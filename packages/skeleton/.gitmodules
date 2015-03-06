@@ -1,0 +1,3 @@
+[submodule "imajs"]
+	path = imajs
+	url = git@gitlab.kancelar.seznam.cz:generic/IMA.js-core.git

@@ -1,0 +1,9 @@
+*.swp
+.DS_Store
+.idea
+.sublime-gulp.cache
+node_modules/
+npm-debug.log
+proxyServer/
+doc/
+.tmp/es5transformedApp.js
