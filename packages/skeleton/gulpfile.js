@@ -106,7 +106,7 @@ var files = {
 	locale: {
 		src: appDependency.languages,
 		dest:{
-			server: './app/locale/',
+			server: './proxyServer/module/locale/',
 			client: './proxyServer/static/js/locale/'
 		},
 		watch: ['./app/locale/**/*.json']
@@ -391,7 +391,7 @@ gulp.task('Es6ToEs5:client', function() {
 			.pipe(gulpif(isJSX, react(), gutil.noop()))
 			.pipe(traceur({modules: 'inline', moduleName: true, sourceMaps: true}))
 			.pipe(gulpif(isView, sweetjs({
-				modules: ['./macro/react.sjs', './macro/componentName.sjs'],
+				modules: ['./imajs/macro/react.sjs', './imajs/macro/componentName.sjs'],
 				readableNames: true
 			}), gutil.noop()))
 			.pipe(remember('Es6ToEs5:client'))

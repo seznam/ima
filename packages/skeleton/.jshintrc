@@ -21,6 +21,7 @@
 	"white": false,
 	"-W058": true,
 	"globals": {
+	  	"super": false,
 		"spyOn": false,
 		"using": false,
 		"ns": false,
