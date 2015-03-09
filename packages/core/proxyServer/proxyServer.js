@@ -12,11 +12,6 @@ var multer = require('multer');
 var cookieParser = require('cookie-parser');
 var methodOverride = require('method-override');
 
-//TODO clear after crash test
-var mongoDb = require('./module/mongo.connection.js');
-var requestModel = require('./model/model.request.js')(mongoDb);
-requestModel.init();
-
 var app = express();
 
 process.on('uncaughtException', function(e) {
@@ -74,7 +69,6 @@ app.use(favicon(__dirname + '/static/img/favicon.ico'))
 	.use(cookieParser())
 	.use(methodOverride())
 	.use(allowCrossDomain)
-	.use(recordRequest)
 	.use('/api/', apiRoute)
 	.use(languageHandler)
 	.use(renderReactApp)

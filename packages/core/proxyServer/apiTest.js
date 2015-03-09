@@ -3,15 +3,8 @@ require('./module/shim.js');
 var http = require('http');
 var rsvp = require('rsvp');
 var ApiHandler = require('./test/api/api.handler');
-var urls = require('./test/api/api.urls')();
+var urls = [];
 var ah = new ApiHandler(http, rsvp.Promise);
-
-var mongoDb = require('./module/mongo.connection.js');
-var requestModel = require('./model/model.request.js')(mongoDb);
-requestModel.init();
-
-var errorModel = require('./model/model.error.js')(mongoDb);
-errorModel.init();
 
 var cron = () => {
 
@@ -44,7 +37,6 @@ var cron = () => {
 					headers: JSON.stringify(respond.options.headers || {}),
 					test: true
 				};
-				requestModel.create(request);
 				console.log(key, 'status: ' + respond.status, 'time: ' + respond.time);
 			}
 		}, (e) => {
@@ -52,14 +44,12 @@ var cron = () => {
 			var error = {
 				message: e.message
 			};
-			errorModel.create(error);
 		})
 		.catch((e) => {
 			console.error('SERVER ERROR', e.message);
 			var error = {
 				message: e.message
 			};
-			errorModel.create(error);
 		});
 
 	setTimeout(cron, 60000);

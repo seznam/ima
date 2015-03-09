@@ -4,13 +4,14 @@ import ns from 'core/namespace/ns.js';
 import {init as initBindCore} from 'core/config/bind.js';
 import {init as initBindApp} from '../../app/config/bind.js';
 import {init as initRoute} from '../../app/config/route.js';
-import {init as initDictionary} from '../../app/config/dictionary.js';
+import {init as initDictionaryCore} from 'core/config/dictionary.js';
+import {init as initDictionaryApp} from '../../app/config/dictionary.js';
 import {init as initVariableCore} from 'core/config/variable.js';
 import {init as initVariableApp} from '../../app/config/variable.js';
 import {init as initSetting} from '../../app/config/setting.js';
 
 var getInit = () => {
-	return {initBindCore, initBindApp, initRoute, initDictionary, initVariableCore, initVariableApp, initSetting};
+	return {initBindCore, initBindApp, initRoute, initDictionaryCore, initDictionaryApp, initVariableCore, initVariableApp, initSetting};
 };
 
 var getNameSpace = () => {

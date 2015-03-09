@@ -126,8 +126,12 @@ class Handler{
 	 * @private
 	 * */
 	_initDictionary() {
-		if (typeof(this._config.initDictionary) === 'function') {
-			this._config.initDictionary(this._ns, this._config.dictionary);
+		if (typeof(this._config.initDictionaryCore) === 'function') {
+			this._config.initDictionaryCore(this._ns, this._config.dictionary);
+		}
+
+		if (typeof(this._config.initDictionaryApp) === 'function') {
+			this._config.initDictionaryApp(this._ns, this._config.dictionary);
 		}
 	}
 

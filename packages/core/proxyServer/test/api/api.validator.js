@@ -1,11 +1,4 @@
-var halson = require('halson');
-
 module.exports = () => {
-
-	var halsonPreProcessor = (respond) => {
-		respond.body = halson(respond.body);
-		return respond;
-	};
 
 	var validateStructure = (options, testedObject, test) => {
 
@@ -100,5 +93,5 @@ module.exports = () => {
 		}
 	};
 
-	return {halsonPreProcessor, validateStructure, parseStructure};
+	return {validateStructure, parseStructure};
 };

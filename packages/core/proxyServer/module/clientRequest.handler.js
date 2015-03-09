@@ -71,7 +71,7 @@ module.exports = () => {
 
 	var _initApp = (req, res) => {
 		var language = res.locals.language;
-		var dictionary = require('../static/js/locale/' + language + '.js');
+		var dictionary = require('./locale/' + language + '.js');
 
 		var vendor = vendorScript();
 		var appServer = appServerScript();

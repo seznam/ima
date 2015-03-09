@@ -52,7 +52,7 @@ class Client extends ns.Core.Abstract.PageRender {
 		var reactiveView = null;
 
 		if (this.firstTime === false) {
-			reactiveView = this._react.render(controller.getView(), document.getElementById('page'));
+			reactiveView = this._react.render(controller.getView(), document.getElementById(this._setting.$PageRender.masterElementId));
 			controller.setReactiveView(reactiveView);
 		}
 

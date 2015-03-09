@@ -51,7 +51,7 @@ class Server extends ns.Core.Abstract.PageRender {
 
 				var pageMarkup = this._react.renderToString(controller.getView());
 
-				var appMarkup = this._react.renderToStaticMarkup(ns.App.Component.Layout.Master.View({
+				var appMarkup = this._react.renderToStaticMarkup(ns.oc.get(this._setting.$PageRender.masterView)({
 					page: pageMarkup,
 					scripts: this._getScripts(),
 					seo: controller.getSeoParams()
