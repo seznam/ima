@@ -7,3 +7,4 @@ npm-debug.log
 proxyServer/
 doc/
 .tmp/es5transformedApp.js
+app/assets/bower
