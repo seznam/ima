@@ -11,6 +11,7 @@ var bodyParser = require('body-parser');
 var multer = require('multer');
 var cookieParser = require('cookie-parser');
 var methodOverride = require('method-override');
+var config = require('./config/environment.js');
 
 var app = express();
 
@@ -62,17 +63,17 @@ var errorHandler = (err, req, res, next) => {
 };
 
 app.use(favicon(__dirname + '/static/img/favicon.ico'))
-	.use('/static', express.static(path.join(__dirname, 'static')))
+	.use(config.$Server.staticFolder, express.static(path.join(__dirname, 'static')))
 	.use(bodyParser.json()) // for parsing application/json
 	.use(bodyParser.urlencoded({ extended: true })) // for parsing application/x-www-form-urlencoded
 	.use(multer()) // for parsing multipart/form-data
 	.use(cookieParser())
 	.use(methodOverride())
 	.use(allowCrossDomain)
-	.use('/api' + '/', apiRoute)
+	.use(config.$Server.apiUrl + '/', apiRoute)
 	.use(languageHandler)
 	.use(renderReactApp)
 	.use(errorHandler)
-	.listen(3001, function() {
-		return console.log('Point your browser at http://localhost:3001');
+	.listen(config.$Server.port, function() {
+		return console.log('Point your browser at http://localhost:' + config.$Server.port);
 	});
