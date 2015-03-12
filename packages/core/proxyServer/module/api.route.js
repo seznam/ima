@@ -55,32 +55,32 @@ var callRemoteServer = (req, res) => {
 		url = url.substr(0, url.length - 1);
 	}
 
-	console.log(`API: ${req.method} ${config.apiServer + url} query:`, req.query);
+	console.log(`API: ${req.method} ${config.$Api.server + url} query:`, req.query);
 
 	switch(req.method) {
 		case 'POST':
 			httpRequest = superAgent
-				.post(config.apiServer + url)
+				.post(config.$Api.server + url)
 				.send(req.body);
 			break;
 		case 'PUT':
 			httpRequest = superAgent
-				.put(config.apiServer + url)
+				.put(config.$Api.server + url)
 				.send(req.body);
 			break;
 		case 'PATCH':
 			httpRequest = superAgent
-				.patch(config.apiServer + url)
+				.patch(config.$Api.server + url)
 				.send(req.body);
 			break;
 		case 'DELETE':
 			httpRequest = superAgent
-				.delete(config.apiServer + url)
+				.delete(config.$Api.server + url)
 				.send(req.body);
 			break;
 		case 'GET':
 			httpRequest = superAgent
-				.get(config.apiServer + url)
+				.get(config.$Api.server + url)
 				.query(req.query);
 			break;
 	}

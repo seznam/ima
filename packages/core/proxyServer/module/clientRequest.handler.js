@@ -83,7 +83,7 @@ module.exports = () => {
 			vendor: vendor,
 			dictionary: {language, dictionary},
 			variable: {request: req, respond: res},
-			setting: {env: config.env, protocol: `${req.protocol}:`, language: language}
+			setting: {env: config.$Env, protocol: `${req.protocol}:`, language: language}
 		};
 
 		Object.assign(bootConfig, appServer.getInit());
@@ -94,7 +94,7 @@ module.exports = () => {
 
 	var errorHandler = (err, req, res) => {
 
-		if (config.debug) {
+		if (config.$Debug) {
 			_displayDetails(err, req, res);
 		} else {
 			var ns = _initApp(req, res);

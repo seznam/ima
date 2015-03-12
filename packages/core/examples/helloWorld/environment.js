@@ -2,28 +2,49 @@ module.exports = (function() {
 
 	var config = {
 		prod: {
-			debug: false,
-			env: 'prod',
-			language:{
-				'http://www.example.com': 'en'
+			$Debug: false,
+			$Env: 'prod',
+			$Language:{
+				'http://example.com': 'en'
 			},
-			apiServer: 'http://localhost:4001/api/v1'
+			$Server: {
+				port: 3001,
+				apiUrl: '/api',
+				staticFolder: '/static'
+			},
+			$Api: {
+				server: 'http://localhost:4001/api/v1'
+			}
 		},
 		dev: {
-			debug: true,
-			env: 'dev',
-			language:{
+			$Debug: true,
+			$Env: 'dev',
+			$Language:{
 				'http://localhost:3001': 'en'
 			},
-			apiServer: 'http://localhost:4001/api/v1'
+			$Server: {
+				port: 3001,
+				apiUrl: '/api',
+				staticFolder: '/static'
+			},
+			$Api: {
+				server: 'http://localhost:4001/api/v1'
+			}
 		},
 		test: {
-			debug: true,
-			env: 'test',
-			language:{
+			$Debug: true,
+			$Env: 'test',
+			$Language:{
 				'http://localhost:3001': 'en'
 			},
-			apiServer: 'http://localhost:4001/api/v1'
+			$Server: {
+				port: 3001,
+				apiUrl: '/api',
+				staticFolder: '/static'
+			},
+			$Api: {
+				server: 'http://localhost:4001/api/v1'
+			}
 		}
 	};
 
