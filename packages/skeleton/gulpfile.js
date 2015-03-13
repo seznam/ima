@@ -38,8 +38,16 @@ var save = require('gulp-save');
 var size = require('gulp-filesize');
 var nodemon = require('gulp-nodemon');
 
-var appDependency = require('./app/build.js');
-
+try {
+	var appDependency = require('./app/build.js');
+}catch(e) {
+	var appDependency = {
+		js: [],
+		languages: [],
+		less: []
+	};
+	console.log(e);
+}
 //process.env.NODE_PATH = path.join(path.resolve('.'), '');
 
 var watchEvent = null;
@@ -450,7 +458,6 @@ gulp.task('vendor:clean', function() {
 		.pipe(clean());
 });
 
-
 gulp.task('less', function() {
 	return (
 		gulp.src(files.less.src)
@@ -486,3 +493,14 @@ gulp.task('locale', function() {
 
 	return locales[locales.length - 1];
 });
+
+gulp.task('app:hello', function() {
+	return gulp.src('./imajs/examples/helloWorld/**/*')
+		.pipe(gulp.dest('./app'));
+});
+
+gulp.task('app:clean', function() {
+	return gulp.src('./app/', {read: false})
+		.pipe(clean());
+});
+
