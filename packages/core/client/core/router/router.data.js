@@ -18,10 +18,9 @@ class Data{
 	 * @param {String} controller
 	 * */
 	constructor(name, path, controller) {
-		var reg = new RegExp(':([a-zA-Z0-9_-]*)', 'g');
-
 		/**
 		 * @property ESCAPED_CHARS_REGEXP
+		 * @const
 		 * @type {RegExp}
 		 * @default new RegExp('[\\.+*?\^$\[\](){}\/'#]','g')
 		 * */
@@ -29,10 +28,19 @@ class Data{
 
 		/**
 		 * @property LOOSE_SLASHES_REGEXP
+		 * @const
 		 * @type {RegExp}
 		 * @default new RegExp('^\/|\/$','g')
 		 * */
 		this.LOOSE_SLASHES_REGEXP = new RegExp('^\/|\/$','g');
+
+		/**
+		 * @property PARAMS_REGEXP
+		 * @const
+		 * @type {RegExp}
+		 * @default new RegExp(':([a-zA-Z0-9_-]*)', 'g')
+		 * */
+		this.PARAMS_REGEXP = new RegExp(':([a-zA-Z0-9_-]*)', 'g');
 
 		/**
 		 * @property _name
@@ -52,6 +60,7 @@ class Data{
 
 		/**
 		 * @property _loosesPath
+		 * @private
 		 * @type {String}
 		 * @default this._path.replace(this.LOOSE_SLASHES_REGEXP, '')
 		 * */
@@ -66,12 +75,13 @@ class Data{
 		 * */
 		this._controller = controller;
 
+
 		/**
 		 * @property _isParamsInpath
 		 * @private
 		 * @type {Boolean}
 		 * */
-		this._isParamsInPath = !!this._path.match(reg);
+		this._isParamsInPath = !!this._path.match(this.PARAMS_REGEXP);
 
 		/**
 		 * @property _regular
@@ -81,23 +91,8 @@ class Data{
 		 * */
 		this._regular = '';
 
-		this._regular  = this._path.replace(this.LOOSE_SLASHES_REGEXP, '');
 
-		this._regular = this._regular.replace(this.ESCAPED_CHARS_REGEXP, '\\$&');
-
-		// replace params in path
-		//this._regular = `^${this._path.replace(reg, '(.*)')}`;
-		this._regular = `^/${this._regular.replace(reg, '([^/?]+)')}`;
-
-		//adjust end for regular
-		//this._regular = this._regular.replace(/\/$/, '/(?!(.*)/$)');
-		//this._regular = this._regular.replace(/\/$/, '/(?!(.*)/$)');
-
-		//adjust / => \/
-		this._regular = this._regular.replace(/\//g, '\\\/');
-
-		this._regular += '(?:\\?(?:.+=.+)(?:&.+=.+)*)?$';
-
+		this._createRegularForPath();
 	}
 
 	/**
@@ -191,6 +186,25 @@ class Data{
 		this._parseQuery(loosesPath, params);
 
 		return params;
+	}
+
+	/**
+	 * Create regular expression for path.
+	 *
+	 * @method createRegularForPath
+	 * @private
+	 * */
+	_createRegularForPath() {
+		this._regular  = this._path.replace(this.LOOSE_SLASHES_REGEXP, '');
+		this._regular = this._regular.replace(this.ESCAPED_CHARS_REGEXP, '\\$&');
+
+		// replace params in path
+		this._regular = `^/${this._regular.replace(this.PARAMS_REGEXP, '([^/?]+)')}`;
+
+		//adjust / => \/
+		this._regular = this._regular.replace(/\//g, '\\\/');
+
+		this._regular += '(?:\\?(?:.+=.+)(?:&.+=.+)*)?$';
 	}
 
 	/**

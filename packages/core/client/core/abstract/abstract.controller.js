@@ -25,7 +25,7 @@ class Controller extends ns.Core.Interface.Controller {
 
 		/**
 		 * @property state
-		 * @private
+		 * @protected
 		 * @type Object
 		 * @default {}
 		 */
@@ -33,7 +33,7 @@ class Controller extends ns.Core.Interface.Controller {
 
 		/**
 		 * @property _seo
-		 * @private
+		 * @protected
 		 * @type {Map}
 		 * @default new Map()
 		 * */
@@ -43,7 +43,7 @@ class Controller extends ns.Core.Interface.Controller {
 		 * Pointer for active react class in DOM.
 		 *
 		 * @property _reactiveView
-		 * @private
+		 * @protected
 		 * @type Vendor.ReactComponent
 		 * @default null
 		 */
@@ -51,7 +51,7 @@ class Controller extends ns.Core.Interface.Controller {
 
 		/**
 		 * @property _status
-		 * @private
+		 * @protected
 		 * @type {Number}
 		 * @default 200
 		 * */
@@ -60,7 +60,7 @@ class Controller extends ns.Core.Interface.Controller {
 
 		/**
 		 * @property view
-		 * @private
+		 * @protected
 		 * @type Core.Abstract.View
 		 */
 		this._view = view

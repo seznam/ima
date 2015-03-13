@@ -26,10 +26,11 @@ class Client extends ns.Core.Abstract.PageRender {
 		 * Flag for first rendering page.
 		 *
 		 * @property firsTime
+		 * @private
 		 * @type {Boolean}
 		 * @default true
 		 * */
-		this.firstTime = true;
+		this._firstTime = true;
 	}
 
 	/**
@@ -51,7 +52,7 @@ class Client extends ns.Core.Abstract.PageRender {
 
 		var reactiveView = null;
 
-		if (this.firstTime === false) {
+		if (this._firstTime === false) {
 			reactiveView = this._react.render(controller.getView(), document.getElementById(this._setting.$PageRender.masterElementId));
 			controller.setReactiveView(reactiveView);
 		}
@@ -60,10 +61,10 @@ class Client extends ns.Core.Abstract.PageRender {
 			.hash(loadPromises)
 			.then((resolvedPromises) => {
 
-				if (this.firstTime === true) {
+				if (this._firstTime === true) {
 					reactiveView = this._react.render(controller.getView(), document.getElementById('page'));
 					controller.setReactiveView(reactiveView);
-					this.firstTime = false;
+					this._firstTime = false;
 				}
 
 				controller.setSeoParams(resolvedPromises);

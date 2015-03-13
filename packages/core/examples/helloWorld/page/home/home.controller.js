@@ -15,20 +15,20 @@ class Controller extends ns.Core.Abstract.Controller {
 	 * @method constructor
 	 * @constructor
 	 * @param {App.Page.Home.View} view
-	 * @param {Vendor.Rsvp.Promise} promise
+	 * @param {Vendor.Rsvp.Promise} Promise
 	 * */
-	constructor(view, promise) {
+	constructor(view, Promise) {
 		super(view);
 
 		/**
 		 * Promise Vendor
 		 *
-		 * @property _promise
+		 * @property _Promise
 		 * @private
 		 * @type {Vendor.Rsvp.Promise}
-		 * @default promise
+		 * @default Promise
 		 */
-		this._promise = promise;
+		this._Promise = Promise;
 	}
 
 	/**
@@ -39,8 +39,18 @@ class Controller extends ns.Core.Abstract.Controller {
 	 * */
 	load() {
 		return {
-			message: this._promise.resolve('This is IMA.js!')
+			message: this._Promise.resolve('This is IMA.js!')
 		};
+	}
+
+	/**
+	 * Set seo params.
+	 *
+	 * @method setSeoParams
+	 * @param {Object} resolvedPromises
+	 * */
+	setSeoParams(resolvedPromises) {
+		this._seo.set('title', resolvedPromises.message);
 	}
 
 }

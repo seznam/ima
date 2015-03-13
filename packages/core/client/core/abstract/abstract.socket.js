@@ -25,7 +25,7 @@ class Socket extends ns.Core.Interface.Socket {
 
 		/**
 		 * @property _dispatcher
-		 * @private
+		 * @protected
 		 * @type {Core.Dispatcher.Handler}
 		 * @default dispatcher
 		 * */
@@ -33,7 +33,7 @@ class Socket extends ns.Core.Interface.Socket {
 
 		/**
 		 * @property _baseUrl
-		 * @private
+		 * @protected
 		 * @type {String}
 		 * @default socketUrl
 		 * */
@@ -41,7 +41,7 @@ class Socket extends ns.Core.Interface.Socket {
 
 		/**
 		 * @property _connection
-		 * @private
+		 * @protected
 		 * @type {WebSocket}
 		 * @default null
 		 * */
@@ -49,7 +49,7 @@ class Socket extends ns.Core.Interface.Socket {
 
 		/**
 		 * @property _technologie
-		 * @private
+		 * @protected
 		 * @type {String}
 		 * @default technologie
 		 * */

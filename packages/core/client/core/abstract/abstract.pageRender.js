@@ -24,7 +24,7 @@ class PageRender extends ns.Core.Interface.PageRender{
 
 		/**
 		 * @property _rsvp
-		 * @private
+		 * @protected
 		 * @type {Vendor.Rsvp}
 		 * @default rsvp
 		 * */
@@ -32,7 +32,7 @@ class PageRender extends ns.Core.Interface.PageRender{
 
 		/**
 		 * @property react
-		 * @private
+		 * @protected
 		 * @type {Vendor.React}
 		 * @default react
 		 * */
@@ -40,7 +40,7 @@ class PageRender extends ns.Core.Interface.PageRender{
 
 		/**
 		 * @property _animate
-		 * @private
+		 * @protected
 		 * @type {Core.Interface.Animate}
 		 * @default animate
 		 * */
@@ -48,7 +48,7 @@ class PageRender extends ns.Core.Interface.PageRender{
 
 		/**
 		 * @property _setting
-		 * @private
+		 * @protected
 		 * @type {Object}
 		 * @default setting
 		 * */

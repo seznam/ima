@@ -24,14 +24,14 @@ class View extends ns.Core.Interface.View {
 
 		/**
 		 * @property _react
-		 * @private
+		 * @protected
 		 * @type Vendor.React
 		 */
 		this._react = react;
 
 		/**
 		 * @property _view
-		 * @private
+		 * @protected
 		 * @type Vendor.ReactComponent
 		 * @default null
 		 */

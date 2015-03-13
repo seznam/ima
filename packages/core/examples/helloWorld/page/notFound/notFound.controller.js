@@ -15,19 +15,21 @@ class Controller extends ns.Core.Abstract.Controller {
 	 * @method constructor
 	 * @constructor
 	 * @param {App.Page.NotFound.View} view
-	 * @param {Vendor.Rsvp.Promise} promise
+	 * @param {Vendor.Rsvp.Promise} Promise
 	 * */
-	constructor(view, promise) {
+	constructor(view, Promise) {
 		super(view);
 		this._status = 404;
 
 		/**
 		 * Promise Vendor
 		 *
-		 * @property _promise
+		 * @property _Promise
+		 * @private
 		 * @type {Vendor.Rsvp.Promise}
+		 * @default Promise
 		 */
-		this._promise = promise;
+		this._Promise = Promise;
 	}
 
 	/**
@@ -38,7 +40,7 @@ class Controller extends ns.Core.Abstract.Controller {
 	 * */
 	load() {
 		return {
-			status: this._promise.resolve(this._status)
+			status: this._Promise.resolve(this._status)
 		};
 	}
 }
