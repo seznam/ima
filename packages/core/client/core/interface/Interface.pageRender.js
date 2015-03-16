@@ -11,14 +11,6 @@ ns.namespace('Core.Interface');
 class PageRender {
 
 	/**
-	 * @method constructor
-	 * @constructor
-	 * */
-	constructor() {
-
-	}
-
-	/**
 	 * Render page.
 	 *
 	 * @method render

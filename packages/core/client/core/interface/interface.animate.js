@@ -13,14 +13,6 @@ ns.namespace('Core.Interface');
 class Animate {
 
 	/**
-	 * @method constructor
-	 * @constructor
-	 * */
-	constructor() {
-
-	}
-
-	/**
 	 * Set new animate state.
 	 *
 	 * @method set

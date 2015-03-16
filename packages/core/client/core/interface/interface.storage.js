@@ -11,14 +11,6 @@ ns.namespace('Core.Interface');
 class Storage {
 
 	/**
-	 * @method constructor
-	 * @constructor
-	 * */
-	constructor() {
-
-	}
-
-	/**
 	 * Initialization storage.
 	 *
 	 * @method init

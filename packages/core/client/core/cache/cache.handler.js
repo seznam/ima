@@ -7,6 +7,8 @@ ns.namespace('Core.Cache');
  * @namespace Core.Cache
  * @module Core
  * @submodule Core.Cache
+ *
+ * @requires Core.Interface.Storage
  * */
 class Handler {
 
@@ -58,7 +60,7 @@ class Handler {
 		 *
 		 * @property _cache
 		 * @private
-		 * @type {Map}
+		 * @type {Core.Interface.Storage}
 		 * @default cacheStorage
 		 * */
 		this._cache = cacheStorage;
@@ -100,7 +102,7 @@ class Handler {
 	 *
 	 * @method get
 	 * @param {String} key
-	 * @return {Mixed|Null}
+	 * @return {*}
 	 * */
 	get(key) {
 
@@ -108,9 +110,10 @@ class Handler {
 			var hashedKey = this._hash(key);
 
 			return this._cache.get(hashedKey).getValue();
+		} else {
+			throw ns.oc.create('$Error', `Core.Cache.Handler:get isn't stored value for key '${key}'.`, {key});
 		}
 
-		return null;
 	}
 
 	/**
@@ -118,7 +121,7 @@ class Handler {
 	 *
 	 * @method set
 	 * @param {String} key
-	 * @param {Mixed} value
+	 * @param {*} value
 	 * @param {Number} [TTL=this._TTL]
 	 * */
 	set(key, value, TTL) {

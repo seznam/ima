@@ -2,10 +2,8 @@ import ns from 'core/namespace/ns.js';
 
 ns.namespace('Core.Error');
 
-
 /**
  * @class Handler
- * @extends Error
  * @namespace Core.Error
  * @module Core
  * @submodule Core.Error
@@ -84,6 +82,7 @@ class Handler {
 
 	/**
 	 * Convert to string.
+	 *
 	 * @method toString
 	 * @return {String}
 	 * */

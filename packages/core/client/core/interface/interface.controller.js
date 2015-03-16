@@ -11,13 +11,6 @@ ns.namespace('Core.Interface');
 class Controller {
 
 	/**
-	 * @method constructor
-	 * @constructor
-	 * */
-	constructor() {
-	}
-
-	/**
 	 * Initialization controller.
 	 *
 	 * @method init

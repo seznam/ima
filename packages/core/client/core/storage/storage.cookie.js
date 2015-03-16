@@ -10,6 +10,9 @@ ns.namespace('Core.Storage');
  * @namespace Core.Storage
  * @module Core
  * @submodule Core.Storage
+ *
+ * @requires Core.Router.Request
+ * @requires Core.Router.Respond
  * */
 class Cookie extends ns.Core.Interface.Storage{
 
@@ -129,7 +132,7 @@ class Cookie extends ns.Core.Interface.Storage{
 	 *
 	 * @method get
 	 * @param {String} name
-	 * @return {Mixed}
+	 * @return {*}
 	 * */
 	get(name) {
 		return this._cookie.get(name);
@@ -141,7 +144,7 @@ class Cookie extends ns.Core.Interface.Storage{
 	 * @method set
 	 * @chainable
 	 * @param {String} name
-	 * @param {Mixed} value
+	 * @param {*} value
 	 * @param {Object} [options={}] possibility options keys {path, secure, domain, expires}
 	 * */
 	set(name, value, options = {}) {
@@ -290,7 +293,7 @@ class Cookie extends ns.Core.Interface.Storage{
 	 * @method _generateCookieString
 	 * @private
 	 * @param {String} name
-	 * @param {Mixed} value
+	 * @param {*} value
 	 * @param {Object} options
 	 * @return {String}
 	 * */

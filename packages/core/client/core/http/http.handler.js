@@ -6,17 +6,17 @@ ns.namespace('Core.Http');
  * Handler for http request.
  *
  * @class Handler
- * @extends Core.Interface.HttpHandler
+ * @extends Core.Interface.Http
  * @namespace Core.Http
  * @module Core
  * @submodule Core.Http
  *
- * @uses Core.Http.Proxy
- * @uses Core.Cache.Handler
- * @uses Core.Storage.Cookie
- * @uses Core.Dictionary.Handler
+ * @requires Core.Http.Proxy
+ * @requires Core.Cache.Handler
+ * @requires Core.Storage.Cookie
+ * @requires Core.Interface.Dictionary
  */
-class Handler extends ns.Core.Interface.HttpHandler{
+class Handler extends ns.Core.Interface.Http{
 
 	/**
 	 * @method constructor
@@ -24,7 +24,7 @@ class Handler extends ns.Core.Interface.HttpHandler{
 	 * @param {Core.Http.Proxy} proxy
 	 * @param {Core.Cache.Handler} cache
 	 * @param {Core.Storage.Cookie} cookie
-	 * @param {Core.Dictionary.Handler} dictionary
+	 * @param {Core.Interface.Dictionary} dictionary
 	 * @param {Promise} promise
 	 * @param {Object} config
 	 * @example
@@ -71,7 +71,7 @@ class Handler extends ns.Core.Interface.HttpHandler{
 		/**
 		 * @property _dictionary
 		 * @private
-		 * @type {Core.Dictionary.Handler}
+		 * @type {Core.Interface.Dictionary}
 		 * @default dictionary
 		 */
 		this._dictionary = dictionary;
@@ -267,7 +267,7 @@ class Handler extends ns.Core.Interface.HttpHandler{
 	 *
 	 * @method _proxyResolved
 	 * @private
-	 * @param {Mixed} respond proxy respond
+	 * @param {Object} respond proxy respond
 	 * @return {Mixed} return resolved results
 	 */
 	_proxyResolved(respond) {

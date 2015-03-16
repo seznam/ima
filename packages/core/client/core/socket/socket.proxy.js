@@ -10,6 +10,10 @@ ns.namespace('Core.Socket');
  * @namespace Core.Socket
  * @module Core
  * @submodule Core.Socket
+ *
+ * @requires Core.Interface.Dispatcher
+ * @requires Core.Socket.Factory
+ * @requires Core.Socket.Parser
  * */
 class Proxy extends ns.Core.Abstract.Socket {
 

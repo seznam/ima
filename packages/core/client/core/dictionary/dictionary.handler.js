@@ -4,11 +4,12 @@ ns.namespace('Core.Dictionary');
 
 /**
  * @class Handler
+ * @extends Core.Interface.Dictionary
  * @namespace Core.Dictionary
  * @module Core
  * @submodule Core.Dictionary
  * */
-class Handler{
+class Handler extends ns.Core.Interface.Dictionary{
 
 	/**
 	 * @method constructor
@@ -17,6 +18,7 @@ class Handler{
 	 * 		dictionary.get('home.hello', {GENDER: 'MALE'});
 	 * */
 	constructor() {
+		super();
 
 		/**
 		 * Application language.

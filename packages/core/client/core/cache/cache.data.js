@@ -14,7 +14,7 @@ class Data {
 	 * @method constructor
 	 * @constructor
 	 *
-	 * @param {Mixed} value
+	 * @param {*} value
 	 * @param {Number} TTL - time to live
 	 * */
 	constructor(value, TTL) {
@@ -24,7 +24,7 @@ class Data {
 		 *
 		 * @property _value
 		 * @private
-		 * @type {Mixed}
+		 * @type {*}
 		 * @default value
 		 * */
 		this._value = value;

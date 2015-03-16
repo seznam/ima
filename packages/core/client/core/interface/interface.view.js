@@ -11,19 +11,20 @@ ns.namespace('Core.Interface');
 class View {
 
 	/**
-	 * @method constructor
-	 * @constructor
-	 * */
-	constructor() {
-
-	}
-
-	/**
 	 * Initialization view.
 	 *
 	 * @method init
 	 * */
 	init() {
+
+	}
+
+	/**
+	 * Deinitialization view.
+	 *
+	 * @method deinit
+	 * */
+	deinit() {
 
 	}
 

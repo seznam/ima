@@ -7,6 +7,8 @@ ns.namespace('Core.Boot');
  * @namespace Core.Boot
  * @module Core
  * @submodule Core.Boot
+ *
+ * @requires Core.Namespace.Ns
  * */
 class Handler{
 

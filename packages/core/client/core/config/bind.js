@@ -44,9 +44,6 @@ export var init = (ns) => { //jshint ignore:line
 	//Core Error
 	ns.oc.bind('$Error', ns.Core.Error.Handler);
 
-	//Dispatcher
-	ns.oc.bind('$Dispatcher', ns.oc.create('Core.Dispatcher.Handler'));
-
 	//Dictionary
 	ns.oc.bind('$Dictionary', ns.oc.create('Core.Dictionary.Handler'));
 
@@ -59,6 +56,9 @@ export var init = (ns) => { //jshint ignore:line
 	ns.oc.bind('$SessionStorage', ns.Core.Storage.Session);
 	ns.oc.bind('$MapStorage', ns.Core.Storage.Map);
 	ns.oc.bind('$SessionMapStorage', ns.Core.Storage.SessionMap, ['$MapStorage', '$SessionStorage']);
+
+	//Dispatcher
+	ns.oc.bind('$Dispatcher', ns.oc.make('Core.Dispatcher.Handler', ['$MapStorage']));
 
 	//Animate
 	ns.oc.bind('$Animate', ns.oc.make('Core.Animate.Handler', ['$Dispatcher', '$BindPromise', '$WindowHelper', '$CookieStorage', '$ANIMATE_CONFIG']));

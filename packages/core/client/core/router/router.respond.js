@@ -91,7 +91,7 @@ class Respond {
 	 * @method setCookie
 	 * @chainable
 	 * @param {String} name
-	 * @param {Mixed} value
+	 * @param {*} value
 	 * @param {Object} options
 	 * */
 	setCookie(name, value, options) {

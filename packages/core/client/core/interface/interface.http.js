@@ -1,24 +1,16 @@
 import ns from 'core/namespace/ns.js';
 
-ns.namespace('Core.Interface.HttpHandler');
+ns.namespace('Core.Interface');
 
 /**
  * Interface for http handler.
  *
- * @class HttpHandler
+ * @class Http
  * @namespace Core.Interface
  * @module Core
  * @submodule Core.Interface
  */
-class HttpHandler {
-
-	/**
-	 * @method constructor
-	 * @constructor
-	 * */
-	constructor() {
-
-	}
+class Http {
 
 	/**
 	 * Return data from api for GET request.
@@ -95,4 +87,4 @@ class HttpHandler {
 
 }
 
-ns.Core.Interface.HttpHandler = HttpHandler;
+ns.Core.Interface.Http = Http;

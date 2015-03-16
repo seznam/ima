@@ -62,7 +62,7 @@ describe('Core.Http.Handler', function() {
 					.then(function(respond) {
 						expect(respond).toEqual(data.body);
 						done();
-					});
+					})
 			});
 
 			it('should be rejected with error', function(done) {

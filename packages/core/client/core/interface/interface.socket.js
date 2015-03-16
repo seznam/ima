@@ -13,14 +13,6 @@ ns.namespace('Core.Interface');
 class Socket {
 
 	/**
-	 * @method constructor
-	 * @constructor
-	 * */
-	constructor() {
-
-	}
-
-	/**
 	 * Open connection to server.
 	 *
 	 * @method open

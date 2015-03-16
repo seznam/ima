@@ -11,16 +11,17 @@ ns.namespace('Core.Animate');
  * @module Core
  * @submodule Core.Animate
  *
- * @uses Core.Dispatcher.Handler
- * @uses Core.Storage.Cookie
- * @uses Core.Interface.WindowHelper
+ * @requires Core.Interface.Dispatcher
+ * @requires Promise
+ * @requires Core.Interface.Storage
+ * @requires Core.Interface.WindowHelper
  * */
 class Handler extends ns.Core.Interface.Animate {
 
 	/**
 	 * @method constructor
 	 * @constructor
-	 * @param {Core.Dispatcher.Handler} dispatcher
+	 * @param {Core.Interface.Dispatcher} dispatcher
 	 * @param {Promise} promise
 	 * @param {Core.Interface.WindowHelper} window
 	 * @param {Core.Storage.Cookie} cookie

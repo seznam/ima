@@ -4,17 +4,17 @@ ns.namespace('Core.PageRender');
 
 /**
  * @class Client
+ * @extends Core.Abstract.PageRender
  * @namespace Core.PageRender
  * @module Core
  * @submodule Core.PageRender
- * @extends Core.Abstract.PageRender
  * */
 class Client extends ns.Core.Abstract.PageRender {
 
 	/**
 	 * @method constructor
 	 * @constructor
-	 * @param {Vendor.Rsvp} vendor
+	 * @param {Vendor.Rsvp} rsvp
 	 * @param {Vendor.React} react
 	 * @param {Core.Animate.Handler} animate
 	 * @param {Object} setting

@@ -46,7 +46,7 @@ class Template {
 	 * Checks if the value is NaN.
 	 *
 	 * @method isNaN
-	 * @param {Mixed} value The checked value.
+	 * @param {*} value The checked value.
 	 * @return {Boolean} True if the value is NaN; otherwise false.
 	 */
 	isNaN(value) {

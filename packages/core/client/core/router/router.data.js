@@ -135,7 +135,7 @@ class Data{
 	 * Create new instance of controller and return it.
 	 *
 	 * @method getController
-	 * @return {Mixed}
+	 * @return {Core.Interface.Controller}
 	 * */
 	getController() {
 		return ns.oc.make(this._controller);

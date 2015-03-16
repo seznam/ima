@@ -4,10 +4,10 @@ ns.namespace('Core.PageRender');
 
 /**
  * @class Server
+ * @extends Core.Abstract.PageRender
  * @namespace Core.PageRender
  * @module Core
  * @submodule Core.PageRender
- * @extends Core.Abstract.PageRender
  * */
 class Server extends ns.Core.Abstract.PageRender {
 

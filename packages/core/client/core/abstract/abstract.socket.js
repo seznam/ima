@@ -10,13 +10,15 @@ ns.namespace('Core.Abstract');
  * @namespace Core.Abstract
  * @module Core
  * @submodule Core.Abstract
+ *
+ * @requires Core.Interface.Dispatcher
  * */
 class Socket extends ns.Core.Interface.Socket {
 
 	/**
 	 * @method constructor
 	 * @constructor
-	 * @param {Core.Dispatcher.Handler} dispatcher
+	 * @param {Core.Interface.Dispatcher} dispatcher
 	 * @param {Object} config
 	 * @param {String} technologie
 	 * */
@@ -26,7 +28,7 @@ class Socket extends ns.Core.Interface.Socket {
 		/**
 		 * @property _dispatcher
 		 * @protected
-		 * @type {Core.Dispatcher.Handler}
+		 * @type {Core.Interface.Dispatcher}
 		 * @default dispatcher
 		 * */
 		this._dispatcher = dispatcher;

@@ -9,6 +9,8 @@ ns.namespace('Core.Socket');
  * @namespace Core.Socket
  * @module Core
  * @submodule Core.Socket
+ *
+ * @requires WebSocket
  * */
 class Factory {
 

@@ -5,9 +5,14 @@ ns.namespace('Core.Abstract');
 /**
  * Abstract class for Renderer.
  * @class PageRender
- * @namespace Core.Abstract
- * @module Core.Abstract
  * @extends Core.Interface.PageRender
+ * @namespace Core.Abstract
+ * @module Core
+ * @submodule Core.Abstract
+ *
+ * @requires Vendor.Rsvp
+ * @requires Vendor.React
+ * @requires Core.Interface.Animate
  */
 class PageRender extends ns.Core.Interface.PageRender{
 

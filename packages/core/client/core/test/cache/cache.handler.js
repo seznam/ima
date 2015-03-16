@@ -30,7 +30,9 @@ describe('Core.Cache.handler', function() {
 	});
 
 	it('should be return null for not exist key', function() {
-		expect(cache.get('bbb')).toBe(null);
+		expect(function() {
+			cache.get('bbb');
+		}).toThrow();
 	});
 
 	it('should be cleared cache', function() {

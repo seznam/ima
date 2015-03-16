@@ -9,14 +9,15 @@ ns.namespace('Core.ObjectContainer');
  * @namespace Core.ObjectContainer
  * @module Core
  * @submodule Core.ObjectContainer
+ *
+ * @requires Core.Namespace.Ns
  * */
-
 class Oc{
 
 	/**
 	 * @method constructor
 	 * @constructor
-	 * @param {Ns} namespace
+	 * @param {Core.Namespace.Ns} namespace
 	 * @example
 	 * 		ns.oc.bind('Dictionary', ns.Core.Dictionary.Handler);
 	 * 		ns.oc.bind('Router', ns.Core.Router.Handler, ['Singleton', 'Dictionary']);
@@ -104,7 +105,7 @@ class Oc{
 	 *
 	 * @method bind
 	 * @param {String} name - namespace or alias
-	 * @param {Mixed} mixed - object, which sore
+	 * @param {*} mixed - object, which is stored in object container
 	 * @param {Array} [dependency=Array()]
 	 * */
 	bind(name, mixed, dependency = []) {
@@ -114,7 +115,7 @@ class Oc{
 
 		for (var i = 0; i < levels.length; i++) {
 
-			if (typeof(object[levels[i]]) === 'undefined') {
+			if (typeof object[levels[i]] === 'undefined') {
 				object[levels[i]] = {};
 				di[levels[i]] = {};
 			}
@@ -137,7 +138,7 @@ class Oc{
 	 *
 	 * @method get
 	 * @param {String} name - namespace or alias
-	 * @return {Mixed}
+	 * @return {*}
 	 * */
 	get(name) {
 		var [object] = this._get(name);
@@ -158,7 +159,7 @@ class Oc{
 
 		for (var i = 0; i < levels.length; i++) {
 
-			if (typeof(object[levels[i]]) === 'undefined') {
+			if (typeof object[levels[i]] === 'undefined') {
 
 				if (this._namespace.has(name)) {
 
@@ -182,13 +183,13 @@ class Oc{
 	 * @method create
 	 * @param {String} name - namespace or alias
 	 * @param {Array} [...=Array]
-	 * @return {Mixed}
+	 * @return {*}
 	 * */
 	create(name) {
 		if (this.has(name)) {
 			var object = this.get(name);
 
-			if (typeof(object) === 'function') {
+			if (typeof object === 'function') {
 
 				return new (Function.prototype.bind.apply(object, arguments));
 			} else {
@@ -208,7 +209,7 @@ class Oc{
 	 * @return {Boolean}
 	 * */
 	has(name) {
-		return typeof(this.get(name)) !== 'undefined';
+		return typeof this.get(name) !== 'undefined';
 	}
 }
 

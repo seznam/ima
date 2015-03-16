@@ -1,13 +1,19 @@
+
 /**
  * @class Ns
  * @namespace Core.Namespace
  * @module Core
  * @submodule Core.Namespace
  */
-
 class Ns {
 
 	/**
+	 * Initializes the namespace provider.
+	 *
+	 * This is a private constructor, you should use the exported ns
+	 * instance to create and use namespaces (see the examples).
+	 *
+	 * @private
 	 * @constructor
 	 * @method constructor
 	 * @example
@@ -23,21 +29,22 @@ class Ns {
 	 * Create new object for assign namespace and return it.
 	 *
 	 * @method namespace
-	 * @param {String} nameSpace - assign namespace
-	 * @return {Mixed} - stored value
-	 * */
+	 * @param {string} nameSpace - the name of the namespace to create
+	 * @return {*} - stored value
+	 */
 	namespace(nameSpace) {
 		var that = this;
 		var levels = nameSpace.split('.');
 
 		for (var i = 0; i < levels.length; i++) {
 
-			if (typeof(that[levels[i]]) === 'undefined') {
+			if (typeof that[levels[i]] === 'undefined') {
 				that[levels[i]] = {};
 			}
 
 			that = that[levels[i]];
 		}
+
 		return that;
 	}
 
@@ -45,25 +52,30 @@ class Ns {
 	 * Check fullfilled for assign namespace.
 	 *
 	 * @method has
-	 * @param {String} nameSpace - assign namespace
-	 * @return {Boolean} - true if namespace exists
-	 * */
+	 * @param {string} nameSpace - assign namespace
+	 * @return {boolean} - true if namespace exists
+	 */
 	has(nameSpace) {
 		var object = this;
 		var levels = nameSpace.split('.');
 
 		for (var i = 0; i < levels.length; i++) {
 
-			if (typeof(object[levels[i]]) === 'undefined') {
+			if (typeof object[levels[i]] === 'undefined') {
 				return false;
 			}
 
 			object = object[levels[i]];
 		}
+
 		return true;
 	}
 }
 
 var ns = new Ns(); // jshint ignore:line
+
+ns.namespace('Core.Namespace');
+
+ns.Core.Namespace.Ns = Ns;
 
 export default ns;

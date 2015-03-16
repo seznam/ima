@@ -10,28 +10,31 @@ ns.namespace('Core.Dispatcher');
  * @namespace Core.Dispatcher
  * @module Core
  * @submodule Core.Dispatcher
+ *
+ * @requires Core.Interface.Storage
  * */
 class Handler extends ns.Core.Interface.Dispatcher {
 
 	/**
 	 * @method constructor
 	 * @constructor
+	 * @param {Core.Interface.Storage} storage
 	 * @example
 	 *      dispatcher.listen('event', handler, [this]);
 	 *      dispatcher.fire('event', data);
 	 *      dispatcher.unlisten('event', handler, [this]);
 	 *      dispatcher.clear();
 	 * */
-	constructor() {
+	constructor(storage) {
 		super();
 
 		/**
 		 * @property _callbacks
 		 * @private
-		 * @type {Map}
-		 * @default new Map()
+		 * @type {Core.Interface.Storage}
+		 * @default storage
 		 * */
-		this._callbacks = new Map();
+		this._callbacks = storage;
 	}
 
 	/**

@@ -12,7 +12,7 @@ describe('Core.Dispatcher.Handler', function() {
 
 	var dispatcher = null;
 	beforeEach(function() {
-		dispatcher = ns.oc.create('Core.Dispatcher.Handler');
+		dispatcher = ns.oc.create('Core.Dispatcher.Handler', new Map());
 	});
 
 	describe('listen method', function() {

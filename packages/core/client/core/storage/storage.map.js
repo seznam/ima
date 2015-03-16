@@ -10,6 +10,8 @@ ns.namespace('Core.Storage');
  * @namespace Core.Storage
  * @module Core
  * @submodule Core.Storage
+ *
+ * @requires Map
  * */
 class MapStorage extends ns.Core.Interface.Storage {
 
@@ -63,7 +65,7 @@ class MapStorage extends ns.Core.Interface.Storage {
 	 * Returns a value of the given item.
 	 * @method get
 	 * @param {String} name
-	 * @return {Mixed}
+	 * @return {*}
 	 */
 	get(name) {
 		return this._storage.get(name);
@@ -74,7 +76,7 @@ class MapStorage extends ns.Core.Interface.Storage {
 	 * @method set
 	 * @chainable
 	 * @param {String} name
-	 * @param {Mixed} value
+	 * @param {*} value
 	 * @return {Core.Storage.Map} Current instance
 	 */
 	set(name, value) {

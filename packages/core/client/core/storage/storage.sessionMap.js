@@ -10,6 +10,9 @@ ns.namespace('Core.Storage');
  * @namespace Core.Storage
  * @module Core
  * @submodule Core.Storage
+ *
+ * @requires Core.Storage.Map
+ * @requires Core.Storage.Session
  * */
 class SessionMap extends ns.Core.Interface.Storage {
 
@@ -80,7 +83,7 @@ class SessionMap extends ns.Core.Interface.Storage {
 	 * Returns a value of the given item.
 	 * @method get
 	 * @param {String} name
-	 * @return {Mixed}
+	 * @return {*}
 	 */
 	get(name) {
 		return this._map.get(name);
@@ -91,7 +94,7 @@ class SessionMap extends ns.Core.Interface.Storage {
 	 * @method set
 	 * @chainable
 	 * @param {String} name
-	 * @param {Mixed} value
+	 * @param {*} value
 	 * @return {Core.Storage.Session} Current instance
 	 */
 	set(name, value) {

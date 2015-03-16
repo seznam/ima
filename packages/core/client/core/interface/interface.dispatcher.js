@@ -13,14 +13,6 @@ ns.namespace('Core.Interface');
 class Dispatcher {
 
 	/**
-	 * @method constructor
-	 * @constructor
-	 * */
-	constructor() {
-
-	}
-
-	/**
 	 * Clear all events.
 	 *
 	 * @method clear

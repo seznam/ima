@@ -11,14 +11,14 @@ ns.namespace('Core.Abstract');
  * @module Core
  * @submodule Core.Abstract
  *
- * @requires Core.Abstract.View
+ * @requires Core.Interface.View
  */
 class Controller extends ns.Core.Interface.Controller {
 
 	/**
 	 * @constructor
 	 * @method constructor
-	 * @param {Core.Abstract.View} view
+	 * @param {Core.Interface.View} view
 	 */
 	constructor(view) {
 		super();
@@ -61,7 +61,7 @@ class Controller extends ns.Core.Interface.Controller {
 		/**
 		 * @property view
 		 * @protected
-		 * @type Core.Abstract.View
+		 * @type Core.Interface.View
 		 */
 		this._view = view
 			.init(this)
@@ -84,6 +84,7 @@ class Controller extends ns.Core.Interface.Controller {
 	 * @method deinit
 	 */
 	deinit() {
+		this._view.deinit(this);
 		this._reactiveView = null;
 	}
 	
@@ -116,7 +117,7 @@ class Controller extends ns.Core.Interface.Controller {
 	 * Set state to controller and to assigned reactive view (if exists).
 	 *
 	 * @method setState
-	 * @param {Mixed} state
+	 * @param {Object} state
 	 */
 	setState(state) {
 		this._state = state;
@@ -129,7 +130,7 @@ class Controller extends ns.Core.Interface.Controller {
 	 * Add state to controller and to assigned reactive view (if exists).
 	 *
 	 * @method addState
-	 * @param {Mixed} state
+	 * @param {Object} state
 	 */
 	addState(state) {
 		this.setState(Object.assign(this._state, state));
@@ -137,7 +138,7 @@ class Controller extends ns.Core.Interface.Controller {
 
 	/**
 	 * @method setState
-	 * @return {Mixed} - assigned view
+	 * @return {Object} - assigned view
 	 */
 	getState() {
 		return this._state;

@@ -13,13 +13,6 @@ ns.namespace('Core.Interface');
 class WindowHelper {
 
 	/**
-	 * @method constructor
-	 * @constructor
-	 * */
-	constructor() {
-	}
-
-	/**
 	 * Return true if is client side code.
 	 *
 	 * @method isClient
