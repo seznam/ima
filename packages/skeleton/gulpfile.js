@@ -396,7 +396,7 @@ gulp.task('Es6ToEs5:client', function() {
 			.pipe(plumber())
 			.pipe(sourcemaps.init())
 			.pipe(cache('Es6ToEs5:client'))
-			.pipe(gulpif(isJSX, react(), gutil.noop()))
+			.pipe(gulpif(isJSX, react({harmony: false, es6module: true}), gutil.noop()))
 			.pipe(traceur({modules: 'inline', moduleName: true, sourceMaps: true}))
 			.pipe(gulpif(isView, sweetjs({
 				modules: ['./imajs/macro/react.sjs', './imajs/macro/componentName.sjs'],
