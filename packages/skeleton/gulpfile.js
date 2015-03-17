@@ -231,7 +231,7 @@ gulp.task('watch', function() {
 	gulp.watch(files.server.watch, ['server:build']);
 	gulp.watch(files.locale.watch, ['locale']);
 
-	gulp.watch('./imajs/**/*.{js,jsx}').on('change', function(e) {
+	gulp.watch(['./imajs/**/*.{js,jsx}', './app/**/*.{js,jsx}']).on('change', function(e) {
 		watchEvent = e;
 		if (e.type === 'deleted') {
 
@@ -307,7 +307,7 @@ gulp.task('reload', function(callback) {
 	setTimeout(function() {
 		server.notify(watchEvent);
 		callback();
-	},1500);
+	}, 1500);
 });
 
 gulp.task('static', function() {
