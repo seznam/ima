@@ -89,7 +89,7 @@ class Server extends ns.Core.Abstract.PageRender {
 
 		scripts.push('<script> window.$IzoApp = window.$IMA || {};' +
 		' window.$IMA.Cache = ' + (ns.oc.get('$Cache').serialize()) + ';' +
-		' window.$IMA.Language = "' + (this._setting.$Languge) + '";' +
+		' window.$IMA.Language = "' + (this._setting.$Language) + '";' +
 		' window.$IMA.Enviroment = "' + (this._setting.$Env) + '";' +
 		' window.$IMA.Protocol = document.location.protocol;' +
 		'</script>');
