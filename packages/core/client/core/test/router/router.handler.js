@@ -30,11 +30,11 @@ describe('Core.Router.Handler', function() {
 
 	describe('should get route by name', function() {
 		it('return instance of Core.Router.Data', function() {
-			expect(router.getRouteByName('home')).not.toBeNull();
+			expect(router._getRouteByName('home')).not.toBeNull();
 		});
 
 		it('return null for non exist route', function() {
-			expect(router.getRouteByName('xxx')).toBeNull();
+			expect(router._getRouteByName('xxx')).toBeNull();
 		});
 	});
 
@@ -51,7 +51,7 @@ describe('Core.Router.Handler', function() {
 			.and
 			.stub();
 
-		router.redirect('home');
+		router.redirect('http://localhost:3002/');
 
 		expect(router._navigate).toHaveBeenCalled();
 	});

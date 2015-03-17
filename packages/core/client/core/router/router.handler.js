@@ -178,25 +178,6 @@ class Handler {
 	}
 
 	/**
-	 * Get route by name.
-	 *
-	 * @method getRouteByName
-	 * @param {String} routeName
-	 * @return {Core.Router.Data|null}
-	 * */
-	getRouteByName(routeName) {
-		for (var i = 0; i < this._routes.length; i++) {
-			var route = this._routes[i];
-
-			if (route.getName() === routeName) {
-				return route;
-			}
-		}
-
-		return null;
-	}
-
-	/**
 	 * Get current path.
 	 *
 	 * @method getPath
@@ -280,18 +261,16 @@ class Handler {
 	}
 
 	/**
-	 * Redirect to route's name with params.
+	 * Redirect to url.
 	 *
 	 * @method redirect
-	 * @param {String} routeName - alias for route
-	 * @param {Object} [params={}]
+	 * @param {String} url -
 	 * */
-	redirect(routeName, params = {}) {
-		var redirectPath = this.link(routeName, params);
-
+	redirect(url) {
 		if (this._respond.isEnabled()) {
-			this._respond.redirect(this._domain + redirectPath);
+			this._respond.redirect(url);
 		} else {
+			var redirectPath = url.replace(this._domain, '');
 			this._navigate(redirectPath);
 		}
 
@@ -306,13 +285,13 @@ class Handler {
 	 * @return {String}
 	 * */
 	link(routeName, params) {
-		var route = this.getRouteByName(routeName);
+		var route = this._getRouteByName(routeName);
 
 		if (!route) {
 			throw new Error(`Core.Router:link has undefined route with name ${routeName}. Add new route with that name.`);
 		}
 
-		return route.createPath(params);
+		return this._domain + route.createPath(params);
 	}
 
 	/**
@@ -366,7 +345,7 @@ class Handler {
 	 * @param {Object} params
 	 * */
 	_handle(routeName, params) {
-		var handleRoute = this.getRouteByName(routeName);
+		var handleRoute = this. __getRouteByName(routeName);
 
 		if (!handleRoute) {
 			throw new Error(`Core.Router:_handle has undefined route. Add new route with name '${routeName}'.`);
@@ -418,6 +397,25 @@ class Handler {
 			var route = this._routes[i];
 
 			if (route.isMatch(path)) {
+				return route;
+			}
+		}
+
+		return null;
+	}
+
+	/**
+	 * Get route by name.
+	 *
+	 * @method _getRouteByName
+	 * @param {String} routeName
+	 * @return {Core.Router.Data|null}
+	 * */
+	_getRouteByName(routeName) {
+		for (var i = 0; i < this._routes.length; i++) {
+			var route = this._routes[i];
+
+			if (route.getName() === routeName) {
 				return route;
 			}
 		}
