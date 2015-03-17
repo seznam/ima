@@ -348,7 +348,7 @@ gulp.task('shim', function() {
 // BUILD tasks for watch
 gulp.task('server:build', function(callback) {
 	return runSequence(
-		'Es6ToEs5:server',
+		['Es6ToEs5:server', 'environment'],
 		'server',
 		'reload',
 		callback
