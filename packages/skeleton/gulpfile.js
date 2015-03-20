@@ -137,7 +137,7 @@ var files = {
 
 /*
 * Change path for file
-* */
+*/
 var resolveNewPath = function(newBase){
 	return es.mapSync(function (file) {
 		var newBasePath = path.resolve(newBase);
