@@ -9,13 +9,13 @@ ns.namespace('Core.Socket');
  * @namespace Core.Socket
  * @module Core
  * @submodule Core.Socket
- * */
+ */
 class Parser {
 
 	/**
 	 * @method constructor
 	 * @constructor
-	 * */
+	 */
 	constructor() {
 
 		/**
@@ -23,7 +23,7 @@ class Parser {
 		 * @const
 		 * @type {String}
 		 * @default 'unknown'
-		 * */
+		 */
 		this.TYPE_UNKNOWN = 'unknown';
 
 
@@ -32,7 +32,7 @@ class Parser {
 		 * @private
 		 * @type {String}
 		 * @default TYPE_UNKNOWN
-		 * */
+		 */
 		this._type = this.TYPE_UNKNOWN;
 
 		/**
@@ -40,7 +40,7 @@ class Parser {
 		 * @private
 		 * @type {Object}
 		 * @default {}
-		 * */
+		 */
 		this._data = {};
 
 	}
@@ -50,7 +50,7 @@ class Parser {
 	 *
 	 * @method parse
 	 * @param {MessageEvent} event
-	 * */
+	 */
 	parse(event) {
 		if (typeof event.data === 'string') {
 
@@ -79,7 +79,7 @@ class Parser {
 	 *
 	 * @method getType
 	 * @return {String}
-	 * */
+	 */
 	getType() {
 		return this._type;
 	}
@@ -89,7 +89,7 @@ class Parser {
 	 *
 	 * @method getData
 	 * @return {Object}
-	 * */
+	 */
 	getData() {
 		return this._data;
 	}

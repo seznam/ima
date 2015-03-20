@@ -8,7 +8,7 @@ ns.namespace('Core.PageRender');
  * @namespace Core.PageRender
  * @module Core
  * @submodule Core.PageRender
- * */
+ */
 class Client extends ns.Core.Abstract.PageRender {
 
 	/**
@@ -18,19 +18,28 @@ class Client extends ns.Core.Abstract.PageRender {
 	 * @param {Vendor.React} react
 	 * @param {Core.Animate.Handler} animate
 	 * @param {Object} setting
-	 * */
-	constructor(rsvp, react, animate, setting) {
+	 * @param {Core.Interface.Window} window
+	 */
+	constructor(rsvp, react, animate, setting, window) {
 		super(rsvp, react, animate, setting);
 
 		/**
 		 * Flag for first rendering page.
 		 *
-		 * @property firsTime
+		 * @property _firsTime
 		 * @private
 		 * @type {Boolean}
 		 * @default true
-		 * */
+		 */
 		this._firstTime = true;
+
+		/**
+		 * @property _window
+		 * @type {Core.Interface.Window}
+		 * @default window
+		 */
+		this._window = window;
+
 	}
 
 	/**
@@ -39,7 +48,7 @@ class Client extends ns.Core.Abstract.PageRender {
 	 * @method render
 	 * @param {Core.Abstract.Controller} controller
 	 * @param {Object} params
-	 * */
+	 */
 	render(controller, params) {
 		super.render(controller, params);
 
@@ -57,25 +66,24 @@ class Client extends ns.Core.Abstract.PageRender {
 			controller.setReactiveView(reactiveView);
 		}
 
-		this._rsvp
-			.hash(loadPromises)
-			.then((resolvedPromises) => {
+		return (
+			this._rsvp
+				.hash(loadPromises)
+				.then((resolvedPromises) => {
 
-				if (this._firstTime === true) {
-					reactiveView = this._react.render(controller.getView(), document.getElementById('page'));
-					controller.setReactiveView(reactiveView);
-					this._firstTime = false;
-				}
+					if (this._firstTime === true) {
+						reactiveView = this._react.render(controller.getView(), document.getElementById(this._setting.$PageRender.masterElementId));
+						controller.setReactiveView(reactiveView);
+						this._firstTime = false;
+					}
 
-				controller.setSeoParams(resolvedPromises);
-				this._changeSeoParamsOnPage(controller.getSeoParams());
+					controller.setSeoParams(resolvedPromises);
+					this._changeSeoParamsOnPage(controller.getSeoParams());
 
-				controller.activate();
+					controller.activate();
 
-			}).catch((reason) => {
-				console.error('PageRender.render catch:', reason.message, reason.stack);
-				throw reason;
-			});
+				})
+		);
 	}
 
 	/**
@@ -86,7 +94,7 @@ class Client extends ns.Core.Abstract.PageRender {
 	 * @param {Core.Abstract.Controller} controller
 	 * @param {String} service
 	 * @param {Promise} promise
-	 * */
+	 */
 	_resolvePromise(controller, service, promise) {
 		promise
 			.then((serviceData) => {
@@ -95,9 +103,6 @@ class Client extends ns.Core.Abstract.PageRender {
 
 				controller.setState(state);
 
-			}).catch((reason) => {
-				console.error('PageRender._resolvePromise catch:', reason.message, reason.stack);
-				throw reason;
 			});
 	}
 
@@ -107,7 +112,7 @@ class Client extends ns.Core.Abstract.PageRender {
 	 * @method _changeSeoParamsOnPage
 	 * @private
 	 * @param {Object} seoParams
-	 * */
+	 */
 	_changeSeoParamsOnPage(seoParams) {
 		document.title = seoParams.get('title');
 		document.querySelector('meta[name="description"]').content = seoParams.get('description');

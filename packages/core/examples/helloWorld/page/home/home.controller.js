@@ -8,7 +8,7 @@ ns.namespace('App.Page.Home');
  * @namespace App.Page.Home
  * @module App
  * @submodule App.Page
- * */
+ */
 class Controller extends ns.Core.Abstract.Controller {
 
 	/**
@@ -16,7 +16,7 @@ class Controller extends ns.Core.Abstract.Controller {
 	 * @constructor
 	 * @param {App.Page.Home.View} view
 	 * @param {Vendor.Rsvp.Promise} Promise
-	 * */
+	 */
 	constructor(view, Promise) {
 		super(view);
 
@@ -36,7 +36,7 @@ class Controller extends ns.Core.Abstract.Controller {
 	 *
 	 * @method load
 	 * @return {Object} object of promise
-	 * */
+	 */
 	load() {
 		return {
 			message: this._Promise.resolve('This is IMA.js!')
@@ -48,7 +48,7 @@ class Controller extends ns.Core.Abstract.Controller {
 	 *
 	 * @method setSeoParams
 	 * @param {Object} resolvedPromises
-	 * */
+	 */
 	setSeoParams(resolvedPromises) {
 		this._seo.set('title', resolvedPromises.message);
 	}

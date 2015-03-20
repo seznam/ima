@@ -43,7 +43,7 @@ class Http {
 	 * Return data from api for PATCH request.
 	 *
 	 * @method patch
-	 * */
+	 */
 	patch() {
 
 	}
@@ -52,7 +52,7 @@ class Http {
 	 * Return data from api for DELETE request.
 	 *
 	 * @method delete
-	 * */
+	 */
 	delete() {
 
 	}

@@ -30,12 +30,12 @@ module.exports = () => {
 					content = hljs.highlight('javascript', content);
 
 					// start a few lines before the error or at the beginning of the file
-					var start = Math.max(item.lineNumber - 5, 0);
+					var start = Math.max(item.lineNumber - 6, 0);
 					var lines = content.value.split('\n').map((line) => {
 						return '<span class="line">' + line + '</span>';
 					});
 					// end a few lines after the error or the last line of the file
-					var end = Math.min(item.lineNumber + 4, lines.length);
+					var end = Math.min(item.lineNumber + 5, lines.length);
 					var snippet = lines.slice(start, end);
 					// array starts at 0 but lines numbers begin with 1, so we have to
 					// subtract 1 to get the error line position in the array
@@ -92,6 +92,13 @@ module.exports = () => {
 		return ns;
 	};
 
+	var showStaticErrorPage = (err, req, res) => {
+		console.error(err);
+		res
+			.status(500)
+			.send('Error static page ' + JSON.stringify(err, 4));
+	};
+
 	var errorHandler = (err, req, res) => {
 
 		if (config.$Debug) {
@@ -100,10 +107,13 @@ module.exports = () => {
 			var ns = _initApp(req, res);
 			var router = ns.oc.get('$Router');
 			var params = {
-				status: 500,
 				error: err
 			};
-			router.handleError(params);
+			router
+				.handleError(params)
+				.catch((fatalError) => {
+					showStaticErrorPage(fatalError, req, res);
+				});
 		}
 
 	};
@@ -112,9 +122,13 @@ module.exports = () => {
 		var ns = _initApp(req, res);
 		var router = ns.oc.get('$Router');
 
-		router.init({domain: res.locals.domain, mode: 'server'});
+		router.init({domain: res.locals.domain, mode: router.MODE_SERVER});
 
-		router.route(req.url, req, res);
+		router
+			.route(req.url)
+			.catch((fatalError) => {
+				errorHandler(fatalError, req, res);
+			});
 	};
 
 	return {errorHandler, respond};

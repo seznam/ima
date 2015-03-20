@@ -110,7 +110,7 @@ class Handler extends ns.Core.Interface.Http{
 		 * @property _options
 		 * @private
 		 * @type {Object}
-		 * */
+		 */
 		this._options = {
 			ttl: config.ttl,
 			timeout: config.timeout,
@@ -299,7 +299,7 @@ class Handler extends ns.Core.Interface.Http{
 	 * @method _proxyRejected
 	 * @private
 	 * @param {Object} errorParams
-	 * */
+	 */
 	_proxyRejected(errorParams) {
 		if (errorParams.options.repeatRequest > 0) {
 			errorParams.options.repeatRequest--;

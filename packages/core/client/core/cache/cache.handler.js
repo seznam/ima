@@ -9,7 +9,7 @@ ns.namespace('Core.Cache');
  * @submodule Core.Cache
  *
  * @requires Core.Interface.Storage
- * */
+ */
 class Handler {
 
 	/**
@@ -23,7 +23,7 @@ class Handler {
 	 * 		} else {
 	 * 			cache.set('model.articles', articles, 60 * 60 * 1000); // cached for hour
 	 * 		}
-	 * */
+	 */
 	constructor(cacheStorage, config = {TTL: 30000, cached: false}) {
 		/**
 		 * Keep config.
@@ -32,7 +32,7 @@ class Handler {
 		 * @private
 		 * @type {Object}
 		 * @default config
-		 * */
+		 */
 		this._config = config;
 
 		/**
@@ -42,7 +42,7 @@ class Handler {
 		 * @private
 		 * @type {Number}
 		 * @default this._config.TTL
-		 * */
+		 */
 		this._TTL = this._config.TTL;
 
 		/**
@@ -52,7 +52,7 @@ class Handler {
 		 * @private
 		 * @type {Boolean}
 		 * @default this._config.cached
-		 * */
+		 */
 		this._cached = this._config.cached;
 
 		/**
@@ -62,7 +62,7 @@ class Handler {
 		 * @private
 		 * @type {Core.Interface.Storage}
 		 * @default cacheStorage
-		 * */
+		 */
 		this._cache = cacheStorage;
 	}
 
@@ -70,7 +70,7 @@ class Handler {
 	 * Clear all cache.
 	 *
 	 * @method clear
-	 * */
+	 */
 	clear() {
 		this._cache.clear();
 	}
@@ -81,7 +81,7 @@ class Handler {
 	 * @method has
 	 * @param {String} key
 	 * @return {Boolean}
-	 * */
+	 */
 	has(key){
 		var hashedKey = this._hash(key);
 
@@ -103,7 +103,7 @@ class Handler {
 	 * @method get
 	 * @param {String} key
 	 * @return {*}
-	 * */
+	 */
 	get(key) {
 
 		if (this.has(key)) {
@@ -123,7 +123,7 @@ class Handler {
 	 * @param {String} key
 	 * @param {*} value
 	 * @param {Number} [TTL=this._TTL]
-	 * */
+	 */
 	set(key, value, TTL) {
 		var hasdedKey = this._hash(key);
 		var cacheData = ns.oc.create('$CacheData', value, TTL || this._TTL);
@@ -136,7 +136,7 @@ class Handler {
 	 *
 	 * @method delete
 	 * @param {String} key
-	 * */
+	 */
 	delete(key) {
 
 		if (this.has(key)) {
@@ -151,7 +151,7 @@ class Handler {
 	 * Disbale cache.
 	 *
 	 * @method disable
-	 * */
+	 */
 	disable() {
 		this._cached = false;
 	}
@@ -160,7 +160,7 @@ class Handler {
 	 * Enable cache
 	 *
 	 * @method enable
-	 * */
+	 */
 	enable() {
 		this._cached = true;
 	}
@@ -172,7 +172,7 @@ class Handler {
 	 * @private
 	 * @param {String} key
 	 * @return {String}
-	 * */
+	 */
 	_hash(key) {
 		return key;
 	}
@@ -182,7 +182,7 @@ class Handler {
 	 *
 	 * @method serialize
 	 * @return {JSON}
-	 * */
+	 */
 	serialize() {
 		var dataToSerialize = {};
 
@@ -199,7 +199,7 @@ class Handler {
 	 *
 	 * @method deserialize
 	 * @param {Object} dataToDeserialize
-	 * */
+	 */
 	deserialize(dataToDeserialize) {
 
 		for (var key of Object.keys(dataToDeserialize)) {

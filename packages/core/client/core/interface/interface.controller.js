@@ -7,14 +7,14 @@ ns.namespace('Core.Interface');
  * @namespace Core.Interface
  * @module Core
  * @submodule Core.Interface
- * */
+ */
 class Controller {
 
 	/**
 	 * Initialization controller.
 	 *
 	 * @method init
-	 * */
+	 */
 	init() {
 	}
 
@@ -22,7 +22,7 @@ class Controller {
 	 * Deinicialization controller.
 	 *
 	 * @method deinit
-	 * */
+	 */
 	deinit() {
 	}
 
@@ -30,7 +30,7 @@ class Controller {
 	 * Controller will be activated, after load complete.
 	 *
 	 * @method activate
-	 * */
+	 */
 	activate() {
 
 	}
@@ -39,7 +39,7 @@ class Controller {
 	 * Load data for controller.
 	 *
 	 * @method load
-	 * */
+	 */
 	load() {
 
 	}

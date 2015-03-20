@@ -7,7 +7,7 @@ ns.namespace('Core.Interface');
  * @namespace Core.Interface
  * @module Core
  * @submodule Core.Interface
- * */
+ */
 class Dictionary{
 
 
@@ -15,7 +15,7 @@ class Dictionary{
 	 * Initialization dictionary class.
 	 *
 	 * @method init
-	 * */
+	 */
 	init() {
 	}
 
@@ -23,7 +23,7 @@ class Dictionary{
 	 * Return application language.
 	 *
 	 * @method getLanguage
-	 * */
+	 */
 	getLanguage() {
 
 	}
@@ -32,7 +32,7 @@ class Dictionary{
 	 * Translate vocabulary key with params and return localization string.
 	 *
 	 * @method get
-	 * */
+	 */
 	get() {
 
 	}

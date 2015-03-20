@@ -20,7 +20,7 @@ class View extends ns.Core.Abstract.View {
 	* @method constructor
 	* @constructor
 	* @param {Vendor.React} react
-	* */
+	*/
 	constructor(react) {
 		super(react);
 	}
@@ -30,7 +30,7 @@ class View extends ns.Core.Abstract.View {
 	 *
 	 * @method init
 	 * @param {App.Page.Home.Controller} cotroller
-	 * */
+	 */
 	init(controller) {
 		super.init(controller);
 		var self = this;

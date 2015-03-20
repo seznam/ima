@@ -9,14 +9,14 @@ ns.namespace('Core.Boot');
  * @submodule Core.Boot
  *
  * @requires Core.Namespace.Ns
- * */
+ */
 class Handler{
 
 	/**
 	 * @method contructor
 	 * @constructor
 	 * @param {Core.Namespace.Ns} namespace
-	 * */
+	 */
 	constructor(namespace) {
 		
 		/**
@@ -24,7 +24,7 @@ class Handler{
 		 * @private
 		 * @type {Core.Namespace.Ns}
 		 * @default namespace
-		 * */
+		 */
 		this._ns = namespace; 
 		
 
@@ -35,7 +35,7 @@ class Handler{
 		 * @private
 		 * @type {Array}
 		 * @default []
-		 * */
+		 */
 		this._component = []; 
 		
 		/**
@@ -43,7 +43,7 @@ class Handler{
 		 * @private
 		 * @type {Object}
 		 * @default {}
-		 * */
+		 */
 		this._config = {}; 
 		
 	}
@@ -54,7 +54,7 @@ class Handler{
 	 *
 	 * @method run
 	 * @param {Object} [config={}]
-	 * */
+	 */
 	run(config = {}) {
 		this._config = config;
 
@@ -72,7 +72,7 @@ class Handler{
 	 *
 	 * @method _setVendor
 	 * @private
-	 * */
+	 */
 	_setVendor() {
 		var vendor = this._config.vendor;
 		var nsVendor = this._ns.namespace('Vendor');
@@ -86,7 +86,7 @@ class Handler{
 	 *
 	 * @method _initSetting
 	 * @private
-	 * */
+	 */
 	_initSetting() {
 		if (typeof(this._config.initSetting) === 'function') {
 			this._config.initSetting(this._ns, this._config.setting);
@@ -98,7 +98,7 @@ class Handler{
 	 *
 	 * @method _initBind
 	 * @private
-	 * */
+	 */
 	_initBind() {
 		if (typeof(this._config.initBindCore) === 'function') {
 			this._config.initBindCore(this._ns, this._config.bind);
@@ -114,7 +114,7 @@ class Handler{
 	 *
 	 * @method _initRoute
 	 * @private
-	 * */
+	 */
 	_initRoute() {
 		if (typeof(this._config.initRoute) === 'function') {
 			this._config.initRoute(this._ns, this._config.route);
@@ -126,7 +126,7 @@ class Handler{
 	 *
 	 * @method _initDictionary
 	 * @private
-	 * */
+	 */
 	_initDictionary() {
 		if (typeof(this._config.initDictionaryCore) === 'function') {
 			this._config.initDictionaryCore(this._ns, this._config.dictionary);
@@ -142,7 +142,7 @@ class Handler{
 	 *
 	 * @method _initComponent
 	 * @private
-	 * */
+	 */
 	_initComponent() {
 		for (var componentHandler of this._component) {
 			if (typeof(componentHandler) === 'function') {
@@ -156,7 +156,7 @@ class Handler{
 	 *
 	 * @method _initVariable
 	 * @private
-	 * */
+	 */
 	_initVariable() {
 		if (typeof(this._config.initVariableCore) === 'function') {
 			this._config.initVariableCore(this._ns, this._config.variable);
@@ -172,7 +172,7 @@ class Handler{
 	 *
 	 * @method addComponent
 	 * @param {Function} componentHandler - function for init react component
-	 * */
+	 */
 	addComponent(componentHandler) {
 		this._component.push(componentHandler);
 	}

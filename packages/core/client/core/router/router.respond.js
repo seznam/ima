@@ -7,13 +7,13 @@ ns.namespace('Core.Router');
  * @namespace Core.Router
  * @module Core
  * @submodule Core.Router
- * */
+ */
 class Respond {
 
 	/**
 	 * @method constructor
 	 * @constructor
-	 * */
+	 */
 	constructor() {
 
 		/**
@@ -21,7 +21,7 @@ class Respond {
 		 * @private
 		 * @type {Express.Respond}
 		 * @default null
-		 * */
+		 */
 		this._res = null;
 	}
 
@@ -32,7 +32,7 @@ class Respond {
 	 * @chainable
 	 * @param {Express.Respond} res
 	 * @return {this}
-	 * */
+	 */
 	init(res) {
 		this._res = res;
 		return this;
@@ -44,7 +44,7 @@ class Respond {
 	 * @method redirect
 	 * @param {String} url
 	 * @param {Number} status
-	 * */
+	 */
 	redirect(url ,status = 303) {
 		this._res.redirect(url, status);
 	}
@@ -54,7 +54,7 @@ class Respond {
 	 * 
 	 * @method isEnabled
 	 * @return {Boolean}
-	 * */
+	 */
 	isEnabled() {
 		return !!this._res;
 	}
@@ -66,7 +66,7 @@ class Respond {
 	 * @chainable
 	 * @param {Number} httpStatus
 	 * @return {Number}
-	 * */
+	 */
 	status(httpStatus) {
 		this._res.status(httpStatus);
 		return this;
@@ -79,7 +79,7 @@ class Respond {
 	 * @chainable
 	 * @param {String} content
 	 * @@return {this}
-	 * */
+	 */
 	send(content) {
 		this._res.send(content);
 		return this;
@@ -93,7 +93,7 @@ class Respond {
 	 * @param {String} name
 	 * @param {*} value
 	 * @param {Object} options
-	 * */
+	 */
 	setCookie(name, value, options) {
 		this._res.cookie(name, value, options);
 		return this;

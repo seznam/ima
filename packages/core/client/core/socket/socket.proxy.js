@@ -14,7 +14,7 @@ ns.namespace('Core.Socket');
  * @requires Core.Interface.Dispatcher
  * @requires Core.Socket.Factory
  * @requires Core.Socket.Parser
- * */
+ */
 class Proxy extends ns.Core.Abstract.Socket {
 
 	/**
@@ -30,7 +30,7 @@ class Proxy extends ns.Core.Abstract.Socket {
 	 *      proxy.open(url);
 	 *      dispatcher.listen('socket.message.[event.type]', data);
 	 *      proxy.close();
-	 * */
+	 */
 	constructor(dispatcher, socketFactory, socketParser, config, secure) {
 		super(dispatcher, config, 'websocket');
 
@@ -39,7 +39,7 @@ class Proxy extends ns.Core.Abstract.Socket {
 		 * @private
 		 * @type {Core.Socket.Factory}
 		 * @default socketFactory
-		 * */
+		 */
 		this._socketFactory = socketFactory;
 
 		/**
@@ -47,7 +47,7 @@ class Proxy extends ns.Core.Abstract.Socket {
 		 * @private
 		 * @type {Core.Socket.Parser}
 		 * @default socketParser
-		 * */
+		 */
 		this._socketParser = socketParser;
 
 		/**
@@ -55,7 +55,7 @@ class Proxy extends ns.Core.Abstract.Socket {
 		 * @private
 		 * @type {Boolean}
 		 * @default secure
-		 * */
+		 */
 		this._secure = secure;
 
 		/**
@@ -63,7 +63,7 @@ class Proxy extends ns.Core.Abstract.Socket {
 		 * @private
 		 * @type {Number}
 		 * @default 0
-		 * */
+		 */
 		this._repeatedAttempts = 0;
 
 		/**
@@ -73,7 +73,7 @@ class Proxy extends ns.Core.Abstract.Socket {
 		 * @private
 		 * @type {Number}
 		 * @default false
-		 * */
+		 */
 		this._manuallyClosed = false;
 
 		/**
@@ -81,7 +81,7 @@ class Proxy extends ns.Core.Abstract.Socket {
 		 * @private
 		 * @type {String}
 		 * @default '';
-		 * */
+		 */
 		this._url = '';
 	}
 
@@ -90,7 +90,7 @@ class Proxy extends ns.Core.Abstract.Socket {
 	 *
 	 * @method open
 	 * @param {String} [id]
-	 * */
+	 */
 	open(id) {
 		var url = this._createUrl(id);
 
@@ -105,7 +105,7 @@ class Proxy extends ns.Core.Abstract.Socket {
 	 * Close active connection.
 	 *
 	 * @method close
-	 * */
+	 */
 	close() {
 		if (this._connection && this._connection.readyState === 1) {
 			this._manuallyClosed = true;
@@ -121,7 +121,7 @@ class Proxy extends ns.Core.Abstract.Socket {
 	 * @method _createUrl
 	 * @param {String} [id]
 	 * @return {String}
-	 * */
+	 */
 	_createUrl(id) {
 		var protocol = this._secure ? 'wss:' : 'ws:';
 		var url = protocol + this._baseUrl + '/' + this._technologie;
@@ -138,7 +138,7 @@ class Proxy extends ns.Core.Abstract.Socket {
 	 *
 	 * @method _connect
 	 * @private
-	 * */
+	 */
 	_connect() {
 		this._connection = this._socketFactory.createConnection(this._url);
 
@@ -153,7 +153,7 @@ class Proxy extends ns.Core.Abstract.Socket {
 	 *
 	 * @method _open
 	 * @private
-	 * */
+	 */
 	_open() {
 		this._repeatedAttempts = 0;
 	}
@@ -164,7 +164,7 @@ class Proxy extends ns.Core.Abstract.Socket {
 	 * @method _message
 	 * @private
 	 * @param {Event} e
-	 * */
+	 */
 	_message(e) {
 		this._socketParser.parse(e);
 		this._dispatcher.fire(`socket.message.${this._socketParser.getType()}`, this._socketParser.getData());
@@ -175,7 +175,7 @@ class Proxy extends ns.Core.Abstract.Socket {
 	 *
 	 * @method _error
 	 * @private
-	 * */
+	 */
 	_error() {
 		this._repeatedAttempts++;
 	}
@@ -185,7 +185,7 @@ class Proxy extends ns.Core.Abstract.Socket {
 	 *
 	 * @method _close
 	 * @private
-	 * */
+	 */
 	_close() {
 		if (this._manuallyClosed === true) {
 			this._manuallyClosed = false;

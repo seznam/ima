@@ -12,7 +12,7 @@ ns.namespace('Core.Dispatcher');
  * @submodule Core.Dispatcher
  *
  * @requires Core.Interface.Storage
- * */
+ */
 class Handler extends ns.Core.Interface.Dispatcher {
 
 	/**
@@ -24,7 +24,7 @@ class Handler extends ns.Core.Interface.Dispatcher {
 	 *      dispatcher.fire('event', data);
 	 *      dispatcher.unlisten('event', handler, [this]);
 	 *      dispatcher.clear();
-	 * */
+	 */
 	constructor(storage) {
 		super();
 
@@ -33,7 +33,7 @@ class Handler extends ns.Core.Interface.Dispatcher {
 		 * @private
 		 * @type {Core.Interface.Storage}
 		 * @default storage
-		 * */
+		 */
 		this._callbacks = storage;
 	}
 
@@ -42,7 +42,7 @@ class Handler extends ns.Core.Interface.Dispatcher {
 	 *
 	 * @method clear
 	 * @chainable
-	 * */
+	 */
 	clear() {
 		this._callbacks.clear();
 
@@ -58,7 +58,7 @@ class Handler extends ns.Core.Interface.Dispatcher {
 	 * @param {Function} handler
 	 * @param {Object} [scope]
 	 * @return {this}
-	 * */
+	 */
 	listen(event, handler, scope) {
 		var listener = {
 			handlers: [],
@@ -89,7 +89,7 @@ class Handler extends ns.Core.Interface.Dispatcher {
 	 * @param {Function} handler
 	 * @param {Object} scope
 	 * @return {this}
-	 * */
+	 */
 	unlisten(event, handler, scope) {
 		if (this._callbacks.has(event)) {
 			var listener = this._callbacks.get(event);
@@ -118,7 +118,7 @@ class Handler extends ns.Core.Interface.Dispatcher {
 	 * @param {String} event
 	 * @param {Object} data
 	 * @return {this}
-	 * */
+	 */
 	fire(event, data) {
 		if (this._callbacks.has(event)) {
 			var listener = this._callbacks.get(event);

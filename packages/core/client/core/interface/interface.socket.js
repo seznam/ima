@@ -9,14 +9,14 @@ ns.namespace('Core.Interface');
  * @namespace Core.Interface
  * @module Core
  * @submodule Core.Interface
- * */
+ */
 class Socket {
 
 	/**
 	 * Open connection to server.
 	 *
 	 * @method open
-	 * */
+	 */
 	open() {
 
 	}
@@ -25,7 +25,7 @@ class Socket {
 	 * Close connection from server.
 	 *
 	 * @method close
-	 * */
+	 */
 	close() {
 
 	}
@@ -34,7 +34,7 @@ class Socket {
 	 * Send message to server.
 	 *
 	 * @method send
-	 * */
+	 */
 	send() {
 
 	}

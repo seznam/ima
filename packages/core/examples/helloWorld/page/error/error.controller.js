@@ -8,7 +8,7 @@ ns.namespace('App.Page.Error');
  * @namespace App.Page.Error
  * @module App
  * @submodule App.Page
- * */
+ */
 class Controller extends ns.Core.Abstract.Controller {
 
 	/**
@@ -16,7 +16,7 @@ class Controller extends ns.Core.Abstract.Controller {
 	 * @constructor
 	 * @param {App.Page.Error.View} view
 	 * @param {Vendor.Rsvp.Promise} Promise
-	 * */
+	 */
 	constructor(view, Promise) {
 		super(view);
 		this._status = 500;
@@ -37,7 +37,7 @@ class Controller extends ns.Core.Abstract.Controller {
 	 *
 	 * @method load
 	 * @return {Object} object of promise
-	 * */
+	 */
 	load() {
 		return {
 			status: this._Promise.resolve(this._status)

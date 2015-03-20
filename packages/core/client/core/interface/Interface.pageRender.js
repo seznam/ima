@@ -7,14 +7,14 @@ ns.namespace('Core.Interface');
  * @namespace Core.Interface
  * @module Core
  * @submodule Core.Interface
- * */
+ */
 class PageRender {
 
 	/**
 	 * Render page.
 	 *
 	 * @method render
-	 * */
+	 */
 	render() {
 
 	}

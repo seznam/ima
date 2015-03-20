@@ -9,14 +9,14 @@ ns.namespace('Core.Interface');
  * @namespace Core.Interface
  * @module Core
  * @submodule Core.Interface
- * */
+ */
 class Animate {
 
 	/**
 	 * Set new animate state.
 	 *
 	 * @method set
-	 * */
+	 */
 	set() {
 
 	}

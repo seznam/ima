@@ -76,14 +76,17 @@ if (typeof window !== 'undefined' && window !== null) {
 			Object.assign(bootConfig, getInit());
 			boot.run(bootConfig);
 
-			 var cache = ns.oc.get('$Cache');
-			 cache.deserialize(window.$IMA.Cache);
+			var cache = ns.oc.get('$Cache');
+			cache.deserialize(window.$IMA.Cache);
 
-			 var router = ns.oc.get('$Router');
-			 router
-				 .init({mode: 'history'})
-				 .listen()
-				 .route(router.getPath());
+			var router = ns.oc.get('$Router');
+			router
+				.init({mode: router.MODE_HISTORY})
+				.listen()
+				.route(router.getPath())
+				.catch((error) => {
+					router.handleError(error);
+				});
 		});
 	}
 }

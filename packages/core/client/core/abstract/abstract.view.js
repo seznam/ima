@@ -43,7 +43,7 @@ class View extends ns.Core.Interface.View {
 		 * @property _viewConfig
 		 * @type {Object}
 		 * @default {}
-		 * */
+		 */
 		this._viewConfig = {};
 
 	}

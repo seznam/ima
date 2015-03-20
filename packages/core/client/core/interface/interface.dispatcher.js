@@ -9,14 +9,14 @@ ns.namespace('Core.Interface');
  * @namespace Core.Interface
  * @module Core
  * @submodule Core.Interface
- * */
+ */
 class Dispatcher {
 
 	/**
 	 * Clear all events.
 	 *
 	 * @method clear
-	 * */
+	 */
 	clear() {
 
 	}
@@ -25,7 +25,7 @@ class Dispatcher {
 	 * Listen handler for event.
 	 *
 	 * @method listen
-	 * */
+	 */
 	listen() {
 
 	}
@@ -34,7 +34,7 @@ class Dispatcher {
 	 * Unlisten handler for event.
 	 *
 	 * @method unlisten
-	 * */
+	 */
 	unlisten() {
 
 	}
@@ -43,7 +43,7 @@ class Dispatcher {
 	 * Fire event with data.
 	 *
 	 * @method fire
-	 * */
+	 */
 	fire() {
 
 	}

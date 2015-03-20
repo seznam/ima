@@ -3,7 +3,7 @@ export var init = (ns) => {
 
 	router
 		.add('home', '/', 'HomeController')
-		.add('error', '/error', 'ErrorController')
-		.add('notFound', '/not-found', 'NotFoundController')
+		.add(router.ROUTE_NAME_ERROR, '/error', 'ErrorController')
+		.add(router.ROUTE_NAME_NOT_FOUND, '/not-found', 'NotFoundController');
 
 };

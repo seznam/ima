@@ -34,11 +34,10 @@ export var init = (ns) => { //jshint ignore:line
 
 	//*************START CORE**************
 	//Helper
-	ns.oc.bind('$TemplateHelper', ns.oc.create('Core.Helper.Template'));
 	if (typeof window !== 'undefined' && window !== null) {
-		ns.oc.bind('$WindowHelper', ns.oc.create('Core.Helper.WindowClient'));
+		ns.oc.bind('$WindowHelper', ns.oc.create('Core.Helper.ClientWindow'));
 	} else {
-		ns.oc.bind('$WindowHelper', ns.oc.create('Core.Helper.WindowServer'));
+		ns.oc.bind('$WindowHelper', ns.oc.create('Core.Helper.ServerWindow'));
 	}
 
 	//Core Error
@@ -64,7 +63,7 @@ export var init = (ns) => { //jshint ignore:line
 	ns.oc.bind('$Animate', ns.oc.make('Core.Animate.Handler', ['$Dispatcher', '$BindPromise', '$WindowHelper', '$CookieStorage', '$ANIMATE_CONFIG']));
 
 	//Cache
-	if (ns.oc.get('$WindowHelper').isSessionStorage()) {
+	if (ns.oc.get('$WindowHelper').hasSessionStorage()) {
 		ns.oc.bind('$CacheStorage', ns.oc.make('$SessionMapStorage'));
 	} else {
 		ns.oc.bind('$CacheStorage', ns.oc.make('$MapStorage'));
@@ -75,14 +74,18 @@ export var init = (ns) => { //jshint ignore:line
 
 	//Render
 	if (ns.oc.get('$WindowHelper').isClient()) {
-		ns.oc.bind('$PageRender', ns.oc.make('Core.PageRender.Client', ['$Rsvp', '$BindReact', '$Animate', ns.Setting]));
+		ns.oc.bind('$PageRender', ns.oc.make('Core.PageRender.Client', ['$Rsvp', '$BindReact', '$Animate', ns.Setting, '$WindowHelper']));
 	} else {
-		ns.oc.bind('$PageRender', ns.oc.make('Core.PageRender.Server', ['$Rsvp', '$BindReact', '$Animate', ns.Setting]));
+		ns.oc.bind('$PageRender', ns.oc.make('Core.PageRender.Server', ['$Rsvp', '$BindReact', '$Animate', ns.Setting, '$Respond']));
 	}
 
 	//Router
-	ns.oc.bind('$Router', ns.oc.make('Core.Router.Handler', ['$PageRender', '$Request', '$Respond']));
-	ns.oc.bind('$Route', ns.Core.Router.Data);
+	if (ns.oc.get('$WindowHelper').isClient()) {
+		ns.oc.bind('$Router', ns.oc.make('Core.Router.ClientHandler', ['$PageRender', '$WindowHelper']));
+	} else {
+		ns.oc.bind('$Router', ns.oc.make('Core.Router.ServerHandler', ['$PageRender', '$Request']));
+	}
+	ns.oc.bind('$Route', ns.Core.Router.Route);
 
 	//SuperAgent
 	ns.oc.bind('$HttpProxy', ns.oc.make('Core.Http.Proxy', ['$SuperAgent', '$BindPromise']));

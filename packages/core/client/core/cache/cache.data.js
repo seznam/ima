@@ -7,7 +7,7 @@ ns.namespace('Core.Cache');
  * @namespace Core.Cache
  * @module Core
  * @submodule Core.Cache
- * */
+ */
 class Data {
 
 	/**
@@ -16,7 +16,7 @@ class Data {
 	 *
 	 * @param {*} value
 	 * @param {Number} TTL - time to live
-	 * */
+	 */
 	constructor(value, TTL) {
 
 		/**
@@ -26,7 +26,7 @@ class Data {
 		 * @private
 		 * @type {*}
 		 * @default value
-		 * */
+		 */
 		this._value = value;
 
 		/**
@@ -36,7 +36,7 @@ class Data {
 		 * @private
 		 * @type {Number}
 		 * @default TTL
-		 * */
+		 */
 		this._TTL = TTL;
 
 		/**
@@ -46,7 +46,7 @@ class Data {
 		 * @private
 		 * @type {Date}
 		 * @default new Date().getTime()
-		 * */
+		 */
 		this._cachedTime = new Date().getTime();
 	}
 
@@ -55,7 +55,7 @@ class Data {
 	 *
 	 * @method isLive
 	 * @return {Boolean}
-	 * */
+	 */
 	isLive() {
 		var now = new Date().getTime();
 		return now <= this._cachedTime + this._TTL;
@@ -66,7 +66,7 @@ class Data {
 	 *
 	 * @method getData
 	 * @return {Object} - {value, TTL}
-	 * */
+	 */
 	getData() {
 		return {value: this._value, TTL: this._TTL};
 	}
@@ -76,7 +76,7 @@ class Data {
 	 *
 	 * @method getValue
 	 * @return {Mixed}
-	 * */
+	 */
 	getValue() {
 		return this._value;
 	}

@@ -3,27 +3,27 @@ import ns from 'core/namespace/ns.js';
 ns.namespace('Core.Router');
 
 /**
- * @class Data
+ * @class Route
  * @namespace Core.Router
  * @module Core
  * @submodule Core.Router
- * */
-class Data{
+ */
+class Route{
 
 	/**
 	 * @method constructor
 	 * @constructor
 	 * @param {String} name
-	 * @param {String} path
+	 * @param {String} pathExpression
 	 * @param {String} controller
-	 * */
-	constructor(name, path, controller) {
+	 */
+	constructor(name, pathExpression, controller) {
 		/**
 		 * @property ESCAPED_CHARS_REGEXP
 		 * @const
 		 * @type {RegExp}
 		 * @default new RegExp('[\\.+*?\^$\[\](){}\/'#]','g')
-		 * */
+		 */
 		this.ESCAPED_CHARS_REGEXP = new RegExp('[\\.+*?\^$\[\](){}\/\'#]','g');
 
 		/**
@@ -31,7 +31,7 @@ class Data{
 		 * @const
 		 * @type {RegExp}
 		 * @default new RegExp('^\/|\/$','g')
-		 * */
+		 */
 		this.LOOSE_SLASHES_REGEXP = new RegExp('^\/|\/$','g');
 
 		/**
@@ -39,7 +39,7 @@ class Data{
 		 * @const
 		 * @type {RegExp}
 		 * @default new RegExp(':([a-zA-Z0-9_-]*)', 'g')
-		 * */
+		 */
 		this.PARAMS_REGEXP = new RegExp(':([a-zA-Z0-9_-]*)', 'g');
 
 		/**
@@ -47,24 +47,24 @@ class Data{
 		 * @private
 		 * @type {String}
 		 * @default name
-		 * */
+		 */
 		this._name = name;
 
 		/**
-		 * @property _path
+		 * @property _pathExpression
 		 * @private
 		 * @type {String}
-		 * @default path
-		 * */
-		this._path = path;
+		 * @default pathExpression
+		 */
+		this._pathExpression = pathExpression;
 
 		/**
-		 * @property _loosesPath
+		 * @property _loosesPathExpression
 		 * @private
 		 * @type {String}
-		 * @default this._path.replace(this.LOOSE_SLASHES_REGEXP, '')
-		 * */
-		this._loosesPath = this._getLoosesPath(this._path);
+		 * @default this._getLoosesPath(this._pathExpression)
+		 */
+		this._loosesPathExpression = this._getLoosesPath(this._pathExpression);
 
 
 		/**
@@ -72,37 +72,36 @@ class Data{
 		 * @private
 		 * @type {String}
 		 * @default controller
-		 * */
+		 */
 		this._controller = controller;
 
 
 		/**
-		 * @property _isParamsInpath
+		 * @property _isParamsInPathExpression
 		 * @private
 		 * @type {Boolean}
-		 * */
-		this._isParamsInPath = !!this._path.match(this.PARAMS_REGEXP);
+		 */
+		this._isParamsInPathExpression = !!this._pathExpression.match(this.PARAMS_REGEXP);
 
 		/**
 		 * @property _regular
 		 * @private
 		 * @type {String}
 		 * @default ''
-		 * */
+		 */
 		this._regular = '';
 
-
-		this._createRegularForPath();
+		this._createRegularExpression();
 	}
 
 	/**
 	 * Create path for params.
 	 *
-	 * @method createPath
+	 * @method createPathForParams
 	 * @param {Object} [params=[]]
-	 * */
-	createPath(params = {}) {
-		var path = this._path;
+	 */
+	createPathForParams(params = {}) {
+		var path = this._pathExpression;
 		var paramKeys = Object.keys(params);
 		var query = [];
 
@@ -126,7 +125,7 @@ class Data{
 	 *
 	 * @method getName
 	 * @return {String}
-	 * */
+	 */
 	getName() {
 		return this._name;
 	}
@@ -136,49 +135,49 @@ class Data{
 	 *
 	 * @method getController
 	 * @return {Core.Interface.Controller}
-	 * */
+	 */
 	getController() {
 		return ns.oc.make(this._controller);
 	}
 
 	/**
-	 * Return defined path.
+	 * Return defined path expression.
 	 *
-	 * @method getPath
+	 * @method getPathExpression
 	 * @return {String}
-	 * */
-	getPath() {
-		return this._path;
+	 */
+	getPathExpression() {
+		return this._pathExpression;
 	}
 
 	/**
-	 * Return regular for path.
+	 * Return regular expression for path.
 	 *
 	 * @method getRegular
 	 * @return {String}
-	 * */
+	 */
 	getRegular() {
 		return this._regular;
 	}
 
 	/**
-	 * Return true if path is matched with regular.
+	 * Return true if path is matched with regular expression.
 	 *
 	 * @method isMatch
 	 * @return {Boolean}
-	 * */
+	 */
 	isMatch(path) {
 		path = this._getLoosesPath(path);
 		return !!path.match(this._regular);
 	}
 
 	/**
-	 * Return params from path.
+	 * Return params for path.
 	 *
-	 * @method getParams
+	 * @method getParamsForPath
 	 * @return {Object}
-	 * */
-	getParams(path) {
+	 */
+	getParamsForPath(path) {
 		var params = {};
 
 		var loosesPath = this._getLoosesPath(path);
@@ -191,14 +190,14 @@ class Data{
 	/**
 	 * Create regular expression for path.
 	 *
-	 * @method createRegularForPath
+	 * @method _createRegularExpression
 	 * @private
-	 * */
-	_createRegularForPath() {
-		this._regular  = this._path.replace(this.LOOSE_SLASHES_REGEXP, '');
+	 */
+	_createRegularExpression() {
+		this._regular  = this._pathExpression.replace(this.LOOSE_SLASHES_REGEXP, '');
 		this._regular = this._regular.replace(this.ESCAPED_CHARS_REGEXP, '\\$&');
 
-		// replace params in path
+		// replace params in path expression
 		this._regular = `^/${this._regular.replace(this.PARAMS_REGEXP, '([^/?]+)')}`;
 
 		//adjust / => \/
@@ -214,16 +213,16 @@ class Data{
 	 * @private
 	 * @param {String} path
 	 * @param {Object} params
-	 * */
+	 */
 	_parseArguments(path, params) {
 		var paramsValue = path.match(this._regular);
-		var paramsKey = this._loosesPath.match(this._regular);
+		var paramsKey = this._loosesPathExpression.match(this._regular);
 
-		if (this._isParamsInPath && paramsValue && paramsKey) {
+		if (this._isParamsInPathExpression && paramsValue && paramsKey) {
 
 			for (var i = 0; i < paramsKey.length; i++) {
 
-				if (paramsKey[i] && paramsKey[i] !== this._loosesPath) {
+				if (paramsKey[i] && paramsKey[i] !== this._loosesPathExpression) {
 					var key = paramsKey[i].replace(':', '');
 					var value = decodeURIComponent(paramsValue[i]);
 					params[key] = value;
@@ -240,7 +239,7 @@ class Data{
 	 * @private
 	 * @param {String} path
 	 * @param {Object} params
-	 * */
+	 */
 	_parseQuery(path, params) {
 		var queryMatched = path.match(/\?(.*)$/);
 
@@ -261,11 +260,11 @@ class Data{
 	 * @private
 	 * @param {String} path
 	 * @return {String}
-	 * */
+	 */
 	_getLoosesPath(path) {
 		return `/${path.replace(this.LOOSE_SLASHES_REGEXP, '')}`;
 	}
 
 }
 
-ns.Core.Router.Data = Data;
+ns.Core.Router.Route = Route;

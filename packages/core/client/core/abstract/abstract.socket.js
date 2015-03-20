@@ -12,7 +12,7 @@ ns.namespace('Core.Abstract');
  * @submodule Core.Abstract
  *
  * @requires Core.Interface.Dispatcher
- * */
+ */
 class Socket extends ns.Core.Interface.Socket {
 
 	/**
@@ -21,7 +21,7 @@ class Socket extends ns.Core.Interface.Socket {
 	 * @param {Core.Interface.Dispatcher} dispatcher
 	 * @param {Object} config
 	 * @param {String} technologie
-	 * */
+	 */
 	constructor(dispatcher, config, technologie) {
 		super();
 
@@ -30,7 +30,7 @@ class Socket extends ns.Core.Interface.Socket {
 		 * @protected
 		 * @type {Core.Interface.Dispatcher}
 		 * @default dispatcher
-		 * */
+		 */
 		this._dispatcher = dispatcher;
 
 		/**
@@ -38,7 +38,7 @@ class Socket extends ns.Core.Interface.Socket {
 		 * @protected
 		 * @type {String}
 		 * @default socketUrl
-		 * */
+		 */
 		this._baseUrl = config.webSocketUrl;
 
 		/**
@@ -46,7 +46,7 @@ class Socket extends ns.Core.Interface.Socket {
 		 * @protected
 		 * @type {WebSocket}
 		 * @default null
-		 * */
+		 */
 		this._connection = null;
 
 		/**
@@ -54,7 +54,7 @@ class Socket extends ns.Core.Interface.Socket {
 		 * @protected
 		 * @type {String}
 		 * @default technologie
-		 * */
+		 */
 		this._technologie = technologie;
 
 		/**
@@ -62,7 +62,7 @@ class Socket extends ns.Core.Interface.Socket {
 		 * @const
 		 * @type {Number}
 		 * @default maxRepeatedAttempts
-		 * */
+		 */
 		this.MAX_REPEATED_ATTEMPTS = config.maxRepeatedAttempts;
 
 	}
@@ -71,7 +71,7 @@ class Socket extends ns.Core.Interface.Socket {
 	 * Open connection to server.
 	 *
 	 * @method open
-	 * */
+	 */
 	open() {
 
 	}
@@ -80,7 +80,7 @@ class Socket extends ns.Core.Interface.Socket {
 	 * Close connection from server.
 	 *
 	 * @method close
-	 * */
+	 */
 	close() {
 
 	}
@@ -90,7 +90,7 @@ class Socket extends ns.Core.Interface.Socket {
 	 *
 	 * @method isOpened
 	 * @return {Boolean}
-	 * */
+	 */
 	isOpened() {
 		return !!this._connection;
 	}
@@ -99,7 +99,7 @@ class Socket extends ns.Core.Interface.Socket {
 	 * Send messsage to server
 	 *
 	 * @method send
-	 * */
+	 */
 	send() {
 		throw new Error('Core.Abstract.Socket:send method must be implemented.');
 	}

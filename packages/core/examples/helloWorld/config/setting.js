@@ -1,4 +1,4 @@
-export var init = (ns, config = {env: 'dev', protocol: 'http:', language: 'cs'}) => { // jshint ignore:line
+export var init = (ns, config = {env: 'dev', protocol: 'http:', language: 'en'}) => { // jshint ignore:line
 
 	var nsSetting = ns.namespace('Setting');
 

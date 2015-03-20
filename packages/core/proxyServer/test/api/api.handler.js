@@ -1,7 +1,7 @@
 /**
  * @class Handler
  * @namespace Server.Test.Api
- * */
+ */
 class Handler {
 
 	/**
@@ -9,14 +9,14 @@ class Handler {
 	 * @constructor
 	 * @param {Node.Http} http
 	 * @param {Promise} promise
-	 * */
+	 */
 	constructor(http, promise) {
 		/**
 		 * @property _http
 		 * @private
 		 * @type {Node.Http}
 		 * @default http
-		 * */
+		 */
 		this._http = http;
 
 
@@ -25,7 +25,7 @@ class Handler {
 		 * @private
 		 * @type {Promise}
 		 * @default promise
-		 * */
+		 */
 		this._promise = promise;
 
 	}
@@ -37,7 +37,7 @@ class Handler {
 	 * @method request
 	 * @param {Object} options - {method, port, path, host, headers, preProcessor, processor}
 	 * @return {Promise}
-	 * */
+	 */
 	request(options) {
 		return new this._promise((resolve, reject) => {
 			var timeStart = Date.now();

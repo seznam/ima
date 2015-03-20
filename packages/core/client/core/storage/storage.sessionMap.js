@@ -13,7 +13,7 @@ ns.namespace('Core.Storage');
  *
  * @requires Core.Storage.Map
  * @requires Core.Storage.Session
- * */
+ */
 class SessionMap extends ns.Core.Interface.Storage {
 
 	/**
@@ -30,7 +30,7 @@ class SessionMap extends ns.Core.Interface.Storage {
 		 * @private
 		 * @type {Core.Storage.Map}
 		 * @default map
-		 * */
+		 */
 		this._map = map;
 
 		/**
@@ -38,7 +38,7 @@ class SessionMap extends ns.Core.Interface.Storage {
 		 * @private
 		 * @type {Core.Storage.Session}
 		 * @default session
-		 * */
+		 */
 		this._session = session;
 	}
 

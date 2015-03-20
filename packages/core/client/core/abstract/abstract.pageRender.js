@@ -32,7 +32,7 @@ class PageRender extends ns.Core.Interface.PageRender{
 		 * @protected
 		 * @type {Vendor.Rsvp}
 		 * @default rsvp
-		 * */
+		 */
 		this._rsvp = rsvp;
 
 		/**
@@ -40,7 +40,7 @@ class PageRender extends ns.Core.Interface.PageRender{
 		 * @protected
 		 * @type {Vendor.React}
 		 * @default react
-		 * */
+		 */
 		this._react = react;
 
 		/**
@@ -48,7 +48,7 @@ class PageRender extends ns.Core.Interface.PageRender{
 		 * @protected
 		 * @type {Core.Interface.Animate}
 		 * @default animate
-		 * */
+		 */
 		this._animate = animate;
 
 		/**
@@ -56,7 +56,7 @@ class PageRender extends ns.Core.Interface.PageRender{
 		 * @protected
 		 * @type {Object}
 		 * @default setting
-		 * */
+		 */
 		this._setting = setting;
 
 	}

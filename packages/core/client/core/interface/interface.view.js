@@ -7,14 +7,14 @@ ns.namespace('Core.Interface');
  * @namespace Core.Interface
  * @module Core
  * @submodule Core.Interface
- * */
+ */
 class View {
 
 	/**
 	 * Initialization view.
 	 *
 	 * @method init
-	 * */
+	 */
 	init() {
 
 	}
@@ -23,7 +23,7 @@ class View {
 	 * Deinitialization view.
 	 *
 	 * @method deinit
-	 * */
+	 */
 	deinit() {
 
 	}
@@ -32,7 +32,7 @@ class View {
 	 * Return view.
 	 *
 	 * @method getView
-	 * */
+	 */
 	getView() {
 
 	}

@@ -12,7 +12,7 @@ ns.namespace('Core.Storage');
  * @submodule Core.Storage
  *
  * @requires SessionStorage
- * */
+ */
 class Session extends ns.Core.Interface.Storage {
 
 	/**
@@ -26,7 +26,7 @@ class Session extends ns.Core.Interface.Storage {
 		 * @property _storage
 		 * @type {SessionStorage}
 		 * @default window.sessionStorage
-		 * */
+		 */
 		this._storage = window.sessionStorage;
 	}
 

@@ -11,7 +11,7 @@ ns.namespace('Core.ObjectContainer');
  * @submodule Core.ObjectContainer
  *
  * @requires Core.Namespace.Ns
- * */
+ */
 class Oc{
 
 	/**
@@ -35,7 +35,7 @@ class Oc{
 		 * @private
 		 * @type {Object}
 		 * @default {}
-		 * */
+		 */
 		this._object = {};
 
 		/**
@@ -45,14 +45,14 @@ class Oc{
 		 * @private
 		 * @type {Object}
 		 * @default {}
-		 * */
+		 */
 		this._DI = {};
 
 		/**
 		 * @property _namespace
 		 * @private
 		 * @type {Core.Namespace.Ns}
-		 * */
+		 */
 		this._namespace = namespace;
 	}
 
@@ -62,7 +62,7 @@ class Oc{
 	 * @method make
 	 * @param {String} name - namepsace or alias for returned instance
 	 * @param {Array} [DI=Array()]
-	 * */
+	 */
 	make(name, DI = []) {
 
 		if (this.has(name)) {
@@ -107,7 +107,7 @@ class Oc{
 	 * @param {String} name - namespace or alias
 	 * @param {*} mixed - object, which is stored in object container
 	 * @param {Array} [dependency=Array()]
-	 * */
+	 */
 	bind(name, mixed, dependency = []) {
 		var object = this._object;
 		var di = this._DI;
@@ -139,7 +139,7 @@ class Oc{
 	 * @method get
 	 * @param {String} name - namespace or alias
 	 * @return {*}
-	 * */
+	 */
 	get(name) {
 		var [object] = this._get(name);
 
@@ -151,7 +151,7 @@ class Oc{
 	 * @private
 	 * @param {String} name - namespace or alias
 	 * @return {Object} - {object, di}
-	 * */
+	 */
 	_get(name) {
 		var object = this._object;
 		var di = this._DI;
@@ -184,7 +184,7 @@ class Oc{
 	 * @param {String} name - namespace or alias
 	 * @param {Array} [...=Array]
 	 * @return {*}
-	 * */
+	 */
 	create(name) {
 		if (this.has(name)) {
 			var object = this.get(name);
@@ -207,7 +207,7 @@ class Oc{
 	 * @method has
 	 * @param {String} name - namespace or alias
 	 * @return {Boolean}
-	 * */
+	 */
 	has(name) {
 		return typeof this.get(name) !== 'undefined';
 	}

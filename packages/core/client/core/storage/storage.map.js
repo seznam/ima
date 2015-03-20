@@ -12,7 +12,7 @@ ns.namespace('Core.Storage');
  * @submodule Core.Storage
  *
  * @requires Map
- * */
+ */
 class MapStorage extends ns.Core.Interface.Storage {
 
 	/**
@@ -26,7 +26,7 @@ class MapStorage extends ns.Core.Interface.Storage {
 		 * @property _storage
 		 * @type {Map}
 		 * @default new Map()
-		 * */
+		 */
 		this._storage = new Map();
 	}
 

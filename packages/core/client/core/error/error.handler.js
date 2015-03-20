@@ -7,7 +7,7 @@ ns.namespace('Core.Error');
  * @namespace Core.Error
  * @module Core
  * @submodule Core.Error
- * */
+ */
 class Handler {
 
 	/**
@@ -15,7 +15,7 @@ class Handler {
 	 * @constructor
 	 * @param {String} message
 	 * @param {Object} [params={}]
-	 * */
+	 */
 	constructor(message, params = {}) {
 		this.constructor.__proto__ = Error.prototype; // jshint ignore:line
 
@@ -31,14 +31,14 @@ class Handler {
 		 * @private
 		 * @type {String}
 		 * @default 'CoreError'
-		 * */
+		 */
 		this._name = 'CoreError';
 
 		/**
 		 * @property message
 		 * @type {String}
 		 * @default message
-		 * */
+		 */
 		this.message = message;
 
 		/**
@@ -46,7 +46,7 @@ class Handler {
 		 * @private
 		 * @type {bject}
 		 * @default params
-		 * */
+		 */
 		this._params = params;
 	}
 
@@ -55,7 +55,7 @@ class Handler {
 	 *
 	 * @method getHttpStatus
 	 * @return {Number}
-	 * */
+	 */
 	getHttpStatus() {
 		return this._params.status || 500;
 	}
@@ -65,7 +65,7 @@ class Handler {
 	 *
 	 * @method getParams
 	 * @return {Object}
-	 * */
+	 */
 	getParams() {
 		return this._params;
 	}
@@ -75,7 +75,7 @@ class Handler {
 	 *
 	 * @method getName
 	 * @return {String}
-	 * */
+	 */
 	getName() {
 		return this._name;
 	}
@@ -85,7 +85,7 @@ class Handler {
 	 *
 	 * @method toString
 	 * @return {String}
-	 * */
+	 */
 	toString() {
 		return `${this._name}: ${this.message}`;
 	}
@@ -95,7 +95,7 @@ class Handler {
 	 *
 	 * @method toSource
 	 * @return {String}
-	 * */
+	 */
 	toSource() {
 		return `${this._name}: ${this.message}`;
 	}

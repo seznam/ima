@@ -9,15 +9,14 @@ ns.namespace('Core.Interface');
  * @namespace Core.Interface
  * @module Core
  * @submodule Core.Interface
- * */
+ */
 class Error {
 
 	/**
 	 * Return http status.
 	 *
 	 * @method getHttpStatus
-	 * @return {Number}
-	 * */
+	 */
 	getHttpStatus() {
 
 	}
@@ -26,8 +25,7 @@ class Error {
 	 * Return error params.
 	 *
 	 * @method getParams
-	 * @return {Object}
-	 * */
+	 */
 	getParams() {
 
 	}
@@ -36,8 +34,7 @@ class Error {
 	 * Return error name.
 	 *
 	 * @method getName
-	 * @return {String}
-	 * */
+	 */
 	getName() {
 
 	}
@@ -46,8 +43,7 @@ class Error {
 	 * Convert to string.
 	 *
 	 * @method toString
-	 * @return {String}
-	 * */
+	 */
 	toString() {
 
 	}
@@ -56,8 +52,7 @@ class Error {
 	 * Convert to source.
 	 *
 	 * @method toSource
-	 * @return {String}
-	 * */
+	 */
 	toSource() {
 
 	}

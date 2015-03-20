@@ -13,7 +13,7 @@ ns.namespace('Core.Storage');
  *
  * @requires Core.Router.Request
  * @requires Core.Router.Respond
- * */
+ */
 class Cookie extends ns.Core.Interface.Storage{
 
 	/**
@@ -26,7 +26,7 @@ class Cookie extends ns.Core.Interface.Storage{
 	 *      cookie.set('cookie', 'value', {expires: 10}); //cookie expires for 10s
 	 *      cookie.set('cookie'); //unset cookie
 	 *
-	 * */
+	 */
 	constructor(request, respond, secure) {
 		super();
 
@@ -35,7 +35,7 @@ class Cookie extends ns.Core.Interface.Storage{
 		 * @private
 		 * @type {Core.Router.Respond}
 		 * @default respond
-		 * */
+		 */
 		this._respond = respond;
 
 		/**
@@ -43,7 +43,7 @@ class Cookie extends ns.Core.Interface.Storage{
 		 * @private
 		 * @type {Core.Router.Request}
 		 * @default request
-		 * */
+		 */
 		this._request = request;
 
 		/**
@@ -51,7 +51,7 @@ class Cookie extends ns.Core.Interface.Storage{
 		 * @private
 		 * @type {Map}
 		 * @default new Map()
-		 * */
+		 */
 		this._cookie = new Map();
 
 		/**
@@ -61,7 +61,7 @@ class Cookie extends ns.Core.Interface.Storage{
 		 * @private
 		 * @type {Array}
 		 * @default []
-		 * */
+		 */
 		this._arrayCookiesString = [];
 
 		/**
@@ -69,7 +69,7 @@ class Cookie extends ns.Core.Interface.Storage{
 		 * @private
 		 * @type {String}
 		 * @default '; '
-		 * */
+		 */
 		this._cookieSeparotor = '; ';
 
 		/**
@@ -77,14 +77,14 @@ class Cookie extends ns.Core.Interface.Storage{
 		 * @type {Date}
 		 * @const
 		 * @default new Date('Fri, 31 Dec 9999 23:59:59 UTC')
-		 * */
+		 */
 		this.MAX_EXPIRE_DATE = new Date('Fri, 31 Dec 9999 23:59:59 UTC');
 
 		/**
 		 * @property options
 		 * @private
 		 * @type {Object}
-		 * */
+		 */
 		this._options = {
 			path: '/',
 			secure: secure
@@ -95,7 +95,7 @@ class Cookie extends ns.Core.Interface.Storage{
 	 * Initialization cookie.
 	 *
 	 * @method init
-	 * */
+	 */
 	init() {
 		this._parse();
 	}
@@ -105,7 +105,7 @@ class Cookie extends ns.Core.Interface.Storage{
 	 *
 	 * @method clear
 	 * @chainable
-	 * */
+	 */
 	clear() {
 		for (var cookieName of this._cookie.keys()) {
 			this.delete(cookieName);
@@ -122,7 +122,7 @@ class Cookie extends ns.Core.Interface.Storage{
 	 * @method has
 	 * @param {String} name
 	 * @return {Boolean}
-	 * */
+	 */
 	has(name) {
 		return this._cookie.has(name);
 	}
@@ -133,7 +133,7 @@ class Cookie extends ns.Core.Interface.Storage{
 	 * @method get
 	 * @param {String} name
 	 * @return {*}
-	 * */
+	 */
 	get(name) {
 		return this._cookie.get(name);
 	}
@@ -146,7 +146,7 @@ class Cookie extends ns.Core.Interface.Storage{
 	 * @param {String} name
 	 * @param {*} value
 	 * @param {Object} [options={}] possibility options keys {path, secure, domain, expires}
-	 * */
+	 */
 	set(name, value, options = {}) {
 		options = Object.assign(options, this._options);
 		options.expires = this._getExpiresDate(value === undefined ? -1 : options.expires);
@@ -170,7 +170,7 @@ class Cookie extends ns.Core.Interface.Storage{
 	 * @method delete
 	 * @chainable
 	 * @param {String} name
-	 * */
+	 */
 	delete(name) {
 		if (this.has(name)) {
 			this.set(name);
@@ -185,7 +185,7 @@ class Cookie extends ns.Core.Interface.Storage{
 	 *
 	 * @method keys
 	 * return {Iterable}
-	 * */
+	 */
 	keys() {
 		return this._cookie.keys();
 	}
@@ -195,7 +195,7 @@ class Cookie extends ns.Core.Interface.Storage{
 	 *
 	 * @method getCookiesString
 	 * @return {String}
-	 * */
+	 */
 	getCookiesString() {
 		return this._arrayCookiesString.join(this._cookieSeparotor);
 	}
@@ -205,7 +205,7 @@ class Cookie extends ns.Core.Interface.Storage{
 	 *
 	 * @method _parse
 	 * @private
-	 * */
+	 */
 	_parse() {
 		var cookiesString = this._request.isEnabled() ? this._request.getCookie() : document.cookie;
 		var cookiesArray = cookiesString ? cookiesString.split(this._cookieSeparotor) : [];
@@ -223,7 +223,7 @@ class Cookie extends ns.Core.Interface.Storage{
 	 * @method _parseKeyValueFromCookieString
 	 * @private
 	 * @param {String} cookieString
-	 * */
+	 */
 	_parseKeyValueFromCookieString(cookieString) {
 		var separatorIndexEqual = cookieString.indexOf('=');
 		var separatorIndexSemicolon = cookieString.indexOf(';');
@@ -243,7 +243,7 @@ class Cookie extends ns.Core.Interface.Storage{
 	 *
 	 * @method parseFromSetCookieHeader
 	 * @param {String} setCookieHeader
-	 * */
+	 */
 	parseFromSetCookieHeader(setCookieHeader) {
 		var cookieOptions = this._options;
 		cookieOptions.expires = this.MAX_EXPIRE_DATE;
@@ -282,7 +282,7 @@ class Cookie extends ns.Core.Interface.Storage{
 	 * @method _firstLetterToLowerCase
 	 * @private
 	 * @param {String} world
-	 * */
+	 */
 	_firstLetterToLowerCase(world) {
 		return world.charAt(0).toLowerCase() + world.slice(1);
 	}
@@ -296,7 +296,7 @@ class Cookie extends ns.Core.Interface.Storage{
 	 * @param {*} value
 	 * @param {Object} options
 	 * @return {String}
-	 * */
+	 */
 	_generateCookieString(name, value, options) {
 		name = name.replace(/[^#$&+\^`|]/g, encodeURIComponent);
 		name = name.replace(/\(/g, '%28').replace(/\)/g, '%29');
@@ -318,7 +318,7 @@ class Cookie extends ns.Core.Interface.Storage{
 	 * @private
 	 * @param {Number} expires - in seconds
 	 * @return {Date}
-	 * */
+	 */
 	_getExpiresDate(expires) {
 		var now = new Date();
 

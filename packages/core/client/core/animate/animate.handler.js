@@ -15,7 +15,7 @@ ns.namespace('Core.Animate');
  * @requires Promise
  * @requires Core.Interface.Storage
  * @requires Core.Interface.WindowHelper
- * */
+ */
 class Handler extends ns.Core.Interface.Animate {
 
 	/**
@@ -26,7 +26,7 @@ class Handler extends ns.Core.Interface.Animate {
 	 * @param {Core.Interface.WindowHelper} window
 	 * @param {Core.Storage.Cookie} cookie
 	 * @param {Object} state
-	 * */
+	 */
 	constructor(dispatcher, promise, window, cookie, state) {
 		super();
 
@@ -35,7 +35,7 @@ class Handler extends ns.Core.Interface.Animate {
 		 * @private
 		 * @type {Core.Dispatcher.Handler}
 		 * @default dispatcher
-		 * */
+		 */
 		this._dispatcher = dispatcher;
 
 		/**
@@ -43,7 +43,7 @@ class Handler extends ns.Core.Interface.Animate {
 		 * @private
 		 * @type {Promise}
 		 * @default promise
-		 * */
+		 */
 		this._promise = promise;
 
 		/**
@@ -51,7 +51,7 @@ class Handler extends ns.Core.Interface.Animate {
 		 * @private
 		 * @type {Core.Interface.WindowHelper}
 		 * @default window
-		 * */
+		 */
 		this._window = window;
 
 		/**
@@ -59,7 +59,7 @@ class Handler extends ns.Core.Interface.Animate {
 		 * @private
 		 * @type {Core.Storage.Cookie}
 		 * @default cookie
-		 * */
+		 */
 		this._cookie = cookie;
 
 		/**
@@ -67,7 +67,7 @@ class Handler extends ns.Core.Interface.Animate {
 		 * @private
 		 * @type {Object}
 		 * @default state
-		 * */
+		 */
 		this._state = state;
 
 		/**
@@ -75,7 +75,7 @@ class Handler extends ns.Core.Interface.Animate {
 		 * @private
 		 * @type {Object}
 		 * @default {}
-		 * */
+		 */
 		this._transition = {};
 		
 		/**
@@ -83,7 +83,7 @@ class Handler extends ns.Core.Interface.Animate {
 		 * @const
 		 * @type {String}
 		 * @default 'animateTransition'
-		 * */
+		 */
 		this.COOKIE_TRANSITION = 'animateTransition';
 		
 		/**
@@ -91,7 +91,7 @@ class Handler extends ns.Core.Interface.Animate {
 		 * @const
 		 * @type {String}
 		 * @default 'animate.update'
-		 * */
+		 */
 		this.ANIMATE_EVENT = 'animate.update';
 		
 
@@ -105,7 +105,7 @@ class Handler extends ns.Core.Interface.Animate {
 	 * @param {Boolean} [value=true]
 	 * @param {Boolean} [transition=false]
 	 * @return {Promise}
-	 * */
+	 */
 	set(key, value, transition = false) {
 
 		if (transition) {
@@ -142,7 +142,7 @@ class Handler extends ns.Core.Interface.Animate {
 	 *
 	 * @method _transitionEndHandler
 	 *
-	 * */
+	 */
 	_transitionEndHandler(e, fun, timer) {
 		console.log('E', e);
 		console.log('FN', fun);

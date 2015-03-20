@@ -1,9 +1,10 @@
-describe('Core.Router.Handler', function() {
+xdescribe('Core.Router.ClientHandler', function() {
 
 	var router = null;
 	var pageRender = null;
 	var respond = null;
 	var request = null;
+	var Promise = ns.oc.get('$Promise');
 
 	beforeEach(function() {
 		ns.oc.bind('BaseController', {});
@@ -11,8 +12,8 @@ describe('Core.Router.Handler', function() {
 		pageRender = ns.oc.create('Core.PageRender.Client');
 		request = ns.oc.create('Core.Router.Request');
 		respond = ns.oc.create('Core.Router.Respond');
-		router = ns.oc.create('Core.Router.Handler', pageRender, request, respond);
-		router.init({mode: 'history'});
+		router = ns.oc.create('Core.Router.ClientHandler', pageRender, respond);
+		router.init({mode: router.MODE_HISTORY});
 
 		router.add('home', '/', 'BaseController');
 		router.add('contact', '/contact', 'BaseController');
@@ -29,7 +30,7 @@ describe('Core.Router.Handler', function() {
 	});
 
 	describe('should get route by name', function() {
-		it('return instance of Core.Router.Data', function() {
+		it('return instance of Core.Router.Route', function() {
 			expect(router._getRouteByName('home')).not.toBeNull();
 		});
 
@@ -50,10 +51,13 @@ describe('Core.Router.Handler', function() {
 		spyOn(router, '_navigate')
 			.and
 			.stub();
+		spyOn(router, 'redirect')
+			.and
+			.stub();
 
 		router.redirect('http://localhost:3002/');
 
-		expect(router._navigate).toHaveBeenCalled();
+		expect(router.redirect).toHaveBeenCalled();
 	});
 
 	describe('Link method', function() {
@@ -71,7 +75,7 @@ describe('Core.Router.Handler', function() {
 		it('should be render page for valid path', function() {
 			spyOn(pageRender, 'render')
 				.and
-				.stub();
+				.returnValue(Promise.resolve('render'));
 
 			router.route('/');
 
@@ -79,13 +83,18 @@ describe('Core.Router.Handler', function() {
 		});
 
 		it('should be render not found page for not valid path', function() {
-			spyOn(router, 'handleNotFound')
+			var path = '/xxx/aaa';
+			var params = {
+				path: path
+			};
+
+			spyOn(router, '_handle')
 				.and
-				.stub();
+				.returnValue(Promise.resolve('notfound'));
 
-			router.route('/xxx/aaa');
+			router.route(path);
 
-			expect(router.handleNotFound).toHaveBeenCalled();
+			expect(router._handle).toHaveBeenCalledWith(router.ROUTE_NAME_NOT_FOUND, params);
 		});
 
 	});

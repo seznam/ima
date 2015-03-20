@@ -7,14 +7,14 @@ ns.namespace('Core.Interface');
  * @namespace Core.Interface
  * @module Core
  * @submodule Core.Interface
- * */
+ */
 class Storage {
 
 	/**
 	 * Initialization storage.
 	 *
 	 * @method init
-	 * */
+	 */
 	init() {
 
 	}
@@ -23,7 +23,7 @@ class Storage {
 	 * Clear storage.
 	 *
 	 * @method clear
-	 * */
+	 */
 	clear() {
 
 	}
@@ -32,7 +32,7 @@ class Storage {
 	 * Return true if key exist in storage.
 	 *
 	 * @method has
-	 * */
+	 */
 	has() {
 
 	}
@@ -41,7 +41,7 @@ class Storage {
 	 * Return value from storage for key.
 	 *
 	 * @method get
-	 * */
+	 */
 	get() {
 
 	}
@@ -50,7 +50,7 @@ class Storage {
 	 * Set value for key.
 	 *
 	 * @method set
-	 * */
+	 */
 	set() {
 
 	}
@@ -59,7 +59,7 @@ class Storage {
 	 * Delete value for key.
 	 *
 	 * @method delete
-	 * */
+	 */
 	delete() {
 
 	}

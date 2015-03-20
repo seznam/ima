@@ -8,7 +8,7 @@ ns.namespace('Core.Dictionary');
  * @namespace Core.Dictionary
  * @module Core
  * @submodule Core.Dictionary
- * */
+ */
 class Handler extends ns.Core.Interface.Dictionary{
 
 	/**
@@ -16,7 +16,7 @@ class Handler extends ns.Core.Interface.Dictionary{
 	 * @constructor
 	 * @example
 	 * 		dictionary.get('home.hello', {GENDER: 'MALE'});
-	 * */
+	 */
 	constructor() {
 		super();
 
@@ -27,7 +27,7 @@ class Handler extends ns.Core.Interface.Dictionary{
 		 * @private
 		 * @type {String}
 		 * @default null
-		 * */
+		 */
 		this._language = null;
 
 		/**
@@ -37,7 +37,7 @@ class Handler extends ns.Core.Interface.Dictionary{
 		 * @private
 		 * @type {Object}
 		 * @default null
-		 * */
+		 */
 		this._dictionary = null;
 	}
 
@@ -46,7 +46,7 @@ class Handler extends ns.Core.Interface.Dictionary{
 	 *
 	 * @method init
 	 * @param {Object} config
-	 * */
+	 */
 	init(config = {language: 'cs', dictionary: {}}) {
 		this._language = config.language;
 		this._dictionary = config.dictionary;
@@ -57,7 +57,7 @@ class Handler extends ns.Core.Interface.Dictionary{
 	 *
 	 * @method getLanguage
 	 * @return {String}
-	 * */
+	 */
 	getLanguage() {
 		return this._language;
 	}
@@ -69,7 +69,7 @@ class Handler extends ns.Core.Interface.Dictionary{
 	 * @param {String} vocabularyKey - key for dictionary
 	 * @param {Object} [vocabularyParams={}]
 	 * @return {String}
-	 * */
+	 */
 	get(vocabularyKey, vocabularyParams = {}) {
 		var pathToVocabulary = vocabularyKey.split('.');
 		var vocabulary = this._dictionary;

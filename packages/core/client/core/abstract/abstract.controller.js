@@ -36,7 +36,7 @@ class Controller extends ns.Core.Interface.Controller {
 		 * @protected
 		 * @type {Map}
 		 * @default new Map()
-		 * */
+		 */
 		this._seo = new Map();
 
 		/**
@@ -54,7 +54,7 @@ class Controller extends ns.Core.Interface.Controller {
 		 * @protected
 		 * @type {Number}
 		 * @default 200
-		 * */
+		 */
 		this._status = 200;
 
 
@@ -66,6 +66,14 @@ class Controller extends ns.Core.Interface.Controller {
 		this._view = view
 			.init(this)
 			.getView();
+
+		/**
+		 * @property params
+		 * @type {Object}
+		 * @default {}
+		 */
+		this.params = {};
+
 	}
 
 	/**
@@ -149,7 +157,7 @@ class Controller extends ns.Core.Interface.Controller {
 	 *
 	 * @method setSeoParams
 	 * @param {Object} resolvedPromises
-	 * */
+	 */
 	setSeoParams(resolvedPromises) { // jshint ignore:line
 
 	}
@@ -159,7 +167,7 @@ class Controller extends ns.Core.Interface.Controller {
 	 *
 	 * @method getSeoParams
 	 * @return {Object} - {title, description, atd.}
-	 * */
+	 */
 	getSeoParams() {
 		return this._seo;
 	}

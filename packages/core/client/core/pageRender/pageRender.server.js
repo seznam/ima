@@ -8,7 +8,7 @@ ns.namespace('Core.PageRender');
  * @namespace Core.PageRender
  * @module Core
  * @submodule Core.PageRender
- * */
+ */
 class Server extends ns.Core.Abstract.PageRender {
 
 	/**
@@ -18,9 +18,18 @@ class Server extends ns.Core.Abstract.PageRender {
 	 * @param {Vendor.React} react
 	 * @param {Core.Animate.Handler} animate
 	 * @param {Object} setting
-	 * */
-	constructor(rsvp, react, animate, setting) {
+	 * @param {Core.Router.Respond} respond
+	 */
+	constructor(rsvp, react, animate, setting, respond) {
 		super(rsvp, react, animate, setting);
+
+		/**
+		 * @property _respond
+		 * @type {Core.Router.Respond}
+		 * @default respond
+		 */
+		this._respond = respond;
+
 	}
 
 	/**
@@ -29,45 +38,38 @@ class Server extends ns.Core.Abstract.PageRender {
 	 * @method render
 	 * @param {Core.Abstract.Controller} controller
 	 * @param {Object} params
-	 * @param {Core.Router.Request} request
-	 * @param {Core.Router.Respond} respond
-	 * */
-	render(controller, params, request, respond) {
+	 */
+	render(controller, params) {
 		super.render(controller, params);
 
 		var loadPromises = controller.load();
 
-		this._rsvp
-			.hash(loadPromises)
-			.then((resolvedPromises) => {
-				var state = controller.getState();
+		return (
+			this._rsvp
+				.hash(loadPromises)
+				.then((resolvedPromises) => {
+					var state = controller.getState();
 
-				for (var key of Object.keys(resolvedPromises)) {
-					state[key] = resolvedPromises[key];
-				}
+					for (var key of Object.keys(resolvedPromises)) {
+						state[key] = resolvedPromises[key];
+					}
 
-				controller.setState(state);
-				controller.setSeoParams(resolvedPromises);
+					controller.setState(state);
+					controller.setSeoParams(resolvedPromises);
 
-				var pageMarkup = this._react.renderToString(controller.getView());
+					var pageMarkup = this._react.renderToString(controller.getView());
 
-				var appMarkup = this._react.renderToStaticMarkup(ns.oc.get(this._setting.$PageRender.masterView)({
-					page: pageMarkup,
-					scripts: this._getScripts(),
-					seo: controller.getSeoParams()
-				}));
+					var appMarkup = this._react.renderToStaticMarkup(ns.oc.get(this._setting.$PageRender.masterView)({
+						page: pageMarkup,
+						scripts: this._getScripts(),
+						seo: controller.getSeoParams()
+					}));
 
-				respond
-					.status(controller.getHttpStatus())
-					.send('<!doctype html>\n' + appMarkup);
-
-			}).catch((reason) => {
-				console.error('PageRender.render catch:', reason, reason.stack);
-				var status = reason instanceof ns.oc.get('Error') ? reason.getHttpStatus() : 500;
-				respond
-					.status(status)
-					.send('PageRender.render Catch:' + reason.message + '<pre>' + reason.stack + '</pre><pre>' + JSON.stringify(reason._params) + '</pre>');
-			});
+					this._respond
+						.status(controller.getHttpStatus())
+						.send('<!doctype html>\n' + appMarkup);
+				})
+		);
 	}
 
 	/**
@@ -77,7 +79,7 @@ class Server extends ns.Core.Abstract.PageRender {
 	 * @private
 	 * @param {String} language
 	 * @return {String}
-	 * */
+	 */
 	_getScripts() {
 		var scripts = [];
 		var html = '';

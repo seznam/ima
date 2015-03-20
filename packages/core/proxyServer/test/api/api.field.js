@@ -1,7 +1,7 @@
 /**
  * @class Field
  * @namespace Server.Test.Api
- * */
+ */
 
 class Field{
 
@@ -10,14 +10,14 @@ class Field{
 	 * @constructor
 	 * @param {String} type
 	 * @param {Array} data - Array of mixed values
-	 * */
+	 */
 	constructor(type, data = []) {
 		/**
 		 * @property _type
 		 * @private
 		 * @type {String}
 		 * @default type
-		 * */
+		 */
 		this._type = type;
 
 		/**
@@ -27,7 +27,7 @@ class Field{
 		 * @private
 		 * @type {Array}
 		 * @default data
-		 * */
+		 */
 		this._data = data;
 
 		/**
@@ -35,7 +35,7 @@ class Field{
 		 * @private
 		 * @type {Array}
 		 * @default []
-		 * */
+		 */
 		this._errors = [];
 	}
 
@@ -44,7 +44,7 @@ class Field{
 	 *
 	 * @method getType
 	 * @return {String}
-	 * */
+	 */
 	getType() {
 		return this._type;
 	}
@@ -54,7 +54,7 @@ class Field{
 	 *
 	 * @method getErrors
 	 * @return {Array}
-	 * */
+	 */
 	getErrors() {
 		return this._errors;
 	}
@@ -65,7 +65,7 @@ class Field{
 	 * @method validate
 	 * @param {Mixed} value
 	 * @return {Boolean}
-	 * */
+	 */
 	validate(value) {
 		var result = false;
 

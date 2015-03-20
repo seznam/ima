@@ -9,7 +9,7 @@ ns.namespace('Core.Http');
  * @namespace Core.Http
  * @module Core
  * @submodule Core.Http
- * */
+ */
 class Proxy {
 
 	/**
@@ -17,7 +17,7 @@ class Proxy {
 	 * @constructor
 	 * @param {Vendor.SuperAgent} superAgent
 	 * @param {Promise} promise
-	 * */
+	 */
 	constructor(superAgent, promise) {
 
 		/**
@@ -25,14 +25,14 @@ class Proxy {
 		 * @private
 		 * @type {Vendor.SuperAgent}
 		 * @default superAgent
-		 * */
+		 */
 		this._superAgent = superAgent;
 
 		/**
 		 * @property _promise
 		 * @type {Promise}
 		 * @default promise
-		 * */
+		 */
 		this.promise = promise;
 
 		/**
@@ -40,7 +40,7 @@ class Proxy {
 		 * @private
 		 * @type {Map}
 		 * @default new Map()
-		 * */
+		 */
 		this._constantHeaders = new Map();
 
 		/**
@@ -48,7 +48,7 @@ class Proxy {
 		 * @const
 		 * @type {Number}
 		 * @default 408
-		 * */
+		 */
 		this.HTTP_TIMEOUT = 408;
 
 		/**
@@ -56,7 +56,7 @@ class Proxy {
 		 * @const
 		 * @type {Number}
 		 * @default 401
-		 * */
+		 */
 		this.HTTP_UNAUTHORIZED = 401;
 
 		/**
@@ -64,7 +64,7 @@ class Proxy {
 		 * @const
 		 * @type {Number}
 		 * @default 403
-		 * */
+		 */
 		this.HTTP_FORBIDDEN = 403;
 
 		/**
@@ -72,7 +72,7 @@ class Proxy {
 		 * @const
 		 * @type {Number}
 		 * @default 500
-		 * */
+		 */
 		this.HTTP_SERVER_ERROR = 500;
 
 		/**
@@ -80,7 +80,7 @@ class Proxy {
 		 * @const
 		 * @type {Number}
 		 * @default 200
-		 * */
+		 */
 		this.HTTP_OK = 200;
 	}
 
@@ -94,7 +94,7 @@ class Proxy {
 	 * @param {Object} data
 	 * @param {Object} options - keys {timeout, ttl, repeatRequest, language, cookie, accept}
 	 * @return {Promise}
-	 * */
+	 */
 	request(method, url, data, options) {
 		return (
 			new this.promise((resolve, reject) => {
@@ -125,7 +125,7 @@ class Proxy {
 	 * @method setConstantHeader
 	 * @param {String} header
 	 * @param {String} value
-	 * */
+	 */
 	setConstantHeader(header, value) {
 		this._constantHeaders.set(header, value);
 	}
@@ -135,7 +135,7 @@ class Proxy {
 	 * Clear constant header to all request.
 	 *
 	 * @method clearConstantHeader
-	 * */
+	 */
 	clearConstantHeader() {
 		this._constantHeaders.clear();
 	}
@@ -150,7 +150,7 @@ class Proxy {
 	 * @param {Function} reject
 	 * @param {Object} params
 	 * @return {this}
-	 * */
+	 */
 	_bindError(request, reject, params) {
 		request.on('error', (error) => {
 			var errorParams = {};
@@ -183,7 +183,7 @@ class Proxy {
 	 * @param {Object} options
 	 * @param {Number} status
 	 * @param {Object} {method, url, data, options, status, errorName}
-	 * */
+	 */
 	getErrorParams(method, url, data, options, status) {
 		var params = this._getParams(method, url, data, options);
 
@@ -222,7 +222,7 @@ class Proxy {
 	 * @param {Function} reject
 	 * @param {Object} params
 	 * @return {this}
-	 * */
+	 */
 	_sendRequest(request, resolve, reject, params) {
 		request.end((respond) => {
 
@@ -249,7 +249,7 @@ class Proxy {
 	 * @param {Vendor.SuperAgent.Request} request
 	 * @param {Object} options
 	 * @return {this}
-	 * */
+	 */
 	_setHeaders(request, options) {
 		request.set('Accept', options.accept);
 		request.set('Accept-Language', options.language);
@@ -270,7 +270,7 @@ class Proxy {
 	 *
 	 * @method haveSetCookieManually
 	 * @return {Boolean}
-	 * */
+	 */
 	haveSetCookieManually() {
 		return typeof window === 'undefined' || window === null;
 	}
@@ -284,7 +284,7 @@ class Proxy {
 	 * @param {String} url
 	 * @param {Object} data
 	 * @param {Object} options
-	 * */
+	 */
 	_getParams(method, url, data, options) {
 		return {method, url, data, options};
 	}
