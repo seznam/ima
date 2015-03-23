@@ -37,10 +37,19 @@ class View extends ns.Core.Abstract.View {
 			displayName: '',
 			/* jshint ignore:start */
 			render() {
+				var error = this.state.error || {};
+				var message = error.message || '';
+				var stack = error.stack || '';
 
 				return (
 					<div className='l-error'>
-						<div className="message"><h1>500 - Error</h1></div>
+						<h1>500 - Error</h1>
+						<div className="message">
+							{message}
+						</div>
+						<pre>
+							{stack}
+						</pre>
 					</div>
 				);
 			}

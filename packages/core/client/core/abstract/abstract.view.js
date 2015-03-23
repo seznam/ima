@@ -32,7 +32,7 @@ class View extends ns.Core.Interface.View {
 		/**
 		 * @property _view
 		 * @protected
-		 * @type Vendor.ReactComponent
+		 * @type Vendor.React.ReactComponent
 		 * @default null
 		 */
 		this._view = null;
@@ -67,10 +67,12 @@ class View extends ns.Core.Interface.View {
 	}
 
 	/**
-	 * @method getView
-	 * @return {Vendor.ReactComponent} - reactive view 
+	 * Return complete page view as ReactElement.
+	 *
+	 * @method getReactView
+	 * @return {Vendor.React.ReactElement} - reactive view
 	 */
-	getView() {
+	getReactView() {
 		return this._react.createElement(this._view, null);
 	}
 }

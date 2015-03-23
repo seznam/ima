@@ -13,7 +13,7 @@ class Handler {
 	/**
 	 * @method contrusctor
 	 * @constructor
-	 * @param {String} message
+	 * @param {string} message
 	 * @param {Object} [params={}]
 	 */
 	constructor(message, params = {}) {
@@ -29,7 +29,7 @@ class Handler {
 		/**
 		 * @property _name
 		 * @private
-		 * @type {String}
+		 * @type {string}
 		 * @default 'CoreError'
 		 */
 		this._name = 'CoreError';
@@ -44,7 +44,7 @@ class Handler {
 		/**
 		 * @property _params
 		 * @private
-		 * @type {bject}
+		 * @type {Object}
 		 * @default params
 		 */
 		this._params = params;
@@ -74,7 +74,7 @@ class Handler {
 	 * Return error name.
 	 *
 	 * @method getName
-	 * @return {String}
+	 * @return {string}
 	 */
 	getName() {
 		return this._name;
@@ -84,7 +84,7 @@ class Handler {
 	 * Convert to string.
 	 *
 	 * @method toString
-	 * @return {String}
+	 * @return {string}
 	 */
 	toString() {
 		return `${this._name}: ${this.message}`;
@@ -94,7 +94,7 @@ class Handler {
 	 * Convert to source.
 	 *
 	 * @method toSource
-	 * @return {String}
+	 * @return {string}
 	 */
 	toSource() {
 		return `${this._name}: ${this.message}`;

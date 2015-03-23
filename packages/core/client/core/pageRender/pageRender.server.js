@@ -19,16 +19,26 @@ class Server extends ns.Core.Abstract.PageRender {
 	 * @param {Core.Animate.Handler} animate
 	 * @param {Object} setting
 	 * @param {Core.Router.Respond} respond
+	 * @param {Core.Interface.Cache} cache
 	 */
-	constructor(rsvp, react, animate, setting, respond) {
+	constructor(rsvp, react, animate, setting, respond, cache) {
 		super(rsvp, react, animate, setting);
 
 		/**
 		 * @property _respond
+		 * @private
 		 * @type {Core.Router.Respond}
 		 * @default respond
 		 */
 		this._respond = respond;
+		
+		/**
+		 * @property _cache
+		 * @private
+		 * @type {Core.Interface.Cache}
+		 * @default 
+		 */
+		this._cache = cache;
 
 	}
 
@@ -57,7 +67,7 @@ class Server extends ns.Core.Abstract.PageRender {
 					controller.setState(state);
 					controller.setSeoParams(resolvedPromises);
 
-					var pageMarkup = this._react.renderToString(controller.getView());
+					var pageMarkup = this._react.renderToString(controller.getReactView());
 
 					var appMarkup = this._react.renderToStaticMarkup(ns.oc.get(this._setting.$PageRender.masterView)({
 						page: pageMarkup,
@@ -90,7 +100,7 @@ class Server extends ns.Core.Abstract.PageRender {
 			});
 
 		scripts.push('<script> window.$IzoApp = window.$IMA || {};' +
-		' window.$IMA.Cache = ' + (ns.oc.get('$Cache').serialize()) + ';' +
+		' window.$IMA.Cache = ' + (this._cache.serialize()) + ';' +
 		' window.$IMA.Language = "' + (this._setting.$Language) + '";' +
 		' window.$IMA.Enviroment = "' + (this._setting.$Env) + '";' +
 		' window.$IMA.Protocol = document.location.protocol;' +

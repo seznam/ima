@@ -40,7 +40,8 @@ class Controller extends ns.Core.Abstract.Controller {
 	 */
 	load() {
 		return {
-			status: this._Promise.resolve(this._status)
+			status: this._Promise.resolve(this._status),
+			error: this._Promise.resolve(this.params)
 		};
 	}
 }

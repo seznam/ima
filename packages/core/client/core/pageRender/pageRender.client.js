@@ -53,16 +53,15 @@ class Client extends ns.Core.Abstract.PageRender {
 		super.render(controller, params);
 
 		var loadPromises = controller.load();
+		var reactiveView = null;
 
 		for (var service of Object.keys(loadPromises)) {
 			var promise = loadPromises[service];
 			this._resolvePromise(controller, service, promise);
 		}
 
-		var reactiveView = null;
-
 		if (this._firstTime === false) {
-			reactiveView = this._react.render(controller.getView(), document.getElementById(this._setting.$PageRender.masterElementId));
+			reactiveView = this._react.render(controller.getReactView(), document.getElementById(this._setting.$PageRender.masterElementId));
 			controller.setReactiveView(reactiveView);
 		}
 
@@ -72,7 +71,7 @@ class Client extends ns.Core.Abstract.PageRender {
 				.then((resolvedPromises) => {
 
 					if (this._firstTime === true) {
-						reactiveView = this._react.render(controller.getView(), document.getElementById(this._setting.$PageRender.masterElementId));
+						reactiveView = this._react.render(controller.getReactView(), document.getElementById(this._setting.$PageRender.masterElementId));
 						controller.setReactiveView(reactiveView);
 						this._firstTime = false;
 					}
@@ -81,7 +80,6 @@ class Client extends ns.Core.Abstract.PageRender {
 					this._changeSeoParamsOnPage(controller.getSeoParams());
 
 					controller.activate();
-
 				})
 		);
 	}

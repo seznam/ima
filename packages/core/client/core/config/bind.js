@@ -76,14 +76,14 @@ export var init = (ns) => { //jshint ignore:line
 	if (ns.oc.get('$WindowHelper').isClient()) {
 		ns.oc.bind('$PageRender', ns.oc.make('Core.PageRender.Client', ['$Rsvp', '$BindReact', '$Animate', ns.Setting, '$WindowHelper']));
 	} else {
-		ns.oc.bind('$PageRender', ns.oc.make('Core.PageRender.Server', ['$Rsvp', '$BindReact', '$Animate', ns.Setting, '$Respond']));
+		ns.oc.bind('$PageRender', ns.oc.make('Core.PageRender.Server', ['$Rsvp', '$BindReact', '$Animate', ns.Setting, '$Respond', '$Cache']));
 	}
 
 	//Router
 	if (ns.oc.get('$WindowHelper').isClient()) {
-		ns.oc.bind('$Router', ns.oc.make('Core.Router.ClientHandler', ['$PageRender', '$WindowHelper']));
+		ns.oc.bind('$Router', ns.oc.make('Core.Router.ClientHandler', ['$PageRender', '$BindPromise', '$WindowHelper']));
 	} else {
-		ns.oc.bind('$Router', ns.oc.make('Core.Router.ServerHandler', ['$PageRender', '$Request']));
+		ns.oc.bind('$Router', ns.oc.make('Core.Router.ServerHandler', ['$PageRender', '$BindPromise', '$Request']));
 	}
 	ns.oc.bind('$Route', ns.Core.Router.Route);
 

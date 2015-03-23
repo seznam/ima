@@ -15,19 +15,37 @@ class Router extends ns.Core.Interface.Router {
 	 * @method constructor
 	 * @constructor
 	 * @param {Core.Interface.PageRender} pageRender
+	 * @param {Promise} Promise
 	 * @example
 	 *      router.link('article', {articleId: 1});
 	 * @example
 	 *      router.redirect('http://www.example.com/web');
 	 */
-	constructor(pageRender) {
+	constructor(pageRender, Promise) {
 		super();
+
+		/**
+		 * @property _pageRender
+		 * @protected
+		 * @type {Core.Base.PageRender}
+		 * @default pageRender
+		 */
+		this._pageRender = pageRender;
+
+		/**
+		 * @property _Promise
+		 * @protected
+		 * @type {Promise}
+		 * @default Promise
+		 */
+		this._Promise = Promise;
+
 
 		/**
 		 * Keep all routes.
 		 *
 		 * @property _routes
-		 * @private
+		 * @protected
 		 * @type {Array}
 		 * @default []
 		 */
@@ -37,7 +55,7 @@ class Router extends ns.Core.Interface.Router {
 		 * Current mode - one of MODE_*.
 		 *
 		 * @property mode
-		 * @private
+		 * @protected
 		 * @type {string}
 		 * @default null
 		 */
@@ -47,19 +65,11 @@ class Router extends ns.Core.Interface.Router {
 		 * Current domain.
 		 *
 		 * @property _domain
-		 * @private
+		 * @protected
 		 * @type {string}
 		 * @default null
 		 */
 		this._domain = null;
-
-		/**
-		 * @property _pageRender
-		 * @private
-		 * @type {Core.Base.PageRender}
-		 * @default pageRender
-		 */
-		this._pageRender = pageRender;
 
 		/**
 		 * @property MODE_HISTORY
@@ -201,7 +211,7 @@ class Router extends ns.Core.Interface.Router {
 	 * Redirect to url.
 	 *
 	 * @method redirect
-	 * @param {string} url -
+	 * @param {string} url
 	 */
 	redirect(url) {
 
@@ -230,18 +240,19 @@ class Router extends ns.Core.Interface.Router {
 	 *
 	 * @method route
 	 * @param {string} path
+	 * @return {Promise}
 	 */
 	route(path) {
 		var routeForPath = this._getRouteByPath(path);
-		var routeName = this.ROUTE_NAME_NOT_FOUND;
 		var params = {path};
 
-		if (routeForPath) {
-			routeName = routeForPath.getName();
-			params = routeForPath.getParamsForPath(path);
+		if (!routeForPath) {
+			return this.handleNotFound(params);
 		}
 
-		return this._handle(routeName, params);
+		params = routeForPath.getParamsForPath(path);
+
+		return this._handle(routeForPath, params);
 	}
 
 	/**
@@ -252,7 +263,14 @@ class Router extends ns.Core.Interface.Router {
 	 * @return {Promise}
 	 */
 	handleError(params) {
-		return this._handle(this.ROUTE_NAME_ERROR, params);
+		var routeError = this._getRouteByName(this.ROUTE_NAME_ERROR);
+
+		if (!routeError) {
+			var error = ns.oc.create('$Error', `Core.Router:handleError has undefined route. Add new route with name '${this.ROUTE_NAME_ERROR}'.`, params);
+			return this._Promise.reject(error);
+		}
+
+		return this._handle(routeError, params);
 	}
 
 	/**
@@ -263,7 +281,14 @@ class Router extends ns.Core.Interface.Router {
 	 * @return {Promise}
 	 */
 	handleNotFound(params) {
-		return this._handle(this.ROUTE_NAME_NOT_FOUND, params);
+		var routeNotFound = this._getRouteByName(this.ROUTE_NAME_NOT_FOUND);
+
+		if (!routeNotFound) {
+			var error = ns.oc.create('$Error', `Core.Router:handleNotFound has undefined route. Add new route with name '${this.ROUTE_NAME_NOT_FOUND}'.`, params);
+			return this._Promise.reject(error);
+		}
+
+		return this._handle(routeNotFound, params);
 	}
 
 	/**
@@ -271,17 +296,12 @@ class Router extends ns.Core.Interface.Router {
 	 *
 	 * @method _handle
 	 * @private
-	 * @param {string} routeName - route alias
+	 * @param {Core.Router.Route} route - route
 	 * @param {Object} params
 	 * @return {Promise}
 	 */
-	_handle(routeName, params) {
-		var handleRoute = this._getRouteByName(routeName);
-
-		if (!handleRoute) {
-			throw new Error(`Core.Router:_handle has undefined route. Add new route with name '${routeName}'.`);
-		}
-		var controller = handleRoute.getController();
+	_handle(route, params) {
+		var controller = route.getController();
 
 		return this._pageRender.render(controller, params);
 	}

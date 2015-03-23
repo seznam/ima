@@ -44,7 +44,7 @@ class Controller extends ns.Core.Interface.Controller {
 		 *
 		 * @property _reactiveView
 		 * @protected
-		 * @type Vendor.ReactComponent
+		 * @type Vendor.React.ReactComponent
 		 * @default null
 		 */
 		this._reactiveView = null;
@@ -57,15 +57,20 @@ class Controller extends ns.Core.Interface.Controller {
 		 */
 		this._status = 200;
 
-
 		/**
 		 * @property view
 		 * @protected
 		 * @type Core.Interface.View
 		 */
-		this._view = view
-			.init(this)
-			.getView();
+		this._view = view;
+
+		/**
+		 * @property _reactView
+		 * @type {Vendor.React.ReactElement}
+		 * @default null
+		 */
+		this._reactView = null;
+
 
 		/**
 		 * @property params
@@ -84,6 +89,7 @@ class Controller extends ns.Core.Interface.Controller {
 	 */
 	init(params = {}) {
 		this.params = params;
+		this._reactView = this._view.init(this).getReactView();
 	}
 		
 	/**
@@ -109,8 +115,8 @@ class Controller extends ns.Core.Interface.Controller {
 	 * @method getView
 	 * @return {Core.Abstract.View} - assigned view
 	 */
-	getView() {
-		return this._view;
+	getReactView() {
+		return this._reactView;
 	}
 		
 	/**

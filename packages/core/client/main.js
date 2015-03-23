@@ -45,8 +45,12 @@ if (typeof window !== 'undefined' && window !== null) {
 
 	} else {
 
-		//TODO onerror call boot with config
-		window.addEventListener('error', () => {
+		window.addEventListener('error', (e) => {
+			if (ns.oc.has('$Router')) {
+				ns.oc
+					.get('$Router')
+					.handleError(e.error)
+			}
 		});
 
 		window.addEventListener('load', () => {
@@ -83,10 +87,7 @@ if (typeof window !== 'undefined' && window !== null) {
 			router
 				.init({mode: router.MODE_HISTORY})
 				.listen()
-				.route(router.getPath())
-				.catch((error) => {
-					router.handleError(error);
-				});
+				.route(router.getPath());
 		});
 	}
 }

@@ -14,17 +14,27 @@ class ClientHandler extends ns.Core.Abstract.Router {
 	 * @method constructor
 	 * @constructor
 	 * @param {Core.Interface.PageRender} pageRender
+	 * @param {Promise} Promise
 	 * @param {Core.Interface.Window} window
 	 */
-	constructor(pageRender, window) {
-		super(pageRender);
+	constructor(pageRender, Promise, window) {
+		super(pageRender, Promise);
 
 		/**
 		 * @property _window
+		 * @private
 		 * @type {Core.Interface.Window}
 		 * @default window
 		 */
 		this._window = window;
+
+		/**
+		 * @property MOUSE_MIDDLE_BUTTON
+		 * @const
+		 * @type {Number}
+		 * @default 1
+		 */
+		this.MOUSE_MIDDLE_BUTTON = 1;
 
 	}
 
@@ -50,17 +60,11 @@ class ClientHandler extends ns.Core.Abstract.Router {
 	 * @return {string}
 	 */
 	getPath() {
-		var path = '';
+		var path = decodeURI(window.location.pathname + window.location.search);
 
-		switch(this._mode) {
-			case this.MODE_HISTORY:
-				path = decodeURI(window.location.pathname + window.location.search);
-				break;
-
-			case this.MODE_HASH:
-				var match = this._window.getUrl().match(/#!\/(.*)$/);
-				path = match ? match[1] : '/';
-				break;
+		if (this._mode == this.MODE_HASH) {
+			var match = this._window.getUrl().match(/#!\/(.*)$/);
+			path = match ? match[1] : '/';
 		}
 
 		return path;
@@ -75,38 +79,18 @@ class ClientHandler extends ns.Core.Abstract.Router {
 	 */
 	listen() {
 		var window = this._window.getWindow();
-
-		if (this._mode === this.MODE_HISTORY) {
-			this._window.addEventListener(window, 'popstate', () => {
-				this.route(this.getPath());
-			});
-		}
+		var changeAddressBarEvent = 'popState';
 
 		if (this._mode === this.MODE_HASH) {
-			this._window.addEventListener(window, 'hashchange', () => {
-				this.route(this.getPath());
-			});
+			changeAddressBarEvent = 'hashchange';
 		}
 
+		this._window.addEventListener(window, changeAddressBarEvent, () => {
+			this.route(this.getPath());
+		});
+
 		this._window.addEventListener(window, 'click', (e)=> {
-			var target = e.target || e.srcElement;
-			var targetHref = target.href;
-
-			//find close a element with href
-			while(target && target.parentNode && (target !== this._window.getBody()) && (typeof targetHref === 'undefined' || targetHref === null)) {
-				target = target.parentNode;
-				targetHref = target.href;
-			}
-
-			if (typeof targetHref !== 'undefined' && targetHref !== null) {
-				var isSameDomain = targetHref.match(this._domain);
-
-				if (isSameDomain) {
-					this._window.preventDefault(e);
-					var path = targetHref.replace(this._domain, '');
-					this._navigate(path);
-				}
-			}
+			this._handleClick(e);
 		});
 
 		return this;
@@ -119,13 +103,75 @@ class ClientHandler extends ns.Core.Abstract.Router {
 	 * @param {string} url
 	 */
 	redirect(url) {
-		var isSameDomain = url.match(this._domain);
 
-		if (isSameDomain) {
-			var redirectPath = url.replace(this._domain, '');
-			this._navigate(redirectPath);
+		if (this._isSameDomain(url)) {
+			this._setAddressBar(url);
 		} else {
 			this._window.redirect(url);
+		}
+
+	}
+
+	/**
+	 * Handle path by router.
+	 *
+	 * @method route
+	 * @param {string} path
+	 */
+	route(path) {
+		return (
+			super
+				.route(path)
+				.catch((error) => {
+					return this.handleError(error);
+				})
+		);
+	}
+
+	/**
+	 * Handle Error that call 'error' controller with params.
+	 *
+	 * @method handleError
+	 * @param {Object} params
+	 * @return {Promise}
+	 */
+	handleError(params) {
+		return (
+			super
+				.handleError(params)
+				.catch((fatalError) => {
+					//TODO handle fatal error
+					console.error('FATAL ERROR', fatalError);
+				})
+		);
+	}
+	
+	/**
+	 * Handle click event.
+	 *
+	 * @method _handleClick
+	 * @param {MouseEvent} event
+	 */
+	_handleClick(event) {
+		var target = event.target || event.srcElement;
+		var targetHref = target.href;
+
+		//find close a element with href
+		while(target && target.parentNode && (target !== this._window.getBody()) && (typeof targetHref === 'undefined' || targetHref === null)) {
+			target = target.parentNode;
+			targetHref = target.href;
+		}
+
+		if (typeof targetHref !== 'undefined' && targetHref !== null) {
+
+			if (this._isSameDomain(targetHref) && event.button !== this.MOUSE_MIDDLE_BUTTON) {
+				var path = targetHref.replace(this._domain, '');
+
+				this._window.preventDefault(event);
+				this.route(path);
+				this._setAddressBar(targetHref);
+			}
+
 		}
 	}
 
@@ -133,32 +179,43 @@ class ClientHandler extends ns.Core.Abstract.Router {
 	 * Normalize path by clear slashes.
 	 *
 	 * @method _clearSlashes
+	 * @private
 	 * @param {string} path
 	 */
 	_clearSlashes(path) {
-		return path.tostring().replace(/\/$/, '').replace(/^\//, '');
+		return path.toString().replace(/\/$/, '').replace(/^\//, '');
 	}
 
 	/**
-	 * Set path to url in address bar and change state for path.
+	 * Set address bar.
 	 *
-	 * @method _navigate
+	 * @method _setAddressBar
 	 * @private
-	 * @param {string} [path='']
+	 * @param {string} [url='']
 	 */
-	_navigate(path = '') {
-		this.route(path)
-			.catch((error) => {
-				this.handleError(error);
-			});
-
-		path = `/${this._clearSlashes(path)}`;
+	_setAddressBar(url = '') {
 
 		if (this._mode === this.MODE_HISTORY) {
-			this._window.pushStateToHistoryAPI(null, null, this._domain + path);
+			this._window.pushStateToHistoryAPI(null, null, url);
 		} else {
+			var path = url.replace(this._domain, '');
+			path = `/${this._clearSlashes(path)}`;
+
 			this._window.redirect(`${this._domain}/#!${path}`);
 		}
+
+	}
+
+	/**
+	 * Return true if url is same domain as app domain.
+	 *
+	 * @method _isSameDomain
+	 * @private
+	 * @param {string} url
+	 * @return {boolean}
+	 */
+	_isSameDomain(url) {
+		return url.test(this._domain);
 	}
 }
 

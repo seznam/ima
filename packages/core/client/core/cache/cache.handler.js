@@ -4,13 +4,14 @@ ns.namespace('Core.Cache');
 
 /**
  * @class Handler
+ * @extends Core.Interface.Cache
  * @namespace Core.Cache
  * @module Core
  * @submodule Core.Cache
  *
  * @requires Core.Interface.Storage
  */
-class Handler {
+class Handler extends ns.Core.Interface.Cache {
 
 	/**
 	 * @method constructor
@@ -25,6 +26,8 @@ class Handler {
 	 * 		}
 	 */
 	constructor(cacheStorage, config = {TTL: 30000, cached: false}) {
+		super();
+
 		/**
 		 * Keep config.
 		 *
@@ -98,7 +101,7 @@ class Handler {
 	}
 
 	/**
-	 * Return cached value for key. If key doesnt exist return null.
+	 * Return cached value for key. If key doesnt exist then throw error.
 	 *
 	 * @method get
 	 * @param {String} key
