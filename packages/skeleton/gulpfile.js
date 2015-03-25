@@ -6,7 +6,7 @@ var concat = require('gulp-concat');
 var uglify = require('gulp-uglify');
 var sourcemaps = require('gulp-sourcemaps');
 var gutil = require('gulp-util');
-var server = require('gulp-express');
+var gls = require('gulp-live-server');
 var insert = require('gulp-insert');
 var browserify = require('browserify');
 var gulpif = require('gulp-if');
@@ -48,9 +48,9 @@ try {
 	};
 	console.log(e);
 }
-//process.env.NODE_PATH = path.join(path.resolve('.'), '');
 
 var watchEvent = null;
+var server = null;
 
 var files = {
 	vendor: {
@@ -261,18 +261,21 @@ gulp.task('watch', function() {
 });
 
 gulp.task('server', function() {
-	var node =  server.run([
-		'./proxyServer/proxyServer.js'
-	]);
-
-/*	node.stdout.on('data', function(data) {
-		console.log(data.trim());
-	});
-
-	node.stderr.on('data', function(data) {
-		console.error(data.trim());
-	});*/
+	server =  gls.new('./proxyServer/proxyServer.js');
+	server.start();
 });
+
+gulp.task('server:restart', function() {
+	server.start();
+});
+
+gulp.task('server:reload', function(callback) {
+	setTimeout(function() {
+		server.notify(watchEvent);
+		callback();
+	}, 1500);
+});
+
 
 gulp.task('server:apiTest', function () {
 	nodemon({ script: './proxyServer/apiTest.js', ext: 'js', ignore: [] })
@@ -301,13 +304,6 @@ gulp.task('devTest', function() {
 		.on('error', function(err) {
 			throw err;
 		});
-});
-
-gulp.task('reload', function(callback) {
-	setTimeout(function() {
-		server.notify(watchEvent);
-		callback();
-	}, 1500);
 });
 
 gulp.task('static', function() {
@@ -349,8 +345,8 @@ gulp.task('shim', function() {
 gulp.task('server:build', function(callback) {
 	return runSequence(
 		['Es6ToEs5:server', 'environment'],
-		'server',
-		'reload',
+		'server:restart',
+		'server:reload',
 		callback
 	);
 });
@@ -358,8 +354,8 @@ gulp.task('server:build', function(callback) {
 gulp.task('app:build', function(callback) {
 	return runSequence(
 		'Es6ToEs5:client',
-		'server',
-		'reload',
+		'server:restart',
+		'server:reload',
 		callback
 	);
 });
@@ -369,8 +365,8 @@ gulp.task('vendor:build', function(callback) {
 		'Es6ToEs5:vendor',
 		['vendor:client', 'vendor:server'],
 		'vendor:clean',
-		'server',
-		'reload',
+		'server:restart',
+		'server:reload',
 		callback
 	);
 });
@@ -421,8 +417,6 @@ gulp.task('Es6ToEs5:client', function() {
 	);
 
 });
-
-//gulp.task('Es6ToEs5:client', shell.task('traceur --out ' + files.app.tmp + ' ' + files.app.src + '  --modules=inline --source-maps=inline'));
 
 // build server logic app
 gulp.task('Es6ToEs5:server', shell.task('traceur --dir ' + files.server.src + ' ' + files.server.dest + '  --modules=commonjs --source-maps=inline'));
