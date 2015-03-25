@@ -60,6 +60,16 @@ class ClientWindow extends ns.Core.Interface.Window {
 	}
 
 	/**
+	 * Set new page title.
+	 *
+	 * @method setTitle
+	 * @param {string} title
+	 */
+	setTitle(title) {
+		document.title = title;
+	}
+
+	/**
 	 * Get WebSocket interface.
 	 *
 	 * @method getWebSocket
@@ -120,6 +130,39 @@ class ClientWindow extends ns.Core.Interface.Window {
 	}
 
 	/**
+	 * Return element by id.
+	 *
+	 * @method getElementById
+	 * @param {string} id
+	 * @return {HtmlElement|null}
+	 */
+	getElementById(id) {
+		return document.getElementById(id);
+	}
+
+	/**
+	 * Returns the first element within the document that matches the specified group of selectors.
+	 *
+	 * @method querySelector
+	 * @param {string} selector
+	 * @return {HtmlElement|null}
+	 */
+	querySelector(selector) {
+		return document.querySelector(selector);
+	}
+
+	/**
+	 * Returns a list of the elements within the document that match the specified group of selectors.
+	 *
+	 * @method querySelectorAll
+	 * @param {string} selector
+	 * @return {NodeList}
+	 */
+	querySelectorAll(selector) {
+		return document.querySelectorAll(selector);
+	}
+
+	/**
 	 * Redirect to url.
 	 *
 	 * @method redirect
@@ -145,17 +188,36 @@ class ClientWindow extends ns.Core.Interface.Window {
 	 * Add event listener.
 	 *
 	 * @method addEventListener
-	 * @param {NodeElement} element
+	 * @param {EventTarget} element
 	 * @param {string} event
 	 * @param {function} listener
 	 * @param {boolean} [useCapture=false]
 	 */
-	addEventListener(element, event, listener, useCapture=false) {
+	addEventListener(element, event, listener, useCapture = false) {
 		if (element.addEventListener) {
 			element.addEventListener(event, listener, useCapture);
 		} else {
 			if (element.attachEvent) {
 				element.attachEvent(`on${event}`, listener);
+			}
+		}
+	}
+
+	/**
+	 * Remove event listener.
+	 *
+	 * @method removeEventListener
+	 * @param {EventTarget} element
+	 * @param {string} event
+	 * @param {function} listener
+	 * @param {boolean} [useCapture=false]
+	 */
+	removeEventListener(element, event, listener, useCapture = false) {
+		if (element.removeEventListener) {
+			element.removeEventListener(event, listener, useCapture);
+		} else {
+			if (element.detachEvent) {
+				element.detachEvent(`on${event}`, listener);
 			}
 		}
 	}

@@ -74,5 +74,28 @@ class PageRender extends ns.Core.Interface.PageRender{
 		}
 		controller.init(params);
 	}
+
+	/**
+	 * Wrap each key of object to Promise if it isnt Promise.
+	 *
+	 * @method _wrapEachKeyToPromise
+	 * @protected
+	 * @param {Object} objectWithoutPromise
+	 * @return {Object}
+	 */
+	_wrapEachKeyToPromise(objectWithoutPromise) {
+		var objectWithPromise = {};
+
+		for(var key of Object.keys(objectWithoutPromise)) {
+
+			if (objectWithoutPromise[key] instanceof this._rsvp.Promise) {
+				objectWithPromise[key] = objectWithoutPromise[key];
+			} else {
+				objectWithPromise[key] = this._rsvp.Promise.resolve(objectWithoutPromise[key]);
+			}
+		}
+
+		return objectWithPromise;
+	}
 }
 ns.Core.Abstract.PageRender = PageRender;

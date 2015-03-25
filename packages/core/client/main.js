@@ -4,14 +4,12 @@ import ns from 'core/namespace/ns.js';
 import {init as initBindCore} from 'core/config/bind.js';
 import {init as initBindApp} from '../../app/config/bind.js';
 import {init as initRoute} from '../../app/config/route.js';
-import {init as initDictionaryCore} from 'core/config/dictionary.js';
-import {init as initDictionaryApp} from '../../app/config/dictionary.js';
-import {init as initVariableCore} from 'core/config/variable.js';
-import {init as initVariableApp} from '../../app/config/variable.js';
+import {init as initHandlerCore} from 'core/config/handler.js';
+import {init as initHandlerApp} from '../../app/config/handler.js';
 import {init as initSetting} from '../../app/config/setting.js';
 
 var getInit = () => {
-	return {initBindCore, initBindApp, initRoute, initDictionaryCore, initDictionaryApp, initVariableCore, initVariableApp, initSetting};
+	return {initBindCore, initBindApp, initRoute, initHandlerCore, initHandlerApp, initSetting};
 };
 
 var getNameSpace = () => {
@@ -28,13 +26,14 @@ if (typeof window !== 'undefined' && window !== null) {
 
 		var bootConfig = {
 			vendor: window.$IMA.Vendor,
-			dictionary: {
-				language: 'cs',
-				dictionary: window.$IMA.i18n
-			},
-			variable: {
+			handler: {
 				respond: null,
-				request: null
+				request: null,
+				$IMA: window.$IMA,
+				dictionary: {
+					language: window.$IMA.Language,
+					dictionary: window.$IMA.i18n
+				}
 			}
 		};
 
@@ -62,13 +61,14 @@ if (typeof window !== 'undefined' && window !== null) {
 
 			var bootConfig = {
 				vendor: window.$IMA.Vendor,
-				dictionary: {
-					language: window.$IMA.Language,
-					dictionary: window.$IMA.i18n
-				},
-				variable: {
+				handler: {
 					respond: null,
-					request: null
+					request: null,
+					$IMA: window.$IMA,
+					dictionary: {
+						language: window.$IMA.Language,
+						dictionary: window.$IMA.i18n
+					}
 				},
 				setting: {
 					env: window.$IMA.Enviroment,

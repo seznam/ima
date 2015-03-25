@@ -25,7 +25,6 @@ class Dictionary{
 	 * @method getLanguage
 	 */
 	getLanguage() {
-
 	}
 
 	/**
@@ -34,7 +33,6 @@ class Dictionary{
 	 * @method get
 	 */
 	get() {
-
 	}
 }
 

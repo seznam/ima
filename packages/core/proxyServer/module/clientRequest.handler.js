@@ -81,8 +81,7 @@ module.exports = () => {
 
 		var bootConfig = {
 			vendor: vendor,
-			dictionary: {language, dictionary},
-			variable: {request: req, respond: res},
+			handler: {request: req, respond: res, $IMA: {}, dictionary: {language, dictionary}},
 			setting: {env: config.$Env, protocol: `${req.protocol}:`, language: language}
 		};
 

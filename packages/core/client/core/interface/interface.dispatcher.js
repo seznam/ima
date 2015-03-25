@@ -18,7 +18,6 @@ class Dispatcher {
 	 * @method clear
 	 */
 	clear() {
-
 	}
 
 	/**
@@ -27,7 +26,6 @@ class Dispatcher {
 	 * @method listen
 	 */
 	listen() {
-
 	}
 
 	/**
@@ -36,7 +34,6 @@ class Dispatcher {
 	 * @method unlisten
 	 */
 	unlisten() {
-
 	}
 
 	/**
@@ -45,7 +42,6 @@ class Dispatcher {
 	 * @method fire
 	 */
 	fire() {
-
 	}
 }
 

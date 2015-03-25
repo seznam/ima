@@ -2,7 +2,7 @@ export var init = (ns) => {
 
 	// Page Home
 	ns.oc.bind('HomeView', ns.App.Page.Home.View, ['$BindReact']);
-	ns.oc.bind('HomeController', ns.App.Page.Home.Controller, ['HomeView', '$BindPromise']);
+	ns.oc.bind('HomeController', ns.App.Page.Home.Controller, ['HomeView', '$Router', '$BindPromise']);
 
 	// Page Error
 	ns.oc.bind('ErrorView', ns.App.Page.Error.View, ['$BindReact']);

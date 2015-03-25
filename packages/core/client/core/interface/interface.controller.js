@@ -32,7 +32,6 @@ class Controller {
 	 * @method activate
 	 */
 	activate() {
-
 	}
 
 	/**
@@ -41,7 +40,6 @@ class Controller {
 	 * @method load
 	 */
 	load() {
-
 	}
 }
 

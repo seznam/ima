@@ -16,7 +16,6 @@ class Storage {
 	 * @method init
 	 */
 	init() {
-
 	}
 
 	/**
@@ -25,7 +24,6 @@ class Storage {
 	 * @method clear
 	 */
 	clear() {
-
 	}
 
 	/**
@@ -34,7 +32,6 @@ class Storage {
 	 * @method has
 	 */
 	has() {
-
 	}
 
 	/**
@@ -43,7 +40,6 @@ class Storage {
 	 * @method get
 	 */
 	get() {
-
 	}
 
 	/**
@@ -52,7 +48,6 @@ class Storage {
 	 * @method set
 	 */
 	set() {
-
 	}
 
 	/**
@@ -61,14 +56,12 @@ class Storage {
 	 * @method delete
 	 */
 	delete() {
-
 	}
 
 	/**
 	 * @method keys
 	 */
 	keys() {
-
 	}
 }
 

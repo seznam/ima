@@ -8,7 +8,7 @@ describe('Core.Abstract.Router', function() {
 		ns.oc.bind('BaseController', {});
 
 		pageRender = ns.oc.create('Core.Interface.PageRender');
-		router = ns.oc.create('Core.Abstract.Router', pageRender);
+		router = ns.oc.create('Core.Abstract.Router', pageRender, Promise);
 
 		router.add('home', '/', 'BaseController');
 		router.add('contact', '/contact', 'BaseController');
@@ -107,4 +107,75 @@ describe('Core.Abstract.Router', function() {
 
 	});
 
+	describe('HandleError method', function() {
+
+		it('should be handle "error" route', function() {
+			var routeError = ns.oc.create('$Route', this.ROUTE_NAME_ERROR, '/error', 'ErrorController');
+			var params = new Error('test');
+
+			spyOn(router, '_getRouteByName')
+				.and
+				.returnValue(routeError);
+
+			spyOn(router, '_handle')
+				.and
+				.stub();
+
+			router.handleError(params);
+
+			expect(router._handle).toHaveBeenCalledWith(routeError, params);
+
+		});
+
+		it('should be reject promise with error for undefined "error" route', function(done) {
+			var params = new Error('test');
+
+			spyOn(router, '_getRouteByName')
+				.and
+				.returnValue(null);
+
+			router
+				.handleError(params)
+				.catch(function(reason) {
+					expect(reason instanceof ns.oc.get('$Error')).toBe(true);
+					done();
+				});
+		});
+	});
+
+	describe('HandleNotFound method', function() {
+
+		it('should be handle "notFound" route', function() {
+			var routeNotFound = ns.oc.create('$Route', this.ROUTE_NAME_ERROR, '/notFound', 'NotFoundController');
+			var params = {path: 'path'};
+
+			spyOn(router, '_getRouteByName')
+				.and
+				.returnValue(routeNotFound);
+
+			spyOn(router, '_handle')
+				.and
+				.stub();
+
+			router.handleNotFound(params);
+
+			expect(router._handle).toHaveBeenCalledWith(routeNotFound, params);
+
+		});
+
+		it('should be reject promise with error for undefined "error" route', function(done) {
+			var params = {path: 'path'};
+
+			spyOn(router, '_getRouteByName')
+				.and
+				.returnValue(null);
+
+			router
+				.handleNotFound(params)
+				.catch(function(reason) {
+					expect(reason instanceof ns.oc.get('$Error')).toBe(true);
+					done();
+				});
+		});
+	});
 });

@@ -18,7 +18,6 @@ class Window {
 	 * @method isClient
 	 */
 	isClient() {
-
 	}
 
 
@@ -28,7 +27,6 @@ class Window {
 	 * @method hasSessionStorage
 	 */
 	hasSessionStorage() {
-
 	}
 
 	/**
@@ -37,7 +35,6 @@ class Window {
 	 * @method hasWebSocket
 	 */
 	hasWebSocket() {
-
 	}
 
 	/**
@@ -46,7 +43,14 @@ class Window {
 	 * @method hasHistoryAPI
 	 */
 	hasHistoryAPI() {
+	}
 
+	/**
+	 * Set new page title.
+	 *
+	 * @method setTitle
+	 */
+	setTitle() {
 	}
 
 	/**
@@ -55,7 +59,6 @@ class Window {
 	 * @method getWebSocket
 	 */
 	getWebSocket() {
-
 	}
 
 	/**
@@ -64,7 +67,6 @@ class Window {
 	 * @method getWindow
 	 */
 	getWindow() {
-
 	}
 
 	/**
@@ -73,7 +75,6 @@ class Window {
 	 * @method getDomain
 	 */
 	getDomain() {
-
 	}
 
 	/**
@@ -82,7 +83,6 @@ class Window {
 	 * @method getPath
 	 */
 	getPath() {
-
 	}
 
 	/**
@@ -91,7 +91,6 @@ class Window {
 	 * @method getUrl
 	 */
 	getUrl() {
-
 	}
 
 	/**
@@ -100,7 +99,30 @@ class Window {
 	 * @method getBody
 	 */
 	getBody() {
-
+	}
+	
+	/**
+	 * Return element by id.
+	 *
+	 * @method getElementById
+	 */
+	getElementById() {
+	}
+	
+	/**
+	 * Returns the first element within the document that matches the specified group of selectors.
+	 *
+	 * @method querySelector
+	 */
+	querySelector() {
+	}
+	
+	/**
+	 * Returns a list of the elements within the document that match the specified group of selectors.
+	 *
+	 * @method querySelectorAll
+	 */
+	querySelectorAll() {
 	}
 
 	/**
@@ -109,7 +131,6 @@ class Window {
 	 * @method redirect
 	 */
 	redirect() {
-
 	}
 	
 	/**
@@ -118,7 +139,6 @@ class Window {
 	 * @method pushStateToHistoryAPI
 	 */
 	pushStateToHistoryAPI() {
-		
 	}
 
 	/**
@@ -127,7 +147,14 @@ class Window {
 	 * @method addEventListener
 	 */
 	addEventListener() {
+	}
 
+	/**
+	 * Remove event listener.
+	 *
+	 * @method removeEventListener
+	 */
+	removeEventListener() {
 	}
 
 	/**
@@ -136,7 +163,6 @@ class Window {
 	 * @method preventDefault
 	 */
 	preventDefault() {
-
 	}
 
 }

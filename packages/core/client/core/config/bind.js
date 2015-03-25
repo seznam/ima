@@ -35,9 +35,9 @@ export var init = (ns) => { //jshint ignore:line
 	//*************START CORE**************
 	//Helper
 	if (typeof window !== 'undefined' && window !== null) {
-		ns.oc.bind('$WindowHelper', ns.oc.create('Core.Helper.ClientWindow'));
+		ns.oc.bind('$Window', ns.oc.create('Core.Helper.ClientWindow'));
 	} else {
-		ns.oc.bind('$WindowHelper', ns.oc.create('Core.Helper.ServerWindow'));
+		ns.oc.bind('$Window', ns.oc.create('Core.Helper.ServerWindow'));
 	}
 
 	//Core Error
@@ -60,10 +60,10 @@ export var init = (ns) => { //jshint ignore:line
 	ns.oc.bind('$Dispatcher', ns.oc.make('Core.Dispatcher.Handler', ['$MapStorage']));
 
 	//Animate
-	ns.oc.bind('$Animate', ns.oc.make('Core.Animate.Handler', ['$Dispatcher', '$BindPromise', '$WindowHelper', '$CookieStorage', '$ANIMATE_CONFIG']));
+	ns.oc.bind('$Animate', ns.oc.make('Core.Animate.Handler', ['$Dispatcher', '$BindPromise', '$Window', '$CookieStorage', '$ANIMATE_CONFIG']));
 
 	//Cache
-	if (ns.oc.get('$WindowHelper').hasSessionStorage()) {
+	if (ns.oc.get('$Window').hasSessionStorage()) {
 		ns.oc.bind('$CacheStorage', ns.oc.make('$SessionMapStorage'));
 	} else {
 		ns.oc.bind('$CacheStorage', ns.oc.make('$MapStorage'));
@@ -73,17 +73,17 @@ export var init = (ns) => { //jshint ignore:line
 	ns.oc.bind('$CacheData', ns.Core.Cache.Data);
 
 	//Render
-	if (ns.oc.get('$WindowHelper').isClient()) {
-		ns.oc.bind('$PageRender', ns.oc.make('Core.PageRender.Client', ['$Rsvp', '$BindReact', '$Animate', ns.Setting, '$WindowHelper']));
+	if (ns.oc.get('$Window').isClient()) {
+		ns.oc.bind('$PageRender', ns.oc.make('Core.PageRender.Client', ['$Rsvp', '$BindReact', '$Animate', ns.Setting, '$Window']));
 	} else {
 		ns.oc.bind('$PageRender', ns.oc.make('Core.PageRender.Server', ['$Rsvp', '$BindReact', '$Animate', ns.Setting, '$Respond', '$Cache']));
 	}
 
 	//Router
-	if (ns.oc.get('$WindowHelper').isClient()) {
-		ns.oc.bind('$Router', ns.oc.make('Core.Router.ClientHandler', ['$PageRender', '$BindPromise', '$WindowHelper']));
+	if (ns.oc.get('$Window').isClient()) {
+		ns.oc.bind('$Router', ns.oc.make('Core.Router.ClientHandler', ['$PageRender', '$BindPromise', '$Window']));
 	} else {
-		ns.oc.bind('$Router', ns.oc.make('Core.Router.ServerHandler', ['$PageRender', '$BindPromise', '$Request']));
+		ns.oc.bind('$Router', ns.oc.make('Core.Router.ServerHandler', ['$PageRender', '$BindPromise', '$Request', '$Respond']));
 	}
 	ns.oc.bind('$Route', ns.Core.Router.Route);
 
@@ -92,7 +92,7 @@ export var init = (ns) => { //jshint ignore:line
 	ns.oc.bind('$Http', ns.oc.make('Core.Http.Handler', ['$HttpProxy', '$Cache', '$CookieStorage', '$Dictionary', '$BindPromise', '$HTTP_CONFIG']));
 
 	//Sockets
-	ns.oc.bind('$SocketFactory', ns.Core.Socket.Factory, [ns.oc.get('$WindowHelper').getWebSocket()]);
+	ns.oc.bind('$SocketFactory', ns.Core.Socket.Factory, [ns.oc.get('$Window').getWebSocket()]);
 	ns.oc.bind('$SocketParser', ns.Core.Socket.Parser, []);
 	ns.oc.bind('$SocketProxy', ns.Core.Socket.Proxy, ['$Dispatcher', '$SocketFactory', '$SocketParser', '$SOCKET_CONFIG', '$SECURE']);
 

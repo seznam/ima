@@ -52,7 +52,7 @@ class Server extends ns.Core.Abstract.PageRender {
 	render(controller, params) {
 		super.render(controller, params);
 
-		var loadPromises = controller.load();
+		var loadPromises = this._wrapEachKeyToPromise(controller.load());
 
 		return (
 			this._rsvp
@@ -65,7 +65,7 @@ class Server extends ns.Core.Abstract.PageRender {
 					}
 
 					controller.setState(state);
-					controller.setSeoParams(resolvedPromises);
+					controller.setSeoParams(resolvedPromises, this._setting);
 
 					var pageMarkup = this._react.renderToString(controller.getReactView());
 

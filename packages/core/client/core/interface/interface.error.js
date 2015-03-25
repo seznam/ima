@@ -18,7 +18,6 @@ class Error {
 	 * @method getHttpStatus
 	 */
 	getHttpStatus() {
-
 	}
 
 	/**
@@ -27,7 +26,6 @@ class Error {
 	 * @method getParams
 	 */
 	getParams() {
-
 	}
 
 	/**
@@ -36,7 +34,6 @@ class Error {
 	 * @method getName
 	 */
 	getName() {
-
 	}
 
 	/**
@@ -45,7 +42,6 @@ class Error {
 	 * @method toString
 	 */
 	toString() {
-
 	}
 
 	/**
@@ -54,7 +50,6 @@ class Error {
 	 * @method toSource
 	 */
 	toSource() {
-
 	}
 }
 

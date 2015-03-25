@@ -40,31 +40,27 @@ class Request {
 	 * Return true for defined property req.
 	 *
 	 * @method isEnabled
-	 * @return {Boolean}
+	 * @return {boolean}
 	 */
 	isEnabled() {
 		return !!this._req;
 	}
 
 	/**
-	 * Return request ooriginal url.
+	 * Return request original url.
 	 *
 	 * @method getPath
-	 * @return {String|null}
+	 * @return {string}
 	 */
 	getPath() {
-		if (this.isEnabled()) {
-			return this._req.originalUrl;
-		} else {
-			return null;
-		}
+		return this._req.originalUrl;
 	}
 
 	/**
 	 * Return cookie string header.
 	 *
 	 * @method getCookie
-	 * @return {String}
+	 * @return {string}
 	 */
 	getCookie() {
 		return this._req.get('Cookie');

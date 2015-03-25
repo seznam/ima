@@ -18,7 +18,6 @@ class Animate {
 	 * @method set
 	 */
 	set() {
-
 	}
 }
 

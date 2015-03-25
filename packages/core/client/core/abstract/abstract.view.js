@@ -55,7 +55,6 @@ class View extends ns.Core.Interface.View {
 	 * @param {Core.Abstract.Controller} controller
 	 */
 	init(controller) { // jshint ignore:line
-
 		this._viewConfig = {
 			getInitialState() {
 				return controller.getState();

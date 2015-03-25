@@ -1,100 +1,94 @@
-xdescribe('Core.Router.ClientHandler', function() {
+describe('Core.Router.ClientHandler', function() {
 
 	var router = null;
 	var pageRender = null;
-	var respond = null;
-	var request = null;
+	var win = null;
 	var Promise = ns.oc.get('$Promise');
+	var domain = 'http://locahlost:3002';
 
 	beforeEach(function() {
-		ns.oc.bind('BaseController', {});
-
 		pageRender = ns.oc.create('Core.PageRender.Client');
-		request = ns.oc.create('Core.Router.Request');
-		respond = ns.oc.create('Core.Router.Respond');
-		router = ns.oc.create('Core.Router.ClientHandler', pageRender, respond);
-		router.init({mode: router.MODE_HISTORY});
-
-		router.add('home', '/', 'BaseController');
-		router.add('contact', '/contact', 'BaseController');
+		win = ns.oc.get('$Window');
+		router = ns.oc.create('Core.Router.ClientHandler', pageRender, Promise, win);
+		router.init({mode: router.MODE_HISTORY, domain: domain});
 	});
 
-	it('should be 2 routes in Array', function() {
-		expect(router._routes.length).toEqual(2);
+	it('should be return actual path', function() {
+		spyOn(win, 'getPath')
+			.and
+			.stub();
+
+		router.getPath();
+
+		expect(win.getPath).toHaveBeenCalled();
 	});
 
-	it('should remove path from router', function() {
-		router.remove('/');
+	it('should be add listener to popState event and click event', function() {
+		spyOn(win, 'addEventListener')
+			.and
+			.stub();
 
-		expect(router._routes.length).toEqual(1);
+		router.listen();
+
+		expect(win.addEventListener.calls.count()).toEqual(2);
 	});
 
-	describe('should get route by name', function() {
-		it('return instance of Core.Router.Route', function() {
-			expect(router._getRouteByName('home')).not.toBeNull();
+	describe('Redirect method', function() {
+		it('should be set address bar', function() {
+			var url = domain + '/somePath';
+
+			spyOn(router, '_setAddressBar')
+				.and
+				.stub();
+
+			router.redirect(url);
+
+			expect(router._setAddressBar).toHaveBeenCalledWith(url);
 		});
 
 		it('return null for non exist route', function() {
-			expect(router._getRouteByName('xxx')).toBeNull();
-		});
-	});
+			var url = 'http://example.com/somePath';
 
-	it('should return current path', function() {
-		expect(router.getPath()).toEqual('/context.html');
-	});
+			spyOn(win, 'redirect')
+				.and
+				.stub();
 
-	it('should return current url', function() {
-		expect(router.getUrl()).toEqual('http://localhost:3002/context.html');
-	});
+			router.redirect('http://example.com/somePath');
 
-	it('should redirect to other page', function() {
-		spyOn(router, '_navigate')
-			.and
-			.stub();
-		spyOn(router, 'redirect')
-			.and
-			.stub();
-
-		router.redirect('http://localhost:3002/');
-
-		expect(router.redirect).toHaveBeenCalled();
-	});
-
-	describe('Link method', function() {
-		it('should be return link for valid route with params', function() {
-			expect(router.link('home', {})).toEqual(jasmine.any(String));
-		});
-
-		it('should be throw Error for not valid route with params', function() {
-			expect(function() {router.link('xxx', {});}).toThrow();
+			expect(win.redirect).toHaveBeenCalledWith(url);
 		});
 	});
 
 	describe('Route method', function() {
 
-		it('should be render page for valid path', function() {
-			spyOn(pageRender, 'render')
+		it('should be call handleError for throwing error in super.router', function(done) {
+			spyOn(router, 'handleError')
 				.and
-				.returnValue(Promise.resolve('render'));
+				.returnValue(Promise.resolve());
 
-			router.route('/');
-
-			expect(pageRender.render).toHaveBeenCalled();
+			router
+				.route('/something')
+				.then(function() {
+					expect(router.handleError).toHaveBeenCalled();
+					done();
+				});
 		});
 
-		it('should be render not found page for not valid path', function() {
-			var path = '/xxx/aaa';
-			var params = {
-				path: path
-			};
+	});
 
-			spyOn(router, '_handle')
+	describe('HandleError method', function() {
+
+		it('should be call $IMA.fatalErrorHandler function', function(done) {
+			spyOn(window.$IMA, 'fatalErrorHandler')
 				.and
-				.returnValue(Promise.resolve('notfound'));
+				.stub();
 
-			router.route(path);
-
-			expect(router._handle).toHaveBeenCalledWith(router.ROUTE_NAME_NOT_FOUND, params);
+			router
+				.handleError(new Error())
+				.then(function(fatalError) {
+					expect(window.$IMA.fatalErrorHandler).toHaveBeenCalled();
+					done();
+				});
 		});
 
 	});

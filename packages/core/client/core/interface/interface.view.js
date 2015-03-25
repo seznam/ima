@@ -16,7 +16,6 @@ class View {
 	 * @method init
 	 */
 	init() {
-
 	}
 
 	/**
@@ -25,7 +24,6 @@ class View {
 	 * @method deinit
 	 */
 	deinit() {
-
 	}
 
 	/**
@@ -34,7 +32,6 @@ class View {
 	 * @method getView
 	 */
 	getView() {
-
 	}
 
 }

@@ -50,7 +50,7 @@ class Handler{
 
 	/**
 	 * Run boot sequence for app with config for each step:
-	 * [setVendor -> init setting -> init class binding -> init variable -> init dictionary -> init route -> init react component].
+	 * [setVendor -> init setting -> init class binding -> init handler -> init route -> init react component].
 	 *
 	 * @method run
 	 * @param {Object} [config={}]
@@ -61,8 +61,7 @@ class Handler{
 		this._setVendor();
 		this._initSetting();
 		this._initBind();
-		this._initVariable();
-		this._initDictionary();
+		this._initHandler();
 		this._initRoute();
 		this._initComponent();
 	}
@@ -122,18 +121,18 @@ class Handler{
 	}
 
 	/**
-	 * Initialization dictionary.
+	 * Additional initialization handler.
 	 *
-	 * @method _initDictionary
+	 * @method _initHandler
 	 * @private
 	 */
-	_initDictionary() {
-		if (typeof(this._config.initDictionaryCore) === 'function') {
-			this._config.initDictionaryCore(this._ns, this._config.dictionary);
+	_initHandler() {
+		if (typeof(this._config.initHandlerCore) === 'function') {
+			this._config.initHandlerCore(this._ns, this._config.handler);
 		}
 
-		if (typeof(this._config.initDictionaryApp) === 'function') {
-			this._config.initDictionaryApp(this._ns, this._config.dictionary);
+		if (typeof(this._config.initHandlerApp) === 'function') {
+			this._config.initHandlerApp(this._ns, this._config.handler);
 		}
 	}
 
@@ -148,22 +147,6 @@ class Handler{
 			if (typeof(componentHandler) === 'function') {
 				componentHandler();
 			}
-		}
-	}
-
-	/**
-	 * Initialization variables.
-	 *
-	 * @method _initVariable
-	 * @private
-	 */
-	_initVariable() {
-		if (typeof(this._config.initVariableCore) === 'function') {
-			this._config.initVariableCore(this._ns, this._config.variable);
-		}
-
-		if (typeof(this._config.initVariableApp) === 'function') {
-			this._config.initVariableApp(this._ns, this._config.variable);
 		}
 	}
 

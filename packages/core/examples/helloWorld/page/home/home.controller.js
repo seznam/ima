@@ -15,20 +15,19 @@ class Controller extends ns.Core.Abstract.Controller {
 	 * @method constructor
 	 * @constructor
 	 * @param {App.Page.Home.View} view
-	 * @param {Vendor.Rsvp.Promise} Promise
+	 * @param {Core.Interface.Router} router
 	 */
-	constructor(view, Promise) {
+	constructor(view, router) {
 		super(view);
 
 		/**
-		 * Promise Vendor
-		 *
-		 * @property _Promise
+		 * @property _router
 		 * @private
-		 * @type {Vendor.Rsvp.Promise}
-		 * @default Promise
+		 * @type {Core.Interface.Router}
+		 * @default router
 		 */
-		this._Promise = Promise;
+		this._router = router;
+
 	}
 
 	/**
@@ -39,7 +38,7 @@ class Controller extends ns.Core.Abstract.Controller {
 	 */
 	load() {
 		return {
-			message: this._Promise.resolve('This is IMA.js!')
+			message: 'This is IMA.js!'
 		};
 	}
 
@@ -48,9 +47,23 @@ class Controller extends ns.Core.Abstract.Controller {
 	 *
 	 * @method setSeoParams
 	 * @param {Object} resolvedPromises
+	 * @param {Object} setting
 	 */
-	setSeoParams(resolvedPromises) {
-		this._seo.set('title', resolvedPromises.message);
+	setSeoParams(resolvedPromises, setting) {
+		var title = 'IMA.js example - Hello world';
+		var description = resolvedPromises.message;
+		var keywords = 'IMA.js';
+		var ogType = 'website';
+
+		this._seo.set('title', title);
+		this._seo.set('description', description);
+		this._seo.set('keywords', keywords);
+
+		this._seo.set('og:title', title);
+		this._seo.set('og:description', description);
+		this._seo.set('og:type', ogType);
+		this._seo.set('og:image', setting.$Static.image + 'imajs-share.png');
+		this._seo.set('og:url', this._router.link('home', {}));
 	}
 
 }

@@ -60,7 +60,7 @@ class ClientHandler extends ns.Core.Abstract.Router {
 	 * @return {string}
 	 */
 	getPath() {
-		var path = decodeURI(window.location.pathname + window.location.search);
+		var path = this._window.getPath();
 
 		if (this._mode == this.MODE_HASH) {
 			var match = this._window.getUrl().match(/#!\/(.*)$/);
@@ -140,8 +140,13 @@ class ClientHandler extends ns.Core.Abstract.Router {
 			super
 				.handleError(params)
 				.catch((fatalError) => {
-					//TODO handle fatal error
-					console.error('FATAL ERROR', fatalError);
+					var window = this._window.getWindow();
+					var isIMA = window.$IMA;
+					var isFunction = window.$IMA.fatalErrorHandler;
+
+					if (window && isIMA && typeof isFunction === 'function') {
+						window.$IMA.fatalErrorHandler(fatalError);
+					}
 				})
 		);
 	}

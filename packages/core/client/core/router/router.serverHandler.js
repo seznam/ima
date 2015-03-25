@@ -16,8 +16,9 @@ class ServerHandler extends ns.Core.Abstract.Router {
 	 * @param {Core.Interface.PageRender} pageRender
 	 * @param {Promise} Promise
 	 * @param {Core.Router.Request} request
+	 * @param {Core.Router.Respond} respond
 	 */
-	constructor(pageRender, Promise, request) {
+	constructor(pageRender, Promise, request, respond) {
 		super(pageRender, Promise);
 
 		/**
@@ -27,6 +28,14 @@ class ServerHandler extends ns.Core.Abstract.Router {
 		 * @default request
 		 */
 		this._request = request;
+
+		/**
+		 * @property _respond
+		 * @private
+		 * @type {Core.Router.Respond}
+		 * @default respond
+		 */
+		this._respond = respond;
 	}
 
 	/**
@@ -51,9 +60,7 @@ class ServerHandler extends ns.Core.Abstract.Router {
 	 * @return {string}
 	 */
 	getPath() {
-		var path = this._request.isEnabled() ? this._request.getPath() : '';
-
-		return path;
+		return this._request.getPath();
 	}
 
 	/**

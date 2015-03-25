@@ -29,7 +29,6 @@ class ServerWindow extends ns.Core.Interface.Window {
 		return false;
 	}
 
-
 	/**
 	 * Return true if is session storage supported.
 	 *
@@ -48,6 +47,14 @@ class ServerWindow extends ns.Core.Interface.Window {
 	 */
 	hasWebSocket() {
 		return false;
+	}
+
+	/**
+	 * Set new page title.
+	 *
+	 * @method setTitle
+	 */
+	setTitle() {
 	}
 
 	/**
@@ -118,12 +125,41 @@ class ServerWindow extends ns.Core.Interface.Window {
 	}
 
 	/**
+	 * Return element by id.
+	 *
+	 * @method getElementById
+	 * @return {null}
+	 */
+	getElementById() {
+		return null;
+	}
+
+	/**
+	 * Returns the first element within the document that matches the specified group of selectors.
+	 *
+	 * @method querySelector
+	 * @return {null}
+	 */
+	querySelector() {
+		return null;
+	}
+
+	/**
+	 * Returns a list of the elements within the document that match the specified group of selectors.
+	 *
+	 * @method querySelectorAll
+	 * @return {Array}
+	 */
+	querySelectorAll() {
+		return [];
+	}
+
+	/**
 	 * Redirect to url.
 	 *
 	 * @method redirect
 	 */
 	redirect() {
-
 	}
 
 	/**
@@ -132,7 +168,6 @@ class ServerWindow extends ns.Core.Interface.Window {
 	 * @method pushStateToHistoryAPI
 	 */
 	pushStateToHistoryAPI() {
-
 	}
 
 	/**
@@ -141,7 +176,14 @@ class ServerWindow extends ns.Core.Interface.Window {
 	 * @method addEventListener
 	 */
 	addEventListener() {
+	}
 
+	/**
+	 * Remove event listener.
+	 *
+	 * @method removeEventListener
+	 */
+	removeEventListener() {
 	}
 
 	/**
@@ -150,7 +192,6 @@ class ServerWindow extends ns.Core.Interface.Window {
 	 * @method preventDefault
 	 */
 	preventDefault() {
-
 	}
 
 }

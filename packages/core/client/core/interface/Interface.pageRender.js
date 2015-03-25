@@ -16,7 +16,6 @@ class PageRender {
 	 * @method render
 	 */
 	render() {
-
 	}
 }
 ns.Core.Interface.PageRender = PageRender;

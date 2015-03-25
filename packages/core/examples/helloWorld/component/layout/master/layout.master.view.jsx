@@ -25,11 +25,11 @@ boot.addComponent(() => {
 						<meta name="description" content={this.props.seo.get('description')} />
 						<meta name="keywords" content={this.props.seo.get('keywords')} />
 
-						<meta property="og:title" content={this.props.seo.get('title')} />
-						<meta property="og:description" content={this.props.seo.get('description')} />
-						<meta property="og:type" content={this.props.seo.get('type')} />
-						<meta property="og:url" content={this.props.seo.get('url')} />
-						<meta property="og:image" content={this.props.seo.get('image')} />
+						<meta property="og:title" content={this.props.seo.get('og:title')} />
+						<meta property="og:description" content={this.props.seo.get('og:description')} />
+						<meta property="og:type" content={this.props.seo.get('og:type')} />
+						<meta property="og:url" content={this.props.seo.get('og:url')} />
+						<meta property="og:image" content={this.props.seo.get('og:image')} />
 
 						<meta name="viewport" content="width=device-width, initial-scale=1" />
 						<link rel="stylesheet" href="/static/css/app.css" />

@@ -108,7 +108,6 @@ class Controller extends ns.Core.Interface.Controller {
 	 * @method activate
 	 */
 	activate() { // jshint ignore:line
-
 	}
 
 	/**
@@ -163,9 +162,9 @@ class Controller extends ns.Core.Interface.Controller {
 	 *
 	 * @method setSeoParams
 	 * @param {Object} resolvedPromises
+	 * @param {Object} setting
 	 */
-	setSeoParams(resolvedPromises) { // jshint ignore:line
-
+	setSeoParams(resolvedPromises, setting) { // jshint ignore:line
 	}
 
 	/**

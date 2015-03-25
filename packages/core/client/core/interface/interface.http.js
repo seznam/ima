@@ -18,7 +18,6 @@ class Http {
 	 * @method get
 	 */
 	get() {
-
 	}
 
 	/**
@@ -27,7 +26,6 @@ class Http {
 	 * @method post
 	 */
 	post() {
-
 	}
 
 	/**
@@ -36,7 +34,6 @@ class Http {
 	 * @method put
 	 */
 	put() {
-
 	}
 
 	/**
@@ -45,7 +42,6 @@ class Http {
 	 * @method patch
 	 */
 	patch() {
-
 	}
 
 	/**
@@ -54,7 +50,6 @@ class Http {
 	 * @method delete
 	 */
 	delete() {
-
 	}
 
 	/**
@@ -63,7 +58,6 @@ class Http {
 	 * @method getCacheKey
 	 */
 	getCacheKey() {
-
 	}
 
 	/**
@@ -72,7 +66,6 @@ class Http {
 	 * @method setConstantHeader
 	 */
 	setConstantHeader() {
-
 	}
 
 
@@ -82,7 +75,6 @@ class Http {
 	 * @method clearConstantHeader
 	 */
 	clearConstantHeader() {
-
 	}
 
 }

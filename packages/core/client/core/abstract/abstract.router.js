@@ -40,7 +40,6 @@ class Router extends ns.Core.Interface.Router {
 		 */
 		this._Promise = Promise;
 
-
 		/**
 		 * Keep all routes.
 		 *
@@ -123,7 +122,6 @@ class Router extends ns.Core.Interface.Router {
 	 * @return {this}
 	 */
 	init(config = {}) {
-
 	}
 
 	/**
@@ -170,6 +168,7 @@ class Router extends ns.Core.Interface.Router {
 
 			if (this._routes[i].getPathExpression() === pathExpression) {
 				this._routes.splice(i, 1);
+
 				return this;
 			}
 		}
@@ -184,7 +183,6 @@ class Router extends ns.Core.Interface.Router {
 	 * @return {string}
 	 */
 	getPath() {
-
 	}
 
 	/**
@@ -204,7 +202,6 @@ class Router extends ns.Core.Interface.Router {
 	 * @return {this}
 	 */
 	listen() {
-
 	}
 
 	/**
@@ -214,7 +211,6 @@ class Router extends ns.Core.Interface.Router {
 	 * @param {string} url
 	 */
 	redirect(url) {
-
 	}
 
 	/**
@@ -267,6 +263,7 @@ class Router extends ns.Core.Interface.Router {
 
 		if (!routeError) {
 			var error = ns.oc.create('$Error', `Core.Router:handleError has undefined route. Add new route with name '${this.ROUTE_NAME_ERROR}'.`, params);
+
 			return this._Promise.reject(error);
 		}
 
@@ -285,6 +282,7 @@ class Router extends ns.Core.Interface.Router {
 
 		if (!routeNotFound) {
 			var error = ns.oc.create('$Error', `Core.Router:handleNotFound has undefined route. Add new route with name '${this.ROUTE_NAME_NOT_FOUND}'.`, params);
+
 			return this._Promise.reject(error);
 		}
 

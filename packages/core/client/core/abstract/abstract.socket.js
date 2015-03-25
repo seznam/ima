@@ -73,7 +73,6 @@ class Socket extends ns.Core.Interface.Socket {
 	 * @method open
 	 */
 	open() {
-
 	}
 
 	/**
@@ -82,7 +81,6 @@ class Socket extends ns.Core.Interface.Socket {
 	 * @method close
 	 */
 	close() {
-
 	}
 
 	/**

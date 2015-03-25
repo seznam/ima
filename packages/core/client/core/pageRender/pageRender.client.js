@@ -40,6 +40,22 @@ class Client extends ns.Core.Abstract.PageRender {
 		 */
 		this._window = window;
 
+		/**
+		 * @property META_NAME_TAGS
+		 * @const
+		 * @type {Array}
+		 * @default ['description', 'keywords']
+		 */
+		this.META_NAME_TAGS = ['description', 'keywords'];
+
+		/**
+		 * @property META_PROPERTY_TAGS
+		 * @const
+		 * @type {Array}
+		 * @default ['og:title', 'og:description', 'og:url', 'og:image', 'og:type']
+		 */
+		this.META_PROPERTY_TAGS = ['og:title', 'og:description', 'og:url', 'og:image', 'og:type'];
+
 	}
 
 	/**
@@ -52,7 +68,7 @@ class Client extends ns.Core.Abstract.PageRender {
 	render(controller, params) {
 		super.render(controller, params);
 
-		var loadPromises = controller.load();
+		var loadPromises = this._wrapEachKeyToPromise(controller.load());
 		var reactiveView = null;
 
 		for (var service of Object.keys(loadPromises)) {
@@ -61,7 +77,7 @@ class Client extends ns.Core.Abstract.PageRender {
 		}
 
 		if (this._firstTime === false) {
-			reactiveView = this._react.render(controller.getReactView(), document.getElementById(this._setting.$PageRender.masterElementId));
+			reactiveView = this._react.render(controller.getReactView(), this._window.getElementById(this._setting.$PageRender.masterElementId));
 			controller.setReactiveView(reactiveView);
 		}
 
@@ -71,12 +87,12 @@ class Client extends ns.Core.Abstract.PageRender {
 				.then((resolvedPromises) => {
 
 					if (this._firstTime === true) {
-						reactiveView = this._react.render(controller.getReactView(), document.getElementById(this._setting.$PageRender.masterElementId));
+						reactiveView = this._react.render(controller.getReactView(), this._window.getElementById(this._setting.$PageRender.masterElementId));
 						controller.setReactiveView(reactiveView);
 						this._firstTime = false;
 					}
 
-					controller.setSeoParams(resolvedPromises);
+					controller.setSeoParams(resolvedPromises, this._setting);
 					this._changeSeoParamsOnPage(controller.getSeoParams());
 
 					controller.activate();
@@ -112,14 +128,15 @@ class Client extends ns.Core.Abstract.PageRender {
 	 * @param {Object} seoParams
 	 */
 	_changeSeoParamsOnPage(seoParams) {
-		document.title = seoParams.get('title');
-		document.querySelector('meta[name="description"]').content = seoParams.get('description');
-		document.querySelector('meta[name="keywords"]').content = seoParams.get('keywords');
-		document.querySelector('meta[property="og:title"]').content = seoParams.get('title');
-		document.querySelector('meta[property="og:description"]').content = seoParams.get('description');
-		document.querySelector('meta[property="og:url"]').content = seoParams.get('url');
-		document.querySelector('meta[property="og:image"]').content = seoParams.get('image');
-		document.querySelector('meta[property="og:type"]').content = seoParams.get('type');
+		this._window.setTitle(seoParams.get('title'));
+
+		for (var metaTag of this.META_NAME_TAGS) {
+			this._window.querySelector(`meta[name="${metaTag}"]`).content = seoParams.get(metaTag);
+		}
+
+		for (var metaTag of this.META_PROPERTY_TAGS) {
+			this._window.querySelector(`meta[property="${metaTag}"]`).content = seoParams.get(metaTag);
+		}
 	}
 }
 

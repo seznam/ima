@@ -18,7 +18,6 @@ class Socket {
 	 * @method open
 	 */
 	open() {
-
 	}
 
 	/**
@@ -27,7 +26,6 @@ class Socket {
 	 * @method close
 	 */
 	close() {
-
 	}
 
 	/**
@@ -36,10 +34,7 @@ class Socket {
 	 * @method send
 	 */
 	send() {
-
 	}
-
-
 
 }
 
