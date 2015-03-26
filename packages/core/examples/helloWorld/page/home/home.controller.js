@@ -38,7 +38,7 @@ class Controller extends ns.Core.Abstract.Controller {
 	 */
 	load() {
 		return {
-			message: 'This is IMA.js!'
+			message: `I am IMA.js!`
 		};
 	}
 

@@ -78,18 +78,18 @@ class ClientHandler extends ns.Core.Abstract.Router {
 	 * @return {this}
 	 */
 	listen() {
-		var window = this._window.getWindow();
-		var changeAddressBarEvent = 'popState';
+		var windowElement = this._window.getWindow();
+		var changeAddressBarEvent = 'popstate';
 
 		if (this._mode === this.MODE_HASH) {
 			changeAddressBarEvent = 'hashchange';
 		}
 
-		this._window.addEventListener(window, changeAddressBarEvent, () => {
+		this._window.addEventListener(windowElement, changeAddressBarEvent, () => {
 			this.route(this.getPath());
 		});
 
-		this._window.addEventListener(window, 'click', (e)=> {
+		this._window.addEventListener(windowElement, 'click', (e)=> {
 			this._handleClick(e);
 		});
 

@@ -43,8 +43,10 @@ class View extends ns.Core.Abstract.View {
 				var Master = ns.App.Component.Layout.Master.View;
 				return (
 					<div className='l-homepage'>
-						<h1>{ns.oc.get('$Dictionary').get('home.helloWorld')}</h1>
-						<p>{this.state.message}</p>
+						<div className='content'>
+							<img src="static/img/imajs-logo.png" alt="IMA.js logo"/>
+							<h1>{ns.oc.get('$Dictionary').get('home.hello')}, {this.state.message}</h1>
+						</div>
 					</div>
 				);
 			}
