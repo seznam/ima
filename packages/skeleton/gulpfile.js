@@ -229,9 +229,9 @@ gulp.task('watch', function() {
 	gulp.watch(files.vendor.watch, ['vendor:build']);
 	gulp.watch(files.less.watch, ['less']);
 	gulp.watch(files.server.watch, ['server:build']);
-	gulp.watch(files.locale.watch, ['locale']);
+	gulp.watch(files.locale.watch, ['locale:build']);
 
-	gulp.watch(['./imajs/**/*.{js,jsx}', './app/**/*.{js,jsx}']).on('change', function(e) {
+	gulp.watch(['./imajs/**/*.{js,jsx}', './app/**/*.{js,jsx}', './proxyServer/static/js/locale/*.js']).on('change', function(e) {
 		watchEvent = e;
 		if (e.type === 'deleted') {
 
@@ -273,7 +273,7 @@ gulp.task('server:reload', function(callback) {
 	setTimeout(function() {
 		server.notify(watchEvent);
 		callback();
-	}, 1500);
+	}, 1750);
 });
 
 
@@ -365,6 +365,15 @@ gulp.task('vendor:build', function(callback) {
 		'Es6ToEs5:vendor',
 		['vendor:client', 'vendor:server'],
 		'vendor:clean',
+		'server:restart',
+		'server:reload',
+		callback
+	);
+});
+
+gulp.task('locale:build', function(callback) {
+	return runSequence(
+		'locale',
 		'server:restart',
 		'server:reload',
 		callback
@@ -490,6 +499,11 @@ gulp.task('locale', function() {
 
 gulp.task('app:hello', function() {
 	return gulp.src('./imajs/examples/helloWorld/**/*')
+		.pipe(gulp.dest('./app'));
+});
+
+gulp.task('app:feed', function() {
+	return gulp.src('./imajs/examples/feed/**/*')
 		.pipe(gulp.dest('./app'));
 });
 
