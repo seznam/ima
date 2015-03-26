@@ -16,7 +16,7 @@ class Controller extends ns.Core.Abstract.Controller {
 	 * @constructor
 	 * @param {App.Page.NotFound.View} view
 	 */
-	constructor(view, Promise) {
+	constructor(view) {
 		super(view);
 
 		this._status = 404;

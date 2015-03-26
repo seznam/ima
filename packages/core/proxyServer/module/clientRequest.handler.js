@@ -20,6 +20,8 @@ module.exports = () => {
 		var fileIndex = 1;
 
 		console.error(err.stack);
+		console.error(err._params);
+
 
 		asyncEach(stack, function getContentInfo(item, cb) {
 			// exclude core node modules and node modules
@@ -30,12 +32,12 @@ module.exports = () => {
 					content = hljs.highlight('javascript', content);
 
 					// start a few lines before the error or at the beginning of the file
-					var start = Math.max(item.lineNumber - 6, 0);
+					var start = Math.max(item.lineNumber - 7, 0);
 					var lines = content.value.split('\n').map((line) => {
 						return '<span class="line">' + line + '</span>';
 					});
 					// end a few lines after the error or the last line of the file
-					var end = Math.min(item.lineNumber + 5, lines.length);
+					var end = Math.min(item.lineNumber + 6, lines.length);
 					var snippet = lines.slice(start, end);
 					// array starts at 0 but lines numbers begin with 1, so we have to
 					// subtract 1 to get the error line position in the array
@@ -98,23 +100,33 @@ module.exports = () => {
 			.send('Error static page ' + JSON.stringify(err, 4));
 	};
 
-	var errorHandler = (err, req, res) => {
+	var errorHandler = (err, req, res, ns) => {
 
 		if (config.$Debug) {
 			_displayDetails(err, req, res);
 		} else {
-			var ns = _initApp(req, res);
 			var router = ns.oc.get('$Router');
-			var params = {
-				error: err
-			};
-			router
-				.handleError(params)
-				.catch((fatalError) => {
-					showStaticErrorPage(fatalError, req, res);
-				});
-		}
 
+			var applyError = (error) => {
+				return (
+					router
+						.handleError(error)
+						.catch((fatalError) => {
+							showStaticErrorPage(fatalError, req, res);
+						})
+				);
+			};
+
+			if (router.isClientError(err)) {
+				router
+					.handleNotFound(err)
+					.catch((error) => {
+						applyError(error);
+					})
+			} else {
+				applyError(err);
+			}
+		}
 	};
 
 	var respond = (req, res) => {
@@ -125,8 +137,8 @@ module.exports = () => {
 
 		router
 			.route(req.url)
-			.catch((fatalError) => {
-				errorHandler(fatalError, req, res);
+			.catch((error) => {
+				errorHandler(error, req, res, ns);
 			});
 	};
 

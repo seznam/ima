@@ -341,6 +341,18 @@ class Router extends ns.Core.Interface.Router {
 
 		return null;
 	}
+
+	/**
+	 * Return true if error is client error and return http status 4**.
+	 *
+	 * @method isClientError
+	 * @param {Error} error
+	 * @return {boolean}
+	 */
+	isClientError(error) {
+		return error instanceof ns.oc.get('$Error') && (error.getHttpStatus() >= 400 && error.getHttpStatus() < 500);
+	}
+
 }
 
 ns.Core.Abstract.Router = Router;

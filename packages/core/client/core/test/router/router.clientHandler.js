@@ -33,7 +33,7 @@ describe('Core.Router.ClientHandler', function() {
 		expect(win.addEventListener.calls.count()).toEqual(2);
 	});
 
-	describe('Redirect method', function() {
+	describe('redirect method', function() {
 		it('should be set address bar', function() {
 			var url = domain + '/somePath';
 
@@ -59,7 +59,7 @@ describe('Core.Router.ClientHandler', function() {
 		});
 	});
 
-	describe('Route method', function() {
+	describe('houte method', function() {
 
 		it('should be call handleError for throwing error in super.router', function(done) {
 			spyOn(router, 'handleError')
@@ -76,7 +76,7 @@ describe('Core.Router.ClientHandler', function() {
 
 	});
 
-	describe('HandleError method', function() {
+	describe('handleError method', function() {
 
 		it('should be call $IMA.fatalErrorHandler function', function(done) {
 			spyOn(window.$IMA, 'fatalErrorHandler')
@@ -88,6 +88,24 @@ describe('Core.Router.ClientHandler', function() {
 				.then(function(fatalError) {
 					expect(window.$IMA.fatalErrorHandler).toHaveBeenCalled();
 					done();
+				});
+		});
+
+	});
+
+	describe('handleNotFound method', function() {
+
+		it('should be call router.handleError function for throwing error', function(done) {
+			spyOn(router, 'handleError')
+				.and
+				.returnValue(Promise.resolve('ok'));
+
+			router
+				.handleNotFound({path: '/path'})
+				.then(function() {
+					expect(router.handleError).toHaveBeenCalled();
+					done();
+
 				});
 		});
 

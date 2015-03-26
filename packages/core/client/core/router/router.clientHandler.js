@@ -123,6 +123,10 @@ class ClientHandler extends ns.Core.Abstract.Router {
 			super
 				.route(path)
 				.catch((error) => {
+					if (this.isClientError(error)) {
+						return this.handleNotFound(error);
+					}
+
 					return this.handleError(error);
 				})
 		);
@@ -147,6 +151,23 @@ class ClientHandler extends ns.Core.Abstract.Router {
 					if (window && isIMA && typeof isFunction === 'function') {
 						window.$IMA.fatalErrorHandler(fatalError);
 					}
+				})
+		);
+	}
+
+	/**
+	 * Handle Not Found path that call 'notFound' controller with params.
+	 *
+	 * @method handleNotFound
+	 * @param {Object} params
+	 * @return {Promise}
+	 */
+	handleNotFound(params) {
+		return (
+			super
+				.handleNotFound(params)
+				.catch((error) => {
+					return this.handleError(error);
 				})
 		);
 	}

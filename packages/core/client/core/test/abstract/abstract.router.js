@@ -42,7 +42,7 @@ describe('Core.Abstract.Router', function() {
 		});
 	});
 
-	describe('Link method', function() {
+	describe('link method', function() {
 		it('should be return link for valid route with params', function() {
 			var route = ns.oc.create('$Route', 'link', '/link', 'BaseController');
 
@@ -68,7 +68,7 @@ describe('Core.Abstract.Router', function() {
 		});
 	});
 
-	describe('Route method', function() {
+	describe('route method', function() {
 
 		it('should be handle valid route path', function() {
 			var route = ns.oc.create('$Route', 'link', '/link', 'BaseController');
@@ -107,7 +107,7 @@ describe('Core.Abstract.Router', function() {
 
 	});
 
-	describe('HandleError method', function() {
+	describe('handleError method', function() {
 
 		it('should be handle "error" route', function() {
 			var routeError = ns.oc.create('$Route', this.ROUTE_NAME_ERROR, '/error', 'ErrorController');
@@ -143,7 +143,7 @@ describe('Core.Abstract.Router', function() {
 		});
 	});
 
-	describe('HandleNotFound method', function() {
+	describe('handleNotFound method', function() {
 
 		it('should be handle "notFound" route', function() {
 			var routeNotFound = ns.oc.create('$Route', this.ROUTE_NAME_ERROR, '/notFound', 'NotFoundController');
@@ -177,5 +177,27 @@ describe('Core.Abstract.Router', function() {
 					done();
 				});
 		});
+	});
+
+	describe('isClientError method', function() {
+
+		it('should be return true for client error, which return status 4**', function() {
+			var isClientError = router.isClientError(ns.oc.create('$Error', 'Client error', {status: 404}));
+
+			expect(isClientError).toEqual(true);
+		});
+
+		it('should be return false for client error, which return status 5**', function() {
+			var isClientError = router.isClientError(ns.oc.create('$Error', 'Server error', {status: 500}));
+
+			expect(isClientError).toEqual(false);
+		});
+
+		it('should be return false for any error', function() {
+			var isClientError = router.isClientError(new Error('some error'));
+
+			expect(isClientError).toEqual(false);
+		});
+
 	});
 });

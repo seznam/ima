@@ -27,12 +27,12 @@ class Handler {
 		}
 
 		/**
-		 * @property _name
-		 * @private
+		 * @property name
+		 * @public
 		 * @type {string}
 		 * @default 'CoreError'
 		 */
-		this._name = 'CoreError';
+		this.name = 'CoreError';
 
 		/**
 		 * @property message
@@ -77,7 +77,7 @@ class Handler {
 	 * @return {string}
 	 */
 	getName() {
-		return this._name;
+		return this.name;
 	}
 
 	/**
@@ -87,7 +87,7 @@ class Handler {
 	 * @return {string}
 	 */
 	toString() {
-		return `${this._name}: ${this.message}`;
+		return `${this.name}: ${this.message}`;
 	}
 
 	/**
@@ -97,7 +97,7 @@ class Handler {
 	 * @return {string}
 	 */
 	toSource() {
-		return `${this._name}: ${this.message}`;
+		return `${this.name}: ${this.message}`;
 	}
 }
 
