@@ -1,0 +1,40 @@
+
+.l-header {
+	.grid(margin; 2 0);
+
+	& > a {
+		.rem(font-size; 13px);
+		display: block;
+		text-align: right;
+		.grid(margin; 0 2 0 0);
+		.grid(height; 2);
+		.grid(line-height; 2);
+	}
+
+	.title-wrapper {
+		.grid(margin; 2 0);
+	}
+
+	.title-wrapper::after {
+		content: '';
+		display: block;
+		clear: both;
+	}
+
+	h1 {
+		.rem(font-size; 22px);
+		.grid(line-height; 5);
+		.grid(height; 5);
+		color: #999999;
+		float: left;
+	}
+
+	.logo {
+		display: block;
+		float: left;
+		.grid(margin; -6 0 0 2);
+		.grid(width; 47);
+		.grid(height; 15);
+		background: url('@{images}/logo.png') left center no-repeat;
+	}
+}

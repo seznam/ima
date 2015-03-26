@@ -1,0 +1,64 @@
+/*
+ * Utility for layouting elements using 8px grid cells as size units.
+ *
+ * Usage:
+ * some-element {
+ *   .grid(height; 2); // height: 2 grid cells
+ *   .grid(margin; 2 2 3 0);
+ * }
+ */
+
+// size of a single grid cell (should be in pixels)
+@grid-cell-size: 8px;
+
+// 4 dimensions
+.grid(@property; @size-cell-list; )
+when ( isnumber(extract(@size-cell-list, 4)) ) {
+	@cellSize1: extract(@size-cell-list, 1);
+	@cellSize2: extract(@size-cell-list, 2);
+	@cellSize3: extract(@size-cell-list, 3);
+	@cellSize4: extract(@size-cell-list, 4);
+
+	@pxSize1: @cellSize1 * @grid-cell-size;
+	@pxSize2: @cellSize2 * @grid-cell-size;
+	@pxSize3: @cellSize3 * @grid-cell-size;
+	@pxSize4: @cellSize4 * @grid-cell-size;
+
+	.rem(@property; @pxSize1 @pxSize2 @pxSize3 @pxSize4);
+}
+
+// 3 dimensions
+.grid(@property; @size-cell-list; )
+when ( isnumber(extract(@size-cell-list, 3)) ) and not ( isnumber(extract(@size-cell-list, 4)) ) {
+	@cellSize1: extract(@size-cell-list, 1);
+	@cellSize2: extract(@size-cell-list, 2);
+	@cellSize3: extract(@size-cell-list, 3);
+
+	@pxSize1: @cellSize1 * @grid-cell-size;
+	@pxSize2: @cellSize2 * @grid-cell-size;
+	@pxSize3: @cellSize3 * @grid-cell-size;
+
+	.rem(@property; @pxSize1 @pxSize2 @pxSize3);
+}
+
+// 2 dimensions
+.grid(@property; @size-cell-list; )
+when ( isnumber(extract(@size-cell-list, 2)) ) and not ( isnumber(extract(@size-cell-list, 3)) ) {
+	@cellSize1: extract(@size-cell-list, 1);
+	@cellSize2: extract(@size-cell-list, 2);
+
+	@pxSize1: @cellSize1 * @grid-cell-size;
+	@pxSize2: @cellSize2 * @grid-cell-size;
+
+	.rem(@property; @pxSize1 @pxSize2);
+}
+
+// 1 dimension
+.grid(@property; @size-cell-list; )
+when ( isnumber(extract(@size-cell-list, 1)) ) and not ( isnumber(extract(@size-cell-list, 2)) ) {
+	@cellSize1: extract(@size-cell-list, 1);
+
+	@pxSize1: @cellSize1 * @grid-cell-size;
+
+	.rem(@property; @pxSize1);
+}

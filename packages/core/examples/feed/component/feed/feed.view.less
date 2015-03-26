@@ -1,0 +1,20 @@
+.feed {
+	margin: 0 auto;
+	.grid(margin-top; 3);
+	.grid(max-width; 80);
+
+	.button.more-items {
+		margin: 20px auto;
+		.grid(padding-right; 8);
+		&::after {
+			content:'';
+			position: absolute;
+			top:0;
+			.grid(right; 5);
+			display: block;
+			height: 100%;
+			.grid(width; 1);
+			background: url('/static/img/next-arrow.png') no-repeat center;
+		}
+	}
+}
