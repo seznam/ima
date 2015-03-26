@@ -71,7 +71,7 @@ if (typeof window !== 'undefined' && window !== null) {
 					}
 				},
 				setting: {
-					env: window.$IMA.Enviroment,
+					env: window.$IMA.Environment,
 					language: window.$IMA.Language,
 					protocol: window.$IMA.Protocol
 				}

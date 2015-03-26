@@ -99,10 +99,10 @@ class Server extends ns.Core.Abstract.PageRender {
 				return `<script src="${script}"></script>`;
 			});
 
-		scripts.push('<script> window.$IzoApp = window.$IMA || {};' +
+		scripts.push('<script> window.$IMA = window.$IMA || {};' +
 		' window.$IMA.Cache = ' + (this._cache.serialize()) + ';' +
 		' window.$IMA.Language = "' + (this._setting.$Language) + '";' +
-		' window.$IMA.Enviroment = "' + (this._setting.$Env) + '";' +
+		' window.$IMA.Environment = "' + (this._setting.$Env) + '";' +
 		' window.$IMA.Protocol = document.location.protocol;' +
 		'</script>');
 		html = scripts.join('');

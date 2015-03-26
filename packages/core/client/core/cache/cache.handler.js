@@ -193,7 +193,7 @@ class Handler extends ns.Core.Interface.Cache {
 			dataToSerialize[key] = this._cache.get(key).getData();
 		}
 
-		return JSON.stringify(dataToSerialize);
+		return JSON.stringify(dataToSerialize).replace(/<\/script/g, '<\\/script');
 	}
 
 
