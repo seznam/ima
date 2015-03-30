@@ -29,10 +29,6 @@ describe('Core.Http.Proxy', function() {
 					self.funcError({timeout: options.timeout});
 				},options.timeout);
 				return this; },
-			on: function(event, func) {
-				this.funcError = func;
-				return this;
-			},
 			end: function() {
 				return this;
 			}
@@ -58,7 +54,7 @@ describe('Core.Http.Proxy', function() {
 				spyOn(superAgent, 'end')
 					.and
 					.callFake(function(callback) {
-						return callback(response);
+						return callback(null, response);
 					});
 
 				proxy.request(method, apiUrl, data, options)
@@ -72,8 +68,8 @@ describe('Core.Http.Proxy', function() {
 			it('should reject promise for Timeout error', function(done) {
 				spyOn(superAgent, 'end')
 					.and
-					.callFake(function() {
-						return superAgent.funcError({timeout: options.timeout});
+					.callFake(function(callback) {
+						return callback({timeout: options.timeout});
 					});
 
 				proxy.request(method, apiUrl, data, options)
@@ -86,7 +82,8 @@ describe('Core.Http.Proxy', function() {
 			it('should be timeouted for longer request then options.timeout', function(done) {
 				spyOn(superAgent, 'end')
 					.and
-					.callFake(function() {
+					.callFake(function(callback) {
+						superAgent.funcError = callback;
 						jasmine.clock().tick(options.timeout + 1);
 					});
 
@@ -101,8 +98,8 @@ describe('Core.Http.Proxy', function() {
 			it('should reject promise for CORS', function(done) {
 				spyOn(superAgent, 'end')
 					.and
-					.callFake(function() {
-						return superAgent.funcError({crossDomain: true});
+					.callFake(function(callback) {
+						return callback({crossDomain: true});
 					});
 
 				proxy.request(method, apiUrl, data, options)
@@ -115,8 +112,8 @@ describe('Core.Http.Proxy', function() {
 			it('should reject promise for UNKNOWN', function(done) {
 				spyOn(superAgent, 'end')
 					.and
-					.callFake(function() {
-						return superAgent.funcError({});
+					.callFake(function(callback) {
+						return callback({});
 					});
 
 				proxy.request(method, apiUrl, data, options)

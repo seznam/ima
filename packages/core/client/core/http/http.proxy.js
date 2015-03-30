@@ -113,7 +113,6 @@ class Proxy {
 
 				this
 					._setHeaders(request, options)
-					._bindError(request, reject, params)
 					._sendRequest(request, resolve, reject, params);
 			})
 		);
@@ -141,36 +140,51 @@ class Proxy {
 	}
 
 	/**
-	 * Bind error event.
+	 * Request error handler.
 	 *
-	 * @method _bindError
+	 * @method _requestErrorHandler
 	 * @private
-	 * @chainable
-	 * @param {Vendor.SuperAgent.Request} request
+	 * @param {Object} error
 	 * @param {Function} reject
 	 * @param {Object} params
-	 * @return {this}
 	 */
-	_bindError(request, reject, params) {
-		request.on('error', (error) => {
-			var errorParams = {};
+	_requestErrorHandler(error, reject, params) {
+		var errorParams = {};
 
-			if (error.timeout === params.options.timeout) {
-				errorParams = this.getErrorParams(params.method, params.url, params.data, params.options, this.HTTP_TIMEOUT);
+		if (error.timeout === params.options.timeout) {
+			errorParams = this.getErrorParams(params.method, params.url, params.data, params.options, this.HTTP_TIMEOUT);
+		} else {
+
+			if (error.crossDomain) {
+				errorParams = this.getErrorParams(params.method, params.url, params.data, params.options, this.HTTP_FORBIDDEN);
 			} else {
-
-				if (error.crossDomain) {
-					errorParams = this.getErrorParams(params.method, params.url, params.data, params.options, this.HTTP_FORBIDDEN);
-				} else {
-					errorParams = this.getErrorParams(params.method, params.url, params.data, params.options, this.HTTP_SERVER_ERROR);
-				}
-
+				errorParams = this.getErrorParams(params.method, params.url, params.data, params.options, this.HTTP_SERVER_ERROR);
 			}
 
-			reject(errorParams);
-		});
+		}
 
-		return this;
+		reject(errorParams);
+	}
+
+	/**
+	 * Request respond handler
+	 *
+	 * @method _requestRespondHandler
+	 * @private
+	 * @param {Object} respond
+	 * @param {Function} resolve
+	 * @param {Function} reject
+	 * @param {Object} params
+	 */
+	_requestRespondHandler(respond, resolve, reject, params) {
+		if (respond.error) {
+			var errorParams = this.getErrorParams(params.method, params.url, params.data, params.options, respond.status);
+			reject(errorParams);
+		} else {
+			params.status = this.HTTP_OK;
+			respond.params = params;
+			resolve(respond);
+		}
 	}
 
 	/**
@@ -224,15 +238,12 @@ class Proxy {
 	 * @return {this}
 	 */
 	_sendRequest(request, resolve, reject, params) {
-		request.end((respond) => {
+		request.end((error, respond) => {
 
-			if (respond.error) {
-				var errorParams = this.getErrorParams(params.method, params.url, params.data, params.options, respond.status);
-				reject(errorParams);
+			if (error) {
+				this._requestErrorHandler(error, reject, params)
 			} else {
-				params.status = this.HTTP_OK;
-				respond.params = params;
-				resolve(respond);
+				this._requestRespondHandler(respond, resolve, reject, params);
 			}
 
 		});

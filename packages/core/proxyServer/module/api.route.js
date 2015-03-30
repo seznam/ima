@@ -91,19 +91,23 @@ var callRemoteServer = (req, res) => {
 
 	httpRequest
 		.set('Cookie', req.get('Cookie'))
-		.on('error', (e) => {
-			console.error('API ERROR', e);
-			res.status(500).json({Error: 'API error', message: e.message});
-		})
-		.end((respond) => {
-			var settedCookies = respond.header['set-cookie'];
-			if (settedCookies) {
-				settedCookies.forEach((cookieString) => {
-					var cookie = parseCookieString(cookieString);
-					res.cookie(cookie.name, cookie.value, cookie.options);
-				});
+		.end((error, respond) => {
+			if (error) {
+				console.error('API ERROR', e);
+				res.status(500).json({Error: 'API error', message: e.message});
 			}
-			res.status(respond.status).json(respond.body);
+
+			if (respond) {
+				var settedCookies = respond.header['set-cookie'];
+
+				if (settedCookies) {
+					settedCookies.forEach((cookieString) => {
+						var cookie = parseCookieString(cookieString);
+						res.cookie(cookie.name, cookie.value, cookie.options);
+					});
+				}
+				res.status(respond.status).json(respond.body);
+			}
 		});
 };
 
