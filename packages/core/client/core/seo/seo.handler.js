@@ -46,20 +46,20 @@ class Handler extends ns.Core.Interface.Seo {
 	/**
 	 * Set page title.
 	 *
-	 * @method setPageTitle
+	 * @method setTitle
 	 * @param {string} title
 	 */
-	setPageTitle(title) {
+	setTitle(title) {
 		this._title = title;
 	}
 
 	/**
 	 * Get page title.
 	 *
-	 * @method getPageTitle
+	 * @method getTitle
 	 * @return {string}
 	 */
-	getPageTitle() {
+	getTitle() {
 		return this._title;
 	}
 

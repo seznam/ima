@@ -17,7 +17,7 @@ class Seo {
 	 *
 	 * @method setPageTitle
 	 */
-	setPageTitle() {
+	setTitle() {
 	}
 
 	/**
@@ -25,7 +25,7 @@ class Seo {
 	 *
 	 * @method getPageTitle
 	 */
-	getPageTitle() {
+	getTitle() {
 	}
 
 	/**

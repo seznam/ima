@@ -111,7 +111,7 @@ class Client extends ns.Core.Abstract.PageRender {
 	 * @param {Core.Interface.Seo} seo
 	 */
 	_changeSeoParamsOnPage(seo) {
-		this._window.setTitle(seo.getPageTitle());
+		this._window.setTitle(seo.getTitle());
 
 		for (var metaTagKey of seo.getMetaNameStorage().keys()) {
 			var metaTag = this._window.querySelector(`meta[name="${metaTagKey}"]`);

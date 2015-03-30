@@ -34,7 +34,7 @@ boot.addComponent(() => {
 						<meta name="viewport" content="width=device-width, initial-scale=1" />
 						<link rel="stylesheet" href="/static/css/app.css" />
 						<title>
-							{this.props.seo.getPageTitle()}
+							{this.props.seo.getTitle()}
 						</title>
 					</head>
 					<body>

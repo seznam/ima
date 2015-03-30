@@ -59,7 +59,7 @@ class Controller extends ns.Core.Abstract.Controller {
 
 		var url = router.getUrl();
 
-		seo.setPageTitle(title);
+		seo.setTitle(title);
 
 		seo.setMetaName('description', description);
 		seo.setMetaName('keywords', 'IMA.js, isomorphic application, javascript');
