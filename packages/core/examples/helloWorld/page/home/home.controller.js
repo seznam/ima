@@ -47,23 +47,34 @@ class Controller extends ns.Core.Abstract.Controller {
 	 *
 	 * @method setSeoParams
 	 * @param {Object} resolvedPromises
+	 * @param {Core.Interface.Seo} seo
+	 * @param {Core.Interface.Router} router
+	 * @param {Core.Interface.Dictionary} dictionary
 	 * @param {Object} setting
 	 */
-	setSeoParams(resolvedPromises, setting) {
-		var title = 'IMA.js example - Hello world';
-		var description = resolvedPromises.message;
-		var keywords = 'IMA.js';
-		var ogType = 'website';
+	setSeoParams(resolvedPromises, seo, router, dictionary, setting) {
+		var title = resolvedPromises.message;
+		var description = 'IMA.js is isomorphic javascript application framework.';
+		var image = router.getDomain() + setting.$Static.image + 'imajs-share.png';
 
-		this._seo.set('title', title);
-		this._seo.set('description', description);
-		this._seo.set('keywords', keywords);
+		var url = router.getUrl();
 
-		this._seo.set('og:title', title);
-		this._seo.set('og:description', description);
-		this._seo.set('og:type', ogType);
-		this._seo.set('og:image', setting.$Static.image + 'imajs-share.png');
-		this._seo.set('og:url', this._router.link('home', {}));
+		seo.setPageTitle(title);
+
+		seo.setMetaName('description', description);
+		seo.setMetaName('keywords', 'IMA.js, isomorphic application, javascript');
+
+		seo.setMetaName('twitter:title', title);
+		seo.setMetaName('twitter:description', description);
+		seo.setMetaName('twitter:card', 'summary');
+		seo.setMetaName('twitter:image', image);
+		seo.setMetaName('twitter:url', url);
+
+		seo.setMetaProperty('og:title', title);
+		seo.setMetaProperty('og:description', description);
+		seo.setMetaProperty('og:type', 'website');
+		seo.setMetaProperty('og:image', image);
+		seo.setMetaProperty('og:url', url);
 	}
 
 }

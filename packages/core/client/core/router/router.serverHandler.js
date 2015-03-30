@@ -14,12 +14,13 @@ class ServerHandler extends ns.Core.Abstract.Router {
 	 * @method constructor
 	 * @constructor
 	 * @param {Core.Interface.PageRender} pageRender
+	 * @param {Core.Router.Factory} factory
 	 * @param {Promise} Promise
 	 * @param {Core.Router.Request} request
 	 * @param {Core.Router.Respond} respond
 	 */
-	constructor(pageRender, Promise, request, respond) {
-		super(pageRender, Promise);
+	constructor(pageRender, factory, Promise, request, respond) {
+		super(pageRender, factory, Promise);
 
 		/**
 		 * @property _request

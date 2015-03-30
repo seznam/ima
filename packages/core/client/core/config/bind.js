@@ -79,11 +79,16 @@ export var init = (ns) => { //jshint ignore:line
 		ns.oc.bind('$PageRender', ns.oc.make('Core.PageRender.Server', ['$Rsvp', '$BindReact', '$Animate', ns.Setting, '$Respond', '$Cache']));
 	}
 
+	//SEO
+	ns.oc.bind('$Seo', ns.oc.make('Core.Seo.Handler', []));
+	ns.oc.bind('$DecoratorController', ns.Core.Decorator.Controller);
+
 	//Router
+	ns.oc.bind('$RouterFactory', ns.oc.make('Core.Router.Factory', ['$Seo', '$Dictionary', ns.Setting]));
 	if (ns.oc.get('$Window').isClient()) {
-		ns.oc.bind('$Router', ns.oc.make('Core.Router.ClientHandler', ['$PageRender', '$BindPromise', '$Window']));
+		ns.oc.bind('$Router', ns.oc.make('Core.Router.ClientHandler', ['$PageRender', '$RouterFactory', '$BindPromise', '$Window']));
 	} else {
-		ns.oc.bind('$Router', ns.oc.make('Core.Router.ServerHandler', ['$PageRender', '$BindPromise', '$Request', '$Respond']));
+		ns.oc.bind('$Router', ns.oc.make('Core.Router.ServerHandler', ['$PageRender', '$RouterFactory', '$BindPromise', '$Request', '$Respond']));
 	}
 	ns.oc.bind('$Route', ns.Core.Router.Route);
 

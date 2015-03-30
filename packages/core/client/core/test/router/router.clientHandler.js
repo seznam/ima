@@ -2,14 +2,16 @@ describe('Core.Router.ClientHandler', function() {
 
 	var router = null;
 	var pageRender = null;
+	var routerFactory = null;
 	var win = null;
 	var Promise = ns.oc.get('$Promise');
 	var domain = 'http://locahlost:3002';
 
 	beforeEach(function() {
 		pageRender = ns.oc.create('Core.PageRender.Client');
+		routerFactory = ns.oc.make('$RouterFactory');
 		win = ns.oc.get('$Window');
-		router = ns.oc.create('Core.Router.ClientHandler', pageRender, Promise, win);
+		router = ns.oc.create('Core.Router.ClientHandler', pageRender, routerFactory, Promise, win);
 		router.init({mode: router.MODE_HISTORY, domain: domain});
 	});
 

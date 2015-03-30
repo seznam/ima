@@ -45,7 +45,7 @@ class Router {
 	}
 
 	/**
-	 * Get current path.
+	 * Ruturns current path.
 	 *
 	 * @method getPath
 	 */
@@ -53,11 +53,19 @@ class Router {
 	}
 
 	/**
-	 * Get current url.
+	 * Returns current url.
 	 *
 	 * @method getUrl
 	 */
 	getUrl() {
+	}
+
+	/**
+	 * Returns domain
+	 *
+	 * @method getDomain
+	 */
+	getDomain() {
 	}
 
 	/**

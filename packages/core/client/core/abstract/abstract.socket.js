@@ -20,9 +20,8 @@ class Socket extends ns.Core.Interface.Socket {
 	 * @constructor
 	 * @param {Core.Interface.Dispatcher} dispatcher
 	 * @param {Object} config
-	 * @param {String} technologie
 	 */
-	constructor(dispatcher, config, technologie) {
+	constructor(dispatcher, config) {
 		super();
 
 		/**
@@ -48,14 +47,6 @@ class Socket extends ns.Core.Interface.Socket {
 		 * @default null
 		 */
 		this._connection = null;
-
-		/**
-		 * @property _technologie
-		 * @protected
-		 * @type {String}
-		 * @default technologie
-		 */
-		this._technologie = technologie;
 
 		/**
 		 * @property MAX_REPEATED_ATTEMPTS

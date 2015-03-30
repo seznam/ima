@@ -41,6 +41,70 @@ class Controller {
 	 */
 	load() {
 	}
+
+	/**
+	 * Returns reactive view.
+	 *
+	 * @method getReactView
+	 */
+	getReactView() {
+	}
+
+	/**
+	 * Set reactive view.
+	 *
+	 * @method setReactiveView
+	 */
+	setReactiveView() {
+	}
+
+	/**
+	 * Set state to controller and to assigned reactive view (if exists).
+	 *
+	 * @method setState
+	 */
+	setState() {
+	}
+
+	/**
+	 * Add state to controller and to assigned reactive view (if exists).
+	 *
+	 * @method addState
+	 */
+	addState() {
+	}
+
+	/**
+	 * Returns state.
+	 *
+	 * @method getState
+	 */
+	getState() {
+	}
+
+	/**
+	 * Set SEO params.
+	 *
+	 * @method setSeoParams
+	 */
+	setSeoParams() { // jshint ignore:line
+	}
+
+	/**
+	 * Returns SEO params.
+	 *
+	 * @method getSeoHandler
+	 */
+	getSeoHandler() {
+	}
+
+	/**
+	 * Returns http status.
+	 *
+	 * @method getHttpStatus
+	 */
+	getHttpStatus() {
+	}
 }
 
 ns.Core.Interface.Controller = Controller;

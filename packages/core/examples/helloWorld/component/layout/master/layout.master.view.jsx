@@ -22,19 +22,19 @@ boot.addComponent(() => {
 						<meta charSet="utf-8" />
 						<meta httpEquiv="X-UA-Compatible" content="IE=edge" />
 
-						<meta name="description" content={this.props.seo.get('description')} />
-						<meta name="keywords" content={this.props.seo.get('keywords')} />
+						<meta name="description" content={this.props.seo.getMetaName('description')} />
+						<meta name="keywords" content={this.props.seo.getMetaName('keywords')} />
 
-						<meta property="og:title" content={this.props.seo.get('og:title')} />
-						<meta property="og:description" content={this.props.seo.get('og:description')} />
-						<meta property="og:type" content={this.props.seo.get('og:type')} />
-						<meta property="og:url" content={this.props.seo.get('og:url')} />
-						<meta property="og:image" content={this.props.seo.get('og:image')} />
+						<meta property="og:title" content={this.props.seo.getMetaProperty('og:title')} />
+						<meta property="og:description" content={this.props.seo.getMetaProperty('og:description')} />
+						<meta property="og:type" content={this.props.seo.getMetaProperty('og:type')} />
+						<meta property="og:url" content={this.props.seo.getMetaProperty('og:url')} />
+						<meta property="og:image" content={this.props.seo.getMetaProperty('og:image')} />
 
 						<meta name="viewport" content="width=device-width, initial-scale=1" />
 						<link rel="stylesheet" href="/static/css/app.css" />
 						<title>
-							{this.props.seo.get('title')}
+							{this.props.seo.getPageTitle()}
 						</title>
 					</head>
 					<body>

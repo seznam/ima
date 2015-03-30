@@ -1,75 +1,69 @@
 import ns from 'core/namespace/ns.js';
 
-ns.namespace('Core.Abstract');
+ns.namespace('Core.Decorator');
 
 /**
- * Abstract class for controller.
+ * Decorator for controller add seo.
  *
  * @class Controller
  * @extends Core.Interface.Controller
- * @namespace Core.Abstract
+ * @namespace Core.Decorator
  * @module Core
- * @submodule Core.Abstract
- *
- * @requires Core.Interface.View
+ * @submodule Core.Decorator
  */
 class Controller extends ns.Core.Interface.Controller {
 
 	/**
-	 * @constructor
 	 * @method constructor
-	 * @param {Core.Interface.View} view
+	 * @constructor
+	 * @param {Core.Interface.Controller} controller
+	 * @param {Core.Interface.Seo} seo
+	 * @param {Core.Interface.Router} router
+	 * @param {Core.Interface.Dictionary} dictionary
+	 * @param {Object} setting
 	 */
-	constructor(view) {
+	constructor(controller, seo, router, dictionary, setting) {
 		super();
 
 		/**
-		 * @property state
-		 * @protected
-		 * @type Object
-		 * @default {}
+		 * @property _controller
+		 * @private
+		 * @type {Core.Interface.Controller}
+		 * @default controller
 		 */
-		this._state = {};
+		this._controller = controller;
 
 		/**
-		 * Pointer for active react class in DOM.
-		 *
-		 * @property _reactiveView
-		 * @protected
-		 * @type Vendor.React.ReactComponent
-		 * @default null
+		 * @property _seo
+		 * @private
+		 * @type {Core.Interface.Seo}
+		 * @default seo
 		 */
-		this._reactiveView = null;
+		this._seo = seo;
 
 		/**
-		 * @property _status
-		 * @protected
-		 * @type {Number}
-		 * @default 200
+		 * @property _router
+		 * @private
+		 * @type {Core.Interface.Router}
+		 * @default router
 		 */
-		this._status = 200;
+		this._router = router;
 
 		/**
-		 * @property view
-		 * @protected
-		 * @type Core.Interface.View
+		 * @property _dictionary
+		 * @private
+		 * @type {Core.Interface.Dictionary}
+		 * @default dictionary
 		 */
-		this._view = view;
+		this._dictionary = dictionary;
 
 		/**
-		 * @property _reactView
-		 * @type {Vendor.React.ReactElement}
-		 * @default null
-		 */
-		this._reactView = null;
-
-		/**
-		 * @property params
+		 * @property _setting
+		 * @private
 		 * @type {Object}
-		 * @default {}
+		 * @default setting
 		 */
-		this.params = {};
-
+		this._setting = setting;
 	}
 
 	/**
@@ -79,26 +73,25 @@ class Controller extends ns.Core.Interface.Controller {
 	 * @param {Object} [params={}] - controller options.
 	 */
 	init(params = {}) {
-		this.params = params;
-		this._reactView = this._view.init(this).getReactView();
+		this._controller.init(params);
 	}
-		
+
 	/**
 	 * Controller deinitialization.
 	 *
 	 * @method deinit
 	 */
 	deinit() {
-		this._view.deinit(this);
-		this._reactiveView = null;
+		this._controller.deinit();
 	}
-	
+
 	/**
 	 * Controller will be activated on resolved promises. In this method you may use setInterval and setTimeout.
 	 *
 	 * @method activate
 	 */
 	activate() { // jshint ignore:line
+		this._controller.activate();
 	}
 
 	/**
@@ -107,26 +100,27 @@ class Controller extends ns.Core.Interface.Controller {
 	 * @method load
 	 */
 	load() {
+		return this._controller.load();
 	}
 
 	/**
-	 * Returns reactive view.
+	 * Return reactive view.
 	 *
 	 * @method getReactView
 	 * @return {Core.Abstract.View} - assigned view
 	 */
 	getReactView() {
-		return this._reactView;
+		return this._controller.getReactView();
 	}
-		
+
 	/**
 	 * Set reactive view.
 	 *
 	 * @method setReactiveView
-	 * @param {Vendor.ReactComponent} reactiveView 
+	 * @param {Vendor.ReactComponent} reactiveView
 	 */
 	setReactiveView(reactiveView) {
-		this._reactiveView = reactiveView;
+		this._controller.setReactiveView(reactiveView);
 	}
 
 	/**
@@ -136,10 +130,7 @@ class Controller extends ns.Core.Interface.Controller {
 	 * @param {Object} state
 	 */
 	setState(state) {
-		this._state = state;
-		if (this._reactiveView) {
-			this._reactiveView.setState(this._state);
-		}
+		this._controller.setState(state);
 	}
 
 	/**
@@ -149,7 +140,7 @@ class Controller extends ns.Core.Interface.Controller {
 	 * @param {Object} state
 	 */
 	addState(state) {
-		this.setState(Object.assign(this._state, state));
+		this._controller.addState(state);
 	}
 
 	/**
@@ -159,7 +150,7 @@ class Controller extends ns.Core.Interface.Controller {
 	 * @return {Object} - assigned view
 	 */
 	getState() {
-		return this._state;
+		return this._controller.getState();
 	}
 
 	/**
@@ -167,32 +158,30 @@ class Controller extends ns.Core.Interface.Controller {
 	 *
 	 * @method setSeoParams
 	 * @param {Object} resolvedPromises
-	 * @param {Core.Interface.Seo} seo
-	 * @param {Core.Interface.Router} router
-	 * @param {Core.Interface.Dictionary} dictionary
-	 * @param {Object} setting
 	 */
-	setSeoParams(resolvedPromises, seo, router, dictionary, setting) { // jshint ignore:line
+	setSeoParams(resolvedPromises) { // jshint ignore:line
+		this._controller.setSeoParams(resolvedPromises, this._seo, this._router, this._dictionary, this._setting);
 	}
 
 	/**
-	 * Returns seo handler.
+	 * Returns SEO params.
 	 *
 	 * @method getSeoHandler
 	 * @return {Core.Interface.Seo}
 	 */
 	getSeoHandler() {
+		return this._seo;
 	}
-	
+
 	/**
 	 * Returns http status.
 	 *
 	 * @method getHttpStatus
-	 * @return {Number} - HTTP status number 
+	 * @return {Number} - HTTP status number
 	 */
 	getHttpStatus() {
-		return this._status;
+		return this._controller.getHttpStatus();
 	}
 }
 
-ns.Core.Abstract.Controller = Controller;
+ns.Core.Decorator.Controller = Controller;

@@ -39,23 +39,6 @@ class Client extends ns.Core.Abstract.PageRender {
 		 * @default window
 		 */
 		this._window = window;
-
-		/**
-		 * @property META_NAME_TAGS
-		 * @const
-		 * @type {Array}
-		 * @default ['description', 'keywords']
-		 */
-		this.META_NAME_TAGS = ['description', 'keywords'];
-
-		/**
-		 * @property META_PROPERTY_TAGS
-		 * @const
-		 * @type {Array}
-		 * @default ['og:title', 'og:description', 'og:url', 'og:image', 'og:type']
-		 */
-		this.META_PROPERTY_TAGS = ['og:title', 'og:description', 'og:url', 'og:image', 'og:type'];
-
 	}
 
 	/**
@@ -93,7 +76,7 @@ class Client extends ns.Core.Abstract.PageRender {
 					}
 
 					controller.setSeoParams(resolvedPromises, this._setting);
-					this._changeSeoParamsOnPage(controller.getSeoParams());
+					this._changeSeoParamsOnPage(controller.getSeoHandler());
 
 					controller.activate();
 				})
@@ -125,17 +108,25 @@ class Client extends ns.Core.Abstract.PageRender {
 	 *
 	 * @method _changeSeoParamsOnPage
 	 * @private
-	 * @param {Object} seoParams
+	 * @param {Core.Interface.Seo} seo
 	 */
-	_changeSeoParamsOnPage(seoParams) {
-		this._window.setTitle(seoParams.get('title'));
+	_changeSeoParamsOnPage(seo) {
+		this._window.setTitle(seo.getPageTitle());
 
-		for (var metaTag of this.META_NAME_TAGS) {
-			this._window.querySelector(`meta[name="${metaTag}"]`).content = seoParams.get(metaTag);
+		for (var metaTagKey of seo.getMetaNameStorage().keys()) {
+			var metaTag = this._window.querySelector(`meta[name="${metaTagKey}"]`);
+
+			if (metaTag) {
+				metaTag.content = seo.getMetaName(metaTagKey);
+			}
 		}
 
-		for (var metaTag of this.META_PROPERTY_TAGS) {
-			this._window.querySelector(`meta[property="${metaTag}"]`).content = seoParams.get(metaTag);
+		for (var metaTag of seo.getMetaPropertyStorage().keys()) {
+			var metaTag = this._window.querySelector(`meta[property="${metaTagKey}"]`);
+
+			if (metaTag) {
+				metaTag.content = seo.getMetaProperty(metaTagKey);
+			}
 		}
 	}
 }

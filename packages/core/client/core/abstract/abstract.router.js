@@ -15,13 +15,14 @@ class Router extends ns.Core.Interface.Router {
 	 * @method constructor
 	 * @constructor
 	 * @param {Core.Interface.PageRender} pageRender
+	 * @param {Core.Router.Factory} factory
 	 * @param {Promise} Promise
 	 * @example
 	 *      router.link('article', {articleId: 1});
 	 * @example
 	 *      router.redirect('http://www.example.com/web');
 	 */
-	constructor(pageRender, Promise) {
+	constructor(pageRender, factory, Promise) {
 		super();
 
 		/**
@@ -31,6 +32,14 @@ class Router extends ns.Core.Interface.Router {
 		 * @default pageRender
 		 */
 		this._pageRender = pageRender;
+
+		/**
+		 * @property _factory
+		 * @protected
+		 * @type {Core.Router.Factory}
+		 * @default factory
+		 */
+		this._factory = factory;
 
 		/**
 		 * @property _Promise
@@ -150,7 +159,7 @@ class Router extends ns.Core.Interface.Router {
 	 * @return {this}
 	 */
 	add(name, pathExpression, controller) {
-		this._routes.push(ns.oc.create('$Route', name, pathExpression, controller));
+		this._routes.push(this._factory.createRoute(name, pathExpression, controller));
 
 		return this;
 	}
@@ -177,7 +186,7 @@ class Router extends ns.Core.Interface.Router {
 	}
 
 	/**
-	 * Get current path.
+	 * Returns current path.
 	 *
 	 * @method getPath
 	 * @return {string}
@@ -186,12 +195,22 @@ class Router extends ns.Core.Interface.Router {
 	}
 
 	/**
-	 * Get current all url.
+	 * Returns current all url.
 	 *
 	 * @method getUrl
 	 */
 	getUrl() {
 		return this._domain + this.getPath();
+	}
+
+	/**
+	 * Returns domain
+	 *
+	 * @method getDomain
+	 * @return {string}
+	 */
+	getDomain() {
+		return this._domain;
 	}
 
 	/**
@@ -299,7 +318,7 @@ class Router extends ns.Core.Interface.Router {
 	 * @return {Promise}
 	 */
 	_handle(route, params) {
-		var controller = route.getController();
+		var controller = this._factory.createController(route.getController(), this);
 
 		return this._pageRender.render(controller, params);
 	}

@@ -14,7 +14,7 @@ export var init = (ns, config = {env: 'dev', protocol: 'http:', language: 'en'})
 				cachePrefixPromise: 'http.promise.'
 			},
 			$Socket:{
-				webSocketUrl: '//localhost:3031', // => ws://localhost:3031/websocket
+				webSocketUrl: '//localhost:3031',
 				maxRepeatedAttempts: 2
 			},
 			$Cache: {
@@ -86,8 +86,8 @@ export var init = (ns, config = {env: 'dev', protocol: 'http:', language: 'en'})
 					cachePrefixPromise: 'http.promise.'
 			},
 			$Socket:{
-				webSocketUrl: '//localhost:3031', // => ws://localhost:3031/websocket
-					maxRepeatedAttempts: 2
+				webSocketUrl: '//localhost:3031',
+				maxRepeatedAttempts: 2
 			},
 			$Cache: {
 				cached: true,

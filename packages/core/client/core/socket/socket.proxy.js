@@ -32,7 +32,7 @@ class Proxy extends ns.Core.Abstract.Socket {
 	 *      proxy.close();
 	 */
 	constructor(dispatcher, socketFactory, socketParser, config, secure) {
-		super(dispatcher, config, 'websocket');
+		super(dispatcher, config);
 
 		/**
 		 * @property _socksetFactory
@@ -124,7 +124,7 @@ class Proxy extends ns.Core.Abstract.Socket {
 	 */
 	_createUrl(id) {
 		var protocol = this._secure ? 'wss:' : 'ws:';
-		var url = protocol + this._baseUrl + '/' + this._technologie;
+		var url = protocol + this._baseUrl;
 
 		if (id) {
 			url += '/' + id;
@@ -193,7 +193,7 @@ class Proxy extends ns.Core.Abstract.Socket {
 			if (this._repeatedAttempts < this.MAX_REPEATED_ATTEMPTS) {
 				this._connect();
 			} else {
-				throw ns.oc.create('$Error', `Core.Socket.Proxy:_close is received max number of attempts to connect with server throught socket.`);
+				throw ns.oc.create('$Error', `Core.Socket.Proxy:_close - You reached max number of attempts to connect with server throught socket.`);
 			}
 		}
 	}

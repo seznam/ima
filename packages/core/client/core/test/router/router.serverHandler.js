@@ -2,6 +2,7 @@ describe('Core.Router.ServerHandler', function() {
 
 	var router = null;
 	var pageRender = null;
+	var routerFactory = null;
 	var request = null;
 	var respond = null;
 	var Promise = ns.oc.get('$Promise');
@@ -9,9 +10,10 @@ describe('Core.Router.ServerHandler', function() {
 
 	beforeEach(function() {
 		pageRender = ns.oc.create('Core.PageRender.Client');
+		routerFactory = ns.oc.make('$RouterFactory');
 		request = ns.oc.create('Core.Router.Request');
 		respond = ns.oc.create('Core.Router.Respond');
-		router = ns.oc.create('Core.Router.ServerHandler', pageRender, Promise, request, respond);
+		router = ns.oc.create('Core.Router.ServerHandler', pageRender, routerFactory, Promise, request, respond);
 		router.init({mode: router.MODE_SERVER, domain: domain});
 	});
 

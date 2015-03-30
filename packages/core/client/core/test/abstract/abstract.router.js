@@ -2,13 +2,15 @@ describe('Core.Abstract.Router', function() {
 
 	var router = null;
 	var pageRender = null;
+	var routerFactory = null;
 	var Promise = ns.oc.get('$Promise');
 
 	beforeEach(function() {
 		ns.oc.bind('BaseController', {});
 
 		pageRender = ns.oc.create('Core.Interface.PageRender');
-		router = ns.oc.create('Core.Abstract.Router', pageRender, Promise);
+		routerFactory = ns.oc.make('$RouterFactory');
+		router = ns.oc.create('Core.Abstract.Router', pageRender, routerFactory, Promise);
 
 		router.add('home', '/', 'BaseController');
 		router.add('contact', '/contact', 'BaseController');

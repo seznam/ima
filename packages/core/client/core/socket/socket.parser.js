@@ -61,9 +61,8 @@ class Parser {
 					this._data = parsedJSON.event.data;
 					this._type = parsedJSON.event.type || this.TYPE_UNKNOWN;
 				} else {
-					throw new Error('Core.Socket.Parser:parse has bad message format from server. Message hasnt property event.');
+					throw ns.oc.create('$Error', `Core.Socket.Parser:parse - Method has bad format from server. Message hasn't property event.`, {status: 500, event: event});
 				}
-
 			}catch(err) {
 				throw ns.oc.create('$Error', err.message, err);
 			}

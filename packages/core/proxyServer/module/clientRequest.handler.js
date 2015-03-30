@@ -95,9 +95,15 @@ module.exports = () => {
 
 	var showStaticErrorPage = (err, req, res) => {
 		console.error(err);
-		res
-			.status(500)
-			.send('Error static page ' + JSON.stringify(err, 4));
+
+		fs.readFile('./app/assets/static/html/error.html', 'utf-8', (err, content) => {
+			res.status(500)
+
+			if (err) {
+				res.send('500');
+			}
+			res.send(content);
+		});
 	};
 
 	var errorHandler = (err, req, res, ns) => {

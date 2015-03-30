@@ -52,7 +52,7 @@ if (typeof window !== 'undefined' && window !== null) {
 			}
 		});
 
-		window.addEventListener('load', () => {
+		window.addEventListener('DOMContentLoaded', () => {
 
 			//set React for ReactJS extension for browser
 			window.React = window.$IMA.Vendor.get('React');

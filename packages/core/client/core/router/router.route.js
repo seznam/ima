@@ -13,9 +13,9 @@ class Route{
 	/**
 	 * @method constructor
 	 * @constructor
-	 * @param {String} name
-	 * @param {String} pathExpression
-	 * @param {String} controller
+	 * @param {string} name
+	 * @param {string} pathExpression
+	 * @param {string} controller
 	 */
 	constructor(name, pathExpression, controller) {
 		/**
@@ -45,7 +45,7 @@ class Route{
 		/**
 		 * @property _name
 		 * @private
-		 * @type {String}
+		 * @type {string}
 		 * @default name
 		 */
 		this._name = name;
@@ -53,7 +53,7 @@ class Route{
 		/**
 		 * @property _pathExpression
 		 * @private
-		 * @type {String}
+		 * @type {string}
 		 * @default pathExpression
 		 */
 		this._pathExpression = pathExpression;
@@ -61,7 +61,7 @@ class Route{
 		/**
 		 * @property _loosesPathExpression
 		 * @private
-		 * @type {String}
+		 * @type {string}
 		 * @default this._getLoosesPath(this._pathExpression)
 		 */
 		this._loosesPathExpression = this._getLoosesPath(this._pathExpression);
@@ -70,7 +70,7 @@ class Route{
 		/**
 		 * @property _controller
 		 * @private
-		 * @type {String}
+		 * @type {string}
 		 * @default controller
 		 */
 		this._controller = controller;
@@ -86,7 +86,7 @@ class Route{
 		/**
 		 * @property _regular
 		 * @private
-		 * @type {String}
+		 * @type {string}
 		 * @default ''
 		 */
 		this._regular = '';
@@ -124,7 +124,7 @@ class Route{
 	 * Return controller name.
 	 *
 	 * @method getName
-	 * @return {String}
+	 * @return {string}
 	 */
 	getName() {
 		return this._name;
@@ -134,17 +134,17 @@ class Route{
 	 * Create new instance of controller and return it.
 	 *
 	 * @method getController
-	 * @return {Core.Interface.Controller}
+	 * @return {string}
 	 */
 	getController() {
-		return ns.oc.make(this._controller);
+		return this._controller;
 	}
 
 	/**
 	 * Return defined path expression.
 	 *
 	 * @method getPathExpression
-	 * @return {String}
+	 * @return {string}
 	 */
 	getPathExpression() {
 		return this._pathExpression;
@@ -154,7 +154,7 @@ class Route{
 	 * Return regular expression for path.
 	 *
 	 * @method getRegular
-	 * @return {String}
+	 * @return {string}
 	 */
 	getRegular() {
 		return this._regular;
@@ -211,7 +211,7 @@ class Route{
 	 *
 	 * @method _parseArguments
 	 * @private
-	 * @param {String} path
+	 * @param {string} path
 	 * @param {Object} params
 	 */
 	_parseArguments(path, params) {
@@ -237,7 +237,7 @@ class Route{
 	 *
 	 * @method _parseQuery
 	 * @private
-	 * @param {String} path
+	 * @param {string} path
 	 * @param {Object} params
 	 */
 	_parseQuery(path, params) {
@@ -258,8 +258,8 @@ class Route{
 	 *
 	 * @method getLoosesPath
 	 * @private
-	 * @param {String} path
-	 * @return {String}
+	 * @param {string} path
+	 * @return {string}
 	 */
 	_getLoosesPath(path) {
 		return `/${path.replace(this.LOOSE_SLASHES_REGEXP, '')}`;
