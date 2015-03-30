@@ -38,6 +38,8 @@ var save = require('gulp-save');
 var size = require('gulp-filesize');
 var nodemon = require('gulp-nodemon');
 
+var coreDependency = require('./imajs/build.js');
+
 try {
 	var appDependency = require('./app/build.js');
 }catch(e) {
@@ -73,27 +75,7 @@ var files = {
 			server: 'app.server.js',
 			client: 'app.client.js'
 		},
-		src: [
-			'imajs/client/core/namespace/*.js',
-			'imajs/client/core/objectContainer/*.js',
-			'imajs/client/core/boot/*.js',
-			'imajs/client/core/interface/*.js',
-			'imajs/client/core/config/*.js',
-			'imajs/client/core/abstract/*.js',
-			'imajs/client/core/dictionary/*.js',
-			'imajs/client/core/http/*.js',
-			'imajs/client/core/file/*.js',
-			'imajs/client/core/cache/*.js',
-			'imajs/client/core/helper/*.js',
-			'imajs/client/core/error/*.js',
-			'imajs/client/core/pageRender/*.js',
-			'imajs/client/core/router/*.js',
-			'imajs/client/core/socket/*.js',
-			'imajs/client/core/dispatcher/*.js',
-			'imajs/client/core/storage/*.js',
-			'imajs/client/core/helper/*.js',
-			'imajs/client/core/animate/*.js'
-			].concat(appDependency.js, ['imajs/client/main.js']),
+		src: coreDependency.js.concat(appDependency.js, coreDependency.mainjs),
 		dest: {
 			server: './proxyServer/module/',
 			client: './proxyServer/static/js/'
