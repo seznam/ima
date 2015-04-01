@@ -111,6 +111,10 @@ module.exports = () => {
 		if (config.$Debug) {
 			_displayDetails(err, req, res);
 		} else {
+
+			if (!ns) {
+				ns = _initApp(req, res);
+			}
 			var router = ns.oc.get('$Router');
 
 			var applyError = (error) => {

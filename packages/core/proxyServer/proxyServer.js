@@ -59,7 +59,7 @@ var renderReactApp = (req, res) => {
 };
 
 var errorHandler = (err, req, res, next) => {
-	clientApp().errorHandler(err, req, res, next);
+	clientApp().errorHandler(err, req, res);
 };
 
 app.use(favicon(__dirname + '/static/img/favicon.ico'))
