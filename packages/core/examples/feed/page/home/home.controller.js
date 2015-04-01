@@ -111,33 +111,6 @@ class Controller extends ns.App.Base.Controller {
 	}
 
 	/**
-	 * @method setSeoParams
-	 */
-	// @override
-	setSeoParams() {
-		super.setSeoParams();
-
-		if (!this.params.category) {
-			return;
-		}
-
-		var state = this.getState();
-		var category = state.currentCategory;
-
-		if (category) {
-			var title = this._dictionary.get('home.seoCategoryTitle', {
-				CATEGORY: category.getName()
-			});
-			var description = this._dictionary.get('home.seoCategoryDescription', {
-				CATEGORY: category.getName()
-			});
-
-			this._seo.set('title', title);
-			this._seo.set('description', description);
-		}
-	}
-
-	/**
 	 * Event handler for the sharetoggle event fired by the Share component.
 	 *
 	 * The handler first checks whether the feed item for which sharing has been

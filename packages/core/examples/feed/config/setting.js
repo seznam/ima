@@ -37,6 +37,9 @@ export var init = (ns, config = {env: 'dev', protocol: 'http:', language: 'cs'})
 				masterView: 'App.Component.Layout.Master.View',
 				masterElementId: 'page'
 			},
+			$Static: {
+				image: '/static/img'
+			},
 			Api: {
 				items: '/items',
 				categories: '/categories'
@@ -75,6 +78,9 @@ export var init = (ns, config = {env: 'dev', protocol: 'http:', language: 'cs'})
 				],
 				masterView: 'App.Component.Layout.Master.View',
 				masterElementId: 'page'
+			},
+			$Static: {
+				image: '/static/img'
 			},
 			Api: {
 				contributions: '/contributions',
@@ -117,6 +123,9 @@ export var init = (ns, config = {env: 'dev', protocol: 'http:', language: 'cs'})
 				],
 					masterView: 'App.Component.Layout.Master.View',
 					masterElementId: 'page'
+			},
+			$Static: {
+				image: '/static/img'
 			},
 			Api: {
 				contributions: '/contributions',
