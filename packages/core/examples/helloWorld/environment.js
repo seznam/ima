@@ -13,7 +13,7 @@ module.exports = (function() {
 				staticFolder: '/static'
 			},
 			$Api: {
-				server: 'http://localhost:4001/api/v1'
+				server: 'http://localhost:3001/api/v1'
 			}
 		},
 		dev: {
@@ -28,7 +28,7 @@ module.exports = (function() {
 				staticFolder: '/static'
 			},
 			$Api: {
-				server: 'http://localhost:4001/api/v1'
+				server: 'http://localhost:3001/api/v1'
 			}
 		},
 		test: {
@@ -43,7 +43,7 @@ module.exports = (function() {
 				staticFolder: '/static'
 			},
 			$Api: {
-				server: 'http://localhost:4001/api/v1'
+				server: 'http://localhost:3001/api/v1'
 			}
 		}
 	};

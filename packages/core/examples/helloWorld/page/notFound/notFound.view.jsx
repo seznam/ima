@@ -37,7 +37,7 @@ class View extends ns.Core.Abstract.View {
 			render() {
 				return (
 					<div className='l-not-found'>
-						<div className="message"><h1>404 - Not Found</h1></div>
+						<h1>404 - Not Found</h1>
 					</div>
 				);
 			}

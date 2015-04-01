@@ -15,19 +15,9 @@ class Controller extends ns.Core.Abstract.Controller {
 	 * @method constructor
 	 * @constructor
 	 * @param {App.Page.Home.View} view
-	 * @param {Core.Interface.Router} router
 	 */
-	constructor(view, router) {
+	constructor(view) {
 		super(view);
-
-		/**
-		 * @property _router
-		 * @private
-		 * @type {Core.Interface.Router}
-		 * @default router
-		 */
-		this._router = router;
-
 	}
 
 	/**
@@ -38,6 +28,7 @@ class Controller extends ns.Core.Abstract.Controller {
 	 */
 	load() {
 		return {
+			//error: ns.oc.get('$Promise').reject(ns.oc.create('$Error', 'Try error page.', {status: 500})),
 			message: `I am IMA.js!`
 		};
 	}
