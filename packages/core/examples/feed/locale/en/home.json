@@ -3,7 +3,6 @@
 
 	"seoTitle": "IMA.js - Demo: Feed",
 	"seoDescription": "Isomorfic javascript application in the IMA.js.",
-	"seoImage": "/static/img/seo/logo.png",
 	"seoUrl": "http://IMAjs.io/",
 	"seoCategoryTitle": "IMA.js - Demo: Feed - category: {CATEGORY}",
 	"seoCategoryDescription": "This is category {CATEGORY} in IMA.js demo application.",

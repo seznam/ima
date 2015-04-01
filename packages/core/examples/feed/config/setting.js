@@ -45,7 +45,7 @@ export var init = (ns, config = {env: 'dev', protocol: 'http:', language: 'cs'})
 				categories: '/categories'
 			},
 			Images: {
-				defaultPortalIcon: '/static/img/favicon.ico'
+				fbShare: '/imajs-share.png'
 			}
 		},
 		prod: {
@@ -87,7 +87,7 @@ export var init = (ns, config = {env: 'dev', protocol: 'http:', language: 'cs'})
 				services: '/services'
 			},
 			Images: {
-				defaultPortalIcon: '/static/img/favicon.ico'
+				fbShare: '/imajs-share.png'
 			}
 		},
 		test: {
@@ -132,7 +132,7 @@ export var init = (ns, config = {env: 'dev', protocol: 'http:', language: 'cs'})
 				services: '/services'
 			},
 			Images: {
-				defaultPortalIcon: '/static/img/favicon.ico'
+				fbShare: '/imajs-share.png'
 			}
 		}
 	};
