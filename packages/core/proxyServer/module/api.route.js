@@ -93,8 +93,8 @@ var callRemoteServer = (req, res) => {
 		.set('Cookie', req.get('Cookie'))
 		.end((error, respond) => {
 			if (error) {
-				console.error('API ERROR', e);
-				res.status(500).json({Error: 'API error', message: e.message});
+				console.error('API ERROR', error);
+				res.status(500).json({Error: 'API error', message: error.message});
 			}
 
 			if (respond) {
