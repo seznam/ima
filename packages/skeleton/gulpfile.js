@@ -61,8 +61,8 @@ var files = {
 			client: 'vendor.client.js'
 		},
 		tmp: './.tmp/es5transformedVendor.js',
-		src: [
-			'./.tmp/es5transformedVendor.js'
+		src:[
+				'./.tmp/es5transformedVendor.js'
 		],
 		dest: {
 			server: './proxyServer/module/',
@@ -395,6 +395,7 @@ gulp.task('Es6ToEs5:client', function() {
 			.pipe(concat(files.app.name.client))
 			.pipe(insert.wrap('(function(){\n', '\n })();\n'))
 			.pipe(sourcemaps.write())
+			//.pipe(gutil.env.type === 'production' ? uglify() : gutil.noop())
 			//.pipe(uglify({mangle:true}))
 			.pipe(gulp.dest(files.app.dest.client))
 			.pipe(save.restore('Es6ToEs5:source'))
@@ -418,7 +419,7 @@ gulp.task('Es6ToEs5:vendor', shell.task('traceur --out ' + files.vendor.tmp + ' 
 
 gulp.task('vendor:client', function() {
 	return (
-		browserify(files.vendor.src, {debug: true, insertGlobals : true})
+		browserify(files.vendor.src, {debug: true, insertGlobals : true, basedir: ''})
 			.external('vertx')
 			.bundle()
 			.pipe(source(files.vendor.name.client))
