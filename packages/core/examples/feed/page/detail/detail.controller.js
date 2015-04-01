@@ -83,14 +83,6 @@ class Controller extends ns.App.Base.Controller {
 	deinit() {
 	}
 
-	/**
-	 * @method setSeoParams
-	 */
-	// @override
-	setSeoParams() {
-		super.setSeoParams();
-	}
-
 }
 
 ns.App.Page.Detail.Controller = Controller;
