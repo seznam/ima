@@ -37,7 +37,7 @@ class Controller extends ns.Core.Abstract.Controller {
 
 		var title = dictionary.get('home.seoTitle');
 		var description = dictionary.get('home.seoDescription');
-		var image = router.getDomain() + setting.$Static.image + dictionary.get('home.seoImage');
+		var image = router.getDomain() + setting.$Static.image + setting.Images.fbShare;
 
 		var url = router.getUrl();
 
