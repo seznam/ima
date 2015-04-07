@@ -180,7 +180,7 @@ class Controller extends ns.App.Base.Controller {
 		
 		this
 			._itemResource
-			.postItem(data)
+			.createEntity(data)
 			.then((item)=> {
 				var state = this.getState();
 				this._feedService.addItemToFeed(state.feed, item);

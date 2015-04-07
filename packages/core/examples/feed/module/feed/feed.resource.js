@@ -16,13 +16,12 @@ class Resource extends ns.App.Base.Resource {
 	 * @method constructor
 	 * @constructor
 	 * @param {Core.Http.Handler} http
-	 * @param {String} baseUrl - Server URL.
-	 * @param {String} apiUrl - API spectific URL.
+	 * @param {String} url - API URL (Base server + api specific path.)
 	 * @param {App.Factory.Feed} feedFactory
 	 * @param {Core.Cache.Handler} cache
 	 * */
-	constructor(http, baseUrl, apiUrl, feedFactory, cache) {
-		super(http, baseUrl, apiUrl, feedFactory, cache);
+	constructor(http, url, feedFactory, cache) {
+		super(http, url, feedFactory, cache);
 	}
 
 	/**

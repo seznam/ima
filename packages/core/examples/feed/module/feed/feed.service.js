@@ -33,14 +33,6 @@ class Service extends ns.App.Base.Service {
 	}
 
 	/**
-	 * Deinitialization model.
-	 *
-	 * @method deinit
-	 * */
-	deinit() {
-	}
-
-	/**
 	 * Force update feed.
 	 *
 	 * @method updateFeed

@@ -18,12 +18,11 @@ class Resource extends ns.App.Interface.Resource {
 	 * @method constructor
 	 * @constructor
 	 * @param {Core.Interface.Http} http
-	 * @param {String} baseUrl
-	 * @param {String} apiUrl
+	 * @param {String} url - API URL (Base server + api specific path.)
 	 * @param {App.Base.EntityFactory} entityFactory
 	 * @param {Core.Cache.Handler} cache
 	 */
-	constructor(http, baseUrl, apiUrl, entityFactory, cache) {
+	constructor(http, url, entityFactory, cache) {
 		
 		super();
 
@@ -37,22 +36,13 @@ class Resource extends ns.App.Interface.Resource {
 		this._http = http;
 
 		/**
-		 * API base URL.
-		 *
-		 * @property _baseUrl
-		 * @private
-		 * @type {String}
-		 */
-		this._baseUrl = baseUrl;
-
-		/**
 		 * API URL for specific resource.
 		 *
 		 * @property _apiUrl
 		 * @private
 		 * @type {String}
 		 */
-		this._apiUrl = apiUrl;
+		this._apiUrl = url;
 
 		/**
 		 * Cache for caching parts of request response.
@@ -111,14 +101,13 @@ class Resource extends ns.App.Interface.Resource {
 	/**
 	 * Posts data to http and returns new Entity.
 	 *
-	 * @method postEntity
-	 * @param {String} [id=null] ID for post entity from API.
+	 * @method createEntity
 	 * @param {Object} [data={}]
 	 * @param {Object} [options={}] Possible keys {ttl: {number}(in ms), timeout: {number}(in ms), repeatRequest: {number}}
 	 * @return {App.Base.Entity}
 	 */
-	postEntity(id = null, data = {}, options = {}) {
-		var url = this._getUrl(id);
+	createEntity(data = {}, options = {}) {
+		var url = this._getUrl();
 		options = this._getOptions(options);
 
 		return this._http
@@ -177,9 +166,9 @@ class Resource extends ns.App.Interface.Resource {
 	 * @private
 	 * @param {String} [id=null]
 	 * @return {String}
-	 * */
+	 */
 	_getUrl(id = null) {
-		var url = this._baseUrl + this._apiUrl;
+		var url = this._apiUrl;
 
 		if (id) {
 			url += '/' + id;
@@ -195,7 +184,7 @@ class Resource extends ns.App.Interface.Resource {
 	 * @private
 	 * @param {Object} options
 	 * @return {Object}
-	 * */
+	 */
 	_getOptions(options) {
 		return Object.assign(this._defaultOptions, options);
 	}
@@ -206,7 +195,7 @@ class Resource extends ns.App.Interface.Resource {
 	 * @method _clearCacheForRequest
 	 * @param {String} url
 	 * @param {Object} data
-	 * */
+	 */
 	_clearCacheForRequest(url, data) {
 		var cacheKey = this._http.getCacheKey(url, data);
 		this._cache.delete(cacheKey);

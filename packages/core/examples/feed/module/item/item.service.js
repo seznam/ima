@@ -31,14 +31,6 @@ class Service extends ns.App.Base.Service {
 		this._itemResource = itemResource;
 
 	}
-
-	/**
-	 * Deinitialization model.
-	 *
-	 * @method deinit
-	 * */
-	deinit() {
-	}
 	
 	/**
 	 * @method load
@@ -48,7 +40,7 @@ class Service extends ns.App.Base.Service {
 
 		return (
 			this._itemResource
-				.getItem(itemId)
+				.getEntity(itemId)
 		);
 	}
 }

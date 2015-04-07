@@ -11,11 +11,19 @@ ns.namespace('App.Interface');
 class Entity {
 
 	/**
-	 * @method constructor
 	 * @constructor
-	 * */
-	constructor() {
-	}
+	 * @method constructor
+	 * @param {Mixed} id
+	 */
+	constructor(id) {}
+
+	/**
+	 * Return entity unique id.
+	 *
+	 * @method getId
+	 * @return {Mixed}
+	 */
+	getId() {}
 }
 
 ns.App.Interface.Entity = Entity;

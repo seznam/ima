@@ -17,9 +17,8 @@ class Entity extends ns.App.Interface.Entity {
 	 * @constructor
 	 * @method constructor
 	 * @param {Mixed} id
-	 * @param {Mixed} [type=null]
 	 */
-	constructor(id, type = null) {
+	constructor(id) {
 
 		super();
 
