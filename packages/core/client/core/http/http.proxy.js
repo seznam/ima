@@ -68,6 +68,14 @@ class Proxy {
 		this.HTTP_FORBIDDEN = 403;
 
 		/**
+		 * @property HTTP_NOT_FOUND
+		 * @const
+		 * @type {Number}
+		 * @default 404
+		 */
+		this.HTTP_NOT_FOUND = 404;
+
+		/**
 		 * @property HTTP_SERVER_ERROR
 		 * @const
 		 * @type {Number}
@@ -158,7 +166,7 @@ class Proxy {
 			if (error.crossDomain) {
 				errorParams = this.getErrorParams(params.method, params.url, params.data, params.options, this.HTTP_FORBIDDEN);
 			} else {
-				errorParams = this.getErrorParams(params.method, params.url, params.data, params.options, this.HTTP_SERVER_ERROR);
+				errorParams = this.getErrorParams(params.method, params.url, params.data, params.options, error.status || this.HTTP_SERVER_ERROR);
 			}
 
 		}
@@ -212,6 +220,9 @@ class Proxy {
 				break;
 			case this.HTTP_FORBIDDEN:
 				error.errorName = 'Forbidden';
+				break;
+			case this.HTTP_NOT_FOUND:
+				error.errorName = 'Not Found';
 				break;
 			case this.HTTP_SERVER_ERROR:
 				error.errorName = 'Internal Server Error';
