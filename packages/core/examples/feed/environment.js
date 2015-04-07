@@ -5,7 +5,7 @@ module.exports = (function() {
 			$Debug: false,
 			$Env: 'prod',
 			$Language:{
-				'http://example.com': 'en'
+				'//example.com': 'en'
 			},
 			$Server: {
 				port: 3001,
@@ -20,7 +20,7 @@ module.exports = (function() {
 			$Debug: true,
 			$Env: 'dev',
 			$Language:{
-				'http://localhost:3001': 'en'
+				'//localhost:3001': 'en'
 			},
 			$Server: {
 				port: 3001,
@@ -35,7 +35,7 @@ module.exports = (function() {
 			$Debug: true,
 			$Env: 'test',
 			$Language:{
-				'http://localhost:3001': 'en'
+				'//localhost:3001': 'en'
 			},
 			$Server: {
 				port: 3001,

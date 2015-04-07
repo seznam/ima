@@ -75,9 +75,27 @@ class Router extends ns.Core.Interface.Router {
 		 * @property _domain
 		 * @protected
 		 * @type {string}
-		 * @default null
+		 * @default ''
 		 */
-		this._domain = null;
+		this._domain = '';
+
+		/**
+		 * Root folder.
+		 *
+		 * @property _root
+		 * @type {string}
+		 * @default ''
+		 */
+		this._root = '';
+
+		/**
+		 * Defined language part in path.
+		 *
+		 * @property _languagePartPath
+		 * @type {string}
+		 * @default ''
+		 */
+		this._languagePartPath = '';
 
 		/**
 		 * @property MODE_HISTORY
@@ -131,6 +149,8 @@ class Router extends ns.Core.Interface.Router {
 	 * @return {this}
 	 */
 	init(config = {}) {
+		this._root = config.root || '';
+		this._languagePartPath = config.languagePartPath || '';
 	}
 
 	/**
@@ -143,7 +163,9 @@ class Router extends ns.Core.Interface.Router {
 	clear() {
 		this._routes = [];
 		this._mode = null;
-		this._domain = null;
+		this._domain = '';
+		this._root = '';
+		this._languagePartPath = '';
 
 		return this;
 	}
@@ -200,7 +222,7 @@ class Router extends ns.Core.Interface.Router {
 	 * @method getUrl
 	 */
 	getUrl() {
-		return this._domain + this.getPath();
+		return this._domain + this._root + this._languagePartPath + this.getPath();
 	}
 
 	/**
@@ -211,6 +233,16 @@ class Router extends ns.Core.Interface.Router {
 	 */
 	getDomain() {
 		return this._domain;
+	}
+
+	/**
+	 * Returns root path.
+	 *
+	 * @method getRoot
+	 * @return {string}
+	 */
+	getRoot() {
+		return this._root;
 	}
 
 	/**
@@ -359,6 +391,18 @@ class Router extends ns.Core.Interface.Router {
 		}
 
 		return null;
+	}
+
+	/**
+	 * Clear root and language from path.
+	 *
+	 * @method _clearPath
+	 * @protected
+	 * @param {string} path
+	 * @return {string}
+	 */
+	_clearPath(path) {
+		return path.replace(this._root + this._languagePartPath, '');
 	}
 
 	/**

@@ -30,7 +30,9 @@ describe('Core.Abstract.Router', function() {
 		router.clear();
 
 		expect(router._routes.length).toEqual(0);
-		expect(router._domain).toEqual(null);
+		expect(router._domain).toEqual('');
+		expect(router._root).toEqual('');
+		expect(router._languagePartPath).toEqual('');
 		expect(router._mode).toEqual(null);
 	});
 
@@ -201,5 +203,41 @@ describe('Core.Abstract.Router', function() {
 			expect(isClientError).toEqual(false);
 		});
 
+	});
+
+	describe('_clearPath method', function() {
+
+		var pathWithRoot = '/root/path';
+		var pathWithLanguage = '/en/path';
+		var pathWithRootAndLanguage = '/root/en/path';
+		var path = '/path';
+
+		beforeEach(function() {
+			router.clear();
+		});
+
+		it('should be clear root from path', function() {
+			router.init({root: '/root'});
+
+			expect(router._clearPath(pathWithRoot)).toEqual(path);
+		});
+
+		it('should be clear root and language from path', function() {
+			router.init({root: '/root', languagePartPath: '/en'});
+
+			expect(router._clearPath(pathWithRootAndLanguage)).toEqual(path);
+		});
+
+		it('should be clear language from path', function() {
+			router.init({languagePartPath: '/en'});
+
+			expect(router._clearPath(pathWithLanguage)).toEqual(path);
+		});
+
+		it('should be return path for empty root and undefined language in path', function() {
+			router.init({});
+
+			expect(router._clearPath(path)).toEqual(path);
+		});
 	});
 });

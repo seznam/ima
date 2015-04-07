@@ -48,6 +48,7 @@ class ServerHandler extends ns.Core.Abstract.Router {
 	 * @return {this}
 	 */
 	init(config = {}) {
+		super.init(config);
 		this._mode = this.MODE_SERVER;
 		this._domain = config.domain;
 
@@ -61,7 +62,7 @@ class ServerHandler extends ns.Core.Abstract.Router {
 	 * @return {string}
 	 */
 	getPath() {
-		return this._request.getPath();
+		return this._clearPath(this._request.getPath());
 	}
 
 	/**

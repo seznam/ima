@@ -48,7 +48,8 @@ class ClientHandler extends ns.Core.Abstract.Router {
 	 * @return {this}
 	 */
 	init(config = {}) {
-		this._mode = config.mode === this.MODE_HISTORY && this._window.hasHistoryAPI() ? this.MODE_HISTORY : this.MODE_HASH;
+		super.init(config);
+		this._mode = this._window.hasHistoryAPI() ? this.MODE_HISTORY : this.MODE_HASH;
 		this._domain = config.domain || this._window.getDomain();
 
 		return this;
@@ -68,7 +69,7 @@ class ClientHandler extends ns.Core.Abstract.Router {
 			path = match ? match[1] : '/';
 		}
 
-		return path;
+		return this._clearPath(path);
 	}
 
 	/**
@@ -193,6 +194,7 @@ class ClientHandler extends ns.Core.Abstract.Router {
 
 			if (this._isSameDomain(targetHref) && event.button !== this.MOUSE_MIDDLE_BUTTON) {
 				var path = targetHref.replace(this._domain, '');
+				path = this._clearPath(path);
 
 				this._window.preventDefault(event);
 				this.route(path);
@@ -226,6 +228,7 @@ class ClientHandler extends ns.Core.Abstract.Router {
 			this._window.pushStateToHistoryAPI(null, null, url);
 		} else {
 			var path = url.replace(this._domain, '');
+			path = this._clearPath(path);
 			path = `/${this._clearSlashes(path)}`;
 
 			this._window.redirect(`${this._domain}/#!${path}`);

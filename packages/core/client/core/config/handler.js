@@ -20,4 +20,9 @@ export var init = (ns, config) => {
 		.get('$Dictionary')
 		.init(config.dictionary);
 
+	ns.oc
+		.get('$Router')
+		.init(config.router);
+
+
 };

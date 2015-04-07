@@ -1,4 +1,4 @@
-export var init = (ns, config = {env: 'dev', protocol: 'http:', language: 'en'}) => { // jshint ignore:line
+export var init = (ns, config) => { // jshint ignore:line
 
 	var nsSetting = ns.namespace('Setting');
 
@@ -123,4 +123,7 @@ export var init = (ns, config = {env: 'dev', protocol: 'http:', language: 'en'})
 	nsSetting['$Env'] = config.env; // jshint ignore:line
 	nsSetting['$Protocol'] = config.protocol; // jshint ignore:line
 	nsSetting['$Language'] = config.language; // jshint ignore:line
+	nsSetting['$Domain'] = config.domain; // jshint ignore:line
+	nsSetting['$Root'] = config.root; // jshint ignore:line
+	nsSetting['$LanguagePartPath'] = config.languagePartPath; // jshint ignore:line
 };

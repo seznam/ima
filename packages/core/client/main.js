@@ -33,7 +33,17 @@ if (typeof window !== 'undefined' && window !== null) {
 				dictionary: {
 					language: window.$IMA.Language,
 					dictionary: window.$IMA.i18n
+				},
+				router: {
+					domain: window.$IMA.Domain,
+					root: window.$IMA.Root,
+					languagePartPath: window.$IMA.LanguagePartPath
 				}
+			},
+			setting: {
+				env: 'dev',
+				language: 'en',
+				protocol: 'http:'
 			}
 		};
 
@@ -68,12 +78,20 @@ if (typeof window !== 'undefined' && window !== null) {
 					dictionary: {
 						language: window.$IMA.Language,
 						dictionary: window.$IMA.i18n
+					},
+					router: {
+						domain: window.$IMA.Domain,
+						root: window.$IMA.Root,
+						languagePartPath: window.$IMA.LanguagePartPath
 					}
 				},
 				setting: {
 					env: window.$IMA.Environment,
 					language: window.$IMA.Language,
-					protocol: window.$IMA.Protocol
+					protocol: window.$IMA.Protocol,
+					domain: window.$IMA.Domain,
+					root: window.$IMA.Root,
+					languagePartPath: window.$IMA.LanguagePartPath
 				}
 			};
 
@@ -84,8 +102,8 @@ if (typeof window !== 'undefined' && window !== null) {
 			cache.deserialize(window.$IMA.Cache);
 
 			var router = ns.oc.get('$Router');
+
 			router
-				.init({mode: router.MODE_HISTORY})
 				.listen()
 				.route(router.getPath());
 		});

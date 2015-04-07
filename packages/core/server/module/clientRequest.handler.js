@@ -14,7 +14,7 @@ hljs.configure({
 	lineNodes: true
 });
 
-module.exports = () => {
+module.exports = (() => {
 	var _displayDetails = (err, req, res) => {
 		var stack = stackTrace.parse(err);
 		var fileIndex = 1;
@@ -73,6 +73,10 @@ module.exports = () => {
 
 	var _initApp = (req, res) => {
 		var language = res.locals.language;
+		var languagePartPath = res.locals.languagePartPath;
+		var domain = res.locals.domain;
+		var root = res.locals.root;
+
 		var dictionary = require('./locale/' + language + '.js');
 
 		var vendor = vendorScript();
@@ -83,8 +87,21 @@ module.exports = () => {
 
 		var bootConfig = {
 			vendor: vendor,
-			handler: {request: req, respond: res, $IMA: {}, dictionary: {language, dictionary}},
-			setting: {env: config.$Env, protocol: `${req.protocol}:`, language: language}
+			handler: {
+				request: req,
+				respond: res,
+				$IMA: {},
+				dictionary: {language, dictionary},
+				router: {domain, root, languagePartPath}
+			},
+			setting: {
+				env: config.$Env,
+				protocol: `${req.protocol}:`,
+				language: language,
+				domain: domain,
+				root: root,
+				languagePartPath: languagePartPath
+			}
 		};
 
 		Object.assign(bootConfig, appServer.getInit());
@@ -143,14 +160,12 @@ module.exports = () => {
 		var ns = _initApp(req, res);
 		var router = ns.oc.get('$Router');
 
-		router.init({domain: res.locals.domain, mode: router.MODE_SERVER});
-
 		router
-			.route(req.url)
+			.route(router.getPath())
 			.catch((error) => {
 				errorHandler(error, req, res, ns);
 			});
 	};
 
 	return {errorHandler, respond};
-};
+})();

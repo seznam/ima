@@ -20,7 +20,7 @@ describe('Core.Router.ServerHandler', function() {
 	it('should be return actual path', function() {
 		spyOn(request, 'getPath')
 			.and
-			.stub();
+			.returnValue('');
 
 		router.getPath();
 

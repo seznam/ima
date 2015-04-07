@@ -12,13 +12,13 @@ describe('Core.Router.ClientHandler', function() {
 		routerFactory = ns.oc.make('$RouterFactory');
 		win = ns.oc.get('$Window');
 		router = ns.oc.create('Core.Router.ClientHandler', pageRender, routerFactory, Promise, win);
-		router.init({mode: router.MODE_HISTORY, domain: domain});
+		router.init({domain: domain});
 	});
 
 	it('should be return actual path', function() {
 		spyOn(win, 'getPath')
 			.and
-			.stub();
+			.returnValue('');
 
 		router.getPath();
 

@@ -103,7 +103,10 @@ class Server extends ns.Core.Abstract.PageRender {
 		' window.$IMA.Cache = ' + (this._cache.serialize()) + ';' +
 		' window.$IMA.Language = "' + (this._setting.$Language) + '";' +
 		' window.$IMA.Environment = "' + (this._setting.$Env) + '";' +
-		' window.$IMA.Protocol = document.location.protocol;' +
+		' window.$IMA.Protocol = "' + (this._setting.$Protocol) + '";'+
+		' window.$IMA.Domain = "' + (this._setting.$Domain) + '";'+
+		' window.$IMA.Root = "' + (this._setting.$Root) + '";'+
+		' window.$IMA.LanguagePartPath = "' + (this._setting.$LanguagePartPath) + '";'+
 		'</script>');
 		html = scripts.join('');
 

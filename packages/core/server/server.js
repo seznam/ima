@@ -5,7 +5,7 @@ global.appRoot = path.resolve(__dirname);
 var express = require('express');
 var favicon = require('serve-favicon');
 var clientApp = require('./module/clientRequest.handler.js');
-var apiRoute = require('./module/api.route.js');
+var proxy = require('./module/proxy.handler.js');
 var languageHandler = require('./module/language.handler.js');
 var bodyParser = require('body-parser');
 var multer = require('multer');
@@ -15,8 +15,8 @@ var config = require('./config/environment.js');
 
 var app = express();
 
-process.on('uncaughtException', function(e) {
-	console.log('uncaughtException caught the error', e);
+process.on('uncaughtException', function(error) {
+	console.error('Uncaught Exception:', error.message, error.stack);
 });
 
 var allowCrossDomain = (req, res, next) => {
@@ -31,35 +31,12 @@ var allowCrossDomain = (req, res, next) => {
 	}
 };
 
-var recordRequest = (req, res, next) => {
-
-	if (req.query.name) {
-		res.cookie('name', req.query.name, { maxAge: 90000000, httpOnly: true });
-	}
-
-	var timeStamp = Date.now();
-
-	res.on('finish', () => {
-		var request = {
-			status: res.statusCode,
-			url: req.hostname + req.originalUrl,
-			method: req.method,
-			headers: 'Cookie: ' + (req.query.name || req.cookies.name),
-			time: Date.now() - timeStamp
-		};
-
-		requestModel.create(request);
-	});
-
-	next();
-};
-
-var renderReactApp = (req, res) => {
-	clientApp().respond(req, res);
+var renderApp = (req, res) => {
+	clientApp.respond(req, res);
 };
 
 var errorHandler = (err, req, res, next) => {
-	clientApp().errorHandler(err, req, res);
+	clientApp.errorHandler(err, req, res);
 };
 
 app.use(favicon(__dirname + '/static/img/favicon.ico'))
@@ -70,9 +47,9 @@ app.use(favicon(__dirname + '/static/img/favicon.ico'))
 	.use(cookieParser())
 	.use(methodOverride())
 	.use(allowCrossDomain)
-	.use(config.$Server.apiUrl + '/', apiRoute)
+	.use(config.$Server.apiUrl + '/', proxy)
 	.use(languageHandler)
-	.use(renderReactApp)
+	.use(renderApp)
 	.use(errorHandler)
 	.listen(config.$Server.port, function() {
 		return console.log('Point your browser at http://localhost:' + config.$Server.port);

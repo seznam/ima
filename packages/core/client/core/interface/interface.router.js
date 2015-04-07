@@ -69,6 +69,14 @@ class Router {
 	}
 
 	/**
+	 * Returns root path.
+	 *
+	 * @method getRoot
+	 */
+	getRoot() {
+	}
+
+	/**
 	 * Attach event to window.
 	 *
 	 * @method listen
