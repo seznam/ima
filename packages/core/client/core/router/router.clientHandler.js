@@ -245,7 +245,7 @@ class ClientHandler extends ns.Core.Abstract.Router {
 	 * @return {boolean}
 	 */
 	_isSameDomain(url) {
-		return url.match(this._domain);
+		return url.match(this._domain + this._root + this._languagePartPath);
 	}
 }
 
