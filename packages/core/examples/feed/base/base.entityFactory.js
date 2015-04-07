@@ -10,7 +10,7 @@ ns.namespace('App.Base');
  * @namespace App.Base
  * @module App
  * @submodule App.Base
- * */
+ */
 class EntityFactory extends ns.App.Interface.EntityFactory {
 
 	/**
@@ -25,7 +25,7 @@ class EntityFactory extends ns.App.Interface.EntityFactory {
 		 * @private
 		 * @type {String}
 		 * @default entity
-		 * */
+		 */
 		this._entity = entity;
 	}
 
