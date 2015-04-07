@@ -65,8 +65,8 @@ var files = {
 				'./.tmp/es5transformedVendor.js'
 		],
 		dest: {
-			server: './proxyServer/module/',
-			client: './proxyServer/static/js/'
+			server: './server/module/',
+			client: './server/static/js/'
 		},
 		watch: ['./imajs/client/core/vendor.js', './app/vendor.js']
 	},
@@ -77,27 +77,27 @@ var files = {
 		},
 		src: coreDependency.js.concat(appDependency.js, coreDependency.mainjs),
 		dest: {
-			server: './proxyServer/module/',
-			client: './proxyServer/static/js/'
+			server: './server/module/',
+			client: './server/static/js/'
 		},
 		watch:['./imajs/client/**/*.{js,jsx}', './imajs/client/main.js', '!./imajs/client/vendor.js', './app/**/*.{js,jsx}', '!./app/*.js']
 	},
 	server: {
-		src: './imajs/proxyServer/',
-		dest: './proxyServer/',
-		watch: ['./imajs/proxyServer/*.js', './imajs/proxyServer/**/*.js', './app/environment.js']
+		src: './imajs/server/',
+		dest: './server/',
+		watch: ['./imajs/server/*.js', './imajs/server/**/*.js', './app/environment.js']
 	},
 	less: {
 		name: 'app.less',
 		src: appDependency.less,
-		dest: './proxyServer/static/css/',
+		dest: './server/static/css/',
 		watch: ['./app/**/*.less', '!./app/assets/bower/']
 	},
 	locale: {
 		src: appDependency.languages,
 		dest:{
-			server: './proxyServer/module/locale/',
-			client: './proxyServer/static/js/locale/'
+			server: './server/module/locale/',
+			client: './server/static/js/locale/'
 		},
 		watch: ['./app/locale/**/*.json']
 	},
@@ -111,8 +111,8 @@ var files = {
 			traceur.RUNTIME_PATH
 		],
 		dest: {
-			client: './proxyServer/static/js/',
-			server: './proxyServer/module/'
+			client: './server/static/js/',
+			server: './server/module/'
 		}
 	}
 };
@@ -213,7 +213,7 @@ gulp.task('watch', function() {
 	gulp.watch(files.server.watch, ['server:build']);
 	gulp.watch(files.locale.watch, ['locale:build']);
 
-	gulp.watch(['./imajs/**/*.{js,jsx}', './app/**/*.{js,jsx}', './proxyServer/static/js/locale/*.js']).on('change', function(e) {
+	gulp.watch(['./imajs/**/*.{js,jsx}', './app/**/*.{js,jsx}', './server/static/js/locale/*.js']).on('change', function(e) {
 		watchEvent = e;
 		if (e.type === 'deleted') {
 
@@ -225,7 +225,7 @@ gulp.task('watch', function() {
 		}
 	});
 
-	flo('./proxyServer/static/', {
+	flo('./server/static/', {
 			port: 5888,
 			host: 'localhost',
 			glob: [
@@ -236,14 +236,14 @@ gulp.task('watch', function() {
 			gutil.log('Reloading \' public/' + gutil.colors.cyan(filepath) + '\' with flo...');
 			callback({
 				resourceURL: 'static/' + filepath,
-				contents: fs.readFileSync('./proxyServer/static/' + filepath).toString()
+				contents: fs.readFileSync('./server/static/' + filepath).toString()
 				//reload: filepath.match(/\.(js|html)$/)
 			});
 		});
 });
 
 gulp.task('server', function() {
-	server =  gls.new('./proxyServer/proxyServer.js');
+	server =  gls.new('./server/server.js');
 	server.start();
 });
 
@@ -260,7 +260,7 @@ gulp.task('server:reload', function(callback) {
 
 
 gulp.task('server:apiTest', function () {
-	nodemon({ script: './proxyServer/apiTest.js', ext: 'js', ignore: [] })
+	nodemon({ script: './server/apiTest.js', ext: 'js', ignore: [] })
 		.on('restart', function () {
 			console.log('restarted!');
 		});
@@ -269,10 +269,10 @@ gulp.task('server:apiTest', function () {
 gulp.task('devTest', function() {
 	var testFiles = [
 		'./imajs/client/test.js',
-		'./proxyServer/static/js/shim.js',
-		'./proxyServer/static/js/vendor.client.js',
-		'./proxyServer/static/js/locale/cs.js',
-		'./proxyServer/static/js/app.client.js',
+		'./server/static/js/shim.js',
+		'./server/static/js/vendor.client.js',
+		'./server/static/js/locale/cs.js',
+		'./server/static/js/app.client.js',
 		'./app/test/**/*.js',
 		'./app/test/*.js',
 		'./imajs/client/core/test/**/*.js',

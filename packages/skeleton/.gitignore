@@ -4,7 +4,7 @@
 .sublime-gulp.cache
 node_modules/
 npm-debug.log
-proxyServer/
+server/
 doc/
 .tmp/es5transformedApp.js
 app/assets/bower
