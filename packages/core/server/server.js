@@ -39,6 +39,10 @@ var errorHandler = (err, req, res, next) => {
 	clientApp.errorHandler(err, req, res);
 };
 
+var staticErrorPage = (err, req, res, next) => {
+	clientApp.showStaticErrorPage(err, req, res);
+};
+
 app.use(favicon(__dirname + '/static/img/favicon.ico'))
 	.use(config.$Server.staticFolder, express.static(path.join(__dirname, 'static')))
 	.use(bodyParser.json()) // for parsing application/json
@@ -51,6 +55,7 @@ app.use(favicon(__dirname + '/static/img/favicon.ico'))
 	.use(languageHandler)
 	.use(renderApp)
 	.use(errorHandler)
+	.use(staticErrorPage)
 	.listen(config.$Server.port, function() {
 		return console.log('Point your browser at http://localhost:' + config.$Server.port);
 	});

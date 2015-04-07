@@ -279,7 +279,7 @@ class Router extends ns.Core.Interface.Router {
 			throw new Error(`Core.Router:link has undefined route with name ${routeName}. Add new route with that name.`);
 		}
 
-		return this._domain + route.createPathForParams(params);
+		return this._domain + this._root + this._languagePartPath + route.createPathForParams(params);
 	}
 
 	/**

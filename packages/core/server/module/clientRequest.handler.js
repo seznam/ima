@@ -167,5 +167,5 @@ module.exports = (() => {
 			});
 	};
 
-	return {errorHandler, respond};
+	return {errorHandler, respond, showStaticErrorPage};
 })();
