@@ -28,7 +28,7 @@ module.exports = (function() {
 				staticFolder: '/static'
 			},
 			$Api: {
-				server: 'http://api.onas.dev'
+				server: 'http://api.example.dev'
 			}
 		},
 		test: {
@@ -43,7 +43,7 @@ module.exports = (function() {
 				staticFolder: '/static'
 			},
 			$Api: {
-				server: 'http://api.onas.dev'
+				server: 'http://api.exmaple.test'
 			}
 		}
 	};

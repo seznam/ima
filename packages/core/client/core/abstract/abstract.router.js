@@ -70,6 +70,15 @@ class Router extends ns.Core.Interface.Router {
 		this._mode = null;
 
 		/**
+		 * Web protocol.
+		 *
+		 * @property _protocol
+		 * @type {string}
+		 * @default null
+		 */
+		this._protocol = null;
+
+		/**
 		 * Current domain.
 		 *
 		 * @property _domain
@@ -149,6 +158,7 @@ class Router extends ns.Core.Interface.Router {
 	 * @return {this}
 	 */
 	init(config = {}) {
+		this._protocol = config.protocol || '';
 		this._root = config.root || '';
 		this._languagePartPath = config.languagePartPath || '';
 	}
@@ -163,6 +173,7 @@ class Router extends ns.Core.Interface.Router {
 	clear() {
 		this._routes = [];
 		this._mode = null;
+		this._protocol = '';
 		this._domain = '';
 		this._root = '';
 		this._languagePartPath = '';
@@ -222,7 +233,7 @@ class Router extends ns.Core.Interface.Router {
 	 * @method getUrl
 	 */
 	getUrl() {
-		return this._domain + this._root + this._languagePartPath + this.getPath();
+		return this._getBaseUrl() + this.getPath();
 	}
 
 	/**
@@ -243,6 +254,26 @@ class Router extends ns.Core.Interface.Router {
 	 */
 	getRoot() {
 		return this._root;
+	}
+
+	/**
+	 * Returns language part path.
+	 *
+	 * @method getLanguagePartPath
+	 * @return {string}
+	 */
+	getLanguagePartPath() {
+		return this._languagePartPath;
+	}
+
+	/**
+	 * Returns web protocol.
+	 *
+	 * @method getProtocol
+	 * @return {string}
+	 */
+	getProtocol() {
+		return this._protocol;
 	}
 
 	/**
@@ -279,7 +310,7 @@ class Router extends ns.Core.Interface.Router {
 			throw new Error(`Core.Router:link has undefined route with name ${routeName}. Add new route with that name.`);
 		}
 
-		return this._domain + this._root + this._languagePartPath + route.createPathForParams(params);
+		return this._getBaseUrl() + route.createPathForParams(params);
 	}
 
 	/**
@@ -338,6 +369,17 @@ class Router extends ns.Core.Interface.Router {
 		}
 
 		return this._handle(routeNotFound, params);
+	}
+
+	/**
+	 * Return true if error is client error and return http status 4**.
+	 *
+	 * @method isClientError
+	 * @param {Error} error
+	 * @return {boolean}
+	 */
+	isClientError(error) {
+		return error instanceof ns.oc.get('$Error') && (error.getHttpStatus() >= 400 && error.getHttpStatus() < 500);
 	}
 
 	/**
@@ -406,14 +448,13 @@ class Router extends ns.Core.Interface.Router {
 	}
 
 	/**
-	 * Return true if error is client error and return http status 4**.
+	 * Returns base url.
 	 *
-	 * @method isClientError
-	 * @param {Error} error
-	 * @return {boolean}
+	 * @method _getBaseUrl
+	 * @return {string}
 	 */
-	isClientError(error) {
-		return error instanceof ns.oc.get('$Error') && (error.getHttpStatus() >= 400 && error.getHttpStatus() < 500);
+	_getBaseUrl() {
+		return this._protocol + '//' + this._domain + this._root + this._languagePartPath;
 	}
 
 }

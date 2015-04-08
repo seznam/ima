@@ -5,14 +5,15 @@ describe('Core.Router.ClientHandler', function() {
 	var routerFactory = null;
 	var win = null;
 	var Promise = ns.oc.get('$Promise');
-	var domain = 'http://locahlost:3002';
+	var domain = 'locahlost:3002';
+	var protocol = 'http:';
 
 	beforeEach(function() {
 		pageRender = ns.oc.create('Core.PageRender.Client');
 		routerFactory = ns.oc.make('$RouterFactory');
 		win = ns.oc.get('$Window');
 		router = ns.oc.create('Core.Router.ClientHandler', pageRender, routerFactory, Promise, win);
-		router.init({domain: domain});
+		router.init({domain: domain, protocol: protocol});
 	});
 
 	it('should be return actual path', function() {
@@ -37,7 +38,7 @@ describe('Core.Router.ClientHandler', function() {
 
 	describe('redirect method', function() {
 		it('should be set address bar', function() {
-			var url = domain + '/somePath';
+			var url = protocol + '//' + domain + '/somePath';
 
 			spyOn(router, '_setAddressBar')
 				.and

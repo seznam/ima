@@ -76,6 +76,7 @@ module.exports = (() => {
 		var languagePartPath = res.locals.languagePartPath;
 		var domain = res.locals.domain;
 		var root = res.locals.root;
+		var protocol = res.locals.protocol;
 
 		var dictionary = require('./locale/' + language + '.js');
 
@@ -92,11 +93,11 @@ module.exports = (() => {
 				respond: res,
 				$IMA: {},
 				dictionary: {language, dictionary},
-				router: {domain, root, languagePartPath}
+				router: {protocol, domain, root, languagePartPath}
 			},
 			setting: {
 				env: config.$Env,
-				protocol: `${req.protocol}:`,
+				protocol: protocol,
 				language: language,
 				domain: domain,
 				root: root,

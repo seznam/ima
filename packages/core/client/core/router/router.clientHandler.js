@@ -37,6 +37,14 @@ class ClientHandler extends ns.Core.Abstract.Router {
 		 */
 		this.MOUSE_MIDDLE_BUTTON = 1;
 
+		/**
+		 * @property POP_STATE_EVENT
+		 * @const
+		 * @type {string}
+		 * @default 'popstate'
+		 */
+		this.POP_STATE_EVENT = 'popstate';
+
 	}
 
 	/**
@@ -62,14 +70,7 @@ class ClientHandler extends ns.Core.Abstract.Router {
 	 * @return {string}
 	 */
 	getPath() {
-		var path = this._window.getPath();
-
-		if (this._mode == this.MODE_HASH) {
-			var match = this._window.getUrl().match(/#!\/(.*)$/);
-			path = match ? match[1] : '/';
-		}
-
-		return this._clearPath(path);
+		return this._clearPath(this._window.getPath());
 	}
 
 	/**
@@ -81,13 +82,8 @@ class ClientHandler extends ns.Core.Abstract.Router {
 	 */
 	listen() {
 		var windowElement = this._window.getWindow();
-		var changeAddressBarEvent = 'popstate';
 
-		if (this._mode === this.MODE_HASH) {
-			changeAddressBarEvent = 'hashchange';
-		}
-
-		this._window.addEventListener(windowElement, changeAddressBarEvent, () => {
+		this._window.addEventListener(windowElement, this.POP_STATE_EVENT, () => {
 			this.route(this.getPath());
 		});
 
@@ -193,7 +189,7 @@ class ClientHandler extends ns.Core.Abstract.Router {
 		if (typeof targetHref !== 'undefined' && targetHref !== null) {
 
 			if (this._isSameDomain(targetHref) && event.button !== this.MOUSE_MIDDLE_BUTTON) {
-				var path = targetHref.replace(this._domain, '');
+				var path = targetHref.replace(this._protocol + '//' + this._domain, '');
 				path = this._clearPath(path);
 
 				this._window.preventDefault(event);
@@ -223,17 +219,7 @@ class ClientHandler extends ns.Core.Abstract.Router {
 	 * @param {string} [url='']
 	 */
 	_setAddressBar(url = '') {
-
-		if (this._mode === this.MODE_HISTORY) {
-			this._window.pushStateToHistoryAPI(null, null, url);
-		} else {
-			var path = url.replace(this._domain, '');
-			path = this._clearPath(path);
-			path = `/${this._clearSlashes(path)}`;
-
-			this._window.redirect(`${this._domain}/#!${path}`);
-		}
-
+		this._window.pushStateToHistoryAPI(null, null, url);
 	}
 
 	/**
@@ -245,7 +231,7 @@ class ClientHandler extends ns.Core.Abstract.Router {
 	 * @return {boolean}
 	 */
 	_isSameDomain(url) {
-		return url.match(this._domain + this._root + this._languagePartPath);
+		return url.match(this._getBaseUrl());
 	}
 }
 

@@ -80,6 +80,7 @@ if (typeof window !== 'undefined' && window !== null) {
 						dictionary: window.$IMA.i18n
 					},
 					router: {
+						protocol: window.$IMA.Protocol,
 						domain: window.$IMA.Domain,
 						root: window.$IMA.Root,
 						languagePartPath: window.$IMA.LanguagePartPath

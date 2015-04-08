@@ -77,6 +77,23 @@ class Router {
 	}
 
 	/**
+	 * Returns language part path.
+	 *
+	 * @method getLanguagePartPath
+	 */
+	getLanguagePartPath() {
+	}
+
+	/**
+	 * Returns web protocol.
+	 *
+	 * @method getProtocol
+	 */
+	getProtocol() {
+	}
+
+
+	/**
 	 * Attach event to window.
 	 *
 	 * @method listen

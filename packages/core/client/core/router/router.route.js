@@ -116,6 +116,7 @@ class Route{
 		}
 
 		path = query.length === 0 ? path : path + '?' + query.join('&');
+		path = path.replace(/\/$/, '');
 
 		return path;
 	}

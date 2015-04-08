@@ -59,12 +59,13 @@ module.exports = function(req, res, next) {
 	res.locals.language = currentLanguage;
 	res.locals.languagePartPath = currentLanguagePartPath;
 	res.locals.domain = currentDomain;
+	res.locals.protocol = req.protocol + ':';
 	res.locals.root = currentRoot;
 
-	//res.send(`${currentUrl} : ${currentDomain} : ${currentRoot} : ${currentLanguage} : ${currentLanguagePartPath}`);
+	res.send(`${currentUrl} : ${currentDomain} : ${currentRoot} : ${currentLanguage} : ${currentLanguagePartPath} : ${req.get('origin')} : ${reg.hostname}`);
 
 	if (!currentLanguage && config.$Debug === true) {
-		throw new Error('You have undefined domain. Set current domain to attribute $Language in environment.js.');
+		throw new Error(`You have undefined domain. Set current domain "${currentDomain}" to attribute $Language in environment.js.`);
 	}
 
 	next();
