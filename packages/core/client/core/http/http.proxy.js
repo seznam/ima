@@ -3,7 +3,9 @@ import ns from 'core/namespace/ns.js';
 ns.namespace('Core.Http');
 
 /**
- * Proxy for SuperAgent.
+ * Middleware proxy between {@codelink Core.Interface.Http} implementations and
+ * the {@codelink Vendor.SuperAgent}, providing a Promise-oriented API for
+ * sending the requests.
  *
  * @class Proxy
  * @namespace Core.Http
@@ -15,99 +17,90 @@ class Proxy {
 	/**
 	 * @method constructor
 	 * @constructor
-	 * @param {Vendor.SuperAgent} superAgent
-	 * @param {Promise} promise
+	 * @param {Vendor.SuperAgent} superAgent SuperAgent instance to use for
+	 *        sending the HTTP requests.
+	 * @param {function(new:Vendor.RSVP.Promise)} Promise Constructor of the
+	 *        Promise implementation to use for promises.
+	 * @param {Object} HTTP_STATUS_CODE
+	 * @param {Core.Interface.Window} window Helper for manipulating the global
+	 *        object ({@code window}) regardless of the client/server-side
+	 *        environment.
 	 */
-	constructor(superAgent, promise) {
-
+	constructor(superAgent, Promise, HTTP_STATUS_CODE, window) {
 		/**
+		 * SuperAgent instance to use for sending the HTTP requests, providing
+		 * uniform API across both the client-side and the server-side
+		 * environments.
+		 *
 		 * @property _superAgent
 		 * @private
 		 * @type {Vendor.SuperAgent}
-		 * @default superAgent
 		 */
 		this._superAgent = superAgent;
 
 		/**
-		 * @property _promise
-		 * @type {Promise}
-		 * @default promise
-		 */
-		this.promise = promise;
-
-		/**
-		 * @property _constantHeaders
+		 * Constructor of the Promise implementation to use for promises.
+		 *
+		 * @property _Promise
 		 * @private
-		 * @type {Map}
-		 * @default new Map()
+		 * @type {function(new:Vendor.RSVP.Promise)}
 		 */
-		this._constantHeaders = new Map();
+		this._Promise = Promise;
 
 		/**
-		 * @property HTTP_TIMEOUT
+		 * HTTP status code constants.
+		 *
+		 * @property HTTP_STATUS_CODE
 		 * @const
-		 * @type {Number}
-		 * @default 408
+		 * @type {Object}
 		 */
-		this.HTTP_TIMEOUT = 408;
+		this.HTTP_STATUS_CODE = HTTP_STATUS_CODE;
 
 		/**
-		 * @property HTTP_UNAUTHORIZED
-		 * @const
-		 * @type {Number}
-		 * @default 401
+		 * Helper for manipulating the global object ({@code window}) regardless of
+		 * the client/server-side environment.
+		 *
+		 * @property _window
+		 * @private
+		 * @type {Core.Interface.Window}
 		 */
-		this.HTTP_UNAUTHORIZED = 401;
+		this._window = window;
 
 		/**
-		 * @property HTTP_FORBIDDEN
-		 * @const
-		 * @type {Number}
-		 * @default 403
+		 * The default HTTP headers to include with the HTTP requests, unless
+		 * overridden.
+		 *
+		 * @property _defaultHeaders
+		 * @private
+		 * @type {Map<string, string>}
 		 */
-		this.HTTP_FORBIDDEN = 403;
-
-		/**
-		 * @property HTTP_NOT_FOUND
-		 * @const
-		 * @type {Number}
-		 * @default 404
-		 */
-		this.HTTP_NOT_FOUND = 404;
-
-		/**
-		 * @property HTTP_SERVER_ERROR
-		 * @const
-		 * @type {Number}
-		 * @default 500
-		 */
-		this.HTTP_SERVER_ERROR = 500;
-
-		/**
-		 * @property HTTP_OK
-		 * @const
-		 * @type {Number}
-		 * @default 200
-		 */
-		this.HTTP_OK = 200;
+		this._defaultHeaders = new Map();
 	}
 
 	/**
-	 * Make request for server.
+	 * Executes an HTTP request to the specified URL using the specified HTTP
+	 * method, carrying the provided data.
 	 *
 	 * @method request
 	 * @private
-	 * @param {String} method
-	 * @param {String} url
-	 * @param {Object} data
-	 * @param {Object} options - keys {timeout, ttl, repeatRequest, language, cookie, accept}
-	 * @return {Promise}
+	 * @param {string} method The HTTP method to use.
+	 * @param {string} url The URL to which the request should be made.
+	 * @param {Object<string, (boolean|number|string|Date)>} data The data to
+	 *        send to the server. The data will be included as query parameters
+	 *        if the request method is set to {@code GET}, and as request body
+	 *        for any other request method.
+	 * @param {Object<string, (number|string)>} options The options used to
+	 *        create the request.
+	 * @return {Promise<Vendor.SuperAgent.Response>} A promise that resolves to
+	 *         the server response. The promise rejects on failure with an error
+	 *         and request descriptor object instead of an {@codelink Error}
+	 *         instance.
 	 */
 	request(method, url, data, options) {
 		return (
-			new this.promise((resolve, reject) => {
+			new this._Promise((resolve, reject) => {
 
-				var params = this._getParams(method, url, data, options);
+				var params = this._composeRequestParams(method, url, data, options);
 
 				var request = this._superAgent[method](url);
 
@@ -127,104 +120,64 @@ class Proxy {
 	}
 
 	/**
-	 * Set constant header to all request.
+	 * Sets the specified default HTTP header. The header will be sent with all
+	 * subsequent HTTP requests unless reconfigured using this method, overridden
+	 * by the request options, or cleared by the {@codelink clearDefaultHeaders}
+	 * method.
 	 *
-	 * @method setConstantHeader
-	 * @param {String} header
-	 * @param {String} value
+	 * @method setDefaultHeader
+	 * @param {string} header The header name.
+	 * @param {string} value The header value.
 	 */
-	setConstantHeader(header, value) {
-		this._constantHeaders.set(header, value);
+	setDefaultHeader(header, value) {
+		this._defaultHeaders.set(header, value);
 	}
 
 
 	/**
-	 * Clear constant header to all request.
+	 * Clears all defaults headers sent with all requests.
 	 *
-	 * @method clearConstantHeader
+	 * @method clearDefaultHeaders
 	 */
-	clearConstantHeader() {
-		this._constantHeaders.clear();
+	clearDefaultHeaders() {
+		this._defaultHeaders.clear();
 	}
 
 	/**
-	 * Request error handler.
-	 *
-	 * @method _requestErrorHandler
-	 * @private
-	 * @param {Object} error
-	 * @param {Function} reject
-	 * @param {Object} params
-	 */
-	_requestErrorHandler(error, reject, params) {
-		var errorParams = {};
-
-		if (error.timeout === params.options.timeout) {
-			errorParams = this.getErrorParams(params.method, params.url, params.data, params.options, this.HTTP_TIMEOUT);
-		} else {
-
-			if (error.crossDomain) {
-				errorParams = this.getErrorParams(params.method, params.url, params.data, params.options, this.HTTP_FORBIDDEN);
-			} else {
-				errorParams = this.getErrorParams(params.method, params.url, params.data, params.options, error.status || this.HTTP_SERVER_ERROR);
-			}
-
-		}
-
-		reject(errorParams);
-	}
-
-	/**
-	 * Request respond handler
-	 *
-	 * @method _requestRespondHandler
-	 * @private
-	 * @param {Object} respond
-	 * @param {Function} resolve
-	 * @param {Function} reject
-	 * @param {Object} params
-	 */
-	_requestRespondHandler(respond, resolve, reject, params) {
-		if (respond.error) {
-			var errorParams = this.getErrorParams(params.method, params.url, params.data, params.options, respond.status);
-			reject(errorParams);
-		} else {
-			params.status = this.HTTP_OK;
-			respond.params = params;
-			resolve(respond);
-		}
-	}
-
-	/**
-	 * Get params for error.
+	 * Constructs and returns an object that describes a failed HTTP requets,
+	 * providing information about both the failure reported by the server and
+	 * how the request has been sent to the server.
 	 *
 	 * @method getErrorParams
-	 * @param {String} method
-	 * @param {String} url
-	 * @param {Object} data
-	 * @param {Object} options
-	 * @param {Number} status
-	 * @param {Object} {method, url, data, options, status, errorName}
+	 * @param {string} method The HTTP method used to make the request.
+	 * @param {string} url The URL to which the request has been made.
+	 * @param {Object<string, (boolean|number|string|Date)>} data The data sent
+	 *        with the request.
+	 * @param {Object<string, (number|string)>} options The options used to
+	 *        create the request.
+	 * @param {number} status The HTTP response status code send by the server.
+	 * @return {Object<string, *>} An object containing both the details of the
+	 *         error and the request that lead to it.
 	 */
 	getErrorParams(method, url, data, options, status) {
-		var params = this._getParams(method, url, data, options);
+		var params = this._composeRequestParams(method, url, data, options);
 
 		var error = {status};
 
 		switch(status) {
-			case this.HTTP_TIMEOUT:
+			case this.HTTP_STATUS_CODE.TIMEOUT:
 				error.errorName = 'Timeout';
 				break;
-			case this.HTTP_UNAUTHORIZED:
+			case this.HTTP_STATUS_CODE.UNAUTHORIZED:
 				error.errorName = 'Unauthorized';
 				break;
-			case this.HTTP_FORBIDDEN:
+			case this.HTTP_STATUS_CODE.FORBIDDEN:
 				error.errorName = 'Forbidden';
 				break;
-			case this.HTTP_NOT_FOUND:
+			case this.HTTP_STATUS_CODE.NOT_FOUND:
 				error.errorName = 'Not Found';
 				break;
-			case this.HTTP_SERVER_ERROR:
+			case this.HTTP_STATUS_CODE.SERVER_ERROR:
 				error.errorName = 'Internal Server Error';
 				break;
 			default:
@@ -235,26 +188,53 @@ class Proxy {
 		return Object.assign(error, params);
 	}
 
+	/**
+	 * Returns {@code true} if the cookies have to be processed manually by
+	 * setting the {@code Cookie} HTTP header on requests and parsing the
+	 * {@code Set-Cookie} HTTP response header.
+	 *
+	 * The result of this method depends on the current application environment,
+	 * the client-side usually handles cookie processing automatically, leading
+	 * this method returning {@code false}.
+	 *
+	 * At the client-side, the method tests whether the client has cookies
+	 * enabled (which results in cookies being automatically processed by the
+	 * browser), and returns {@code true} or {@code false} accordingly.
+	 *
+	 * @method haveToSetCookiesManually
+	 * @return {boolean} {@code true} if the cookies are not processed
+	 *         automatically by the environment and have to be handled manually
+	 *         by parsing response headers and setting request headers.
+	 */
+	haveToSetCookiesManually() {
+		return this._window.isCookieEnabled();
+	}
 
 	/**
-	 * Send request to server.
+	 * Send the provided request to the server. The method then executes either
+	 * the provided promise resolution or rejection callback depending on the
+	 * request outcome.
 	 *
 	 * @method _sendRequest
 	 * @private
 	 * @chainable
-	 * @param {Vendor.SuperAgent.Request} request
-	 * @param {Function} resolve
-	 * @param {Function} reject
-	 * @param {Object} params
-	 * @return {this}
+	 * @param {Vendor.SuperAgent.Request} request The request to send.
+	 * @param {function(Vendor.SuperAgent.Response)} resolve Promise resolution
+	 *        callback to call if the request completes successfuly.
+	 * @param {function(Object<string, *>)} reject Promise rejection callback to
+	 *        call if the request fails with an error.
+	 * @param {{method: string, url: string, data: Object<string, (boolean|number|string|Date)>, options: Object<string, (number|string)>}}
+	 *        params An object representing the complete request parameters used
+	 *        to create and send the HTTP request.
+	 * @return {Core.Http.Proxy} This instance.
 	 */
 	_sendRequest(request, resolve, reject, params) {
-		request.end((error, respond) => {
+		request.end((error, response) => {
 
 			if (error) {
-				this._requestErrorHandler(error, reject, params)
+				this._handleError(error, reject, params)
 			} else {
-				this._requestRespondHandler(respond, resolve, reject, params);
+				this._handleResponse(response, resolve, reject, params);
 			}
 
 		});
@@ -263,52 +243,123 @@ class Proxy {
 	}
 
 	/**
-	 * Set headers to request.
+	 * Processes a finished HTTP request. The method determines whether the
+	 * request has been completed successfuly and resolves or rejects the promise
+	 * representing the request using the provided resolution and rejection
+	 * callbacks accordingly.
+	 *
+	 * @method _handleResponse
+	 * @private
+	 * @param {Vendor.SuperAgent.Response} response The response object
+	 *        representing the server response.
+	 * @param {function(Vendor.SuperAgent.Response)} resolve Promise resolution
+	 *        callback to call if the request has been completed successfuly.
+	 * @param {function(Object<string, *>)} reject Promise rejection callback to
+	 *        call if the request failed with an error.
+	 * @param {{method: string, url: string, data: Object<string, (boolean|number|string|Date)>, options: Object<string, (number|string)>}}
+	 *        params An object representing the complete request parameters used
+	 *        to create and send the HTTP request.
+	 */
+	_handleResponse(response, resolve, reject, params) {
+		if (response.error) {
+			var errorParams = this.getErrorParams(params.method, params.url,
+				params.data, params.options, response.status);
+			reject(errorParams);
+		} else {
+			params.status = this.HTTP_STATUS_CODE.OK;
+			response.params = params;
+			resolve(response);
+		}
+	}
+
+	/**
+	 * Processes an error encountered during an HTTP request. The method
+	 * processes the error, constructs an object describing the request and the
+	 * error, and passes the created object to the provided promise rejection
+	 * callback to reject the promise representing the said HTTP request.
+	 *
+	 * @method _handleError
+	 * @private
+	 * @param {Vendor.SuperAgent.Error} error The encountered error. The paramter
+	 *        is actually an {@codelink Error} instance augmented with fields
+	 *        providing additional details (timeout, HTTP status code, etc.).
+	 * @param {function(Object<string, *>)} reject Promise rejection callback to
+	 *        call.
+	 * @param {{method: string, url: string, data: Object<string, (boolean|number|string|Date)>, options: Object<string, (number|string)>}}
+	 *        params An object representing the complete request parameters used
+	 *        to create and send the HTTP request.
+	 */
+	_handleError(error, reject, params) {
+		var errorParams = {};
+
+		if (error.timeout === params.options.timeout) {
+			errorParams = this.getErrorParams(params.method, params.url, params.data,
+				params.options, this.HTTP_STATUS_CODE.TIMEOUT);
+		} else {
+
+			if (error.crossDomain) {
+				errorParams = this.getErrorParams(params.method, params.url,
+					params.data, params.options, this.HTTP_STATUS_CODE.FORBIDDEN);
+			} else {
+				errorParams = this.getErrorParams(params.method, params.url,
+					params.data, params.options, error.status || this.HTTP_STATUS_CODE.SERVER_ERROR);
+			}
+
+		}
+
+		reject(errorParams);
+	}
+
+	/**
+	 * Applies the specified options on the provided request as HTTP headers.
 	 *
 	 * @method _setHeaders
 	 * @private
 	 * @chainable
-	 * @param {Vendor.SuperAgent.Request} request
-	 * @param {Object} options
-	 * @return {this}
+	 * @param {Vendor.SuperAgent.Request} request The request on which the HTTP
+	 *        headers should be set.
+	 * @param {{accept: string, language: string, cookie: string}} options The
+	 *        options to apply to the request as HTTP headers.
+	 * @return {Core.Http.Proxy} This instance.
 	 */
 	_setHeaders(request, options) {
+		for (var [headerName, headerValue] of this._defaultHeaders) {
+			request.set(headerName, headerValue);
+		}
+
 		request.set('Accept', options.accept);
 		request.set('Accept-Language', options.language);
 
-		if (this.haveSetCookieManually()) {
+		if (this.haveToSetCookiesManually()) {
 			request.set('Cookie', options.cookie);
-		}
-
-		for (var [headerName, headerValue] of this._constantHeaders) {
-			request.set(headerName, headerValue);
 		}
 
 		return this;
 	}
 
 	/**
-	 * Have set cookie manually.
+	 * Composes an object representing the HTTP request parameters from the
+	 * provided arguments.
 	 *
-	 * @method haveSetCookieManually
-	 * @return {Boolean}
-	 */
-	haveSetCookieManually() {
-		return typeof window === 'undefined' || window === null;
-	}
-
-	/**
-	 * Get params to request.
-	 *
-	 * @method _getParams
+	 * @method _composeRequestParams
 	 * @private
-	 * @param {String} method
-	 * @param {String} url
-	 * @param {Object} data
-	 * @param {Object} options
+	 * @param {string} method The HTTP method to use.
+	 * @param {string} url The URL to which the request should be sent.
+	 * @param {Object<string, (boolean|number|string|Date)>} data The data to
+	 *        send with the request.
+	 * @param {Object<string, (number|string)>} options Request options: accepted
+	 *        content encoding and language, cookies, etc.
+	 * @return {{method: string, url: string, data: Object<string, (boolean|number|string|Date)>, options: Object<string, (number|string)>}}
+	 *         An object representing the complete request parameters used to
+	 *         create and send the HTTP request.
 	 */
-	_getParams(method, url, data, options) {
-		return {method, url, data, options};
+	_composeRequestParams(method, url, data, options) {
+		return {
+			method,
+			url,
+			data,
+			options
+		};
 	}
 }
 

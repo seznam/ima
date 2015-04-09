@@ -3,80 +3,146 @@ import ns from 'core/namespace/ns.js';
 ns.namespace('Core.Interface');
 
 /**
- * Interface for http handler.
+ * The {@codelink Http} defines unifying API for simple sending of HTTP
+ * requests at both client-side and server-side.
  *
- * @class Http
+ * @interface Http
  * @namespace Core.Interface
  * @module Core
  * @submodule Core.Interface
  */
 class Http {
-
 	/**
-	 * Return data from api for GET request.
+	 * Sends an HTTP GET request to the specified URL, sending the provided data
+	 * as query parameters.
 	 *
 	 * @method get
+	 * @param {string} url The URL to which the request should be made.
+	 * @param {Object<string, (boolean|number|string|Date)>} data The data to
+	 *        send to the server as query parameters.
+	 * @param {{timeout: number=, ttl: number=, repeatRequest: number=}=} options
+	 *        Optional request options. The {@code timeout} specifies the request
+	 *        timeout in milliseconds, the {@code ttl} specified how long the
+	 *        request may be cached in milliseconds, and the
+	 *        {@code repeatRequest} specifies the maximum number of tries to
+	 *        repeat the request if the request fails.
+	 * @return {Promise<*>} A promise that resolves to the response body parsed
+	 *         as JSON.
 	 */
-	get() {
-	}
+	get(url, data, options = {}) {}
 
 	/**
-	 * Return data from api for POST request.
+	 * Sends an HTTP POST request to the specified URL, sending the provided data
+	 * as a request body.
 	 *
 	 * @method post
+	 * @param {string} url The URL to which the request should be made.
+	 * @param {Object<string, (boolean|number|string|Date)>} data The data to
+	 *        send to the server as request body.
+	 * @param {{timeout: number=, ttl: number=, repeatRequest: number=}=} options
+	 *        Optional request options. The {@code timeout} specifies the request
+	 *        timeout in milliseconds, the {@code ttl} specified how long the
+	 *        request may be cached in milliseconds, and the
+	 *        {@code repeatRequest} specifies the maximum number of tries to
+	 *        repeat the request if the request fails.
+	 * @return {Promise<*>} A promise that resolves to the response body parsed
+	 *         as JSON.
 	 */
-	post() {
-	}
+	post(url, data, options = {}) {}
 
 	/**
-	 * Return data from api for PUT request.
+	 * Sends an HTTP PUT request to the specified URL, sending the provided data
+	 * as a request body.
 	 *
 	 * @method put
+	 * @param {string} url The URL to which the request should be made.
+	 * @param {Object<string, (boolean|number|string|Date)>} data The data to
+	 *        send to the server as request body.
+	 * @param {{timeout: number=, ttl: number=, repeatRequest: number=}=} options
+	 *        Optional request options. The {@code timeout} specifies the request
+	 *        timeout in milliseconds, the {@code ttl} specified how long the
+	 *        request may be cached in milliseconds, and the
+	 *        {@code repeatRequest} specifies the maximum number of tries to
+	 *        repeat the request if the request fails.
+	 * @return {Promise<*>} A promise that resolves to the response body parsed
+	 *         as JSON.
 	 */
-	put() {
-	}
+	put(url, data, options = {}) {}
 
 	/**
-	 * Return data from api for PATCH request.
+	 * Sends an HTTP PATCH request to the specified URL, sending the provided
+	 * data as a request body.
 	 *
 	 * @method patch
+	 * @param {string} url The URL to which the request should be made.
+	 * @param {Object<string, (boolean|number|string|Date)>} data The data to
+	 *        send to the server as request body.
+	 * @param {{timeout: number=, ttl: number=, repeatRequest: number=}=} options
+	 *        Optional request options. The {@code timeout} specifies the request
+	 *        timeout in milliseconds, the {@code ttl} specified how long the
+	 *        request may be cached in milliseconds, and the
+	 *        {@code repeatRequest} specifies the maximum number of tries to
+	 *        repeat the request if the request fails.
+	 * @return {Promise<*>} A promise that resolves to the response body parsed
+	 *         as JSON.
 	 */
-	patch() {
-	}
+	patch(url, data, options = {}) {}
 
 	/**
-	 * Return data from api for DELETE request.
+	 * Sends an HTTP DELETE request to the specified URL, sending the provided
+	 * data as a request body.
 	 *
 	 * @method delete
+	 * @param {string} url The URL to which the request should be made.
+	 * @param {Object<string, (boolean|number|string|Date)>} data The data to
+	 *        send to the server as request body.
+	 * @param {{timeout: number=, ttl: number=, repeatRequest: number=}=} options
+	 *        Optional request options. The {@code timeout} specifies the request
+	 *        timeout in milliseconds, the {@code ttl} specified how long the
+	 *        request may be cached in milliseconds, and the
+	 *        {@code repeatRequest} specifies the maximum number of tries to
+	 *        repeat the request if the request fails.
+	 * @return {Promise<*>} A promise that resolves to the response body parsed
+	 *         as JSON.
 	 */
-	delete() {
-	}
+	delete(url, data, options = {}) {}
 
 	/**
-	 * Return cache key.
+	 * Generates a cache key to use for identifying a request to the specified
+	 * URL and submitted data.
 	 *
 	 * @method getCacheKey
+	 * @param {string} method The HTTP method used by the request.
+	 * @param {string} url The URL to which the request is sent.
+	 * @param {Object<string, string>} data The data associated with the request.
+	 *        These can be either the query parameters of request body
+	 *        parameters.
+	 * @return {string} Key to use for identifying a request to the specifed URL
+	 *         with the specified request data in the cache.
 	 */
-	getCacheKey() {
-	}
+	getCacheKey(method, url, data) {}
 
 	/**
 	 * Set constant header to all request.
 	 *
-	 * @method setConstantHeader
+	 * @method setDefaultHeader
+	 * @chainable
+	 * @param {string} header The name of the header.
+	 * @param {string} value The header value. To provide multiple values,
+	 *        separate them with commas
+	 *        (see http://www.w3.org/Protocols/rfc2616/rfc2616-sec4.html#sec4.2).
+	 * @return {Core.Interface.Http} This instance.
 	 */
-	setConstantHeader() {
-	}
-
+	setDefaultHeader(header, value) {}
 
 	/**
-	 * Clear constant header to all request.
+	 * Clears all defaults headers sent with all requests.
 	 *
-	 * @method clearConstantHeader
+	 * @method clearDefaultHeaders
+	 * @chainable
+	 * @return {Core.Interface.Http} This instance.
 	 */
-	clearConstantHeader() {
-	}
-
+	clearDefaultHeaders() {}
 }
 
 ns.Core.Interface.Http = Http;

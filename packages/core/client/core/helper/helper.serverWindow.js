@@ -20,7 +20,7 @@ class ServerWindow extends ns.Core.Interface.Window {
 	}
 
 	/**
-	 * Return true if is client side code.
+	 * Returns true if is client side code.
 	 *
 	 * @method isClient
 	 * @return {boolean}
@@ -30,7 +30,17 @@ class ServerWindow extends ns.Core.Interface.Window {
 	}
 
 	/**
-	 * Return true if is session storage supported.
+	 * Returns true if cookie is enabled.
+	 *
+	 * @method isCookieEnabled
+	 * @return {boolean}
+	 */
+	isCookieEnabled() {
+		return false;
+	}
+
+	/**
+	 * Returns true if is session storage supported.
 	 *
 	 * @method hasSessionStorage
 	 * @return {boolean}
@@ -40,7 +50,7 @@ class ServerWindow extends ns.Core.Interface.Window {
 	}
 
 	/**
-	 * Return true if websocket is supported.
+	 * Returns true if websocket is supported.
 	 *
 	 * @method hasWebSocket
 	 * @return {boolean}
@@ -75,7 +85,7 @@ class ServerWindow extends ns.Core.Interface.Window {
 	}
 
 	/**
-	 * Return window object.
+	 * Returns window object.
 	 *
 	 * @method getWindow
 	 * @return {undefined}
@@ -85,7 +95,7 @@ class ServerWindow extends ns.Core.Interface.Window {
 	}
 
 	/**
-	 * Return current domain.
+	 * Returns current domain.
 	 *
 	 * @method getDomain
 	 * @return {string}
@@ -95,7 +105,7 @@ class ServerWindow extends ns.Core.Interface.Window {
 	}
 
 	/**
-	 * Return current path.
+	 * Returns current path.
 	 *
 	 * @method getPath
 	 * @return {string}
@@ -105,7 +115,7 @@ class ServerWindow extends ns.Core.Interface.Window {
 	}
 
 	/**
-	 * Return current url.
+	 * Returns current url.
 	 *
 	 * @method getUrl
 	 * @return {string}
@@ -115,7 +125,7 @@ class ServerWindow extends ns.Core.Interface.Window {
 	}
 
 	/**
-	 * Return body element.
+	 * Returns body element.
 	 *
 	 * @method getBody
 	 * @return {undefined}
@@ -125,7 +135,7 @@ class ServerWindow extends ns.Core.Interface.Window {
 	}
 
 	/**
-	 * Return element by id.
+	 * Returns element by id.
 	 *
 	 * @method getElementById
 	 * @return {null}

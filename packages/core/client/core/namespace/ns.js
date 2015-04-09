@@ -10,7 +10,7 @@ class Ns {
 	/**
 	 * Initializes the namespace provider.
 	 *
-	 * This is a private constructor, you should use the exported ns
+	 * This is a private constructor, you should use the exported <code>ns</code>
 	 * instance to create and use namespaces (see the examples).
 	 *
 	 * @private
@@ -53,7 +53,7 @@ class Ns {
 	 *
 	 * @method has
 	 * @param {string} nameSpace - assign namespace
-	 * @return {boolean} - true if namespace exists
+	 * @return {boolean} - <code>true</code> if namespace exists
 	 */
 	has(nameSpace) {
 		var object = this;
@@ -73,9 +73,5 @@ class Ns {
 }
 
 var ns = new Ns(); // jshint ignore:line
-
-ns.namespace('Core.Namespace');
-
-ns.Core.Namespace.Ns = Ns;
 
 export default ns;

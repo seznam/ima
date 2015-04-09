@@ -13,16 +13,25 @@ ns.namespace('Core.Interface');
 class Window {
 
 	/**
-	 * Return true if is client side code.
+	 * Returns true if is client side code.
 	 *
 	 * @method isClient
 	 */
 	isClient() {
 	}
 
+	/**
+	 * Returns true if cookie is enabled.
+	 *
+	 * @method isCookieEnabled
+	 * @return {boolean}
+	 */
+	isCookieEnabled() {
+	}
+
 
 	/**
-	 * Return true if is session storage supported.
+	 * Returns true if is session storage supported.
 	 *
 	 * @method hasSessionStorage
 	 */
@@ -30,7 +39,7 @@ class Window {
 	}
 
 	/**
-	 * Return true if websocket is supported.
+	 * Returns true if websocket is supported.
 	 *
 	 * @method hasWebSocket
 	 */
@@ -38,7 +47,7 @@ class Window {
 	}
 
 	/**
-	 * Return true if history API is supported.
+	 * Returns true if history API is supported.
 	 *
 	 * @method hasHistoryAPI
 	 */
@@ -62,7 +71,7 @@ class Window {
 	}
 
 	/**
-	 * Return object window.
+	 * Returns object window.
 	 *
 	 * @method getWindow
 	 */
@@ -70,7 +79,7 @@ class Window {
 	}
 
 	/**
-	 * Return current domain.
+	 * Returns current domain.
 	 *
 	 * @method getDomain
 	 */
@@ -78,7 +87,7 @@ class Window {
 	}
 
 	/**
-	 * Return current path.
+	 * Returns current path.
 	 *
 	 * @method getPath
 	 */
@@ -86,7 +95,7 @@ class Window {
 	}
 
 	/**
-	 * Return current url.
+	 * Returns current url.
 	 *
 	 * @method getUrl
 	 */
@@ -94,7 +103,7 @@ class Window {
 	}
 
 	/**
-	 * Return body element.
+	 * Returns body element.
 	 *
 	 * @method getBody
 	 */
@@ -102,7 +111,7 @@ class Window {
 	}
 	
 	/**
-	 * Return element by id.
+	 * Returns element by id.
 	 *
 	 * @method getElementById
 	 */

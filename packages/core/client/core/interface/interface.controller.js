@@ -3,108 +3,176 @@ import ns from 'core/namespace/ns.js';
 ns.namespace('Core.Interface');
 
 /**
- * @class Controller
+ * Interface defining the common API of page controllers. A page controller is
+ * used to manage the overall state and view of a single application page, and
+ * updates the page state according to the events submitted to it by components
+ * on the page.
+ *
+ * @interface Controller
  * @namespace Core.Interface
  * @module Core
  * @submodule Core.Interface
  */
 class Controller {
-
 	/**
-	 * Initialization controller.
+	 * Callback for initializing the controller with the route parameters.
 	 *
 	 * @method init
+	 * @param {Object<string, string>=} [params={}] The current route parameters.
 	 */
-	init() {
-	}
+	init(params = {}) {}
 
 	/**
-	 * Deinicialization controller.
+	 * Finalization callback, called when the controller is being discarded by
+	 * the application. This usually happens when the user navigates to a
+	 * different URL.
+	 *
+	 * The controller should unregister all React and DOM event listeners the
+	 * controller has registered in the {@codelink active()} method. The
+	 * controller must also release any resources that might not be released
+	 * automatically when the controller instance is destroyed by the garbage
+	 * collector.
 	 *
 	 * @method deinit
 	 */
-	deinit() {
-	}
+	deinit() {}
 
 	/**
-	 * Controller will be activated, after load complete.
+	 * Callback for activating the controller in the UI. This is the last method
+	 * invoked during controller initialization, called after all the promises
+	 * returned from the {@codelink load()} method has been resolved, the
+	 * controller's reactive view has been set and the controller has configured
+	 * the SEO manager.
+	 *
+	 * The controller may register in this method any React and DOM event
+	 * listeners the controller may need to handle the user interaction with the
+	 * page.
 	 *
 	 * @method activate
 	 */
-	activate() {
-	}
+	activate() {}
 
 	/**
-	 * Load data for controller.
+	 * Callback the controller uses to request the resources it needs to render
+	 * its view. This method is invoked after the {@codelink init()} method.
+	 *
+	 * The controller should request all resources it needs in this method, and
+	 * represent each resource request as a promise that will resolve once the
+	 * resource is ready for use (these can be data fetch over HTTP(S), database
+	 * connections, etc).
+	 *
+	 * The controller must return a map object. The field names of the object
+	 * identify the resources being fetched and prepared, the values must be the
+	 * Promises that resolve when the resources are ready to be used.
+	 *
+	 * The returned map object may also contain fields that have non-Promise
+	 * value. These can be used to represent static data, or initial value of
+	 * controller's state that will change due to user interaction, or resource
+	 * that has been immediately available (for example fetched from the DOM
+	 * storage).
+	 *
+	 * The system will wait for all promises to resolve, and then push them to
+	 * the controller's state using the field names used in the returned map
+	 * object.
 	 *
 	 * @method load
+	 * @return {Object<string, (Vendor.Rsvp.Promise|*)>} A map object of promises
+	 *         resolved when all resources the controller requires are ready. The
+	 *         resolved values will be pushed to the controller's state.
 	 */
-	load() {
-	}
+	load() {}
 
 	/**
-	 * Returns reactive view.
+	 * Returns the controller's view.
 	 *
 	 * @method getReactView
+	 * @return {Vendor.React.ReactElement} The controller's view.
 	 */
-	getReactView() {
-	}
+	getReactView() {}
 
 	/**
-	 * Set reactive view.
+	 * Sets the rendered (reactive) view, allowing the controller to push changes
+	 * in state to the current view shown to the user instance.
+	 *
+	 * Note that this method is invoked only at the client-side.
 	 *
 	 * @method setReactiveView
+	 * @param {Vendor.React.ReactComponent} The rendered controller's view.
 	 */
-	setReactiveView() {
-	}
+	setReactiveView(reactiveView) {}
 
 	/**
-	 * Set state to controller and to assigned reactive view (if exists).
+	 * Sets the controller state, replacing the old state. This method also
+	 * pushes the state into the controller's reactive (rendered) view (if
+	 * present).
+	 *
+	 * You should use this method only if you need to remove a field from the
+	 * controller's current state. To perform updates of the state, please use
+	 * the {@codelink patchState} method.
 	 *
 	 * @method setState
+	 * @param {Object<string, *>} state The new controller state, replacing the
+	 *        old state.
 	 */
-	setState() {
-	}
+	setState(state) {}
 
 	/**
-	 * Add state to controller and to assigned reactive view (if exists).
+	 * Patches the state of this controller using the provided object by copying
+	 * the provided patch object fields to the controller's state object.
 	 *
-	 * @method addState
+	 * You can use this method to modify the state partially or add new fields to
+	 * the state object. Fields can only be removed from the controller's state
+	 * through the {@codelink setState} method.
+	 *
+	 * Note that the state is not patched recursively but by replacing the values
+	 * of the top-level fields of the state object.
+	 *
+	 * Once the promises returned by the {@codelink load} method are resolved,
+	 * this method is called with the an object containing the resolved values.
+	 * The field names of the passed value-containing object will match the field
+	 * names in the object returned from the {@codelink load} method.
+	 *
+	 * @method patchState
+	 * @param {Object<string, *>} statePatch Patch of the controller's state to
+	 *        apply.
 	 */
-	addState() {
-	}
+	patchState(statePatch) {}
 
 	/**
-	 * Returns state.
+	 * Returns the controller's current state.
 	 *
 	 * @method getState
+	 * @return {Object<string, *>} The current state of this controller.
 	 */
-	getState() {
-	}
+	getState() {}
 
 	/**
-	 * Set SEO params.
+	 * Callback used to configure the SEO attribute manager. The method is called
+	 * after the the controller's state has been patched with the loaded
+	 * resources, the view has been rendered and (if at the client-side) the
+	 * controller has been provided with the rendered view.
 	 *
 	 * @method setSeoParams
+	 * @param {Object<string, *>} loadedResources Map of resource names to
+	 *        resources loaded by the {@codelink load} method. This is the same
+	 *        object as the one passed to the {@codelink patchState} method when
+	 *        the Promises returned by the {@codelink load} method were resolved.
+	 * @param {Core.Interface.Seo} seo SEO attributes manager to configure.
+	 * @param {Core.Interface.Router} router The current application router.
+	 * @param {Core.Interface.Dictionary} dictionary The current localization
+	 *        dictionary.
+	 * @param {Object<string, *>} settings The application settings for the
+	 *        current application environment.
 	 */
-	setSeoParams() { // jshint ignore:line
-	}
+	setSeoParams(loadedResources, seo, router, dictionary, settings) {}
 
 	/**
-	 * Returns SEO params.
-	 *
-	 * @method getSeoHandler
-	 */
-	getSeoHandler() {
-	}
-
-	/**
-	 * Returns http status.
+	 * Returns the HTTPS status code to send to the client.
 	 *
 	 * @method getHttpStatus
+	 * @return {number} The HTTP status code to send to the client.
 	 */
-	getHttpStatus() {
-	}
+	getHttpStatus() {}
 }
 
 ns.Core.Interface.Controller = Controller;

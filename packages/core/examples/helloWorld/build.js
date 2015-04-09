@@ -25,9 +25,15 @@ module.exports = (function() {
 		'en'
 	];
 
+	var bundle = {
+		js: [],
+		css: []
+	};
+
 	return {
 		js: js,
 		less: less,
-		languages: languages
+		languages: languages,
+		bundle: bundle
 	};
 })();

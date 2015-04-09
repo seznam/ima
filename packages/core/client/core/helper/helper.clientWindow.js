@@ -20,7 +20,7 @@ class ClientWindow extends ns.Core.Interface.Window {
 	}
 
 	/**
-	 * Return true if is client side code.
+	 * Returns true if is client side code.
 	 *
 	 * @method isClient
 	 * @return {boolean}
@@ -30,7 +30,18 @@ class ClientWindow extends ns.Core.Interface.Window {
 	}
 
 	/**
-	 * Return true if is session storage supported.
+	 * Returns true if cookie is enabled.
+	 *
+	 * @method isCookieEnabled
+	 * @return {boolean}
+	 */
+	isCookieEnabled() {
+		return typeof navigator === 'undefined' || navigator === null ||
+			!navigator.cookieEnabled;
+	}
+
+	/**
+	 * Returns true if is session storage supported.
 	 *
 	 * @method hasSessionStorage
 	 * @return {boolean}
@@ -40,7 +51,7 @@ class ClientWindow extends ns.Core.Interface.Window {
 	}
 
 	/**
-	 * Return true if websocket is supported.
+	 * Returns true if websocket is supported.
 	 *
 	 * @method hasWebSocket
 	 * @return {boolean}
@@ -50,7 +61,7 @@ class ClientWindow extends ns.Core.Interface.Window {
 	}
 
 	/**
-	 * Return true if history API is supported.
+	 * Returns true if history API is supported.
 	 *
 	 * @method hasHistoryAPI
 	 * @return {boolean}
@@ -80,7 +91,7 @@ class ClientWindow extends ns.Core.Interface.Window {
 	}
 
 	/**
-	 * Return window object.
+	 * Returns window object.
 	 *
 	 * @method getWindow
 	 * @return {Window}
@@ -90,7 +101,7 @@ class ClientWindow extends ns.Core.Interface.Window {
 	}
 
 	/**
-	 * Return current domain.
+	 * Returns current domain.
 	 *
 	 * @method getDomain
 	 * @return {string}
@@ -100,7 +111,7 @@ class ClientWindow extends ns.Core.Interface.Window {
 	}
 
 	/**
-	 * Return current path.
+	 * Returns current path.
 	 *
 	 * @method getPath
 	 * @return {string}
@@ -110,7 +121,7 @@ class ClientWindow extends ns.Core.Interface.Window {
 	}
 
 	/**
-	 * Return current url.
+	 * Returns current url.
 	 *
 	 * @method getUrl
 	 * @return {string}
@@ -120,7 +131,7 @@ class ClientWindow extends ns.Core.Interface.Window {
 	}
 
 	/**
-	 * Return body element.
+	 * Returns body element.
 	 *
 	 * @method getBody
 	 * @return {HTMLElement}
@@ -130,7 +141,7 @@ class ClientWindow extends ns.Core.Interface.Window {
 	}
 
 	/**
-	 * Return element by id.
+	 * Returns element by id.
 	 *
 	 * @method getElementById
 	 * @param {string} id

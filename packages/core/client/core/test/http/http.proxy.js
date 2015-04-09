@@ -11,9 +11,11 @@ describe('Core.Http.Proxy', function() {
 
 	var data = {};
 	var options = {ttl: 3600000, timeout: 2000, repeatRequest: 1};
+	var HTTP_STATUS_CODE = ns.oc.get('$HTTP_STATUS_CODE');
+	var windowHelper = ns.oc.get('$Window');
 
 	beforeEach(function() {
-		var promise = ns.oc.get('$Promise');
+		var Promise = ns.oc.get('$Promise');
 		superAgent = {
 			funcError: null,
 			get: function() { return this; },
@@ -34,8 +36,7 @@ describe('Core.Http.Proxy', function() {
 			}
 		};
 
-
-		proxy = ns.oc.create('Core.Http.Proxy', superAgent, promise);
+		proxy = ns.oc.create('Core.Http.Proxy', superAgent, Promise, HTTP_STATUS_CODE, windowHelper);
 
 		jasmine.clock().install();
 	});
@@ -74,7 +75,7 @@ describe('Core.Http.Proxy', function() {
 
 				proxy.request(method, apiUrl, data, options)
 					.then(function(){}, function(error){
-						expect(error.status).toEqual(proxy.HTTP_TIMEOUT);
+						expect(error.status).toEqual(HTTP_STATUS_CODE.TIMEOUT);
 						done();
 					});
 			});
@@ -90,7 +91,7 @@ describe('Core.Http.Proxy', function() {
 
 				proxy.request(method, apiUrl, data, options)
 					.then(function() {},function(error){
-						expect(error.status).toEqual(proxy.HTTP_TIMEOUT);
+						expect(error.status).toEqual(HTTP_STATUS_CODE.TIMEOUT);
 						done();
 					});
 			});
@@ -104,7 +105,21 @@ describe('Core.Http.Proxy', function() {
 
 				proxy.request(method, apiUrl, data, options)
 					.then(function() {}, function(error){
-						expect(error.status).toEqual(proxy.HTTP_FORBIDDEN);
+						expect(error.status).toEqual(HTTP_STATUS_CODE.FORBIDDEN);
+						done();
+					});
+			});
+
+			it('should reject promise for Not found', function(done) {
+				spyOn(superAgent, 'end')
+					.and
+					.callFake(function(callback) {
+						return callback({status: 404});
+					});
+
+				proxy.request(method, apiUrl, data, options)
+					.then(function() {},function(error){
+						expect(error.status).toEqual(HTTP_STATUS_CODE.NOT_FOUND);
 						done();
 					});
 			});
@@ -118,7 +133,7 @@ describe('Core.Http.Proxy', function() {
 
 				proxy.request(method, apiUrl, data, options)
 					.then(function() {},function(error){
-						expect(error.status).toEqual(proxy.HTTP_SERVER_ERROR);
+						expect(error.status).toEqual(HTTP_STATUS_CODE.SERVER_ERROR);
 						done();
 					});
 			});

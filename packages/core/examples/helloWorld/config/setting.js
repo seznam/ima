@@ -100,10 +100,8 @@ export var init = (ns, config) => { // jshint ignore:line
 			},
 			$PageRender: {
 				scripts: [
-					'/static/js/shim.js',
-					'/static/js/vendor.client.js',
 					'/static/js/locale/'+config.language+'.js',
-					'/static/js/app.client.js'
+					'/static/js/app.bundle.js'
 				],
 					masterView: 'App.Component.Layout.Master.View',
 					masterElementId: 'page'

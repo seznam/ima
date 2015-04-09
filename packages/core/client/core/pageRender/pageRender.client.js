@@ -3,6 +3,9 @@ import ns from 'core/namespace/ns.js';
 ns.namespace('Core.PageRender');
 
 /**
+ * Client-side page renderer. The renderer attempts to reuse the markup sent by
+ * server if possible.
+ *
  * @class Client
  * @extends Core.Abstract.PageRender
  * @namespace Core.PageRender
@@ -12,71 +15,97 @@ ns.namespace('Core.PageRender');
 class Client extends ns.Core.Abstract.PageRender {
 
 	/**
+	 * Initializes the client-side page renderer.
+	 *
 	 * @method constructor
 	 * @constructor
-	 * @param {Vendor.Rsvp} rsvp
-	 * @param {Vendor.React} react
-	 * @param {Core.Animate.Handler} animate
-	 * @param {Object} setting
-	 * @param {Core.Interface.Window} window
+	 * @param {Vendor.Rsvp} rsvp The RSVP implementation of the Promise API with
+	 *        helpers.
+	 * @param {Vendor.React} react React framework instance to use to render the
+	 *        page.
+	 * @param {Core.Animate.Handler} animate Animation helper.
+	 * @param {Object<string, *>} settings The application settings for the
+	 *        current application environment.
+	 * @param {Core.Interface.Window} window Helper for manipulating the global
+	 *        object ({@code window}) regardless of the client/server-side
+	 *        environment.
 	 */
-	constructor(rsvp, react, animate, setting, window) {
-		super(rsvp, react, animate, setting);
+	constructor(rsvp, react, animate, settings, window) {
+		super(rsvp, react, animate, settings);
 
 		/**
-		 * Flag for first rendering page.
+		 * Flag signalling that the page is being rendered for the first time.
 		 *
 		 * @property _firsTime
 		 * @private
-		 * @type {Boolean}
+		 * @type {boolean}
 		 * @default true
 		 */
 		this._firstTime = true;
 
 		/**
+		 * Helper for manipulating the global object ({@code window}) regardless of
+		 * the client/server-side environment.
+		 *
 		 * @property _window
+		 * @private
 		 * @type {Core.Interface.Window}
-		 * @default window
 		 */
 		this._window = window;
 	}
 
 	/**
-	 * Render page for controller with params.
+	 * Renders the page using the provided controller and parameters. The method
+	 * attempts to re-use the markup sent by the server if possible.
 	 *
+	 * @override
 	 * @method render
-	 * @param {Core.Abstract.Controller} controller
-	 * @param {Object} params
+	 * @param {Core.Abstract.Controller} controller The page controller that
+	 *        should have its view rendered.
+	 * @param {Object<string, string>=} [params={}] The route parameters.
 	 */
-	render(controller, params) {
-		super.render(controller, params);
+	render(controller, params = {}) {
+		this._initController(controller, params);
 
 		var loadPromises = this._wrapEachKeyToPromise(controller.load());
 		var reactiveView = null;
+		var masterElementId = this._settings.$PageRender.masterElementId;
+		var viewContainer = this._window.getElementById(masterElementId);
 
-		for (var service of Object.keys(loadPromises)) {
-			var promise = loadPromises[service];
-			this._resolvePromise(controller, service, promise);
+		for (let resourceName of Object.keys(loadPromises)) {
+			loadPromises[resourceName]
+				.then((resource) => {
+					controller.patchState({
+						[resourceName]: resource
+					})
+				})
 		}
 
 		if (this._firstTime === false) {
-			reactiveView = this._react.render(controller.getReactView(), this._window.getElementById(this._setting.$PageRender.masterElementId));
+			reactiveView = this._react.render(
+				controller.getReactView(),
+				viewContainer
+			);
 			controller.setReactiveView(reactiveView);
 		}
 
 		return (
 			this._rsvp
 				.hash(loadPromises)
-				.then((resolvedPromises) => {
+				.then((fetchedResources) => {
+					controller.setState(fetchedResources);
 
 					if (this._firstTime === true) {
-						reactiveView = this._react.render(controller.getReactView(), this._window.getElementById(this._setting.$PageRender.masterElementId));
+						reactiveView = this._react.render(
+							controller.getReactView(),
+							viewContainer
+						);
 						controller.setReactiveView(reactiveView);
 						this._firstTime = false;
 					}
 
-					controller.setSeoParams(resolvedPromises, this._setting);
-					this._changeSeoParamsOnPage(controller.getSeoHandler());
+					controller.setSeoParams(fetchedResources);
+					this._updateSeoAttributes(controller.getSeoHandler());
 
 					controller.activate();
 				})
@@ -84,33 +113,14 @@ class Client extends ns.Core.Abstract.PageRender {
 	}
 
 	/**
-	 * Resolve each promise.
+	 * Updates the title and the contents of the meta elements used for SEO.
 	 *
-	 * @method _resolvePromise
+	 * @method _updateSeoAttributes
 	 * @private
-	 * @param {Core.Abstract.Controller} controller
-	 * @param {String} service
-	 * @param {Promise} promise
+	 * @param {Core.Interface.Seo} seo SEO attributes storage providing the new
+	 *        values for page meta elements and title.
 	 */
-	_resolvePromise(controller, service, promise) {
-		promise
-			.then((serviceData) => {
-				var state = controller.getState();
-				state[service] = serviceData;
-
-				controller.setState(state);
-
-			});
-	}
-
-	/**
-	 * Change SEO params on page.
-	 *
-	 * @method _changeSeoParamsOnPage
-	 * @private
-	 * @param {Core.Interface.Seo} seo
-	 */
-	_changeSeoParamsOnPage(seo) {
+	_updateSeoAttributes(seo) {
 		this._window.setTitle(seo.getTitle());
 
 		for (var metaTagKey of seo.getMetaNameStorage().keys()) {
@@ -121,8 +131,9 @@ class Client extends ns.Core.Abstract.PageRender {
 			}
 		}
 
-		for (var metaTag of seo.getMetaPropertyStorage().keys()) {
-			var metaTag = this._window.querySelector(`meta[property="${metaTagKey}"]`);
+		for (var metaTagKey of seo.getMetaPropertyStorage().keys()) {
+			var metaTag;
+			metaTag = this._window.querySelector(`meta[property="${metaTagKey}"]`);
 
 			if (metaTag) {
 				metaTag.content = seo.getMetaProperty(metaTagKey);

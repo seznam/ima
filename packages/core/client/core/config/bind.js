@@ -21,6 +21,7 @@ export var init = (ns) => { //jshint ignore:line
 	//*************END VENDORS*****************
 
 	//*************START CONSTANT**************
+	ns.oc.bind('$SETTING', ns.Setting);
 	ns.oc.bind('$ENV', ns.Setting.$Env);
 	ns.oc.bind('$HTTP_CONFIG', ns.Setting.$Http);
 	ns.oc.bind('$SOCKET_CONFIG', ns.Setting.$Socket);
@@ -41,7 +42,7 @@ export var init = (ns) => { //jshint ignore:line
 	}
 
 	//Core Error
-	ns.oc.bind('$Error', ns.Core.Error.Handler);
+	ns.oc.bind('$Error', ns.Core.Error.CoreError);
 
 	//Dictionary
 	ns.oc.bind('$Dictionary', ns.oc.create('Core.Dictionary.Handler'));
@@ -93,7 +94,8 @@ export var init = (ns) => { //jshint ignore:line
 	ns.oc.bind('$Route', ns.Core.Router.Route);
 
 	//SuperAgent
-	ns.oc.bind('$HttpProxy', ns.oc.make('Core.Http.Proxy', ['$SuperAgent', '$BindPromise']));
+	ns.oc.bind('$HTTP_STATUS_CODE', ns.Core.Http.STATUS_CODE);
+	ns.oc.bind('$HttpProxy', ns.oc.make('Core.Http.Proxy', ['$SuperAgent', '$BindPromise', '$HTTP_STATUS_CODE', '$Window']));
 	ns.oc.bind('$Http', ns.oc.make('Core.Http.Handler', ['$HttpProxy', '$Cache', '$CookieStorage', '$Dictionary', '$BindPromise', '$HTTP_CONFIG']));
 
 	//Sockets

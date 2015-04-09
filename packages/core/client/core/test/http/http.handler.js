@@ -11,7 +11,7 @@ describe('Core.Http.Handler', function() {
 
 	beforeEach(function() {
 		Promise = ns.oc.get('$Promise');
-		proxy = ns.oc.make('Core.Http.Proxy');
+		proxy = ns.oc.get('$HttpProxy');
 		cache = ns.oc.create('Core.Cache.Handler', ns.oc.create('$MapStorage'), ns.Setting.$Cache);
 		cookie = ns.oc.make('Core.Storage.Cookie');
 		dictionary = ns.oc.make('Core.Dictionary.Handler');
@@ -86,7 +86,7 @@ describe('Core.Http.Handler', function() {
 					.callFake(function() {
 						return Promise.resolve(data);
 					});
-				spyOn(proxy, 'haveSetCookieManually')
+				spyOn(proxy, 'haveToSetCookiesManually')
 					.and
 					.returnValue(true);
 				spyOn(cookie, 'parseFromSetCookieHeader');
