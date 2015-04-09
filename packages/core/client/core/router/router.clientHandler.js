@@ -83,8 +83,10 @@ class ClientHandler extends ns.Core.Abstract.Router {
 	listen() {
 		var windowElement = this._window.getWindow();
 
-		this._window.addEventListener(windowElement, this.POP_STATE_EVENT, () => {
-			this.route(this.getPath());
+		this._window.addEventListener(windowElement, this.POP_STATE_EVENT, (event) => {
+			if (event.state) {
+				this.route(this.getPath());
+			}
 		});
 
 		this._window.addEventListener(windowElement, 'click', (e)=> {
@@ -219,7 +221,8 @@ class ClientHandler extends ns.Core.Abstract.Router {
 	 * @param {string} [url='']
 	 */
 	_setAddressBar(url = '') {
-		this._window.pushStateToHistoryAPI(null, null, url);
+		var state = {url}
+		this._window.pushStateToHistoryAPI(state, null, url);
 	}
 
 	/**

@@ -4,12 +4,12 @@ ns.namespace('App.Page.NotFound');
 
 /**
  * @class Controller
- * @extends Core.Abstract.Controller
+ * @extends App.Base.Controller
  * @namespace App.Page.NotFound
  * @module App
  * @submodule App.Page
  */
-class Controller extends ns.Core.Abstract.Controller {
+class Controller extends ns.App.Base.Controller {
 
 	/**
 	 * @method constructor

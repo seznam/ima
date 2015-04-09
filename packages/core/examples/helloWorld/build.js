@@ -2,6 +2,7 @@ module.exports = (function() {
 
 	var js = [
 		'./app/config/*.js',
+		'./app/base/*.js',
 		'./app/page/*.js',
 		'./app/page/*.jsx',
 		'./app/page/**/*.js',
