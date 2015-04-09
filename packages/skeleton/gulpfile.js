@@ -37,6 +37,9 @@ var messageFormat = require('gulp-messageformat');
 var save = require('gulp-save');
 var size = require('gulp-filesize');
 var nodemon = require('gulp-nodemon');
+var change = require('gulp-change');
+var minifyCSS = require('gulp-minify-css');
+var buffer = require('vinyl-buffer');
 
 var coreDependency = require('./imajs/build.js');
 
@@ -46,7 +49,11 @@ try {
 	var appDependency = {
 		js: [],
 		languages: [],
-		less: []
+		less: [],
+		bundle: {
+			js: [],
+			css: []
+		}
 	};
 	console.log(e);
 }
@@ -104,7 +111,7 @@ var files = {
 	shim : {
 		name: 'shim.js',
 		src: [
-			'./node_modules/es5-shim/es5-shim.js',
+			//'./node_modules/es5-shim/es5-shim.js',
 			//'./node_modules/es5-shim/es5-shim.map',
 			//'./node_modules/es6-shim/es6-shim.map',
 			'./node_modules/es6-shim/es6-shim.js',
@@ -113,6 +120,24 @@ var files = {
 		dest: {
 			client: './server/static/js/',
 			server: './server/module/'
+		}
+	},
+	bundle: {
+		js: {
+			name: 'app.bundle.js',
+			src: [
+				'./server/static/js/shim.js',
+				'./server/static/js/vendor.client.js',
+				'./server/static/js/app.client.js'
+			].concat(appDependency.bundle.js),
+			dest: './server/static/js/'
+		},
+		css: {
+			name: 'app.min.css',
+			src: [
+				'./server/static/css/app.css'
+			].concat(appDependency.bundle.css),
+			dest: './server/static/css/'
 		}
 	}
 };
@@ -133,6 +158,49 @@ var resolveNewPath = function(newBase){
 	});
 };
 
+/**
+ * Patterns used to increase compatibility of YUI Doc with jsDoc tags.
+ *
+ * @type {{pattern: RegExp, replace: string}[]}
+ */
+var documentationPreprocessors = [
+	{
+		pattern: /\/[*][*]((?:a|[^a])*?)(?: |\t)*[*]\s*@(?:override|inheritdoc|abstract)\n((a|[^a])*)[*]\//g,
+		replace: '/**$1$2*/'
+	},
+	{
+		pattern: /\/[*][*]((?:a|[^a])*?)@implements(?: (.*))?\n((a|[^a])*)[*]\//g,
+		replace: '/**$1@extends $2\n$3*/'
+	},
+	{
+		pattern: /\/[*][*]((?:a|[^a])*?)@interface (.*)\n((a|[^a])*)?[*]\//g,
+		replace: '/**$1@class $2\n$3*/'
+	},
+	{
+		pattern: /\/[*][*]((?:a|[^a])*?)@see (.*)\n((a|[^a])*)[*]\//g,
+		replace: '/**$1See $2.\n$3*/'
+	},
+	{
+		pattern: /\/[*][*]((?:a|[^a])*?)[{]@code(?:link)? ([^}]*)[}]((a|[^a])*)[*]\//g,
+		replace: '/**$1<code>$2</code>$3*/'
+	},
+	{
+		pattern: /\/[*][*]((?:a|[^a])*?)@(type|param|return)\s*[{]([^}]*)[*]([^}]*)[}]((a|[^a])*)[*]\//g,
+		replace: '/**$1@$2 {$3any$4}$5*/'
+	},
+	{
+		pattern: /\/[*][*]((?:a|[^a])*?)@(type|param|return)\s*[{]([^}]*)<([^}]*)[}]((a|[^a])*)[*]\//g,
+		replace: '/**$1@$2 {$3&lt;$4}$5*/'
+	},
+	{
+		pattern: /\/[*][*]((?:a|[^a])*?)@(type|param|return)\s*[{]([^}]*)>([^}]*)[}]((a|[^a])*)[*]\//g,
+		replace: '/**$1@$2 {$3&gt;$4}$5*/'
+	},
+	{
+		pattern: /\/[*][*]((?:a|[^a])*?)@(type|param|return)\s*[{]([^}]*?)([a-zA-Z0-9_.]+)\[\]([^}]*)[}]((a|[^a])*)[*]\//g,
+		replace: '/**$1@$2 {$3Array<$4>$5}$6*/'
+	}
+];
 
 // -------------------------------------PUBLIC TASKS (gulp task)
 gulp.task('dev', function(callback) {
@@ -159,7 +227,8 @@ gulp.task('build', function(callback) {
 		['static', 'shim'], //copy folder public, concat shim
 		['Es6ToEs5:client', 'Es6ToEs5:server', 'Es6ToEs5:vendor'], // convert app and vendor script
 		['vendor:client', 'vendor:server', 'less', 'doc', 'locale', 'environment'], // adjust vendors, compile less, create doc,
-		'vendor:clean',// clean vendor
+		['bundle:js', 'bundle:css'],
+		['vendor:clean', 'bundle:clean'],// clean vendor
 		callback
 	);
 });
@@ -182,6 +251,21 @@ gulp.task('doc', function() {
 	return (
 		gulp
 			.src(files.app.src)
+			.pipe(change(function (content) {
+				var oldContent = null;
+
+				while (content !== oldContent) {
+					oldContent = content;
+					documentationPreprocessors.forEach(function (preprocessor) {
+						content = content.replace(
+							preprocessor.pattern,
+							preprocessor.replace
+						);
+					});
+				}
+
+				return content;
+			}))
 			.pipe(yuidoc())
 			.pipe(gulp.dest('./doc'))
 	);
@@ -419,10 +503,11 @@ gulp.task('Es6ToEs5:vendor', shell.task('traceur --out ' + files.vendor.tmp + ' 
 
 gulp.task('vendor:client', function() {
 	return (
-		browserify(files.vendor.src, {debug: true, insertGlobals : true, basedir: ''})
+		browserify(files.vendor.src, {debug: false, insertGlobals : false, basedir: ''})
 			.external('vertx')
 			.bundle()
 			.pipe(source(files.vendor.name.client))
+			//.pipe(buffer())
 			.pipe(gutil.env.type === 'production' ? uglify() : gutil.noop())
 			.pipe(gulp.dest(files.vendor.dest.client))
 	);
@@ -478,6 +563,33 @@ gulp.task('locale', function() {
 	});
 
 	return locales[locales.length - 1];
+});
+
+gulp.task('bundle:js', function() {
+	return (
+		gulp.src(files.bundle.js.src)
+			.pipe(plumber())
+			.pipe(concat(files.bundle.js.name))
+			.pipe(uglify({mangle:true}))
+			.pipe(plumber.stop())
+			.pipe(gulp.dest(files.bundle.js.dest))
+	);
+});
+
+gulp.task('bundle:css', function() {
+	return (
+		gulp.src(files.bundle.css.src)
+			.pipe(plumber())
+			.pipe(concat(files.bundle.css.name))
+			.pipe(minifyCSS())
+			.pipe(plumber.stop())
+			.pipe(gulp.dest(files.bundle.css.dest))
+	);
+});
+
+gulp.task('bundle:clean', function() {
+	return gulp.src(files.bundle.css.src.concat(files.bundle.js.src), {read: false})
+		.pipe(clean());
 });
 
 gulp.task('app:hello', function() {
