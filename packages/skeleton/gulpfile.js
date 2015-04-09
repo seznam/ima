@@ -39,7 +39,6 @@ var size = require('gulp-filesize');
 var nodemon = require('gulp-nodemon');
 var change = require('gulp-change');
 var minifyCSS = require('gulp-minify-css');
-var buffer = require('vinyl-buffer');
 
 var coreDependency = require('./imajs/build.js');
 
@@ -507,7 +506,6 @@ gulp.task('vendor:client', function() {
 			.external('vertx')
 			.bundle()
 			.pipe(source(files.vendor.name.client))
-			//.pipe(buffer())
 			.pipe(gutil.env.type === 'production' ? uglify() : gutil.noop())
 			.pipe(gulp.dest(files.vendor.dest.client))
 	);
