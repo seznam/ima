@@ -70,7 +70,7 @@ class ClientHandler extends ns.Core.Abstract.Router {
 	 * @return {string}
 	 */
 	getPath() {
-		return this._clearPath(this._window.getPath());
+		return this._extractRoutePath(this._window.getPath());
 	}
 
 	/**
@@ -100,11 +100,15 @@ class ClientHandler extends ns.Core.Abstract.Router {
 	 * Redirect to url.
 	 *
 	 * @method redirect
-	 * @param {string} url
+	 * @param {string} [url='']
 	 */
-	redirect(url) {
+	redirect(url = '') {
 
 		if (this._isSameDomain(url)) {
+			var path = url.replace(this._protocol + '//' + this._domain, '');
+
+			path = this._extractRoutePath(path);
+			this.route(path);
 			this._setAddressBar(url);
 		} else {
 			this._window.redirect(url);
@@ -188,17 +192,13 @@ class ClientHandler extends ns.Core.Abstract.Router {
 			targetHref = target.href;
 		}
 
-		if (typeof targetHref !== 'undefined' && targetHref !== null) {
+		var isDefinedTargetHref = typeof targetHref !== 'undefined' && targetHref !== null;
+		var isNotMiddleButton = event.button !== this.MOUSE_MIDDLE_BUTTON;
+		var isSameDomain = this._isSameDomain(targetHref);
 
-			if (this._isSameDomain(targetHref) && event.button !== this.MOUSE_MIDDLE_BUTTON) {
-				var path = targetHref.replace(this._protocol + '//' + this._domain, '');
-				path = this._clearPath(path);
-
-				this._window.preventDefault(event);
-				this.route(path);
-				this._setAddressBar(targetHref);
-			}
-
+		if (isDefinedTargetHref && isNotMiddleButton && isSameDomain) {
+			this._window.preventDefault(event);
+			this.redirect(targetHref);
 		}
 	}
 
@@ -221,7 +221,7 @@ class ClientHandler extends ns.Core.Abstract.Router {
 	 * @param {string} [url='']
 	 */
 	_setAddressBar(url = '') {
-		var state = {url}
+		var state = {url};
 		this._window.pushStateToHistoryAPI(state, null, url);
 	}
 
@@ -230,10 +230,10 @@ class ClientHandler extends ns.Core.Abstract.Router {
 	 *
 	 * @method _isSameDomain
 	 * @private
-	 * @param {string} url
+	 * @param {string} [url='']
 	 * @return {boolean}
 	 */
-	_isSameDomain(url) {
+	_isSameDomain(url = '') {
 		return url.match(this._getBaseUrl());
 	}
 }

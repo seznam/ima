@@ -62,7 +62,7 @@ class ServerHandler extends ns.Core.Abstract.Router {
 	 * @return {string}
 	 */
 	getPath() {
-		return this._clearPath(this._request.getPath());
+		return this._extractRoutePath(this._request.getPath());
 	}
 
 	/**

@@ -205,7 +205,7 @@ describe('Core.Abstract.Router', function() {
 
 	});
 
-	describe('_clearPath method', function() {
+	describe('_extractRoutePath method', function() {
 
 		var pathWithRoot = '/root/path';
 		var pathWithLanguage = '/en/path';
@@ -219,25 +219,25 @@ describe('Core.Abstract.Router', function() {
 		it('should be clear root from path', function() {
 			router.init({root: '/root'});
 
-			expect(router._clearPath(pathWithRoot)).toEqual(path);
+			expect(router._extractRoutePath(pathWithRoot)).toEqual(path);
 		});
 
 		it('should be clear root and language from path', function() {
 			router.init({root: '/root', languagePartPath: '/en'});
 
-			expect(router._clearPath(pathWithRootAndLanguage)).toEqual(path);
+			expect(router._extractRoutePath(pathWithRootAndLanguage)).toEqual(path);
 		});
 
 		it('should be clear language from path', function() {
 			router.init({languagePartPath: '/en'});
 
-			expect(router._clearPath(pathWithLanguage)).toEqual(path);
+			expect(router._extractRoutePath(pathWithLanguage)).toEqual(path);
 		});
 
 		it('should be return path for empty root and undefined language in path', function() {
 			router.init({});
 
-			expect(router._clearPath(path)).toEqual(path);
+			expect(router._extractRoutePath(path)).toEqual(path);
 		});
 	});
 });

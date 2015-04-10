@@ -38,15 +38,21 @@ describe('Core.Router.ClientHandler', function() {
 
 	describe('redirect method', function() {
 		it('should be set address bar', function() {
-			var url = protocol + '//' + domain + '/somePath';
+			var path = '/somePath';
+			var url = protocol + '//' + domain + path;
 
 			spyOn(router, '_setAddressBar')
+				.and
+				.stub();
+
+			spyOn(router, 'route')
 				.and
 				.stub();
 
 			router.redirect(url);
 
 			expect(router._setAddressBar).toHaveBeenCalledWith(url);
+			expect(router.route).toHaveBeenCalledWith(path);
 		});
 
 		it('return null for non exist route', function() {

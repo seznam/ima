@@ -436,14 +436,14 @@ class Router extends ns.Core.Interface.Router {
 	}
 
 	/**
-	 * Clear root and language from path.
+	 * Extract route path from original url path.
 	 *
-	 * @method _clearPath
+	 * @method _extractRoutePath
 	 * @protected
 	 * @param {string} path
 	 * @return {string}
 	 */
-	_clearPath(path) {
+	_extractRoutePath(path) {
 		return path.replace(this._root + this._languagePartPath, '');
 	}
 
