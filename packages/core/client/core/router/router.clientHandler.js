@@ -104,7 +104,7 @@ class ClientHandler extends ns.Core.Abstract.Router {
 	 */
 	redirect(url = '') {
 
-		if (this._isSameDomain(url)) {
+		if (this._isSameDomain(url) && this._mode === this.MODE_HISTORY) {
 			var path = url.replace(this._protocol + '//' + this._domain, '');
 
 			path = this._extractRoutePath(path);
