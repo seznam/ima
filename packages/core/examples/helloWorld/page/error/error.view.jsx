@@ -29,11 +29,9 @@ class View extends ns.Core.Abstract.View {
 	 * @param {App.Page.Error.Controller} cotroller
 	 */
 	init(controller) {
-		super.init(controller);
 		var self = this;
 
-		this._view = this._react.createClass({
-			mixins: [self._viewConfig],
+		this._view = this._React.createClass({
 			displayName: '',
 			/* jshint ignore:start */
 			render() {

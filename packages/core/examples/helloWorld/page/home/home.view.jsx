@@ -36,12 +36,11 @@ class View extends ns.Core.Abstract.View {
 		super.init(controller);
 		var self = this;
 
-		this._view = this._react.createClass({
-			mixins: [self._viewConfig],
+		this._view = this._React.createClass({
+			mixins: [self._viewMixin],
 			displayName: '',
 			/* jshint ignore:start */
 			render() {
-				var Master = ns.App.Component.Layout.Master.View;
 				return (
 					<div className='l-homepage'>
 						<div className='content'>
