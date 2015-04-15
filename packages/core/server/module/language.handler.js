@@ -12,7 +12,11 @@ var getRootRegExp = (domainExpression, rootExpression, languageParam) => {
 	var rootReg = '\/\/' + domainExpression.replace(':', '\:') + rootExpression.replace('/','\/');
 
 	if (languageParam) {
-		rootReg += '(\/([^\/]*))';
+		if (languageParam) {
+			var build = require('../../app/build.js');
+			var languagesExpr = build.languages.join('|');
+			rootReg += '(\/('+languagesExpr+'))?';
+		}
 	}
 	rootReg += '.*$';
 
@@ -47,6 +51,15 @@ module.exports = function(req, res, next) {
 
 					currentLanguagePartPath = matchedLanguage[1];
 					currentLanguage = matchedLanguage[2];
+
+					if (!currentLanguage) {
+		              	currentLanguagePartPath = '/'+config.$Language[expression];
+		              	currentLanguage = config.$Language[expression];
+
+		              	// REDIRECT
+		              	res.redirect(req.protocol + '://'+currentDomain+currentRoot+currentLanguagePartPath);
+		              	return;
+		              }
 				} else {
 					currentLanguage = config.$Language[expression];
 				}
