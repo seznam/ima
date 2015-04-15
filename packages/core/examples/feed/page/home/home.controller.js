@@ -73,18 +73,17 @@ class Controller extends ns.App.Base.Controller {
 	 * @return {Object} object of promise
 	 */
 	load() {
-		var Promise = ns.oc.get('$Promise');
 		var currentCategory = this._categoryListService.getCategoryByUrl(this.params.category);
 
 		return {
 			categories: this._categoryListService.load(),
 			currentCategory: currentCategory,
 			feed: this._feedService.load(currentCategory),
-			filter: Promise.resolve({
+			filter: {
 				expanded: false
-			}),
-			sharedItem: Promise.resolve(null),
-			textInputCheckedCategory: Promise.resolve(null)
+			},
+			sharedItem: null,
+			textInputCheckedCategory: null
 		};
 	}
 

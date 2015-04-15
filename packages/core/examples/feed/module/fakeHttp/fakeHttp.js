@@ -106,7 +106,7 @@ class FakeHttp {
 					if (singleItem[0]) {
 						return this._promise.resolve(singleItem[0]);
 					}
-					return this._promise.reject(ns.oc.create('$Error', 'Bad request', { status: 404, url: url }));
+					return this._promise.reject(oc.create('$Error', 'Bad request', { status: 404, url: url }));
 				}
 
 				if (data.category) {
@@ -119,7 +119,7 @@ class FakeHttp {
 			case '/categories':
 				return this._promise.resolve({ 'categories': this.categories });
 			default: 
-				return this._promise.reject(ns.oc.create('$Error', 'Bad request', { status: 404, url: url }));
+				return this._promise.reject(oc.create('$Error', 'Bad request', { status: 404, url: url }));
 		}
 	}
 
@@ -140,7 +140,7 @@ class FakeHttp {
 
 				return this._promise.resolve(data);
 			default: 
-				return this._promise.reject(ns.oc.create('$Error', 'Bad request', { status: 500, url: url }));
+				return this._promise.reject(oc.create('$Error', 'Bad request', { status: 500, url: url }));
 		}
 	}
 	

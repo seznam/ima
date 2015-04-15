@@ -1,4 +1,5 @@
 import ns from 'imajs/client/core/namespace.js';
+import oc from 'imajs/client/core/objectContainer.js';
 
 ns.namespace('App.Page.Detail');
 /**
@@ -19,10 +20,10 @@ class View extends ns.Core.Abstract.View {
 	/*
 	* @method constructor
 	* @constructor
-	* @param {Vendor.React} react
+	* @param {Vendor.React} React
 	* */
-	constructor(react) {
-		super(react);
+	constructor(React) {
+		super(React);
 	}
 
 	/**
@@ -35,8 +36,8 @@ class View extends ns.Core.Abstract.View {
 		super.init(controller);
 		var self = this;
 
-		this._view = this._react.createClass({
-			mixins: [self._viewConfig],
+		this._view = this._React.createClass({
+			mixins: [self._viewMixin],
 			displayName: '',
 			/* jshint ignore:start */
 			render() {
@@ -76,7 +77,7 @@ class View extends ns.Core.Abstract.View {
 			},
 
 			getMoreItemButton() {
-				var dictionary = ns.oc.get('$Dictionary');
+				var dictionary = oc.get('$Dictionary');
 				var buttonTitle = dictionary.get('detail.moreItemsButtonTitle');
 				var link = dictionary.get('detail.moreItemsButtonLink');
 
