@@ -148,8 +148,8 @@ var resolveNewPath = function(newBase){
 	return es.mapSync(function (file) {
 		var newBasePath = path.resolve(newBase);
 		var namespaceForFile = '/' + path.relative(file.cwd + '/' + newBase, file.base) + '/';
-
 		var newPath = newBasePath + namespaceForFile + file.relative;
+
 		file.base = newBasePath;
 		file.path = newPath;
 		file.cwd = newBasePath;
@@ -358,8 +358,8 @@ gulp.task('devTest', function() {
 		'./server/static/js/app.client.js',
 		'./app/test/**/*.js',
 		'./app/test/*.js',
-		'./imajs/client/core/test/**/*.js',
-		'./imajs/client/core/test/*.js'
+		'./imajs/client/test/**/*.js',
+		'./imajs/client/test/*.js'
 	];
 	return gulp.src(testFiles)
 		.pipe(karma({
@@ -462,7 +462,7 @@ gulp.task('Es6ToEs5:client', function() {
 
 	return (
 		gulp.src(files.app.src)
-			.pipe(resolveNewPath('imajs/client/'))
+			.pipe(resolveNewPath('/'))
 			.pipe(plumber())
 			.pipe(sourcemaps.init())
 			.pipe(cache('Es6ToEs5:client'))
@@ -485,7 +485,7 @@ gulp.task('Es6ToEs5:client', function() {
 			//.pipe(gulpif(isFile, gutil.noop()))
 			//.pipe(sourcemaps.init({loadMaps: true}))
 			.pipe(concat(files.app.name.server))
-			.pipe(insert.wrap('module.exports = function(){\n', '\nreturn $__main_46_js__; };\n'))
+			.pipe(insert.wrap('module.exports = function(){\n', '\nreturn $__imajs_47_client_47_main_46_js__; };\n'))
 			.pipe(sourcemaps.write())
 			.pipe(gulp.dest(files.app.dest.server))
 			//.pipe(size())
