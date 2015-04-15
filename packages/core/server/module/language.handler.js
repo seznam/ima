@@ -32,6 +32,10 @@ module.exports = function(req, res, next) {
 	var currentLanguagePartPath = '';
 	var currentDomain = parsedCurrentUrl[1];
 	var currentRoot = parsedCurrentUrl[2];
+	var currentProtocol = req.protocol + ':';
+	if (req.get('X-Forwarded-Proto')) {
+		currentProtocol = req.get('X-Forwarded-Proto') + ':';
+	}
 
 	for (var expression of Object.keys(config.$Language)) {
 		var parsedDomainExpression = expression.match(parseUrlReg);
@@ -57,7 +61,7 @@ module.exports = function(req, res, next) {
 		              	currentLanguage = config.$Language[expression];
 
 		              	// REDIRECT
-		              	res.redirect(req.protocol + '://'+currentDomain+currentRoot+currentLanguagePartPath);
+		              	res.redirect(currentProtocol + '//'+currentDomain+currentRoot+currentLanguagePartPath);
 		              	return;
 		              }
 				} else {
@@ -72,7 +76,7 @@ module.exports = function(req, res, next) {
 	res.locals.language = currentLanguage;
 	res.locals.languagePartPath = currentLanguagePartPath;
 	res.locals.domain = currentDomain;
-	res.locals.protocol = req.protocol + ':';
+	res.locals.protocol = currentProtocol;
 	res.locals.root = currentRoot;
 
 	//res.send(`${currentUrl} : ${currentDomain} : ${currentRoot} : ${currentLanguage} : ${currentLanguagePartPath} : ${req.get('origin')} : ${req.hostname}`);
