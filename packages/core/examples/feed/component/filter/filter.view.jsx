@@ -1,4 +1,4 @@
-import ns from 'core/namespace/ns.js';
+import ns from 'imajs/client/core/namespace.js';
 
 var boot = ns.oc.get('$Boot');
 

@@ -1,4 +1,5 @@
-import ns from 'core/namespace/ns.js';
+import ns from 'imajs/client/core/namespace.js';
+import oc from 'imajs/client/core/objectContainer.js';
 
 ns.namespace('App.Page.Home');
 /**
@@ -45,7 +46,7 @@ class View extends ns.Core.Abstract.View {
 					<div className='l-homepage'>
 						<div className='content'>
 							<img src="static/img/imajs-logo.png" alt="IMA.js logo"/>
-							<h1>{ns.oc.get('$Dictionary').get('home.hello')}, {this.state.message}</h1>
+							<h1>{oc.get('$Dictionary').get('home.hello')}, {this.state.message}</h1>
 						</div>
 					</div>
 				);

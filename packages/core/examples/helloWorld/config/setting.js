@@ -1,4 +1,4 @@
-export var init = (ns, config) => { // jshint ignore:line
+export var init = (ns, oc, config) => { // jshint ignore:line
 
 	var nsSetting = ns.namespace('Setting');
 

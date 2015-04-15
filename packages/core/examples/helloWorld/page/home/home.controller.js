@@ -1,4 +1,6 @@
-import ns from 'core/namespace/ns.js';
+import ns from 'imajs/client/core/namespace.js';
+import oc from 'imajs/client/core/objectContainer.js';
+import CoreError from 'imajs/client/core/coreError.js';
 
 ns.namespace('App.Page.Home');
 
@@ -28,7 +30,7 @@ class Controller extends ns.App.Base.Controller {
 	 */
 	load() {
 		return {
-			//error: ns.oc.get('$Promise').reject(ns.oc.create('$Error', 'Try error page.', {status: 500})),
+			//error: oc.get('$Promise').reject(new CoreError('Try error page.')),
 			message: `I am IMA.js!`
 		};
 	}

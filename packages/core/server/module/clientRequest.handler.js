@@ -57,8 +57,8 @@ module.exports = (() => {
 			} else {
 				cb();
 			}
-		}, function(e, items) {
-			items = items.filter(function(item) { return !!item; });
+		}, (e, items) => {
+			items = items.filter((item) => { return !!item; });
 
 			// if something bad happened while processing the stacktrace
 			// make sure to return something useful
@@ -83,12 +83,9 @@ module.exports = (() => {
 		var vendor = vendorScript();
 		var appServer = appServerScript();
 
-		var ns = appServer.getNameSpace();
-		var boot = ns.oc.get('$Boot');
-
 		var bootConfig = {
 			vendor: vendor,
-			handler: {
+			service: {
 				request: req,
 				respond: res,
 				$IMA: {},
@@ -106,9 +103,11 @@ module.exports = (() => {
 		};
 
 		Object.assign(bootConfig, appServer.getInit());
-		boot.run(bootConfig);
+		appServer
+			.getBootstrap()
+			.run(bootConfig);
 
-		return ns;
+		return appServer;
 	};
 
 	var showStaticErrorPage = (err, req, res) => {
@@ -124,16 +123,18 @@ module.exports = (() => {
 		});
 	};
 
-	var errorHandler = (err, req, res, ns) => {
+	var errorHandler = (err, req, res, appServer) => {
 
 		if (config.$Debug) {
 			_displayDetails(err, req, res);
 		} else {
 
-			if (!ns) {
-				ns = _initApp(req, res);
+			if (!appServer) {
+				appServer = _initApp(req, res);
 			}
-			var router = ns.oc.get('$Router');
+			var router = appServer
+				.getObjectContainer()
+				.get('$Router');
 
 			var applyError = (error) => {
 				return (
@@ -158,13 +159,15 @@ module.exports = (() => {
 	};
 
 	var respond = (req, res) => {
-		var ns = _initApp(req, res);
-		var router = ns.oc.get('$Router');
+		var appServer = _initApp(req, res);
+		var router = appServer
+			.getObjectContainer()
+			.get('$Router');
 
 		router
 			.route(router.getPath())
 			.catch((error) => {
-				errorHandler(error, req, res, ns);
+				errorHandler(error, req, res, appServer);
 			});
 	};
 

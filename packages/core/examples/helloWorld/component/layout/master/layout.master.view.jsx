@@ -1,8 +1,7 @@
-import ns from 'core/namespace/ns.js';
+import ns from 'imajs/client/core/namespace.js';
+import bootstrap from 'imajs/client/core/bootstrap.js';
 
-var boot = ns.oc.get('$Boot');
-
-boot.addComponent(() => {
+bootstrap.addComponent(() => {
 
 	ns.namespace('App.Component.Layout.Master');
 

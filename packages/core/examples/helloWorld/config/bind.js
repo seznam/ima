@@ -1,15 +1,15 @@
-export var init = (ns) => {
+export var init = (ns, oc, config) => {
 
 	// Page Home
-	ns.oc.bind('HomeView', ns.App.Page.Home.View, ['$BindReact']);
-	ns.oc.bind('HomeController', ns.App.Page.Home.Controller, ['HomeView']);
+	oc.bind('HomeView', ns.App.Page.Home.View, ['$BindReact']);
+	oc.bind('HomeController', ns.App.Page.Home.Controller, ['HomeView']);
 
 	// Page Error
-	ns.oc.bind('ErrorView', ns.App.Page.Error.View, ['$BindReact']);
-	ns.oc.bind('ErrorController', ns.App.Page.Error.Controller, ['ErrorView']);
+	oc.bind('ErrorView', ns.App.Page.Error.View, ['$BindReact']);
+	oc.bind('ErrorController', ns.App.Page.Error.Controller, ['ErrorView']);
 
 	// Page Not Found
-	ns.oc.bind('NotFoundView', ns.App.Page.NotFound.View, ['$BindReact']);
-	ns.oc.bind('NotFoundController', ns.App.Page.NotFound.Controller, ['NotFoundView']);
+	oc.bind('NotFoundView', ns.App.Page.NotFound.View, ['$BindReact']);
+	oc.bind('NotFoundController', ns.App.Page.NotFound.Controller, ['NotFoundView']);
 
 };

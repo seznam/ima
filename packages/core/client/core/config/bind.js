@@ -1,107 +1,107 @@
-export var init = (ns) => { //jshint ignore:line
+export var init = (ns, oc, config) => { //jshint ignore:line
 
 	//**************START VENDORS**************
 	//RSVP
-	ns.oc.bind('$Rsvp', ns.Vendor.Rsvp); // ???
-	ns.oc.bind('$Promise', ns.Vendor.Rsvp.Promise);
-	ns.oc.bind('$BindPromise', () => {
-		return ns.oc.get('$Promise');
+	oc.bind('$Rsvp', ns.Vendor.Rsvp); // ???
+	oc.bind('$Promise', ns.Vendor.Rsvp.Promise);
+	oc.bind('$BindPromise', () => {
+		return oc.get('$Promise');
 	});
 
 	//React
-	ns.oc.bind('$React', ns.Vendor.React);
-	ns.oc.bind('$BindReact', () => {
-		return ns.oc.get('$React');
+	oc.bind('$React', ns.Vendor.React);
+	oc.bind('$BindReact', () => {
+		return oc.get('$React');
 	});
 
 	//SuperAgent
-	ns.oc.bind('$SuperAgent', () => {
+	oc.bind('$SuperAgent', () => {
 		return ns.Vendor.SuperAgent;
 	});
 	//*************END VENDORS*****************
 
 	//*************START CONSTANT**************
-	ns.oc.bind('$SETTING', ns.Setting);
-	ns.oc.bind('$ENV', ns.Setting.$Env);
-	ns.oc.bind('$HTTP_CONFIG', ns.Setting.$Http);
-	ns.oc.bind('$SOCKET_CONFIG', ns.Setting.$Socket);
-	ns.oc.bind('$CACHE_CONFIG', ns.Setting.$Cache);
-	ns.oc.bind('$ANIMATE_CONFIG', ns.Setting.$Animate);
+	oc.bind('$SETTING', ns.Setting);
+	oc.bind('$ENV', ns.Setting.$Env);
+	oc.bind('$HTTP_CONFIG', ns.Setting.$Http);
+	oc.bind('$SOCKET_CONFIG', ns.Setting.$Socket);
+	oc.bind('$CACHE_CONFIG', ns.Setting.$Cache);
+	oc.bind('$ANIMATE_CONFIG', ns.Setting.$Animate);
 
-	ns.oc.bind('$SECURE', ns.Setting.$Protocol === 'https:' ? true: false );
-	ns.oc.bind('$PROTOCOL', ns.Setting.$Protocol );
+	oc.bind('$SECURE', ns.Setting.$Protocol === 'https:' ? true: false );
+	oc.bind('$PROTOCOL', ns.Setting.$Protocol );
 	//*************END CONSTANT****************
 
 
 	//*************START CORE**************
 	//Helper
 	if (typeof window !== 'undefined' && window !== null) {
-		ns.oc.bind('$Window', ns.oc.create('Core.Helper.ClientWindow'));
+		oc.bind('$Window', oc.create('Core.Window.Client'));
 	} else {
-		ns.oc.bind('$Window', ns.oc.create('Core.Helper.ServerWindow'));
+		oc.bind('$Window', oc.create('Core.Window.Server'));
 	}
 
 	//Core Error
-	ns.oc.bind('$Error', ns.Core.Error.CoreError);
+	oc.bind('$Error', ns.Core.CoreError);
 
 	//Dictionary
-	ns.oc.bind('$Dictionary', ns.oc.create('Core.Dictionary.Handler'));
+	oc.bind('$Dictionary', oc.create('Core.Dictionary.MessageFormat'));
 
 	//Request & Respond
-	ns.oc.bind('$Request', ns.oc.create('Core.Router.Request'));
-	ns.oc.bind('$Respond', ns.oc.create('Core.Router.Respond'));
+	oc.bind('$Request', oc.create('Core.Router.Request'));
+	oc.bind('$Respond', oc.create('Core.Router.Respond'));
 
 	//Storage
-	ns.oc.bind('$CookieStorage', ns.oc.make('Core.Storage.Cookie', ['$Request', '$Respond', '$SECURE']));
-	ns.oc.bind('$SessionStorage', ns.Core.Storage.Session);
-	ns.oc.bind('$MapStorage', ns.Core.Storage.Map);
-	ns.oc.bind('$SessionMapStorage', ns.Core.Storage.SessionMap, ['$MapStorage', '$SessionStorage']);
+	oc.bind('$CookieStorage', oc.make('Core.Storage.Cookie', ['$Request', '$Respond', '$SECURE']));
+	oc.bind('$SessionStorage', ns.Core.Storage.Session);
+	oc.bind('$MapStorage', ns.Core.Storage.Map);
+	oc.bind('$SessionMapStorage', ns.Core.Storage.SessionMap, ['$MapStorage', '$SessionStorage']);
 
 	//Dispatcher
-	ns.oc.bind('$Dispatcher', ns.oc.make('Core.Dispatcher.Handler', ['$MapStorage']));
+	oc.bind('$Dispatcher', oc.make('Core.Dispatcher.Handler', ['$MapStorage']));
 
 	//Animate
-	ns.oc.bind('$Animate', ns.oc.make('Core.Animate.Handler', ['$Dispatcher', '$BindPromise', '$Window', '$CookieStorage', '$ANIMATE_CONFIG']));
+	oc.bind('$Animate', oc.make('Core.Animate.Handler', ['$Dispatcher', '$BindPromise', '$Window', '$CookieStorage', '$ANIMATE_CONFIG']));
 
 	//Cache
-	if (ns.oc.get('$Window').hasSessionStorage()) {
-		ns.oc.bind('$CacheStorage', ns.oc.make('$SessionMapStorage'));
+	if (oc.get('$Window').hasSessionStorage()) {
+		oc.bind('$CacheStorage', oc.make('$SessionMapStorage'));
 	} else {
-		ns.oc.bind('$CacheStorage', ns.oc.make('$MapStorage'));
+		oc.bind('$CacheStorage', oc.make('$MapStorage'));
 	}
 
-	ns.oc.bind('$Cache', ns.oc.make('Core.Cache.Handler', ['$CacheStorage' ,'$CACHE_CONFIG']));
-	ns.oc.bind('$CacheData', ns.Core.Cache.Data);
+	oc.bind('$Cache', oc.make('Core.Cache.Handler', ['$CacheStorage' ,'$CACHE_CONFIG']));
+	oc.bind('$CacheEntry', ns.Core.Cache.Entry);
 
 	//Render
-	if (ns.oc.get('$Window').isClient()) {
-		ns.oc.bind('$PageRender', ns.oc.make('Core.PageRender.Client', ['$Rsvp', '$BindReact', '$Animate', ns.Setting, '$Window']));
+	if (oc.get('$Window').isClient()) {
+		oc.bind('$PageRender', oc.make('Core.Page.Render.Client', ['$Rsvp', '$BindReact', '$Animate', ns.Setting, '$Window']));
 	} else {
-		ns.oc.bind('$PageRender', ns.oc.make('Core.PageRender.Server', ['$Rsvp', '$BindReact', '$Animate', ns.Setting, '$Respond', '$Cache']));
+		oc.bind('$PageRender', oc.make('Core.Page.Render.Server', ['$Rsvp', '$BindReact', '$Animate', ns.Setting, '$Respond', '$Cache']));
 	}
 
 	//SEO
-	ns.oc.bind('$Seo', ns.oc.make('Core.Seo.Handler', []));
-	ns.oc.bind('$DecoratorController', ns.Core.Decorator.Controller);
+	oc.bind('$Seo', oc.make('Core.Seo.Manager', []));
+	oc.bind('$DecoratorController', ns.Core.Decorator.Controller);
 
 	//Router
-	ns.oc.bind('$RouterFactory', ns.oc.make('Core.Router.Factory', ['$Seo', '$Dictionary', ns.Setting]));
-	if (ns.oc.get('$Window').isClient()) {
-		ns.oc.bind('$Router', ns.oc.make('Core.Router.ClientHandler', ['$PageRender', '$RouterFactory', '$BindPromise', '$Window']));
+	oc.bind('$RouterFactory', oc.make('Core.Router.Factory', ['$Seo', '$Dictionary', ns.Setting]));
+	if (oc.get('$Window').isClient()) {
+		oc.bind('$Router', oc.make('Core.Router.ClientHandler', ['$PageRender', '$RouterFactory', '$BindPromise', '$Window']));
 	} else {
-		ns.oc.bind('$Router', ns.oc.make('Core.Router.ServerHandler', ['$PageRender', '$RouterFactory', '$BindPromise', '$Request', '$Respond']));
+		oc.bind('$Router', oc.make('Core.Router.ServerHandler', ['$PageRender', '$RouterFactory', '$BindPromise', '$Request', '$Respond']));
 	}
-	ns.oc.bind('$Route', ns.Core.Router.Route);
+	oc.bind('$Route', ns.Core.Router.Route);
 
 	//SuperAgent
-	ns.oc.bind('$HTTP_STATUS_CODE', ns.Core.Http.STATUS_CODE);
-	ns.oc.bind('$HttpProxy', ns.oc.make('Core.Http.Proxy', ['$SuperAgent', '$BindPromise', '$HTTP_STATUS_CODE', '$Window']));
-	ns.oc.bind('$Http', ns.oc.make('Core.Http.Handler', ['$HttpProxy', '$Cache', '$CookieStorage', '$Dictionary', '$BindPromise', '$HTTP_CONFIG']));
+	oc.bind('$HTTP_STATUS_CODE', ns.Core.Http.STATUS_CODE);
+	oc.bind('$HttpProxy', oc.make('Core.Http.Proxy', ['$SuperAgent', '$BindPromise', '$HTTP_STATUS_CODE', '$Window']));
+	oc.bind('$Http', oc.make('Core.Http.Agent', ['$HttpProxy', '$Cache', '$CookieStorage', '$Dictionary', '$BindPromise', '$HTTP_CONFIG']));
 
 	//Sockets
-	ns.oc.bind('$SocketFactory', ns.Core.Socket.Factory, [ns.oc.get('$Window').getWebSocket()]);
-	ns.oc.bind('$SocketParser', ns.Core.Socket.Parser, []);
-	ns.oc.bind('$SocketProxy', ns.Core.Socket.Proxy, ['$Dispatcher', '$SocketFactory', '$SocketParser', '$SOCKET_CONFIG', '$SECURE']);
+	oc.bind('$SocketFactory', ns.Core.Socket.Factory, [oc.get('$Window').getWebSocket()]);
+	oc.bind('$SocketParser', ns.Core.Socket.Parser, []);
+	oc.bind('$SocketProxy', ns.Core.Socket.Proxy, ['$Dispatcher', '$SocketFactory', '$SocketParser', '$SOCKET_CONFIG', '$SECURE']);
 
 	//*************END CORE****************
 

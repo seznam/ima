@@ -1,5 +1,5 @@
 
-import ns from 'core/namespace/ns.js';
+import ns from 'imajs/client/core/namespace.js';
 
 ns.namespace('App.Module.Category');
 
