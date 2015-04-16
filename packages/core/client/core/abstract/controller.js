@@ -97,7 +97,7 @@ class Controller extends ns.Core.Interface.Controller {
 	 * @method init
 	 */
 	init() {
-		this._view.init(this)
+		this._view.init(() => this.getState());
 		this._reactView = this._view.getReactView();
 	}
 

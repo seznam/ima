@@ -24,19 +24,28 @@ class View extends ns.Core.Interface.View {
 	 * @method constructor
 	 * @param {Vendor.React} React The React framework, used to create the view
 	 * 				React component and render it to a React element.
+	 * @param {Object} utils component utils
 	 */
-	constructor(React) {
+	constructor(React, utils) {
 		super();
 
 		/**
 		 * The React framework, used to create the view React component and render
 		 * it to a React element.
 		 *
-		 * @property _react
+		 * @property _React
 		 * @protected
 		 * @type {Vendor.React}
 		 */
 		this._React = React;
+
+		/**
+		 * @property utils
+		 * @type {Object}
+		 * @default utils
+		 */
+		this.utils = utils;
+
 
 		/**
 		 * The React view factory as a React class component. This field is
@@ -85,14 +94,12 @@ class View extends ns.Core.Interface.View {
 	 *
 	 * @override
 	 * @method init
-	 * @param {Core.Abstract.Controller} controller The controller that will be
-	 *        using this view, and provide state to the rendered instances of
-	 *        this view.
+	 * @param {Function} getInitialState
 	 */
-	init(controller) {
+	init(getInitialState) {
 		this._viewMixin = {
 			getInitialState() {
-				return controller.getState();
+				return getInitialState();
 			}
 		};
 	}

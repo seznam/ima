@@ -66,10 +66,9 @@ class Server extends ns.Core.Abstract.PageRender {
 	 * @param {Core.Abstract.Controller} controller The page controller that
 	 *        should have its view rendered.
 	 * @param {Object<string, *>=} [params={}] The route parameters.
+	 * @return {Promise}
 	 */
 	render(controller, params = {}) {
-		this._initController(controller, params);
-
 		var loadPromises = this._wrapEachKeyToPromise(controller.load());
 
 		return (

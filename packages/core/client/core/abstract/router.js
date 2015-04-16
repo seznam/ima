@@ -15,7 +15,7 @@ class Router extends ns.Core.Interface.Router {
 	/**
 	 * @method constructor
 	 * @constructor
-	 * @param {Core.Interface.PageRender} pageRender
+	 * @param {Core.Interface.PageManager} pageManager
 	 * @param {Core.Router.Factory} factory
 	 * @param {Promise} Promise
 	 * @example
@@ -23,16 +23,16 @@ class Router extends ns.Core.Interface.Router {
 	 * @example
 	 *      router.redirect('http://www.example.com/web');
 	 */
-	constructor(pageRender, factory, Promise) {
+	constructor(pageManager, factory, Promise) {
 		super();
 
 		/**
-		 * @property _pageRender
+		 * @property _pageManager
 		 * @protected
-		 * @type {Core.Base.PageRender}
-		 * @default pageRender
+		 * @type {Core.Interface.pageManager}
+		 * @default pageManager
 		 */
-		this._pageRender = pageRender;
+		this._pageManager = pageManager;
 
 		/**
 		 * @property _factory
@@ -395,7 +395,7 @@ class Router extends ns.Core.Interface.Router {
 	_handle(route, params) {
 		var controller = this._factory.createController(route.getController(), this);
 
-		return this._pageRender.render(controller, params);
+		return this._pageManager.manage(controller, params);
 	}
 
 	/**

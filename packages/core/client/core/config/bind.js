@@ -73,12 +73,13 @@ export var init = (ns, oc, config) => { //jshint ignore:line
 	oc.bind('$Cache', oc.make('Core.Cache.Handler', ['$CacheStorage' ,'$CACHE_CONFIG']));
 	oc.bind('$CacheEntry', ns.Core.Cache.Entry);
 
-	//Render
+	//Page
 	if (oc.get('$Window').isClient()) {
 		oc.bind('$PageRender', oc.make('Core.Page.Render.Client', ['$Rsvp', '$BindReact', '$Animate', ns.Setting, '$Window']));
 	} else {
 		oc.bind('$PageRender', oc.make('Core.Page.Render.Server', ['$Rsvp', '$BindReact', '$Animate', ns.Setting, '$Respond', '$Cache']));
 	}
+	oc.bind('$PageManager', oc.make('Core.Page.Manager', ['$PageRender', '$Window']));
 
 	//SEO
 	oc.bind('$Seo', oc.make('Core.Seo.Manager', []));
@@ -87,9 +88,9 @@ export var init = (ns, oc, config) => { //jshint ignore:line
 	//Router
 	oc.bind('$RouterFactory', oc.make('Core.Router.Factory', ['$Seo', '$Dictionary', ns.Setting]));
 	if (oc.get('$Window').isClient()) {
-		oc.bind('$Router', oc.make('Core.Router.ClientHandler', ['$PageRender', '$RouterFactory', '$BindPromise', '$Window']));
+		oc.bind('$Router', oc.make('Core.Router.ClientHandler', ['$PageManager', '$RouterFactory', '$BindPromise', '$Window']));
 	} else {
-		oc.bind('$Router', oc.make('Core.Router.ServerHandler', ['$PageRender', '$RouterFactory', '$BindPromise', '$Request', '$Respond']));
+		oc.bind('$Router', oc.make('Core.Router.ServerHandler', ['$PageManager', '$RouterFactory', '$BindPromise', '$Request', '$Respond']));
 	}
 	oc.bind('$Route', ns.Core.Router.Route);
 
@@ -102,6 +103,14 @@ export var init = (ns, oc, config) => { //jshint ignore:line
 	oc.bind('$SocketFactory', ns.Core.Socket.Factory, [oc.get('$Window').getWebSocket()]);
 	oc.bind('$SocketParser', ns.Core.Socket.Parser, []);
 	oc.bind('$SocketProxy', ns.Core.Socket.Proxy, ['$Dispatcher', '$SocketFactory', '$SocketParser', '$SOCKET_CONFIG', '$SECURE']);
+
+	//COMPONENT
+	oc.bind('$Utils', {
+		router: oc.get('$Router'),
+		dictionary: oc.get('$Dictionary'),
+		setting: oc.get('$SETTING'),
+		window: oc.get('$Window')
+	});
 
 	//*************END CORE****************
 

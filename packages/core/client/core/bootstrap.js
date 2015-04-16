@@ -153,7 +153,7 @@ class Bootstrap{
 	_initComponent() {
 		for (var componentHandler of this._component) {
 			if (typeof(componentHandler) === 'function') {
-				componentHandler();
+				componentHandler(this._oc.get('$Utils'));
 			}
 		}
 	}

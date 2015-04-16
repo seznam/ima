@@ -27,6 +27,7 @@ class PageRender {
 	 * @param {Core.Abstract.Controller} controller The page controller to use to
 	 *        render the page, and bind to the rendered page if at the client.
 	 * @param {Object<string, string>} params The route parameters.
+	 * @return {Promise}
 	 */
 	render(controller, params = {}) {}
 }

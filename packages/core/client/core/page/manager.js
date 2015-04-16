@@ -1,22 +1,26 @@
 import ns from 'imajs/client/core/namespace.js';
 
-ns.namespace('Core.PageManager');
+ns.namespace('Core.Page');
 
 /**
  * Page manager for controller.
  *
- * @class Controller
- * @namespace Core.PageManager
+ * @class Manager
+ * @implements Core.Interface.PageManager
+ * @namespace Core.Page
  * @module Core
- * @submodule Core.PageManager
+ * @submodule Core.Page
  */
-class Controller {
+class Manager extends ns.Core.Interface.PageManager {
 
 	/**
 	 * @method constructor
 	 * @constructor
+	 * @param {Core.Interface.PageRender} pageRender
+	 * @param {Core.Interface.Window} window
 	 */
-	constructor() {
+	constructor(pageRender, window) {
+		super();
 
 		/**
 		 * @property _pageRender
@@ -43,23 +47,24 @@ class Controller {
 	}
 
 	/**
-	 * Run controller.
+	 * Manager controller with params.
 	 *
 	 * @method run
 	 * @param {Core.Abstract.Controller} controller The page controller that
 	 *        should have its view rendered.
 	 * @param {Object<string, string>=} [params={}] The route parameters.
+	 * @return {Promise}
 	 */
-	run(controller, params = {}) {
+	manage(controller, params = {}) {
 		if (!controller) {
-			throw new CoreError(`Core.PageManager.Controller.run(): The ` +
+			throw new CoreError(`Core.PageManager.Controller.manage(): The ` +
 			`controller parameter is required`);
 		}
 
 		this._deinitActiveController();
 		this._initController(controller);
 
-		this._pageRender.render(controller);
+		return this._pageRender.render(controller);
 	}
 
 	/**
@@ -72,7 +77,7 @@ class Controller {
 	 *        the controller.
 	 */
 	_initController(controller, params) {
-		controller.setParams(params);
+		controller.setRouteParams(params);
 		controller.init();
 		this._activeController = controller;
 	}
@@ -93,4 +98,4 @@ class Controller {
 
 }
 
-ns.Core.PageManager.Controller = Controller;
+ns.Core.Page.Manager = Manager;

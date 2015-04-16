@@ -89,30 +89,10 @@ class PageRender extends ns.Core.Interface.PageRender {
 	 * @abstract
 	 * @param {Core.Abstract.Controller} controller The page controller that
 	 *        should have its view rendered.
-	 * @param {Object<string, string>=} [params=null] The route parameters.
+	 * @return {Promise}
 	 */
 	render(controller, params = {}) { // jshint ignore:line
 		throw new CoreError('The render() method is abstract and must be overridden');
-	}
-
-	/**
-	 * Initializes the provided controller using the provided parameters.
-	 *
-	 * @method _initController
-	 * @protected
-	 * @param {Core.Abstract.Controller} controller The controller to initialize.
-	 * @param {Object<string, *>=} [params={}] Parameters to use to initialize
-	 *        the controller.
-	 * @throws {Error} Thrown if the provided controller is not a valid
-	 *         controller.
-	 */
-	_initController(controller, params = {}) {
-		if (!controller) {
-			throw new CoreError(`Core.Abstract.PageRender._initController(): The ` +
-			`controller parameter is required`);
-		}
-
-		controller.init(params);
 	}
 
 	/**

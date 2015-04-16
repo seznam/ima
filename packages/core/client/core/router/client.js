@@ -13,13 +13,13 @@ class ClientHandler extends ns.Core.Abstract.Router {
 	/**
 	 * @method constructor
 	 * @constructor
-	 * @param {Core.Interface.PageRender} pageRender
+	 * @param {Core.Interface.PageManager} pageManager
 	 * @param {Core.Router.Factory} factory
 	 * @param {Promise} Promise
 	 * @param {Core.Interface.Window} window
 	 */
-	constructor(pageRender, factory, Promise, window) {
-		super(pageRender, factory, Promise);
+	constructor(pageManager, factory, Promise, window) {
+		super(pageManager, factory, Promise);
 
 		/**
 		 * @property _window

@@ -16,22 +16,25 @@ class View extends ns.Core.Abstract.View {
 	/*
 	* @method constructor
 	* @constructor
-	* @param {Vendor.React} react
-	*/
-	constructor(react) {
-		super(react);
+	* @param {Vendor.React} React
+	* @param {Object} utils component utils
+	 */
+	constructor(React, utils) {
+		super(React, utils);
 	}
 
 	/**
 	 * Initialization view.
 	 *
 	 * @method init
-	 * @param {App.Page.Error.Controller} cotroller
+	 * @param {Function} getInitialState
 	 */
-	init(controller) {
+	init(getInitialState) {
+		super.init(getInitialState);
 		var self = this;
 
 		this._view = this._React.createClass({
+			mixins: [self._viewMixin],
 			displayName: '',
 			/* jshint ignore:start */
 			render() {

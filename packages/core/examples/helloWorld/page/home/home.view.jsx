@@ -20,23 +20,24 @@ class View extends ns.Core.Abstract.View {
 	/*
 	* @method constructor
 	* @constructor
-	* @param {Vendor.React} react
+	* @param {Vendor.React} React
+	* @param {Object} utils component utils
 	*/
-	constructor(react) {
-		super(react);
+	constructor(React, utils) {
+		super(React, utils);
 	}
 
 	/**
 	 * Initialization view.
 	 *
 	 * @method init
-	 * @param {App.Page.Home.Controller} cotroller
+	 * @param {Function} getInitialState
 	 */
-	init(controller) {
-		super.init(controller);
+	init(getInitialState) {
+		super.init(getInitialState);
 		var self = this;
 
-		this._view = this._React.createClass({
+		this._view = self._React.createClass({
 			mixins: [self._viewMixin],
 			displayName: '',
 			/* jshint ignore:start */
@@ -45,7 +46,7 @@ class View extends ns.Core.Abstract.View {
 					<div className='l-homepage'>
 						<div className='content'>
 							<img src="static/img/imajs-logo.png" alt="IMA.js logo"/>
-							<h1>{oc.get('$Dictionary').get('home.hello')}, {this.state.message}</h1>
+							<h1>{self.utils.dictionary.get('home.hello')}, {this.state.message}</h1>
 						</div>
 					</div>
 				);

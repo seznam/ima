@@ -63,10 +63,9 @@ class Client extends ns.Core.Abstract.PageRender {
 	 * @param {Core.Abstract.Controller} controller The page controller that
 	 *        should have its view rendered.
 	 * @param {Object<string, string>=} [params={}] The route parameters.
+	 * @return {Promise}
 	 */
 	render(controller, params = {}) {
-		this._initController(controller, params);
-
 		var loadPromises = this._wrapEachKeyToPromise(controller.load());
 		var reactiveView = null;
 		var masterElementId = this._settings.$Page.$Render.masterElementId;
