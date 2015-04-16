@@ -268,6 +268,18 @@ class Controller extends ns.Core.Interface.Controller {
 	}
 
 	/**
+	 * Set route parameters for controller.
+	 *
+	 * @inheritdoc
+	 * @override
+	 * @method setRouteParams
+	 * @param {Object<string, string>=} [params={}] The current route parameters.
+	 */
+	setRouteParams(params = {}) {
+		this._controller.setRouteParams(params);
+	}
+
+	/**
 	 * Returns the SEO attributes manager to configured by this controller.
 	 *
 	 * @method getSeoManager

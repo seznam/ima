@@ -62,7 +62,7 @@ class Manager extends ns.Core.Interface.PageManager {
 		}
 
 		this._deinitActiveController();
-		this._initController(controller);
+		this._initController(controller, params);
 
 		return this._pageRender.render(controller);
 	}
