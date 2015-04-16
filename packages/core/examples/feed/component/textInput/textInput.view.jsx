@@ -1,8 +1,8 @@
 import ns from 'imajs/client/core/namespace.js';
+import oc from 'imajs/client/core/objectContainer.js';
+import bootstrap from 'imajs/client/core/bootstrap.js';
 
-var boot = ns.oc.get('$Boot');
-
-boot.addComponent(() => {
+bootstrap.addComponent(() => {
 
 	ns.namespace('App.Component.TextInput');
 
@@ -16,8 +16,8 @@ boot.addComponent(() => {
 	/* jshint ignore:start */
 	ns.App.Component.TextInput.View = React.createClass({
 		render() {
-			var placeholder = ns.oc.get('$Dictionary').get('home.placeHolder');
-			var sendText = ns.oc.get('$Dictionary').get('home.sendText');
+			var placeholder = oc.get('$Dictionary').get('home.placeHolder');
+			var sendText = oc.get('$Dictionary').get('home.sendText');
 			var radioCategories = this.getRadioCategories(
 					this.props.categories, this.props.currentCategory, this.props.checkedCategory);
 
@@ -81,7 +81,7 @@ boot.addComponent(() => {
 			var text = this.refs.textInput.getDOMNode().value.trim();
 			this.refs.textInput.getDOMNode().value = '';
 			
-			var dispatcher = ns.oc.get('$Dispatcher');
+			var dispatcher = oc.get('$Dispatcher');
 
 			dispatcher.fire('addItemToFeed', {
 				content: text,
@@ -91,7 +91,7 @@ boot.addComponent(() => {
 
 		setCheckedCategory(e) {
 			var checked = e.currentTarget.value;
-			var dispatcher = ns.oc.get('$Dispatcher');
+			var dispatcher = oc.get('$Dispatcher');
 			dispatcher.fire('setCheckedInputCategory', checked);
 		},
 

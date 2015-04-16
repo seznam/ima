@@ -1,4 +1,5 @@
 import ns from 'imajs/client/core/namespace.js';
+import oc from 'imajs/client/core/objectContainer.js';
 
 ns.namespace('App.Base');
 
@@ -56,7 +57,7 @@ class EntityFactory extends ns.App.Interface.EntityFactory {
 	 * @return {App.Base.Entity}
 	 */
 	createEntity(data) {
-		return ns.oc.create(this._entity, data);
+		return oc.create(this._entity, data);
 	}
 }
 

@@ -36,9 +36,17 @@ module.exports = (function() {
 		'en'
 	];
 
+	var bundle = {
+		js: [
+			'./server/static/js/facebook.js'
+		],
+		css: []
+	};
+
 	return {
 		js: js,
 		less: less,
-		languages: languages
+		languages: languages,
+		bundle: bundle
 	};
 })();

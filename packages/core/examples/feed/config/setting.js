@@ -1,4 +1,4 @@
-export var init = (ns, config) => { // jshint ignore:line
+export var init = (ns, oc, config) => { // jshint ignore:line
 
 	var nsSetting = ns.namespace('Setting');
 
@@ -26,16 +26,17 @@ export var init = (ns, config) => { // jshint ignore:line
 
 				}
 			},
-			$PageRender: {
-				scripts: [
+			$Page:{
+				$Render: {
+					scripts: [
 					'/static/js/shim.js',
 					'/static/js/vendor.client.js',
 					'/static/js/locale/'+config.language+'.js',
-					'/static/js/app.client.js',
-					'/static/js/facebook.js'
-				],
-				masterView: 'App.Component.Layout.Master.View',
-				masterElementId: 'page'
+					'/static/js/app.client.js'
+					],
+					masterView: 'App.Component.Layout.Master.View',
+					masterElementId: 'page'
+				}
 			},
 			$Static: {
 				image: '/static/img'

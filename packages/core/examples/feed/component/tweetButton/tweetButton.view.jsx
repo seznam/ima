@@ -1,13 +1,13 @@
 import ns from 'imajs/client/core/namespace.js';
+import bootstrap from 'imajs/client/core/bootstrap.js';
 
-var boot = ns.oc.get('$Boot');
 
 const POPUP_SIZE = Object.freeze({
 	width: 550,
 	height: 443
 });
 
-boot.addComponent(() => {
+bootstrap.addComponent(() => {
 
 	ns.namespace('App.Component.TweetButton');
 

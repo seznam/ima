@@ -1,8 +1,8 @@
 import ns from 'imajs/client/core/namespace.js';
+import oc from 'imajs/client/core/objectContainer.js';
+import bootstrap from 'imajs/client/core/bootstrap.js';
 
-var boot = ns.oc.get('$Boot');
-
-boot.addComponent(() => {
+bootstrap.addComponent(() => {
 
 	ns.namespace('App.Component.Filter');
 
@@ -33,7 +33,7 @@ boot.addComponent(() => {
 		},
 
 		getFilterTopBar(currentCategory) {
-			var dictionary = ns.oc.get('$Dictionary');
+			var dictionary = oc.get('$Dictionary');
 			var label = dictionary.get('filter.label');
 			var currentCategoryLabel = currentCategory ?
 					currentCategory.getName() : dictionary.get('filter.defaultCategory');
@@ -49,8 +49,8 @@ boot.addComponent(() => {
 		},
 
 		getAllLink() {
-			var router = ns.oc.get('$Router');
-			var dictionary = ns.oc.get('$Dictionary');
+			var router = oc.get('$Router');
+			var dictionary = oc.get('$Dictionary');
 			var allLabel = dictionary.get('filter.all');
 
 			return (
@@ -63,7 +63,7 @@ boot.addComponent(() => {
 		getCategoryLinks(categories) {
 
 			if (categories) {
-				var router = ns.oc.get('$Router');
+				var router = oc.get('$Router');
 
 				return (
 					categories
@@ -86,7 +86,7 @@ boot.addComponent(() => {
 		},
 
 		onToggle() {
-			var dispatcher = ns.oc.get('$Dispatcher');
+			var dispatcher = oc.get('$Dispatcher');
 			dispatcher.fire('filterToggle');
 		}
 	});

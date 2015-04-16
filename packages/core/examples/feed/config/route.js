@@ -1,5 +1,5 @@
-export var init = (ns) => {
-	var router = ns.oc.get('$Router');
+export var init = (ns, oc, config) => {
+	var router = oc.get('$Router');
 
 	router
 		.add('home', '/', 'HomeController')

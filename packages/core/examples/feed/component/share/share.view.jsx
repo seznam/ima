@@ -1,8 +1,8 @@
 import ns from 'imajs/client/core/namespace.js';
+import oc from 'imajs/client/core/objectContainer.js';
+import bootstrap from 'imajs/client/core/bootstrap.js';
 
-var boot = ns.oc.get('$Boot');
-
-boot.addComponent(() => {
+bootstrap.addComponent(() => {
 
 	ns.namespace('App.Component.Share');
 
@@ -18,7 +18,7 @@ boot.addComponent(() => {
 	/* jshint ignore:start */
 	ns.App.Component.Share.View = React.createClass({
 		render() {
-			var dictionary = ns.oc.get('$Dictionary');
+			var dictionary = oc.get('$Dictionary');
 			var label = dictionary.get('home.share');
 
 			var TwitterButtonA = ns.App.Component.TweetButton.View;
@@ -82,7 +82,7 @@ boot.addComponent(() => {
 		},
 
 		getMailShareLink(item) {
-			var dictionary = ns.oc.get('$Dictionary');
+			var dictionary = oc.get('$Dictionary');
 			var category = this.props.category;
 			var categoryName = category ?
 					category.name : dictionary.get('home.defaultPortal');
@@ -111,7 +111,7 @@ boot.addComponent(() => {
 
 		getPostLink(item, category) {
 			if (item && category) {
-				var router = ns.oc.get('$Router');
+				var router = oc.get('$Router');
 
 				var localLink = router.link('post', {
 					category: category.getUrlName(),
@@ -126,7 +126,7 @@ boot.addComponent(() => {
 		},
 
 		onToggle() {
-			var dispatcher = ns.oc.get('$Dispatcher');
+			var dispatcher = oc.get('$Dispatcher');
 			dispatcher.fire('shareToggle', {
 				item: this.props.item
 			});

@@ -1,8 +1,7 @@
 import ns from 'imajs/client/core/namespace.js';
+import bootstrap from 'imajs/client/core/bootstrap.js';
 
-var boot = ns.oc.get('$Boot');
-
-boot.addComponent(() => {
+bootstrap.addComponent(() => {
 
 	ns.namespace('App.Component.Feed');
 
@@ -55,7 +54,7 @@ boot.addComponent(() => {
 		getMoreItems() {
 			var entity = this.props.entity;
 			if (entity) {
-				ns.oc.get('$Dispatcher').fire('getmoreitems');
+				oc.get('$Dispatcher').fire('getmoreitems');
 			}
 		}
 	});

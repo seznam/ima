@@ -14,10 +14,10 @@ class View extends ns.Core.Abstract.View {
 	/*
 	* @method constructor
 	* @constructor
-	* @param {Vendor.React} react
+	* @param {Vendor.React} React
 	* */
-	constructor(react) {
-		super(react);
+	constructor(React) {
+		super(React);
 	}
 
 	/**
@@ -30,8 +30,8 @@ class View extends ns.Core.Abstract.View {
 		super.init(controller);
 		var self = this;
 
-		this._view = this._react.createClass({
-			mixins: [self._viewConfig],
+		this._view = this._React.createClass({
+			mixins: [self._viewMixin],
 			displayName: '',
 			/* jshint ignore:start */
 			render() {

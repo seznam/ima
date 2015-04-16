@@ -1,8 +1,8 @@
 import ns from 'imajs/client/core/namespace.js';
+import oc from 'imajs/client/core/objectContainer.js';
+import bootstrap from 'imajs/client/core/bootstrap.js';
 
-var boot = ns.oc.get('$Boot');
-
-boot.addComponent(() => {
+bootstrap.addComponent(() => {
 
 	ns.namespace('App.Component.Header');
 
@@ -17,7 +17,7 @@ boot.addComponent(() => {
 	/* jshint ignore:start */
 	ns.App.Component.Header.View = React.createClass({
 		render() {
-			var dictionary = ns.oc.get('$Dictionary');
+			var dictionary = oc.get('$Dictionary');
 
 			return (
 				<div className='l-header'>

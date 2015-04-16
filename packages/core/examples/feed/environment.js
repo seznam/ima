@@ -4,17 +4,8 @@ module.exports = (function() {
 		prod: {
 			$Debug: false,
 			$Env: 'prod',
-			/*
-			 * Pair (key:value) is used for pairing urls with language.
-			 * 
-			 * - Key: 	Url have to start with '//' instead protocol and you can define root path. 
-			 * 			Optional parameter ":language" could be defined in the end, to display language in url.
-			 * 
-			 * - Value: Language definition for url. If ":language" optional parameter is used, 
-			 *			this language is used like default language.
-			 */ 
 			$Language:{
-				'//example.com/root/path/:language': 'en'
+				'//example.com': 'en'
 			},
 			$Server: {
 				port: 3001,
@@ -37,7 +28,7 @@ module.exports = (function() {
 			 * - Value: Language definition for url. If ":language" optional parameter is used, 
 			 *			this language is used like default language.
 			 */ 
-			$Language:{
+			$Language: {
 				'//localhost:3001': 'en'
 			},
 			$Server: {
@@ -52,15 +43,6 @@ module.exports = (function() {
 		test: {
 			$Debug: true,
 			$Env: 'test',
-			/*
-			 * Pair (key:value) is used for pairing urls with language.
-			 * 
-			 * - Key: 	Url have to start with '//' instead protocol and you can define root path. 
-			 * 			Optional parameter ":language" could be defined in the end, to display language in url.
-			 * 
-			 * - Value: Language definition for url. If ":language" optional parameter is used, 
-			 *			this language is used like default language.
-			 */ 
 			$Language:{
 				'//localhost:3001': 'en'
 			},
