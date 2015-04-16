@@ -45,6 +45,14 @@ class ClientHandler extends ns.Core.Abstract.Router {
 		 */
 		this.POP_STATE_EVENT = 'popstate';
 
+		/**
+		 * @property CLICK_EVENT
+		 * @const
+		 * @type {string}
+		 * @default 'click'
+		 */
+		this.CLICK_EVENT = 'click';
+
 	}
 
 	/**
@@ -83,13 +91,13 @@ class ClientHandler extends ns.Core.Abstract.Router {
 	listen() {
 		var windowElement = this._window.getWindow();
 
-		this._window.addEventListener(windowElement, this.POP_STATE_EVENT, (event) => {
+		this._window.bindEventListener(windowElement, this.POP_STATE_EVENT, (event) => {
 			if (event.state) {
 				this.route(this.getPath());
 			}
 		});
 
-		this._window.addEventListener(windowElement, 'click', (e)=> {
+		this._window.bindEventListener(windowElement, this.CLICK_EVENT, (e)=> {
 			this._handleClick(e);
 		});
 

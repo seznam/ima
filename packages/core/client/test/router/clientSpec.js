@@ -27,13 +27,13 @@ describe('Core.Router.Client', function() {
 	});
 
 	it('should be add listener to popState event and click event', function() {
-		spyOn(win, 'addEventListener')
+		spyOn(win, 'bindEventListener')
 			.and
 			.stub();
 
 		router.listen();
 
-		expect(win.addEventListener.calls.count()).toEqual(2);
+		expect(win.bindEventListener.calls.count()).toEqual(2);
 	});
 
 	describe('redirect method', function() {
