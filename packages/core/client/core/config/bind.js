@@ -107,6 +107,7 @@ export var init = (ns, oc, config) => { //jshint ignore:line
 	//COMPONENT
 	oc.bind('$Utils', {
 		router: oc.get('$Router'),
+		dispatcher: oc.get('$Dispatcher'),
 		dictionary: oc.get('$Dictionary'),
 		setting: oc.get('$SETTING'),
 		window: oc.get('$Window')

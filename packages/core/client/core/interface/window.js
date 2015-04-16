@@ -17,8 +17,7 @@ class Window {
 	 *
 	 * @method isClient
 	 */
-	isClient() {
-	}
+	isClient() {}
 
 	/**
 	 * Returns true if cookie is enabled.
@@ -26,8 +25,7 @@ class Window {
 	 * @method isCookieEnabled
 	 * @return {boolean}
 	 */
-	isCookieEnabled() {
-	}
+	isCookieEnabled() {}
 
 
 	/**
@@ -35,144 +33,134 @@ class Window {
 	 *
 	 * @method hasSessionStorage
 	 */
-	hasSessionStorage() {
-	}
+	hasSessionStorage() {}
 
 	/**
 	 * Returns true if websocket is supported.
 	 *
 	 * @method hasWebSocket
 	 */
-	hasWebSocket() {
-	}
+	hasWebSocket() {}
 
 	/**
 	 * Returns true if history API is supported.
 	 *
 	 * @method hasHistoryAPI
 	 */
-	hasHistoryAPI() {
-	}
+	hasHistoryAPI() {}
 
 	/**
 	 * Set new page title.
 	 *
 	 * @method setTitle
 	 */
-	setTitle() {
-	}
+	setTitle() {}
 
 	/**
 	 * Get WebSocket interface.
 	 *
 	 * @method getWebSocket
 	 */
-	getWebSocket() {
-	}
+	getWebSocket() {}
 
 	/**
 	 * Returns object window.
 	 *
 	 * @method getWindow
 	 */
-	getWindow() {
-	}
+	getWindow() {}
 
 	/**
 	 * Returns current domain.
 	 *
 	 * @method getDomain
 	 */
-	getDomain() {
-	}
+	getDomain() {}
 
 	/**
 	 * Returns current path.
 	 *
 	 * @method getPath
 	 */
-	getPath() {
-	}
+	getPath() {}
 
 	/**
 	 * Returns current url.
 	 *
 	 * @method getUrl
 	 */
-	getUrl() {
-	}
+	getUrl() {}
 
 	/**
 	 * Returns body element.
 	 *
 	 * @method getBody
 	 */
-	getBody() {
-	}
+	getBody() {}
 	
 	/**
 	 * Returns element by id.
 	 *
 	 * @method getElementById
 	 */
-	getElementById() {
-	}
+	getElementById() {}
 	
 	/**
 	 * Returns the first element within the document that matches the specified group of selectors.
 	 *
 	 * @method querySelector
 	 */
-	querySelector() {
-	}
+	querySelector() {}
 	
 	/**
 	 * Returns a list of the elements within the document that match the specified group of selectors.
 	 *
 	 * @method querySelectorAll
 	 */
-	querySelectorAll() {
-	}
+	querySelectorAll() {}
 
 	/**
 	 * Redirect to url.
 	 *
 	 * @method redirect
 	 */
-	redirect() {
-	}
+	redirect() {}
 	
 	/**
 	 * Push state to history API.
 	 *
 	 * @method pushStateToHistoryAPI
 	 */
-	pushStateToHistoryAPI() {
-	}
+	pushStateToHistoryAPI() {}
 
 	/**
-	 * Add event listener.
+	 * Bind event listener.
 	 *
-	 * @method addEventListener
+	 * @method bindEventListener
+	 * @param {EventTarget} element
+	 * @param {string} event
+	 * @param {function} listener
+	 * @param {boolean} [useCapture=false]
 	 */
-	addEventListener() {
-	}
+	bindEventListener(element, event, listener, useCapture = false) {}
 
 	/**
-	 * Remove event listener.
+	 * Unbind event listener.
 	 *
-	 * @method removeEventListener
+	 * @method unbindEventListener
+	 * @param {EventTarget} element
+	 * @param {string} event
+	 * @param {function} listener
+	 * @param {boolean} [useCapture=false]
 	 */
-	removeEventListener() {
-	}
+	unbindEventListener(element, event, listener, useCapture = false) {}
 
 	/**
 	 * PreventDefault action.
 	 *
 	 * @method preventDefault
 	 */
-	preventDefault() {
-	}
+	preventDefault() {}
 
 }
 

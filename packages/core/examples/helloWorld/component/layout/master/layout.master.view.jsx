@@ -1,7 +1,7 @@
 import ns from 'imajs/client/core/namespace.js';
 import bootstrap from 'imajs/client/core/bootstrap.js';
 
-bootstrap.addComponent(() => {
+bootstrap.addComponent((utils) => {
 
 	ns.namespace('App.Component.Layout.Master');
 
@@ -12,10 +12,14 @@ bootstrap.addComponent(() => {
 	 * @module App
 	 * @submodule Component
 	 */
-	/* jshint ignore:start */
-	ns.App.Component.Layout.Master.RC = React.createClass({
+	class View extends React.Component {
+
+		constructor(props) {
+			super(props);
+		}
+
 		render() {
-			var appCssFile = this.props.setting.$Env !== 'dev' ? 'app.min.css' : 'app.css';
+			var appCssFile = utils.setting.$Env !== 'dev' ? 'app.min.css' : 'app.css';
 
 			return (
 				<html>
@@ -45,7 +49,7 @@ bootstrap.addComponent(() => {
 				</html>
 			);
 		}
-	});
-	ns.App.Component.Layout.Master.View = React.createFactory(ns.App.Component.Layout.Master.RC);
-	/* jshint ignore:end */
+	}
+
+	ns.App.Component.Layout.Master.View = React.createFactory(View);
 });

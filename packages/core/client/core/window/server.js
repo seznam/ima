@@ -64,8 +64,7 @@ class Server extends ns.Core.Interface.Window {
 	 *
 	 * @method setTitle
 	 */
-	setTitle() {
-	}
+	setTitle() {}
 
 	/**
 	 * Get WebSocket interface.
@@ -169,40 +168,43 @@ class Server extends ns.Core.Interface.Window {
 	 *
 	 * @method redirect
 	 */
-	redirect() {
-	}
+	redirect() {}
 
 	/**
 	 * Push state to history API.
 	 *
 	 * @method pushStateToHistoryAPI
 	 */
-	pushStateToHistoryAPI() {
-	}
+	pushStateToHistoryAPI() {}
 
 	/**
-	 * Add event listener.
+	 * Bind event listener.
 	 *
-	 * @method addEventListener
+	 * @method bindEventListener
+	 * @param {EventTarget} element
+	 * @param {string} event
+	 * @param {function} listener
+	 * @param {boolean} [useCapture=false]
 	 */
-	addEventListener() {
-	}
+	bindEventListener(element, event, listener, useCapture = false) {}
 
 	/**
-	 * Remove event listener.
+	 * Unbind event listener.
 	 *
-	 * @method removeEventListener
+	 * @method unbindEventListener
+	 * @param {EventTarget} element
+	 * @param {string} event
+	 * @param {function} listener
+	 * @param {boolean} [useCapture=false]
 	 */
-	removeEventListener() {
-	}
+	unbindEventListener(element, event, listener, useCapture = false) {}
 
 	/**
 	 * PreventDefault action.
 	 *
 	 * @method preventDefault
 	 */
-	preventDefault() {
-	}
+	preventDefault() {}
 
 }
 

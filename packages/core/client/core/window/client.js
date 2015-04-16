@@ -196,15 +196,15 @@ class Client extends ns.Core.Interface.Window {
 	}
 
 	/**
-	 * Add event listener.
+	 * Bind event listener.
 	 *
-	 * @method addEventListener
+	 * @method bindEventListener
 	 * @param {EventTarget} element
 	 * @param {string} event
 	 * @param {function} listener
 	 * @param {boolean} [useCapture=false]
 	 */
-	addEventListener(element, event, listener, useCapture = false) {
+	bindEventListener(element, event, listener, useCapture = false) {
 		if (element.addEventListener) {
 			element.addEventListener(event, listener, useCapture);
 		} else {
@@ -215,15 +215,15 @@ class Client extends ns.Core.Interface.Window {
 	}
 
 	/**
-	 * Remove event listener.
+	 * Unbind event listener.
 	 *
-	 * @method removeEventListener
+	 * @method unbindEventListener
 	 * @param {EventTarget} element
 	 * @param {string} event
 	 * @param {function} listener
 	 * @param {boolean} [useCapture=false]
 	 */
-	removeEventListener(element, event, listener, useCapture = false) {
+	unbindEventListener(element, event, listener, useCapture = false) {
 		if (element.removeEventListener) {
 			element.removeEventListener(event, listener, useCapture);
 		} else {
