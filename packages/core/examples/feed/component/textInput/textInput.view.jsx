@@ -1,8 +1,7 @@
 import ns from 'imajs/client/core/namespace.js';
-import oc from 'imajs/client/core/objectContainer.js';
 import bootstrap from 'imajs/client/core/bootstrap.js';
 
-bootstrap.addComponent(() => {
+bootstrap.addComponent((utils) => {
 
 	ns.namespace('App.Component.TextInput');
 
@@ -16,10 +15,10 @@ bootstrap.addComponent(() => {
 	/* jshint ignore:start */
 	ns.App.Component.TextInput.View = React.createClass({
 		render() {
-			var placeholder = oc.get('$Dictionary').get('home.placeHolder');
-			var sendText = oc.get('$Dictionary').get('home.sendText');
+			var placeholder = utils.dictionary.get('home.placeHolder');
+			var sendText = utils.dictionary.get('home.sendText');
 			var radioCategories = this.getRadioCategories(
-					this.props.categories, this.props.currentCategory, this.props.checkedCategory);
+					this.props.categories,this.props.currentCategory, this.props.checkedCategory);
 
 			return (
 				<div className="text-input">
@@ -80,10 +79,8 @@ bootstrap.addComponent(() => {
 		sendText(e, id) {
 			var text = this.refs.textInput.getDOMNode().value.trim();
 			this.refs.textInput.getDOMNode().value = '';
-			
-			var dispatcher = oc.get('$Dispatcher');
 
-			dispatcher.fire('addItemToFeed', {
+			utils.dispatcher.fire('addItemToFeed', {
 				content: text,
 				category: Number(this.props.checkedCategory.getId())
 			});
@@ -91,8 +88,7 @@ bootstrap.addComponent(() => {
 
 		setCheckedCategory(e) {
 			var checked = e.currentTarget.value;
-			var dispatcher = oc.get('$Dispatcher');
-			dispatcher.fire('setCheckedInputCategory', checked);
+			utils.dispatcher.fire('setCheckedInputCategory', checked);
 		},
 
 		sendTextByKeys(e) {

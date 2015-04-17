@@ -1,8 +1,7 @@
 import ns from 'imajs/client/core/namespace.js';
-import oc from 'imajs/client/core/objectContainer.js';
 import bootstrap from 'imajs/client/core/bootstrap.js';
 
-bootstrap.addComponent(() => {
+bootstrap.addComponent((utils) => {
 
 	ns.namespace('App.Component.FeedItem');
 
@@ -62,10 +61,9 @@ bootstrap.addComponent(() => {
 		},
 
 		getHashTag(category) {
-			var router = oc.get('$Router');
 
 			if (category) {
-				var link = router.link('category', { category: category.getUrlName() });
+				var link = utils.router.link('category', { category: category.getUrlName() });
 
 				return (
 					<a href={link}>{category.getHashTag()}</a>

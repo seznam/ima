@@ -7,7 +7,7 @@ const POPUP_SIZE = Object.freeze({
 	height: 443
 });
 
-bootstrap.addComponent(() => {
+bootstrap.addComponent((utils) => {
 
 	ns.namespace('App.Component.TweetButton');
 
@@ -115,11 +115,13 @@ bootstrap.addComponent(() => {
 				hashtags: this.props.hashTags.replace('#', '')
 			};
 
-			var queryString = Object.keys(query).map((parameterName) => {
-				return [parameterName, query[parameterName]].
-						map(encodeURIComponent).
-						join('=');
-			}).join("&");
+			var queryString = Object.keys(query)
+				.map((parameterName) => {
+					return [
+						parameterName,
+						query[parameterName]
+					].map(encodeURIComponent).join('=');
+				}).join("&");
 
 			return `https://twitter.com/share?${queryString}`;
 		}

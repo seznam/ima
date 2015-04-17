@@ -30,15 +30,15 @@ export var init = (ns, oc, config) => {
 	oc.bind('FeedEntity', ns.App.Module.Feed.Entity);
 	oc.bind('FeedFactory', oc.make('App.Module.Feed.Factory', ['ItemFactory']));
 	oc.bind('FeedResource', oc.make('App.Module.Feed.Resource', ['FakeHttp', 'ITEMS_API_URL', 'FeedFactory', '$Cache']));
-	oc.bind('FeedService', oc.make('App.Module.Feed.Service', ['FeedResource']));
+	oc.bind('FeedService', oc.make('App.Module.Feed.Service', ['FeedResource', 'CategoryListService']));
 	
 	// Page Home
 	oc.bind('HomeView', ns.App.Page.Home.View, ['$BindReact']);
-	oc.bind('HomeController', ns.App.Page.Home.Controller, ['HomeView', 'FeedService', 'CategoryListService', 'ItemResource', '$Dispatcher', '$Dictionary']);
+	oc.bind('HomeController', ns.App.Page.Home.Controller, ['HomeView', 'FeedService', 'CategoryListService', 'ItemResource', '$Dispatcher']);
 
 	// Page Detail
 	oc.bind('DetailView', ns.App.Page.Detail.View, ['$BindReact']);
-	oc.bind('DetailController', ns.App.Page.Detail.Controller, ['DetailView', 'ItemService', 'CategoryListService', '$Dispatcher', '$Dictionary']);
+	oc.bind('DetailController', ns.App.Page.Detail.Controller, ['DetailView', 'ItemService', 'CategoryListService']);
 
 	// Page Error
 	oc.bind('ErrorView', ns.App.Page.Error.View, ['$BindReact']);

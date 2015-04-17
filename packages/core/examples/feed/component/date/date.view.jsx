@@ -1,8 +1,7 @@
 import ns from 'imajs/client/core/namespace.js';
-import oc from 'imajs/client/core/objectContainer.js';
 import bootstrap from 'imajs/client/core/bootstrap.js';
 
-bootstrap.addComponent(() => {
+bootstrap.addComponent((utils) => {
 
 	ns.namespace('App.Component.Date');
 
@@ -18,8 +17,7 @@ bootstrap.addComponent(() => {
 		render() {
 			var date = this.props.date || new Date();
 
-			var dictionary = oc.get('$Dictionary');
-			var formattedDate = dictionary.get('home.dateFormat', {
+			var formattedDate = utils.dictionary.get('home.dateFormat', {
 				DATE: date.getDate(),
 				MONTH: date.getMonth()+1,
 				YEAR: date.getFullYear()

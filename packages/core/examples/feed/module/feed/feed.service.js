@@ -18,8 +18,9 @@ class Service extends ns.App.Base.Service {
 	 * @method constructor
 	 * @constructor
 	 * @param {App.Module.Feed.Resource} feedResource
+	 * @param {App.Module.Category.Service} categoryListService
 	 */
-	constructor(feedResource) {
+	constructor(feedResource, categoryListService) {
 		super();
 
 		/**
@@ -29,6 +30,14 @@ class Service extends ns.App.Base.Service {
 		 * @default feedResource
 		 * */
 		this._feedResource = feedResource;
+
+		/**
+		 * @property _categoryListService
+		 * @private
+		 * @type {App-Module.Category.Service}
+		 * @default categoryListService
+		 */
+		this._categoryListService = categoryListService;
 
 	}
 
@@ -92,16 +101,17 @@ class Service extends ns.App.Base.Service {
 
 	/**
 	 * @method load
-	 * @param {App.Module.Portal.Entity} [currentPortalEntity=null]
+	 * @param {string=} [currentCategory=null]
 	 */
-	load(currentPortalEntity) {
-
-		return currentPortalEntity.then((portalEntity) => {
+	load(currentCategory = null) {
+		return this
+			._categoryListService
+			.getCategoryByUrl(currentCategory)
+			.then((portalEntity) => {
 
 				return this._feedResource
 						.getEntity(portalEntity);
-			}
-		);
+			});
 	}
 
 	/**

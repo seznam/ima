@@ -1,8 +1,7 @@
 import ns from 'imajs/client/core/namespace.js';
-import oc from 'imajs/client/core/objectContainer.js';
 import bootstrap from 'imajs/client/core/bootstrap.js';
 
-bootstrap.addComponent(() => {
+bootstrap.addComponent((utils) => {
 
 	ns.namespace('App.Component.Header');
 
@@ -17,14 +16,13 @@ bootstrap.addComponent(() => {
 	/* jshint ignore:start */
 	ns.App.Component.Header.View = React.createClass({
 		render() {
-			var dictionary = oc.get('$Dictionary');
 
 			return (
 				<div className='l-header'>
-					<a href={'//'+dictionary.get('home.imaLink')} title={dictionary.get('home.imaLink')}>{dictionary.get('home.imaLink')}</a>
+					<a href={'//'+utils.dictionary.get('home.imaLink')} title={utils.dictionary.get('home.imaLink')}>{utils.dictionary.get('home.imaLink')}</a>
 					<div className='title-wrapper'>
-						<a href='/' title={dictionary.get('home.pageTitle')} className="logo"></a>
-						<h1>{dictionary.get('home.pageTitle')}</h1>
+						<a href='/' title={utils.dictionary.get('home.pageTitle')} className="logo"></a>
+						<h1>{utils.dictionary.get('home.pageTitle')}</h1>
 					</div>
 				</div>
 			);

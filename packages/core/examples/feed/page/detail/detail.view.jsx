@@ -18,22 +18,23 @@ ns.namespace('App.Page.Detail');
 class View extends ns.Core.Abstract.View {
 
 	/*
-	* @method constructor
-	* @constructor
-	* @param {Vendor.React} React
-	* */
-	constructor(React) {
-		super(React);
+	 * @method constructor
+	 * @constructor
+	 * @param {Vendor.React} React
+	 * @param {Object} utils
+	 */
+	constructor(React, utils) {
+		super(React, utils);
 	}
 
 	/**
 	 * Initialization view.
 	 *
 	 * @method init
-	 * @param {App.Page.Detail.Controller} cotroller
-	 * */
-	init(controller) {
-		super.init(controller);
+	 * @param {function()} getInitializationState
+	 */
+	init(getInitializationState) {
+		super.init(getInitializationState);
 		var self = this;
 
 		this._view = this._React.createClass({
