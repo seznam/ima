@@ -3,85 +3,112 @@ import ns from 'imajs/client/core/namespace.js';
 ns.namespace('Core.Interface');
 
 /**
- * @class Cache
+ * The cache provides a temporary storage for expirable information. The
+ * primary use of a cache is caching information obtained via constly means
+ * (CPU-heavy computation or networking) to speed up the application
+ * performance when the same information needs to be retrieved multiple times.
+ *
+ * @interface Cache
  * @namespace Core.Interface
  * @module Core
  * @submodule Core.Interface
  */
 class Cache {
-
 	/**
-	 * Clear all cache.
+	 * Clear the cache by deleting all entries.
 	 *
 	 * @method clear
 	 */
-	clear() {
-	}
+	clear() {}
 
 	/**
-	 * Return true if key exist in cache.
+	 * Tests whether the cache contains a fresh entry for the specified key. A
+	 * cache entry is fresh if the has not expired its TTL (time to live).
+	 *
+	 * The method always returns {@code false} if the cache is currently
+	 * disabled.
 	 *
 	 * @method has
+	 * @param {string} key The identifier of the cache entry.
+	 * @return {boolean} {@code true} if the cache is enabled, the entry exists
+	 *         and has not expired yet.
 	 */
-	has(){
-	}
+	has(key) {}
 
 	/**
-	 * Return cached value for key. If key doesnt exist then throw error.
+	 * Returns the value of the entry identified by the specified key.
+	 *
+	 * The method returns {@code null} if the specified entry does not exist, has
+	 * already expired, or the cache is currently disabled.
 	 *
 	 * @method get
+	 * @param {string} key The identifier of the cache entry.
+	 * @return {*} The value of the specified cache entry, or {@code null} if the
+	 *         entry is not available.
 	 */
-	get() {
-	}
+	get(key) {}
 
 	/**
-	 * Set value to cache for key.
+	 * Sets the cache entry identified by the specified key to the provided
+	 * value. The entry is created if it does not exist yet.
 	 *
 	 * @method set
+	 * @param {string} key The identifier of the cache entry.
+	 * @param {*} value The cache entry value.
+	 * @param {?number=} ttl Cache entry time to live in milliseconds. The entry
+	 *        will expire after the specified amount of milliseconds. Use
+	 *        {@code null} or omit the parameter to use the default TTL of this
+	 *        cache.
 	 */
-	set() {
-	}
+	set(key, value, ttl = null) {}
 
 	/**
-	 * Delete value in cache for key.
+	 * Deletes the specified cache entry. The method has no effect if the entry
+	 * does not exist.
 	 *
 	 * @method delete
+	 * @param {string} key The identifier of the cache entry.
 	 */
-	delete() {
-	}
+	delete(key) {}
 
 	/**
-	 * Disbale cache.
+	 * Disables the cache, preventing the retrieval of any cached entries and
+	 * reporting all cache entries as non-existing. Disabling the cache does not
+	 * however prevent setting the existing or creating new cache entries.
+	 *
+	 * The method has no effect if the cache is already disabled.
 	 *
 	 * @method disable
 	 */
-	disable() {
-	}
+	disable() {}
 
 	/**
-	 * Enable cache
+	 * Enables the cache, allowing the retrieval of cache entries.
+	 *
+	 * The method has no effect if the cache is already enabled.
 	 *
 	 * @method enable
 	 */
-	enable() {
-	}
+	enable() {}
 
 	/**
-	 * Serialization data from cache.
+	 * Exports the state of this cache to a JSON string.
 	 *
 	 * @method serialize
+	 * @return {string} A JSON string containing an object representing of the
+	 *         current state of this cache.
 	 */
-	serialize() {
-	}
-
+	serialize() {}
 
 	/**
 	 * Deserialization data from JSON.
 	 *
 	 * @method deserialize
+	 * @object {Object<string, {value: *, ttl: number}>} serializedData An object
+	 *         representing the state of the cache to load, obtained by parsing
+	 *         the JSON string returned by the {@codelink serialize} method.
 	 */
-	deserialize() {
-	}
+	deserialize(serializedData) {}
 }
 
 ns.Core.Interface.Cache = Cache;

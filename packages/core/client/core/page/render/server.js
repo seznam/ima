@@ -20,30 +20,29 @@ class Server extends ns.Core.Abstract.PageRender {
 	 *
 	 * @method contructor
 	 * @constructor
-	 * @param {Vendor.Rsvp} rsvp The RSVP implementation of the Promise API and
+	 * @param {Vendor.Rsvp} Rsvp The RSVP implementation of the Promise API and
 	 *        related helpers.
-	 * @param {Vendor.React} react React framework instance to use to render the
+	 * @param {Vendor.React} React React framework instance to use to render the
 	 *        page.
-	 * @param {Core.Animate.Handler} animate UI animation control helper.
-	 * @param {Object<string, *>} settings Application settings for the current
+	 * @param {Object<string, *>} setting Application setting for the current
 	 *        application environment.
-	 * @param {Core.Router.Respond} respond Utility for sending the page markup
+	 * @param {Core.Router.Response} response Utility for sending the page markup
 	 *        to the client as a response to the current HTTP request.
 	 * @param {Core.Interface.Cache} cache Resource cache caching the results of
 	 *        HTTP requests made by services used by the rendered page.
 	 */
-	constructor(rsvp, react, animate, settings, respond, cache) {
-		super(rsvp, react, animate, settings);
+	constructor(Rsvp, React, setting, response, cache) {
+		super(Rsvp, React, setting);
 
 		/**
 		 * Utility for sending the page markup to the client as a response to the
 		 * current HTTP request.
 		 *
-		 * @property _respond
+		 * @property _response
 		 * @private
-		 * @type {Core.Router.Respond}
+		 * @type {Core.Router.Response}
 		 */
-		this._respond = respond;
+		this._response = response;
 
 		/**
 		 * The resource cache, caching the results of all HTTP requests made by the
@@ -65,30 +64,31 @@ class Server extends ns.Core.Abstract.PageRender {
 	 * @method render
 	 * @param {Core.Abstract.Controller} controller The page controller that
 	 *        should have its view rendered.
-	 * @param {Object<string, *>=} [params={}] The route parameters.
+	 * @param {Vendor.React.Component} view
 	 * @return {Promise}
 	 */
-	render(controller, params = {}) {
+	render(controller, view) {
 		var loadPromises = this._wrapEachKeyToPromise(controller.load());
 
 		return (
-			this._rsvp
+			this._Rsvp
 				.hash(loadPromises)
 				.then((fetchedResources) => {
 					controller.setState(fetchedResources);
 					controller.setSeoParams(fetchedResources);
 
-					var view = controller.getReactView();
-					var pageMarkup = this._react.renderToString(view);
+					var reactElementView = this._React.createElement(view, controller.getState());
 
-					var masterView = oc.get(this._settings.$Page.$Render.masterView);
-					var appMarkup = this._react.renderToStaticMarkup(masterView({
+					var pageMarkup = this._React.renderToString(reactElementView);
+
+					var masterView = oc.get(this._setting.$Page.$Render.masterView);
+					var appMarkup = this._React.renderToStaticMarkup(masterView({
 						page: pageMarkup,
 						scripts: this._getScripts(),
 						seo: controller.getSeoManager()
 					}));
 
-					this._respond
+					this._response
 						.status(controller.getHttpStatus())
 						.send('<!doctype html>\n' + appMarkup);
 				})
@@ -98,7 +98,7 @@ class Server extends ns.Core.Abstract.PageRender {
 	/**
 	 * Generates the HTML code concontaining all scripts elements to include into
 	 * the rendered page. THe HTML code will include the scripts specified in
-	 * page renderer's settings and a script setting the "rehydration" data for
+	 * page renderer's setting and a script setting the "rehydration" data for
 	 * the application at the client-side.
 	 *
 	 * @method _getScripts
@@ -110,19 +110,19 @@ class Server extends ns.Core.Abstract.PageRender {
 		var scripts = [];
 		var html = '';
 
-		scripts = this._settings.$Page.$Render.scripts
+		scripts = this._setting.$Page.$Render.scripts
 			.map(script => `<script src="${script}"></script>`);
 
 		scripts.push(
 			'<script>' +
 			' window.$IMA = window.$IMA || {};' +
 			' window.$IMA.Cache = ' + (this._cache.serialize()) + ';' +
-			' window.$IMA.Language = "' + (this._settings.$Language) + '";' +
-			' window.$IMA.Environment = "' + (this._settings.$Env) + '";' +
-			' window.$IMA.Protocol = "' + (this._settings.$Protocol) + '";'+
-			' window.$IMA.Domain = "' + (this._settings.$Domain) + '";'+
-			' window.$IMA.Root = "' + (this._settings.$Root) + '";'+
-			' window.$IMA.LanguagePartPath = "' + (this._settings.$LanguagePartPath) + '";'+
+			' window.$IMA.$Language = "' + (this._setting.$Language) + '";' +
+			' window.$IMA.$Env = "' + (this._setting.$Env) + '";' +
+			' window.$IMA.$Protocol = "' + (this._setting.$Protocol) + '";'+
+			' window.$IMA.$Domain = "' + (this._setting.$Domain) + '";'+
+			' window.$IMA.$Root = "' + (this._setting.$Root) + '";'+
+			' window.$IMA.$LanguagePartPath = "' + (this._setting.$LanguagePartPath) + '";'+
 			'</script>'
 		);
 		html = scripts.join('');

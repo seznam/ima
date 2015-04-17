@@ -1,60 +1,81 @@
 import ns from 'imajs/client/core/namespace.js';
-import CoreError from 'imajs/client/core/coreError.js';
 
-ns.namespace('Core.Abstract');
+ns.namespace('Core.Decorator');
 
 /**
- * Basic implementation of the {@codelink Core.Interface.Controller} interface,
- * providing the default implementation of most of the API.
+ * Decorator for page controllers. The decorator manages references to the SEO
+ * attributes manager and other utilities to provide them to the decorated page
+ * controller.
  *
- * @abstract
- * @class Controller
+ * @class SeoController
  * @implements Core.Interface.Controller
- * @namespace Core.Abstract
+ * @namespace Core.Decorator
  * @module Core
- * @submodule Core.Abstract
- * @requires Core.Interface.View
+ * @submodule Core.Decorator
  */
-class Controller extends ns.Core.Interface.Controller {
+class SeoController extends ns.Core.Interface.Controller {
 
 	/**
-	 * Initializes the controller.
+	 * Initializes the controller decorator.
 	 *
-	 * @constructor
 	 * @method constructor
+	 * @constructor
+	 * @param {Core.Interface.Controller} controller The actuall controller being
+	 *        decorated.
+	 * @param {Core.Interface.Seo} seo SEO attributes manager.
+	 * @param {Core.Interface.Router} router The application router.
+	 * @param {Core.Interface.Dictionary} dictionary Localization phrases
+	 *        dictionary.
+	 * @param {Object<string, *>} setting  Application settings for the current
+	 *        application environment.
 	 */
-	constructor() {
+	constructor(controller, seo, router, dictionary, setting) {
 		super();
 
 		/**
-		 * Pointer for active react class in DOM.
+		 * The actuall controller being decorated.
 		 *
-		 * @property _reactiveView
-		 * @protected
-		 * @type {Vendor.React.ReactComponent}
-		 * @default null
+		 * @property _controller
+		 * @private
+		 * @type {Core.Interface.Controller}
 		 */
-		this._reactiveView = null;
+		this._controller = controller;
 
 		/**
-		 * The HTTP response code to send to the client.
+		 * SEO attributes manager.
 		 *
-		 * @property _status
-		 * @protected
-		 * @type {number}
-		 * @default 200
+		 * @property _seo
+		 * @private
+		 * @type {Core.Interface.Seo}
 		 */
-		this._status = 200;
+		this._seo = seo;
 
 		/**
-		 * The route parameters extracted from the current route.
+		 * The application router.
 		 *
-		 * @property params
-		 * @public
-		 * @type {Object<string, string>}
-		 * @default {}
+		 * @property _router
+		 * @private
+		 * @type {Core.Interface.Router}
 		 */
-		this.params = {};
+		this._router = router;
+
+		/**
+		 * Localization phrases dictionary.
+		 *
+		 * @property _dictionary
+		 * @private
+		 * @type {Core.Interface.Dictionary}
+		 */
+		this._dictionary = dictionary;
+
+		/**
+		 * Application settings for the current application environment.
+		 *
+		 * @property _setting
+		 * @private
+		 * @type {Object<string, *>}
+		 */
+		this._setting = setting;
 	}
 
 	/**
@@ -64,7 +85,9 @@ class Controller extends ns.Core.Interface.Controller {
 	 * @override
 	 * @method init
 	 */
-	init() {}
+	init() {
+		this._controller.init();
+	}
 
 	/**
 	 * Finalization callback, called when the controller is being discarded by
@@ -81,7 +104,9 @@ class Controller extends ns.Core.Interface.Controller {
 	 * @override
 	 * @method deinit
 	 */
-	deinit() {}
+	deinit() {
+		this._controller.deinit();
+	}
 
 	/**
 	 * Callback for activating the controller in the UI. This is the last method
@@ -98,7 +123,8 @@ class Controller extends ns.Core.Interface.Controller {
 	 * @override
 	 * @method activate
 	 */
-	activate() {
+	activate() { // jshint ignore:line
+		this._controller.activate();
 	}
 
 	/**
@@ -133,8 +159,7 @@ class Controller extends ns.Core.Interface.Controller {
 	 *         resolved values will be pushed to the controller's state.
 	 */
 	load() {
-		throw new CoreError('The Core.Abstract.Controller.load method is abstract ' +
-		'and must be overridden');
+		return this._controller.load();
 	}
 
 	/**
@@ -149,7 +174,7 @@ class Controller extends ns.Core.Interface.Controller {
 	 * @param {Vendor.React.ReactComponent} The rendered controller's view.
 	 */
 	setReactiveView(reactiveView) {
-		this._reactiveView = reactiveView;
+		this._controller.setReactiveView(reactiveView);
 	}
 
 	/**
@@ -168,9 +193,7 @@ class Controller extends ns.Core.Interface.Controller {
 	 *        old state.
 	 */
 	setState(state) {
-		if (this._reactiveView) {
-			this._reactiveView.setState(state);
-		}
+		this._controller.setState(state);
 	}
 
 	/**
@@ -195,8 +218,8 @@ class Controller extends ns.Core.Interface.Controller {
 	 * @param {Object<string, *>} statePatch Patch of the controller's state to
 	 *        apply.
 	 */
-	patchState(statePatch) {
-		this.setState(statePatch);
+	patchState(state) {
+		this._controller.patchState(state);
 	}
 
 	/**
@@ -207,7 +230,9 @@ class Controller extends ns.Core.Interface.Controller {
 	 * @method getState
 	 * @return {Object<string, *>} The current state of this controller.
 	 */
-	getState() {}
+	getState() {
+		return this._controller.getState();
+	}
 
 	/**
 	 * Callback used to configure the SEO attribute manager. The method is called
@@ -223,16 +248,10 @@ class Controller extends ns.Core.Interface.Controller {
 	 *        resources loaded by the {@codelink load} method. This is the same
 	 *        object as the one passed to the {@codelink patchState} method when
 	 *        the Promises returned by the {@codelink load} method were resolved.
-	 * @param {Core.Interface.Seo} seo SEO attributes manager to configure.
-	 * @param {Core.Interface.Router} router The current application router.
-	 * @param {Core.Interface.Dictionary} dictionary The current localization
-	 *        dictionary.
-	 * @param {Object<string, *>} settings The application settings for the
-	 *        current application environment.
 	 */
-	setSeoParams(resolvedPromises, seo, router, dictionary, setting) {
-		throw new CoreError('The Core.Abstract.Controller.setSeoParams method is ' +
-		'abstract and must be overridden');
+	setSeoParams(loadedResources) {
+		this._controller.setSeoParams(loadedResources, this._seo, this._router,
+			this._dictionary, this._setting);
 	}
 
 	/**
@@ -244,7 +263,18 @@ class Controller extends ns.Core.Interface.Controller {
 	 * @param {Object<string, string>=} [params={}] The current route parameters.
 	 */
 	setRouteParams(params = {}) {
-		this.params = params;
+		this._controller.setRouteParams(params);
+	}
+
+	/**
+	 * Returns the SEO attributes manager to configured by this controller.
+	 *
+	 * @method getSeoManager
+	 * @return {Core.Interface.Seo} SEO attributes manager to configured by this
+	 *         controller.
+	 */
+	getSeoManager() {
+		return this._seo;
 	}
 
 	/**
@@ -256,8 +286,8 @@ class Controller extends ns.Core.Interface.Controller {
 	 * @return {number} The HTTP status code to send to the client.
 	 */
 	getHttpStatus() {
-		return this._status;
+		return this._controller.getHttpStatus();
 	}
 }
 
-ns.Core.Abstract.Controller = Controller;
+ns.Core.Decorator.SeoController = SeoController;

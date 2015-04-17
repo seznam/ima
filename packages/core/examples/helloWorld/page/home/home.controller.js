@@ -18,8 +18,8 @@ class Controller extends ns.App.Base.Controller {
 	 * @constructor
 	 * @param {App.Page.Home.View} view
 	 */
-	constructor(view) {
-		super(view);
+	constructor() {
+		super();
 	}
 
 	/**

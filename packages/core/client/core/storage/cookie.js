@@ -20,23 +20,23 @@ class Cookie extends ns.Core.Interface.Storage{
 	 * @method constructor
 	 * @constructor
 	 * @param {Core.Router.Request} request
-	 * @param {Core.Router.Respond} respond
+	 * @param {Core.Router.Response} response
 	 * @param {Boolean} secure - flag for secure cookie
 	 * @example
 	 *      cookie.set('cookie', 'value', {expires: 10}); //cookie expires for 10s
 	 *      cookie.set('cookie'); //unset cookie
 	 *
 	 */
-	constructor(request, respond, secure) {
+	constructor(request, response, secure) {
 		super();
 
 		/**
-		 * @property _respond
+		 * @property _response
 		 * @private
-		 * @type {Core.Router.Respond}
-		 * @default respond
+		 * @type {Core.Router.Response}
+		 * @default response
 		 */
-		this._respond = respond;
+		this._response = response;
 
 		/**
 		 * @property _request
@@ -155,8 +155,8 @@ class Cookie extends ns.Core.Interface.Storage{
 
 		this._arrayCookiesString.push(cookieString);
 
-		if (this._respond.isEnabled()) {
-			this._respond.setCookie(name, value, options);
+		if (this._response.isEnabled()) {
+			this._response.setCookie(name, value, options);
 		} else {
 			document.cookie = cookieString;
 		}

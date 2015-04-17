@@ -16,8 +16,9 @@ class Route{
 	 * @param {string} name
 	 * @param {string} pathExpression
 	 * @param {string} controller
+	 * @param {string} view
 	 */
-	constructor(name, pathExpression, controller) {
+	constructor(name, pathExpression, controller, view) {
 		/**
 		 * @property ESCAPED_CHARS_REGEXP
 		 * @const
@@ -75,6 +76,13 @@ class Route{
 		 */
 		this._controller = controller;
 
+		/**
+		 * @property _view
+		 * @private
+		 * @type {Vendor.React.Component}
+		 * @default view
+		 */
+		this._view = view;
 
 		/**
 		 * @property _isParamsInPathExpression
@@ -132,13 +140,23 @@ class Route{
 	}
 
 	/**
-	 * Create new instance of controller and return it.
+	 * Returns name of controller.
 	 *
 	 * @method getController
 	 * @return {string}
 	 */
 	getController() {
 		return this._controller;
+	}
+
+	/**
+	 * Returns view.
+	 *
+	 * @method getView
+	 * @return {string}
+	 */
+	getView() {
+		return this._view;
 	}
 
 	/**

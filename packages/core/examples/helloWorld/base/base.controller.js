@@ -18,10 +18,9 @@ class Controller extends ns.Core.Abstract.Controller {
 	 *
 	 * @constructor
 	 * @method constructor
-	 * @param {Core.Interface.View} view The controller's view.
 	 */
-	constructor(view) {
-		super(view);
+	constructor() {
+		super();
 	}
 
 	/**

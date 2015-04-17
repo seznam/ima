@@ -24,53 +24,42 @@ class PageRender extends ns.Core.Interface.PageRender {
 	 *
 	 * @constructor
 	 * @method constructor
-	 * @param {Vendor.Rsvp} rsvp The RSVP implementation of Promise API and
+	 * @param {Vendor.Rsvp} Rsvp The RSVP implementation of Promise API and
 	 *        helper methods.
-	 * @param {Vendor.React} react React framework instance, will be used to
+	 * @param {Vendor.React} React React framework instance, will be used to
 	 *        render the page.
-	 * @param {Core.Interface.Animate} animate The client-side UI animation
-	 *        helper.
-	 * @param {Object<string, *>} settings Application settings for the current
+	 * @param {Object<string, *>} setting Application settings for the current
 	 *        application environment.
 	 */
-	constructor(rsvp, react, animate, settings) {
+	constructor(Rsvp, React, setting) {
 		super();
 
 		/**
 		 * The RSVP implementation of Promise API and helper methods.
 		 *
-		 * @property _rsvp
+		 * @property _Rsvp
 		 * @protected
 		 * @type {Vendor.Rsvp}
 		 */
-		this._rsvp = rsvp;
+		this._Rsvp = Rsvp;
 
 		/**
 		 * Rect framework instance, used to render the page.
 		 *
-		 * @property react
+		 * @property _react
 		 * @protected
 		 * @type {Vendor.React}
 		 */
-		this._react = react;
+		this._React = React;
 
 		/**
-		 * The client-side UI animation control helper.
+		 * Application setting for the current application environment.
 		 *
-		 * @property _animate
-		 * @protected
-		 * @type {Core.Interface.Animate}
-		 */
-		this._animate = animate;
-
-		/**
-		 * Application settings for the current application environment.
-		 *
-		 * @property _settings
+		 * @property _setting
 		 * @protected
 		 * @type {Object<string, *>}
 		 */
-		this._settings = settings;
+		this._setting = setting;
 	}
 
 	/**
@@ -89,9 +78,10 @@ class PageRender extends ns.Core.Interface.PageRender {
 	 * @abstract
 	 * @param {Core.Abstract.Controller} controller The page controller that
 	 *        should have its view rendered.
+	 * @param {Vendor.React.Component} view
 	 * @return {Promise}
 	 */
-	render(controller, params = {}) { // jshint ignore:line
+	render(controller, view) { // jshint ignore:line
 		throw new CoreError('The render() method is abstract and must be overridden');
 	}
 
@@ -110,7 +100,7 @@ class PageRender extends ns.Core.Interface.PageRender {
 	 *         map that has all its values wrapped into promises.
 	 */
 	_wrapEachKeyToPromise(dataMap) {
-		var Promise = this._rsvp.Promise;
+		var Promise = this._Rsvp.Promise;
 		var copy = {};
 
 		for (var field of Object.keys(dataMap)) {

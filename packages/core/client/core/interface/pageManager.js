@@ -18,11 +18,12 @@ class PageManager {
 	 *
 	 * @method manage
 	 * @param {Core.Abstract.Controller} controller
+	 * @param {Vendor.React.Component} view
 	 * @param {Object<string, *>=} params Parameters to use to initialize
 	 *        the controller.
 	 * @return {Promise}
 	 */
-	manage(controller, params = {}) {}
+	manage(controller, view, params = {}) {}
 }
 
 ns.Core.Interface.PageManager = PageManager;

@@ -3,79 +3,80 @@ import ns from 'imajs/client/core/namespace.js';
 ns.namespace('Core.Cache');
 
 /**
+ * The cache entry is a typed container of cache data used to track the
+ * creation and expiration of cache entries.
+ *
  * @class Entry
  * @namespace Core.Cache
  * @module Core
  * @submodule Core.Cache
  */
 class Entry {
-
 	/**
-	 * @method constructor
-	 * @constructor
+	 * Initializes the cache entry.
 	 *
-	 * @param {*} value
-	 * @param {Number} TTL - time to live
+	 * @constructor
+	 * @method constructor
+	 * @param {*} value The cache entry value.
+	 * @param {number} ttl The time to live in milliseconds.
 	 */
-	constructor(value, TTL) {
-
+	constructor(value, ttl) {
 		/**
-		 * Stored value.
+		 * Cache entry value.
 		 *
 		 * @property _value
 		 * @private
 		 * @type {*}
-		 * @default value
 		 */
 		this._value = value;
 
 		/**
-		 * Time to live.
+		 * The time to live in milliseconds. The cache entry is considered expired
+		 * after this time.
 		 *
-		 * @property TTL
+		 * @property _ttl
 		 * @private
-		 * @type {Number}
-		 * @default TTL
+		 * @type {number}
 		 */
-		this._TTL = TTL;
+		this._ttl = ttl;
 
 		/**
-		 * Cached time.
+		 * The timestamp of creation of this cache entry.
 		 *
-		 * @property cachedTime
+		 * @property _created
 		 * @private
-		 * @type {Date}
-		 * @default new Date().getTime()
+		 * @type {number}
 		 */
-		this._cachedTime = new Date().getTime();
+		this._created = Date.now();
 	}
 
 	/**
-	 * Ruturn true is data is live.
+	 * Returns {@code true} if this entry has expired.
 	 *
-	 * @method isLive
-	 * @return {Boolean}
+	 * @method isExpired
+	 * @return {boolean} {@code true} if this entry has expired.
 	 */
-	isLive() {
-		var now = new Date().getTime();
-		return now <= this._cachedTime + this._TTL;
+	isExpired() {
+		var now = Date.now();
+		return now > (this._created + this._ttl);
 	}
 
 	/**
-	 * Return data for serialization.
+	 * Exports this cache entry into a JSON-serializable object.
 	 *
 	 * @method serialize
-	 * @return {Object} - {value, TTL}
+	 * @return {{value: *, ttl: number}} This entry exported to a
+	 *         JSON-serializable object.
 	 */
 	serialize() {
-		return {value: this._value, TTL: this._TTL};
+		return {value: this._value, ttl: this._ttl};
 	}
 
 	/**
-	 * Return stored value.
+	 * Returns the entry value.
 	 *
 	 * @method getValue
-	 * @return {Mixed}
+	 * @return {*} The entry value.
 	 */
 	getValue() {
 		return this._value;

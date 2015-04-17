@@ -4,7 +4,7 @@ describe('Core.Cache.handler', function() {
 	var cacheStorage = null;
 	beforeEach(function() {
 		cacheStorage = oc.create('$MapStorage');
-		cache = oc.create('Core.Cache.Handler', cacheStorage, {cached: true, TTL: 1000});
+		cache = oc.create('Core.Cache.Handler', cacheStorage, {enabled: true, ttl: 1000});
 		cache.set('aaa', 123);
 		jasmine.clock().install();
 	});
@@ -30,9 +30,7 @@ describe('Core.Cache.handler', function() {
 	});
 
 	it('should be return null for not exist key', function() {
-		expect(function() {
-			cache.get('bbb');
-		}).toThrow();
+		expect(cache.get('bbb')).toEqual(null);
 	});
 
 	it('should be cleared cache', function() {

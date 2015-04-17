@@ -12,7 +12,7 @@ module.exports = (function() {
 				apiUrl: '/api',
 				staticFolder: '/static'
 			},
-			$Api: {
+			$Proxy: {
 				server: 'http://localhost:3001/api/v1'
 			}
 		},
@@ -27,7 +27,7 @@ module.exports = (function() {
 				apiUrl: '/api',
 				staticFolder: '/static'
 			},
-			$Api: {
+			$Proxy: {
 				server: 'http://localhost:3001/api/v1'
 			}
 		},
@@ -42,7 +42,7 @@ module.exports = (function() {
 				apiUrl: '/api',
 				staticFolder: '/static'
 			},
-			$Api: {
+			$Proxy: {
 				server: 'http://localhost:3001/api/v1'
 			}
 		}

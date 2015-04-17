@@ -3,17 +3,16 @@ import ns from 'imajs/client/core/namespace.js';
 ns.namespace('Core.Decorator');
 
 /**
- * Decorator for page controllers. The decorator manages references to the SEO
- * attributes manager and other utilities to provide them to the decorated page
- * controller.
+ * Decorator for page controllers. The decorator manages references to the state
+ * attributes manager.
  *
- * @class Controller
+ * @class StateController
  * @implements Core.Interface.Controller
  * @namespace Core.Decorator
  * @module Core
  * @submodule Core.Decorator
  */
-class Controller extends ns.Core.Interface.Controller {
+class StateController extends ns.Core.Interface.Controller {
 
 	/**
 	 * Initializes the controller decorator.
@@ -22,14 +21,9 @@ class Controller extends ns.Core.Interface.Controller {
 	 * @constructor
 	 * @param {Core.Interface.Controller} controller The actuall controller being
 	 *        decorated.
-	 * @param {Core.Interface.Seo} seo SEO attributes manager.
-	 * @param {Core.Interface.Router} router The application router.
-	 * @param {Core.Interface.Dictionary} dictionary Localization phrases
-	 *        dictionary.
-	 * @param {Object<string, *>} setting  Application settings for the current
-	 *        application environment.
+	 * @param {Core.Interface.PageState} pageState Page state manager.
 	 */
-	constructor(controller, seo, router, dictionary, setting) {
+	constructor(controller, pageState) {
 		super();
 
 		/**
@@ -42,40 +36,14 @@ class Controller extends ns.Core.Interface.Controller {
 		this._controller = controller;
 
 		/**
-		 * SEO attributes manager.
+		 * Page state manager.
 		 *
-		 * @property _seo
+		 * @property _pageState
 		 * @private
-		 * @type {Core.Interface.Seo}
+		 * @type {Core.Interface.PageState}
 		 */
-		this._seo = seo;
+		this._pageState = pageState;
 
-		/**
-		 * The application router.
-		 *
-		 * @property _router
-		 * @private
-		 * @type {Core.Interface.Router}
-		 */
-		this._router = router;
-
-		/**
-		 * Localization phrases dictionary.
-		 *
-		 * @property _dictionary
-		 * @private
-		 * @type {Core.Interface.Dictionary}
-		 */
-		this._dictionary = dictionary;
-
-		/**
-		 * Application settings for the current application environment.
-		 *
-		 * @property _setting
-		 * @private
-		 * @type {Object<string, *>}
-		 */
-		this._setting = setting;
 	}
 
 	/**
@@ -84,10 +52,9 @@ class Controller extends ns.Core.Interface.Controller {
 	 * @inheritdoc
 	 * @override
 	 * @method init
-	 * @param {Object<string, string>=} [params={}] The current route parameters.
 	 */
-	init(params = {}) {
-		this._controller.init(params);
+	init() {
+		this._controller.init();
 	}
 
 	/**
@@ -164,18 +131,6 @@ class Controller extends ns.Core.Interface.Controller {
 	}
 
 	/**
-	 * Returns the controller's view.
-	 *
-	 * @inheritdoc
-	 * @override
-	 * @method getReactView
-	 * @return {Vendor.React.ReactElement} The controller's view.
-	 */
-	getReactView() {
-		return this._controller.getReactView();
-	}
-
-	/**
 	 * Sets the rendered (reactive) view, allowing the controller to push changes
 	 * in state to the current view shown to the user instance.
 	 *
@@ -206,6 +161,7 @@ class Controller extends ns.Core.Interface.Controller {
 	 *        old state.
 	 */
 	setState(state) {
+		this._pageState.setState(state);
 		this._controller.setState(state);
 	}
 
@@ -231,8 +187,11 @@ class Controller extends ns.Core.Interface.Controller {
 	 * @param {Object<string, *>} statePatch Patch of the controller's state to
 	 *        apply.
 	 */
-	patchState(state) {
-		this._controller.patchState(state);
+	patchState(statePatch) {
+		var oldState = this._pageState.getState();
+		var newState = Object.assign({}, oldState, statePatch);
+
+		this._controller.patchState(newState);
 	}
 
 	/**
@@ -244,7 +203,7 @@ class Controller extends ns.Core.Interface.Controller {
 	 * @return {Object<string, *>} The current state of this controller.
 	 */
 	getState() {
-		return this._controller.getState();
+		return this._pageState.getState();
 	}
 
 	/**
@@ -262,9 +221,26 @@ class Controller extends ns.Core.Interface.Controller {
 	 *        object as the one passed to the {@codelink patchState} method when
 	 *        the Promises returned by the {@codelink load} method were resolved.
 	 */
-	setSeoParams(loadedResources) {
-		this._controller.setSeoParams(loadedResources, this._seo, this._router,
-			this._dictionary, this._setting);
+	/**
+	 * Callback used to configure the SEO attribute manager. The method is called
+	 * after the the controller's state has been patched with the loaded
+	 * resources, the view has been rendered and (if at the client-side) the
+	 * controller has been provided with the rendered view.
+	 *
+	 * @method setSeoParams
+	 * @param {Object<string, *>} loadedResources Map of resource names to
+	 *        resources loaded by the {@codelink load} method. This is the same
+	 *        object as the one passed to the {@codelink patchState} method when
+	 *        the Promises returned by the {@codelink load} method were resolved.
+	 * @param {Core.Interface.Seo} seo SEO attributes manager to configure.
+	 * @param {Core.Interface.Router} router The current application router.
+	 * @param {Core.Interface.Dictionary} dictionary The current localization
+	 *        dictionary.
+	 * @param {Object<string, *>} settings The application settings for the
+	 *        current application environment.
+	 */
+	setSeoParams(loadedResources, seo, router, dictionary, settings) {
+		this._controller.setSeoParams(loadedResources, seo, router, dictionary, settings);
 	}
 
 	/**
@@ -303,4 +279,4 @@ class Controller extends ns.Core.Interface.Controller {
 	}
 }
 
-ns.Core.Decorator.Controller = Controller;
+ns.Core.Decorator.StateController = StateController;

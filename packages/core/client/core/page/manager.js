@@ -52,10 +52,11 @@ class Manager extends ns.Core.Interface.PageManager {
 	 * @method run
 	 * @param {Core.Abstract.Controller} controller The page controller that
 	 *        should have its view rendered.
+	 * @param {Vendor.React.Component} view
 	 * @param {Object<string, string>=} [params={}] The route parameters.
 	 * @return {Promise}
 	 */
-	manage(controller, params = {}) {
+	manage(controller, view, params = {}) {
 		if (!controller) {
 			throw new CoreError(`Core.PageManager.Controller.manage(): The ` +
 			`controller parameter is required`);
@@ -64,7 +65,7 @@ class Manager extends ns.Core.Interface.PageManager {
 		this._deinitActiveController();
 		this._initController(controller, params);
 
-		return this._pageRender.render(controller);
+		return this._pageRender.render(controller, view);
 	}
 
 	/**
@@ -90,6 +91,7 @@ class Manager extends ns.Core.Interface.PageManager {
 	 */
 	_deinitActiveController() {
 		if (this._activeController) {
+			this._activeController.setReactiveView(null);
 			this._activeController.deinit();
 			this._activeController = null;
 		}

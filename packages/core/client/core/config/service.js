@@ -9,8 +9,8 @@ export var init = (ns, oc, config) => {
 		.init(config.request);
 
 	oc
-		.get('$Respond')
-		.init(config.respond);
+		.get('$Response')
+		.init(config.response);
 
 	oc
 		.get('$CookieStorage')

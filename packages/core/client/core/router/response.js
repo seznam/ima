@@ -3,12 +3,12 @@ import ns from 'imajs/client/core/namespace.js';
 ns.namespace('Core.Router');
 
 /**
- * @class Respond
+ * @class Response
  * @namespace Core.Router
  * @module Core
  * @submodule Core.Router
  */
-class Respond {
+class Response {
 
 	/**
 	 * @method constructor
@@ -19,7 +19,7 @@ class Respond {
 		/**
 		 * @property _res
 		 * @private
-		 * @type {Express.Respond}
+		 * @type {Express.Response}
 		 * @default null
 		 */
 		this._res = null;
@@ -30,7 +30,7 @@ class Respond {
 	 *
 	 * @method init
 	 * @chainable
-	 * @param {Express.Respond} res
+	 * @param {Express.Response} res
 	 * @return {this}
 	 */
 	init(res) {
@@ -100,4 +100,4 @@ class Respond {
 	}
  }
 
-ns.Core.Router.Respond = Respond;
+ns.Core.Router.Response = Response;

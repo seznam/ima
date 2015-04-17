@@ -87,18 +87,26 @@ module.exports = (() => {
 			vendor: vendor,
 			service: {
 				request: req,
-				respond: res,
+				response: res,
 				$IMA: {},
-				dictionary: {language, dictionary},
-				router: {protocol, domain, root, languagePartPath}
+				dictionary: {
+					$Language: language,
+					dictionary: dictionary
+				},
+				router: {
+					$Protocol: protocol,
+					$Domain: domain,
+					$Root: root,
+					$LanguagePartPath: languagePartPath
+				}
 			},
 			setting: {
-				env: config.$Env,
-				protocol: protocol,
-				language: language,
-				domain: domain,
-				root: root,
-				languagePartPath: languagePartPath
+				$Env: config.$Env,
+				$Protocol: protocol,
+				$Language: language,
+				$Domain: domain,
+				$Root: root,
+				$LanguagePartPath: languagePartPath
 			}
 		};
 
@@ -158,7 +166,7 @@ module.exports = (() => {
 		}
 	};
 
-	var respond = (req, res) => {
+	var response = (req, res) => {
 		var appServer = _initApp(req, res);
 		var router = appServer
 			.getObjectContainer()
@@ -171,5 +179,5 @@ module.exports = (() => {
 			});
 	};
 
-	return {errorHandler, respond, showStaticErrorPage};
+	return {errorHandler, response, showStaticErrorPage};
 })();

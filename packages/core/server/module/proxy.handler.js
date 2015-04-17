@@ -55,32 +55,34 @@ var callRemoteServer = (req, res) => {
 		url = url.substr(0, url.length - 1);
 	}
 
-	console.log(`API: ${req.method} ${config.$Api.server + url} query:`, req.query);
+	var proxyUrl = config.$Proxy.server + url;
+
+	console.log(`API: ${req.method} ${proxyUrl} query:`, req.query);
 
 	switch(req.method) {
 		case 'POST':
 			httpRequest = superAgent
-				.post(config.$Api.server + url)
+				.post(proxyUrl)
 				.send(req.body);
 			break;
 		case 'PUT':
 			httpRequest = superAgent
-				.put(config.$Api.server + url)
+				.put(proxyUrl)
 				.send(req.body);
 			break;
 		case 'PATCH':
 			httpRequest = superAgent
-				.patch(config.$Api.server + url)
+				.patch(proxyUrl)
 				.send(req.body);
 			break;
 		case 'DELETE':
 			httpRequest = superAgent
-				.delete(config.$Api.server + url)
+				.delete(proxyUrl)
 				.send(req.body);
 			break;
 		case 'GET':
 			httpRequest = superAgent
-				.get(config.$Api.server + url)
+				.get(proxyUrl)
 				.query(req.query);
 			break;
 	}

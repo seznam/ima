@@ -39,19 +39,19 @@ if (typeof window !== 'undefined' && window !== null) {
 				request: null,
 				$IMA: window.$IMA,
 				dictionary: {
-					language: window.$IMA.Language,
+					$Language: window.$IMA.$Language,
 					dictionary: window.$IMA.i18n
 				},
 				router: {
-					domain: window.$IMA.Domain,
-					root: window.$IMA.Root,
-					languagePartPath: window.$IMA.LanguagePartPath
+					$Domain: window.$IMA.$Domain,
+					$Root: window.$IMA.$Root,
+					$LanguagePartPath: window.$IMA.$LanguagePartPath
 				}
 			},
 			setting: {
-				env: 'dev',
-				language: 'en',
-				protocol: 'http:'
+				$Env: 'dev',
+				$Language: 'en',
+				$Protocol: 'http:'
 			}
 		};
 
@@ -84,23 +84,23 @@ if (typeof window !== 'undefined' && window !== null) {
 					request: null,
 					$IMA: window.$IMA,
 					dictionary: {
-						language: window.$IMA.Language,
+						$Language: window.$IMA.$Language,
 						dictionary: window.$IMA.i18n
 					},
 					router: {
-						protocol: window.$IMA.Protocol,
-						domain: window.$IMA.Domain,
-						root: window.$IMA.Root,
-						languagePartPath: window.$IMA.LanguagePartPath
+						$Protocol: window.$IMA.$Protocol,
+						$Domain: window.$IMA.$Domain,
+						$Root: window.$IMA.$Root,
+						$LanguagePartPath: window.$IMA.$LanguagePartPath
 					}
 				},
 				setting: {
-					env: window.$IMA.Environment,
-					language: window.$IMA.Language,
-					protocol: window.$IMA.Protocol,
-					domain: window.$IMA.Domain,
-					root: window.$IMA.Root,
-					languagePartPath: window.$IMA.LanguagePartPath
+					$Env: window.$IMA.$Env,
+					$Language: window.$IMA.$Language,
+					$Protocol: window.$IMA.$Protocol,
+					$Domain: window.$IMA.$Domain,
+					$Root: window.$IMA.$Root,
+					$LanguagePartPath: window.$IMA.$LanguagePartPath
 				}
 			};
 

@@ -1,61 +1,37 @@
 import ns from 'imajs/client/core/namespace.js';
-import oc from 'imajs/client/core/objectContainer.js';
+import bootstrap from 'imajs/client/core/bootstrap.js';
 
-ns.namespace('App.Page.Home');
-/**
- * HomePage view.
- *
- * @class View
- * @extends Core.Abstract.View
- * @namespace App.Page.Home
- * @module App
- * @submodule App.Page
- *
- * @uses App.Component.Layout.Header.View
- * @uses App.Component.Layout.Main.View
- * @uses App.Component.Sign.List.View
- */
-class View extends ns.Core.Abstract.View {
+bootstrap.addComponent((utils) => {
 
-	/*
-	* @method constructor
-	* @constructor
-	* @param {Vendor.React} React
-	* @param {Object} utils component utils
-	*/
-	constructor(React, utils) {
-		super(React, utils);
-	}
+	ns.namespace('App.Page.Home');
 
 	/**
-	 * Initialization view.
-	 *
-	 * @method init
-	 * @param {Function} getInitialState
+	 * Master Layout.
+	 * @class View
+	 * @namespace App.Component.Layout.Master
+	 * @module App
+	 * @submodule Component
 	 */
-	init(getInitialState) {
-		super.init(getInitialState);
-		var self = this;
+	class View extends React.Component {
 
-		this._view = self._React.createClass({
-			mixins: [self._viewMixin],
-			displayName: '',
-			/* jshint ignore:start */
-			render() {
-				return (
-					<div className='l-homepage'>
-						<div className='content'>
-							<img src="static/img/imajs-logo.png" alt="IMA.js logo"/>
-							<h1>{self.utils.dictionary.get('home.hello')}, {this.state.message}</h1>
-						</div>
+		constructor(props) {
+			super(props);
+
+			this.state = props;
+		}
+
+		render() {
+			return (
+				<div className='l-homepage'>
+					<div className='content'>
+						<img src="static/img/imajs-logo.png" alt="IMA.js logo"/>
+						<h1>{utils.dictionary.get('home.hello')}, {this.state.message}</h1>
 					</div>
-				);
-			}
-			/* jshint ignore:end */
-		});
-
-		return this;
+				</div>
+			);
+		}
 	}
-}
 
-ns.App.Page.Home.View = View;
+	ns.App.Page.Home.View = View;
+});
+

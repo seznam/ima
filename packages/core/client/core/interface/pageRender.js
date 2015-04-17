@@ -26,10 +26,10 @@ class PageRender {
 	 * @method render
 	 * @param {Core.Abstract.Controller} controller The page controller to use to
 	 *        render the page, and bind to the rendered page if at the client.
-	 * @param {Object<string, string>} params The route parameters.
+	 * @param {Vendor.React.Component} view
 	 * @return {Promise}
 	 */
-	render(controller, params = {}) {}
+	render(controller, view) {}
 }
 
 ns.Core.Interface.PageRender = PageRender;

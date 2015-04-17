@@ -12,8 +12,8 @@ describe('Core.Router.Server', function() {
 		pageRender = oc.make('$PageRender');
 		routerFactory = oc.make('$RouterFactory');
 		request = oc.create('Core.Router.Request');
-		respond = oc.create('Core.Router.Respond');
-		router = oc.create('Core.Router.ServerHandler', pageRender, routerFactory, Promise, request, respond);
+		response = oc.create('Core.Router.Response');
+		router = oc.create('Core.Router.ServerHandler', pageRender, routerFactory, Promise, request, response);
 		router.init({mode: router.MODE_SERVER, domain: domain});
 	});
 
@@ -30,13 +30,13 @@ describe('Core.Router.Server', function() {
 	it('should be redirect to url', function() {
 		var url = domain + '/redirectUrl';
 
-		spyOn(respond, 'redirect')
+		spyOn(response, 'redirect')
 			.and
 			.stub();
 
 		router.redirect(url);
 
-		expect(respond.redirect).toHaveBeenCalledWith(url);
+		expect(response.redirect).toHaveBeenCalledWith(url);
 	});
 
 });

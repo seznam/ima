@@ -32,7 +32,7 @@ var allowCrossDomain = (req, res, next) => {
 };
 
 var renderApp = (req, res) => {
-	clientApp.respond(req, res);
+	clientApp.response(req, res);
 };
 
 var errorHandler = (err, req, res, next) => {

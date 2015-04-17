@@ -5,22 +5,22 @@ describe('Core.Storage.Cookie', function() {
 
 
 	var request = null;
-	var respond = null;
+	var response = null;
 	var secure = false;
 	var cookie = null;
 	beforeEach(function() {
 		request = oc.create('Core.Router.Request');
-		respond = oc.create('Core.Router.Respond');
-		cookie = oc.create('Core.Storage.Cookie', request, respond, secure);
+		response = oc.create('Core.Router.Response');
+		cookie = oc.create('Core.Storage.Cookie', request, response, secure);
 
 		request.init({});
-		respond.init({});
+		response.init({});
 
 		spyOn(request, 'getCookie')
 			.and
 			.returnValue(cookieString);
 
-		spyOn(respond, 'setCookie')
+		spyOn(response, 'setCookie')
 			.and
 			.stub();
 
@@ -48,20 +48,20 @@ describe('Core.Storage.Cookie', function() {
 	it('should be set value to cookie', function() {
 		cookie.set('cok3','hello3');
 
-		expect(respond.setCookie).toHaveBeenCalled();
+		expect(response.setCookie).toHaveBeenCalled();
 	});
 
 	it('should be delete value from cookie', function() {
 		cookie.delete('cok2');
 
-		expect(respond.setCookie).toHaveBeenCalled();
+		expect(response.setCookie).toHaveBeenCalled();
 		expect(cookie._cookie.size).toEqual(1);
 	});
 
 	it('should be delete all cookies', function() {
 		cookie.clear();
 
-		expect(respond.setCookie.calls.count()).toEqual(2);
+		expect(response.setCookie.calls.count()).toEqual(2);
 		expect(cookie._cookie.size).toEqual(0);
 	});
 

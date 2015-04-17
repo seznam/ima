@@ -1,52 +1,34 @@
 import ns from 'imajs/client/core/namespace.js';
+import bootstrap from 'imajs/client/core/bootstrap.js';
 
-ns.namespace('App.Page.NotFound');
-/**
- * NotFoundPage view.
- * @class View
- * @extends Core.Abstract.View
- * @namespace App.Page.NotFound
- * @module App
- * @submodule App.Page
- */
-class View extends ns.Core.Abstract.View {
+bootstrap.addComponent((utils) => {
 
-	/*
-	* @method constructor
-	* @constructor
-	* @param {Vendor.React} React
-	* @param {Object} utils component utils
-	*/
-	constructor(React, utils) {
-		super(React, utils);
-	}
+	ns.namespace('App.Page.NotFound');
 
 	/**
-	 * Initialization view.
-	 *
-	 * @method init
-	 * @param {Function} getInitialState
+	 * Master Layout.
+	 * @class View
+	 * @namespace App.Component.Layout.Master
+	 * @module App
+	 * @submodule Component
 	 */
-	init(getInitialState) {
-		super.init(getInitialState);
-		var self = this;
+	class View extends React.Component {
 
-		this._view = this._React.createClass({
-			mixins: [self._viewMixin],
-			displayName: '',
-			/* jshint ignore:start */
-			render() {
-				return (
-					<div className='l-not-found'>
-						<h1>404 - Not Found</h1>
-					</div>
-				);
-			}
-			/* jshint ignore:end */
-		});
+		constructor(props) {
+			super(props);
 
-		return this;
+			this.state = props;
+		}
+
+		render() {
+			return (
+				<div className='l-not-found'>
+					<h1>404 - Not Found</h1>
+				</div>
+			);
+		}
 	}
-}
 
-ns.App.Page.NotFound.View = View;
+	ns.App.Page.NotFound.View = View;
+});
+

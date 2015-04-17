@@ -10,14 +10,14 @@ describe('Core.Cache.Entry', function() {
 		jasmine.clock().uninstall();
 	});
 
-	it('should be return true if is live', function() {
+	it('should be return true if is expired', function() {
 		jasmine.clock().mockDate(new Date());
 
 		jasmine.clock().tick(500);
-		expect(cacheData.isLive()).toBe(true);
+		expect(cacheData.isExpired()).toBe(false);
 
 		jasmine.clock().tick(1001);
-		expect(cacheData.isLive()).toBe(false);
+		expect(cacheData.isExpired()).toBe(true);
 	});
 
 	it('should be return value', function() {
@@ -26,6 +26,6 @@ describe('Core.Cache.Entry', function() {
 
 	it('should be return object for serialization', function() {
 		expect(cacheData.serialize().value).toEqual(123);
-		expect(cacheData.serialize().TTL).toEqual(1000);
+		expect(cacheData.serialize().ttl).toEqual(1000);
 	});
 });

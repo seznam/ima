@@ -19,19 +19,18 @@ class Client extends ns.Core.Abstract.PageRender {
 	 *
 	 * @method constructor
 	 * @constructor
-	 * @param {Vendor.Rsvp} rsvp The RSVP implementation of the Promise API with
+	 * @param {Vendor.Rsvp} Rsvp The RSVP implementation of the Promise API with
 	 *        helpers.
-	 * @param {Vendor.React} react React framework instance to use to render the
+	 * @param {Vendor.React} React React framework instance to use to render the
 	 *        page.
-	 * @param {Core.Animate.Handler} animate Animation helper.
-	 * @param {Object<string, *>} settings The application settings for the
+	 * @param {Object<string, *>} setting The application setting for the
 	 *        current application environment.
 	 * @param {Core.Interface.Window} window Helper for manipulating the global
 	 *        object ({@code window}) regardless of the client/server-side
 	 *        environment.
 	 */
-	constructor(rsvp, react, animate, settings, window) {
-		super(rsvp, react, animate, settings);
+	constructor(Rsvp, React, setting, window) {
+		super(Rsvp, React, setting);
 
 		/**
 		 * Flag signalling that the page is being rendered for the first time.
@@ -62,13 +61,13 @@ class Client extends ns.Core.Abstract.PageRender {
 	 * @method render
 	 * @param {Core.Abstract.Controller} controller The page controller that
 	 *        should have its view rendered.
-	 * @param {Object<string, string>=} [params={}] The route parameters.
+	 * @param {Vendor.React.Component} view
 	 * @return {Promise}
 	 */
-	render(controller, params = {}) {
+	render(controller, view) {
 		var loadPromises = this._wrapEachKeyToPromise(controller.load());
 		var reactiveView = null;
-		var masterElementId = this._settings.$Page.$Render.masterElementId;
+		var masterElementId = this._setting.$Page.$Render.masterElementId;
 		var viewContainer = this._window.getElementById(masterElementId);
 
 		for (let resourceName of Object.keys(loadPromises)) {
@@ -81,22 +80,25 @@ class Client extends ns.Core.Abstract.PageRender {
 		}
 
 		if (this._firstTime === false) {
-			reactiveView = this._react.render(
-				controller.getReactView(),
+			var reactElementView = this._React.createElement(view, controller.getState());
+
+			reactiveView = this._React.render(
+				reactElementView,
 				viewContainer
 			);
 			controller.setReactiveView(reactiveView);
 		}
 
 		return (
-			this._rsvp
+			this._Rsvp
 				.hash(loadPromises)
 				.then((fetchedResources) => {
 					controller.setState(fetchedResources);
+					var reactElementView = this._React.createElement(view, controller.getState());
 
 					if (this._firstTime === true) {
-						reactiveView = this._react.render(
-							controller.getReactView(),
+						reactiveView = this._React.render(
+							reactElementView,
 							viewContainer
 						);
 						controller.setReactiveView(reactiveView);

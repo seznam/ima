@@ -17,9 +17,9 @@ class ServerHandler extends ns.Core.Abstract.Router {
 	 * @param {Core.Router.Factory} factory
 	 * @param {Promise} Promise
 	 * @param {Core.Router.Request} request
-	 * @param {Core.Router.Respond} respond
+	 * @param {Core.Router.Response} response
 	 */
-	constructor(pageManager, factory, Promise, request, respond) {
+	constructor(pageManager, factory, Promise, request, response) {
 		super(pageManager, factory, Promise);
 
 		/**
@@ -31,12 +31,12 @@ class ServerHandler extends ns.Core.Abstract.Router {
 		this._request = request;
 
 		/**
-		 * @property _respond
+		 * @property _response
 		 * @private
-		 * @type {Core.Router.Respond}
-		 * @default respond
+		 * @type {Core.Router.Response}
+		 * @default response
 		 */
-		this._respond = respond;
+		this._response = response;
 	}
 
 	/**
@@ -83,7 +83,7 @@ class ServerHandler extends ns.Core.Abstract.Router {
 	 * @param {string} url
 	 */
 	redirect(url) {
-		this._respond.redirect(url);
+		this._response.redirect(url);
 	}
 }
 

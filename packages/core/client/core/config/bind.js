@@ -47,12 +47,12 @@ export var init = (ns, oc, config) => { //jshint ignore:line
 	//Dictionary
 	oc.bind('$Dictionary', oc.create('Core.Dictionary.MessageFormat'));
 
-	//Request & Respond
+	//Request & Response
 	oc.bind('$Request', oc.create('Core.Router.Request'));
-	oc.bind('$Respond', oc.create('Core.Router.Respond'));
+	oc.bind('$Response', oc.create('Core.Router.Response'));
 
 	//Storage
-	oc.bind('$CookieStorage', oc.make('Core.Storage.Cookie', ['$Request', '$Respond', '$SECURE']));
+	oc.bind('$CookieStorage', oc.make('Core.Storage.Cookie', ['$Request', '$Response', '$SECURE']));
 	oc.bind('$SessionStorage', ns.Core.Storage.Session);
 	oc.bind('$MapStorage', ns.Core.Storage.Map);
 	oc.bind('$SessionMapStorage', ns.Core.Storage.SessionMap, ['$MapStorage', '$SessionStorage']);
@@ -61,7 +61,7 @@ export var init = (ns, oc, config) => { //jshint ignore:line
 	oc.bind('$Dispatcher', oc.make('Core.Dispatcher.Handler', ['$MapStorage']));
 
 	//Animate
-	oc.bind('$Animate', oc.make('Core.Animate.Handler', ['$Dispatcher', '$BindPromise', '$Window', '$CookieStorage', '$ANIMATE_CONFIG']));
+	//oc.bind('$Animate', oc.make('Core.Animate.Handler', ['$Dispatcher', '$BindPromise', '$Window', '$CookieStorage', '$ANIMATE_CONFIG']));
 
 	//Cache
 	if (oc.get('$Window').hasSessionStorage()) {
@@ -74,23 +74,26 @@ export var init = (ns, oc, config) => { //jshint ignore:line
 	oc.bind('$CacheEntry', ns.Core.Cache.Entry);
 
 	//Page
+	oc.bind('$PageState', oc.make('Core.Page.State'));
+
 	if (oc.get('$Window').isClient()) {
-		oc.bind('$PageRender', oc.make('Core.Page.Render.Client', ['$Rsvp', '$BindReact', '$Animate', ns.Setting, '$Window']));
+		oc.bind('$PageRender', oc.make('Core.Page.Render.Client', ['$Rsvp', '$BindReact', ns.Setting, '$Window']));
 	} else {
-		oc.bind('$PageRender', oc.make('Core.Page.Render.Server', ['$Rsvp', '$BindReact', '$Animate', ns.Setting, '$Respond', '$Cache']));
+		oc.bind('$PageRender', oc.make('Core.Page.Render.Server', ['$Rsvp', '$BindReact', ns.Setting, '$Response', '$Cache']));
 	}
 	oc.bind('$PageManager', oc.make('Core.Page.Manager', ['$PageRender', '$Window']));
 
 	//SEO
 	oc.bind('$Seo', oc.make('Core.Seo.Manager', []));
-	oc.bind('$DecoratorController', ns.Core.Decorator.Controller);
+	oc.bind('$SeoDecoratorController', ns.Core.Decorator.SeoController);
+	oc.bind('$StateDecoratorController', ns.Core.Decorator.StateController);
 
 	//Router
-	oc.bind('$RouterFactory', oc.make('Core.Router.Factory', ['$Seo', '$Dictionary', ns.Setting]));
+	oc.bind('$RouterFactory', oc.make('Core.Router.Factory', ['$Seo', '$Dictionary', '$PageState', ns.Setting]));
 	if (oc.get('$Window').isClient()) {
 		oc.bind('$Router', oc.make('Core.Router.ClientHandler', ['$PageManager', '$RouterFactory', '$BindPromise', '$Window']));
 	} else {
-		oc.bind('$Router', oc.make('Core.Router.ServerHandler', ['$PageManager', '$RouterFactory', '$BindPromise', '$Request', '$Respond']));
+		oc.bind('$Router', oc.make('Core.Router.ServerHandler', ['$PageManager', '$RouterFactory', '$BindPromise', '$Request', '$Response']));
 	}
 	oc.bind('$Route', ns.Core.Router.Route);
 

@@ -190,10 +190,11 @@ class Router extends ns.Core.Interface.Router {
 	 * @param {string} name
 	 * @param {string} pathExpression
 	 * @param {string} controller
+	 * @param {string} view
 	 * @return {this}
 	 */
-	add(name, pathExpression, controller) {
-		this._routes.push(this._factory.createRoute(name, pathExpression, controller));
+	add(name, pathExpression, controller, view) {
+		this._routes.push(this._factory.createRoute(name, pathExpression, controller, view));
 
 		return this;
 	}
@@ -364,7 +365,7 @@ class Router extends ns.Core.Interface.Router {
 		var routeNotFound = this._getRouteByName(this.ROUTE_NAME_NOT_FOUND);
 
 		if (!routeNotFound) {
-			var error = new CoreError('$Error', `Core.Router:handleNotFound has undefined route. Add new route with name '${this.ROUTE_NAME_NOT_FOUND}'.`, params);
+			var error = new CoreError(`Core.Router:handleNotFound has undefined route. Add new route with name '${this.ROUTE_NAME_NOT_FOUND}'.`, params);
 
 			return this._Promise.reject(error);
 		}
@@ -394,8 +395,9 @@ class Router extends ns.Core.Interface.Router {
 	 */
 	_handle(route, params) {
 		var controller = this._factory.createController(route.getController(), this);
+		var view = this._factory.createView(route.getView());
 
-		return this._pageManager.manage(controller, params);
+		return this._pageManager.manage(controller, view, params);
 	}
 
 	/**

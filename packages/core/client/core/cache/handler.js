@@ -5,75 +5,72 @@ import CoreError from 'imajs/client/core/coreError.js';
 ns.namespace('Core.Cache');
 
 /**
+ * Configurable generic implementation of the {@codelink Core.Interface.Cache}
+ * interface.
+ *
  * @class Handler
- * @extends Core.Interface.Cache
+ * @implements Core.Interface.Cache
  * @namespace Core.Cache
  * @module Core
  * @submodule Core.Cache
  *
  * @requires Core.Interface.Storage
+ *
+ * @example
+ *   if (cache.has('model.articles')) {
+ *     return cache.get('model.articles');
+ *   } else {
+ *     var articles = getArticlesFromStorage();
+ *     cache.set('model.articles', articles, 60 * 60 * 1000); // cache for an hour
+ *   }
  */
 class Handler extends ns.Core.Interface.Cache {
-
 	/**
+	 * Initializes the cache.
+	 *
 	 * @method constructor
 	 * @constructor
-	 * @param {Core.Interface.Storage} cacheStorage
-	 * @param {Object} [config={TTL: 30000, cached: false}]
-	 * @example
-	 * 		if (cache.has('model.articles')) {
-	 * 			return cache.get('model.articles');
-	 * 		} else {
-	 * 			cache.set('model.articles', articles, 60 * 60 * 1000); // cached for hour
-	 * 		}
+	 * @param {Core.Interface.Storage} cacheStorage The cache entry storage to
+	 *        use.
+	 * @param {{ttl: number, enabled: false}} [config={ttl: 30000, enabled: false}]
 	 */
-	constructor(cacheStorage, config = {TTL: 30000, cached: false}) {
+	constructor(cacheStorage, config = { ttl: 30000, enabled: false }) {
 		super();
 
 		/**
-		 * Keep config.
+		 * Default cache entry time to live in milliseconds.
 		 *
-		 * @property _config
+		 * @property _ttl
 		 * @private
-		 * @type {Object}
-		 * @default config
+		 * @type {number}
+		 * @default this._config.ttl
 		 */
-		this._config = config;
+		this._ttl = config.ttl;
 
 		/**
-		 * Time to live in [ms].
+		 * Flag signalling whether the cache is currently enabled.
 		 *
-		 * @property _TTL
+		 * @property _enabled
 		 * @private
-		 * @type {Number}
-		 * @default this._config.TTL
+		 * @type {boolean}
 		 */
-		this._TTL = this._config.TTL;
+		this._enabled = config.enabled;
 
 		/**
-		 * Flag for quick enabled and disabled cache.
-		 *
-		 * @property _cached
-		 * @private
-		 * @type {Boolean}
-		 * @default this._config.cached
-		 */
-		this._cached = this._config.cached;
-
-		/**
-		 * Map for cache
+		 * Cache entry storage.
 		 *
 		 * @property _cache
 		 * @private
 		 * @type {Core.Interface.Storage}
-		 * @default cacheStorage
 		 */
 		this._cache = cacheStorage;
 	}
 
 	/**
-	 * Clear all cache.
+	 * Clear the cache by deleting all entries.
 	 *
+	 * @inheritdoc
+	 * @override
 	 * @method clear
 	 */
 	clear() {
@@ -81,112 +78,124 @@ class Handler extends ns.Core.Interface.Cache {
 	}
 
 	/**
-	 * Return true if key exist in cache.
+	 * Tests whether the cache contains a fresh entry for the specified key. A
+	 * cache entry is fresh if the has not expired its TTL (time to live).
 	 *
+	 * The method always returns {@code false} if the cache is currently
+	 * disabled.
+	 *
+	 * @inheritdoc
+	 * @override
 	 * @method has
-	 * @param {String} key
-	 * @return {Boolean}
+	 * @param {string} key The identifier of the cache entry.
+	 * @return {boolean} {@code true} if the cache is enabled, the entry exists
+	 *         and has not expired yet.
 	 */
-	has(key){
-		var hashedKey = this._hash(key);
-
-		if (this._cache.has(hashedKey)) {
-			var cachedData = this._cache.get(hashedKey);
-
-			if (cachedData.isLive() && this._cached) {
-				return true;
-			}
-
+	has(key) {
+		if (!this._enabled || !this._cache.has(key)) {
+			return false;
 		}
+
+		var cacheEntry = this._cache.get(key);
+		if (!cacheEntry.isExpired()) {
+			return true;
+		}
+
+		this.delete(key);
 
 		return false;
 	}
 
 	/**
-	 * Return cached value for key. If key doesnt exist then throw error.
+	 * Returns the value of the entry identified by the specified key.
 	 *
+	 * The method returns {@code null} if the specified entry does not exist, has
+	 * already expired, or the cache is currently disabled.
+	 *
+	 * @inheritdoc
+	 * @override
 	 * @method get
-	 * @param {String} key
-	 * @return {*}
+	 * @param {string} key The identifier of the cache entry.
+	 * @return {*} The value of the specified cache entry, or {@code null} if the
+	 *         entry is not available.
 	 */
 	get(key) {
-
 		if (this.has(key)) {
-			var hashedKey = this._hash(key);
-
-			return this._cache.get(hashedKey).getValue();
-		} else {
-			throw new CoreError('$Error', `Core.Cache.Handler:get isn't stored value for key '${key}'.`, {key});
+			return this._cache.get(key).getValue();
 		}
 
+		return null;
 	}
 
 	/**
-	 * Set value to cache for key.
+	 * Sets the cache entry identified by the specified key to the provided
+	 * value. The entry is created if it does not exist yet.
 	 *
+	 * @inheritdoc
+	 * @override
 	 * @method set
-	 * @param {String} key
-	 * @param {*} value
-	 * @param {Number} [TTL=this._TTL]
+	 * @param {string} key The identifier of the cache entry.
+	 * @param {*} value The cache entry value.
+	 * @param {?number=} ttl Cache entry time to live in milliseconds. The entry
+	 *        will expire after the specified amount of milliseconds. Use
+	 *        {@code null} or omit the parameter to use the default TTL of this
+	 *        cache.
 	 */
-	set(key, value, TTL) {
-		var hasdedKey = this._hash(key);
-		var cacheData = oc.create('$CacheEntry', value, TTL || this._TTL);
+	set(key, value, ttl = null) {
+		var cacheData = oc.create('$CacheEntry', value, ttl || this._ttl);
 
-		this._cache.set(hasdedKey, cacheData);
+		this._cache.set(key, cacheData);
 	}
 
 	/**
-	 * Delete value in cache for key.
+	 * Deletes the specified cache entry. The method has no effect if the entry
+	 * does not exist.
 	 *
+	 * @inheritdoc
+	 * @override
 	 * @method delete
-	 * @param {String} key
+	 * @param {string} key The identifier of the cache entry.
 	 */
 	delete(key) {
-
-		if (this.has(key)) {
-			var hashedKey = this._hash(key);
-
-			this._cache.delete(hashedKey);
-		}
-
+		this._cache.delete(key);
 	}
 
 	/**
-	 * Disbale cache.
+	 * Disables the cache, preventing the retrieval of any cached entries and
+	 * reporting all cache entries as non-existing. Disabling the cache does not
+	 * however prevent setting the existing or creating new cache entries.
 	 *
+	 * The method has no effect if the cache is already disabled.
+	 *
+	 * @inheritdoc
+	 * @override
 	 * @method disable
 	 */
 	disable() {
-		this._cached = false;
+		this._enabled = false;
 	}
 
 	/**
-	 * Enable cache
+	 * Enables the cache, allowing the retrieval of cache entries.
 	 *
+	 * The method has no effect if the cache is already enabled.
+	 *
+	 * @inheritdoc
+	 * @override
 	 * @method enable
 	 */
 	enable() {
-		this._cached = true;
+		this._enabled = true;
 	}
 
 	/**
-	 * Hashed key
+	 * Exports the state of this cache to a JSON string.
 	 *
-	 * @method _hash
-	 * @private
-	 * @param {String} key
-	 * @return {String}
-	 */
-	_hash(key) {
-		return key;
-	}
-
-	/**
-	 * Serialization data from cache.
-	 *
+	 * @inheritdoc
+	 * @override
 	 * @method serialize
-	 * @return {JSON}
+	 * @return {string} A JSON string containing an object representing of the
+	 *         current state of this cache.
 	 */
 	serialize() {
 		var dataToSerialize = {};
@@ -198,20 +207,21 @@ class Handler extends ns.Core.Interface.Cache {
 		return JSON.stringify(dataToSerialize).replace(/<\/script/g, '<\\/script');
 	}
 
-
 	/**
 	 * Deserialization data from JSON.
 	 *
+	 * @inheritdoc
+	 * @override
 	 * @method deserialize
-	 * @param {Object} dataToDeserialize
+	 * @object {Object<string, {value: *, ttl: number}>} serializedData An object
+	 *         representing the state of the cache to load, obtained by parsing
+	 *         the JSON string returned by the {@codelink serialize} method.
 	 */
-	deserialize(dataToDeserialize) {
-
-		for (var key of Object.keys(dataToDeserialize)) {
-			var cacheDataItem = dataToDeserialize[key];
-			this.set(key, cacheDataItem.value, cacheDataItem.TTL);
+	deserialize(serializedData) {
+		for (var key of Object.keys(serializedData)) {
+			var cacheDataItem = serializedData[key];
+			this.set(key, cacheDataItem.value, cacheDataItem.ttl);
 		}
-
 	}
 }
 
