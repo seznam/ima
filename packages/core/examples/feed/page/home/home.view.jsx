@@ -46,16 +46,13 @@ class View extends ns.Core.Abstract.View {
 				var Feed = ns.App.Component.Feed.View;
 				var Header = ns.App.Component.Header.View;
 				var Filter = ns.App.Component.Filter.View;
-
-				var checkedCategory = this.getCheckedCategory();
 				
 				return (
 					<div className='l-homepage'>
 						<Header />
 						<TextInput 
 								categories={this.state.categories} 
-								currentCategory={this.state.currentCategory} 
-								checkedCategory={checkedCategory} />
+								currentCategory={this.state.currentCategory} />
 						<Filter
 								categories={this.state.categories}
 								currentCategory={this.state.currentCategory} />
@@ -67,25 +64,6 @@ class View extends ns.Core.Abstract.View {
 				);
 			},
 			/* jshint ignore:end */
-
-			getCheckedCategory() {
-				var currentCategory = this.state.currentCategory;
-				var checkedCategory = this.state.textInputCheckedCategory;
-				
-				if (currentCategory) {
-					return currentCategory;
-				}
-				
-				if (checkedCategory) {
-					return checkedCategory;
-				}
-				
-				if (this.state.categories) {
-					return this.state.categories.getCategories()[0];
-				}
-
-				return null;
-			}
 		});
 
 		return this;

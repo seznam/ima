@@ -14,11 +14,25 @@ bootstrap.addComponent((utils) => {
 	 */
 	/* jshint ignore:start */
 	ns.App.Component.TextInput.View = React.createClass({
+		getInitialState() {
+			var defaultCategory = null;
+			if (this.props.categories) {
+				var categories = this.props.categories.getCategories();
+				if (categories.length > 0) {
+					defaultCategory = categories[0];
+				}
+			}
+			
+			return {
+				checkedCategory: defaultCategory
+			};
+		},
+
 		render() {
 			var placeholder = utils.dictionary.get('home.placeHolder');
 			var sendText = utils.dictionary.get('home.sendText');
 			var radioCategories = this.getRadioCategories(
-					this.props.categories,this.props.currentCategory, this.props.checkedCategory);
+					this.props.categories, this.props.currentCategory);
 
 			return (
 				<div className="text-input">
@@ -40,7 +54,7 @@ bootstrap.addComponent((utils) => {
 			);
 		},
 
-		getRadioCategories(categoryListEntity, currentCategory, checkedCategory) {
+		getRadioCategories(categoryListEntity, currentCategory) {
 			
 			if (currentCategory) {
 				return '';
@@ -48,12 +62,7 @@ bootstrap.addComponent((utils) => {
 
 			if (categoryListEntity) {
 				var categories = categoryListEntity.getCategories();
-				return categories.map((category) => {
-					var checked = false;
-					
-					if (checkedCategory.getId() === category.getId()) {
-						checked = true;
-					}
+				return categories.map((category, index) => {
 
 					return (
 						<div 
@@ -64,7 +73,7 @@ bootstrap.addComponent((utils) => {
 									name="radio-categories"
 									value={category.getId()}
 									onChange={this.setCheckedCategory}
-									defaultChecked={checked} />
+									defaultChecked={index==0?true:false} />
 							<label htmlFor={"radio" + category.getId()}>
 								{category.getName()}
 							</label>
@@ -82,13 +91,14 @@ bootstrap.addComponent((utils) => {
 
 			utils.dispatcher.fire('addItemToFeed', {
 				content: text,
-				category: Number(this.props.checkedCategory.getId())
+				category: Number(this.state.checkedCategory.getId())
 			});
 		},
 
 		setCheckedCategory(e) {
-			var checked = e.currentTarget.value;
-			utils.dispatcher.fire('setCheckedInputCategory', checked);
+			var checkedCategoryId = e.currentTarget.value;
+			var category = this.props.categories.getCategoryById(checkedCategoryId);
+			this.setState({ checkedCategory: category });
 		},
 
 		sendTextByKeys(e) {
