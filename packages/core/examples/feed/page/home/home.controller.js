@@ -23,10 +23,9 @@ class Controller extends ns.App.Base.Controller {
 	 * @param {App.Module.CategoryList.Service} categoryListService
 	 * @param {App.Module.Item.Resource} itemResource
 	 * @param {Core.Dispatcher.Handler} dispatcher
-	 * @param {Core.Dictionary.Handler} dictionary
 	 */
-	constructor(view, feedService, categoryListService, itemResource, dispatcher, dictionary) {
-		super(view, dictionary);
+	constructor(view, feedService, categoryListService, itemResource, dispatcher) {
+		super(view);
 
 		/**
 		 * Service providing the list of feed items loaded from the REST API.
@@ -73,15 +72,17 @@ class Controller extends ns.App.Base.Controller {
 	 * @return {Object} object of promise
 	 */
 	load() {
-		var currentCategory = this._categoryListService.getCategoryByUrl(this.params.category);
 
 		return {
-			categories: this._categoryListService.load(),
-			currentCategory: currentCategory,
-			feed: this._feedService.load(currentCategory),
-			filter: {
-				expanded: false
-			},
+			categories: 
+				this._categoryListService
+					.load(),
+			currentCategory: 
+				this._categoryListService
+					.getCategoryByUrl(this.params.category),
+			feed: 
+				this._feedService
+					.load(this.params.category),
 			sharedItem: null,
 			textInputCheckedCategory: null
 		};
@@ -95,7 +96,6 @@ class Controller extends ns.App.Base.Controller {
 		this._dispatcher.listen('setCheckedInputCategory', this.setCheckedInputCategory, this);
 		this._dispatcher.listen('addItemToFeed', this.addItemToFeed, this);
 		this._dispatcher.listen('shareToggle', this.onShareToggle, this);
-		this._dispatcher.listen('filterToggle', this.onFilterToggle, this);
 	}
 
 	/**
@@ -106,7 +106,7 @@ class Controller extends ns.App.Base.Controller {
 		this._dispatcher.unlisten('setCheckedInputCategory', this.setCheckedInputCategory, this);
 		this._dispatcher.unlisten('addItemToFeed', this.addItemToFeed, this);
 		this._dispatcher.unlisten('shareToggle', this.onShareToggle, this);
-		this._dispatcher.unlisten('filterToggle', this.onFilterToggle, this);
+		//this._dispatcher.clear(); // It could work, too - sometimes.
 	}
 
 	/**
@@ -136,20 +136,6 @@ class Controller extends ns.App.Base.Controller {
 			state.sharedItem = event.item;
 		}
 
-		this.setState(state);
-	}
-
-	/**
-	 * Event handler for the filtertoggle event fired by the Filter component.
-	 *
-	 * The handler reverts the state of the filter.expanded flag in the
-	 * controller's state.
-   *
-	 * @method onFilterToggle
-	 */
-	onFilterToggle() {
-		var state = this.getState();
-		state.filter.expanded = !state.filter.expanded;
 		this.setState(state);
 	}
 

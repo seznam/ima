@@ -47,8 +47,6 @@ class View extends ns.Core.Abstract.View {
 				var Header = ns.App.Component.Header.View;
 				var Filter = ns.App.Component.Filter.View;
 
-				var filterExpanded = this.isFilterExpanded();
-
 				var checkedCategory = this.getCheckedCategory();
 				
 				return (
@@ -57,11 +55,10 @@ class View extends ns.Core.Abstract.View {
 						<TextInput 
 								categories={this.state.categories} 
 								currentCategory={this.state.currentCategory} 
-								checkedCategory={checkedCategory}/>
+								checkedCategory={checkedCategory} />
 						<Filter
 								categories={this.state.categories}
-								currentCategory={this.state.currentCategory}
-								expanded={filterExpanded} />
+								currentCategory={this.state.currentCategory} />
 						<Feed
 								entity={this.state.feed}
 								categories={this.state.categories}
@@ -70,10 +67,6 @@ class View extends ns.Core.Abstract.View {
 				);
 			},
 			/* jshint ignore:end */
-
-			isFilterExpanded() {
-				return this.state.filter && this.state.filter.expanded;
-			},
 
 			getCheckedCategory() {
 				var currentCategory = this.state.currentCategory;

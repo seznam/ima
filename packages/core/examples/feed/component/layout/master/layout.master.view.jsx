@@ -1,7 +1,7 @@
 import ns from 'imajs/client/core/namespace.js';
 import bootstrap from 'imajs/client/core/bootstrap.js';
 
-bootstrap.addComponent(() => {
+bootstrap.addComponent((utils) => {
 
 	ns.namespace('App.Component.Layout.Master');
 

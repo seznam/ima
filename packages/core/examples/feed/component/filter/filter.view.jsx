@@ -1,8 +1,7 @@
 import ns from 'imajs/client/core/namespace.js';
-import oc from 'imajs/client/core/objectContainer.js';
 import bootstrap from 'imajs/client/core/bootstrap.js';
 
-bootstrap.addComponent(() => {
+bootstrap.addComponent((utils) => {
 
 	ns.namespace('App.Component.Filter');
 
@@ -15,8 +14,14 @@ bootstrap.addComponent(() => {
 	 */
 	/* jshint ignore:start */
 	ns.App.Component.Filter.View = React.createClass({
+		getInitialState() {
+			return {
+				expanded: false
+			};
+		},
+
 		render() {
-			var isExpandedClass = this.props.expanded ? ' expanded' : '';
+			var isExpandedClass = this.state.expanded ? ' expanded' : '';
 			var topBar = this.getFilterTopBar(this.props.currentCategory);
 			var categoryLinks = this.getCategoryLinks(this.props.categories);
 			var allLink = this.getAllLink();
@@ -33,10 +38,9 @@ bootstrap.addComponent(() => {
 		},
 
 		getFilterTopBar(currentCategory) {
-			var dictionary = oc.get('$Dictionary');
-			var label = dictionary.get('filter.label');
+			var label = utils.dictionary.get('filter.label');
 			var currentCategoryLabel = currentCategory ?
-					currentCategory.getName() : dictionary.get('filter.defaultCategory');
+					currentCategory.getName() : utils.dictionary.get('filter.defaultCategory');
 
 			return (
 				<div className='top'>
@@ -49,12 +53,10 @@ bootstrap.addComponent(() => {
 		},
 
 		getAllLink() {
-			var router = oc.get('$Router');
-			var dictionary = oc.get('$Dictionary');
-			var allLabel = dictionary.get('filter.all');
+			var allLabel = utils.dictionary.get('filter.all');
 
 			return (
-				<a href={router.link('home')} className='all'>
+				<a href={utils.router.link('home')} className='all'>
 					{allLabel}
 				</a>
 			);
@@ -63,13 +65,12 @@ bootstrap.addComponent(() => {
 		getCategoryLinks(categories) {
 
 			if (categories) {
-				var router = oc.get('$Router');
 
 				return (
 					categories
 						.getCategories()
 						.map((category, index) => {
-							var link = router.link('category', {
+							var link = utils.router.link('category', {
 								category: category.getUrlName()
 							});
 
@@ -86,8 +87,9 @@ bootstrap.addComponent(() => {
 		},
 
 		onToggle() {
-			var dispatcher = oc.get('$Dispatcher');
-			dispatcher.fire('filterToggle');
+			this.setState({
+				expanded: !this.state.expanded
+			});
 		}
 	});
 	/* jshint ignore:end */
