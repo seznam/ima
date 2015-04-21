@@ -6,14 +6,18 @@ bootstrap.addComponent((utils) => {
 	ns.namespace('App.Component.Date');
 
 	/**
-	 * Feed writing.
+	 * Date Component.
 	 * @class View
 	 * @namespace App.Component.Date
 	 * @module App
 	 * @submodule Component
 	 */
-	/* jshint ignore:start */
-	ns.App.Component.Date.View = React.createClass({
+	class View extends React.Component {
+
+		constructor(props) {
+			super(props);
+		}
+
 		render() {
 			var date = this.props.date || new Date();
 
@@ -29,6 +33,7 @@ bootstrap.addComponent((utils) => {
 				</div>
 			);
 		}
-	});
-	/* jshint ignore:end */
+	}
+	
+	ns.App.Component.Date.View = View;
 });

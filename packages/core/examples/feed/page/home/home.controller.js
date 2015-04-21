@@ -18,14 +18,13 @@ class Controller extends ns.App.Base.Controller {
 	 *
 	 * @method constructor
 	 * @constructor
-	 * @param {App.Page.Home.View} view
 	 * @param {App.Module.Feed.Service} feedService
 	 * @param {App.Module.CategoryList.Service} categoryListService
 	 * @param {App.Module.Item.Resource} itemResource
 	 * @param {Core.Dispatcher.Handler} dispatcher
 	 */
-	constructor(view, feedService, categoryListService, itemResource, dispatcher) {
-		super(view);
+	constructor(feedService, categoryListService, itemResource, dispatcher) {
+		super();
 
 		/**
 		 * Service providing the list of feed items loaded from the REST API.
@@ -134,21 +133,6 @@ class Controller extends ns.App.Base.Controller {
 		}
 
 		this.setState(state);
-	}
-
-	/**
-	 * Button click handler for getting more items.
-	 * It sets new feed entity to state. 
-	 *
-	 * @method getMoreFeedItems
-	 */
-	getMoreFeedItems() {
-		var state = this.getState();
-		var updatedFeedPromise = this._feedService.loadNextItems(state.currentCategory, state.feed);
-		updatedFeedPromise.then((feedEntity) => {
-			state.feed = feedEntity;
-			this.setState(state);
-		});
 	}
 	
 	/**

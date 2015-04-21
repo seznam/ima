@@ -12,9 +12,11 @@ bootstrap.addComponent((utils) => {
 	 * @module App
 	 * @submodule Component
 	 */
-	/* jshint ignore:start */
-	ns.App.Component.TextInput.View = React.createClass({
-		getInitialState() {
+	class View extends React.Component {
+
+		constructor(props) {
+			super(props);
+
 			var defaultCategory = null;
 			if (this.props.categories) {
 				var categories = this.props.categories.getCategories();
@@ -22,11 +24,11 @@ bootstrap.addComponent((utils) => {
 					defaultCategory = categories[0];
 				}
 			}
-			
-			return {
+
+			this.state = {
 				checkedCategory: defaultCategory
 			};
-		},
+		}
 
 		render() {
 			var placeholder = utils.dictionary.get('home.placeHolder');
@@ -52,7 +54,7 @@ bootstrap.addComponent((utils) => {
 					</div>
 				</div>
 			);
-		},
+		}
 
 		getRadioCategories(categoryListEntity, currentCategory) {
 			
@@ -83,7 +85,7 @@ bootstrap.addComponent((utils) => {
 			}
 
 			return '';
-		},
+		}
 		
 		sendText(e, id) {
 			var text = this.refs.textInput.getDOMNode().value.trim();
@@ -93,13 +95,13 @@ bootstrap.addComponent((utils) => {
 				content: text,
 				category: Number(this.state.checkedCategory.getId())
 			});
-		},
+		}
 
 		setCheckedCategory(e) {
 			var checkedCategoryId = e.currentTarget.value;
 			var category = this.props.categories.getCategoryById(checkedCategoryId);
 			this.setState({ checkedCategory: category });
-		},
+		}
 
 		sendTextByKeys(e) {
 			e.stopPropagation();
@@ -108,6 +110,7 @@ bootstrap.addComponent((utils) => {
 		        this.sendText(null, null);
 		    }
 		}
-	});
-	/* jshint ignore:end */
+	}
+
+	ns.App.Component.TextInput.View = View;
 });

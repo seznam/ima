@@ -13,8 +13,12 @@ bootstrap.addComponent((utils) => {
 	 * @module App
 	 * @submodule Component
 	 */
-	/* jshint ignore:start */
-	ns.App.Component.Header.View = React.createClass({
+	 class View extends React.Component {
+
+		constructor(props) {
+			super(props);
+		}
+		
 		render() {
 
 			return (
@@ -27,6 +31,7 @@ bootstrap.addComponent((utils) => {
 				</div>
 			);
 		}
-	});
-	/* jshint ignore:end */
+	}
+	
+	ns.App.Component.Header.View = View;
 });

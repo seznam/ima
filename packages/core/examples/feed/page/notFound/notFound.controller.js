@@ -17,8 +17,8 @@ class Controller extends ns.App.Base.Controller {
 	 * @param {App.Page.NotFound.View} view
 	 * @param {Vendor.Rsvp.Promise} promise
 	 * */
-	constructor(view, promise) {
-		super(view);
+	constructor(promise) {
+		super();
 		this._status = 404;
 
 		/**

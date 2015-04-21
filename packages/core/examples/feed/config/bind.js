@@ -34,18 +34,18 @@ export var init = (ns, oc, config) => {
 	
 	// Page Home
 	oc.bind('HomeView', ns.App.Page.Home.View, ['$BindReact']);
-	oc.bind('HomeController', ns.App.Page.Home.Controller, ['HomeView', 'FeedService', 'CategoryListService', 'ItemResource', '$Dispatcher']);
+	oc.bind('HomeController', ns.App.Page.Home.Controller, ['FeedService', 'CategoryListService', 'ItemResource', '$Dispatcher']);
 
 	// Page Detail
 	oc.bind('DetailView', ns.App.Page.Detail.View, ['$BindReact']);
-	oc.bind('DetailController', ns.App.Page.Detail.Controller, ['DetailView', 'ItemService', 'CategoryListService']);
+	oc.bind('DetailController', ns.App.Page.Detail.Controller, ['ItemService', 'CategoryListService']);
 
 	// Page Error
 	oc.bind('ErrorView', ns.App.Page.Error.View, ['$BindReact']);
-	oc.bind('ErrorController', ns.App.Page.Error.Controller, ['ErrorView', '$BindPromise']);
+	oc.bind('ErrorController', ns.App.Page.Error.Controller, ['$BindPromise']);
 
 	// Page Not Found
 	oc.bind('NotFoundView', ns.App.Page.NotFound.View, ['$BindReact']);
-	oc.bind('NotFoundController', ns.App.Page.NotFound.Controller, ['NotFoundView', '$BindPromise']);
+	oc.bind('NotFoundController', ns.App.Page.NotFound.Controller, ['$BindPromise']);
 
 };

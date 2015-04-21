@@ -12,8 +12,12 @@ bootstrap.addComponent((utils) => {
 	 * @module App
 	 * @submodule Component
 	 */
-	/* jshint ignore:start */
-	ns.App.Component.Layout.Master.RC = React.createClass({
+	class View extends React.Component {
+
+		constructor(props) {
+			super(props);
+		}
+		
 		render() {
 			return (
 				<html>
@@ -44,7 +48,7 @@ bootstrap.addComponent((utils) => {
 				</html>
 			);
 		}
-	});
-	ns.App.Component.Layout.Master.View = React.createFactory(ns.App.Component.Layout.Master.RC);
-	/* jshint ignore:end */
+	}
+	
+	ns.App.Component.Layout.Master.View = React.createFactory(View);
 });
