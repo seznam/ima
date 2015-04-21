@@ -21,7 +21,8 @@ export var init = (ns, oc, config) => { //jshint ignore:line
 	//*************END VENDORS*****************
 
 	//*************START CONSTANT**************
-	oc.bind('$SETTINGS', ns.$Settings);
+	oc.bind('$Settings', ns.$Settings);
+	
 	oc.bind('$ENV', ns.$Settings.$Env);
 	oc.bind('$HTTP_CONFIG', ns.$Settings.$Http);
 	oc.bind('$SOCKET_CONFIG', ns.$Settings.$Socket);
@@ -110,7 +111,7 @@ export var init = (ns, oc, config) => { //jshint ignore:line
 		$Router: oc.get('$Router'),
 		$Dispatcher: oc.get('$Dispatcher'),
 		$Dictionary: oc.get('$Dictionary'),
-		$Settings: oc.get('$SETTINGS'),
+		$Settings: oc.get('$Settings'),
 		$Window: oc.get('$Window')
 	});
 

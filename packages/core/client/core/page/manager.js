@@ -94,7 +94,7 @@ class Manager extends ns.Core.Interface.PageManager {
 	 * @private
 	 */
 	_init() {
-		this._stateManager.onChange = this._onChangeStateHandler;
+		this._stateManager.onChange = (newState) => this._onChangeStateHandler(newState);
 	}
 
 	/**
@@ -130,11 +130,11 @@ class Manager extends ns.Core.Interface.PageManager {
 	/**
 	 * On change handler for state.
 	 *
-	 * @method onChangeStateHandler
-	 *
+	 * @method _onChangeStateHandler
+	 * @private
 	 */
-	onChangeStateHandler(state) {
-		if (this._activeContoller) {
+	_onChangeStateHandler(state) {
+		if (this._activeController) {
 			this._pageRender.setState(state);
 		}
 	}

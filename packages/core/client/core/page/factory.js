@@ -58,8 +58,8 @@ class Factory {
 	decorateController(controllerInstance) {
 		var seo = oc.get('$Seo');
 		var router = oc.get('$Router');
-		var dictionary = oc.get('Dictionary');
-		var settings = oc.get('$SETTINGS');
+		var dictionary = oc.get('$Dictionary');
+		var settings = oc.get('$Settings');
 
 		var decoratedController = oc.create('$DecoratorController', controllerInstance,
 			seo, router, dictionary, settings);

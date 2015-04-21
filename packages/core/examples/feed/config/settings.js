@@ -1,6 +1,6 @@
 export var init = (ns, oc, config) => { // jshint ignore:line
 
-	var nsSetting = ns.namespace('Setting');
+	var nsSettings = ns.namespace('$Settings');
 
 	var settings = {
 		dev: {
@@ -126,13 +126,13 @@ export var init = (ns, oc, config) => { // jshint ignore:line
 	var envSettings = settings[config.$Env]; // jshint ignore:line
 
 	for (var envKey of Object.keys(envSettings)) {
-		nsSetting[envKey] = envSettings[envKey];
+		nsSettings[envKey] = envSettings[envKey];
 	}
 
-	nsSetting['$Env'] = config.$Env; // jshint ignore:line
-	nsSetting['$Protocol'] = config.$Protocol; // jshint ignore:line
-	nsSetting['$Language'] = config.$Language; // jshint ignore:line
-	nsSetting['$Domain'] = config.$Domain; // jshint ignore:line
-	nsSetting['$Root'] = config.$Root; // jshint ignore:line
-	nsSetting['$LanguagePartPath'] = config.$LanguagePartPath; // jshint ignore:line
+	nsSettings['$Env'] = config.$Env; // jshint ignore:line
+	nsSettings['$Protocol'] = config.$Protocol; // jshint ignore:line
+	nsSettings['$Language'] = config.$Language; // jshint ignore:line
+	nsSettings['$Domain'] = config.$Domain; // jshint ignore:line
+	nsSettings['$Root'] = config.$Root; // jshint ignore:line
+	nsSettings['$LanguagePartPath'] = config.$LanguagePartPath; // jshint ignore:line
 };
