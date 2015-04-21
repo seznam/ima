@@ -26,6 +26,42 @@
 	overflow: hidden;
 }
 
+/* The micro clearfix http://nicolasgallagher.com/micro-clearfix-hack */
+.clearfix(){
+	*zoom:1;
+	
+	&:before,
+	&:after{
+	    content:"";
+	    display:table;
+	}
+	&:after{
+	    clear:both;
+	}
+}
+
+/**
+ * --------------------------------
+ * @section Mixins from lesshat.com
+ * --------------------------------
+ */
+
+.box-sizing(...) {
+  @process: ~`(function(e){return e=e||"content-box"})((function(){var e="@{arguments}";return e=e.replace(/^\[|\]$/g,"")})())`;
+  -webkit-box-sizing: @process;
+  -moz-box-sizing: @process;
+  box-sizing: @process;
+}
+
+.opacity(...) {
+  @process_ms: ~`(function(e){return e=e||"filter: alpha(opacity=100)","alpha(opacity="+Math.floor(100*e)+")"})((function(){var e="@{arguments}";return e=e.replace(/^\[|\]$/g,"")})())`;
+  @process: ~`(function(e){return e=e||"1"})((function(){var e="@{arguments}";return e=e.replace(/^\[|\]$/g,"")})())`;
+  zoom: 1; filter: @process_ms;
+  -webkit-opacity: @process;
+  -moz-opacity: @process;
+  opacity: @process;
+}
+
 /**
  * ---------------------
  * @section Global rules
