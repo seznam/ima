@@ -67,7 +67,7 @@ bootstrap.addComponent((utils) => {
 		getHashTag(category) {
 
 			if (category) {
-				var link = utils.router.link('category', { category: category.getUrlName() });
+				var link = utils.$Router.link('category', { category: category.getUrlName() });
 
 				return (
 					<a href={link}>{category.getHashTag()}</a>

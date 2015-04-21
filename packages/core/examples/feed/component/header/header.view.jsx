@@ -23,10 +23,10 @@ bootstrap.addComponent((utils) => {
 
 			return (
 				<div className='l-header'>
-					<a href={'//'+utils.dictionary.get('home.imaLink')} title={utils.dictionary.get('home.imaLink')}>{utils.dictionary.get('home.imaLink')}</a>
+					<a href={'//'+utils.$Dictionary.get('home.imaLink')} title={utils.$Dictionary.get('home.imaLink')}>{utils.$Dictionary.get('home.imaLink')}</a>
 					<div className='title-wrapper'>
-						<a href='/' title={utils.dictionary.get('home.pageTitle')} className="logo"></a>
-						<h1>{utils.dictionary.get('home.pageTitle')}</h1>
+						<a href='/' title={utils.$Dictionary.get('home.pageTitle')} className="logo"></a>
+						<h1>{utils.$Dictionary.get('home.pageTitle')}</h1>
 					</div>
 				</div>
 			);

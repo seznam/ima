@@ -21,7 +21,7 @@ bootstrap.addComponent((utils) => {
 		}
 		
 		render() {
-			var label = utils.dictionary.get('home.share');
+			var label = utils.$Dictionary.get('home.share');
 
 			var TwitterButtonA = ns.App.Component.TweetButton.View;
 
@@ -33,7 +33,7 @@ bootstrap.addComponent((utils) => {
 
 			return (
 				<div className={'share' + (active)}>
-					<span className='toggle' onClick={this.onToggle}>{label}</span>
+					<span className='toggle' onClick={()=>this.onToggle()}>{label}</span>
 					<div className='sharing-wrapper'>
 						<div className='sharing-container'>
 							<div className='arrow'></div>
@@ -44,11 +44,11 @@ bootstrap.addComponent((utils) => {
 										value={postLink}
 										readOnly={true}
 										ref='shareLink'
-										onClick={this.selectShareLink}/>
+										onClick={()=>this.selectShareLink()}/>
 
 								<a
 										href={postLink}
-										onClick={this.onShareOnFacebook}
+										onClick={()=>this.onShareOnFacebook()}
 										className='facebook'>Facebook
 								</a>
 
@@ -86,9 +86,9 @@ bootstrap.addComponent((utils) => {
 		getMailShareLink(item) {
 			var category = this.props.category;
 			var categoryName = category ?
-					category.name : utils.dictionary.get('home.defaultPortal');
+					category.name : utils.$Dictionary.get('home.defaultPortal');
 			var query = {
-				subject: utils.dictionary.get('home.shareMailSubject', {
+				subject: utils.$Dictionary.get('home.shareMailSubject', {
 					PORTAL: categoryName
 				}),
 				body: this.getPlainTextItemContent(item)
@@ -113,7 +113,7 @@ bootstrap.addComponent((utils) => {
 		getPostLink(item, category) {
 			if (item && category) {
 
-				var localLink = utils.router.link('post', {
+				var localLink = utils.$Router.link('post', {
 					category: category.getUrlName(),
 					itemId: item.getId()
 				});
@@ -126,7 +126,7 @@ bootstrap.addComponent((utils) => {
 		}
 
 		onToggle() {
-			utils.dispatcher.fire('shareToggle', {
+			utils.$Dispatcher.fire('shareToggle', {
 				item: this.props.item
 			});
 		}

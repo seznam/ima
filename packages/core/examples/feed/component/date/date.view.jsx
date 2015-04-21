@@ -21,7 +21,7 @@ bootstrap.addComponent((utils) => {
 		render() {
 			var date = this.props.date || new Date();
 
-			var formattedDate = utils.dictionary.get('home.dateFormat', {
+			var formattedDate = utils.$Dictionary.get('home.dateFormat', {
 				DATE: date.getDate(),
 				MONTH: date.getMonth()+1,
 				YEAR: date.getFullYear()

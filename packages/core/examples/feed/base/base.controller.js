@@ -16,11 +16,9 @@ class Controller extends ns.Core.Abstract.Controller {
 	 * Initializes the base controller.
 	 *
 	 * @method constructor
-	 * @param {*} view The React component representing the current view.
-	 * @param {Core.Dictionary.Handler} dictionary The dictionary provider.
 	 */
-	constructor(view) {
-		super(view);
+	constructor() {
+		super();
 	}
 
 	/**

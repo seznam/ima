@@ -58,7 +58,7 @@ bootstrap.addComponent((utils) => {
 		getMoreItems() {
 			var entity = this.props.entity;
 			if (entity) {
-				utils.dispatcher.fire('getmoreitems');
+				utils.$Dispatcher.fire('getmoreitems');
 			}
 		}
 	}

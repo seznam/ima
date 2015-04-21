@@ -31,8 +31,8 @@ bootstrap.addComponent((utils) => {
 		}
 
 		render() {
-			var placeholder = utils.dictionary.get('home.placeHolder');
-			var sendText = utils.dictionary.get('home.sendText');
+			var placeholder = utils.$Dictionary.get('home.placeHolder');
+			var sendText = utils.$Dictionary.get('home.sendText');
 			var radioCategories = this.getRadioCategories(
 					this.props.categories, this.props.currentCategory);
 
@@ -43,10 +43,10 @@ bootstrap.addComponent((utils) => {
 							ref="textInput"
 							className="form-text-input"
 							placeholder={placeholder}
-							onKeyPress={this.sendTextByKeys} />
+							onKeyPress={()=>this.sendTextByKeys} />
 					<button 
 							className="form-button"
-							onClick={this.sendText} >
+							onClick={()=>this.sendText()} >
 						{sendText}
 					</button>
 					<div className="form-categories" ref="categories">
@@ -74,7 +74,7 @@ bootstrap.addComponent((utils) => {
 									type="radio"
 									name="radio-categories"
 									value={category.getId()}
-									onChange={this.setCheckedCategory}
+									onChange={(e)=>this.setCheckedCategory(e)}
 									defaultChecked={index==0?true:false} />
 							<label htmlFor={"radio" + category.getId()}>
 								{category.getName()}
@@ -91,7 +91,7 @@ bootstrap.addComponent((utils) => {
 			var text = this.refs.textInput.getDOMNode().value.trim();
 			this.refs.textInput.getDOMNode().value = '';
 
-			utils.dispatcher.fire('addItemToFeed', {
+			utils.$Dispatcher.fire('addItemToFeed', {
 				content: text,
 				category: Number(this.state.checkedCategory.getId())
 			});

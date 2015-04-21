@@ -39,7 +39,7 @@ bootstrap.addComponent((utils) => {
 			return (
 				<a
 						href={link}
-						onClick={this.onShare}
+						onClick={()=>this.onShare()}
 						className='tweet-button'
 						target='_blank'>
 					{this.props.label}

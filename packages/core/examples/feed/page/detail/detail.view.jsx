@@ -63,8 +63,8 @@ bootstrap.addComponent((utils) => {
 		}
 
 		getMoreItemButton() {
-			var buttonTitle = utils.dictionary.get('detail.moreItemsButtonTitle');
-			var link = utils.dictionary.get('detail.moreItemsButtonLink');
+			var buttonTitle = utils.$Dictionary.get('detail.moreItemsButtonTitle');
+			var link = utils.$Dictionary.get('detail.moreItemsButtonLink');
 
 			return <a href={link} id='more-items-button' className='more-items button'>{buttonTitle}</a>
 		}

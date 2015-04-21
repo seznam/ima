@@ -1,10 +1,10 @@
 export var init = (ns, oc, config) => {
 
 	//*************START CONSTANT**************
-	var baseUrl = ns.Setting.$Http.baseUrl;
-	oc.bind('CATEGORIES_API_URL', baseUrl + ns.Setting.Api.categories);
-	oc.bind('ITEMS_API_URL', baseUrl + ns.Setting.Api.items);
-	oc.bind('DEFAULT_PORTAL_ICON', ns.Setting.Images.defaultCategoryListIcon);
+	var baseUrl = ns.$Settings.$Http.baseUrl;
+	oc.bind('CATEGORIES_API_URL', baseUrl + ns.$Settings.Api.categories);
+	oc.bind('ITEMS_API_URL', baseUrl + ns.$Settings.Api.items);
+	oc.bind('DEFAULT_PORTAL_ICON', ns.$Settings.Images.defaultCategoryListIcon);
 	//*************END CONSTANT****************
 
 	// Our fake http handler for demo. You can use superagent (It's binded in IMA.js Core like '$Http') instead of fakeHttp.

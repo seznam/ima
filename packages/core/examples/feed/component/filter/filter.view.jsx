@@ -40,14 +40,14 @@ bootstrap.addComponent((utils) => {
 		}
 
 		getFilterTopBar(currentCategory) {
-			var label = utils.dictionary.get('filter.label');
+			var label = utils.$Dictionary.get('filter.label');
 			var currentCategoryLabel = currentCategory ?
-					currentCategory.getName() : utils.dictionary.get('filter.defaultCategory');
+					currentCategory.getName() : utils.$Dictionary.get('filter.defaultCategory');
 
 			return (
 				<div className='top'>
 					{label}
-					<span className='toggle' onClick={this.onToggle}>
+					<span className='toggle' onClick={()=>this.onToggle()}>
 						{currentCategoryLabel}
 					</span>
 				</div>
@@ -55,10 +55,10 @@ bootstrap.addComponent((utils) => {
 		}
 
 		getAllLink() {
-			var allLabel = utils.dictionary.get('filter.all');
+			var allLabel = utils.$Dictionary.get('filter.all');
 
 			return (
-				<a href={utils.router.link('home')} className='all'>
+				<a href={utils.$Router.link('home')} className='all'>
 					{allLabel}
 				</a>
 			);
@@ -72,7 +72,7 @@ bootstrap.addComponent((utils) => {
 					categories
 						.getCategories()
 						.map((category, index) => {
-							var link = utils.router.link('category', {
+							var link = utils.$Router.link('category', {
 								category: category.getUrlName()
 							});
 
