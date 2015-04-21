@@ -217,19 +217,19 @@ describe('Core.Abstract.Router', function() {
 		});
 
 		it('should be clear root from path', function() {
-			router.init({root: '/root'});
+			router.init({$Root: '/root'});
 
 			expect(router._extractRoutePath(pathWithRoot)).toEqual(path);
 		});
 
 		it('should be clear root and language from path', function() {
-			router.init({root: '/root', languagePartPath: '/en'});
+			router.init({$Root: '/root', $LanguagePartPath: '/en'});
 
 			expect(router._extractRoutePath(pathWithRootAndLanguage)).toEqual(path);
 		});
 
 		it('should be clear language from path', function() {
-			router.init({languagePartPath: '/en'});
+			router.init({$LanguagePartPath: '/en'});
 
 			expect(router._extractRoutePath(pathWithLanguage)).toEqual(path);
 		});

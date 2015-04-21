@@ -66,7 +66,7 @@ class ClientHandler extends ns.Core.Abstract.Router {
 	init(config = {}) {
 		super.init(config);
 		this._mode = this._window.hasHistoryAPI() ? this.MODE_HISTORY : this.MODE_HASH;
-		this._domain = config.domain || this._window.getDomain();
+		this._domain = config.$Domain || this._window.getDomain();
 
 		return this;
 	}

@@ -159,9 +159,9 @@ class Router extends ns.Core.Interface.Router {
 	 * @return {this}
 	 */
 	init(config = {}) {
-		this._protocol = config.protocol || '';
-		this._root = config.root || '';
-		this._languagePartPath = config.languagePartPath || '';
+		this._protocol = config.$Protocol || '';
+		this._root = config.$Root || '';
+		this._languagePartPath = config.$LanguagePartPath || '';
 	}
 
 	/**
