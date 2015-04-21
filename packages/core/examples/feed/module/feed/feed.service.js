@@ -42,47 +42,6 @@ class Service extends ns.App.Base.Service {
 	}
 
 	/**
-	 * Force update feed.
-	 *
-	 * @method updateFeed
-	 */
-	updateFeed() {
-		return this._feedResource
-				.getFeedItems(true);
-	}
-	
-	/**
-	 * Loads next items after current one and returns new Feed Entity.
-	 *
-	 * @method loadNextItems
-	 * @param {App.Module.Portal.Entity} portal
-	 * @param {App.Module.Item.Entity} afterItem
-	 *
-	 * @return {App.Module.Feed.Entity|null} updatedFeedEntity
-	 */
-	loadNextItems(portal, oldFeedEntity) {
-
-		if (oldFeedEntity) {
-			var lastItem = this.getLastItem(oldFeedEntity);
-
-			return (
-				this._feedResource
-					.getFeedItems(false, portal, lastItem)
-					.then((feedEntity) => {
-						feedEntity
-							.getItems()
-							.push(...oldFeedEntity.getItems());
-
-						return feedEntity;
-				})
-			);
-		} else {
-
-			return null;
-		}
-	}
-
-	/**
 	 * Returns last item entity.
 	 *
 	 * @method getLastItem

@@ -18,14 +18,13 @@ class Controller extends ns.App.Base.Controller {
 	 *
 	 * @method constructor
 	 * @constructor
-	 * @param {App.Page.Home.View} view
 	 * @param {App.Module.Feed.Service} feedService
 	 * @param {App.Module.CategoryList.Service} categoryListService
 	 * @param {App.Module.Item.Resource} itemResource
 	 * @param {Core.Dispatcher.Handler} dispatcher
 	 */
-	constructor(view, feedService, categoryListService, itemResource, dispatcher) {
-		super(view);
+	constructor(feedService, categoryListService, itemResource, dispatcher) {
+		super();
 
 		/**
 		 * Service providing the list of feed items loaded from the REST API.
@@ -83,8 +82,7 @@ class Controller extends ns.App.Base.Controller {
 			feed: 
 				this._feedService
 					.load(this.params.category),
-			sharedItem: null,
-			textInputCheckedCategory: null
+			sharedItem: null
 		};
 	}
 
@@ -93,7 +91,6 @@ class Controller extends ns.App.Base.Controller {
 	 */
 	// @override
 	activate() {
-		this._dispatcher.listen('setCheckedInputCategory', this.setCheckedInputCategory, this);
 		this._dispatcher.listen('addItemToFeed', this.addItemToFeed, this);
 		this._dispatcher.listen('shareToggle', this.onShareToggle, this);
 	}
@@ -103,7 +100,6 @@ class Controller extends ns.App.Base.Controller {
 	 */
 	// @override
 	deinit() {
-		this._dispatcher.unlisten('setCheckedInputCategory', this.setCheckedInputCategory, this);
 		this._dispatcher.unlisten('addItemToFeed', this.addItemToFeed, this);
 		this._dispatcher.unlisten('shareToggle', this.onShareToggle, this);
 		//this._dispatcher.clear(); // It could work, too - sometimes.
@@ -138,21 +134,6 @@ class Controller extends ns.App.Base.Controller {
 
 		this.setState(state);
 	}
-
-	/**
-	 * Button click handler for getting more items.
-	 * It sets new feed entity to state. 
-	 *
-	 * @method getMoreFeedItems
-	 */
-	getMoreFeedItems() {
-		var state = this.getState();
-		var updatedFeedPromise = this._feedService.loadNextItems(state.currentCategory, state.feed);
-		updatedFeedPromise.then((feedEntity) => {
-			state.feed = feedEntity;
-			this.setState(state);
-		});
-	}
 	
 	/**
 	 * Button click handler for add new item to feed.
@@ -171,18 +152,6 @@ class Controller extends ns.App.Base.Controller {
 				this._feedService.addItemToFeed(state.feed, item);
 				this.setState(state);
 			});
-	}
-
-	/**
-	 * Sets checked item category in text input
-	 *
-	 * @method setCheckedFilterCategory
-	 * @param {number} category
-	 */
-	setCheckedInputCategory(categoryId) {
-		var state = this.getState();
-		state.textInputCheckedCategory = state.categories.getCategoryById(categoryId);
-		this.setState(state);
 	}
 	
 

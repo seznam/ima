@@ -13,7 +13,7 @@ describe('Core.Router.Client', function() {
 		routerFactory = oc.make('$RouterFactory');
 		win = oc.get('$Window');
 		router = oc.create('Core.Router.Client', pageRender, routerFactory, Promise, win);
-		router.init({domain: domain, protocol: protocol});
+		router.init({$Domain: domain, $Protocol: protocol});
 	});
 
 	it('should be return actual path', function() {

@@ -18,12 +18,11 @@ class Controller extends ns.App.Base.Controller {
 	 *
 	 * @method constructor
 	 * @constructor
-	 * @param {App.Page.Detail.View} view
 	 * @param {App.Module.Feed.Service} itemService
 	 * @param {App.Module.CategoryList.Service} categoryListService
 	 */
-	constructor(view, itemService, categoryListService) {
-		super(view);
+	constructor(itemService, categoryListService) {
+		super();
 
 		/**
 		 * Service providing the list of feed items loaded from the REST API.

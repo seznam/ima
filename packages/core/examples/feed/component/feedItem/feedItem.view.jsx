@@ -12,8 +12,12 @@ bootstrap.addComponent((utils) => {
 	 * @module App
 	 * @submodule App.Component
 	 */
-	/* jshint ignore:start */
-	ns.App.Component.FeedItem.View = React.createClass({
+	class View extends React.Component {
+
+		constructor(props) {
+			super(props);
+		}
+
 		render() {
 			var DateComponentDiv = ns.App.Component.Date.View;
 			var ShareDiv = ns.App.Component.Share.View;
@@ -48,7 +52,7 @@ bootstrap.addComponent((utils) => {
 					</div>
 				</div>
 			);
-		},
+		}
 
 		getIcon(category) {
 			if (category) {
@@ -58,7 +62,7 @@ bootstrap.addComponent((utils) => {
 					</div>);
 			}
 			return '';
-		},
+		}
 
 		getHashTag(category) {
 
@@ -71,6 +75,7 @@ bootstrap.addComponent((utils) => {
 			}
 			return '';
 		}
-	});
-	/* jshint ignore:end */
+	}
+	
+	ns.App.Component.FeedItem.View = View;
 });

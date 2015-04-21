@@ -14,8 +14,12 @@ bootstrap.addComponent((utils) => {
 	 * @module App
 	 * @submodule App.Component
 	 */
-	/* jshint ignore:start */
-	ns.App.Component.Share.View = React.createClass({
+	class View extends React.Component {
+
+		constructor(props) {
+			super(props);
+		}
+		
 		render() {
 			var label = utils.dictionary.get('home.share');
 
@@ -62,7 +66,7 @@ bootstrap.addComponent((utils) => {
 					</div>
 				</div>
 			);
-		},
+		}
 
 		onShareOnFacebook(event) {
 			event.preventDefault();
@@ -77,7 +81,7 @@ bootstrap.addComponent((utils) => {
 			}, (response) => {
 				console.log(response);
 			});
-		},
+		}
 
 		getMailShareLink(item) {
 			var category = this.props.category;
@@ -96,7 +100,7 @@ bootstrap.addComponent((utils) => {
 					}).join("&");
 
 			return `mailto:?${queryString}`;
-		},
+		}
 
 		getPlainTextItemContent(item) {
 			if (item) {
@@ -104,7 +108,7 @@ bootstrap.addComponent((utils) => {
 				return content.replace(/<[^>]*?>/g, '');
 			}
 			return '';
-		},
+		}
 
 		getPostLink(item, category) {
 			if (item && category) {
@@ -119,13 +123,13 @@ bootstrap.addComponent((utils) => {
 				return router.link('home');
 			}
 			
-		},
+		}
 
 		onToggle() {
 			utils.dispatcher.fire('shareToggle', {
 				item: this.props.item
 			});
-		},
+		}
 
 		selectShareLink() {
 			var input = this.refs.shareLink.getDOMNode();
@@ -136,6 +140,7 @@ bootstrap.addComponent((utils) => {
 				input.select();
 			}
 		}
-	});
-	/* jshint ignore:end */
+	}
+	
+	ns.App.Component.Share.View = View;
 });

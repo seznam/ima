@@ -20,8 +20,13 @@ bootstrap.addComponent((utils) => {
 	 * @module App
 	 * @submodule App.Component
 	 */
-	/* jshint ignore:start */
-	ns.App.Component.TweetButton.View = React.createClass({
+	
+	class View extends React.Component {
+
+		constructor(props) {
+			super(props);
+		}
+		
 		/**
 		 * Renders the component.
 		 *
@@ -40,7 +45,7 @@ bootstrap.addComponent((utils) => {
 					{this.props.label}
 				</a>
 			);
-		},
+		}
 
 		/**
 		 * Event handler for the click on the "share via Twitter" button.
@@ -92,7 +97,7 @@ bootstrap.addComponent((utils) => {
 			if (openedWindow) {
 				event.preventDefault();
 			}
-		},
+		}
 
 		/**
 		 * Composes the URL to the Twitter sharing API containing the parameters
@@ -125,6 +130,7 @@ bootstrap.addComponent((utils) => {
 
 			return `https://twitter.com/share?${queryString}`;
 		}
-	});
-	/* jshint ignore:end */
+	}
+
+	ns.App.Component.TweetButton.View = View;
 });

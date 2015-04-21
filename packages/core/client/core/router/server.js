@@ -50,7 +50,7 @@ class Server extends ns.Core.Abstract.Router {
 	init(config = {}) {
 		super.init(config);
 		this._mode = this.MODE_SERVER;
-		this._domain = config.domain;
+		this._domain = config.$Domain;
 
 		return this;
 	}

@@ -12,8 +12,12 @@ bootstrap.addComponent((utils) => {
 	 * @module App
 	 * @submodule Component
 	 */
-	/* jshint ignore:start */
-	ns.App.Component.Feed.View = React.createClass({
+	class View extends React.Component {
+
+		constructor(props) {
+			super(props);
+		}
+
 		render() {
 			
 			var entity = this.props.entity;
@@ -24,7 +28,7 @@ bootstrap.addComponent((utils) => {
 					{Items}
 				</div>
 			);
-		},
+		}
 
 		getFeedItems(entity) {
 			if (entity) {
@@ -49,7 +53,7 @@ bootstrap.addComponent((utils) => {
 			} else {
 				return null;
 			}
-		},
+		}
 
 		getMoreItems() {
 			var entity = this.props.entity;
@@ -57,6 +61,7 @@ bootstrap.addComponent((utils) => {
 				utils.dispatcher.fire('getmoreitems');
 			}
 		}
-	});
-	/* jshint ignore:end */
+	}
+	
+	ns.App.Component.Feed.View = View;
 });

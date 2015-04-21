@@ -12,13 +12,15 @@ bootstrap.addComponent((utils) => {
 	 * @module App
 	 * @submodule App.Component
 	 */
-	/* jshint ignore:start */
-	ns.App.Component.Filter.View = React.createClass({
-		getInitialState() {
-			return {
+	class View extends React.Component {
+
+		constructor(props) {
+			super(props);
+
+			this.state = {
 				expanded: false
 			};
-		},
+		}
 
 		render() {
 			var isExpandedClass = this.state.expanded ? ' expanded' : '';
@@ -35,7 +37,7 @@ bootstrap.addComponent((utils) => {
 					</div>
 				</div>
 			);
-		},
+		}
 
 		getFilterTopBar(currentCategory) {
 			var label = utils.dictionary.get('filter.label');
@@ -50,7 +52,7 @@ bootstrap.addComponent((utils) => {
 					</span>
 				</div>
 			);
-		},
+		}
 
 		getAllLink() {
 			var allLabel = utils.dictionary.get('filter.all');
@@ -60,7 +62,7 @@ bootstrap.addComponent((utils) => {
 					{allLabel}
 				</a>
 			);
-		},
+		}
 
 		getCategoryLinks(categories) {
 
@@ -84,13 +86,14 @@ bootstrap.addComponent((utils) => {
 			}
 
 			return '';
-		},
+		}
 
 		onToggle() {
 			this.setState({
 				expanded: !this.state.expanded
 			});
 		}
-	});
-	/* jshint ignore:end */
+	}
+	
+	ns.App.Component.Filter.View = View;
 });
