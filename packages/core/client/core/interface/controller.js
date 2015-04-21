@@ -81,24 +81,6 @@ class Controller {
 	 */
 	load() {}
 
-	/**
-	 * Returns the controller's view.
-	 *
-	 * @method getReactView
-	 * @return {Vendor.React.ReactElement} The controller's view.
-	 */
-	getReactView() {}
-
-	/**
-	 * Sets the rendered (reactive) view, allowing the controller to push changes
-	 * in state to the current view shown to the user instance.
-	 *
-	 * Note that this method is invoked only at the client-side.
-	 *
-	 * @method setReactiveView
-	 * @param {Vendor.React.ReactComponent} The rendered controller's view.
-	 */
-	setReactiveView(reactiveView) {}
 
 	/**
 	 * Sets the controller state, replacing the old state. This method also
@@ -174,6 +156,14 @@ class Controller {
 	 * @param {Object<string, string>} [params={}] The current route parameters.
 	 */
 	setRouteParams(params = {}) {}
+
+	/**
+	 * Set state manager.
+	 *
+	 * @method setStateManager
+	 * @param {Core.Interface.PageStateManager|Null} stateManager
+	 */
+	setStateManager(stateManager) {}
 
 	/**
 	 * Returns the HTTPS status code to send to the client.

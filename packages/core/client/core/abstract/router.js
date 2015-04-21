@@ -394,8 +394,8 @@ class Router extends ns.Core.Interface.Router {
 	 * @return {Promise}
 	 */
 	_handle(route, params) {
-		var controller = this._factory.createController(route.getController(), this);
-		var view = this._factory.createView(route.getView());
+		var controller = route.getController();
+		var view = route.getView();
 
 		return this._pageManager.manage(controller, view, params);
 	}

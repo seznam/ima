@@ -12,7 +12,7 @@ describe('Core.Router.Client', function() {
 		pageRender = oc.make('$PageRender');
 		routerFactory = oc.make('$RouterFactory');
 		win = oc.get('$Window');
-		router = oc.create('Core.Router.ClientHandler', pageRender, routerFactory, Promise, win);
+		router = oc.create('Core.Router.Client', pageRender, routerFactory, Promise, win);
 		router.init({domain: domain, protocol: protocol});
 	});
 

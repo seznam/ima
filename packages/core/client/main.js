@@ -5,13 +5,13 @@ import bootstrap from 'imajs/client/core/bootstrap.js';
 // Import app/config
 import {init as initBindCore} from 'imajs/client/core/config/bind.js';
 import {init as initBindApp} from 'app/config/bind.js';
-import {init as initRoute} from 'app/config/route.js';
-import {init as initServiceCore} from 'imajs/client/core/config/service.js';
-import {init as initServiceApp} from 'app/config/service.js';
-import {init as initSetting} from 'app/config/setting.js';
+import {init as initRoutes} from 'app/config/routes.js';
+import {init as initServicesCore} from 'imajs/client/core/config/services.js';
+import {init as initServicesApp} from 'app/config/services.js';
+import {init as initSettings} from 'app/config/settings.js';
 
 var getInit = () => {
-	return {initBindCore, initBindApp, initRoute, initServiceCore, initServiceApp, initSetting};
+	return {initBindCore, initBindApp, initRoutes, initServicesCore, initServicesApp, initSettings};
 };
 
 var getNameSpace = () => {
@@ -34,7 +34,7 @@ if (typeof window !== 'undefined' && window !== null) {
 
 		var bootConfig = {
 			vendor: window.$IMA.Vendor,
-			service: {
+			services: {
 				respond: null,
 				request: null,
 				$IMA: window.$IMA,
@@ -48,7 +48,7 @@ if (typeof window !== 'undefined' && window !== null) {
 					$LanguagePartPath: window.$IMA.$LanguagePartPath
 				}
 			},
-			setting: {
+			settings: {
 				$Env: 'dev',
 				$Language: 'en',
 				$Protocol: 'http:'
@@ -79,7 +79,7 @@ if (typeof window !== 'undefined' && window !== null) {
 
 			var bootConfig = {
 				vendor: window.$IMA.Vendor,
-				service: {
+				services: {
 					respond: null,
 					request: null,
 					$IMA: window.$IMA,
@@ -94,7 +94,7 @@ if (typeof window !== 'undefined' && window !== null) {
 						$LanguagePartPath: window.$IMA.$LanguagePartPath
 					}
 				},
-				setting: {
+				settings: {
 					$Env: window.$IMA.$Env,
 					$Language: window.$IMA.$Language,
 					$Protocol: window.$IMA.$Protocol,

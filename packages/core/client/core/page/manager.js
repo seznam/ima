@@ -16,21 +16,41 @@ class Manager extends ns.Core.Interface.PageManager {
 	/**
 	 * @method constructor
 	 * @constructor
+	 * @param {Core.Page.Factory} pageFactory
 	 * @param {Core.Interface.PageRender} pageRender
+	 * @param {Core.Interface.PageStateManager} stateManager
 	 * @param {Core.Interface.Window} window
 	 */
-	constructor(pageRender, window) {
+	constructor(pageFactory, pageRender, stateManager, window) {
 		super();
 
 		/**
+		 * @property _pageFactory
+		 * @private
+		 * @type {Core.Page.Factory}
+		 * @default pageFactory
+		 */
+		this._pageFactory = pageFactory;
+
+		/**
 		 * @property _pageRender
+		 * @private
 		 * @type {Core.Abstract.PageRender}
 		 * @default pageRender
 		 */
 		this._pageRender = pageRender;
 
 		/**
+		 * @property _stateManager
+		 * @private
+		 * @type {Core.Interface.PageStateManager}
+		 * @default stateManager
+		 */
+		this._stateManager = stateManager;
+
+		/**
 		 * @property _window
+		 * @private
 		 * @type {Core.Interface.Window}
 		 * @default window
 		 */
@@ -44,28 +64,37 @@ class Manager extends ns.Core.Interface.PageManager {
 		 */
 		this._activeController = null;
 
+		this._init();
 	}
 
 	/**
 	 * Manager controller with params.
 	 *
 	 * @method run
-	 * @param {Core.Abstract.Controller} controller The page controller that
-	 *        should have its view rendered.
-	 * @param {Vendor.React.Component} view
+	 * @param {string} controller
+	 * @param {string} view
 	 * @param {Object<string, string>=} [params={}] The route parameters.
 	 * @return {Promise}
 	 */
 	manage(controller, view, params = {}) {
-		if (!controller) {
-			throw new CoreError(`Core.PageManager.Controller.manage(): The ` +
-			`controller parameter is required`);
-		}
+		var controllerInstance = this._pageFactory.createController(controller);
+		var decoratedController = this._pageFactory.decorateController(controllerInstance);
+		var viewInstance = this._pageFactory.createView(view);
 
 		this._deinitActiveController();
-		this._initController(controller, params);
+		this._initController(controllerInstance, params);
 
-		return this._pageRender.render(controller, view);
+		return this._pageRender.render(decoratedController, viewInstance);
+	}
+
+	/**
+	 * Initialization manager.
+	 *
+	 * @method _init
+	 * @private
+	 */
+	_init() {
+		this._stateManager.onChange = this._onChangeStateHandler;
 	}
 
 	/**
@@ -79,6 +108,7 @@ class Manager extends ns.Core.Interface.PageManager {
 	 */
 	_initController(controller, params) {
 		controller.setRouteParams(params);
+		controller.setStateManager(this._stateManager);
 		controller.init();
 		this._activeController = controller;
 	}
@@ -91,9 +121,21 @@ class Manager extends ns.Core.Interface.PageManager {
 	 */
 	_deinitActiveController() {
 		if (this._activeController) {
-			this._activeController.setReactiveView(null);
 			this._activeController.deinit();
+			this._activeController.setStateManager(null);
 			this._activeController = null;
+		}
+	}
+
+	/**
+	 * On change handler for state.
+	 *
+	 * @method onChangeStateHandler
+	 *
+	 */
+	onChangeStateHandler(state) {
+		if (this._activeContoller) {
+			this._pageRender.setState(state);
 		}
 	}
 

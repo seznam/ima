@@ -17,8 +17,8 @@ class PageManager {
 	 * Manage controller with params
 	 *
 	 * @method manage
-	 * @param {Core.Abstract.Controller} controller
-	 * @param {Vendor.React.Component} view
+	 * @param {string} controller
+	 * @param {string} view
 	 * @param {Object<string, *>=} params Parameters to use to initialize
 	 *        the controller.
 	 * @return {Promise}

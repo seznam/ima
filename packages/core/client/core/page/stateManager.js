@@ -5,13 +5,13 @@ ns.namespace('Core.Page');
 /**
  * Class for app state.
  *
- * @class State
- * @implements Core.Interface.PageState
+ * @class StateManager
+ * @implements Core.Interface.PageStateManager
  * @namespace Core.Page
  * @module Core
  * @submodule Core.Page
  */
-class State extends ns.Core.Interface.PageState {
+class StateManager extends ns.Core.Interface.PageStateManager {
 
 	/**
 	 * @method constructor
@@ -44,6 +44,14 @@ class State extends ns.Core.Interface.PageState {
 		 */
 		this.MAX_HISTORY_LIMIT = 5;
 
+		/**
+		 * @property onChange
+		 * @public
+		 * @type {function}
+		 * @default null
+		 */
+		this.onChange = null;
+
 	}
 
 	/**
@@ -60,6 +68,21 @@ class State extends ns.Core.Interface.PageState {
 
 		this._states.push(state);
 		this._cursor++;
+
+		if (this.onChange && typeof this.onChange === 'function') {
+			this.onChange(state);
+		}
+	}
+
+	/**
+	 * Patch state.
+	 *
+	 * @method patchState
+	 * @param {Object} statePatch
+	 */
+	patchState(statePatch) {
+		var newState = Object.assign({}, this.getState(), statePatch);
+		this.setState(newState);
 	}
 
 	/**
@@ -84,4 +107,4 @@ class State extends ns.Core.Interface.PageState {
 
 }
 
-ns.Core.Page.State = State;
+ns.Core.Page.StateManager = StateManager;

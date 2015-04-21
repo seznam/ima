@@ -23,14 +23,14 @@ class Client extends ns.Core.Abstract.PageRender {
 	 *        helpers.
 	 * @param {Vendor.React} React React framework instance to use to render the
 	 *        page.
-	 * @param {Object<string, *>} setting The application setting for the
+	 * @param {Object<string, *>} settings The application setting for the
 	 *        current application environment.
 	 * @param {Core.Interface.Window} window Helper for manipulating the global
 	 *        object ({@code window}) regardless of the client/server-side
 	 *        environment.
 	 */
-	constructor(Rsvp, React, setting, window) {
-		super(Rsvp, React, setting);
+	constructor(Rsvp, React, settings, window) {
+		super(Rsvp, React, settings);
 
 		/**
 		 * Flag signalling that the page is being rendered for the first time.
@@ -66,8 +66,7 @@ class Client extends ns.Core.Abstract.PageRender {
 	 */
 	render(controller, view) {
 		var loadPromises = this._wrapEachKeyToPromise(controller.load());
-		var reactiveView = null;
-		var masterElementId = this._setting.$Page.$Render.masterElementId;
+		var masterElementId = this._settings.$Page.$Render.masterElementId;
 		var viewContainer = this._window.getElementById(masterElementId);
 
 		for (let resourceName of Object.keys(loadPromises)) {
@@ -82,11 +81,10 @@ class Client extends ns.Core.Abstract.PageRender {
 		if (this._firstTime === false) {
 			var reactElementView = this._React.createElement(view, controller.getState());
 
-			reactiveView = this._React.render(
+			this._reactiveView = this._React.render(
 				reactElementView,
 				viewContainer
 			);
-			controller.setReactiveView(reactiveView);
 		}
 
 		return (
@@ -97,11 +95,10 @@ class Client extends ns.Core.Abstract.PageRender {
 					var reactElementView = this._React.createElement(view, controller.getState());
 
 					if (this._firstTime === true) {
-						reactiveView = this._React.render(
+						this._reactiveView = this._React.render(
 							reactElementView,
 							viewContainer
 						);
-						controller.setReactiveView(reactiveView);
 						this._firstTime = false;
 					}
 

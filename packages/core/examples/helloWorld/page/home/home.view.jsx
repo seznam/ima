@@ -25,7 +25,7 @@ bootstrap.addComponent((utils) => {
 				<div className='l-homepage'>
 					<div className='content'>
 						<img src="static/img/imajs-logo.png" alt="IMA.js logo"/>
-						<h1>{utils.dictionary.get('home.hello')}, {this.state.message}</h1>
+						<h1>{utils.$Dictionary.get('home.hello')}, {this.state.message}</h1>
 					</div>
 				</div>
 			);

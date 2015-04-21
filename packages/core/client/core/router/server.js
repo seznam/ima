@@ -3,12 +3,12 @@ import ns from 'imajs/client/core/namespace.js';
 ns.namespace('Core.Router');
 
 /**
- * @class ServerHandler
+ * @class Server
  * @namespace Core.Router
  * @module Core
  * @submodule Core.Router
  */
-class ServerHandler extends ns.Core.Abstract.Router {
+class Server extends ns.Core.Abstract.Router {
 
 	/**
 	 * @method constructor
@@ -87,4 +87,4 @@ class ServerHandler extends ns.Core.Abstract.Router {
 	}
 }
 
-ns.Core.Router.ServerHandler = ServerHandler;
+ns.Core.Router.Server = Server;

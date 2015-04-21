@@ -24,15 +24,15 @@ class Server extends ns.Core.Abstract.PageRender {
 	 *        related helpers.
 	 * @param {Vendor.React} React React framework instance to use to render the
 	 *        page.
-	 * @param {Object<string, *>} setting Application setting for the current
+	 * @param {Object<string, *>} settings Application setting for the current
 	 *        application environment.
 	 * @param {Core.Router.Response} response Utility for sending the page markup
 	 *        to the client as a response to the current HTTP request.
 	 * @param {Core.Interface.Cache} cache Resource cache caching the results of
 	 *        HTTP requests made by services used by the rendered page.
 	 */
-	constructor(Rsvp, React, setting, response, cache) {
-		super(Rsvp, React, setting);
+	constructor(Rsvp, React, settings, response, cache) {
+		super(Rsvp, React, settings);
 
 		/**
 		 * Utility for sending the page markup to the client as a response to the
@@ -81,7 +81,7 @@ class Server extends ns.Core.Abstract.PageRender {
 
 					var pageMarkup = this._React.renderToString(reactElementView);
 
-					var masterView = oc.get(this._setting.$Page.$Render.masterView);
+					var masterView = oc.get(this._settings.$Page.$Render.masterView);
 					var appMarkup = this._React.renderToStaticMarkup(masterView({
 						page: pageMarkup,
 						scripts: this._getScripts(),
@@ -98,7 +98,7 @@ class Server extends ns.Core.Abstract.PageRender {
 	/**
 	 * Generates the HTML code concontaining all scripts elements to include into
 	 * the rendered page. THe HTML code will include the scripts specified in
-	 * page renderer's setting and a script setting the "rehydration" data for
+	 * page renderer's settings and a script settings the "rehydration" data for
 	 * the application at the client-side.
 	 *
 	 * @method _getScripts
@@ -110,19 +110,19 @@ class Server extends ns.Core.Abstract.PageRender {
 		var scripts = [];
 		var html = '';
 
-		scripts = this._setting.$Page.$Render.scripts
+		scripts = this._settings.$Page.$Render.scripts
 			.map(script => `<script src="${script}"></script>`);
 
 		scripts.push(
 			'<script>' +
 			' window.$IMA = window.$IMA || {};' +
 			' window.$IMA.Cache = ' + (this._cache.serialize()) + ';' +
-			' window.$IMA.$Language = "' + (this._setting.$Language) + '";' +
-			' window.$IMA.$Env = "' + (this._setting.$Env) + '";' +
-			' window.$IMA.$Protocol = "' + (this._setting.$Protocol) + '";'+
-			' window.$IMA.$Domain = "' + (this._setting.$Domain) + '";'+
-			' window.$IMA.$Root = "' + (this._setting.$Root) + '";'+
-			' window.$IMA.$LanguagePartPath = "' + (this._setting.$LanguagePartPath) + '";'+
+			' window.$IMA.$Language = "' + (this._settings.$Language) + '";' +
+			' window.$IMA.$Env = "' + (this._settings.$Env) + '";' +
+			' window.$IMA.$Protocol = "' + (this._settings.$Protocol) + '";'+
+			' window.$IMA.$Domain = "' + (this._settings.$Domain) + '";'+
+			' window.$IMA.$Root = "' + (this._settings.$Root) + '";'+
+			' window.$IMA.$LanguagePartPath = "' + (this._settings.$LanguagePartPath) + '";'+
 			'</script>'
 		);
 		html = scripts.join('');

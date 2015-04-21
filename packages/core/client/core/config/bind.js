@@ -21,15 +21,14 @@ export var init = (ns, oc, config) => { //jshint ignore:line
 	//*************END VENDORS*****************
 
 	//*************START CONSTANT**************
-	oc.bind('$SETTING', ns.Setting);
-	oc.bind('$ENV', ns.Setting.$Env);
-	oc.bind('$HTTP_CONFIG', ns.Setting.$Http);
-	oc.bind('$SOCKET_CONFIG', ns.Setting.$Socket);
-	oc.bind('$CACHE_CONFIG', ns.Setting.$Cache);
-	oc.bind('$ANIMATE_CONFIG', ns.Setting.$Animate);
+	oc.bind('$SETTINGS', ns.$Settings);
+	oc.bind('$ENV', ns.$Settings.$Env);
+	oc.bind('$HTTP_CONFIG', ns.$Settings.$Http);
+	oc.bind('$SOCKET_CONFIG', ns.$Settings.$Socket);
+	oc.bind('$CACHE_CONFIG', ns.$Settings.$Cache);
 
-	oc.bind('$SECURE', ns.Setting.$Protocol === 'https:' ? true: false );
-	oc.bind('$PROTOCOL', ns.Setting.$Protocol );
+	oc.bind('$SECURE', ns.$Settings.$Protocol === 'https:' ? true: false );
+	oc.bind('$PROTOCOL', ns.$Settings.$Protocol );
 	//*************END CONSTANT****************
 
 
@@ -73,27 +72,26 @@ export var init = (ns, oc, config) => { //jshint ignore:line
 	oc.bind('$Cache', oc.make('Core.Cache.Handler', ['$CacheStorage' ,'$CACHE_CONFIG']));
 	oc.bind('$CacheEntry', ns.Core.Cache.Entry);
 
-	//Page
-	oc.bind('$PageState', oc.make('Core.Page.State'));
-
-	if (oc.get('$Window').isClient()) {
-		oc.bind('$PageRender', oc.make('Core.Page.Render.Client', ['$Rsvp', '$BindReact', ns.Setting, '$Window']));
-	} else {
-		oc.bind('$PageRender', oc.make('Core.Page.Render.Server', ['$Rsvp', '$BindReact', ns.Setting, '$Response', '$Cache']));
-	}
-	oc.bind('$PageManager', oc.make('Core.Page.Manager', ['$PageRender', '$Window']));
-
 	//SEO
 	oc.bind('$Seo', oc.make('Core.Seo.Manager', []));
-	oc.bind('$SeoDecoratorController', ns.Core.Decorator.SeoController);
-	oc.bind('$StateDecoratorController', ns.Core.Decorator.StateController);
+	oc.bind('$DecoratorController', ns.Core.Decorator.Controller);
+
+	//Page
+	oc.bind('$PageStateManager', oc.make('Core.Page.StateManager'));
+	oc.bind('$PageFactory', oc.make('Core.Page.Factory'));
+	if (oc.get('$Window').isClient()) {
+		oc.bind('$PageRender', oc.make('Core.Page.Render.Client', ['$Rsvp', '$BindReact', ns.$Settings, '$Window']));
+	} else {
+		oc.bind('$PageRender', oc.make('Core.Page.Render.Server', ['$Rsvp', '$BindReact', ns.$Settings, '$Response', '$Cache']));
+	}
+	oc.bind('$PageManager', oc.make('Core.Page.Manager', ['$PageFactory', '$PageRender', '$PageStateManager', '$Window']));
 
 	//Router
-	oc.bind('$RouterFactory', oc.make('Core.Router.Factory', ['$Seo', '$Dictionary', '$PageState', ns.Setting]));
+	oc.bind('$RouterFactory', oc.make('Core.Router.Factory', []));
 	if (oc.get('$Window').isClient()) {
-		oc.bind('$Router', oc.make('Core.Router.ClientHandler', ['$PageManager', '$RouterFactory', '$BindPromise', '$Window']));
+		oc.bind('$Router', oc.make('Core.Router.Client', ['$PageManager', '$RouterFactory', '$BindPromise', '$Window']));
 	} else {
-		oc.bind('$Router', oc.make('Core.Router.ServerHandler', ['$PageManager', '$RouterFactory', '$BindPromise', '$Request', '$Response']));
+		oc.bind('$Router', oc.make('Core.Router.Server', ['$PageManager', '$RouterFactory', '$BindPromise', '$Request', '$Response']));
 	}
 	oc.bind('$Route', ns.Core.Router.Route);
 
@@ -109,11 +107,11 @@ export var init = (ns, oc, config) => { //jshint ignore:line
 
 	//COMPONENT
 	oc.bind('$Utils', {
-		router: oc.get('$Router'),
-		dispatcher: oc.get('$Dispatcher'),
-		dictionary: oc.get('$Dictionary'),
-		setting: oc.get('$SETTING'),
-		window: oc.get('$Window')
+		$Router: oc.get('$Router'),
+		$Dispatcher: oc.get('$Dispatcher'),
+		$Dictionary: oc.get('$Dictionary'),
+		$Settings: oc.get('$SETTINGS'),
+		$Window: oc.get('$Window')
 	});
 
 	//*************END CORE****************

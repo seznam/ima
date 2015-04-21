@@ -19,8 +19,8 @@ module.exports = (() => {
 		var stack = stackTrace.parse(err);
 		var fileIndex = 1;
 
-		console.error(err.stack);
-		console.error(err._params);
+		console.error('Stack: ',err.stack);
+		console.error('Params: ', err._params);
 
 
 		asyncEach(stack, function getContentInfo(item, cb) {
@@ -85,7 +85,7 @@ module.exports = (() => {
 
 		var bootConfig = {
 			vendor: vendor,
-			service: {
+			services: {
 				request: req,
 				response: res,
 				$IMA: {},
@@ -100,7 +100,7 @@ module.exports = (() => {
 					$LanguagePartPath: languagePartPath
 				}
 			},
-			setting: {
+			settings: {
 				$Env: config.$Env,
 				$Protocol: protocol,
 				$Language: language,

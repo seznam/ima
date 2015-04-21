@@ -12,15 +12,15 @@ describe('Core.Http.Agent', function() {
 	beforeEach(function() {
 		Promise = oc.get('$Promise');
 		proxy = oc.get('$HttpProxy');
-		cache = oc.create('Core.Cache.Handler', oc.create('$MapStorage'), ns.Setting.$Cache);
+		cache = oc.create('Core.Cache.Handler', oc.create('$MapStorage'), ns.$Settings.$Cache);
 		cookie = oc.make('Core.Storage.Cookie');
 		dictionary = oc.make('Core.Dictionary.MessageFormat');
 
 		dictionary.init();
 
-		http = oc.create('Core.Http.Agent', proxy, cache, cookie, dictionary, Promise, ns.Setting.$Http);
+		http = oc.create('Core.Http.Agent', proxy, cache, cookie, dictionary, Promise, ns.$Settings.$Http);
 
-		options = {ttl: ns.Setting.$Http.ttl, timeout: ns.Setting.$Http.timeout, repeatRequest: ns.Setting.$Http.repeatRequest};
+		options = {ttl: ns.$Settings.$Http.ttl, timeout: ns.$Settings.$Http.timeout, repeatRequest: ns.$Settings.$Http.repeatRequest};
 
 		data = {
 			body: 111,

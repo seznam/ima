@@ -13,7 +13,7 @@ describe('Core.Router.Server', function() {
 		routerFactory = oc.make('$RouterFactory');
 		request = oc.create('Core.Router.Request');
 		response = oc.create('Core.Router.Response');
-		router = oc.create('Core.Router.ServerHandler', pageRender, routerFactory, Promise, request, response);
+		router = oc.create('Core.Router.Server', pageRender, routerFactory, Promise, request, response);
 		router.init({mode: router.MODE_SERVER, domain: domain});
 	});
 

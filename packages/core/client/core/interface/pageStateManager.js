@@ -5,12 +5,12 @@ ns.namespace('Core.Interface');
 /**
  * Page state.
  *
- * @interface PageState
+ * @interface PageStateManager
  * @namespace Core.Interface
  * @module Core
  * @submodule Core.Interface
  */
-class PageState {
+class PageStateManager {
 
 	/**
 	 * Set state.
@@ -19,6 +19,14 @@ class PageState {
 	 * @param {Object} state
 	 */
 	setState(state) {}
+
+	/**
+	 * Patch state.
+	 *
+	 * @method patchState
+	 * @param {Object} statePatch
+	 */
+	patchState(statePatch) {}
 
 	/**
 	 * Get state.
@@ -38,4 +46,4 @@ class PageState {
 
 }
 
-ns.Core.Interface.PageState = PageState;
+ns.Core.Interface.PageStateManager = PageStateManager;

@@ -28,10 +28,10 @@ class PageRender extends ns.Core.Interface.PageRender {
 	 *        helper methods.
 	 * @param {Vendor.React} React React framework instance, will be used to
 	 *        render the page.
-	 * @param {Object<string, *>} setting Application settings for the current
+	 * @param {Object<string, *>} settings Application settings for the current
 	 *        application environment.
 	 */
-	constructor(Rsvp, React, setting) {
+	constructor(Rsvp, React, settings) {
 		super();
 
 		/**
@@ -59,7 +59,15 @@ class PageRender extends ns.Core.Interface.PageRender {
 		 * @protected
 		 * @type {Object<string, *>}
 		 */
-		this._setting = setting;
+		this._settings = settings;
+
+		/**
+		 * @property _reactiveView
+		 * @type {Vendor.React.Component}
+		 * @default null
+		 */
+		this._reactiveView = null;
+
 	}
 
 	/**
@@ -83,6 +91,18 @@ class PageRender extends ns.Core.Interface.PageRender {
 	 */
 	render(controller, view) { // jshint ignore:line
 		throw new CoreError('The render() method is abstract and must be overridden');
+	}
+
+	/**
+	 * Set state to reactive react component.
+	 *
+	 * @method setState
+	 * @param {object} [state={}]
+	 */
+	setState(state = {}) {
+		if (this._reactiveView) {
+			this._reactiveView.setState(state);
+		}
 	}
 
 	/**

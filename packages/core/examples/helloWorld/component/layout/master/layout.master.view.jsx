@@ -19,7 +19,7 @@ bootstrap.addComponent((utils) => {
 		}
 
 		render() {
-			var appCssFile = utils.setting.$Env !== 'dev' ? 'app.min.css' : 'app.css';
+			var appCssFile = utils.$Settings.$Env !== 'dev' ? 'app.min.css' : 'app.css';
 
 			return (
 				<html>

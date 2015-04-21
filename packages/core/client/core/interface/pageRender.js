@@ -30,6 +30,14 @@ class PageRender {
 	 * @return {Promise}
 	 */
 	render(controller, view) {}
+
+	/**
+	 * Set state to reactive react component.
+	 *
+	 * @method setState
+	 * @param {object} [state={}]
+	 */
+	setState(state = {}) {}
 }
 
 ns.Core.Interface.PageRender = PageRender;

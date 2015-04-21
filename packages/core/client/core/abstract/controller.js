@@ -27,14 +27,14 @@ class Controller extends ns.Core.Interface.Controller {
 		super();
 
 		/**
-		 * Pointer for active react class in DOM.
+		 * State manager.
 		 *
-		 * @property _reactiveView
+		 * @property _stateManager
 		 * @protected
-		 * @type {Vendor.React.ReactComponent}
+		 * @type {Core.Interface.PageStateManager}
 		 * @default null
 		 */
-		this._reactiveView = null;
+		this._stateManager = null;
 
 		/**
 		 * The HTTP response code to send to the client.
@@ -137,20 +137,6 @@ class Controller extends ns.Core.Interface.Controller {
 		'and must be overridden');
 	}
 
-	/**
-	 * Sets the rendered (reactive) view, allowing the controller to push changes
-	 * in state to the current view shown to the user instance.
-	 *
-	 * Note that this method is invoked only at the client-side.
-	 *
-	 * @inheritdoc
-	 * @override
-	 * @method setReactiveView
-	 * @param {Vendor.React.ReactComponent} The rendered controller's view.
-	 */
-	setReactiveView(reactiveView) {
-		this._reactiveView = reactiveView;
-	}
 
 	/**
 	 * Sets the controller state, replacing the old state. This method also
@@ -168,8 +154,8 @@ class Controller extends ns.Core.Interface.Controller {
 	 *        old state.
 	 */
 	setState(state) {
-		if (this._reactiveView) {
-			this._reactiveView.setState(state);
+		if (this._stateManager) {
+			this._stateManager.setState(state);
 		}
 	}
 
@@ -196,7 +182,9 @@ class Controller extends ns.Core.Interface.Controller {
 	 *        apply.
 	 */
 	patchState(statePatch) {
-		this.setState(statePatch);
+		if (this._stateManager) {
+			this._stateManager.patchState(statePatch);
+		}
 	}
 
 	/**
@@ -205,9 +193,15 @@ class Controller extends ns.Core.Interface.Controller {
 	 * @inheritdoc
 	 * @override
 	 * @method getState
-	 * @return {Object<string, *>} The current state of this controller.
+	 * @return {Object<string, *>|Null} The current state of this controller.
 	 */
-	getState() {}
+	getState() {
+		if (this._stateManager) {
+			return this._stateManager.getState();
+		} else {
+			return null;
+		}
+	}
 
 	/**
 	 * Callback used to configure the SEO attribute manager. The method is called
@@ -230,7 +224,7 @@ class Controller extends ns.Core.Interface.Controller {
 	 * @param {Object<string, *>} settings The application settings for the
 	 *        current application environment.
 	 */
-	setSeoParams(resolvedPromises, seo, router, dictionary, setting) {
+	setSeoParams(resolvedPromises, seo, router, dictionary, settings) {
 		throw new CoreError('The Core.Abstract.Controller.setSeoParams method is ' +
 		'abstract and must be overridden');
 	}
@@ -245,6 +239,16 @@ class Controller extends ns.Core.Interface.Controller {
 	 */
 	setRouteParams(params = {}) {
 		this.params = params;
+	}
+
+	/**
+	 * Set state manager.
+	 *
+	 * @method setStateManager
+	 * @param {Core.Interface.PageStateManager|Null} stateManager
+	 */
+	setStateManager(stateManager) {
+		this._stateManager = stateManager;
 	}
 
 	/**

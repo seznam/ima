@@ -15,36 +15,18 @@ class Bootstrap{
 	/**
 	 * @method contructor
 	 * @constructor
-	 * @param {Core.Namespace} namespace
-	 * @param {Core.ObjectContainer} objectContainer
 	 */
-	constructor(namespace, objectContainer) {
+	constructor() {
 		
 		/**
-		 * @property _ns
-		 * @private
-		 * @type {Core.Namespace}
-		 * @default namespace
-		 */
-		this._ns = namespace; 
-
-		/**
-		 * @property _oc
-		 * @private
-		 * @type {Core.ObjectContainer}
-		 * @default objectContainer
-		 */
-		this._oc = objectContainer;
-
-		/**
 		 *
 		 *
-		 * @property _component
+		 * @property _components
 		 * @private
 		 * @type {Array}
 		 * @default []
 		 */
-		this._component = []; 
+		this._components = [];
 		
 		/**
 		 * @property _config
@@ -67,11 +49,11 @@ class Bootstrap{
 		this._config = config;
 
 		this._setVendor();
-		this._initSetting();
+		this._initSettings();
 		this._initBind();
-		this._initService();
-		this._initRoute();
-		this._initComponent();
+		this._initServices();
+		this._initRoutes();
+		this._initComponents();
 	}
 
 	/**
@@ -82,7 +64,7 @@ class Bootstrap{
 	 */
 	_setVendor() {
 		var vendor = this._config.vendor;
-		var nsVendor = this._ns.namespace('Vendor');
+		var nsVendor = ns.namespace('Vendor');
 		for (var [name, lib] of vendor) {
 			nsVendor[name] = lib;
 		}
@@ -91,12 +73,12 @@ class Bootstrap{
 	/**
 	 * Initialization app settings.
 	 *
-	 * @method _initSetting
+	 * @method _initSettings
 	 * @private
 	 */
-	_initSetting() {
-		if (typeof(this._config.initSetting) === 'function') {
-			this._config.initSetting(this._ns, this._oc, this._config.setting);
+	_initSettings() {
+		if (typeof(this._config.initSettings) === 'function') {
+			this._config.initSettings(ns, oc, this._config.settings);
 		}
 	}
 
@@ -108,52 +90,52 @@ class Bootstrap{
 	 */
 	_initBind() {
 		if (typeof(this._config.initBindCore) === 'function') {
-			this._config.initBindCore(this._ns, this._oc, this._config.bind);
+			this._config.initBindCore(ns, oc, this._config.bind);
 		}
 
 		if (typeof(this._config.initBindApp) === 'function') {
-			this._config.initBindApp(this._ns, this._oc, this._config.bind);
+			this._config.initBindApp(ns, oc, this._config.bind);
 		}
 	}
 
 	/**
 	 * Initialization routes.
 	 *
-	 * @method _initRoute
+	 * @method _initRoutes
 	 * @private
 	 */
-	_initRoute() {
-		if (typeof(this._config.initRoute) === 'function') {
-			this._config.initRoute(this._ns, this._oc, this._config.route);
+	_initRoutes() {
+		if (typeof(this._config.initRoutes) === 'function') {
+			this._config.initRoutes(ns, oc, this._config.routes);
 		}
 	}
 
 	/**
 	 * Additional initialization service.
 	 *
-	 * @method _initService
+	 * @method _initServices
 	 * @private
 	 */
-	_initService() {
-		if (typeof(this._config.initServiceCore) === 'function') {
-			this._config.initServiceCore(this._ns, this._oc, this._config.service);
+	_initServices() {
+		if (typeof(this._config.initServicesCore) === 'function') {
+			this._config.initServicesCore(ns, oc, this._config.services);
 		}
 
-		if (typeof(this._config.initServiceApp) === 'function') {
-			this._config.initServiceApp(this._ns, this._oc, this._config.service);
+		if (typeof(this._config.initServicesApp) === 'function') {
+			this._config.initServicesApp(ns, oc, this._config.services);
 		}
 	}
 
 	/**
 	 * Initialization components.
 	 *
-	 * @method _initComponent
+	 * @method _initComponents
 	 * @private
 	 */
-	_initComponent() {
-		for (var componentHandler of this._component) {
-			if (typeof(componentHandler) === 'function') {
-				componentHandler(this._oc.get('$Utils'));
+	_initComponents() {
+		for (var component of this._components) {
+			if (typeof(component) === 'function') {
+				component(oc.get('$Utils'));
 			}
 		}
 	}
@@ -162,15 +144,15 @@ class Bootstrap{
 	 * Add component to pipe.
 	 *
 	 * @method addComponent
-	 * @param {Function} componentHandler - function for init react component
+	 * @param {Function} component - function for init react component
 	 */
-	addComponent(componentHandler) {
-		this._component.push(componentHandler);
+	addComponent(component) {
+		this._components.push(component);
 	}
 }
 
 ns.Core.Bootstrap = Bootstrap;
 
-var bootstrap = new Bootstrap(ns, oc);
+var bootstrap = new Bootstrap();
 
 export default bootstrap;
