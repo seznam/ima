@@ -116,10 +116,20 @@ var files = {
 			server: './build/imajs/'
 		}
 	},
+	polyfill: {
+		name: 'polyfill.js',
+		src: [
+			'./node_modules/custom-event-polyfill/custom-event-polyfill.js'
+		],
+		dest: {
+			client: './build/static/js/'
+		}
+	},
 	bundle: {
 		js: {
 			name: 'app.bundle.js',
 			src: [
+				'./build/static/js/polyfill.js',
 				'./build/static/js/shim.js',
 				'./build/static/js/vendor.client.js',
 				'./build/static/js/app.client.js'
@@ -199,7 +209,7 @@ var documentationPreprocessors = [
 // -------------------------------------PUBLIC TASKS (gulp task)
 gulp.task('dev', function(callback) {
 	return runSequence(
-		['copy:appStatic', 'copy:imajsServer', 'copy:environment', 'shim'],
+		['copy:appStatic', 'copy:imajsServer', 'copy:environment', 'shim', 'polyfill'],
 		['Es6ToEs5:client', 'Es6ToEs5:server', 'Es6ToEs5:vendor'],
 		['vendor:client', 'vendor:server', 'less', 'doc', 'locale'],
 		'vendor:clean',
@@ -211,7 +221,7 @@ gulp.task('dev', function(callback) {
 
 gulp.task('build', function(callback) {
 	return runSequence(
-		['copy:appStatic', 'copy:imajsServer', 'copy:environment', 'shim'], //copy folder public, concat shim
+		['copy:appStatic', 'copy:imajsServer', 'copy:environment', 'shim', 'polyfill'], //copy folder public, concat shim
 		['Es6ToEs5:client', 'Es6ToEs5:server', 'Es6ToEs5:vendor'], // convert app and vendor script
 		['vendor:client', 'vendor:server', 'less', 'doc', 'locale'], // adjust vendors, compile less, create doc,
 		['bundle:js', 'bundle:css'],
@@ -396,6 +406,17 @@ gulp.task('shim', function() {
 			.pipe(concat(files.shim.name))
 			.pipe(gulp.dest(files.shim.dest.client))
 			.pipe(gulp.dest(files.shim.dest.server))
+	);
+});
+
+gulp.task('polyfill', function() {
+	return (
+		gulp
+			.src(files.polyfill.src)
+			.pipe(sourcemaps.init({loadMaps: true}))
+			.pipe(insert.wrap('(function(){', '})();'))
+			.pipe(concat(files.polyfill.name))
+			.pipe(gulp.dest(files.shim.dest.client))
 	);
 });
 
