@@ -1,20 +1,23 @@
 import ns from 'imajs/client/core/namespace.js';
 import bootstrap from 'imajs/client/core/bootstrap.js';
 
+ns.namespace('App.Page.Home');
+
 bootstrap.addComponent((utils) => {
-	ns.namespace('App.Page.Home');
+	
 	/**
-	 * HomePage view.
+	 * Home Page view.
 	 *
 	 * @class View
-	 * @extends Core.Abstract.View
+	 * @extends React.Component
 	 * @namespace App.Page.Home
 	 * @module App
 	 * @submodule App.Page
 	 *
-	 * @uses App.Component.Layout.Header.View
-	 * @uses App.Component.Layout.Main.View
-	 * @uses App.Component.Sign.List.View
+	 * @uses App.Component.TextInput.View
+	 * @uses App.Component.Feed.View
+	 * @uses App.Component.Header.View
+	 * @uses App.Component.Filter.View
 	 */
 	class View extends React.Component {
 

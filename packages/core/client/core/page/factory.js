@@ -41,8 +41,8 @@ class Factory {
 	 * @return {Vendor.React.Component}
 	 */
 	createView(view) {
-		if (ns.has(view)) {
-			return ns.namespace(view);
+		if (oc.has(view)) {
+			return oc.get(view);
 		} else {
 			throw new CoreError(`Core.Page.Factory:createView hasn't name of view "${view}".`);
 		}
