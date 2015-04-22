@@ -71,7 +71,7 @@ class PageRender extends ns.Core.Interface.PageRender {
 	}
 
 	/**
-	 * Renders the page using the provided controller and parameters. The actual
+	 * Renders the page using the provided controller and view. The actual
 	 * behavior of this method differs at the client and the at server in the
 	 * following way:
 	 *
@@ -82,16 +82,24 @@ class PageRender extends ns.Core.Interface.PageRender {
 	 * from the HTML markup send by the server if possible.
 	 *
 	 * @override
-	 * @method render
+	 * @method mount
 	 * @abstract
-	 * @param {Core.Abstract.Controller} controller The page controller that
-	 *        should have its view rendered.
+	 * @param {Core.Abstract.Controller} controller
 	 * @param {Vendor.React.Component} view
 	 * @return {Promise}
 	 */
-	render(controller, view) { // jshint ignore:line
+	mount(controller, view) { // jshint ignore:line
 		throw new CoreError('The render() method is abstract and must be overridden');
 	}
+
+	/**
+	 * Unmount view from th DOM.
+	 *
+	 * @override
+	 * @method unmount
+	 * @abstract
+	 */
+	unmount() {}
 
 	/**
 	 * Set state to reactive react component.

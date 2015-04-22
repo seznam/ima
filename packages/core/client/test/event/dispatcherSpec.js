@@ -1,4 +1,4 @@
-describe('Core.Dispatcher.Handler', function() {
+describe('Core.Event.Dispatcher', function() {
 
 	var handlers = {
 		handler1: function() {},
@@ -12,7 +12,7 @@ describe('Core.Dispatcher.Handler', function() {
 
 	var dispatcher = null;
 	beforeEach(function() {
-		dispatcher = oc.create('Core.Dispatcher.Handler');
+		dispatcher = oc.create('Core.Event.Dispatcher');
 	});
 
 	describe('listen method', function() {

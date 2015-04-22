@@ -19,7 +19,7 @@ module.exports = (function() {
 		'imajs/client/core/seo/*.js',
 		'imajs/client/core/decorator/*.js',
 		'imajs/client/core/socket/*.js',
-		'imajs/client/core/dispatcher/*.js',
+		'imajs/client/core/event/*.js',
 		'imajs/client/core/storage/*.js',
 		'imajs/client/core/window/*.js',
 		'imajs/client/core/animate/*.js'

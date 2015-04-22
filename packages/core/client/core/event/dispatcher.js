@@ -1,7 +1,7 @@
 import ns from 'imajs/client/core/namespace.js';
 import CoreError from 'imajs/client/core/coreError.js';
 
-ns.namespace('Core.Dispatcher');
+ns.namespace('Core.Event');
 
 /**
  * An empty immutable map of event listener to scopes, used for a mismatch in
@@ -27,15 +27,15 @@ const EMPTY_SET = Object.freeze(new Set());
  * Default implementation of the {@codelink Core.Interface.Dispatcher}
  * interface.
  *
- * @class Handler
+ * @class Dispatcher
  * @implements ns.Core.Interface.Dispatcher
- * @namespace Core.Dispatcher
+ * @namespace Core.Event
  * @module Core
- * @submodule Core.Dispatcher
+ * @submodule Core.Event
  *
  * @requires Core.Interface.Storage
  */
-class Handler extends ns.Core.Interface.Dispatcher {
+class Dispatcher extends ns.Core.Interface.Dispatcher {
 	/**
 	 * Initializes the dispatcher.
 	 *
@@ -124,7 +124,7 @@ class Handler extends ns.Core.Interface.Dispatcher {
 		var scopes = this._getScopesOf(event, listener);
 
 		if (!scopes.has(scope)) {
-			throw new CoreError('Core.Dispatcher.Handler.unlisten(): the provided ' +
+			throw new CoreError('Core.Event.Dispatcher.unlisten(): the provided ' +
 			`handler '${handler}' is not registered for the specified event ` +
 			`'${event}' and scope '${scope}'. Check your workflow.`, {
 				event: event,
@@ -273,4 +273,4 @@ class Handler extends ns.Core.Interface.Dispatcher {
 	}
 }
 
-ns.Core.Dispatcher.Handler = Handler;
+ns.Core.Event.Dispatcher = Dispatcher;

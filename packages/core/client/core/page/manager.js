@@ -84,7 +84,7 @@ class Manager extends ns.Core.Interface.PageManager {
 		this._deinitActiveController();
 		this._initController(controllerInstance, params);
 
-		return this._pageRender.render(decoratedController, viewInstance);
+		return this._pageRender.mount(decoratedController, viewInstance);
 	}
 
 	/**
@@ -123,6 +123,7 @@ class Manager extends ns.Core.Interface.PageManager {
 		if (this._activeController) {
 			this._activeController.deinit();
 			this._activeController.setStateManager(null);
+			this._pageRender.unmount();
 			this._activeController = null;
 		}
 	}

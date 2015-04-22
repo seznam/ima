@@ -13,7 +13,7 @@ ns.namespace('Core.Interface');
  */
 class PageRender {
 	/**
-	 * Renders the page using the provided controller and parameters. The actual
+	 * Renders the page using the provided controller and view. The actual
 	 * behavior of this method differs at the client and the at server in the
 	 * following way:
 	 *
@@ -23,13 +23,19 @@ class PageRender {
 	 * On client, the method renders the page into DOM, re-using the DOM created
 	 * from the HTML markup send by the server if possible.
 	 *
-	 * @method render
-	 * @param {Core.Abstract.Controller} controller The page controller to use to
-	 *        render the page, and bind to the rendered page if at the client.
+	 * @method unmount
+	 * @param {Core.Abstract.Controller} controller
 	 * @param {Vendor.React.Component} view
 	 * @return {Promise}
 	 */
-	render(controller, view) {}
+	mount(controller, view) {}
+
+	/**
+	 * Unmount view from th DOM.
+	 *
+	 * @method unmount
+	 */
+	unmount() {}
 
 	/**
 	 * Set state to reactive react component.

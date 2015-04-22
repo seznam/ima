@@ -61,13 +61,12 @@ class Server extends ns.Core.Abstract.PageRender {
 	 * Renders the page into HTML markup and sends it to the client using the
 	 * response utility provided by router.
 	 *
-	 * @method render
-	 * @param {Core.Abstract.Controller} controller The page controller that
-	 *        should have its view rendered.
+	 * @method mount
+	 * @param {Core.Abstract.Controller} controller
 	 * @param {Vendor.React.Component} view
 	 * @return {Promise}
 	 */
-	render(controller, view) {
+	mount(controller, view) {
 		var loadPromises = this._wrapEachKeyToPromise(controller.load());
 
 		return (
@@ -93,6 +92,19 @@ class Server extends ns.Core.Abstract.PageRender {
 						.send('<!doctype html>\n' + appMarkup);
 				})
 		);
+	}
+
+	/**
+	 * Unmount view from th DOM.
+	 *
+	 * @override
+	 * @method unmount
+	 * @abstract
+	 */
+	unmount() {
+		if (this._reactiveView) {
+			this._reactiveView = null;
+		}
 	}
 
 	/**

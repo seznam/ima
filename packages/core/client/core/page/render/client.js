@@ -51,23 +51,29 @@ class Client extends ns.Core.Abstract.PageRender {
 		 * @type {Core.Interface.Window}
 		 */
 		this._window = window;
+
+		/**
+		 * @property _viewContainer
+		 * @private
+		 * @type {HTMLElement}
+		 */
+		this._viewContainer = this._window
+				.getElementById(this._settings.$Page.$Render.masterElementId);
+
 	}
 
 	/**
-	 * Renders the page using the provided controller and parameters. The method
+	 * Renders the page using the provided controller and view. The method
 	 * attempts to re-use the markup sent by the server if possible.
 	 *
 	 * @override
-	 * @method render
-	 * @param {Core.Abstract.Controller} controller The page controller that
-	 *        should have its view rendered.
+	 * @method mount
+	 * @param {Core.Abstract.Controller} controller
 	 * @param {Vendor.React.Component} view
 	 * @return {Promise}
 	 */
-	render(controller, view) {
+	mount(controller, view) {
 		var loadPromises = this._wrapEachKeyToPromise(controller.load());
-		var masterElementId = this._settings.$Page.$Render.masterElementId;
-		var viewContainer = this._window.getElementById(masterElementId);
 
 		for (let resourceName of Object.keys(loadPromises)) {
 			loadPromises[resourceName]
@@ -83,7 +89,7 @@ class Client extends ns.Core.Abstract.PageRender {
 
 			this._reactiveView = this._React.render(
 				reactElementView,
-				viewContainer
+				this._viewContainer
 			);
 		}
 
@@ -97,7 +103,7 @@ class Client extends ns.Core.Abstract.PageRender {
 					if (this._firstTime === true) {
 						this._reactiveView = this._React.render(
 							reactElementView,
-							viewContainer
+							this._viewContainer
 						);
 						this._firstTime = false;
 					}
@@ -108,6 +114,20 @@ class Client extends ns.Core.Abstract.PageRender {
 					controller.activate();
 				})
 		);
+	}
+
+	/**
+	 * Unmount view from th DOM.
+	 *
+	 * @override
+	 * @method unmount
+	 * @abstract
+	 */
+	unmount() {
+		if (this._reactiveView) {
+			this._React.unmountComponentAtNode(this._viewContainer);
+			this._reactiveView = null;
+		}
 	}
 
 	/**
