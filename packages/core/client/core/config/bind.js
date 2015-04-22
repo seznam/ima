@@ -54,6 +54,7 @@ export var init = (ns, oc, config) => { //jshint ignore:line
 	oc.bind('$CookieStorage', oc.make('Core.Storage.Cookie', ['$Request', '$Response', '$SECURE']));
 	oc.bind('$SessionStorage', ns.Core.Storage.Session);
 	oc.bind('$MapStorage', ns.Core.Storage.Map);
+	oc.bind('$WeakMapStorage', ns.Core.Storage.WeakMap, [30 * 60 * 1000, 1000, 60 * 1000, 16]);
 	oc.bind('$SessionMapStorage', ns.Core.Storage.SessionMap, ['$MapStorage', '$SessionStorage']);
 
 	//Dispatcher

@@ -3,10 +3,12 @@ import ns from 'imajs/client/core/namespace.js';
 ns.namespace('Core.Storage');
 
 /**
- * Session map storage.
+ * The {@codelink SessionMap} storage is an implementation of the
+ * {@codelink Core.Interface.Storage} interface acting as a synchronization
+ * proxy between
  *
  * @class SessionMap
- * @extends Core.Interface.Storage
+ * @implements Core.Interface.Storage
  * @namespace Core.Storage
  * @module Core
  * @submodule Core.Storage
@@ -15,53 +17,134 @@ ns.namespace('Core.Storage');
  * @requires Core.Storage.Session
  */
 class SessionMap extends ns.Core.Interface.Storage {
-
 	/**
-	 * @method constructor
+	 * Initializes the storage.
+	 *
 	 * @constructor
-	 * @param {Core.Storage.Map} map
-	 * @param {Core.Storage.Session} session
+	 * @method constructor
+	 * @param {Core.Storage.Map} map The map storage to use.
+	 * @param {Core.Storage.Session} session The session storage to use.
 	 */
 	constructor(map, session) {
 		super();
 
 		/**
-		 * @property _map
+		 * The map storage, synced with the session storage.
+		 *
 		 * @private
+		 * @property _map
 		 * @type {Core.Storage.Map}
-		 * @default map
 		 */
 		this._map = map;
 
 		/**
-		 * @property _session
+		 * The session storage, synced with the map storage.
+		 *
 		 * @private
+		 * @property _session
 		 * @type {Core.Storage.Session}
-		 * @default session
 		 */
 		this._session = session;
 	}
 
 	/**
-	 * Initialize the storage.
-	 * @method init
+	 * This method is used to finalize the initialization of the storage after
+	 * the dependencies provided through the constructor are ready to be used.
+	 *
+	 * This method must be invoked only once and it must be the first method
+	 * invoked on this instance.
+	 *
+	 * @inheritdoc
+	 * @override
 	 * @chainable
-	 * @return {Core.Storage.Session} Current instance
+	 * @method init
+	 * @return {Core.Interface.Storage}
 	 */
 	init() {
 		this._map.clear();
-		for (var i = 0; i < this._session.length; i++) {
-			var key = this._session.key(i);
+		for (var key of this._session.keys()) {
 			this._map.set(key, this._session[key]);
 		}
+
 		return this;
 	}
 
 	/**
-	 * Clear the storage.
-	 * @method clear
+	 * Returns {@code true} if the specified cookie exists in this storage.
+	 *
+	 * Note that the method checks only for cookies known to this storage, it
+	 * does not check for cookies set using other means (for example by
+	 * manipulating the {@code document.cookie} property).
+	 *
+	 * @override
+	 * @method has
+	 * @param {string} key The key identifying the storage entry.
+	 * @return {boolean} {@code true} if the specified cookie exists in this
+	 *         storage.
+	 */
+	has(key) {
+		return this._map.has(key);
+	}
+
+	/**
+	 * Retrieves the value of the entry indetified by the specified key. The
+	 * method returns {@code undefined} if the entry does not exists.
+	 *
+	 * Entries set to the {@code undefined} value can be tested for existence
+	 * using the {@codelink has} method.
+	 *
+	 * @inheritdoc
+	 * @override
+	 * @method get
+	 * @param {string} key The key identifying the storage entry.
+	 * @return {*} The value of the storage entry.
+	 */
+	get(key) {
+		return this._map.get(key);
+	}
+
+	/**
+	 * Sets the storage entry identied by the specified key to the provided
+	 * value. The method creates the entry if it does not exist already.
+	 *
+	 * @inheritdoc
+	 * @override
 	 * @chainable
-	 * @return {Core.Storage.Session} Current instance
+	 * @method set
+	 * @param {string} key The key identifying the storage entry.
+	 * @param {*} value The storage entry value.
+	 * @return {Core.Storage.SessionMap} This storage.
+	 */
+	set(key, value) {
+		this._session.set(key, value);
+		this._map.set(key, value);
+		return this;
+	}
+
+	/**
+	 * Deletes the entry identified by the specified key from this storage.
+	 *
+	 * @inheritdoc
+	 * @override
+	 * @chainable
+	 * @method delete
+	 * @param {string} key The key identifying the storage entry.
+	 * @return {Core.Storage.SessionMap} This storage.
+	 */
+	delete(key) {
+		this._session.delete(key);
+		this._map.delete(key);
+		return this;
+	}
+
+	/**
+	 * Clears the storage of all entries.
+	 *
+	 * @inheritdoc
+	 * @override
+	 * @chainable
+	 * @method clear
+	 * @return {Core.Storage.SessionMap} This storage.
 	 */
 	clear() {
 		this._session.clear();
@@ -70,55 +153,16 @@ class SessionMap extends ns.Core.Interface.Storage {
 	}
 
 	/**
-	 * Checks if an item with the given name exists.
-	 * @method has
-	 * @param {String} name
-	 * @return {Boolean}
-	 */
-	has(name) {
-		return this._map.has(name);
-	}
-
-	/**
-	 * Returns a value of the given item.
-	 * @method get
-	 * @param {String} name
-	 * @return {*}
-	 */
-	get(name) {
-		return this._map.get(name);
-	}
-
-	/**
-	 * Saves the value under the given name.
-	 * @method set
-	 * @chainable
-	 * @param {String} name
-	 * @param {*} value
-	 * @return {Core.Storage.Session} Current instance
-	 */
-	set(name, value) {
-		this._session.set(name, value);
-		return this._map.set(name, value);
-	}
-
-	/**
-	 * Deletes the item.
-	 * @method delete
-	 * @chainable
-	 * @param {String} name
-	 * @return {Core.Storage.Session} Current instance
-	 */
-	delete(name) {
-		this._session.delete(name);
-		return this._map.delete(name);
-	}
-
-	/**
-	 * Returns an iterator containing keys.
-	 * 
+	 * Returns an iterator for traversing the keys in this storage. The order in
+	 * which the keys are traversed is undefined.
+	 *
+	 * @inheritdoc
+	 * @override
 	 * @method keys
-	 * @return {Iterator} Keys iterator.
+	 * @return {Iterator<string>} An iterator for traversing the keys in this
+	 *         storage. The iterator also implements the iterable protocol,
+	 *         returning itself as its own iterator, allowing it to be used in a
+	 *         {@code for..of} loop.
 	 */
 	keys() {
 		return this._map.keys();

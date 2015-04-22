@@ -124,11 +124,11 @@ class Dispatcher extends ns.Core.Interface.Dispatcher {
 		var scopes = this._getScopesOf(event, listener);
 
 		if (!scopes.has(scope)) {
-			throw new CoreError('Core.Event.Dispatcher.unlisten(): the provided ' +
-			`handler '${handler}' is not registered for the specified event ` +
+			throw new CoreError('Core.Event.Handler.unlisten(): the provided ' +
+			`listener '${listener}' is not registered for the specified event ` +
 			`'${event}' and scope '${scope}'. Check your workflow.`, {
 				event: event,
-				handler: handler,
+				listener: listener,
 				scope: scope
 			});
 		}

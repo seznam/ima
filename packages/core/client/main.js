@@ -63,13 +63,13 @@ if (typeof window !== 'undefined' && window !== null) {
 
 	} else {
 
-		window.addEventListener('error', (e) => {
+		/*window.addEventListener('error', (e) => {
 			if (oc.has('$Router')) {
 				oc
 					.get('$Router')
 					.handleError(e.error)
 			}
-		});
+		});*/
 
 		window.addEventListener('DOMContentLoaded', () => {
 

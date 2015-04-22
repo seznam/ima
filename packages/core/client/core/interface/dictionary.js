@@ -22,8 +22,6 @@ class Dictionary {
 	 * {@code NAME} and {@code VERB} parameter placeholders. The parameter
 	 * placeholder names should be in uppercase.
 	 *
-	 * @inheritdoc
-	 * @override
 	 * @method init
 	 * @param {{language: string, dictionary: Object<string, Object<string, function(Object<string, (number|string)>): string>>}} config
 	 *        The dictionary configuration.

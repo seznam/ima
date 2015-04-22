@@ -98,8 +98,7 @@ class Controller extends ns.Core.Interface.Controller {
 	 * @override
 	 * @method activate
 	 */
-	activate() {
-	}
+	activate() {}
 
 	/**
 	 * Callback the controller uses to request the resources it needs to render

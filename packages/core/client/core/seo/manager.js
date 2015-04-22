@@ -3,17 +3,18 @@ import ns from 'imajs/client/core/namespace.js';
 ns.namespace('Core.Seo');
 
 /**
- * Manager for SEO.
+ * Default implementation of the {@codelink Core.Interface.Seo} interface.
  *
  * @class Manager
- * @extends Core.Interface.Seo
+ * @implements Core.Interface.Seo
  * @namespace Core.Seo
  * @module Core
  * @submodule Core.Seo
  */
 class Manager extends ns.Core.Interface.Seo {
-
 	/**
+	 * Initializes the SEO page attributes manager.
+	 *
 	 * @method constructor
 	 * @constructor
 	 */
@@ -21,6 +22,8 @@ class Manager extends ns.Core.Interface.Seo {
 		super();
 
 		/**
+		 * The page title.
+		 *
 		 * @property _title
 		 * @private
 		 * @type {string}
@@ -29,110 +32,129 @@ class Manager extends ns.Core.Interface.Seo {
 		this._title = '';
 
 		/**
-		 * @property _metaNameStorage
-		 * @type {Map}
-		 * @default new Map()
+		 * Storage of generic meta information.
+		 *
+		 * @property _metaName
+		 * @type {Map<string, string>}
 		 */
-		this._metaNameStorage = new Map();
+		this._metaName = new Map();
 
 		/**
-		 * @property _metaPropertyStorage
-		 * @type {Map}
-		 * @default new Map()
+		 * Storage of specialized meta information.
+		 *
+		 * @property _metaProperty
+		 * @type {Map<string, string>}
 		 */
-		this._metaPropertyStorage = new Map();
+		this._metaProperty = new Map();
 	}
 
 	/**
-	 * Set page title.
+	 * Sets the page title.
 	 *
+	 * @inheritdoc
+	 * @override
 	 * @method setTitle
-	 * @param {string} title
+	 * @param {string} title The new page title.
 	 */
 	setTitle(title) {
 		this._title = title;
 	}
 
 	/**
-	 * Get page title.
+	 * Returns the page title. The method returns an empty string if no page
+	 * title has been set yet.
 	 *
+	 * @inheritdoc
+	 * @override
 	 * @method getTitle
-	 * @return {string}
+	 * @return {string} The paget title currently stored in this seo manager.
 	 */
 	getTitle() {
 		return this._title;
 	}
 
 	/**
-	 * Set data for meta tag with attribute name.
+	 * Set the specified generic meta information.
 	 *
+	 * @inheritdoc
+	 * @override
 	 * @method setMetaName
-	 * @param {string} metaName
-	 * @param {string} value
+	 * @param {string} name Meta information name, for example {@code keywords}.
+	 * @param {string} value The meta information value.
 	 */
-	setMetaName(metaName, value) {
-		this._metaNameStorage.set(metaName, value);
+	setMetaName(name, value) {
+		this._metaName.set(name, value);
 	}
 
 	/**
-	 * Returns data for meta tag with attribute name.
+	 * Returns the value of the specified generic meta information. The method
+	 * returns an empty string for missing meta information (to make the returned
+	 * value React-friendly).
 	 *
+	 * @inheritdoc
+	 * @override
 	 * @method getMetaName
-	 * @param {string} metaName
-	 * @return {string}
+	 * @param {string} name The name of the generic meta information.
+	 * @return {string} The value of the generic meta information, or an empty
+	 *         string.
 	 */
-	getMetaName(metaName) {
-		if (this._metaNameStorage.has(metaName)) {
-			return this._metaNameStorage.get(metaName);
-		}
-
-		return '';
+	getMetaName(name) {
+		return this._metaName.get(name) || '';
 	}
 
 	/**
-	 * Returns storage for meta tags with attribute name.
+	 * Returns the names of the currently known generic meta information.
 	 *
-	 * @method getMetaNameStorage
-	 * @return {Map}
+	 * @inheritdoc
+	 * @override
+	 * @method getMetaNames
+	 * @return {string[]} The names of the currently known generic meta
+	 *         information.
 	 */
-	getMetaNameStorage() {
-		return this._metaNameStorage;
+	getMetaNames() {
+		return Array.from(this._metaName.keys());
 	}
 
 	/**
-	 * Set data for meta tag with attribute property.
+	 * Sets the specified specialized meta information.
 	 *
+	 * @inheritdoc
+	 * @override
 	 * @method setMetaProperty
-	 * @param {string} metaProperty
-	 * @param {string} value
+	 * @param {string} name Name of the specialized meta information.
+	 * @param {string} value The value of the meta information.
 	 */
-	setMetaProperty(metaProperty, value) {
-		this._metaPropertyStorage.set(metaProperty, value);
+	setMetaProperty(name, value) {
+		this._metaProperty.set(name, value);
 	}
 
 	/**
-	 * Returns data for meta tag with attribute property.
+	 * Returns the value of the specified specialized meta information. The
+	 * method returns an empty string for missing meta information (to make the
+	 * returned value React-friendly).
 	 *
+	 * @inheritdoc
+	 * @override
 	 * @method getMetaProperty
-	 * @param {string} metaProperty
-	 * @return {string}
+	 * @param {string} name The name of the specialized meta information.
+	 * @return {string} The value of the specified meta information, or an empty
+	 *         string.
 	 */
-	getMetaProperty(metaProperty) {
-		if (this._metaPropertyStorage.has(metaProperty)) {
-			return this._metaPropertyStorage.get(metaProperty);
-		}
-
-		return '';
+	getMetaProperty(name) {
+		return this._metaProperty.get(name) || '';
 	}
 
 	/**
-	 * Returns data for meta tags with attribute property.
+	 * Returns the names of the currently known specialized meta information.
 	 *
-	 * @method getMetaPropertyStorage
-	 * @return {Map}
+	 * @inheritdoc
+	 * @override
+	 * @method getMetaProperties
+	 * @return {string[]} The names of the currently known specialized meta
+	 *         information.
 	 */
-	getMetaPropertyStorage() {
-		return this._metaPropertyStorage;
+	getMetaProperties() {
+		return Array.from(this._metaProperty.keys());
 	}
 }
 

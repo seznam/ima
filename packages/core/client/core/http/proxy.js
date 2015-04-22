@@ -207,7 +207,7 @@ class Proxy {
 	 *         by parsing response headers and setting request headers.
 	 */
 	haveToSetCookiesManually() {
-		return this._window.isCookieEnabled();
+		return !this._window.isCookieEnabled();
 	}
 
 	/**

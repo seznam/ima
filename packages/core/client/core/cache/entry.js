@@ -12,6 +12,7 @@ ns.namespace('Core.Cache');
  * @submodule Core.Cache
  */
 class Entry {
+
 	/**
 	 * Initializes the cache entry.
 	 *

@@ -147,6 +147,8 @@ class Router extends ns.Core.Interface.Router {
 		 */
 		this.ROUTE_NAME_ERROR = 'error';
 
+		this.x=0;
+
 		this.clear();
 	}
 

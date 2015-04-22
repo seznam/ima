@@ -141,7 +141,7 @@ class Client extends ns.Core.Abstract.PageRender {
 	_updateSeoAttributes(seo) {
 		this._window.setTitle(seo.getTitle());
 
-		for (var metaTagKey of seo.getMetaNameStorage().keys()) {
+		for (var metaTagKey of seo.getMetaNames()) {
 			var metaTag = this._window.querySelector(`meta[name="${metaTagKey}"]`);
 
 			if (metaTag) {
@@ -149,7 +149,7 @@ class Client extends ns.Core.Abstract.PageRender {
 			}
 		}
 
-		for (var metaTagKey of seo.getMetaPropertyStorage().keys()) {
+		for (var metaTagKey of seo.getMetaProperties().keys()) {
 			var metaTag;
 			metaTag = this._window.querySelector(`meta[property="${metaTagKey}"]`);
 

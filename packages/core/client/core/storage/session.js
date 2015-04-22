@@ -4,10 +4,12 @@ import CoreError from 'imajs/client/core/coreError.js';
 ns.namespace('Core.Storage');
 
 /**
- * Session storage.
+ * Implementation of the {@codelink Core.Interface.Storage} interface that
+ * relies on the native {@code sessionStorage} DOM storage for storing its
+ * entries.
  *
  * @class Session
- * @extends Core.Interface.Storage
+ * @implements Core.Interface.Storage
  * @namespace Core.Storage
  * @module Core
  * @submodule Core.Storage
@@ -15,37 +17,117 @@ ns.namespace('Core.Storage');
  * @requires SessionStorage
  */
 class Session extends ns.Core.Interface.Storage {
-
 	/**
-	 * @method constructor
+	 * Initializes the session storage.
+	 *
 	 * @constructor
+	 * @method constructor
 	 */
 	constructor() {
 		super();
 
 		/**
+		 * The DOM storage providing the actual storage of the entries.
+		 *
+		 * @private
 		 * @property _storage
-		 * @type {SessionStorage}
-		 * @default window.sessionStorage
+		 * @type {Storage}
 		 */
 		this._storage = window.sessionStorage;
 	}
 
 	/**
-	 * Initialize the storage.
-	 * @method init
+	 * This method is used to finalize the initialization of the storage after
+	 * the dependencies provided through the constructor are ready to be used.
+	 *
+	 * This method must be invoked only once and it must be the first method
+	 * invoked on this instance.
+	 *
+	 * @inheritdoc
+	 * @override
 	 * @chainable
-	 * @return {Core.Storage.Session} Current instance
+	 * @method init
+	 * @return {Core.Interface.Storage}
 	 */
 	init() {
 		return this;
 	}
 
 	/**
-	 * Clear the storage.
-	 * @method clear
+	 * Returns {@code true} if the entry identified by the specified key exists
+	 * in this storage.
+	 *
+	 * @method has
+	 * @param {string} key The key identifying the storage entry.
+	 * @return {boolean} {@code true} if the storage entry exists.
+	 */
+	has(key) {
+		return !!this._storage.getItem(key);
+	}
+
+	/**
+	 * Retrieves the value of the entry indetified by the specified key. The
+	 * method returns {@code undefined} if the entry does not exists.
+	 *
+	 * Entries set to the {@code undefined} value can be tested for existence
+	 * using the {@codelink has} method.
+	 *
+	 * @inheritdoc
+	 * @override
+	 * @method get
+	 * @param {string} key The key identifying the storage entry.
+	 * @return {*} The value of the storage entry.
+	 */
+	get(key) {
+		try {
+			return JSON.parse(this._storage.getItem(key));
+		} catch (e) {
+			throw new CoreError('Core.Storage.Session.get: Failed to parse a ' +
+			`session storage item value identified by the key ${key}: ` +
+			e.message);
+		}
+	}
+
+	/**
+	 * Sets the storage entry identied by the specified key to the provided
+	 * value. The method creates the entry if it does not exist already.
+	 *
+	 * @inheritdoc
+	 * @override
 	 * @chainable
-	 * @return {Core.Storage.Session} Current instance
+	 * @method set
+	 * @param {string} key The key identifying the storage entry.
+	 * @param {*} value The storage entry value.
+	 * @return {Core.Storage.Session} This storage.
+	 */
+	set(key, value) {
+		this._storage.setItem(key, JSON.stringify(value));
+		return this;
+	}
+
+	/**
+	 * Deletes the entry identified by the specified key from this storage.
+	 *
+	 * @inheritdoc
+	 * @override
+	 * @chainable
+	 * @method delete
+	 * @param {string} key The key identifying the storage entry.
+	 * @return {Core.Storage.Session} This storage.
+	 */
+	delete(key) {
+		this._storage.removeItem(key);
+		return this;
+	}
+
+	/**
+	 * Clears the storage of all entries.
+	 *
+	 * @inheritdoc
+	 * @override
+	 * @chainable
+	 * @method clear
+	 * @return {Core.Storage.Session} This storage.
 	 */
 	clear() {
 		this._storage.clear();
@@ -53,64 +135,93 @@ class Session extends ns.Core.Interface.Storage {
 	}
 
 	/**
-	 * Checks if an item with the given name exists.
-	 * @method has
-	 * @param {String} name
-	 * @return {Boolean}
-	 */
-	has(name) {
-		var item = this._storage.getItem(name);
-		return item !== null && item !== undefined;
-	}
-
-	/**
-	 * Returns a value of the given item.
-	 * @method get
-	 * @param {String} name
-	 * @return {*}
-	 */
-	get(name) {
-		try {
-			return JSON.parse(this._storage.getItem(name));
-		} catch(e) {
-			throw new CoreError('Failed to parse a session storage item value saved under the name ' + name + '. ' + e.message);
-		}
-	}
-
-	/**
-	 * Saves the value under the given name.
-	 * @method set
-	 * @chainable
-	 * @param {String} name
-	 * @param {*} value
-	 * @return {Core.Storage.Session} Current instance
-	 */
-	set(name, value) {
-		this._storage.setItem(name, JSON.stringify(value));
-		return this;
-	}
-
-	/**
-	 * Deletes the item.
-	 * @method delete
-	 * @chainable
-	 * @param {String} name
-	 * @return {Core.Storage.Session} Current instance
-	 */
-	delete(name) {
-		this._storage.removeItem(name);
-		return this;
-	}
-
-	/**
-	 * Returns an iterator containing keys.
-	 * 
+	 * Returns an iterator for traversing the keys in this storage. The order in
+	 * which the keys are traversed is undefined.
+	 *
+	 * @inheritdoc
+	 * @override
 	 * @method keys
-	 * @return {Iterator} Keys iterator.
+	 * @return {Iterator<string>} An iterator for traversing the keys in this
+	 *         storage. The iterator also implements the iterable protocol,
+	 *         returning itself as its own iterator, allowing it to be used in a
+	 *         {@code for..of} loop.
 	 */
 	keys() {
-		throw new CoreError('Method keys() is not implemented for the session storage.');
+		return new StorageIterator(this._storage);
 	}
 }
 
 ns.Core.Storage.Session = Session;
+
+/**
+ * Implementation of the iterator protocol and iterable protocol for DOM
+ * storage keys.
+ *
+ * @private
+ * @class StorageIterator
+ * @implements Iterable
+ * @implements Iterator
+ * @namespace Core.Storage
+ * @module Core
+ * @submodule Core.Storage
+ * @see https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Iteration_protocols
+ */
+class StorageIterator {
+
+	/**
+	 * @constructor
+	 * @method constructor
+	 * @param {Storage} storage The DOM storage to iterate through.
+	 */
+	constructor(storage) {
+
+		/**
+		 * The DOM storage being iterated.
+		 *
+		 * @private
+		 * @property _storage
+		 * @type {Storage}
+		 */
+		this._storage = storage;
+
+		/**
+		 * The current index of the DOM storage key this iterator will return next.
+		 *
+		 * @private
+		 * @property _currentKeyIndex
+		 * @type {number}
+		 */
+		this._currentKeyIndex = 0;
+	}
+
+	/**
+	 * Iterates to the next item. This method implements the iterator protocol.
+	 *
+	 * @method next
+	 * @return {{done: boolean, value: (undefined|string)}} The next value in the
+	 *         sequence and whether the iterator is done iterating through the
+	 *         values.
+	 */
+	next() {
+		var key = this._storage.key(this._currentKeyIndex);
+		this._currentKeyIndex++;
+
+		return {
+			done: !key,
+			value: key ? key : undefined
+		};
+	}
+
+	/**
+	 * Returns the iterator for this object (this iterator). This method
+	 * implements the iterable protocol and provides compatibility with the
+	 * {@code for..of} loops.
+	 *
+	 * @method @@Symbol.iterator
+	 * @return {StorageIterator} This iterator.
+	 */
+	[Symbol.iterator]() {
+		return this;
+	}
+}
+

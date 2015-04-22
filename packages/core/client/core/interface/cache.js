@@ -105,8 +105,8 @@ class Cache {
 	 *
 	 * @method deserialize
 	 * @param {Object<string, {value: *, ttl: number}>} serializedData An object
-	 *         representing the state of the cache to load, obtained by parsing
-	 *         the JSON string returned by the {@codelink serialize} method.
+	 *        representing the state of the cache to load, obtained by parsing
+	 *        the JSON string returned by the {@codelink serialize} method.
 	 */
 	deserialize(serializedData) {}
 }
