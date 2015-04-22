@@ -2,7 +2,7 @@ export var init = (ns, oc, config) => { //jshint ignore:line
 
 	//**************START VENDORS**************
 	//RSVP
-	oc.bind('$Rsvp', ns.Vendor.Rsvp); // ???
+	oc.bind('$Rsvp', ns.Vendor.Rsvp); //
 	oc.bind('$Promise', ns.Vendor.Rsvp.Promise);
 	oc.bind('$BindPromise', () => {
 		return oc.get('$Promise');
@@ -22,14 +22,13 @@ export var init = (ns, oc, config) => { //jshint ignore:line
 
 	//*************START CONSTANT**************
 	oc.bind('$Settings', ns.$Settings);
-	
-	oc.bind('$ENV', ns.$Settings.$Env);
+	oc.bind('$Env', ns.$Settings.$Env);
+	oc.bind('$Protocol', ns.$Settings.$Protocol );
+
 	oc.bind('$HTTP_CONFIG', ns.$Settings.$Http);
 	oc.bind('$SOCKET_CONFIG', ns.$Settings.$Socket);
 	oc.bind('$CACHE_CONFIG', ns.$Settings.$Cache);
-
 	oc.bind('$SECURE', ns.$Settings.$Protocol === 'https:' ? true: false );
-	oc.bind('$PROTOCOL', ns.$Settings.$Protocol );
 	//*************END CONSTANT****************
 
 
@@ -99,12 +98,12 @@ export var init = (ns, oc, config) => { //jshint ignore:line
 	//SuperAgent
 	oc.bind('$HTTP_STATUS_CODE', ns.Core.Http.STATUS_CODE);
 	oc.bind('$HttpProxy', oc.make('Core.Http.Proxy', ['$SuperAgent', '$BindPromise', '$HTTP_STATUS_CODE', '$Window']));
-	oc.bind('$Http', oc.make('Core.Http.Agent', ['$HttpProxy', '$Cache', '$CookieStorage', '$Dictionary', '$BindPromise', '$HTTP_CONFIG']));
+	oc.bind('$Http', oc.make('Core.Http.Agent', ['$HttpProxy', '$Cache', '$CookieStorage', '$BindPromise', '$HTTP_CONFIG']));
 
 	//Sockets
-	oc.bind('$SocketFactory', ns.Core.Socket.Factory, [oc.get('$Window').getWebSocket()]);
-	oc.bind('$SocketParser', ns.Core.Socket.Parser, []);
-	oc.bind('$SocketProxy', ns.Core.Socket.Proxy, ['$Dispatcher', '$SocketFactory', '$SocketParser', '$SOCKET_CONFIG', '$SECURE']);
+	//oc.bind('$SocketFactory', ns.Core.Socket.Factory, [oc.get('$Window').getWebSocket()]);
+	//oc.bind('$SocketParser', ns.Core.Socket.Parser, []);
+	//oc.bind('$SocketProxy', ns.Core.Socket.Proxy, ['$Dispatcher', '$SocketFactory', '$SocketParser', '$SOCKET_CONFIG', '$SECURE']);
 
 	//COMPONENT
 	oc.bind('$Utils', {

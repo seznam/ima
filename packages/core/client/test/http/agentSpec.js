@@ -4,7 +4,6 @@ describe('Core.Http.Agent', function() {
 	var http = null;
 	var cache = null;
 	var cookie = null;
-	var dictionary = null;
 	var Promise = null;
 	var options = null;
 	var data = null;
@@ -14,13 +13,10 @@ describe('Core.Http.Agent', function() {
 		proxy = oc.get('$HttpProxy');
 		cache = oc.create('Core.Cache.Handler', oc.create('$MapStorage'), ns.$Settings.$Cache);
 		cookie = oc.make('Core.Storage.Cookie');
-		dictionary = oc.make('Core.Dictionary.MessageFormat');
 
-		dictionary.init();
+		http = oc.create('Core.Http.Agent', proxy, cache, cookie, Promise, ns.$Settings.$Http);
 
-		http = oc.create('Core.Http.Agent', proxy, cache, cookie, dictionary, Promise, ns.$Settings.$Http);
-
-		options = {ttl: ns.$Settings.$Http.ttl, timeout: ns.$Settings.$Http.timeout, repeatRequest: ns.$Settings.$Http.repeatRequest};
+		options = {ttl: ns.$Settings.$Http.ttl, timeout: ns.$Settings.$Http.timeout, repeatRequest: ns.$Settings.$Http.repeatRequest, language: ns.$Settings.$Http.language};
 
 		data = {
 			body: 111,

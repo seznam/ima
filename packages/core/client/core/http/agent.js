@@ -29,9 +29,6 @@ class Agent extends ns.Core.Interface.HttpAgent {
 	 * @param {Core.Cache.Handler} cache Cache to use for caching ongoing and
 	 *        completed requests.
 	 * @param {Core.Storage.Cookie} cookie The cookie storage to use internally.
-	 * @param {Core.Interface.Dictionary} dictionary Localization dictionary
-	 *        providing the localization phrases for the current locale
-	 *        environment.
 	 * @param {function(new:Vendor.RSVP.Promise)} Promise Constructor of Promise
 	 *        implementation.
 	 * @param {Object<string, *>} config Configuration of the HTTP handler for
@@ -56,7 +53,7 @@ class Agent extends ns.Core.Interface.HttpAgent {
 	 *          .setDefaultHeader('Accept-Language', 'cs')
 	 *          .clearDefaultHeaders();
 	 */
-	constructor(proxy, cache, cookie, dictionary, Promise, config) {
+	constructor(proxy, cache, cookie, Promise, config) {
 		super();
 
 		/**
@@ -123,13 +120,7 @@ class Agent extends ns.Core.Interface.HttpAgent {
 		 * @private
 		 * @type {Object<string, (number|string)>}
 		 */
-		this._options = {
-			ttl: config.ttl,
-			timeout: config.timeout,
-			repeatRequest: config.repeatRequest,
-			accept: config.accept,
-			language: dictionary.getLanguage(),
-		};
+		this._options = config;
 	}
 
 	/**
