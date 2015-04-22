@@ -1,7 +1,7 @@
 var express = require('express');
 var router = express.Router();
 var superAgent = require('superagent');
-var config = require('../config/environment.js');
+var environment = require('./environment.js');
 
 var firstLetterToLowerCase = (world) => {
 	return world.charAt(0).toLowerCase() + world.slice(1);
@@ -55,7 +55,7 @@ var callRemoteServer = (req, res) => {
 		url = url.substr(0, url.length - 1);
 	}
 
-	var proxyUrl = config.$Proxy.server + url;
+	var proxyUrl = environment.$Proxy.server + url;
 
 	console.log(`API: ${req.method} ${proxyUrl} query:`, req.query);
 

@@ -3,8 +3,8 @@ var stackTrace = require('stack-trace');
 var asyncEach = require('async-each');
 var hljs = require('highlight.js');
 var sep = require('path').sep;
-var errorDetailsView = require('../template/error.detail.view');
-var config = require('../config/environment.js');
+var errorDetailsView = require('./template/error.detail.view');
+var environment = require('./environment.js');
 
 var vendorScript = require('./vendor.server.js');
 var appServerScript = require('./app.server.js');
@@ -101,7 +101,7 @@ module.exports = (() => {
 				}
 			},
 			settings: {
-				$Env: config.$Env,
+				$Env: environment.$Env,
 				$Protocol: protocol,
 				$Language: language,
 				$Domain: domain,
@@ -121,10 +121,10 @@ module.exports = (() => {
 	var showStaticErrorPage = (err, req, res) => {
 		console.error(err);
 
-		fs.readFile('./app/assets/static/html/error.html', 'utf-8', (err, content) => {
+		fs.readFile('./build/static/html/error.html', 'utf-8', (error, content) => {
 			res.status(500)
 
-			if (err) {
+			if (error) {
 				res.send('500');
 			}
 			res.send(content);
@@ -133,7 +133,7 @@ module.exports = (() => {
 
 	var errorHandler = (err, req, res, appServer) => {
 
-		if (config.$Debug) {
+		if (environment.$Debug) {
 			_displayDetails(err, req, res);
 		} else {
 

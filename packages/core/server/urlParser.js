@@ -1,4 +1,4 @@
-var config = require('../config/environment.js');
+var environment = require('./environment.js');
 
 var getUrlFromRequest = (req) => {
 	return  '//' + req.get('host') + req.originalUrl.replace(/\/$/, '');
@@ -37,7 +37,7 @@ module.exports = function(req, res, next) {
 		currentProtocol = req.get('X-Forwarded-Proto') + ':';
 	}
 
-	for (var expression of Object.keys(config.$Language)) {
+	for (var expression of Object.keys(environment.$Language)) {
 		var parsedDomainExpression = expression.match(parseUrlReg);
 		var domainExpression = parsedDomainExpression[1] || '';
 		var rootExpression = parsedDomainExpression[2] || '';
@@ -57,15 +57,15 @@ module.exports = function(req, res, next) {
 					currentLanguage = matchedLanguage[2];
 
 					if (!currentLanguage) {
-		              	currentLanguagePartPath = '/'+config.$Language[expression];
-		              	currentLanguage = config.$Language[expression];
+		              	currentLanguagePartPath = '/'+environment.$Language[expression];
+		              	currentLanguage = environment.$Language[expression];
 
 		              	// REDIRECT
 		              	res.redirect(currentProtocol + '//'+currentDomain+currentRoot+currentLanguagePartPath);
 		              	return;
 		              }
 				} else {
-					currentLanguage = config.$Language[expression];
+					currentLanguage = environment.$Language[expression];
 				}
 
 				break;
@@ -81,7 +81,7 @@ module.exports = function(req, res, next) {
 
 	//res.send(`${currentUrl} : ${currentDomain} : ${currentRoot} : ${currentLanguage} : ${currentLanguagePartPath} : ${req.get('origin')} : ${req.hostname}`);
 
-	if (!currentLanguage && config.$Debug === true) {
+	if (!currentLanguage && environment.$Debug === true) {
 		throw new Error(`You have undefined domain. Set current domain "${currentDomain}" to attribute $Language in environment.js.`);
 	}
 
