@@ -17,9 +17,9 @@ bootstrap.addComponent((utils) => {
 		constructor(props) {
 			super(props);
 
-			var defaultCategory = null;
-			if (this.props.categories) {
-				var categories = this.props.categories.getCategories();
+			var defaultCategory = props.currentCategory;
+			if (props.categories) {
+				var categories = props.categories.getCategories();
 				if (categories.length > 0) {
 					defaultCategory = categories[0];
 				}
@@ -43,10 +43,10 @@ bootstrap.addComponent((utils) => {
 							ref="textInput"
 							className="form-text-input"
 							placeholder={placeholder}
-							onKeyPress={()=>this.sendTextByKeys} />
+							onKeyPress={(e)=>this.sendTextByKeys(e)} />
 					<button 
 							className="form-button"
-							onClick={()=>this.sendText()} >
+							onClick={(e)=>this.sendText(e)} >
 						{sendText}
 					</button>
 					<div className="form-categories" ref="categories">
@@ -87,13 +87,18 @@ bootstrap.addComponent((utils) => {
 			return '';
 		}
 		
-		sendText(e, id) {
+		sendText(e) {
 			var text = this.refs.textInput.getDOMNode().value.trim();
 			this.refs.textInput.getDOMNode().value = '';
 
+			var category = this.state.checkedCategory;
+			if (this.props.currentCategory) {
+				category = this.props.currentCategory;
+			}
+			
 			utils.$Dispatcher.fire('addItemToFeed', {
 				content: text,
-				category: Number(this.state.checkedCategory.getId())
+				category: Number(category.getId())
 			});
 		}
 
