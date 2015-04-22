@@ -30,7 +30,7 @@ bootstrap.addComponent((utils) => {
 			var Feed = ns.App.Component.Feed.View;
 			var Header = ns.App.Component.Header.View;
 			var Filter = ns.App.Component.Filter.View;
-			
+
 			return (
 				<div className='l-homepage'>
 					<Header />
