@@ -35,8 +35,6 @@ var commander = require('commander');
 var through = require('through2');
 var messageFormat = require('gulp-messageformat');
 var save = require('gulp-save');
-var size = require('gulp-filesize');
-var nodemon = require('gulp-nodemon');
 var change = require('gulp-change');
 var minifyCSS = require('gulp-minify-css');
 
@@ -71,8 +69,8 @@ var files = {
 				'./.tmp/es5transformedVendor.js'
 		],
 		dest: {
-			server: './server/module/',
-			client: './server/static/js/'
+			server: './build/imajs/',
+			client: './build/static/js/'
 		},
 		watch: ['./imajs/client/core/vendor.js', './app/vendor.js']
 	},
@@ -83,60 +81,57 @@ var files = {
 		},
 		src: coreDependency.js.concat(appDependency.js, coreDependency.mainjs),
 		dest: {
-			server: './server/module/',
-			client: './server/static/js/'
+			server: './build/imajs/',
+			client: './build/static/js/'
 		},
 		watch:['./imajs/client/**/*.{js,jsx}', './imajs/client/main.js', '!./imajs/client/vendor.js', './app/**/*.{js,jsx}', '!./app/*.js']
 	},
 	server: {
-		src: './imajs/server/',
-		dest: './server/',
-		watch: ['./imajs/server/*.js', './imajs/server/**/*.js', './app/environment.js']
+		src: './server/',
+		dest: './build/',
+		watch: ['./server/*.js', './server/**/*.js', './app/environment.js', './imajs/server/*.js']
 	},
 	less: {
 		name: 'app.less',
 		src: appDependency.less,
-		dest: './server/static/css/',
+		dest: './build/static/css/',
 		watch: ['./app/**/*.less', '!./app/assets/bower/']
 	},
 	locale: {
 		src: appDependency.languages,
 		dest:{
-			server: './server/module/locale/',
-			client: './server/static/js/locale/'
+			server: './build/imajs/locale/',
+			client: './build/static/js/locale/'
 		},
 		watch: ['./app/locale/**/*.json']
 	},
 	shim : {
 		name: 'shim.js',
 		src: [
-			//'./node_modules/es5-shim/es5-shim.js',
-			//'./node_modules/es5-shim/es5-shim.map',
-			//'./node_modules/es6-shim/es6-shim.map',
 			'./node_modules/es6-shim/es6-shim.js',
 			traceur.RUNTIME_PATH
 		],
 		dest: {
-			client: './server/static/js/',
-			server: './server/module/'
+			client: './build/static/js/',
+			server: './build/imajs/'
 		}
 	},
 	bundle: {
 		js: {
 			name: 'app.bundle.js',
 			src: [
-				'./server/static/js/shim.js',
-				'./server/static/js/vendor.client.js',
-				'./server/static/js/app.client.js'
+				'./build/static/js/shim.js',
+				'./build/static/js/vendor.client.js',
+				'./build/static/js/app.client.js'
 			].concat(appDependency.bundle.js),
-			dest: './server/static/js/'
+			dest: './build/static/js/'
 		},
 		css: {
 			name: 'app.min.css',
 			src: [
-				'./server/static/css/app.css'
+				'./build/static/css/app.css'
 			].concat(appDependency.bundle.css),
-			dest: './server/static/css/'
+			dest: './build/static/css/'
 		}
 	}
 };
@@ -204,9 +199,9 @@ var documentationPreprocessors = [
 // -------------------------------------PUBLIC TASKS (gulp task)
 gulp.task('dev', function(callback) {
 	return runSequence(
-		['static', 'shim'],
+		['copy:appStatic', 'copy:imajsServer', 'copy:environment', 'shim'],
 		['Es6ToEs5:client', 'Es6ToEs5:server', 'Es6ToEs5:vendor'],
-		['vendor:client', 'vendor:server', 'less', 'doc', 'locale', 'environment'],
+		['vendor:client', 'vendor:server', 'less', 'doc', 'locale'],
 		'vendor:clean',
 		['server'],
 		['devTest', 'watch'],
@@ -214,18 +209,11 @@ gulp.task('dev', function(callback) {
 	);
 });
 
-gulp.task('testApi', function(callback) {
-	return runSequence(
-		'server:apiTest',
-		callback
-	);
-});
-
 gulp.task('build', function(callback) {
 	return runSequence(
-		['static', 'shim'], //copy folder public, concat shim
+		['copy:appStatic', 'copy:imajsServer', 'copy:environment', 'shim'], //copy folder public, concat shim
 		['Es6ToEs5:client', 'Es6ToEs5:server', 'Es6ToEs5:vendor'], // convert app and vendor script
-		['vendor:client', 'vendor:server', 'less', 'doc', 'locale', 'environment'], // adjust vendors, compile less, create doc,
+		['vendor:client', 'vendor:server', 'less', 'doc', 'locale'], // adjust vendors, compile less, create doc,
 		['bundle:js', 'bundle:css'],
 		['vendor:clean', 'bundle:clean'],// clean vendor
 		callback
@@ -296,7 +284,7 @@ gulp.task('watch', function() {
 	gulp.watch(files.server.watch, ['server:build']);
 	gulp.watch(files.locale.watch, ['locale:build']);
 
-	gulp.watch(['./imajs/**/*.{js,jsx}', './app/**/*.{js,jsx}', './server/static/js/locale/*.js']).on('change', function(e) {
+	gulp.watch(['./imajs/**/*.{js,jsx}', './app/**/*.{js,jsx}', './build/static/js/locale/*.js']).on('change', function(e) {
 		watchEvent = e;
 		if (e.type === 'deleted') {
 
@@ -308,7 +296,7 @@ gulp.task('watch', function() {
 		}
 	});
 
-	flo('./server/static/', {
+	flo('./build/static/', {
 			port: 5888,
 			host: 'localhost',
 			glob: [
@@ -319,14 +307,14 @@ gulp.task('watch', function() {
 			gutil.log('Reloading \' public/' + gutil.colors.cyan(filepath) + '\' with flo...');
 			callback({
 				resourceURL: 'static/' + filepath,
-				contents: fs.readFileSync('./server/static/' + filepath).toString()
+				contents: fs.readFileSync('./build/static/' + filepath).toString()
 				//reload: filepath.match(/\.(js|html)$/)
 			});
 		});
 });
 
 gulp.task('server', function() {
-	server =  gls.new('./server/server.js');
+	server =  gls.new('./build/server.js');
 	server.start();
 });
 
@@ -341,21 +329,13 @@ gulp.task('server:reload', function(callback) {
 	}, 1750);
 });
 
-
-gulp.task('server:apiTest', function () {
-	nodemon({ script: './server/apiTest.js', ext: 'js', ignore: [] })
-		.on('restart', function () {
-			console.log('restarted!');
-		});
-});
-
 gulp.task('devTest', function() {
 	var testFiles = [
 		'./imajs/client/test.js',
-		'./server/static/js/shim.js',
-		'./server/static/js/vendor.client.js',
-		'./server/static/js/locale/cs.js',
-		'./server/static/js/app.client.js',
+		'./build/static/js/shim.js',
+		'./build/static/js/vendor.client.js',
+		'./build/static/js/locale/cs.js',
+		'./build/static/js/app.client.js',
 		'./app/test/**/*.js',
 		'./app/test/*.js',
 		'./imajs/client/test/**/*.js',
@@ -371,7 +351,7 @@ gulp.task('devTest', function() {
 		});
 });
 
-gulp.task('static', function() {
+gulp.task('copy:appStatic', function() {
 	var filesToMove = [
 		'./app/assets/static/**/*.*',
 		'./app/assets/static/*.*'
@@ -383,14 +363,27 @@ gulp.task('static', function() {
 	);
 });
 
-gulp.task('environment', function() {
+gulp.task('copy:imajsServer', function() {
+	var filesToMove = [
+		'./imajs/server/**/*.*',
+		'./imajs/server/*.*'
+	];
+	return (
+		gulp
+			.src(filesToMove)
+			.pipe(gulp.dest(files.server.src + 'imajs/'))
+	);
+});
+
+
+gulp.task('copy:environment', function() {
 	var filesToMove = [
 		'./app/environment.js'
 	];
 	return (
 		gulp
 			.src(filesToMove)
-			.pipe(gulp.dest(files.server.dest + 'config/'))
+			.pipe(gulp.dest(files.server.src + 'imajs/'))
 	);
 });
 
@@ -409,7 +402,8 @@ gulp.task('shim', function() {
 // BUILD tasks for watch
 gulp.task('server:build', function(callback) {
 	return runSequence(
-		['Es6ToEs5:server', 'environment'],
+		['copy:imajsServer', 'copy:environment'],
+		'Es6ToEs5:server',
 		'server:restart',
 		'server:reload',
 		callback
@@ -444,7 +438,6 @@ gulp.task('locale:build', function(callback) {
 		callback
 	);
 });
-
 
 
 // build client logic app
