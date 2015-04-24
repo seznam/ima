@@ -11,7 +11,7 @@ var bodyParser = require('body-parser');
 var multer = require('multer');
 var cookieParser = require('cookie-parser');
 var methodOverride = require('method-override');
-var config = require('./imajs/config/environment.js');
+var environment = require('./imajs/environment.js');
 
 var app = express();
 
@@ -44,18 +44,18 @@ var staticErrorPage = (err, req, res, next) => {
 };
 
 app.use(favicon(__dirname + '/static/img/favicon.ico'))
-	.use(config.$Server.staticFolder, express.static(path.join(__dirname, 'static')))
+	.use(environment.$Server.staticFolder, express.static(path.join(__dirname, 'static')))
 	.use(bodyParser.json()) // for parsing application/json
 	.use(bodyParser.urlencoded({ extended: true })) // for parsing application/x-www-form-urlencoded
 	.use(multer()) // for parsing multipart/form-data
 	.use(cookieParser())
 	.use(methodOverride())
 	.use(allowCrossDomain)
-	.use(config.$Server.apiUrl + '/', proxy)
+	.use(environment.$Server.apiUrl + '/', proxy)
 	.use(urlParser)
 	.use(renderApp)
 	.use(errorHandler)
 	.use(staticErrorPage)
-	.listen(config.$Server.port, function() {
-		return console.log('Point your browser at http://localhost:' + config.$Server.port);
+	.listen(environment.$Server.port, function() {
+		return console.log('Point your browser at http://localhost:' + environment.$Server.port);
 	});

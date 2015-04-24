@@ -64,9 +64,9 @@ var files = {
 			server: 'vendor.server.js',
 			client: 'vendor.client.js'
 		},
-		tmp: './.tmp/es5transformedVendor.js',
+		tmp: './build/imajs/es5transformedVendor.js',
 		src:[
-				'./.tmp/es5transformedVendor.js'
+				'./build/imajs/es5transformedVendor.js'
 		],
 		dest: {
 			server: './build/imajs/',
@@ -393,7 +393,7 @@ gulp.task('copy:environment', function() {
 	return (
 		gulp
 			.src(filesToMove)
-			.pipe(gulp.dest(files.server.src + 'imajs/'))
+			.pipe(gulp.dest(files.server.src + 'imajs/config/'))
 	);
 });
 
@@ -615,7 +615,7 @@ gulp.task('app:feed', function() {
 });
 
 gulp.task('app:clean', function() {
-	return gulp.src('./app/', {read: false})
+	return gulp.src(['./app/', './build/'], {read: false})
 		.pipe(clean());
 });
 
