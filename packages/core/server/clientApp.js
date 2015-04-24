@@ -3,7 +3,7 @@ var stackTrace = require('stack-trace');
 var asyncEach = require('async-each');
 var hljs = require('highlight.js');
 var sep = require('path').sep;
-var errorDetailsView = require('./template/error.detail.view');
+var errorView = require('./template/errorView.js');
 var environment = require('./environment.js');
 
 var vendorScript = require('./vendor.server.js');
@@ -67,7 +67,7 @@ module.exports = (() => {
 				return res.send(err.stack);
 			}
 
-			res.send(errorDetailsView(err,items));
+			res.send(errorView(err,items));
 		});
 	};
 

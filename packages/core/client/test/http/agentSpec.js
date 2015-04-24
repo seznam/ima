@@ -7,16 +7,17 @@ describe('Core.Http.Agent', function() {
 	var Promise = null;
 	var options = null;
 	var data = null;
+	var httpConfig = null;
 
 	beforeEach(function() {
 		Promise = oc.get('$Promise');
 		proxy = oc.get('$HttpProxy');
-		cache = oc.create('Core.Cache.Handler', oc.create('$MapStorage'), ns.$Settings.$Cache);
+		cache = oc.create('Core.Cache.Handler', oc.create('$MapStorage'), oc.get('$CACHE_CONFIG'));
 		cookie = oc.make('Core.Storage.Cookie');
+		httpConfig = oc.get('$HTTP_CONFIG');
+		http = oc.create('Core.Http.Agent', proxy, cache, cookie, Promise, httpConfig);
 
-		http = oc.create('Core.Http.Agent', proxy, cache, cookie, Promise, ns.$Settings.$Http);
-
-		options = {ttl: ns.$Settings.$Http.ttl, timeout: ns.$Settings.$Http.timeout, repeatRequest: ns.$Settings.$Http.repeatRequest, language: ns.$Settings.$Http.language};
+		options = {ttl: httpConfig.ttl, timeout: httpConfig.timeout, repeatRequest: httpConfig.repeatRequest, language: httpConfig.language};
 
 		data = {
 			body: 111,

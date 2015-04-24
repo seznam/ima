@@ -21,14 +21,14 @@ export var init = (ns, oc, config) => { //jshint ignore:line
 	//*************END VENDORS*****************
 
 	//*************START CONSTANT**************
-	oc.bind('$Settings', ns.$Settings);
-	oc.bind('$Env', ns.$Settings.$Env);
-	oc.bind('$Protocol', ns.$Settings.$Protocol );
+	oc.bind('$Settings', config);
+	oc.bind('$Env', config.$Env);
+	oc.bind('$Protocol', config.$Protocol );
 
-	oc.bind('$HTTP_CONFIG', ns.$Settings.$Http);
-	oc.bind('$SOCKET_CONFIG', ns.$Settings.$Socket);
-	oc.bind('$CACHE_CONFIG', ns.$Settings.$Cache);
-	oc.bind('$SECURE', ns.$Settings.$Protocol === 'https:' ? true: false );
+	oc.bind('$HTTP_CONFIG', config.$Http);
+	oc.bind('$SOCKET_CONFIG', config.$Socket);
+	oc.bind('$CACHE_CONFIG', config.$Cache);
+	oc.bind('$SECURE', config.$Protocol === 'https:' ? true: false );
 	//*************END CONSTANT****************
 
 
@@ -81,9 +81,9 @@ export var init = (ns, oc, config) => { //jshint ignore:line
 	oc.bind('$PageStateManager', oc.make('Core.Page.StateManager'));
 	oc.bind('$PageFactory', oc.make('Core.Page.Factory'));
 	if (oc.get('$Window').isClient()) {
-		oc.bind('$PageRender', oc.make('Core.Page.Render.Client', ['$Rsvp', '$BindReact', ns.$Settings, '$Window']));
+		oc.bind('$PageRender', oc.make('Core.Page.Render.Client', ['$Rsvp', '$BindReact', '$Settings', '$Window']));
 	} else {
-		oc.bind('$PageRender', oc.make('Core.Page.Render.Server', ['$Rsvp', '$BindReact', ns.$Settings, '$Response', '$Cache']));
+		oc.bind('$PageRender', oc.make('Core.Page.Render.Server', ['$Rsvp', '$BindReact', '$Settings', '$Response', '$Cache']));
 	}
 	oc.bind('$PageManager', oc.make('Core.Page.Manager', ['$PageFactory', '$PageRender', '$PageStateManager', '$Window']));
 

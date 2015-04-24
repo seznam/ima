@@ -4,6 +4,15 @@ import oc from 'imajs/client/core/objectContainer.js';
 ns.namespace('Core');
 
 /**
+ * @property PRODUCTION_ENVIRONMENT
+ * @const
+ * @type {string}
+ * @default 'prod'
+ */
+const PRODUCTION_ENVIRONMENT = 'prod';
+
+
+/**
  * @class Bootstrap
  * @namespace Core
  * @module Core
@@ -78,7 +87,18 @@ class Bootstrap{
 	 */
 	_initSettings() {
 		if (typeof(this._config.initSettings) === 'function') {
-			this._config.initSettings(ns, oc, this._config.settings);
+
+			var allSettings = this._config.initSettings(ns, oc, this._config.settings);
+			var environment = this._config.settings['$Env'];
+			var currentSettings = allSettings[environment];
+
+			if (environment !== PRODUCTION_ENVIRONMENT) {
+				var	productionSettings = allSettings[PRODUCTION_ENVIRONMENT];
+				ns.Vendor.Helper.assignRecursively(productionSettings, currentSettings);
+				currentSettings = productionSettings;
+			}
+
+			this._config.bind = Object.assign(this._config.bind || {}, currentSettings, this._config.settings);
 		}
 	}
 

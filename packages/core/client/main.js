@@ -104,6 +104,8 @@ if (typeof window !== 'undefined' && window !== null) {
 				}
 			};
 
+			window.ns = ns;
+
 			Object.assign(bootConfig, getInit());
 			bootstrap.run(bootConfig);
 
