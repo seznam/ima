@@ -15,8 +15,10 @@ module.exports = (() => {
 	var currentEnvironment = environment[env];
 
 	if (env !== prod) {
+		var $Language = Object.assign({}, currentEnvironment.$Language);
 		Helper.assignRecursively(productEnvironment, currentEnvironment);
 		currentEnvironment = productEnvironment;
+		currentEnvironment.$Language = $Language;
 	}
 
 	currentEnvironment['$Env'] = env;
