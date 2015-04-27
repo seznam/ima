@@ -6,16 +6,17 @@ bootstrap.addComponent((utils) => {
 
 	ns.namespace('App.Page.Detail');
 	/**
-	 * Detail Page view.
+	 * DetailPage view.
 	 *
 	 * @class View
-	 * @extends React.Component
+	 * @extends Core.Abstract.View
 	 * @namespace App.Page.Detail
 	 * @module App
 	 * @submodule App.Page
 	 *
 	 * @uses App.Component.Layout.Header.View
-	 * @uses App.Component.Feed.Item.View
+	 * @uses App.Component.Layout.Main.View
+	 * @uses App.Component.Sign.List.View
 	 */
 	class View extends React.Component {
 

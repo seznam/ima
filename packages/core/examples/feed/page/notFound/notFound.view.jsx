@@ -6,13 +6,11 @@ bootstrap.addComponent((utils) => {
 	ns.namespace('App.Page.NotFound');
 
 	/**
-	 * Not Found Page view.
-	 *
+	 * Master Layout.
 	 * @class View
-	 * @extends React.Component
-	 * @namespace App.Page.Error
+	 * @namespace App.Component.Layout.Master
 	 * @module App
-	 * @submodule App.Page
+	 * @submodule Component
 	 */
 	class View extends React.Component {
 
