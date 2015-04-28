@@ -1,6 +1,6 @@
 var vendor = new Map();
 
-var react = require('react');
+var react = require('react/dist/react.min.js');
 var rsvp = require('rsvp');
 var superAgent = require('superagent');
 var helper = require('./helper.js');

@@ -326,6 +326,15 @@ class ObjectContainer {
 	has(name) {
 		return typeof(this.get(name)) !== 'undefined';
 	}
+
+	/**
+	 *
+	 * @method clear
+	 */
+	clear() {
+		this._dependencyRegistry = {};
+		this._registry = {};
+	}
 }
 
 var oc = new ObjectContainer(ns);

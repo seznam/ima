@@ -18,7 +18,8 @@ module.exports = (() => {
 			$Server: {
 				port: 3001,
 				apiUrl: '/api',
-				staticFolder: '/static'
+				staticFolder: '/static',
+				concurency: 100
 			},
 			$Proxy: {
 				server: 'http://example.com/api/v1'
@@ -36,7 +37,8 @@ module.exports = (() => {
 			 *			this language is used like default language.
 			 */ 
 			$Language: {
-				'//localhost:3001': 'en'
+				'//localhost:3001': 'en',
+				'//10.0.133.81:3001': 'en'
 			},
 			$Proxy: {
 				server: 'http://api.example.dev'

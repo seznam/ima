@@ -5,6 +5,7 @@ var hljs = require('highlight.js');
 var sep = require('path').sep;
 var errorView = require('./template/errorView.js');
 var environment = require('./environment.js');
+var appRecycler = require('./instanceRecycler.js');
 
 var vendorScript = require('./vendor.server.js');
 var appServerScript = require('./app.server.js');
@@ -13,6 +14,8 @@ hljs.configure({
 	tabReplace: '  ',
 	lineNodes: true
 });
+
+appRecycler.init(appServerScript, environment.$Server.concurency);
 
 module.exports = (() => {
 	var _displayDetails = (err, req, res) => {
@@ -81,7 +84,7 @@ module.exports = (() => {
 		var dictionary = require('./locale/' + language + '.js');
 
 		var vendor = vendorScript();
-		var appServer = appServerScript();
+		var appServer = appRecycler.getInstance();
 
 		var bootConfig = {
 			vendor: vendor,
@@ -148,6 +151,9 @@ module.exports = (() => {
 				return (
 					router
 						.handleError(error)
+						.then(() => {
+							appRecycler.clearInstance(appServer);
+						})
 						.catch((fatalError) => {
 							showStaticErrorPage(fatalError, req, res);
 						})
@@ -157,6 +163,9 @@ module.exports = (() => {
 			if (router.isClientError(err)) {
 				router
 					.handleNotFound(err)
+					.then(() => {
+						appRecycler.clearInstance(appServer);
+					})
 					.catch((error) => {
 						applyError(error);
 					})
@@ -174,6 +183,9 @@ module.exports = (() => {
 
 		router
 			.route(router.getPath())
+			.then(() => {
+				appRecycler.clearInstance(appServer);
+			})
 			.catch((error) => {
 				errorHandler(error, req, res, appServer);
 			});
