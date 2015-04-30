@@ -6,7 +6,7 @@ ns.namespace('Core.Storage');
  * Implementation of the {@codelink Core.Interface.Storage} interface that
  * relies on the native {@code Map} for storage.
  *
- * @class MapStorage
+ * @class Map
  * @implements Core.Interface.Storage
  * @namespace Core.Storage
  * @module Core
@@ -14,8 +14,7 @@ ns.namespace('Core.Storage');
  *
  * @requires Map
  */
-class MapStorage extends ns.Core.Interface.Storage {
-
+class Map extends ns.Core.Interface.Storage {
 	/**
 	 * Initializes the map storage.
 	 *
@@ -146,4 +145,4 @@ class MapStorage extends ns.Core.Interface.Storage {
 	}
 }
 
-ns.Core.Storage.Map = MapStorage;
+ns.Core.Storage.Map = Map;

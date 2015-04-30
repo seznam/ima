@@ -15,7 +15,7 @@ module.exports = (() => {
 			this.instancies = [];
 		}
 
-		init(instanceConstructor, maxInstanceCount) {
+		init(instanceConstructor, maxInstanceCount = 1) {
 			this.instanceConstructor = instanceConstructor;
 			this.maxInstanceCount = maxInstanceCount;
 
