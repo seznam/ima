@@ -14,7 +14,7 @@ ns.namespace('Core.Storage');
  *
  * @requires Map
  */
-class Map extends ns.Core.Interface.Storage {
+class MapStorage extends ns.Core.Interface.Storage {
 	/**
 	 * Initializes the map storage.
 	 *
@@ -145,4 +145,4 @@ class Map extends ns.Core.Interface.Storage {
 	}
 }
 
-ns.Core.Storage.Map = Map;
+ns.Core.Storage.Map = MapStorage;

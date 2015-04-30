@@ -58,7 +58,7 @@ export var init = (ns, oc, config) => { //jshint ignore:line
 	oc.bind('$SessionMapStorage', ns.Core.Storage.SessionMap, ['$MapStorage', '$SessionStorage']);
 
 	//Dispatcher
-	oc.bind('$Dispatcher', oc.make('Core.Event.Dispatcher', ['$MapStorage']));
+	oc.bind('$Dispatcher', oc.make('Core.Event.Dispatcher', []));
 
 	//Animate
 	//oc.bind('$Animate', oc.make('Core.Animate.Handler', ['$Dispatcher', '$BindPromise', '$Window', '$CookieStorage', '$ANIMATE_CONFIG']));
