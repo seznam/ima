@@ -81,7 +81,7 @@ class Manager extends ns.Core.Interface.PageManager {
 		var decoratedController = this._pageFactory.decorateController(controllerInstance);
 		var viewInstance = this._pageFactory.createView(view);
 
-		this._deinitActiveController();
+		this._destroyActiveController();
 		this._initController(controllerInstance, params);
 
 		return this._pageRender.mount(decoratedController, viewInstance);
@@ -114,14 +114,14 @@ class Manager extends ns.Core.Interface.PageManager {
 	}
 
 	/**
-	 * Deinitializes active controller.
+	 * Destroy active controller.
 	 *
-	 * @method _deinitActiveController
+	 * @method _destroyActiveController
 	 * @private
 	 */
-	_deinitActiveController() {
+	_destroyActiveController() {
 		if (this._activeController) {
-			this._activeController.deinit();
+			this._activeController.destroy();
 			this._activeController.setStateManager(null);
 			this._pageRender.unmount();
 			this._activeController = null;

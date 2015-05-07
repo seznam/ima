@@ -1,11 +1,9 @@
 import ns from 'imajs/client/core/namespace.js';
-import oc from 'imajs/client/core/objectContainer.js';
-import CoreError from 'imajs/client/core/coreError.js';
 
 ns.namespace('Core.Router');
 
 /**
- * Factory for router.
+ * Utility factory used by router to create routes.
  *
  * @class Factory
  * @namespace Core.Router
@@ -15,23 +13,42 @@ ns.namespace('Core.Router');
 class Factory {
 
 	/**
-	 * @method constructor
+	 * Initializes the factory.
+	 *
 	 * @constructor
+	 * @method constructor
+	 * @param {function(new: Core.Router.Route)} Route The implementation of the
+	 *        route representation to use.
 	 */
-	constructor() {}
+	constructor(Route) {
+		/**
+		 * The implementation of the route representation to use.
+		 *
+		 * @private
+		 * @property _Route
+		 * @type {function(new: Core.Router.Route)}
+		 */
+		this._Route = Route;
+	}
 
 	/**
 	 * Create new instance of Core.Router.Route.
 	 *
 	 * @method createRoute
-	 * @param {string} name
-	 * @param {string} pathExpression
-	 * @param {string} controller
-	 * @param {string} view
-	 * @return {Core.Router.Route}
+	 * @param {string} name The unique name of this route, identifying it among
+	 *        the rest of the routes in the application.
+	 * @param {string} pathExpression A path expression specifying the URL path
+	 *        part matching this route (must not contain a query string),
+	 *        optionally containing named parameter placeholders specified as
+	 *        {@code :parameterName}.
+	 * @param {string} controller The full name of Object Container alias
+	 *        identifying the controller associated with this route.
+	 * @param {string} view The full name or Object Container alias identifying
+	 *        the view class associated with this route.
+	 * @return {Core.Router.Route} The contructed route.
 	 */
 	createRoute(name, pathExpression, controller, view) {
-		return oc.create('$Route', name, pathExpression, controller, view)
+		return new this._Route(name, pathExpression, controller, view);
 	}
 }
 

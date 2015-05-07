@@ -4,8 +4,12 @@ import CoreError from 'imajs/client/core/coreError.js';
 ns.namespace('Core.Abstract');
 
 /**
+ * The basic implementation of the {@codelink Core.Interface.Router} interface,
+ * providing the common or default functionality for parts of the API.
+ *
+ * @abstract
  * @class Router
- * @extends Core.Interface.Router
+ * @implements Core.Interface.Router
  * @namespace Core.Abstract
  * @module Core
  * @submodule Core.Abstract
@@ -13,85 +17,77 @@ ns.namespace('Core.Abstract');
 class Router extends ns.Core.Interface.Router {
 
 	/**
-	 * @method constructor
+	 * Initializes the router.
+	 *
 	 * @constructor
-	 * @param {Core.Interface.PageManager} pageManager
-	 * @param {Core.Router.Factory} factory
-	 * @param {Promise} Promise
+	 * @method constructor
+	 * @param {Core.Interface.PageManager} pageManager The page manager handling
+	 *        UI rendering, and transitions between pages if at the client side.
+	 * @param {Core.Router.Factory} factory Factory for routes.
+	 * @param {Object<string, string>} ROUTE_NAMES The internal route names.
 	 * @example
 	 *      router.link('article', {articleId: 1});
 	 * @example
 	 *      router.redirect('http://www.example.com/web');
 	 */
-	constructor(pageManager, factory, Promise) {
+	constructor(pageManager, factory, ROUTE_NAMES) {
 		super();
 
 		/**
+		 * The page manager handling UI rendering, and transitions between pages if
+		 * at the client side.
+		 *
+		 * @private
 		 * @property _pageManager
-		 * @protected
 		 * @type {Core.Interface.pageManager}
-		 * @default pageManager
 		 */
 		this._pageManager = pageManager;
 
 		/**
+		 * Factory for routes.
+		 *
+		 * @private
 		 * @property _factory
-		 * @protected
 		 * @type {Core.Router.Factory}
-		 * @default factory
 		 */
 		this._factory = factory;
 
 		/**
-		 * @property _Promise
-		 * @protected
-		 * @type {Promise}
-		 * @default Promise
+		 * The internal route names.
+		 *
+		 * @const
+		 * @private
+		 * @property _ROUTE_NAMES
+		 * @type {Object<string, string>}
 		 */
-		this._Promise = Promise;
+		this._ROUTE_NAMES = ROUTE_NAMES;
 
 		/**
-		 * Keep all routes.
+		 * The current protocol used to access the application, terminated by a
+		 * collon (for example {@code https:}).
 		 *
-		 * @property _routes
-		 * @protected
-		 * @type {Array}
-		 * @default []
-		 */
- 		this._routes = [];
-
-		/**
-		 * Current mode - one of MODE_*.
-		 *
-		 * @property mode
-		 * @protected
-		 * @type {string}
-		 * @default null
-		 */
-		this._mode = null;
-
-		/**
-		 * Web protocol.
-		 *
+		 * @private
 		 * @property _protocol
 		 * @type {string}
-		 * @default null
+		 * @default ''
 		 */
-		this._protocol = null;
+		this._protocol = '';
 
 		/**
-		 * Current domain.
+		 * The application's domain in the following form:
+		 * {@code `${protocol}//${host}`}.
 		 *
+		 * @private
 		 * @property _domain
-		 * @protected
 		 * @type {string}
 		 * @default ''
 		 */
 		this._domain = '';
 
 		/**
-		 * Root folder.
+		 * The URL path pointing to the application's root.
 		 *
+		 * @private
 		 * @property _root
 		 * @type {string}
 		 * @default ''
@@ -99,8 +95,10 @@ class Router extends ns.Core.Interface.Router {
 		this._root = '';
 
 		/**
-		 * Defined language part in path.
+		 * The URL path fragment used as a suffix to the {@code $Root} field that
+		 * specifies the current language.
 		 *
+		 * @private
 		 * @property _languagePartPath
 		 * @type {string}
 		 * @default ''
@@ -108,221 +106,169 @@ class Router extends ns.Core.Interface.Router {
 		this._languagePartPath = '';
 
 		/**
-		 * @property MODE_HISTORY
-		 * @const
-		 * @type {string}
-		 * @default 'history'
+		 * Storage of all known routes. The key are the route names.
+		 *
+		 * @private
+		 * @property _routes
+		 * @type {Map<string, Core.Router.Route>}
 		 */
-		this.MODE_HISTORY = 'history';
-
-		/**
-		 * @property MODE_HASH
-		 * @const
-		 * @type {string}
-		 * @default 'hash'
-		 */
-		this.MODE_HASH = 'hash';
-
-		/**
-		 * @property MODE_SERVER
-		 * @const
-		 * @type {string}
-		 * @default 'server'
-		 */
-		this.MODE_SERVER = 'server';
-		
-		/**
-		 * @property ROUTE_NAME_NOT_FOUND
-		 * @const
-		 * @type {string}
-		 * @default 'notFound'
-		 */
-		this.ROUTE_NAME_NOT_FOUND = 'notFound';
-
-		/**
-		 * @property ROUTE_NAME_ERROR
-		 * @const
-		 * @type {string}
-		 * @default 'error'
-		 */
-		this.ROUTE_NAME_ERROR = 'error';
-
-		this.x=0;
-
-		this.clear();
+		this._routes = new Map();
 	}
 
 	/**
-	 * Initialization router.
+	 * Initializes the router with the provided configuration.
 	 *
+	 * @inheritdoc
+	 * @override
 	 * @method init
-	 * @chainable
-	 * @param {Object} config
-	 * @return {this}
+	 * @param {{$Protocol: string, $Domain: string, $Root: string, $LanguagePartPath: string}} config
+	 *        Router configuration.
+	 *        The {@code $Protocol} field must be the current protocol used to
+	 *        access the application, terminated by a collon (for example
+	 *        {@code https:}).
+	 *        The {@code $Domain} field must be the application's domain in the
+	 *        following form: {@code `${protocol}//${host}`}.
+	 *        The {@code $Root} field must specify the URL path pointing to the
+	 *        application's root.
+	 *        The {@code $LanguagePartPath} field must be the URL path fragment
+	 *        used as a suffix to the {@code $Root} field that specifies the
+	 *        current language.
 	 */
-	init(config = {}) {
+	init(config) {
 		this._protocol = config.$Protocol || '';
 		this._root = config.$Root || '';
 		this._languagePartPath = config.$LanguagePartPath || '';
+		this._domain = config.$Domain;
 	}
 
 	/**
-	 * Clear all setting in router.
+	 * Adds a new route to router.
 	 *
-	 * @method clear
+	 * @inheritdoc
+	 * @override
 	 * @chainable
-	 * @return {this}
-	 */
-	clear() {
-		this._routes = [];
-		this._mode = null;
-		this._protocol = '';
-		this._domain = '';
-		this._root = '';
-		this._languagePartPath = '';
-
-		return this;
-	}
-
-	/**
-	 * Add route to router.
-	 *
 	 * @method add
-	 * @chainable
-	 * @param {string} name
-	 * @param {string} pathExpression
-	 * @param {string} controller
-	 * @param {string} view
-	 * @return {this}
+	 * @param {string} name The unique name of this route, identifying it among
+	 *        the rest of the routes in the application.
+	 * @param {string} pathExpression A path expression specifying the URL path
+	 *        part matching this route (must not contain a query string),
+	 *        optionally containing named parameter placeholders specified as
+	 *        {@code :parameterName}.
+	 * @param {string} controller The full name of Object Container alias
+	 *        identifying the controller associated with this route.
+	 * @param {string} view The full name or Object Container alias identifying
+	 *        the view class associated with this route.
+	 * @return {Core.Interface.Router} This router.
+	 * @throws {Core.CoreError} Thrown if a route with the same name is added
+	 *         multiple times.
 	 */
 	add(name, pathExpression, controller, view) {
-		this._routes.push(this._factory.createRoute(name, pathExpression, controller, view));
-
-		return this;
-	}
-
-	/**
-	 * Remove path from router.
-	 *
-	 * @method remove
-	 * @chainable
-	 * @param {string} pathExpression
-	 * @return {this}
-	 */
-	remove(pathExpression) {
-		for (var i = 0; i < this._routes.length; i++) {
-
-			if (this._routes[i].getPathExpression() === pathExpression) {
-				this._routes.splice(i, 1);
-
-				return this;
-			}
+		if (this._routes.has(name)) {
+			throw new CoreError(`Core.Abstract.Router.add: The path with name ${name}` +
+			"is already defined");
 		}
 
+		var factory = this._factory;
+		var route = factory.createRoute(name, pathExpression, controller, view);
+		this._routes.set(name, route);
+
 		return this;
 	}
 
 	/**
-	 * Returns current path.
+	 * Removes the specified route from the router's known routes.
 	 *
-	 * @method getPath
-	 * @return {string}
+	 * @inheritdoc
+	 * @override
+	 * @chainable
+	 * @method remove
+	 * @param {string} name The route's unique name, identifying the route to
+	 *        remove.
+	 * @return {Core.Interface.Router} This router.
 	 */
-	getPath() {
+	remove(name) {
+		this._routes.delete(name);
+
+		return this;
 	}
 
 	/**
-	 * Returns current all url.
+	 * Returns the current absolute URL (including protocol, host, query, etc).
 	 *
+	 * @inheritdoc
+	 * @override
 	 * @method getUrl
+	 * @return {string} The current absolute URL.
 	 */
 	getUrl() {
 		return this._getBaseUrl() + this.getPath();
 	}
 
 	/**
-	 * Returns domain
+	 * Returns the application's domain in the following form
+	 * {@code `${protocol}//${host}`}.
 	 *
+	 * @inheritdoc
+	 * @override
 	 * @method getDomain
-	 * @return {string}
+	 * @return {string} The current application's domain.
 	 */
 	getDomain() {
 		return this._domain;
 	}
 
 	/**
-	 * Returns root path.
+	 * Returns the current protocol used to access the application, terminated by
+	 * a collon (for example {@code https:}).
 	 *
-	 * @method getRoot
-	 * @return {string}
-	 */
-	getRoot() {
-		return this._root;
-	}
-
-	/**
-	 * Returns language part path.
-	 *
-	 * @method getLanguagePartPath
-	 * @return {string}
-	 */
-	getLanguagePartPath() {
-		return this._languagePartPath;
-	}
-
-	/**
-	 * Returns web protocol.
-	 *
+	 * @inheritdoc
+	 * @override
 	 * @method getProtocol
-	 * @return {string}
+	 * @return {string} The current application protocol used to access the
+	 *         application.
 	 */
 	getProtocol() {
 		return this._protocol;
 	}
 
 	/**
-	 * Attach event to window.
+	 * Generates an absolute URL (including protocol, domain, etc) for the
+	 * specified route by substituting the route's parameter placeholders with
+	 * the provided parameter values.
 	 *
-	 * @method listen
-	 * @chainable
-	 * @return {this}
-	 */
-	listen() {
-	}
-
-	/**
-	 * Redirect to url.
-	 *
-	 * @method redirect
-	 * @param {string} url
-	 */
-	redirect(url) {
-	}
-
-	/**
-	 * Return link for route's name with params.
-	 *
+	 * @inheritdoc
+	 * @override
 	 * @method link
-	 * @param {string} routeName - alias for route
-	 * @param {Object} params
-	 * @return {string}
+	 * @param {string} routeName The unique name of the route, identifying the
+	 *        route to use.
+	 * @param {Object<string, string>} params Parameter values for the route's
+	 *        parameter placeholders. Extraneous parameters will be added as URL
+	 *        query.
+	 * @return {string} An absolute URL for the specified route and parameters.
 	 */
 	link(routeName, params) {
-		var route = this._getRouteByName(routeName);
+		var route = this._routes.get(routeName);
 
 		if (!route) {
-			throw new CoreError(`Core.Router:link has undefined route with name ${routeName}. Add new route with that name.`);
+			throw new CoreError(`Core.Router:link has undefined route with name ` +
+			`${routeName}. Add new route with that name.`);
 		}
 
-		return this._getBaseUrl() + route.createPathForParams(params);
+		return this._getBaseUrl() + route.toPath(params);
 	}
 
 	/**
-	 * Handle path by router.
+	 * Routes the application to the route matching the providing path, renders
+	 * the route page and sends the result to the client.
 	 *
+	 * @inheritdoc
+	 * @override
 	 * @method route
-	 * @param {string} path
-	 * @return {Promise}
+	 * @param {string} path The URL path part received from the client, with
+	 *        optional query.
+	 * @return {Promise<undefined>} A promise resolved when the error has been
+	 *         handled and the response has been sent to the client, or displayed
+	 *         if used at the client side.
 	 */
 	route(path) {
 		var routeForPath = this._getRouteByPath(path);
@@ -332,68 +278,139 @@ class Router extends ns.Core.Interface.Router {
 			return this.handleNotFound(params);
 		}
 
-		params = routeForPath.getParamsForPath(path);
+		params = routeForPath.extractParameters(path);
 
 		return this._handle(routeForPath, params);
 	}
 
 	/**
-	 * Handle Error that call 'error' controller with params.
+	 * Handles an internal server error by responding with the appropriate
+	 * "internal server error" error page.
 	 *
+	 * @inheritdoc
+	 * @override
 	 * @method handleError
-	 * @param {Object} params
-	 * @return {Promise}
+	 * @param {Object<string, string>} params Parameters extracted from the
+	 *        current URL path and query.
+	 * @return {Promise<undefined>} A promise resolved when the error has been
+	 *         handled and the response has been sent to the client, or displayed
+	 *         if used at the client side.
 	 */
 	handleError(params) {
-		var routeError = this._getRouteByName(this.ROUTE_NAME_ERROR);
+		var routeError = this._routes.get(this._ROUTE_NAMES.ERROR);
 
 		if (!routeError) {
-			var error = new CoreError(`Core.Router:handleError has undefined route. Add new route with name '${this.ROUTE_NAME_ERROR}'.`, params);
+			var error = new CoreError(`Core.Router:handleError has undefined ` +
+				`route. Add new route with name '${this._ROUTE_NAMES.ERROR}'.`,
+				params);
 
-			return this._Promise.reject(error);
+			return Promise.reject(error);
 		}
 
 		return this._handle(routeError, params);
 	}
 
 	/**
-	 * Handle Not Found path that call 'notFound' controller with params.
+	 * Handles a "not found" error by responsing with the appropriate "not found"
+	 * error page.
 	 *
+	 * @inheritdoc
+	 * @override
 	 * @method handleNotFound
-	 * @param {Object} params
-	 * @return {Promise}
+	 * @param {Object<string, string>} params Parameters extracted from the
+	 *        current URL path and query.
+	 * @return {Promise<undefined>} A promise resolved when the error has been
+	 *         handled and the response has been sent to the client, or displayed
+	 *         if used at the client side.
 	 */
 	handleNotFound(params) {
-		var routeNotFound = this._getRouteByName(this.ROUTE_NAME_NOT_FOUND);
+		var routeNotFound = this._routes.get(this._ROUTE_NAMES.NOT_FOUND);
 
 		if (!routeNotFound) {
-			var error = new CoreError(`Core.Router:handleNotFound has undefined route. Add new route with name '${this.ROUTE_NAME_NOT_FOUND}'.`, params);
+			var error = new CoreError(`Core.Router:handleNotFound has undefined ` +
+				`route. Add new route with name '${this._ROUTE_NAMES.NOT_FOUND}'.`,
+				params);
 
-			return this._Promise.reject(error);
+			return Promise.reject(error);
 		}
 
 		return this._handle(routeNotFound, params);
 	}
 
 	/**
-	 * Return true if error is client error and return http status 4**.
+	 * Tests, if possible, whether the specified error was caused by the client's
+	 * action (for example wrong URL or request encoding) or by a failure at the
+	 * server side.
 	 *
+	 * @inheritdoc
+	 * @override
 	 * @method isClientError
-	 * @param {Error} error
-	 * @return {boolean}
+	 * @param {(Core.CoreError|Error)} error The encountered error.
+	 * @return {boolean} {@code true} if the error was caused the action of the
+	 *         client.
 	 */
 	isClientError(error) {
-		return error instanceof CoreError && (error.getHttpStatus() >= 400 && error.getHttpStatus() < 500);
+		return (error instanceof CoreError) &&
+			(error.getHttpStatus() >= 400) &&
+			(error.getHttpStatus() < 500);
 	}
 
 	/**
-	 * Handle route's name with params.
+	 * Tests, if possible, whether the specified error lead to redirection.
 	 *
-	 * @method _handle
+	 * @method isRedirection
+	 * @param {(Core.CoreError|Error)} error The encountered error.
+	 * @return {boolean} {@code true} if the error was caused the action of the
+	 *         redirection.
+	 */
+	isRedirection(error) {
+		return (error instanceof CoreError) &&
+			(error.getHttpStatus() >= 300) &&
+			(error.getHttpStatus() < 400);
+	}
+
+	/**
+	 * Strips the URL path part that points to the application's root (base URL)
+	 * from the provided path.
+	 *
+	 * @protected
+	 * @method _extractRoutePath
+	 * @param {string} path Relative or absolute URL path.
+	 * @return {string} URL path relative to the application's base URL.
+	 */
+	_extractRoutePath(path) {
+		return path.replace(this._root + this._languagePartPath, '');
+	}
+
+	/**
+	 * Returns the application's absolute base URL, pointing to the public root
+	 * of the application.
+	 *
+	 * @protected
+	 * @method _getBaseUrl
+	 * @return {string} The application's base URL.
+	 */
+	_getBaseUrl() {
+		return this._protocol + '//' + this._domain + this._root +
+			this._languagePartPath;
+	}
+
+	/**
+	 * Handles the provided route and parameters by initalizing the route's
+	 * controller and rendering its state via the route's view.
+	 *
+	 * The result is then sent to the client if used at the server side, or
+	 * displayed if used as the client side.
+	 *
 	 * @private
-	 * @param {Core.Router.Route} route - route
-	 * @param {Object} params
-	 * @return {Promise}
+	 * @method _handle
+	 * @param {Core.Router.Route} route The route that should have its associated
+	 *        controller rendered via the associated view.
+	 * @param {Object<string, string>} params Parameters extracted from the URL
+	 *        path and query.
+	 * @return {Promise<undefined>} A promise that resolves when the page is
+	 *         rendered and the result is sent to the client, or displayed if
+	 *         used at the client side.
 	 */
 	_handle(route, params) {
 		var controller = route.getController();
@@ -403,65 +420,24 @@ class Router extends ns.Core.Interface.Router {
 	}
 
 	/**
-	 * Return Route by path.
+	 * Returns the route matching the provided URL path part. The path may
+	 * contain a query.
 	 *
+	 * @private
 	 * @method _getRouteByPath
-	 * @param {string} path
-	 * @return {Core.Router.Data|null}
+	 * @param {string} path The URL path.
+	 * @return {?Core.Router.Route} The route matching the path, or {@code null}
+	 *         if no such route exists.
 	 */
 	_getRouteByPath(path) {
-		for (var i = this._routes.length - 1; i >= 0; i--) {
-			var route = this._routes[i];
-
-			if (route.isMatch(path)) {
+		for (var route of this._routes.values()) {
+			if (route.matches(path)) {
 				return route;
 			}
 		}
 
 		return null;
 	}
-
-	/**
-	 * Get route by name.
-	 *
-	 * @method _getRouteByName
-	 * @param {string} routeName
-	 * @return {Core.Router.Data|null}
-	 */
-	_getRouteByName(routeName) {
-		for (var i = 0; i < this._routes.length; i++) {
-			var route = this._routes[i];
-
-			if (route.getName() === routeName) {
-				return route;
-			}
-		}
-
-		return null;
-	}
-
-	/**
-	 * Extract route path from original url path.
-	 *
-	 * @method _extractRoutePath
-	 * @protected
-	 * @param {string} path
-	 * @return {string}
-	 */
-	_extractRoutePath(path) {
-		return path.replace(this._root + this._languagePartPath, '');
-	}
-
-	/**
-	 * Returns base url.
-	 *
-	 * @method _getBaseUrl
-	 * @return {string}
-	 */
-	_getBaseUrl() {
-		return this._protocol + '//' + this._domain + this._root + this._languagePartPath;
-	}
-
 }
 
 ns.Core.Abstract.Router = Router;

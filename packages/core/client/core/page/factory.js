@@ -37,12 +37,22 @@ class Factory {
 	 * Create instance of view.
 	 *
 	 * @method createView
-	 * @param {string} view
+	 * @param {string|Vendor.React.Component} view
 	 * @return {Vendor.React.Component}
 	 */
 	createView(view) {
+		if (typeof view === 'function') {
+			return view;
+		}
+
 		if (oc.has(view)) {
-			return oc.get(view);
+			var view = oc.get(view);
+
+			if (typeof view === 'function') {
+				return view();
+			} else {
+				return view;
+			}
 		} else {
 			throw new CoreError(`Core.Page.Factory:createView hasn't name of view "${view}".`);
 		}

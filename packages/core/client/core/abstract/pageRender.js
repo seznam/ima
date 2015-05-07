@@ -13,7 +13,7 @@ ns.namespace('Core.Abstract');
  * @module Core
  * @submodule Core.Abstract
  *
- * @requires Vendor.Rsvp
+ * @requires Vendor.Helper
  * @requires Vendor.React
  * @requires Core.Interface.Animate
  */
@@ -24,24 +24,23 @@ class PageRender extends ns.Core.Interface.PageRender {
 	 *
 	 * @constructor
 	 * @method constructor
-	 * @param {Vendor.Rsvp} Rsvp The RSVP implementation of Promise API and
-	 *        helper methods.
+	 * @param {Vendor.Helper} Helper The IMA.js helper methods.
 	 * @param {Vendor.React} React React framework instance, will be used to
 	 *        render the page.
 	 * @param {Object<string, *>} settings Application settings for the current
 	 *        application environment.
 	 */
-	constructor(Rsvp, React, settings) {
+	constructor(Helper, React, settings) {
 		super();
 
 		/**
-		 * The RSVP implementation of Promise API and helper methods.
+		 * The IMA.js helper methods.
 		 *
-		 * @property _Rsvp
+		 * @property _Helper
 		 * @protected
-		 * @type {Vendor.Rsvp}
+		 * @type {Vendor.Helper}
 		 */
-		this._Rsvp = Rsvp;
+		this._Helper = Helper;
 
 		/**
 		 * Rect framework instance, used to render the page.
@@ -124,11 +123,10 @@ class PageRender extends ns.Core.Interface.PageRender {
 	 * @protected
 	 * @param {Object<string, *>} dataMap A map of data that should have its
 	 *        values wrapped into Promises.
-	 * @return {Object<string, Vendor.Rsvp.Promise>} A copy of the provided data
+	 * @return {Object<string, Promise>} A copy of the provided data
 	 *         map that has all its values wrapped into promises.
 	 */
 	_wrapEachKeyToPromise(dataMap) {
-		var Promise = this._Rsvp.Promise;
 		var copy = {};
 
 		for (var field of Object.keys(dataMap)) {

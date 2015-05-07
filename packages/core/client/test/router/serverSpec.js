@@ -5,15 +5,15 @@ describe('Core.Router.Server', function() {
 	var routerFactory = null;
 	var request = null;
 	var respond = null;
-	var Promise = oc.get('$Promise');
 	var domain = 'http://locahlost:3002';
+	var ROUTE_NAMES = oc.get('$ROUTE_NAMES');
 
 	beforeEach(function() {
 		pageRender = oc.make('$PageRender');
 		routerFactory = oc.make('$RouterFactory');
 		request = oc.create('Core.Router.Request');
 		response = oc.create('Core.Router.Response');
-		router = oc.create('Core.Router.Server', pageRender, routerFactory, Promise, request, response);
+		router = oc.create('Core.Router.Server', pageRender, routerFactory, ROUTE_NAMES, request, response);
 		router.init({mode: router.MODE_SERVER, domain: domain});
 	});
 

@@ -3,20 +3,22 @@ describe('Core.Storage.Cookie', function() {
 	var cookieString = 'cok1=hello;path=/;expires=Fri, 31 Dec 9999 23:59:59 GMT; cok2=hello2;path=/;expires=Fri, 31 Dec 9999 23:59:59 GMT';
 	var setCookieString = 'cok3=hello3; Path=/; Expires=Fri, 31 Dec 9999 23:59:59 GMT';
 
-
 	var request = null;
 	var response = null;
 	var secure = false;
 	var cookie = null;
+	var win = null;
+
 	beforeEach(function() {
 		request = oc.create('Core.Router.Request');
 		response = oc.create('Core.Router.Response');
-		cookie = oc.create('Core.Storage.Cookie', request, response, secure);
+		win = oc.create('Core.Window.Server');
+		cookie = oc.create('Core.Storage.Cookie', win, request, response, secure);
 
 		request.init({});
 		response.init({});
 
-		spyOn(request, 'getCookie')
+		spyOn(request, 'getCookieHeader')
 			.and
 			.returnValue(cookieString);
 
@@ -28,8 +30,8 @@ describe('Core.Storage.Cookie', function() {
 	});
 
 	it('should be parse exist cookies', function() {
-		expect(request.getCookie).toHaveBeenCalled();
-		expect(cookie._cookie.size).toEqual(2);
+		expect(request.getCookieHeader).toHaveBeenCalled();
+		expect(cookie._storage.size).toEqual(2);
 	});
 
 
@@ -55,14 +57,14 @@ describe('Core.Storage.Cookie', function() {
 		cookie.delete('cok2');
 
 		expect(response.setCookie).toHaveBeenCalled();
-		expect(cookie._cookie.size).toEqual(1);
+		expect(cookie._storage.size).toEqual(1);
 	});
 
 	it('should be delete all cookies', function() {
 		cookie.clear();
 
 		expect(response.setCookie.calls.count()).toEqual(2);
-		expect(cookie._cookie.size).toEqual(0);
+		expect(cookie._storage.size).toEqual(0);
 	});
 
 	it('should be get cookies string', function() {
@@ -73,7 +75,7 @@ describe('Core.Storage.Cookie', function() {
 		spyOn(cookie, 'set');
 
 		cookie.parseFromSetCookieHeader(setCookieString);
-		expect(cookie.set).toHaveBeenCalledWith('cok3', 'hello3', {expires: cookie.MAX_EXPIRE_DATE, httpOnly: false, secure: false, path: '/'});
+		expect(cookie.set).toHaveBeenCalledWith('cok3', 'hello3', {expires: new Date('Fri, 31 Dec 9999 23:59:59 UTC'), httpOnly: false, secure: false, path: '/'});
 	});
 
 	describe('should get expires date', function() {
@@ -86,7 +88,7 @@ describe('Core.Storage.Cookie', function() {
 			'Fri, 31 Dec 2000 23:59:59 GMT'
 		], function(value) {
 			it('for value ' + value, function() {
-				expect(cookie._getExpiresDate(value) instanceof Date).toEqual(true);
+				expect(cookie._getExpirationAsDate(value) instanceof Date).toEqual(true);
 			});
 		});
 	});

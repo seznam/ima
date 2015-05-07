@@ -3,7 +3,78 @@ import ns from 'imajs/client/core/namespace.js';
 ns.namespace('Core.Router');
 
 /**
+ * Names of the DOM events the router responds to.
+ *
+ * @const
+ * @property EVENTS
+ * @type {Object<string, string>}
+ */
+const EVENTS = Object.freeze({
+	/**
+	 * Name of the event produced when the user clicks the page using the mouse,
+	 * or touches the page and the touch event is not stopped.
+	 *
+	 * @const
+	 * @property
+	 * @type {string}
+	 */
+	CLICK: 'click',
+
+	/**
+	 * Name of the event fired when the user navigates back in the history.
+	 *
+	 * @const
+	 * @property EVENTS.POP_STATE
+	 * @type {string}
+	 */
+	POP_STATE: 'popstate'
+});
+
+/**
+ * Address bar content manipulation modes.
+ *
+ * @const
+ * @property MODES
+ * @type {Object<string, string>}
+ */
+const MODES = Object.freeze({
+	/**
+	 * Address bar manipulation mode in which the current URL in the address bar
+	 * is being udpated using the session history management API.
+	 *
+	 * @const
+	 * @property MODES.HISTORY
+	 * @type {string}
+	 */
+	HISTORY: 'history',
+
+	/**
+	 * Address bar manipulation mode in which the current URL in the address bar
+	 * is being udpated by modifying the {@code hash} part.
+	 *
+	 * @const
+	 * @property MODES.HASH
+	 * @type {string}
+	 */
+	HASH: 'hash'
+});
+
+/**
+ * The number used as the index of the mouse middle button in DOM
+ * {@code MouseEvent}s.
+ *
+ * @const
+ * @property MOUSE_MIDDLE_BUTTON
+ * @type {number}
+ */
+const MOUSE_MIDDLE_BUTTON = 1;
+
+/**
+ * The client-side implementation of the {@codelink Core.Interface.Router}
+ * interface.
+ *
  * @class Client
+ * @extends Core.Abstract.Router
  * @namespace Core.Router
  * @module Core
  * @submodule Core.Router
@@ -11,109 +82,139 @@ ns.namespace('Core.Router');
 class Client extends ns.Core.Abstract.Router {
 
 	/**
-	 * @method constructor
+	 * Initializes the client-side router.
+	 *
 	 * @constructor
-	 * @param {Core.Interface.PageManager} pageManager
-	 * @param {Core.Router.Factory} factory
-	 * @param {Promise} Promise
+	 * @method constructor
+	 * @param {Core.Interface.PageManager} pageManager The page manager handling
+	 *        UI rendering, and transitions between pages if at the client side.
+	 * @param {Core.Router.Factory} factory Factory for routes.
+	 * @param {Object<string, string>} ROUTE_NAMES The internal route names.
 	 * @param {Core.Interface.Window} window
 	 */
-	constructor(pageManager, factory, Promise, window) {
-		super(pageManager, factory, Promise);
+	constructor(pageManager, factory, ROUTE_NAMES, window) {
+		super(pageManager, factory, ROUTE_NAMES);
 
 		/**
-		 * @property _window
+		 * Helper for accessing the native client-side APIs.
+		 *
 		 * @private
+		 * @property _window
 		 * @type {Core.Interface.Window}
-		 * @default window
 		 */
 		this._window = window;
 
 		/**
-		 * @property MOUSE_MIDDLE_BUTTON
-		 * @const
-		 * @type {Number}
-		 * @default 1
-		 */
-		this.MOUSE_MIDDLE_BUTTON = 1;
-
-		/**
-		 * @property POP_STATE_EVENT
-		 * @const
+		 * Current address bar manipulation mode, specified as one of the
+		 * {@code MODES.*} constants..
+		 *
+		 * @private
+		 * @property mode
 		 * @type {string}
-		 * @default 'popstate'
+		 * @default null
 		 */
-		this.POP_STATE_EVENT = 'popstate';
-
-		/**
-		 * @property CLICK_EVENT
-		 * @const
-		 * @type {string}
-		 * @default 'click'
-		 */
-		this.CLICK_EVENT = 'click';
-
+		this._mode = null;
 	}
 
 	/**
-	 * Initialization router.
+	 * Initializes the router with the provided configuration.
 	 *
 	 * @method init
-	 * @chainable
-	 * @param {Object} config
-	 * @return {this}
+	 * @param {{$Protocol: string, $Domain: string, $Root: string, $LanguagePartPath: string}} config
+	 *        Router configuration.
+	 *        The {@code $Protocol} field must be the current protocol used to
+	 *        access the application, terminated by a collon (for example
+	 *        {@code https:}).
+	 *        The {@code $Domain} field must be the application's domain in the
+	 *        following form: {@code `${protocol}//${host}`}.
+	 *        The {@code $Root} field must specify the URL path pointing to the
+	 *        application's root.
+	 *        The {@code $LanguagePartPath} field must be the URL path fragment
+	 *        used as a suffix to the {@code $Root} field that specifies the
+	 *        current language.
 	 */
-	init(config = {}) {
+	init(config) {
 		super.init(config);
-		this._mode = this._window.hasHistoryAPI() ? this.MODE_HISTORY : this.MODE_HASH;
+		this._mode = this._window.hasHistoryAPI() ? MODES.HISTORY : MODES.HASH;
 		this._domain = config.$Domain || this._window.getDomain();
 
 		return this;
 	}
 
 	/**
-	 * Get current path.
+	 * Ruturns current path part of the current URL, including the query string
+	 * (if any).
 	 *
+	 * @inheritdoc
+	 * @override
 	 * @method getPath
-	 * @return {string}
+	 * @return {string} The path and query parts of the current URL.
 	 */
 	getPath() {
 		return this._extractRoutePath(this._window.getPath());
 	}
 
 	/**
-	 * Attach event to window.
+	 * Registers event listeners at the client side window object allowing the
+	 * router to capture user's history (history pop state - going "back") and
+	 * page (clicking links) navigation.
 	 *
-	 * @method listen
+	 * The router will start processing the navigation internally, handling the
+	 * user's navigation to display the page related to the URL resulting from
+	 * the user's action.
+	 *
+	 * Note that the router will not prevent forms from being submitted to the
+	 * server.
+	 *
+	 * The effects of this method cannot be reverted. This method has no effect
+	 * at the server side.
+	 *
+	 * @inheritdoc
+	 * @override
 	 * @chainable
-	 * @return {this}
+	 * @method listen
+	 * @return {Core.Interface.Router} This router.
 	 */
 	listen() {
-		var windowElement = this._window.getWindow();
+		var nativeWindow = this._window.getWindow();
 
-		this._window.bindEventListener(windowElement, this.POP_STATE_EVENT, (event) => {
+		this._setAddressBar(this.getUrl());
+		this._window.bindEventListener(nativeWindow, EVENTS.POP_STATE, (event) => {
 			if (event.state) {
 				this.route(this.getPath());
 			}
 		});
 
-		this._window.bindEventListener(windowElement, this.CLICK_EVENT, (e)=> {
-			this._handleClick(e);
+		this._window.bindEventListener(nativeWindow, EVENTS.CLICK, (event) => {
+			this._handleClick(event);
 		});
 
 		return this;
 	}
 
 	/**
-	 * Redirect to url.
+	 * Redirects the client to the specified location.
 	 *
+	 * At the server side the method results in responsing to the client with a
+	 * redirect HTTP status code and the {@code Location} header.
+	 *
+	 * At the client side the method updates the current URL by manipulating the
+	 * browser history (if the target URL is at the same domain and protocol as
+	 * the current one) or performs a hard redirect (if the target URL points to
+	 * a different protocol or domain).
+	 *
+	 * The method will result in the router handling the new URL and routing the
+	 * client to the related page if the URL is set at the client side and points
+	 * to the same domain and protocol.
+	 *
+	 * @inheritdoc
+	 * @override
 	 * @method redirect
-	 * @param {string} [url='']
+	 * @param {string} url The URL to which the client should be redirected.
 	 */
 	redirect(url = '') {
-
-		if (this._isSameDomain(url) && this._mode === this.MODE_HISTORY) {
-			var path = url.replace(this._protocol + '//' + this._domain, '');
+		if (this._isSameDomain(url) && this._mode === MODES.HISTORY) {
+			var path = url.replace(this.getProtocol() + '//' + this._domain, '');
 
 			path = this._extractRoutePath(path);
 			this.route(path);
@@ -121,14 +222,20 @@ class Client extends ns.Core.Abstract.Router {
 		} else {
 			this._window.redirect(url);
 		}
-
 	}
 
 	/**
-	 * Handle path by router.
+	 * Routes the application to the route matching the providing path, renders
+	 * the route page and sends the result to the client.
 	 *
+	 * @inheritdoc
+	 * @override
 	 * @method route
-	 * @param {string} path
+	 * @param {string} path The URL path part received from the client, with
+	 *        optional query.
+	 * @return {Promise<undefined>} A promise resolved when the error has been
+	 *         handled and the response has been sent to the client, or displayed
+	 *         if used at the client side.
 	 */
 	route(path) {
 		return (
@@ -139,17 +246,28 @@ class Client extends ns.Core.Abstract.Router {
 						return this.handleNotFound(error);
 					}
 
+					if (this.isRedirection(error)) {
+						this.redirect(error.getParams().url);
+						return Promise.resolve();
+					}
+
 					return this.handleError(error);
 				})
 		);
 	}
 
 	/**
-	 * Handle Error that call 'error' controller with params.
+	 * Handles an internal server error by responding with the appropriate
+	 * "internal server error" error page.
 	 *
+	 * @inheritdoc
+	 * @override
 	 * @method handleError
-	 * @param {Object} params
-	 * @return {Promise}
+	 * @param {Object<string, string>} params Parameters extracted from the
+	 *        current URL path and query.
+	 * @return {Promise<undefined>} A promise resolved when the error has been
+	 *         handled and the response has been sent to the client, or displayed
+	 *         if used at the client side.
 	 */
 	handleError(params) {
 		return (
@@ -168,11 +286,17 @@ class Client extends ns.Core.Abstract.Router {
 	}
 
 	/**
-	 * Handle Not Found path that call 'notFound' controller with params.
+	 * Handles a "not found" error by responsing with the appropriate "not found"
+	 * error page.
 	 *
+	 * @inheritdoc
+	 * @override
 	 * @method handleNotFound
-	 * @param {Object} params
-	 * @return {Promise}
+	 * @param {Object<string, string>} params Parameters extracted from the
+	 *        current URL path and query.
+	 * @return {Promise<undefined>} A promise resolved when the error has been
+	 *         handled and the response has been sent to the client, or displayed
+	 *         if used at the client side.
 	 */
 	handleNotFound(params) {
 		return (
@@ -183,66 +307,78 @@ class Client extends ns.Core.Abstract.Router {
 				})
 		);
 	}
-	
+
 	/**
-	 * Handle click event.
+	 * Handles a click event. The method determines whether an anchor element or
+	 * a child of an anchor element has been clicked, and if it was, the method
+	 * performs navigation to the target location of the anchor (if it has one).
+	 *
+	 * The navigation will be handled by the router if the protocol and domain of
+	 * the anchor's target location (href) is the same as the corrent, otherwise
+	 * the method results in a hard redirect.
 	 *
 	 * @method _handleClick
-	 * @param {MouseEvent} event
+	 * @param {MouseEvent} event The click event.
 	 */
 	_handleClick(event) {
 		var target = event.target || event.srcElement;
 		var targetHref = target.href;
+		var self = this;
 
 		//find close a element with href
-		while(target && target.parentNode && (target !== this._window.getBody()) && (typeof targetHref === 'undefined' || targetHref === null)) {
+		while(hasReachedAnchor()) {
 			target = target.parentNode;
 			targetHref = target.href;
 		}
 
-		var isDefinedTargetHref = typeof targetHref !== 'undefined' && targetHref !== null;
-		var isNotMiddleButton = event.button !== this.MOUSE_MIDDLE_BUTTON;
+		var isDefinedTargetHref =
+			(targetHref !== undefined) &&
+			(targetHref !== null);
+		var isNotMiddleButton = event.button !== MOUSE_MIDDLE_BUTTON;
 		var isSameDomain = this._isSameDomain(targetHref);
 
 		if (isDefinedTargetHref && isNotMiddleButton && isSameDomain) {
 			this._window.preventDefault(event);
 			this.redirect(targetHref);
 		}
+
+		function hasReachedAnchor() {
+			return target &&
+				target.parentNode &&
+				(target !== self._window.getBody()) &&
+				(typeof targetHref === 'undefined' || targetHref === null);
+		}
 	}
 
 	/**
-	 * Normalize path by clear slashes.
+	 * Sets the provided URL to the browser's address bar by pushing a new state
+	 * to the history.
 	 *
-	 * @method _clearSlashes
+	 * The state object pushed to the history will be an object with the follwing
+	 * structure: {@code {url: string}}. The {@code url} field will be set to the
+	 * provided URL.
+	 *
 	 * @private
-	 * @param {string} path
-	 */
-	_clearSlashes(path) {
-		return path.toString().replace(/\/$/, '').replace(/^\//, '');
-	}
-
-	/**
-	 * Set address bar.
-	 *
 	 * @method _setAddressBar
-	 * @private
-	 * @param {string} [url='']
+	 * @param {string} url The URL.
 	 */
-	_setAddressBar(url = '') {
+	_setAddressBar(url) {
 		var state = {url};
 		this._window.pushStateToHistoryAPI(state, null, url);
 	}
 
 	/**
-	 * Return true if url is same domain as app domain.
+	 * Tests whether the the protocol and domain of the provided URL are the
+	 * same as the current.
 	 *
-	 * @method _isSameDomain
 	 * @private
-	 * @param {string} [url='']
-	 * @return {boolean}
+	 * @method _isSameDomain
+	 * @param {string} [url=''] The URL.
+	 * @return {boolean} {@code true} if the protocol and domain of the provided
+	 *         URL are the same as the current.
 	 */
 	_isSameDomain(url = '') {
-		return url.match(this._getBaseUrl());
+		return !!url.match(this._getBaseUrl());
 	}
 }
 

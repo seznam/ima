@@ -3,10 +3,10 @@ describe('Core.Router.Route', function() {
 	var route = null;
 	var name = 'home';
 	var pathExpression = '/home/:userId/something/:somethingId';
-	var regular = '^\\/home\\/([^\\/?]+)\\/something\\/([^\\/?]+)(?:\\?(?:.+=.+)(?:&.+=.+)*)?$';
+	var view = 'Home.View';
 
 	beforeEach(function() {
-		route = oc.create('Core.Router.Route', name, pathExpression,'home');
+		route = oc.create('Core.Router.Route', name, pathExpression, view);
 	});
 
 	describe('should be create right path', function() {
@@ -17,18 +17,18 @@ describe('Core.Router.Route', function() {
 			{userId: 'hello', somethingId: 'job'}
 		], function(value){
 			it('for path params. userId:' + value.userId + ', somethingId:' + value.somethingId, function(){
-				expect(route.createPathForParams(value)).toEqual('/home/' + value.userId + '/something/' + value.somethingId);
+				expect(route.toPath(value)).toEqual('/home/' + value.userId + '/something/' + value.somethingId);
 			});
 		});
 
 		it('for empty variables will be return defined path', function() {
-			expect(route.createPathForParams()).toEqual(pathExpression);
+			expect(route.toPath()).toEqual(pathExpression);
 		});
 
 		it('for path and query variables', function() {
 			var value = {userId: 'hello', somethingId: 'job', query1: 'query', query2: 'text for you'};
 
-			expect(route.createPathForParams(value)).toEqual('/home/' + value.userId + '/something/' + value.somethingId + '?query1=query&query2=' + encodeURIComponent(value.query2));
+			expect(route.toPath(value)).toEqual('/home/' + value.userId + '/something/' + value.somethingId + '?query1=query&query2=' + encodeURIComponent(value.query2));
 		});
 
 	});
@@ -39,10 +39,6 @@ describe('Core.Router.Route', function() {
 
 	it('should be return route path', function() {
 		expect(route.getPathExpression()).toEqual(pathExpression);
-	});
-
-	it('should be return regular', function() {
-		expect(route.getRegular()).toEqual(regular);
 	});
 
 	describe('should get params from path', function() {
@@ -57,7 +53,7 @@ describe('Core.Router.Route', function() {
 			it(value.pathExpression, function() {
 				var routeLocal = oc.create('Core.Router.Route', 'unknown', value.pathExpression, 'unknown');
 
-				var routeParams = routeLocal.getParamsForPath(value.path);
+				var routeParams = routeLocal.extractParameters(value.path);
 				var keys = Object.keys(value.params);
 
 				for (var i = 0; i < keys.length; i++) {
@@ -77,7 +73,7 @@ describe('Core.Router.Route', function() {
 			{path: '/home/param1/something/param2?query=param3', result: true}
 		], function(value) {
 			it(value.path, function() {
-				expect(route.isMatch(value.path)).toEqual(value.result);
+				expect(route.matches(value.path)).toEqual(value.result);
 			});
 		});
 
@@ -101,7 +97,7 @@ describe('Core.Router.Route', function() {
 			it('for pathExpression ' + value.pathExpression + ' and path ' + value.path, function() {
 				var routeLocal = oc.create('Core.Router.Route', 'unknown', value.pathExpression,'unknown');
 
-				expect(routeLocal.isMatch(value.path)).toEqual(value.result);
+				expect(routeLocal.matches(value.path)).toEqual(value.result);
 			});
 		});
 

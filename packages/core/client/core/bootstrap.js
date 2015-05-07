@@ -43,8 +43,16 @@ class Bootstrap{
 		 * @type {Object}
 		 * @default {}
 		 */
-		this._config = {}; 
-		
+		this._config = {};
+
+		/**
+		 * @property _isInitialized
+		 * @private
+		 * @type {Boolean}
+		 * @default false
+		 */
+		this._isInitialized = false;
+
 	}
 
 	/**
@@ -61,8 +69,10 @@ class Bootstrap{
 		this._initSettings();
 		this._initBind();
 		this._initServices();
-		this._initRoutes();
 		this._initComponents();
+		this._initRoutes();
+
+		this._isInitialized = true;
 	}
 
 	/**
@@ -72,10 +82,12 @@ class Bootstrap{
 	 * @private
 	 */
 	_setVendor() {
-		var vendor = this._config.vendor;
-		var nsVendor = ns.namespace('Vendor');
-		for (var [name, lib] of vendor) {
-			nsVendor[name] = lib;
+		if (!this._isInitialized) {
+			var vendor = this._config.vendor;
+			var nsVendor = ns.namespace('Vendor');
+			for (var [name, lib] of vendor) {
+				nsVendor[name] = lib;
+			}
 		}
 	}
 
@@ -86,20 +98,17 @@ class Bootstrap{
 	 * @private
 	 */
 	_initSettings() {
-		if (typeof(this._config.initSettings) === 'function') {
+		var allSettings = this._config.initSettings(ns, oc, this._config.settings);
+		var environment = this._config.settings['$Env'];
+		var currentSettings = allSettings[environment];
 
-			var allSettings = this._config.initSettings(ns, oc, this._config.settings);
-			var environment = this._config.settings['$Env'];
-			var currentSettings = allSettings[environment];
-
-			if (environment !== PRODUCTION_ENVIRONMENT) {
-				var	productionSettings = allSettings[PRODUCTION_ENVIRONMENT];
-				ns.Vendor.Helper.assignRecursively(productionSettings, currentSettings);
-				currentSettings = productionSettings;
-			}
-
-			this._config.bind = Object.assign(this._config.bind || {}, currentSettings, this._config.settings);
+		if (environment !== PRODUCTION_ENVIRONMENT) {
+			var	productionSettings = allSettings[PRODUCTION_ENVIRONMENT];
+			ns.Vendor.$Helper.assignRecursively(productionSettings, currentSettings);
+			currentSettings = productionSettings;
 		}
+
+		this._config.bind = Object.assign(this._config.bind || {}, currentSettings, this._config.settings);
 	}
 
 	/**
@@ -109,13 +118,8 @@ class Bootstrap{
 	 * @private
 	 */
 	_initBind() {
-		if (typeof(this._config.initBindCore) === 'function') {
-			this._config.initBindCore(ns, oc, this._config.bind);
-		}
-
-		if (typeof(this._config.initBindApp) === 'function') {
-			this._config.initBindApp(ns, oc, this._config.bind);
-		}
+		this._config.initBindCore(ns, oc, this._config.bind);
+		this._config.initBindApp(ns, oc, this._config.bind);
 	}
 
 	/**
@@ -125,9 +129,7 @@ class Bootstrap{
 	 * @private
 	 */
 	_initRoutes() {
-		if (typeof(this._config.initRoutes) === 'function') {
-			this._config.initRoutes(ns, oc, this._config.routes);
-		}
+		this._config.initRoutes(ns, oc, this._config.routes);
 	}
 
 	/**
@@ -137,13 +139,8 @@ class Bootstrap{
 	 * @private
 	 */
 	_initServices() {
-		if (typeof(this._config.initServicesCore) === 'function') {
-			this._config.initServicesCore(ns, oc, this._config.services);
-		}
-
-		if (typeof(this._config.initServicesApp) === 'function') {
-			this._config.initServicesApp(ns, oc, this._config.services);
-		}
+		this._config.initServicesCore(ns, oc, this._config.services);
+		this._config.initServicesApp(ns, oc, this._config.services);
 	}
 
 	/**
@@ -153,9 +150,11 @@ class Bootstrap{
 	 * @private
 	 */
 	_initComponents() {
-		for (var component of this._components) {
-			if (typeof(component) === 'function') {
-				component(oc.get('$Utils'));
+		if (!this._isInitialized) {
+			for (var component of this._components) {
+				if (typeof(component) === 'function') {
+					component(oc.get('$Utils'));
+				}
 			}
 		}
 	}

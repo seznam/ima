@@ -22,6 +22,21 @@ module.exports = (() => {
 		}
 	};
 
+	var allPromiseHash = (hash) => {
+		let keys = Object.keys(hash)
+		let loadPromises = keys.map((key) => Promise.resolve(hash[key]))
 
-	return {assignRecursively};
+		return Promise.all(loadPromises).then((resolvedValues) => {
+			let result = {}
+
+			for (let key of keys) {
+				result[key] = resolvedValues.shift()
+			}
+
+			return result
+		})
+	}
+
+
+	return {assignRecursively, allPromiseHash};
 })();

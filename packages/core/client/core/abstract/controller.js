@@ -79,9 +79,9 @@ class Controller extends ns.Core.Interface.Controller {
 	 *
 	 * @inheritdoc
 	 * @override
-	 * @method deinit
+	 * @method destroy
 	 */
-	deinit() {}
+	destroy() {}
 
 	/**
 	 * Callback for activating the controller in the UI. This is the last method

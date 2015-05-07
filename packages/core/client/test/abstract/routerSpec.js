@@ -3,70 +3,55 @@ describe('Core.Abstract.Router', function() {
 	var router = null;
 	var pageRender = null;
 	var routerFactory = null;
-	var Promise = oc.get('$Promise');
+	var ROUTE_NAMES = oc.get('$ROUTE_NAMES');
 
 	beforeEach(function() {
 		oc.bind('BaseController', {});
 
 		pageRender = oc.create('Core.Interface.PageRender');
 		routerFactory = oc.make('$RouterFactory');
-		router = oc.create('Core.Abstract.Router', pageRender, routerFactory, Promise);
+		router = oc.create('Core.Abstract.Router', pageRender, routerFactory, ROUTE_NAMES);
 
 		router.add('home', '/', 'BaseController');
 		router.add('contact', '/contact', 'BaseController');
 	});
 
 	it('should be 2 routes in Array', function() {
-		expect(router._routes.length).toEqual(2);
+		expect(router._routes.size).toEqual(2);
 	});
 
 	it('should remove path from router', function() {
-		router.remove('/');
+		router.remove('home');
 
-		expect(router._routes.length).toEqual(1);
-	});
-
-	it('should clear router', function() {
-		router.clear();
-
-		expect(router._routes.length).toEqual(0);
-		expect(router._domain).toEqual('');
-		expect(router._root).toEqual('');
-		expect(router._languagePartPath).toEqual('');
-		expect(router._mode).toEqual(null);
-	});
-
-	describe('should get route by name', function() {
-		it('return instance of Core.Router.Route', function() {
-			expect(router._getRouteByName('home')).not.toBeNull();
-		});
-
-		it('return null for non exist route', function() {
-			expect(router._getRouteByName('xxx')).toBeNull();
-		});
+		expect(router._routes.size).toEqual(1);
 	});
 
 	describe('link method', function() {
+
+		var routeName ='link';
+		var path = '/link';
+		var baseUrl = 'baseUrl';
+
+		beforeEach(function() {
+			router.add(routeName, path, 'BaseController', 'View');
+		});
+
+		afterEach(function() {
+			router.remove(routeName);
+		});
+
 		it('should be return link for valid route with params', function() {
-			var route = oc.create('$Route', 'link', '/link', 'BaseController');
-
-			spyOn(router, '_getRouteByName')
+			spyOn(router, '_getBaseUrl')
 				.and
-				.returnValue(route);
+				.returnValue(baseUrl);
 
-			spyOn(route, 'createPathForParams')
-				.and
-				.returnValue('');
-
-			expect(router.link('link', {})).toEqual(jasmine.any(String));
-			expect(router._getRouteByName).toHaveBeenCalled();
-			expect(route.createPathForParams).toHaveBeenCalled();
+			expect(router.link(routeName, {})).toEqual(baseUrl + path);
 		});
 
 		it('should be throw Error for not valid route with params', function() {
-			spyOn(router, '_getRouteByName')
+			spyOn(router._routes, 'has')
 				.and
-				.returnValue(null);
+				.returnValue(false);
 
 			expect(function() {router.link('xxx', {});}).toThrow();
 		});
@@ -74,9 +59,20 @@ describe('Core.Abstract.Router', function() {
 
 	describe('route method', function() {
 
-		it('should be handle valid route path', function() {
-			var route = oc.create('$Route', 'link', '/link', 'BaseController');
+		var routeName ='link';
+		var path = '/link';
+		var baseUrl = 'baseUrl';
+		var route = null;
 
+		beforeEach(function() {
+			route = routerFactory.createRoute(routeName, path, 'BaseController', 'View');
+		});
+
+		afterEach(function() {
+			route = null;
+		});
+
+		it('should be handle valid route path', function() {
 			spyOn(router, '_getRouteByPath')
 				.and
 				.returnValue(route);
@@ -85,13 +81,13 @@ describe('Core.Abstract.Router', function() {
 				.and
 				.stub();
 
-			spyOn(route, 'getParamsForPath')
+			spyOn(route, 'extractParameters')
 				.and
 				.callThrough();
 
-			router.route('/link');
+			router.route(path);
 
-			expect(route.getParamsForPath).toHaveBeenCalled();
+			expect(route.extractParameters).toHaveBeenCalled();
 			expect(router._handle).toHaveBeenCalledWith(route, {});
 		});
 
@@ -104,22 +100,34 @@ describe('Core.Abstract.Router', function() {
 				.and
 				.stub();
 
-			router.route('/link');
+			router.route(path);
 
-			expect(router.handleNotFound).toHaveBeenCalledWith({path: '/link'});
+			expect(router.handleNotFound).toHaveBeenCalledWith({path: path});
 		});
 
 	});
 
 	describe('handleError method', function() {
 
+		var routeName = ROUTE_NAMES.ERROR;
+		var path = '/error';
+		var baseUrl = 'baseUrl';
+		var route = null;
+
+		beforeEach(function() {
+			route = routerFactory.createRoute(routeName, path, 'BaseController', 'View');
+		});
+
+		afterEach(function() {
+			route = null;
+		});
+
 		it('should be handle "error" route', function() {
-			var routeError = oc.create('$Route', this.ROUTE_NAME_ERROR, '/error', 'ErrorController');
 			var params = new Error('test');
 
-			spyOn(router, '_getRouteByName')
+			spyOn(router._routes, 'get')
 				.and
-				.returnValue(routeError);
+				.returnValue(route);
 
 			spyOn(router, '_handle')
 				.and
@@ -127,14 +135,13 @@ describe('Core.Abstract.Router', function() {
 
 			router.handleError(params);
 
-			expect(router._handle).toHaveBeenCalledWith(routeError, params);
-
+			expect(router._handle).toHaveBeenCalledWith(route, params);
 		});
 
 		it('should be reject promise with error for undefined "error" route', function(done) {
 			var params = new Error('test');
 
-			spyOn(router, '_getRouteByName')
+			spyOn(router._routes, 'get')
 				.and
 				.returnValue(null);
 
@@ -149,13 +156,25 @@ describe('Core.Abstract.Router', function() {
 
 	describe('handleNotFound method', function() {
 
-		it('should be handle "notFound" route', function() {
-			var routeNotFound = oc.create('$Route', this.ROUTE_NAME_ERROR, '/notFound', 'NotFoundController');
-			var params = {path: 'path'};
+		var routeName = ROUTE_NAMES.NOT_FOUND;
+		var path = '/not-found';
+		var baseUrl = 'baseUrl';
+		var route = null;
 
-			spyOn(router, '_getRouteByName')
+		beforeEach(function() {
+			route = routerFactory.createRoute(routeName, path, 'BaseController', 'View');
+		});
+
+		afterEach(function() {
+			route = null;
+		});
+
+		it('should be handle "notFound" route', function() {
+			var params = {path: path};
+
+			spyOn(router._routes, 'get')
 				.and
-				.returnValue(routeNotFound);
+				.returnValue(route);
 
 			spyOn(router, '_handle')
 				.and
@@ -163,14 +182,14 @@ describe('Core.Abstract.Router', function() {
 
 			router.handleNotFound(params);
 
-			expect(router._handle).toHaveBeenCalledWith(routeNotFound, params);
+			expect(router._handle).toHaveBeenCalledWith(route, params);
 
 		});
 
 		it('should be reject promise with error for undefined "error" route', function(done) {
-			var params = {path: 'path'};
+			var params = {path: path};
 
-			spyOn(router, '_getRouteByName')
+			spyOn(router._routes, 'get')
 				.and
 				.returnValue(null);
 
@@ -205,6 +224,28 @@ describe('Core.Abstract.Router', function() {
 
 	});
 
+	describe('isRedirection method', function() {
+
+		it('should be return true for redirection, which return status 3**', function() {
+			var isRedireciton = router.isRedirection(oc.create('$Error', 'Redirection', {status: 300, url: 'http://www.example.com/redirect'}));
+
+			expect(isRedireciton).toEqual(true);
+		});
+
+		it('should be return true for client error, which return status 4**', function() {
+			var isRedireciton = router.isRedirection(oc.create('$Error', 'Client error', {status: 400}));
+
+			expect(isRedireciton).toEqual(false);
+		});
+
+		it('should be return false for any error', function() {
+			var isClientError = router.isClientError(new Error('some error'));
+
+			expect(isClientError).toEqual(false);
+		});
+
+	});
+
 	describe('_extractRoutePath method', function() {
 
 		var pathWithRoot = '/root/path';
@@ -213,7 +254,7 @@ describe('Core.Abstract.Router', function() {
 		var path = '/path';
 
 		beforeEach(function() {
-			router.clear();
+			router = oc.create('Core.Abstract.Router', pageRender, routerFactory, Promise);
 		});
 
 		it('should be clear root from path', function() {

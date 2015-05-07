@@ -15,7 +15,6 @@ describe('Core.Http.Proxy', function() {
 	var windowHelper = oc.get('$Window');
 
 	beforeEach(function() {
-		var Promise = oc.get('$Promise');
 		superAgent = {
 			funcError: null,
 			get: function() { return this; },
@@ -36,7 +35,7 @@ describe('Core.Http.Proxy', function() {
 			}
 		};
 
-		proxy = oc.create('Core.Http.Proxy', superAgent, Promise, HTTP_STATUS_CODE, windowHelper);
+		proxy = oc.create('Core.Http.Proxy', superAgent, HTTP_STATUS_CODE, windowHelper);
 
 		jasmine.clock().install();
 	});

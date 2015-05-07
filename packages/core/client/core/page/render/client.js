@@ -19,8 +19,7 @@ class Client extends ns.Core.Abstract.PageRender {
 	 *
 	 * @method constructor
 	 * @constructor
-	 * @param {Vendor.Rsvp} Rsvp The RSVP implementation of the Promise API with
-	 *        helpers.
+	 * @param {Vendor.Helper} Helper The IMA.js helper methods.
 	 * @param {Vendor.React} React React framework instance to use to render the
 	 *        page.
 	 * @param {Object<string, *>} settings The application setting for the
@@ -29,8 +28,8 @@ class Client extends ns.Core.Abstract.PageRender {
 	 *        object ({@code window}) regardless of the client/server-side
 	 *        environment.
 	 */
-	constructor(Rsvp, React, settings, window) {
-		super(Rsvp, React, settings);
+	constructor(Helper, React, settings, window) {
+		super(Helper, React, settings);
 
 		/**
 		 * Flag signalling that the page is being rendered for the first time.
@@ -94,8 +93,8 @@ class Client extends ns.Core.Abstract.PageRender {
 		}
 
 		return (
-			this._Rsvp
-				.hash(loadPromises)
+			this._Helper
+				.allPromiseHash(loadPromises)
 				.then((fetchedResources) => {
 					controller.setState(fetchedResources);
 					var reactElementView = this._React.createElement(view, controller.getState());

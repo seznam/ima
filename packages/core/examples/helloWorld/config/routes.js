@@ -1,9 +1,10 @@
 export var init = (ns, oc, config) => {
 	var router = oc.get('$Router');
+	var ROUTES = oc.get('$ROUTE_NAMES');
 
 	router
-		.add('home', '/', 'HomeController', 'App.Page.Home.View')
-		.add(router.ROUTE_NAME_ERROR, '/error', 'ErrorController', 'App.Page.Error.View')
-		.add(router.ROUTE_NAME_NOT_FOUND, '/not-found', 'NotFoundController', 'App.Page.NotFound.View');
+		.add('home', '/', 'HomeController', 'HomeView')
+		.add(ROUTES.ERROR, '/error', 'ErrorController', 'ErrorView')
+		.add(ROUTES.NOT_FOUND, '/not-found', 'NotFoundController', 'NotFoundView');
 
 };

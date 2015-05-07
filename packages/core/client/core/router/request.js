@@ -3,6 +3,8 @@ import ns from 'imajs/client/core/namespace.js';
 ns.namespace('Core.Router');
 
 /**
+ * Wrapper for the ExpressJS request, exposing only the neccessary minimum.
+ *
  * @class Request
  * @namespace Core.Router
  * @module Core
@@ -11,59 +13,55 @@ ns.namespace('Core.Router');
 class Request {
 
 	/**
-	 * @method constructor
+	 * Initializes the request.
+	 *
 	 * @constructor
+	 * @method constructor
 	 */
 	constructor() {
 
 		/**
-		 * @property _req
+		 * The current ExpressJS request object, or {@code null} if running at the
+		 * client side.
+		 *
 		 * @private
-		 * @type {Express.Request}
+		 * @property _request
+		 * @type {?Express.Request}
 		 * @default null
 		 */
-		this._req = null;
+		this._request = null;
 	}
 
-
 	/**
-	 * Initialization class with server request.
+	 * Initializes the request using the provided ExpressJS request object.
 	 *
 	 * @method init
-	 * @param {Express.Request|null} req
+	 * @param {?Express.Request} request The ExpressJS request object
+	 *        representing the current request. Use {@code null} at the client
+	 *        side.
 	 */
-	init(req) {
-		this._req = req;
+	init(request) {
+		this._request = request;
 	}
 
 	/**
-	 * Return true for defined property req.
-	 *
-	 * @method isEnabled
-	 * @return {boolean}
-	 */
-	isEnabled() {
-		return !!this._req;
-	}
-
-	/**
-	 * Return request original url.
+	 * Returns the path part of the URL to which the request was made.
 	 *
 	 * @method getPath
-	 * @return {string}
+	 * @return {string} The path to which the request was made.
 	 */
 	getPath() {
-		return this._req.originalUrl;
+		return this._request.originalUrl;
 	}
 
 	/**
-	 * Return cookie string header.
+	 * Returns the {@code Cookie} HTTP header value.
 	 *
-	 * @method getCookie
-	 * @return {string}
+	 * @method getCookieHeader
+	 * @return {string} The value of the {@code Cookie} header.
 	 */
-	getCookie() {
-		return this._req.get('Cookie');
+	getCookieHeader() {
+		return this._request.get('Cookie');
 	}
 }
 

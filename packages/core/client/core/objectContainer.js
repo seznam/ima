@@ -328,6 +328,7 @@ class ObjectContainer {
 	}
 
 	/**
+	 * Clear all registered aboject and their dependencies.
 	 *
 	 * @method clear
 	 */
@@ -338,13 +339,6 @@ class ObjectContainer {
 }
 
 var oc = new ObjectContainer(ns);
-/*
-var oc = null;
-if (!ns.has('oc')) {
-	oc = new ObjectContainer(ns);
-	ns.oc = oc;
-}
-*/
 
 ns.Core.ObjectContainer = ObjectContainer;
 

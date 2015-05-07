@@ -10,6 +10,11 @@ var appRecycler = require('./instanceRecycler.js');
 var vendorScript = require('./vendor.server.js');
 var appServerScript = require('./app.server.js');
 
+var vendor = vendorScript();
+var apiConnections = {
+	count: 0
+};
+
 hljs.configure({
 	tabReplace: '  ',
 	lineNodes: true
@@ -83,7 +88,6 @@ module.exports = (() => {
 
 		var dictionary = require('./locale/' + language + '.js');
 
-		var vendor = vendorScript();
 		var appServer = appRecycler.getInstance();
 
 		var bootConfig = {
@@ -91,7 +95,9 @@ module.exports = (() => {
 			services: {
 				request: req,
 				response: res,
-				$IMA: {},
+				$IMA: {
+					apiConnections: apiConnections
+				},
 				dictionary: {
 					$Language: language,
 					dictionary: dictionary
@@ -163,6 +169,15 @@ module.exports = (() => {
 			if (router.isClientError(err)) {
 				router
 					.handleNotFound(err)
+					.then(() => {
+						appRecycler.clearInstance(appServer);
+					})
+					.catch((error) => {
+						applyError(error);
+					});
+			} else if (router.isRedirection(err)) {
+				router
+					.redirect(err.getParams().url)
 					.then(() => {
 						appRecycler.clearInstance(appServer);
 					})

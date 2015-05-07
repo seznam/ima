@@ -3,287 +3,364 @@ import ns from 'imajs/client/core/namespace.js';
 ns.namespace('Core.Router');
 
 /**
+ * Regular expression matching all control characters used in regular
+ * expressions. The regular expression is used to match these characters in
+ * path expressions and replace them appropriately so the path expression can
+ * be compiled to a regular expression.
+ *
+ * @const
+ * @property
+ * @type {RegExp}
+ */
+const CONTROL_CHARACTERS_REGEXP = /[\\.+*?\^$\[\](){}\/\'#]/g;
+
+/**
+ * Regular expression used to match and remove the strating and trailing
+ * forward slashes from a path expression or a URL path.
+ *
+ * @const
+ * @property
+ * @type {RegExp}
+ */
+const LOOSE_SLASHES_REGEXP = /^\/|\/$/g;
+
+/**
+ * Regular expression used to match the parameter names from a path expression.
+ *
+ * @const
+ * @property PARAMS_REGEXP
+ * @type {RegExp}
+ */
+const PARAMS_REGEXP = /:([a-zA-Z0-9_-]*)/g;
+
+/**
+ * Utility for representing and manipulating a single route in the router's
+ * configuration.
+ *
  * @class Route
  * @namespace Core.Router
  * @module Core
  * @submodule Core.Router
  */
-class Route{
+class Route {
 
 	/**
-	 * @method constructor
+	 * Initializes the route.
+	 *
 	 * @constructor
-	 * @param {string} name
-	 * @param {string} pathExpression
-	 * @param {string} controller
-	 * @param {string} view
+	 * @method constructor
+	 * @param {string} name The unique name of this route, identifying it among
+	 *        the rest of the routes in the application.
+	 * @param {string} pathExpression A path expression specifying the URL path
+	 *        part matching this route (must not contain a query string),
+	 *        optionally containing named parameter placeholders specified as
+	 *        {@code :parameterName}.
+	 * @param {string} controller The full name of Object Container alias
+	 *        identifying the controller associated with this route.
+	 * @param {string} view The full name or Object Container alias identifying
+	 *        the view class associated with this route.
 	 */
 	constructor(name, pathExpression, controller, view) {
-		/**
-		 * @property ESCAPED_CHARS_REGEXP
-		 * @const
-		 * @type {RegExp}
-		 * @default new RegExp('[\\.+*?\^$\[\](){}\/'#]','g')
-		 */
-		this.ESCAPED_CHARS_REGEXP = new RegExp('[\\.+*?\^$\[\](){}\/\'#]','g');
 
 		/**
-		 * @property LOOSE_SLASHES_REGEXP
-		 * @const
-		 * @type {RegExp}
-		 * @default new RegExp('^\/|\/$','g')
-		 */
-		this.LOOSE_SLASHES_REGEXP = new RegExp('^\/|\/$','g');
-
-		/**
-		 * @property PARAMS_REGEXP
-		 * @const
-		 * @type {RegExp}
-		 * @default new RegExp(':([a-zA-Z0-9_-]*)', 'g')
-		 */
-		this.PARAMS_REGEXP = new RegExp(':([a-zA-Z0-9_-]*)', 'g');
-
-		/**
-		 * @property _name
+		 * The unique name of this route, identifying it among the rest of the
+		 * routes in the application.
+		 *
 		 * @private
+		 * @property _name
 		 * @type {string}
-		 * @default name
 		 */
 		this._name = name;
 
 		/**
-		 * @property _pathExpression
+		 * The original URL path expression from which this route was created.
+		 *
 		 * @private
+		 * @property _pathExpression
 		 * @type {string}
-		 * @default pathExpression
 		 */
 		this._pathExpression = pathExpression;
 
 		/**
-		 * @property _loosesPathExpression
+		 * The full name of Object Container alias identifying the controller
+		 * associated with this route.
+		 *
 		 * @private
-		 * @type {string}
-		 * @default this._getLoosesPath(this._pathExpression)
-		 */
-		this._loosesPathExpression = this._getLoosesPath(this._pathExpression);
-
-
-		/**
 		 * @property _controller
-		 * @private
 		 * @type {string}
-		 * @default controller
 		 */
 		this._controller = controller;
 
 		/**
-		 * @property _view
+		 * The full name or Object Container alias identifying the view class
+		 * associated with this route.
+		 *
 		 * @private
+		 * @property _view
 		 * @type {Vendor.React.Component}
-		 * @default view
 		 */
 		this._view = view;
 
 		/**
-		 * @property _isParamsInPathExpression
+		 * The path expression with the trailing slashes trimmed.
+		 *
 		 * @private
-		 * @type {Boolean}
+		 * @property _trimmedPathExpression
+		 * @type {string}
 		 */
-		this._isParamsInPathExpression = !!this._pathExpression.match(this.PARAMS_REGEXP);
+		this._trimmedPathExpression = this._getTrimmedPath(pathExpression);
 
 		/**
-		 * @property _regular
+		 * The names of the parameters in this route.
+		 *
 		 * @private
-		 * @type {string}
-		 * @default ''
+		 * @property _parameterNames
+		 * @type {string[]}
 		 */
-		this._regular = '';
+		this._parameterNames = this._getParameterNames(pathExpression);
 
-		this._createRegularExpression();
+		/**
+		 * Set to {@code true} if this route contains parameters in its path.
+		 *
+		 * @private
+		 * @property _hasParameters
+		 * @type {boolean}
+		 */
+		this._hasParameters = !!this._parameterNames.length;
+
+		/**
+		 * A regexp used to match URL path against this route and extract the
+		 * parameter values from the matched URL paths.
+		 *
+		 * @private
+		 * @property _matcher
+		 * @type {RegExp}
+		 */
+		this._matcher = this._compileToRegExp(this._trimmedPathExpression);
 	}
 
 	/**
-	 * Create path for params.
+	 * Creates the URL and query parts of a URL by substituting the route's
+	 * parameter placeholders by the provided parameter value.
 	 *
-	 * @method createPathForParams
-	 * @param {Object} [params=[]]
+	 * The extraneous parameters that do not match any of the route's
+	 * placeholders will be appended as the query string.
+	 *
+	 * @method toPath
+	 * @param {Object<string, (number|string)>} [params={}] The route parameter
+	 *        values.
+	 * @return {string} Path and, if neccessary, query parts of the URL
+	 *         representing this route with its parameters replaced by the
+	 *         provided parameter values.
 	 */
-	createPathForParams(params = {}) {
+	toPath(params = {}) {
 		var path = this._pathExpression;
-		var paramKeys = Object.keys(params);
 		var query = [];
 
-		for (var paramKey of paramKeys) {
-			var reg = new RegExp(`:${paramKey}`, 'g');
-
-			if (reg.test(path)) {
-				path = path.replace(reg, params[paramKey]);
+		for (var paramName of Object.keys(params)) {
+			if (path.indexOf(`:${paramName}`) > -1) {
+				path = path.replace(`:${paramName}`, params[paramName], 'g');
 			} else {
-				query.push(`${[encodeURIComponent(paramKey)]}=${encodeURIComponent(params[paramKey])}`);
+				var pair = [paramName, params[paramName]].map(encodeURIComponent);
+				query.push(pair.join('='));
 			}
 		}
 
-		path = query.length === 0 ? path : path + '?' + query.join('&');
-		path = path.replace(/\/$/, '');
+		path = query.length ? (path + '?' + query.join('&')) : path;
+		path = this._getTrimmedPath(path);
 
 		return path;
 	}
 
 	/**
-	 * Return controller name.
+	 * Returns the unique identifying name of this route.
 	 *
 	 * @method getName
-	 * @return {string}
+	 * @return {string} The name of the route, identifying it.
 	 */
 	getName() {
 		return this._name;
 	}
 
 	/**
-	 * Returns name of controller.
+	 * Returns the full name of the controller to use when this route is matched
+	 * by the current URL, or an Object Container-registered alias of the
+	 * controller.
 	 *
 	 * @method getController
-	 * @return {string}
+	 * @return {string} The name of alias of the controller.
 	 */
 	getController() {
 		return this._controller;
 	}
 
 	/**
-	 * Returns view.
+	 * Returns the full name of the view class or an Object Container-registered
+	 * alias for the view class, representing the view to use when this route is
+	 * matched by the current URL.
 	 *
 	 * @method getView
-	 * @return {string}
+	 * @return {string} The name or alias of the view class.
 	 */
 	getView() {
 		return this._view;
 	}
 
 	/**
-	 * Return defined path expression.
+	 * Returns the path expression, which is the parametrized pattern matching
+	 * the URL paths matched by this route.
 	 *
 	 * @method getPathExpression
-	 * @return {string}
+	 * @return {string} The path expression.
 	 */
 	getPathExpression() {
 		return this._pathExpression;
 	}
 
 	/**
-	 * Return regular expression for path.
+	 * Tests whether the provided URL path matches this route. The provided path
+	 * may contain the query.
 	 *
-	 * @method getRegular
-	 * @return {string}
+	 * @method matches
+	 * @param {string} path The URL path.
+	 * @return {boolean} {@code true} if the provided path matches this route.
 	 */
-	getRegular() {
-		return this._regular;
+	matches(path) {
+		var trimmedPath = this._getTrimmedPath(path);
+		return this._matcher.test(trimmedPath);
 	}
 
 	/**
-	 * Return true if path is matched with regular expression.
+	 * Extracts the parameter values from the provided path. The method extracts
+	 * both the in-path parameters and parses the query, allowing the query
+	 * parameters to override the in-path parameters.
 	 *
-	 * @method isMatch
-	 * @return {Boolean}
-	 */
-	isMatch(path) {
-		path = this._getLoosesPath(path);
-		return !!path.match(this._regular);
-	}
-
-	/**
-	 * Return params for path.
+	 * The method returns an empty hash object if the path does not match this
+	 * route.
 	 *
-	 * @method getParamsForPath
-	 * @return {Object}
-	 */
-	getParamsForPath(path) {
-		var params = {};
-
-		var loosesPath = this._getLoosesPath(path);
-		this._parseArguments(loosesPath, params);
-		this._parseQuery(loosesPath, params);
-
-		return params;
-	}
-
-	/**
-	 * Create regular expression for path.
-	 *
-	 * @method _createRegularExpression
-	 * @private
-	 */
-	_createRegularExpression() {
-		this._regular  = this._pathExpression.replace(this.LOOSE_SLASHES_REGEXP, '');
-		this._regular = this._regular.replace(this.ESCAPED_CHARS_REGEXP, '\\$&');
-
-		// replace params in path expression
-		this._regular = `^/${this._regular.replace(this.PARAMS_REGEXP, '([^/?]+)')}`;
-
-		//adjust / => \/
-		this._regular = this._regular.replace(/\//g, '\\\/');
-
-		this._regular += '(?:\\?(?:.+=.+)(?:&.+=.+)*)?$';
-	}
-
-	/**
-	 * Parse path and set params arguments from path.
-	 *
-	 * @method _parseArguments
-	 * @private
+	 * @method extractParameters
 	 * @param {string} path
-	 * @param {Object} params
+	 * @return {Object<string, ?string>} Map of parameter names to parameter
+	 *         values.
 	 */
-	_parseArguments(path, params) {
-		var paramsValue = path.match(this._regular);
-		var paramsKey = this._loosesPathExpression.match(this._regular);
+	extractParameters(path) {
+		var trimmedPath = this._getTrimmedPath(path);
+		var parameters = this._getParameters(trimmedPath);
+		var query = this._getQuery(trimmedPath);
 
-		if (this._isParamsInPathExpression && paramsValue && paramsKey) {
+		return Object.assign({}, parameters, query);
+	}
 
-			for (var i = 0; i < paramsKey.length; i++) {
+	/**
+	 * Compiles the path expression to a regular expression that can be used for
+	 * easier matching of URL paths against this route, and extracting the path
+	 * parameter values from the URL path.
+	 *
+	 * @private
+	 * @method _compileToRegExp
+	 * @param {string} pathExpression The path expression to compile.
+	 * @return {RegExp} The compiled regular expression.
+	 */
+	_compileToRegExp(pathExpression) {
+		var pattern = pathExpression
+			.replace(LOOSE_SLASHES_REGEXP, '')
+			.replace(CONTROL_CHARACTERS_REGEXP, '\\$&');
 
-				if (paramsKey[i] && paramsKey[i] !== this._loosesPathExpression) {
-					var key = paramsKey[i].replace(':', '');
-					var value = decodeURIComponent(paramsValue[i]);
-					params[key] = value;
-				}
+		// convert parameters to capture sequences
+		pattern = pattern.replace(PARAMS_REGEXP, '([^/?]+)');
 
+		// add path root
+		pattern = '^/' + pattern;
+
+		// add query parameters matcher
+		pattern += '(?:\\?(?:[^=&]*(?:=[^&]*)?)(?:[&;][^=&]*(?:=[^&]*)?)*)?$';
+
+		return new RegExp(pattern);
+	}
+
+	/**
+	 * Parses the provided path and extract the in-path parameters. The method
+	 * decodes the parameters and returns them in a hash object.
+	 *
+	 * @private
+	 * @method _getParameters
+	 * @param {string} path The URL path.
+	 * @return {Object<string, string>} The parsed path parameters.
+	 */
+	_getParameters(path) {
+		if (!this._hasParameters) {
+			return {};
+		}
+
+		var parameterValues = path.match(this._matcher);
+		if (!parameterValues) {
+			return {};
+		}
+
+		var parameters = {};
+		parameterValues.shift(); // remove the match on whole path
+		for (var parameterName of this._parameterNames) {
+			var decodedValue = decodeURIComponent(parameterValues.shift());
+			parameters[parameterName] = decodedValue;
+		}
+
+		return parameters;
+	}
+
+	/**
+	 * Extracts and decodes the query parameters from the provided URL path and
+	 * query.
+	 *
+	 * @private
+	 * @method _getQuery
+	 * @param {string} path The URL path, including the optional query string (if
+	 *        any).
+	 * @return {Object<string, ?string>} Parsed query parameters.
+	 */
+	_getQuery(path) {
+		var query = {};
+		var queryStart = path.indexOf('?');
+		var hasQuery = (queryStart > -1) && (queryStart !== (path.length - 1));
+
+		if (hasQuery) {
+			var pairs = path.substring(queryStart + 1).split('&');
+
+			for (var parameterPair of pairs) {
+				var pair = parameterPair.split('=');
+				query[decodeURIComponent(pair[0])] =
+					decodeURIComponent(pair[1] || null);
 			}
 		}
+
+		return query;
 	}
 
 	/**
-	 * Parse path and set params query from path.
+	 * Trimms the trailing forward slash from the provided URL path.
 	 *
-	 * @method _parseQuery
 	 * @private
-	 * @param {string} path
-	 * @param {Object} params
-	 */
-	_parseQuery(path, params) {
-		var queryMatched = path.match(/\?(.*)$/);
-
-		if (queryMatched && queryMatched[1]) {
-			var queryPairs = queryMatched[1].split('&');
-
-			for (var query of queryPairs) {
-				var pair = query.split('=');
-				params[decodeURIComponent(pair[0])] = decodeURIComponent(pair[1]);
-			}
-		}
-	}
-
-	/**
-	 * Return looses path for last one slash.
-	 *
 	 * @method getLoosesPath
-	 * @private
-	 * @param {string} path
-	 * @return {string}
+	 * @param {string} path The path to trim.
+	 * @return {string} Trimmed path.
 	 */
-	_getLoosesPath(path) {
-		return `/${path.replace(this.LOOSE_SLASHES_REGEXP, '')}`;
+	_getTrimmedPath(path) {
+		return `/${path.replace(LOOSE_SLASHES_REGEXP, '')}`;
 	}
 
+	/**
+	 * Extracts the parameter names from the provided path expression.
+	 *
+	 * @private
+	 * @method _getParameterNames
+	 * @param {string} pathExpression The path expression.
+	 * @return {string[]} The names of the parameters defined in the provided
+	 *         path expression.
+	 */
+	_getParameterNames(pathExpression) {
+		var rawNames = pathExpression.match(PARAMS_REGEXP) || [];
+
+		return rawNames.map(rawParameterName => rawParameterName.substring(1));
+	}
 }
 
 ns.Core.Router.Route = Route;

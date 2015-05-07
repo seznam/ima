@@ -4,15 +4,15 @@ describe('Core.Router.Client', function() {
 	var pageRender = null;
 	var routerFactory = null;
 	var win = null;
-	var Promise = oc.get('$Promise');
 	var domain = 'locahlost:3002';
 	var protocol = 'http:';
+	var ROUTE_NAMES = oc.get('$ROUTE_NAMES');
 
 	beforeEach(function() {
 		pageRender = oc.make('$PageRender');
 		routerFactory = oc.make('$RouterFactory');
 		win = oc.get('$Window');
-		router = oc.create('Core.Router.Client', pageRender, routerFactory, Promise, win);
+		router = oc.create('Core.Router.Client', pageRender, routerFactory, ROUTE_NAMES, win);
 		router.init({$Domain: domain, $Protocol: protocol});
 	});
 
@@ -26,13 +26,18 @@ describe('Core.Router.Client', function() {
 		expect(win.getPath).toHaveBeenCalled();
 	});
 
-	it('should be add listener to popState event and click event', function() {
+	it('should be add listener to popState event, click event and add first page state to history', function() {
 		spyOn(win, 'bindEventListener')
+			.and
+			.stub();
+
+		spyOn(router, '_setAddressBar')
 			.and
 			.stub();
 
 		router.listen();
 
+		expect(router._setAddressBar).toHaveBeenCalled();
 		expect(win.bindEventListener.calls.count()).toEqual(2);
 	});
 
@@ -51,7 +56,7 @@ describe('Core.Router.Client', function() {
 
 			router.redirect(url);
 
-			expect(router._setAddressBar).toHaveBeenCalledWith(url);
+			//expect(router._setAddressBar).toHaveBeenCalledWith(url);
 			expect(router.route).toHaveBeenCalledWith(path);
 		});
 
@@ -62,13 +67,13 @@ describe('Core.Router.Client', function() {
 				.and
 				.stub();
 
-			router.redirect('http://example.com/somePath');
+			router.redirect(url);
 
 			expect(win.redirect).toHaveBeenCalledWith(url);
 		});
 	});
 
-	describe('houte method', function() {
+	describe('route method', function() {
 
 		it('should be call handleError for throwing error in super.router', function(done) {
 			spyOn(router, 'handleError')

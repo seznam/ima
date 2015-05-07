@@ -19,14 +19,12 @@ class Proxy {
 	 * @constructor
 	 * @param {Vendor.SuperAgent} superAgent SuperAgent instance to use for
 	 *        sending the HTTP requests.
-	 * @param {function(new:Vendor.RSVP.Promise)} Promise Constructor of the
-	 *        Promise implementation to use for promises.
 	 * @param {Object} HTTP_STATUS_CODE
 	 * @param {Core.Interface.Window} window Helper for manipulating the global
 	 *        object ({@code window}) regardless of the client/server-side
 	 *        environment.
 	 */
-	constructor(superAgent, Promise, HTTP_STATUS_CODE, window) {
+	constructor(superAgent, HTTP_STATUS_CODE, window) {
 		/**
 		 * SuperAgent instance to use for sending the HTTP requests, providing
 		 * uniform API across both the client-side and the server-side
@@ -37,15 +35,6 @@ class Proxy {
 		 * @type {Vendor.SuperAgent}
 		 */
 		this._superAgent = superAgent;
-
-		/**
-		 * Constructor of the Promise implementation to use for promises.
-		 *
-		 * @property _Promise
-		 * @private
-		 * @type {function(new:Vendor.RSVP.Promise)}
-		 */
-		this._Promise = Promise;
 
 		/**
 		 * HTTP status code constants.
@@ -98,7 +87,7 @@ class Proxy {
 	 */
 	request(method, url, data, options) {
 		return (
-			new this._Promise((resolve, reject) => {
+			new Promise((resolve, reject) => {
 
 				var params = this._composeRequestParams(method, url, data, options);
 

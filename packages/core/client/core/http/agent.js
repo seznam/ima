@@ -29,8 +29,6 @@ class Agent extends ns.Core.Interface.HttpAgent {
 	 * @param {Core.Cache.Handler} cache Cache to use for caching ongoing and
 	 *        completed requests.
 	 * @param {Core.Storage.Cookie} cookie The cookie storage to use internally.
-	 * @param {function(new:Vendor.RSVP.Promise)} Promise Constructor of Promise
-	 *        implementation.
 	 * @param {Object<string, *>} config Configuration of the HTTP handler for
 	 *        the current application environment, specifying the various default
 	 *        request option values.
@@ -53,7 +51,7 @@ class Agent extends ns.Core.Interface.HttpAgent {
 	 *          .setDefaultHeader('Accept-Language', 'cs')
 	 *          .clearDefaultHeaders();
 	 */
-	constructor(proxy, cache, cookie, Promise, config) {
+	constructor(proxy, cache, cookie, config) {
 		super();
 
 		/**
@@ -84,15 +82,6 @@ class Agent extends ns.Core.Interface.HttpAgent {
 		 * @type {Core.Storage.Cookie}
 		 */
 		this._cookie = cookie;
-
-		/**
-		 * Constructor of the Promise class implementation to use.
-		 *
-		 * @property _Promise
-		 * @private
-		 * @type {function(new:Vendor.RSVP.Promise)}
-		 */
-		this._Promise = Promise;
 
 		/**
 		 * Cache key prefix for response bodies (already parsed as JSON) of
@@ -347,7 +336,7 @@ class Agent extends ns.Core.Interface.HttpAgent {
 		if (this._cache.has(responseCacheKey)) {
 			var cacheData = this._cache.get(responseCacheKey);
 
-			return this._Promise.resolve(cacheData);
+			return Promise.resolve(cacheData);
 		}
 
 		return null;
@@ -454,7 +443,7 @@ class Agent extends ns.Core.Interface.HttpAgent {
 			var errorName = errorParams.errorName;
 			var errorMessage = `${errorName}: Core.Http.Agent:_proxyRejected`
 			var error = new CoreError(errorMessage, errorParams)
-			return this._Promise.reject(error);
+			return Promise.reject(error);
 		}
 	}
 

@@ -32,9 +32,9 @@ class Controller {
 	 * automatically when the controller instance is destroyed by the garbage
 	 * collector.
 	 *
-	 * @method deinit
+	 * @method destroy
 	 */
-	deinit() {}
+	destroy() {}
 
 	/**
 	 * Callback for activating the controller in the UI. This is the last method

@@ -3,10 +3,35 @@ import ns from 'imajs/client/core/namespace.js';
 ns.namespace('Core.Storage');
 
 /**
- * Cookie storage.
+ * Implementation note: while this is not the largest possible value for a
+ * {@code Date} instance, it is considered "safe enough", because we don't
+ * expect this code to be around by the year 10 000. For those whom it might be
+ * of intereset, the largest value we know of is
+ * {@code new Date('Sat Sep 13 275760 00:00:00 GMT+0000 (UTC)')}.
+ *
+ * @const
+ * @property MAX_EXPIRE_DATE
+ * @type {Date}
+ */
+const MAX_EXPIRE_DATE = new Date('Fri, 31 Dec 9999 23:59:59 UTC');
+
+/**
+ * Separator used to separate cookie declarations in the {@code Cookie} HTTP
+ * header or the return value of the {@code document.cookie} property.
+ *
+ * @const
+ * @property COOKIE_SEPARATOR
+ * @type {string}
+ */
+const COOKIE_SEPARATOR = '; ';
+
+/**
+ * Storage of cookies, mirroring the cookies to the current request / response
+ * at the server side and the {@code document.cookie} property at the client
+ * side. The storage caches the cookies internally.
  *
  * @class Cookie
- * @extends Core.Interface.Storage
+ * @extends Core.Storage.Map
  * @namespace Core.Storage
  * @module Core
  * @submodule Core.Storage
@@ -14,76 +39,69 @@ ns.namespace('Core.Storage');
  * @requires Core.Router.Request
  * @requires Core.Router.Respond
  */
-class Cookie extends ns.Core.Interface.Storage{
-
+class Cookie extends ns.Core.Storage.Map {
 	/**
-	 * @method constructor
 	 * @constructor
-	 * @param {Core.Router.Request} request
-	 * @param {Core.Router.Response} response
-	 * @param {Boolean} secure - flag for secure cookie
+	 * @method constructor
+	 * @param {Core.Interface.Window} window The window utility.
+	 * @param {Core.Router.Request} request The current HTTP request.
+	 * @param {Core.Router.Response} response The current HTTP response.
+	 * @param {boolean} secure Flag setting the {@code secure} cookie atribute
+	 *        for all cookies set through this storage.
 	 * @example
-	 *      cookie.set('cookie', 'value', {expires: 10}); //cookie expires for 10s
-	 *      cookie.set('cookie'); //unset cookie
+	 *      cookie.set('cookie', 'value', {expires: 10}); // cookie expires after 10s
+	 *      cookie.set('cookie'); // delete cookie
 	 *
 	 */
-	constructor(request, response, secure) {
+	constructor(window, request, response, secure) {
 		super();
 
 		/**
-		 * @property _response
+		 * The window utility used to determine whether the core is being run at
+		 * the client or at the server.
+		 *
 		 * @private
-		 * @type {Core.Router.Response}
-		 * @default response
+		 * @property _window
+		 * @type {Core.Interface.Window}
 		 */
-		this._response = response;
+		this._window = window;
 
 		/**
-		 * @property _request
+		 * The current HTTP request. This field is used at the server side.
+		 *
 		 * @private
+		 * @property _request
 		 * @type {Core.Router.Request}
-		 * @default request
 		 */
 		this._request = request;
 
 		/**
-		 * @property _cookie
+		 * The current HTTP response. This field is used at the server side.
+		 *
 		 * @private
-		 * @type {Map}
-		 * @default new Map()
+		 * @property _response
+		 * @type {Core.Router.Response}
 		 */
-		this._cookie = new Map();
+		this._response = response;
 
 		/**
-		 * Array of cookies string.
+		 * Cookies in this storage serialized into string compatible with the
+		 * {@code Set-Cookie} HTTP header (each string contains only one cookie),
+		 * and "deletion" cookie strings for cookies that were deleted from this
+		 * storage.
 		 *
-		 * @property _arrayCookiesString
 		 * @private
-		 * @type {Array}
-		 * @default []
+		 * @property _arrayCookiesString
+		 * @type {string[]}
 		 */
 		this._arrayCookiesString = [];
 
 		/**
-		 * @property _cookieSeparotor
+		 * The overriding cookie attribute values.
+		 *
 		 * @private
-		 * @type {String}
-		 * @default '; '
-		 */
-		this._cookieSeparotor = '; ';
-
-		/**
-		 * @property MAX_EXPIRE_DATE
-		 * @type {Date}
-		 * @const
-		 * @default new Date('Fri, 31 Dec 9999 23:59:59 UTC')
-		 */
-		this.MAX_EXPIRE_DATE = new Date('Fri, 31 Dec 9999 23:59:59 UTC');
-
-		/**
 		 * @property options
-		 * @private
-		 * @type {Object}
+		 * @type {{path: string, secure: boolean}}
 		 */
 		this._options = {
 			path: '/',
@@ -92,161 +110,165 @@ class Cookie extends ns.Core.Interface.Storage{
 	}
 
 	/**
-	 * Initialization cookie.
+	 * This method is used to finalize the initialization of the storage after
+	 * the dependencies provided through the constructor are ready to be used.
 	 *
+	 * This method must be invoked only once and it must be the first method
+	 * invoked on this instance.
+	 *
+	 * @inheritdoc
+	 * @override
+	 * @chainable
 	 * @method init
+	 * @return {Core.Interface.Storage}
 	 */
 	init() {
 		this._parse();
 	}
 
 	/**
-	 * Clear all cookies.
+	 * Returns {@code true} if the specified cookie exists in this storage.
 	 *
-	 * @method clear
-	 * @chainable
-	 */
-	clear() {
-		for (var cookieName of this._cookie.keys()) {
-			this.delete(cookieName);
-		}
-
-		this._cookie.clear();
-
-		return this;
-	}
-
-	/**
-	 * Return true if cookie exist.
+	 * Note that the method checks only for cookies known to this storage, it
+	 * does not check for cookies set using other means (for example by
+	 * manipulating the {@code document.cookie} property).
 	 *
+	 * @override
 	 * @method has
-	 * @param {String} name
-	 * @return {Boolean}
+	 * @param {string} name The name of the cookie to test for existence.
+	 * @return {boolean} {@code true} if the specified cookie exists in this
+	 *         storage.
 	 */
 	has(name) {
-		return this._cookie.has(name);
+		return super.has(name);
 	}
 
 	/**
-	 * Return value from storage for name.
+	 * Returns the value of the specified cookie from the storage. The method
+	 * returns {@code undefined} if the cookie does not exist.
 	 *
+	 * @override
 	 * @method get
-	 * @param {String} name
-	 * @return {*}
+	 * @param {string} name The cookie name.
+	 * @return {(undefined|string)} The value of the cookie, or {@code undefined}
+	 *         if the cookie does not exist.
 	 */
 	get(name) {
-		return this._cookie.get(name);
+		return super.get(name);
 	}
 
 	/**
 	 * Set cookie for name.
 	 *
-	 * @method set
+	 * @override
 	 * @chainable
-	 * @param {String} name
-	 * @param {*} value
-	 * @param {Object} [options={}] possibility options keys {path, secure, domain, expires}
+	 * @method set
+	 * @param {string} name The cookie name.
+	 * @param {(boolean|number|string)} value The cookie value, will be converted
+	 *        to string.
+	 * @param {{domain: string=, expires: (number|string)=}} [options={}]
+	 *        Cookie attributes. Only the attributes listed in the type
+	 *        annotation of this field are supported. For documentation and full
+	 *        list of cookie attributes see
+	 *        http://tools.ietf.org/html/rfc2965#page-5
+	 * @return {Core.Storage.Cookie} This storage.
 	 */
 	set(name, value, options = {}) {
 		options = Object.assign(options, this._options);
-		options.expires = this._getExpiresDate(value === undefined ? -1 : options.expires);
+		var expiration = value === undefined ? -1 : options.expires;
+		options.expires = this._getExpirationAsDate(expiration);
 
 		var cookieString = this._generateCookieString(name, value, options);
 
 		this._arrayCookiesString.push(cookieString);
 
-		if (this._response.isEnabled()) {
-			this._response.setCookie(name, value, options);
-		} else {
+		if (this._window.isClient()) {
 			document.cookie = cookieString;
+		} else {
+			this._response.setCookie(name, value, options);
 		}
-		this._cookie.set(name, value);
+		super.set(name, value + '');
+
 		return this;
 	}
 
 	/**
-	 * Delete cookie for name.
+	 * Deletes the the specified cookie from this storage, the current response
+	 * and / or the browser.
 	 *
-	 * @method delete
+	 * @override
 	 * @chainable
-	 * @param {String} name
+	 * @method delete
+	 * @param {string} name The name of the cookie to delete.
+	 * @return {Core.Storage.Cookie} This storage.
 	 */
 	delete(name) {
 		if (this.has(name)) {
 			this.set(name);
-			this._cookie.delete(name);
+			super.delete(name);
 		}
 
 		return this;
 	}
 
 	/**
-	 * Return all defined cookie keys.
+	 * Deletes all cookies from this storage, the current response and / or the
+	 * browser.
 	 *
+	 * @override
+	 * @chainable
+	 * @method clear
+	 * @return {Core.Storage.Cookie} This storage.
+	 */
+	clear() {
+		for (var cookieName of super.keys()) {
+			this.delete(cookieName);
+		}
+
+		return super.clear();
+	}
+
+	/**
+	 * Returns the names of all cookies in this storage.
+	 *
+	 * @override
 	 * @method keys
-	 * return {Iterable}
+	 * @return {Iterator<string>} An iterator for traversing the keys in this
+	 *         storage. The iterator also implements the iterable protocol,
+	 *         returning itself as its own iterator, allowing it to be used in a
+	 *         {@code for..of} loop.
 	 */
 	keys() {
-		return this._cookie.keys();
+		return super.keys();
 	}
 
 	/**
-	 * Get cookies string.
+	 * Returns all cookies in this storage serialized to a string compatible with
+	 * the {@code Set-Cookie} HTTP header and the setter of the
+	 * {@code document.cookie} property.
 	 *
 	 * @method getCookiesString
-	 * @return {String}
+	 * @return {string} All cookies in this storage serialized to a string
+	 *         compatible with the {@code Set-Cookie} HTTP header.
 	 */
 	getCookiesString() {
-		return this._arrayCookiesString.join(this._cookieSeparotor);
+		return this._arrayCookiesString.join(COOKIE_SEPARATOR);
 	}
 
 	/**
-	 * Parse cookie from source.
+	 * Parses cookies from the provided {@code Set-Cookie} HTTP header value.
 	 *
-	 * @method _parse
-	 * @private
-	 */
-	_parse() {
-		var cookiesString = this._request.isEnabled() ? this._request.getCookie() : document.cookie;
-		var cookiesArray = cookiesString ? cookiesString.split(this._cookieSeparotor) : [];
-
-		this._arrayCookiesString = cookiesArray;
-
-		for (var i = 0; i < cookiesArray.length; i++) {
-			this._parseKeyValueFromCookieString(cookiesArray[i]);
-		}
-	}
-
-	/**
-	 * Parse key and value from cookie string.
-	 *
-	 * @method _parseKeyValueFromCookieString
-	 * @private
-	 * @param {String} cookieString
-	 */
-	_parseKeyValueFromCookieString(cookieString) {
-		var separatorIndexEqual = cookieString.indexOf('=');
-		var separatorIndexSemicolon = cookieString.indexOf(';');
-
-		separatorIndexSemicolon = separatorIndexSemicolon < 0 ? (cookieString.length - separatorIndexEqual - 1) : (separatorIndexSemicolon - separatorIndexEqual -1);
-
-		if (separatorIndexEqual > 0) {
-			var name = decodeURIComponent(cookieString.substr(0, separatorIndexEqual));
-			var value = decodeURIComponent(cookieString.substr(separatorIndexEqual + 1, separatorIndexSemicolon));
-
-			this._cookie.set(name, value);
-		}
-	}
-
-	/**
-	 * Parse cookie from header Set-Cookie.
+	 * The parsed cookies will be set to the internal storage, and the current
+	 * HTTP response (via the {@code Set-Cookie} HTTP header) if at the server
+	 * side, or the browser (via the {@code document.cookie} property).
 	 *
 	 * @method parseFromSetCookieHeader
-	 * @param {String} setCookieHeader
+	 * @param {string} setCookieHeader The value of the {@code Set-Cookie} HTTP
+	 *        header.
 	 */
 	parseFromSetCookieHeader(setCookieHeader) {
 		var cookieOptions = this._options;
-		cookieOptions.expires = this.MAX_EXPIRE_DATE;
+		cookieOptions.expires = MAX_EXPIRE_DATE;
 		cookieOptions.httpOnly = false;
 
 		var cookiePairs = setCookieHeader.split('; ');
@@ -254,9 +276,14 @@ class Cookie extends ns.Core.Interface.Storage{
 		var cookieValue = null;
 
 		cookiePairs.forEach((pair) => {
-			var separatorIndexEqual =  pair.indexOf('=');
-			var name = decodeURIComponent(this._firstLetterToLowerCase(pair.substr(0, separatorIndexEqual)));
-			var value = decodeURIComponent(pair.substr(separatorIndexEqual + 1));
+			var separatorIndexEqual = pair.indexOf('=');
+
+			var parts = [
+				this._firstLetterToLowerCase(pair.substring(0, separatorIndexEqual)),
+				pair.substring(separatorIndexEqual + 1)
+			];
+
+			var [name, value] = parts.map(decodeURIComponent);
 
 			if (cookieOptions[name]) {
 				var cookieExpires = new Date(value);
@@ -277,25 +304,94 @@ class Cookie extends ns.Core.Interface.Storage{
 	}
 
 	/**
-	 * Return string with first letter lower case.
+	 * Parses cookies from a cookie string and sets the parsed cookies to the
+	 * internal storage.
 	 *
-	 * @method _firstLetterToLowerCase
+	 * The method obtains the cookie string from the request's {@code Cookie}
+	 * HTTP header when used at the server side, and the {@code document.cookie}
+	 * property at the client side.
+	 *
 	 * @private
-	 * @param {String} world
+	 * @method _parse
 	 */
-	_firstLetterToLowerCase(world) {
-		return world.charAt(0).toLowerCase() + world.slice(1);
+	_parse() {
+		var cookiesString = this._window.isClient() ?
+			document.cookie : this._request.getCookieHeader();
+		var cookiesArray = cookiesString ?
+			cookiesString.split(COOKIE_SEPARATOR) : [];
+
+		this._arrayCookiesString = cookiesArray;
+
+		for (var i = 0; i < cookiesArray.length; i++) {
+			this._parseKeyValueFromCookieString(cookiesArray[i]);
+		}
 	}
 
 	/**
-	 * Return cookie string.
+	 * Parses the string representing a single cookie and sets the cookie to the
+	 * internal cookie storage.
 	 *
-	 * @method _generateCookieString
 	 * @private
-	 * @param {String} name
-	 * @param {*} value
-	 * @param {Object} options
-	 * @return {String}
+	 * @method _parseKeyValueFromCookieString
+	 * @param {string} cookieString A string containing the definintion of a
+	 *        single cookie, as used in the {@code Cookie} HTTP header or the
+	 *        value returned by the {@code document.cookie} property.
+	 */
+	_parseKeyValueFromCookieString(cookieString) {
+		var assignIndex = cookieString.indexOf('=');
+		var semicolonIndex = cookieString.indexOf(';');
+
+		semicolonIndex = semicolonIndex < 0 ?
+			cookieString.length : semicolonIndex;
+
+		if (assignIndex > 0) {
+			var parts = [
+				cookieString.substring(0, assignIndex),
+				cookieString.substring(assignIndex + 1, semicolonIndex)
+			];
+
+			var [name, value] = parts.map(decodeURIComponent);
+
+			super.set(name, value);
+		}
+	}
+
+	/**
+	 * Creates a copy of the provided word (or text) that has its first character
+	 * converted to lower case.
+	 *
+	 * @private
+	 * @method _firstLetterToLowerCase
+	 * @param {string} word The word (or any text) that should have its first
+	 *        character converted to lower case.
+	 * @return {string} A copy of the provided string with its first character
+	 *         converted to lower case.
+	 */
+	_firstLetterToLowerCase(word) {
+		return word.charAt(0).toLowerCase() + word.substring(1);
+	}
+
+	/**
+	 * Generates a string representing the specified cookied, usable either with
+	 * the {@code document.cookie} property or the {@code Set-Cookie} HTTP
+	 * header.
+	 *
+	 * (Note that the {@code Cookie} HTTP header uses a slightly different
+	 * syntax.)
+	 *
+	 * @private
+	 * @method _generateCookieString
+	 * @param {string} name The cookie name.
+	 * @param {(boolean|number|string)} value The cookie value, will be converted
+	 *        to string.
+	 * @param {{path: string=, domain: string=, expires: (number|string)=, secure: boolean=}} options
+	 *        Cookie attributes. Only the attributes listed in the type
+	 *        annotation of this field are supported. For documentation and full
+	 *        list of cookie attributes see
+	 *        http://tools.ietf.org/html/rfc2965#page-5
+	 * @return {string} A string representing the cookie. Setting this string to
+	 *         the {@code document.cookie} property will set the cookie to the
+	 *         browser's cookie storage.
 	 */
 	_generateCookieString(name, value, options) {
 		name = name.replace(/[^#$&+\^`|]/g, encodeURIComponent);
@@ -305,30 +401,29 @@ class Cookie extends ns.Core.Interface.Storage{
 		var cookieString = name + '=' + value;
 		cookieString += options.path ? ';path=' + options.path : '';
 		cookieString += options.domain ? ';domain=' + options.domain : '';
-		cookieString += options.expires ? ';expires=' + options.expires.toUTCString() : '';
+		cookieString += options.expires ?
+		';expires=' + options.expires.toUTCString() : '';
 		cookieString += options.secure ? ';secure' : '';
 
 		return cookieString;
 	}
-	
-	/**
-	 * Return expires date for cookie.
-	 *
-	 * @method _getExpiresDate
-	 * @private
-	 * @param {Number} expires - in seconds
-	 * @return {Date}
-	 */
-	_getExpiresDate(expires) {
-		var now = new Date();
 
-		if (typeof expires === 'number') {
-			expires = expires === Infinity ? this.MAX_EXPIRE_DATE : new Date(now.getTime() + expires * 1000);
-		} else {
-			expires = expires ? new Date(expires) : this.MAX_EXPIRE_DATE;
+	/**
+	 * Converts the provided cookie expiration to a {@code Date} instance.
+	 *
+	 * @private
+	 * @method _getExpirationAsDate
+	 * @param {(number|string)} expiration Cookie expiration in seconds from now,
+	 *        or as a string compatible with the {@code Date} constructor.
+	 * @return {Date} Cookie expiration as a {@code Date} instance.
+	 */
+	_getExpirationAsDate(expiration) {
+		if (typeof expiration === 'number') {
+			return expiration === Infinity ?
+				MAX_EXPIRE_DATE : new Date(Date.now() + (expiration * 1000));
 		}
 
-		return expires;
+		return expiration ? new Date(expiration) : MAX_EXPIRE_DATE;
 	}
 }
 

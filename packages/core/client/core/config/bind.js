@@ -2,8 +2,8 @@ export var init = (ns, oc, config) => { //jshint ignore:line
 
 	//**************START VENDORS**************
 	//RSVP
-	oc.bind('$Rsvp', ns.Vendor.Rsvp); //
-	oc.bind('$Promise', ns.Vendor.Rsvp.Promise);
+	oc.bind('$Helper', ns.Vendor.$Helper);
+	oc.bind('$Promise', Promise);
 	oc.bind('$BindPromise', () => {
 		return oc.get('$Promise');
 	});
@@ -29,6 +29,8 @@ export var init = (ns, oc, config) => { //jshint ignore:line
 	oc.bind('$SOCKET_CONFIG', config.$Socket);
 	oc.bind('$CACHE_CONFIG', config.$Cache);
 	oc.bind('$SECURE', config.$Protocol === 'https:' ? true: false );
+	oc.bind('$ROUTE_NAMES', ns.Core.Router.ROUTE_NAMES);
+	oc.bind('$HTTP_STATUS_CODE', ns.Core.Http.STATUS_CODE);
 	//*************END CONSTANT****************
 
 
@@ -51,14 +53,14 @@ export var init = (ns, oc, config) => { //jshint ignore:line
 	oc.bind('$Response', oc.create('Core.Router.Response'));
 
 	//Storage
-	oc.bind('$CookieStorage', oc.make('Core.Storage.Cookie', ['$Request', '$Response', '$SECURE']));
+	oc.bind('$CookieStorage', oc.make('Core.Storage.Cookie', ['$Window', '$Request', '$Response', '$SECURE']));
 	oc.bind('$SessionStorage', ns.Core.Storage.Session);
 	oc.bind('$MapStorage', ns.Core.Storage.Map);
 	oc.bind('$WeakMapStorage', ns.Core.Storage.WeakMap, [30 * 60 * 1000, 1000, 60 * 1000, 16]);
 	oc.bind('$SessionMapStorage', ns.Core.Storage.SessionMap, ['$MapStorage', '$SessionStorage']);
 
 	//Dispatcher
-	oc.bind('$Dispatcher', oc.make('Core.Event.Dispatcher', []));
+	oc.bind('$Dispatcher', oc.make('Core.Event.Dispatcher', ['$MapStorage']));
 
 	//Animate
 	//oc.bind('$Animate', oc.make('Core.Animate.Handler', ['$Dispatcher', '$BindPromise', '$Window', '$CookieStorage', '$ANIMATE_CONFIG']));
@@ -81,25 +83,26 @@ export var init = (ns, oc, config) => { //jshint ignore:line
 	oc.bind('$PageStateManager', oc.make('Core.Page.StateManager'));
 	oc.bind('$PageFactory', oc.make('Core.Page.Factory'));
 	if (oc.get('$Window').isClient()) {
-		oc.bind('$PageRender', oc.make('Core.Page.Render.Client', ['$Rsvp', '$BindReact', '$Settings', '$Window']));
+		oc.bind('$PageRender', oc.make('Core.Page.Render.Client', ['$Helper', '$BindReact', '$Settings', '$Window']));
 	} else {
-		oc.bind('$PageRender', oc.make('Core.Page.Render.Server', ['$Rsvp', '$BindReact', '$Settings', '$Response', '$Cache']));
+		oc.bind('$PageRender', oc.make('Core.Page.Render.Server', ['$Helper', '$BindReact', '$Settings', '$Response', '$Cache']));
 	}
 	oc.bind('$PageManager', oc.make('Core.Page.Manager', ['$PageFactory', '$PageRender', '$PageStateManager', '$Window']));
 
 	//Router
-	oc.bind('$RouterFactory', oc.make('Core.Router.Factory', []));
+
+	//Router
+	oc.bind('$Route', () => ns.Core.Router.Route);
+	oc.bind('$RouterFactory', oc.make('Core.Router.Factory', ['$Route']));
 	if (oc.get('$Window').isClient()) {
-		oc.bind('$Router', oc.make('Core.Router.Client', ['$PageManager', '$RouterFactory', '$BindPromise', '$Window']));
+		oc.bind('$Router', oc.make('Core.Router.Client', ['$PageManager', '$RouterFactory', '$ROUTE_NAMES', '$Window']));
 	} else {
-		oc.bind('$Router', oc.make('Core.Router.Server', ['$PageManager', '$RouterFactory', '$BindPromise', '$Request', '$Response']));
+		oc.bind('$Router', oc.make('Core.Router.Server', ['$PageManager', '$RouterFactory', '$ROUTE_NAMES', '$Request', '$Response']));
 	}
-	oc.bind('$Route', ns.Core.Router.Route);
 
 	//SuperAgent
-	oc.bind('$HTTP_STATUS_CODE', ns.Core.Http.STATUS_CODE);
-	oc.bind('$HttpProxy', oc.make('Core.Http.Proxy', ['$SuperAgent', '$BindPromise', '$HTTP_STATUS_CODE', '$Window']));
-	oc.bind('$Http', oc.make('Core.Http.Agent', ['$HttpProxy', '$Cache', '$CookieStorage', '$BindPromise', '$HTTP_CONFIG']));
+	oc.bind('$HttpProxy', oc.make('Core.Http.Proxy', ['$SuperAgent', '$HTTP_STATUS_CODE', '$Window']));
+	oc.bind('$Http', oc.make('Core.Http.Agent', ['$HttpProxy', '$Cache', '$CookieStorage', '$HTTP_CONFIG']));
 
 	//Sockets
 	//oc.bind('$SocketFactory', ns.Core.Socket.Factory, [oc.get('$Window').getWebSocket()]);

@@ -20,8 +20,7 @@ class Server extends ns.Core.Abstract.PageRender {
 	 *
 	 * @method contructor
 	 * @constructor
-	 * @param {Vendor.Rsvp} Rsvp The RSVP implementation of the Promise API and
-	 *        related helpers.
+	 * @param {Vendor.Helper} Helper The IMA.js helper methods.
 	 * @param {Vendor.React} React React framework instance to use to render the
 	 *        page.
 	 * @param {Object<string, *>} settings Application setting for the current
@@ -31,8 +30,8 @@ class Server extends ns.Core.Abstract.PageRender {
 	 * @param {Core.Interface.Cache} cache Resource cache caching the results of
 	 *        HTTP requests made by services used by the rendered page.
 	 */
-	constructor(Rsvp, React, settings, response, cache) {
-		super(Rsvp, React, settings);
+	constructor(Helper, React, settings, response, cache) {
+		super(Helper, React, settings);
 
 		/**
 		 * Utility for sending the page markup to the client as a response to the
@@ -70,8 +69,8 @@ class Server extends ns.Core.Abstract.PageRender {
 		var loadPromises = this._wrapEachKeyToPromise(controller.load());
 
 		return (
-			this._Rsvp
-				.hash(loadPromises)
+			this._Helper
+				.allPromiseHash(loadPromises)
 				.then((fetchedResources) => {
 					controller.setState(fetchedResources);
 					controller.setSeoParams(fetchedResources);
