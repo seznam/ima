@@ -29,8 +29,7 @@ module.exports = (() => {
 			$Debug: true,
 			$Language:{
 				'//localhost:3001': 'en',
-				'//127.0.0.1:3001': 'en',
-				'//10.0.133.28:3001': 'en'
+				'//127.0.0.1:3001': 'en'
 			},
 			$Server: {
 				concurency: 1
