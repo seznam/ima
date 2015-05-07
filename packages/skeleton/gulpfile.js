@@ -119,7 +119,7 @@ var files = {
 	polyfill: {
 		name: 'polyfill.js',
 		src: [
-			'./node_modules/custom-event-polyfill/custom-event-polyfill.js'
+			'./node_modules/polyfill-function-prototype-bind/bind.js'
 		],
 		dest: {
 			client: './build/static/js/'
@@ -143,6 +143,20 @@ var files = {
 			].concat(appDependency.bundle.css),
 			dest: './build/static/css/'
 		}
+	},
+	test: {
+		src: [
+			'./imajs/client/test.js',
+			'./build/static/js/polyfill.js',
+			'./build/static/js/shim.js',
+			'./build/static/js/vendor.client.js',
+			'./build/static/js/locale/cs.js',
+			'./build/static/js/app.client.js',
+			'./app/test/**/*.js',
+			'./app/test/*.js',
+			'./imajs/client/test/**/*.js',
+			'./imajs/client/test/*.js'
+		]
 	}
 };
 
@@ -203,6 +217,10 @@ var documentationPreprocessors = [
 	{
 		pattern: /\/[*][*]((?:a|[^a])*?)@(type|param|return)\s*[{]([^}]*?)([a-zA-Z0-9_.]+)\[\]([^}]*)[}]((a|[^a])*)[*]\//g,
 		replace: '/**$1@$2 {$3Array<$4>$5}$6*/'
+	},
+	{
+		pattern: /\/[*][*]((?:a|[^a])*?)(?: |\t)*[*]\s*@template\s*.*\n((a|[^a])*)[*]\//g,
+		replace: '/**$1$2*/'
 	}
 ];
 
@@ -231,9 +249,8 @@ gulp.task('build', function(callback) {
 });
 
 gulp.task('test', function() {
-	var testFiles = [];
 	// Be sure to return the stream
-	return gulp.src(testFiles)
+	return gulp.src(files.test.src)
 		.pipe(karma({
 			configFile: './karma.conf.js',
 			action: 'run'
@@ -340,18 +357,8 @@ gulp.task('server:reload', function(callback) {
 });
 
 gulp.task('devTest', function() {
-	var testFiles = [
-		'./imajs/client/test.js',
-		'./build/static/js/shim.js',
-		'./build/static/js/vendor.client.js',
-		'./build/static/js/locale/cs.js',
-		'./build/static/js/app.client.js',
-		'./app/test/**/*.js',
-		'./app/test/*.js',
-		'./imajs/client/test/**/*.js',
-		'./imajs/client/test/*.js'
-	];
-	return gulp.src(testFiles)
+
+	return gulp.src(files.test.src)
 		.pipe(karma({
 			configFile: './karma.conf.js',
 			action: 'watch'
@@ -520,7 +527,7 @@ gulp.task('vendor:client', function() {
 			.external('vertx')
 			.bundle()
 			.pipe(source(files.vendor.name.client))
-			.pipe(gutil.env.type === 'production' ? uglify() : gutil.noop())
+			//.pipe(gutil.env.type === 'production' ? uglify() : gutil.noop())
 			.pipe(gulp.dest(files.vendor.dest.client))
 	);
 });
@@ -530,8 +537,8 @@ gulp.task('vendor:server', function() {
 		gulp
 			.src(files.vendor.src)
 			.pipe(concat(files.vendor.name.server))
-			.pipe(gutil.env.type === 'production' ? uglify() : gutil.noop())
-			.pipe(insert.wrap('module.exports = function(){', ' return vendor;};'))
+			//.pipe(gutil.env.type === 'production' ? uglify() : gutil.noop())
+			.pipe(insert.wrap('module.exports = function(config){', ' return vendor;};'))
 			.pipe(gulp.dest(files.vendor.dest.server))
 	);
 });

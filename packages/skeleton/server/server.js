@@ -13,7 +13,7 @@ var multer = require('multer');
 var cookieParser = require('cookie-parser');
 var methodOverride = require('method-override');
 var environment = require('./imajs/environment.js');
-var async = require('async');
+var compression = require('compression');
 
 process.on('uncaughtException', function(error) {
 	console.error('Uncaught Exception:', error.message, error.stack);
@@ -47,7 +47,8 @@ var runNodeApp = () => {
 	var express = require('express');
 	var app = express();
 
-	app.use(favicon(__dirname + '/static/img/favicon.ico'))
+	app.use(compression())
+		.use(favicon(__dirname + '/static/img/favicon.ico'))
 		.use(environment.$Server.staticFolder, express.static(path.join(__dirname, 'static')))
 		.use(bodyParser.json()) // for parsing application/json
 		.use(bodyParser.urlencoded({ extended: true })) // for parsing application/x-www-form-urlencoded
