@@ -607,8 +607,10 @@ gulp.task('bundle:css', function() {
 });
 
 gulp.task('bundle:clean', function() {
-	return gulp.src(files.bundle.css.src.concat(files.bundle.js.src), {read: false})
-		.pipe(clean());
+	return (
+		gulp.src(files.bundle.css.src.concat(files.bundle.js.src), {read: false})
+			.pipe(clean())
+	);
 });
 
 gulp.task('app:hello', function() {
