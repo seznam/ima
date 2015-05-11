@@ -97,7 +97,7 @@ class Handler extends ns.Core.Interface.Cache {
 		}
 
 		var cacheEntry = this._cache.get(key);
-		if (!cacheEntry.isExpired()) {
+		if (cacheEntry && !cacheEntry.isExpired()) {
 			return true;
 		}
 

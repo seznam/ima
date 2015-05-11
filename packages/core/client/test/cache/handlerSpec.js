@@ -25,6 +25,14 @@ describe('Core.Cache.handler', function() {
 		expect(cache.has('ccc')).toBe(true);
 	});
 
+	it('should be return false for undefined cacheEntry', function() {
+		spyOn(cacheStorage, 'has')
+			.and
+			.returnValue(true);
+
+		expect(cache.has('bbb')).toBe(false);
+	});
+
 	it('should be return cached value for exist key', function() {
 		expect(cache.get('aaa')).toEqual(123);
 	});
