@@ -90,23 +90,6 @@ describe('Core.Router.Client', function() {
 
 	});
 
-	describe('handleError method', function() {
-
-		it('should be call $IMA.fatalErrorHandler function', function(done) {
-			spyOn(window.$IMA, 'fatalErrorHandler')
-				.and
-				.stub();
-
-			router
-				.handleError(new Error())
-				.then(function(fatalError) {
-					expect(window.$IMA.fatalErrorHandler).toHaveBeenCalled();
-					done();
-				});
-		});
-
-	});
-
 	describe('handleNotFound method', function() {
 
 		it('should be call router.handleError function for throwing error', function(done) {

@@ -1,5 +1,6 @@
 import ns from 'imajs/client/core/namespace.js';
 import oc from 'imajs/client/core/objectContainer.js';
+import component from 'imajs/client/core/component.js';
 
 ns.namespace('Core');
 
@@ -26,16 +27,6 @@ class Bootstrap{
 	 * @constructor
 	 */
 	constructor() {
-		
-		/**
-		 *
-		 *
-		 * @property _components
-		 * @private
-		 * @type {Array}
-		 * @default []
-		 */
-		this._components = [];
 		
 		/**
 		 * @property _config
@@ -151,27 +142,13 @@ class Bootstrap{
 	 */
 	_initComponents() {
 		if (!this._isInitialized) {
-			for (var component of this._components) {
-				if (typeof(component) === 'function') {
-					component(oc.get('$Utils'));
+			for (var componentFn of component.getComponents()) {
+				if (typeof(componentFn) === 'function') {
+					componentFn(oc.get('$Utils'));
 				}
 			}
 		}
 	}
-
-	/**
-	 * Add component to pipe.
-	 *
-	 * @method addComponent
-	 * @param {Function} component - function for init react component
-	 */
-	addComponent(component) {
-		this._components.push(component);
-	}
 }
 
 ns.Core.Bootstrap = Bootstrap;
-
-var bootstrap = new Bootstrap();
-
-export default bootstrap;

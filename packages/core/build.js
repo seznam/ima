@@ -2,7 +2,9 @@ module.exports = (function() {
 
 	var js = [
 		'imajs/client/core/namespace.js',
+		'imajs/client/core/component.js',
 		'imajs/client/core/objectContainer.js',
+		'imajs/client/core/bootstrap.js',
 		'imajs/client/core/bootstrap.js',
 		'imajs/client/core/coreError.js',
 		'imajs/client/core/interface/*.js',

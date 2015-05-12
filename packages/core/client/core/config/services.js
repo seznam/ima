@@ -24,5 +24,8 @@ export var init = (ns, oc, config) => {
 		.get('$Router')
 		.init(config.router);
 
+	oc
+		.get('$PageManager')
+		.init();
 
 };

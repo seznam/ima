@@ -12,6 +12,12 @@ ns.namespace('Core.Interface');
  */
 class PageManager {
 
+	/**
+	 * Initialization manager.
+	 *
+	 * @method init
+	 */
+	init() {}
 
 	/**
 	 * Manage controller with params

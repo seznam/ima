@@ -63,8 +63,6 @@ class Manager extends ns.Core.Interface.PageManager {
 		 * @default null
 		 */
 		this._activeController = null;
-
-		this._init();
 	}
 
 	/**
@@ -90,10 +88,10 @@ class Manager extends ns.Core.Interface.PageManager {
 	/**
 	 * Initialization manager.
 	 *
-	 * @method _init
-	 * @private
+	 * @method init
 	 */
-	_init() {
+	init() {
+		this._activeController = null;
 		this._stateManager.onChange = (newState) => this._onChangeStateHandler(newState);
 	}
 
