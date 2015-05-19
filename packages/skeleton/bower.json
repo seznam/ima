@@ -1,10 +1,7 @@
 {
   "name": "IMA.js",
-  "version": "0.0.1",
+  "version": "1.0.0",
   "dependencies": {},
   "devDependencies": {
-    "1680540": "https://gist.github.com/1680540.git",
-    "Responsable-Framework": "https://github.com/Responsable/Responsable-Framework.git#~1.0.0",
-    "lesshat": "~3.0.2"
   }
 }

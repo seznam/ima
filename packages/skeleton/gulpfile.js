@@ -15,9 +15,6 @@ var path = require('path');
 var runSequence = require('run-sequence');
 var shell = require('gulp-shell');
 var source = require('vinyl-source-stream');
-var jshint = require('gulp-jshint');
-var jshintReporter = require('jshint-stylish');
-var jscs = require('gulp-jscs');
 var traceur = require('gulp-traceur');
 var es = require('event-stream');
 var react = require('gulp-react');
@@ -25,18 +22,17 @@ var sweetjs = require('gulp-sweetjs');
 var yuidoc = require('gulp-yuidoc');
 var less = require('gulp-less');
 var clean = require('gulp-clean');
-var sweet = require('sweet.js');
 var plumber = require('gulp-plumber');
 var karma = require('gulp-karma');
 var cache = require('gulp-cached');
 var	remember = require('gulp-remember');
 var flo = require('fb-flo');
-var commander = require('commander');
 var through = require('through2');
 var messageFormat = require('gulp-messageformat');
 var save = require('gulp-save');
 var change = require('gulp-change');
 var minifyCSS = require('gulp-minify-css');
+var eslint = require('gulp-eslint');
 
 var coreDependency = require('./imajs/build.js');
 
@@ -119,7 +115,7 @@ var files = {
 	polyfill: {
 		name: 'polyfill.js',
 		src: [
-			'./node_modules/polyfill-function-prototype-bind/bind.js'
+			'./node_modules/custom-event-polyfill/custom-event-polyfill.js'
 		],
 		dest: {
 			client: './build/static/js/'
@@ -285,22 +281,12 @@ gulp.task('doc', function() {
 	);
 });
 
-gulp.task('qa', function() {
-	var qaFiles = ['./imajs/**/*.js', '!./app/assets/**/*.js'];
-	qaFiles.push('!' + files.app.tmp);
-	qaFiles.push('!' + files.vendor.tmp);
-
-	return (
-		gulp
-			.src(qaFiles)
-			.pipe(jshint())
-			.pipe(jshint.reporter(jshintReporter))
-			//.pipe(jscs({esnext: true}))
-			//.pipe(shell('jsxhint --jsx-only imajs/client/**/*'))
-	);
+gulp.task('lint', function () {
+	return gulp.src(files.app.src)
+		.pipe(eslint())
+		.pipe(eslint.format())
+		.pipe(eslint.failOnError());
 });
-
-
 
 // -------------------------------------PRIVATE HELPER TASKS
 gulp.task('watch', function() {
@@ -466,7 +452,6 @@ gulp.task('locale:build', function(callback) {
 		callback
 	);
 });
-
 
 // build client logic app
 gulp.task('Es6ToEs5:client', function() {
