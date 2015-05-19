@@ -7,13 +7,18 @@ describe('Core.Http.Agent', function() {
 	var options = null;
 	var data = null;
 	var httpConfig = null;
+	var cacheStorage = null;
+	var cacheFactory = null;
 
 	beforeEach(function() {
-		proxy = oc.get('$HttpProxy');
-		cache = oc.create('Core.Cache.Handler', oc.create('$MapStorage'), oc.get('$CACHE_CONFIG'));
-		cookie = oc.make('Core.Storage.Cookie');
-		httpConfig = oc.get('$HTTP_CONFIG');
-		http = oc.create('Core.Http.Agent', proxy, cache, cookie, httpConfig);
+		cacheStorage = oc.create('$MapStorage');
+		cacheFactory = oc.create('$CacheFactory');
+		cache = oc.create('Core.Cache.Handler', [cacheStorage, cacheFactory, {enabled: true, ttl: 1000}]);
+
+		proxy = oc.create('$HttpProxy');
+		cookie = oc.create('$CookieStorage');
+		httpConfig = oc.create('$HTTP_CONFIG');
+		http = oc.create('Core.Http.Agent', [proxy, cache, cookie, httpConfig]);
 
 		options = {ttl: httpConfig.ttl, timeout: httpConfig.timeout, repeatRequest: httpConfig.repeatRequest, language: httpConfig.language};
 
@@ -69,7 +74,7 @@ describe('Core.Http.Agent', function() {
 
 				http[method](data.params.url, data.params.data, data.params.options)
 					.then(function() {}, function(error) {
-						expect(error.getName()).toEqual('CoreError');
+						expect(error instanceof ns.Core.IMAError).toBe(true);
 						expect(proxy.request.calls.count()).toEqual(2);
 						done();
 					});

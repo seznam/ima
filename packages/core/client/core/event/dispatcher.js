@@ -1,5 +1,5 @@
 import ns from 'imajs/client/core/namespace.js';
-import CoreError from 'imajs/client/core/coreError.js';
+import IMAError from 'imajs/client/core/imaError.js';
 
 ns.namespace('Core.Event');
 
@@ -95,7 +95,7 @@ class Dispatcher extends ns.Core.Interface.Dispatcher {
 	 */
 	listen(event, listener, scope = null) {
 		if (!(listener instanceof Function)) {
-			throw new CoreError(`The listener must be a function, ${listener} provided`);
+			throw new IMAError(`The listener must be a function, ${listener} provided`);
 		}
 
 		var scopes = this._prepareScopesFor(event, listener);
@@ -124,7 +124,7 @@ class Dispatcher extends ns.Core.Interface.Dispatcher {
 		var scopes = this._getScopesOf(event, listener);
 
 		if (!scopes.has(scope)) {
-			throw new CoreError('Core.Event.Handler.unlisten(): the provided ' +
+			throw new IMAError('Core.Event.Handler.unlisten(): the provided ' +
 			`listener '${listener}' is not registered for the specified event ` +
 			`'${event}' and scope '${scope}'. Check your workflow.`, {
 				event: event,
@@ -170,7 +170,7 @@ class Dispatcher extends ns.Core.Interface.Dispatcher {
 		var listenersToScopes = this._getListenersOf(event);
 
 		if (!listenersToScopes.size) {
-			throw new CoreError('There are no event listeners registered for the ' +
+			throw new IMAError('There are no event listeners registered for the ' +
 			`${event} event`, {
 				event: event,
 				data: data

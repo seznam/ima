@@ -42,18 +42,18 @@ class Namespace {
 	 * @return {*} The value at the specified path in the namespace.
 	 */
 	namespace(path) {
-		var level = this;
+		var self = this;
 		var levels = path.split('.');
 
 		for (var levelName of levels) {
-			if (!level.hasOwnProperty(levelName)) {
-				level[levelName] = {};
+			if (!self.hasOwnProperty(levelName)) {
+				self[levelName] = {};
 			}
 
-			level = level[levelName];
+			self = self[levelName];
 		}
 
-		return level;
+		return self;
 	}
 
 	/**
@@ -66,18 +66,29 @@ class Namespace {
 	 *         at the specified path.
 	 */
 	has(path) {
-		var object = this;
+		return typeof this.get(path) !== 'undefined';
+	}
+
+	/**
+	 * Return value for the specified namespace path point.
+	 *
+	 * @method get
+	 * @param {string} path The namespace path to test.
+	 * @return {*} The value at the specified path in the namespace.
+	 */
+	get(path) {
+		var self = this;
 		var levels = path.split('.');
 
 		for (var level of levels) {
-			if (!object[level]) {
-				return false;
+			if (!self[level]) {
+				return undefined;
 			}
 
-			object = object[level];
+			self = self[level];
 		}
 
-		return true;
+		return self;
 	}
 }
 

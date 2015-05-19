@@ -1,10 +1,12 @@
-describe('Core.Cache.handler', function() {
+describe('Core.Cache.Handler', function() {
 
 	var cache = null;
 	var cacheStorage = null;
+	var cacheFactory = null;
 	beforeEach(function() {
 		cacheStorage = oc.create('$MapStorage');
-		cache = oc.create('Core.Cache.Handler', cacheStorage, {enabled: true, ttl: 1000});
+		cacheFactory = oc.create('$CacheFactory');
+		cache = oc.create('Core.Cache.Handler', [cacheStorage, cacheFactory, {enabled: true, ttl: 1000}]);
 		cache.set('aaa', 123);
 		jasmine.clock().install();
 	});
@@ -61,4 +63,11 @@ describe('Core.Cache.handler', function() {
 		expect(cache.has('aaa')).toBe(false);
 	});
 
+	it('should be throw error for serialize if value is instance of Promise', function() {
+		cache.set('promise', Promise.resolve('promise'));
+
+		expect(function() {
+			cache.serialize();
+		}).toThrow();
+	});
 });

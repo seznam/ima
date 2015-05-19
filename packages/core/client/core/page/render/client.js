@@ -79,8 +79,8 @@ class Client extends ns.Core.Abstract.PageRender {
 				.then((resource) => {
 					controller.patchState({
 						[resourceName]: resource
-					})
-				})
+					});
+				});
 		}
 
 		if (this._firstTime === false) {
@@ -116,7 +116,7 @@ class Client extends ns.Core.Abstract.PageRender {
 	}
 
 	/**
-	 * Unmount view from th DOM.
+	 * Unmount view from the DOM.
 	 *
 	 * @override
 	 * @method unmount
@@ -138,18 +138,19 @@ class Client extends ns.Core.Abstract.PageRender {
 	 *        values for page meta elements and title.
 	 */
 	_updateSeoAttributes(seo) {
+		var metaTagKey = null;
+		var metaTag = null;
 		this._window.setTitle(seo.getTitle());
 
-		for (var metaTagKey of seo.getMetaNames()) {
-			var metaTag = this._window.querySelector(`meta[name="${metaTagKey}"]`);
+		for (metaTagKey of seo.getMetaNames()) {
+			metaTag = this._window.querySelector(`meta[name="${metaTagKey}"]`);
 
 			if (metaTag) {
 				metaTag.content = seo.getMetaName(metaTagKey);
 			}
 		}
 
-		for (var metaTagKey of seo.getMetaProperties().keys()) {
-			var metaTag;
+		for (metaTagKey of seo.getMetaProperties().keys()) {
 			metaTag = this._window.querySelector(`meta[property="${metaTagKey}"]`);
 
 			if (metaTag) {

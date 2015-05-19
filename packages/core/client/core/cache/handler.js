@@ -1,6 +1,4 @@
 import ns from 'imajs/client/core/namespace.js';
-import oc from 'imajs/client/core/objectContainer.js';
-import CoreError from 'imajs/client/core/coreError.js';
 
 ns.namespace('Core.Cache');
 
@@ -32,10 +30,27 @@ class Handler extends ns.Core.Interface.Cache {
 	 * @constructor
 	 * @param {Core.Interface.Storage} cacheStorage The cache entry storage to
 	 *        use.
+	 * @param {Core.Cache.Factory} factory Which create new instance of cache entry
 	 * @param {{ttl: number, enabled: false}} [config={ttl: 30000, enabled: false}]
 	 */
-	constructor(cacheStorage, config = { ttl: 30000, enabled: false }) {
+	constructor(cacheStorage, factory, config = {ttl: 30000, enabled: false}) {
 		super();
+
+		/**
+		 * Cache entry storage.
+		 *
+		 * @property _cache
+		 * @private
+		 * @type {Core.Interface.Storage}
+		 */
+		this._cache = cacheStorage;
+
+		/**
+		 * @property _factory
+		 * @private
+		 * @type {Core.Cache.Factory}
+		 */
+		this._factory = factory;
 
 		/**
 		 * Default cache entry time to live in milliseconds.
@@ -55,15 +70,6 @@ class Handler extends ns.Core.Interface.Cache {
 		 * @type {boolean}
 		 */
 		this._enabled = config.enabled;
-
-		/**
-		 * Cache entry storage.
-		 *
-		 * @property _cache
-		 * @private
-		 * @type {Core.Interface.Storage}
-		 */
-		this._cache = cacheStorage;
 	}
 
 	/**
@@ -142,9 +148,9 @@ class Handler extends ns.Core.Interface.Cache {
 	 *        cache.
 	 */
 	set(key, value, ttl = null) {
-		var cacheData = oc.create('$CacheEntry', value, ttl || this._ttl);
+		var cacheEntry = this._factory.createCacheEntry(value, ttl || this._ttl);
 
-		this._cache.set(key, cacheData);
+		this._cache.set(key, cacheEntry);
 	}
 
 	/**
@@ -201,7 +207,13 @@ class Handler extends ns.Core.Interface.Cache {
 		var dataToSerialize = {};
 
 		for (var key of this._cache.keys()) {
-			dataToSerialize[key] = this._cache.get(key).serialize();
+			var serializeEntry = this._cache.get(key).serialize();
+
+			if (serializeEntry.value instanceof Promise) {
+				throw new Error(`Core.Cache.Handler:serialize You want to serialize promise for key ${key}. Clear promise value from cache.`);
+			}
+
+			dataToSerialize[key] = serializeEntry;
 		}
 
 		return JSON.stringify(dataToSerialize).replace(/<\/script/g, '<\\/script');
@@ -219,8 +231,8 @@ class Handler extends ns.Core.Interface.Cache {
 	 */
 	deserialize(serializedData) {
 		for (var key of Object.keys(serializedData)) {
-			var cacheDataItem = serializedData[key];
-			this.set(key, cacheDataItem.value, cacheDataItem.ttl);
+			var cacheEntryItem = serializedData[key];
+			this.set(key, cacheEntryItem.value, cacheEntryItem.ttl);
 		}
 	}
 }

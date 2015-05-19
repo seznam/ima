@@ -1,7 +1,7 @@
 import ns from 'imajs/client/core/namespace.js';
-import bootstrap from 'imajs/client/core/bootstrap.js';
+import component from 'imajs/client/core/component.js';
 
-bootstrap.addComponent((utils) => {
+component.add((utils) => {
 
 	ns.namespace('App.Page.Home');
 
@@ -23,7 +23,7 @@ bootstrap.addComponent((utils) => {
 		render() {
 			return (
 				<div className='l-homepage'>
-					<div className='content'>
+					<div className='content' toggle={this.state.toggle}>
 						<img src="static/img/imajs-logo.png" alt="IMA.js logo"/>
 						<h1>{utils.$Dictionary.get('home.hello')}, {this.state.message}</h1>
 					</div>

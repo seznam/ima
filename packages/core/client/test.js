@@ -9,3 +9,8 @@ function using(values, func){ //jshint ignore:line
 		func.apply(this, values[i]);
 	}
 }
+
+function extend(ChildClass, ParentClass) {
+	ChildClass.prototype = new ParentClass();
+	ChildClass.prototype.constructor = ChildClass;
+}

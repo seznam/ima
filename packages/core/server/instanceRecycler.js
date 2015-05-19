@@ -25,18 +25,16 @@ module.exports = (() => {
 		}
 
 		getInstance() {
-			//console.log('getInstance', this.instancies.length);
 			if (this.instancies.length < 1) {
 				return this.instanceConstructor();
 			} else {
-				return this.instancies.pop();
+				return this.instancies.shift();
 			}
 			
 		}
 
 		clearInstance(instance) {
-			//console.log('clearInstance', this.instancies.length);
-			instance.getObjectContainer().clear();
+			instance.oc.clear();
 			if (this.instancies.length < this.maxInstanceCount) {
 				this.instancies.push(instance);
 			}

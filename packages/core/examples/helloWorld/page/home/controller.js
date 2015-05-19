@@ -1,5 +1,5 @@
 import ns from 'imajs/client/core/namespace.js';
-import CoreError from 'imajs/client/core/coreError.js';
+//import IMAError from 'imajs/client/core/imaError.js';
 
 ns.namespace('App.Page.Home');
 
@@ -22,18 +22,132 @@ class Controller extends ns.App.Base.Controller {
 	}
 
 	/**
-	 * Load all needed data.
+	 * Callback for initializing the controller with the route parameters.
 	 *
+	 * @inheritdoc
+	 * @override
+	 * @method init
+	 */
+	init() {}
+
+	/**
+	 * Callback the controller uses to request the resources it needs to render
+	 * its view. This method is invoked after the {@codelink init()} method.
+	 *
+	 * The controller should request all resources it needs in this method, and
+	 * represent each resource request as a promise that will resolve once the
+	 * resource is ready for use (these can be data fetch over HTTP(S), database
+	 * connections, etc).
+	 *
+	 * The controller must return a map object. The field names of the object
+	 * identify the resources being fetched and prepared, the values must be the
+	 * Promises that resolve when the resources are ready to be used.
+	 *
+	 * The returned map object may also contain fields that have non-Promise
+	 * value. These can be used to represent static data, or initial value of
+	 * controller's state that will change due to user interaction, or resource
+	 * that has been immediately available (for example fetched from the DOM
+	 * storage).
+	 *
+	 * The system will wait for all promises to resolve, and then push them to
+	 * the controller's state using the field names used in the returned map
+	 * object.
+	 *
+	 * @inheritdoc
+	 * @abstract
+	 * @override
 	 * @method load
-	 * @return {Object} object of promise
+	 * @return {Object<string, (Vendor.Rsvp.Promise|*)>} A map object of promises
+	 *         resolved when all resources the controller requires are ready. The
+	 *         resolved values will be pushed to the controller's state.
 	 */
 	load() {
 		return {
-			//error: Promise.reject(new CoreError('Try error page.')),
-			//redirect: Promise.reject(new CoreError('Redirect from home page to error page for $Debug = false.', {status: 303, url: 'http://localhost:3001/not-found'})),
+			//error: Promise.reject(new IMAError('Try error page.')),
+			//redirect: Promise.reject(new IMAError('Redirect from home page to error page for $Debug = false.', {status: 303, url: 'http://localhost:3001/not-found'})),
 			message: `I am IMA.js!`
 		};
 	}
+
+	/**
+	 * Callback for activating the controller in the UI. This is the last method
+	 * invoked during controller initialization, called after all the promises
+	 * returned from the {@codelink load()} method has been resolved, the
+	 * controller's reactive view has been set and the controller has configured
+	 * the SEO manager.
+	 *
+	 * The controller may register in this method any React and DOM event
+	 * listeners the controller may need to handle the user interaction with the
+	 * page.
+	 *
+	 * @inheritdoc
+	 * @override
+	 * @method activate
+	 */
+	activate() {}
+
+	/**
+	 * Callback used to configure the SEO attribute manager. The method is called
+	 * after the the controller's state has been patched with the loaded
+	 * resources, the view has been rendered and (if at the client-side) the
+	 * controller has been provided with the rendered view.
+	 *
+	 * @inheritdoc
+	 * @override
+	 * @abstract
+	 * @method setSeoParams
+	 * @param {Object<string, *>} loadedResources Map of resource names to
+	 *        resources loaded by the {@codelink load} method. This is the same
+	 *        object as the one passed to the {@codelink patchState} method when
+	 *        the Promises returned by the {@codelink load} method were resolved.
+	 * @param {Core.Interface.Seo} seo SEO attributes manager to configure.
+	 * @param {Core.Interface.Router} router The current application router.
+	 * @param {Core.Interface.Dictionary} dictionary The current localization
+	 *        dictionary.
+	 * @param {Object<string, *>} settings The application settings for the
+	 *        current application environment.
+	 */
+	setSeoParams(loadedResources, seo, router, dictionary, settings) {
+		var title = loadedResources.message;
+		var description = 'IMA.js is isomorphic javascript application framework.';
+		var image = router.getDomain() + settings.$Static.image + 'imajs-share.png';
+
+		var url = router.getUrl();
+
+		seo.setTitle(title);
+
+		seo.setMetaName('description', description);
+		seo.setMetaName('keywords', 'IMA.js, isomorphic application, javascript');
+
+		seo.setMetaName('twitter:title', title);
+		seo.setMetaName('twitter:description', description);
+		seo.setMetaName('twitter:card', 'summary');
+		seo.setMetaName('twitter:image', image);
+		seo.setMetaName('twitter:url', url);
+
+		seo.setMetaProperty('og:title', title);
+		seo.setMetaProperty('og:description', description);
+		seo.setMetaProperty('og:type', 'website');
+		seo.setMetaProperty('og:image', image);
+		seo.setMetaProperty('og:url', url);
+	}
+
+	/**
+	 * Finalization callback, called when the controller is being discarded by
+	 * the application. This usually happens when the user navigates to a
+	 * different URL.
+	 *
+	 * The controller should unregister all React and DOM event listeners the
+	 * controller has registered in the {@codelink active()} method. The
+	 * controller must also release any resources that might not be released
+	 * automatically when the controller instance is destroyed by the garbage
+	 * collector.
+	 *
+	 * @inheritdoc
+	 * @override
+	 * @method destroy
+	 */
+	destroy() {}
 }
 
 ns.App.Page.Home.Controller = Controller;

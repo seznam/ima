@@ -1,7 +1,7 @@
 describe('Core.Storage.SessionMap', function() {
 	var sessionMap;
 	beforeEach(function() {
-		sessionMap = oc.make('$SessionMapStorage');
+		sessionMap = oc.create('$SessionMapStorage');
 		sessionMap.init();
 		sessionMap.clear();
 

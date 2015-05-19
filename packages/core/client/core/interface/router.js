@@ -48,7 +48,7 @@ class Router {
 	 * @param {string} view The full name or Object Container alias identifying
 	 *        the view class associated with this route.
 	 * @return {Core.Interface.Router} This router.
-	 * @throws {Core.CoreError} Thrown if a route with the same name is added
+	 * @throws {Core.IMAError} Thrown if a route with the same name is added
 	 *         multiple times.
 	 */
 	add(name, pathExpression, controller, view) {}
@@ -201,11 +201,11 @@ class Router {
 	 * server side.
 	 *
 	 * @method isClientError
-	 * @param {(Core.CoreError|Error)} error The encountered error.
+	 * @param {(Core.IMAError|Error)} reason The encountered error.
 	 * @return {boolean} {@code true} if the error was caused the action of the
 	 *         client.
 	 */
-	isClientError(error) {}
+	isClientError(reason) {}
 }
 
 ns.Core.Interface.Router = Router;

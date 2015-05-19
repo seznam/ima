@@ -317,7 +317,7 @@ class Client extends ns.Core.Abstract.Router {
 		var self = this;
 
 		//find close a element with href
-		while(hasReachedAnchor()) {
+		while (hasReachedAnchor()) {
 			target = target.parentNode;
 			targetHref = target.href;
 		}

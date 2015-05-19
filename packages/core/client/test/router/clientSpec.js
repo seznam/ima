@@ -1,5 +1,4 @@
 describe('Core.Router.Client', function() {
-
 	var router = null;
 	var pageRender = null;
 	var routerFactory = null;
@@ -9,10 +8,10 @@ describe('Core.Router.Client', function() {
 	var ROUTE_NAMES = oc.get('$ROUTE_NAMES');
 
 	beforeEach(function() {
-		pageRender = oc.make('$PageRender');
-		routerFactory = oc.make('$RouterFactory');
+		pageRender = oc.create('$PageRender');
+		routerFactory = oc.create('$RouterFactory');
 		win = oc.get('$Window');
-		router = oc.create('Core.Router.Client', pageRender, routerFactory, ROUTE_NAMES, win);
+		router = oc.create('Core.Router.Client', [pageRender, routerFactory, ROUTE_NAMES, win]);
 		router.init({$Domain: domain, $Protocol: protocol});
 	});
 

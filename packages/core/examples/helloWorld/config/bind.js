@@ -1,15 +1,20 @@
 export var init = (ns, oc, config) => {
 
 	// Page Home
-	oc.bind('HomeController', ns.App.Page.Home.Controller);
-	oc.bind('HomeView', () => oc.get('App.Page.Home.View'));
+	oc.inject(ns.App.Page.Home.Controller, []);
 
 	// Page Error
-	oc.bind('ErrorController', ns.App.Page.Error.Controller);
-	oc.bind('ErrorView', () => oc.get('App.Page.Error.View'));
+	oc.inject(ns.App.Page.Error.Controller, []);
 
 	// Page Not Found
-	oc.bind('NotFoundController', ns.App.Page.NotFound.Controller);
-	oc.bind('NotFoundView', () => oc.get('App.Page.NotFound.View'));
+	oc.inject(ns.App.Page.NotFound.Controller, []);
 
+	//COMPONENT Utils
+	oc.constant('$Utils', {
+		$Router: oc.get('$Router'),
+		$Dispatcher: oc.get('$Dispatcher'),
+		$Dictionary: oc.get('$Dictionary'),
+		$Settings: oc.get('$Settings'),
+		$Window: oc.get('$Window')
+	});
 };

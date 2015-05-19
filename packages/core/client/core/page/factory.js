@@ -1,6 +1,5 @@
 import ns from 'imajs/client/core/namespace.js';
-import oc from 'imajs/client/core/objectContainer.js';
-import CoreError from 'imajs/client/core/coreError.js';
+import IMAError from 'imajs/client/core/imaError.js';
 
 ns.namespace('Core.Page');
 
@@ -11,14 +10,25 @@ ns.namespace('Core.Page');
  * @namespace Core.Page
  * @module Core
  * @submodule Core.Page
+ *
+ * @requires Core.ObjectContainer
  */
 class Factory {
 
 	/**
 	 * @method constructor
 	 * @constructor
+	 * @param {Core.ObjectContainer} oc
 	 */
-	constructor() {}
+	constructor(oc) {
+
+		/**
+		 * @property _oc
+		 * @private
+		 * @type {Core.ObjectContainer}
+		 */
+		this._oc = oc;
+	}
 
 	/**
 	 * Create new instance of Core.Interface.Controller.
@@ -28,7 +38,7 @@ class Factory {
 	 * @return {Core.Interface.Controller}
 	 */
 	createController(controller) {
-		var controllerInstantion = oc.make(controller);
+		var controllerInstantion = this._oc.create(controller);
 
 		return controllerInstantion;
 	}
@@ -44,17 +54,12 @@ class Factory {
 		if (typeof view === 'function') {
 			return view;
 		}
+		var entry = this._oc.getEntry(view);
 
-		if (oc.has(view)) {
-			var view = oc.get(view);
-
-			if (typeof view === 'function') {
-				return view();
-			} else {
-				return view;
-			}
+		if (entry) {
+			return entry.classConstructor;
 		} else {
-			throw new CoreError(`Core.Page.Factory:createView hasn't name of view "${view}".`);
+			throw new IMAError(`Core.Page.Factory:createView hasn't name of view "${view}".`);
 		}
 	}
 
@@ -66,13 +71,13 @@ class Factory {
 	 * @return {Core.Interface.Controller}
 	 */
 	decorateController(controllerInstance) {
-		var seo = oc.get('$Seo');
-		var router = oc.get('$Router');
-		var dictionary = oc.get('$Dictionary');
-		var settings = oc.get('$Settings');
+		var seo = this._oc.get('$Seo');
+		var router = this._oc.get('$Router');
+		var dictionary = this._oc.get('$Dictionary');
+		var settings = this._oc.get('$Settings');
 
-		var decoratedController = oc.create('$DecoratorController', controllerInstance,
-			seo, router, dictionary, settings);
+		var decoratedController = this._oc.create('$DecoratorController', [controllerInstance,
+			seo, router, dictionary, settings]);
 
 		return decoratedController;
 	}

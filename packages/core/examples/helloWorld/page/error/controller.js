@@ -22,10 +22,8 @@ class Controller extends ns.App.Base.Controller {
 	}
 
 	/**
-	 * Load all needed data.
-	 *
 	 * @method load
-	 * @return {Object} object of promise
+	 * @return {Object}
 	 */
 	load() {
 		return {

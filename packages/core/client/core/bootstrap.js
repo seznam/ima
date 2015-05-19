@@ -1,5 +1,4 @@
 import ns from 'imajs/client/core/namespace.js';
-import oc from 'imajs/client/core/objectContainer.js';
 import component from 'imajs/client/core/component.js';
 
 ns.namespace('Core');
@@ -25,9 +24,17 @@ class Bootstrap{
 	/**
 	 * @method contructor
 	 * @constructor
+	 * @param {Core.ObjectContainer} oc
 	 */
-	constructor() {
-		
+	constructor(oc) {
+
+		/**
+		 * @property _oc
+		 * @private
+		 * @type {Core.ObjectContainer}
+		 */
+		this._oc = oc;
+
 		/**
 		 * @property _config
 		 * @private
@@ -89,8 +96,8 @@ class Bootstrap{
 	 * @private
 	 */
 	_initSettings() {
-		var allSettings = this._config.initSettings(ns, oc, this._config.settings);
-		var environment = this._config.settings['$Env'];
+		var allSettings = this._config.initSettings(ns, this._oc, this._config.settings);
+		var environment = this._config.settings.$Env;
 		var currentSettings = allSettings[environment];
 
 		if (environment !== PRODUCTION_ENVIRONMENT) {
@@ -109,8 +116,8 @@ class Bootstrap{
 	 * @private
 	 */
 	_initBind() {
-		this._config.initBindCore(ns, oc, this._config.bind);
-		this._config.initBindApp(ns, oc, this._config.bind);
+		this._config.initBindCore(ns, this._oc, this._config.bind);
+		this._config.initBindApp(ns, this._oc, this._config.bind);
 	}
 
 	/**
@@ -120,7 +127,7 @@ class Bootstrap{
 	 * @private
 	 */
 	_initRoutes() {
-		this._config.initRoutes(ns, oc, this._config.routes);
+		this._config.initRoutes(ns, this._oc, this._config.routes);
 	}
 
 	/**
@@ -130,8 +137,8 @@ class Bootstrap{
 	 * @private
 	 */
 	_initServices() {
-		this._config.initServicesCore(ns, oc, this._config.services);
-		this._config.initServicesApp(ns, oc, this._config.services);
+		this._config.initServicesCore(ns, this._oc, this._config.services);
+		this._config.initServicesApp(ns, this._oc, this._config.services);
 	}
 
 	/**
@@ -143,8 +150,8 @@ class Bootstrap{
 	_initComponents() {
 		if (!this._isInitialized) {
 			for (var componentFn of component.getComponents()) {
-				if (typeof(componentFn) === 'function') {
-					componentFn(oc.get('$Utils'));
+				if (typeof componentFn === 'function') {
+					componentFn(this._oc.get('$Utils'));
 				}
 			}
 		}
@@ -152,3 +159,5 @@ class Bootstrap{
 }
 
 ns.Core.Bootstrap = Bootstrap;
+
+export default Bootstrap;

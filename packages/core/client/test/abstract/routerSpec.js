@@ -6,14 +6,15 @@ describe('Core.Abstract.Router', function() {
 	var ROUTE_NAMES = oc.get('$ROUTE_NAMES');
 
 	beforeEach(function() {
-		oc.bind('BaseController', {});
+		oc.bind('BaseController', function() {});
+		oc.bind('BaseView', function() {});
 
 		pageRender = oc.create('Core.Interface.PageRender');
-		routerFactory = oc.make('$RouterFactory');
-		router = oc.create('Core.Abstract.Router', pageRender, routerFactory, ROUTE_NAMES);
+		routerFactory = oc.create('$RouterFactory');
+		router = oc.create('Core.Abstract.Router', [pageRender, routerFactory, ROUTE_NAMES]);
 
-		router.add('home', '/', 'BaseController');
-		router.add('contact', '/contact', 'BaseController');
+		router.add('home', '/', 'BaseController', 'BaseView');
+		router.add('contact', '/contact', 'BaseController', 'BaseView');
 	});
 
 	it('should be 2 routes in Array', function() {
@@ -33,7 +34,7 @@ describe('Core.Abstract.Router', function() {
 		var baseUrl = 'baseUrl';
 
 		beforeEach(function() {
-			router.add(routeName, path, 'BaseController', 'View');
+			router.add(routeName, path, 'BaseController', 'BaseView');
 		});
 
 		afterEach(function() {
@@ -65,7 +66,7 @@ describe('Core.Abstract.Router', function() {
 		var route = null;
 
 		beforeEach(function() {
-			route = routerFactory.createRoute(routeName, path, 'BaseController', 'View');
+			route = routerFactory.createRoute(routeName, path, 'BaseController', 'BaseView');
 		});
 
 		afterEach(function() {
@@ -115,7 +116,7 @@ describe('Core.Abstract.Router', function() {
 		var route = null;
 
 		beforeEach(function() {
-			route = routerFactory.createRoute(routeName, path, 'BaseController', 'View');
+			route = routerFactory.createRoute(routeName, path, 'BaseController', 'BaseView');
 		});
 
 		afterEach(function() {
@@ -145,10 +146,11 @@ describe('Core.Abstract.Router', function() {
 				.and
 				.returnValue(null);
 
+
 			router
 				.handleError(params)
 				.catch(function(reason) {
-					expect(reason instanceof oc.get('$Error')).toBe(true);
+					expect(reason instanceof ns.Core.IMAError).toBe(true);
 					done();
 				});
 		});
@@ -162,7 +164,7 @@ describe('Core.Abstract.Router', function() {
 		var route = null;
 
 		beforeEach(function() {
-			route = routerFactory.createRoute(routeName, path, 'BaseController', 'View');
+			route = routerFactory.createRoute(routeName, path, 'BaseController', 'BaseView');
 		});
 
 		afterEach(function() {
@@ -196,7 +198,7 @@ describe('Core.Abstract.Router', function() {
 			router
 				.handleNotFound(params)
 				.catch(function(reason) {
-					expect(reason instanceof oc.get('$Error')).toBe(true);
+					expect(reason instanceof ns.Core.IMAError).toBe(true);
 					done();
 				});
 		});
@@ -205,13 +207,13 @@ describe('Core.Abstract.Router', function() {
 	describe('isClientError method', function() {
 
 		it('should be return true for client error, which return status 4**', function() {
-			var isClientError = router.isClientError(oc.create('$Error', 'Client error', {status: 404}));
+			var isClientError = router.isClientError(oc.create('$Error', ['Client error', {status: 404}]));
 
 			expect(isClientError).toEqual(true);
 		});
 
 		it('should be return false for client error, which return status 5**', function() {
-			var isClientError = router.isClientError(oc.create('$Error', 'Server error', {status: 500}));
+			var isClientError = router.isClientError(oc.create('$Error', ['Server error', {status: 500}]));
 
 			expect(isClientError).toEqual(false);
 		});
@@ -227,13 +229,13 @@ describe('Core.Abstract.Router', function() {
 	describe('isRedirection method', function() {
 
 		it('should be return true for redirection, which return status 3**', function() {
-			var isRedireciton = router.isRedirection(oc.create('$Error', 'Redirection', {status: 300, url: 'http://www.example.com/redirect'}));
+			var isRedireciton = router.isRedirection(oc.create('$Error', ['Redirection', {status: 300, url: 'http://www.example.com/redirect'}]));
 
 			expect(isRedireciton).toEqual(true);
 		});
 
 		it('should be return true for client error, which return status 4**', function() {
-			var isRedireciton = router.isRedirection(oc.create('$Error', 'Client error', {status: 400}));
+			var isRedireciton = router.isRedirection(oc.create('$Error', ['Client error', {status: 400}]));
 
 			expect(isRedireciton).toEqual(false);
 		});
@@ -254,7 +256,7 @@ describe('Core.Abstract.Router', function() {
 		var path = '/path';
 
 		beforeEach(function() {
-			router = oc.create('Core.Abstract.Router', pageRender, routerFactory, Promise);
+			router = oc.create('Core.Abstract.Router', [pageRender, routerFactory, Promise]);
 		});
 
 		it('should be clear root from path', function() {

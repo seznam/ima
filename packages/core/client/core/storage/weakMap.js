@@ -102,12 +102,12 @@ class WeakMapStorage extends ns.Core.Storage.Map {
 	 * @param {string} key The key identifying the storage entry.
 	 * @return {*} The value of the storage entry.
 	 */
-	get(name) {
-		if (!this.has(name)) {
+	get(key) {
+		if (!this.has(key)) {
 			return undefined;
 		}
 
-		return super.get(name).value;
+		return super.get(key).value;
 	}
 
 	/**
@@ -122,8 +122,8 @@ class WeakMapStorage extends ns.Core.Storage.Map {
 	 * @param {*} value The storage entry value.
 	 * @return {Core.Storage.WeakMap} This storage.
 	 */
-	set(name, value) {
-		this._storage.set(name, {
+	set(key, value) {
+		this._storage.set(key, {
 			value,
 			lastUpdate: Date.now()
 		});
@@ -234,12 +234,13 @@ class WeakMapStorage extends ns.Core.Storage.Map {
 	_runOverflowGc() {
 		var removalBuffer = [];
 		var expectedBufferSize = this._storage.size - this._maxEntries;
+		var entry = null;
 
-		for (var entry of this._storage) {
-			insertSorted(entry)
+		for (entry of this._storage) {
+			insertSorted(entry);
 		}
 
-		for (var entry of removalBuffer) {
+		for (entry of removalBuffer) {
 			this.delete(entry[0]);
 		}
 
@@ -267,3 +268,4 @@ class WeakMapStorage extends ns.Core.Storage.Map {
 }
 
 ns.Core.Storage.WeakMap = WeakMapStorage;
+

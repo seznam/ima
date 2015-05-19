@@ -91,8 +91,11 @@ var callRemoteServer = (req, res) => {
 		httpRequest = httpRequest.set('Authorization', req.get('Authorization'));
 	}
 
+	if (req.get('Cookie') && req.get('Cookie') !== '') {
+		httpRequest = httpRequest.set('Cookie', req.get('Cookie'));
+	}
+
 	httpRequest
-		.set('Cookie', req.get('Cookie'))
 		.end((error, respond) => {
 			if (error) {
 				console.error('API ERROR', error);

@@ -153,7 +153,7 @@ class Proxy {
 
 		var error = {status};
 
-		switch(status) {
+		switch (status) {
 			case this.HTTP_STATUS_CODE.TIMEOUT:
 				error.errorName = 'Timeout';
 				break;
@@ -221,7 +221,7 @@ class Proxy {
 		request.end((error, response) => {
 
 			if (error) {
-				this._handleError(error, reject, params)
+				this._handleError(error, reject, params);
 			} else {
 				this._handleResponse(response, resolve, reject, params);
 			}

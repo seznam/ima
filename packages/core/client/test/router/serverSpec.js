@@ -4,16 +4,16 @@ describe('Core.Router.Server', function() {
 	var pageRender = null;
 	var routerFactory = null;
 	var request = null;
-	var respond = null;
+	var response = null;
 	var domain = 'http://locahlost:3002';
 	var ROUTE_NAMES = oc.get('$ROUTE_NAMES');
 
 	beforeEach(function() {
-		pageRender = oc.make('$PageRender');
-		routerFactory = oc.make('$RouterFactory');
+		pageRender = oc.create('$PageRender');
+		routerFactory = oc.create('$RouterFactory');
 		request = oc.create('Core.Router.Request');
 		response = oc.create('Core.Router.Response');
-		router = oc.create('Core.Router.Server', pageRender, routerFactory, ROUTE_NAMES, request, response);
+		router = oc.create('Core.Router.Server', [pageRender, routerFactory, ROUTE_NAMES, request, response]);
 		router.init({mode: router.MODE_SERVER, domain: domain});
 	});
 

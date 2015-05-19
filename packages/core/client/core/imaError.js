@@ -6,13 +6,13 @@ ns.namespace('Core');
  * Implementation of the Core.Interface.Error interface, providing more
  * advanced error API.
  *
- * @class CoreError
+ * @class IMAError
  * @extends Error
  * @implements Core.Interface.Error
  * @namespace Core
  * @module Core
  */
-class CoreError {
+class IMAError {
 
 	/**
 	 * Initializes the error.
@@ -41,9 +41,9 @@ class CoreError {
 		 * @property name
 		 * @public
 		 * @type {string}
-		 * @default 'CoreError'
+		 * @default 'IMAError'
 		 */
-		this.name = 'CoreError';
+		this.name = 'IMAError';
 
 		/**
 		 * The message describing the cause of the error.
@@ -116,6 +116,6 @@ class CoreError {
 	}
 }
 
-ns.Core.CoreError = CoreError;
+ns.Core.IMAError = IMAError;
 
-export default CoreError;
+export default IMAError;

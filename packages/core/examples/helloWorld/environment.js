@@ -11,10 +11,10 @@ module.exports = (() => {
 				apiUrl: '/api',
 				staticFolder: '/static',
 				concurency: 100,
-				clusters: 2
+				clusters: null
 			},
 			$Proxy: {
-				server: 'http://localhost:3001/api/v1'
+				server: 'http://www.example.com/api'
 			}
 		},
 
@@ -33,6 +33,9 @@ module.exports = (() => {
 			},
 			$Server: {
 				concurency: 1
+			},
+			$Proxy: {
+				server: 'http://localhost:3001/api'
 			}
 		}
 

@@ -35,7 +35,7 @@ describe('Core.Http.Proxy', function() {
 			}
 		};
 
-		proxy = oc.create('Core.Http.Proxy', superAgent, HTTP_STATUS_CODE, windowHelper);
+		proxy = oc.create('Core.Http.Proxy', [superAgent, HTTP_STATUS_CODE, windowHelper]);
 
 		jasmine.clock().install();
 	});

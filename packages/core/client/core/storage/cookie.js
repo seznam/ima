@@ -46,14 +46,12 @@ class Cookie extends ns.Core.Storage.Map {
 	 * @param {Core.Interface.Window} window The window utility.
 	 * @param {Core.Router.Request} request The current HTTP request.
 	 * @param {Core.Router.Response} response The current HTTP response.
-	 * @param {boolean} secure Flag setting the {@code secure} cookie atribute
-	 *        for all cookies set through this storage.
 	 * @example
 	 *      cookie.set('cookie', 'value', {expires: 10}); // cookie expires after 10s
 	 *      cookie.set('cookie'); // delete cookie
 	 *
 	 */
-	constructor(window, request, response, secure) {
+	constructor(window, request, response) {
 		super();
 
 		/**
@@ -105,7 +103,7 @@ class Cookie extends ns.Core.Storage.Map {
 		 */
 		this._options = {
 			path: '/',
-			secure: secure
+			secure: false
 		};
 	}
 
@@ -120,10 +118,14 @@ class Cookie extends ns.Core.Storage.Map {
 	 * @override
 	 * @chainable
 	 * @method init
+	 * @param {{path: string=, secure: boolean=}} [options={}]
 	 * @return {Core.Interface.Storage}
 	 */
-	init() {
+	init(options = {}) {
+		this._options = Object.assign(this._options, options);
 		this._parse();
+
+		return this;
 	}
 
 	/**

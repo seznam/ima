@@ -1,5 +1,4 @@
 import ns from 'imajs/client/core/namespace.js';
-import oc from 'imajs/client/core/objectContainer.js';
 
 ns.namespace('Core.Page.Render');
 
@@ -76,11 +75,10 @@ class Server extends ns.Core.Abstract.PageRender {
 					controller.setSeoParams(fetchedResources);
 
 					var reactElementView = this._React.createElement(view, controller.getState());
-
 					var pageMarkup = this._React.renderToString(reactElementView);
 
-					var masterView = oc.get(this._settings.$Page.$Render.masterView);
-					var appMarkup = this._React.renderToStaticMarkup(masterView({
+					var documentView = ns.get(this._settings.$Page.$Render.documentView);
+					var appMarkup = this._React.renderToStaticMarkup(documentView({
 						page: pageMarkup,
 						scripts: this._getScripts(),
 						seo: controller.getSeoManager()
@@ -130,10 +128,10 @@ class Server extends ns.Core.Abstract.PageRender {
 			' window.$IMA.Cache = ' + (this._cache.serialize()) + ';' +
 			' window.$IMA.$Language = "' + (this._settings.$Language) + '";' +
 			' window.$IMA.$Env = "' + (this._settings.$Env) + '";' +
-			' window.$IMA.$Protocol = "' + (this._settings.$Protocol) + '";'+
-			' window.$IMA.$Domain = "' + (this._settings.$Domain) + '";'+
-			' window.$IMA.$Root = "' + (this._settings.$Root) + '";'+
-			' window.$IMA.$LanguagePartPath = "' + (this._settings.$LanguagePartPath) + '";'+
+			' window.$IMA.$Protocol = "' + (this._settings.$Protocol) + '";' +
+			' window.$IMA.$Domain = "' + (this._settings.$Domain) + '";' +
+			' window.$IMA.$Root = "' + (this._settings.$Root) + '";' +
+			' window.$IMA.$LanguagePartPath = "' + (this._settings.$LanguagePartPath) + '";' +
 			'</script>'
 		);
 		html = scripts.join('');

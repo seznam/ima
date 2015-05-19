@@ -1,5 +1,5 @@
 import ns from 'imajs/client/core/namespace.js';
-import CoreError from 'imajs/client/core/coreError.js';
+import IMAError from 'imajs/client/core/imaError.js';
 
 ns.namespace('Core.Abstract');
 
@@ -88,7 +88,7 @@ class PageRender extends ns.Core.Interface.PageRender {
 	 * @return {Promise}
 	 */
 	mount(controller, view) { // jshint ignore:line
-		throw new CoreError('The render() method is abstract and must be overridden');
+		throw new IMAError('The render() method is abstract and must be overridden');
 	}
 
 	/**

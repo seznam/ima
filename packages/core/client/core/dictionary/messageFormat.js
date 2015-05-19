@@ -1,5 +1,5 @@
 import ns from 'imajs/client/core/namespace.js';
-import CoreError from 'imajs/client/core/coreError.js';
+import IMAError from 'imajs/client/core/imaError.js';
 
 ns.namespace('Core.Dictionary');
 
@@ -111,7 +111,7 @@ class MessageFormat extends ns.Core.Interface.Dictionary {
 
 		for (var scopeKey of path) {
 			if (!scope[scopeKey]) {
-				throw new CoreError(`Core.Dictionary.MessageFormat.get: The ` +
+				throw new IMAError(`Core.Dictionary.MessageFormat.get: The ` +
 					`localization phrase '${key}' does not exists`,
 					{key, parameters});
 			}

@@ -5,6 +5,10 @@ export var init = (ns, oc, config) => {
 		.init(config.dictionary);
 
 	oc
+		.get('$Dispatcher')
+		.clear();
+
+	oc
 		.get('$Request')
 		.init(config.request);
 
@@ -14,11 +18,18 @@ export var init = (ns, oc, config) => {
 
 	oc
 		.get('$CookieStorage')
-		.init();
+		.clear()
+		.init({secure: oc.get('$SECURE')});
 
 	oc
-		.get('$CacheStorage')
+		.get('$SessionStorage')
 		.init();
+
+	if (!oc.get('$Window').hasSessionStorage()) {
+		oc
+			.get('$SessionStorage')
+			.clear();
+	}
 
 	oc
 		.get('$Router')

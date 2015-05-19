@@ -27,14 +27,14 @@ class Controller extends ns.Core.Abstract.Controller {
 	 * Set seo params.
 	 *
 	 * @method setSeoParams
-	 * @param {Object} resolvedPromises
+	 * @param {Object} loadedResources
 	 * @param {Core.Interface.Seo} seo
 	 * @param {Core.Interface.Router} router
 	 * @param {Core.Interface.Dictionary} dictionary
 	 * @param {Object} settings
 	 */
-	setSeoParams(resolvedPromises, seo, router, dictionary, settings) {
-		var title = resolvedPromises.message;
+	setSeoParams(loadedResources, seo, router, dictionary, settings) {
+		var title = 'IMA.js';
 		var description = 'IMA.js is isomorphic javascript application framework.';
 		var image = router.getDomain() + settings.$Static.image + 'imajs-share.png';
 

@@ -5,7 +5,6 @@ describe('Core.Storage.Cookie', function() {
 
 	var request = null;
 	var response = null;
-	var secure = false;
 	var cookie = null;
 	var win = null;
 
@@ -13,7 +12,7 @@ describe('Core.Storage.Cookie', function() {
 		request = oc.create('Core.Router.Request');
 		response = oc.create('Core.Router.Response');
 		win = oc.create('Core.Window.Server');
-		cookie = oc.create('Core.Storage.Cookie', win, request, response, secure);
+		cookie = oc.create('Core.Storage.Cookie', [win, request, response]);
 
 		request.init({});
 		response.init({});

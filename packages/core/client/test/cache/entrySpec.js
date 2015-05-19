@@ -2,7 +2,7 @@ describe('Core.Cache.Entry', function() {
 
 	var cacheData = null;
 	beforeEach(function() {
-		cacheData = oc.create('Core.Cache.Entry', 123, 1000);
+		cacheData = oc.create('Core.Cache.Entry', [123, 1000]);
 		jasmine.clock().install();
 	});
 

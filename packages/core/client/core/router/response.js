@@ -60,7 +60,7 @@ class Response {
 	 * @param {string} url The URL to which the client should be redirected.
 	 * @param {number=} [status=303] The HTTP status code to send to the client.
 	 */
-	redirect(url ,status = 303) {
+	redirect(url, status = 303) {
 		this._response.redirect(url, status);
 	}
 

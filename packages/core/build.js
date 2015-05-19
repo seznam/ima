@@ -4,9 +4,9 @@ module.exports = (function() {
 		'imajs/client/core/namespace.js',
 		'imajs/client/core/component.js',
 		'imajs/client/core/objectContainer.js',
+		//'imajs/client/core/objectContainer.js',
 		'imajs/client/core/bootstrap.js',
-		'imajs/client/core/bootstrap.js',
-		'imajs/client/core/coreError.js',
+		'imajs/client/core/imaError.js',
 		'imajs/client/core/interface/*.js',
 		'imajs/client/core/config/*.js',
 		'imajs/client/core/abstract/*.js',
@@ -20,12 +20,10 @@ module.exports = (function() {
 		'imajs/client/core/router/*.js',
 		'imajs/client/core/seo/*.js',
 		'imajs/client/core/decorator/*.js',
-		'imajs/client/core/socket/*.js',
 		'imajs/client/core/event/*.js',
 		'imajs/client/core/storage/map.js',
 		'imajs/client/core/storage/*.js',
-		'imajs/client/core/window/*.js',
-		'imajs/client/core/animate/*.js'
+		'imajs/client/core/window/*.js'
 	];
 
 	var mainjs = ['imajs/client/main.js'];

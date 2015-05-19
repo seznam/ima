@@ -1,5 +1,5 @@
 import ns from 'imajs/client/core/namespace.js';
-import CoreError from 'imajs/client/core/coreError.js';
+import IMAError from 'imajs/client/core/imaError.js';
 
 ns.namespace('Core.Abstract');
 
@@ -159,13 +159,13 @@ class Router extends ns.Core.Interface.Router {
 	 * @param {string} view The full name or Object Container alias identifying
 	 *        the view class associated with this route.
 	 * @return {Core.Interface.Router} This router.
-	 * @throws {Core.CoreError} Thrown if a route with the same name is added
+	 * @throws {Core.IMAError} Thrown if a route with the same name is added
 	 *         multiple times.
 	 */
 	add(name, pathExpression, controller, view) {
 		if (this._routes.has(name)) {
-			throw new CoreError(`Core.Abstract.Router.add: The path with name ${name}` +
-			"is already defined");
+			throw new IMAError(`Core.Abstract.Router.add: The path with name ${name}` +
+			'is already defined');
 		}
 
 		var factory = this._factory;
@@ -250,7 +250,7 @@ class Router extends ns.Core.Interface.Router {
 		var route = this._routes.get(routeName);
 
 		if (!route) {
-			throw new CoreError(`Core.Router:link has undefined route with name ` +
+			throw new IMAError(`Core.Router:link has undefined route with name ` +
 			`${routeName}. Add new route with that name.`);
 		}
 
@@ -300,7 +300,7 @@ class Router extends ns.Core.Interface.Router {
 		var routeError = this._routes.get(this._ROUTE_NAMES.ERROR);
 
 		if (!routeError) {
-			var error = new CoreError(`Core.Router:handleError has undefined ` +
+			var error = new IMAError(`Core.Router:handleError has undefined ` +
 				`route. Add new route with name '${this._ROUTE_NAMES.ERROR}'.`,
 				params);
 
@@ -327,7 +327,7 @@ class Router extends ns.Core.Interface.Router {
 		var routeNotFound = this._routes.get(this._ROUTE_NAMES.NOT_FOUND);
 
 		if (!routeNotFound) {
-			var error = new CoreError(`Core.Router:handleNotFound has undefined ` +
+			var error = new IMAError(`Core.Router:handleNotFound has undefined ` +
 				`route. Add new route with name '${this._ROUTE_NAMES.NOT_FOUND}'.`,
 				params);
 
@@ -345,12 +345,12 @@ class Router extends ns.Core.Interface.Router {
 	 * @inheritdoc
 	 * @override
 	 * @method isClientError
-	 * @param {(Core.CoreError|Error)} error The encountered error.
+	 * @param {(Core.IMAError|Error)} error The encountered error.
 	 * @return {boolean} {@code true} if the error was caused the action of the
 	 *         client.
 	 */
 	isClientError(error) {
-		return (error instanceof CoreError) &&
+		return (error instanceof IMAError) &&
 			(error.getHttpStatus() >= 400) &&
 			(error.getHttpStatus() < 500);
 	}
@@ -359,12 +359,12 @@ class Router extends ns.Core.Interface.Router {
 	 * Tests, if possible, whether the specified error lead to redirection.
 	 *
 	 * @method isRedirection
-	 * @param {(Core.CoreError|Error)} error The encountered error.
+	 * @param {(Core.IMAError|Error)} error The encountered error.
 	 * @return {boolean} {@code true} if the error was caused the action of the
 	 *         redirection.
 	 */
 	isRedirection(error) {
-		return (error instanceof CoreError) &&
+		return (error instanceof IMAError) &&
 			(error.getHttpStatus() >= 300) &&
 			(error.getHttpStatus() < 400);
 	}

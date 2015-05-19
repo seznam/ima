@@ -5,23 +5,20 @@ var hljs = require('highlight.js');
 var sep = require('path').sep;
 var errorView = require('./template/errorView.js');
 var environment = require('./environment.js');
-var appRecycler = require('./instanceRecycler.js');
+var instanceRecycler = require('./instanceRecycler.js');
 
 var vendorScript = require('./vendor.server.js');
 var appServerScript = require('./app.server.js');
 
 var vendor = vendorScript();
-var apiConnections = {
-	count: 0
-};
-
+var appServer = appServerScript();
 
 hljs.configure({
 	tabReplace: '  ',
 	lineNodes: true
 });
 
-appRecycler.init(appServerScript, environment.$Server.concurency);
+instanceRecycler.init(appServer.createIMAJsApp, environment.$Server.concurency);
 
 module.exports = (() => {
 	var _displayDetails = (err, req, res) => {
@@ -89,7 +86,8 @@ module.exports = (() => {
 
 		var dictionary = require('./locale/' + language + '.js');
 
-		var appServer = appRecycler.getInstance();
+		//var app = appServer.createIMAJsApp();
+		var app = instanceRecycler.getInstance();
 
 		var bootConfig = {
 			vendor: vendor,
@@ -118,15 +116,14 @@ module.exports = (() => {
 		};
 
 		Object.assign(bootConfig, appServer.getInit());
-		appServer
-			.getBootstrap()
+		app.bootstrap
 			.run(bootConfig);
 
-		return appServer;
+		return app;
 	};
 
 	var showStaticErrorPage = (err, req, res) => {
-		console.error(err);
+		console.log(err);
 
 		fs.readFile('./build/static/html/error.html', 'utf-8', (error, content) => {
 			res.status(500)
@@ -138,17 +135,16 @@ module.exports = (() => {
 		});
 	};
 
-	var errorHandler = (err, req, res, appServer) => {
+	var errorHandler = (err, req, res, app) => {
 
 		if (environment.$Debug) {
 			_displayDetails(err, req, res);
 		} else {
 
-			if (!appServer) {
-				appServer = _initApp(req, res);
+			if (!app) {
+				app = _initApp(req, res);
 			}
-			var router = appServer
-				.getObjectContainer()
+			var router = app.oc
 				.get('$Router');
 
 			var applyError = (error) => {
@@ -156,9 +152,10 @@ module.exports = (() => {
 					router
 						.handleError(error)
 						.then(() => {
-							appRecycler.clearInstance(appServer);
+							instanceRecycler.clearInstance(app);
 						})
 						.catch((fatalError) => {
+							instanceRecycler.clearInstance(app);
 							showStaticErrorPage(fatalError, req, res);
 						})
 				);
@@ -168,7 +165,7 @@ module.exports = (() => {
 				router
 					.handleNotFound(err)
 					.then(() => {
-						appRecycler.clearInstance(appServer);
+						instanceRecycler.clearInstance(app);
 					})
 					.catch((error) => {
 						applyError(error);
@@ -177,7 +174,7 @@ module.exports = (() => {
 				router
 					.redirect(err.getParams().url)
 					.then(() => {
-						appRecycler.clearInstance(appServer);
+						instanceRecycler.clearInstance(app);
 					})
 					.catch((error) => {
 						applyError(error);
@@ -189,18 +186,17 @@ module.exports = (() => {
 	};
 
 	var response = (req, res) => {
-		var appServer = _initApp(req, res);
-		var router = appServer
-			.getObjectContainer()
+		var app = _initApp(req, res);
+		var router = app.oc
 			.get('$Router');
 
 		router
 			.route(router.getPath())
 			.then(() => {
-				appRecycler.clearInstance(appServer);
+				instanceRecycler.clearInstance(app);
 			})
 			.catch((error) => {
-				errorHandler(error, req, res, appServer);
+				errorHandler(error, req, res, app);
 			});
 	};
 

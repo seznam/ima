@@ -1,5 +1,5 @@
 import ns from 'imajs/client/core/namespace.js';
-import CoreError from 'imajs/client/core/coreError.js';
+import IMAError from 'imajs/client/core/imaError.js';
 
 ns.namespace('Core.Http');
 
@@ -260,7 +260,7 @@ class Agent extends ns.Core.Interface.HttpAgent {
 	 * @return {Core.Interface.HttpAgent} This instance.
 	 */
 	setDefaultHeader(header, value) {
-		this._proxy.setDefaultHeader(header,value);
+		this._proxy.setDefaultHeader(header, value);
 
 		return this;
 	}
@@ -367,7 +367,7 @@ class Agent extends ns.Core.Interface.HttpAgent {
 				.request(method, url, data, options)
 				.then((response) => {
 					return this._proxyResolved(response);
-				},(errorParams) => {
+				}, (errorParams) => {
 					return this._proxyRejected(errorParams);
 				})
 		);
@@ -441,8 +441,8 @@ class Agent extends ns.Core.Interface.HttpAgent {
 			this._cache.delete(cachePromiseKey);
 
 			var errorName = errorParams.errorName;
-			var errorMessage = `${errorName}: Core.Http.Agent:_proxyRejected`
-			var error = new CoreError(errorMessage, errorParams)
+			var errorMessage = `${errorName}: Core.Http.Agent:_proxyRejected`;
+			var error = new IMAError(errorMessage, errorParams);
 			return Promise.reject(error);
 		}
 	}

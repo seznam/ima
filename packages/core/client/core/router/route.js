@@ -273,7 +273,8 @@ class Route {
 		pattern = '^/' + pattern;
 
 		// add query parameters matcher
-		pattern += '(?:\\?(?:[^=&]*(?:=[^&]*)?)(?:[&;][^=&]*(?:=[^&]*)?)*)?$';
+		var pairPattern = '[^=&;]*(?:=[^&;]*)?';
+		pattern += `(?:\\?(?:${pairPattern})(?:[&;]${pairPattern})*)?$`;
 
 		return new RegExp(pattern);
 	}
@@ -323,12 +324,12 @@ class Route {
 		var hasQuery = (queryStart > -1) && (queryStart !== (path.length - 1));
 
 		if (hasQuery) {
-			var pairs = path.substring(queryStart + 1).split('&');
+			var pairs = path.substring(queryStart + 1).split(/[&;]/);
 
 			for (var parameterPair of pairs) {
 				var pair = parameterPair.split('=');
 				query[decodeURIComponent(pair[0])] =
-					decodeURIComponent(pair[1] || null);
+					(pair.length > 1) ? decodeURIComponent(pair[1]) : true;
 			}
 		}
 

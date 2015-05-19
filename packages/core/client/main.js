@@ -1,6 +1,6 @@
 import ns from 'imajs/client/core/namespace.js';
-import oc from 'imajs/client/core/objectContainer.js';
-import bootstrap from 'imajs/client/core/bootstrap.js';
+import ObjectContainer from 'imajs/client/core/objectContainer.js';
+import Bootstrap from 'imajs/client/core/bootstrap.js';
 
 // Import app/config
 import {init as initBindCore} from 'imajs/client/core/config/bind.js';
@@ -14,16 +14,15 @@ var getInit = () => {
 	return {initBindCore, initBindApp, initRoutes, initServicesCore, initServicesApp, initSettings};
 };
 
-var getNameSpace = () => {
+var getNamespace = () => {
 	return ns;
 };
 
-var getObjectContainer = () => {
-	return oc;
-};
+var createIMAJsApp = () => {
+	var oc = new ObjectContainer(ns);
+	var bootstrap = new Bootstrap(oc);
 
-var getBootstrap = () => {
-	return bootstrap;
+	return {oc, bootstrap};
 };
 
 //only on client side
@@ -55,10 +54,13 @@ if (typeof window !== 'undefined' && window !== null) {
 		};
 
 		Object.assign(bootConfig, getInit());
-		bootstrap.run(bootConfig);
+
+		var app = createIMAJsApp();
+
+		app.bootstrap.run(bootConfig);
 
 		window.ns = ns;
-		window.oc = oc;
+		window.oc = app.oc;
 
 	} else {
 
@@ -102,15 +104,16 @@ if (typeof window !== 'undefined' && window !== null) {
 				}
 			};
 
-			window.ns = ns;
-
 			Object.assign(bootConfig, getInit());
-			bootstrap.run(bootConfig);
 
-			var cache = oc.get('$Cache');
+			var app = createIMAJsApp();
+
+			app.bootstrap.run(bootConfig);
+
+			var cache = app.oc.get('$Cache');
 			cache.deserialize(window.$IMA.Cache);
 
-			var router = oc.get('$Router');
+			var router = app.oc.get('$Router');
 
 			router
 				.listen()
@@ -122,4 +125,4 @@ if (typeof window !== 'undefined' && window !== null) {
 	}
 }
 
-export {getInit, getNameSpace, getObjectContainer, getBootstrap};
+export {getInit, getNamespace, createIMAJsApp};

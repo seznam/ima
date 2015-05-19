@@ -118,7 +118,7 @@ describe('Core.Event.Dispatcher', function() {
 			expect(handlers.handler2).toHaveBeenCalledWith(data);
 		});
 
-		it('should be throw error for undefiend event', function() {
+		it('should be throw error for undefined event', function() {
 			expect(function() {
 				dispatcher.fire(event, data);
 			}).toThrow();

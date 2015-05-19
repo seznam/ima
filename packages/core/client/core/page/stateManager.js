@@ -61,7 +61,6 @@ class StateManager extends ns.Core.Interface.PageStateManager {
 	 * @param {Object} state
 	 */
 	setState(state) {
-		
 		if (this._states.length > this.MAX_HISTORY_LIMIT) {
 			this._states.shift();
 			this._cursor--;

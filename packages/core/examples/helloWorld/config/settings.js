@@ -1,6 +1,9 @@
-export var init = (ns, oc, config) => { // jshint ignore:line
+var versionCoef = 1000 * 30;
+var timeStamp = Math.round(new Date().getTime() / versionCoef) * versionCoef;
+var version = `?version=${timeStamp}`;
 
-	return  {
+export var init = (ns, oc, config) => { // jshint ignore:line
+	return {
 		prod: {
 			$Http: {
 				baseUrl: config.$Protocol + '//www.example.com/api', // jshint ignore:line
@@ -19,11 +22,12 @@ export var init = (ns, oc, config) => { // jshint ignore:line
 			$Page:{
 				$Render: {
 					scripts: [
-						'/static/js/locale/'+config.$Language+'.js',
-						'/static/js/app.bundle.js'
+						'/static/js/locale/' + config.$Language + '.js' + version,
+						'/static/js/app.bundle.js' + version
 					],
-					masterView: 'App.Component.Layout.Master.View',
-					masterElementId: 'page'
+					documentView: 'App.Component.Document.View',
+					masterElementId: 'page',
+					version: timeStamp
 				}
 			},
 			$Static: {
@@ -46,15 +50,14 @@ export var init = (ns, oc, config) => { // jshint ignore:line
 			$Page:{
 				$Render: {
 					scripts: [
-						'/static/js/polyfill.js',
-						'/static/js/shim.js',
-						'/static/js/vendor.client.js',
-						'/static/js/locale/'+config.$Language+'.js',
-						'/static/js/app.client.js'
+						'/static/js/polyfill.js' + version,
+						'/static/js/shim.js' + version,
+						'/static/js/vendor.client.js' + version,
+						'/static/js/locale/' + config.$Language + '.js' + version,
+						'/static/js/app.client.js' + version
 					]
 				}
 			}
 		}
 	};
-
 };

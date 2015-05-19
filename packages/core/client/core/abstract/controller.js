@@ -1,5 +1,5 @@
 import ns from 'imajs/client/core/namespace.js';
-import CoreError from 'imajs/client/core/coreError.js';
+import IMAError from 'imajs/client/core/imaError.js';
 
 ns.namespace('Core.Abstract');
 
@@ -132,7 +132,7 @@ class Controller extends ns.Core.Interface.Controller {
 	 *         resolved values will be pushed to the controller's state.
 	 */
 	load() {
-		throw new CoreError('The Core.Abstract.Controller.load method is abstract ' +
+		throw new IMAError('The Core.Abstract.Controller.load method is abstract ' +
 		'and must be overridden');
 	}
 
@@ -223,8 +223,8 @@ class Controller extends ns.Core.Interface.Controller {
 	 * @param {Object<string, *>} settings The application settings for the
 	 *        current application environment.
 	 */
-	setSeoParams(resolvedPromises, seo, router, dictionary, settings) {
-		throw new CoreError('The Core.Abstract.Controller.setSeoParams method is ' +
+	setSeoParams(loadedResources, seo, router, dictionary, settings) {
+		throw new IMAError('The Core.Abstract.Controller.setSeoParams method is ' +
 		'abstract and must be overridden');
 	}
 

@@ -1,0 +1,284 @@
+describe('Core.ObjectContainer', function() {
+
+	var oc = null;
+
+	var alias = 'alias';
+	var classParent = function() { this.parent = this; };
+	var classConstructor = function(dependency) { this.dependecy = dependency};
+	var classDependency = function() {};
+	var dependencies = [classDependency];
+	extend(classConstructor, classParent);
+
+	var constantName = 'constant';
+	var constantValue = 'value';
+
+	var namespacePathUnit = 'Test.Unit';
+	var namespacePathOC = 'Test.Unit.ObjectContainer';
+	ns.namespace(namespacePathUnit);
+
+	beforeEach(function() {
+		oc = new ns.Core.ObjectContainer(ns);
+		var map = new Map();
+
+	});
+
+	it('should be empty object container', function() {
+		expect(oc._aliases.size).toEqual(0);
+		expect(oc._constants.size).toEqual(0);
+		expect(oc._registry.size).toEqual(0);
+		expect(oc._providers.size).toEqual(0);
+	});
+
+	it('should be clear all maps', function() {
+		spyOn(oc._constants, 'clear')
+			.and
+			.stub();
+
+		spyOn(oc._aliases, 'clear')
+			.and
+			.stub();
+
+		spyOn(oc._registry, 'clear')
+			.and
+			.stub();
+
+		spyOn(oc._providers, 'clear')
+			.and
+			.stub();
+
+		oc.clear();
+
+		expect(oc._constants.clear).toHaveBeenCalled();
+		expect(oc._aliases.clear).toHaveBeenCalled();
+		expect(oc._registry.clear).toHaveBeenCalled();
+		expect(oc._providers.clear).toHaveBeenCalled();
+	});
+
+	describe('constant method', function() {
+
+		it('should be set constant value', function() {
+			spyOn(oc, '_createEntry')
+				.and
+				.callThrough();
+
+			oc.constant(constantName, constantValue);
+
+			expect(oc._createEntry).toHaveBeenCalled();
+			expect(oc._constants.get(constantName).sharedInstance, constantValue);
+		});
+
+	});
+
+	describe('inject method', function() {
+
+		beforeEach(function() {
+			oc.clear();
+		});
+
+		it('should be throw error, if classConstructor parameter is not function', function() {
+			expect(function() {
+				oc.inject(alias, dependencies);
+			}).toThrow();
+		});
+
+		it('should be create new instance of entry and set it to registry', function() {
+			spyOn(oc, '_createEntry')
+				.and
+				.callThrough();
+
+			oc.inject(classConstructor, dependencies);
+
+			expect(oc._registry.get(classConstructor).classConstructor).toEqual(classConstructor);
+			expect(oc._registry.get(classConstructor).dependencies).toEqual(dependencies);
+			expect(oc._createEntry).toHaveBeenCalledWith(classConstructor, dependencies);
+			expect(oc._registry.size).toEqual(1);
+		});
+
+		it('should be throw error, if yow call inject more times for same classConstructor', function() {
+			oc.inject(classConstructor, dependencies);
+
+			expect(function() {
+				oc.inject(classConstructor, dependencies);
+			}).toThrow();
+		});
+	});
+
+
+	describe('bind method', function() {
+
+		beforeEach(function() {
+			oc.clear();
+		});
+
+		it('should be create new entry for defined dependencies', function() {
+			spyOn(oc, '_createEntry')
+				.and
+				.callThrough();
+
+			oc.bind(alias, classConstructor, dependencies);
+
+			expect(oc._createEntry).toHaveBeenCalledWith(classConstructor, dependencies);
+		});
+
+		it('should be use entry from registry if entry exist and dependencies is undefined', function() {
+			oc.inject(classConstructor, dependencies);
+
+			spyOn(oc, '_createEntry')
+				.and
+				.callThrough();
+
+			oc.bind(alias, classConstructor);
+
+			expect(oc._createEntry.calls.count()).toEqual(0);
+			expect(oc._aliases.get(alias)).toEqual(oc._registry.get(classConstructor));
+		});
+
+		it('should be use entry from providers if entry exist and dependencies is undefined', function() {
+			oc.provide(classParent, classConstructor, dependencies);
+
+			spyOn(oc, '_createEntry')
+				.and
+				.callThrough();
+
+			oc.bind(alias, classParent);
+
+			expect(oc._createEntry.calls.count()).toEqual(0);
+			expect(oc._aliases.get(alias)).toEqual(oc._providers.get(classParent));
+		});
+
+		it('should be throw Error if classContructor param is not type of function', function() {
+			expect(function() {
+				oc.bind(alias, {}, dependencies);
+			}).toThrow();
+		});
+
+	});
+
+	describe('provide method', function() {
+
+		beforeEach(function() {
+			oc.clear();
+		});
+
+		it('should be create new Entry and set it to providers', function() {
+			spyOn(oc, '_createEntry')
+				.and
+				.callThrough();
+
+			oc.provide(classParent, classConstructor, dependencies);
+
+			expect(oc._createEntry.calls.count()).toEqual(1);
+			expect(oc._providers.size).toEqual(1);
+		});
+
+		it('should be throw Error if you call provide more time for same interfaceConstructor', function() {
+			oc.provide(classParent, classConstructor, dependencies);
+
+			expect(function() {
+				oc.provide(classParent, classConstructor, dependencies);
+			}).toThrow();
+		});
+
+		it('should be throw Error, if interface is not match with implementation', function() {
+			expect(function() {
+				oc.provide(classDependency, classConstructor, dependencies);
+			}).toThrow();
+		});
+	});
+
+	describe('getEntry method', function() {
+
+		beforeEach(function() {
+			oc.clear();
+		});
+
+		it('should be throw Error for undefined identification of entry', function() {
+			expect(function() {
+				oc.getEntry(function() {});
+			}).toThrow();
+
+			expect(function() {
+				oc.getEntry('undefined');
+			}).toThrow();
+		});
+
+		it('should be return entry from constants', function() {
+			oc.constant(constantName, constantValue);
+
+			expect(oc.getEntry(constantName).sharedInstance).toEqual(constantValue);
+		});
+
+		it('should be return entry from aliases', function() {
+			oc.bind(alias, classConstructor, dependencies);
+
+			expect(oc.getEntry(alias).sharedInstance)
+		});
+
+		it('should be return value from registry', function() {
+			oc.inject(classConstructor, dependencies);
+
+			var entry = oc.getEntry(classConstructor);
+
+			expect(entry.classConstructor).toEqual(classConstructor);
+			expect(entry.dependencies).toEqual(dependencies);
+		});
+
+		it('should be return value from namespace', function() {
+			var value = {a: 1};
+			var namespace = ns.get(namespacePathUnit);
+			namespace.ObjectContainer = value;
+
+			var entry = oc.getEntry(namespacePathOC);
+
+			expect(entry.sharedInstance).toEqual(value);
+		});
+
+	});
+
+	describe('_getEntryFromNamespace method', function() {
+
+		var namespace = null;
+		beforeEach(function() {
+			namespace = ns.get(namespacePathUnit);
+			namespace.ObjectContainer = classConstructor;
+
+			oc.clear();
+		});
+
+		it('should be return entry from registry', function() {
+			oc.inject(classConstructor, dependencies);
+
+			var entry = oc._getEntryFromNamespace(namespacePathOC);
+
+			expect(entry.classConstructor).toEqual(classConstructor);
+			expect(entry.dependencies).toEqual(dependencies);
+		});
+
+		it('should be create new entry if namespace return function with zero dependencies and their dependencies is not injected', function() {
+			namespace.ObjectContainer = classDependency;
+
+			spyOn(oc, '_createEntry')
+				.and
+				.callThrough();
+
+			var entry = oc._getEntryFromNamespace(namespacePathOC);
+
+			expect(entry.classConstructor).toEqual(classDependency);
+			expect(entry.dependencies).toEqual([]);
+		});
+
+		it('should be create entry with constant value if namespace return another type than function', function() {
+			var constant = {a: 1};
+			namespace.ObjectContainer = constant;
+
+			spyOn(oc, '_createEntry')
+				.and
+				.callThrough();
+
+			var entry = oc._getEntryFromNamespace(namespacePathOC);
+
+			expect(entry.sharedInstance).toEqual(constant);
+		});
+
+	});
+});
