@@ -1,6 +1,6 @@
 var versionCoef = 1000 * 30;
-var timeStamp = Math.round(new Date().getTime() / versionCoef) * versionCoef;
-var version = `?version=${timeStamp}`;
+var version = Math.round(new Date().getTime() / versionCoef) * versionCoef;
+var versionStamp = `?version=${version}`;
 
 export var init = (ns, oc, config) => { // jshint ignore:line
 	return {
@@ -22,12 +22,12 @@ export var init = (ns, oc, config) => { // jshint ignore:line
 			$Page:{
 				$Render: {
 					scripts: [
-						'/static/js/locale/' + config.$Language + '.js' + version,
-						'/static/js/app.bundle.js' + version
+						'/static/js/locale/' + config.$Language + '.js' + versionStamp,
+						'/static/js/app.bundle.js' + versionStamp
 					],
 					documentView: 'App.Component.Document.View',
 					masterElementId: 'page',
-					version: timeStamp
+					version: version
 				}
 			},
 			$Static: {
@@ -50,11 +50,11 @@ export var init = (ns, oc, config) => { // jshint ignore:line
 			$Page:{
 				$Render: {
 					scripts: [
-						'/static/js/polyfill.js' + version,
-						'/static/js/shim.js' + version,
-						'/static/js/vendor.client.js' + version,
-						'/static/js/locale/' + config.$Language + '.js' + version,
-						'/static/js/app.client.js' + version
+						'/static/js/polyfill.js' + versionStamp,
+						'/static/js/shim.js' + versionStamp,
+						'/static/js/vendor.client.js' + versionStamp,
+						'/static/js/locale/' + config.$Language + '.js' + versionStamp,
+						'/static/js/app.client.js' + versionStamp
 					]
 				}
 			}
