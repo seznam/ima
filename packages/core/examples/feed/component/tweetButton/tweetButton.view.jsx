@@ -1,13 +1,12 @@
 import ns from 'imajs/client/core/namespace.js';
-import bootstrap from 'imajs/client/core/bootstrap.js';
-
+import component from 'imajs/client/core/component.js';
 
 const POPUP_SIZE = Object.freeze({
 	width: 550,
 	height: 443
 });
 
-bootstrap.addComponent((utils) => {
+component.add((utils) => {
 
 	ns.namespace('App.Component.TweetButton');
 
@@ -39,7 +38,7 @@ bootstrap.addComponent((utils) => {
 			return (
 				<a
 						href={link}
-						onClick={()=>this.onShare()}
+						onClick={(e)=>this.onShare(e)}
 						className='tweet-button'
 						target='_blank'>
 					{this.props.label}

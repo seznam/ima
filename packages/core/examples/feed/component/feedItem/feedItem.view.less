@@ -26,6 +26,12 @@
 			text-align: justify;
 		}
 
+		@media (max-width: 480px) {
+			.content {
+				text-align: left;
+			}
+		}
+
 		.toolbar {
 			.clearfix();
 
@@ -37,6 +43,11 @@
 				.rem(font-size; 12px);
 				.grid(margin; 1 4 0 0);
 				.grid(min-width; 8);
+			}
+			.share > a {
+				color: @color-grey;
+				font-weight: bold;
+				.rem(font-size; 12px);
 			}
 
 			& > .date {

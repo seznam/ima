@@ -1,7 +1,7 @@
 import ns from 'imajs/client/core/namespace.js';
-import bootstrap from 'imajs/client/core/bootstrap.js';
+import component from 'imajs/client/core/component.js';
 
-bootstrap.addComponent((utils) => {
+component.add((utils) => {
 
 	ns.namespace('App.Component.Filter');
 

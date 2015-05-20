@@ -1,4 +1,5 @@
 import ns from 'imajs/client/core/namespace.js';
+import IMAError from 'imajs/client/core/imaError.js';
 
 ns.namespace('App.Module');
 
@@ -14,10 +15,10 @@ class FakeHttp {
 	/**
 	 * @constructor
 	 * @method constructor
+	 * @param {string} apiBaseUrl
 	 */
-	constructor(promise) {
-
-		this._promise = promise;
+	constructor(apiBaseUrl) {
+		this._apiBaseUrl = apiBaseUrl;
 
 		this.categories = [
 			{
@@ -94,7 +95,10 @@ class FakeHttp {
 	 * return {Object} - Json object with all items.
 	 */
 	get(url, data = {}) {
-		switch(url) {
+		// Universal API BASE URL
+		var apiUrl = url.replace(this._apiBaseUrl,'');
+
+		switch(apiUrl) {
 			case '/items':
 				var items = this.items;
 
@@ -104,9 +108,9 @@ class FakeHttp {
 						return item._id === id;
 					});
 					if (singleItem[0]) {
-						return this._promise.resolve(singleItem[0]);
+						return Promise.resolve(singleItem[0]);
 					}
-					return this._promise.reject(oc.create('$Error', 'Bad request', { status: 404, url: url }));
+					return Promise.reject(new IMAError('Bad request', { status: 404,  url: apiUrl, fullUrl: url }));
 				}
 
 				if (data.category) {
@@ -115,11 +119,11 @@ class FakeHttp {
 					});
 				}
 
-				return this._promise.resolve({ 'items': items });
+				return Promise.resolve({ 'items': items });
 			case '/categories':
-				return this._promise.resolve({ 'categories': this.categories });
+				return Promise.resolve({ 'categories': this.categories });
 			default: 
-				return this._promise.reject(oc.create('$Error', 'Bad request', { status: 404, url: url }));
+				return Promise.reject(new IMAError('Bad request', { status: 404, url: apiUrl, fullUrl: url }));
 		}
 	}
 
@@ -131,16 +135,18 @@ class FakeHttp {
 	 */
 	post(url, data = {}) {
 
-		switch(url) {
+		var apiUrl = url.replace(this._apiBaseUrl,'');
+
+		switch(apiUrl) {
 			case '/items':
 				data._id = this._nextId;
 				data.date = new Date().toString();
 				this._nextId++;
 				this.items.push(data);
 
-				return this._promise.resolve(data);
+				return Promise.resolve(data);
 			default: 
-				return this._promise.reject(oc.create('$Error', 'Bad request', { status: 500, url: url }));
+				return Promise.reject(new IMAError('Bad request', { status: 500, url: apiUrl, fullUrl: url }));
 		}
 	}
 	

@@ -15,9 +15,10 @@ class Factory extends ns.App.Base.EntityFactory {
 	/**
 	 * @constructor
 	 * @method constructor
+	 * @param {App.Module.Feed.Entity} FeedEntityConstructor
 	 */
-	constructor(itemFactory) {
-		super('FeedEntity');
+	constructor(FeedEntityConstructor, itemFactory) {
+		super(FeedEntityConstructor);
 
 		this._itemFactory = itemFactory;
 	}

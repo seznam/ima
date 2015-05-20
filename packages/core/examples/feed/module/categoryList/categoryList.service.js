@@ -1,4 +1,5 @@
 import ns from 'imajs/client/core/namespace.js';
+import IMAError from 'imajs/client/core/imaError.js';
 
 ns.namespace('App.Module.Feed');
 
@@ -53,6 +54,10 @@ class Service extends ns.App.Base.Service {
 				.getEntity()
 				.then((categoryListEntity) => {
 					var categories = categoryListEntity.getCategories();
+
+					if (!urlName) {
+						return null;
+					}
 					
 					for (var i = 0; i < categories.length; i++) {
 						if (categories[i].getUrlName() === urlName) {
@@ -60,7 +65,9 @@ class Service extends ns.App.Base.Service {
 						}
 					}
 
-					return null;
+
+
+					throw new IMAError('Category not found.', {status: 404});
 				})
 		);
 		

@@ -38,4 +38,27 @@
 		background: url('@{images}/logo.png') left center no-repeat;
 		background-size: 85%;
 	}
+
+	@media (max-width: 480px) {
+		.logo {
+			.grid(margin; 0 0 0 0);
+			width: 100%;
+			.grid(max-width; 47);
+			background-position: center;
+  			background-size: contain;
+		}
+
+		.title-wrapper {
+			.grid(margin; 0);
+			h1 {
+				.grid(margin; 0);
+				width: 100%;
+				text-align: center;
+			}
+		}
+
+		& > a {
+			display: none;
+		}
+	}
 }

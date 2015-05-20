@@ -69,10 +69,10 @@ class Controller extends ns.App.Base.Controller {
 	}
 
 	/**
-	 * @method deinit
+	 * @method destroy
 	 */
 	// @override
-	deinit() {
+	destroy() {
 	}
 
 }

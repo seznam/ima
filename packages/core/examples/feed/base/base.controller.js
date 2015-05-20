@@ -31,7 +31,7 @@ class Controller extends ns.Core.Abstract.Controller {
 	 * @param {Core.Interface.Dictionary} dictionary
 	 * @param {Object} setting
 	 */
-	setSeoParams(resolvedPromises, seo, router, dictionary, setting) {
+	setMetaParams(resolvedPromises, seo, router, dictionary, setting) {
 
 		var title = dictionary.get('home.seoTitle');
 		var description = dictionary.get('home.seoDescription');

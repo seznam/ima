@@ -17,9 +17,9 @@ class EntityFactory extends ns.App.Interface.EntityFactory {
 	/**
 	 * @constructor
 	 * @method constructor
-	 * @param {String} entity - name of entity
+	 * @param {App.Base.Entity} EntityConstructor - name of entity
 	 */
-	constructor(entity) {
+	constructor(EntityConstructor) {
 		super();
 		/**
 		 * @property _entity
@@ -27,7 +27,7 @@ class EntityFactory extends ns.App.Interface.EntityFactory {
 		 * @type {String}
 		 * @default entity
 		 */
-		this._entity = entity;
+		this._EntityConstructor = EntityConstructor;
 	}
 
 	/**
@@ -57,7 +57,7 @@ class EntityFactory extends ns.App.Interface.EntityFactory {
 	 * @return {App.Base.Entity}
 	 */
 	createEntity(data) {
-		return oc.create(this._entity, data);
+		return new this._EntityConstructor(data);
 	}
 }
 

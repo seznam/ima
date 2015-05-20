@@ -91,8 +91,8 @@ class Resource extends ns.App.Interface.Resource {
 
 		return this._http
 			.get(url, data, options)
-			.then((results) => {
-				return this._entityFactory.createEntity(results);
+			.then((result) => {
+				return this._entityFactory.createEntity(result.body);
 			},(error) => {
 				throw error;
 			});
@@ -113,47 +113,7 @@ class Resource extends ns.App.Interface.Resource {
 		return this._http
 			.post(url, data, options)
 			.then((result) => {
-				return this._entityFactory.createEntity(result);
-			},(error) => {
-				throw error;
-			});
-	}
-
-	/**
-	 * Gets entity list from http, save embeds to cache and returns Entity List. 
-	 *
-	 * @method getEntityList
-	 * @param {Object} [data={}]
-	 * @param {Object} [options={}]
-	 * @param {Boolean} [force=false] Forces request, doesn't use cache.
-	 * @return {Array[App.Base.Entity]} - Entity List
-	 */
-	getEntityList(data = {}, options = {}, force = false) {
-		var url = this._getUrl();
-		options = this._getOptions(options);
-
-		if (force) {
-			this._clearCacheForRequest(url, data);
-		}
-
-		return this._http
-			.get(url, data, options)
-			.then((results) => {
-				var embedRelList = this._halson(results).listEmbedRels();
-
-				for (var embedRel of embedRelList) {
-					var embeds = this._halson(results).getEmbeds(embedRel);
-
-					for (var embedData of embeds) {
-						var selfLink = embedData.getLink('self');
-						var embedUrl = this._baseUrl + selfLink.href;
-						var cacheKey = this._http.getCacheKey(embedUrl, data);
-
-						this._cache.set(cacheKey, embedData, options.ttl);
-					}
-				}
-				
-				return this._entityFactory.createEntityList(results);
+				return this._entityFactory.createEntity(result.body);
 			},(error) => {
 				throw error;
 			});

@@ -1,7 +1,7 @@
 import ns from 'imajs/client/core/namespace.js';
-import bootstrap from 'imajs/client/core/bootstrap.js';
+import component from 'imajs/client/core/component.js';
 
-bootstrap.addComponent((utils) => {
+component.add((utils) => {
 
 	ns.namespace('App.Component.Share');
 
@@ -33,7 +33,7 @@ bootstrap.addComponent((utils) => {
 
 			return (
 				<div className={'share' + (active)}>
-					<span className='toggle' onClick={()=>this.onToggle()}>{label}</span>
+					<a href={postLink} className='toggle' onClick={(e)=>this.onToggle(e)}>{label}</a>
 					<div className='sharing-wrapper'>
 						<div className='sharing-container'>
 							<div className='arrow'></div>
@@ -44,11 +44,11 @@ bootstrap.addComponent((utils) => {
 										value={postLink}
 										readOnly={true}
 										ref='shareLink'
-										onClick={()=>this.selectShareLink()}/>
+										onClick={(e)=>this.selectShareLink(e)}/>
 
 								<a
 										href={postLink}
-										onClick={()=>this.onShareOnFacebook()}
+										onClick={(e)=>this.onShareOnFacebook(e)}
 										className='facebook'>Facebook
 								</a>
 
@@ -125,7 +125,9 @@ bootstrap.addComponent((utils) => {
 			
 		}
 
-		onToggle() {
+		onToggle(e) {
+			e.preventDefault();
+			e.stopPropagation();
 			utils.$Dispatcher.fire('shareToggle', {
 				item: this.props.item
 			});

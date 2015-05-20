@@ -1,5 +1,12 @@
 export var init = (ns, oc, config) => { // jshint ignore:line
-	config.$IMA.fatalErrorHandler = (e) => {
-		console.error('Fatal error, run away!', e);
-	}
+	var $window = oc.get('$Window');
+	var $router = oc.get('$Router');
+
+	$window.bindEventListener($window.getWindow(), 'error', (e) => {
+		$router
+		.handleError(e.error)
+		.catch((fatalError) => {
+			console.error('FATAL ERROR HANDLER:', e);
+		});
+	});
 };

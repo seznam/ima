@@ -22,6 +22,34 @@
 		max-height: 0;
 		transition: 0.3s;
 		overflow: hidden;
+
+		a {
+			display: block;
+			float: left;
+			.grid(height; 4);
+			.grid(padding-left; 6);
+			.grid(margin-right; 13);
+			.rem(font-size; 14px);
+
+			color: black;
+			background: left center no-repeat; 
+		}
+
+		a:last-child {
+			margin-right: 0;
+		}
+
+		.facebook {
+			background-image: url('@{images}/share/facebook.png');
+		}
+
+		.tweet-button {
+			background-image: url('@{images}/share/twitter.png');
+		}
+
+		.email {
+			background-image: url('@{images}/share/email.png');
+		}
 	}
 
 	.arrow,
@@ -75,34 +103,6 @@
 		cursor: text;
 	}
 
-	a {
-		display: block;
-		float: left;
-		.grid(height; 4);
-		.grid(padding-left; 6);
-		.grid(margin-right; 13);
-		.rem(font-size; 14px);
-
-		color: black;
-		background: left center no-repeat; 
-	}
-
-	a:last-child {
-		margin-right: 0;
-	}
-
-	.facebook {
-		background-image: url('@{images}/share/facebook.png');
-	}
-
-	.tweet-button {
-		background-image: url('@{images}/share/twitter.png');
-	}
-
-	.email {
-		background-image: url('@{images}/share/email.png');
-	}
-
 	&.expanded {
 		color: #cc0000 !important;
 
@@ -112,5 +112,7 @@
 			.grid(max-height; 17);
 			.grid(padding-bottom; 1);
 		}
+
+		
 	}
 }

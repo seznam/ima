@@ -9,7 +9,8 @@ export var init = (ns, oc, config) => {
 				ttl: 0,
 				accept: 'application/json',
 				cachePrefix: 'http.',
-				cachePrefixPromise: 'http.promise.'
+				cachePrefixPromise: 'http.promise.',
+				language: config.$Language
 			},
 			$Cache: {
 				enabled: true,
@@ -21,7 +22,7 @@ export var init = (ns, oc, config) => {
 						'/static/js/locale/'+config.$Language+'.js',
 						'/static/js/app.bundle.js'
 					],
-					masterView: 'App.Component.Layout.Master.View',
+					documentView: 'App.Component.Document.View',
 					masterElementId: 'page'
 				}
 			},
@@ -38,7 +39,7 @@ export var init = (ns, oc, config) => {
 		},
 		dev: {
 			$Http: {
-				baseUrl: '' // For FakeHttp
+				baseUrl: config.$Protocol + '//localhost:3001/api'
 			},
 			$Page:{
 				$Render: {
@@ -46,9 +47,10 @@ export var init = (ns, oc, config) => {
 						'/static/js/shim.js',
 						'/static/js/vendor.client.js',
 						'/static/js/locale/'+config.$Language+'.js',
-						'/static/js/app.client.js'
+						'/static/js/app.client.js',
+						'/static/js/facebook.js'
 					],
-					masterView: 'App.Component.Layout.Master.View',
+					documentView: 'App.Component.Document.View',
 					masterElementId: 'page'
 				}
 			}
@@ -66,7 +68,7 @@ export var init = (ns, oc, config) => {
 						'/static/js/app.client.js',
 						'/static/js/facebook.js'
 					],
-					masterView: 'App.Component.Layout.Master.View',
+					documentView: 'App.Component.Document.View',
 					masterElementId: 'page'
 				}
 			}

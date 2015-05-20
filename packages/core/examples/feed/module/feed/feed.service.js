@@ -66,10 +66,10 @@ class Service extends ns.App.Base.Service {
 		return this
 			._categoryListService
 			.getCategoryByUrl(currentCategory)
-			.then((portalEntity) => {
+			.then((categoryEntity) => {
 
 				return this._feedResource
-						.getEntity(portalEntity);
+						.getEntity(categoryEntity);
 			});
 	}
 

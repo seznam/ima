@@ -14,19 +14,10 @@ class Controller extends ns.App.Base.Controller {
 	/**
 	 * @method constructor
 	 * @constructor
-	 * @param {Vendor.Rsvp.Promise} promise
 	 * */
-	constructor(promise) {
+	constructor() {
 		super();
 		this._status = 404;
-
-		/**
-		 * Promise Vendor
-		 *
-		 * @property _promise
-		 * @type {Vendor.Rsvp.Promise}
-		 */
-		this._promise = promise;
 	}
 
 	/**
@@ -37,7 +28,7 @@ class Controller extends ns.App.Base.Controller {
 	 * */
 	load() {
 		return {
-			status: this._promise.resolve(this._status)
+			status: this._status
 		};
 	}
 }

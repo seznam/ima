@@ -15,9 +15,10 @@ class Factory extends ns.App.Base.EntityFactory {
 	/**
 	 * @constructor
 	 * @method constructor
+	 * @param {App.Module.Item.Entity} ItemEntityConstructor
 	 */
-	constructor() {
-		super('ItemEntity');
+	constructor(ItemEntityConstructor) {
+		super(ItemEntityConstructor);
 	}
 }
 

@@ -96,10 +96,10 @@ class Controller extends ns.App.Base.Controller {
 	}
 
 	/**
-	 * @method deinit
+	 * @method destroy
 	 */
 	// @override
-	deinit() {
+	destroy() {
 		this._dispatcher.unlisten('addItemToFeed', this.addItemToFeed, this);
 		this._dispatcher.unlisten('shareToggle', this.onShareToggle, this);
 		//this._dispatcher.clear(); // It could work, too - sometimes.
@@ -125,6 +125,7 @@ class Controller extends ns.App.Base.Controller {
 	 */
 	onShareToggle(event) {
 		var state = this.getState();
+		console.log('state', state);
 
 		if (state.sharedItem === event.item) {
 			state.sharedItem = null;
