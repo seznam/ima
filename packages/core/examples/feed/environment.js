@@ -41,7 +41,7 @@ module.exports = (() => {
 				'//10.0.133.81:3001': 'en'
 			},
 			$Proxy: {
-				server: 'http://dock1.dev:5000/api'
+				server: 'http://localhost:3001/api'
 			}
 		},
 		test: {

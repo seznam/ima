@@ -70,6 +70,7 @@ component.add((utils) => {
 
 		onShareOnFacebook(event) {
 			event.preventDefault();
+			event.stopPropagation();
 
 			if (typeof FB === "undefined") {
 				return;
