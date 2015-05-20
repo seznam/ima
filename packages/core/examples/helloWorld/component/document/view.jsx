@@ -28,19 +28,19 @@ component.add((utils) => {
 						<meta charSet="utf-8" />
 						<meta httpEquiv="X-UA-Compatible" content="IE=edge" />
 
-						<meta name="description" content={this.props.seo.getMetaName('description')} />
-						<meta name="keywords" content={this.props.seo.getMetaName('keywords')} />
+						<meta name="description" content={this.props.metaManager.getMetaName('description')} />
+						<meta name="keywords" content={this.props.metaManager.getMetaName('keywords')} />
 
-						<meta property="og:title" content={this.props.seo.getMetaProperty('og:title')} />
-						<meta property="og:description" content={this.props.seo.getMetaProperty('og:description')} />
-						<meta property="og:type" content={this.props.seo.getMetaProperty('og:type')} />
-						<meta property="og:url" content={this.props.seo.getMetaProperty('og:url')} />
-						<meta property="og:image" content={this.props.seo.getMetaProperty('og:image')} />
+						<meta property="og:title" content={this.props.metaManager.getMetaProperty('og:title')} />
+						<meta property="og:description" content={this.props.metaManager.getMetaProperty('og:description')} />
+						<meta property="og:type" content={this.props.metaManager.getMetaProperty('og:type')} />
+						<meta property="og:url" content={this.props.metaManager.getMetaProperty('og:url')} />
+						<meta property="og:image" content={this.props.metaManager.getMetaProperty('og:image')} />
 
 						<meta name="viewport" content="width=device-width, initial-scale=1" />
 						<link rel="stylesheet" href={`/static/css/${appCssFile}`} />
 						<title>
-							{this.props.seo.getTitle()}
+							{this.props.metaManager.getTitle()}
 						</title>
 					</head>
 					<body>

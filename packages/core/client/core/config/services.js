@@ -16,20 +16,31 @@ export var init = (ns, oc, config) => {
 		.get('$Response')
 		.init(config.response);
 
+	if (!oc.get('$Window').isClient()) {
+		oc
+			.get('$CookieStorage')
+			.clear();
+
+		oc
+			.get('$SessionStorage')
+			.clear();
+
+		oc
+			.get('$CacheStorage')
+			.clear();
+	}
+
 	oc
 		.get('$CookieStorage')
-		.clear()
 		.init({secure: oc.get('$SECURE')});
 
 	oc
 		.get('$SessionStorage')
 		.init();
 
-	if (!oc.get('$Window').hasSessionStorage()) {
-		oc
-			.get('$SessionStorage')
-			.clear();
-	}
+	oc
+		.get('$CacheStorage')
+		.init();
 
 	oc
 		.get('$Router')

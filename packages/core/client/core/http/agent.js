@@ -411,7 +411,7 @@ class Agent extends ns.Core.Interface.HttpAgent {
 			}
 		}
 
-		return results;
+		return response;
 	}
 
 	/**
@@ -461,7 +461,8 @@ class Agent extends ns.Core.Interface.HttpAgent {
 	 */
 	_prepareOptions(options) {
 		var extraOptions = {
-			cookie: this._cookie.getCookiesString()
+			cookie: this._cookie.getCookiesString(),
+			headers: []
 		};
 
 		return Object.assign({}, this._options, extraOptions, options);

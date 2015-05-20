@@ -91,6 +91,14 @@ class Storage {
 	 *         {@code for..of} loop.
 	 */
 	keys() {}
+
+	/**
+	 * Returns storage size.
+	 *
+	 * @method size
+	 * @return {number}
+	 */
+	size() {}
 }
 
 ns.Core.Interface.Storage = Storage;

@@ -72,7 +72,7 @@ class Server extends ns.Core.Abstract.PageRender {
 				.allPromiseHash(loadPromises)
 				.then((fetchedResources) => {
 					controller.setState(fetchedResources);
-					controller.setSeoParams(fetchedResources);
+					controller.setMetaParams(fetchedResources);
 
 					var reactElementView = this._React.createElement(view, controller.getState());
 					var pageMarkup = this._React.renderToString(reactElementView);
@@ -81,7 +81,7 @@ class Server extends ns.Core.Abstract.PageRender {
 					var appMarkup = this._React.renderToStaticMarkup(documentView({
 						page: pageMarkup,
 						scripts: this._getScripts(),
-						seo: controller.getSeoManager()
+						metaManager: controller.getMetaManager()
 					}));
 
 					this._response

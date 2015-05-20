@@ -319,6 +319,12 @@ class Proxy {
 		request.set('Accept', options.accept);
 		request.set('Accept-Language', options.language);
 
+		for (var header of options.headers) {
+			if (header.name && header.value) {
+				request.set(header.name, header.value);
+			}
+		}
+
 		if (this.haveToSetCookiesManually()) {
 			request.set('Cookie', options.cookie);
 		}

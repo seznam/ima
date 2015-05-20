@@ -186,7 +186,27 @@ describe('Core.ObjectContainer', function() {
 		});
 	});
 
-	describe('getEntry method', function() {
+	describe('has method', function() {
+
+		beforeEach(function() {
+			oc.clear();
+		});
+
+		it('should be return true if name is exist in object container', function() {
+			oc.inject(classConstructor, dependencies);
+
+			expect(oc.has(classConstructor)).toEqual(true);
+			expect(oc.has(namespacePathUnit)).toEqual(true);
+		});
+
+		it('should be return false if name is not exist in object container', function() {
+			expect(oc.has(classConstructor)).toEqual(false);
+			expect(oc.has(namespacePathOC)).toEqual(false);
+		});
+
+	});
+
+	describe('_getEntry method', function() {
 
 		beforeEach(function() {
 			oc.clear();
@@ -194,30 +214,30 @@ describe('Core.ObjectContainer', function() {
 
 		it('should be throw Error for undefined identification of entry', function() {
 			expect(function() {
-				oc.getEntry(function() {});
+				oc._getEntry(function() {});
 			}).toThrow();
 
 			expect(function() {
-				oc.getEntry('undefined');
+				oc._getEntry('undefined');
 			}).toThrow();
 		});
 
 		it('should be return entry from constants', function() {
 			oc.constant(constantName, constantValue);
 
-			expect(oc.getEntry(constantName).sharedInstance).toEqual(constantValue);
+			expect(oc._getEntry(constantName).sharedInstance).toEqual(constantValue);
 		});
 
 		it('should be return entry from aliases', function() {
 			oc.bind(alias, classConstructor, dependencies);
 
-			expect(oc.getEntry(alias).sharedInstance)
+			expect(oc._getEntry(alias).sharedInstance)
 		});
 
 		it('should be return value from registry', function() {
 			oc.inject(classConstructor, dependencies);
 
-			var entry = oc.getEntry(classConstructor);
+			var entry = oc._getEntry(classConstructor);
 
 			expect(entry.classConstructor).toEqual(classConstructor);
 			expect(entry.dependencies).toEqual(dependencies);
@@ -228,7 +248,7 @@ describe('Core.ObjectContainer', function() {
 			var namespace = ns.get(namespacePathUnit);
 			namespace.ObjectContainer = value;
 
-			var entry = oc.getEntry(namespacePathOC);
+			var entry = oc._getEntry(namespacePathOC);
 
 			expect(entry.sharedInstance).toEqual(value);
 		});

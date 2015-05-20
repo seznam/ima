@@ -245,6 +245,17 @@ class Cookie extends ns.Core.Storage.Map {
 	}
 
 	/**
+	 * Returns storage size.
+	 *
+	 * @override
+	 * @method size
+	 * @return {number}
+	 */
+	size() {
+		return super.size();
+	}
+
+	/**
 	 * Returns all cookies in this storage serialized to a string compatible with
 	 * the {@code Set-Cookie} HTTP header and the setter of the
 	 * {@code document.cookie} property.

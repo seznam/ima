@@ -54,7 +54,6 @@ class Controller extends ns.App.Base.Controller {
 	 * object.
 	 *
 	 * @inheritdoc
-	 * @abstract
 	 * @override
 	 * @method load
 	 * @return {Object<string, (Vendor.Rsvp.Promise|*)>} A map object of promises
@@ -87,49 +86,48 @@ class Controller extends ns.App.Base.Controller {
 	activate() {}
 
 	/**
-	 * Callback used to configure the SEO attribute manager. The method is called
+	 * Callback used to configure the meta attribute manager. The method is called
 	 * after the the controller's state has been patched with the loaded
 	 * resources, the view has been rendered and (if at the client-side) the
 	 * controller has been provided with the rendered view.
 	 *
 	 * @inheritdoc
 	 * @override
-	 * @abstract
-	 * @method setSeoParams
+	 * @method setMetaParams
 	 * @param {Object<string, *>} loadedResources Map of resource names to
 	 *        resources loaded by the {@codelink load} method. This is the same
 	 *        object as the one passed to the {@codelink patchState} method when
 	 *        the Promises returned by the {@codelink load} method were resolved.
-	 * @param {Core.Interface.Seo} seo SEO attributes manager to configure.
+	 * @param {Core.Interface.MetaManager} metaManager Meta attributes manager to configure.
 	 * @param {Core.Interface.Router} router The current application router.
 	 * @param {Core.Interface.Dictionary} dictionary The current localization
 	 *        dictionary.
 	 * @param {Object<string, *>} settings The application settings for the
 	 *        current application environment.
 	 */
-	setSeoParams(loadedResources, seo, router, dictionary, settings) {
-		var title = loadedResources.message;
+	setMetaParams(loadedResources, metaManager, router, dictionary, settings) {
+		var title = 'IMA.js';
 		var description = 'IMA.js is isomorphic javascript application framework.';
 		var image = router.getDomain() + settings.$Static.image + 'imajs-share.png';
 
 		var url = router.getUrl();
 
-		seo.setTitle(title);
+		metaManager.setTitle(title);
 
-		seo.setMetaName('description', description);
-		seo.setMetaName('keywords', 'IMA.js, isomorphic application, javascript');
+		metaManager.setMetaName('description', description);
+		metaManager.setMetaName('keywords', 'IMA.js, isomorphic application, javascript');
 
-		seo.setMetaName('twitter:title', title);
-		seo.setMetaName('twitter:description', description);
-		seo.setMetaName('twitter:card', 'summary');
-		seo.setMetaName('twitter:image', image);
-		seo.setMetaName('twitter:url', url);
+		metaManager.setMetaName('twitter:title', title);
+		metaManager.setMetaName('twitter:description', description);
+		metaManager.setMetaName('twitter:card', 'summary');
+		metaManager.setMetaName('twitter:image', image);
+		metaManager.setMetaName('twitter:url', url);
 
-		seo.setMetaProperty('og:title', title);
-		seo.setMetaProperty('og:description', description);
-		seo.setMetaProperty('og:type', 'website');
-		seo.setMetaProperty('og:image', image);
-		seo.setMetaProperty('og:url', url);
+		metaManager.setMetaProperty('og:title', title);
+		metaManager.setMetaProperty('og:description', description);
+		metaManager.setMetaProperty('og:type', 'website');
+		metaManager.setMetaProperty('og:image', image);
+		metaManager.setMetaProperty('og:url', url);
 	}
 
 	/**

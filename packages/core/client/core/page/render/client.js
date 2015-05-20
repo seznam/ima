@@ -107,8 +107,8 @@ class Client extends ns.Core.Abstract.PageRender {
 						this._firstTime = false;
 					}
 
-					controller.setSeoParams(fetchedResources);
-					this._updateSeoAttributes(controller.getSeoManager());
+					controller.setMetaParams(fetchedResources);
+					this._updateMetaAttributes(controller.getMetaManager());
 
 					controller.activate();
 				})
@@ -132,29 +132,29 @@ class Client extends ns.Core.Abstract.PageRender {
 	/**
 	 * Updates the title and the contents of the meta elements used for SEO.
 	 *
-	 * @method _updateSeoAttributes
+	 * @method _updateMetaAttributes
 	 * @private
-	 * @param {Core.Interface.Seo} seo SEO attributes storage providing the new
+	 * @param {Core.Interface.MetaManager} metaManager meta attributes storage providing the new
 	 *        values for page meta elements and title.
 	 */
-	_updateSeoAttributes(seo) {
+	_updateMetaAttributes(metaManager) {
 		var metaTagKey = null;
 		var metaTag = null;
-		this._window.setTitle(seo.getTitle());
+		this._window.setTitle(metaManager.getTitle());
 
-		for (metaTagKey of seo.getMetaNames()) {
+		for (metaTagKey of metaManager.getMetaNames()) {
 			metaTag = this._window.querySelector(`meta[name="${metaTagKey}"]`);
 
 			if (metaTag) {
-				metaTag.content = seo.getMetaName(metaTagKey);
+				metaTag.content = metaManager.getMetaName(metaTagKey);
 			}
 		}
 
-		for (metaTagKey of seo.getMetaProperties().keys()) {
+		for (metaTagKey of metaManager.getMetaProperties().keys()) {
 			metaTag = this._window.querySelector(`meta[property="${metaTagKey}"]`);
 
 			if (metaTag) {
-				metaTag.content = seo.getMetaProperty(metaTagKey);
+				metaTag.content = metaManager.getMetaProperty(metaTagKey);
 			}
 		}
 	}

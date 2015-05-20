@@ -60,7 +60,7 @@ describe('Core.Http.Agent', function() {
 
 				http[method](data.params.url, data.params.data, data.params.options)
 					.then(function(respond) {
-						expect(respond).toEqual(data.body);
+						expect(respond).toEqual(data);
 						done();
 					})
 			});

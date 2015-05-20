@@ -171,6 +171,17 @@ class WeakMapStorage extends ns.Core.Storage.Map {
 	}
 
 	/**
+	 * Returns storage size.
+	 *
+	 * @override
+	 * @method size
+	 * @return {number}
+	 */
+	size() {
+		return super.size();
+	}
+
+	/**
 	 * Initiates the garbage collector. The garbage collector will execute each
 	 * {@codelink _gcInterval} milliseconds, after a {@codelink _gcInterval}
 	 * milliseconds delay after invoking this method.

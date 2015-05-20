@@ -18,7 +18,7 @@ module.exports = (function() {
 		'imajs/client/core/page/render/*.js',
 		'imajs/client/core/page/*.js',
 		'imajs/client/core/router/*.js',
-		'imajs/client/core/seo/*.js',
+		'imajs/client/core/meta/*.js',
 		'imajs/client/core/decorator/*.js',
 		'imajs/client/core/event/*.js',
 		'imajs/client/core/storage/map.js',

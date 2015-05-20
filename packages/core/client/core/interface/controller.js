@@ -75,7 +75,7 @@ class Controller {
 	 * object.
 	 *
 	 * @method load
-	 * @return {Object<string, (Vendor.Rsvp.Promise|*)>} A map object of promises
+	 * @return {Object<string, (Promise|*)>} A map object of promises
 	 *         resolved when all resources the controller requires are ready. The
 	 *         resolved values will be pushed to the controller's state.
 	 */
@@ -128,24 +128,24 @@ class Controller {
 	getState() {}
 
 	/**
-	 * Callback used to configure the SEO attribute manager. The method is called
+	 * Callback used to configure the meta attribute manager. The method is called
 	 * after the the controller's state has been patched with the loaded
 	 * resources, the view has been rendered and (if at the client-side) the
 	 * controller has been provided with the rendered view.
 	 *
-	 * @method setSeoParams
+	 * @method setMetaParams
 	 * @param {Object<string, *>} loadedResources Map of resource names to
 	 *        resources loaded by the {@codelink load} method. This is the same
 	 *        object as the one passed to the {@codelink patchState} method when
 	 *        the Promises returned by the {@codelink load} method were resolved.
-	 * @param {Core.Interface.Seo} seo SEO attributes manager to configure.
+	 * @param {Core.Interface.MetaManager} metaManager Meta attributes manager to configure.
 	 * @param {Core.Interface.Router} router The current application router.
 	 * @param {Core.Interface.Dictionary} dictionary The current localization
 	 *        dictionary.
 	 * @param {Object<string, *>} settings The application settings for the
 	 *        current application environment.
 	 */
-	setSeoParams(loadedResources, seo, router, dictionary, settings) {}
+	setMetaParams(loadedResources, metaManager, router, dictionary, settings) {}
 
 	/**
 	 * Set route parameters for controller.

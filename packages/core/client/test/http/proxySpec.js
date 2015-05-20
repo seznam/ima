@@ -10,7 +10,7 @@ describe('Core.Http.Proxy', function() {
 	var superAgent = null;
 
 	var data = {};
-	var options = {ttl: 3600000, timeout: 2000, repeatRequest: 1};
+	var options = {ttl: 3600000, timeout: 2000, repeatRequest: 1, headers: []};
 	var HTTP_STATUS_CODE = oc.get('$HTTP_STATUS_CODE');
 	var windowHelper = oc.get('$Window');
 

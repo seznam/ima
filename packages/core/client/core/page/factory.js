@@ -54,10 +54,10 @@ class Factory {
 		if (typeof view === 'function') {
 			return view;
 		}
-		var entry = this._oc.getEntry(view);
+		var classConstructor = this._oc.getConstructorOf(view);
 
-		if (entry) {
-			return entry.classConstructor;
+		if (classConstructor) {
+			return classConstructor;
 		} else {
 			throw new IMAError(`Core.Page.Factory:createView hasn't name of view "${view}".`);
 		}
@@ -71,13 +71,13 @@ class Factory {
 	 * @return {Core.Interface.Controller}
 	 */
 	decorateController(controllerInstance) {
-		var seo = this._oc.get('$Seo');
+		var metaManager = this._oc.get('$MetaManager');
 		var router = this._oc.get('$Router');
 		var dictionary = this._oc.get('$Dictionary');
 		var settings = this._oc.get('$Settings');
 
 		var decoratedController = this._oc.create('$DecoratorController', [controllerInstance,
-			seo, router, dictionary, settings]);
+			metaManager, router, dictionary, settings]);
 
 		return decoratedController;
 	}

@@ -4,78 +4,6 @@ import IMAError from 'imajs/client/core/imaError.js';
 ns.namespace('Core.Storage');
 
 /**
- * Implementation of the iterator protocol and iterable protocol for DOM
- * storage keys.
- *
- * @private
- * @class StorageIterator
- * @implements Iterable
- * @implements Iterator
- * @namespace Core.Storage
- * @module Core
- * @submodule Core.Storage
- * @see https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Iteration_protocols
- */
-class StorageIterator {
-
-	/**
-	 * @constructor
-	 * @method constructor
-	 * @param {Storage} storage The DOM storage to iterate through.
-	 */
-	constructor(storage) {
-
-		/**
-		 * The DOM storage being iterated.
-		 *
-		 * @private
-		 * @property _storage
-		 * @type {Storage}
-		 */
-		this._storage = storage;
-
-		/**
-		 * The current index of the DOM storage key this iterator will return next.
-		 *
-		 * @private
-		 * @property _currentKeyIndex
-		 * @type {number}
-		 */
-		this._currentKeyIndex = 0;
-	}
-
-	/**
-	 * Iterates to the next item. This method implements the iterator protocol.
-	 *
-	 * @method next
-	 * @return {{done: boolean, value: (undefined|string)}} The next value in the
-	 *         sequence and whether the iterator is done iterating through the
-	 *         values.
-	 */
-	next() {
-		var key = this._storage.key(this._currentKeyIndex);
-		this._currentKeyIndex++;
-
-		return {
-			done: !key,
-			value: key ? key : undefined
-		};
-	}
-
-/**
- * Returns the iterator for this object (this iterator). This method
- * implements the iterable protocol and provides compatibility with the
- * {@code for..of} loops.
- *
- * @method @@Symbol.iterator
- * @return {StorageIterator} This iterator.
- */
-	[Symbol.iterator]() {
-	return this;
-}
-}
-
-/**
  * Implementation of the {@codelink Core.Interface.Storage} interface that
  * relies on the native {@code sessionStorage} DOM storage for storing its
  * entries.
@@ -220,6 +148,89 @@ class Session extends ns.Core.Interface.Storage {
 	 */
 	keys() {
 		return new StorageIterator(this._storage);
+	}
+
+	/**
+	 * Returns storage size.
+	 *
+	 * @override
+	 * @method size
+	 * @return {number}
+	 */
+	size() {
+		return this._storage.length;
+	}
+}
+
+/**
+ * Implementation of the iterator protocol and iterable protocol for DOM
+ * storage keys.
+ *
+ * @private
+ * @class StorageIterator
+ * @implements Iterable
+ * @implements Iterator
+ * @namespace Core.Storage
+ * @module Core
+ * @submodule Core.Storage
+ * @see https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Iteration_protocols
+ */
+class StorageIterator {
+
+	/**
+	 * @constructor
+	 * @method constructor
+	 * @param {Storage} storage The DOM storage to iterate through.
+	 */
+	constructor(storage) {
+
+		/**
+		 * The DOM storage being iterated.
+		 *
+		 * @private
+		 * @property _storage
+		 * @type {Storage}
+		 */
+		this._storage = storage;
+
+		/**
+		 * The current index of the DOM storage key this iterator will return next.
+		 *
+		 * @private
+		 * @property _currentKeyIndex
+		 * @type {number}
+		 */
+		this._currentKeyIndex = 0;
+	}
+
+	/**
+	 * Iterates to the next item. This method implements the iterator protocol.
+	 *
+	 * @method next
+	 * @return {{done: boolean, value: (undefined|string)}} The next value in the
+	 *         sequence and whether the iterator is done iterating through the
+	 *         values.
+	 */
+	next() {
+		var key = this._storage.key(this._currentKeyIndex);
+		this._currentKeyIndex++;
+
+		return {
+			done: !key,
+			value: key ? key : undefined
+		};
+	}
+
+	/**
+	 * Returns the iterator for this object (this iterator). This method
+	 * implements the iterable protocol and provides compatibility with the
+	 * {@code for..of} loops.
+	 *
+	 * @method @@Symbol.iterator
+	 * @return {StorageIterator} This iterator.
+	 */
+	[Symbol.iterator]() {
+		return this;
 	}
 }
 

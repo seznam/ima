@@ -167,6 +167,17 @@ class SessionMap extends ns.Core.Interface.Storage {
 	keys() {
 		return this._map.keys();
 	}
+
+	/**
+	 * Returns storage size.
+	 *
+	 * @override
+	 * @method size
+	 * @return {number}
+	 */
+	size() {
+		return this._map.size();
+	}
 }
 
 ns.Core.Storage.SessionMap = SessionMap;

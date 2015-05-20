@@ -70,12 +70,17 @@ export var init = (ns, oc, config) => { //jshint ignore:line
 
 	//Cache
 	oc.constant('$CacheEntry', ns.Core.Cache.Entry);
+	if (oc.get('$Window').hasSessionStorage()) {
+		oc.constant('$CacheStorage', oc.get('$SessionMapStorage'));
+	} else {
+		oc.constant('$CacheStorage', oc.get('$MapStorage'));
+	}
 	oc.bind('$CacheFactory', ns.Core.Cache.Factory, ['$CacheEntry']);
-	oc.provide(ns.Core.Interface.Cache, ns.Core.Cache.Handler, ['$SessionStorage', '$CacheFactory', '$CACHE_CONFIG']);
+	oc.provide(ns.Core.Interface.Cache, ns.Core.Cache.Handler, ['$CacheStorage', '$CacheFactory', '$CACHE_CONFIG']);
 	oc.bind('$Cache', ns.Core.Interface.Cache);
 
 	//SEO
-	oc.bind('$Seo', ns.Core.Seo.Manager);
+	oc.bind('$MetaManager', ns.Core.Meta.Manager);
 	oc.bind('$DecoratorController', ns.Core.Decorator.Controller);
 
 	//Page

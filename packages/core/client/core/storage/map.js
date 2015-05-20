@@ -143,6 +143,17 @@ class MapStorage extends ns.Core.Interface.Storage {
 	keys() {
 		return this._storage.keys();
 	}
+
+	/**
+	 * Returns storage size.
+	 *
+	 * @override
+	 * @method size
+	 * @return {number}
+	 */
+	size() {
+		return this._storage.size;
+	}
 }
 
 ns.Core.Storage.Map = MapStorage;

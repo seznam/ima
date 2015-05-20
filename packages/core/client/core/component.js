@@ -3,7 +3,7 @@ import ns from 'imajs/client/core/namespace.js';
 ns.namespace('Core');
 
 /**
- * Storage for all app component.
+ * Registry for UI component factory functions.
  *
  * @class Component
  * @namespace Core
@@ -12,37 +12,47 @@ ns.namespace('Core');
 class Component {
 
 	/**
+	 * Initializes the registry.
+	 *
 	 * @method constructor
 	 * @constructor
 	 */
 	constructor() {
 
 		/**
+		 * The internal registry of UI component factory functions. The functions
+		 * are in the order they were registered.
 		 *
+		 * The functions must be called with the UI utils as argument.
 		 *
-		 * @property _components
 		 * @private
-		 * @type {Array}
-		 * @default []
+		 * @property _components
+		 * @type {function(*)[]}
 		 */
 		this._components = [];
 	}
 
 	/**
-	 * Add component to pipe.
+	 * Registers the provided UI component factory function. The function should
+	 * create the component class and bind it to the namespace.
+	 *
+	 * The function will be called with the UI utils as argument during
+	 * application initialization.
 	 *
 	 * @method addComponent
-	 * @param {Function} component - function for init react component
+	 * @param {function(*)} componentFactory Factory function that creates the UI
+	 *        component.
 	 */
-	add(component) {
-		this._components.push(component);
+	add(componentFactory) {
+		this._components.push(componentFactory);
 	}
 
 	/**
-	 * Return all components.
+	 * Returns all registered UI component factory functions. The functions are
+	 * returned in the same order that they were registered.
 	 *
 	 * @method getComponents
-	 * @return {function}[]
+	 * @return {function(*)[]}
 	 */
 	getComponents() {
 		return this._components;

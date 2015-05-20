@@ -4,80 +4,101 @@ import component from 'imajs/client/core/component.js';
 ns.namespace('Core');
 
 /**
- * @property PRODUCTION_ENVIRONMENT
+ * Environment name value in the production environment.
+ *
  * @const
+ * @property PRODUCTION_ENVIRONMENT
  * @type {string}
- * @default 'prod'
  */
 const PRODUCTION_ENVIRONMENT = 'prod';
 
 
 /**
+ * Application bootstrap used to initialize the environment and the application
+ * itself.
+ *
  * @class Bootstrap
  * @namespace Core
  * @module Core
  *
  * @requires Core.Namespace
  */
-class Bootstrap{
+export default class Bootstrap {
 
 	/**
-	 * @method contructor
+	 * Initializes the bootstrap
+	 *
 	 * @constructor
-	 * @param {Core.ObjectContainer} oc
+	 * @method contructor
+	 * @param {Core.ObjectContainer} oc The application's object container to use
+	 *        for managing dependencies.
 	 */
 	constructor(oc) {
 
 		/**
-		 * @property _oc
+		 * The object container used to manage dependencies.
+		 *
 		 * @private
+		 * @property _oc
 		 * @type {Core.ObjectContainer}
 		 */
 		this._oc = oc;
 
 		/**
-		 * @property _config
+		 * Application configuration.
+		 *
 		 * @private
-		 * @type {Object}
+		 * @property _config
+		 * @type {Object<string, *>}
 		 * @default {}
 		 */
 		this._config = {};
 
 		/**
-		 * @property _isInitialized
+		 * Flag signalling whether the application is initialized. The flag is used
+		 * to prevent re-initialization of some components of the system.
+		 *
 		 * @private
-		 * @type {Boolean}
-		 * @default false
+		 * @property _isInitialized
+		 * @type {boolean}
 		 */
 		this._isInitialized = false;
-
 	}
 
 	/**
-	 * Run boot sequence for app with config for each step:
-	 * [setVendor -> init setting -> init class binding -> init service -> init route -> init react component].
+	 * Initializes the application by running the bootstrap sequence. The
+	 * sequence initializes the components of the application in the following
+	 * order:
+	 * - vendor libraries
+	 * - application settings
+	 * - constants, service providers and class dependencies configuration
+	 * - services
+	 * - UI component
+	 * - routing
 	 *
 	 * @method run
-	 * @param {Object} [config={}]
+	 * @param {Object<string, *>} config The application environment
+	 *        configuration for the current environment.
 	 */
-	run(config = {}) {
+	run(config) {
 		this._config = config;
 
 		this._setVendor();
 		this._initSettings();
-		this._initBind();
+		this._bindDependencies();
 		this._initServices();
 		this._initComponents();
-		this._initRoutes();
+		this._initRouting();
 
 		this._isInitialized = true;
 	}
 
 	/**
-	 * Set vendor.
+	 * Processes the vendor library definitions in the configuration and binds
+	 * the vendor libraries to the application namespace.
 	 *
-	 * @method _setVendor
 	 * @private
+	 * @method _setVendor
 	 */
 	_setVendor() {
 		if (!this._isInitialized) {
@@ -90,13 +111,21 @@ class Bootstrap{
 	}
 
 	/**
-	 * Initialization app settings.
+	 * Initializes the application settings. The method loads the settings for
+	 * all environments and then pics the settings for the current environment.
 	 *
-	 * @method _initSettings
+	 * The method also handles using the values in the production environment as
+	 * default values for configuration items in other environments.
+	 *
 	 * @private
+	 * @method _initSettings
 	 */
 	_initSettings() {
-		var allSettings = this._config.initSettings(ns, this._oc, this._config.settings);
+		var allSettings = this._config.initSettings(
+			ns,
+			this._oc,
+			this._config.settings
+		);
 		var environment = this._config.settings.$Env;
 		var currentSettings = allSettings[environment];
 
@@ -106,35 +135,40 @@ class Bootstrap{
 			currentSettings = productionSettings;
 		}
 
-		this._config.bind = Object.assign(this._config.bind || {}, currentSettings, this._config.settings);
+		this._config.bind = Object.assign(
+			this._config.bind || {},
+			currentSettings,
+			this._config.settings
+		);
 	}
 
 	/**
-	 * Initialization bind instantions.
+	 * Binds the constants, service providers and class dependencies to the
+	 * object container.
 	 *
-	 * @method _initBind
 	 * @private
+	 * @method _bindDependencies
 	 */
-	_initBind() {
+	_bindDependencies() {
 		this._config.initBindCore(ns, this._oc, this._config.bind);
 		this._config.initBindApp(ns, this._oc, this._config.bind);
 	}
 
 	/**
-	 * Initialization routes.
+	 * Initalizes the routing.
 	 *
-	 * @method _initRoutes
 	 * @private
+	 * @method _initRouting
 	 */
-	_initRoutes() {
+	_initRouting() {
 		this._config.initRoutes(ns, this._oc, this._config.routes);
 	}
 
 	/**
-	 * Additional initialization service.
+	 * Initializes the basic application services.
 	 *
-	 * @method _initServices
 	 * @private
+	 * @method _initServices
 	 */
 	_initServices() {
 		this._config.initServicesCore(ns, this._oc, this._config.services);
@@ -142,16 +176,18 @@ class Bootstrap{
 	}
 
 	/**
-	 * Initialization components.
+	 * Initializes the UI components of the application, injecting the UI utils
+	 * into their factory methods.
 	 *
-	 * @method _initComponents
 	 * @private
+	 * @method _initComponents
 	 */
 	_initComponents() {
 		if (!this._isInitialized) {
-			for (var componentFn of component.getComponents()) {
-				if (typeof componentFn === 'function') {
-					componentFn(this._oc.get('$Utils'));
+			var utils = this._oc.get('$Utils');
+			for (var componentFactory of component.getComponents()) {
+				if (typeof componentFactory === 'function') {
+					componentFactory(utils);
 				}
 			}
 		}
@@ -159,5 +195,3 @@ class Bootstrap{
 }
 
 ns.Core.Bootstrap = Bootstrap;
-
-export default Bootstrap;

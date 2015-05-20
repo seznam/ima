@@ -3,7 +3,7 @@ import ns from 'imajs/client/core/namespace.js';
 ns.namespace('Core.Decorator');
 
 /**
- * Decorator for page controllers. The decorator manages references to the SEO
+ * Decorator for page controllers. The decorator manages references to the meta
  * attributes manager and other utilities to provide them to the decorated page
  * controller.
  *
@@ -22,14 +22,14 @@ class Controller extends ns.Core.Interface.Controller {
 	 * @constructor
 	 * @param {Core.Interface.Controller} controller The actuall controller being
 	 *        decorated.
-	 * @param {Core.Interface.Seo} seo SEO attributes manager.
+	 * @param {Core.Interface.MetaManager} metaManager meta attributes manager.
 	 * @param {Core.Interface.Router} router The application router.
 	 * @param {Core.Interface.Dictionary} dictionary Localization phrases
 	 *        dictionary.
 	 * @param {Object<string, *>} settings  Application settings for the current
 	 *        application environment.
 	 */
-	constructor(controller, seo, router, dictionary, settings) {
+	constructor(controller, metaManager, router, dictionary, settings) {
 		super();
 
 		/**
@@ -42,13 +42,13 @@ class Controller extends ns.Core.Interface.Controller {
 		this._controller = controller;
 
 		/**
-		 * SEO attributes manager.
+		 * Meta attributes manager.
 		 *
-		 * @property _seo
+		 * @property _metaManager
 		 * @private
-		 * @type {Core.Interface.Seo}
+		 * @type {Core.Interface.MetaManager}
 		 */
-		this._seo = seo;
+		this._metaManager = metaManager;
 
 		/**
 		 * The application router.
@@ -113,7 +113,7 @@ class Controller extends ns.Core.Interface.Controller {
 	 * invoked during controller initialization, called after all the promises
 	 * returned from the {@codelink load()} method has been resolved, the
 	 * controller's reactive view has been set and the controller has configured
-	 * the SEO manager.
+	 * the meta manager.
 	 *
 	 * The controller may register in this method any React and DOM event
 	 * listeners the controller may need to handle the user interaction with the
@@ -154,7 +154,7 @@ class Controller extends ns.Core.Interface.Controller {
 	 * @abstract
 	 * @override
 	 * @method load
-	 * @return {Object<string, (Vendor.Rsvp.Promise|*)>} A map object of promises
+	 * @return {Object<string, (Promise|*)>} A map object of promises
 	 *         resolved when all resources the controller requires are ready. The
 	 *         resolved values will be pushed to the controller's state.
 	 */
@@ -235,22 +235,26 @@ class Controller extends ns.Core.Interface.Controller {
 	}
 
 	/**
-	 * Callback used to configure the SEO attribute manager. The method is called
+	 * Callback used to configure the meta attribute manager. The method is called
 	 * after the the controller's state has been patched with the loaded
 	 * resources, the view has been rendered and (if at the client-side) the
 	 * controller has been provided with the rendered view.
 	 *
 	 * @inheritdoc
-	 * @override
-	 * @abstract
-	 * @method setSeoParams
+	 * @method setMetaParams
 	 * @param {Object<string, *>} loadedResources Map of resource names to
 	 *        resources loaded by the {@codelink load} method. This is the same
 	 *        object as the one passed to the {@codelink patchState} method when
 	 *        the Promises returned by the {@codelink load} method were resolved.
+	 * @param {Core.Interface.MetaManager} metaManager Meta attributes manager to configure.
+	 * @param {Core.Interface.Router} router The current application router.
+	 * @param {Core.Interface.Dictionary} dictionary The current localization
+	 *        dictionary.
+	 * @param {Object<string, *>} settings The application settings for the
+	 *        current application environment.
 	 */
-	setSeoParams(loadedResources) {
-		this._controller.setSeoParams(loadedResources, this._seo, this._router,
+	setMetaParams(loadedResources, metaManager, router, dictionary, settings) {
+		this._controller.setMetaParams(loadedResources, this._metaManager, this._router,
 			this._dictionary, this._settings);
 	}
 
@@ -277,14 +281,14 @@ class Controller extends ns.Core.Interface.Controller {
 	}
 
 	/**
-	 * Returns the SEO attributes manager to configured by this controller.
+	 * Returns the meta attributes manager to configured by this controller.
 	 *
-	 * @method getSeoManager
-	 * @return {Core.Interface.Seo} SEO attributes manager to configured by this
+	 * @method getMetaManager
+	 * @return {Core.Interface.MetaManager} meta attributes manager to configured by this
 	 *         controller.
 	 */
-	getSeoManager() {
-		return this._seo;
+	getMetaManager() {
+		return this._metaManager;
 	}
 
 	/**

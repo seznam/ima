@@ -2,38 +2,6 @@ import ns from 'imajs/client/core/namespace.js';
 
 ns.namespace('Core');
 
-class Entry {
-
-	/**
-	 *
-	 * @method constructor
-	 * @param {function(new: T, ...*)} classConstructor The class constructor.
-	 * @param {*[]} [dependencies=[]] The dependencies to pass into the constructor
-	 *        function.
-	 */
-	constructor(classConstructor, dependencies) {
-
-		/**
-		 * @property classConstructor
-		 * @type {function(new: T, ...*)}
-		 */
-		this.classConstructor = classConstructor;
-
-		/**
-		 * @property dependencies
-		 * @type {*[]}
-		 */
-		this.dependencies = dependencies;
-
-		/**
-		 * @property sharedInstance
-		 * @type {*}
-		 * @default null
-		 */
-		this.sharedInstance = null;
-	}
-}
-
 /**
  * ObjectContainer.
  *
@@ -42,12 +10,14 @@ class Entry {
  * @module Core
  * @requires Core.Namespace
  */
-class ObjectContainer {
+export default class ObjectContainer {
 
 	/**
-	 * @method constructor
+	 * Initializes the object container.
+	 *
 	 * @constructor
-	 * @param {Ns} namespace The namespace container, used to access classes and
+	 * @method constructor
+	 * @param {Core.Namespace} namespace The namespace container, used to access classes and
 	 *        values using their fully qualified names.
 	 */
 	constructor(namespace) {
@@ -57,7 +27,7 @@ class ObjectContainer {
 		 *
 		 * @property _namespace
 		 * @private
-		 * @type {Core.Namespace.Ns}
+		 * @type {Core.Namespace}
 		 */
 		this._namespace = namespace;
 
@@ -211,13 +181,41 @@ class ObjectContainer {
 	 * @return {*}
 	 */
 	get(name) {
-		var entry = this.getEntry(name);
+		var entry = this._getEntry(name);
 
 		if (!entry.sharedInstance) {
 			entry.sharedInstance = this._createInstanceOfEntry(entry);
 		}
 
 		return entry.sharedInstance;
+	}
+
+	/**
+	 *
+	 *
+	 * @method getConstructorOf
+	 * @param {String|function(new: T, ...*)} name
+	 * @return {function(new: T, ...*)}
+	 */
+	getConstructorOf(name) {
+		var entry = this._getEntry(name);
+
+		return entry.classConstructor;
+	}
+
+	/**
+	 *
+	 *
+	 * @method has
+	 * @param {String|function(new: T, ...*)} name
+	 * @return {boolean}
+	 */
+	has(name) {
+		return this._constants.has(name) ||
+			this._aliases.has(name) ||
+			this._registry.has(name) ||
+			this._providers.has(name) ||
+			!!this._getEntryFromNamespace(name);
 	}
 
 	/**
@@ -230,7 +228,7 @@ class ObjectContainer {
 	 * @return {T}
 	 */
 	create(name, dependencies = []) {
-		var entry = this.getEntry(name);
+		var entry = this._getEntry(name);
 
 		return this._createInstanceOfEntry(entry, dependencies);
 	}
@@ -266,10 +264,11 @@ class ObjectContainer {
 	/**
 	 *
 	 *
-	 * @method getEntry
+	 * @method _getEntry
 	 * @param {String|function(new: T, ...*)} name
+	 * @return {Entry}
 	 */
-	getEntry(name) {
+	_getEntry(name) {
 		var entry = this._constants.get(name) ||
 			this._aliases.get(name) ||
 			this._registry.get(name) ||
@@ -277,7 +276,7 @@ class ObjectContainer {
 			this._getEntryFromNamespace(name);
 
 		if (!entry) {
-			throw new Error(`Core.ObjectContainer:getEntry method has not constant, alias, registered class, provided interface and namespace name for name ${name}. Check your bind.js file and add implementation for name ${name}.`);
+			throw new Error(`Core.ObjectContainer:_getEntry method has not constant, alias, registered class, provided interface and namespace name for name ${name}. Check your bind.js file and add implementation for name ${name}.`);
 		}
 
 		return entry;
@@ -346,4 +345,43 @@ class ObjectContainer {
 
 ns.Core.ObjectContainer = ObjectContainer;
 
-export default ObjectContainer;
+/**
+ * @class Entry
+ */
+class Entry {
+
+	/**
+	 *
+	 * @method constructor
+	 * @param {function(new: T, ...*)} classConstructor The class constructor.
+	 * @param {*[]} [dependencies=[]] The dependencies to pass into the
+	 *        constructor function.
+	 */
+	constructor(classConstructor, dependencies) {
+
+		/**
+		 * The constructor of the class represented by this entry.
+		 *
+		 * @property classConstructor
+		 * @type {function(new: T, ...*)}
+		 */
+		this.classConstructor = classConstructor;
+
+		/**
+		 * Dependencies of the class constructor of the class represented by this
+		 * entry.
+		 *
+		 * @property dependencies
+		 * @type {*[]}
+		 */
+		this.dependencies = dependencies;
+
+		/**
+		 * The shared instance of the class represented by this entry.
+		 *
+		 * @property sharedInstance
+		 * @type {*}
+		 */
+		this.sharedInstance = null;
+	}
+}
