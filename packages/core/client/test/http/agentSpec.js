@@ -23,6 +23,7 @@ describe('Core.Http.Agent', function() {
 		options = {ttl: httpConfig.ttl, timeout: httpConfig.timeout, repeatRequest: httpConfig.repeatRequest, language: httpConfig.language};
 
 		data = {
+			status: 200,
 			body: 111,
 			params:{
 				url: 'url',
@@ -59,8 +60,15 @@ describe('Core.Http.Agent', function() {
 					});
 
 				http[method](data.params.url, data.params.data, data.params.options)
-					.then(function(respond) {
-						expect(respond).toEqual(data);
+					.then(function(response) {
+						var agentResponse = {
+							status: data.status,
+							params: data.params,
+							body: data.body,
+							headers: data.header
+						};
+
+						expect(response).toEqual(agentResponse);
 						done();
 					})
 			});

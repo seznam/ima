@@ -385,24 +385,27 @@ class Agent extends ns.Core.Interface.HttpAgent {
 	 * @method _proxyResolved
 	 * @private
 	 * @param {Vendor.SuperAgent.Response} response Server response.
-	 * @return {*} HTTP response body parsed as JSON.
+	 * @return {{status: number,body: *, params: Object, headers: Object}}
 	 */
 	_proxyResolved(response) {
-		var results = response.body;
-		var params = response.params;
-
+		var agentResponse = {
+			status: response.status,
+			body: response.body,
+			params: response.params,
+			headers: response.header
+		};
+		var params = agentResponse.params;
 		var method = params.method;
 		var url = params.url;
 		var data = params.data;
-
 		var cachePromiseKey = this._getRequestPromiseCacheKey(method, url, data);
 		var cacheKey = this.getCacheKey(method, url, data);
 
 		this._cache.delete(cachePromiseKey);
-		this._cache.set(cacheKey, results, params.options.ttl);
+		this._cache.set(cacheKey, agentResponse, params.options.ttl);
 
-		if (this._proxy.haveToSetCookiesManually() && response.header) {
-			var receivedCookies = response.header['set-cookie'];
+		if (this._proxy.haveToSetCookiesManually() && agentResponse.headers) {
+			var receivedCookies = agentResponse.headers['set-cookie'];
 
 			if (receivedCookies) {
 				receivedCookies.forEach((cookieHeader) => {
@@ -411,7 +414,7 @@ class Agent extends ns.Core.Interface.HttpAgent {
 			}
 		}
 
-		return response;
+		return agentResponse;
 	}
 
 	/**
