@@ -19,6 +19,9 @@ component.add((utils) => {
 		}
 		
 		render() {
+
+			var appCssFile = utils.$Settings.$Env !== 'dev' ? 'app.min.css' : 'app.css';
+
 			return (
 				<html>
 					<head>
@@ -35,7 +38,7 @@ component.add((utils) => {
 						<meta property="og:image" content={this.props.metaManager.getMetaProperty('og:image')} />
 
 						<meta name="viewport" content="width=device-width, initial-scale=1" />
-						<link rel="stylesheet" href="/static/css/app.css" />
+						<link rel="stylesheet" href={"/static/css/"+appCssFile} />
 						<title>
 							{this.props.metaManager.getTitle()}
 						</title>

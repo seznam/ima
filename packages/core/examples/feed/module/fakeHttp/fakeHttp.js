@@ -108,7 +108,7 @@ class FakeHttp {
 						return item._id === id;
 					});
 					if (singleItem[0]) {
-						return Promise.resolve(singleItem[0]);
+						return Promise.resolve({ body: singleItem[0] });
 					}
 					return Promise.reject(new IMAError('Bad request', { status: 404,  url: apiUrl, fullUrl: url }));
 				}
@@ -119,9 +119,9 @@ class FakeHttp {
 					});
 				}
 
-				return Promise.resolve({ 'items': items });
+				return Promise.resolve({ body: { 'items': items } });
 			case '/categories':
-				return Promise.resolve({ 'categories': this.categories });
+				return Promise.resolve({ body: { 'categories': this.categories } });
 			default: 
 				return Promise.reject(new IMAError('Bad request', { status: 404, url: apiUrl, fullUrl: url }));
 		}
@@ -144,7 +144,7 @@ class FakeHttp {
 				this._nextId++;
 				this.items.push(data);
 
-				return Promise.resolve(data);
+				return Promise.resolve({ body: data});
 			default: 
 				return Promise.reject(new IMAError('Bad request', { status: 500, url: apiUrl, fullUrl: url }));
 		}

@@ -9,7 +9,7 @@ export var init = (ns, oc, config) => {
 	//*************END CONSTANT****************
 
 	// Our fake http handler for demo. You can use superagent (It's binded in IMA.js Core like '$Http') instead of fakeHttp.
-	//oc.bind('$Http', ns.App.Module.FakeHttp, ['API_BASE_URL']);
+	oc.bind('$Http', ns.App.Module.FakeHttp, ['API_BASE_URL']);
 
 	// Category Module
 	oc.constant('CategoryEntity', ns.App.Module.Category.Entity);
