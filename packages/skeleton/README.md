@@ -1,4 +1,4 @@
-= IMA.js skeleton application
+# IMA.js skeleton application
 
 The IMA.js is a application development stack for developing isomorphic
 applications written in pure JavaScript.
@@ -11,7 +11,7 @@ multi-page application if the client does not support JavaScript). This allows
 for fast load times, out-of-box support for web crawlers and greater overall
 user experience (or UX for short).
 
-== Installation
+## Installation
 
 To install the IMA.js application development stack, start by cloning this git
 repository:
@@ -36,12 +36,12 @@ These commands install the `gulp` tool locally, install the dependencies,
 prepare the basic demo application and start the development server. Go ahead
 and open `http://localhost:3001/` in your browser!
 
-== Tutorial
+## Tutorial
 
 The in-deep tutorial is being prepared and will be available shorty. For now,
 keep tuned!
 
-== IMA.js overview
+## IMA.js overview
 
 IMA.js consists of several components:
 - React for UI, which you should learn before you dive head-first into IMA.js
@@ -56,7 +56,7 @@ your application to life.
 The core library can be found in the `imajs/core/client` directory and you are
 free to study the available APIs.
 
-== Structure of your IMA.js application
+## Structure of your IMA.js application
 
 You application resides in the `app` directory, so let's take a closer look at
 the contents of the demo "hello world" application:
@@ -90,7 +90,7 @@ The `assets`, `config` and `locale` directories are expected by the IMA.js
 application stack, the remaining directories can be renamed or moved an you are
 free to organize your files in any way you like.
 
-== Configuration
+## Configuration
 
 There are several configuration files in your IMA.js application:
 - `app/build.js` specifies which JavaScript, JSX, Less CSS and language files
@@ -117,7 +117,7 @@ There are several configuration files in your IMA.js application:
 
 All of these files are neccessary and must remain in their locations.
 
-== Other content
+## Other content
 
 There are several directories we have not mentioned so far:
 - `doc` contains the generated documentation of IMA.js and your application.
