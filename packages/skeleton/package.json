@@ -10,7 +10,7 @@
     "IMA.js"
   ],
   "author": "Miroslav Jancarik <miroslav.jancarik@firma.seznam.cz>",
-  "license": "ISC",
+  "license": "MIT",
   "devDependencies": {
     "async-each": "^0.1.6",
     "body-parser": "^1.12.4",
