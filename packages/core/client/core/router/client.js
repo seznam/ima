@@ -273,6 +273,15 @@ class Client extends ns.Core.Abstract.Router {
 		return (
 			super
 				.handleError(params)
+				.catch((fatalError) => {
+					var window = this._window.getWindow();
+					var isIMA = window.$IMA;
+					var isFunction = window.$IMA.fatalErrorHandler;
+
+					if (window && isIMA && typeof isFunction === 'function') {
+						window.$IMA.fatalErrorHandler(fatalError);
+					}
+				})
 		);
 	}
 

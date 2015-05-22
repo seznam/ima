@@ -94,6 +94,7 @@ module.exports = (() => {
 			services: {
 				request: req,
 				response: res,
+				$IMA: {},
 				dictionary: {
 					$Language: language,
 					dictionary: dictionary

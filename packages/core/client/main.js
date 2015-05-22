@@ -36,6 +36,7 @@ if (typeof window !== 'undefined' && window !== null) {
 			services: {
 				respond: null,
 				request: null,
+				$IMA: window.$IMA,
 				dictionary: {
 					$Language: window.$IMA.$Language,
 					dictionary: window.$IMA.i18n
@@ -64,14 +65,6 @@ if (typeof window !== 'undefined' && window !== null) {
 
 	} else {
 
-		/*window.addEventListener('error', (e) => {
-			if (oc.has('$Router')) {
-				oc
-					.get('$Router')
-					.handleError(e.error)
-			}
-		});*/
-
 		window.addEventListener('DOMContentLoaded', () => {
 
 			//set React for ReactJS extension for browser
@@ -83,6 +76,7 @@ if (typeof window !== 'undefined' && window !== null) {
 				services: {
 					respond: null,
 					request: null,
+					$IMA: window.$IMA,
 					dictionary: {
 						$Language: window.$IMA.$Language,
 						dictionary: window.$IMA.i18n
@@ -119,7 +113,11 @@ if (typeof window !== 'undefined' && window !== null) {
 				.listen()
 				.route(router.getPath())
 				.catch((error) => {
-					throw error;
+					if (window && window.$IMA && typeof window.$IMA.fatalErrorHandler === 'function') {
+						window.$IMA.fatalErrorHandler(error);
+					} else {
+						console.warn('Define function config.$IMA.fatalErrorHandler in services.js.');
+					}
 				});
 		});
 	}

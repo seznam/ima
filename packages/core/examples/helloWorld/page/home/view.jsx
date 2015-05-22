@@ -23,7 +23,7 @@ component.add((utils) => {
 		render() {
 			return (
 				<div className='l-homepage'>
-					<div className='content' toggle={this.state.toggle}>
+					<div className='content'>
 						<img src="static/img/imajs-logo.png" alt="IMA.js logo"/>
 						<h1>{utils.$Dictionary.get('home.hello')}, {this.state.message}</h1>
 					</div>
