@@ -56,6 +56,10 @@ describe('Core.ObjectContainer', function() {
 
 	describe('constant method', function() {
 
+		beforeEach(function() {
+			oc.clear();
+		});
+
 		it('should be set constant value', function() {
 			spyOn(oc, '_createEntry')
 				.and
@@ -65,6 +69,14 @@ describe('Core.ObjectContainer', function() {
 
 			expect(oc._createEntry).toHaveBeenCalled();
 			expect(oc._constants.get(constantName).sharedInstance, constantValue);
+		});
+
+		it('should be throw Error, if you want to re-set constant value.', function() {
+			oc.constant(constantName, constantValue);
+
+			expect(function() {
+				oc.constant(constantName, constantValue);
+			}).toThrow();
 		});
 
 	});
