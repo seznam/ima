@@ -12,7 +12,7 @@ ns.namespace('Core');
  * @namespace Core
  * @module Core
  */
-class IMAError {
+export default class IMAError extends Error {
 
 	/**
 	 * Initializes the error.
@@ -24,16 +24,13 @@ class IMAError {
 	 *        details related to the error. It is recommended to set the
 	 *        {@code status} field to the HTTP response code that should be sent
 	 *        to the client.
+	 * @param {boolean=} dropInternalStackFrames Whether or not the call stack
+	 *        frames referring to the constructors of the {@codelink CustomError}
+	 *        and overriding class(es) should be included in the stack of this
+	 *        error.
 	 */
-	constructor(message, params = {}) {
-		this.constructor.__proto__ = Error.prototype; // jshint ignore:line
-
-		//FIX IE
-		if (Error.captureStackTrace) {
-			Error.captureStackTrace(this, this.constructor);
-		} else {
-			this.prototype = Error.prototype;
-		}
+	constructor(message, params = {}, dropInternalStackFrames = true) {
+		super(message);
 
 		/**
 		 * The name of this error, used in the generated stack.
@@ -61,6 +58,86 @@ class IMAError {
 		 * @type {Object<string, *>}
 		 */
 		this._params = params;
+
+		/**
+		 * Native error instance we use to generate the call stack. For some reason
+		 * the browsers do not generate call stacks for instances of classes
+		 * extending the native {@codelink Error} class, so we bypass this
+		 * shortcoming like this.
+		 *
+		 * @private
+		 * @property
+		 * @type {Error}
+		 */
+		this._nativeError = new Error(message);
+		this._nativeError.name = this.name;
+
+		// improve compatibility with Gecko
+		if (this._nativeError.columnNumber) {
+			this.lineNumber = this._nativeError.lineNumber;
+			this.columnNumber = this._nativeError.columnNumber;
+			this.fileName = this._nativeError.fileName;
+		}
+
+		/**
+		 * The internal cache of the generated stack. The cache is filled upon
+		 * first access to the {@codelink stack} property.
+		 *
+		 * @private
+		 * @property
+		 * @type {?string}
+		 */
+		this._stack = null;
+
+		/**
+		 * Whether or not the call stack frames referring to the constructors of
+		 * the {@codelink CustomError} and overriding class(es) should be included
+		 * in the stack of this error.
+		 *
+		 * @private
+		 * @property
+		 * @type {boolean}
+		 */
+		this._dropInternalStackFrames = dropInternalStackFrames;
+	}
+
+	/**
+	  * The call stack captured at the moment of creation of this error. The
+	 * formatting of the stack is browser-dependant.
+	 *
+	 * @override
+	 * @public
+	 * @property stack
+	 * @type {string}
+	 */
+	get stack() {
+		if (this._stack) {
+			return this._stack;
+		}
+
+		var stack = this._nativeError.stack;
+		if (typeof stack !== 'string') {
+			return undefined;
+		}
+
+		// drop the stack trace frames referring to the custom error constructors
+		if (this._dropInternalStackFrames) {
+			var stackLines = stack.split('\n');
+
+			var inheritanceDepth = 1;
+			var currentPrototype = Object.getPrototypeOf(this);
+			while (currentPrototype !== CustomError.prototype) {
+				currentPrototype = Object.getPrototypeOf(currentPrototype);
+				inheritanceDepth++;
+			}
+			stackLines.splice(1, inheritanceDepth);
+
+			this._stack = stackLines.join('\n');
+		} else {
+			this._stack = stack;
+		}
+
+		return this._stack;
 	}
 
 	/**
@@ -117,5 +194,3 @@ class IMAError {
 }
 
 ns.Core.IMAError = IMAError;
-
-export default IMAError;
