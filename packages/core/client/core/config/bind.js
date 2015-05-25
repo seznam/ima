@@ -64,9 +64,12 @@ export var init = (ns, oc, config) => { //jshint ignore:line
 	oc.bind('$WeakMapStorage', ns.Core.Storage.WeakMap, [30 * 60 * 1000, 1000, 60 * 1000, 16]);
 	oc.bind('$SessionMapStorage', ns.Core.Storage.SessionMap, ['$MapStorage', '$SessionStorage']);
 
-	//Dispatcher
+	// Dispatcher
 	oc.provide(ns.Core.Interface.Dispatcher, ns.Core.Event.Dispatcher, ['$MapStorage']);
 	oc.bind('$Dispatcher', ns.Core.Interface.Dispatcher);
+
+	// Custom Events
+	oc.bind('$CustomEventHandler', ns.Core.Event.CustomHandler, ['$Window']);
 
 	//Cache
 	oc.constant('$CacheEntry', ns.Core.Cache.Entry);
@@ -92,7 +95,7 @@ export var init = (ns, oc, config) => { //jshint ignore:line
 		oc.provide(ns.Core.Interface.PageRender, ns.Core.Page.Render.Server, ['$Helper', '$React', '$Settings', '$Response', '$Cache']);
 	}
 	oc.bind('$PageRender', ns.Core.Interface.PageRender);
-	oc.provide(ns.Core.Interface.PageManager, ns.Core.Page.Manager, ['$PageFactory', '$PageRender', '$PageStateManager', '$Window']);
+	oc.provide(ns.Core.Interface.PageManager, ns.Core.Page.Manager, ['$PageFactory', '$PageRender', '$PageStateManager', '$Window', '$CustomEventHandler']);
 	oc.bind('$PageManager', ns.Core.Interface.PageManager);
 
 	//Router
