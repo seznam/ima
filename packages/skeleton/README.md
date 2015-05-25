@@ -18,12 +18,15 @@ repository:
 
 ```
 git clone git@github.com:seznam/IMA.js-skeleton.git
-git submodule init
-git submodule update
 ```
 
 Switch to the cloned `IMA.js-skeleton` directory and run the following commands
 to set-up your application:
+
+```
+git submodule init
+git submodule update
+```
 
 ```
 npm install -g gulp
