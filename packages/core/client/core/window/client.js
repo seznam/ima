@@ -48,7 +48,19 @@ class Client extends ns.Core.Interface.Window {
 	 * @return {boolean} {@code true} if the session storage is supported.
 	 */
 	hasSessionStorage() {
-		return !!window.sessionStorage;
+		if (!!window.sessionStorage) {
+			var sessionKey = 'IMA.jsTest';
+
+			try {
+				sessionStorage.setItem(sessionKey, 1);
+				sessionStorage.removeItem(sessionKey);
+			} catch(e){
+				return false;
+			}
+
+			return true;
+		}
+		return false;
 	}
 
 	/**
