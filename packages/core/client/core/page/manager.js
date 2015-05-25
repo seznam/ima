@@ -20,8 +20,9 @@ class Manager extends ns.Core.Interface.PageManager {
 	 * @param {Core.Interface.PageRender} pageRender
 	 * @param {Core.Interface.PageStateManager} stateManager
 	 * @param {Core.Interface.Window} window
+	 * @param {Core.Event.CustomHandler} customEventHandler
 	 */
-	constructor(pageFactory, pageRender, stateManager, window) {
+	constructor(pageFactory, pageRender, stateManager, window, customEventHandler) {
 		super();
 
 		/**
@@ -55,6 +56,14 @@ class Manager extends ns.Core.Interface.PageManager {
 		 * @default window
 		 */
 		this._window = window;
+
+		/**
+		 * @property _customEventHandler
+		 * @private
+		 * @type {Core.Event.CustomHandler}
+		 * @default customEventHandler
+		 */
+		this._customEventHandler = customEventHandler;
 
 		/**
 		 * @property _activeController
@@ -93,6 +102,7 @@ class Manager extends ns.Core.Interface.PageManager {
 	init() {
 		this._activeController = null;
 		this._stateManager.onChange = (newState) => this._onChangeStateHandler(newState);
+		this._customEventHandler.listenAll(this._window.getWindow(), (e) => this._onCustomEventHandler(e));
 	}
 
 	/**
@@ -135,6 +145,28 @@ class Manager extends ns.Core.Interface.PageManager {
 	_onChangeStateHandler(state) {
 		if (this._activeController) {
 			this._pageRender.setState(state);
+		}
+	}
+
+	/**
+	 * On custom event handler for controllers.
+	 *
+	 * @method _onCustomEventHandler
+	 * @private
+	 */
+	_onCustomEventHandler(e) {
+		console.log(e);
+		var eventName = e.detail.eventName;
+		
+		if (this._activeController) {
+
+			if (typeof this._activeController[eventName] === 'function') {
+				this._activeController[eventName](e.detail.data);
+			} else {
+				console.warn(`Active controller has not listener for your event` +
+						` '${eventName}'! Add event listener with 'e.stopPropagation()' to your view` +
+						` or add handler function into your active controller.`);
+			}
 		}
 	}
 
