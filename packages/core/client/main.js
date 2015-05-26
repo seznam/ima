@@ -67,6 +67,11 @@ if (typeof window !== 'undefined' && window !== null) {
 
 		window.addEventListener('DOMContentLoaded', () => {
 
+			//hack for browser Chrome, which has sometimes problem with rendering page
+			document.body.style.display = 'none';
+			document.body.offsetHeight;
+			document.body.style.display = '';
+
 			//set React for ReactJS extension for browser
 			window.React = window.$IMA.Vendor.get('React');
 			window.React.initializeTouchEvents(true);
