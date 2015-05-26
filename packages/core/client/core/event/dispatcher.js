@@ -182,6 +182,8 @@ class Dispatcher extends ns.Core.Interface.Dispatcher {
 				listener.bind(scope)(data);
 			}
 		}
+
+		return this;
 	}
 
 	/**
