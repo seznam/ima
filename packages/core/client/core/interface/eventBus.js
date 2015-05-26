@@ -1,45 +1,18 @@
 import ns from 'imajs/client/core/namespace.js';
-import IMAError from 'imajs/client/core/imaError.js';
 
 ns.namespace('Core.Event');
-
-/**
- * Global name of IMA.js custom event.
- *
- * @property IMA_EVENT
- * @const
- * @type {string}
- */
-const IMA_EVENT = '$IMA.CustomEvent';
 
 /**
  * Helper for custom events. It offers public methods for firing custom events
  * and catching events inside view components. It includes private method for 
  * calling functions of the active controller.
  *
- * @class CustomHandler
- * @namespace Core.Event
+ * @class EventBus
+ * @namespace Core.Interface
  * @module Core
- * @submodule Core.Event
+ * @submodule Core.Interface
  */
-class CustomHandler {
-	/**
-	 * Initializes the custom event helper.
-	 *
-	 * @constructor
-	 * @method constructor
-	 */
-	constructor(window) {
-
-		/**
-		 * @property _window
-		 * @private
-		 * @type {Core.Interface.Window}
-		 * @default window
-		 */
-		this._window = window;
-	}
-
+class EventBus {
 	/**
 	 * Fires a new custom event of the specified name, carrying the provided data.
 	 *
@@ -60,22 +33,7 @@ class CustomHandler {
 	 * @return {Core.Event.Custom} This custom event helper.
 	 * @throws {Error} Thrown if there is no document defined.
 	 */
-	fire(element, eventName, data, options = {}) {
-
-		var eventInit = {};
-		var params = { detail: {eventName: eventName, data: data } };
-		var defaultOptions = { bubbles: true, cancelable: true };
-		Object.assign(eventInit, defaultOptions, options, params);
-
-		var e = new CustomEvent(IMA_EVENT, eventInit);
-		
-		if (element && typeof element.dispatchEvent !== 'undefined') {
-			element.dispatchEvent(e);
-		} else {
-			throw new IMAError(`Element ${element} is not defined or can not dispatch event ${eventName} (data: ${data}).`);
-		}
-		return this;
-	}
+	fire(element, eventName, data, options = {}) {}
 
 	/**
 	 * Registers the provided event listener to be executed when the any
@@ -93,10 +51,7 @@ class CustomHandler {
 	 * @param {function(*)} listener The event listener to register.
 	 
 	 */
-	listenAll(eventTarget, listener) {
-		this._window.bindEventListener(eventTarget, IMA_EVENT, listener);
-		return this;
-	}
+	listenAll(eventTarget, listener) {}
 
 	 /**
 	 * Registers the provided event listener to be executed when the specific
@@ -115,14 +70,7 @@ class CustomHandler {
 	 * @param {function(*)} listener The event listener to register.
 	 
 	 */
-	listen(eventTarget, eventName, listener) {
-		eventTarget.addEventListener(IMA_EVENT, (e) => {
-			if (e.detail.eventName == eventName) {
-				listener(e);
-			}
-		});
-		return this;
-	}
+	listen(eventTarget, eventName, listener) {}
 }
 
-ns.Core.Event.CustomHandler = CustomHandler;
+ns.Core.Interface.EventBus = EventBus;
