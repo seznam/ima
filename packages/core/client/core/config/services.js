@@ -50,4 +50,8 @@ export var init = (ns, oc, config) => {
 		.get('$PageManager')
 		.init();
 
+	oc
+		.get('$PageStateManager')
+		.clear();
+
 };

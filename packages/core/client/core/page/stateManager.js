@@ -40,9 +40,9 @@ class StateManager extends ns.Core.Interface.PageStateManager {
 		 * @property MAX_HISTORY_LIMIT
 		 * @const
 		 * @type {Number}
-		 * @default 5
+		 * @default 10
 		 */
-		this.MAX_HISTORY_LIMIT = 5;
+		this.MAX_HISTORY_LIMIT = 10;
 
 		/**
 		 * @property onChange
@@ -52,6 +52,15 @@ class StateManager extends ns.Core.Interface.PageStateManager {
 		 */
 		this.onChange = null;
 
+	}
+
+	/**
+	 * Clear history.
+	 *
+	 * @method clear
+	 */
+	clear() {
+		this._states = [];
 	}
 
 	/**

@@ -95,7 +95,7 @@ class Router extends ns.Core.Interface.Router {
 		this._root = '';
 
 		/**
-		 * The URL path fragment used as a suffix to the {@code $Root} field that
+		 * The URL path fragment used as a suffix to the {@code _root} field that
 		 * specifies the current language.
 		 *
 		 * @private
@@ -164,8 +164,8 @@ class Router extends ns.Core.Interface.Router {
 	 */
 	add(name, pathExpression, controller, view) {
 		if (this._routes.has(name)) {
-			throw new IMAError(`Core.Abstract.Router.add: The path with name ${name}` +
-			'is already defined');
+			throw new IMAError(`Core.Abstract.Router.add: The path with name ` +
+					`${name} is already defined`);
 		}
 
 		var factory = this._factory;
@@ -251,7 +251,7 @@ class Router extends ns.Core.Interface.Router {
 
 		if (!route) {
 			throw new IMAError(`Core.Router:link has undefined route with name ` +
-			`${routeName}. Add new route with that name.`);
+					`${routeName}. Add new route with that name.`);
 		}
 
 		return this._getBaseUrl() + route.toPath(params);
@@ -300,9 +300,9 @@ class Router extends ns.Core.Interface.Router {
 		var routeError = this._routes.get(this._ROUTE_NAMES.ERROR);
 
 		if (!routeError) {
-			var error = new IMAError(`Core.Router:handleError has undefined ` +
-				`route. Add new route with name '${this._ROUTE_NAMES.ERROR}'.`,
-				params);
+			var error = new IMAError(`Core.Router:handleError cannot process the ` +
+					`error because no error page route has been configured. Add a new ` +
+					`route named '${this._ROUTE_NAMES.ERROR}'.`, params);
 
 			return Promise.reject(error);
 		}
@@ -327,9 +327,10 @@ class Router extends ns.Core.Interface.Router {
 		var routeNotFound = this._routes.get(this._ROUTE_NAMES.NOT_FOUND);
 
 		if (!routeNotFound) {
-			var error = new IMAError(`Core.Router:handleNotFound has undefined ` +
-				`route. Add new route with name '${this._ROUTE_NAMES.NOT_FOUND}'.`,
-				params);
+			var error = new IMAError(`Core.Router:handleNotFound cannot processes ` +
+					`a non-matching route because no not found page route has been ` +
+					`configured. Add new route named '${this._ROUTE_NAMES.NOT_FOUND}'.`,
+					params);
 
 			return Promise.reject(error);
 		}
@@ -351,8 +352,8 @@ class Router extends ns.Core.Interface.Router {
 	 */
 	isClientError(error) {
 		return (error instanceof IMAError) &&
-			(error.getHttpStatus() >= 400) &&
-			(error.getHttpStatus() < 500);
+				(error.getHttpStatus() >= 400) &&
+				(error.getHttpStatus() < 500);
 	}
 
 	/**
@@ -365,8 +366,8 @@ class Router extends ns.Core.Interface.Router {
 	 */
 	isRedirection(error) {
 		return (error instanceof IMAError) &&
-			(error.getHttpStatus() >= 300) &&
-			(error.getHttpStatus() < 400);
+				(error.getHttpStatus() >= 300) &&
+				(error.getHttpStatus() < 400);
 	}
 
 	/**

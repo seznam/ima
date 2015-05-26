@@ -32,8 +32,6 @@ const EMPTY_SET = Object.freeze(new Set());
  * @namespace Core.Event
  * @module Core
  * @submodule Core.Event
- *
- * @requires Core.Interface.Storage
  */
 class Dispatcher extends ns.Core.Interface.Dispatcher {
 	/**
@@ -182,6 +180,8 @@ class Dispatcher extends ns.Core.Interface.Dispatcher {
 				listener.bind(scope)(data);
 			}
 		}
+
+		return this;
 	}
 
 	/**

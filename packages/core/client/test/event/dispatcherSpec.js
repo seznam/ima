@@ -16,7 +16,7 @@ describe('Core.Event.Dispatcher', function() {
 	});
 
 	describe('listen method', function() {
-		it('should be add handler for event', function() {
+		it('should add handler for event', function() {
 
 			dispatcher.listen(event, handlers.handler1);
 			dispatcher.listen(event, handlers.handler2);
@@ -25,7 +25,7 @@ describe('Core.Event.Dispatcher', function() {
 			expect(dispatcher._eventListeners.get(event).get(handlers.handler2).size).toEqual(1);
 		});
 
-		it('should be add handler with their scope for event', function() {
+		it('should add handler with their scope for event', function() {
 
 			dispatcher.listen(event, handlers.handler1, handlers);
 			dispatcher.listen(event, handlers.handler2, handlers);
@@ -34,7 +34,7 @@ describe('Core.Event.Dispatcher', function() {
 			expect(dispatcher._eventListeners.get(event).get(handlers.handler2).size).toEqual(1);
 		});
 
-		it('should be throw error if handler isnt function', function() {
+		it('should throw error if handler isnt function', function() {
 			expect(function() {
 				dispatcher.listen(event, 'string');
 			}).toThrow();
@@ -53,7 +53,7 @@ describe('Core.Event.Dispatcher', function() {
 			dispatcher.clear();
 		});
 
-		it('should be remove handler for event', function() {
+		it('should remove handler for event', function() {
 			dispatcher.listen(event, handlers.handler1);
 			dispatcher.listen(event, handlers.handler2);
 
@@ -62,7 +62,7 @@ describe('Core.Event.Dispatcher', function() {
 			expect(dispatcher._eventListeners.get(event).size).toEqual(1);
 		});
 
-		it('should be remove handler with their scope for event', function() {
+		it('should remove handler with their scope for event', function() {
 			dispatcher.listen(event, handlers.handler1, handlers);
 			dispatcher.listen(event, handlers.handler2, handlers);
 
@@ -71,14 +71,14 @@ describe('Core.Event.Dispatcher', function() {
 			expect(dispatcher._eventListeners.get(event).size).toEqual(1);
 		});
 
-		it('should be remove handler with their scope for event, if scope is not changing', function() {
+		it('should remove handler with their scope for event, if scope is not changing', function() {
 			dispatcher.listen(event, handlers.handler1, handlers);
 			dispatcher.unlisten(event, handlers.handler1, handlers);
 
 			expect(dispatcher._eventListeners.get(event)).toBeUndefined();
 		});
 
-		it('should be remove handler with their scope for event, if scope is changing', function() {
+		it('should remove handler with their scope for event, if scope is changing', function() {
 
 			dispatcher.listen(event, handlers.handler1, handlers);
 
@@ -89,13 +89,13 @@ describe('Core.Event.Dispatcher', function() {
 			expect(dispatcher._eventListeners.get(event)).toBeUndefined();
 		});
 
-		it('should be throw error for undefined event', function() {
+		it('should throw error for undefined event', function() {
 			expect(function() {
 				dispatcher.unlisten(event, handlers.handler1);
 			}).toThrow();
 		});
 
-		it('should be throw error for undefined handler for event', function() {
+		it('should throw error for undefined handler for event', function() {
 			dispatcher.listen(event, handlers.handler1);
 
 			expect(function() {
@@ -105,7 +105,7 @@ describe('Core.Event.Dispatcher', function() {
 	});
 
 	describe('fire method', function() {
-		it('should be fire event for handlers', function() {
+		it('should fire event for handlers', function() {
 			spyOn(handlers, 'handler1');
 			spyOn(handlers, 'handler2');
 
@@ -118,7 +118,7 @@ describe('Core.Event.Dispatcher', function() {
 			expect(handlers.handler2).toHaveBeenCalledWith(data);
 		});
 
-		it('should be throw error for undefined event', function() {
+		it('should throw error for undefined event', function() {
 			expect(function() {
 				dispatcher.fire(event, data);
 			}).toThrow();
@@ -126,7 +126,7 @@ describe('Core.Event.Dispatcher', function() {
 	});
 
 	describe('clear method', function() {
-		it('should be cleared dispatcher', function() {
+		it('should cleared dispatcher', function() {
 			dispatcher.listen(event, handlers.handler1, handlers);
 			dispatcher.listen(event, handlers.handler2, handlers);
 

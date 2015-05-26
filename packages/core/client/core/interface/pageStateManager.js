@@ -13,6 +13,13 @@ ns.namespace('Core.Interface');
 class PageStateManager {
 
 	/**
+	 * Clear history.
+	 *
+	 * @method clear
+	 */
+	clear() {}
+
+	/**
 	 * Set state.
 	 *
 	 * @method setState

@@ -115,9 +115,6 @@ export var init = (ns, oc, config) => { //jshint ignore:line
 	oc.provide(ns.Core.Interface.HttpAgent, ns.Core.Http.Agent, ['$HttpProxy', '$Cache', '$CookieStorage', '$HTTP_CONFIG']);
 	oc.bind('$Http', ns.Core.Interface.HttpAgent);
 
-	//COMPONENT
-	oc.constant('$Utils', {});
-
 	//*************END CORE****************
 
 };
