@@ -65,11 +65,12 @@ export var init = (ns, oc, config) => { //jshint ignore:line
 	oc.bind('$SessionMapStorage', ns.Core.Storage.SessionMap, ['$MapStorage', '$SessionStorage']);
 
 	// Dispatcher
-	oc.provide(ns.Core.Interface.Dispatcher, ns.Core.Event.Dispatcher, ['$MapStorage']);
+	oc.provide(ns.Core.Interface.Dispatcher, ns.Core.Event.Dispatcher);
 	oc.bind('$Dispatcher', ns.Core.Interface.Dispatcher);
 
-	// Custom Events
-	oc.bind('$CustomEventHandler', ns.Core.Event.CustomHandler, ['$Window']);
+	// Custom Event Bus
+	oc.provide(ns.Core.Interface.EventBus, ns.Core.Event.Bus, ['$Window']);
+	oc.bind('$EventBus', ns.Core.Interface.EventBus);
 
 	//Cache
 	oc.constant('$CacheEntry', ns.Core.Cache.Entry);
@@ -95,7 +96,7 @@ export var init = (ns, oc, config) => { //jshint ignore:line
 		oc.provide(ns.Core.Interface.PageRender, ns.Core.Page.Render.Server, ['$Helper', '$React', '$Settings', '$Response', '$Cache']);
 	}
 	oc.bind('$PageRender', ns.Core.Interface.PageRender);
-	oc.provide(ns.Core.Interface.PageManager, ns.Core.Page.Manager, ['$PageFactory', '$PageRender', '$PageStateManager', '$Window', '$CustomEventHandler']);
+	oc.provide(ns.Core.Interface.PageManager, ns.Core.Page.Manager, ['$PageFactory', '$PageRender', '$PageStateManager', '$Window', '$EventBus']);
 	oc.bind('$PageManager', ns.Core.Interface.PageManager);
 
 	//Router
