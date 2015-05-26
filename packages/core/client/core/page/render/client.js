@@ -72,38 +72,34 @@ class Client extends ns.Core.Abstract.PageRender {
 	 * @return {Promise}
 	 */
 	mount(controller, view) {
-		var loadPromises = this._wrapEachKeyToPromise(controller.load());
-
-		for (let resourceName of Object.keys(loadPromises)) {
-			loadPromises[resourceName]
-				.then((resource) => {
-					controller.patchState({
-						[resourceName]: resource
-					});
-				});
-		}
+		var loadedData = controller.load();
+		var separatedData = this._separatePromisesAndValues(loadedData);
+		var defaultPageState = separatedData.values;
+		var loadedPromises = separatedData.promises;
 
 		if (this._firstTime === false) {
-			var reactElementView = this._React.createElement(view, controller.getState());
+			controller.setState(defaultPageState);
+			this._renderToDOM(controller, view);
 
-			this._reactiveView = this._React.render(
-				reactElementView,
-				this._viewContainer
-			);
+			for (let resourceName of Object.keys(loadedPromises)) {
+				loadedPromises[resourceName]
+					.then((resource) => {
+						controller.patchState({
+							[resourceName]: resource
+						});
+					});
+			}
 		}
 
 		return (
 			this._Helper
-				.allPromiseHash(loadPromises)
+				.allPromiseHash(loadedPromises)
 				.then((fetchedResources) => {
-					controller.setState(fetchedResources);
-					var reactElementView = this._React.createElement(view, controller.getState());
 
 					if (this._firstTime === true) {
-						this._reactiveView = this._React.render(
-							reactElementView,
-							this._viewContainer
-						);
+						Object.assign(defaultPageState, fetchedResources);
+						controller.setState(defaultPageState);
+						this._renderToDOM(controller, view);
 						this._firstTime = false;
 					}
 
@@ -120,13 +116,56 @@ class Client extends ns.Core.Abstract.PageRender {
 	 *
 	 * @override
 	 * @method unmount
-	 * @abstract
 	 */
 	unmount() {
 		if (this._reactiveView) {
 			this._React.unmountComponentAtNode(this._viewContainer);
 			this._reactiveView = null;
 		}
+	}
+
+	/**
+	 * Render React element to DOM.
+	 *
+	 * @method _renderToDOM
+	 * @private
+	 * @param {Core.Abstract.Controller} controller
+	 * @param {Vendor.React.Component} view
+	 *
+	 */
+	_renderToDOM(controller, view) {
+		var reactElementView = this._React.createElement(view, controller.getState());
+
+		this._reactiveView = this._React.render(
+			reactElementView,
+			this._viewContainer
+		);
+	}
+
+	/**
+	 * Separate promises and values from provided data map. Values will be use for
+	 * default page state. Promises will be patched to state after their resolve.
+	 *
+	 * @method _separatePromisesAndValues
+	 * @private
+	 * @param {Object<string, *>} dataMap A map of data.
+	 * @return {{promises: Promise, values: *}} Return separated promises and other values.
+	 */
+	_separatePromisesAndValues(dataMap) {
+		var promises = {};
+		var values = {};
+
+		for (var field of Object.keys(dataMap)) {
+			var value = dataMap[field];
+
+			if (value instanceof Promise) {
+				promises[field] = value;
+			} else {
+				values[field] = value;
+			}
+		}
+
+		return {promises, values};
 	}
 
 	/**

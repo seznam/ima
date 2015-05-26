@@ -138,6 +138,36 @@ class Server extends ns.Core.Abstract.PageRender {
 
 		return html;
 	}
+
+	/**
+	 * Creates a copy of the provided data map object that has the values of its
+	 * fields wrapped into Promises.
+	 *
+	 * The the values that are already Promises will referenced directly without
+	 * wrapping then into another Promise.
+	 *
+	 * @method _wrapEachKeyToPromise
+	 * @protected
+	 * @param {Object<string, *>} dataMap A map of data that should have its
+	 *        values wrapped into Promises.
+	 * @return {Object<string, Promise>} A copy of the provided data
+	 *         map that has all its values wrapped into promises.
+	 */
+	_wrapEachKeyToPromise(dataMap) {
+		var copy = {};
+
+		for (var field of Object.keys(dataMap)) {
+			var value = dataMap[field];
+
+			if (value instanceof Promise) {
+				copy[field] = value;
+			} else {
+				copy[field] = Promise.resolve(value);
+			}
+		}
+
+		return copy;
+	}
 }
 
 ns.Core.Page.Render.Server = Server;
