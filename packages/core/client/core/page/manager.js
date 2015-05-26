@@ -20,9 +20,9 @@ class Manager extends ns.Core.Interface.PageManager {
 	 * @param {Core.Interface.PageRender} pageRender
 	 * @param {Core.Interface.PageStateManager} stateManager
 	 * @param {Core.Interface.Window} window
-	 * @param {Core.Event.CustomHandler} customEventHandler
+	 * @param {Core.Interface.EventBus} eventBus
 	 */
-	constructor(pageFactory, pageRender, stateManager, window, customEventHandler) {
+	constructor(pageFactory, pageRender, stateManager, window, eventBus) {
 		super();
 
 		/**
@@ -58,12 +58,12 @@ class Manager extends ns.Core.Interface.PageManager {
 		this._window = window;
 
 		/**
-		 * @property _customEventHandler
+		 * @property _eventBus
 		 * @private
 		 * @type {Core.Event.CustomHandler}
-		 * @default customEventHandler
+		 * @default eventBus
 		 */
-		this._customEventHandler = customEventHandler;
+		this._eventBus = eventBus;
 
 		/**
 		 * @property _activeController
@@ -102,7 +102,7 @@ class Manager extends ns.Core.Interface.PageManager {
 	init() {
 		this._activeController = null;
 		this._stateManager.onChange = (newState) => this._onChangeStateHandler(newState);
-		this._customEventHandler.listenAll(this._window.getWindow(), (e) => this._onCustomEventHandler(e));
+		this._eventBus.listenAll(this._window.getWindow(), (e) => this._onCustomEventHandler(e));
 	}
 
 	/**
@@ -155,11 +155,10 @@ class Manager extends ns.Core.Interface.PageManager {
 	 * @private
 	 */
 	_onCustomEventHandler(e) {
-		console.log(e);
 		var eventName = e.detail.eventName;
 		
 		if (this._activeController) {
-
+			
 			if (typeof this._activeController[eventName] === 'function') {
 				this._activeController[eventName](e.detail.data);
 			} else {
