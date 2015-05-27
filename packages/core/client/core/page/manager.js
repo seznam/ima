@@ -149,9 +149,10 @@ class Manager extends ns.Core.Interface.PageManager {
 	}
 
 	/**
-	 * On custom event handler. It calls method in active controller. Name of method is defined by event name.
-	 * Event name is stored in event.detail.eventName. 
+	 * On custom event handler. 
 	 *
+	 * It calls method in active controller. Name of method is defined by event name.
+	 * Event name is stored in event.detail.eventName. 
 	 *
 	 * @method _onCustomEventHandler
 	 * @private
