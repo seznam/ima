@@ -151,8 +151,8 @@ class Manager extends ns.Core.Interface.PageManager {
 	/**
 	 * On custom event handler. 
 	 *
-	 * It calls method in active controller. Name of method is defined by event name.
-	 * Event name is stored in event.detail.eventName. 
+	 * It calls listener in the active controller. Name of listener is defined by prefix 'on' and event name.
+	 * If event name is 'toggle', listener should be 'onToggle'.
 	 *
 	 * @method _onCustomEventHandler
 	 * @private
@@ -160,16 +160,19 @@ class Manager extends ns.Core.Interface.PageManager {
 	 */
 	_onCustomEventHandler(event) {
 		var eventName = event.detail.eventName;
+		var onEventName = 'on'+eventName.charAt(0).toUpperCase()+eventName.slice(1);
 		var eventData = event.detail.data;
 		
 		if (this._activeController) {
 			
-			if (typeof this._activeController[eventName] === 'function') {
-				this._activeController[eventName](eventData);
+			if (typeof this._activeController[onEventName] === 'function') {
+				this._activeController[onEventName](eventData);
 			} else {
-				console.warn(`Active controller has not listener for your event` +
-						` '${eventName}'! Add event listener with 'e.stopPropagation()' to your view` +
-						` or add handler function into your active controller.`);
+				console.warn(`The active controller has no listener for the encountered`+
+						` event '${eventName}'. Check your event name for typos, or`+
+						` create an '${onEventName}' event listener method on the active`+
+						` controller or add an event listener that stops the propagation`+
+						` of this event to an ancestor component of the component that fired this event.`);
 			}
 		}
 	}

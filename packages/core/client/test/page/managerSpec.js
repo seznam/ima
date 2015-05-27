@@ -14,7 +14,7 @@ describe('Core.Page.Manager', function() {
 
 		var event = {
 			detail: {
-				eventName: 'onEvent',
+				eventName: 'event',
 				data: data
 			}		
 		};
