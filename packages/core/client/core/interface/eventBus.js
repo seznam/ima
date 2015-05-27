@@ -1,39 +1,42 @@
 import ns from 'imajs/client/core/namespace.js';
 
-ns.namespace('Core.Event');
+ns.namespace('Core.Interface');
 
 /**
- * Helper for custom events. It offers public methods for firing custom events
- * and catching events inside view components. It includes private method for 
- * calling functions of the active controller.
+ * Helper for custom events. 
  *
- * @class EventBus
+ * It offers public methods for firing custom events
+ * and two methods for catching events (e.g. inside view components).
+ *
+ * @interface EventBus
  * @namespace Core.Interface
  * @module Core
  * @submodule Core.Interface
  */
 class EventBus {
+
 	/**
 	 * Fires a new custom event of the specified name, carrying the provided data.
-	 *
-	 * The method will synchronously execute all event listeners registered for
-	 * the specified event, passing the provided data to them in arguments.
 	 *
 	 * Note that this method does not prevent the event listeners to modify the
 	 * data in any way. The order in which the event listeners will be executed
 	 * is unspecified and should not be relied upon.
 	 *
+	 * Note that default options of eventInit are { bubbles: true, cancelable: true }, 
+	 * that are different like default values in native CustomEvents ({ bubbles: false, cancelable: false }).
+	 *
 	 * @method fire
 	 * @chainable
-	 * @param {string} element The event dispatching element.
+	 * @param {EventTarget} eventSource The event source dispatching event (e.g. element/document/window).
 	 * @param {string} eventName The name of the event to fire.
 	 * @param {*} data The data to pass to the event listeners.
-	 * @param {Object=} [options={}] Is an EventInit dictionary. 
-	 *		(See: https://developer.mozilla.org/en-US/docs/Web/API/Event/Event)
-	 * @return {Core.Event.Custom} This custom event helper.
-	 * @throws {Error} Thrown if there is no document defined.
+	 * @param {Object=} [options={}] Using options could be define or override an EventInit dictionary options too. 
+	 *								 Options of eventInit are { bubbles: true, cancelable: true } by default. 
+	 *								 For more info see: https://developer.mozilla.org/en-US/docs/Web/API/Event/Event
+	 * @return {Core.Event.Bus} This custom event bus.
+	 * @throws {Error} Thrown if there is no event source defined.
 	 */
-	fire(element, eventName, data, options = {}) {}
+	fire(eventSource, eventName, data, options = {}) {}
 
 	/**
 	 * Registers the provided event listener to be executed when the any
@@ -47,9 +50,9 @@ class EventBus {
 	 *
 	 * @chainable
 	 * @method listen
-	 * @param {document|window|element|eventTarget} eventTarget The event target listining for all events.
-	 * @param {function(*)} listener The event listener to register.
-	 
+	 * @param {EventTarget} eventTarget The event target listining for all events.
+	 * @param {function(<CustomEvent>)} listener The event listener to register.
+	 * @return {Core.Event.Bus} This custom event bus.
 	 */
 	listenAll(eventTarget, listener) {}
 
@@ -65,10 +68,10 @@ class EventBus {
 	 *
 	 * @chainable
 	 * @method listen
-	 * @param {eventTarget} eventTarget The event target listining for specific event.
+	 * @param {EventTarget} eventTarget The event target listining for specific event.
 	 * @param {string} eventName The name of the event to listen for.
-	 * @param {function(*)} listener The event listener to register.
-	 
+	 * @param {function(<CustomEvent>)} listener The event listener to register.
+	 * @return {Core.Event.Bus} This custom event bus.
 	 */
 	listen(eventTarget, eventName, listener) {}
 }
