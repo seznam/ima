@@ -9,7 +9,9 @@ var isDomainSame = (currentDomain, domainExpression) => {
 };
 
 var getRootRegExp = (domainExpression, rootExpression, languageParam) => {
-	var rootReg = '\/\/' + domainExpression.replace(':', '\:') + rootExpression.replace('/','\/');
+	var rootReg = '\/\/' +
+				domainExpression.replace(/[\\.+*?\^$\[\](){}\/\'#]/g, '\\$&') +
+				rootExpression.replace('/','\/');
 
 	if (languageParam) {
 		if (languageParam) {
