@@ -17,16 +17,8 @@ component.add((utils) => {
 		constructor(props) {
 			super(props);
 
-			var defaultCategory = props.currentCategory;
-			if (props.categories) {
-				var categories = props.categories.getCategories();
-				if (categories.length > 0) {
-					defaultCategory = categories[0];
-				}
-			}
-
 			this.state = {
-				checkedCategory: defaultCategory
+				checkedCategory: this.getDefaultCategory(props)
 			};
 		}
 
@@ -92,14 +84,29 @@ component.add((utils) => {
 			this.refs.textInput.getDOMNode().value = '';
 
 			var category = this.state.checkedCategory;
-			if (this.props.currentCategory) {
-				category = this.props.currentCategory;
+			if (!category) {
+				category = this.getDefaultCategory(this.props);
 			}
 			
 			utils.$Dispatcher.fire('addItemToFeed', {
 				content: text,
-				category: Number(category.getId())
+				category: category?Number(category.getId()):null
 			});
+		}
+
+		getDefaultCategory(props) {
+			if (props.currentCategory) {
+				return props.currentCategory;
+			}
+
+			if (props.categories) {
+				var categories = props.categories.getCategories();
+				if (categories.length > 0) {
+					return categories[0];
+				}
+			}
+
+			return null;
 		}
 
 		setCheckedCategory(e) {
