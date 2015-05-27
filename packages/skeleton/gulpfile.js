@@ -466,13 +466,23 @@ gulp.task('Es6ToEs5:client', function() {
 		return !!file.relative.match(jsx);
 	}
 
+	function handleError (error) {
+		gutil.log(
+			gutil.colors.red('Es6ToEs5:client:error'),
+			error.toString()
+		);
+
+		this.emit('end');
+		this.end();
+	}
+
 	return (
 		gulp.src(files.app.src)
 			.pipe(resolveNewPath('/'))
 			.pipe(plumber())
 			.pipe(sourcemaps.init())
 			.pipe(cache('Es6ToEs5:client'))
-			.pipe(gulpif(isJSX, react({harmony: false, es6module: true}), gutil.noop()))
+			.pipe(gulpif(isJSX, react({harmony: false, es6module: true}), gutil.noop()).on('error', handleError))
 			.pipe(traceur({modules: 'inline', moduleName: true, sourceMaps: true}))
 			.pipe(gulpif(isView, sweetjs({
 				modules: ['./imajs/macro/react.sjs', './imajs/macro/componentName.sjs'],
