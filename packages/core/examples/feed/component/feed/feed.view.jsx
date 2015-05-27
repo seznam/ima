@@ -54,13 +54,6 @@ component.add((utils) => {
 				return null;
 			}
 		}
-
-		getMoreItems() {
-			var entity = this.props.entity;
-			if (entity) {
-				utils.$Dispatcher.fire('getmoreitems');
-			}
-		}
 	}
 	
 	ns.App.Component.Feed.View = View;

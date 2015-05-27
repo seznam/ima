@@ -96,7 +96,7 @@ component.add((utils) => {
 				category = this.props.currentCategory;
 			}
 			
-			utils.$Dispatcher.fire('addItemToFeed', {
+			utils.$EventBus.fire(e.target, 'addItemToFeed', {
 				content: text,
 				category: Number(category.getId())
 			});

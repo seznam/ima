@@ -21,9 +21,8 @@ class Controller extends ns.App.Base.Controller {
 	 * @param {App.Module.Feed.Service} feedService
 	 * @param {App.Module.CategoryList.Service} categoryListService
 	 * @param {App.Module.Item.Resource} itemResource
-	 * @param {Core.Dispatcher.Handler} dispatcher
 	 */
-	constructor(feedService, categoryListService, itemResource, dispatcher) {
+	constructor(feedService, categoryListService, itemResource) {
 		super();
 
 		/**
@@ -52,16 +51,6 @@ class Controller extends ns.App.Base.Controller {
 		 * @type {App.Module.Item.Resource}
 		 */
 		this._itemResource = itemResource;
-		
-
-		/**
-		 * Event dispatcher.
-		 *
-		 * @property dispatcher
-		 * @private
-		 * @type {Core.Dispatcher.Handler}
-		 */
-		this._dispatcher = dispatcher;
 	}
 
 	/**
@@ -91,8 +80,7 @@ class Controller extends ns.App.Base.Controller {
 	 */
 	// @override
 	activate() {
-		this._dispatcher.listen('addItemToFeed', this.addItemToFeed, this);
-		this._dispatcher.listen('shareToggle', this.onShareToggle, this);
+
 	}
 
 	/**
@@ -100,9 +88,7 @@ class Controller extends ns.App.Base.Controller {
 	 */
 	// @override
 	destroy() {
-		this._dispatcher.unlisten('addItemToFeed', this.addItemToFeed, this);
-		this._dispatcher.unlisten('shareToggle', this.onShareToggle, this);
-		//this._dispatcher.clear(); // It could work, too - sometimes.
+
 	}
 
 	/**
@@ -125,7 +111,6 @@ class Controller extends ns.App.Base.Controller {
 	 */
 	onShareToggle(event) {
 		var state = this.getState();
-		console.log('state', state);
 
 		if (state.sharedItem === event.item) {
 			state.sharedItem = null;
@@ -143,7 +128,7 @@ class Controller extends ns.App.Base.Controller {
 	 * @method addItemToFeed
 	 * @param {Object} data
 	 */
-	addItemToFeed(data) {
+	onAddItemToFeed(data) {
 		
 		this
 			._itemResource

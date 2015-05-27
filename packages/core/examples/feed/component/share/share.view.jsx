@@ -129,7 +129,7 @@ component.add((utils) => {
 		onToggle(e) {
 			e.preventDefault();
 			e.stopPropagation();
-			utils.$Dispatcher.fire('shareToggle', {
+			utils.$EventBus.fire(e.target, 'shareToggle', {
 				item: this.props.item
 			});
 		}

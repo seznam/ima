@@ -34,7 +34,7 @@ export var init = (ns, oc, config) => {
 	oc.bind('FeedService', ns.App.Module.Feed.Service, ['FeedResource', 'CategoryListService']);
 	
 	// Page Home
-	oc.inject(ns.App.Page.Home.Controller, ['FeedService', 'CategoryListService', 'ItemResource', '$Dispatcher']);
+	oc.inject(ns.App.Page.Home.Controller, ['FeedService', 'CategoryListService', 'ItemResource']);
 
 	// Page Detail
 	oc.inject(ns.App.Page.Detail.Controller, ['ItemService', 'CategoryListService']);
@@ -48,8 +48,8 @@ export var init = (ns, oc, config) => {
 	//COMPONENT Utils
 	oc.constant('$Utils', {
 		$Router: oc.get('$Router'),
-		$Dispatcher: oc.get('$Dispatcher'),
 		$Dictionary: oc.get('$Dictionary'),
+		$EventBus: oc.get('$EventBus'),
 		$Settings: oc.get('$Settings'),
 		$Window: oc.get('$Window')
 	});
