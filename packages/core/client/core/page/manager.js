@@ -60,7 +60,7 @@ class Manager extends ns.Core.Interface.PageManager {
 		/**
 		 * @property _eventBus
 		 * @private
-		 * @type {Core.Event.CustomHandler}
+		 * @type {Core.Interface.EventBus}
 		 * @default eventBus
 		 */
 		this._eventBus = eventBus;
@@ -149,18 +149,22 @@ class Manager extends ns.Core.Interface.PageManager {
 	}
 
 	/**
-	 * On custom event handler for controllers.
+	 * On custom event handler. It calls method in active controller. Name of method is defined by event name.
+	 * Event name is stored in event.detail.eventName. 
+	 *
 	 *
 	 * @method _onCustomEventHandler
 	 * @private
+	 * @param {CustomEvent} event
 	 */
-	_onCustomEventHandler(e) {
-		var eventName = e.detail.eventName;
+	_onCustomEventHandler(event) {
+		var eventName = event.detail.eventName;
+		var eventData = event.detail.data;
 		
 		if (this._activeController) {
 			
 			if (typeof this._activeController[eventName] === 'function') {
-				this._activeController[eventName](e.detail.data);
+				this._activeController[eventName](eventData);
 			} else {
 				console.warn(`Active controller has not listener for your event` +
 						` '${eventName}'! Add event listener with 'e.stopPropagation()' to your view` +

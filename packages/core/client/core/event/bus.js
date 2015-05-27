@@ -13,9 +13,10 @@ ns.namespace('Core.Event');
 const IMA_EVENT = '$IMA.CustomEvent';
 
 /**
- * Helper for custom events. It offers public methods for firing custom events
- * and catching events inside view components. It includes private method for 
- * calling functions of the active controller.
+ * Helper for custom events. 
+ *
+ * It offers public methods for firing custom events
+ * and two methods for catching events (e.g. inside view components).
  *
  * @class Bus
  * @implements ns.Core.Interface.EventBus
@@ -45,25 +46,27 @@ class Bus extends ns.Core.Interface.EventBus {
 	/**
 	 * Fires a new custom event of the specified name, carrying the provided data.
 	 *
-	 * The method will synchronously execute all event listeners registered for
-	 * the specified event, passing the provided data to them in arguments.
-	 *
 	 * Note that this method does not prevent the event listeners to modify the
 	 * data in any way. The order in which the event listeners will be executed
 	 * is unspecified and should not be relied upon.
 	 *
-	 * @method fire
+	 * Note that default options of eventInit are { bubbles: true, cancelable: true }, 
+	 * that are different like default values in native CustomEvents ({ bubbles: false, cancelable: false }).
+	 *
+	 * @inheritdoc
+	 * @override
 	 * @chainable
-	 * @param {string} element The event dispatching element.
+	 * @method fire
+	 * @param {EventTarget} eventSource The event source dispatching event (e.g. element/document/window).
 	 * @param {string} eventName The name of the event to fire.
 	 * @param {*} data The data to pass to the event listeners.
-	 * @param {Object=} [options={}] Is an EventInit dictionary. 
-	 *		(See: https://developer.mozilla.org/en-US/docs/Web/API/Event/Event)
-	 * @return {Core.Event.Custom} This custom event helper.
-	 * @throws {Error} Thrown if there is no document defined.
+	 * @param {Object=} [options={}] Using options could be define or override an EventInit dictionary options too. 
+	 *								 Options of eventInit are { bubbles: true, cancelable: true } by default. 
+	 *								 For more info see: https://developer.mozilla.org/en-US/docs/Web/API/Event/Event
+	 * @return {Core.Event.Bus} This custom event bus.
+	 * @throws {Error} Thrown if there is no event source defined.
 	 */
-	fire(element, eventName, data, options = {}) {
-
+	fire(eventSource, eventName, data, options = {}) {
 		if (this._window.isClient()) {
 			var eventInit = {};
 			var params = { detail: { eventName, data } };
@@ -72,10 +75,10 @@ class Bus extends ns.Core.Interface.EventBus {
 
 			var e = new CustomEvent(IMA_EVENT, eventInit);
 			
-			if (element && typeof element.dispatchEvent !== 'undefined') {
-				element.dispatchEvent(e);
+			if (eventSource && typeof eventSource.dispatchEvent !== 'undefined') {
+				eventSource.dispatchEvent(e);
 			} else {
-				throw new IMAError(`Element ${element} is not defined or can not dispatch event '${eventName}' (data: ${data}).`);
+				throw new IMAError(`Core.Event.Bus.fire: The EventSource ${eventSource} is not defined or can not dispatch event '${eventName}' (data: ${data}).`, { eventSource, eventName, data, eventInit });
 			}
 		}
 
@@ -92,14 +95,17 @@ class Bus extends ns.Core.Interface.EventBus {
 	 * The order in which the event listeners will be executed is unspecified and
 	 * should not be relied upon.
 	 *
+	 * @inheritdoc
+	 * @override
 	 * @chainable
 	 * @method listen
-	 * @param {document|window|element|eventTarget} eventTarget The event target listining for all events.
-	 * @param {function(*)} listener The event listener to register.
-	 
+	 * @param {EventTarget} eventTarget The event target listining for all events.
+	 * @param {function(<CustomEvent>)} listener The event listener to register.
+	 * @return {Core.Event.Bus} This custom event bus.
 	 */
 	listenAll(eventTarget, listener) {
 		this._window.bindEventListener(eventTarget, IMA_EVENT, listener);
+		
 		return this;
 	}
 
@@ -113,12 +119,14 @@ class Bus extends ns.Core.Interface.EventBus {
 	 * The order in which the event listeners will be executed is unspecified and
 	 * should not be relied upon.
 	 *
+	 * @inheritdoc
+	 * @override
 	 * @chainable
 	 * @method listen
-	 * @param {eventTarget} eventTarget The event target listining for specific event.
+	 * @param {EventTarget} eventTarget The event target listining for specific event.
 	 * @param {string} eventName The name of the event to listen for.
-	 * @param {function(*)} listener The event listener to register.
-	 
+	 * @param {function(<CustomEvent>)} listener The event listener to register.
+	 * @return {Core.Event.Bus} This custom event bus.
 	 */
 	listen(eventTarget, eventName, listener) {
 		this._window.bindEventListener(eventTarget, IMA_EVENT, (e) => {
@@ -126,6 +134,7 @@ class Bus extends ns.Core.Interface.EventBus {
 				listener(e);
 			}
 		});
+
 		return this;
 	}
 }
