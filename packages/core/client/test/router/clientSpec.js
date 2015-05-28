@@ -41,11 +41,20 @@ describe('Core.Router.Client', function() {
 	});
 
 	describe('redirect method', function() {
-		it('should be set address bar', function() {
+
+		it('should be save scroll history and set address bar', function() {
 			var path = '/somePath';
 			var url = protocol + '//' + domain + path;
 
 			spyOn(router, '_setAddressBar')
+				.and
+				.stub();
+
+			spyOn(router, '_saveScrollHistory')
+				.and
+				.stub();
+
+			spyOn(router, '_asyncWindowScroll')
 				.and
 				.stub();
 
@@ -55,7 +64,9 @@ describe('Core.Router.Client', function() {
 
 			router.redirect(url);
 
-			//expect(router._setAddressBar).toHaveBeenCalledWith(url);
+			expect(router._setAddressBar).toHaveBeenCalledWith(url);
+			expect(router._saveScrollHistory).toHaveBeenCalled();
+			expect(router._asyncWindowScroll).toHaveBeenCalledWith(0, 0);
 			expect(router.route).toHaveBeenCalledWith(path);
 		});
 
@@ -122,6 +133,57 @@ describe('Core.Router.Client', function() {
 				});
 		});
 
+	});
+
+	describe('_isSameDomain method', function() {
+
+		it('should be return true for same domain', function() {
+			var path = '/somePath';
+			var url = protocol + '//' + domain + path;
+
+			expect(router._isSameDomain(url)).toEqual(true);
+		});
+
+		it('should be retrun false for strange domain', function() {
+			var path = '/somePath';
+			var url = protocol + '//' + 'www.strangeDomain.com' + path;
+
+			expect(router._isSameDomain(url)).toEqual(false);
+		});
+	});
+
+	it('_asyncWindowScroll method should be call window.scrollTo', function() {
+		spyOn(win, 'scrollTo')
+			.and
+			.stub();
+
+		jasmine.clock().install();
+		router._asyncWindowScroll(0, 0);
+		jasmine.clock().tick(1);
+		jasmine.clock().uninstall();
+
+
+		expect(win.scrollTo).toHaveBeenCalledWith(0, 0);
+	});
+
+	it('_saveScrollHistory method should be call window.replaceState', function() {
+		spyOn(win, 'replaceState')
+			.and
+			.stub();
+
+		router._saveScrollHistory();
+
+		expect(win.replaceState).toHaveBeenCalled();
+	});
+
+	it('_setAddressBar method should be call window.pushState', function() {
+		spyOn(win, 'pushState')
+			.and
+			.stub();
+
+		router._setAddressBar('url');
+
+		expect(win.pushState).toHaveBeenCalled();
 	});
 
 });

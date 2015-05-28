@@ -1,4 +1,4 @@
-describe('Core.Storage.WeakMap', function () {
+xdescribe('Core.Storage.WeakMap', function () {
 
 	var map;
 
@@ -56,7 +56,7 @@ describe('Core.Storage.WeakMap', function () {
 		});
 
 	// TODO: Should be updated/corrected.
-	xit("should start garbage collector once there are enough values",
+	it("should start garbage collector once there are enough values",
 		function (done) {
 			delay(50).then(function () {
 				map
@@ -104,7 +104,7 @@ describe('Core.Storage.WeakMap', function () {
 		});
 
 	// TODO: Should be updated/corrected.
-	xit("should use garbage collector to dispose the oldest overflowing entries",
+	it("should use garbage collector to dispose the oldest overflowing entries",
 		function (done) {
 			delay(1).then(function () {
 				map.set("b", 2);

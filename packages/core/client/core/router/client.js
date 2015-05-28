@@ -181,7 +181,7 @@ class Client extends ns.Core.Abstract.Router {
 		this._setAddressBar(this.getUrl());
 		this._window.bindEventListener(nativeWindow, EVENTS.POP_STATE, (event) => {
 			if (event.state) {
-				this.route(this.getPath());
+				this.route(this.getPath(), event.state.scroll);
 			}
 		});
 
@@ -215,10 +215,12 @@ class Client extends ns.Core.Abstract.Router {
 	redirect(url = '') {
 		if (this._isSameDomain(url) && this._mode === MODES.HISTORY) {
 			var path = url.replace(this.getProtocol() + '//' + this._domain, '');
-
 			path = this._extractRoutePath(path);
-			this.route(path);
+
+			this._saveScrollHistory();
 			this._setAddressBar(url);
+			this._asyncWindowScroll(0, 0);
+			this.route(path);
 		} else {
 			this._window.redirect(url);
 		}
@@ -233,14 +235,20 @@ class Client extends ns.Core.Abstract.Router {
 	 * @method route
 	 * @param {string} path The URL path part received from the client, with
 	 *        optional query.
+	 * @param {{x: number, y: number}|null} [scroll=null]
 	 * @return {Promise<undefined>} A promise resolved when the error has been
 	 *         handled and the response has been sent to the client, or displayed
 	 *         if used at the client side.
 	 */
-	route(path) {
+	route(path, scroll = null) {
 		return (
 			super
 				.route(path)
+				.then(() => {
+					if (scroll) {
+						this._asyncWindowScroll(scroll.x, scroll.y);
+					}
+				})
 				.catch((error) => {
 					if (this.isClientError(error)) {
 						return this.handleNotFound(error);
@@ -363,8 +371,45 @@ class Client extends ns.Core.Abstract.Router {
 	 * @param {string} url The URL.
 	 */
 	_setAddressBar(url) {
-		var state = {url};
-		this._window.pushStateToHistoryAPI(state, null, url);
+		var scroll = {
+			x: 0,
+			y: 0
+		};
+		var state = {url, scroll};
+
+		this._window.pushState(state, null, url);
+	}
+
+	/**
+	 * Save user's scroll state to history.
+	 *
+	 * Replace scroll values in current state for actual scroll values in document.
+	 *
+	 * @method _saveScrollHistory
+	 */
+	_saveScrollHistory() {
+		var url = this.getUrl();
+		var scroll = {
+			x: this._window.getScrollX(),
+			y: this._window.getScrollY()
+		};
+		var state = {url, scroll};
+
+		this._window.replaceState(state, null, url);
+	}
+	
+	/**
+	 * Asynchronous window scroll to defined vertical and horizontal values.
+	 *
+	 * @private
+	 * @method _asyncWindowScroll
+	 * @param {number} x is the pixel along the horizontal axis of the document
+	 * @param {number} y is the pixel along the vertical axis of the document
+	 */
+	_asyncWindowScroll(x, y) {
+		setTimeout(() => {
+			this._window.scrollTo(x, y);
+		}, 0);
 	}
 
 	/**

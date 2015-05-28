@@ -121,6 +121,41 @@ class Server extends ns.Core.Interface.Window {
 	}
 
 	/**
+	 * Returns the number of pixels that document has already been scrolled horizontally.
+	 *
+	 * @inheritdoc
+	 * @override
+	 * @method getScrollX
+	 * @return {number}
+	 */
+	getScrollX() {
+		return 0;
+	}
+
+	/**
+	 * Returns the number of pixels that document has already been scrolled vertically.
+	 *
+	 * @inheritdoc
+	 * @override
+	 * @method getScrollY
+	 * @return {number}
+	 */
+	getScrollY() {
+		return 0;
+	}
+
+	/**
+	 * Scrolls to a particular set of coordinates in the document.
+	 *
+	 * @inheritdoc
+	 * @override
+	 * @method scrollTo
+	 * @param {number} x is the pixel along the horizontal axis of the document
+	 * @param {number} y is the pixel along the vertical axis of the document
+	 */
+	scrollTo(x, y) {}
+
+	/**
 	 * Returns the domain of the current URL as `${protocol}://${host}`.
 	 *
 	 * @inheritdoc
@@ -240,14 +275,28 @@ class Server extends ns.Core.Interface.Window {
 	 *
 	 * @inheritdoc
 	 * @override
-	 * @method pushStateToHistoryAPI
+	 * @method pushState
 	 * @param {Object<string, *>} state A state object associated with the
 	 *        history item, preferably representing the page state.
 	 * @param {string} title The page title related to the state. Note that this
 	 *        parameter is ignored by some browsers.
 	 * @param {string} url The new URL at which the state is available.
 	 */
-	pushStateToHistoryAPI(state, title, url) {}
+	pushState(state, title, url) {}
+
+	/**
+	 * Replace the current history entry state.
+	 *
+	 * @inheritdoc
+	 * @override
+	 * @method replaceState
+	 * @param {Object<string, *>} state A state object associated with the
+	 *        history item, preferably representing the page state.
+	 * @param {string} title The page title related to the state. Note that this
+	 *        parameter is ignored by some browsers.
+	 * @param {string} url The new URL at which the state is available.
+	 */
+	replaceState(state, title, url) {}
 
 	/**
 	 * Registers the provided event listener to be executed when the specified

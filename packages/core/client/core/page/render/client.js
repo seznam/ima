@@ -127,11 +127,10 @@ class Client extends ns.Core.Abstract.PageRender {
 	/**
 	 * Render React element to DOM.
 	 *
-	 * @method _renderToDOM
 	 * @private
+	 * @method _renderToDOM
 	 * @param {Core.Abstract.Controller} controller
 	 * @param {Vendor.React.Component} view
-	 *
 	 */
 	_renderToDOM(controller, view) {
 		var reactElementView = this._React.createElement(view, controller.getState());
@@ -171,8 +170,8 @@ class Client extends ns.Core.Abstract.PageRender {
 	/**
 	 * Updates the title and the contents of the meta elements used for SEO.
 	 *
-	 * @method _updateMetaAttributes
 	 * @private
+	 * @method _updateMetaAttributes
 	 * @param {Core.Interface.MetaManager} metaManager meta attributes storage providing the new
 	 *        values for page meta elements and title.
 	 */

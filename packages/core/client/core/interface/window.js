@@ -86,6 +86,31 @@ class Window {
 	getWindow() {}
 
 	/**
+	 * Returns the number of pixels that document has already been scrolled horizontally.
+	 *
+	 * @method getScrollX
+	 * @return {number}
+	 */
+	getScrollX() {}
+
+	/**
+	 * Returns the number of pixels that document has already been scrolled vertically.
+	 *
+	 * @method getScrollY
+	 * @return {number}
+	 */
+	getScrollY() {}
+	
+	/**
+	 * Scrolls to a particular set of coordinates in the document.
+	 *
+	 * @method scrollTo
+	 * @param {number} x is the pixel along the horizontal axis of the document
+	 * @param {number} y is the pixel along the vertical axis of the document
+	 */
+	scrollTo(x, y) {}
+
+	/**
 	 * Returns the domain of the current URL as `${protocol}://${host}`.
 	 *
 	 * @method getDomain
@@ -163,14 +188,26 @@ class Window {
 	/**
 	 * Pushes a new state to the browser history.
 	 *
-	 * @method pushStateToHistoryAPI
+	 * @method pushState
 	 * @param {Object<string, *>} state A state object associated with the
 	 *        history item, preferably representing the page state.
 	 * @param {string} title The page title related to the state. Note that this
 	 *        parameter is ignored by some browsers.
 	 * @param {string} url The new URL at which the state is available.
 	 */
-	pushStateToHistoryAPI(state, title, url) {}
+	pushState(state, title, url) {}
+	
+	/**
+	 * Replace the current history entry state.
+	 *
+	 * @method replaceState
+	 * @param {Object<string, *>} state A state object associated with the
+	 *        history item, preferably representing the page state.
+	 * @param {string} title The page title related to the state. Note that this
+	 *        parameter is ignored by some browsers.
+	 * @param {string} url The new URL at which the state is available.
+	 */
+	replaceState(state, title, url) {}
 
 	/**
 	 * Registers the provided event listener to be executed when the specified
