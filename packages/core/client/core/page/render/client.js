@@ -188,7 +188,7 @@ class Client extends ns.Core.Abstract.PageRender {
 			}
 		}
 
-		for (metaTagKey of metaManager.getMetaProperties().keys()) {
+		for (metaTagKey of metaManager.getMetaProperties()) {
 			metaTag = this._window.querySelector(`meta[property="${metaTagKey}"]`);
 
 			if (metaTag) {
