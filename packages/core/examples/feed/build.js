@@ -38,9 +38,15 @@ module.exports = (function() {
 
 	var bundle = {
 		js: [
+			'./build/static/js/polyfill.js',
+			'./build/static/js/shim.js',
+			'./build/static/js/vendor.client.js',
+			'./build/static/js/app.client.js',
 			'./server/static/js/facebook.js'
 		],
-		css: []
+		css: [
+			'./build/static/css/app.css'
+		]
 	};
 
 	return {
