@@ -25,7 +25,7 @@ export default class IMAError extends Error {
 	 *        {@code status} field to the HTTP response code that should be sent
 	 *        to the client.
 	 * @param {boolean=} dropInternalStackFrames Whether or not the call stack
-	 *        frames referring to the constructors of the {@codelink CustomError}
+	 *        frames referring to the constructors of the {@codelink IMAError}
 	 *        and overriding class(es) should be included in the stack of this
 	 *        error.
 	 */
@@ -91,7 +91,7 @@ export default class IMAError extends Error {
 
 		/**
 		 * Whether or not the call stack frames referring to the constructors of
-		 * the {@codelink CustomError} and overriding class(es) should be included
+		 * the {@codelink IMAError} and overriding class(es) should be included
 		 * in the stack of this error.
 		 *
 		 * @private
@@ -126,7 +126,7 @@ export default class IMAError extends Error {
 
 			var inheritanceDepth = 1;
 			var currentPrototype = Object.getPrototypeOf(this);
-			while (currentPrototype !== CustomError.prototype) {
+			while (currentPrototype !== IMAError.prototype) {
 				currentPrototype = Object.getPrototypeOf(currentPrototype);
 				inheritanceDepth++;
 			}

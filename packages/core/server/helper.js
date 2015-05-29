@@ -23,18 +23,20 @@ module.exports = (() => {
 	};
 
 	var allPromiseHash = (hash) => {
-		let keys = Object.keys(hash)
-		let loadPromises = keys.map((key) => Promise.resolve(hash[key]))
+		var keys = Object.keys(hash);
+		var loadPromises = keys.map((key) => Promise.resolve(hash[key]));
 
-		return Promise.all(loadPromises).then((resolvedValues) => {
-			let result = {}
+		return Promise
+				.all(loadPromises)
+				.then((resolvedValues) => {
+					var result = {};
 
-			for (let key of keys) {
-				result[key] = resolvedValues.shift()
-			}
+					for (let key of keys) {
+						result[key] = resolvedValues.shift();
+					}
 
-			return result
-		})
+					return result;
+				});
 	}
 
 
