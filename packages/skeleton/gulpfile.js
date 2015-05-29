@@ -123,20 +123,13 @@ var files = {
 	},
 	bundle: {
 		js: {
-			name: 'app.bundle.js',
-			src: [
-				'./build/static/js/polyfill.js',
-				'./build/static/js/shim.js',
-				'./build/static/js/vendor.client.js',
-				'./build/static/js/app.client.js'
-			].concat(appDependency.bundle.js),
+			name: 'app.bundle.min.js',
+			src: appDependency.bundle.js,
 			dest: './build/static/js/'
 		},
 		css: {
 			name: 'app.min.css',
-			src: [
-				'./build/static/css/app.css'
-			].concat(appDependency.bundle.css),
+			src: appDependency.bundle.css,
 			dest: './build/static/css/'
 		}
 	},
