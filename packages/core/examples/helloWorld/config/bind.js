@@ -13,6 +13,7 @@ export var init = (ns, oc, config) => {
 	oc.constant('$Utils', {
 		$Router: oc.get('$Router'),
 		$Dispatcher: oc.get('$Dispatcher'),
+		$EventBus: oc.get('$EventBus'),
 		$Dictionary: oc.get('$Dictionary'),
 		$Settings: oc.get('$Settings'),
 		$Window: oc.get('$Window')
