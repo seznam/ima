@@ -54,7 +54,7 @@ describe('Core.Router.Client', function() {
 				.and
 				.stub();
 
-			spyOn(router, '_asyncWindowScroll')
+			spyOn(win, 'scrollTo')
 				.and
 				.stub();
 
@@ -66,7 +66,7 @@ describe('Core.Router.Client', function() {
 
 			expect(router._setAddressBar).toHaveBeenCalledWith(url);
 			expect(router._saveScrollHistory).toHaveBeenCalled();
-			expect(router._asyncWindowScroll).toHaveBeenCalledWith(0, 0);
+			expect(win.scrollTo).toHaveBeenCalledWith(0, 0);
 			expect(router.route).toHaveBeenCalledWith(path);
 		});
 

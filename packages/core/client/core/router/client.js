@@ -219,7 +219,7 @@ class Client extends ns.Core.Abstract.Router {
 
 			this._saveScrollHistory();
 			this._setAddressBar(url);
-			this._asyncWindowScroll(0, 0);
+			this._window.scrollTo(0, 0);
 			this.route(path);
 		} else {
 			this._window.redirect(url);
