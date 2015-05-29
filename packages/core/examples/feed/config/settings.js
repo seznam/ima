@@ -20,7 +20,7 @@ export var init = (ns, oc, config) => {
 				$Render: {
 					scripts: [
 						'/static/js/locale/'+config.$Language+'.js',
-						'/static/js/app.bundle.js'
+						'/static/js/app.bundle.min.js'
 					],
 					documentView: 'App.Component.Document.View',
 					masterElementId: 'page'

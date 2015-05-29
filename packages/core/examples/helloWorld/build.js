@@ -27,8 +27,15 @@ module.exports = (function() {
 	];
 
 	var bundle = {
-		js: [],
-		css: []
+		js: [
+			'./build/static/js/polyfill.js',
+			'./build/static/js/shim.js',
+			'./build/static/js/vendor.client.js',
+			'./build/static/js/app.client.js'
+		],
+		css: [
+			'./build/static/css/app.css'
+		]
 	};
 
 	return {

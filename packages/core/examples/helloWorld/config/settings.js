@@ -23,7 +23,7 @@ export var init = (ns, oc, config) => { // jshint ignore:line
 				$Render: {
 					scripts: [
 						'/static/js/locale/' + config.$Language + '.js' + versionStamp,
-						'/static/js/app.bundle.js' + versionStamp
+						'/static/js/app.bundle.min.js' + versionStamp
 					],
 					documentView: 'App.Component.Document.View',
 					masterElementId: 'page',
