@@ -107,6 +107,7 @@ module.exports = (() => {
 				}
 			},
 			settings: {
+				$Debug: environment.$Debug,
 				$Env: environment.$Env,
 				$Protocol: protocol,
 				$Language: language,

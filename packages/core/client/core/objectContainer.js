@@ -98,10 +98,12 @@ export default class ObjectContainer {
 	 * @return {Core.ObjectContainer} This object container.
 	 */
 	bind(name, classConstructor, dependencies = []) {
-		if (typeof classConstructor !== 'function') {
-			throw new Error(`Core.ObjectContainer:bind method has to have the ` +
-					`second parameter type of function for alias name ${name}. You ` +
-					`give type of ${typeof classConstructor}. Fix your bind.js file.`);
+		if ($Debug) {
+			if (typeof classConstructor !== 'function') {
+				throw new Error(`Core.ObjectContainer:bind method has to have the ` +
+				`second parameter type of function for alias name ${name}. You ` +
+				`give type of ${typeof classConstructor}. Fix your bind.js file.`);
+			}
 		}
 
 		if (dependencies.length === 0) {
@@ -139,10 +141,12 @@ export default class ObjectContainer {
 	 * @return {Core.ObjectContainer} This object container.
 	 */
 	constant(name, value) {
-		if (this._constants.has(name)) {
-			throw new Error(`Core.ObjectContainer:constant method has already ` +
-					`registered name ${name}. Constant method may be ` +
-					`call only once for one name.`);
+		if ($Debug) {
+			if (this._constants.has(name)) {
+				throw new Error(`Core.ObjectContainer:constant method has already ` +
+				`registered name ${name}. Constant method may be ` +
+				`call only once for one name.`);
+			}
 		}
 
 		var constantEntry = this._createEntry(() => value);
@@ -168,18 +172,21 @@ export default class ObjectContainer {
 	 * @return {Core.ObjectContainer} This object container.
 	 */
 	inject(classConstructor, dependencies) {
-		if (typeof classConstructor !== 'function') {
-			throw new Error(`Core.ObjectContainer:bind method has to have the ` +
-					`first parameter type of function. You give type of ` +
-					`${typeof classConstructor}. Fix your bind.js file.`);
+		if ($Debug) {
+			if (typeof classConstructor !== 'function') {
+				throw new Error(`Core.ObjectContainer:bind method has to have the ` +
+				`first parameter type of function. You give type of ` +
+				`${typeof classConstructor}. Fix your bind.js file.`);
+			}
+
+			if (this._registry.has(classConstructor)) {
+				throw new Error(`Core.ObjectContainer:inject method has already ` +
+				`registered class ${classConstructor.name}. Inject method may be ` +
+				`call only once for one class. If you need more different ` +
+				`implementation use method bind.`);
+			}
 		}
 
-		if (this._registry.has(classConstructor)) {
-			throw new Error(`Core.ObjectContainer:inject method has already ` +
-					`registered class ${classConstructor.name}. Inject method may be ` +
-					`call only once for one class. If you need more different ` +
-					`implementation use method bind.`);
-		}
 		var newEntry = this._createEntry(classConstructor, dependencies);
 		this._registry.set(classConstructor, newEntry);
 
@@ -207,21 +214,23 @@ export default class ObjectContainer {
 	 * @return {Core.ObjectContainer} This object container.
 	 */
 	provide(interfaceConstructor, implementationConstructor, dependencies = []) {
-		if (this._providers.has(interfaceConstructor)) {
-			throw new Error('Core.ObjectContainer:provide The specified interface ' +
-					`(${interfaceConstructor.name}) is already provided with the ` +
-					`object container.`);
-		}
+		if ($Debug) {
+			if (this._providers.has(interfaceConstructor)) {
+				throw new Error('Core.ObjectContainer:provide The specified interface ' +
+				`(${interfaceConstructor.name}) is already provided with the ` +
+				`object container.`);
+			}
 
-		// check that implementation really extends interface
-		var prototype = implementationConstructor.prototype;
-		while (prototype && (prototype !== interfaceConstructor.prototype)) {
-			prototype = Object.getPrototypeOf(prototype);
-		}
-		if (!prototype) {
-			throw new Error('The specified class ' +
-			`(${implementationConstructor.name}) does not implement the ` +
-			`${interfaceConstructor.name} interface.`);
+			// check that implementation really extends interface
+			var prototype = implementationConstructor.prototype;
+			while (prototype && (prototype !== interfaceConstructor.prototype)) {
+				prototype = Object.getPrototypeOf(prototype);
+			}
+			if (!prototype) {
+				throw new Error('The specified class ' +
+				`(${implementationConstructor.name}) does not implement the ` +
+				`${interfaceConstructor.name} interface.`);
+			}
 		}
 
 		var newEntry = this._createEntry(implementationConstructor, dependencies);
@@ -353,11 +362,13 @@ export default class ObjectContainer {
 				this._providers.get(name) ||
 				this._getEntryFromNamespace(name);
 
-		if (!entry) {
-			throw new Error(`Core.ObjectContainer:_getEntry method has not ` +
-					`constant, alias, registered class, provided interface and ` +
-					`namespace name for name ${name}. Check your bind.js file and add ` +
-					`implementation for name ${name}.`);
+		if ($Debug) {
+			if (!entry) {
+				throw new Error(`Core.ObjectContainer:_getEntry method has not ` +
+				`constant, alias, registered class, provided interface and ` +
+				`namespace name for name ${name}. Check your bind.js file and add ` +
+				`implementation for name ${name}.`);
+			}
 		}
 
 		return entry;

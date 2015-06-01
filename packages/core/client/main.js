@@ -31,6 +31,8 @@ if (typeof window !== 'undefined' && window !== null) {
 	//check enviroment
 	if (window.$IMA.Test === true) {
 
+		window.$Debug = true;
+
 		var bootConfig = {
 			vendor: window.$IMA.Vendor,
 			services: {
@@ -50,7 +52,8 @@ if (typeof window !== 'undefined' && window !== null) {
 			settings: {
 				$Env: 'dev',
 				$Language: 'en',
-				$Protocol: 'http:'
+				$Protocol: 'http:',
+				$Debug: true
 			}
 		};
 
@@ -75,6 +78,7 @@ if (typeof window !== 'undefined' && window !== null) {
 			//set React for ReactJS extension for browser
 			window.React = window.$IMA.Vendor.get('React');
 			window.React.initializeTouchEvents(true);
+			window.$Debug = window.$IMA.$Debug;
 
 			var bootConfig = {
 				vendor: window.$IMA.Vendor,
@@ -95,6 +99,7 @@ if (typeof window !== 'undefined' && window !== null) {
 				},
 				settings: {
 					$Env: window.$IMA.$Env,
+					$Debug: window.$IMA.$Debug,
 					$Language: window.$IMA.$Language,
 					$Protocol: window.$IMA.$Protocol,
 					$Domain: window.$IMA.$Domain,
