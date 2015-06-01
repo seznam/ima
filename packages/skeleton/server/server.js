@@ -15,6 +15,8 @@ var methodOverride = require('method-override');
 var environment = require('./imajs/environment.js');
 var compression = require('compression');
 
+GLOBAL.$Debug = environment.$Debug;
+
 process.on('uncaughtException', function(error) {
 	console.error('Uncaught Exception:', error.message, error.stack);
 });

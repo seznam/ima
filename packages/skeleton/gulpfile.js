@@ -54,6 +54,13 @@ try {
 var watchEvent = null;
 var server = null;
 
+var uglifyCompression = {
+	global_defs: {
+		$Debug: false
+	},
+	dead_code: true
+};
+
 var files = {
 	vendor: {
 		name: {
@@ -231,7 +238,7 @@ gulp.task('build', function(callback) {
 		['copy:appStatic', 'copy:imajsServer', 'copy:environment', 'shim', 'polyfill'], //copy folder public, concat shim
 		['Es6ToEs5:client', 'Es6ToEs5:server', 'Es6ToEs5:vendor'], // convert app and vendor script
 		['vendor:client', 'vendor:server', 'less', 'doc', 'locale'], // adjust vendors, compile less, create doc,
-		['bundle:js', 'bundle:css'],
+		['bundle:js:app', 'bundle:js:server', 'bundle:css'],
 		['vendor:clean', 'bundle:clean'],// clean vendor
 		callback
 	);
@@ -572,14 +579,26 @@ gulp.task('locale', function() {
 	return locales[locales.length - 1];
 });
 
-gulp.task('bundle:js', function() {
+gulp.task('bundle:js:app', function() {
 	return (
 		gulp.src(files.bundle.js.src)
 			.pipe(plumber())
 			.pipe(concat(files.bundle.js.name))
-			.pipe(uglify({mangle:true}))
+			.pipe(uglify({mangle:true, compress: uglifyCompression}))
 			.pipe(plumber.stop())
 			.pipe(gulp.dest(files.bundle.js.dest))
+	);
+});
+
+gulp.task('bundle:js:server', function() {
+	var file = files.app.dest.server + files.app.name.server;
+
+	return (
+		gulp.src(file)
+			.pipe(plumber())
+			.pipe(uglify({mangle:false, compress: uglifyCompression}))
+			.pipe(plumber.stop())
+			.pipe(gulp.dest(files.app.dest.server))
 	);
 });
 
