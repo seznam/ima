@@ -33,6 +33,7 @@ var save = require('gulp-save');
 var change = require('gulp-change');
 var minifyCSS = require('gulp-minify-css');
 var eslint = require('gulp-eslint');
+var gulpCommand = require('gulp-command')(gulp);
 
 var coreDependency = require('./imajs/build.js');
 
@@ -56,7 +57,7 @@ var server = null;
 
 var uglifyCompression = {
 	global_defs: {
-		$Debug: false
+		$Debug: true
 	},
 	dead_code: true
 };
@@ -233,15 +234,21 @@ gulp.task('dev', function(callback) {
 	);
 });
 
-gulp.task('build', function(callback) {
-	return runSequence(
-		['copy:appStatic', 'copy:imajsServer', 'copy:environment', 'shim', 'polyfill'], //copy folder public, concat shim
-		['Es6ToEs5:client', 'Es6ToEs5:server', 'Es6ToEs5:vendor'], // convert app and vendor script
-		['vendor:client', 'vendor:server', 'less', 'doc', 'locale'], // adjust vendors, compile less, create doc,
-		['bundle:js:app', 'bundle:js:server', 'bundle:css'],
-		['vendor:clean', 'bundle:clean'],// clean vendor
-		callback
-	);
+gulp
+	.option('build', '-e, --env', 'Build environment')
+	.task('build', function(callback) {
+
+		if (this.flags.env === 'prod') {
+			uglifyCompression.global_defs.$Debug = false;
+		}
+		return runSequence(
+			['copy:appStatic', 'copy:imajsServer', 'copy:environment', 'shim', 'polyfill'], //copy folder public, concat shim
+			['Es6ToEs5:client', 'Es6ToEs5:server', 'Es6ToEs5:vendor'], // convert app and vendor script
+			['vendor:client', 'vendor:server', 'less', 'doc', 'locale'], // adjust vendors, compile less, create doc,
+			['bundle:js:app', 'bundle:js:server', 'bundle:css'],
+			['vendor:clean', 'bundle:clean'],// clean vendor
+			callback
+		);
 });
 
 gulp.task('test', function() {
@@ -596,7 +603,7 @@ gulp.task('bundle:js:server', function() {
 	return (
 		gulp.src(file)
 			.pipe(plumber())
-			.pipe(uglify({mangle:false, compress: uglifyCompression}))
+			.pipe(uglify({mangle:false, output: {beautify: true}, compress: uglifyCompression}))
 			.pipe(plumber.stop())
 			.pipe(gulp.dest(files.app.dest.server))
 	);
