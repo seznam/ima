@@ -5,9 +5,12 @@ describe('Core.Router.Route', function () {
 	var pathExpression = '/home/:userId/something/:somethingId';
 	var controller = function() {};
 	var view = function() {};
+	var options = {
+		onlyUpdate: true
+	};
 
 	beforeEach(function () {
-		route = oc.create('Core.Router.Route', [name, pathExpression, controller, view]);
+		route = oc.create('Core.Router.Route', [name, pathExpression, controller, view, options]);
 	});
 
 	describe('should be create right path', function () {
@@ -40,6 +43,10 @@ describe('Core.Router.Route', function () {
 
 	it('should be return route path', function () {
 		expect(route.getPathExpression()).toEqual(pathExpression);
+	});
+
+	it('should be return route options', function() {
+		expect(route.getOptions()).toEqual(options);
 	});
 
 	describe('should get params from path', function () {

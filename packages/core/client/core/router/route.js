@@ -59,8 +59,9 @@ class Route {
 	 *        identifying the controller associated with this route.
 	 * @param {string} view The full name or Object Container alias identifying
 	 *        the view class associated with this route.
+	 * @param {{onlyUpdate: boolean}} [options={onlyUpdate: false}] The route additional options.
 	 */
-	constructor(name, pathExpression, controller, view) {
+	constructor(name, pathExpression, controller, view, options = {onlyUpdate: false}) {
 
 		/**
 		 * The unique name of this route, identifying it among the rest of the
@@ -100,6 +101,15 @@ class Route {
 		 * @type {Vendor.React.Component}
 		 */
 		this._view = view;
+
+		/**
+		 * The route additional options.
+		 *
+		 * @private
+		 * @property _options
+		 * @type {{onlyUpdate: boolean}}
+		 */
+		this._options = options;
 
 		/**
 		 * The path expression with the trailing slashes trimmed.
@@ -204,6 +214,16 @@ class Route {
 	 */
 	getView() {
 		return this._view;
+	}
+
+	/**
+	 * Return route additional options.
+	 *
+	 * @method getOptions
+	 * @return {{onlyUpdate: boolean}}
+	 */
+	getOptions() {
+		return this._options;
 	}
 
 	/**
