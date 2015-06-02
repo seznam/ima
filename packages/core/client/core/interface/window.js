@@ -100,7 +100,7 @@ class Window {
 	 * @return {number}
 	 */
 	getScrollY() {}
-	
+
 	/**
 	 * Scrolls to a particular set of coordinates in the document.
 	 *
@@ -196,7 +196,7 @@ class Window {
 	 * @param {string} url The new URL at which the state is available.
 	 */
 	pushState(state, title, url) {}
-	
+
 	/**
 	 * Replace the current history entry state.
 	 *

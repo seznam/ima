@@ -48,13 +48,13 @@ class Client extends ns.Core.Interface.Window {
 	 * @return {boolean} {@code true} if the session storage is supported.
 	 */
 	hasSessionStorage() {
-		if (!!window.sessionStorage) {
+		if (window.sessionStorage) {
 			var sessionKey = 'IMA.jsTest';
 
 			try {
 				sessionStorage.setItem(sessionKey, 1);
 				sessionStorage.removeItem(sessionKey);
-			} catch(e){
+			} catch(e) {
 				return false;
 			}
 
@@ -138,7 +138,7 @@ class Client extends ns.Core.Interface.Window {
 	 */
 	getScrollX() {
 		var supportPageOffset = window.pageXOffset !== undefined;
-		var isCSS1Compat = ((document.compatMode || "") === "CSS1Compat");
+		var isCSS1Compat = ((document.compatMode || '') === 'CSS1Compat');
 
 		return supportPageOffset ? window.pageXOffset : isCSS1Compat ? document.documentElement.scrollLeft : document.body.scrollLeft;
 	}
@@ -153,7 +153,7 @@ class Client extends ns.Core.Interface.Window {
 	 */
 	getScrollY() {
 		var supportPageOffset = window.pageXOffset !== undefined;
-		var isCSS1Compat = ((document.compatMode || "") === "CSS1Compat");
+		var isCSS1Compat = ((document.compatMode || '') === 'CSS1Compat');
 
 		return supportPageOffset ? window.pageYOffset : isCSS1Compat ? document.documentElement.scrollTop : document.body.scrollTop;
 	}

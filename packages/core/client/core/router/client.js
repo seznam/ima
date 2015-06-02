@@ -397,7 +397,7 @@ class Client extends ns.Core.Abstract.Router {
 
 		this._window.replaceState(state, null, url);
 	}
-	
+
 	/**
 	 * Asynchronous window scroll to defined vertical and horizontal values.
 	 *

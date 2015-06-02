@@ -3,7 +3,7 @@ import ns from 'imajs/client/core/namespace.js';
 ns.namespace('Core.Interface');
 
 /**
- * Helper for custom events. 
+ * Helper for custom events.
  *
  * It offers public methods for firing custom events
  * and two methods for catching events (e.g. inside view components).
@@ -22,7 +22,7 @@ class EventBus {
 	 * data in any way. The order in which the event listeners will be executed
 	 * is unspecified and should not be relied upon.
 	 *
-	 * Note that default options of eventInit are { bubbles: true, cancelable: true }, 
+	 * Note that default options of eventInit are { bubbles: true, cancelable: true },
 	 * that are different like default values in native CustomEvents ({ bubbles: false, cancelable: false }).
 	 *
 	 * @method fire
@@ -30,8 +30,8 @@ class EventBus {
 	 * @param {EventTarget} eventSource The event source dispatching event (e.g. element/document/window).
 	 * @param {string} eventName The name of the event to fire.
 	 * @param {*} data The data to pass to the event listeners.
-	 * @param {Object=} [options={}] Using options could be define or override an EventInit dictionary options too. 
-	 *								 Options of eventInit are { bubbles: true, cancelable: true } by default. 
+	 * @param {Object=} [options={}] Using options could be define or override an EventInit dictionary options too.
+	 *								 Options of eventInit are { bubbles: true, cancelable: true } by default.
 	 *								 For more info see: https://developer.mozilla.org/en-US/docs/Web/API/Event/Event
 	 * @return {Core.Event.Bus} This custom event bus.
 	 * @throws {Error} Thrown if there is no event source defined.
@@ -56,7 +56,7 @@ class EventBus {
 	 */
 	listenAll(eventTarget, listener) {}
 
-	 /**
+	/**
 	 * Registers the provided event listener to be executed when the specific
 	 * custom event is fired.
 	 *

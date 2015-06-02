@@ -72,7 +72,7 @@ if (typeof window !== 'undefined' && window !== null) {
 
 			//hack for browser Chrome, which has sometimes problem with rendering page
 			document.body.style.display = 'none';
-			document.body.offsetHeight;
+			document.body.offsetHeight; //eslint-disable-line
 			document.body.style.display = '';
 
 			//set React for ReactJS extension for browser
