@@ -23,7 +23,10 @@ class PageRender {
 	 * On client, the method renders the page into DOM, re-using the DOM created
 	 * from the HTML markup send by the server if possible.
 	 *
-	 * @method unmount
+	 * @inheritdoc
+	 * @override
+	 * @method mount
+	 * @abstract
 	 * @param {Core.Abstract.Controller} controller
 	 * @param {Vendor.React.Component} view
 	 * @return {Promise}
@@ -31,8 +34,26 @@ class PageRender {
 	mount(controller, view) {}
 
 	/**
-	 * Unmount view from th DOM.
+	 * Only update controller state and React view not call constructor.
 	 *
+	 * It is useful for same controller and view, where only change url params.
+	 * Then it is possible to reuse same controller and view.
+	 *
+	 * @inheritdoc
+	 * @override
+	 * @method update
+	 * @param {Core.Decorator.Controller} controller
+	 * @param {Object<string, string>=} [params={}] New route params.
+	 * @return {Promise}
+	 */
+	update(controller, params = {}) {}
+
+	/**
+	 * Unmount view from the DOM. Then React always call constructor
+	 * for new mounting view.
+	 *
+	 * @inheritdoc
+	 * @override
 	 * @method unmount
 	 */
 	unmount() {}
@@ -41,7 +62,7 @@ class PageRender {
 	 * Set state to reactive react component.
 	 *
 	 * @method setState
-	 * @param {object} [state={}]
+	 * @param {Object<string, *>=} [state={}]
 	 */
 	setState(state = {}) {}
 }

@@ -26,8 +26,8 @@ class Manager extends ns.Core.Interface.PageManager {
 		super();
 
 		/**
-		 * @property _pageFactory
 		 * @private
+		 * @property _pageFactory
 		 * @type {Core.Page.Factory}
 		 * @default pageFactory
 		 */
@@ -42,54 +42,82 @@ class Manager extends ns.Core.Interface.PageManager {
 		this._pageRender = pageRender;
 
 		/**
-		 * @property _stateManager
 		 * @private
+		 * @property _stateManager
 		 * @type {Core.Interface.PageStateManager}
 		 * @default stateManager
 		 */
 		this._stateManager = stateManager;
 
 		/**
-		 * @property _window
 		 * @private
+		 * @property _window
 		 * @type {Core.Interface.Window}
 		 * @default window
 		 */
 		this._window = window;
 
 		/**
-		 * @property _eventBus
 		 * @private
+		 * @property _eventBus
 		 * @type {Core.Interface.EventBus}
 		 * @default eventBus
 		 */
 		this._eventBus = eventBus;
 
 		/**
-		 * @property _activeController
 		 * @private
-		 * @type {Core.Abstract.Controller}
-		 * @default null
+		 * @property _lastManagePage
+		 * @type {Object<string, *>}
 		 */
-		this._activeController = null;
+		this._lastManagePage = {
+			controller: null,
+			controllerInstance: null,
+			decoratedController: null,
+			view: null,
+			viewInstance: null,
+			options: null,
+			params: null
+		};
+
 	}
 
 	/**
 	 * Manager controller with params.
 	 *
-	 * @method run
-	 * @param {string} controller
-	 * @param {string} view
+	 * @inheritdoc
+	 * @override
+	 * @method manage
+	 * @param {string|function} controller
+	 * @param {string|function} view
+	 * @param {{onlyUpdate: boolean}} options
 	 * @param {Object<string, string>=} [params={}] The route parameters.
 	 * @return {Promise}
 	 */
-	manage(controller, view, params = {}) {
+	manage(controller, view, options, params = {}) {
+		var isOnlyUpdate = options.onlyUpdate &&
+				this._lastManagePage.controller === controller &&
+				this._lastManagePage.view === view;
+
+		if (isOnlyUpdate) {
+			return this._pageRender.update(this._lastManagePage.decoratedController, params);
+		}
+
 		var controllerInstance = this._pageFactory.createController(controller);
 		var decoratedController = this._pageFactory.decorateController(controllerInstance);
 		var viewInstance = this._pageFactory.createView(view);
 
 		this._destroyActiveController();
 		this._initController(controllerInstance, params);
+		this._lastManagePage = {
+			controller,
+			controllerInstance,
+			decoratedController,
+			view,
+			viewInstance,
+			options,
+			params
+		};
 
 		return this._pageRender.mount(decoratedController, viewInstance);
 	}
@@ -97,10 +125,21 @@ class Manager extends ns.Core.Interface.PageManager {
 	/**
 	 * Initialization manager.
 	 *
+	 * @inheritdoc
+	 * @override
 	 * @method init
 	 */
 	init() {
-		this._activeController = null;
+		this._lastManagePage = {
+			controller: null,
+			controllerInstance: null,
+			decoratedController: null,
+			view: null,
+			viewInstance: null,
+			options: null,
+			params: null
+		};
+
 		this._stateManager.onChange = (newState) => this._onChangeStateHandler(newState);
 		this._eventBus.listenAll(this._window.getWindow(), (e) => this._onCustomEventHandler(e));
 	}
@@ -108,8 +147,8 @@ class Manager extends ns.Core.Interface.PageManager {
 	/**
 	 * Initializes the provided controller using the provided parameters.
 	 *
-	 * @method _initController
 	 * @private
+	 * @method _initController
 	 * @param {Core.Abstract.Controller} controller The controller to initialize.
 	 * @param {Object<string, *>=} params Parameters to use to initialize
 	 *        the controller.
@@ -118,32 +157,31 @@ class Manager extends ns.Core.Interface.PageManager {
 		controller.setRouteParams(params);
 		controller.setStateManager(this._stateManager);
 		controller.init();
-		this._activeController = controller;
 	}
 
 	/**
 	 * Destroy active controller.
 	 *
-	 * @method _destroyActiveController
 	 * @private
+	 * @method _destroyActiveController
 	 */
 	_destroyActiveController() {
-		if (this._activeController) {
-			this._activeController.destroy();
-			this._activeController.setStateManager(null);
+		if (this._lastManagePage.controllerInstance) {
+			controllerInstance.destroy();
+			controllerInstance.setStateManager(null);
 			this._pageRender.unmount();
-			this._activeController = null;
+			this._lastManagePage.controllerInstance = null;
 		}
 	}
 
 	/**
 	 * On change handler for state.
 	 *
-	 * @method _onChangeStateHandler
 	 * @private
+	 * @method _onChangeStateHandler
 	 */
 	_onChangeStateHandler(state) {
-		if (this._activeController) {
+		if (this._lastManagePage.controllerInstance) {
 			this._pageRender.setState(state);
 		}
 	}
@@ -154,19 +192,20 @@ class Manager extends ns.Core.Interface.PageManager {
 	 * It calls listener in the active controller. Name of listener is defined by prefix 'on' and event name.
 	 * If event name is 'toggle', listener should be 'onToggle'.
 	 *
-	 * @method _onCustomEventHandler
 	 * @private
+	 * @method _onCustomEventHandler
 	 * @param {CustomEvent} event
 	 */
 	_onCustomEventHandler(event) {
 		var eventName = event.detail.eventName;
 		var onEventName = 'on' + eventName.charAt(0).toUpperCase() + eventName.slice(1);
 		var eventData = event.detail.data;
+		var controllerInstance = this._lastManagePage.controllerInstance;
 
-		if (this._activeController) {
+		if (controllerInstance) {
 
-			if (typeof this._activeController[onEventName] === 'function') {
-				this._activeController[onEventName](eventData);
+			if (typeof controllerInstance[onEventName] === 'function') {
+				controllerInstance[onEventName](eventData);
 			} else {
 				console.warn(`The active controller has no listener for the encountered` +
 						` event '${eventName}'. Check your event name for typos, or` +

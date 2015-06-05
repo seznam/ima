@@ -80,6 +80,7 @@ class PageRender extends ns.Core.Interface.PageRender {
 	 * On client, the method renders the page into DOM, re-using the DOM created
 	 * from the HTML markup send by the server if possible.
 	 *
+	 * @inheritdoc
 	 * @override
 	 * @method mount
 	 * @abstract
@@ -88,23 +89,43 @@ class PageRender extends ns.Core.Interface.PageRender {
 	 * @return {Promise}
 	 */
 	mount(controller, view) { // jshint ignore:line
-		throw new IMAError('The render() method is abstract and must be overridden');
+		throw new IMAError('The mount() method is abstract and must be overridden.');
 	}
 
 	/**
-	 * Unmount view from th DOM.
+	 * Only update controller state and React view not call constructor.
 	 *
+	 * It is useful for same controller and view, where only change url params.
+	 * Then it is possible to reuse same controller and view.
+	 *
+	 * @inheritdoc
+	 * @override
+	 * @method update
+	 * @param {Core.Decorator.Controller} controller
+	 * @param {Object<string, string>=} [params={}] New route params.
+	 * @return {Promise}
+	 */
+	update(controller, params = {}) {
+		throw new IMAError('The update() method is abstract and must be overridden.');
+	}
+
+	/**
+	 * Unmount view from the DOM. Then React always call constructor
+	 * for new mounting view.
+	 *
+	 * @inheritdoc
 	 * @override
 	 * @method unmount
-	 * @abstract
 	 */
-	unmount() {}
+	unmount() {
+		throw new IMAError('The unmount() method is abstract and must be overridden.');
+	}
 
 	/**
 	 * Set state to reactive react component.
 	 *
 	 * @method setState
-	 * @param {Object<string, *>} [state={}]
+	 * @param {Object<string, *>=} [state={}]
 	 */
 	setState(state = {}) {
 		if (this._reactiveView) {

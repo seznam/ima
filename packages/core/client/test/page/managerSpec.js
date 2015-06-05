@@ -32,37 +32,36 @@ describe('Core.Page.Manager', function() {
 					);
 		});
 		it('should call method (with event name) from active controller', function() {
-			pageManager._activeController = {
+			pageManager._lastManagePage.controllerInstance = {
 				onEvent: function(data) {}
 			};
-			spyOn(pageManager._activeController, 'onEvent');
+			spyOn(pageManager._lastManagePage.controllerInstance, 'onEvent');
 
 			pageManager._onCustomEventHandler(event);
 
-			expect(pageManager._activeController.onEvent.calls.count()).toEqual(1);
-
-			expect(pageManager._activeController.onEvent).toHaveBeenCalledWith(data);
+			expect(pageManager._lastManagePage.controllerInstance.onEvent.calls.count()).toEqual(1);
+			expect(pageManager._lastManagePage.controllerInstance.onEvent).toHaveBeenCalledWith(data);
 		});
 
 		it('should throw error because active controller hasn\'t event listener' , function() {
-			pageManager._activeController = {
+			pageManager._lastManagePage.controllerInstance = {
 				onDifferentEvent: function(data) {}
 			};
-			spyOn(pageManager._activeController, 'onDifferentEvent');
+			spyOn(pageManager._lastManagePage.controllerInstance, 'onDifferentEvent');
 			spyOn(console, 'warn');
 
 			pageManager._onCustomEventHandler(event);
 
-			expect(pageManager._activeController.onDifferentEvent.calls.count()).toEqual(0);
-
+			expect(pageManager._lastManagePage.controllerInstance.onDifferentEvent.calls.count()).toEqual(0);
 			expect(console.warn).toHaveBeenCalled();
 		});
 
 		it('should do nothing if active controller is null' , function() {
-			pageManager._activeController = null;
+			pageManager._lastManagePage.controllerInstance = null;
 			spyOn(console, 'warn');
 
 			pageManager._onCustomEventHandler(event);
+
 			expect(console.warn).not.toHaveBeenCalled();
 		});
 

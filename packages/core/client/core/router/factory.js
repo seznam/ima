@@ -45,10 +45,11 @@ class Factory {
 	 *        identifying the controller associated with this route.
 	 * @param {string} view The full name or Object Container alias identifying
 	 *        the view class associated with this route.
+	 * @param {Object<string, *>=} [options] The route additional options.
 	 * @return {Core.Router.Route} The contructed route.
 	 */
-	createRoute(name, pathExpression, controller, view) {
-		return new this._Route(name, pathExpression, controller, view);
+	createRoute(name, pathExpression, controller, view, options) {
+		return new this._Route(name, pathExpression, controller, view, options);
 	}
 }
 

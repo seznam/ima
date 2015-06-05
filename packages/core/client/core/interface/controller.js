@@ -81,6 +81,19 @@ class Controller {
 	 */
 	load() {}
 
+	/**
+	 * Callback for updating the controller. This method is invoked
+	 * if {@codelink Core.Router.Route} has options onlyUpdate set to true.
+	 * Others callbacks as {@codelink init()}, {@codelink load()}, {@codelink activate()},
+	 * {@codelink deinit()} are not call.
+	 *
+	 * @method update
+	 * @param {Object<string, string>=} [params={}] The current route parameters.
+	 * @return {Object<string, (Promise|*)>} A map object of promises
+	 *         resolved when all resources the controller requires are ready. The
+	 *         resolved values will be pushed to the controller's state.
+	 */
+	update(params = {}) {}
 
 	/**
 	 * Sets the controller state, replacing the old state. This method also
@@ -150,8 +163,6 @@ class Controller {
 	/**
 	 * Set route parameters for controller.
 	 *
-	 * @inheritdoc
-	 * @override
 	 * @method setRouteParams
 	 * @param {Object<string, string>} [params={}] The current route parameters.
 	 */

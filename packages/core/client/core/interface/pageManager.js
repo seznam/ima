@@ -20,16 +20,17 @@ class PageManager {
 	init() {}
 
 	/**
-	 * Manage controller with params
+	 * Manage controller with params.
 	 *
 	 * @method manage
-	 * @param {string} controller
-	 * @param {string} view
+	 * @param {string|function} controller
+	 * @param {string|function} view
+	 * @param {{onlyUpdate: boolean}} options
 	 * @param {Object<string, *>=} params Parameters to use to initialize
 	 *        the controller.
 	 * @return {Promise}
 	 */
-	manage(controller, view, params = {}) {}
+	manage(controller, view, options, params = {}) {}
 }
 
 ns.Core.Interface.PageManager = PageManager;

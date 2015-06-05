@@ -62,7 +62,6 @@ class Route {
 	 * @param {{onlyUpdate: boolean}} [options={onlyUpdate: false}] The route additional options.
 	 */
 	constructor(name, pathExpression, controller, view, options = {onlyUpdate: false}) {
-
 		/**
 		 * The unique name of this route, identifying it among the rest of the
 		 * routes in the application.

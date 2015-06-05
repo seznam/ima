@@ -151,7 +151,6 @@ class Controller extends ns.Core.Interface.Controller {
 	 * object.
 	 *
 	 * @inheritdoc
-	 * @abstract
 	 * @override
 	 * @method load
 	 * @return {Object<string, (Promise|*)>} A map object of promises
@@ -160,6 +159,24 @@ class Controller extends ns.Core.Interface.Controller {
 	 */
 	load() {
 		return this._controller.load();
+	}
+
+	/**
+	 * Callback for updating the controller. This method is invoked
+	 * if {@codelink Core.Router.Route} has options onlyUpdate set to true.
+	 * Others callbacks as {@codelink init()}, {@codelink load()}, {@codelink activate()},
+	 * {@codelink deinit()} are not call.
+	 *
+	 * @inheritdoc
+	 * @override
+	 * @method update
+	 * @param {Object<string, string>=} [params={}] The current route parameters.
+	 * @return {Object<string, (Promise|*)>} A map object of promises
+	 *         resolved when all resources the controller requires are ready. The
+	 *         resolved values will be pushed to the controller's state.
+	 */
+	update(params = {}) {
+		return this._controller.update(params);
 	}
 
 	/**

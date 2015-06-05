@@ -1,20 +1,33 @@
 describe('Core.Abstract.Router', function() {
 
 	var router = null;
-	var pageRender = null;
+	var pageManager = null;
 	var routerFactory = null;
 	var ROUTE_NAMES = oc.get('$ROUTE_NAMES');
+	var config = {
+		$Protocol: 'http:',
+		$Root: '/root',
+		$LanguagePartPath: '',
+		$Domain: 'www.domain.com'
+	};
+	var options = {
+		onlyUpdate: true
+	};
+	var controller = 'BaseController';
+	var view = 'BaseView';
 
 	beforeEach(function() {
 		oc.bind('BaseController', function() {});
 		oc.bind('BaseView', function() {});
 
-		pageRender = oc.create('Core.Interface.PageRender');
+		pageManager = oc.create('Core.Interface.PageManager');
 		routerFactory = oc.create('$RouterFactory');
-		router = oc.create('Core.Abstract.Router', [pageRender, routerFactory, ROUTE_NAMES]);
+		router = oc.create('Core.Abstract.Router', [pageManager, routerFactory, ROUTE_NAMES]);
 
-		router.add('home', '/', 'BaseController', 'BaseView');
-		router.add('contact', '/contact', 'BaseController', 'BaseView');
+		router.init(config);
+
+		router.add('home', '/', controller, view, options);
+		router.add('contact', '/contact', controller, view, options);
 	});
 
 	it('should be 2 routes in Array', function() {
@@ -27,6 +40,40 @@ describe('Core.Abstract.Router', function() {
 		expect(router._routes.size).toEqual(1);
 	});
 
+	it('should return absolute current url', function() {
+		spyOn(router, 'getPath')
+			.and
+			.returnValue('/path');
+
+		expect(router.getUrl()).toEqual('http://www.domain.com/root/path');
+	});
+
+	it('should return route for defined path', function() {
+		var route = router._getRouteByPath('/');
+
+		expect(route.getName()).toEqual('home');
+	});
+
+	describe('add method', function() {
+
+		it('should be throw error if you try add route with exists name', function() {
+			expect(function() {
+				router.add('home', '/home', controller, view, options);
+			}).toThrow();
+		});
+
+		it('should be create new Core.Router.Route', function() {
+			spyOn(routerFactory, 'createRoute')
+				.and
+				.callThrough();
+
+			router.add('routeName', '/routePath', controller, view, options);
+
+			expect(routerFactory.createRoute).toHaveBeenCalledWith('routeName', '/routePath', controller, view, options);
+
+		});
+	});
+
 	describe('link method', function() {
 
 		var routeName ='link';
@@ -34,7 +81,7 @@ describe('Core.Abstract.Router', function() {
 		var baseUrl = 'baseUrl';
 
 		beforeEach(function() {
-			router.add(routeName, path, 'BaseController', 'BaseView');
+			router.add(routeName, path, controller, view, options);
 		});
 
 		afterEach(function() {
@@ -66,7 +113,7 @@ describe('Core.Abstract.Router', function() {
 		var route = null;
 
 		beforeEach(function() {
-			route = routerFactory.createRoute(routeName, path, 'BaseController', 'BaseView');
+			route = routerFactory.createRoute(routeName, path, controller, view, options);
 		});
 
 		afterEach(function() {
@@ -116,7 +163,7 @@ describe('Core.Abstract.Router', function() {
 		var route = null;
 
 		beforeEach(function() {
-			route = routerFactory.createRoute(routeName, path, 'BaseController', 'BaseView');
+			route = routerFactory.createRoute(routeName, path, controller, view, options);
 		});
 
 		afterEach(function() {
@@ -164,7 +211,7 @@ describe('Core.Abstract.Router', function() {
 		var route = null;
 
 		beforeEach(function() {
-			route = routerFactory.createRoute(routeName, path, 'BaseController', 'BaseView');
+			route = routerFactory.createRoute(routeName, path, controller, view, options);
 		});
 
 		afterEach(function() {
@@ -248,6 +295,31 @@ describe('Core.Abstract.Router', function() {
 
 	});
 
+	describe('_handle method', function() {
+
+		var routeName ='routeName';
+		var routePath = '/routePath';
+		var route = null;
+
+		beforeEach(function() {
+			route = routerFactory.createRoute(routeName, routePath, controller, view, options);
+		});
+
+		afterEach(function() {
+			route = null;
+		});
+
+		it('should be call paga manager', function() {
+			spyOn(pageManager, 'manage')
+				.and
+				.stub();
+
+			router._handle(route, {});
+
+			expect(pageManager.manage).toHaveBeenCalledWith(controller, view, options, {});
+		});
+	});
+
 	describe('_extractRoutePath method', function() {
 
 		var pathWithRoot = '/root/path';
@@ -256,7 +328,7 @@ describe('Core.Abstract.Router', function() {
 		var path = '/path';
 
 		beforeEach(function() {
-			router = oc.create('Core.Abstract.Router', [pageRender, routerFactory, Promise]);
+			router = oc.create('Core.Abstract.Router', [pageManager, routerFactory, Promise]);
 		});
 
 		it('should be clear root from path', function() {

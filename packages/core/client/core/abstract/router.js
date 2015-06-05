@@ -158,18 +158,19 @@ class Router extends ns.Core.Interface.Router {
 	 *        identifying the controller associated with this route.
 	 * @param {string} view The full name or Object Container alias identifying
 	 *        the view class associated with this route.
+	 * @param {Object<string, *>=} [options={}] The route additional options.
 	 * @return {Core.Interface.Router} This router.
 	 * @throws {Core.IMAError} Thrown if a route with the same name is added
 	 *         multiple times.
 	 */
-	add(name, pathExpression, controller, view) {
+	add(name, pathExpression, controller, view, options = {}) {
 		if (this._routes.has(name)) {
-			throw new IMAError(`Core.Abstract.Router.add: The path with name ` +
+			throw new IMAError(`Core.Abstract.Router.add: The route with name ` +
 					`${name} is already defined`);
 		}
 
 		var factory = this._factory;
-		var route = factory.createRoute(name, pathExpression, controller, view);
+		var route = factory.createRoute(name, pathExpression, controller, view, options);
 		this._routes.set(name, route);
 
 		return this;
@@ -416,8 +417,9 @@ class Router extends ns.Core.Interface.Router {
 	_handle(route, params) {
 		var controller = route.getController();
 		var view = route.getView();
+		var options = route.getOptions();
 
-		return this._pageManager.manage(controller, view, params);
+		return this._pageManager.manage(controller, view, options, params);
 	}
 
 	/**
