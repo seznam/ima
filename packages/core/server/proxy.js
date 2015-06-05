@@ -99,7 +99,7 @@ var callRemoteServer = (req, res) => {
 		.end((error, respond) => {
 			if (error) {
 				console.error('API ERROR', error);
-				res.status(500).json({Error: 'API error', message: error.message});
+				res.status(error.status || 500).json({Error: 'API error', message: error.message});
 			}
 
 			if (respond) {
