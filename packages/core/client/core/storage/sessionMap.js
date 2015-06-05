@@ -54,7 +54,7 @@ class SessionMap extends ns.Core.Interface.Storage {
 	 * This method must be invoked only once and it must be the first method
 	 * invoked on this instance.
 	 *
-	 * @inheritdoc
+	 * @inheritDoc
 	 * @override
 	 * @chainable
 	 * @method init
@@ -93,7 +93,7 @@ class SessionMap extends ns.Core.Interface.Storage {
 	 * Entries set to the {@code undefined} value can be tested for existence
 	 * using the {@codelink has} method.
 	 *
-	 * @inheritdoc
+	 * @inheritDoc
 	 * @override
 	 * @method get
 	 * @param {string} key The key identifying the storage entry.
@@ -107,7 +107,7 @@ class SessionMap extends ns.Core.Interface.Storage {
 	 * Sets the storage entry identied by the specified key to the provided
 	 * value. The method creates the entry if it does not exist already.
 	 *
-	 * @inheritdoc
+	 * @inheritDoc
 	 * @override
 	 * @chainable
 	 * @method set
@@ -124,7 +124,7 @@ class SessionMap extends ns.Core.Interface.Storage {
 	/**
 	 * Deletes the entry identified by the specified key from this storage.
 	 *
-	 * @inheritdoc
+	 * @inheritDoc
 	 * @override
 	 * @chainable
 	 * @method delete
@@ -140,7 +140,7 @@ class SessionMap extends ns.Core.Interface.Storage {
 	/**
 	 * Clears the storage of all entries.
 	 *
-	 * @inheritdoc
+	 * @inheritDoc
 	 * @override
 	 * @chainable
 	 * @method clear
@@ -156,7 +156,7 @@ class SessionMap extends ns.Core.Interface.Storage {
 	 * Returns an iterator for traversing the keys in this storage. The order in
 	 * which the keys are traversed is undefined.
 	 *
-	 * @inheritdoc
+	 * @inheritDoc
 	 * @override
 	 * @method keys
 	 * @return {Iterator<string>} An iterator for traversing the keys in this

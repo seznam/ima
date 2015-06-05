@@ -118,7 +118,7 @@ class Router extends ns.Core.Interface.Router {
 	/**
 	 * Initializes the router with the provided configuration.
 	 *
-	 * @inheritdoc
+	 * @inheritDoc
 	 * @override
 	 * @method init
 	 * @param {{$Protocol: string, $Domain: string, $Root: string, $LanguagePartPath: string}} config
@@ -144,7 +144,7 @@ class Router extends ns.Core.Interface.Router {
 	/**
 	 * Adds a new route to router.
 	 *
-	 * @inheritdoc
+	 * @inheritDoc
 	 * @override
 	 * @chainable
 	 * @method add
@@ -179,7 +179,7 @@ class Router extends ns.Core.Interface.Router {
 	/**
 	 * Removes the specified route from the router's known routes.
 	 *
-	 * @inheritdoc
+	 * @inheritDoc
 	 * @override
 	 * @chainable
 	 * @method remove
@@ -196,7 +196,7 @@ class Router extends ns.Core.Interface.Router {
 	/**
 	 * Returns the current absolute URL (including protocol, host, query, etc).
 	 *
-	 * @inheritdoc
+	 * @inheritDoc
 	 * @override
 	 * @method getUrl
 	 * @return {string} The current absolute URL.
@@ -209,7 +209,7 @@ class Router extends ns.Core.Interface.Router {
 	 * Returns the application's domain in the following form
 	 * {@code `${protocol}//${host}`}.
 	 *
-	 * @inheritdoc
+	 * @inheritDoc
 	 * @override
 	 * @method getDomain
 	 * @return {string} The current application's domain.
@@ -222,7 +222,7 @@ class Router extends ns.Core.Interface.Router {
 	 * Returns the current protocol used to access the application, terminated by
 	 * a collon (for example {@code https:}).
 	 *
-	 * @inheritdoc
+	 * @inheritDoc
 	 * @override
 	 * @method getProtocol
 	 * @return {string} The current application protocol used to access the
@@ -237,7 +237,7 @@ class Router extends ns.Core.Interface.Router {
 	 * specified route by substituting the route's parameter placeholders with
 	 * the provided parameter values.
 	 *
-	 * @inheritdoc
+	 * @inheritDoc
 	 * @override
 	 * @method link
 	 * @param {string} routeName The unique name of the route, identifying the
@@ -262,7 +262,7 @@ class Router extends ns.Core.Interface.Router {
 	 * Routes the application to the route matching the providing path, renders
 	 * the route page and sends the result to the client.
 	 *
-	 * @inheritdoc
+	 * @inheritDoc
 	 * @override
 	 * @method route
 	 * @param {string} path The URL path part received from the client, with
@@ -288,7 +288,7 @@ class Router extends ns.Core.Interface.Router {
 	 * Handles an internal server error by responding with the appropriate
 	 * "internal server error" error page.
 	 *
-	 * @inheritdoc
+	 * @inheritDoc
 	 * @override
 	 * @method handleError
 	 * @param {Object<string, string>} params Parameters extracted from the
@@ -315,7 +315,7 @@ class Router extends ns.Core.Interface.Router {
 	 * Handles a "not found" error by responsing with the appropriate "not found"
 	 * error page.
 	 *
-	 * @inheritdoc
+	 * @inheritDoc
 	 * @override
 	 * @method handleNotFound
 	 * @param {Object<string, string>} params Parameters extracted from the
@@ -344,7 +344,7 @@ class Router extends ns.Core.Interface.Router {
 	 * action (for example wrong URL or request encoding) or by a failure at the
 	 * server side.
 	 *
-	 * @inheritdoc
+	 * @inheritDoc
 	 * @override
 	 * @method isClientError
 	 * @param {(Core.IMAError|Error)} error The encountered error.

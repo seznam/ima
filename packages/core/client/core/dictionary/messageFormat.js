@@ -55,7 +55,7 @@ class MessageFormat extends ns.Core.Interface.Dictionary {
 	 * {@code NAME} and {@code VERB} parameter placeholders. The parameter
 	 * placeholder names should be in uppercase.
 	 *
-	 * @inheritdoc
+	 * @inheritDoc
 	 * @override
 	 * @method init
 	 * @param {{language: string, dictionary: Object<string, Object<string, function(Object<string, (number|string)>): string>>}} config
@@ -79,7 +79,7 @@ class MessageFormat extends ns.Core.Interface.Dictionary {
 	 * Returns the ISO 639-1 language code of the language this dictionary was
 	 * initialized with.
 	 *
-	 * @inheritdoc
+	 * @inheritDoc
 	 * @override
 	 * @method getLanguage
 	 * @return {string} The language code representing the language of the
@@ -94,7 +94,7 @@ class MessageFormat extends ns.Core.Interface.Dictionary {
 	 * replaces the parameter placeholder with the provided parameters and
 	 * returns the result.
 	 *
-	 * @inheritdoc
+	 * @inheritDoc
 	 * @override
 	 * @method get
 	 * @param {string} key The key identifying the localization phrase, following

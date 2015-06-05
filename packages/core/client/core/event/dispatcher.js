@@ -58,7 +58,7 @@ class Dispatcher extends ns.Core.Interface.Dispatcher {
 	/**
 	 * Unregisters all event listeners currently registered with this dispatcher.
 	 *
-	 * @inheritdoc
+	 * @inheritDoc
 	 * @override
 	 * @chainable
 	 * @method clear
@@ -81,7 +81,7 @@ class Dispatcher extends ns.Core.Interface.Dispatcher {
 	 * should not be relied upon. Registering the same listener for the same
 	 * event and with the same scope multiple times has no effect.
 	 *
-	 * @inheritdoc
+	 * @inheritDoc
 	 * @override
 	 * @chainable
 	 * @method listen
@@ -106,7 +106,7 @@ class Dispatcher extends ns.Core.Interface.Dispatcher {
 	 * Unregistered the provided event listener, so it will no longer be executed
 	 * with the specified scope when the specified event is fired.
 	 *
-	 * @inheritdoc
+	 * @inheritDoc
 	 * @override
 	 * @chainable
 	 * @method unlisten
@@ -154,7 +154,7 @@ class Dispatcher extends ns.Core.Interface.Dispatcher {
 	 * data in any way. The order in which the event listeners will be executed
 	 * is unspecified and should not be relied upon.
 	 *
-	 * @inheritdoc
+	 * @inheritDoc
 	 * @override
 	 * @chainable
 	 * @method fire

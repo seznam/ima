@@ -75,7 +75,7 @@ class Handler extends ns.Core.Interface.Cache {
 	/**
 	 * Clear the cache by deleting all entries.
 	 *
-	 * @inheritdoc
+	 * @inheritDoc
 	 * @override
 	 * @method clear
 	 */
@@ -90,7 +90,7 @@ class Handler extends ns.Core.Interface.Cache {
 	 * The method always returns {@code false} if the cache is currently
 	 * disabled.
 	 *
-	 * @inheritdoc
+	 * @inheritDoc
 	 * @override
 	 * @method has
 	 * @param {string} key The identifier of the cache entry.
@@ -118,7 +118,7 @@ class Handler extends ns.Core.Interface.Cache {
 	 * The method returns {@code null} if the specified entry does not exist, has
 	 * already expired, or the cache is currently disabled.
 	 *
-	 * @inheritdoc
+	 * @inheritDoc
 	 * @override
 	 * @method get
 	 * @param {string} key The identifier of the cache entry.
@@ -137,7 +137,7 @@ class Handler extends ns.Core.Interface.Cache {
 	 * Sets the cache entry identified by the specified key to the provided
 	 * value. The entry is created if it does not exist yet.
 	 *
-	 * @inheritdoc
+	 * @inheritDoc
 	 * @override
 	 * @method set
 	 * @param {string} key The identifier of the cache entry.
@@ -157,7 +157,7 @@ class Handler extends ns.Core.Interface.Cache {
 	 * Deletes the specified cache entry. The method has no effect if the entry
 	 * does not exist.
 	 *
-	 * @inheritdoc
+	 * @inheritDoc
 	 * @override
 	 * @method delete
 	 * @param {string} key The identifier of the cache entry.
@@ -173,7 +173,7 @@ class Handler extends ns.Core.Interface.Cache {
 	 *
 	 * The method has no effect if the cache is already disabled.
 	 *
-	 * @inheritdoc
+	 * @inheritDoc
 	 * @override
 	 * @method disable
 	 */
@@ -186,7 +186,7 @@ class Handler extends ns.Core.Interface.Cache {
 	 *
 	 * The method has no effect if the cache is already enabled.
 	 *
-	 * @inheritdoc
+	 * @inheritDoc
 	 * @override
 	 * @method enable
 	 */
@@ -197,7 +197,7 @@ class Handler extends ns.Core.Interface.Cache {
 	/**
 	 * Exports the state of this cache to a JSON string.
 	 *
-	 * @inheritdoc
+	 * @inheritDoc
 	 * @override
 	 * @method serialize
 	 * @return {string} A JSON string containing an object representing of the
@@ -222,7 +222,7 @@ class Handler extends ns.Core.Interface.Cache {
 	/**
 	 * Deserialization data from JSON.
 	 *
-	 * @inheritdoc
+	 * @inheritDoc
 	 * @override
 	 * @method deserialize
 	 * @param {Object<string, {value: *, ttl: number}>} serializedData An object

@@ -60,7 +60,7 @@ class Controller extends ns.Core.Interface.Controller {
 	/**
 	 * Callback for initializing the controller with the route parameters.
 	 *
-	 * @inheritdoc
+	 * @inheritDoc
 	 * @override
 	 * @method init
 	 */
@@ -77,7 +77,7 @@ class Controller extends ns.Core.Interface.Controller {
 	 * automatically when the controller instance is destroyed by the garbage
 	 * collector.
 	 *
-	 * @inheritdoc
+	 * @inheritDoc
 	 * @override
 	 * @method destroy
 	 */
@@ -94,7 +94,7 @@ class Controller extends ns.Core.Interface.Controller {
 	 * listeners the controller may need to handle the user interaction with the
 	 * page.
 	 *
-	 * @inheritdoc
+	 * @inheritDoc
 	 * @override
 	 * @method activate
 	 */
@@ -123,7 +123,7 @@ class Controller extends ns.Core.Interface.Controller {
 	 * the controller's state using the field names used in the returned map
 	 * object.
 	 *
-	 * @inheritdoc
+	 * @inheritDoc
 	 * @abstract
 	 * @override
 	 * @method load
@@ -142,7 +142,7 @@ class Controller extends ns.Core.Interface.Controller {
 	 * Others callbacks as {@codelink init()}, {@codelink load()}, {@codelink activate()},
 	 * {@codelink deinit()} are not call.
 	 *
-	 * @inheritdoc
+	 * @inheritDoc
 	 * @override
 	 * @method update
 	 * @param {Object<string, string>=} [params={}] The current route parameters.
@@ -163,7 +163,7 @@ class Controller extends ns.Core.Interface.Controller {
 	 * controller's current state. To perform updates of the state, please use
 	 * the {@codelink patchState} method.
 	 *
-	 * @inheritdoc
+	 * @inheritDoc
 	 * @override
 	 * @method setState
 	 * @param {Object<string, *>} state The new controller state, replacing the
@@ -191,7 +191,7 @@ class Controller extends ns.Core.Interface.Controller {
 	 * The field names of the passed value-containing object will match the field
 	 * names in the object returned from the {@codelink load} method.
 	 *
-	 * @inheritdoc
+	 * @inheritDoc
 	 * @override
 	 * @method patchState
 	 * @param {Object<string, *>} statePatch Patch of the controller's state to
@@ -206,7 +206,7 @@ class Controller extends ns.Core.Interface.Controller {
 	/**
 	 * Returns the controller's current state.
 	 *
-	 * @inheritdoc
+	 * @inheritDoc
 	 * @override
 	 * @method getState
 	 * @return {Object<string, *>|Null} The current state of this controller.
@@ -225,7 +225,7 @@ class Controller extends ns.Core.Interface.Controller {
 	 * resources, the view has been rendered and (if at the client-side) the
 	 * controller has been provided with the rendered view.
 	 *
-	 * @inheritdoc
+	 * @inheritDoc
 	 * @override
 	 * @abstract
 	 * @method setMetaParams
@@ -248,7 +248,7 @@ class Controller extends ns.Core.Interface.Controller {
 	/**
 	 * Set route parameters for controller.
 	 *
-	 * @inheritdoc
+	 * @inheritDoc
 	 * @override
 	 * @method setRouteParams
 	 * @param {Object<string, string>=} [params={}] The current route parameters.
@@ -270,7 +270,7 @@ class Controller extends ns.Core.Interface.Controller {
 	/**
 	 * Returns the HTTPS status code to send to the client.
 	 *
-	 * @inheritdoc
+	 * @inheritDoc
 	 * @override
 	 * @method getHttpStatus
 	 * @return {number} The HTTP status code to send to the client.

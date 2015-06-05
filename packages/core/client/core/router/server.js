@@ -74,7 +74,7 @@ class Server extends ns.Core.Abstract.Router {
 	 * The effects of this method cannot be reverted. This method has no effect
 	 * at the server side.
 	 *
-	 * @inheritdoc
+	 * @inheritDoc
 	 * @override
 	 * @chainable
 	 * @method listen
@@ -99,7 +99,7 @@ class Server extends ns.Core.Abstract.Router {
 	 * client to the related page if the URL is set at the client side and points
 	 * to the same domain and protocol.
 	 *
-	 * @inheritdoc
+	 * @inheritDoc
 	 * @override
 	 * @method redirect
 	 * @param {string} url The URL to which the client should be redirected.

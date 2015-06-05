@@ -114,7 +114,7 @@ class Cookie extends ns.Core.Storage.Map {
 	 * This method must be invoked only once and it must be the first method
 	 * invoked on this instance.
 	 *
-	 * @inheritdoc
+	 * @inheritDoc
 	 * @override
 	 * @chainable
 	 * @method init

@@ -146,7 +146,7 @@ export default class IMAError extends Error {
 	 * This method is a shorthand for the following code snippet:
 	 * {@code this.getParams().status || 500}.
 	 *
-	 * @inheritdoc
+	 * @inheritDoc
 	 * @override
 	 * @method getHttpStatus
 	 * @return {number}

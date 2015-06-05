@@ -51,7 +51,7 @@ class Manager extends ns.Core.Interface.MetaManager {
 	/**
 	 * Sets the page title.
 	 *
-	 * @inheritdoc
+	 * @inheritDoc
 	 * @override
 	 * @method setTitle
 	 * @param {string} title The new page title.
@@ -64,7 +64,7 @@ class Manager extends ns.Core.Interface.MetaManager {
 	 * Returns the page title. The method returns an empty string if no page
 	 * title has been set yet.
 	 *
-	 * @inheritdoc
+	 * @inheritDoc
 	 * @override
 	 * @method getTitle
 	 * @return {string} The paget title currently stored in this meta manager.
@@ -76,7 +76,7 @@ class Manager extends ns.Core.Interface.MetaManager {
 	/**
 	 * Set the specified generic meta information.
 	 *
-	 * @inheritdoc
+	 * @inheritDoc
 	 * @override
 	 * @method setMetaName
 	 * @param {string} name Meta information name, for example {@code keywords}.
@@ -91,7 +91,7 @@ class Manager extends ns.Core.Interface.MetaManager {
 	 * returns an empty string for missing meta information (to make the returned
 	 * value React-friendly).
 	 *
-	 * @inheritdoc
+	 * @inheritDoc
 	 * @override
 	 * @method getMetaName
 	 * @param {string} name The name of the generic meta information.
@@ -105,7 +105,7 @@ class Manager extends ns.Core.Interface.MetaManager {
 	/**
 	 * Returns the names of the currently known generic meta information.
 	 *
-	 * @inheritdoc
+	 * @inheritDoc
 	 * @override
 	 * @method getMetaNames
 	 * @return {string[]} The names of the currently known generic meta
@@ -118,7 +118,7 @@ class Manager extends ns.Core.Interface.MetaManager {
 	/**
 	 * Sets the specified specialized meta information.
 	 *
-	 * @inheritdoc
+	 * @inheritDoc
 	 * @override
 	 * @method setMetaProperty
 	 * @param {string} name Name of the specialized meta information.
@@ -133,7 +133,7 @@ class Manager extends ns.Core.Interface.MetaManager {
 	 * method returns an empty string for missing meta information (to make the
 	 * returned value React-friendly).
 	 *
-	 * @inheritdoc
+	 * @inheritDoc
 	 * @override
 	 * @method getMetaProperty
 	 * @param {string} name The name of the specialized meta information.
@@ -147,7 +147,7 @@ class Manager extends ns.Core.Interface.MetaManager {
 	/**
 	 * Returns the names of the currently known specialized meta information.
 	 *
-	 * @inheritdoc
+	 * @inheritDoc
 	 * @override
 	 * @method getMetaProperties
 	 * @return {string[]} The names of the currently known specialized meta

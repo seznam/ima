@@ -85,7 +85,7 @@ class Manager extends ns.Core.Interface.PageManager {
 	/**
 	 * Manager controller with params.
 	 *
-	 * @inheritdoc
+	 * @inheritDoc
 	 * @override
 	 * @method manage
 	 * @param {string|function} controller
@@ -121,7 +121,7 @@ class Manager extends ns.Core.Interface.PageManager {
 	/**
 	 * Initialization manager.
 	 *
-	 * @inheritdoc
+	 * @inheritDoc
 	 * @override
 	 * @method init
 	 */

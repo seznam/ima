@@ -24,7 +24,7 @@ class Controller extends ns.App.Base.Controller {
 	/**
 	 * Callback for initializing the controller with the route parameters.
 	 *
-	 * @inheritdoc
+	 * @inheritDoc
 	 * @override
 	 * @method init
 	 */
@@ -53,7 +53,7 @@ class Controller extends ns.App.Base.Controller {
 	 * the controller's state using the field names used in the returned map
 	 * object.
 	 *
-	 * @inheritdoc
+	 * @inheritDoc
 	 * @override
 	 * @method load
 	 * @return {Object<string, (Vendor.Rsvp.Promise|*)>} A map object of promises
@@ -79,7 +79,7 @@ class Controller extends ns.App.Base.Controller {
 	 * listeners the controller may need to handle the user interaction with the
 	 * page.
 	 *
-	 * @inheritdoc
+	 * @inheritDoc
 	 * @override
 	 * @method activate
 	 */
@@ -91,7 +91,7 @@ class Controller extends ns.App.Base.Controller {
 	 * resources, the view has been rendered and (if at the client-side) the
 	 * controller has been provided with the rendered view.
 	 *
-	 * @inheritdoc
+	 * @inheritDoc
 	 * @override
 	 * @method setMetaParams
 	 * @param {Object<string, *>} loadedResources Map of resource names to
@@ -141,7 +141,7 @@ class Controller extends ns.App.Base.Controller {
 	 * automatically when the controller instance is destroyed by the garbage
 	 * collector.
 	 *
-	 * @inheritdoc
+	 * @inheritDoc
 	 * @override
 	 * @method destroy
 	 */

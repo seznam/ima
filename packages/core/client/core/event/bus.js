@@ -53,7 +53,7 @@ class Bus extends ns.Core.Interface.EventBus {
 	 * Note that default options of eventInit are { bubbles: true, cancelable: true },
 	 * that are different like default values in native CustomEvents ({ bubbles: false, cancelable: false }).
 	 *
-	 * @inheritdoc
+	 * @inheritDoc
 	 * @override
 	 * @chainable
 	 * @method fire
@@ -97,7 +97,7 @@ class Bus extends ns.Core.Interface.EventBus {
 	 * The order in which the event listeners will be executed is unspecified and
 	 * should not be relied upon.
 	 *
-	 * @inheritdoc
+	 * @inheritDoc
 	 * @override
 	 * @chainable
 	 * @method listen
@@ -121,7 +121,7 @@ class Bus extends ns.Core.Interface.EventBus {
 	 * The order in which the event listeners will be executed is unspecified and
 	 * should not be relied upon.
 	 *
-	 * @inheritdoc
+	 * @inheritDoc
 	 * @override
 	 * @chainable
 	 * @method listen

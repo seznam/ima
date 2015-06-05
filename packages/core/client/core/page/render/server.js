@@ -66,7 +66,7 @@ class Server extends ns.Core.Abstract.PageRender {
 	 * On client, the method renders the page into DOM, re-using the DOM created
 	 * from the HTML markup send by the server if possible.
 	 *
-	 * @inheritdoc
+	 * @inheritDoc
 	 * @override
 	 * @method mount
 	 * @abstract
@@ -107,7 +107,7 @@ class Server extends ns.Core.Abstract.PageRender {
 	 * It is useful for same controller and view, where only change url params.
 	 * Then it is possible to reuse same controller and view.
 	 *
-	 * @inheritdoc
+	 * @inheritDoc
 	 * @override
 	 * @method update
 	 * @param {Core.Decorator.Controller} controller
@@ -122,7 +122,7 @@ class Server extends ns.Core.Abstract.PageRender {
 	 * Unmount view from the DOM. Then React always call constructor
 	 * for new mounting view.
 	 *
-	 * @inheritdoc
+	 * @inheritDoc
 	 * @override
 	 * @method unmount
 	 */

@@ -16,7 +16,7 @@ class Client extends ns.Core.Interface.Window {
 	/**
 	 * Returns {@code true} if invoked at the client side.
 	 *
-	 * @inheritdoc
+	 * @inheritDoc
 	 * @override
 	 * @method isClient
 	 * @return {boolean} {@code true} if invoked at the client side.
@@ -29,7 +29,7 @@ class Client extends ns.Core.Interface.Window {
 	 * Returns {@code true} if the cookies are set and processed on the HTTP
 	 * requests and responses automatically by the environment.
 	 *
-	 * @inheritdoc
+	 * @inheritDoc
 	 * @override
 	 * @method isCookieEnabled
 	 * @return {boolean} {@code true} if cookies are handled automatically by the
@@ -42,7 +42,7 @@ class Client extends ns.Core.Interface.Window {
 	/**
 	 * Returns {@code true} if the session storage is supported.
 	 *
-	 * @inheritdoc
+	 * @inheritDoc
 	 * @override
 	 * @method hasSessionStorage
 	 * @return {boolean} {@code true} if the session storage is supported.
@@ -66,7 +66,7 @@ class Client extends ns.Core.Interface.Window {
 	/**
 	 * Returns {@code true} if the WebSockets are supported.
 	 *
-	 * @inheritdoc
+	 * @inheritDoc
 	 * @override
 	 * @method hasWebSocket
 	 * @return {boolean} {@code true} if the WebSockets are supported.
@@ -78,7 +78,7 @@ class Client extends ns.Core.Interface.Window {
 	/**
 	 * Returns {@code true} if the history manipulation API is supported.
 	 *
-	 * @inheritdoc
+	 * @inheritDoc
 	 * @override
 	 * @method hasHistoryAPI
 	 * @return {boolean} {@code true} if the history manipulation API is
@@ -91,7 +91,7 @@ class Client extends ns.Core.Interface.Window {
 	/**
 	 * Sets the new page title to the document.
 	 *
-	 * @inheritdoc
+	 * @inheritDoc
 	 * @override
 	 * @method setTitle
 	 * @param {string} title The new page title.
@@ -103,7 +103,7 @@ class Client extends ns.Core.Interface.Window {
 	/**
 	 * Returns the current {@code WebSocket} implementation to use.
 	 *
-	 * @inheritdoc
+	 * @inheritDoc
 	 * @override
 	 * @method getWebSocket
 	 * @return {function(new: WebSocket)} The current {@code WebSocket}
@@ -118,7 +118,7 @@ class Client extends ns.Core.Interface.Window {
 	 * client side. The method returns {@code undefined} if used at the server
 	 * side.
 	 *
-	 * @inheritdoc
+	 * @inheritDoc
 	 * @override
 	 * @method getWindow
 	 * @return {(undefined|Window)} The {@code window} object at the client side,
@@ -131,7 +131,7 @@ class Client extends ns.Core.Interface.Window {
 	/**
 	 * Returns the number of pixels that document has already been scrolled horizontally.
 	 *
-	 * @inheritdoc
+	 * @inheritDoc
 	 * @override
 	 * @method getScrollX
 	 * @return {number}
@@ -146,7 +146,7 @@ class Client extends ns.Core.Interface.Window {
 	/**
 	 * Returns the number of pixels that document has already been scrolled vertically.
 	 *
-	 * @inheritdoc
+	 * @inheritDoc
 	 * @override
 	 * @method getScrollY
 	 * @return {number}
@@ -161,7 +161,7 @@ class Client extends ns.Core.Interface.Window {
 	/**
 	 * Scrolls to a particular set of coordinates in the document.
 	 *
-	 * @inheritdoc
+	 * @inheritDoc
 	 * @override
 	 * @method scrollTo
 	 * @param {number} x is the pixel along the horizontal axis of the document
@@ -174,7 +174,7 @@ class Client extends ns.Core.Interface.Window {
 	/**
 	 * Returns the domain of the current URL as `${protocol}://${host}`.
 	 *
-	 * @inheritdoc
+	 * @inheritDoc
 	 * @override
 	 * @method getDomain
 	 * @return {string} The current domain.
@@ -186,7 +186,7 @@ class Client extends ns.Core.Interface.Window {
 	/**
 	 * Returns the path part of the current URL, including the query string.
 	 *
-	 * @inheritdoc
+	 * @inheritDoc
 	 * @override
 	 * @method getPath
 	 * @return {string} The path and query string parts of the current URL.
@@ -198,7 +198,7 @@ class Client extends ns.Core.Interface.Window {
 	/**
 	 * Returns the current URL.
 	 *
-	 * @inheritdoc
+	 * @inheritDoc
 	 * @override
 	 * @method getUrl
 	 * @return {string} The current URL.
@@ -211,7 +211,7 @@ class Client extends ns.Core.Interface.Window {
 	 * Returns the {@code &lt;body&gt;} body element. The method returns
 	 * {@code undefined} if invoked at the server side.
 	 *
-	 * @inheritdoc
+	 * @inheritDoc
 	 * @override
 	 * @method getBody
 	 * @return {(undefined|HTMLBodyElement)} The {@code &lt;body&gt;} body
@@ -224,7 +224,7 @@ class Client extends ns.Core.Interface.Window {
 	/**
 	 * Returns the HTML element with the specified {@code id} attribute value.
 	 *
-	 * @inheritdoc
+	 * @inheritDoc
 	 * @override
 	 * @method getElementById
 	 * @param {string} id The value of the {@code id} attribute to look for.
@@ -239,7 +239,7 @@ class Client extends ns.Core.Interface.Window {
 	 * Returns the first element matching the specified CSS 2.1 (or CSS 3 since
 	 * IE9) selector.
 	 *
-	 * @inheritdoc
+	 * @inheritDoc
 	 * @override
 	 * @method querySelector
 	 * @param {string} selector The CSS selector.
@@ -254,7 +254,7 @@ class Client extends ns.Core.Interface.Window {
 	 * Returns a node list of all elements matching the specified CSS 2.1 (or
 	 * CSS 3 since IE9) selector.
 	 *
-	 * @inheritdoc
+	 * @inheritDoc
 	 * @override
 	 * @method querySelectorAll
 	 * @param {string} selector The CSS selector.
@@ -269,7 +269,7 @@ class Client extends ns.Core.Interface.Window {
 	 * Performs a hard redirect (discarding the current JavaScript state) to the
 	 * specified URL.
 	 *
-	 * @inheritdoc
+	 * @inheritDoc
 	 * @override
 	 * @method redirect
 	 * @param {string} url The URL to which the browser will be redirected.
@@ -281,7 +281,7 @@ class Client extends ns.Core.Interface.Window {
 	/**
 	 * Pushes a new state to the browser history.
 	 *
-	 * @inheritdoc
+	 * @inheritDoc
 	 * @override
 	 * @method pushState
 	 * @param {Object<string, *>} state A state object associated with the
@@ -297,7 +297,7 @@ class Client extends ns.Core.Interface.Window {
 	/**
 	 * Replace the current history entry state.
 	 *
-	 * @inheritdoc
+	 * @inheritDoc
 	 * @override
 	 * @method replaceState
 	 * @param {Object<string, *>} state A state object associated with the
@@ -318,7 +318,7 @@ class Client extends ns.Core.Interface.Window {
 	 * target with the same {@code useCapture} flag value repeatedly has no
 	 * effect.
 	 *
-	 * @inheritdoc
+	 * @inheritDoc
 	 * @override
 	 * @method bindEventListener
 	 * @param {EventTarget} eventTarget The event target.
@@ -348,7 +348,7 @@ class Client extends ns.Core.Interface.Window {
 	 * The method has no effect if the provided event listener is not registered
 	 * to be executed at the specified event.
 	 *
-	 * @inheritdoc
+	 * @inheritDoc
 	 * @override
 	 * @method unbindEventListener
 	 * @param {EventTarget} eventTarget The event target.
@@ -370,7 +370,7 @@ class Client extends ns.Core.Interface.Window {
 	/**
 	 * Prevents the default browser action for the provided event.
 	 *
-	 * @inheritdoc
+	 * @inheritDoc
 	 * @override
 	 * @method preventDefault
 	 * @param {Event} event The event.

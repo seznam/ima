@@ -116,7 +116,7 @@ class Agent extends ns.Core.Interface.HttpAgent {
 	 * Sends an HTTP GET request to the specified URL, sending the provided data
 	 * as query parameters.
 	 *
-	 * @inheritdoc
+	 * @inheritDoc
 	 * @override
 	 * @method get
 	 * @param {string} url The URL to which the request should be made.
@@ -139,7 +139,7 @@ class Agent extends ns.Core.Interface.HttpAgent {
 	 * Sends an HTTP POST request to the specified URL, sending the provided data
 	 * as a request body.
 	 *
-	 * @inheritdoc
+	 * @inheritDoc
 	 * @override
 	 * @method post
 	 * @param {string} url The URL to which the request should be made.
@@ -162,7 +162,7 @@ class Agent extends ns.Core.Interface.HttpAgent {
 	 * Sends an HTTP PUT request to the specified URL, sending the provided data
 	 * as a request body.
 	 *
-	 * @inheritdoc
+	 * @inheritDoc
 	 * @override
 	 * @method put
 	 * @param {string} url The URL to which the request should be made.
@@ -185,7 +185,7 @@ class Agent extends ns.Core.Interface.HttpAgent {
 	 * Sends an HTTP PATCH request to the specified URL, sending the provided
 	 * data as a request body.
 	 *
-	 * @inheritdoc
+	 * @inheritDoc
 	 * @override
 	 * @method patch
 	 * @param {string} url The URL to which the request should be made.
@@ -208,7 +208,7 @@ class Agent extends ns.Core.Interface.HttpAgent {
 	 * Sends an HTTP DELETE request to the specified URL, sending the provided
 	 * data as a request body.
 	 *
-	 * @inheritdoc
+	 * @inheritDoc
 	 * @override
 	 * @method delete
 	 * @param {string} url The URL to which the request should be made.
@@ -231,7 +231,7 @@ class Agent extends ns.Core.Interface.HttpAgent {
 	 * Generates a cache key to use for identifying a request to the specified
 	 * URL and submitted data.
 	 *
-	 * @inheritdoc
+	 * @inheritDoc
 	 * @override
 	 * @method getCacheKey
 	 * @param {string} method The HTTP method used by the request.
@@ -249,7 +249,7 @@ class Agent extends ns.Core.Interface.HttpAgent {
 	/**
 	 * Set constant header to all request.
 	 *
-	 * @inheritdoc
+	 * @inheritDoc
 	 * @override
 	 * @method setDefaultHeader
 	 * @chainable
@@ -268,7 +268,7 @@ class Agent extends ns.Core.Interface.HttpAgent {
 	/**
 	 * Clears all defaults headers sent with all requests.
 	 *
-	 * @inheritdoc
+	 * @inheritDoc
 	 * @override
 	 * @method clearDefaultHeaders
 	 * @chainable
