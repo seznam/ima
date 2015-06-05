@@ -3,7 +3,12 @@ xdescribe('Core.Storage.WeakMap', function () {
 	var map;
 
 	beforeEach(function () {
-		map = oc.create('Core.Storage.WeakMap', [100, 3, 75, 2]);
+		map = oc.create('Core.Storage.WeakMap', [{
+			entryTtl: 100,
+			maxEntries: 3,
+			gcInterval: 75,
+			gcEntryCountTreshold: 2
+		}]);
 		map.set("a", 1);
 	});
 

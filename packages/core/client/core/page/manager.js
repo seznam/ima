@@ -224,7 +224,7 @@ class Manager extends ns.Core.Interface.PageManager {
 	 * @param {{onlyUpdate: boolean}} options
 	 * @return {boolean}
 	 */
-	_hasOnlyUpdate(controller, view ,options) {
+	_hasOnlyUpdate(controller, view, options) {
 		return options.onlyUpdate &&
 				this._lastManagePage.controller === controller &&
 				this._lastManagePage.view === view;

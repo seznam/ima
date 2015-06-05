@@ -21,16 +21,17 @@ class WeakMapStorage extends ns.Core.Storage.Map {
 	 *
 	 * @method constructor
 	 * @constructor
-	 * @param {number} entryTtl The time-to-live of a storage entry in
-	 *        milliseconds.
-	 * @param {number} maxEntries The maximum number of entries allowed in the
-	 *        storage.
-	 * @param {number} gcInterval The delay between runs of the garbage collector
-	 *        in milliseconds.
-	 * @param {number} gcEntryCountTreshold The maximum number of entries the
-	 *        storage can contain before the garbage collector is started.
+	 * @param {{entryTtl: number, maxEntries: number, gcInterval: number, gcEntryCountTreshold: number}} config
+	 *        Weak map storage configuration. The fields have the following
+	 *        meaning:
+	 *        - entryTtl The time-to-live of a storage entry in milliseconds.
+	 *        - maxEntries The maximum number of entries allowed in the storage.
+	 *        - gcInterval The delay between runs of the garbage collector in
+	 *          milliseconds.
+	 *        - gcEntryCountTreshold The maximum number of entries the storage
+	 *          can contain before the garbage collector is started.
 	 */
-	constructor(entryTtl, maxEntries, gcInterval, gcEntryCountTreshold) {
+	constructor(config) {
 		super();
 
 		/**
@@ -43,7 +44,7 @@ class WeakMapStorage extends ns.Core.Storage.Map {
 		 * @property _entryTtl
 		 * @type {number}
 		 */
-		this._entryTtl = entryTtl;
+		this._entryTtl = config.entryTtl;
 
 		/**
 		 * The maximum number of entries allowed in the storage. When the storage
@@ -54,7 +55,7 @@ class WeakMapStorage extends ns.Core.Storage.Map {
 		 * @property _maxEntries
 		 * @type {number}
 		 */
-		this._maxEntries = maxEntries;
+		this._maxEntries = config.maxEntries;
 
 		/**
 		 * The interval duration in which the garbage collector discards the stale
@@ -65,7 +66,7 @@ class WeakMapStorage extends ns.Core.Storage.Map {
 		 * @property _gcInterval
 		 * @type {number}
 		 */
-		this._gcInterval = gcInterval;
+		this._gcInterval = config.gcInterval;
 
 		/**
 		 * The maximum number of entries the storage can contain before the garbage
@@ -75,7 +76,7 @@ class WeakMapStorage extends ns.Core.Storage.Map {
 		 * @property _gcEntryCountTreshold
 		 * @type {number}
 		 */
-		this._gcEntryCountTreshold = gcEntryCountTreshold;
+		this._gcEntryCountTreshold = config.gcEntryCountTreshold;
 
 		/**
 		 * ID of the global interval used to run the garbage collector

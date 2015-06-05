@@ -61,7 +61,12 @@ export var init = (ns, oc, config) => { //jshint ignore:line
 		oc.bind('$SessionStorage', ns.Core.Storage.Map);
 	}
 	oc.bind('$MapStorage', ns.Core.Storage.Map);
-	oc.bind('$WeakMapStorage', ns.Core.Storage.WeakMap, [30 * 60 * 1000, 1000, 60 * 1000, 16]);
+	oc.bind('$WeakMapStorage', ns.Core.Storage.WeakMap, [{
+		entryTtl: 30 * 60 * 1000,
+		maxEntries: 1000,
+		gcInterval: 60 * 1000,
+		gcEntryCountTreshold: 16
+	}]);
 	oc.bind('$SessionMapStorage', ns.Core.Storage.SessionMap, ['$MapStorage', '$SessionStorage']);
 
 	// Dispatcher
