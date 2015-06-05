@@ -180,7 +180,7 @@ var resolveNewPath = function(newBase){
  */
 var documentationPreprocessors = [
 	{
-		pattern: /\/[*][*]((?:a|[^a])*?)(?: |\t)*[*]\s*@(?:override|inheritdoc|abstract)\n((a|[^a])*)[*]\//g,
+		pattern: /\/[*][*]((?:a|[^a])*?)(?: |\t)*[*]\s*@(?:override|inheritDoc|abstract)\n((a|[^a])*)[*]\//g,
 		replace: '/**$1$2*/'
 	},
 	{
