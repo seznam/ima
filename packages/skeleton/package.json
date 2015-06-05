@@ -4,12 +4,21 @@
   "description": "Isomorphic javascript application",
   "main": "build/server.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "gulp test"
   },
   "keywords": [
-    "IMA.js"
+    "IMA.js",
+    "Isomorphic",
+    "Javascript"
   ],
   "author": "Miroslav Jancarik <miroslav.jancarik@firma.seznam.cz>",
+  "contributors": [{
+    "name": "Martin Urban",
+    "email": "martin.urban@firma.seznam.cz"
+  },{
+    "name": "Martin Jurča",
+    "email": "martin.jurca@firma.seznam.cz"
+  }],
   "license": "MIT",
   "devDependencies": {
     "async-each": "^0.1.6",
@@ -32,14 +41,14 @@
     "gulp-clean": "^0.3.1",
     "gulp-command": "^0.1.1",
     "gulp-concat": "^2.5.2",
-    "gulp-eslint": "^0.13.0",
+    "gulp-eslint": "^0.13.2",
     "gulp-if": "^1.2.5",
     "gulp-insert": "^0.4.0",
     "gulp-karma": "0.0.4",
     "gulp-less": "^3.0.3",
-    "gulp-live-server": "0.0.19",
+    "gulp-live-server": "0.0.20",
     "gulp-messageformat": "0.0.6",
-    "gulp-minify-css": "^1.1.5",
+    "gulp-minify-css": "^1.1.6",
     "gulp-plumber": "^1.0.0",
     "gulp-react": "^3.0.1",
     "gulp-remember": "^0.3.0",
@@ -51,7 +60,6 @@
     "gulp-uglify": "^1.2.0",
     "gulp-util": "^3.0.5",
     "gulp-yuidoc": "^0.1.2",
-    "halson": "^2.3.1",
     "helmet": "^0.9.1",
     "highlight.js": "^8.6.0",
     "jasmine-core": "^2.3.4",
