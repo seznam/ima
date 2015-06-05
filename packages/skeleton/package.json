@@ -19,6 +19,13 @@
     "name": "Martin Jurča",
     "email": "martin.jurca@firma.seznam.cz"
   }],
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/seznam/IMA.js-skeleton.git"
+  },
+  "bugs": {
+    "url": "https://github.com/seznam/IMA.js-skeleton/issues"
+  },
   "license": "MIT",
   "devDependencies": {
     "async-each": "^0.1.6",
