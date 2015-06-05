@@ -52,6 +52,7 @@
     "gulp-util": "^3.0.5",
     "gulp-yuidoc": "^0.1.2",
     "halson": "^2.3.1",
+    "helmet": "^0.9.1",
     "highlight.js": "^8.6.0",
     "jasmine-core": "^2.3.4",
     "karma": "^0.12.36",
