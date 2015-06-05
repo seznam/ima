@@ -95,11 +95,7 @@ class Manager extends ns.Core.Interface.PageManager {
 	 * @return {Promise}
 	 */
 	manage(controller, view, options, params = {}) {
-		var isOnlyUpdate = options.onlyUpdate &&
-				this._lastManagePage.controller === controller &&
-				this._lastManagePage.view === view;
-
-		if (isOnlyUpdate) {
+		if (this._hasOnlyUpdate(controller, view, options)) {
 			return this._pageRender.update(this._lastManagePage.decoratedController, params);
 		}
 
@@ -107,7 +103,7 @@ class Manager extends ns.Core.Interface.PageManager {
 		var decoratedController = this._pageFactory.decorateController(controllerInstance);
 		var viewInstance = this._pageFactory.createView(view);
 
-		this._destroyActiveController();
+		this._destroyController();
 		this._initController(controllerInstance, params);
 		this._lastManagePage = {
 			controller,
@@ -160,13 +156,15 @@ class Manager extends ns.Core.Interface.PageManager {
 	}
 
 	/**
-	 * Destroy active controller.
+	 * Destroy current page controller.
 	 *
 	 * @private
-	 * @method _destroyActiveController
+	 * @method _destroyController
 	 */
-	_destroyActiveController() {
-		if (this._lastManagePage.controllerInstance) {
+	_destroyController() {
+		var controllerInstance = this._lastManagePage.controllerInstance;
+
+		if (controllerInstance) {
 			controllerInstance.destroy();
 			controllerInstance.setStateManager(null);
 			this._pageRender.unmount();
@@ -216,6 +214,21 @@ class Manager extends ns.Core.Interface.PageManager {
 		}
 	}
 
+	/**
+	 * Return true if manager has to update last managed controller and view.
+	 *
+	 * @private
+	 * @method _hasOnlyUpdate
+	 * @param {string|function} controller
+	 * @param {string|function} view
+	 * @param {{onlyUpdate: boolean}} options
+	 * @return {boolean}
+	 */
+	_hasOnlyUpdate(controller, view ,options) {
+		return options.onlyUpdate &&
+				this._lastManagePage.controller === controller &&
+				this._lastManagePage.view === view;
+	}
 
 }
 
