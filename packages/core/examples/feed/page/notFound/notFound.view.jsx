@@ -1,34 +1,30 @@
 import ns from 'imajs/client/core/namespace.js';
-import component from 'imajs/client/core/component.js';
+import AbstractComponent from 'imajs/client/core/abstract/viewComponent.js';
 
-component.add((utils) => {
+ns.namespace('App.Page.NotFound');
 
-	ns.namespace('App.Page.NotFound');
+/**
+ * Master Layout.
+ * @class View
+ * @namespace App.Component.Layout.Master
+ * @module App
+ * @submodule Component
+ */
+class View extends AbstractComponent {
 
-	/**
-	 * Master Layout.
-	 * @class View
-	 * @namespace App.Component.Layout.Master
-	 * @module App
-	 * @submodule Component
-	 */
-	class View extends React.Component {
+	constructor(props) {
+		super(props);
 
-		constructor(props) {
-			super(props);
-
-			this.state = props;
-		}
-
-		render() {
-			return (
-				<div className='l-not-found'>
-					<h1>404 - Not Found</h1>
-				</div>
-			);
-		}
+		this.state = props;
 	}
 
-	ns.App.Page.NotFound.View = View;
-});
+	render() {
+		return (
+			<div className='l-not-found'>
+				<h1>404 - Not Found</h1>
+			</div>
+		);
+	}
+}
 
+ns.App.Page.NotFound.View = View;

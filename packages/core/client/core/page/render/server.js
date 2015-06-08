@@ -88,7 +88,8 @@ export default class Server extends ns.Core.Abstract.PageRender {
 					var pageMarkup = this._React.renderToString(reactElementView);
 
 					var documentView = ns.get(this._settings.$Page.$Render.documentView);
-					var appMarkup = this._React.renderToStaticMarkup(documentView({
+					var documentViewFactory = this._React.createFactory(documentView);
+					var appMarkup = this._React.renderToStaticMarkup(documentViewFactory({
 						page: pageMarkup,
 						scripts: this._getScripts(),
 						metaManager: controller.getMetaManager()
