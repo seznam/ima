@@ -136,7 +136,7 @@ var files = {
 			dest: './build/static/js/'
 		},
 		css: {
-			name: 'app.min.css',
+			name: 'app.bundle.min.css',
 			src: appDependency.bundle.css,
 			dest: './build/static/css/'
 		}
