@@ -1,60 +1,57 @@
 import ns from 'imajs/client/core/namespace.js';
-import component from 'imajs/client/core/component.js';
+import AbstractComponent from 'imajs/client/core/abstract/viewComponent.js';
 
-component.add((utils) => {
+ns.namespace('App.Component.Feed');
 
-	ns.namespace('App.Component.Feed');
+/**
+ * Feed writing.
+ * @class View
+ * @namespace App.Component.Feed
+ * @module App
+ * @submodule Component
+ */
+class View extends AbstractComponent {
 
-	/**
-	 * Feed writing.
-	 * @class View
-	 * @namespace App.Component.Feed
-	 * @module App
-	 * @submodule Component
-	 */
-	class View extends React.Component {
+	constructor(props) {
+		super(props);
+	}
 
-		constructor(props) {
-			super(props);
-		}
+	render() {
+		
+		var entity = this.props.entity;
+		var Items = this.getFeedItems(entity);
 
-		render() {
-			
-			var entity = this.props.entity;
-			var Items = this.getFeedItems(entity);
+		return (
+			<div className='feed'>
+				{Items}
+			</div>
+		);
+	}
 
-			return (
-				<div className='feed'>
-					{Items}
-				</div>
-			);
-		}
+	getFeedItems(entity) {
+		if (entity) {
+			var FeedItem = ns.App.Component.FeedItem.View;
 
-		getFeedItems(entity) {
-			if (entity) {
-				var FeedItem = ns.App.Component.FeedItem.View;
+			var categories = this.props.categories;
 
-				var categories = this.props.categories;
+			var items = entity.getItems();
+			var FeedItems = items.map((item) => {
 
-				var items = entity.getItems();
-				var FeedItems = items.map((item) => {
+				var category = categories.getCategoryById(item.getCategoryId());
 
-					var category = categories.getCategoryById(item.getCategoryId());
-
-					return (
-						<FeedItem
-								key={'item'+item.getId()}
-								entity={item}
-								category={category}
-								sharedItem={this.props.sharedItem}/>
-					);
-				}).reverse();
-				return FeedItems;
-			} else {
-				return null;
-			}
+				return (
+					<FeedItem
+							key={'item'+item.getId()}
+							entity={item}
+							category={category}
+							sharedItem={this.props.sharedItem}/>
+				);
+			}).reverse();
+			return FeedItems;
+		} else {
+			return null;
 		}
 	}
-	
-	ns.App.Component.Feed.View = View;
-});
+}
+
+ns.App.Component.Feed.View = View;

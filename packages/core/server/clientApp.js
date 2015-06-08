@@ -7,10 +7,8 @@ var errorView = require('./template/errorView.js');
 var environment = require('./environment.js');
 var instanceRecycler = require('./instanceRecycler.js');
 
-var vendorScript = require('./vendor.server.js');
 var appServerScript = require('./app.server.js');
 
-var vendor = vendorScript();
 var appServer = appServerScript();
 
 hljs.configure({
@@ -90,7 +88,6 @@ module.exports = (() => {
 		var app = instanceRecycler.getInstance();
 
 		var bootConfig = {
-			vendor: vendor,
 			services: {
 				request: req,
 				response: res,

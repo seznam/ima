@@ -1,149 +1,146 @@
 import ns from 'imajs/client/core/namespace.js';
-import component from 'imajs/client/core/component.js';
+import AbstractComponent from 'imajs/client/core/abstract/viewComponent.js';
 
-component.add((utils) => {
+ns.namespace('App.Component.Share');
 
-	ns.namespace('App.Component.Share');
+/**
+ * React component providing the UI for sharing feed items using social media
+ * and e-mail.
+ *
+ * @class View
+ * @namespace App.Component.Share
+ * @module App
+ * @submodule App.Component
+ */
+class View extends AbstractComponent {
 
-	/**
-	 * React component providing the UI for sharing feed items using social media
-	 * and e-mail.
-	 *
-	 * @class View
-	 * @namespace App.Component.Share
-	 * @module App
-	 * @submodule App.Component
-	 */
-	class View extends React.Component {
+	constructor(props) {
+		super(props);
+	}
+	
+	render() {
+		var label = this.utils.$Dictionary.get('home.share');
 
-		constructor(props) {
-			super(props);
-		}
-		
-		render() {
-			var label = utils.$Dictionary.get('home.share');
+		var TwitterButtonA = ns.App.Component.TweetButton.View;
 
-			var TwitterButtonA = ns.App.Component.TweetButton.View;
+		var item = this.props.item;
+		var category = this.props.category;
 
-			var item = this.props.item;
-			var category = this.props.category;
+		var active = this.props.active ? ' expanded' : '';
+		var postLink = this.getPostLink(item, category);
 
-			var active = this.props.active ? ' expanded' : '';
-			var postLink = this.getPostLink(item, category);
+		return (
+			<div className={'share' + (active)}>
+				<a href={postLink} className='toggle' onClick={(e)=>this.onToggle(e)}>{label}</a>
+				<div className='sharing-wrapper'>
+					<div className='sharing-container'>
+						<div className='arrow'></div>
+						<div className='arrow-overlay'></div>
+						<div className='sharing-options'>
+							<input
+									type='text'
+									value={postLink}
+									readOnly={true}
+									ref='shareLink'
+									onClick={(e)=>this.selectShareLink(e)}/>
 
-			return (
-				<div className={'share' + (active)}>
-					<a href={postLink} className='toggle' onClick={(e)=>this.onToggle(e)}>{label}</a>
-					<div className='sharing-wrapper'>
-						<div className='sharing-container'>
-							<div className='arrow'></div>
-							<div className='arrow-overlay'></div>
-							<div className='sharing-options'>
-								<input
-										type='text'
-										value={postLink}
-										readOnly={true}
-										ref='shareLink'
-										onClick={(e)=>this.selectShareLink(e)}/>
+							<a
+									href={postLink}
+									onClick={(e)=>this.onShareOnFacebook(e)}
+									className='facebook'>Facebook
+							</a>
 
-								<a
-										href={postLink}
-										onClick={(e)=>this.onShareOnFacebook(e)}
-										className='facebook'>Facebook
-								</a>
+							<TwitterButtonA
+									label='Twitter'
+									url={postLink}
+									text={this.getPlainTextItemContent(item)}
+									hashTags={category.getHashTag()}/>
 
-								<TwitterButtonA
-										label='Twitter'
-										url={postLink}
-										text={this.getPlainTextItemContent(item)}
-										hashTags={category.getHashTag()}/>
-
-								<a href={this.getMailShareLink(item)} className='email'>
-									Email
-								</a>
-							</div>
+							<a href={this.getMailShareLink(item)} className='email'>
+								Email
+							</a>
 						</div>
 					</div>
 				</div>
-			);
+			</div>
+		);
+	}
+
+	onShareOnFacebook(event) {
+		event.preventDefault();
+		event.stopPropagation();
+
+		if (typeof FB === "undefined") {
+			return;
 		}
 
-		onShareOnFacebook(event) {
-			event.preventDefault();
-			event.stopPropagation();
+		FB.ui({
+			method: 'share',
+			href: event.target.href,
+		}, (response) => {
+			console.log(response);
+		});
+	}
 
-			if (typeof FB === "undefined") {
-				return;
-			}
+	getMailShareLink(item) {
+		var category = this.props.category;
+		var categoryName = category ?
+				category.name : this.utils.$Dictionary.get('home.defaultPortal');
+		var query = {
+			subject: this.utils.$Dictionary.get('home.shareMailSubject', {
+				PORTAL: categoryName
+			}),
+			body: this.getPlainTextItemContent(item)
+		};
+		var queryString = Object.keys(query)
+				.map((parameterName) => {
+					var parts = [parameterName, query[parameterName]];
+					return parts.map(encodeURIComponent).join("=");
+				}).join("&");
 
-			FB.ui({
-				method: 'share',
-				href: event.target.href,
-			}, (response) => {
-				console.log(response);
+		return `mailto:?${queryString}`;
+	}
+
+	getPlainTextItemContent(item) {
+		if (item) {
+			var content = item.getContent();
+			return content.replace(/<[^>]*?>/g, '');
+		}
+		return '';
+	}
+
+	getPostLink(item, category) {
+		if (item && category) {
+
+			var localLink = this.utils.$Router.link('post', {
+				category: category.getUrlName(),
+				itemId: item.getId()
 			});
+
+			return localLink;
+		} else {
+			return router.link('home');
 		}
+		
+	}
 
-		getMailShareLink(item) {
-			var category = this.props.category;
-			var categoryName = category ?
-					category.name : utils.$Dictionary.get('home.defaultPortal');
-			var query = {
-				subject: utils.$Dictionary.get('home.shareMailSubject', {
-					PORTAL: categoryName
-				}),
-				body: this.getPlainTextItemContent(item)
-			};
-			var queryString = Object.keys(query)
-					.map((parameterName) => {
-						var parts = [parameterName, query[parameterName]];
-						return parts.map(encodeURIComponent).join("=");
-					}).join("&");
+	onToggle(e) {
+		e.preventDefault();
+		e.stopPropagation();
+		this.utils.$EventBus.fire(e.target, 'shareToggle', {
+			item: this.props.item
+		});
+	}
 
-			return `mailto:?${queryString}`;
-		}
-
-		getPlainTextItemContent(item) {
-			if (item) {
-				var content = item.getContent();
-				return content.replace(/<[^>]*?>/g, '');
-			}
-			return '';
-		}
-
-		getPostLink(item, category) {
-			if (item && category) {
-
-				var localLink = utils.$Router.link('post', {
-					category: category.getUrlName(),
-					itemId: item.getId()
-				});
-
-				return localLink;
-			} else {
-				return router.link('home');
-			}
-			
-		}
-
-		onToggle(e) {
-			e.preventDefault();
-			e.stopPropagation();
-			utils.$EventBus.fire(e.target, 'shareToggle', {
-				item: this.props.item
-			});
-		}
-
-		selectShareLink() {
-			var input = this.refs.shareLink.getDOMNode();
-			
-			if (input.setSelectionRange) {
-				input.setSelectionRange(0, input.value.length);
-			} else if (input.select) {
-				input.select();
-			}
+	selectShareLink() {
+		var input = this.refs.shareLink.getDOMNode();
+		
+		if (input.setSelectionRange) {
+			input.setSelectionRange(0, input.value.length);
+		} else if (input.select) {
+			input.select();
 		}
 	}
-	
-	ns.App.Component.Share.View = View;
-});
+}
+
+ns.App.Component.Share.View = View;

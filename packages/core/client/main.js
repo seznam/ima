@@ -34,7 +34,6 @@ if (typeof window !== 'undefined' && window !== null) {
 		window.$Debug = true;
 
 		var bootConfig = {
-			vendor: window.$IMA.Vendor,
 			services: {
 				respond: null,
 				request: null,
