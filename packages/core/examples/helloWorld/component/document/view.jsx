@@ -19,7 +19,7 @@ component.add((utils) => {
 		}
 
 		render() {
-			var appCssFile = utils.$Settings.$Env !== 'dev' ? 'app.min.css' : 'app.css';
+			var appCssFile = utils.$Settings.$Env !== 'dev' ? 'app.bundle.min.css' : 'app.css';
 			appCssFile += `?version=${utils.$Settings.$Page.$Render.version}`;
 
 			return (
