@@ -11,14 +11,8 @@ ns.namespace('App.Component.Document');
  * @submodule Component
  */
 class View extends AbstractComponent {
-
-	constructor(props) {
-		super(props);
-	}
-	
 	render() {
-
-		var appCssFile = this.utils.$Settings.$Env !== 'dev' ? 'app.min.css' : 'app.css';
+		var appCssFile = this.utils.$Settings.$Env !== 'dev' ? 'app.bundle.min.css' : 'app.css';
 
 		return (
 			<html>

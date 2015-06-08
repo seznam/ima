@@ -12,7 +12,7 @@ ns.namespace('App.Component.Document');
  */
 class View extends AbstractComponent {
 	render() {
-		var appCssFile = this.utils.$Settings.$Env !== 'dev' ? 'app.min.css' : 'app.css';
+		var appCssFile = this.utils.$Settings.$Env !== 'dev' ? 'app.bundle.min.css' : 'app.css';
 		appCssFile += `?version=${this.utils.$Settings.$Page.$Render.version}`;
 
 		return (
