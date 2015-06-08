@@ -45,4 +45,4 @@ class View extends AbstractComponent {
 	}
 }
 
-ns.App.Component.Document.View = React.createFactory(View);
+ns.App.Component.Document.View = View;
