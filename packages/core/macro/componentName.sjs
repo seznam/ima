@@ -1,26 +1,17 @@
-let namespace = macro {
-  case infix { ns.|$macro_name($name) } => {
-		var ns = makeIdent("ns", #{$macro_name});
-		letstx $ns = [ns];
-		var componentName = makeIdent("componentName", #{$macro_name});
-          letstx $componentName = [componentName];
-		return #{
-		  $ns.namespace($name);
-		  var $componentName = $name
-		}
-	}
+macro to_str {
+  case { _ ($toks ...) } => {
+    return [makeValue(#{ $toks ... }.map(unwrapSyntax).join(''), #{ here })];
+  }
 }
 
-let displayName = macro {
-  case { $macro_name $(:)$name } => {
-        var componentName = makeIdent("componentName", #{$macro_name});
-        letstx $componentName = [componentName];
-        return #{
-            displayName:$componentName
-        }
+let App = macro {
+    rule infix {$ns.|.$x(.) ... = $view} => {
+        $view.displayName = to_str(App.$x(.) ...);
+        $ns.App.$x(.) ... = $view
+    }
+    rule infix {$ns.|.$x(.) ...} => {
+        $ns.App.$x(.) ...
     }
 }
 
-
-export displayName;
-export namespace;
+export App;
