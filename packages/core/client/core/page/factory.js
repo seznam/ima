@@ -13,7 +13,7 @@ ns.namespace('Core.Page');
  *
  * @requires Core.ObjectContainer
  */
-class Factory {
+export default class Factory {
 
 	/**
 	 * @method constructor

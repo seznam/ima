@@ -42,7 +42,7 @@ const PARAMS_REGEXP = /:([a-zA-Z0-9_-]*)/g;
  * @module Core
  * @submodule Core.Router
  */
-class Route {
+export default class Route {
 
 	/**
 	 * Initializes the route.

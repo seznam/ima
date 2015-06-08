@@ -11,7 +11,7 @@ ns.namespace('Core.Interface');
  * @module Core
  * @submodule Core.Interface
  */
-class HttpAgent {
+export default class HttpAgent {
 	/**
 	 * Sends an HTTP GET request to the specified URL, sending the provided data
 	 * as query parameters.

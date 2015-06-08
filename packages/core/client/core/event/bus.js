@@ -24,7 +24,7 @@ const IMA_EVENT = '$IMA.CustomEvent';
  * @module Core
  * @submodule Core.Event
  */
-class Bus extends ns.Core.Interface.EventBus {
+export default class Bus extends ns.Core.Interface.EventBus {
 	/**
 	 * Initializes the custom event helper.
 	 *

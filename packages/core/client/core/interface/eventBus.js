@@ -13,7 +13,7 @@ ns.namespace('Core.Interface');
  * @module Core
  * @submodule Core.Interface
  */
-class EventBus {
+export default class EventBus {
 
 	/**
 	 * Fires a new custom event of the specified name, carrying the provided data.

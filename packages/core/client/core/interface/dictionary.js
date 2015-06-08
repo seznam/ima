@@ -11,7 +11,7 @@ ns.namespace('Core.Interface');
  * @module Core
  * @submodule Core.Interface
  */
-class Dictionary {
+export default class Dictionary {
 	/**
 	 * Initializes this dictionary with the provided language and localization
 	 * phrases.

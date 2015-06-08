@@ -39,7 +39,7 @@ const COOKIE_SEPARATOR = '; ';
  * @requires Core.Router.Request
  * @requires Core.Router.Respond
  */
-class Cookie extends ns.Core.Storage.Map {
+export default class Cookie extends ns.Core.Storage.Map {
 	/**
 	 * @constructor
 	 * @method constructor

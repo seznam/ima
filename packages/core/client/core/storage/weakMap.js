@@ -15,7 +15,7 @@ ns.namespace('Core.Storage');
  *
  * @requires WeakMap
  */
-class WeakMapStorage extends ns.Core.Storage.Map {
+export default class WeakMapStorage extends ns.Core.Storage.Map {
 	/**
 	 * Initializes the storage.
 	 *
@@ -280,4 +280,3 @@ class WeakMapStorage extends ns.Core.Storage.Map {
 }
 
 ns.Core.Storage.WeakMap = WeakMapStorage;
-

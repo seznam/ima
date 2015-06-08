@@ -15,7 +15,7 @@ ns.namespace('Core.Abstract');
  * @submodule Core.Abstract
  * @requires Core.Interface.View
  */
-class Controller extends ns.Core.Interface.Controller {
+export default class Controller extends ns.Core.Interface.Controller {
 
 	/**
 	 * Initializes the controller.

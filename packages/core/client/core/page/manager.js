@@ -11,7 +11,7 @@ ns.namespace('Core.Page');
  * @module Core
  * @submodule Core.Page
  */
-class Manager extends ns.Core.Interface.PageManager {
+export default class Manager extends ns.Core.Interface.PageManager {
 
 	/**
 	 * @method constructor

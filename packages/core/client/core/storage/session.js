@@ -16,7 +16,7 @@ ns.namespace('Core.Storage');
  *
  * @requires SessionStorage
  */
-class Session extends ns.Core.Interface.Storage {
+export default class Session extends ns.Core.Interface.Storage {
 	/**
 	 * Initializes the session storage.
 	 *

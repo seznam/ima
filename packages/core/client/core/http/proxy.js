@@ -12,7 +12,7 @@ ns.namespace('Core.Http');
  * @module Core
  * @submodule Core.Http
  */
-class Proxy {
+export default class Proxy {
 
 	/**
 	 * @method constructor

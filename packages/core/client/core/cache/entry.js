@@ -11,7 +11,7 @@ ns.namespace('Core.Cache');
  * @module Core
  * @submodule Core.Cache
  */
-class Entry {
+export default class Entry {
 
 	/**
 	 * Initializes the cache entry.

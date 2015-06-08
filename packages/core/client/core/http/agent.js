@@ -18,7 +18,7 @@ ns.namespace('Core.Http');
  * @requires Core.Storage.Cookie
  * @requires Core.Interface.Dictionary
  */
-class Agent extends ns.Core.Interface.HttpAgent {
+export default class Agent extends ns.Core.Interface.HttpAgent {
 	/**
 	 * Initializes the HTTP handler.
 	 *

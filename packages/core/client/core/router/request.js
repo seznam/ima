@@ -10,7 +10,7 @@ ns.namespace('Core.Router');
  * @module Core
  * @submodule Core.Router
  */
-class Request {
+export default class Request {
 
 	/**
 	 * Initializes the request.

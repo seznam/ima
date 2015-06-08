@@ -11,7 +11,7 @@ ns.namespace('Core.Page');
  * @module Core
  * @submodule Core.Page
  */
-class StateManager extends ns.Core.Interface.PageStateManager {
+export default class StateManager extends ns.Core.Interface.PageStateManager {
 
 	/**
 	 * @method constructor

@@ -13,7 +13,7 @@ ns.namespace('Core.Decorator');
  * @module Core
  * @submodule Core.Decorator
  */
-class Controller extends ns.Core.Interface.Controller {
+export default class Controller extends ns.Core.Interface.Controller {
 
 	/**
 	 * Initializes the controller decorator.

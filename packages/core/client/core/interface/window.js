@@ -12,7 +12,7 @@ ns.namespace('Core.Interface');
  * @module Core
  * @submodule Core.Interface
  */
-class Window {
+export default class Window {
 
 	/**
 	 * Returns {@code true} if invoked at the client side.

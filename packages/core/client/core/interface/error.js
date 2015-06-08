@@ -12,7 +12,7 @@ ns.namespace('Core.Interface');
  * @module Core
  * @submodule Core.Interface
  */
-class Error {
+export default class Error {
 
 	/**
 	 * Returns the HTTP status to send to the client.

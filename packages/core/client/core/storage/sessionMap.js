@@ -16,7 +16,7 @@ ns.namespace('Core.Storage');
  * @requires Core.Storage.Map
  * @requires Core.Storage.Session
  */
-class SessionMap extends ns.Core.Interface.Storage {
+export default class SessionMap extends ns.Core.Interface.Storage {
 	/**
 	 * Initializes the storage.
 	 *
