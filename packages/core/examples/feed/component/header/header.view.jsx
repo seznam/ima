@@ -1,37 +1,36 @@
 import ns from 'imajs/client/core/namespace.js';
-import component from 'imajs/client/core/component.js';
+import AbstractComponent from 'imajs/client/core/abstract/viewComponent.js';
 
-component.add((utils) => {
+ns.namespace('App.Component.Header');
 
-	ns.namespace('App.Component.Header');
+/**
+ * Header writing.
+ *
+ * @class View
+ * @namespace App.Component.Header
+ * @module App
+ * @submodule Component
+ */
+ class View extends AbstractComponent {
 
-	/**
-	 * Header writing.
-	 *
-	 * @class View
-	 * @namespace App.Component.Header
-	 * @module App
-	 * @submodule Component
-	 */
-	 class View extends React.Component {
-
-		constructor(props) {
-			super(props);
-		}
-		
-		render() {
-
-			return (
-				<div className='l-header'>
-					<a href={'//'+utils.$Dictionary.get('home.imaLink')} title={utils.$Dictionary.get('home.imaLink')}>{utils.$Dictionary.get('home.imaLink')}</a>
-					<div className='title-wrapper'>
-						<a href='/' title={utils.$Dictionary.get('home.pageTitle')} className="logo"></a>
-						<h1>{utils.$Dictionary.get('home.pageTitle')}</h1>
-					</div>
-				</div>
-			);
-		}
+	constructor(props) {
+		super(props);
 	}
 	
-	ns.App.Component.Header.View = View;
-});
+	render() {
+
+		return (
+			<div className='l-header'>
+				<a href={'//' + this.utils.$Dictionary.get('home.imaLink')} title={this.utils.$Dictionary.get('home.imaLink')}>
+					{this.utils.$Dictionary.get('home.imaLink')}
+				</a>
+				<div className='title-wrapper'>
+					<a href='/' title={this.utils.$Dictionary.get('home.pageTitle')} className="logo"></a>
+					<h1>{this.utils.$Dictionary.get('home.pageTitle')}</h1>
+				</div>
+			</div>
+		);
+	}
+}
+
+ns.App.Component.Header.View = View;

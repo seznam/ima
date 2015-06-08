@@ -1,5 +1,5 @@
 import ns from 'imajs/client/core/namespace.js';
-import component from 'imajs/client/core/component.js';
+import AbstractComponent from 'imajs/client/core/abstract/viewComponent.js';
 
 ns.namespace('Core');
 
@@ -69,11 +69,10 @@ export default class Bootstrap {
 	 * Initializes the application by running the bootstrap sequence. The
 	 * sequence initializes the components of the application in the following
 	 * order:
-	 * - vendor libraries
 	 * - application settings
 	 * - constants, service providers and class dependencies configuration
 	 * - services
-	 * - UI component
+	 * - UI components
 	 * - routing
 	 *
 	 * @method run
@@ -83,7 +82,6 @@ export default class Bootstrap {
 	run(config) {
 		this._config = config;
 
-		this._setVendor();
 		this._initSettings();
 		this._bindDependencies();
 		this._initServices();
@@ -91,23 +89,6 @@ export default class Bootstrap {
 		this._initRouting();
 
 		this._isInitialized = true;
-	}
-
-	/**
-	 * Processes the vendor library definitions in the configuration and binds
-	 * the vendor libraries to the application namespace.
-	 *
-	 * @private
-	 * @method _setVendor
-	 */
-	_setVendor() {
-		if (!this._isInitialized) {
-			var vendor = this._config.vendor;
-			var nsVendor = ns.namespace('Vendor');
-			for (var [name, lib] of vendor) {
-				nsVendor[name] = lib;
-			}
-		}
 	}
 
 	/**
@@ -185,11 +166,7 @@ export default class Bootstrap {
 	_initComponents() {
 		if (!this._isInitialized) {
 			var utils = this._oc.get('$Utils');
-			for (var componentFactory of component.getComponents()) {
-				if (typeof componentFactory === 'function') {
-					componentFactory(utils);
-				}
-			}
+			AbstractComponent.utils = utils;
 		}
 	}
 }

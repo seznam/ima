@@ -1,37 +1,33 @@
 import ns from 'imajs/client/core/namespace.js';
-import component from 'imajs/client/core/component.js';
+import AbstractComponent from 'imajs/client/core/abstract/viewComponent.js';
 
-component.add((utils) => {
+ns.namespace('App.Page.Home');
 
-	ns.namespace('App.Page.Home');
+/**
+ * Master Layout.
+ * @class View
+ * @namespace App.Component.Layout.Master
+ * @module App
+ * @submodule Component
+ */
+class View extends AbstractComponent {
 
-	/**
-	 * Master Layout.
-	 * @class View
-	 * @namespace App.Component.Layout.Master
-	 * @module App
-	 * @submodule Component
-	 */
-	class View extends React.Component {
+	constructor(props) {
+		super(props);
 
-		constructor(props) {
-			super(props);
-
-			this.state = props;
-		}
-
-		render() {
-			return (
-				<div className='l-homepage'>
-					<div className='content'>
-						<img src="static/img/imajs-logo.png" alt="IMA.js logo"/>
-						<h1>{utils.$Dictionary.get('home.hello')}, {this.state.message}</h1>
-					</div>
-				</div>
-			);
-		}
+		this.state = props;
 	}
 
-	ns.App.Page.Home.View = View;
-});
+	render() {
+		return (
+			<div className='l-homepage'>
+				<div className='content'>
+					<img src="static/img/imajs-logo.png" alt="IMA.js logo"/>
+					<h1>{this.utils.$Dictionary.get('home.hello')}, {this.state.message}</h1>
+				</div>
+			</div>
+		);
+	}
+}
 
+ns.App.Page.Home.View = View;

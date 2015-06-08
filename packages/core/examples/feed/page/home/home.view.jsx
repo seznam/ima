@@ -1,53 +1,52 @@
 import ns from 'imajs/client/core/namespace.js';
-import component from 'imajs/client/core/component.js';
+import AbstractComponent from 'imajs/client/core/abstract/viewComponent.js';
 
-component.add((utils) => {
-	ns.namespace('App.Page.Home');
-	/**
-	 * HomePage view.
-	 *
-	 * @class View
-	 * @extends Core.Abstract.View
-	 * @namespace App.Page.Home
-	 * @module App
-	 * @submodule App.Page
-	 *
-	 * @uses App.Component.Layout.Header.View
-	 * @uses App.Component.Layout.Main.View
-	 * @uses App.Component.Sign.List.View
-	 */
-	class View extends React.Component {
+ns.namespace('App.Page.Home');
 
-		constructor(props) {
-			super(props);
+/**
+ * HomePage view.
+ *
+ * @class View
+ * @extends Core.Abstract.View
+ * @namespace App.Page.Home
+ * @module App
+ * @submodule App.Page
+ *
+ * @uses App.Component.Layout.Header.View
+ * @uses App.Component.Layout.Main.View
+ * @uses App.Component.Sign.List.View
+ */
+class View extends AbstractComponent {
 
-			this.state = props;
-		}
+	constructor(props) {
+		super(props);
 
-		render() {
-
-			var TextInput = ns.App.Component.TextInput.View;
-			var Feed = ns.App.Component.Feed.View;
-			var Header = ns.App.Component.Header.View;
-			var Filter = ns.App.Component.Filter.View;
-
-			return (
-				<div className='l-homepage'>
-					<Header />
-					<TextInput 
-							categories={this.state.categories} 
-							currentCategory={this.state.currentCategory} />
-					<Filter
-							categories={this.state.categories}
-							currentCategory={this.state.currentCategory} />
-					<Feed
-							entity={this.state.feed}
-							categories={this.state.categories}
-							sharedItem={this.state.sharedItem} />
-				</div>
-			);
-		}
+		this.state = props;
 	}
 
-	ns.App.Page.Home.View = View;
-});
+	render() {
+
+		var TextInput = ns.App.Component.TextInput.View;
+		var Feed = ns.App.Component.Feed.View;
+		var Header = ns.App.Component.Header.View;
+		var Filter = ns.App.Component.Filter.View;
+
+		return (
+			<div className='l-homepage'>
+				<Header />
+				<TextInput 
+						categories={this.state.categories} 
+						currentCategory={this.state.currentCategory} />
+				<Filter
+						categories={this.state.categories}
+						currentCategory={this.state.currentCategory} />
+				<Feed
+						entity={this.state.feed}
+						categories={this.state.categories}
+						sharedItem={this.state.sharedItem} />
+			</div>
+		);
+	}
+}
+
+ns.App.Page.Home.View = View;
