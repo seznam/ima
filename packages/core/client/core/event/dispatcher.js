@@ -33,7 +33,7 @@ const EMPTY_SET = Object.freeze(new Set());
  * @module Core
  * @submodule Core.Event
  */
-class Dispatcher extends ns.Core.Interface.Dispatcher {
+export default class Dispatcher extends ns.Core.Interface.Dispatcher {
 	/**
 	 * Initializes the dispatcher.
 	 *

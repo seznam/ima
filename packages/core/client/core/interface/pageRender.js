@@ -11,7 +11,7 @@ ns.namespace('Core.Interface');
  * @module Core
  * @submodule Core.Interface
  */
-class PageRender {
+export default class PageRender {
 	/**
 	 * Renders the page using the provided controller and view. The actual
 	 * behavior of this method differs at the client and the at server in the

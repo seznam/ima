@@ -10,7 +10,7 @@ ns.namespace('Core.Router');
  * @module Core
  * @submodule Core.Router
  */
-class Factory {
+export default class Factory {
 
 	/**
 	 * Initializes the factory.

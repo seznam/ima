@@ -12,7 +12,7 @@ ns.namespace('Core.Page.Render');
  * @module Core
  * @submodule Core.Page
  */
-class Client extends ns.Core.Abstract.PageRender {
+export default class Client extends ns.Core.Abstract.PageRender {
 
 	/**
 	 * Initializes the client-side page renderer.

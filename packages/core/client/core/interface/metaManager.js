@@ -21,7 +21,7 @@ ns.namespace('Core.Interface');
  * @module Core
  * @submodule Core.Interface
  */
-class MetaManager {
+export default class MetaManager {
 	/**
 	 * Sets the page title.
 	 *

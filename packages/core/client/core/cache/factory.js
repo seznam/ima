@@ -12,7 +12,7 @@ ns.namespace('Core.Cache');
  *
  * @requires Core.ObjectContainer
  */
-class Factory {
+export default class Factory {
 
 	/**
 	 * @method constructor

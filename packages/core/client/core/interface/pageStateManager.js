@@ -10,7 +10,7 @@ ns.namespace('Core.Interface');
  * @module Core
  * @submodule Core.Interface
  */
-class PageStateManager {
+export default class PageStateManager {
 
 	/**
 	 * Clear history.

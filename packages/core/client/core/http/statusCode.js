@@ -60,5 +60,6 @@ const STATUS_CODE = Object.freeze({
 	SERVER_ERROR: 500
 });
 
-ns.Core.Http.STATUS_CODE = STATUS_CODE;
+export default STATUS_CODE;
 
+ns.Core.Http.STATUS_CODE = STATUS_CODE;

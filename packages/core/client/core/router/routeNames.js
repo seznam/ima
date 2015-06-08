@@ -31,4 +31,6 @@ const ROUTE_NAMES = Object.freeze({
 	ERROR: 'error'
 });
 
+export default ROUTE_NAMES;
+
 ns.Core.Router.ROUTE_NAMES = ROUTE_NAMES;

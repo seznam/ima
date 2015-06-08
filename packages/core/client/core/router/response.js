@@ -10,7 +10,7 @@ ns.namespace('Core.Router');
  * @module Core
  * @submodule Core.Router
  */
-class Response {
+export default class Response {
 
 	/**
 	 * Initializes the response.

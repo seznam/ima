@@ -14,7 +14,7 @@ ns.namespace('Core.Abstract');
  * @module Core
  * @submodule Core.Abstract
  */
-class Router extends ns.Core.Interface.Router {
+export default class Router extends ns.Core.Interface.Router {
 
 	/**
 	 * Initializes the router.

@@ -79,7 +79,7 @@ const MOUSE_MIDDLE_BUTTON = 1;
  * @module Core
  * @submodule Core.Router
  */
-class Client extends ns.Core.Abstract.Router {
+export default class Client extends ns.Core.Abstract.Router {
 
 	/**
 	 * Initializes the client-side router.

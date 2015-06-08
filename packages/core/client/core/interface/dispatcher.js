@@ -12,7 +12,7 @@ ns.namespace('Core.Interface');
  * @module Core
  * @submodule Core.Interface
  */
-class Dispatcher {
+export default class Dispatcher {
 	/**
 	 * Unregisters all event listeners currently registered with this dispatcher.
 	 *

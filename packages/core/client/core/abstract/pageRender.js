@@ -17,7 +17,7 @@ ns.namespace('Core.Abstract');
  * @requires Vendor.React
  * @requires Core.Interface.Animate
  */
-class PageRender extends ns.Core.Interface.PageRender {
+export default class PageRender extends ns.Core.Interface.PageRender {
 
 	/**
 	 * Initializes the abstract page renderer.

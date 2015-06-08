@@ -13,7 +13,7 @@ ns.namespace('Core.Dictionary');
  * @module Core
  * @submodule Core.Dictionary
  */
-class MessageFormat extends ns.Core.Interface.Dictionary {
+export default class MessageFormat extends ns.Core.Interface.Dictionary {
 
 	/**
 	 * Initializes the dictionary.

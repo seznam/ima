@@ -10,7 +10,7 @@ ns.namespace('Core.Interface');
  * @module Core
  * @submodule Core.Interface
  */
-class PageManager {
+export default class PageManager {
 
 	/**
 	 * Initialization manager.

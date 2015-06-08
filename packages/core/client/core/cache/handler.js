@@ -22,7 +22,7 @@ ns.namespace('Core.Cache');
  *     cache.set('model.articles', articles, 60 * 60 * 1000); // cache for an hour
  *   }
  */
-class Handler extends ns.Core.Interface.Cache {
+export default class Handler extends ns.Core.Interface.Cache {
 	/**
 	 * Initializes the cache.
 	 *

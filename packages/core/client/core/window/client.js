@@ -11,7 +11,7 @@ ns.namespace('Core.Window');
  * @module Core
  * @submodule Core.Window
  */
-class Client extends ns.Core.Interface.Window {
+export default class Client extends ns.Core.Interface.Window {
 
 	/**
 	 * Returns {@code true} if invoked at the client side.

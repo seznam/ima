@@ -12,7 +12,7 @@ ns.namespace('Core.Interface');
  * @module Core
  * @submodule Core.Interface
  */
-class Storage {
+export default class Storage {
 	/**
 	 * This method is used to finalize the initialization of the storage after
 	 * the dependencies provided through the constructor are ready to be used.

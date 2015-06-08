@@ -3,7 +3,8 @@ import ns from 'imajs/client/core/namespace.js';
 ns.namespace('Core.Meta');
 
 /**
- * Default implementation of the {@codelink Core.Interface.MetaManager} interface.
+ * Default implementation of the {@codelink Core.Interface.MetaManager}
+ * interface.
  *
  * @class Manager
  * @implements Core.Interface.MetaManager
@@ -11,7 +12,7 @@ ns.namespace('Core.Meta');
  * @module Core
  * @submodule Core.Meta
  */
-class Manager extends ns.Core.Interface.MetaManager {
+export default class Manager extends ns.Core.Interface.MetaManager {
 	/**
 	 * Initializes the meta page attributes manager.
 	 *

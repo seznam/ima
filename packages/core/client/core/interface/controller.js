@@ -13,7 +13,7 @@ ns.namespace('Core.Interface');
  * @module Core
  * @submodule Core.Interface
  */
-class Controller {
+export default class Controller {
 	/**
 	 * Callback for initializing the controller with the route parameters.
 	 *

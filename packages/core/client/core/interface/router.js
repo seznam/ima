@@ -11,7 +11,7 @@ ns.namespace('Core.Interface');
  * @module Core
  * @submodule Core.Interface
  */
-class Router {
+export default class Router {
 
 	/**
 	 * Initializes the router with the provided configuration.

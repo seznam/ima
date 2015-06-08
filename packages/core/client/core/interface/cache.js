@@ -13,7 +13,7 @@ ns.namespace('Core.Interface');
  * @module Core
  * @submodule Core.Interface
  */
-class Cache {
+export default class Cache {
 	/**
 	 * Clear the cache by deleting all entries.
 	 *
