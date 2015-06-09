@@ -325,37 +325,70 @@ export default class Client extends ns.Core.Abstract.Router {
 	 * the anchor's target location (href) is the same as the corrent, otherwise
 	 * the method results in a hard redirect.
 	 *
+	 * @private
 	 * @method _handleClick
 	 * @param {MouseEvent} event The click event.
 	 */
 	_handleClick(event) {
 		var target = event.target || event.srcElement;
-		var targetHref = target.href;
 		var self = this;
 
-		//find close a element with href
-		while (hasReachedAnchor()) {
+		// find the closest anchor element with a href attribute
+		while (!hasReachedAnchor(target)) {
 			target = target.parentNode;
-			targetHref = target.href;
 		}
+
+		var targetHref = target.href;
 
 		var isDefinedTargetHref =
 			(targetHref !== undefined) &&
 			(targetHref !== null);
-		var isNotMiddleButton = event.button !== MOUSE_MIDDLE_BUTTON;
+		var isMiddleButton = event.button === MOUSE_MIDDLE_BUTTON;
 		var isSameDomain = this._isSameDomain(targetHref);
 
-		if (isDefinedTargetHref && isNotMiddleButton && isSameDomain) {
-			this._window.preventDefault(event);
-			this.redirect(targetHref);
+		if (!isDefinedTargetHref || isMiddleButton || !isSameDomain) {
+			return;
 		}
 
-		function hasReachedAnchor() {
-			return target &&
-				target.parentNode &&
-				(target !== self._window.getBody()) &&
-				(typeof targetHref === 'undefined' || targetHref === null);
+		var isHashLink = this._isHashLink(targetHref);
+
+		if (isHashLink) {
+			return;
 		}
+
+		this._window.preventDefault(event);
+		this.redirect(targetHref);
+
+		function hasReachedAnchor(element) {
+			return element &&
+					element.parentNode &&
+					(element !== self._window.getBody()) &&
+					(element.href !== undefined) &&
+					(element.href !== null);
+		}
+	}
+
+	/**
+	 * Tests whether the provided target URL contains only an update of the
+	 * hash fragment of the current URL.
+	 *
+	 * @private
+	 * @method _isHashLink
+	 * @param {string} targetUrl The target URL.
+	 * @return {boolean} {@code true} if the navigation to target URL would
+	 *         result only in updating the hash fragment of the current URL.
+	 */
+	_isHashLink(targetUrl) {
+		if (targetUrl.indexOf('#') === -1) {
+			return false;
+		}
+
+		var currentUrl = this._window.getUrl();
+		var trimmedCurrentUrl = currentUrl.indexOf('#') === -1 ? currentUrl :
+				currentUrl.substring(0, currentUrl.indexOf('#'));
+		var trimmedTargetUrl = targetUrl.substring(0, targetUrl.indexOf('#'));
+
+		return trimmedTargetUrl === trimmedCurrentUrl;
 	}
 
 	/**
