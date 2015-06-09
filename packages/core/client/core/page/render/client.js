@@ -109,6 +109,15 @@ export default class Client extends ns.Core.Abstract.PageRender {
 
 					controller.activate();
 				})
+				.catch((error) => {
+					if (window && window.$IMA && typeof window.$IMA.fatalErrorHandler === 'function') {
+						window.$IMA.fatalErrorHandler(error);
+					} else {
+						console.warn('Define function config.$IMA.fatalErrorHandler in services.js.');
+					}
+
+					throw error;
+				})
 		);
 	}
 

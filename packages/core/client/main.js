@@ -120,14 +120,7 @@ if (typeof window !== 'undefined' && window !== null) {
 
 			router
 				.listen()
-				.route(router.getPath())
-				.catch((error) => {
-					if (window && window.$IMA && typeof window.$IMA.fatalErrorHandler === 'function') {
-						window.$IMA.fatalErrorHandler(error);
-					} else {
-						console.warn('Define function config.$IMA.fatalErrorHandler in services.js.');
-					}
-				});
+				.route(router.getPath());
 		});
 	}
 }
