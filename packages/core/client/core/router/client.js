@@ -334,8 +334,11 @@ export default class Client extends ns.Core.Abstract.Router {
 		var self = this;
 
 		// find the closest anchor element with a href attribute
-		while (!hasReachedAnchor(target)) {
+		while (target && !hasReachedAnchor(target)) {
 			target = target.parentNode;
+		}
+		if (!target) {
+			return;
 		}
 
 		var targetHref = target.href;
@@ -360,8 +363,7 @@ export default class Client extends ns.Core.Abstract.Router {
 		this.redirect(targetHref);
 
 		function hasReachedAnchor(element) {
-			return element &&
-					element.parentNode &&
+			return element.parentNode &&
 					(element !== self._window.getBody()) &&
 					(element.href !== undefined) &&
 					(element.href !== null);
