@@ -1,23 +1,62 @@
+let var = macro {
+  case { $macro_name $x:ident = this; } => {
+        var that = makeIdent("$__that", #{$macro_name});
+        letstx $that = [that];
+        return #{
+            var $x = this;
+            var $that = this;
+        }
+        
+    }
+    case { $macro_name } => {
+        return #{
+            var
+        }
+    }
+}
+
+
 let createElement = macro {
-	
-    rule { ($name:ident, null) } => { 
-    	createElement($name, {$Utils: this.utils})
+
+    case { $macro_name($name:ident, null) } => { 
+        var that = makeIdent("$__that", #{$macro_name});
+        letstx $that = [that];
+        return #{
+           createElement($name, {$Utils: (typeof $that !== 'undefined'?$that.utils:this.utils)})
+        }
     }
-	rule { ($name:ident, null, $c:expr(,)...) } => { 
-    	createElement($name, {$Utils: this.utils}, $c(,)...)
+    case { $macro_name($name:ident, null, $c:expr(,)...) } => { 
+        var that = makeIdent("$__that", #{$macro_name});
+        letstx $that = [that];
+        return #{
+            createElement($name, {$Utils: (typeof $that !== 'undefined'?$that.utils:this.utils)}, $c(,)...)
+        }
     }
-	rule { ($name:ident, $b) } => { 
-    	createElement($name, Object.assign($b, {$Utils: this.utils}))
+    case { $macro_name($name:ident, $b) } => { 
+        var that = makeIdent("$__that", #{$macro_name});
+        letstx $that = [that];
+        return #{
+            createElement($name, Object.assign($b, {$Utils: (typeof $that !=='undefined'?$that.utils:this.utils)}))
+        }
     }
-	rule { ($name:ident, $b, $c:expr(,)...) } => { 
-    	createElement($name, Object.assign($b, {$Utils: this.utils}), $c(,)...)
+    case { $macro_name($name:ident, $b, $c:expr(,)...) } => { 
+        var that = makeIdent("$__that", #{$macro_name});
+        letstx $that = [that];
+        return #{
+            createElement($name, Object.assign($b, {$Utils: (typeof $that !== 'undefined'?$that.utils:this.utils)}), $c(,)...)
+        }
     }
-    rule { ($name, $b) } => { 
-    	createElement($name, $b)
+    case { $macro_name($name, $b) } => {
+        return #{
+            createElement($name, $b)
+        }
     }
-	rule { ($name, $b, $c:expr(,)...) } => { 
-    	createElement($name, $b, $c(,)...)
+    case { $macro_name($name, $b, $c:expr(,)...) } => {
+        return #{
+            createElement($name, $b, $c(,)...)
+        }
     }
 }
 
+export var;
 export createElement;
