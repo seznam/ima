@@ -19,6 +19,7 @@ export default class Server extends ns.Core.Abstract.PageRender {
 	 *
 	 * @method contructor
 	 * @constructor
+	 * @param {Core.Page.Render.Factory} factory Factory for receive $Utils to view.
 	 * @param {Vendor.Helper} Helper The IMA.js helper methods.
 	 * @param {Vendor.React} React React framework instance to use to render the
 	 *        page.
@@ -29,15 +30,15 @@ export default class Server extends ns.Core.Abstract.PageRender {
 	 * @param {Core.Interface.Cache} cache Resource cache caching the results of
 	 *        HTTP requests made by services used by the rendered page.
 	 */
-	constructor(Helper, React, settings, response, cache) {
-		super(Helper, React, settings);
+	constructor(factory, Helper, React, settings, response, cache, oc) {
+		super(factory, Helper, React, settings);
 
 		/**
 		 * Utility for sending the page markup to the client as a response to the
 		 * current HTTP request.
 		 *
-		 * @property _response
 		 * @private
+		 * @property _response
 		 * @type {Core.Router.Response}
 		 */
 		this._response = response;
@@ -48,11 +49,19 @@ export default class Server extends ns.Core.Abstract.PageRender {
 		 * serialized and sent to the client to re-initialize the page at the
 		 * client side.
 		 *
-		 * @property _cache
 		 * @private
+		 * @property _cache
 		 * @type {Core.Interface.Cache}
 		 */
 		this._cache = cache;
+
+		/**
+		 * @private
+		 * @property _utils
+		 * @type {Object<string, *>}
+		 */
+		this._oc = oc;
+
 	}
 
 	/**
@@ -83,8 +92,9 @@ export default class Server extends ns.Core.Abstract.PageRender {
 				.then((fetchedResources) => {
 					controller.setState(fetchedResources);
 					controller.setMetaParams(fetchedResources);
+					var props = this._generateViewProps(controller.getState());
 
-					var reactElementView = this._React.createElement(view, controller.getState());
+					var reactElementView = this._React.createElement(view, props);
 					var pageMarkup = this._React.renderToString(reactElementView);
 
 					var documentView = ns.get(this._settings.$Page.$Render.documentView);
@@ -92,7 +102,8 @@ export default class Server extends ns.Core.Abstract.PageRender {
 					var appMarkup = this._React.renderToStaticMarkup(documentViewFactory({
 						page: pageMarkup,
 						scripts: this._getScripts(),
-						metaManager: controller.getMetaManager()
+						metaManager: controller.getMetaManager(),
+						$Utils: this._factory.getUtils()
 					}));
 
 					this._response

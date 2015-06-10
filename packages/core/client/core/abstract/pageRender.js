@@ -24,20 +24,30 @@ export default class PageRender extends ns.Core.Interface.PageRender {
 	 *
 	 * @constructor
 	 * @method constructor
+	 * @param {Core.Page.Render.Factory} factory Factory for receive $Utils to view.
 	 * @param {Vendor.Helper} Helper The IMA.js helper methods.
 	 * @param {Vendor.React} React React framework instance, will be used to
 	 *        render the page.
 	 * @param {Object<string, *>} settings Application settings for the current
 	 *        application environment.
 	 */
-	constructor(Helper, React, settings) {
+	constructor(factory, Helper, React, settings) {
 		super();
+
+		/**
+		 * Factory for receive $Utils to view.
+		 *
+		 * @protected
+		 * @property _factory
+		 * @type {Core.Page.Render.Factory}
+		 */
+		this._factory = factory;
 
 		/**
 		 * The IMA.js helper methods.
 		 *
-		 * @property _Helper
 		 * @protected
+		 * @property _Helper
 		 * @type {Vendor.Helper}
 		 */
 		this._Helper = Helper;
@@ -45,8 +55,8 @@ export default class PageRender extends ns.Core.Interface.PageRender {
 		/**
 		 * Rect framework instance, used to render the page.
 		 *
-		 * @property _react
 		 * @protected
+		 * @property _react
 		 * @type {Vendor.React}
 		 */
 		this._React = React;
@@ -54,13 +64,14 @@ export default class PageRender extends ns.Core.Interface.PageRender {
 		/**
 		 * Application setting for the current application environment.
 		 *
-		 * @property _setting
 		 * @protected
+		 * @property _setting
 		 * @type {Object<string, *>}
 		 */
 		this._settings = settings;
 
 		/**
+		 * @protected
 		 * @property _reactiveView
 		 * @type {Vendor.React.Component}
 		 * @default null
@@ -131,6 +142,20 @@ export default class PageRender extends ns.Core.Interface.PageRender {
 		if (this._reactiveView) {
 			this._reactiveView.setState(state);
 		}
+	}
+
+	/**
+	 * Generate properties for view from state.
+	 *
+	 * @protected
+	 * @method _generateViewProps
+	 * @param {Object<string, *>=} [state={}]
+	 * @return {Object<string, *>}
+	 */
+	_generateViewProps(state = {}) {
+		state.$Utils = this._factory.getUtils();
+
+		return state;
 	}
 }
 

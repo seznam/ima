@@ -2,8 +2,6 @@ import ns from 'imajs/client/core/namespace.js';
 
 ns.namespace('Core.Abstract');
 
-var viewUtils = null;
-
 /**
  * The base class for all view components.
  *
@@ -14,23 +12,39 @@ var viewUtils = null;
  * @submodule Core.Abstract
  */
 export default class ViewComponent extends ns.Vendor.React.Component {
+
+	/**
+	 * @constructor
+	 * @method constructor
+	 * @param {Object<string, *>} props
+	 */
+	constructor(props) {
+		super(props);
+
+		/**
+		 * @private
+		 * @property _utils
+		 * @type {Object<string, *>}
+		 */
+		this._utils = props.$Utils;
+
+		delete props.$Utils;
+	}
+
 	/**
 	 * Returns the utilities for the view components. The returned value is the
 	 * value bound to the {@code $Utils} object container constant.
-	 *
-	 * This method cannot be called before the application initialization has
-	 * been completed.
 	 *
 	 * @method get utils
 	 * @return {Object<string, *>} The utilities for the view components.
 	 */
 	get utils() {
-		if (!viewUtils) {
-			throw new Error('Cannot access view utils before the ' +
-					'application initialization has finished');
+		if (!this._utils) {
+			throw new Error('You cannot access view utils because they were ' +
+					'not passed in the initial props.');
 		}
 
-		return viewUtils;
+		return this._utils;
 	}
 
 	/**
@@ -46,18 +60,6 @@ export default class ViewComponent extends ns.Vendor.React.Component {
 	 */
 	findDOMNode(component = this) {
 		return ns.Vendor.React.findDOMNode(component);
-	}
-
-	/**
-	 * Sets the view utils the view components should use.
-	 *
-	 * @method set utils
-	 * @param {Object<string, *>} newViewUtils The view utils the view
-	 *        components should use.
-	 * @throws {Error} Thrown if the utils have already been set.
-	 */
-	static set utils(newViewUtils) {
-		viewUtils = newViewUtils;
 	}
 }
 

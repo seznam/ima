@@ -53,16 +53,6 @@ export default class Bootstrap {
 		 * @default {}
 		 */
 		this._config = {};
-
-		/**
-		 * Flag signalling whether the application is initialized. The flag is used
-		 * to prevent re-initialization of some components of the system.
-		 *
-		 * @private
-		 * @property _isInitialized
-		 * @type {boolean}
-		 */
-		this._isInitialized = false;
 	}
 
 	/**
@@ -85,10 +75,7 @@ export default class Bootstrap {
 		this._initSettings();
 		this._bindDependencies();
 		this._initServices();
-		this._initComponents();
 		this._initRouting();
-
-		this._isInitialized = true;
 	}
 
 	/**
@@ -154,20 +141,6 @@ export default class Bootstrap {
 	_initServices() {
 		this._config.initServicesCore(ns, this._oc, this._config.services);
 		this._config.initServicesApp(ns, this._oc, this._config.services);
-	}
-
-	/**
-	 * Initializes the UI components of the application, injecting the UI utils
-	 * into their factory methods.
-	 *
-	 * @private
-	 * @method _initComponents
-	 */
-	_initComponents() {
-		if (!this._isInitialized) {
-			var utils = this._oc.get('$Utils');
-			AbstractComponent.utils = utils;
-		}
 	}
 }
 

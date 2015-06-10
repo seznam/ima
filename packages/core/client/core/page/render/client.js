@@ -19,6 +19,7 @@ export default class Client extends ns.Core.Abstract.PageRender {
 	 *
 	 * @method constructor
 	 * @constructor
+	 * @param {Core.Page.Render.Factory} factory Factory for receive $Utils to view.
 	 * @param {Vendor.Helper} Helper The IMA.js helper methods.
 	 * @param {Vendor.React} React React framework instance to use to render the
 	 *        page.
@@ -28,8 +29,8 @@ export default class Client extends ns.Core.Abstract.PageRender {
 	 *        object ({@code window}) regardless of the client/server-side
 	 *        environment.
 	 */
-	constructor(Helper, React, settings, window) {
-		super(Helper, React, settings);
+	constructor(factory, Helper, React, settings, window) {
+		super(factory, Helper, React, settings);
 
 		/**
 		 * Flag signalling that the page is being rendered for the first time.
@@ -110,8 +111,10 @@ export default class Client extends ns.Core.Abstract.PageRender {
 					controller.activate();
 				})
 				.catch((error) => {
-					if (window && window.$IMA && typeof window.$IMA.fatalErrorHandler === 'function') {
-						window.$IMA.fatalErrorHandler(error);
+					var win = this._window.getWindow();
+
+					if (win && win.$IMA && typeof win.$IMA.fatalErrorHandler === 'function') {
+						win.$IMA.fatalErrorHandler(error);
 					} else {
 						console.warn('Define function config.$IMA.fatalErrorHandler in services.js.');
 					}
@@ -195,7 +198,8 @@ export default class Client extends ns.Core.Abstract.PageRender {
 	 * @param {Vendor.React.Component} view
 	 */
 	_renderToDOM(controller, view) {
-		var reactElementView = this._React.createElement(view, controller.getState());
+		var props = this._generateViewProps(controller.getState());
+		var reactElementView = this._React.createElement(view, props);
 
 		this._reactiveView = this._React.render(
 			reactElementView,
