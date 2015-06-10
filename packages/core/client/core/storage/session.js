@@ -16,7 +16,7 @@ ns.namespace('Core.Storage');
  *
  * @requires SessionStorage
  */
-export default class Session extends ns.Core.Interface.Storage {
+class Session extends ns.Core.Interface.Storage {
 	/**
 	 * Initializes the session storage.
 	 *
@@ -43,7 +43,7 @@ export default class Session extends ns.Core.Interface.Storage {
 	 * This method must be invoked only once and it must be the first method
 	 * invoked on this instance.
 	 *
-	 * @inheritDoc
+	 * @inheritdoc
 	 * @override
 	 * @chainable
 	 * @method init
@@ -72,7 +72,7 @@ export default class Session extends ns.Core.Interface.Storage {
 	 * Entries set to the {@code undefined} value can be tested for existence
 	 * using the {@codelink has} method.
 	 *
-	 * @inheritDoc
+	 * @inheritdoc
 	 * @override
 	 * @method get
 	 * @param {string} key The key identifying the storage entry.
@@ -80,7 +80,7 @@ export default class Session extends ns.Core.Interface.Storage {
 	 */
 	get(key) {
 		try {
-			return JSON.parse(this._storage.getItem(key));
+			return JSON.parse(this._storage.getItem(key)).value;
 		} catch (e) {
 			throw new IMAError('Core.Storage.Session.get: Failed to parse a ' +
 			`session storage item value identified by the key ${key}: ` +
@@ -92,7 +92,7 @@ export default class Session extends ns.Core.Interface.Storage {
 	 * Sets the storage entry identied by the specified key to the provided
 	 * value. The method creates the entry if it does not exist already.
 	 *
-	 * @inheritDoc
+	 * @inheritdoc
 	 * @override
 	 * @chainable
 	 * @method set
@@ -101,14 +101,30 @@ export default class Session extends ns.Core.Interface.Storage {
 	 * @return {Core.Storage.Session} This storage.
 	 */
 	set(key, value) {
-		this._storage.setItem(key, JSON.stringify(value));
+		try {
+			this._storage.setItem(key, JSON.stringify({
+				created: Date.now(),
+				value
+			}));
+		} catch (e) {
+			var storage = this._storage;
+			var isItemTooBig = (storage.length === 0) ||
+					((storage.length === 1) && (storage.key(0) === key));
+			if (isItemTooBig) {
+				throw e;
+			}
+
+			this._deleteOldestEntry();
+			this.set(key, value);
+		}
+
 		return this;
 	}
 
 	/**
 	 * Deletes the entry identified by the specified key from this storage.
 	 *
-	 * @inheritDoc
+	 * @inheritdoc
 	 * @override
 	 * @chainable
 	 * @method delete
@@ -123,7 +139,7 @@ export default class Session extends ns.Core.Interface.Storage {
 	/**
 	 * Clears the storage of all entries.
 	 *
-	 * @inheritDoc
+	 * @inheritdoc
 	 * @override
 	 * @chainable
 	 * @method clear
@@ -138,7 +154,7 @@ export default class Session extends ns.Core.Interface.Storage {
 	 * Returns an iterator for traversing the keys in this storage. The order in
 	 * which the keys are traversed is undefined.
 	 *
-	 * @inheritDoc
+	 * @inheritdoc
 	 * @override
 	 * @method keys
 	 * @return {Iterator<string>} An iterator for traversing the keys in this
@@ -159,6 +175,33 @@ export default class Session extends ns.Core.Interface.Storage {
 	 */
 	size() {
 		return this._storage.length;
+	}
+
+	/**
+	 * Deletes the oldest entry in this storage.
+	 *
+	 * @private
+	 * @method _deleteOldestEntry
+	 */
+	_deleteOldestEntry() {
+		let oldestEntry = {
+			key: null,
+			created: Date.now() + 1
+		};
+
+		for (let key of this.keys()) {
+			let value = JSON.parse(this._storage.getItem(key));
+			if (value.created < oldestEntry.created) {
+				oldestEntry = {
+					key,
+					created: value.created
+				};
+			}
+		}
+
+		if (typeof oldestEntry.key === 'string') {
+			this.delete(oldestEntry.key);
+		}
 	}
 }
 
