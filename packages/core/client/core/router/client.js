@@ -317,12 +317,11 @@ export default class Client extends ns.Core.Abstract.Router {
 	}
 
 	/**
-	 * Handles a click event. The method determines whether an anchor element or
-	 * a child of an anchor element has been clicked, and if it was, the method
-	 * performs navigation to the target location of the anchor (if it has one).
+	 * Handles a click event. The method performs navigation to the target
+	 * location of the anchor (if it has one).
 	 *
 	 * The navigation will be handled by the router if the protocol and domain of
-	 * the anchor's target location (href) is the same as the corrent, otherwise
+	 * the anchor's target location (href) is the same as the current, otherwise
 	 * the method results in a hard redirect.
 	 *
 	 * @private
@@ -331,38 +330,57 @@ export default class Client extends ns.Core.Abstract.Router {
 	 */
 	_handleClick(event) {
 		var target = event.target || event.srcElement;
-		var self = this;
+		var anchorElement = this._getAnchorElement(target);
 
-		// find the closest anchor element with a href attribute
-		while (target && !hasReachedAnchor(target)) {
-			target = target.parentNode;
-		}
-		if (!target) {
+		if (!anchorElement) {
 			return;
 		}
 
-		var targetHref = target.href;
-
-		var isDefinedTargetHref =
-			(targetHref !== undefined) &&
-			(targetHref !== null);
+		var anchorHref = anchorElement.href;
+		var isDefinedTargetHref = (anchorHref !== undefined) &&
+				(anchorHref !== null);
 		var isMiddleButton = event.button === MOUSE_MIDDLE_BUTTON;
-		var isSameDomain = this._isSameDomain(targetHref);
-		var isHashLink = this._isHashLink(targetHref);
+		var isSameDomain = this._isSameDomain(anchorHref);
+		var isHashLink = this._isHashLink(anchorHref);
+		var isLinkPrevented = event.defaultPrevented;
 
-		if (!isDefinedTargetHref || isMiddleButton || !isSameDomain || isHashLink) {
+		if (!isDefinedTargetHref ||
+				isMiddleButton ||
+				!isSameDomain ||
+				isHashLink ||
+				isLinkPrevented) {
 			return;
 		}
 
 		this._window.preventDefault(event);
-		this.redirect(targetHref);
+		this.redirect(anchorHref);
+	}
 
-		function hasReachedAnchor(element) {
-			return element.parentNode &&
-					(element !== self._window.getBody()) &&
-					(element.href !== undefined) &&
-					(element.href !== null);
+	/**
+	 * The method determines whether an anchor element or
+	 * a child of an anchor element has been clicked, and if it was, the method
+	 * returns anchor element else null.
+	 *
+	 * @private
+	 * @method _getAnchorElement
+	 * @param {Node} target
+	 * @return {Node|null}
+	 */
+	_getAnchorElement(target) {
+		var self = this;
+
+		while (target && !hasReachedAnchor(target)) {
+			target = target.parentNode;
 		}
+
+		function hasReachedAnchor(nodeElement) {
+			return nodeElement.parentNode &&
+				(nodeElement !== self._window.getBody()) &&
+				(nodeElement.href !== undefined) &&
+				(nodeElement.href !== null);
+		}
+
+		return target;
 	}
 
 	/**
