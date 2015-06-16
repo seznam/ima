@@ -152,6 +152,22 @@ describe('Core.Router.Client', function() {
 		});
 	});
 
+	describe('_isHashLink method', function() {
+		using([
+			{targetUrl:'http://localhost/aaa#hash', baseUrl: 'http://localhost/aaa', result: true},
+			{targetUrl:'http://localhost/bbb#hash', baseUrl: 'http://localhost/aaa', result: false},
+			{targetUrl:'http://localhost/aaa', baseUrl: 'http://localhost/aaa', result: false}
+		], function(value) {
+			it('should be for ' + value.targetUrl + ' and base url ' + value.baseUrl + ' return ' + value.result, function() {
+				spyOn(win, 'getUrl')
+					.and
+					.returnValue(value.baseUrl);
+
+				expect(router._isHashLink(value.targetUrl)).toEqual(value.result);
+			});
+		});
+	});
+
 	it('_asyncWindowScroll method should be call window.scrollTo', function() {
 		spyOn(win, 'scrollTo')
 			.and
