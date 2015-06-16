@@ -67,6 +67,7 @@
     "gulp-uglify": "^1.2.0",
     "gulp-util": "^3.0.5",
     "gulp-yuidoc": "^0.1.2",
+    "gulp-autoprefixer": "^2.3.1",
     "helmet": "^0.9.1",
     "highlight.js": "^8.6.0",
     "jasmine-core": "^2.3.4",

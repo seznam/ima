@@ -1,6 +1,3 @@
-/**
- * Created by slavek on 29.10.14.
- */
 var gulp = require('gulp');
 var concat = require('gulp-concat');
 var uglify = require('gulp-uglify');
@@ -32,6 +29,7 @@ var messageFormat = require('gulp-messageformat');
 var save = require('gulp-save');
 var change = require('gulp-change');
 var minifyCSS = require('gulp-minify-css');
+var autoprefixer = require('gulp-autoprefixer');
 var eslint = require('gulp-eslint');
 var gulpCommand = require('gulp-command')(gulp);
 
@@ -557,6 +555,7 @@ gulp.task('less', function() {
 			.pipe(sourcemaps.init())
 			.pipe(concat(files.less.name))
 			.pipe(less({compress: true, paths: [ path.join(__dirname) ]}))
+			.pipe(autoprefixer())
 			.pipe(sourcemaps.write())
 			.pipe(plumber.stop())
 			.pipe(gulp.dest(files.less.dest))
