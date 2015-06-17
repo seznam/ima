@@ -33,17 +33,20 @@ class View extends AbstractComponent {
 
 		return (
 			<div className='l-homepage'>
-				<Header />
+				<Header $Utils={this.utils}/>
 				<TextInput 
 						categories={this.state.categories} 
-						currentCategory={this.state.currentCategory} />
+						currentCategory={this.state.currentCategory}
+						$Utils={this.utils}/>
 				<Filter
 						categories={this.state.categories}
-						currentCategory={this.state.currentCategory} />
+						currentCategory={this.state.currentCategory}
+						$Utils={this.utils}/>
 				<Feed
 						entity={this.state.feed}
 						categories={this.state.categories}
-						sharedItem={this.state.sharedItem} />
+						sharedItem={this.state.sharedItem}
+						$Utils={this.utils}/>
 			</div>
 		);
 	}

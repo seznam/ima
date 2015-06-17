@@ -44,7 +44,8 @@ class View extends AbstractComponent {
 							key={'item'+item.getId()}
 							entity={item}
 							category={category}
-							sharedItem={this.props.sharedItem}/>
+							sharedItem={this.props.sharedItem}
+							$Utils={this.utils}/>
 				);
 			}).reverse();
 			return FeedItems;

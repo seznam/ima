@@ -34,18 +34,20 @@ class View extends AbstractComponent {
 				{icon}
 				<div className='content-wrapper'>
 					<div
-						className='content' 
-						dangerouslySetInnerHTML={{__html: entity.getContent()}}>
+							className='content'
+							dangerouslySetInnerHTML={{__html: entity.getContent()}}>
 					</div>
 					
 					<div className='toolbar'>
 						{hashTag}
 						<DateComponentDiv 
-							date={entity.getPosted()} />
+								date={entity.getPosted()}
+								$Utils={this.utils}/>
 						<ShareDiv
-							item={entity}
-							category={category}
-							active={sharedItemActive} />
+								item={entity}
+								category={category}
+								active={sharedItemActive}
+								$Utils={this.utils}/>
 					</div>
 				</div>
 			</div>

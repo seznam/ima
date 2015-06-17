@@ -34,7 +34,7 @@ class View extends AbstractComponent {
 		
 		return (
 			<div className='l-detailpage'>
-				<Header/>
+				<Header $Utils={this.utils}/>
 				<div className='detail'>
 					{item}
 					{moreItemsButton}
@@ -52,11 +52,12 @@ class View extends AbstractComponent {
 
 			return (
 				<FeedItem
-					key={'item'+entity.getId()}
-					entity={entity}
-					category={category}
-					singleItem='true'
-					sharedItem={entity} />
+						key={'item'+entity.getId()}
+						entity={entity}
+						category={category}
+						singleItem='true'
+						sharedItem={entity}
+						$Utils={this.utils}/>
 			);
 		}
 		return '';
