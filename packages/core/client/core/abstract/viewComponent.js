@@ -39,9 +39,9 @@ export default class ViewComponent extends ns.Vendor.React.Component {
 	 * @return {Object<string, *>} The utilities for the view components.
 	 */
 	get utils() {
-		if (!this._utils) {
+		if ($Debug && !this._utils) {
 			throw new Error('You cannot access view utils because they were ' +
-					'not passed in the initial props.');
+					'not passed in the initial props as key name $Utils.');
 		}
 
 		return this._utils;
