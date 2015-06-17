@@ -1,5 +1,5 @@
 import ns from 'imajs/client/core/namespace.js';
-import AbstractComponent from 'imajs/client/core/abstract/viewComponent.js';
+import AbstractComponent from 'imajs/client/core/abstract/component.js';
 
 ns.namespace('App.Page.Home');
 
@@ -7,7 +7,7 @@ ns.namespace('App.Page.Home');
  * HomePage view.
  *
  * @class View
- * @extends Core.Abstract.View
+ * @extends Core.Abstract.Component
  * @namespace App.Page.Home
  * @module App
  * @submodule App.Page

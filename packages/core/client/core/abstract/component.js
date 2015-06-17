@@ -6,12 +6,12 @@ ns.namespace('Core.Abstract');
  * The base class for all view components.
  *
  * @abstract
- * @class ViewComponent
+ * @class Component
  * @namespace Core.Abstract
  * @module Core
  * @submodule Core.Abstract
  */
-export default class ViewComponent extends ns.Vendor.React.Component {
+export default class Component extends ns.Vendor.React.Component {
 
 	/**
 	 * @constructor
@@ -63,4 +63,4 @@ export default class ViewComponent extends ns.Vendor.React.Component {
 	}
 }
 
-ns.Core.Abstract.ViewComponent = ViewComponent;
+ns.Core.Abstract.Component = Component;
