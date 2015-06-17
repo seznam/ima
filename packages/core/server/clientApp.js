@@ -145,9 +145,10 @@ module.exports = (() => {
 			}
 			var router = app.oc
 				.get('$Router');
+			app.oc.get('$Cache').clear();
 
 			var applyError = (error) => {
-				return (
+				try {
 					router
 						.handleError(error)
 						.then(() => {
@@ -157,27 +158,38 @@ module.exports = (() => {
 							instanceRecycler.clearInstance(app);
 							showStaticErrorPage(fatalError, req, res);
 						})
-				);
+				} catch(e) {
+					instanceRecycler.clearInstance(app);
+					showStaticErrorPage(e, req, res);
+				}
 			};
 
 			if (router.isClientError(err)) {
-				router
-					.handleNotFound(err)
-					.then(() => {
-						instanceRecycler.clearInstance(app);
-					})
-					.catch((error) => {
-						applyError(error);
-					});
+				try {
+					router
+						.handleNotFound(err)
+						.then(() => {
+							instanceRecycler.clearInstance(app);
+						})
+						.catch((error) => {
+							applyError(error);
+						});
+				} catch(e) {
+					applyError(e);
+				}
 			} else if (router.isRedirection(err)) {
-				router
-					.redirect(err.getParams().url)
-					.then(() => {
-						instanceRecycler.clearInstance(app);
-					})
-					.catch((error) => {
-						applyError(error);
-					})
+				try {
+					router
+						.redirect(err.getParams().url)
+						.then(() => {
+							instanceRecycler.clearInstance(app);
+						})
+						.catch((error) => {
+							applyError(error);
+						})
+				} catch(e) {
+					applyError(e);
+				}
 			} else {
 				applyError(err);
 			}
@@ -188,15 +200,21 @@ module.exports = (() => {
 		var app = _initApp(req, res);
 		var router = app.oc
 			.get('$Router');
+		var cache = app.oc
+			.get('$Cache');
 
-		router
-			.route(router.getPath())
-			.then(() => {
-				instanceRecycler.clearInstance(app);
-			})
-			.catch((error) => {
-				errorHandler(error, req, res, app);
-			});
+		try {
+			router
+				.route(router.getPath())
+				.then(() => {
+					instanceRecycler.clearInstance(app);
+				})
+				.catch((error) => {
+					errorHandler(error, req, res, app);
+				});
+		} catch(e) {
+			errorHandler(e, req, res, app);
+		}
 	};
 
 	return {errorHandler, response, showStaticErrorPage};
