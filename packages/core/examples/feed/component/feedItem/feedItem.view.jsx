@@ -1,5 +1,4 @@
 import ns from 'imajs/client/core/namespace.js';
-import AbstractComponent from 'imajs/client/core/abstract/component.js';
 
 ns.namespace('App.Component.FeedItem');
 
@@ -10,7 +9,7 @@ ns.namespace('App.Component.FeedItem');
  * @module App
  * @submodule App.Component
  */
-class View extends AbstractComponent {
+class View extends ns.Core.Abstract.Component {
 
 	constructor(props) {
 		super(props);

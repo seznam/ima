@@ -1,5 +1,4 @@
 import ns from 'imajs/client/core/namespace.js';
-import AbstractComponent from 'imajs/client/core/abstract/component.js';
 
 ns.namespace('App.Page.Detail');
 
@@ -16,7 +15,7 @@ ns.namespace('App.Page.Detail');
  * @uses App.Component.Layout.Main.View
  * @uses App.Component.Sign.List.View
  */
-class View extends AbstractComponent {
+class View extends ns.Core.Abstract.Component {
 
 	constructor(props) {
 		super(props);

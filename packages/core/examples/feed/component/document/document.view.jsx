@@ -1,5 +1,4 @@
 import ns from 'imajs/client/core/namespace.js';
-import AbstractComponent from 'imajs/client/core/abstract/component.js';
 
 ns.namespace('App.Component.Document');
 
@@ -10,7 +9,7 @@ ns.namespace('App.Component.Document');
  * @module App
  * @submodule Component
  */
-class View extends AbstractComponent {
+class View extends ns.Core.Abstract.Component {
 	render() {
 		var appCssFile = this.utils.$Settings.$Env !== 'dev' ? 'app.bundle.min.css' : 'app.css';
 
