@@ -26,7 +26,6 @@ module.exports = (() => {
 		console.error('Stack: ',err.stack);
 		console.error('Params: ', err._params);
 
-
 		asyncEach(stack, function getContentInfo(item, cb) {
 			// exclude core node modules and node modules
 			if ((item.fileName.indexOf(sep) !== -1) && !/node_modules/.test(item.fileName)) {
@@ -84,7 +83,6 @@ module.exports = (() => {
 
 		var dictionary = require('./locale/' + language + '.js');
 
-		//var app = appServer.createIMAJsApp();
 		var app = instanceRecycler.getInstance();
 
 		var bootConfig = {
@@ -200,8 +198,6 @@ module.exports = (() => {
 		var app = _initApp(req, res);
 		var router = app.oc
 			.get('$Router');
-		var cache = app.oc
-			.get('$Cache');
 
 		try {
 			router
