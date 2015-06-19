@@ -181,7 +181,14 @@ export default class Client extends ns.Core.Abstract.Router {
 		this._setAddressBar(this.getUrl());
 		this._window.bindEventListener(nativeWindow, EVENTS.POP_STATE, (event) => {
 			if (event.state) {
-				this.route(this.getPath(), event.state.scroll);
+				this.route(this.getPath(), event.state.scroll)
+					.then(() => {
+						var scroll = event.state.scroll;
+
+						if (scroll) {
+							this._asyncWindowScroll(scroll.x, scroll.y);
+						}
+					})
 			}
 		});
 
@@ -235,20 +242,14 @@ export default class Client extends ns.Core.Abstract.Router {
 	 * @method route
 	 * @param {string} path The URL path part received from the client, with
 	 *        optional query.
-	 * @param {{x: number, y: number}|null} [scroll=null]
 	 * @return {Promise<undefined>} A promise resolved when the error has been
 	 *         handled and the response has been sent to the client, or displayed
 	 *         if used at the client side.
 	 */
-	route(path, scroll = null) {
+	route(path) {
 		return (
 			super
 				.route(path)
-				.then(() => {
-					if (scroll) {
-						this._asyncWindowScroll(scroll.x, scroll.y);
-					}
-				})
 				.catch((error) => {
 					if (this.isClientError(error)) {
 						return this.handleNotFound(error);
