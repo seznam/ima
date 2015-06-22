@@ -152,7 +152,7 @@ export default class Client extends ns.Core.Interface.Window {
 	 * @return {number}
 	 */
 	getScrollY() {
-		var supportPageOffset = window.pageXOffset !== undefined;
+		var supportPageOffset = window.pageYOffset !== undefined;
 		var isCSS1Compat = ((document.compatMode || '') === 'CSS1Compat');
 
 		return supportPageOffset ? window.pageYOffset : isCSS1Compat ? document.documentElement.scrollTop : document.body.scrollTop;
