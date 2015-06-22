@@ -7,7 +7,12 @@ export var init = (ns, oc, config) => { // jshint ignore:line
 	};
 
 	$window.bindEventListener($window.getWindow(), 'error', (e) => {
+		var error = e.error;
+
 		$router
-			.handleError(e.error);
+			.handleError({error})
+			.catch((fatalError) => {
+				config.$IMA.fatalErrorHandler(fatalError);
+			});
 	});
 };
