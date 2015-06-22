@@ -7,6 +7,10 @@ var firstLetterToLowerCase = (world) => {
 	return world.charAt(0).toLowerCase() + world.slice(1);
 };
 
+var firstLetterToUpperCase = (world) => {
+	return world.charAt(0).toUpperCase() + world.slice(1);
+};
+
 var parseCookieString = (cookieString) => {
 	var cookiePairs = cookieString.split('; ');
 
@@ -87,21 +91,26 @@ var callRemoteServer = (req, res) => {
 			break;
 	}
 
-	if (req.get('Authorization')) {
-		httpRequest = httpRequest.set('Authorization', req.get('Authorization'));
-	}
+	Object
+		.keys(req.headers)
+		.filter((key) => {
+			return ['host', 'Cookie'].indexOf(key) === -1;
+		})
+		.forEach((key) => {
+			httpRequest.set(key, req.headers[key]);
+		});
 
 	if (req.get('Cookie') && req.get('Cookie') !== '') {
 		httpRequest = httpRequest.set('Cookie', req.get('Cookie'));
 	}
 
 	httpRequest
-		.end((error, respond) => {
+		.end((error, response) => {
 			if (error) {
 				console.error('API ERROR', error);
 				res.status(error.status || 500).json({Error: 'API error', message: error.message});
-			} else if (respond) {
-				var settedCookies = respond.header['set-cookie'];
+			} else if (response) {
+				var settedCookies = response.header['set-cookie'];
 
 				if (settedCookies) {
 					settedCookies.forEach((cookieString) => {
@@ -109,7 +118,8 @@ var callRemoteServer = (req, res) => {
 						res.cookie(cookie.name, cookie.value, cookie.options);
 					});
 				}
-				res.status(respond.status).json(respond.body);
+
+				res.status(response.status).json(response.body);
 			}
 		});
 };
