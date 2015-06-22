@@ -252,8 +252,9 @@ export default class Client extends ns.Core.Abstract.Router {
 			super
 				.route(path)
 				.catch((error) => {
+
 					if (this.isClientError(error)) {
-						return this.handleNotFound(error);
+						return this.handleNotFound({error});
 					}
 
 					if (this.isRedirection(error)) {
@@ -261,36 +262,7 @@ export default class Client extends ns.Core.Abstract.Router {
 						return Promise.resolve();
 					}
 
-					return this.handleError(error);
-				})
-		);
-	}
-
-	/**
-	 * Handles an internal server error by responding with the appropriate
-	 * "internal server error" error page.
-	 *
-	 * @inheritDoc
-	 * @override
-	 * @method handleError
-	 * @param {Object<string, string>} params Parameters extracted from the
-	 *        current URL path and query.
-	 * @return {Promise<undefined>} A promise resolved when the error has been
-	 *         handled and the response has been sent to the client, or displayed
-	 *         if used at the client side.
-	 */
-	handleError(params) {
-		return (
-			super
-				.handleError(params)
-				.catch((fatalError) => {
-					var window = this._window.getWindow();
-					var isIMA = window.$IMA;
-					var isFunction = window.$IMA.fatalErrorHandler;
-
-					if (window && isIMA && typeof isFunction === 'function') {
-						window.$IMA.fatalErrorHandler(fatalError);
-					}
+					return this.handleError({error});
 				})
 		);
 	}
@@ -313,7 +285,7 @@ export default class Client extends ns.Core.Abstract.Router {
 			super
 				.handleNotFound(params)
 				.catch((error) => {
-					return this.handleError(error);
+					return this.handleError({error});
 				})
 		);
 	}

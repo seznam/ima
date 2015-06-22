@@ -148,7 +148,7 @@ module.exports = (() => {
 			var applyError = (error) => {
 				try {
 					router
-						.handleError(error)
+						.handleError({error})
 						.then(() => {
 							instanceRecycler.clearInstance(app);
 						})
@@ -165,7 +165,7 @@ module.exports = (() => {
 			if (router.isClientError(err)) {
 				try {
 					router
-						.handleNotFound(err)
+						.handleNotFound({error:err})
 						.then(() => {
 							instanceRecycler.clearInstance(app);
 						})
