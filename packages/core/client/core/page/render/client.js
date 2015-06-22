@@ -110,17 +110,7 @@ export default class Client extends ns.Core.Abstract.PageRender {
 
 					controller.activate();
 				})
-				.catch((error) => {
-					var win = this._window.getWindow();
-
-					if (win && win.$IMA && typeof win.$IMA.fatalErrorHandler === 'function') {
-						win.$IMA.fatalErrorHandler(error);
-					} else {
-						console.warn('Define function config.$IMA.fatalErrorHandler in services.js.');
-					}
-
-					throw error;
-				})
+				.catch((error) => this._handleError(error))
 		);
 	}
 
@@ -153,6 +143,7 @@ export default class Client extends ns.Core.Abstract.PageRender {
 					controller.setMetaParams(fetchedResources);
 					this._updateMetaAttributes(controller.getMetaManager());
 				})
+				.catch((error) => this._handleError(error))
 		);
 	}
 
@@ -172,6 +163,27 @@ export default class Client extends ns.Core.Abstract.PageRender {
 	}
 
 	/**
+	 * Call $IMA fatal error handler, which is defined in services.js
+	 * and re-throw that error for other error handler.
+	 *
+	 * @private
+	 * @method _handleError
+	 * @param {Error} error
+	 * @throws {Error} Re-throw handled error.
+	 */
+	_handleError(error) {
+		var win = this._window.getWindow();
+
+		if (win && win.$IMA && typeof win.$IMA.fatalErrorHandler === 'function') {
+			win.$IMA.fatalErrorHandler(error);
+		} else {
+			console.warn('Define function config.$IMA.fatalErrorHandler in services.js.');
+		}
+
+		throw error;
+	}
+
+	/**
 	 * Patch promise values to controller state.
 	 *
 	 * @method _patchPromisesToState
@@ -185,12 +197,13 @@ export default class Client extends ns.Core.Abstract.PageRender {
 					controller.patchState({
 						[resourceName]: resource
 					});
-				});
+				})
+				.catch((error) => this._handleError(error));
 		}
 	}
 
 	/**
-	 * Render React element to DOM.
+	 * Render React element to DOM for controller state.
 	 *
 	 * @private
 	 * @method _renderToDOM
