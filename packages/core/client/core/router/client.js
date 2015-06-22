@@ -180,8 +180,9 @@ export default class Client extends ns.Core.Abstract.Router {
 
 		this._setAddressBar(this.getUrl());
 		this._window.bindEventListener(nativeWindow, EVENTS.POP_STATE, (event) => {
+
 			if (event.state) {
-				this.route(this.getPath(), event.state.scroll)
+				this.route(this.getPath())
 					.then(() => {
 						var scroll = event.state.scroll;
 
