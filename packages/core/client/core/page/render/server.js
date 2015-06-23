@@ -101,7 +101,7 @@ export default class Server extends ns.Core.Abstract.PageRender {
 					var documentViewFactory = this._React.createFactory(documentView);
 					var appMarkup = this._React.renderToStaticMarkup(documentViewFactory({
 						page: pageMarkup,
-						scripts: this._getScripts(),
+						revivalSettings: this._getRevivalSettings(),
 						metaManager: controller.getMetaManager(),
 						$Utils: this._factory.getUtils()
 					}));
@@ -145,24 +145,16 @@ export default class Server extends ns.Core.Abstract.PageRender {
 	}
 
 	/**
-	 * Generates the HTML code concontaining all scripts elements to include into
-	 * the rendered page. THe HTML code will include the scripts specified in
-	 * page renderer's settings and a script settings the "rehydration" data for
-	 * the application at the client-side.
+	 * THe HTML code will include a script settings the "revival"
+	 * data for the application at the client-side.
 	 *
-	 * @method _getScripts
+	 * @method _getRevivalSettings
 	 * @private
-	 * @return {string} HTML code containing all scripts elements to include into
+	 * @return {string} HTML code containing script element to include into
 	 *         the rendered page.
 	 */
-	_getScripts() {
-		var scripts = [];
-		var html = '';
-
-		scripts = this._settings.$Page.$Render.scripts
-			.map(script => `<script src="${script}"></script>`);
-
-		scripts.push(
+	_getRevivalSettings() {
+		var html =
 			'<script>' +
 			' window.$IMA = window.$IMA || {};' +
 			' window.$IMA.Cache = ' + (this._cache.serialize()) + ';' +
@@ -173,9 +165,7 @@ export default class Server extends ns.Core.Abstract.PageRender {
 			' window.$IMA.$Domain = "' + (this._settings.$Domain) + '";' +
 			' window.$IMA.$Root = "' + (this._settings.$Root) + '";' +
 			' window.$IMA.$LanguagePartPath = "' + (this._settings.$LanguagePartPath) + '";' +
-			'</script>'
-		);
-		html = scripts.join('');
+			'</script>';
 
 		return html;
 	}
