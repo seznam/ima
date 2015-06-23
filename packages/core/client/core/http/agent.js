@@ -385,14 +385,15 @@ export default class Agent extends ns.Core.Interface.HttpAgent {
 	 * @method _proxyResolved
 	 * @private
 	 * @param {Vendor.SuperAgent.Response} response Server response.
-	 * @return {{status: number,body: *, params: Object, headers: Object}}
+	 * @return {{status: number, body: *, params: Object, headers: Object, cached: boolean}}
 	 */
 	_proxyResolved(response) {
 		var agentResponse = {
 			status: response.status,
 			body: response.body,
 			params: response.params,
-			headers: response.header
+			headers: response.header,
+			cached: false
 		};
 		var params = agentResponse.params;
 		var method = params.method;
@@ -402,7 +403,10 @@ export default class Agent extends ns.Core.Interface.HttpAgent {
 		var cacheKey = this.getCacheKey(method, url, data);
 
 		this._cache.delete(cachePromiseKey);
-		this._cache.set(cacheKey, agentResponse, params.options.ttl);
+
+		var responseClone = JSON.parse(JSON.stringify(agentResponse));
+		responseClone.cached = true;
+		this._cache.set(cacheKey, responseClone, params.options.ttl);
 
 		if (this._proxy.haveToSetCookiesManually() && agentResponse.headers) {
 			var receivedCookies = agentResponse.headers['set-cookie'];

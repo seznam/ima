@@ -65,7 +65,8 @@ describe('Core.Http.Agent', function() {
 							status: data.status,
 							params: data.params,
 							body: data.body,
-							headers: data.header
+							headers: data.header,
+							cached: false
 						};
 
 						expect(response).toEqual(agentResponse);
