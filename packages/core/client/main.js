@@ -67,8 +67,7 @@ if (typeof window !== 'undefined' && window !== null) {
 
 	} else {
 
-		window.addEventListener('DOMContentLoaded', () => {
-
+		var revivalIMAjsApp = () => {
 			//hack for browser Chrome, which has sometimes problem with rendering page
 			document.body.style.display = 'none';
 			document.body.offsetHeight; //eslint-disable-line
@@ -110,18 +109,22 @@ if (typeof window !== 'undefined' && window !== null) {
 			Object.assign(bootConfig, getInit());
 
 			var app = createIMAJsApp();
-
 			app.bootstrap.run(bootConfig);
 
 			var cache = app.oc.get('$Cache');
 			cache.deserialize(window.$IMA.Cache);
 
 			var router = app.oc.get('$Router');
-
 			router
 				.listen()
 				.route(router.getPath());
-		});
+		};
+
+		if (document.readyState === 'complete' || document.readyState === 'interactive') {
+			revivalIMAjsApp();
+		} else {
+			window.addEventListener('DOMContentLoaded', revivalIMAjsApp);
+		}
 	}
 }
 

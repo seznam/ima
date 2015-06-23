@@ -154,7 +154,7 @@ export default class Server extends ns.Core.Abstract.PageRender {
 	 *         the rendered page.
 	 */
 	_getRevivalSettings() {
-		var html =
+		return (
 			'<script>' +
 			' window.$IMA = window.$IMA || {};' +
 			' window.$IMA.Cache = ' + (this._cache.serialize()) + ';' +
@@ -165,9 +165,8 @@ export default class Server extends ns.Core.Abstract.PageRender {
 			' window.$IMA.$Domain = "' + (this._settings.$Domain) + '";' +
 			' window.$IMA.$Root = "' + (this._settings.$Root) + '";' +
 			' window.$IMA.$LanguagePartPath = "' + (this._settings.$LanguagePartPath) + '";' +
-			'</script>';
-
-		return html;
+			'</script>'
+		);
 	}
 
 	/**
