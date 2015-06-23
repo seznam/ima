@@ -184,13 +184,13 @@ class Session extends ns.Core.Interface.Storage {
 	 * @method _deleteOldestEntry
 	 */
 	_deleteOldestEntry() {
-		let oldestEntry = {
+		var oldestEntry = {
 			key: null,
 			created: Date.now() + 1
 		};
 
-		for (let key of this.keys()) {
-			let value = JSON.parse(this._storage.getItem(key));
+		for (var key of this.keys()) {
+			var value = JSON.parse(this._storage.getItem(key));
 			if (value.created < oldestEntry.created) {
 				oldestEntry = {
 					key,
