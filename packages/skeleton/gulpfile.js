@@ -636,6 +636,11 @@ gulp.task('app:feed', function() {
 		.pipe(gulp.dest('./app'));
 });
 
+gulp.task('app:todos', function() {
+	return gulp.src('./imajs/examples/todos/**/*')
+		.pipe(gulp.dest('./app'));
+});
+
 gulp.task('app:clean', function() {
 	return gulp.src(['./app/', './build/'], {read: false})
 		.pipe(clean());
