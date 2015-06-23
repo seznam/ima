@@ -112,20 +112,22 @@ var callRemoteServer = (req, res) => {
 			} else if (response) {
 				var settedCookies = response.header['set-cookie'];
 
-				response.header
+				Object
+					.keys(response.header)
 					.filter((key) => {
-						return ['set-cookie'].indexOf(key) === -1;
+						return ['set-cookie', 'content-encoding'].indexOf(key) === -1;
 					})
 					.map((key) => {
-						return (
-							key
-								.split('-')
-								.map(firstLetterToUpperCase)
-								.join('-')
-						);
+						return ({
+							headerName: key
+									.split('-')
+									.map(firstLetterToUpperCase)
+									.join('-'),
+							key: key
+						});
 					})
-					.forEach((key) => {
-						res.set(key, response.header[key]);
+					.forEach((item) => {
+						res.set(item.headerName, response.header[item.key]);
 					});
 
 				if (settedCookies) {
