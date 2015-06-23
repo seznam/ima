@@ -13,6 +13,7 @@ class View extends ns.Core.Abstract.Component {
 	render() {
 		var appCssFile = this.utils.$Settings.$Env !== 'dev' ? 'app.bundle.min.css' : 'app.css';
 		appCssFile += `?version=${this.utils.$Settings.$Page.$Render.version}`;
+		var scripts = this.getScripts();
 
 		return (
 			<html>
@@ -37,10 +38,19 @@ class View extends ns.Core.Abstract.Component {
 				</head>
 				<body>
 					<div id="page" dangerouslySetInnerHTML={{__html: this.props.page}} />
-					<div id="scripts" dangerouslySetInnerHTML={{__html: this.props.scripts}} />
+					<div id="revivalSettings" dangerouslySetInnerHTML={{__html: this.props.revivalSettings}}/>
+					<div id="scripts">
+						{scripts}
+					</div>
 				</body>
 			</html>
 		);
+	}
+
+	getScripts() {
+		return this.utils.$Settings.$Page.$Render.scripts.map((script) => {
+			return <script src={script} async />;
+		});
 	}
 }
 
