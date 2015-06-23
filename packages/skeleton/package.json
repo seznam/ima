@@ -12,13 +12,16 @@
     "Javascript"
   ],
   "author": "Miroslav Jancarik <miroslav.jancarik@firma.seznam.cz>",
-  "contributors": [{
-    "name": "Martin Urban",
-    "email": "martin.urban@firma.seznam.cz"
-  },{
-    "name": "Martin Jurča",
-    "email": "martin.jurca@firma.seznam.cz"
-  }],
+  "contributors": [
+    {
+      "name": "Martin Urban",
+      "email": "martin.urban@firma.seznam.cz"
+    },
+    {
+      "name": "Martin Jurča",
+      "email": "martin.jurca@firma.seznam.cz"
+    }
+  ],
   "repository": {
     "type": "git",
     "url": "https://github.com/seznam/IMA.js-skeleton.git"
@@ -43,10 +46,11 @@
     "fb-flo": "^0.4.0",
     "fibers": "^1.0.5",
     "gulp": "^3.9.0",
+    "gulp-autoprefixer": "^2.3.1",
     "gulp-cached": "^1.1.0",
     "gulp-change": "^1.0.0",
     "gulp-clean": "^0.3.1",
-    "gulp-command": "git://github.com/mjancarik/gulp-command.git#c8dd057e242b6c35cf1bca796e7561a8f22ccc11",
+    "gulp-command": "^0.1.2",
     "gulp-concat": "^2.5.2",
     "gulp-eslint": "^0.14.0",
     "gulp-if": "^1.2.5",
@@ -67,7 +71,6 @@
     "gulp-uglify": "^1.2.0",
     "gulp-util": "^3.0.5",
     "gulp-yuidoc": "^0.1.2",
-    "gulp-autoprefixer": "^2.3.1",
     "helmet": "^0.9.1",
     "highlight.js": "^8.6.0",
     "jasmine-core": "^2.3.4",
