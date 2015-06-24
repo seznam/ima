@@ -94,7 +94,9 @@ var files = {
 		watch: ['./server/*.js', './server/**/*.js', './app/environment.js', './imajs/server/*.js']
 	},
 	less: {
-		name: 'app.less',
+		cwd: '/',
+		base: './app/assets/less/',
+		name: './app/assets/less/app.less',
 		src: appDependency.less,
 		dest: './build/static/css/',
 		watch: ['./app/**/*.less', '!./app/assets/bower/']
@@ -344,7 +346,7 @@ gulp.task('server:reload', function(callback) {
 	setTimeout(function() {
 		server.notify(watchEvent);
 		callback();
-	}, 1750);
+	}, 2000);
 });
 
 gulp.task('devTest', function() {
@@ -553,7 +555,7 @@ gulp.task('less', function() {
 		gulp.src(files.less.src)
 			.pipe(plumber())
 			.pipe(sourcemaps.init())
-			.pipe(concat(files.less.name))
+			.pipe(concat({path: files.less.name, base: files.less.base, cwd: files.less.cwd}))
 			.pipe(less({compress: true, paths: [ path.join(__dirname) ]}))
 			.pipe(autoprefixer())
 			.pipe(sourcemaps.write())
