@@ -94,7 +94,7 @@ export default class Server extends ns.Core.Abstract.PageRender {
 					controller.setMetaParams(fetchedResources);
 					var props = this._generateViewProps(controller.getState());
 
-					var reactElementView = this._React.createElement(view, props);
+					var reactElementView = this._factory.wrapView(view, props);
 					var pageMarkup = this._React.renderToString(reactElementView);
 
 					var documentView = ns.get(this._settings.$Page.$Render.documentView);

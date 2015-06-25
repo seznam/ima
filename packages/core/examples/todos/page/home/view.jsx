@@ -4,18 +4,10 @@ import AbstractComponent from 'imajs/client/core/abstract/component.js';
 ns.namespace('App.Page.Home');
 
 class View extends ns.Core.Abstract.Component {
-	constructor(props) {
-		super(props);
-
-		this.state = props;
-	}
 
 	render() {
 		var Item = ns.App.Component.Item.View;
-		var items = this.state.items.map((item) => {
-			return <Item item={item} key={item.id} $Utils={this.utils}/>
-		});
-
+		
 		return (
 			<div className='l-home'>
 				<section className='todoapp'>
@@ -35,37 +27,39 @@ class View extends ns.Core.Abstract.Component {
 								type='checkbox'
 								ref='toggleAll'
 								onChange={(e) => this.onToggleAll(e)}
-								checked={this.state.toggleAllChecked}/>
+								checked={this.props.toggleAllChecked}/>
 						<label htmlFor='toggle-all'>{this.localize('toggle all label')}</label>
 						<ul className='todo-list'>
-							{items}
+							{this.props.items.map((item) => (
+								return <Item item={item} key={item.id} $Utils={this.utils}/>
+							))}
 						</ul>
 					</section>
 					<footer className='footer'>
 						<span className='todo-count'>
-							<strong>{this.state.items.filter(item => !item.completed).length}</strong>
-							{this.localize('count', { COUNT: this.state.items.filter(item => !item.completed).length })}
+							<strong>{this.props.items.filter(item => !item.completed).length}</strong>
+							{this.localize('count', { COUNT: this.props.items.filter(item => !item.completed).length })}
 						</span>
 						<ul className='filters'>
 							<li>
-								<a href='/' className={this.state.filter === null ? 'selected' : ''}>
+								<a href='/' className={this.props.filter === null ? 'selected' : ''}>
 									{this.localize('filters: all')}
 								</a>
 							</li>
 							<li>
-								<a href='/active' className={this.state.filter === false ? 'selected' : ''}>
+								<a href='/active' className={this.props.filter === false ? 'selected' : ''}>
 									{this.localize('filters: active')}
 								</a>
 							</li>
 							<li>
-								<a href='/completed' className={this.state.filter === true ? 'selected' : ''}>
+								<a href='/completed' className={this.props.filter === true ? 'selected' : ''}>
 									{this.localize('filters: completed')}
 								</a>
 							</li>
 						</ul>
 						<button onClick={(e) => this.onDeleteCompleted(e)} className={
 							'clear-completed' +
-							(this.state.items.every(item => !item.completed) ? ' hidden' : '')
+							(this.props.items.every(item => !item.completed) ? ' hidden' : '')
 						}>{this.localize('clear completed')}</button>
 					</footer>
 				</section>

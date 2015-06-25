@@ -17,17 +17,11 @@ ns.namespace('App.Page.Detail');
  */
 class View extends ns.Core.Abstract.Component {
 
-	constructor(props) {
-		super(props);
-
-		this.state = props;
-	}
-
 	render() {
 		var Header = ns.App.Component.Header.View;
 
-		var entity = this.state.item;
-		var category = this.state.category;
+		var entity = this.props.item;
+		var category = this.props.category;
 		var item = this.getItem(entity, category);
 		var moreItemsButton = this.getMoreItemButton();
 		

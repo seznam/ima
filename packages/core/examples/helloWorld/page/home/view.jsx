@@ -11,18 +11,12 @@ ns.namespace('App.Page.Home');
  */
 class View extends ns.Core.Abstract.Component {
 
-	constructor(props) {
-		super(props);
-
-		this.state = props;
-	}
-
 	render() {
 		return (
 			<div className='l-homepage'>
 				<div className='content'>
 					<img src="static/img/imajs-logo.png" alt="IMA.js logo"/>
-					<h1>{this.utils.$Dictionary.get('home.hello')}, {this.state.message}</h1>
+					<h1>{this.utils.$Dictionary.get('home.hello')}, {this.props.message}</h1>
 				</div>
 			</div>
 		);
