@@ -4,12 +4,12 @@ module.exports = (function() {
 		'./app/config/*.js',
 		'./app/base/*.js',
 		'./app/model/**/*.js',
+		'./app/component/**/*.js',
+		'./app/component/**/*.jsx',
 		'./app/page/*.js',
 		'./app/page/*.jsx',
 		'./app/page/**/*.js',
-		'./app/page/**/*.jsx',
-		'./app/component/**/*.js',
-		'./app/component/**/*.jsx'
+		'./app/page/**/*.jsx'
 	];
 
 	var less = [
