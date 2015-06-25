@@ -27,8 +27,6 @@ export default class Component extends ns.Vendor.React.Component {
 		 * @type {Object<string, *>}
 		 */
 		this._utils = props.$Utils;
-
-		delete props.$Utils;
 	}
 
 	/**
