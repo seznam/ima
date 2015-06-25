@@ -1,5 +1,4 @@
 describe('Core.Page.Manager', function() {
-
 	var pageFactory = {
 		createController: function(Controller) {return new Controller();},
 		decorateController: function(controller) {return controller;},
@@ -14,7 +13,8 @@ describe('Core.Page.Manager', function() {
 	var controller = ns.Core.Interface.Controller;
 	var view = function (){};
 	var options = {
-		onlyUpdate: true
+		onlyUpdate: true,
+		autoScroll: false
 	};
 
 	beforeEach(function() {
@@ -46,12 +46,31 @@ describe('Core.Page.Manager', function() {
 		expect(stateManager.onChange).not.toEqual(null);
 	});
 
+	it('scrollTo method should be call window.scrollTo async', function() {
+		spyOn(windowInterface, 'scrollTo')
+			.and
+			.stub();
+
+		jasmine.clock().install();
+		pageManager.scrollTo(0, 0);
+		jasmine.clock().tick(1);
+		jasmine.clock().uninstall();
+
+		expect(windowInterface.scrollTo).toHaveBeenCalledWith(0, 0);
+	});
+
 	describe('manage method', function() {
 
 		it('should be only update last managed controller and view', function() {
 			spyOn(pageManager, '_hasOnlyUpdate')
 				.and
 				.returnValue(true);
+			spyOn(pageManager, '_hasAutoScroll')
+				.and
+				.returnValue(true);
+			spyOn(pageManager, 'scrollTo')
+				.and
+				.stub();
 			spyOn(pageRender, 'update')
 				.and
 				.stub();
@@ -59,10 +78,14 @@ describe('Core.Page.Manager', function() {
 			pageManager.manage(controller, view, options);
 
 			expect(pageRender.update).toHaveBeenCalled();
+			expect(pageManager.scrollTo).toHaveBeenCalled();
 		});
 
 		it('should be mount new controller and view', function() {
 			spyOn(pageManager, '_hasOnlyUpdate')
+				.and
+				.returnValue(false);
+			spyOn(pageManager, '_hasAutoScroll')
 				.and
 				.returnValue(false);
 			spyOn(pageManager, '_destroyController')
@@ -123,7 +146,7 @@ describe('Core.Page.Manager', function() {
 
 		beforeEach(function() {
 			controllerInstance = pageFactory.createController(controller);
-			pageManager._lastManagePage.controllerInstance = controllerInstance;
+			pageManager._lastManagedPage.controllerInstance = controllerInstance;
 		});
 
 		it('should be call destroy on controller instance', function() {
@@ -170,32 +193,32 @@ describe('Core.Page.Manager', function() {
 		};
 
 		it('should call method (with event name) from active controller', function() {
-			pageManager._lastManagePage.controllerInstance = {
+			pageManager._lastManagedPage.controllerInstance = {
 				onEvent: function(data) {}
 			};
-			spyOn(pageManager._lastManagePage.controllerInstance, 'onEvent');
+			spyOn(pageManager._lastManagedPage.controllerInstance, 'onEvent');
 
 			pageManager._onCustomEventHandler(event);
 
-			expect(pageManager._lastManagePage.controllerInstance.onEvent.calls.count()).toEqual(1);
-			expect(pageManager._lastManagePage.controllerInstance.onEvent).toHaveBeenCalledWith(data);
+			expect(pageManager._lastManagedPage.controllerInstance.onEvent.calls.count()).toEqual(1);
+			expect(pageManager._lastManagedPage.controllerInstance.onEvent).toHaveBeenCalledWith(data);
 		});
 
 		it('should throw error because active controller hasn\'t event listener' , function() {
-			pageManager._lastManagePage.controllerInstance = {
+			pageManager._lastManagedPage.controllerInstance = {
 				onDifferentEvent: function(data) {}
 			};
-			spyOn(pageManager._lastManagePage.controllerInstance, 'onDifferentEvent');
+			spyOn(pageManager._lastManagedPage.controllerInstance, 'onDifferentEvent');
 			spyOn(console, 'warn');
 
 			pageManager._onCustomEventHandler(event);
 
-			expect(pageManager._lastManagePage.controllerInstance.onDifferentEvent.calls.count()).toEqual(0);
+			expect(pageManager._lastManagedPage.controllerInstance.onDifferentEvent.calls.count()).toEqual(0);
 			expect(console.warn).toHaveBeenCalled();
 		});
 
 		it('should do nothing if active controller is null' , function() {
-			pageManager._lastManagePage.controllerInstance = null;
+			pageManager._lastManagedPage.controllerInstance = null;
 			spyOn(console, 'warn');
 
 			pageManager._onCustomEventHandler(event);

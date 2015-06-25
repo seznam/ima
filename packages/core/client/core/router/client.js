@@ -187,7 +187,7 @@ export default class Client extends ns.Core.Abstract.Router {
 						var scroll = event.state.scroll;
 
 						if (scroll) {
-							this._asyncWindowScroll(scroll.x, scroll.y);
+							this._pageManager.scrollTo(scroll.x, scroll.y);
 						}
 					})
 			}
@@ -227,7 +227,6 @@ export default class Client extends ns.Core.Abstract.Router {
 
 			this._saveScrollHistory();
 			this._setAddressBar(url);
-			this._window.scrollTo(0, 0);
 			this.route(path);
 		} else {
 			this._window.redirect(url);
@@ -418,20 +417,6 @@ export default class Client extends ns.Core.Abstract.Router {
 		var state = {url, scroll};
 
 		this._window.replaceState(state, null, url);
-	}
-
-	/**
-	 * Asynchronous window scroll to defined vertical and horizontal values.
-	 *
-	 * @private
-	 * @method _asyncWindowScroll
-	 * @param {number} x is the pixel along the horizontal axis of the document
-	 * @param {number} y is the pixel along the vertical axis of the document
-	 */
-	_asyncWindowScroll(x, y) {
-		setTimeout(() => {
-			this._window.scrollTo(x, y);
-		}, 0);
 	}
 
 	/**

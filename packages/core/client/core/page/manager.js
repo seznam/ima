@@ -67,10 +67,10 @@ export default class Manager extends ns.Core.Interface.PageManager {
 
 		/**
 		 * @private
-		 * @property _lastManagePage
+		 * @property _lastManagedPage
 		 * @type {Object<string, *>}
 		 */
-		this._lastManagePage = {
+		this._lastManagedPage = {
 			controller: null,
 			controllerInstance: null,
 			decoratedController: null,
@@ -95,8 +95,12 @@ export default class Manager extends ns.Core.Interface.PageManager {
 	 * @return {Promise}
 	 */
 	manage(controller, view, options, params = {}) {
+		if (this._hasAutoScroll(options)) {
+			this.scrollTo();
+		}
+
 		if (this._hasOnlyUpdate(controller, view, options)) {
-			return this._pageRender.update(this._lastManagePage.decoratedController, params);
+			return this._pageRender.update(this._lastManagedPage.decoratedController, params);
 		}
 
 		var controllerInstance = this._pageFactory.createController(controller);
@@ -105,7 +109,7 @@ export default class Manager extends ns.Core.Interface.PageManager {
 
 		this._destroyController();
 		this._initController(controllerInstance, params);
-		this._lastManagePage = {
+		this._lastManagedPage = {
 			controller,
 			controllerInstance,
 			decoratedController,
@@ -119,6 +123,23 @@ export default class Manager extends ns.Core.Interface.PageManager {
 	}
 
 	/**
+	 * Scroll page to defined vertical and horizontal values.
+	 *
+	 * Scrolling is async.
+	 *
+	 * @inheritDoc
+	 * @override
+	 * @method scrollTo
+	 * @param {number} [x=0] x is the pixel along the horizontal axis of the document
+	 * @param {number} [y=0] y is the pixel along the vertical axis of the document
+	 */
+	scrollTo(x = 0, y = 0) {
+		setTimeout(() => {
+			this._window.scrollTo(x, y);
+		}, 0);
+	}
+
+	/**
 	 * Initialization manager.
 	 *
 	 * @inheritDoc
@@ -126,7 +147,7 @@ export default class Manager extends ns.Core.Interface.PageManager {
 	 * @method init
 	 */
 	init() {
-		this._lastManagePage = {
+		this._lastManagedPage = {
 			controller: null,
 			controllerInstance: null,
 			decoratedController: null,
@@ -162,13 +183,13 @@ export default class Manager extends ns.Core.Interface.PageManager {
 	 * @method _destroyController
 	 */
 	_destroyController() {
-		var controllerInstance = this._lastManagePage.controllerInstance;
+		var controllerInstance = this._lastManagedPage.controllerInstance;
 
 		if (controllerInstance) {
 			controllerInstance.destroy();
 			controllerInstance.setStateManager(null);
 			this._pageRender.unmount();
-			this._lastManagePage.controllerInstance = null;
+			this._lastManagedPage.controllerInstance = null;
 		}
 	}
 
@@ -179,7 +200,7 @@ export default class Manager extends ns.Core.Interface.PageManager {
 	 * @method _onChangeStateHandler
 	 */
 	_onChangeStateHandler(state) {
-		if (this._lastManagePage.controllerInstance) {
+		if (this._lastManagedPage.controllerInstance) {
 			this._pageRender.setState(state);
 		}
 	}
@@ -198,7 +219,7 @@ export default class Manager extends ns.Core.Interface.PageManager {
 		var eventName = event.detail.eventName;
 		var onEventName = 'on' + eventName.charAt(0).toUpperCase() + eventName.slice(1);
 		var eventData = event.detail.data;
-		var controllerInstance = this._lastManagePage.controllerInstance;
+		var controllerInstance = this._lastManagedPage.controllerInstance;
 
 		if (controllerInstance) {
 
@@ -226,8 +247,20 @@ export default class Manager extends ns.Core.Interface.PageManager {
 	 */
 	_hasOnlyUpdate(controller, view, options) {
 		return options.onlyUpdate &&
-				this._lastManagePage.controller === controller &&
-				this._lastManagePage.view === view;
+				this._lastManagedPage.controller === controller &&
+				this._lastManagedPage.view === view;
+	}
+
+	/**
+	 * Return true if auto-scrolling is turn on.
+	 *
+	 * @private
+	 * @method _hasAutoScroll
+	 * @param {{onlyUpdate: boolean, autoScroll: boolean}} options
+	 * @return {boolean}
+	 */
+	_hasAutoScroll(options) {
+		return options.autoScroll;
 	}
 
 }

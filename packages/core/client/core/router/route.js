@@ -59,9 +59,9 @@ export default class Route {
 	 *        identifying the controller associated with this route.
 	 * @param {string} view The full name or Object Container alias identifying
 	 *        the view class associated with this route.
-	 * @param {{onlyUpdate: boolean}} [options={onlyUpdate: false}] The route additional options.
+	 * @param {{onlyUpdate: boolean, autoScroll: boolean}} [options={onlyUpdate: false, autoScroll: true}] The route additional options.
 	 */
-	constructor(name, pathExpression, controller, view, options = {onlyUpdate: false}) {
+	constructor(name, pathExpression, controller, view, options = {onlyUpdate: false, autoScroll: true}) {
 		/**
 		 * The unique name of this route, identifying it among the rest of the
 		 * routes in the application.

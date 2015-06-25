@@ -54,10 +54,6 @@ describe('Core.Router.Client', function() {
 				.and
 				.stub();
 
-			spyOn(win, 'scrollTo')
-				.and
-				.stub();
-
 			spyOn(router, 'route')
 				.and
 				.stub();
@@ -66,7 +62,6 @@ describe('Core.Router.Client', function() {
 
 			expect(router._setAddressBar).toHaveBeenCalledWith(url);
 			expect(router._saveScrollHistory).toHaveBeenCalled();
-			expect(win.scrollTo).toHaveBeenCalledWith(0, 0);
 			expect(router.route).toHaveBeenCalledWith(path);
 		});
 
@@ -149,20 +144,6 @@ describe('Core.Router.Client', function() {
 				expect(router._isHashLink(value.targetUrl)).toEqual(value.result);
 			});
 		});
-	});
-
-	it('_asyncWindowScroll method should be call window.scrollTo', function() {
-		spyOn(win, 'scrollTo')
-			.and
-			.stub();
-
-		jasmine.clock().install();
-		router._asyncWindowScroll(0, 0);
-		jasmine.clock().tick(1);
-		jasmine.clock().uninstall();
-
-
-		expect(win.scrollTo).toHaveBeenCalledWith(0, 0);
 	});
 
 	it('_saveScrollHistory method should be call window.replaceState', function() {
