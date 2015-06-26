@@ -169,6 +169,14 @@ export default class Controller {
 	setRouteParams(params = {}) {}
 
 	/**
+	 * Set route parameters from controller.
+	 *
+	 * @method getRouteParams
+	 * @return {Object<string, string>} The current route parameters.
+	 */
+	getRouteParams() {}
+
+	/**
 	 * Set state manager.
 	 *
 	 * @method setStateManager

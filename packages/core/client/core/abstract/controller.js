@@ -258,6 +258,18 @@ export default class Controller extends ns.Core.Interface.Controller {
 	}
 
 	/**
+	 * Set route parameters from controller.
+	 *
+	 * @inheritDoc
+	 * @override
+	 * @method getRouteParams
+	 * @return {Object<string, string>} The current route parameters.
+	 */
+	getRouteParams() {
+		return this.params;
+	}
+
+	/**
 	 * Set state manager.
 	 *
 	 * @method setStateManager
