@@ -212,7 +212,7 @@ export default class Client extends ns.Core.Abstract.PageRender {
 	 */
 	_renderToDOM(controller, view) {
 		var props = this._generateViewProps(controller.getState());
-		var reactElementView = this._React.createElement(view, props);
+		var reactElementView = this._factory.wrapView(view, props);
 
 		this._reactiveView = this._React.render(
 			reactElementView,

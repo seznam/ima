@@ -17,12 +17,6 @@ ns.namespace('App.Page.Home');
  */
 class View extends ns.Core.Abstract.Component {
 
-	constructor(props) {
-		super(props);
-
-		this.state = props;
-	}
-
 	render() {
 
 		var TextInput = ns.App.Component.TextInput.View;
@@ -34,17 +28,17 @@ class View extends ns.Core.Abstract.Component {
 			<div className='l-homepage'>
 				<Header $Utils={this.utils}/>
 				<TextInput 
-						categories={this.state.categories} 
-						currentCategory={this.state.currentCategory}
+						categories={this.props.categories} 
+						currentCategory={this.props.currentCategory}
 						$Utils={this.utils}/>
 				<Filter
-						categories={this.state.categories}
-						currentCategory={this.state.currentCategory}
+						categories={this.props.categories}
+						currentCategory={this.props.currentCategory}
 						$Utils={this.utils}/>
 				<Feed
-						entity={this.state.feed}
-						categories={this.state.categories}
-						sharedItem={this.state.sharedItem}
+						entity={this.props.feed}
+						categories={this.props.categories}
+						sharedItem={this.props.sharedItem}
 						$Utils={this.utils}/>
 			</div>
 		);
