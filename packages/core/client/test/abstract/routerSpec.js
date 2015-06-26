@@ -11,7 +11,8 @@ describe('Core.Abstract.Router', function() {
 		$Domain: 'www.domain.com'
 	};
 	var options = {
-		onlyUpdate: true
+		onlyUpdate: false,
+		autoScroll: true
 	};
 	var controller = 'BaseController';
 	var view = 'BaseView';
