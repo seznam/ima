@@ -98,9 +98,14 @@ export default class Manager extends ns.Core.Interface.PageManager {
 		this._preManage(options);
 
 		if (this._hasOnlyUpdate(controller, view, options)) {
+			var lastDecoratedController = this._lastManagedPage.decoratedController;
+			var lastRouteParams = lastDecoratedController.getRouteParams();
+
+			lastDecoratedController.setRouteParams(params);
+
 			return (
 				this._pageRender
-					.update(this._lastManagedPage.decoratedController, params)
+					.update(lastDecoratedController, lastRouteParams)
 					.then(() => this._postManage(options))
 			);
 		}
