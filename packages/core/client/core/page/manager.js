@@ -95,12 +95,14 @@ export default class Manager extends ns.Core.Interface.PageManager {
 	 * @return {Promise}
 	 */
 	manage(controller, view, options, params = {}) {
-		if (this._hasAutoScroll(options)) {
-			this.scrollTo();
-		}
+		this._preManage(options);
 
 		if (this._hasOnlyUpdate(controller, view, options)) {
-			return this._pageRender.update(this._lastManagedPage.decoratedController, params);
+			return (
+				this._pageRender
+					.update(this._lastManagedPage.decoratedController, params)
+					.then(() => this._postManage(options))
+			);
 		}
 
 		var controllerInstance = this._pageFactory.createController(controller);
@@ -119,7 +121,11 @@ export default class Manager extends ns.Core.Interface.PageManager {
 			params
 		};
 
-		return this._pageRender.mount(decoratedController, viewInstance);
+		return (
+			this._pageRender
+				.mount(decoratedController, viewInstance)
+				.then(() => this._postManage(options))
+		);
 	}
 
 	/**
@@ -252,16 +258,28 @@ export default class Manager extends ns.Core.Interface.PageManager {
 	}
 
 	/**
-	 * Return true if auto-scrolling is turn on.
+	 * Make defined instruction as scroll for current page options before than
+	 * change page.
 	 *
 	 * @private
-	 * @method _hasAutoScroll
+	 * @method _preManage
 	 * @param {{onlyUpdate: boolean, autoScroll: boolean}} options
-	 * @return {boolean}
 	 */
-	_hasAutoScroll(options) {
-		return options.autoScroll;
+	_preManage(options) {
+		if (options.autoScroll) {
+			this.scrollTo();
+		}
 	}
+
+	/**
+	 * Make defined instruction for current page options after that
+	 * changed page.
+	 *
+	 * @private
+	 * @method _postManage
+	 * @param {{onlyUpdate: boolean, autoScroll: boolean}} options
+	 */
+	_postManage(options) {}
 
 }
 

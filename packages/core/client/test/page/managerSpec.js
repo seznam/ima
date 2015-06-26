@@ -61,33 +61,44 @@ describe('Core.Page.Manager', function() {
 
 	describe('manage method', function() {
 
-		it('should be only update last managed controller and view', function() {
+		it('should be only update last managed controller and view', function(done) {
 			spyOn(pageManager, '_hasOnlyUpdate')
 				.and
 				.returnValue(true);
-			spyOn(pageManager, '_hasAutoScroll')
+			spyOn(pageManager, '_preManage')
 				.and
-				.returnValue(true);
-			spyOn(pageManager, 'scrollTo')
+				.stub();
+			spyOn(pageManager, '_postManage')
 				.and
 				.stub();
 			spyOn(pageRender, 'update')
 				.and
-				.stub();
+				.returnValue(Promise.resolve());
 
-			pageManager.manage(controller, view, options);
-
-			expect(pageRender.update).toHaveBeenCalled();
-			expect(pageManager.scrollTo).toHaveBeenCalled();
+			pageManager
+				.manage(controller, view, options)
+				.then(function() {
+					expect(pageManager._preManage).toHaveBeenCalled();
+					expect(pageRender.update).toHaveBeenCalled();
+					expect(pageManager._postManage).toHaveBeenCalled();
+					done();
+				})
+				.catch(function(e) {
+					console.error('Core.Page.Manager:manage', e.message);
+					done();
+				});
 		});
 
-		it('should be mount new controller and view', function() {
+		it('should be mount new controller and view', function(done) {
 			spyOn(pageManager, '_hasOnlyUpdate')
 				.and
 				.returnValue(false);
-			spyOn(pageManager, '_hasAutoScroll')
+			spyOn(pageManager, '_preManage')
 				.and
-				.returnValue(false);
+				.stub();
+			spyOn(pageManager, '_postManage')
+				.and
+				.stub();
 			spyOn(pageManager, '_destroyController')
 				.and
 				.stub();
@@ -96,13 +107,22 @@ describe('Core.Page.Manager', function() {
 				.stub();
 			spyOn(pageRender, 'mount')
 				.and
-				.stub();
+				.returnValue(Promise.resolve());
 
-			pageManager.manage(controller, view, options);
-
-			expect(pageManager._destroyController).toHaveBeenCalled();
-			expect(pageManager._initController).toHaveBeenCalled();
-			expect(pageRender.mount).toHaveBeenCalled();
+			pageManager
+				.manage(controller, view, options)
+				.then(function() {
+					expect(pageManager._preManage).toHaveBeenCalled();
+					expect(pageManager._destroyController).toHaveBeenCalled();
+					expect(pageManager._initController).toHaveBeenCalled();
+					expect(pageRender.mount).toHaveBeenCalled();
+					expect(pageManager._postManage).toHaveBeenCalled();
+					done();
+				})
+				.catch(function(e) {
+					console.error('Core.Page.Manager:manage', e.message);
+					done();
+				});
 		});
 	});
 
