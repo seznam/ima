@@ -62,6 +62,9 @@ describe('Core.Page.Manager', function() {
 	describe('manage method', function() {
 
 		it('should be only update last managed controller and view', function(done) {
+			pageManager._lastManagedPage.decoratedController =
+					pageFactory.decorateController(pageFactory.createController(controller));
+
 			spyOn(pageManager, '_hasOnlyUpdate')
 				.and
 				.returnValue(true);
