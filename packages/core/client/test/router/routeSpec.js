@@ -6,7 +6,9 @@ describe('Core.Router.Route', function () {
 	var controller = function() {};
 	var view = function() {};
 	var options = {
-		onlyUpdate: true
+		onlyUpdate: false,
+		autoScroll: true
+
 	};
 
 	beforeEach(function () {
