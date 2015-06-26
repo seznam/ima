@@ -124,7 +124,7 @@ export default class Client extends ns.Core.Abstract.PageRender {
 	 * @override
 	 * @method update
 	 * @param {Core.Decorator.Controller} controller
-	 * @param {Object<string, string>=} [params={}] New route params.
+	 * @param {Object<string, string>=} [params={}] Last route params.
 	 * @return {Promise}
 	 */
 	update(controller, params = {}) {
