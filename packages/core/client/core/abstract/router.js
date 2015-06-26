@@ -29,6 +29,8 @@ export default class Router extends ns.Core.Interface.Router {
 	 *      router.link('article', {articleId: 1});
 	 * @example
 	 *      router.redirect('http://www.example.com/web');
+	 * @example
+	 *      router.add('home', ns.App.Page.Home.Controller, ns.App.Page.Home.View, {onlyUpdate: false, autoScroll: true});
 	 */
 	constructor(pageManager, factory, ROUTE_NAMES) {
 		super();
