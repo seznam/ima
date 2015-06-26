@@ -13,8 +13,8 @@ describe('Core.Page.Manager', function() {
 	var controller = ns.Core.Interface.Controller;
 	var view = function (){};
 	var options = {
-		onlyUpdate: true,
-		autoScroll: false
+		onlyUpdate: false,
+		autoScroll: true
 	};
 
 	beforeEach(function() {
@@ -249,5 +249,19 @@ describe('Core.Page.Manager', function() {
 			expect(console.warn).not.toHaveBeenCalled();
 		});
 
+	});
+
+	describe('_preManage method', function() {
+
+		it('should call scroll to', function() {
+			var newOptions = Object.assign({}, options, {autoScroll: true});
+			spyOn(pageManager, 'scrollTo')
+				.and
+				.stub();
+
+			pageManager._preManage(options);
+
+			expect(pageManager.scrollTo).toHaveBeenCalled();
+		});
 	});
 });
