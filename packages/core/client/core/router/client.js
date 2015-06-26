@@ -189,7 +189,7 @@ export default class Client extends ns.Core.Abstract.Router {
 						if (scroll) {
 							this._pageManager.scrollTo(scroll.x, scroll.y);
 						}
-					})
+					});
 			}
 		});
 

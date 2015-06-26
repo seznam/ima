@@ -102,7 +102,7 @@ export default class IMAError extends Error {
 	}
 
 	/**
-	  * The call stack captured at the moment of creation of this error. The
+	 * The call stack captured at the moment of creation of this error. The
 	 * formatting of the stack is browser-dependant.
 	 *
 	 * @override

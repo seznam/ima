@@ -72,11 +72,11 @@ export default class StateManager extends ns.Core.Interface.PageStateManager {
 	setState(state) {
 		if (this._states.length > this.MAX_HISTORY_LIMIT) {
 			this._states.shift();
-			this._cursor--;
+			this._cursor -= 1;
 		}
 
 		this._states.push(state);
-		this._cursor++;
+		this._cursor += 1;
 
 		if (this.onChange && typeof this.onChange === 'function') {
 			this.onChange(state);
