@@ -43,6 +43,7 @@ export default class Factory {
 	 * passed from controller through the {@code props} property instead of the
 	 * {@code state} property.
 	 *
+	 * @method wrapView
 	 * @param {function(new:Vendor.React.Component, Object<string, *>)} view The
 	 *        page view React component to wrap.
 	 * @param {Object<string, *>} state The initial state to pass to the view.
