@@ -17,7 +17,7 @@ To install the IMA.js application development stack, start by cloning this git
 repository:
 
 ```
-git clone git@github.com:seznam/IMA.js-skeleton.git
+git clone https://github.com/seznam/IMA.js-skeleton.git
 ```
 
 Switch to the cloned `IMA.js-skeleton` directory and run the following commands
@@ -41,8 +41,7 @@ and open `http://localhost:3001/` in your browser!
 
 ## Tutorial
 
-The in-deep tutorial is being prepared and will be available shorty. For now,
-keep tuned!
+We prepared complex tutorial for you [Your first IMA.js application](https://github.com/seznam/IMA.js-skeleton/wiki/Tutorial,-part-1).
 
 ## IMA.js overview
 
