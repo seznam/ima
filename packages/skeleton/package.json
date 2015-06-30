@@ -40,7 +40,7 @@
     "custom-event-polyfill": "^0.2.1",
     "es6-shim": "^0.32.2",
     "eslint": "^0.24.0",
-    "eslint-plugin-react": "^2.6.2",
+    "eslint-plugin-react": "^2.6.3",
     "event-stream": "^3.3.1",
     "express": "^4.13.0",
     "fb-flo": "^0.4.0",
