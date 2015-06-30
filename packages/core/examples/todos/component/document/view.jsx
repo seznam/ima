@@ -37,8 +37,8 @@ class View extends ns.Core.Abstract.Component {
 	}
 
 	getScripts() {
-		return this.utils.$Settings.$Page.$Render.scripts.map((script) => {
-			return <script src={script} async />;
+		return this.utils.$Settings.$Page.$Render.scripts.map((script, index) => {
+			return <script src={script} key={"script" + index}/>;
 		});
 	}
 }
