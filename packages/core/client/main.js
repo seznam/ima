@@ -120,6 +120,7 @@ if (typeof window !== 'undefined' && window !== null) {
 				.route(router.getPath());
 		};
 
+		//revival IMA.js app
 		if (document.readyState === 'complete' || document.readyState === 'interactive') {
 			revivalIMAjsApp();
 		} else {
