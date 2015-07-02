@@ -14,11 +14,9 @@ var getRootRegExp = (domainExpression, rootExpression, languageParam) => {
 				rootExpression.replace('/','\/');
 
 	if (languageParam) {
-		if (languageParam) {
-			var build = require('../../app/build.js');
-			var languagesExpr = build.languages.join('|');
-			rootReg += '(\/('+languagesExpr+'))?';
-		}
+		var build = require('../../app/build.js');
+		var languagesExpr = build.languages.join('|');
+		rootReg += '(\/('+languagesExpr+'))?';
 	}
 	rootReg += '.*$';
 
@@ -35,13 +33,15 @@ module.exports = function(req, res, next) {
 	var currentDomain = parsedCurrentUrl[1];
 	var currentRoot = parsedCurrentUrl[2];
 	var currentProtocol = req.protocol + ':';
+
 	if (req.get('X-Forwarded-Proto')) {
 		currentProtocol = req.get('X-Forwarded-Proto') + ':';
 	}
 
 	for (var expression of Object.keys(environment.$Language)) {
 		var parsedDomainExpression = expression.match(parseUrlReg);
-		var domainExpression = parsedDomainExpression[1] || '';
+
+		var domainExpression = parsedDomainExpression[1] === '*:*' ? currentDomain : parsedDomainExpression[1] || '';
 		var rootExpression = parsedDomainExpression[2] || '';
 		var languageInPath = parsedDomainExpression[3];
 
@@ -59,13 +59,13 @@ module.exports = function(req, res, next) {
 					currentLanguage = matchedLanguage[2];
 
 					if (!currentLanguage) {
-		              	currentLanguagePartPath = '/'+environment.$Language[expression];
-		              	currentLanguage = environment.$Language[expression];
+						currentLanguagePartPath = '/'+environment.$Language[expression];
+						currentLanguage = environment.$Language[expression];
 
-		              	// REDIRECT
-		              	res.redirect(currentProtocol + '//'+currentDomain+currentRoot+currentLanguagePartPath);
-		              	return;
-		              }
+						// REDIRECT
+						res.redirect(currentProtocol + '//'+currentDomain+currentRoot+currentLanguagePartPath);
+						return;
+					}
 				} else {
 					currentLanguage = environment.$Language[expression];
 				}
@@ -84,7 +84,7 @@ module.exports = function(req, res, next) {
 	//res.send(`${currentUrl} : ${currentDomain} : ${currentRoot} : ${currentLanguage} : ${currentLanguagePartPath} : ${req.get('origin')} : ${req.hostname}`);
 
 	if (!currentLanguage && environment.$Debug === true) {
-		throw new Error(`You have undefined domain. Set current domain "${currentDomain}" to attribute $Language in environment.js.`);
+		throw new Error(`You have undefined domain. Set current domain "${currentDomain}" or "*:*" to attribute $Language in environment.js.`);
 	}
 
 	next();

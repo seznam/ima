@@ -1,19 +1,20 @@
 module.exports = (() => {
 
+	//Production environment is used as default values for configuration items in other environments.
 	return {
 		prod: {
-			$Debug: false,
-			$Language:{
+			$Debug: false,  // Debug mode.
+			$Language:{     // Set domain, root and language. You have opportunity use '//*:*' as default for all request.
 				'//example.com': 'en'
 			},
 			$Server: {
-				port: 3001,
-				apiUrl: '/api',
-				staticFolder: '/static',
-				concurency: 100,
-				clusters: null
+				port: 3001, // Port where server listen.
+				apiUrl: '/api', // Url which would be proxy pass to $Proxy.server.
+				staticFolder: '/static',    // Define path for static folder.
+				concurency: 100,    // Node prepared defined number of app instances. It is performance improvements.
+				clusters: null   // Define number of cluster you want to create. Null value is number of CPUs.
 			},
-			$Proxy: {
+			$Proxy: {   // Proxy pass all request from $Server.apiUrl to defined url. Only for dev environment.
 				server: 'http://www.example.com/api'
 			}
 		},
@@ -28,8 +29,7 @@ module.exports = (() => {
 		dev: {
 			$Debug: true,
 			$Language:{
-				'//localhost:3001': 'en',
-				'//127.0.0.1:3001': 'en'
+				'//*:*': 'en'
 			},
 			$Server: {
 				concurency: 1
