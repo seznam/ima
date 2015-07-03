@@ -106,7 +106,11 @@ export default class Manager extends ns.Core.Interface.PageManager {
 			return (
 				this._pageRender
 					.update(lastDecoratedController, lastRouteParams)
-					.then(() => this._postManage(options))
+					.then((response) => {
+						this._postManage(options);
+
+						return response;
+					})
 			);
 		}
 
@@ -129,7 +133,11 @@ export default class Manager extends ns.Core.Interface.PageManager {
 		return (
 			this._pageRender
 				.mount(decoratedController, viewInstance)
-				.then(() => this._postManage(options))
+				.then((response) => {
+					this._postManage(options);
+
+					return response;
+				})
 		);
 	}
 
