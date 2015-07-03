@@ -70,15 +70,7 @@ export default class Manager extends ns.Core.Interface.PageManager {
 		 * @property _lastManagedPage
 		 * @type {Object<string, *>}
 		 */
-		this._lastManagedPage = {
-			controller: null,
-			controllerInstance: null,
-			decoratedController: null,
-			view: null,
-			viewInstance: null,
-			options: null,
-			params: null
-		};
+		this._lastManagedPage = {};
 
 	}
 
@@ -107,15 +99,8 @@ export default class Manager extends ns.Core.Interface.PageManager {
 
 		this._destroyController(this._lastManagedPage.controllerInstance);
 		this._initController(controllerInstance, params);
-		this._lastManagedPage = {
-			controller,
-			controllerInstance,
-			decoratedController,
-			view,
-			viewInstance,
-			options,
-			params
-		};
+		this._storeLastManagedPage(controller, view, options, params, controllerInstance,
+				decoratedController, viewInstance);
 
 		return (
 			this._pageRender
@@ -153,6 +138,43 @@ export default class Manager extends ns.Core.Interface.PageManager {
 	 * @method init
 	 */
 	init() {
+		this._clearLastManagedPage();
+		this._stateManager.onChange = (newState) => this._onChangeStateHandler(newState);
+		this._eventBus.listenAll(this._window.getWindow(), (e) => this._onCustomEventHandler(e));
+	}
+	
+	/**
+	 * Store value from last managed page for next managing process.
+	 *
+	 * @private
+	 * @method _storeLastManagedPage
+	 * @param {string|function} controller
+	 * @param {string|function} view
+	 * @param {{onlyUpdate: boolean}} options
+	 * @param {Object<string, string>} params The route parameters.
+	 * @param {Core.Abstract.Controller} controllerInstance
+	 * @param {Core.Decorator.Controller} decoratedController
+	 * @param {Vendor.React.Component} viewInstance
+	 */
+	_storeLastManagedPage(controller, view, options, params, controllerInstance, decoratedController, viewInstance) {
+		this._lastManagedPage = {
+			controller,
+			controllerInstance,
+			decoratedController,
+			view,
+			viewInstance,
+			options,
+			params
+		};
+	}
+	
+	/**
+	 * Clear value from last managed page.
+	 *
+	 * @private
+	 * @method _clearLastManagedPage
+	 */
+	_clearLastManagedPage() {
 		this._lastManagedPage = {
 			controller: null,
 			controllerInstance: null,
@@ -162,9 +184,6 @@ export default class Manager extends ns.Core.Interface.PageManager {
 			options: null,
 			params: null
 		};
-
-		this._stateManager.onChange = (newState) => this._onChangeStateHandler(newState);
-		this._eventBus.listenAll(this._window.getWindow(), (e) => this._onCustomEventHandler(e));
 	}
 
 	/**
@@ -185,6 +204,7 @@ export default class Manager extends ns.Core.Interface.PageManager {
 	/**
 	 * Update current page controller.
 	 *
+	 * @private
 	 * @method _updateController
 	 * @param {Core.Decorator.Controller} controller The controller to update.
 	 * @param {Object<string, *>=} params Parameters to use to update
@@ -194,13 +214,14 @@ export default class Manager extends ns.Core.Interface.PageManager {
 	_updateController(controller, params) {
 		var lastRouteParams = controller.getRouteParams();
 
+		this._lastManagedPage.params = params;
 		controller.setRouteParams(params);
 
 		return (
 			this._pageRender
 				.update(controller, lastRouteParams)
 				.then((response) => {
-					this._postManage(options);
+					this._postManage(this._lastManagedPage.options);
 
 					return response;
 				})
@@ -212,15 +233,14 @@ export default class Manager extends ns.Core.Interface.PageManager {
 	 *
 	 * @private
 	 * @method _destroyController
+	 * @param {Core.Abstract.Controller} controller The controller to deinitialize.
 	 */
-	_destroyController() {
-		var controllerInstance = this._lastManagedPage.controllerInstance;
-
-		if (controllerInstance) {
-			controllerInstance.destroy();
-			controllerInstance.setStateManager(null);
+	_destroyController(controller) {
+		if (controller) {
+			controller.destroy();
+			controller.setStateManager(null);
 			this._pageRender.unmount();
-			this._lastManagedPage.controllerInstance = null;
+			this._clearLastManagedPage();
 		}
 	}
 
