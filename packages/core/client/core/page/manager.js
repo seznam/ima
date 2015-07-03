@@ -98,27 +98,14 @@ export default class Manager extends ns.Core.Interface.PageManager {
 		this._preManage(options);
 
 		if (this._hasOnlyUpdate(controller, view, options)) {
-			var lastDecoratedController = this._lastManagedPage.decoratedController;
-			var lastRouteParams = lastDecoratedController.getRouteParams();
-
-			lastDecoratedController.setRouteParams(params);
-
-			return (
-				this._pageRender
-					.update(lastDecoratedController, lastRouteParams)
-					.then((response) => {
-						this._postManage(options);
-
-						return response;
-					})
-			);
+			return this._updateController(this._lastManagedPage.decoratedController, params);
 		}
 
 		var controllerInstance = this._pageFactory.createController(controller);
 		var decoratedController = this._pageFactory.decorateController(controllerInstance);
 		var viewInstance = this._pageFactory.createView(view);
 
-		this._destroyController();
+		this._destroyController(this._lastManagedPage.controllerInstance);
 		this._initController(controllerInstance, params);
 		this._lastManagedPage = {
 			controller,
@@ -193,6 +180,31 @@ export default class Manager extends ns.Core.Interface.PageManager {
 		controller.setRouteParams(params);
 		controller.setStateManager(this._stateManager);
 		controller.init();
+	}
+
+	/**
+	 * Update current page controller.
+	 *
+	 * @method _updateController
+	 * @param {Core.Decorator.Controller} controller The controller to update.
+	 * @param {Object<string, *>=} params Parameters to use to update
+	 *        the controller.
+	 * @return {Promise}
+	 */
+	_updateController(controller, params) {
+		var lastRouteParams = controller.getRouteParams();
+
+		controller.setRouteParams(params);
+
+		return (
+			this._pageRender
+				.update(controller, lastRouteParams)
+				.then((response) => {
+					this._postManage(options);
+
+					return response;
+				})
+		);
 	}
 
 	/**

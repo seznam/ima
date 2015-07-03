@@ -102,10 +102,10 @@ export default class Controller extends ns.Core.Interface.Controller {
 	 *
 	 * @inheritDoc
 	 * @override
-	 * @method deinit
+	 * @method destroy
 	 */
-	deinit() {
-		this._controller.deinit();
+	destroy() {
+		this._controller.destroy();
 	}
 
 	/**
