@@ -105,10 +105,13 @@ export default class Server extends ns.Core.Abstract.PageRender {
 						metaManager: controller.getMetaManager(),
 						$Utils: this._factory.getUtils()
 					}));
+					var html = '<!doctype html>\n' + appMarkup;
 
 					this._response
 						.status(controller.getHttpStatus())
-						.send('<!doctype html>\n' + appMarkup);
+						.send(html);
+
+					return {html, status: controller.getHttpStatus()};
 				})
 		);
 	}

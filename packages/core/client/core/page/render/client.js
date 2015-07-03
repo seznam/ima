@@ -109,6 +109,8 @@ export default class Client extends ns.Core.Abstract.PageRender {
 					this._updateMetaAttributes(controller.getMetaManager());
 
 					controller.activate();
+
+					return {html: null, status: controller.getHttpStatus()};
 				})
 				.catch((error) => this._handleError(error))
 		);
