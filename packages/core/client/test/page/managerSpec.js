@@ -169,7 +169,6 @@ describe('Core.Page.Manager', function() {
 
 		beforeEach(function() {
 			controllerInstance = pageFactory.createController(controller);
-			pageManager._lastManagedPage.controllerInstance = controllerInstance;
 		});
 
 		it('should be call destroy on controller instance', function() {
@@ -177,7 +176,7 @@ describe('Core.Page.Manager', function() {
 				.and
 				.stub();
 
-			pageManager._destroyController();
+			pageManager._destroyController(controllerInstance);
 
 			expect(controllerInstance.destroy).toHaveBeenCalled();
 		});
@@ -187,7 +186,7 @@ describe('Core.Page.Manager', function() {
 				.and
 				.stub();
 
-			pageManager._destroyController();
+			pageManager._destroyController(controllerInstance);
 
 			expect(controllerInstance.setStateManager).toHaveBeenCalledWith(null);
 		});
@@ -197,7 +196,7 @@ describe('Core.Page.Manager', function() {
 				.and
 				.stub();
 
-			pageManager._destroyController();
+			pageManager._destroyController(controllerInstance);
 
 			expect(pageRender.unmount).toHaveBeenCalled();
 		});
