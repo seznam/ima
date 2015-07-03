@@ -215,7 +215,6 @@ module.exports = (() => {
 					.route(router.getPath())
 					.then((response) => {
 						instanceRecycler.clearInstance(app);
-						console.log('RESPONSE', response);
 
 						return response;
 					})
