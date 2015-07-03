@@ -205,7 +205,7 @@ module.exports = (() => {
 		return promise;
 	};
 
-	var response = (req, res) => {
+	var requestHandler = (req, res) => {
 		var promise = Promise.reject(new Error());
 		var app = _initApp(req, res);
 		var router = app.oc.get('$Router');
@@ -229,5 +229,5 @@ module.exports = (() => {
 		return promise;
 	};
 
-	return {errorHandler, response, showStaticErrorPage};
+	return {errorHandler, requestHandler, showStaticErrorPage};
 })();
