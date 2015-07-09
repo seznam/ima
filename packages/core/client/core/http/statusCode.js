@@ -20,6 +20,14 @@ const STATUS_CODE = Object.freeze({
 	OK: 200,
 
 	/**
+	 * Bad request
+	 *
+	 * @property HTTP_STATUS_CODE.BAD_REQUEST
+	 * @type {number}
+	 */
+	BAD_REQUEST: 400,
+
+	/**
 	 * Unauthorized
 	 *
 	 * @property HTTP_STATUS_CODE.UNAUTHORIZED
