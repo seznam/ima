@@ -35,7 +35,13 @@ var allowCrossDomain = (req, res, next) => {
 };
 
 var renderApp = (req, res) => {
-	clientApp.response(req, res);
+	clientApp
+		.requestHandler(req, res)
+		.then((response) => {
+			//console.log('RESOLVE', response);
+		}, (error) => {
+			//console.log('REJECT', error, error.stack);
+		});
 };
 
 var errorHandler = (err, req, res, next) => {
