@@ -61,7 +61,7 @@ export default class Response {
 	 * @param {number=} [status=303] The HTTP status code to send to the client.
 	 */
 	redirect(url, status = 303) {
-		this._response.redirect(url, status);
+		this._response.redirect(status, url);
 	}
 
 	/**
