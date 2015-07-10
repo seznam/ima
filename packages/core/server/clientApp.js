@@ -120,7 +120,7 @@ module.exports = (() => {
 	};
 
 	var showStaticErrorPage = (err, req, res) => {
-		console.log(err);
+		console.log(err, err.stack);
 
 		fs.readFile('./build/static/html/error.html', 'utf-8', (error, content) => {
 			res.status(500)
@@ -130,6 +130,67 @@ module.exports = (() => {
 			}
 			res.send(content);
 		});
+	};
+
+	var _applyError = (err, req, res, app) => {
+		var promise = Promise.reject(err);
+
+		try {
+			promise = app.oc.get('$Router')
+					.handleError({err})
+					.then((response) => {
+						instanceRecycler.clearInstance(app);
+
+						return response;
+					})
+					.catch((fatalError) => {
+						showStaticErrorPage(fatalError, req, res);
+						instanceRecycler.clearInstance(app);
+
+						return Promise.reject(fatalError);
+					})
+		} catch(e) {
+			showStaticErrorPage(e, req, res);
+			instanceRecycler.clearInstance(app);
+			promise = Promise.reject(e);
+		}
+
+		return promise;
+	};
+
+	var _applyNotFound = (err, req, res, app) => {
+		var promise = Promise.reject(err);
+
+		try {
+			promise = app.oc.get('$Router')
+					.handleNotFound({error:err})
+					.then((response) => {
+						instanceRecycler.clearInstance(app);
+
+						return response;
+					})
+					.catch((error) => {
+						return _applyError(error, req, res, app);
+					});
+		} catch(e) {
+			promise = _applyError(e, req, res, app);
+		}
+
+		return promise;
+	};
+
+	var _applyRedirect = (err, req, res, app) => {
+		var promise = Promise.reject(err);
+
+		try {
+			app.oc.get('$Router').redirect(err.getParams().url);
+			instanceRecycler.clearInstance(app);
+			promise = Promise.resolve({html: null, status: err.getHttpStatus()});
+		} catch(e) {
+			promise = _applyError(e, req, res, app);
+		}
+
+		return promise;
 	};
 
 	var errorHandler = (err, req, res, app) => {
@@ -144,61 +205,16 @@ module.exports = (() => {
 			if (!app) {
 				app = _initApp(req, res);
 			}
+
 			var router = app.oc.get('$Router');
 			app.oc.get('$Cache').clear();
 
-			var applyError = (error) => {
-				var promise = Promise.reject(error);
-
-				try {
-					promise = router
-							.handleError({error})
-							.then(() => {
-								instanceRecycler.clearInstance(app);
-							})
-							.catch((fatalError) => {
-								instanceRecycler.clearInstance(app);
-								showStaticErrorPage(fatalError, req, res);
-
-								return Promise.reject(fatalError);
-							})
-				} catch(e) {
-					instanceRecycler.clearInstance(app);
-					showStaticErrorPage(e, req, res);
-					promise = Promise.reject(e);
-				}
-
-				return promise;
-			};
-
 			if (router.isClientError(err)) {
-				try {
-					promise = router
-							.handleNotFound({error:err})
-							.then(() => {
-								instanceRecycler.clearInstance(app);
-							})
-							.catch((error) => {
-								return applyError(error);
-							});
-				} catch(e) {
-					promise = applyError(e);
-				}
+				promise = _applyNotFound(err, req, res, app);
 			} else if (router.isRedirection(err)) {
-				try {
-					promise = router
-							.redirect(err.getParams().url)
-							.then(() => {
-								instanceRecycler.clearInstance(app);
-							})
-							.catch((error) => {
-								return applyError(error);
-							})
-				} catch(e) {
-					promise = applyError(e);
-				}
+				promise = _applyRedirect(err, req, res, app);
 			} else {
-				promise = applyError(err);
+				promise = _applyError(err, req, res, app);
 			}
 		}
 
