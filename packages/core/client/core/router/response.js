@@ -1,4 +1,5 @@
 import ns from 'imajs/client/core/namespace.js';
+import IMAError from 'imajs/client/core/imaError.js';
 
 ns.namespace('Core.Router');
 
@@ -30,6 +31,34 @@ export default class Response {
 		 * @default null
 		 */
 		this._response = null;
+
+		/**
+		 * It is flag for sent response for request.
+		 *
+		 * @private
+		 * @property _isSent
+		 * @type {boolean}
+		 * @default false
+		 */
+		this._isSent = false;
+
+		/**
+		 * HTTP Status code.
+		 *
+		 * @property _status
+		 * @type {number}
+		 * @default 500
+		 */
+		this._status = 500;
+
+		/**
+		 * The content of response.
+		 *
+		 * @property _content
+		 * @type {string}
+		 * @default ''
+		 */
+		this._content = '';
 	}
 
 	/**
@@ -44,6 +73,9 @@ export default class Response {
 	 */
 	init(response) {
 		this._response = response;
+		this._isSent = false;
+		this._status = 500;
+		this._content = '';
 		return this;
 	}
 
@@ -56,12 +88,26 @@ export default class Response {
 	 *
 	 * Use this method only at the server side.
 	 *
+	 * @chainable
 	 * @method redirect
 	 * @param {string} url The URL to which the client should be redirected.
 	 * @param {number=} [status=303] The HTTP status code to send to the client.
+	 * @return {Core.Router.Response} This response.
 	 */
 	redirect(url, status = 303) {
+		if (this._isSent === true && $Debug) {
+			var params = this.getResponseParams();
+			params.url = url;
+
+			throw new IMAError('Core.Router.Response:redirect The response has already ' +
+					'been sent. Check your workflow.', params);
+		}
+
+		this._isSent = true;
+		this._status = status;
 		this._response.redirect(status, url);
+
+		return this;
 	}
 
 	/**
@@ -80,7 +126,16 @@ export default class Response {
 	 * @return {Core.Router.Response} This response.
 	 */
 	status(httpStatus) {
+		if (this._isSent === true && $Debug) {
+			var params = this.getResponseParams();
+
+			throw new IMAError('Core.Router.Response:status The response has already ' +
+					'been sent. Check your workflow.', params);
+		}
+
+		this._status = httpStatus;
 		this._response.status(httpStatus);
+
 		return this;
 	}
 
@@ -94,7 +149,18 @@ export default class Response {
 	 * @return {Core.Router.Response} This response.
 	 */
 	send(content) {
+		if (this._isSent === true && $Debug) {
+			var params = this.getResponseParams();
+			params.content = content;
+
+			throw new IMAError('Core.Router.Response:send The response has already ' +
+					'been sent. Check your workflow.', params);
+		}
+
+		this._isSent = true;
+		this._content = content;
 		this._response.send(content);
+
 		return this;
 	}
 
@@ -113,8 +179,39 @@ export default class Response {
 	 * @return {Core.Router.Response} This response.
 	 */
 	setCookie(name, value, options = {}) {
+		if (this._isSent === true && $Debug) {
+			var params = this.getResponseParams();
+			params.name = name;
+			params.value = value;
+			params.options = options;
+
+			throw new IMAError('Core.Router.Response:setCookie The response has already ' +
+					'been sent. Check your workflow.', params);
+		}
+
 		this._response.cookie(name, value, options);
+
 		return this;
+	}
+
+	/**
+	 * Return object which contains response status and content.
+	 *
+	 * @method getResponseParams
+	 * @return {{status: number, content: string}}
+	 */
+	getResponseParams() {
+		return {status: this._status, content: this._content};
+	}
+
+	/**
+	 * Return true if response is sent from server to client.
+	 *
+	 * @method isResponseSent
+	 * @return {boolean}
+	 */
+	isResponseSent() {
+		return this._isSent;
 	}
 }
 
