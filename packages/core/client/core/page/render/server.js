@@ -92,8 +92,8 @@ export default class Server extends ns.Core.Abstract.PageRender {
 				.then((fetchedResources) => {
 					controller.setState(fetchedResources);
 					controller.setMetaParams(fetchedResources);
-					var props = this._generateViewProps(controller.getState());
 
+					var props = this._generateViewProps(controller.getState());
 					var reactElementView = this._factory.wrapView(view, props);
 					var pageMarkup = this._React.renderToString(reactElementView);
 
