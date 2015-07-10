@@ -110,7 +110,7 @@ export default class Client extends ns.Core.Abstract.PageRender {
 
 					controller.activate();
 
-					return {html: null, status: controller.getHttpStatus()};
+					return {content: null, status: controller.getHttpStatus()};
 				})
 				.catch((error) => this._handleError(error))
 		);

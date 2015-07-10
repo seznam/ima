@@ -86,6 +86,10 @@ export default class Server extends ns.Core.Abstract.PageRender {
 	mount(controller, view) {
 		var loadPromises = this._wrapEachKeyToPromise(controller.load());
 
+		if (this._response.isResponseSent()) {
+			return Promise.resolve(this._response.getResponseParams());
+		}
+
 		return (
 			this._Helper
 				.allPromiseHash(loadPromises)
@@ -105,13 +109,13 @@ export default class Server extends ns.Core.Abstract.PageRender {
 						metaManager: controller.getMetaManager(),
 						$Utils: this._factory.getUtils()
 					}));
-					var html = '<!doctype html>\n' + appMarkup;
+					var content = '<!doctype html>\n' + appMarkup;
 
 					this._response
 						.status(controller.getHttpStatus())
-						.send(html);
+						.send(content);
 
-					return {html, status: controller.getHttpStatus()};
+					return this._response.getResponseParams();
 				})
 		);
 	}
