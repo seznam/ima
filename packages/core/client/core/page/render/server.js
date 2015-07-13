@@ -30,7 +30,7 @@ export default class Server extends ns.Core.Abstract.PageRender {
 	 * @param {Core.Interface.Cache} cache Resource cache caching the results of
 	 *        HTTP requests made by services used by the rendered page.
 	 */
-	constructor(factory, Helper, React, settings, response, cache, oc) {
+	constructor(factory, Helper, React, settings, response, cache) {
 		super(factory, Helper, React, settings);
 
 		/**
@@ -54,13 +54,6 @@ export default class Server extends ns.Core.Abstract.PageRender {
 		 * @type {Core.Interface.Cache}
 		 */
 		this._cache = cache;
-
-		/**
-		 * @private
-		 * @property _utils
-		 * @type {Object<string, *>}
-		 */
-		this._oc = oc;
 
 	}
 
@@ -164,12 +157,12 @@ export default class Server extends ns.Core.Abstract.PageRender {
 	 *
 	 * @method _wrapEachKeyToPromise
 	 * @protected
-	 * @param {Object<string, *>} dataMap A map of data that should have its
+	 * @param {Object<string, *>=} [dataMap={}] A map of data that should have its
 	 *        values wrapped into Promises.
 	 * @return {Object<string, Promise>} A copy of the provided data
 	 *         map that has all its values wrapped into promises.
 	 */
-	_wrapEachKeyToPromise(dataMap) {
+	_wrapEachKeyToPromise(dataMap = {}) {
 		var copy = {};
 
 		for (var field of Object.keys(dataMap)) {
