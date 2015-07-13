@@ -94,30 +94,7 @@ export default class Server extends ns.Core.Abstract.PageRender {
 			this._Helper
 				.allPromiseHash(loadPromises)
 				.then((fetchedResources) => {
-					controller.setState(fetchedResources);
-					controller.setMetaParams(fetchedResources);
-
-					var props = this._generateViewProps(controller.getState());
-					var reactElementView = this._factory.wrapView(view, props);
-					var pageMarkup = this._React.renderToString(reactElementView);
-
-					var documentView = ns.get(this._settings.$Page.$Render.documentView);
-					var documentViewFactory = this._React.createFactory(documentView);
-					var appMarkup = this._React.renderToStaticMarkup(documentViewFactory({
-						page: pageMarkup,
-						revivalSettings: this._getRevivalSettings(),
-						metaManager: controller.getMetaManager(),
-						$Utils: this._factory.getUtils()
-					}));
-					var content = '<!doctype html>\n' + appMarkup;
-
-					if (!this._response.isResponseSent()) {
-						this._response
-							.status(controller.getHttpStatus())
-							.send(content);
-					}
-
-					return this._response.getResponseParams();
+					return this._renderPage(controller, view, fetchedResources);
 				})
 		);
 	}
@@ -206,6 +183,55 @@ export default class Server extends ns.Core.Abstract.PageRender {
 		}
 
 		return copy;
+	}
+
+	/**
+	 * Render page after all promises from loaded resources is resolved.
+	 *
+	 * @private
+	 * @method _renderPage
+	 * @param {Core.Abstract.Controller} controller
+	 * @param {Vendor.React.Component} view
+	 * @param {Object<string, *>} fetchedResource
+	 * @return {{content: string, status: number}}
+	 */
+	_renderPage(controller, view, fetchedResources) {
+		if (!this._response.isResponseSent()) {
+			controller.setState(fetchedResources);
+			controller.setMetaParams(fetchedResources);
+
+			this._response
+				.status(controller.getHttpStatus())
+				.send(this._renderPageContentToString(controller, view));
+		}
+
+		return this._response.getResponseParams();
+	}
+
+	/**
+	 * Render page content to a string containing HTML markup.
+	 *
+	 * @private
+	 * @method _renderPageContentToString
+	 * @param {Core.Abstract.Controller} controller
+	 * @param {Vendor.React.Component} view
+	 * @return {string}
+	 */
+	_renderPageContentToString(controller, view) {
+		var props = this._generateViewProps(controller.getState());
+		var reactElementView = this._factory.wrapView(view, props);
+		var pageMarkup = this._React.renderToString(reactElementView);
+
+		var documentView = ns.get(this._settings.$Page.$Render.documentView);
+		var documentViewFactory = this._React.createFactory(documentView);
+		var appMarkup = this._React.renderToStaticMarkup(documentViewFactory({
+			page: pageMarkup,
+			revivalSettings: this._getRevivalSettings(),
+			metaManager: controller.getMetaManager(),
+			$Utils: this._factory.getUtils()
+		}));
+		
+		return '<!doctype html>\n' + appMarkup;
 	}
 }
 
