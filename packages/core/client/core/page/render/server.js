@@ -111,9 +111,11 @@ export default class Server extends ns.Core.Abstract.PageRender {
 					}));
 					var content = '<!doctype html>\n' + appMarkup;
 
-					this._response
-						.status(controller.getHttpStatus())
-						.send(content);
+					if (!this._response.isResponseSent()) {
+						this._response
+							.status(controller.getHttpStatus())
+							.send(content);
+					}
 
 					return this._response.getResponseParams();
 				})
