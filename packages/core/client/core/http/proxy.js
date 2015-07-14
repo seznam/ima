@@ -157,6 +157,9 @@ export default class Proxy {
 			case this.HTTP_STATUS_CODE.TIMEOUT:
 				error.errorName = 'Timeout';
 				break;
+			case this.HTTP_STATUS_CODE.BAD_REQUEST:
+				error.errorName = 'Bad Request';
+				break;
 			case this.HTTP_STATUS_CODE.UNAUTHORIZED:
 				error.errorName = 'Unauthorized';
 				break;
