@@ -1,3 +1,4 @@
 [submodule "imajs"]
 	path = imajs
 	url = https://github.com/seznam/IMA.js-core.git
+	url2 = git@github.com:seznam/IMA.js-core.git
