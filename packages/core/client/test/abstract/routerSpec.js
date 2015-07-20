@@ -8,7 +8,7 @@ describe('Core.Abstract.Router', function() {
 		$Protocol: 'http:',
 		$Root: '/root',
 		$LanguagePartPath: '',
-		$Domain: 'www.domain.com'
+		$Host: 'www.domain.com'
 	};
 	var options = {
 		onlyUpdate: false,

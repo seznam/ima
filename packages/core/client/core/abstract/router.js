@@ -76,15 +76,14 @@ export default class Router extends ns.Core.Interface.Router {
 		this._protocol = '';
 
 		/**
-		 * The application's domain in the following form:
-		 * {@code `${protocol}//${host}`}.
+		 * The application's host.
 		 *
 		 * @private
-		 * @property _domain
+		 * @property _host
 		 * @type {string}
 		 * @default ''
 		 */
-		this._domain = '';
+		this._host = '';
 
 		/**
 		 * The URL path pointing to the application's root.
@@ -123,13 +122,12 @@ export default class Router extends ns.Core.Interface.Router {
 	 * @inheritDoc
 	 * @override
 	 * @method init
-	 * @param {{$Protocol: string, $Domain: string, $Root: string, $LanguagePartPath: string}} config
+	 * @param {{$Protocol: string, $Host: string, $Root: string, $LanguagePartPath: string}} config
 	 *        Router configuration.
 	 *        The {@code $Protocol} field must be the current protocol used to
 	 *        access the application, terminated by a collon (for example
 	 *        {@code https:}).
-	 *        The {@code $Domain} field must be the application's domain in the
-	 *        following form: {@code `${protocol}//${host}`}.
+	 *        The {@code $Host} field is the application's host.
 	 *        The {@code $Root} field must specify the URL path pointing to the
 	 *        application's root.
 	 *        The {@code $LanguagePartPath} field must be the URL path fragment
@@ -140,7 +138,7 @@ export default class Router extends ns.Core.Interface.Router {
 		this._protocol = config.$Protocol || '';
 		this._root = config.$Root || '';
 		this._languagePartPath = config.$LanguagePartPath || '';
-		this._domain = config.$Domain;
+		this._host = config.$Host;
 	}
 
 	/**
@@ -217,7 +215,19 @@ export default class Router extends ns.Core.Interface.Router {
 	 * @return {string} The current application's domain.
 	 */
 	getDomain() {
-		return this._domain;
+		return this._protocol + '//' + this._host;
+	}
+
+	/**
+	 * Returns application's host.
+	 *
+	 * @inheritDoc
+	 * @override
+	 * @method getHost
+	 * @return {string} The current application's host.
+	 */
+	getHost() {
+		return this._host;
 	}
 
 	/**
@@ -395,7 +405,7 @@ export default class Router extends ns.Core.Interface.Router {
 	 * @return {string} The application's base URL.
 	 */
 	_getBaseUrl() {
-		return this._protocol + '//' + this._domain + this._root +
+		return this.getDomain() + this._root +
 			this._languagePartPath;
 	}
 

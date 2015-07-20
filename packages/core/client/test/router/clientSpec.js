@@ -3,7 +3,7 @@ describe('Core.Router.Client', function() {
 	var pageRender = null;
 	var routerFactory = null;
 	var win = null;
-	var domain = 'locahlost:3002';
+	var host = 'locahlost:3002';
 	var protocol = 'http:';
 	var ROUTE_NAMES = oc.get('$ROUTE_NAMES');
 
@@ -12,7 +12,7 @@ describe('Core.Router.Client', function() {
 		routerFactory = oc.create('$RouterFactory');
 		win = oc.get('$Window');
 		router = oc.create('Core.Router.Client', [pageRender, routerFactory, ROUTE_NAMES, win]);
-		router.init({$Domain: domain, $Protocol: protocol});
+		router.init({$Host: host, $Protocol: protocol});
 	});
 
 	it('should be return actual path', function() {
@@ -44,7 +44,7 @@ describe('Core.Router.Client', function() {
 
 		it('should be save scroll history and set address bar', function() {
 			var path = '/somePath';
-			var url = protocol + '//' + domain + path;
+			var url = protocol + '//' + host + path;
 
 			spyOn(router, '_setAddressBar')
 				.and
@@ -117,7 +117,7 @@ describe('Core.Router.Client', function() {
 
 		it('should be return true for same domain', function() {
 			var path = '/somePath';
-			var url = protocol + '//' + domain + path;
+			var url = protocol + '//' + host + path;
 
 			expect(router._isSameDomain(url)).toEqual(true);
 		});

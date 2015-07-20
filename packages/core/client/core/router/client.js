@@ -136,7 +136,7 @@ export default class Client extends ns.Core.Abstract.Router {
 	init(config) {
 		super.init(config);
 		this._mode = this._window.hasHistoryAPI() ? MODES.HISTORY : MODES.HASH;
-		this._domain = config.$Domain || this._window.getDomain();
+		this._host = config.$Host || this._window.getHost();
 
 		return this;
 	}
@@ -222,7 +222,7 @@ export default class Client extends ns.Core.Abstract.Router {
 	 */
 	redirect(url = '') {
 		if (this._isSameDomain(url) && this._mode === MODES.HISTORY) {
-			var path = url.replace(this.getProtocol() + '//' + this._domain, '');
+			var path = url.replace(this.getDomain(), '');
 			path = this._extractRoutePath(path);
 
 			this._saveScrollHistory();

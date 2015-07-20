@@ -43,7 +43,7 @@ if (typeof window !== 'undefined' && window !== null) {
 					dictionary: window.$IMA.i18n
 				},
 				router: {
-					$Domain: window.$IMA.$Domain,
+					$Host: window.$IMA.$Host,
 					$Root: window.$IMA.$Root,
 					$LanguagePartPath: window.$IMA.$LanguagePartPath
 				}
@@ -78,6 +78,11 @@ if (typeof window !== 'undefined' && window !== null) {
 			window.React.initializeTouchEvents(true);
 			window.$Debug = window.$IMA.$Debug;
 
+			if ($Debug && window.$IMA.$Protocol !== window.location.protocol) {
+					throw new Error(`Your client's protocol is not same as server's protocol.` +
+							`For right setting protocol on the server site set 'X-Forwarded-Proto' header.`);
+			}
+
 			var bootConfig = {
 				vendor: window.$IMA.Vendor,
 				services: {
@@ -90,7 +95,7 @@ if (typeof window !== 'undefined' && window !== null) {
 					},
 					router: {
 						$Protocol: window.$IMA.$Protocol,
-						$Domain: window.$IMA.$Domain,
+						$Host: window.$IMA.$Host,
 						$Root: window.$IMA.$Root,
 						$LanguagePartPath: window.$IMA.$LanguagePartPath
 					}
@@ -100,7 +105,7 @@ if (typeof window !== 'undefined' && window !== null) {
 					$Debug: window.$IMA.$Debug,
 					$Language: window.$IMA.$Language,
 					$Protocol: window.$IMA.$Protocol,
-					$Domain: window.$IMA.$Domain,
+					$Host: window.$IMA.$Host,
 					$Root: window.$IMA.$Root,
 					$LanguagePartPath: window.$IMA.$LanguagePartPath
 				}

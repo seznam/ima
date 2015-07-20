@@ -91,6 +91,14 @@ export default class Router {
 	getDomain() {}
 
 	/**
+	 * Returns application's host.
+	 *
+	 * @method getHost
+	 * @return {string} The current application's host.
+	 */
+	getHost() {}
+
+	/**
 	 * Returns the current protocol used to access the application, terminated by
 	 * a collon (for example {@code https:}).
 	 *
