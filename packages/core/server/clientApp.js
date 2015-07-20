@@ -185,7 +185,7 @@ module.exports = (() => {
 		try {
 			app.oc.get('$Router').redirect(err.getParams().url);
 			instanceRecycler.clearInstance(app);
-			promise = Promise.resolve({html: null, status: err.getHttpStatus()});
+			promise = Promise.resolve({content: null, status: err.getHttpStatus()});
 		} catch(e) {
 			promise = _applyError(e, req, res, app);
 		}
