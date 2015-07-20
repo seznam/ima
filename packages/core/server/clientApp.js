@@ -77,7 +77,7 @@ module.exports = (() => {
 	var _initApp = (req, res) => {
 		var language = res.locals.language;
 		var languagePartPath = res.locals.languagePartPath;
-		var domain = res.locals.domain;
+		var host = res.locals.host;
 		var root = res.locals.root;
 		var protocol = res.locals.protocol;
 
@@ -96,7 +96,7 @@ module.exports = (() => {
 				},
 				router: {
 					$Protocol: protocol,
-					$Domain: domain,
+					$Host: host,
 					$Root: root,
 					$LanguagePartPath: languagePartPath
 				}
@@ -106,7 +106,7 @@ module.exports = (() => {
 				$Env: environment.$Env,
 				$Protocol: protocol,
 				$Language: language,
-				$Domain: domain,
+				$Host: host,
 				$Root: root,
 				$LanguagePartPath: languagePartPath
 			}
