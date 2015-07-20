@@ -83,8 +83,8 @@ module.exports = function(req, res, next) {
 
 	//res.send(`${currentUrl} : ${currentDomain} : ${currentRoot} : ${currentLanguage} : ${currentLanguagePartPath} : ${req.get('origin')} : ${req.hostname}`);
 
-	if (!currentLanguage && environment.$Debug === true) {
-		throw new Error(`You have undefined domain. Set current domain "${currentDomain}" or "*:*" to attribute $Language in environment.js.`);
+	if (!currentLanguage) {
+		throw new Error(`You have undefined language. Set current domain "${currentDomain}" or "*:*" to attribute $Language in environment.js.`);
 	}
 
 	next();
