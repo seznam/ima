@@ -168,6 +168,18 @@ export default class Server extends ns.Core.Interface.Window {
 	}
 
 	/**
+	 * Returns the application's host.
+	 *
+	 * @inheritDoc
+	 * @override
+	 * @method getHost
+	 * @return {string} The current host.
+	 */
+	getHost() {
+		return '';
+	}
+
+	/**
 	 * Returns the path part of the current URL, including the query string.
 	 *
 	 * @inheritDoc

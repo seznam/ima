@@ -119,6 +119,14 @@ export default class Window {
 	getDomain() {}
 
 	/**
+	 * Returns the application's host.
+	 *
+	 * @method getHost
+	 * @return {string} The current host.
+	 */
+	getHost() {}
+
+	/**
 	 * Returns the path part of the current URL, including the query string.
 	 *
 	 * @method getPath
