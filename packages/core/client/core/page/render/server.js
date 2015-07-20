@@ -144,6 +144,7 @@ export default class Server extends ns.Core.Abstract.PageRender {
 			' window.$IMA.$Host = "' + (this._settings.$Host) + '";' +
 			' window.$IMA.$Root = "' + (this._settings.$Root) + '";' +
 			' window.$IMA.$LanguagePartPath = "' + (this._settings.$LanguagePartPath) + '";' +
+			' window.$IMA.Version = ' + (this._settings.$Page.$Render.version) + ';' +
 			'</script>'
 		);
 	}
