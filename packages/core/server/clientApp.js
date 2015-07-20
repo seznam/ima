@@ -6,6 +6,7 @@ var sep = require('path').sep;
 var errorView = require('./template/errorView.js');
 var environment = require('./environment.js');
 var instanceRecycler = require('./instanceRecycler.js');
+var helper = require('./helper.js');
 
 var appServerScript = require('./app.server.js');
 
@@ -75,6 +76,54 @@ module.exports = (() => {
 	};
 
 	var _initApp = (req, res) => {
+		var bootConfig = _getBootConfig(req, res);
+		var app = instanceRecycler.getInstance();
+
+		Object.assign(bootConfig, appServer.getInit());
+		app.bootstrap
+			.run(bootConfig);
+
+		return app;
+	};
+
+	var showStaticErrorPage = (err, req, res) => {
+		console.log(err, err.stack);
+
+		fs.readFile('./build/static/html/error.html', 'utf-8', (error, content) => {
+			res.status(500);
+
+			if (error) {
+				res.send('500');
+			}
+
+			res.send(content);
+		});
+	};
+
+	var showStaticSPAPage = (req, res) => {
+		fs.readFile('./build/static/html/spa.html', 'utf-8', (error, content) => {
+
+			if (error) {
+				showStaticErrorPage(error, req, res);
+			} else {
+				var bootConfig = _getBootConfig(req, res);
+
+				for (var settingKey of Object.keys(bootConfig.settings)) {
+					var value =  bootConfig.settings[settingKey];
+					var key = `{${settingKey}}`;
+					var reg = new RegExp(helper.escapeRegExp(key), 'g');
+
+					content = content.replace(reg, value);
+				}
+
+				res.status(200);
+				res.send(content);
+			}
+
+		});
+	};
+
+	var _getBootConfig = (req, res) => {
 		var language = res.locals.language;
 		var languagePartPath = res.locals.languagePartPath;
 		var host = res.locals.host;
@@ -82,8 +131,6 @@ module.exports = (() => {
 		var protocol = res.locals.protocol;
 
 		var dictionary = require('./locale/' + language + '.js');
-
-		var app = instanceRecycler.getInstance();
 
 		var bootConfig = {
 			services: {
@@ -112,24 +159,7 @@ module.exports = (() => {
 			}
 		};
 
-		Object.assign(bootConfig, appServer.getInit());
-		app.bootstrap
-			.run(bootConfig);
-
-		return app;
-	};
-
-	var showStaticErrorPage = (err, req, res) => {
-		console.log(err, err.stack);
-
-		fs.readFile('./build/static/html/error.html', 'utf-8', (error, content) => {
-			res.status(500)
-
-			if (error) {
-				res.send('500');
-			}
-			res.send(content);
-		});
+		return bootConfig;
 	};
 
 	var _applyError = (err, req, res, app) => {

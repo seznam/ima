@@ -37,8 +37,11 @@ module.exports = (() => {
 
 					return result;
 				});
-	}
+	};
 
+	var escapeRegExp = (string) => {
+		return string.replace(/([.*+?^=!:${}()|\[\]\/\\])/g, "\\$1");
+	};
 
-	return {assignRecursively, allPromiseHash};
+	return {assignRecursively, allPromiseHash, escapeRegExp};
 })();
