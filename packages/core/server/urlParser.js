@@ -4,13 +4,13 @@ var getUrlFromRequest = (req) => {
 	return  '//' + req.get('host') + req.originalUrl.replace(/\/$/, '');
 };
 
-var isDomainSame = (currentDomain, domainExpression) => {
-	return currentDomain === domainExpression;
+var isHostSame = (currentHost, hostExpression) => {
+	return currentHost === hostExpression;
 };
 
-var getRootRegExp = (domainExpression, rootExpression, languageParam) => {
+var getRootRegExp = (hostExpression, rootExpression, languageParam) => {
 	var rootReg = '\/\/' +
-				domainExpression.replace(/[\\.+*?\^$\[\](){}\/\'#]/g, '\\$&') +
+				hostExpression.replace(/[\\.+*?\^$\[\](){}\/\'#]/g, '\\$&') +
 				rootExpression.replace('/','\/');
 
 	if (languageParam) {
@@ -30,7 +30,7 @@ module.exports = function(req, res, next) {
 
 	var currentLanguage = null;
 	var currentLanguagePartPath = '';
-	var currentDomain = parsedCurrentUrl[1];
+	var currentHost = parsedCurrentUrl[1];
 	var currentRoot = parsedCurrentUrl[2];
 	var currentProtocol = req.protocol + ':';
 
@@ -41,13 +41,13 @@ module.exports = function(req, res, next) {
 	for (var expression of Object.keys(environment.$Language)) {
 		var parsedDomainExpression = expression.match(parseUrlReg);
 
-		var domainExpression = parsedDomainExpression[1] === '*:*' ? currentDomain : parsedDomainExpression[1] || '';
+		var hostExpression = parsedDomainExpression[1] === '*:*' ? currentHost : parsedDomainExpression[1] || '';
 		var rootExpression = parsedDomainExpression[2] || '';
 		var languageInPath = parsedDomainExpression[3];
 
-		if (isDomainSame(currentDomain, domainExpression)) {
+		if (isHostSame(currentHost, hostExpression)) {
 
-			var rootRegExp = getRootRegExp(domainExpression, rootExpression, languageInPath);
+			var rootRegExp = getRootRegExp(hostExpression, rootExpression, languageInPath);
 
 			if (rootRegExp.test(currentUrl)) {
 				currentRoot = rootExpression;
@@ -63,7 +63,7 @@ module.exports = function(req, res, next) {
 						currentLanguage = environment.$Language[expression];
 
 						// REDIRECT
-						res.redirect(currentProtocol + '//'+currentDomain+currentRoot+currentLanguagePartPath);
+						res.redirect(currentProtocol + '//'+currentHost+currentRoot+currentLanguagePartPath);
 						return;
 					}
 				} else {
@@ -77,14 +77,14 @@ module.exports = function(req, res, next) {
 
 	res.locals.language = currentLanguage;
 	res.locals.languagePartPath = currentLanguagePartPath;
-	res.locals.domain = currentDomain;
+	res.locals.host = currentHost;
 	res.locals.protocol = currentProtocol;
 	res.locals.root = currentRoot;
 
-	//res.send(`${currentUrl} : ${currentDomain} : ${currentRoot} : ${currentLanguage} : ${currentLanguagePartPath} : ${req.get('origin')} : ${req.hostname}`);
+	//res.send(`${currentUrl} : ${currentHost} : ${currentRoot} : ${currentLanguage} : ${currentLanguagePartPath} : ${req.get('origin')} : ${req.hostname}`);
 
 	if (!currentLanguage) {
-		throw new Error(`You have undefined language. Set current domain "${currentDomain}" or "*:*" to attribute $Language in environment.js.`);
+		throw new Error(`You have undefined language. Set current domain "//${currentHost}" or "//*:*" to attribute $Language in environment.js.`);
 	}
 
 	next();
