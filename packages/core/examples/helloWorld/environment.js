@@ -15,7 +15,11 @@ module.exports = (() => {
 				port: 3001, // Port where server listen.
 				staticFolder: '/static',    // Define path for static folder.
 				concurency: 100,    // Node prepared defined number of app instances. It is performance improvements.
-				clusters: null   // Define number of cluster you want to create. Null value is number of CPUs.
+				clusters: null,   // Define number of cluster you want to create. Null value is number of CPUs.
+				serveSPA: {
+					allow: true,    // if node cluster will have lot's of request to process, then it start serve SPA page.
+					blackList: ['Googlebot', 'SeznamBot'] // This user agents will always be serve as isomorphic page.
+				}
 			},
 			$Proxy: {   // Proxy pass all request from $Proxy.path to defined server url. It should be used only for dev environment.
 				path: '/api', // Url which would be proxy pass to $Proxy.server.
