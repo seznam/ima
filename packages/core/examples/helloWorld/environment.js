@@ -1,9 +1,13 @@
+var versionCoef = 1000 * 30;
+var version = Math.round(new Date().getTime() / versionCoef) * versionCoef;
+
 module.exports = (() => {
 
 	//Production environment is used as default values for configuration items in other environments.
 	return {
 		prod: {
 			$Debug: false,  // Debug mode.
+			$Version: version, // Current server version. Version value is used for static assets timestamp.
 			$Language:{     // Set domain, root and language. You have opportunity use '//*:*' as default for all request.
 				'//example.com': 'en'
 			},

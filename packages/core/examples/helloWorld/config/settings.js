@@ -1,8 +1,6 @@
-var versionCoef = 1000 * 30;
-var version = Math.round(new Date().getTime() / versionCoef) * versionCoef;
-var versionStamp = `?version=${version}`;
-
 export var init = (ns, oc, config) => { // jshint ignore:line
+	var versionStamp = `?version=${config.$Version}`;
+
 	return {
 		prod: {
 			$Http: {
@@ -26,8 +24,7 @@ export var init = (ns, oc, config) => { // jshint ignore:line
 						'/static/js/app.bundle.min.js' + versionStamp
 					],
 					documentView: 'App.Component.Document.View',
-					masterElementId: 'page',
-					version: version
+					masterElementId: 'page'
 				}
 			},
 			$Static: {
