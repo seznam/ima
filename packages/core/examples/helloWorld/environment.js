@@ -13,12 +13,12 @@ module.exports = (() => {
 			},
 			$Server: {
 				port: 3001, // Port where server listen.
-				apiUrl: '/api', // Url which would be proxy pass to $Proxy.server.
 				staticFolder: '/static',    // Define path for static folder.
 				concurency: 100,    // Node prepared defined number of app instances. It is performance improvements.
 				clusters: null   // Define number of cluster you want to create. Null value is number of CPUs.
 			},
-			$Proxy: {   // Proxy pass all request from $Server.apiUrl to defined url. Only for dev environment.
+			$Proxy: {   // Proxy pass all request from $Proxy.path to defined server url. It should be used only for dev environment.
+				path: '/api', // Url which would be proxy pass to $Proxy.server.
 				server: 'http://www.example.com/api'
 			}
 		},
