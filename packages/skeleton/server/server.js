@@ -22,6 +22,13 @@ process.on('uncaughtException', function(error) {
 	console.error('Uncaught Exception:', error.message, error.stack);
 });
 
+/*setInterval(() => {
+	var mem = process.memoryUsage();
+
+	console.log('Rss: ', mem.rss / (1024 * 1024), 'Heap total: ', mem.heapTotal / (1024 * 1024), 'Heap used: ', mem.heapUsed / (1024 * 1024));
+}, 1000);*/
+
+
 var allowCrossDomain = (req, res, next) => {
 	res.header('Access-Control-Allow-Origin', '*');
 	res.header('Access-Control-Allow-Methods', 'GET,PUT,POST,PATCH,DELETE');
@@ -65,7 +72,7 @@ var runNodeApp = () => {
 		.use(multer()) // for parsing multipart/form-data
 		.use(cookieParser())
 		.use(methodOverride())
-		.use(environment.$Server.apiUrl + '/', proxy)
+		.use(environment.$Proxy.path + '/', proxy)
 		.use(urlParser)
 		.use(renderApp)
 		.use(errorHandler)
