@@ -14,7 +14,7 @@ module.exports = (() => {
 			$Server: {
 				port: 3001, // Port where server listen.
 				staticFolder: '/static',    // Define path for static folder.
-				concurency: 100,    // Node prepared defined number of app instances. It is performance improvements.
+				concurrency: 100,    // Node prepared defined number of app instances. It is performance improvements. Concurrency
 				clusters: null,   // Define number of cluster you want to create. Null value is number of CPUs.
 				serveSPA: {
 					allow: true,    // if node cluster will have lot's of request to process, then it start serve SPA page.
@@ -40,7 +40,7 @@ module.exports = (() => {
 				'//*:*': 'en'
 			},
 			$Server: {
-				concurency: 1
+				concurrency: 0
 			},
 			$Proxy: {
 				server: 'http://localhost:3001/api'
