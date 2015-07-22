@@ -10,33 +10,37 @@ module.exports = (() => {
 		 * @method constructor
 		 */
 		constructor() {
-			this.instanceConstructor = null;
-			this.maxInstanceCount = 1;
-			this.instancies = [];
+			this._instanceConstructor = null;
+			this._maxInstanceCount = 1;
+			this._instancies = [];
 		}
 
 		init(instanceConstructor, maxInstanceCount = 1) {
-			this.instanceConstructor = instanceConstructor;
-			this.maxInstanceCount = maxInstanceCount;
+			this._instanceConstructor = instanceConstructor;
+			this._maxInstanceCount = maxInstanceCount;
 
 			for(var i = 0; i < maxInstanceCount; i++) {
-			  this.instancies.push(this.instanceConstructor());
+			  this._instancies.push(this._instanceConstructor());
 			}
 		}
 
+		hasNextInstance() {
+			return this._instancies.length > 0;
+		}
+
 		getInstance() {
-			if (this.instancies.length < 1) {
-				return this.instanceConstructor();
+			if (this.hasNextInstance()) {
+				return this._instancies.shift();
 			} else {
-				return this.instancies.shift();
+				return this._instanceConstructor();
 			}
 			
 		}
 
 		clearInstance(instance) {
 			instance.oc.clear();
-			if (this.instancies.length < this.maxInstanceCount) {
-				this.instancies.push(instance);
+			if (this._instancies.length < this._maxInstanceCount) {
+				this._instancies.push(instance);
 			}
 		}
 	}

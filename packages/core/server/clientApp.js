@@ -17,21 +17,23 @@ hljs.configure({
 	lineNodes: true
 });
 
-instanceRecycler.init(appServer.createIMAJsApp, environment.$Server.concurency);
+instanceRecycler.init(appServer.createIMAJsApp, environment.$Server.concurrency);
 
 module.exports = (() => {
 	var _displayDetails = (err, req, res) => {
 		var stack = stackTrace.parse(err);
 		var fileIndex = 1;
 
-		console.error('Stack: ',err.stack);
+		console.error('Stack: ', err.stack);
 		console.error('Params: ', err._params);
 
 		asyncEach(stack, function getContentInfo(item, cb) {
 			// exclude core node modules and node modules
 			if ((item.fileName.indexOf(sep) !== -1) && !/node_modules/.test(item.fileName)) {
 				fs.readFile(item.fileName, 'utf-8', function(err, content) {
-					if (err) { return cb(err); }
+					if (err) {
+						return cb(err);
+					}
 
 					content = hljs.highlight('javascript', content);
 
@@ -62,7 +64,9 @@ module.exports = (() => {
 				cb();
 			}
 		}, (e, items) => {
-			items = items.filter((item) => { return !!item; });
+			items = items.filter((item) => {
+				return !!item;
+			});
 
 			// if something bad happened while processing the stacktrace
 			// make sure to return something useful
@@ -71,7 +75,7 @@ module.exports = (() => {
 				return res.send(err.stack);
 			}
 
-			res.send(errorView(err,items));
+			res.send(errorView(err, items));
 		});
 	};
 
@@ -89,38 +93,57 @@ module.exports = (() => {
 	var showStaticErrorPage = (err, req, res) => {
 		console.log(err, err.stack);
 
-		fs.readFile('./build/static/html/error.html', 'utf-8', (error, content) => {
-			res.status(500);
+		return new Promise((resolve, reject) => {
+			fs.readFile('./build/static/html/error.html', 'utf-8', (error, content) => {
+				var status = 500;
+				res.status(status);
 
-			if (error) {
-				res.send('500');
-			}
+				if (error) {
+					res.send('500');
+					reject(error);
+				}
 
-			res.send(content);
+				res.send(content);
+
+				resolve({content, status});
+			});
 		});
 	};
 
 	var showStaticSPAPage = (req, res) => {
-		fs.readFile('./build/static/html/spa.html', 'utf-8', (error, content) => {
+		return new Promise((resolve, reject) => {
+			fs.readFile('./build/static/html/spa.html', 'utf-8', (error, content) => {
+				if (error) {
+					showStaticErrorPage(error, req, res);
+					reject(error);
+				} else {
+					var bootConfig = _getBootConfig(req, res);
+					var status = 200;
 
-			if (error) {
-				showStaticErrorPage(error, req, res);
-			} else {
-				var bootConfig = _getBootConfig(req, res);
+					for (var settingKey of Object.keys(bootConfig.settings)) {
+						var value = bootConfig.settings[settingKey];
+						var key = `{${settingKey}}`;
+						var reg = new RegExp(helper.escapeRegExp(key), 'g');
 
-				for (var settingKey of Object.keys(bootConfig.settings)) {
-					var value =  bootConfig.settings[settingKey];
-					var key = `{${settingKey}}`;
-					var reg = new RegExp(helper.escapeRegExp(key), 'g');
+						content = content.replace(reg, value);
+					}
 
-					content = content.replace(reg, value);
+					res.status(200);
+					res.send(content);
+
+					resolve({content, status, SPA: true});
 				}
-
-				res.status(200);
-				res.send(content);
-			}
-
+			});
 		});
+	};
+
+	var _haveToServeSPA = (req) => {
+		var userAgent = req.headers['user-agent'] || '';
+		var isAllowedServeSPA = environment.$Server.serveSPA.allow;
+		var isServerBusy = !instanceRecycler.hasNextInstance();
+		var isAllowedUserAgent = !environment.$Server.serveSPA.blackListReg.test(userAgent);
+
+		return isAllowedServeSPA && isServerBusy && isAllowedUserAgent;
 	};
 
 	var _getBootConfig = (req, res) => {
@@ -168,19 +191,19 @@ module.exports = (() => {
 
 		try {
 			promise = app.oc.get('$Router')
-					.handleError({err})
-					.then((response) => {
-						instanceRecycler.clearInstance(app);
+				.handleError({err})
+				.then((response) => {
+					instanceRecycler.clearInstance(app);
 
-						return response;
-					})
-					.catch((fatalError) => {
-						showStaticErrorPage(fatalError, req, res);
-						instanceRecycler.clearInstance(app);
+					return response;
+				})
+				.catch((fatalError) => {
+					showStaticErrorPage(fatalError, req, res);
+					instanceRecycler.clearInstance(app);
 
-						return Promise.reject(fatalError);
-					})
-		} catch(e) {
+					return Promise.reject(fatalError);
+				})
+		} catch (e) {
 			showStaticErrorPage(e, req, res);
 			instanceRecycler.clearInstance(app);
 			promise = Promise.reject(e);
@@ -194,16 +217,16 @@ module.exports = (() => {
 
 		try {
 			promise = app.oc.get('$Router')
-					.handleNotFound({error:err})
-					.then((response) => {
-						instanceRecycler.clearInstance(app);
+				.handleNotFound({error: err})
+				.then((response) => {
+					instanceRecycler.clearInstance(app);
 
-						return response;
-					})
-					.catch((error) => {
-						return _applyError(error, req, res, app);
-					});
-		} catch(e) {
+					return response;
+				})
+				.catch((error) => {
+					return _applyError(error, req, res, app);
+				});
+		} catch (e) {
 			promise = _applyError(e, req, res, app);
 		}
 
@@ -216,8 +239,11 @@ module.exports = (() => {
 		try {
 			app.oc.get('$Router').redirect(err.getParams().url);
 			instanceRecycler.clearInstance(app);
-			promise = Promise.resolve({content: null, status: err.getHttpStatus()});
-		} catch(e) {
+			promise = Promise.resolve({
+				content: null,
+				status: err.getHttpStatus()
+			});
+		} catch (e) {
 			promise = _applyError(e, req, res, app);
 		}
 
@@ -253,27 +279,36 @@ module.exports = (() => {
 	};
 
 	var requestHandler = (req, res) => {
+		if (_haveToServeSPA(req)) {
+			return showStaticSPAPage(req, res);
+		}
+
 		var promise = Promise.reject(new Error());
 		var app = _initApp(req, res);
 		var router = app.oc.get('$Router');
 
 		try {
 			promise = router
-					.route(router.getPath())
-					.then((response) => {
-						instanceRecycler.clearInstance(app);
+				.route(router.getPath())
+				.then((response) => {
+					instanceRecycler.clearInstance(app);
 
-						return response;
-					})
-					.catch((error) => {
-						return errorHandler(error, req, res, app);
-					});
-		} catch(e) {
+					return response;
+				})
+				.catch((error) => {
+					return errorHandler(error, req, res, app);
+				});
+		} catch (e) {
 			promise = errorHandler(e, req, res, app);
 		}
 
 		return promise;
 	};
 
-	return {errorHandler, requestHandler, showStaticErrorPage};
+	return {
+		errorHandler,
+		requestHandler,
+		showStaticErrorPage,
+		showStaticSPAPage
+	};
 })();
