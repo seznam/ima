@@ -30,9 +30,9 @@ class View extends ns.Core.Abstract.Component {
 								checked={this.props.toggleAllChecked}/>
 						<label htmlFor='toggle-all'>{this.localize('toggle all label')}</label>
 						<ul className='todo-list'>
-							{this.props.items.map((item) => (
+							{this.props.items.map((item) => {
 								return <Item item={item} key={item.id} $Utils={this.utils}/>
-							))}
+							})}
 						</ul>
 					</section>
 					<footer className='footer'>
