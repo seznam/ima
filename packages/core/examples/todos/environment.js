@@ -1,19 +1,27 @@
+var versionCoef = 1000 * 30;
+var version = Math.round(new Date().getTime() / versionCoef) * versionCoef;
+
 module.exports = (() => {
 
 	return {
 		prod: {
 			$Debug: false,
-			$Language:{
+			$Version: version,
+			$Language: {
 				'//example.com': 'en'
 			},
 			$Server: {
 				port: 3001,
-				apiUrl: '/api',
 				staticFolder: '/static',
-				concurency: 100,
-				clusters: null
+				concurrency: 100,
+				clusters: null,
+				serveSPA: {
+					allow: true,
+					blackList: ['Googlebot', 'SeznamBot']
+				}
 			},
 			$Proxy: {
+				path: '/api',
 				server: 'http://www.example.com/api'
 			}
 		},
@@ -28,11 +36,10 @@ module.exports = (() => {
 		dev: {
 			$Debug: true,
 			$Language:{
-				'//localhost:3001': 'en',
-				'//127.0.0.1:3001': 'en'
+				'//*:*': 'en'
 			},
 			$Server: {
-				concurency: 1
+				concurrency: 0
 			},
 			$Proxy: {
 				server: 'http://localhost:3001/api'

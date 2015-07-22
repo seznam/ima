@@ -8,7 +8,7 @@ module.exports = (() => {
 		prod: {
 			$Debug: false,  // Debug mode.
 			$Version: version, // Current server version. Version value is used for static assets timestamp.
-			$Language:{     // Set domain, root and language. You have opportunity use '//*:*' as default for all request.
+			$Language: {     // Set domain, root and language. You have opportunity use '//*:*' as default for all request.
 				'//example.com': 'en'
 			},
 			$Server: {
@@ -29,14 +29,14 @@ module.exports = (() => {
 
 		test: {
 			$Debug: true,
-			$Language:{
+			$Language: {
 				'//example.test': 'en'
 			}
 		},
 
 		dev: {
 			$Debug: true,
-			$Language:{
+			$Language: {
 				'//*:*': 'en'
 			},
 			$Server: {
