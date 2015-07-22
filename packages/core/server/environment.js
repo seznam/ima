@@ -21,6 +21,8 @@ module.exports = (() => {
 		currentEnvironment.$Language = $Language;
 	}
 
+	currentEnvironment.$Server.serveSPA.blackListReg = new RegExp(currentEnvironment.$Server.serveSPA.blackList.join('|'), 'g');
+
 	currentEnvironment['$Env'] = env;
 
 	return currentEnvironment;
