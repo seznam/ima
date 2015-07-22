@@ -39,7 +39,7 @@ module.exports = (() => {
 				'//*:*': 'en'
 			},
 			$Server: {
-				concurrency: 0
+				concurrency: 1
 			},
 			$Proxy: {
 				server: 'http://localhost:3001/api'
