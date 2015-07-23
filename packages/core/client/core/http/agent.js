@@ -85,32 +85,22 @@ export default class Agent extends ns.Core.Interface.HttpAgent {
 		this._cookie = cookie;
 
 		/**
-		 * Cache key prefix for response bodies (already parsed as JSON) of
-		 * completed HTTP requests.
+		 * Cache options.
 		 *
-		 * @property _cachePrefix
+		 * @property _cacheOptions
 		 * @private
-		 * @type {string}
+		 * @type {Object<string, (string|Object<string, string>)>}
 		 */
-		this._cachePrefix = config.cachePrefix;
-
-		/**
-		 * Cache key prefix for promises representing HTTP requests in progress.
-		 *
-		 * @property _cachePrefixPromise
-		 * @private
-		 * @type {string}
-		 */
-		this._cachePrefixPromise = config.cachePrefixPromise;
+		this._cacheOptions = config.cache;
 
 		/**
 		 * Default request options.
 		 *
-		 * @property _options
+		 * @property _defaultRequestOptions
 		 * @private
 		 * @type {Object<string, (number|string)>}
 		 */
-		this._options = config;
+		this._defaultRequestOptions = config;
 	}
 
 	/**
@@ -254,7 +244,7 @@ export default class Agent extends ns.Core.Interface.HttpAgent {
 	 *         with the specified request data in the cache.
 	 */
 	getCacheKey(method, url, data) {
-		return this._cachePrefix + this._getCacheKeySuffix(method, url, data);
+		return this._cacheOptions.prefix + this._getCacheKeySuffix(method, url, data);
 	}
 
 	/**
@@ -485,7 +475,7 @@ export default class Agent extends ns.Core.Interface.HttpAgent {
 			headers: []
 		};
 
-		return Object.assign({}, this._options, extraOptions, options);
+		return Object.assign({}, this._defaultRequestOptions, extraOptions, options);
 	}
 
 	/**
@@ -502,7 +492,7 @@ export default class Agent extends ns.Core.Interface.HttpAgent {
 	 *         request for the specified URL and data.
 	 */
 	_getRequestPromiseCacheKey(method, url, data) {
-		return this._cachePrefixPromise +
+		return this._cacheOptions.prefixPromise +
 			this._getCacheKeySuffix(method, url, data);
 	}
 
