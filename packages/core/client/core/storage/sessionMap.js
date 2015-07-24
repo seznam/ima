@@ -63,7 +63,7 @@ export default class SessionMap extends ns.Core.Interface.Storage {
 	init() {
 		this._map.clear();
 		for (var key of this._session.keys()) {
-			this._map.set(key, this._session[key]);
+			this._map.set(key, this._session.get(key));
 		}
 
 		return this;

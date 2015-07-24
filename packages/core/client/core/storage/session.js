@@ -255,12 +255,19 @@ class StorageIterator {
 	 *         values.
 	 */
 	next() {
+		if (this._currentKeyIndex >= this._storage.length) {
+			return {
+				done: true,
+				value: undefined
+			};
+		}
+
 		var key = this._storage.key(this._currentKeyIndex);
 		this._currentKeyIndex++;
 
 		return {
-			done: !key,
-			value: key ? key : undefined
+			done: false,
+			value: key
 		};
 	}
 
