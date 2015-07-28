@@ -116,7 +116,7 @@ export var init = (ns, oc, config) => { //jshint ignore:line
 
 	//SuperAgent
 	oc.bind('$HttpTransformer', ns.Core.Http.Transformer);
-	oc.bind('$HttpProxy', ns.Core.Http.Proxy, ['$SuperAgent', '$HTTP_STATUS_CODE', '$Window']);
+	oc.bind('$HttpProxy', ns.Core.Http.Proxy, ['$SuperAgent', '$HTTP_STATUS_CODE', '$HttpTransformer', '$Window']);
 	oc.provide(ns.Core.Interface.HttpAgent, ns.Core.Http.Agent, ['$HttpProxy', '$Cache', '$CookieStorage', config.$Http]);
 	oc.bind('$Http', ns.Core.Interface.HttpAgent);
 
