@@ -21,9 +21,8 @@ export var init = (ns, oc, config) => { //jshint ignore:line
 	oc.constant('$Env', config.$Env);
 	oc.constant('$Protocol', config.$Protocol);
 
-	oc.constant('$HTTP_CONFIG', config.$Http);
-	oc.constant('$CACHE_CONFIG', config.$Cache);
-	oc.constant('$SECURE', config.$Protocol === 'https:' ? true : false);
+	oc.constant('$Secure', config.$Protocol === 'https:' ? true : false);
+
 	oc.constant('$ROUTE_NAMES', ns.Core.Router.ROUTE_NAMES);
 	oc.constant('$HTTP_STATUS_CODE', ns.Core.Http.STATUS_CODE);
 
@@ -85,7 +84,7 @@ export var init = (ns, oc, config) => { //jshint ignore:line
 		oc.constant('$CacheStorage', oc.get('$MapStorage'));
 	}
 	oc.bind('$CacheFactory', ns.Core.Cache.Factory, ['$CacheEntry']);
-	oc.provide(ns.Core.Interface.Cache, ns.Core.Cache.Handler, ['$CacheStorage', '$CacheFactory', '$CACHE_CONFIG']);
+	oc.provide(ns.Core.Interface.Cache, ns.Core.Cache.Handler, ['$CacheStorage', '$CacheFactory', config.$Cache]);
 	oc.bind('$Cache', ns.Core.Interface.Cache);
 
 	//SEO
@@ -117,8 +116,9 @@ export var init = (ns, oc, config) => { //jshint ignore:line
 	oc.bind('$Router', ns.Core.Interface.Router);
 
 	//SuperAgent
+	oc.bind('$HttpTransformer', ns.Core.Http.Transformer);
 	oc.bind('$HttpProxy', ns.Core.Http.Proxy, ['$SuperAgent', '$HTTP_STATUS_CODE', '$Window']);
-	oc.provide(ns.Core.Interface.HttpAgent, ns.Core.Http.Agent, ['$HttpProxy', '$Cache', '$CookieStorage', '$HTTP_CONFIG']);
+	oc.provide(ns.Core.Interface.HttpAgent, ns.Core.Http.Agent, ['$HttpProxy', '$Cache', '$CookieStorage', config.$Http.defaultRequestOptions, config.$Http.cacheOptions]);
 	oc.bind('$Http', ns.Core.Interface.HttpAgent);
 
 	//*************END CORE****************

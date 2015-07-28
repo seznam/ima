@@ -32,7 +32,7 @@ export var init = (ns, oc, config) => {
 
 	oc
 		.get('$CookieStorage')
-		.init({secure: oc.get('$SECURE')});
+		.init({secure: oc.get('$Secure')});
 
 	oc
 		.get('$SessionStorage')
@@ -52,6 +52,10 @@ export var init = (ns, oc, config) => {
 
 	oc
 		.get('$PageStateManager')
+		.clear();
+
+	oc
+		.get('$HttpTransformer')
 		.clear();
 
 };

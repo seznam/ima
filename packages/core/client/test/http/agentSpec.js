@@ -17,10 +17,15 @@ describe('Core.Http.Agent', function() {
 
 		proxy = oc.create('$HttpProxy');
 		cookie = oc.create('$CookieStorage');
-		httpConfig = oc.create('$HTTP_CONFIG');
-		http = oc.create('Core.Http.Agent', [proxy, cache, cookie, httpConfig]);
+		httpConfig = oc.get('$Settings').$Http;
+		http = oc.create('Core.Http.Agent', [proxy, cache, cookie, httpConfig.defaultRequestOptions, httpConfig.cacheOptions]);
 
-		options = {ttl: httpConfig.ttl, timeout: httpConfig.timeout, repeatRequest: httpConfig.repeatRequest, language: httpConfig.language};
+		options = {
+			ttl: httpConfig.defaultRequestOptions.ttl,
+			timeout: httpConfig.defaultRequestOptions.timeout,
+			repeatRequest: httpConfig.defaultRequestOptions.repeatRequest,
+			language: httpConfig.defaultRequestOptions.language
+		};
 
 		data = {
 			status: 200,
