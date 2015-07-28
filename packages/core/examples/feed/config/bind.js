@@ -1,10 +1,9 @@
 export var init = (ns, oc, config) => {
 
 	//*************START CONSTANT**************
-	var baseUrl = config.$Http.baseUrl;
-	oc.constant('API_BASE_URL', baseUrl);
-	oc.constant('CATEGORIES_API_URL', baseUrl + config.Api.categories);
-	oc.constant('ITEMS_API_URL', baseUrl + config.Api.items);
+	oc.constant('API_BASE_URL', config.Api.baseUrl);
+	oc.constant('CATEGORIES_API_URL', config.Api.baseUrl + config.Api.categories);
+	oc.constant('ITEMS_API_URL', config.Api.baseUrl + config.Api.items);
 	oc.constant('DEFAULT_PORTAL_ICON', config.Images.defaultCategoryListIcon);
 	//*************END CONSTANT****************
 

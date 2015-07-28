@@ -20,11 +20,12 @@ export default class Proxy {
 	 * @param {Vendor.SuperAgent} superAgent SuperAgent instance to use for
 	 *        sending the HTTP requests.
 	 * @param {Object} HTTP_STATUS_CODE
+	 * @param {Core.Http.Transformer} transformer Transform apply rules to request url.
 	 * @param {Core.Interface.Window} window Helper for manipulating the global
 	 *        object ({@code window}) regardless of the client/server-side
 	 *        environment.
 	 */
-	constructor(superAgent, HTTP_STATUS_CODE, window) {
+	constructor(superAgent, HTTP_STATUS_CODE, transformer, window) {
 		/**
 		 * SuperAgent instance to use for sending the HTTP requests, providing
 		 * uniform API across both the client-side and the server-side
@@ -44,6 +45,13 @@ export default class Proxy {
 		 * @type {Object}
 		 */
 		this.HTTP_STATUS_CODE = HTTP_STATUS_CODE;
+
+		/**
+		 * @property _transformer
+		 * @private
+		 * @type {Core.Http.Transformer}
+		 */
+		this._transformer = transformer;
 
 		/**
 		 * Helper for manipulating the global object ({@code window}) regardless of
@@ -88,10 +96,8 @@ export default class Proxy {
 	request(method, url, data, options) {
 		return (
 			new Promise((resolve, reject) => {
-
 				var params = this._composeRequestParams(method, url, data, options);
-
-				var request = this._superAgent[method](url);
+				var request = this._superAgent[method](params.transformedUrl);
 
 				if (method === 'get') {
 					request.query(data);
@@ -150,7 +156,6 @@ export default class Proxy {
 	 */
 	getErrorParams(method, url, data, options, status) {
 		var params = this._composeRequestParams(method, url, data, options);
-
 		var error = {status};
 
 		switch (status) {
@@ -256,10 +261,12 @@ export default class Proxy {
 		if (response.error) {
 			var errorParams = this.getErrorParams(params.method, params.url,
 				params.data, params.options, response.status);
+
 			reject(errorParams);
 		} else {
 			params.status = this.HTTP_STATUS_CODE.OK;
 			response.params = params;
+
 			resolve(response);
 		}
 	}
@@ -355,6 +362,7 @@ export default class Proxy {
 		return {
 			method,
 			url,
+			transformedUrl: this._transformer.transform(url),
 			data,
 			options
 		};

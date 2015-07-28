@@ -12,6 +12,7 @@ describe('Core.Http.Proxy', function() {
 	var data = {};
 	var options = {ttl: 3600000, timeout: 2000, repeatRequest: 1, headers: []};
 	var HTTP_STATUS_CODE = oc.get('$HTTP_STATUS_CODE');
+	var httpTransformer = oc.get('$HttpTransformer');
 	var windowHelper = oc.get('$Window');
 
 	beforeEach(function() {
@@ -35,7 +36,7 @@ describe('Core.Http.Proxy', function() {
 			}
 		};
 
-		proxy = oc.create('Core.Http.Proxy', [superAgent, HTTP_STATUS_CODE, windowHelper]);
+		proxy = oc.create('Core.Http.Proxy', [superAgent, HTTP_STATUS_CODE, httpTransformer, windowHelper]);
 
 		jasmine.clock().install();
 	});
