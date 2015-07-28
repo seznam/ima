@@ -29,12 +29,9 @@ export default class Agent extends ns.Core.Interface.HttpAgent {
 	 * @param {Core.Cache.Handler} cache Cache to use for caching ongoing and
 	 *        completed requests.
 	 * @param {Core.Storage.Cookie} cookie The cookie storage to use internally.
-	 * @param {Object<string, (number|string)>} defaultRequestOptions Configuration of the HTTP handler for
+	 * @param {Object<string, *>} config Configuration of the HTTP handler for
 	 *        the current application environment, specifying the various default
-	 *        request option values.
-	 * @param {Object<string, string>} cacheOptions Configuration of the HTTP handler for
-	 *        the current application environment, specifying the various cache
-	 *        option values.
+	 *        request option values and cache option values.
 	 * @example
 	 *      http
 	 *          .get('url', { data: data }, {
@@ -55,7 +52,7 @@ export default class Agent extends ns.Core.Interface.HttpAgent {
 	 *          .setDefaultHeader('Accept-Language', 'en')
 	 *          .clearDefaultHeaders();
 	 */
-	constructor(proxy, cache, cookie, defaultRequestOptions, cacheOptions) {
+	constructor(proxy, cache, cookie, config) {
 		super();
 
 		/**
@@ -94,7 +91,7 @@ export default class Agent extends ns.Core.Interface.HttpAgent {
 		 * @private
 		 * @type {Object<string, string>}
 		 */
-		this._cacheOptions = cacheOptions;
+		this._cacheOptions = config.cacheOptions;
 
 		/**
 		 * Default request options.
@@ -103,7 +100,7 @@ export default class Agent extends ns.Core.Interface.HttpAgent {
 		 * @private
 		 * @type {Object<string, (number|string)>}
 		 */
-		this._defaultRequestOptions = defaultRequestOptions;
+		this._defaultRequestOptions = config.defaultRequestOptions;
 	}
 
 	/**

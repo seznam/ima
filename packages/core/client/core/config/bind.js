@@ -20,7 +20,6 @@ export var init = (ns, oc, config) => { //jshint ignore:line
 	oc.constant('$Settings', config);
 	oc.constant('$Env', config.$Env);
 	oc.constant('$Protocol', config.$Protocol);
-
 	oc.constant('$Secure', config.$Protocol === 'https:' ? true : false);
 
 	oc.constant('$ROUTE_NAMES', ns.Core.Router.ROUTE_NAMES);
@@ -118,7 +117,7 @@ export var init = (ns, oc, config) => { //jshint ignore:line
 	//SuperAgent
 	oc.bind('$HttpTransformer', ns.Core.Http.Transformer);
 	oc.bind('$HttpProxy', ns.Core.Http.Proxy, ['$SuperAgent', '$HTTP_STATUS_CODE', '$Window']);
-	oc.provide(ns.Core.Interface.HttpAgent, ns.Core.Http.Agent, ['$HttpProxy', '$Cache', '$CookieStorage', config.$Http.defaultRequestOptions, config.$Http.cacheOptions]);
+	oc.provide(ns.Core.Interface.HttpAgent, ns.Core.Http.Agent, ['$HttpProxy', '$Cache', '$CookieStorage', config.$Http]);
 	oc.bind('$Http', ns.Core.Interface.HttpAgent);
 
 	//*************END CORE****************

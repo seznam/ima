@@ -18,7 +18,7 @@ describe('Core.Http.Agent', function() {
 		proxy = oc.create('$HttpProxy');
 		cookie = oc.create('$CookieStorage');
 		httpConfig = oc.get('$Settings').$Http;
-		http = oc.create('Core.Http.Agent', [proxy, cache, cookie, httpConfig.defaultRequestOptions, httpConfig.cacheOptions]);
+		http = oc.create('Core.Http.Agent', [proxy, cache, cookie, httpConfig]);
 
 		options = {
 			ttl: httpConfig.defaultRequestOptions.ttl,
