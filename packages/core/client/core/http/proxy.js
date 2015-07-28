@@ -97,8 +97,7 @@ export default class Proxy {
 		return (
 			new Promise((resolve, reject) => {
 				var params = this._composeRequestParams(method, url, data, options);
-				var transformedUrl = this._transformer.transform(url);
-				var request = this._superAgent[method](transformedUrl);
+				var request = this._superAgent[method](params.transformedUrl);
 
 				if (method === 'get') {
 					request.query(data);
@@ -363,6 +362,7 @@ export default class Proxy {
 		return {
 			method,
 			url,
+			transformedUrl: this._transformer.transform(url),
 			data,
 			options
 		};
