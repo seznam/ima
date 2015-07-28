@@ -4,14 +4,17 @@ export var init = (ns, oc, config) => { // jshint ignore:line
 	return {
 		prod: {
 			$Http: {
-				baseUrl: config.$Protocol + '//www.example.com/api', // jshint ignore:line
-				timeout: 7000,
-				repeatRequest: 1,
-				ttl: 0,
-				accept: 'application/json',
-				cachePrefix: 'http.',
-				cachePrefixPromise: 'http.promise.',
-				language: config.$Language
+				defaultRequestOptions: {
+					timeout: 7000,  // Request timeout
+					repeatRequest: 1,   // Count of automatic repeated request after failing request.
+					ttl: 0, // Default time to live for cached request in ms.
+					accept: 'application/json', // Set Accept header.
+					language: config.$Language  // Set Accept-Language header.
+				},
+				cacheOptions: {
+					prefix: 'http.', // Cache key prefix for response bodies (already parsed as JSON) of completed HTTP requests.
+					prefixPromise: 'http.promise' // Cache key prefix for promises representing HTTP requests in progress.
+				}
 			},
 			$Cache: {
 				enabled: true,
@@ -34,15 +37,17 @@ export var init = (ns, oc, config) => { // jshint ignore:line
 
 		test: {
 			$Http: {
-				baseUrl: config.$Protocol + '//example.test/api', // jshint ignore:line
+				defaultRequestOptions: {
 					timeout: 5000
+				}
 			}
 		},
 
 		dev: {
 			$Http: {
-				baseUrl: config.$Protocol + '//localhost:3001/api', // jshint ignore:line
-				timeout: 2000
+				defaultRequestOptions: {
+					timeout: 2000
+				}
 			},
 			$Page:{
 				$Render: {

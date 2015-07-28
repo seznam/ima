@@ -1,19 +1,20 @@
-var versionCoef = 1000 * 30;
-var version = Math.round(new Date().getTime() / versionCoef) * versionCoef;
-var versionStamp = `?version=${version}`;
+export var init = (ns, oc, config) => { // jshint ignore:line
+	var versionStamp = `?version=${config.$Version}`;
 
-export var init = (ns, oc, config) => {
 	return {
 		prod: {
 			$Http: {
-				baseUrl: config.$Protocol + '//www.example.com/api',
-				timeout: 7000,
-				repeatRequest: 1,
-				ttl: 0,
-				accept: 'application/json',
-				cachePrefix: 'http.',
-				cachePrefixPromise: 'http.promise.',
-				language: config.$Language
+				defaultRequestOptions: {
+					timeout: 7000,  // Request timeout
+					repeatRequest: 1,   // Count of automatic repeated request after failing request.
+					ttl: 0, // Default time to live for cached request in ms.
+					accept: 'application/json', // Set Accept header.
+					language: config.$Language  // Set Accept-Language header.
+				},
+				cacheOptions: {
+					prefix: 'http.', // Cache key prefix for response bodies (already parsed as JSON) of completed HTTP requests.
+					prefixPromise: 'http.promise' // Cache key prefix for promises representing HTTP requests in progress.
+				}
 			},
 			$Cache: {
 				enabled: true,
@@ -23,26 +24,30 @@ export var init = (ns, oc, config) => {
 				$Render: {
 					scripts: [
 						'/static/js/locale/' + config.$Language + '.js' + versionStamp,
-						'/static/js/app.min.js' + versionStamp
+						'/static/js/app.bundle.min.js' + versionStamp
 					],
 					documentView: 'App.Component.Document.View',
-					masterElementId: 'page',
-					version: version
+					masterElementId: 'page'
 				}
+			},
+			$Static: {
+				image: '/static/img/'
 			}
 		},
 
 		test: {
 			$Http: {
-				baseUrl: config.$Protocol + '//example.test/api',
+				defaultRequestOptions: {
 					timeout: 5000
+				}
 			}
 		},
 
 		dev: {
 			$Http: {
-				baseUrl: config.$Protocol + '//localhost:3001/api',
-				timeout: 2000
+				defaultRequestOptions: {
+					timeout: 2000
+				}
 			},
 			$Page:{
 				$Render: {
