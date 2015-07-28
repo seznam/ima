@@ -58,11 +58,11 @@ class Transformer {
 	 * For given string apply all rules. Method use all rules and try replace
 	 * defined key of rule with value of rule.
 	 *
-	 * @method translate
-	 * @param {string} str The string for translation.
-	 * @return {string} translated string
+	 * @method transform
+	 * @param {string} str The string for transformation.
+	 * @return {string} transformed string
 	 */
-	translate(str) {
+	transform(str) {
 		var rulesKey = Object.keys(this._rules);
 
 		if (rulesKey.length === 0) {

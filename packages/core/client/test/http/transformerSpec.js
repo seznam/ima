@@ -23,25 +23,25 @@ describe('Core.Http.Transformer', function() {
 	});
 
 	it('should apply one rule', function() {
-		expect(transformer.translate('http://localhost:3001/something/otherPath'))
+		expect(transformer.transform('http://localhost:3001/something/otherPath'))
 			.toEqual('http://127.0.0.1:3002/somethingElse/otherPath');
 	});
 
 	it('should apply both rules', function() {
-		expect(transformer.translate('http://localhost:3001/something/otherPath/:appIdRules'))
+		expect(transformer.transform('http://localhost:3001/something/otherPath/:appIdRules'))
 			.toEqual('http://127.0.0.1:3002/somethingElse/otherPath/123');
 	});
 
 	it('should return same url for not match rules', function() {
 		var  url = 'http://www.example.com/something';
 
-		expect(transformer.translate(url)).toEqual(url);
+		expect(transformer.transform(url)).toEqual(url);
 	});
 
 	it('should return same url for none rules', function() {
 		var  url = 'http://www.example.com/something';
 		transformer = oc.create('$HttpTransformer');
 
-		expect(transformer.translate(url)).toEqual(url);
+		expect(transformer.transform(url)).toEqual(url);
 	});
 });
