@@ -243,7 +243,10 @@ describe('Core.ObjectContainer', function() {
 		it('should be return entry from aliases', function() {
 			oc.bind(alias, classConstructor, dependencies);
 
-			expect(oc._getEntry(alias).sharedInstance)
+			var entry = oc._getEntry(alias);
+
+			expect(entry.classConstructor).toEqual(classConstructor);
+			expect(entry.dependencies).toEqual(dependencies);
 		});
 
 		it('should be return value from registry', function() {
