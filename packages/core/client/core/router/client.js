@@ -312,12 +312,14 @@ export default class Client extends ns.Core.Abstract.Router {
 		var anchorHref = anchorElement.href;
 		var isDefinedTargetHref = (anchorHref !== undefined) &&
 				(anchorHref !== null);
+		var isSetTarget = anchorElement.getAttribute('target') != null;
 		var isMiddleButton = event.button === MOUSE_MIDDLE_BUTTON;
 		var isSameDomain = this._isSameDomain(anchorHref);
 		var isHashLink = this._isHashLink(anchorHref);
 		var isLinkPrevented = event.defaultPrevented;
 
 		if (!isDefinedTargetHref ||
+				isSetTarget ||
 				isMiddleButton ||
 				!isSameDomain ||
 				isHashLink ||
