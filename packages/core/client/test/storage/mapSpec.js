@@ -62,18 +62,24 @@ describe('Core.Storage.Map', function() {
 			.set('item3', false);
 
 		var index = 0;
-		for (var key of map.keys()) {
+		var iterator = map.keys();
+		var item = iterator.next();
+
+		do {
 			switch (index++) {
 				case 0:
-					expect(key).toEqual('item1');
+					expect(item.value).toEqual('item1');
 					break;
 				case 1:
-					expect(key).toEqual('item2');
+					expect(item.value).toEqual('item2');
 					break;
 				default:
-					expect(key).toEqual('item3');
+					expect(item.value).toEqual('item3');
 					break;
 			}
-		}
+			item = iterator.next();
+
+		} while(item.done != true)
+
 	});	
 });
