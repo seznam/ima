@@ -86,7 +86,7 @@ export default class Proxy {
 	 *        send to the server. The data will be included as query parameters
 	 *        if the request method is set to {@code GET}, and as request body
 	 *        for any other request method.
-	 * @param {Object<string, (number|string)>} options The options used to
+	 * @param {Object<string, *>} options The options used to
 	 *        create the request.
 	 * @return {Promise<Vendor.SuperAgent.Response>} A promise that resolves to
 	 *         the server response. The promise rejects on failure with an error
@@ -148,7 +148,7 @@ export default class Proxy {
 	 * @param {string} url The URL to which the request has been made.
 	 * @param {Object<string, (boolean|number|string|Date)>} data The data sent
 	 *        with the request.
-	 * @param {Object<string, (number|string)>} options The options used to
+	 * @param {Object<string, *>} options The options used to
 	 *        create the request.
 	 * @param {number} status The HTTP response status code send by the server.
 	 * @return {Object<string, *>} An object containing both the details of the
@@ -220,9 +220,9 @@ export default class Proxy {
 	 *        callback to call if the request completes successfuly.
 	 * @param {function(Object<string, *>)} reject Promise rejection callback to
 	 *        call if the request fails with an error.
-	 * @param {{method: string, url: string, data: Object<string, (boolean|number|string|Date)>, options: Object<string, (number|string)>}}
-	 *        params An object representing the complete request parameters used
-	 *        to create and send the HTTP request.
+	 * @param {{method: string, url: string, data: Object<string, (boolean|number|string|Date)>,
+	 *        options: Object<string, *>} params An object representing the complete
+	 *        request parameters used to create and send the HTTP request.
 	 * @return {Core.Http.Proxy} This instance.
 	 */
 	_sendRequest(request, resolve, reject, params) {
@@ -253,9 +253,9 @@ export default class Proxy {
 	 *        callback to call if the request has been completed successfuly.
 	 * @param {function(Object<string, *>)} reject Promise rejection callback to
 	 *        call if the request failed with an error.
-	 * @param {{method: string, url: string, data: Object<string, (boolean|number|string|Date)>, options: Object<string, (number|string)>}}
-	 *        params An object representing the complete request parameters used
-	 *        to create and send the HTTP request.
+	 * @param {{method: string, url: string, data: Object<string, (boolean|number|string|Date)>,
+	 *        options: Object<string, *>} params An object representing the complete
+	 *        request parameters used to create and send the HTTP request.
 	 */
 	_handleResponse(response, resolve, reject, params) {
 		if (response.error) {
@@ -284,9 +284,9 @@ export default class Proxy {
 	 *        providing additional details (timeout, HTTP status code, etc.).
 	 * @param {function(Object<string, *>)} reject Promise rejection callback to
 	 *        call.
-	 * @param {{method: string, url: string, data: Object<string, (boolean|number|string|Date)>, options: Object<string, (number|string)>}}
-	 *        params An object representing the complete request parameters used
-	 *        to create and send the HTTP request.
+	 * @param {{method: string, url: string, data: Object<string, (boolean|number|string|Date)>,
+	 *        options: Object<string, *>} params An object representing the complete
+	 *        request parameters used to create and send the HTTP request.
 	 */
 	_handleError(error, reject, params) {
 		var errorParams = {};
@@ -317,17 +317,14 @@ export default class Proxy {
 	 * @chainable
 	 * @param {Vendor.SuperAgent.Request} request The request on which the HTTP
 	 *        headers should be set.
-	 * @param {{accept: string, language: string, cookie: string}} options The
-	 *        options to apply to the request as HTTP headers.
+	 * @param {Object<string, *>} options The options used to
+	 *        create the request.
 	 * @return {Core.Http.Proxy} This instance.
 	 */
 	_setHeaders(request, options) {
 		for (var [headerName, headerValue] of this._defaultHeaders) {
 			request.set(headerName, headerValue);
 		}
-
-		request.set('Accept', options.accept);
-		request.set('Accept-Language', options.language);
 
 		for (var headerName of Object.keys(options.headers)) {
 			request.set(headerName, options.headers[headerName]);
@@ -350,9 +347,10 @@ export default class Proxy {
 	 * @param {string} url The URL to which the request should be sent.
 	 * @param {Object<string, (boolean|number|string|Date)>} data The data to
 	 *        send with the request.
-	 * @param {Object<string, (number|string)>} options Request options: accepted
-	 *        content encoding and language, cookies, etc.
-	 * @return {{method: string, url: string, data: Object<string, (boolean|number|string|Date)>, options: Object<string, (number|string)>}}
+	 * @param {Object<string, *>} options The options used to
+	 *        create the request.
+	 * @return {{method: string, url: string, data: Object<string, (boolean|number|string|Date)>,
+	 *         options: {headers: Object<string, string>, cookie: string}}}
 	 *         An object representing the complete request parameters used to
 	 *         create and send the HTTP request.
 	 */
