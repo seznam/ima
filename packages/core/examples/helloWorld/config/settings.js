@@ -8,8 +8,10 @@ export var init = (ns, oc, config) => { // jshint ignore:line
 					timeout: 7000,  // Request timeout
 					repeatRequest: 1,   // Count of automatic repeated request after failing request.
 					ttl: 0, // Default time to live for cached request in ms.
-					accept: 'application/json', // Set Accept header.
-					language: config.$Language  // Set Accept-Language header.
+					headers: {  // Set default request headers
+						'Accept': 'application/json',
+						'Accept-Language': config.$Language
+					}
 				},
 				cacheOptions: {
 					prefix: 'http.', // Cache key prefix for response bodies (already parsed as JSON) of completed HTTP requests.
