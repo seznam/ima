@@ -329,10 +329,8 @@ export default class Proxy {
 		request.set('Accept', options.accept);
 		request.set('Accept-Language', options.language);
 
-		for (var header of options.headers) {
-			if (header.name && header.value) {
-				request.set(header.name, header.value);
-			}
+		for (var headerName of Object.keys(options.headers)) {
+			request.set(headerName, options.headers[headerName]);
 		}
 
 		if (this.haveToSetCookiesManually()) {
