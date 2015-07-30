@@ -25,47 +25,48 @@ var createIMAJsApp = () => {
 	return {oc, bootstrap};
 };
 
-//only on client side
-if (typeof window !== 'undefined' && window !== null) {
+var root = (typeof window !== 'undefined' && window !== null) ? window : GLOBAL;
 
-	//check enviroment
-	if (window.$IMA.Test === true) {
+//Check testing
+if (root.$IMA.Test === true) {
 
-		window.$Debug = true;
+	root.$Debug = true;
 
-		var bootConfig = {
-			services: {
-				respond: null,
-				request: null,
-				$IMA: window.$IMA,
-				dictionary: {
-					$Language: window.$IMA.$Language,
-					dictionary: window.$IMA.i18n
-				},
-				router: {
-					$Host: window.$IMA.$Host,
-					$Root: window.$IMA.$Root,
-					$LanguagePartPath: window.$IMA.$LanguagePartPath
-				}
+	var bootConfig = {
+		services: {
+			respond: null,
+			request: null,
+			$IMA: $IMA,
+			dictionary: {
+				$Language: $IMA.$Language,
+				dictionary: $IMA.i18n
 			},
-			settings: {
-				$Env: 'dev',
-				$Language: 'en',
-				$Protocol: 'http:',
-				$Debug: true
+			router: {
+				$Host: $IMA.$Host,
+				$Root: $IMA.$Root,
+				$LanguagePartPath: $IMA.$LanguagePartPath
 			}
-		};
+		},
+		settings: {
+			$Env: 'dev',
+			$Language: 'en',
+			$Protocol: 'http:',
+			$Debug: true
+		}
+	};
 
-		Object.assign(bootConfig, getInit());
+	Object.assign(bootConfig, getInit());
 
-		var app = createIMAJsApp();
+	var app = createIMAJsApp();
 
-		app.bootstrap.run(bootConfig);
+	app.bootstrap.run(bootConfig);
 
-		window.ns = ns;
-		window.oc = app.oc;
+	root.ns = ns;
+	root.oc = app.oc;
 
-	} else {
+} else {
+
+	if (typeof window !== 'undefined' && window !== null) {
 
 		var revivalIMAjsApp = () => {
 			//hack for browser Chrome, which has sometimes problem with rendering page
@@ -79,8 +80,8 @@ if (typeof window !== 'undefined' && window !== null) {
 			window.$Debug = window.$IMA.$Debug;
 
 			if ($Debug && window.$IMA.$Protocol !== window.location.protocol) {
-					throw new Error(`Your client's protocol is not same as server's protocol.` +
-							`For right setting protocol on the server site set 'X-Forwarded-Proto' header.`);
+				throw new Error(`Your client's protocol is not same as server's protocol.` +
+						`For right setting protocol on the server site set 'X-Forwarded-Proto' header.`);
 			}
 
 			var bootConfig = {
@@ -132,6 +133,7 @@ if (typeof window !== 'undefined' && window !== null) {
 			window.addEventListener('DOMContentLoaded', revivalIMAjsApp);
 		}
 	}
+
 }
 
 export {getInit, getNamespace, createIMAJsApp};
