@@ -51,7 +51,7 @@ export default class Request {
 	 * @return {string} The path to which the request was made.
 	 */
 	getPath() {
-		return this._request.originalUrl;
+		return this._request ? this._request.originalUrl : '';
 	}
 
 	/**
@@ -61,7 +61,7 @@ export default class Request {
 	 * @return {string} The value of the {@code Cookie} header.
 	 */
 	getCookieHeader() {
-		return this._request.get('Cookie');
+		return this._request ? this._request.get('Cookie') : '';
 	}
 }
 
