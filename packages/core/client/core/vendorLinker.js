@@ -4,8 +4,7 @@ var vendor;
 if (typeof window !== 'undefined' && window !== null) {
 	vendor = window.$IMA.Vendor;
 } else {
-	var vendorScript = require('./vendor.server.js');
-	vendor = vendorScript();
+	vendor = require('./vendor.server.js');
 }
 
 var nsVendor = ns.namespace('Vendor');

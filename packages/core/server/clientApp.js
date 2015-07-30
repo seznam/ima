@@ -8,9 +8,10 @@ var environment = require('./environment.js');
 var instanceRecycler = require('./instanceRecycler.js');
 var helper = require('./helper.js');
 
-var appServerScript = require('./app.server.js');
+GLOBAL.$Debug = environment.$Debug;
+GLOBAL.$IMA = {};
 
-var appServer = appServerScript();
+var appServer = require('./app.server.js');
 
 hljs.configure({
 	tabReplace: '  ',
