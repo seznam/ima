@@ -60,14 +60,14 @@ const MODES = Object.freeze({
 });
 
 /**
- * The number used as the index of the mouse middle button in DOM
+ * The number used as the index of the mouse left button in DOM
  * {@code MouseEvent}s.
  *
  * @const
- * @property MOUSE_MIDDLE_BUTTON
+ * @property MOUSE_LEFT_BUTTON
  * @type {number}
  */
-const MOUSE_MIDDLE_BUTTON = 1;
+const MOUSE_LEFT_BUTTON = 0;
 
 /**
  * The client-side implementation of the {@codelink Core.Interface.Router}
@@ -312,15 +312,15 @@ export default class Client extends ns.Core.Abstract.Router {
 		var anchorHref = anchorElement.href;
 		var isDefinedTargetHref = (anchorHref !== undefined) &&
 				(anchorHref !== null);
-		var isSetTarget = anchorElement.getAttribute('target') != null;
-		var isMiddleButton = event.button === MOUSE_MIDDLE_BUTTON;
+		var isSetTarget = anchorElement.getAttribute('target') !== null;
+		var isLeftButton = event.button === MOUSE_LEFT_BUTTON;
 		var isSameDomain = this._isSameDomain(anchorHref);
 		var isHashLink = this._isHashLink(anchorHref);
 		var isLinkPrevented = event.defaultPrevented;
 
 		if (!isDefinedTargetHref ||
 				isSetTarget ||
-				isMiddleButton ||
+				!isLeftButton ||
 				!isSameDomain ||
 				isHashLink ||
 				isLinkPrevented) {
