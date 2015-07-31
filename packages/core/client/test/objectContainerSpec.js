@@ -218,6 +218,47 @@ describe('Core.ObjectContainer', function() {
 
 	});
 
+	describe('get method', function() {
+
+		var entry;
+
+		beforeEach(function() {
+			entry = {
+				sharedInstance: null,
+				classConstructor: classConstructor,
+				dependencies: dependencies
+			};
+		});
+
+		it('should return shared instance', function() {
+			entry.sharedInstance = false;
+
+			spyOn(oc, '_getEntry')
+				.and
+				.returnValue(entry);
+			spyOn(oc, '_createInstanceFromEntry')
+				.and
+				.stub();
+
+			expect(oc.get('entry')).toEqual(entry.sharedInstance);
+			expect(oc._createInstanceFromEntry.calls.count()).toEqual(0);
+		});
+
+		it('should create new instance', function() {
+			spyOn(oc, '_getEntry')
+				.and
+				.returnValue(entry);
+			spyOn(oc, '_createInstanceFromEntry')
+				.and
+				.stub();
+
+			oc.get('entry');
+
+			expect(oc._createInstanceFromEntry).toHaveBeenCalledWith(entry);
+		});
+
+	});
+
 	describe('_getEntry method', function() {
 
 		beforeEach(function() {
