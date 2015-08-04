@@ -323,6 +323,18 @@ export default class Client extends ns.Core.Interface.Window {
 	}
 
 	/**
+	 * Create new instance of CustomEvent with defined name and options.
+	 *
+	 * @method createCustomEvent
+	 * @param {string} name
+	 * @param {Object<string, *>} options
+	 * @return {CustomEvent}
+	 */
+	createCustomEvent(name, options) {
+		return new CustomEvent(name, options);
+	}
+
+	/**
 	 * Registers the provided event listener to be executed when the specified
 	 * event occurrs on the specified event target.
 	 *

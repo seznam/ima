@@ -311,6 +311,20 @@ export default class Server extends ns.Core.Interface.Window {
 	replaceState(state, title, url) {}
 
 	/**
+	 * Create new instance of CustomEvent with defined name and options.
+	 *
+	 * @method createCustomEvent
+	 * @param {string} name
+	 * @param {Object<string, *>} options
+	 * @return {CustomEvent}
+	 */
+	createCustomEvent(name, options) {
+		var dummyCustomEvent = {initCustomEvent: () => {}, detail: {}};
+
+		return Object.assign(dummyCustomEvent, options);
+	}
+
+	/**
 	 * Registers the provided event listener to be executed when the specified
 	 * event occurrs on the specified event target.
 	 *

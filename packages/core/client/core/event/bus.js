@@ -67,21 +67,19 @@ export default class Bus extends ns.Core.Interface.EventBus {
 	 * @throws {Error} Thrown if there is no event source defined.
 	 */
 	fire(eventSource, eventName, data, options = {}) {
-		if (this._window.isClient()) {
-			var eventInit = {};
-			var params = {detail: {eventName, data}};
-			var defaultOptions = {bubbles: true, cancelable: true};
-			Object.assign(eventInit, defaultOptions, options, params);
+		var eventInit = {};
+		var params = {detail: {eventName, data}};
+		var defaultOptions = {bubbles: true, cancelable: true};
+		Object.assign(eventInit, defaultOptions, options, params);
 
-			var e = new CustomEvent(IMA_EVENT, eventInit);
+		var e = this._window.createCustomEvent(IMA_EVENT, eventInit);
 
-			if (eventSource && typeof eventSource.dispatchEvent !== 'undefined') {
-				eventSource.dispatchEvent(e);
-			} else {
-				throw new IMAError(`Core.Event.Bus.fire: The EventSource ${eventSource} is not defined or ` +
-						`can not dispatch event '${eventName}' (data: ${data}).`,
-						{eventSource, eventName, data, eventInit});
-			}
+		if (eventSource && typeof eventSource.dispatchEvent !== 'undefined') {
+			eventSource.dispatchEvent(e);
+		} else {
+			throw new IMAError(`Core.Event.Bus.fire: The EventSource ${eventSource} is not defined or ` +
+					`can not dispatch event '${eventName}' (data: ${data}).`,
+					{eventSource, eventName, data, eventInit});
 		}
 
 		return this;
