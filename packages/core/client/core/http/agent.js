@@ -304,7 +304,7 @@ export default class Agent extends ns.Core.Interface.HttpAgent {
 	_requestWithCheckCache(method, url, data, options) {
 		options = this._prepareOptions(options);
 
-		if (!options.cache) {
+		if (options.cache) {
 			var cachedData = this._getCachedData(method, url, data);
 
 			if (cachedData) {
