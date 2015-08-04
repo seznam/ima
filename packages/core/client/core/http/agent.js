@@ -114,13 +114,14 @@ export default class Agent extends ns.Core.Interface.HttpAgent {
 	 * @param {Object<string, (boolean|number|string|Date)>} data The data to
 	 *        send to the server as query parameters.
 	 * @param {{timeout: number=, ttl: number=, repeatRequest: number=,
-	 *        accept: string=, language: string=}=} options
+	 *        headers: Object<string, string>=, noCache: boolean=}=} options
 	 *        Optional request options. The {@code timeout} specifies the request
 	 *        timeout in milliseconds, the {@code ttl} specified how long the
 	 *        request may be cached in milliseconds, the
 	 *        {@code repeatRequest} specifies the maximum number of tries to
-	 *        repeat the request if the request fails, the {@code accept} set
-	 *        Accept header and the {@code language} set Accept-Language header.
+	 *        repeat the request if the request fails, The {@code headers} set
+	 *        request headers. The {@code noCache} can be used to bypass the cache
+	 *        of pending and finished HTTP requests.
 	 * @return {Promise<*>} A promise that resolves to the response body parsed
 	 *         as JSON.
 	 */
@@ -139,13 +140,14 @@ export default class Agent extends ns.Core.Interface.HttpAgent {
 	 * @param {Object<string, (boolean|number|string|Date)>} data The data to
 	 *        send to the server as request body.
 	 * @param {{timeout: number=, ttl: number=, repeatRequest: number=,
-	 *        accept: string=, language: string=}=} options
+	 *        headers: Object<string, string>=, noCache: boolean=}=} options
 	 *        Optional request options. The {@code timeout} specifies the request
 	 *        timeout in milliseconds, the {@code ttl} specified how long the
 	 *        request may be cached in milliseconds, the
 	 *        {@code repeatRequest} specifies the maximum number of tries to
-	 *        repeat the request if the request fails, the {@code accept} set
-	 *        Accept header and the {@code language} set Accept-Language header.
+	 *        repeat the request if the request fails, The {@code headers} set
+	 *        request headers. The {@code noCache} can be used to bypass the cache
+	 *        of pending and finished HTTP requests.
 	 * @return {Promise<*>} A promise that resolves to the response body parsed
 	 *         as JSON.
 	 */
@@ -164,13 +166,14 @@ export default class Agent extends ns.Core.Interface.HttpAgent {
 	 * @param {Object<string, (boolean|number|string|Date)>} data The data to
 	 *        send to the server as request body.
 	 * @param {{timeout: number=, ttl: number=, repeatRequest: number=,
-	 *        accept: string=, language: string=}=} options
+	 *        headers: Object<string, string>=, noCache: boolean=}=} options
 	 *        Optional request options. The {@code timeout} specifies the request
 	 *        timeout in milliseconds, the {@code ttl} specified how long the
 	 *        request may be cached in milliseconds, the
 	 *        {@code repeatRequest} specifies the maximum number of tries to
-	 *        repeat the request if the request fails, the {@code accept} set
-	 *        Accept header and the {@code language} set Accept-Language header.
+	 *        repeat the request if the request fails, The {@code headers} set
+	 *        request headers. The {@code noCache} can be used to bypass the cache
+	 *        of pending and finished HTTP requests.
 	 * @return {Promise<*>} A promise that resolves to the response body parsed
 	 *         as JSON.
 	 */
@@ -189,13 +192,14 @@ export default class Agent extends ns.Core.Interface.HttpAgent {
 	 * @param {Object<string, (boolean|number|string|Date)>} data The data to
 	 *        send to the server as request body.
 	 * @param {{timeout: number=, ttl: number=, repeatRequest: number=,
-	 *        accept: string=, language: string=}=} options
+	 *        headers: Object<string, string>=, noCache: boolean=}=} options
 	 *        Optional request options. The {@code timeout} specifies the request
 	 *        timeout in milliseconds, the {@code ttl} specified how long the
 	 *        request may be cached in milliseconds, the
 	 *        {@code repeatRequest} specifies the maximum number of tries to
-	 *        repeat the request if the request fails, the {@code accept} set
-	 *        Accept header and the {@code language} set Accept-Language header.
+	 *        repeat the request if the request fails, The {@code headers} set
+	 *        request headers. The {@code noCache} can be used to bypass the cache
+	 *        of pending and finished HTTP requests.
 	 * @return {Promise<*>} A promise that resolves to the response body parsed
 	 *         as JSON.
 	 */
@@ -214,13 +218,14 @@ export default class Agent extends ns.Core.Interface.HttpAgent {
 	 * @param {Object<string, (boolean|number|string|Date)>} data The data to
 	 *        send to the server as request body.
 	 * @param {{timeout: number=, ttl: number=, repeatRequest: number=,
-	 *        accept: string=, language: string=}=} options
+	 *        headers: Object<string, string>=, noCache: boolean=}=} options
 	 *        Optional request options. The {@code timeout} specifies the request
 	 *        timeout in milliseconds, the {@code ttl} specified how long the
 	 *        request may be cached in milliseconds, the
 	 *        {@code repeatRequest} specifies the maximum number of tries to
-	 *        repeat the request if the request fails, the {@code accept} set
-	 *        Accept header and the {@code language} set Accept-Language header.
+	 *        repeat the request if the request fails, The {@code headers} set
+	 *        request headers. The {@code noCache} can be used to bypass the cache
+	 *        of pending and finished HTTP requests.
 	 * @return {Promise<*>} A promise that resolves to the response body parsed
 	 *         as JSON.
 	 */
@@ -291,16 +296,18 @@ export default class Agent extends ns.Core.Interface.HttpAgent {
 	 * @param {Object<string, (boolean|number|string|Date)>} data The data to
 	 *        send with the request.
 	 * @param {{timeout: number=, ttl: number=, repeatRequest: number=,
-	 *        accept: string=, language: string=}} options HTTP request options,
-	 *        as described in the public API.
+	 *        headers: Object<string, string>=, noCache: boolean=}} options
+	 *        HTTP request options, as described in the public API.
 	 * @return {Promise<*>} A promise that resolves to the response body parsed
 	 *         as JSON.
 	 */
 	_requestWithCheckCache(method, url, data, options) {
-		var cachedData = this._getCachedData(method, url, data);
+		if (!options.noCache) {
+			var cachedData = this._getCachedData(method, url, data);
 
-		if (cachedData) {
-			return cachedData;
+			if (cachedData) {
+				return cachedData;
+			}
 		}
 
 		options = this._prepareOptions(options);
@@ -357,8 +364,8 @@ export default class Agent extends ns.Core.Interface.HttpAgent {
 	 * @param {Object<string, (boolean|number|string|Date)>} data The data sent
 	 *        with the request.
 	 * @param {{timeout: number=, ttl: number=, repeatRequest: number=,
-	 *        accept: string=, language: string=}} options HTTP request options,
-	 *        as described in the public API.
+	 *        headers: Object<string, string>=, noCache: boolean=}} options
+	 *        HTTP request options, as described in the public API.
 	 * @return {Promise<*>} A promise that resolves the to response body parsed
 	 *         as JSON.
 	 */
@@ -463,8 +470,9 @@ export default class Agent extends ns.Core.Interface.HttpAgent {
 	 *
 	 * @method _prepareOptions
 	 * @private
-	 * @param {{timeout: number=, ttl: number=, repeatRequest: number=}} options
-	 *        Request options, as provided by the client code.
+	 * @param {{timeout: number=, ttl: number=, repeatRequest: number=,
+	 *        headers: Object<string, string>=, noCache: boolean=}} options
+	 *        HTTP request options, as described in the public API.
 	 * @return {Object<string, (number|string)>} Request options with set
 	 *         filled-in default values for missing fields, and extra options
 	 *         used internally.
