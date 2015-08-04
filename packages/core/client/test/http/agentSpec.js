@@ -24,6 +24,8 @@ describe('Core.Http.Agent', function() {
 			ttl: httpConfig.defaultRequestOptions.ttl,
 			timeout: httpConfig.defaultRequestOptions.timeout,
 			repeatRequest: httpConfig.defaultRequestOptions.repeatRequest,
+			headers: {},
+			cache: true,
 			language: httpConfig.defaultRequestOptions.language
 		};
 
