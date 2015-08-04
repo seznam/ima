@@ -12,6 +12,11 @@ describe('Core.Router.Client', function() {
 		routerFactory = oc.create('$RouterFactory');
 		win = oc.get('$Window');
 		router = oc.create('Core.Router.Client', [pageRender, routerFactory, ROUTE_NAMES, win]);
+
+		spyOn(win, 'hasHistoryAPI')
+			.and
+			.returnValue(true);
+
 		router.init({$Host: host, $Protocol: protocol});
 	});
 
