@@ -43,7 +43,7 @@ export default class HttpAgent {
 	 * @param {Object<string, (boolean|number|string|Date)>} data The data to
 	 *        send to the server as request body.
 	 * @param {{timeout: number=, ttl: number=, repeatRequest: number=,
-	 *        headers: Object<string, string>=, cache: boolean=}=} options
+	 *        headers: Object<string, string>=}=} options
 	 *        Optional request options. The {@code timeout} specifies the request
 	 *        timeout in milliseconds, the {@code ttl} specified how long the
 	 *        request may be cached in milliseconds, the
@@ -65,7 +65,7 @@ export default class HttpAgent {
 	 * @param {Object<string, (boolean|number|string|Date)>} data The data to
 	 *        send to the server as request body.
 	 * @param {{timeout: number=, ttl: number=, repeatRequest: number=,
-	 *        headers: Object<string, string>=, cache: boolean=}=} options
+	 *        headers: Object<string, string>=}=} options
 	 *        Optional request options. The {@code timeout} specifies the request
 	 *        timeout in milliseconds, the {@code ttl} specified how long the
 	 *        request may be cached in milliseconds, the
@@ -87,7 +87,7 @@ export default class HttpAgent {
 	 * @param {Object<string, (boolean|number|string|Date)>} data The data to
 	 *        send to the server as request body.
 	 * @param {{timeout: number=, ttl: number=, repeatRequest: number=,
-	 *        headers: Object<string, string>=, cache: boolean=}=} options
+	 *        headers: Object<string, string>=}=} options
 	 *        Optional request options. The {@code timeout} specifies the request
 	 *        timeout in milliseconds, the {@code ttl} specified how long the
 	 *        request may be cached in milliseconds, the
@@ -109,7 +109,7 @@ export default class HttpAgent {
 	 * @param {Object<string, (boolean|number|string|Date)>} data The data to
 	 *        send to the server as request body.
 	 * @param {{timeout: number=, ttl: number=, repeatRequest: number=,
-	 *        headers: Object<string, string>=, cache: boolean=}=} options
+	 *        headers: Object<string, string>=}=} options
 	 *        Optional request options. The {@code timeout} specifies the request
 	 *        timeout in milliseconds, the {@code ttl} specified how long the
 	 *        request may be cached in milliseconds, the
