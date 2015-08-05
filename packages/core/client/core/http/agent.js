@@ -140,19 +140,23 @@ export default class Agent extends ns.Core.Interface.HttpAgent {
 	 * @param {Object<string, (boolean|number|string|Date)>} data The data to
 	 *        send to the server as request body.
 	 * @param {{timeout: number=, ttl: number=, repeatRequest: number=,
-	 *        headers: Object<string, string>=, cache: boolean=}=} options
+	 *        headers: Object<string, string>=}=} options
 	 *        Optional request options. The {@code timeout} specifies the request
 	 *        timeout in milliseconds, the {@code ttl} specified how long the
 	 *        request may be cached in milliseconds, the
 	 *        {@code repeatRequest} specifies the maximum number of tries to
 	 *        repeat the request if the request fails, The {@code headers} set
-	 *        request headers. The {@code cache} can be used to bypass the cache
-	 *        of pending and finished HTTP requests.
+	 *        request headers.
 	 * @return {Promise<*>} A promise that resolves to the response body parsed
 	 *         as JSON.
 	 */
 	post(url, data, options = {}) {
-		return this._requestWithCheckCache('post', url, data, options);
+		return this._requestWithCheckCache(
+			'post',
+			url,
+			data,
+			Object.assign({}, options, { cache: false })
+		);
 	}
 
 	/**
@@ -166,19 +170,23 @@ export default class Agent extends ns.Core.Interface.HttpAgent {
 	 * @param {Object<string, (boolean|number|string|Date)>} data The data to
 	 *        send to the server as request body.
 	 * @param {{timeout: number=, ttl: number=, repeatRequest: number=,
-	 *        headers: Object<string, string>=, cache: boolean=}=} options
+	 *        headers: Object<string, string>=}=} options
 	 *        Optional request options. The {@code timeout} specifies the request
 	 *        timeout in milliseconds, the {@code ttl} specified how long the
 	 *        request may be cached in milliseconds, the
 	 *        {@code repeatRequest} specifies the maximum number of tries to
 	 *        repeat the request if the request fails, The {@code headers} set
-	 *        request headers. The {@code cache} can be used to bypass the cache
-	 *        of pending and finished HTTP requests.
+	 *        request headers.
 	 * @return {Promise<*>} A promise that resolves to the response body parsed
 	 *         as JSON.
 	 */
 	put(url, data, options = {}) {
-		return this._requestWithCheckCache('put', url, data, options);
+		return this._requestWithCheckCache(
+			'put',
+			url,
+			data,
+			Object.assign({}, options, { cache: false })
+		);
 	}
 
 	/**
@@ -192,19 +200,23 @@ export default class Agent extends ns.Core.Interface.HttpAgent {
 	 * @param {Object<string, (boolean|number|string|Date)>} data The data to
 	 *        send to the server as request body.
 	 * @param {{timeout: number=, ttl: number=, repeatRequest: number=,
-	 *        headers: Object<string, string>=, cache: boolean=}=} options
+	 *        headers: Object<string, string>=}=} options
 	 *        Optional request options. The {@code timeout} specifies the request
 	 *        timeout in milliseconds, the {@code ttl} specified how long the
 	 *        request may be cached in milliseconds, the
 	 *        {@code repeatRequest} specifies the maximum number of tries to
 	 *        repeat the request if the request fails, The {@code headers} set
-	 *        request headers. The {@code cache} can be used to bypass the cache
-	 *        of pending and finished HTTP requests.
+	 *        request headers.
 	 * @return {Promise<*>} A promise that resolves to the response body parsed
 	 *         as JSON.
 	 */
 	patch(url, data, options = {}) {
-		return this._requestWithCheckCache('patch', url, data, options);
+		return this._requestWithCheckCache(
+			'patch',
+			url,
+			data,
+			Object.assign({}, options, { cache: false })
+		);
 	}
 
 	/**
@@ -218,19 +230,23 @@ export default class Agent extends ns.Core.Interface.HttpAgent {
 	 * @param {Object<string, (boolean|number|string|Date)>} data The data to
 	 *        send to the server as request body.
 	 * @param {{timeout: number=, ttl: number=, repeatRequest: number=,
-	 *        headers: Object<string, string>=, cache: boolean=}=} options
+	 *        headers: Object<string, string>=}=} options
 	 *        Optional request options. The {@code timeout} specifies the request
 	 *        timeout in milliseconds, the {@code ttl} specified how long the
 	 *        request may be cached in milliseconds, the
 	 *        {@code repeatRequest} specifies the maximum number of tries to
 	 *        repeat the request if the request fails, The {@code headers} set
-	 *        request headers. The {@code cache} can be used to bypass the cache
-	 *        of pending and finished HTTP requests.
+	 *        request headers.
 	 * @return {Promise<*>} A promise that resolves to the response body parsed
 	 *         as JSON.
 	 */
 	delete(url, data, options = {}) {
-		return this._requestWithCheckCache('delete', url, data, options);
+		return this._requestWithCheckCache(
+			'delete',
+			url,
+			data,
+			Object.assign({}, options, { cache: false })
+		);
 	}
 
 	/**
@@ -304,7 +320,7 @@ export default class Agent extends ns.Core.Interface.HttpAgent {
 	_requestWithCheckCache(method, url, data, options) {
 		options = this._prepareOptions(options);
 
-		if (!options.cache) {
+		if (options.cache) {
 			var cachedData = this._getCachedData(method, url, data);
 
 			if (cachedData) {
