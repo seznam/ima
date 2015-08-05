@@ -66,6 +66,10 @@ describe('Core.Http.Agent', function() {
 						return Promise.resolve(data);
 					});
 
+				spyOn(proxy, 'haveToSetCookiesManually')
+					.and
+					.returnValue(false);
+
 				http[method](data.params.url, data.params.data, data.params.options)
 					.then(function(response) {
 						var agentResponse = {
@@ -79,6 +83,10 @@ describe('Core.Http.Agent', function() {
 						expect(response).toEqual(agentResponse);
 						done();
 					})
+					.catch(function(e) {
+						console.error(e.message, e.stack);
+						done();
+					});
 			});
 
 			it('should be rejected with error', function(done) {
