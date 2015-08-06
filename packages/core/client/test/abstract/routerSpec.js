@@ -343,7 +343,7 @@ describe('Core.Abstract.Router', function() {
 					var data = {route: route, params: params, response: response, path: path};
 
 					expect(dispatcher.fire)
-						.toHaveBeenCalledWith(ns.Core.Router.EVENTS.ROUTE_HANDLE, data);
+						.toHaveBeenCalledWith(ns.Core.Router.EVENTS.ROUTE_HANDLE, data, true);
 
 					done();
 				});

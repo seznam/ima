@@ -164,14 +164,16 @@ export default class Dispatcher extends ns.Core.Interface.Dispatcher {
 	 * @method fire
 	 * @param {string} event The name of the event to fire.
 	 * @param {Object<string, *>} data The data to pass to the event listeners.
+	 * @param {boolean=} [imaInternalEvent=false] The flag specify that defined
+	 *        event is $IMA internal or usually application event.
 	 * @return {Core.Interface.Dispatcher} This dispatcher.
 	 * @throws {Error} Thrown if there is no event listener registered for the
-	 *         specified event.
+	 *         specified event and is not $IMA internal event.
 	 */
-	fire(event, data) {
+	fire(event, data, imaInternalEvent = false) {
 		var listenersToScopes = this._getListenersOf(event);
 
-		if (!listenersToScopes.size) {
+		if (!listenersToScopes.size && !imaInternalEvent) {
 			throw new IMAError('There are no event listeners registered for the ' +
 			`${event} event`, {
 				event: event,

@@ -73,12 +73,13 @@ export default class Dispatcher {
 	 * @method fire
 	 * @param {string} event The name of the event to fire.
 	 * @param {Object<string, *>} data The data to pass to the event listeners.
-	 * @param {}
+	 * @param {boolean=} [imaInternalEvent=false] The flag specify that defined
+	 *        event is $IMA internal or usually application event.
 	 * @return {Core.Interface.Dispatcher} This dispatcher.
 	 * @throws {Error} Thrown if there is no event listener registered for the
 	 *         specified event.
 	 */
-	fire(event, data) {}
+	fire(event, data, imaInternalEvent = false) {}
 }
 
 ns.Core.Interface.Dispatcher = Dispatcher;

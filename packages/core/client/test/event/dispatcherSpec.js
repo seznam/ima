@@ -118,10 +118,16 @@ describe('Core.Event.Dispatcher', function() {
 			expect(handlers.handler2).toHaveBeenCalledWith(data);
 		});
 
-		it('should throw error for undefined event', function() {
+		it('should throw error for none listeners', function() {
 			expect(function() {
 				dispatcher.fire(event, data);
 			}).toThrow();
+		});
+
+		it('should not throw error for $IMA internal event', function() {
+			expect(function() {
+				dispatcher.fire(event, data, true);
+			}).not.toThrow();
 		});
 	});
 
