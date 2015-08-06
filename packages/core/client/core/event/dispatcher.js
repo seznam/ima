@@ -126,12 +126,12 @@ export default class Dispatcher extends ns.Core.Interface.Dispatcher {
 		if ($Debug) {
 			if (!scopes.has(scope)) {
 				throw new IMAError('Core.Event.Handler.unlisten(): the provided ' +
-				`listener '${listener}' is not registered for the specified event ` +
-				`'${event}' and scope '${scope}'. Check your workflow.`, {
-					event: event,
-					listener: listener,
-					scope: scope
-				});
+						`listener '${listener}' is not registered for the specified event ` +
+						`'${event}' and scope '${scope}'. Check your workflow.`, {
+							event: event,
+							listener: listener,
+							scope: scope
+						});
 			}
 		}
 
@@ -175,10 +175,10 @@ export default class Dispatcher extends ns.Core.Interface.Dispatcher {
 
 		if (!listenersToScopes.size && !imaInternalEvent) {
 			throw new IMAError('There are no event listeners registered for the ' +
-			`${event} event`, {
-				event: event,
-				data: data
-			});
+					`${event} event`, {
+						event: event,
+						data: data
+					});
 		}
 
 		for (var [listener, scopes] of listenersToScopes) {

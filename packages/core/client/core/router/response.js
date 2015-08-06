@@ -95,12 +95,14 @@ export default class Response {
 	 * @return {Core.Router.Response} This response.
 	 */
 	redirect(url, status = 303) {
-		if (this._isSent === true && $Debug) {
-			var params = this.getResponseParams();
-			params.url = url;
+		if ($Debug) {
+			if (this._isSent === true) {
+				var params = this.getResponseParams();
+				params.url = url;
 
-			throw new IMAError('Core.Router.Response:redirect The response has already ' +
-					'been sent. Check your workflow.', params);
+				throw new IMAError('Core.Router.Response:redirect The response has already ' +
+						'been sent. Check your workflow.', params);
+			}
 		}
 
 		this._isSent = true;
@@ -126,11 +128,13 @@ export default class Response {
 	 * @return {Core.Router.Response} This response.
 	 */
 	status(httpStatus) {
-		if (this._isSent === true && $Debug) {
-			var params = this.getResponseParams();
+		if ($Debug) {
+			if (this._isSent === true) {
+				var params = this.getResponseParams();
 
-			throw new IMAError('Core.Router.Response:status The response has already ' +
-					'been sent. Check your workflow.', params);
+				throw new IMAError('Core.Router.Response:status The response has already ' +
+						'been sent. Check your workflow.', params);
+			}
 		}
 
 		this._status = httpStatus;
@@ -149,12 +153,14 @@ export default class Response {
 	 * @return {Core.Router.Response} This response.
 	 */
 	send(content) {
-		if (this._isSent === true && $Debug) {
-			var params = this.getResponseParams();
-			params.content = content;
+		if ($Debug) {
+			if (this._isSent === true) {
+				var params = this.getResponseParams();
+				params.content = content;
 
-			throw new IMAError('Core.Router.Response:send The response has already ' +
-					'been sent. Check your workflow.', params);
+				throw new IMAError('Core.Router.Response:send The response has already ' +
+						'been sent. Check your workflow.', params);
+			}
 		}
 
 		this._isSent = true;
@@ -179,14 +185,16 @@ export default class Response {
 	 * @return {Core.Router.Response} This response.
 	 */
 	setCookie(name, value, options = {}) {
-		if (this._isSent === true && $Debug) {
-			var params = this.getResponseParams();
-			params.name = name;
-			params.value = value;
-			params.options = options;
+		if ($Debug) {
+			if (this._isSent === true) {
+				var params = this.getResponseParams();
+				params.name = name;
+				params.value = value;
+				params.options = options;
 
-			throw new IMAError('Core.Router.Response:setCookie The response has already ' +
-					'been sent. Check your workflow.', params);
+				throw new IMAError('Core.Router.Response:setCookie The response has already ' +
+						'been sent. Check your workflow.', params);
+			}
 		}
 
 		this._response.cookie(name, value, options);
