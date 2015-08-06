@@ -4,7 +4,7 @@ ns.namespace('App.Module.Feed');
 
 /**
  * Resource for feed.
- * 
+ *
  * @class Resource
  * @extends App.Base.Resource
  * @namespace App.Module.Feed
@@ -33,11 +33,11 @@ class Resource extends ns.App.Base.Resource {
 	 * @method getFeedItems
 	 * @param {App.Module.Category.Entity} [category=null] - Category entity.
 	 * @param {App.Module.Item.Entity} [lastItem=null] - Last item entity.
-	 * @return {App.Entity.Feed} - Promise of feed entity 
+	 * @return {App.Entity.Feed} - Promise of feed entity
 	 */
 	getEntity(category = null, lastItem = null) {
 		var data = {};
-		
+
 		if (category) {
 			data.category = category.getId();
 		}

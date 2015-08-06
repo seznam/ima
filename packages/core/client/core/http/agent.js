@@ -397,6 +397,7 @@ export default class Agent extends ns.Core.Interface.HttpAgent {
 					return this._proxyRejected(errorParams);
 				})
 		);
+
 		this._cache.set(requestPromiseKey, cachePromise);
 
 		return cachePromise;

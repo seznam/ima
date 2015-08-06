@@ -4,7 +4,7 @@ ns.namespace('App.Module.Item');
 
 /**
  * Resource for items.
- * 
+ *
  * @class Resource
  * @extends App.Base.Resource
  * @namespace App.Module.Item
@@ -29,7 +29,7 @@ class Resource extends ns.App.Base.Resource {
 	 *
 	 * @method getEntity
 	 * @param {string} id - Id of the item.
-	 * @return {App.Entity.Item} - Promise of item entity 
+	 * @return {App.Entity.Item} - Promise of item entity
 	 */
 	getEntity(id) {
 		return super.getEntity(null, { id: id });
@@ -40,11 +40,11 @@ class Resource extends ns.App.Base.Resource {
 	 *
 	 * @method createEntity
 	 * @param {Object} data - Data with text and category for create new Entity ({text: <string>, category: <number>}).
-	 * @return {App.Entity.Item} - Promise of item entity 
+	 * @return {App.Entity.Item} - Promise of item entity
 	 */
 	createEntity(data) {
 		this._cache.clear();
-		
+
 		return super.createEntity(data);
 	}
 }

@@ -10,13 +10,6 @@ ns.namespace('App.Interface');
  * @submodule App.Interface
  */
 class EntityFactory {
-	/**
-	 * @constructor
-	 * @method constructor
-	 */
-	constructor() {
-
-	}
 
 	/**
 	 * Creates list entity of articles
@@ -24,7 +17,6 @@ class EntityFactory {
 	 * @method createArticleEntityList
 	 */
 	createEntityList() { // jshint ignore:line
-	
 	}
 
 	/**
@@ -33,9 +25,7 @@ class EntityFactory {
 	 * @method createArticleEntityList
 	 */
 	createEntity() { // jshint ignore:line
-	
 	}
 }
 
 ns.App.Interface.EntityFactory = EntityFactory;
-

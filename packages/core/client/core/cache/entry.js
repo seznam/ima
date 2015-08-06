@@ -59,7 +59,7 @@ export default class Entry {
 	 */
 	isExpired() {
 		var now = Date.now();
-		return now > (this._created + this._ttl);
+		return now > this._created + this._ttl;
 	}
 
 	/**
@@ -70,7 +70,7 @@ export default class Entry {
 	 *         JSON-serializable object.
 	 */
 	serialize() {
-		return {value: this._value, ttl: this._ttl};
+		return { value: this._value, ttl: this._ttl };
 	}
 
 	/**

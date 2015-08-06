@@ -22,7 +22,7 @@ export var init = (ns, oc, config) => { //jshint ignore:line
 	oc.constant('$Protocol', config.$Protocol);
 	oc.constant('$Secure', config.$Protocol === 'https:' ? true : false);
 
-	oc.constant('$ROUTER_CONSTANTS', {ROUTE_NAMES: ns.Core.Router.ROUTE_NAMES, EVENTS: ns.Core.Router.EVENTS});
+	oc.constant('$ROUTER_CONSTANTS', { ROUTE_NAMES: ns.Core.Router.ROUTE_NAMES, EVENTS: ns.Core.Router.EVENTS });
 	oc.constant('$HTTP_STATUS_CODE', ns.Core.Http.STATUS_CODE);
 
 	//*************END CONSTANTS*****************

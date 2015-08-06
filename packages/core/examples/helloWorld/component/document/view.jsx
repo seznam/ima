@@ -37,8 +37,8 @@ class View extends ns.Core.Abstract.Component {
 					</title>
 				</head>
 				<body>
-					<div id="page" dangerouslySetInnerHTML={{__html: this.props.page}} />
-					<div id="revivalSettings" dangerouslySetInnerHTML={{__html: this.props.revivalSettings}}/>
+					<div id="page" dangerouslySetInnerHTML={{ __html: this.props.page }} />
+					<div id="revivalSettings" dangerouslySetInnerHTML={{ __html: this.props.revivalSettings }}/>
 					<div id="scripts">
 						{scripts}
 					</div>
@@ -49,7 +49,7 @@ class View extends ns.Core.Abstract.Component {
 
 	getScripts() {
 		return this.utils.$Settings.$Page.$Render.scripts.map((script, index) => {
-			return <script src={script} key={"script" + index}/>;
+			return <script src={script} key={'script' + index}/>;
 		});
 	}
 }

@@ -142,7 +142,7 @@ export default class Manager extends ns.Core.Interface.PageManager {
 		this._stateManager.onChange = (newState) => this._onChangeStateHandler(newState);
 		this._eventBus.listenAll(this._window.getWindow(), (e) => this._onCustomEventHandler(e));
 	}
-	
+
 	/**
 	 * Store value from last managed page for next managing process.
 	 *
@@ -167,7 +167,7 @@ export default class Manager extends ns.Core.Interface.PageManager {
 			params
 		};
 	}
-	
+
 	/**
 	 * Clear value from last managed page.
 	 *

@@ -30,7 +30,6 @@ class Service extends ns.App.Base.Service {
 		 * @default categoryListResource
 		 * */
 		this._categoryListResource = categoryListResource;
-
 	}
 
 	/**
@@ -38,8 +37,7 @@ class Service extends ns.App.Base.Service {
 	 *
 	 * @method deinit
 	 * */
-	deinit() {
-	}
+	deinit() {}
 
 	/**
 	 * Get category by url name.
@@ -49,8 +47,7 @@ class Service extends ns.App.Base.Service {
 	 * @return {App.Entity.Category|null}
 	 */
 	getCategoryByUrl(urlName) {
-		return (
-			this._categoryListResource
+		return this._categoryListResource
 				.getEntity()
 				.then((categoryListEntity) => {
 					var categories = categoryListEntity.getCategories();
@@ -58,28 +55,22 @@ class Service extends ns.App.Base.Service {
 					if (!urlName) {
 						return null;
 					}
-					
+
 					for (var i = 0; i < categories.length; i++) {
 						if (categories[i].getUrlName() === urlName) {
 							return categories[i];
 						}
 					}
 
-
-
-					throw new IMAError('Category not found.', {status: 404});
-				})
-		);
-		
+					throw new IMAError('Category not found.', { status: 404 });
+				});
 	}
-
 
 	/**
 	 * @method load
 	 * @return {App.Module.CategoryList.Entity}
 	 */
 	load() {
-
 		return this._categoryListResource.getEntity();
 	}
 }

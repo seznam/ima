@@ -136,15 +136,15 @@ export default class Server extends ns.Core.Abstract.PageRender {
 		return (
 			'<script>' +
 			' window.$IMA = window.$IMA || {};' +
-			' window.$IMA.Cache = ' + (this._cache.serialize()) + ';' +
-			' window.$IMA.$Language = "' + (this._settings.$Language) + '";' +
-			' window.$IMA.$Env = "' + (this._settings.$Env) + '";' +
-			' window.$IMA.$Debug = ' + (this._settings.$Debug) + ';' +
-			' window.$IMA.$Version = ' + (this._settings.$Version) + ';' +
-			' window.$IMA.$Protocol = "' + (this._settings.$Protocol) + '";' +
-			' window.$IMA.$Host = "' + (this._settings.$Host) + '";' +
-			' window.$IMA.$Root = "' + (this._settings.$Root) + '";' +
-			' window.$IMA.$LanguagePartPath = "' + (this._settings.$LanguagePartPath) + '";' +
+			' window.$IMA.Cache = ' + this._cache.serialize() + ';' +
+			' window.$IMA.$Language = "' + this._settings.$Language + '";' +
+			' window.$IMA.$Env = "' + this._settings.$Env + '";' +
+			' window.$IMA.$Debug = ' + this._settings.$Debug + ';' +
+			' window.$IMA.$Version = ' + this._settings.$Version + ';' +
+			' window.$IMA.$Protocol = "' + this._settings.$Protocol + '";' +
+			' window.$IMA.$Host = "' + this._settings.$Host + '";' +
+			' window.$IMA.$Root = "' + this._settings.$Root + '";' +
+			' window.$IMA.$LanguagePartPath = "' + this._settings.$LanguagePartPath + '";' +
 			'</script>'
 		);
 	}
@@ -224,7 +224,7 @@ export default class Server extends ns.Core.Abstract.PageRender {
 			metaManager: controller.getMetaManager(),
 			$Utils: this._factory.getUtils()
 		}));
-		
+
 		return '<!doctype html>\n' + appMarkup;
 	}
 }

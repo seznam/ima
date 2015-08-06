@@ -16,7 +16,6 @@ class View extends ns.Core.Abstract.Component {
 	}
 
 	render() {
-		
 		var entity = this.props.entity;
 		var Items = this.getFeedItems(entity);
 
@@ -40,7 +39,7 @@ class View extends ns.Core.Abstract.Component {
 
 				return (
 					<FeedItem
-							key={'item'+item.getId()}
+							key={'item' + item.getId()}
 							entity={item}
 							category={category}
 							sharedItem={this.props.sharedItem}

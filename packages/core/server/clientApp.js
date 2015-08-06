@@ -106,7 +106,7 @@ module.exports = (() => {
 
 				res.send(content);
 
-				resolve({content, status});
+				resolve({ content, status });
 			});
 		});
 	};
@@ -132,7 +132,7 @@ module.exports = (() => {
 					res.status(200);
 					res.send(content);
 
-					resolve({content, status, SPA: true});
+					resolve({ content, status, SPA: true });
 				}
 			});
 		});

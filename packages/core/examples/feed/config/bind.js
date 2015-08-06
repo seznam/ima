@@ -26,12 +26,12 @@ export var init = (ns, oc, config) => {
 	oc.bind('ItemResource', ns.App.Module.Item.Resource, ['$Http', 'ITEMS_API_URL', 'ItemFactory', '$Cache']);
 	oc.bind('ItemService', ns.App.Module.Item.Service, ['ItemResource']);
 
-	// Feed Module	
+	// Feed Module
 	oc.constant('FeedEntity', ns.App.Module.Feed.Entity);
 	oc.bind('FeedFactory', ns.App.Module.Feed.Factory, ['FeedEntity', 'ItemFactory']);
 	oc.bind('FeedResource', ns.App.Module.Feed.Resource, ['$Http', 'ITEMS_API_URL', 'FeedFactory', '$Cache']);
 	oc.bind('FeedService', ns.App.Module.Feed.Service, ['FeedResource', 'CategoryListService']);
-	
+
 	// Page Home
 	oc.inject(ns.App.Page.Home.Controller, ['FeedService', 'CategoryListService', 'ItemResource']);
 

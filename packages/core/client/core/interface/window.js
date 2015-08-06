@@ -216,7 +216,7 @@ export default class Window {
 	 * @param {string} url The new URL at which the state is available.
 	 */
 	replaceState(state, title, url) {}
-	
+
 	/**
 	 * Create new instance of CustomEvent with defined name and options.
 	 *

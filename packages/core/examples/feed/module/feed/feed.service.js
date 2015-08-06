@@ -46,10 +46,10 @@ class Service extends ns.App.Base.Service {
 	 *
 	 * @method getLastItem
 	 * @param {Object} feedEntity
-	 * @return {App.Module.Item.Entity|null} 
+	 * @return {App.Module.Item.Entity|null}
 	 */
 	getLastItem(feedEntity) {
-		if (feedEntity && (feedEntity.getItems().length > 0)) {
+		if (feedEntity && feedEntity.getItems().length > 0) {
 			var items = feedEntity.getItems();
 
 			return items[0];
@@ -88,7 +88,6 @@ class Service extends ns.App.Base.Service {
 
 		return feedEntity;
 	}
-	
 }
 
 ns.App.Module.Feed.Service = Service;

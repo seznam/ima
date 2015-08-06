@@ -319,7 +319,7 @@ export default class Server extends ns.Core.Interface.Window {
 	 * @return {CustomEvent}
 	 */
 	createCustomEvent(name, options) {
-		var dummyCustomEvent = {initCustomEvent: () => {}, detail: {}};
+		var dummyCustomEvent = { initCustomEvent: () => {}, detail: {} };
 
 		return Object.assign(dummyCustomEvent, options);
 	}

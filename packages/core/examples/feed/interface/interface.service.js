@@ -11,39 +11,25 @@ ns.namespace('App.Interface');
 class Service {
 
 	/**
-	 * @method constructor
-	 * @constructor
-	 */
-	constructor() {
-		
-	}
-
-	/**
 	 * Initialization model.
 	 *
 	 * @method init
 	 */
-	init() {
-
-	}
+	init() {}
 
 	/**
 	 * Deinitialization model.
 	 *
 	 * @method deinit
 	 */
-	deinit() {
-
-	}
+	deinit() {}
 
 	/**
 	 * Load data for model.
 	 *
 	 * @method load
 	 */
-	load() {
-
-	}
+	load() {}
 }
 
 ns.App.Interface.Service = Service;

@@ -23,7 +23,6 @@ class Resource extends ns.App.Interface.Resource {
 	 * @param {Core.Cache.Handler} cache
 	 */
 	constructor(http, url, entityFactory, cache) {
-		
 		super();
 
 		/**
@@ -65,9 +64,9 @@ class Resource extends ns.App.Interface.Resource {
 		/**
 		 * @property _defaultOptions
 		 * @type {Object}
-		 * @default {ttl: 3600000, timeout: 2000, repeatRequest: 1}
+		 * @default { ttl: 3600000, timeout: 2000, repeatRequest: 1 }
 		 * */
-		this._defaultOptions = {ttl: 3600000, timeout: 2000, repeatRequest: 1};
+		this._defaultOptions = { ttl: 3600000, timeout: 2000, repeatRequest: 1 };
 
 	}
 
@@ -77,7 +76,7 @@ class Resource extends ns.App.Interface.Resource {
 	 * @method getEntity
 	 * @param {String} [id=null] ID for get entity from API.
 	 * @param {Object} [data={}]
-	 * @param {Object} [options={}] Possible keys {ttl: {number}(in ms), timeout: {number}(in ms), repeatRequest: {number}}
+	 * @param {Object} [options={}] Possible keys { ttl: {number}(in ms), timeout: {number}(in ms), repeatRequest: {number} }
 	 * @param {Boolean} [force=false] Forces request, doesn't use cache.
 	 * @return {App.Base.Entity}
 	 */
@@ -93,7 +92,7 @@ class Resource extends ns.App.Interface.Resource {
 			.get(url, data, options)
 			.then((result) => {
 				return this._entityFactory.createEntity(result.body);
-			},(error) => {
+			}, (error) => {
 				throw error;
 			});
 	}
@@ -103,7 +102,7 @@ class Resource extends ns.App.Interface.Resource {
 	 *
 	 * @method createEntity
 	 * @param {Object} [data={}]
-	 * @param {Object} [options={}] Possible keys {ttl: {number}(in ms), timeout: {number}(in ms), repeatRequest: {number}}
+	 * @param {Object} [options={}] Possible keys { ttl: {number}(in ms), timeout: {number}(in ms), repeatRequest: {number} }
 	 * @return {App.Base.Entity}
 	 */
 	createEntity(data = {}, options = {}) {
@@ -114,7 +113,7 @@ class Resource extends ns.App.Interface.Resource {
 			.post(url, data, options)
 			.then((result) => {
 				return this._entityFactory.createEntity(result.body);
-			},(error) => {
+			}, (error) => {
 				throw error;
 			});
 	}

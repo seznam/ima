@@ -4,7 +4,7 @@ ns.namespace('App.Module.Item');
 
 /**
  * Entity of item.
- * 
+ *
  * @class Entity
  * @namespace App.Module.Item
  * @extends App.Base.Entity
@@ -52,7 +52,7 @@ class Entity extends ns.App.Base.Entity {
 	getContent() {
 		return this._content;
 	}
-	
+
 	/**
 	 * Getter for service.
 	 *
@@ -62,7 +62,7 @@ class Entity extends ns.App.Base.Entity {
 	getCategoryId() {
 		return this._category;
 	}
-	
+
 	/**
 	 * Getter for posted.
 	 *
@@ -71,8 +71,7 @@ class Entity extends ns.App.Base.Entity {
 	 */
 	getPosted() {
 		return this._posted;
-	}	
-	
+	}
 }
 
 ns.App.Module.Item.Entity = Entity;

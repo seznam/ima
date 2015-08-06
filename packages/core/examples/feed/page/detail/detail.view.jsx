@@ -24,7 +24,7 @@ class View extends ns.Core.Abstract.Component {
 		var category = this.props.category;
 		var item = this.getItem(entity, category);
 		var moreItemsButton = this.getMoreItemButton();
-		
+
 		return (
 			<div className='l-detailpage'>
 				<Header $Utils={this.utils}/>
@@ -39,13 +39,12 @@ class View extends ns.Core.Abstract.Component {
 	}
 
 	getItem(entity, category) {
-
 		if (entity && category) {
 			var FeedItem = ns.App.Component.FeedItem.View;
 
 			return (
 				<FeedItem
-						key={'item'+entity.getId()}
+						key={'item' + entity.getId()}
 						entity={entity}
 						category={category}
 						singleItem='true'
@@ -60,7 +59,7 @@ class View extends ns.Core.Abstract.Component {
 		var buttonTitle = this.utils.$Dictionary.get('detail.moreItemsButtonTitle');
 		var link = this.utils.$Dictionary.get('detail.moreItemsButtonLink');
 
-		return <a href={link} id='more-items-button' className='more-items button'>{buttonTitle}</a>
+		return <a href={link} id='more-items-button' className='more-items button'>{buttonTitle}</a>;
 	}
 }
 

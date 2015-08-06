@@ -113,7 +113,7 @@ export default class MessageFormat extends ns.Core.Interface.Dictionary {
 			if (!scope[scopeKey]) {
 				throw new IMAError(`Core.Dictionary.MessageFormat.get: The ` +
 					`localization phrase '${key}' does not exists`,
-					{key, parameters});
+					{ key, parameters });
 			}
 
 			scope = scope[scopeKey];

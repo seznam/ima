@@ -33,7 +33,7 @@ export default class Handler extends ns.Core.Interface.Cache {
 	 * @param {Core.Cache.Factory} factory Which create new instance of cache entry
 	 * @param {{ttl: number, enabled: false}} [config={ttl: 30000, enabled: false}]
 	 */
-	constructor(cacheStorage, factory, config = {ttl: 30000, enabled: false}) {
+	constructor(cacheStorage, factory, config = { ttl: 30000, enabled: false }) {
 		super();
 
 		/**

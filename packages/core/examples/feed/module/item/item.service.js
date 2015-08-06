@@ -31,17 +31,14 @@ class Service extends ns.App.Base.Service {
 		this._itemResource = itemResource;
 
 	}
-	
+
 	/**
 	 * @method load
 	 * @param {string} [itemId=null]
 	 */
 	load(itemId) {
-
-		return (
-			this._itemResource
-				.getEntity(itemId)
-		);
+		return this._itemResource
+				.getEntity(itemId);
 	}
 }
 

@@ -11,18 +11,6 @@ ns.namespace('App.Interface');
 class Resource {
 
 	/**
-	 * @method constructor
-	 * @constructor
-	 * @param {Core.Interface.Http} http
-	 * @param {String} url - API URL (Base server + api specific path.)
-	 * @param {App.Base.EntityFactory} entityFactory
-	 * @param {Core.Cache.Handler} cache
-	 */
-	constructor(http, url, entityFactory, cache) {
-
-	}
-
-	/**
 	 * Gets 1 entity from http and returns Entity.
 	 *
 	 * @method getEntity
@@ -46,7 +34,7 @@ class Resource {
 	postEntity(id = null, data = {}, options = {}) {}
 
 	/**
-	 * Gets entity list from http, save embeds to cache and returns Entity List. 
+	 * Gets entity list from http, save embeds to cache and returns Entity List.
 	 *
 	 * @method getEntityList
 	 * @param {Object} [data={}]

@@ -16,7 +16,7 @@ class View extends ns.Core.Abstract.Component {
 	constructor(props) {
 		super(props);
 	}
-	
+
 	render() {
 		var label = this.utils.$Dictionary.get('home.share');
 
@@ -69,13 +69,13 @@ class View extends ns.Core.Abstract.Component {
 		event.preventDefault();
 		event.stopPropagation();
 
-		if (typeof FB === "undefined") {
+		if (typeof FB === 'undefined') {
 			return;
 		}
 
 		FB.ui({
 			method: 'share',
-			href: event.target.href,
+			href: event.target.href
 		}, (response) => {
 			console.log(response);
 		});
@@ -94,8 +94,8 @@ class View extends ns.Core.Abstract.Component {
 		var queryString = Object.keys(query)
 				.map((parameterName) => {
 					var parts = [parameterName, query[parameterName]];
-					return parts.map(encodeURIComponent).join("=");
-				}).join("&");
+					return parts.map(encodeURIComponent).join('=');
+				}).join('&');
 
 		return `mailto:?${queryString}`;
 	}
@@ -110,7 +110,6 @@ class View extends ns.Core.Abstract.Component {
 
 	getPostLink(item, category) {
 		if (item && category) {
-
 			var localLink = this.utils.$Router.link('post', {
 				category: category.getUrlName(),
 				itemId: item.getId()
@@ -120,12 +119,12 @@ class View extends ns.Core.Abstract.Component {
 		} else {
 			return router.link('home');
 		}
-		
 	}
 
 	onToggle(e) {
 		e.preventDefault();
 		e.stopPropagation();
+
 		this.utils.$EventBus.fire(e.target, 'shareToggle', {
 			item: this.props.item
 		});
@@ -133,7 +132,7 @@ class View extends ns.Core.Abstract.Component {
 
 	selectShareLink() {
 		var input = this.refs.shareLink.getDOMNode();
-		
+
 		if (input.setSelectionRange) {
 			input.setSelectionRange(0, input.value.length);
 		} else if (input.select) {

@@ -10,8 +10,7 @@ export var init = (ns, oc, config) => {
 					headers: {  // Set default request headers
 						'Accept': 'application/json',
 						'Accept-Language': config.$Language
-					},
-					cache: true
+					}
 				},
 				cacheOptions: {
 					prefix: 'http.', // Cache key prefix for response bodies (already parsed as JSON) of completed HTTP requests.
@@ -25,7 +24,7 @@ export var init = (ns, oc, config) => {
 			$Page: {
 				$Render: {
 					scripts: [
-						'/static/js/locale/'+config.$Language+'.js',
+						'/static/js/locale/' + config.$Language + '.js',
 						'/static/js/app.bundle.min.js'
 					],
 					documentView: 'App.Component.Document.View',
@@ -50,7 +49,7 @@ export var init = (ns, oc, config) => {
 					scripts: [
 						'/static/js/shim.js',
 						'/static/js/vendor.client.js',
-						'/static/js/locale/'+config.$Language+'.js',
+						'/static/js/locale/' + config.$Language + '.js',
 						'/static/js/app.client.js',
 						'/static/js/facebook.js'
 					],
@@ -65,7 +64,7 @@ export var init = (ns, oc, config) => {
 					scripts: [
 						'/static/js/shim.js',
 						'/static/js/vendor.client.js',
-						'/static/js/locale/'+config.$Language+'.js',
+						'/static/js/locale/' + config.$Language + '.js',
 						'/static/js/app.client.js',
 						'/static/js/facebook.js'
 					],

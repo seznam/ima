@@ -30,11 +30,10 @@ class Factory extends ns.App.Base.EntityFactory {
 	 * @param {Object} data
 	 * @return {App.Base.Entity}
 	 */
-	createEntity(data) { 
-
+	createEntity(data) {
 		var categoryEntityList = this._categoryFactory.createEntityList(data.categories);
 
-		return super.createEntity({_id: 'categories', categories: categoryEntityList});
+		return super.createEntity({ _id: 'categories', categories: categoryEntityList });
 	}
 }
 

@@ -10,19 +10,18 @@ export var init = (ns, oc, config) => { // jshint ignore:line
 		var error = e.error;
 
 		if ($router.isClientError(error)) {
-			return $router.handleNotFound({error});
+			return $router.handleNotFound({ error });
 		}
 
 		if ($router.isRedirection(error)) {
 			return $router.redirect(error.getParams().url);
 		}
 
-		return (
-			$router
-				.handleError({error})
+		return $router
+				.handleError({ error })
 				.catch((fatalError) => {
 					config.$IMA.fatalErrorHandler(fatalError);
-				})
-		);
+				});
+
 	});
 };

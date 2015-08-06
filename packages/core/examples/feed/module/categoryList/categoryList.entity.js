@@ -18,7 +18,6 @@ class Entity extends ns.App.Base.Entity {
 	 * @param {Object} data
 	 */
 	constructor(data) {
-		
 		super(data._id);
 
 		/**
@@ -48,7 +47,7 @@ class Entity extends ns.App.Base.Entity {
 	 */
 	getCategoryById(id) {
 		return this._categories.filter((category) => {
-			if (category.getId() == id) {
+			if (category.getId() === id) {
 				return category;
 			}
 		})[0];

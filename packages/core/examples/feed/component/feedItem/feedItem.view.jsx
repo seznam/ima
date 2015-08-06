@@ -18,7 +18,7 @@ class View extends ns.Core.Abstract.Component {
 	render() {
 		var DateComponentDiv = ns.App.Component.Date.View;
 		var ShareDiv = ns.App.Component.Share.View;
-		
+
 		var entity = this.props.entity;
 		var category = this.props.category;
 
@@ -34,12 +34,11 @@ class View extends ns.Core.Abstract.Component {
 				<div className='content-wrapper'>
 					<div
 							className='content'
-							dangerouslySetInnerHTML={{__html: entity.getContent()}}>
+							dangerouslySetInnerHTML={{ __html: entity.getContent() }}>
 					</div>
-					
 					<div className='toolbar'>
 						{hashTag}
-						<DateComponentDiv 
+						<DateComponentDiv
 								date={entity.getPosted()}
 								$Utils={this.utils}/>
 						<ShareDiv
@@ -60,11 +59,11 @@ class View extends ns.Core.Abstract.Component {
 					<img src={category.getIconUrl()} alt={category.getName()} />
 				</div>);
 		}
+
 		return '';
 	}
 
 	getHashTag(category) {
-
 		if (category) {
 			var link = this.utils.$Router.link('category', { category: category.getUrlName() });
 
@@ -72,6 +71,7 @@ class View extends ns.Core.Abstract.Component {
 				<a href={link}>{category.getHashTag()}</a>
 			);
 		}
+
 		return '';
 	}
 }

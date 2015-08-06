@@ -10,7 +10,7 @@ export var init = (ns, oc, config) => { // jshint ignore:line
 		var error = e.error;
 
 		if ($router.isClientError(error)) {
-			return $router.handleNotFound({error});
+			return $router.handleNotFound({ error });
 		}
 
 		if ($router.isRedirection(error)) {
@@ -19,7 +19,7 @@ export var init = (ns, oc, config) => { // jshint ignore:line
 
 		return (
 			$router
-				.handleError({error})
+				.handleError({ error })
 				.catch((fatalError) => {
 					config.$IMA.fatalErrorHandler(fatalError);
 				})

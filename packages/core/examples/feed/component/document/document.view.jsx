@@ -31,15 +31,15 @@ class View extends ns.Core.Abstract.Component {
 					<meta property="og:image" content={this.props.metaManager.getMetaProperty('og:image')} />
 
 					<meta name="viewport" content="width=device-width, initial-scale=1" />
-					<link rel="stylesheet" href={"/static/css/"+appCssFile} />
+					<link rel="stylesheet" href={'/static/css/' + appCssFile} />
 					<title>
 						{this.props.metaManager.getTitle()}
 					</title>
 				</head>
 				<body>
 					<div id="fb-root" />
-					<div id="page" dangerouslySetInnerHTML={{__html: this.props.page}} />
-					<div id="revivalSettings" dangerouslySetInnerHTML={{__html: this.props.revivalSettings}}/>
+					<div id="page" dangerouslySetInnerHTML={{ __html: this.props.page }} />
+					<div id="revivalSettings" dangerouslySetInnerHTML={{ __html: this.props.revivalSettings }}/>
 					<div id="scripts">
 						{scripts}
 					</div>
@@ -50,7 +50,7 @@ class View extends ns.Core.Abstract.Component {
 
 	getScripts() {
 		return this.utils.$Settings.$Page.$Render.scripts.map((script, index) => {
-			return <script src={script} key={"script" + index}/>;
+			return <script src={script} key={'script' + index}/>;
 		});
 	}
 }

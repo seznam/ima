@@ -320,7 +320,7 @@ export default class Router extends ns.Core.Interface.Router {
 	 */
 	route(path) {
 		var routeForPath = this._getRouteByPath(path);
-		var params = {path};
+		var params = { path };
 
 		if (!routeForPath) {
 			return this.handleNotFound(params);
@@ -399,9 +399,9 @@ export default class Router extends ns.Core.Interface.Router {
 	 *         client.
 	 */
 	isClientError(error) {
-		return (error instanceof IMAError) &&
-				(error.getHttpStatus() >= 400) &&
-				(error.getHttpStatus() < 500);
+		return error instanceof IMAError &&
+				error.getHttpStatus() >= 400 &&
+				error.getHttpStatus() < 500;
 	}
 
 	/**
@@ -413,9 +413,9 @@ export default class Router extends ns.Core.Interface.Router {
 	 *         redirection.
 	 */
 	isRedirection(error) {
-		return (error instanceof IMAError) &&
-				(error.getHttpStatus() >= 300) &&
-				(error.getHttpStatus() < 400);
+		return error instanceof IMAError &&
+				error.getHttpStatus() >= 300 &&
+				error.getHttpStatus() < 400;
 	}
 
 	/**
@@ -466,16 +466,15 @@ export default class Router extends ns.Core.Interface.Router {
 		var view = route.getView();
 		var options = route.getOptions();
 
-		return (
-			this._pageManager
+		return this._pageManager
 				.manage(controller, view, options, params)
 				.then((response) => {
-					var data = {route, params, response, path: this.getPath()};
+					var data = { route, params, response, path: this.getPath() };
 
 					this._dispatcher
 						.fire(this._EVENTS.ROUTE_HANDLE, data, true);
-				})
-		);
+				});
+
 	}
 
 	/**

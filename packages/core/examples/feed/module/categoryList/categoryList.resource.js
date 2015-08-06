@@ -4,7 +4,7 @@ ns.namespace('App.Module.Feed');
 
 /**
  * Resource for feed.
- * 
+ *
  * @class Resource
  * @extends App.Base.Resource
  * @namespace App.Module.Feed

@@ -20,7 +20,7 @@ class View extends ns.Core.Abstract.Component {
 
 		var formattedDate = this.utils.$Dictionary.get('home.dateFormat', {
 			DATE: date.getDate(),
-			MONTH: date.getMonth()+1,
+			MONTH: date.getMonth() + 1,
 			YEAR: date.getFullYear()
 		});
 

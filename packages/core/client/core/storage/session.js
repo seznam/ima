@@ -83,8 +83,8 @@ class Session extends ns.Core.Interface.Storage {
 			return JSON.parse(this._storage.getItem(key)).value;
 		} catch (e) {
 			throw new IMAError('Core.Storage.Session.get: Failed to parse a ' +
-			`session storage item value identified by the key ${key}: ` +
-			e.message);
+					`session storage item value identified by the key ${key}: ` +
+					e.message);
 		}
 	}
 
@@ -108,8 +108,10 @@ class Session extends ns.Core.Interface.Storage {
 			}));
 		} catch (e) {
 			var storage = this._storage;
-			var isItemTooBig = (storage.length === 0) ||
-					((storage.length === 1) && (storage.key(0) === key));
+			var isItemTooBig = storage.length === 0 ||
+					storage.length === 1 &&
+					storage.key(0) === key;
+
 			if (isItemTooBig) {
 				throw e;
 			}

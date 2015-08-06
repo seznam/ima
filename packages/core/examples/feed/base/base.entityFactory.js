@@ -1,5 +1,4 @@
 import ns from 'imajs/client/core/namespace.js';
-import oc from 'imajs/client/core/objectContainer.js';
 
 ns.namespace('App.Base');
 

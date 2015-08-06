@@ -68,8 +68,8 @@ export default class Bus extends ns.Core.Interface.EventBus {
 	 */
 	fire(eventSource, eventName, data, options = {}) {
 		var eventInit = {};
-		var params = {detail: {eventName, data}};
-		var defaultOptions = {bubbles: true, cancelable: true};
+		var params = { detail: { eventName, data } };
+		var defaultOptions = { bubbles: true, cancelable: true };
 		Object.assign(eventInit, defaultOptions, options, params);
 
 		var e = this._window.createCustomEvent(IMA_EVENT, eventInit);
@@ -79,7 +79,7 @@ export default class Bus extends ns.Core.Interface.EventBus {
 		} else {
 			throw new IMAError(`Core.Event.Bus.fire: The EventSource ${eventSource} is not defined or ` +
 					`can not dispatch event '${eventName}' (data: ${data}).`,
-					{eventSource, eventName, data, eventInit});
+					{ eventSource, eventName, data, eventInit });
 		}
 
 		return this;

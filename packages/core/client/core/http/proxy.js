@@ -160,7 +160,7 @@ export default class Proxy {
 	 */
 	getErrorParams(method, url, data, options, status) {
 		var params = this._composeRequestParams(method, url, data, options);
-		var error = {status};
+		var error = { status };
 
 		switch (status) {
 			case this.HTTP_STATUS_CODE.TIMEOUT:
@@ -326,11 +326,11 @@ export default class Proxy {
 	 * @return {Core.Http.Proxy} This instance.
 	 */
 	_setHeaders(request, options) {
-		for (var [headerName, headerValue] of this._defaultHeaders) {
+		for (let [headerName, headerValue] of this._defaultHeaders) {
 			request.set(headerName, headerValue);
 		}
 
-		for (var headerName of Object.keys(options.headers)) {
+		for (let headerName of Object.keys(options.headers)) {
 			request.set(headerName, options.headers[headerName]);
 		}
 

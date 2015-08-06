@@ -22,7 +22,7 @@ class View extends React.Component {
 	constructor(props) {
 		super(props);
 	}
-	
+
 	/**
 	 * Renders the component.
 	 *
@@ -60,7 +60,7 @@ class View extends React.Component {
 	 * only if the popup is successfuly shown. If the browser blocks the popup,
 	 * the default action will not be blocked and the broser will follow the
 	 * link of the anchor.
-	 * 
+	 *
 	 * @method onShare
 	 * @param {SyntheticEvent} event The event wrapper by React.
 	 */
@@ -86,7 +86,7 @@ class View extends React.Component {
 			return [optionName, options[optionName]].
 					map(encodeURIComponent).
 					join('=');
-		})
+		});
 
 		var openedWindow = window.open(url, 'twitter', optionsString);
 
@@ -122,7 +122,7 @@ class View extends React.Component {
 					parameterName,
 					query[parameterName]
 				].map(encodeURIComponent).join('=');
-			}).join("&");
+			}).join('&');
 
 		return `https://twitter.com/share?${queryString}`;
 	}

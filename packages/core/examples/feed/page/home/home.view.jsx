@@ -27,8 +27,8 @@ class View extends ns.Core.Abstract.Component {
 		return (
 			<div className='l-homepage'>
 				<Header $Utils={this.utils}/>
-				<TextInput 
-						categories={this.props.categories} 
+				<TextInput
+						categories={this.props.categories}
 						currentCategory={this.props.currentCategory}
 						$Utils={this.utils}/>
 				<Filter

@@ -5,7 +5,7 @@ ns.namespace('App.Module.Category');
 
 /**
  * Entity of portal.
- * 
+ *
  * @class Entity
  * @namespace App.Module.Category
  * @extends App.Base.Entity
@@ -62,7 +62,7 @@ class Entity extends ns.App.Base.Entity {
 	getName() {
 		return this._name;
 	}
-	
+
 	/**
 	 * Getter for _urlName.
 	 *
@@ -82,8 +82,7 @@ class Entity extends ns.App.Base.Entity {
 	getHashTag() {
 		return this._hashTag;
 	}
-	
-	
+
 	/**
 	 * Getter for _iconUrl.
 	 *
@@ -93,7 +92,7 @@ class Entity extends ns.App.Base.Entity {
 	getIconUrl() {
 		return this._iconUrl;
 	}
-	
+
 }
 
 ns.App.Module.Category.Entity = Entity;

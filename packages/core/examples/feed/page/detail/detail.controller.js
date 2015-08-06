@@ -52,10 +52,10 @@ class Controller extends ns.App.Base.Controller {
 	load() {
 
 		return {
-			item: 
+			item:
 				this._itemService
 					.load(this.params.itemId),
-			category: 
+			category:
 				this._categoryListService
 					.getCategoryByUrl(this.params.category)
 		};
@@ -65,15 +65,13 @@ class Controller extends ns.App.Base.Controller {
 	 * @method activate
 	 */
 	// @override
-	activate() {
-	}
+	activate() {}
 
 	/**
 	 * @method destroy
 	 */
 	// @override
-	destroy() {
-	}
+	destroy() {}
 
 }
 

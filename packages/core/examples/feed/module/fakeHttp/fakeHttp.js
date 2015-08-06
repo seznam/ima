@@ -85,7 +85,7 @@ class FakeHttp {
 		 * @private
 		 * @type {number}
 		 */
-		this._nextId = this.items.slice().pop()._id+1;
+		this._nextId = this.items.slice().pop()._id + 1;
 	}
 
 	/**
@@ -96,9 +96,9 @@ class FakeHttp {
 	 */
 	get(url, data = {}) {
 		// Universal API BASE URL
-		var apiUrl = url.replace(this._apiBaseUrl,'');
+		var apiUrl = url.replace(this._apiBaseUrl, '');
 
-		switch(apiUrl) {
+		switch (apiUrl) {
 			case '/items':
 				var items = this.items;
 
@@ -114,7 +114,7 @@ class FakeHttp {
 				}
 
 				if (data.category) {
-					var items = this.items.filter((item) => {
+					items = this.items.filter((item) => {
 						return item.category === data.category;
 					});
 				}
@@ -122,7 +122,7 @@ class FakeHttp {
 				return Promise.resolve({ body: { 'items': items } });
 			case '/categories':
 				return Promise.resolve({ body: { 'categories': this.categories } });
-			default: 
+			default:
 				return Promise.reject(new IMAError('Bad request', { status: 404, url: apiUrl, fullUrl: url }));
 		}
 	}
@@ -134,22 +134,20 @@ class FakeHttp {
 	 * return {Object} - Json object with all items.
 	 */
 	post(url, data = {}) {
+		var apiUrl = url.replace(this._apiBaseUrl, '');
 
-		var apiUrl = url.replace(this._apiBaseUrl,'');
-
-		switch(apiUrl) {
+		switch (apiUrl) {
 			case '/items':
 				data._id = this._nextId;
 				data.date = new Date().toString();
 				this._nextId++;
 				this.items.push(data);
 
-				return Promise.resolve({ body: data});
-			default: 
+				return Promise.resolve({ body: data });
+			default:
 				return Promise.reject(new IMAError('Bad request', { status: 500, url: apiUrl, fullUrl: url }));
 		}
 	}
-	
 }
 
 ns.App.Module.FakeHttp = FakeHttp;

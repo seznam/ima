@@ -201,7 +201,7 @@ export default class Response {
 	 * @return {{status: number, content: string}}
 	 */
 	getResponseParams() {
-		return {status: this._status, content: this._content};
+		return { status: this._status, content: this._content };
 	}
 
 	/**

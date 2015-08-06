@@ -32,7 +32,7 @@ export var init = (ns, oc, config) => {
 
 	oc
 		.get('$CookieStorage')
-		.init({secure: oc.get('$Secure')});
+		.init({ secure: oc.get('$Secure') });
 
 	oc
 		.get('$SessionStorage')

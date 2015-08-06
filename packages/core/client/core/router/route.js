@@ -110,7 +110,7 @@ export default class Route {
 		 * @default {onlyUpdate: false, autoScroll: true}
 		 */
 		this._options = Object.assign(
-			{onlyUpdate: false, autoScroll: true},
+			{ onlyUpdate: false, autoScroll: true },
 			options
 		);
 
@@ -179,7 +179,7 @@ export default class Route {
 			}
 		}
 
-		path = query.length ? (path + '?' + query.join('&')) : path;
+		path = query.length ? path + '?' + query.join('&') : path;
 		path = this._getTrimmedPath(path);
 
 		return path;
@@ -344,7 +344,7 @@ export default class Route {
 	_getQuery(path) {
 		var query = {};
 		var queryStart = path.indexOf('?');
-		var hasQuery = (queryStart > -1) && (queryStart !== (path.length - 1));
+		var hasQuery = queryStart > -1 && queryStart !== path.length - 1;
 
 		if (hasQuery) {
 			var pairs = path.substring(queryStart + 1).split(/[&;]/);
@@ -352,7 +352,7 @@ export default class Route {
 			for (var parameterPair of pairs) {
 				var pair = parameterPair.split('=');
 				query[decodeURIComponent(pair[0])] =
-					(pair.length > 1) ? decodeURIComponent(pair[1]) : true;
+					pair.length > 1 ? decodeURIComponent(pair[1]) : true;
 			}
 		}
 

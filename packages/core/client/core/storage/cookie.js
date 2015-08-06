@@ -433,7 +433,7 @@ export default class Cookie extends ns.Core.Storage.Map {
 	_getExpirationAsDate(expiration) {
 		if (typeof expiration === 'number') {
 			return expiration === Infinity ?
-				MAX_EXPIRE_DATE : new Date(Date.now() + (expiration * 1000));
+				MAX_EXPIRE_DATE : new Date(Date.now() + expiration * 1000);
 		}
 
 		return expiration ? new Date(expiration) : MAX_EXPIRE_DATE;

@@ -27,13 +27,13 @@ class View extends ns.Core.Abstract.Component {
 
 		return (
 			<div className="text-input">
-				<input 	
+				<input
 						type="text"
 						ref="textInput"
 						className="form-text-input"
 						placeholder={placeholder}
 						onKeyPress={(e)=>this.sendTextByKeys(e)} />
-				<button 
+				<button
 						className="form-button"
 						onClick={(e)=>this.sendText(e)} >
 					{sendText}
@@ -46,7 +46,6 @@ class View extends ns.Core.Abstract.Component {
 	}
 
 	getRadioCategories(categoryListEntity, currentCategory) {
-		
 		if (currentCategory) {
 			return '';
 		}
@@ -54,18 +53,17 @@ class View extends ns.Core.Abstract.Component {
 		if (categoryListEntity) {
 			var categories = categoryListEntity.getCategories();
 			return categories.map((category, index) => {
-
 				return (
-					<div 
-						className="radio-button" key={"radio-category-"+category.getId()} >
-						<input 
-								id={"radio" + category.getId()}
-								type="radio"
-								name="radio-categories"
+					<div
+						className="radio-button" key={'radio-category-' + category.getId()} >
+						<input
+								id={'radio' + category.getId()}
+								type='radio'
+								name='radio-categories'
 								value={category.getId()}
 								onChange={(e)=>this.setCheckedCategory(e)}
-								defaultChecked={index==0?true:false} />
-						<label htmlFor={"radio" + category.getId()}>
+								defaultChecked={index === 0 ? true : false} />
+						<label htmlFor={'radio' + category.getId()}>
 							{category.getName()}
 						</label>
 					</div>
@@ -75,7 +73,7 @@ class View extends ns.Core.Abstract.Component {
 
 		return '';
 	}
-	
+
 	sendText(e) {
 		var text = this.refs.textInput.getDOMNode().value.trim();
 		this.refs.textInput.getDOMNode().value = '';
@@ -84,10 +82,10 @@ class View extends ns.Core.Abstract.Component {
 		if (!category) {
 			category = this.getDefaultCategory(this.props);
 		}
-		
+
 		this.utils.$EventBus.fire(e.target, 'addItemToFeed', {
 			content: text,
-			category: category?Number(category.getId()):null
+			category: category ? Number(category.getId()) : null
 		});
 	}
 
@@ -114,10 +112,10 @@ class View extends ns.Core.Abstract.Component {
 
 	sendTextByKeys(e) {
 		e.stopPropagation();
-		if (e.which == 13 || e.keyCode == 13) {
+		if (e.which === 13 || e.keyCode === 13) {
 			e.preventDefault();
-	        this.sendText(null, null);
-	    }
+			this.sendText(null, null);
+		}
 	}
 }
 

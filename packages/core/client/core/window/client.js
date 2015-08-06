@@ -85,7 +85,7 @@ export default class Client extends ns.Core.Interface.Window {
 	 *         supported.
 	 */
 	hasHistoryAPI() {
-		return !!(window.history) && !!(window.history.pushState);
+		return !!window.history && !!window.history.pushState;
 	}
 
 	/**
@@ -138,7 +138,7 @@ export default class Client extends ns.Core.Interface.Window {
 	 */
 	getScrollX() {
 		var supportPageOffset = window.pageXOffset !== undefined;
-		var isCSS1Compat = ((document.compatMode || '') === 'CSS1Compat');
+		var isCSS1Compat = (document.compatMode || '') === 'CSS1Compat';
 
 		return supportPageOffset ? window.pageXOffset : isCSS1Compat ? document.documentElement.scrollLeft : document.body.scrollLeft;
 	}
@@ -153,7 +153,7 @@ export default class Client extends ns.Core.Interface.Window {
 	 */
 	getScrollY() {
 		var supportPageOffset = window.pageYOffset !== undefined;
-		var isCSS1Compat = ((document.compatMode || '') === 'CSS1Compat');
+		var isCSS1Compat = (document.compatMode || '') === 'CSS1Compat';
 
 		return supportPageOffset ? window.pageYOffset : isCSS1Compat ? document.documentElement.scrollTop : document.body.scrollTop;
 	}

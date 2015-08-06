@@ -257,15 +257,15 @@ export default class Client extends ns.Core.Abstract.Router {
 				.catch((error) => {
 
 					if (this.isClientError(error)) {
-						return this.handleNotFound({error});
+						return this.handleNotFound({ error });
 					}
 
 					if (this.isRedirection(error)) {
 						this.redirect(error.getParams().url);
-						return Promise.resolve({content: null, status: error.getHttpStatus()});
+						return Promise.resolve({ content: null, status: error.getHttpStatus() });
 					}
 
-					return this.handleError({error});
+					return this.handleError({ error });
 				})
 		);
 	}
@@ -288,7 +288,7 @@ export default class Client extends ns.Core.Abstract.Router {
 			super
 				.handleNotFound(params)
 				.catch((error) => {
-					return this.handleError({error});
+					return this.handleError({ error });
 				})
 		);
 	}
@@ -314,8 +314,8 @@ export default class Client extends ns.Core.Abstract.Router {
 		}
 
 		var anchorHref = anchorElement.href;
-		var isDefinedTargetHref = (anchorHref !== undefined) &&
-				(anchorHref !== null);
+		var isDefinedTargetHref = anchorHref !== undefined &&
+				anchorHref !== null;
 		var isSetTarget = anchorElement.getAttribute('target') !== null;
 		var isLeftButton = event.button === MOUSE_LEFT_BUTTON;
 		var isSameDomain = this._isSameDomain(anchorHref);
@@ -354,9 +354,9 @@ export default class Client extends ns.Core.Abstract.Router {
 
 		function hasReachedAnchor(nodeElement) {
 			return nodeElement.parentNode &&
-				(nodeElement !== self._window.getBody()) &&
-				(nodeElement.href !== undefined) &&
-				(nodeElement.href !== null);
+					nodeElement !== self._window.getBody() &&
+					nodeElement.href !== undefined &&
+					nodeElement.href !== null;
 		}
 
 		return target;
@@ -402,7 +402,7 @@ export default class Client extends ns.Core.Abstract.Router {
 			x: 0,
 			y: 0
 		};
-		var state = {url, scroll};
+		var state = { url, scroll };
 
 		this._window.pushState(state, null, url);
 	}
@@ -420,7 +420,7 @@ export default class Client extends ns.Core.Abstract.Router {
 			x: this._window.getScrollX(),
 			y: this._window.getScrollY()
 		};
-		var state = {url, scroll};
+		var state = { url, scroll };
 
 		this._window.replaceState(state, null, url);
 	}

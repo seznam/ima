@@ -15,9 +15,8 @@ ns.namespace('App.Component.Header');
 	constructor(props) {
 		super(props);
 	}
-	
-	render() {
 
+	render() {
 		return (
 			<div className='l-header'>
 				<a href={'//' + this.utils.$Dictionary.get('home.imaLink')} title={this.utils.$Dictionary.get('home.imaLink')}>

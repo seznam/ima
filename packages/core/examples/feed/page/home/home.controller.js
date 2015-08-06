@@ -62,13 +62,13 @@ class Controller extends ns.App.Base.Controller {
 	load() {
 
 		return {
-			categories: 
+			categories:
 				this._categoryListService
 					.load(),
-			currentCategory: 
+			currentCategory:
 				this._categoryListService
 					.getCategoryByUrl(this.params.category),
-			feed: 
+			feed:
 				this._feedService
 					.load(this.params.category),
 			sharedItem: null
@@ -120,16 +120,15 @@ class Controller extends ns.App.Base.Controller {
 
 		this.setState(state);
 	}
-	
+
 	/**
 	 * Button click handler for add new item to feed.
-	 * It cretaes new item entity and adds it to feed. 
+	 * It cretaes new item entity and adds it to feed.
 	 *
 	 * @method addItemToFeed
 	 * @param {Object} data
 	 */
 	onAddItemToFeed(data) {
-		
 		this
 			._itemResource
 			.createEntity(data)
@@ -139,8 +138,6 @@ class Controller extends ns.App.Base.Controller {
 				this.setState(state);
 			});
 	}
-	
-
 }
 
 ns.App.Page.Home.Controller = Controller;

@@ -223,7 +223,7 @@ export default class ObjectContainer {
 
 			// check that implementation really extends interface
 			var prototype = implementationConstructor.prototype;
-			while (prototype && (prototype !== interfaceConstructor.prototype)) {
+			while (prototype && prototype !== interfaceConstructor.prototype) {
 				prototype = Object.getPrototypeOf(prototype);
 			}
 			if (!prototype) {

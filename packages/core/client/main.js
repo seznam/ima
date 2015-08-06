@@ -3,15 +3,15 @@ import ObjectContainer from 'imajs/client/core/objectContainer.js';
 import Bootstrap from 'imajs/client/core/bootstrap.js';
 
 // Import app/config
-import {init as initBindCore} from 'imajs/client/core/config/bind.js';
-import {init as initBindApp} from 'app/config/bind.js';
-import {init as initRoutes} from 'app/config/routes.js';
-import {init as initServicesCore} from 'imajs/client/core/config/services.js';
-import {init as initServicesApp} from 'app/config/services.js';
-import {init as initSettings} from 'app/config/settings.js';
+import { init as initBindCore } from 'imajs/client/core/config/bind.js';
+import { init as initBindApp } from 'app/config/bind.js';
+import { init as initRoutes } from 'app/config/routes.js';
+import { init as initServicesCore } from 'imajs/client/core/config/services.js';
+import { init as initServicesApp } from 'app/config/services.js';
+import { init as initSettings } from 'app/config/settings.js';
 
 var getInit = () => {
-	return {initBindCore, initBindApp, initRoutes, initServicesCore, initServicesApp, initSettings};
+	return { initBindCore, initBindApp, initRoutes, initServicesCore, initServicesApp, initSettings };
 };
 
 var getNamespace = () => {
@@ -22,10 +22,10 @@ var createIMAJsApp = () => {
 	var oc = new ObjectContainer(ns);
 	var bootstrap = new Bootstrap(oc);
 
-	return {oc, bootstrap};
+	return { oc, bootstrap };
 };
 
-var root = (typeof window !== 'undefined' && window !== null) ? window : GLOBAL;
+var root = typeof window !== 'undefined' && window !== null ? window : GLOBAL;
 
 //Check testing
 if (root.$IMA.Test === true) {
@@ -136,4 +136,4 @@ if (root.$IMA.Test === true) {
 
 }
 
-export {getInit, getNamespace, createIMAJsApp};
+export { getInit, getNamespace, createIMAJsApp };

@@ -18,7 +18,6 @@ class Entity extends ns.App.Base.Entity {
 	 * @param {Object} data
 	 */
 	constructor(data) {
-		
 		super(data._id);
 
 		/**
