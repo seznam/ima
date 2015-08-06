@@ -9,25 +9,16 @@ var clientApp = require('./imajs/clientApp.js');
 var proxy = require('./imajs/proxy.js');
 var urlParser = require('./imajs/urlParser.js');
 var bodyParser = require('body-parser');
-var multer = require('multer');
+var multer = require('multer')({dest: __dirname + '/static/uploads/'});
 var cookieParser = require('cookie-parser');
 var methodOverride = require('method-override');
 var environment = require('./imajs/environment.js');
 var compression = require('compression');
 var helmet = require('helmet');
 
-GLOBAL.$Debug = environment.$Debug;
-
 process.on('uncaughtException', function(error) {
 	console.error('Uncaught Exception:', error.message, error.stack);
 });
-
-/*setInterval(() => {
-	var mem = process.memoryUsage();
-
-	console.log('Rss: ', mem.rss / (1024 * 1024), 'Heap total: ', mem.heapTotal / (1024 * 1024), 'Heap used: ', mem.heapUsed / (1024 * 1024));
-}, 1000);*/
-
 
 var allowCrossDomain = (req, res, next) => {
 	res.header('Access-Control-Allow-Origin', '*');
@@ -69,7 +60,7 @@ var runNodeApp = () => {
 		.use(environment.$Server.staticFolder, express.static(path.join(__dirname, 'static')))
 		.use(bodyParser.json()) // for parsing application/json
 		.use(bodyParser.urlencoded({ extended: true })) // for parsing application/x-www-form-urlencoded
-		.use(multer()) // for parsing multipart/form-data
+		.use(multer.array()) // for parsing multipart/form-data
 		.use(cookieParser())
 		.use(methodOverride())
 		.use(environment.$Proxy.path + '/', proxy)
