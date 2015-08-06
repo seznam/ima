@@ -3,7 +3,8 @@ describe('Core.Abstract.Router', function() {
 	var router = null;
 	var pageManager = null;
 	var routerFactory = null;
-	var ROUTE_NAMES = oc.get('$ROUTE_NAMES');
+	var dispatcher = null;
+	var ROUTER_CONSTANTS = oc.get('$ROUTER_CONSTANTS');
 	var config = {
 		$Protocol: 'http:',
 		$Root: '/root',
@@ -23,7 +24,8 @@ describe('Core.Abstract.Router', function() {
 
 		pageManager = oc.create('Core.Interface.PageManager');
 		routerFactory = oc.create('$RouterFactory');
-		router = oc.create('Core.Abstract.Router', [pageManager, routerFactory, ROUTE_NAMES]);
+		dispatcher = oc.create('Core.Interface.Dispatcher');
+		router = oc.create('Core.Abstract.Router', [pageManager, routerFactory, dispatcher, ROUTER_CONSTANTS]);
 
 		router.init(config);
 
@@ -158,7 +160,7 @@ describe('Core.Abstract.Router', function() {
 
 	describe('handleError method', function() {
 
-		var routeName = ROUTE_NAMES.ERROR;
+		var routeName = ROUTER_CONSTANTS.ROUTE_NAMES.ERROR;
 		var path = '/error';
 		var baseUrl = 'baseUrl';
 		var route = null;
@@ -206,7 +208,7 @@ describe('Core.Abstract.Router', function() {
 
 	describe('handleNotFound method', function() {
 
-		var routeName = ROUTE_NAMES.NOT_FOUND;
+		var routeName = ROUTER_CONSTANTS.ROUTE_NAMES.NOT_FOUND;
 		var path = '/not-found';
 		var baseUrl = 'baseUrl';
 		var route = null;
@@ -313,11 +315,38 @@ describe('Core.Abstract.Router', function() {
 		it('should be call paga manager', function() {
 			spyOn(pageManager, 'manage')
 				.and
-				.stub();
+				.returnValue(Promise.resolve({content: null, status: 200}));
 
 			router._handle(route, {});
 
 			expect(pageManager.manage).toHaveBeenCalledWith(controller, view, options, {});
+		});
+
+		it('should be fire ns.Core.Router.EVENTS.ROUTE_HANDLE', function(done) {
+			var response = {content: null, status: 200};
+			var params = {};
+			var path ='/';
+
+			spyOn(router, 'getPath')
+				.and
+				.returnValue(path);
+			spyOn(pageManager, 'manage')
+				.and
+				.returnValue(Promise.resolve({content: null, status: 200}));
+			spyOn(dispatcher, 'fire')
+				.and
+				.stub();
+
+			router
+				._handle(route, params)
+				.then(function() {
+					var data = {route: route, params: params, response: response, path: path};
+
+					expect(dispatcher.fire)
+						.toHaveBeenCalledWith(ns.Core.Router.EVENTS.ROUTE_HANDLE, data);
+
+					done();
+				});
 		});
 	});
 
@@ -329,7 +358,7 @@ describe('Core.Abstract.Router', function() {
 		var path = '/path';
 
 		beforeEach(function() {
-			router = oc.create('Core.Abstract.Router', [pageManager, routerFactory, Promise]);
+			router = oc.create('Core.Abstract.Router', [pageManager, routerFactory, dispatcher, ROUTER_CONSTANTS]);
 		});
 
 		it('should be clear root from path', function() {

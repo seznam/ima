@@ -2,16 +2,18 @@ describe('Core.Router.Client', function() {
 	var router = null;
 	var pageRender = null;
 	var routerFactory = null;
+	var dispatcher = null;
 	var win = null;
 	var host = 'locahlost:3002';
 	var protocol = 'http:';
-	var ROUTE_NAMES = oc.get('$ROUTE_NAMES');
+	var ROUTER_CONSTANTS = oc.get('$ROUTER_CONSTANTS');
 
 	beforeEach(function() {
-		pageRender = oc.create('$PageRender');
+		pageRender = oc.create('Core.Interface.PageManager');
 		routerFactory = oc.create('$RouterFactory');
+		dispatcher = oc.create('Core.Interface.Dispatcher');
 		win = oc.get('$Window');
-		router = oc.create('Core.Router.Client', [pageRender, routerFactory, ROUTE_NAMES, win]);
+		router = oc.create('Core.Router.Client', [pageRender, routerFactory, dispatcher, ROUTER_CONSTANTS, win]);
 
 		spyOn(win, 'hasHistoryAPI')
 			.and

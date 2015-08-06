@@ -3,17 +3,19 @@ describe('Core.Router.Server', function() {
 	var router = null;
 	var pageRender = null;
 	var routerFactory = null;
+	var dispatcher = null;
 	var request = null;
 	var response = null;
 	var domain = 'http://locahlost:3002';
-	var ROUTE_NAMES = oc.get('$ROUTE_NAMES');
+	var ROUTER_CONSTANTS = oc.get('$ROUTER_CONSTANTS');
 
 	beforeEach(function() {
-		pageRender = oc.create('$PageRender');
+		pageRender = oc.create('Core.Interface.PageManager');
 		routerFactory = oc.create('$RouterFactory');
+		dispatcher = oc.create('Core.Interface.Dispatcher');
 		request = oc.create('Core.Router.Request');
 		response = oc.create('Core.Router.Response');
-		router = oc.create('Core.Router.Server', [pageRender, routerFactory, ROUTE_NAMES, request, response]);
+		router = oc.create('Core.Router.Server', [pageRender, routerFactory, dispatcher, ROUTER_CONSTANTS, request, response]);
 		router.init({mode: router.MODE_SERVER, domain: domain});
 	});
 
