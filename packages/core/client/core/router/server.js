@@ -23,8 +23,8 @@ export default class Server extends ns.Core.Abstract.Router {
 	 * @param {Core.Router.Factory} factory The router factory used to create
 	 *        routes.
 	 * @param {Core.Interface.Dispatcher} dispatcher Dispatcher fires events to app.
-	 * @param {{ROUTE_NAMES: Object<string, string>, EVENTS: Object<string, string>}
-	 *        ROUTER_CONSTANTS The internal router constants. The {@code ROUTE_NAMES}
+	 * @param {{ROUTE_NAMES: Object<string, string>, EVENTS: Object<string, string>} ROUTER_CONSTANTS
+	 *        The internal router constants. The {@code ROUTE_NAMES}
 	 *        contains internal route names. The {@code EVENTS} contains name of events
 	 *        which are fired with {@code Core.Interface.Dispatcher}.
 	 * @param {Core.Router.Request} request The current HTTP request.
