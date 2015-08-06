@@ -92,8 +92,10 @@ export default class Dispatcher extends ns.Core.Interface.Dispatcher {
 	 * @return {Core.Interface.Dispatcher} This dispatcher.
 	 */
 	listen(event, listener, scope = null) {
-		if (!(listener instanceof Function)) {
-			throw new IMAError(`The listener must be a function, ${listener} provided`);
+		if ($Debug) {
+			if (!(listener instanceof Function)) {
+				throw new IMAError(`The listener must be a function, ${listener} provided`);
+			}
 		}
 
 		var scopes = this._prepareScopesFor(event, listener);
@@ -121,14 +123,16 @@ export default class Dispatcher extends ns.Core.Interface.Dispatcher {
 	unlisten(event, listener, scope = null) {
 		var scopes = this._getScopesOf(event, listener);
 
-		if (!scopes.has(scope)) {
-			throw new IMAError('Core.Event.Handler.unlisten(): the provided ' +
-			`listener '${listener}' is not registered for the specified event ` +
-			`'${event}' and scope '${scope}'. Check your workflow.`, {
-				event: event,
-				listener: listener,
-				scope: scope
-			});
+		if ($Debug) {
+			if (!scopes.has(scope)) {
+				throw new IMAError('Core.Event.Handler.unlisten(): the provided ' +
+				`listener '${listener}' is not registered for the specified event ` +
+				`'${event}' and scope '${scope}'. Check your workflow.`, {
+					event: event,
+					listener: listener,
+					scope: scope
+				});
+			}
 		}
 
 		scopes.delete(scope);
@@ -189,7 +193,7 @@ export default class Dispatcher extends ns.Core.Interface.Dispatcher {
 	 * executed for the specified event.
 	 *
 	 * @private
-	 * @method _getScopesOf
+	 * @method _prepareScopesFor
 	 * @param {string} event The name of the event.
 	 * @param {function(*)} listener The event listener.
 	 * @return {Set<?Object>} The scopes in which the specified listeners should
