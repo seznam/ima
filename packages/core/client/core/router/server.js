@@ -22,12 +22,16 @@ export default class Server extends ns.Core.Abstract.Router {
 	 * @param {Core.Interface.PageRender} pageManager The current page manager.
 	 * @param {Core.Router.Factory} factory The router factory used to create
 	 *        routes.
-	 * @param {Object<string, string>} ROUTE_NAMES The internal route names.
+	 * @param {Core.Interface.Dispatcher} dispatcher Dispatcher fires events to app.
+	 * @param {{ROUTE_NAMES: Object<string, string>, EVENTS: Object<string, string>}
+	 *        ROUTER_CONSTANTS The internal router constants. The {@code ROUTE_NAMES}
+	 *        contains internal route names. The {@code EVENTS} contains name of events
+	 *        which are fired with {@code Core.Interface.Dispatcher}.
 	 * @param {Core.Router.Request} request The current HTTP request.
 	 * @param {Core.Router.Response} response The current HTTP response.
 	 */
-	constructor(pageManager, factory, ROUTE_NAMES, request, response) {
-		super(pageManager, factory, ROUTE_NAMES);
+	constructor(pageManager, factory, dispatcher, ROUTER_CONSTANTS, request, response) {
+		super(pageManager, factory, dispatcher, ROUTER_CONSTANTS);
 
 		/**
 		 * The current HTTP request.

@@ -89,11 +89,15 @@ export default class Client extends ns.Core.Abstract.Router {
 	 * @param {Core.Interface.PageManager} pageManager The page manager handling
 	 *        UI rendering, and transitions between pages if at the client side.
 	 * @param {Core.Router.Factory} factory Factory for routes.
-	 * @param {Object<string, string>} ROUTE_NAMES The internal route names.
+	 * @param {Core.Interface.Dispatcher} dispatcher Dispatcher fires events to app.
+	 * @param {{ROUTE_NAMES: Object<string, string>, EVENTS: Object<string, string>}
+	 *        ROUTER_CONSTANTS The internal router constants. The {@code ROUTE_NAMES}
+	 *        contains internal route names. The {@code EVENTS} contains name of events
+	 *        which are fired with {@code Core.Interface.Dispatcher}.
 	 * @param {Core.Interface.Window} window
 	 */
-	constructor(pageManager, factory, ROUTE_NAMES, window) {
-		super(pageManager, factory, ROUTE_NAMES);
+	constructor(pageManager, factory, dispatcher, ROUTER_CONSTANTS, window) {
+		super(pageManager, factory, dispatcher, ROUTER_CONSTANTS);
 
 		/**
 		 * Helper for accessing the native client-side APIs.
@@ -258,7 +262,7 @@ export default class Client extends ns.Core.Abstract.Router {
 
 					if (this.isRedirection(error)) {
 						this.redirect(error.getParams().url);
-						return Promise.resolve();
+						return Promise.resolve({content: null, status: error.getHttpStatus()});
 					}
 
 					return this.handleError({error});

@@ -24,7 +24,11 @@ export default class Router extends ns.Core.Interface.Router {
 	 * @param {Core.Interface.PageManager} pageManager The page manager handling
 	 *        UI rendering, and transitions between pages if at the client side.
 	 * @param {Core.Router.Factory} factory Factory for routes.
-	 * @param {Object<string, string>} ROUTE_NAMES The internal route names.
+	 * @param {Core.Interface.Dispatcher} dispatcher Dispatcher fires events to app.
+	 * @param {{ROUTE_NAMES: Object<string, string>, EVENTS: Object<string, string>}
+	 *        ROUTER_CONSTANTS The internal router constants. The {@code ROUTE_NAMES}
+	 *        contains internal route names. The {@code EVENTS} contains name of events
+	 *        which are fired with {@code Core.Interface.Dispatcher}.
 	 * @example
 	 *      router.link('article', {articleId: 1});
 	 * @example
@@ -32,7 +36,7 @@ export default class Router extends ns.Core.Interface.Router {
 	 * @example
 	 *      router.add('home', ns.App.Page.Home.Controller, ns.App.Page.Home.View, {onlyUpdate: false, autoScroll: true});
 	 */
-	constructor(pageManager, factory, ROUTE_NAMES) {
+	constructor(pageManager, factory, dispatcher, ROUTER_CONSTANTS) {
 		super();
 
 		/**
@@ -55,6 +59,15 @@ export default class Router extends ns.Core.Interface.Router {
 		this._factory = factory;
 
 		/**
+		 * Dispatcher fires events to app.
+		 *
+		 * @private
+		 * @property _dispatcher
+		 * @type {Core.Interface.Dispatcher}
+		 */
+		this._dispatcher = dispatcher;
+
+		/**
 		 * The internal route names.
 		 *
 		 * @const
@@ -62,7 +75,16 @@ export default class Router extends ns.Core.Interface.Router {
 		 * @property _ROUTE_NAMES
 		 * @type {Object<string, string>}
 		 */
-		this._ROUTE_NAMES = ROUTE_NAMES;
+		this._ROUTE_NAMES = ROUTER_CONSTANTS.ROUTE_NAMES;
+
+		/**
+		 * The internal router events.
+		 *
+		 * @private
+		 * @property _EVENTS
+		 * @type {Object<string, string>}
+		 */
+		this._EVENTS = ROUTER_CONSTANTS.EVENTS;
 
 		/**
 		 * The current protocol used to access the application, terminated by a
@@ -191,6 +213,19 @@ export default class Router extends ns.Core.Interface.Router {
 		this._routes.delete(name);
 
 		return this;
+	}
+
+	/**
+	 * Ruturns current path part of the current URL, including the query string
+	 * (if any).
+	 *
+	 * @inheritDoc
+	 * @override
+	 * @method getPath
+	 * @return {string} The path and query parts of the current URL.
+	 */
+	getPath() {
+		throw new IMAError('The getPath() method is abstract and must be overridden.');
 	}
 
 	/**
@@ -431,7 +466,16 @@ export default class Router extends ns.Core.Interface.Router {
 		var view = route.getView();
 		var options = route.getOptions();
 
-		return this._pageManager.manage(controller, view, options, params);
+		return (
+			this._pageManager
+				.manage(controller, view, options, params)
+				.then((response) => {
+					var data = {route, params, response, path: this.getPath()};
+
+					this._dispatcher
+						.fire(this._EVENTS.ROUTE_HANDLE, data);
+				})
+		);
 	}
 
 	/**

@@ -22,7 +22,7 @@ export var init = (ns, oc, config) => { //jshint ignore:line
 	oc.constant('$Protocol', config.$Protocol);
 	oc.constant('$Secure', config.$Protocol === 'https:' ? true : false);
 
-	oc.constant('$ROUTE_NAMES', ns.Core.Router.ROUTE_NAMES);
+	oc.constant('$ROUTER_CONSTANTS', {ROUTE_NAMES: ns.Core.Router.ROUTE_NAMES, EVENTS: ns.Core.Router.EVENTS});
 	oc.constant('$HTTP_STATUS_CODE', ns.Core.Http.STATUS_CODE);
 
 	//*************END CONSTANTS*****************
@@ -107,10 +107,9 @@ export var init = (ns, oc, config) => { //jshint ignore:line
 	oc.constant('$Route', ns.Core.Router.Route);
 	oc.bind('$RouterFactory', ns.Core.Router.Factory, ['$Route']);
 	if (oc.get('$Window').isClient()) {
-		oc.provide(ns.Core.Interface.Router, ns.Core.Router.Client, ['$PageManager', '$RouterFactory', '$ROUTE_NAMES', '$Window']);
-		oc.bind('$Router', ns.Core.Router.Client, ['$PageManager', '$RouterFactory', '$ROUTE_NAMES', '$Window']);
+		oc.provide(ns.Core.Interface.Router, ns.Core.Router.Client, ['$PageManager', '$RouterFactory', '$Dispatcher', '$ROUTER_CONSTANTS', '$Window']);
 	} else {
-		oc.provide(ns.Core.Interface.Router, ns.Core.Router.Server, ['$PageManager', '$RouterFactory', '$ROUTE_NAMES', '$Request', '$Response']);
+		oc.provide(ns.Core.Interface.Router, ns.Core.Router.Server, ['$PageManager', '$RouterFactory', '$Dispatcher', '$ROUTER_CONSTANTS', '$Request', '$Response']);
 	}
 	oc.bind('$Router', ns.Core.Interface.Router);
 
