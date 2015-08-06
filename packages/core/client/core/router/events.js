@@ -9,13 +9,17 @@ ns.namespace('Core.Router');
  */
 const EVENTS = Object.freeze({
 	/**
-	 * Router fire change route event after router handle the route.
+	 * Router fire event {@code $IMA.$Router.routeHandle} after page manager handle the route.
+	 * Event's data contain {{response: Object<string, *>, params: Object<string, string>},
+	 * route: ns.Core.Router.Route, path: string}. The {@code response} is page render result.
+	 * The {@code path} is current path, the {@code params} are params extracted from path and
+	 * the {@code route} is handle route for path.
 	 *
 	 * @const
-	 * @property ROUTE
+	 * @property ROUTE_HANDLE
 	 * @type {string}
 	 */
-	CHANGE_ROUTE: '$IMA.$Router.changeRoute'
+	ROUTE_HANDLE: '$IMA.$Router.routeHandle'
 });
 
 export default EVENTS;
