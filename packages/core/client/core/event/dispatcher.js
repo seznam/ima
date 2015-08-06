@@ -163,7 +163,7 @@ export default class Dispatcher extends ns.Core.Interface.Dispatcher {
 	 * @chainable
 	 * @method fire
 	 * @param {string} event The name of the event to fire.
-	 * @param {*} data The data to pass to the event listeners.
+	 * @param {Object<string, *>} data The data to pass to the event listeners.
 	 * @return {Core.Interface.Dispatcher} This dispatcher.
 	 * @throws {Error} Thrown if there is no event listener registered for the
 	 *         specified event.
