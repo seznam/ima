@@ -193,7 +193,7 @@ var documentationPreprocessors = [
 	},
 	{
 		pattern: /\/[*][*]((?:a|[^a])*?)@see (.*)\n((a|[^a])*)[*]\//g,
-		replace: '/**$1See $2.\n$3*/'
+		replace: '/**$1\n$3*/'
 	},
 	{
 		pattern: /\/[*][*]((?:a|[^a])*?)[{]@code(?:link)? ([^}]*)[}]((a|[^a])*)[*]\//g,
