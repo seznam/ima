@@ -20,15 +20,16 @@ export default class PageManager {
 	init() {}
 
 	/**
-	 * Manage controller with params.
+	 * Manager controller with params.
 	 *
+	 * @inheritDoc
+	 * @override
 	 * @method manage
-	 * @param {string|function} controller
-	 * @param {string|function} view
+	 * @param {(string|function)} controller
+	 * @param {(string|function)} view
 	 * @param {{onlyUpdate: boolean}} options
-	 * @param {Object<string, *>=} params Parameters to use to initialize
-	 *        the controller.
-	 * @return {Promise}
+	 * @param {Object<string, string>=} [params={}] The route parameters.
+	 * @return {Promise<Object<string, ?(number|string)>>}
 	 */
 	manage(controller, view, options, params = {}) {}
 

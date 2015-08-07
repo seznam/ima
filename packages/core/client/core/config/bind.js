@@ -100,7 +100,12 @@ export var init = (ns, oc, config) => { //jshint ignore:line
 		oc.provide(ns.Core.Interface.PageRender, ns.Core.Page.Render.Server, ['$PageRenderFactory', '$Helper', '$React', '$Settings', '$Response', '$Cache']);
 	}
 	oc.bind('$PageRender', ns.Core.Interface.PageRender);
-	oc.provide(ns.Core.Interface.PageManager, ns.Core.Page.Manager, ['$PageFactory', '$PageRender', '$PageStateManager', '$Window', '$EventBus']);
+	//oc.provide(ns.Core.Interface.PageManager, ns.Core.Page.Manager, ['$PageFactory', '$PageRender', '$PageStateManager', '$Window', '$EventBus']);
+	if (oc.get('$Window').isClient()) {
+		oc.provide(ns.Core.Interface.PageManager, ns.Core.Page.Manager.Client, ['$PageFactory', '$PageRender', '$PageStateManager', '$Window', '$EventBus']);
+	} else {
+		oc.provide(ns.Core.Interface.PageManager, ns.Core.Page.Manager.Server, ['$PageFactory', '$PageRender', '$PageStateManager']);
+	}
 	oc.bind('$PageManager', ns.Core.Interface.PageManager);
 
 	//Router
