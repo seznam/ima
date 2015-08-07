@@ -194,4 +194,37 @@ describe('Core.Abstract.PageManager', function() {
 			expect(pageManager.scrollTo).toHaveBeenCalled();
 		});
 	});
+
+	describe('_hasOnlyUpdate method', function() {
+
+		it('should return value from onlyUpdate function', function() {
+			var newOptions = Object.assign({}, options, {onlyUpdate: function() {return true;}});
+			pageManager._lastManagedPage.controller = controller;
+			pageManager._lastManagedPage.view = view;
+
+			spyOn(newOptions, 'onlyUpdate')
+				.and
+				.callThrough();
+
+			expect(pageManager._hasOnlyUpdate(controller, view, newOptions)).toEqual(true);
+			expect(newOptions.onlyUpdate).toHaveBeenCalledWith(controller, view);
+
+		});
+
+		it('should return true for option onlyUpdate set to true and for same controller and view', function() {
+			var newOptions = Object.assign({}, options, {onlyUpdate: true});
+			pageManager._lastManagedPage.controller = controller;
+			pageManager._lastManagedPage.view = view;
+
+			expect(pageManager._hasOnlyUpdate(controller, view, newOptions)).toEqual(true);
+		});
+
+		it('should return false for option onlyUpdate set to true and for different controller and view', function() {
+			var newOptions = Object.assign({}, options, {onlyUpdate: true});
+			pageManager._lastManagedPage.controller = null;
+			pageManager._lastManagedPage.view = view;
+
+			expect(pageManager._hasOnlyUpdate(controller, view, newOptions)).toEqual(false);
+		});
+	});
 });

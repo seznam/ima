@@ -27,7 +27,7 @@ export default class PageManager {
 	 * @method manage
 	 * @param {(string|function)} controller
 	 * @param {(string|function)} view
-	 * @param {{onlyUpdate: boolean}} options
+	 * @param {{onlyUpdate: (boolean|function), autoScroll: boolean}} options
 	 * @param {Object<string, string>=} [params={}] The route parameters.
 	 * @return {Promise<Object<string, ?(number|string)>>}
 	 */

@@ -75,7 +75,7 @@ export default class PageManager extends ns.Core.Interface.PageManager {
 	 * @method manage
 	 * @param {(string|function)} controller
 	 * @param {(string|function)} view
-	 * @param {{onlyUpdate: boolean}} options
+	 * @param {{onlyUpdate: (boolean|function), autoScroll: boolean}} options
 	 * @param {Object<string, string>=} [params={}] The route parameters.
 	 * @return {Promise<Object<string, ?(number|string)>>}
 	 */
@@ -242,10 +242,17 @@ export default class PageManager extends ns.Core.Interface.PageManager {
 	 * @method _hasOnlyUpdate
 	 * @param {string|function} controller
 	 * @param {string|function} view
-	 * @param {{onlyUpdate: boolean}} options
+	 * @param {{onlyUpdate: (boolean|function), autoScroll: boolean}} options
 	 * @return {boolean}
 	 */
 	_hasOnlyUpdate(controller, view, options) {
+		if (options.onlyUpdate instanceof Function) {
+			return options.onlyUpdate(
+				this._lastManagedPage.controller,
+				this._lastManagedPage.view
+			);
+		}
+
 		return options.onlyUpdate &&
 			this._lastManagedPage.controller === controller &&
 			this._lastManagedPage.view === view;
