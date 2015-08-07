@@ -63,6 +63,36 @@ export default class Request {
 	getCookieHeader() {
 		return this._request ? this._request.get('Cookie') : '';
 	}
+
+	/**
+	 * Returns uploaded file to server and meta information.
+	 *
+	 * @method getFile
+	 * @return {Object<string, *>|null}
+	 */
+	getFile() {
+		return this._request ? this._request.file : null;
+	}
+
+	/**
+	 * Returns upaloaded files to server with their meta information.
+	 *
+	 * @method getFiles
+	 * @return {Object<string, *>|null}
+	 */
+	getFiles() {
+		return this._request ? this._request.files : null;
+	}
+
+	/**
+	 * Returns body of request.
+	 *
+	 * @method getBody
+	 * @return {string|null}
+	 */
+	getBody() {
+		return this._request ? this._request.body : null;
+	}
 }
 
 ns.Core.Router.Request = Request;
