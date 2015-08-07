@@ -322,7 +322,7 @@ describe('Core.Abstract.Router', function() {
 			expect(pageManager.manage).toHaveBeenCalledWith(controller, view, options, {});
 		});
 
-		it('should be fire ns.Core.Router.EVENTS.ROUTE_HANDLE', function(done) {
+		it('should be fire ns.Core.Router.EVENTS.HANDLE_ROUTE', function(done) {
 			var response = {content: null, status: 200};
 			var params = {};
 			var path ='/';
@@ -343,7 +343,7 @@ describe('Core.Abstract.Router', function() {
 					var data = {route: route, params: params, response: response, path: path};
 
 					expect(dispatcher.fire)
-						.toHaveBeenCalledWith(ns.Core.Router.EVENTS.ROUTE_HANDLE, data, true);
+						.toHaveBeenCalledWith(ns.Core.Router.EVENTS.HANDLE_ROUTE, data, true);
 
 					done();
 				});

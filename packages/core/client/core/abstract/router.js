@@ -472,7 +472,7 @@ export default class Router extends ns.Core.Interface.Router {
 					var data = { route, params, response, path: this.getPath() };
 
 					this._dispatcher
-						.fire(this._EVENTS.ROUTE_HANDLE, data, true);
+						.fire(this._EVENTS.HANDLE_ROUTE, data, true);
 				});
 
 	}
