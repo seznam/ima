@@ -508,7 +508,7 @@ gulp.task('Es6ToEs5:client', function() {
 			//.pipe(gulpif(isFile, gutil.noop()))
 			//.pipe(sourcemaps.init({loadMaps: true}))
 			.pipe(concat(files.app.name.server))
-			.pipe(insert.wrap('module.exports = function(){\n', '\nreturn $__imajs_47_client_47_main_46_js__; };\n'))
+			.pipe(insert.wrap('module.exports = (function(){\n', '\nreturn $__imajs_47_client_47_main_46_js__; })()\n'))
 			.pipe(sourcemaps.write())
 			.pipe(gulp.dest(files.app.dest.server))
 			//.pipe(size())
@@ -540,7 +540,7 @@ gulp.task('vendor:server', function() {
 			.src(files.vendor.src)
 			.pipe(concat(files.vendor.name.server))
 			//.pipe(gutil.env.type === 'production' ? uglify() : gutil.noop())
-			.pipe(insert.wrap('module.exports = function(config){', ' return vendor;};'))
+			.pipe(insert.wrap('module.exports = (function(config){', ' return vendor;})()'))
 			.pipe(gulp.dest(files.vendor.dest.server))
 	);
 });
