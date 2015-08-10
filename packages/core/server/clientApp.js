@@ -255,6 +255,11 @@ module.exports = (() => {
 		var promise = Promise.reject(err);
 
 		if (environment.$Debug) {
+
+			if (app) {
+				instanceRecycler.clearInstance(app);
+			}
+
 			_displayDetails(err, req, res);
 
 			return promise;
