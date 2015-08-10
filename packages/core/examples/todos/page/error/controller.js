@@ -6,12 +6,12 @@ class Controller extends ns.App.Base.Controller {
 	constructor() {
 		super();
 
-		this._status = 500;
+		this.status = 500;
 	}
 
 	load() {
 		return {
-			status: this._status,
+			status: this.status,
 			error: this.params
 		};
 	}

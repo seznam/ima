@@ -18,7 +18,7 @@ class Controller extends ns.App.Base.Controller {
 	constructor() {
 		super();
 
-		this._status = 404;
+		this.status = 404;
 	}
 
 	/**
@@ -27,7 +27,7 @@ class Controller extends ns.App.Base.Controller {
 	 */
 	load() {
 		return {
-			status: this._status
+			status: this.status
 		};
 	}
 }

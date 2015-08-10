@@ -45,6 +45,7 @@ export default class Response {
 		/**
 		 * HTTP Status code.
 		 *
+		 * @private
 		 * @property _status
 		 * @type {number}
 		 * @default 500
@@ -54,6 +55,7 @@ export default class Response {
 		/**
 		 * The content of response.
 		 *
+		 * @private
 		 * @property _content
 		 * @type {string}
 		 * @default ''

@@ -39,12 +39,12 @@ export default class Controller extends ns.Core.Interface.Controller {
 		/**
 		 * The HTTP response code to send to the client.
 		 *
-		 * @property _status
-		 * @protected
+		 * @property status
+		 * @public
 		 * @type {number}
 		 * @default 200
 		 */
-		this._status = 200;
+		this.status = 200;
 
 		/**
 		 * The route parameters extracted from the current route.
@@ -288,7 +288,7 @@ export default class Controller extends ns.Core.Interface.Controller {
 	 * @return {number} The HTTP status code to send to the client.
 	 */
 	getHttpStatus() {
-		return this._status;
+		return this.status;
 	}
 }
 
