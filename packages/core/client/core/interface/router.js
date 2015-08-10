@@ -109,6 +109,16 @@ export default class Router {
 	getProtocol() {}
 
 	/**
+	 * Returns the information about the currently active route.
+	 *
+	 * @method getCurrentRouteInfo
+	 * @return {{route: Core.Router.Route, params: Object<string, string>,
+	 *         path: string}} The information about the current route.
+	 * @throws {Core.IMAError} Thrown if a route is not define for current path.
+	 */
+	getCurrentRouteInfo() {}
+
+	/**
 	 * Registers event listeners at the client side window object allowing the
 	 * router to capture user's history (history pop state - going "back") and
 	 * page (clicking links) navigation.

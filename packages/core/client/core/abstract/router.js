@@ -280,6 +280,28 @@ export default class Router extends ns.Core.Interface.Router {
 	}
 
 	/**
+	 * Returns the information about the currently active route.
+	 *
+	 * @method getCurrentRouteInfo
+	 * @return {{route: Core.Router.Route, params: Object<string, string>,
+	 *         path: string}} The information about the current route.
+	 * @throws {Core.IMAError} Thrown if a route is not define for current path.
+	 */
+	getCurrentRouteInfo() {
+		var path = this.getPath();
+		var route = this._getRouteByPath(path);
+
+		if (!route) {
+			throw new IMAError(`Core.Abstract.Router.getCurrentRouteInfo: The route for path ` +
+					`${path} is not define.`);
+		}
+
+		var params = route.extractParameters(path);
+
+		return { route, params };
+	}
+
+	/**
 	 * Generates an absolute URL (including protocol, domain, etc) for the
 	 * specified route by substituting the route's parameter placeholders with
 	 * the provided parameter values.

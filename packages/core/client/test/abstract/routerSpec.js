@@ -77,6 +77,46 @@ describe('Core.Abstract.Router', function() {
 		});
 	});
 
+	describe('getCurrentRouteInfo method', function() {
+
+		var routeName ='link';
+		var path = '/link';
+		var route = null;
+		var params = {};
+
+		beforeEach(function() {
+			route = routerFactory.createRoute(routeName, path, controller, view, options);
+		});
+
+		afterEach(function() {
+			route = null;
+		});
+
+		it('should throw error for not exist route', function() {
+			spyOn(router, 'getPath')
+				.and
+				.returnValue(null);
+
+			expect(function() {
+				router.getCurrentRouteInfo();
+			}).toThrow();
+		});
+
+		it('should return current route information', function() {
+			spyOn(router, 'getPath')
+				.and
+				.returnValue(path);
+			spyOn(router, '_getRouteByPath')
+				.and
+				.returnValue(route);
+			spyOn(route, 'extractParameters')
+				.and
+				.returnValue(params);
+
+			expect(router.getCurrentRouteInfo()).toEqual({route: route, params: params});
+		});
+	});
+
 	describe('link method', function() {
 
 		var routeName ='link';
