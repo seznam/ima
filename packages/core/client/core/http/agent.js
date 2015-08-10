@@ -500,7 +500,20 @@ export default class Agent extends ns.Core.Interface.HttpAgent {
 			headers: {}
 		};
 
-		return Object.assign({}, this._defaultRequestOptions, extraOptions, options);
+		var composedOptions = Object.assign(
+			{},
+			this._defaultRequestOptions,
+			extraOptions,
+			options
+		);
+
+		composedOptions.headers = Object.assign(
+			{},
+			this._defaultRequestOptions.headers,
+			options.headers || {}
+		);
+
+		return composedOptions;
 	}
 
 	/**
