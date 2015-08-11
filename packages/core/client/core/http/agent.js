@@ -58,8 +58,8 @@ export default class Agent extends ns.Core.Interface.HttpAgent {
 		/**
 		 * HTTP proxy, used to execute the HTTP requests.
 		 *
-		 * @property _proxy
 		 * @private
+		 * @property _proxy
 		 * @type {Core.Http.Proxy}
 		 */
 		this._proxy = proxy;
@@ -68,8 +68,8 @@ export default class Agent extends ns.Core.Interface.HttpAgent {
 		 * Internal request cache, used to cache both completed request results and
 		 * ongoing requests.
 		 *
-		 * @property _cache
 		 * @private
+		 * @property _cache
 		 * @type {Core.Cache.Handler}
 		 */
 		this._cache = cache;
@@ -78,8 +78,8 @@ export default class Agent extends ns.Core.Interface.HttpAgent {
 		 * Cookie storage, used to keep track of cookies received from the server
 		 * and send them with the subsequent requests to the server.
 		 *
-		 * @property _cookie
 		 * @private
+		 * @property _cookie
 		 * @type {Core.Storage.Cookie}
 		 */
 		this._cookie = cookie;
@@ -87,8 +87,8 @@ export default class Agent extends ns.Core.Interface.HttpAgent {
 		/**
 		 * Cache options.
 		 *
-		 * @property _cacheOptions
 		 * @private
+		 * @property _cacheOptions
 		 * @type {Object<string, string>}
 		 */
 		this._cacheOptions = config.cacheOptions;
@@ -96,8 +96,8 @@ export default class Agent extends ns.Core.Interface.HttpAgent {
 		/**
 		 * Default request options.
 		 *
-		 * @property _defaultRequestOptions
 		 * @private
+		 * @property _defaultRequestOptions
 		 * @type {Object<string, (number|string)>}
 		 */
 		this._defaultRequestOptions = config.defaultRequestOptions;
@@ -305,8 +305,8 @@ export default class Agent extends ns.Core.Interface.HttpAgent {
 	/**
 	 * Check cache and if data isnt available then make real request.
 	 *
-	 * @method _requestWithCheckCache
 	 * @private
+	 * @method _requestWithCheckCache
 	 * @param {string} method The HTTP method to use.
 	 * @param {string} url The URL to which the request should be sent.
 	 * @param {Object<string, (boolean|number|string|Date)>} data The data to
@@ -339,8 +339,8 @@ export default class Agent extends ns.Core.Interface.HttpAgent {
 	 * The method returns {@code null} if no such request is present in the
 	 * cache.
 	 *
-	 * @method _getCachedData
 	 * @private
+	 * @method _getCachedData
 	 * @param {string} method The HTTP method used by the request.
 	 * @param {string} url The URL to which the request was made.
 	 * @param {Object<string, (boolean|number|string|Date)>} data The data sent
@@ -373,8 +373,8 @@ export default class Agent extends ns.Core.Interface.HttpAgent {
 	 * method is GET, but the data will be sent as request body for any other
 	 * request method.
 	 *
-	 * @method _request
 	 * @private
+	 * @method _request
 	 * @param {string} method HTTP method to use.
 	 * @param {string} url The URL to which the request is sent.
 	 * @param {Object<string, (boolean|number|string|Date)>} data The data sent
@@ -409,8 +409,8 @@ export default class Agent extends ns.Core.Interface.HttpAgent {
 	 * The method also updates the internal cookie storage with the cookies
 	 * recieved from the server.
 	 *
-	 * @method _proxyResolved
 	 * @private
+	 * @method _proxyResolved
 	 * @param {Vendor.SuperAgent.Response} response Server response.
 	 * @return {{status: number, body: *, params: Object, headers: Object, cached: boolean}}
 	 */
@@ -422,27 +422,20 @@ export default class Agent extends ns.Core.Interface.HttpAgent {
 			headers: response.header,
 			cached: false
 		};
-		var params = agentResponse.params;
-		var method = params.method;
-		var url = params.url;
-		var data = params.data;
-		var cachePromiseKey = this._getRequestPromiseCacheKey(method, url, data);
-		var cacheKey = this.getCacheKey(method, url, data);
+		var cachePromiseKey = this._getRequestPromiseCacheKey(
+			agentResponse.params.method,
+			agentResponse.params.url,
+			agentResponse.params.data
+		);
 
 		this._cache.delete(cachePromiseKey);
 
-		var responseClone = JSON.parse(JSON.stringify(agentResponse));
-		responseClone.cached = true;
-		this._cache.set(cacheKey, responseClone, params.options.ttl);
+		if (agentResponse.params.options.cache) {
+			this._saveAgentResponseToCache(agentResponse);
+		}
 
-		if (this._proxy.haveToSetCookiesManually() && agentResponse.headers) {
-			var receivedCookies = agentResponse.headers['set-cookie'];
-
-			if (receivedCookies) {
-				receivedCookies.forEach((cookieHeader) => {
-					this._cookie.parseFromSetCookieHeader(cookieHeader);
-				});
-			}
+		if (this._proxy.haveToSetCookiesManually()) {
+			this._setCookiesFromResponse(agentResponse);
 		}
 
 		return agentResponse;
@@ -456,8 +449,8 @@ export default class Agent extends ns.Core.Interface.HttpAgent {
 	 * The method rejects the internal request promise if there are no tries
 	 * left.
 	 *
-	 * @method _proxyRejected
 	 * @private
+	 * @method _proxyRejected
 	 * @param {Object<string, *>} errorParams Error parameters, containing the
 	 *        request url, data, method, options and other usefull data.
 	 */
@@ -485,8 +478,8 @@ export default class Agent extends ns.Core.Interface.HttpAgent {
 	 * Prepares the provided request options object by filling in missing options
 	 * with default values and addding extra options used internally.
 	 *
-	 * @method _prepareOptions
 	 * @private
+	 * @method _prepareOptions
 	 * @param {{timeout: number=, ttl: number=, repeatRequest: number=,
 	 *        headers: Object<string, string>=, cache: boolean=}} options
 	 *        HTTP request options, as described in the public API.
@@ -520,8 +513,8 @@ export default class Agent extends ns.Core.Interface.HttpAgent {
 	 * Generates the cache key identifying an HTTP request promise for an HTTP
 	 * request in progress to the specified URL with the specified data.
 	 *
-	 * @method _getRequestPromiseCacheKey
 	 * @private
+	 * @method _getRequestPromiseCacheKey
 	 * @param {string} method The HTTP method used by the request.
 	 * @param {string} url The URL to which the request is sent.
 	 * @param {Object<string, (boolean|number|string|Date)>} data The data sent
@@ -538,8 +531,8 @@ export default class Agent extends ns.Core.Interface.HttpAgent {
 	 * Generates cache key suffix for an HTTP request to the specified URL with
 	 * the specified data.
 	 *
-	 * @method _getCacheKeySuffix
 	 * @private
+	 * @method _getCacheKeySuffix
 	 * @param {string} method The HTTP method used by the request.
 	 * @param {string} url The URL to which the request is sent.
 	 * @param {Object<string, (boolean|number|string|Date)>} data The data sent
@@ -549,6 +542,45 @@ export default class Agent extends ns.Core.Interface.HttpAgent {
 	 */
 	_getCacheKeySuffix(method, url, data) {
 		return `${method}:${url}?${JSON.stringify(data)}`;
+	}
+
+	/**
+	 * Set all cookies from response headers set-cookie.
+	 *
+	 * @private
+	 * @method setCookiesFromResponse
+	 * @param {{status: number, body: *, params: Object, headers: Object, cached: boolean}} agentResponse
+	 */
+	_setCookiesFromResponse(agentResponse) {
+		if (agentResponse.headers) {
+			var receivedCookies = agentResponse.headers['set-cookie'];
+
+			if (receivedCookies) {
+				receivedCookies.forEach((cookieHeader) => {
+					this._cookie.parseFromSetCookieHeader(cookieHeader);
+				});
+			}
+		}
+	}
+
+	/**
+	 * Save agent response to cache for next request.
+	 *
+	 * @private
+	 * @method _saveAgentResponseToCache
+	 * @param {{status: number, body: *, params: Object, headers: Object, cached: boolean}} agentResponse
+	 */
+	_saveAgentResponseToCache(agentResponse) {
+		var cacheKey = this.getCacheKey(
+			agentResponse.params.method,
+			agentResponse.params.url,
+			agentResponse.params.data
+		);
+
+		var responseClone = JSON.parse(JSON.stringify(agentResponse));
+		responseClone.cached = true;
+
+		this._cache.set(cacheKey, responseClone, agentResponse.params.options.ttl);
 	}
 }
 
