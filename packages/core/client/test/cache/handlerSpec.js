@@ -124,4 +124,41 @@ describe('Core.Cache.Handler', function() {
 			cache.serialize();
 		}).toThrow();
 	});
+
+	describe('_canSerializeValue method', function() {
+
+		it('should return false for Date', function() {
+			expect(cache._canSerializeValue(new Date())).toBe(false);
+		});
+
+		it('should return false for RegExp', function() {
+			expect(cache._canSerializeValue(new RegExp('/'))).toBe(false);
+		});
+
+		it('should return false for resolved promise', function() {
+			expect(cache._canSerializeValue(Promise.resolve(1))).toBe(false);
+		});
+
+		it('should return false for object with bad type of keys', function() {
+			var object = {
+				date: new Date()
+			};
+
+			expect(cache._canSerializeValue(object)).toBe(false);
+		});
+
+		it('should return true for serializable object', function() {
+			var object = {
+				number: 1,
+				string: 'string',
+				boolean: true,
+				array: [1, 2, 3, 4],
+				object: {
+					number: 1
+				}
+			};
+
+			expect(cache._canSerializeValue(object)).toBe(true);
+		});
+	});
 });

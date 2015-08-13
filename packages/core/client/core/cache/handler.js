@@ -213,8 +213,10 @@ export default class Handler extends ns.Core.Interface.Cache {
 			var serializeEntry = this._cache.get(key).serialize();
 
 			if ($Debug) {
-				if (serializeEntry.value instanceof Promise) {
-					throw new Error(`Core.Cache.Handler:serialize You want to serialize promise for key ${key}. Clear promise value from cache.`);
+				if (!this._canSerializeValue(serializeEntry.value)) {
+					 throw new Error(`Core.Cache.Handler:serialize You want to serialize ` +
+							 `${serializeEntry.value.toString()} for key ${key}. Clear value from cache or ` +
+							 `change their type so that will be serializable with JSON.stringify.`);
 				}
 			}
 
@@ -239,6 +241,42 @@ export default class Handler extends ns.Core.Interface.Cache {
 			var cacheEntryItem = serializedData[key];
 			this.set(key, cacheEntryItem.value, cacheEntryItem.ttl);
 		}
+	}
+
+	/**
+	 * Returns true if value can be serializable with JSON.stringify method.
+	 *
+	 * @method _canSerializeValue
+	 * @param {string} key
+	 * @param {*} value
+	 * @return {boolean}
+	 */
+	_canSerializeValue(value) {
+		if (value instanceof Date ||
+			value instanceof RegExp ||
+			value instanceof Promise ||
+			typeof value === 'function'
+		) {
+			return false;
+		}
+
+		if (value && value.constructor === Array) {
+			for (var partValue of value) {
+				if (!this._canSerializeValue(value[partValue])) {
+					return false;
+				}
+			}
+		}
+
+		if (value && typeof value === 'object') {
+			for (var valueKey of Object.keys(value)) {
+				if (!this._canSerializeValue(value[valueKey])) {
+					return false;
+				}
+			}
+		}
+
+		return true;
 	}
 
 	/**
