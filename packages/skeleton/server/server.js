@@ -54,6 +54,8 @@ var runNodeApp = () => {
 	var express = require('express');
 	var app = express();
 
+	app.set('trust proxy', true);
+
 	app.use(helmet())
 		.use(compression())
 		.use(favicon(__dirname + '/static/img/favicon.ico'))
