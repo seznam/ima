@@ -127,7 +127,9 @@ export default class Handler extends ns.Core.Interface.Cache {
 	 */
 	get(key) {
 		if (this.has(key)) {
-			return this._cache.get(key).getValue();
+			var value = this._cache.get(key).getValue();
+
+			return this._clone(value);
 		}
 
 		return null;
@@ -148,7 +150,8 @@ export default class Handler extends ns.Core.Interface.Cache {
 	 *        cache.
 	 */
 	set(key, value, ttl = null) {
-		var cacheEntry = this._factory.createCacheEntry(value, ttl || this._ttl);
+		var cacheEntry = this._factory
+				.createCacheEntry(this._clone(value), ttl || this._ttl);
 
 		this._cache.set(key, cacheEntry);
 	}
@@ -209,8 +212,10 @@ export default class Handler extends ns.Core.Interface.Cache {
 		for (var key of this._cache.keys()) {
 			var serializeEntry = this._cache.get(key).serialize();
 
-			if (serializeEntry.value instanceof Promise) {
-				throw new Error(`Core.Cache.Handler:serialize You want to serialize promise for key ${key}. Clear promise value from cache.`);
+			if ($Debug) {
+				if (serializeEntry.value instanceof Promise) {
+					throw new Error(`Core.Cache.Handler:serialize You want to serialize promise for key ${key}. Clear promise value from cache.`);
+				}
 			}
 
 			dataToSerialize[key] = serializeEntry;
@@ -234,6 +239,21 @@ export default class Handler extends ns.Core.Interface.Cache {
 			var cacheEntryItem = serializedData[key];
 			this.set(key, cacheEntryItem.value, cacheEntryItem.ttl);
 		}
+	}
+
+	/**
+	 * Clone only mutable values.
+	 *
+	 * @method _clone
+	 * @param {*} value
+	 * @return {*}
+	 */
+	_clone(value) {
+		if (value !== null && typeof value === 'object') {
+			return ns.Vendor.$Helper.clone(value);
+		}
+
+		return value;
 	}
 }
 

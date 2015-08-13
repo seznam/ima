@@ -15,7 +15,7 @@ describe('Core.Cache.Handler', function() {
 		jasmine.clock().uninstall();
 	});
 
-	it('should be store value for key', function() {
+	it('should store value for key', function() {
 		jasmine.clock().mockDate(new Date());
 		cache.set('bbb', 456);
 		cache.set('ccc', 321, 2000);
@@ -27,7 +27,61 @@ describe('Core.Cache.Handler', function() {
 		expect(cache.has('ccc')).toBe(true);
 	});
 
-	it('should be return false for undefined cacheEntry', function() {
+	describe('set method', function() {
+
+		it('should store deep clone', function() {
+			var object = {
+				number: 1,
+				boolean: true,
+				string: 'text',
+				array: [1, 2, 3, [4, 5]],
+				object: {
+					number: 1,
+					boolean: true,
+					string: 'text',
+					array: [1, 2, 3, [4, 5], {number: 1}]
+				}
+			};
+
+			cache.set('object', object);
+
+			object.object.number = 2;
+			object.object.array[3] = 4;
+			object.object.array[4].number = 2;
+
+			var cacheObject = cache.get('object');
+
+			expect(cacheObject.object.number).toEqual(1);
+			expect(cacheObject.object.array[3]).toEqual([4, 5]);
+			expect(cacheObject.object.array[4].number).toEqual(1);
+		});
+
+		it('should returns deep clone', function() {
+			var object = {
+				number: 1,
+				boolean: true,
+				string: 'text',
+				array: [1, 2, 3, [4, 5]],
+				object: {
+					number: 1,
+					boolean: true,
+					string: 'text',
+					array: [1, 2, 3, [4, 5], {number: 1}]
+				}
+			};
+
+			cache.set('object', object);
+			var cloneObject = cache.get('object');
+
+			cloneObject.object.number = 2;
+			cloneObject.object.array[3] = 4;
+			cloneObject.object.array[4].number = 2;
+
+			expect(cache.get('object')).toEqual(object);
+		});
+	});
+
+	it('should return false for undefined cacheEntry', function() {
 		spyOn(cacheStorage, 'has')
 			.and
 			.returnValue(true);
@@ -35,27 +89,27 @@ describe('Core.Cache.Handler', function() {
 		expect(cache.has('bbb')).toBe(false);
 	});
 
-	it('should be return cached value for exist key', function() {
+	it('should return cached value for exist key', function() {
 		expect(cache.get('aaa')).toEqual(123);
 	});
 
-	it('should be return null for not exist key', function() {
+	it('should return null for not exist key', function() {
 		expect(cache.get('bbb')).toEqual(null);
 	});
 
-	it('should be cleared cache', function() {
+	it('should cleared cache', function() {
 		cache.clear();
 
 		expect(cache.has('aaa')).toBe(false);
 	});
 
-	it('should be cache disabled', function() {
+	it('should cache disabled', function() {
 		cache.disable();
 
 		expect(cache.has('aaa')).toBe(false);
 	});
 
-	it('should be serialize and deserialize', function() {
+	it('should serialize and deserialize', function() {
 		var serialization = cache.serialize();
 		cache.clear();
 		cache.deserialize(serialization);
@@ -63,7 +117,7 @@ describe('Core.Cache.Handler', function() {
 		expect(cache.has('aaa')).toBe(false);
 	});
 
-	it('should be throw error for serialize if value is instance of Promise', function() {
+	it('should throw error for serialize if value is instance of Promise', function() {
 		cache.set('promise', Promise.resolve('promise'));
 
 		expect(function() {

@@ -1,3 +1,5 @@
+var clone = require('clone');
+
 module.exports = (() => {
 
 	var assignRecursively = (target, ...sources) => {
@@ -43,5 +45,5 @@ module.exports = (() => {
 		return string.replace(/([.*+?^=!:${}()|\[\]\/\\])/g, "\\$1");
 	};
 
-	return {assignRecursively, allPromiseHash, escapeRegExp};
+	return {assignRecursively, allPromiseHash, escapeRegExp, clone};
 })();

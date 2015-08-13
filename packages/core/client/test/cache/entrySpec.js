@@ -20,7 +20,7 @@ describe('Core.Cache.Entry', function() {
 		expect(cacheData.isExpired()).toBe(true);
 	});
 
-	it('should be return value', function() {
+	it('should return value', function() {
 		expect(cacheData.getValue()).toEqual(123);
 	});
 

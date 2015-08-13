@@ -123,7 +123,7 @@ export default class Request {
 	 * @return {Array<string>}
 	 */
 	getIPs() {
-		return this._request ? this._request.ips : [];
+		return this._request ? this._request.ips || [] : [];
 	}
 }
 

@@ -577,10 +577,9 @@ export default class Agent extends ns.Core.Interface.HttpAgent {
 			agentResponse.params.data
 		);
 
-		var responseClone = Object.assign({}, agentResponse);
-		responseClone.cached = true;
-
-		this._cache.set(cacheKey, responseClone, agentResponse.params.options.ttl);
+		agentResponse.cached = true;
+		this._cache.set(cacheKey, agentResponse, agentResponse.params.options.ttl);
+		agentResponse.cached = false;
 	}
 }
 

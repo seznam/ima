@@ -74,7 +74,8 @@ export default class Entry {
 	}
 
 	/**
-	 * Returns the entry value.
+	 * Returns the entry value. If entry value is type of object
+	 * returns clone of that object.
 	 *
 	 * @method getValue
 	 * @return {*} The entry value.
