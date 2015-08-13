@@ -68,7 +68,7 @@ export default class Request {
 	 * Returns uploaded file to server and meta information.
 	 *
 	 * @method getFile
-	 * @return {Object<string, *>|null}
+	 * @return {(Object<string, *>|null)}
 	 */
 	getFile() {
 		return this._request ? this._request.file : null;
@@ -78,7 +78,7 @@ export default class Request {
 	 * Returns upaloaded files to server with their meta information.
 	 *
 	 * @method getFiles
-	 * @return {Object<string, *>|null}
+	 * @return {(Object<string, *>|null)}
 	 */
 	getFiles() {
 		return this._request ? this._request.files : null;
@@ -88,10 +88,42 @@ export default class Request {
 	 * Returns body of request.
 	 *
 	 * @method getBody
-	 * @return {string|null}
+	 * @return {(string|null)}
 	 */
 	getBody() {
-		return this._request ? this._request.body : null;
+		return this._request ? this._request.body || null : null;
+	}
+
+	/**
+	 * Returns the specified HTTP request header.
+	 *
+	 * @method getHeader
+	 * @param {string} header
+	 * @return {(string|null)}
+	 */
+	getHeader(header) {
+		return this._request ? this._request.get(header) || null : null;
+	}
+
+	/**
+	 * Returns the remote IP address of the request.
+	 *
+	 * @method getIP
+	 * @return {(string|null)}
+	 */
+	getIP() {
+		return this._request ? this._request.ip : null;
+	}
+
+	/**
+	 * Returns array of IP addresses specified in the “X-Forwarded-For”
+	 * request header.
+	 *
+	 * @method getIPs
+	 * @return {Array<string>}
+	 */
+	getIPs() {
+		return this._request ? this._request.ips : [];
 	}
 }
 
