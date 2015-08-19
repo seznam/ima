@@ -92,11 +92,15 @@ export default class Client extends ns.Core.Abstract.PageManager {
 			if (typeof controllerInstance[onEventName] === 'function') {
 				controllerInstance[onEventName](eventData);
 			} else {
-				console.warn(`The active controller has no listener for the encountered` +
-						` event '${eventName}'. Check your event name for typos, or` +
-						` create an '${onEventName}' event listener method on the active` +
-						` controller or add an event listener that stops the propagation` +
-						` of this event to an ancestor component of the component that fired this event.`);
+
+				if ($Debug) {
+					console.warn(`The active controller has no listener for the encountered` +
+							` event '${eventName}'. Check your event name for typos, or` +
+							` create an '${onEventName}' event listener method on the active` +
+							` controller or add an event listener that stops the propagation` +
+							` of this event to an ancestor component of the component that fired this event.`);
+				}
+
 			}
 		}
 	}
