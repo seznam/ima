@@ -1,4 +1,4 @@
-import ns from 'imajs/client/core/namespace.js';
+import ns from 'imajs/client/core/namespace';
 
 ns.namespace('Core.Page.Manager');
 

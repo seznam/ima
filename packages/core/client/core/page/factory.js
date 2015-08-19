@@ -1,5 +1,5 @@
-import ns from 'imajs/client/core/namespace.js';
-import IMAError from 'imajs/client/core/imaError.js';
+import ns from 'imajs/client/core/namespace';
+import IMAError from 'imajs/client/core/imaError';
 
 ns.namespace('Core.Page');
 

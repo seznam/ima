@@ -1,4 +1,4 @@
-import ns from 'imajs/client/core/namespace.js';
+import ns from 'imajs/client/core/namespace';
 
 const POPUP_SIZE = Object.freeze({
 	width: 550,

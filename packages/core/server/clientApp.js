@@ -9,16 +9,25 @@ var instanceRecycler = require('./instanceRecycler.js');
 var helper = require('./helper.js');
 
 GLOBAL.$Debug = environment.$Debug;
-GLOBAL.$IMA = {};
+GLOBAL.$IMA = GLOBAL.$IMA || {};
 
-var appServer = require('./app.server.js');
+require('./app.server.js');
+
+var appServer = null;
+
+$IMA.Loader.import('imajs/client/main').then((app) => {
+	appServer = app;
+	instanceRecycler.init(appServer.createIMAJsApp, environment.$Server.concurrency);
+}).catch((error) => {
+	console.log('Message', error.message);
+	console.error('Stack: ', error.stack);
+	console.error('Params: ', error._params);
+});
 
 hljs.configure({
 	tabReplace: '  ',
 	lineNodes: true
 });
-
-instanceRecycler.init(appServer.createIMAJsApp, environment.$Server.concurrency);
 
 module.exports = (() => {
 	var _displayDetails = (err, req, res) => {

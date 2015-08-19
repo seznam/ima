@@ -1,14 +1,14 @@
-import ns from 'imajs/client/core/namespace.js';
-import ObjectContainer from 'imajs/client/core/objectContainer.js';
-import Bootstrap from 'imajs/client/core/bootstrap.js';
+import ns from 'imajs/client/core/namespace';
+import ObjectContainer from 'imajs/client/core/objectContainer';
+import Bootstrap from 'imajs/client/core/bootstrap';
 
 // Import app/config
-import { init as initBindCore } from 'imajs/client/core/config/bind.js';
-import { init as initBindApp } from 'app/config/bind.js';
-import { init as initRoutes } from 'app/config/routes.js';
-import { init as initServicesCore } from 'imajs/client/core/config/services.js';
-import { init as initServicesApp } from 'app/config/services.js';
-import { init as initSettings } from 'app/config/settings.js';
+import { init as initBindCore } from 'imajs/client/core/config/bind';
+import { init as initBindApp } from 'app/config/bind';
+import { init as initRoutes } from 'app/config/routes';
+import { init as initServicesCore } from 'imajs/client/core/config/services';
+import { init as initServicesApp } from 'app/config/services';
+import { init as initSettings } from 'app/config/settings';
 
 var getInit = () => {
 	return { initBindCore, initBindApp, initRoutes, initServicesCore, initServicesApp, initSettings };

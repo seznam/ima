@@ -1,4 +1,4 @@
-import ns from 'imajs/client/core/namespace.js';
+import ns from 'imajs/client/core/namespace';
 
 var vendor;
 if (typeof window !== 'undefined' && window !== null) {
