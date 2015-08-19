@@ -6,25 +6,23 @@ var gutil = require('gulp-util');
 var gls = require('gulp-live-server');
 var insert = require('gulp-insert');
 var browserify = require('browserify');
+var babelify = require('babelify');
+var babel = require('gulp-babel');
 var gulpif = require('gulp-if');
 var fs = require('fs');
 var path = require('path');
 var runSequence = require('run-sequence');
-var shell = require('gulp-shell');
 var source = require('vinyl-source-stream');
-var traceur = require('gulp-traceur');
 var es = require('event-stream');
-var react = require('gulp-react');
 var sweetjs = require('gulp-sweetjs');
 var yuidoc = require('gulp-yuidoc');
 var less = require('gulp-less');
 var clean = require('gulp-clean');
 var plumber = require('gulp-plumber');
-var karma = require('gulp-karma');
+var karma = require('karma');
 var cache = require('gulp-cached');
 var	remember = require('gulp-remember');
 var flo = require('fb-flo');
-var through = require('through2');
 var messageFormat = require('gulp-messageformat');
 var save = require('gulp-save');
 var change = require('gulp-change');
@@ -64,15 +62,14 @@ var files = {
 	vendor: {
 		name: {
 			server: 'vendor.server.js',
-			client: 'vendor.client.js'
+			client: 'vendor.client.js',
+			tmp: 'es5transformedVendor.js'
 		},
-		tmp: './build/imajs/es5transformedVendor.js',
-		src:[
-				'./build/imajs/es5transformedVendor.js'
-		],
+		src:['./imajs/client/core/vendor.js', './app/vendor.js'],
 		dest: {
 			server: './build/imajs/',
-			client: './build/static/js/'
+			client: './build/static/js/',
+			tmp: './build/imajs/'
 		},
 		watch: ['./imajs/client/core/vendor.js', './app/vendor.js']
 	},
@@ -89,7 +86,9 @@ var files = {
 		watch:['./imajs/client/**/*.{js,jsx}', './imajs/client/main.js', '!./imajs/client/vendor.js', './app/**/*.{js,jsx}', '!./app/*.js']
 	},
 	server: {
-		src: './server/',
+		cwd: '/',
+		src: ['./server/*.js', './server/**/*.js'],
+		base: './server/',
 		dest: './build/',
 		watch: ['./server/*.js', './server/**/*.js', './app/environment.js', './imajs/server/*.js']
 	},
@@ -113,7 +112,8 @@ var files = {
 		name: 'shim.js',
 		src: [
 			'./node_modules/es6-shim/es6-shim.js',
-			traceur.RUNTIME_PATH
+			'./node_modules/gulp-babel/node_modules/babel-core/external-helpers.js',
+			'./imajs/polyfill/imaLoader.js'
 		],
 		dest: {
 			client: './build/static/js/',
@@ -140,20 +140,6 @@ var files = {
 			src: appDependency.bundle.css,
 			dest: './build/static/css/'
 		}
-	},
-	test: {
-		src: [
-			'./imajs/client/test.js',
-			'./build/static/js/polyfill.js',
-			'./build/static/js/shim.js',
-			'./build/static/js/vendor.client.js',
-			'./build/static/js/locale/cs.js',
-			'./build/static/js/app.client.js',
-			'./app/test/**/*.js',
-			'./app/test/*.js',
-			'./imajs/client/test/**/*.js',
-			'./imajs/client/test/*.js'
-		]
 	}
 };
 
@@ -225,9 +211,8 @@ var documentationPreprocessors = [
 gulp.task('dev', function(callback) {
 	return runSequence(
 		['copy:appStatic', 'copy:imajsServer', 'copy:environment', 'shim', 'polyfill'],
-		['Es6ToEs5:client', 'Es6ToEs5:server', 'Es6ToEs5:vendor'],
-		['vendor:client', 'vendor:server', 'less', 'doc', 'locale'],
-		'vendor:clean',
+		['Es6ToEs5:app', 'Es6ToEs5:server', 'Es6ToEs5:vendor'],
+		['less', 'doc', 'locale', 'Es6ToEs5:vendor:client', 'Es6ToEs5:vendor:server'],
 		['server'],
 		['devTest', 'watch'],
 		callback
@@ -243,25 +228,19 @@ gulp
 		}
 		return runSequence(
 			['copy:appStatic', 'copy:imajsServer', 'copy:environment', 'shim', 'polyfill'], //copy folder public, concat shim
-			['Es6ToEs5:client', 'Es6ToEs5:server', 'Es6ToEs5:vendor'], // convert app and vendor script
-			['vendor:client', 'vendor:server', 'less', 'doc', 'locale'], // adjust vendors, compile less, create doc,
+			['Es6ToEs5:app', 'Es6ToEs5:server', 'Es6ToEs5:vendor'], // convert app and vendor script
+			['less', 'doc', 'locale', 'Es6ToEs5:vendor:client', 'Es6ToEs5:vendor:server'], // adjust vendors, compile less, create doc,
 			['bundle:js:app', 'bundle:js:server', 'bundle:css'],
-			['vendor:clean', 'bundle:clean'],// clean vendor
+			['bundle:clean', 'Es6ToEs5:vendor:clean'],// clean vendor
 			callback
 		);
 });
 
-gulp.task('test', function() {
-	// Be sure to return the stream
-	return gulp.src(files.test.src)
-		.pipe(karma({
-			configFile: './karma.conf.js',
-			action: 'run'
-		}))
-		.on('error', function(err) {
-			// Make sure failed tests cause gulp to exit non-zero
-			throw err;
-		});
+gulp.task('test', function(done) {
+	new karma.Server({
+		configFile: __dirname + '/karma.conf.js',
+		singleRun: true
+	}, done).start();
 });
 
 gulp.task('doc', function() {
@@ -308,9 +287,9 @@ gulp.task('watch', function() {
 		watchEvent = e;
 		if (e.type === 'deleted') {
 
-			if (cache.caches['Es6ToEs5:client'][e.path]) {
-				delete cache.caches['Es6ToEs5:client'][e.path];
-				remember.forget('Es6ToEs5:client', e.path);
+			if (cache.caches['Es6ToEs5:app'][e.path]) {
+				delete cache.caches['Es6ToEs5:app'][e.path];
+				remember.forget('Es6ToEs5:app', e.path);
 			}
 
 		}
@@ -320,7 +299,8 @@ gulp.task('watch', function() {
 			port: 5888,
 			host: 'localhost',
 			glob: [
-				'**/*.css'
+				'**/*.css',
+				'**/*.js'
 			]
 		},
 		function(filepath, callback) {
@@ -349,16 +329,19 @@ gulp.task('server:reload', function(callback) {
 	}, 2000);
 });
 
-gulp.task('devTest', function() {
+gulp.task('devTest', function(done) {
+	new karma.Server({
+		configFile: __dirname + '/karma.conf.js'
+	}, done).start();
 
-	return gulp.src(files.test.src)
+	/*return gulp.src(files.test.src)
 		.pipe(karma({
 			configFile: './karma.conf.js',
 			action: 'watch'
 		}))
 		.on('error', function(err) {
 			throw err;
-		});
+		});*/
 });
 
 gulp.task('copy:appStatic', function() {
@@ -381,7 +364,7 @@ gulp.task('copy:imajsServer', function() {
 	return (
 		gulp
 			.src(filesToMove)
-			.pipe(gulp.dest(files.server.src + 'imajs/'))
+			.pipe(gulp.dest(files.server.base + 'imajs/'))
 	);
 });
 
@@ -393,7 +376,7 @@ gulp.task('copy:environment', function() {
 	return (
 		gulp
 			.src(filesToMove)
-			.pipe(gulp.dest(files.server.src + 'imajs/config/'))
+			.pipe(gulp.dest(files.server.base + 'imajs/config/'))
 	);
 });
 
@@ -433,7 +416,7 @@ gulp.task('server:build', function(callback) {
 
 gulp.task('app:build', function(callback) {
 	return runSequence(
-		'Es6ToEs5:client',
+		'Es6ToEs5:app',
 		'server:restart',
 		'server:reload',
 		callback
@@ -442,9 +425,8 @@ gulp.task('app:build', function(callback) {
 
 gulp.task('vendor:build', function(callback) {
 	return runSequence(
-		'Es6ToEs5:vendor',
-		['vendor:client', 'vendor:server'],
-		'vendor:clean',
+		['Es6ToEs5:vendor'],
+		['Es6ToEs5:vendor:server', 'Es6ToEs5:vendor:client'],
 		'server:restart',
 		'server:reload',
 		callback
@@ -461,26 +443,35 @@ gulp.task('locale:build', function(callback) {
 });
 
 // build client logic app
-gulp.task('Es6ToEs5:client', function() {
+gulp.task('Es6ToEs5:app', function() {
+	var systemImports = [];
 	var view = /view.js$/;
-	var jsx = /view.jsx$/;
 
 	function isView(file) {
 		return !!file.relative.match(view);
 	}
 
-	function isJSX(file) {
-		return !!file.relative.match(jsx);
+	function generateSystemImports() {
+		return es.mapSync(function (file) {
+
+			systemImports.push('System.import("' + file.relative.substr(0, file.relative.lastIndexOf('.')) + '")\n');
+
+			return file;
+		});
 	}
 
-	function handleError (error) {
-		gutil.log(
-			gutil.colors.red('Es6ToEs5:client:error'),
-			error.toString()
-		);
+	function insertSystemImports() {
+		return change(function (content) {
+			content = content + '\n' +
+					'Promise.all([$IMA.Loader.import("imajs/client/main")])\n' +
+					'.catch(function(error) { \n' +
+					'console.error(error); \n });';
 
-		this.emit('end');
-		this.end();
+			content = content.replace(/System.import/g, '$IMA.Loader.import');
+			content = content.replace(/System.register/g, '$IMA.Loader.register');
+
+			return content;
+		});
 	}
 
 	return (
@@ -488,27 +479,28 @@ gulp.task('Es6ToEs5:client', function() {
 			.pipe(resolveNewPath('/'))
 			.pipe(plumber())
 			.pipe(sourcemaps.init())
-			.pipe(cache('Es6ToEs5:client'))
-			.pipe(gulpif(isJSX, react({harmony: false, es6module: true}), gutil.noop()).on('error', handleError))
-			.pipe(traceur({modules: 'inline', moduleName: true, sourceMaps: true}))
+			.pipe(cache('Es6ToEs5:app'))
+			.pipe(babel({modules: 'system', moduleIds: true, loose: "all", externalHelpers: true}))
 			.pipe(gulpif(isView, sweetjs({
 				modules: ['./imajs/macro/react.sjs', './imajs/macro/componentName.sjs'],
 				readableNames: true
 			}), gutil.noop()))
-			.pipe(remember('Es6ToEs5:client'))
+			.pipe(remember('Es6ToEs5:app'))
+			.pipe(generateSystemImports())
 			.pipe(plumber.stop())
-			.pipe(save('Es6ToEs5:source'))
 			.pipe(concat(files.app.name.client))
+			.pipe(insertSystemImports())
+			.pipe(save('Es6ToEs5:app:source'))
 			.pipe(insert.wrap('(function(){\n', '\n })();\n'))
 			.pipe(sourcemaps.write())
 			//.pipe(gutil.env.type === 'production' ? uglify() : gutil.noop())
 			//.pipe(uglify({mangle:true}))
 			.pipe(gulp.dest(files.app.dest.client))
-			.pipe(save.restore('Es6ToEs5:source'))
+			.pipe(save.restore('Es6ToEs5:app:source'))
 			//.pipe(gulpif(isFile, gutil.noop()))
 			//.pipe(sourcemaps.init({loadMaps: true}))
 			.pipe(concat(files.app.name.server))
-			.pipe(insert.wrap('module.exports = (function(){\n', '\nreturn $__imajs_47_client_47_main_46_js__; })()\n'))
+			.pipe(insert.wrap('module.exports = (function(){\n', '\n })()\n'))
 			.pipe(sourcemaps.write())
 			.pipe(gulp.dest(files.app.dest.server))
 			//.pipe(size())
@@ -517,38 +509,57 @@ gulp.task('Es6ToEs5:client', function() {
 });
 
 // build server logic app
-gulp.task('Es6ToEs5:server', shell.task('traceur --dir ' + files.server.src + ' ' + files.server.dest + '  --modules=commonjs --source-maps=inline'));
-
-
-//build vendor for server and client part
-gulp.task('Es6ToEs5:vendor', shell.task('traceur --out ' + files.vendor.tmp + ' --script ' + files.vendor.watch.join(' ') + '  --modules=commonjs --source-maps=inline'));
-
-gulp.task('vendor:client', function() {
+gulp.task('Es6ToEs5:server', function() {
 	return (
-		browserify(files.vendor.src, {debug: false, insertGlobals : false, basedir: ''})
+		gulp
+			.src(files.server.src)
+			.pipe(plumber())
+			.pipe(babel({modules: 'ignore', loose: "all", externalHelpers: true}))
+			.pipe(plumber.stop())
+			.pipe(gulp.dest(files.server.dest))
+	);
+});
+
+
+gulp.task('Es6ToEs5:vendor', function() {
+	return (
+		gulp
+			.src(files.vendor.src)
+			.pipe(plumber())
+			.pipe(babel({modules: 'commonStrict', loose: "all", externalHelpers: true}))
+			.pipe(plumber.stop())
+			.pipe(concat(files.vendor.name.tmp))
+			.pipe(gulp.dest(files.vendor.dest.tmp))
+	);
+});
+
+gulp.task('Es6ToEs5:vendor:client', function() {
+	return (
+		browserify(files.vendor.dest.tmp + files.vendor.name.tmp, {debug: false, insertGlobals : false, basedir: '.'})
+			.transform(babelify.configure({modules: 'ignore', loose: "all", externalHelpers: true}))
 			.external('vertx')
 			.bundle()
 			.pipe(source(files.vendor.name.client))
-			//.pipe(gutil.env.type === 'production' ? uglify() : gutil.noop())
 			.pipe(gulp.dest(files.vendor.dest.client))
 	);
 });
 
-gulp.task('vendor:server', function() {
+gulp.task('Es6ToEs5:vendor:server', function() {
 	return (
-		gulp
-			.src(files.vendor.src)
-			.pipe(concat(files.vendor.name.server))
-			//.pipe(gutil.env.type === 'production' ? uglify() : gutil.noop())
+		gulp.src(files.vendor.dest.tmp + files.vendor.name.tmp)
 			.pipe(insert.wrap('module.exports = (function(config){', ' return vendor;})()'))
+			.pipe(concat(files.vendor.name.server))
 			.pipe(gulp.dest(files.vendor.dest.server))
+	)
+});
+
+gulp.task('Es6ToEs5:vendor:clean', function() {
+	return (
+		gulp.src(files.vendor.dest.tmp + files.vendor.name.tmp, {read: false})
+			.pipe(clean())
 	);
 });
 
-gulp.task('vendor:clean', function() {
-	return gulp.src(files.vendor.tmp, {read: false})
-		.pipe(clean());
-});
 
 gulp.task('less', function() {
 	return (
@@ -647,4 +658,3 @@ gulp.task('app:clean', function() {
 	return gulp.src(['./app/', './build/'], {read: false})
 		.pipe(clean());
 });
-

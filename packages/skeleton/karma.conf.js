@@ -8,6 +8,18 @@ module.exports = function(config) {
 		browsers: [
 			'Chrome'
 		],
+		files: [
+			'./imajs/client/test.js',
+			'./build/static/js/polyfill.js',
+			'./build/static/js/shim.js',
+			'./build/static/js/vendor.client.js',
+			'./build/static/js/locale/cs.js',
+			'./build/static/js/app.client.js',
+			'./app/test/**/*.js',
+			'./app/test/*.js',
+			'./imajs/client/test/**/*.js',
+			'./imajs/client/test/*.js'
+		],
 		customLaunchers: {
 	      Chrome_without_security: {
 	        base: 'Chrome',
