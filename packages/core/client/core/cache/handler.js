@@ -214,9 +214,9 @@ export default class Handler extends ns.Core.Interface.Cache {
 
 			if ($Debug) {
 				if (!this._canSerializeValue(serializeEntry.value)) {
-					 throw new Error(`Core.Cache.Handler:serialize You want to serialize ` +
-							 `${serializeEntry.value.toString()} for key ${key}. Clear value from cache or ` +
-							 `change their type so that will be serializable with JSON.stringify.`);
+					throw new Error(`Core.Cache.Handler:serialize You want to serialize ` +
+							`${serializeEntry.value.toString()} for key ${key}. Clear value from cache or ` +
+							`change their type so that will be serializable with JSON.stringify.`);
 				}
 			}
 
