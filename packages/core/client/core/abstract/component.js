@@ -89,10 +89,8 @@ export default class Component extends ns.Vendor.React.Component {
 	/**
 	 * Generate string of CSS classes, which have set value to true.
 	 *
-	 * @param {Object<string, boolean>} classRules Mapa názvů CSS tříd na
-	 *        boolean hodnoty (predikáty). CSS třída bude zahrnuta do výsledku
-	 *        pouze pokud je predikát pravdivý.
-	 * @return {string} Řetězec CSS tříd kterých predikáty byly splněny.
+	 * @param {Object<string, boolean>} classRules Map of CSS classes with boolean values.
+	 * @return {string} string of CSS classes
 	 */
 	cssClasses(classRules) {
 		if (!(classRules instanceof Object)) {
