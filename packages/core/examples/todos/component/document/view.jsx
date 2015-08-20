@@ -10,7 +10,7 @@ class View extends ns.Core.Abstract.Component {
 
 	render() {
 		var appCssFile = this.utils.$Settings.$Env !== 'dev' ? 'app.bundle.min.css' : 'app.css';
-		appCssFile += `?version=${this.utils.$Settings.$Page.$Render.version}`;
+		appCssFile += `?version=${this.utils.$Settings.$Version}`;
 		var scripts = this.getScripts();
 
 		return (
