@@ -66,6 +66,7 @@ export default class Component extends ns.Vendor.React.Component {
 	 * Returns localize string for defined key. Method replace params in string
 	 * with value of params.
 	 *
+	 * @method localize
 	 * @param {string} key Localization key
 	 * @param {Object<string, (number|string)>=} params Params for replacement
 	 * @return {string} localize string
