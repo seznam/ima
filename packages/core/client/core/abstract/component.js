@@ -78,6 +78,7 @@ export default class Component extends ns.Vendor.React.Component {
 	 * Returns URL for route name. Method replace params in route with defined params.
 	 * Routes is defined in {@code /app/config/routes.js}.
 	 *
+	 * @method link
 	 * @param {string} name Route name
 	 * @param {Object<string, (number|string)>=} params Params for replacement
 	 * @return {string}
@@ -89,6 +90,7 @@ export default class Component extends ns.Vendor.React.Component {
 	/**
 	 * Generate string of CSS classes, which have set value to true.
 	 *
+	 * @method cssClasses
 	 * @param {Object<string, boolean>} classRules Map of CSS classes with boolean values.
 	 * @return {string} string of CSS classes
 	 */
@@ -109,6 +111,7 @@ export default class Component extends ns.Vendor.React.Component {
 	/**
 	 * Create and send new IMA.js DOM Custom event from this component.
 	 *
+	 * @method fire
 	 * @param {string} eventName Name of event
 	 * @param {*=} data Data for event
 	 */
@@ -119,6 +122,7 @@ export default class Component extends ns.Vendor.React.Component {
 	/**
 	 * Add listener for defined IMA.js DOM Custom event.
 	 *
+	 * @method listen
 	 * @param {(ReactElement|EventTarget)} eventTarget Element for add
 	 *        event listener
 	 * @param {string} eventName Name of event which is listen
