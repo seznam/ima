@@ -99,11 +99,13 @@ export default class Cookie extends ns.Core.Storage.Map {
 		 *
 		 * @private
 		 * @property options
-		 * @type {{path: string, secure: boolean}}
+		 * @type {{path: string, secure: boolean, httpOnly: boolean, domain: string}}
 		 */
 		this._options = {
 			path: '/',
-			secure: false
+			secure: false,
+			httpOnly: false,
+			domain: ''
 		};
 	}
 
@@ -118,7 +120,7 @@ export default class Cookie extends ns.Core.Storage.Map {
 	 * @override
 	 * @chainable
 	 * @method init
-	 * @param {{path: string=, secure: boolean=}} [options={}]
+	 * @param {{path: string=, secure: boolean=, httpOnly: boolean=, domain: string=}} [options={}]
 	 * @return {Core.Interface.Storage}
 	 */
 	init(options = {}) {
@@ -291,20 +293,23 @@ export default class Cookie extends ns.Core.Storage.Map {
 		cookiePairs.forEach((pair) => {
 			var separatorIndexEqual = pair.indexOf('=');
 
+			if (separatorIndexEqual < 0) {
+				return;
+			}
+
 			var parts = [
-				this._firstLetterToLowerCase(pair.substring(0, separatorIndexEqual)),
-				pair.substring(separatorIndexEqual + 1)
+				this._firstLetterToLowerCase(pair.substring(0, separatorIndexEqual)).trim(),
+				pair.substring(separatorIndexEqual + 1).trim()
 			];
 
 			var [name, value] = parts.map(decodeURIComponent);
 
-			if (cookieOptions[name]) {
-				var cookieExpires = new Date(value);
+			if (cookieOptions[name] !== undefined && cookieOptions[name] !== null) {
 
-				if (isNaN(cookieExpires.getTime())) {
-					cookieOptions[name] = value;
+				if (name === 'expires') {
+					cookieOptions[name] = new Date(value);
 				} else {
-					cookieOptions[name] = cookieExpires;
+					cookieOptions[name] = value;
 				}
 
 			} else {
@@ -359,8 +364,8 @@ export default class Cookie extends ns.Core.Storage.Map {
 
 		if (assignIndex > 0) {
 			var parts = [
-				cookieString.substring(0, assignIndex),
-				cookieString.substring(assignIndex + 1, semicolonIndex)
+				cookieString.substring(0, assignIndex).trim(),
+				cookieString.substring(assignIndex + 1, semicolonIndex).trim()
 			];
 
 			var [name, value] = parts.map(decodeURIComponent);
@@ -412,10 +417,11 @@ export default class Cookie extends ns.Core.Storage.Map {
 		value = (value + '').replace(/[^!#$&-+\--:<-\[\]-~]/g, encodeURIComponent);
 
 		var cookieString = name + '=' + value;
-		cookieString += options.path ? ';path=' + options.path : '';
 		cookieString += options.domain ? ';domain=' + options.domain : '';
+		cookieString += options.path ? ';path=' + options.path : '';
 		cookieString += options.expires ?
 		';expires=' + options.expires.toUTCString() : '';
+		cookieString += options.httpOnly ? ';httpOnly' : '';
 		cookieString += options.secure ? ';secure' : '';
 
 		return cookieString;
