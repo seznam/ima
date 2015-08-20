@@ -165,8 +165,8 @@ export default class Client extends ns.Core.Abstract.PageRender {
 	}
 
 	/**
-	 * Call $IMA fatal error handler, which is defined in services.js
-	 * and re-throw that error for other error handler.
+	 * Show error to console in $Debug mode and re-throw that error
+	 * for other error handler.
 	 *
 	 * @private
 	 * @method _handleError
@@ -174,12 +174,8 @@ export default class Client extends ns.Core.Abstract.PageRender {
 	 * @throws {Error} Re-throw handled error.
 	 */
 	_handleError(error) {
-		var win = this._window.getWindow();
-
-		if (win && win.$IMA && typeof win.$IMA.fatalErrorHandler === 'function') {
-			win.$IMA.fatalErrorHandler(error);
-		} else {
-			console.warn('Define function config.$IMA.fatalErrorHandler in services.js.');
+		if ($Debug) {
+			console.error('Render Error:', error);
 		}
 
 		throw error;

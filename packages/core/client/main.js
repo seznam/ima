@@ -123,7 +123,14 @@ if (root.$IMA.Test === true) {
 			var router = app.oc.get('$Router');
 			router
 				.listen()
-				.route(router.getPath());
+				.route(router.getPath())
+				.catch((error) => {
+					if (typeof $IMA.fatalErrorHandler === 'function') {
+						$IMA.fatalErrorHandler(error);
+					} else {
+						console.warn('Define function config.$IMA.fatalErrorHandler in services.js.');
+					}
+				});
 		};
 
 		//revival IMA.js app
