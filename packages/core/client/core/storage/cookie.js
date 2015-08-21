@@ -286,31 +286,15 @@ export default class Cookie extends ns.Core.Storage.Map {
 		cookieOptions.expires = MAX_EXPIRE_DATE;
 		cookieOptions.httpOnly = false;
 
-		var cookiePairs = setCookieHeader.split('; ');
+		var cookiePairs = setCookieHeader.split(COOKIE_SEPARATOR);
 		var cookieName = null;
 		var cookieValue = null;
 
 		cookiePairs.forEach((pair) => {
-			var separatorIndexEqual = pair.indexOf('=');
-
-			if (separatorIndexEqual < 0) {
-				return;
-			}
-
-			var parts = [
-				this._firstLetterToLowerCase(pair.substring(0, separatorIndexEqual)).trim(),
-				pair.substring(separatorIndexEqual + 1).trim()
-			];
-
-			var [name, value] = parts.map(decodeURIComponent);
+			var [name, value] = this._extractNameAndValue(pair);
 
 			if (cookieOptions[name] !== undefined && cookieOptions[name] !== null) {
-
-				if (name === 'expires') {
-					cookieOptions[name] = new Date(value);
-				} else {
-					cookieOptions[name] = value;
-				}
+				cookieOptions[name] = value;
 
 			} else {
 				cookieName = name;
@@ -341,34 +325,8 @@ export default class Cookie extends ns.Core.Storage.Map {
 		this._arrayCookiesString = cookiesArray;
 
 		for (var i = 0; i < cookiesArray.length; i++) {
-			this._parseKeyValueFromCookieString(cookiesArray[i]);
-		}
-	}
-
-	/**
-	 * Parses the string representing a single cookie and sets the cookie to the
-	 * internal cookie storage.
-	 *
-	 * @private
-	 * @method _parseKeyValueFromCookieString
-	 * @param {string} cookieString A string containing the definintion of a
-	 *        single cookie, as used in the {@code Cookie} HTTP header or the
-	 *        value returned by the {@code document.cookie} property.
-	 */
-	_parseKeyValueFromCookieString(cookieString) {
-		var assignIndex = cookieString.indexOf('=');
-		var semicolonIndex = cookieString.indexOf(';');
-
-		semicolonIndex = semicolonIndex < 0 ?
-			cookieString.length : semicolonIndex;
-
-		if (assignIndex > 0) {
-			var parts = [
-				cookieString.substring(0, assignIndex).trim(),
-				cookieString.substring(assignIndex + 1, semicolonIndex).trim()
-			];
-
-			var [name, value] = parts.map(decodeURIComponent);
+			var cookiePairs = cookiesArray[i].split(COOKIE_SEPARATOR.trim());
+			var [name, value] = this._extractNameAndValue(cookiePairs[0]);
 
 			super.set(name, value);
 		}
@@ -376,7 +334,7 @@ export default class Cookie extends ns.Core.Storage.Map {
 
 	/**
 	 * Creates a copy of the provided word (or text) that has its first character
-	 * converted to lower case.
+	 * converted to lower case.e
 	 *
 	 * @private
 	 * @method _firstLetterToLowerCase
@@ -444,6 +402,42 @@ export default class Cookie extends ns.Core.Storage.Map {
 
 		return expiration ? new Date(expiration) : MAX_EXPIRE_DATE;
 	}
+
+	/**
+	 * Extract name and value for defined pair from cookie string.
+	 *
+	 * @method _extractNameAndValue
+	 * @param {string} pair
+	 * @return {Array<(string|boolean|Date>}
+	 */
+	_extractNameAndValue(pair) {
+		var separatorIndexEqual = pair.indexOf('=');
+		var name = '';
+		var value = null;
+
+		if (separatorIndexEqual < 0) {
+			name = decodeURIComponent(this._firstLetterToLowerCase(pair.trim()));
+			value = true;
+		} else {
+			name = decodeURIComponent(this._firstLetterToLowerCase(pair.substring(0, separatorIndexEqual).trim()));
+			value = decodeURIComponent(pair.substring(separatorIndexEqual + 1).trim());
+
+			// erase quoted values
+			if ('"' == value[0]) {
+				value = value.slice(1, -1);
+			}
+
+			if (name === 'expires') {
+				value = new Date(value);
+			}
+		}
+
+		return [
+			name,
+			value
+		];
+	}
+
 }
 
 ns.Core.Storage.Cookie = Cookie;

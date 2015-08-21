@@ -3,6 +3,7 @@ describe('Core.Storage.Cookie', function() {
 	var cookieString = 'cok1=hello;path=/;expires=Fri, 31 Dec 9999 23:59:59 GMT; cok2=hello2;path=/;expires=Fri, 31 Dec 9999 23:59:59 GMT';
 	var setCookieString = 'cok3=hello3; Path=/; Expires=Fri, 31 Dec 9999 23:59:59 GMT';
 	var setCookieStringWithDomain = 'cok3=hello3; Path=/; Domain=localhost:3001; Expires=Fri, 31 Dec 9999 23:59:59 GMT';
+	var setCookieStringWithComplex = 'cok3="hello3"; Domain=localhost:3001; Expires=Fri, 31 Dec 9999 23:59:59 GMT; HttpOnly; Secure; Path=/';
 
 	var request = null;
 	var response = null;
@@ -85,6 +86,13 @@ describe('Core.Storage.Cookie', function() {
 
 			cookie.parseFromSetCookieHeader(setCookieStringWithDomain);
 			expect(cookie.set).toHaveBeenCalledWith('cok3', 'hello3', {expires: new Date('Fri, 31 Dec 9999 23:59:59 UTC'), httpOnly: false, secure: false, path: '/', domain: 'localhost:3001'});
+		});
+
+		it('should parse cookie from Set-Cookie header string with complex options', function() {
+			spyOn(cookie, 'set');
+
+			cookie.parseFromSetCookieHeader(setCookieStringWithComplex);
+			expect(cookie.set).toHaveBeenCalledWith('cok3', 'hello3', {expires: new Date('Fri, 31 Dec 9999 23:59:59 UTC'), httpOnly: true, secure: true, path: '/', domain: 'localhost:3001'});
 		});
 
 	});
