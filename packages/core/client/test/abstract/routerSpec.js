@@ -352,14 +352,24 @@ describe('Core.Abstract.Router', function() {
 			route = null;
 		});
 
-		it('should be call paga manager', function() {
+		it('should be call paga manager', function(done) {
+			spyOn(router, 'getPath')
+				.and
+				.returnValue(routePath);
 			spyOn(pageManager, 'manage')
 				.and
 				.returnValue(Promise.resolve({content: null, status: 200}));
+			spyOn(dispatcher, 'fire')
+				.and
+				.stub();
 
-			router._handle(route, {});
+			router
+				._handle(route, {})
+				.then(function() {
+					expect(pageManager.manage).toHaveBeenCalledWith(controller, view, options, {});
+					done();
+				})
 
-			expect(pageManager.manage).toHaveBeenCalledWith(controller, view, options, {});
 		});
 
 		it('should be fire ns.Core.Router.EVENTS.HANDLE_ROUTE', function(done) {
