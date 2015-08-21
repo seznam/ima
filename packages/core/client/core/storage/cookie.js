@@ -423,7 +423,7 @@ export default class Cookie extends ns.Core.Storage.Map {
 			value = decodeURIComponent(pair.substring(separatorIndexEqual + 1).trim());
 
 			// erase quoted values
-			if ('"' == value[0]) {
+			if ('"' === value[0]) {
 				value = value.slice(1, -1);
 			}
 
