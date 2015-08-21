@@ -1,3 +1,4 @@
+require('gulp-babel/node_modules/babel-core/polyfill.js');
 require('./imajs/shim.js');
 
 var cluster = require('cluster');

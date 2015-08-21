@@ -123,7 +123,8 @@ var files = {
 	polyfill: {
 		name: 'polyfill.js',
 		src: [
-			'./node_modules/custom-event-polyfill/custom-event-polyfill.js'
+			'./node_modules/custom-event-polyfill/custom-event-polyfill.js',
+			'./node_modules/gulp-babel/node_modules/babel-core/browser-polyfill.js'
 		],
 		dest: {
 			client: './build/static/js/'
