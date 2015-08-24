@@ -1,6 +1,6 @@
 describe('Core.Storage.Cookie', function() {
 
-	var cookieString = 'cok1=hello;path=/;expires=Fri, 31 Dec 9999 23:59:59 GMT; cok2=hello2;path=/;expires=Fri, 31 Dec 9999 23:59:59 GMT';
+	var cookieString = 'cok1=hello;Path=/;Expires=Fri, 31 Dec 9999 23:59:59 GMT; cok2=hello2;Path=/;Expires=Fri, 31 Dec 9999 23:59:59 GMT';
 	var setCookieString = 'cok3=hello3; Path=/; Expires=Fri, 31 Dec 9999 23:59:59 GMT';
 	var setCookieStringWithDomain = 'cok3=hello3; Path=/; Domain=localhost:3001; Expires=Fri, 31 Dec 9999 23:59:59 GMT';
 	var setCookieStringWithComplex = 'cok3="hello3"; Domain=localhost:3001; Expires=Fri, 31 Dec 9999 23:59:59 GMT; HttpOnly; Secure; Path=/';
@@ -110,6 +110,29 @@ describe('Core.Storage.Cookie', function() {
 				expect(cookie._getExpirationAsDate(value) instanceof Date).toEqual(true);
 			});
 		});
+	});
+
+	describe('_sanitizeCookieValue method', function() {
+
+		beforeEach(function() {
+			$Debug = false;
+		});
+
+		afterEach(function() {
+			$Debug = true;
+		});
+
+		using([
+			{value: '1', sanitizedValue: '1'},
+			{value: '7|AABBCCD===', sanitizedValue: '7|AABBCCD==='},
+			{value: '7|AABBCCD=== ', sanitizedValue: '7|AABBCCD==='},
+			{value: undefined + '', sanitizedValue: 'undefined'}
+		], function(item) {
+			it('should return ' + item.sanitizedValue + 'for value ' + item.value, function() {
+				expect(cookie._sanitizeCookieValue(item.value)).toEqual(item.sanitizedValue);
+			});
+		});
+
 	});
 
 });

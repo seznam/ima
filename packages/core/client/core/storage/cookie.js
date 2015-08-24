@@ -1,4 +1,5 @@
 import ns from 'imajs/client/core/namespace';
+import IMAError from 'imajs/client/core/imaError';
 
 ns.namespace('Core.Storage');
 
@@ -83,26 +84,15 @@ export default class Cookie extends ns.Core.Storage.Map {
 		this._response = response;
 
 		/**
-		 * Cookies in this storage serialized into string compatible with the
-		 * {@code Set-Cookie} HTTP header (each string contains only one cookie),
-		 * and "deletion" cookie strings for cookies that were deleted from this
-		 * storage.
-		 *
-		 * @private
-		 * @property _arrayCookiesString
-		 * @type {string[]}
-		 */
-		this._arrayCookiesString = [];
-
-		/**
 		 * The overriding cookie attribute values.
 		 *
 		 * @private
 		 * @property options
-		 * @type {{path: string, secure: boolean, httpOnly: boolean, domain: string}}
+		 * @type {{path: string, secure: boolean, httpOnly: boolean, domain: string, expires: Date}}
 		 */
 		this._options = {
 			path: '/',
+			expires: this._getExpirationAsDate(MAX_EXPIRE_DATE),
 			secure: false,
 			httpOnly: false,
 			domain: ''
@@ -158,7 +148,11 @@ export default class Cookie extends ns.Core.Storage.Map {
 	 *         if the cookie does not exist.
 	 */
 	get(name) {
-		return super.get(name);
+		if (super.has(name)) {
+			return super.get(name).value;
+		} else {
+			return undefined;
+		}
 	}
 
 	/**
@@ -168,9 +162,10 @@ export default class Cookie extends ns.Core.Storage.Map {
 	 * @chainable
 	 * @method set
 	 * @param {string} name The cookie name.
-	 * @param {(boolean|number|string)} value The cookie value, will be converted
+	 * @param {(boolean|number|string|undefined)} value The cookie value, will be converted
 	 *        to string.
-	 * @param {{domain: string=, expires: (number|string)=}} [options={}]
+	 * @param {{domain: string=, expires: (number|string)=},
+	 *        secure: boolean=, httpOnly: boolean=, path: string=} [options={}]
 	 *        Cookie attributes. Only the attributes listed in the type
 	 *        annotation of this field are supported. For documentation and full
 	 *        list of cookie attributes see
@@ -178,20 +173,17 @@ export default class Cookie extends ns.Core.Storage.Map {
 	 * @return {Core.Storage.Cookie} This storage.
 	 */
 	set(name, value, options = {}) {
-		options = Object.assign(options, this._options);
+		options = Object.assign({}, this._options, options);
 		var expiration = value === undefined ? -1 : options.expires;
 		options.expires = this._getExpirationAsDate(expiration);
-
-		var cookieString = this._generateCookieString(name, value, options);
-
-		this._arrayCookiesString.push(cookieString);
+		value = this._sanitizeCookieValue(value + '');
 
 		if (this._window.isClient()) {
-			document.cookie = cookieString;
+			document.cookie = this._generateCookieString(name, value, options);
 		} else {
 			this._response.setCookie(name, value, options);
 		}
-		super.set(name, value + '');
+		super.set(name, {value, options});
 
 		return this;
 	}
@@ -267,7 +259,15 @@ export default class Cookie extends ns.Core.Storage.Map {
 	 *         compatible with the {@code Set-Cookie} HTTP header.
 	 */
 	getCookiesString() {
-		return this._arrayCookiesString.join(COOKIE_SEPARATOR);
+		var cookieStrings = [];
+
+		for (var cookieName of super.keys()) {
+			var cookieItem = super.get(cookieName);
+
+			cookieStrings.push(this._generateCookieString(cookieName, cookieItem.value, cookieItem.options));
+		}
+
+		return cookieStrings.join(COOKIE_SEPARATOR);
 	}
 
 	/**
@@ -282,27 +282,11 @@ export default class Cookie extends ns.Core.Storage.Map {
 	 *        header.
 	 */
 	parseFromSetCookieHeader(setCookieHeader) {
-		var cookieOptions = this._options;
-		cookieOptions.expires = MAX_EXPIRE_DATE;
-		cookieOptions.httpOnly = false;
+		var cookie = this._extractCookie(setCookieHeader);
 
-		var cookiePairs = setCookieHeader.split(COOKIE_SEPARATOR);
-		var cookieName = null;
-		var cookieValue = null;
-
-		cookiePairs.forEach((pair) => {
-			var [name, value] = this._extractNameAndValue(pair);
-
-			if (cookieOptions[name] !== undefined && cookieOptions[name] !== null) {
-				cookieOptions[name] = value;
-
-			} else {
-				cookieName = name;
-				cookieValue = value;
-			}
-		});
-
-		this.set(cookieName, cookieValue, cookieOptions);
+		if (cookie.name !== null) {
+			this.set(cookie.name, cookie.value, cookie.options);
+		}
 	}
 
 	/**
@@ -322,13 +306,12 @@ export default class Cookie extends ns.Core.Storage.Map {
 		var cookiesArray = cookiesString ?
 			cookiesString.split(COOKIE_SEPARATOR) : [];
 
-		this._arrayCookiesString = cookiesArray;
-
 		for (var i = 0; i < cookiesArray.length; i++) {
-			var cookiePairs = cookiesArray[i].split(COOKIE_SEPARATOR.trim());
-			var [name, value] = this._extractNameAndValue(cookiePairs[0]);
+			var cookie = this._extractCookie(cookiesArray[i]);
 
-			super.set(name, value);
+			if (cookie.name !== null) {
+				super.set(cookie.name, {value: this._sanitizeCookieValue(cookie.value), options: cookie.options});
+			}
 		}
 	}
 
@@ -370,17 +353,13 @@ export default class Cookie extends ns.Core.Storage.Map {
 	 *         browser's cookie storage.
 	 */
 	_generateCookieString(name, value, options) {
-		name = name.replace(/[^#$&+\^`|]/g, encodeURIComponent);
-		name = name.replace(/\(/g, '%28').replace(/\)/g, '%29');
-		value = (value + '').replace(/[^!#$&-+\--:<-\[\]-~]/g, encodeURIComponent);
-
 		var cookieString = name + '=' + value;
-		cookieString += options.domain ? ';domain=' + options.domain : '';
-		cookieString += options.path ? ';path=' + options.path : '';
+		cookieString += options.domain ? ';Domain=' + options.domain : '';
+		cookieString += options.path ? ';Path=' + options.path : '';
 		cookieString += options.expires ?
-		';expires=' + options.expires.toUTCString() : '';
-		cookieString += options.httpOnly ? ';httpOnly' : '';
-		cookieString += options.secure ? ';secure' : '';
+		';Expires=' + options.expires.toUTCString() : '';
+		cookieString += options.httpOnly ? ';HttpOnly' : '';
+		cookieString += options.secure ? ';Secure' : '';
 
 		return cookieString;
 	}
@@ -404,16 +383,56 @@ export default class Cookie extends ns.Core.Storage.Map {
 	}
 
 	/**
-	 * Extract name and value for defined pair from cookie string.
+	 * Extract cookie name, value and options from cookie string.
 	 *
+	 * @private
+	 * @method _extractCookie
+	 * @param {string} setCookieHeader The value of the {@code Set-Cookie} HTTP
+	 *        header.
+	 * @return {{name: (string|null) value: (string|null), options: Object<string, boolean|Date>}}
+	 */
+	_extractCookie(cookieString) {
+		var cookieOptions = Object.assign({}, this._options);
+
+		var cookiePairs = cookieString.split(COOKIE_SEPARATOR.trim());
+		var cookieName = null;
+		var cookieValue = null;
+
+		cookiePairs.forEach((pair, index) => {
+			var [name, value] = this._extractNameAndValue(pair, index);
+
+			if (index === 0) {
+				cookieName = name;
+				cookieValue = value;
+			} else {
+				cookieOptions[name] = value;
+			}
+		});
+
+		return {
+			name: cookieName,
+			value: cookieValue,
+			options: cookieOptions
+		};
+	}
+
+	/**
+	 * Extract name and value for defined pair and pair index.
+	 *
+	 * @private
 	 * @method _extractNameAndValue
 	 * @param {string} pair
-	 * @return {Array<(string|boolean|Date>}
+	 * @param {number} pairIndex
+	 * @return {Array<(string|boolean|Date|null>}
 	 */
-	_extractNameAndValue(pair) {
+	_extractNameAndValue(pair, pairIndex) {
 		var separatorIndexEqual = pair.indexOf('=');
 		var name = '';
 		var value = null;
+
+		if (pairIndex === 0 && separatorIndexEqual < 0) {
+			return [null, null];
+		}
 
 		if (separatorIndexEqual < 0) {
 			name = decodeURIComponent(this._firstLetterToLowerCase(pair.trim()));
@@ -428,7 +447,7 @@ export default class Cookie extends ns.Core.Storage.Map {
 			}
 
 			if (name === 'expires') {
-				value = new Date(value);
+				value = this._getExpirationAsDate(value);
 			}
 		}
 
@@ -438,6 +457,35 @@ export default class Cookie extends ns.Core.Storage.Map {
 		];
 	}
 
+	/**
+	 * Sanitize cookie value by rules in (@see http://tools.ietf.org/html/rfc6265#section-4r.1.1).
+	 * Erase all invalid characters from cookie value.
+	 *
+	 * @private
+	 * @method _sanitizeCookieValue
+	 * @param {string} value Cookie value
+	 * @return {string} Sanitized value
+	 */
+	_sanitizeCookieValue(value) {
+		var sanitizedValue = '';
+
+		for (var keyChar = 0; keyChar < value.length; keyChar++) {
+			var charCode = value.charCodeAt(keyChar);
+			var char = value[keyChar];
+
+			if (charCode >= 33 && charCode <= 126 && char !== '"' && char !== ';' && char !== '\\') {
+				sanitizedValue += char;
+			} else {
+
+				if ($Debug) {
+					throw new IMAError(`Invalid char ${char} code ${charCode} in ${value}. ` +
+							`Dropping invalid char from cookie value.`, {value, charCode, char});
+				}
+			}
+		}
+
+		return sanitizedValue;
+	}
 }
 
 ns.Core.Storage.Cookie = Cookie;

@@ -33,7 +33,7 @@ describe('Core.Abstract.Router', function() {
 		router.add('contact', '/contact', controller, view, options);
 	});
 
-	it('should be 2 routes in Array', function() {
+	it('should have 2 routes in Array', function() {
 		expect(router._routes.size).toEqual(2);
 	});
 
@@ -65,7 +65,7 @@ describe('Core.Abstract.Router', function() {
 			}).toThrow();
 		});
 
-		it('should be create new Core.Router.Route', function() {
+		it('should create new Core.Router.Route', function() {
 			spyOn(routerFactory, 'createRoute')
 				.and
 				.callThrough();
@@ -131,7 +131,7 @@ describe('Core.Abstract.Router', function() {
 			router.remove(routeName);
 		});
 
-		it('should be return link for valid route with params', function() {
+		it('should return link for valid route with params', function() {
 			spyOn(router, '_getBaseUrl')
 				.and
 				.returnValue(baseUrl);
@@ -139,7 +139,7 @@ describe('Core.Abstract.Router', function() {
 			expect(router.link(routeName, {})).toEqual(baseUrl + path);
 		});
 
-		it('should be throw Error for not valid route with params', function() {
+		it('should throw Error for not valid route with params', function() {
 			spyOn(router._routes, 'has')
 				.and
 				.returnValue(false);
@@ -163,7 +163,7 @@ describe('Core.Abstract.Router', function() {
 			route = null;
 		});
 
-		it('should be handle valid route path', function() {
+		it('should handle valid route path', function() {
 			spyOn(router, '_getRouteByPath')
 				.and
 				.returnValue(route);
@@ -182,7 +182,7 @@ describe('Core.Abstract.Router', function() {
 			expect(router._handle).toHaveBeenCalledWith(route, {});
 		});
 
-		it('should be handle "not-found" route', function() {
+		it('should handle "not-found" route', function() {
 			spyOn(router, '_getRouteByPath')
 				.and
 				.returnValue(null);
@@ -213,7 +213,7 @@ describe('Core.Abstract.Router', function() {
 			route = null;
 		});
 
-		it('should be handle "error" route', function() {
+		it('should handle "error" route', function() {
 			var params = new Error('test');
 
 			spyOn(router._routes, 'get')
@@ -229,7 +229,7 @@ describe('Core.Abstract.Router', function() {
 			expect(router._handle).toHaveBeenCalledWith(route, params);
 		});
 
-		it('should be reject promise with error for undefined "error" route', function(done) {
+		it('should reject promise with error for undefined "error" route', function(done) {
 			var params = new Error('test');
 
 			spyOn(router._routes, 'get')
@@ -261,7 +261,7 @@ describe('Core.Abstract.Router', function() {
 			route = null;
 		});
 
-		it('should be handle "notFound" route', function() {
+		it('should handle "notFound" route', function() {
 			var params = {path: path};
 
 			spyOn(router._routes, 'get')
@@ -278,7 +278,7 @@ describe('Core.Abstract.Router', function() {
 
 		});
 
-		it('should be reject promise with error for undefined "error" route', function(done) {
+		it('should reject promise with error for undefined "error" route', function(done) {
 			var params = {path: path};
 
 			spyOn(router._routes, 'get')
@@ -296,19 +296,19 @@ describe('Core.Abstract.Router', function() {
 
 	describe('isClientError method', function() {
 
-		it('should be return true for client error, which return status 4**', function() {
+		it('should return true for client error, which return status 4**', function() {
 			var isClientError = router.isClientError(oc.create('$Error', ['Client error', {status: 404}]));
 
 			expect(isClientError).toEqual(true);
 		});
 
-		it('should be return false for client error, which return status 5**', function() {
+		it('should return false for client error, which return status 5**', function() {
 			var isClientError = router.isClientError(oc.create('$Error', ['Server error', {status: 500}]));
 
 			expect(isClientError).toEqual(false);
 		});
 
-		it('should be return false for any error', function() {
+		it('should return false for any error', function() {
 			var isClientError = router.isClientError(new Error('some error'));
 
 			expect(isClientError).toEqual(false);
@@ -318,19 +318,19 @@ describe('Core.Abstract.Router', function() {
 
 	describe('isRedirection method', function() {
 
-		it('should be return true for redirection, which return status 3**', function() {
+		it('should return true for redirection, which return status 3**', function() {
 			var isRedireciton = router.isRedirection(oc.create('$Error', ['Redirection', {status: 300, url: 'http://www.example.com/redirect'}]));
 
 			expect(isRedireciton).toEqual(true);
 		});
 
-		it('should be return true for client error, which return status 4**', function() {
+		it('should return true for client error, which return status 4**', function() {
 			var isRedireciton = router.isRedirection(oc.create('$Error', ['Client error', {status: 400}]));
 
 			expect(isRedireciton).toEqual(false);
 		});
 
-		it('should be return false for any error', function() {
+		it('should return false for any error', function() {
 			var isClientError = router.isClientError(new Error('some error'));
 
 			expect(isClientError).toEqual(false);
@@ -352,7 +352,7 @@ describe('Core.Abstract.Router', function() {
 			route = null;
 		});
 
-		it('should be call paga manager', function(done) {
+		it('should call paga manager', function(done) {
 			spyOn(router, 'getPath')
 				.and
 				.returnValue(routePath);
@@ -372,7 +372,7 @@ describe('Core.Abstract.Router', function() {
 
 		});
 
-		it('should be fire ns.Core.Router.EVENTS.HANDLE_ROUTE', function(done) {
+		it('should fire ns.Core.Router.EVENTS.HANDLE_ROUTE', function(done) {
 			var response = {content: null, status: 200};
 			var params = {};
 			var path ='/';
@@ -411,25 +411,25 @@ describe('Core.Abstract.Router', function() {
 			router = oc.create('Core.Abstract.Router', [pageManager, routerFactory, dispatcher, ROUTER_CONSTANTS]);
 		});
 
-		it('should be clear root from path', function() {
+		it('should clear root from path', function() {
 			router.init({$Root: '/root'});
 
 			expect(router._extractRoutePath(pathWithRoot)).toEqual(path);
 		});
 
-		it('should be clear root and language from path', function() {
+		it('should clear root and language from path', function() {
 			router.init({$Root: '/root', $LanguagePartPath: '/en'});
 
 			expect(router._extractRoutePath(pathWithRootAndLanguage)).toEqual(path);
 		});
 
-		it('should be clear language from path', function() {
+		it('should clear language from path', function() {
 			router.init({$LanguagePartPath: '/en'});
 
 			expect(router._extractRoutePath(pathWithLanguage)).toEqual(path);
 		});
 
-		it('should be return path for empty root and undefined language in path', function() {
+		it('should return path for empty root and undefined language in path', function() {
 			router.init({});
 
 			expect(router._extractRoutePath(path)).toEqual(path);
