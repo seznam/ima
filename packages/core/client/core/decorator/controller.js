@@ -170,7 +170,7 @@ export default class Controller extends ns.Core.Interface.Controller {
 	 * @inheritDoc
 	 * @override
 	 * @method update
-	 * @param {Object<string, string>=} [params={}] The current route parameters.
+	 * @param {Object<string, string>=} [params={}] Last route params.
 	 * @return {Object<string, (Promise|*)>} A map object of promises
 	 *         resolved when all resources the controller requires are ready. The
 	 *         resolved values will be pushed to the controller's state.
