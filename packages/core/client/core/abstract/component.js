@@ -28,8 +28,12 @@ export default class Component extends ns.Vendor.React.Component {
 		 */
 		this._utils = props.$Utils;
 
-		/* The prop className should be always defined. */
-		props.className = props.className ? ' ' + props.className + ' ' : '';
+		/**
+		 * @public
+		 * @property className
+		 * @type {string}
+		 */
+		this.className = props.className ? ' ' + props.className + ' ' : '';
 	}
 
 	/**
