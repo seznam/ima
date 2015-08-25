@@ -93,7 +93,8 @@ export var init = (ns, oc, config) => { //jshint ignore:line
 	//Page
 	oc.bind('$PageStateManager', ns.Core.Page.StateManager);
 	oc.bind('$PageFactory', ns.Core.Page.Factory, [oc]);
-	oc.bind('$PageRenderFactory', ns.Core.Page.Render.Factory, [oc]);
+	oc.constant('$PageRenderViewAdapter', ns.Core.Page.Render.ViewAdapter);
+	oc.bind('$PageRenderFactory', ns.Core.Page.Render.Factory, [oc, '$React', '$PageRenderViewAdapter']);
 	if (oc.get('$Window').isClient()) {
 		oc.provide(ns.Core.Interface.PageRender, ns.Core.Page.Render.Client, ['$PageRenderFactory', '$Helper', '$React', '$Settings', '$Window']);
 	} else {

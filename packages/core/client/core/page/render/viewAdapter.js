@@ -6,7 +6,7 @@ ns.namespace('Core.Page.Render');
  * An adapter component providing the current page controller's state to the
  * page view component through its properties.
  *
- * @class Factory
+ * @class ViewAdapter
  * @namespace Core.Page.Render
  * @module Core
  * @submodule Core.Page

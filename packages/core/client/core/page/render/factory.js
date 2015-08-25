@@ -18,8 +18,13 @@ export default class Factory {
 	 * @method constructor
 	 * @constructor
 	 * @param {Core.ObjectContainer} oc
+	 * @param {Vendor.React} React React framework instance to use to render the
+	 *        page.
+	 * @param {Vendor.React.Component} ViewAdapter An adapter component providing
+	 *        the current page controller's state to the page view component through
+	 *        its properties.
 	 */
-	constructor(oc) {
+	constructor(oc, React, ViewAdapter) {
 
 		/**
 		 * @property _oc
@@ -27,6 +32,22 @@ export default class Factory {
 		 * @type {Core.ObjectContainer}
 		 */
 		this._oc = oc;
+
+		/**
+		 * Rect framework instance, used to render the page.
+		 *
+		 * @protected
+		 * @property _React
+		 * @type {Vendor.React}
+		 */
+		this._React = React;
+
+		/**
+		 * @private
+		 * @property _ViewAdapter
+		 * @type {Vendor.React.Component}
+		 */
+		this._ViewAdapter = ViewAdapter;
 	}
 
 	/**
@@ -52,8 +73,7 @@ export default class Factory {
 	 *         through properties.
 	 */
 	wrapView(view, state) {
-		const ViewAdapter = ns.Core.Page.Render.ViewAdapter;
-		return ns.Vendor.React.createElement(ViewAdapter, {
+		return this._React.createElement(this._ViewAdapter, {
 			view,
 			state
 		});
