@@ -13,9 +13,8 @@ ns.namespace('Core.Abstract');
  * @module Core
  * @submodule Core.Abstract
  *
- * @requires Vendor.Helper
+ * @requires Vendor.$Helper
  * @requires Vendor.React
- * @requires Core.Interface.Animate
  */
 export default class PageRender extends ns.Core.Interface.PageRender {
 
