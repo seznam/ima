@@ -3,10 +3,11 @@ describe('Core.Cache.Handler', function() {
 	var cache = null;
 	var cacheStorage = null;
 	var cacheFactory = null;
+	var Helper = ns.Vendor.$Helper;
 	beforeEach(function() {
 		cacheStorage = oc.create('$MapStorage');
 		cacheFactory = oc.create('$CacheFactory');
-		cache = oc.create('Core.Cache.Handler', [cacheStorage, cacheFactory, {enabled: true, ttl: 1000}]);
+		cache = oc.create('Core.Cache.Handler', [cacheStorage, cacheFactory, Helper, {enabled: true, ttl: 1000}]);
 		cache.set('aaa', 123);
 		jasmine.clock().install();
 	});
@@ -82,13 +83,13 @@ describe('Core.Cache.Handler', function() {
 
 		it('should return same value for instance of Promise', function() {
 			var promise = Promise.resolve('promise');
-			spyOn(ns.Vendor.$Helper, 'clone')
+			spyOn(Helper, 'clone')
 				.and
 				.stub();
 
 			cache.set('promise', promise);
 
-			expect(ns.Vendor.$Helper.clone).not.toHaveBeenCalled();
+			expect(Helper.clone).not.toHaveBeenCalled();
 			expect(cache.get('promise')).toEqual(promise);
 		});
 	});

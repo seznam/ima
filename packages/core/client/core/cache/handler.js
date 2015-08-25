@@ -13,6 +13,7 @@ ns.namespace('Core.Cache');
  * @submodule Core.Cache
  *
  * @requires Core.Interface.Storage
+ * @requires Vendor.$Helper
  *
  * @example
  *   if (cache.has('model.articles')) {
@@ -31,9 +32,10 @@ export default class Handler extends ns.Core.Interface.Cache {
 	 * @param {Core.Interface.Storage} cacheStorage The cache entry storage to
 	 *        use.
 	 * @param {Core.Cache.Factory} factory Which create new instance of cache entry
+	 * @param {Vendor.$Helper} Helper The IMA.js helper methods.
 	 * @param {{ttl: number, enabled: false}} [config={ttl: 30000, enabled: false}]
 	 */
-	constructor(cacheStorage, factory, config = { ttl: 30000, enabled: false }) {
+	constructor(cacheStorage, factory, Helper, config = { ttl: 30000, enabled: false }) {
 		super();
 
 		/**
@@ -51,6 +53,15 @@ export default class Handler extends ns.Core.Interface.Cache {
 		 * @type {Core.Cache.Factory}
 		 */
 		this._factory = factory;
+
+		/**
+		 * Tha IMA.js helper methods.
+		 *
+		 * @private
+		 * @property _Helper
+		 * @type {Vendor.$Helper}
+		 */
+		this._Helper = Helper;
 
 		/**
 		 * Default cache entry time to live in milliseconds.
@@ -291,7 +302,7 @@ export default class Handler extends ns.Core.Interface.Cache {
 			typeof value === 'object' &&
 			!(value instanceof Promise)
 		) {
-			return ns.Vendor.$Helper.clone(value);
+			return this._Helper.clone(value);
 		}
 
 		return value;

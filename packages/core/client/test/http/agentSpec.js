@@ -9,11 +9,12 @@ describe('Core.Http.Agent', function() {
 	var httpConfig = null;
 	var cacheStorage = null;
 	var cacheFactory = null;
+	var Helper = ns.Vendor.$Helper;
 
 	beforeEach(function() {
 		cacheStorage = oc.create('$MapStorage');
 		cacheFactory = oc.create('$CacheFactory');
-		cache = oc.create('Core.Cache.Handler', [cacheStorage, cacheFactory, {enabled: true, ttl: 1000}]);
+		cache = oc.create('Core.Cache.Handler', [cacheStorage, cacheFactory, Helper, {enabled: true, ttl: 1000}]);
 
 		proxy = oc.create('$HttpProxy');
 		cookie = oc.create('$CookieStorage');

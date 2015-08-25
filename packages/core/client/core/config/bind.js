@@ -83,7 +83,7 @@ export var init = (ns, oc, config) => { //jshint ignore:line
 		oc.constant('$CacheStorage', oc.get('$MapStorage'));
 	}
 	oc.bind('$CacheFactory', ns.Core.Cache.Factory, ['$CacheEntry']);
-	oc.provide(ns.Core.Interface.Cache, ns.Core.Cache.Handler, ['$CacheStorage', '$CacheFactory', config.$Cache]);
+	oc.provide(ns.Core.Interface.Cache, ns.Core.Cache.Handler, ['$CacheStorage', '$CacheFactory', '$Helper', config.$Cache]);
 	oc.bind('$Cache', ns.Core.Interface.Cache);
 
 	//SEO
