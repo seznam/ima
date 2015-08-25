@@ -79,6 +79,18 @@ describe('Core.Cache.Handler', function() {
 
 			expect(cache.get('object')).toEqual(object);
 		});
+
+		it('should return same value for instance of Promise', function() {
+			var promise = Promise.resolve('promise');
+			spyOn(ns.Vendor.$Helper, 'clone')
+				.and
+				.stub();
+
+			cache.set('promise', promise);
+
+			expect(ns.Vendor.$Helper.clone).not.toHaveBeenCalled();
+			expect(cache.get('promise')).toEqual(promise);
+		});
 	});
 
 	it('should return false for undefined cacheEntry', function() {

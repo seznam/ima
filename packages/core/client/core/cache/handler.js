@@ -287,7 +287,10 @@ export default class Handler extends ns.Core.Interface.Cache {
 	 * @return {*}
 	 */
 	_clone(value) {
-		if (value !== null && typeof value === 'object') {
+		if (value !== null &&
+			typeof value === 'object' &&
+			!(value instanceof Promise)
+		) {
 			return ns.Vendor.$Helper.clone(value);
 		}
 
