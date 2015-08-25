@@ -20,7 +20,7 @@ export default class Client extends ns.Core.Abstract.PageRender {
 	 * @method constructor
 	 * @constructor
 	 * @param {Core.Page.Render.Factory} factory Factory for receive $Utils to view.
-	 * @param {Vendor.Helper} Helper The IMA.js helper methods.
+	 * @param {Vendor.$Helper} Helper The IMA.js helper methods.
 	 * @param {Vendor.React} React React framework instance to use to render the
 	 *        page.
 	 * @param {Object<string, *>} settings The application setting for the
