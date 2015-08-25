@@ -183,7 +183,7 @@ export default class Cookie extends ns.Core.Storage.Map {
 		} else {
 			this._response.setCookie(name, value, options);
 		}
-		super.set(name, {value, options});
+		super.set(name, { value, options });
 
 		return this;
 	}
@@ -310,7 +310,7 @@ export default class Cookie extends ns.Core.Storage.Map {
 			var cookie = this._extractCookie(cookiesArray[i]);
 
 			if (cookie.name !== null) {
-				super.set(cookie.name, {value: this._sanitizeCookieValue(cookie.value), options: cookie.options});
+				super.set(cookie.name, { value: this._sanitizeCookieValue(cookie.value), options: cookie.options });
 			}
 		}
 	}
@@ -479,7 +479,7 @@ export default class Cookie extends ns.Core.Storage.Map {
 
 				if ($Debug) {
 					throw new IMAError(`Invalid char ${char} code ${charCode} in ${value}. ` +
-							`Dropping invalid char from cookie value.`, {value, charCode, char});
+							`Dropping invalid char from cookie value.`, { value, charCode, char });
 				}
 			}
 		}
