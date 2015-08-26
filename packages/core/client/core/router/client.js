@@ -223,8 +223,9 @@ export default class Client extends ns.Core.Abstract.Router {
 	 * @override
 	 * @method redirect
 	 * @param {string} url The URL to which the client should be redirected.
+	 * @param {number} [httpStatus=302] The HTTP status code
 	 */
-	redirect(url = '') {
+	redirect(url = '', httpStatus = 302) {
 		if (this._isSameDomain(url) && this._mode === MODES.HISTORY) {
 			var path = url.replace(this.getDomain(), '');
 			path = this._extractRoutePath(path);
@@ -246,26 +247,51 @@ export default class Client extends ns.Core.Abstract.Router {
 	 * @method route
 	 * @param {string} path The URL path part received from the client, with
 	 *        optional query.
-	 * @return {Promise<undefined>} A promise resolved when the error has been
-	 *         handled and the response has been sent to the client, or displayed
-	 *         if used at the client side.
+	 * @return {Promise<Object<string, ?(number|string)>>} A promise resolved when
+	 *         the error has been handled and the response has been sent to the
+	 *         client, or displayed if used at the client side.
 	 */
 	route(path) {
 		return (
 			super
 				.route(path)
 				.catch((error) => {
-
-					if (this.isClientError(error)) {
-						return this.handleNotFound({ error });
-					}
-
-					if (this.isRedirection(error)) {
-						this.redirect(error.getParams().url);
-						return Promise.resolve({ content: null, status: error.getHttpStatus() });
-					}
-
 					return this.handleError({ error });
+				})
+				.catch((error) => {
+					this._handleFatalError(error);
+				})
+		);
+	}
+
+	/**
+	 * Handles an internal server error by responding with the appropriate
+	 * "internal server error" error page.
+	 *
+	 * @inheritDoc
+	 * @override
+	 * @method handleError
+	 * @param {Object<string, (Error|string)>} params Parameters extracted from the
+	 *        current URL path and query.
+	 * @return {Promise<Object<string, ?(number|string)>>} A promise resolved when
+	 *         the error has been handled and the response has been sent to the
+	 *         client, or displayed if used at the client side.
+	 */
+	handleError(params) {
+		if (this.isClientError(params.error)) {
+			return this.handleNotFound(params);
+		}
+
+		if (this.isRedirection(params.error)) {
+			this.redirect(params.error.getParams().url, params.error.getHttpStatus());
+			return Promise.resolve({ content: null, status: params.error.getHttpStatus() });
+		}
+
+		return (
+			super
+				.handleError(params)
+				.catch((error) => {
+					this._handleFatalError(error);
 				})
 		);
 	}
@@ -277,11 +303,11 @@ export default class Client extends ns.Core.Abstract.Router {
 	 * @inheritDoc
 	 * @override
 	 * @method handleNotFound
-	 * @param {Object<string, string>} params Parameters extracted from the
+	 * @param {Object<string, (Error|string)>} params Parameters extracted from the
 	 *        current URL path and query.
-	 * @return {Promise<undefined>} A promise resolved when the error has been
-	 *         handled and the response has been sent to the client, or displayed
-	 *         if used at the client side.
+	 * @return {Promise<Object<string, ?(number|string)>>} A promise resolved when
+	 *         the error has been handled and the response has been sent to the
+	 *         client, or displayed if used at the client side.
 	 */
 	handleNotFound(params) {
 		return (
@@ -291,6 +317,24 @@ export default class Client extends ns.Core.Abstract.Router {
 					return this.handleError({ error });
 				})
 		);
+	}
+
+	/**
+	 * Handle a fatal error application state. IMA handle fatal error when IMA handle error
+	 *
+	 * @private
+	 * @method _handleFatalError
+	 * @param {Error} error
+	 */
+	_handleFatalError(error) {
+		if ($IMA && typeof $IMA.fatalErrorHandler === 'function') {
+			$IMA.fatalErrorHandler(error);
+		} else {
+
+			if ($Debug) {
+				console.warn('You must implement $IMA.fatalErrorHandler in services.js');
+			}
+		}
 	}
 
 	/**

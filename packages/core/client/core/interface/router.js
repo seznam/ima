@@ -156,8 +156,9 @@ export default class Router {
 	 *
 	 * @method redirect
 	 * @param {string} url The URL to which the client should be redirected.
+	 * @param {number} [httpStatus=302] The HTTP status code
 	 */
-	redirect(url) {}
+	redirect(url, httpStatus = 302) {}
 
 	/**
 	 * Generates an absolute URL (including protocol, domain, etc) for the
@@ -181,9 +182,9 @@ export default class Router {
 	 * @method route
 	 * @param {string} path The URL path part received from the client, with
 	 *        optional query.
-	 * @return {Promise<undefined>} A promise resolved when the error has been
-	 *         handled and the response has been sent to the client, or displayed
-	 *         if used at the client side.
+	 * @return {Promise<Object<string, ?(number|string)>>} A promise resolved when
+	 *         the error has been handled and the response has been sent to the
+	 *         client, or displayed if used at the client side.
 	 */
 	route(path) {}
 
@@ -192,11 +193,11 @@ export default class Router {
 	 * "internal server error" error page.
 	 *
 	 * @method handleError
-	 * @param {Object<string, string>} params Parameters extracted from the
+	 * @param {Object<string, (Error|string)>} params Parameters extracted from the
 	 *        current URL path and query.
-	 * @return {Promise<undefined>} A promise resolved when the error has been
-	 *         handled and the response has been sent to the client, or displayed
-	 *         if used at the client side.
+	 * @return {Promise<Object<string, ?(number|string)>>} A promise resolved when
+	 *         the error has been handled and the response has been sent to the
+	 *         client, or displayed if used at the client side.
 	 */
 	handleError(params) {}
 
@@ -205,11 +206,11 @@ export default class Router {
 	 * error page.
 	 *
 	 * @method handleNotFound
-	 * @param {Object<string, string>} params Parameters extracted from the
+	 * @param {Object<string, (Error|string)>} params Parameters extracted from the
 	 *        current URL path and query.
-	 * @return {Promise<undefined>} A promise resolved when the error has been
-	 *         handled and the response has been sent to the client, or displayed
-	 *         if used at the client side.
+	 * @return {Promise<Object<string, ?(number|string)>>} A promise resolved when
+	 *         the error has been handled and the response has been sent to the
+	 *         client, or displayed if used at the client side.
 	 */
 	handleNotFound(params) {}
 
@@ -224,6 +225,16 @@ export default class Router {
 	 *         client.
 	 */
 	isClientError(reason) {}
+
+	/**
+	 * Tests, if possible, whether the specified error lead to redirection.
+	 *
+	 * @method isRedirection
+	 * @param {(Core.IMAError|Error)} error The encountered error.
+	 * @return {boolean} {@code true} if the error was caused the action of the
+	 *         redirection.
+	 */
+	isRedirection(error) {}
 }
 
 ns.Core.Interface.Router = Router;

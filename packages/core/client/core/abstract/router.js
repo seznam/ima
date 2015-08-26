@@ -300,6 +300,57 @@ export default class Router extends ns.Core.Interface.Router {
 
 		return { route, params };
 	}
+	/**
+	 * Registers event listeners at the client side window object allowing the
+	 * router to capture user's history (history pop state - going "back") and
+	 * page (clicking links) navigation.
+	 *
+	 * The router will start processing the navigation internally, handling the
+	 * user's navigation to display the page related to the URL resulting from
+	 * the user's action.
+	 *
+	 * Note that the router will not prevent forms from being submitted to the
+	 * server.
+	 *
+	 * The effects of this method cannot be reverted. This method has no effect
+	 * at the server side.
+	 *
+	 * @abstract
+	 * @inheritDoc
+	 * @override
+	 * @chainable
+	 * @method listen
+	 * @return {Core.Interface.Router} This router.
+	 */
+	listen() {
+		throw new IMAError('The listen() method is abstract and must be overridden.');
+	}
+
+	/**
+	 * Redirects the client to the specified location.
+	 *
+	 * At the server side the method results in responsing to the client with a
+	 * redirect HTTP status code and the {@code Location} header.
+	 *
+	 * At the client side the method updates the current URL by manipulating the
+	 * browser history (if the target URL is at the same domain and protocol as
+	 * the current one) or performs a hard redirect (if the target URL points to
+	 * a different protocol or domain).
+	 *
+	 * The method will result in the router handling the new URL and routing the
+	 * client to the related page if the URL is set at the client side and points
+	 * to the same domain and protocol.
+	 *
+	 * @abstract
+	 * @inheritDoc
+	 * @override
+	 * @method redirect
+	 * @param {string} url The URL to which the client should be redirected.
+	 * @param {number} [httpStatus=302] The HTTP status code
+	 */
+	redirect(url, httpStatus = 302) {
+		throw new IMAError('The redirect() method is abstract and must be overridden.');
+	}
 
 	/**
 	 * Generates an absolute URL (including protocol, domain, etc) for the
@@ -336,9 +387,9 @@ export default class Router extends ns.Core.Interface.Router {
 	 * @method route
 	 * @param {string} path The URL path part received from the client, with
 	 *        optional query.
-	 * @return {Promise<undefined>} A promise resolved when the error has been
-	 *         handled and the response has been sent to the client, or displayed
-	 *         if used at the client side.
+	 * @return {Promise<Object<string, ?(number|string)>>} A promise resolved when
+	 *         the error has been handled and the response has been sent to the
+	 *         client, or displayed if used at the client side.
 	 */
 	route(path) {
 		var routeForPath = this._getRouteByPath(path);
@@ -360,11 +411,11 @@ export default class Router extends ns.Core.Interface.Router {
 	 * @inheritDoc
 	 * @override
 	 * @method handleError
-	 * @param {Object<string, string>} params Parameters extracted from the
+	 * @param {Object<string, (Error|string)>} params Parameters extracted from the
 	 *        current URL path and query.
-	 * @return {Promise<undefined>} A promise resolved when the error has been
-	 *         handled and the response has been sent to the client, or displayed
-	 *         if used at the client side.
+	 * @return {Promise<Object<string, ?(number|string)>>} A promise resolved when
+	 *         the error has been handled and the response has been sent to the
+	 *         client, or displayed if used at the client side.
 	 */
 	handleError(params) {
 		var routeError = this._routes.get(this._ROUTE_NAMES.ERROR);
@@ -387,11 +438,11 @@ export default class Router extends ns.Core.Interface.Router {
 	 * @inheritDoc
 	 * @override
 	 * @method handleNotFound
-	 * @param {Object<string, string>} params Parameters extracted from the
+	 * @param {Object<string, (Error|string)>} params Parameters extracted from the
 	 *        current URL path and query.
-	 * @return {Promise<undefined>} A promise resolved when the error has been
-	 *         handled and the response has been sent to the client, or displayed
-	 *         if used at the client side.
+	 * @return {Promise<Object<string, ?(number|string)>>} A promise resolved when
+	 *         the error has been handled and the response has been sent to the
+	 *         client, or displayed if used at the client side.
 	 */
 	handleNotFound(params) {
 		var routeNotFound = this._routes.get(this._ROUTE_NAMES.NOT_FOUND);
@@ -429,6 +480,8 @@ export default class Router extends ns.Core.Interface.Router {
 	/**
 	 * Tests, if possible, whether the specified error lead to redirection.
 	 *
+	 * @inheritDoc
+	 * @override
 	 * @method isRedirection
 	 * @param {(Core.IMAError|Error)} error The encountered error.
 	 * @return {boolean} {@code true} if the error was caused the action of the
@@ -477,7 +530,7 @@ export default class Router extends ns.Core.Interface.Router {
 	 * @method _handle
 	 * @param {Core.Router.Route} route The route that should have its associated
 	 *        controller rendered via the associated view.
-	 * @param {Object<string, string>} params Parameters extracted from the URL
+	 * @param {Object<string, (Error|string)>} params Parameters extracted from the URL
 	 *        path and query.
 	 * @return {Promise<undefined>} A promise that resolves when the page is
 	 *         rendered and the result is sent to the client, or displayed if

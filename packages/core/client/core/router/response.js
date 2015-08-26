@@ -93,10 +93,10 @@ export default class Response {
 	 * @chainable
 	 * @method redirect
 	 * @param {string} url The URL to which the client should be redirected.
-	 * @param {number=} [status=303] The HTTP status code to send to the client.
+	 * @param {number=} [status=302] The HTTP status code to send to the client.
 	 * @return {Core.Router.Response} This response.
 	 */
-	redirect(url, status = 303) {
+	redirect(url, status = 302) {
 		if ($Debug) {
 			if (this._isSent === true) {
 				var params = this.getResponseParams();

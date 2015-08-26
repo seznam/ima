@@ -201,7 +201,7 @@ module.exports = (() => {
 
 		try {
 			promise = app.oc.get('$Router')
-				.handleError({err})
+				.handleError({error: err})
 				.then((response) => {
 					instanceRecycler.clearInstance(app);
 
@@ -247,7 +247,7 @@ module.exports = (() => {
 		var promise = Promise.reject(err);
 
 		try {
-			app.oc.get('$Router').redirect(err.getParams().url);
+			app.oc.get('$Router').redirect(err.getParams().url, err.getHttpStatus());
 			instanceRecycler.clearInstance(app);
 			promise = Promise.resolve({
 				content: null,
