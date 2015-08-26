@@ -125,7 +125,7 @@ export default class Dispatcher extends ns.Core.Interface.Dispatcher {
 
 		if ($Debug) {
 			if (!scopes.has(scope)) {
-				throw new IMAError('Core.Event.Handler.unlisten(): the provided ' +
+				throw new IMAError('Core.Event.Dispatcher.unlisten(): the provided ' +
 						`listener '${listener}' is not registered for the specified event ` +
 						`'${event}' and scope '${scope}'. Check your workflow.`, {
 							event: event,
