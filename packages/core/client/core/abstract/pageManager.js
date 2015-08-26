@@ -63,7 +63,7 @@ export default class PageManager extends ns.Core.Interface.PageManager {
 	 * @method init
 	 */
 	init() {
-		this._clearManagedPage();
+		this._clearManagedPageValue();
 		this._stateManager.onChange = (newState) => this._onChangeStateHandler(newState);
 	}
 
@@ -93,7 +93,7 @@ export default class PageManager extends ns.Core.Interface.PageManager {
 		this._deactivateController();
 		this._destroyController();
 
-		this._storeManagedPage(controller, view, options, params, controllerInstance,
+		this._storeManagedPageValue(controller, view, options, params, controllerInstance,
 			decoratedController, viewInstance);
 
 		this._initController(params);
@@ -129,7 +129,7 @@ export default class PageManager extends ns.Core.Interface.PageManager {
 	 * Store value for next managing process.
 	 *
 	 * @protected
-	 * @method _storeManagedPage
+	 * @method _storeManagedPageValue
 	 * @param {(string|function)} controller
 	 * @param {(string|function)} view
 	 * @param {{onlyUpdate: boolean}} options
@@ -138,7 +138,7 @@ export default class PageManager extends ns.Core.Interface.PageManager {
 	 * @param {Core.Decorator.Controller} decoratedController
 	 * @param {Vendor.React.Component} viewInstance
 	 */
-	_storeManagedPage(controller, view, options, params, controllerInstance, decoratedController, viewInstance) {
+	_storeManagedPageValue(controller, view, options, params, controllerInstance, decoratedController, viewInstance) {
 		this._managedPage = {
 			controller,
 			controllerInstance,
@@ -157,9 +157,9 @@ export default class PageManager extends ns.Core.Interface.PageManager {
 	 * Clear value from managed page.
 	 *
 	 * @protected
-	 * @method _clearManagedPage
+	 * @method _clearManagedPageValue
 	 */
-	_clearManagedPage() {
+	_clearManagedPageValue() {
 		this._managedPage = {
 			controller: null,
 			controllerInstance: null,
@@ -262,7 +262,7 @@ export default class PageManager extends ns.Core.Interface.PageManager {
 			controller.destroy();
 			controller.setStateManager(null);
 			this._pageRender.unmount();
-			this._clearManagedPage();
+			this._clearManagedPageValue();
 		}
 	}
 

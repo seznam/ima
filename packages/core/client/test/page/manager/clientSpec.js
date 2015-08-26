@@ -29,7 +29,7 @@ describe('Core.Page.Manager.Client', function() {
 				]
 			);
 
-		pageManager._clearManagedPage();
+		pageManager._clearManagedPageValue();
 	});
 
 	it('should be listen for all custom events', function() {

@@ -117,11 +117,11 @@ describe('Core.Abstract.PageManager', function() {
 		var params = {param: 1};
 
 		beforeEach(function() {
-			pageManager._storeManagedPage(null, null, null, params, controllerInstance, null, null);
+			pageManager._storeManagedPageValue(null, null, null, params, controllerInstance, null, null);
 		});
 
 		afterEach(function() {
-			pageManager._clearManagedPage();
+			pageManager._clearManagedPageValue();
 		});
 
 		it('should set route params to controller instance', function() {
@@ -160,11 +160,11 @@ describe('Core.Abstract.PageManager', function() {
 
 		beforeEach(function() {
 			controllerInstance = pageFactory.createController(controller);
-			pageManager._storeManagedPage(null, null, null, null, controllerInstance, null, null);
+			pageManager._storeManagedPageValue(null, null, null, null, controllerInstance, null, null);
 		});
 
 		afterEach(function() {
-			pageManager._clearManagedPage();
+			pageManager._clearManagedPageValue();
 		});
 
 		it('should call deactivate on activated controller ', function() {
@@ -195,11 +195,11 @@ describe('Core.Abstract.PageManager', function() {
 
 		beforeEach(function() {
 			controllerInstance = pageFactory.createController(controller);
-			pageManager._storeManagedPage(null, null, null, null, controllerInstance, null, null);
+			pageManager._storeManagedPageValue(null, null, null, null, controllerInstance, null, null);
 		});
 
 		afterEach(function() {
-			pageManager._clearManagedPage();
+			pageManager._clearManagedPageValue();
 		});
 
 		it('should call destroy on controller instance', function() {
