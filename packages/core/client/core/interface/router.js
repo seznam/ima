@@ -230,11 +230,11 @@ export default class Router {
 	 * Tests, if possible, whether the specified error lead to redirection.
 	 *
 	 * @method isRedirection
-	 * @param {(Core.IMAError|Error)} error The encountered error.
+	 * @param {(Core.IMAError|Error)} reason The encountered error.
 	 * @return {boolean} {@code true} if the error was caused the action of the
 	 *         redirection.
 	 */
-	isRedirection(error) {}
+	isRedirection(reason) {}
 }
 
 ns.Core.Interface.Router = Router;

@@ -467,14 +467,14 @@ export default class Router extends ns.Core.Interface.Router {
 	 * @inheritDoc
 	 * @override
 	 * @method isClientError
-	 * @param {(Core.IMAError|Error)} error The encountered error.
+	 * @param {(Core.IMAError|Error)} reason The encountered error.
 	 * @return {boolean} {@code true} if the error was caused the action of the
 	 *         client.
 	 */
-	isClientError(error) {
-		return error instanceof IMAError &&
-				error.getHttpStatus() >= 400 &&
-				error.getHttpStatus() < 500;
+	isClientError(reason) {
+		return reason instanceof IMAError &&
+				reason.getHttpStatus() >= 400 &&
+				reason.getHttpStatus() < 500;
 	}
 
 	/**
@@ -483,14 +483,14 @@ export default class Router extends ns.Core.Interface.Router {
 	 * @inheritDoc
 	 * @override
 	 * @method isRedirection
-	 * @param {(Core.IMAError|Error)} error The encountered error.
+	 * @param {(Core.IMAError|Error)} reason The encountered error.
 	 * @return {boolean} {@code true} if the error was caused the action of the
 	 *         redirection.
 	 */
-	isRedirection(error) {
-		return error instanceof IMAError &&
-				error.getHttpStatus() >= 300 &&
-				error.getHttpStatus() < 400;
+	isRedirection(reason) {
+		return reason instanceof IMAError &&
+				reason.getHttpStatus() >= 300 &&
+				reason.getHttpStatus() < 400;
 	}
 
 	/**

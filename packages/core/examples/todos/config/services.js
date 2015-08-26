@@ -13,6 +13,6 @@ export var init = (ns, oc, config) => { // jshint ignore:line
 			.handleError({ error })
 			.catch((fatalError) => {
 				config.$IMA.fatalErrorHandler(fatalError);
-			})
+			});
 	});
 };
