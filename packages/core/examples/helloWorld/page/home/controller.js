@@ -86,6 +86,20 @@ class Controller extends ns.App.Base.Controller {
 	activate() {}
 
 	/**
+	 * Callback for deactivating the controller in the UI. This is the first method
+	 * invoked during controller deinitialization. This usually happens when the user
+	 * navigates to a different URL.
+	 *
+	 * The controller should unregister all React and DOM event listeners the
+	 * controller has registered in the {@codelink active()} method.
+	 *
+	 * @inheritDoc
+	 * @override
+	 * @method deactivate
+	 */
+	deactivate() {}
+
+	/**
 	 * Callback used to configure the meta attribute manager. The method is called
 	 * after the the controller's state has been patched with the loaded
 	 * resources, the view has been rendered and (if at the client-side) the

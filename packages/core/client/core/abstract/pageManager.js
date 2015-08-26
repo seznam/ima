@@ -49,10 +49,10 @@ export default class PageManager extends ns.Core.Interface.PageManager {
 
 		/**
 		 * @protected
-		 * @property _lastManagedPage
+		 * @property _managedPage
 		 * @type {Object<string, *>}
 		 */
-		this._lastManagedPage = {};
+		this._managedPage = {};
 	}
 
 	/**
@@ -63,7 +63,7 @@ export default class PageManager extends ns.Core.Interface.PageManager {
 	 * @method init
 	 */
 	init() {
-		this._clearLastManagedPage();
+		this._clearManagedPage();
 		this._stateManager.onChange = (newState) => this._onChangeStateHandler(newState);
 	}
 
@@ -83,17 +83,20 @@ export default class PageManager extends ns.Core.Interface.PageManager {
 		this._preManage(options);
 
 		if (this._hasOnlyUpdate(controller, view, options)) {
-			return this._updateController(this._lastManagedPage.decoratedController, params);
+			return this._updateController(params);
 		}
 
 		var controllerInstance = this._pageFactory.createController(controller);
 		var decoratedController = this._pageFactory.decorateController(controllerInstance);
 		var viewInstance = this._pageFactory.createView(view);
 
-		this._destroyController(this._lastManagedPage.controllerInstance);
-		this._initController(controllerInstance, params);
-		this._storeLastManagedPage(controller, view, options, params, controllerInstance,
+		this._deactivateController();
+		this._destroyController();
+
+		this._storeManagedPage(controller, view, options, params, controllerInstance,
 			decoratedController, viewInstance);
+
+		this._initController(params);
 
 		return (
 			this._pageRender
@@ -123,10 +126,10 @@ export default class PageManager extends ns.Core.Interface.PageManager {
 	}
 
 	/**
-	 * Store value from last managed page for next managing process.
+	 * Store value for next managing process.
 	 *
 	 * @protected
-	 * @method _storeLastManagedPage
+	 * @method _storeManagedPage
 	 * @param {(string|function)} controller
 	 * @param {(string|function)} view
 	 * @param {{onlyUpdate: boolean}} options
@@ -135,72 +138,95 @@ export default class PageManager extends ns.Core.Interface.PageManager {
 	 * @param {Core.Decorator.Controller} decoratedController
 	 * @param {Vendor.React.Component} viewInstance
 	 */
-	_storeLastManagedPage(controller, view, options, params, controllerInstance, decoratedController, viewInstance) {
-		this._lastManagedPage = {
+	_storeManagedPage(controller, view, options, params, controllerInstance, decoratedController, viewInstance) {
+		this._managedPage = {
 			controller,
 			controllerInstance,
 			decoratedController,
 			view,
 			viewInstance,
 			options,
-			params
+			params,
+			state: {
+				activated: false
+			}
 		};
 	}
 
 	/**
-	 * Clear value from last managed page.
+	 * Clear value from managed page.
 	 *
 	 * @protected
-	 * @method _clearLastManagedPage
+	 * @method _clearManagedPage
 	 */
-	_clearLastManagedPage() {
-		this._lastManagedPage = {
+	_clearManagedPage() {
+		this._managedPage = {
 			controller: null,
 			controllerInstance: null,
 			decoratedController: null,
 			view: null,
 			viewInstance: null,
 			options: null,
-			params: null
+			params: null,
+			state: {
+				activated: false
+			}
 		};
 	}
 
 	/**
-	 * Initializes the provided controller using the provided parameters.
+	 * Initializes managed instance of controller with the provided parameters.
 	 *
-	 * @private
+	 * @protected
 	 * @method _initController
-	 * @param {Core.Abstract.Controller} controller The controller to initialize.
 	 * @param {Object<string, *>=} params Parameters to use to initialize
 	 *        the controller.
 	 */
-	_initController(controller, params) {
+	_initController(params) {
+		var controller = this._managedPage.controllerInstance;
+
 		controller.setRouteParams(params);
 		controller.setStateManager(this._stateManager);
 		controller.init();
 	}
 
 	/**
+	 * Activate managed instance of controller.
+	 *
+	 * @protected
+	 * @method _activateController
+	 */
+	_activateController() {
+		var controller = this._managedPage.controllerInstance;
+		var isNotActivated = !this._managedPage.state.activated;
+
+		if (controller && isNotActivated) {
+			controller.activate();
+			this._managedPage.state.activated = true;
+		}
+	}
+
+	/**
 	 * Update current page controller.
 	 *
-	 * @private
+	 * @protected
 	 * @method _updateController
-	 * @param {Core.Decorator.Controller} controller The controller to update.
 	 * @param {Object<string, *>=} params Parameters to use to update
 	 *        the controller.
 	 * @return {Promise}
 	 */
-	_updateController(controller, params) {
+	_updateController(params) {
+		var controller = this._managedPage.decoratedController;
 		var lastRouteParams = controller.getRouteParams();
 
-		this._lastManagedPage.params = params;
+		this._managedPage.params = params;
 		controller.setRouteParams(params);
 
 		return (
 			this._pageRender
 				.update(controller, lastRouteParams)
 				.then((response) => {
-					this._postManage(this._lastManagedPage.options);
+					this._postManage(this._managedPage.options);
 
 					return response;
 				})
@@ -208,29 +234,48 @@ export default class PageManager extends ns.Core.Interface.PageManager {
 	}
 
 	/**
-	 * Destroy current page controller.
+	 * Deactivate last managed instance of controller only If controller
+	 * was activated.
 	 *
-	 * @private
-	 * @method _destroyController
-	 * @param {Core.Abstract.Controller} controller The controller to deinitialize.
+	 * @protected
+	 * @method _deactivateController
 	 */
-	_destroyController(controller) {
-		if (controller) {
-			controller.destroy();
-			controller.setStateManager(null);
-			this._pageRender.unmount();
-			this._clearLastManagedPage();
+	_deactivateController() {
+		var controller = this._managedPage.controllerInstance;
+		var isActivated = this._managedPage.state.activated;
+
+		if (controller && isActivated) {
+			controller.deactivate();
 		}
 	}
 
 	/**
-	 * On change handler for state.
+	 * Destroy last managed instance of controller.
+	 *
+	 * @protected
+	 * @method _destroyController
+	 */
+	_destroyController() {
+		var controller = this._managedPage.controllerInstance;
+
+		if (controller) {
+			controller.destroy();
+			controller.setStateManager(null);
+			this._pageRender.unmount();
+			this._clearManagedPage();
+		}
+	}
+
+	/**
+	 * On change event handler set state to view.
 	 *
 	 * @private
 	 * @method _onChangeStateHandler
 	 */
 	_onChangeStateHandler(state) {
-		if (this._lastManagedPage.controllerInstance) {
+		var controller = this._managedPage.controllerInstance;
+
+		if (controller) {
 			this._pageRender.setState(state);
 		}
 	}
@@ -238,7 +283,7 @@ export default class PageManager extends ns.Core.Interface.PageManager {
 	/**
 	 * Return true if manager has to update last managed controller and view.
 	 *
-	 * @private
+	 * @protected
 	 * @method _hasOnlyUpdate
 	 * @param {string|function} controller
 	 * @param {string|function} view
@@ -248,21 +293,21 @@ export default class PageManager extends ns.Core.Interface.PageManager {
 	_hasOnlyUpdate(controller, view, options) {
 		if (options.onlyUpdate instanceof Function) {
 			return options.onlyUpdate(
-				this._lastManagedPage.controller,
-				this._lastManagedPage.view
+				this._managedPage.controller,
+				this._managedPage.view
 			);
 		}
 
 		return options.onlyUpdate &&
-			this._lastManagedPage.controller === controller &&
-			this._lastManagedPage.view === view;
+			this._managedPage.controller === controller &&
+			this._managedPage.view === view;
 	}
 
 	/**
 	 * Make defined instruction as scroll for current page options before than
 	 * change page.
 	 *
-	 * @private
+	 * @protected
 	 * @method _preManage
 	 * @param {{onlyUpdate: boolean, autoScroll: boolean}} options
 	 */
@@ -276,7 +321,7 @@ export default class PageManager extends ns.Core.Interface.PageManager {
 	 * Make defined instruction for current page options after that
 	 * changed page.
 	 *
-	 * @private
+	 * @protected
 	 * @method _postManage
 	 * @param {{onlyUpdate: boolean, autoScroll: boolean}} options
 	 */

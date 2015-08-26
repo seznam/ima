@@ -71,11 +71,10 @@ export default class Controller extends ns.Core.Interface.Controller {
 	 * the application. This usually happens when the user navigates to a
 	 * different URL.
 	 *
-	 * The controller should unregister all React and DOM event listeners the
-	 * controller has registered in the {@codelink active()} method. The
-	 * controller must also release any resources that might not be released
-	 * automatically when the controller instance is destroyed by the garbage
-	 * collector.
+	 * The controller should unregister all resource registered in the
+	 * {@codelink init()} method. The controller must also release any resources
+	 * that might not be released automatically when the controller instance is
+	 * destroyed by the garbage collector.
 	 *
 	 * @inheritDoc
 	 * @override
@@ -99,6 +98,20 @@ export default class Controller extends ns.Core.Interface.Controller {
 	 * @method activate
 	 */
 	activate() {}
+
+	/**
+	 * Callback for deactivating the controller in the UI. This is the first method
+	 * invoked during controller deinitialization. This usually happens when the user
+	 * navigates to a different URL.
+	 *
+	 * The controller should unregister all React and DOM event listeners the
+	 * controller has registered in the {@codelink active()} method.
+	 *
+	 * @inheritDoc
+	 * @override
+	 * @method deactivate
+	 */
+	deactivate() {}
 
 	/**
 	 * Callback the controller uses to request the resources it needs to render

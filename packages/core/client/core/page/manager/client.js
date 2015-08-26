@@ -43,6 +43,30 @@ export default class Client extends ns.Core.Abstract.PageManager {
 	}
 
 	/**
+	 * Manager controller with params.
+	 *
+	 * @inheritDoc
+	 * @override
+	 * @method manage
+	 * @param {(string|function)} controller
+	 * @param {(string|function)} view
+	 * @param {{onlyUpdate: (boolean|function), autoScroll: boolean}} options
+	 * @param {Object<string, string>=} [params={}] The route parameters.
+	 * @return {Promise<Object<string, ?(number|string)>>}
+	 */
+	manage(controller, view, options, params = {}) {
+		return (
+			super
+				.manage(controller, view, options, params)
+				.then((response) => {
+					this._activateController();
+
+					return response;
+				})
+		)
+	}
+
+	/**
 	 * Scroll page to defined vertical and horizontal values.
 	 *
 	 * Scrolling is async.
@@ -85,7 +109,7 @@ export default class Client extends ns.Core.Abstract.PageManager {
 		var eventName = event.detail.eventName;
 		var onEventName = 'on' + eventName.charAt(0).toUpperCase() + eventName.slice(1);
 		var eventData = event.detail.data;
-		var controllerInstance = this._lastManagedPage.controllerInstance;
+		var controllerInstance = this._managedPage.controllerInstance;
 
 		if (controllerInstance) {
 

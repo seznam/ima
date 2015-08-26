@@ -108,8 +108,6 @@ export default class Client extends ns.Core.Abstract.PageRender {
 					controller.setMetaParams(fetchedResources);
 					this._updateMetaAttributes(controller.getMetaManager());
 
-					controller.activate();
-
 					return { content: null, status: controller.getHttpStatus() };
 				})
 				.catch((error) => this._handleError(error))

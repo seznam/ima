@@ -40,8 +40,8 @@ describe('Core.Abstract.PageManager', function() {
 
 	describe('manage method', function() {
 
-		it('should be only update last managed controller and view', function(done) {
-			pageManager._lastManagedPage.decoratedController =
+		it('should only update last managed controller and view', function(done) {
+			pageManager._managedPage.decoratedController =
 				pageFactory.decorateController(pageFactory.createController(controller));
 
 			spyOn(pageManager, '_hasOnlyUpdate')
@@ -71,7 +71,7 @@ describe('Core.Abstract.PageManager', function() {
 				});
 		});
 
-		it('should be mount new controller and view', function(done) {
+		it('should mount new controller and view', function(done) {
 			spyOn(pageManager, '_hasOnlyUpdate')
 				.and
 				.returnValue(false);
@@ -79,6 +79,9 @@ describe('Core.Abstract.PageManager', function() {
 				.and
 				.stub();
 			spyOn(pageManager, '_postManage')
+				.and
+				.stub();
+			spyOn(pageManager, '_deactivateController')
 				.and
 				.stub();
 			spyOn(pageManager, '_destroyController')
@@ -95,6 +98,7 @@ describe('Core.Abstract.PageManager', function() {
 				.manage(controller, view, options)
 				.then(function() {
 					expect(pageManager._preManage).toHaveBeenCalled();
+					expect(pageManager._deactivateController).toHaveBeenCalled();
 					expect(pageManager._destroyController).toHaveBeenCalled();
 					expect(pageManager._initController).toHaveBeenCalled();
 					expect(pageRender.mount).toHaveBeenCalled();
@@ -112,70 +116,118 @@ describe('Core.Abstract.PageManager', function() {
 		var controllerInstance = pageFactory.createController(controller);
 		var params = {param: 1};
 
-		it('should be set route params to controller instance', function() {
+		beforeEach(function() {
+			pageManager._storeManagedPage(null, null, null, params, controllerInstance, null, null);
+		});
+
+		afterEach(function() {
+			pageManager._clearManagedPage();
+		});
+
+		it('should set route params to controller instance', function() {
 			spyOn(controllerInstance, 'setRouteParams')
 				.and
 				.stub();
 
-			pageManager._initController(controllerInstance, params);
+			pageManager._initController(params);
 
 			expect(controllerInstance.setRouteParams).toHaveBeenCalledWith(params);
 		});
 
-		it('should be set stateManager to controller instance', function() {
+		it('should set stateManager to controller instance', function() {
 			spyOn(controllerInstance, 'setStateManager')
 				.and
 				.stub();
 
-			pageManager._initController(controllerInstance, params);
+			pageManager._initController(params);
 
 			expect(controllerInstance.setStateManager).toHaveBeenCalledWith(stateManager);
 		});
 
-		it('should be call init function on controller instance', function() {
+		it('should call init function on controller instance', function() {
 			spyOn(controllerInstance, 'init')
 				.and
 				.stub();
 
-			pageManager._initController(controllerInstance, params);
+			pageManager._initController(params);
 
 			expect(controllerInstance.init).toHaveBeenCalled();
 		});
 	});
+
+	describe('_deactivateController method', function() {
+		var controllerInstance = null;
+
+		beforeEach(function() {
+			controllerInstance = pageFactory.createController(controller);
+			pageManager._storeManagedPage(null, null, null, null, controllerInstance, null, null);
+		});
+
+		afterEach(function() {
+			pageManager._clearManagedPage();
+		});
+
+		it('should call deactivate on activated controller ', function() {
+			pageManager._managedPage.state.activated = true;
+			spyOn(controllerInstance, 'deactivate')
+				.and
+				.stub();
+
+			pageManager._deactivateController();
+
+			expect(controllerInstance.deactivate).toHaveBeenCalled();
+		});
+
+		it('should not call deactivate on no activated controller', function() {
+			spyOn(controllerInstance, 'deactivate')
+				.and
+				.stub();
+
+			pageManager._deactivateController();
+
+			expect(controllerInstance.deactivate).not.toHaveBeenCalled();
+		});
+	});
+
 
 	describe('_destroyController method', function() {
 		var controllerInstance = null;
 
 		beforeEach(function() {
 			controllerInstance = pageFactory.createController(controller);
+			pageManager._storeManagedPage(null, null, null, null, controllerInstance, null, null);
 		});
 
-		it('should be call destroy on controller instance', function() {
+		afterEach(function() {
+			pageManager._clearManagedPage();
+		});
+
+		it('should call destroy on controller instance', function() {
 			spyOn(controllerInstance, 'destroy')
 				.and
 				.stub();
 
-			pageManager._destroyController(controllerInstance);
+			pageManager._destroyController();
 
 			expect(controllerInstance.destroy).toHaveBeenCalled();
 		});
 
-		it('should be unset stateManager to controller', function() {
+		it('should unset stateManager to controller', function() {
 			spyOn(controllerInstance, 'setStateManager')
 				.and
 				.stub();
 
-			pageManager._destroyController(controllerInstance);
+			pageManager._destroyController();
 
 			expect(controllerInstance.setStateManager).toHaveBeenCalledWith(null);
 		});
 
-		it('should be unmout view from DOM', function() {
+		it('should unmout view from DOM', function() {
 			spyOn(pageRender, 'unmount')
 				.and
 				.stub();
 
-			pageManager._destroyController(controllerInstance);
+			pageManager._destroyController();
 
 			expect(pageRender.unmount).toHaveBeenCalled();
 		});
@@ -199,8 +251,8 @@ describe('Core.Abstract.PageManager', function() {
 
 		it('should return value from onlyUpdate function', function() {
 			var newOptions = Object.assign({}, options, {onlyUpdate: function() {return true;}});
-			pageManager._lastManagedPage.controller = controller;
-			pageManager._lastManagedPage.view = view;
+			pageManager._managedPage.controller = controller;
+			pageManager._managedPage.view = view;
 
 			spyOn(newOptions, 'onlyUpdate')
 				.and
@@ -213,16 +265,16 @@ describe('Core.Abstract.PageManager', function() {
 
 		it('should return true for option onlyUpdate set to true and for same controller and view', function() {
 			var newOptions = Object.assign({}, options, {onlyUpdate: true});
-			pageManager._lastManagedPage.controller = controller;
-			pageManager._lastManagedPage.view = view;
+			pageManager._managedPage.controller = controller;
+			pageManager._managedPage.view = view;
 
 			expect(pageManager._hasOnlyUpdate(controller, view, newOptions)).toEqual(true);
 		});
 
 		it('should return false for option onlyUpdate set to true and for different controller and view', function() {
 			var newOptions = Object.assign({}, options, {onlyUpdate: true});
-			pageManager._lastManagedPage.controller = null;
-			pageManager._lastManagedPage.view = view;
+			pageManager._managedPage.controller = null;
+			pageManager._managedPage.view = view;
 
 			expect(pageManager._hasOnlyUpdate(controller, view, newOptions)).toEqual(false);
 		});

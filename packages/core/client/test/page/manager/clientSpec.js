@@ -28,6 +28,8 @@ describe('Core.Page.Manager.Client', function() {
 					eventBusInterface
 				]
 			);
+
+		pageManager._clearManagedPage();
 	});
 
 	it('should be listen for all custom events', function() {
@@ -66,32 +68,32 @@ describe('Core.Page.Manager.Client', function() {
 		};
 
 		it('should call method (with event name) from active controller', function() {
-			pageManager._lastManagedPage.controllerInstance = {
+			pageManager._managedPage.controllerInstance = {
 				onEvent: function(data) {}
 			};
-			spyOn(pageManager._lastManagedPage.controllerInstance, 'onEvent');
+			spyOn(pageManager._managedPage.controllerInstance, 'onEvent');
 
 			pageManager._onCustomEventHandler(event);
 
-			expect(pageManager._lastManagedPage.controllerInstance.onEvent.calls.count()).toEqual(1);
-			expect(pageManager._lastManagedPage.controllerInstance.onEvent).toHaveBeenCalledWith(data);
+			expect(pageManager._managedPage.controllerInstance.onEvent.calls.count()).toEqual(1);
+			expect(pageManager._managedPage.controllerInstance.onEvent).toHaveBeenCalledWith(data);
 		});
 
 		it('should throw error because active controller hasn\'t event listener' , function() {
-			pageManager._lastManagedPage.controllerInstance = {
+			pageManager._managedPage.controllerInstance = {
 				onDifferentEvent: function(data) {}
 			};
-			spyOn(pageManager._lastManagedPage.controllerInstance, 'onDifferentEvent');
+			spyOn(pageManager._managedPage.controllerInstance, 'onDifferentEvent');
 			spyOn(console, 'warn');
 
 			pageManager._onCustomEventHandler(event);
 
-			expect(pageManager._lastManagedPage.controllerInstance.onDifferentEvent.calls.count()).toEqual(0);
+			expect(pageManager._managedPage.controllerInstance.onDifferentEvent.calls.count()).toEqual(0);
 			expect(console.warn).toHaveBeenCalled();
 		});
 
 		it('should do nothing if active controller is null' , function() {
-			pageManager._lastManagedPage.controllerInstance = null;
+			pageManager._managedPage.controllerInstance = null;
 			spyOn(console, 'warn');
 
 			pageManager._onCustomEventHandler(event);
