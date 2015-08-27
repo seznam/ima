@@ -14,7 +14,7 @@ export var init = (ns, oc, config) => {
 
 	oc
 		.get('$Response')
-		.init(config.response);
+		.init(config.response, oc.get('$CookieTransformFunction'));
 
 	if (!oc.get('$Window').isClient()) {
 		oc
@@ -32,7 +32,7 @@ export var init = (ns, oc, config) => {
 
 	oc
 		.get('$CookieStorage')
-		.init({ secure: oc.get('$Secure') });
+		.init({ secure: oc.get('$Secure') }, oc.get('$CookieTransformFunction'));
 
 	oc
 		.get('$SessionStorage')

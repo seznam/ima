@@ -9,6 +9,10 @@ describe('Core.Storage.Cookie', function() {
 	var response = null;
 	var cookie = null;
 	var win = null;
+	var transformFunction = {
+		encode: function(s) { return s; },
+		decode: function(s) { return s; }
+	};
 
 	beforeEach(function() {
 		request = oc.create('Core.Router.Request');
@@ -17,7 +21,7 @@ describe('Core.Storage.Cookie', function() {
 		cookie = oc.create('Core.Storage.Cookie', [win, request, response]);
 
 		request.init({});
-		response.init({});
+		response.init({}, transformFunction);
 
 		spyOn(request, 'getCookieHeader')
 			.and
@@ -27,7 +31,7 @@ describe('Core.Storage.Cookie', function() {
 			.and
 			.stub();
 
-		cookie.init({secure: false});
+		cookie.init({ secure: false }, transformFunction);
 	});
 
 	it('should be parse exist cookies', function() {
@@ -69,7 +73,12 @@ describe('Core.Storage.Cookie', function() {
 	});
 
 	it('should be get cookies string', function() {
+		spyOn(cookie._transformFunction, 'encode')
+			.and
+			.callThrough();
+
 		expect(cookie.getCookiesString()).toEqual(cookieString);
+		expect(cookie._transformFunction.encode.calls.count()).toEqual(2);
 	});
 
 	describe('parseFromSetCookieHeader method', function() {

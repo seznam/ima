@@ -61,6 +61,18 @@ export default class Response {
 		 * @default ''
 		 */
 		this._content = '';
+
+		/**
+		 * Transform function for cookie value.
+		 *
+		 * @private
+		 * @property _cookieTransformFunction
+		 * @type {{encode: function, decode: function}}
+		 */
+		this._cookieTransformFunction = {
+			encode: (s) => s,
+			decode: (s) => s
+		};
 	}
 
 	/**
@@ -71,13 +83,16 @@ export default class Response {
 	 * @chainable
 	 * @param {?Express.Response} response The ExpressJS response, or
 	 *        {@code null} if the code is running at the client side.
+	 * @param {{encode: function, decode: function}} [cookieTransformFunction={}]
 	 * @return {Core.Router.Response} This response.
 	 */
-	init(response) {
+	init(response, cookieTransformFunction = {}) {
+		this._cookieTransformFunction = Object.assign(this._cookieTransformFunction, cookieTransformFunction);
 		this._response = response;
 		this._isSent = false;
 		this._status = 500;
 		this._content = '';
+
 		return this;
 	}
 
@@ -199,7 +214,9 @@ export default class Response {
 			}
 		}
 
-		this._response.cookie(name, value, options);
+		var advanceOptions = Object.assign({}, this._cookieTransformFunction, options);
+
+		this._response.cookie(name, value, advanceOptions);
 
 		return this;
 	}

@@ -16,7 +16,6 @@ export var init = (ns, oc, config) => { //jshint ignore:line
 
 
 	//*************START CONSTANTS*****************
-
 	oc.constant('$Settings', config);
 	oc.constant('$Env', config.$Env);
 	oc.constant('$Protocol', config.$Protocol);
@@ -51,7 +50,7 @@ export var init = (ns, oc, config) => { //jshint ignore:line
 	oc.bind('$Response', ns.Core.Router.Response);
 
 	//Storage
-	oc.bind('$CookieStorage', ns.Core.Storage.Cookie, ['$Window', '$Request', '$Response']);
+	oc.constant('$CookieTransformFunction', { encode: (s) => s, decode: (s) => s });
 	oc.bind('$CookieStorage', ns.Core.Storage.Cookie, ['$Window', '$Request', '$Response']);
 	if (oc.get('$Window').hasSessionStorage()) {
 		oc.bind('$SessionStorage', ns.Core.Storage.Session);

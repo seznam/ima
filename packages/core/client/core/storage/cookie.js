@@ -87,7 +87,7 @@ export default class Cookie extends ns.Core.Storage.Map {
 		 * The overriding cookie attribute values.
 		 *
 		 * @private
-		 * @property options
+		 * @property _options
 		 * @type {{path: string, secure: boolean, httpOnly: boolean, domain: string, expires: Date}}
 		 */
 		this._options = {
@@ -96,6 +96,18 @@ export default class Cookie extends ns.Core.Storage.Map {
 			secure: false,
 			httpOnly: false,
 			domain: ''
+		};
+
+		/**
+		 * Transform encode and decode functions for cookie value.
+		 *
+		 * @private
+		 * @property _transformFunction
+		 * @type {{encode: function, decode: function}}
+		 */
+		this._transformFunction = {
+			encode: (s) => s,
+			decode: (s) => s
 		};
 	}
 
@@ -111,9 +123,11 @@ export default class Cookie extends ns.Core.Storage.Map {
 	 * @chainable
 	 * @method init
 	 * @param {{path: string=, secure: boolean=, httpOnly: boolean=, domain: string=}} [options={}]
+	 * @param {{encode: function, decode: function}} [transformFunction={}]
 	 * @return {Core.Interface.Storage}
 	 */
-	init(options = {}) {
+	init(options = {}, transformFunction = {}) {
+		this._transformFunction = Object.assign(this._transformFunction, transformFunction);
 		this._options = Object.assign(this._options, options);
 		this._parse();
 
@@ -353,7 +367,8 @@ export default class Cookie extends ns.Core.Storage.Map {
 	 *         browser's cookie storage.
 	 */
 	_generateCookieString(name, value, options) {
-		var cookieString = name + '=' + value;
+		var cookieString = name + '=' + this._transformFunction.encode(value);
+
 		cookieString += options.domain ? ';Domain=' + options.domain : '';
 		cookieString += options.path ? ';Path=' + options.path : '';
 		cookieString += options.expires ?
@@ -435,11 +450,11 @@ export default class Cookie extends ns.Core.Storage.Map {
 		}
 
 		if (separatorIndexEqual < 0) {
-			name = decodeURIComponent(this._firstLetterToLowerCase(pair.trim()));
+			name = this._firstLetterToLowerCase(pair.trim());
 			value = true;
 		} else {
-			name = decodeURIComponent(this._firstLetterToLowerCase(pair.substring(0, separatorIndexEqual).trim()));
-			value = decodeURIComponent(pair.substring(separatorIndexEqual + 1).trim());
+			name = this._firstLetterToLowerCase(pair.substring(0, separatorIndexEqual).trim());
+			value = this._transformFunction.decode(pair.substring(separatorIndexEqual + 1).trim());
 
 			// erase quoted values
 			if ('"' === value[0]) {
