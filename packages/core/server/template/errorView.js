@@ -201,7 +201,7 @@ module.exports = (err, items) => {
 	</style>`;
 
 	res += `<h1>${err.name}: ${err.message}</h1>`;
-	res += `<h3>Params: ${JSON.stringify(err._params, 4)}</h3>`;
+	res += `<h3>Params: ${encodeURIComponent(JSON.stringify(err._params, 4))}</h3>`;
 	res += `<ul>`;
 	res += items.map((item) => {
 		return (
