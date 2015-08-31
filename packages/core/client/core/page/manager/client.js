@@ -63,7 +63,7 @@ export default class Client extends ns.Core.Abstract.PageManager {
 
 					return response;
 				})
-		)
+		);
 	}
 
 	/**
