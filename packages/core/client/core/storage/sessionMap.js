@@ -116,7 +116,12 @@ export default class SessionMap extends ns.Core.Interface.Storage {
 	 * @return {Core.Storage.SessionMap} This storage.
 	 */
 	set(key, value) {
-		this._session.set(key, value);
+		if (!(value instanceof Promise) &&
+			!(value instanceof ns.Core.Cache.Entry && value.getValue() instanceof Promise)
+		) {
+			this._session.set(key, value);
+		}
+
 		this._map.set(key, value);
 		return this;
 	}

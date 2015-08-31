@@ -1,7 +1,12 @@
 describe('Core.Storage.SessionMap', function() {
 	var sessionMap;
+	var mapStorage = null;
+	var sessionStorage = null;
 	beforeEach(function() {
-		sessionMap = oc.create('$SessionMapStorage');
+		mapStorage = oc.create('$MapStorage');
+		sessionStorage = oc.create('$SessionStorage');
+
+		sessionMap = oc.create('$SessionMapStorage', [mapStorage, sessionStorage]);
 		sessionMap.init();
 		sessionMap.clear();
 
@@ -23,6 +28,16 @@ describe('Core.Storage.SessionMap', function() {
 		var arr = [0, 'val', true, {}];
 		sessionMap.set('item5', arr);
 		expect(sessionMap.get('item5')).toEqual(arr);
+	});
+
+	it('should set promise value only to map storage', function() {
+		spyOn(sessionStorage, 'set')
+			.and
+			.stub();
+
+		sessionMap.set('promise', Promise.resolve(1));
+
+		expect(sessionStorage.set).not.toHaveBeenCalled();
 	});
 
 	it ('should should have (not) an item', function() {
