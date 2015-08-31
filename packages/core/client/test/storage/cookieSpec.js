@@ -81,20 +81,43 @@ describe('Core.Storage.Cookie', function() {
 		expect(cookie._transformFunction.encode.calls.count()).toEqual(2);
 	});
 
+	describe('set method', function() {
+		it('should set expires to -1', function() {
+			spyOn(cookie, '_getExpirationAsDate')
+				.and
+				.stub();
+
+			cookie.set('cok2');
+
+			expect(cookie._getExpirationAsDate).toHaveBeenCalledWith(-1);
+		});
+
+		it('should not auto set expires', function() {
+			spyOn(cookie, '_getExpirationAsDate')
+				.and
+				.stub();
+
+			cookie.set('cok2', 'val2');
+
+			expect(cookie._getExpirationAsDate).not.toHaveBeenCalled();
+		})
+
+	});
+
 	describe('parseFromSetCookieHeader method', function() {
 
 		it('should parse cookie from Set-Cookie header string', function() {
 			spyOn(cookie, 'set');
 
 			cookie.parseFromSetCookieHeader(setCookieString);
-			expect(cookie.set).toHaveBeenCalledWith('cok3', 'hello3', {expires: new Date('Fri, 31 Dec 9999 23:59:59 UTC'), httpOnly: false, secure: false, path: '/', domain: ''});
+			expect(cookie.set).toHaveBeenCalledWith('cok3', 'hello3', {expires: new Date('Fri, 31 Dec 9999 23:59:59 UTC'), path: '/'});
 		});
 
 		it('should parse cookie from Set-Cookie header string with defined domain', function() {
 			spyOn(cookie, 'set');
 
 			cookie.parseFromSetCookieHeader(setCookieStringWithDomain);
-			expect(cookie.set).toHaveBeenCalledWith('cok3', 'hello3', {expires: new Date('Fri, 31 Dec 9999 23:59:59 UTC'), httpOnly: false, secure: false, path: '/', domain: 'localhost:3001'});
+			expect(cookie.set).toHaveBeenCalledWith('cok3', 'hello3', {expires: new Date('Fri, 31 Dec 9999 23:59:59 UTC'), path: '/', domain: 'localhost:3001'});
 		});
 
 		it('should parse cookie from Set-Cookie header string with complex options', function() {
@@ -111,9 +134,10 @@ describe('Core.Storage.Cookie', function() {
 			1,
 			2,
 			1000,
-			undefined,
+			Infinity,
 			null,
-			'Fri, 31 Dec 2000 23:59:59 GMT'
+			'Fri, 31 Dec 2000 23:59:59 GMT',
+			new Date('Fri, 31 Dec 2000 23:59:59 GMT')
 		], function(value) {
 			it('for value ' + value, function() {
 				expect(cookie._getExpirationAsDate(value) instanceof Date).toEqual(true);

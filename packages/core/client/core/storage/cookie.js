@@ -88,11 +88,11 @@ export default class Cookie extends ns.Core.Storage.Map {
 		 *
 		 * @private
 		 * @property _options
-		 * @type {{path: string, secure: boolean, httpOnly: boolean, domain: string, expires: Date}}
+		 * @type {{path: string, secure: boolean, httpOnly: boolean, domain: string, expires: (Date|number|null)}}
 		 */
 		this._options = {
 			path: '/',
-			expires: this._getExpirationAsDate(MAX_EXPIRE_DATE),
+			expires: null,
 			secure: false,
 			httpOnly: false,
 			domain: ''
@@ -178,7 +178,7 @@ export default class Cookie extends ns.Core.Storage.Map {
 	 * @param {string} name The cookie name.
 	 * @param {(boolean|number|string|undefined)} value The cookie value, will be converted
 	 *        to string.
-	 * @param {{domain: string=, expires: (number|string)=},
+	 * @param {{domain: string=, expires: (number|string|Date|null)=},
 	 *        secure: boolean=, httpOnly: boolean=, path: string=} [options={}]
 	 *        Cookie attributes. Only the attributes listed in the type
 	 *        annotation of this field are supported. For documentation and full
@@ -188,8 +188,15 @@ export default class Cookie extends ns.Core.Storage.Map {
 	 */
 	set(name, value, options = {}) {
 		options = Object.assign({}, this._options, options);
-		var expiration = value === undefined ? -1 : options.expires;
-		options.expires = this._getExpirationAsDate(expiration);
+
+		if (value === undefined) {
+			options.expires = -1;
+		}
+
+		if (options.expires) {
+			options.expires = this._getExpirationAsDate(options.expires);
+		}
+
 		value = this._sanitizeCookieValue(value + '');
 
 		if (this._window.isClient()) {
@@ -324,6 +331,8 @@ export default class Cookie extends ns.Core.Storage.Map {
 			var cookie = this._extractCookie(cookiesArray[i]);
 
 			if (cookie.name !== null) {
+				cookie.options = Object.assign({}, this._options, cookie.options);
+
 				super.set(cookie.name, { value: this._sanitizeCookieValue(cookie.value), options: cookie.options });
 			}
 		}
@@ -357,7 +366,7 @@ export default class Cookie extends ns.Core.Storage.Map {
 	 * @param {string} name The cookie name.
 	 * @param {(boolean|number|string)} value The cookie value, will be converted
 	 *        to string.
-	 * @param {{path: string=, domain: string=, expires: (number|string)=, secure: boolean=}} options
+	 * @param {{path: string=, domain: string=, expires: Date=, secure: boolean=}} options
 	 *        Cookie attributes. Only the attributes listed in the type
 	 *        annotation of this field are supported. For documentation and full
 	 *        list of cookie attributes see
@@ -384,11 +393,15 @@ export default class Cookie extends ns.Core.Storage.Map {
 	 *
 	 * @private
 	 * @method _getExpirationAsDate
-	 * @param {(number|string)} expiration Cookie expiration in seconds from now,
+	 * @param {(number|string|Date)} expiration Cookie expiration in seconds from now,
 	 *        or as a string compatible with the {@code Date} constructor.
 	 * @return {Date} Cookie expiration as a {@code Date} instance.
 	 */
 	_getExpirationAsDate(expiration) {
+		if (expiration instanceof Date) {
+			return expiration;
+		}
+
 		if (typeof expiration === 'number') {
 			return expiration === Infinity ?
 				MAX_EXPIRE_DATE : new Date(Date.now() + expiration * 1000);
@@ -407,11 +420,11 @@ export default class Cookie extends ns.Core.Storage.Map {
 	 * @return {{name: (string|null) value: (string|null), options: Object<string, boolean|Date>}}
 	 */
 	_extractCookie(cookieString) {
-		var cookieOptions = Object.assign({}, this._options);
-
-		var cookiePairs = cookieString.split(COOKIE_SEPARATOR.trim());
+		var cookieOptions = {};
 		var cookieName = null;
 		var cookieValue = null;
+
+		var cookiePairs = cookieString.split(COOKIE_SEPARATOR.trim());
 
 		cookiePairs.forEach((pair, index) => {
 			var [name, value] = this._extractNameAndValue(pair, index);
