@@ -204,7 +204,7 @@ export default class Client extends ns.Core.Interface.Window {
 	 * @return {string} The path and query string parts of the current URL.
 	 */
 	getPath() {
-		return decodeURI(window.location.pathname + window.location.search);
+		return window.location.pathname + window.location.search;
 	}
 
 	/**
@@ -216,7 +216,7 @@ export default class Client extends ns.Core.Interface.Window {
 	 * @return {string} The current URL.
 	 */
 	getUrl() {
-		return decodeURI(window.location.href);
+		return window.location.href;
 	}
 
 	/**
