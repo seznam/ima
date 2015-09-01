@@ -81,7 +81,7 @@ var callRemoteServer = (req, res) => {
 			break;
 		case 'DELETE':
 			httpRequest = superAgent
-				.delete(proxyUrl)
+				.del(proxyUrl)
 				.send(req.body);
 			break;
 		case 'GET':
