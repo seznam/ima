@@ -65,8 +65,7 @@ export default class Agent extends ns.Core.Interface.HttpAgent {
 		this._proxy = proxy;
 
 		/**
-		 * Internal request cache, used to cache both completed request results and
-		 * ongoing requests.
+		 * Internal request cache, used to cache completed request results.
 		 *
 		 * @private
 		 * @property _cache
@@ -101,6 +100,15 @@ export default class Agent extends ns.Core.Interface.HttpAgent {
 		 * @type {Object<string, (number|string)>}
 		 */
 		this._defaultRequestOptions = config.defaultRequestOptions;
+
+		/**
+		 * Internal request cache, used to cache ongoing requests.
+		 *
+		 * @private
+		 * @property _internalCacheOfPromises
+		 * @type {Map}
+		 */
+		this._internalCacheOfPromises = new Map();
 	}
 
 	/**
@@ -350,16 +358,14 @@ export default class Agent extends ns.Core.Interface.HttpAgent {
 	 *         in the cache.
 	 */
 	_getCachedData(method, url, data) {
-		var promiseCacheKey = this._getRequestPromiseCacheKey(method, url, data);
+		var cacheKey = this.getCacheKey(method, url, data);
 
-		if (this._cache.has(promiseCacheKey)) {
-			return this._cache.get(promiseCacheKey);
+		if (this._internalCacheOfPromises.has(cacheKey)) {
+			return this._internalCacheOfPromises.get(cacheKey);
 		}
 
-		var responseCacheKey = this.getCacheKey(method, url, data);
-
-		if (this._cache.has(responseCacheKey)) {
-			var cacheData = this._cache.get(responseCacheKey);
+		if (this._cache.has(cacheKey)) {
+			var cacheData = this._cache.get(cacheKey);
 
 			return Promise.resolve(cacheData);
 		}
@@ -386,7 +392,7 @@ export default class Agent extends ns.Core.Interface.HttpAgent {
 	 *         as JSON.
 	 */
 	_request(method, url, data, options) {
-		var requestPromiseKey = this._getRequestPromiseCacheKey(method, url, data);
+		var cacheKey = this.getCacheKey(method, url, data);
 
 		var cachePromise = (
 			this._proxy
@@ -398,7 +404,7 @@ export default class Agent extends ns.Core.Interface.HttpAgent {
 				})
 		);
 
-		this._cache.set(requestPromiseKey, cachePromise);
+		this._cache.set(cacheKey, cachePromise);
 
 		return cachePromise;
 	}
@@ -422,13 +428,13 @@ export default class Agent extends ns.Core.Interface.HttpAgent {
 			headers: response.header,
 			cached: false
 		};
-		var cachePromiseKey = this._getRequestPromiseCacheKey(
+		var cacheKey = this.getCacheKey(
 			agentResponse.params.method,
 			agentResponse.params.url,
 			agentResponse.params.data
 		);
 
-		this._cache.delete(cachePromiseKey);
+		this._internalCacheOfPromises.delete(cacheKey);
 
 		if (agentResponse.params.options.cache) {
 			this._saveAgentResponseToCache(agentResponse);
@@ -464,8 +470,8 @@ export default class Agent extends ns.Core.Interface.HttpAgent {
 
 			return this._request(method, url, data, errorParams.options);
 		} else {
-			var cachePromiseKey = this._getRequestPromiseCacheKey(method, url, data);
-			this._cache.delete(cachePromiseKey);
+			var cacheKey = this.getCacheKey(method, url, data);
+			this._internalCacheOfPromises.delete(cacheKey);
 
 			var errorName = errorParams.errorName;
 			var errorMessage = `${errorName}: Core.Http.Agent:_proxyRejected`;
@@ -507,24 +513,6 @@ export default class Agent extends ns.Core.Interface.HttpAgent {
 		);
 
 		return composedOptions;
-	}
-
-	/**
-	 * Generates the cache key identifying an HTTP request promise for an HTTP
-	 * request in progress to the specified URL with the specified data.
-	 *
-	 * @private
-	 * @method _getRequestPromiseCacheKey
-	 * @param {string} method The HTTP method used by the request.
-	 * @param {string} url The URL to which the request is sent.
-	 * @param {Object<string, (boolean|number|string|Date)>} data The data sent
-	 *        with the request.
-	 * @return {string} The cache key identifying a promise for an ongoing HTTP
-	 *         request for the specified URL and data.
-	 */
-	_getRequestPromiseCacheKey(method, url, data) {
-		return this._cacheOptions.prefixPromise +
-			this._getCacheKeySuffix(method, url, data);
 	}
 
 	/**
