@@ -13,8 +13,7 @@ export var init = (ns, oc, config) => {
 					}
 				},
 				cacheOptions: {
-					prefix: 'http.', // Cache key prefix for response bodies (already parsed as JSON) of completed HTTP requests.
-					prefixPromise: 'http.promise' // Cache key prefix for promises representing HTTP requests in progress.
+					prefix: 'http.' // Cache key prefix for response bodies (already parsed as JSON) of completed HTTP requests.
 				}
 			},
 			$Cache: {

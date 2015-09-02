@@ -15,8 +15,7 @@ export var init = (ns, oc, config) => { // jshint ignore:line
 					cache: true // if value exists in cache then returned it else make request to remote server.
 				},
 				cacheOptions: {
-					prefix: 'http.', // Cache key prefix for response bodies (already parsed as JSON) of completed HTTP requests.
-					prefixPromise: 'http.promise' // Cache key prefix for promises representing HTTP requests in progress.
+					prefix: 'http.' // Cache key prefix for response bodies (already parsed as JSON) of completed HTTP requests.
 				}
 			},
 			$Cache: {
