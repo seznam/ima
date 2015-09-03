@@ -176,10 +176,10 @@ describe('Core.Abstract.Router', function() {
 				.and
 				.callThrough();
 
-			router.route(path);
+			router.route(path, options);
 
 			expect(route.extractParameters).toHaveBeenCalled();
-			expect(router._handle).toHaveBeenCalledWith(route, {});
+			expect(router._handle).toHaveBeenCalledWith(route, {}, options);
 		});
 
 		it('should handle "not-found" route', function() {
@@ -224,9 +224,9 @@ describe('Core.Abstract.Router', function() {
 				.and
 				.stub();
 
-			router.handleError(params);
+			router.handleError(params, options);
 
-			expect(router._handle).toHaveBeenCalledWith(route, params);
+			expect(router._handle).toHaveBeenCalledWith(route, params, options);
 		});
 
 		it('should reject promise with error for undefined "error" route', function(done) {
@@ -272,9 +272,9 @@ describe('Core.Abstract.Router', function() {
 				.and
 				.stub();
 
-			router.handleNotFound(params);
+			router.handleNotFound(params, options);
 
-			expect(router._handle).toHaveBeenCalledWith(route, params);
+			expect(router._handle).toHaveBeenCalledWith(route, params, options);
 
 		});
 

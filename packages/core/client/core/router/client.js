@@ -223,16 +223,17 @@ export default class Client extends ns.Core.Abstract.Router {
 	 * @override
 	 * @method redirect
 	 * @param {string} url The URL to which the client should be redirected.
-	 * @param {number} [httpStatus=302] The HTTP status code
+	 * @param {{httpStatus: number=, onlyUpdate: boolean=, autoScroll: boolean=}} [options={}]
+	 *        The options overrides route options defined in routes.js.
 	 */
-	redirect(url = '', httpStatus = 302) {
+	redirect(url = '', options = {}) {
 		if (this._isSameDomain(url) && this._mode === MODES.HISTORY) {
 			var path = url.replace(this.getDomain(), '');
 			path = this._extractRoutePath(path);
 
 			this._saveScrollHistory();
 			this._setAddressBar(url);
-			this.route(path);
+			this.route(path, options);
 		} else {
 			this._window.redirect(url);
 		}
@@ -247,14 +248,16 @@ export default class Client extends ns.Core.Abstract.Router {
 	 * @method route
 	 * @param {string} path The URL path part received from the client, with
 	 *        optional query.
+	 * @param {{onlyUpdate: boolean=, autoScroll: boolean=}} [options={}]
+	 *        The options overrides route options defined in routes.js.
 	 * @return {Promise<Object<string, ?(number|string)>>} A promise resolved when
 	 *         the error has been handled and the response has been sent to the
 	 *         client, or displayed if used at the client side.
 	 */
-	route(path) {
+	route(path, options = {}) {
 		return (
 			super
-				.route(path)
+				.route(path, options)
 				.catch((error) => {
 					return this.handleError({ error });
 				})
@@ -273,23 +276,26 @@ export default class Client extends ns.Core.Abstract.Router {
 	 * @method handleError
 	 * @param {Object<string, (Error|string)>} params Parameters extracted from the
 	 *        current URL path and query.
+	 * @param {{onlyUpdate: boolean=, autoScroll: boolean=}} [options={}]
+	 *        The options overrides route options defined in routes.js.
 	 * @return {Promise<Object<string, ?(number|string)>>} A promise resolved when
 	 *         the error has been handled and the response has been sent to the
 	 *         client, or displayed if used at the client side.
 	 */
-	handleError(params) {
+	handleError(params, options = {}) {
 		if (this.isClientError(params.error)) {
-			return this.handleNotFound(params);
+			return this.handleNotFound(params, options);
 		}
 
 		if (this.isRedirection(params.error)) {
-			this.redirect(params.error.getParams().url, params.error.getHttpStatus());
-			return Promise.resolve({ content: null, status: params.error.getHttpStatus() });
+			options.httpStatus = params.error.getHttpStatus();
+			this.redirect(params.error.getParams().url, options);
+			return Promise.resolve({ content: null, status: options.httpStatus });
 		}
 
 		return (
 			super
-				.handleError(params)
+				.handleError(params, options)
 				.catch((error) => {
 					this._handleFatalError(error);
 				})
@@ -305,14 +311,16 @@ export default class Client extends ns.Core.Abstract.Router {
 	 * @method handleNotFound
 	 * @param {Object<string, (Error|string)>} params Parameters extracted from the
 	 *        current URL path and query.
+	 * @param {{onlyUpdate: boolean=, autoScroll: boolean=}} [options={}]
+	 *        The options overrides route options defined in routes.js.
 	 * @return {Promise<Object<string, ?(number|string)>>} A promise resolved when
 	 *         the error has been handled and the response has been sent to the
 	 *         client, or displayed if used at the client side.
 	 */
-	handleNotFound(params) {
+	handleNotFound(params, options = {}) {
 		return (
 			super
-				.handleNotFound(params)
+				.handleNotFound(params, options)
 				.catch((error) => {
 					return this.handleError({ error });
 				})

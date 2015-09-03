@@ -52,6 +52,7 @@ describe('Core.Router.Client', function() {
 		it('should be save scroll history and set address bar', function() {
 			var path = '/somePath';
 			var url = protocol + '//' + host + path;
+			var options = {httpStatus: 302};
 
 			spyOn(router, '_setAddressBar')
 				.and
@@ -65,11 +66,11 @@ describe('Core.Router.Client', function() {
 				.and
 				.stub();
 
-			router.redirect(url);
+			router.redirect(url, options);
 
 			expect(router._setAddressBar).toHaveBeenCalledWith(url);
 			expect(router._saveScrollHistory).toHaveBeenCalled();
-			expect(router.route).toHaveBeenCalledWith(path);
+			expect(router.route).toHaveBeenCalledWith(path, options);
 		});
 
 		it('return null for non exist route', function() {

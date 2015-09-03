@@ -31,15 +31,15 @@ describe('Core.Router.Server', function() {
 
 	it('should be redirect to url', function() {
 		var url = domain + '/redirectUrl';
-		var httpStatus = 303;
+		var options = {httpStatus: 303};
 
 		spyOn(response, 'redirect')
 			.and
 			.stub();
 
-		router.redirect(url, httpStatus);
+		router.redirect(url, options);
 
-		expect(response.redirect).toHaveBeenCalledWith(url, httpStatus);
+		expect(response.redirect).toHaveBeenCalledWith(url, 303);
 	});
 
 });

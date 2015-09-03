@@ -156,9 +156,10 @@ export default class Router {
 	 *
 	 * @method redirect
 	 * @param {string} url The URL to which the client should be redirected.
-	 * @param {number} [httpStatus=302] The HTTP status code
+	 * @param {{httpStatus: number=, onlyUpdate: boolean=, autoScroll: boolean=}} [options={}]
+	 *        The options overrides route options defined in routes.js.
 	 */
-	redirect(url, httpStatus = 302) {}
+	redirect(url, options = {}) {}
 
 	/**
 	 * Generates an absolute URL (including protocol, domain, etc) for the
@@ -182,11 +183,13 @@ export default class Router {
 	 * @method route
 	 * @param {string} path The URL path part received from the client, with
 	 *        optional query.
+	 * @param {{onlyUpdate: boolean=, autoScroll: boolean=}} [options={}]
+	 *        The options overrides route options defined in routes.js.
 	 * @return {Promise<Object<string, ?(number|string)>>} A promise resolved when
 	 *         the error has been handled and the response has been sent to the
 	 *         client, or displayed if used at the client side.
 	 */
-	route(path) {}
+	route(path, options = {}) {}
 
 	/**
 	 * Handles an internal server error by responding with the appropriate
@@ -195,11 +198,13 @@ export default class Router {
 	 * @method handleError
 	 * @param {Object<string, (Error|string)>} params Parameters extracted from the
 	 *        current URL path and query.
+	 * @param {{onlyUpdate: boolean=, autoScroll: boolean=}} [options={}]
+	 *        The options overrides route options defined in routes.js.
 	 * @return {Promise<Object<string, ?(number|string)>>} A promise resolved when
 	 *         the error has been handled and the response has been sent to the
 	 *         client, or displayed if used at the client side.
 	 */
-	handleError(params) {}
+	handleError(params, options = {}) {}
 
 	/**
 	 * Handles a "not found" error by responsing with the appropriate "not found"
@@ -208,11 +213,13 @@ export default class Router {
 	 * @method handleNotFound
 	 * @param {Object<string, (Error|string)>} params Parameters extracted from the
 	 *        current URL path and query.
+	 * @param {{onlyUpdate: boolean=, autoScroll: boolean=}} [options={}]
+	 *        The options overrides route options defined in routes.js.
 	 * @return {Promise<Object<string, ?(number|string)>>} A promise resolved when
 	 *         the error has been handled and the response has been sent to the
 	 *         client, or displayed if used at the client side.
 	 */
-	handleNotFound(params) {}
+	handleNotFound(params, options = {}) {}
 
 	/**
 	 * Tests, if possible, whether the specified error was caused by the client's

@@ -107,10 +107,11 @@ export default class Server extends ns.Core.Abstract.Router {
 	 * @override
 	 * @method redirect
 	 * @param {string} url The URL to which the client should be redirected.
-	 * @param {number} [httpStatus=302]
+	 * @param {{httpStatus: number=, onlyUpdate: boolean=, autoScroll: boolean=}} [options={}]
+	 *        The options overrides route options defined in routes.js.
 	 */
-	redirect(url = '/', httpStatus = 302) {
-		this._response.redirect(url, httpStatus);
+	redirect(url = '/', options = {}) {
+		this._response.redirect(url, options.httpStatus || 302);
 	}
 }
 

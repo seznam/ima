@@ -346,9 +346,10 @@ export default class Router extends ns.Core.Interface.Router {
 	 * @override
 	 * @method redirect
 	 * @param {string} url The URL to which the client should be redirected.
-	 * @param {number} [httpStatus=302] The HTTP status code
+	 * @param {{httpStatus: number=, onlyUpdate: boolean=, autoScroll: boolean=}} [options={}]
+	 *        The options overrides route options defined in routes.js.
 	 */
-	redirect(url, httpStatus = 302) {
+	redirect(url, options) {
 		throw new IMAError('The redirect() method is abstract and must be overridden.');
 	}
 
@@ -387,11 +388,13 @@ export default class Router extends ns.Core.Interface.Router {
 	 * @method route
 	 * @param {string} path The URL path part received from the client, with
 	 *        optional query.
+	 * @param {{onlyUpdate: boolean=, autoScroll: boolean=}} [options={}]
+	 *        The options overrides route options defined in routes.js.
 	 * @return {Promise<Object<string, ?(number|string)>>} A promise resolved when
 	 *         the error has been handled and the response has been sent to the
 	 *         client, or displayed if used at the client side.
 	 */
-	route(path) {
+	route(path, options = {}) {
 		var routeForPath = this._getRouteByPath(path);
 		var params = { path };
 
@@ -401,7 +404,7 @@ export default class Router extends ns.Core.Interface.Router {
 
 		params = routeForPath.extractParameters(path);
 
-		return this._handle(routeForPath, params);
+		return this._handle(routeForPath, params, options);
 	}
 
 	/**
@@ -413,11 +416,13 @@ export default class Router extends ns.Core.Interface.Router {
 	 * @method handleError
 	 * @param {Object<string, (Error|string)>} params Parameters extracted from the
 	 *        current URL path and query.
+	 * @param {{onlyUpdate: boolean=, autoScroll: boolean=}} [options={}]
+	 *        The options overrides route options defined in routes.js.
 	 * @return {Promise<Object<string, ?(number|string)>>} A promise resolved when
 	 *         the error has been handled and the response has been sent to the
 	 *         client, or displayed if used at the client side.
 	 */
-	handleError(params) {
+	handleError(params, options = {}) {
 		var routeError = this._routes.get(this._ROUTE_NAMES.ERROR);
 
 		if (!routeError) {
@@ -428,7 +433,7 @@ export default class Router extends ns.Core.Interface.Router {
 			return Promise.reject(error);
 		}
 
-		return this._handle(routeError, params);
+		return this._handle(routeError, params, options);
 	}
 
 	/**
@@ -440,11 +445,13 @@ export default class Router extends ns.Core.Interface.Router {
 	 * @method handleNotFound
 	 * @param {Object<string, (Error|string)>} params Parameters extracted from the
 	 *        current URL path and query.
+	 * @param {{onlyUpdate: boolean=, autoScroll: boolean=}} [options={}]
+	 *        The options overrides route options defined in routes.js.
 	 * @return {Promise<Object<string, ?(number|string)>>} A promise resolved when
 	 *         the error has been handled and the response has been sent to the
 	 *         client, or displayed if used at the client side.
 	 */
-	handleNotFound(params) {
+	handleNotFound(params, options = {}) {
 		var routeNotFound = this._routes.get(this._ROUTE_NAMES.NOT_FOUND);
 
 		if (!routeNotFound) {
@@ -456,7 +463,7 @@ export default class Router extends ns.Core.Interface.Router {
 			return Promise.reject(error);
 		}
 
-		return this._handle(routeNotFound, params);
+		return this._handle(routeNotFound, params, options);
 	}
 
 	/**
@@ -532,14 +539,16 @@ export default class Router extends ns.Core.Interface.Router {
 	 *        controller rendered via the associated view.
 	 * @param {Object<string, (Error|string)>} params Parameters extracted from the URL
 	 *        path and query.
+	 * @param {{onlyUpdate: boolean=, autoScroll: boolean=}} options
+	 *        The options overrides route options defined in routes.js.
 	 * @return {Promise<undefined>} A promise that resolves when the page is
 	 *         rendered and the result is sent to the client, or displayed if
 	 *         used at the client side.
 	 */
-	_handle(route, params) {
+	_handle(route, params, options) {
 		var controller = route.getController();
 		var view = route.getView();
-		var options = route.getOptions();
+		var options = Object.assign({}, route.getOptions(), options);
 
 		return this._pageManager
 				.manage(controller, view, options, params)
