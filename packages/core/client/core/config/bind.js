@@ -124,6 +124,9 @@ export var init = (ns, oc, config) => { //jshint ignore:line
 	oc.provide(ns.Core.Interface.HttpAgent, ns.Core.Http.Agent, ['$HttpProxy', '$Cache', '$CookieStorage', config.$Http]);
 	oc.bind('$Http', ns.Core.Interface.HttpAgent);
 
+	//Dev tools
+	oc.bind('$DevTool', ns.Core.Debug.DevTool, ['$PageManager', '$PageStateManager']);
+
 	//*************END CORE****************
 
 };

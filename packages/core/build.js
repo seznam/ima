@@ -22,7 +22,8 @@ module.exports = (function() {
 		'imajs/client/core/event/*.js',
 		'imajs/client/core/storage/map.js',
 		'imajs/client/core/storage/*.js',
-		'imajs/client/core/window/*.js'
+		'imajs/client/core/window/*.js',
+		'imajs/client/core/debug/*.js'
 	];
 
 	var mainjs = ['imajs/client/main.js'];
