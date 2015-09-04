@@ -1,12 +1,12 @@
-describe('Core.Event.Bus', function() {
+describe('Core.Event.Bus', function () {
 
 	var listeners = {
-		listener1: function() {},
-		listener2: function() {}
+		listener1: function () {},
+		listener2: function () {}
 	};
 
 	var eventSource = {
-		dispatchEvent: function(e) {}
+		dispatchEvent: function (e) {}
 	};
 	var notEventSource = {
 	};
@@ -19,13 +19,13 @@ describe('Core.Event.Bus', function() {
 	
 	var windowInterface = null;
 	var eventBus = null;
-	beforeEach(function() {
+	beforeEach(function () {
 		windowInterface = oc.create('Core.Interface.Window');
 		eventBus = oc.create('Core.Event.Bus', [ windowInterface ]);
 	});
 
-	describe('listen method', function() {
-		it('should bind listener for specific event', function() {
+	describe('listen method', function () {
+		it('should bind listener for specific event', function () {
 			spyOn(windowInterface, 'bindEventListener');
 
 			eventBus.listen(eventTarget, event, listeners.listener1);
@@ -39,8 +39,8 @@ describe('Core.Event.Bus', function() {
 		});
 	});
 
-	describe('listenAll method', function() {
-		it('should bind listener for any event', function() {
+	describe('listenAll method', function () {
+		it('should bind listener for any event', function () {
 			spyOn(windowInterface, 'bindEventListener');
 
 			eventBus.listenAll(eventTarget, listeners.listener1);
@@ -53,9 +53,9 @@ describe('Core.Event.Bus', function() {
 	});
 
 	
-	describe('fire method', function() {
+	describe('fire method', function () {
 
-		it('should fire event for listeners', function() {
+		it('should fire event for listeners', function () {
 			spyOn(eventSource, 'dispatchEvent');
 
 			var event = 'event1';
@@ -72,10 +72,35 @@ describe('Core.Event.Bus', function() {
 			expect(eventSource.dispatchEvent.calls.argsFor(0)[0].cancelable).toEqual(true);
 		});
 
-		it('should throw error for incorrect eventSource', function() {
-			expect(function() {
+		it('should throw error for incorrect eventSource', function () {
+			expect(function () {
 				eventBus.fire(notEventSource, event, data);
 			}).toThrow();
+		});
+	});
+
+	describe('unlisten method', function () {
+		it('should unbind bound listeners', function () {
+			spyOn(windowInterface, 'unbindEventListener');
+
+			eventBus.listen(eventTarget, event, listeners.listener1);
+			eventBus.unlisten(eventTarget, event, listeners.listener1);
+
+			expect(windowInterface.unbindEventListener.calls.count()).toEqual(1);
+			expect(windowInterface.unbindEventListener.calls.argsFor(0)[0]).toEqual(eventTarget);
+			expect(windowInterface.unbindEventListener.calls.argsFor(0)[1]).toEqual(IMA_EVENT);
+		});
+	});
+
+	describe('unlistenAll method', function () {
+		it('should unbind bound listeners', function () {
+			spyOn(windowInterface, 'unbindEventListener');
+
+			eventBus.listenAll(eventTarget, listeners.listener1);
+			eventBus.unlistenAll(eventTarget, listeners.listener1);
+
+			expect(windowInterface.unbindEventListener.calls.count()).toEqual(1);
+			expect(windowInterface.unbindEventListener.calls.argsFor(0)).toEqual([eventTarget, IMA_EVENT, listeners.listener1]);
 		});
 	});
 
