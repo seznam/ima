@@ -98,8 +98,15 @@ export default class Dispatcher extends ns.Core.Interface.Dispatcher {
 			}
 		}
 
-		var scopes = this._prepareScopesFor(event, listener);
-		scopes.add(scope);
+		if (!this._eventListeners.has(event)) {
+			this._createNewEvent(event);
+		}
+		var listeners = this._getListenersOf(event);
+
+		if (!listeners.has(listener)) {
+			this._createNewListener(event, listener);
+		}
+		this._getScopesOf(event, listener).add(scope);
 
 		return this;
 	}
@@ -137,10 +144,10 @@ export default class Dispatcher extends ns.Core.Interface.Dispatcher {
 
 		scopes.delete(scope);
 		if (!scopes.size) {
-			var listenersToScopes = this._getListenersOf(event);
-			listenersToScopes.delete(listener);
+			var listeners = this._getListenersOf(event);
+			listeners.delete(listener);
 
-			if (!listenersToScopes.size) {
+			if (!listeners.size) {
 				this._eventListeners.delete(event);
 			}
 		}
@@ -171,9 +178,9 @@ export default class Dispatcher extends ns.Core.Interface.Dispatcher {
 	 *         specified event and is not $IMA internal event.
 	 */
 	fire(event, data, imaInternalEvent = false) {
-		var listenersToScopes = this._getListenersOf(event);
+		var listeners = this._getListenersOf(event);
 
-		if (!listenersToScopes.size && !imaInternalEvent) {
+		if (!listeners.size && !imaInternalEvent) {
 			throw new IMAError('There are no event listeners registered for the ' +
 					`${event} event`, {
 						event: event,
@@ -181,7 +188,7 @@ export default class Dispatcher extends ns.Core.Interface.Dispatcher {
 					});
 		}
 
-		for (var [listener, scopes] of listenersToScopes) {
+		for (var [listener, scopes] of listeners) {
 			for (var scope of scopes) {
 				listener.bind(scope)(data);
 			}
@@ -191,26 +198,28 @@ export default class Dispatcher extends ns.Core.Interface.Dispatcher {
 	}
 
 	/**
-	 * Prepares the scopes in which the specified event listener should be
-	 * executed for the specified event.
+	 * Create new Map storage of listeners for the specified event.
 	 *
 	 * @private
-	 * @method _prepareScopesFor
+	 * @method _createNewEvent
+	 * @param {string} event The name of the event.
+	 */
+	_createNewEvent(event) {
+		var listeners = new Map();
+		this._eventListeners.set(event, listeners);
+	}
+
+	/**
+	 * Create new Set storage of scopes for the specified event and listener.
+	 *
+	 * @private
+	 * @method _createNewListener
 	 * @param {string} event The name of the event.
 	 * @param {function(*)} listener The event listener.
-	 * @return {Set<?Object>} The scopes in which the specified listeners should
-	 *         be executed in case of the specified event.
 	 */
-	_prepareScopesFor(event, listener) {
-		var listenersToScopes = this._prepareListenersFor(event);
-
-		if (!listenersToScopes.has(listener)) {
-			var scopes = new Set();
-			listenersToScopes.set(listener, scopes);
-			return scopes;
-		}
-
-		return listenersToScopes.get(listener);
+	_createNewListener(event, listener) {
+		var scopes = new Set();
+		this._eventListeners.get(event).set(listener, scopes);
 	}
 
 	/**
@@ -234,29 +243,6 @@ export default class Dispatcher extends ns.Core.Interface.Dispatcher {
 		}
 
 		return EMPTY_SET;
-	}
-
-	/**
-	 * Prepares a listeners to scopes map for listeners for the specified event.
-	 * The method returns a previously created map for the same event if there
-	 * already is one in the {@codelink _eventListeners} map. The method
-	 * otherwise creates a new listeners to scopes map and addes it to the
-	 * {@codelink _eventListeners} map before returning it.
-	 *
-	 * @private
-	 * @method _prepareListenersFor
-	 * @param {string} event The name of the event.
-	 * @return {Map<function(*), Set<?Object>>} A map of event listeners to the
-	 *         scopes in which they should be executed.
-	 */
-	_prepareListenersFor(event) {
-		if (!this._eventListeners.has(event)) {
-			var listeners = new Map();
-			this._eventListeners.set(event, listeners);
-			return listeners;
-		}
-
-		return this._eventListeners.get(event);
 	}
 
 	/**
