@@ -37,6 +37,22 @@ export default class WeakMapStorage extends ns.Core.Storage.Map {
 	}
 
 	/**
+	 * Returns {@code true} if the entry identified by the specified key exists
+	 * in this storage.
+	 *
+	 * @inheritDoc
+	 * @override
+	 * @method has
+	 * @param {string} key The key identifying the storage entry.
+	 * @return {boolean} {@code true} if the storage entry exists.
+	 */
+	has(key) {
+		this._discardExpiredEntries();
+
+		return super.has(key);
+	}
+
+	/**
 	 * Retrieves the value of the entry identified by the specified key. The
 	 * method returns {@code undefined} if the entry does not exists.
 	 *
@@ -50,13 +66,9 @@ export default class WeakMapStorage extends ns.Core.Storage.Map {
 	 * @return {*} The value of the storage entry.
 	 */
 	get(key) {
-		if (!this.has(key)) {
-			return undefined;
-		}
+		this._discardExpiredEntries();
 
-		var targetReference = super.get(key);
-		if (!targetReference.target) { // the reference has died
-			this.delete(key);
+		if (!this.has(key)) {
 			return undefined;
 		}
 
@@ -76,9 +88,71 @@ export default class WeakMapStorage extends ns.Core.Storage.Map {
 	 * @return {Core.Storage.WeakMap} This storage.
 	 */
 	set(key, value) {
-		super.set(key, new WeakRef(value, this._entryTtl));
+		this._discardExpiredEntries();
 
-		return this;
+		return super.set(key, new WeakRef(value, this._entryTtl));
+	}
+
+	/**
+	 * Deletes the entry identified by the specified key from this storage.
+	 *
+	 * @inheritDoc
+	 * @override
+	 * @chainable
+	 * @method delete
+	 * @param {string} key The key identifying the storage entry.
+	 * @return {Core.Storage.Map} This storage.
+	 */
+	delete(key) {
+		this._discardExpiredEntries();
+
+		return super.delete(key);
+	}
+
+	/**
+	 * Returns an iterator for traversing the keys in this storage. The order in
+	 * which the keys are traversed is undefined.
+	 *
+	 * @inheritDoc
+	 * @override
+	 * @method keys
+	 * @return {Iterator<string>} An iterator for traversing the keys in this
+	 *         storage. The iterator also implements the iterable protocol,
+	 *         returning itself as its own iterator, allowing it to be used in a
+	 *         {@code for..of} loop.
+	 */
+	keys() {
+		this._discardExpiredEntries();
+
+		return super.keys();
+	}
+
+	/**
+	 * Returns the number of entries in this storage.
+	 *
+	 * @override
+	 * @method size
+	 * @return {number} The number of entries in this storage.
+	 */
+	size() {
+		this._discardExpiredEntries();
+
+		return super.size();
+	}
+
+	/**
+	 * Deletes all expired entries from this storage.
+	 *
+	 * @private
+	 * @method _discardExpiredEntries
+	 */
+	_discardExpiredEntries() {
+		for (var key of super.keys()) {
+			var targetReference = super.get(key);
+			if (!targetReference.target) { // the reference has died
+				this.delete(key);
+			}
+		}
 	}
 }
 
