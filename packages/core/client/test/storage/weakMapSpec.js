@@ -4,20 +4,23 @@ xdescribe('Core.Storage.WeakMap', function () {
 
 	beforeEach(function () {
 		map = oc.create('Core.Storage.WeakMap', [{
-			entryTtl: 100,
-			maxEntries: 3,
-			gcInterval: 75,
-			gcEntryCountTreshold: 2
+			entryTtl: 100
 		}]);
-		map.set("a", 1);
+		map.set("a", { num: 1 });
 	});
 
 	afterEach(function () {
 		map.clear();
 	});
 
+	it("should reject primitive values", function () {
+		expect(function () {
+			map.set("b", "some string");
+		}).toThrow();
+	});
+
 	it("should allow retrieving existing entries", function () {
-		expect(map.get("a")).toBe(1);
+		expect(map.get("a")).toEqual({ num: 1 });
 	});
 
 	it("should return undefined for non-existing entries", function () {
@@ -25,13 +28,13 @@ xdescribe('Core.Storage.WeakMap', function () {
 	});
 
 	it("should allow storing new values", function () {
-		map.set("foo", "bar");
-		expect(map.get("foo")).toBe("bar");
+		map.set("foo", { string: "bar" });
+		expect(map.get("foo")).toEqual({ string: "bar" });
 	});
 
 	it("should allow over-writing existing values", function () {
-		map.set("a", 42);
-		expect(map.get("a")).toBe(42);
+		map.set("a", { num2: 42 });
+		expect(map.get("a")).toBe({ num2: 42 });
 	});
 
 	it("should allow deleting existing values", function () {
@@ -44,107 +47,12 @@ xdescribe('Core.Storage.WeakMap', function () {
 		expect(map.get("a")).toBeUndefined();
 	});
 
-	it("should not start garbage collector before there are enough values",
-		function (done) {
-			delay(200).then(function () {
-				expect(map.get("a")).toBe(1);
+	it("should discard expired entries", function () {
+		expect(map.size()).toBe(1);
 
-				map.set("b", 2);
-
-				return delay(200);
-			}).then(function () {
-				expect(map.get("a")).toBe(1);
-				expect(map.get("b")).toBe(2);
-
-				done();
-			});
-		});
-
-	// TODO: Should be updated/corrected.
-	it("should start garbage collector once there are enough values",
-		function (done) {
-			delay(50).then(function () {
-				map
-					.set("b", 2)
-					.set("c", 3);
-
-				return delay(100);
-			}).then(function () {
-				expect(map.get("a")).toBeUndefined();
-				expect(map.get("b")).toBe(2);
-				expect(map.get("c")).toBe(3);
-
-				return delay(100);
-			}).then(function () {
-				expect(map.get("b")).toBeUndefined();
-				expect(map.get("c")).toBeUndefined();
-
-				done();
-			});
-		});
-
-	it("should stop garbage collector once the storage is empty",
-		function (done) {
-			delay(50).then(function () {
-				map
-					.set("b", 2)
-					.set("c", 3);
-
-				return delay(90);
-			}).then(function () {
-				expect(map.get("a")).toBeUndefined();
-
-				map
-					.delete("b")
-					.delete("c");
-
-				map.set("x", 42);
-
-				return delay(200);
-			}).then(function () {
-				expect(map.get("x")).toBe(42);
-
-				done();
-			});
-		});
-
-	// TODO: Should be updated/corrected.
-	it("should use garbage collector to dispose the oldest overflowing entries",
-		function (done) {
-			delay(1).then(function () {
-				map.set("b", 2);
-
-				return delay(1);
-			}).then(function () {
-				map.set("c", 3);
-
-				return delay(1);
-			}).then(function () {
-				map.set("d", 4);
-
-				return delay(1);
-			}).then(function () {
-				expect(map.get("a")).toBe(1); // gc's first run must be delayed
-
-				map.set("e", 5);
-
-				return delay(80);
-			}).then(function () {
-				expect(map.get("a")).toBeUndefined();
-				expect(map.get("b")).toBeUndefined();
-				expect(map.get("c")).toBe(3);
-				expect(map.get("d")).toBe(4);
-				expect(map.get("e")).toBe(5);
-				expect(Array.from(map.keys()).sort()).toEqual(["c", "d", "e"]);
-
-				done();
-			});
-		});
-
-	function delay(timeout) {
-		return new Promise(function (resolve) {
-			setTimeout(resolve, timeout);
-		});
-	}
+		jasmine.clock().mockDate(new Date());
+		jasmine.clock().tick(101);
+		expect(map.size()).toBe(0);
+	});
 
 });
