@@ -376,7 +376,7 @@ describe('Core.Abstract.Router', function() {
 			var response = {content: null, status: 200};
 			var params = {};
 			var path ='/';
-			var data = {route: route, params: params, path: path};
+			var data = {route: route, params: params, path: path, options: options};
 
 			spyOn(router, 'getPath')
 				.and
@@ -388,7 +388,7 @@ describe('Core.Abstract.Router', function() {
 				.and
 				.stub();
 
-			router._handle(route, params);
+			router._handle(route, params, options);
 
 			expect(dispatcher.fire).toHaveBeenCalledWith(router.EVENTS.PRE_HANDLE_ROUTE, data, true);
 		});
@@ -397,7 +397,6 @@ describe('Core.Abstract.Router', function() {
 			var response = {content: null, status: 200};
 			var params = {};
 			var path ='/';
-			var data = {route: route, params: params, path: path};
 
 			spyOn(router, 'getPath')
 				.and
@@ -410,9 +409,9 @@ describe('Core.Abstract.Router', function() {
 				.stub();
 
 			router
-				._handle(route, params)
+				._handle(route, params, options)
 				.then(function() {
-					var data = {route: route, params: params, path: path, response: response};
+					var data = {route: route, params: params, path: path, response: response, options: options};
 
 					expect(dispatcher.fire)
 						.toHaveBeenCalledWith(router.EVENTS.POST_HANDLE_ROUTE, data, true);

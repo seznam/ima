@@ -548,7 +548,7 @@ export default class Router extends ns.Core.Interface.Router {
 		var controller = route.getController();
 		var view = route.getView();
 		options = Object.assign({}, route.getOptions(), options);
-		var data = { route, params, path: this.getPath() };
+		var data = { route, params, path: this.getPath(), options };
 
 		this._dispatcher
 			.fire(this.EVENTS.PRE_HANDLE_ROUTE, data, true);
