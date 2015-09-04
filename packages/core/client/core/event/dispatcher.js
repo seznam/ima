@@ -132,7 +132,7 @@ export default class Dispatcher extends ns.Core.Interface.Dispatcher {
 
 		if ($Debug) {
 			if (!scopes.has(scope)) {
-				throw new IMAError('Core.Event.Dispatcher.unlisten(): the provided ' +
+				console.warn('Core.Event.Dispatcher.unlisten(): the provided ' +
 						`listener '${listener}' is not registered for the specified event ` +
 						`'${event}' and scope '${scope}'. Check your workflow.`, {
 							event: event,
@@ -181,7 +181,7 @@ export default class Dispatcher extends ns.Core.Interface.Dispatcher {
 		var listeners = this._getListenersOf(event);
 
 		if (!listeners.size && !imaInternalEvent) {
-			throw new IMAError('There are no event listeners registered for the ' +
+			console.warn('There are no event listeners registered for the ' +
 					`${event} event`, {
 						event: event,
 						data: data
