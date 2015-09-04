@@ -12,86 +12,32 @@ ns.namespace('Core.Storage');
  * @namespace Core.Storage
  * @module Core
  * @submodule Core.Storage
- *
- * @requires WeakMap
  */
 export default class WeakMapStorage extends ns.Core.Storage.Map {
 	/**
 	 * Initializes the storage.
 	 *
-	 * @method constructor
 	 * @constructor
-	 * @param {{entryTtl: number, maxEntries: number, gcInterval: number, gcEntryCountTreshold: number}} config
-	 *        Weak map storage configuration. The fields have the following
-	 *        meaning:
+	 * @method constructor
+	 * @param {{entryTtl: number}} config Weak map storage configuration. The
+	 *        fields have the following meaning:
 	 *        - entryTtl The time-to-live of a storage entry in milliseconds.
-	 *        - maxEntries The maximum number of entries allowed in the storage.
-	 *        - gcInterval The delay between runs of the garbage collector in
-	 *          milliseconds.
-	 *        - gcEntryCountTreshold The maximum number of entries the storage
-	 *          can contain before the garbage collector is started.
 	 */
 	constructor(config) {
 		super();
 
 		/**
-		 * The time-to-live of a storage entry. Entries present in the storage for
-		 * a longer period of time are considered stale and will be deleted by the
-		 * garbage collector (if the garbage collector is active). The time-to-live
-		 * is specified in milliseconds.
+		 * The time-to-live of a storage entry in milliseconds.
 		 *
 		 * @private
 		 * @property _entryTtl
 		 * @type {number}
 		 */
 		this._entryTtl = config.entryTtl;
-
-		/**
-		 * The maximum number of entries allowed in the storage. When the storage
-		 * size exceeds this limit, the garbage collector will remove the oldest
-		 * entries to reducte the storage size to this limit.
-		 *
-		 * @private
-		 * @property _maxEntries
-		 * @type {number}
-		 */
-		this._maxEntries = config.maxEntries;
-
-		/**
-		 * The interval duration in which the garbage collector discards the stale
-		 * and overflowing storage entries. The interval duration is specified in
-		 * milliseconds.
-		 *
-		 * @private
-		 * @property _gcInterval
-		 * @type {number}
-		 */
-		this._gcInterval = config.gcInterval;
-
-		/**
-		 * The maximum number of entries the storage can contain before the garbage
-		 * collector is started.
-		 *
-		 * @private
-		 * @property _gcEntryCountTreshold
-		 * @type {number}
-		 */
-		this._gcEntryCountTreshold = config.gcEntryCountTreshold;
-
-		/**
-		 * ID of the global interval used to run the garbage collector
-		 * periodically. The field is set to {@code null} if the garbage collector
-		 * is not being currently used.
-		 *
-		 * @private
-		 * @property _gcIntervalId
-		 * @type {?number}
-		 */
-		this._gcIntervalId = null;
 	}
 
 	/**
-	 * Retrieves the value of the entry indetified by the specified key. The
+	 * Retrieves the value of the entry identified by the specified key. The
 	 * method returns {@code undefined} if the entry does not exists.
 	 *
 	 * Entries set to the {@code undefined} value can be tested for existence
@@ -108,11 +54,17 @@ export default class WeakMapStorage extends ns.Core.Storage.Map {
 			return undefined;
 		}
 
-		return super.get(key).value;
+		var targetReference = super.get(key);
+		if (!targetReference.target) { // the reference has died
+			this.delete(key);
+			return undefined;
+		}
+
+		return targetReference.target;
 	}
 
 	/**
-	 * Sets the storage entry identied by the specified key to the provided
+	 * Sets the storage entry identified by the specified key to the provided
 	 * value. The method creates the entry if it does not exist already.
 	 *
 	 * @inheritDoc
@@ -124,159 +76,82 @@ export default class WeakMapStorage extends ns.Core.Storage.Map {
 	 * @return {Core.Storage.WeakMap} This storage.
 	 */
 	set(key, value) {
-		this._storage.set(key, {
-			value,
-			lastUpdate: Date.now()
-		});
-
-		if (this._storage.size > this._gcEntryCountTreshold) {
-			this._startGc();
-		}
+		super.set(key, new WeakRef(value, this._entryTtl));
 
 		return this;
-	}
-
-	/**
-	 * Deletes the entry identified by the specified key from this storage.
-	 *
-	 * @inheritDoc
-	 * @override
-	 * @chainable
-	 * @method delete
-	 * @param {string} key The key identifying the storage entry.
-	 * @return {Core.Storage.WeakMap} This storage.
-	 */
-	delete(key) {
-		super.delete(key);
-
-		if (!this._storage.size) {
-			this._stopGc();
-		}
-
-		return this;
-	}
-
-	/**
-	 * Clears the storage of all entries.
-	 *
-	 * @inheritDoc
-	 * @override
-	 * @chainable
-	 * @method clear
-	 * @return {Core.Storage.WeakMap} This storage.
-	 */
-	clear() {
-		super.clear();
-		this._stopGc();
-		return this;
-	}
-
-	/**
-	 * Returns storage size.
-	 *
-	 * @override
-	 * @method size
-	 * @return {number}
-	 */
-	size() {
-		return super.size();
-	}
-
-	/**
-	 * Initiates the garbage collector. The garbage collector will execute each
-	 * {@codelink _gcInterval} milliseconds, after a {@codelink _gcInterval}
-	 * milliseconds delay after invoking this method.
-	 *
-	 * The method has no effect if the garbage collector is already active.
-	 *
-	 * @private
-	 * @method _startGc
-	 */
-	_startGc() {
-		if (!this._gcIntervalId) {
-			this._gcIntervalId = setInterval(() => this._runGc(), this._gcInterval);
-		}
-	}
-
-	/**
-	 * Stops the garbage collector. The method has no effect if the gargabe
-	 * collector is not currently active.
-	 *
-	 * @private
-	 * @method _stopGc
-	 */
-	_stopGc() {
-		if (this._gcIntervalId) {
-			clearInterval(this._gcIntervalId);
-			this._gcIntervalId = null;
-		}
-	}
-
-	/**
-	 * Performs garbage collection by deleting stale entries, and, if the storage
-	 * size exceeds the {@codelink _maxEntries} field value, continues to delete
-	 * the oldest entries until the size is reduced below the treshold.
-	 *
-	 * @private
-	 * @method _runGc
-	 */
-	_runGc() {
-		var now = Date.now();
-		var expirationTreshold = now - this._entryTtl;
-
-		for (var entry of this._storage) {
-			if (entry[1].lastUpdate < expirationTreshold) {
-				this.delete(entry[0]);
-			}
-		}
-
-		if (this._storage.size > this._maxEntries) {
-			this._runOverflowGc();
-		}
-	}
-
-	/**
-	 * Handles the overflowing entries in the storage by finding the oldest
-	 * entries and deleting them. The method removes only so many entries that
-	 * the storage size is reducted to the {@codelink _maxEntries} field value.
-	 *
-	 * @private
-	 * @method _runOverflowGc
-	 */
-	_runOverflowGc() {
-		var removalBuffer = [];
-		var expectedBufferSize = this._storage.size - this._maxEntries;
-		var entry = null;
-
-		for (entry of this._storage) {
-			insertSorted(entry);
-		}
-
-		for (entry of removalBuffer) {
-			this.delete(entry[0]);
-		}
-
-		function insertSorted(item) {
-			for (var i = 0; i < removalBuffer.length; i++) {
-				if (comparator(item, removalBuffer[i]) > 0) {
-					continue;
-				}
-
-				removalBuffer.splice(i, 0, item);
-				break;
-			}
-
-			if (removalBuffer.length < expectedBufferSize) {
-				removalBuffer.push(item);
-			} else if (removalBuffer.length > expectedBufferSize) {
-				removalBuffer.splice(expectedBufferSize);
-			}
-		}
-
-		function comparator(entry1, entry2) {
-			return entry1[1].lastUpdate - entry2[1].lastUpdate;
-		}
 	}
 }
 
 ns.Core.Storage.WeakMap = WeakMapStorage;
+
+/**
+ * A simple reference wrapper that emulates a weak reference. We seem to have
+ * no other option, since WeakMap and WeakSet are not enumerable (so what is
+ * the point of WeakMap and WeakSet if you still need to manage the keys?!) and
+ * there is no native way to create a weak reference.
+ *
+ * @private
+ * @class WeakRef
+ * @namespace Core.Storage
+ * @module Core
+ * @submodule Core.Storage
+ */
+class WeakRef {
+	/**
+	 * Initializes the weak reference to the target reference.
+	 *
+	 * @constructor
+	 * @method constructor
+	 * @param {Object} target The target reference that should be referenced by
+	 *        this weak reference.
+	 * @param {number} ttl The maximum number of milliseconds the weak
+	 *        reference should be kept. The reference will be discarded once
+	 *        ACCESSED after the specified timeout.
+	 */
+	constructor(target, ttl) {
+		if ($Debug) {
+			if (!(target instanceof Object)) {
+				throw new TypeError("The target reference must point to an " +
+						"object, primitive values are not allowed");
+			}
+			if (ttl <= 0) {
+				throw new Error('The time-to-live must be positive');
+			}
+		}
+
+		/**
+		 * The actual target reference, or {@code null} if the reference has
+		 * been already discarded.
+		 *
+		 * @private
+		 * @property _reference
+		 * @type {?Object}
+		 */
+		this._reference = target;
+
+		/**
+		 * The UNIX timestamp with millisecond precision marking the moment at
+		 * or after which the reference will be discarded.
+		 *
+		 * @private
+		 * @property _expiration
+		 * @type {number}
+		 */
+		this._expiration = Date.now() + ttl;
+	}
+
+	/**
+	 * Returns the target reference, provided that the target reference is
+	 * still alive. Returns {@code null} if the reference has been discarded.
+	 *
+	 * @return {?Object} The target reference, or {@code null} if the reference
+	 *         has been discarded by the garbage collector.
+	 */
+	get target() {
+		if (this._reference && (Date.now() >= this._expiration)) {
+			this._reference = null; // let the GC do its job
+		}
+
+		return this._reference;
+	}
+}
