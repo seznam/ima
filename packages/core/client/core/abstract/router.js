@@ -547,7 +547,7 @@ export default class Router extends ns.Core.Interface.Router {
 	_handle(route, params, options) {
 		var controller = route.getController();
 		var view = route.getView();
-		var options = Object.assign({}, route.getOptions(), options);
+		options = Object.assign({}, route.getOptions(), options);
 		var data = { route, params, path: this.getPath() };
 
 		this._dispatcher
