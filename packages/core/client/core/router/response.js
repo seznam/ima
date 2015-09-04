@@ -63,6 +63,15 @@ export default class Response {
 		this._content = '';
 
 		/**
+		 * Internal cookie storage for Set-Cookie header.
+		 *
+		 * @private
+		 * @property _internalCookieStorage
+		 * @type {Map}
+		 */
+		this._internalCookieStorage = new Map();
+
+		/**
 		 * Transform function for cookie value.
 		 *
 		 * @private
@@ -92,6 +101,7 @@ export default class Response {
 		this._isSent = false;
 		this._status = 500;
 		this._content = '';
+		this._internalCookieStorage = new Map();
 
 		return this;
 	}
@@ -124,6 +134,7 @@ export default class Response {
 
 		this._isSent = true;
 		this._status = status;
+		this._setCookieHeaders();
 		this._response.redirect(status, url);
 
 		return this;
@@ -182,6 +193,7 @@ export default class Response {
 
 		this._isSent = true;
 		this._content = content;
+		this._setCookieHeaders();
 		this._response.send(content);
 
 		return this;
@@ -215,8 +227,7 @@ export default class Response {
 		}
 
 		var advanceOptions = Object.assign({}, this._cookieTransformFunction, options);
-
-		this._response.cookie(name, value, advanceOptions);
+		this._internalCookieStorage.set(name, { value, options: advanceOptions });
 
 		return this;
 	}
@@ -239,6 +250,18 @@ export default class Response {
 	 */
 	isResponseSent() {
 		return this._isSent;
+	}
+
+	/**
+	 * Set cookie headers for response.
+	 *
+	 * @private
+	 * @method _setCookieHeaders
+	 */
+	_setCookieHeaders() {
+		for (var [name, param] of this._internalCookieStorage) {
+			this._response.cookie(name, param.value, param.options);
+		}
 	}
 }
 
