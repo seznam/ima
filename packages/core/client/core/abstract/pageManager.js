@@ -94,7 +94,7 @@ export default class PageManager extends ns.Core.Interface.PageManager {
 		this._destroyController();
 
 		this._storeManagedPageValue(controller, view, options, params, controllerInstance,
-			decoratedController, viewInstance);
+				decoratedController, viewInstance);
 
 		this._initController(params);
 
