@@ -1,4 +1,4 @@
-xdescribe('Core.Storage.WeakMap', function () {
+describe('Core.Storage.WeakMap', function () {
 
 	var map;
 
@@ -34,7 +34,7 @@ xdescribe('Core.Storage.WeakMap', function () {
 
 	it("should allow over-writing existing values", function () {
 		map.set("a", { num2: 42 });
-		expect(map.get("a")).toBe({ num2: 42 });
+		expect(map.get("a")).toEqual({ num2: 42 });
 	});
 
 	it("should allow deleting existing values", function () {
@@ -50,6 +50,7 @@ xdescribe('Core.Storage.WeakMap', function () {
 	it("should discard expired entries", function () {
 		expect(map.size()).toBe(1);
 
+		jasmine.clock().install();
 		jasmine.clock().mockDate(new Date());
 		jasmine.clock().tick(101);
 		expect(map.size()).toBe(0);

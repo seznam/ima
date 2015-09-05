@@ -68,11 +68,11 @@ export default class WeakMapStorage extends ns.Core.Storage.Map {
 	get(key) {
 		this._discardExpiredEntries();
 
-		if (!this.has(key)) {
+		if (!super.has(key)) {
 			return undefined;
 		}
 
-		return targetReference.target;
+		return super.get(key).target;
 	}
 
 	/**
@@ -150,7 +150,7 @@ export default class WeakMapStorage extends ns.Core.Storage.Map {
 		for (var key of super.keys()) {
 			var targetReference = super.get(key);
 			if (!targetReference.target) { // the reference has died
-				this.delete(key);
+				super.delete(key);
 			}
 		}
 	}
