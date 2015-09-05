@@ -50,7 +50,7 @@ export default class EventBus {
 	 *
 	 * @chainable
 	 * @method listen
-	 * @param {EventTarget} eventTarget The event target listining for all events.
+	 * @param {EventTarget} eventTarget The event target listening for all events.
 	 * @param {function(<CustomEvent>)} listener The event listener to register.
 	 * @return {Core.Event.Bus} This custom event bus.
 	 */
@@ -68,12 +68,48 @@ export default class EventBus {
 	 *
 	 * @chainable
 	 * @method listen
-	 * @param {EventTarget} eventTarget The event target listining for specific event.
+	 * @param {EventTarget} eventTarget The event target listening for specific event.
 	 * @param {string} eventName The name of the event to listen for.
 	 * @param {function(<CustomEvent>)} listener The event listener to register.
 	 * @return {Core.Event.Bus} This custom event bus.
 	 */
 	listen(eventTarget, eventName, listener) {}
+
+	/**
+	 * Removes the provided event listener from the set of event listeners
+	 * executed when the any event bus event occurs at the specified event
+	 * target.
+	 *
+	 * The method has no effect if the listener is not registered at the
+	 * specified event target.
+	 *
+	 * @chainable
+	 * @method unlistenAll
+	 * @param {EventTarget} eventTarget The event target listening for specific
+	 *        event.
+	 * @param {function(<CustomEvent>)} listener The event listener to
+	 *        unregister.
+	 * @return {Core.Event.Bus} This custom event bus.
+	 */
+	unlistenAll(eventTarget, listener) {}
+
+	/**
+	 * Removes the provided event listener from the set of event listeners
+	 * executed when the specified event occurs at the specified event target.
+	 *
+	 * The method has no effect if the listener is not registered for the
+	 * specified event at the specified event target.
+	 *
+	 * @chainable
+	 * @method unlisten
+	 * @param {EventTarget} eventTarget The event target listening for specific
+	 *        event.
+	 * @param {string} eventName The name of the event listened for.
+	 * @param {function(<CustomEvent>)} listener The event listener to
+	 *        unregister.
+	 * @return {Core.Event.Bus} This custom event bus.
+	 */
+	unlisten(eventTarget, eventName, listener) {}
 }
 
 ns.Core.Interface.EventBus = EventBus;

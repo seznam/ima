@@ -19,7 +19,7 @@ const IMA_EVENT = '$IMA.CustomEvent';
  * and two methods for catching events (e.g. inside view components).
  *
  * @class Bus
- * @implements ns.Core.Interface.EventBus
+ * @implements Core.Interface.EventBus
  * @namespace Core.Event
  * @module Core
  * @submodule Core.Event
@@ -41,6 +41,29 @@ export default class Bus extends ns.Core.Interface.EventBus {
 		 * @default window
 		 */
 		this._window = window;
+
+		/**
+		 * Map of listeners provided to the public API of this event bus to a
+		 * map of event targets to a map of event names to actual listeners
+		 * bound to the native API.
+		 *
+		 * The "listen all" event listeners are not registered in this map.
+		 *
+		 * @property _listeners
+		 * @private
+		 * @type {WeakMap<function(Event), WeakMap<EventTarget, Map<string, function(Event)>>>}
+		 */
+		this._listeners = new WeakMap();
+
+		/**
+		 * Map of event targets to listeners executed on all IMA.js event bus
+		 * events.
+		 *
+		 * @property _allEventListeners
+		 * @private
+		 * @type {WeakMap<EventTarget, WeakSet<function(Event)>>}
+		 */
+		this._allEventListeners = new WeakMap();
 	}
 
 	/**
@@ -98,13 +121,18 @@ export default class Bus extends ns.Core.Interface.EventBus {
 	 * @inheritDoc
 	 * @override
 	 * @chainable
-	 * @method listen
+	 * @method listenAll
 	 * @param {EventTarget} eventTarget The event target listining for all events.
 	 * @param {function(<CustomEvent>)} listener The event listener to register.
 	 * @return {Core.Event.Bus} This custom event bus.
 	 */
 	listenAll(eventTarget, listener) {
 		this._window.bindEventListener(eventTarget, IMA_EVENT, listener);
+
+		if (!this._allEventListeners.has(eventTarget)) {
+			this._allEventListeners.set(eventTarget, new WeakSet());
+		}
+		this._allEventListeners.get(eventTarget).add(listener);
 
 		return this;
 	}
@@ -129,11 +157,130 @@ export default class Bus extends ns.Core.Interface.EventBus {
 	 * @return {Core.Event.Bus} This custom event bus.
 	 */
 	listen(eventTarget, eventName, listener) {
-		this._window.bindEventListener(eventTarget, IMA_EVENT, (e) => {
+		if (!this._listeners.has(listener)) {
+			this._listeners.set(listener, new WeakMap());
+		}
+
+		var targetToEventName = this._listeners.get(listener);
+		if (!targetToEventName.has(eventTarget)) {
+			targetToEventName.set(eventTarget, new Map());
+		}
+
+		var eventNameToNativeListener = targetToEventName.get(eventTarget);
+		var nativeListener = (e) => {
 			if (e.detail.eventName === eventName) {
 				listener(e);
 			}
-		});
+		};
+		eventNameToNativeListener.set(eventName, nativeListener);
+
+		this._window.bindEventListener(eventTarget, IMA_EVENT, nativeListener);
+
+		return this;
+	}
+
+	/**
+	 * Removes the provided event listener from the set of event listeners
+	 * executed when the any event bus event occurs at the specified event
+	 * target.
+	 *
+	 * The method has no effect if the listener is not registered at the
+	 * specified event target.
+	 *
+	 * @inheritDoc
+	 * @override
+	 * @chainable
+	 * @method unlistenAll
+	 * @param {EventTarget} eventTarget The event target listening for specific
+	 *        event.
+	 * @param {function(<CustomEvent>)} listener The event listener to
+	 *        unregister.
+	 * @return {Core.Event.Bus} This custom event bus.
+	 */
+	unlistenAll(eventTarget, listener) {
+		this._window.unbindEventListener(eventTarget, IMA_EVENT, listener);
+
+		var listenerRegistered =
+				this._allEventListeners.has(eventTarget) &&
+				this._allEventListeners.get(eventTarget).has(listener);
+		if (listenerRegistered) {
+			this._allEventListeners.get(eventTarget).delete(listener);
+		}
+
+		if ($Debug) {
+			if (!listenerRegistered) {
+				console.warn('The provided listener is not registered on ' +
+						'the specified event target');
+			}
+		}
+
+		return this;
+	}
+
+	/**
+	 * Removes the provided event listener from the set of event listeners
+	 * executed when the specified event occurs at the specified event target.
+	 *
+	 * The method has no effect if the listener is not registered for the
+	 * specified event at the specified event target.
+	 *
+	 * @inheritDoc
+	 * @override
+	 * @chainable
+	 * @method unlisten
+	 * @param {EventTarget} eventTarget The event target listening for specific
+	 *        event.
+	 * @param {string} eventName The name of the event listened for.
+	 * @param {function(<CustomEvent>)} listener The event listener to
+	 *        unregister.
+	 * @return {Core.Event.Bus} This custom event bus.
+	 */
+	unlisten(eventTarget, eventName, listener) {
+		if (!this._listeners.has(listener)) {
+			if ($Debug) {
+				console.warn('The provided listener is not bound to listen ' +
+						'for the specified event on the specified event ' +
+						'target');
+			}
+
+			return this;
+		}
+
+		var targets = this._listeners.get(listener);
+		if (!targets.has(eventTarget)) {
+			if ($Debug) {
+				console.warn('The provided listener is not bound to listen ' +
+					'for the specified event on the specified event ' +
+					'target');
+			}
+
+			return this;
+		}
+
+		var eventNameToNativeListener = targets.get(eventTarget);
+		if (!eventNameToNativeListener.has(eventName)) {
+			if ($Debug) {
+				console.warn('The provided listener is not bound to listen ' +
+					'for the specified event on the specified event ' +
+					'target');
+			}
+
+			return this;
+		}
+
+		var nativeListener = eventNameToNativeListener.get(eventName);
+		this._window.unbindEventListener(
+			eventTarget,
+			IMA_EVENT,
+			nativeListener
+		);
+
+		eventNameToNativeListener.delete(eventName);
+		if (eventNameToNativeListener.size) {
+			return this;
+		}
+
+		targets.delete(eventTarget);
 
 		return this;
 	}
