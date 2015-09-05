@@ -121,7 +121,7 @@ export default class Bus extends ns.Core.Interface.EventBus {
 	 * @inheritDoc
 	 * @override
 	 * @chainable
-	 * @method listen
+	 * @method listenAll
 	 * @param {EventTarget} eventTarget The event target listining for all events.
 	 * @param {function(<CustomEvent>)} listener The event listener to register.
 	 * @return {Core.Event.Bus} This custom event bus.
@@ -190,6 +190,7 @@ export default class Bus extends ns.Core.Interface.EventBus {
 	 * @inheritDoc
 	 * @override
 	 * @chainable
+	 * @method unlistenAll
 	 * @param {EventTarget} eventTarget The event target listening for specific
 	 *        event.
 	 * @param {function(<CustomEvent>)} listener The event listener to
