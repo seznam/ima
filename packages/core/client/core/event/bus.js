@@ -201,8 +201,8 @@ export default class Bus extends ns.Core.Interface.EventBus {
 		this._window.unbindEventListener(eventTarget, IMA_EVENT, listener);
 
 		var listenerRegistered =
-				!this._allEventListeners.has(eventTarget) ||
-				!this._allEventListeners.get(eventTarget).has(listener);
+				this._allEventListeners.has(eventTarget) &&
+				this._allEventListeners.get(eventTarget).has(listener);
 		if (listenerRegistered) {
 			this._allEventListeners.get(eventTarget).delete(listener);
 		}
