@@ -218,6 +218,7 @@ class WeakRef {
 	 * Returns the target reference, provided that the target reference is
 	 * still alive. Returns {@code null} if the reference has been discarded.
 	 *
+	 * @property target
 	 * @return {?Object} The target reference, or {@code null} if the reference
 	 *         has been discarded by the garbage collector.
 	 */
