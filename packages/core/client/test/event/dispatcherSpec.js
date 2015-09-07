@@ -89,18 +89,25 @@ describe('Core.Event.Dispatcher', function() {
 			expect(dispatcher._eventListeners.get(event)).toBeUndefined();
 		});
 
-		it('should throw error for undefined event', function() {
-			expect(function() {
-				dispatcher.unlisten(event, handlers.handler1);
-			}).toThrow();
+		it('should show warning for undefined event', function() {
+			spyOn(console, 'warn')
+				.and
+				.stub();
+
+			dispatcher.unlisten(event, handlers.handler1);
+
+			expect(console.warn).toHaveBeenCalled();
 		});
 
-		it('should throw error for undefined handler for event', function() {
-			dispatcher.listen(event, handlers.handler1);
+		it('should show warning for undefined handler for event', function() {
+			spyOn(console, 'warn')
+				.and
+				.stub();
 
-			expect(function() {
-				dispatcher.unlisten(event, handlers.handler2);
-			}).toThrow();
+			dispatcher.listen(event, handlers.handler1);
+			dispatcher.unlisten(event, handlers.handler2);
+
+			expect(console.warn).toHaveBeenCalled();
 		});
 	});
 
@@ -118,16 +125,24 @@ describe('Core.Event.Dispatcher', function() {
 			expect(handlers.handler2).toHaveBeenCalledWith(data);
 		});
 
-		it('should throw error for none listeners', function() {
-			expect(function() {
-				dispatcher.fire(event, data);
-			}).toThrow();
+		it('should show warning for none listeners', function() {
+			spyOn(console, 'warn')
+				.and
+				.stub();
+
+			dispatcher.fire(event, data);
+
+			expect(console.warn).toHaveBeenCalled();
 		});
 
-		it('should not throw error for $IMA internal event', function() {
-			expect(function() {
-				dispatcher.fire(event, data, true);
-			}).not.toThrow();
+		it('should not show warning for $IMA internal event', function() {
+			spyOn(console, 'warn')
+				.and
+				.stub();
+
+			dispatcher.fire(event, data, true);
+
+			expect(console.warn).not.toHaveBeenCalled();
 		});
 	});
 
