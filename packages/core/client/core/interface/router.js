@@ -82,6 +82,15 @@ export default class Router {
 	getUrl() {}
 
 	/**
+	 * Returns the application's absolute base URL, pointing to the public root
+	 * of the application.
+	 *
+	 * @method getBaseUrl
+	 * @return {string} The application's base URL.
+	 */
+	getBaseUrl() {}
+
+	/**
 	 * Returns the application's domain in the following form
 	 * {@code `${protocol}//${host}`}.
 	 *

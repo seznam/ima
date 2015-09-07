@@ -51,6 +51,10 @@ describe('Core.Abstract.Router', function() {
 		expect(router.getUrl()).toEqual('http://www.domain.com/root/path');
 	});
 
+	it('should return base url of application', function() {
+		expect(router.getBaseUrl()).toEqual('http://www.domain.com/root');
+	});
+
 	it('should return route for defined path', function() {
 		var route = router._getRouteByPath('/');
 
@@ -132,7 +136,7 @@ describe('Core.Abstract.Router', function() {
 		});
 
 		it('should return link for valid route with params', function() {
-			spyOn(router, '_getBaseUrl')
+			spyOn(router, 'getBaseUrl')
 				.and
 				.returnValue(baseUrl);
 
