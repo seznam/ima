@@ -4,7 +4,7 @@ ns.namespace('Core.Interface');
 
 /**
  * The cache provides a temporary storage for expirable information. The
- * primary use of a cache is caching information obtained via constly means
+ * primary use of a cache is caching information obtained via costly means
  * (CPU-heavy computation or networking) to speed up the application
  * performance when the same information needs to be retrieved multiple times.
  *
@@ -38,13 +38,13 @@ export default class Cache {
 	/**
 	 * Returns the value of the entry identified by the specified key.
 	 *
-	 * The method returns {@code null} if the specified entry does not exist, has
-	 * already expired, or the cache is currently disabled.
+	 * The method returns {@code null} if the specified entry does not exist,
+	 * has already expired, or the cache is currently disabled.
 	 *
 	 * @method get
 	 * @param {string} key The identifier of the cache entry.
-	 * @return {*} The value of the specified cache entry, or {@code null} if the
-	 *         entry is not available.
+	 * @return {*} The value of the specified cache entry, or {@code null} if
+	 *         the entry is not available.
 	 */
 	get(key) {}
 
@@ -55,8 +55,8 @@ export default class Cache {
 	 * @method set
 	 * @param {string} key The identifier of the cache entry.
 	 * @param {*} value The cache entry value.
-	 * @param {?number=} ttl Cache entry time to live in milliseconds. The entry
-	 *        will expire after the specified amount of milliseconds. Use
+	 * @param {?number=} ttl Cache entry time to live in milliseconds. The
+	 *        entry will expire after the specified amount of milliseconds. Use
 	 *        {@code null} or omit the parameter to use the default TTL of this
 	 *        cache.
 	 */
@@ -73,8 +73,8 @@ export default class Cache {
 
 	/**
 	 * Disables the cache, preventing the retrieval of any cached entries and
-	 * reporting all cache entries as non-existing. Disabling the cache does not
-	 * however prevent setting the existing or creating new cache entries.
+	 * reporting all cache entries as non-existing. Disabling the cache does
+	 * not however prevent setting the existing or creating new cache entries.
 	 *
 	 * The method has no effect if the cache is already disabled.
 	 *
@@ -104,9 +104,10 @@ export default class Cache {
 	 * Deserialization data from JSON.
 	 *
 	 * @method deserialize
-	 * @param {Object<string, {value: *, ttl: number}>} serializedData An object
-	 *        representing the state of the cache to load, obtained by parsing
-	 *        the JSON string returned by the {@codelink serialize} method.
+	 * @param {Object<string, {value: *, ttl: number}>} serializedData An
+	 *        object representing the state of the cache to load, obtained by
+	 *        parsing the JSON string returned by the {@codelink serialize}
+	 *        method.
 	 */
 	deserialize(serializedData) {}
 }

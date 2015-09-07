@@ -28,12 +28,12 @@ export default class Dictionary {
 	 *        The language field is an ISO 639-1 language code specifying the
 	 *        language of the provided phrases.
 	 *        The dictionary field are the localization phrases organited in a
-	 *        deep plain object map. The top-level key is the name of the phrase
-	 *        group, the bottom-level key is the phrase key. The bottom-level
-	 *        value is the localization phrase generator that takes the phrase
-	 *        placeholder values map as an argument and produces the localization
-	 *        phrase with its placeholders replaced by the provided placeholder
-	 *        values.
+	 *        deep plain object map. The top-level key is the name of the
+	 *        phrase group, the bottom-level key is the phrase key. The
+	 *        bottom-level value is the localization phrase generator that
+	 *        takes the phrase placeholder values map as an argument and
+	 *        produces the localization phrase with its placeholders replaced
+	 *        by the provided placeholder values.
 	 */
 	init(config) {}
 
@@ -53,11 +53,11 @@ export default class Dictionary {
 	 * returns the result.
 	 *
 	 * @method get
-	 * @param {string} key The key identifying the localization phrase, following
-	 *        the `${phraseGroup}.${phraseKey}` syntax.
-	 * @param {Object<string, (number|string)>=} parameters The map of parameter
-	 *        placeholder names to the parameter values to use. Defaults to an
-	 *        empty plain object.
+	 * @param {string} key The key identifying the localization phrase,
+	 *        following the `${phraseGroup}.${phraseKey}` syntax.
+	 * @param {Object<string, (number|string)>=} parameters The map of
+	 *        parameter placeholder names to the parameter values to use.
+	 *        Defaults to an empty plain object.
 	 * @return {string} The specified localization phrase with its placeholders
 	 *         replaced with the provided parameters.
 	 */

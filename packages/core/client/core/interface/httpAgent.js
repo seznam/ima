@@ -13,8 +13,8 @@ ns.namespace('Core.Interface');
  */
 export default class HttpAgent {
 	/**
-	 * Sends an HTTP GET request to the specified URL, sending the provided data
-	 * as query parameters.
+	 * Sends an HTTP GET request to the specified URL, sending the provided
+	 * data as query parameters.
 	 *
 	 * @method get
 	 * @param {string} url The URL to which the request should be made.
@@ -22,21 +22,21 @@ export default class HttpAgent {
 	 *        send to the server as query parameters.
 	 * @param {{timeout: number=, ttl: number=, repeatRequest: number=,
 	 *        headers: Object<string, string>=, cache: boolean=}=} options
-	 *        Optional request options. The {@code timeout} specifies the request
-	 *        timeout in milliseconds, the {@code ttl} specified how long the
-	 *        request may be cached in milliseconds, the
+	 *        Optional request options. The {@code timeout} specifies the
+	 *        request timeout in milliseconds, the {@code ttl} specified how
+	 *        long the request may be cached in milliseconds, the
 	 *        {@code repeatRequest} specifies the maximum number of tries to
 	 *        repeat the request if the request fails, The {@code headers} set
-	 *        request headers. The {@code cache} can be used to bypass the cache
-	 *        of pending and finished HTTP requests.
+	 *        request headers. The {@code cache} can be used to bypass the
+	 *        cache of pending and finished HTTP requests.
 	 * @return {Promise<*>} A promise that resolves to the response body parsed
 	 *         as JSON.
 	 */
 	get(url, data, options = {}) {}
 
 	/**
-	 * Sends an HTTP POST request to the specified URL, sending the provided data
-	 * as a request body.
+	 * Sends an HTTP POST request to the specified URL, sending the provided
+	 * data as a request body.
 	 *
 	 * @method post
 	 * @param {string} url The URL to which the request should be made.
@@ -44,21 +44,21 @@ export default class HttpAgent {
 	 *        send to the server as request body.
 	 * @param {{timeout: number=, ttl: number=, repeatRequest: number=,
 	 *        headers: Object<string, string>=}=} options
-	 *        Optional request options. The {@code timeout} specifies the request
-	 *        timeout in milliseconds, the {@code ttl} specified how long the
-	 *        request may be cached in milliseconds, the
+	 *        Optional request options. The {@code timeout} specifies the
+	 *        request timeout in milliseconds, the {@code ttl} specified how
+	 *        long the request may be cached in milliseconds, the
 	 *        {@code repeatRequest} specifies the maximum number of tries to
 	 *        repeat the request if the request fails, The {@code headers} set
-	 *        request headers. The {@code cache} can be used to bypass the cache
-	 *        of pending and finished HTTP requests.
+	 *        request headers. The {@code cache} can be used to bypass the
+	 *        cache of pending and finished HTTP requests.
 	 * @return {Promise<*>} A promise that resolves to the response body parsed
 	 *         as JSON.
 	 */
 	post(url, data, options = {}) {}
 
 	/**
-	 * Sends an HTTP PUT request to the specified URL, sending the provided data
-	 * as a request body.
+	 * Sends an HTTP PUT request to the specified URL, sending the provided
+	 * data as a request body.
 	 *
 	 * @method put
 	 * @param {string} url The URL to which the request should be made.
@@ -66,13 +66,13 @@ export default class HttpAgent {
 	 *        send to the server as request body.
 	 * @param {{timeout: number=, ttl: number=, repeatRequest: number=,
 	 *        headers: Object<string, string>=}=} options
-	 *        Optional request options. The {@code timeout} specifies the request
-	 *        timeout in milliseconds, the {@code ttl} specified how long the
-	 *        request may be cached in milliseconds, the
+	 *        Optional request options. The {@code timeout} specifies the
+	 *        request timeout in milliseconds, the {@code ttl} specified how
+	 *        long the request may be cached in milliseconds, the
 	 *        {@code repeatRequest} specifies the maximum number of tries to
 	 *        repeat the request if the request fails, The {@code headers} set
-	 *        request headers. The {@code cache} can be used to bypass the cache
-	 *        of pending and finished HTTP requests.
+	 *        request headers. The {@code cache} can be used to bypass the
+	 *        cache of pending and finished HTTP requests.
 	 * @return {Promise<*>} A promise that resolves to the response body parsed
 	 *         as JSON.
 	 */
@@ -88,13 +88,13 @@ export default class HttpAgent {
 	 *        send to the server as request body.
 	 * @param {{timeout: number=, ttl: number=, repeatRequest: number=,
 	 *        headers: Object<string, string>=}=} options
-	 *        Optional request options. The {@code timeout} specifies the request
-	 *        timeout in milliseconds, the {@code ttl} specified how long the
-	 *        request may be cached in milliseconds, the
+	 *        Optional request options. The {@code timeout} specifies the
+	 *        request timeout in milliseconds, the {@code ttl} specified how
+	 *        long the request may be cached in milliseconds, the
 	 *        {@code repeatRequest} specifies the maximum number of tries to
 	 *        repeat the request if the request fails, The {@code headers} set
-	 *        request headers. The {@code cache} can be used to bypass the cache
-	 *        of pending and finished HTTP requests.
+	 *        request headers. The {@code cache} can be used to bypass the
+	 *        cache of pending and finished HTTP requests.
 	 * @return {Promise<*>} A promise that resolves to the response body parsed
 	 *         as JSON.
 	 */
@@ -110,13 +110,13 @@ export default class HttpAgent {
 	 *        send to the server as request body.
 	 * @param {{timeout: number=, ttl: number=, repeatRequest: number=,
 	 *        headers: Object<string, string>=}=} options
-	 *        Optional request options. The {@code timeout} specifies the request
-	 *        timeout in milliseconds, the {@code ttl} specified how long the
-	 *        request may be cached in milliseconds, the
+	 *        Optional request options. The {@code timeout} specifies the
+	 *        request timeout in milliseconds, the {@code ttl} specified how
+	 *        long the request may be cached in milliseconds, the
 	 *        {@code repeatRequest} specifies the maximum number of tries to
 	 *        repeat the request if the request fails, The {@code headers} set
-	 *        request headers. The {@code cache} can be used to bypass the cache
-	 *        of pending and finished HTTP requests.
+	 *        request headers. The {@code cache} can be used to bypass the
+	 *        cache of pending and finished HTTP requests.
 	 * @return {Promise<*>} A promise that resolves to the response body parsed
 	 *         as JSON.
 	 */
@@ -129,11 +129,11 @@ export default class HttpAgent {
 	 * @method getCacheKey
 	 * @param {string} method The HTTP method used by the request.
 	 * @param {string} url The URL to which the request is sent.
-	 * @param {Object<string, string>} data The data associated with the request.
-	 *        These can be either the query parameters of request body
+	 * @param {Object<string, string>} data The data associated with the
+	 *        request. These can be either the query parameters of request body
 	 *        parameters.
-	 * @return {string} Key to use for identifying a request to the specifed URL
-	 *         with the specified request data in the cache.
+	 * @return {string} Key to use for identifying a request to the specified
+	 *         URL with the specified request data in the cache.
 	 */
 	getCacheKey(method, url, data) {}
 

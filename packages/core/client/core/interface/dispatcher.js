@@ -14,7 +14,8 @@ ns.namespace('Core.Interface');
  */
 export default class Dispatcher {
 	/**
-	 * Unregisters all event listeners currently registered with this dispatcher.
+	 * Unregisters all event listeners currently registered with this
+	 * dispatcher.
 	 *
 	 * @chainable
 	 * @method clear
@@ -29,31 +30,31 @@ export default class Dispatcher {
 	 * When the specified event is fired, the event listener will be executed
 	 * with the data passed with the event as the first argument.
 	 *
-	 * The order in which the event listeners will be executed is unspecified and
-	 * should not be relied upon. Registering the same listener for the same
-	 * event and with the same scope multiple times has no effect.
+	 * The order in which the event listeners will be executed is unspecified
+	 * and should not be relied upon. Registering the same listener for the
+	 * same event and with the same scope multiple times has no effect.
 	 *
 	 * @chainable
 	 * @method listen
 	 * @param {string} event The name of the event to listen for.
 	 * @param {function(*)} listener The event listener to register.
-	 * @param {?Object=} scope The object to which the {@code this} keyword will
-	 *        be bound in the event listener.
+	 * @param {?Object=} scope The object to which the {@code this} keyword
+	 *        will be bound in the event listener.
 	 * @return {Core.Interface.Dispatcher} This dispatcher.
 	 */
 	listen(event, listener, scope = null) {}
 
 	/**
-	 * Unregistered the provided event listener, so it will no longer be executed
-	 * with the specified scope when the specified event is fired.
+	 * Unregistered the provided event listener, so it will no longer be
+	 * executed with the specified scope when the specified event is fired.
 	 *
 	 * @chainable
 	 * @method unlisten
-	 * @param {string} event The name of the event for which the listener should
-	 *        be unregistered.
+	 * @param {string} event The name of the event for which the listener
+	 *        should be unregistered.
 	 * @param {function(*)} listener The event listener to unregister.
-	 * @param {?Object=} scope The object to which the {@code this} keyword would
-	 *        be bound in the event listener
+	 * @param {?Object=} scope The object to which the {@code this} keyword
+	 *        would be bound in the event listener.
 	 * @return {Core.Interface.Dispatcher} This dispatcher.
 	 * @throws {Error} Thrown if there is no such listener registered.
 	 */

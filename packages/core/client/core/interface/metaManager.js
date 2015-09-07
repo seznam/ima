@@ -3,8 +3,8 @@ import ns from 'imajs/client/core/namespace';
 ns.namespace('Core.Interface');
 
 /**
- * The Meta manager is a utility for managing various page attributes related to
- * the SEO (search engine optimization).
+ * The Meta manager is a utility for managing various page attributes related
+ * to the SEO (search engine optimization).
  *
  * The Meta manager is used to manage the following:
  * - page title, added to the page via the {@code &lt;title&gt;} element
@@ -43,15 +43,16 @@ export default class MetaManager {
 	 * Set the specified generic meta information.
 	 *
 	 * @method setMetaName
-	 * @param {string} name Meta information name, for example {@code keywords}.
+	 * @param {string} name Meta information name, for example
+	 *        {@code keywords}.
 	 * @param {string} value The meta information value.
 	 */
 	setMetaName(name, value) {}
 
 	/**
 	 * Returns the value of the specified generic meta information. The method
-	 * returns an empty string for missing meta information (to make the returned
-	 * value React-friendly).
+	 * returns an empty string for missing meta information (to make the
+	 * returned value React-friendly).
 	 *
 	 * @method getMetaName
 	 * @param {string} name The name of the generic meta information.
@@ -85,8 +86,8 @@ export default class MetaManager {
 	 *
 	 * @method getMetaProperty
 	 * @param {string} name The name of the specialized meta information.
-	 * @return {string} The value of the specified meta information, or an empty
-	 *         string.
+	 * @return {string} The value of the specified meta information, or an
+	 *         empty string.
 	 */
 	getMetaProperty(name) {}
 

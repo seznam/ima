@@ -99,8 +99,8 @@ export default class Router {
 	getHost() {}
 
 	/**
-	 * Returns the current protocol used to access the application, terminated by
-	 * a collon (for example {@code https:}).
+	 * Returns the current protocol used to access the application, terminated
+	 * by a colon (for example {@code https:}).
 	 *
 	 * @method getProtocol
 	 * @return {string} The current application protocol used to access the
@@ -114,7 +114,8 @@ export default class Router {
 	 * @method getCurrentRouteInfo
 	 * @return {{route: Core.Router.Route, params: Object<string, string>,
 	 *         path: string}} The information about the current route.
-	 * @throws {Core.IMAError} Thrown if a route is not define for current path.
+	 * @throws {Core.IMAError} Thrown if a route is not define for current
+	 *         path.
 	 */
 	getCurrentRouteInfo() {}
 
@@ -145,14 +146,14 @@ export default class Router {
 	 * At the server side the method results in responsing to the client with a
 	 * redirect HTTP status code and the {@code Location} header.
 	 *
-	 * At the client side the method updates the current URL by manipulating the
-	 * browser history (if the target URL is at the same domain and protocol as
-	 * the current one) or performs a hard redirect (if the target URL points to
-	 * a different protocol or domain).
+	 * At the client side the method updates the current URL by manipulating
+	 * the browser history (if the target URL is at the same domain and
+	 * protocol as the current one) or performs a hard redirect (if the target
+	 * URL points to a different protocol or domain).
 	 *
-	 * The method will result in the router handling the new URL and routing the
-	 * client to the related page if the URL is set at the client side and points
-	 * to the same domain and protocol.
+	 * The method will result in the router handling the new URL and routing
+	 * the client to the related page if the URL is set at the client side and
+	 * points to the same domain and protocol.
 	 *
 	 * @method redirect
 	 * @param {string} url The URL to which the client should be redirected.
@@ -170,8 +171,8 @@ export default class Router {
 	 * @param {string} routeName The unique name of the route, identifying the
 	 *        route to use.
 	 * @param {Object<string, string>} params Parameter values for the route's
-	 *        parameter placeholders. Extraneous parameters will be added as URL
-	 *        query.
+	 *        parameter placeholders. Extraneous parameters will be added as
+	 *        URL query.
 	 * @return {string} An absolute URL for the specified route and parameters.
 	 */
 	link(routeName, params) {}
@@ -185,9 +186,9 @@ export default class Router {
 	 *        optional query.
 	 * @param {{onlyUpdate: boolean=, autoScroll: boolean=}} [options={}]
 	 *        The options overrides route options defined in routes.js.
-	 * @return {Promise<Object<string, ?(number|string)>>} A promise resolved when
-	 *         the error has been handled and the response has been sent to the
-	 *         client, or displayed if used at the client side.
+	 * @return {Promise<Object<string, ?(number|string)>>} A promise resolved
+	 *         when the error has been handled and the response has been sent
+	 *         to the client, or displayed if used at the client side.
 	 */
 	route(path, options = {}) {}
 
@@ -196,35 +197,35 @@ export default class Router {
 	 * "internal server error" error page.
 	 *
 	 * @method handleError
-	 * @param {Object<string, (Error|string)>} params Parameters extracted from the
-	 *        current URL path and query.
+	 * @param {Object<string, (Error|string)>} params Parameters extracted from
+	 *        the current URL path and query.
 	 * @param {{onlyUpdate: boolean=, autoScroll: boolean=}} [options={}]
 	 *        The options overrides route options defined in routes.js.
-	 * @return {Promise<Object<string, ?(number|string)>>} A promise resolved when
-	 *         the error has been handled and the response has been sent to the
-	 *         client, or displayed if used at the client side.
+	 * @return {Promise<Object<string, ?(number|string)>>} A promise resolved
+	 *         when the error has been handled and the response has been sent
+	 *         to the client, or displayed if used at the client side.
 	 */
 	handleError(params, options = {}) {}
 
 	/**
-	 * Handles a "not found" error by responsing with the appropriate "not found"
-	 * error page.
+	 * Handles a "not found" error by responsing with the appropriate "not
+	 * found" error page.
 	 *
 	 * @method handleNotFound
-	 * @param {Object<string, (Error|string)>} params Parameters extracted from the
-	 *        current URL path and query.
+	 * @param {Object<string, (Error|string)>} params Parameters extracted from
+	 *        the current URL path and query.
 	 * @param {{onlyUpdate: boolean=, autoScroll: boolean=}} [options={}]
 	 *        The options overrides route options defined in routes.js.
-	 * @return {Promise<Object<string, ?(number|string)>>} A promise resolved when
-	 *         the error has been handled and the response has been sent to the
-	 *         client, or displayed if used at the client side.
+	 * @return {Promise<Object<string, ?(number|string)>>} A promise resolved
+	 *         when the error has been handled and the response has been sent
+	 *         to the client, or displayed if used at the client side.
 	 */
 	handleNotFound(params, options = {}) {}
 
 	/**
-	 * Tests, if possible, whether the specified error was caused by the client's
-	 * action (for example wrong URL or request encoding) or by a failure at the
-	 * server side.
+	 * Tests, if possible, whether the specified error was caused by the
+	 * client's action (for example wrong URL or request encoding) or by a
+	 * failure at the server side.
 	 *
 	 * @method isClientError
 	 * @param {(Core.IMAError|Error)} reason The encountered error.

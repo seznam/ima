@@ -16,23 +16,28 @@ ns.namespace('Core.Interface');
 export default class EventBus {
 
 	/**
-	 * Fires a new custom event of the specified name, carrying the provided data.
+	 * Fires a new custom event of the specified name, carrying the provided
+	 * data.
 	 *
 	 * Note that this method does not prevent the event listeners to modify the
 	 * data in any way. The order in which the event listeners will be executed
 	 * is unspecified and should not be relied upon.
 	 *
-	 * Note that default options of eventInit are { bubbles: true, cancelable: true },
-	 * that are different like default values in native CustomEvents ({ bubbles: false, cancelable: false }).
+	 * Note that default options of eventInit are
+	 * {@code { bubbles: true, cancelable: true }}, that are different like
+	 * default values in native CustomEvents
+	 * ({@code { bubbles: false, cancelable: false }}).
 	 *
 	 * @method fire
 	 * @chainable
-	 * @param {EventTarget} eventSource The event source dispatching event (e.g. element/document/window).
+	 * @param {EventTarget} eventSource The event source dispatching event
+	 *        (e.g. element/document/window).
 	 * @param {string} eventName The name of the event to fire.
 	 * @param {*} data The data to pass to the event listeners.
-	 * @param {Object=} [options={}] Using options could be define or override an EventInit dictionary options too.
-	 *								 Options of eventInit are { bubbles: true, cancelable: true } by default.
-	 *								 For more info see: https://developer.mozilla.org/en-US/docs/Web/API/Event/Event
+	 * @param {Object=} [options={}] Using options could be define or override
+	 *        an EventInit dictionary options too. Options of eventInit are
+	 *        {@code { bubbles: true, cancelable: true }} by default. For more
+	 *        info see: https://developer.mozilla.org/en-US/docs/Web/API/Event/Event
 	 * @return {Core.Event.Bus} This custom event bus.
 	 * @throws {Error} Thrown if there is no event source defined.
 	 */
@@ -45,13 +50,15 @@ export default class EventBus {
 	 * When the specified event is fired, the event listener will be executed
 	 * with the event passed as the first argument.
 	 *
-	 * The order in which the event listeners will be executed is unspecified and
-	 * should not be relied upon.
+	 * The order in which the event listeners will be executed is unspecified
+	 * and should not be relied upon.
 	 *
 	 * @chainable
 	 * @method listen
-	 * @param {EventTarget} eventTarget The event target listening for all events.
-	 * @param {function(<CustomEvent>)} listener The event listener to register.
+	 * @param {EventTarget} eventTarget The event target listening for all
+	 *        events.
+	 * @param {function(<CustomEvent>)} listener The event listener to
+	 *        register.
 	 * @return {Core.Event.Bus} This custom event bus.
 	 */
 	listenAll(eventTarget, listener) {}
@@ -63,14 +70,16 @@ export default class EventBus {
 	 * When the specified event is fired, the event listener will be executed
 	 * with the event passed as the first argument.
 	 *
-	 * The order in which the event listeners will be executed is unspecified and
-	 * should not be relied upon.
+	 * The order in which the event listeners will be executed is unspecified
+	 * and should not be relied upon.
 	 *
 	 * @chainable
 	 * @method listen
-	 * @param {EventTarget} eventTarget The event target listening for specific event.
+	 * @param {EventTarget} eventTarget The event target listening for specific
+	 *        event.
 	 * @param {string} eventName The name of the event to listen for.
-	 * @param {function(<CustomEvent>)} listener The event listener to register.
+	 * @param {function(<CustomEvent>)} listener The event listener to
+	 *        register.
 	 * @return {Core.Event.Bus} This custom event bus.
 	 */
 	listen(eventTarget, eventName, listener) {}

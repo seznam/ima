@@ -37,8 +37,10 @@ export default class PageManager {
 	 * Scroll page to defined vertical and horizontal values.
 	 *
 	 * @method scrollTo
-	 * @param {number} [x=0] x is the pixel along the horizontal axis of the document
-	 * @param {number} [y=0] y is the pixel along the vertical axis of the document
+	 * @param {number} [x=0] x is the pixel along the horizontal axis of the
+	 *        document
+	 * @param {number} [y=0] y is the pixel along the vertical axis of the
+	 *        document
 	 */
 	scrollTo(x = 0, y = 0) {}
 }

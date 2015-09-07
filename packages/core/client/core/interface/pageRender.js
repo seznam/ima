@@ -17,11 +17,11 @@ export default class PageRender {
 	 * behavior of this method differs at the client and the at server in the
 	 * following way:
 	 *
-	 * On server, the method renders the page to a string containing HTML markup
-	 * to send to the client.
+	 * On server, the method renders the page to a string containing HTML
+	 * markup to send to the client.
 	 *
-	 * On client, the method renders the page into DOM, re-using the DOM created
-	 * from the HTML markup send by the server if possible.
+	 * On client, the method renders the page into DOM, re-using the DOM
+	 * created from the HTML markup send by the server if possible.
 	 *
 	 * @inheritDoc
 	 * @override

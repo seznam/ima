@@ -27,8 +27,8 @@ export default class Window {
 	 * requests and responses automatically by the environment.
 	 *
 	 * @method isCookieEnabled
-	 * @return {boolean} {@code true} if cookies are handled automatically by the
-	 *         environment.
+	 * @return {boolean} {@code true} if cookies are handled automatically by
+	 *         the environment.
 	 */
 	isCookieEnabled() {}
 
@@ -80,13 +80,14 @@ export default class Window {
 	 * side.
 	 *
 	 * @method getWindow
-	 * @return {(undefined|Window)} The {@code window} object at the client side,
-	 *         or {@code undefined} at the server side.
+	 * @return {(undefined|Window)} The {@code window} object at the client
+	 *         side, or {@code undefined} at the server side.
 	 */
 	getWindow() {}
 
 	/**
-	 * Returns the number of pixels that document has already been scrolled horizontally.
+	 * Returns the number of pixels that document has already been scrolled
+	 * horizontally.
 	 *
 	 * @method getScrollX
 	 * @return {number}
@@ -94,7 +95,8 @@ export default class Window {
 	getScrollX() {}
 
 	/**
-	 * Returns the number of pixels that document has already been scrolled vertically.
+	 * Returns the number of pixels that document has already been scrolled
+	 * vertically.
 	 *
 	 * @method getScrollY
 	 * @return {number}
@@ -157,8 +159,8 @@ export default class Window {
 	 *
 	 * @method getElementById
 	 * @param {string} id The value of the {@code id} attribute to look for.
-	 * @return {?HTMLElement} The element with the specified id, or {@code null}
-	 *         if no such element exists.
+	 * @return {?HTMLElement} The element with the specified id, or
+	 *         {@code null} if no such element exists.
 	 */
 	getElementById(id) {}
 
@@ -185,8 +187,8 @@ export default class Window {
 	querySelectorAll(selector) {}
 
 	/**
-	 * Performs a hard redirect (discarding the current JavaScript state) to the
-	 * specified URL.
+	 * Performs a hard redirect (discarding the current JavaScript state) to
+	 * the specified URL.
 	 *
 	 * @method redirect
 	 * @param {string} url The URL to which the browser will be redirected.
@@ -199,8 +201,8 @@ export default class Window {
 	 * @method pushState
 	 * @param {Object<string, *>} state A state object associated with the
 	 *        history item, preferably representing the page state.
-	 * @param {string} title The page title related to the state. Note that this
-	 *        parameter is ignored by some browsers.
+	 * @param {string} title The page title related to the state. Note that
+	 *        this parameter is ignored by some browsers.
 	 * @param {string} url The new URL at which the state is available.
 	 */
 	pushState(state, title, url) {}
@@ -211,8 +213,8 @@ export default class Window {
 	 * @method replaceState
 	 * @param {Object<string, *>} state A state object associated with the
 	 *        history item, preferably representing the page state.
-	 * @param {string} title The page title related to the state. Note that this
-	 *        parameter is ignored by some browsers.
+	 * @param {string} title The page title related to the state. Note that
+	 *        this parameter is ignored by some browsers.
 	 * @param {string} url The new URL at which the state is available.
 	 */
 	replaceState(state, title, url) {}
@@ -240,8 +242,8 @@ export default class Window {
 	 * @param {string} event The name of the event.
 	 * @param {function(Event)} listener The event listener.
 	 * @param {boolean=} [useCapture=false] If true, the method initiates event
-	 *        capture. After initiating capture, all events of the specified type
-	 *        will be dispatched to the registered listener before being
+	 *        capture. After initiating capture, all events of the specified
+	 *        type will be dispatched to the registered listener before being
 	 *        dispatched to any EventTarget beneath it in the DOM tree. Events
 	 *        which are bubbling upward through the tree will not trigger a
 	 *        listener designated to use capture.
@@ -249,11 +251,11 @@ export default class Window {
 	bindEventListener(eventTarget, event, listener, useCapture = false) {}
 
 	/**
-	 * Unregisters the provided event listener, so it will no longer we executed
-	 * when the specified event occurrs on the specified event target.
+	 * Unregisters the provided event listener, so it will no longer we
+	 * executed when the specified event occurrs on the specified event target.
 	 *
-	 * The method has no effect if the provided event listener is not registered
-	 * to be executed at the specified event.
+	 * The method has no effect if the provided event listener is not
+	 * registered to be executed at the specified event.
 	 *
 	 * @method unbindEventListener
 	 * @param {EventTarget} eventTarget The event target.

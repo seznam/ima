@@ -27,14 +27,15 @@ export default class Error {
 	getHttpStatus() {}
 
 	/**
-	 * Returns the error parameters providing additional details about the error.
-	 * The structure of the returned object is always situation dependent, but
-	 * the returned object usually contains the {@code status: number} field
-	 * which represents the HTTP status to send to the client.
+	 * Returns the error parameters providing additional details about the
+	 * error. The structure of the returned object is always situation
+	 * dependent, but the returned object usually contains the
+	 * {@code status: number} field which represents the HTTP status to send to
+	 * the client.
 	 *
 	 * @method getParams
-	 * @return {Object<string, *>} The route parameters of the route at which the
-	 *         error has occurred.
+	 * @return {Object<string, *>} The route parameters of the route at which
+	 *         the error has occurred.
 	 */
 	getParams() {}
 

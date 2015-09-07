@@ -81,14 +81,14 @@ export default class Storage {
 	clear() {}
 
 	/**
-	 * Returns an iterator for traversing the keys in this storage. The order in
-	 * which the keys are traversed is undefined.
+	 * Returns an iterator for traversing the keys in this storage. The order
+	 * in which the keys are traversed is undefined.
 	 *
 	 * @method keys
 	 * @return {Iterator<string>} An iterator for traversing the keys in this
 	 *         storage. The iterator also implements the iterable protocol,
-	 *         returning itself as its own iterator, allowing it to be used in a
-	 *         {@code for..of} loop.
+	 *         returning itself as its own iterator, allowing it to be used in
+	 *         a {@code for..of} loop.
 	 */
 	keys() {}
 
