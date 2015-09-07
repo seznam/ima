@@ -51,7 +51,8 @@ if (root.$IMA.Test === true) {
 			$Env: 'dev',
 			$Language: 'en',
 			$Protocol: 'http:',
-			$Debug: true
+			$Debug: true,
+			$App: {}
 		}
 	};
 
@@ -102,10 +103,12 @@ if (root.$IMA.Test === true) {
 					}
 				},
 				settings: {
-					$Env: window.$IMA.$Env,
 					$Debug: window.$IMA.$Debug,
-					$Language: window.$IMA.$Language,
+					$Env: window.$IMA.$Env,
+					$Version: window.$IMA.$Version,
+					$App: window.$IMA.$App,
 					$Protocol: window.$IMA.$Protocol,
+					$Language: window.$IMA.$Language,
 					$Host: window.$IMA.$Host,
 					$Root: window.$IMA.$Root,
 					$LanguagePartPath: window.$IMA.$LanguagePartPath

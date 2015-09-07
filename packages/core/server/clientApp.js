@@ -185,6 +185,7 @@ module.exports = (() => {
 				$Debug: environment.$Debug,
 				$Env: environment.$Env,
 				$Version: environment.$Version,
+				$App: environment.$App || {},
 				$Protocol: protocol,
 				$Language: language,
 				$Host: host,

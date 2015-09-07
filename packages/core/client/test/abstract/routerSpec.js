@@ -372,7 +372,28 @@ describe('Core.Abstract.Router', function() {
 
 		});
 
-		it('should fire ns.Core.Router.EVENTS.HANDLE_ROUTE', function(done) {
+		it('should fire ns.Core.Router.EVENTS.PRE_HANDLE_ROUTE', function() {
+			var response = {content: null, status: 200};
+			var params = {};
+			var path ='/';
+			var data = {route: route, params: params, path: path, options: options};
+
+			spyOn(router, 'getPath')
+				.and
+				.returnValue(path);
+			spyOn(pageManager, 'manage')
+				.and
+				.returnValue(Promise.resolve(response));
+			spyOn(dispatcher, 'fire')
+				.and
+				.stub();
+
+			router._handle(route, params, options);
+
+			expect(dispatcher.fire).toHaveBeenCalledWith(router.EVENTS.PRE_HANDLE_ROUTE, data, true);
+		});
+
+		it('should fire ns.Core.Router.EVENTS.POST_HANDLE_ROUTE', function(done) {
 			var response = {content: null, status: 200};
 			var params = {};
 			var path ='/';
@@ -388,12 +409,12 @@ describe('Core.Abstract.Router', function() {
 				.stub();
 
 			router
-				._handle(route, params)
+				._handle(route, params, options)
 				.then(function() {
-					var data = {route: route, params: params, response: response, path: path};
+					var data = {route: route, params: params, path: path, response: response, options: options};
 
 					expect(dispatcher.fire)
-						.toHaveBeenCalledWith(ns.Core.Router.EVENTS.HANDLE_ROUTE, data, true);
+						.toHaveBeenCalledWith(router.EVENTS.POST_HANDLE_ROUTE, data, true);
 
 					done();
 				});

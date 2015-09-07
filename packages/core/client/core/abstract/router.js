@@ -71,20 +71,19 @@ export default class Router extends ns.Core.Interface.Router {
 		 * The internal route names.
 		 *
 		 * @const
-		 * @private
-		 * @property _ROUTE_NAMES
+		 * @property ROUTE_NAMES
 		 * @type {Object<string, string>}
 		 */
-		this._ROUTE_NAMES = ROUTER_CONSTANTS.ROUTE_NAMES;
+		this.ROUTE_NAMES = ROUTER_CONSTANTS.ROUTE_NAMES;
 
 		/**
 		 * The internal router events.
 		 *
-		 * @private
-		 * @property _EVENTS
+		 * @const
+		 * @property EVENTS
 		 * @type {Object<string, string>}
 		 */
-		this._EVENTS = ROUTER_CONSTANTS.EVENTS;
+		this.EVENTS = ROUTER_CONSTANTS.EVENTS;
 
 		/**
 		 * The current protocol used to access the application, terminated by a
@@ -423,12 +422,12 @@ export default class Router extends ns.Core.Interface.Router {
 	 *         client, or displayed if used at the client side.
 	 */
 	handleError(params, options = {}) {
-		var routeError = this._routes.get(this._ROUTE_NAMES.ERROR);
+		var routeError = this._routes.get(this.ROUTE_NAMES.ERROR);
 
 		if (!routeError) {
 			var error = new IMAError(`Core.Router:handleError cannot process the ` +
 					`error because no error page route has been configured. Add a new ` +
-					`route named '${this._ROUTE_NAMES.ERROR}'.`, params);
+					`route named '${this.ROUTE_NAMES.ERROR}'.`, params);
 
 			return Promise.reject(error);
 		}
@@ -452,12 +451,12 @@ export default class Router extends ns.Core.Interface.Router {
 	 *         client, or displayed if used at the client side.
 	 */
 	handleNotFound(params, options = {}) {
-		var routeNotFound = this._routes.get(this._ROUTE_NAMES.NOT_FOUND);
+		var routeNotFound = this._routes.get(this.ROUTE_NAMES.NOT_FOUND);
 
 		if (!routeNotFound) {
 			var error = new IMAError(`Core.Router:handleNotFound cannot processes ` +
 					`a non-matching route because no not found page route has been ` +
-					`configured. Add new route named '${this._ROUTE_NAMES.NOT_FOUND}'.`,
+					`configured. Add new route named '${this.ROUTE_NAMES.NOT_FOUND}'.`,
 					params);
 
 			return Promise.reject(error);
@@ -523,7 +522,7 @@ export default class Router extends ns.Core.Interface.Router {
 	 */
 	_getBaseUrl() {
 		return this.getDomain() + this._root +
-			this._languagePartPath;
+				this._languagePartPath;
 	}
 
 	/**
@@ -548,15 +547,19 @@ export default class Router extends ns.Core.Interface.Router {
 	_handle(route, params, options) {
 		var controller = route.getController();
 		var view = route.getView();
-		var options = Object.assign({}, route.getOptions(), options);
+		options = Object.assign({}, route.getOptions(), options);
+		var data = { route, params, path: this.getPath(), options };
+
+		this._dispatcher
+			.fire(this.EVENTS.PRE_HANDLE_ROUTE, data, true);
 
 		return this._pageManager
 				.manage(controller, view, options, params)
 				.then((response) => {
-					var data = { route, params, response, path: this.getPath() };
+					data.response = response;
 
 					this._dispatcher
-						.fire(this._EVENTS.HANDLE_ROUTE, data, true);
+						.fire(this.EVENTS.POST_HANDLE_ROUTE, data, true);
 				});
 
 	}
