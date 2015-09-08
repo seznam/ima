@@ -23,7 +23,9 @@ ns.namespace('App.Component.Header');
 					{this.utils.$Dictionary.get('home.imaLink')}
 				</a>
 				<div className='title-wrapper'>
-					<a href='/' title={this.utils.$Dictionary.get('home.pageTitle')} className="logo"></a>
+					<a href={this.utils.$Router.getBaseUrl()} title={this.utils.$Dictionary.get('home.pageTitle')} className="logo">
+						<img src={this.utils.$Router.getBaseUrl() + this.utils.$Settings.$Static.image + '/logo.png'} alt='Logo' />
+					</a>
 					<h1>{this.utils.$Dictionary.get('home.pageTitle')}</h1>
 				</div>
 			</div>
