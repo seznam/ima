@@ -222,7 +222,17 @@ export default class Router extends ns.Core.Interface.Router {
 	 * @return {string}
 	 */
 	getUrl() {
-		return this._getBaseUrl() + this.getPath();
+		return this.getBaseUrl() + this.getPath();
+	}
+
+	/**
+	 * @inheritDoc
+	 * @override
+	 * @method getBaseUrl
+	 * @return {string}
+	 */
+	getBaseUrl() {
+		return this.getDomain() + this._root + this._languagePartPath;
 	}
 
 	/**
@@ -318,7 +328,7 @@ export default class Router extends ns.Core.Interface.Router {
 					`name ${routeName}. Add new route with that name.`);
 		}
 
-		return this._getBaseUrl() + route.toPath(params);
+		return this.getBaseUrl() + route.toPath(params);
 	}
 
 	/**
@@ -425,19 +435,6 @@ export default class Router extends ns.Core.Interface.Router {
 	 */
 	_extractRoutePath(path) {
 		return path.replace(this._root + this._languagePartPath, '');
-	}
-
-	/**
-	 * Returns the application's absolute base URL, pointing to the public root
-	 * of the application.
-	 *
-	 * @protected
-	 * @method _getBaseUrl
-	 * @return {string} The application's base URL.
-	 */
-	_getBaseUrl() {
-		return this.getDomain() + this._root +
-				this._languagePartPath;
 	}
 
 	/**

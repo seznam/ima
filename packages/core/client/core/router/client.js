@@ -431,7 +431,7 @@ export default class Client extends ns.Core.Abstract.Router {
 	 *         provided URL are the same as the current.
 	 */
 	_isSameDomain(url = '') {
-		return !!url.match(this._getBaseUrl());
+		return !!url.match(this.getBaseUrl());
 	}
 }
 
