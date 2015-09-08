@@ -105,7 +105,7 @@ class View extends ns.Core.Abstract.Component {
 	}
 
 	setCheckedCategory(e) {
-		var checkedCategoryId = e.currentTarget.value;
+		var checkedCategoryId = parseInt(e.currentTarget.value, 10);
 		var category = this.props.categories.getCategoryById(checkedCategoryId);
 		this.setState({ checkedCategory: category });
 	}
@@ -114,7 +114,7 @@ class View extends ns.Core.Abstract.Component {
 		e.stopPropagation();
 		if (e.which === 13 || e.keyCode === 13) {
 			e.preventDefault();
-			this.sendText(null, null);
+			this.sendText(e);
 		}
 	}
 }
