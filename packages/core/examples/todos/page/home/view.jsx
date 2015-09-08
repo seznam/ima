@@ -1,5 +1,4 @@
 import ns from 'imajs/client/core/namespace';
-import AbstractComponent from 'imajs/client/core/abstract/component.js';
 
 ns.namespace('App.Page.Home');
 
