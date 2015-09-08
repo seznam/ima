@@ -20,7 +20,7 @@ class View extends ns.Core.Abstract.Component {
 	render() {
 		var label = this.utils.$Dictionary.get('home.share');
 
-		var TwitterButtonA = ns.App.Component.TweetButton.View;
+		var TwitterButton = ns.App.Component.TweetButton.View;
 
 		var item = this.props.item;
 		var category = this.props.category;
@@ -30,7 +30,7 @@ class View extends ns.Core.Abstract.Component {
 
 		return (
 			<div className={'share' + (active)}>
-				<a href={postLink} className='toggle' onClick={(e)=>this.onToggle(e)}>{label}</a>
+				<a href={postLink} className='toggle' onClick={(e) => this.onToggle(e)}>{label}</a>
 				<div className='sharing-wrapper'>
 					<div className='sharing-container'>
 						<div className='arrow'></div>
@@ -46,16 +46,24 @@ class View extends ns.Core.Abstract.Component {
 							<a
 									href={postLink}
 									onClick={(e)=>this.onShareOnFacebook(e)}
-									className='facebook'>Facebook
+									className='facebook'>
+								<img
+										src={this.utils.$Router.getBaseUrl() + this.utils.$Settings.$Static.image + '/share/facebook.png'}
+										alt='Facebook' />
+								Facebook
 							</a>
 
-							<TwitterButtonA
+							<TwitterButton
 									label='Twitter'
 									url={postLink}
 									text={this.getPlainTextItemContent(item)}
-									hashTags={category.getHashTag()}/>
+									hashTags={category.getHashTag()}
+									$Utils={this.utils}/>
 
 							<a href={this.getMailShareLink(item)} className='email'>
+								<img
+										src={this.utils.$Router.getBaseUrl() + this.utils.$Settings.$Static.image + '/share/email.png'}
+										alt='Email' />
 								Email
 							</a>
 						</div>

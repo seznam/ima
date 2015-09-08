@@ -31,7 +31,7 @@ class View extends ns.Core.Abstract.Component {
 					<meta property="og:image" content={this.props.metaManager.getMetaProperty('og:image')} />
 
 					<meta name="viewport" content="width=device-width, initial-scale=1" />
-					<link rel="stylesheet" href={'/static/css/' + appCssFile} />
+					<link rel="stylesheet" href={this.utils.$Router.getBaseUrl() + this.utils.$Settings.$Static.css + '/' + appCssFile} />
 					<title>
 						{this.props.metaManager.getTitle()}
 					</title>

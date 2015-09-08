@@ -56,7 +56,7 @@ class View extends ns.Core.Abstract.Component {
 		if (category) {
 			return (
 				<div className='service-icon'>
-					<img src={category.getIconUrl()} alt={category.getName()} />
+					<img src={this.utils.$Router.getBaseUrl() + category.getIconUrl()} alt={category.getName()} />
 				</div>);
 		}
 

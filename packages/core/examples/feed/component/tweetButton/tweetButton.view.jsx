@@ -17,7 +17,7 @@ ns.namespace('App.Component.TweetButton');
  * @submodule App.Component
  */
 
-class View extends React.Component {
+class View extends ns.Core.Abstract.Component {
 
 	constructor(props) {
 		super(props);
@@ -38,6 +38,9 @@ class View extends React.Component {
 					onClick={(e)=>this.onShare(e)}
 					className='tweet-button'
 					target='_blank'>
+				<img
+						src={this.utils.$Router.getBaseUrl() + this.utils.$Settings.$Static.image + '/share/twitter.png'}
+						alt={this.props.label} />
 				{this.props.label}
 			</a>
 		);

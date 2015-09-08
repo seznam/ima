@@ -31,7 +31,8 @@ export var init = (ns, oc, config) => {
 				}
 			},
 			$Static: {
-				image: '/static/img'
+				image: '/static/img',
+				css: '/static/css'
 			},
 			Api: {
 				baseUrl: config.$Protocol + '//localhost:3001/api',
