@@ -2,7 +2,7 @@
 var gulp = require('gulp');
 
 gulp.task('app:hello', function () {
-	return gulp.src('./imajs/examples/helloWorld/**/*')
+	return gulp.src('./imajs/examples/hello/**/*')
 		.pipe(gulp.dest('./app'));
 });
 
