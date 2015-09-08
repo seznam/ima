@@ -31,15 +31,17 @@ export default class Component extends ns.Vendor.React.Component {
 		 * @type {Object<string, *>}
 		 */
 		this._utils = props.$Utils;
+	}
 
-		/**
-		 * The CSS class names passed in the initial properties.
-		 *
-		 * @public
-		 * @property className
-		 * @type {string}
-		 */
-		this.className = props.className ? ' ' + props.className + ' ' : '';
+	/**
+	 * Returns the current value of the component's {@code className} property.
+	 * The returned value is an empty string if no such property is defined.
+	 *
+	 * @return {string} The current value of the component's {@code className}
+	 *         property, or an empty string.
+	 */
+	get className() {
+		return this.props.className || '';
 	}
 
 	/**
@@ -111,13 +113,28 @@ export default class Component extends ns.Vendor.React.Component {
 	 * @param {Object<string, boolean>} classRules A map of CSS class names to
 	 *        boolean values. The CSS class name will be included in the result
 	 *        only if the value is {@code true}.
+	 * @param {boolean} includeComponentClassName
 	 * @return {string} String of CSS classes that had their property resolved
 	 *         to {@code true}.
 	 */
-	cssClasses(classRules) {
+	cssClasses(classRules, includeComponentClassName = false) {
 		if (!(classRules instanceof Object)) {
 			throw new Error('The class rules must be specified as a plain ' +
 					`object, ${classRules} provided`);
+		}
+
+		if (includeComponentClassName) {
+			var propClassNames = this.className;
+			if (propClassNames) {
+				var separatedPropClassNames = propClassNames.split(/\s+/);
+				var classNamesMap = {};
+
+				for (var className of separatedPropClassNames) {
+					classNamesMap[className] = true;
+				}
+
+				classRules = Object.assign({}, classRules, classNamesMap);
+			}
 		}
 
 		return Object
