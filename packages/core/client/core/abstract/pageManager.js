@@ -14,6 +14,8 @@ ns.namespace('Core.Abstract');
 export default class PageManager extends ns.Core.Interface.PageManager {
 
 	/**
+	 * Initializes the page manager.
+	 *
 	 * @method constructor
 	 * @constructor
 	 * @param {Core.Page.Factory} pageFactory
@@ -56,20 +58,18 @@ export default class PageManager extends ns.Core.Interface.PageManager {
 	}
 
 	/**
-	 * Initialization manager.
-	 *
 	 * @inheritDoc
 	 * @override
 	 * @method init
 	 */
 	init() {
 		this._clearManagedPageValue();
-		this._stateManager.onChange = (newState) => this._onChangeStateHandler(newState);
+		this._stateManager.onChange = (newState) => {
+			this._onChangeStateHandler(newState);
+		};
 	}
 
 	/**
-	 * Manager controller with params.
-	 *
 	 * @inheritDoc
 	 * @override
 	 * @method manage
@@ -86,15 +86,25 @@ export default class PageManager extends ns.Core.Interface.PageManager {
 			return this._updateController(params);
 		}
 
-		var controllerInstance = this._pageFactory.createController(controller);
-		var decoratedController = this._pageFactory.decorateController(controllerInstance);
+		var controllerInstance;
+		controllerInstance = this._pageFactory.createController(controller);
+		var decoratedController = this._pageFactory.decorateController(
+			controllerInstance
+		);
 		var viewInstance = this._pageFactory.createView(view);
 
 		this._deactivateController();
 		this._destroyController();
 
-		this._storeManagedPageValue(controller, view, options, params, controllerInstance,
-				decoratedController, viewInstance);
+		this._storeManagedPageValue(
+			controller,
+			view,
+			options,
+			params,
+			controllerInstance,
+			decoratedController,
+			viewInstance
+		);
 
 		this._initController(params);
 
@@ -110,24 +120,19 @@ export default class PageManager extends ns.Core.Interface.PageManager {
 	}
 
 	/**
-	 * Scroll page to defined vertical and horizontal values.
-	 *
-	 * Scrolling is async.
-	 *
 	 * @abstract
 	 * @inheritDoc
 	 * @override
 	 * @method scrollTo
-	 * @param {number} [x=0] x is the pixel along the horizontal axis of the document
-	 * @param {number} [y=0] y is the pixel along the vertical axis of the document
+	 * @param {number} [x=0]
+	 * @param {number} [y=0]
 	 */
 	scrollTo(x = 0, y = 0) {
-		throw new IMAError('The scrollTo() method is abstract and must be overridden.');
+		throw new IMAError('The scrollTo() method is abstract and must be ' +
+				'overridden.');
 	}
 
 	/**
-	 * Store value for next managing process.
-	 *
 	 * @protected
 	 * @method _storeManagedPageValue
 	 * @param {(string|function)} controller
@@ -138,7 +143,8 @@ export default class PageManager extends ns.Core.Interface.PageManager {
 	 * @param {Core.Decorator.Controller} decoratedController
 	 * @param {Vendor.React.Component} viewInstance
 	 */
-	_storeManagedPageValue(controller, view, options, params, controllerInstance, decoratedController, viewInstance) {
+	_storeManagedPageValue(controller, view, options, params,
+			controllerInstance, decoratedController, viewInstance) {
 		this._managedPage = {
 			controller,
 			controllerInstance,

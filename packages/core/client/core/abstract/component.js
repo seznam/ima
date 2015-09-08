@@ -14,14 +14,18 @@ ns.namespace('Core.Abstract');
 export default class Component extends ns.Vendor.React.Component {
 
 	/**
+	 * Initializes the constructor.
+	 *
 	 * @constructor
 	 * @method constructor
-	 * @param {Object<string, *>} props
+	 * @param {Object<string, *>} props The component properties.
 	 */
 	constructor(props) {
 		super(props);
 
 		/**
+		 * The view utilities.
+		 *
 		 * @private
 		 * @property _utils
 		 * @type {Object<string, *>}
@@ -29,6 +33,8 @@ export default class Component extends ns.Vendor.React.Component {
 		this._utils = props.$Utils;
 
 		/**
+		 * The CSS class names passed in the initial properties.
+		 *
 		 * @public
 		 * @property className
 		 * @type {string}
@@ -46,8 +52,9 @@ export default class Component extends ns.Vendor.React.Component {
 	get utils() {
 		if ($Debug) {
 			if (!this._utils) {
-				throw new Error('You cannot access view utils because they were ' +
-						'not passed in the initial props as key name $Utils.');
+				throw new Error('You cannot access view utils because they ' +
+						'were not passed in the initial props as key name ' +
+						'$Utils.');
 			}
 		}
 
@@ -83,24 +90,29 @@ export default class Component extends ns.Vendor.React.Component {
 	}
 
 	/**
-	 * Returns URL for route name. Method replace params in route with defined params.
-	 * Routes is defined in {@code /app/config/routes.js}.
+	 * Returns URL for route name. Method replace params in route with defined
+	 * params. Routes is defined in {@code /app/config/routes.js}.
 	 *
 	 * @method link
-	 * @param {string} name Route name
-	 * @param {Object<string, (number|string)>=} params Params for replacement
-	 * @return {string}
+	 * @param {string} name The route name.
+	 * @param {Object<string, (number|string)>=} params Router parameters and
+	 *        extraneous parameters to add to the URL as a query string.
+	 * @return {string} The generated URL.
 	 */
 	link(name, params = {}) {
 		return this._utils.$Router.link(name, params);
 	}
 
 	/**
-	 * Generate string of CSS classes, which have set value to true.
+	 * Generate a string of CSS classes from the properties of the passed-in
+	 * object that resolve to true.
 	 *
 	 * @method cssClasses
-	 * @param {Object<string, boolean>} classRules Map of CSS classes with boolean values.
-	 * @return {string} string of CSS classes
+	 * @param {Object<string, boolean>} classRules A map of CSS class names to
+	 *        boolean values. The CSS class name will be included in the result
+	 *        only if the value is {@code true}.
+	 * @return {string} String of CSS classes that had their property resolved
+	 *         to {@code true}.
 	 */
 	cssClasses(classRules) {
 		if (!(classRules instanceof Object)) {
@@ -117,27 +129,29 @@ export default class Component extends ns.Vendor.React.Component {
 	}
 
 	/**
-	 * Create and send new IMA.js DOM Custom event from this component.
+	 * Creates and sends a new IMA.js DOM custom event from this component.
 	 *
 	 * @method fire
-	 * @param {string} eventName Name of event
-	 * @param {*=} data Data for event
+	 * @param {string} eventName The name of the event.
+	 * @param {*=} data Data to send within the event.
 	 */
 	fire(eventName, data = null) {
 		this._utils.$EventBus.fire(this.findDOMNode(), eventName, data);
 	}
 
 	/**
-	 * Add listener for defined IMA.js DOM Custom event.
+	 * Registers the provided event listener for execution whenever an IMA.js
+	 * DOM custom event of the specified name occurs at the specified event
+	 * target.
 	 *
 	 * @method listen
-	 * @param {(ReactElement|EventTarget)} eventTarget Element for add
-	 *        event listener
-	 * @param {string} eventName Name of event which is listen
-	 * @param {function(Event)} listener Listener for event
+	 * @param {(ReactElement|EventTarget)} eventTarget The react component or
+	 *        event target at which the listener should listen for the event.
+	 * @param {string} eventName The name of the event for which to listen.
+	 * @param {function(Event)} listener The listener for event to register.
 	 */
 	listen(eventTarget, eventName, listener) {
-		if (!eventTarget.addEventListener) { // Safari doesn't know EventTarget
+		if (!eventTarget.addEventListener) { // Safari doesn't have EventTarget
 			eventTarget = this.findDOMNode(eventTarget);
 		}
 

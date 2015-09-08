@@ -32,8 +32,8 @@ export default class Entry {
 		this._value = value;
 
 		/**
-		 * The time to live in milliseconds. The cache entry is considered expired
-		 * after this time.
+		 * The time to live in milliseconds. The cache entry is considered
+		 * expired after this time.
 		 *
 		 * @property _ttl
 		 * @private
@@ -74,8 +74,8 @@ export default class Entry {
 	}
 
 	/**
-	 * Returns the entry value. If entry value is type of object
-	 * returns clone of that object.
+	 * Returns the entry value. If entry value is type of object returns clone
+	 * of that object.
 	 *
 	 * @method getValue
 	 * @return {*} The entry value.

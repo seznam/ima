@@ -37,14 +37,11 @@ export default class WeakMapStorage extends ns.Core.Storage.Map {
 	}
 
 	/**
-	 * Returns {@code true} if the entry identified by the specified key exists
-	 * in this storage.
-	 *
 	 * @inheritDoc
 	 * @override
 	 * @method has
-	 * @param {string} key The key identifying the storage entry.
-	 * @return {boolean} {@code true} if the storage entry exists.
+	 * @param {string} key
+	 * @return {boolean}
 	 */
 	has(key) {
 		this._discardExpiredEntries();
@@ -53,17 +50,11 @@ export default class WeakMapStorage extends ns.Core.Storage.Map {
 	}
 
 	/**
-	 * Retrieves the value of the entry identified by the specified key. The
-	 * method returns {@code undefined} if the entry does not exists.
-	 *
-	 * Entries set to the {@code undefined} value can be tested for existence
-	 * using the {@codelink has} method.
-	 *
 	 * @inheritDoc
 	 * @override
 	 * @method get
-	 * @param {string} key The key identifying the storage entry.
-	 * @return {*} The value of the storage entry.
+	 * @param {string} key
+	 * @return {*}
 	 */
 	get(key) {
 		this._discardExpiredEntries();
@@ -76,16 +67,13 @@ export default class WeakMapStorage extends ns.Core.Storage.Map {
 	}
 
 	/**
-	 * Sets the storage entry identified by the specified key to the provided
-	 * value. The method creates the entry if it does not exist already.
-	 *
 	 * @inheritDoc
 	 * @override
 	 * @chainable
 	 * @method set
-	 * @param {string} key The key identifying the storage entry.
-	 * @param {*} value The storage entry value.
-	 * @return {Core.Storage.WeakMap} This storage.
+	 * @param {string} key
+	 * @param {*} value
+	 * @return {Core.Storage.WeakMap}
 	 */
 	set(key, value) {
 		this._discardExpiredEntries();
@@ -94,14 +82,12 @@ export default class WeakMapStorage extends ns.Core.Storage.Map {
 	}
 
 	/**
-	 * Deletes the entry identified by the specified key from this storage.
-	 *
 	 * @inheritDoc
 	 * @override
 	 * @chainable
 	 * @method delete
-	 * @param {string} key The key identifying the storage entry.
-	 * @return {Core.Storage.Map} This storage.
+	 * @param {string} key
+	 * @return {Core.Storage.Map}
 	 */
 	delete(key) {
 		this._discardExpiredEntries();
@@ -110,16 +96,10 @@ export default class WeakMapStorage extends ns.Core.Storage.Map {
 	}
 
 	/**
-	 * Returns an iterator for traversing the keys in this storage. The order in
-	 * which the keys are traversed is undefined.
-	 *
 	 * @inheritDoc
 	 * @override
 	 * @method keys
-	 * @return {Iterator<string>} An iterator for traversing the keys in this
-	 *         storage. The iterator also implements the iterable protocol,
-	 *         returning itself as its own iterator, allowing it to be used in a
-	 *         {@code for..of} loop.
+	 * @return {Iterator<string>}
 	 */
 	keys() {
 		this._discardExpiredEntries();
@@ -128,11 +108,10 @@ export default class WeakMapStorage extends ns.Core.Storage.Map {
 	}
 
 	/**
-	 * Returns the number of entries in this storage.
-	 *
+	 * @inheritDoc
 	 * @override
 	 * @method size
-	 * @return {number} The number of entries in this storage.
+	 * @return {number}
 	 */
 	size() {
 		this._discardExpiredEntries();
@@ -185,8 +164,8 @@ class WeakRef {
 	constructor(target, ttl) {
 		if ($Debug) {
 			if (!(target instanceof Object)) {
-				throw new TypeError("The target reference must point to an " +
-						"object, primitive values are not allowed");
+				throw new TypeError('The target reference must point to an ' +
+						'object, primitive values are not allowed');
 			}
 			if (ttl <= 0) {
 				throw new Error('The time-to-live must be positive');

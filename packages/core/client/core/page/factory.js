@@ -59,7 +59,8 @@ export default class Factory {
 		if (classConstructor) {
 			return classConstructor;
 		} else {
-			throw new IMAError(`Core.Page.Factory:createView hasn't name of view "${view}".`);
+			throw new IMAError(`Core.Page.Factory:createView hasn't name ` +
+					`of view "${view}".`);
 		}
 	}
 
@@ -70,14 +71,16 @@ export default class Factory {
 	 * @param {Core.Interface.Controller} controller
 	 * @return {Core.Interface.Controller}
 	 */
-	decorateController(controllerInstance) {
+	decorateController(controller) {
 		var metaManager = this._oc.get('$MetaManager');
 		var router = this._oc.get('$Router');
 		var dictionary = this._oc.get('$Dictionary');
 		var settings = this._oc.get('$Settings');
 
-		var decoratedController = this._oc.create('$DecoratorController', [controllerInstance,
-			metaManager, router, dictionary, settings]);
+		var decoratedController = this._oc.create(
+			'$DecoratorController',
+			[controller, metaManager, router, dictionary, settings]
+		);
 
 		return decoratedController;
 	}

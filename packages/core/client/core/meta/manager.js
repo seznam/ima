@@ -50,109 +50,84 @@ export default class Manager extends ns.Core.Interface.MetaManager {
 	}
 
 	/**
-	 * Sets the page title.
-	 *
 	 * @inheritDoc
 	 * @override
 	 * @method setTitle
-	 * @param {string} title The new page title.
+	 * @param {string} title
 	 */
 	setTitle(title) {
 		this._title = title;
 	}
 
 	/**
-	 * Returns the page title. The method returns an empty string if no page
-	 * title has been set yet.
-	 *
 	 * @inheritDoc
 	 * @override
 	 * @method getTitle
-	 * @return {string} The paget title currently stored in this meta manager.
+	 * @return {string}
 	 */
 	getTitle() {
 		return this._title;
 	}
 
 	/**
-	 * Set the specified generic meta information.
-	 *
 	 * @inheritDoc
 	 * @override
 	 * @method setMetaName
-	 * @param {string} name Meta information name, for example {@code keywords}.
-	 * @param {string} value The meta information value.
+	 * @param {string} name
+	 * @param {string} value
 	 */
 	setMetaName(name, value) {
 		this._metaName.set(name, value);
 	}
 
 	/**
-	 * Returns the value of the specified generic meta information. The method
-	 * returns an empty string for missing meta information (to make the returned
-	 * value React-friendly).
-	 *
 	 * @inheritDoc
 	 * @override
 	 * @method getMetaName
-	 * @param {string} name The name of the generic meta information.
-	 * @return {string} The value of the generic meta information, or an empty
-	 *         string.
+	 * @param {string} name
+	 * @return {string}
 	 */
 	getMetaName(name) {
 		return this._metaName.get(name) || '';
 	}
 
 	/**
-	 * Returns the names of the currently known generic meta information.
-	 *
 	 * @inheritDoc
 	 * @override
 	 * @method getMetaNames
-	 * @return {string[]} The names of the currently known generic meta
-	 *         information.
+	 * @return {string[]}
 	 */
 	getMetaNames() {
 		return Array.from(this._metaName.keys());
 	}
 
 	/**
-	 * Sets the specified specialized meta information.
-	 *
 	 * @inheritDoc
 	 * @override
 	 * @method setMetaProperty
-	 * @param {string} name Name of the specialized meta information.
-	 * @param {string} value The value of the meta information.
+	 * @param {string} name
+	 * @param {string} value
 	 */
 	setMetaProperty(name, value) {
 		this._metaProperty.set(name, value);
 	}
 
 	/**
-	 * Returns the value of the specified specialized meta information. The
-	 * method returns an empty string for missing meta information (to make the
-	 * returned value React-friendly).
-	 *
 	 * @inheritDoc
 	 * @override
 	 * @method getMetaProperty
-	 * @param {string} name The name of the specialized meta information.
-	 * @return {string} The value of the specified meta information, or an empty
-	 *         string.
+	 * @param {string} name
+	 * @return {string}
 	 */
 	getMetaProperty(name) {
 		return this._metaProperty.get(name) || '';
 	}
 
 	/**
-	 * Returns the names of the currently known specialized meta information.
-	 *
 	 * @inheritDoc
 	 * @override
 	 * @method getMetaProperties
-	 * @return {string[]} The names of the currently known specialized meta
-	 *         information.
+	 * @return {string[]}
 	 */
 	getMetaProperties() {
 		return Array.from(this._metaProperty.keys());

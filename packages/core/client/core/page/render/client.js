@@ -19,10 +19,11 @@ export default class Client extends ns.Core.Abstract.PageRender {
 	 *
 	 * @method constructor
 	 * @constructor
-	 * @param {Core.Page.Render.Factory} factory Factory for receive $Utils to view.
+	 * @param {Core.Page.Render.Factory} factory Factory for receive $Utils to
+	 *        view.
 	 * @param {Vendor.$Helper} Helper The IMA.js helper methods.
-	 * @param {Vendor.React} React React framework instance to use to render the
-	 *        page.
+	 * @param {Vendor.React} React React framework instance to use to render
+	 *        the page.
 	 * @param {Object<string, *>} settings The application setting for the
 	 *        current application environment.
 	 * @param {Core.Interface.Window} window Helper for manipulating the global
@@ -43,8 +44,8 @@ export default class Client extends ns.Core.Abstract.PageRender {
 		this._firstTime = true;
 
 		/**
-		 * Helper for manipulating the global object ({@code window}) regardless of
-		 * the client/server-side environment.
+		 * Helper for manipulating the global object ({@code window})
+		 * regardless of the client/server-side environment.
 		 *
 		 * @property _window
 		 * @private
@@ -57,22 +58,12 @@ export default class Client extends ns.Core.Abstract.PageRender {
 		 * @private
 		 * @type {HTMLElement}
 		 */
-		this._viewContainer = this._window
-				.getElementById(this._settings.$Page.$Render.masterElementId);
-
+		this._viewContainer = this._window.getElementById(
+			this._settings.$Page.$Render.masterElementId
+		);
 	}
 
 	/**
-	 * Renders the page using the provided controller and view. The actual
-	 * behavior of this method differs at the client and the at server in the
-	 * following way:
-	 *
-	 * On server, the method renders the page to a string containing HTML markup
-	 * to send to the client.
-	 *
-	 * On client, the method renders the page into DOM, re-using the DOM created
-	 * from the HTML markup send by the server if possible.
-	 *
 	 * @inheritDoc
 	 * @override
 	 * @method mount
@@ -108,23 +99,21 @@ export default class Client extends ns.Core.Abstract.PageRender {
 					controller.setMetaParams(fetchedResources);
 					this._updateMetaAttributes(controller.getMetaManager());
 
-					return { content: null, status: controller.getHttpStatus() };
+					return {
+						content: null,
+						status: controller.getHttpStatus()
+					};
 				})
 				.catch((error) => this._handleError(error))
 		);
 	}
 
 	/**
-	 * Only update controller state and React view not call constructor.
-	 *
-	 * It is useful for same controller and view, where only change url params.
-	 * Then it is possible to reuse same controller and view.
-	 *
 	 * @inheritDoc
 	 * @override
 	 * @method update
 	 * @param {Core.Decorator.Controller} controller
-	 * @param {Object<string, string>=} [params={}] Last route params.
+	 * @param {Object<string, string>=} [params={}]
 	 * @return {Promise}
 	 */
 	update(controller, params = {}) {
@@ -148,9 +137,6 @@ export default class Client extends ns.Core.Abstract.PageRender {
 	}
 
 	/**
-	 * Unmount view from the DOM. Then React always call constructor
-	 * for new mounting view.
-	 *
 	 * @inheritDoc
 	 * @override
 	 * @method unmount
@@ -217,13 +203,15 @@ export default class Client extends ns.Core.Abstract.PageRender {
 	}
 
 	/**
-	 * Separate promises and values from provided data map. Values will be use for
-	 * default page state. Promises will be patched to state after their resolve.
+	 * Separate promises and values from provided data map. Values will be use
+	 * for default page state. Promises will be patched to state after their
+	 * resolve.
 	 *
 	 * @method _separatePromisesAndValues
 	 * @private
 	 * @param {Object<string, *>} dataMap A map of data.
-	 * @return {{promises: Promise, values: *}} Return separated promises and other values.
+	 * @return {{promises: Object<string, Promise>, values: Object<string, *>}}
+	 *         Return separated promises and other values.
 	 */
 	_separatePromisesAndValues(dataMap) {
 		var promises = {};
@@ -247,8 +235,8 @@ export default class Client extends ns.Core.Abstract.PageRender {
 	 *
 	 * @private
 	 * @method _updateMetaAttributes
-	 * @param {Core.Interface.MetaManager} metaManager meta attributes storage providing the new
-	 *        values for page meta elements and title.
+	 * @param {Core.Interface.MetaManager} metaManager meta attributes storage
+	 *        providing the new values for page meta elements and title.
 	 */
 	_updateMetaAttributes(metaManager) {
 		var metaTagKey = null;
@@ -264,7 +252,9 @@ export default class Client extends ns.Core.Abstract.PageRender {
 		}
 
 		for (metaTagKey of metaManager.getMetaProperties()) {
-			metaTag = this._window.querySelector(`meta[property="${metaTagKey}"]`);
+			metaTag = this._window.querySelector(
+				`meta[property="${metaTagKey}"]`
+			);
 
 			if (metaTag) {
 				metaTag.content = metaManager.getMetaProperty(metaTagKey);

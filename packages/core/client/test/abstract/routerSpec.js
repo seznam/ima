@@ -113,7 +113,7 @@ describe('Core.Abstract.Router', function() {
 				.and
 				.returnValue(params);
 
-			expect(router.getCurrentRouteInfo()).toEqual({route: route, params: params});
+			expect(router.getCurrentRouteInfo()).toEqual({route: route, params: params, path: '/link'});
 		});
 	});
 

@@ -38,17 +38,20 @@ const COOKIE_SEPARATOR = '; ';
  * @submodule Core.Storage
  *
  * @requires Core.Router.Request
- * @requires Core.Router.Respond
+ * @requires Core.Router.Response
  */
 export default class Cookie extends ns.Core.Storage.Map {
 	/**
+	 * Initializes the cookie storage.
+	 *
 	 * @constructor
 	 * @method constructor
 	 * @param {Core.Interface.Window} window The window utility.
 	 * @param {Core.Router.Request} request The current HTTP request.
 	 * @param {Core.Router.Response} response The current HTTP response.
 	 * @example
-	 *      cookie.set('cookie', 'value', {expires: 10}); // cookie expires after 10s
+	 *      cookie.set('cookie', 'value', {expires: 10}); // cookie expires
+	 *                                                    // after 10s
 	 *      cookie.set('cookie'); // delete cookie
 	 *
 	 */
@@ -56,8 +59,8 @@ export default class Cookie extends ns.Core.Storage.Map {
 		super();
 
 		/**
-		 * The window utility used to determine whether the core is being run at
-		 * the client or at the server.
+		 * The window utility used to determine whether the core is being run
+		 * at the client or at the server.
 		 *
 		 * @private
 		 * @property _window
@@ -112,12 +115,6 @@ export default class Cookie extends ns.Core.Storage.Map {
 	}
 
 	/**
-	 * This method is used to finalize the initialization of the storage after
-	 * the dependencies provided through the constructor are ready to be used.
-	 *
-	 * This method must be invoked only once and it must be the first method
-	 * invoked on this instance.
-	 *
 	 * @inheritDoc
 	 * @override
 	 * @chainable
@@ -127,7 +124,10 @@ export default class Cookie extends ns.Core.Storage.Map {
 	 * @return {Core.Interface.Storage}
 	 */
 	init(options = {}, transformFunction = {}) {
-		this._transformFunction = Object.assign(this._transformFunction, transformFunction);
+		this._transformFunction = Object.assign(
+			this._transformFunction,
+			transformFunction
+		);
 		this._options = Object.assign(this._options, options);
 		this._parse();
 
@@ -135,31 +135,22 @@ export default class Cookie extends ns.Core.Storage.Map {
 	}
 
 	/**
-	 * Returns {@code true} if the specified cookie exists in this storage.
-	 *
-	 * Note that the method checks only for cookies known to this storage, it
-	 * does not check for cookies set using other means (for example by
-	 * manipulating the {@code document.cookie} property).
-	 *
+	 * @inheritDoc
 	 * @override
 	 * @method has
-	 * @param {string} name The name of the cookie to test for existence.
-	 * @return {boolean} {@code true} if the specified cookie exists in this
-	 *         storage.
+	 * @param {string} name
+	 * @return {boolean}
 	 */
 	has(name) {
 		return super.has(name);
 	}
 
 	/**
-	 * Returns the value of the specified cookie from the storage. The method
-	 * returns {@code undefined} if the cookie does not exist.
-	 *
+	 * @inheritDoc
 	 * @override
 	 * @method get
 	 * @param {string} name The cookie name.
-	 * @return {(undefined|string)} The value of the cookie, or {@code undefined}
-	 *         if the cookie does not exist.
+	 * @return {(undefined|string)}
 	 */
 	get(name) {
 		if (super.has(name)) {
@@ -170,21 +161,18 @@ export default class Cookie extends ns.Core.Storage.Map {
 	}
 
 	/**
-	 * Set cookie for name.
-	 *
+	 * @inheritDoc
 	 * @override
 	 * @chainable
 	 * @method set
-	 * @param {string} name The cookie name.
-	 * @param {(boolean|number|string|undefined)} value The cookie value, will be converted
-	 *        to string.
-	 * @param {{domain: string=, expires: (number|string|Date|null)=},
-	 *        secure: boolean=, httpOnly: boolean=, path: string=} [options={}]
+	 * @param {string} name
+	 * @param {(boolean|number|string|undefined)} value
+	 * @param {{domain: string=, expires: (number|string|Date|null)=, secure: boolean=, httpOnly: boolean=, path: string=}} [options={}]
 	 *        Cookie attributes. Only the attributes listed in the type
-	 *        annotation of this field are supported. For documentation and full
-	 *        list of cookie attributes see
+	 *        annotation of this field are supported. For documentation and
+	 *        full list of cookie attributes see
 	 *        http://tools.ietf.org/html/rfc2965#page-5
-	 * @return {Core.Storage.Cookie} This storage.
+	 * @return {Core.Storage.Cookie}
 	 */
 	set(name, value, options = {}) {
 		options = Object.assign({}, this._options, options);
@@ -210,14 +198,12 @@ export default class Cookie extends ns.Core.Storage.Map {
 	}
 
 	/**
-	 * Deletes the the specified cookie from this storage, the current response
-	 * and / or the browser.
-	 *
+	 * @inheritDoc
 	 * @override
 	 * @chainable
 	 * @method delete
-	 * @param {string} name The name of the cookie to delete.
-	 * @return {Core.Storage.Cookie} This storage.
+	 * @param {string} name
+	 * @return {Core.Storage.Cookie}
 	 */
 	delete(name) {
 		if (this.has(name)) {
@@ -229,13 +215,11 @@ export default class Cookie extends ns.Core.Storage.Map {
 	}
 
 	/**
-	 * Deletes all cookies from this storage, the current response and / or the
-	 * browser.
-	 *
+	 * @inheritDoc
 	 * @override
 	 * @chainable
 	 * @method clear
-	 * @return {Core.Storage.Cookie} This storage.
+	 * @return {Core.Storage.Cookie}
 	 */
 	clear() {
 		for (var cookieName of super.keys()) {
@@ -246,22 +230,17 @@ export default class Cookie extends ns.Core.Storage.Map {
 	}
 
 	/**
-	 * Returns the names of all cookies in this storage.
-	 *
+	 * @inheritDoc
 	 * @override
 	 * @method keys
-	 * @return {Iterator<string>} An iterator for traversing the keys in this
-	 *         storage. The iterator also implements the iterable protocol,
-	 *         returning itself as its own iterator, allowing it to be used in a
-	 *         {@code for..of} loop.
+	 * @return {Iterator<string>}
 	 */
 	keys() {
 		return super.keys();
 	}
 
 	/**
-	 * Returns storage size.
-	 *
+	 * @inheritDoc
 	 * @override
 	 * @method size
 	 * @return {number}
@@ -271,8 +250,8 @@ export default class Cookie extends ns.Core.Storage.Map {
 	}
 
 	/**
-	 * Returns all cookies in this storage serialized to a string compatible with
-	 * the {@code Set-Cookie} HTTP header and the setter of the
+	 * Returns all cookies in this storage serialized to a string compatible
+	 * with the {@code Set-Cookie} HTTP header and the setter of the
 	 * {@code document.cookie} property.
 	 *
 	 * @method getCookiesString
@@ -285,7 +264,11 @@ export default class Cookie extends ns.Core.Storage.Map {
 		for (var cookieName of super.keys()) {
 			var cookieItem = super.get(cookieName);
 
-			cookieStrings.push(this._generateCookieString(cookieName, cookieItem.value, cookieItem.options));
+			cookieStrings.push(this._generateCookieString(
+				cookieName,
+				cookieItem.value,
+				cookieItem.options
+			));
 		}
 
 		return cookieStrings.join(COOKIE_SEPARATOR);
@@ -331,16 +314,23 @@ export default class Cookie extends ns.Core.Storage.Map {
 			var cookie = this._extractCookie(cookiesArray[i]);
 
 			if (cookie.name !== null) {
-				cookie.options = Object.assign({}, this._options, cookie.options);
+				cookie.options = Object.assign(
+					{},
+					this._options,
+					cookie.options
+				);
 
-				super.set(cookie.name, { value: this._sanitizeCookieValue(cookie.value), options: cookie.options });
+				super.set(cookie.name, {
+					value: this._sanitizeCookieValue(cookie.value),
+					options: cookie.options
+				});
 			}
 		}
 	}
 
 	/**
-	 * Creates a copy of the provided word (or text) that has its first character
-	 * converted to lower case.e
+	 * Creates a copy of the provided word (or text) that has its first
+	 * character converted to lower case.
 	 *
 	 * @private
 	 * @method _firstLetterToLowerCase
@@ -354,8 +344,8 @@ export default class Cookie extends ns.Core.Storage.Map {
 	}
 
 	/**
-	 * Generates a string representing the specified cookied, usable either with
-	 * the {@code document.cookie} property or the {@code Set-Cookie} HTTP
+	 * Generates a string representing the specified cookied, usable either
+	 * with the {@code document.cookie} property or the {@code Set-Cookie} HTTP
 	 * header.
 	 *
 	 * (Note that the {@code Cookie} HTTP header uses a slightly different
@@ -364,16 +354,16 @@ export default class Cookie extends ns.Core.Storage.Map {
 	 * @private
 	 * @method _generateCookieString
 	 * @param {string} name The cookie name.
-	 * @param {(boolean|number|string)} value The cookie value, will be converted
-	 *        to string.
+	 * @param {(boolean|number|string)} value The cookie value, will be
+	 *        converted to string.
 	 * @param {{path: string=, domain: string=, expires: Date=, secure: boolean=}} options
 	 *        Cookie attributes. Only the attributes listed in the type
-	 *        annotation of this field are supported. For documentation and full
-	 *        list of cookie attributes see
+	 *        annotation of this field are supported. For documentation and
+	 *        full list of cookie attributes see
 	 *        http://tools.ietf.org/html/rfc2965#page-5
-	 * @return {string} A string representing the cookie. Setting this string to
-	 *         the {@code document.cookie} property will set the cookie to the
-	 *         browser's cookie storage.
+	 * @return {string} A string representing the cookie. Setting this string
+	 *         to the {@code document.cookie} property will set the cookie to
+	 *         the browser's cookie storage.
 	 */
 	_generateCookieString(name, value, options) {
 		var cookieString = name + '=' + this._transformFunction.encode(value);
@@ -393,8 +383,9 @@ export default class Cookie extends ns.Core.Storage.Map {
 	 *
 	 * @private
 	 * @method _getExpirationAsDate
-	 * @param {(number|string|Date)} expiration Cookie expiration in seconds from now,
-	 *        or as a string compatible with the {@code Date} constructor.
+	 * @param {(number|string|Date)} expiration Cookie expiration in seconds
+	 *        from now, or as a string compatible with the {@code Date}
+	 *        constructor.
 	 * @return {Date} Cookie expiration as a {@code Date} instance.
 	 */
 	_getExpirationAsDate(expiration) {
@@ -415,7 +406,7 @@ export default class Cookie extends ns.Core.Storage.Map {
 	 *
 	 * @private
 	 * @method _extractCookie
-	 * @param {string} setCookieHeader The value of the {@code Set-Cookie} HTTP
+	 * @param {string} cookieString The value of the {@code Set-Cookie} HTTP
 	 *        header.
 	 * @return {{name: (string|null) value: (string|null), options: Object<string, boolean|Date>}}
 	 */
@@ -451,7 +442,7 @@ export default class Cookie extends ns.Core.Storage.Map {
 	 * @method _extractNameAndValue
 	 * @param {string} pair
 	 * @param {number} pairIndex
-	 * @return {Array<(string|boolean|Date|null>}
+	 * @return {Array<(string|boolean|Date|null)>}
 	 */
 	_extractNameAndValue(pair, pairIndex) {
 		var separatorIndexEqual = pair.indexOf('=');
@@ -466,8 +457,12 @@ export default class Cookie extends ns.Core.Storage.Map {
 			name = this._firstLetterToLowerCase(pair.trim());
 			value = true;
 		} else {
-			name = this._firstLetterToLowerCase(pair.substring(0, separatorIndexEqual).trim());
-			value = this._transformFunction.decode(pair.substring(separatorIndexEqual + 1).trim());
+			name = this._firstLetterToLowerCase(
+				pair.substring(0, separatorIndexEqual).trim()
+			);
+			value = this._transformFunction.decode(
+				pair.substring(separatorIndexEqual + 1).trim()
+			);
 
 			// erase quoted values
 			if ('"' === value[0]) {
@@ -486,8 +481,9 @@ export default class Cookie extends ns.Core.Storage.Map {
 	}
 
 	/**
-	 * Sanitize cookie value by rules in (@see http://tools.ietf.org/html/rfc6265#section-4r.1.1).
-	 * Erase all invalid characters from cookie value.
+	 * Sanitize cookie value by rules in
+	 * (@see http://tools.ietf.org/html/rfc6265#section-4r.1.1). Erase all
+	 * invalid characters from cookie value.
 	 *
 	 * @private
 	 * @method _sanitizeCookieValue
@@ -501,13 +497,19 @@ export default class Cookie extends ns.Core.Storage.Map {
 			var charCode = value.charCodeAt(keyChar);
 			var char = value[keyChar];
 
-			if (charCode >= 33 && charCode <= 126 && char !== '"' && char !== ';' && char !== '\\') {
+			var isValid =
+					(charCode >= 33) &&
+					(charCode <= 126) &&
+					(char !== '"') &&
+					(char !== ';') &&
+					(char !== '\\');
+			if (isValid) {
 				sanitizedValue += char;
 			} else {
-
 				if ($Debug) {
-					throw new IMAError(`Invalid char ${char} code ${charCode} in ${value}. ` +
-							`Dropping invalid char from cookie value.`, { value, charCode, char });
+					throw new IMAError(`Invalid char ${char} code ` +
+							`${charCode} in ${value}. Dropping invalid char ` +
+							`from cookie value.`, { value, charCode, char });
 				}
 			}
 		}

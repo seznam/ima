@@ -43,15 +43,13 @@ export default class Client extends ns.Core.Abstract.PageManager {
 	}
 
 	/**
-	 * Manager controller with params.
-	 *
 	 * @inheritDoc
 	 * @override
 	 * @method manage
 	 * @param {(string|function)} controller
 	 * @param {(string|function)} view
 	 * @param {{onlyUpdate: (boolean|function), autoScroll: boolean}} options
-	 * @param {Object<string, string>=} [params={}] The route parameters.
+	 * @param {Object<string, string>=} [params={}]
 	 * @return {Promise<Object<string, ?(number|string)>>}
 	 */
 	manage(controller, view, options, params = {}) {
@@ -67,15 +65,11 @@ export default class Client extends ns.Core.Abstract.PageManager {
 	}
 
 	/**
-	 * Scroll page to defined vertical and horizontal values.
-	 *
-	 * Scrolling is async.
-	 *
 	 * @inheritDoc
 	 * @override
 	 * @method scrollTo
-	 * @param {number} [x=0] x is the pixel along the horizontal axis of the document
-	 * @param {number} [y=0] y is the pixel along the vertical axis of the document
+	 * @param {number} [x=0]
+	 * @param {number} [y=0]
 	 */
 	scrollTo(x = 0, y = 0) {
 		setTimeout(() => {
@@ -84,15 +78,15 @@ export default class Client extends ns.Core.Abstract.PageManager {
 	}
 
 	/**
-	 * Initialization manager.
-	 *
 	 * @inheritDoc
 	 * @override
 	 * @method init
 	 */
 	init() {
 		super.init();
-		this._eventBus.listenAll(this._window.getWindow(), (e) => this._onCustomEventHandler(e));
+		this._eventBus.listenAll(this._window.getWindow(), (e) => {
+			this._onCustomEventHandler(e);
+		});
 	}
 
 	/**
@@ -107,7 +101,8 @@ export default class Client extends ns.Core.Abstract.PageManager {
 	 */
 	_onCustomEventHandler(event) {
 		var eventName = event.detail.eventName;
-		var onEventName = 'on' + eventName.charAt(0).toUpperCase() + eventName.slice(1);
+		var onEventName = 'on' + eventName.charAt(0).toUpperCase() +
+				eventName.slice(1);
 		var eventData = event.detail.data;
 		var controllerInstance = this._managedPage.controllerInstance;
 
@@ -116,15 +111,16 @@ export default class Client extends ns.Core.Abstract.PageManager {
 			if (typeof controllerInstance[onEventName] === 'function') {
 				controllerInstance[onEventName](eventData);
 			} else {
-
 				if ($Debug) {
-					console.warn(`The active controller has no listener for the encountered` +
-							` event '${eventName}'. Check your event name for typos, or` +
-							` create an '${onEventName}' event listener method on the active` +
-							` controller or add an event listener that stops the propagation` +
-							` of this event to an ancestor component of the component that fired this event.`);
+					console.warn(`The active controller has no listener for ` +
+							`the encountered event '${eventName}'. Check ` +
+							`your event name for typos, or create an ` +
+							`'${onEventName}' event listener method on the ` +
+							`active controller or add an event listener ` +
+							`that stops the propagation of this event to ` +
+							`an ancestor component of the component that ` +
+							`fired this event.`);
 				}
-
 			}
 		}
 	}

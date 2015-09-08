@@ -48,12 +48,6 @@ export default class SessionMap extends ns.Core.Interface.Storage {
 	}
 
 	/**
-	 * This method is used to finalize the initialization of the storage after
-	 * the dependencies provided through the constructor are ready to be used.
-	 *
-	 * This method must be invoked only once and it must be the first method
-	 * invoked on this instance.
-	 *
 	 * @inheritDoc
 	 * @override
 	 * @chainable
@@ -70,55 +64,44 @@ export default class SessionMap extends ns.Core.Interface.Storage {
 	}
 
 	/**
-	 * Returns {@code true} if the specified cookie exists in this storage.
-	 *
-	 * Note that the method checks only for cookies known to this storage, it
-	 * does not check for cookies set using other means (for example by
-	 * manipulating the {@code document.cookie} property).
-	 *
+	 * @inheritDoc
 	 * @override
 	 * @method has
-	 * @param {string} key The key identifying the storage entry.
-	 * @return {boolean} {@code true} if the specified cookie exists in this
-	 *         storage.
+	 * @param {string} key
+	 * @return {boolean}
 	 */
 	has(key) {
 		return this._map.has(key);
 	}
 
 	/**
-	 * Retrieves the value of the entry indetified by the specified key. The
-	 * method returns {@code undefined} if the entry does not exists.
-	 *
-	 * Entries set to the {@code undefined} value can be tested for existence
-	 * using the {@codelink has} method.
-	 *
 	 * @inheritDoc
 	 * @override
 	 * @method get
-	 * @param {string} key The key identifying the storage entry.
-	 * @return {*} The value of the storage entry.
+	 * @param {string} key
+	 * @return {*}
 	 */
 	get(key) {
 		return this._map.get(key);
 	}
 
 	/**
-	 * Sets the storage entry identied by the specified key to the provided
-	 * value. The method creates the entry if it does not exist already.
-	 *
 	 * @inheritDoc
 	 * @override
 	 * @chainable
 	 * @method set
-	 * @param {string} key The key identifying the storage entry.
-	 * @param {*} value The storage entry value.
-	 * @return {Core.Storage.SessionMap} This storage.
+	 * @param {string} key
+	 * @param {*} value
+	 * @return {Core.Storage.SessionMap}
 	 */
 	set(key, value) {
-		if (!(value instanceof Promise) &&
-			!(value instanceof ns.Core.Cache.Entry && value.getValue() instanceof Promise)
-		) {
+		var canBeSerializedToJSON =
+				!(value instanceof Promise) &&
+				(
+					!(value instanceof ns.Core.Cache.Entry) ||
+					!(value.getValue() instanceof Promise)
+				);
+		if (canBeSerializedToJSON) {
 			this._session.set(key, value);
 		}
 
@@ -127,14 +110,12 @@ export default class SessionMap extends ns.Core.Interface.Storage {
 	}
 
 	/**
-	 * Deletes the entry identified by the specified key from this storage.
-	 *
 	 * @inheritDoc
 	 * @override
 	 * @chainable
 	 * @method delete
-	 * @param {string} key The key identifying the storage entry.
-	 * @return {Core.Storage.SessionMap} This storage.
+	 * @param {string} key
+	 * @return {Core.Storage.SessionMap}
 	 */
 	delete(key) {
 		this._session.delete(key);
@@ -143,13 +124,11 @@ export default class SessionMap extends ns.Core.Interface.Storage {
 	}
 
 	/**
-	 * Clears the storage of all entries.
-	 *
 	 * @inheritDoc
 	 * @override
 	 * @chainable
 	 * @method clear
-	 * @return {Core.Storage.SessionMap} This storage.
+	 * @return {Core.Storage.SessionMap}
 	 */
 	clear() {
 		this._session.clear();
@@ -158,24 +137,16 @@ export default class SessionMap extends ns.Core.Interface.Storage {
 	}
 
 	/**
-	 * Returns an iterator for traversing the keys in this storage. The order in
-	 * which the keys are traversed is undefined.
-	 *
 	 * @inheritDoc
 	 * @override
 	 * @method keys
-	 * @return {Iterator<string>} An iterator for traversing the keys in this
-	 *         storage. The iterator also implements the iterable protocol,
-	 *         returning itself as its own iterator, allowing it to be used in a
-	 *         {@code for..of} loop.
+	 * @return {Iterator<string>}
 	 */
 	keys() {
 		return this._map.keys();
 	}
 
 	/**
-	 * Returns storage size.
-	 *
 	 * @override
 	 * @method size
 	 * @return {number}

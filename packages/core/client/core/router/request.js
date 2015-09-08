@@ -21,8 +21,8 @@ export default class Request {
 	constructor() {
 
 		/**
-		 * The current ExpressJS request object, or {@code null} if running at the
-		 * client side.
+		 * The current ExpressJS request object, or {@code null} if running at
+		 * the client side.
 		 *
 		 * @private
 		 * @property _request
@@ -68,7 +68,7 @@ export default class Request {
 	 * Returns uploaded file to server and meta information.
 	 *
 	 * @method getFile
-	 * @return {(Object<string, *>|null)}
+	 * @return {?Object<string, *>}
 	 */
 	getFile() {
 		return this._request ? this._request.file : null;
@@ -78,7 +78,7 @@ export default class Request {
 	 * Returns upaloaded files to server with their meta information.
 	 *
 	 * @method getFiles
-	 * @return {(Object<string, *>|null)}
+	 * @return {?Object<string, *>}
 	 */
 	getFiles() {
 		return this._request ? this._request.files : null;
@@ -88,7 +88,7 @@ export default class Request {
 	 * Returns body of request.
 	 *
 	 * @method getBody
-	 * @return {(string|null)}
+	 * @return {?string}
 	 */
 	getBody() {
 		return this._request ? this._request.body || null : null;
@@ -99,7 +99,7 @@ export default class Request {
 	 *
 	 * @method getHeader
 	 * @param {string} header
-	 * @return {(string|null)}
+	 * @return {?string}
 	 */
 	getHeader(header) {
 		return this._request ? this._request.get(header) || null : null;
@@ -109,7 +109,7 @@ export default class Request {
 	 * Returns the remote IP address of the request.
 	 *
 	 * @method getIP
-	 * @return {(string|null)}
+	 * @return {?string}
 	 */
 	getIP() {
 		return this._request ? this._request.ip : null;

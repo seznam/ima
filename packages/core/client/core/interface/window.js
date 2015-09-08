@@ -224,8 +224,8 @@ export default class Window {
 	 *
 	 * @method createCustomEvent
 	 * @param {string} name
-	 * @param {Object<string, *>} options
-	 * @return {CustomEvent}
+	 * @param {Object<string, *>} options The custom event options.
+	 * @return {CustomEvent} The created custom event.
 	 */
 	createCustomEvent(name, options) {}
 

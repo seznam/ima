@@ -18,11 +18,11 @@ export default class Factory {
 	 * @method constructor
 	 * @constructor
 	 * @param {Core.ObjectContainer} oc
-	 * @param {Vendor.React} React React framework instance to use to render the
-	 *        page.
-	 * @param {Vendor.React.Component} ViewAdapter An adapter component providing
-	 *        the current page controller's state to the page view component through
-	 *        its properties.
+	 * @param {Vendor.React} React React framework instance to use to render
+	 *        the page.
+	 * @param {Vendor.React.Component} ViewAdapter An adapter component
+	 *        providing the current page controller's state to the page view
+	 *        component through its properties.
 	 */
 	constructor(oc, React, ViewAdapter) {
 
@@ -65,8 +65,8 @@ export default class Factory {
 	 * {@code state} property.
 	 *
 	 * @method wrapView
-	 * @param {function(new:Vendor.React.Component, Object<string, *>)} view The
-	 *        page view React component to wrap.
+	 * @param {function(new:Vendor.React.Component, Object<string, *>)} view
+	 *        The page view React component to wrap.
 	 * @param {Object<string, *>} state The initial state to pass to the view.
 	 * @return {Vendor.React.Component} View adapter handling passing the
 	 *         controller's state to an instance of the specified page view

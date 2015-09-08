@@ -37,12 +37,6 @@ class Session extends ns.Core.Interface.Storage {
 	}
 
 	/**
-	 * This method is used to finalize the initialization of the storage after
-	 * the dependencies provided through the constructor are ready to be used.
-	 *
-	 * This method must be invoked only once and it must be the first method
-	 * invoked on this instance.
-	 *
 	 * @inheritDoc
 	 * @override
 	 * @chainable
@@ -54,51 +48,39 @@ class Session extends ns.Core.Interface.Storage {
 	}
 
 	/**
-	 * Returns {@code true} if the entry identified by the specified key exists
-	 * in this storage.
-	 *
 	 * @method has
-	 * @param {string} key The key identifying the storage entry.
-	 * @return {boolean} {@code true} if the storage entry exists.
+	 * @param {string} key
+	 * @return {boolean}
 	 */
 	has(key) {
 		return !!this._storage.getItem(key);
 	}
 
 	/**
-	 * Retrieves the value of the entry indetified by the specified key. The
-	 * method returns {@code undefined} if the entry does not exists.
-	 *
-	 * Entries set to the {@code undefined} value can be tested for existence
-	 * using the {@codelink has} method.
-	 *
 	 * @inheritDoc
 	 * @override
 	 * @method get
-	 * @param {string} key The key identifying the storage entry.
-	 * @return {*} The value of the storage entry.
+	 * @param {string} key
+	 * @return {*}
 	 */
 	get(key) {
 		try {
 			return JSON.parse(this._storage.getItem(key)).value;
 		} catch (e) {
 			throw new IMAError('Core.Storage.Session.get: Failed to parse a ' +
-					`session storage item value identified by the key ${key}: ` +
-					e.message);
+					`session storage item value identified by the key ` +
+					`${key}: ${e.message}`);
 		}
 	}
 
 	/**
-	 * Sets the storage entry identied by the specified key to the provided
-	 * value. The method creates the entry if it does not exist already.
-	 *
 	 * @inheritDoc
 	 * @override
 	 * @chainable
 	 * @method set
-	 * @param {string} key The key identifying the storage entry.
-	 * @param {*} value The storage entry value.
-	 * @return {Core.Storage.Session} This storage.
+	 * @param {string} key
+	 * @param {*} value
+	 * @return {Core.Storage.Session}
 	 */
 	set(key, value) {
 		try {
@@ -124,14 +106,12 @@ class Session extends ns.Core.Interface.Storage {
 	}
 
 	/**
-	 * Deletes the entry identified by the specified key from this storage.
-	 *
 	 * @inheritDoc
 	 * @override
 	 * @chainable
 	 * @method delete
-	 * @param {string} key The key identifying the storage entry.
-	 * @return {Core.Storage.Session} This storage.
+	 * @param {string} key
+	 * @return {Core.Storage.Session}
 	 */
 	delete(key) {
 		this._storage.removeItem(key);
@@ -139,13 +119,11 @@ class Session extends ns.Core.Interface.Storage {
 	}
 
 	/**
-	 * Clears the storage of all entries.
-	 *
 	 * @inheritDoc
 	 * @override
 	 * @chainable
 	 * @method clear
-	 * @return {Core.Storage.Session} This storage.
+	 * @return {Core.Storage.Session}
 	 */
 	clear() {
 		this._storage.clear();
@@ -153,24 +131,16 @@ class Session extends ns.Core.Interface.Storage {
 	}
 
 	/**
-	 * Returns an iterator for traversing the keys in this storage. The order in
-	 * which the keys are traversed is undefined.
-	 *
 	 * @inheritDoc
 	 * @override
 	 * @method keys
-	 * @return {Iterator<string>} An iterator for traversing the keys in this
-	 *         storage. The iterator also implements the iterable protocol,
-	 *         returning itself as its own iterator, allowing it to be used in a
-	 *         {@code for..of} loop.
+	 * @return {Iterator<string>}
 	 */
 	keys() {
 		return new StorageIterator(this._storage);
 	}
 
 	/**
-	 * Returns storage size.
-	 *
 	 * @override
 	 * @method size
 	 * @return {number}
@@ -208,7 +178,7 @@ class Session extends ns.Core.Interface.Storage {
 }
 
 /**
- * Implementation of the iterator protocol and iterable protocol for DOM
+ * Implementation of the iterator protocol and the iterable protocol for DOM
  * storage keys.
  *
  * @private
@@ -223,6 +193,8 @@ class Session extends ns.Core.Interface.Storage {
 class StorageIterator {
 
 	/**
+	 * Initializes the DOM storage iterator.
+	 *
 	 * @constructor
 	 * @method constructor
 	 * @param {Storage} storage The DOM storage to iterate through.
@@ -239,7 +211,8 @@ class StorageIterator {
 		this._storage = storage;
 
 		/**
-		 * The current index of the DOM storage key this iterator will return next.
+		 * The current index of the DOM storage key this iterator will return
+		 * next.
 		 *
 		 * @private
 		 * @property _currentKeyIndex
@@ -252,9 +225,9 @@ class StorageIterator {
 	 * Iterates to the next item. This method implements the iterator protocol.
 	 *
 	 * @method next
-	 * @return {{done: boolean, value: (undefined|string)}} The next value in the
-	 *         sequence and whether the iterator is done iterating through the
-	 *         values.
+	 * @return {{done: boolean, value: (undefined|string)}} The next value in
+	 *         the sequence and whether the iterator is done iterating through
+	 *         the values.
 	 */
 	next() {
 		if (this._currentKeyIndex >= this._storage.length) {

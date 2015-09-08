@@ -29,8 +29,8 @@ export default class Bootstrap {
 	 *
 	 * @constructor
 	 * @method contructor
-	 * @param {Core.ObjectContainer} oc The application's object container to use
-	 *        for managing dependencies.
+	 * @param {Core.ObjectContainer} oc The application's object container to
+	 *        use for managing dependencies.
 	 */
 	constructor(oc) {
 
@@ -81,8 +81,8 @@ export default class Bootstrap {
 	 * Initializes the application settings. The method loads the settings for
 	 * all environments and then pics the settings for the current environment.
 	 *
-	 * The method also handles using the values in the production environment as
-	 * default values for configuration items in other environments.
+	 * The method also handles using the values in the production environment
+	 * as default values for configuration items in other environments.
 	 *
 	 * @private
 	 * @method _initSettings
@@ -98,7 +98,10 @@ export default class Bootstrap {
 
 		if (environment !== PRODUCTION_ENVIRONMENT) {
 			var	productionSettings = allSettings[PRODUCTION_ENVIRONMENT];
-			ns.Vendor.$Helper.assignRecursively(productionSettings, currentSettings);
+			ns.Vendor.$Helper.assignRecursively(
+				productionSettings,
+				currentSettings
+			);
 			currentSettings = productionSettings;
 		}
 

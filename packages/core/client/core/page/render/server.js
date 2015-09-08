@@ -19,23 +19,24 @@ export default class Server extends ns.Core.Abstract.PageRender {
 	 *
 	 * @method contructor
 	 * @constructor
-	 * @param {Core.Page.Render.Factory} factory Factory for receive $Utils to view.
+	 * @param {Core.Page.Render.Factory} factory Factory for receive $Utils to
+	 *        view.
 	 * @param {Vendor.$Helper} Helper The IMA.js helper methods.
-	 * @param {Vendor.React} React React framework instance to use to render the
-	 *        page.
+	 * @param {Vendor.React} React React framework instance to use to render
+	 *        the page.
 	 * @param {Object<string, *>} settings Application setting for the current
 	 *        application environment.
-	 * @param {Core.Router.Response} response Utility for sending the page markup
-	 *        to the client as a response to the current HTTP request.
-	 * @param {Core.Interface.Cache} cache Resource cache caching the results of
-	 *        HTTP requests made by services used by the rendered page.
+	 * @param {Core.Router.Response} response Utility for sending the page
+	 *        markup to the client as a response to the current HTTP request.
+	 * @param {Core.Interface.Cache} cache Resource cache caching the results
+	 *        of HTTP requests made by services used by the rendered page.
 	 */
 	constructor(factory, Helper, React, settings, response, cache) {
 		super(factory, Helper, React, settings);
 
 		/**
-		 * Utility for sending the page markup to the client as a response to the
-		 * current HTTP request.
+		 * Utility for sending the page markup to the client as a response to
+		 * the current HTTP request.
 		 *
 		 * @private
 		 * @property _response
@@ -44,10 +45,10 @@ export default class Server extends ns.Core.Abstract.PageRender {
 		this._response = response;
 
 		/**
-		 * The resource cache, caching the results of all HTTP requests made by the
-		 * services using by the rendered page. The state of the cache will then be
-		 * serialized and sent to the client to re-initialize the page at the
-		 * client side.
+		 * The resource cache, caching the results of all HTTP requests made by
+		 * the services using by the rendered page. The state of the cache will
+		 * then be serialized and sent to the client to re-initialize the page
+		 * at the client side.
 		 *
 		 * @private
 		 * @property _cache
@@ -58,16 +59,6 @@ export default class Server extends ns.Core.Abstract.PageRender {
 	}
 
 	/**
-	 * Renders the page using the provided controller and view. The actual
-	 * behavior of this method differs at the client and the at server in the
-	 * following way:
-	 *
-	 * On server, the method renders the page to a string containing HTML markup
-	 * to send to the client.
-	 *
-	 * On client, the method renders the page into DOM, re-using the DOM created
-	 * from the HTML markup send by the server if possible.
-	 *
 	 * @inheritDoc
 	 * @override
 	 * @method mount
@@ -93,16 +84,11 @@ export default class Server extends ns.Core.Abstract.PageRender {
 	}
 
 	/**
-	 * Only update controller state and React view not call constructor.
-	 *
-	 * It is useful for same controller and view, where only change url params.
-	 * Then it is possible to reuse same controller and view.
-	 *
 	 * @inheritDoc
 	 * @override
 	 * @method update
 	 * @param {Core.Decorator.Controller} controller
-	 * @param {Object<string, string>=} [params={}] Last route params.
+	 * @param {Object<string, string>=} [params={}]
 	 * @return {Promise}
 	 */
 	update(controller, params = {}) {
@@ -110,9 +96,6 @@ export default class Server extends ns.Core.Abstract.PageRender {
 	}
 
 	/**
-	 * Unmount view from the DOM. Then React always call constructor
-	 * for new mounting view.
-	 *
 	 * @inheritDoc
 	 * @override
 	 * @method unmount
@@ -124,13 +107,13 @@ export default class Server extends ns.Core.Abstract.PageRender {
 	}
 
 	/**
-	 * THe HTML code will include a script settings the "revival"
-	 * data for the application at the client-side.
+	 * THe HTML code will include a script settings the "revival" data for the
+	 * application at the client-side.
 	 *
 	 * @method _getRevivalSettings
 	 * @private
-	 * @return {string} HTML code containing script element to include into
-	 *         the rendered page.
+	 * @return {string} HTML code containing script element to include into the
+	 *         rendered page.
 	 */
 	_getRevivalSettings() {
 		return (
@@ -145,24 +128,25 @@ export default class Server extends ns.Core.Abstract.PageRender {
 			' window.$IMA.$Protocol = "' + this._settings.$Protocol + '";' +
 			' window.$IMA.$Host = "' + this._settings.$Host + '";' +
 			' window.$IMA.$Root = "' + this._settings.$Root + '";' +
-			' window.$IMA.$LanguagePartPath = "' + this._settings.$LanguagePartPath + '";' +
+			' window.$IMA.$LanguagePartPath = "' +
+					this._settings.$LanguagePartPath + '";' +
 			'</script>'
 		);
 	}
 
 	/**
-	 * Creates a copy of the provided data map object that has the values of its
-	 * fields wrapped into Promises.
+	 * Creates a copy of the provided data map object that has the values of
+	 * its fields wrapped into Promises.
 	 *
-	 * The the values that are already Promises will referenced directly without
-	 * wrapping then into another Promise.
+	 * The the values that are already Promises will referenced directly
+	 * without wrapping then into another Promise.
 	 *
 	 * @method _wrapEachKeyToPromise
 	 * @protected
-	 * @param {Object<string, *>=} [dataMap={}] A map of data that should have its
-	 *        values wrapped into Promises.
-	 * @return {Object<string, Promise>} A copy of the provided data
-	 *         map that has all its values wrapped into promises.
+	 * @param {Object<string, *>=} [dataMap={}] A map of data that should have
+	 *        its values wrapped into Promises.
+	 * @return {Object<string, Promise>} A copy of the provided data map that
+	 *         has all its values wrapped into promises.
 	 */
 	_wrapEachKeyToPromise(dataMap = {}) {
 		var copy = {};
@@ -187,7 +171,7 @@ export default class Server extends ns.Core.Abstract.PageRender {
 	 * @method _renderPage
 	 * @param {Core.Abstract.Controller} controller
 	 * @param {Vendor.React.Component} view
-	 * @param {Object<string, *>} fetchedResource
+	 * @param {Object<string, *>} fetchedResources
 	 * @return {{content: string, status: number}}
 	 */
 	_renderPage(controller, view, fetchedResources) {

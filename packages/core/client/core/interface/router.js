@@ -112,8 +112,8 @@ export default class Router {
 	 * Returns the information about the currently active route.
 	 *
 	 * @method getCurrentRouteInfo
-	 * @return {{route: Core.Router.Route, params: Object<string, string>,
-	 *         path: string}} The information about the current route.
+	 * @return {{route: Core.Router.Route, params: Object<string, string>, path: string}}
+	 *         The information about the current route.
 	 * @throws {Core.IMAError} Thrown if a route is not define for current
 	 *         path.
 	 */

@@ -33,7 +33,7 @@ export default class ViewAdapter extends ns.Vendor.React.Component {
 		this.state = props.state;
 
 		/**
-		 * The acutal page view to render.
+		 * The actual page view to render.
 		 *
 		 * @private
 		 * @property _view

@@ -163,7 +163,8 @@ export default class IMAError extends Error {
 	 *
 	 * @override
 	 * @method getParams
-	 * @return {Object<string, *>}
+	 * @return {Object<string, *>} The error parameters providing additional
+	 *         details about the error.
 	 */
 	getParams() {
 		return this._params;
@@ -174,7 +175,7 @@ export default class IMAError extends Error {
 	 *
 	 * @override
 	 * @method getName
-	 * @return {string}
+	 * @return {string} The name of this error.
 	 */
 	getName() {
 		return this.name;
@@ -186,7 +187,7 @@ export default class IMAError extends Error {
 	 *
 	 * @override
 	 * @method toString
-	 * @return {string}
+	 * @return {string} A string representing this error.
 	 */
 	toString() {
 		return `${this.name}: ${this.message}`;

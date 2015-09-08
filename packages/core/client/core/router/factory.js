@@ -17,8 +17,8 @@ export default class Factory {
 	 *
 	 * @constructor
 	 * @method constructor
-	 * @param {function(new: Core.Router.Route)} Route The implementation of the
-	 *        route representation to use.
+	 * @param {function(new: Core.Router.Route)} Route The implementation of
+	 *        the route representation to use.
 	 */
 	constructor(Route) {
 		/**

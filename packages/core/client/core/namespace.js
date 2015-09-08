@@ -33,9 +33,10 @@ class Namespace {
 	 * does not, and returns the value at the specified path in the namespace.
 	 *
 	 * The method recursively creates all path parts in the namespaces as empty
-	 * plain objects for all path parts that do not exist yet, including the last
-	 * one. This means, that if called with a non-existing namespace path as an
-	 * argument, the return value will be the last created namespace object.
+	 * plain objects for all path parts that do not exist yet, including the
+	 * last one. This means, that if called with a non-existing namespace path
+	 * as an argument, the return value will be the last created namespace
+	 * object.
 	 *
 	 * @method namespace
 	 * @param {string} path The namespace path.
@@ -57,8 +58,8 @@ class Namespace {
 	}
 
 	/**
-	 * Verifies that the specified namespace path point to an existing namespace
-	 * or terminal value.
+	 * Verifies that the specified namespace path point to an existing
+	 * namespace or terminal value.
 	 *
 	 * @method has
 	 * @param {string} path The namespace path to test.

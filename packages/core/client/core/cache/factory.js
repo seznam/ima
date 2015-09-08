@@ -3,28 +3,28 @@ import ns from 'imajs/client/core/namespace';
 ns.namespace('Core.Cache');
 
 /**
- * Factory for creating instace of Core.Cache.Entry.
+ * Factory for creating instances of Core.Cache.Entry.
  *
  * @class Factory
  * @namespace Core.Cache
  * @module Core
  * @submodule Core.Cache
- *
- * @requires Core.ObjectContainer
  */
 export default class Factory {
 
 	/**
+	 * Initializes the cache entry factory.
+	 *
 	 * @method constructor
 	 * @constructor
-	 * @param {Core.Cache.Entry} Entry
+	 * @param {function(new: Core.Cache.Entry, *, number)} Entry
 	 */
 	constructor(Entry) {
 
 		/**
 		 * @property _Entry
 		 * @private
-		 * @type {Core.Cache.Entry}
+		 * @type {function(new: Core.Cache.Entry, *, number)}
 		 */
 		this._Entry = Entry;
 	}
@@ -34,8 +34,8 @@ export default class Factory {
 	 *
 	 * @method createCacheEntry
 	 * @param {*} value The cache entry value.
-	 * @param {?number=} ttl Cache entry time to live in milliseconds. The entry
-	 *        will expire after the specified amount of milliseconds.
+	 * @param {?number=} ttl Cache entry time to live in milliseconds. The
+	 *        entry will expire after the specified amount of milliseconds.
 	 */
 	createCacheEntry(value, ttl) {
 		return new this._Entry(value, ttl);

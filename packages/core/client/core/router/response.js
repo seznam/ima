@@ -4,7 +4,7 @@ import IMAError from 'imajs/client/core/imaError';
 ns.namespace('Core.Router');
 
 /**
- * Wrapper for the ExpressJS response, exposing only the neccessary minimum.
+ * Wrapper for the ExpressJS response, exposing only the necessary minimum.
  *
  * @class Response
  * @namespace Core.Router
@@ -22,8 +22,8 @@ export default class Response {
 	constructor() {
 
 		/**
-		 * The ExpressJS response object, or {@code null} if running at the client
-		 * side.
+		 * The ExpressJS response object, or {@code null} if running at the
+		 * client side.
 		 *
 		 * @private
 		 * @property _response
@@ -96,7 +96,10 @@ export default class Response {
 	 * @return {Core.Router.Response} This response.
 	 */
 	init(response, cookieTransformFunction = {}) {
-		this._cookieTransformFunction = Object.assign(this._cookieTransformFunction, cookieTransformFunction);
+		this._cookieTransformFunction = Object.assign(
+			this._cookieTransformFunction,
+			cookieTransformFunction
+		);
 		this._response = response;
 		this._isSent = false;
 		this._status = 500;
@@ -118,7 +121,8 @@ export default class Response {
 	 * @chainable
 	 * @method redirect
 	 * @param {string} url The URL to which the client should be redirected.
-	 * @param {number=} [status=302] The HTTP status code to send to the client.
+	 * @param {number=} [status=302] The HTTP status code to send to the
+	 *        client.
 	 * @return {Core.Router.Response} This response.
 	 */
 	redirect(url, status = 302) {
@@ -127,8 +131,9 @@ export default class Response {
 				var params = this.getResponseParams();
 				params.url = url;
 
-				throw new IMAError('Core.Router.Response:redirect The response has already ' +
-						'been sent. Check your workflow.', params);
+				throw new IMAError('Core.Router.Response:redirect The ' +
+						'response has already been sent. Check your workflow.',
+						params);
 			}
 		}
 
@@ -160,8 +165,9 @@ export default class Response {
 			if (this._isSent === true) {
 				var params = this.getResponseParams();
 
-				throw new IMAError('Core.Router.Response:status The response has already ' +
-						'been sent. Check your workflow.', params);
+				throw new IMAError('Core.Router.Response:status The ' +
+						'response has already been sent. Check your workflow.',
+						params);
 			}
 		}
 
@@ -186,8 +192,8 @@ export default class Response {
 				var params = this.getResponseParams();
 				params.content = content;
 
-				throw new IMAError('Core.Router.Response:send The response has already ' +
-						'been sent. Check your workflow.', params);
+				throw new IMAError('Core.Router.Response:send The response ' +
+						'has already been sent. Check your workflow.', params);
 			}
 		}
 
@@ -205,12 +211,12 @@ export default class Response {
 	 * @chainable
 	 * @method setCookie
 	 * @param {string} name The cookie name.
-	 * @param {(boolean|number|string)} value The cookie value, will be converted
-	 *        to string.
+	 * @param {(boolean|number|string)} value The cookie value, will be
+	 *        converted to string.
 	 * @param {{domain: string=, expires: (number|string)=}} options Cookie
 	 *        attributes. Only the attributes listed in the type annotation of
-	 *        this field are supported. For documentation and full list of cookie
-	 *        attributes see http://tools.ietf.org/html/rfc2965#page-5
+	 *        this field are supported. For documentation and full list of
+	 *        cookie attributes see http://tools.ietf.org/html/rfc2965#page-5
 	 * @return {Core.Router.Response} This response.
 	 */
 	setCookie(name, value, options = {}) {
@@ -221,13 +227,21 @@ export default class Response {
 				params.value = value;
 				params.options = options;
 
-				throw new IMAError('Core.Router.Response:setCookie The response has already ' +
-						'been sent. Check your workflow.', params);
+				throw new IMAError('Core.Router.Response:setCookie The ' +
+						'response has already been sent. Check your workflow.',
+						params);
 			}
 		}
 
-		var advanceOptions = Object.assign({}, this._cookieTransformFunction, options);
-		this._internalCookieStorage.set(name, { value, options: advanceOptions });
+		var advanceOptions = Object.assign(
+			{},
+			this._cookieTransformFunction,
+			options
+		);
+		this._internalCookieStorage.set(name, {
+			value,
+			options: advanceOptions
+		});
 
 		return this;
 	}

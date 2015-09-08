@@ -20,7 +20,8 @@ export default class Proxy {
 	 * @param {Vendor.SuperAgent} superAgent SuperAgent instance to use for
 	 *        sending the HTTP requests.
 	 * @param {Object} HTTP_STATUS_CODE
-	 * @param {Core.Http.Transformer} transformer Transform apply rules to request url.
+	 * @param {Core.Http.Transformer} transformer Transform apply rules to
+	 *        request url.
 	 * @param {Core.Interface.Window} window Helper for manipulating the global
 	 *        object ({@code window}) regardless of the client/server-side
 	 *        environment.
@@ -54,8 +55,8 @@ export default class Proxy {
 		this._transformer = transformer;
 
 		/**
-		 * Helper for manipulating the global object ({@code window}) regardless of
-		 * the client/server-side environment.
+		 * Helper for manipulating the global object ({@code window})
+		 * regardless of the client/server-side environment.
 		 *
 		 * @property _window
 		 * @private
@@ -89,14 +90,19 @@ export default class Proxy {
 	 * @param {Object<string, *>} options The options used to
 	 *        create the request.
 	 * @return {Promise<Vendor.SuperAgent.Response>} A promise that resolves to
-	 *         the server response. The promise rejects on failure with an error
-	 *         and request descriptor object instead of an {@codelink Error}
-	 *         instance.
+	 *         the server response. The promise rejects on failure with an
+	 *         error and request descriptor object instead of an
+	 *         {@codelink Error} instance.
 	 */
 	request(method, url, data, options) {
 		return (
 			new Promise((resolve, reject) => {
-				var params = this._composeRequestParams(method, url, data, options);
+				var params = this._composeRequestParams(
+					method,
+					url,
+					data,
+					options
+				);
 
 				if (method === 'delete') {
 					method = 'del';
@@ -120,9 +126,9 @@ export default class Proxy {
 
 	/**
 	 * Sets the specified default HTTP header. The header will be sent with all
-	 * subsequent HTTP requests unless reconfigured using this method, overridden
-	 * by the request options, or cleared by the {@codelink clearDefaultHeaders}
-	 * method.
+	 * subsequent HTTP requests unless reconfigured using this method,
+	 * overridden by the request options, or cleared by the
+	 * {@codelink clearDefaultHeaders} method.
 	 *
 	 * @method setDefaultHeader
 	 * @param {string} header The header name.
@@ -194,9 +200,9 @@ export default class Proxy {
 	 * setting the {@code Cookie} HTTP header on requests and parsing the
 	 * {@code Set-Cookie} HTTP response header.
 	 *
-	 * The result of this method depends on the current application environment,
-	 * the client-side usually handles cookie processing automatically, leading
-	 * this method returning {@code false}.
+	 * The result of this method depends on the current application
+	 * environment, the client-side usually handles cookie processing
+	 * automatically, leading this method returning {@code false}.
 	 *
 	 * At the client-side, the method tests whether the client has cookies
 	 * enabled (which results in cookies being automatically processed by the
@@ -222,11 +228,11 @@ export default class Proxy {
 	 * @param {Vendor.SuperAgent.Request} request The request to send.
 	 * @param {function(Vendor.SuperAgent.Response)} resolve Promise resolution
 	 *        callback to call if the request completes successfuly.
-	 * @param {function(Object<string, *>)} reject Promise rejection callback to
-	 *        call if the request fails with an error.
-	 * @param {{method: string, url: string, data: Object<string, (boolean|number|string|Date)>,
-	 *        options: Object<string, *>} params An object representing the complete
-	 *        request parameters used to create and send the HTTP request.
+	 * @param {function(Object<string, *>)} reject Promise rejection callback
+	 *        to call if the request fails with an error.
+	 * @param {{method: string, url: string, data: Object<string, (boolean|number|string|Date)>, options: Object<string, *>}} params
+	 *        An object representing the complete request parameters used to
+	 *        create and send the HTTP request.
 	 * @return {Core.Http.Proxy} This instance.
 	 */
 	_sendRequest(request, resolve, reject, params) {
@@ -245,9 +251,9 @@ export default class Proxy {
 
 	/**
 	 * Processes a finished HTTP request. The method determines whether the
-	 * request has been completed successfuly and resolves or rejects the promise
-	 * representing the request using the provided resolution and rejection
-	 * callbacks accordingly.
+	 * request has been completed successfuly and resolves or rejects the
+	 * promise representing the request using the provided resolution and
+	 * rejection callbacks accordingly.
 	 *
 	 * @method _handleResponse
 	 * @private
@@ -255,11 +261,11 @@ export default class Proxy {
 	 *        representing the server response.
 	 * @param {function(Vendor.SuperAgent.Response)} resolve Promise resolution
 	 *        callback to call if the request has been completed successfuly.
-	 * @param {function(Object<string, *>)} reject Promise rejection callback to
-	 *        call if the request failed with an error.
-	 * @param {{method: string, url: string, data: Object<string, (boolean|number|string|Date)>,
-	 *        options: Object<string, *>} params An object representing the complete
-	 *        request parameters used to create and send the HTTP request.
+	 * @param {function(Object<string, *>)} reject Promise rejection callback
+	 *        to call if the request failed with an error.
+	 * @param {{method: string, url: string, data: Object<string, (boolean|number|string|Date)>, options: Object<string, *>}} params
+	 *        An object representing the complete request parameters used to
+	 *        create and send the HTTP request.
 	 */
 	_handleResponse(response, resolve, reject, params) {
 		if (response.error) {
@@ -283,31 +289,45 @@ export default class Proxy {
 	 *
 	 * @method _handleError
 	 * @private
-	 * @param {Vendor.SuperAgent.Error} error The encountered error. The paramter
-	 *        is actually an {@codelink Error} instance augmented with fields
-	 *        providing additional details (timeout, HTTP status code, etc.).
-	 * @param {function(Object<string, *>)} reject Promise rejection callback to
-	 *        call.
-	 * @param {{method: string, url: string, data: Object<string, (boolean|number|string|Date)>,
-	 *        options: Object<string, *>} params An object representing the complete
-	 *        request parameters used to create and send the HTTP request.
+	 * @param {Vendor.SuperAgent.Error} error The encountered error. The
+	 *        parameter is actually an {@codelink Error} instance augmented
+	 *        with fields providing additional details (timeout, HTTP status
+	 *        code, etc.).
+	 * @param {function(Object<string, *>)} reject Promise rejection callback
+	 *        to call.
+	 * @param {{method: string, url: string, data: Object<string, (boolean|number|string|Date)>, options: Object<string, *>}} params
+	 *        An object representing the complete request parameters used to
+	 *        create and send the HTTP request.
 	 */
 	_handleError(error, reject, params) {
 		var errorParams = {};
 
 		if (error.timeout === params.options.timeout) {
-			errorParams = this.getErrorParams(params.method, params.url, params.data,
-				params.options, this.HTTP_STATUS_CODE.TIMEOUT);
+			errorParams = this.getErrorParams(
+				params.method,
+				params.url,
+				params.data,
+				params.options,
+				this.HTTP_STATUS_CODE.TIMEOUT
+			);
 		} else {
-
 			if (error.crossDomain) {
-				errorParams = this.getErrorParams(params.method, params.url,
-					params.data, params.options, this.HTTP_STATUS_CODE.FORBIDDEN);
+				errorParams = this.getErrorParams(
+					params.method,
+					params.url,
+					params.data,
+					params.options,
+					this.HTTP_STATUS_CODE.FORBIDDEN
+				);
 			} else {
-				errorParams = this.getErrorParams(params.method, params.url,
-					params.data, params.options, error.status || this.HTTP_STATUS_CODE.SERVER_ERROR);
+				errorParams = this.getErrorParams(
+					params.method,
+					params.url,
+					params.data,
+					params.options,
+					error.status || this.HTTP_STATUS_CODE.SERVER_ERROR
+				);
 			}
-
 		}
 
 		reject(errorParams);
@@ -321,8 +341,8 @@ export default class Proxy {
 	 * @chainable
 	 * @param {Vendor.SuperAgent.Request} request The request on which the HTTP
 	 *        headers should be set.
-	 * @param {Object<string, *>} options The options used to
-	 *        create the request.
+	 * @param {Object<string, *>} options The options used to create the
+	 *        request.
 	 * @return {Core.Http.Proxy} This instance.
 	 */
 	_setHeaders(request, options) {
@@ -351,10 +371,9 @@ export default class Proxy {
 	 * @param {string} url The URL to which the request should be sent.
 	 * @param {Object<string, (boolean|number|string|Date)>} data The data to
 	 *        send with the request.
-	 * @param {Object<string, *>} options The options used to
-	 *        create the request.
-	 * @return {{method: string, url: string, data: Object<string, (boolean|number|string|Date)>,
-	 *         options: {headers: Object<string, string>, cookie: string}}}
+	 * @param {Object<string, *>} options The options used to create the
+	 *        request.
+	 * @return {{method: string, url: string, data: Object<string, (boolean|number|string|Date)>, options: {headers: Object<string, string>, cookie: string}}}
 	 *         An object representing the complete request parameters used to
 	 *         create and send the HTTP request.
 	 */

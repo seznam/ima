@@ -11,8 +11,8 @@ ns.namespace('Core.Router');
  */
 const EVENTS = Object.freeze({
 	/**
-	 * Name of the event produced when the user clicks the page using the mouse,
-	 * or touches the page and the touch event is not stopped.
+	 * Name of the event produced when the user clicks the page using the
+	 * mouse, or touches the page and the touch event is not stopped.
 	 *
 	 * @const
 	 * @property
@@ -39,8 +39,8 @@ const EVENTS = Object.freeze({
  */
 const MODES = Object.freeze({
 	/**
-	 * Address bar manipulation mode in which the current URL in the address bar
-	 * is being udpated using the session history management API.
+	 * Address bar manipulation mode in which the current URL in the address
+	 * bar is being udpated using the session history management API.
 	 *
 	 * @const
 	 * @property MODES.HISTORY
@@ -49,8 +49,8 @@ const MODES = Object.freeze({
 	HISTORY: 'history',
 
 	/**
-	 * Address bar manipulation mode in which the current URL in the address bar
-	 * is being udpated by modifying the {@code hash} part.
+	 * Address bar manipulation mode in which the current URL in the address
+	 * bar is being udpated by modifying the {@code hash} part.
 	 *
 	 * @const
 	 * @property MODES.HASH
@@ -86,15 +86,18 @@ export default class Client extends ns.Core.Abstract.Router {
 	 *
 	 * @constructor
 	 * @method constructor
-	 * @param {Core.Interface.PageManager} pageManager The page manager handling
-	 *        UI rendering, and transitions between pages if at the client side.
+	 * @param {Core.Interface.PageManager} pageManager The page manager
+	 *        handling UI rendering, and transitions between pages if at the
+	 *        client side.
 	 * @param {Core.Router.Factory} factory Factory for routes.
-	 * @param {Core.Interface.Dispatcher} dispatcher Dispatcher fires events to app.
-	 * @param {{ROUTE_NAMES: Object<string, string>, EVENTS: Object<string, string>} ROUTER_CONSTANTS
+	 * @param {Core.Interface.Dispatcher} dispatcher Dispatcher fires events to
+	 *        app.
+	 * @param {{ROUTE_NAMES: Object<string, string>, EVENTS: Object<string, string>}} ROUTER_CONSTANTS
 	 *        The internal router constants. The {@code ROUTE_NAMES}
-	 *        contains internal route names. The {@code EVENTS} contains name of events
-	 *        which are fired with {@code Core.Interface.Dispatcher}.
-	 * @param {Core.Interface.Window} window
+	 *        contains internal route names. The {@code EVENTS} contains name
+	 *        of events which are fired with {@code Core.Interface.Dispatcher}.
+	 * @param {Core.Interface.Window} window The current global client-side
+	 *        APIs provider.
 	 */
 	constructor(pageManager, factory, dispatcher, ROUTER_CONSTANTS, window) {
 		super(pageManager, factory, dispatcher, ROUTER_CONSTANTS);
@@ -121,21 +124,10 @@ export default class Client extends ns.Core.Abstract.Router {
 	}
 
 	/**
-	 * Initializes the router with the provided configuration.
-	 *
+	 * @inheritDoc
+	 * @override
 	 * @method init
 	 * @param {{$Protocol: string, $Domain: string, $Root: string, $LanguagePartPath: string}} config
-	 *        Router configuration.
-	 *        The {@code $Protocol} field must be the current protocol used to
-	 *        access the application, terminated by a collon (for example
-	 *        {@code https:}).
-	 *        The {@code $Domain} field must be the application's domain in the
-	 *        following form: {@code `${protocol}//${host}`}.
-	 *        The {@code $Root} field must specify the URL path pointing to the
-	 *        application's root.
-	 *        The {@code $LanguagePartPath} field must be the URL path fragment
-	 *        used as a suffix to the {@code $Root} field that specifies the
-	 *        current language.
 	 */
 	init(config) {
 		super.init(config);
@@ -146,44 +138,28 @@ export default class Client extends ns.Core.Abstract.Router {
 	}
 
 	/**
-	 * Ruturns current path part of the current URL, including the query string
-	 * (if any).
-	 *
 	 * @inheritDoc
 	 * @override
 	 * @method getPath
-	 * @return {string} The path and query parts of the current URL.
+	 * @return {string}
 	 */
 	getPath() {
 		return this._extractRoutePath(this._window.getPath());
 	}
 
 	/**
-	 * Registers event listeners at the client side window object allowing the
-	 * router to capture user's history (history pop state - going "back") and
-	 * page (clicking links) navigation.
-	 *
-	 * The router will start processing the navigation internally, handling the
-	 * user's navigation to display the page related to the URL resulting from
-	 * the user's action.
-	 *
-	 * Note that the router will not prevent forms from being submitted to the
-	 * server.
-	 *
-	 * The effects of this method cannot be reverted. This method has no effect
-	 * at the server side.
-	 *
 	 * @inheritDoc
 	 * @override
 	 * @chainable
 	 * @method listen
-	 * @return {Core.Interface.Router} This router.
+	 * @return {Core.Interface.Router}
 	 */
 	listen() {
 		var nativeWindow = this._window.getWindow();
 
 		this._setAddressBar(this.getUrl());
-		this._window.bindEventListener(nativeWindow, EVENTS.POP_STATE, (event) => {
+		var eventName = EVENTS.POP_STATE;
+		this._window.bindEventListener(nativeWindow, eventName, (event) => {
 
 			if (event.state) {
 				this.route(this.getPath())
@@ -205,26 +181,11 @@ export default class Client extends ns.Core.Abstract.Router {
 	}
 
 	/**
-	 * Redirects the client to the specified location.
-	 *
-	 * At the server side the method results in responsing to the client with a
-	 * redirect HTTP status code and the {@code Location} header.
-	 *
-	 * At the client side the method updates the current URL by manipulating the
-	 * browser history (if the target URL is at the same domain and protocol as
-	 * the current one) or performs a hard redirect (if the target URL points to
-	 * a different protocol or domain).
-	 *
-	 * The method will result in the router handling the new URL and routing the
-	 * client to the related page if the URL is set at the client side and points
-	 * to the same domain and protocol.
-	 *
 	 * @inheritDoc
 	 * @override
 	 * @method redirect
-	 * @param {string} url The URL to which the client should be redirected.
+	 * @param {string} url
 	 * @param {{httpStatus: number=, onlyUpdate: boolean=, autoScroll: boolean=}} [options={}]
-	 *        The options overrides route options defined in routes.js.
 	 */
 	redirect(url = '', options = {}) {
 		if (this._isSameDomain(url) && this._mode === MODES.HISTORY) {
@@ -240,19 +201,12 @@ export default class Client extends ns.Core.Abstract.Router {
 	}
 
 	/**
-	 * Routes the application to the route matching the providing path, renders
-	 * the route page and sends the result to the client.
-	 *
 	 * @inheritDoc
 	 * @override
 	 * @method route
-	 * @param {string} path The URL path part received from the client, with
-	 *        optional query.
+	 * @param {string} path
 	 * @param {{onlyUpdate: boolean=, autoScroll: boolean=}} [options={}]
-	 *        The options overrides route options defined in routes.js.
-	 * @return {Promise<Object<string, ?(number|string)>>} A promise resolved when
-	 *         the error has been handled and the response has been sent to the
-	 *         client, or displayed if used at the client side.
+	 * @return {Promise<Object<string, ?(number|string)>>}
 	 */
 	route(path, options = {}) {
 		return (
@@ -268,19 +222,12 @@ export default class Client extends ns.Core.Abstract.Router {
 	}
 
 	/**
-	 * Handles an internal server error by responding with the appropriate
-	 * "internal server error" error page.
-	 *
 	 * @inheritDoc
 	 * @override
 	 * @method handleError
-	 * @param {Object<string, (Error|string)>} params Parameters extracted from the
-	 *        current URL path and query.
+	 * @param {Object<string, (Error|string)>} params
 	 * @param {{onlyUpdate: boolean=, autoScroll: boolean=}} [options={}]
-	 *        The options overrides route options defined in routes.js.
-	 * @return {Promise<Object<string, ?(number|string)>>} A promise resolved when
-	 *         the error has been handled and the response has been sent to the
-	 *         client, or displayed if used at the client side.
+	 * @return {Promise<Object<string, ?(number|string)>>}
 	 */
 	handleError(params, options = {}) {
 		if (this.isClientError(params.error)) {
@@ -303,19 +250,12 @@ export default class Client extends ns.Core.Abstract.Router {
 	}
 
 	/**
-	 * Handles a "not found" error by responsing with the appropriate "not found"
-	 * error page.
-	 *
 	 * @inheritDoc
 	 * @override
 	 * @method handleNotFound
-	 * @param {Object<string, (Error|string)>} params Parameters extracted from the
-	 *        current URL path and query.
+	 * @param {Object<string, (Error|string)>} params
 	 * @param {{onlyUpdate: boolean=, autoScroll: boolean=}} [options={}]
-	 *        The options overrides route options defined in routes.js.
-	 * @return {Promise<Object<string, ?(number|string)>>} A promise resolved when
-	 *         the error has been handled and the response has been sent to the
-	 *         client, or displayed if used at the client side.
+	 * @return {Promise<Object<string, ?(number|string)>>}
 	 */
 	handleNotFound(params, options = {}) {
 		return (
@@ -328,7 +268,8 @@ export default class Client extends ns.Core.Abstract.Router {
 	}
 
 	/**
-	 * Handle a fatal error application state. IMA handle fatal error when IMA handle error
+	 * Handle a fatal error application state. IMA handle fatal error when IMA
+	 * handle error.
 	 *
 	 * @private
 	 * @method _handleFatalError
@@ -340,7 +281,8 @@ export default class Client extends ns.Core.Abstract.Router {
 		} else {
 
 			if ($Debug) {
-				console.warn('You must implement $IMA.fatalErrorHandler in services.js');
+				console.warn('You must implement $IMA.fatalErrorHandler in ' +
+						'services.js');
 			}
 		}
 	}
@@ -349,9 +291,9 @@ export default class Client extends ns.Core.Abstract.Router {
 	 * Handles a click event. The method performs navigation to the target
 	 * location of the anchor (if it has one).
 	 *
-	 * The navigation will be handled by the router if the protocol and domain of
-	 * the anchor's target location (href) is the same as the current, otherwise
-	 * the method results in a hard redirect.
+	 * The navigation will be handled by the router if the protocol and domain
+	 * of the anchor's target location (href) is the same as the current,
+	 * otherwise the method results in a hard redirect.
 	 *
 	 * @private
 	 * @method _handleClick
@@ -388,14 +330,14 @@ export default class Client extends ns.Core.Abstract.Router {
 	}
 
 	/**
-	 * The method determines whether an anchor element or
-	 * a child of an anchor element has been clicked, and if it was, the method
-	 * returns anchor element else null.
+	 * The method determines whether an anchor element or a child of an anchor
+	 * element has been clicked, and if it was, the method returns anchor
+	 * element else null.
 	 *
 	 * @private
 	 * @method _getAnchorElement
 	 * @param {Node} target
-	 * @return {Node|null}
+	 * @return {?Node}
 	 */
 	_getAnchorElement(target) {
 		var self = this;
@@ -438,12 +380,12 @@ export default class Client extends ns.Core.Abstract.Router {
 	}
 
 	/**
-	 * Sets the provided URL to the browser's address bar by pushing a new state
-	 * to the history.
+	 * Sets the provided URL to the browser's address bar by pushing a new
+	 * state to the history.
 	 *
-	 * The state object pushed to the history will be an object with the follwing
-	 * structure: {@code {url: string}}. The {@code url} field will be set to the
-	 * provided URL.
+	 * The state object pushed to the history will be an object with the
+	 * following structure: {@code {url: string}}. The {@code url} field will
+	 * be set to the provided URL.
 	 *
 	 * @private
 	 * @method _setAddressBar
@@ -462,7 +404,8 @@ export default class Client extends ns.Core.Abstract.Router {
 	/**
 	 * Save user's scroll state to history.
 	 *
-	 * Replace scroll values in current state for actual scroll values in document.
+	 * Replace scroll values in current state for actual scroll values in
+	 * document.
 	 *
 	 * @method _saveScrollHistory
 	 */
@@ -484,8 +427,8 @@ export default class Client extends ns.Core.Abstract.Router {
 	 * @private
 	 * @method _isSameDomain
 	 * @param {string} [url=''] The URL.
-	 * @return {boolean} {@code true} if the protocol and domain of the provided
-	 *         URL are the same as the current.
+	 * @return {boolean} {@code true} if the protocol and domain of the
+	 *         provided URL are the same as the current.
 	 */
 	_isSameDomain(url = '') {
 		return !!url.match(this._getBaseUrl());

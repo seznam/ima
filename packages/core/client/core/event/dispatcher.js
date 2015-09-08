@@ -45,8 +45,8 @@ export default class Dispatcher extends ns.Core.Interface.Dispatcher {
 
 		/**
 		 * Map of event names to a map of event listeners to a set of scopes to
-		 * which the event listener should be bound when being executed due to the
-		 * event.
+		 * which the event listener should be bound when being executed due to
+		 * the event.
 		 *
 		 * @private
 		 * @property _eventListeners
@@ -56,13 +56,11 @@ export default class Dispatcher extends ns.Core.Interface.Dispatcher {
 	}
 
 	/**
-	 * Unregisters all event listeners currently registered with this dispatcher.
-	 *
 	 * @inheritDoc
 	 * @override
 	 * @chainable
 	 * @method clear
-	 * @return {Core.Interface.Dispatcher} This dispatcher.
+	 * @return {Core.Interface.Dispatcher}
 	 */
 	clear() {
 		this._eventListeners.clear();
@@ -71,30 +69,20 @@ export default class Dispatcher extends ns.Core.Interface.Dispatcher {
 	}
 
 	/**
-	 * Registers the provided event listener to be executed when the specified
-	 * event is fired on this dispatcher.
-	 *
-	 * When the specified event is fired, the event listener will be executed
-	 * with the data passed with the event as the first argument.
-	 *
-	 * The order in which the event listeners will be executed is unspecified and
-	 * should not be relied upon. Registering the same listener for the same
-	 * event and with the same scope multiple times has no effect.
-	 *
 	 * @inheritDoc
 	 * @override
 	 * @chainable
 	 * @method listen
-	 * @param {string} event The name of the event to listen for.
-	 * @param {function(*)} listener The event listener to register.
-	 * @param {?Object=} scope The object to which the {@code this} keyword will
-	 *        be bound in the event listener.
-	 * @return {Core.Interface.Dispatcher} This dispatcher.
+	 * @param {string} event
+	 * @param {function(*)} listener
+	 * @param {?Object=} scope
+	 * @return {Core.Interface.Dispatcher}
 	 */
 	listen(event, listener, scope = null) {
 		if ($Debug) {
 			if (!(listener instanceof Function)) {
-				throw new IMAError(`The listener must be a function, ${listener} provided`);
+				throw new IMAError(`The listener must be a function, ` +
+						`${listener} provided`);
 			}
 		}
 
@@ -112,29 +100,25 @@ export default class Dispatcher extends ns.Core.Interface.Dispatcher {
 	}
 
 	/**
-	 * Unregistered the provided event listener, so it will no longer be executed
-	 * with the specified scope when the specified event is fired.
-	 *
 	 * @inheritDoc
 	 * @override
 	 * @chainable
 	 * @method unlisten
-	 * @param {string} event The name of the event for which the listener should
-	 *        be unregistered.
-	 * @param {function(*)} listener The event listener to unregister.
-	 * @param {?Object=} scope The object to which the {@code this} keyword would
-	 *        be bound in the event listener
-	 * @return {Core.Interface.Dispatcher} This dispatcher.
-	 * @throws {Error} Thrown if there is no such listener registered.
+	 * @param {string} event
+	 * @param {function(*)} listener
+	 * @param {?Object=} scope
+	 * @return {Core.Interface.Dispatcher}
+	 * @throws {Error}
 	 */
 	unlisten(event, listener, scope = null) {
 		var scopes = this._getScopesOf(event, listener);
 
 		if ($Debug) {
 			if (!scopes.has(scope)) {
-				console.warn('Core.Event.Dispatcher.unlisten(): the provided ' +
-						`listener '${listener}' is not registered for the specified event ` +
-						`'${event}' and scope '${scope}'. Check your workflow.`, {
+				console.warn('Core.Event.Dispatcher.unlisten(): the ' +
+						`provided listener '${listener}' is not registered ` +
+						`for the specified event '${event}' and scope ` +
+						`'${scope}'. Check your workflow.`, {
 							event: event,
 							listener: listener,
 							scope: scope
@@ -156,26 +140,15 @@ export default class Dispatcher extends ns.Core.Interface.Dispatcher {
 	}
 
 	/**
-	 * Fires a new event of the specified name, carrying the provided data.
-	 *
-	 * The method will synchronously execute all event listeners registered for
-	 * the specified event, passing the provided data to them in arguments.
-	 *
-	 * Note that this method does not prevent the event listeners to modify the
-	 * data in any way. The order in which the event listeners will be executed
-	 * is unspecified and should not be relied upon.
-	 *
 	 * @inheritDoc
 	 * @override
 	 * @chainable
 	 * @method fire
-	 * @param {string} event The name of the event to fire.
-	 * @param {Object<string, *>} data The data to pass to the event listeners.
-	 * @param {boolean=} [imaInternalEvent=false] The flag specify that defined
-	 *        event is $IMA internal or usually application event.
-	 * @return {Core.Interface.Dispatcher} This dispatcher.
-	 * @throws {Error} Thrown if there is no event listener registered for the
-	 *         specified event and is not $IMA internal event.
+	 * @param {string} event
+	 * @param {Object<string, *>} data
+	 * @param {boolean=} [imaInternalEvent=false]
+	 * @return {Core.Interface.Dispatcher}
+	 * @throws {Error}
 	 */
 	fire(event, data, imaInternalEvent = false) {
 		var listeners = this._getListenersOf(event);

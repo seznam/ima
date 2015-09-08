@@ -15,7 +15,7 @@ ns.namespace('Core.Router');
 const CONTROL_CHARACTERS_REGEXP = /[\\.+*?\^$\[\](){}\/\'#]/g;
 
 /**
- * Regular expression used to match and remove the strating and trailing
+ * Regular expression used to match and remove the starting and trailing
  * forward slashes from a path expression or a URL path.
  *
  * @const
@@ -173,10 +173,10 @@ export default class Route {
 
 		for (var paramName of Object.keys(params)) {
 			if (path.indexOf(`:${paramName}`) > -1) {
-				path = path.replace(`:${paramName}`, params[paramName], 'g');
+				path = path.replace(`:${paramName}`, params[paramName]);
 			} else {
-				var pair = [paramName, params[paramName]].map(encodeURIComponent);
-				query.push(pair.join('='));
+				var pair = [paramName, params[paramName]];
+				query.push(pair.map(encodeURIComponent).join('='));
 			}
 		}
 
@@ -197,9 +197,9 @@ export default class Route {
 	}
 
 	/**
-	 * Returns the full name of the controller to use when this route is matched
-	 * by the current URL, or an Object Container-registered alias of the
-	 * controller.
+	 * Returns the full name of the controller to use when this route is
+	 * matched by the current URL, or an Object Container-registered alias of
+	 * the controller.
 	 *
 	 * @method getController
 	 * @return {string} The name of alias of the controller.
@@ -209,9 +209,9 @@ export default class Route {
 	}
 
 	/**
-	 * Returns the full name of the view class or an Object Container-registered
-	 * alias for the view class, representing the view to use when this route is
-	 * matched by the current URL.
+	 * Returns the full name of the view class or an Object
+	 * Container-registered alias for the view class, representing the view to
+	 * use when this route is matched by the current URL.
 	 *
 	 * @method getView
 	 * @return {string} The name or alias of the view class.
@@ -242,8 +242,8 @@ export default class Route {
 	}
 
 	/**
-	 * Tests whether the provided URL path matches this route. The provided path
-	 * may contain the query.
+	 * Tests whether the provided URL path matches this route. The provided
+	 * path may contain the query.
 	 *
 	 * @method matches
 	 * @param {string} path The URL path.
@@ -255,9 +255,9 @@ export default class Route {
 	}
 
 	/**
-	 * Extracts the parameter values from the provided path. The method extracts
-	 * both the in-path parameters and parses the query, allowing the query
-	 * parameters to override the in-path parameters.
+	 * Extracts the parameter values from the provided path. The method
+	 * extracts both the in-path parameters and parses the query, allowing the
+	 * query parameters to override the in-path parameters.
 	 *
 	 * The method returns an empty hash object if the path does not match this
 	 * route.
@@ -276,9 +276,9 @@ export default class Route {
 	}
 
 	/**
-	 * Compiles the path expression to a regular expression that can be used for
-	 * easier matching of URL paths against this route, and extracting the path
-	 * parameter values from the URL path.
+	 * Compiles the path expression to a regular expression that can be used
+	 * for easier matching of URL paths against this route, and extracting the
+	 * path parameter values from the URL path.
 	 *
 	 * @private
 	 * @method _compileToRegExp
@@ -338,8 +338,8 @@ export default class Route {
 	 *
 	 * @private
 	 * @method _getQuery
-	 * @param {string} path The URL path, including the optional query string (if
-	 *        any).
+	 * @param {string} path The URL path, including the optional query string
+	 *        (if any).
 	 * @return {Object<string, ?string>} Parsed query parameters.
 	 */
 	_getQuery(path) {
@@ -361,7 +361,7 @@ export default class Route {
 	}
 
 	/**
-	 * Trimms the trailing forward slash from the provided URL path.
+	 * Trims the trailing forward slash from the provided URL path.
 	 *
 	 * @private
 	 * @method getLoosesPath

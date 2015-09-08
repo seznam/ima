@@ -55,8 +55,8 @@ export default class StateManager extends ns.Core.Interface.PageStateManager {
 	}
 
 	/**
-	 * Clear history.
-	 *
+	 * @inheritDoc
+	 * @override
 	 * @method clear
 	 */
 	clear() {
@@ -64,8 +64,8 @@ export default class StateManager extends ns.Core.Interface.PageStateManager {
 	}
 
 	/**
-	 * Set state.
-	 *
+	 * @inheritDoc
+	 * @override
 	 * @method setState
 	 * @param {Object} state
 	 */
@@ -84,8 +84,8 @@ export default class StateManager extends ns.Core.Interface.PageStateManager {
 	}
 
 	/**
-	 * Patch state.
-	 *
+	 * @inheritDoc
+	 * @override
 	 * @method patchState
 	 * @param {Object} statePatch
 	 */
@@ -95,8 +95,8 @@ export default class StateManager extends ns.Core.Interface.PageStateManager {
 	}
 
 	/**
-	 * Get state.
-	 *
+	 * @inheritDoc
+	 * @override
 	 * @method getState
 	 * @return {Object}
 	 */
@@ -105,10 +105,10 @@ export default class StateManager extends ns.Core.Interface.PageStateManager {
 	}
 
 	/**
-	 * Get all history state.
-	 *
+	 * @inheritDoc
+	 * @override
 	 * @method getAllStates
-	 * @return {array}
+	 * @return {Object[]}
 	 */
 	getAllStates() {
 		return this._states;
