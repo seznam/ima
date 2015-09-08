@@ -37,6 +37,7 @@ export default class Component extends ns.Vendor.React.Component {
 	 * Returns the current value of the component's {@code className} property.
 	 * The returned value is an empty string if no such property is defined.
 	 *
+	 * @property utils
 	 * @return {string} The current value of the component's {@code className}
 	 *         property, or an empty string.
 	 */
@@ -48,7 +49,7 @@ export default class Component extends ns.Vendor.React.Component {
 	 * Returns the utilities for the view components. The returned value is the
 	 * value bound to the {@code $Utils} object container constant.
 	 *
-	 * @method get utils
+	 * @property utils
 	 * @return {Object<string, *>} The utilities for the view components.
 	 */
 	get utils() {
