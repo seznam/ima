@@ -14,7 +14,7 @@
 		<meta property="og:image" content=""/>
 
 		<meta name="viewport" content="width=device-width, initial-scale=1"/>
-		<link rel="stylesheet" href="/static/css/app{if $Env === 'prod'}.bundle.min{/if}.css?version={$Version}"/>
+		<link rel="stylesheet" href="/static/css/app{if $Env !== 'dev'}.bundle.min{/if}.css?version={$Version}"/>
 		<title></title>
 	</head>
 	<body>
