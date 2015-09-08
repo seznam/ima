@@ -14,7 +14,7 @@
 		<meta property="og:image" content=""/>
 
 		<meta name="viewport" content="width=device-width, initial-scale=1"/>
-		<link rel="stylesheet" href="/static/css/app.bundle.min.css?version={$Version}"/>
+		<link rel="stylesheet" href="/static/css/app{if $Env === 'prod'}.bundle.min{/if}.css?version={$Version}"/>
 		<title></title>
 	</head>
 	<body>
@@ -34,8 +34,16 @@
 			</script>
 		</div>
 		<div id="scripts">
-			<script type="application/javascript" src="/static/js/locale/{$Language}.js?version={$Version}"></script>
-			<script type="application/javascript" src="/static/js/app.bundle.min.js?version={$Version}"></script>
+			{if $Env !== 'dev'}
+				<script type="application/javascript" src="/static/js/locale/{$Language}.js?version={$Version}"></script>
+				<script type="application/javascript" src="/static/js/app.bundle.min.js?version={$Version}"></script>
+			{else}
+				<script type="application/javascript" src="/static/js/polyfill.js?version={$Version}"></script>
+				<script type="application/javascript" src="/static/js/shim.js?version={$Version}"></script>
+				<script type="application/javascript" src="/static/js/vendor.client.js?version={$Version}"></script>
+				<script type="application/javascript" src="/static/js/locale/{$Language}.js?version={$Version}"></script>
+				<script type="application/javascript" src="/static/js/app.client.js?version={$Version}"></script>
+			{/if}
 		</div>
 	</body>
 </html>

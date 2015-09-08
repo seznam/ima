@@ -7,6 +7,7 @@ var errorView = require('./template/errorView.js');
 var environment = require('./environment.js');
 var instanceRecycler = require('./instanceRecycler.js');
 var helper = require('./helper.js');
+var templateProcessor = require('./templateProcessor.js');
 
 GLOBAL.$Debug = environment.$Debug;
 GLOBAL.$IMA = GLOBAL.$IMA || {};
@@ -130,15 +131,9 @@ module.exports = (() => {
 					var bootConfig = _getBootConfig(req, res);
 					var status = 200;
 
-					for (var settingKey of Object.keys(bootConfig.settings)) {
-						var value = bootConfig.settings[settingKey];
-						var key = `{${settingKey}}`;
-						var reg = new RegExp(helper.escapeRegExp(key), 'g');
+					content = templateProcessor(content, bootConfig.settings);
 
-						content = content.replace(reg, value);
-					}
-
-					res.status(200);
+					res.status(status);
 					res.send(content);
 
 					resolve({ content, status, SPA: true });
