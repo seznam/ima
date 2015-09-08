@@ -1,5 +1,6 @@
 
 var gulp = require('gulp');
+var clean = require('gulp-clean');
 
 gulp.task('app:hello', function () {
 	return gulp.src('./imajs/examples/hello/**/*')
