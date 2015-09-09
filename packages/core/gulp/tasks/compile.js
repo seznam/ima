@@ -6,6 +6,7 @@ var browserify = require('browserify');
 var cache = require('gulp-cached');
 var change = require('gulp-change');
 var concat = require('gulp-concat');
+var del = require('del');
 var es = require('event-stream');
 var gulpif = require('gulp-if');
 var gutil = require('gulp-util');
@@ -127,10 +128,9 @@ gulp.task('Es6ToEs5:vendor:server', function () {
 });
 
 gulp.task('Es6ToEs5:vendor:clean', function () {
-	return (
-		gulp.src(files.vendor.dest.tmp + files.vendor.name.tmp, {read: false})
-			.pipe(clean())
-	);
+	return del([
+		files.vendor.dest.tmp + files.vendor.name.tmp
+	]);
 });
 
 /**

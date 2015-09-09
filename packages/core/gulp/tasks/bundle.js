@@ -1,7 +1,7 @@
 
 var gulp = require('gulp');
-var clean = require('gulp-clean');
 var concat = require('gulp-concat');
+var del = require('del');
 var minifyCSS = require('gulp-minify-css');
 var plumber = require('gulp-plumber');
 var uglify = require('gulp-uglify');
@@ -45,8 +45,5 @@ gulp.task('bundle:css', function () {
 });
 
 gulp.task('bundle:clean', function () {
-	return (
-		gulp.src(files.bundle.css.src.concat(files.bundle.js.src), {read: false})
-			.pipe(clean())
-	);
+	return del(files.bundle.css.src.concat(files.bundle.js.src));
 });

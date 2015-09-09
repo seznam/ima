@@ -1,6 +1,6 @@
 
 var gulp = require('gulp');
-var clean = require('gulp-clean');
+var del = require('del');
 
 gulp.task('app:hello', function () {
 	return gulp.src('./imajs/examples/hello/**/*')
@@ -18,6 +18,5 @@ gulp.task('app:todos', function () {
 });
 
 gulp.task('app:clean', function () {
-	return gulp.src(['./app/', './build/'], {read: false})
-		.pipe(clean());
+	return del(['./app/', './build/']);
 });
