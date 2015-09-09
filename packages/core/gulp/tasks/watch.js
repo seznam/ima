@@ -18,6 +18,7 @@ gulp.task('watch', function() {
 	gulp.watch(files.less.watch, ['less']);
 	gulp.watch(files.server.watch, ['server:build']);
 	gulp.watch(files.locale.watch, ['locale:build']);
+	gulp.watch('./app/assets/static/**/*', ['copy:appStatic']);
 
 	gulp.watch([
 		'./imajs/**/*.{js,jsx}',
