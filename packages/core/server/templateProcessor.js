@@ -3,8 +3,9 @@ var helper = require('./helper.js');
 
 module.exports = processTemplate;
 
-var SIMPLE_CONDITION_MATCHER = /[{]if\s+([^}]+)[}]([^{]*)[{]\/if[}]/;
-var IF_ELSE_CONDITION_MATCHER = /[{]if\s+([^}]+)[}]([^{]*)[{]else[}]([^{]*)[{]\/if[}]/;
+var SIMPLE_ENV_CONDITION_MATCHER = /[{]ifEnv\s+([^}]+)[}]([^{]*)[{]\/ifEnv[}]/;
+var IF_ELSE_ENV_CONDITION_MATCHER =
+		/[{]ifEnv\s+([^}]+)[}]([^{]*)[{]else[}]([^{]*)[{]\/ifEnv[}]/;
 
 /**
  * Processes the provided template, replacing variable placeholders with the
@@ -70,7 +71,7 @@ function evaluateConditions(template, variables) {
  * @return {string} Processed template.
  */
 function processSimpleConditions(template, variables) {
-	return processCondition(template, variables, SIMPLE_CONDITION_MATCHER);
+	return processCondition(template, variables, SIMPLE_ENV_CONDITION_MATCHER);
 }
 
 /**
@@ -82,7 +83,11 @@ function processSimpleConditions(template, variables) {
  * @return {string} Processed template.
  */
 function processIfElseConditions(template, variables) {
-	return processCondition(template, variables, IF_ELSE_CONDITION_MATCHER);
+	return processCondition(
+		template,
+		variables,
+		IF_ELSE_ENV_CONDITION_MATCHER
+	);
 }
 
 /**
@@ -129,34 +134,19 @@ function processCondition(template, variables, matcher) {
  *         boolean.
  */
 function evaluateCondition(conditionCode, variables) {
-	var variableDeclarations = [];
+	var trimmedCondition = conditionCode.trim();
 
-	for (var variableName of Object.keys(variables)) {
-		if (!/[$a-zA-Z_][$\w]/.test(variableName)) {
-			if ($Debug) {
-				console.warn('Invalid variable name detected (' +
-						variableName + '), skipping');
-			}
-
-			continue;
+	if ($Debug) {
+		if (!/^!?('[^']*'|"[^"]*")$/.test(trimmedCondition)) {
+			throw new Error('Invalid expected value: ' + trimmedCondition);
 		}
-		if (variableName === '$Debug') {
-			continue; // already defined
-		}
-
-		if ($Debug) {
-			if (eval(`typeof ${variableName} !== 'undefined'`)) {
-				console.warn(`The variable ${variableName} overrides a ` +
-						`local or global variable`);
-			}
-		}
-
-		variableDeclarations.push(
-			`var ${variableName} = ${JSON.stringify(variables[variableName])}`
-		);
 	}
 
-	var code = variableDeclarations.join('; ') + '; ' + conditionCode;
+	var negate = trimmedCondition.charAt(0) === '!';
 
-	return !!eval(code);
+	var expectedValue = trimmedCondition.slice(negate ? 2 : 1, -1);
+
+	return negate ?
+			(expectedValue !== variables.$Env) :
+			(expectedValue === variables.$Env);
 }
