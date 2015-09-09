@@ -15,6 +15,7 @@ GLOBAL.$IMA = GLOBAL.$IMA || {};
 require('./app.server.js');
 
 var appServer = null;
+var renderedSPAs = {};
 
 $IMA.Loader.import('imajs/client/main').then((app) => {
 	appServer = app;
@@ -122,16 +123,30 @@ module.exports = (() => {
 	};
 
 	var showStaticSPAPage = (req, res) => {
+		var bootConfig = _getBootConfig(req, res);
+		var status = 200;
+
+		var language = bootConfig.settings.$Language;
+		if (renderedSPAs[language]) {
+			res.status(status);
+			res.send(renderedSPAs[language]);
+
+			return Promise.resolve({
+				content: renderedSPAs[language],
+				status,
+				SPA: true
+			});
+		}
+
 		return new Promise((resolve, reject) => {
 			fs.readFile('./build/static/html/spa.html', 'utf-8', (error, content) => {
 				if (error) {
 					showStaticErrorPage(error, req, res);
 					reject(error);
 				} else {
-					var bootConfig = _getBootConfig(req, res);
-					var status = 200;
-
 					content = templateProcessor(content, bootConfig.settings);
+
+					renderedSPAs[language] = content;
 
 					res.status(status);
 					res.send(content);
