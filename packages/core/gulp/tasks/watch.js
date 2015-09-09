@@ -5,6 +5,7 @@ var flo = require('fb-flo');
 var fs = require('fs');
 var gutil = require('gulp-util');
 var remember = require('gulp-remember');
+var watch = require('gulp-watch');
 
 var sharedState = require('../gulpState.js');
 
@@ -13,12 +14,12 @@ var files = gulpConfig.files;
 
 gulp.task('watch', function() {
 
-	gulp.watch(files.app.watch, ['app:build']);
-	gulp.watch(files.vendor.watch, ['vendor:build']);
-	gulp.watch(files.less.watch, ['less']);
-	gulp.watch(files.server.watch, ['server:build']);
-	gulp.watch(files.locale.watch, ['locale:build']);
-	gulp.watch('./app/assets/static/**/*', ['copy:appStatic']);
+	runOnChange(files.app.watch, 'app:build');
+	runOnChange(files.vendor.watch, 'vendor:build');
+	runOnChange(files.less.watch, 'less');
+	runOnChange(files.server.watch, 'server:build');
+	runOnChange(files.locale.watch, 'locale:build');
+	runOnChange('./app/assets/static/**/*', 'copy:appStatic');
 
 	gulp.watch([
 		'./imajs/**/*.{js,jsx}',
@@ -56,4 +57,10 @@ gulp.task('watch', function() {
 			});
 		}
 	);
+
+	function runOnChange(files, tasks) {
+		watch(files, function () {
+			gulp.start(tasks);
+		});
+	}
 });
