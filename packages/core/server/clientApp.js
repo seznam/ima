@@ -126,13 +126,19 @@ module.exports = (() => {
 		var bootConfig = _getBootConfig(req, res);
 		var status = 200;
 
-		var language = bootConfig.settings.$Language;
-		if (renderedSPAs[language]) {
+		var cacheKey = [
+			bootConfig.settings.$Protocol,
+			bootConfig.settings.$Language,
+			bootConfig.settings.$Host,
+			bootConfig.settings.$Root,
+			bootConfig.settings.$LanguagePartPath
+		].join('|');
+		if (renderedSPAs[cacheKey]) {
 			res.status(status);
-			res.send(renderedSPAs[language]);
+			res.send(renderedSPAs[cacheKey]);
 
 			return Promise.resolve({
-				content: renderedSPAs[language],
+				content: renderedSPAs[cacheKey],
 				status,
 				SPA: true
 			});
@@ -146,7 +152,7 @@ module.exports = (() => {
 				} else {
 					content = templateProcessor(content, bootConfig.settings);
 
-					renderedSPAs[language] = content;
+					renderedSPAs[cacheKey] = content;
 
 					res.status(status);
 					res.send(content);
