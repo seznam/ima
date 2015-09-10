@@ -472,6 +472,8 @@ export default class Router extends ns.Core.Interface.Router {
 
 					this._dispatcher
 						.fire(this.EVENTS.POST_HANDLE_ROUTE, data, true);
+
+					return response;
 				});
 
 	}
