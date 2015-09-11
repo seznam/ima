@@ -15,8 +15,6 @@ loadTasks('./app/gulp/tasks');
  *        defining the gulp tasks.
  */
 function loadTasks(directory) {
-	directory = directory.split('/').join(path.sep); // normalize
-
 	if (!fs.existsSync(directory)) {
 		console.warn('The gulp tasks directory ' + directory + ' does not ' +
 				'exist, skipping');
