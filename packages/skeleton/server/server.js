@@ -17,6 +17,9 @@ var environment = require('./imajs/environment.js');
 var compression = require('compression');
 var helmet = require('helmet');
 
+var cacheConfig = environment.$Server.cache;
+var cache = new (require('./cache.js'))(cacheConfig);
+
 process.on('uncaughtException', function(error) {
 	console.error('Uncaught Exception:', error.message, error.stack);
 });
@@ -34,12 +37,32 @@ var allowCrossDomain = (req, res, next) => {
 };
 
 var renderApp = (req, res) => {
+	console.log('renderApp');
+	if (req.method === 'GET') {
+		console.log('can be cached');
+		var cachedPage = cache.get(req);
+		if (cachedPage) {
+			console.log('cached');
+			res.status(200);
+			res.send(cachedPage);
+
+			return;
+		}
+	}
+
 	clientApp
 		.requestHandler(req, res)
 		.then((response) => {
-			//console.log('RESOLVE', response);
+			//console.log('RESOLVE', response = { status: number, content: string, SPA: boolean= });
+
+			if ((req.method === 'GET') && (response.status === 200) && !response.SPA) {
+				console.log('setting to cache');
+				cache.set(req, response.content);
+			}
 		}, (error) => {
 			//console.log('REJECT', error, error.stack);
+		}).catch((error) => {
+			console.error('Cache error', error);
 		});
 };
 
