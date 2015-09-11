@@ -49,13 +49,26 @@ module.exports = (() => {
 														  // served a
 														  // server-rendered
 														  // page
+				},
+				cache: {
+					// boolean, or function(Express.Request): boolean
+					enabled: false,
+
+					// null or function(Express.Request): string
+					cacheKeyGenerator: null,
+
+					// the maximum time a cache entry is kept
+					entryTtl: 60 * 60 * 1000, // milliseconds
+
+					// the time after which the unused entries are discarded
+					unusedEntryTtl: 15 * 60 * 1000 // milliseconds
 				}
 			},
 			$Proxy: { // Configuration of REST API proxy. All requests to the
-				// specified path will be proxies to the specified
-				// server. This proxy should be used only in dev
-				// environment because of performance a possible security
-				// concerns.
+			          // specified path will be proxies to the specified
+			          // server. This proxy should be used only in dev
+			          // environment because of performance a possible security
+			          // concerns.
 				path: '/api', // Path at which the proxy will be listening for
 							  // request
 				server: 'https://example.com/api/v1'

@@ -49,6 +49,19 @@ module.exports = (() => {
 														  // served a
 														  // server-rendered
 														  // page
+				},
+				cache: {
+					// boolean, or function(Express.Request): boolean
+					enabled: false,
+
+					// null or function(Express.Request): string
+					cacheKeyGenerator: null,
+
+					// the maximum time a cache entry is kept
+					entryTtl: 60 * 60 * 1000, // milliseconds
+
+					// the time after which the unused entries are discarded
+					unusedEntryTtl: 15 * 60 * 1000 // milliseconds
 				}
 			},
 			$Proxy: { // Configuration of REST API proxy. All requests to the
