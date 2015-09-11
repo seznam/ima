@@ -332,7 +332,7 @@ export default class Agent extends ns.Core.Interface.HttpAgent {
 				})
 		);
 
-		this._cache.set(cacheKey, cachePromise);
+		this._internalCacheOfPromises.set(cacheKey, cachePromise);
 
 		return cachePromise;
 	}

@@ -423,6 +423,26 @@ describe('Core.Abstract.Router', function() {
 					done();
 				});
 		});
+
+		it('should return response', function(done) {
+			var response = {content: null, status: 200};
+			var params = {};
+			var path ='/';
+
+			spyOn(router, 'getPath')
+				.and
+				.returnValue(path);
+			spyOn(pageManager, 'manage')
+				.and
+				.returnValue(Promise.resolve({content: null, status: 200}));
+
+			router
+				._handle(route, params, options)
+				.then(function(response) {
+					expect(response).toEqual(response);
+					done();
+				});
+		});
 	});
 
 	describe('_extractRoutePath method', function() {
