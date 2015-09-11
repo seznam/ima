@@ -1,6 +1,6 @@
 import ns from 'imajs/client/core/namespace';
 
-ns.namespace('App.Module.Feed');
+ns.namespace('App.Module.CategoryList');
 
 /**
  * Resource for feed.

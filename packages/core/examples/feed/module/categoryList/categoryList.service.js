@@ -1,7 +1,7 @@
 import ns from 'imajs/client/core/namespace';
 import IMAError from 'imajs/client/core/imaError';
 
-ns.namespace('App.Module.Feed');
+ns.namespace('App.Module.CategoryList');
 
 /**
  * Class for the feed model.
