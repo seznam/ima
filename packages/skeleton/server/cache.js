@@ -194,7 +194,6 @@ function defaultKeyGenerator(request) {
 	var host = request.get('Host');
 	var url = request.originalUrl;
 
-	console.log('cache key: ' + protocol + ':' + host + url);
 	return protocol + ':' + host + url;
 }
 
