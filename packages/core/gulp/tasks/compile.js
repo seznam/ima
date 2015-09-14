@@ -47,10 +47,23 @@ gulp.task('Es6ToEs5:app', function () {
 				'.catch(function (error) { \n' +
 				'console.error(error); \n });';
 
-			content = content.replace(/System.import/g, '$IMA.Loader.import');
-			content = content.replace(/System.register/g, '$IMA.Loader.register');
-
 			return content;
+		});
+	}
+
+	function moduleTransformer(pluginAndTypes) {
+		var Plugin = pluginAndTypes.Plugin;
+
+		return new Plugin('ima-babel-modules', {
+			visitor: {
+				Identifier: function (node) {
+					if (node.name === 'System') {
+						node.name = '$IMA.Loader';
+					}
+
+					return node;
+				}
+			}
 		});
 	}
 
@@ -60,7 +73,9 @@ gulp.task('Es6ToEs5:app', function () {
 			.pipe(plumber())
 			.pipe(sourcemaps.init())
 			.pipe(cache('Es6ToEs5:app'))
-			.pipe(babel({modules: 'system', moduleIds: true, loose: "all", externalHelpers: true}))
+			.pipe(babel({modules: 'system', moduleIds: true, loose: 'all', plugins: [
+				{transformer: moduleTransformer, position: 'after'}
+			], externalHelpers: true}))
 			.pipe(gulpif(isView, sweetjs({
 				modules: ['./imajs/macro/componentName.sjs'],
 				readableNames: true
@@ -89,7 +104,7 @@ gulp.task('Es6ToEs5:server', function () {
 		gulp
 			.src(files.server.src)
 			.pipe(plumber())
-			.pipe(babel({modules: 'ignore', loose: "all", externalHelpers: true}))
+			.pipe(babel({modules: 'ignore', loose: 'all', externalHelpers: true}))
 			.pipe(plumber.stop())
 			.pipe(gulp.dest(files.server.dest))
 	);
@@ -100,7 +115,7 @@ gulp.task('Es6ToEs5:vendor', function () {
 		gulp
 			.src(files.vendor.src)
 			.pipe(plumber())
-			.pipe(babel({modules: 'commonStrict', loose: "all", externalHelpers: true}))
+			.pipe(babel({modules: 'commonStrict', loose: 'all', externalHelpers: true}))
 			.pipe(plumber.stop())
 			.pipe(concat(files.vendor.name.tmp))
 			.pipe(gulp.dest(files.vendor.dest.tmp))
@@ -110,7 +125,7 @@ gulp.task('Es6ToEs5:vendor', function () {
 gulp.task('Es6ToEs5:vendor:client', function () {
 	return (
 		browserify(files.vendor.dest.tmp + files.vendor.name.tmp, {debug: false, insertGlobals : false, basedir: '.'})
-			.transform(babelify.configure({modules: 'ignore', loose: "all", externalHelpers: true}))
+			.transform(babelify.configure({modules: 'ignore', loose: 'all', externalHelpers: true}))
 			.external('vertx')
 			.bundle()
 			.pipe(source(files.vendor.name.client))
