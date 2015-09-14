@@ -34,18 +34,6 @@ export default class Component extends ns.Vendor.React.Component {
 	}
 
 	/**
-	 * Returns the current value of the component's {@code className} property.
-	 * The returned value is an empty string if no such property is defined.
-	 *
-	 * @property utils
-	 * @return {string} The current value of the component's {@code className}
-	 *         property, or an empty string.
-	 */
-	get className() {
-		return this.props.className || '';
-	}
-
-	/**
 	 * Returns the utilities for the view components. The returned value is the
 	 * value bound to the {@code $Utils} object container constant.
 	 *
@@ -111,7 +99,8 @@ export default class Component extends ns.Vendor.React.Component {
 	 * object that resolve to true.
 	 *
 	 * @method cssClasses
-	 * @param {Object<string, boolean>} classRules A map of CSS class names to
+	 * @param {(string|Object<string, boolean>)} classRules CSS classes in a
+	 *        string separated by whitespace, or a map of CSS class names to
 	 *        boolean values. The CSS class name will be included in the result
 	 *        only if the value is {@code true}.
 	 * @param {boolean} includeComponentClassName
@@ -119,19 +108,28 @@ export default class Component extends ns.Vendor.React.Component {
 	 *         to {@code true}.
 	 */
 	cssClasses(classRules, includeComponentClassName = false) {
+		if (typeof classRules === 'string') {
+			var  separatedClassNames = classRules.split(/\s+/);
+			classRules = {};
+
+			for (var className of separatedClassNames) {
+				classRules[className] = true;
+			}
+		}
+
 		if (!(classRules instanceof Object)) {
 			throw new Error('The class rules must be specified as a plain ' +
 					`object, ${classRules} provided`);
 		}
 
 		if (includeComponentClassName) {
-			var propClassNames = this.className;
+			var propClassNames = this.props.className;
 			if (propClassNames) {
 				var separatedPropClassNames = propClassNames.split(/\s+/);
 				var classNamesMap = {};
 
-				for (var className of separatedPropClassNames) {
-					classNamesMap[className] = true;
+				for (var propClassName of separatedPropClassNames) {
+					classNamesMap[propClassName] = true;
 				}
 
 				classRules = Object.assign({}, classRules, classNamesMap);
