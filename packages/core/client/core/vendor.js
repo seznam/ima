@@ -1,8 +1,7 @@
-var vendor = new Map();
-var helper = require('./helper.js');
 
-vendor.set('React', function () {});
-vendor.set('SuperAgent', function () {});
+var vendor = new Map();
+
+var helper = require('./helper.js');
 vendor.set('$Helper', helper);
 
 if (typeof window !== 'undefined' && window !== null) {

@@ -62,7 +62,7 @@ gulp.task('Es6ToEs5:app', function () {
 			.pipe(cache('Es6ToEs5:app'))
 			.pipe(babel({modules: 'system', moduleIds: true, loose: "all", externalHelpers: true}))
 			.pipe(gulpif(isView, sweetjs({
-				modules: ['./imajs/macro/react.sjs', './imajs/macro/componentName.sjs'],
+				modules: ['./imajs/macro/componentName.sjs'],
 				readableNames: true
 			}), gutil.noop()))
 			.pipe(remember('Es6ToEs5:app'))
