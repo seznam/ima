@@ -19,7 +19,7 @@ var helmet = require('helmet');
 var logger = require('./imajs/logger.js');
 
 var cacheConfig = environment.$Server.cache;
-var cache = new (require('./cache.js'))(cacheConfig);
+var cache = new (require('./imajs/cache.js'))(cacheConfig);
 
 process.on('uncaughtException', function (error) {
 	logger.error('Uncaught Exception:', error.message, error.stack);
