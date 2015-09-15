@@ -16,12 +16,13 @@ var methodOverride = require('method-override');
 var environment = require('./imajs/environment.js');
 var compression = require('compression');
 var helmet = require('helmet');
+var logger = require('./imajs/logger.js');
 
 var cacheConfig = environment.$Server.cache;
-var cache = new (require('./cache.js'))(cacheConfig);
+var cache = new (require('./imajs/cache.js'))(cacheConfig);
 
-process.on('uncaughtException', function(error) {
-	console.error('Uncaught Exception:', error.message, error.stack);
+process.on('uncaughtException', function (error) {
+	logger.error('Uncaught Exception:', error.message, error.stack);
 });
 
 var allowCrossDomain = (req, res, next) => {
@@ -50,15 +51,27 @@ var renderApp = (req, res) => {
 	clientApp
 		.requestHandler(req, res)
 		.then((response) => {
-			//console.log('RESOLVE', response = { status: number, content: string, SPA: boolean= });
+			// logger.info('Request handled successfully', { response: { status: number, content: string, SPA: boolean= } });
 
 			if ((req.method === 'GET') && (response.status === 200) && !response.SPA) {
 				cache.set(req, response.content);
 			}
 		}, (error) => {
-			//console.log('REJECT', error, error.stack);
+			// logger.error('REJECT', {
+			// 	error: {
+			// 		type: error.name,
+			// 			message: error.message,
+			// 			stack: error.stack
+			// 	}
+			// });
 		}).catch((error) => {
-			console.error('Cache error', error);
+			logger.error('Cache error', {
+				error: {
+					type: error.name,
+					message: error.message,
+					stack: error.stack
+				}
+			});
 		});
 };
 
@@ -90,8 +103,8 @@ var runNodeApp = () => {
 		.use(renderApp)
 		.use(errorHandler)
 		.use(staticErrorPage)
-		.listen(environment.$Server.port, function() {
-			return console.log('Point your browser at http://localhost:' + environment.$Server.port);
+		.listen(environment.$Server.port, function () {
+			return logger.info('Point your browser at http://localhost:' + environment.$Server.port);
 		});
 };
 
@@ -112,7 +125,7 @@ if (environment.$Env === 'dev') {
 
 		// Listen for dying workers
 		cluster.on('exit', function (worker) {
-			console.log('Worker ' + worker.id + ' died :(');
+			logger.warn('Worker ' + worker.id + ' died :(');
 			cluster.fork();
 		});
 
