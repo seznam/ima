@@ -103,12 +103,12 @@ var runNodeApp = () => {
 		.use(renderApp)
 		.use(errorHandler)
 		.use(staticErrorPage)
-		.listen(environment.$Server.port, function () {
+		.listen(environment.$Server.port, () => {
 			return logger.info('Point your browser at http://localhost:' + environment.$Server.port);
 		});
 };
 
-if (environment.$Env === 'dev') {
+if (environment.$Env === 'dev' || environment.$Server.clusters === 1) {
 
 	runNodeApp();
 
