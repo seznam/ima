@@ -2,6 +2,7 @@ var express = require('express');
 var router = express.Router();
 var superAgent = require('superagent');
 var environment = require('./environment.js');
+var logger = require('./logger.js');
 
 var firstLetterToLowerCase = (world) => {
 	return world.charAt(0).toLowerCase() + world.slice(1);
@@ -61,7 +62,7 @@ var callRemoteServer = (req, res) => {
 
 	var proxyUrl = environment.$Proxy.server + url;
 
-	console.log(`API: ${req.method} ${proxyUrl} query:`, req.query);
+	logger.info(`API proxy: ${req.method} ${proxyUrl} query: ` + JSON.stringify(req.query));
 
 	switch(req.method) {
 		case 'POST':
@@ -107,7 +108,13 @@ var callRemoteServer = (req, res) => {
 	httpRequest
 		.end((error, response) => {
 			if (error) {
-				console.error('API ERROR', error);
+				logger.error('API ERROR', {
+					error: {
+						type: error.name,
+						message: error.message,
+						stack: error.stack
+					}
+				});
 				res.status(error.status || 500).json({Error: 'API error', message: error.message});
 			} else if (response) {
 				var settedCookies = response.header['set-cookie'];

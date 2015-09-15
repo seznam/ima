@@ -8,6 +8,7 @@ var environment = require('./environment.js');
 var instanceRecycler = require('./instanceRecycler.js');
 var helper = require('./helper.js');
 var templateProcessor = require('./templateProcessor.js');
+var logger = require('./logger.js');
 
 GLOBAL.$Debug = environment.$Debug;
 GLOBAL.$IMA = GLOBAL.$IMA || {};
@@ -21,9 +22,14 @@ $IMA.Loader.import('imajs/client/main').then((app) => {
 	appServer = app;
 	instanceRecycler.init(appServer.createIMAJsApp, environment.$Server.concurrency);
 }).catch((error) => {
-	console.log('Message', error.message);
-	console.error('Stack: ', error.stack);
-	console.error('Params: ', error._params);
+	logger.error('Failed to initialize the application or the instance recycler', {
+		error: {
+			type: error.name,
+			message: error.message,
+			stack: error.stack,
+			params: error._params
+		}
+	});
 });
 
 hljs.configure({
@@ -36,8 +42,14 @@ module.exports = (() => {
 		var stack = stackTrace.parse(err);
 		var fileIndex = 1;
 
-		console.error('Stack: ', err.stack);
-		console.error('Params: ', err._params);
+		logger.error('The application crashed due to an uncaught exception', {
+			error: {
+				type: err.name,
+				message: err.message,
+				stack: err.stack,
+				params: err._params
+			}
+		});
 
 		asyncEach(stack, function getContentInfo(item, cb) {
 			// exclude core node modules and node modules
@@ -83,7 +95,14 @@ module.exports = (() => {
 			// if something bad happened while processing the stacktrace
 			// make sure to return something useful
 			if (e) {
-				console.error(e);
+				logger.error('Failed to display error page', {
+					error: {
+						type: e.name,
+						message: e.message,
+						stack: e.stack,
+						params: e._params
+					}
+				});
 				return res.send(err.stack);
 			}
 
@@ -103,7 +122,14 @@ module.exports = (() => {
 	};
 
 	var showStaticErrorPage = (err, req, res) => {
-		console.log(err, err.stack);
+		logger.error('Failed to display error page, displaying the static error page', {
+			error: {
+				type: err.name,
+				message: err.message,
+				stack: err.stack,
+				params: err._params
+			}
+		});
 
 		return new Promise((resolve, reject) => {
 			fs.readFile('./build/static/html/error.html', 'utf-8', (error, content) => {
