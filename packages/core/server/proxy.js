@@ -108,13 +108,7 @@ var callRemoteServer = (req, res) => {
 	httpRequest
 		.end((error, response) => {
 			if (error) {
-				logger.error('API ERROR', {
-					error: {
-						type: error.name,
-						message: error.message,
-						stack: error.stack
-					}
-				});
+				logger.error('API ERROR', { error });
 				res.status(error.status || 500).json({Error: 'API error', message: error.message});
 			} else if (response) {
 				var settedCookies = response.header['set-cookie'];

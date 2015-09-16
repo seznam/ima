@@ -22,14 +22,7 @@ $IMA.Loader.import('imajs/client/main').then((app) => {
 	appServer = app;
 	instanceRecycler.init(appServer.createIMAJsApp, environment.$Server.concurrency);
 }).catch((error) => {
-	logger.error('Failed to initialize the application or the instance recycler', {
-		error: {
-			type: error.name,
-			message: error.message,
-			stack: error.stack,
-			params: error._params
-		}
-	});
+	logger.error('Failed to initialize the application or the instance recycler', { error });
 });
 
 hljs.configure({
@@ -42,14 +35,7 @@ module.exports = (() => {
 		var stack = stackTrace.parse(err);
 		var fileIndex = 1;
 
-		logger.error('The application crashed due to an uncaught exception', {
-			error: {
-				type: err.name,
-				message: err.message,
-				stack: err.stack,
-				params: err._params
-			}
-		});
+		logger.error('The application crashed due to an uncaught exception', { err });
 
 		asyncEach(stack, function getContentInfo(item, cb) {
 			// exclude core node modules and node modules
@@ -95,14 +81,7 @@ module.exports = (() => {
 			// if something bad happened while processing the stacktrace
 			// make sure to return something useful
 			if (e) {
-				logger.error('Failed to display error page', {
-					error: {
-						type: e.name,
-						message: e.message,
-						stack: e.stack,
-						params: e._params
-					}
-				});
+				logger.error('Failed to display error page', { e });
 				return res.send(err.stack);
 			}
 
@@ -122,14 +101,7 @@ module.exports = (() => {
 	};
 
 	var showStaticErrorPage = (err, req, res) => {
-		logger.error('Failed to display error page, displaying the static error page', {
-			error: {
-				type: err.name,
-				message: err.message,
-				stack: err.stack,
-				params: err._params
-			}
-		});
+		logger.error('Failed to display error page, displaying the static error page', { err });
 
 		return new Promise((resolve, reject) => {
 			fs.readFile('./build/static/html/error.html', 'utf-8', (error, content) => {
