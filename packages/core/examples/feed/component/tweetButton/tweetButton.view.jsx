@@ -1,5 +1,5 @@
 import ns from 'imajs/client/core/namespace';
-import {React} from 'app/vendor';
+import { React } from 'app/vendor';
 
 const POPUP_SIZE = Object.freeze({
 	width: 550,

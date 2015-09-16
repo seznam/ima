@@ -46,7 +46,7 @@ export default class Client extends ns.Core.Interface.Window {
 			try {
 				sessionStorage.setItem(sessionKey, 1);
 				sessionStorage.removeItem(sessionKey);
-			} catch(e) {
+			} catch (e) {
 				return false;
 			}
 
