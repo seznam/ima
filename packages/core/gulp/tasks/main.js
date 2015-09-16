@@ -29,11 +29,12 @@ gulp
 		var tasks = [
 			['copy:appStatic', 'copy:imajsServer', 'copy:environment', 'shim', 'polyfill'], // copy public folder, concat shim
 			['Es6ToEs5:app', 'Es6ToEs5:server', 'Es6ToEs5:vendor'], // compile app and vendor script
-			['less', 'doc', 'locale', 'Es6ToEs5:vendor:client', 'Es6ToEs5:vendor:server'] // adjust vendors, compile less, create doc
+			['less', 'doc', 'locale', 'Es6ToEs5:vendor:client', 'Es6ToEs5:vendor:server'], // adjust vendors, compile less, create doc
+			['bundle:js:app', 'bundle:js:server', 'bundle:css']
 		];
+
 		if (['prod', 'test'].indexOf(this.flags.env) > -1) {
 			tasks.push(
-				['bundle:js:app', 'bundle:js:server', 'bundle:css'],
 				['bundle:clean', 'Es6ToEs5:vendor:clean'] // clean vendor
 			);
 		}
