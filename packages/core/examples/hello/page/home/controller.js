@@ -64,7 +64,8 @@ class Controller extends ns.App.Base.Controller {
 		return {
 			//error: Promise.reject(new IMAError('Try error page.')),
 			//redirect: Promise.reject(new IMAError('Redirect from home page to error page for $Debug = false.', {status: 303, url: 'http://localhost:3001/not-found'})),
-			message: `I am IMA.js!`
+			message: `I am`,
+			name: `IMA.js`
 		};
 	}
 
