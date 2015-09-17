@@ -41,6 +41,31 @@ class Controller extends ns.App.Base.Controller {
 
 	destroy() {}
 
+	setMetaParams(loadedResources, metaManager, router, dictionary, settings) {
+		var title = 'Isomorphic applications TODO list - IMA.js';
+		var description = 'Demo example of TodoMVC. TodoMVC is a project which offers the same Todo application implemented using MV* concepts in most of the popular JavaScript MV* frameworks of today.';
+		var image = router.getDomain() + settings.$Static.image + 'imajs-share.png';
+
+		var url = router.getUrl();
+
+		metaManager.setTitle(title);
+
+		metaManager.setMetaName('description', description);
+		metaManager.setMetaName('keywords', 'IMA.js, isomorphic application, javascript, TODO list');
+
+		metaManager.setMetaName('twitter:title', title);
+		metaManager.setMetaName('twitter:description', description);
+		metaManager.setMetaName('twitter:card', 'summary');
+		metaManager.setMetaName('twitter:image', image);
+		metaManager.setMetaName('twitter:url', url);
+
+		metaManager.setMetaProperty('og:title', title);
+		metaManager.setMetaProperty('og:description', description);
+		metaManager.setMetaProperty('og:type', 'website');
+		metaManager.setMetaProperty('og:image', image);
+		metaManager.setMetaProperty('og:url', url);
+	}
+
 	onItemCreated(data) {
 		data.completed = false;
 		this._itemsService.add(data);

@@ -120,8 +120,8 @@ class Controller extends ns.App.Base.Controller {
 	 *        current application environment.
 	 */
 	setMetaParams(loadedResources, metaManager, router, dictionary, settings) {
-		var title = 'IMA.js';
-		var description = 'IMA.js is isomorphic javascript application framework.';
+		var title = 'Isomorphic applications hello world - IMA.js';
+		var description = 'IMA.js is isomorphic javascript applications framework. The basic Hello World example. Just the running IMA.js with the only one page. This example is ideal base for new project.';
 		var image = router.getDomain() + settings.$Static.image + 'imajs-share.png';
 
 		var url = router.getUrl();
@@ -129,7 +129,7 @@ class Controller extends ns.App.Base.Controller {
 		metaManager.setTitle(title);
 
 		metaManager.setMetaName('description', description);
-		metaManager.setMetaName('keywords', 'IMA.js, isomorphic application, javascript');
+		metaManager.setMetaName('keywords', 'IMA.js, isomorphic application, javascript, hello world');
 
 		metaManager.setMetaName('twitter:title', title);
 		metaManager.setMetaName('twitter:description', description);
