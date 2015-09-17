@@ -20,11 +20,11 @@ class View extends ns.Core.Abstract.Component {
 					<meta charSet="utf-8" />
 					<meta httpEquiv="X-UA-Compatible" content="IE=edge" />
 					<meta name="viewport" content="width=device-width, initial-scale=1" />
-					<link rel="stylesheet" href={`/static/css/${appCssFile}`} />
+					<link rel="stylesheet" href={this.utils.$Router.getBaseUrl() + this.utils.$Settings.$Static.css + '/' + appCssFile} />
 					<title>
 						{this.props.metaManager.getTitle()}
 					</title>
-					<script src="/static/js/todomvc-common-base.js"></script>
+					<script src={this.utils.$Router.getBaseUrl() + this.utils.$Settings.$Static.js + '/todomvc-common-base.js'}></script>
 				</head>
 				<body>
 					<div id="page" dangerouslySetInnerHTML={{__html: this.props.page}} />

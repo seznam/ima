@@ -33,7 +33,9 @@ export var init = (ns, oc, config) => { // jshint ignore:line
 				}
 			},
 			$Static: {
-				image: '/static/img/'
+				image: '/static/img/',
+				css: '/static/css',
+				js: '/static/js'
 			}
 		},
 

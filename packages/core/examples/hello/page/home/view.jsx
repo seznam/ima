@@ -16,7 +16,7 @@ class View extends ns.Core.Abstract.Component {
 		return (
 			<div className='l-homepage'>
 				<div className='content'>
-					<img src="static/img/imajs-logo.png" alt="IMA.js logo"/>
+					<img src={this.utils.$Router.getBaseUrl() + this.utils.$Settings.$Static.image + '/imajs-logo.png'} alt='IMA.js logo'/>
 					<h1>{this.utils.$Dictionary.get('home.hello')}, {this.props.message}</h1>
 				</div>
 			</div>
