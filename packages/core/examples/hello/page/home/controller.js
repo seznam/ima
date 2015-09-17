@@ -56,7 +56,7 @@ class Controller extends ns.App.Base.Controller {
 	 * @inheritDoc
 	 * @override
 	 * @method load
-	 * @return {Object<string, (Vendor.Rsvp.Promise|*)>} A map object of promises
+	 * @return {Object<string, (Promise|*)>} A map object of promises
 	 *         resolved when all resources the controller requires are ready. The
 	 *         resolved values will be pushed to the controller's state.
 	 */
