@@ -20,8 +20,70 @@ module.exports = (() => {
 				} else {
 					target[field] = source[field];
 				}
-			})
+			});
 		}
+	};
+
+	var debounce = (func, wait = 100) => {
+		var timeout = null;
+
+		return (...args) => {
+			clearTimeout(timeout);
+			timeout = setTimeout(() => {
+				func(...args);
+			}, wait);
+		};
+	};
+
+	var throttle = (func, interval, scope) => {
+		var timeout = null;
+		var args = [];
+		var shouldFireMethod = false;
+
+		if (scope) {
+			func= func.bind(scope);
+		}
+
+		var fireMethod = () => {
+			timeout = setTimeout(() => {
+				timeout = null;
+				if (shouldFireMethod) {
+					shouldFireMethod = false;
+					fireMethod();
+				}
+			}, interval);
+			func(...args);
+		};
+
+		return (...rest) => {
+			args = rest;
+
+			if (!timeout) {
+				fireMethod();
+			} else {
+				shouldFireMethod = true;
+			}
+
+		};
+	};
+
+	var throttle = (func, internval= 100, scope = null) => {
+		var timeout = null;
+		var shouldFire = false;
+
+		if (scope) {
+			func = func.bind(scope);
+		}
+
+		var fire = () => {
+			timeout = setTimeout(handleTimeout, internval);
+		};
+		var handleTimeout = () => {
+			timeout = null;
+			if (shouldFire) {
+
+			}
+		};
 	};
 
 	var allPromiseHash = (hash) => {
@@ -45,5 +107,5 @@ module.exports = (() => {
 		return string.replace(/([.*+?^=!:${}()|\[\]\/\\])/g, "\\$1");
 	};
 
-	return {assignRecursively, allPromiseHash, escapeRegExp, clone};
+	return { assignRecursively, allPromiseHash, escapeRegExp, clone, debounce, throttle };
 })();
