@@ -254,7 +254,9 @@ export default class Client extends ns.Core.Interface.Window {
 	 * @param {string} url
 	 */
 	pushState(state, title, url) {
-		window.history.pushState(state, title, url);
+		if (window.history.pushState) {
+			window.history.pushState(state, title, url);
+		}
 	}
 
 	/**
@@ -266,7 +268,9 @@ export default class Client extends ns.Core.Interface.Window {
 	 * @param {string} url
 	 */
 	replaceState(state, title, url) {
-		window.history.replaceState(state, title, url);
+		if (window.history.replaceState) {
+			window.history.replaceState(state, title, url);
+		}
 	}
 
 	/**
