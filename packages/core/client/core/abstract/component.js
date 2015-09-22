@@ -173,6 +173,24 @@ export default class Component extends ns.Vendor.React.Component {
 
 		this._utils.$EventBus.listen(eventTarget, eventName, listener);
 	}
+
+	/**
+	 * Unregisters the provided event listener for an IMA.js DOM custom event
+	 * of the specified name at the specified event target.
+	 *
+	 * @method unlisten
+	 * @param {(ReactElement|EventTarget)} eventTarget The react component or
+	 *        event target at which the listener should listen for the event.
+	 * @param {string} eventName The name of the event for which to listen.
+	 * @param {function(Event)} listener The listener for event to register.
+	 */
+	unlisten(eventTarget, eventName, listener) {
+		if (!eventTarget.addEventListener) { // Safari doesn't have EventTarget
+			eventTarget = this.findDOMNode(eventTarget);
+		}
+
+		this._utils.$EventBus.unlisten(eventTarget, eventName, listener);
+	}
 }
 
 ns.Core.Abstract.Component = Component;
