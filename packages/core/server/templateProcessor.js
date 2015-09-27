@@ -33,14 +33,19 @@ function processTemplate(template, variables) {
  *
  * @param {string} template The template.
  * @param {string} name The variable name.
- * @param {(number|string)} value The variable value.
+ * @param {?(boolean|number|string|Object<string, ?(boolean|number|string)>|(boolean|number|string|Object<string, ?(boolean|number|string)>)[])} value
+ *        The variable value.
  * @return {string} Processed template.
  */
 function replaceVariable(template, name, value) {
 	var key = `{${name}}`;
 	var reg = new RegExp(helper.escapeRegExp(key), 'g');
+	var encodedReg = new RegExp(helper.escapeRegExp(`{${name}|json}`), 'g');
+	var encodedValue = JSON
+		.stringify(value)
+		.replace(/<\/script/gi, '<\\/script');
 
-	return template.replace(reg, value);
+	return template.replace(reg, value).replace(encodedReg, encodedValue);
 }
 
 /**
