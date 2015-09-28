@@ -202,9 +202,13 @@ module.exports = (err, items) => {
 
 	res += `<h1>${err.name}: ${err.message}</h1>`;
 
-	var encodedParams = String(JSON.stringify(err._params, 4)).replace(/[\u00A0-\u9999<>\&]/gim, (i) => {
-		return '&#' + i.charCodeAt(0) + ';';
-	});
+	var encodedParams = '';
+
+	if (err._params) {
+		encodedParams = String(JSON.stringify(err._params, 4)).replace(/[\u00A0-\u9999<>\&]/gim, (i) => {
+			return '&#' + i.charCodeAt(0) + ';';
+		});
+	}
 
 	res += `<h3>Params: ${encodedParams}</h3>`;
 	res += `<ul>`;
