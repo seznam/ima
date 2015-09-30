@@ -11,8 +11,29 @@ var gulpConfig = require('../../../gulpConfig.js');
 var files = gulpConfig.files;
 
 gulp.task('less', function () {
+
+	function fixPipe(stream) {
+		var origPipe = stream.pipe;
+		stream.pipe = function (dest) {
+			arguments[0] = dest.on('error', function (error) {
+				var nextStreams = dest._nextStreams;
+				if (nextStreams) {
+					nextStreams.forEach(function (nextStream) {
+						nextStream.emit('error', error);
+					});
+				} else if (dest.listeners('error').length === 1) {
+					throw error;
+				}
+			});
+			var nextStream = fixPipe(origPipe.apply(this, arguments));
+			(this._nextStreams || (this._nextStreams = [])).push(nextStream);
+			return nextStream;
+		};
+		return stream;
+	}
+
 	return (
-		gulp.src(files.less.src)
+		fixPipe(gulp.src(files.less.src))
 			.pipe(plumber())
 			.pipe(sourcemaps.init())
 			.pipe(concat({path: files.less.name, base: files.less.base, cwd: files.less.cwd}))
