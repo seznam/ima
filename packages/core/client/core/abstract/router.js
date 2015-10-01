@@ -463,7 +463,7 @@ export default class Router extends ns.Core.Interface.Router {
 		var data = { route, params, path: this.getPath(), options };
 
 		this._dispatcher
-			.fire(this.EVENTS.PRE_HANDLE_ROUTE, data, true);
+			.fire(this.EVENTS.BEFORE_HANDLE_ROUTE, data, true);
 
 		return this._pageManager
 				.manage(controller, view, options, params)
@@ -471,7 +471,7 @@ export default class Router extends ns.Core.Interface.Router {
 					data.response = response;
 
 					this._dispatcher
-						.fire(this.EVENTS.POST_HANDLE_ROUTE, data, true);
+						.fire(this.EVENTS.AFTER_HANDLE_ROUTE, data, true);
 
 					return response;
 				});

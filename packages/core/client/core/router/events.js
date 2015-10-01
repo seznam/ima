@@ -18,10 +18,10 @@ const EVENTS = Object.freeze({
 	 * additional options.
 	 *
 	 * @const
-	 * @property PRE_HANDLE_ROUTE
+	 * @property BEFORE_HANDLE_ROUTE
 	 * @type {string}
 	 */
-	PRE_HANDLE_ROUTE: '$IMA.$Router.preHandleRoute',
+	BEFORE_HANDLE_ROUTE: '$IMA.$Router.beforeHandleRoute',
 
 	/**
 	 * Router fire event {@code $IMA.$Router.postHandleRoute} after page
@@ -34,10 +34,10 @@ const EVENTS = Object.freeze({
 	 * additional options.
 	 *
 	 * @const
-	 * @property POST_HANDLE_ROUTE
+	 * @property AFTER_HANDLE_ROUTE
 	 * @type {string}
 	 */
-	POST_HANDLE_ROUTE: '$IMA.$Router.postHandleRoute'
+	AFTER_HANDLE_ROUTE: '$IMA.$Router.afterHandleRoute'
 });
 
 export default EVENTS;
