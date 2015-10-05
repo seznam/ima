@@ -51,9 +51,19 @@ var renderApp = (req, res) => {
 	clientApp
 		.requestHandler(req, res)
 		.then((response) => {
-			// logger.info('Request handled successfully', { response: { status: number, content: string, SPA: boolean= } });
+			// logger.info('Request handled successfully', { response: { status: number, content: string, SPA: boolean=, error: Error= } });
 
-			if ((req.method === 'GET') && (response.status === 200) && !response.SPA) {
+			if (response.error) {
+				logger.error('App error', {
+					error: {
+						type: response.error.name,
+						message: response.error.message,
+						stack: response.error.stack
+					}
+				});
+			}
+
+			if ((req.method === 'GET') && (response.status === 200) && !response.SPA && !response.error) {
 				cache.set(req, response.content);
 			}
 		}, (error) => {
@@ -64,7 +74,8 @@ var renderApp = (req, res) => {
 			// 			stack: error.stack
 			// 	}
 			// });
-		}).catch((error) => {
+		})
+		.catch((error) => {
 			logger.error('Cache error', {
 				error: {
 					type: error.name,
