@@ -195,7 +195,7 @@ export default class Router {
 	 *        optional query.
 	 * @param {{onlyUpdate: boolean=, autoScroll: boolean=}} [options={}]
 	 *        The options overrides route options defined in routes.js.
-	 * @return {Promise<Object<string, ?(number|string)>>} A promise resolved
+	 * @return {Promise<Object<string, *>>} A promise resolved
 	 *         when the error has been handled and the response has been sent
 	 *         to the client, or displayed if used at the client side.
 	 */
@@ -210,7 +210,7 @@ export default class Router {
 	 *        the current URL path and query.
 	 * @param {{onlyUpdate: boolean=, autoScroll: boolean=}} [options={}]
 	 *        The options overrides route options defined in routes.js.
-	 * @return {Promise<Object<string, ?(number|string)>>} A promise resolved
+	 * @return {Promise<Object<string, *>>} A promise resolved
 	 *         when the error has been handled and the response has been sent
 	 *         to the client, or displayed if used at the client side.
 	 */
@@ -225,7 +225,7 @@ export default class Router {
 	 *        the current URL path and query.
 	 * @param {{onlyUpdate: boolean=, autoScroll: boolean=}} [options={}]
 	 *        The options overrides route options defined in routes.js.
-	 * @return {Promise<Object<string, ?(number|string)>>} A promise resolved
+	 * @return {Promise<Object<string, *>>} A promise resolved
 	 *         when the error has been handled and the response has been sent
 	 *         to the client, or displayed if used at the client side.
 	 */

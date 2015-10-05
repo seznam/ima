@@ -337,13 +337,16 @@ export default class Router extends ns.Core.Interface.Router {
 	 * @method route
 	 * @param {string} path
 	 * @param {{onlyUpdate: boolean=, autoScroll: boolean=}} [options={}]
-	 * @return {Promise<Object<string, ?(number|string)>>}
+	 * @return {Promise<Object<string, *>>}
 	 */
 	route(path, options = {}) {
 		var routeForPath = this._getRouteByPath(path);
-		var params = { path };
+		var params = {};
 
 		if (!routeForPath) {
+			params.error = new IMAError(`Route for path ` +
+					`'${path}' is not configured.`);
+
 			return this.handleNotFound(params);
 		}
 
@@ -358,7 +361,7 @@ export default class Router extends ns.Core.Interface.Router {
 	 * @method handleError
 	 * @param {Object<string, (Error|string)>} params
 	 * @param {{onlyUpdate: boolean=, autoScroll: boolean=}} [options={}]
-	 * @return {Promise<Object<string, ?(number|string)>>}
+	 * @return {Promise<Object<string, *>>}
 	 */
 	handleError(params, options = {}) {
 		var routeError = this._routes.get(this.ROUTE_NAMES.ERROR);
@@ -372,7 +375,14 @@ export default class Router extends ns.Core.Interface.Router {
 			return Promise.reject(error);
 		}
 
-		return this._handle(routeError, params, options);
+		return (
+			this._handle(routeError, params, options)
+				.then((response) => {
+					response.error = params.error;
+
+					return response;
+				})
+		);
 	}
 
 	/**
@@ -381,7 +391,7 @@ export default class Router extends ns.Core.Interface.Router {
 	 * @method handleNotFound
 	 * @param {Object<string, (Error|string)>} params
 	 * @param {{onlyUpdate: boolean=, autoScroll: boolean=}} [options={}]
-	 * @return {Promise<Object<string, ?(number|string)>>}
+	 * @return {Promise<Object<string, *>>}
 	 */
 	handleNotFound(params, options = {}) {
 		var routeNotFound = this._routes.get(this.ROUTE_NAMES.NOT_FOUND);
@@ -395,7 +405,14 @@ export default class Router extends ns.Core.Interface.Router {
 			return Promise.reject(error);
 		}
 
-		return this._handle(routeNotFound, params, options);
+		return (
+			this._handle(routeNotFound, params, options)
+				.then((response) => {
+					response.error = params.error;
+
+					return response;
+				})
+		);
 	}
 
 	/**
@@ -452,7 +469,7 @@ export default class Router extends ns.Core.Interface.Router {
 	 *        the URL path and query.
 	 * @param {{onlyUpdate: boolean=, autoScroll: boolean=}} options
 	 *        The options overrides route options defined in routes.js.
-	 * @return {Promise<undefined>} A promise that resolves when the page is
+	 * @return {Promise<Object<string, *>>} A promise that resolves when the page is
 	 *         rendered and the result is sent to the client, or displayed if
 	 *         used at the client side.
 	 */
@@ -465,7 +482,8 @@ export default class Router extends ns.Core.Interface.Router {
 		this._dispatcher
 			.fire(this.EVENTS.BEFORE_HANDLE_ROUTE, data, true);
 
-		return this._pageManager
+		return (
+			this._pageManager
 				.manage(controller, view, options, params)
 				.then((response) => {
 					data.response = response;
@@ -474,8 +492,8 @@ export default class Router extends ns.Core.Interface.Router {
 						.fire(this.EVENTS.AFTER_HANDLE_ROUTE, data, true);
 
 					return response;
-				});
-
+				})
+		);
 	}
 
 	/**

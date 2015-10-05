@@ -186,18 +186,23 @@ describe('Core.Abstract.Router', function() {
 			expect(router._handle).toHaveBeenCalledWith(route, {}, options);
 		});
 
-		it('should handle "not-found" route', function() {
+		it('should handle "not-found" route', function(done) {
 			spyOn(router, '_getRouteByPath')
 				.and
 				.returnValue(null);
 
 			spyOn(router, 'handleNotFound')
 				.and
-				.stub();
+				.callFake(function(params) {
+					return Promise.resolve(params);
+				});
 
-			router.route(path);
-
-			expect(router.handleNotFound).toHaveBeenCalledWith({path: path});
+			router
+				.route(path)
+				.then(function(params) {
+					expect(params.error instanceof ns.Core.IMAError).toBe(true);
+					done();
+				});
 		});
 
 	});
@@ -217,8 +222,8 @@ describe('Core.Abstract.Router', function() {
 			route = null;
 		});
 
-		it('should handle "error" route', function() {
-			var params = new Error('test');
+		it('should handle "error" route', function(done) {
+			var params = { error: new Error('test') };
 
 			spyOn(router._routes, 'get')
 				.and
@@ -226,15 +231,24 @@ describe('Core.Abstract.Router', function() {
 
 			spyOn(router, '_handle')
 				.and
-				.stub();
+				.returnValue(Promise.resolve({ content: '', status: 200 }));
 
-			router.handleError(params, options);
+			router
+				.handleError(params, options)
+				.then(function(response) {
+					expect(router._handle).toHaveBeenCalledWith(route, params, options);
+					expect(response.error).toEqual(params.error);
+					done();
+				})
+				.catch(function(error) {
+					console.error('Core.Abstract.Router.handleError', error);
+					done();
+				});
 
-			expect(router._handle).toHaveBeenCalledWith(route, params, options);
 		});
 
 		it('should reject promise with error for undefined "error" route', function(done) {
-			var params = new Error('test');
+			var params = { error: new Error('test') };
 
 			spyOn(router._routes, 'get')
 				.and
@@ -265,8 +279,8 @@ describe('Core.Abstract.Router', function() {
 			route = null;
 		});
 
-		it('should handle "notFound" route', function() {
-			var params = {path: path};
+		it('should handle "notFound" route', function(done) {
+			var params = { error: new ns.Core.IMAError() };
 
 			spyOn(router._routes, 'get')
 				.and
@@ -274,16 +288,23 @@ describe('Core.Abstract.Router', function() {
 
 			spyOn(router, '_handle')
 				.and
-				.stub();
+				.returnValue(Promise.resolve({ content: '', status: 200 }));
 
-			router.handleNotFound(params, options);
-
-			expect(router._handle).toHaveBeenCalledWith(route, params, options);
-
+			router
+				.handleNotFound(params, options)
+				.then(function(response) {
+					expect(router._handle).toHaveBeenCalledWith(route, params, options);
+					expect(response.error instanceof ns.Core.IMAError).toEqual(true);
+					done();
+				})
+				.catch(function(error) {
+					console.error('Core.Abstract.Router.handleNotFound', error);
+					done();
+				});
 		});
 
 		it('should reject promise with error for undefined "error" route', function(done) {
-			var params = {path: path};
+			var params = { error: new Error() };
 
 			spyOn(router._routes, 'get')
 				.and

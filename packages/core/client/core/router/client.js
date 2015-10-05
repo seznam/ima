@@ -206,7 +206,7 @@ export default class Client extends ns.Core.Abstract.Router {
 	 * @method route
 	 * @param {string} path
 	 * @param {{onlyUpdate: boolean=, autoScroll: boolean=}} [options={}]
-	 * @return {Promise<Object<string, ?(number|string)>>}
+	 * @return {Promise<Object<string, *>>}
 	 */
 	route(path, options = {}) {
 		return (
@@ -227,7 +227,7 @@ export default class Client extends ns.Core.Abstract.Router {
 	 * @method handleError
 	 * @param {Object<string, (Error|string)>} params
 	 * @param {{onlyUpdate: boolean=, autoScroll: boolean=}} [options={}]
-	 * @return {Promise<Object<string, ?(number|string)>>}
+	 * @return {Promise<Object<string, *>>}
 	 */
 	handleError(params, options = {}) {
 		if (this.isClientError(params.error)) {
@@ -237,7 +237,7 @@ export default class Client extends ns.Core.Abstract.Router {
 		if (this.isRedirection(params.error)) {
 			options.httpStatus = params.error.getHttpStatus();
 			this.redirect(params.error.getParams().url, options);
-			return Promise.resolve({ content: null, status: options.httpStatus });
+			return Promise.resolve({ content: null, status: options.httpStatus, error: params.error });
 		}
 
 		return (
@@ -255,7 +255,7 @@ export default class Client extends ns.Core.Abstract.Router {
 	 * @method handleNotFound
 	 * @param {Object<string, (Error|string)>} params
 	 * @param {{onlyUpdate: boolean=, autoScroll: boolean=}} [options={}]
-	 * @return {Promise<Object<string, ?(number|string)>>}
+	 * @return {Promise<Object<string, *>>}
 	 */
 	handleNotFound(params, options = {}) {
 		return (
