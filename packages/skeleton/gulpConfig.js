@@ -79,6 +79,7 @@ exports.files = {
 		src: [
 			'./node_modules/es6-shim/es6-shim.js',
 			'./node_modules/gulp-babel/node_modules/babel-core/external-helpers.js',
+			'./imajs/polyfill/collectionEnumeration.js',
 			'./imajs/polyfill/imaLoader.js'
 		],
 		dest: {

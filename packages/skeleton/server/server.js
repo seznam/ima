@@ -22,7 +22,7 @@ var cacheConfig = environment.$Server.cache;
 var cache = new (require('./imajs/cache.js'))(cacheConfig);
 
 process.on('uncaughtException', function (error) {
-	logger.error('Uncaught Exception:', error.message, error.stack);
+	logger.error('Uncaught Exception:', { error });
 });
 
 var allowCrossDomain = (req, res, next) => {
@@ -54,35 +54,17 @@ var renderApp = (req, res) => {
 			// logger.info('Request handled successfully', { response: { status: number, content: string, SPA: boolean=, error: Error= } });
 
 			if (response.error) {
-				logger.error('App error', {
-					error: {
-						type: response.error.name,
-						message: response.error.message,
-						stack: response.error.stack
-					}
-				});
+				logger.error('App error', { error });
 			}
 
 			if ((req.method === 'GET') && (response.status === 200) && !response.SPA && !response.error) {
 				cache.set(req, response.content);
 			}
 		}, (error) => {
-			// logger.error('REJECT', {
-			// 	error: {
-			// 		type: error.name,
-			// 			message: error.message,
-			// 			stack: error.stack
-			// 	}
-			// });
+			// logger.error('REJECT', { error });
 		})
 		.catch((error) => {
-			logger.error('Cache error', {
-				error: {
-					type: error.name,
-					message: error.message,
-					stack: error.stack
-				}
-			});
+			logger.error('Cache error', { error });
 		});
 };
 
