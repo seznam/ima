@@ -153,8 +153,8 @@ export default class Controller extends ns.Core.Interface.Controller {
 	 * @method setState
 	 * @param {Object<string, *>} state
 	 */
-	setState(state) {
-		this._controller.setState(state);
+	replaceState(state) {
+		this._controller.replaceState(state);
 	}
 
 	/**
@@ -163,8 +163,8 @@ export default class Controller extends ns.Core.Interface.Controller {
 	 * @method patchState
 	 * @param {Object<string, *>} statePatch
 	 */
-	patchState(statePatch) {
-		this._controller.patchState(statePatch);
+	setState(statePatch) {
+		this._controller.setState(statePatch);
 	}
 
 	/**

@@ -116,13 +116,13 @@ export default class Controller {
 	 *
 	 * You should use this method only if you need to remove a field from the
 	 * controller's current state. To perform updates of the state, please use
-	 * the {@codelink patchState} method.
+	 * the {@codelink setState} method.
 	 *
-	 * @method setState
+	 * @method replaceState
 	 * @param {Object<string, *>} state The new controller state, replacing the
 	 *        old state.
 	 */
-	setState(state) {}
+	replaceState(state) {}
 
 	/**
 	 * Patches the state of this controller using the provided object by
@@ -131,7 +131,7 @@ export default class Controller {
 	 *
 	 * You can use this method to modify the state partially or add new fields
 	 * to the state object. Fields can only be removed from the controller's
-	 * state through the {@codelink setState} method.
+	 * state through the {@codelink replaceState} method.
 	 *
 	 * Note that the state is not patched recursively but by replacing the
 	 * values of the top-level fields of the state object.
@@ -141,11 +141,11 @@ export default class Controller {
 	 * The field names of the passed value-containing object will match the
 	 * field names in the object returned from the {@codelink load} method.
 	 *
-	 * @method patchState
+	 * @method setState
 	 * @param {Object<string, *>} statePatch Patch of the controller's state to
 	 *        apply.
 	 */
-	patchState(statePatch) {}
+	setState(statePatch) {}
 
 	/**
 	 * Returns the controller's current state.

@@ -5,8 +5,15 @@ describe('Core.Abstract.PageRender', function() {
 	var React = oc.get('$React');
 	var settings = oc.get('$Settings');
 
+	var reactiveComponentView = {
+		setState: function() {},
+		replaceState: function() {}
+	};
+
 	beforeEach(function() {
 		pageRender = oc.create('Core.Abstract.PageRender', [$Helper, React, settings]);
+
+		pageRender._reactiveView = reactiveComponentView;
 	});
 
 	it('should be throw error for mounting component', function() {
@@ -18,11 +25,8 @@ describe('Core.Abstract.PageRender', function() {
 	describe('setState method', function() {
 
 		it('should be set new state to reactive component view', function() {
-			var state = {state: 'state'};
-			var reactiveComponentView = {
-				setState: function() {}
-			};
-			pageRender._reactiveView = reactiveComponentView;
+			var state = { state: 'state' };
+
 			spyOn(reactiveComponentView, 'setState')
 				.and
 				.stub();
@@ -30,6 +34,22 @@ describe('Core.Abstract.PageRender', function() {
 			pageRender.setState(state);
 
 			expect(reactiveComponentView.setState).toHaveBeenCalledWith(state);
+		});
+
+	});
+
+	describe('replaceState method', function() {
+
+		it('should be replace state to reactive component view', function() {
+			var state = { state: 'state' };
+
+			spyOn(reactiveComponentView, 'replaceState')
+				.and
+				.stub();
+
+			pageRender.replaceState(state);
+
+			expect(reactiveComponentView.replaceState).toHaveBeenCalledWith(state);
 		});
 
 	});

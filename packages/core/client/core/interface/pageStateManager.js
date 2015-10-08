@@ -20,26 +20,26 @@ export default class PageStateManager {
 	clear() {}
 
 	/**
-	 * Set state.
+	 * Set new state as smooth copy last state and state patch.
 	 *
 	 * @method setState
-	 * @param {Object} state
+	 * @param {Object<string, *>} statePatch
 	 */
-	setState(state) {}
+	setState(statePatch) {}
 
 	/**
-	 * Patch state.
+	 * Replace state.
 	 *
-	 * @method patchState
-	 * @param {Object} statePatch
+	 * @method replaceState
+	 * @param {Object<string, *>} state
 	 */
-	patchState(statePatch) {}
+	replaceState(state) {}
 
 	/**
 	 * Get state.
 	 *
 	 * @method getState
-	 * @return {Object}
+	 * @return {Object<string, *>}
 	 */
 	getState() {}
 
@@ -47,7 +47,7 @@ export default class PageStateManager {
 	 * Get all history states.
 	 *
 	 * @method getAllStates
-	 * @return {array}
+	 * @return {Array<Object<string, *>>}
 	 */
 	getAllStates() {}
 

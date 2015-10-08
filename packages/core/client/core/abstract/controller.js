@@ -115,26 +115,26 @@ export default class Controller extends ns.Core.Interface.Controller {
 	/**
 	 * @inheritDoc
 	 * @override
-	 * @method setState
+	 * @method replaceState
 	 * @param {Object<string, *>} state The new controller state, replacing the
 	 *        old state.
 	 */
-	setState(state) {
+	replaceState(state) {
 		if (this._stateManager) {
-			this._stateManager.setState(state);
+			this._stateManager.replaceState(state);
 		}
 	}
 
 	/**
 	 * @inheritDoc
 	 * @override
-	 * @method patchState
+	 * @method setState
 	 * @param {Object<string, *>} statePatch Patch of the controller's state to
 	 *        apply.
 	 */
-	patchState(statePatch) {
+	setState(statePatch) {
 		if (this._stateManager) {
-			this._stateManager.patchState(statePatch);
+			this._stateManager.setState(statePatch);
 		}
 	}
 

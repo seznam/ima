@@ -64,8 +64,8 @@ export default class PageManager extends ns.Core.Interface.PageManager {
 	 */
 	init() {
 		this._clearManagedPageValue();
-		this._stateManager.onChange = (newState) => {
-			this._onChangeStateHandler(newState);
+		this._stateManager.onChange = (newState, replaced) => {
+			this._onChangeStateHandler(newState, replaced);
 		};
 	}
 
@@ -277,12 +277,20 @@ export default class PageManager extends ns.Core.Interface.PageManager {
 	 *
 	 * @private
 	 * @method _onChangeStateHandler
+	 * @param {Object<string, *>} state
+	 * @param {boolean} replaced
 	 */
-	_onChangeStateHandler(state) {
+	_onChangeStateHandler(state, replaced) {
 		var controller = this._managedPage.controllerInstance;
 
 		if (controller) {
-			this._pageRender.setState(state);
+
+			if (replaced) {
+				this._pageRender.replaceState(state);
+			} else {
+				this._pageRender.setState(state);
+			}
+
 		}
 	}
 

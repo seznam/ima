@@ -16,8 +16,8 @@ describe('Core.Abstract.Controller', function() {
 		}).toThrow();
 	});
 
-	it('should be set new state to PageStateManager', function() {
-		var state = {state: 'state'};
+	it('should be set state to PageStateManager', function() {
+		var state = { state: 'state' };
 
 		spyOn(pageStateManager, 'setState')
 			.and
@@ -28,16 +28,16 @@ describe('Core.Abstract.Controller', function() {
 		expect(pageStateManager.setState).toHaveBeenCalledWith(state);
 	});
 
-	it('should be patch state to PageStateManager', function() {
-		var state = {state: 'state'};
+	it('should be replace state to PageStateManager', function() {
+		var state = { state: 'state' };
 
-		spyOn(pageStateManager, 'patchState')
+		spyOn(pageStateManager, 'replaceState')
 			.and
 			.stub();
 
-		controller.patchState(state);
+		controller.replaceState(state);
 
-		expect(pageStateManager.patchState).toHaveBeenCalledWith(state);
+		expect(pageStateManager.replaceState).toHaveBeenCalledWith(state);
 	});
 
 	describe('getState method', function() {

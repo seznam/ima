@@ -130,6 +130,18 @@ export default class PageRender extends ns.Core.Interface.PageRender {
 	}
 
 	/**
+	 * @inheritDoc
+	 * @override
+	 * @method replaceState
+	 * @param {Object<string, *>=} [state={}]
+	 */
+	replaceState(state = {}) {
+		if (this._reactiveView) {
+			this._reactiveView.replaceState(state);
+		}
+	}
+
+	/**
 	 * Generate properties for view from state.
 	 *
 	 * @protected

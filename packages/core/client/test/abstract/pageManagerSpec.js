@@ -250,7 +250,7 @@ describe('Core.Abstract.PageManager', function() {
 	describe('_hasOnlyUpdate method', function() {
 
 		it('should return value from onlyUpdate function', function() {
-			var newOptions = Object.assign({}, options, {onlyUpdate: function() {return true;}});
+			var newOptions = Object.assign({}, options, { onlyUpdate: function() {return true;} });
 			pageManager._managedPage.controller = controller;
 			pageManager._managedPage.view = view;
 
@@ -264,7 +264,7 @@ describe('Core.Abstract.PageManager', function() {
 		});
 
 		it('should return true for option onlyUpdate set to true and for same controller and view', function() {
-			var newOptions = Object.assign({}, options, {onlyUpdate: true});
+			var newOptions = Object.assign({}, options, { onlyUpdate: true });
 			pageManager._managedPage.controller = controller;
 			pageManager._managedPage.view = view;
 
@@ -272,11 +272,42 @@ describe('Core.Abstract.PageManager', function() {
 		});
 
 		it('should return false for option onlyUpdate set to true and for different controller and view', function() {
-			var newOptions = Object.assign({}, options, {onlyUpdate: true});
+			var newOptions = Object.assign({}, options, { onlyUpdate: true });
 			pageManager._managedPage.controller = null;
 			pageManager._managedPage.view = view;
 
 			expect(pageManager._hasOnlyUpdate(controller, view, newOptions)).toEqual(false);
+		});
+	});
+
+	describe('_onChangeStateHandler method', function() {
+
+		it('should replace state', function() {
+			var state = { state: 'state' };
+			var replaced = true;
+			pageManager._managedPage.controllerInstance = pageFactory.createController(controller);
+
+			spyOn(pageRender, 'replaceState')
+				.and
+				.stub();
+
+			pageManager._onChangeStateHandler(state, replaced);
+
+			expect(pageRender.replaceState).toHaveBeenCalledWith(state);
+		});
+
+		it('should replace state', function() {
+			var state = { state: 'state' };
+			var replaced = false;
+			pageManager._managedPage.controllerInstance = pageFactory.createController(controller);
+
+			spyOn(pageRender, 'setState')
+				.and
+				.stub();
+
+			pageManager._onChangeStateHandler(state, replaced);
+
+			expect(pageRender.setState).toHaveBeenCalledWith(state);
 		});
 	});
 });
