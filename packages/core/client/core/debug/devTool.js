@@ -66,16 +66,18 @@ export default class DevTool {
 	 *
 	 */
 	init() {
-		if (this._window.isClient()) {
-			this._window.getWindow().$IMA.$DevTool = this;
-		}
-
-
-		this._window.bindEventListener(this._window.getWindow(), 'keydown', (e) => {
-			if (e.altKey && e.keyCode === 83) {
-				console.log(this._stateManager.getState());
+		if ($Debug) {
+			if (this._window.isClient()) {
+				this._window.getWindow().$IMA.$DevTool = this;
 			}
-		});
+
+
+			this._window.bindEventListener(this._window.getWindow(), 'keydown', (e) => {
+				if (e.altKey && e.keyCode === 83) {
+					console.log(this._stateManager.getState());
+				}
+			});
+		}
 	}
 
 	/**
