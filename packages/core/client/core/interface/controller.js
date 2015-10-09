@@ -110,28 +110,12 @@ export default class Controller {
 	update(prevParams = {}) {}
 
 	/**
-	 * Sets the controller state, replacing the old state. This method also
-	 * pushes the state into the controller's reactive (rendered) view (if
-	 * present).
-	 *
-	 * You should use this method only if you need to remove a field from the
-	 * controller's current state. To perform updates of the state, please use
-	 * the {@codelink setState} method.
-	 *
-	 * @method replaceState
-	 * @param {Object<string, *>} state The new controller state, replacing the
-	 *        old state.
-	 */
-	replaceState(state) {}
-
-	/**
 	 * Patches the state of this controller using the provided object by
 	 * copying the provided patch object fields to the controller's state
 	 * object.
 	 *
 	 * You can use this method to modify the state partially or add new fields
-	 * to the state object. Fields can only be removed from the controller's
-	 * state through the {@codelink replaceState} method.
+	 * to the state object.
 	 *
 	 * Note that the state is not patched recursively but by replacing the
 	 * values of the top-level fields of the state object.

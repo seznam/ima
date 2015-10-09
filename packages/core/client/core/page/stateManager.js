@@ -47,7 +47,7 @@ export default class StateManager extends ns.Core.Interface.PageStateManager {
 		/**
 		 * @property onChange
 		 * @public
-		 * @type {(null|function(Object<string, *>, boolean))}
+		 * @type {(null|function(Object<string, *>))}
 		 * @default null
 		 */
 		this.onChange = null;
@@ -72,17 +72,9 @@ export default class StateManager extends ns.Core.Interface.PageStateManager {
 	setState(statePatch) {
 		var newState = Object.assign({}, this.getState(), statePatch);
 
-		this._setState(newState);
-	}
-
-	/**
-	 * @inheritDoc
-	 * @override
-	 * @method replaceState
-	 * @param {Object<string, *>} newState
-	 */
-	replaceState(newState) {
-		this._setState(newState, true);
+		this._eraseExcessHistory();
+		this._pushToHistory(newState);
+		this._callOnChangeCallback(newState);
 	}
 
 	/**
@@ -103,19 +95,6 @@ export default class StateManager extends ns.Core.Interface.PageStateManager {
 	 */
 	getAllStates() {
 		return this._states;
-	}
-
-	/**
-	 * Set new app state.
-	 *
-	 * @method _setState
-	 * @param {Object<string, *>} newState
-	 * @param {boolean} [replaced=false]
-	 */
-	_setState(newState, replaced = false) {
-		this._eraseExcessHistory();
-		this._pushToHistory(newState);
-		this._callOnChangeCallback(newState, replaced);
 	}
 
 	/**
@@ -150,11 +129,10 @@ export default class StateManager extends ns.Core.Interface.PageStateManager {
 	 * @private
 	 * @method _callOnChangeCallback
 	 * @param {Object<string, *>} newState
-	 * @param {boolean} replaced
 	 */
-	_callOnChangeCallback(newState, replaced) {
+	_callOnChangeCallback(newState) {
 		if (this.onChange && typeof this.onChange === 'function') {
-			this.onChange(newState, replaced);
+			this.onChange(newState);
 		}
 	}
 

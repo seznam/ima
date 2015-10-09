@@ -38,22 +38,6 @@ describe('Core.Abstract.PageRender', function() {
 
 	});
 
-	describe('replaceState method', function() {
-
-		it('should be replace state to reactive component view', function() {
-			var state = { state: 'state' };
-
-			spyOn(reactiveComponentView, 'replaceState')
-				.and
-				.stub();
-
-			pageRender.replaceState(state);
-
-			expect(reactiveComponentView.replaceState).toHaveBeenCalledWith(state);
-		});
-
-	});
-
 	/*it('should be wrap each key to promise', function() {
 		var param1 = 'param1'
 		var dataMap = {

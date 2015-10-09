@@ -17,8 +17,10 @@ export default class DevTool {
 	 * @constructor
 	 * @param {Core.Interface.PageManager} pageManager
 	 * @param {Core.Interface.PageStateManager} stateManager
+	 * @param {Core.Interface.Window} window
+	 * @param {Core.Event.Dispatcher} dispatcher
 	 */
-	constructor(pageManager, stateManager) {
+	constructor(pageManager, stateManager, window, dispatcher) {
 
 		/**
 		 * App page manager.
@@ -37,6 +39,53 @@ export default class DevTool {
 		 * @type {Core.Interface.PageStateManager}
 		 */
 		this._stateManager = stateManager;
+
+		/**
+		 * $IMA wrapper for window.
+		 *
+		 * @private
+		 * @property _window
+		 * @type {Core.Interface.Window}
+		 */
+		this._window = window;
+
+		/**
+		 * $IMA dispatcher.
+		 *
+		 * @private
+		 * @property _dispatcher
+		 * @type {Core.Interface.Dispatcher}
+		 */
+		this._dispatcher = dispatcher;
+	}
+
+	/**
+	 * Initialization Dev tool
+	 *
+	 * @method init
+	 *
+	 */
+	init() {
+		if (this._window.isClient()) {
+			this._window.getWindow().$IMA.$DevTool = this;
+		}
+
+
+		this._window.bindEventListener(this._window.getWindow(), 'keydown', (e) => {
+			if (e.altKey && e.keyCode === 83) {
+				console.log(this._stateManager.getState());
+			}
+		});
+	}
+
+	/**
+	 * Set state to state manager.
+	 *
+	 * @method setState
+	 * @param {Object<string, *>} statePatch
+	 */
+	setState(statePatch) {
+		this._stateManager.setState(statePatch);
 	}
 }
 

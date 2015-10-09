@@ -58,4 +58,8 @@ export var init = (ns, oc, config) => {
 		.get('$HttpTransformer')
 		.clear();
 
+	oc
+		.get('$DevTool')
+		.init();
+
 };

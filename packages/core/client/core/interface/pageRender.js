@@ -65,14 +65,6 @@ export default class PageRender {
 	 * @param {Object<string, *>=} [state={}]
 	 */
 	setState(state = {}) {}
-
-	/**
-	 * Replace state to reactive react component.
-	 *
-	 * @method replaceState
-	 * @param {Object<string, *>=} [state={}]
-	 */
-	replaceState(state = {}) {}
 }
 
 ns.Core.Interface.PageRender = PageRender;

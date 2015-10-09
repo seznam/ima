@@ -28,18 +28,6 @@ describe('Core.Abstract.Controller', function() {
 		expect(pageStateManager.setState).toHaveBeenCalledWith(state);
 	});
 
-	it('should be replace state to PageStateManager', function() {
-		var state = { state: 'state' };
-
-		spyOn(pageStateManager, 'replaceState')
-			.and
-			.stub();
-
-		controller.replaceState(state);
-
-		expect(pageStateManager.replaceState).toHaveBeenCalledWith(state);
-	});
-
 	describe('getState method', function() {
 
 		it('should be get state from PageStateManager for setted stateManager', function() {

@@ -28,14 +28,6 @@ export default class PageStateManager {
 	setState(statePatch) {}
 
 	/**
-	 * Replace state.
-	 *
-	 * @method replaceState
-	 * @param {Object<string, *>} state
-	 */
-	replaceState(state) {}
-
-	/**
 	 * Get state.
 	 *
 	 * @method getState

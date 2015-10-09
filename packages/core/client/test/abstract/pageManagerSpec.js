@@ -282,30 +282,15 @@ describe('Core.Abstract.PageManager', function() {
 
 	describe('_onChangeStateHandler method', function() {
 
-		it('should replace state', function() {
+		it('should call setState', function() {
 			var state = { state: 'state' };
-			var replaced = true;
-			pageManager._managedPage.controllerInstance = pageFactory.createController(controller);
-
-			spyOn(pageRender, 'replaceState')
-				.and
-				.stub();
-
-			pageManager._onChangeStateHandler(state, replaced);
-
-			expect(pageRender.replaceState).toHaveBeenCalledWith(state);
-		});
-
-		it('should replace state', function() {
-			var state = { state: 'state' };
-			var replaced = false;
 			pageManager._managedPage.controllerInstance = pageFactory.createController(controller);
 
 			spyOn(pageRender, 'setState')
 				.and
 				.stub();
 
-			pageManager._onChangeStateHandler(state, replaced);
+			pageManager._onChangeStateHandler(state);
 
 			expect(pageRender.setState).toHaveBeenCalledWith(state);
 		});

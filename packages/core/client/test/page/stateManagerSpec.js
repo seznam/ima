@@ -20,63 +20,34 @@ describe('Core.Page.StateManager', function() {
 		expect(stateManager.getState()).toEqual(defaultState);
 	});
 
-	it('should set smooth copy last state and state patch', function() {
-		var newState = Object.assign({}, defaultState, patchState);
+	describe('setState method', function() {
 
-		spyOn(stateManager, '_setState')
-			.and
-			.stub();
+		it('should set smooth copy last state and state patch', function() {
+			var newState = Object.assign({}, defaultState, patchState);
 
-		stateManager.setState(patchState);
-
-		expect(stateManager._setState).toHaveBeenCalledWith(newState);
-	});
-
-	it('should replace state', function() {
-		spyOn(stateManager, '_setState')
-			.and
-			.stub();
-
-		stateManager.replaceState(patchState);
-
-		expect(stateManager._setState).toHaveBeenCalledWith(patchState, true);
-	});
-
-	it('should return history of states', function() {
-		expect(stateManager.getAllStates()).toEqual([defaultState]);
-	});
-
-	describe('_setState method', function() {
-
-		it('should erase excess history', function() {
 			spyOn(stateManager, '_eraseExcessHistory')
 				.and
 				.stub();
 
-			stateManager._setState(defaultState);
-
-			expect(stateManager._eraseExcessHistory).toHaveBeenCalledWith();
-		});
-
-		it('should push state to history', function() {
 			spyOn(stateManager, '_pushToHistory')
 				.and
 				.stub();
 
-			stateManager._setState(defaultState);
-
-			expect(stateManager._pushToHistory).toHaveBeenCalledWith(defaultState);
-		});
-
-		it('should call onChange callback', function() {
 			spyOn(stateManager, '_callOnChangeCallback')
 				.and
 				.stub();
 
-			stateManager._setState(defaultState, true);
 
-			expect(stateManager._callOnChangeCallback).toHaveBeenCalledWith(defaultState, true);
+			stateManager.setState(patchState);
+
+			expect(stateManager._eraseExcessHistory).toHaveBeenCalledWith();
+			expect(stateManager._pushToHistory).toHaveBeenCalledWith(newState);
+			expect(stateManager._callOnChangeCallback).toHaveBeenCalledWith(newState);
 		});
+	});
+
+	it('should return history of states', function() {
+		expect(stateManager.getAllStates()).toEqual([defaultState]);
 	});
 
 });
