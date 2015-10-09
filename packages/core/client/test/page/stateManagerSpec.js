@@ -14,10 +14,21 @@ describe('Core.Page.StateManager', function() {
 		stateManager.clear();
 
 		expect(stateManager._states.length).toEqual(0);
+		expect(stateManager._cursor).toEqual(0);
 	});
 
-	it('should returns default state', function() {
-		expect(stateManager.getState()).toEqual(defaultState);
+	describe('getState method', function() {
+
+		it('should returns default state', function() {
+			expect(stateManager.getState()).toEqual(defaultState);
+		});
+
+		it('should returns empty object for empty history', function() {
+			stateManager.clear();
+
+			expect(stateManager.getState()).toEqual({});
+		});
+
 	});
 
 	describe('setState method', function() {

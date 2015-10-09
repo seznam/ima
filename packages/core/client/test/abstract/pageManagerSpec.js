@@ -9,7 +9,7 @@ describe('Core.Abstract.PageManager', function() {
 	var pageManager = null;
 
 	var controller = ns.Core.Interface.Controller;
-	var view = function (){};
+	var view = function () {};
 	var options = {
 		onlyUpdate: false,
 		autoScroll: true
@@ -114,7 +114,7 @@ describe('Core.Abstract.PageManager', function() {
 
 	describe('_initController method', function() {
 		var controllerInstance = pageFactory.createController(controller);
-		var params = {param: 1};
+		var params = { param: 1 };
 
 		beforeEach(function() {
 			pageManager._storeManagedPageValue(null, null, null, params, controllerInstance, null, null);
@@ -220,6 +220,16 @@ describe('Core.Abstract.PageManager', function() {
 			pageManager._destroyController();
 
 			expect(controllerInstance.setStateManager).toHaveBeenCalledWith(null);
+		});
+
+		it('should clear stateManager', function() {
+			spyOn(stateManager, 'clear')
+				.and
+				.stub();
+
+			pageManager._destroyController();
+
+			expect(stateManager.clear).toHaveBeenCalled();
 		});
 
 		it('should unmout view from DOM', function() {

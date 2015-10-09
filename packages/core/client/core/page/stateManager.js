@@ -61,6 +61,7 @@ export default class StateManager extends ns.Core.Interface.PageStateManager {
 	 */
 	clear() {
 		this._states = [];
+		this._cursor = 0;
 	}
 
 	/**
@@ -84,7 +85,7 @@ export default class StateManager extends ns.Core.Interface.PageStateManager {
 	 * @return {Object<string, *>}
 	 */
 	getState() {
-		return this._states[this._cursor - 1];
+		return this._states[this._cursor - 1] || {};
 	}
 
 	/**

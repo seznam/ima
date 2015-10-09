@@ -267,6 +267,7 @@ export default class PageManager extends ns.Core.Interface.PageManager {
 		if (controller) {
 			controller.destroy();
 			controller.setStateManager(null);
+			this._stateManager.clear();
 			this._pageRender.unmount();
 			this._clearManagedPageValue();
 		}
