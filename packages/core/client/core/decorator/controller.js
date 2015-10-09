@@ -150,7 +150,7 @@ export default class Controller extends ns.Core.Interface.Controller {
 	/**
 	 * @inheritDoc
 	 * @override
-	 * @method patchState
+	 * @method setState
 	 * @param {Object<string, *>} statePatch
 	 */
 	setState(statePatch) {
