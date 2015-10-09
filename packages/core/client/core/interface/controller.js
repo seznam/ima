@@ -148,7 +148,7 @@ export default class Controller {
 	 * @method setMetaParams
 	 * @param {Object<string, *>} loadedResources Map of resource names to
 	 *        resources loaded by the {@codelink load} method. This is the same
-	 *        object as the one passed to the {@codelink patchState} method
+	 *        object as the one passed to the {@codelink setState} method
 	 *        when the Promises returned by the {@codelink load} method were
 	 *        resolved.
 	 * @param {Core.Interface.MetaManager} metaManager Meta attributes manager

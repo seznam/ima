@@ -70,7 +70,7 @@ class Controller extends ns.App.Base.Controller {
 		data.completed = false;
 		this._itemsService.add(data);
 
-		this.patchState({
+		this.setState({
 			items: this._itemsService.getAll(this.getState().filter)
 		});
 	}
@@ -83,7 +83,7 @@ class Controller extends ns.App.Base.Controller {
 			this._itemsService.update(item.id, item);
 		}
 
-		this.patchState({
+		this.setState({
 			items: this._itemsService.getAll(state.filter),
 			toggleAllChecked: data.completed
 		});
@@ -97,7 +97,7 @@ class Controller extends ns.App.Base.Controller {
 			}
 		}
 
-		this.patchState({
+		this.setState({
 			items: this._itemsService.getAll(this.getState().filter)
 		});
 	}
@@ -105,7 +105,7 @@ class Controller extends ns.App.Base.Controller {
 	onItemDeleted(data) {
 		this._itemsService.delete(data.item.id);
 
-		this.patchState({
+		this.setState({
 			items: this._itemsService.getAll(this.getState().filter)
 		});
 	}
@@ -117,7 +117,7 @@ class Controller extends ns.App.Base.Controller {
 
 		var items = this._itemsService.getAll(this.getState().filter);
 
-		this.patchState({
+		this.setState({
 			items: items,
 			toggleAllChecked: items.every(item => item.completed)
 		});
@@ -128,7 +128,7 @@ class Controller extends ns.App.Base.Controller {
 		item.title = newTitle;
 		this._itemsService.update(item.id, item);
 
-		this.patchState({
+		this.setState({
 			items: this._itemsService.getAll(this.getState().filter)
 		});
 	}
