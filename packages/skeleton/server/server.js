@@ -54,7 +54,7 @@ var renderApp = (req, res) => {
 			// logger.info('Request handled successfully', { response: { status: number, content: string, SPA: boolean=, error: Error= } });
 
 			if (response.error) {
-				logger.error('App error', { error });
+				logger.error('App error', { error: response.error });
 			}
 
 			if ((req.method === 'GET') && (response.status === 200) && !response.SPA && !response.error) {
