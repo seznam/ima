@@ -176,7 +176,7 @@ export default class Client extends ns.Core.Abstract.PageRender {
 		for (let resourceName of Object.keys(patchedPromises)) {
 			patchedPromises[resourceName]
 				.then((resource) => {
-					controller.patchState({
+					controller.setState({
 						[resourceName]: resource
 					});
 				})
