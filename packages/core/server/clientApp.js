@@ -262,7 +262,7 @@ module.exports = (() => {
 		var promise = Promise.reject(error);
 
 		try {
-			app.oc.get('$Router').redirect(error.getParams().url, error.getHttpStatus());
+			app.oc.get('$Router').redirect(error.getParams().url, { httpStatus: error.getHttpStatus() });
 			instanceRecycler.clearInstance(app);
 			promise = Promise.resolve({
 				content: null,
