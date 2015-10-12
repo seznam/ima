@@ -80,9 +80,16 @@ if (root.$IMA.Test === true) {
 			window.React.initializeTouchEvents(true);
 			window.$Debug = window.$IMA.$Debug;
 
-			if ($Debug && window.$IMA.$Protocol !== window.location.protocol) {
-				throw new Error(`Your client's protocol is not same as server's protocol.` +
-						`For right setting protocol on the server site set 'X-Forwarded-Proto' header.`);
+			if ($Debug) {
+				if (window.$IMA.$Protocol !== window.location.protocol) {
+					throw new Error(`Your client's protocol is not same as server's protocol.` +
+							`For right setting protocol on the server site set 'X-Forwarded-Proto' header.`);
+				}
+
+				if (window.$IMA.$Host !== window.location.host) {
+					throw new Error(`Your client's host is not same as server's host.` +
+							`For right setting host on the server site set 'X-Forwarded-Proto' header.`);
+				}
 			}
 
 			var bootConfig = {
