@@ -44,7 +44,7 @@ class Controller extends ns.App.Base.Controller {
 	setMetaParams(loadedResources, metaManager, router, dictionary, settings) {
 		var title = 'Isomorphic applications TODO list - IMA.js';
 		var description = 'Demo example of TodoMVC. TodoMVC is a project which offers the same Todo application implemented using MV* concepts in most of the popular JavaScript MV* frameworks of today.';
-		var image = router.getDomain() + settings.$Static.image + 'imajs-share.png';
+		var image = router.getDomain() + settings.$Static.image + '/imajs-share.png';
 
 		var url = router.getUrl();
 

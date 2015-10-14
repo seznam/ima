@@ -36,7 +36,7 @@ class Controller extends ns.Core.Abstract.Controller {
 	setMetaParams(loadedResources, metaManager, router, dictionary, settings) {
 		var title = 'IMA.js';
 		var description = 'IMA.js is isomorphic javascript application framework.';
-		var image = router.getDomain() + settings.$Static.image + 'imajs-share.png';
+		var image = router.getDomain() + settings.$Static.image + '/imajs-share.png';
 
 		var url = router.getUrl();
 
