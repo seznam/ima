@@ -40,7 +40,7 @@ describe('Core.Abstract.Controller', function() {
 			expect(pageStateManager.getState).toHaveBeenCalled();
 		});
 
-		it('should be return null for undefined stateManager', function() {
+		it('should be return {} for undefined stateManager', function() {
 			controller.setStateManager(null);
 
 			expect(controller.getState()).toEqual({});
