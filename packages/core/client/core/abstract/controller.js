@@ -109,7 +109,7 @@ export default class Controller extends ns.Core.Interface.Controller {
 	 *         resolved values will be pushed to the controller's state.
 	 */
 	update(params = {}) {
-		return this.getState() || {};
+		return this.getState();
 	}
 
 	/**
@@ -129,13 +129,13 @@ export default class Controller extends ns.Core.Interface.Controller {
 	 * @inheritDoc
 	 * @override
 	 * @method getState
-	 * @return {Object<string, *>|Null} The current state of this controller.
+	 * @return {Object<string, *>} The current state of this controller.
 	 */
 	getState() {
 		if (this._stateManager) {
 			return this._stateManager.getState();
 		} else {
-			return null;
+			return {};
 		}
 	}
 

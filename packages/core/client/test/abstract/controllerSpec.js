@@ -43,7 +43,7 @@ describe('Core.Abstract.Controller', function() {
 		it('should be return null for undefined stateManager', function() {
 			controller.setStateManager(null);
 
-			expect(controller.getState()).toEqual(null);
+			expect(controller.getState()).toEqual({});
 		});
 	});
 });
