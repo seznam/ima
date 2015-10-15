@@ -375,14 +375,7 @@ export default class Router extends ns.Core.Interface.Router {
 			return Promise.reject(error);
 		}
 
-		return (
-			this._handle(routeError, params, options)
-				.then((response) => {
-					response.error = params.error;
-
-					return response;
-				})
-		);
+		return this._handle(routeError, params, options);
 	}
 
 	/**
@@ -405,14 +398,7 @@ export default class Router extends ns.Core.Interface.Router {
 			return Promise.reject(error);
 		}
 
-		return (
-			this._handle(routeNotFound, params, options)
-				.then((response) => {
-					response.error = params.error;
-
-					return response;
-				})
-		);
+		return this._handle(routeNotFound, params, options);
 	}
 
 	/**
@@ -486,6 +472,12 @@ export default class Router extends ns.Core.Interface.Router {
 			this._pageManager
 				.manage(controller, view, options, params)
 				.then((response) => {
+					response = response || {};
+
+					if (params.error && params.error instanceof Error) {
+						response.error = params.error;
+					}
+
 					data.response = response;
 
 					this._dispatcher

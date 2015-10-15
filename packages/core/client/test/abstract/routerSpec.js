@@ -231,7 +231,7 @@ describe('Core.Abstract.Router', function() {
 
 			spyOn(router, '_handle')
 				.and
-				.returnValue(Promise.resolve({ content: '', status: 200 }));
+				.returnValue(Promise.resolve({ content: '', status: 200, error: params.error }));
 
 			router
 				.handleError(params, options)
@@ -288,7 +288,7 @@ describe('Core.Abstract.Router', function() {
 
 			spyOn(router, '_handle')
 				.and
-				.returnValue(Promise.resolve({ content: '', status: 200 }));
+				.returnValue(Promise.resolve({ content: '', status: 200, error: params.error }));
 
 			router
 				.handleNotFound(params, options)
@@ -383,7 +383,7 @@ describe('Core.Abstract.Router', function() {
 				.returnValue(routePath);
 			spyOn(pageManager, 'manage')
 				.and
-				.returnValue(Promise.resolve({content: null, status: 200}));
+				.returnValue(Promise.resolve({ content: null, status: 200 }));
 			spyOn(dispatcher, 'fire')
 				.and
 				.stub();
@@ -393,15 +393,15 @@ describe('Core.Abstract.Router', function() {
 				.then(function() {
 					expect(pageManager.manage).toHaveBeenCalledWith(controller, view, options, {});
 					done();
-				})
+				});
 
 		});
 
 		it('should fire ns.Core.Router.EVENTS.BEFORE_HANDLE_ROUTE', function() {
-			var response = {content: null, status: 200};
+			var response = { content: null, status: 200 };
 			var params = {};
 			var path ='/';
-			var data = {route: route, params: params, path: path, options: options};
+			var data = { route: route, params: params, path: path, options: options };
 
 			spyOn(router, 'getPath')
 				.and
@@ -419,7 +419,7 @@ describe('Core.Abstract.Router', function() {
 		});
 
 		it('should fire ns.Core.Router.EVENTS.AFTER_HANDLE_ROUTE', function(done) {
-			var response = {content: null, status: 200};
+			var response = { content: null, status: 200 };
 			var params = {};
 			var path ='/';
 
@@ -428,7 +428,7 @@ describe('Core.Abstract.Router', function() {
 				.returnValue(path);
 			spyOn(pageManager, 'manage')
 				.and
-				.returnValue(Promise.resolve({content: null, status: 200}));
+				.returnValue(Promise.resolve(Object.assign({}, response)));
 			spyOn(dispatcher, 'fire')
 				.and
 				.stub();
@@ -436,7 +436,34 @@ describe('Core.Abstract.Router', function() {
 			router
 				._handle(route, params, options)
 				.then(function() {
-					var data = {route: route, params: params, path: path, response: response, options: options};
+					var data = { route: route, params: params, path: path, response: response, options: options };
+
+					expect(dispatcher.fire)
+						.toHaveBeenCalledWith(router.EVENTS.AFTER_HANDLE_ROUTE, data, true);
+
+					done();
+				});
+		});
+
+		it('should fire ns.Core.Router.EVENTS.AFTER_HANDLE_ROUTE with error', function(done) {
+			var response = { content: null, status: 200 };
+			var params = { error: new Error('test') };
+			var path ='/';
+
+			spyOn(router, 'getPath')
+				.and
+				.returnValue(path);
+			spyOn(pageManager, 'manage')
+				.and
+				.returnValue(Promise.resolve(Object.assign({}, response)));
+			spyOn(dispatcher, 'fire')
+				.and
+				.stub();
+
+			router
+				._handle(route, params, options)
+				.then(function() {
+					var data = { route: route, params: params, path: path, response: Object.assign({}, response, params), options: options };
 
 					expect(dispatcher.fire)
 						.toHaveBeenCalledWith(router.EVENTS.AFTER_HANDLE_ROUTE, data, true);
@@ -446,7 +473,7 @@ describe('Core.Abstract.Router', function() {
 		});
 
 		it('should return response', function(done) {
-			var response = {content: null, status: 200};
+			var response = { content: null, status: 200 };
 			var params = {};
 			var path ='/';
 
@@ -455,12 +482,33 @@ describe('Core.Abstract.Router', function() {
 				.returnValue(path);
 			spyOn(pageManager, 'manage')
 				.and
-				.returnValue(Promise.resolve({content: null, status: 200}));
+				.returnValue(Promise.resolve(Object.assign({}, response)));
 
 			router
 				._handle(route, params, options)
-				.then(function(response) {
-					expect(response).toEqual(response);
+				.then(function(handleResponse) {
+					expect(handleResponse).toEqual(response);
+					done();
+				});
+		});
+
+		it('should return response with handled error', function(done) {
+			var response = { content: null, status: 500 };
+			var params = { error: new Error('test') };
+			var path ='/';
+
+			spyOn(router, 'getPath')
+				.and
+				.returnValue(path);
+
+			spyOn(pageManager, 'manage')
+				.and
+				.returnValue(Promise.resolve(Object.assign({}, response)));
+
+			router
+				._handle(route, params, options)
+				.then(function(handleResponse) {
+					expect(handleResponse).toEqual(Object.assign({},response, params));
 					done();
 				});
 		});
