@@ -1,5 +1,12 @@
 
 var winston = require('winston');
+var environment = require('./environment.js');
+
+var FORMATTING = environment.$Server.logger.formatting;
+if (['simple', 'JSON'].indexOf(FORMATTING) === -1) {
+	throw new Error('Invalid logger configuration: the formatting has to be ' +
+			`either "simple" or "JSON", ${FORMATTING} was provided`);
+}
 
 var logger = new (winston.Logger)({
 	transports: [
@@ -35,6 +42,55 @@ var logger = new (winston.Logger)({
 module.exports = logger;
 
 function formatMeta(meta) {
+	switch (FORMATTING) {
+		case 'JSON':
+			return formatMetaJSON(meta);
+		case 'simple':
+			return formatMetaSimple(meta);
+		default:
+			throw new Error(`Unrecognized log message formatting: ${FORMATTING}`);
+	}
+}
+
+function formatMetaSimple(meta) {
+	var keys = Object.keys(meta);
+	if (!meta || !keys.length) {
+		return '';
+	}
+
+	var lines = keys.map((key) => {
+		var value = meta[key];
+		if (value instanceof Error) {
+			return key + ': ' + indentLines(value.stack, '   ', true);
+		} else if (value instanceof Object) {
+			return key + ': ' + indentLines(
+				JSON.stringify(value, null, 4),
+				'   ',
+				true
+			);
+		} else {
+			return key + ': ' + value;
+		}
+	});
+
+	return '\n - ' + lines.join('\n - ');
+}
+
+function indentLines(string, spaces, skipFirstLine) {
+	var lines = string.split('\n');
+
+	var indentedLines = lines.map((line, index) => {
+		if (!index && skipFirstLine) {
+			return line;
+		}
+
+		return spaces + line;
+	});
+
+	return indentedLines.join('\n');
+}
+
+function formatMetaJSON(meta) {
 	var keys = Object.keys(meta);
 	if (!meta || !keys.length) {
 		return '';
@@ -55,7 +111,7 @@ function formatMeta(meta) {
 function formatError(error) {
 	var matcher = /^\s+at\s+([^(]+?)\s+[(](.+):(\d+):(\d+)[)]/;
 
-	var stack = error.stack.split("\n").slice(1).map((line) => {
+	var stack = error.stack.split('\n').slice(1).map((line) => {
 		var parts = line.match(matcher);
 		if (!parts) {
 			return line;
