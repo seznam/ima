@@ -17,7 +17,7 @@ try {
 	console.log(e);
 }
 
-exports.babelOptional = ["optimisation.react.constantElements", "optimisation.react.inlineElements"];
+exports.babelOptional = null; //["optimisation.react.constantElements", "optimisation.react.inlineElements"];
 
 exports.uglifyCompression = {
 	global_defs: {
