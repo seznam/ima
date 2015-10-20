@@ -1,5 +1,5 @@
 {
-  "name": "IMA.js-gulp-tasks",
+  "name": "ima.js-gulp-tasks",
   "version": "0.9.0",
   "description": "Default gulp tasks for IMA.js applications.",
   "main": "",
@@ -19,6 +19,9 @@
   "license": "MIT",
   "bugs": {
     "url": "https://github.com/seznam/IMA.js-gulp-tasks/issues"
+  },
+  "publishConfig": {
+    "registry": "http://registry.npmjs.org/"
   },
   "homepage": "https://github.com/seznam/IMA.js-gulp-tasks",
   "devDependencies": {
