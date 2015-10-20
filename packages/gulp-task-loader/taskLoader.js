@@ -10,6 +10,7 @@ var path = require('path');
  * @param {Object<string, *>} gulpConfig Configuration of the gulp tasks.
  */
 module.exports = function (gulpConfig) {
+	console.log('Loading gulp tasks...');
 	loadTasks('./node_modules/IMA.js-gulp-tasks/tasks', gulpConfig);
 	loadTasks('./app/gulp/tasks', gulpConfig);
 };
@@ -32,7 +33,8 @@ function loadTasks(directory, gulpConfig) {
 	fs.readdirSync(directory).filter(function (file) {
 		return file.match(/[.]js$/i);
 	}).forEach(function (file) {
-		var factory = require(directory + path.sep + file);
+		var modulePath = path.resolve(directory + path.sep + file);
+		var factory = require(modulePath);
 		if (factory instanceof Function) {
 			factory(gulpConfig);
 		}
