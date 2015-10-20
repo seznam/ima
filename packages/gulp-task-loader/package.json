@@ -1,6 +1,6 @@
 {
   "name": "ima.js-gulp-task-loader",
-  "version": "0.9.0",
+  "version": "0.10.0",
   "description": "Automatic gulp task loader for IMA.js applications.",
   "main": "taskLoader.js",
   "scripts": {
