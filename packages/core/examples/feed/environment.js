@@ -62,6 +62,9 @@ module.exports = (() => {
 
 					// the time after which the unused entries are discarded
 					unusedEntryTtl: 15 * 60 * 1000 // milliseconds
+				},
+				logger: {
+					formatting: 'simple' // use "simple" or "JSON"
 				}
 			},
 			$Proxy: { // Configuration of REST API proxy. All requests to the
