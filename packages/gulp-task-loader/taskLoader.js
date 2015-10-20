@@ -11,7 +11,7 @@ var path = require('path');
  */
 module.exports = function (gulpConfig) {
 	console.log('Loading gulp tasks...');
-	loadTasks('./node_modules/IMA.js-gulp-tasks/tasks', gulpConfig);
+	loadTasks('./node_modules/ima.js-gulp-tasks/tasks', gulpConfig);
 	loadTasks('./app/gulp/tasks', gulpConfig);
 };
 
