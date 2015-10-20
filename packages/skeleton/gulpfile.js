@@ -1,29 +1,4 @@
 
-var gulp = require('gulp');
-var fs = require('fs');
-var path = require('path');
+var gulpConfig = require('./gulpConfig.js');
 
-// load IMA.js gulp tasks
-loadTasks('./imajs/gulp/tasks');
-loadTasks('./app/gulp/tasks');
-
-/**
- * Loads the gulp tasks defined in the JavaScript files within the specified
- * directory. The JavaScript files are executed in arbitrary order.
- *
- * @param {string} directory The directory containing the JavaScript files
- *        defining the gulp tasks.
- */
-function loadTasks(directory) {
-	if (!fs.existsSync(directory)) {
-		console.warn('The gulp tasks directory ' + directory + ' does not ' +
-				'exist, skipping');
-		return;
-	}
-
-	fs.readdirSync(directory).filter(function (file) {
-		return file.match(/[.]js$/i);
-	}).forEach(function (file) {
-		require(directory + path.sep + file);
-	});
-}
+require('IMA.js-gulp-task-loader')(gulpConfig);
