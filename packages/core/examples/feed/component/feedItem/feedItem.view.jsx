@@ -35,8 +35,7 @@ class View extends ns.Core.Abstract.Component {
 				<div className='content-wrapper'>
 					<div
 							className='content'
-							dangerouslySetInnerHTML={{ __html: entity.getContent() }}>
-					</div>
+							dangerouslySetInnerHTML={{ __html: entity.getContent() }}/>
 					<div className='toolbar'>
 						{hashTag}
 						<DateComponentDiv

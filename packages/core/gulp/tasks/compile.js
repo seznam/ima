@@ -73,9 +73,9 @@ gulp.task('Es6ToEs5:app', function () {
 			.pipe(plumber())
 			.pipe(sourcemaps.init())
 			.pipe(cache('Es6ToEs5:app'))
-			.pipe(babel({modules: 'system', moduleIds: true, loose: 'all', plugins: [
-				{transformer: moduleTransformer, position: 'after'}
-			], externalHelpers: true}))
+			.pipe(babel({ modules: 'system', moduleIds: true, loose: 'all', plugins: [
+				{ transformer: moduleTransformer, position: 'after' }
+			], externalHelpers: true, optional: gulpConfig.babelOptional || [] }))
 			.pipe(gulpif(isView, sweetjs({
 				modules: ['./imajs/macro/componentName.sjs'],
 				readableNames: true
@@ -104,7 +104,7 @@ gulp.task('Es6ToEs5:server', function () {
 		gulp
 			.src(files.server.src)
 			.pipe(plumber())
-			.pipe(babel({modules: 'ignore', loose: 'all', externalHelpers: true}))
+			.pipe(babel({ modules: 'ignore', loose: 'all', externalHelpers: true }))
 			.pipe(plumber.stop())
 			.pipe(gulp.dest(files.server.dest))
 	);
@@ -115,7 +115,7 @@ gulp.task('Es6ToEs5:vendor', function () {
 		gulp
 			.src(files.vendor.src)
 			.pipe(plumber())
-			.pipe(babel({modules: 'commonStrict', loose: 'all', externalHelpers: true}))
+			.pipe(babel({ modules: 'commonStrict', loose: 'all', externalHelpers: true }))
 			.pipe(plumber.stop())
 			.pipe(concat(files.vendor.name.tmp))
 			.pipe(gulp.dest(files.vendor.dest.tmp))
@@ -124,8 +124,8 @@ gulp.task('Es6ToEs5:vendor', function () {
 
 gulp.task('Es6ToEs5:vendor:client', function () {
 	return (
-		browserify(files.vendor.dest.tmp + files.vendor.name.tmp, {debug: false, insertGlobals : false, basedir: '.'})
-			.transform(babelify.configure({modules: 'ignore', loose: 'all', externalHelpers: true}))
+		browserify(files.vendor.dest.tmp + files.vendor.name.tmp, { debug: false, insertGlobals : false, basedir: '.' })
+			.transform(babelify.configure({ modules: 'ignore', loose: 'all', externalHelpers: true }))
 			.external('vertx')
 			.bundle()
 			.pipe(source(files.vendor.name.client))
@@ -139,7 +139,7 @@ gulp.task('Es6ToEs5:vendor:server', function () {
 			.pipe(insert.wrap('module.exports = (function (config) {', ' return vendor;})()'))
 			.pipe(concat(files.vendor.name.server))
 			.pipe(gulp.dest(files.vendor.dest.server))
-	)
+	);
 });
 
 gulp.task('Es6ToEs5:vendor:clean', function () {

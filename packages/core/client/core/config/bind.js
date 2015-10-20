@@ -7,6 +7,8 @@ export var init = (ns, oc, config) => { //jshint ignore:line
 
 	//React
 	oc.constant('$React', ns.Vendor.React);
+	oc.constant('$ReactDOM', ns.Vendor.ReactDOM);
+	oc.constant('$ReactDOMServer', ns.Vendor.ReactDOMServer);
 
 	//SuperAgent
 	oc.constant('$SuperAgent', ns.Vendor.SuperAgent);
@@ -95,9 +97,9 @@ export var init = (ns, oc, config) => { //jshint ignore:line
 	oc.constant('$PageRenderViewAdapter', ns.Core.Page.Render.ViewAdapter);
 	oc.bind('$PageRenderFactory', ns.Core.Page.Render.Factory, [oc, '$React', '$PageRenderViewAdapter']);
 	if (oc.get('$Window').isClient()) {
-		oc.provide(ns.Core.Interface.PageRender, ns.Core.Page.Render.Client, ['$PageRenderFactory', '$Helper', '$React', '$Settings', '$Window']);
+		oc.provide(ns.Core.Interface.PageRender, ns.Core.Page.Render.Client, ['$PageRenderFactory', '$Helper', '$ReactDOM', '$Settings', '$Window']);
 	} else {
-		oc.provide(ns.Core.Interface.PageRender, ns.Core.Page.Render.Server, ['$PageRenderFactory', '$Helper', '$React', '$Settings', '$Response', '$Cache']);
+		oc.provide(ns.Core.Interface.PageRender, ns.Core.Page.Render.Server, ['$PageRenderFactory', '$Helper', '$ReactDOMServer', '$Settings', '$Response', '$Cache']);
 	}
 	oc.bind('$PageRender', ns.Core.Interface.PageRender);
 	//oc.provide(ns.Core.Interface.PageManager, ns.Core.Page.Manager, ['$PageFactory', '$PageRender', '$PageStateManager', '$Window', '$EventBus']);

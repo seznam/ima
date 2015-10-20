@@ -7,7 +7,7 @@ class View extends ns.Core.Abstract.Component {
 
 	render() {
 		var Item = ns.App.Component.Item.View;
-		
+
 		return (
 			<div className='l-home'>
 				<section className='todoapp'>
@@ -79,7 +79,7 @@ class View extends ns.Core.Abstract.Component {
 	}
 
 	onItemAdded() {
-		var newItemInput = React.findDOMNode(this.refs.newItem);
+		var newItemInput = this.findDOMNode(this.refs.newItem);
 		if (newItemInput.value) {
 			this.utils.$EventBus.fire(newItemInput, 'itemCreated', {
 				title: newItemInput.value
@@ -89,7 +89,7 @@ class View extends ns.Core.Abstract.Component {
 	}
 
 	onToggleAll(event) {
-		var toggleAll = React.findDOMNode(this.refs.toggleAll);
+		var toggleAll = this.findDOMNode(this.refs.toggleAll);
 		this.utils.$EventBus.fire(event.target, 'toggleAll', {
 			completed: toggleAll.checked
 		});
@@ -100,7 +100,7 @@ class View extends ns.Core.Abstract.Component {
 	}
 
 	componentDidMount() {
-		var newItemInput = React.findDOMNode(this.refs.newItem);
+		var newItemInput = this.findDOMNode(this.refs.newItem);
 		newItemInput.focus();
 	}
 

@@ -78,6 +78,17 @@ export default class Factory {
 			state
 		});
 	}
+
+	/**
+	 * Return a function that produces ReactElements of a given type.
+	 * Like React.createElement.
+	 *
+	 * @method reactCreateFactory
+	 * @param {(string|ReactClass)} view
+	 */
+	reactCreateFactory(view) {
+		return this._React.createFactory(view);
+	}
 }
 
 ns.Core.Page.Render.Factory = Factory;

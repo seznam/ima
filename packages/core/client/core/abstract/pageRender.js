@@ -26,12 +26,12 @@ export default class PageRender extends ns.Core.Interface.PageRender {
 	 * @param {Core.Page.Render.Factory} factory Factory for receive $Utils to
 	 *        view.
 	 * @param {Vendor.$Helper} Helper The IMA.js helper methods.
-	 * @param {Vendor.React} React React framework instance, will be used to
+	 * @param {Vendor.ReactDOM} ReactDOM React framework instance, will be used to
 	 *        render the page.
 	 * @param {Object<string, *>} settings Application settings for the current
 	 *        application environment.
 	 */
-	constructor(factory, Helper, React, settings) {
+	constructor(factory, Helper, ReactDOM, settings) {
 		super();
 
 		/**
@@ -56,10 +56,10 @@ export default class PageRender extends ns.Core.Interface.PageRender {
 		 * Rect framework instance, used to render the page.
 		 *
 		 * @protected
-		 * @property _React
-		 * @type {Vendor.React}
+		 * @property _ReactDOM
+		 * @type {Vendor.ReactDOM}
 		 */
-		this._React = React;
+		this._ReactDOM = ReactDOM;
 
 		/**
 		 * Application setting for the current application environment.

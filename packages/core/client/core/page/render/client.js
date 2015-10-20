@@ -22,16 +22,16 @@ export default class Client extends ns.Core.Abstract.PageRender {
 	 * @param {Core.Page.Render.Factory} factory Factory for receive $Utils to
 	 *        view.
 	 * @param {Vendor.$Helper} Helper The IMA.js helper methods.
-	 * @param {Vendor.React} React React framework instance to use to render
-	 *        the page.
+	 * @param {Vendor.ReactDOM} ReactDOM React framework instance to use to render
+	 *        the page on the client side.
 	 * @param {Object<string, *>} settings The application setting for the
 	 *        current application environment.
 	 * @param {Core.Interface.Window} window Helper for manipulating the global
 	 *        object ({@code window}) regardless of the client/server-side
 	 *        environment.
 	 */
-	constructor(factory, Helper, React, settings, window) {
-		super(factory, Helper, React, settings);
+	constructor(factory, Helper, ReactDOM, settings, window) {
+		super(factory, Helper, ReactDOM, settings);
 
 		/**
 		 * Flag signalling that the page is being rendered for the first time.
@@ -143,7 +143,7 @@ export default class Client extends ns.Core.Abstract.PageRender {
 	 */
 	unmount() {
 		if (this._reactiveView) {
-			this._React.unmountComponentAtNode(this._viewContainer);
+			this._ReactDOM.unmountComponentAtNode(this._viewContainer);
 			this._reactiveView = null;
 		}
 	}
@@ -196,7 +196,7 @@ export default class Client extends ns.Core.Abstract.PageRender {
 		var props = this._generateViewProps(controller.getState());
 		var reactElementView = this._factory.wrapView(view, props);
 
-		this._reactiveView = this._React.render(
+		this._reactiveView = this._ReactDOM.render(
 			reactElementView,
 			this._viewContainer
 		);

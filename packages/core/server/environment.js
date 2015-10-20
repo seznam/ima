@@ -11,6 +11,10 @@ module.exports = (() => {
 		env = dev;
 	}
 
+	if (env === 'production') {
+		env = prod;
+	}
+
 	var productEnvironment = environment[prod];
 	var currentEnvironment = environment[env];
 

@@ -53,7 +53,7 @@ class View extends ns.Core.Abstract.Component {
 	}
 
 	onFinishEditing(event) {
-		var editInput = React.findDOMNode(this.refs.edit);
+		var editInput = this.findDOMNode(this.refs.edit);
 		var newTitle = editInput.value;
 
 		if (newTitle !== this.props.item.title) {
@@ -73,7 +73,7 @@ class View extends ns.Core.Abstract.Component {
 			return;
 		}
 
-		var editInput = React.findDOMNode(this.refs.edit);
+		var editInput = this.findDOMNode(this.refs.edit);
 		editInput.focus();
 	}
 

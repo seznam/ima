@@ -64,7 +64,7 @@ export default class Component extends ns.Vendor.React.Component {
 	 *         component, or {@code null} if no such node was found.
 	 */
 	findDOMNode(component = this) {
-		return ns.Vendor.React.findDOMNode(component);
+		return ns.Vendor.ReactDOM.findDOMNode(component);
 	}
 
 	/**

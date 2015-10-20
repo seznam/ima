@@ -22,8 +22,8 @@ export default class Server extends ns.Core.Abstract.PageRender {
 	 * @param {Core.Page.Render.Factory} factory Factory for receive $Utils to
 	 *        view.
 	 * @param {Vendor.$Helper} Helper The IMA.js helper methods.
-	 * @param {Vendor.React} React React framework instance to use to render
-	 *        the page.
+	 * @param {Vendor.ReactDOMServer} ReactDOMServer React framework instance to use to render
+	 *        the page on the server side.
 	 * @param {Object<string, *>} settings Application setting for the current
 	 *        application environment.
 	 * @param {Core.Router.Response} response Utility for sending the page
@@ -31,8 +31,8 @@ export default class Server extends ns.Core.Abstract.PageRender {
 	 * @param {Core.Interface.Cache} cache Resource cache caching the results
 	 *        of HTTP requests made by services used by the rendered page.
 	 */
-	constructor(factory, Helper, React, settings, response, cache) {
-		super(factory, Helper, React, settings);
+	constructor(factory, Helper, ReactDOMServer, settings, response, cache) {
+		super(factory, Helper, ReactDOMServer, settings);
 
 		/**
 		 * Utility for sending the page markup to the client as a response to
@@ -199,11 +199,11 @@ export default class Server extends ns.Core.Abstract.PageRender {
 	_renderPageContentToString(controller, view) {
 		var props = this._generateViewProps(controller.getState());
 		var reactElementView = this._factory.wrapView(view, props);
-		var pageMarkup = this._React.renderToString(reactElementView);
+		var pageMarkup = this._ReactDOM.renderToString(reactElementView);
 
 		var documentView = ns.get(this._settings.$Page.$Render.documentView);
-		var documentViewFactory = this._React.createFactory(documentView);
-		var appMarkup = this._React.renderToStaticMarkup(documentViewFactory({
+		var documentViewElement = this._factory.reactCreateFactory(documentView);
+		var appMarkup = this._ReactDOM.renderToStaticMarkup(documentViewElement({
 			page: pageMarkup,
 			revivalSettings: this._getRevivalSettings(),
 			metaManager: controller.getMetaManager(),

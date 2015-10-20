@@ -77,7 +77,6 @@ if (root.$IMA.Test === true) {
 
 			//set React for ReactJS extension for browser
 			window.React = window.$IMA.Vendor.get('React');
-			window.React.initializeTouchEvents(true);
 			window.$Debug = window.$IMA.$Debug;
 
 			if ($Debug) {

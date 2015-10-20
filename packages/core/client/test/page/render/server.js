@@ -17,14 +17,14 @@ describe('Core.Page.Render.Server', function() {
 	var pageRender = null;
 	var $Helper = ns.Vendor.$Helper;
 	var factory = oc.get('$PageRenderFactory');
-	var React = oc.get('$React');
+	var ReactDOMServer = oc.get('$ReactDOMServer');
 	var settings = oc.get('$Settings');
 	var response = oc.get('$Response');
 	var cache = oc.get('$Cache');
 
 	beforeEach(function() {
 		response.init(expressResponse);
-		pageRender = oc.create('Core.Page.Render.Server', [factory, $Helper, React, settings, response, cache, oc]);
+		pageRender = oc.create('Core.Page.Render.Server', [factory, $Helper, ReactDOMServer, settings, response, cache, oc]);
 	});
 
 	it('should be wrap each key to promise', function() {
