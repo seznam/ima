@@ -198,12 +198,12 @@ export default class Server extends ns.Core.Abstract.PageRender {
 	 */
 	_renderPageContentToString(controller, view) {
 		var props = this._generateViewProps(controller.getState());
-		var reactElementView = this._factory.wrapView(view, props);
-		var pageMarkup = this._ReactDOM.renderToString(reactElementView);
+		var wrapedPageViewElement = this._factory.wrapView(view, props);
+		var pageMarkup = this._ReactDOM.renderToString(wrapedPageViewElement);
 
 		var documentView = ns.get(this._settings.$Page.$Render.documentView);
-		var documentViewElement = this._factory.reactCreateFactory(documentView);
-		var appMarkup = this._ReactDOM.renderToStaticMarkup(documentViewElement({
+		var documentViewFactory = this._factory.reactCreateFactory(documentView);
+		var appMarkup = this._ReactDOM.renderToStaticMarkup(documentViewFactory({
 			page: pageMarkup,
 			revivalSettings: this._getRevivalSettings(),
 			metaManager: controller.getMetaManager(),

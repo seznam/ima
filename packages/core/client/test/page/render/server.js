@@ -8,6 +8,7 @@ describe('Core.Page.Render.Server', function() {
 	};
 
 	var controller = new ns.Core.Interface.Controller();
+	controller.getMetaManager = function() {};
 	var view = function (){};
 	var expressResponse = {
 		status: function() {},
@@ -111,29 +112,138 @@ describe('Core.Page.Render.Server', function() {
 			expect(pageRender._renderPage(controller, view, fetchedResource)).toEqual(responseParams);
 		});
 
-		it('should set controller state, meta params and render page content', function() {
-			spyOn(controller, 'setState')
-				.and
-				.stub();
-			spyOn(controller, 'setMetaParams')
-				.and
-				.stub();
-			spyOn(controller, 'getHttpStatus')
-				.and
-				.stub();
-			spyOn(pageRender, '_renderPageContentToString')
-				.and
-				.stub();
+		describe('render new page', function() {
 
-			pageRender._renderPage(controller, view, fetchedResource);
+			var responseParams = { status: 200, content: '' };
+			var pageRenderResponse = null;
 
-			expect(controller.setState).toHaveBeenCalledWith(fetchedResource);
-			expect(controller.setMetaParams).toHaveBeenCalledWith(fetchedResource);
-			expect(controller.getHttpStatus).toHaveBeenCalled();
-			expect(pageRender._renderPageContentToString).toHaveBeenCalledWith(controller, view);
+			beforeEach(function() {
+				spyOn(controller, 'setState')
+					.and
+					.stub();
+				spyOn(controller, 'setMetaParams')
+					.and
+					.stub();
+				spyOn(controller, 'getHttpStatus')
+					.and
+					.stub();
+				spyOn(pageRender, '_renderPageContentToString')
+					.and
+					.stub();
+				spyOn(response, 'status')
+					.and
+					.returnValue(response);
+				spyOn(response, 'send')
+					.and
+					.returnValue(response);
+				spyOn(response, 'getResponseParams')
+					.and
+					.returnValue(responseParams);
+
+				pageRenderResponse = pageRender._renderPage(controller, view, fetchedResource);
+			});
+
+			it('should set controller state', function() {
+				expect(controller.setState).toHaveBeenCalledWith(fetchedResource);
+			});
+
+			it('should set meta params', function() {
+				expect(controller.setMetaParams).toHaveBeenCalledWith(fetchedResource);
+			});
+
+			it('should send response for request', function() {
+				expect(response.status).toHaveBeenCalled();
+				expect(response.send).toHaveBeenCalled();
+				expect(controller.getHttpStatus).toHaveBeenCalled();
+				expect(pageRender._renderPageContentToString).toHaveBeenCalledWith(controller, view);
+			});
+
+			it('should return response params', function() {
+				expect(pageRenderResponse).toEqual(responseParams);
+			});
+		});
+	});
+
+	describe('_renderPageContentToString method', function() {
+
+		var utils = { $Utils: 'utils' };
+		var state = { state: 'state' };
+		var props = Object.assign({}, state, utils);
+		var wrapedPageViewElement = { wrapElementView: 'wrapedPageViewElement' };
+		var pageMarkup = '<body></body>';
+		var documentView = function() {};
+		var documentViewElement = function() {};
+		var documentViewFactory = function() { return documentViewElement; };
+		var appMarkup = '<html>' + pageMarkup + '</html>';
+		var revivalSettings = { revivalSettings: 'revivalSettings' };
+		var metaManager = { metaManager: 'metaManager' };
+		var pageContent = null;
+
+		beforeEach(function() {
+			spyOn(pageRender, '_generateViewProps')
+				.and
+				.returnValue(props);
+			spyOn(controller, 'getState')
+				.and
+				.returnValue(state);
+			spyOn(factory, 'wrapView')
+				.and
+				.returnValue(wrapedPageViewElement);
+			spyOn(ReactDOMServer, 'renderToString')
+				.and
+				.returnValue(pageMarkup);
+			spyOn(ns, 'get')
+				.and
+				.returnValue(documentView);
+			spyOn(factory, 'reactCreateFactory')
+				.and
+				.returnValue(documentViewFactory);
+			spyOn(ReactDOMServer, 'renderToStaticMarkup')
+				.and
+				.returnValue(appMarkup);
+			spyOn(pageRender, '_getRevivalSettings')
+				.and
+				.returnValue(revivalSettings);
+			spyOn(controller, 'getMetaManager')
+				.and
+				.returnValue(metaManager);
+			spyOn(factory, 'getUtils')
+				.and
+				.returnValue(utils);
+
+			pageContent = pageRender._renderPageContentToString(controller, view);
 		});
 
+		it('should generate view props from controller state', function() {
+			expect(pageRender._generateViewProps).toHaveBeenCalledWith(state);
+		});
 
+		it('should wrap page view', function() {
+			expect(factory.wrapView).toHaveBeenCalledWith(view, props);
+		});
+
+		it('should render page view to string', function() {
+			expect(ReactDOMServer.renderToString).toHaveBeenCalledWith(wrapedPageViewElement);
+		});
+
+		it('should find document view from namespace', function() {
+			expect(ns.get).toHaveBeenCalledWith(settings.$Page.$Render.documentView);
+		});
+
+		it('should create factory for creating React element from document view', function() {
+			expect(factory.reactCreateFactory).toHaveBeenCalledWith(documentView);
+		});
+
+		it('should render static markup from document view', function() {
+			expect(factory.getUtils).toHaveBeenCalled();
+			expect(controller.getMetaManager).toHaveBeenCalled();
+			expect(pageRender._getRevivalSettings).toHaveBeenCalled();
+			expect(ReactDOMServer.renderToStaticMarkup).toHaveBeenCalledWith(documentViewElement);
+		});
+
+		it('should return page content', function() {
+			expect(pageContent).toEqual('<!doctype html>\n' + appMarkup);
+		})
 	});
 
 });
