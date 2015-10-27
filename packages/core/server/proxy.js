@@ -108,7 +108,7 @@ var callRemoteServer = (req, res) => {
 	httpRequest
 		.end((error, response) => {
 			if (error) {
-				logger.error('API ERROR', { error });
+				logger.error(`API ERROR: ${req.method} ${proxyUrl} query: ` + JSON.stringify(req.query), { error });
 				res.status(error.status || 500).json({Error: 'API error', message: error.message});
 			} else if (response) {
 				var settedCookies = response.header['set-cookie'];
