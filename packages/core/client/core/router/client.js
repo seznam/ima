@@ -230,6 +230,10 @@ export default class Client extends ns.Core.Abstract.Router {
 	 * @return {Promise<Object<string, *>>}
 	 */
 	handleError(params, options = {}) {
+		if ($Debug) {
+			console.error(params.error);
+		}
+
 		if (this.isClientError(params.error)) {
 			return this.handleNotFound(params, options);
 		}
