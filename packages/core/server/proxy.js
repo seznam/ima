@@ -115,7 +115,7 @@ var callRemoteServer = (req, res) => {
 				Object
 					.keys(response.header)
 					.filter((key) => {
-						return ['set-cookie', 'content-encoding'].indexOf(key) === -1;
+						return ['set-cookie', 'content-encoding', 'content-type'].indexOf(key) === -1;
 					})
 					.map((key) => {
 						return ({
@@ -137,7 +137,16 @@ var callRemoteServer = (req, res) => {
 					});
 				}
 
-				res.status(response.status).json(response.body);
+				var result = response.body;
+				if (Object.keys(result).length === 0 && typeof(response.text) === 'string' && response.text !== '') {
+					try {
+						result = JSON.parse(response.text);	
+					} catch (e) {
+						console.warn("Response cannot be parsed as JSON");	
+					}
+				}
+
+				res.status(response.status).json(result);
 			}
 		});
 };
