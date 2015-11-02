@@ -22,7 +22,7 @@ module.exports = function (gulpConfig) {
 		.option('build', '-e, --env', 'Build environment')
 		.task('build', function (callback) {
 
-			if (this.flags.env === 'prod') {
+			if (this.flags.env === 'prod' || this.flags.env === 'production') {
 				uglifyCompression.global_defs.$Debug = false;
 			}
 
@@ -33,7 +33,7 @@ module.exports = function (gulpConfig) {
 				['bundle:js:app', 'bundle:js:server', 'bundle:css']
 			];
 
-			if (['prod', 'test'].indexOf(this.flags.env) > -1) {
+			if (['prod', 'production', 'test'].indexOf(this.flags.env) > -1) {
 				tasks.push(
 					['bundle:clean', 'Es6ToEs5:vendor:clean'] // clean vendor
 				);
