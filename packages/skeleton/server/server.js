@@ -1,4 +1,12 @@
-require('gulp-babel/node_modules/babel-core/polyfill.js');
+'use strict';
+
+try {
+	require('gulp-babel/node_modules/babel-core/polyfill');
+	require('gulp-babel/node_modules/babel-core/external-helpers');
+} catch (e) {
+	require('babel-core/polyfill');
+	require('babel-core/external-helpers');
+}
 require('./imajs/shim.js');
 
 var cluster = require('cluster');

@@ -81,6 +81,7 @@ exports.files = {
 		src: [
 			'./node_modules/es6-shim/es6-shim.js',
 			'./node_modules/gulp-babel/node_modules/babel-core/external-helpers.js',
+			'./node_modules/babel-core/external-helpers.js',
 			'./imajs/polyfill/collectionEnumeration.js',
 			'./imajs/polyfill/imaLoader.js'
 		],
@@ -93,7 +94,8 @@ exports.files = {
 		name: 'polyfill.js',
 		src: [
 			'./node_modules/custom-event-polyfill/custom-event-polyfill.js',
-			'./node_modules/gulp-babel/node_modules/babel-core/browser-polyfill.js'
+			'./node_modules/gulp-babel/node_modules/babel-core/browser-polyfill.js',
+			'./node_modules/babel-core/browser-polyfill.js'
 		],
 		dest: {
 			client: './build/static/js/'
