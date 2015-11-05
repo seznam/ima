@@ -9,6 +9,10 @@ if (typeof window !== 'undefined' && window !== null) {
 
 var nsVendor = ns.namespace('Vendor');
 for (var [name, lib] of vendor) {
+	if (typeof lib.__$IMAModuleRegister__ === 'function') {
+		lib.__$IMAModuleRegister__(ns);
+	}
+
 	nsVendor[name] = lib;
 }
 
@@ -21,6 +25,7 @@ $IMA.Loader.register('imajs/client/core/vendor', [], (_export) => {
 		}
 	};
 });
+
 $IMA.Loader.register('app/vendor', [], (_export) => {
 	return {
 		setters: [],
