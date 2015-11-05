@@ -18,7 +18,22 @@ describe('Core.Http.Agent', function() {
 
 		proxy = oc.create('$HttpProxy');
 		cookie = oc.create('$CookieStorage');
-		httpConfig = oc.get('$Settings').$Http;
+		httpConfig = {
+			defaultRequestOptions: {
+				timeout: 7000,
+				repeatRequest: 1,
+				ttl: 0,
+				headers: {
+					'Accept': 'application/json',
+					'Accept-Language': 'en'
+				},
+				cache: true
+			},
+			cacheOptions: {
+				prefix: 'http.'
+			}
+		};
+
 		http = oc.create('Core.Http.Agent', [proxy, cache, cookie, httpConfig]);
 
 		options = {
