@@ -35,7 +35,7 @@ module.exports = (() => {
 		};
 	};
 
-	var throttle = (func, interval, scope) => {
+	var throttle = (func, interval = 100, scope = null) => {
 		var timeout = null;
 		var args = [];
 		var shouldFireMethod = false;
@@ -64,25 +64,6 @@ module.exports = (() => {
 				shouldFireMethod = true;
 			}
 
-		};
-	};
-
-	var throttle = (func, internval= 100, scope = null) => {
-		var timeout = null;
-		var shouldFire = false;
-
-		if (scope) {
-			func = func.bind(scope);
-		}
-
-		var fire = () => {
-			timeout = setTimeout(handleTimeout, internval);
-		};
-		var handleTimeout = () => {
-			timeout = null;
-			if (shouldFire) {
-
-			}
 		};
 	};
 
