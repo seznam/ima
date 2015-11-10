@@ -143,7 +143,7 @@ var callRemoteServer = (req, res) => {
 					try {
 						result = JSON.parse(response.text);	
 					} catch (e) {
-						result = null;
+						result = {};
 					}
 				}
 
