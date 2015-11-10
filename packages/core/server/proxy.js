@@ -138,11 +138,12 @@ var callRemoteServer = (req, res) => {
 				}
 
 				var result = response.body;
-				if (Object.keys(result).length === 0 && typeof(response.text) === 'string' && response.text !== '') {
+				if ((!result || typeof result === 'object' && Object.keys(result).length === 0) && 
+					typeof(response.text) === 'string' && response.text !== '') {
 					try {
 						result = JSON.parse(response.text);	
 					} catch (e) {
-						console.warn("Response cannot be parsed as JSON");	
+						result = null;
 					}
 				}
 
