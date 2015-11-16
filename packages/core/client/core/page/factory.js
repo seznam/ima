@@ -78,11 +78,28 @@ export default class Factory {
 		var settings = this._oc.get('$Settings');
 
 		var decoratedController = this._oc.create(
-			'$DecoratorController',
-			[controller, metaManager, router, dictionary, settings]
+				'$DecoratorController',
+				[controller, metaManager, router, dictionary, settings]
 		);
 
 		return decoratedController;
+	}
+
+	/**
+	 * Returns decorated page state manager for extension.
+	 *
+	 * @method decoratePageStateManager
+	 * @param {Core.Interface.PageStateManager} pageStateManager
+	 * @param {Array<string>} allowedStateKeys
+	 * @return {Core.Interface.PageStateManager}
+	 */
+	decoratePageStateManager(pageStateManager, allowedStateKeys) {
+		var decoratedPageStateManager = this._oc.create(
+				'$DecoratorPageStateManager',
+				[pageStateManager, allowedStateKeys]
+		);
+
+		return decoratedPageStateManager;
 	}
 }
 

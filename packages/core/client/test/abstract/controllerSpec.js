@@ -7,7 +7,7 @@ describe('Core.Abstract.Controller', function() {
 		controller = oc.create('Core.Abstract.Controller');
 		pageStateManager = oc.create('Core.Interface.PageStateManager');
 
-		controller.setStateManager(pageStateManager);
+		controller.setPageStateManager(pageStateManager);
 	});
 
 	it('shoudl be throw error for load method', function() {
@@ -41,7 +41,7 @@ describe('Core.Abstract.Controller', function() {
 		});
 
 		it('should be return {} for undefined stateManager', function() {
-			controller.setStateManager(null);
+			controller.setPageStateManager(null);
 
 			expect(controller.getState()).toEqual({});
 		});

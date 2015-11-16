@@ -169,6 +169,30 @@ export default class Controller extends ns.Core.Interface.Controller {
 
 	/**
 	 * @inheritDoc
+	 * @override
+	 * @chainable
+	 * @method addExtension
+	 * @param {Core.Interface.Extensions} extension
+	 * @return {Core.Interface.Controller} This controller
+	 */
+	addExtension(extension) {
+		this._controller.addExtension(extension);
+
+		return this;
+	}
+
+	/**
+	 * @inheritDoc
+	 * @override
+	 * @method getExtensions
+	 * @return {Array<Core.Interface.Extension>}
+	 */
+	getExtensions() {
+		return this._controller.getExtensions();
+	}
+
+	/**
+	 * @inheritDoc
 	 * @method setMetaParams
 	 * @param {Object<string, *>} loadedResources
 	 * @param {Core.Interface.MetaManager} metaManager
@@ -209,11 +233,11 @@ export default class Controller extends ns.Core.Interface.Controller {
 	/**
 	 * @inheritDoc
 	 * @override
-	 * @method setStateManager
-	 * @param {Core.Interface.PageStateManager|Null} stateManager
+	 * @method setPageStateManager
+	 * @param {Core.Interface.PageStateManager|Null} pageStateManager
 	 */
-	setStateManager(stateManager) {
-		this._controller.setStateManager(stateManager);
+	setPageStateManager(pageStateManager) {
+		this._controller.setPageStateManager(pageStateManager);
 	}
 
 	/**

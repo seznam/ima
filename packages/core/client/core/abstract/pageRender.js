@@ -87,9 +87,10 @@ export default class PageRender extends ns.Core.Interface.PageRender {
 	 * @abstract
 	 * @param {Core.Abstract.Controller} controller
 	 * @param {Vendor.React.Component} view
+	 * @param {Object<string, *>} loadedPageState
 	 * @return {Promise}
 	 */
-	mount(controller, view) { // jshint ignore:line
+	mount(controller, view, loadedPageState) { // jshint ignore:line
 		throw new IMAError('The mount() method is abstract and must be ' +
 				'overridden.');
 	}
@@ -98,11 +99,11 @@ export default class PageRender extends ns.Core.Interface.PageRender {
 	 * @inheritDoc
 	 * @override
 	 * @method update
-	 * @param {Core.Decorator.Controller} controller
-	 * @param {Object<string, string>=} [params={}] Last route params.
+	 * @param {Core.Abstract.Controller} controller
+	 * @param {Object<string, *>} updatedPageState
 	 * @return {Promise}
 	 */
-	update(controller, params = {}) {
+	update(controller, updatedPageState) {
 		throw new IMAError('The update() method is abstract and must be ' +
 				'overridden.');
 	}

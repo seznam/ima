@@ -105,8 +105,8 @@ describe('Core.Page.Manager.Client', function() {
 
 	describe('manage method', function() {
 
-		it('should activate controller after loading all resources', function(done) {
-			spyOn(pageManager, '_activateController')
+		it('should activate page source after loading all resources', function(done) {
+			spyOn(pageManager, '_activatePageSource')
 				.and
 				.stub();
 			spyOn(pageManager.__proto__.__proto__, 'manage')
@@ -116,7 +116,7 @@ describe('Core.Page.Manager.Client', function() {
 			pageManager
 				.manage(null, null, {}, {})
 				.then(function() {
-					expect(pageManager._activateController).toHaveBeenCalled();
+					expect(pageManager._activatePageSource).toHaveBeenCalled();
 					done();
 				})
 				.catch(function(error) {

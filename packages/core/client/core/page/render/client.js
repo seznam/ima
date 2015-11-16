@@ -70,11 +70,11 @@ export default class Client extends ns.Core.Abstract.PageRender {
 	 * @abstract
 	 * @param {Core.Abstract.Controller} controller
 	 * @param {Vendor.React.Component} view
+	 * @param {Object<string, *>} loadedPageState
 	 * @return {Promise}
 	 */
-	mount(controller, view) {
-		var loadedData = controller.load();
-		var separatedData = this._separatePromisesAndValues(loadedData);
+	mount(controller, view, loadedPageState) {
+		var separatedData = this._separatePromisesAndValues(loadedPageState);
 		var defaultPageState = separatedData.values;
 		var loadedPromises = separatedData.promises;
 
@@ -112,13 +112,12 @@ export default class Client extends ns.Core.Abstract.PageRender {
 	 * @inheritDoc
 	 * @override
 	 * @method update
-	 * @param {Core.Decorator.Controller} controller
-	 * @param {Object<string, string>=} [params={}]
+	 * @param {Core.Abstract.Controller} controller
+	 * @param {Object<string, *>} updatedPageState
 	 * @return {Promise}
 	 */
-	update(controller, params = {}) {
-		var updatedData = controller.update(params);
-		var separatedData = this._separatePromisesAndValues(updatedData);
+	update(controller, updatedPageState) {
+		var separatedData = this._separatePromisesAndValues(updatedPageState);
 		var defaultPageState = separatedData.values;
 		var updatedPromises = separatedData.promises;
 

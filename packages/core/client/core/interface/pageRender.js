@@ -29,9 +29,10 @@ export default class PageRender {
 	 * @abstract
 	 * @param {Core.Abstract.Controller} controller
 	 * @param {Vendor.React.Component} view
+	 * @param {Object<string, *>} loadedPageState
 	 * @return {Promise}
 	 */
-	mount(controller, view) {}
+	mount(controller, view, loadedPageState) {}
 
 	/**
 	 * Only update controller state and React view not call constructor.
@@ -42,11 +43,11 @@ export default class PageRender {
 	 * @inheritDoc
 	 * @override
 	 * @method update
-	 * @param {Core.Decorator.Controller} controller
-	 * @param {Object<string, string>=} [params={}] Last route params.
+	 * @param {Core.Abstract.Controller} controller
+	 * @param {Object<string, *>} updatedPageState
 	 * @return {Promise}
 	 */
-	update(controller, params = {}) {}
+	update(controller, updatedPageState) {}
 
 	/**
 	 * Unmount view from the DOM. Then React always call constructor

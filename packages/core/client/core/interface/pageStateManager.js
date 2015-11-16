@@ -28,7 +28,7 @@ export default class PageStateManager {
 	setState(statePatch) {}
 
 	/**
-	 * Get state.
+	 * Returns page state.
 	 *
 	 * @method getState
 	 * @return {Object<string, *>}
@@ -36,7 +36,7 @@ export default class PageStateManager {
 	getState() {}
 
 	/**
-	 * Get all history states.
+	 * Return all history of states.
 	 *
 	 * @method getAllStates
 	 * @return {Array<Object<string, *>>}

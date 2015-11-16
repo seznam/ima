@@ -20,9 +20,9 @@ export default class PageManager extends ns.Core.Interface.PageManager {
 	 * @constructor
 	 * @param {Core.Page.Factory} pageFactory
 	 * @param {Core.Interface.PageRender} pageRender
-	 * @param {Core.Interface.PageStateManager} stateManager
+	 * @param {Core.Interface.PageStateManager} pageStateManager
 	 */
-	constructor(pageFactory, pageRender, stateManager) {
+	constructor(pageFactory, pageRender, pageStateManager) {
 		super();
 
 		/**
@@ -43,11 +43,11 @@ export default class PageManager extends ns.Core.Interface.PageManager {
 
 		/**
 		 * @protected
-		 * @property _stateManager
+		 * @property _pageStateManager
 		 * @type {Core.Interface.PageStateManager}
-		 * @default stateManager
+		 * @default pageStateManager
 		 */
-		this._stateManager = stateManager;
+		this._pageStateManager = pageStateManager;
 
 		/**
 		 * @protected
@@ -64,7 +64,7 @@ export default class PageManager extends ns.Core.Interface.PageManager {
 	 */
 	init() {
 		this._clearManagedPageValue();
-		this._stateManager.onChange = (newState) => {
+		this._pageStateManager.onChange = (newState) => {
 			this._onChangeStateHandler(newState);
 		};
 	}
@@ -83,18 +83,18 @@ export default class PageManager extends ns.Core.Interface.PageManager {
 		this._preManage(options);
 
 		if (this._hasOnlyUpdate(controller, view, options)) {
-			return this._updateController(params);
+			this._managedPage.params = params;
+
+			return this._updatePageSource();
 		}
 
-		var controllerInstance;
-		controllerInstance = this._pageFactory.createController(controller);
+		var controllerInstance = this._pageFactory.createController(controller);
 		var decoratedController = this._pageFactory.decorateController(
-			controllerInstance
-		);
+				controllerInstance);
 		var viewInstance = this._pageFactory.createView(view);
 
-		this._deactivateController();
-		this._destroyController();
+		this._deactivatePageSource();
+		this._destroyPageSource();
 
 		this._storeManagedPageValue(
 			controller,
@@ -106,17 +106,9 @@ export default class PageManager extends ns.Core.Interface.PageManager {
 			viewInstance
 		);
 
-		this._initController(params);
+		this._initPageSource();
 
-		return (
-			this._pageRender
-				.mount(decoratedController, viewInstance)
-				.then((response) => {
-					this._postManage(options);
-
-					return response;
-				})
-		);
+		return this._loadPageSource();
 	}
 
 	/**
@@ -181,19 +173,128 @@ export default class PageManager extends ns.Core.Interface.PageManager {
 	}
 
 	/**
+	 * Initialize page source so call init method on controller and his extensions.
+	 *
+	 * @protected
+	 * @method _initPageSource
+	 */
+	_initPageSource() {
+		this._initController();
+		this._initExtensions();
+	}
+
+	/**
 	 * Initializes managed instance of controller with the provided parameters.
 	 *
 	 * @protected
 	 * @method _initController
-	 * @param {Object<string, *>=} params Parameters to use to initialize
-	 *        the controller.
 	 */
-	_initController(params) {
+	_initController() {
 		var controller = this._managedPage.controllerInstance;
 
-		controller.setRouteParams(params);
-		controller.setStateManager(this._stateManager);
+		controller.setRouteParams(this._managedPage.params);
 		controller.init();
+	}
+
+	/**
+	 * Initialize extensions for managed instance of controller with the
+	 * provided parameters.
+	 *
+	 * @protected
+	 * @method _initExtensions
+	 */
+	_initExtensions() {
+		var controller = this._managedPage.controllerInstance;
+
+		for (var extension of controller.getExtensions()) {
+			extension.setRouteParams(this._managedPage.params);
+			extension.init();
+		}
+	}
+
+	/**
+	 * Load page source so call load method on controller and his extensions.
+	 * Merge loaded state and render it.
+	 *
+	 * @protected
+	 * @method _loadPageSource
+	 * @return {Object<string, (Promise|*)>}
+	 */
+	_loadPageSource() {
+		var controllerState = this._getLoadedControllerState();
+		var extensionsState = this._getLoadedExtensionsState();
+		var loadedPageState = Object.assign({}, extensionsState, controllerState);
+
+		return (
+			this._pageRender
+				.mount(this._managedPage.decoratedController, this._managedPage.view, loadedPageState)
+				.then((response) => {
+					this._postManage(this._managedPage.options);
+
+					return response;
+				})
+		);
+	}
+
+	/**
+	 * Load controller state from managed instance of controller.
+	 *
+	 * @protected
+	 * @method _getLoadedControllerState
+	 * @return {Object<string, (Promise|*)>}
+	 */
+	_getLoadedControllerState() {
+		var controller = this._managedPage.controllerInstance;
+		var controllerState = controller.load();
+
+		controller.setPageStateManager(this._pageStateManager);
+
+		return controllerState;
+	}
+
+	/**
+	 * Load extensions state from managed instance of controller.
+	 *
+	 * @protected
+	 * @method _getLoadedExtensionsState
+	 * @return {Object<string, (Promise|*)>}
+	 */
+	_getLoadedExtensionsState() {
+		var controller = this._managedPage.controllerInstance;
+		var extensionsState = {};
+
+		for (var extension of controller.getExtensions()) {
+			var extensionState = extension.load();
+
+			var loadedKeys = Object.keys(extensionState);
+			var allAllowedStateKeys = loadedKeys.concat(extension.getAllowedStateKeys());
+
+			var decoratedPageStateManager = this._pageFactory.decoratePageStateManager(
+					this._pageStateManager,
+					allAllowedStateKeys);
+			extension.setPageStateManager(decoratedPageStateManager);
+
+			Object.assign(extensionsState, extensionState);
+		}
+
+		return extensionsState;
+	}
+
+	/**
+	 * Activate page source so call activate method on controller and his extensions.
+	 *
+	 * @protected
+	 * @method _activatePageSource
+	 */
+	_activatePageSource() {
+		var controller = this._managedPage.controllerInstance;
+		var isNotActivated = !this._managedPage.state.activated;
+
+		if (controller && isNotActivated) {
+			this._activateController();
+			this._activateExtensions();
+			this._managedPage.state.activated = true;
+		}
 	}
 
 	/**
@@ -204,39 +305,107 @@ export default class PageManager extends ns.Core.Interface.PageManager {
 	 */
 	_activateController() {
 		var controller = this._managedPage.controllerInstance;
-		var isNotActivated = !this._managedPage.state.activated;
 
-		if (controller && isNotActivated) {
-			controller.activate();
-			this._managedPage.state.activated = true;
+		controller.activate();
+	}
+
+	/**
+	 * Activate extensions for managed instance of controller.
+	 *
+	 * @protected
+	 * @method _activateExtensions
+	 */
+	_activateExtensions() {
+		var controller = this._managedPage.controllerInstance;
+
+		for (var extension of controller.getExtensions()) {
+			extension.activate();
 		}
 	}
 
 	/**
-	 * Update current page controller.
+	 * Update page source so call update method on controller and his extensions.
+	 * Merge updated state and render it.
 	 *
 	 * @protected
-	 * @method _updateController
-	 * @param {Object<string, *>=} params Parameters to use to update
-	 *        the controller.
+	 * @method _updatePageSource
 	 * @return {Promise}
 	 */
-	_updateController(params) {
-		var controller = this._managedPage.decoratedController;
-		var lastRouteParams = controller.getRouteParams();
-
-		this._managedPage.params = params;
-		controller.setRouteParams(params);
+	_updatePageSource() {
+		var updatedControllerState = this._getUpdatedControllerState();
+		var updatedExtensionState = this._getUpdatedExtensionsState();
+		var updatedPageState = Object.assign({}, updatedExtensionState, updatedControllerState);
 
 		return (
 			this._pageRender
-				.update(controller, lastRouteParams)
+				.update(this._managedPage.decoratedController, updatedPageState)
 				.then((response) => {
 					this._postManage(this._managedPage.options);
 
 					return response;
 				})
 		);
+	}
+
+	/**
+	 * Return updated controller state for current page controller.
+	 *
+	 * @protected
+	 * @method _getUpdatedControllerState
+	 * @return {Promise}
+	 */
+	_getUpdatedControllerState() {
+		var controller = this._managedPage.controllerInstance;
+		var lastRouteParams = controller.getRouteParams();
+
+		controller.setRouteParams(this._managedPage.params);
+
+		return controller.update(lastRouteParams);
+	}
+
+	/**
+	 * Return updated extensions state for current page controller.
+	 *
+	 * @protected
+	 * @method _getUpdatedExtensionsState
+	 * @return {Object<string, (Promise|*)>}
+	 */
+	_getUpdatedExtensionsState() {
+		var controller = this._managedPage.controllerInstance;
+		var extensionsState = {};
+
+		for (var extension of controller.getExtensions()) {
+			var lastRouteParams = extension.getRouteParams();
+			var extensionState = extension.update(lastRouteParams);
+
+			var updatedKeys = Object.keys(extensionState);
+			var allAllowedStateKeys = updatedKeys.concat(extension.getAllowedStateKeys());
+
+			var decoratedPageStateManager = this._pageFactory.decoratePageStateManager(
+					this._pageStateManager,
+					allAllowedStateKeys);
+			extension.setPageStateManager(decoratedPageStateManager);
+
+			Object.assign(extensionsState, extensionState);
+		}
+
+		return extensionsState;
+	}
+
+	/**
+	 * Deactivate page source so call deactivate method on controller and his extensions.
+	 *
+	 * @protected
+	 * @method _deactivatePageSource
+	 */
+	_deactivatePageSource() {
+		var controller = this._managedPage.controllerInstance;
+		var isActivated = this._managedPage.state.activated;
+
+		if (controller && isActivated) {
+			this._deactivateExtensions();
+			this._deactivateController();
+		}
 	}
 
 	/**
@@ -248,10 +417,41 @@ export default class PageManager extends ns.Core.Interface.PageManager {
 	 */
 	_deactivateController() {
 		var controller = this._managedPage.controllerInstance;
-		var isActivated = this._managedPage.state.activated;
 
-		if (controller && isActivated) {
-			controller.deactivate();
+		controller.deactivate();
+	}
+
+	/**
+	 * Deactivate extensions for last managed instance of controller only If they
+	 * were activated.
+	 *
+	 * @protected
+	 * @method _deactivateExtensions
+	 */
+	_deactivateExtensions() {
+		var controller = this._managedPage.controllerInstance;
+
+		for (var extension of controller.getExtensions()) {
+			extension.deactivate();
+		}
+	}
+
+	/**
+	 * Destroy page source so call destroy method on controller and his extensions.
+	 *
+	 * @protected
+	 * @method _destroyPageSource
+	 */
+	_destroyPageSource() {
+		var controller = this._managedPage.controllerInstance;
+
+		if (controller) {
+			this._destroyExtensions();
+			this._destroyController();
+
+			this._pageStateManager.clear();
+			this._pageRender.unmount();
+			this._clearManagedPageValue();
 		}
 	}
 
@@ -264,12 +464,22 @@ export default class PageManager extends ns.Core.Interface.PageManager {
 	_destroyController() {
 		var controller = this._managedPage.controllerInstance;
 
-		if (controller) {
-			controller.destroy();
-			controller.setStateManager(null);
-			this._stateManager.clear();
-			this._pageRender.unmount();
-			this._clearManagedPageValue();
+		controller.destroy();
+		controller.setPageStateManager(null);
+	}
+
+	/**
+	 * Destroy extensions for last managed instance of controller.
+	 *
+	 * @protected
+	 * @method _destroyExtensions
+	 */
+	_destroyExtensions() {
+		var controller = this._managedPage.controllerInstance;
+
+		for (var extension of controller.getExtensions()) {
+			extension.destroy();
+			extension.setPageStateManager(null);
 		}
 	}
 

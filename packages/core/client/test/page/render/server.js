@@ -41,19 +41,27 @@ describe('Core.Page.Render.Server', function() {
 
 	describe('update method', function() {
 
-		it('should call mount method', function() {
+		it('should reject promise with error', function(done) {
 			spyOn(pageRender, 'mount')
 				.and
 				.stub();
 
-			pageRender.update(controller, params);
-
-			expect(pageRender.mount).toHaveBeenCalledWith(controller, params);
+			pageRender
+				.update(controller, params)
+				.catch(function(error) {
+					expect(error instanceof ns.Core.IMAError).toEqual(true);
+					done();
+				});
 		});
 
 	});
 
 	describe('mount method', function() {
+
+		var loadedPageState = {
+			param1: 'param1',
+			param2: Promise.resolve('param2')
+		};
 
 		it('should return already sent data to the client', function(done) {
 			var responseParams = {
@@ -69,7 +77,7 @@ describe('Core.Page.Render.Server', function() {
 				.returnValue(responseParams);
 
 			pageRender
-				.mount(controller, view)
+				.mount(controller, view, loadedPageState)
 				.then(function(page) {
 					expect(page).toEqual(responseParams);
 					done();
@@ -82,7 +90,7 @@ describe('Core.Page.Render.Server', function() {
 				.stub();
 
 			pageRender
-				.mount(controller, view)
+				.mount(controller, view, loadedPageState)
 				.then(function(page) {
 					expect(pageRender._renderPage).toHaveBeenCalled();
 					done();

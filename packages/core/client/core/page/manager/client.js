@@ -57,7 +57,7 @@ export default class Client extends ns.Core.Abstract.PageManager {
 			super
 				.manage(controller, view, options, params)
 				.then((response) => {
-					this._activateController();
+					this._activatePageSource();
 
 					return response;
 				})

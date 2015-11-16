@@ -14,6 +14,7 @@ ns.namespace('Core.Interface');
  * @submodule Core.Interface
  */
 export default class Controller {
+
 	/**
 	 * Callback for initializing the controller with the route parameters.
 	 *
@@ -140,6 +141,24 @@ export default class Controller {
 	getState() {}
 
 	/**
+	 * Add defined extension to controller extensions.
+	 *
+	 * @chainable
+	 * @method addExtension
+	 * @param {Core.Interface.Extensions} extension
+	 * @return {Core.Interface.Controller} This controller
+	 */
+	addExtension(extension) {}
+
+	/**
+	 * Return the controller extensions.
+	 *
+	 * @method getExtensions
+	 * @return {Array<Core.Interface.Extension>}
+	 */
+	getExtensions() {}
+
+	/**
 	 * Callback used to configure the meta attribute manager. The method is
 	 * called after the the controller's state has been patched with the loaded
 	 * resources, the view has been rendered and (if at the client-side) the
@@ -159,8 +178,7 @@ export default class Controller {
 	 * @param {Object<string, *>} settings The application settings for the
 	 *        current application environment.
 	 */
-	setMetaParams(loadedResources, metaManager, router, dictionary, settings) {
-	}
+	setMetaParams(loadedResources, metaManager, router, dictionary, settings) {}
 
 	/**
 	 * Set route parameters for controller.
@@ -172,7 +190,7 @@ export default class Controller {
 	setRouteParams(params = {}) {}
 
 	/**
-	 * Set route parameters from controller.
+	 * Set route parameters for controller.
 	 *
 	 * @method getRouteParams
 	 * @return {Object<string, string>} The current route parameters.
@@ -180,13 +198,13 @@ export default class Controller {
 	getRouteParams() {}
 
 	/**
-	 * Sets the state manager.
+	 * Sets the page state manager.
 	 *
-	 * @method setStateManager
-	 * @param {Core.Interface.PageStateManager|Null} stateManager The current
+	 * @method setPageStateManager
+	 * @param {Core.Interface.PageStateManager|Null} pageStateManager The current
 	 *        state manager to use.
 	 */
-	setStateManager(stateManager) {}
+	setPageStateManager(pageStateManager) {}
 
 	/**
 	 * Returns the HTTPS status code to send to the client.

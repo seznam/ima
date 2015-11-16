@@ -1,4 +1,6 @@
 import ns from 'imajs/client/core/namespace';
+import IMAError from 'imajs/client/core/imaError';
+
 
 ns.namespace('Core.Page.Render');
 
@@ -65,18 +67,17 @@ export default class Server extends ns.Core.Abstract.PageRender {
 	 * @abstract
 	 * @param {Core.Abstract.Controller} controller
 	 * @param {Vendor.React.Component} view
+	 * @param {Object<string, *>} loadedPageState
 	 * @return {Promise}
 	 */
-	mount(controller, view) {
-		var loadPromises = this._wrapEachKeyToPromise(controller.load());
-
+	mount(controller, view, loadedPageState) {
 		if (this._response.isResponseSent()) {
 			return Promise.resolve(this._response.getResponseParams());
 		}
 
 		return (
 			this._Helper
-				.allPromiseHash(loadPromises)
+				.allPromiseHash(loadedPageState)
 				.then((fetchedResources) => {
 					return this._renderPage(controller, view, fetchedResources);
 				})
@@ -88,11 +89,11 @@ export default class Server extends ns.Core.Abstract.PageRender {
 	 * @override
 	 * @method update
 	 * @param {Core.Decorator.Controller} controller
-	 * @param {Object<string, string>=} [params={}]
+	 * @param {Object<string, *>} updatedPageState
 	 * @return {Promise}
 	 */
-	update(controller, params = {}) {
-		return this.mount(controller, params);
+	update(controller, updatedPageState) {
+		return Promise.reject(new IMAError('The update() is denied on server side.'));
 	}
 
 	/**
