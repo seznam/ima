@@ -42,17 +42,17 @@ class View extends ns.Core.Abstract.Component {
 						</span>
 						<ul className='filters'>
 							<li>
-								<a href='/' className={this.props.filter === null ? 'selected' : ''}>
+								<a href={this.utils.$Router.link('home', {})} className={this.props.filter === null ? 'selected' : ''}>
 									{this.localize('filters: all')}
 								</a>
 							</li>
 							<li>
-								<a href='/active' className={this.props.filter === false ? 'selected' : ''}>
+								<a href={this.utils.$Router.link('filtered', { filter: 'active' })} className={this.props.filter === false ? 'selected' : ''}>
 									{this.localize('filters: active')}
 								</a>
 							</li>
 							<li>
-								<a href='/completed' className={this.props.filter === true ? 'selected' : ''}>
+								<a href={this.utils.$Router.link('filtered', { filter: 'completed' })} className={this.props.filter === true ? 'selected' : ''}>
 									{this.localize('filters: completed')}
 								</a>
 							</li>
