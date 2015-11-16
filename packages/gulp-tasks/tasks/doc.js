@@ -77,6 +77,10 @@ module.exports = function (gulpConfig) {
 		{
 			pattern: /\/[*][*]((?:a|[^a])*?)(?: |\t)*[*]\s*@template\s*.*\n((a|[^a])*)[*]\//g,
 			replace: '/**$1$2*/'
+		},
+		{
+			pattern: /@(type|param|return)\s{([^{}]*){([^{}]*)}([^{}]*)}/g,
+			replace: '@$1 {$2&#123;$3&#125;$4}'
 		}
 	];
 };
