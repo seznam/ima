@@ -173,6 +173,25 @@ export default class PageManager extends ns.Core.Interface.PageManager {
 	}
 
 	/**
+	 * Set page state manager to extension which has restricted rights to set global state.
+	 *
+	 * @private
+	 * @method _setRestrictedPageStateManager
+	 * @param {Core.Interface.Extension} extension
+	 * @param {Object<string, *>} extensionState
+	 */
+	_setRestrictedPageStateManager(extension, extensionState) {
+		var stateKeys = Object.keys(extensionState);
+		var allAllowedStateKeys = stateKeys.concat(extension.getAllowedStateKeys());
+
+		var decoratedPageStateManager = this._pageFactory.decoratePageStateManager(
+				this._pageStateManager,
+				allAllowedStateKeys);
+
+		extension.setPageStateManager(decoratedPageStateManager);
+	}
+
+	/**
 	 * Initialize page source so call init method on controller and his extensions.
 	 *
 	 * @protected
@@ -266,14 +285,7 @@ export default class PageManager extends ns.Core.Interface.PageManager {
 		for (var extension of controller.getExtensions()) {
 			var extensionState = extension.load();
 
-			var loadedKeys = Object.keys(extensionState);
-			var allAllowedStateKeys = loadedKeys.concat(extension.getAllowedStateKeys());
-
-			var decoratedPageStateManager = this._pageFactory.decoratePageStateManager(
-					this._pageStateManager,
-					allAllowedStateKeys);
-			extension.setPageStateManager(decoratedPageStateManager);
-
+			this._setRestrictedPageStateManager(extension, extensionState);
 			Object.assign(extensionsState, extensionState);
 		}
 
@@ -378,14 +390,7 @@ export default class PageManager extends ns.Core.Interface.PageManager {
 			var lastRouteParams = extension.getRouteParams();
 			var extensionState = extension.update(lastRouteParams);
 
-			var updatedKeys = Object.keys(extensionState);
-			var allAllowedStateKeys = updatedKeys.concat(extension.getAllowedStateKeys());
-
-			var decoratedPageStateManager = this._pageFactory.decoratePageStateManager(
-					this._pageStateManager,
-					allAllowedStateKeys);
-			extension.setPageStateManager(decoratedPageStateManager);
-
+			this._setRestrictedPageStateManager(extension, extensionState);
 			Object.assign(extensionsState, extensionState);
 		}
 

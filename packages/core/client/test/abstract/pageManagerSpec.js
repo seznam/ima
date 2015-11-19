@@ -34,6 +34,7 @@ describe('Core.Abstract.PageManager', function() {
 		extension: 'extension',
 		share: 'extension'
 	};
+	var extensionState = {};
 	var pageState = Object.assign({}, extensionsState, controllerState);
 
 	beforeEach(function() {
@@ -131,6 +132,39 @@ describe('Core.Abstract.PageManager', function() {
 					done();
 				});
 		});
+	});
+
+	describe('_setRestrictedPageStateManager', function() {
+
+		var allowedStateKeys = ['user'];
+		var allAllowedStateKeys = Object.keys(extensionState).concat(allowedStateKeys);
+
+		beforeEach(function() {
+			spyOn(extensionInstance, 'getAllowedStateKeys')
+				.and
+				.returnValue(allowedStateKeys);
+
+			spyOn(pageFactory, 'decoratePageStateManager')
+				.and
+				.returnValue(pageStateManager);
+
+			spyOn(extensionInstance, 'setPageStateManager')
+				.and
+				.stub();
+		});
+
+		it('should create restricted page state manager for extension', function() {
+			pageManager._setRestrictedPageStateManager(extensionInstance, extensionState);
+
+			expect(pageFactory.decoratePageStateManager).toHaveBeenCalledWith(pageStateManager, allAllowedStateKeys);
+		});
+
+		it('should set restricted page state manager to extension', function() {
+			pageManager._setRestrictedPageStateManager(extensionInstance, extensionState);
+
+			expect(extensionInstance.setPageStateManager).toHaveBeenCalledWith(pageStateManager);
+		});
+
 	});
 
 	describe('_initPageSource method', function() {
@@ -270,7 +304,7 @@ describe('Core.Abstract.PageManager', function() {
 		beforeEach(function() {
 			spyOn(extensionInstance, 'load')
 				.and
-				.returnValue({});
+				.returnValue(extensionState);
 		});
 
 		it('should call extensions load method', function() {
@@ -279,14 +313,14 @@ describe('Core.Abstract.PageManager', function() {
 			expect(extensionInstance.load).toHaveBeenCalled();
 		});
 
-		it('should set decorated pageStateManager to extension instance', function() {
-			spyOn(extensionInstance, 'setPageStateManager')
+		it('should set restricted pageStateManager to extension instance', function() {
+			spyOn(pageManager, '_setRestrictedPageStateManager')
 				.and
 				.stub();
 
 			pageManager._getLoadedExtensionsState();
 
-			expect(extensionInstance.setPageStateManager).toHaveBeenCalledWith(pageStateManager);
+			expect(pageManager._setRestrictedPageStateManager).toHaveBeenCalledWith(extensionInstance, extensionState);
 		});
 	});
 
@@ -411,7 +445,7 @@ describe('Core.Abstract.PageManager', function() {
 		beforeEach(function() {
 			spyOn(extensionInstance, 'update')
 				.and
-				.returnValue({});
+				.returnValue(extensionState);
 		});
 
 		it('should call extensions update method', function() {
@@ -424,14 +458,14 @@ describe('Core.Abstract.PageManager', function() {
 			expect(extensionInstance.update).toHaveBeenCalledWith(params);
 		});
 
-		it('should set decorated pageStateManager to extension instance', function() {
-			spyOn(extensionInstance, 'setPageStateManager')
+		it('should set restricted pageStateManager to extension instance', function() {
+			spyOn(pageManager, '_setRestrictedPageStateManager')
 				.and
 				.stub();
 
 			pageManager._getUpdatedExtensionsState();
 
-			expect(extensionInstance.setPageStateManager).toHaveBeenCalledWith(pageStateManager);
+			expect(pageManager._setRestrictedPageStateManager).toHaveBeenCalledWith(extensionInstance, extensionState);
 		});
 	});
 
