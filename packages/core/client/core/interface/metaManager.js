@@ -16,7 +16,7 @@ ns.namespace('Core.Interface');
  *     elements with the {@code property} attribute, for example the OG meta
  *     tags ({@code og:type}, {@code og:image}, etc.).
  *
- * @interface Handler
+ * @interface MetaManager
  * @namespace Core.Interface
  * @module Core
  * @submodule Core.Interface

@@ -7,7 +7,7 @@ ns.namespace('Core');
  * aliases and constants, and allowing to reference classes in the application
  * namespace by specifying their fully qualified names.
  *
- * @class Handler
+ * @class ObjectContainer
  * @namespace Core
  * @module Core
  * @requires Core.Namespace
