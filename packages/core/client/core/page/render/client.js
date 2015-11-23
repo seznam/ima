@@ -238,9 +238,24 @@ export default class Client extends ns.Core.Abstract.PageRender {
 	 *        providing the new values for page meta elements and title.
 	 */
 	_updateMetaAttributes(metaManager) {
+		this._window.setTitle(metaManager.getTitle());
+
+		this._updateMetaNameAttributes(metaManager);
+		this._updateMetaPropertyAttributes(metaManager);
+		this._updateMetaLinkAttributes(metaManager);
+	}
+
+	/**
+	 * Updates the contents of the generic meta elements used for SEO.
+	 *
+	 * @private
+	 * @method _updateMetaNameAttributes
+	 * @param {Core.Interface.MetaManager} metaManager meta attributes storage
+	 *        providing the new values for page meta elements and title.
+	 */
+	_updateMetaNameAttributes(metaManager) {
 		var metaTagKey = null;
 		var metaTag = null;
-		this._window.setTitle(metaManager.getTitle());
 
 		for (metaTagKey of metaManager.getMetaNames()) {
 			metaTag = this._window.querySelector(`meta[name="${metaTagKey}"]`);
@@ -249,6 +264,19 @@ export default class Client extends ns.Core.Abstract.PageRender {
 				metaTag.content = metaManager.getMetaName(metaTagKey);
 			}
 		}
+	}
+
+	/**
+	 * Updates the contents of the specialized meta elements used for SEO.
+	 *
+	 * @private
+	 * @method _updateMetaPropertyAttributes
+	 * @param {Core.Interface.MetaManager} metaManager meta attributes storage
+	 *        providing the new values for page meta elements and title.
+	 */
+	_updateMetaPropertyAttributes(metaManager) {
+		var metaTagKey = null;
+		var metaTag = null;
 
 		for (metaTagKey of metaManager.getMetaProperties()) {
 			metaTag = this._window.querySelector(
@@ -257,6 +285,29 @@ export default class Client extends ns.Core.Abstract.PageRender {
 
 			if (metaTag) {
 				metaTag.content = metaManager.getMetaProperty(metaTagKey);
+			}
+		}
+	}
+
+	/**
+	 * Updates the href of the specialized link elements used for SEO.
+	 *
+	 * @private
+	 * @method _updateMetaLinkAttributes
+	 * @param {Core.Interface.MetaManager} metaManager meta attributes storage
+	 *        providing the new values for page meta elements and title.
+	 */
+	_updateMetaLinkAttributes(metaManager) {
+		var linkTagKey = null;
+		var linkTag = null;
+
+		for (linkTagKey of metaManager.getLinks()) {
+			linkTag = this._window.querySelector(
+				`link[rel="${linkTagKey}"]`
+			);
+
+			if (linkTag) {
+				linkTag.href = metaManager.getLink(linkTagKey);
 			}
 		}
 	}
