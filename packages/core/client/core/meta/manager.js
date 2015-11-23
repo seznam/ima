@@ -47,6 +47,14 @@ export default class Manager extends ns.Core.Interface.MetaManager {
 		 * @type {Map<string, string>}
 		 */
 		this._metaProperty = new Map();
+
+		/**
+		 * Storage of generic link information.
+		 *
+		 * @property _link
+		 * @type {Map<string, string>}
+		 */
+		this._link = new Map();
 	}
 
 	/**
@@ -95,7 +103,7 @@ export default class Manager extends ns.Core.Interface.MetaManager {
 	 * @inheritDoc
 	 * @override
 	 * @method getMetaNames
-	 * @return {string[]}
+	 * @return {Array<string>}
 	 */
 	getMetaNames() {
 		return Array.from(this._metaName.keys());
@@ -127,10 +135,41 @@ export default class Manager extends ns.Core.Interface.MetaManager {
 	 * @inheritDoc
 	 * @override
 	 * @method getMetaProperties
-	 * @return {string[]}
+	 * @return {Array<string>}
 	 */
 	getMetaProperties() {
 		return Array.from(this._metaProperty.keys());
+	}
+
+	/**
+	 * @inheritDoc
+	 * @override
+	 * @method setLink
+	 * @param {string} name
+	 * @param {string} value
+	 */
+	setLink(name, value) {
+		this._link.set(name, vlaue);
+	}
+
+	/**
+	 * @inheritDoc
+	 * @override
+	 * @method getLink
+	 * @return {string}
+	 */
+	getLink(name) {
+		return this._link.get(name) || '';
+	}
+
+	/**
+	 * @inheritDoc
+	 * @override
+	 * @method getLinks
+	 * @return {Array<string>}
+	 */
+	getLinks() {
+		return Array.from(this._link.keys());
 	}
 }
 
