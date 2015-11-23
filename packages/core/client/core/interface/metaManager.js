@@ -8,6 +8,7 @@ ns.namespace('Core.Interface');
  *
  * The Meta manager is used to manage the following:
  * - page title, added to the page via the {@code &lt;title&gt;} element
+ * - page link, added to the page via the {@code &lt;link&gt;} element
  * - page meta information:
  *   - the generic meta information added to the page via {@code &lt;meta&gt;}
  *     elements with the {@code name} attribute, for example the
@@ -62,13 +63,12 @@ export default class MetaManager {
 	getMetaName(name) {}
 
 	/**
-	 * Returns the names of the currently known generic meta information.
+	 * Returns array of specified generic meta information.
 	 *
-	 * @method getMetaNameStorage
-	 * @return {string[]} The names of the currently known generic meta
-	 *         information.
+	 * @method getMetaNames
+	 * @return {Array<string>}
 	 */
-	getMetaNameStorage() {}
+	getMetaNames() {}
 
 	/**
 	 * Sets the specified specialized meta information.
@@ -92,13 +92,41 @@ export default class MetaManager {
 	getMetaProperty(name) {}
 
 	/**
-	 * Returns the names of the currently known specialized meta information.
+	 * Returns array of specified specialized meta information.
 	 *
-	 * @method getMetaPropertyStorage
-	 * @return {string[]} The names of the currently known specialized meta
-	 *         information.
+	 * @method getMetaProperties
+	 * @return {Array<string>}
 	 */
-	getMetaPropertyStorage() {}
+	getMetaProperties() {}
+
+	/**
+	 * Sets the specified specialized link information.
+	 *
+	 * @method setLink
+	 * @param {string} name The names of the currently known specialized link
+	 *         information.
+	 * @param {string} value The value of the link information.
+	 */
+	setLink(name, value) {}
+
+	/**
+	 * Returns the value of the specified specialized link information. The
+	 * method returns an empty string for missing meta information (to make the
+	 * returned value React-friendly).
+	 *
+	 * @method getLink
+	 * @return {string} The value of the specified link information, or an
+	 *         empty string.
+	 */
+	getLink(name) {}
+
+	/**
+	 * Returns array of specified specialized link information.
+	 *
+	 * @method getLinks
+	 * @return {Array<string>}
+	 */
+	getLinks() {}
 }
 
 ns.Core.Interface.MetaManager = MetaManager;
