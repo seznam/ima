@@ -18,7 +18,7 @@ var clientApp = require('./imajs/clientApp.js');
 var proxy = require('./imajs/proxy.js');
 var urlParser = require('./imajs/urlParser.js');
 var bodyParser = require('body-parser');
-var multer = require('multer')({dest: __dirname + '/static/uploads/'});
+var multer = require('multer')({ dest: path.resolve(__dirname) + '/static/uploads/' });
 var cookieParser = require('cookie-parser');
 var methodOverride = require('method-override');
 var environment = require('./imajs/environment.js');
@@ -29,21 +29,9 @@ var logger = require('./imajs/logger.js');
 var cacheConfig = environment.$Server.cache;
 var cache = new (require('./imajs/cache.js'))(cacheConfig);
 
-process.on('uncaughtException', function (error) {
+process.on('uncaughtException', (error) => {
 	logger.error('Uncaught Exception:', { error });
 });
-
-var allowCrossDomain = (req, res, next) => {
-	res.header('Access-Control-Allow-Origin', '*');
-	res.header('Access-Control-Allow-Methods', 'GET,PUT,POST,PATCH,DELETE');
-	res.header('Access-Control-Allow-Headers', 'Origin, X-Requested-With, Content-Type, Accept, Authorization');
-
-	if (req.method === 'OPTIONS') {
-		res.send();
-	} else {
-		next();
-	}
-};
 
 var renderApp = (req, res) => {
 	if (req.method === 'GET') {
@@ -92,7 +80,7 @@ var runNodeApp = () => {
 
 	app.use(helmet())
 		.use(compression())
-		.use(favicon(__dirname + '/static/img/favicon.ico'))
+		.use(favicon(path.resolve(__dirname) + '/static/img/favicon.ico'))
 		.use(environment.$Server.staticFolder, express.static(path.join(__dirname, 'static')))
 		.use(bodyParser.json()) // for parsing application/json
 		.use(bodyParser.urlencoded({ extended: true })) // for parsing application/x-www-form-urlencoded
@@ -125,7 +113,7 @@ if (environment.$Env === 'dev' || environment.$Server.clusters === 1) {
 		}
 
 		// Listen for dying workers
-		cluster.on('exit', function (worker) {
+		cluster.on('exit', (worker) => {
 			logger.warn('Worker ' + worker.id + ' died :(');
 			cluster.fork();
 		});
@@ -135,4 +123,3 @@ if (environment.$Env === 'dev' || environment.$Server.clusters === 1) {
 	}
 
 }
-
