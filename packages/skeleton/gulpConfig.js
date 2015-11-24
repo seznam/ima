@@ -17,11 +17,19 @@ try {
 	console.log(e);
 }
 
-exports.babelOptional = null; //["optimisation.react.constantElements", "optimisation.react.inlineElements"];
+var babelOptional = null;
+var $Debug = false;
+
+if (process.env.NODE_ENV === 'production' || process.env.NODE_ENV === 'test') {
+	babelOptional = ['optimisation.react.constantElements', 'optimisation.react.inlineElements'];
+	$Debug = true;
+}
+
+exports.babelOptional = babelOptional;
 
 exports.uglifyCompression = {
 	global_defs: {
-		$Debug: false
+		$Debug: $Debug
 	},
 	dead_code: true
 };
