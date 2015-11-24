@@ -149,7 +149,7 @@ export default class Manager extends ns.Core.Interface.MetaManager {
 	 * @param {string} value
 	 */
 	setLink(name, value) {
-		this._link.set(name, vlaue);
+		this._link.set(name, value);
 	}
 
 	/**

@@ -306,7 +306,7 @@ export default class Client extends ns.Core.Abstract.PageRender {
 				`link[rel="${linkTagKey}"]`
 			);
 
-			if (linkTag) {
+			if (linkTag && linkTag.href) {
 				linkTag.href = metaManager.getLink(linkTagKey);
 			}
 		}
