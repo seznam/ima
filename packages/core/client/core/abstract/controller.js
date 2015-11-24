@@ -179,14 +179,14 @@ export default class Controller extends ns.Core.Interface.Controller {
 	 *        resources loaded by the {@codelink load} method. This is the same
 	 *        object as the one passed to the {@codelink setState} method when
 	 *        the Promises returned by the {@codelink load} method were resolved.
-	 * @param {Core.Interface.Seo} seo SEO attributes manager to configure.
+	 * @param {Core.Interface.MetaManager} metaManager SEO attributes manager to configure.
 	 * @param {Core.Interface.Router} router The current application router.
 	 * @param {Core.Interface.Dictionary} dictionary The current localization
 	 *        dictionary.
 	 * @param {Object<string, *>} settings The application settings for the
 	 *        current application environment.
 	 */
-	setMetaParams(loadedResources, seo, router, dictionary, settings) {
+	setMetaParams(loadedResources, metaManager, router, dictionary, settings) {
 		throw new IMAError('The Core.Abstract.Controller.setMetaParams method is ' +
 				'abstract and must be overridden');
 	}
