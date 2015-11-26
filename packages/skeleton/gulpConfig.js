@@ -17,17 +17,28 @@ try {
 	console.log(e);
 }
 
-var babelOptional = null;
+var babelConfig = {
+	vendor: {
+		presets: [],
+		plugins: []
+	},
+	app: {
+		presets: [],
+		plugins: []
+	},
+	server: {
+		presets: [],
+		plugins: []
+	}
+};
 var $Debug = false;
 
-if (process.env.NODE_ENV === 'production' ||
-		process.env.NODE_ENV === 'prod' ||
- 		process.env.NODE_ENV === 'test') {
-	babelOptional = ['optimisation.react.constantElements', 'optimisation.react.inlineElements'];
+if (process.env.NODE_ENV === 'production' || process.env.NODE_ENV === 'test') {
+	babelConfig.app.plugins = ['transform-react-constant-elements', 'transform-react-inline-elements'];
 	$Debug = true;
 }
 
-exports.babelOptional = babelOptional;
+exports.babelConfig = babelConfig;
 
 exports.uglifyCompression = {
 	global_defs: {
@@ -56,7 +67,7 @@ exports.files = {
 			server: 'app.server.js',
 			client: 'app.client.js'
 		},
-		src: coreDependency.js.concat(appDependency.js, coreDependency.mainjs),
+		src: ['babel-runtime/core-js/**/*.js'].concat(coreDependency.js, appDependency.js, coreDependency.mainjs),
 		dest: {
 			server: './build/imajs/',
 			client: './build/static/js/'
@@ -90,8 +101,6 @@ exports.files = {
 		name: 'shim.js',
 		src: [
 			'./node_modules/es6-shim/es6-shim.js',
-			'./node_modules/gulp-babel/node_modules/babel-core/external-helpers.js',
-			'./node_modules/babel-core/external-helpers.js',
 			'./imajs/polyfill/collectionEnumeration.js',
 			'./imajs/polyfill/imaLoader.js'
 		],
@@ -103,9 +112,7 @@ exports.files = {
 	polyfill: {
 		name: 'polyfill.js',
 		src: [
-			'./node_modules/custom-event-polyfill/custom-event-polyfill.js',
-			'./node_modules/gulp-babel/node_modules/babel-core/browser-polyfill.js',
-			'./node_modules/babel-core/browser-polyfill.js'
+			'./node_modules/custom-event-polyfill/custom-event-polyfill.js'
 		],
 		dest: {
 			client: './build/static/js/'
