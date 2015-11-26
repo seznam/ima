@@ -21,6 +21,7 @@ var sweetjs = require('gulp-sweetjs');
 
 var gulpConfig = require('../../../gulpConfig.js');
 var files = gulpConfig.files;
+var babelConfig = gulpConfig.babelConfig;
 
 // build client logic app
 gulp.task('Es6ToEs5:app', function () {
@@ -51,19 +52,12 @@ gulp.task('Es6ToEs5:app', function () {
 		});
 	}
 
-	function moduleTransformer(pluginAndTypes) {
-		var Plugin = pluginAndTypes.Plugin;
+	function replaceToIMALoader() {
+		return change(function (content) {
+			content = content.replace(/System.import/g, '$IMA.Loader.import');
+			content = content.replace(/System.register/g, '$IMA.Loader.register');
 
-		return new Plugin('ima-babel-modules', {
-			visitor: {
-				Identifier: function (node) {
-					if (node.name === 'System') {
-						node.name = '$IMA.Loader';
-					}
-
-					return node;
-				}
-			}
+			return content;
 		});
 	}
 
@@ -73,9 +67,11 @@ gulp.task('Es6ToEs5:app', function () {
 			.pipe(plumber())
 			.pipe(sourcemaps.init())
 			.pipe(cache('Es6ToEs5:app'))
-			.pipe(babel({ modules: 'system', moduleIds: true, loose: 'all', plugins: [
-				{ transformer: moduleTransformer, position: 'after' }
-			], externalHelpers: true, optional: gulpConfig.babelOptional || [] }))
+			.pipe(babel({
+				moduleIds: true,
+				presets: ['es2015', 'react'].concat(babelConfig.app.presets),
+				plugins: ['transform-es2015-modules-systemjs', 'external-helpers-2'].concat(babelConfig.app.plugins)
+			 }))
 			.pipe(gulpif(isView, sweetjs({
 				modules: ['./imajs/macro/componentName.sjs'],
 				readableNames: true
@@ -85,6 +81,7 @@ gulp.task('Es6ToEs5:app', function () {
 			.pipe(plumber.stop())
 			.pipe(concat(files.app.name.client))
 			.pipe(insertSystemImports())
+			.pipe(replaceToIMALoader())
 			.pipe(save('Es6ToEs5:app:source'))
 			.pipe(insert.wrap('(function(){\n', '\n })();\n'))
 			.pipe(sourcemaps.write())
@@ -104,7 +101,10 @@ gulp.task('Es6ToEs5:server', function () {
 		gulp
 			.src(files.server.src)
 			.pipe(plumber())
-			.pipe(babel({ modules: 'ignore', loose: 'all', externalHelpers: true }))
+			.pipe(babel({
+				presets: ['es2015'].concat(babelConfig.server.presets),
+				plugins: ['external-helpers-2'].concat(babelConfig.server.plugins)
+			}))
 			.pipe(plumber.stop())
 			.pipe(gulp.dest(files.server.dest))
 	);
@@ -115,7 +115,9 @@ gulp.task('Es6ToEs5:vendor', function () {
 		gulp
 			.src(files.vendor.src)
 			.pipe(plumber())
-			.pipe(babel({ modules: 'commonStrict', loose: 'all', externalHelpers: true }))
+			.pipe(babel({
+				presets: ['es2015', 'react'].concat(babelConfig.vendor.presets),
+				plugins: ['external-helpers-2'].concat(babelConfig.vendor.plugins)}))
 			.pipe(plumber.stop())
 			.pipe(concat(files.vendor.name.tmp))
 			.pipe(gulp.dest(files.vendor.dest.tmp))
@@ -125,8 +127,10 @@ gulp.task('Es6ToEs5:vendor', function () {
 gulp.task('Es6ToEs5:vendor:client', function () {
 	return (
 		browserify(files.vendor.dest.tmp + files.vendor.name.tmp, { debug: false, insertGlobals : false, basedir: '.' })
-			.transform(babelify.configure({ modules: 'ignore', loose: 'all', externalHelpers: true }))
-			.external('vertx')
+			.transform(babelify.configure({
+				presets: ['es2015', 'react'].concat(babelConfig.vendor.presets),
+				plugins: ['external-helpers-2'].concat(babelConfig.vendor.plugins)
+			}))
 			.bundle()
 			.pipe(source(files.vendor.name.client))
 			.pipe(gulp.dest(files.vendor.dest.client))
@@ -161,9 +165,7 @@ function resolveNewPath(newBase) {
 		var namespaceForFile = '/' + path.relative(file.cwd + '/' + newBase, file.base) + '/';
 		var newPath = newBasePath + namespaceForFile + file.relative;
 
-		file.base = newBasePath;
-		file.path = newPath;
-		file.cwd = newBasePath;
+		file.base = file.cwd;
 		return file;
 	});
 }
