@@ -1,6 +1,6 @@
 {
 	"name": "ima.js-gulp-tasks",
-	"version": "0.10.4",
+	"version": "0.10.5",
 	"description": "Default gulp tasks for IMA.js applications.",
 	"main": "",
 	"scripts": {
@@ -24,7 +24,8 @@
 		"registry": "http://registry.npmjs.org/"
 	},
 	"homepage": "https://github.com/seznam/IMA.js-gulp-tasks",
-	"devDependencies": {
+	"devDependencies": {},
+	"dependencies": {
 		"babel-core": "^6.2.1",
 		"babel-plugin-external-helpers-2": "^6.1.18",
 		"babel-plugin-transform-es2015-modules-systemjs": "^6.1.18",
