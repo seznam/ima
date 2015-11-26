@@ -12,7 +12,7 @@ ns.namespace('Core');
  * @namespace Core
  * @module Core
  */
-export default class IMAError extends Error {
+export default class IMAError {
 
 	/**
 	 * Initializes the error.
@@ -30,7 +30,8 @@ export default class IMAError extends Error {
 	 *        error.
 	 */
 	constructor(message, params = {}, dropInternalStackFrames = true) {
-		super(message);
+		//super(message);
+		this.constructor.prototype.__proto__ = Error.prototype;
 
 		/**
 		 * The name of this error, used in the generated stack.
