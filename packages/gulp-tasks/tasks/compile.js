@@ -69,8 +69,8 @@ gulp.task('Es6ToEs5:app', function () {
 			.pipe(cache('Es6ToEs5:app'))
 			.pipe(babel({
 				moduleIds: true,
-				presets: ['es2015', 'react'].concat(babelConfig.app.presets),
-				plugins: ['transform-es2015-modules-systemjs', 'external-helpers-2'].concat(babelConfig.app.plugins)
+				presets: babelConfig.app.presets,
+				plugins: babelConfig.app.plugins
 			 }))
 			.pipe(gulpif(isView, sweetjs({
 				modules: ['./imajs/macro/componentName.sjs'],
@@ -102,8 +102,8 @@ gulp.task('Es6ToEs5:server', function () {
 			.src(files.server.src)
 			.pipe(plumber())
 			.pipe(babel({
-				presets: ['es2015'].concat(babelConfig.server.presets),
-				plugins: ['external-helpers-2'].concat(babelConfig.server.plugins)
+				presets: babelConfig.server.presets,
+				plugins: babelConfig.server.plugins
 			}))
 			.pipe(plumber.stop())
 			.pipe(gulp.dest(files.server.dest))
@@ -116,8 +116,9 @@ gulp.task('Es6ToEs5:vendor', function () {
 			.src(files.vendor.src)
 			.pipe(plumber())
 			.pipe(babel({
-				presets: ['es2015', 'react'].concat(babelConfig.vendor.presets),
-				plugins: ['external-helpers-2'].concat(babelConfig.vendor.plugins)}))
+				presets: babelConfig.vendor.presets,
+				plugins: babelConfig.vendor.plugins
+			}))
 			.pipe(plumber.stop())
 			.pipe(concat(files.vendor.name.tmp))
 			.pipe(gulp.dest(files.vendor.dest.tmp))
@@ -128,8 +129,8 @@ gulp.task('Es6ToEs5:vendor:client', function () {
 	return (
 		browserify(files.vendor.dest.tmp + files.vendor.name.tmp, { debug: false, insertGlobals : false, basedir: '.' })
 			.transform(babelify.configure({
-				presets: ['es2015', 'react'].concat(babelConfig.vendor.presets),
-				plugins: ['external-helpers-2'].concat(babelConfig.vendor.plugins)
+				presets: babelConfig.vendor.presets,
+				plugins: babelConfig.vendor.plugins
 			}))
 			.bundle()
 			.pipe(source(files.vendor.name.client))
