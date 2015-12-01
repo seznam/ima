@@ -204,8 +204,8 @@ module.exports = (err, items) => {
 
 	var encodedParams = '';
 
-	if (err._params) {
-		encodedParams = String(JSON.stringify(err._params, 4)).replace(/[\u00A0-\u9999<>\&]/gim, (i) => {
+	if (err && err.getParams) {
+		encodedParams = String(JSON.stringify(err.getParams())).replace(/[\u00A0-\u9999<>\&]/gim, (i) => {
 			return '&#' + i.charCodeAt(0) + ';';
 		});
 	}
