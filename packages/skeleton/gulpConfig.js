@@ -19,23 +19,23 @@ try {
 
 var babelConfig = {
 	vendor: {
-		presets: [],
-		plugins: []
+		presets: ['es2015', 'react'],
+		plugins: ['external-helpers-2']
 	},
 	app: {
-		presets: [],
-		plugins: []
+		presets: ['es2015', 'react'],
+		plugins: ['transform-es2015-modules-systemjs', 'external-helpers-2']
 	},
 	server: {
-		presets: [],
-		plugins: []
+		presets: ['es2015'],
+		plugins: ['external-helpers-2']
 	}
 };
-var $Debug = false;
+var $Debug = true;
 
 if (process.env.NODE_ENV === 'production' || process.env.NODE_ENV === 'test') {
-	babelConfig.app.plugins = ['transform-react-constant-elements', 'transform-react-inline-elements'];
-	$Debug = true;
+	babelConfig.app.plugins = babelConfig.app.plugins.concat(['transform-react-constant-elements', 'transform-react-inline-elements']);
+	$Debug = false;
 }
 
 exports.babelConfig = babelConfig;
