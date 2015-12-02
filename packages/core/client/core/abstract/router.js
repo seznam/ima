@@ -345,7 +345,7 @@ export default class Router extends ns.Core.Interface.Router {
 
 		if (!routeForPath) {
 			params.error = new IMAError(`Route for path ` +
-					`'${path}' is not configured.`);
+					`'${path}' is not configured.`, { status: 404 });
 
 			return this.handleNotFound(params);
 		}
