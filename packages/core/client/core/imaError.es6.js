@@ -51,7 +51,7 @@ export default class IMAErrorES6 extends Error {
 	 * @type {string}
 	 */
 	get stack() {
-		return errorImplementation.getStack.call(this);
+		return errorImplementation.getStack.call(this, IMAErrorES6);
 	}
 
 	/**

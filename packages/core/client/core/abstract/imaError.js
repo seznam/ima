@@ -100,7 +100,7 @@ export function constructor(message, params = {},
  * @method getStack
  * @return {string}
  */
-export function getStack() {
+export function getStack(implementationClass) {
 	if (this._stack) {
 		return this._stack;
 	}
@@ -116,7 +116,7 @@ export function getStack() {
 
 		var inheritanceDepth = 1;
 		var currentPrototype = Object.getPrototypeOf(this);
-		while (currentPrototype !== IMAError.prototype) {
+		while (currentPrototype !== implementationClass.prototype) {
 			currentPrototype = Object.getPrototypeOf(currentPrototype);
 			inheritanceDepth++;
 		}

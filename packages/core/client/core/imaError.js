@@ -59,7 +59,7 @@ Object.defineProperty(IMAError.prototype, "stack", {
 	configurable: false,
 	enumerable: true,
 	get: function () {
-		return errorImplementation.getStack.call(this);
+		return errorImplementation.getStack.call(this, IMAError);
 	}
 });
 
