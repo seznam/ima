@@ -18,6 +18,7 @@ module.exports = function (gulpConfig) {
 		);
 	});
 
+
 	gulp
 		.option('build', '-e, --env', 'Build environment')
 		.task('build', function (callback) {
