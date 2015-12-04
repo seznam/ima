@@ -17,7 +17,7 @@ module.exports = function (gulpConfig) {
 				.pipe(sourcemaps.init({loadMaps: true}))
 				.pipe(insert.wrap('(function(){', '})();'))
 				.pipe(concat(files.shim.name))
-				.pipe(insert.append(babelHelpers));
+				.pipe(insert.append(babelHelpers))
 				.pipe(gulp.dest(files.shim.dest.client))
 				.pipe(gulp.dest(files.shim.dest.server))
 		);
