@@ -3,6 +3,7 @@ module.exports = (function() {
 	var js = [
 		'imajs/client/core/namespace.js',
 		'imajs/client/core/vendorLinker.js',
+		'imajs/client/core/abstract/imaError.js',
 		'imajs/client/core/imaError.js',
 		'imajs/client/core/objectContainer.js',
 		'imajs/client/core/interface/*.js',
