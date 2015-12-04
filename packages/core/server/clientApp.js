@@ -48,12 +48,12 @@ module.exports = (() => {
 					content = hljs.highlight('javascript', content);
 
 					// start a few lines before the error or at the beginning of the file
-					var start = Math.max(item.lineNumber - 7, 0);
+					var start = Math.max(item.lineNumber - 11, 0);
 					var lines = content.value.split('\n').map((line) => {
 						return '<span class="line">' + line + '</span>';
 					});
 					// end a few lines after the error or the last line of the file
-					var end = Math.min(item.lineNumber + 6, lines.length);
+					var end = Math.min(item.lineNumber + 10, lines.length);
 					var snippet = lines.slice(start, end);
 					// array starts at 0 but lines numbers begin with 1, so we have to
 					// subtract 1 to get the error line position in the array
