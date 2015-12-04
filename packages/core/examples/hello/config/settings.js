@@ -19,8 +19,8 @@ export var init = (ns, oc, config) => { // jshint ignore:line
 				}
 			},
 			$Cache: {
-				enabled: true,
-				ttl: 60000
+				enabled: true, //Turn on/off cache for all application.
+				ttl: 60000 // Default time to live for cached value in ms.
 			},
 			$Page:{
 				$Render: {
