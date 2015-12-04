@@ -1,5 +1,6 @@
 'use strict';
 
+require("babel-polyfill");
 require('./imajs/shim.js');
 
 var cluster = require('cluster');
