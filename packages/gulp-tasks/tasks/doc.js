@@ -32,7 +32,7 @@ module.exports = function (gulpConfig) {
 
 					return content;
 				}))
-				.pipe(yuidoc())
+				.pipe(yuidoc({}, { 'themedir': './imajs/yuidocTheme' }))
 				.pipe(gulp.dest('./doc'))
 		);
 	});
