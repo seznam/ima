@@ -140,7 +140,7 @@ class View extends ns.Core.Abstract.Component {
 	}
 
 	selectShareLink() {
-		var input = this.refs.shareLink.getDOMNode();
+		var input = this.refs.shareLink;
 
 		if (input.setSelectionRange) {
 			input.setSelectionRange(0, input.value.length);

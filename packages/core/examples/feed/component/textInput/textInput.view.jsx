@@ -76,8 +76,8 @@ class View extends ns.Core.Abstract.Component {
 	}
 
 	sendText(e) {
-		var text = this.refs.textInput.getDOMNode().value.trim();
-		this.refs.textInput.getDOMNode().value = '';
+		var text = this.refs.textInput.value.trim();
+		this.refs.textInput.value = '';
 
 		var category = this.state.checkedCategory;
 		if (!category) {
