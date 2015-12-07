@@ -34,6 +34,7 @@ var babelConfig = {
 var $Debug = true;
 
 if (process.env.NODE_ENV === 'production' || process.env.NODE_ENV === 'test') {
+	babelConfig.app.presets = ['es2015-loose', 'react'];
 	babelConfig.app.plugins = babelConfig.app.plugins.concat(['transform-react-constant-elements', 'transform-react-inline-elements']);
 	$Debug = false;
 }
