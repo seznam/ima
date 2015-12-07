@@ -1,6 +1,6 @@
 {
 	"name": "ima.js-gulp-tasks",
-	"version": "0.10.10",
+	"version": "0.10.11",
 	"description": "Default gulp tasks for IMA.js applications.",
 	"main": "",
 	"scripts": {
@@ -66,6 +66,7 @@
 		"karma-jasmine": "^0.3.6",
 		"karma-opera-launcher": "^0.3.0",
 		"karma-phantomjs-launcher": "^0.2.1",
+		"phantomjs": "^1.9.19",
 		"run-sequence": "^1.1.5",
 		"vinyl-source-stream": "^1.1.0"
 	}
