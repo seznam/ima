@@ -116,7 +116,7 @@ var callRemoteServer = (req, res) => {
 				Object
 					.keys(response.header)
 					.filter((key) => {
-						return ['set-cookie', 'content-encoding'].indexOf(key) === -1;
+						return ['set-cookie', 'content-encoding', 'content-type'].indexOf(key) === -1;
 					})
 					.map((key) => {
 						return ({
@@ -138,7 +138,19 @@ var callRemoteServer = (req, res) => {
 					});
 				}
 
-				res.status(response.status).json(response.body);
+				var result = response.body;
+				if ((!result || typeof result === 'object' && Object.keys(result).length === 0) && 
+					typeof(response.text) === 'string' && response.text !== '') {
+					try {
+						console.warn('API sent bad header of content-type. More info how you can to fix it: http://visionmedia.github.io/superagent/#parsing-response bodies');
+						result = JSON.parse(response.text);	
+					} catch (e) {
+						console.error('API response is invalid JSON.', { err });
+						result = {};
+					}
+				}
+
+				res.status(response.status).json(result);
 			}
 		});
 };
