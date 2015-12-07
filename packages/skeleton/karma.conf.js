@@ -6,7 +6,7 @@ module.exports = function(config) {
 		logLevel: config.LOG_INFO,
 		reporters: ['dots'],
 		browsers: [
-			'Chrome'
+			'PhantomJS'
 		],
 		files: [
 			'./imajs/client/test.js',
