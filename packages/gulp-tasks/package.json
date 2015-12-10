@@ -1,6 +1,6 @@
 {
 	"name": "ima.js-gulp-tasks",
-	"version": "0.10.13",
+	"version": "0.10.14",
 	"description": "Default gulp tasks for IMA.js applications.",
 	"main": "",
 	"scripts": {
@@ -40,7 +40,6 @@
 		"gulp-babel": "^6.1.1",
 		"gulp-cached": "^1.1.0",
 		"gulp-change": "^1.0.0",
-		"gulp-command": "git://github.com/mjancarik/gulp-command.git#c8dd057e242b6c35cf1bca796e7561a8f22ccc11",
 		"gulp-concat": "^2.6.0",
 		"gulp-eslint": "^1.1.1",
 		"gulp-if": "^2.0.0",
