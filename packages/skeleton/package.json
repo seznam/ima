@@ -1,69 +1,69 @@
 {
-  "name": "IMA.js-skeleton",
-  "version": "0.10.0",
-  "description": "Isomorphic javascript application",
-  "main": "build/server.js",
-  "scripts": {
-    "test": "node node_modules/gulp/bin/gulp.js test",
-    "start": "node node_modules/gulp/bin/gulp.js dev"
-  },
-  "keywords": [
+	"name": "IMA.js-skeleton",
+	"version": "0.10.0",
+	"description": "Isomorphic javascript application",
+	"main": "build/server.js",
+	"scripts": {
+		"test": "node node_modules/gulp/bin/gulp.js test",
+		"start": "node node_modules/gulp/bin/gulp.js dev"
+	},
+	"keywords": [
     "IMA.js",
     "Isomorphic",
     "Javascript"
   ],
-  "author": "Miroslav Jancarik <miroslav.jancarik@firma.seznam.cz>",
-  "contributors": [
-    {
-      "name": "Martin Urban",
-      "email": "martin.urban@firma.seznam.cz"
+	"author": "Miroslav Jancarik <miroslav.jancarik@firma.seznam.cz>",
+	"contributors": [
+		{
+			"name": "Martin Urban",
+			"email": "martin.urban@firma.seznam.cz"
     },
-    {
-      "name": "Martin Jurča",
-      "email": "martin.jurca@firma.seznam.cz"
+		{
+			"name": "Martin Jurča",
+			"email": "martin.jurca@firma.seznam.cz"
     }
   ],
-  "repository": {
-    "type": "git",
-    "url": "https://github.com/seznam/IMA.js-skeleton.git"
-  },
-  "bugs": {
-    "url": "https://github.com/seznam/IMA.js-skeleton/issues"
-  },
-  "license": "MIT",
-  "devDependencies": {
-    "babel-plugin-external-helpers-2": "^6.1.18",
-    "babel-plugin-transform-es2015-modules-systemjs": "^6.1.18",
-    "babel-plugin-transform-react-constant-elements": "^6.1.20",
-    "babel-plugin-transform-react-inline-elements": "^6.1.20",
-    "babel-preset-es2015": "^6.1.18",
-    "babel-preset-es2015-loose": "^6.1.3",
-    "babel-preset-react": "^6.1.18",
-    "bower": "^1.6.3",
-    "gulp": "^3.9.0",
-    "ima.js-gulp-task-loader": "0.10.0",
-    "ima.js-gulp-tasks": "0.10.12"
-  },
-  "dependencies": {
-    "async-each": "^0.1.6",
-    "babel-polyfill": "^6.2.0",
-    "body-parser": "^1.14.1",
-    "clone": "^1.0.2",
-    "compression": "^1.6.0",
-    "cookie-parser": "^1.4.0",
-    "custom-event-polyfill": "^0.2.1",
-    "es6-shim": "^0.33.10",
-    "express": "^4.13.3",
-    "helmet": "^0.15.0",
-    "highlight.js": "^9.0.0",
-    "ima.js-babel6-polyfill": "^0.1.0",
-    "method-override": "^2.3.5",
-    "multer": "^1.0.6",
-    "react": "^0.14.3",
-    "react-dom": "^0.14.3",
-    "serve-favicon": "^2.3.0",
-    "stack-trace": "0.0.9",
-    "superagent": "^1.5.0",
-    "winston": "^2.1.1"
-  }
+	"repository": {
+		"type": "git",
+		"url": "https://github.com/seznam/IMA.js-skeleton.git"
+	},
+	"bugs": {
+		"url": "https://github.com/seznam/IMA.js-skeleton/issues"
+	},
+	"license": "MIT",
+	"devDependencies": {
+		"babel-plugin-external-helpers-2": "^6.1.18",
+		"babel-plugin-transform-es2015-modules-systemjs": "^6.1.18",
+		"babel-plugin-transform-react-constant-elements": "^6.1.20",
+		"babel-plugin-transform-react-inline-elements": "^6.1.20",
+		"babel-preset-es2015": "^6.1.18",
+		"babel-preset-es2015-loose": "^6.1.3",
+		"babel-preset-react": "^6.1.18",
+		"bower": "^1.6.3",
+		"gulp": "^3.9.0",
+		"ima.js-gulp-task-loader": "0.10.0",
+		"ima.js-gulp-tasks": "0.10.14"
+	},
+	"dependencies": {
+		"async-each": "^0.1.6",
+		"babel-polyfill": "^6.2.0",
+		"body-parser": "^1.14.1",
+		"clone": "^1.0.2",
+		"compression": "^1.6.0",
+		"cookie-parser": "^1.4.0",
+		"custom-event-polyfill": "^0.2.1",
+		"es6-shim": "^0.33.10",
+		"express": "^4.13.3",
+		"helmet": "^0.15.0",
+		"highlight.js": "^9.0.0",
+		"ima.js-babel6-polyfill": "^0.1.0",
+		"method-override": "^2.3.5",
+		"multer": "^1.0.6",
+		"react": "^0.14.3",
+		"react-dom": "^0.14.3",
+		"serve-favicon": "^2.3.0",
+		"stack-trace": "0.0.9",
+		"superagent": "^1.5.0",
+		"winston": "^2.1.1"
+	}
 }
