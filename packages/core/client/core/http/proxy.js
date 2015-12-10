@@ -87,8 +87,18 @@ export default class Proxy {
 	 *        send to the server. The data will be included as query parameters
 	 *        if the request method is set to {@code GET}, and as request body
 	 *        for any other request method.
-	 * @param {Object<string, *>} options The options used to
-	 *        create the request.
+	 * @param {{timeout: number=, ttl: number=, repeatRequest: number=,
+	 *        headers: Object<string, string>=, cache: boolean=,
+	 *        withCredentials: boolean}=} options
+	 *        Optional request options. The {@code timeout} specifies the
+	 *        request timeout in milliseconds, the {@code ttl} specified how
+	 *        long the request may be cached in milliseconds, the
+	 *        {@code repeatRequest} specifies the maximum number of tries to
+	 *        repeat the request if the request fails, The {@code headers} set
+	 *        request headers. The {@code cache} can be used to bypass the
+	 *        cache of pending and finished HTTP requests. The
+	 *        {@code withCredentials} that indicates whether requests should be
+	 *        made using credentials such as cookies or authorization headers.
 	 * @return {Promise<Vendor.SuperAgent.Response>} A promise that resolves to
 	 *         the server response. The promise rejects on failure with an
 	 *         error and request descriptor object instead of an
@@ -119,6 +129,7 @@ export default class Proxy {
 
 				this
 					._setHeaders(request, options)
+					._setCredentials(request, options)
 					._sendRequest(request, resolve, reject, params);
 			})
 		);
@@ -158,8 +169,18 @@ export default class Proxy {
 	 * @param {string} url The URL to which the request has been made.
 	 * @param {Object<string, (boolean|number|string|Date)>} data The data sent
 	 *        with the request.
-	 * @param {Object<string, *>} options The options used to
-	 *        create the request.
+	 * @param {{timeout: number=, ttl: number=, repeatRequest: number=,
+	 *        headers: Object<string, string>=, cache: boolean=,
+	 *        withCredentials: boolean}=} options
+	 *        Optional request options. The {@code timeout} specifies the
+	 *        request timeout in milliseconds, the {@code ttl} specified how
+	 *        long the request may be cached in milliseconds, the
+	 *        {@code repeatRequest} specifies the maximum number of tries to
+	 *        repeat the request if the request fails, The {@code headers} set
+	 *        request headers. The {@code cache} can be used to bypass the
+	 *        cache of pending and finished HTTP requests. The
+	 *        {@code withCredentials} that indicates whether requests should be
+	 *        made using credentials such as cookies or authorization headers.
 	 * @param {number} status The HTTP response status code send by the server.
 	 * @return {Object<string, *>} An object containing both the details of the
 	 *         error and the request that lead to it.
@@ -341,8 +362,18 @@ export default class Proxy {
 	 * @chainable
 	 * @param {Vendor.SuperAgent.Request} request The request on which the HTTP
 	 *        headers should be set.
-	 * @param {Object<string, *>} options The options used to create the
-	 *        request.
+	 * @param {{timeout: number=, ttl: number=, repeatRequest: number=,
+	 *        headers: Object<string, string>=, cache: boolean=,
+	 *        withCredentials: boolean}=} options
+	 *        Optional request options. The {@code timeout} specifies the
+	 *        request timeout in milliseconds, the {@code ttl} specified how
+	 *        long the request may be cached in milliseconds, the
+	 *        {@code repeatRequest} specifies the maximum number of tries to
+	 *        repeat the request if the request fails, The {@code headers} set
+	 *        request headers. The {@code cache} can be used to bypass the
+	 *        cache of pending and finished HTTP requests. The
+	 *        {@code withCredentials} that indicates whether requests should be
+	 *        made using credentials such as cookies or authorization headers.
 	 * @return {Core.Http.Proxy} This instance.
 	 */
 	_setHeaders(request, options) {
@@ -362,6 +393,40 @@ export default class Proxy {
 	}
 
 	/**
+	 * Whether options withCredentials is set to true that indicates whether or
+	 * not cross-site Access-Control requests should be made using credentials
+	 * such as cookies or authorization headers.
+	 *
+	 * @method _setCredentials
+	 * @private
+	 * @chainable
+	 * @param {Vendor.SuperAgent.Request} request The request on which the HTTP
+	 *        headers should be set.
+	 * @param {{timeout: number=, ttl: number=, repeatRequest: number=,
+	 *        headers: Object<string, string>=, cache: boolean=,
+	 *        withCredentials: boolean}=} options
+	 *        Optional request options. The {@code timeout} specifies the
+	 *        request timeout in milliseconds, the {@code ttl} specified how
+	 *        long the request may be cached in milliseconds, the
+	 *        {@code repeatRequest} specifies the maximum number of tries to
+	 *        repeat the request if the request fails, The {@code headers} set
+	 *        request headers. The {@code cache} can be used to bypass the
+	 *        cache of pending and finished HTTP requests. The
+	 *        {@code withCredentials} that indicates whether requests should be
+	 *        made using credentials such as cookies or authorization headers.
+	 * @return {Core.Http.Proxy} This instance.
+	 */
+	_setCredentials(request, options) {
+		if (options.withCredentials &&
+				request.withCredentials) {
+
+			request.withCredentials();
+		}
+
+		return this;
+	}
+
+	/**
 	 * Composes an object representing the HTTP request parameters from the
 	 * provided arguments.
 	 *
@@ -371,8 +436,18 @@ export default class Proxy {
 	 * @param {string} url The URL to which the request should be sent.
 	 * @param {Object<string, (boolean|number|string|Date)>} data The data to
 	 *        send with the request.
-	 * @param {Object<string, *>} options The options used to create the
-	 *        request.
+	 * @param {{timeout: number=, ttl: number=, repeatRequest: number=,
+	 *        headers: Object<string, string>=, cache: boolean=,
+	 *        withCredentials: boolean}=} options
+	 *        Optional request options. The {@code timeout} specifies the
+	 *        request timeout in milliseconds, the {@code ttl} specified how
+	 *        long the request may be cached in milliseconds, the
+	 *        {@code repeatRequest} specifies the maximum number of tries to
+	 *        repeat the request if the request fails, The {@code headers} set
+	 *        request headers. The {@code cache} can be used to bypass the
+	 *        cache of pending and finished HTTP requests. The
+	 *        {@code withCredentials} that indicates whether requests should be
+	 *        made using credentials such as cookies or authorization headers.
 	 * @return {{method: string, url: string, data: Object<string, (boolean|number|string|Date)>, options: {headers: Object<string, string>, cookie: string}}}
 	 *         An object representing the complete request parameters used to
 	 *         create and send the HTTP request.

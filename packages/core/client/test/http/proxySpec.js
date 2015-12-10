@@ -10,7 +10,7 @@ describe('Core.Http.Proxy', function() {
 	var superAgent = null;
 
 	var data = {};
-	var options = {ttl: 3600000, timeout: 2000, repeatRequest: 1, headers: []};
+	var options = {ttl: 3600000, timeout: 2000, repeatRequest: 1, headers: [], withCredentials: true};
 	var HTTP_STATUS_CODE = oc.get('$HTTP_STATUS_CODE');
 	var httpTransformer = oc.get('$HttpTransformer');
 	var windowHelper = oc.get('$Window');
@@ -21,10 +21,13 @@ describe('Core.Http.Proxy', function() {
 			get: function() { return this; },
 			post: function(){ return this; },
 			put: function(){ return this; },
+			del: function(){ return this; },
+			patch: function() { return this; },
 			set: function() { return this; },
 			accept: function() { return this; },
 			query: function() { return this; },
 			send: function() { return this; },
+			withCredentials: function() { return this; },
 			timeout: function() {
 				var self = this;
 				setTimeout(function() {
@@ -48,7 +51,9 @@ describe('Core.Http.Proxy', function() {
 	using([
 		'get',
 		'post',
-		'put'
+		'put',
+		'delete',
+		'patch'
 	], function(method) {
 		describe('method ' + method, function() {
 			it('should return promise with response body', function(done) {
@@ -100,11 +105,25 @@ describe('Core.Http.Proxy', function() {
 				spyOn(superAgent, 'end')
 					.and
 					.callFake(function(callback) {
-						return callback({crossDomain: true});
+						return callback({ crossDomain: true });
 					});
 
 				proxy.request(method, apiUrl, data, options)
 					.then(function() {}, function(error){
+						expect(error.status).toEqual(HTTP_STATUS_CODE.FORBIDDEN);
+						done();
+					});
+			});
+
+			it('should reject promise for Forbidden', function(done) {
+				spyOn(superAgent, 'end')
+					.and
+					.callFake(function(callback) {
+						return callback({status: 403});
+					});
+
+				proxy.request(method, apiUrl, data, options)
+					.then(function() {},function(error){
 						expect(error.status).toEqual(HTTP_STATUS_CODE.FORBIDDEN);
 						done();
 					});
@@ -124,6 +143,20 @@ describe('Core.Http.Proxy', function() {
 					});
 			});
 
+			it('should reject promise for Internal Server Error', function(done) {
+				spyOn(superAgent, 'end')
+					.and
+					.callFake(function(callback) {
+						return callback({status: 500});
+					});
+
+				proxy.request(method, apiUrl, data, options)
+					.then(function() {},function(error){
+						expect(error.status).toEqual(HTTP_STATUS_CODE.SERVER_ERROR);
+						done();
+					});
+			});
+
 			it('should reject promise for UNKNOWN', function(done) {
 				spyOn(superAgent, 'end')
 					.and
@@ -136,6 +169,25 @@ describe('Core.Http.Proxy', function() {
 						expect(error.status).toEqual(HTTP_STATUS_CODE.SERVER_ERROR);
 						done();
 					});
+			});
+
+			it('should set credentials to request', function(done) {
+				spyOn(superAgent, 'end')
+					.and
+					.callFake(function(callback) {
+						return callback(null, response);
+					});
+
+				spyOn(proxy, '_setCredentials')
+					.and
+					.returnValue(proxy);
+
+				proxy.request(method, apiUrl, data, options)
+					.then(function(result) {
+						expect(proxy._setCredentials).toHaveBeenCalled();
+						done();
+					})
+					.catch(function(e){console.log(e); done();});
 			});
 		});
 	});

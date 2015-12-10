@@ -42,6 +42,7 @@ describe('Core.Http.Agent', function() {
 			repeatRequest: httpConfig.defaultRequestOptions.repeatRequest,
 			headers: {},
 			cache: true,
+			withCredentials: true,
 			language: httpConfig.defaultRequestOptions.language
 		};
 

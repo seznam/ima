@@ -37,6 +37,7 @@ export default class Agent extends ns.Core.Interface.HttpAgent {
 	 *          .get('url', { data: data }, {
 	 *              ttl: 2000,
 	 *              repeatRequest: 1,
+	 *              withCredentials: true,
 	 *              timeout: 2000,
 	 *              accept: 'application/json',
 	 *              language: 'en'
@@ -117,7 +118,18 @@ export default class Agent extends ns.Core.Interface.HttpAgent {
 	 * @method get
 	 * @param {string} url
 	 * @param {Object<string, (boolean|number|string|Date)>} data
-	 * @param {{timeout: number=, ttl: number=, repeatRequest: number=, headers: Object<string, string>=, cache: boolean=}=} options
+	 * @param {{timeout: number=, ttl: number=, repeatRequest: number=,
+	 *        headers: Object<string, string>=, cache: boolean=,
+	 *        withCredentials: boolean}=} options
+	 *        Optional request options. The {@code timeout} specifies the
+	 *        request timeout in milliseconds, the {@code ttl} specified how
+	 *        long the request may be cached in milliseconds, the
+	 *        {@code repeatRequest} specifies the maximum number of tries to
+	 *        repeat the request if the request fails, The {@code headers} set
+	 *        request headers. The {@code cache} can be used to bypass the
+	 *        cache of pending and finished HTTP requests. The
+	 *        {@code withCredentials} that indicates whether requests should be
+	 *        made using credentials such as cookies or authorization headers.
 	 * @return {Promise<*>}
 	 */
 	get(url, data, options = {}) {
@@ -130,7 +142,18 @@ export default class Agent extends ns.Core.Interface.HttpAgent {
 	 * @method post
 	 * @param {string} url
 	 * @param {Object<string, (boolean|number|string|Date)>} data
-	 * @param {{timeout: number=, ttl: number=, repeatRequest: number=, headers: Object<string, string>=}=} options
+	 * @param {{timeout: number=, ttl: number=, repeatRequest: number=,
+	 *        headers: Object<string, string>=, cache: boolean=,
+	 *        withCredentials: boolean}=} options
+	 *        Optional request options. The {@code timeout} specifies the
+	 *        request timeout in milliseconds, the {@code ttl} specified how
+	 *        long the request may be cached in milliseconds, the
+	 *        {@code repeatRequest} specifies the maximum number of tries to
+	 *        repeat the request if the request fails, The {@code headers} set
+	 *        request headers. The {@code cache} can be used to bypass the
+	 *        cache of pending and finished HTTP requests. The
+	 *        {@code withCredentials} that indicates whether requests should be
+	 *        made using credentials such as cookies or authorization headers.
 	 * @return {Promise<*>}
 	 */
 	post(url, data, options = {}) {
@@ -148,7 +171,18 @@ export default class Agent extends ns.Core.Interface.HttpAgent {
 	 * @method put
 	 * @param {string} url
 	 * @param {Object<string, (boolean|number|string|Date)>} data
-	 * @param {{timeout: number=, ttl: number=, repeatRequest: number=, headers: Object<string, string>=}=} options
+	 * @param {{timeout: number=, ttl: number=, repeatRequest: number=,
+	 *        headers: Object<string, string>=, cache: boolean=,
+	 *        withCredentials: boolean}=} options
+	 *        Optional request options. The {@code timeout} specifies the
+	 *        request timeout in milliseconds, the {@code ttl} specified how
+	 *        long the request may be cached in milliseconds, the
+	 *        {@code repeatRequest} specifies the maximum number of tries to
+	 *        repeat the request if the request fails, The {@code headers} set
+	 *        request headers. The {@code cache} can be used to bypass the
+	 *        cache of pending and finished HTTP requests. The
+	 *        {@code withCredentials} that indicates whether requests should be
+	 *        made using credentials such as cookies or authorization headers.
 	 * @return {Promise<*>}
 	 */
 	put(url, data, options = {}) {
@@ -166,7 +200,18 @@ export default class Agent extends ns.Core.Interface.HttpAgent {
 	 * @method patch
 	 * @param {string} url
 	 * @param {Object<string, (boolean|number|string|Date)>} data
-	 * @param {{timeout: number=, ttl: number=, repeatRequest: number=, headers: Object<string, string>=}=} options
+	 * @param {{timeout: number=, ttl: number=, repeatRequest: number=,
+	 *        headers: Object<string, string>=, cache: boolean=,
+	 *        withCredentials: boolean}=} options
+	 *        Optional request options. The {@code timeout} specifies the
+	 *        request timeout in milliseconds, the {@code ttl} specified how
+	 *        long the request may be cached in milliseconds, the
+	 *        {@code repeatRequest} specifies the maximum number of tries to
+	 *        repeat the request if the request fails, The {@code headers} set
+	 *        request headers. The {@code cache} can be used to bypass the
+	 *        cache of pending and finished HTTP requests. The
+	 *        {@code withCredentials} that indicates whether requests should be
+	 *        made using credentials such as cookies or authorization headers.
 	 * @return {Promise<*>}
 	 */
 	patch(url, data, options = {}) {
@@ -184,7 +229,18 @@ export default class Agent extends ns.Core.Interface.HttpAgent {
 	 * @method delete
 	 * @param {string} url
 	 * @param {Object<string, (boolean|number|string|Date)>} data
-	 * @param {{timeout: number=, ttl: number=, repeatRequest: number=, headers: Object<string, string>=}=} options
+	 * @param {{timeout: number=, ttl: number=, repeatRequest: number=,
+	 *        headers: Object<string, string>=, cache: boolean=,
+	 *        withCredentials: boolean}=} options
+	 *        Optional request options. The {@code timeout} specifies the
+	 *        request timeout in milliseconds, the {@code ttl} specified how
+	 *        long the request may be cached in milliseconds, the
+	 *        {@code repeatRequest} specifies the maximum number of tries to
+	 *        repeat the request if the request fails, The {@code headers} set
+	 *        request headers. The {@code cache} can be used to bypass the
+	 *        cache of pending and finished HTTP requests. The
+	 *        {@code withCredentials} that indicates whether requests should be
+	 *        made using credentials such as cookies or authorization headers.
 	 * @return {Promise<*>}
 	 */
 	delete(url, data, options = {}) {
@@ -247,9 +303,18 @@ export default class Agent extends ns.Core.Interface.HttpAgent {
 	 * @param {string} url The URL to which the request should be sent.
 	 * @param {Object<string, (boolean|number|string|Date)>} data The data to
 	 *        send with the request.
-	 * @param {{timeout: number=, ttl: number=, repeatRequest: number=,
-	 *        headers: Object<string, string>=, cache: boolean=}} options
-	 *        HTTP request options, as described in the public API.
+	 * * @param {{timeout: number=, ttl: number=, repeatRequest: number=,
+	 *        headers: Object<string, string>=, cache: boolean=,
+	 *        withCredentials: boolean}=} options
+	 *        Optional request options. The {@code timeout} specifies the
+	 *        request timeout in milliseconds, the {@code ttl} specified how
+	 *        long the request may be cached in milliseconds, the
+	 *        {@code repeatRequest} specifies the maximum number of tries to
+	 *        repeat the request if the request fails, The {@code headers} set
+	 *        request headers. The {@code cache} can be used to bypass the
+	 *        cache of pending and finished HTTP requests. The
+	 *        {@code withCredentials} that indicates whether requests should be
+	 *        made using credentials such as cookies or authorization headers.
 	 * @return {Promise<*>} A promise that resolves to the response body parsed
 	 *         as JSON.
 	 */
@@ -314,8 +379,17 @@ export default class Agent extends ns.Core.Interface.HttpAgent {
 	 * @param {Object<string, (boolean|number|string|Date)>} data The data sent
 	 *        with the request.
 	 * @param {{timeout: number=, ttl: number=, repeatRequest: number=,
-	 *        headers: Object<string, string>=, cache: boolean=}} options
-	 *        HTTP request options, as described in the public API.
+	 *        headers: Object<string, string>=, cache: boolean=,
+	 *        withCredentials: boolean}=} options
+	 *        Optional request options. The {@code timeout} specifies the
+	 *        request timeout in milliseconds, the {@code ttl} specified how
+	 *        long the request may be cached in milliseconds, the
+	 *        {@code repeatRequest} specifies the maximum number of tries to
+	 *        repeat the request if the request fails, The {@code headers} set
+	 *        request headers. The {@code cache} can be used to bypass the
+	 *        cache of pending and finished HTTP requests. The
+	 *        {@code withCredentials} that indicates whether requests should be
+	 *        made using credentials such as cookies or authorization headers.
 	 * @return {Promise<*>} A promise that resolves the to response body parsed
 	 *         as JSON.
 	 */
@@ -414,8 +488,18 @@ export default class Agent extends ns.Core.Interface.HttpAgent {
 	 *
 	 * @private
 	 * @method _prepareOptions
-	 * @param {{timeout: number=, ttl: number=, repeatRequest: number=, headers: Object<string, string>=, cache: boolean=}} options
-	 *        HTTP request options, as described in the public API.
+	 * @param {{timeout: number=, ttl: number=, repeatRequest: number=,
+	 *        headers: Object<string, string>=, cache: boolean=,
+	 *        withCredentials: boolean}=} options
+	 *        Optional request options. The {@code timeout} specifies the
+	 *        request timeout in milliseconds, the {@code ttl} specified how
+	 *        long the request may be cached in milliseconds, the
+	 *        {@code repeatRequest} specifies the maximum number of tries to
+	 *        repeat the request if the request fails, The {@code headers} set
+	 *        request headers. The {@code cache} can be used to bypass the
+	 *        cache of pending and finished HTTP requests. The
+	 *        {@code withCredentials} that indicates whether requests should be
+	 *        made using credentials such as cookies or authorization headers.
 	 * @return {Object<string, (number|string)>} Request options with set
 	 *         filled-in default values for missing fields, and extra options
 	 *         used internally.
