@@ -70,7 +70,7 @@ exports.files = {
 			server: 'app.server.js',
 			client: 'app.client.js'
 		},
-		src: ['babel-runtime/core-js/**/*.js'].concat(coreDependency.js, appDependency.js, coreDependency.mainjs),
+		src: [].concat(coreDependency.js, appDependency.js, coreDependency.mainjs),
 		dest: {
 			server: './build/imajs/',
 			client: './build/static/js/'
