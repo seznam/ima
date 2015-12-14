@@ -42,10 +42,9 @@
 		"bower": "^1.6.3",
 		"gulp": "^3.9.0",
 		"ima.js-gulp-task-loader": "0.10.0",
-		"ima.js-gulp-tasks": "0.10.14"
+		"ima.js-gulp-tasks": "0.11.0"
 	},
 	"dependencies": {
-		"async-each": "^0.1.6",
 		"babel-polyfill": "^6.2.0",
 		"body-parser": "^1.14.1",
 		"clone": "^1.0.2",
@@ -55,15 +54,13 @@
 		"es6-shim": "^0.33.10",
 		"express": "^4.13.3",
 		"helmet": "^0.15.0",
-		"highlight.js": "^9.0.0",
 		"ima.js-babel6-polyfill": "^0.1.0",
+		"ima.js-server": "^0.11.0",
 		"method-override": "^2.3.5",
 		"multer": "^1.0.6",
 		"react": "^0.14.3",
 		"react-dom": "^0.14.3",
 		"serve-favicon": "^2.3.0",
-		"stack-trace": "0.0.9",
-		"superagent": "^1.5.0",
-		"winston": "^2.1.1"
+		"superagent": "^1.5.0"
 	}
 }
