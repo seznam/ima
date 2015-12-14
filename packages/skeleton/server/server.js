@@ -57,11 +57,11 @@ var renderApp = (req, res) => {
 		});
 };
 
-var errorHandler = (err, req, res, next) => {
+var errorHandler = (err, req, res) => {
 	clientApp.errorHandler(err, req, res);
 };
 
-var staticErrorPage = (err, req, res, next) => {
+var staticErrorPage = (err, req, res) => {
 	clientApp.showStaticErrorPage(err, req, res);
 };
 
