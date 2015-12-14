@@ -88,7 +88,7 @@ gulp.task('Es6ToEs5:app', function () {
 			.pipe(gulp.dest(files.app.dest.client))
 			.pipe(save.restore('Es6ToEs5:app:source'))
 			.pipe(concat(files.app.name.server))
-			.pipe(insert.wrap('module.exports = (function(){\n', '\n })()\n'))
+			.pipe(insert.wrap('module.exports = (function(){\n', '\n })\n'))
 			.pipe(sourcemaps.write())
 			.pipe(gulp.dest(files.app.dest.server))
 	);
