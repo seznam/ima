@@ -251,14 +251,13 @@ export default class Cookie extends ns.Core.Storage.Map {
 
 	/**
 	 * Returns all cookies in this storage serialized to a string compatible
-	 * with the {@code Set-Cookie} HTTP header and the setter of the
-	 * {@code document.cookie} property.
+	 * with the {@code Cookie} HTTP header.
 	 *
-	 * @method getCookiesString
+	 * @method getCookiesStringToCookieHeader
 	 * @return {string} All cookies in this storage serialized to a string
-	 *         compatible with the {@code Set-Cookie} HTTP header.
+	 *         compatible with the {@code Cookie} HTTP header.
 	 */
-	getCookiesString() {
+	getCookiesStringToCookieHeader() {
 		var cookieStrings = [];
 
 		for (var cookieName of super.keys()) {
@@ -267,7 +266,7 @@ export default class Cookie extends ns.Core.Storage.Map {
 			cookieStrings.push(this._generateCookieString(
 				cookieName,
 				cookieItem.value,
-				cookieItem.options
+				{}
 			));
 		}
 

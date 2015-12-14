@@ -506,7 +506,7 @@ export default class Agent extends ns.Core.Interface.HttpAgent {
 	 */
 	_prepareOptions(options) {
 		var extraOptions = {
-			cookie: this._cookie.getCookiesString(),
+			cookie: this._cookie.getCookiesStringToCookieHeader(),
 			headers: {}
 		};
 
