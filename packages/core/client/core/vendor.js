@@ -1,7 +1,7 @@
 
 var vendor = new Map();
 
-var helper = require('./helper.js');
+var helper = require('ima.js-server/lib/helper.js');
 vendor.set('$Helper', helper);
 
 if (typeof window !== 'undefined' && window !== null) {
