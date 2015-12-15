@@ -11,10 +11,10 @@
 		"url": "https://github.com/seznam/IMA.js-gulp-tasks.git"
 	},
 	"keywords": [
-    "gulp",
-    "IMA.js",
-    "ima"
-  ],
+		"gulp",
+		"IMA.js",
+		"ima"
+	],
 	"author": "Seznam.cz, a.s.",
 	"license": "MIT",
 	"bugs": {
