@@ -55,7 +55,7 @@
 		"express": "^4.13.3",
 		"helmet": "^0.15.0",
 		"ima.js-babel6-polyfill": "^0.1.0",
-		"ima.js-server": "^0.11.0",
+		"ima.js-server": "git+http://github.com/seznam/IMA.js-server.git#0.11.2",
 		"method-override": "^2.3.5",
 		"multer": "^1.0.6",
 		"react": "^0.14.3",
