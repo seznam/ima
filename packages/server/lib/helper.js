@@ -82,7 +82,7 @@ module.exports = (function () {
 	var allPromiseHash = function (hash) {
 		var keys = Object.keys(hash);
 		var loadPromises = keys.map(function (key) {
-			Promise.resolve(hash[key])
+			return Promise.resolve(hash[key]);
 		});
 
 		return Promise
