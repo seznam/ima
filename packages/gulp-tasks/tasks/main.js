@@ -2,8 +2,6 @@
 var gulp = require('gulp');
 var runSequence = require('run-sequence');
 
-require('gulp-command')(gulp);
-
 module.exports = function (gulpConfig) {
 	var uglifyCompression = gulpConfig.uglifyCompression;
 
@@ -20,12 +18,8 @@ module.exports = function (gulpConfig) {
 
 
 	gulp
-		.option('build', '-e, --env', 'Build environment')
 		.task('build', function (callback) {
-
-			if (this.flags.env === 'prod' || this.flags.env === 'production') {
-				uglifyCompression.global_defs.$Debug = false;
-			}
+			var env = process.env.NODE_ENV;
 
 			var tasks = [
 				['copy:appStatic', 'copy:imajsServer', 'copy:environment', 'shim', 'polyfill'], // copy public folder, concat shim
@@ -34,7 +28,7 @@ module.exports = function (gulpConfig) {
 				['bundle:js:app', 'bundle:js:server', 'bundle:css']
 			];
 
-			if (['prod', 'production', 'test'].indexOf(this.flags.env) > -1) {
+			if (['prod', 'production', 'test'].indexOf(env) > -1) {
 				tasks.push(
 					['bundle:clean', 'Es6ToEs5:vendor:clean'] // clean vendor
 				);
