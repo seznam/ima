@@ -103,7 +103,6 @@ exports.files = {
 	shim : {
 		name: 'shim.js',
 		src: [
-			'./node_modules/es6-shim/es6-shim.js',
 			'./imajs/polyfill/collectionEnumeration.js',
 			'./imajs/polyfill/imaLoader.js'
 		],
