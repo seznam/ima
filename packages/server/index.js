@@ -2,8 +2,7 @@
 module.exports = (environmentConfig, languageLoader, appFactory) => {
 	'use strict';
 
-	let environment = require('./lib/environment.js');
-	environment.$__loadEnvironmentConfiguration(environmentConfig);
+	let environment = require('./lib/environment.js')(environmentConfig);
 
 	GLOBAL.$Debug = environment.$Debug;
 	GLOBAL.$IMA = GLOBAL.$IMA || {};

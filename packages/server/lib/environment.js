@@ -1,11 +1,7 @@
 
 var Helper = require('./helper.js');
 
-module.exports = {
-	$__loadEnvironmentConfiguration: loadEnvironmentConfiguration
-};
-
-function loadEnvironmentConfiguration(environment) {
+module.exports = (environment) => {
 	var prod = 'prod';
 	var dev = 'dev';
 	var env = process.env.NODE_ENV || dev;
@@ -32,5 +28,5 @@ function loadEnvironmentConfiguration(environment) {
 
 	currentEnvironment['$Env'] = env;
 
-	Object.assign(module.exports, currentEnvironment);
+	return currentEnvironment;
 };
