@@ -1,56 +1,4 @@
-
 var winston = require('winston');
-var environment = require('./environment.js');
-
-var FORMATTING = environment.$Server.logger.formatting;
-if (['simple', 'JSON'].indexOf(FORMATTING) === -1) {
-	throw new Error('Invalid logger configuration: the formatting has to be ' +
-			`either "simple" or "JSON", ${FORMATTING} was provided`);
-}
-
-var logger = new (winston.Logger)({
-	transports: [
-		new (winston.transports.Console)({
-			timestamp: () => {
-				var now = new Date();
-				var date = now.getFullYear() + '-' +
-						formatNumber(now.getMonth() + 1) + '-' +
-						formatNumber(now.getDate());
-				var time = formatNumber(now.getHours()) + ':' +
-						formatNumber(now.getMinutes()) + ':' +
-						formatNumber(now.getSeconds()) + '.' +
-						now.getMilliseconds();
-
-				return date + ' ' + time;
-
-				function formatNumber(number) {
-					var asString = '' + number;
-					return asString.length > 1 ? asString : ('0' + asString);
-				}
-			},
-
-			formatter: (options) => {
-				return options.timestamp() +
-						' [' + options.level.toUpperCase() + '] ' +
-						(options.message || '') +
-						formatMeta(options.meta);
-			}
-		})
-	]
-});
-
-module.exports = logger;
-
-function formatMeta(meta) {
-	switch (FORMATTING) {
-		case 'JSON':
-			return formatMetaJSON(meta);
-		case 'simple':
-			return formatMetaSimple(meta);
-		default:
-			throw new Error(`Unrecognized log message formatting: ${FORMATTING}`);
-	}
-}
 
 function formatMetaSimple(meta) {
 	var keys = Object.keys(meta);
@@ -137,3 +85,56 @@ function formatError(error) {
 
 	return description;
 }
+
+module.exports = (environment) => {
+	var FORMATTING = environment.$Server.logger.formatting;
+
+	if (['simple', 'JSON'].indexOf(FORMATTING) === -1) {
+		throw new Error('Invalid logger configuration: the formatting has to be ' +
+				`either "simple" or "JSON", ${FORMATTING} was provided`);
+	}
+
+	var logger = new (winston.Logger)({
+		transports: [
+			new (winston.transports.Console)({
+				timestamp: () => {
+					var now = new Date();
+					var date = now.getFullYear() + '-' +
+							formatNumber(now.getMonth() + 1) + '-' +
+							formatNumber(now.getDate());
+					var time = formatNumber(now.getHours()) + ':' +
+							formatNumber(now.getMinutes()) + ':' +
+							formatNumber(now.getSeconds()) + '.' +
+							now.getMilliseconds();
+
+					return date + ' ' + time;
+
+					function formatNumber(number) {
+						var asString = '' + number;
+						return asString.length > 1 ? asString : ('0' + asString);
+					}
+				},
+
+				formatter: (options) => {
+					return options.timestamp() +
+							' [' + options.level.toUpperCase() + '] ' +
+							(options.message || '') +
+							formatMeta(options.meta);
+				}
+			})
+		]
+	});
+
+	function formatMeta(meta) {
+		switch (FORMATTING) {
+			case 'JSON':
+				return formatMetaJSON(meta);
+			case 'simple':
+				return formatMetaSimple(meta);
+			default:
+				throw new Error(`Unrecognized log message formatting: ${FORMATTING}`);
+		}
+	}
+
+	return logger;
+};

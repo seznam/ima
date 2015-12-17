@@ -2,16 +2,16 @@
 module.exports = (environmentConfig, languageLoader, appFactory) => {
 	'use strict';
 
-	let environment = require('./lib/environment.js')(environmentConfig);
+	var environment = require('./lib/environment.js')(environmentConfig);
 
 	GLOBAL.$Debug = environment.$Debug;
 	GLOBAL.$IMA = GLOBAL.$IMA || {};
 
-	let clientApp = require('./lib/clientApp.js')(languageLoader, appFactory);
-	let urlParser = require('./lib/urlParser.js');
-	let logger = require('./lib/logger.js');
-	let proxy = require('./lib/proxy.js');
-	let Cache = require('./lib/cache.js');
+	var logger = require('./lib/logger.js')(environment);
+	var urlParser = require('./lib/urlParser.js')(environment);
+	var proxy = require('./lib/proxy.js')(environment, logger);
+	var clientApp = require('./lib/clientApp.js')(environment, logger, languageLoader, appFactory);
+	var cache = require('./lib/cache.js')(environment);
 
 	return {
 		environment,
@@ -19,6 +19,6 @@ module.exports = (environmentConfig, languageLoader, appFactory) => {
 		urlParser,
 		logger,
 		proxy,
-		Cache
+		cache
 	};
 };

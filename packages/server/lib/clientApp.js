@@ -4,11 +4,9 @@ var asyncEach = require('async-each');
 var hljs = require('highlight.js');
 var sep = require('path').sep;
 var errorView = require('./template/errorView.js');
-var environment = require('./environment.js');
 var instanceRecycler = require('./instanceRecycler.js');
 var helper = require('./helper.js');
 var templateProcessor = require('./templateProcessor.js');
-var logger = require('./logger.js');
 
 var appServer = null;
 var renderedSPAs = {};
@@ -18,7 +16,7 @@ hljs.configure({
 	lineNodes: true
 });
 
-module.exports = ((languageLoader, appFactory) => {
+module.exports = ((environment, logger, languageLoader, appFactory) => {
 	appFactory();
 
 	$IMA.Loader.import('imajs/client/main').then((app) => {

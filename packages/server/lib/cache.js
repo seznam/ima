@@ -200,4 +200,6 @@ function defaultKeyGenerator(request) {
 	return protocol + ':' + host + url;
 }
 
-module.exports = Cache;
+module.exports = (environment) => {
+	return new Cache(environment.$Server.cache);
+};
