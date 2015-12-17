@@ -22,15 +22,13 @@ var environment = imajsServer.environment;
 var compression = require('compression');
 var helmet = require('helmet');
 var logger = imajsServer.logger;
-
-var cacheConfig = environment.$Server.cache;
-var cache = new (imajsServer.Cache)(cacheConfig);
+var cache = imajsServer.cache
 
 process.on('uncaughtException', (error) => {
 	logger.error('Uncaught Exception:', { error });
 });
 
-var renderApp = (req, res) => {
+var renderApp = (req, res, next) => {
 	if (req.method === 'GET') {
 		var cachedPage = cache.get(req);
 		if (cachedPage) {
@@ -55,17 +53,19 @@ var renderApp = (req, res) => {
 			}
 		}, (error) => {
 			// logger.error('REJECT', { error });
+			next(error);
 		})
 		.catch((error) => {
 			logger.error('Cache error', { error });
+			next(error);
 		});
 };
 
-var errorHandler = (err, req, res) => {
+var errorHandler = (err, req, res, next) => {
 	clientApp.errorHandler(err, req, res);
 };
 
-var staticErrorPage = (err, req, res) => {
+var staticErrorPage = (err, req, res, next) => {
 	clientApp.showStaticErrorPage(err, req, res);
 };
 
