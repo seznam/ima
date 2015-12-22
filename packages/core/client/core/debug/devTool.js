@@ -89,6 +89,16 @@ export default class DevTool {
 	setState(statePatch) {
 		this._stateManager.setState(statePatch);
 	}
+
+	/**
+	 * Returns current state of page.
+	 *
+	 * @method getState
+	 * @return {Object<string, *>}
+	 */
+	getState() {
+		return this._stateManager.getState();
+	}
 }
 
 ns.Core.Debug.DevTool = DevTool;
