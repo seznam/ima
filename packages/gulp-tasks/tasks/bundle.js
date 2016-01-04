@@ -2,7 +2,7 @@
 var gulp = require('gulp');
 var concat = require('gulp-concat');
 var del = require('del');
-var minifyCSS = require('gulp-minify-css');
+var nano = require('gulp-cssnano');
 var plumber = require('gulp-plumber');
 var uglify = require('gulp-uglify');
 
@@ -42,7 +42,7 @@ module.exports = function (gulpConfig) {
 			gulp.src(files.bundle.css.src)
 				.pipe(plumber())
 				.pipe(concat(files.bundle.css.name))
-				.pipe(minifyCSS())
+				.pipe(nano())
 				.pipe(plumber.stop())
 				.pipe(gulp.dest(files.bundle.css.dest))
 		);
