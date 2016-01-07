@@ -32,9 +32,9 @@
 	},
 	"license": "MIT",
 	"devDependencies": {
-		"bower": "^1.7.1",
-		"ima.js-gulp-task-loader": "0.10.0",
-		"ima.js-gulp-tasks": "git+http://github.com/seznam/IMA.js-gulp-tasks.git#0.11.2"
+		"bower": "^1.7.2",
+		"ima.js-gulp-task-loader": "git+http://github.com/seznam/IMA.js-gulp-task-loader.git#0.11.0",
+		"ima.js-gulp-tasks": "git+http://github.com/seznam/IMA.js-gulp-tasks.git#0.11.5"
 	},
 	"dependencies": {
 		"babel-polyfill": "^6.3.14",
@@ -44,13 +44,13 @@
 		"cookie-parser": "^1.4.0",
 		"custom-event-polyfill": "^0.2.1",
 		"express": "^4.13.3",
-		"helmet": "^0.15.0",
+		"helmet": "^1.0.1",
 		"ima.js-babel6-polyfill": "^0.1.0",
 		"ima.js-server": "git+http://github.com/seznam/IMA.js-server.git#0.11.4",
 		"method-override": "^2.3.5",
 		"multer": "^1.0.6",
-		"react": "^0.14.3",
-		"react-dom": "^0.14.3",
+		"react": "^0.14.6",
+		"react-dom": "^0.14.6",
 		"serve-favicon": "^2.3.0",
 		"superagent": "^1.6.1"
 	}
