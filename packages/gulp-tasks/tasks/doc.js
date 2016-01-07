@@ -2,6 +2,7 @@
 var gulp = require('gulp');
 var change = require('gulp-change');
 var yuidoc = require('gulp-yuidoc');
+var path = require('path');
 
 module.exports = function (gulpConfig) {
 	var files = gulpConfig.files;
@@ -32,7 +33,7 @@ module.exports = function (gulpConfig) {
 
 					return content;
 				}))
-				.pipe(yuidoc({}, { 'themedir': './imajs/yuidocTheme' }))
+				.pipe(yuidoc({}, { 'themedir': path.resolve('./node_modules/ima.js-gulp-tasks/yuidocTheme') }))
 				.pipe(gulp.dest('./doc'))
 		);
 	});
