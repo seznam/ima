@@ -3,17 +3,22 @@ var fs = require('fs');
 var path = require('path');
 
 /**
- * Loads the default IMA.js and application-specific gulp tasks. The
- * application-specific gulp tasks will override the default ones if the names
+ * Loads gulp tasks from defined directories. The
+ * newest gulp tasks will override the older tasks if the names
  * match.
  *
+ * @param {Array<string>} directories
  * @param {Object<string, *>} gulpConfig Configuration of the gulp tasks.
  */
-module.exports = function (gulpConfig) {
-	console.log('Loading gulp tasks...');
-	loadTasks('./node_modules/ima.js-gulp-tasks/tasks', gulpConfig);
-	loadTasks('./app/gulp/tasks', gulpConfig);
-};
+ module.exports = function (directories, gulpConfig) {
+ 	console.log('Loading gulp tasks...');
+
+ 	for (var i = 0; i < directories.length; i++) {
+ 		var directory = directories[i];
+
+ 		loadTasks(directory, gulpConfig);
+ 	}
+ };
 
 /**
  * Loads the gulp tasks defined in the JavaScript files within the specified
