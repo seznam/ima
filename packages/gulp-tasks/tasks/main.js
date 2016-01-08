@@ -11,7 +11,7 @@ module.exports = function (gulpConfig) {
 			['Es6ToEs5:app', 'Es6ToEs5:server', 'Es6ToEs5:vendor'],
 			['less', 'doc', 'locale', 'Es6ToEs5:vendor:client', 'Es6ToEs5:vendor:server'],
 			['server'],
-			['devTest', 'watch'],
+			['test:unit:karma:dev', 'watch'],
 			callback
 		);
 	});
