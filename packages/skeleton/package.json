@@ -34,7 +34,7 @@
 	"devDependencies": {
 		"bower": "^1.7.2",
 		"ima.js-gulp-task-loader": "git+http://github.com/seznam/IMA.js-gulp-task-loader.git#0.11.0",
-		"ima.js-gulp-tasks": "git+http://github.com/seznam/IMA.js-gulp-tasks.git#0.11.5"
+		"ima.js-gulp-tasks": "git+http://github.com/seznam/IMA.js-gulp-tasks.git#0.11.6"
 	},
 	"dependencies": {
 		"babel-polyfill": "^6.3.14",
