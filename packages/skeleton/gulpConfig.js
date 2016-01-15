@@ -33,7 +33,9 @@ var babelConfig = {
 };
 var $Debug = true;
 
-if (process.env.NODE_ENV === 'production' || process.env.NODE_ENV === 'test') {
+if (process.env.NODE_ENV === 'production' ||
+		process.env.NODE_ENV === 'prod' ||
+		process.env.NODE_ENV === 'test') {
 	babelConfig.app.presets = ['es2015-loose', 'react'];
 	babelConfig.app.plugins = babelConfig.app.plugins.concat(['transform-react-constant-elements', 'transform-react-inline-elements']);
 	$Debug = false;
@@ -68,7 +70,7 @@ exports.files = {
 			server: 'app.server.js',
 			client: 'app.client.js'
 		},
-		src: ['babel-runtime/core-js/**/*.js'].concat(coreDependency.js, appDependency.js, coreDependency.mainjs),
+		src: [].concat(coreDependency.js, appDependency.js, coreDependency.mainjs),
 		dest: {
 			server: './build/imajs/',
 			client: './build/static/js/'
@@ -101,7 +103,6 @@ exports.files = {
 	shim : {
 		name: 'shim.js',
 		src: [
-			'./node_modules/es6-shim/es6-shim.js',
 			'./imajs/polyfill/collectionEnumeration.js',
 			'./imajs/polyfill/imaLoader.js'
 		],

@@ -19,7 +19,23 @@ module.exports = function(config) {
 			'./app/test/*.js',
 			'./imajs/client/test/**/*.js',
 			'./imajs/client/test/*.js'
-		],
+		]/*,
+		preprocessors: {
+			'./app/test/*.js': ['babel'],
+			'./imajs/client/test/*.js': ['babel']
+		},
+		babelPreprocessor: {
+			options: {
+				presets: ['es2015'],
+				sourceMap: 'inline'
+			},
+			filename: function (file) {
+				return file.originalPath.replace(/\.js$/, '.es5.js');
+			},
+			sourceFileName: function (file) {
+				return file.originalPath;
+			}
+		}*/,
 		customLaunchers: {
 	      Chrome_without_security: {
 	        base: 'Chrome',
@@ -28,9 +44,7 @@ module.exports = function(config) {
 	    },
 		plugins: [
 			'karma-phantomjs-launcher',
-			'karma-chrome-launcher',
-			'karma-firefox-launcher',
-			'karma-opera-launcher',
+			//'karma-babel-preprocessor',
 			'karma-jasmine'
 			//'karma-coverage'
 		],

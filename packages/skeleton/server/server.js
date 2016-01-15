@@ -3,30 +3,32 @@
 require("babel-polyfill");
 require('./imajs/shim.js');
 
+var environmentConfig = require('./imajs/config/environment.js');
+var appFactory = require('./imajs/app.server.js');
+var languageLoader = (language => require('./imajs/locale/' + language + '.js'));
+var imajsServer = require('ima.js-server')(environmentConfig, languageLoader, appFactory);
 var cluster = require('cluster');
 var path = require('path');
 global.appRoot = path.resolve(__dirname);
 var favicon = require('serve-favicon');
-var clientApp = require('./imajs/clientApp.js');
-var proxy = require('./imajs/proxy.js');
-var urlParser = require('./imajs/urlParser.js');
+var clientApp = imajsServer.clientApp;
+var proxy = imajsServer.proxy;
+var urlParser = imajsServer.urlParser;
 var bodyParser = require('body-parser');
 var multer = require('multer')({ dest: path.resolve(__dirname) + '/static/uploads/' });
 var cookieParser = require('cookie-parser');
 var methodOverride = require('method-override');
-var environment = require('./imajs/environment.js');
+var environment = imajsServer.environment;
 var compression = require('compression');
 var helmet = require('helmet');
-var logger = require('./imajs/logger.js');
-
-var cacheConfig = environment.$Server.cache;
-var cache = new (require('./imajs/cache.js'))(cacheConfig);
+var logger = imajsServer.logger;
+var cache = imajsServer.cache
 
 process.on('uncaughtException', (error) => {
 	logger.error('Uncaught Exception:', { error });
 });
 
-var renderApp = (req, res) => {
+var renderApp = (req, res, next) => {
 	if (req.method === 'GET') {
 		var cachedPage = cache.get(req);
 		if (cachedPage) {
@@ -51,9 +53,11 @@ var renderApp = (req, res) => {
 			}
 		}, (error) => {
 			// logger.error('REJECT', { error });
+			next(error);
 		})
 		.catch((error) => {
 			logger.error('Cache error', { error });
+			next(error);
 		});
 };
 
