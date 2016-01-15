@@ -159,8 +159,7 @@ export default class Client extends AbstractRouter {
 		var nativeWindow = this._window.getWindow();
 
 		this._setAddressBar(this.getUrl());
-		var eventName = EVENTS.POP_STATE;
-		this._window.bindEventListener(nativeWindow, eventName, (event) => {
+		this._window.bindEventListener(nativeWindow, EVENTS.POP_STATE, (event) => {
 
 			if (event.state) {
 				this.route(this.getPath())
