@@ -32,6 +32,16 @@ describe('Core.Router.Client', function() {
 		expect(win.getPath).toHaveBeenCalled();
 	});
 
+	it('should be return actual url', function() {
+		spyOn(win, 'getUrl')
+			.and
+			.stub();
+
+		router.getUrl();
+
+		expect(win.getUrl).toHaveBeenCalled();
+	});
+
 	it('should be add listener to popState event, click event and add first page state to history', function() {
 		spyOn(win, 'bindEventListener')
 			.and

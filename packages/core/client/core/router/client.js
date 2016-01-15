@@ -141,6 +141,16 @@ export default class Client extends AbstractRouter {
 	/**
 	 * @inheritDoc
 	 * @override
+	 * @method getUrl
+	 * @return {string}
+	 */
+	getUrl() {
+		return this._window.getUrl();
+	}
+
+	/**
+	 * @inheritDoc
+	 * @override
 	 * @method getPath
 	 * @return {string}
 	 */
