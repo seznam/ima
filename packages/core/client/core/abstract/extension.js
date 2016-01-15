@@ -1,5 +1,6 @@
 import ns from 'imajs/client/core/namespace';
 import IMAError from 'imajs/client/core/imaError';
+import ExtensionInterface from 'imajs/client/core/interface/extension';
 
 ns.namespace('Core.Abstract');
 
@@ -13,7 +14,7 @@ ns.namespace('Core.Abstract');
  *
  * @extends Core.Interface.Extension
  */
-export default class Extension extends ns.Core.Interface.Extension {
+export default class Extension extends ExtensionInterface {
 
 	/**
 	 * @method constructor

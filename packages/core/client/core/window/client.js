@@ -1,4 +1,5 @@
 import ns from 'imajs/client/core/namespace';
+import WindowInterface from 'imajs/client/core/interface/window';
 
 ns.namespace('Core.Window');
 
@@ -11,7 +12,7 @@ ns.namespace('Core.Window');
  * @module Core
  * @submodule Core.Window
  */
-export default class Client extends ns.Core.Interface.Window {
+export default class Client extends WindowInterface {
 
 	/**
 	 * @inheritDoc

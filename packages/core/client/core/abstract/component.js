@@ -1,4 +1,5 @@
 import ns from 'imajs/client/core/namespace';
+import {React, ReactDOM} from 'app/vendor';
 
 ns.namespace('Core.Abstract');
 
@@ -11,7 +12,7 @@ ns.namespace('Core.Abstract');
  * @module Core
  * @submodule Core.Abstract
  */
-export default class Component extends ns.Vendor.React.Component {
+export default class Component extends React.Component {
 
 	/**
 	 * Initializes the constructor.
@@ -64,7 +65,7 @@ export default class Component extends ns.Vendor.React.Component {
 	 *         component, or {@code null} if no such node was found.
 	 */
 	findDOMNode(component = this) {
-		return ns.Vendor.ReactDOM.findDOMNode(component);
+		return ReactDOM.findDOMNode(component);
 	}
 
 	/**

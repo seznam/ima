@@ -1,5 +1,6 @@
 import ns from 'imajs/client/core/namespace';
 import IMAError from 'imajs/client/core/imaError';
+import DispatcherInterface from 'imajs/client/core/interface/dispatcher';
 
 ns.namespace('Core.Event');
 
@@ -33,7 +34,7 @@ const EMPTY_SET = Object.freeze(new Set());
  * @module Core
  * @submodule Core.Event
  */
-export default class Dispatcher extends ns.Core.Interface.Dispatcher {
+export default class Dispatcher extends DispatcherInterface {
 	/**
 	 * Initializes the dispatcher.
 	 *

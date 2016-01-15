@@ -1,5 +1,6 @@
 import ns from 'imajs/client/core/namespace';
 import IMAError from 'imajs/client/core/imaError';
+import PageRenderInterface from 'imajs/client/core/interface/pageRender';
 
 ns.namespace('Core.Abstract');
 
@@ -16,7 +17,7 @@ ns.namespace('Core.Abstract');
  * @requires Vendor.$Helper
  * @requires Vendor.React
  */
-export default class PageRender extends ns.Core.Interface.PageRender {
+export default class PageRender extends PageRenderInterface {
 
 	/**
 	 * Initializes the abstract page renderer.

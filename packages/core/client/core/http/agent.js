@@ -1,5 +1,6 @@
 import ns from 'imajs/client/core/namespace';
 import IMAError from 'imajs/client/core/imaError';
+import HttpAgent from 'imajs/client/core/interface/httpAgent';
 
 ns.namespace('Core.Http');
 
@@ -18,7 +19,7 @@ ns.namespace('Core.Http');
  * @requires Core.Storage.Cookie
  * @requires Core.Interface.Dictionary
  */
-export default class Agent extends ns.Core.Interface.HttpAgent {
+export default class Agent extends HttpAgent {
 	/**
 	 * Initializes the HTTP handler.
 	 *

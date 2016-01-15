@@ -1,4 +1,5 @@
 import ns from 'imajs/client/core/namespace';
+import AbstractRouter from 'imajs/client/core/abstract/router';
 
 ns.namespace('Core.Router');
 
@@ -12,7 +13,7 @@ ns.namespace('Core.Router');
  * @module Core
  * @submodule Core.Router
  */
-export default class Server extends ns.Core.Abstract.Router {
+export default class Server extends AbstractRouter {
 
 	/**
 	 * Initializes the router.

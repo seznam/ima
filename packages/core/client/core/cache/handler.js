@@ -1,4 +1,5 @@
 import ns from 'imajs/client/core/namespace';
+import Cache from 'imajs/client/core/interface/cache';
 
 ns.namespace('Core.Cache');
 
@@ -23,7 +24,7 @@ ns.namespace('Core.Cache');
  *     cache.set('model.articles', articles, 60 * 60 * 1000); // cache for an hour
  *   }
  */
-export default class Handler extends ns.Core.Interface.Cache {
+export default class Handler extends Cache {
 	/**
 	 * Initializes the cache.
 	 *

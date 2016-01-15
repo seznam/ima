@@ -1,4 +1,5 @@
 import ns from 'imajs/client/core/namespace';
+import AbstractRouter from 'imajs/client/core/abstract/router';
 
 ns.namespace('Core.Router');
 
@@ -79,7 +80,7 @@ const MOUSE_LEFT_BUTTON = 0;
  * @module Core
  * @submodule Core.Router
  */
-export default class Client extends ns.Core.Abstract.Router {
+export default class Client extends AbstractRouter {
 
 	/**
 	 * Initializes the client-side router.

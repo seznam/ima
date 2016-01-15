@@ -1,4 +1,7 @@
 import ns from 'imajs/client/core/namespace';
+import vendor from 'imajs/client/core/vendorLinker';
+
+const $Helper = vendor.get('$Helper');
 
 ns.namespace('Core');
 
@@ -98,7 +101,7 @@ export default class Bootstrap {
 
 		if (environment !== PRODUCTION_ENVIRONMENT) {
 			var	productionSettings = allSettings[PRODUCTION_ENVIRONMENT];
-			ns.Vendor.$Helper.assignRecursively(
+			$Helper.assignRecursively(
 				productionSettings,
 				currentSettings
 			);

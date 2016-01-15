@@ -1,4 +1,5 @@
 import ns from 'imajs/client/core/namespace';
+import Storage from 'imajs/client/core/interface/storage';
 
 ns.namespace('Core.Storage');
 
@@ -14,7 +15,7 @@ ns.namespace('Core.Storage');
  *
  * @requires Map
  */
-export default class MapStorage extends ns.Core.Interface.Storage {
+export default class MapStorage extends Storage {
 	/**
 	 * Initializes the map storage.
 	 *

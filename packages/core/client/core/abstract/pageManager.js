@@ -1,4 +1,5 @@
 import ns from 'imajs/client/core/namespace';
+import PageManagerInterface from 'imajs/client/core/interface/pageManager';
 
 ns.namespace('Core.Abstract');
 
@@ -11,7 +12,7 @@ ns.namespace('Core.Abstract');
  * @module Core
  * @submodule Core.Abstract
  */
-export default class PageManager extends ns.Core.Interface.PageManager {
+export default class PageManager extends PageManagerInterface {
 
 	/**
 	 * Initializes the page manager.

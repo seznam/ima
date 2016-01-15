@@ -1,5 +1,6 @@
 import ns from 'imajs/client/core/namespace';
 import * as errorImplementation from 'imajs/client/core/abstract/imaError';
+import ErrorInterface from 'imajs/client/core/interface/error';
 
 /*
 

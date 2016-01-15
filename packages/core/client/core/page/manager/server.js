@@ -1,4 +1,5 @@
 import ns from 'imajs/client/core/namespace';
+import AbstractPageManager from 'imajs/client/core/abstract/pageManager';
 
 ns.namespace('Core.Page.Manager');
 
@@ -11,7 +12,7 @@ ns.namespace('Core.Page.Manager');
  * @module Core
  * @submodule Core.Page
  */
-export default class Server extends ns.Core.Abstract.PageManager {
+export default class Server extends AbstractPageManager {
 
 	/**
 	 * @inheritDoc

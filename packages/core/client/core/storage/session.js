@@ -1,5 +1,6 @@
 import ns from 'imajs/client/core/namespace';
 import IMAError from 'imajs/client/core/imaError';
+import Storage from 'imajs/client/core/interface/storage';
 
 ns.namespace('Core.Storage');
 
@@ -16,7 +17,7 @@ ns.namespace('Core.Storage');
  *
  * @requires SessionStorage
  */
-class Session extends ns.Core.Interface.Storage {
+class Session extends Storage {
 	/**
 	 * Initializes the session storage.
 	 *

@@ -1,5 +1,6 @@
 import ns from 'imajs/client/core/namespace';
 import IMAError from 'imajs/client/core/imaError';
+import ControllerInterface from 'imajs/client/core/interface/controller';
 
 ns.namespace('Core.Abstract');
 
@@ -15,7 +16,7 @@ ns.namespace('Core.Abstract');
  * @submodule Core.Abstract
  * @requires Core.Interface.View
  */
-export default class Controller extends ns.Core.Interface.Controller {
+export default class Controller extends ControllerInterface {
 
 	/**
 	 * Initializes the controller.

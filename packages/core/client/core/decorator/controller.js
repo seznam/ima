@@ -1,4 +1,5 @@
 import ns from 'imajs/client/core/namespace';
+import ControllerInterface from 'imajs/client/core/interface/controller';
 
 ns.namespace('Core.Decorator');
 
@@ -13,7 +14,7 @@ ns.namespace('Core.Decorator');
  * @module Core
  * @submodule Core.Decorator
  */
-export default class Controller extends ns.Core.Interface.Controller {
+export default class Controller extends ControllerInterface {
 
 	/**
 	 * Initializes the controller decorator.

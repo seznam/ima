@@ -1,5 +1,6 @@
 import ns from 'imajs/client/core/namespace';
 import IMAError from 'imajs/client/core/imaError';
+import RouterInterface from 'imajs/client/core/interface/router';
 
 ns.namespace('Core.Abstract');
 
@@ -14,7 +15,7 @@ ns.namespace('Core.Abstract');
  * @module Core
  * @submodule Core.Abstract
  */
-export default class Router extends ns.Core.Interface.Router {
+export default class Router extends RouterInterface {
 
 	/**
 	 * Initializes the router.
@@ -52,7 +53,7 @@ export default class Router extends ns.Core.Interface.Router {
 		 *
 		 * @private
 		 * @property _pageManager
-		 * @type {Core.Interface.pageManager}
+		 * @type {Core.Interface.PageManager}
 		 */
 		this._pageManager = pageManager;
 

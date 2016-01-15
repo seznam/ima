@@ -1,4 +1,5 @@
 import ns from 'imajs/client/core/namespace';
+import PageStateManager from 'imajs/client/core/interface/pageStateManager';
 
 ns.namespace('Core.Page');
 
@@ -11,7 +12,7 @@ ns.namespace('Core.Page');
  * @module Core
  * @submodule Core.Page
  */
-export default class StateManager extends ns.Core.Interface.PageStateManager {
+export default class StateManager extends PageStateManager {
 
 	/**
 	 * @method constructor

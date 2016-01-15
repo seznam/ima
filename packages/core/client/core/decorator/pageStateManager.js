@@ -1,5 +1,7 @@
 import ns from 'imajs/client/core/namespace';
 import IMAError from 'imajs/client/core/imaError';
+import PageStateManagerInterface
+		from 'imajs/client/core/interface/pageStateManager';
 
 ns.namespace('Core.Decorator.PageStateManager');
 
@@ -13,7 +15,7 @@ ns.namespace('Core.Decorator.PageStateManager');
  *
  * @extends Core.Interface.PageStateManager
  */
-export default class PageStateManager extends ns.Core.Interface.PageStateManager {
+export default class PageStateManager extends PageStateManagerInterface {
 
 	/**
 	 * @method constructor

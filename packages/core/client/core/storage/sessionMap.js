@@ -1,4 +1,6 @@
 import ns from 'imajs/client/core/namespace';
+import Storage from 'imajs/client/core/interface/storage';
+import Entry from 'imajs/client/core/cache/entry';
 
 ns.namespace('Core.Storage');
 
@@ -16,7 +18,7 @@ ns.namespace('Core.Storage');
  * @requires Core.Storage.Map
  * @requires Core.Storage.Session
  */
-export default class SessionMap extends ns.Core.Interface.Storage {
+export default class SessionMap extends Storage {
 	/**
 	 * Initializes the storage.
 	 *
@@ -98,7 +100,7 @@ export default class SessionMap extends ns.Core.Interface.Storage {
 		var canBeSerializedToJSON =
 				!(value instanceof Promise) &&
 				(
-					!(value instanceof ns.Core.Cache.Entry) ||
+					!(value instanceof Entry) ||
 					!(value.getValue() instanceof Promise)
 				);
 		if (canBeSerializedToJSON) {

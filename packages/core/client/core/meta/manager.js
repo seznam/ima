@@ -1,4 +1,5 @@
 import ns from 'imajs/client/core/namespace';
+import MetaManager from 'imajs/client/core/interface/metaManager';
 
 ns.namespace('Core.Meta');
 
@@ -12,7 +13,7 @@ ns.namespace('Core.Meta');
  * @module Core
  * @submodule Core.Meta
  */
-export default class Manager extends ns.Core.Interface.MetaManager {
+export default class Manager extends MetaManager {
 	/**
 	 * Initializes the meta page attributes manager.
 	 *

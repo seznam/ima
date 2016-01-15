@@ -1,6 +1,6 @@
 import ns from 'imajs/client/core/namespace';
 import IMAError from 'imajs/client/core/imaError';
-
+import AbstractPageRender from 'imajs/client/core/abstract/pageRender';
 
 ns.namespace('Core.Page.Render');
 
@@ -14,7 +14,7 @@ ns.namespace('Core.Page.Render');
  * @module Core
  * @submodule Core.Page
  */
-export default class Server extends ns.Core.Abstract.PageRender {
+export default class Server extends AbstractPageRender {
 
 	/**
 	 * Initializes the server-side page renderer.

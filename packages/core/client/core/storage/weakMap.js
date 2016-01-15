@@ -1,4 +1,5 @@
 import ns from 'imajs/client/core/namespace';
+import MapStorage from 'imajs/client/core/storage/map';
 
 ns.namespace('Core.Storage');
 
@@ -13,7 +14,7 @@ ns.namespace('Core.Storage');
  * @module Core
  * @submodule Core.Storage
  */
-export default class WeakMapStorage extends ns.Core.Storage.Map {
+export default class WeakMapStorage extends MapStorage {
 	/**
 	 * Initializes the storage.
 	 *

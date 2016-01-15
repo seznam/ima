@@ -1,5 +1,6 @@
 import ns from 'imajs/client/core/namespace';
 import IMAError from 'imajs/client/core/imaError';
+import EventBus from 'imajs/client/core/interface/eventBus';
 
 ns.namespace('Core.Event');
 
@@ -24,7 +25,7 @@ const IMA_EVENT = '$IMA.CustomEvent';
  * @module Core
  * @submodule Core.Event
  */
-export default class Bus extends ns.Core.Interface.EventBus {
+export default class Bus extends EventBus {
 	/**
 	 * Initializes the custom event helper.
 	 *

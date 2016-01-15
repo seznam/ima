@@ -1,4 +1,5 @@
 import ns from 'imajs/client/core/namespace';
+import {React} from 'app/vendor';
 
 ns.namespace('Core.Page.Render');
 
@@ -11,7 +12,7 @@ ns.namespace('Core.Page.Render');
  * @module Core
  * @submodule Core.Page
  */
-export default class ViewAdapter extends ns.Vendor.React.Component {
+export default class ViewAdapter extends React.Component {
 	/**
 	 * Initializes the adapter component.
 	 *
@@ -48,7 +49,7 @@ export default class ViewAdapter extends ns.Vendor.React.Component {
 	 * @method render
 	 */
 	render() {
-		return ns.Vendor.React.createElement(this._view, this.state);
+		return React.createElement(this._view, this.state);
 	}
 }
 

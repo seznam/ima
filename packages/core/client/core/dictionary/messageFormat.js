@@ -1,5 +1,6 @@
 import ns from 'imajs/client/core/namespace';
 import IMAError from 'imajs/client/core/imaError';
+import Dictionary from 'imajs/client/core/interface/dictionary';
 
 ns.namespace('Core.Dictionary');
 
@@ -13,7 +14,7 @@ ns.namespace('Core.Dictionary');
  * @module Core
  * @submodule Core.Dictionary
  */
-export default class MessageFormat extends ns.Core.Interface.Dictionary {
+export default class MessageFormat extends Dictionary {
 
 	/**
 	 * Initializes the dictionary.

@@ -1,5 +1,6 @@
 import ns from 'imajs/client/core/namespace';
 import IMAError from 'imajs/client/core/imaError';
+import MapStorage from 'imajs/client/core/storage/map';
 
 ns.namespace('Core.Storage');
 
@@ -40,7 +41,7 @@ const COOKIE_SEPARATOR = '; ';
  * @requires Core.Router.Request
  * @requires Core.Router.Response
  */
-export default class Cookie extends ns.Core.Storage.Map {
+export default class Cookie extends MapStorage {
 	/**
 	 * Initializes the cookie storage.
 	 *
