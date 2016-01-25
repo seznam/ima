@@ -4,7 +4,7 @@ describe('Core.Storage.Cookie', function() {
 	var setCookieString = 'cok3=hello3; Path=/; Expires=Fri, 31 Dec 9999 23:59:59 GMT';
 	var setCookieStringWithDomain = 'cok3=hello3; Path=/; Domain=localhost:3001; Expires=Fri, 31 Dec 9999 23:59:59 GMT';
 	var setCookieStringWithComplex = 'cok3="hello3"; Domain=localhost:3001; Expires=Fri, 31 Dec 9999 23:59:59 GMT; HttpOnly; Secure; Path=/';
-	var cookiesStringToCookieHeader = 'cok1=hello; cok2=hello2';
+	var cookiesStringForCookieHeader = 'cok1=hello; cok2=hello2';
 
 	var request = null;
 	var response = null;
@@ -78,7 +78,7 @@ describe('Core.Storage.Cookie', function() {
 			.and
 			.callThrough();
 
-		expect(cookie.getCookiesStringToCookieHeader()).toEqual(cookiesStringToCookieHeader);
+		expect(cookie.getCookiesStringForCookieHeader()).toEqual(cookiesStringForCookieHeader);
 		expect(cookie._transformFunction.encode.calls.count()).toEqual(2);
 	});
 

@@ -507,7 +507,7 @@ export default class Agent extends HttpAgent {
 	 */
 	_prepareOptions(options) {
 		var extraOptions = {
-			cookie: this._cookie.getCookiesStringToCookieHeader(),
+			cookie: this._cookie.getCookiesStringForCookieHeader(),
 			headers: {}
 		};
 

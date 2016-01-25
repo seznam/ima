@@ -254,11 +254,11 @@ export default class Cookie extends MapStorage {
 	 * Returns all cookies in this storage serialized to a string compatible
 	 * with the {@code Cookie} HTTP header.
 	 *
-	 * @method getCookiesStringToCookieHeader
+	 * @method getCookiesStringForCookieHeader
 	 * @return {string} All cookies in this storage serialized to a string
 	 *         compatible with the {@code Cookie} HTTP header.
 	 */
-	getCookiesStringToCookieHeader() {
+	getCookiesStringForCookieHeader() {
 		var cookieStrings = [];
 
 		for (var cookieName of super.keys()) {
