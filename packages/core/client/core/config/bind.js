@@ -128,7 +128,7 @@ export var init = (ns, oc, config) => { //jshint ignore:line
 	oc.bind('$Http', ns.Core.Interface.HttpAgent);
 
 	//Dev tools
-	oc.bind('$DevTool', ns.Core.Debug.DevTool, ['$PageManager', '$PageStateManager', '$Window', '$Dispatcher']);
+	oc.bind('$DevTool', ns.Core.Debug.DevTool, ['$PageManager', '$PageStateManager', '$Window', '$Dispatcher', '$EventBus']);
 
 	//*************END CORE****************
 

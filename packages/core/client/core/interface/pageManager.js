@@ -43,6 +43,14 @@ export default class PageManager {
 	 *        document
 	 */
 	scrollTo(x = 0, y = 0) {}
+
+	/**
+	 * Finalization callback, called when the pagemanager is being discarded.
+	 * This usually happens when the page is hot-reload.
+	 *
+	 * @method destroy
+	 */
+	destroy() {}
 }
 
 ns.Core.Interface.PageManager = PageManager;

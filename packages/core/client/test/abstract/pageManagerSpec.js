@@ -134,6 +134,46 @@ describe('Core.Abstract.PageManager', function() {
 		});
 	});
 
+	describe('destroy method', function() {
+
+		it('should clear managed page value', function() {
+			spyOn(pageManager, '_clearManagedPageValue')
+				.and
+				.stub();
+
+			pageManager.destroy();
+
+			expect(pageManager._clearManagedPageValue).toHaveBeenCalled();
+		});
+
+		it('should remove listener for onChange event from page state manager', function() {
+			pageManager.destroy();
+
+			expect(pageStateManager.onChange).toBeNull();
+		});
+
+		it('should deactivate page source', function() {
+			spyOn(pageManager, '_deactivatePageSource')
+				.and
+				.stub();
+
+			pageManager.destroy();
+
+			expect(pageManager._deactivatePageSource).toHaveBeenCalled();
+		});
+
+		it('should destroy page source', function() {
+			spyOn(pageManager, '_destroyPageSource')
+				.and
+				.stub();
+
+			pageManager.destroy();
+
+			expect(pageManager._destroyPageSource).toHaveBeenCalled();
+		});
+
+	});
+
 	describe('_setRestrictedPageStateManager', function() {
 
 		var allowedStateKeys = ['user'];

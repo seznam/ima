@@ -126,6 +126,20 @@ export default class PageManager extends PageManagerInterface {
 	}
 
 	/**
+	 * @inheritDoc
+	 * @override
+	 * @method destroy
+	 */
+	destroy() {
+		this._pageStateManager.onChange = null;
+
+		this._deactivatePageSource();
+		this._destroyPageSource();
+		
+		this._clearManagedPageValue();
+	}
+
+	/**
 	 * @protected
 	 * @method _storeManagedPageValue
 	 * @param {(string|function)} controller

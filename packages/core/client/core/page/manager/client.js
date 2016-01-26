@@ -41,6 +41,24 @@ export default class Client extends AbstractPageManager {
 		 * @default eventBus
 		 */
 		this._eventBus = eventBus;
+
+		/**
+		 * Binded custom event handler.
+		 *
+		 * @property _bindedOnCustomEventHandler
+		 * @type {function}
+		 */
+		this._bindedOnCustomEventHandler = (e) => this._onCustomEventHandler(e);
+	}
+
+	/**
+	 * @inheritDoc
+	 * @override
+	 * @method init
+	 */
+	init() {
+		super.init();
+		this._eventBus.listenAll(this._window.getWindow(), this._bindedOnCustomEventHandler);
 	}
 
 	/**
@@ -81,13 +99,12 @@ export default class Client extends AbstractPageManager {
 	/**
 	 * @inheritDoc
 	 * @override
-	 * @method init
+	 * @method destroy
 	 */
-	init() {
-		super.init();
-		this._eventBus.listenAll(this._window.getWindow(), (e) => {
-			this._onCustomEventHandler(e);
-		});
+	destroy() {
+		super.destroy();
+
+		this._eventBus.unlistenAll(this._window.getWindow(), this._bindedOnCustomEventHandler);
 	}
 
 	/**

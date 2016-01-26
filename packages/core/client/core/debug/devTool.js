@@ -18,9 +18,10 @@ export default class DevTool {
 	 * @param {Core.Interface.PageManager} pageManager
 	 * @param {Core.Interface.PageStateManager} stateManager
 	 * @param {Core.Interface.Window} window
-	 * @param {Core.Event.Dispatcher} dispatcher
+	 * @param {Core.Interface.Dispatcher} dispatcher
+	 * @param {Core.Interface.EventBus} eventBus
 	 */
-	constructor(pageManager, stateManager, window, dispatcher) {
+	constructor(pageManager, stateManager, window, dispatcher, eventBus) {
 
 		/**
 		 * App page manager.
@@ -57,6 +58,14 @@ export default class DevTool {
 		 * @type {Core.Interface.Dispatcher}
 		 */
 		this._dispatcher = dispatcher;
+
+		/**
+		 * $IMA eventBus
+		 *
+		 * @property _eventBus
+		 * @type {Core.Interface.EventBus}
+		 */
+		this._eventBus = eventBus;
 	}
 
 	/**
@@ -98,6 +107,17 @@ export default class DevTool {
 	 */
 	getState() {
 		return this._stateManager.getState();
+	}
+
+	/**
+	 * Clear app source from page.
+	 *
+	 * @method clearAppSource
+	 */
+	clearAppSource() {
+		this._pageManager.destroy();
+
+		this._dispatcher.clear();
 	}
 }
 

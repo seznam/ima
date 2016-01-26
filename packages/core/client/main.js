@@ -25,6 +25,118 @@ var createIMAJsApp = () => {
 	return { oc, bootstrap };
 };
 
+var getIMAJsClientBootConfig = () => {
+	if ($Debug) {
+		if (window.$IMA.$Protocol !== window.location.protocol) {
+			throw new Error(`Your client's protocol is not same as server's protocol.` +
+					`For right setting protocol on the server site set 'X-Forwarded-Proto' header.`);
+		}
+
+		if (window.$IMA.$Host !== window.location.host) {
+			throw new Error(`Your client's host is not same as server's host.` +
+					`For right setting host on the server site set 'X-Forwarded-Proto' header.`);
+		}
+	}
+
+	var bootConfig = {
+		vendor: window.$IMA.Vendor,
+		services: {
+			respond: null,
+			request: null,
+			$IMA: window.$IMA,
+			dictionary: {
+				$Language: window.$IMA.$Language,
+				dictionary: window.$IMA.i18n
+			},
+			router: {
+				$Protocol: window.$IMA.$Protocol,
+				$Host: window.$IMA.$Host,
+				$Root: window.$IMA.$Root,
+				$LanguagePartPath: window.$IMA.$LanguagePartPath
+			}
+		},
+		settings: {
+			$Debug: window.$IMA.$Debug,
+			$Env: window.$IMA.$Env,
+			$Version: window.$IMA.$Version,
+			$App: window.$IMA.$App,
+			$Protocol: window.$IMA.$Protocol,
+			$Language: window.$IMA.$Language,
+			$Host: window.$IMA.$Host,
+			$Root: window.$IMA.$Root,
+			$LanguagePartPath: window.$IMA.$LanguagePartPath
+		}
+	};
+
+	return Object.assign(bootConfig, getInit());
+};
+
+var bootIMAJsClientApp = (app, bootConfig) => {
+	app.bootstrap.run(bootConfig);
+
+	var cache = app.oc.get('$Cache');
+	cache.deserialize(window.$IMA.Cache || {});
+
+	return app;
+};
+
+var routeIMAJsClientApp = (app) => {
+	var router = app.oc.get('$Router');
+
+	router
+		.listen()
+		.route(router.getPath())
+		.catch((error) => {
+			if (typeof $IMA.fatalErrorHandler === 'function') {
+				$IMA.fatalErrorHandler(error);
+			} else {
+				console.warn('Define function config.$IMA.fatalErrorHandler in services.js.');
+			}
+		});
+};
+
+var hotReloadIMAJsClientApp = () => {
+	if ($Debug) {
+		var app = createIMAJsApp();
+		var bootConfig = getIMAJsClientBootConfig();
+		app = bootIMAJsClientApp(app, bootConfig);
+
+		var router = app.oc.get('$Router');
+		var pageManager = app.oc.get('$PageManager');
+		var currentRouteInfo = router.getCurrentRouteInfo();
+		var currentRoute = currentRouteInfo.route;
+
+		router.listen();
+
+		pageManager
+			.manage(currentRoute.getController(), currentRoute.getView(), { onlyUpdate: false, autoScroll: false }, currentRouteInfo.params)
+			.catch((error) => {
+				if (typeof $IMA.fatalErrorHandler === 'function') {
+					$IMA.fatalErrorHandler(error);
+				} else {
+					console.warn('Define function config.$IMA.fatalErrorHandler in services.js.');
+				}
+			});
+	}
+};
+
+var revivalIMAJsClientApp = () => {
+	//hack for browser Chrome, which has sometimes problem with rendering page
+	document.body.style.display = 'none';
+	document.body.offsetHeight; //eslint-disable-line
+	document.body.style.display = '';
+
+	//set React for ReactJS extension for browser
+	window.React = window.$IMA.Vendor.get('React');
+	window.$Debug = window.$IMA.$Debug;
+
+	var app = createIMAJsApp();
+	var bootConfig = getIMAJsClientBootConfig();
+	app = bootIMAJsClientApp(app, bootConfig);
+
+	routeIMAJsClientApp(app);
+};
+
 var root = typeof window !== 'undefined' && window !== null ? window : GLOBAL;
 
 //Check testing
@@ -59,8 +171,7 @@ if (root.$IMA.Test === true) {
 	Object.assign(bootConfig, getInit());
 
 	var app = createIMAJsApp();
-
-	app.bootstrap.run(bootConfig);
+	app = bootIMAJsClientApp(app, bootConfig);
 
 	root.ns = ns;
 	root.oc = app.oc;
@@ -69,87 +180,24 @@ if (root.$IMA.Test === true) {
 
 	if (typeof window !== 'undefined' && window !== null) {
 
-		var revivalIMAjsApp = () => {
-			//hack for browser Chrome, which has sometimes problem with rendering page
-			document.body.style.display = 'none';
-			document.body.offsetHeight; //eslint-disable-line
-			document.body.style.display = '';
-
-			//set React for ReactJS extension for browser
-			window.React = window.$IMA.Vendor.get('React');
-			window.$Debug = window.$IMA.$Debug;
-
-			if ($Debug) {
-				if (window.$IMA.$Protocol !== window.location.protocol) {
-					throw new Error(`Your client's protocol is not same as server's protocol.` +
-							`For right setting protocol on the server site set 'X-Forwarded-Proto' header.`);
-				}
-
-				if (window.$IMA.$Host !== window.location.host) {
-					throw new Error(`Your client's host is not same as server's host.` +
-							`For right setting host on the server site set 'X-Forwarded-Proto' header.`);
-				}
-			}
-
-			var bootConfig = {
-				vendor: window.$IMA.Vendor,
-				services: {
-					respond: null,
-					request: null,
-					$IMA: window.$IMA,
-					dictionary: {
-						$Language: window.$IMA.$Language,
-						dictionary: window.$IMA.i18n
-					},
-					router: {
-						$Protocol: window.$IMA.$Protocol,
-						$Host: window.$IMA.$Host,
-						$Root: window.$IMA.$Root,
-						$LanguagePartPath: window.$IMA.$LanguagePartPath
-					}
-				},
-				settings: {
-					$Debug: window.$IMA.$Debug,
-					$Env: window.$IMA.$Env,
-					$Version: window.$IMA.$Version,
-					$App: window.$IMA.$App,
-					$Protocol: window.$IMA.$Protocol,
-					$Language: window.$IMA.$Language,
-					$Host: window.$IMA.$Host,
-					$Root: window.$IMA.$Root,
-					$LanguagePartPath: window.$IMA.$LanguagePartPath
-				}
-			};
-
-			Object.assign(bootConfig, getInit());
-
-			var app = createIMAJsApp();
-			app.bootstrap.run(bootConfig);
-
-			var cache = app.oc.get('$Cache');
-			cache.deserialize(window.$IMA.Cache);
-
-			var router = app.oc.get('$Router');
-			router
-				.listen()
-				.route(router.getPath())
-				.catch((error) => {
-					if (typeof $IMA.fatalErrorHandler === 'function') {
-						$IMA.fatalErrorHandler(error);
-					} else {
-						console.warn('Define function config.$IMA.fatalErrorHandler in services.js.');
-					}
-				});
-		};
-
 		//revival IMA.js app
 		if (document.readyState === 'complete' || document.readyState === 'interactive') {
-			revivalIMAjsApp();
+			if (!$IMA.HotReload) {
+				revivalIMAJsClientApp();
+			}
 		} else {
-			window.addEventListener('DOMContentLoaded', revivalIMAjsApp);
+			window.addEventListener('DOMContentLoaded', revivalIMAJsClientApp);
 		}
 	}
-
 }
 
-export { getInit, getNamespace, createIMAJsApp };
+export {
+	getInit,
+	getNamespace,
+	createIMAJsApp,
+	getIMAJsClientBootConfig,
+	bootIMAJsClientApp,
+	routeIMAJsClientApp,
+	hotReloadIMAJsClientApp,
+	revivalIMAJsClientApp
+};

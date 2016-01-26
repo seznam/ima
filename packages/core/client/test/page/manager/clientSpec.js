@@ -67,7 +67,7 @@ describe('Core.Page.Manager.Client', function() {
 
 		pageManager.init();
 
-		expect(eventBusInterface.listenAll).toHaveBeenCalled();
+		expect(eventBusInterface.listenAll).toHaveBeenCalledWith(window, pageManager._bindedOnCustomEventHandler);
 	});
 
 	it('should return parsed custom event', function() {
@@ -85,6 +85,16 @@ describe('Core.Page.Manager.Client', function() {
 		jasmine.clock().uninstall();
 
 		expect(windowInterface.scrollTo).toHaveBeenCalledWith(0, 0);
+	});
+
+	it('should be unlisten for all custom events', function() {
+		spyOn(eventBusInterface, 'unlistenAll')
+			.and
+			.stub();
+
+		pageManager.destroy();
+
+		expect(eventBusInterface.unlistenAll).toHaveBeenCalledWith(window, pageManager._bindedOnCustomEventHandler);
 	});
 
 	describe('_onCustomEventHanler method', function() {
