@@ -22,7 +22,7 @@ var environment = imajsServer.environment;
 var compression = require('compression');
 var helmet = require('helmet');
 var logger = imajsServer.logger;
-var cache = imajsServer.cache
+var cache = imajsServer.cache;
 
 process.on('uncaughtException', (error) => {
 	logger.error('Uncaught Exception:', { error });
