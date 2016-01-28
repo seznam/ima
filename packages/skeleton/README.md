@@ -40,6 +40,38 @@ your computer, locally install the dependencies, prepare the basic demo
 application and start the development server. Go ahead and open
 [`http://localhost:3001/`](http://localhost:3001/) in your browser!
 
+## Production use
+
+If you want deploy your IMA.js application to production, the installation is similar like in dev enviroment.
+
+To install the IMA.js application, start by cloning your application git
+repository on your production server:
+```
+git clone https://github.com/seznam/IMA.js-skeleton.git // use your application repository url
+```
+
+Switch to the cloned directory and run the following commands
+to set-up your application - same like in development mode:
+
+```
+git submodule init
+git submodule update
+```
+```
+npm install -g gulp
+npm install
+NODE_ENV=production gulp build
+```
+
+Now is your server ready for running IMA.js application.
+
+Run it with the following command:
+
+```
+NODE_ENV=production node build/server.js
+```
+Your application is running on [`http://localhost:3001/`](http://localhost:3001/) (by default) now!
+
 ## Tutorial
 
 We have prepared a complex tutorial for you:
