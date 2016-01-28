@@ -108,15 +108,22 @@ var hotReloadIMAJsClientApp = () => {
 
 		router.listen();
 
-		pageManager
-			.manage(currentRoute.getController(), currentRoute.getView(), { onlyUpdate: false, autoScroll: false }, currentRouteInfo.params)
-			.catch((error) => {
-				if (typeof $IMA.fatalErrorHandler === 'function') {
-					$IMA.fatalErrorHandler(error);
-				} else {
-					console.warn('Define function config.$IMA.fatalErrorHandler in services.js.');
-				}
-			});
+		try {
+			pageManager
+				.manage(currentRoute.getController(), currentRoute.getView(), { onlyUpdate: false, autoScroll: false }, currentRouteInfo.params)
+				.catch((error) => {
+					return router.handleError({ error });
+				})
+				.catch((error) => {
+					if (typeof $IMA.fatalErrorHandler === 'function') {
+						$IMA.fatalErrorHandler(error);
+					} else {
+						console.warn('Define function config.$IMA.fatalErrorHandler in services.js.');
+					}
+				});
+		} catch(error) {
+			router.handleError({ error });
+		}
 	}
 };
 
