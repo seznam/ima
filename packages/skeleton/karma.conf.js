@@ -15,10 +15,10 @@ module.exports = function(config) {
 			'./build/static/js/vendor.client.js',
 			'./build/static/js/locale/cs.js',
 			'./build/static/js/app.client.js',
-			'./app/test/**/*.js',
-			'./app/test/*.js',
-			'./imajs/client/test/**/*.js',
-			'./imajs/client/test/*.js'
+			'./app/tests/**/*.js',
+			'./app/tests/*.js',
+			'./imajs/client/tests/**/*.js',
+			'./imajs/client/tests/*.js'
 		]/*,
 		preprocessors: {
 			'./app/test/*.js': ['babel'],
