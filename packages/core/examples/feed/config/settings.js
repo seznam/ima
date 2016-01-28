@@ -51,7 +51,8 @@ export var init = (ns, oc, config) => {
 						'/static/js/vendor.client.js',
 						'/static/js/locale/' + config.$Language + '.js',
 						'/static/js/app.client.js',
-						'/static/js/facebook.js'
+						'/static/js/facebook.js',
+						'/static/js/hot.reload.js'
 					],
 					documentView: 'App.Component.Document.View',
 					masterElementId: 'page'
@@ -66,8 +67,7 @@ export var init = (ns, oc, config) => {
 						'/static/js/vendor.client.js',
 						'/static/js/locale/' + config.$Language + '.js',
 						'/static/js/app.client.js',
-						'/static/js/facebook.js',
-						'/static/js/hot.reload.js' + versionStamp
+						'/static/js/facebook.js'
 					],
 					documentView: 'App.Component.Document.View',
 					masterElementId: 'page'
