@@ -15,8 +15,8 @@ module.exports = function(config) {
 			'./build/static/js/vendor.client.js',
 			'./build/static/js/locale/cs.js',
 			'./build/static/js/app.client.js',
-			'./app/tests/**/*.js',
-			'./app/tests/*.js',
+			'./app/tests/unit/**/*.js',
+			'./app/tests/unit/*.js',
 			'./imajs/client/tests/**/*.js',
 			'./imajs/client/tests/*.js'
 		]/*,
