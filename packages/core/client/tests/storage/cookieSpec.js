@@ -95,7 +95,7 @@ describe('Core.Storage.Cookie', function() {
 
 			cookie.set('cok2');
 
-			expect(cookie._getExpirationAsDate).toHaveBeenCalledWith(-1000);
+			expect(cookie._getExpirationAsDate).toHaveBeenCalledWith(-1);
 		});
 
 		it('should prefer maxAge before expires', function() {
