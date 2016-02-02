@@ -4,6 +4,7 @@ describe('Core.Storage.Cookie', function() {
 	var setCookieString = 'cok3=hello3; Path=/; Expires=Fri, 31 Dec 9999 23:59:59 GMT';
 	var setCookieStringWithDomain = 'cok3=hello3; Path=/; Domain=localhost:3001; Expires=Fri, 31 Dec 9999 23:59:59 GMT';
 	var setCookieStringWithComplex = 'cok3="hello3"; Domain=localhost:3001; Expires=Fri, 31 Dec 9999 23:59:59 GMT; HttpOnly; Secure; Path=/';
+	var setCookieStringWithMaxAge = 'cok3="hello3"; Domain=localhost:3001; Expires=Fri, 31 Dec 9999 23:59:59 GMT; Max-Age=5; HttpOnly; Secure; Path=/';
 	var cookiesStringForCookieHeader = 'cok1=hello; cok2=hello2';
 
 	var request = null;
@@ -11,8 +12,12 @@ describe('Core.Storage.Cookie', function() {
 	var cookie = null;
 	var win = null;
 	var transformFunction = {
-		encode: function(s) { return s; },
-		decode: function(s) { return s; }
+		encode: function(s) {
+			return s;
+		},
+		decode: function(s) {
+			return s;
+		}
 	};
 
 	beforeEach(function() {
@@ -54,7 +59,7 @@ describe('Core.Storage.Cookie', function() {
 	});
 
 	it('should be set value to cookie', function() {
-		cookie.set('cok3','hello3');
+		cookie.set('cok3', 'hello3');
 
 		expect(response.setCookie).toHaveBeenCalled();
 	});
@@ -83,17 +88,27 @@ describe('Core.Storage.Cookie', function() {
 	});
 
 	describe('set method', function() {
-		it('should set expires to -1', function() {
+		it('should set cookie as expired for undefined value', function() {
 			spyOn(cookie, '_getExpirationAsDate')
 				.and
 				.stub();
 
 			cookie.set('cok2');
 
-			expect(cookie._getExpirationAsDate).toHaveBeenCalledWith(-1);
+			expect(cookie._getExpirationAsDate).toHaveBeenCalledWith(-1000);
 		});
 
-		it('should not auto set expires', function() {
+		it('should prefer maxAge before expires', function() {
+			spyOn(cookie, '_getExpirationAsDate')
+				.and
+				.stub();
+
+			cookie.set('cok2', 'val2', { expires: new Date(), maxAge: 5 });
+
+			expect(cookie._getExpirationAsDate).toHaveBeenCalledWith(5);
+		});
+
+		it('should set session cookie', function() {
 			spyOn(cookie, '_getExpirationAsDate')
 				.and
 				.stub();
@@ -101,7 +116,7 @@ describe('Core.Storage.Cookie', function() {
 			cookie.set('cok2', 'val2');
 
 			expect(cookie._getExpirationAsDate).not.toHaveBeenCalled();
-		})
+		});
 
 	});
 
@@ -111,21 +126,28 @@ describe('Core.Storage.Cookie', function() {
 			spyOn(cookie, 'set');
 
 			cookie.parseFromSetCookieHeader(setCookieString);
-			expect(cookie.set).toHaveBeenCalledWith('cok3', 'hello3', {expires: new Date('Fri, 31 Dec 9999 23:59:59 UTC'), path: '/'});
+			expect(cookie.set).toHaveBeenCalledWith('cok3', 'hello3', { expires: new Date('Fri, 31 Dec 9999 23:59:59 UTC'), path: '/' });
 		});
 
 		it('should parse cookie from Set-Cookie header string with defined domain', function() {
 			spyOn(cookie, 'set');
 
 			cookie.parseFromSetCookieHeader(setCookieStringWithDomain);
-			expect(cookie.set).toHaveBeenCalledWith('cok3', 'hello3', {expires: new Date('Fri, 31 Dec 9999 23:59:59 UTC'), path: '/', domain: 'localhost:3001'});
+			expect(cookie.set).toHaveBeenCalledWith('cok3', 'hello3', { expires: new Date('Fri, 31 Dec 9999 23:59:59 UTC'), path: '/', domain: 'localhost:3001' });
 		});
 
 		it('should parse cookie from Set-Cookie header string with complex options', function() {
 			spyOn(cookie, 'set');
 
 			cookie.parseFromSetCookieHeader(setCookieStringWithComplex);
-			expect(cookie.set).toHaveBeenCalledWith('cok3', 'hello3', {expires: new Date('Fri, 31 Dec 9999 23:59:59 UTC'), httpOnly: true, secure: true, path: '/', domain: 'localhost:3001'});
+			expect(cookie.set).toHaveBeenCalledWith('cok3', 'hello3', { expires: new Date('Fri, 31 Dec 9999 23:59:59 UTC'), httpOnly: true, secure: true, path: '/', domain: 'localhost:3001' });
+		});
+
+		it('should parse cookie from Set-Cookie header string with Max-Age option', function() {
+			spyOn(cookie, 'set');
+
+			cookie.parseFromSetCookieHeader(setCookieStringWithMaxAge);
+			expect(cookie.set).toHaveBeenCalledWith('cok3', 'hello3', { expires: new Date('Fri, 31 Dec 9999 23:59:59 UTC'), maxAge: 5, httpOnly: true, secure: true, path: '/', domain: 'localhost:3001' });
 		});
 
 	});
@@ -157,10 +179,10 @@ describe('Core.Storage.Cookie', function() {
 		});
 
 		using([
-			{value: '1', sanitizedValue: '1'},
-			{value: '7|AABBCCD===', sanitizedValue: '7|AABBCCD==='},
-			{value: '7|AABBCCD=== ', sanitizedValue: '7|AABBCCD==='},
-			{value: undefined + '', sanitizedValue: 'undefined'}
+			{ value: '1', sanitizedValue: '1' },
+			{ value: '7|AABBCCD===', sanitizedValue: '7|AABBCCD===' },
+			{ value: '7|AABBCCD=== ', sanitizedValue: '7|AABBCCD===' },
+			{ value: undefined + '', sanitizedValue: 'undefined' }
 		], function(item) {
 			it('should return ' + item.sanitizedValue + 'for value ' + item.value, function() {
 				expect(cookie._sanitizeCookieValue(item.value)).toEqual(item.sanitizedValue);

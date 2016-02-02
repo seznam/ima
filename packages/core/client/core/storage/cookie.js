@@ -187,7 +187,7 @@ export default class Cookie extends MapStorage {
 			options.expires = -1000;
 		}
 
-		if (options.expires) {
+		if (options.maxAge || options.expires) {
 			options.expires = this._getExpirationAsDate(options.maxAge || options.expires);
 		}
 
@@ -478,7 +478,7 @@ export default class Cookie extends MapStorage {
 				value = this._getExpirationAsDate(value);
 			}
 
-			if (name === 'max-age') {
+			if (name === 'max-Age') {
 				name = 'maxAge';
 				value = parseInt(value, 10);
 			}
