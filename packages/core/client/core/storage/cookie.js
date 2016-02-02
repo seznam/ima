@@ -51,7 +51,7 @@ export default class Cookie extends MapStorage {
 	 * @param {Core.Router.Request} request The current HTTP request.
 	 * @param {Core.Router.Response} response The current HTTP response.
 	 * @example
-	 *      cookie.set('cookie', 'value', {expires: 10}); // cookie expires
+	 *      cookie.set('cookie', 'value', {expires: 10000}); // cookie expires
 	 *                                                    // after 10s
 	 *      cookie.set('cookie'); // delete cookie
 	 *
@@ -400,7 +400,7 @@ export default class Cookie extends MapStorage {
 
 		if (typeof expiration === 'number') {
 			return expiration === Infinity ?
-				MAX_EXPIRE_DATE : new Date(Date.now() + expiration * 1000);
+				MAX_EXPIRE_DATE : new Date(Date.now() + expiration);
 		}
 
 		return expiration ? new Date(expiration) : MAX_EXPIRE_DATE;
