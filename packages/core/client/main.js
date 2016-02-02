@@ -83,7 +83,7 @@ var bootIMAJsClientApp = (app, bootConfig) => {
 var routeIMAJsClientApp = (app) => {
 	var router = app.oc.get('$Router');
 
-	router
+	return router
 		.listen()
 		.route(router.getPath())
 		.catch((error) => {
@@ -109,7 +109,7 @@ var hotReloadIMAJsClientApp = () => {
 		router.listen();
 
 		try {
-			pageManager
+			return pageManager
 				.manage(currentRoute.getController(), currentRoute.getView(), { onlyUpdate: false, autoScroll: false }, currentRouteInfo.params)
 				.catch((error) => {
 					return router.handleError({ error });
@@ -122,7 +122,7 @@ var hotReloadIMAJsClientApp = () => {
 					}
 				});
 		} catch (error) {
-			router.handleError({ error });
+			return router.handleError({ error });
 		}
 	}
 };
@@ -141,7 +141,7 @@ var revivalIMAJsClientApp = () => {
 	var bootConfig = getIMAJsClientBootConfig();
 	app = bootIMAJsClientApp(app, bootConfig);
 
-	routeIMAJsClientApp(app);
+	return routeIMAJsClientApp(app);
 };
 
 var root = typeof window !== 'undefined' && window !== null ? window : GLOBAL;
