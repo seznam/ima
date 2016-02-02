@@ -88,8 +88,7 @@ module.exports = (environment, logger) => {
 				break;
 			case 'GET':
 				httpRequest = superAgent
-					.get(proxyUrl)
-					.query(req.query);
+					.get(proxyUrl);
 				break;
 		}
 
