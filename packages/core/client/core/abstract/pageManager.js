@@ -135,7 +135,7 @@ export default class PageManager extends PageManagerInterface {
 
 		this._deactivatePageSource();
 		this._destroyPageSource();
-		
+
 		this._clearManagedPageValue();
 	}
 

@@ -121,7 +121,7 @@ var hotReloadIMAJsClientApp = () => {
 						console.warn('Define function config.$IMA.fatalErrorHandler in services.js.');
 					}
 				});
-		} catch(error) {
+		} catch (error) {
 			router.handleError({ error });
 		}
 	}

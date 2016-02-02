@@ -1,6 +1,6 @@
 import ns from 'imajs/client/core/namespace';
 import * as errorImplementation from 'imajs/client/core/abstract/imaError';
-import ErrorInterface from 'imajs/client/core/interface/error';
+//import ErrorInterface from 'imajs/client/core/interface/error'; //eslint-disable-line
 
 /*
 
@@ -56,10 +56,10 @@ export default function IMAError(message, params = {},
  * @property stack
  * @type {string}
  */
-Object.defineProperty(IMAError.prototype, "stack", {
+Object.defineProperty(IMAError.prototype, 'stack', {
 	configurable: false,
 	enumerable: true,
-	get: function () {
+	get: function() {
 		return errorImplementation.getStack.call(this, IMAError);
 	}
 });
@@ -75,7 +75,7 @@ Object.defineProperty(IMAError.prototype, "stack", {
  * @method getHttpStatus
  * @return {number}
  */
-IMAError.prototype.getHttpStatus = function () {
+IMAError.prototype.getHttpStatus = function() {
 	return errorImplementation.getHttpStatus.call(this);
 };
 
@@ -90,7 +90,7 @@ IMAError.prototype.getHttpStatus = function () {
  * @return {Object<string, *>} The error parameters providing additional
  *         details about the error.
  */
-IMAError.prototype.getParams = function () {
+IMAError.prototype.getParams = function() {
 	return errorImplementation.getParams.call(this);
 };
 
@@ -101,7 +101,7 @@ IMAError.prototype.getParams = function () {
  * @method getName
  * @return {string} The name of this error.
  */
-IMAError.prototype.getName = function () {
+IMAError.prototype.getName = function() {
 	return errorImplementation.getName.call(this);
 };
 
@@ -113,7 +113,7 @@ IMAError.prototype.getName = function () {
  * @method toString
  * @return {string} A string representing this error.
  */
-IMAError.prototype.toString = function () {
+IMAError.prototype.toString = function() {
 	return errorImplementation.toString.call(this);
 };
 

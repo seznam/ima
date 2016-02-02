@@ -1,5 +1,5 @@
 import ns from 'imajs/client/core/namespace';
-import {React, ReactDOM} from 'app/vendor';
+import { React, ReactDOM } from 'app/vendor';
 
 ns.namespace('Core.Abstract');
 
