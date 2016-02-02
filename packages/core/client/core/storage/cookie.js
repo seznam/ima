@@ -92,11 +92,14 @@ export default class Cookie extends MapStorage {
 		 *
 		 * @private
 		 * @property _options
-		 * @type {{path: string, secure: boolean, httpOnly: boolean, domain: string, expires: (Date|number|null)}}
+		 * @type {{path: string, secure: boolean, httpOnly: boolean,
+		 *       domain: string, expires: (Date|number|null),
+		 *       maxAge: (number|null)}}
 		 */
 		this._options = {
 			path: '/',
 			expires: null,
+			maxAge: null,
 			secure: false,
 			httpOnly: false,
 			domain: ''
@@ -168,22 +171,24 @@ export default class Cookie extends MapStorage {
 	 * @method set
 	 * @param {string} name
 	 * @param {(boolean|number|string|undefined)} value
-	 * @param {{domain: string=, expires: (number|string|Date|null)=, secure: boolean=, httpOnly: boolean=, path: string=}} [options={}]
+	 * @param {{domain: string=, expires: (number|string|Date|null)=,
+	 *        secure: boolean=, httpOnly: boolean=, path: string=,
+	 *        maxAge: number=}} [options={}]
 	 *        Cookie attributes. Only the attributes listed in the type
 	 *        annotation of this field are supported. For documentation and
 	 *        full list of cookie attributes see
-	 *        http://tools.ietf.org/html/rfc2965#page-5
+	 *        http://tools.ietf.org/html/rfc6265#page-9
 	 * @return {Core.Storage.Cookie}
 	 */
 	set(name, value, options = {}) {
 		options = Object.assign({}, this._options, options);
 
 		if (value === undefined) {
-			options.expires = -1;
+			options.expires = -1000;
 		}
 
 		if (options.expires) {
-			options.expires = this._getExpirationAsDate(options.expires);
+			options.expires = this._getExpirationAsDate(options.maxAge || options.expires);
 		}
 
 		value = this._sanitizeCookieValue(value + '');
@@ -383,7 +388,7 @@ export default class Cookie extends MapStorage {
 	 *
 	 * @private
 	 * @method _getExpirationAsDate
-	 * @param {(number|string|Date)} expiration Cookie expiration in seconds
+	 * @param {(number|string|Date)} expiration Cookie expiration in miliseconds
 	 *        from now, or as a string compatible with the {@code Date}
 	 *        constructor.
 	 * @return {Date} Cookie expiration as a {@code Date} instance.
@@ -471,6 +476,11 @@ export default class Cookie extends MapStorage {
 
 			if (name === 'expires') {
 				value = this._getExpirationAsDate(value);
+			}
+
+			if (name === 'max-age') {
+				name = 'maxAge';
+				value = parseInt(value, 10);
 			}
 		}
 
