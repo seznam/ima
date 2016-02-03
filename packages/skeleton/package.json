@@ -44,7 +44,7 @@
 		"express": "^4.13.3",
 		"helmet": "^1.1.0",
 		"ima.js-babel6-polyfill": "^0.1.1",
-		"ima.js-server": "^0.11.7",
+		"ima.js-server": "^0.11.8",
 		"method-override": "^2.3.5",
 		"multer": "^1.0.6",
 		"react": "^0.14.6",
