@@ -56,10 +56,10 @@ var parseSetCookieHeader = (cookieString) => {
 	};
 }
 
-var createHttpRequest = (proxyUrl, body) => {
+var createHttpRequest = (method, proxyUrl, body) => {
 	var httpRequest = null;
 
-	switch(req.method) {
+	switch(method) {
 		case 'POST':
 			httpRequest = superAgent
 				.post(proxyUrl)
@@ -116,7 +116,7 @@ module.exports = (environment, logger) => {
 
 		logger.info(`API proxy: ${req.method} ${proxyUrl} query: ` + JSON.stringify(req.query));
 
-		var httpRequest = createHttpRequest(proxyUrl, req.body);
+		var httpRequest = createHttpRequest(req.method, proxyUrl, req.body);
 		httpRequest = setCommonRequestHeaders(httpRequest, req.headers);
 
 		if (req.get('Cookie') && req.get('Cookie') !== '') {
