@@ -4,58 +4,109 @@ var superAgent = require('superagent');
 var environment = require('./environment.js');
 var logger = require('./logger.js');
 
-module.exports = (environment, logger) => {
+var firstLetterToLowerCase = (world) => {
+	return world.charAt(0).toLowerCase() + world.slice(1);
+};
 
-	var _firstLetterToLowerCase = (world) => {
-		return world.charAt(0).toLowerCase() + world.slice(1);
+var firstLetterToUpperCase = (world) => {
+	return world.charAt(0).toUpperCase() + world.slice(1);
+};
+
+var parseSetCookieHeader = (cookieString) => {
+	var cookiePairs = cookieString.split('; ');
+
+	var cookieName = null;
+	var cookieValue = null;
+	var cookieOptions = {
+		path: '/',
+		secure: false,
+		expires: new Date('Fri, 31 Dec 9999 23:59:59 UTC'),
+		httpOnly: false,
+		'max-Age': null
 	};
 
-	var _firstLetterToUpperCase = (world) => {
-		return world.charAt(0).toUpperCase() + world.slice(1);
-	};
+	cookiePairs.forEach((pair) => {
+		var separatorIndexEqual =  pair.indexOf('=');
+		var name = decodeURIComponent(firstLetterToLowerCase(pair.substr(0, separatorIndexEqual)).trim());
+		var value = decodeURIComponent(pair.substr(separatorIndexEqual + 1).trim());
 
-	var _parseCookieString = (cookieString) => {
-		var cookiePairs = cookieString.split('; ');
+		if (name === '') {
+			name = firstLetterToLowerCase(value);
+			value = true;
+		}
 
-		var cookieName = null;
-		var cookieValue = null;
-		var cookieOptions = {
-			path: '/',
-			secure: false,
-			expires: new Date('Fri, 31 Dec 9999 23:59:59 UTC'),
-			httpOnly: false
-		};
+		if (cookieOptions.hasOwnProperty(name)) {
 
-		cookiePairs.forEach((pair) => {
-			var separatorIndexEqual =  pair.indexOf('=');
-			var name = decodeURIComponent(_firstLetterToLowerCase(pair.substr(0, separatorIndexEqual)));
-			var value = decodeURIComponent(pair.substr(separatorIndexEqual + 1));
-
-			if (cookieOptions[name]) {
-				var date = new Date(value);
-
-				if (isNaN(date.getTime())) {
-					cookieOptions[name] = value;
-				} else {
-					cookieOptions[name] = date;
-				}
-
+			if (name === 'expires') {
+				cookieOptions[name] = new Date(value);
 			} else {
-				cookieName = name;
-				cookieValue = value;
+				cookieOptions[name] = value;
 			}
+
+		} else {
+			cookieName = name;
+			cookieValue = value;
+		}
+	});
+
+	return {
+		name: cookieName,
+		value: cookieValue,
+		options: cookieOptions
+	};
+}
+
+var createHttpRequest = (proxyUrl, body) => {
+	var httpRequest = null;
+
+	switch(req.method) {
+		case 'POST':
+			httpRequest = superAgent
+				.post(proxyUrl)
+				.send(body);
+			break;
+		case 'PUT':
+			httpRequest = superAgent
+				.put(proxyUrl)
+				.send(body);
+			break;
+		case 'PATCH':
+			httpRequest = superAgent
+				.patch(proxyUrl)
+				.send(body);
+			break;
+		case 'DELETE':
+			httpRequest = superAgent
+				.del(proxyUrl)
+				.send(body);
+			break;
+		case 'GET':
+			httpRequest = superAgent
+				.get(proxyUrl);
+			break;
+	};
+
+	return httpRequest;
+};
+
+var setCommonRequestHeaders = (httpRequest, headers) => {
+	Object
+		.keys(headers)
+		.filter((key) => {
+			return ['host', 'Cookie'].indexOf(key) === -1;
+		})
+		.forEach((header) => {
+			httpRequest.set(header, headers[header]);
 		});
 
-		return {
-			name: cookieName,
-			value: cookieValue,
-			options: cookieOptions
-		};
-	};
+	return httpRequest;
+};
+
+
+module.exports = (environment, logger) => {
 
 	var _callRemoteServer = (req, res) => {
 		var url = req.url;
-		var httpRequest = null;
 
 		if ((req.url.length > 1) && (req.url[req.url.length-1] === '/')) {
 			url = url.substr(0, url.length - 1);
@@ -65,41 +116,8 @@ module.exports = (environment, logger) => {
 
 		logger.info(`API proxy: ${req.method} ${proxyUrl} query: ` + JSON.stringify(req.query));
 
-		switch(req.method) {
-			case 'POST':
-				httpRequest = superAgent
-					.post(proxyUrl)
-					.send(req.body);
-				break;
-			case 'PUT':
-				httpRequest = superAgent
-					.put(proxyUrl)
-					.send(req.body);
-				break;
-			case 'PATCH':
-				httpRequest = superAgent
-					.patch(proxyUrl)
-					.send(req.body);
-				break;
-			case 'DELETE':
-				httpRequest = superAgent
-					.del(proxyUrl)
-					.send(req.body);
-				break;
-			case 'GET':
-				httpRequest = superAgent
-					.get(proxyUrl);
-				break;
-		}
-
-		Object
-			.keys(req.headers)
-			.filter((key) => {
-				return ['host', 'Cookie'].indexOf(key) === -1;
-			})
-			.forEach((key) => {
-				httpRequest.set(key, req.headers[key]);
-			});
+		var httpRequest = createHttpRequest(proxyUrl, req.body);
+		httpRequest = setCommonRequestHeaders(httpRequest, req.headers);
 
 		if (req.get('Cookie') && req.get('Cookie') !== '') {
 			httpRequest = httpRequest.set('Cookie', req.get('Cookie'));
@@ -122,7 +140,7 @@ module.exports = (environment, logger) => {
 							return ({
 								headerName: key
 										.split('-')
-										.map(_firstLetterToUpperCase)
+										.map(firstLetterToUpperCase)
 										.join('-'),
 								key: key
 							});
@@ -133,7 +151,7 @@ module.exports = (environment, logger) => {
 
 					if (settedCookies) {
 						settedCookies.forEach((cookieString) => {
-							var cookie = _parseCookieString(cookieString);
+							var cookie = parseSetCookieHeader(cookieString);
 							res.cookie(cookie.name, cookie.value, cookie.options);
 						});
 					}
@@ -161,3 +179,9 @@ module.exports = (environment, logger) => {
 
 	return router;
 };
+
+module.exports.parseSetCookieHeader = parseSetCookieHeader;
+module.exports.firstLetterToLowerCase = firstLetterToLowerCase;
+module.exports.firstLetterToUpperCase = firstLetterToUpperCase;
+module.exports.createHttpRequest = createHttpRequest;
+module.exports.setCommonRequestHeaders = setCommonRequestHeaders;
