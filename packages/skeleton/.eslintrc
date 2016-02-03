@@ -89,7 +89,7 @@
     "no-new-require": 1,
     "no-path-concat": 1,
     "react/jsx-boolean-value": 0,
-    "react/jsx-quotes": 1,
+    "jsx-quotes": 1,
     "react/jsx-no-undef": 1,
     "react/jsx-sort-props": 0,
     "react/jsx-sort-prop-types": 0,
