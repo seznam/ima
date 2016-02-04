@@ -31,7 +31,25 @@ const LOOSE_SLASHES_REGEXP = /^\/|\/$/g;
  * @property PARAMS_REGEXP
  * @type {RegExp}
  */
-const PARAMS_REGEXP = /:([a-zA-Z0-9_-]*)/g;
+const PARAMS_REGEXP_UNIVERSAL = /:\??([a-zA-Z0-9_-]+)/g;
+
+/**
+ * Regular expression used to match the parameter names from a path expression.
+ *
+ * @const
+ * @property PARAMS_REGEXP
+ * @type {RegExp}
+ */
+const PARAMS_REGEXP = /:([a-zA-Z0-9_-]+)/g;
+
+/**
+ * Regular expression used to match the parameter names from a path expression.
+ *
+ * @const
+ * @property PARAMS_REGEXP
+ * @type {RegExp}
+ */
+const PARAMS_REGEXP_OPT = /\\\/:\\\?([a-zA-Z0-9_-]+)/g;
 
 /**
  * Utility for representing and manipulating a single route in the router's
@@ -174,6 +192,7 @@ export default class Route {
 		for (var paramName of Object.keys(params)) {
 			if (path.indexOf(`:${paramName}`) > -1) {
 				path = path.replace(`:${paramName}`, params[paramName]);
+				path = path.replace(`/:?${paramName}`, params[paramName] || '');
 			} else {
 				var pair = [paramName, params[paramName]];
 				query.push(pair.map(encodeURIComponent).join('='));
@@ -291,6 +310,9 @@ export default class Route {
 			.replace(CONTROL_CHARACTERS_REGEXP, '\\$&');
 
 		// convert parameters to capture sequences
+		pattern = pattern.replace(PARAMS_REGEXP_OPT, '(?:\/([^/?]+))?');
+
+		// convert parameters to capture sequences
 		pattern = pattern.replace(PARAMS_REGEXP, '([^/?]+)');
 
 		// add path root
@@ -299,7 +321,7 @@ export default class Route {
 		// add query parameters matcher
 		var pairPattern = '[^=&;]*(?:=[^&;]*)?';
 		pattern += `(?:\\?(?:${pairPattern})(?:[&;]${pairPattern})*)?$`;
-
+		console.log('pattern', pattern);
 		return new RegExp(pattern);
 	}
 
@@ -323,12 +345,23 @@ export default class Route {
 		}
 
 		var parameters = {};
-		parameterValues.shift(); // remove the match on whole path
-		for (var parameterName of this._parameterNames) {
-			var decodedValue = decodeURIComponent(parameterValues.shift());
-			parameters[parameterName] = decodedValue;
-		}
+		parameterValues.shift(); // remove the match on whole path, and other parts
 
+		var pathParameterValuesCount = (parameterValues.length - 1 <= i) ? parameterValues.length : this._parameterNames.length;
+
+		for (var i = this._parameterNames.length - 1, j = pathParameterValuesCount - 1; i >= 0; i--) {
+			if (j <= 0 && i > 0) {
+				console.error('Error, uncompatible counts of given params');
+			}
+			if (!(/\?.+/.test(this._parameterNames[i])) || (i <= j)) {
+				var decodedValue = decodeURIComponent(parameterValues[j]);
+				j--;
+				parameters[this._parameterNames[i].replace('?', '')] = decodedValue;
+			} else {
+				parameters[this._parameterNames[i].replace('?', '')] = null;
+			}
+		}
+		console.log('parameters', parameters, this._parameterNames, parameterValues, pathParameterValuesCount);
 		return parameters;
 	}
 
@@ -382,9 +415,9 @@ export default class Route {
 	 *         path expression.
 	 */
 	_getParameterNames(pathExpression) {
-		var rawNames = pathExpression.match(PARAMS_REGEXP) || [];
+		var rawNames = pathExpression.match(PARAMS_REGEXP_UNIVERSAL) || [];
 
-		return rawNames.map(rawParameterName => rawParameterName.substring(1));
+		return rawNames.map(rawParameterName => rawParameterName.substring(1).replace('?', ''));
 	}
 }
 
