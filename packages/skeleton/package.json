@@ -5,7 +5,8 @@
 	"main": "build/server.js",
 	"scripts": {
 		"test": "node node_modules/gulp/bin/gulp.js test",
-		"start": "node node_modules/gulp/bin/gulp.js dev"
+		"dev": "node node_modules/gulp/bin/gulp.js dev",
+		"start": "NODE_ENV=production node build/server.js"
 	},
 	"keywords": [
 		"IMA.js",
