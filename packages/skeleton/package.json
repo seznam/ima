@@ -34,23 +34,23 @@
 	"devDependencies": {
 		"ima.js-examples": "git+http://github.com/seznam/IMA.js-examples.git#0.11.0",
 		"ima.js-gulp-task-loader": "^0.11.0",
-		"ima.js-gulp-tasks": "^0.11.8"
+		"ima.js-gulp-tasks": "git+http://github.com/seznam/IMA.js-gulp-tasks.git#0.12.1"
 	},
 	"dependencies": {
 		"babel-polyfill": "^6.3.14",
 		"body-parser": "^1.14.2",
-		"compression": "^1.6.0",
+		"compression": "^1.6.1",
 		"cookie-parser": "^1.4.1",
-		"custom-event-polyfill": "^0.2.1",
-		"express": "^4.13.3",
+		"custom-event-polyfill": "^0.2.2",
+		"express": "^4.13.4",
 		"helmet": "^1.1.0",
 		"ima.js-babel6-polyfill": "^0.1.1",
 		"ima.js-server": "^0.11.8",
 		"method-override": "^2.3.5",
 		"multer": "^1.0.6",
-		"react": "^0.14.6",
-		"react-dom": "^0.14.6",
+		"react": "^0.14.7",
+		"react-dom": "^0.14.7",
 		"serve-favicon": "^2.3.0",
-		"superagent": "^1.6.1"
+		"superagent": "^1.7.2"
 	}
 }
