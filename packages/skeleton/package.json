@@ -32,6 +32,7 @@
 	},
 	"license": "MIT",
 	"devDependencies": {
+		"ima.js-examples": "git+http://github.com/seznam/IMA.js-examples.git#0.11.0",
 		"ima.js-gulp-task-loader": "^0.11.0",
 		"ima.js-gulp-tasks": "^0.11.8"
 	},
