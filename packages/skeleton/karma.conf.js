@@ -37,17 +37,20 @@ module.exports = function(config) {
 			}
 		}*/,
 		customLaunchers: {
-	      Chrome_without_security: {
-	        base: 'Chrome',
-	        flags: ['--disable-web-security']
-	      }
-	    },
+			Chrome_without_security: {
+				base: 'Chrome',
+				flags: ['--disable-web-security']
+			}
+		},
 		plugins: [
 			'karma-phantomjs-launcher',
 			//'karma-babel-preprocessor',
 			'karma-jasmine'
 			//'karma-coverage'
 		],
+		phantomjsLauncher: {
+			exitOnResourceError: true
+		},
 		autoWatch: true,
 		singleRun: false,
 		colors: true
