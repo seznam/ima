@@ -11,14 +11,14 @@
 
 	root.$IMA.Loader = {
 		modules: modules,
-		register: function (moduleName, dependencies, moduleFactory) {
+		register: function(moduleName, dependencies, moduleFactory) {
 			this.modules[moduleName] = {
 				dependencies: dependencies,
 				factory: moduleFactory,
 				instance: null
 			};
 		},
-		import: function (moduleName) {
+		import: function(moduleName) {
 			if (!this.modules[moduleName]) {
 				throw new Error('$IMA.Loader.import: Module name ' +
 						moduleName + ' is not registered. Update your ' +
@@ -27,7 +27,7 @@
 
 			return Promise.resolve(resolveModule(moduleName));
 		},
-		initAllModules: function () {
+		initAllModules: function() {
 			Object.keys(modules).forEach(function (moduleName) {
 				resolveModule(moduleName);
 			});
@@ -55,11 +55,11 @@
 		});
 		module.instance = moduleInstance; // allow lazy circular dependencies
 
-		var dependencies = module.dependencies.map(function (dependencyName) {
+		var dependencies = module.dependencies.map(function(dependencyName) {
 			var resolvedName = resolveModuleName(moduleName, dependencyName);
 			return resolveModule(resolvedName, moduleName);
 		});
-		dependencies.forEach(function (dependency, index) {
+		dependencies.forEach(function(dependency, index) {
 			moduleInitializer.setters[index](dependency);
 		});
 
