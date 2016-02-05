@@ -136,13 +136,19 @@ export default class PageRender extends PageRenderInterface {
 	 *
 	 * @protected
 	 * @method _generateViewProps
+	 * @param {function(new:Vendor.React.Component, Object<string, *>)} view
+	 *        The page view React component to wrap.
 	 * @param {Object<string, *>=} [state={}]
 	 * @return {Object<string, *>}
 	 */
-	_generateViewProps(state = {}) {
-		state.$Utils = this._factory.getUtils();
+	_generateViewProps(view, state = {}) {
+		var props = {
+			view,
+			state,
+			'$Utils': this._factory.getUtils()
+		};
 
-		return state;
+		return props;
 	}
 }
 

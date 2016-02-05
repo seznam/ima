@@ -11,6 +11,8 @@ describe('Core.Abstract.PageRender', function() {
 		replaceState: function() {}
 	};
 
+	var view = function() {};
+
 	beforeEach(function() {
 		pageRender = oc.create('Core.Abstract.PageRender', [renderFactory, $Helper, ReactDOM, settings]);
 
@@ -53,14 +55,14 @@ describe('Core.Abstract.PageRender', function() {
 
 	describe('_generateViewProps method', function() {
 
-		it('should be set $Utils to state', function() {
+		it('should be set $Utils to props', function() {
 			var utils = { router: 'router' };
 
 			spyOn(renderFactory, 'getUtils')
 				.and
 				.returnValue(utils);
 
-			expect(pageRender._generateViewProps()).toEqual({$Utils: utils});
+			expect(pageRender._generateViewProps(view)).toEqual({ '$Utils': utils, view: view, state: {} });
 		});
 	});
 

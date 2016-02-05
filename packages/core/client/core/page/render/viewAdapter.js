@@ -51,6 +51,21 @@ export default class ViewAdapter extends React.Component {
 	render() {
 		return React.createElement(this._view, this.state);
 	}
+
+	/**
+	 * @inheritDoc
+	 * @override
+	 * @method getChildContext
+	 */
+	getChildContext() {
+		return {
+			$Utils: this.props.$Utils
+		};
+	}
 }
+
+ViewAdapter.childContextTypes = {
+	$Utils: React.PropTypes.object.isRequired
+};
 
 ns.Core.Page.Render.ViewAdapter = ViewAdapter;

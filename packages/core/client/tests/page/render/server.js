@@ -9,7 +9,7 @@ describe('Core.Page.Render.Server', function() {
 
 	var controller = new ns.Core.Interface.Controller();
 	controller.getMetaManager = function() {};
-	var view = function (){};
+	var view = function() {};
 	var expressResponse = {
 		status: function() {},
 		send: function() {}
@@ -37,7 +37,7 @@ describe('Core.Page.Render.Server', function() {
 
 		expect(Promise.resolve).toHaveBeenCalledWith(param1);
 		expect(Promise.resolve.calls.count()).toEqual(1);
-	 });
+	});
 
 	describe('update method', function() {
 
@@ -176,12 +176,15 @@ describe('Core.Page.Render.Server', function() {
 
 		var utils = { $Utils: 'utils' };
 		var state = { state: 'state' };
-		var props = Object.assign({}, state, utils);
+		var propsView = { view: view };
+		var props = Object.assign({}, state, utils, propsView);
 		var wrapedPageViewElement = { wrapElementView: 'wrapedPageViewElement' };
 		var pageMarkup = '<body></body>';
 		var documentView = function() {};
 		var documentViewElement = function() {};
-		var documentViewFactory = function() { return documentViewElement; };
+		var documentViewFactory = function() {
+			return documentViewElement;
+		};
 		var appMarkup = '<html>' + pageMarkup + '</html>';
 		var revivalSettings = { revivalSettings: 'revivalSettings' };
 		var metaManager = { metaManager: 'metaManager' };
@@ -223,11 +226,11 @@ describe('Core.Page.Render.Server', function() {
 		});
 
 		it('should generate view props from controller state', function() {
-			expect(pageRender._generateViewProps).toHaveBeenCalledWith(state);
+			expect(pageRender._generateViewProps).toHaveBeenCalledWith(view, state);
 		});
 
 		it('should wrap page view', function() {
-			expect(factory.wrapView).toHaveBeenCalledWith(view, props);
+			expect(factory.wrapView).toHaveBeenCalledWith(props);
 		});
 
 		it('should render page view to string', function() {
@@ -251,7 +254,7 @@ describe('Core.Page.Render.Server', function() {
 
 		it('should return page content', function() {
 			expect(pageContent).toEqual('<!doctype html>\n' + appMarkup);
-		})
+		});
 	});
 
 });

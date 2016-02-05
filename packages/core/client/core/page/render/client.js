@@ -193,8 +193,8 @@ export default class Client extends AbstractPageRender {
 	 * @param {Vendor.React.Component} view
 	 */
 	_renderToDOM(controller, view) {
-		var props = this._generateViewProps(controller.getState());
-		var reactElementView = this._factory.wrapView(view, props);
+		var props = this._generateViewProps(view, controller.getState());
+		var reactElementView = this._factory.wrapView(props);
 
 		this._reactiveView = this._ReactDOM.render(
 			reactElementView,

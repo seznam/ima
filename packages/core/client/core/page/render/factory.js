@@ -65,18 +65,14 @@ export default class Factory {
 	 * {@code state} property.
 	 *
 	 * @method wrapView
-	 * @param {function(new:Vendor.React.Component, Object<string, *>)} view
-	 *        The page view React component to wrap.
-	 * @param {Object<string, *>} state The initial state to pass to the view.
+	 * @param {{view: ns.Vendor.React.Component, state: Object<string, *>,
+	 *         $Utils: Object<string, *>}} props The initial props to pass to the view.
 	 * @return {Vendor.React.Component} View adapter handling passing the
 	 *         controller's state to an instance of the specified page view
 	 *         through properties.
 	 */
-	wrapView(view, state) {
-		return this._React.createElement(this._ViewAdapter, {
-			view,
-			state
-		});
+	wrapView(props) {
+		return this._React.createElement(this._ViewAdapter, props);
 	}
 
 	/**

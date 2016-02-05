@@ -198,8 +198,8 @@ export default class Server extends AbstractPageRender {
 	 * @return {string}
 	 */
 	_renderPageContentToString(controller, view) {
-		var props = this._generateViewProps(controller.getState());
-		var wrapedPageViewElement = this._factory.wrapView(view, props);
+		var props = this._generateViewProps(view, controller.getState());
+		var wrapedPageViewElement = this._factory.wrapView(props);
 		var pageMarkup = this._ReactDOM.renderToString(wrapedPageViewElement);
 
 		var documentView = ns.get(this._settings.$Page.$Render.documentView);

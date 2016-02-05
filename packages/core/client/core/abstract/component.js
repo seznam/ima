@@ -20,9 +20,10 @@ export default class Component extends React.Component {
 	 * @constructor
 	 * @method constructor
 	 * @param {Object<string, *>} props The component properties.
+	 * @param {Object<string, *>} context The component context.
 	 */
-	constructor(props) {
-		super(props);
+	constructor(props, context) {
+		super(props, context);
 
 		/**
 		 * The view utilities.
@@ -31,7 +32,7 @@ export default class Component extends React.Component {
 		 * @property _utils
 		 * @type {Object<string, *>}
 		 */
-		this._utils = props.$Utils;
+		this._utils = context ? context.$Utils || props.$Utils : props.$Utils;
 	}
 
 	/**
@@ -45,7 +46,7 @@ export default class Component extends React.Component {
 		if ($Debug) {
 			if (!this._utils) {
 				throw new Error('You cannot access view utils because they ' +
-						'were not passed in the initial props as key name ' +
+						'were not passed in the initial props or context as key name ' +
 						'$Utils.');
 			}
 		}
@@ -193,5 +194,9 @@ export default class Component extends React.Component {
 		this._utils.$EventBus.unlisten(eventTarget, eventName, listener);
 	}
 }
+
+Component.contextTypes = {
+	$Utils: React.PropTypes.object
+};
 
 ns.Core.Abstract.Component = Component;
