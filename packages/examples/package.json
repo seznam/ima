@@ -1,0 +1,25 @@
+{
+	"name": "ima.js-examples",
+	"version": "0.11.0",
+	"description": "Eexample IMA.js applications.",
+	"main": "index.js",
+	"scripts": {
+	},
+	"repository": {
+		"type": "git",
+		"url": "https://github.com/seznam/IMA.js-examples.git"
+	},
+	"keywords": [
+		"IMA.js",
+		"ima"
+	],
+	"author": "Seznam.cz, a.s.",
+	"license": "MIT",
+	"bugs": {
+		"url": "https://github.com/seznam/IMA.js-examples/issues"
+	},
+	"publishConfig": {
+		"registry": "http://registry.npmjs.org/"
+	},
+	"homepage": "https://github.com/seznam/IMA.js-examples"
+}

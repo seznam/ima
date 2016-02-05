@@ -1,0 +1,42 @@
+/**
+ * --------------------------------
+ * @section Configuration variables
+ * --------------------------------
+ */
+
+/**
+ * @subsection Paths
+ */
+@root: '/static';
+@images: '@{root}/img';
+
+/**
+ * @subsection Grid system (http://responsablecss.com/usage)
+ */
+@columns: 12;
+@max_width: 100%;
+@gutter_width: 20px;
+@gutter-width: @gutter_width;
+// Half the gutter for borders, margin, padding etc
+@gutter: @gutter_width / 2;
+
+/**
+ * @subsection Colors
+ */
+@color-black: #000;
+@color-white: #fff;
+@color-red: #c00;
+@color-red-hover: #b00;
+@color-grey: #979797;
+@color-silver: #e1e1e1;
+@color-blue: #1b4b6d;
+@color-text: @color-black;
+@color-background: @color-white;
+
+/**
+ * @subsection Fonts
+ */
+@font-family: helvetica, sans-serif;
+@font-size: @base-font-size;
+
+@feed-filter-width: 260px;

@@ -1,0 +1,15 @@
+{
+	"title": "todos",
+	"new item placeholder": "What needs to be done?",
+	"toggle all label": "Mark all as complete",
+	"count": " item{COUNT, plural, 1 {} other {s} } left",
+	
+	"filters: all": "All",
+	"filters: active": "Active",
+	"filters: completed": "Completed",
+
+	"clear completed": "Clear completed",
+
+	"info: edit": "Double-click to edit a todo",
+	"info: created by": "Created by the IMA.js team"
+}

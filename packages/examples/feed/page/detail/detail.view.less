@@ -1,0 +1,30 @@
+.detail {
+	margin: 0 auto;
+	.grid(margin-top; 8);
+	.grid(max-width; 80);
+
+	.more-items {
+		margin: 20px auto;
+		display: table;
+		.grid(padding-right; 8);
+		&::after {
+			content:'';
+			position: absolute;
+			top:0;
+			.grid(right; 5);
+			display: block;
+			height: 100%;
+			.grid(width; 1);
+			background: url('/static/img/next-arrow.png') no-repeat center;
+		}
+	}
+
+	.sharing-container {
+		.grid(margin-top; 4) !important;
+		
+	}
+
+	.toggle, .arrow, .arrow-overlay {
+		display: none;
+	}
+}
