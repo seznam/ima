@@ -28,7 +28,7 @@
 			return Promise.resolve(resolveModule(moduleName));
 		},
 		initAllModules: function() {
-			Object.keys(modules).forEach(function (moduleName) {
+			Object.keys(modules).forEach(function(moduleName) {
 				resolveModule(moduleName);
 			});
 		}
