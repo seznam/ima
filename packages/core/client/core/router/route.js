@@ -49,7 +49,7 @@ const PARAMS_REGEXP = /:([a-zA-Z0-9_-]+)/g;
  * @property PARAMS_REGEXP
  * @type {RegExp}
  */
-const PARAMS_REGEXP_OPT = /\\\/:\\\?([a-zA-Z0-9_-]+)/g;
+const PARAMS_REGEXP_OPT = /(?:^:\\\?([a-zA-Z0-9_-]+)(\\\/)?)|(?:(\\\/):\\\?([a-zA-Z0-9_-]+))|(?::\\\?([a-zA-Z0-9_-]+))/g;
 
 /**
  * Utility for representing and manipulating a single route in the router's
@@ -188,20 +188,19 @@ export default class Route {
 	toPath(params = {}) {
 		var path = this._pathExpression;
 		var query = [];
-
 		for (var paramName of Object.keys(params)) {
-			if (path.indexOf(`:${paramName}`) > -1) {
-				path = path.replace(`:${paramName}`, params[paramName]);
-				path = path.replace(`/:?${paramName}`, params[paramName] || '');
+			if (new RegExp(`:\??${paramName}(?:[\/\?]|$)`).test(path)) {
+				path = path.replace(new RegExp(`(^|\/):${paramName}([\/\?]|$)`), params[paramName] ? '$1' + params[paramName] +  '$2' : '');
+				path = path.replace(new RegExp(`(^|\/):\\\?${paramName}([\/\?]|$)`), params[paramName] ? '$1' + params[paramName] +  '$2' : '');
 			} else {
 				var pair = [paramName, params[paramName]];
 				query.push(pair.map(encodeURIComponent).join('='));
 			}
 		}
+		path = path.replace(/(\/:\?([a-zA-Z0-9_-]+))|(:\?([a-zA-Z0-9_-]+)\/?)/g, '');
 
 		path = query.length ? path + '?' + query.join('&') : path;
 		path = this._getTrimmedPath(path);
-
 		return path;
 	}
 
@@ -310,18 +309,19 @@ export default class Route {
 			.replace(CONTROL_CHARACTERS_REGEXP, '\\$&');
 
 		// convert parameters to capture sequences
-		pattern = pattern.replace(PARAMS_REGEXP_OPT, '(?:\/([^/?]+))?');
+		pattern = pattern.replace(PARAMS_REGEXP_OPT, '(?:$3([^/?]+)$2)?');
+
 
 		// convert parameters to capture sequences
 		pattern = pattern.replace(PARAMS_REGEXP, '([^/?]+)');
 
 		// add path root
-		pattern = '^/' + pattern;
+		pattern = '^\\\/' + pattern;
 
 		// add query parameters matcher
 		var pairPattern = '[^=&;]*(?:=[^&;]*)?';
 		pattern += `(?:\\?(?:${pairPattern})(?:[&;]${pairPattern})*)?$`;
-		console.log('pattern', pattern);
+
 		return new RegExp(pattern);
 	}
 
@@ -351,17 +351,17 @@ export default class Route {
 
 		for (var i = this._parameterNames.length - 1, j = pathParameterValuesCount - 1; i >= 0; i--) {
 			if (j <= 0 && i > 0) {
-				console.error('Error, uncompatible counts of given params');
+
 			}
 			if (!(/\?.+/.test(this._parameterNames[i])) || (i <= j)) {
-				var decodedValue = decodeURIComponent(parameterValues[j]);
+				var decodedValue = parameterValues[j] !== undefined ? decodeURIComponent(parameterValues[j]) : undefined;
 				j--;
 				parameters[this._parameterNames[i].replace('?', '')] = decodedValue;
 			} else {
-				parameters[this._parameterNames[i].replace('?', '')] = null;
+				parameters[this._parameterNames[i].replace('?', '')] = undefined;
 			}
 		}
-		console.log('parameters', parameters, this._parameterNames, parameterValues, pathParameterValuesCount);
+
 		return parameters;
 	}
 
