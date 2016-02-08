@@ -1,14 +1,7 @@
-module.exports = (function() {
+module.exports = (() => {
 
 	var js = [
-		'./app/config/*.js',
-		'./app/base/*.js',
-		'./app/component/**/*.js',
-		'./app/component/**/*.jsx',
-		'./app/page/*.js',
-		'./app/page/*.jsx',
-		'./app/page/**/*.js',
-		'./app/page/**/*.jsx'
+		'./app/!(assets)/**/*.{js,jsx}'
 	];
 
 	var less = [

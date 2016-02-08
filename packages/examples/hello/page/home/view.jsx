@@ -1,4 +1,5 @@
 import ns from 'imajs/client/core/namespace';
+import AbstractComponent from 'imajs/client/core/abstract/component';
 import { React } from 'app/vendor';
 
 ns.namespace('App.Page.Home');
@@ -10,14 +11,16 @@ ns.namespace('App.Page.Home');
  * @module App
  * @submodule Component
  */
-class View extends ns.Core.Abstract.Component {
+export default class View extends AbstractComponent {
 
 	render() {
 		return (
 			<div className='l-homepage'>
 				<div className='content'>
 					<img src={this.utils.$Router.getBaseUrl() + this.utils.$Settings.$Static.image + '/imajs-logo.png'} alt='IMA.js logo'/>
-					<h1>{this.utils.$Dictionary.get('home.hello')}, {this.props.message} <a href='//imajs.io' title={this.props.name} target='_blank'>{this.props.name}</a>!</h1>
+					<h1>
+						{this.utils.$Dictionary.get('home.hello')}, {this.props.message} <a href='//imajs.io' title={this.props.name} target='_blank'>{this.props.name}</a>!
+					</h1>
 				</div>
 			</div>
 		);

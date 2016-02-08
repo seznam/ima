@@ -1,4 +1,5 @@
 import ns from 'imajs/client/core/namespace';
+import AbstractComponent from 'imajs/client/core/abstract/component';
 import { React } from 'app/vendor';
 
 ns.namespace('App.Page.NotFound');
@@ -10,7 +11,7 @@ ns.namespace('App.Page.NotFound');
  * @module App
  * @submodule Component
  */
-class View extends ns.Core.Abstract.Component {
+export default class View extends AbstractComponent {
 
 	render() {
 		return (

@@ -1,4 +1,5 @@
 import ns from 'imajs/client/core/namespace';
+import AbstractComponent from 'imajs/client/core/abstract/component';
 import { React } from 'app/vendor';
 
 ns.namespace('App.Page.Error');
@@ -10,7 +11,7 @@ ns.namespace('App.Page.Error');
  * @module App
  * @submodule Component
  */
-class View extends ns.Core.Abstract.Component {
+export default class View extends AbstractComponent {
 
 	render() {
 		var error = this.props.error || {};

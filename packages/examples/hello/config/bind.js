@@ -1,13 +1,17 @@
+import HomeController from 'app/page/home/controller';
+import ErrorController from 'app/page/error/controller';
+import NotFoundController from 'app/page/notFound/controller';
+
 export var init = (ns, oc, config) => {
 
 	// Page Home
-	oc.inject(ns.App.Page.Home.Controller, []);
+	oc.inject(HomeController, []);
 
 	// Page Error
-	oc.inject(ns.App.Page.Error.Controller, []);
+	oc.inject(ErrorController, []);
 
 	// Page Not Found
-	oc.inject(ns.App.Page.NotFound.Controller, []);
+	oc.inject(NotFoundController, []);
 
 	//COMPONENT Utils
 	oc.constant('$Utils', {

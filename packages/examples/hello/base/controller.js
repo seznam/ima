@@ -1,4 +1,5 @@
 import ns from 'imajs/client/core/namespace';
+import AbstractController from 'imajs/client/core/abstract/controller';
 
 ns.namespace('App.Base');
 
@@ -11,7 +12,7 @@ ns.namespace('App.Base');
  * @module App
  * @submodule App.Base
  */
-class Controller extends ns.Core.Abstract.Controller {
+export default class Controller extends AbstractController {
 
 	/**
 	 * Initializes the controller.

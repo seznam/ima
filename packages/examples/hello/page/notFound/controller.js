@@ -1,4 +1,5 @@
 import ns from 'imajs/client/core/namespace';
+import BaseController from 'app/base/controller';
 
 ns.namespace('App.Page.NotFound');
 
@@ -9,7 +10,7 @@ ns.namespace('App.Page.NotFound');
  * @module App
  * @submodule App.Page
  */
-class Controller extends ns.App.Base.Controller {
+export default class Controller extends BaseController {
 
 	/**
 	 * @method constructor
