@@ -205,62 +205,6 @@ export default class Route {
 	}
 
 	/**
-	 *  Replace param placeholder in path with parameter value.
-	 *
-	 * @method _cleanUnusedOptionalParams
-	 * @private
-	 * @param {string} path
-	 * @param {string} paramName
-	 * @param {string} paramValue
-	 * @return {string} New path.
-	 */
-	_substituteParamInPath(path, paramName, paramValue) {
-		return path.replace(new RegExp(`(^|\/):${paramName}([\/\?]|$)`), paramValue ? '$1' + paramValue +  '$2' : '');
-	}
-
-	/**
-	 * Replace optional param placeholder in path with parameter value.
-	 *
-	 * @method _cleanUnusedOptionalParams
-	 * @private
-	 * @param {string} path
-	 * @param {string} paramName
-	 * @param {string} paramValue
-	 * @return {string} New path.
-	 */
-	_substituteOptionalParamInPath(path, paramName, paramValue) {
-		return path.replace(new RegExp(`(^|\/):\\\?${paramName}([\/\?]|$)`), paramValue ? '$1' + paramValue +  '$2' : '');
-	}
-
-	/**
-	 * Replace optional param placeholder in path with parameter value.
-	 *
-	 * @method _cleanUnusedOptionalParams
-	 * @private
-	 * @param {string} path
-	 * @param {string} paramName
-	 * @param {string} paramValue
-	 * @return {string} New path.
-	 */
-	_cleanUnusedOptionalParams(path) {
-		return path.replace(/(\/:\?([a-zA-Z0-9_-]+))|(:\?([a-zA-Z0-9_-]+)\/?)/g, '');
-	}
-
-	/**
-	 * Returns true, if paramName is placed in path.
-	 *
-	 * @method _isParamInPath
-	 * @private
-	 * @param {string} path
-	 * @param {string} paramName
-	 * @return {true}
-	 */
-	_isParamInPath(path, paramName) {
-		var regexp = new RegExp(`:\??${paramName}(?:[\/\?]|$)`);
-		return regexp.test(path);
-	}
-
-	/**
 	 * Returns the unique identifying name of this route.
 	 *
 	 * @method getName
@@ -350,6 +294,62 @@ export default class Route {
 	}
 
 	/**
+	 *  Replace param placeholder in path with parameter value.
+	 *
+	 * @private
+	 * @method _cleanUnusedOptionalParams
+	 * @param {string} path
+	 * @param {string} paramName
+	 * @param {string} paramValue
+	 * @return {string} New path.
+	 */
+	_substituteParamInPath(path, paramName, paramValue) {
+		return path.replace(new RegExp(`(^|\/):${paramName}([\/\?]|$)`), paramValue ? '$1' + paramValue +  '$2' : '');
+	}
+
+	/**
+	 * Replace optional param placeholder in path with parameter value.
+	 *
+	 * @private
+	 * @method _cleanUnusedOptionalParams
+	 * @param {string} path
+	 * @param {string} paramName
+	 * @param {string} paramValue
+	 * @return {string} New path.
+	 */
+	_substituteOptionalParamInPath(path, paramName, paramValue) {
+		return path.replace(new RegExp(`(^|\/):\\\?${paramName}([\/\?]|$)`), paramValue ? '$1' + paramValue +  '$2' : '');
+	}
+
+	/**
+	 * Replace optional param placeholder in path with parameter value.
+	 *
+	 * @private
+	 * @method _cleanUnusedOptionalParams
+	 * @param {string} path
+	 * @param {string} paramName
+	 * @param {string} paramValue
+	 * @return {string} New path.
+	 */
+	_cleanUnusedOptionalParams(path) {
+		return path.replace(/(\/:\?([a-zA-Z0-9_-]+))|(:\?([a-zA-Z0-9_-]+)\/?)/g, '');
+	}
+
+	/**
+	 * Returns true, if paramName is placed in path.
+	 *
+	 * @private
+	 * @method _isParamInPath
+	 * @param {string} path
+	 * @param {string} paramName
+	 * @return {true}
+	 */
+	_isParamInPath(path, paramName) {
+		var regexp = new RegExp(`:\??${paramName}(?:[\/\?]|$)`);
+		return regexp.test(path);
+	}
+
+	/**
 	 * Compiles the path expression to a regular expression that can be used
 	 * for easier matching of URL paths against this route, and extracting the
 	 * path parameter values from the URL path.
@@ -405,21 +405,22 @@ export default class Route {
 		return this._extractParameters(parameterValues);
 	}
 
+	/**
+	 * Extract parameters from given path.
+	 *
+	 * @private
+	 * @method _extractParameters
+	 * @param {Array<string>} parameterValues
+	 * @return {Object<string, string=>} Params object.
+	 */
 	_extractParameters(parameterValues) {
 		var parameters = {};
 
-		// Find shorter lenght of param values vs. names
-		var pathParameterValuesCount = (parameterValues.length - 1 <= i) ? parameterValues.length : this._parameterNames.length;
-
 		// Cycle for names and values from last to 0
-		for (var i = this._parameterNames.length - 1, j = pathParameterValuesCount - 1; i >= 0; i--) {
+		for (var i = this._parameterNames.length - 1; i >= 0; i--) {
+			var cleanParamName = this._cleanOptParamName(this._parameterNames[i]);
 
-			if (!(this._isParamOptional(this._parameterNames[i])) || (i <= j)) {
-				parameters[this._cleanOptParamName(this._parameterNames[i])] = this._decodeURIParameter(parameterValues[j]);
-				j--;
-			} else {
-				parameters[this._cleanOptParamName(this._parameterNames[i])] = undefined;
-			}
+			parameters[cleanParamName] = this._decodeURIParameter(parameterValues[i]);
 		}
 
 		return parameters;
@@ -428,6 +429,7 @@ export default class Route {
 	/**
 	 * Decoding parameters.
 	 *
+	 * @private
 	 * @method _decodeURIParameter
 	 * @param {string} parameterValue
 	 * @return {string} decodedValue
@@ -443,6 +445,7 @@ export default class Route {
 	/**
 	 * Returns optional param name without "?"
 	 *
+	 * @private
 	 * @method _cleanOptParamName
 	 * @param {string} paramName Full param name with "?"
 	 * @return {string} Strict param name without "?"
@@ -454,6 +457,7 @@ export default class Route {
 	/**
 	 * Checks if parameter is optional or not.
 	 *
+	 * @private
 	 * @method _isParamOptional
 	 * @param {string} paramName
 	 * @return {boolean} return true if is optional, otherwise false
