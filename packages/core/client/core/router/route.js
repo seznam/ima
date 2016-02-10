@@ -189,19 +189,75 @@ export default class Route {
 		var path = this._pathExpression;
 		var query = [];
 		for (var paramName of Object.keys(params)) {
-			if (new RegExp(`:\??${paramName}(?:[\/\?]|$)`).test(path)) {
-				path = path.replace(new RegExp(`(^|\/):${paramName}([\/\?]|$)`), params[paramName] ? '$1' + params[paramName] +  '$2' : '');
-				path = path.replace(new RegExp(`(^|\/):\\\?${paramName}([\/\?]|$)`), params[paramName] ? '$1' + params[paramName] +  '$2' : '');
+			if (this._isParamInPath(path, paramName)) {
+				path = this._substituteParamInPath(path, paramName, params[paramName]);
+				path = this._substituteOptionalParamInPath(path, paramName, params[paramName]);
 			} else {
 				var pair = [paramName, params[paramName]];
 				query.push(pair.map(encodeURIComponent).join('='));
 			}
 		}
-		path = path.replace(/(\/:\?([a-zA-Z0-9_-]+))|(:\?([a-zA-Z0-9_-]+)\/?)/g, '');
+		path = this._cleanUnusedOptionalParams(path);
 
 		path = query.length ? path + '?' + query.join('&') : path;
 		path = this._getTrimmedPath(path);
 		return path;
+	}
+
+	/**
+	 *  Replace param placeholder in path with parameter value.
+	 *
+	 * @method _cleanUnusedOptionalParams
+	 * @private
+	 * @param {string} path
+	 * @param {string} paramName
+	 * @param {string} paramValue
+	 * @return {string} New path.
+	 */
+	_substituteParamInPath(path, paramName, paramValue) {
+		return path.replace(new RegExp(`(^|\/):${paramName}([\/\?]|$)`), paramValue ? '$1' + paramValue +  '$2' : '');
+	}
+
+	/**
+	 * Replace optional param placeholder in path with parameter value.
+	 *
+	 * @method _cleanUnusedOptionalParams
+	 * @private
+	 * @param {string} path
+	 * @param {string} paramName
+	 * @param {string} paramValue
+	 * @return {string} New path.
+	 */
+	_substituteOptionalParamInPath(path, paramName, paramValue) {
+		return path.replace(new RegExp(`(^|\/):\\\?${paramName}([\/\?]|$)`), paramValue ? '$1' + paramValue +  '$2' : '');
+	}
+
+	/**
+	 * Replace optional param placeholder in path with parameter value.
+	 *
+	 * @method _cleanUnusedOptionalParams
+	 * @private
+	 * @param {string} path
+	 * @param {string} paramName
+	 * @param {string} paramValue
+	 * @return {string} New path.
+	 */
+	_cleanUnusedOptionalParams(path) {
+		return path.replace(/(\/:\?([a-zA-Z0-9_-]+))|(:\?([a-zA-Z0-9_-]+)\/?)/g, '');
+	}
+
+	/**
+	 * Returns true, if paramName is placed in path.
+	 *
+	 * @method _isParamInPath
+	 * @private
+	 * @param {string} path
+	 * @param {string} paramName
+	 * @return {true}
+	 */
+	_isParamInPath(path, paramName) {
+		var regexp = new RegExp(`:\??${paramName}(?:[\/\?]|$)`);
+		return regexp.test(path);
 	}
 
 	/**
@@ -344,25 +400,66 @@ export default class Route {
 			return {};
 		}
 
-		var parameters = {};
 		parameterValues.shift(); // remove the match on whole path, and other parts
 
+		return this._extractParameters(parameterValues);
+	}
+
+	_extractParameters(parameterValues) {
+		var parameters = {};
+
+		// Find shorter lenght of param values vs. names
 		var pathParameterValuesCount = (parameterValues.length - 1 <= i) ? parameterValues.length : this._parameterNames.length;
 
+		// Cycle for names and values from last to 0
 		for (var i = this._parameterNames.length - 1, j = pathParameterValuesCount - 1; i >= 0; i--) {
-			if (j <= 0 && i > 0) {
 
-			}
-			if (!(/\?.+/.test(this._parameterNames[i])) || (i <= j)) {
-				var decodedValue = parameterValues[j] !== undefined ? decodeURIComponent(parameterValues[j]) : undefined;
+			if (!(this._isParamOptional(this._parameterNames[i])) || (i <= j)) {
+				parameters[this._cleanOptParamName(this._parameterNames[i])] = this._decodeURIParameter(parameterValues[j]);
 				j--;
-				parameters[this._parameterNames[i].replace('?', '')] = decodedValue;
 			} else {
-				parameters[this._parameterNames[i].replace('?', '')] = undefined;
+				parameters[this._cleanOptParamName(this._parameterNames[i])] = undefined;
 			}
 		}
 
 		return parameters;
+	}
+
+	/**
+	 * Decoding parameters.
+	 *
+	 * @method _decodeURIParameter
+	 * @param {string} parameterValue
+	 * @return {string} decodedValue
+	 */
+	_decodeURIParameter(parameterValue) {
+		var decodedValue;
+		if (parameterValue) {
+			decodedValue = decodeURIComponent(parameterValue);
+		}
+		return decodedValue;
+	}
+
+	/**
+	 * Returns optional param name without "?"
+	 *
+	 * @method _cleanOptParamName
+	 * @param {string} paramName Full param name with "?"
+	 * @return {string} Strict param name without "?"
+	 */
+	_cleanOptParamName(paramName) {
+		return paramName.replace('?', '');
+	}
+
+	/**
+	 * Checks if parameter is optional or not.
+	 *
+	 * @method _isParamOptional
+	 * @param {string} paramName
+	 * @return {boolean} return true if is optional, otherwise false
+	 */
+	_isParamOptional(paramName) {
+		return /\?.+/.test(paramName);
 	}
 
 	/**
