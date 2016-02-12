@@ -46,8 +46,8 @@ export default class Component extends React.Component {
 		if ($Debug) {
 			if (!this._utils) {
 				throw new Error('You cannot access view utils because they ' +
-						'were not passed in the initial props or context as key name ' +
-						'$Utils.');
+						'were not passed in the initial props or context as ' +
+						'key name $Utils.');
 			}
 		}
 
