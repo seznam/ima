@@ -35,11 +35,11 @@
 	"devDependencies": {
 		"ima.js-examples": "git+http://github.com/seznam/IMA.js-examples.git#0.11.0",
 		"ima.js-gulp-task-loader": "^0.11.0",
-		"ima.js-gulp-tasks": "git+http://github.com/seznam/IMA.js-gulp-tasks.git#0.12.1"
+		"ima.js-gulp-tasks": "git+http://github.com/seznam/IMA.js-gulp-tasks.git#0.12.2"
 	},
 	"dependencies": {
-		"babel-polyfill": "^6.3.14",
-		"body-parser": "^1.14.2",
+		"babel-polyfill": "^6.5.0",
+		"body-parser": "^1.15.0",
 		"compression": "^1.6.1",
 		"cookie-parser": "^1.4.1",
 		"custom-event-polyfill": "^0.2.2",
