@@ -67,7 +67,7 @@ describe('Core.Page.Manager.Client', function() {
 
 		pageManager.init();
 
-		expect(eventBusInterface.listenAll).toHaveBeenCalledWith(window, pageManager._bindedOnCustomEventHandler);
+		expect(eventBusInterface.listenAll).toHaveBeenCalledWith(window, pageManager._boundOnCustomEventHandler);
 	});
 
 	it('should return parsed custom event', function() {
@@ -94,7 +94,7 @@ describe('Core.Page.Manager.Client', function() {
 
 		pageManager.destroy();
 
-		expect(eventBusInterface.unlistenAll).toHaveBeenCalledWith(window, pageManager._bindedOnCustomEventHandler);
+		expect(eventBusInterface.unlistenAll).toHaveBeenCalledWith(window, pageManager._boundOnCustomEventHandler);
 	});
 
 	describe('_onCustomEventHanler method', function() {
