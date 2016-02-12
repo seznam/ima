@@ -57,11 +57,8 @@ export default class Dispatcher extends DispatcherInterface {
 	}
 
 	/**
-	 * @inheritDoc
-	 * @override
-	 * @chainable
+	 * @inheritdoc
 	 * @method clear
-	 * @return {Core.Interface.Dispatcher}
 	 */
 	clear() {
 		this._eventListeners.clear();
@@ -70,14 +67,8 @@ export default class Dispatcher extends DispatcherInterface {
 	}
 
 	/**
-	 * @inheritDoc
-	 * @override
-	 * @chainable
+	 * @inheritdoc
 	 * @method listen
-	 * @param {string} event
-	 * @param {function(*)} listener
-	 * @param {?Object=} scope
-	 * @return {Core.Interface.Dispatcher}
 	 */
 	listen(event, listener, scope = null) {
 		if ($Debug) {
@@ -101,15 +92,8 @@ export default class Dispatcher extends DispatcherInterface {
 	}
 
 	/**
-	 * @inheritDoc
-	 * @override
-	 * @chainable
+	 * @inheritdoc
 	 * @method unlisten
-	 * @param {string} event
-	 * @param {function(*)} listener
-	 * @param {?Object=} scope
-	 * @return {Core.Interface.Dispatcher}
-	 * @throws {Error}
 	 */
 	unlisten(event, listener, scope = null) {
 		var scopes = this._getScopesOf(event, listener);
@@ -141,15 +125,8 @@ export default class Dispatcher extends DispatcherInterface {
 	}
 
 	/**
-	 * @inheritDoc
-	 * @override
-	 * @chainable
+	 * @inheritdoc
 	 * @method fire
-	 * @param {string} event
-	 * @param {Object<string, *>} data
-	 * @param {boolean=} [imaInternalEvent=false]
-	 * @return {Core.Interface.Dispatcher}
-	 * @throws {Error}
 	 */
 	fire(event, data, imaInternalEvent = false) {
 		var listeners = this._getListenersOf(event);
@@ -204,10 +181,10 @@ export default class Dispatcher extends DispatcherInterface {
 	 * @method _getScopesOf
 	 * @param {string} event The name of the event.
 	 * @param {function(*)} listener The event listener.
-	 * @return {Set<?Object>} The scopes in which the specified listeners should
-	 *         be executed in case of the specified event. The returned set is an
-	 *         unmodifiable empty set if no listeners are registered for the
-	 *         event.
+	 * @return {Set<?Object>} The scopes in which the specified listeners
+	 *         should be executed in case of the specified event. The returned
+	 *         set is an unmodifiable empty set if no listeners are registered
+	 *         for the event.
 	 */
 	_getScopesOf(event, listener) {
 		var listenersToScopes = this._getListenersOf(event);

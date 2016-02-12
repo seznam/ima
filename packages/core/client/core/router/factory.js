@@ -49,7 +49,13 @@ export default class Factory {
 	 * @return {Core.Router.Route} The contructed route.
 	 */
 	createRoute(name, pathExpression, controller, view, options) {
-		return new this._Route(name, pathExpression, controller, view, options);
+		return new this._Route(
+			name,
+			pathExpression,
+			controller,
+			view,
+			options
+		);
 	}
 }
 

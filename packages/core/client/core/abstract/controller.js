@@ -68,41 +68,33 @@ export default class Controller extends ControllerInterface {
 	}
 
 	/**
-	 * @inheritDoc
-	 * @override
+	 * @inheritdoc
 	 * @method init
 	 */
 	init() {}
 
 	/**
-	 * @inheritDoc
-	 * @override
+	 * @inheritdoc
 	 * @method destroy
 	 */
 	destroy() {}
 
 	/**
-	 * @inheritDoc
-	 * @override
+	 * @inheritdoc
 	 * @method activate
 	 */
 	activate() {}
 
 	/**
-	 * @inheritDoc
-	 * @override
+	 * @inheritdoc
 	 * @method deactivate
 	 */
 	deactivate() {}
 
 	/**
-	 * @inheritDoc
+	 * @inheritdoc
 	 * @abstract
-	 * @override
 	 * @method load
-	 * @return {Object<string, (Promise|*)>} A map object of promises
-	 *         resolved when all resources the controller requires are ready. The
-	 *         resolved values will be pushed to the controller's state.
 	 */
 	load() {
 		throw new IMAError('The Core.Abstract.Controller.load method is ' +
@@ -110,24 +102,16 @@ export default class Controller extends ControllerInterface {
 	}
 
 	/**
-	 * @inheritDoc
-	 * @override
+	 * @inheritdoc
 	 * @method update
-	 * @param {Object<string, string>=} [params={}] Last route params.
-	 * @return {Object<string, (Promise|*)>} A map object of promises
-	 *         resolved when all resources the controller requires are ready. The
-	 *         resolved values will be pushed to the controller's state.
 	 */
 	update(params = {}) {
 		return this.getState();
 	}
 
 	/**
-	 * @inheritDoc
-	 * @override
+	 * @inheritdoc
 	 * @method setState
-	 * @param {Object<string, *>} statePatch Patch of the controller's state to
-	 *        apply.
 	 */
 	setState(statePatch) {
 		if (this._pageStateManager) {
@@ -136,10 +120,8 @@ export default class Controller extends ControllerInterface {
 	}
 
 	/**
-	 * @inheritDoc
-	 * @override
+	 * @inheritdoc
 	 * @method getState
-	 * @return {Object<string, *>} The current state of this controller.
 	 */
 	getState() {
 		if (this._pageStateManager) {
@@ -150,81 +132,58 @@ export default class Controller extends ControllerInterface {
 	}
 
 	/**
-	 * @inheritDoc
-	 * @override
-	 * @chainable
+	 * @inheritdoc
 	 * @method addExtension
-	 * @param {Core.Interface.Extensions} extension
-	 * @return {Core.Interface.Controller} This controller
 	 */
 	addExtension(extension) {
 		this._extensions.push(extension);
 	}
 
 	/**
-	 * @inheritDoc
-	 * @override
+	 * @inheritdoc
 	 * @method getExtensions
-	 * @return {Array<Core.Interface.Extension>}
 	 */
 	getExtensions() {
 		return this._extensions;
 	}
 
 	/**
-	 * @inheritDoc
-	 * @override
+	 * @inheritdoc
 	 * @abstract
 	 * @method setMetaParams
-	 * @param {Object<string, *>} loadedResources Map of resource names to
-	 *        resources loaded by the {@codelink load} method. This is the same
-	 *        object as the one passed to the {@codelink setState} method when
-	 *        the Promises returned by the {@codelink load} method were resolved.
-	 * @param {Core.Interface.MetaManager} metaManager SEO attributes manager to configure.
-	 * @param {Core.Interface.Router} router The current application router.
-	 * @param {Core.Interface.Dictionary} dictionary The current localization
-	 *        dictionary.
-	 * @param {Object<string, *>} settings The application settings for the
-	 *        current application environment.
 	 */
 	setMetaParams(loadedResources, metaManager, router, dictionary, settings) {
-		throw new IMAError('The Core.Abstract.Controller.setMetaParams method is ' +
-				'abstract and must be overridden');
+		throw new IMAError('The Core.Abstract.Controller.setMetaParams ' +
+				'method is abstract and must be overridden');
 	}
 
 	/**
-	 * @inheritDoc
-	 * @override
+	 * @inheritdoc
 	 * @method setRouteParams
-	 * @param {Object<string, string>=} [params={}] The current route parameters.
 	 */
 	setRouteParams(params = {}) {
 		this.params = params;
 	}
 
 	/**
-	 * @inheritDoc
-	 * @override
+	 * @inheritdoc
 	 * @method getRouteParams
-	 * @return {Object<string, string>} The current route parameters.
 	 */
 	getRouteParams() {
 		return this.params;
 	}
 
 	/**
+	 * @inheritdoc
 	 * @method setPageStateManager
-	 * @param {Core.Interface.PageStateManager|Null} pageStateManager
 	 */
 	setPageStateManager(pageStateManager) {
 		this._pageStateManager = pageStateManager;
 	}
 
 	/**
-	 * @inheritDoc
-	 * @override
+	 * @inheritdoc
 	 * @method getHttpStatus
-	 * @return {number} The HTTP status code to send to the client.
 	 */
 	getHttpStatus() {
 		return this.status;

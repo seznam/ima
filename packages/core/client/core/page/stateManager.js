@@ -56,8 +56,7 @@ export default class StateManager extends PageStateManager {
 	}
 
 	/**
-	 * @inheritDoc
-	 * @override
+	 * @inheritdoc
 	 * @method clear
 	 */
 	clear() {
@@ -66,10 +65,8 @@ export default class StateManager extends PageStateManager {
 	}
 
 	/**
-	 * @inheritDoc
-	 * @override
+	 * @inheritdoc
 	 * @method setState
-	 * @param {Object<string, *>} statePatch
 	 */
 	setState(statePatch) {
 		var newState = Object.assign({}, this.getState(), statePatch);
@@ -80,20 +77,16 @@ export default class StateManager extends PageStateManager {
 	}
 
 	/**
-	 * @inheritDoc
-	 * @override
+	 * @inheritdoc
 	 * @method getState
-	 * @return {Object<string, *>}
 	 */
 	getState() {
 		return this._states[this._cursor - 1] || {};
 	}
 
 	/**
-	 * @inheritDoc
-	 * @override
+	 * @inheritdoc
 	 * @method getAllStates
-	 * @return {Array<Object<string, *>>}
 	 */
 	getAllStates() {
 		return this._states;

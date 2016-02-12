@@ -56,32 +56,24 @@ export default class Server extends AbstractRouter {
 	}
 
 	/**
-	 * @inheritDoc
-	 * @override
+	 * @inheritdoc
 	 * @method getPath
-	 * @return {string}
 	 */
 	getPath() {
 		return this._extractRoutePath(this._request.getPath());
 	}
 
 	/**
-	 * @inheritDoc
-	 * @override
-	 * @chainable
+	 * @inheritdoc
 	 * @method listen
-	 * @return {Core.Interface.Router}
 	 */
 	listen() {
 		return this;
 	}
 
 	/**
-	 * @inheritDoc
-	 * @override
+	 * @inheritdoc
 	 * @method redirect
-	 * @param {string} url
-	 * @param {{httpStatus: number=, onlyUpdate: boolean=, autoScroll: boolean=}} [options={}]
 	 */
 	redirect(url = '/', options = {}) {
 		this._response.redirect(url, options.httpStatus || 302);

@@ -52,7 +52,7 @@ export default class Cookie extends MapStorage {
 	 * @param {Core.Router.Response} response The current HTTP response.
 	 * @example
 	 *      cookie.set('cookie', 'value', { expires: 10 }); // cookie expires
-	 *                                                    // after 10s
+	 *                                                      // after 10s
 	 *      cookie.set('cookie'); // delete cookie
 	 *
 	 */
@@ -119,13 +119,8 @@ export default class Cookie extends MapStorage {
 	}
 
 	/**
-	 * @inheritDoc
-	 * @override
-	 * @chainable
+	 * @inheritdoc
 	 * @method init
-	 * @param {{path: string=, secure: boolean=, httpOnly: boolean=, domain: string=}} [options={}]
-	 * @param {{encode: function, decode: function}} [transformFunction={}]
-	 * @return {Core.Interface.Storage}
 	 */
 	init(options = {}, transformFunction = {}) {
 		this._transformFunction = Object.assign(
@@ -139,22 +134,16 @@ export default class Cookie extends MapStorage {
 	}
 
 	/**
-	 * @inheritDoc
-	 * @override
+	 * @inheritdoc
 	 * @method has
-	 * @param {string} name
-	 * @return {boolean}
 	 */
 	has(name) {
 		return super.has(name);
 	}
 
 	/**
-	 * @inheritDoc
-	 * @override
+	 * @inheritdoc
 	 * @method get
-	 * @param {string} name The cookie name.
-	 * @return {(undefined|string)}
 	 */
 	get(name) {
 		if (super.has(name)) {
@@ -165,20 +154,8 @@ export default class Cookie extends MapStorage {
 	}
 
 	/**
-	 * @inheritDoc
-	 * @override
-	 * @chainable
+	 * @inheritdoc
 	 * @method set
-	 * @param {string} name
-	 * @param {(boolean|number|string|undefined)} value
-	 * @param {{domain: string=, expires: (number|string|Date|null)=,
-	 *        secure: boolean=, httpOnly: boolean=, path: string=,
-	 *        maxAge: number=}} [options={}]
-	 *        Cookie attributes. Only the attributes listed in the type
-	 *        annotation of this field are supported. For documentation and
-	 *        full list of cookie attributes see
-	 *        http://tools.ietf.org/html/rfc6265#page-9
-	 * @return {Core.Storage.Cookie}
 	 */
 	set(name, value, options = {}) {
 		options = Object.assign({}, this._options, options);
@@ -204,12 +181,8 @@ export default class Cookie extends MapStorage {
 	}
 
 	/**
-	 * @inheritDoc
-	 * @override
-	 * @chainable
+	 * @inheritdoc
 	 * @method delete
-	 * @param {string} name
-	 * @return {Core.Storage.Cookie}
 	 */
 	delete(name) {
 		if (this.has(name)) {
@@ -221,11 +194,8 @@ export default class Cookie extends MapStorage {
 	}
 
 	/**
-	 * @inheritDoc
-	 * @override
-	 * @chainable
+	 * @inheritdoc
 	 * @method clear
-	 * @return {Core.Storage.Cookie}
 	 */
 	clear() {
 		for (var cookieName of super.keys()) {
@@ -236,20 +206,16 @@ export default class Cookie extends MapStorage {
 	}
 
 	/**
-	 * @inheritDoc
-	 * @override
+	 * @inheritdoc
 	 * @method keys
-	 * @return {Iterator<string>}
 	 */
 	keys() {
 		return super.keys();
 	}
 
 	/**
-	 * @inheritDoc
-	 * @override
+	 * @inheritdoc
 	 * @method size
-	 * @return {number}
 	 */
 	size() {
 		return super.size();

@@ -59,115 +59,88 @@ export default class Manager extends MetaManager {
 	}
 
 	/**
-	 * @inheritDoc
-	 * @override
+	 * @inheritdoc
 	 * @method setTitle
-	 * @param {string} title
 	 */
 	setTitle(title) {
 		this._title = title;
 	}
 
 	/**
-	 * @inheritDoc
-	 * @override
+	 * @inheritdoc
 	 * @method getTitle
-	 * @return {string}
 	 */
 	getTitle() {
 		return this._title;
 	}
 
 	/**
-	 * @inheritDoc
-	 * @override
+	 * @inheritdoc
 	 * @method setMetaName
-	 * @param {string} name
-	 * @param {string} value
 	 */
 	setMetaName(name, value) {
 		this._metaName.set(name, value);
 	}
 
 	/**
-	 * @inheritDoc
-	 * @override
+	 * @inheritdoc
 	 * @method getMetaName
-	 * @param {string} name
-	 * @return {string}
 	 */
 	getMetaName(name) {
 		return this._metaName.get(name) || '';
 	}
 
 	/**
-	 * @inheritDoc
-	 * @override
+	 * @inheritdoc
 	 * @method getMetaNames
-	 * @return {Array<string>}
 	 */
 	getMetaNames() {
 		return Array.from(this._metaName.keys());
 	}
 
 	/**
-	 * @inheritDoc
-	 * @override
+	 * @inheritdoc
 	 * @method setMetaProperty
-	 * @param {string} name
-	 * @param {string} value
 	 */
 	setMetaProperty(name, value) {
 		this._metaProperty.set(name, value);
 	}
 
 	/**
-	 * @inheritDoc
-	 * @override
+	 * @inheritdoc
 	 * @method getMetaProperty
-	 * @param {string} name
-	 * @return {string}
 	 */
 	getMetaProperty(name) {
 		return this._metaProperty.get(name) || '';
 	}
 
 	/**
-	 * @inheritDoc
-	 * @override
+	 * @inheritdoc
 	 * @method getMetaProperties
-	 * @return {Array<string>}
 	 */
 	getMetaProperties() {
 		return Array.from(this._metaProperty.keys());
 	}
 
 	/**
-	 * @inheritDoc
-	 * @override
+	 * @inheritdoc
 	 * @method setLink
-	 * @param {string} name
-	 * @param {string} value
 	 */
 	setLink(name, value) {
 		this._link.set(name, value);
 	}
 
 	/**
-	 * @inheritDoc
-	 * @override
+	 * @inheritdoc
 	 * @method getLink
-	 * @return {string}
 	 */
 	getLink(name) {
 		return this._link.get(name) || '';
 	}
 
 	/**
-	 * @inheritDoc
-	 * @override
+	 * @inheritdoc
 	 * @method getLinks
-	 * @return {Array<string>}
 	 */
 	getLinks() {
 		return Array.from(this._link.keys());

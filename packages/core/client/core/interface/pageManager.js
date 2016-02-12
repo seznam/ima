@@ -22,7 +22,7 @@ export default class PageManager {
 	/**
 	 * Manager controller with params.
 	 *
-	 * @inheritDoc
+	 * @inheritdoc
 	 * @override
 	 * @method manage
 	 * @param {(string|function)} controller
@@ -45,7 +45,7 @@ export default class PageManager {
 	scrollTo(x = 0, y = 0) {}
 
 	/**
-	 * Finalization callback, called when the pagemanager is being discarded.
+	 * Finalization callback, called when the page manager is being discarded.
 	 * This usually happens when the page is hot-reload.
 	 *
 	 * @method destroy

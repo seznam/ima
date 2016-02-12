@@ -80,9 +80,9 @@ export default class DevTool {
 				this._window.getWindow().$IMA.$DevTool = this;
 			}
 
-
-			this._window.bindEventListener(this._window.getWindow(), 'keydown', (e) => {
-				if (e.altKey && e.keyCode === 83) {
+			let window = this._window.getWindow();
+			this._window.bindEventListener(window, 'keydown', (e) => {
+				if (e.altKey && e.keyCode === 83) { // Alt + S
 					console.log(this._stateManager.getState());
 				}
 			});

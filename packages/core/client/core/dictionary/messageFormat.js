@@ -47,10 +47,8 @@ export default class MessageFormat extends Dictionary {
 	}
 
 	/**
-	 * @inheritDoc
-	 * @override
+	 * @inheritdoc
 	 * @method init
-	 * @param {{language: string, dictionary: Object<string, Object<string, function(Object<string, (number|string)>): string>>}} config
 	 */
 	init(config) {
 		this._language = config.language;
@@ -58,22 +56,16 @@ export default class MessageFormat extends Dictionary {
 	}
 
 	/**
-	 * @inheritDoc
-	 * @override
+	 * @inheritdoc
 	 * @method getLanguage
-	 * @return {string}
 	 */
 	getLanguage() {
 		return this._language;
 	}
 
 	/**
-	 * @inheritDoc
-	 * @override
+	 * @inheritdoc
 	 * @method get
-	 * @param {string} key
-	 * @param {Object<string, (number|string)>=} parameters
-	 * @return {string}
 	 */
 	get(key, parameters = {}) {
 		var path = key.split('.');
@@ -82,8 +74,8 @@ export default class MessageFormat extends Dictionary {
 		for (var scopeKey of path) {
 			if (!scope[scopeKey]) {
 				throw new IMAError(`Core.Dictionary.MessageFormat.get: The ` +
-					`localization phrase '${key}' does not exists`,
-					{ key, parameters });
+						`localization phrase '${key}' does not exists`,
+						{ key, parameters });
 			}
 
 			scope = scope[scopeKey];

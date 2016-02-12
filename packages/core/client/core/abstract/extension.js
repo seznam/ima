@@ -55,41 +55,33 @@ export default class Extension extends ExtensionInterface {
 	}
 
 	/**
-	 * @inheritDoc
-	 * @override
+	 * @inheritdoc
 	 * @method init
 	 */
 	init() {}
 
 	/**
-	 * @inheritDoc
-	 * @override
+	 * @inheritdoc
 	 * @method destroy
 	 */
 	destroy() {}
 
 	/**
-	 * @inheritDoc
-	 * @override
+	 * @inheritdoc
 	 * @method activate
 	 */
 	activate() {}
 
 	/**
-	 * @inheritDoc
-	 * @override
+	 * @inheritdoc
 	 * @method deactivate
 	 */
 	deactivate() {}
 
 	/**
-	 * @inheritDoc
+	 * @inheritdoc
 	 * @abstract
-	 * @override
 	 * @method load
-	 * @return {Object<string, (Promise|*)>} A map object of promises
-	 *         resolved when all resources the extension requires are ready. The
-	 *         resolved values will be pushed to the extension's state.
 	 */
 	load() {
 		throw new IMAError('The Core.Abstract.Extension.load method is ' +
@@ -97,24 +89,16 @@ export default class Extension extends ExtensionInterface {
 	}
 
 	/**
-	 * @inheritDoc
-	 * @override
+	 * @inheritdoc
 	 * @method update
-	 * @param {Object<string, string>=} [params={}] Last route params.
-	 * @return {Object<string, (Promise|*)>} A map object of promises
-	 *         resolved when all resources the extension requires are ready. The
-	 *         resolved values will be pushed to the extension's state.
 	 */
 	update(params = {}) {
 		return this.getState();
 	}
 
 	/**
-	 * @inheritDoc
-	 * @override
+	 * @inheritdoc
 	 * @method setState
-	 * @param {Object<string, *>} statePatch Patch of the extension's state to
-	 *        apply.
 	 */
 	setState(statePatch) {
 		if (this._pageStateManager) {
@@ -123,10 +107,8 @@ export default class Extension extends ExtensionInterface {
 	}
 
 	/**
-	 * @inheritDoc
-	 * @override
+	 * @inheritdoc
 	 * @method getState
-	 * @return {Object<string, *>} The current state of this extension.
 	 */
 	getState() {
 		if (this._pageStateManager) {
@@ -137,38 +119,32 @@ export default class Extension extends ExtensionInterface {
 	}
 
 	/**
-	 * @inheritDoc
-	 * @override
+	 * @inheritdoc
 	 * @method setRouteParams
-	 * @param {Object<string, string>=} [params={}] The current route parameters.
 	 */
 	setRouteParams(params = {}) {
 		this.params = params;
 	}
 
 	/**
-	 * @inheritDoc
-	 * @override
+	 * @inheritdoc
 	 * @method getRouteParams
-	 * @return {Object<string, string>} The current route parameters.
 	 */
 	getRouteParams() {
 		return this.params;
 	}
 
 	/**
+	 * @inheritdoc
 	 * @method setPageStateManager
-	 * @param {Core.Interface.PageStateManager|Null} pageStateManager
 	 */
 	setPageStateManager(pageStateManager) {
 		this._pageStateManager = pageStateManager;
 	}
 
 	/**
-	 * @inheritDoc
-	 * @override
+	 * @inheritdoc
 	 * @method getHttpStatus
-	 * @return {number} The HTTP status code to send to the client.
 	 */
 	getHttpStatus() {
 		return this.status;
@@ -177,10 +153,8 @@ export default class Extension extends ExtensionInterface {
 	/**
 	 * Returns array of allowed state keys for extension.
 	 *
-	 * @inheritDoc
-	 * @override
+	 * @inheritdoc
 	 * @method getAllowedStateKeys
-	 * @return {Array<string>} The allowed state keys.
 	 */
 	getAllowedStateKeys() {
 		return [];

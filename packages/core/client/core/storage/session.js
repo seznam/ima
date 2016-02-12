@@ -38,31 +38,24 @@ class Session extends Storage {
 	}
 
 	/**
-	 * @inheritDoc
-	 * @override
-	 * @chainable
+	 * @inheritdoc
 	 * @method init
-	 * @return {Core.Interface.Storage}
 	 */
 	init() {
 		return this;
 	}
 
 	/**
+	 * @inheritdoc
 	 * @method has
-	 * @param {string} key
-	 * @return {boolean}
 	 */
 	has(key) {
 		return !!this._storage.getItem(key);
 	}
 
 	/**
-	 * @inheritDoc
-	 * @override
+	 * @inheritdoc
 	 * @method get
-	 * @param {string} key
-	 * @return {*}
 	 */
 	get(key) {
 		try {
@@ -75,13 +68,8 @@ class Session extends Storage {
 	}
 
 	/**
-	 * @inheritDoc
-	 * @override
-	 * @chainable
+	 * @inheritdoc
 	 * @method set
-	 * @param {string} key
-	 * @param {*} value
-	 * @return {Core.Storage.Session}
 	 */
 	set(key, value) {
 		try {
@@ -107,12 +95,8 @@ class Session extends Storage {
 	}
 
 	/**
-	 * @inheritDoc
-	 * @override
-	 * @chainable
+	 * @inheritdoc
 	 * @method delete
-	 * @param {string} key
-	 * @return {Core.Storage.Session}
 	 */
 	delete(key) {
 		this._storage.removeItem(key);
@@ -120,11 +104,8 @@ class Session extends Storage {
 	}
 
 	/**
-	 * @inheritDoc
-	 * @override
-	 * @chainable
+	 * @inheritdoc
 	 * @method clear
-	 * @return {Core.Storage.Session}
 	 */
 	clear() {
 		this._storage.clear();
@@ -132,10 +113,8 @@ class Session extends Storage {
 	}
 
 	/**
-	 * @inheritDoc
-	 * @override
+	 * @inheritdoc
 	 * @method keys
-	 * @return {Iterator<string>}
 	 */
 	keys() {
 		return new StorageIterator(this._storage);
@@ -144,7 +123,6 @@ class Session extends Storage {
 	/**
 	 * @override
 	 * @method size
-	 * @return {number}
 	 */
 	size() {
 		return this._storage.length;

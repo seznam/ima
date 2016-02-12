@@ -24,8 +24,8 @@ export default class Server extends AbstractPageRender {
 	 * @param {Core.Page.Render.Factory} factory Factory for receive $Utils to
 	 *        view.
 	 * @param {Vendor.$Helper} Helper The IMA.js helper methods.
-	 * @param {Vendor.ReactDOMServer} ReactDOMServer React framework instance to use to render
-	 *        the page on the server side.
+	 * @param {Vendor.ReactDOMServer} ReactDOMServer React framework instance
+	 *        to use to render the page on the server side.
 	 * @param {Object<string, *>} settings Application setting for the current
 	 *        application environment.
 	 * @param {Core.Router.Response} response Utility for sending the page
@@ -61,14 +61,9 @@ export default class Server extends AbstractPageRender {
 	}
 
 	/**
-	 * @inheritDoc
-	 * @override
-	 * @method mount
+	 * @inheritdoc
 	 * @abstract
-	 * @param {Core.Abstract.Controller} controller
-	 * @param {Vendor.React.Component} view
-	 * @param {Object<string, *>} loadedPageState
-	 * @return {Promise}
+	 * @method mount
 	 */
 	mount(controller, view, loadedPageState) {
 		if (this._response.isResponseSent()) {
@@ -85,20 +80,17 @@ export default class Server extends AbstractPageRender {
 	}
 
 	/**
-	 * @inheritDoc
-	 * @override
+	 * @inheritdoc
 	 * @method update
-	 * @param {Core.Decorator.Controller} controller
-	 * @param {Object<string, *>} updatedPageState
-	 * @return {Promise}
 	 */
 	update(controller, updatedPageState) {
-		return Promise.reject(new IMAError('The update() is denied on server side.'));
+		return Promise.reject(new IMAError(
+			'The update() is denied on server side.'
+		));
 	}
 
 	/**
-	 * @inheritDoc
-	 * @override
+	 * @inheritdoc
 	 * @method unmount
 	 */
 	unmount() {
@@ -111,8 +103,8 @@ export default class Server extends AbstractPageRender {
 	 * THe HTML code will include a script settings the "revival" data for the
 	 * application at the client-side.
 	 *
-	 * @method _getRevivalSettings
 	 * @private
+	 * @method _getRevivalSettings
 	 * @return {string} HTML code containing script element to include into the
 	 *         rendered page.
 	 */
@@ -142,8 +134,8 @@ export default class Server extends AbstractPageRender {
 	 * The the values that are already Promises will referenced directly
 	 * without wrapping then into another Promise.
 	 *
-	 * @method _wrapEachKeyToPromise
 	 * @protected
+	 * @method _wrapEachKeyToPromise
 	 * @param {Object<string, *>=} [dataMap={}] A map of data that should have
 	 *        its values wrapped into Promises.
 	 * @return {Object<string, Promise>} A copy of the provided data map that

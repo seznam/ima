@@ -70,7 +70,7 @@ Object.defineProperty(IMAError.prototype, 'stack', {
  * This method is a shorthand for the following code snippet:
  * {@code this.getParams().status || 500}.
  *
- * @inheritDoc
+ * @inheritdoc
  * @override
  * @method getHttpStatus
  * @return {number}

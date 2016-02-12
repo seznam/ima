@@ -26,7 +26,6 @@ export function constructor(message, params = {},
 	 * The name of this error, used in the generated stack.
 	 *
 	 * @property name
-	 * @public
 	 * @type {string}
 	 * @default 'IMAError'
 	 */
@@ -43,8 +42,8 @@ export function constructor(message, params = {},
 	/**
 	 * A data map providing additional details related to this error.
 	 *
-	 * @property _params
 	 * @private
+	 * @property _params
 	 * @type {Object<string, *>}
 	 */
 	this._params = params;
@@ -56,7 +55,7 @@ export function constructor(message, params = {},
 	 * shortcoming like this.
 	 *
 	 * @private
-	 * @property
+	 * @property _nativeError
 	 * @type {Error}
 	 */
 	this._nativeError = new Error(message);
@@ -74,7 +73,7 @@ export function constructor(message, params = {},
 	 * first access to the {@codelink stack} property.
 	 *
 	 * @private
-	 * @property
+	 * @property _stack
 	 * @type {?string}
 	 */
 	this._stack = null;
@@ -85,7 +84,7 @@ export function constructor(message, params = {},
 	 * in the stack of this error.
 	 *
 	 * @private
-	 * @property
+	 * @property _dropInternalStackFrames
 	 * @type {boolean}
 	 */
 	this._dropInternalStackFrames = dropInternalStackFrames;
@@ -95,10 +94,9 @@ export function constructor(message, params = {},
  * The call stack captured at the moment of creation of this error. The
  * formatting of the stack is browser-dependant.
  *
- * @override
- * @public
  * @method getStack
- * @return {string}
+ * @return {string} The call stack captured at the moment of creation of this
+ *         error.
  */
 export function getStack(implementationClass) {
 	if (this._stack) {
@@ -136,10 +134,8 @@ export function getStack(implementationClass) {
  * This method is a shorthand for the following code snippet:
  * {@code this.getParams().status || 500}.
  *
- * @inheritDoc
- * @override
  * @method getHttpStatus
- * @return {number}
+ * @return {number} The HTTP status to send to the client.
  */
 export function getHttpStatus() {
 	return this._params.status || 500;
@@ -151,7 +147,6 @@ export function getHttpStatus() {
  * the returned object usually contains the {@code status: number} field
  * which represents the HTTP status to send to the client.
  *
- * @override
  * @method getParams
  * @return {Object<string, *>} The error parameters providing additional
  *         details about the error.
@@ -163,7 +158,6 @@ export function getParams() {
 /**
  * Returns the name of this error. The name briefly describes this error.
  *
- * @override
  * @method getName
  * @return {string} The name of this error.
  */
@@ -175,7 +169,6 @@ export function getName() {
  * Returns a string representing this error. The string will consist of the
  * error name and message.
  *
- * @override
  * @method toString
  * @return {string} A string representing this error.
  */

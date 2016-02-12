@@ -59,8 +59,7 @@ export default class PageManager extends PageManagerInterface {
 	}
 
 	/**
-	 * @inheritDoc
-	 * @override
+	 * @inheritdoc
 	 * @method init
 	 */
 	init() {
@@ -71,14 +70,8 @@ export default class PageManager extends PageManagerInterface {
 	}
 
 	/**
-	 * @inheritDoc
-	 * @override
+	 * @inheritdoc
 	 * @method manage
-	 * @param {(string|function)} controller
-	 * @param {(string|function)} view
-	 * @param {{onlyUpdate: (boolean|function), autoScroll: boolean}} options
-	 * @param {Object<string, string>=} [params={}] The route parameters.
-	 * @return {Promise<Object<string, ?(number|string)>>}
 	 */
 	manage(controller, view, options, params = {}) {
 		this._preManage(options);
@@ -89,10 +82,12 @@ export default class PageManager extends PageManagerInterface {
 			return this._updatePageSource();
 		}
 
-		var controllerInstance = this._pageFactory.createController(controller);
-		var decoratedController = this._pageFactory.decorateController(
-				controllerInstance);
-		var viewInstance = this._pageFactory.createView(view);
+		let pageFactory = this._pageFactory;
+		var controllerInstance = pageFactory.createController(controller);
+		var decoratedController = pageFactory.decorateController(
+			controllerInstance
+		);
+		var viewInstance = pageFactory.createView(view);
 
 		this._deactivatePageSource();
 		this._destroyPageSource();
@@ -114,11 +109,8 @@ export default class PageManager extends PageManagerInterface {
 
 	/**
 	 * @abstract
-	 * @inheritDoc
-	 * @override
+	 * @inheritdoc
 	 * @method scrollTo
-	 * @param {number} [x=0]
-	 * @param {number} [y=0]
 	 */
 	scrollTo(x = 0, y = 0) {
 		throw new IMAError('The scrollTo() method is abstract and must be ' +
@@ -126,8 +118,7 @@ export default class PageManager extends PageManagerInterface {
 	}
 
 	/**
-	 * @inheritDoc
-	 * @override
+	 * @inheritdoc
 	 * @method destroy
 	 */
 	destroy() {
@@ -188,7 +179,8 @@ export default class PageManager extends PageManagerInterface {
 	}
 
 	/**
-	 * Set page state manager to extension which has restricted rights to set global state.
+	 * Set page state manager to extension which has restricted rights to set
+	 * global state.
 	 *
 	 * @private
 	 * @method _setRestrictedPageStateManager
@@ -197,17 +189,21 @@ export default class PageManager extends PageManagerInterface {
 	 */
 	_setRestrictedPageStateManager(extension, extensionState) {
 		var stateKeys = Object.keys(extensionState);
-		var allAllowedStateKeys = stateKeys.concat(extension.getAllowedStateKeys());
+		let allowedKey = extension.getAllowedStateKeys();
+		var allAllowedStateKeys = stateKeys.concat(allowedKey);
 
-		var decoratedPageStateManager = this._pageFactory.decoratePageStateManager(
-				this._pageStateManager,
-				allAllowedStateKeys);
+		var pageFactory = this._pageFactory;
+		var decoratedPageStateManager = pageFactory.decoratePageStateManager(
+			this._pageStateManager,
+			allAllowedStateKeys
+		);
 
 		extension.setPageStateManager(decoratedPageStateManager);
 	}
 
 	/**
-	 * Initialize page source so call init method on controller and his extensions.
+	 * Initialize page source so call init method on controller and his
+	 * extensions.
 	 *
 	 * @protected
 	 * @method _initPageSource
@@ -257,11 +253,19 @@ export default class PageManager extends PageManagerInterface {
 	_loadPageSource() {
 		var controllerState = this._getLoadedControllerState();
 		var extensionsState = this._getLoadedExtensionsState();
-		var loadedPageState = Object.assign({}, extensionsState, controllerState);
+		var loadedPageState = Object.assign(
+			{},
+			extensionsState,
+			controllerState
+		);
 
 		return (
 			this._pageRender
-				.mount(this._managedPage.decoratedController, this._managedPage.view, loadedPageState)
+				.mount(
+					this._managedPage.decoratedController,
+					this._managedPage.view,
+					loadedPageState
+				)
 				.then((response) => {
 					this._postManage(this._managedPage.options);
 
@@ -361,11 +365,18 @@ export default class PageManager extends PageManagerInterface {
 	_updatePageSource() {
 		var updatedControllerState = this._getUpdatedControllerState();
 		var updatedExtensionState = this._getUpdatedExtensionsState();
-		var updatedPageState = Object.assign({}, updatedExtensionState, updatedControllerState);
+		var updatedPageState = Object.assign(
+			{},
+			updatedExtensionState,
+			updatedControllerState
+		);
 
 		return (
 			this._pageRender
-				.update(this._managedPage.decoratedController, updatedPageState)
+				.update(
+					this._managedPage.decoratedController,
+					updatedPageState
+				)
 				.then((response) => {
 					this._postManage(this._managedPage.options);
 
@@ -413,7 +424,8 @@ export default class PageManager extends PageManagerInterface {
 	}
 
 	/**
-	 * Deactivate page source so call deactivate method on controller and his extensions.
+	 * Deactivate page source so call deactivate method on controller and his
+	 * extensions.
 	 *
 	 * @protected
 	 * @method _deactivatePageSource
@@ -429,8 +441,8 @@ export default class PageManager extends PageManagerInterface {
 	}
 
 	/**
-	 * Deactivate last managed instance of controller only If controller
-	 * was activated.
+	 * Deactivate last managed instance of controller only If controller was
+	 * activated.
 	 *
 	 * @protected
 	 * @method _deactivateController
@@ -442,8 +454,8 @@ export default class PageManager extends PageManagerInterface {
 	}
 
 	/**
-	 * Deactivate extensions for last managed instance of controller only If they
-	 * were activated.
+	 * Deactivate extensions for last managed instance of controller only if
+	 * they were activated.
 	 *
 	 * @protected
 	 * @method _deactivateExtensions
@@ -457,7 +469,8 @@ export default class PageManager extends PageManagerInterface {
 	}
 
 	/**
-	 * Destroy page source so call destroy method on controller and his extensions.
+	 * Destroy page source so call destroy method on controller and his
+	 * extensions.
 	 *
 	 * @protected
 	 * @method _destroyPageSource
@@ -537,8 +550,8 @@ export default class PageManager extends PageManagerInterface {
 		}
 
 		return options.onlyUpdate &&
-			this._managedPage.controller === controller &&
-			this._managedPage.view === view;
+				this._managedPage.controller === controller &&
+				this._managedPage.view === view;
 	}
 
 	/**

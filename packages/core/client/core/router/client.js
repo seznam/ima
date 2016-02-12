@@ -125,10 +125,8 @@ export default class Client extends AbstractRouter {
 	}
 
 	/**
-	 * @inheritDoc
-	 * @override
+	 * @inheritdoc
 	 * @method init
-	 * @param {{$Protocol: string, $Domain: string, $Root: string, $LanguagePartPath: string}} config
 	 */
 	init(config) {
 		super.init(config);
@@ -139,37 +137,31 @@ export default class Client extends AbstractRouter {
 	}
 
 	/**
-	 * @inheritDoc
-	 * @override
+	 * @inheritdoc
 	 * @method getUrl
-	 * @return {string}
 	 */
 	getUrl() {
 		return this._window.getUrl();
 	}
 
 	/**
-	 * @inheritDoc
-	 * @override
+	 * @inheritdoc
 	 * @method getPath
-	 * @return {string}
 	 */
 	getPath() {
 		return this._extractRoutePath(this._window.getPath());
 	}
 
 	/**
-	 * @inheritDoc
-	 * @override
-	 * @chainable
+	 * @inheritdoc
 	 * @method listen
-	 * @return {Core.Interface.Router}
 	 */
 	listen() {
 		var nativeWindow = this._window.getWindow();
 
 		this._setAddressBar(this.getUrl());
-		this._window.bindEventListener(nativeWindow, EVENTS.POP_STATE, (event) => {
+		let eventName = EVENTS.POP_STATE;
+		this._window.bindEventListener(nativeWindow, eventName, (event) => {
 
 			if (event.state) {
 				this.route(this.getPath())
@@ -191,11 +183,8 @@ export default class Client extends AbstractRouter {
 	}
 
 	/**
-	 * @inheritDoc
-	 * @override
+	 * @inheritdoc
 	 * @method redirect
-	 * @param {string} url
-	 * @param {{httpStatus: number=, onlyUpdate: boolean=, autoScroll: boolean=}} [options={}]
 	 */
 	redirect(url = '', options = {}) {
 		if (this._isSameDomain(url) && this._mode === MODES.HISTORY) {
@@ -211,12 +200,8 @@ export default class Client extends AbstractRouter {
 	}
 
 	/**
-	 * @inheritDoc
-	 * @override
+	 * @inheritdoc
 	 * @method route
-	 * @param {string} path
-	 * @param {{onlyUpdate: boolean=, autoScroll: boolean=}} [options={}]
-	 * @return {Promise<Object<string, *>>}
 	 */
 	route(path, options = {}) {
 		return (
@@ -232,12 +217,8 @@ export default class Client extends AbstractRouter {
 	}
 
 	/**
-	 * @inheritDoc
-	 * @override
+	 * @inheritdoc
 	 * @method handleError
-	 * @param {Object<string, (Error|string)>} params
-	 * @param {{onlyUpdate: boolean=, autoScroll: boolean=}} [options={}]
-	 * @return {Promise<Object<string, *>>}
 	 */
 	handleError(params, options = {}) {
 		if ($Debug) {
@@ -251,7 +232,11 @@ export default class Client extends AbstractRouter {
 		if (this.isRedirection(params.error)) {
 			options.httpStatus = params.error.getHttpStatus();
 			this.redirect(params.error.getParams().url, options);
-			return Promise.resolve({ content: null, status: options.httpStatus, error: params.error });
+			return Promise.resolve({
+				content: null,
+				status: options.httpStatus,
+				error: params.error
+			});
 		}
 
 		return (
@@ -264,12 +249,8 @@ export default class Client extends AbstractRouter {
 	}
 
 	/**
-	 * @inheritDoc
-	 * @override
+	 * @inheritdoc
 	 * @method handleNotFound
-	 * @param {Object<string, (Error|string)>} params
-	 * @param {{onlyUpdate: boolean=, autoScroll: boolean=}} [options={}]
-	 * @return {Promise<Object<string, *>>}
 	 */
 	handleNotFound(params, options = {}) {
 		return (

@@ -79,8 +79,8 @@ export default class Proxy {
 	 * Executes an HTTP request to the specified URL using the specified HTTP
 	 * method, carrying the provided data.
 	 *
-	 * @method request
 	 * @private
+	 * @method request
 	 * @param {string} method The HTTP method to use.
 	 * @param {string} url The URL to which the request should be made.
 	 * @param {Object<string, (boolean|number|string|Date)>} data The data to

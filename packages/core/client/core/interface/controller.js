@@ -100,10 +100,10 @@ export default class Controller {
 	 * {@codelink activate()}, {@codelink deactivate()}, {@codelink deinit()}
 	 * are not call.
 	 *
-	 * @inheritDoc
+	 * @inheritdoc
 	 * @override
 	 * @method update
-	 * @param {Object<string, string>=} [params={}] Previous route params.
+	 * @param {Object<string, string>=} [prevParams={}] Previous route params.
 	 * @return {Object<string, (Promise|*)>} A map object of promises
 	 *         resolved when all resources the controller requires are ready.
 	 *         The resolved values will be pushed to the controller's state.
@@ -145,7 +145,7 @@ export default class Controller {
 	 *
 	 * @chainable
 	 * @method addExtension
-	 * @param {Core.Interface.Extensions} extension
+	 * @param {Core.Interface.Extension} extension
 	 * @return {Core.Interface.Controller} This controller
 	 */
 	addExtension(extension) {}
@@ -154,7 +154,7 @@ export default class Controller {
 	 * Return the controller extensions.
 	 *
 	 * @method getExtensions
-	 * @return {Array<Core.Interface.Extension>}
+	 * @return {Core.Interface.Extension[]}
 	 */
 	getExtensions() {}
 

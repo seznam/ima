@@ -29,7 +29,8 @@ export default class Agent extends HttpAgent {
 	 *        HTTP requests.
 	 * @param {Core.Cache.Handler} cache Cache to use for caching ongoing and
 	 *        completed requests.
-	 * @param {Core.Storage.Cookie} cookie The cookie storage to use internally.
+	 * @param {Core.Storage.Cookie} cookie The cookie storage to use
+	 *        internally.
 	 * @param {Object<string, *>} config Configuration of the HTTP handler for
 	 *        the current application environment, specifying the various
 	 *        default request option values and cache option values.
@@ -114,48 +115,16 @@ export default class Agent extends HttpAgent {
 	}
 
 	/**
-	 * @inheritDoc
-	 * @override
+	 * @inheritdoc
 	 * @method get
-	 * @param {string} url
-	 * @param {Object<string, (boolean|number|string|Date)>} data
-	 * @param {{timeout: number=, ttl: number=, repeatRequest: number=,
-	 *        headers: Object<string, string>=, cache: boolean=,
-	 *        withCredentials: boolean}=} options
-	 *        Optional request options. The {@code timeout} specifies the
-	 *        request timeout in milliseconds, the {@code ttl} specified how
-	 *        long the request may be cached in milliseconds, the
-	 *        {@code repeatRequest} specifies the maximum number of tries to
-	 *        repeat the request if the request fails, The {@code headers} set
-	 *        request headers. The {@code cache} can be used to bypass the
-	 *        cache of pending and finished HTTP requests. The
-	 *        {@code withCredentials} that indicates whether requests should be
-	 *        made using credentials such as cookies or authorization headers.
-	 * @return {Promise<*>}
 	 */
 	get(url, data, options = {}) {
 		return this._requestWithCheckCache('get', url, data, options);
 	}
 
 	/**
-	 * @inheritDoc
-	 * @override
+	 * @inheritdoc
 	 * @method post
-	 * @param {string} url
-	 * @param {Object<string, (boolean|number|string|Date)>} data
-	 * @param {{timeout: number=, ttl: number=, repeatRequest: number=,
-	 *        headers: Object<string, string>=, cache: boolean=,
-	 *        withCredentials: boolean}=} options
-	 *        Optional request options. The {@code timeout} specifies the
-	 *        request timeout in milliseconds, the {@code ttl} specified how
-	 *        long the request may be cached in milliseconds, the
-	 *        {@code repeatRequest} specifies the maximum number of tries to
-	 *        repeat the request if the request fails, The {@code headers} set
-	 *        request headers. The {@code cache} can be used to bypass the
-	 *        cache of pending and finished HTTP requests. The
-	 *        {@code withCredentials} that indicates whether requests should be
-	 *        made using credentials such as cookies or authorization headers.
-	 * @return {Promise<*>}
 	 */
 	post(url, data, options = {}) {
 		return this._requestWithCheckCache(
@@ -167,24 +136,8 @@ export default class Agent extends HttpAgent {
 	}
 
 	/**
-	 * @inheritDoc
-	 * @override
+	 * @inheritdoc
 	 * @method put
-	 * @param {string} url
-	 * @param {Object<string, (boolean|number|string|Date)>} data
-	 * @param {{timeout: number=, ttl: number=, repeatRequest: number=,
-	 *        headers: Object<string, string>=, cache: boolean=,
-	 *        withCredentials: boolean}=} options
-	 *        Optional request options. The {@code timeout} specifies the
-	 *        request timeout in milliseconds, the {@code ttl} specified how
-	 *        long the request may be cached in milliseconds, the
-	 *        {@code repeatRequest} specifies the maximum number of tries to
-	 *        repeat the request if the request fails, The {@code headers} set
-	 *        request headers. The {@code cache} can be used to bypass the
-	 *        cache of pending and finished HTTP requests. The
-	 *        {@code withCredentials} that indicates whether requests should be
-	 *        made using credentials such as cookies or authorization headers.
-	 * @return {Promise<*>}
 	 */
 	put(url, data, options = {}) {
 		return this._requestWithCheckCache(
@@ -196,24 +149,8 @@ export default class Agent extends HttpAgent {
 	}
 
 	/**
-	 * @inheritDoc
-	 * @override
+	 * @inheritdoc
 	 * @method patch
-	 * @param {string} url
-	 * @param {Object<string, (boolean|number|string|Date)>} data
-	 * @param {{timeout: number=, ttl: number=, repeatRequest: number=,
-	 *        headers: Object<string, string>=, cache: boolean=,
-	 *        withCredentials: boolean}=} options
-	 *        Optional request options. The {@code timeout} specifies the
-	 *        request timeout in milliseconds, the {@code ttl} specified how
-	 *        long the request may be cached in milliseconds, the
-	 *        {@code repeatRequest} specifies the maximum number of tries to
-	 *        repeat the request if the request fails, The {@code headers} set
-	 *        request headers. The {@code cache} can be used to bypass the
-	 *        cache of pending and finished HTTP requests. The
-	 *        {@code withCredentials} that indicates whether requests should be
-	 *        made using credentials such as cookies or authorization headers.
-	 * @return {Promise<*>}
 	 */
 	patch(url, data, options = {}) {
 		return this._requestWithCheckCache(
@@ -225,24 +162,8 @@ export default class Agent extends HttpAgent {
 	}
 
 	/**
-	 * @inheritDoc
-	 * @override
+	 * @inheritdoc
 	 * @method delete
-	 * @param {string} url
-	 * @param {Object<string, (boolean|number|string|Date)>} data
-	 * @param {{timeout: number=, ttl: number=, repeatRequest: number=,
-	 *        headers: Object<string, string>=, cache: boolean=,
-	 *        withCredentials: boolean}=} options
-	 *        Optional request options. The {@code timeout} specifies the
-	 *        request timeout in milliseconds, the {@code ttl} specified how
-	 *        long the request may be cached in milliseconds, the
-	 *        {@code repeatRequest} specifies the maximum number of tries to
-	 *        repeat the request if the request fails, The {@code headers} set
-	 *        request headers. The {@code cache} can be used to bypass the
-	 *        cache of pending and finished HTTP requests. The
-	 *        {@code withCredentials} that indicates whether requests should be
-	 *        made using credentials such as cookies or authorization headers.
-	 * @return {Promise<*>}
 	 */
 	delete(url, data, options = {}) {
 		return this._requestWithCheckCache(
@@ -254,13 +175,8 @@ export default class Agent extends HttpAgent {
 	}
 
 	/**
-	 * @inheritDoc
-	 * @override
+	 * @inheritdoc
 	 * @method getCacheKey
-	 * @param {string} method
-	 * @param {string} url
-	 * @param {Object<string, string>} data
-	 * @return {string}
 	 */
 	getCacheKey(method, url, data) {
 		return this._cacheOptions.prefix +
@@ -268,13 +184,8 @@ export default class Agent extends HttpAgent {
 	}
 
 	/**
-	 * @inheritDoc
-	 * @override
+	 * @inheritdoc
 	 * @method setDefaultHeader
-	 * @chainable
-	 * @param {string} header
-	 * @param {string} value
-	 * @return {Core.Interface.HttpAgent}
 	 */
 	setDefaultHeader(header, value) {
 		this._proxy.setDefaultHeader(header, value);
@@ -283,11 +194,8 @@ export default class Agent extends HttpAgent {
 	}
 
 	/**
-	 * @inheritDoc
-	 * @override
+	 * @inheritdoc
 	 * @method clearDefaultHeaders
-	 * @chainable
-	 * @return {Core.Interface.HttpAgent}
 	 */
 	clearDefaultHeaders() {
 		this._proxy.clearDefaultHeaders();
@@ -578,7 +486,8 @@ export default class Agent extends HttpAgent {
 		);
 
 		agentResponse.cached = true;
-		this._cache.set(cacheKey, agentResponse, agentResponse.params.options.ttl);
+		var ttl = agentResponse.params.options.ttl;
+		this._cache.set(cacheKey, agentResponse, ttl);
 		agentResponse.cached = false;
 	}
 }

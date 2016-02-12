@@ -15,68 +15,54 @@ ns.namespace('Core.Window');
 export default class Server extends WindowInterface {
 
 	/**
-	 * @inheritDoc
-	 * @override
+	 * @inheritdoc
 	 * @method isClient
-	 * @return {boolean}
 	 */
 	isClient() {
 		return false;
 	}
 
 	/**
-	 * @inheritDoc
-	 * @override
+	 * @inheritdoc
 	 * @method isCookieEnabled
-	 * @return {boolean}
 	 */
 	isCookieEnabled() {
 		return false;
 	}
 
 	/**
-	 * @inheritDoc
-	 * @override
+	 * @inheritdoc
 	 * @method hasSessionStorage
-	 * @return {boolean}
 	 */
 	hasSessionStorage() {
 		return false;
 	}
 
 	/**
-	 * @inheritDoc
-	 * @override
+	 * @inheritdoc
 	 * @method hasWebSocket
-	 * @return {boolean}
 	 */
 	hasWebSocket() {
 		return false;
 	}
 
 	/**
-	 * @inheritDoc
-	 * @override
+	 * @inheritdoc
 	 * @method hasHistoryAPI
-	 * @return {boolean}
 	 */
 	hasHistoryAPI() {
 		return false;
 	}
 
 	/**
-	 * @inheritDoc
-	 * @override
+	 * @inheritdoc
 	 * @method setTitle
-	 * @param {string} title
 	 */
 	setTitle(title) {}
 
 	/**
-	 * @inheritDoc
-	 * @override
+	 * @inheritdoc
 	 * @method getWebSocket
-	 * @return {function(new: WebSocket)}
 	 */
 	getWebSocket() {
 		class DummyWebSocket {
@@ -89,122 +75,94 @@ export default class Server extends WindowInterface {
 	}
 
 	/**
-	 * @inheritDoc
-	 * @override
+	 * @inheritdoc
 	 * @method getWindow
-	 * @return {(undefined|Window)}
 	 */
 	getWindow() {
 		return undefined;
 	}
 
 	/**
-	 * @inheritDoc
-	 * @override
+	 * @inheritdoc
 	 * @method getScrollX
-	 * @return {number}
 	 */
 	getScrollX() {
 		return 0;
 	}
 
 	/**
-	 * @inheritDoc
-	 * @override
+	 * @inheritdoc
 	 * @method getScrollY
-	 * @return {number}
 	 */
 	getScrollY() {
 		return 0;
 	}
 
 	/**
-	 * @inheritDoc
-	 * @override
+	 * @inheritdoc
 	 * @method scrollTo
-	 * @param {number} x
-	 * @param {number} y
 	 */
 	scrollTo(x, y) {}
 
 	/**
-	 *  @inheritDoc
-	 * @override
+	 * @inheritdoc
 	 * @method getDomain
-	 * @return {string}
 	 */
 	getDomain() {
 		return '';
 	}
 
 	/**
-	 * @inheritDoc
-	 * @override
+	 * @inheritdoc
 	 * @method getHost
-	 * @return {string}
 	 */
 	getHost() {
 		return '';
 	}
 
 	/**
-	 * @inheritDoc
-	 * @override
+	 * @inheritdoc
 	 * @method getPath
-	 * @return {string}
 	 */
 	getPath() {
 		return '';
 	}
 
 	/**
-	 * @inheritDoc
-	 * @override
+	 * @inheritdoc
 	 * @method getUrl
-	 * @return {string}
 	 */
 	getUrl() {
 		return '';
 	}
 
 	/**
-	 * @inheritDoc
-	 * @override
+	 * @inheritdoc
 	 * @method getBody
-	 * @return {(undefined|HTMLBodyElement)}
 	 */
 	getBody() {
 		return undefined;
 	}
 
 	/**
-	 * @inheritDoc
-	 * @override
+	 * @inheritdoc
 	 * @method getElementById
-	 * @param {string} id
-	 * @return {?HTMLElement}
 	 */
 	getElementById(id) {
 		return null;
 	}
 
 	/**
-	 * @inheritDoc
-	 * @override
+	 * @inheritdoc
 	 * @method querySelector
-	 * @param {string} selector
-	 * @return {?HTMLElement}
 	 */
 	querySelector(selector) {
 		return null;
 	}
 
 	/**
-	 * @inheritDoc
-	 * @override
+	 * @inheritdoc
 	 * @method querySelectorAll
-	 * @param {string} selector
-	 * @return {NodeList}
 	 */
 	querySelectorAll(selector) {
 		class DummyNodeList {
@@ -221,40 +179,26 @@ export default class Server extends WindowInterface {
 	}
 
 	/**
-	 * @inheritDoc
-	 * @override
+	 * @inheritdoc
 	 * @method redirect
-	 * @param {string} url
 	 */
 	redirect(url) {}
 
 	/**
-	 * @inheritDoc
-	 * @override
+	 * @inheritdoc
 	 * @method pushState
-	 * @param {Object<string, *>} state
-	 * @param {string} title
-	 * @param {string} url
 	 */
 	pushState(state, title, url) {}
 
 	/**
-	 * @inheritDoc
-	 * @override
+	 * @inheritdoc
 	 * @method replaceState
-	 * @param {Object<string, *>} state
-	 * @param {string} title
-	 * @param {string} url
 	 */
 	replaceState(state, title, url) {}
 
 	/**
-	 * @inheritDoc
-	 * @override
+	 * @inheritdoc
 	 * @method createCustomEvent
-	 * @param {string} name
-	 * @param {Object<string, *>} options
-	 * @return {CustomEvent}
 	 */
 	createCustomEvent(name, options) {
 		var dummyCustomEvent = { initCustomEvent: () => {}, detail: {} };
@@ -263,32 +207,20 @@ export default class Server extends WindowInterface {
 	}
 
 	/**
-	 * @inheritDoc
-	 * @override
+	 * @inheritdoc
 	 * @method bindEventListener
-	 * @param {EventTarget} eventTarget
-	 * @param {string} event
-	 * @param {function(Event)} listener
-	 * @param {boolean=} [useCapture=false]
 	 */
 	bindEventListener(eventTarget, event, listener, useCapture = false) {}
 
 	/**
-	 * @inheritDoc
-	 * @override
+	 * @inheritdoc
 	 * @method unbindEventListener
-	 * @param {EventTarget} eventTarget
-	 * @param {string} event
-	 * @param {function(Event)} listener
-	 * @param {boolean=} [useCapture=false]
 	 */
 	unbindEventListener(eventTarget, event, listener, useCapture = false) {}
 
 	/**
-	 * @inheritDoc
-	 * @override
+	 * @inheritdoc
 	 * @method preventDefault
-	 * @param {Event} event
 	 */
 	preventDefault(event) {}
 }

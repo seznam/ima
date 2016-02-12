@@ -82,8 +82,7 @@ export default class Controller extends ControllerInterface {
 	/**
 	 * Callback for initializing the controller with the route parameters.
 	 *
-	 * @inheritDoc
-	 * @override
+	 * @inheritdoc
 	 * @method init
 	 */
 	init() {
@@ -91,8 +90,7 @@ export default class Controller extends ControllerInterface {
 	}
 
 	/**
-	 * @inheritDoc
-	 * @override
+	 * @inheritdoc
 	 * @method destroy
 	 */
 	destroy() {
@@ -100,8 +98,7 @@ export default class Controller extends ControllerInterface {
 	}
 
 	/**
-	 * @inheritDoc
-	 * @override
+	 * @inheritdoc
 	 * @method activate
 	 */
 	activate() {
@@ -109,8 +106,7 @@ export default class Controller extends ControllerInterface {
 	}
 
 	/**
-	 * @inheritDoc
-	 * @override
+	 * @inheritdoc
 	 * @method deactivate
 	 */
 	deactivate() {
@@ -118,63 +114,48 @@ export default class Controller extends ControllerInterface {
 	}
 
 	/**
-	 * @inheritDoc
-	 * @override
+	 * @inheritdoc
 	 * @method load
-	 * @return {Object<string, (Promise|*)>}
 	 */
 	load() {
 		return this._controller.load();
 	}
 
 	/**
-	 * @inheritDoc
-	 * @override
+	 * @inheritdoc
 	 * @method update
-	 * @param {Object<string, string>=} [params={}]
-	 * @return {Object<string, (Promise|*)>}
 	 */
 	update(params = {}) {
 		return this._controller.update(params);
 	}
 
 	/**
-	 * @inheritDoc
-	 * @override
+	 * @inheritdoc
 	 * @method setReactiveView
-	 * @param {Vendor.React.Component} reactiveView
 	 */
 	setReactiveView(reactiveView) {
 		this._controller.setReactiveView(reactiveView);
 	}
 
 	/**
-	 * @inheritDoc
-	 * @override
+	 * @inheritdoc
 	 * @method setState
-	 * @param {Object<string, *>} statePatch
 	 */
 	setState(statePatch) {
 		this._controller.setState(statePatch);
 	}
 
 	/**
-	 * @inheritDoc
-	 * @override
+	 * @inheritdoc
 	 * @method getState
-	 * @return {Object<string, *>}
 	 */
 	getState() {
 		return this._controller.getState();
 	}
 
 	/**
-	 * @inheritDoc
-	 * @override
-	 * @chainable
+	 * @inheritdoc
 	 * @method addExtension
-	 * @param {Core.Interface.Extensions} extension
-	 * @return {Core.Interface.Controller} This controller
 	 */
 	addExtension(extension) {
 		this._controller.addExtension(extension);
@@ -183,23 +164,16 @@ export default class Controller extends ControllerInterface {
 	}
 
 	/**
-	 * @inheritDoc
-	 * @override
+	 * @inheritdoc
 	 * @method getExtensions
-	 * @return {Array<Core.Interface.Extension>}
 	 */
 	getExtensions() {
 		return this._controller.getExtensions();
 	}
 
 	/**
-	 * @inheritDoc
+	 * @inheritdoc
 	 * @method setMetaParams
-	 * @param {Object<string, *>} loadedResources
-	 * @param {Core.Interface.MetaManager} metaManager
-	 * @param {Core.Interface.Router} router
-	 * @param {Core.Interface.Dictionary} dictionary
-	 * @param {Object<string, *>} settings
 	 */
 	setMetaParams(loadedResources, metaManager, router, dictionary, settings) {
 		this._controller.setMetaParams(
@@ -212,40 +186,32 @@ export default class Controller extends ControllerInterface {
 	}
 
 	/**
-	 * @inheritDoc
-	 * @override
+	 * @inheritdoc
 	 * @method setRouteParams
-	 * @param {Object<string, string>=} [params={}]
 	 */
 	setRouteParams(params = {}) {
 		this._controller.setRouteParams(params);
 	}
 
 	/**
-	 * @inheritDoc
-	 * @override
+	 * @inheritdoc
 	 * @method getRouteParams
-	 * @return {Object<string, string>}
 	 */
 	getRouteParams() {
 		return this._controller.getRouteParams();
 	}
 
 	/**
-	 * @inheritDoc
-	 * @override
+	 * @inheritdoc
 	 * @method setPageStateManager
-	 * @param {Core.Interface.PageStateManager|Null} pageStateManager
 	 */
 	setPageStateManager(pageStateManager) {
 		this._controller.setPageStateManager(pageStateManager);
 	}
 
 	/**
-	 * @inheritDoc
-	 * @override
+	 * @inheritdoc
 	 * @method getHttpStatus
-	 * @return {number}
 	 */
 	getHttpStatus() {
 		return this._controller.getHttpStatus();

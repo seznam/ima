@@ -21,7 +21,8 @@ ns.namespace('Core.Cache');
  *     return cache.get('model.articles');
  *   } else {
  *     var articles = getArticlesFromStorage();
- *     cache.set('model.articles', articles, 60 * 60 * 1000); // cache for an hour
+ *     // cache for an hour
+ *     cache.set('model.articles', articles, 60 * 60 * 1000);
  *   }
  */
 export default class Handler extends Cache {
@@ -88,8 +89,7 @@ export default class Handler extends Cache {
 	}
 
 	/**
-	 * @inheritDoc
-	 * @override
+	 * @inheritdoc
 	 * @method clear
 	 */
 	clear() {
@@ -97,11 +97,8 @@ export default class Handler extends Cache {
 	}
 
 	/**
-	 * @inheritDoc
-	 * @override
+	 * @inheritdoc
 	 * @method has
-	 * @param {string} key
-	 * @return
 	 */
 	has(key) {
 		if (!this._enabled || !this._cache.has(key)) {
@@ -119,11 +116,8 @@ export default class Handler extends Cache {
 	}
 
 	/**
-	 * @inheritDoc
-	 * @override
+	 * @inheritdoc
 	 * @method get
-	 * @param {string} key
-	 * @return {*}
 	 */
 	get(key) {
 		if (this.has(key)) {
@@ -136,12 +130,8 @@ export default class Handler extends Cache {
 	}
 
 	/**
-	 * @inheritDoc
-	 * @override
+	 * @inheritdoc
 	 * @method set
-	 * @param {string} key
-	 * @param {*} value
-	 * @param {?number=} ttl
 	 */
 	set(key, value, ttl = null) {
 		var cacheEntry = this._factory
@@ -151,18 +141,15 @@ export default class Handler extends Cache {
 	}
 
 	/**
-	 * @inheritDoc
-	 * @override
+	 * @inheritdoc
 	 * @method delete
-	 * @param {string} key
 	 */
 	delete(key) {
 		this._cache.delete(key);
 	}
 
 	/**
-	 * @inheritDoc
-	 * @override
+	 * @inheritdoc
 	 * @method disable
 	 */
 	disable() {
@@ -170,8 +157,7 @@ export default class Handler extends Cache {
 	}
 
 	/**
-	 * @inheritDoc
-	 * @override
+	 * @inheritdoc
 	 * @method enable
 	 */
 	enable() {
@@ -179,10 +165,8 @@ export default class Handler extends Cache {
 	}
 
 	/**
-	 * @inheritDoc
-	 * @override
+	 * @inheritdoc
 	 * @method serialize
-	 * @return {string}
 	 */
 	serialize() {
 		var dataToSerialize = {};
@@ -210,10 +194,8 @@ export default class Handler extends Cache {
 	}
 
 	/**
-	 * @inheritDoc
-	 * @override
+	 * @inheritdoc
 	 * @method deserialize
-	 * @param {Object<string, {value: *, ttl: number}>} serializedData
 	 */
 	deserialize(serializedData) {
 		for (var key of Object.keys(serializedData)) {
@@ -223,8 +205,8 @@ export default class Handler extends Cache {
 	}
 
 	/**
+	 * @private
 	 * @method _canSerializeValue
-	 * @param {string} value
 	 * @param {*} value
 	 * @return {boolean}
 	 */
@@ -259,6 +241,7 @@ export default class Handler extends Cache {
 	/**
 	 * Clone only mutable values.
 	 *
+	 * @private
 	 * @method _clone
 	 * @param {*} value
 	 * @return {*}

@@ -23,7 +23,7 @@ export default class PageRender {
 	 * On client, the method renders the page into DOM, re-using the DOM
 	 * created from the HTML markup send by the server if possible.
 	 *
-	 * @inheritDoc
+	 * @inheritdoc
 	 * @override
 	 * @method mount
 	 * @abstract
@@ -40,7 +40,7 @@ export default class PageRender {
 	 * It is useful for same controller and view, where only change url params.
 	 * Then it is possible to reuse same controller and view.
 	 *
-	 * @inheritDoc
+	 * @inheritdoc
 	 * @override
 	 * @method update
 	 * @param {Core.Abstract.Controller} controller
@@ -53,7 +53,7 @@ export default class PageRender {
 	 * Unmount view from the DOM. Then React always call constructor
 	 * for new mounting view.
 	 *
-	 * @inheritDoc
+	 * @inheritdoc
 	 * @override
 	 * @method unmount
 	 */

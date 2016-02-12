@@ -24,8 +24,8 @@ export default class IMAErrorES6 extends Error {
 	 * @param {string} message The message describing the cause of the error.
 	 * @param {Object<string, *>=} [params={}] A data map providing additional
 	 *        details related to the error. It is recommended to set the
-	 *        {@code status} field to the HTTP response code that should be sent
-	 *        to the client.
+	 *        {@code status} field to the HTTP response code that should be
+	 *        sent to the client.
 	 * @param {boolean=} dropInternalStackFrames Whether or not the call stack
 	 *        frames referring to the constructors of the {@codelink IMAError}
 	 *        and overriding class(es) should be included in the stack of this
@@ -61,7 +61,7 @@ export default class IMAErrorES6 extends Error {
 	 * This method is a shorthand for the following code snippet:
 	 * {@code this.getParams().status || 500}.
 	 *
-	 * @inheritDoc
+	 * @inheritdoc
 	 * @override
 	 * @method getHttpStatus
 	 * @return {number}
@@ -71,10 +71,11 @@ export default class IMAErrorES6 extends Error {
 	}
 
 	/**
-	 * Returns the error parameters providing additional details about the error.
-	 * The structure of the returned object is always situation dependent, but
-	 * the returned object usually contains the {@code status: number} field
-	 * which represents the HTTP status to send to the client.
+	 * Returns the error parameters providing additional details about the
+	 * error. The structure of the returned object is always situation
+	 * dependent, but the returned object usually contains the
+	 * {@code status: number} field which represents the HTTP status to send to
+	 * the client.
 	 *
 	 * @override
 	 * @method getParams

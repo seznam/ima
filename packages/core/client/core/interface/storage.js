@@ -37,7 +37,7 @@ export default class Storage {
 	has(key) {}
 
 	/**
-	 * Retrieves the value of the entry indetified by the specified key. The
+	 * Retrieves the value of the entry identified by the specified key. The
 	 * method returns {@code undefined} if the entry does not exists.
 	 *
 	 * Entries set to the {@code undefined} value can be tested for existence
@@ -50,7 +50,7 @@ export default class Storage {
 	get(key) {}
 
 	/**
-	 * Sets the storage entry identied by the specified key to the provided
+	 * Sets the storage entry identified by the specified key to the provided
 	 * value. The method creates the entry if it does not exist already.
 	 *
 	 * @chainable

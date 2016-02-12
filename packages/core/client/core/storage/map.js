@@ -36,46 +36,32 @@ export default class MapStorage extends Storage {
 	}
 
 	/**
-	 * @inheritDoc
-	 * @override
-	 * @chainable
+	 * @inheritdoc
 	 * @method init
-	 * @return {Core.Interface.Storage}
 	 */
 	init() {
 		return this;
 	}
 
 	/**
-	 * @inheritDoc
-	 * @override
+	 * @inheritdoc
 	 * @method has
-	 * @param {string} key
-	 * @return {boolean}
 	 */
 	has(key) {
 		return this._storage.has(key);
 	}
 
 	/**
-	 * @inheritDoc
-	 * @override
+	 * @inheritdoc
 	 * @method get
-	 * @param {string} key
-	 * @return {*}
 	 */
 	get(key) {
 		return this._storage.get(key);
 	}
 
 	/**
-	 * @inheritDoc
-	 * @override
-	 * @chainable
+	 * @inheritdoc
 	 * @method set
-	 * @param {string} key
-	 * @param {*} value
-	 * @return {Core.Storage.Map}
 	 */
 	set(key, value) {
 		this._storage.set(key, value);
@@ -83,12 +69,8 @@ export default class MapStorage extends Storage {
 	}
 
 	/**
-	 * @inheritDoc
-	 * @override
-	 * @chainable
+	 * @inheritdoc
 	 * @method delete
-	 * @param {string} key
-	 * @return {Core.Storage.Map}
 	 */
 	delete(key) {
 		this._storage.delete(key);
@@ -96,11 +78,8 @@ export default class MapStorage extends Storage {
 	}
 
 	/**
-	 * @inheritDoc
-	 * @override
-	 * @chainable
+	 * @inheritdoc
 	 * @method clear
-	 * @return {Core.Storage.Map}
 	 */
 	clear() {
 		this._storage.clear();
@@ -108,10 +87,8 @@ export default class MapStorage extends Storage {
 	}
 
 	/**
-	 * @inheritDoc
-	 * @override
+	 * @inheritdoc
 	 * @method keys
-	 * @return {Iterator<string>}
 	 */
 	keys() {
 		return this._storage.keys();
@@ -120,7 +97,6 @@ export default class MapStorage extends Storage {
 	/**
 	 * @override
 	 * @method size
-	 * @return {number}
 	 */
 	size() {
 		return this._storage.size;

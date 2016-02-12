@@ -50,11 +50,8 @@ export default class SessionMap extends Storage {
 	}
 
 	/**
-	 * @inheritDoc
-	 * @override
-	 * @chainable
+	 * @inheritdoc
 	 * @method init
-	 * @return {Core.Interface.Storage}
 	 */
 	init() {
 		this._map.clear();
@@ -66,35 +63,24 @@ export default class SessionMap extends Storage {
 	}
 
 	/**
-	 * @inheritDoc
-	 * @override
+	 * @inheritdoc
 	 * @method has
-	 * @param {string} key
-	 * @return {boolean}
 	 */
 	has(key) {
 		return this._map.has(key);
 	}
 
 	/**
-	 * @inheritDoc
-	 * @override
+	 * @inheritdoc
 	 * @method get
-	 * @param {string} key
-	 * @return {*}
 	 */
 	get(key) {
 		return this._map.get(key);
 	}
 
 	/**
-	 * @inheritDoc
-	 * @override
-	 * @chainable
+	 * @inheritdoc
 	 * @method set
-	 * @param {string} key
-	 * @param {*} value
-	 * @return {Core.Storage.SessionMap}
 	 */
 	set(key, value) {
 		var canBeSerializedToJSON =
@@ -112,12 +98,8 @@ export default class SessionMap extends Storage {
 	}
 
 	/**
-	 * @inheritDoc
-	 * @override
-	 * @chainable
+	 * @inheritdoc
 	 * @method delete
-	 * @param {string} key
-	 * @return {Core.Storage.SessionMap}
 	 */
 	delete(key) {
 		this._session.delete(key);
@@ -126,11 +108,8 @@ export default class SessionMap extends Storage {
 	}
 
 	/**
-	 * @inheritDoc
-	 * @override
-	 * @chainable
+	 * @inheritdoc
 	 * @method clear
-	 * @return {Core.Storage.SessionMap}
 	 */
 	clear() {
 		this._session.clear();
@@ -139,10 +118,8 @@ export default class SessionMap extends Storage {
 	}
 
 	/**
-	 * @inheritDoc
-	 * @override
+	 * @inheritdoc
 	 * @method keys
-	 * @return {Iterator<string>}
 	 */
 	keys() {
 		return this._map.keys();
@@ -151,7 +128,6 @@ export default class SessionMap extends Storage {
 	/**
 	 * @override
 	 * @method size
-	 * @return {number}
 	 */
 	size() {
 		return this._map.size();

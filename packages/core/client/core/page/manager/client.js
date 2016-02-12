@@ -45,31 +45,27 @@ export default class Client extends AbstractPageManager {
 		/**
 		 * Binded custom event handler.
 		 *
-		 * @property _bindedOnCustomEventHandler
+		 * @property _boundOnCustomEventHandler
 		 * @type {function}
 		 */
-		this._bindedOnCustomEventHandler = (e) => this._onCustomEventHandler(e);
+		this._boundOnCustomEventHandler = (e) => this._onCustomEventHandler(e);
 	}
 
 	/**
-	 * @inheritDoc
-	 * @override
+	 * @inheritdoc
 	 * @method init
 	 */
 	init() {
 		super.init();
-		this._eventBus.listenAll(this._window.getWindow(), this._bindedOnCustomEventHandler);
+		this._eventBus.listenAll(
+			this._window.getWindow(),
+			this._boundOnCustomEventHandler
+		);
 	}
 
 	/**
-	 * @inheritDoc
-	 * @override
+	 * @inheritdoc
 	 * @method manage
-	 * @param {(string|function)} controller
-	 * @param {(string|function)} view
-	 * @param {{onlyUpdate: (boolean|function), autoScroll: boolean}} options
-	 * @param {Object<string, string>=} [params={}]
-	 * @return {Promise<Object<string, ?(number|string)>>}
 	 */
 	manage(controller, view, options, params = {}) {
 		return (
@@ -84,11 +80,8 @@ export default class Client extends AbstractPageManager {
 	}
 
 	/**
-	 * @inheritDoc
-	 * @override
+	 * @inheritdoc
 	 * @method scrollTo
-	 * @param {number} [x=0]
-	 * @param {number} [y=0]
 	 */
 	scrollTo(x = 0, y = 0) {
 		setTimeout(() => {
@@ -97,21 +90,24 @@ export default class Client extends AbstractPageManager {
 	}
 
 	/**
-	 * @inheritDoc
-	 * @override
+	 * @inheritdoc
 	 * @method destroy
 	 */
 	destroy() {
 		super.destroy();
 
-		this._eventBus.unlistenAll(this._window.getWindow(), this._bindedOnCustomEventHandler);
+		this._eventBus.unlistenAll(
+			this._window.getWindow(),
+			this._boundOnCustomEventHandler
+		);
 	}
 
 	/**
 	 * On custom event handler.
 	 *
-	 * It calls listener in the active controller. Name of listener is defined by prefix 'on' and event name.
-	 * If event name is 'toggle', listener should be 'onToggle'.
+	 * It calls listener in the active controller. Name of listener is defined
+	 * by prefix 'on' and event name. If event name is 'toggle', listener
+	 * should be 'onToggle'.
 	 *
 	 * @private
 	 * @method _onCustomEventHandler
@@ -144,8 +140,8 @@ export default class Client extends AbstractPageManager {
 	}
 
 	/**
-	 * Return parsed custom event as object with keys
-	 * method, data and eventName.
+	 * Return parsed custom event as object with keys method, data and
+	 * eventName.
 	 *
 	 * @private
 	 * @method _parseCustomEvent
@@ -165,6 +161,7 @@ export default class Client extends AbstractPageManager {
 	 * Try handle event with controller. If event is handled by
 	 * controller then return true else return false.
 	 *
+	 * @private
 	 * @method _handleEventWithController
 	 * @param {string} method
 	 * @param {Object<string, *>} data
@@ -186,6 +183,7 @@ export default class Client extends AbstractPageManager {
 	 * Try handle event with extensions. If event is handled by
 	 * extension then return true else return false.
 	 *
+	 * @private
 	 * @method _handleEventWithExtensions
 	 * @param {string} method
 	 * @param {Object<string, *>} data

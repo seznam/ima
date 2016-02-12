@@ -88,8 +88,8 @@ export default class Response {
 	 * Initializes this response wrapper with the provided ExpressJS response
 	 * object.
 	 *
-	 * @method init
 	 * @chainable
+	 * @method init
 	 * @param {?Express.Response} response The ExpressJS response, or
 	 *        {@code null} if the code is running at the client side.
 	 * @param {{encode: function, decode: function}} [cookieTransformFunction={}]

@@ -15,11 +15,8 @@ ns.namespace('Core.Page.Manager');
 export default class Server extends AbstractPageManager {
 
 	/**
-	 * @inheritDoc
-	 * @override
+	 * @inheritdoc
 	 * @method scrollTo
-	 * @param {number} [x=0]
-	 * @param {number} [y=0]
 	 */
 	scrollTo(x = 0, y = 0) {}
 

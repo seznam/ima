@@ -36,8 +36,8 @@ export default class Bus extends EventBus {
 		super();
 
 		/**
-		 * @property _window
 		 * @private
+		 * @property _window
 		 * @type {Core.Interface.Window}
 		 * @default window
 		 */
@@ -50,8 +50,8 @@ export default class Bus extends EventBus {
 		 *
 		 * The "listen all" event listeners are not registered in this map.
 		 *
-		 * @property _listeners
 		 * @private
+		 * @property _listeners
 		 * @type {WeakMap<function(Event), WeakMap<EventTarget, Map<string, function(Event)>>>}
 		 */
 		this._listeners = new WeakMap();
@@ -60,24 +60,16 @@ export default class Bus extends EventBus {
 		 * Map of event targets to listeners executed on all IMA.js event bus
 		 * events.
 		 *
-		 * @property _allEventListeners
 		 * @private
+		 * @property _allEventListeners
 		 * @type {WeakMap<EventTarget, WeakSet<function(Event)>>}
 		 */
 		this._allEventListeners = new WeakMap();
 	}
 
 	/**
-	 * @inheritDoc
-	 * @override
-	 * @chainable
+	 * @inheritdoc
 	 * @method fire
-	 * @param {EventTarget} eventSource
-	 * @param {string} eventName
-	 * @param {*} data
-	 * @param {Object=} [options={}]
-	 * @return {Core.Event.Bus}
-	 * @throws {Error}
 	 */
 	fire(eventSource, eventName, data, options = {}) {
 		var eventInit = {};
@@ -100,13 +92,8 @@ export default class Bus extends EventBus {
 	}
 
 	/**
-	 * @inheritDoc
-	 * @override
-	 * @chainable
+	 * @inheritdoc
 	 * @method listenAll
-	 * @param {EventTarget} eventTarget
-	 * @param {function(<CustomEvent>)} listener
-	 * @return {Core.Event.Bus}
 	 */
 	listenAll(eventTarget, listener) {
 		this._window.bindEventListener(eventTarget, IMA_EVENT, listener);
@@ -120,14 +107,8 @@ export default class Bus extends EventBus {
 	}
 
 	/**
-	 * @inheritDoc
-	 * @override
-	 * @chainable
+	 * @inheritdoc
 	 * @method listen
-	 * @param {EventTarget} eventTarget
-	 * @param {string} eventName
-	 * @param {function(<CustomEvent>)} listener
-	 * @return {Core.Event.Bus}
 	 */
 	listen(eventTarget, eventName, listener) {
 		if (!this._listeners.has(listener)) {
@@ -153,13 +134,8 @@ export default class Bus extends EventBus {
 	}
 
 	/**
-	 * @inheritDoc
-	 * @override
-	 * @chainable
+	 * @inheritdoc
 	 * @method unlistenAll
-	 * @param {EventTarget} eventTarget
-	 * @param {function(<CustomEvent>)} listener
-	 * @return {Core.Event.Bus}
 	 */
 	unlistenAll(eventTarget, listener) {
 		this._window.unbindEventListener(eventTarget, IMA_EVENT, listener);
@@ -182,14 +158,8 @@ export default class Bus extends EventBus {
 	}
 
 	/**
-	 * @inheritDoc
-	 * @override
-	 * @chainable
+	 * @inheritdoc
 	 * @method unlisten
-	 * @param {EventTarget} eventTarget
-	 * @param {string} eventName
-	 * @param {function(<CustomEvent>)} listener
-	 * @return {Core.Event.Bus}
 	 */
 	unlisten(eventTarget, eventName, listener) {
 		if (!this._listeners.has(listener)) {
@@ -206,8 +176,8 @@ export default class Bus extends EventBus {
 		if (!targets.has(eventTarget)) {
 			if ($Debug) {
 				console.warn('The provided listener is not bound to listen ' +
-					'for the specified event on the specified event ' +
-					'target');
+						'for the specified event on the specified event ' +
+						'target');
 			}
 
 			return this;
@@ -217,8 +187,8 @@ export default class Bus extends EventBus {
 		if (!eventNameToNativeListener.has(eventName)) {
 			if ($Debug) {
 				console.warn('The provided listener is not bound to listen ' +
-					'for the specified event on the specified event ' +
-					'target');
+						'for the specified event on the specified event ' +
+						'target');
 			}
 
 			return this;

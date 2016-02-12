@@ -23,8 +23,8 @@ export default class Client extends AbstractPageRender {
 	 * @param {Core.Page.Render.Factory} factory Factory for receive $Utils to
 	 *        view.
 	 * @param {Vendor.$Helper} Helper The IMA.js helper methods.
-	 * @param {Vendor.ReactDOM} ReactDOM React framework instance to use to render
-	 *        the page on the client side.
+	 * @param {Vendor.ReactDOM} ReactDOM React framework instance to use to
+	 *        render the page on the client side.
 	 * @param {Object<string, *>} settings The application setting for the
 	 *        current application environment.
 	 * @param {Core.Interface.Window} window Helper for manipulating the global
@@ -65,14 +65,9 @@ export default class Client extends AbstractPageRender {
 	}
 
 	/**
-	 * @inheritDoc
-	 * @override
-	 * @method mount
+	 * @inheritdoc
 	 * @abstract
-	 * @param {Core.Abstract.Controller} controller
-	 * @param {Vendor.React.Component} view
-	 * @param {Object<string, *>} loadedPageState
-	 * @return {Promise}
+	 * @method mount
 	 */
 	mount(controller, view, loadedPageState) {
 		var separatedData = this._separatePromisesAndValues(loadedPageState);
@@ -110,12 +105,8 @@ export default class Client extends AbstractPageRender {
 	}
 
 	/**
-	 * @inheritDoc
-	 * @override
+	 * @inheritdoc
 	 * @method update
-	 * @param {Core.Abstract.Controller} controller
-	 * @param {Object<string, *>} updatedPageState
-	 * @return {Promise}
 	 */
 	update(controller, updatedPageState) {
 		var separatedData = this._separatePromisesAndValues(updatedPageState);
@@ -137,8 +128,7 @@ export default class Client extends AbstractPageRender {
 	}
 
 	/**
-	 * @inheritDoc
-	 * @override
+	 * @inheritdoc
 	 * @method unmount
 	 */
 	unmount() {

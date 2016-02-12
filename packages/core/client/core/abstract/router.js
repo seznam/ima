@@ -146,10 +146,8 @@ export default class Router extends RouterInterface {
 	}
 
 	/**
-	 * @inheritDoc
-	 * @override
+	 * @inheritdoc
 	 * @method init
-	 * @param {{$Protocol: string, $Host: string, $Root: string, $LanguagePartPath: string}} config
 	 */
 	init(config) {
 		this._protocol = config.$Protocol || '';
@@ -159,17 +157,8 @@ export default class Router extends RouterInterface {
 	}
 
 	/**
-	 * @inheritDoc
-	 * @override
-	 * @chainable
+	 * @inheritdoc
 	 * @method add
-	 * @param {string} name
-	 * @param {string} pathExpression
-	 * @param {string} controller
-	 * @param {string} view
-	 * @param {Object<string, *>=} options
-	 * @throws {Core.IMAError} Thrown if a route with the same name is added
-	 *         multiple times.
 	 */
 	add(name, pathExpression, controller, view, options = undefined) {
 		if (this._routes.has(name)) {
@@ -191,13 +180,8 @@ export default class Router extends RouterInterface {
 	}
 
 	/**
-	 * @inheritDoc
-	 * @override
-	 * @chainable
+	 * @inheritdoc
 	 * @method remove
-	 * @param {string} name The route's unique name, identifying the route to
-	 *        remove.
-	 * @return {Core.Interface.Router} This router.
 	 */
 	remove(name) {
 		this._routes.delete(name);
@@ -206,10 +190,8 @@ export default class Router extends RouterInterface {
 	}
 
 	/**
-	 * @inheritDoc
-	 * @override
+	 * @inheritdoc
 	 * @method getPath
-	 * @return {string}
 	 */
 	getPath() {
 		throw new IMAError('The getPath() method is abstract and must be ' +
@@ -217,61 +199,48 @@ export default class Router extends RouterInterface {
 	}
 
 	/**
-	 * @inheritDoc
-	 * @override
+	 * @inheritdoc
 	 * @method getUrl
-	 * @return {string}
 	 */
 	getUrl() {
 		return this.getBaseUrl() + this.getPath();
 	}
 
 	/**
-	 * @inheritDoc
-	 * @override
+	 * @inheritdoc
 	 * @method getBaseUrl
-	 * @return {string}
 	 */
 	getBaseUrl() {
 		return this.getDomain() + this._root + this._languagePartPath;
 	}
 
 	/**
-	 * @inheritDoc
-	 * @override
+	 * @inheritdoc
 	 * @method getDomain
-	 * @return {string}
 	 */
 	getDomain() {
 		return this._protocol + '//' + this._host;
 	}
 
 	/**
-	 * @inheritDoc
-	 * @override
+	 * @inheritdoc
 	 * @method getHost
-	 * @return {string}
 	 */
 	getHost() {
 		return this._host;
 	}
 
 	/**
-	 * @inheritDoc
-	 * @override
+	 * @inheritdoc
 	 * @method getProtocol
-	 * @return {string}
 	 */
 	getProtocol() {
 		return this._protocol;
 	}
 
 	/**
-	 * @inheritDoc
-	 * @override
+	 * @inheritdoc
 	 * @method getCurrentRouteInfo
-	 * @return {{route: Core.Router.Route, params: Object<string, string>, path: string}}
-	 * @throws {Core.IMAError}
 	 */
 	getCurrentRouteInfo() {
 		var path = this.getPath();
@@ -288,12 +257,9 @@ export default class Router extends RouterInterface {
 	}
 
 	/**
+	 * @inheritdoc
 	 * @abstract
-	 * @inheritDoc
-	 * @override
-	 * @chainable
 	 * @method listen
-	 * @return {Core.Interface.Router}
 	 */
 	listen() {
 		throw new IMAError('The listen() method is abstract and must be ' +
@@ -301,12 +267,9 @@ export default class Router extends RouterInterface {
 	}
 
 	/**
+	 * @inheritdoc
 	 * @abstract
-	 * @inheritDoc
-	 * @override
 	 * @method redirect
-	 * @param {string} url
-	 * @param {{httpStatus: number=, onlyUpdate: boolean=, autoScroll: boolean=}} [options={}]
 	 */
 	redirect(url, options) {
 		throw new IMAError('The redirect() method is abstract and must be ' +
@@ -314,12 +277,8 @@ export default class Router extends RouterInterface {
 	}
 
 	/**
-	 * @inheritDoc
-	 * @override
+	 * @inheritdoc
 	 * @method link
-	 * @param {string} routeName
-	 * @param {Object<string, string>} params
-	 * @return {string}
 	 */
 	link(routeName, params) {
 		var route = this._routes.get(routeName);
@@ -333,12 +292,8 @@ export default class Router extends RouterInterface {
 	}
 
 	/**
-	 * @inheritDoc
-	 * @override
+	 * @inheritdoc
 	 * @method route
-	 * @param {string} path
-	 * @param {{onlyUpdate: boolean=, autoScroll: boolean=}} [options={}]
-	 * @return {Promise<Object<string, *>>}
 	 */
 	route(path, options = {}) {
 		var routeForPath = this._getRouteByPath(path);
@@ -357,12 +312,8 @@ export default class Router extends RouterInterface {
 	}
 
 	/**
-	 * @inheritDoc
-	 * @override
+	 * @inheritdoc
 	 * @method handleError
-	 * @param {Object<string, (Error|string)>} params
-	 * @param {{onlyUpdate: boolean=, autoScroll: boolean=}} [options={}]
-	 * @return {Promise<Object<string, *>>}
 	 */
 	handleError(params, options = {}) {
 		var routeError = this._routes.get(this.ROUTE_NAMES.ERROR);
@@ -380,12 +331,8 @@ export default class Router extends RouterInterface {
 	}
 
 	/**
-	 * @inheritDoc
-	 * @override
+	 * @inheritdoc
 	 * @method handleNotFound
-	 * @param {Object<string, (Error|string)>} params
-	 * @param {{onlyUpdate: boolean=, autoScroll: boolean=}} [options={}]
-	 * @return {Promise<Object<string, *>>}
 	 */
 	handleNotFound(params, options = {}) {
 		var routeNotFound = this._routes.get(this.ROUTE_NAMES.NOT_FOUND);
@@ -403,11 +350,8 @@ export default class Router extends RouterInterface {
 	}
 
 	/**
-	 * @inheritDoc
-	 * @override
+	 * @inheritdoc
 	 * @method isClientError
-	 * @param {(Core.IMAError|Error)} reason
-	 * @return {boolean}
 	 */
 	isClientError(reason) {
 		return reason instanceof IMAError &&
@@ -416,11 +360,8 @@ export default class Router extends RouterInterface {
 	}
 
 	/**
-	 * @inheritDoc
-	 * @override
+	 * @inheritdoc
 	 * @method isRedirection
-	 * @param {(Core.IMAError|Error)} reason
-	 * @return {boolean}
 	 */
 	isRedirection(reason) {
 		return reason instanceof IMAError &&
@@ -429,8 +370,8 @@ export default class Router extends RouterInterface {
 	}
 
 	/**
-	 * Strips the URL path part that points to the application's root (base URL)
-	 * from the provided path.
+	 * Strips the URL path part that points to the application's root (base
+	 * URL) from the provided path.
 	 *
 	 * @protected
 	 * @method _extractRoutePath
@@ -456,9 +397,9 @@ export default class Router extends RouterInterface {
 	 *        the URL path and query.
 	 * @param {{onlyUpdate: boolean=, autoScroll: boolean=}} options
 	 *        The options overrides route options defined in routes.js.
-	 * @return {Promise<Object<string, *>>} A promise that resolves when the page is
-	 *         rendered and the result is sent to the client, or displayed if
-	 *         used at the client side.
+	 * @return {Promise<Object<string, *>>} A promise that resolves when the
+	 *         page is rendered and the result is sent to the client, or
+	 *         displayed if used at the client side.
 	 */
 	_handle(route, params, options) {
 		var controller = route.getController();

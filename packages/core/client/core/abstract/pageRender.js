@@ -82,14 +82,9 @@ export default class PageRender extends PageRenderInterface {
 	}
 
 	/**
-	 * @inheritDoc
-	 * @override
-	 * @method mount
+	 * @inheritdoc
 	 * @abstract
-	 * @param {Core.Abstract.Controller} controller
-	 * @param {Vendor.React.Component} view
-	 * @param {Object<string, *>} loadedPageState
-	 * @return {Promise}
+	 * @method mount
 	 */
 	mount(controller, view, loadedPageState) { // jshint ignore:line
 		throw new IMAError('The mount() method is abstract and must be ' +
@@ -97,12 +92,8 @@ export default class PageRender extends PageRenderInterface {
 	}
 
 	/**
-	 * @inheritDoc
-	 * @override
+	 * @inheritdoc
 	 * @method update
-	 * @param {Core.Abstract.Controller} controller
-	 * @param {Object<string, *>} updatedPageState
-	 * @return {Promise}
 	 */
 	update(controller, updatedPageState) {
 		throw new IMAError('The update() method is abstract and must be ' +
@@ -110,8 +101,7 @@ export default class PageRender extends PageRenderInterface {
 	}
 
 	/**
-	 * @inheritDoc
-	 * @override
+	 * @inheritdoc
 	 * @method unmount
 	 */
 	unmount() {
@@ -120,10 +110,8 @@ export default class PageRender extends PageRenderInterface {
 	}
 
 	/**
-	 * @inheritDoc
-	 * @override
+	 * @inheritdoc
 	 * @method setState
-	 * @param {Object<string, *>=} [state={}]
 	 */
 	setState(state = {}) {
 		if (this._reactiveView) {
@@ -145,7 +133,7 @@ export default class PageRender extends PageRenderInterface {
 		var props = {
 			view,
 			state,
-			'$Utils': this._factory.getUtils()
+			$Utils: this._factory.getUtils()
 		};
 
 		return props;

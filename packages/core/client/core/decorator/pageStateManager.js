@@ -6,7 +6,8 @@ import PageStateManagerInterface
 ns.namespace('Core.Decorator.PageStateManager');
 
 /**
- * Decorator for page state manager, which add logic for limiting Extension competence.
+ * Decorator for page state manager, which add logic for limiting Extension
+ * competence.
  *
  * @class PageStateManager
  * @namespace Core.Decorator.PageStateManager
@@ -27,7 +28,7 @@ export default class PageStateManager extends PageStateManagerInterface {
 		super();
 
 		/**
-		 *
+		 * The current page state manager.
 		 *
 		 * @private
 		 * @property _pageStateManager
@@ -46,8 +47,7 @@ export default class PageStateManager extends PageStateManagerInterface {
 	}
 
 	/**
-	 * @inheritDoc
-	 * @override
+	 * @inheritdoc
 	 * @method clear
 	 */
 	clear() {
@@ -55,19 +55,20 @@ export default class PageStateManager extends PageStateManagerInterface {
 	}
 
 	/**
-	 * @inheritDoc
-	 * @override
+	 * @inheritdoc
 	 * @method setState
-	 * @param {Object<string, *>} statePatch
 	 */
 	setState(statePatch) {
 		if ($Debug) {
 			var patchKeys = Object.keys(statePatch);
-			var deniedKeys = patchKeys.filter((patchKey) => this._allowedStateKeys.indexOf(patchKey) === -1);
+			var deniedKeys = patchKeys.filter((patchKey) => {
+				return this._allowedStateKeys.indexOf(patchKey) === -1;
+			});
 
 			if (deniedKeys.length > 0) {
-				throw new IMAError(`Extension can not set state for keys ${deniedKeys.join()}.` +
-						` Check your extension or add keys ${deniedKeys.join()} to getAllowedStateKeys.`);
+				throw new IMAError(`Extension can not set state for keys ` +
+						`${deniedKeys.join()}. Check your extension or add ` +
+						`keys ${deniedKeys.join()} to getAllowedStateKeys.`);
 			}
 		}
 
@@ -75,20 +76,16 @@ export default class PageStateManager extends PageStateManagerInterface {
 	}
 
 	/**
-	 * @inheritDoc
-	 * @override
+	 * @inheritdoc
 	 * @method getState
-	 * @return {Object<string, *>}
 	 */
 	getState() {
 		return this._pageStateManager.getState();
 	}
 
 	/**
-	 * @inheritDoc
-	 * @override
+	 * @inheritdoc
 	 * @method getAllStates
-	 * @return {Array<Object<string, *>>}
 	 */
 	getAllStates() {
 		return this._pageStateManager.getAllStates();

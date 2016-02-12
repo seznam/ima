@@ -5,7 +5,7 @@ ns.namespace('Core.Interface');
 /**
  * The {@codelink Window} interface defines the API for a utility for easier
  * cross-environment use of various low-level client-side JavaScript APIs
- * avaiable through various global objects.
+ * available through various global objects.
  *
  * @interface Window
  * @namespace Core.Interface
@@ -231,7 +231,7 @@ export default class Window {
 
 	/**
 	 * Registers the provided event listener to be executed when the specified
-	 * event occurrs on the specified event target.
+	 * event occurs on the specified event target.
 	 *
 	 * Registering the same event listener for the same event on the same event
 	 * target with the same {@code useCapture} flag value repeatedly has no
@@ -251,8 +251,8 @@ export default class Window {
 	bindEventListener(eventTarget, event, listener, useCapture = false) {}
 
 	/**
-	 * Unregisters the provided event listener, so it will no longer we
-	 * executed when the specified event occurrs on the specified event target.
+	 * Deregisters the provided event listener, so it will no longer we
+	 * executed when the specified event occurs on the specified event target.
 	 *
 	 * The method has no effect if the provided event listener is not
 	 * registered to be executed at the specified event.

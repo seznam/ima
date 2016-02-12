@@ -152,7 +152,7 @@ export default class Router {
 	/**
 	 * Redirects the client to the specified location.
 	 *
-	 * At the server side the method results in responsing to the client with a
+	 * At the server side the method results in responding to the client with a
 	 * redirect HTTP status code and the {@code Location} header.
 	 *
 	 * At the client side the method updates the current URL by manipulating

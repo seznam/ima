@@ -304,7 +304,10 @@ export default class Route {
 	 * @return {string} New path.
 	 */
 	_substituteParamInPath(path, paramName, paramValue) {
-		return path.replace(new RegExp(`(^|\/):${paramName}([\/\?]|$)`), paramValue ? '$1' + paramValue +  '$2' : '');
+		return path.replace(
+			new RegExp(`(^|\/):${paramName}([\/\?]|$)`),
+			paramValue ? '$1' + paramValue +  '$2' : ''
+		);
 	}
 
 	/**
@@ -318,7 +321,10 @@ export default class Route {
 	 * @return {string} New path.
 	 */
 	_substituteOptionalParamInPath(path, paramName, paramValue) {
-		return path.replace(new RegExp(`(^|\/):\\\?${paramName}([\/\?]|$)`), paramValue ? '$1' + paramValue +  '$2' : '');
+		return path.replace(
+			new RegExp(`(^|\/):\\\?${paramName}([\/\?]|$)`),
+			paramValue ? '$1' + paramValue +  '$2' : ''
+		);
 	}
 
 	/**
@@ -327,12 +333,13 @@ export default class Route {
 	 * @private
 	 * @method _cleanUnusedOptionalParams
 	 * @param {string} path
-	 * @param {string} paramName
-	 * @param {string} paramValue
 	 * @return {string} New path.
 	 */
 	_cleanUnusedOptionalParams(path) {
-		return path.replace(/(\/:\?([a-zA-Z0-9_-]+))|(:\?([a-zA-Z0-9_-]+)\/?)/g, '');
+		return path.replace(
+			/(\/:\?([a-zA-Z0-9_-]+))|(:\?([a-zA-Z0-9_-]+)\/?)/g,
+			''
+		);
 	}
 
 	/**
@@ -342,7 +349,7 @@ export default class Route {
 	 * @method _isParamInPath
 	 * @param {string} path
 	 * @param {string} paramName
-	 * @return {true}
+	 * @return {boolean}
 	 */
 	_isParamInPath(path, paramName) {
 		var regexp = new RegExp(`:\??${paramName}(?:[\/\?]|$)`);
@@ -410,17 +417,21 @@ export default class Route {
 	 *
 	 * @private
 	 * @method _extractParameters
-	 * @param {Array<string>} parameterValues
-	 * @return {Object<string, string=>} Params object.
+	 * @param {string[]} parameterValues
+	 * @return {Object<string, ?string>} Params object.
 	 */
 	_extractParameters(parameterValues) {
 		var parameters = {};
 
 		// Cycle for names and values from last to 0
 		for (var i = this._parameterNames.length - 1; i >= 0; i--) {
-			var cleanParamName = this._cleanOptParamName(this._parameterNames[i]);
+			let [rawName, rawValue] = [
+				this._parameterNames[i],
+				parameterValues[i]
+			];
+			var cleanParamName = this._cleanOptParamName(rawName);
 
-			parameters[cleanParamName] = this._decodeURIParameter(parameterValues[i]);
+			parameters[cleanParamName] = this._decodeURIParameter(rawValue);
 		}
 
 		return parameters;
@@ -518,7 +529,9 @@ export default class Route {
 	_getParameterNames(pathExpression) {
 		var rawNames = pathExpression.match(PARAMS_REGEXP_UNIVERSAL) || [];
 
-		return rawNames.map(rawParameterName => rawParameterName.substring(1).replace('?', ''));
+		return rawNames.map((rawParameterName) => {
+			return rawParameterName.substring(1).replace('?', '')
+		});
 	}
 }
 

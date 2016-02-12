@@ -44,8 +44,7 @@ export default class ViewAdapter extends React.Component {
 	}
 
 	/**
-	 * @inheritDoc
-	 * @override
+	 * @inheritdoc
 	 * @method render
 	 */
 	render() {
@@ -53,8 +52,7 @@ export default class ViewAdapter extends React.Component {
 	}
 
 	/**
-	 * @inheritDoc
-	 * @override
+	 * @inheritdoc
 	 * @method getChildContext
 	 */
 	getChildContext() {
