@@ -5,7 +5,7 @@ ns.namespace('Core.Interface');
 /**
  * The cache provides a temporary storage for expirable information. The
  * primary use of a cache is caching information obtained via costly means
- * (CPU-heavy computation or networking) to speed up the application
+ * (CPU-heavy computation or networking) to speed up the application's
  * performance when the same information needs to be retrieved multiple times.
  *
  * @interface Cache
@@ -15,7 +15,7 @@ ns.namespace('Core.Interface');
  */
 export default class Cache {
 	/**
-	 * Clear the cache by deleting all entries.
+	 * Clears the cache by deleting all entries.
 	 *
 	 * @method clear
 	 */
@@ -52,6 +52,8 @@ export default class Cache {
 	 * Sets the cache entry identified by the specified key to the provided
 	 * value. The entry is created if it does not exist yet.
 	 *
+	 * The method has no effect if the cache is currently disabled.
+	 *
 	 * @method set
 	 * @param {string} key The identifier of the cache entry.
 	 * @param {*} value The cache entry value.
@@ -74,7 +76,10 @@ export default class Cache {
 	/**
 	 * Disables the cache, preventing the retrieval of any cached entries and
 	 * reporting all cache entries as non-existing. Disabling the cache does
-	 * not however prevent setting the existing or creating new cache entries.
+	 * not however prevent modifying the existing or creating new cache
+	 * entries.
+	 *
+	 * Disabling the cache also clears all of its current entries.
 	 *
 	 * The method has no effect if the cache is already disabled.
 	 *
@@ -92,7 +97,9 @@ export default class Cache {
 	enable() {}
 
 	/**
-	 * Exports the state of this cache to a JSON string.
+	 * Exports the state of this cache to an HTML-safe JSON string. The data
+	 * obtained by parsing the result of this method are compatible with the
+	 * {@linkcode deserialize()} method.
 	 *
 	 * @method serialize
 	 * @return {string} A JSON string containing an object representing of the
@@ -101,7 +108,9 @@ export default class Cache {
 	serialize() {}
 
 	/**
-	 * Deserialization data from JSON.
+	 * Loads the provided serialized cache data into this cache. Entries
+	 * present in this cache but not specified in the provided data will remain
+	 * in this cache intact.
 	 *
 	 * @method deserialize
 	 * @param {Object<string, {value: *, ttl: number}>} serializedData An
