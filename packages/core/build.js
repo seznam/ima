@@ -1,10 +1,10 @@
 module.exports = (() => {
 
 	var js = [
-		'imajs/client/core/**/!(vendor|imaError.es6).js'
+		'ima/core/**/!(vendor|imaError.es6).js'
 	];
 
-	var mainjs = ['imajs/client/main.js'];
+	var mainjs = ['ima/client/main.js'];
 
 	return {
 		js: js,
