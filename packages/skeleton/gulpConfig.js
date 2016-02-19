@@ -1,5 +1,4 @@
-
-var coreDependency = require('./imajs/build.js');
+var coreDependency = require('./ima/build.js');
 
 var appDependency;
 try {
@@ -57,32 +56,32 @@ exports.files = {
 			client: 'vendor.client.js',
 			tmp: 'es5transformedVendor.js'
 		},
-		src:['./imajs/client/core/vendor.js', './app/vendor.js'],
+		src:['./ima/vendor.js', './app/vendor.js'],
 		dest: {
-			server: './build/imajs/',
+			server: './build/ima/',
 			client: './build/static/js/',
-			tmp: './build/imajs/'
+			tmp: './build/ima/'
 		},
-		watch: ['./imajs/client/core/vendor.js', './app/vendor.js']
+		watch: ['./ima/vendor.js', './app/vendor.js']
 	},
 	app: {
 		name: {
 			server: 'app.server.js',
 			client: 'app.client.js'
 		},
-		src: [].concat(coreDependency.js, appDependency.js, coreDependency.mainjs),
+		src: [].concat(coreDependency.js, appDependency.js, coreDependency.mainjs, appDependency.mainjs),
 		dest: {
-			server: './build/imajs/',
+			server: './build/ima/',
 			client: './build/static/js/'
 		},
-		watch:['./imajs/client/**/*.{js,jsx}', './imajs/client/main.js', '!./imajs/client/vendor.js', './app/**/*.{js,jsx}', '!./app/*.js']
+		watch:['./ima/**/*.{js,jsx}', '!./ima/vendor.js', './app/**/*.{js,jsx}', '!./app/*.js', './app/main.js']
 	},
 	server: {
 		cwd: '/',
 		src: ['./server/*.js', './server/**/*.js'],
 		base: './server/',
 		dest: './build/',
-		watch: ['./server/*.js', './server/**/*.js', './app/environment.js', './imajs/server/*.js']
+		watch: ['./server/*.js', './server/**/*.js', './app/environment.js']
 	},
 	less: {
 		cwd: '/',
@@ -95,7 +94,7 @@ exports.files = {
 	locale: {
 		src: appDependency.languages,
 		dest:{
-			server: './build/imajs/locale/',
+			server: './build/ima/locale/',
 			client: './build/static/js/locale/'
 		},
 		watch: ['./app/locale/**/*.json']
@@ -103,12 +102,12 @@ exports.files = {
 	shim : {
 		name: 'shim.js',
 		src: [
-			'./imajs/polyfill/collectionEnumeration.js',
-			'./imajs/polyfill/imaLoader.js'
+			'./ima/polyfill/collectionEnumeration.js',
+			'./ima/polyfill/imaLoader.js'
 		],
 		dest: {
 			client: './build/static/js/',
-			server: './build/imajs/'
+			server: './build/ima/'
 		}
 	},
 	polyfill: {

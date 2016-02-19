@@ -9,7 +9,7 @@ module.exports = function(config) {
 			'PhantomJS'
 		],
 		files: [
-			'./imajs/client/test.js',
+			'./ima/test.js',
 			'./build/static/js/polyfill.js',
 			'./build/static/js/shim.js',
 			'./build/static/js/vendor.client.js',
@@ -17,13 +17,12 @@ module.exports = function(config) {
 			'./build/static/js/app.client.js',
 			'./app/tests/unit/**/*.js',
 			'./app/tests/unit/*.js',
-			'./imajs/client/tests/**/*.js',
-			'./imajs/client/tests/*.js'
+			'./ima/**/__tests__/*Spec.js'
 		]/*,
 		preprocessors: {
-			'./app/test/*.js': ['babel'],
-			'./imajs/client/test/*.js': ['babel']
-		},
+			'./app/test/*.js': ['babel'],*/
+		//	'./ima/**/*Spec.js': ['babel']
+		/*},
 		babelPreprocessor: {
 			options: {
 				presets: ['es2015'],
