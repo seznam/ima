@@ -4,14 +4,10 @@ import Bootstrap from 'imajs/client/core/bootstrap';
 
 // Import app/config
 import { init as initBindCore } from 'imajs/client/core/config/bind';
-import { init as initBindApp } from 'app/config/bind';
-import { init as initRoutes } from 'app/config/routes';
 import { init as initServicesCore } from 'imajs/client/core/config/services';
-import { init as initServicesApp } from 'app/config/services';
-import { init as initSettings } from 'app/config/settings';
 
-var getInit = () => {
-	return { initBindCore, initBindApp, initRoutes, initServicesCore, initServicesApp, initSettings };
+var getInitialCoreConfigFunctions = () => {
+	return { initBindCore, initServicesCore };
 };
 
 var getNamespace = () => {
@@ -25,7 +21,7 @@ var createIMAJsApp = () => {
 	return { oc, bootstrap };
 };
 
-var getIMAJsClientBootConfig = () => {
+var getClientBootConfig = (initialAppConfigFunctions) => {
 	if ($Debug) {
 		if (window.$IMA.$Protocol !== window.location.protocol) {
 			throw new Error(`Your client's protocol is not same as server's protocol.` +
@@ -68,10 +64,41 @@ var getIMAJsClientBootConfig = () => {
 		}
 	};
 
-	return Object.assign(bootConfig, getInit());
+	return Object.assign(bootConfig, initialAppConfigFunctions(), getInitialCoreConfigFunctions());
 };
 
-var bootIMAJsClientApp = (app, bootConfig) => {
+var getTestClientBootConfig = (initialAppConfigFunctions) => {
+	var root = typeof window !== 'undefined' && window !== null ? window : GLOBAL;
+	root.$Debug = true;
+
+	var bootConfig = {
+		services: {
+			respond: null,
+			request: null,
+			$IMA: $IMA,
+			dictionary: {
+				$Language: $IMA.$Language,
+				dictionary: $IMA.i18n
+			},
+			router: {
+				$Host: $IMA.$Host,
+				$Root: $IMA.$Root,
+				$LanguagePartPath: $IMA.$LanguagePartPath
+			}
+		},
+		settings: {
+			$Env: 'dev',
+			$Language: 'en',
+			$Protocol: 'http:',
+			$Debug: true,
+			$App: {}
+		}
+	};
+
+	return Object.assign(bootConfig, initialAppConfigFunctions(), getInitialCoreConfigFunctions());
+};
+
+var bootClientApp = (app, bootConfig) => {
 	app.bootstrap.run(bootConfig);
 
 	var cache = app.oc.get('$Cache');
@@ -80,7 +107,7 @@ var bootIMAJsClientApp = (app, bootConfig) => {
 	return app;
 };
 
-var routeIMAJsClientApp = (app) => {
+var routeClientApp = (app) => {
 	var router = app.oc.get('$Router');
 
 	return router
@@ -95,11 +122,11 @@ var routeIMAJsClientApp = (app) => {
 		});
 };
 
-var hotReloadIMAJsClientApp = () => {
+var hotReloadClientApp = (initialAppConfigFunctions) => {
 	if ($Debug) {
 		var app = createIMAJsApp();
-		var bootConfig = getIMAJsClientBootConfig();
-		app = bootIMAJsClientApp(app, bootConfig);
+		var bootConfig = getClientBootConfig(initialAppConfigFunctions);
+		app = bootClientApp(app, bootConfig);
 
 		var router = app.oc.get('$Router');
 		var pageManager = app.oc.get('$PageManager');
@@ -127,7 +154,7 @@ var hotReloadIMAJsClientApp = () => {
 	}
 };
 
-var revivalIMAJsClientApp = () => {
+var revivalClientApp = (initialAppConfigFunctions) => {
 	//hack for browser Chrome, which has sometimes problem with rendering page
 	document.body.style.display = 'none';
 	document.body.offsetHeight; //eslint-disable-line
@@ -138,73 +165,32 @@ var revivalIMAJsClientApp = () => {
 	window.$Debug = window.$IMA.$Debug;
 
 	var app = createIMAJsApp();
-	var bootConfig = getIMAJsClientBootConfig();
-	app = bootIMAJsClientApp(app, bootConfig);
+	var bootConfig = getClientBootConfig(initialAppConfigFunctions);
+	app = bootClientApp(app, bootConfig);
 
-	return routeIMAJsClientApp(app);
+	routeClientApp(app);
 };
 
-var root = typeof window !== 'undefined' && window !== null ? window : GLOBAL;
-
-//Check testing
-if (root.$IMA.Test === true) {
-
-	root.$Debug = true;
-
-	var bootConfig = {
-		services: {
-			respond: null,
-			request: null,
-			$IMA: $IMA,
-			dictionary: {
-				$Language: $IMA.$Language,
-				dictionary: $IMA.i18n
-			},
-			router: {
-				$Host: $IMA.$Host,
-				$Root: $IMA.$Root,
-				$LanguagePartPath: $IMA.$LanguagePartPath
-			}
-		},
-		settings: {
-			$Env: 'dev',
-			$Language: 'en',
-			$Protocol: 'http:',
-			$Debug: true,
-			$App: {}
-		}
-	};
-
-	Object.assign(bootConfig, getInit());
-
+var revivalTestClientApp = (initialAppConfigFunctions) => {
+	var root = typeof window !== 'undefined' && window !== null ? window : GLOBAL;
 	var app = createIMAJsApp();
-	app = bootIMAJsClientApp(app, bootConfig);
+	var bootConfig = getTestClientBootConfig(initialAppConfigFunctions);
+
+	app = bootClientApp(app, bootConfig);
 
 	root.ns = ns;
 	root.oc = app.oc;
-
-} else {
-
-	if (typeof window !== 'undefined' && window !== null) {
-
-		//revival IMA.js app
-		if (document.readyState === 'complete' || document.readyState === 'interactive') {
-			if (!$IMA.HotReload) {
-				revivalIMAJsClientApp();
-			}
-		} else {
-			window.addEventListener('DOMContentLoaded', revivalIMAJsClientApp);
-		}
-	}
-}
+};
 
 export {
-	getInit,
+	getInitialCoreConfigFunctions,
 	getNamespace,
 	createIMAJsApp,
-	getIMAJsClientBootConfig,
-	bootIMAJsClientApp,
-	routeIMAJsClientApp,
-	hotReloadIMAJsClientApp,
-	revivalIMAJsClientApp
+	getClientBootConfig,
+	getTestClientBootConfig,
+	bootClientApp,
+	routeClientApp,
+	hotReloadClientApp,
+	revivalClientApp,
+	revivalTestClientApp
 };
