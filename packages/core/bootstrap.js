@@ -1,9 +1,9 @@
-import ns from 'ima/core/namespace';
-import vendor from 'ima/core/vendorLinker';
+import ns from 'ima/namespace';
+import vendor from 'ima/vendorLinker';
 
 const $Helper = vendor.get('$Helper');
 
-ns.namespace('Core');
+ns.namespace('Ima');
 
 /**
  * Environment name value in the production environment.
@@ -20,10 +20,10 @@ const PRODUCTION_ENVIRONMENT = 'prod';
  * itself.
  *
  * @class Bootstrap
- * @namespace Core
- * @module Core
+ * @namespace Ima
+ * @module Ima
  *
- * @requires Core.Namespace
+ * @requires Ima.Namespace
  */
 export default class Bootstrap {
 
@@ -32,7 +32,7 @@ export default class Bootstrap {
 	 *
 	 * @constructor
 	 * @method contructor
-	 * @param {Core.ObjectContainer} oc The application's object container to
+	 * @param {Ima.ObjectContainer} oc The application's object container to
 	 *        use for managing dependencies.
 	 */
 	constructor(oc) {
@@ -42,7 +42,7 @@ export default class Bootstrap {
 		 *
 		 * @private
 		 * @property _oc
-		 * @type {Core.ObjectContainer}
+		 * @type {Ima.ObjectContainer}
 		 */
 		this._oc = oc;
 
@@ -123,7 +123,7 @@ export default class Bootstrap {
 	 * @method _bindDependencies
 	 */
 	_bindDependencies() {
-		this._config.initBindCore(ns, this._oc, this._config.bind);
+		this._config.initBindIma(ns, this._oc, this._config.bind);
 		this._config.initBindApp(ns, this._oc, this._config.bind);
 	}
 
@@ -144,9 +144,9 @@ export default class Bootstrap {
 	 * @method _initServices
 	 */
 	_initServices() {
-		this._config.initServicesCore(ns, this._oc, this._config.services);
+		this._config.initServicesIma(ns, this._oc, this._config.services);
 		this._config.initServicesApp(ns, this._oc, this._config.services);
 	}
 }
 
-ns.Core.Bootstrap = Bootstrap;
+ns.Ima.Bootstrap = Bootstrap;

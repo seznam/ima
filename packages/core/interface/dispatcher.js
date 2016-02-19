@@ -1,6 +1,6 @@
-import ns from 'ima/core/namespace';
+import ns from 'ima/namespace';
 
-ns.namespace('Core.Interface');
+ns.namespace('Ima.Interface');
 
 /**
  * A Dispatcher is a utility that manager event listeners registered for events
@@ -8,9 +8,9 @@ ns.namespace('Core.Interface');
  * given event.
  *
  * @interface Dispatcher
- * @namespace Core.Interface
- * @module Core
- * @submodule Core.Interface
+ * @namespace Ima.Interface
+ * @module Ima
+ * @submodule Ima.Interface
  */
 export default class Dispatcher {
 	/**
@@ -19,7 +19,7 @@ export default class Dispatcher {
 	 *
 	 * @chainable
 	 * @method clear
-	 * @return {Core.Interface.Dispatcher} This dispatcher.
+	 * @return {Ima.Interface.Dispatcher} This dispatcher.
 	 */
 	clear() {}
 
@@ -40,7 +40,7 @@ export default class Dispatcher {
 	 * @param {function(*)} listener The event listener to register.
 	 * @param {?Object=} scope The object to which the {@code this} keyword
 	 *        will be bound in the event listener.
-	 * @return {Core.Interface.Dispatcher} This dispatcher.
+	 * @return {Ima.Interface.Dispatcher} This dispatcher.
 	 */
 	listen(event, listener, scope = null) {}
 
@@ -55,7 +55,7 @@ export default class Dispatcher {
 	 * @param {function(*)} listener The event listener to unregister.
 	 * @param {?Object=} scope The object to which the {@code this} keyword
 	 *        would be bound in the event listener.
-	 * @return {Core.Interface.Dispatcher} This dispatcher.
+	 * @return {Ima.Interface.Dispatcher} This dispatcher.
 	 * @throws {Error} Thrown if there is no such listener registered.
 	 */
 	unlisten(event, listener, scope = null) {}
@@ -76,11 +76,11 @@ export default class Dispatcher {
 	 * @param {Object<string, *>} data The data to pass to the event listeners.
 	 * @param {boolean=} [imaInternalEvent=false] The flag specify that defined
 	 *        event is $IMA internal or usually application event.
-	 * @return {Core.Interface.Dispatcher} This dispatcher.
+	 * @return {Ima.Interface.Dispatcher} This dispatcher.
 	 * @throws {Error} Thrown if there is no event listener registered for the
 	 *         specified event.
 	 */
 	fire(event, data, imaInternalEvent = false) {}
 }
 
-ns.Core.Interface.Dispatcher = Dispatcher;
+ns.Ima.Interface.Dispatcher = Dispatcher;

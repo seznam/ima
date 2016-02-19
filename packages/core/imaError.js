@@ -1,6 +1,6 @@
-import ns from 'ima/core/namespace';
-import * as errorImplementation from 'ima/core/abstract/imaError';
-//import ErrorInterface from 'ima/core/interface/error'; //eslint-disable-line
+import ns from 'ima/namespace';
+import * as errorImplementation from 'ima/abstract/imaError';
+//import ErrorInterface from 'ima/interface/error'; //eslint-disable-line
 
 /*
 
@@ -9,21 +9,21 @@ import * as errorImplementation from 'ima/core/abstract/imaError';
 
  */
 
-ns.namespace('Core');
+ns.namespace('Ima');
 
 // extend the Error class
 IMAError.prototype = Object.create(Error.prototype);
 IMAError.prototype.constructor = IMAError;
 
 /**
- * Implementation of the Core.Interface.Error interface, providing more
+ * Implementation of the Ima.Interface.Error interface, providing more
  * advanced error API.
  *
  * @class IMAError
  * @extends Error
- * @implements Core.Interface.Error
- * @namespace Core
- * @module Core
+ * @implements Ima.Interface.Error
+ * @namespace Ima
+ * @module Ima
  *
  * @param {string} message The message describing the cause of the error.
  * @param {Object<string, *>} [params={}] A data map providing additional
@@ -117,4 +117,4 @@ IMAError.prototype.toString = function() {
 	return errorImplementation.toString.call(this);
 };
 
-ns.Core.IMAError = IMAError;
+ns.Ima.IMAError = IMAError;

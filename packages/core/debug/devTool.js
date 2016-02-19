@@ -1,25 +1,25 @@
-import ns from 'ima/core/namespace';
+import ns from 'ima/namespace';
 
-ns.namespace('Core.Debug');
+ns.namespace('Ima.Debug');
 
 /**
  * DevTool
  *
  * @class DevTool
- * @namespace Core.Debug
- * @module Core
- * @submodule Core.Debug
+ * @namespace Ima.Debug
+ * @module Ima
+ * @submodule Ima.Debug
  */
 export default class DevTool {
 
 	/**
 	 * @method constructor
 	 * @constructor
-	 * @param {Core.Interface.PageManager} pageManager
-	 * @param {Core.Interface.PageStateManager} stateManager
-	 * @param {Core.Interface.Window} window
-	 * @param {Core.Interface.Dispatcher} dispatcher
-	 * @param {Core.Interface.EventBus} eventBus
+	 * @param {Ima.Interface.PageManager} pageManager
+	 * @param {Ima.Interface.PageStateManager} stateManager
+	 * @param {Ima.Interface.Window} window
+	 * @param {Ima.Interface.Dispatcher} dispatcher
+	 * @param {Ima.Interface.EventBus} eventBus
 	 */
 	constructor(pageManager, stateManager, window, dispatcher, eventBus) {
 
@@ -28,7 +28,7 @@ export default class DevTool {
 		 *
 		 * @private
 		 * @property _pageManager
-		 * @type {Core.Interface.PageManager}
+		 * @type {Ima.Interface.PageManager}
 		 */
 		this._pageManager = pageManager;
 
@@ -37,7 +37,7 @@ export default class DevTool {
 		 *
 		 * @private
 		 * @property _stateManager
-		 * @type {Core.Interface.PageStateManager}
+		 * @type {Ima.Interface.PageStateManager}
 		 */
 		this._stateManager = stateManager;
 
@@ -46,7 +46,7 @@ export default class DevTool {
 		 *
 		 * @private
 		 * @property _window
-		 * @type {Core.Interface.Window}
+		 * @type {Ima.Interface.Window}
 		 */
 		this._window = window;
 
@@ -55,7 +55,7 @@ export default class DevTool {
 		 *
 		 * @private
 		 * @property _dispatcher
-		 * @type {Core.Interface.Dispatcher}
+		 * @type {Ima.Interface.Dispatcher}
 		 */
 		this._dispatcher = dispatcher;
 
@@ -63,7 +63,7 @@ export default class DevTool {
 		 * $IMA eventBus
 		 *
 		 * @property _eventBus
-		 * @type {Core.Interface.EventBus}
+		 * @type {Ima.Interface.EventBus}
 		 */
 		this._eventBus = eventBus;
 	}
@@ -121,4 +121,4 @@ export default class DevTool {
 	}
 }
 
-ns.Core.Debug.DevTool = DevTool;
+ns.Ima.Debug.DevTool = DevTool;

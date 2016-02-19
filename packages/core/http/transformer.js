@@ -1,14 +1,14 @@
-import ns from 'ima/core/namespace';
+import ns from 'ima/namespace';
 
-ns.namespace('Core.Http');
+ns.namespace('Ima.Http');
 
 /**
  * Transform given string by defined rules.
  *
  * @class Transformer
- * @namespace Core.Http
- * @module Core
- * @submodule Core.Http
+ * @namespace Ima.Http
+ * @module Ima
+ * @submodule Ima.Http
  */
 class Transformer {
 
@@ -33,7 +33,7 @@ class Transformer {
 	 * @chainable
 	 * @param {string} key
 	 * @param {string} value
-	 * @return {Core.Http.Transformer} This transformer.
+	 * @return {Ima.Http.Transformer} This transformer.
 	 */
 	addRule(key, value) {
 		this._rules[key] = value;
@@ -46,7 +46,7 @@ class Transformer {
 	 *
 	 * @method clear
 	 * @chainable
-	 * @return {Core.Http.Transformer} This transformer.
+	 * @return {Ima.Http.Transformer} This transformer.
 	 */
 	clear() {
 		this._rules = {};
@@ -75,4 +75,4 @@ class Transformer {
 	}
 }
 
-ns.Core.Http.Transformer = Transformer;
+ns.Ima.Http.Transformer = Transformer;

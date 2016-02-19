@@ -1,7 +1,7 @@
-import ns from 'ima/core/namespace';
-import AbstractRouter from 'ima/core/abstract/router';
+import ns from 'ima/namespace';
+import AbstractRouter from 'ima/abstract/router';
 
-ns.namespace('Core.Router');
+ns.namespace('Ima.Router');
 
 /**
  * Names of the DOM events the router responds to.
@@ -71,14 +71,14 @@ const MODES = Object.freeze({
 const MOUSE_LEFT_BUTTON = 0;
 
 /**
- * The client-side implementation of the {@codelink Core.Interface.Router}
+ * The client-side implementation of the {@codelink Ima.Interface.Router}
  * interface.
  *
  * @class Client
- * @extends Core.Abstract.Router
- * @namespace Core.Router
- * @module Core
- * @submodule Core.Router
+ * @extends Ima.Abstract.Router
+ * @namespace Ima.Router
+ * @module Ima
+ * @submodule Ima.Router
  */
 export default class Client extends AbstractRouter {
 
@@ -87,17 +87,17 @@ export default class Client extends AbstractRouter {
 	 *
 	 * @constructor
 	 * @method constructor
-	 * @param {Core.Interface.PageManager} pageManager The page manager
+	 * @param {Ima.Interface.PageManager} pageManager The page manager
 	 *        handling UI rendering, and transitions between pages if at the
 	 *        client side.
-	 * @param {Core.Router.Factory} factory Factory for routes.
-	 * @param {Core.Interface.Dispatcher} dispatcher Dispatcher fires events to
+	 * @param {Ima.Router.Factory} factory Factory for routes.
+	 * @param {Ima.Interface.Dispatcher} dispatcher Dispatcher fires events to
 	 *        app.
 	 * @param {{ROUTE_NAMES: Object<string, string>, EVENTS: Object<string, string>}} ROUTER_CONSTANTS
 	 *        The internal router constants. The {@code ROUTE_NAMES}
 	 *        contains internal route names. The {@code EVENTS} contains name
-	 *        of events which are fired with {@code Core.Interface.Dispatcher}.
-	 * @param {Core.Interface.Window} window The current global client-side
+	 *        of events which are fired with {@code Ima.Interface.Dispatcher}.
+	 * @param {Ima.Interface.Window} window The current global client-side
 	 *        APIs provider.
 	 */
 	constructor(pageManager, factory, dispatcher, ROUTER_CONSTANTS, window) {
@@ -108,7 +108,7 @@ export default class Client extends AbstractRouter {
 		 *
 		 * @private
 		 * @property _window
-		 * @type {Core.Interface.Window}
+		 * @type {Ima.Interface.Window}
 		 */
 		this._window = window;
 
@@ -430,4 +430,4 @@ export default class Client extends AbstractRouter {
 	}
 }
 
-ns.Core.Router.Client = Client;
+ns.Ima.Router.Client = Client;

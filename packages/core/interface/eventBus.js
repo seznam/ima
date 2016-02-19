@@ -1,6 +1,6 @@
-import ns from 'ima/core/namespace';
+import ns from 'ima/namespace';
 
-ns.namespace('Core.Interface');
+ns.namespace('Ima.Interface');
 
 /**
  * Helper for custom events.
@@ -9,9 +9,9 @@ ns.namespace('Core.Interface');
  * and two methods for catching events (e.g. inside view components).
  *
  * @interface EventBus
- * @namespace Core.Interface
- * @module Core
- * @submodule Core.Interface
+ * @namespace Ima.Interface
+ * @module Ima
+ * @submodule Ima.Interface
  */
 export default class EventBus {
 
@@ -38,7 +38,7 @@ export default class EventBus {
 	 *        an EventInit dictionary options too. Options of eventInit are
 	 *        {@code { bubbles: true, cancelable: true }} by default. For more
 	 *        info see: https://developer.mozilla.org/en-US/docs/Web/API/Event/Event
-	 * @return {Core.Event.Bus} This custom event bus.
+	 * @return {Ima.Event.Bus} This custom event bus.
 	 * @throws {Error} Thrown if there is no event source defined.
 	 */
 	fire(eventSource, eventName, data, options = {}) {}
@@ -59,7 +59,7 @@ export default class EventBus {
 	 *        events.
 	 * @param {function(<CustomEvent>)} listener The event listener to
 	 *        register.
-	 * @return {Core.Event.Bus} This custom event bus.
+	 * @return {Ima.Event.Bus} This custom event bus.
 	 */
 	listenAll(eventTarget, listener) {}
 
@@ -80,7 +80,7 @@ export default class EventBus {
 	 * @param {string} eventName The name of the event to listen for.
 	 * @param {function(<CustomEvent>)} listener The event listener to
 	 *        register.
-	 * @return {Core.Event.Bus} This custom event bus.
+	 * @return {Ima.Event.Bus} This custom event bus.
 	 */
 	listen(eventTarget, eventName, listener) {}
 
@@ -98,7 +98,7 @@ export default class EventBus {
 	 *        event.
 	 * @param {function(<CustomEvent>)} listener The event listener to
 	 *        unregister.
-	 * @return {Core.Event.Bus} This custom event bus.
+	 * @return {Ima.Event.Bus} This custom event bus.
 	 */
 	unlistenAll(eventTarget, listener) {}
 
@@ -116,9 +116,9 @@ export default class EventBus {
 	 * @param {string} eventName The name of the event listened for.
 	 * @param {function(<CustomEvent>)} listener The event listener to
 	 *        unregister.
-	 * @return {Core.Event.Bus} This custom event bus.
+	 * @return {Ima.Event.Bus} This custom event bus.
 	 */
 	unlisten(eventTarget, eventName, listener) {}
 }
 
-ns.Core.Interface.EventBus = EventBus;
+ns.Ima.Interface.EventBus = EventBus;

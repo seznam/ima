@@ -1,16 +1,16 @@
-import ns from 'ima/core/namespace';
+import ns from 'ima/namespace';
 
-ns.namespace('Core.Http');
+ns.namespace('Ima.Http');
 
 /**
- * Middleware proxy between {@codelink Core.Interface.Http} implementations and
+ * Middleware proxy between {@codelink Ima.Interface.Http} implementations and
  * the {@codelink Vendor.SuperAgent}, providing a Promise-oriented API for
  * sending the requests.
  *
  * @class Proxy
- * @namespace Core.Http
- * @module Core
- * @submodule Core.Http
+ * @namespace Ima.Http
+ * @module Ima
+ * @submodule Ima.Http
  */
 export default class Proxy {
 
@@ -20,9 +20,9 @@ export default class Proxy {
 	 * @param {Vendor.SuperAgent} superAgent SuperAgent instance to use for
 	 *        sending the HTTP requests.
 	 * @param {Object} HTTP_STATUS_CODE
-	 * @param {Core.Http.Transformer} transformer Transform apply rules to
+	 * @param {Ima.Http.Transformer} transformer Transform apply rules to
 	 *        request url.
-	 * @param {Core.Interface.Window} window Helper for manipulating the global
+	 * @param {Ima.Interface.Window} window Helper for manipulating the global
 	 *        object ({@code window}) regardless of the client/server-side
 	 *        environment.
 	 */
@@ -50,7 +50,7 @@ export default class Proxy {
 		/**
 		 * @property _transformer
 		 * @private
-		 * @type {Core.Http.Transformer}
+		 * @type {Ima.Http.Transformer}
 		 */
 		this._transformer = transformer;
 
@@ -60,7 +60,7 @@ export default class Proxy {
 		 *
 		 * @property _window
 		 * @private
-		 * @type {Core.Interface.Window}
+		 * @type {Ima.Interface.Window}
 		 */
 		this._window = window;
 
@@ -254,7 +254,7 @@ export default class Proxy {
 	 * @param {{method: string, url: string, data: Object<string, (boolean|number|string|Date)>, options: Object<string, *>}} params
 	 *        An object representing the complete request parameters used to
 	 *        create and send the HTTP request.
-	 * @return {Core.Http.Proxy} This instance.
+	 * @return {Ima.Http.Proxy} This instance.
 	 */
 	_sendRequest(request, resolve, reject, params) {
 		request.end((error, response) => {
@@ -374,7 +374,7 @@ export default class Proxy {
 	 *        cache of pending and finished HTTP requests. The
 	 *        {@code withCredentials} that indicates whether requests should be
 	 *        made using credentials such as cookies or authorization headers.
-	 * @return {Core.Http.Proxy} This instance.
+	 * @return {Ima.Http.Proxy} This instance.
 	 */
 	_setHeaders(request, options) {
 		for (let [headerName, headerValue] of this._defaultHeaders) {
@@ -414,7 +414,7 @@ export default class Proxy {
 	 *        cache of pending and finished HTTP requests. The
 	 *        {@code withCredentials} that indicates whether requests should be
 	 *        made using credentials such as cookies or authorization headers.
-	 * @return {Core.Http.Proxy} This instance.
+	 * @return {Ima.Http.Proxy} This instance.
 	 */
 	_setCredentials(request, options) {
 		if (options.withCredentials &&
@@ -463,4 +463,4 @@ export default class Proxy {
 	}
 }
 
-ns.Core.Http.Proxy = Proxy;
+ns.Ima.Http.Proxy = Proxy;

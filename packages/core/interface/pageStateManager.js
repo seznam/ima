@@ -1,14 +1,14 @@
-import ns from 'ima/core/namespace';
+import ns from 'ima/namespace';
 
-ns.namespace('Core.Interface');
+ns.namespace('Ima.Interface');
 
 /**
  * Page state.
  *
  * @interface PageStateManager
- * @namespace Core.Interface
- * @module Core
- * @submodule Core.Interface
+ * @namespace Ima.Interface
+ * @module Ima
+ * @submodule Ima.Interface
  */
 export default class PageStateManager {
 
@@ -45,4 +45,4 @@ export default class PageStateManager {
 
 }
 
-ns.Core.Interface.PageStateManager = PageStateManager;
+ns.Ima.Interface.PageStateManager = PageStateManager;

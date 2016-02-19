@@ -1,16 +1,16 @@
-import ns from 'ima/core/namespace';
-import PageStateManager from 'ima/core/interface/pageStateManager';
+import ns from 'ima/namespace';
+import PageStateManager from 'ima/interface/pageStateManager';
 
-ns.namespace('Core.Page');
+ns.namespace('Ima.Page');
 
 /**
  * Class for app state.
  *
  * @class StateManager
- * @implements Core.Interface.PageStateManager
- * @namespace Core.Page
- * @module Core
- * @submodule Core.Page
+ * @implements Ima.Interface.PageStateManager
+ * @namespace Ima.Page
+ * @module Ima
+ * @submodule Ima.Page
  */
 export default class StateManager extends PageStateManager {
 
@@ -133,4 +133,4 @@ export default class StateManager extends PageStateManager {
 
 }
 
-ns.Core.Page.StateManager = StateManager;
+ns.Ima.Page.StateManager = StateManager;

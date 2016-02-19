@@ -1,15 +1,15 @@
-import ns from 'ima/core/namespace';
+import ns from 'ima/namespace';
 
-ns.namespace('Core.Interface');
+ns.namespace('Ima.Interface');
 
 /**
  * The Dictionary is a manager and preprocessor of localization phrases for a
  * single language.
  *
  * @interface Dictionary
- * @namespace Core.Interface
- * @module Core
- * @submodule Core.Interface
+ * @namespace Ima.Interface
+ * @module Ima
+ * @submodule Ima.Interface
  */
 export default class Dictionary {
 	/**
@@ -64,4 +64,4 @@ export default class Dictionary {
 	get(key, parameters = {}) {}
 }
 
-ns.Core.Interface.Dictionary = Dictionary;
+ns.Ima.Interface.Dictionary = Dictionary;

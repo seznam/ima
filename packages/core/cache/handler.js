@@ -1,19 +1,19 @@
-import ns from 'ima/core/namespace';
-import Cache from 'ima/core/interface/cache';
+import ns from 'ima/namespace';
+import Cache from 'ima/interface/cache';
 
-ns.namespace('Core.Cache');
+ns.namespace('Ima.Cache');
 
 /**
- * Configurable generic implementation of the {@codelink Core.Interface.Cache}
+ * Configurable generic implementation of the {@codelink Ima.Interface.Cache}
  * interface.
  *
  * @class Handler
- * @implements Core.Interface.Cache
- * @namespace Core.Cache
- * @module Core
- * @submodule Core.Cache
+ * @implements Ima.Interface.Cache
+ * @namespace Ima.Cache
+ * @module Ima
+ * @submodule Ima.Cache
  *
- * @requires Core.Interface.Storage
+ * @requires Ima.Interface.Storage
  * @requires Vendor.$Helper
  *
  * @example
@@ -31,9 +31,9 @@ export default class Handler extends Cache {
 	 *
 	 * @method constructor
 	 * @constructor
-	 * @param {Core.Interface.Storage} cacheStorage The cache entry storage to
+	 * @param {Ima.Interface.Storage} cacheStorage The cache entry storage to
 	 *        use.
-	 * @param {Core.Cache.Factory} factory Which create new instance of cache
+	 * @param {Ima.Cache.Factory} factory Which create new instance of cache
 	 *        entry.
 	 * @param {Vendor.$Helper} Helper The IMA.js helper methods.
 	 * @param {{ttl: number, enabled: boolean}} [config={ttl: 30000, enabled: false}]
@@ -48,14 +48,14 @@ export default class Handler extends Cache {
 		 *
 		 * @property _cache
 		 * @private
-		 * @type {Core.Interface.Storage}
+		 * @type {Ima.Interface.Storage}
 		 */
 		this._cache = cacheStorage;
 
 		/**
 		 * @property _factory
 		 * @private
-		 * @type {Core.Cache.Factory}
+		 * @type {Ima.Cache.Factory}
 		 */
 		this._factory = factory;
 
@@ -181,7 +181,7 @@ export default class Handler extends Cache {
 
 			if ($Debug) {
 				if (!this._canSerializeValue(serializeEntry.value)) {
-					throw new Error(`Core.Cache.Handler:serialize You want ` +
+					throw new Error(`Ima.Cache.Handler:serialize You want ` +
 							`to serialize ` +
 							`${serializeEntry.value.toString()} for key ` +
 							`${key}. Clear value from cache or change their ` +
@@ -264,4 +264,4 @@ export default class Handler extends Cache {
 	}
 }
 
-ns.Core.Cache.Handler = Handler;
+ns.Ima.Cache.Handler = Handler;

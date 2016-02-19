@@ -1,17 +1,17 @@
-import ns from 'ima/core/namespace';
-import MetaManager from 'ima/core/interface/metaManager';
+import ns from 'ima/namespace';
+import MetaManager from 'ima/interface/metaManager';
 
-ns.namespace('Core.Meta');
+ns.namespace('Ima.Meta');
 
 /**
- * Default implementation of the {@codelink Core.Interface.MetaManager}
+ * Default implementation of the {@codelink Ima.Interface.MetaManager}
  * interface.
  *
  * @class Manager
- * @implements Core.Interface.MetaManager
- * @namespace Core.Meta
- * @module Core
- * @submodule Core.Meta
+ * @implements Ima.Interface.MetaManager
+ * @namespace Ima.Meta
+ * @module Ima
+ * @submodule Ima.Meta
  */
 export default class Manager extends MetaManager {
 	/**
@@ -147,4 +147,4 @@ export default class Manager extends MetaManager {
 	}
 }
 
-ns.Core.Meta.Manager = Manager;
+ns.Ima.Meta.Manager = Manager;

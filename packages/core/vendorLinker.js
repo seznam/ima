@@ -1,4 +1,4 @@
-import ns from 'ima/core/namespace';
+import ns from 'ima/namespace';
 
 var vendor;
 if (typeof window !== 'undefined' && window !== null) {
@@ -17,7 +17,7 @@ for (var [name, lib] of vendor) {
 }
 
 // bind the vendor libraries to the module system
-$IMA.Loader.register('ima/core/vendor', [], (_export) => {
+$IMA.Loader.register('ima/vendor', [], (_export) => {
 	return {
 		setters: [],
 		execute: () => {

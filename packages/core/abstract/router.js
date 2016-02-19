@@ -1,19 +1,19 @@
-import ns from 'ima/core/namespace';
-import IMAError from 'ima/core/imaError';
-import RouterInterface from 'ima/core/interface/router';
+import ns from 'ima/namespace';
+import IMAError from 'ima/imaError';
+import RouterInterface from 'ima/interface/router';
 
-ns.namespace('Core.Abstract');
+ns.namespace('Ima.Abstract');
 
 /**
- * The basic implementation of the {@codelink Core.Interface.Router} interface,
+ * The basic implementation of the {@codelink Ima.Interface.Router} interface,
  * providing the common or default functionality for parts of the API.
  *
  * @abstract
  * @class Router
- * @implements Core.Interface.Router
- * @namespace Core.Abstract
- * @module Core
- * @submodule Core.Abstract
+ * @implements Ima.Interface.Router
+ * @namespace Ima.Abstract
+ * @module Ima
+ * @submodule Ima.Abstract
  */
 export default class Router extends RouterInterface {
 
@@ -22,16 +22,16 @@ export default class Router extends RouterInterface {
 	 *
 	 * @constructor
 	 * @method constructor
-	 * @param {Core.Interface.PageManager} pageManager The page manager
+	 * @param {Ima.Interface.PageManager} pageManager The page manager
 	 *        handling UI rendering, and transitions between pages if at the
 	 *        client side.
-	 * @param {Core.Router.Factory} factory Factory for routes.
-	 * @param {Core.Interface.Dispatcher} dispatcher Dispatcher fires events to
+	 * @param {Ima.Router.Factory} factory Factory for routes.
+	 * @param {Ima.Interface.Dispatcher} dispatcher Dispatcher fires events to
 	 *        app.
 	 * @param {{ROUTE_NAMES: Object<string, string>, EVENTS: Object<string, string>}} ROUTER_CONSTANTS
 	 *        The internal router constants. The {@code ROUTE_NAMES} contains
 	 *        internal route names. The {@code EVENTS} contains name of events
-	 *        which are fired with {@code Core.Interface.Dispatcher}.
+	 *        which are fired with {@code Ima.Interface.Dispatcher}.
 	 * @example
 	 *      router.link('article', {articleId: 1});
 	 * @example
@@ -53,7 +53,7 @@ export default class Router extends RouterInterface {
 		 *
 		 * @private
 		 * @property _pageManager
-		 * @type {Core.Interface.PageManager}
+		 * @type {Ima.Interface.PageManager}
 		 */
 		this._pageManager = pageManager;
 
@@ -62,7 +62,7 @@ export default class Router extends RouterInterface {
 		 *
 		 * @private
 		 * @property _factory
-		 * @type {Core.Router.Factory}
+		 * @type {Ima.Router.Factory}
 		 */
 		this._factory = factory;
 
@@ -71,7 +71,7 @@ export default class Router extends RouterInterface {
 		 *
 		 * @private
 		 * @property _dispatcher
-		 * @type {Core.Interface.Dispatcher}
+		 * @type {Ima.Interface.Dispatcher}
 		 */
 		this._dispatcher = dispatcher;
 
@@ -140,7 +140,7 @@ export default class Router extends RouterInterface {
 		 *
 		 * @private
 		 * @property _routes
-		 * @type {Map<string, Core.Router.Route>}
+		 * @type {Map<string, Ima.Router.Route>}
 		 */
 		this._routes = new Map();
 	}
@@ -162,7 +162,7 @@ export default class Router extends RouterInterface {
 	 */
 	add(name, pathExpression, controller, view, options = undefined) {
 		if (this._routes.has(name)) {
-			throw new IMAError(`Core.Abstract.Router.add: The route with ` +
+			throw new IMAError(`Ima.Abstract.Router.add: The route with ` +
 					`name ${name} is already defined`);
 		}
 
@@ -247,7 +247,7 @@ export default class Router extends RouterInterface {
 		var route = this._getRouteByPath(path);
 
 		if (!route) {
-			throw new IMAError(`Core.Abstract.Router.getCurrentRouteInfo: ` +
+			throw new IMAError(`Ima.Abstract.Router.getCurrentRouteInfo: ` +
 					`The route for path ${path} is not define.`);
 		}
 
@@ -284,7 +284,7 @@ export default class Router extends RouterInterface {
 		var route = this._routes.get(routeName);
 
 		if (!route) {
-			throw new IMAError(`Core.Router:link has undefined route with ` +
+			throw new IMAError(`Ima.Router:link has undefined route with ` +
 					`name ${routeName}. Add new route with that name.`);
 		}
 
@@ -319,7 +319,7 @@ export default class Router extends RouterInterface {
 		var routeError = this._routes.get(this.ROUTE_NAMES.ERROR);
 
 		if (!routeError) {
-			var error = new IMAError(`Core.Router:handleError cannot ` +
+			var error = new IMAError(`Ima.Router:handleError cannot ` +
 					`process the error because no error page route has been ` +
 					`configured. Add a new route named ` +
 					`'${this.ROUTE_NAMES.ERROR}'.`, params);
@@ -338,7 +338,7 @@ export default class Router extends RouterInterface {
 		var routeNotFound = this._routes.get(this.ROUTE_NAMES.NOT_FOUND);
 
 		if (!routeNotFound) {
-			var error = new IMAError(`Core.Router:handleNotFound cannot ` +
+			var error = new IMAError(`Ima.Router:handleNotFound cannot ` +
 					`processes a non-matching route because no not found ` +
 					`page route has been configured. Add new route named ` +
 					`'${this.ROUTE_NAMES.NOT_FOUND}'.`, params);
@@ -391,7 +391,7 @@ export default class Router extends RouterInterface {
 	 *
 	 * @private
 	 * @method _handle
-	 * @param {Core.Router.Route} route The route that should have its
+	 * @param {Ima.Router.Route} route The route that should have its
 	 *        associated controller rendered via the associated view.
 	 * @param {Object<string, (Error|string)>} params Parameters extracted from
 	 *        the URL path and query.
@@ -437,7 +437,7 @@ export default class Router extends RouterInterface {
 	 * @private
 	 * @method _getRouteByPath
 	 * @param {string} path The URL path.
-	 * @return {?Core.Router.Route} The route matching the path, or
+	 * @return {?Ima.Router.Route} The route matching the path, or
 	 *         {@code null} if no such route exists.
 	 */
 	_getRouteByPath(path) {
@@ -451,4 +451,4 @@ export default class Router extends RouterInterface {
 	}
 }
 
-ns.Core.Abstract.Router = Router;
+ns.Ima.Abstract.Router = Router;

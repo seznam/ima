@@ -1,8 +1,8 @@
-import ns from 'ima/core/namespace';
-import IMAError from 'ima/core/imaError';
-import EventBus from 'ima/core/interface/eventBus';
+import ns from 'ima/namespace';
+import IMAError from 'ima/imaError';
+import EventBus from 'ima/interface/eventBus';
 
-ns.namespace('Core.Event');
+ns.namespace('Ima.Event');
 
 /**
  * Global name of IMA.js custom event.
@@ -20,10 +20,10 @@ const IMA_EVENT = '$IMA.CustomEvent';
  * and two methods for catching events (e.g. inside view components).
  *
  * @class Bus
- * @implements Core.Interface.EventBus
- * @namespace Core.Event
- * @module Core
- * @submodule Core.Event
+ * @implements Ima.Interface.EventBus
+ * @namespace Ima.Event
+ * @module Ima
+ * @submodule Ima.Event
  */
 export default class Bus extends EventBus {
 	/**
@@ -38,7 +38,7 @@ export default class Bus extends EventBus {
 		/**
 		 * @private
 		 * @property _window
-		 * @type {Core.Interface.Window}
+		 * @type {Ima.Interface.Window}
 		 * @default window
 		 */
 		this._window = window;
@@ -82,7 +82,7 @@ export default class Bus extends EventBus {
 		if (eventSource && typeof eventSource.dispatchEvent !== 'undefined') {
 			eventSource.dispatchEvent(e);
 		} else {
-			throw new IMAError(`Core.Event.Bus.fire: The EventSource ` +
+			throw new IMAError(`Ima.Event.Bus.fire: The EventSource ` +
 					`${eventSource} is not defined or can not dispatch ` +
 					`event '${eventName}' (data: ${data}).`,
 					{ eventSource, eventName, data, eventInit });
@@ -212,4 +212,4 @@ export default class Bus extends EventBus {
 	}
 }
 
-ns.Core.Event.Bus = Bus;
+ns.Ima.Event.Bus = Bus;

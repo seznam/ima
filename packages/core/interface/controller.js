@@ -1,6 +1,6 @@
-import ns from 'ima/core/namespace';
+import ns from 'ima/namespace';
 
-ns.namespace('Core.Interface');
+ns.namespace('Ima.Interface');
 
 /**
  * Interface defining the common API of page controllers. A page controller is
@@ -9,9 +9,9 @@ ns.namespace('Core.Interface');
  * on the page (or other input).
  *
  * @interface Controller
- * @namespace Core.Interface
- * @module Core
- * @submodule Core.Interface
+ * @namespace Ima.Interface
+ * @module Ima
+ * @submodule Ima.Interface
  */
 export default class Controller {
 
@@ -165,9 +165,9 @@ export default class Controller {
 	 * added to the controller before the {@codelink init()} method is invoked.
 	 *
 	 * @method addExtension
-	 * @param {Core.Interface.Extension} extension The extension to add to this
+	 * @param {Ima.Interface.Extension} extension The extension to add to this
 	 *        controller.
-	 * @return {Core.Interface.Controller} This controller.
+	 * @return {Ima.Interface.Controller} This controller.
 	 */
 	addExtension(extension) {}
 
@@ -175,7 +175,7 @@ export default class Controller {
 	 * Returns the controller's extensions.
 	 *
 	 * @method getExtensions
-	 * @return {Core.Interface.Extension[]} The extensions added to this
+	 * @return {Ima.Interface.Extension[]} The extensions added to this
 	 *         controller.
 	 */
 	getExtensions() {}
@@ -190,10 +190,10 @@ export default class Controller {
 	 *        map of resource names to resources loaded by the
 	 *        {@codelink load()} method. This is the same object as the one
 	 *        passed to the {@codelink setState()} method.
-	 * @param {Core.Interface.MetaManager} metaManager Meta attributes manager
+	 * @param {Ima.Interface.MetaManager} metaManager Meta attributes manager
 	 *        to configure.
-	 * @param {Core.Interface.Router} router The current application router.
-	 * @param {Core.Interface.Dictionary} dictionary The current localization
+	 * @param {Ima.Interface.Router} router The current application router.
+	 * @param {Ima.Interface.Dictionary} dictionary The current localization
 	 *        dictionary.
 	 * @param {Object<string, *>} settings The application settings for the
 	 *        current application environment.
@@ -226,7 +226,7 @@ export default class Controller {
 	 * controller).
 	 *
 	 * @method setPageStateManager
-	 * @param {?Core.Interface.PageStateManager} pageStateManager The current
+	 * @param {?Ima.Interface.PageStateManager} pageStateManager The current
 	 *        state manager to use.
 	 */
 	setPageStateManager(pageStateManager) {}
@@ -241,4 +241,4 @@ export default class Controller {
 	getHttpStatus() {}
 }
 
-ns.Core.Interface.Controller = Controller;
+ns.Ima.Interface.Controller = Controller;

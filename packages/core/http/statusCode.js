@@ -1,6 +1,6 @@
-import ns from 'ima/core/namespace';
+import ns from 'ima/namespace';
 
-ns.namespace('Core.Http');
+ns.namespace('Ima.Http');
 
 /**
  * HTTP status code constants, representing the HTTP status codes recognized
@@ -70,4 +70,4 @@ const STATUS_CODE = Object.freeze({
 
 export default STATUS_CODE;
 
-ns.Core.Http.STATUS_CODE = STATUS_CODE;
+ns.Ima.Http.STATUS_CODE = STATUS_CODE;

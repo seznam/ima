@@ -1,16 +1,16 @@
-import ns from 'ima/core/namespace';
-import AbstractPageManager from 'ima/core/abstract/pageManager';
+import ns from 'ima/namespace';
+import AbstractPageManager from 'ima/abstract/pageManager';
 
-ns.namespace('Core.Page.Manager');
+ns.namespace('Ima.Page.Manager');
 
 /**
  * Page manager for controller on the server side.
  *
  * @class Server
- * @implements Core.Abstract.PageManager
- * @namespace Core.Page.Manager
- * @module Core
- * @submodule Core.Page
+ * @implements Ima.Abstract.PageManager
+ * @namespace Ima.Page.Manager
+ * @module Ima
+ * @submodule Ima.Page
  */
 export default class Server extends AbstractPageManager {
 
@@ -22,4 +22,4 @@ export default class Server extends AbstractPageManager {
 
 }
 
-ns.Core.Page.Manager.Server = Server;
+ns.Ima.Page.Manager.Server = Server;

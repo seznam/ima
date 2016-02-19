@@ -1,16 +1,16 @@
-import ns from 'ima/core/namespace';
+import ns from 'ima/namespace';
 import { React } from 'app/vendor';
 
-ns.namespace('Core.Page.Render');
+ns.namespace('Ima.Page.Render');
 
 /**
  * An adapter component providing the current page controller's state to the
  * page view component through its properties.
  *
  * @class ViewAdapter
- * @namespace Core.Page.Render
- * @module Core
- * @submodule Core.Page
+ * @namespace Ima.Page.Render
+ * @module Ima
+ * @submodule Ima.Page
  */
 export default class ViewAdapter extends React.Component {
 	/**
@@ -66,4 +66,4 @@ ViewAdapter.childContextTypes = {
 	$Utils: React.PropTypes.object.isRequired
 };
 
-ns.Core.Page.Render.ViewAdapter = ViewAdapter;
+ns.Ima.Page.Render.ViewAdapter = ViewAdapter;

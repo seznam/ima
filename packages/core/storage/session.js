@@ -1,19 +1,19 @@
-import ns from 'ima/core/namespace';
-import IMAError from 'ima/core/imaError';
-import Storage from 'ima/core/interface/storage';
+import ns from 'ima/namespace';
+import IMAError from 'ima/imaError';
+import Storage from 'ima/interface/storage';
 
-ns.namespace('Core.Storage');
+ns.namespace('Ima.Storage');
 
 /**
- * Implementation of the {@codelink Core.Interface.Storage} interface that
+ * Implementation of the {@codelink Ima.Interface.Storage} interface that
  * relies on the native {@code sessionStorage} DOM storage for storing its
  * entries.
  *
  * @class Session
- * @implements Core.Interface.Storage
- * @namespace Core.Storage
- * @module Core
- * @submodule Core.Storage
+ * @implements Ima.Interface.Storage
+ * @namespace Ima.Storage
+ * @module Ima
+ * @submodule Ima.Storage
  *
  * @requires SessionStorage
  */
@@ -61,7 +61,7 @@ class Session extends Storage {
 		try {
 			return JSON.parse(this._storage.getItem(key)).value;
 		} catch (e) {
-			throw new IMAError('Core.Storage.Session.get: Failed to parse a ' +
+			throw new IMAError('Ima.Storage.Session.get: Failed to parse a ' +
 					`session storage item value identified by the key ` +
 					`${key}: ${e.message}`);
 		}
@@ -164,9 +164,9 @@ class Session extends Storage {
  * @class StorageIterator
  * @implements Iterable
  * @implements Iterator
- * @namespace Core.Storage
- * @module Core
- * @submodule Core.Storage
+ * @namespace Ima.Storage
+ * @module Ima
+ * @submodule Ima.Storage
  * @see https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Iteration_protocols
  */
 class StorageIterator {
@@ -238,4 +238,4 @@ class StorageIterator {
 	}
 }
 
-ns.Core.Storage.Session = Session;
+ns.Ima.Storage.Session = Session;

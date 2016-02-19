@@ -1,23 +1,23 @@
-import ns from 'ima/core/namespace';
+import ns from 'ima/namespace';
 
-ns.namespace('Core.Page.Render');
+ns.namespace('Ima.Page.Render');
 
 /**
  * Factory for page render.
  *
  * @class Factory
- * @namespace Core.Page.Render
- * @module Core
- * @submodule Core.Page
+ * @namespace Ima.Page.Render
+ * @module Ima
+ * @submodule Ima.Page
  *
- * @requires Core.ObjectContainer
+ * @requires Ima.ObjectContainer
  */
 export default class Factory {
 
 	/**
 	 * @method constructor
 	 * @constructor
-	 * @param {Core.ObjectContainer} oc
+	 * @param {Ima.ObjectContainer} oc
 	 * @param {Vendor.React} React React framework instance to use to render
 	 *        the page.
 	 * @param {Vendor.React.Component} ViewAdapter An adapter component
@@ -29,7 +29,7 @@ export default class Factory {
 		/**
 		 * @property _oc
 		 * @private
-		 * @type {Core.ObjectContainer}
+		 * @type {Ima.ObjectContainer}
 		 */
 		this._oc = oc;
 
@@ -87,4 +87,4 @@ export default class Factory {
 	}
 }
 
-ns.Core.Page.Render.Factory = Factory;
+ns.Ima.Page.Render.Factory = Factory;

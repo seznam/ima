@@ -1,14 +1,14 @@
-import ns from 'ima/core/namespace';
+import ns from 'ima/namespace';
 
-ns.namespace('Core.Cache');
+ns.namespace('Ima.Cache');
 
 /**
- * Factory for creating instances of Core.Cache.Entry.
+ * Factory for creating instances of Ima.Cache.Entry.
  *
  * @class Factory
- * @namespace Core.Cache
- * @module Core
- * @submodule Core.Cache
+ * @namespace Ima.Cache
+ * @module Ima
+ * @submodule Ima.Cache
  */
 export default class Factory {
 
@@ -17,20 +17,20 @@ export default class Factory {
 	 *
 	 * @method constructor
 	 * @constructor
-	 * @param {function(new: Core.Cache.Entry, *, number)} Entry
+	 * @param {function(new: Ima.Cache.Entry, *, number)} Entry
 	 */
 	constructor(Entry) {
 
 		/**
 		 * @property _Entry
 		 * @private
-		 * @type {function(new: Core.Cache.Entry, *, number)}
+		 * @type {function(new: Ima.Cache.Entry, *, number)}
 		 */
 		this._Entry = Entry;
 	}
 
 	/**
-	 * Create new instance of Core.Cache.Entry with value a ttl.
+	 * Create new instance of Ima.Cache.Entry with value a ttl.
 	 *
 	 * @method createCacheEntry
 	 * @param {*} value The cache entry value.
@@ -42,4 +42,4 @@ export default class Factory {
 	}
 }
 
-ns.Core.Cache.Factory = Factory;
+ns.Ima.Cache.Factory = Factory;

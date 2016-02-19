@@ -1,23 +1,23 @@
-import ns from 'ima/core/namespace';
-import IMAError from 'ima/core/imaError';
-import HttpAgent from 'ima/core/interface/httpAgent';
+import ns from 'ima/namespace';
+import IMAError from 'ima/imaError';
+import HttpAgent from 'ima/interface/httpAgent';
 
-ns.namespace('Core.Http');
+ns.namespace('Ima.Http');
 
 /**
- * Implementation of the {@codelink Core.Interface.HttpAgent} interface with
+ * Implementation of the {@codelink Ima.Interface.HttpAgent} interface with
  * internal caching of completed and ongoing HTTP requests and cookie storage.
  *
  * @class Agent
- * @implements Core.Interface.HttpAgent
- * @namespace Core.Http
- * @module Core
- * @submodule Core.Http
+ * @implements Ima.Interface.HttpAgent
+ * @namespace Ima.Http
+ * @module Ima
+ * @submodule Ima.Http
  *
- * @requires Core.Http.Proxy
- * @requires Core.Cache.Handler
- * @requires Core.Storage.Cookie
- * @requires Core.Interface.Dictionary
+ * @requires Ima.Http.Proxy
+ * @requires Ima.Cache.Handler
+ * @requires Ima.Storage.Cookie
+ * @requires Ima.Interface.Dictionary
  */
 export default class Agent extends HttpAgent {
 	/**
@@ -25,11 +25,11 @@ export default class Agent extends HttpAgent {
 	 *
 	 * @method constructor
 	 * @constructor
-	 * @param {Core.Http.Proxy} proxy The low-level HTTP proxy for sending the
+	 * @param {Ima.Http.Proxy} proxy The low-level HTTP proxy for sending the
 	 *        HTTP requests.
-	 * @param {Core.Cache.Handler} cache Cache to use for caching ongoing and
+	 * @param {Ima.Cache.Handler} cache Cache to use for caching ongoing and
 	 *        completed requests.
-	 * @param {Core.Storage.Cookie} cookie The cookie storage to use
+	 * @param {Ima.Storage.Cookie} cookie The cookie storage to use
 	 *        internally.
 	 * @param {Object<string, *>} config Configuration of the HTTP handler for
 	 *        the current application environment, specifying the various
@@ -63,7 +63,7 @@ export default class Agent extends HttpAgent {
 		 *
 		 * @private
 		 * @property _proxy
-		 * @type {Core.Http.Proxy}
+		 * @type {Ima.Http.Proxy}
 		 */
 		this._proxy = proxy;
 
@@ -72,7 +72,7 @@ export default class Agent extends HttpAgent {
 		 *
 		 * @private
 		 * @property _cache
-		 * @type {Core.Cache.Handler}
+		 * @type {Ima.Cache.Handler}
 		 */
 		this._cache = cache;
 
@@ -82,7 +82,7 @@ export default class Agent extends HttpAgent {
 		 *
 		 * @private
 		 * @property _cookie
-		 * @type {Core.Storage.Cookie}
+		 * @type {Ima.Storage.Cookie}
 		 */
 		this._cookie = cookie;
 
@@ -385,7 +385,7 @@ export default class Agent extends HttpAgent {
 			this._internalCacheOfPromises.delete(cacheKey);
 
 			var errorName = errorParams.errorName;
-			var errorMessage = `${errorName}: Core.Http.Agent:_proxyRejected`;
+			var errorMessage = `${errorName}: Ima.Http.Agent:_proxyRejected`;
 			var error = new IMAError(errorMessage, errorParams);
 			return Promise.reject(error);
 		}
@@ -492,4 +492,4 @@ export default class Agent extends HttpAgent {
 	}
 }
 
-ns.Core.Http.Agent = Agent;
+ns.Ima.Http.Agent = Agent;

@@ -1,15 +1,15 @@
-import ns from 'ima/core/namespace';
+import ns from 'ima/namespace';
 
-ns.namespace('Core.Interface');
+ns.namespace('Ima.Interface');
 
 /**
  * The page renderer is a utility for rendering the page at either the client
  * or the server, handling the differences in the environment.
  *
  * @interface PageRender
- * @namespace Core.Interface
- * @module Core
- * @submodule Core.Interface
+ * @namespace Ima.Interface
+ * @module Ima
+ * @submodule Ima.Interface
  */
 export default class PageRender {
 	/**
@@ -27,7 +27,7 @@ export default class PageRender {
 	 * @override
 	 * @method mount
 	 * @abstract
-	 * @param {Core.Abstract.Controller} controller
+	 * @param {Ima.Abstract.Controller} controller
 	 * @param {Vendor.React.Component} view
 	 * @param {Object<string, *>} loadedPageState
 	 * @return {Promise}
@@ -43,7 +43,7 @@ export default class PageRender {
 	 * @inheritdoc
 	 * @override
 	 * @method update
-	 * @param {Core.Abstract.Controller} controller
+	 * @param {Ima.Abstract.Controller} controller
 	 * @param {Object<string, *>} updatedPageState
 	 * @return {Promise}
 	 */
@@ -68,4 +68,4 @@ export default class PageRender {
 	setState(state = {}) {}
 }
 
-ns.Core.Interface.PageRender = PageRender;
+ns.Ima.Interface.PageRender = PageRender;

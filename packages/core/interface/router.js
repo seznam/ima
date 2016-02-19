@@ -1,15 +1,15 @@
-import ns from 'ima/core/namespace';
+import ns from 'ima/namespace';
 
-ns.namespace('Core.Interface');
+ns.namespace('Ima.Interface');
 
 /**
  * The router manages the application's routing configuration and dispatches
  * controllers and views according to the current URL and the route it matches.
  *
  * @interface Router
- * @namespace Core.Interface
- * @module Core
- * @submodule Core.Interface
+ * @namespace Ima.Interface
+ * @module Ima
+ * @submodule Ima.Interface
  */
 export default class Router {
 
@@ -47,8 +47,8 @@ export default class Router {
 	 *        identifying the controller associated with this route.
 	 * @param {string} view The full name or Object Container alias identifying
 	 *        the view class associated with this route.
-	 * @return {Core.Interface.Router} This router.
-	 * @throws {Core.IMAError} Thrown if a route with the same name is added
+	 * @return {Ima.Interface.Router} This router.
+	 * @throws {Ima.IMAError} Thrown if a route with the same name is added
 	 *         multiple times.
 	 */
 	add(name, pathExpression, controller, view) {}
@@ -60,7 +60,7 @@ export default class Router {
 	 * @method remove
 	 * @param {string} name The route's unique name, identifying the route to
 	 *        remove.
-	 * @return {Core.Interface.Router} This router.
+	 * @return {Ima.Interface.Router} This router.
 	 */
 	remove(name) {}
 
@@ -121,9 +121,9 @@ export default class Router {
 	 * Returns the information about the currently active route.
 	 *
 	 * @method getCurrentRouteInfo
-	 * @return {{route: Core.Router.Route, params: Object<string, string>, path: string}}
+	 * @return {{route: Ima.Router.Route, params: Object<string, string>, path: string}}
 	 *         The information about the current route.
-	 * @throws {Core.IMAError} Thrown if a route is not define for current
+	 * @throws {Ima.IMAError} Thrown if a route is not define for current
 	 *         path.
 	 */
 	getCurrentRouteInfo() {}
@@ -145,7 +145,7 @@ export default class Router {
 	 *
 	 * @chainable
 	 * @method listen
-	 * @return {Core.Interface.Router} This router.
+	 * @return {Ima.Interface.Router} This router.
 	 */
 	listen() {}
 
@@ -237,7 +237,7 @@ export default class Router {
 	 * failure at the server side.
 	 *
 	 * @method isClientError
-	 * @param {(Core.IMAError|Error)} reason The encountered error.
+	 * @param {(Ima.IMAError|Error)} reason The encountered error.
 	 * @return {boolean} {@code true} if the error was caused the action of the
 	 *         client.
 	 */
@@ -247,11 +247,11 @@ export default class Router {
 	 * Tests, if possible, whether the specified error lead to redirection.
 	 *
 	 * @method isRedirection
-	 * @param {(Core.IMAError|Error)} reason The encountered error.
+	 * @param {(Ima.IMAError|Error)} reason The encountered error.
 	 * @return {boolean} {@code true} if the error was caused the action of the
 	 *         redirection.
 	 */
 	isRedirection(reason) {}
 }
 
-ns.Core.Interface.Router = Router;
+ns.Ima.Interface.Router = Router;

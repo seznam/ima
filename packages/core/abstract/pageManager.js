@@ -1,16 +1,16 @@
-import ns from 'ima/core/namespace';
-import PageManagerInterface from 'ima/core/interface/pageManager';
+import ns from 'ima/namespace';
+import PageManagerInterface from 'ima/interface/pageManager';
 
-ns.namespace('Core.Abstract');
+ns.namespace('Ima.Abstract');
 
 /**
  * Page manager for controller.
  *
  * @class PageManager
- * @implements Core.Interface.PageManager
- * @namespace Core.Abstract
- * @module Core
- * @submodule Core.Abstract
+ * @implements Ima.Interface.PageManager
+ * @namespace Ima.Abstract
+ * @module Ima
+ * @submodule Ima.Abstract
  */
 export default class PageManager extends PageManagerInterface {
 
@@ -19,9 +19,9 @@ export default class PageManager extends PageManagerInterface {
 	 *
 	 * @method constructor
 	 * @constructor
-	 * @param {Core.Page.Factory} pageFactory
-	 * @param {Core.Interface.PageRender} pageRender
-	 * @param {Core.Interface.PageStateManager} pageStateManager
+	 * @param {Ima.Page.Factory} pageFactory
+	 * @param {Ima.Interface.PageRender} pageRender
+	 * @param {Ima.Interface.PageStateManager} pageStateManager
 	 */
 	constructor(pageFactory, pageRender, pageStateManager) {
 		super();
@@ -29,7 +29,7 @@ export default class PageManager extends PageManagerInterface {
 		/**
 		 * @protected
 		 * @property _pageFactory
-		 * @type {Core.Page.Factory}
+		 * @type {Ima.Page.Factory}
 		 * @default pageFactory
 		 */
 		this._pageFactory = pageFactory;
@@ -37,7 +37,7 @@ export default class PageManager extends PageManagerInterface {
 		/**
 		 * @protected
 		 * @property _pageRender
-		 * @type {Core.Abstract.PageRender}
+		 * @type {Ima.Abstract.PageRender}
 		 * @default pageRender
 		 */
 		this._pageRender = pageRender;
@@ -45,7 +45,7 @@ export default class PageManager extends PageManagerInterface {
 		/**
 		 * @protected
 		 * @property _pageStateManager
-		 * @type {Core.Interface.PageStateManager}
+		 * @type {Ima.Interface.PageStateManager}
 		 * @default pageStateManager
 		 */
 		this._pageStateManager = pageStateManager;
@@ -137,8 +137,8 @@ export default class PageManager extends PageManagerInterface {
 	 * @param {(string|function)} view
 	 * @param {{onlyUpdate: boolean}} options
 	 * @param {Object<string, string>} params The route parameters.
-	 * @param {Core.Abstract.Controller} controllerInstance
-	 * @param {Core.Decorator.Controller} decoratedController
+	 * @param {Ima.Abstract.Controller} controllerInstance
+	 * @param {Ima.Decorator.Controller} decoratedController
 	 * @param {Vendor.React.Component} viewInstance
 	 */
 	_storeManagedPageValue(controller, view, options, params,
@@ -184,7 +184,7 @@ export default class PageManager extends PageManagerInterface {
 	 *
 	 * @private
 	 * @method _setRestrictedPageStateManager
-	 * @param {Core.Interface.Extension} extension
+	 * @param {Ima.Interface.Extension} extension
 	 * @param {Object<string, *>} extensionState
 	 */
 	_setRestrictedPageStateManager(extension, extensionState) {
@@ -580,4 +580,4 @@ export default class PageManager extends PageManagerInterface {
 
 }
 
-ns.Core.Abstract.PageManager = PageManager;
+ns.Ima.Abstract.PageManager = PageManager;

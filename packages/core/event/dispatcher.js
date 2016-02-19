@@ -1,8 +1,8 @@
-import ns from 'ima/core/namespace';
-import IMAError from 'ima/core/imaError';
-import DispatcherInterface from 'ima/core/interface/dispatcher';
+import ns from 'ima/namespace';
+import IMAError from 'ima/imaError';
+import DispatcherInterface from 'ima/interface/dispatcher';
 
-ns.namespace('Core.Event');
+ns.namespace('Ima.Event');
 
 /**
  * An empty immutable map of event listener to scopes, used for a mismatch in
@@ -25,14 +25,14 @@ const EMPTY_MAP = Object.freeze(new Map());
 const EMPTY_SET = Object.freeze(new Set());
 
 /**
- * Default implementation of the {@codelink Core.Interface.Dispatcher}
+ * Default implementation of the {@codelink Ima.Interface.Dispatcher}
  * interface.
  *
  * @class Dispatcher
- * @implements ns.Core.Interface.Dispatcher
- * @namespace Core.Event
- * @module Core
- * @submodule Core.Event
+ * @implements ns.Ima.Interface.Dispatcher
+ * @namespace Ima.Event
+ * @module Ima
+ * @submodule Ima.Event
  */
 export default class Dispatcher extends DispatcherInterface {
 	/**
@@ -100,7 +100,7 @@ export default class Dispatcher extends DispatcherInterface {
 
 		if ($Debug) {
 			if (!scopes.has(scope)) {
-				console.warn('Core.Event.Dispatcher.unlisten(): the ' +
+				console.warn('Ima.Event.Dispatcher.unlisten(): the ' +
 						`provided listener '${listener}' is not registered ` +
 						`for the specified event '${event}' and scope ` +
 						`'${scope}'. Check your workflow.`, {
@@ -216,4 +216,4 @@ export default class Dispatcher extends DispatcherInterface {
 	}
 }
 
-ns.Core.Event.Dispatcher = Dispatcher;
+ns.Ima.Event.Dispatcher = Dispatcher;

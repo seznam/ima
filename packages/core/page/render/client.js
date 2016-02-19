@@ -1,17 +1,17 @@
-import ns from 'ima/core/namespace';
-import AbstractPageRender from 'ima/core/abstract/pageRender';
+import ns from 'ima/namespace';
+import AbstractPageRender from 'ima/abstract/pageRender';
 
-ns.namespace('Core.Page.Render');
+ns.namespace('Ima.Page.Render');
 
 /**
  * Client-side page renderer. The renderer attempts to reuse the markup sent by
  * server if possible.
  *
  * @class Client
- * @extends Core.Abstract.PageRender
- * @namespace Core.Page.Render
- * @module Core
- * @submodule Core.Page
+ * @extends Ima.Abstract.PageRender
+ * @namespace Ima.Page.Render
+ * @module Ima
+ * @submodule Ima.Page
  */
 export default class Client extends AbstractPageRender {
 
@@ -20,14 +20,14 @@ export default class Client extends AbstractPageRender {
 	 *
 	 * @method constructor
 	 * @constructor
-	 * @param {Core.Page.Render.Factory} factory Factory for receive $Utils to
+	 * @param {Ima.Page.Render.Factory} factory Factory for receive $Utils to
 	 *        view.
 	 * @param {Vendor.$Helper} Helper The IMA.js helper methods.
 	 * @param {Vendor.ReactDOM} ReactDOM React framework instance to use to
 	 *        render the page on the client side.
 	 * @param {Object<string, *>} settings The application setting for the
 	 *        current application environment.
-	 * @param {Core.Interface.Window} window Helper for manipulating the global
+	 * @param {Ima.Interface.Window} window Helper for manipulating the global
 	 *        object ({@code window}) regardless of the client/server-side
 	 *        environment.
 	 */
@@ -50,7 +50,7 @@ export default class Client extends AbstractPageRender {
 		 *
 		 * @property _window
 		 * @private
-		 * @type {Core.Interface.Window}
+		 * @type {Ima.Interface.Window}
 		 */
 		this._window = window;
 
@@ -159,7 +159,7 @@ export default class Client extends AbstractPageRender {
 	 * Patch promise values to controller state.
 	 *
 	 * @method _patchPromisesToState
-	 * @param {Core.Decorator.Controller} controller
+	 * @param {Ima.Decorator.Controller} controller
 	 * @param {Object<string, Promise>} patchedPromises
 	 */
 	_patchPromisesToState(controller, patchedPromises) {
@@ -179,7 +179,7 @@ export default class Client extends AbstractPageRender {
 	 *
 	 * @private
 	 * @method _renderToDOM
-	 * @param {Core.Decorator.Controller} controller
+	 * @param {Ima.Decorator.Controller} controller
 	 * @param {Vendor.React.Component} view
 	 */
 	_renderToDOM(controller, view) {
@@ -225,7 +225,7 @@ export default class Client extends AbstractPageRender {
 	 *
 	 * @private
 	 * @method _updateMetaAttributes
-	 * @param {Core.Interface.MetaManager} metaManager meta attributes storage
+	 * @param {Ima.Interface.MetaManager} metaManager meta attributes storage
 	 *        providing the new values for page meta elements and title.
 	 */
 	_updateMetaAttributes(metaManager) {
@@ -241,7 +241,7 @@ export default class Client extends AbstractPageRender {
 	 *
 	 * @private
 	 * @method _updateMetaNameAttributes
-	 * @param {Core.Interface.MetaManager} metaManager meta attributes storage
+	 * @param {Ima.Interface.MetaManager} metaManager meta attributes storage
 	 *        providing the new values for page meta elements and title.
 	 */
 	_updateMetaNameAttributes(metaManager) {
@@ -262,7 +262,7 @@ export default class Client extends AbstractPageRender {
 	 *
 	 * @private
 	 * @method _updateMetaPropertyAttributes
-	 * @param {Core.Interface.MetaManager} metaManager meta attributes storage
+	 * @param {Ima.Interface.MetaManager} metaManager meta attributes storage
 	 *        providing the new values for page meta elements and title.
 	 */
 	_updateMetaPropertyAttributes(metaManager) {
@@ -285,7 +285,7 @@ export default class Client extends AbstractPageRender {
 	 *
 	 * @private
 	 * @method _updateMetaLinkAttributes
-	 * @param {Core.Interface.MetaManager} metaManager meta attributes storage
+	 * @param {Ima.Interface.MetaManager} metaManager meta attributes storage
 	 *        providing the new values for page meta elements and title.
 	 */
 	_updateMetaLinkAttributes(metaManager) {
@@ -304,4 +304,4 @@ export default class Client extends AbstractPageRender {
 	}
 }
 
-ns.Core.Page.Render.Client = Client;
+ns.Ima.Page.Render.Client = Client;

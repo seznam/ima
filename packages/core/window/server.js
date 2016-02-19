@@ -1,16 +1,16 @@
-import ns from 'ima/core/namespace';
-import WindowInterface from 'ima/core/interface/window';
+import ns from 'ima/namespace';
+import WindowInterface from 'ima/interface/window';
 
-ns.namespace('Core.Window');
+ns.namespace('Ima.Window');
 
 /**
- * Server-side implementation of the {@code Core.Interface.Window} utility API.
+ * Server-side implementation of the {@code Ima.Interface.Window} utility API.
  *
  * @class Server
- * @implements ns.Core.Interface.Window
- * @namespace Core.Window
- * @module Core
- * @submodule Core.Window
+ * @implements ns.Ima.Interface.Window
+ * @namespace Ima.Window
+ * @module Ima
+ * @submodule Ima.Window
  */
 export default class Server extends WindowInterface {
 
@@ -225,4 +225,4 @@ export default class Server extends WindowInterface {
 	preventDefault(event) {}
 }
 
-ns.Core.Window.Server = Server;
+ns.Ima.Window.Server = Server;

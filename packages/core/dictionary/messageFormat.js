@@ -1,18 +1,18 @@
-import ns from 'ima/core/namespace';
-import IMAError from 'ima/core/imaError';
-import Dictionary from 'ima/core/interface/dictionary';
+import ns from 'ima/namespace';
+import IMAError from 'ima/imaError';
+import Dictionary from 'ima/interface/dictionary';
 
-ns.namespace('Core.Dictionary');
+ns.namespace('Ima.Dictionary');
 
 /**
- * Implementation of the {@codelink COre.Interface.Dictionary} interface that
+ * Implementation of the {@codelink Ima.Interface.Dictionary} interface that
  * relies on the MessageFormat localization messages for its dictionary.
  *
  * @class MessageFormat
- * @implements Core.Interface.Dictionary
- * @namespace Core.Dictionary
- * @module Core
- * @submodule Core.Dictionary
+ * @implements Ima.Interface.Dictionary
+ * @namespace Ima.Dictionary
+ * @module Ima
+ * @submodule Ima.Dictionary
  */
 export default class MessageFormat extends Dictionary {
 
@@ -73,7 +73,7 @@ export default class MessageFormat extends Dictionary {
 
 		for (var scopeKey of path) {
 			if (!scope[scopeKey]) {
-				throw new IMAError(`Core.Dictionary.MessageFormat.get: The ` +
+				throw new IMAError(`Ima.Dictionary.MessageFormat.get: The ` +
 						`localization phrase '${key}' does not exists`,
 						{ key, parameters });
 			}
@@ -85,4 +85,4 @@ export default class MessageFormat extends Dictionary {
 	}
 }
 
-ns.Core.Dictionary.MessageFormat = MessageFormat;
+ns.Ima.Dictionary.MessageFormat = MessageFormat;

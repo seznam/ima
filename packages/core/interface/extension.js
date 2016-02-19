@@ -1,6 +1,6 @@
-import ns from 'ima/core/namespace';
+import ns from 'ima/namespace';
 
-ns.namespace('Core.Interface');
+ns.namespace('Ima.Interface');
 
 /**
  * Interface defining the common API of component extension. A page extension is
@@ -8,9 +8,9 @@ ns.namespace('Core.Interface');
  * state according to the events submitted to it by components on the page.
  *
  * @interface Extension
- * @namespace Core.Interface
- * @module Core
- * @submodule Core.Interface
+ * @namespace Ima.Interface
+ * @module Ima
+ * @submodule Ima.Interface
  */
 export default class Extension {
 
@@ -92,7 +92,7 @@ export default class Extension {
 
 	/**
 	 * Callback for updating the extension. This method is invoked
-	 * if {@codelink Core.Router.Route} has options onlyUpdate set to true.
+	 * if {@codelink Ima.Router.Route} has options onlyUpdate set to true.
 	 * Others callbacks as {@codelink init()}, {@codelink load()},
 	 * {@codelink activate()}, {@codelink deactivate()}, {@codelink deinit()}
 	 * are not call.
@@ -141,7 +141,7 @@ export default class Extension {
 	 * Sets the state manager.
 	 *
 	 * @method setPageStateManager
-	 * @param {?Core.Interface.PageStateManager} pageStateManager The current
+	 * @param {?Ima.Interface.PageStateManager} pageStateManager The current
 	 *        state manager to use.
 	 */
 	setPageStateManager(pageStateManager) {}
@@ -172,4 +172,4 @@ export default class Extension {
 	getAllowedStateKeys() {}
 }
 
-ns.Core.Interface.Extension = Extension;
+ns.Ima.Interface.Extension = Extension;

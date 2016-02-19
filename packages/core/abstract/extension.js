@@ -1,18 +1,18 @@
-import ns from 'ima/core/namespace';
-import IMAError from 'ima/core/imaError';
-import ExtensionInterface from 'ima/core/interface/extension';
+import ns from 'ima/namespace';
+import IMAError from 'ima/imaError';
+import ExtensionInterface from 'ima/interface/extension';
 
-ns.namespace('Core.Abstract');
+ns.namespace('Ima.Abstract');
 
 /**
  * Abstract extension
  *
  * @class Extension
- * @namespace Core.Abstract
- * @module Core
- * @submodule Core.Abstract
+ * @namespace Ima.Abstract
+ * @module Ima
+ * @submodule Ima.Abstract
  *
- * @extends Core.Interface.Extension
+ * @extends Ima.Interface.Extension
  */
 export default class Extension extends ExtensionInterface {
 
@@ -28,7 +28,7 @@ export default class Extension extends ExtensionInterface {
 		 *
 		 * @property _pageStateManager
 		 * @protected
-		 * @type {Core.Interface.PageStateManager}
+		 * @type {Ima.Interface.PageStateManager}
 		 * @default null
 		 */
 		this._pageStateManager = null;
@@ -84,7 +84,7 @@ export default class Extension extends ExtensionInterface {
 	 * @method load
 	 */
 	load() {
-		throw new IMAError('The Core.Abstract.Extension.load method is ' +
+		throw new IMAError('The Ima.Abstract.Extension.load method is ' +
 				'abstract and must be overridden');
 	}
 
@@ -161,4 +161,4 @@ export default class Extension extends ExtensionInterface {
 	}
 }
 
-ns.Core.Abstract.Extension = Extension;
+ns.Ima.Abstract.Extension = Extension;

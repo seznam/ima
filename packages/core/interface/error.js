@@ -1,6 +1,6 @@
-import ns from 'ima/core/namespace';
+import ns from 'ima/namespace';
 
-ns.namespace('Core.Interface');
+ns.namespace('Ima.Interface');
 
 /**
  * The IMA.js application error extends the native {@code Error} with
@@ -8,9 +8,9 @@ ns.namespace('Core.Interface');
  * to the client.
  *
  * @interface Error
- * @namespace Core.Interface
- * @module Core
- * @submodule Core.Interface
+ * @namespace Ima.Interface
+ * @module Ima
+ * @submodule Ima.Interface
  */
 export default class Error {
 
@@ -58,4 +58,4 @@ export default class Error {
 	toString() {}
 }
 
-ns.Core.Interface.Error = Error;
+ns.Ima.Interface.Error = Error;

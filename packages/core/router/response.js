@@ -1,15 +1,15 @@
-import ns from 'ima/core/namespace';
-import IMAError from 'ima/core/imaError';
+import ns from 'ima/namespace';
+import IMAError from 'ima/imaError';
 
-ns.namespace('Core.Router');
+ns.namespace('Ima.Router');
 
 /**
  * Wrapper for the ExpressJS response, exposing only the necessary minimum.
  *
  * @class Response
- * @namespace Core.Router
- * @module Core
- * @submodule Core.Router
+ * @namespace Ima.Router
+ * @module Ima
+ * @submodule Ima.Router
  */
 export default class Response {
 
@@ -93,7 +93,7 @@ export default class Response {
 	 * @param {?Express.Response} response The ExpressJS response, or
 	 *        {@code null} if the code is running at the client side.
 	 * @param {{encode: function, decode: function}} [cookieTransformFunction={}]
-	 * @return {Core.Router.Response} This response.
+	 * @return {Ima.Router.Response} This response.
 	 */
 	init(response, cookieTransformFunction = {}) {
 		this._cookieTransformFunction = Object.assign(
@@ -123,7 +123,7 @@ export default class Response {
 	 * @param {string} url The URL to which the client should be redirected.
 	 * @param {number=} [status=302] The HTTP status code to send to the
 	 *        client.
-	 * @return {Core.Router.Response} This response.
+	 * @return {Ima.Router.Response} This response.
 	 */
 	redirect(url, status = 302) {
 		if ($Debug) {
@@ -131,7 +131,7 @@ export default class Response {
 				var params = this.getResponseParams();
 				params.url = url;
 
-				throw new IMAError('Core.Router.Response:redirect The ' +
+				throw new IMAError('Ima.Router.Response:redirect The ' +
 						'response has already been sent. Check your workflow.',
 						params);
 			}
@@ -158,14 +158,14 @@ export default class Response {
 	 * @method status
 	 * @param {number} httpStatus HTTP response status code to send to the
 	 *        client.
-	 * @return {Core.Router.Response} This response.
+	 * @return {Ima.Router.Response} This response.
 	 */
 	status(httpStatus) {
 		if ($Debug) {
 			if (this._isSent === true) {
 				var params = this.getResponseParams();
 
-				throw new IMAError('Core.Router.Response:status The ' +
+				throw new IMAError('Ima.Router.Response:status The ' +
 						'response has already been sent. Check your workflow.',
 						params);
 			}
@@ -184,7 +184,7 @@ export default class Response {
 	 * @chainable
 	 * @method send
 	 * @param {string} content The response body.
-	 * @return {Core.Router.Response} This response.
+	 * @return {Ima.Router.Response} This response.
 	 */
 	send(content) {
 		if ($Debug) {
@@ -192,7 +192,7 @@ export default class Response {
 				var params = this.getResponseParams();
 				params.content = content;
 
-				throw new IMAError('Core.Router.Response:send The response ' +
+				throw new IMAError('Ima.Router.Response:send The response ' +
 						'has already been sent. Check your workflow.', params);
 			}
 		}
@@ -217,7 +217,7 @@ export default class Response {
 	 *        attributes. Only the attributes listed in the type annotation of
 	 *        this field are supported. For documentation and full list of
 	 *        cookie attributes see http://tools.ietf.org/html/rfc2965#page-5
-	 * @return {Core.Router.Response} This response.
+	 * @return {Ima.Router.Response} This response.
 	 */
 	setCookie(name, value, options = {}) {
 		if ($Debug) {
@@ -227,7 +227,7 @@ export default class Response {
 				params.value = value;
 				params.options = options;
 
-				throw new IMAError('Core.Router.Response:setCookie The ' +
+				throw new IMAError('Ima.Router.Response:setCookie The ' +
 						'response has already been sent. Check your workflow.',
 						params);
 			}
@@ -279,4 +279,4 @@ export default class Response {
 	}
 }
 
-ns.Core.Router.Response = Response;
+ns.Ima.Router.Response = Response;

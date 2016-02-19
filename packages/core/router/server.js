@@ -1,17 +1,17 @@
-import ns from 'ima/core/namespace';
-import AbstractRouter from 'ima/core/abstract/router';
+import ns from 'ima/namespace';
+import AbstractRouter from 'ima/abstract/router';
 
-ns.namespace('Core.Router');
+ns.namespace('Ima.Router');
 
 /**
- * The server-side implementation of the {@codelink Core.Interface.Router}
+ * The server-side implementation of the {@codelink Ima.Interface.Router}
  * interface.
  *
  * @class Server
- * @extends Core.Abstract.Router
- * @namespace Core.Router
- * @module Core
- * @submodule Core.Router
+ * @extends Ima.Abstract.Router
+ * @namespace Ima.Router
+ * @module Ima
+ * @submodule Ima.Router
  */
 export default class Server extends AbstractRouter {
 
@@ -20,17 +20,17 @@ export default class Server extends AbstractRouter {
 	 *
 	 * @constructor
 	 * @method constructor
-	 * @param {Core.Interface.PageRender} pageManager The current page manager.
-	 * @param {Core.Router.Factory} factory The router factory used to create
+	 * @param {Ima.Interface.PageRender} pageManager The current page manager.
+	 * @param {Ima.Router.Factory} factory The router factory used to create
 	 *        routes.
-	 * @param {Core.Interface.Dispatcher} dispatcher Dispatcher fires events to
+	 * @param {Ima.Interface.Dispatcher} dispatcher Dispatcher fires events to
 	 *        app.
 	 * @param {{ROUTE_NAMES: Object<string, string>, EVENTS: Object<string, string>}} ROUTER_CONSTANTS
 	 *        The internal router constants. The {@code ROUTE_NAMES}
 	 *        contains internal route names. The {@code EVENTS} contains name
-	  *       of events which are fired with {@code Core.Interface.Dispatcher}.
-	 * @param {Core.Router.Request} request The current HTTP request.
-	 * @param {Core.Router.Response} response The current HTTP response.
+	  *       of events which are fired with {@code Ima.Interface.Dispatcher}.
+	 * @param {Ima.Router.Request} request The current HTTP request.
+	 * @param {Ima.Router.Response} response The current HTTP response.
 	 */
 	constructor(pageManager, factory, dispatcher, ROUTER_CONSTANTS, request,
 			response) {
@@ -41,7 +41,7 @@ export default class Server extends AbstractRouter {
 		 *
 		 * @private
 		 * @property _request
-		 * @type {Core.Router.Request}
+		 * @type {Ima.Router.Request}
 		 */
 		this._request = request;
 
@@ -50,7 +50,7 @@ export default class Server extends AbstractRouter {
 		 *
 		 * @private
 		 * @property _response
-		 * @type {Core.Router.Response}
+		 * @type {Ima.Router.Response}
 		 */
 		this._response = response;
 	}
@@ -80,4 +80,4 @@ export default class Server extends AbstractRouter {
 	}
 }
 
-ns.Core.Router.Server = Server;
+ns.Ima.Router.Server = Server;

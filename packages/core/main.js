@@ -1,13 +1,13 @@
-import ns from 'ima/core/namespace';
-import ObjectContainer from 'ima/core/objectContainer';
-import Bootstrap from 'ima/core/bootstrap';
+import ns from 'ima/namespace';
+import ObjectContainer from 'ima/objectContainer';
+import Bootstrap from 'ima/bootstrap';
 
 // Import app/config
-import { init as initBindCore } from 'ima/core/config/bind';
-import { init as initServicesCore } from 'ima/core/config/services';
+import { init as initBindIma } from 'ima/config/bind';
+import { init as initServicesIma } from 'ima/config/services';
 
-var getInitialCoreConfigFunctions = () => {
-	return { initBindCore, initServicesCore };
+var getInitialImaConfigFunctions = () => {
+	return { initBindIma, initServicesIma };
 };
 
 var getNamespace = () => {
@@ -64,7 +64,7 @@ var getClientBootConfig = (initialAppConfigFunctions) => {
 		}
 	};
 
-	return Object.assign(bootConfig, initialAppConfigFunctions(), getInitialCoreConfigFunctions());
+	return Object.assign(bootConfig, initialAppConfigFunctions(), getInitialImaConfigFunctions());
 };
 
 var getTestClientBootConfig = (initialAppConfigFunctions) => {
@@ -95,7 +95,7 @@ var getTestClientBootConfig = (initialAppConfigFunctions) => {
 		}
 	};
 
-	return Object.assign(bootConfig, initialAppConfigFunctions(), getInitialCoreConfigFunctions());
+	return Object.assign(bootConfig, initialAppConfigFunctions(), getInitialImaConfigFunctions());
 };
 
 var bootClientApp = (app, bootConfig) => {
@@ -183,7 +183,7 @@ var revivalTestClientApp = (initialAppConfigFunctions) => {
 };
 
 export {
-	getInitialCoreConfigFunctions,
+	getInitialImaConfigFunctions,
 	getNamespace,
 	createIMAJsApp,
 	getClientBootConfig,

@@ -1,14 +1,14 @@
-import ns from 'ima/core/namespace';
+import ns from 'ima/namespace';
 
-ns.namespace('Core.Interface');
+ns.namespace('Ima.Interface');
 
 /**
  * The page manager is a utility for managing rendered controller.
  *
  * @interface PageManager
- * @namespace Core.Interface
- * @module Core
- * @submodule Core.Interface
+ * @namespace Ima.Interface
+ * @module Ima
+ * @submodule Ima.Interface
  */
 export default class PageManager {
 
@@ -53,4 +53,4 @@ export default class PageManager {
 	destroy() {}
 }
 
-ns.Core.Interface.PageManager = PageManager;
+ns.Ima.Interface.PageManager = PageManager;

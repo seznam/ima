@@ -1,18 +1,18 @@
-import ns from 'ima/core/namespace';
-import IMAError from 'ima/core/imaError';
-import PageRenderInterface from 'ima/core/interface/pageRender';
+import ns from 'ima/namespace';
+import IMAError from 'ima/imaError';
+import PageRenderInterface from 'ima/interface/pageRender';
 
-ns.namespace('Core.Abstract');
+ns.namespace('Ima.Abstract');
 
 /**
  * Base class for implementations of the
- * {@codelink Core.Interface.PageRenderer} interface.
+ * {@codelink Ima.Interface.PageRenderer} interface.
  *
  * @class PageRender
- * @implements Core.Interface.PageRender
- * @namespace Core.Abstract
- * @module Core
- * @submodule Core.Abstract
+ * @implements Ima.Interface.PageRender
+ * @namespace Ima.Abstract
+ * @module Ima
+ * @submodule Ima.Abstract
  *
  * @requires Vendor.$Helper
  * @requires Vendor.React
@@ -24,7 +24,7 @@ export default class PageRender extends PageRenderInterface {
 	 *
 	 * @constructor
 	 * @method constructor
-	 * @param {Core.Page.Render.Factory} factory Factory for receive $Utils to
+	 * @param {Ima.Page.Render.Factory} factory Factory for receive $Utils to
 	 *        view.
 	 * @param {Vendor.$Helper} Helper The IMA.js helper methods.
 	 * @param {Vendor.ReactDOM} ReactDOM React framework instance, will be used to
@@ -40,7 +40,7 @@ export default class PageRender extends PageRenderInterface {
 		 *
 		 * @protected
 		 * @property _factory
-		 * @type {Core.Page.Render.Factory}
+		 * @type {Ima.Page.Render.Factory}
 		 */
 		this._factory = factory;
 
@@ -140,4 +140,4 @@ export default class PageRender extends PageRenderInterface {
 	}
 }
 
-ns.Core.Abstract.PageRender = PageRender;
+ns.Ima.Abstract.PageRender = PageRender;

@@ -1,18 +1,18 @@
-import ns from 'ima/core/namespace';
-import IMAError from 'ima/core/imaError';
-import AbstractPageRender from 'ima/core/abstract/pageRender';
+import ns from 'ima/namespace';
+import IMAError from 'ima/imaError';
+import AbstractPageRender from 'ima/abstract/pageRender';
 
-ns.namespace('Core.Page.Render');
+ns.namespace('Ima.Page.Render');
 
 /**
  * Server-side page renderer. The renderer renders the page into the HTML
  * markup and sends it to the client.
  *
  * @class Server
- * @extends Core.Abstract.PageRender
- * @namespace Core.Page.Render
- * @module Core
- * @submodule Core.Page
+ * @extends Ima.Abstract.PageRender
+ * @namespace Ima.Page.Render
+ * @module Ima
+ * @submodule Ima.Page
  */
 export default class Server extends AbstractPageRender {
 
@@ -21,16 +21,16 @@ export default class Server extends AbstractPageRender {
 	 *
 	 * @method contructor
 	 * @constructor
-	 * @param {Core.Page.Render.Factory} factory Factory for receive $Utils to
+	 * @param {Ima.Page.Render.Factory} factory Factory for receive $Utils to
 	 *        view.
 	 * @param {Vendor.$Helper} Helper The IMA.js helper methods.
 	 * @param {Vendor.ReactDOMServer} ReactDOMServer React framework instance
 	 *        to use to render the page on the server side.
 	 * @param {Object<string, *>} settings Application setting for the current
 	 *        application environment.
-	 * @param {Core.Router.Response} response Utility for sending the page
+	 * @param {Ima.Router.Response} response Utility for sending the page
 	 *        markup to the client as a response to the current HTTP request.
-	 * @param {Core.Interface.Cache} cache Resource cache caching the results
+	 * @param {Ima.Interface.Cache} cache Resource cache caching the results
 	 *        of HTTP requests made by services used by the rendered page.
 	 */
 	constructor(factory, Helper, ReactDOMServer, settings, response, cache) {
@@ -42,7 +42,7 @@ export default class Server extends AbstractPageRender {
 		 *
 		 * @private
 		 * @property _response
-		 * @type {Core.Router.Response}
+		 * @type {Ima.Router.Response}
 		 */
 		this._response = response;
 
@@ -54,7 +54,7 @@ export default class Server extends AbstractPageRender {
 		 *
 		 * @private
 		 * @property _cache
-		 * @type {Core.Interface.Cache}
+		 * @type {Ima.Interface.Cache}
 		 */
 		this._cache = cache;
 
@@ -162,7 +162,7 @@ export default class Server extends AbstractPageRender {
 	 *
 	 * @private
 	 * @method _renderPage
-	 * @param {Core.Abstract.Controller} controller
+	 * @param {Ima.Abstract.Controller} controller
 	 * @param {Vendor.React.Component} view
 	 * @param {Object<string, *>} fetchedResources
 	 * @return {{content: string, status: number}}
@@ -185,7 +185,7 @@ export default class Server extends AbstractPageRender {
 	 *
 	 * @private
 	 * @method _renderPageContentToString
-	 * @param {Core.Abstract.Controller} controller
+	 * @param {Ima.Abstract.Controller} controller
 	 * @param {Vendor.React.Component} view
 	 * @return {string}
 	 */
@@ -207,4 +207,4 @@ export default class Server extends AbstractPageRender {
 	}
 }
 
-ns.Core.Page.Render.Server = Server;
+ns.Ima.Page.Render.Server = Server;

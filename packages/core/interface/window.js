@@ -1,6 +1,6 @@
-import ns from 'ima/core/namespace';
+import ns from 'ima/namespace';
 
-ns.namespace('Core.Interface');
+ns.namespace('Ima.Interface');
 
 /**
  * The {@codelink Window} interface defines the API for a utility for easier
@@ -8,9 +8,9 @@ ns.namespace('Core.Interface');
  * available through various global objects.
  *
  * @interface Window
- * @namespace Core.Interface
- * @module Core
- * @submodule Core.Interface
+ * @namespace Ima.Interface
+ * @module Ima
+ * @submodule Ima.Interface
  */
 export default class Window {
 
@@ -275,4 +275,4 @@ export default class Window {
 	preventDefault(event) {}
 }
 
-ns.Core.Interface.Window = Window;
+ns.Ima.Interface.Window = Window;

@@ -1,18 +1,18 @@
-import ns from 'ima/core/namespace';
-import * as errorImplementation from 'ima/core/abstract/imaError';
-import ErrorInterface from 'ima/core/interface/error';
+import ns from 'ima/namespace';
+import * as errorImplementation from 'ima/abstract/imaError';
+import ErrorInterface from 'ima/interface/error';
 
-ns.namespace('Core');
+ns.namespace('Ima');
 
 /**
- * Implementation of the Core.Interface.Error interface, providing more
+ * Implementation of the Ima.Interface.Error interface, providing more
  * advanced error API.
  *
  * @class IMAErrorES6
  * @extends Error
- * @implements Core.Interface.Error
- * @namespace Core
- * @module Core
+ * @implements Ima.Interface.Error
+ * @namespace Ima
+ * @module Ima
  */
 export default class IMAErrorES6 extends Error {
 
@@ -110,4 +110,4 @@ export default class IMAErrorES6 extends Error {
 	}
 }
 
-ns.Core.IMAErrorES6 = IMAErrorES6;
+ns.Ima.IMAErrorES6 = IMAErrorES6;
