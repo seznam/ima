@@ -4,7 +4,7 @@ module.exports = (() => {
 		'ima/**/!(vendor|imaError.es6).js'
 	];
 
-	var mainjs = ['ima/client/main.js'];
+	var mainjs = ['ima/main.js'];
 
 	return {
 		js: js,
