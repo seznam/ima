@@ -134,6 +134,10 @@ export default class Handler extends Cache {
 	 * @method set
 	 */
 	set(key, value, ttl = null) {
+		if (!this._enabled) {
+			return;
+		}
+
 		var cacheEntry = this._factory
 				.createCacheEntry(this._clone(value), ttl || this._ttl);
 
@@ -154,6 +158,7 @@ export default class Handler extends Cache {
 	 */
 	disable() {
 		this._enabled = false;
+		this.clear();
 	}
 
 	/**
@@ -247,7 +252,8 @@ export default class Handler extends Cache {
 	 * @return {*}
 	 */
 	_clone(value) {
-		if (value !== null &&
+		if (
+			value !== null &&
 			typeof value === 'object' &&
 			!(value instanceof Promise)
 		) {
