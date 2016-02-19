@@ -6,7 +6,7 @@ ns.namespace('Ima.Dictionary');
 
 /**
  * Implementation of the {@codelink Ima.Interface.Dictionary} interface that
- * relies on the MessageFormat localization messages for its dictionary.
+ * relies on compiled MessageFormat localization messages for its dictionary.
  *
  * @class MessageFormat
  * @implements Ima.Interface.Dictionary
@@ -22,13 +22,14 @@ export default class MessageFormat extends Dictionary {
 	 * @constructor
 	 * @method constructor
 	 * @example
-	 * 		dictionary.get('home.hello', {GENDER: 'MALE'});
+	 * 		dictionary.get('home.hello', {GENDER: 'UNSPECIFIED'});
 	 */
 	constructor() {
 		super();
 
 		/**
-		 * Application language.
+		 * The language of the phrases in the dictionary, represented as a
+		 * ISO 639-1 language code.
 		 *
 		 * @private
 		 * @property _language
@@ -49,6 +50,14 @@ export default class MessageFormat extends Dictionary {
 	/**
 	 * @inheritdoc
 	 * @method init
+	 * @param {{language: string, dictionary: Object<string, Object<string, function(Object<string, (number|string)>): string>>}} config
+	 *        The dictionary field contains the localization phrases organized
+	 *        in a deep plain object map. The top-level key is the name of the
+	 *        phrase group, the bottom-level key is the phrase key. The
+	 *        bottom-level value is the localization phrase generator that
+	 *        takes the phrase placeholder values map as an argument and
+	 *        produces the localization phrase with its placeholders evaluated
+	 *        using the provided placeholder values.
 	 */
 	init(config) {
 		this._language = config.language;
@@ -66,6 +75,11 @@ export default class MessageFormat extends Dictionary {
 	/**
 	 * @inheritdoc
 	 * @method get
+	 * @param {string} key The key identifying the localization phrase. The key
+	 *        consists of at least two parts separated by dots. The first part
+	 *        denotes the name of the source JSON localization file, while the
+	 *        rest denote a field path within the localization object within
+	 *        the given localization file.
 	 */
 	get(key, parameters = {}) {
 		var path = key.split('.');
