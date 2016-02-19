@@ -1,10 +1,10 @@
-import ns from 'imajs/client/core/namespace';
-import ObjectContainer from 'imajs/client/core/objectContainer';
-import Bootstrap from 'imajs/client/core/bootstrap';
+import ns from 'ima/core/namespace';
+import ObjectContainer from 'ima/core/objectContainer';
+import Bootstrap from 'ima/core/bootstrap';
 
 // Import app/config
-import { init as initBindCore } from 'imajs/client/core/config/bind';
-import { init as initServicesCore } from 'imajs/client/core/config/services';
+import { init as initBindCore } from 'ima/core/config/bind';
+import { init as initServicesCore } from 'ima/core/config/services';
 
 var getInitialCoreConfigFunctions = () => {
 	return { initBindCore, initServicesCore };
