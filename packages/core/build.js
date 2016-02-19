@@ -1,7 +1,8 @@
 module.exports = (() => {
 
 	var js = [
-		'ima/**/!(vendor|imaError.es6).js'
+		'ima/**/!(vendor|build|test|imaError.es6|*Spec).js',
+		'!ima/polyfill/*.js'
 	];
 
 	var mainjs = ['ima/main.js'];
