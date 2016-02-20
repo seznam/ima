@@ -7,6 +7,10 @@ ns.namespace('Ima.Interface');
  * and allows distributing (firing) events to the listeners registered for the
  * given event.
  *
+ * The dispatcher provides a single-node event bus and is usually used to
+ * propagate events from controllers to UI components when modifying/passing
+ * the state is impractical for any reason.
+ *
  * @interface Dispatcher
  * @namespace Ima.Interface
  * @module Ima
@@ -14,10 +18,9 @@ ns.namespace('Ima.Interface');
  */
 export default class Dispatcher {
 	/**
-	 * Unregisters all event listeners currently registered with this
+	 * Deregisters all event listeners currently registered with this
 	 * dispatcher.
 	 *
-	 * @chainable
 	 * @method clear
 	 * @return {Ima.Interface.Dispatcher} This dispatcher.
 	 */
@@ -34,7 +37,6 @@ export default class Dispatcher {
 	 * and should not be relied upon. Registering the same listener for the
 	 * same event and with the same scope multiple times has no effect.
 	 *
-	 * @chainable
 	 * @method listen
 	 * @param {string} event The name of the event to listen for.
 	 * @param {function(*)} listener The event listener to register.
@@ -45,18 +47,16 @@ export default class Dispatcher {
 	listen(event, listener, scope = null) {}
 
 	/**
-	 * Unregistered the provided event listener, so it will no longer be
+	 * Deregisters the provided event listener, so it will no longer be
 	 * executed with the specified scope when the specified event is fired.
 	 *
-	 * @chainable
 	 * @method unlisten
 	 * @param {string} event The name of the event for which the listener
-	 *        should be unregistered.
-	 * @param {function(*)} listener The event listener to unregister.
+	 *        should be deregistered.
+	 * @param {function(*)} listener The event listener to deregister.
 	 * @param {?Object=} scope The object to which the {@code this} keyword
 	 *        would be bound in the event listener.
 	 * @return {Ima.Interface.Dispatcher} This dispatcher.
-	 * @throws {Error} Thrown if there is no such listener registered.
 	 */
 	unlisten(event, listener, scope = null) {}
 
@@ -64,7 +64,8 @@ export default class Dispatcher {
 	 * Fires a new event of the specified name, carrying the provided data.
 	 *
 	 * The method will synchronously execute all event listeners registered for
-	 * the specified event, passing the provided data to them in arguments.
+	 * the specified event, passing the provided data to them as the first
+	 * argument.
 	 *
 	 * Note that this method does not prevent the event listeners to modify the
 	 * data in any way. The order in which the event listeners will be executed
@@ -74,11 +75,12 @@ export default class Dispatcher {
 	 * @method fire
 	 * @param {string} event The name of the event to fire.
 	 * @param {Object<string, *>} data The data to pass to the event listeners.
-	 * @param {boolean=} [imaInternalEvent=false] The flag specify that defined
-	 *        event is $IMA internal or usually application event.
+	 * @param {boolean=} [imaInternalEvent=false] The flag signalling whether
+	 *        this is an internal IMA event. The fired event is treated as a
+	 *        custom application event if this flag is not set.
+	 *        The flag is used only for debugging and has no effect on the
+	 *        propagation of the event.
 	 * @return {Ima.Interface.Dispatcher} This dispatcher.
-	 * @throws {Error} Thrown if there is no event listener registered for the
-	 *         specified event.
 	 */
 	fire(event, data, imaInternalEvent = false) {}
 }

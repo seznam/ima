@@ -71,21 +71,24 @@ export default class Bus extends EventBus {
 	 * @inheritdoc
 	 * @method fire
 	 */
-	fire(eventSource, eventName, data, options = {}) {
-		var eventInit = {};
+	fire(eventTarget, eventName, data, options = {}) {
+		var eventInitialization = {};
 		var params = { detail: { eventName, data } };
 		var defaultOptions = { bubbles: true, cancelable: true };
-		Object.assign(eventInit, defaultOptions, options, params);
+		Object.assign(eventInitialization, defaultOptions, options, params);
 
-		var e = this._window.createCustomEvent(IMA_EVENT, eventInit);
+		var event = this._window.createCustomEvent(
+			IMA_EVENT,
+			eventInitialization
+		);
 
-		if (eventSource && typeof eventSource.dispatchEvent !== 'undefined') {
-			eventSource.dispatchEvent(e);
+		if (eventTarget && typeof eventTarget.dispatchEvent !== 'undefined') {
+			eventTarget.dispatchEvent(event);
 		} else {
 			throw new IMAError(`Ima.Event.Bus.fire: The EventSource ` +
-					`${eventSource} is not defined or can not dispatch ` +
+					`${eventTarget} is not defined or can not dispatch ` +
 					`event '${eventName}' (data: ${data}).`,
-					{ eventSource, eventName, data, eventInit });
+					{ eventTarget, eventName, data, eventInitialization });
 		}
 
 		return this;

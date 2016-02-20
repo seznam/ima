@@ -3,9 +3,19 @@ import ns from 'ima/namespace';
 ns.namespace('Ima.Interface');
 
 /**
- * Interface defining the common API of component extension. A page extension is
- * used to manage the component state and component logic, and updates the component
- * state according to the events submitted to it by components on the page.
+ * Extensions provide means of extending the page controllers with additional
+ * managed state and logic.
+ *
+ * An extension has access to the current route parameters, specify the
+ * resources to load when the page is loading or being updated, may intercept
+ * event bus events and modify the state of the page just like an ordinary
+ * controller, except that the modifications are restricted to the state fields
+ * which the extension explicitly specifies using its
+ * {@linkcode getAllowedStateKeys()} method.
+ *
+ * All extensions to be used on a page must be added to the current controller
+ * before the controller is initialized. After that, the extensions will go
+ * through the same lifecycle as the controller.
  *
  * @interface Extension
  * @namespace Ima.Interface
@@ -15,21 +25,25 @@ ns.namespace('Ima.Interface');
 export default class Extension {
 
 	/**
-	 * Callback for initializing the extension with the route parameters.
+	 * Callback for initializing the controller extension after the route
+	 * parameters have been set on this extension.
 	 *
 	 * @method init
 	 */
 	init() {}
 
 	/**
-	 * Finalization callback, called when the extension is being discarded by
+	 * Finalization callback, called when the controller is being discarded by
 	 * the application. This usually happens when the user navigates to a
 	 * different URL.
 	 *
-	 * The extension should unregister all resource registered in the
-	 * {@codelink init()} method. The extension must also release any
-	 * resources that might not be released automatically when the extension
-	 * instance is destroyed by the garbage collector.
+	 * This method is the lifecycle counterpart of the {@linkcode init()}
+	 * method.
+	 *
+	 * The extension should release all resources obtained in the
+	 * {@codelink init()} method. The extension must release any resources
+	 * that might not be released automatically when the extensions's instance
+	 * is destroyed by the garbage collector.
 	 *
 	 * @method destroy
 	 */
@@ -37,12 +51,13 @@ export default class Extension {
 
 	/**
 	 * Callback for activating the extension in the UI. This is the last
-	 * method invoked during extension initialization, called after all the
-	 * promises returned from the {@codelink load()} method has been resolved.
+	 * method invoked during controller (and extensions) initialization, called
+	 * after all the promises returned from the {@codelink load()} method have
+	 * been resolved and the controller has configured the meta manager.
 	 *
-	 * The extension may register in this method any React and DOM event
-	 * listeners the extension may need to handle the user interaction with
-	 * the page.
+	 * The extension may register any React and DOM event listeners in this
+	 * method. The extension may start receiving event bus event after this
+	 * method completes.
 	 *
 	 * @method activate
 	 */
@@ -53,8 +68,11 @@ export default class Extension {
 	 * method invoked during extension deinitialization. This usually happens
 	 * when the user navigates to a different URL.
 	 *
-	 * The extension should unregister all React and DOM event listeners the
-	 * extension has registered in the {@codelink active()} method.
+	 * This method is the lifecycle counterpart of the {@linkcode activate()}
+	 * method.
+	 *
+	 * The extension should deregister listeners registered and release all
+	 * resources obtained in the {@codelink activate()} method.
 	 *
 	 * @method deactivate
 	 */
@@ -62,83 +80,83 @@ export default class Extension {
 
 	/**
 	 * Callback the extension uses to request the resources it needs to render
-	 * its view. This method is invoked after the {@codelink init()} method.
+	 * its related parts of the view. This method is invoked after the
+	 * {@codelink init()} method.
 	 *
 	 * The extension should request all resources it needs in this method, and
 	 * represent each resource request as a promise that will resolve once the
-	 * resource is ready for use (these can be data fetch over HTTP(S),
+	 * resource is ready for use (these can be data fetched over HTTP(S),
 	 * database connections, etc).
 	 *
-	 * The extension must return a map object. The field names of the object
-	 * identify the resources being fetched and prepared, the values must be
-	 * the Promises that resolve when the resources are ready to be used.
+	 * The method must return a plain flat object. The field names of the
+	 * object identify the resources being fetched and prepared, each value
+	 * must be either the resource (e.g. view configuration or a value
+	 * retrieved synchronously) or a Promise that will resolve to the resource.
 	 *
-	 * The returned map object may also contain fields that have non-Promise
-	 * value. These can be used to represent static data, or initial value of
-	 * extension's state that will change due to user interaction, or resource
-	 * that has been immediately available (for example fetched from the DOM
-	 * storage).
+	 * The IMA will use the object to set the state of the controller.
 	 *
-	 * The system will wait for all promises to resolve, and then push them to
-	 * the extension's state using the field names used in the returned map
-	 * object.
+	 * Any returned promise that gets rejected will redirect the application to
+	 * the error page. The error page that will be used depends on the status
+	 * code of the error.
 	 *
 	 * @method load
 	 * @return {Object<string, (Promise|*)>} A map object of promises
 	 *         resolved when all resources the extension requires are ready.
-	 *         The resolved values will be pushed to the extension's state.
+	 *         The resolved values will be pushed to the controller's state.
 	 */
 	load() {}
 
 	/**
-	 * Callback for updating the extension. This method is invoked
-	 * if {@codelink Ima.Router.Route} has options onlyUpdate set to true.
-	 * Others callbacks as {@codelink init()}, {@codelink load()},
-	 * {@codelink activate()}, {@codelink deactivate()}, {@codelink deinit()}
-	 * are not call.
+	 * Callback for updating the extension after a route update. This method
+	 * is invoked if the current route has the {@code onlyUpdate} flag set to
+	 * {@code true} and the current controller and view match those used by the
+	 * previously active route, or, the {@code onlyUpdate} option of the
+	 * current route is a callback and returned {@code true}.
 	 *
-	 * @inheritdoc
-	 * @override
+	 * The method must return an object with the same semantics as the result
+	 * of the {@codelink load()} method. The controller's state will then be
+	 * patched by the returned object.
+	 *
+	 * The other extension lifecycle callbacks ({@codelink init()},
+	 * {@codelink load()}, {@codelink activate()}, {@codelink deactivate()},
+	 * {@codelink deinit()}) are not call in case this method is used.
+	 *
 	 * @method update
-	 * @param {Object<string, string>=} [prevParams={}] Previous route params.
+	 * @param {Object<string, string>=} [prevParams={}] Previous route
+	 *        parameters.
 	 * @return {Object<string, (Promise|*)>} A map object of promises
 	 *         resolved when all resources the extension requires are ready.
-	 *         The resolved values will be pushed to the extension's state.
+	 *         The resolved values will be pushed to the controller's state.
 	 */
 	update(prevParams = {}) {}
 
 	/**
-	 * Patches the state of this extension using the provided object by
-	 * copying the provided patch object fields to the extension's state
-	 * object.
-	 *
-	 * You can use this method to modify the state partially or add new fields
-	 * to the state object.
+	 * Patches the state of the controller using this extension by using the
+	 * provided object by copying the provided patch object fields to the
+	 * controller's state object.
 	 *
 	 * Note that the state is not patched recursively but by replacing the
 	 * values of the top-level fields of the state object.
 	 *
-	 * Once the promises returned by the {@codelink load} method are resolved,
-	 * this method is called with the an object containing the resolved values.
-	 * The field names of the passed value-containing object will match the
-	 * field names in the object returned from the {@codelink load} method.
+	 * Note that the extension may modify only the fields of the state that it
+	 * has specified by its {@linkcode getAllowedStateKeys} method.
 	 *
 	 * @method setState
-	 * @param {Object<string, *>} statePatch Patch of the extension's state to
+	 * @param {Object<string, *>} statePatch Patch of the controller's state to
 	 *        apply.
 	 */
 	setState(statePatch) {}
 
 	/**
-	 * Returns the extension's current state.
+	 * Returns the current state of the controller using this extension.
 	 *
 	 * @method getState
-	 * @return {Object<string, *>} The current state of this extension.
+	 * @return {Object<string, *>} The current state of the controller.
 	 */
 	getState() {}
 
 	/**
-	 * Sets the state manager.
+	 * Sets the state manager used to manage the controller's state..
 	 *
 	 * @method setPageStateManager
 	 * @param {?Ima.Interface.PageStateManager} pageStateManager The current
@@ -147,7 +165,8 @@ export default class Extension {
 	setPageStateManager(pageStateManager) {}
 
 	/**
-	 * Set route parameters for extension.
+	 * Sets the current route parameters. This method is invoked before the
+	 * {@code init()} method.
 	 *
 	 * @method setRouteParams
 	 * @param {Object<string, string>} [params={}] The current route
@@ -156,7 +175,7 @@ export default class Extension {
 	setRouteParams(params = {}) {}
 
 	/**
-	 * Set route parameters for extension.
+	 * Returns the current route parameters.
 	 *
 	 * @method getRouteParams
 	 * @return {Object<string, string>} The current route parameters.
@@ -164,10 +183,12 @@ export default class Extension {
 	getRouteParams() {}
 
 	/**
-	 * Returns array of allowed state keys for extension.
+	 * Returns the names of the state fields that may be manipulated by this
+	 * extension. Manipulations of other fields of the state will be ignored.
 	 *
 	 * @method getAllowedStateKeys
-	 * @return {string[]} The allowed state keys.
+	 * @return {string[]} The names of the state fields that may be manipulated
+	 *         by this extension.
 	 */
 	getAllowedStateKeys() {}
 }

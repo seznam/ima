@@ -3,9 +3,9 @@ import ns from 'ima/namespace';
 ns.namespace('Ima.Interface');
 
 /**
- * The IMA.js application error extends the native {@code Error} with
- * additional details that lead to the error and the HTTP status code to send
- * to the client.
+ * The IMA application error extends the native {@code Error} with additional
+ * details that lead to the error and the HTTP status code to send to the
+ * client.
  *
  * @interface Error
  * @namespace Ima.Interface
@@ -16,6 +16,9 @@ export default class Error {
 
 	/**
 	 * Returns the HTTP status to send to the client.
+	 *
+	 * If the error occurs at the client-side, the status code is used to
+	 * determine the error page to show to the user.
 	 *
 	 * This method is a shorthand for the following code snippet:
 	 * {@code this.getParams().status || 500}.
@@ -28,14 +31,15 @@ export default class Error {
 
 	/**
 	 * Returns the error parameters providing additional details about the
-	 * error. The structure of the returned object is always situation
-	 * dependent, but the returned object usually contains the
+	 * error. The structure of the returned object is always
+	 * situation-dependent, but the returned object usually contains the
 	 * {@code status: number} field which represents the HTTP status to send to
 	 * the client.
 	 *
 	 * @method getParams
 	 * @return {Object<string, *>} The route parameters of the route at which
 	 *         the error has occurred.
+	 * @see getHttpStatus
 	 */
 	getParams() {}
 
@@ -49,7 +53,7 @@ export default class Error {
 
 	/**
 	 * Returns a string representing this error. The string will consist of the
-	 * error name and message.
+	 * error name and the accompanying message.
 	 *
 	 * @override
 	 * @method toString
