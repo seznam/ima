@@ -14,7 +14,7 @@ describe('Ima.Page.StateManager', function() {
 		stateManager.clear();
 
 		expect(stateManager._states.length).toEqual(0);
-		expect(stateManager._cursor).toEqual(0);
+		expect(stateManager._cursor).toEqual(-1);
 	});
 
 	describe('getState method', function() {

@@ -3,6 +3,8 @@ import PageStateManager from 'ima/interface/pageStateManager';
 
 ns.namespace('Ima.Page');
 
+const MAX_HISTORY_LIMIT = 10;
+
 /**
  * Class for app state.
  *
@@ -35,15 +37,7 @@ export default class StateManager extends PageStateManager {
 		 * @type {Number}
 		 * @default 0
 		 */
-		this._cursor = 0;
-
-		/**
-		 * @property MAX_HISTORY_LIMIT
-		 * @const
-		 * @type {Number}
-		 * @default 10
-		 */
-		this.MAX_HISTORY_LIMIT = 10;
+		this._cursor = -1;
 
 		/**
 		 * @property onChange
@@ -61,7 +55,7 @@ export default class StateManager extends PageStateManager {
 	 */
 	clear() {
 		this._states = [];
-		this._cursor = 0;
+		this._cursor = -1;
 	}
 
 	/**
@@ -81,7 +75,7 @@ export default class StateManager extends PageStateManager {
 	 * @method getState
 	 */
 	getState() {
-		return this._states[this._cursor - 1] || {};
+		return this._states[this._cursor] || {};
 	}
 
 	/**
@@ -100,7 +94,7 @@ export default class StateManager extends PageStateManager {
 	 * @method _eraseExcessHistory
 	 */
 	_eraseExcessHistory() {
-		if (this._states.length > this.MAX_HISTORY_LIMIT) {
+		if (this._states.length > MAX_HISTORY_LIMIT) {
 			this._states.shift();
 			this._cursor -= 1;
 		}
