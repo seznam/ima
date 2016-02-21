@@ -3,7 +3,7 @@ import ns from 'ima/namespace';
 ns.namespace('Ima.Interface');
 
 /**
- * Page state.
+ * Manager of the current page state and state history.
  *
  * @interface PageStateManager
  * @namespace Ima.Interface
@@ -13,33 +13,38 @@ ns.namespace('Ima.Interface');
 export default class PageStateManager {
 
 	/**
-	 * Clear history.
+	 * Clears the state history.
 	 *
 	 * @method clear
 	 */
 	clear() {}
 
 	/**
-	 * Set new state as smooth copy last state and state patch.
+	 * Sets a new page state by applying the provided patch to the current
+	 * state.
 	 *
 	 * @method setState
-	 * @param {Object<string, *>} statePatch
+	 * @param {Object<string, *>} statePatch The patch of the current state.
 	 */
 	setState(statePatch) {}
 
 	/**
-	 * Returns page state.
+	 * Returns the current page state.
 	 *
 	 * @method getState
-	 * @return {Object<string, *>}
+	 * @return {Object<string, *>} The current page state.
 	 */
 	getState() {}
 
 	/**
-	 * Return all history of states.
+	 * Returns the recorded history of page states. The states will be
+	 * chronologically sorted from the oldest to the newest.
+	 *
+	 * Note that the implementation may limit the size of the recorded history,
+	 * therefore the complete history may not be available.
 	 *
 	 * @method getAllStates
-	 * @return {Array<Object<string, *>>}
+	 * @return {Array<Object<string, *>>} The recorded history of page states.
 	 */
 	getAllStates() {}
 

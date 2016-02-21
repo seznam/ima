@@ -86,7 +86,7 @@ export default class PageRender extends PageRenderInterface {
 	 * @abstract
 	 * @method mount
 	 */
-	mount(controller, view, loadedPageState) { // jshint ignore:line
+	mount(controller, view, pageResources) {
 		throw new IMAError('The mount() method is abstract and must be ' +
 				'overridden.');
 	}
@@ -95,7 +95,7 @@ export default class PageRender extends PageRenderInterface {
 	 * @inheritdoc
 	 * @method update
 	 */
-	update(controller, updatedPageState) {
+	update(controller, resourcesUpdate) {
 		throw new IMAError('The update() method is abstract and must be ' +
 				'overridden.');
 	}

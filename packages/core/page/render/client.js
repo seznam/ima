@@ -69,8 +69,8 @@ export default class Client extends AbstractPageRender {
 	 * @abstract
 	 * @method mount
 	 */
-	mount(controller, view, loadedPageState) {
-		var separatedData = this._separatePromisesAndValues(loadedPageState);
+	mount(controller, view, pageResources) {
+		var separatedData = this._separatePromisesAndValues(pageResources);
 		var defaultPageState = separatedData.values;
 		var loadedPromises = separatedData.promises;
 
@@ -108,8 +108,8 @@ export default class Client extends AbstractPageRender {
 	 * @inheritdoc
 	 * @method update
 	 */
-	update(controller, updatedPageState) {
-		var separatedData = this._separatePromisesAndValues(updatedPageState);
+	update(controller, resourcesUpdate) {
+		var separatedData = this._separatePromisesAndValues(resourcesUpdate);
 		var defaultPageState = separatedData.values;
 		var updatedPromises = separatedData.promises;
 

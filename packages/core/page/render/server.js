@@ -65,14 +65,14 @@ export default class Server extends AbstractPageRender {
 	 * @abstract
 	 * @method mount
 	 */
-	mount(controller, view, loadedPageState) {
+	mount(controller, view, pageResources) {
 		if (this._response.isResponseSent()) {
 			return Promise.resolve(this._response.getResponseParams());
 		}
 
 		return (
 			this._Helper
-				.allPromiseHash(loadedPageState)
+				.allPromiseHash(pageResources)
 				.then((fetchedResources) => {
 					return this._renderPage(controller, view, fetchedResources);
 				})
@@ -83,7 +83,7 @@ export default class Server extends AbstractPageRender {
 	 * @inheritdoc
 	 * @method update
 	 */
-	update(controller, updatedPageState) {
+	update(controller, resourcesUpdate) {
 		return Promise.reject(new IMAError(
 			'The update() is denied on server side.'
 		));
@@ -94,9 +94,7 @@ export default class Server extends AbstractPageRender {
 	 * @method unmount
 	 */
 	unmount() {
-		if (this._reactiveView) {
-			this._reactiveView = null;
-		}
+		// nothing to do
 	}
 
 	/**

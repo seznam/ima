@@ -4,15 +4,16 @@ ns.namespace('Ima.Interface');
 
 /**
  * The Meta manager is a utility for managing various page attributes related
- * to the SEO (search engine optimization).
+ * to the SEO (search engine optimization) and social network integration.
  *
  * The Meta manager is used to manage the following:
- * - page title, added to the page via the {@code &lt;title&gt;} element
- * - page link, added to the page via the {@code &lt;link&gt;} element
+ * - page title, set using the contents of the {@code &lt;title&gt;} element
+ * - page links, linking related documents and meta-information, added to the
+ *   using {@code &lt;link&gt;} elements
  * - page meta information:
- *   - the generic meta information added to the page via {@code &lt;meta&gt;}
- *     elements with the {@code name} attribute, for example the
- *     {@code keywords}.
+ *   - the generic named meta information added to the page via
+ *     {@code &lt;meta&gt;} elements with the {@code name} attribute, for
+ *     example the {@code keywords}.
  *   - specialized meta information added to the page via {@code &lt;meta&gt;}
  *     elements with the {@code property} attribute, for example the OG meta
  *     tags ({@code og:type}, {@code og:image}, etc.).
@@ -35,64 +36,71 @@ export default class MetaManager {
 	 * Returns the page title. The method returns an empty string if no page
 	 * title has been set yet.
 	 *
+	 * Note that the page title is cached internally by the meta manager and
+	 * may therefore differ from the current document title if it has been
+	 * modified by a 3rd party code.
+	 *
 	 * @method getTitle
-	 * @return {string} The paget title currently stored in this meta manager.
+	 * @return {string} The current page title.
 	 */
 	getTitle() {}
 
 	/**
-	 * Set the specified generic meta information.
+	 * Set the specified named meta information property.
 	 *
 	 * @method setMetaName
-	 * @param {string} name Meta information name, for example
+	 * @param {string} name Meta information property name, for example
 	 *        {@code keywords}.
 	 * @param {string} value The meta information value.
 	 */
 	setMetaName(name, value) {}
 
 	/**
-	 * Returns the value of the specified generic meta information. The method
-	 * returns an empty string for missing meta information (to make the
+	 * Returns the value of the specified named meta information property. The
+	 * method returns an empty string for missing meta information (to make the
 	 * returned value React-friendly).
 	 *
 	 * @method getMetaName
-	 * @param {string} name The name of the generic meta information.
+	 * @param {string} name The name of the named meta information property.
 	 * @return {string} The value of the generic meta information, or an empty
 	 *         string.
 	 */
 	getMetaName(name) {}
 
 	/**
-	 * Returns array of specified generic meta information.
+	 * Returns the names of the currently specified named meta information
+	 * properties.
 	 *
 	 * @method getMetaNames
-	 * @return {Array<string>}
+	 * @return {string[]}
 	 */
 	getMetaNames() {}
 
 	/**
-	 * Sets the specified specialized meta information.
+	 * Sets the specified specialized meta information property.
 	 *
 	 * @method setMetaProperty
-	 * @param {string} name Name of the specialized meta information.
-	 * @param {string} value The value of the meta information.
+	 * @param {string} name Name of the specialized meta information property.
+	 * @param {string} value The value of the meta information property.
 	 */
 	setMetaProperty(name, value) {}
 
 	/**
-	 * Returns the value of the specified specialized meta information. The
-	 * method returns an empty string for missing meta information (to make the
-	 * returned value React-friendly).
+	 * Returns the value of the specified specialized meta information
+	 * property. The method returns an empty string for missing meta
+	 * information (to make the returned value React-friendly).
 	 *
 	 * @method getMetaProperty
-	 * @param {string} name The name of the specialized meta information.
+	 * @param {string} name The name of the specialized meta information
+	 *        property.
 	 * @return {string} The value of the specified meta information, or an
 	 *         empty string.
 	 */
 	getMetaProperty(name) {}
 
 	/**
-	 * Returns array of specified specialized meta information.
+	 * Returns the names of the currently specified specialized meta
+	 * information properties.
 	 *
 	 * @method getMetaProperties
 	 * @return {Array<string>}
@@ -103,28 +111,32 @@ export default class MetaManager {
 	 * Sets the specified specialized link information.
 	 *
 	 * @method setLink
-	 * @param {string} name The names of the currently known specialized link
-	 *         information.
-	 * @param {string} value The value of the link information.
+	 * @param {string} relation The relation of the link target to the current
+	 *        page.
+	 * @param {string} reference The reference to the location of the related
+	 *        document, e.g. a URL.
 	 */
-	setLink(name, value) {}
+	setLink(relation, reference) {}
 
 	/**
-	 * Returns the value of the specified specialized link information. The
+	 * Return the reference to the specified related linked document. The
 	 * method returns an empty string for missing meta information (to make the
 	 * returned value React-friendly).
 	 *
 	 * @method getLink
-	 * @return {string} The value of the specified link information, or an
-	 *         empty string.
+	 * @param {string} relation The relation of the link target to the current
+	 *        page.
+	 * @return {string} The reference to the location of the related document,
+	 *         e.g. a URL.
 	 */
-	getLink(name) {}
+	getLink(relation) {}
 
 	/**
-	 * Returns array of specified specialized link information.
+	 * Returns the relations of the currently set related documents linked to
+	 * the current page.
 	 *
 	 * @method getLinks
-	 * @return {Array<string>}
+	 * @return {string[]}
 	 */
 	getLinks() {}
 }

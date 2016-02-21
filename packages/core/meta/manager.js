@@ -126,16 +126,16 @@ export default class Manager extends MetaManager {
 	 * @inheritdoc
 	 * @method setLink
 	 */
-	setLink(name, value) {
-		this._link.set(name, value);
+	setLink(relation, value) {
+		this._link.set(relation, value);
 	}
 
 	/**
 	 * @inheritdoc
 	 * @method getLink
 	 */
-	getLink(name) {
-		return this._link.get(name) || '';
+	getLink(relation) {
+		return this._link.get(relation) || '';
 	}
 
 	/**
