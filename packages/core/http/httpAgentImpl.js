@@ -1,25 +1,25 @@
 import ns from 'ima/namespace';
 import IMAError from 'ima/imaError';
-import HttpAgent from 'ima/interface/httpAgent';
+import HttpAgentInterface from 'ima/http/httpAgent';
 
 ns.namespace('Ima.Http');
 
 /**
- * Implementation of the {@codelink Ima.Interface.HttpAgent} interface with
+ * Implementation of the {@codelink Ima.Http.HttpAgent} interface with
  * internal caching of completed and ongoing HTTP requests and cookie storage.
  *
- * @class Agent
- * @implements Ima.Interface.HttpAgent
+ * @class httpAgentImpl
+ * @implements Ima.Http.HttpAgent
  * @namespace Ima.Http
  * @module Ima
  * @submodule Ima.Http
  *
- * @requires Ima.Http.Proxy
+ * @requires Ima.Http.SuperAgentProxy
  * @requires Ima.Cache.Cache
- * @requires Ima.Storage.Cookie
+ * @requires Ima.Storage.CookieStorage
  * @requires Ima.Dictionary.Dictionary
  */
-export default class Agent extends HttpAgent {
+export default class HttpAgentImpl extends HttpAgentInterface {
 	/**
 	 * Initializes the HTTP handler.
 	 *
@@ -63,7 +63,7 @@ export default class Agent extends HttpAgent {
 		 *
 		 * @private
 		 * @property _proxy
-		 * @type {Ima.Http.Proxy}
+		 * @type {Ima.Http.SuperAgentProxy}
 		 */
 		this._proxy = proxy;
 
@@ -82,7 +82,7 @@ export default class Agent extends HttpAgent {
 		 *
 		 * @private
 		 * @property _cookie
-		 * @type {Ima.Storage.Cookie}
+		 * @type {Ima.Storage.CookieStorage}
 		 */
 		this._cookie = cookie;
 
@@ -492,4 +492,4 @@ export default class Agent extends HttpAgent {
 	}
 }
 
-ns.Ima.Http.Agent = Agent;
+ns.Ima.Http.HttpAgentImpl = HttpAgentImpl;

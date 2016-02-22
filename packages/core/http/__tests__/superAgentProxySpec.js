@@ -1,4 +1,4 @@
-describe('Ima.Http.Proxy', function() {
+describe('Ima.Http.SuperAgentProxy', function() {
 
 	var proxy = null;
 	var apiUrl = 'http://localhost:3001/api/';
@@ -12,7 +12,7 @@ describe('Ima.Http.Proxy', function() {
 	var data = {};
 	var options = {ttl: 3600000, timeout: 2000, repeatRequest: 1, headers: [], withCredentials: true};
 	var HTTP_STATUS_CODE = oc.get('$HTTP_STATUS_CODE');
-	var httpTransformer = oc.get('$HttpTransformer');
+	var httpUrlTransformer = oc.get('$HttpUrlTransformer');
 	var windowHelper = oc.get('$Window');
 
 	beforeEach(function() {
@@ -38,8 +38,7 @@ describe('Ima.Http.Proxy', function() {
 				return this;
 			}
 		};
-
-		proxy = oc.create('Ima.Http.Proxy', [superAgent, HTTP_STATUS_CODE, httpTransformer, windowHelper]);
+		proxy = oc.create('Ima.Http.SuperAgentProxy', [superAgent, HTTP_STATUS_CODE, httpUrlTransformer, windowHelper]);
 
 		jasmine.clock().install();
 	});

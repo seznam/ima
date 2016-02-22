@@ -3,16 +3,16 @@ import ns from 'ima/namespace';
 ns.namespace('Ima.Http');
 
 /**
- * Middleware proxy between {@codelink Ima.Interface.Http} implementations and
+ * Middleware proxy between {@codelink Ima.Http.HttpAgent} implementations and
  * the {@codelink Vendor.SuperAgent}, providing a Promise-oriented API for
  * sending the requests.
  *
- * @class Proxy
+ * @class SuperAgentProxy
  * @namespace Ima.Http
  * @module Ima
  * @submodule Ima.Http
  */
-export default class Proxy {
+export default class SuperAgentProxy {
 
 	/**
 	 * @method constructor
@@ -254,7 +254,7 @@ export default class Proxy {
 	 * @param {{method: string, url: string, data: Object<string, (boolean|number|string|Date)>, options: Object<string, *>}} params
 	 *        An object representing the complete request parameters used to
 	 *        create and send the HTTP request.
-	 * @return {Ima.Http.Proxy} This instance.
+	 * @return {Ima.Http.SuperAgentProxy} This instance.
 	 */
 	_sendRequest(request, resolve, reject, params) {
 		request.end((error, response) => {
@@ -374,7 +374,7 @@ export default class Proxy {
 	 *        cache of pending and finished HTTP requests. The
 	 *        {@code withCredentials} that indicates whether requests should be
 	 *        made using credentials such as cookies or authorization headers.
-	 * @return {Ima.Http.Proxy} This instance.
+	 * @return {Ima.Http.SuperAgentProxy} This instance.
 	 */
 	_setHeaders(request, options) {
 		for (let [headerName, headerValue] of this._defaultHeaders) {
@@ -414,7 +414,7 @@ export default class Proxy {
 	 *        cache of pending and finished HTTP requests. The
 	 *        {@code withCredentials} that indicates whether requests should be
 	 *        made using credentials such as cookies or authorization headers.
-	 * @return {Ima.Http.Proxy} This instance.
+	 * @return {Ima.Http.SuperAgentProxy} This instance.
 	 */
 	_setCredentials(request, options) {
 		if (options.withCredentials &&
@@ -463,4 +463,4 @@ export default class Proxy {
 	}
 }
 
-ns.Ima.Http.Proxy = Proxy;
+ns.Ima.Http.SuperAgentProxy = SuperAgentProxy;

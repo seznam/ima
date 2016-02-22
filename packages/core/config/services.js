@@ -55,7 +55,7 @@ export var init = (ns, oc, config) => {
 		.clear();
 
 	oc
-		.get('$HttpTransformer')
+		.get('$HttpUrlTransformer')
 		.clear();
 
 	oc

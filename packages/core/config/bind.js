@@ -122,10 +122,10 @@ export var init = (ns, oc, config) => { //jshint ignore:line
 	oc.bind('$Router', ns.Ima.Router.Router);
 
 	//SuperAgent
-	oc.bind('$HttpTransformer', ns.Ima.Http.Transformer);
-	oc.bind('$HttpProxy', ns.Ima.Http.Proxy, ['$SuperAgent', '$HTTP_STATUS_CODE', '$HttpTransformer', '$Window']);
-	oc.provide(ns.Ima.Interface.HttpAgent, ns.Ima.Http.Agent, ['$HttpProxy', '$Cache', '$CookieStorage', config.$Http]);
-	oc.bind('$Http', ns.Ima.Interface.HttpAgent);
+	oc.bind('$HttpUrlTransformer', ns.Ima.Http.UrlTransformer);
+	oc.bind('$SuperAgentProxy', ns.Ima.Http.SuperAgentProxy, ['$SuperAgent', '$HTTP_STATUS_CODE', '$HttpUrlTransformer', '$Window']);
+	oc.provide(ns.Ima.Http.HttpAgent, ns.Ima.Http.HttpAgentImpl, ['$SuperAgentProxy', '$Cache', '$CookieStorage', config.$Http]);
+	oc.bind('$Http', ns.Ima.Http.HttpAgent);
 
 	//Dev tools
 	oc.bind('$DevTool', ns.Ima.Debug.DevTool, ['$PageManager', '$PageStateManager', '$Window', '$Dispatcher', '$EventBus']);

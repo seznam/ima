@@ -5,12 +5,12 @@ ns.namespace('Ima.Http');
 /**
  * Transform given string by defined rules.
  *
- * @class Transformer
+ * @class UrlTransformer
  * @namespace Ima.Http
  * @module Ima
  * @submodule Ima.Http
  */
-class Transformer {
+export default class UrlTransformer {
 
 	/**
 	 * @method constructor
@@ -33,7 +33,7 @@ class Transformer {
 	 * @chainable
 	 * @param {string} key
 	 * @param {string} value
-	 * @return {Ima.Http.Transformer} This transformer.
+	 * @return {Ima.Http.UrlTransformer} This transformer.
 	 */
 	addRule(key, value) {
 		this._rules[key] = value;
@@ -46,7 +46,7 @@ class Transformer {
 	 *
 	 * @method clear
 	 * @chainable
-	 * @return {Ima.Http.Transformer} This transformer.
+	 * @return {Ima.Http.UrlTransformer} This transformer.
 	 */
 	clear() {
 		this._rules = {};
@@ -75,4 +75,4 @@ class Transformer {
 	}
 }
 
-ns.Ima.Http.Transformer = Transformer;
+ns.Ima.Http.UrlTransformer = UrlTransformer;
