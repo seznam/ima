@@ -1,3 +1,4 @@
+// @client-side
 
 // fix for-of for Maps and Sets in IE9 & IE10
 if (!Map.prototype[Symbol.iterator]) {

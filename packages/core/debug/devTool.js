@@ -1,3 +1,5 @@
+// @client-side
+
 import ns from 'ima/namespace';
 
 ns.namespace('Ima.Debug');
