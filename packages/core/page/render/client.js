@@ -225,7 +225,7 @@ export default class Client extends AbstractPageRender {
 	 *
 	 * @private
 	 * @method _updateMetaAttributes
-	 * @param {Ima.Interface.MetaManager} metaManager meta attributes storage
+	 * @param {Ima.Meta.MetaManager} metaManager meta attributes storage
 	 *        providing the new values for page meta elements and title.
 	 */
 	_updateMetaAttributes(metaManager) {
@@ -241,7 +241,7 @@ export default class Client extends AbstractPageRender {
 	 *
 	 * @private
 	 * @method _updateMetaNameAttributes
-	 * @param {Ima.Interface.MetaManager} metaManager meta attributes storage
+	 * @param {Ima.Meta.MetaManager} metaManager meta attributes storage
 	 *        providing the new values for page meta elements and title.
 	 */
 	_updateMetaNameAttributes(metaManager) {
@@ -262,7 +262,7 @@ export default class Client extends AbstractPageRender {
 	 *
 	 * @private
 	 * @method _updateMetaPropertyAttributes
-	 * @param {Ima.Interface.MetaManager} metaManager meta attributes storage
+	 * @param {Ima.Meta.MetaManager} metaManager meta attributes storage
 	 *        providing the new values for page meta elements and title.
 	 */
 	_updateMetaPropertyAttributes(metaManager) {
@@ -285,7 +285,7 @@ export default class Client extends AbstractPageRender {
 	 *
 	 * @private
 	 * @method _updateMetaLinkAttributes
-	 * @param {Ima.Interface.MetaManager} metaManager meta attributes storage
+	 * @param {Ima.Meta.MetaManager} metaManager meta attributes storage
 	 *        providing the new values for page meta elements and title.
 	 */
 	_updateMetaLinkAttributes(metaManager) {

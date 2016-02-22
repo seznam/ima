@@ -1,19 +1,19 @@
 import ns from 'ima/namespace';
-import MetaManager from 'ima/interface/metaManager';
+import MetaManagerInterface from 'ima/meta/metaManager';
 
 ns.namespace('Ima.Meta');
 
 /**
- * Default implementation of the {@codelink Ima.Interface.MetaManager}
+ * Default implementation of the {@codelink Ima.Meta.MetaManager}
  * interface.
  *
- * @class Manager
- * @implements Ima.Interface.MetaManager
+ * @class MetaManagerImpl
+ * @implements Ima.Meta.MetaManager
  * @namespace Ima.Meta
  * @module Ima
  * @submodule Ima.Meta
  */
-export default class Manager extends MetaManager {
+export default class MetaManagerImpl extends MetaManagerInterface {
 	/**
 	 * Initializes the meta page attributes manager.
 	 *
@@ -147,4 +147,4 @@ export default class Manager extends MetaManager {
 	}
 }
 
-ns.Ima.Meta.Manager = Manager;
+ns.Ima.Meta.MetaManagerImpl = MetaManagerImpl;

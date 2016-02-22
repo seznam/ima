@@ -23,7 +23,7 @@ export default class ControllerDecorator extends ControllerInterface {
 	 * @constructor
 	 * @param {Ima.Controller.Controller} controller The actual controller
 	 *        being decorated.
-	 * @param {Ima.Interface.MetaManager} metaManager meta attributes manager.
+	 * @param {Ima.Meta.MetaManager} metaManager meta attributes manager.
 	 * @param {Ima.Router.Router} router The application router.
 	 * @param {Ima.Dictionary.Dictionary} dictionary Localization phrases
 	 *        dictionary.
@@ -47,7 +47,7 @@ export default class ControllerDecorator extends ControllerInterface {
 		 *
 		 * @property _metaManager
 		 * @private
-		 * @type {Ima.Interface.MetaManager}
+		 * @type {Ima.Meta.MetaManager}
 		 */
 		this._metaManager = metaManager;
 
@@ -221,7 +221,7 @@ export default class ControllerDecorator extends ControllerInterface {
 	 * Returns the meta attributes manager to configured by this controller.
 	 *
 	 * @method getMetaManager
-	 * @return {Ima.Interface.MetaManager} meta attributes manager to
+	 * @return {Ima.Meta.MetaManager} meta attributes manager to
 	 *         configured by this controller.
 	 */
 	getMetaManager() {
