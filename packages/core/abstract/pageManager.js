@@ -137,7 +137,7 @@ export default class PageManager extends PageManagerInterface {
 	 * @param {(string|function)} view
 	 * @param {{onlyUpdate: boolean}} options
 	 * @param {Object<string, string>} params The route parameters.
-	 * @param {Ima.Abstract.Controller} controllerInstance
+	 * @param {Ima.Controller.AbstractController} controllerInstance
 	 * @param {Ima.Decorator.Controller} decoratedController
 	 * @param {Vendor.React.Component} viewInstance
 	 */

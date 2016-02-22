@@ -1,6 +1,6 @@
 import ns from 'ima/namespace';
 
-ns.namespace('Ima.Interface');
+ns.namespace('Ima.Controller');
 
 /**
  * Interface defining the common API of page controllers. A page controller is
@@ -9,9 +9,9 @@ ns.namespace('Ima.Interface');
  * on the page (or other input).
  *
  * @interface Controller
- * @namespace Ima.Interface
+ * @namespace Ima.Controller
  * @module Ima
- * @submodule Ima.Interface
+ * @submodule Ima.Controller
  */
 export default class Controller {
 
@@ -167,7 +167,7 @@ export default class Controller {
 	 * @method addExtension
 	 * @param {Ima.Interface.Extension} extension The extension to add to this
 	 *        controller.
-	 * @return {Ima.Interface.Controller} This controller.
+	 * @return {Ima.Controller.Controller} This controller.
 	 */
 	addExtension(extension) {}
 
@@ -241,4 +241,4 @@ export default class Controller {
 	getHttpStatus() {}
 }
 
-ns.Ima.Interface.Controller = Controller;
+ns.Ima.Controller.Controller = Controller;

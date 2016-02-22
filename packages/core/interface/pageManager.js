@@ -29,7 +29,7 @@ export default class PageManager {
 	 * server-side).
 	 *
 	 * @method manage
-	 * @param {(string|function(new: Ima.Interface.Controller, ...*))} controller
+	 * @param {(string|function(new: Ima.Controller.Controller, ...*))} controller
 	 *        The alias, namespace path, or constructor of the controller to
 	 *        manage.
 	 * @param {(string|function(new: React.Component, Object<string, *>, ?Object<string, *>))} view
@@ -39,7 +39,7 @@ export default class PageManager {
 	 *            onlyUpdate: (
 	 *                boolean|
 	 *                function(
-	 *                    (string|function(new: Ima.Interface.Controller, ...*)),
+	 *                    (string|function(new: Ima.Controller.Controller, ...*)),
 	  *                   (string|function(new: React.Component, Object<string, *>, ?Object<string, *>))
 	  *               ): boolean
 	 *            ),

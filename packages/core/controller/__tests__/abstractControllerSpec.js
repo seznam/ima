@@ -1,10 +1,10 @@
-describe('Ima.Abstract.Controller', function() {
+describe('Ima.Controller.AbstractController', function() {
 
 	var controller = null;
 	var pageStateManager = null;
 
 	beforeEach(function() {
-		controller = oc.create('Ima.Abstract.Controller');
+		controller = oc.create('Ima.Controller.AbstractController');
 		pageStateManager = oc.create('Ima.Interface.PageStateManager');
 
 		controller.setPageStateManager(pageStateManager);

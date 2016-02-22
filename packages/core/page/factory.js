@@ -31,11 +31,11 @@ export default class Factory {
 	}
 
 	/**
-	 * Create new instance of Ima.Interface.Controller.
+	 * Create new instance of Ima.Controller.Controller.
 	 *
 	 * @method createController
 	 * @param {string} controller
-	 * @return {Ima.Interface.Controller}
+	 * @return {Ima.Controller.Controller}
 	 */
 	createController(controller) {
 		var controllerInstantion = this._oc.create(controller);
@@ -68,8 +68,8 @@ export default class Factory {
 	 * Returns decorated controller for ease setting seo params in controller.
 	 *
 	 * @method decorateController
-	 * @param {Ima.Interface.Controller} controller
-	 * @return {Ima.Interface.Controller}
+	 * @param {Ima.Controller.Controller} controller
+	 * @return {Ima.Controller.Controller}
 	 */
 	decorateController(controller) {
 		var metaManager = this._oc.get('$MetaManager');
@@ -78,7 +78,7 @@ export default class Factory {
 		var settings = this._oc.get('$Settings');
 
 		var decoratedController = this._oc.create(
-				'$DecoratorController',
+				'$ControllerDecorator',
 				[controller, metaManager, router, dictionary, settings]
 		);
 

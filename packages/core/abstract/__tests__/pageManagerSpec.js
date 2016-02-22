@@ -9,7 +9,7 @@ describe('Ima.Abstract.PageManager', function() {
 	var pageStateManager = oc.create('Ima.Interface.PageStateManager');
 	var pageManager = null;
 
-	var Controller = ns.Ima.Interface.Controller;
+	var Controller = ns.Ima.Controller.Controller;
 	var Extension = ns.Ima.Interface.Extension;
 	var View = function () {};
 	var options = {

@@ -8,7 +8,7 @@ describe('Ima.Abstract.PageManager', function() {
 	var stateManager = oc.create('Ima.Interface.PageStateManager');
 	var pageManager = null;
 
-	var controller = ns.Ima.Interface.Controller;
+	var controller = ns.Ima.Controller.Controller;
 	var view = function (){};
 	var options = {
 		onlyUpdate: false,

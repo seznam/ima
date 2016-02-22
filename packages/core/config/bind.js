@@ -89,7 +89,7 @@ export var init = (ns, oc, config) => { //jshint ignore:line
 
 	//SEO
 	oc.bind('$MetaManager', ns.Ima.Meta.Manager);
-	oc.bind('$DecoratorController', ns.Ima.Decorator.Controller);
+	oc.bind('$ControllerDecorator', ns.Ima.Controller.ControllerDecorator);
 	oc.bind('$DecoratorPageStateManager', ns.Ima.Decorator.PageStateManager);
 
 	//Page

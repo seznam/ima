@@ -32,7 +32,7 @@ export default class PageRender {
 	 * invoked at the client.
 	 *
 	 * @method mount
-	 * @param {Ima.Interface.Controller} controller The current page
+	 * @param {Ima.Controller.Controller} controller The current page
 	 *        controller.
 	 * @param {React.Component} view The page's view.
 	 * @param {Object<string, (*|Promise<*>)>} pageResources The resources for
@@ -57,7 +57,7 @@ export default class PageRender {
 	 * resolved.
 	 *
 	 * @method update
-	 * @param {Ima.Interface.Controller} controller The current page
+	 * @param {Ima.Controller.Controller} controller The current page
 	 *        controller.
 	 * @param {Object<string, (*|Promise<*>)>} resourcesUpdate The resources
 	 *        that represent the update the of current state according to the

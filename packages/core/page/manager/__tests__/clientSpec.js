@@ -11,7 +11,7 @@ describe('Ima.Page.Manager.Client', function() {
 	var eventBusInterface = oc.create('Ima.Interface.EventBus');
 	var pageManager = null;
 
-	var Controller = ns.Ima.Interface.Controller;
+	var Controller = ns.Ima.Controller.Controller;
 	var Extension = ns.Ima.Interface.Extension;
 	var View = function() {};
 

@@ -1,27 +1,27 @@
 import ns from 'ima/namespace';
-import ControllerInterface from 'ima/interface/controller';
+import ControllerInterface from 'ima/controller/controller';
 
-ns.namespace('Ima.Decorator');
+ns.namespace('Ima.Controller');
 
 /**
  * Decorator for page controllers. The decorator manages references to the meta
  * attributes manager and other utilities to provide them to the decorated page
  * controller.
  *
- * @class Controller
- * @implements Ima.Interface.Controller
- * @namespace Ima.Decorator
+ * @class ControllerDecorator
+ * @implements Ima.Controller.Controller
+ * @namespace Ima.Controller
  * @module Ima
- * @submodule Ima.Decorator
+ * @submodule Ima.Controller
  */
-export default class Controller extends ControllerInterface {
+export default class ControllerDecorator extends ControllerInterface {
 
 	/**
 	 * Initializes the controller decorator.
 	 *
 	 * @method constructor
 	 * @constructor
-	 * @param {Ima.Interface.Controller} controller The actual controller
+	 * @param {Ima.Controller.Controller} controller The actual controller
 	 *        being decorated.
 	 * @param {Ima.Interface.MetaManager} metaManager meta attributes manager.
 	 * @param {Ima.Interface.Router} router The application router.
@@ -38,7 +38,7 @@ export default class Controller extends ControllerInterface {
 		 *
 		 * @property _controller
 		 * @private
-		 * @type {Ima.Interface.Controller}
+		 * @type {Ima.Controller.Controller}
 		 */
 		this._controller = controller;
 
@@ -229,4 +229,4 @@ export default class Controller extends ControllerInterface {
 	}
 }
 
-ns.Ima.Decorator.Controller = Controller;
+ns.Ima.Controller.ControllerDecorator = ControllerDecorator;

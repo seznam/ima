@@ -7,7 +7,7 @@ describe('Ima.Page.Render.Server', function() {
 		param2: Promise.resolve(param2)
 	};
 
-	var controller = new ns.Ima.Interface.Controller();
+	var controller = new ns.Ima.Controller.Controller();
 	controller.getMetaManager = function() {};
 	var view = function() {};
 	var expressResponse = {

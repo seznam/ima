@@ -2,7 +2,6 @@ import ns from 'ima/namespace';
 import ObjectContainer from 'ima/objectContainer';
 import Bootstrap from 'ima/bootstrap';
 
-// Import app/config
 import { init as initBindIma } from 'ima/config/bind';
 import { init as initServicesIma } from 'ima/config/services';
 
@@ -14,7 +13,7 @@ var getNamespace = () => {
 	return ns;
 };
 
-var createIMAJsApp = () => {
+var createImaApp = () => {
 	var oc = new ObjectContainer(ns);
 	var bootstrap = new Bootstrap(oc);
 
@@ -124,7 +123,7 @@ var routeClientApp = (app) => {
 
 var hotReloadClientApp = (initialAppConfigFunctions) => {
 	if ($Debug) {
-		var app = createIMAJsApp();
+		var app = createImaApp();
 		var bootConfig = getClientBootConfig(initialAppConfigFunctions);
 		app = bootClientApp(app, bootConfig);
 
@@ -164,7 +163,7 @@ var revivalClientApp = (initialAppConfigFunctions) => {
 	window.React = window.$IMA.Vendor.get('React');
 	window.$Debug = window.$IMA.$Debug;
 
-	var app = createIMAJsApp();
+	var app = createImaApp();
 	var bootConfig = getClientBootConfig(initialAppConfigFunctions);
 	app = bootClientApp(app, bootConfig);
 
@@ -173,7 +172,7 @@ var revivalClientApp = (initialAppConfigFunctions) => {
 
 var revivalTestClientApp = (initialAppConfigFunctions) => {
 	var root = typeof window !== 'undefined' && window !== null ? window : GLOBAL;
-	var app = createIMAJsApp();
+	var app = createImaApp();
 	var bootConfig = getTestClientBootConfig(initialAppConfigFunctions);
 
 	app = bootClientApp(app, bootConfig);
@@ -185,7 +184,7 @@ var revivalTestClientApp = (initialAppConfigFunctions) => {
 export {
 	getInitialImaConfigFunctions,
 	getNamespace,
-	createIMAJsApp,
+	createImaApp,
 	getClientBootConfig,
 	getTestClientBootConfig,
 	bootClientApp,

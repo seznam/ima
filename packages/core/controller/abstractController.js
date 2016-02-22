@@ -1,22 +1,21 @@
 import ns from 'ima/namespace';
 import IMAError from 'ima/imaError';
-import ControllerInterface from 'ima/interface/controller';
+import ControllerInterface from 'ima/controller/controller';
 
-ns.namespace('Ima.Abstract');
+ns.namespace('Ima.Controller');
 
 /**
- * Basic implementation of the {@codelink Ima.Interface.Controller} interface,
+ * Basic implementation of the {@codelink Ima.Controller.Interface} interface,
  * providing the default implementation of most of the API.
  *
  * @abstract
- * @class Controller
- * @implements Ima.Interface.Controller
- * @namespace Ima.Abstract
+ * @class AbstractController
+ * @implements Ima.Controller.Controller
+ * @namespace Ima.Controller
  * @module Ima
- * @submodule Ima.Abstract
- * @requires Ima.Interface.View
+ * @submodule Ima.Controller
  */
-export default class Controller extends ControllerInterface {
+export default class AbstractController extends ControllerInterface {
 
 	/**
 	 * Initializes the controller.
@@ -32,7 +31,7 @@ export default class Controller extends ControllerInterface {
 		 *
 		 * @property _pageStateManager
 		 * @protected
-		 * @type {Ima.Interface.PageStateManager}
+		 * @type {Ima.PageStateManager.Interface}
 		 * @default null
 		 */
 		this._pageStateManager = null;
@@ -42,7 +41,7 @@ export default class Controller extends ControllerInterface {
 		 *
 		 * @private
 		 * @property _extensions
-		 * @type {Array<string, Ima.Interface.Extension>}
+		 * @type {Array<string, Ima.Extension.Interface>}
 		 */
 		this._extensions = [];
 
@@ -97,7 +96,7 @@ export default class Controller extends ControllerInterface {
 	 * @method load
 	 */
 	load() {
-		throw new IMAError('The Ima.Abstract.Controller.load method is ' +
+		throw new IMAError('The Ima.Controller.AbstractController.load method is ' +
 				'abstract and must be overridden');
 	}
 
@@ -153,7 +152,7 @@ export default class Controller extends ControllerInterface {
 	 * @method setMetaParams
 	 */
 	setMetaParams(loadedResources, metaManager, router, dictionary, settings) {
-		throw new IMAError('The Ima.Abstract.Controller.setMetaParams ' +
+		throw new IMAError('The Ima.Controller.AbstractController.setMetaParams ' +
 				'method is abstract and must be overridden');
 	}
 
@@ -190,4 +189,4 @@ export default class Controller extends ControllerInterface {
 	}
 }
 
-ns.Ima.Abstract.Controller = Controller;
+ns.Ima.Controller.AbstractController = AbstractController;
