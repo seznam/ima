@@ -1,4 +1,4 @@
-describe('Ima.Storage.Cookie', function() {
+describe('Ima.Storage.CookieStorage', function() {
 
 	var cookieString = 'cok1=hello;Path=/;Expires=Fri, 31 Dec 9999 23:59:59 GMT; cok2=hello2;Path=/;Expires=Fri, 31 Dec 9999 23:59:59 GMT';
 	var setCookieString = 'cok3=hello3; Path=/; Expires=Fri, 31 Dec 9999 23:59:59 GMT';
@@ -24,7 +24,7 @@ describe('Ima.Storage.Cookie', function() {
 		request = oc.create('Ima.Router.Request');
 		response = oc.create('Ima.Router.Response');
 		win = oc.create('Ima.Window.ServerWindow');
-		cookie = oc.create('Ima.Storage.Cookie', [win, request, response]);
+		cookie = oc.create('Ima.Storage.CookieStorage', [win, request, response]);
 
 		request.init({});
 		response.init({}, transformFunction);

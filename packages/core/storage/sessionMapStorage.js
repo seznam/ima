@@ -1,31 +1,31 @@
 import ns from 'ima/namespace';
-import Storage from 'ima/interface/storage';
+import StorageInterface from 'ima/storage/storage';
 import CacheEntry from 'ima/cache/cacheEntry';
 
 ns.namespace('Ima.Storage');
 
 /**
  * The {@codelink SessionMap} storage is an implementation of the
- * {@codelink Ima.Interface.Storage} interface acting as a synchronization
+ * {@codelink Ima.Storage.Storage} interface acting as a synchronization
  * proxy between
  *
- * @class SessionMap
- * @implements Ima.Interface.Storage
+ * @class SessionMapStorage
+ * @implements Ima.Storage.Storage
  * @namespace Ima.Storage
  * @module Ima
  * @submodule Ima.Storage
  *
- * @requires Ima.Storage.Map
- * @requires Ima.Storage.Session
+ * @requires Ima.Storage.MapStorage
+ * @requires Ima.Storage.SessionStorage
  */
-export default class SessionMap extends Storage {
+export default class SessionMapStorage extends StorageInterface {
 	/**
 	 * Initializes the storage.
 	 *
 	 * @constructor
 	 * @method constructor
-	 * @param {Ima.Storage.Map} map The map storage to use.
-	 * @param {Ima.Storage.Session} session The session storage to use.
+	 * @param {Ima.Storage.MapStorage} map The map storage to use.
+	 * @param {Ima.Storage.SessionStorage} session The session storage to use.
 	 */
 	constructor(map, session) {
 		super();
@@ -35,7 +35,7 @@ export default class SessionMap extends Storage {
 		 *
 		 * @private
 		 * @property _map
-		 * @type {Ima.Storage.Map}
+		 * @type {Ima.Storage.MapStorage}
 		 */
 		this._map = map;
 
@@ -44,7 +44,7 @@ export default class SessionMap extends Storage {
 		 *
 		 * @private
 		 * @property _session
-		 * @type {Ima.Storage.Session}
+		 * @type {Ima.Storage.SessionStorage}
 		 */
 		this._session = session;
 	}
@@ -134,4 +134,4 @@ export default class SessionMap extends Storage {
 	}
 }
 
-ns.Ima.Storage.SessionMap = SessionMap;
+ns.Ima.Storage.SessionMapStorage = SessionMapStorage;

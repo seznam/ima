@@ -1,5 +1,5 @@
 import ns from 'ima/namespace';
-import MapStorage from 'ima/storage/map';
+import MapStorage from 'ima/storage/mapStorage';
 
 ns.namespace('Ima.Storage');
 
@@ -117,7 +117,7 @@ export default class WeakMapStorage extends MapStorage {
 	}
 }
 
-ns.Ima.Storage.WeakMap = WeakMapStorage;
+ns.Ima.Storage.WeakMapStorage = WeakMapStorage;
 
 /**
  * A simple reference wrapper that emulates a weak reference. We seem to have

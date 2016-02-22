@@ -1,9 +1,9 @@
-describe('Ima.Storage.WeakMap', function () {
+describe('Ima.Storage.WeakMapStorage', function () {
 
 	var map;
 
 	beforeEach(function () {
-		map = oc.create('Ima.Storage.WeakMap', [{
+		map = oc.create('Ima.Storage.WeakMapStorage', [{
 			entryTtl: 100
 		}]);
 		map.set("a", { num: 1 });

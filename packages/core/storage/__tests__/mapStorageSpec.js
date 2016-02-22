@@ -1,7 +1,7 @@
 describe('Ima.Storage.Map', function() {
 	var map;
 	beforeEach(function() {
-		map = oc.create('Ima.Storage.Map');
+		map = oc.create('Ima.Storage.MapStorage');
 		map.init();
 		map.clear();
 	});
@@ -81,5 +81,5 @@ describe('Ima.Storage.Map', function() {
 
 		} while(item.done != true)
 
-	});	
+	});
 });

@@ -13,7 +13,7 @@ ns.namespace('Ima.Cache');
  * @module Ima
  * @submodule Ima.Cache
  *
- * @requires Ima.Interface.Storage
+ * @requires Ima.Storage.Storage
  * @requires Vendor.$Helper
  *
  * @example
@@ -31,7 +31,7 @@ export default class CacheImpl extends CacheInterface {
 	 *
 	 * @method constructor
 	 * @constructor
-	 * @param {Ima.Interface.Storage} cacheStorage The cache entry storage to
+	 * @param {Ima.Storage.Storage} cacheStorage The cache entry storage to
 	 *        use.
 	 * @param {Ima.Cache.CacheFactory} factory Which create new instance of cache
 	 *        entry.
@@ -48,7 +48,7 @@ export default class CacheImpl extends CacheInterface {
 		 *
 		 * @property _cache
 		 * @private
-		 * @type {Ima.Interface.Storage}
+		 * @type {Ima.Storage.Storage}
 		 */
 		this._cache = cacheStorage;
 

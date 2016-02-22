@@ -53,20 +53,20 @@ export var init = (ns, oc, config) => { //jshint ignore:line
 
 	//Storage
 	oc.constant('$CookieTransformFunction', { encode: (s) => s, decode: (s) => s });
-	oc.bind('$CookieStorage', ns.Ima.Storage.Cookie, ['$Window', '$Request', '$Response']);
+	oc.bind('$CookieStorage', ns.Ima.Storage.CookieStorage, ['$Window', '$Request', '$Response']);
 	if (oc.get('$Window').hasSessionStorage()) {
-		oc.bind('$SessionStorage', ns.Ima.Storage.Session);
+		oc.bind('$SessionStorage', ns.Ima.Storage.SessionStorage);
 	} else {
-		oc.bind('$SessionStorage', ns.Ima.Storage.Map);
+		oc.bind('$SessionStorage', ns.Ima.Storage.MapStorage);
 	}
-	oc.bind('$MapStorage', ns.Ima.Storage.Map);
-	oc.bind('$WeakMapStorage', ns.Ima.Storage.WeakMap, [{
+	oc.bind('$MapStorage', ns.Ima.Storage.MapStorage);
+	oc.bind('$WeakMapStorage', ns.Ima.Storage.WeakMapStorage, [{
 		entryTtl: 30 * 60 * 1000,
 		maxEntries: 1000,
 		gcInterval: 60 * 1000,
 		gcEntryCountTreshold: 16
 	}]);
-	oc.bind('$SessionMapStorage', ns.Ima.Storage.SessionMap, ['$MapStorage', '$SessionStorage']);
+	oc.bind('$SessionMapStorage', ns.Ima.Storage.SessionMapStorage, ['$MapStorage', '$SessionStorage']);
 
 	// Dispatcher
 	oc.provide(ns.Ima.Event.Dispatcher, ns.Ima.Event.DispatcherImpl);

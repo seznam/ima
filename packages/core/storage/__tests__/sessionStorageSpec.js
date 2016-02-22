@@ -1,10 +1,12 @@
-describe('Ima.Storage.Session', function() {
+describe('Ima.Storage.SessionStorage', function() {
 	var session;
+
 	beforeEach(function() {
-		session = oc.create('Ima.Storage.Session');
+		session = oc.create('Ima.Storage.SessionStorage');
 		session.init();
 		session.clear();
 	});
+
 	afterEach(function() {
 		session.clear();
 	});

@@ -1,6 +1,6 @@
 import ns from 'ima/namespace';
 import IMAError from 'ima/imaError';
-import MapStorage from 'ima/storage/map';
+import MapStorage from 'ima/storage/mapStorage';
 
 ns.namespace('Ima.Storage');
 
@@ -32,7 +32,7 @@ const COOKIE_SEPARATOR = '; ';
  * at the server side and the {@code document.cookie} property at the client
  * side. The storage caches the cookies internally.
  *
- * @class Cookie
+ * @class CookieStorage
  * @extends Ima.Storage.Map
  * @namespace Ima.Storage
  * @module Ima
@@ -41,7 +41,7 @@ const COOKIE_SEPARATOR = '; ';
  * @requires Ima.Router.Request
  * @requires Ima.Router.Response
  */
-export default class Cookie extends MapStorage {
+export default class CookieStorage extends MapStorage {
 	/**
 	 * Initializes the cookie storage.
 	 *
@@ -494,4 +494,4 @@ export default class Cookie extends MapStorage {
 	}
 }
 
-ns.Ima.Storage.Cookie = Cookie;
+ns.Ima.Storage.CookieStorage = CookieStorage;

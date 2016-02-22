@@ -1,21 +1,21 @@
 import ns from 'ima/namespace';
-import Storage from 'ima/interface/storage';
+import StorageInterface from 'ima/storage/storage';
 
 ns.namespace('Ima.Storage');
 
 /**
- * Implementation of the {@codelink Ima.Interface.Storage} interface that
+ * Implementation of the {@codelink Ima.Storage.Storage} interface that
  * relies on the native {@code Map} for storage.
  *
  * @class Map
- * @implements Ima.Interface.Storage
+ * @implements Ima.Storage.Storage
  * @namespace Ima.Storage
  * @module Ima
  * @submodule Ima.Storage
  *
  * @requires Map
  */
-export default class MapStorage extends Storage {
+export default class MapStorage extends StorageInterface {
 	/**
 	 * Initializes the map storage.
 	 *
@@ -103,4 +103,4 @@ export default class MapStorage extends Storage {
 	}
 }
 
-ns.Ima.Storage.Map = MapStorage;
+ns.Ima.Storage.MapStorage = MapStorage;

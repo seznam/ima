@@ -1,23 +1,23 @@
 import ns from 'ima/namespace';
 import IMAError from 'ima/imaError';
-import Storage from 'ima/interface/storage';
+import StorageInterface from 'ima/storage/storage';
 
 ns.namespace('Ima.Storage');
 
 /**
- * Implementation of the {@codelink Ima.Interface.Storage} interface that
+ * Implementation of the {@codelink Ima.Storage.Storage} interface that
  * relies on the native {@code sessionStorage} DOM storage for storing its
  * entries.
  *
- * @class Session
- * @implements Ima.Interface.Storage
+ * @class SessionStorage
+ * @implements Ima.Storage.Storage
  * @namespace Ima.Storage
  * @module Ima
  * @submodule Ima.Storage
  *
  * @requires SessionStorage
  */
-class Session extends Storage {
+class SessionStorage extends StorageInterface {
 	/**
 	 * Initializes the session storage.
 	 *
@@ -61,7 +61,7 @@ class Session extends Storage {
 		try {
 			return JSON.parse(this._storage.getItem(key)).value;
 		} catch (e) {
-			throw new IMAError('Ima.Storage.Session.get: Failed to parse a ' +
+			throw new IMAError('Ima.Storage.SessionStorage.get: Failed to parse a ' +
 					`session storage item value identified by the key ` +
 					`${key}: ${e.message}`);
 		}
@@ -238,4 +238,4 @@ class StorageIterator {
 	}
 }
 
-ns.Ima.Storage.Session = Session;
+ns.Ima.Storage.SessionStorage = SessionStorage;

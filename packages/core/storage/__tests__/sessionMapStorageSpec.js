@@ -1,7 +1,8 @@
-describe('Ima.Storage.SessionMap', function() {
+describe('Ima.Storage.SessionMapStorage', function() {
 	var sessionMap;
 	var mapStorage = null;
 	var sessionStorage = null;
+
 	beforeEach(function() {
 		mapStorage = oc.create('$MapStorage');
 		sessionStorage = oc.create('$SessionStorage');
@@ -11,6 +12,7 @@ describe('Ima.Storage.SessionMap', function() {
 		sessionMap.clear();
 
 	});
+
 	afterEach(function() {
 		sessionMap.clear();
 	});
@@ -40,7 +42,7 @@ describe('Ima.Storage.SessionMap', function() {
 		expect(sessionStorage.set).not.toHaveBeenCalled();
 	});
 
-	it ('should should have (not) an item', function() {
+	it('should should have (not) an item', function() {
 		expect(sessionMap.has('item1')).toBeFalsy();
 		sessionMap.set('item1', 1);
 		expect(sessionMap.has('item1')).toBeTruthy();
@@ -95,6 +97,6 @@ describe('Ima.Storage.SessionMap', function() {
 			}
 			item = iterator.next();
 
-		} while(item.done != true)
+		} while (item.done !== true)
 	});
 });
