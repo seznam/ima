@@ -1,19 +1,19 @@
 import ns from 'ima/namespace';
-import AbstractRouter from 'ima/abstract/router';
+import AbstractRouter from 'ima/router/abstractRouter';
 
 ns.namespace('Ima.Router');
 
 /**
- * The server-side implementation of the {@codelink Ima.Interface.Router}
+ * The server-side implementation of the {@codelink Ima.Router.Router}
  * interface.
  *
  * @class Server
- * @extends Ima.Abstract.Router
+ * @extends Ima.Router.AbstractRouter
  * @namespace Ima.Router
  * @module Ima
  * @submodule Ima.Router
  */
-export default class Server extends AbstractRouter {
+export default class ServerRouter extends AbstractRouter {
 
 	/**
 	 * Initializes the router.
@@ -21,7 +21,7 @@ export default class Server extends AbstractRouter {
 	 * @constructor
 	 * @method constructor
 	 * @param {Ima.Interface.PageRender} pageManager The current page manager.
-	 * @param {Ima.Router.Factory} factory The router factory used to create
+	 * @param {Ima.Router.RouterFactory} factory The router factory used to create
 	 *        routes.
 	 * @param {Ima.Interface.Dispatcher} dispatcher Dispatcher fires events to
 	 *        app.
@@ -80,4 +80,4 @@ export default class Server extends AbstractRouter {
 	}
 }
 
-ns.Ima.Router.Server = Server;
+ns.Ima.Router.ServerRouter = ServerRouter;

@@ -1,15 +1,15 @@
 import ns from 'ima/namespace';
 
-ns.namespace('Ima.Interface');
+ns.namespace('Ima.Router');
 
 /**
  * The router manages the application's routing configuration and dispatches
  * controllers and views according to the current URL and the route it matches.
  *
  * @interface Router
- * @namespace Ima.Interface
+ * @namespace Ima.Router
  * @module Ima
- * @submodule Ima.Interface
+ * @submodule Ima.Router
  */
 export default class Router {
 
@@ -47,7 +47,7 @@ export default class Router {
 	 *        identifying the controller associated with this route.
 	 * @param {string} view The full name or Object Container alias identifying
 	 *        the view class associated with this route.
-	 * @return {Ima.Interface.Router} This router.
+	 * @return {Ima.Router.Router} This router.
 	 * @throws {Ima.IMAError} Thrown if a route with the same name is added
 	 *         multiple times.
 	 */
@@ -60,7 +60,7 @@ export default class Router {
 	 * @method remove
 	 * @param {string} name The route's unique name, identifying the route to
 	 *        remove.
-	 * @return {Ima.Interface.Router} This router.
+	 * @return {Ima.Router.Router} This router.
 	 */
 	remove(name) {}
 
@@ -145,7 +145,7 @@ export default class Router {
 	 *
 	 * @chainable
 	 * @method listen
-	 * @return {Ima.Interface.Router} This router.
+	 * @return {Ima.Router.Router} This router.
 	 */
 	listen() {}
 
@@ -254,4 +254,4 @@ export default class Router {
 	isRedirection(reason) {}
 }
 
-ns.Ima.Interface.Router = Router;
+ns.Ima.Router.Router = Router;

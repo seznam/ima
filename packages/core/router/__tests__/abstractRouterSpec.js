@@ -1,4 +1,4 @@
-describe('Ima.Abstract.Router', function() {
+describe('Ima.Router.AbstractRouter', function() {
 
 	var router = null;
 	var pageManager = null;
@@ -25,7 +25,7 @@ describe('Ima.Abstract.Router', function() {
 		pageManager = oc.create('Ima.Interface.PageManager');
 		routerFactory = oc.create('$RouterFactory');
 		dispatcher = oc.create('Ima.Interface.Dispatcher');
-		router = oc.create('Ima.Abstract.Router', [pageManager, routerFactory, dispatcher, ROUTER_CONSTANTS]);
+		router = oc.create('Ima.Router.AbstractRouter', [pageManager, routerFactory, dispatcher, ROUTER_CONSTANTS]);
 
 		router.init(config);
 
@@ -241,7 +241,7 @@ describe('Ima.Abstract.Router', function() {
 					done();
 				})
 				.catch(function(error) {
-					console.error('Ima.Abstract.Router.handleError', error);
+					console.error('Ima.Router.AbstractRouter.handleError', error);
 					done();
 				});
 
@@ -298,7 +298,7 @@ describe('Ima.Abstract.Router', function() {
 					done();
 				})
 				.catch(function(error) {
-					console.error('Ima.Abstract.Router.handleNotFound', error);
+					console.error('Ima.Router.AbstractRouter.handleNotFound', error);
 					done();
 				});
 		});
@@ -522,7 +522,7 @@ describe('Ima.Abstract.Router', function() {
 		var path = '/path';
 
 		beforeEach(function() {
-			router = oc.create('Ima.Abstract.Router', [pageManager, routerFactory, dispatcher, ROUTER_CONSTANTS]);
+			router = oc.create('Ima.Router.AbstractRouter', [pageManager, routerFactory, dispatcher, ROUTER_CONSTANTS]);
 		});
 
 		it('should clear root from path', function() {

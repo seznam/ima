@@ -1,5 +1,5 @@
 import ns from 'ima/namespace';
-import AbstractRouter from 'ima/abstract/router';
+import AbstractRouter from 'ima/router/abstractRouter';
 
 ns.namespace('Ima.Router');
 
@@ -71,16 +71,16 @@ const MODES = Object.freeze({
 const MOUSE_LEFT_BUTTON = 0;
 
 /**
- * The client-side implementation of the {@codelink Ima.Interface.Router}
+ * The client-side implementation of the {@codelink Ima.Router.Router}
  * interface.
  *
- * @class Client
- * @extends Ima.Abstract.Router
+ * @class ClientRouter
+ * @extends Ima.Router.AbstractRouter
  * @namespace Ima.Router
  * @module Ima
  * @submodule Ima.Router
  */
-export default class Client extends AbstractRouter {
+export default class ClientRouter extends AbstractRouter {
 
 	/**
 	 * Initializes the client-side router.
@@ -90,7 +90,7 @@ export default class Client extends AbstractRouter {
 	 * @param {Ima.Interface.PageManager} pageManager The page manager
 	 *        handling UI rendering, and transitions between pages if at the
 	 *        client side.
-	 * @param {Ima.Router.Factory} factory Factory for routes.
+	 * @param {Ima.Router.RouterFactory} factory Factory for routes.
 	 * @param {Ima.Interface.Dispatcher} dispatcher Dispatcher fires events to
 	 *        app.
 	 * @param {{ROUTE_NAMES: Object<string, string>, EVENTS: Object<string, string>}} ROUTER_CONSTANTS
@@ -430,4 +430,4 @@ export default class Client extends AbstractRouter {
 	}
 }
 
-ns.Ima.Router.Client = Client;
+ns.Ima.Router.ClientRouter = ClientRouter;

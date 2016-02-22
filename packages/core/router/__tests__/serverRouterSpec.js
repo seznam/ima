@@ -1,4 +1,4 @@
-describe('Ima.Router.Server', function() {
+describe('Ima.Router.ServerRouter', function() {
 
 	var router = null;
 	var pageRender = null;
@@ -15,7 +15,7 @@ describe('Ima.Router.Server', function() {
 		dispatcher = oc.create('Ima.Interface.Dispatcher');
 		request = oc.create('Ima.Router.Request');
 		response = oc.create('Ima.Router.Response');
-		router = oc.create('Ima.Router.Server', [pageRender, routerFactory, dispatcher, ROUTER_CONSTANTS, request, response]);
+		router = oc.create('Ima.Router.ServerRouter', [pageRender, routerFactory, dispatcher, ROUTER_CONSTANTS, request, response]);
 		router.init({mode: router.MODE_SERVER, domain: domain});
 	});
 

@@ -1,21 +1,21 @@
 import ns from 'ima/namespace';
 import IMAError from 'ima/imaError';
-import RouterInterface from 'ima/interface/router';
+import RouterInterface from 'ima/router/router';
 
-ns.namespace('Ima.Abstract');
+ns.namespace('Ima.Router');
 
 /**
- * The basic implementation of the {@codelink Ima.Interface.Router} interface,
+ * The basic implementation of the {@codelink Ima.Router.Router} interface,
  * providing the common or default functionality for parts of the API.
  *
  * @abstract
- * @class Router
- * @implements Ima.Interface.Router
- * @namespace Ima.Abstract
+ * @class AbstractRouter
+ * @implements Ima.Router.Router
+ * @namespace Ima.Router
  * @module Ima
- * @submodule Ima.Abstract
+ * @submodule Ima.Router
  */
-export default class Router extends RouterInterface {
+export default class AbstractRouter extends RouterInterface {
 
 	/**
 	 * Initializes the router.
@@ -25,7 +25,7 @@ export default class Router extends RouterInterface {
 	 * @param {Ima.Interface.PageManager} pageManager The page manager
 	 *        handling UI rendering, and transitions between pages if at the
 	 *        client side.
-	 * @param {Ima.Router.Factory} factory Factory for routes.
+	 * @param {Ima.Router.RouterFactory} factory Factory for routes.
 	 * @param {Ima.Interface.Dispatcher} dispatcher Dispatcher fires events to
 	 *        app.
 	 * @param {{ROUTE_NAMES: Object<string, string>, EVENTS: Object<string, string>}} ROUTER_CONSTANTS
@@ -62,7 +62,7 @@ export default class Router extends RouterInterface {
 		 *
 		 * @private
 		 * @property _factory
-		 * @type {Ima.Router.Factory}
+		 * @type {Ima.Router.RouterFactory}
 		 */
 		this._factory = factory;
 
@@ -162,7 +162,7 @@ export default class Router extends RouterInterface {
 	 */
 	add(name, pathExpression, controller, view, options = undefined) {
 		if (this._routes.has(name)) {
-			throw new IMAError(`Ima.Abstract.Router.add: The route with ` +
+			throw new IMAError(`Ima.Router.AbstractRouter.add: The route with ` +
 					`name ${name} is already defined`);
 		}
 
@@ -247,7 +247,7 @@ export default class Router extends RouterInterface {
 		var route = this._getRouteByPath(path);
 
 		if (!route) {
-			throw new IMAError(`Ima.Abstract.Router.getCurrentRouteInfo: ` +
+			throw new IMAError(`Ima.Router.AbstractRouter.getCurrentRouteInfo: ` +
 					`The route for path ${path} is not define.`);
 		}
 
@@ -284,7 +284,7 @@ export default class Router extends RouterInterface {
 		var route = this._routes.get(routeName);
 
 		if (!route) {
-			throw new IMAError(`Ima.Router:link has undefined route with ` +
+			throw new IMAError(`Ima.Router.AbstractRouter:link has undefined route with ` +
 					`name ${routeName}. Add new route with that name.`);
 		}
 
@@ -319,7 +319,7 @@ export default class Router extends RouterInterface {
 		var routeError = this._routes.get(this.ROUTE_NAMES.ERROR);
 
 		if (!routeError) {
-			var error = new IMAError(`Ima.Router:handleError cannot ` +
+			var error = new IMAError(`Ima.Router.AbstractRouter:handleError cannot ` +
 					`process the error because no error page route has been ` +
 					`configured. Add a new route named ` +
 					`'${this.ROUTE_NAMES.ERROR}'.`, params);
@@ -338,7 +338,7 @@ export default class Router extends RouterInterface {
 		var routeNotFound = this._routes.get(this.ROUTE_NAMES.NOT_FOUND);
 
 		if (!routeNotFound) {
-			var error = new IMAError(`Ima.Router:handleNotFound cannot ` +
+			var error = new IMAError(`Ima.Router.AbstractRouter:handleNotFound cannot ` +
 					`processes a non-matching route because no not found ` +
 					`page route has been configured. Add new route named ` +
 					`'${this.ROUTE_NAMES.NOT_FOUND}'.`, params);
@@ -451,4 +451,4 @@ export default class Router extends RouterInterface {
 	}
 }
 
-ns.Ima.Abstract.Router = Router;
+ns.Ima.Router.AbstractRouter = AbstractRouter;

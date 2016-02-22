@@ -192,7 +192,7 @@ export default class Controller {
 	 *        passed to the {@codelink setState()} method.
 	 * @param {Ima.Interface.MetaManager} metaManager Meta attributes manager
 	 *        to configure.
-	 * @param {Ima.Interface.Router} router The current application router.
+	 * @param {Ima.Router.Router} router The current application router.
 	 * @param {Ima.Dictionary.Dictionary} dictionary The current localization
 	 *        dictionary.
 	 * @param {Object<string, *>} settings The application settings for the
