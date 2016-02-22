@@ -193,7 +193,7 @@ export default class Controller {
 	 * @param {Ima.Interface.MetaManager} metaManager Meta attributes manager
 	 *        to configure.
 	 * @param {Ima.Interface.Router} router The current application router.
-	 * @param {Ima.Interface.Dictionary} dictionary The current localization
+	 * @param {Ima.Dictionary.Dictionary} dictionary The current localization
 	 *        dictionary.
 	 * @param {Object<string, *>} settings The application settings for the
 	 *        current application environment.

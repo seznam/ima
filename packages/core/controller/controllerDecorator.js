@@ -25,7 +25,7 @@ export default class ControllerDecorator extends ControllerInterface {
 	 *        being decorated.
 	 * @param {Ima.Interface.MetaManager} metaManager meta attributes manager.
 	 * @param {Ima.Interface.Router} router The application router.
-	 * @param {Ima.Interface.Dictionary} dictionary Localization phrases
+	 * @param {Ima.Dictionary.Dictionary} dictionary Localization phrases
 	 *        dictionary.
 	 * @param {Object<string, *>} settings  Application settings for the
 	 *        current application environment.
@@ -65,7 +65,7 @@ export default class ControllerDecorator extends ControllerInterface {
 		 *
 		 * @property _dictionary
 		 * @private
-		 * @type {Ima.Interface.Dictionary}
+		 * @type {Ima.Dictionary.Dictionary}
 		 */
 		this._dictionary = dictionary;
 

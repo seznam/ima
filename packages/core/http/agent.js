@@ -17,7 +17,7 @@ ns.namespace('Ima.Http');
  * @requires Ima.Http.Proxy
  * @requires Ima.Cache.Handler
  * @requires Ima.Storage.Cookie
- * @requires Ima.Interface.Dictionary
+ * @requires Ima.Dictionary.Dictionary
  */
 export default class Agent extends HttpAgent {
 	/**

@@ -1,4 +1,4 @@
-describe('Ima.Dictionary', function() {
+describe('Ima.MessageFormatDictionary', function() {
 
 	var dictionary = null;
 	var config = {
@@ -15,7 +15,7 @@ describe('Ima.Dictionary', function() {
 		}
 	};
 	beforeEach(function() {
-		dictionary = oc.create('Ima.Dictionary.MessageFormat');
+		dictionary = oc.create('Ima.Dictionary.MessageFormatDictionary');
 
 		dictionary.init(config);
 	});

@@ -44,8 +44,8 @@ export var init = (ns, oc, config) => { //jshint ignore:line
 	oc.bind('$Error', ns.Ima.IMAError);
 
 	//Dictionary
-	oc.provide(ns.Ima.Interface.Dictionary, ns.Ima.Dictionary.MessageFormat);
-	oc.bind('$Dictionary', ns.Ima.Interface.Dictionary);
+	oc.provide(ns.Ima.Dictionary.Dictionary, ns.Ima.Dictionary.MessageFormatDictionary);
+	oc.bind('$Dictionary', ns.Ima.Dictionary.Dictionary);
 
 	//Request & Response
 	oc.bind('$Request', ns.Ima.Router.Request);

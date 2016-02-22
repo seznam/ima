@@ -1,6 +1,6 @@
 import ns from 'ima/namespace';
 
-ns.namespace('Ima.Interface');
+ns.namespace('Ima.Dictionary');
 
 /**
  * The Dictionary is a manager and preprocessor of localization phrases for a
@@ -8,9 +8,9 @@ ns.namespace('Ima.Interface');
  * implementation of this interface.
  *
  * @interface Dictionary
- * @namespace Ima.Interface
+ * @namespace Ima.Dictionary
  * @module Ima
- * @submodule Ima.Interface
+ * @submodule Ima.Dictionary
  */
 export default class Dictionary {
 	/**
@@ -53,4 +53,4 @@ export default class Dictionary {
 	get(key, parameters = {}) {}
 }
 
-ns.Ima.Interface.Dictionary = Dictionary;
+ns.Ima.Dictionary.Dictionary = Dictionary;
