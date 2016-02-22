@@ -1,20 +1,20 @@
 import ns from 'ima/namespace';
 import IMAError from 'ima/imaError';
-import ExtensionInterface from 'ima/interface/extension';
+import ExtensionInterface from 'ima/extension/extension';
 
-ns.namespace('Ima.Abstract');
+ns.namespace('Ima.Extension');
 
 /**
  * Abstract extension
  *
- * @class Extension
- * @namespace Ima.Abstract
+ * @class AbstractExtension
+ * @namespace Ima.Extension
  * @module Ima
- * @submodule Ima.Abstract
+ * @submodule Ima.Extension
  *
- * @extends Ima.Interface.Extension
+ * @extends Ima.Extension.Extension
  */
-export default class Extension extends ExtensionInterface {
+export default class AbstractExtension extends ExtensionInterface {
 
 	/**
 	 * @method constructor
@@ -84,7 +84,7 @@ export default class Extension extends ExtensionInterface {
 	 * @method load
 	 */
 	load() {
-		throw new IMAError('The Ima.Abstract.Extension.load method is ' +
+		throw new IMAError('The Ima.Extension.AbstractExtension.load method is ' +
 				'abstract and must be overridden');
 	}
 
@@ -161,4 +161,4 @@ export default class Extension extends ExtensionInterface {
 	}
 }
 
-ns.Ima.Abstract.Extension = Extension;
+ns.Ima.Extension.AbstractExtension = AbstractExtension;

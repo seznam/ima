@@ -165,7 +165,7 @@ export default class Controller {
 	 * added to the controller before the {@codelink init()} method is invoked.
 	 *
 	 * @method addExtension
-	 * @param {Ima.Interface.Extension} extension The extension to add to this
+	 * @param {Ima.Extension.Extension} extension The extension to add to this
 	 *        controller.
 	 * @return {Ima.Controller.Controller} This controller.
 	 */
@@ -175,7 +175,7 @@ export default class Controller {
 	 * Returns the controller's extensions.
 	 *
 	 * @method getExtensions
-	 * @return {Ima.Interface.Extension[]} The extensions added to this
+	 * @return {Ima.Extension.Extension[]} The extensions added to this
 	 *         controller.
 	 */
 	getExtensions() {}

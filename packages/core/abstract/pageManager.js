@@ -184,7 +184,7 @@ export default class PageManager extends PageManagerInterface {
 	 *
 	 * @private
 	 * @method _setRestrictedPageStateManager
-	 * @param {Ima.Interface.Extension} extension
+	 * @param {Ima.Extension.Extension} extension
 	 * @param {Object<string, *>} extensionState
 	 */
 	_setRestrictedPageStateManager(extension, extensionState) {

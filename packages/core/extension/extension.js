@@ -1,6 +1,6 @@
 import ns from 'ima/namespace';
 
-ns.namespace('Ima.Interface');
+ns.namespace('Ima.Extension');
 
 /**
  * Extensions provide means of extending the page controllers with additional
@@ -18,9 +18,9 @@ ns.namespace('Ima.Interface');
  * through the same lifecycle as the controller.
  *
  * @interface Extension
- * @namespace Ima.Interface
+ * @namespace Ima.Extension
  * @module Ima
- * @submodule Ima.Interface
+ * @submodule Ima.Extension
  */
 export default class Extension {
 
@@ -193,4 +193,4 @@ export default class Extension {
 	getAllowedStateKeys() {}
 }
 
-ns.Ima.Interface.Extension = Extension;
+ns.Ima.Extension.Extension = Extension;

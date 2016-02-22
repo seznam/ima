@@ -12,7 +12,7 @@ describe('Ima.Page.Manager.Client', function() {
 	var pageManager = null;
 
 	var Controller = ns.Ima.Controller.Controller;
-	var Extension = ns.Ima.Interface.Extension;
+	var Extension = ns.Ima.Extension.Extension;
 	var View = function() {};
 
 	var controllerInstance = pageFactory.createController(Controller);
