@@ -2,7 +2,7 @@ describe('Ima.Router.AbstractRouter', function() {
 
 	var router = null;
 	var pageManager = null;
-	var routerFactory = null;
+	var routeFactory = null;
 	var dispatcher = null;
 	var ROUTER_CONSTANTS = oc.get('$ROUTER_CONSTANTS');
 	var config = {
@@ -23,9 +23,9 @@ describe('Ima.Router.AbstractRouter', function() {
 		oc.bind('BaseView', function() {});
 
 		pageManager = oc.create('Ima.Interface.PageManager');
-		routerFactory = oc.create('$RouterFactory');
+		routeFactory = oc.create('$RouteFactory');
 		dispatcher = oc.create('Ima.Event.Dispatcher');
-		router = oc.create('Ima.Router.AbstractRouter', [pageManager, routerFactory, dispatcher, ROUTER_CONSTANTS]);
+		router = oc.create('Ima.Router.AbstractRouter', [pageManager, routeFactory, dispatcher, ROUTER_CONSTANTS]);
 
 		router.init(config);
 
@@ -70,13 +70,13 @@ describe('Ima.Router.AbstractRouter', function() {
 		});
 
 		it('should create new Ima.Router.Route', function() {
-			spyOn(routerFactory, 'createRoute')
+			spyOn(routeFactory, 'createRoute')
 				.and
 				.callThrough();
 
 			router.add('routeName', '/routePath', controller, view, options);
 
-			expect(routerFactory.createRoute).toHaveBeenCalledWith('routeName', '/routePath', controller, view, options);
+			expect(routeFactory.createRoute).toHaveBeenCalledWith('routeName', '/routePath', controller, view, options);
 
 		});
 	});
@@ -89,7 +89,7 @@ describe('Ima.Router.AbstractRouter', function() {
 		var params = {};
 
 		beforeEach(function() {
-			route = routerFactory.createRoute(routeName, path, controller, view, options);
+			route = routeFactory.createRoute(routeName, path, controller, view, options);
 		});
 
 		afterEach(function() {
@@ -160,7 +160,7 @@ describe('Ima.Router.AbstractRouter', function() {
 		var route = null;
 
 		beforeEach(function() {
-			route = routerFactory.createRoute(routeName, path, controller, view, options);
+			route = routeFactory.createRoute(routeName, path, controller, view, options);
 		});
 
 		afterEach(function() {
@@ -215,7 +215,7 @@ describe('Ima.Router.AbstractRouter', function() {
 		var route = null;
 
 		beforeEach(function() {
-			route = routerFactory.createRoute(routeName, path, controller, view, options);
+			route = routeFactory.createRoute(routeName, path, controller, view, options);
 		});
 
 		afterEach(function() {
@@ -272,7 +272,7 @@ describe('Ima.Router.AbstractRouter', function() {
 		var route = null;
 
 		beforeEach(function() {
-			route = routerFactory.createRoute(routeName, path, controller, view, options);
+			route = routeFactory.createRoute(routeName, path, controller, view, options);
 		});
 
 		afterEach(function() {
@@ -370,7 +370,7 @@ describe('Ima.Router.AbstractRouter', function() {
 		var route = null;
 
 		beforeEach(function() {
-			route = routerFactory.createRoute(routeName, routePath, controller, view, options);
+			route = routeFactory.createRoute(routeName, routePath, controller, view, options);
 		});
 
 		afterEach(function() {
@@ -522,7 +522,7 @@ describe('Ima.Router.AbstractRouter', function() {
 		var path = '/path';
 
 		beforeEach(function() {
-			router = oc.create('Ima.Router.AbstractRouter', [pageManager, routerFactory, dispatcher, ROUTER_CONSTANTS]);
+			router = oc.create('Ima.Router.AbstractRouter', [pageManager, routeFactory, dispatcher, ROUTER_CONSTANTS]);
 		});
 
 		it('should clear root from path', function() {

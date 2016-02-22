@@ -1,7 +1,7 @@
 describe('Ima.Router.ClientRouter', function() {
 	var router = null;
 	var pageRender = null;
-	var routerFactory = null;
+	var routeFactory = null;
 	var dispatcher = null;
 	var win = null;
 	var host = 'locahlost:3002';
@@ -10,10 +10,10 @@ describe('Ima.Router.ClientRouter', function() {
 
 	beforeEach(function() {
 		pageRender = oc.create('Ima.Interface.PageManager');
-		routerFactory = oc.create('$RouterFactory');
+		routeFactory = oc.create('$RouteFactory');
 		dispatcher = oc.create('Ima.Event.Dispatcher');
 		win = oc.get('$Window');
-		router = oc.create('Ima.Router.ClientRouter', [pageRender, routerFactory, dispatcher, ROUTER_CONSTANTS, win]);
+		router = oc.create('Ima.Router.ClientRouter', [pageRender, routeFactory, dispatcher, ROUTER_CONSTANTS, win]);
 
 		spyOn(win, 'hasHistoryAPI')
 			.and
