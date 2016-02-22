@@ -159,7 +159,7 @@ export default class Extension {
 	 * Sets the state manager used to manage the controller's state..
 	 *
 	 * @method setPageStateManager
-	 * @param {?Ima.Interface.PageStateManager} pageStateManager The current
+	 * @param {?Ima.Page.State.PageStateManager} pageStateManager The current
 	 *        state manager to use.
 	 */
 	setPageStateManager(pageStateManager) {}

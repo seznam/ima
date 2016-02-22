@@ -89,13 +89,13 @@ export default class Factory {
 	 * Returns decorated page state manager for extension.
 	 *
 	 * @method decoratePageStateManager
-	 * @param {Ima.Interface.PageStateManager} pageStateManager
+	 * @param {Ima.Page.State.PageStateManager} pageStateManager
 	 * @param {Array<string>} allowedStateKeys
-	 * @return {Ima.Interface.PageStateManager}
+	 * @return {Ima.Page.State.PageStateManager}
 	 */
 	decoratePageStateManager(pageStateManager, allowedStateKeys) {
 		var decoratedPageStateManager = this._oc.create(
-				'$DecoratorPageStateManager',
+				'$PageStateManagerDecorator',
 				[pageStateManager, allowedStateKeys]
 		);
 

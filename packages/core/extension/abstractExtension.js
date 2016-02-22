@@ -28,7 +28,7 @@ export default class AbstractExtension extends ExtensionInterface {
 		 *
 		 * @property _pageStateManager
 		 * @protected
-		 * @type {Ima.Interface.PageStateManager}
+		 * @type {Ima.Page.State.PageStateManager}
 		 * @default null
 		 */
 		this._pageStateManager = null;

@@ -91,10 +91,11 @@ export var init = (ns, oc, config) => { //jshint ignore:line
 	oc.provide(ns.Ima.Meta.MetaManager, ns.Ima.Meta.MetaManagerImpl);
 	oc.bind('$MetaManager', ns.Ima.Meta.MetaManager);
 	oc.bind('$ControllerDecorator', ns.Ima.Controller.ControllerDecorator);
-	oc.bind('$DecoratorPageStateManager', ns.Ima.Decorator.PageStateManager);
+	oc.bind('$PageStateManagerDecorator', ns.Ima.Page.State.PageStateManagerDecorator);
 
 	//Page
-	oc.bind('$PageStateManager', ns.Ima.Page.StateManager);
+	oc.provide(ns.Ima.Page.State.PageStateManager, ns.Ima.Page.State.PageStateManagerImpl);
+	oc.bind('$PageStateManager', ns.Ima.Page.State.PageStateManager);
 	oc.bind('$PageFactory', ns.Ima.Page.Factory, [oc]);
 	oc.constant('$PageRenderViewAdapter', ns.Ima.Page.Render.ViewAdapter);
 	oc.bind('$PageRenderFactory', ns.Ima.Page.Render.Factory, [oc, '$React', '$PageRenderViewAdapter']);

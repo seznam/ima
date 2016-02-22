@@ -6,7 +6,7 @@ describe('Ima.Page.Manager.Client', function() {
 		createView: function(view) { return view; }
 	};
 	var pageRender = oc.create('Ima.Interface.PageRender');
-	var pageStateManager = oc.create('Ima.Interface.PageStateManager');
+	var pageStateManager = oc.create('Ima.Page.State.PageStateManager');
 	var windowInterface = oc.create('Ima.Window.Window');
 	var eventBusInterface = oc.create('Ima.Event.EventBus');
 	var pageManager = null;

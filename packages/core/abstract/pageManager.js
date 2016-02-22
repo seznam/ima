@@ -22,7 +22,7 @@ export default class PageManager extends PageManagerInterface {
 	 * @constructor
 	 * @param {Ima.Page.Factory} pageFactory
 	 * @param {Ima.Interface.PageRender} pageRender
-	 * @param {Ima.Interface.PageStateManager} pageStateManager
+	 * @param {Ima.Page.State.PageStateManager} pageStateManager
 	 */
 	constructor(pageFactory, pageRender, pageStateManager) {
 		super();
@@ -46,7 +46,7 @@ export default class PageManager extends PageManagerInterface {
 		/**
 		 * @protected
 		 * @property _pageStateManager
-		 * @type {Ima.Interface.PageStateManager}
+		 * @type {Ima.Page.State.PageStateManager}
 		 * @default pageStateManager
 		 */
 		this._pageStateManager = pageStateManager;

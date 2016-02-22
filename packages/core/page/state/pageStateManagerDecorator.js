@@ -1,27 +1,27 @@
 import ns from 'ima/namespace';
 import IMAError from 'ima/error/genericError';
 import PageStateManagerInterface
-		from 'ima/interface/pageStateManager';
+		from 'ima/page/state/pageStateManager';
 
-ns.namespace('Ima.Decorator.PageStateManager');
+ns.namespace('Ima.Page.State');
 
 /**
  * Decorator for page state manager, which add logic for limiting Extension
  * competence.
  *
- * @class PageStateManager
- * @namespace Ima.Decorator.PageStateManager
+ * @class PageStateManagerDecorator
+ * @namespace Ima.Page.State
  * @module Ima
- * @submodule Ima.Decorator
+ * @submodule Ima.Page
  *
- * @extends Ima.Interface.PageStateManager
+ * @extends Ima.Page.State.PageStateManager
  */
-export default class PageStateManager extends PageStateManagerInterface {
+export default class PageStateManagerDecorator extends PageStateManagerInterface {
 
 	/**
 	 * @method constructor
 	 * @constructor
-	 * @param {Ima.Interface.PageStateManager} pageStateManager
+	 * @param {Ima.Page.State.PageStateManager} pageStateManager
 	 * @param {Array<string>} allowedStateKeys
 	 */
 	constructor(pageStateManager, allowedStateKeys) {
@@ -32,7 +32,7 @@ export default class PageStateManager extends PageStateManagerInterface {
 		 *
 		 * @private
 		 * @property _pageStateManager
-		 * @type {Ima.Interface.PageStateManager}
+		 * @type {Ima.Page.State.PageStateManager}
 		 */
 		this._pageStateManager = pageStateManager;
 
@@ -92,4 +92,4 @@ export default class PageStateManager extends PageStateManagerInterface {
 	}
 }
 
-ns.Ima.Decorator.PageStateManager = PageStateManager;
+ns.Ima.Page.State.PageStateManagerDecorator = PageStateManagerDecorator;

@@ -226,7 +226,7 @@ export default class Controller {
 	 * controller).
 	 *
 	 * @method setPageStateManager
-	 * @param {?Ima.Interface.PageStateManager} pageStateManager The current
+	 * @param {?Ima.Page.State.PageStateManager} pageStateManager The current
 	 *        state manager to use.
 	 */
 	setPageStateManager(pageStateManager) {}

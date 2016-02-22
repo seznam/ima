@@ -1,4 +1,4 @@
-describe('Ima.Page.StateManager', function() {
+describe('Ima.Page.State.PageStateManagerImpl', function() {
 
 	var stateManager = null;
 	var defaultState = { state: 'state', patch: null };

@@ -1,14 +1,14 @@
 import ns from 'ima/namespace';
 
-ns.namespace('Ima.Interface');
+ns.namespace('Ima.Page.State');
 
 /**
  * Manager of the current page state and state history.
  *
  * @interface PageStateManager
- * @namespace Ima.Interface
+ * @namespace Ima.Page.State
  * @module Ima
- * @submodule Ima.Interface
+ * @submodule Ima.Page
  */
 export default class PageStateManager {
 
@@ -50,4 +50,4 @@ export default class PageStateManager {
 
 }
 
-ns.Ima.Interface.PageStateManager = PageStateManager;
+ns.Ima.Page.State.PageStateManager = PageStateManager;
