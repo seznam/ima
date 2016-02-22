@@ -3,8 +3,8 @@ import ns from 'ima/namespace';
 ns.namespace('Ima.Window');
 
 /**
- * The {@codelink Window} interface defines the API for a utility for easier
- * cross-environment use of various low-level client-side JavaScript APIs
+ * The {@codelink Window} interface defines various utility API for easier
+ * cross-environment usage of various low-level client-side JavaScript APIs
  * available through various global objects.
  *
  * @interface Window
@@ -23,8 +23,8 @@ export default class Window {
 	isClient() {}
 
 	/**
-	 * Returns {@code true} if the cookies are set and processed on the HTTP
-	 * requests and responses automatically by the environment.
+	 * Returns {@code true} if the cookies are set and processed with every
+	 * HTTP request and response automatically by the environment.
 	 *
 	 * @method isCookieEnabled
 	 * @return {boolean} {@code true} if cookies are handled automatically by
@@ -58,7 +58,7 @@ export default class Window {
 	hasHistoryAPI() {}
 
 	/**
-	 * Sets the new page title to the document.
+	 * Sets the new page title of the document.
 	 *
 	 * @method setTitle
 	 * @param {string} title The new page title.
@@ -75,45 +75,46 @@ export default class Window {
 	getWebSocket() {}
 
 	/**
-	 * Returns the {@code window} object representing the global context at the
-	 * client side. The method returns {@code undefined} if used at the server
-	 * side.
+	 * Returns the native {@code window} object representing the global context
+	 * at the client-side. The method returns {@code undefined} if used at the
+	 * server-side.
 	 *
 	 * @method getWindow
-	 * @return {(undefined|Window)} The {@code window} object at the client
-	 *         side, or {@code undefined} at the server side.
+	 * @return {(undefined|Window)} The {@code window} object at the
+	 *         client-side, or {@code undefined} at the server-side.
 	 */
 	getWindow() {}
 
 	/**
-	 * Returns the number of pixels that document has already been scrolled
-	 * horizontally.
+	 * Returns the number of pixels the viewport is scrolled horizontally.
 	 *
 	 * @method getScrollX
-	 * @return {number}
+	 * @return {number} The number of pixels the viewport is scrolled
+	 *         horizontally.
 	 */
 	getScrollX() {}
 
 	/**
-	 * Returns the number of pixels that document has already been scrolled
-	 * vertically.
+	 * Returns the number of pixels the document is scrolled vertically.
 	 *
 	 * @method getScrollY
-	 * @return {number}
+	 * @return {number} The number of pixels the document is scrolled
+	 *         vertically.
 	 */
 	getScrollY() {}
 
 	/**
-	 * Scrolls to a particular set of coordinates in the document.
+	 * Scrolls the viewport to the specified location (if possible).
 	 *
 	 * @method scrollTo
-	 * @param {number} x is the pixel along the horizontal axis of the document
-	 * @param {number} y is the pixel along the vertical axis of the document
+	 * @param {number} x Horizontal scroll offset in pixels.
+	 * @param {number} y Vertical scroll offset in pixels.
 	 */
 	scrollTo(x, y) {}
 
 	/**
-	 * Returns the domain of the current URL as `${protocol}://${host}`.
+	 * Returns the domain of the current document's URL as
+	 * {@code `${protocol}://${host}`}.
 	 *
 	 * @method getDomain
 	 * @return {string} The current domain.
@@ -137,20 +138,20 @@ export default class Window {
 	getPath() {}
 
 	/**
-	 * Returns the current URL.
+	 * Returns the current document's URL.
 	 *
 	 * @method getUrl
-	 * @return {string} The current URL.
+	 * @return {string} The current document's URL.
 	 */
 	getUrl() {}
 
 	/**
-	 * Returns the {@code &lt;body&gt;} body element. The method returns
-	 * {@code undefined} if invoked at the server side.
+	 * Returns the document's body element. The method returns
+	 * {@code undefined} if invoked at the server-side.
 	 *
 	 * @method getBody
-	 * @return {(undefined|HTMLBodyElement)} The {@code &lt;body&gt;} body
-	 *         element, or {@code undefined} if invoked at the server side.
+	 * @return {(undefined|HTMLBodyElement)} The document's body element, or
+	 *         {@code undefined} if invoked at the server side.
 	 */
 	getBody() {}
 
@@ -165,8 +166,7 @@ export default class Window {
 	getElementById(id) {}
 
 	/**
-	 * Returns the first element matching the specified CSS 2.1 (or CSS 3 since
-	 * IE9) selector.
+	 * Returns the first element matching the specified CSS 3 selector.
 	 *
 	 * @method querySelector
 	 * @param {string} selector The CSS selector.
@@ -176,8 +176,8 @@ export default class Window {
 	querySelector(selector) {}
 
 	/**
-	 * Returns a node list of all elements matching the specified CSS 2.1 (or
-	 * CSS 3 since IE9) selector.
+	 * Returns a node list of all elements matching the specified CSS 3
+	 * selector.
 	 *
 	 * @method querySelectorAll
 	 * @param {string} selector The CSS selector.
@@ -196,7 +196,8 @@ export default class Window {
 	redirect(url) {}
 
 	/**
-	 * Pushes a new state to the browser history.
+	 * Pushes a new state to the browser history. The method has no effect if
+	 * the current browser does not support the history API (IE9).
 	 *
 	 * @method pushState
 	 * @param {Object<string, *>} state A state object associated with the
@@ -208,7 +209,8 @@ export default class Window {
 	pushState(state, title, url) {}
 
 	/**
-	 * Replace the current history entry state.
+	 * Replaces the current history entry. The method has no effect if the
+	 * current browser does not support the history API (IE9).
 	 *
 	 * @method replaceState
 	 * @param {Object<string, *>} state A state object associated with the
@@ -220,12 +222,15 @@ export default class Window {
 	replaceState(state, title, url) {}
 
 	/**
-	 * Create new instance of CustomEvent with defined name and options.
+	 * Create new instance of CustomEvent of the specified name and using the
+	 * provided options.
 	 *
 	 * @method createCustomEvent
-	 * @param {string} name
-	 * @param {Object<string, *>} options The custom event options.
+	 * @param {string} name Custom event's name (sometimes referred to as the
+	 *        event's type).
+	 * @param {Object<string, *>} options The custom event's options.
 	 * @return {CustomEvent} The created custom event.
+	 * @see https://developer.mozilla.org/en-US/docs/Web/API/CustomEvent/CustomEvent
 	 */
 	createCustomEvent(name, options) {}
 
@@ -265,14 +270,6 @@ export default class Window {
 	 *        that was used when the listener was registered.
 	 */
 	unbindEventListener(eventTarget, event, listener, useCapture = false) {}
-
-	/**
-	 * Prevents the default browser action for the provided event.
-	 *
-	 * @method preventDefault
-	 * @param {Event} event The event.
-	 */
-	preventDefault(event) {}
 }
 
 ns.Ima.Window.Window = Window;

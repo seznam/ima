@@ -55,7 +55,7 @@ export default class ClientWindow extends WindowInterface {
 	 * @method hasWebSocket
 	 */
 	hasWebSocket() {
-		return window.WebSocket || window.MozWebSocket;
+		return window.WebSocket;
 	}
 
 	/**
@@ -79,7 +79,7 @@ export default class ClientWindow extends WindowInterface {
 	 * @method getWebSocket
 	 */
 	getWebSocket() {
-		return window.WebSocket || window.MozWebSocket;
+		return window.WebSocket;
 	}
 
 	/**
@@ -237,10 +237,6 @@ export default class ClientWindow extends WindowInterface {
 	bindEventListener(eventTarget, event, listener, useCapture = false) {
 		if (eventTarget.addEventListener) {
 			eventTarget.addEventListener(event, listener, useCapture);
-		} else {
-			if (eventTarget.attachEvent) {
-				eventTarget.attachEvent(`on${event}`, listener);
-			}
 		}
 	}
 
@@ -251,22 +247,6 @@ export default class ClientWindow extends WindowInterface {
 	unbindEventListener(eventTarget, event, listener, useCapture = false) {
 		if (eventTarget.removeEventListener) {
 			eventTarget.removeEventListener(event, listener, useCapture);
-		} else {
-			if (eventTarget.detachEvent) {
-				eventTarget.detachEvent(`on${event}`, listener);
-			}
-		}
-	}
-
-	/**
-	 * @inheritdoc
-	 * @method preventDefault
-	 */
-	preventDefault(event) {
-		if (event.preventDefault) {
-			event.preventDefault();
-		} else {
-			event.returnValue = false;
 		}
 	}
 }
