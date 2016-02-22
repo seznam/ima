@@ -113,11 +113,11 @@ export var init = (ns, oc, config) => { //jshint ignore:line
 
 	//Router
 	oc.constant('$Route', ns.Ima.Router.Route);
-	oc.bind('$RouterFactory', ns.Ima.Router.RouterFactory, ['$Route']);
+	oc.bind('$RouteFactory', ns.Ima.Router.RouteFactory, ['$Route']);
 	if (oc.get('$Window').isClient()) {
-		oc.provide(ns.Ima.Router.Router, ns.Ima.Router.ClientRouter, ['$PageManager', '$RouterFactory', '$Dispatcher', '$ROUTER_CONSTANTS', '$Window']);
+		oc.provide(ns.Ima.Router.Router, ns.Ima.Router.ClientRouter, ['$PageManager', '$RouteFactory', '$Dispatcher', '$ROUTER_CONSTANTS', '$Window']);
 	} else {
-		oc.provide(ns.Ima.Router.Router, ns.Ima.Router.ServerRouter, ['$PageManager', '$RouterFactory', '$Dispatcher', '$ROUTER_CONSTANTS', '$Request', '$Response']);
+		oc.provide(ns.Ima.Router.Router, ns.Ima.Router.ServerRouter, ['$PageManager', '$RouteFactory', '$Dispatcher', '$ROUTER_CONSTANTS', '$Request', '$Response']);
 	}
 	oc.bind('$Router', ns.Ima.Router.Router);
 

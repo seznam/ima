@@ -17,25 +17,25 @@ export default class Router {
 	 * Initializes the router with the provided configuration.
 	 *
 	 * @method init
-	 * @param {{$Protocol: string, $Domain: string, $Root: string, $LanguagePartPath: string}} config
+	 * @param {{$Protocol: string, $Root: string, $LanguagePartPath: string, $Host: string}} config
 	 *        Router configuration.
 	 *        The {@code $Protocol} field must be the current protocol used to
 	 *        access the application, terminated by a collon (for example
 	 *        {@code https:}).
-	 *        The {@code $Domain} field must be the application's domain in the
-	 *        following form: {@code `${protocol}//${host}`}.
 	 *        The {@code $Root} field must specify the URL path pointing to the
 	 *        application's root.
 	 *        The {@code $LanguagePartPath} field must be the URL path fragment
 	 *        used as a suffix to the {@code $Root} field that specifies the
 	 *        current language.
+	 *        The {@code $Host} field must be the application's domain (and the
+	 *        port number if other than the default is used) in the following
+	 *        form: {@code `${protocol}//${host}`}.
 	 */
 	init(config) {}
 
 	/**
 	 * Adds a new route to router.
 	 *
-	 * @chainable
 	 * @method add
 	 * @param {string} name The unique name of this route, identifying it among
 	 *        the rest of the routes in the application.
@@ -47,16 +47,37 @@ export default class Router {
 	 *        identifying the controller associated with this route.
 	 * @param {string} view The full name or Object Container alias identifying
 	 *        the view class associated with this route.
+	 * @param {{
+	 *            onlyUpdate: (
+	 *                boolean|
+	 *                function(
+	 *                    (string|function(new: Ima.Controller.Controller, ...*)),
+	  *                   (string|function(new: React.Component, Object<string, *>, ?Object<string, *>))
+	 *                ): boolean
+	 *            )=,
+	 *            autoScroll: boolean=
+	 *        }=} options
+	 *        Additional route options, specified how the navigation to the
+	 *        route will be handled.
+	 *        The {@code onlyUpdate} can be either a flag signalling whether
+	 *        the current controller and view instances should be kept if they
+	 *        match the ones used by the previous route; or a callback function
+	 *        that will receive the previous controller and view identifiers
+	 *        used in the previously matching route, and returns a
+	 *        {@code boolean} representing the value of the flag. This flag is
+	 *        disabled by default.
+	 *        The {@code autoScroll} flag signals whether the page should be
+	 *        scrolled to the top when the navigation takes place. This flag is
+	 *        enabled by default.
 	 * @return {Ima.Router.Router} This router.
-	 * @throws {Ima.IMAError} Thrown if a route with the same name is added
-	 *         multiple times.
+	 * @throws {Ima.Error.Error} Thrown if a route with the same name already
+	 *         exists.
 	 */
-	add(name, pathExpression, controller, view) {}
+	add(name, pathExpression, controller, view, options = undefined) {}
 
 	/**
 	 * Removes the specified route from the router's known routes.
 	 *
-	 * @chainable
 	 * @method remove
 	 * @param {string} name The route's unique name, identifying the route to
 	 *        remove.
@@ -65,8 +86,8 @@ export default class Router {
 	remove(name) {}
 
 	/**
-	 * Ruturns current path part of the current URL, including the query string
-	 * (if any).
+	 * Returns the current path part of the current URL, including the query
+	 * string (if any).
 	 *
 	 * @method getPath
 	 * @return {string} The path and query parts of the current URL.
@@ -100,7 +121,7 @@ export default class Router {
 	getDomain() {}
 
 	/**
-	 * Returns application's host.
+	 * Returns application's host (domain and, if necessary, the port number).
 	 *
 	 * @method getHost
 	 * @return {string} The current application's host.
@@ -123,7 +144,7 @@ export default class Router {
 	 * @method getCurrentRouteInfo
 	 * @return {{route: Ima.Router.Route, params: Object<string, string>, path: string}}
 	 *         The information about the current route.
-	 * @throws {Ima.IMAError} Thrown if a route is not define for current
+	 * @throws {Ima.Error.Error} Thrown if a route is not define for current
 	 *         path.
 	 */
 	getCurrentRouteInfo() {}
@@ -143,7 +164,6 @@ export default class Router {
 	 * The effects of this method cannot be reverted. This method has no effect
 	 * at the server side.
 	 *
-	 * @chainable
 	 * @method listen
 	 * @return {Ima.Router.Router} This router.
 	 */
@@ -217,7 +237,7 @@ export default class Router {
 	handleError(params, options = {}) {}
 
 	/**
-	 * Handles a "not found" error by responsing with the appropriate "not
+	 * Handles a "not found" error by responding with the appropriate "not
 	 * found" error page.
 	 *
 	 * @method handleNotFound
@@ -237,7 +257,7 @@ export default class Router {
 	 * failure at the server side.
 	 *
 	 * @method isClientError
-	 * @param {(Ima.IMAError|Error)} reason The encountered error.
+	 * @param {(Ima.Error.Error|Error)} reason The encountered error.
 	 * @return {boolean} {@code true} if the error was caused the action of the
 	 *         client.
 	 */
@@ -247,7 +267,7 @@ export default class Router {
 	 * Tests, if possible, whether the specified error lead to redirection.
 	 *
 	 * @method isRedirection
-	 * @param {(Ima.IMAError|Error)} reason The encountered error.
+	 * @param {(Ima.Error.Error|Error)} reason The encountered error.
 	 * @return {boolean} {@code true} if the error was caused the action of the
 	 *         redirection.
 	 */

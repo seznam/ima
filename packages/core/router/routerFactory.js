@@ -5,12 +5,12 @@ ns.namespace('Ima.Router');
 /**
  * Utility factory used by router to create routes.
  *
- * @class RouterFactory
+ * @class RouteFactory
  * @namespace Ima.Router
  * @module Ima
  * @submodule Ima.Router
  */
-export default class RouterFactory {
+export default class RouteFactory {
 
 	/**
 	 * Initializes the factory.
@@ -59,4 +59,4 @@ export default class RouterFactory {
 	}
 }
 
-ns.Ima.Router.RouterFactory = RouterFactory;
+ns.Ima.Router.RouteFactory = RouteFactory;
