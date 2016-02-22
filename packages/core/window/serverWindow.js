@@ -217,12 +217,6 @@ export default class ServerWindow extends WindowInterface {
 	 * @method unbindEventListener
 	 */
 	unbindEventListener(eventTarget, event, listener, useCapture = false) {}
-
-	/**
-	 * @inheritdoc
-	 * @method preventDefault
-	 */
-	preventDefault(event) {}
 }
 
 ns.Ima.Window.ServerWindow = ServerWindow;
