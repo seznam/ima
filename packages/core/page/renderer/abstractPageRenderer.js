@@ -1,23 +1,23 @@
 import ns from 'ima/namespace';
 import IMAError from 'ima/error/genericError';
-import PageRenderInterface from 'ima/interface/pageRender';
+import PageRendererInterface from 'ima/page/renderer/pageRenderer';
 
-ns.namespace('Ima.Abstract');
+ns.namespace('Ima.Page.Renderer');
 
 /**
  * Base class for implementations of the
- * {@codelink Ima.Interface.PageRenderer} interface.
+ * {@codelink Ima.Page.Renderer.PageRenderer} interface.
  *
- * @class PageRender
- * @implements Ima.Interface.PageRender
- * @namespace Ima.Abstract
+ * @class AbstractPageRenderer
+ * @implements Ima.Page.Renderer.PageRenderer
+ * @namespace Ima.Page.Renderer
  * @module Ima
- * @submodule Ima.Abstract
+ * @submodule Ima.Page
  *
  * @requires Vendor.$Helper
  * @requires Vendor.React
  */
-export default class PageRender extends PageRenderInterface {
+export default class AbstractPageRenderer extends PageRendererInterface {
 
 	/**
 	 * Initializes the abstract page renderer.
@@ -40,7 +40,7 @@ export default class PageRender extends PageRenderInterface {
 		 *
 		 * @protected
 		 * @property _factory
-		 * @type {Ima.Page.Render.Factory}
+		 * @type {Ima.Page.Renderer.PageRendererFactory}
 		 */
 		this._factory = factory;
 
@@ -140,4 +140,4 @@ export default class PageRender extends PageRenderInterface {
 	}
 }
 
-ns.Ima.Abstract.PageRender = PageRender;
+ns.Ima.Page.Renderer.AbstractPageRenderer = AbstractPageRenderer;

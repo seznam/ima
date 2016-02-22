@@ -1,4 +1,4 @@
-describe('Ima.Page.Render.Server', function() {
+describe('Ima.Page.Renderer.ServerPageRenderer', function() {
 
 	var param1 = 'param1';
 	var param2 = 'param2';
@@ -17,7 +17,7 @@ describe('Ima.Page.Render.Server', function() {
 
 	var pageRender = null;
 	var $Helper = ns.Vendor.$Helper;
-	var factory = oc.get('$PageRenderFactory');
+	var rendererFactory = oc.get('$PageRendererFactory');
 	var ReactDOMServer = oc.get('$ReactDOMServer');
 	var settings = oc.get('$Settings');
 	var response = oc.get('$Response');
@@ -25,7 +25,7 @@ describe('Ima.Page.Render.Server', function() {
 
 	beforeEach(function() {
 		response.init(expressResponse);
-		pageRender = oc.create('Ima.Page.Render.Server', [factory, $Helper, ReactDOMServer, settings, response, cache, oc]);
+		pageRender = oc.create('Ima.Page.Renderer.ServerPageRenderer', [rendererFactory, $Helper, ReactDOMServer, settings, response, cache, oc]);
 	});
 
 	it('should be wrap each key to promise', function() {
@@ -197,7 +197,7 @@ describe('Ima.Page.Render.Server', function() {
 			spyOn(controller, 'getState')
 				.and
 				.returnValue(state);
-			spyOn(factory, 'wrapView')
+			spyOn(rendererFactory, 'wrapView')
 				.and
 				.returnValue(wrapedPageViewElement);
 			spyOn(ReactDOMServer, 'renderToString')
@@ -206,7 +206,7 @@ describe('Ima.Page.Render.Server', function() {
 			spyOn(ns, 'get')
 				.and
 				.returnValue(documentView);
-			spyOn(factory, 'reactCreateFactory')
+			spyOn(rendererFactory, 'reactCreateFactory')
 				.and
 				.returnValue(documentViewFactory);
 			spyOn(ReactDOMServer, 'renderToStaticMarkup')
@@ -218,7 +218,7 @@ describe('Ima.Page.Render.Server', function() {
 			spyOn(controller, 'getMetaManager')
 				.and
 				.returnValue(metaManager);
-			spyOn(factory, 'getUtils')
+			spyOn(rendererFactory, 'getUtils')
 				.and
 				.returnValue(utils);
 
@@ -230,7 +230,7 @@ describe('Ima.Page.Render.Server', function() {
 		});
 
 		it('should wrap page view', function() {
-			expect(factory.wrapView).toHaveBeenCalledWith(props);
+			expect(rendererFactory.wrapView).toHaveBeenCalledWith(props);
 		});
 
 		it('should render page view to string', function() {
@@ -242,11 +242,11 @@ describe('Ima.Page.Render.Server', function() {
 		});
 
 		it('should create factory for creating React element from document view', function() {
-			expect(factory.reactCreateFactory).toHaveBeenCalledWith(documentView);
+			expect(rendererFactory.reactCreateFactory).toHaveBeenCalledWith(documentView);
 		});
 
 		it('should render static markup from document view', function() {
-			expect(factory.getUtils).toHaveBeenCalled();
+			expect(rendererFactory.getUtils).toHaveBeenCalled();
 			expect(controller.getMetaManager).toHaveBeenCalled();
 			expect(pageRender._getRevivalSettings).toHaveBeenCalled();
 			expect(ReactDOMServer.renderToStaticMarkup).toHaveBeenCalledWith(documentViewElement);

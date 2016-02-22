@@ -1,7 +1,7 @@
-describe('Ima.Abstract.PageRender', function() {
+describe('Ima.Page.Renderer.AbstractPageRenderer', function() {
 
 	var pageRender = null;
-	var renderFactory = oc.get('$PageRenderFactory');
+	var rendererFactory = oc.get('$PageRendererFactory');
 	var $Helper = ns.Vendor.$Helper;
 	var ReactDOM = oc.get('$ReactDOM');
 	var settings = oc.get('$Settings');
@@ -14,7 +14,7 @@ describe('Ima.Abstract.PageRender', function() {
 	var view = function() {};
 
 	beforeEach(function() {
-		pageRender = oc.create('Ima.Abstract.PageRender', [renderFactory, $Helper, ReactDOM, settings]);
+		pageRender = oc.create('Ima.Page.Renderer.AbstractPageRenderer', [rendererFactory, $Helper, ReactDOM, settings]);
 
 		pageRender._reactiveView = reactiveComponentView;
 	});
@@ -58,7 +58,7 @@ describe('Ima.Abstract.PageRender', function() {
 		it('should be set $Utils to props', function() {
 			var utils = { router: 'router' };
 
-			spyOn(renderFactory, 'getUtils')
+			spyOn(rendererFactory, 'getUtils')
 				.and
 				.returnValue(utils);
 

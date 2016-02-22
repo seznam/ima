@@ -1,27 +1,27 @@
 import ns from 'ima/namespace';
 import IMAError from 'ima/error/genericError';
-import AbstractPageRender from 'ima/abstract/pageRender';
+import AbstractPageRenderer from 'ima/page/renderer/abstractPageRenderer';
 
-ns.namespace('Ima.Page.Render');
+ns.namespace('Ima.Page.Renderer');
 
 /**
  * Server-side page renderer. The renderer renders the page into the HTML
  * markup and sends it to the client.
  *
- * @class Server
- * @extends Ima.Abstract.PageRender
- * @namespace Ima.Page.Render
+ * @class ServerPageRenderer
+ * @extends Ima.Page.Renderer.AbstractPageRenderer
+ * @namespace Ima.Page.Renderer
  * @module Ima
  * @submodule Ima.Page
  */
-export default class Server extends AbstractPageRender {
+export default class ServerPageRenderer extends AbstractPageRenderer {
 
 	/**
 	 * Initializes the server-side page renderer.
 	 *
 	 * @method contructor
 	 * @constructor
-	 * @param {Ima.Page.Render.Factory} factory Factory for receive $Utils to
+	 * @param {Ima.Page.Renderer.PageRendererFactory} factory Factory for receive $Utils to
 	 *        view.
 	 * @param {Vendor.$Helper} Helper The IMA.js helper methods.
 	 * @param {Vendor.ReactDOMServer} ReactDOMServer React framework instance
@@ -205,4 +205,4 @@ export default class Server extends AbstractPageRender {
 	}
 }
 
-ns.Ima.Page.Render.Server = Server;
+ns.Ima.Page.Renderer.ServerPageRenderer = ServerPageRenderer;

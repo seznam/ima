@@ -1,17 +1,17 @@
 import ns from 'ima/namespace';
 
-ns.namespace('Ima.Interface');
+ns.namespace('Ima.Page.Renderer');
 
 /**
  * The page renderer is a utility for rendering the page at either the
  * client-side or the server-side, handling the differences in the environment.
  *
- * @interface PageRender
- * @namespace Ima.Interface
+ * @interface PageRenderer
+ * @namespace Ima.Page.Renderer
  * @module Ima
- * @submodule Ima.Interface
+ * @submodule Ima.Page
  */
-export default class PageRender {
+export default class PageRenderer {
 	/**
 	 * Renders the page using the provided controller and view. The actual
 	 * behavior of this method differs at the client-side and the at
@@ -89,4 +89,4 @@ export default class PageRender {
 	setState(state = {}) {}
 }
 
-ns.Ima.Interface.PageRender = PageRender;
+ns.Ima.Page.Renderer.PageRenderer = PageRenderer;

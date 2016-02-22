@@ -1,18 +1,18 @@
 import ns from 'ima/namespace';
 
-ns.namespace('Ima.Page.Render');
+ns.namespace('Ima.Page.Renderer');
 
 /**
  * Factory for page render.
  *
- * @class Factory
- * @namespace Ima.Page.Render
+ * @class PageRendererFactory
+ * @namespace Ima.Page.Renderer
  * @module Ima
  * @submodule Ima.Page
  *
  * @requires Ima.ObjectContainer
  */
-export default class Factory {
+export default class PageRendererFactory {
 
 	/**
 	 * @method constructor
@@ -87,4 +87,4 @@ export default class Factory {
 	}
 }
 
-ns.Ima.Page.Render.Factory = Factory;
+ns.Ima.Page.Renderer.PageRendererFactory = PageRendererFactory;

@@ -18,7 +18,7 @@ export default class Client extends AbstractPageManager {
 	 * @method constructor
 	 * @constructor
 	 * @param {Ima.Page.Factory} pageFactory
-	 * @param {Ima.Interface.PageRender} pageRender
+	 * @param {Ima.Page.Renderer.PageRenderer} pageRender
 	 * @param {Ima.Page.State.PageStateManager} stateManager
 	 * @param {Ima.Window.Window} window
 	 * @param {Ima.Event.EventBus} eventBus

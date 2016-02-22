@@ -20,7 +20,7 @@ export default class ServerRouter extends AbstractRouter {
 	 *
 	 * @constructor
 	 * @method constructor
-	 * @param {Ima.Interface.PageRender} pageManager The current page manager.
+	 * @param {Ima.Page.Renderer.PageRenderer} pageManager The current page manager.
 	 * @param {Ima.Router.RouteFactory} factory The router factory used to create
 	 *        routes.
 	 * @param {Ima.Event.Dispatcher} dispatcher Dispatcher fires events to

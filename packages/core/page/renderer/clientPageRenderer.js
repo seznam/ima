@@ -1,26 +1,26 @@
 import ns from 'ima/namespace';
-import AbstractPageRender from 'ima/abstract/pageRender';
+import AbstractPageRenderer from 'ima/page/renderer/abstractPageRenderer';
 
-ns.namespace('Ima.Page.Render');
+ns.namespace('Ima.Page.Renderer');
 
 /**
  * Client-side page renderer. The renderer attempts to reuse the markup sent by
  * server if possible.
  *
- * @class Client
- * @extends Ima.Abstract.PageRender
- * @namespace Ima.Page.Render
+ * @class ClientPageRenderer
+ * @extends Ima.Page.Renderer.AbstractPageRenderer
+ * @namespace Ima.Page.Renderer
  * @module Ima
  * @submodule Ima.Page
  */
-export default class Client extends AbstractPageRender {
+export default class ClientPageRenderer extends AbstractPageRenderer {
 
 	/**
 	 * Initializes the client-side page renderer.
 	 *
 	 * @method constructor
 	 * @constructor
-	 * @param {Ima.Page.Render.Factory} factory Factory for receive $Utils to
+	 * @param {Ima.Page.Render.PageRendererFactory} factory Factory for receive $Utils to
 	 *        view.
 	 * @param {Vendor.$Helper} Helper The IMA.js helper methods.
 	 * @param {Vendor.ReactDOM} ReactDOM React framework instance to use to
@@ -304,4 +304,4 @@ export default class Client extends AbstractPageRender {
 	}
 }
 
-ns.Ima.Page.Render.Client = Client;
+ns.Ima.Page.Renderer.ClientPageRenderer = ClientPageRenderer;

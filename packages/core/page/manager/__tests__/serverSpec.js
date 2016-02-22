@@ -4,7 +4,7 @@ describe('Ima.Abstract.PageManager', function() {
 		decorateController: function(controller) {return controller;},
 		createView: function(view) { return view;}
 	};
-	var pageRender = oc.create('Ima.Interface.PageRender');
+	var pageRenderer = oc.create('Ima.Page.Renderer.PageRenderer');
 	var stateManager = oc.create('Ima.Page.State.PageStateManager');
 	var pageManager = null;
 
@@ -20,7 +20,7 @@ describe('Ima.Abstract.PageManager', function() {
 			oc.create('Ima.Page.Manager.Server',
 				[
 					pageFactory,
-					pageRender,
+					pageRenderer,
 					stateManager
 				]
 			);

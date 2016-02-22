@@ -5,7 +5,7 @@ describe('Ima.Abstract.PageManager', function() {
 		decoratePageStateManager: function(pageStateManger) {return pageStateManger},
 		createView: function(view) { return view;}
 	};
-	var pageRender = oc.create('Ima.Interface.PageRender');
+	var pageRenderer = oc.create('Ima.Page.Renderer.PageRenderer');
 	var pageStateManager = oc.create('Ima.Page.State.PageStateManager');
 	var pageManager = null;
 
@@ -42,7 +42,7 @@ describe('Ima.Abstract.PageManager', function() {
 			oc.create('Ima.Abstract.PageManager',
 				[
 					pageFactory,
-					pageRender,
+					pageRenderer,
 					pageStateManager
 				]
 			);
@@ -280,7 +280,7 @@ describe('Ima.Abstract.PageManager', function() {
 			spyOn(pageManager, '_getLoadedExtensionsState')
 				.and
 				.returnValue(extensionsState);
-			spyOn(pageRender, 'mount')
+			spyOn(pageRenderer, 'mount')
 				.and
 				.returnValue(Promise.resolve());
 		});
@@ -289,7 +289,7 @@ describe('Ima.Abstract.PageManager', function() {
 			pageManager
 				._loadPageSource()
 				.then(function() {
-					expect(pageRender.mount).toHaveBeenCalledWith(decoratedController, View, pageState);
+					expect(pageRenderer.mount).toHaveBeenCalledWith(decoratedController, View, pageState);
 					done();
 				})
 				.catch(function(error) {
@@ -428,7 +428,7 @@ describe('Ima.Abstract.PageManager', function() {
 			spyOn(pageManager, '_getUpdatedExtensionsState')
 				.and
 				.returnValue(extensionsState);
-			spyOn(pageRender, 'update')
+			spyOn(pageRenderer, 'update')
 				.and
 				.returnValue(Promise.resolve());
 		});
@@ -437,7 +437,7 @@ describe('Ima.Abstract.PageManager', function() {
 			pageManager
 				._updatePageSource()
 				.then(function() {
-					expect(pageRender.update).toHaveBeenCalledWith(decoratedController, pageState);
+					expect(pageRenderer.update).toHaveBeenCalledWith(decoratedController, pageState);
 					done();
 				})
 				.catch(function(error) {
@@ -576,7 +576,7 @@ describe('Ima.Abstract.PageManager', function() {
 			spyOn(pageStateManager, 'clear')
 				.and
 				.stub();
-			spyOn(pageRender, 'unmount')
+			spyOn(pageRenderer, 'unmount')
 				.and
 				.stub();
 			spyOn(pageManager, '_clearManagedPageValue')
@@ -588,7 +588,7 @@ describe('Ima.Abstract.PageManager', function() {
 			expect(pageManager._destroyController).toHaveBeenCalledWith();
 			expect(pageManager._destroyExtensions).toHaveBeenCalledWith();
 			expect(pageStateManager.clear).toHaveBeenCalledWith();
-			expect(pageRender.unmount).toHaveBeenCalledWith();
+			expect(pageRenderer.unmount).toHaveBeenCalledWith();
 			expect(pageManager._clearManagedPageValue).toHaveBeenCalledWith();
 		});
 	});
@@ -685,13 +685,13 @@ describe('Ima.Abstract.PageManager', function() {
 		it('should call setState', function() {
 			var state = { state: 'state' };
 
-			spyOn(pageRender, 'setState')
+			spyOn(pageRenderer, 'setState')
 				.and
 				.stub();
 
 			pageManager._onChangeStateHandler(state);
 
-			expect(pageRender.setState).toHaveBeenCalledWith(state);
+			expect(pageRenderer.setState).toHaveBeenCalledWith(state);
 		});
 	});
 });

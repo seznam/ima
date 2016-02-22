@@ -5,7 +5,7 @@ describe('Ima.Page.Manager.Client', function() {
 		decoratePageStateManager: function(pageStateManger) { return pageStateManger; },
 		createView: function(view) { return view; }
 	};
-	var pageRender = oc.create('Ima.Interface.PageRender');
+	var pageRenderer = oc.create('Ima.Page.Renderer.PageRenderer');
 	var pageStateManager = oc.create('Ima.Page.State.PageStateManager');
 	var windowInterface = oc.create('Ima.Window.Window');
 	var eventBusInterface = oc.create('Ima.Event.EventBus');
@@ -43,7 +43,7 @@ describe('Ima.Page.Manager.Client', function() {
 			oc.create('Ima.Page.Manager.Client',
 				[
 					pageFactory,
-					pageRender,
+					pageRenderer,
 					pageStateManager,
 					windowInterface,
 					eventBusInterface

@@ -97,19 +97,19 @@ export var init = (ns, oc, config) => { //jshint ignore:line
 	oc.provide(ns.Ima.Page.State.PageStateManager, ns.Ima.Page.State.PageStateManagerImpl);
 	oc.bind('$PageStateManager', ns.Ima.Page.State.PageStateManager);
 	oc.bind('$PageFactory', ns.Ima.Page.Factory, [oc]);
-	oc.constant('$PageRenderViewAdapter', ns.Ima.Page.Render.ViewAdapter);
-	oc.bind('$PageRenderFactory', ns.Ima.Page.Render.Factory, [oc, '$React', '$PageRenderViewAdapter']);
+	oc.constant('$PageRendererViewAdapter', ns.Ima.Page.Renderer.ViewAdapter);
+	oc.bind('$PageRendererFactory', ns.Ima.Page.Renderer.PageRendererFactory, [oc, '$React', '$PageRendererViewAdapter']);
 	if (oc.get('$Window').isClient()) {
-		oc.provide(ns.Ima.Interface.PageRender, ns.Ima.Page.Render.Client, ['$PageRenderFactory', '$Helper', '$ReactDOM', '$Settings', '$Window']);
+		oc.provide(ns.Ima.Page.Renderer.PageRenderer, ns.Ima.Page.Renderer.ClientPageRenderer, ['$PageRendererFactory', '$Helper', '$ReactDOM', '$Settings', '$Window']);
 	} else {
-		oc.provide(ns.Ima.Interface.PageRender, ns.Ima.Page.Render.Server, ['$PageRenderFactory', '$Helper', '$ReactDOMServer', '$Settings', '$Response', '$Cache']);
+		oc.provide(ns.Ima.Page.Renderer.PageRenderer, ns.Ima.Page.Renderer.ServerPageRenderer, ['$PageRendererFactory', '$Helper', '$ReactDOMServer', '$Settings', '$Response', '$Cache']);
 	}
-	oc.bind('$PageRender', ns.Ima.Interface.PageRender);
+	oc.bind('$PageRenderer', ns.Ima.Page.Renderer.PageRenderer);
 	//oc.provide(ns.Ima.Interface.PageManager, ns.Ima.Page.Manager, ['$PageFactory', '$PageRender', '$PageStateManager', '$Window', '$EventBus']);
 	if (oc.get('$Window').isClient()) {
-		oc.provide(ns.Ima.Interface.PageManager, ns.Ima.Page.Manager.Client, ['$PageFactory', '$PageRender', '$PageStateManager', '$Window', '$EventBus']);
+		oc.provide(ns.Ima.Interface.PageManager, ns.Ima.Page.Manager.Client, ['$PageFactory', '$PageRenderer', '$PageStateManager', '$Window', '$EventBus']);
 	} else {
-		oc.provide(ns.Ima.Interface.PageManager, ns.Ima.Page.Manager.Server, ['$PageFactory', '$PageRender', '$PageStateManager']);
+		oc.provide(ns.Ima.Interface.PageManager, ns.Ima.Page.Manager.Server, ['$PageFactory', '$PageRenderer', '$PageStateManager']);
 	}
 	oc.bind('$PageManager', ns.Ima.Interface.PageManager);
 
