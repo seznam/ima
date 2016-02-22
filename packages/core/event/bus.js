@@ -38,7 +38,7 @@ export default class Bus extends EventBus {
 		/**
 		 * @private
 		 * @property _window
-		 * @type {Ima.Interface.Window}
+		 * @type {Ima.Window.Window}
 		 * @default window
 		 */
 		this._window = window;

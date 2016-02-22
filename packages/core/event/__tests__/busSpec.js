@@ -20,7 +20,7 @@ describe('Ima.Event.Bus', function () {
 	var windowInterface = null;
 	var eventBus = null;
 	beforeEach(function () {
-		windowInterface = oc.create('Ima.Interface.Window');
+		windowInterface = oc.create('Ima.Window.Window');
 		eventBus = oc.create('Ima.Event.Bus', [ windowInterface ]);
 	});
 

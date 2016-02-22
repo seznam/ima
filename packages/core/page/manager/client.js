@@ -20,7 +20,7 @@ export default class Client extends AbstractPageManager {
 	 * @param {Ima.Page.Factory} pageFactory
 	 * @param {Ima.Interface.PageRender} pageRender
 	 * @param {Ima.Interface.PageStateManager} stateManager
-	 * @param {Ima.Interface.Window} window
+	 * @param {Ima.Window.Window} window
 	 * @param {Ima.Interface.EventBus} eventBus
 	 */
 	constructor(pageFactory, pageRender, stateManager, window, eventBus) {
@@ -29,7 +29,7 @@ export default class Client extends AbstractPageManager {
 		/**
 		 * @private
 		 * @property _window
-		 * @type {Ima.Interface.Window}
+		 * @type {Ima.Window.Window}
 		 * @default window
 		 */
 		this._window = window;

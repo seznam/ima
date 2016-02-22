@@ -27,7 +27,7 @@ export default class Client extends AbstractPageRender {
 	 *        render the page on the client side.
 	 * @param {Object<string, *>} settings The application setting for the
 	 *        current application environment.
-	 * @param {Ima.Interface.Window} window Helper for manipulating the global
+	 * @param {Ima.Window.Window} window Helper for manipulating the global
 	 *        object ({@code window}) regardless of the client/server-side
 	 *        environment.
 	 */
@@ -50,7 +50,7 @@ export default class Client extends AbstractPageRender {
 		 *
 		 * @property _window
 		 * @private
-		 * @type {Ima.Interface.Window}
+		 * @type {Ima.Window.Window}
 		 */
 		this._window = window;
 

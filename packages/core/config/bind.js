@@ -34,11 +34,11 @@ export var init = (ns, oc, config) => { //jshint ignore:line
 
 	//Window helper
 	if (typeof window !== 'undefined' && window !== null) {
-		oc.provide(ns.Ima.Interface.Window, ns.Ima.Window.Client);
+		oc.provide(ns.Ima.Window.Window, ns.Ima.Window.ClientWindow);
 	} else {
-		oc.provide(ns.Ima.Interface.Window, ns.Ima.Window.Server);
+		oc.provide(ns.Ima.Window.Window, ns.Ima.Window.ServerWindow);
 	}
-	oc.bind('$Window', ns.Ima.Interface.Window);
+	oc.bind('$Window', ns.Ima.Window.Window);
 
 	//Ima Error
 	oc.bind('$Error', ns.Ima.IMAError);

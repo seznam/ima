@@ -97,7 +97,7 @@ export default class ClientRouter extends AbstractRouter {
 	 *        The internal router constants. The {@code ROUTE_NAMES}
 	 *        contains internal route names. The {@code EVENTS} contains name
 	 *        of events which are fired with {@code Ima.Interface.Dispatcher}.
-	 * @param {Ima.Interface.Window} window The current global client-side
+	 * @param {Ima.Window.Window} window The current global client-side
 	 *        APIs provider.
 	 */
 	constructor(pageManager, factory, dispatcher, ROUTER_CONSTANTS, window) {
@@ -108,7 +108,7 @@ export default class ClientRouter extends AbstractRouter {
 		 *
 		 * @private
 		 * @property _window
-		 * @type {Ima.Interface.Window}
+		 * @type {Ima.Window.Window}
 		 */
 		this._window = window;
 

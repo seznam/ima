@@ -47,7 +47,7 @@ export default class Cookie extends MapStorage {
 	 *
 	 * @constructor
 	 * @method constructor
-	 * @param {Ima.Interface.Window} window The window utility.
+	 * @param {Ima.Window.Window} window The window utility.
 	 * @param {Ima.Router.Request} request The current HTTP request.
 	 * @param {Ima.Router.Response} response The current HTTP response.
 	 * @example
@@ -65,7 +65,7 @@ export default class Cookie extends MapStorage {
 		 *
 		 * @private
 		 * @property _window
-		 * @type {Ima.Interface.Window}
+		 * @type {Ima.Window.Window}
 		 */
 		this._window = window;
 

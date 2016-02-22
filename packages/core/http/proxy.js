@@ -22,7 +22,7 @@ export default class Proxy {
 	 * @param {Object} HTTP_STATUS_CODE
 	 * @param {Ima.Http.Transformer} transformer Transform apply rules to
 	 *        request url.
-	 * @param {Ima.Interface.Window} window Helper for manipulating the global
+	 * @param {Ima.Window.Window} window Helper for manipulating the global
 	 *        object ({@code window}) regardless of the client/server-side
 	 *        environment.
 	 */
@@ -60,7 +60,7 @@ export default class Proxy {
 		 *
 		 * @property _window
 		 * @private
-		 * @type {Ima.Interface.Window}
+		 * @type {Ima.Window.Window}
 		 */
 		this._window = window;
 

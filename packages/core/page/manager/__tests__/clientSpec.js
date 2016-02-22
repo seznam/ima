@@ -7,7 +7,7 @@ describe('Ima.Page.Manager.Client', function() {
 	};
 	var pageRender = oc.create('Ima.Interface.PageRender');
 	var pageStateManager = oc.create('Ima.Interface.PageStateManager');
-	var windowInterface = oc.create('Ima.Interface.Window');
+	var windowInterface = oc.create('Ima.Window.Window');
 	var eventBusInterface = oc.create('Ima.Interface.EventBus');
 	var pageManager = null;
 

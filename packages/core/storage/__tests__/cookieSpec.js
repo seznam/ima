@@ -23,7 +23,7 @@ describe('Ima.Storage.Cookie', function() {
 	beforeEach(function() {
 		request = oc.create('Ima.Router.Request');
 		response = oc.create('Ima.Router.Response');
-		win = oc.create('Ima.Window.Server');
+		win = oc.create('Ima.Window.ServerWindow');
 		cookie = oc.create('Ima.Storage.Cookie', [win, request, response]);
 
 		request.init({});
