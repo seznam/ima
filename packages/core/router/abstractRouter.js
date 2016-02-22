@@ -25,7 +25,7 @@ export default class AbstractRouter extends RouterInterface {
 	 * @param {Ima.Interface.PageManager} pageManager The page manager
 	 *        handling UI rendering, and transitions between pages if at the
 	 *        client side.
-	 * @param {Ima.Router.RouterFactory} factory Factory for routes.
+	 * @param {Ima.Router.RouteFactory} factory Factory for routes.
 	 * @param {Ima.Event.Dispatcher} dispatcher Dispatcher fires events to
 	 *        app.
 	 * @param {{ROUTE_NAMES: Object<string, string>, EVENTS: Object<string, string>}} ROUTER_CONSTANTS
@@ -62,7 +62,7 @@ export default class AbstractRouter extends RouterInterface {
 		 *
 		 * @private
 		 * @property _factory
-		 * @type {Ima.Router.RouterFactory}
+		 * @type {Ima.Router.RouteFactory}
 		 */
 		this._factory = factory;
 
