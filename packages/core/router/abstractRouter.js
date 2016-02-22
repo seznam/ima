@@ -26,12 +26,12 @@ export default class AbstractRouter extends RouterInterface {
 	 *        handling UI rendering, and transitions between pages if at the
 	 *        client side.
 	 * @param {Ima.Router.RouterFactory} factory Factory for routes.
-	 * @param {Ima.Interface.Dispatcher} dispatcher Dispatcher fires events to
+	 * @param {Ima.Event.Dispatcher} dispatcher Dispatcher fires events to
 	 *        app.
 	 * @param {{ROUTE_NAMES: Object<string, string>, EVENTS: Object<string, string>}} ROUTER_CONSTANTS
 	 *        The internal router constants. The {@code ROUTE_NAMES} contains
 	 *        internal route names. The {@code EVENTS} contains name of events
-	 *        which are fired with {@code Ima.Interface.Dispatcher}.
+	 *        which are fired with {@code Ima.Event.Dispatcher}.
 	 * @example
 	 *      router.link('article', {articleId: 1});
 	 * @example
@@ -71,7 +71,7 @@ export default class AbstractRouter extends RouterInterface {
 		 *
 		 * @private
 		 * @property _dispatcher
-		 * @type {Ima.Interface.Dispatcher}
+		 * @type {Ima.Event.Dispatcher}
 		 */
 		this._dispatcher = dispatcher;
 

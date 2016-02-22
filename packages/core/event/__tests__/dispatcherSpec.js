@@ -1,4 +1,4 @@
-describe('Ima.Event.Dispatcher', function() {
+describe('Ima.Event.DispatcherImpl', function() {
 
 	var handlers = {
 		handler1: function() {},
@@ -12,7 +12,7 @@ describe('Ima.Event.Dispatcher', function() {
 
 	var dispatcher = null;
 	beforeEach(function() {
-		dispatcher = oc.create('Ima.Event.Dispatcher');
+		dispatcher = oc.create('Ima.Event.DispatcherImpl');
 	});
 
 	describe('listen method', function() {

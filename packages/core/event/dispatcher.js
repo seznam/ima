@@ -1,219 +1,88 @@
 import ns from 'ima/namespace';
-import IMAError from 'ima/imaError';
-import DispatcherInterface from 'ima/interface/dispatcher';
 
 ns.namespace('Ima.Event');
 
 /**
- * An empty immutable map of event listener to scopes, used for a mismatch in
- * the {@codelink _eventListeners} map.
+ * A Dispatcher is a utility that manager event listeners registered for events
+ * and allows distributing (firing) events to the listeners registered for the
+ * given event.
  *
- * @property EMPTY_MAP
- * @const
- * @type {Map<function (*), Set<?Object>>}
- */
-const EMPTY_MAP = Object.freeze(new Map());
-
-/**
- * An empty immutable set of event listener scopes, used for a mismatch in the
- * {@codelink _eventListeners} map.
+ * The dispatcher provides a single-node event bus and is usually used to
+ * propagate events from controllers to UI components when modifying/passing
+ * the state is impractical for any reason.
  *
- * @property EMPTY_SET
- * @const
- * @type {Set<?Object>}
- */
-const EMPTY_SET = Object.freeze(new Set());
-
-/**
- * Default implementation of the {@codelink Ima.Interface.Dispatcher}
- * interface.
- *
- * @class Dispatcher
- * @implements ns.Ima.Interface.Dispatcher
+ * @interface Dispatcher
  * @namespace Ima.Event
  * @module Ima
  * @submodule Ima.Event
  */
-export default class Dispatcher extends DispatcherInterface {
+export default class Dispatcher {
 	/**
-	 * Initializes the dispatcher.
+	 * Deregisters all event listeners currently registered with this
+	 * dispatcher.
 	 *
-	 * @constructor
-	 * @method constructor
-	 */
-	constructor() {
-		super();
-
-		/**
-		 * Map of event names to a map of event listeners to a set of scopes to
-		 * which the event listener should be bound when being executed due to
-		 * the event.
-		 *
-		 * @private
-		 * @property _eventListeners
-		 * @type {Map<string, Map<function(*), Set<?Object>>>}
-		 */
-		this._eventListeners = new Map();
-	}
-
-	/**
-	 * @inheritdoc
 	 * @method clear
+	 * @return {Ima.Event.Dispatcher} This dispatcher.
 	 */
-	clear() {
-		this._eventListeners.clear();
-
-		return this;
-	}
+	clear() {}
 
 	/**
-	 * @inheritdoc
+	 * Registers the provided event listener to be executed when the specified
+	 * event is fired on this dispatcher.
+	 *
+	 * When the specified event is fired, the event listener will be executed
+	 * with the data passed with the event as the first argument.
+	 *
+	 * The order in which the event listeners will be executed is unspecified
+	 * and should not be relied upon. Registering the same listener for the
+	 * same event and with the same scope multiple times has no effect.
+	 *
 	 * @method listen
+	 * @param {string} event The name of the event to listen for.
+	 * @param {function(*)} listener The event listener to register.
+	 * @param {?Object=} scope The object to which the {@code this} keyword
+	 *        will be bound in the event listener.
+	 * @return {Ima.Event.Dispatcher} This dispatcher.
 	 */
-	listen(event, listener, scope = null) {
-		if ($Debug) {
-			if (!(listener instanceof Function)) {
-				throw new IMAError(`The listener must be a function, ` +
-						`${listener} provided`);
-			}
-		}
-
-		if (!this._eventListeners.has(event)) {
-			this._createNewEvent(event);
-		}
-		var listeners = this._getListenersOf(event);
-
-		if (!listeners.has(listener)) {
-			this._createNewListener(event, listener);
-		}
-		this._getScopesOf(event, listener).add(scope);
-
-		return this;
-	}
+	listen(event, listener, scope = null) {}
 
 	/**
-	 * @inheritdoc
+	 * Deregisters the provided event listener, so it will no longer be
+	 * executed with the specified scope when the specified event is fired.
+	 *
 	 * @method unlisten
+	 * @param {string} event The name of the event for which the listener
+	 *        should be deregistered.
+	 * @param {function(*)} listener The event listener to deregister.
+	 * @param {?Object=} scope The object to which the {@code this} keyword
+	 *        would be bound in the event listener.
+	 * @return {Ima.Event.Dispatcher} This dispatcher.
 	 */
-	unlisten(event, listener, scope = null) {
-		var scopes = this._getScopesOf(event, listener);
-
-		if ($Debug) {
-			if (!scopes.has(scope)) {
-				console.warn('Ima.Event.Dispatcher.unlisten(): the ' +
-						`provided listener '${listener}' is not registered ` +
-						`for the specified event '${event}' and scope ` +
-						`'${scope}'. Check your workflow.`, {
-							event: event,
-							listener: listener,
-							scope: scope
-						});
-			}
-		}
-
-		scopes.delete(scope);
-		if (!scopes.size) {
-			var listeners = this._getListenersOf(event);
-			listeners.delete(listener);
-
-			if (!listeners.size) {
-				this._eventListeners.delete(event);
-			}
-		}
-
-		return this;
-	}
+	unlisten(event, listener, scope = null) {}
 
 	/**
-	 * @inheritdoc
+	 * Fires a new event of the specified name, carrying the provided data.
+	 *
+	 * The method will synchronously execute all event listeners registered for
+	 * the specified event, passing the provided data to them as the first
+	 * argument.
+	 *
+	 * Note that this method does not prevent the event listeners to modify the
+	 * data in any way. The order in which the event listeners will be executed
+	 * is unspecified and should not be relied upon.
+	 *
+	 * @chainable
 	 * @method fire
+	 * @param {string} event The name of the event to fire.
+	 * @param {Object<string, *>} data The data to pass to the event listeners.
+	 * @param {boolean=} [imaInternalEvent=false] The flag signalling whether
+	 *        this is an internal IMA event. The fired event is treated as a
+	 *        custom application event if this flag is not set.
+	 *        The flag is used only for debugging and has no effect on the
+	 *        propagation of the event.
+	 * @return {Ima.Event.Dispatcher} This dispatcher.
 	 */
-	fire(event, data, imaInternalEvent = false) {
-		var listeners = this._getListenersOf(event);
-
-		if (!listeners.size && !imaInternalEvent) {
-			console.warn('There are no event listeners registered for the ' +
-					`${event} event`, {
-						event: event,
-						data: data
-					});
-		}
-
-		for (var [listener, scopes] of listeners) {
-			for (var scope of scopes) {
-				listener.bind(scope)(data);
-			}
-		}
-
-		return this;
-	}
-
-	/**
-	 * Create new Map storage of listeners for the specified event.
-	 *
-	 * @private
-	 * @method _createNewEvent
-	 * @param {string} event The name of the event.
-	 */
-	_createNewEvent(event) {
-		var listeners = new Map();
-		this._eventListeners.set(event, listeners);
-	}
-
-	/**
-	 * Create new Set storage of scopes for the specified event and listener.
-	 *
-	 * @private
-	 * @method _createNewListener
-	 * @param {string} event The name of the event.
-	 * @param {function(*)} listener The event listener.
-	 */
-	_createNewListener(event, listener) {
-		var scopes = new Set();
-		this._eventListeners.get(event).set(listener, scopes);
-	}
-
-	/**
-	 * Retrieves the scopes in which the specified event listener should be
-	 * executed for the specified event.
-	 *
-	 * @private
-	 * @method _getScopesOf
-	 * @param {string} event The name of the event.
-	 * @param {function(*)} listener The event listener.
-	 * @return {Set<?Object>} The scopes in which the specified listeners
-	 *         should be executed in case of the specified event. The returned
-	 *         set is an unmodifiable empty set if no listeners are registered
-	 *         for the event.
-	 */
-	_getScopesOf(event, listener) {
-		var listenersToScopes = this._getListenersOf(event);
-
-		if (listenersToScopes.has(listener)) {
-			return listenersToScopes.get(listener);
-		}
-
-		return EMPTY_SET;
-	}
-
-	/**
-	 * Retrieves the map of event listeners to scopes they are bound to.
-	 *
-	 * @private
-	 * @method _getListenersOf
-	 * @param {string} event The name of the event.
-	 * @return {Map<function(*), Set<?Object>>} A map of event listeners to the
-	 *         scopes in which they should be executed. The returned map is an
-	 *         unmodifiable empty map if no listeners are registered for the
-	 *         event.
-	 */
-	_getListenersOf(event) {
-		if (this._eventListeners.has(event)) {
-			return this._eventListeners.get(event);
-		}
-
-		return EMPTY_MAP;
-	}
+	fire(event, data, imaInternalEvent = false) {}
 }
 
 ns.Ima.Event.Dispatcher = Dispatcher;

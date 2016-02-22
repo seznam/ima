@@ -91,12 +91,12 @@ export default class ClientRouter extends AbstractRouter {
 	 *        handling UI rendering, and transitions between pages if at the
 	 *        client side.
 	 * @param {Ima.Router.RouterFactory} factory Factory for routes.
-	 * @param {Ima.Interface.Dispatcher} dispatcher Dispatcher fires events to
+	 * @param {Ima.Event.Dispatcher} dispatcher Dispatcher fires events to
 	 *        app.
 	 * @param {{ROUTE_NAMES: Object<string, string>, EVENTS: Object<string, string>}} ROUTER_CONSTANTS
 	 *        The internal router constants. The {@code ROUTE_NAMES}
 	 *        contains internal route names. The {@code EVENTS} contains name
-	 *        of events which are fired with {@code Ima.Interface.Dispatcher}.
+	 *        of events which are fired with {@code Ima.Event.Dispatcher}.
 	 * @param {Ima.Window.Window} window The current global client-side
 	 *        APIs provider.
 	 */

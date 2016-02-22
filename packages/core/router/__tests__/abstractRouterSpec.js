@@ -24,7 +24,7 @@ describe('Ima.Router.AbstractRouter', function() {
 
 		pageManager = oc.create('Ima.Interface.PageManager');
 		routerFactory = oc.create('$RouterFactory');
-		dispatcher = oc.create('Ima.Interface.Dispatcher');
+		dispatcher = oc.create('Ima.Event.Dispatcher');
 		router = oc.create('Ima.Router.AbstractRouter', [pageManager, routerFactory, dispatcher, ROUTER_CONSTANTS]);
 
 		router.init(config);

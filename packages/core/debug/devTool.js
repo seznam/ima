@@ -18,8 +18,8 @@ export default class DevTool {
 	 * @param {Ima.Interface.PageManager} pageManager
 	 * @param {Ima.Interface.PageStateManager} stateManager
 	 * @param {Ima.Window.Window} window
-	 * @param {Ima.Interface.Dispatcher} dispatcher
-	 * @param {Ima.Interface.EventBus} eventBus
+	 * @param {Ima.Event.Dispatcher} dispatcher
+	 * @param {Ima.Event.EventBus} eventBus
 	 */
 	constructor(pageManager, stateManager, window, dispatcher, eventBus) {
 
@@ -55,7 +55,7 @@ export default class DevTool {
 		 *
 		 * @private
 		 * @property _dispatcher
-		 * @type {Ima.Interface.Dispatcher}
+		 * @type {Ima.Event.Dispatcher}
 		 */
 		this._dispatcher = dispatcher;
 
@@ -63,7 +63,7 @@ export default class DevTool {
 		 * $IMA eventBus
 		 *
 		 * @property _eventBus
-		 * @type {Ima.Interface.EventBus}
+		 * @type {Ima.Event.EventBus}
 		 */
 		this._eventBus = eventBus;
 	}

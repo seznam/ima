@@ -1,4 +1,4 @@
-describe('Ima.Event.Bus', function () {
+describe('Ima.Event.EventBusImpl', function () {
 
 	var listeners = {
 		listener1: function () {},
@@ -21,7 +21,7 @@ describe('Ima.Event.Bus', function () {
 	var eventBus = null;
 	beforeEach(function () {
 		windowInterface = oc.create('Ima.Window.Window');
-		eventBus = oc.create('Ima.Event.Bus', [ windowInterface ]);
+		eventBus = oc.create('Ima.Event.EventBusImpl', [ windowInterface ]);
 	});
 
 	describe('listen method', function () {

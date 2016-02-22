@@ -12,7 +12,7 @@ describe('Ima.Router.ServerRouter', function() {
 	beforeEach(function() {
 		pageRender = oc.create('Ima.Interface.PageManager');
 		routerFactory = oc.create('$RouterFactory');
-		dispatcher = oc.create('Ima.Interface.Dispatcher');
+		dispatcher = oc.create('Ima.Event.Dispatcher');
 		request = oc.create('Ima.Router.Request');
 		response = oc.create('Ima.Router.Response');
 		router = oc.create('Ima.Router.ServerRouter', [pageRender, routerFactory, dispatcher, ROUTER_CONSTANTS, request, response]);

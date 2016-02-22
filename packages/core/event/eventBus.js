@@ -1,6 +1,6 @@
 import ns from 'ima/namespace';
 
-ns.namespace('Ima.Interface');
+ns.namespace('Ima.Event');
 
 /**
  * Utility for sending and intercepting wrapped custom DOM events on the DOM or
@@ -16,9 +16,9 @@ ns.namespace('Ima.Interface');
  * by the implementation.
  *
  * @interface EventBus
- * @namespace Ima.Interface
+ * @namespace Ima.Event
  * @module Ima
- * @submodule Ima.Interface
+ * @submodule Ima.Event
  */
 export default class EventBus {
 
@@ -45,7 +45,7 @@ export default class EventBus {
 	 *        custom event fired by this event bus.
 	 *        The default options passed to the custom event constructor are
 	 *        {@code { bubbles: true, cancelable: true }}.
-	 * @return {Ima.Event.Bus} This custom event bus.
+	 * @return {Ima.Event.EventBus} This custom event bus.
 	 * @throws {Error} Thrown if the provided event target cannot be used to
 	 *         fire the event.
 	 * @see https://developer.mozilla.org/en-US/docs/Web/API/Event/Event
@@ -68,7 +68,7 @@ export default class EventBus {
 	 *        should listen for all event bus events.
 	 * @param {function(<CustomEvent>)} listener The event listener to
 	 *        register.
-	 * @return {Ima.Event.Bus} This event bus.
+	 * @return {Ima.Event.EventBus} This event bus.
 	 */
 	listenAll(eventTarget, listener) {}
 
@@ -89,7 +89,7 @@ export default class EventBus {
 	 * @param {string} eventName The name of the event to listen for.
 	 * @param {function(<CustomEvent>)} listener The event listener to
 	 *        register.
-	 * @return {Ima.Event.Bus} This event bus.
+	 * @return {Ima.Event.EventBus} This event bus.
 	 */
 	listen(eventTarget, eventName, listener) {}
 
@@ -107,7 +107,7 @@ export default class EventBus {
 	 *        listener listens for events.
 	 * @param {function(<CustomEvent>)} listener The event listener to
 	 *        deregister.
-	 * @return {Ima.Event.Bus} This event bus.
+	 * @return {Ima.Event.EventBus} This event bus.
 	 */
 	unlistenAll(eventTarget, listener) {}
 
@@ -125,9 +125,9 @@ export default class EventBus {
 	 * @param {string} eventName The name of the event listened for.
 	 * @param {function(<CustomEvent>)} listener The event listener to
 	 *        deregister.
-	 * @return {Ima.Event.Bus} This event bus.
+	 * @return {Ima.Event.EventBus} This event bus.
 	 */
 	unlisten(eventTarget, eventName, listener) {}
 }
 
-ns.Ima.Interface.EventBus = EventBus;
+ns.Ima.Event.EventBus = EventBus;

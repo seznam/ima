@@ -23,12 +23,12 @@ export default class ServerRouter extends AbstractRouter {
 	 * @param {Ima.Interface.PageRender} pageManager The current page manager.
 	 * @param {Ima.Router.RouterFactory} factory The router factory used to create
 	 *        routes.
-	 * @param {Ima.Interface.Dispatcher} dispatcher Dispatcher fires events to
+	 * @param {Ima.Event.Dispatcher} dispatcher Dispatcher fires events to
 	 *        app.
 	 * @param {{ROUTE_NAMES: Object<string, string>, EVENTS: Object<string, string>}} ROUTER_CONSTANTS
 	 *        The internal router constants. The {@code ROUTE_NAMES}
 	 *        contains internal route names. The {@code EVENTS} contains name
-	  *       of events which are fired with {@code Ima.Interface.Dispatcher}.
+	  *       of events which are fired with {@code Ima.Event.Dispatcher}.
 	 * @param {Ima.Router.Request} request The current HTTP request.
 	 * @param {Ima.Router.Response} response The current HTTP response.
 	 */

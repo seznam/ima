@@ -21,7 +21,7 @@ export default class Client extends AbstractPageManager {
 	 * @param {Ima.Interface.PageRender} pageRender
 	 * @param {Ima.Interface.PageStateManager} stateManager
 	 * @param {Ima.Window.Window} window
-	 * @param {Ima.Interface.EventBus} eventBus
+	 * @param {Ima.Event.EventBus} eventBus
 	 */
 	constructor(pageFactory, pageRender, stateManager, window, eventBus) {
 		super(pageFactory, pageRender, stateManager);
@@ -37,7 +37,7 @@ export default class Client extends AbstractPageManager {
 		/**
 		 * @private
 		 * @property _eventBus
-		 * @type {Ima.Interface.EventBus}
+		 * @type {Ima.Event.EventBus}
 		 * @default eventBus
 		 */
 		this._eventBus = eventBus;

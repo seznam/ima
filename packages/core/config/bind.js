@@ -69,12 +69,12 @@ export var init = (ns, oc, config) => { //jshint ignore:line
 	oc.bind('$SessionMapStorage', ns.Ima.Storage.SessionMap, ['$MapStorage', '$SessionStorage']);
 
 	// Dispatcher
-	oc.provide(ns.Ima.Interface.Dispatcher, ns.Ima.Event.Dispatcher);
-	oc.bind('$Dispatcher', ns.Ima.Interface.Dispatcher);
+	oc.provide(ns.Ima.Event.Dispatcher, ns.Ima.Event.DispatcherImpl);
+	oc.bind('$Dispatcher', ns.Ima.Event.Dispatcher);
 
 	// Custom Event Bus
-	oc.provide(ns.Ima.Interface.EventBus, ns.Ima.Event.Bus, ['$Window']);
-	oc.bind('$EventBus', ns.Ima.Interface.EventBus);
+	oc.provide(ns.Ima.Event.EventBus, ns.Ima.Event.EventBusImpl, ['$Window']);
+	oc.bind('$EventBus', ns.Ima.Event.EventBus);
 
 	//Cache
 	oc.constant('$CacheEntry', ns.Ima.Cache.CacheEntry);

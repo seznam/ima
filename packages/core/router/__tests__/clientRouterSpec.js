@@ -11,7 +11,7 @@ describe('Ima.Router.ClientRouter', function() {
 	beforeEach(function() {
 		pageRender = oc.create('Ima.Interface.PageManager');
 		routerFactory = oc.create('$RouterFactory');
-		dispatcher = oc.create('Ima.Interface.Dispatcher');
+		dispatcher = oc.create('Ima.Event.Dispatcher');
 		win = oc.get('$Window');
 		router = oc.create('Ima.Router.ClientRouter', [pageRender, routerFactory, dispatcher, ROUTER_CONSTANTS, win]);
 

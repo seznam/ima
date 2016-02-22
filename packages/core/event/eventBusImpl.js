@@ -1,6 +1,6 @@
 import ns from 'ima/namespace';
 import IMAError from 'ima/imaError';
-import EventBus from 'ima/interface/eventBus';
+import EventBus from 'ima/event/eventBus';
 
 ns.namespace('Ima.Event');
 
@@ -19,18 +19,19 @@ const IMA_EVENT = '$IMA.CustomEvent';
  * It offers public methods for firing custom events
  * and two methods for catching events (e.g. inside view components).
  *
- * @class Bus
- * @implements Ima.Interface.EventBus
+ * @class EventBusImpl
+ * @implements Ima.Event.EventBus
  * @namespace Ima.Event
  * @module Ima
  * @submodule Ima.Event
  */
-export default class Bus extends EventBus {
+export default class EventBusImpl extends EventBus {
 	/**
 	 * Initializes the custom event helper.
 	 *
 	 * @constructor
 	 * @method constructor
+	 * @param {Ima.Window.Window} window
 	 */
 	constructor(window) {
 		super();
@@ -85,7 +86,7 @@ export default class Bus extends EventBus {
 		if (eventTarget && typeof eventTarget.dispatchEvent !== 'undefined') {
 			eventTarget.dispatchEvent(event);
 		} else {
-			throw new IMAError(`Ima.Event.Bus.fire: The EventSource ` +
+			throw new IMAError(`Ima.Event.EventBusImpl.fire: The EventSource ` +
 					`${eventTarget} is not defined or can not dispatch ` +
 					`event '${eventName}' (data: ${data}).`,
 					{ eventTarget, eventName, data, eventInitialization });
@@ -169,7 +170,7 @@ export default class Bus extends EventBus {
 			if ($Debug) {
 				console.warn('The provided listener is not bound to listen ' +
 						'for the specified event on the specified event ' +
-						'target');
+						'target.');
 			}
 
 			return this;
@@ -180,7 +181,7 @@ export default class Bus extends EventBus {
 			if ($Debug) {
 				console.warn('The provided listener is not bound to listen ' +
 						'for the specified event on the specified event ' +
-						'target');
+						'target.');
 			}
 
 			return this;
@@ -191,7 +192,7 @@ export default class Bus extends EventBus {
 			if ($Debug) {
 				console.warn('The provided listener is not bound to listen ' +
 						'for the specified event on the specified event ' +
-						'target');
+						'target.');
 			}
 
 			return this;
@@ -215,4 +216,4 @@ export default class Bus extends EventBus {
 	}
 }
 
-ns.Ima.Event.Bus = Bus;
+ns.Ima.Event.EventBusImpl = EventBusImpl;
