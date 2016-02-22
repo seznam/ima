@@ -1,23 +1,28 @@
 import ns from 'ima/namespace';
+import ExtensibleError from './extensibleError';
 
-ns.namespace('Ima.Interface');
+ns.namespace('Ima.Error');
 
 /**
  * The IMA application error extends the native {@code Error} with additional
  * details that lead to the error and the HTTP status code to send to the
  * client.
  *
+ * Implementation note: This is an interface that extends the abstract class
+ * {@linkcode ExtensibleError}, which does not make much sense from the strict
+ * OOP standpoint, but is necessary due to limitations of JavaScript, so that
+ * IMA errors are instances of both the native errors and of this interface.
+ *
  * @interface Error
  * @namespace Ima.Interface
  * @module Ima
  * @submodule Ima.Interface
  */
-export default class Error {
-
+export default class Error extends ExtensibleError {
 	/**
 	 * Returns the HTTP status to send to the client.
 	 *
-	 * If the error occurs at the client-side, the status code is used to
+	 * If the error has occurred at the client-side, the status code is used to
 	 * determine the error page to show to the user.
 	 *
 	 * This method is a shorthand for the following code snippet:
@@ -42,24 +47,6 @@ export default class Error {
 	 * @see getHttpStatus
 	 */
 	getParams() {}
-
-	/**
-	 * Returns the name of this error. The name briefly describes this error.
-	 *
-	 * @method getName
-	 * @return {string} The name of this error.
-	 */
-	getName() {}
-
-	/**
-	 * Returns a string representing this error. The string will consist of the
-	 * error name and the accompanying message.
-	 *
-	 * @override
-	 * @method toString
-	 * @return {string} A string representing this error.
-	 */
-	toString() {}
 }
 
-ns.Ima.Interface.Error = Error;
+ns.Ima.Error.Error = Error;
