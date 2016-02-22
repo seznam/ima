@@ -41,7 +41,7 @@ export var init = (ns, oc, config) => { //jshint ignore:line
 	oc.bind('$Window', ns.Ima.Window.Window);
 
 	//Ima Error
-	oc.bind('$Error', ns.Ima.IMAError);
+	oc.bind('$Error', ns.Ima.Error.GenericError);
 
 	//Dictionary
 	oc.provide(ns.Ima.Dictionary.Dictionary, ns.Ima.Dictionary.MessageFormatDictionary);

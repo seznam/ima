@@ -115,7 +115,7 @@ describe('Ima.Http.HttpAgentImpl', function() {
 
 				http[method](data.params.url, data.params.data, data.params.options)
 					.then(function() {}, function(error) {
-						expect(error instanceof ns.Ima.IMAError).toBe(true);
+						expect(error instanceof ns.Ima.Error.GenericError).toBe(true);
 						expect(proxy.request.calls.count()).toEqual(2);
 						done();
 					});

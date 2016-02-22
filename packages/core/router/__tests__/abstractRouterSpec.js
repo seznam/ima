@@ -200,7 +200,7 @@ describe('Ima.Router.AbstractRouter', function() {
 			router
 				.route(path)
 				.then(function(params) {
-					expect(params.error instanceof ns.Ima.IMAError).toBe(true);
+					expect(params.error instanceof ns.Ima.Error.GenericError).toBe(true);
 					done();
 				});
 		});
@@ -258,7 +258,7 @@ describe('Ima.Router.AbstractRouter', function() {
 			router
 				.handleError(params)
 				.catch(function(reason) {
-					expect(reason instanceof ns.Ima.IMAError).toBe(true);
+					expect(reason instanceof ns.Ima.Error.GenericError).toBe(true);
 					done();
 				});
 		});
@@ -280,7 +280,7 @@ describe('Ima.Router.AbstractRouter', function() {
 		});
 
 		it('should handle "notFound" route', function(done) {
-			var params = { error: new ns.Ima.IMAError() };
+			var params = { error: new ns.Ima.Error.GenericError() };
 
 			spyOn(router._routes, 'get')
 				.and
@@ -294,7 +294,7 @@ describe('Ima.Router.AbstractRouter', function() {
 				.handleNotFound(params, options)
 				.then(function(response) {
 					expect(router._handle).toHaveBeenCalledWith(route, params, options);
-					expect(response.error instanceof ns.Ima.IMAError).toEqual(true);
+					expect(response.error instanceof ns.Ima.Error.GenericError).toEqual(true);
 					done();
 				})
 				.catch(function(error) {
@@ -313,7 +313,7 @@ describe('Ima.Router.AbstractRouter', function() {
 			router
 				.handleNotFound(params)
 				.catch(function(reason) {
-					expect(reason instanceof ns.Ima.IMAError).toBe(true);
+					expect(reason instanceof ns.Ima.Error.GenericError).toBe(true);
 					done();
 				});
 		});
