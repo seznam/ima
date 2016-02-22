@@ -49,7 +49,7 @@ describe('Ima.Page.Render.Server', function() {
 			pageRender
 				.update(controller, params)
 				.catch(function(error) {
-					expect(error instanceof ns.Ima.IMAError).toEqual(true);
+					expect(error instanceof ns.Ima.Error.GenericError).toEqual(true);
 					done();
 				});
 		});

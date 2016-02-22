@@ -1,4 +1,5 @@
 import ns from 'ima/namespace';
+import IMAError from 'ima/error/genericError';
 import PageManagerInterface from 'ima/interface/pageManager';
 
 ns.namespace('Ima.Abstract');

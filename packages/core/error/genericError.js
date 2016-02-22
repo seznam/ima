@@ -1,5 +1,5 @@
 import ns from 'ima/namespace';
-import Error from './imaError';
+import Error from './error';
 
 ns.namespace('Ima.Error');
 

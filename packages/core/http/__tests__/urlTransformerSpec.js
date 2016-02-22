@@ -1,9 +1,9 @@
-describe('Ima.Http.Transformer', function() {
+describe('Ima.Http.UrlTransformer', function() {
 
 	var transformer = null;
 
 	beforeEach(function() {
-		transformer = oc.create('$HttpTransformer');
+		transformer = oc.create('$HttpUrlTransformer');
 
 		transformer
 			.addRule('//localhost:3001/something', '//127.0.0.1:3002/somethingElse')
@@ -40,7 +40,7 @@ describe('Ima.Http.Transformer', function() {
 
 	it('should return same url for none rules', function() {
 		var  url = 'http://www.example.com/something';
-		transformer = oc.create('$HttpTransformer');
+		transformer = oc.create('$HttpUrlTransformer');
 
 		expect(transformer.transform(url)).toEqual(url);
 	});

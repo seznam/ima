@@ -1,4 +1,4 @@
-describe('Ima.Http.Agent', function() {
+describe('Ima.Http.HttpAgentImpl', function() {
 
 	var proxy = null;
 	var http = null;
@@ -16,7 +16,7 @@ describe('Ima.Http.Agent', function() {
 		cacheFactory = oc.create('$CacheFactory');
 		cache = oc.create('Ima.Cache.CacheImpl', [cacheStorage, cacheFactory, Helper, {enabled: true, ttl: 1000}]);
 
-		proxy = oc.create('$HttpProxy');
+		proxy = oc.create('$SuperAgentProxy');
 		cookie = oc.create('$CookieStorage');
 		httpConfig = {
 			defaultRequestOptions: {
@@ -34,7 +34,7 @@ describe('Ima.Http.Agent', function() {
 			}
 		};
 
-		http = oc.create('Ima.Http.Agent', [proxy, cache, cookie, httpConfig]);
+		http = oc.create('Ima.Http.HttpAgentImpl', [proxy, cache, cookie, httpConfig]);
 
 		options = {
 			ttl: httpConfig.defaultRequestOptions.ttl,
@@ -115,7 +115,7 @@ describe('Ima.Http.Agent', function() {
 
 				http[method](data.params.url, data.params.data, data.params.options)
 					.then(function() {}, function(error) {
-						expect(error instanceof ns.Ima.IMAError).toBe(true);
+						expect(error instanceof ns.Ima.Error.GenericError).toBe(true);
 						expect(proxy.request.calls.count()).toEqual(2);
 						done();
 					});
