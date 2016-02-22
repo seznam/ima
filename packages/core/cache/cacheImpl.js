@@ -1,14 +1,14 @@
 import ns from 'ima/namespace';
-import Cache from 'ima/interface/cache';
+import CacheInterface from 'ima/cache/cache';
 
 ns.namespace('Ima.Cache');
 
 /**
- * Configurable generic implementation of the {@codelink Ima.Interface.Cache}
+ * Configurable generic implementation of the {@codelink Ima.Cache.Cache}
  * interface.
  *
- * @class Handler
- * @implements Ima.Interface.Cache
+ * @class CacheImpl
+ * @implements Ima.Cache.Cache
  * @namespace Ima.Cache
  * @module Ima
  * @submodule Ima.Cache
@@ -25,7 +25,7 @@ ns.namespace('Ima.Cache');
  *     cache.set('model.articles', articles, 60 * 60 * 1000);
  *   }
  */
-export default class Handler extends Cache {
+export default class CacheImpl extends CacheInterface {
 	/**
 	 * Initializes the cache.
 	 *
@@ -33,7 +33,7 @@ export default class Handler extends Cache {
 	 * @constructor
 	 * @param {Ima.Interface.Storage} cacheStorage The cache entry storage to
 	 *        use.
-	 * @param {Ima.Cache.Factory} factory Which create new instance of cache
+	 * @param {Ima.Cache.CacheFactory} factory Which create new instance of cache
 	 *        entry.
 	 * @param {Vendor.$Helper} Helper The IMA.js helper methods.
 	 * @param {{ttl: number, enabled: boolean}} [config={ttl: 30000, enabled: false}]
@@ -55,7 +55,7 @@ export default class Handler extends Cache {
 		/**
 		 * @property _factory
 		 * @private
-		 * @type {Ima.Cache.Factory}
+		 * @type {Ima.Cache.CacheFactory}
 		 */
 		this._factory = factory;
 
@@ -181,7 +181,7 @@ export default class Handler extends Cache {
 
 			if ($Debug) {
 				if (!this._canSerializeValue(serializeEntry.value)) {
-					throw new Error(`Ima.Cache.Handler:serialize You want ` +
+					throw new Error(`Ima.Cache.CacheImpl:serialize You want ` +
 							`to serialize ` +
 							`${serializeEntry.value.toString()} for key ` +
 							`${key}. Clear value from cache or change their ` +
@@ -264,4 +264,4 @@ export default class Handler extends Cache {
 	}
 }
 
-ns.Ima.Cache.Handler = Handler;
+ns.Ima.Cache.CacheImpl = CacheImpl;

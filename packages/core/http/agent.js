@@ -15,7 +15,7 @@ ns.namespace('Ima.Http');
  * @submodule Ima.Http
  *
  * @requires Ima.Http.Proxy
- * @requires Ima.Cache.Handler
+ * @requires Ima.Cache.Cache
  * @requires Ima.Storage.Cookie
  * @requires Ima.Dictionary.Dictionary
  */
@@ -27,7 +27,7 @@ export default class Agent extends HttpAgent {
 	 * @constructor
 	 * @param {Ima.Http.Proxy} proxy The low-level HTTP proxy for sending the
 	 *        HTTP requests.
-	 * @param {Ima.Cache.Handler} cache Cache to use for caching ongoing and
+	 * @param {Ima.Cache.Cache} cache Cache to use for caching ongoing and
 	 *        completed requests.
 	 * @param {Ima.Storage.Cookie} cookie The cookie storage to use
 	 *        internally.
@@ -72,7 +72,7 @@ export default class Agent extends HttpAgent {
 		 *
 		 * @private
 		 * @property _cache
-		 * @type {Ima.Cache.Handler}
+		 * @type {Ima.Cache.Cache}
 		 */
 		this._cache = cache;
 

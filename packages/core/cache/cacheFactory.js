@@ -3,34 +3,34 @@ import ns from 'ima/namespace';
 ns.namespace('Ima.Cache');
 
 /**
- * Factory for creating instances of Ima.Cache.Entry.
+ * Factory for creating instances of Ima.Cache.CacheEntry.
  *
- * @class Factory
+ * @class CacheFactory
  * @namespace Ima.Cache
  * @module Ima
  * @submodule Ima.Cache
  */
-export default class Factory {
+export default class CacheFactory {
 
 	/**
 	 * Initializes the cache entry factory.
 	 *
 	 * @method constructor
 	 * @constructor
-	 * @param {function(new: Ima.Cache.Entry, *, number)} Entry
+	 * @param {function(new: Ima.Cache.CacheEntry, *, number)} CacheEntry
 	 */
-	constructor(Entry) {
+	constructor(CacheEntry) {
 
 		/**
-		 * @property _Entry
+		 * @property _CacheEntry
 		 * @private
-		 * @type {function(new: Ima.Cache.Entry, *, number)}
+		 * @type {function(new: Ima.Cache.CacheEntry, *, number)}
 		 */
-		this._Entry = Entry;
+		this._CacheEntry = CacheEntry;
 	}
 
 	/**
-	 * Create new instance of Ima.Cache.Entry with value a ttl.
+	 * Create new instance of Ima.Cache.CacheEntry with value a ttl.
 	 *
 	 * @method createCacheEntry
 	 * @param {*} value The cache entry value.
@@ -38,8 +38,8 @@ export default class Factory {
 	 *        entry will expire after the specified amount of milliseconds.
 	 */
 	createCacheEntry(value, ttl) {
-		return new this._Entry(value, ttl);
+		return new this._CacheEntry(value, ttl);
 	}
 }
 
-ns.Ima.Cache.Factory = Factory;
+ns.Ima.Cache.CacheFactory = CacheFactory;

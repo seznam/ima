@@ -14,7 +14,7 @@ describe('Ima.Http.Agent', function() {
 	beforeEach(function() {
 		cacheStorage = oc.create('$MapStorage');
 		cacheFactory = oc.create('$CacheFactory');
-		cache = oc.create('Ima.Cache.Handler', [cacheStorage, cacheFactory, Helper, {enabled: true, ttl: 1000}]);
+		cache = oc.create('Ima.Cache.CacheImpl', [cacheStorage, cacheFactory, Helper, {enabled: true, ttl: 1000}]);
 
 		proxy = oc.create('$HttpProxy');
 		cookie = oc.create('$CookieStorage');

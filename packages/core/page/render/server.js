@@ -30,7 +30,7 @@ export default class Server extends AbstractPageRender {
 	 *        application environment.
 	 * @param {Ima.Router.Response} response Utility for sending the page
 	 *        markup to the client as a response to the current HTTP request.
-	 * @param {Ima.Interface.Cache} cache Resource cache caching the results
+	 * @param {Ima.Cache.Cache} cache Resource cache caching the results
 	 *        of HTTP requests made by services used by the rendered page.
 	 */
 	constructor(factory, Helper, ReactDOMServer, settings, response, cache) {
@@ -54,7 +54,7 @@ export default class Server extends AbstractPageRender {
 		 *
 		 * @private
 		 * @property _cache
-		 * @type {Ima.Interface.Cache}
+		 * @type {Ima.Cache.Cache}
 		 */
 		this._cache = cache;
 

@@ -1,6 +1,6 @@
 import ns from 'ima/namespace';
 import Storage from 'ima/interface/storage';
-import Entry from 'ima/cache/entry';
+import CacheEntry from 'ima/cache/cacheEntry';
 
 ns.namespace('Ima.Storage');
 
@@ -86,7 +86,7 @@ export default class SessionMap extends Storage {
 		var canBeSerializedToJSON =
 				!(value instanceof Promise) &&
 				(
-					!(value instanceof Entry) ||
+					!(value instanceof CacheEntry) ||
 					!(value.getValue() instanceof Promise)
 				);
 		if (canBeSerializedToJSON) {

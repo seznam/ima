@@ -77,15 +77,15 @@ export var init = (ns, oc, config) => { //jshint ignore:line
 	oc.bind('$EventBus', ns.Ima.Interface.EventBus);
 
 	//Cache
-	oc.constant('$CacheEntry', ns.Ima.Cache.Entry);
+	oc.constant('$CacheEntry', ns.Ima.Cache.CacheEntry);
 	if (oc.get('$Window').hasSessionStorage()) {
 		oc.constant('$CacheStorage', oc.get('$SessionMapStorage'));
 	} else {
 		oc.constant('$CacheStorage', oc.get('$MapStorage'));
 	}
-	oc.bind('$CacheFactory', ns.Ima.Cache.Factory, ['$CacheEntry']);
-	oc.provide(ns.Ima.Interface.Cache, ns.Ima.Cache.Handler, ['$CacheStorage', '$CacheFactory', '$Helper', config.$Cache]);
-	oc.bind('$Cache', ns.Ima.Interface.Cache);
+	oc.bind('$CacheFactory', ns.Ima.Cache.CacheFactory, ['$CacheEntry']);
+	oc.provide(ns.Ima.Cache.Cache, ns.Ima.Cache.CacheImpl, ['$CacheStorage', '$CacheFactory', '$Helper', config.$Cache]);
+	oc.bind('$Cache', ns.Ima.Cache.Cache);
 
 	//SEO
 	oc.bind('$MetaManager', ns.Ima.Meta.Manager);

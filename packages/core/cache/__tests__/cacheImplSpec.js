@@ -1,4 +1,4 @@
-describe('Ima.Cache.Handler', function() {
+describe('Ima.Cache.CacheImpl', function() {
 
 	var cache = null;
 	var cacheStorage = null;
@@ -7,7 +7,7 @@ describe('Ima.Cache.Handler', function() {
 	beforeEach(function() {
 		cacheStorage = oc.create('$MapStorage');
 		cacheFactory = oc.create('$CacheFactory');
-		cache = oc.create('Ima.Cache.Handler', [cacheStorage, cacheFactory, Helper, {enabled: true, ttl: 1000}]);
+		cache = oc.create('Ima.Cache.CacheImpl', [cacheStorage, cacheFactory, Helper, {enabled: true, ttl: 1000}]);
 		cache.set('aaa', 123);
 		jasmine.clock().install();
 	});
