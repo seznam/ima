@@ -15,12 +15,12 @@ ns.namespace('Ima.Storage');
 export default class Storage {
 	/**
 	 * This method is used to finalize the initialization of the storage after
-	 * the dependencies provided through the constructor are ready to be used.
+	 * the dependencies provided through the constructor have been prepared for
+	 * use.
 	 *
 	 * This method must be invoked only once and it must be the first method
 	 * invoked on this instance.
 	 *
-	 * @chainable
 	 * @method init
 	 * @return {Ima.Storage.Storage}
 	 */
@@ -53,7 +53,6 @@ export default class Storage {
 	 * Sets the storage entry identified by the specified key to the provided
 	 * value. The method creates the entry if it does not exist already.
 	 *
-	 * @chainable
 	 * @method set
 	 * @param {string} key The key identifying the storage entry.
 	 * @param {*} value The storage entry value.
@@ -64,7 +63,6 @@ export default class Storage {
 	/**
 	 * Deletes the entry identified by the specified key from this storage.
 	 *
-	 * @chainable
 	 * @method delete
 	 * @param {string} key The key identifying the storage entry.
 	 * @return {Ima.Storage.Storage} This storage.
@@ -74,7 +72,6 @@ export default class Storage {
 	/**
 	 * Clears the storage of all entries.
 	 *
-	 * @chainable
 	 * @method clear
 	 * @return {Ima.Storage.Storage} This storage.
 	 */
@@ -93,10 +90,10 @@ export default class Storage {
 	keys() {}
 
 	/**
-	 * Returns storage size.
+	 * Returns the number of entries in this storage.
 	 *
 	 * @method size
-	 * @return {number}
+	 * @return {number} The number of entries in this storage.
 	 */
 	size() {}
 }
