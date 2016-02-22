@@ -1,3 +1,5 @@
+// @client-side
+
 import ns from 'ima/namespace';
 import IMAError from 'ima/error/genericError';
 import EventBus from 'ima/event/eventBus';
