@@ -1,0 +1,34 @@
+{
+	"name": "ima",
+	"version": "0.1.0",
+	"description": "IMA.js framework for isomorphic javascript application",
+	"main": "main.js",
+	"keywords": [
+		"IMA.js",
+		"Isomorphic",
+		"Javascript"
+	],
+	"author": "Miroslav Jancarik <miroslav.jancarik@firma.seznam.cz>",
+	"contributors": [
+		{
+			"name": "Martin Urban",
+			"email": "martin.urban@firma.seznam.cz"
+		},
+		{
+			"name": "Martin Jurča",
+			"email": "martin.jurca@firma.seznam.cz"
+		}
+	],
+	"repository": {
+		"type": "git",
+		"url": "https://github.com/seznam/IMA.js-core.git"
+	},
+	"bugs": {
+		"url": "https://github.com/seznam/IMA.js-core/issues"
+	},
+	"license": "MIT",
+	"devDependencies": {},
+	"dependencies": {
+		"ima-helpers": "git+http://github.com/seznam/IMA.js-helpers.git#0.12.1"
+	}
+}
