@@ -21,7 +21,7 @@ module.exports = function(config) {
 		]/*,
 		preprocessors: {
 			'./app/test/*.js': ['babel'],*/
-		//	'./ima/**/*Spec.js': ['babel']
+		//	'./node_modules/ima/**/__tests__/*Spec.js': ['babel']
 		/*},
 		babelPreprocessor: {
 			options: {

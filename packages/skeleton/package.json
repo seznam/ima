@@ -35,7 +35,7 @@
 	"devDependencies": {
 		"ima.js-examples": "git+http://github.com/seznam/IMA.js-examples.git#0.11.0",
 		"ima.js-gulp-task-loader": "^0.11.0",
-		"ima.js-gulp-tasks": "git+http://github.com/seznam/IMA.js-gulp-tasks.git#0.12.2"
+		"ima.js-gulp-tasks": "git+http://github.com/seznam/IMA.js-gulp-tasks.git#0.12.4"
 	},
 	"dependencies": {
 		"babel-polyfill": "^6.5.0",
@@ -46,7 +46,7 @@
 		"express": "^4.13.4",
 		"helmet": "^1.1.0",
 		"ima.js-babel6-polyfill": "^0.1.1",
-		"ima.js-server": "^0.11.8",
+		"ima.js-server": "git+http://github.com/seznam/IMA.js-server.git#0.12.0",
 		"method-override": "^2.3.5",
 		"multer": "^1.0.6",
 		"react": "^0.14.7",
