@@ -19,7 +19,7 @@ hljs.configure({
 module.exports = ((environment, logger, languageLoader, appFactory) => {
 	appFactory();
 
-	$IMA.Loader.import('imajs/client/main').then((app) => {
+	$IMA.Loader.import('app/main').then((app) => {
 		appServer = app;
 		instanceRecycler.init(appServer.createIMAJsApp, environment.$Server.concurrency);
 	}).catch((error) => {
