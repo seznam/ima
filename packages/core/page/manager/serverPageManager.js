@@ -1,3 +1,5 @@
+// @server-side
+
 import ns from 'ima/namespace';
 import AbstractPageManager from 'ima/page/manager/abstractPageManager';
 
