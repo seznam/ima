@@ -22,5 +22,10 @@
   "homepage": "https://github.com/seznam/IMA.js-helpers#readme",
   "dependencies": {
     "clone": "^1.0.2"
+  },
+  "browserify": {
+    "transform": [
+      "babelify"
+    ]
   }
 }
