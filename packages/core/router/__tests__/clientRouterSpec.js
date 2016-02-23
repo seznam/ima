@@ -1,4 +1,4 @@
-describe('Ima.Router.ClientRouter', function() {
+describe('ima.router.ClientRouter', function() {
 	var router = null;
 	var pageRenderer = null;
 	var routeFactory = null;
@@ -9,17 +9,17 @@ describe('Ima.Router.ClientRouter', function() {
 	var ROUTER_CONSTANTS = oc.get('$ROUTER_CONSTANTS');
 
 	beforeEach(function() {
-		pageRenderer = oc.create('Ima.Page.Manager.PageManager');
+		pageRenderer = oc.create('ima.page.manager.PageManager');
 		routeFactory = oc.create('$RouteFactory');
-		dispatcher = oc.create('Ima.Event.Dispatcher');
+		dispatcher = oc.create('ima.event.Dispatcher');
 		win = oc.get('$Window');
-		router = oc.create('Ima.Router.ClientRouter', [pageRenderer, routeFactory, dispatcher, ROUTER_CONSTANTS, win]);
+		router = oc.create('ima.router.ClientRouter', [pageRenderer, routeFactory, dispatcher, ROUTER_CONSTANTS, win]);
 
 		spyOn(win, 'hasHistoryAPI')
 			.and
 			.returnValue(true);
 
-		router.init({$Host: host, $Protocol: protocol});
+		router.init({ $Host: host, $Protocol: protocol });
 	});
 
 	it('should be return actual path', function() {
@@ -62,7 +62,7 @@ describe('Ima.Router.ClientRouter', function() {
 		it('should be save scroll history and set address bar', function() {
 			var path = '/somePath';
 			var url = protocol + '//' + host + path;
-			var options = {httpStatus: 302};
+			var options = { httpStatus: 302 };
 
 			spyOn(router, '_setAddressBar')
 				.and
@@ -121,7 +121,7 @@ describe('Ima.Router.ClientRouter', function() {
 				.returnValue(Promise.resolve('ok'));
 
 			router
-				.handleNotFound({path: '/path'})
+				.handleNotFound({ path: '/path' })
 				.then(function() {
 					expect(router.handleError).toHaveBeenCalled();
 					done();
@@ -150,9 +150,9 @@ describe('Ima.Router.ClientRouter', function() {
 
 	describe('_isHashLink method', function() {
 		using([
-			{targetUrl:'http://localhost/aaa#hash', baseUrl: 'http://localhost/aaa', result: true},
-			{targetUrl:'http://localhost/bbb#hash', baseUrl: 'http://localhost/aaa', result: false},
-			{targetUrl:'http://localhost/aaa', baseUrl: 'http://localhost/aaa', result: false}
+			{ targetUrl:'http://localhost/aaa#hash', baseUrl: 'http://localhost/aaa', result: true },
+			{ targetUrl:'http://localhost/bbb#hash', baseUrl: 'http://localhost/aaa', result: false },
+			{ targetUrl:'http://localhost/aaa', baseUrl: 'http://localhost/aaa', result: false }
 		], function(value) {
 			it('should be for ' + value.targetUrl + ' and base url ' + value.baseUrl + ' return ' + value.result, function() {
 				spyOn(win, 'getUrl')

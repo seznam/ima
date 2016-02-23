@@ -1,6 +1,6 @@
 import ns from 'ima/namespace';
 
-ns.namespace('Ima.Router');
+ns.namespace('ima.router');
 
 /**
  * HTTP status code constants, representing the HTTP status codes recognized
@@ -33,4 +33,4 @@ const ROUTE_NAMES = Object.freeze({
 
 export default ROUTE_NAMES;
 
-ns.Ima.Router.ROUTE_NAMES = ROUTE_NAMES;
+ns.ima.router.ROUTE_NAMES = ROUTE_NAMES;

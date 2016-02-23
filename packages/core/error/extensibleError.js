@@ -1,6 +1,6 @@
 import ns from 'ima/namespace';
 
-ns.namespace('Ima.Error');
+ns.namespace('ima.error');
 
 /**
  * Base class of custom error classes, extending the native {@linkcode Error}
@@ -12,9 +12,9 @@ ns.namespace('Ima.Error');
  * @abstract
  * @class ExtensibleError
  * @extends Error
- * @namespace Ima.Error
- * @module Ima
- * @submodule Ima.Error
+ * @namespace ima.error
+ * @module ima
+ * @submodule ima.error
  *
  * @param message The message describing the cause of the error.
  * @param {boolean=} dropInternalStackFrames Whether or not the call stack
@@ -140,4 +140,4 @@ Object.defineProperty(ExtensibleError.prototype, 'stack', {
 	}
 });
 
-ns.Ima.Error.ExtensibleError = ExtensibleError;
+ns.ima.error.ExtensibleError = ExtensibleError;

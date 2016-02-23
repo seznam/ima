@@ -1,4 +1,4 @@
-describe('Ima.Page.Renderer.ServerPageRenderer', function() {
+describe('ima.page.renderer.ServerPageRenderer', function() {
 
 	var param1 = 'param1';
 	var param2 = 'param2';
@@ -7,7 +7,7 @@ describe('Ima.Page.Renderer.ServerPageRenderer', function() {
 		param2: Promise.resolve(param2)
 	};
 
-	var controller = new ns.Ima.Controller.Controller();
+	var controller = new ns.ima.controller.Controller();
 	controller.getMetaManager = function() {};
 	var view = function() {};
 	var expressResponse = {
@@ -16,7 +16,7 @@ describe('Ima.Page.Renderer.ServerPageRenderer', function() {
 	};
 
 	var pageRenderer = null;
-	var $Helper = ns.Vendor.$Helper;
+	var $Helper = oc.get('$Helper');
 	var rendererFactory = oc.get('$PageRendererFactory');
 	var ReactDOMServer = oc.get('$ReactDOMServer');
 	var settings = oc.get('$Settings');
@@ -25,7 +25,7 @@ describe('Ima.Page.Renderer.ServerPageRenderer', function() {
 
 	beforeEach(function() {
 		response.init(expressResponse);
-		pageRenderer = oc.create('Ima.Page.Renderer.ServerPageRenderer', [rendererFactory, $Helper, ReactDOMServer, settings, response, cache, oc]);
+		pageRenderer = oc.create('ima.page.renderer.ServerPageRenderer', [rendererFactory, $Helper, ReactDOMServer, settings, response, cache, oc]);
 	});
 
 	it('should be wrap each key to promise', function() {
@@ -49,7 +49,7 @@ describe('Ima.Page.Renderer.ServerPageRenderer', function() {
 			pageRenderer
 				.update(controller, params)
 				.catch(function(error) {
-					expect(error instanceof ns.Ima.Error.GenericError).toEqual(true);
+					expect(error instanceof ns.ima.error.GenericError).toEqual(true);
 					done();
 				});
 		});

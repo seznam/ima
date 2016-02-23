@@ -1,41 +1,41 @@
 import ns from 'ima/namespace';
 import IMAError from 'ima/error/genericError';
 
-ns.namespace('Ima.Page');
+ns.namespace('ima.page');
 
 /**
  * Factory for page.
  *
- * @class Factory
- * @namespace Ima.Page
- * @module Ima
- * @submodule Ima.Page
+ * @class PageFactory
+ * @namespace ima.page
+ * @module ima
+ * @submodule ima.page
  *
- * @requires Ima.ObjectContainer
+ * @requires ima.ObjectContainer
  */
 export default class PageFactory {
 
 	/**
 	 * @method constructor
 	 * @constructor
-	 * @param {Ima.ObjectContainer} oc
+	 * @param {ima.ObjectContainer} oc
 	 */
 	constructor(oc) {
 
 		/**
 		 * @property _oc
 		 * @private
-		 * @type {Ima.ObjectContainer}
+		 * @type {ima.ObjectContainer}
 		 */
 		this._oc = oc;
 	}
 
 	/**
-	 * Create new instance of Ima.Controller.Controller.
+	 * Create new instance of ima.controller.Controller.
 	 *
 	 * @method createController
 	 * @param {string} controller
-	 * @return {Ima.Controller.Controller}
+	 * @return {ima.controller.Controller}
 	 */
 	createController(controller) {
 		var controllerInstantion = this._oc.create(controller);
@@ -59,7 +59,7 @@ export default class PageFactory {
 		if (classConstructor) {
 			return classConstructor;
 		} else {
-			throw new IMAError(`Ima.Page.Factory:createView hasn't name ` +
+			throw new IMAError(`ima.page.Factory:createView hasn't name ` +
 					`of view "${view}".`);
 		}
 	}
@@ -68,8 +68,8 @@ export default class PageFactory {
 	 * Returns decorated controller for ease setting seo params in controller.
 	 *
 	 * @method decorateController
-	 * @param {Ima.Controller.Controller} controller
-	 * @return {Ima.Controller.Controller}
+	 * @param {ima.controller.Controller} controller
+	 * @return {ima.controller.Controller}
 	 */
 	decorateController(controller) {
 		var metaManager = this._oc.get('$MetaManager');
@@ -89,9 +89,9 @@ export default class PageFactory {
 	 * Returns decorated page state manager for extension.
 	 *
 	 * @method decoratePageStateManager
-	 * @param {Ima.Page.State.PageStateManager} pageStateManager
+	 * @param {ima.page.state.PageStateManager} pageStateManager
 	 * @param {Array<string>} allowedStateKeys
-	 * @return {Ima.Page.State.PageStateManager}
+	 * @return {ima.page.state.PageStateManager}
 	 */
 	decoratePageStateManager(pageStateManager, allowedStateKeys) {
 		var decoratedPageStateManager = this._oc.create(
@@ -103,4 +103,4 @@ export default class PageFactory {
 	}
 }
 
-ns.Ima.Page.PageFactory = PageFactory;
+ns.ima.page.PageFactory = PageFactory;

@@ -1,16 +1,16 @@
 import ns from 'ima/namespace';
 import { React, ReactDOM } from 'app/vendor';
 
-ns.namespace('Ima.Page');
+ns.namespace('ima.page');
 
 /**
  * The base class for all view components.
  *
  * @abstract
  * @class AbstractComponent
- * @namespace Ima.Page
- * @module Ima
- * @submodule Ima.Page
+ * @namespace ima.page
+ * @module ima
+ * @submodule ima.page
  */
 export default class AbstractComponent extends React.Component {
 
@@ -199,4 +199,4 @@ AbstractComponent.contextTypes = {
 	$Utils: React.PropTypes.object
 };
 
-ns.Ima.Page.AbstractComponent = AbstractComponent;
+ns.ima.page.AbstractComponent = AbstractComponent;

@@ -1,8 +1,8 @@
-describe('Ima.Page.Renderer.AbstractPageRenderer', function() {
+describe('ima.page.renderer.AbstractPageRenderer', function() {
 
 	var pageRenderer = null;
 	var rendererFactory = oc.get('$PageRendererFactory');
-	var $Helper = ns.Vendor.$Helper;
+	var $Helper = oc.get('$Helper');
 	var ReactDOM = oc.get('$ReactDOM');
 	var settings = oc.get('$Settings');
 
@@ -14,7 +14,7 @@ describe('Ima.Page.Renderer.AbstractPageRenderer', function() {
 	var view = function() {};
 
 	beforeEach(function() {
-		pageRenderer = oc.create('Ima.Page.Renderer.AbstractPageRenderer', [rendererFactory, $Helper, ReactDOM, settings]);
+		pageRenderer = oc.create('ima.page.renderer.AbstractPageRenderer', [rendererFactory, $Helper, ReactDOM, settings]);
 
 		pageRenderer._reactiveView = reactiveComponentView;
 	});

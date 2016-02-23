@@ -153,7 +153,7 @@ var hotReloadClientApp = (initialAppConfigFunctions) => {
 	}
 };
 
-var revivalClientApp = (initialAppConfigFunctions) => {
+var reviveClientApp = (initialAppConfigFunctions) => {
 	//hack for browser Chrome, which has sometimes problem with rendering page
 	document.body.style.display = 'none';
 	document.body.offsetHeight; //eslint-disable-line
@@ -170,7 +170,7 @@ var revivalClientApp = (initialAppConfigFunctions) => {
 	routeClientApp(app);
 };
 
-var revivalTestClientApp = (initialAppConfigFunctions) => {
+var reviveTestClientApp = (initialAppConfigFunctions) => {
 	var root = typeof window !== 'undefined' && window !== null ? window : GLOBAL;
 	var app = createImaApp();
 	var bootConfig = getTestClientBootConfig(initialAppConfigFunctions);
@@ -190,6 +190,6 @@ export {
 	bootClientApp,
 	routeClientApp,
 	hotReloadClientApp,
-	revivalClientApp,
-	revivalTestClientApp
+	reviveClientApp,
+	reviveTestClientApp
 };

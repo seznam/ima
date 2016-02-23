@@ -1,20 +1,20 @@
 import ns from 'ima/namespace';
 import CacheInterface from 'ima/cache/cache';
 
-ns.namespace('Ima.Cache');
+ns.namespace('ima.cache');
 
 /**
- * Configurable generic implementation of the {@codelink Ima.Cache.Cache}
+ * Configurable generic implementation of the {@codelink ima.cache.Cache}
  * interface.
  *
  * @class CacheImpl
- * @implements Ima.Cache.Cache
- * @namespace Ima.Cache
- * @module Ima
- * @submodule Ima.Cache
+ * @implements ima.cache.Cache
+ * @namespace ima.cache
+ * @module ima
+ * @submodule ima.cache
  *
- * @requires Ima.Storage.Storage
- * @requires Vendor.$Helper
+ * @requires ima.storage.Storage
+ * @requires vendor.$Helper
  *
  * @example
  *   if (cache.has('model.articles')) {
@@ -31,11 +31,11 @@ export default class CacheImpl extends CacheInterface {
 	 *
 	 * @method constructor
 	 * @constructor
-	 * @param {Ima.Storage.Storage} cacheStorage The cache entry storage to
+	 * @param {ima.storage.Storage} cacheStorage The cache entry storage to
 	 *        use.
-	 * @param {Ima.Cache.CacheFactory} factory Which create new instance of cache
+	 * @param {ima.cache.CacheFactory} factory Which create new instance of cache
 	 *        entry.
-	 * @param {Vendor.$Helper} Helper The IMA.js helper methods.
+	 * @param {vendor.$Helper} Helper The IMA.js helper methods.
 	 * @param {{ttl: number, enabled: boolean}} [config={ttl: 30000, enabled: false}]
 	 *        The cache configuration.
 	 */
@@ -48,14 +48,14 @@ export default class CacheImpl extends CacheInterface {
 		 *
 		 * @property _cache
 		 * @private
-		 * @type {Ima.Storage.Storage}
+		 * @type {ima.storage.Storage}
 		 */
 		this._cache = cacheStorage;
 
 		/**
 		 * @property _factory
 		 * @private
-		 * @type {Ima.Cache.CacheFactory}
+		 * @type {ima.cache.CacheFactory}
 		 */
 		this._factory = factory;
 
@@ -64,7 +64,7 @@ export default class CacheImpl extends CacheInterface {
 		 *
 		 * @private
 		 * @property _Helper
-		 * @type {Vendor.$Helper}
+		 * @type {vendor.$Helper}
 		 */
 		this._Helper = Helper;
 
@@ -181,7 +181,7 @@ export default class CacheImpl extends CacheInterface {
 
 			if ($Debug) {
 				if (!this._canSerializeValue(serializeEntry.value)) {
-					throw new Error(`Ima.Cache.CacheImpl:serialize You want ` +
+					throw new Error(`ima.cache.CacheImpl:serialize You want ` +
 							`to serialize ` +
 							`${serializeEntry.value.toString()} for key ` +
 							`${key}. Clear value from cache or change their ` +
@@ -264,4 +264,4 @@ export default class CacheImpl extends CacheInterface {
 	}
 }
 
-ns.Ima.Cache.CacheImpl = CacheImpl;
+ns.ima.cache.CacheImpl = CacheImpl;

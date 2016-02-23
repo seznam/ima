@@ -7,7 +7,7 @@ if (typeof window !== 'undefined' && window !== null) {
 	vendor = require('./vendor.server.js');
 }
 
-var nsVendor = ns.namespace('Vendor');
+var nsVendor = ns.namespace('vendor');
 for (var [name, lib] of vendor) {
 	if (typeof lib.__$IMAModuleRegister__ === 'function') {
 		lib.__$IMAModuleRegister__(ns);

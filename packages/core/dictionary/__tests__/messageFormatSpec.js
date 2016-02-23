@@ -1,4 +1,4 @@
-describe('Ima.MessageFormatDictionary', function() {
+describe('ima.MessageFormatDictionary', function() {
 
 	var dictionary = null;
 	var config = {
@@ -15,7 +15,7 @@ describe('Ima.MessageFormatDictionary', function() {
 		}
 	};
 	beforeEach(function() {
-		dictionary = oc.create('Ima.Dictionary.MessageFormatDictionary');
+		dictionary = oc.create('ima.dictionary.MessageFormatDictionary');
 
 		dictionary.init(config);
 	});
@@ -37,7 +37,9 @@ describe('Ima.MessageFormatDictionary', function() {
 		});
 
 		it('should be throw Error for undefined vocabulary key', function() {
-			expect(function() {dictionary.get('home.title.text');}).toThrow();
+			expect(function() {
+				dictionary.get('home.title.text');
+			}).toThrow();
 		});
 	});
 

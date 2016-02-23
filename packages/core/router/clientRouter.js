@@ -3,7 +3,7 @@
 import ns from 'ima/namespace';
 import AbstractRouter from 'ima/router/abstractRouter';
 
-ns.namespace('Ima.Router');
+ns.namespace('ima.router');
 
 /**
  * Names of the DOM events the router responds to.
@@ -73,14 +73,14 @@ const MODES = Object.freeze({
 const MOUSE_LEFT_BUTTON = 0;
 
 /**
- * The client-side implementation of the {@codelink Ima.Router.Router}
+ * The client-side implementation of the {@codelink ima.router.Router}
  * interface.
  *
  * @class ClientRouter
- * @extends Ima.Router.AbstractRouter
- * @namespace Ima.Router
- * @module Ima
- * @submodule Ima.Router
+ * @extends ima.router.AbstractRouter
+ * @namespace ima.router
+ * @module ima
+ * @submodule ima.router
  */
 export default class ClientRouter extends AbstractRouter {
 
@@ -89,17 +89,17 @@ export default class ClientRouter extends AbstractRouter {
 	 *
 	 * @constructor
 	 * @method constructor
-	 * @param {Ima.Page.Manager.PageManager} pageManager The page manager
+	 * @param {ima.page.manager.PageManager} pageManager The page manager
 	 *        handling UI rendering, and transitions between pages if at the
 	 *        client side.
-	 * @param {Ima.Router.RouteFactory} factory Factory for routes.
-	 * @param {Ima.Event.Dispatcher} dispatcher Dispatcher fires events to
+	 * @param {ima.router.RouteFactory} factory Factory for routes.
+	 * @param {ima.event.Dispatcher} dispatcher Dispatcher fires events to
 	 *        app.
 	 * @param {{ROUTE_NAMES: Object<string, string>, EVENTS: Object<string, string>}} ROUTER_CONSTANTS
 	 *        The internal router constants. The {@code ROUTE_NAMES}
 	 *        contains internal route names. The {@code EVENTS} contains name
-	 *        of events which are fired with {@code Ima.Event.Dispatcher}.
-	 * @param {Ima.Window.Window} window The current global client-side
+	 *        of events which are fired with {@code ima.Event.Dispatcher}.
+	 * @param {ima.window.Window} window The current global client-side
 	 *        APIs provider.
 	 */
 	constructor(pageManager, factory, dispatcher, ROUTER_CONSTANTS, window) {
@@ -110,7 +110,7 @@ export default class ClientRouter extends AbstractRouter {
 		 *
 		 * @private
 		 * @property _window
-		 * @type {Ima.Window.Window}
+		 * @type {ima.window.Window}
 		 */
 		this._window = window;
 
@@ -432,4 +432,4 @@ export default class ClientRouter extends AbstractRouter {
 	}
 }
 
-ns.Ima.Router.ClientRouter = ClientRouter;
+ns.ima.router.ClientRouter = ClientRouter;

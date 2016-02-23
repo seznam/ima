@@ -1,28 +1,28 @@
 import ns from 'ima/namespace';
 
-ns.namespace('Ima.Http');
+ns.namespace('ima.http');
 
 /**
- * Middleware proxy between {@codelink Ima.Http.HttpAgent} implementations and
+ * Middleware proxy between {@codelink ima.http.HttpAgent} implementations and
  * the {@codelink Vendor.SuperAgent}, providing a Promise-oriented API for
  * sending the requests.
  *
  * @class SuperAgentProxy
- * @namespace Ima.Http
- * @module Ima
- * @submodule Ima.Http
+ * @namespace ima.http
+ * @module ima
+ * @submodule ima.http
  */
 export default class SuperAgentProxy {
 
 	/**
 	 * @method constructor
 	 * @constructor
-	 * @param {Vendor.SuperAgent} superAgent SuperAgent instance to use for
+	 * @param {vendor.SuperAgent} superAgent SuperAgent instance to use for
 	 *        sending the HTTP requests.
 	 * @param {Object} HTTP_STATUS_CODE
-	 * @param {Ima.Http.Transformer} transformer Transform apply rules to
+	 * @param {ima.http.Transformer} transformer Transform apply rules to
 	 *        request url.
-	 * @param {Ima.Window.Window} window Helper for manipulating the global
+	 * @param {ima.window.Window} window Helper for manipulating the global
 	 *        object ({@code window}) regardless of the client/server-side
 	 *        environment.
 	 */
@@ -34,7 +34,7 @@ export default class SuperAgentProxy {
 		 *
 		 * @property _superAgent
 		 * @private
-		 * @type {Vendor.SuperAgent}
+		 * @type {vendor.SuperAgent}
 		 */
 		this._superAgent = superAgent;
 
@@ -50,7 +50,7 @@ export default class SuperAgentProxy {
 		/**
 		 * @property _transformer
 		 * @private
-		 * @type {Ima.Http.Transformer}
+		 * @type {ima.http.Transformer}
 		 */
 		this._transformer = transformer;
 
@@ -60,7 +60,7 @@ export default class SuperAgentProxy {
 		 *
 		 * @property _window
 		 * @private
-		 * @type {Ima.Window.Window}
+		 * @type {ima.window.Window}
 		 */
 		this._window = window;
 
@@ -254,7 +254,7 @@ export default class SuperAgentProxy {
 	 * @param {{method: string, url: string, data: Object<string, (boolean|number|string|Date)>, options: Object<string, *>}} params
 	 *        An object representing the complete request parameters used to
 	 *        create and send the HTTP request.
-	 * @return {Ima.Http.SuperAgentProxy} This instance.
+	 * @return {ima.http.SuperAgentProxy} This instance.
 	 */
 	_sendRequest(request, resolve, reject, params) {
 		request.end((error, response) => {
@@ -374,7 +374,7 @@ export default class SuperAgentProxy {
 	 *        cache of pending and finished HTTP requests. The
 	 *        {@code withCredentials} that indicates whether requests should be
 	 *        made using credentials such as cookies or authorization headers.
-	 * @return {Ima.Http.SuperAgentProxy} This instance.
+	 * @return {ima.http.SuperAgentProxy} This instance.
 	 */
 	_setHeaders(request, options) {
 		for (let [headerName, headerValue] of this._defaultHeaders) {
@@ -414,7 +414,7 @@ export default class SuperAgentProxy {
 	 *        cache of pending and finished HTTP requests. The
 	 *        {@code withCredentials} that indicates whether requests should be
 	 *        made using credentials such as cookies or authorization headers.
-	 * @return {Ima.Http.SuperAgentProxy} This instance.
+	 * @return {ima.http.SuperAgentProxy} This instance.
 	 */
 	_setCredentials(request, options) {
 		if (options.withCredentials &&
@@ -463,4 +463,4 @@ export default class SuperAgentProxy {
 	}
 }
 
-ns.Ima.Http.SuperAgentProxy = SuperAgentProxy;
+ns.ima.http.SuperAgentProxy = SuperAgentProxy;

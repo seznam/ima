@@ -1,13 +1,14 @@
-describe('Ima.Cache.CacheImpl', function() {
+describe('ima.cache.CacheImpl', function() {
 
 	var cache = null;
 	var cacheStorage = null;
 	var cacheFactory = null;
-	var Helper = ns.Vendor.$Helper;
+	var Helper = oc.get('$Helper');
+
 	beforeEach(function() {
 		cacheStorage = oc.create('$MapStorage');
 		cacheFactory = oc.create('$CacheFactory');
-		cache = oc.create('Ima.Cache.CacheImpl', [cacheStorage, cacheFactory, Helper, {enabled: true, ttl: 1000}]);
+		cache = oc.create('ima.cache.CacheImpl', [cacheStorage, cacheFactory, Helper, { enabled: true, ttl: 1000 }]);
 		cache.set('aaa', 123);
 		jasmine.clock().install();
 	});

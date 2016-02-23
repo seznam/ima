@@ -1,18 +1,18 @@
 import ns from 'ima/namespace';
 import MapStorage from 'ima/storage/mapStorage';
 
-ns.namespace('Ima.Storage');
+ns.namespace('ima.storage');
 
 /**
- * A specialization of the {@codelink Ima.Storage.Map} storage mimicking the
+ * A specialization of the {@codelink ima.storage.Map} storage mimicking the
  * native {@code WeakMap} using its internal garbage collector used once the
  * size of the storage reaches the configured threshold.
  *
  * @class WeakMapStorage
- * @extends Ima.Storage.Map
- * @namespace Ima.Storage
- * @module Ima
- * @submodule Ima.Storage
+ * @extends ima.storage.Map
+ * @namespace ima.storage
+ * @module ima
+ * @submodule ima.storage
  */
 export default class WeakMapStorage extends MapStorage {
 	/**
@@ -117,7 +117,7 @@ export default class WeakMapStorage extends MapStorage {
 	}
 }
 
-ns.Ima.Storage.WeakMapStorage = WeakMapStorage;
+ns.ima.storage.WeakMapStorage = WeakMapStorage;
 
 /**
  * A simple reference wrapper that emulates a weak reference. We seem to have
@@ -127,9 +127,9 @@ ns.Ima.Storage.WeakMapStorage = WeakMapStorage;
  *
  * @private
  * @class WeakRef
- * @namespace Ima.Storage
- * @module Ima
- * @submodule Ima.Storage
+ * @namespace ima.storage
+ * @module ima
+ * @submodule ima.storage
  */
 class WeakRef {
 	/**

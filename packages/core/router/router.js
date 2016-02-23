@@ -1,15 +1,15 @@
 import ns from 'ima/namespace';
 
-ns.namespace('Ima.Router');
+ns.namespace('ima.router');
 
 /**
  * The router manages the application's routing configuration and dispatches
  * controllers and views according to the current URL and the route it matches.
  *
  * @interface Router
- * @namespace Ima.Router
- * @module Ima
- * @submodule Ima.Router
+ * @namespace ima.router
+ * @module ima
+ * @submodule ima.router
  */
 export default class Router {
 
@@ -51,7 +51,7 @@ export default class Router {
 	 *            onlyUpdate: (
 	 *                boolean|
 	 *                function(
-	 *                    (string|function(new: Ima.Controller.Controller, ...*)),
+	 *                    (string|function(new: ima.controller.Controller, ...*)),
 	  *                   (string|function(new: React.Component, Object<string, *>, ?Object<string, *>))
 	 *                ): boolean
 	 *            )=,
@@ -69,8 +69,8 @@ export default class Router {
 	 *        The {@code autoScroll} flag signals whether the page should be
 	 *        scrolled to the top when the navigation takes place. This flag is
 	 *        enabled by default.
-	 * @return {Ima.Router.Router} This router.
-	 * @throws {Ima.Error.Error} Thrown if a route with the same name already
+	 * @return {ima.router.Router} This router.
+	 * @throws {ima.error.Error} Thrown if a route with the same name already
 	 *         exists.
 	 */
 	add(name, pathExpression, controller, view, options = undefined) {}
@@ -81,7 +81,7 @@ export default class Router {
 	 * @method remove
 	 * @param {string} name The route's unique name, identifying the route to
 	 *        remove.
-	 * @return {Ima.Router.Router} This router.
+	 * @return {ima.router.Router} This router.
 	 */
 	remove(name) {}
 
@@ -142,9 +142,9 @@ export default class Router {
 	 * Returns the information about the currently active route.
 	 *
 	 * @method getCurrentRouteInfo
-	 * @return {{route: Ima.Router.Route, params: Object<string, string>, path: string}}
+	 * @return {{route: ima.router.Route, params: Object<string, string>, path: string}}
 	 *         The information about the current route.
-	 * @throws {Ima.Error.Error} Thrown if a route is not define for current
+	 * @throws {ima.error.Error} Thrown if a route is not define for current
 	 *         path.
 	 */
 	getCurrentRouteInfo() {}
@@ -165,7 +165,7 @@ export default class Router {
 	 * at the server side.
 	 *
 	 * @method listen
-	 * @return {Ima.Router.Router} This router.
+	 * @return {ima.router.Router} This router.
 	 */
 	listen() {}
 
@@ -257,7 +257,7 @@ export default class Router {
 	 * failure at the server side.
 	 *
 	 * @method isClientError
-	 * @param {(Ima.Error.Error|Error)} reason The encountered error.
+	 * @param {(ima.error.Error|Error)} reason The encountered error.
 	 * @return {boolean} {@code true} if the error was caused the action of the
 	 *         client.
 	 */
@@ -267,11 +267,11 @@ export default class Router {
 	 * Tests, if possible, whether the specified error lead to redirection.
 	 *
 	 * @method isRedirection
-	 * @param {(Ima.Error.Error|Error)} reason The encountered error.
+	 * @param {(ima.error.Error|Error)} reason The encountered error.
 	 * @return {boolean} {@code true} if the error was caused the action of the
 	 *         redirection.
 	 */
 	isRedirection(reason) {}
 }
 
-ns.Ima.Router.Router = Router;
+ns.ima.router.Router = Router;

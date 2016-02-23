@@ -1,7 +1,7 @@
 import ns from 'ima/namespace';
 import PageStateManagerInterface from 'ima/page/state/pageStateManager';
 
-ns.namespace('Ima.Page.State');
+ns.namespace('ima.page.state');
 
 const MAX_HISTORY_LIMIT = 10;
 
@@ -9,10 +9,10 @@ const MAX_HISTORY_LIMIT = 10;
  * Class for app state.
  *
  * @class PageStateManagerImpl
- * @implements Ima.Page.State.PageStateManager
- * @namespace Ima.Page.State
- * @module Ima
- * @submodule Ima.Page
+ * @implements ima.page.state.PageStateManager
+ * @namespace ima.page.state
+ * @module ima
+ * @submodule ima.page
  */
 export default class PageStateManagerImpl extends PageStateManagerInterface {
 
@@ -127,4 +127,4 @@ export default class PageStateManagerImpl extends PageStateManagerInterface {
 
 }
 
-ns.Ima.Page.State.PageStateManagerImpl = PageStateManagerImpl;
+ns.ima.page.state.PageStateManagerImpl = PageStateManagerImpl;

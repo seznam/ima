@@ -1,6 +1,6 @@
 import ns from 'ima/namespace';
 
-ns.namespace('Ima.Event');
+ns.namespace('ima.event');
 
 /**
  * A Dispatcher is a utility that manager event listeners registered for events
@@ -12,9 +12,9 @@ ns.namespace('Ima.Event');
  * the state is impractical for any reason.
  *
  * @interface Dispatcher
- * @namespace Ima.Event
- * @module Ima
- * @submodule Ima.Event
+ * @namespace ima.event
+ * @module ima
+ * @submodule ima.event
  */
 export default class Dispatcher {
 	/**
@@ -22,7 +22,7 @@ export default class Dispatcher {
 	 * dispatcher.
 	 *
 	 * @method clear
-	 * @return {Ima.Event.Dispatcher} This dispatcher.
+	 * @return {ima.event.Dispatcher} This dispatcher.
 	 */
 	clear() {}
 
@@ -42,7 +42,7 @@ export default class Dispatcher {
 	 * @param {function(*)} listener The event listener to register.
 	 * @param {?Object=} scope The object to which the {@code this} keyword
 	 *        will be bound in the event listener.
-	 * @return {Ima.Event.Dispatcher} This dispatcher.
+	 * @return {ima.event.Dispatcher} This dispatcher.
 	 */
 	listen(event, listener, scope = null) {}
 
@@ -56,7 +56,7 @@ export default class Dispatcher {
 	 * @param {function(*)} listener The event listener to deregister.
 	 * @param {?Object=} scope The object to which the {@code this} keyword
 	 *        would be bound in the event listener.
-	 * @return {Ima.Event.Dispatcher} This dispatcher.
+	 * @return {ima.event.Dispatcher} This dispatcher.
 	 */
 	unlisten(event, listener, scope = null) {}
 
@@ -80,9 +80,9 @@ export default class Dispatcher {
 	 *        custom application event if this flag is not set.
 	 *        The flag is used only for debugging and has no effect on the
 	 *        propagation of the event.
-	 * @return {Ima.Event.Dispatcher} This dispatcher.
+	 * @return {ima.event.Dispatcher} This dispatcher.
 	 */
 	fire(event, data, imaInternalEvent = false) {}
 }
 
-ns.Ima.Event.Dispatcher = Dispatcher;
+ns.ima.event.Dispatcher = Dispatcher;

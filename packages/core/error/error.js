@@ -1,7 +1,7 @@
 import ns from 'ima/namespace';
 import ExtensibleError from './extensibleError';
 
-ns.namespace('Ima.Error');
+ns.namespace('ima.error');
 
 /**
  * The IMA application error extends the native {@code Error} with additional
@@ -14,9 +14,9 @@ ns.namespace('Ima.Error');
  * IMA errors are instances of both the native errors and of this interface.
  *
  * @interface Error
- * @namespace Ima.Error
- * @module Ima
- * @submodule Ima.Error
+ * @namespace ima.error
+ * @module ima
+ * @submodule ima.error
  */
 export default class Error extends ExtensibleError {
 	/**
@@ -49,4 +49,4 @@ export default class Error extends ExtensibleError {
 	getParams() {}
 }
 
-ns.Ima.Error.Error = Error;
+ns.ima.error.Error = Error;

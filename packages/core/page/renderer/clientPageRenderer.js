@@ -3,17 +3,17 @@
 import ns from 'ima/namespace';
 import AbstractPageRenderer from 'ima/page/renderer/abstractPageRenderer';
 
-ns.namespace('Ima.Page.Renderer');
+ns.namespace('ima.page.renderer');
 
 /**
  * Client-side page renderer. The renderer attempts to reuse the markup sent by
  * server if possible.
  *
  * @class ClientPageRenderer
- * @extends Ima.Page.Renderer.AbstractPageRenderer
- * @namespace Ima.Page.Renderer
- * @module Ima
- * @submodule Ima.Page
+ * @extends ima.page.renderer.AbstractPageRenderer
+ * @namespace ima.page.renderer
+ * @module ima
+ * @submodule ima.page
  */
 export default class ClientPageRenderer extends AbstractPageRenderer {
 
@@ -22,14 +22,14 @@ export default class ClientPageRenderer extends AbstractPageRenderer {
 	 *
 	 * @method constructor
 	 * @constructor
-	 * @param {Ima.Page.Render.PageRendererFactory} factory Factory for receive $Utils to
+	 * @param {ima.page.renderer.PageRendererFactory} factory Factory for receive $Utils to
 	 *        view.
-	 * @param {Vendor.$Helper} Helper The IMA.js helper methods.
-	 * @param {Vendor.ReactDOM} ReactDOM React framework instance to use to
+	 * @param {vendor.$Helper} Helper The IMA.js helper methods.
+	 * @param {vendor.ReactDOM} ReactDOM React framework instance to use to
 	 *        render the page on the client side.
 	 * @param {Object<string, *>} settings The application setting for the
 	 *        current application environment.
-	 * @param {Ima.Window.Window} window Helper for manipulating the global
+	 * @param {ima.window.Window} window Helper for manipulating the global
 	 *        object ({@code window}) regardless of the client/server-side
 	 *        environment.
 	 */
@@ -52,7 +52,7 @@ export default class ClientPageRenderer extends AbstractPageRenderer {
 		 *
 		 * @property _window
 		 * @private
-		 * @type {Ima.Window.Window}
+		 * @type {ima.window.Window}
 		 */
 		this._window = window;
 
@@ -161,7 +161,7 @@ export default class ClientPageRenderer extends AbstractPageRenderer {
 	 * Patch promise values to controller state.
 	 *
 	 * @method _patchPromisesToState
-	 * @param {Ima.Controller.ControllerDecorator} controller
+	 * @param {ima.Controller.ControllerDecorator} controller
 	 * @param {Object<string, Promise>} patchedPromises
 	 */
 	_patchPromisesToState(controller, patchedPromises) {
@@ -181,7 +181,7 @@ export default class ClientPageRenderer extends AbstractPageRenderer {
 	 *
 	 * @private
 	 * @method _renderToDOM
-	 * @param {Ima.Controller.ControllerDecorator} controller
+	 * @param {ima.controller.ControllerDecorator} controller
 	 * @param {React.Component} view
 	 */
 	_renderToDOM(controller, view) {
@@ -227,7 +227,7 @@ export default class ClientPageRenderer extends AbstractPageRenderer {
 	 *
 	 * @private
 	 * @method _updateMetaAttributes
-	 * @param {Ima.Meta.MetaManager} metaManager meta attributes storage
+	 * @param {ima.meta.MetaManager} metaManager meta attributes storage
 	 *        providing the new values for page meta elements and title.
 	 */
 	_updateMetaAttributes(metaManager) {
@@ -243,7 +243,7 @@ export default class ClientPageRenderer extends AbstractPageRenderer {
 	 *
 	 * @private
 	 * @method _updateMetaNameAttributes
-	 * @param {Ima.Meta.MetaManager} metaManager meta attributes storage
+	 * @param {ima.meta.MetaManager} metaManager meta attributes storage
 	 *        providing the new values for page meta elements and title.
 	 */
 	_updateMetaNameAttributes(metaManager) {
@@ -264,7 +264,7 @@ export default class ClientPageRenderer extends AbstractPageRenderer {
 	 *
 	 * @private
 	 * @method _updateMetaPropertyAttributes
-	 * @param {Ima.Meta.MetaManager} metaManager meta attributes storage
+	 * @param {ima.meta.MetaManager} metaManager meta attributes storage
 	 *        providing the new values for page meta elements and title.
 	 */
 	_updateMetaPropertyAttributes(metaManager) {
@@ -287,7 +287,7 @@ export default class ClientPageRenderer extends AbstractPageRenderer {
 	 *
 	 * @private
 	 * @method _updateMetaLinkAttributes
-	 * @param {Ima.Meta.MetaManager} metaManager meta attributes storage
+	 * @param {ima.meta.MetaManager} metaManager meta attributes storage
 	 *        providing the new values for page meta elements and title.
 	 */
 	_updateMetaLinkAttributes(metaManager) {
@@ -306,4 +306,4 @@ export default class ClientPageRenderer extends AbstractPageRenderer {
 	}
 }
 
-ns.Ima.Page.Renderer.ClientPageRenderer = ClientPageRenderer;
+ns.ima.page.renderer.ClientPageRenderer = ClientPageRenderer;

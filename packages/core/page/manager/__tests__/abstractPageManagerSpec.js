@@ -1,16 +1,16 @@
-describe('Ima.Page.Manager.AbstractPageManager', function() {
+describe('ima.page.manager.AbstractPageManager', function() {
 	var pageFactory = {
-		createController: function(Controller) {return new Controller();},
-		decorateController: function(controller) {return controller;},
-		decoratePageStateManager: function(pageStateManger) {return pageStateManger},
-		createView: function(view) { return view;}
+		createController: function(Controller) { return new Controller(); },
+		decorateController: function(controller) { return controller; },
+		decoratePageStateManager: function(pageStateManger) { return pageStateManger; },
+		createView: function(view) { return view; }
 	};
-	var pageRenderer = oc.create('Ima.Page.Renderer.PageRenderer');
-	var pageStateManager = oc.create('Ima.Page.State.PageStateManager');
+	var pageRenderer = oc.create('ima.page.renderer.PageRenderer');
+	var pageStateManager = oc.create('ima.page.state.PageStateManager');
 	var pageManager = null;
 
-	var Controller = ns.Ima.Controller.Controller;
-	var Extension = ns.Ima.Extension.Extension;
+	var Controller = ns.ima.controller.Controller;
+	var Extension = ns.ima.extension.Extension;
 	var View = function () {};
 	var options = {
 		onlyUpdate: false,
@@ -39,7 +39,7 @@ describe('Ima.Page.Manager.AbstractPageManager', function() {
 
 	beforeEach(function() {
 		pageManager =
-			oc.create('Ima.Page.Manager.AbstractPageManager',
+			oc.create('ima.page.manager.AbstractPageManager',
 				[
 					pageFactory,
 					pageRenderer,
@@ -92,7 +92,7 @@ describe('Ima.Page.Manager.AbstractPageManager', function() {
 					done();
 				})
 				.catch(function(e) {
-					console.error('Ima.Page.Manager:manage', e.message);
+					console.error('ima.page.manager:manage', e.message);
 					done();
 				});
 		});
@@ -128,7 +128,7 @@ describe('Ima.Page.Manager.AbstractPageManager', function() {
 					done();
 				})
 				.catch(function(e) {
-					console.error('Ima.Page.Manager:manage', e.message);
+					console.error('ima.page.manager:manage', e.message);
 					done();
 				});
 		});
@@ -293,7 +293,7 @@ describe('Ima.Page.Manager.AbstractPageManager', function() {
 					done();
 				})
 				.catch(function(error) {
-					console.error('Ima.Page.Manager:_loadPageSource', e.message);
+					console.error('ima.page.manager:_loadPageSource', e.message);
 					done();
 				});
 		});
@@ -310,7 +310,7 @@ describe('Ima.Page.Manager.AbstractPageManager', function() {
 					done();
 				})
 				.catch(function(error) {
-					console.error('Ima.Page.Manager:_loadPageSource', e.message);
+					console.error('ima.page.manager:_loadPageSource', e.message);
 					done();
 				});
 		});
@@ -441,7 +441,7 @@ describe('Ima.Page.Manager.AbstractPageManager', function() {
 					done();
 				})
 				.catch(function(error) {
-					console.error('Ima.Page.Manager:_updatePageSource', e.message);
+					console.error('ima.page.manager:_updatePageSource', e.message);
 					done();
 				});
 		});
@@ -458,7 +458,7 @@ describe('Ima.Page.Manager.AbstractPageManager', function() {
 					done();
 				})
 				.catch(function(error) {
-					console.error('Ima.Page.Manager:_updatePageSource', e.message);
+					console.error('ima.page.manager:_updatePageSource', e.message);
 					done();
 				});
 		});

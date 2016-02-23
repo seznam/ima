@@ -1,15 +1,15 @@
 import ns from 'ima/namespace';
 
-ns.namespace('Ima.Page.Manager');
+ns.namespace('ima.page.manager');
 
 /**
  * The page manager is a utility for managing the current controller and its
  * view.
  *
  * @interface PageManager
- * @namespace Ima.Page.Manager
- * @module Ima
- * @submodule Ima.Page.Manager
+ * @namespace ima.page.manager
+ * @module ima
+ * @submodule ima.page
  */
 export default class PageManager {
 
@@ -29,7 +29,7 @@ export default class PageManager {
 	 * server-side).
 	 *
 	 * @method manage
-	 * @param {(string|function(new: Ima.Controller.Controller, ...*))} controller
+	 * @param {(string|function(new: ima.controller.Controller, ...*))} controller
 	 *        The alias, namespace path, or constructor of the controller to
 	 *        manage.
 	 * @param {(string|function(new: React.Component, Object<string, *>, ?Object<string, *>))} view
@@ -39,7 +39,7 @@ export default class PageManager {
 	 *            onlyUpdate: (
 	 *                boolean|
 	 *                function(
-	 *                    (string|function(new: Ima.Controller.Controller, ...*)),
+	 *                    (string|function(new: ima.controller.Controller, ...*)),
 	  *                   (string|function(new: React.Component, Object<string, *>, ?Object<string, *>))
 	  *               ): boolean
 	 *            ),
@@ -77,4 +77,4 @@ export default class PageManager {
 	destroy() {}
 }
 
-ns.Ima.Page.Manager.PageManager = PageManager;
+ns.ima.page.manager.PageManager = PageManager;

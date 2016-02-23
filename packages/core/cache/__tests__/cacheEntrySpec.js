@@ -1,8 +1,8 @@
-describe('Ima.Cache.CacheEntry', function() {
+describe('ima.cache.CacheEntry', function() {
 
 	var cacheData = null;
 	beforeEach(function() {
-		cacheData = oc.create('Ima.Cache.CacheEntry', [123, 1000]);
+		cacheData = oc.create('ima.cache.CacheEntry', [123, 1000]);
 		jasmine.clock().install();
 	});
 

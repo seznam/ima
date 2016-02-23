@@ -1,6 +1,6 @@
 import ns from 'ima/namespace';
 
-ns.namespace('Ima.Storage');
+ns.namespace('ima.storage');
 
 /**
  * The {@codelink Storage} is an unordered collection of named values of any
@@ -8,9 +8,9 @@ ns.namespace('Ima.Storage');
  * can be therefore thought of as a {@code Map<string, *>}.
  *
  * @interface Storage
- * @namespace Ima.Storage
- * @module Ima
- * @submodule Ima.Storage
+ * @namespace ima.storage
+ * @module ima
+ * @submodule ima.storage
  */
 export default class Storage {
 	/**
@@ -22,7 +22,7 @@ export default class Storage {
 	 * invoked on this instance.
 	 *
 	 * @method init
-	 * @return {Ima.Storage.Storage}
+	 * @return {ima.storage.Storage}
 	 */
 	init() {}
 
@@ -56,7 +56,7 @@ export default class Storage {
 	 * @method set
 	 * @param {string} key The key identifying the storage entry.
 	 * @param {*} value The storage entry value.
-	 * @return {Ima.Storage.Storage} This storage.
+	 * @return {ima.storage.Storage} This storage.
 	 */
 	set(key, value) {}
 
@@ -65,7 +65,7 @@ export default class Storage {
 	 *
 	 * @method delete
 	 * @param {string} key The key identifying the storage entry.
-	 * @return {Ima.Storage.Storage} This storage.
+	 * @return {ima.storage.Storage} This storage.
 	 */
 	delete(key) {}
 
@@ -73,7 +73,7 @@ export default class Storage {
 	 * Clears the storage of all entries.
 	 *
 	 * @method clear
-	 * @return {Ima.Storage.Storage} This storage.
+	 * @return {ima.storage.Storage} This storage.
 	 */
 	clear() {}
 
@@ -98,4 +98,4 @@ export default class Storage {
 	size() {}
 }
 
-ns.Ima.Storage.Storage = Storage;
+ns.ima.storage.Storage = Storage;

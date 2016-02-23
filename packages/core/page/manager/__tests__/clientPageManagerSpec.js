@@ -1,18 +1,18 @@
-describe('Ima.Page.Manager.ClientPageManager', function() {
+describe('ima.page.manager.ClientPageManager', function() {
 	var pageFactory = {
 		createController: function(Controller) { return new Controller(); },
 		decorateController: function(controller) { return controller; },
 		decoratePageStateManager: function(pageStateManger) { return pageStateManger; },
 		createView: function(view) { return view; }
 	};
-	var pageRenderer = oc.create('Ima.Page.Renderer.PageRenderer');
-	var pageStateManager = oc.create('Ima.Page.State.PageStateManager');
-	var windowInterface = oc.create('Ima.Window.Window');
-	var eventBusInterface = oc.create('Ima.Event.EventBus');
+	var pageRenderer = oc.create('ima.page.renderer.PageRenderer');
+	var pageStateManager = oc.create('ima.page.state.PageStateManager');
+	var windowInterface = oc.create('ima.window.Window');
+	var eventBusInterface = oc.create('ima.event.EventBus');
 	var pageManager = null;
 
-	var Controller = ns.Ima.Controller.Controller;
-	var Extension = ns.Ima.Extension.Extension;
+	var Controller = ns.ima.controller.Controller;
+	var Extension = ns.ima.extension.Extension;
 	var View = function() {};
 
 	var controllerInstance = pageFactory.createController(Controller);
@@ -40,7 +40,7 @@ describe('Ima.Page.Manager.ClientPageManager', function() {
 
 	beforeEach(function() {
 		pageManager =
-			oc.create('Ima.Page.Manager.ClientPageManager',
+			oc.create('ima.page.manager.ClientPageManager',
 				[
 					pageFactory,
 					pageRenderer,
@@ -187,7 +187,7 @@ describe('Ima.Page.Manager.ClientPageManager', function() {
 					done();
 				})
 				.catch(function(error) {
-					console.error('Ima.Page.Manager.Client: CATCH ERROR: ', error);
+					console.error('ima.page.manager.Client: CATCH ERROR: ', error);
 				});
 		});
 	});

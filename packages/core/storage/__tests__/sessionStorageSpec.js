@@ -1,8 +1,8 @@
-describe('Ima.Storage.SessionStorage', function() {
+describe('ima.storage.SessionStorage', function() {
 	var session;
 
 	beforeEach(function() {
-		session = oc.create('Ima.Storage.SessionStorage');
+		session = oc.create('ima.storage.SessionStorage');
 		session.init();
 		session.clear();
 	});
@@ -18,7 +18,7 @@ describe('Ima.Storage.SessionStorage', function() {
 		expect(session.get('item2')).toEqual('test');
 		session.set('item3', false);
 		expect(session.get('item3')).toEqual(false);
-		var obj = {testedProp: 'testedValue'};
+		var obj = { testedProp: 'testedValue' };
 		session.set('item4', obj);
 		expect(session.get('item4')).toEqual(obj);
 		var arr = [0, 'val', true, {}];
@@ -26,7 +26,7 @@ describe('Ima.Storage.SessionStorage', function() {
 		expect(session.get('item5')).toEqual(arr);
 	});
 
-	it ('should should have (not) an item', function() {
+	it('should should have (not) an item', function() {
 		expect(session.has('item1')).toBeFalsy();
 		session.set('item1', 1);
 		expect(session.has('item1')).toBeTruthy();

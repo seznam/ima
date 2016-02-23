@@ -1,14 +1,14 @@
-describe('Ima.Page.Manager.ServerPageManager', function() {
+describe('ima.page.manager.ServerPageManager', function() {
 	var pageFactory = {
 		createController: function(Controller) {return new Controller();},
 		decorateController: function(controller) {return controller;},
 		createView: function(view) { return view;}
 	};
-	var pageRenderer = oc.create('Ima.Page.Renderer.PageRenderer');
-	var stateManager = oc.create('Ima.Page.State.PageStateManager');
+	var pageRenderer = oc.create('ima.page.renderer.PageRenderer');
+	var stateManager = oc.create('ima.page.state.PageStateManager');
 	var pageManager = null;
 
-	var controller = ns.Ima.Controller.Controller;
+	var controller = ns.ima.controller.Controller;
 	var view = function (){};
 	var options = {
 		onlyUpdate: false,
@@ -17,7 +17,7 @@ describe('Ima.Page.Manager.ServerPageManager', function() {
 
 	beforeEach(function() {
 		pageManager =
-			oc.create('Ima.Page.Manager.ServerPageManager',
+			oc.create('ima.page.manager.ServerPageManager',
 				[
 					pageFactory,
 					pageRenderer,

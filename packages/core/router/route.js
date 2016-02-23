@@ -1,6 +1,6 @@
 import ns from 'ima/namespace';
 
-ns.namespace('Ima.Router');
+ns.namespace('ima.router');
 
 /**
  * Regular expression matching all control characters used in regular
@@ -56,9 +56,9 @@ const PARAMS_REGEXP_OPT = /(?:^:\\\?([a-zA-Z0-9_-]+)(\\\/)?)|(?:(\\\/):\\\?([a-z
  * configuration.
  *
  * @class Route
- * @namespace Ima.Router
- * @module Ima
- * @submodule Ima.Router
+ * @namespace ima.router
+ * @module ima
+ * @submodule ima.router
  */
 export default class Route {
 
@@ -535,4 +535,4 @@ export default class Route {
 	}
 }
 
-ns.Ima.Router.Route = Route;
+ns.ima.router.Route = Route;

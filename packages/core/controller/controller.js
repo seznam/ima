@@ -1,6 +1,6 @@
 import ns from 'ima/namespace';
 
-ns.namespace('Ima.Controller');
+ns.namespace('ima.controller');
 
 /**
  * Interface defining the common API of page controllers. A page controller is
@@ -9,9 +9,9 @@ ns.namespace('Ima.Controller');
  * on the page (or other input).
  *
  * @interface Controller
- * @namespace Ima.Controller
- * @module Ima
- * @submodule Ima.Controller
+ * @namespace ima.controller
+ * @module ima
+ * @submodule ima.controller
  */
 export default class Controller {
 
@@ -165,9 +165,9 @@ export default class Controller {
 	 * added to the controller before the {@codelink init()} method is invoked.
 	 *
 	 * @method addExtension
-	 * @param {Ima.Extension.Extension} extension The extension to add to this
+	 * @param {ima.extension.Extension} extension The extension to add to this
 	 *        controller.
-	 * @return {Ima.Controller.Controller} This controller.
+	 * @return {ima.controller.Controller} This controller.
 	 */
 	addExtension(extension) {}
 
@@ -175,7 +175,7 @@ export default class Controller {
 	 * Returns the controller's extensions.
 	 *
 	 * @method getExtensions
-	 * @return {Ima.Extension.Extension[]} The extensions added to this
+	 * @return {ima.extension.Extension[]} The extensions added to this
 	 *         controller.
 	 */
 	getExtensions() {}
@@ -190,10 +190,10 @@ export default class Controller {
 	 *        map of resource names to resources loaded by the
 	 *        {@codelink load()} method. This is the same object as the one
 	 *        passed to the {@codelink setState()} method.
-	 * @param {Ima.Meta.MetaManager} metaManager Meta attributes manager
+	 * @param {ima.meta.MetaManager} metaManager Meta attributes manager
 	 *        to configure.
-	 * @param {Ima.Router.Router} router The current application router.
-	 * @param {Ima.Dictionary.Dictionary} dictionary The current localization
+	 * @param {ima.router.Router} router The current application router.
+	 * @param {ima.dictionary.Dictionary} dictionary The current localization
 	 *        dictionary.
 	 * @param {Object<string, *>} settings The application settings for the
 	 *        current application environment.
@@ -226,7 +226,7 @@ export default class Controller {
 	 * controller).
 	 *
 	 * @method setPageStateManager
-	 * @param {?Ima.Page.State.PageStateManager} pageStateManager The current
+	 * @param {?ima.page.state.PageStateManager} pageStateManager The current
 	 *        state manager to use.
 	 */
 	setPageStateManager(pageStateManager) {}
@@ -241,4 +241,4 @@ export default class Controller {
 	getHttpStatus() {}
 }
 
-ns.Ima.Controller.Controller = Controller;
+ns.ima.controller.Controller = Controller;

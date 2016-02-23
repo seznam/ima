@@ -1,53 +1,53 @@
-describe('Ima.Storage.WeakMapStorage', function () {
+describe('ima.storage.WeakMapStorage', function() {
 
 	var map;
 
-	beforeEach(function () {
-		map = oc.create('Ima.Storage.WeakMapStorage', [{
+	beforeEach(function() {
+		map = oc.create('ima.storage.WeakMapStorage', [{
 			entryTtl: 100
 		}]);
-		map.set("a", { num: 1 });
+		map.set('a', { num: 1 });
 	});
 
-	afterEach(function () {
+	afterEach(function() {
 		map.clear();
 	});
 
-	it("should reject primitive values", function () {
-		expect(function () {
+	it("should reject primitive values", function() {
+		expect(function() {
 			map.set("b", "some string");
 		}).toThrow();
 	});
 
-	it("should allow retrieving existing entries", function () {
+	it("should allow retrieving existing entries", function() {
 		expect(map.get("a")).toEqual({ num: 1 });
 	});
 
-	it("should return undefined for non-existing entries", function () {
+	it("should return undefined for non-existing entries", function() {
 		expect(map.get("something")).toBeUndefined();
 	});
 
-	it("should allow storing new values", function () {
+	it("should allow storing new values", function() {
 		map.set("foo", { string: "bar" });
 		expect(map.get("foo")).toEqual({ string: "bar" });
 	});
 
-	it("should allow over-writing existing values", function () {
+	it("should allow over-writing existing values", function() {
 		map.set("a", { num2: 42 });
 		expect(map.get("a")).toEqual({ num2: 42 });
 	});
 
-	it("should allow deleting existing values", function () {
+	it("should allow deleting existing values", function() {
 		map.delete("a");
 		expect(map.get("a")).toBeUndefined();
 	});
 
-	it("should allow clearing itself of all entries", function () {
+	it("should allow clearing itself of all entries", function() {
 		map.clear();
 		expect(map.get("a")).toBeUndefined();
 	});
 
-	it("should discard expired entries", function () {
+	it("should discard expired entries", function() {
 		expect(map.size()).toBe(1);
 
 		jasmine.clock().install();

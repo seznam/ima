@@ -2,15 +2,15 @@
 
 import ns from 'ima/namespace';
 
-ns.namespace('Ima.Router');
+ns.namespace('ima.router');
 
 /**
  * Wrapper for the ExpressJS request, exposing only the neccessary minimum.
  *
  * @class Request
- * @namespace Ima.Router
- * @module Ima
- * @submodule Ima.Router
+ * @namespace ima.router
+ * @module ima
+ * @submodule ima.router
  */
 export default class Request {
 
@@ -129,4 +129,4 @@ export default class Request {
 	}
 }
 
-ns.Ima.Router.Request = Request;
+ns.ima.router.Request = Request;

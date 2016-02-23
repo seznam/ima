@@ -1,6 +1,6 @@
 import ns from 'ima/namespace';
 
-ns.namespace('Ima.Extension');
+ns.namespace('ima.extension');
 
 /**
  * Extensions provide means of extending the page controllers with additional
@@ -18,9 +18,9 @@ ns.namespace('Ima.Extension');
  * through the same lifecycle as the controller.
  *
  * @interface Extension
- * @namespace Ima.Extension
- * @module Ima
- * @submodule Ima.Extension
+ * @namespace ima.extension
+ * @module ima
+ * @submodule ima.extension
  */
 export default class Extension {
 
@@ -159,7 +159,7 @@ export default class Extension {
 	 * Sets the state manager used to manage the controller's state..
 	 *
 	 * @method setPageStateManager
-	 * @param {?Ima.Page.State.PageStateManager} pageStateManager The current
+	 * @param {?ima.page.state.PageStateManager} pageStateManager The current
 	 *        state manager to use.
 	 */
 	setPageStateManager(pageStateManager) {}
@@ -193,4 +193,4 @@ export default class Extension {
 	getAllowedStateKeys() {}
 }
 
-ns.Ima.Extension.Extension = Extension;
+ns.ima.extension.Extension = Extension;

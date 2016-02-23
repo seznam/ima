@@ -3,7 +3,7 @@ import vendor from 'ima/vendorLinker';
 
 const $Helper = vendor.get('$Helper');
 
-ns.namespace('Ima');
+ns.namespace('ima');
 
 /**
  * Environment name value in the production environment.
@@ -20,10 +20,10 @@ const PRODUCTION_ENVIRONMENT = 'prod';
  * itself.
  *
  * @class Bootstrap
- * @namespace Ima
- * @module Ima
+ * @namespace ima
+ * @module ima
  *
- * @requires Ima.Namespace
+ * @requires ima.Namespace
  */
 export default class Bootstrap {
 
@@ -32,7 +32,7 @@ export default class Bootstrap {
 	 *
 	 * @constructor
 	 * @method contructor
-	 * @param {Ima.ObjectContainer} oc The application's object container to
+	 * @param {ima.ObjectContainer} oc The application's object container to
 	 *        use for managing dependencies.
 	 */
 	constructor(oc) {
@@ -42,7 +42,7 @@ export default class Bootstrap {
 		 *
 		 * @private
 		 * @property _oc
-		 * @type {Ima.ObjectContainer}
+		 * @type {ima.ObjectContainer}
 		 */
 		this._oc = oc;
 
@@ -149,4 +149,4 @@ export default class Bootstrap {
 	}
 }
 
-ns.Ima.Bootstrap = Bootstrap;
+ns.ima.Bootstrap = Bootstrap;

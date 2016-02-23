@@ -1,15 +1,15 @@
 import ns from 'ima/namespace';
 
-ns.namespace('Ima.Http');
+ns.namespace('ima.http');
 
 /**
  * The {@codelink HttpAgent} defines unifying API for sending HTTP requests at
  * both client-side and server-side.
  *
  * @interface HttpAgent
- * @namespace Ima.Http
- * @module Ima
- * @submodule Ima.Http
+ * @namespace ima.http
+ * @module ima
+ * @submodule ima.http
  */
 export default class HttpAgent {
 	/**
@@ -244,7 +244,7 @@ export default class HttpAgent {
 	 * @param {string} value The header value. To provide multiple values,
 	 *        separate them with commas
 	 *        (see http://www.w3.org/Protocols/rfc2616/rfc2616-sec4.html#sec4.2).
-	 * @return {Ima.Http.HttpAgent} This HTTP agent.
+	 * @return {ima.http.HttpAgent} This HTTP agent.
 	 */
 	setDefaultHeader(header, value) {}
 
@@ -252,9 +252,9 @@ export default class HttpAgent {
 	 * Clears all configured default headers.
 	 *
 	 * @method clearDefaultHeaders
-	 * @return {Ima.Http.HttpAgent} This HTTP agent.
+	 * @return {ima.http.HttpAgent} This HTTP agent.
 	 */
 	clearDefaultHeaders() {}
 }
 
-ns.Ima.Http.HttpAgent = HttpAgent;
+ns.ima.http.HttpAgent = HttpAgent;

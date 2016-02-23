@@ -1,4 +1,4 @@
-describe('Ima.Http.SuperAgentProxy', function() {
+describe('ima.http.SuperAgentProxy', function() {
 
 	var proxy = null;
 	var apiUrl = 'http://localhost:3001/api/';
@@ -31,14 +31,15 @@ describe('Ima.Http.SuperAgentProxy', function() {
 			timeout: function() {
 				var self = this;
 				setTimeout(function() {
-					self.funcError({timeout: options.timeout});
-				},options.timeout);
-				return this; },
+					self.funcError({ timeout: options.timeout });
+				}, options.timeout);
+				return this;
+			},
 			end: function() {
 				return this;
 			}
 		};
-		proxy = oc.create('Ima.Http.SuperAgentProxy', [superAgent, HTTP_STATUS_CODE, httpUrlTransformer, windowHelper]);
+		proxy = oc.create('ima.http.SuperAgentProxy', [superAgent, HTTP_STATUS_CODE, httpUrlTransformer, windowHelper]);
 
 		jasmine.clock().install();
 	});

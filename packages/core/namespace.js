@@ -6,9 +6,9 @@
  * each other more easily than by using the ES6 import/export mechanism.
  *
  * @class Namespace
- * @namespace Ima.Namespace
- * @module Ima
- * @submodule Ima.Namespace
+ * @namespace ima.Namespace
+ * @module ima
+ * @submodule ima.Namespace
  */
 class Namespace {
 	/**
@@ -21,10 +21,9 @@ class Namespace {
 	 * @constructor
 	 * @method constructor
 	 * @example
-	 *        import ns from 'Ima/namespace/ns.js';
-	 *        ns.namespace('Ima');
-	 *        ns.has('Ima');
-	 *        ns.Ima.Oc = Oc;
+	 *        import ns from 'ima/namespace/ns.js';
+	 *        ns.namespace('ima');
+	 *        ns.has('ima');
 	 */
 	constructor() {}
 

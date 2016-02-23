@@ -1,5 +1,5 @@
-describe('Ima.Page.State.PageStateManagerDecorator', function() {
-	var pageStateManager = oc.create('Ima.Page.State.PageStateManagerImpl');
+describe('ima.page.state.PageStateManagerDecorator', function() {
+	var pageStateManager = oc.create('ima.page.state.PageStateManagerImpl');
 	var allowedStateKeys = ['allow'];
 	var decoratedPageStateManager = null;
 	var state = {
@@ -9,7 +9,7 @@ describe('Ima.Page.State.PageStateManagerDecorator', function() {
 
 	beforeEach(function() {
 		decoratedPageStateManager =
-			oc.create('Ima.Page.State.PageStateManagerDecorator',
+			oc.create('ima.page.state.PageStateManagerDecorator',
 				[
 					pageStateManager,
 					allowedStateKeys

@@ -1,6 +1,6 @@
 import ns from 'ima/namespace';
 
-ns.namespace('Ima.Meta');
+ns.namespace('ima.meta');
 
 /**
  * The Meta manager is a utility for managing various page attributes related
@@ -19,9 +19,9 @@ ns.namespace('Ima.Meta');
  *     tags ({@code og:type}, {@code og:image}, etc.).
  *
  * @interface MetaManager
- * @namespace Ima.Meta
- * @module Ima
- * @submodule Ima.Meta
+ * @namespace ima.meta
+ * @module ima
+ * @submodule ima.meta
  */
 export default class MetaManager {
 	/**
@@ -141,4 +141,4 @@ export default class MetaManager {
 	getLinks() {}
 }
 
-ns.Ima.Meta.MetaManager = MetaManager;
+ns.ima.meta.MetaManager = MetaManager;

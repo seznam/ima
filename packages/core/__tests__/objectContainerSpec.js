@@ -1,4 +1,4 @@
-describe('Ima.ObjectContainer', function() {
+describe('ima.ObjectContainer', function() {
 
 	var oc = null;
 
@@ -12,12 +12,12 @@ describe('Ima.ObjectContainer', function() {
 	var constantName = 'constant';
 	var constantValue = 'value';
 
-	var namespacePathUnit = 'Test.Unit';
-	var namespacePathOC = 'Test.Unit.ObjectContainer';
+	var namespacePathUnit = 'test.unit';
+	var namespacePathOC = 'test.unit.ObjectContainer';
 	ns.namespace(namespacePathUnit);
 
 	beforeEach(function() {
-		oc = new ns.Ima.ObjectContainer(ns);
+		oc = new ns.ima.ObjectContainer(ns);
 		var map = new Map();
 
 	});
@@ -300,7 +300,7 @@ describe('Ima.ObjectContainer', function() {
 		});
 
 		it('should be return value from namespace', function() {
-			var value = {a: 1};
+			var value = { a: 1 };
 			var namespace = ns.get(namespacePathUnit);
 			namespace.ObjectContainer = value;
 

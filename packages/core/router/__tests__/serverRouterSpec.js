@@ -1,4 +1,4 @@
-describe('Ima.Router.ServerRouter', function() {
+describe('ima.router.ServerRouter', function() {
 
 	var router = null;
 	var pageRenderer = null;
@@ -10,13 +10,13 @@ describe('Ima.Router.ServerRouter', function() {
 	var ROUTER_CONSTANTS = oc.get('$ROUTER_CONSTANTS');
 
 	beforeEach(function() {
-		pageRenderer = oc.create('Ima.Page.Manager.PageManager');
+		pageRenderer = oc.create('ima.page.manager.PageManager');
 		routeFactory = oc.create('$RouteFactory');
-		dispatcher = oc.create('Ima.Event.Dispatcher');
-		request = oc.create('Ima.Router.Request');
-		response = oc.create('Ima.Router.Response');
-		router = oc.create('Ima.Router.ServerRouter', [pageRenderer, routeFactory, dispatcher, ROUTER_CONSTANTS, request, response]);
-		router.init({mode: router.MODE_SERVER, domain: domain});
+		dispatcher = oc.create('ima.event.Dispatcher');
+		request = oc.create('ima.router.Request');
+		response = oc.create('ima.router.Response');
+		router = oc.create('ima.router.ServerRouter', [pageRenderer, routeFactory, dispatcher, ROUTER_CONSTANTS, request, response]);
+		router.init({ mode: router.MODE_SERVER, domain: domain });
 	});
 
 	it('should be return actual path', function() {
@@ -31,7 +31,7 @@ describe('Ima.Router.ServerRouter', function() {
 
 	it('should be redirect to url', function() {
 		var url = domain + '/redirectUrl';
-		var options = {httpStatus: 303};
+		var options = { httpStatus: 303 };
 
 		spyOn(response, 'redirect')
 			.and

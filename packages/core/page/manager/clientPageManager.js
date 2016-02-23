@@ -3,27 +3,27 @@
 import ns from 'ima/namespace';
 import AbstractPageManager from 'ima/page/manager/abstractPageManager';
 
-ns.namespace('Ima.Page.Manager');
+ns.namespace('ima.page.manager');
 
 /**
  * Page manager for controller on the client side.
  *
  * @class ClientPageManager
- * @implements Ima.Page.Manager.AbstractPageManager
- * @namespace Ima.Page.Manager
- * @module Ima
- * @submodule Ima.Page
+ * @implements ima.page.manager.AbstractPageManager
+ * @namespace ima.page.manager
+ * @module ima
+ * @submodule ima.page
  */
 export default class ClientPageManager extends AbstractPageManager {
 
 	/**
 	 * @method constructor
 	 * @constructor
-	 * @param {Ima.Page.Factory} pageFactory
-	 * @param {Ima.Page.Renderer.PageRenderer} pageRenderer
-	 * @param {Ima.Page.State.PageStateManager} stateManager
-	 * @param {Ima.Window.Window} window
-	 * @param {Ima.Event.EventBus} eventBus
+	 * @param {ima.page.Factory} pageFactory
+	 * @param {ima.page.renderer.PageRenderer} pageRenderer
+	 * @param {ima.page.state.PageStateManager} stateManager
+	 * @param {ima.window.Window} window
+	 * @param {ima.event.EventBus} eventBus
 	 */
 	constructor(pageFactory, pageRenderer, stateManager, window, eventBus) {
 		super(pageFactory, pageRenderer, stateManager);
@@ -31,7 +31,7 @@ export default class ClientPageManager extends AbstractPageManager {
 		/**
 		 * @private
 		 * @property _window
-		 * @type {Ima.Window.Window}
+		 * @type {ima.window.Window}
 		 * @default window
 		 */
 		this._window = window;
@@ -39,7 +39,7 @@ export default class ClientPageManager extends AbstractPageManager {
 		/**
 		 * @private
 		 * @property _eventBus
-		 * @type {Ima.Event.EventBus}
+		 * @type {ima.event.EventBus}
 		 * @default eventBus
 		 */
 		this._eventBus = eventBus;
@@ -207,4 +207,4 @@ export default class ClientPageManager extends AbstractPageManager {
 	}
 }
 
-ns.Ima.Page.Manager.ClientPageManager = ClientPageManager;
+ns.ima.page.manager.ClientPageManager = ClientPageManager;

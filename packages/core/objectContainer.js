@@ -1,6 +1,6 @@
 import ns from 'ima/namespace';
 
-ns.namespace('Ima');
+ns.namespace('ima');
 
 /**
  * The Object Container is an enhanced dependency injector with support for
@@ -8,9 +8,9 @@ ns.namespace('Ima');
  * namespace by specifying their fully qualified names.
  *
  * @class ObjectContainer
- * @namespace Ima
- * @module Ima
- * @requires Ima.Namespace
+ * @namespace ima
+ * @module ima
+ * @requires ima.Namespace
  */
 export default class ObjectContainer {
 
@@ -19,7 +19,7 @@ export default class ObjectContainer {
 	 *
 	 * @constructor
 	 * @method constructor
-	 * @param {Ima.Namespace} namespace The namespace container, used to
+	 * @param {ima.Namespace} namespace The namespace container, used to
 	 *        access classes and values using their fully qualified names.
 	 */
 	constructor(namespace) {
@@ -30,7 +30,7 @@ export default class ObjectContainer {
 		 *
 		 * @private
 		 * @property _namespace
-		 * @type {Ima.Namespace}
+		 * @type {ima.Namespace}
 		 */
 		this._namespace = namespace;
 
@@ -95,12 +95,12 @@ export default class ObjectContainer {
 	 *        class constructor or a factory function.
 	 * @param {*[]} [dependencies=[]] The dependencies to pass into the
 	 *        constructor or factory function.
-	 * @return {Ima.ObjectContainer} This object container.
+	 * @return {ima.ObjectContainer} This object container.
 	 */
 	bind(name, classConstructor, dependencies = []) {
 		if ($Debug) {
 			if (typeof classConstructor !== 'function') {
-				throw new Error(`Ima.ObjectContainer:bind method has to ` +
+				throw new Error(`ima.ObjectContainer:bind method has to ` +
 						`have the second parameter type of function for ` +
 						`alias name ${name}. You give type of ` +
 						`${typeof classConstructor}. Fix your bind.js file.`);
@@ -139,12 +139,12 @@ export default class ObjectContainer {
 	 * @method constant
 	 * @param {string} name The constant name.
 	 * @param {*} value The constant value.
-	 * @return {Ima.ObjectContainer} This object container.
+	 * @return {ima.ObjectContainer} This object container.
 	 */
 	constant(name, value) {
 		if ($Debug) {
 			if (this._constants.has(name)) {
-				throw new Error(`Ima.ObjectContainer:constant method has ` +
+				throw new Error(`ima.ObjectContainer:constant method has ` +
 						`already registered name ${name}. Constant method ` +
 						`may be call only once for one name.`);
 			}
@@ -171,19 +171,19 @@ export default class ObjectContainer {
 	 * @param {function(new: T, ...*)} classConstructor The class constructor.
 	 * @param {*[]} dependencies The dependencies to pass into the
 	 *        constructor function.
-	 * @return {Ima.ObjectContainer} This object container.
+	 * @return {ima.ObjectContainer} This object container.
 	 */
 	inject(classConstructor, dependencies) {
 		if ($Debug) {
 			if (typeof classConstructor !== 'function') {
-				throw new Error(`Ima.ObjectContainer:bind method has to ` +
+				throw new Error(`ima.ObjectContainer:bind method has to ` +
 						`have the first parameter type of function. You ` +
 						`give type of ${typeof classConstructor}. Fix your ` +
 						`bind.js file.`);
 			}
 
 			if (this._registry.has(classConstructor)) {
-				throw new Error(`Ima.ObjectContainer:inject method has ` +
+				throw new Error(`ima.ObjectContainer:inject method has ` +
 						`already registered class ${classConstructor.name}. ` +
 						`Inject method may be call only once for one class. ` +
 						`If you need more different implementation use ` +
@@ -216,13 +216,13 @@ export default class ObjectContainer {
 	 *        The constructor of the class implementing the service interface.
 	 * @param {*[]} [dependencies=[]] The dependencies to pass into the
 	 *        constructor function.
-	 * @return {Ima.ObjectContainer} This object container.
+	 * @return {ima.ObjectContainer} This object container.
 	 */
 	provide(interfaceConstructor, implementationConstructor,
 			dependencies = []) {
 		if ($Debug) {
 			if (this._providers.has(interfaceConstructor)) {
-				throw new Error('Ima.ObjectContainer:provide The specified' +
+				throw new Error('ima.ObjectContainer:provide The specified' +
 						` interface (${interfaceConstructor.name}) is ` +
 						`already provided with the object container.`);
 			}
@@ -335,7 +335,7 @@ export default class ObjectContainer {
 	 *
 	 * @chainable
 	 * @method clear
-	 * @return {Ima.ObjectContainer} This object container.
+	 * @return {ima.ObjectContainer} This object container.
 	 */
 	clear() {
 		this._constants.clear();
@@ -379,7 +379,7 @@ export default class ObjectContainer {
 
 		if ($Debug) {
 			if (!entry) {
-				throw new Error(`Ima.ObjectContainer:_getEntry method has ` +
+				throw new Error(`ima.ObjectContainer:_getEntry method has ` +
 						`not constant, alias, registered class, provided ` +
 						`interface and namespace name for name ${name}. ` +
 						`Check your bind.js file and add implementation for ` +
@@ -496,15 +496,15 @@ export default class ObjectContainer {
 	}
 }
 
-ns.Ima.ObjectContainer = ObjectContainer;
+ns.ima.ObjectContainer = ObjectContainer;
 
 /**
  * Object container entry, representing either a class, interface, constant or
  * an alias.
  *
  * @class Entry
- * @namespace Ima
- * @module Ima
+ * @namespace ima
+ * @module ima
  * @template T
  */
 class Entry {

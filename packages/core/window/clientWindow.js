@@ -3,16 +3,16 @@
 import ns from 'ima/namespace';
 import WindowInterface from 'ima/window/window';
 
-ns.namespace('Ima.Window');
+ns.namespace('ima.window');
 
 /**
- * Client-side implementation of the {@code Ima.Window.Window} utility API.
+ * Client-side implementation of the {@code ima.window.Window} utility API.
  *
  * @class ClientWindow
- * @implements Ima.Window.Window
- * @namespace Ima.Window
- * @module Ima
- * @submodule Ima.Window
+ * @implements ima.window.Window
+ * @namespace ima.window
+ * @module ima
+ * @submodule ima.window
  */
 export default class ClientWindow extends WindowInterface {
 
@@ -253,4 +253,4 @@ export default class ClientWindow extends WindowInterface {
 	}
 }
 
-ns.Ima.Window.ClientWindow = ClientWindow;
+ns.ima.window.ClientWindow = ClientWindow;

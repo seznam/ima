@@ -4,7 +4,7 @@ import ns from 'ima/namespace';
 import IMAError from 'ima/error/genericError';
 import EventBus from 'ima/event/eventBus';
 
-ns.namespace('Ima.Event');
+ns.namespace('ima.event');
 
 /**
  * Global name of IMA.js custom event.
@@ -22,10 +22,10 @@ const IMA_EVENT = '$IMA.CustomEvent';
  * and two methods for catching events (e.g. inside view components).
  *
  * @class EventBusImpl
- * @implements Ima.Event.EventBus
- * @namespace Ima.Event
- * @module Ima
- * @submodule Ima.Event
+ * @implements ima.event.EventBus
+ * @namespace ima.event
+ * @module ima
+ * @submodule ima.event
  */
 export default class EventBusImpl extends EventBus {
 	/**
@@ -33,7 +33,7 @@ export default class EventBusImpl extends EventBus {
 	 *
 	 * @constructor
 	 * @method constructor
-	 * @param {Ima.Window.Window} window
+	 * @param {ima.window.Window} window
 	 */
 	constructor(window) {
 		super();
@@ -41,7 +41,7 @@ export default class EventBusImpl extends EventBus {
 		/**
 		 * @private
 		 * @property _window
-		 * @type {Ima.Window.Window}
+		 * @type {ima.window.Window}
 		 * @default window
 		 */
 		this._window = window;
@@ -88,7 +88,7 @@ export default class EventBusImpl extends EventBus {
 		if (eventTarget && typeof eventTarget.dispatchEvent !== 'undefined') {
 			eventTarget.dispatchEvent(event);
 		} else {
-			throw new IMAError(`Ima.Event.EventBusImpl.fire: The EventSource ` +
+			throw new IMAError(`ima.event.EventBusImpl.fire: The EventSource ` +
 					`${eventTarget} is not defined or can not dispatch ` +
 					`event '${eventName}' (data: ${data}).`,
 					{ eventTarget, eventName, data, eventInitialization });
@@ -218,4 +218,4 @@ export default class EventBusImpl extends EventBus {
 	}
 }
 
-ns.Ima.Event.EventBusImpl = EventBusImpl;
+ns.ima.event.EventBusImpl = EventBusImpl;

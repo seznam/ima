@@ -1,4 +1,4 @@
-describe('Ima.Http.HttpAgentImpl', function() {
+describe('ima.http.HttpAgentImpl', function() {
 
 	var proxy = null;
 	var http = null;
@@ -9,12 +9,12 @@ describe('Ima.Http.HttpAgentImpl', function() {
 	var httpConfig = null;
 	var cacheStorage = null;
 	var cacheFactory = null;
-	var Helper = ns.Vendor.$Helper;
+	var Helper = oc.get('$Helper');
 
 	beforeEach(function() {
 		cacheStorage = oc.create('$MapStorage');
 		cacheFactory = oc.create('$CacheFactory');
-		cache = oc.create('Ima.Cache.CacheImpl', [cacheStorage, cacheFactory, Helper, {enabled: true, ttl: 1000}]);
+		cache = oc.create('ima.cache.CacheImpl', [cacheStorage, cacheFactory, Helper, { enabled: true, ttl: 1000 }]);
 
 		proxy = oc.create('$SuperAgentProxy');
 		cookie = oc.create('$CookieStorage');
@@ -34,7 +34,7 @@ describe('Ima.Http.HttpAgentImpl', function() {
 			}
 		};
 
-		http = oc.create('Ima.Http.HttpAgentImpl', [proxy, cache, cookie, httpConfig]);
+		http = oc.create('ima.http.HttpAgentImpl', [proxy, cache, cookie, httpConfig]);
 
 		options = {
 			ttl: httpConfig.defaultRequestOptions.ttl,
@@ -115,7 +115,7 @@ describe('Ima.Http.HttpAgentImpl', function() {
 
 				http[method](data.params.url, data.params.data, data.params.options)
 					.then(function() {}, function(error) {
-						expect(error instanceof ns.Ima.Error.GenericError).toBe(true);
+						expect(error instanceof ns.ima.error.GenericError).toBe(true);
 						expect(proxy.request.calls.count()).toEqual(2);
 						done();
 					});

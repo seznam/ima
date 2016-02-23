@@ -1,17 +1,17 @@
 import ns from 'ima/namespace';
 import MetaManagerInterface from 'ima/meta/metaManager';
 
-ns.namespace('Ima.Meta');
+ns.namespace('ima.meta');
 
 /**
- * Default implementation of the {@codelink Ima.Meta.MetaManager}
+ * Default implementation of the {@codelink ima.meta.MetaManager}
  * interface.
  *
  * @class MetaManagerImpl
- * @implements Ima.Meta.MetaManager
- * @namespace Ima.Meta
- * @module Ima
- * @submodule Ima.Meta
+ * @implements ima.meta.MetaManager
+ * @namespace ima.meta
+ * @module ima
+ * @submodule ima.meta
  */
 export default class MetaManagerImpl extends MetaManagerInterface {
 	/**
@@ -147,4 +147,4 @@ export default class MetaManagerImpl extends MetaManagerInterface {
 	}
 }
 
-ns.Ima.Meta.MetaManagerImpl = MetaManagerImpl;
+ns.ima.meta.MetaManagerImpl = MetaManagerImpl;

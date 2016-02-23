@@ -3,16 +3,16 @@
 import ns from 'ima/namespace';
 import AbstractPageManager from 'ima/page/manager/abstractPageManager';
 
-ns.namespace('Ima.Page.Manager');
+ns.namespace('ima.page.manager');
 
 /**
  * Page manager for controller on the server side.
  *
  * @class ServerPageManager
- * @implements Ima.Page.Manager.AbstractPageManager
- * @namespace Ima.Page.Manager
- * @module Ima
- * @submodule Ima.Page
+ * @implements ima.page.manager.AbstractPageManager
+ * @namespace ima.page.manager
+ * @module ima
+ * @submodule ima.page
  */
 export default class ServerPageManager extends AbstractPageManager {
 
@@ -24,4 +24,4 @@ export default class ServerPageManager extends AbstractPageManager {
 
 }
 
-ns.Ima.Page.Manager.ServerPageManager = ServerPageManager;
+ns.ima.page.manager.ServerPageManager = ServerPageManager;

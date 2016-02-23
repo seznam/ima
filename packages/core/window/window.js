@@ -1,6 +1,6 @@
 import ns from 'ima/namespace';
 
-ns.namespace('Ima.Window');
+ns.namespace('ima.window');
 
 /**
  * The {@codelink Window} interface defines various utility API for easier
@@ -8,9 +8,9 @@ ns.namespace('Ima.Window');
  * available through various global objects.
  *
  * @interface Window
- * @namespace Ima.Window
- * @module Ima
- * @submodule Ima.Window
+ * @namespace ima.window
+ * @module ima
+ * @submodule ima.window
  */
 export default class Window {
 
@@ -272,4 +272,4 @@ export default class Window {
 	unbindEventListener(eventTarget, event, listener, useCapture = false) {}
 }
 
-ns.Ima.Window.Window = Window;
+ns.ima.window.Window = Window;

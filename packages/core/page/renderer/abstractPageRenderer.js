@@ -2,20 +2,20 @@ import ns from 'ima/namespace';
 import IMAError from 'ima/error/genericError';
 import PageRendererInterface from 'ima/page/renderer/pageRenderer';
 
-ns.namespace('Ima.Page.Renderer');
+ns.namespace('ima.page.renderer');
 
 /**
  * Base class for implementations of the
- * {@codelink Ima.Page.Renderer.PageRenderer} interface.
+ * {@codelink ima.page.renderer.PageRenderer} interface.
  *
  * @class AbstractPageRenderer
- * @implements Ima.Page.Renderer.PageRenderer
- * @namespace Ima.Page.Renderer
- * @module Ima
- * @submodule Ima.Page
+ * @implements ima.page.renderer.PageRenderer
+ * @namespace ima.page.renderer
+ * @module ima
+ * @submodule ima.page
  *
- * @requires Vendor.$Helper
- * @requires React
+ * @requires vendor.$Helper
+ * @requires ReactDOM
  */
 export default class AbstractPageRenderer extends PageRendererInterface {
 
@@ -24,10 +24,10 @@ export default class AbstractPageRenderer extends PageRendererInterface {
 	 *
 	 * @constructor
 	 * @method constructor
-	 * @param {Ima.Page.Render.Factory} factory Factory for receive $Utils to
+	 * @param {ima.page.renderer.Factory} factory Factory for receive $Utils to
 	 *        view.
-	 * @param {Vendor.$Helper} Helper The IMA.js helper methods.
-	 * @param {Vendor.ReactDOM} ReactDOM React framework instance, will be used to
+	 * @param {vendor.$Helper} Helper The IMA.js helper methods.
+	 * @param {vendor.ReactDOM} ReactDOM React framework instance, will be used to
 	 *        render the page.
 	 * @param {Object<string, *>} settings Application settings for the current
 	 *        application environment.
@@ -40,7 +40,7 @@ export default class AbstractPageRenderer extends PageRendererInterface {
 		 *
 		 * @protected
 		 * @property _factory
-		 * @type {Ima.Page.Renderer.PageRendererFactory}
+		 * @type {ima.page.renderer.PageRendererFactory}
 		 */
 		this._factory = factory;
 
@@ -140,4 +140,4 @@ export default class AbstractPageRenderer extends PageRendererInterface {
 	}
 }
 
-ns.Ima.Page.Renderer.AbstractPageRenderer = AbstractPageRenderer;
+ns.ima.page.renderer.AbstractPageRenderer = AbstractPageRenderer;

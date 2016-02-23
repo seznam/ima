@@ -2,26 +2,26 @@
 
 import ns from 'ima/namespace';
 
-ns.namespace('Ima.Debug');
+ns.namespace('ima.debug');
 
 /**
  * DevTool
  *
  * @class DevTool
- * @namespace Ima.Debug
- * @module Ima
- * @submodule Ima.Debug
+ * @namespace ima.debug
+ * @module ima
+ * @submodule ima.debug
  */
 export default class DevTool {
 
 	/**
 	 * @method constructor
 	 * @constructor
-	 * @param {Ima.Page.Manager.PageManager} pageManager
-	 * @param {Ima.Page.State.PageStateManager} stateManager
-	 * @param {Ima.Window.Window} window
-	 * @param {Ima.Event.Dispatcher} dispatcher
-	 * @param {Ima.Event.EventBus} eventBus
+	 * @param {ima.page.manager.PageManager} pageManager
+	 * @param {ima.page.state.PageStateManager} stateManager
+	 * @param {ima.window.Window} window
+	 * @param {ima.event.Dispatcher} dispatcher
+	 * @param {ima.event.EventBus} eventBus
 	 */
 	constructor(pageManager, stateManager, window, dispatcher, eventBus) {
 
@@ -30,7 +30,7 @@ export default class DevTool {
 		 *
 		 * @private
 		 * @property _pageManager
-		 * @type {Ima.Page.Manager.PageManager}
+		 * @type {ima.page.manager.PageManager}
 		 */
 		this._pageManager = pageManager;
 
@@ -39,7 +39,7 @@ export default class DevTool {
 		 *
 		 * @private
 		 * @property _stateManager
-		 * @type {Ima.Page.State.PageStateManager}
+		 * @type {ima.page.state.PageStateManager}
 		 */
 		this._stateManager = stateManager;
 
@@ -48,7 +48,7 @@ export default class DevTool {
 		 *
 		 * @private
 		 * @property _window
-		 * @type {Ima.Window.Window}
+		 * @type {ima.window.Window}
 		 */
 		this._window = window;
 
@@ -57,7 +57,7 @@ export default class DevTool {
 		 *
 		 * @private
 		 * @property _dispatcher
-		 * @type {Ima.Event.Dispatcher}
+		 * @type {ima.event.Dispatcher}
 		 */
 		this._dispatcher = dispatcher;
 
@@ -65,7 +65,7 @@ export default class DevTool {
 		 * $IMA eventBus
 		 *
 		 * @property _eventBus
-		 * @type {Ima.Event.EventBus}
+		 * @type {ima.event.EventBus}
 		 */
 		this._eventBus = eventBus;
 	}
@@ -123,4 +123,4 @@ export default class DevTool {
 	}
 }
 
-ns.Ima.Debug.DevTool = DevTool;
+ns.ima.debug.DevTool = DevTool;

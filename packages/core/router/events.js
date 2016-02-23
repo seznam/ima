@@ -1,6 +1,6 @@
 import ns from 'ima/namespace';
 
-ns.namespace('Ima.Router');
+ns.namespace('ima.router');
 
 /**
  * Events constants, which is firing to app.
@@ -9,9 +9,9 @@ ns.namespace('Ima.Router');
  */
 const EVENTS = Object.freeze({
 	/**
-	 * Router fire event {@code $IMA.$Router.preHandleRoute} before page
+	 * Router fire event {@code $IMA.$Router.beforeHandleRoute} before page
 	 * manager handle the route. Event's data contain
-	 * {@code { params: Object<string, string>}, route: ns.Ima.Router.Route,
+	 * {@code { params: Object<string, string>}, route: ima.router.Route,
 	 * path: string, options: Object<string, *>}}. The {@code path} is current
 	 * path, the {@code params} are params extracted from path, the
 	 * {@code route} is handle route for path and the {@code options} is route
@@ -24,10 +24,10 @@ const EVENTS = Object.freeze({
 	BEFORE_HANDLE_ROUTE: '$IMA.$Router.beforeHandleRoute',
 
 	/**
-	 * Router fire event {@code $IMA.$Router.postHandleRoute} after page
+	 * Router fire event {@code $IMA.$Router.afterHandleRoute} after page
 	 * manager handle the route. Event's data contain
 	 * {@code {response: Object<string, *>, params: Object<string, string>},
-	 * route: ns.Ima.Router.Route, path: string, options: Object<string, *>}}.
+	 * route: ima.router.Route, path: string, options: Object<string, *>}}.
 	 * The {@code response} is page render result. The {@code path} is current
 	 * path, the {@code params} are params extracted from path, the
 	 * {@code route} is handle route for path and the {@code options} is route
@@ -42,4 +42,4 @@ const EVENTS = Object.freeze({
 
 export default EVENTS;
 
-ns.Ima.Router.EVENTS = EVENTS;
+ns.ima.router.EVENTS = EVENTS;

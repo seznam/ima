@@ -3,16 +3,16 @@
 import ns from 'ima/namespace';
 import WindowInterface from 'ima/window/window';
 
-ns.namespace('Ima.Window');
+ns.namespace('ima.window');
 
 /**
- * Server-side implementation of the {@code Ima.Window.Window} utility API.
+ * Server-side implementation of the {@code ima.window.Window} utility API.
  *
  * @class ServerWindow
- * @implements ns.Ima.Window.Window
- * @namespace Ima.Window
- * @module Ima
- * @submodule Ima.Window
+ * @implements ns.ima.window.Window
+ * @namespace ima.window
+ * @module ima
+ * @submodule ima.window
  */
 export default class ServerWindow extends WindowInterface {
 
@@ -221,4 +221,4 @@ export default class ServerWindow extends WindowInterface {
 	unbindEventListener(eventTarget, event, listener, useCapture = false) {}
 }
 
-ns.Ima.Window.ServerWindow = ServerWindow;
+ns.ima.window.ServerWindow = ServerWindow;

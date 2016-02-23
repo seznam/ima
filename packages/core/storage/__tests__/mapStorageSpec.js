@@ -1,7 +1,7 @@
-describe('Ima.Storage.Map', function() {
+describe('ima.storage.Map', function() {
 	var map;
 	beforeEach(function() {
-		map = oc.create('Ima.Storage.MapStorage');
+		map = oc.create('ima.storage.MapStorage');
 		map.init();
 		map.clear();
 	});

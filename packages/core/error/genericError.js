@@ -1,18 +1,18 @@
 import ns from 'ima/namespace';
 import Error from './error';
 
-ns.namespace('Ima.Error');
+ns.namespace('ima.error');
 
 /**
- * Implementation of the Ima.Error.Error interface, providing more advanced
+ * Implementation of the ima.error.Error interface, providing more advanced
  * error API.
  *
  * @class GenericError
  * @extends ExtensibleError
- * @implements Ima.Error.Error
- * @namespace Ima.Error
- * @module Ima
- * @submodule Ima.Error
+ * @implements ima.error.Error
+ * @namespace ima.error
+ * @module ima
+ * @submodule ima.error
  */
 export default class GenericError extends Error {
 	/**
@@ -59,4 +59,4 @@ export default class GenericError extends Error {
 	}
 }
 
-ns.Ima.Error.GenericError = GenericError;
+ns.ima.error.GenericError = GenericError;

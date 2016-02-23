@@ -2,7 +2,7 @@ import ns from 'ima/namespace';
 import IMAError from 'ima/error/genericError';
 import MapStorage from 'ima/storage/mapStorage';
 
-ns.namespace('Ima.Storage');
+ns.namespace('ima.storage');
 
 /**
  * Implementation note: while this is not the largest possible value for a
@@ -33,13 +33,13 @@ const COOKIE_SEPARATOR = '; ';
  * side. The storage caches the cookies internally.
  *
  * @class CookieStorage
- * @extends Ima.Storage.Map
- * @namespace Ima.Storage
- * @module Ima
- * @submodule Ima.Storage
+ * @extends ima.storage.Map
+ * @namespace ima.storage
+ * @module ima
+ * @submodule ima.storage
  *
- * @requires Ima.Router.Request
- * @requires Ima.Router.Response
+ * @requires ima.Router.Request
+ * @requires ima.Router.Response
  */
 export default class CookieStorage extends MapStorage {
 	/**
@@ -47,9 +47,9 @@ export default class CookieStorage extends MapStorage {
 	 *
 	 * @constructor
 	 * @method constructor
-	 * @param {Ima.Window.Window} window The window utility.
-	 * @param {Ima.Router.Request} request The current HTTP request.
-	 * @param {Ima.Router.Response} response The current HTTP response.
+	 * @param {ima.window.Window} window The window utility.
+	 * @param {ima.router.Request} request The current HTTP request.
+	 * @param {ima.router.Response} response The current HTTP response.
 	 * @example
 	 *      cookie.set('cookie', 'value', { expires: 10 }); // cookie expires
 	 *                                                      // after 10s
@@ -60,12 +60,12 @@ export default class CookieStorage extends MapStorage {
 		super();
 
 		/**
-		 * The window utility used to determine whether the Ima is being run
+		 * The window utility used to determine whether the IMA is being run
 		 * at the client or at the server.
 		 *
 		 * @private
 		 * @property _window
-		 * @type {Ima.Window.Window}
+		 * @type {ima.window.Window}
 		 */
 		this._window = window;
 
@@ -74,7 +74,7 @@ export default class CookieStorage extends MapStorage {
 		 *
 		 * @private
 		 * @property _request
-		 * @type {Ima.Router.Request}
+		 * @type {ima.router.Request}
 		 */
 		this._request = request;
 
@@ -83,7 +83,7 @@ export default class CookieStorage extends MapStorage {
 		 *
 		 * @private
 		 * @property _response
-		 * @type {Ima.Router.Response}
+		 * @type {ima.router.Response}
 		 */
 		this._response = response;
 
@@ -510,4 +510,4 @@ export default class CookieStorage extends MapStorage {
 	}
 }
 
-ns.Ima.Storage.CookieStorage = CookieStorage;
+ns.ima.storage.CookieStorage = CookieStorage;

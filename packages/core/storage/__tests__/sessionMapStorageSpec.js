@@ -1,4 +1,4 @@
-describe('Ima.Storage.SessionMapStorage', function() {
+describe('ima.storage.SessionMapStorage', function() {
 	var sessionMap;
 	var mapStorage = null;
 	var sessionStorage = null;
@@ -24,7 +24,7 @@ describe('Ima.Storage.SessionMapStorage', function() {
 		expect(sessionMap.get('item2')).toEqual('test');
 		sessionMap.set('item3', false);
 		expect(sessionMap.get('item3')).toEqual(false);
-		var obj = {testedProp: 'testedValue'};
+		var obj = { testedProp: 'testedValue' };
 		sessionMap.set('item4', obj);
 		expect(sessionMap.get('item4')).toEqual(obj);
 		var arr = [0, 'val', true, {}];
@@ -97,6 +97,6 @@ describe('Ima.Storage.SessionMapStorage', function() {
 			}
 			item = iterator.next();
 
-		} while (item.done !== true)
+		} while (item.done !== true);
 	});
 });

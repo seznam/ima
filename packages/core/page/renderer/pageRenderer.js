@@ -1,15 +1,15 @@
 import ns from 'ima/namespace';
 
-ns.namespace('Ima.Page.Renderer');
+ns.namespace('ima.page.renderer');
 
 /**
  * The page renderer is a utility for rendering the page at either the
  * client-side or the server-side, handling the differences in the environment.
  *
  * @interface PageRenderer
- * @namespace Ima.Page.Renderer
- * @module Ima
- * @submodule Ima.Page
+ * @namespace ima.page.renderer
+ * @module ima
+ * @submodule ima.page
  */
 export default class PageRenderer {
 	/**
@@ -32,7 +32,7 @@ export default class PageRenderer {
 	 * invoked at the client.
 	 *
 	 * @method mount
-	 * @param {Ima.Controller.Controller} controller The current page
+	 * @param {ima.controller.Controller} controller The current page
 	 *        controller.
 	 * @param {React.Component} view The page's view.
 	 * @param {Object<string, (*|Promise<*>)>} pageResources The resources for
@@ -57,7 +57,7 @@ export default class PageRenderer {
 	 * resolved.
 	 *
 	 * @method update
-	 * @param {Ima.Controller.Controller} controller The current page
+	 * @param {ima.controller.Controller} controller The current page
 	 *        controller.
 	 * @param {Object<string, (*|Promise<*>)>} resourcesUpdate The resources
 	 *        that represent the update the of current state according to the
@@ -89,4 +89,4 @@ export default class PageRenderer {
 	setState(state = {}) {}
 }
 
-ns.Ima.Page.Renderer.PageRenderer = PageRenderer;
+ns.ima.page.renderer.PageRenderer = PageRenderer;

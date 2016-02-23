@@ -2,7 +2,7 @@ import ns from 'ima/namespace';
 import IMAError from 'ima/error/genericError';
 import DispatcherInterface from 'ima/event/dispatcher';
 
-ns.namespace('Ima.Event');
+ns.namespace('ima.event');
 
 /**
  * An empty immutable map of event listener to scopes, used for a mismatch in
@@ -25,14 +25,14 @@ const EMPTY_MAP = Object.freeze(new Map());
 const EMPTY_SET = Object.freeze(new Set());
 
 /**
- * Default implementation of the {@codelink Ima.Event.Dispatcher}
+ * Default implementation of the {@codelink ima.event.Dispatcher}
  * interface.
  *
  * @class DispatcherImpl
- * @implements Ima.Event.Dispatcher
- * @namespace Ima.Event
- * @module Ima
- * @submodule Ima.Event
+ * @implements ima.event.Dispatcher
+ * @namespace ima.event
+ * @module ima
+ * @submodule ima.event
  */
 export default class DispatcherImpl extends DispatcherInterface {
 	/**
@@ -100,7 +100,7 @@ export default class DispatcherImpl extends DispatcherInterface {
 
 		if ($Debug) {
 			if (!scopes.has(scope)) {
-				console.warn('Ima.Event.DispatcherImpl.unlisten(): the ' +
+				console.warn('ima.event.DispatcherImpl.unlisten(): the ' +
 						`provided listener '${listener}' is not registered ` +
 						`for the specified event '${event}' and scope ` +
 						`'${scope}'. Check your workflow.`, {
@@ -216,4 +216,4 @@ export default class DispatcherImpl extends DispatcherInterface {
 	}
 }
 
-ns.Ima.Event.DispatcherImpl = DispatcherImpl;
+ns.ima.event.DispatcherImpl = DispatcherImpl;

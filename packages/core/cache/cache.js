@@ -1,6 +1,6 @@
 import ns from 'ima/namespace';
 
-ns.namespace('Ima.Cache');
+ns.namespace('ima.cache');
 
 /**
  * The cache provides a temporary storage for expirable information. The
@@ -9,9 +9,9 @@ ns.namespace('Ima.Cache');
  * performance when the same information needs to be retrieved multiple times.
  *
  * @interface Cache
- * @namespace Ima.Cache
- * @module Ima
- * @submodule Ima.Cache
+ * @namespace ima.cache
+ * @module ima
+ * @submodule ima.cache
  */
 export default class Cache {
 	/**
@@ -121,4 +121,4 @@ export default class Cache {
 	deserialize(serializedData) {}
 }
 
-ns.Ima.Cache.Cache = Cache;
+ns.ima.cache.Cache = Cache;

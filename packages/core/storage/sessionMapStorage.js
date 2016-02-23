@@ -2,21 +2,21 @@ import ns from 'ima/namespace';
 import StorageInterface from 'ima/storage/storage';
 import CacheEntry from 'ima/cache/cacheEntry';
 
-ns.namespace('Ima.Storage');
+ns.namespace('ima.storage');
 
 /**
  * The {@codelink SessionMap} storage is an implementation of the
- * {@codelink Ima.Storage.Storage} interface acting as a synchronization
+ * {@codelink ima.storage.Storage} interface acting as a synchronization
  * proxy between
  *
  * @class SessionMapStorage
- * @implements Ima.Storage.Storage
- * @namespace Ima.Storage
- * @module Ima
- * @submodule Ima.Storage
+ * @implements ima.storage.Storage
+ * @namespace ima.storage
+ * @module ima
+ * @submodule ima.storage
  *
- * @requires Ima.Storage.MapStorage
- * @requires Ima.Storage.SessionStorage
+ * @requires ima.storage.MapStorage
+ * @requires ima.storage.SessionStorage
  */
 export default class SessionMapStorage extends StorageInterface {
 	/**
@@ -24,8 +24,8 @@ export default class SessionMapStorage extends StorageInterface {
 	 *
 	 * @constructor
 	 * @method constructor
-	 * @param {Ima.Storage.MapStorage} map The map storage to use.
-	 * @param {Ima.Storage.SessionStorage} session The session storage to use.
+	 * @param {ima.storage.MapStorage} map The map storage to use.
+	 * @param {ima.storage.SessionStorage} session The session storage to use.
 	 */
 	constructor(map, session) {
 		super();
@@ -35,7 +35,7 @@ export default class SessionMapStorage extends StorageInterface {
 		 *
 		 * @private
 		 * @property _map
-		 * @type {Ima.Storage.MapStorage}
+		 * @type {ima.storage.MapStorage}
 		 */
 		this._map = map;
 
@@ -44,7 +44,7 @@ export default class SessionMapStorage extends StorageInterface {
 		 *
 		 * @private
 		 * @property _session
-		 * @type {Ima.Storage.SessionStorage}
+		 * @type {ima.storage.SessionStorage}
 		 */
 		this._session = session;
 	}
@@ -134,4 +134,4 @@ export default class SessionMapStorage extends StorageInterface {
 	}
 }
 
-ns.Ima.Storage.SessionMapStorage = SessionMapStorage;
+ns.ima.storage.SessionMapStorage = SessionMapStorage;

@@ -1,4 +1,4 @@
-describe('Ima.Http.UrlTransformer', function() {
+describe('ima.http.UrlTransformer', function() {
 
 	var transformer = null;
 
