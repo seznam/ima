@@ -5,6 +5,7 @@
  * interfaces, classes and constants of the application to provide access to
  * each other more easily than by using the ES6 import/export mechanism.
  *
+ * @deprecated
  * @class Namespace
  * @namespace ima
  * @module ima
