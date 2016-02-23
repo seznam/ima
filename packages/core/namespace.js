@@ -6,9 +6,8 @@
  * each other more easily than by using the ES6 import/export mechanism.
  *
  * @class Namespace
- * @namespace ima.Namespace
+ * @namespace ima
  * @module ima
- * @submodule ima.Namespace
  */
 class Namespace {
 	/**
