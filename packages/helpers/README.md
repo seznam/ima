@@ -1,4 +1,4 @@
-# IMA.js-babel6-polyfill
+# IMA.js-helpers
 
 This repository contains various helpers for the IMA.js framework.
 
