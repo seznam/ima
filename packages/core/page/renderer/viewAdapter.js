@@ -1,5 +1,5 @@
 import ns from 'ima/namespace';
-import { React } from 'app/vendor';
+import React from 'react';
 
 ns.namespace('ima.page.renderer');
 

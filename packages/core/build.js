@@ -1,14 +1,23 @@
-module.exports = (() => {
 
-	var js = [
-		'ima/**/!(vendor|build|test|imaError.es6|*Spec).js',
-		'!ima/polyfill/*.js'
-	];
+var js = [
+	'ima/**/!(vendorLinker|build|test|*Spec).js',
+	'!ima/polyfill/*.js'
+];
 
-	var mainjs = ['ima/main.js'];
+var mainjs = ['ima/main.js'];
 
-	return {
-		js: js,
-		mainjs: mainjs
-	};
-})();
+var vendors = {
+	common: [
+		'ima-helpers'
+	],
+
+	server: [],
+
+	client: []
+};
+
+module.exports = {
+	js,
+	mainjs,
+	vendors
+};

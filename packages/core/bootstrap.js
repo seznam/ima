@@ -1,7 +1,5 @@
 import ns from 'ima/namespace';
-import vendor from 'ima/vendorLinker';
-
-const $Helper = vendor.get('$Helper');
+import $Helper from 'ima-helpers';
 
 ns.namespace('ima');
 

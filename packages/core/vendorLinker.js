@@ -1,44 +1,61 @@
-import ns from 'ima/namespace';
+'use strict';
 
-var vendor;
-if (typeof window !== 'undefined' && window !== null) {
-	vendor = window.$IMA.Vendor;
-} else {
-	vendor = require('./vendor.server.js');
-}
+/**
+ * Utility for linking vendor node modules with the application by exporting
+ * them to the IMA loader's modules.
+ */
+class VendorLinker extends Map {
+	/**
+	 * Sets the provided vendor node module to the internal registry of this
+	 * vendor linker, and registers an IMA loader module of the same name,
+	 * exporting the same values.
+	 *
+	 * @param {string} moduleName The name of the module.
+	 * @param {Object<string, *>} moduleValues Values exported from the module.
+	 */
+	set(moduleName, moduleValues) {
+		super.set(moduleName, moduleValues);
 
-var nsVendor = ns.namespace('vendor');
-for (var [name, lib] of vendor) {
-	if (typeof lib.__$IMAModuleRegister__ === 'function') {
-		lib.__$IMAModuleRegister__(ns);
+		$IMA.Loader.register(moduleName, [], (exports) => ({
+			setters: [],
+			execute: () => {
+				// commonjs module compatibility
+				exports('default', moduleValues);
+				// ES2015 module compatibility
+				for (let key of Object.keys(moduleValues)) {
+					exports(key, moduleValues[key]);
+				}
+			}
+		}));
 	}
 
-	nsVendor[name] = lib;
+	/**
+	 * Binds the vendor modules loaded in this vendor linker to the
+	 * {@code Vendor} sub-namespace of the provided namespace.
+	 *
+	 * @param {Namespace} ns The namespace to which the vendor modules should
+	 *        be bound.
+	 */
+	bindToNamespace(ns) {
+		let nsVendor = ns.namespace('vendor');
+		for (let [name, lib] of this) {
+			if (typeof lib.__$IMAModuleRegister__ === 'function') {
+				lib.__$IMAModuleRegister__(ns);
+			}
+
+			nsVendor[name] = lib;
+		}
+	}
 }
 
-// bind the vendor libraries to the module system
-$IMA.Loader.register('ima/vendor', [], (_export) => {
+let vendorLinker = new VendorLinker();
+
+module.exports = vendorLinker;
+$IMA.Loader.register('ima/vendorLinker', [], (exports) => {
 	return {
 		setters: [],
 		execute: () => {
-			_export('$Helper', vendor.get('$Helper'));
+			exports('default', vendorLinker);
 		}
 	};
 });
-
-$IMA.Loader.register('app/vendor', [], (_export) => {
-	return {
-		setters: [],
-		execute: () => {
-			for (var [name, lib] of vendor) {
-				if (name === '$Helper') {
-					continue;
-				}
-
-				_export(name, lib);
-			}
-		}
-	};
-});
-
-export default vendor;

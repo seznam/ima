@@ -1,5 +1,6 @@
 import ns from 'ima/namespace';
-import { React, ReactDOM } from 'app/vendor';
+import React from 'react';
+import ReactDOM from 'react-dom';
 
 ns.namespace('ima.page');
 

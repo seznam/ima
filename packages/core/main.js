@@ -1,3 +1,4 @@
+import vendorLinker from 'ima/vendorLinker';
 import ns from 'ima/namespace';
 import ObjectContainer from 'ima/objectContainer';
 import Bootstrap from 'ima/bootstrap';
@@ -14,6 +15,8 @@ var getNamespace = () => {
 };
 
 var createImaApp = () => {
+	vendorLinker.bindToNamespace(ns);
+
 	var oc = new ObjectContainer(ns);
 	var bootstrap = new Bootstrap(oc);
 
