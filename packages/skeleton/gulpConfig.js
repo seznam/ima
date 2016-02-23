@@ -1,19 +1,24 @@
-var coreDependency = require('./ima/build.js');
+var coreDependencies = require('./ima/build.js');
 
-var appDependency;
+var appDependencies;
 try {
-	appDependency = require('./app/build.js');
-} catch (e) {
-	appDependency = {
+	appDependencies = require('./app/build.js');
+} catch (error) {
+	appDependencies = {
 		js: [],
 		languages: [],
 		less: [],
+		vendors: {
+			common: [],
+			server: [],
+			client: []
+		},
 		bundle: {
 			js: [],
 			css: []
 		}
 	};
-	console.log(e);
+	console.log(error);
 }
 
 var babelConfig = {
@@ -32,11 +37,12 @@ var babelConfig = {
 };
 var $Debug = true;
 
-if (process.env.NODE_ENV === 'production' ||
-		process.env.NODE_ENV === 'prod' ||
-		process.env.NODE_ENV === 'test') {
+if (['production', 'prod', 'test'].indexOf(process.env.NODE_ENV) > -1) {
 	babelConfig.app.presets = ['es2015-loose', 'react'];
-	babelConfig.app.plugins = babelConfig.app.plugins.concat(['transform-react-constant-elements', 'transform-react-inline-elements']);
+	babelConfig.app.plugins = babelConfig.app.plugins.concat([
+		'transform-react-constant-elements',
+		'transform-react-inline-elements'
+	]);
 	$Debug = false;
 }
 
@@ -49,27 +55,33 @@ exports.uglifyCompression = {
 	dead_code: true
 };
 
+exports.vendorDependencies = {
+	common: coreDependencies.vendors.common.concat(appDependencies.vendors.common),
+	server: coreDependencies.vendors.server.concat(appDependencies.vendors.server),
+	client: coreDependencies.vendors.client.concat(appDependencies.vendors.client)
+};
+
 exports.files = {
 	vendor: {
+		src: {
+			client: 'vendor.client.src.js'
+		},
 		name: {
 			server: 'vendor.server.js',
-			client: 'vendor.client.js',
-			tmp: 'es5transformedVendor.js'
+			client: 'vendor.client.js'
 		},
-		src:['./ima/vendor.js', './app/vendor.js'],
 		dest: {
 			server: './build/ima/',
 			client: './build/static/js/',
 			tmp: './build/ima/'
-		},
-		watch: ['./ima/vendor.js', './app/vendor.js']
+		}
 	},
 	app: {
 		name: {
 			server: 'app.server.js',
 			client: 'app.client.js'
 		},
-		src: [].concat(coreDependency.js, appDependency.js, coreDependency.mainjs, appDependency.mainjs),
+		src: [].concat(coreDependencies.js, appDependencies.js, coreDependencies.mainjs, appDependencies.mainjs),
 		dest: {
 			server: './build/ima/',
 			client: './build/static/js/'
@@ -87,12 +99,12 @@ exports.files = {
 		cwd: '/',
 		base: './app/assets/less/',
 		name: './app/assets/less/app.less',
-		src: appDependency.less,
+		src: appDependencies.less,
 		dest: './build/static/css/',
 		watch: ['./app/**/*.less', '!./app/assets/bower/']
 	},
 	locale: {
-		src: appDependency.languages,
+		src: appDependencies.languages,
 		dest:{
 			server: './build/ima/locale/',
 			client: './build/static/js/locale/'
@@ -124,12 +136,12 @@ exports.files = {
 	bundle: {
 		js: {
 			name: 'app.bundle.min.js',
-			src: appDependency.bundle.js,
+			src: appDependencies.bundle.js,
 			dest: './build/static/js/'
 		},
 		css: {
 			name: 'app.bundle.min.css',
-			src: appDependency.bundle.css,
+			src: appDependencies.bundle.css,
 			dest: './build/static/css/'
 		}
 	}
