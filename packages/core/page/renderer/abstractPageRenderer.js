@@ -15,7 +15,7 @@ ns.namespace('Ima.Page.Renderer');
  * @submodule Ima.Page
  *
  * @requires Vendor.$Helper
- * @requires Vendor.React
+ * @requires React
  */
 export default class AbstractPageRenderer extends PageRendererInterface {
 
@@ -74,7 +74,7 @@ export default class AbstractPageRenderer extends PageRendererInterface {
 		/**
 		 * @protected
 		 * @property _reactiveView
-		 * @type {Vendor.React.Component}
+		 * @type {React.Component}
 		 * @default null
 		 */
 		this._reactiveView = null;
@@ -124,7 +124,7 @@ export default class AbstractPageRenderer extends PageRendererInterface {
 	 *
 	 * @protected
 	 * @method _generateViewProps
-	 * @param {function(new:Vendor.React.Component, Object<string, *>)} view
+	 * @param {function(new:React.Component, Object<string, *>)} view
 	 *        The page view React component to wrap.
 	 * @param {Object<string, *>=} [state={}]
 	 * @return {Object<string, *>}

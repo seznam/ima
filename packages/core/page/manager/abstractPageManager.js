@@ -139,8 +139,8 @@ export default class AbstractPageManager extends PageManagerInterface {
 	 * @param {{onlyUpdate: boolean}} options
 	 * @param {Object<string, string>} params The route parameters.
 	 * @param {Ima.Controller.AbstractController} controllerInstance
-	 * @param {Ima.Decorator.Controller} decoratedController
-	 * @param {Vendor.React.Component} viewInstance
+	 * @param {Ima.Controller.ControllerDecorator} decoratedController
+	 * @param {React.Component} viewInstance
 	 */
 	_storeManagedPageValue(controller, view, options, params,
 			controllerInstance, decoratedController, viewInstance) {

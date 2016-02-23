@@ -47,8 +47,8 @@ export default class PageFactory {
 	 * Create instance of view.
 	 *
 	 * @method createView
-	 * @param {string|Vendor.React.Component} view
-	 * @return {Vendor.React.Component}
+	 * @param {string|React.Component} view
+	 * @return {React.Component}
 	 */
 	createView(view) {
 		if (typeof view === 'function') {

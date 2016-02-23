@@ -161,7 +161,7 @@ export default class ClientPageRenderer extends AbstractPageRenderer {
 	 * Patch promise values to controller state.
 	 *
 	 * @method _patchPromisesToState
-	 * @param {Ima.Decorator.Controller} controller
+	 * @param {Ima.Controller.ControllerDecorator} controller
 	 * @param {Object<string, Promise>} patchedPromises
 	 */
 	_patchPromisesToState(controller, patchedPromises) {
@@ -181,8 +181,8 @@ export default class ClientPageRenderer extends AbstractPageRenderer {
 	 *
 	 * @private
 	 * @method _renderToDOM
-	 * @param {Ima.Decorator.Controller} controller
-	 * @param {Vendor.React.Component} view
+	 * @param {Ima.Controller.ControllerDecorator} controller
+	 * @param {React.Component} view
 	 */
 	_renderToDOM(controller, view) {
 		var props = this._generateViewProps(view, controller.getState());

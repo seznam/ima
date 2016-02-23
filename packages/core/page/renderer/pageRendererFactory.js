@@ -18,9 +18,9 @@ export default class PageRendererFactory {
 	 * @method constructor
 	 * @constructor
 	 * @param {Ima.ObjectContainer} oc
-	 * @param {Vendor.React} React React framework instance to use to render
+	 * @param {React} React React framework instance to use to render
 	 *        the page.
-	 * @param {Vendor.React.Component} ViewAdapter An adapter component
+	 * @param {React.Component} ViewAdapter An adapter component
 	 *        providing the current page controller's state to the page view
 	 *        component through its properties.
 	 */
@@ -38,14 +38,14 @@ export default class PageRendererFactory {
 		 *
 		 * @protected
 		 * @property _React
-		 * @type {Vendor.React}
+		 * @type {React}
 		 */
 		this._React = React;
 
 		/**
 		 * @private
 		 * @property _ViewAdapter
-		 * @type {Vendor.React.Component}
+		 * @type {React.Component}
 		 */
 		this._ViewAdapter = ViewAdapter;
 	}
@@ -65,9 +65,9 @@ export default class PageRendererFactory {
 	 * {@code state} property.
 	 *
 	 * @method wrapView
-	 * @param {{view: ns.Vendor.React.Component, state: Object<string, *>, $Utils: Object<string, *>}} props
+	 * @param {{view: ns.React.Component, state: Object<string, *>, $Utils: Object<string, *>}} props
 	 *        The initial props to pass to the view.
-	 * @return {Vendor.React.Component} View adapter handling passing the
+	 * @return {React.Component} View adapter handling passing the
 	 *         controller's state to an instance of the specified page view
 	 *         through properties.
 	 */

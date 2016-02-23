@@ -18,7 +18,7 @@ export default class ViewAdapter extends React.Component {
 	 *
 	 * @constructor
 	 * @method constructor
-	 * @param {{state: Object<string, *>, view: function(new:Vendor.React.Component, Object<string, *>)}} props
+	 * @param {{state: Object<string, *>, view: function(new:React.Component, Object<string, *>)}} props
 	 *        Component properties, containing the actual page view and the
 	 *        initial page state to pass to the view.
 	 */
@@ -38,7 +38,7 @@ export default class ViewAdapter extends React.Component {
 		 *
 		 * @private
 		 * @property _view
-		 * @type {function(new:Vendor.React.Component, Object<string, *>)}
+		 * @type {function(new:React.Component, Object<string, *>)}
 		 */
 		this._view = props.view;
 	}

@@ -116,7 +116,7 @@ export default class Route {
 		 *
 		 * @private
 		 * @property _view
-		 * @type {Vendor.React.Component}
+		 * @type {React.Component}
 		 */
 		this._view = view;
 

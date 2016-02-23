@@ -163,7 +163,7 @@ export default class ServerPageRenderer extends AbstractPageRenderer {
 	 * @private
 	 * @method _renderPage
 	 * @param {Ima.Controller.AbstractController} controller
-	 * @param {Vendor.React.Component} view
+	 * @param {React.Component} view
 	 * @param {Object<string, *>} fetchedResources
 	 * @return {{content: string, status: number}}
 	 */
@@ -186,7 +186,7 @@ export default class ServerPageRenderer extends AbstractPageRenderer {
 	 * @private
 	 * @method _renderPageContentToString
 	 * @param {Ima.Controller.AbstractController} controller
-	 * @param {Vendor.React.Component} view
+	 * @param {React.Component} view
 	 * @return {string}
 	 */
 	_renderPageContentToString(controller, view) {

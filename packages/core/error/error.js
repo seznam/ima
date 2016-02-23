@@ -14,9 +14,9 @@ ns.namespace('Ima.Error');
  * IMA errors are instances of both the native errors and of this interface.
  *
  * @interface Error
- * @namespace Ima.Interface
+ * @namespace Ima.Error
  * @module Ima
- * @submodule Ima.Interface
+ * @submodule Ima.Error
  */
 export default class Error extends ExtensibleError {
 	/**
