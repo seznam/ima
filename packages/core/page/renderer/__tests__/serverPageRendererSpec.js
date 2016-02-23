@@ -18,7 +18,10 @@ describe('ima.page.renderer.ServerPageRenderer', function() {
 	var pageRenderer = null;
 	var $Helper = oc.get('$Helper');
 	var rendererFactory = oc.get('$PageRendererFactory');
-	var ReactDOMServer = oc.get('$ReactDOMServer');
+	var ReactDOMServer = {
+		renderToString: function() {},
+		renderToStaticMarkup: function() {}
+	};
 	var settings = oc.get('$Settings');
 	var response = oc.get('$Response');
 	var cache = oc.get('$Cache');
