@@ -2,7 +2,10 @@
 	"name": "ima",
 	"version": "0.1.0",
 	"description": "IMA.js framework for isomorphic javascript application",
-	"main": "main.js",
+	"main": "",
+	"scripts": {
+		"test": "echo \"Error: no test specified\" && exit 1"
+	},
 	"keywords": [
 		"IMA.js",
 		"Isomorphic",
@@ -25,6 +28,9 @@
 	},
 	"bugs": {
 		"url": "https://github.com/seznam/IMA.js-core/issues"
+	},
+	"publishConfig": {
+		"registry": "http://registry.npmjs.org/"
 	},
 	"license": "MIT",
 	"devDependencies": {},
