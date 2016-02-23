@@ -5,7 +5,7 @@ var hljs = require('highlight.js');
 var sep = require('path').sep;
 var errorView = require('./template/errorView.js');
 var instanceRecycler = require('./instanceRecycler.js');
-var helper = require('./helper.js');
+var helper = require('ima-helpers');
 var templateProcessor = require('./templateProcessor.js');
 
 var appServer = null;
@@ -19,12 +19,14 @@ hljs.configure({
 module.exports = ((environment, logger, languageLoader, appFactory) => {
 	appFactory();
 
-	$IMA.Loader.import('imajs/client/main').then((app) => {
-		appServer = app;
-		instanceRecycler.init(appServer.createIMAJsApp, environment.$Server.concurrency);
-	}).catch((error) => {
-		logger.error('Failed to initialize the application or the instance recycler', { error });
-	});
+	$IMA.Loader
+		.import('app/main')
+		.then((main) => {
+			appServer = main;
+			instanceRecycler.init(appServer.ima.createImaApp, environment.$Server.concurrency);
+		}).catch((error) => {
+			logger.error('Failed to initialize the application or the instance recycler', { error });
+		});
 
 	var _displayDetails = (err, req, res) => {
 		var stack = stackTrace.parse(err);
@@ -88,7 +90,11 @@ module.exports = ((environment, logger, languageLoader, appFactory) => {
 		var bootConfig = _getBootConfig(req, res);
 		var app = instanceRecycler.getInstance();
 
-		Object.assign(bootConfig, appServer.getInit());
+		Object.assign(
+			bootConfig,
+			appServer.getInitialAppConfigFunctions(),
+			appServer.ima.getInitialImaConfigFunctions()
+		);
 		app.bootstrap
 			.run(bootConfig);
 

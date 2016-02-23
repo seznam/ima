@@ -1,5 +1,5 @@
 
-var helper = require('./helper.js');
+var helper = require('ima-helpers');
 
 module.exports = processTemplate;
 

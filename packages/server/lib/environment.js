@@ -1,5 +1,5 @@
 
-var Helper = require('./helper.js');
+var helper = require('ima-helpers');
 
 module.exports = (environment) => {
 	var prod = 'prod';
@@ -19,7 +19,7 @@ module.exports = (environment) => {
 
 	if (env !== prod) {
 		var $Language = Object.assign({}, currentEnvironment.$Language);
-		Helper.assignRecursively(productEnvironment, currentEnvironment);
+		helper.assignRecursively(productEnvironment, currentEnvironment);
 		currentEnvironment = productEnvironment;
 		currentEnvironment.$Language = $Language;
 	}
