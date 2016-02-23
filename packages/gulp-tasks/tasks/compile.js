@@ -8,6 +8,7 @@ var change = require('gulp-change');
 var concat = require('gulp-concat');
 var del = require('del');
 var es = require('event-stream');
+var fs = require('fs');
 var gulpif = require('gulp-if');
 var gutil = require('gulp-util');
 var insert = require('gulp-insert');
@@ -111,24 +112,43 @@ gulp.task('Es6ToEs5:server', function () {
 	);
 });
 
-gulp.task('Es6ToEs5:vendor', function () {
-	return (
-		gulp
-			.src(files.vendor.src)
-			.pipe(plumber())
-			.pipe(babel({
-				presets: babelConfig.vendor.presets,
-				plugins: babelConfig.vendor.plugins
-			}))
-			.pipe(plumber.stop())
-			.pipe(concat(files.vendor.name.tmp))
-			.pipe(gulp.dest(files.vendor.dest.tmp))
-	);
+gulp.task('Es6ToEs5:vendor', function (done) {
+	var vendorModules = gulpConfig.vendorDependencies;
+	var serverModules = vendorModules.common.concat(vendorModules.server);
+	var clientModules = vendorModules.common.concat(vendorModules.client);
+
+	var linkingFileHeader = `var vendorLinker = require('ima/vendorLinker.js');\n`;
+	var linkingFileFooter = `module.exports = vendorLinker;\n`;
+
+	var serverModuleLinker =
+		linkingFileHeader +
+		serverModules.map(generateVendorInclusion).join('') +
+		linkingFileFooter;
+	var clientModuleLinker =
+		linkingFileHeader +
+		clientModules.map(generateVendorInclusion).join('') +
+		linkingFileFooter;
+
+	fs.writeFile(files.vendor.dest.tmp + files.vendor.name.server, serverModuleLinker, (error) => {
+		if (error) {
+			return done(error);
+		}
+
+		fs.writeFile(files.vendor.dest.tmp + files.vendor.src.client, clientModuleLinker, (error) => {
+			done(error);
+		});
+	});
+
+	function generateVendorInclusion(vendorModuleName) {
+		return `vendorLinker.set('${vendorModuleName}', require('${vendorModuleName}'));\n`;
+	}
 });
 
 gulp.task('Es6ToEs5:vendor:client', function () {
+	var sourceFile = files.vendor.dest.tmp + files.vendor.src.client;
+	var options ={ debug: false, insertGlobals : false, basedir: '.' };
 	return (
-		browserify(files.vendor.dest.tmp + files.vendor.name.tmp, { debug: false, insertGlobals : false, basedir: '.' })
+		browserify(sourceFile, options)
 			.transform(babelify.configure({
 				presets: babelConfig.vendor.presets,
 				plugins: babelConfig.vendor.plugins
@@ -136,15 +156,6 @@ gulp.task('Es6ToEs5:vendor:client', function () {
 			.bundle()
 			.pipe(source(files.vendor.name.client))
 			.pipe(gulp.dest(files.vendor.dest.client))
-	);
-});
-
-gulp.task('Es6ToEs5:vendor:server', function () {
-	return (
-		gulp.src(files.vendor.dest.tmp + files.vendor.name.tmp)
-			.pipe(insert.wrap('module.exports = (function (config) {', ' return vendor;})()'))
-			.pipe(concat(files.vendor.name.server))
-			.pipe(gulp.dest(files.vendor.dest.server))
 	);
 });
 

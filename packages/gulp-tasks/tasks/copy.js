@@ -25,7 +25,7 @@ module.exports = function (gulpConfig) {
 		return (
 			gulp
 				.src(filesToMove)
-				.pipe(gulp.dest(files.server.base + 'imajs/'))
+				.pipe(gulp.dest(files.server.base + 'ima/'))
 		);
 	});
 
@@ -37,7 +37,7 @@ module.exports = function (gulpConfig) {
 		return (
 			gulp
 				.src(filesToMove)
-				.pipe(gulp.dest(files.server.base + 'imajs/config/'))
+				.pipe(gulp.dest(files.server.base + 'ima/config/'))
 		);
 	});
 };

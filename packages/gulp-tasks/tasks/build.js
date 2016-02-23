@@ -23,8 +23,8 @@ gulp.task('app:build', function (callback) {
 
 gulp.task('vendor:build', function (callback) {
 	return runSequence(
-		['Es6ToEs5:vendor'],
-		['Es6ToEs5:vendor:server', 'Es6ToEs5:vendor:client'],
+		'Es6ToEs5:vendor',
+		'Es6ToEs5:vendor:client',
 		'server:restart',
 		'server:reload',
 		callback
