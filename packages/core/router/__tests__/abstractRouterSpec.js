@@ -22,7 +22,7 @@ describe('Ima.Router.AbstractRouter', function() {
 		oc.bind('BaseController', function() {});
 		oc.bind('BaseView', function() {});
 
-		pageManager = oc.create('Ima.Interface.PageManager');
+		pageManager = oc.create('Ima.Page.Manager.PageManager');
 		routeFactory = oc.create('$RouteFactory');
 		dispatcher = oc.create('Ima.Event.Dispatcher');
 		router = oc.create('Ima.Router.AbstractRouter', [pageManager, routeFactory, dispatcher, ROUTER_CONSTANTS]);

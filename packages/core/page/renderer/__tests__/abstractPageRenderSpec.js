@@ -1,6 +1,6 @@
 describe('Ima.Page.Renderer.AbstractPageRenderer', function() {
 
-	var pageRender = null;
+	var pageRenderer = null;
 	var rendererFactory = oc.get('$PageRendererFactory');
 	var $Helper = ns.Vendor.$Helper;
 	var ReactDOM = oc.get('$ReactDOM');
@@ -14,26 +14,26 @@ describe('Ima.Page.Renderer.AbstractPageRenderer', function() {
 	var view = function() {};
 
 	beforeEach(function() {
-		pageRender = oc.create('Ima.Page.Renderer.AbstractPageRenderer', [rendererFactory, $Helper, ReactDOM, settings]);
+		pageRenderer = oc.create('Ima.Page.Renderer.AbstractPageRenderer', [rendererFactory, $Helper, ReactDOM, settings]);
 
-		pageRender._reactiveView = reactiveComponentView;
+		pageRenderer._reactiveView = reactiveComponentView;
 	});
 
 	it('should be throw error for mounting component', function() {
 		expect(function() {
-			pageRender.mount();
+			pageRenderer.mount();
 		}).toThrow();
 	});
 
 	it('should be throw error for updating component', function() {
 		expect(function() {
-			pageRender.update();
+			pageRenderer.update();
 		}).toThrow();
 	});
 
 	it('should be throw error for unmounting component', function() {
 		expect(function() {
-			pageRender.unmount();
+			pageRenderer.unmount();
 		}).toThrow();
 	});
 
@@ -46,7 +46,7 @@ describe('Ima.Page.Renderer.AbstractPageRenderer', function() {
 				.and
 				.stub();
 
-			pageRender.setState(state);
+			pageRenderer.setState(state);
 
 			expect(reactiveComponentView.setState).toHaveBeenCalledWith(state);
 		});
@@ -62,7 +62,7 @@ describe('Ima.Page.Renderer.AbstractPageRenderer', function() {
 				.and
 				.returnValue(utils);
 
-			expect(pageRender._generateViewProps(view)).toEqual({ '$Utils': utils, view: view, state: {} });
+			expect(pageRenderer._generateViewProps(view)).toEqual({ '$Utils': utils, view: view, state: {} });
 		});
 	});
 
@@ -77,7 +77,7 @@ describe('Ima.Page.Renderer.AbstractPageRenderer', function() {
 			.and
 			.callThrough();
 
-		pageRender._wrapEachKeyToPromise(dataMap);
+		pageRenderer._wrapEachKeyToPromise(dataMap);
 
 		expect(Promise.resolve).toHaveBeenCalledWith(param1);
 		expect(Promise.resolve.calls.count()).toEqual(1);

@@ -22,7 +22,7 @@ export default class AbstractRouter extends RouterInterface {
 	 *
 	 * @constructor
 	 * @method constructor
-	 * @param {Ima.Interface.PageManager} pageManager The page manager
+	 * @param {Ima.Page.Manager.PageManager} pageManager The page manager
 	 *        handling UI rendering, and transitions between pages if at the
 	 *        client side.
 	 * @param {Ima.Router.RouteFactory} factory Factory for routes.
@@ -53,7 +53,7 @@ export default class AbstractRouter extends RouterInterface {
 		 *
 		 * @private
 		 * @property _pageManager
-		 * @type {Ima.Interface.PageManager}
+		 * @type {Ima.Page.Manager.PageManager}
 		 */
 		this._pageManager = pageManager;
 

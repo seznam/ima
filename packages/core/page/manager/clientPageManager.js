@@ -1,30 +1,30 @@
 import ns from 'ima/namespace';
-import AbstractPageManager from 'ima/abstract/pageManager';
+import AbstractPageManager from 'ima/page/manager/abstractPageManager';
 
 ns.namespace('Ima.Page.Manager');
 
 /**
  * Page manager for controller on the client side.
  *
- * @class Client
- * @implements Ima.Abstract.PageManager
+ * @class ClientPageManager
+ * @implements Ima.Page.Manager.AbstractPageManager
  * @namespace Ima.Page.Manager
  * @module Ima
  * @submodule Ima.Page
  */
-export default class Client extends AbstractPageManager {
+export default class ClientPageManager extends AbstractPageManager {
 
 	/**
 	 * @method constructor
 	 * @constructor
 	 * @param {Ima.Page.Factory} pageFactory
-	 * @param {Ima.Page.Renderer.PageRenderer} pageRender
+	 * @param {Ima.Page.Renderer.PageRenderer} pageRenderer
 	 * @param {Ima.Page.State.PageStateManager} stateManager
 	 * @param {Ima.Window.Window} window
 	 * @param {Ima.Event.EventBus} eventBus
 	 */
-	constructor(pageFactory, pageRender, stateManager, window, eventBus) {
-		super(pageFactory, pageRender, stateManager);
+	constructor(pageFactory, pageRenderer, stateManager, window, eventBus) {
+		super(pageFactory, pageRenderer, stateManager);
 
 		/**
 		 * @private
@@ -205,4 +205,4 @@ export default class Client extends AbstractPageManager {
 	}
 }
 
-ns.Ima.Page.Manager.Client = Client;
+ns.Ima.Page.Manager.ClientPageManager = ClientPageManager;

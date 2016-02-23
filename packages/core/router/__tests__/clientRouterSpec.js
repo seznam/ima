@@ -1,6 +1,6 @@
 describe('Ima.Router.ClientRouter', function() {
 	var router = null;
-	var pageRender = null;
+	var pageRenderer = null;
 	var routeFactory = null;
 	var dispatcher = null;
 	var win = null;
@@ -9,11 +9,11 @@ describe('Ima.Router.ClientRouter', function() {
 	var ROUTER_CONSTANTS = oc.get('$ROUTER_CONSTANTS');
 
 	beforeEach(function() {
-		pageRender = oc.create('Ima.Interface.PageManager');
+		pageRenderer = oc.create('Ima.Page.Manager.PageManager');
 		routeFactory = oc.create('$RouteFactory');
 		dispatcher = oc.create('Ima.Event.Dispatcher');
 		win = oc.get('$Window');
-		router = oc.create('Ima.Router.ClientRouter', [pageRender, routeFactory, dispatcher, ROUTER_CONSTANTS, win]);
+		router = oc.create('Ima.Router.ClientRouter', [pageRenderer, routeFactory, dispatcher, ROUTER_CONSTANTS, win]);
 
 		spyOn(win, 'hasHistoryAPI')
 			.and

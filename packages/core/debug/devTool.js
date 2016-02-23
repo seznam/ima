@@ -17,7 +17,7 @@ export default class DevTool {
 	/**
 	 * @method constructor
 	 * @constructor
-	 * @param {Ima.Interface.PageManager} pageManager
+	 * @param {Ima.Page.Manager.PageManager} pageManager
 	 * @param {Ima.Page.State.PageStateManager} stateManager
 	 * @param {Ima.Window.Window} window
 	 * @param {Ima.Event.Dispatcher} dispatcher
@@ -30,7 +30,7 @@ export default class DevTool {
 		 *
 		 * @private
 		 * @property _pageManager
-		 * @type {Ima.Interface.PageManager}
+		 * @type {Ima.Page.Manager.PageManager}
 		 */
 		this._pageManager = pageManager;
 

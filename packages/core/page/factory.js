@@ -13,7 +13,7 @@ ns.namespace('Ima.Page');
  *
  * @requires Ima.ObjectContainer
  */
-export default class Factory {
+export default class PageFactory {
 
 	/**
 	 * @method constructor
@@ -103,4 +103,4 @@ export default class Factory {
 	}
 }
 
-ns.Ima.Page.Factory = Factory;
+ns.Ima.Page.PageFactory = PageFactory;

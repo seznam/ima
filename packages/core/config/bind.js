@@ -96,7 +96,7 @@ export var init = (ns, oc, config) => { //jshint ignore:line
 	//Page
 	oc.provide(ns.Ima.Page.State.PageStateManager, ns.Ima.Page.State.PageStateManagerImpl);
 	oc.bind('$PageStateManager', ns.Ima.Page.State.PageStateManager);
-	oc.bind('$PageFactory', ns.Ima.Page.Factory, [oc]);
+	oc.bind('$PageFactory', ns.Ima.Page.PageFactory, [oc]);
 	oc.constant('$PageRendererViewAdapter', ns.Ima.Page.Renderer.ViewAdapter);
 	oc.bind('$PageRendererFactory', ns.Ima.Page.Renderer.PageRendererFactory, [oc, '$React', '$PageRendererViewAdapter']);
 	if (oc.get('$Window').isClient()) {
@@ -105,13 +105,12 @@ export var init = (ns, oc, config) => { //jshint ignore:line
 		oc.provide(ns.Ima.Page.Renderer.PageRenderer, ns.Ima.Page.Renderer.ServerPageRenderer, ['$PageRendererFactory', '$Helper', '$ReactDOMServer', '$Settings', '$Response', '$Cache']);
 	}
 	oc.bind('$PageRenderer', ns.Ima.Page.Renderer.PageRenderer);
-	//oc.provide(ns.Ima.Interface.PageManager, ns.Ima.Page.Manager, ['$PageFactory', '$PageRender', '$PageStateManager', '$Window', '$EventBus']);
 	if (oc.get('$Window').isClient()) {
-		oc.provide(ns.Ima.Interface.PageManager, ns.Ima.Page.Manager.Client, ['$PageFactory', '$PageRenderer', '$PageStateManager', '$Window', '$EventBus']);
+		oc.provide(ns.Ima.Page.Manager.PageManager, ns.Ima.Page.Manager.ClientPageManager, ['$PageFactory', '$PageRenderer', '$PageStateManager', '$Window', '$EventBus']);
 	} else {
-		oc.provide(ns.Ima.Interface.PageManager, ns.Ima.Page.Manager.Server, ['$PageFactory', '$PageRenderer', '$PageStateManager']);
+		oc.provide(ns.Ima.Page.Manager.PageManager, ns.Ima.Page.Manager.ServerPageManager, ['$PageFactory', '$PageRenderer', '$PageStateManager']);
 	}
-	oc.bind('$PageManager', ns.Ima.Interface.PageManager);
+	oc.bind('$PageManager', ns.Ima.Page.Manager.PageManager);
 
 	//Router
 	oc.constant('$Route', ns.Ima.Router.Route);

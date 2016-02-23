@@ -1,30 +1,30 @@
 import ns from 'ima/namespace';
 import IMAError from 'ima/error/genericError';
-import PageManagerInterface from 'ima/interface/pageManager';
+import PageManagerInterface from 'ima/page/manager/pageManager';
 
-ns.namespace('Ima.Abstract');
+ns.namespace('Ima.Page.Manager');
 
 /**
  * Page manager for controller.
  *
- * @class PageManager
- * @implements Ima.Interface.PageManager
- * @namespace Ima.Abstract
+ * @class AbstractPageManager
+ * @implements Ima.Page.Manager.PageManager
+ * @namespace Ima.Page.Manager
  * @module Ima
- * @submodule Ima.Abstract
+ * @submodule Ima.Page
  */
-export default class PageManager extends PageManagerInterface {
+export default class AbstractPageManager extends PageManagerInterface {
 
 	/**
 	 * Initializes the page manager.
 	 *
 	 * @method constructor
 	 * @constructor
-	 * @param {Ima.Page.Factory} pageFactory
-	 * @param {Ima.Page.Renderer.PageRenderer} pageRender
+	 * @param {Ima.Page.PageFactory} pageFactory
+	 * @param {Ima.Page.Renderer.PageRenderer} pageRenderer
 	 * @param {Ima.Page.State.PageStateManager} pageStateManager
 	 */
-	constructor(pageFactory, pageRender, pageStateManager) {
+	constructor(pageFactory, pageRenderer, pageStateManager) {
 		super();
 
 		/**
@@ -37,11 +37,11 @@ export default class PageManager extends PageManagerInterface {
 
 		/**
 		 * @protected
-		 * @property _pageRender
+		 * @property _pageRenderer
 		 * @type {Ima.Page.Renderer.AbstractPageRenderer}
-		 * @default pageRender
+		 * @default pageRenderer
 		 */
-		this._pageRender = pageRender;
+		this._pageRenderer = pageRenderer;
 
 		/**
 		 * @protected
@@ -261,7 +261,7 @@ export default class PageManager extends PageManagerInterface {
 		);
 
 		return (
-			this._pageRender
+			this._pageRenderer
 				.mount(
 					this._managedPage.decoratedController,
 					this._managedPage.view,
@@ -373,7 +373,7 @@ export default class PageManager extends PageManagerInterface {
 		);
 
 		return (
-			this._pageRender
+			this._pageRenderer
 				.update(
 					this._managedPage.decoratedController,
 					updatedPageState
@@ -484,7 +484,7 @@ export default class PageManager extends PageManagerInterface {
 			this._destroyController();
 
 			this._pageStateManager.clear();
-			this._pageRender.unmount();
+			this._pageRenderer.unmount();
 			this._clearManagedPageValue();
 		}
 	}
@@ -528,7 +528,7 @@ export default class PageManager extends PageManagerInterface {
 		var controller = this._managedPage.controllerInstance;
 
 		if (controller) {
-			this._pageRender.setState(state);
+			this._pageRenderer.setState(state);
 		}
 	}
 
@@ -581,4 +581,4 @@ export default class PageManager extends PageManagerInterface {
 
 }
 
-ns.Ima.Abstract.PageManager = PageManager;
+ns.Ima.Page.Manager.AbstractPageManager = AbstractPageManager;

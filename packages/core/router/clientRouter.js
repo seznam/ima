@@ -89,7 +89,7 @@ export default class ClientRouter extends AbstractRouter {
 	 *
 	 * @constructor
 	 * @method constructor
-	 * @param {Ima.Interface.PageManager} pageManager The page manager
+	 * @param {Ima.Page.Manager.PageManager} pageManager The page manager
 	 *        handling UI rendering, and transitions between pages if at the
 	 *        client side.
 	 * @param {Ima.Router.RouteFactory} factory Factory for routes.

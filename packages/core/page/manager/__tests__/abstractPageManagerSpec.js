@@ -1,4 +1,4 @@
-describe('Ima.Abstract.PageManager', function() {
+describe('Ima.Page.Manager.AbstractPageManager', function() {
 	var pageFactory = {
 		createController: function(Controller) {return new Controller();},
 		decorateController: function(controller) {return controller;},
@@ -39,7 +39,7 @@ describe('Ima.Abstract.PageManager', function() {
 
 	beforeEach(function() {
 		pageManager =
-			oc.create('Ima.Abstract.PageManager',
+			oc.create('Ima.Page.Manager.AbstractPageManager',
 				[
 					pageFactory,
 					pageRenderer,

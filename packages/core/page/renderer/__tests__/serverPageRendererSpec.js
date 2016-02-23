@@ -15,7 +15,7 @@ describe('Ima.Page.Renderer.ServerPageRenderer', function() {
 		send: function() {}
 	};
 
-	var pageRender = null;
+	var pageRenderer = null;
 	var $Helper = ns.Vendor.$Helper;
 	var rendererFactory = oc.get('$PageRendererFactory');
 	var ReactDOMServer = oc.get('$ReactDOMServer');
@@ -25,7 +25,7 @@ describe('Ima.Page.Renderer.ServerPageRenderer', function() {
 
 	beforeEach(function() {
 		response.init(expressResponse);
-		pageRender = oc.create('Ima.Page.Renderer.ServerPageRenderer', [rendererFactory, $Helper, ReactDOMServer, settings, response, cache, oc]);
+		pageRenderer = oc.create('Ima.Page.Renderer.ServerPageRenderer', [rendererFactory, $Helper, ReactDOMServer, settings, response, cache, oc]);
 	});
 
 	it('should be wrap each key to promise', function() {
@@ -33,7 +33,7 @@ describe('Ima.Page.Renderer.ServerPageRenderer', function() {
 			.and
 			.callThrough();
 
-		pageRender._wrapEachKeyToPromise(params);
+		pageRenderer._wrapEachKeyToPromise(params);
 
 		expect(Promise.resolve).toHaveBeenCalledWith(param1);
 		expect(Promise.resolve.calls.count()).toEqual(1);
@@ -42,11 +42,11 @@ describe('Ima.Page.Renderer.ServerPageRenderer', function() {
 	describe('update method', function() {
 
 		it('should reject promise with error', function(done) {
-			spyOn(pageRender, 'mount')
+			spyOn(pageRenderer, 'mount')
 				.and
 				.stub();
 
-			pageRender
+			pageRenderer
 				.update(controller, params)
 				.catch(function(error) {
 					expect(error instanceof ns.Ima.Error.GenericError).toEqual(true);
@@ -76,7 +76,7 @@ describe('Ima.Page.Renderer.ServerPageRenderer', function() {
 				.and
 				.returnValue(responseParams);
 
-			pageRender
+			pageRenderer
 				.mount(controller, view, loadedPageState)
 				.then(function(page) {
 					expect(page).toEqual(responseParams);
@@ -85,14 +85,14 @@ describe('Ima.Page.Renderer.ServerPageRenderer', function() {
 		});
 
 		it('should call _renderPage method', function(done) {
-			spyOn(pageRender, '_renderPage')
+			spyOn(pageRenderer, '_renderPage')
 				.and
 				.stub();
 
-			pageRender
+			pageRenderer
 				.mount(controller, view, loadedPageState)
 				.then(function(page) {
-					expect(pageRender._renderPage).toHaveBeenCalled();
+					expect(pageRenderer._renderPage).toHaveBeenCalled();
 					done();
 				});
 		});
@@ -117,7 +117,7 @@ describe('Ima.Page.Renderer.ServerPageRenderer', function() {
 				.and
 				.returnValue(responseParams);
 
-			expect(pageRender._renderPage(controller, view, fetchedResource)).toEqual(responseParams);
+			expect(pageRenderer._renderPage(controller, view, fetchedResource)).toEqual(responseParams);
 		});
 
 		describe('render new page', function() {
@@ -135,7 +135,7 @@ describe('Ima.Page.Renderer.ServerPageRenderer', function() {
 				spyOn(controller, 'getHttpStatus')
 					.and
 					.stub();
-				spyOn(pageRender, '_renderPageContentToString')
+				spyOn(pageRenderer, '_renderPageContentToString')
 					.and
 					.stub();
 				spyOn(response, 'status')
@@ -148,7 +148,7 @@ describe('Ima.Page.Renderer.ServerPageRenderer', function() {
 					.and
 					.returnValue(responseParams);
 
-				pageRenderResponse = pageRender._renderPage(controller, view, fetchedResource);
+				pageRenderResponse = pageRenderer._renderPage(controller, view, fetchedResource);
 			});
 
 			it('should set controller state', function() {
@@ -163,7 +163,7 @@ describe('Ima.Page.Renderer.ServerPageRenderer', function() {
 				expect(response.status).toHaveBeenCalled();
 				expect(response.send).toHaveBeenCalled();
 				expect(controller.getHttpStatus).toHaveBeenCalled();
-				expect(pageRender._renderPageContentToString).toHaveBeenCalledWith(controller, view);
+				expect(pageRenderer._renderPageContentToString).toHaveBeenCalledWith(controller, view);
 			});
 
 			it('should return response params', function() {
@@ -191,7 +191,7 @@ describe('Ima.Page.Renderer.ServerPageRenderer', function() {
 		var pageContent = null;
 
 		beforeEach(function() {
-			spyOn(pageRender, '_generateViewProps')
+			spyOn(pageRenderer, '_generateViewProps')
 				.and
 				.returnValue(props);
 			spyOn(controller, 'getState')
@@ -212,7 +212,7 @@ describe('Ima.Page.Renderer.ServerPageRenderer', function() {
 			spyOn(ReactDOMServer, 'renderToStaticMarkup')
 				.and
 				.returnValue(appMarkup);
-			spyOn(pageRender, '_getRevivalSettings')
+			spyOn(pageRenderer, '_getRevivalSettings')
 				.and
 				.returnValue(revivalSettings);
 			spyOn(controller, 'getMetaManager')
@@ -222,11 +222,11 @@ describe('Ima.Page.Renderer.ServerPageRenderer', function() {
 				.and
 				.returnValue(utils);
 
-			pageContent = pageRender._renderPageContentToString(controller, view);
+			pageContent = pageRenderer._renderPageContentToString(controller, view);
 		});
 
 		it('should generate view props from controller state', function() {
-			expect(pageRender._generateViewProps).toHaveBeenCalledWith(view, state);
+			expect(pageRenderer._generateViewProps).toHaveBeenCalledWith(view, state);
 		});
 
 		it('should wrap page view', function() {
@@ -248,7 +248,7 @@ describe('Ima.Page.Renderer.ServerPageRenderer', function() {
 		it('should render static markup from document view', function() {
 			expect(rendererFactory.getUtils).toHaveBeenCalled();
 			expect(controller.getMetaManager).toHaveBeenCalled();
-			expect(pageRender._getRevivalSettings).toHaveBeenCalled();
+			expect(pageRenderer._getRevivalSettings).toHaveBeenCalled();
 			expect(ReactDOMServer.renderToStaticMarkup).toHaveBeenCalledWith(documentViewElement);
 		});
 
