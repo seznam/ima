@@ -78,6 +78,7 @@ export var init = (ns, oc, config) => { //jshint ignore:line
 
 	//Cache
 	oc.constant('$CacheEntry', ns.Ima.Cache.CacheEntry);
+
 	if (oc.get('$Window').hasSessionStorage()) {
 		oc.constant('$CacheStorage', oc.get('$SessionMapStorage'));
 	} else {
@@ -99,12 +100,14 @@ export var init = (ns, oc, config) => { //jshint ignore:line
 	oc.bind('$PageFactory', ns.Ima.Page.PageFactory, [oc]);
 	oc.constant('$PageRendererViewAdapter', ns.Ima.Page.Renderer.ViewAdapter);
 	oc.bind('$PageRendererFactory', ns.Ima.Page.Renderer.PageRendererFactory, [oc, '$React', '$PageRendererViewAdapter']);
+
 	if (oc.get('$Window').isClient()) {
 		oc.provide(ns.Ima.Page.Renderer.PageRenderer, ns.Ima.Page.Renderer.ClientPageRenderer, ['$PageRendererFactory', '$Helper', '$ReactDOM', '$Settings', '$Window']);
 	} else {
 		oc.provide(ns.Ima.Page.Renderer.PageRenderer, ns.Ima.Page.Renderer.ServerPageRenderer, ['$PageRendererFactory', '$Helper', '$ReactDOMServer', '$Settings', '$Response', '$Cache']);
 	}
 	oc.bind('$PageRenderer', ns.Ima.Page.Renderer.PageRenderer);
+
 	if (oc.get('$Window').isClient()) {
 		oc.provide(ns.Ima.Page.Manager.PageManager, ns.Ima.Page.Manager.ClientPageManager, ['$PageFactory', '$PageRenderer', '$PageStateManager', '$Window', '$EventBus']);
 	} else {
@@ -115,6 +118,7 @@ export var init = (ns, oc, config) => { //jshint ignore:line
 	//Router
 	oc.constant('$Route', ns.Ima.Router.Route);
 	oc.bind('$RouteFactory', ns.Ima.Router.RouteFactory, ['$Route']);
+
 	if (oc.get('$Window').isClient()) {
 		oc.provide(ns.Ima.Router.Router, ns.Ima.Router.ClientRouter, ['$PageManager', '$RouteFactory', '$Dispatcher', '$ROUTER_CONSTANTS', '$Window']);
 	} else {

@@ -530,7 +530,7 @@ export default class Route {
 		var rawNames = pathExpression.match(PARAMS_REGEXP_UNIVERSAL) || [];
 
 		return rawNames.map((rawParameterName) => {
-			return rawParameterName.substring(1).replace('?', '')
+			return rawParameterName.substring(1).replace('?', '');
 		});
 	}
 }
