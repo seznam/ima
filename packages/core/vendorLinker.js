@@ -4,7 +4,20 @@
  * Utility for linking vendor node modules with the application by exporting
  * them to the IMA loader's modules.
  */
-class VendorLinker extends Map {
+class VendorLinker {
+	/**
+	 * Initializes the vendor linker.
+	 */
+	constructor() {
+		/**
+		 * Internal storage of loaded modules.
+		 *
+		 * @private
+		 * @type {Map}
+		 */
+		this._modules = new Map();
+	}
+
 	/**
 	 * Sets the provided vendor node module to the internal registry of this
 	 * vendor linker, and registers an IMA loader module of the same name,
@@ -14,7 +27,7 @@ class VendorLinker extends Map {
 	 * @param {Object<string, *>} moduleValues Values exported from the module.
 	 */
 	set(moduleName, moduleValues) {
-		super.set(moduleName, moduleValues);
+		this._modules.set(moduleName, moduleValues);
 
 		$IMA.Loader.register(moduleName, [], (exports) => ({
 			setters: [],
@@ -38,7 +51,9 @@ class VendorLinker extends Map {
 	 */
 	bindToNamespace(ns) {
 		let nsVendor = ns.namespace('vendor');
-		for (let [name, lib] of this) {
+		for (let name of this._modules.keys()) {
+			let lib = this._modules.get(name);
+
 			if (typeof lib.__$IMAModuleRegister__ === 'function') {
 				lib.__$IMAModuleRegister__(ns);
 			}
