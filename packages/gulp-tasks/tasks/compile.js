@@ -46,7 +46,7 @@ gulp.task('Es6ToEs5:app', function () {
 		return change(function (content) {
 			content = content + '\n' +
 				'$IMA.Loader.initAllModules();\n' +
-				'Promise.all([$IMA.Loader.import("imajs/client/main")])\n' +
+				'Promise.all([$IMA.Loader.import("app/main")])\n' +
 				'.catch(function (error) { \n' +
 				'console.error(error); \n });';
 
