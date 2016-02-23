@@ -156,6 +156,22 @@ export default class CookieStorage extends MapStorage {
 	/**
 	 * @inheritdoc
 	 * @method set
+	 * @param {string} name The key identifying the storage entry.
+	 * @param {*} value The storage entry value.
+	 * @param {{
+	 *            maxAge: number=,
+	 *            expires: (string|Date)=,
+	 *            domain: string=,
+	 *            path: string=,
+	 *            httpOnly: boolean=,
+	 *            secure: boolean=
+	 *        }=} options The cookie options. The {@code maxAge} is the maximum
+	 *        age in seconds of the cookie before it will be deleted, the
+	 *        {@code expires} is an alternative to that, specifying the moment
+	 *        at which the cookie will be discarded. The {@code domain} and
+	 *        {@code path} specify the cookie's domain and path. The
+	 *        {@code httpOnly} and {@code secure} flags set the flags of the
+	 *        same name of the cookie.
 	 */
 	set(name, value, options = {}) {
 		options = Object.assign({}, this._options, options);
@@ -342,7 +358,7 @@ export default class CookieStorage extends MapStorage {
 		cookieString += options.domain ? ';Domain=' + options.domain : '';
 		cookieString += options.path ? ';Path=' + options.path : '';
 		cookieString += options.expires ?
-		';Expires=' + options.expires.toUTCString() : '';
+				';Expires=' + options.expires.toUTCString() : '';
 		cookieString += options.httpOnly ? ';HttpOnly' : '';
 		cookieString += options.secure ? ';Secure' : '';
 
