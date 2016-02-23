@@ -36,5 +36,10 @@
 	"devDependencies": {},
 	"dependencies": {
 		"ima-helpers": "git+http://github.com/seznam/IMA.js-helpers.git#0.12.1"
+	},
+	"browserify": {
+		"transform": [
+			"babelify"
+		]
 	}
 }
