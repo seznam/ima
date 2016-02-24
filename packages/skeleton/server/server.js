@@ -2,9 +2,14 @@
 
 require("babel-polyfill");
 require('./ima/shim.js');
+require('./ima/vendor.server.js');
 
 var environmentConfig = require('./ima/config/environment.js');
-var appFactory = require('./ima/app.server.js');
+var appFactory = () => {
+	delete require.cache[require.resolve('./ima/app.server.js')];
+
+	require('./ima/app.server.js')();
+};
 var languageLoader = (language => require('./ima/locale/' + language + '.js'));
 var imaServer = require('ima.js-server')(environmentConfig, languageLoader, appFactory);
 var cluster = require('cluster');
