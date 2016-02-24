@@ -37,7 +37,6 @@ var getClientBootConfig = (initialAppConfigFunctions) => {
 	}
 
 	var bootConfig = {
-		vendor: window.$IMA.Vendor,
 		services: {
 			respond: null,
 			request: null,
@@ -66,7 +65,7 @@ var getClientBootConfig = (initialAppConfigFunctions) => {
 		}
 	};
 
-	return Object.assign(bootConfig, initialAppConfigFunctions(), getInitialImaConfigFunctions());
+	return Object.assign(bootConfig, initialAppConfigFunctions, getInitialImaConfigFunctions());
 };
 
 var getTestClientBootConfig = (initialAppConfigFunctions) => {
@@ -97,7 +96,7 @@ var getTestClientBootConfig = (initialAppConfigFunctions) => {
 		}
 	};
 
-	return Object.assign(bootConfig, initialAppConfigFunctions(), getInitialImaConfigFunctions());
+	return Object.assign(bootConfig, initialAppConfigFunctions, getInitialImaConfigFunctions());
 };
 
 var bootClientApp = (app, bootConfig) => {
@@ -163,7 +162,7 @@ var reviveClientApp = (initialAppConfigFunctions) => {
 	document.body.style.display = '';
 
 	//set React for ReactJS extension for browser
-	window.React = window.$IMA.Vendor.get('React');
+	window.React = vendorLinker.get('react');
 	window.$Debug = window.$IMA.$Debug;
 
 	var app = createImaApp();
@@ -184,6 +183,18 @@ var reviveTestClientApp = (initialAppConfigFunctions) => {
 	root.oc = app.oc;
 };
 
+var onLoad = (callback) => {
+	if (typeof window !== 'undefined' && window !== null) {
+		if (document.readyState === 'complete' || document.readyState === 'interactive') {
+			callback()
+		} else {
+			window.addEventListener('DOMContentLoaded', () => {
+				callback();
+			});
+		}
+	}
+};
+
 export {
 	getInitialImaConfigFunctions,
 	getNamespace,
@@ -194,5 +205,6 @@ export {
 	routeClientApp,
 	hotReloadClientApp,
 	reviveClientApp,
-	reviveTestClientApp
+	reviveTestClientApp,
+	onLoad
 };
