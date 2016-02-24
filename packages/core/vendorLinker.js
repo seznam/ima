@@ -42,6 +42,24 @@ class VendorLinker {
 		}));
 	}
 
+
+	/**
+	 * Returns the provided vendor node module from the internal registry of this
+	 * vendor linker.
+	 *
+	 * @param {string} moduleName The name of the module.
+	 * @param {?boolean} [imaInternalModule]
+	 * @return {Object<string, *>} moduleValues Values exported from the module.
+	 */
+	get(moduleName, imaInternalModule) {
+		if (!this._modules.has(moduleName) && !imaInternalModule) {
+			throw new Error(`The module '${moduleName}' is not registered.` +
+					`Add the module to vendors in build.js`);
+		}
+
+		return this._modules.get(moduleName);
+	}
+
 	/**
 	 * Binds the vendor modules loaded in this vendor linker to the
 	 * {@code Vendor} sub-namespace of the provided namespace.
