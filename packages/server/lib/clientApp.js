@@ -8,7 +8,6 @@ var instanceRecycler = require('./instanceRecycler.js');
 var helper = require('ima-helpers');
 var templateProcessor = require('./templateProcessor.js');
 
-var appServer = null;
 var renderedSPAs = {};
 
 hljs.configure({
@@ -18,15 +17,6 @@ hljs.configure({
 
 module.exports = ((environment, logger, languageLoader, appFactory) => {
 	appFactory();
-
-	$IMA.Loader
-		.import('app/main')
-		.then((main) => {
-			appServer = main;
-			instanceRecycler.init(appServer.ima.createImaApp, environment.$Server.concurrency);
-		}).catch((error) => {
-			logger.error('Failed to initialize the application or the instance recycler', { error });
-		});
 
 	var _displayDetails = (err, req, res) => {
 		var stack = stackTrace.parse(err);
@@ -86,14 +76,14 @@ module.exports = ((environment, logger, languageLoader, appFactory) => {
 		});
 	};
 
-	var _initApp = (req, res) => {
+	var _initApp = (req, res, appMain) => {
 		var bootConfig = _getBootConfig(req, res);
 		var app = instanceRecycler.getInstance();
 
 		Object.assign(
 			bootConfig,
-			appServer.getInitialAppConfigFunctions(),
-			appServer.ima.getInitialImaConfigFunctions()
+			appMain.getInitialAppConfigFunctions(),
+			appMain.ima.getInitialImaConfigFunctions()
 		);
 		app.bootstrap
 			.run(bootConfig);
@@ -277,8 +267,18 @@ module.exports = ((environment, logger, languageLoader, appFactory) => {
 		return promise;
 	};
 
+	var _importAppMain = () => {
+		return $IMA.Loader
+			.import('app/main')
+			.then((appMain) => {
+				instanceRecycler.init(appMain.ima.createImaApp, environment.$Server.concurrency);
+
+				return appMain;
+			});
+	}
+
 	var errorHandler = (error, req, res, app) => {
-		var promise = Promise.reject(error);
+		var returnPromise = Promise.reject(error);
 
 		if (environment.$Debug) {
 
@@ -287,27 +287,32 @@ module.exports = ((environment, logger, languageLoader, appFactory) => {
 			}
 
 			_displayDetails(error, req, res);
-
-			return promise;
 		} else {
+			var appPromise = Promise.resolve(app);
 
 			if (!app) {
-				app = _initApp(req, res);
+				appPromise = _importAppMain()
+					.then((appMain) => {
+						return _initApp(req, res, appMain);
+					});
 			}
 
-			var router = app.oc.get('$Router');
-			app.oc.get('$Cache').clear();
+			returnPromise = appPromise
+				.then((app) => {
+					var router = app.oc.get('$Router');
+					app.oc.get('$Cache').clear();
 
-			if (router.isClientError(error)) {
-				promise = _applyNotFound(error, req, res, app);
-			} else if (router.isRedirection(error)) {
-				promise = _applyRedirect(error, req, res, app);
-			} else {
-				promise = _applyError(error, req, res, app);
-			}
+					if (router.isClientError(error)) {
+						return _applyNotFound(error, req, res, app);
+					} else if (router.isRedirection(error)) {
+						return _applyRedirect(error, req, res, app);
+					} else {
+						return _applyError(error, req, res, app);
+					}
+				})
 		}
 
-		return promise;
+		return returnPromise;
 	};
 
 	var requestHandler = (req, res) => {
@@ -315,26 +320,34 @@ module.exports = ((environment, logger, languageLoader, appFactory) => {
 			return showStaticSPAPage(req, res);
 		}
 
-		var promise = Promise.reject(new Error());
-		var app = _initApp(req, res);
-		var router = app.oc.get('$Router');
-
-		try {
-			promise = router
-				.route(router.getPath())
-				.then((response) => {
-					instanceRecycler.clearInstance(app);
-
-					return response;
-				})
-				.catch((error) => {
-					return errorHandler(error, req, res, app);
-				});
-		} catch (e) {
-			promise = errorHandler(e, req, res, app);
+		if (environment.$Env === 'dev') {
+			appFactory();
+			instanceRecycler.clear();
 		}
 
-		return promise;
+		return _importAppMain()
+			.then((appMain) => {
+				var returnPromise = Promise.reject(new Error());
+				var app = _initApp(req, res, appMain);
+				var router = app.oc.get('$Router');
+
+				try {
+					returnPromise = router
+						.route(router.getPath())
+						.then((response) => {
+							instanceRecycler.clearInstance(app);
+
+							return response;
+						})
+						.catch((error) => {
+							return errorHandler(error, req, res, app);
+						});
+				} catch (e) {
+					returnPromise = errorHandler(e, req, res, app);
+				}
+
+				return returnPromise;
+			})
 	};
 
 	return {
