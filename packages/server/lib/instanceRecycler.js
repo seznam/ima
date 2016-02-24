@@ -47,5 +47,8 @@ module.exports = (() => {
 		}
 	}
 
-	return new InstanceRecycler().clear();
+	var instanceRecycler = new InstanceRecycler();
+	instanceRecycler.clear();
+
+	return instanceRecycler;
 })();
