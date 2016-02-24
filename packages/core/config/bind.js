@@ -1,20 +1,21 @@
+import vendorLinker from 'ima/vendorLinker';
+
 export var init = (ns, oc, config) => { //jshint ignore:line
 
 	//**************START VENDORS**************
 
-	oc.constant('$Helper', ns.vendor.$Helper);
+	oc.constant('$Helper', vendorLinker.get('ima-helpers', true));
 	oc.constant('$Promise', Promise);
 
 	//React
-	oc.constant('$React', ns.vendor.React);
-	oc.constant('$ReactDOM', ns.vendor.ReactDOM);
-	oc.constant('$ReactDOMServer', ns.vendor.ReactDOMServer);
+	oc.constant('$React', vendorLinker.get('react', true));
+	oc.constant('$ReactDOM', vendorLinker.get('react-dom', true));
+	oc.constant('$ReactDOMServer', vendorLinker.get('react-dom/server.js', true));
 
 	//SuperAgent
 	oc.constant('$SuperAgent', ns.vendor.SuperAgent);
 
 	//*************END VENDORS*****************
-
 
 
 	//*************START CONSTANTS*****************
@@ -27,7 +28,6 @@ export var init = (ns, oc, config) => { //jshint ignore:line
 	oc.constant('$HTTP_STATUS_CODE', ns.ima.http.STATUS_CODE);
 
 	//*************END CONSTANTS*****************
-
 
 
 	//*************START IMA**************
