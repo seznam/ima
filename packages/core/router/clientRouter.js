@@ -322,7 +322,7 @@ export default class ClientRouter extends AbstractRouter {
 			return;
 		}
 
-		this._window.preventDefault(event);
+		event.preventDefault();
 		this.redirect(anchorHref);
 	}
 
