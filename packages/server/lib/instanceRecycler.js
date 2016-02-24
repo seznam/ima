@@ -7,10 +7,8 @@ module.exports = (() => {
 	 * @class InstanceRecycler
 	 */
 	class InstanceRecycler {
-		/**
-		 * @method constructor
-		 */
-		constructor() {
+
+		clear() {
 			this._instanceConstructor = null;
 			this._maxInstanceCount = 1;
 			this._instancies = [];
@@ -38,7 +36,7 @@ module.exports = (() => {
 			} else {
 				return this._instanceConstructor();
 			}
-			
+
 		}
 
 		clearInstance(instance) {
@@ -49,5 +47,5 @@ module.exports = (() => {
 		}
 	}
 
-	return new InstanceRecycler();
+	return new InstanceRecycler().clear();
 })();
