@@ -8,10 +8,15 @@ var mainjs = ['ima/main.js'];
 
 var vendors = {
 	common: [
-		'ima-helpers'
+		'ima-helpers',
+		'react',
+		'react-dom',
+		'superagent'
 	],
 
-	server: [],
+	server: [
+		'react-dom/server.js'
+	],
 
 	client: []
 };
