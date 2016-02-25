@@ -1,7 +1,7 @@
 // @client-side
 
 import ns from 'ima/namespace';
-import AbstractPageRenderer from 'ima/page/renderer/abstractPageRenderer';
+import AbstractPageRenderer from 'ima/page/renderer/AbstractPageRenderer';
 
 ns.namespace('ima.page.renderer');
 

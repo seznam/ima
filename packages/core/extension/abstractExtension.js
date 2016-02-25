@@ -1,6 +1,6 @@
 import ns from 'ima/namespace';
-import IMAError from 'ima/error/genericError';
-import ExtensionInterface from 'ima/extension/extension';
+import IMAError from 'ima/error/GenericError';
+import ExtensionInterface from 'ima/extension/Extension';
 
 ns.namespace('ima.extension');
 

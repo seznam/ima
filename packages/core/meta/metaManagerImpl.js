@@ -1,5 +1,5 @@
 import ns from 'ima/namespace';
-import MetaManagerInterface from 'ima/meta/metaManager';
+import MetaManagerInterface from 'ima/meta/MetaManager';
 
 ns.namespace('ima.meta');
 

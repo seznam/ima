@@ -1,8 +1,8 @@
 // @server-side
 
 import ns from 'ima/namespace';
-import IMAError from 'ima/error/genericError';
-import AbstractPageRenderer from 'ima/page/renderer/abstractPageRenderer';
+import IMAError from 'ima/error/GenericError';
+import AbstractPageRenderer from 'ima/page/renderer/AbstractPageRenderer';
 
 ns.namespace('ima.page.renderer');
 

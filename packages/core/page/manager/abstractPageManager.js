@@ -1,6 +1,6 @@
 import ns from 'ima/namespace';
-import IMAError from 'ima/error/genericError';
-import PageManagerInterface from 'ima/page/manager/pageManager';
+import IMAError from 'ima/error/GenericError';
+import PageManagerInterface from 'ima/page/manager/PageManager';
 
 ns.namespace('ima.page.manager');
 

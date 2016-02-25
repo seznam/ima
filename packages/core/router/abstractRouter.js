@@ -1,6 +1,6 @@
 import ns from 'ima/namespace';
-import IMAError from 'ima/error/genericError';
-import RouterInterface from 'ima/router/router';
+import IMAError from 'ima/error/GenericError';
+import RouterInterface from 'ima/router/Router';
 
 ns.namespace('ima.router');
 

@@ -1,6 +1,6 @@
 import ns from 'ima/namespace';
-import IMAError from 'ima/error/genericError';
-import PageRendererInterface from 'ima/page/renderer/pageRenderer';
+import IMAError from 'ima/error/GenericError';
+import PageRendererInterface from 'ima/page/renderer/PageRenderer';
 
 ns.namespace('ima.page.renderer');
 

@@ -1,8 +1,8 @@
 // @client-side
 
 import ns from 'ima/namespace';
-import IMAError from 'ima/error/genericError';
-import EventBus from 'ima/event/eventBus';
+import IMAError from 'ima/error/GenericError';
+import EventBus from 'ima/event/EventBus';
 
 ns.namespace('ima.event');
 

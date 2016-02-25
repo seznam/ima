@@ -1,5 +1,5 @@
 import ns from 'ima/namespace';
-import ControllerInterface from 'ima/controller/controller';
+import ControllerInterface from 'ima/controller/Controller';
 
 ns.namespace('ima.controller');
 

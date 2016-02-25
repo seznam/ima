@@ -1,6 +1,6 @@
 import ns from 'ima/namespace';
-import IMAError from 'ima/error/genericError';
-import MapStorage from 'ima/storage/mapStorage';
+import IMAError from 'ima/error/GenericError';
+import MapStorage from 'ima/storage/MapStorage';
 
 ns.namespace('ima.storage');
 

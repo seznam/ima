@@ -24,8 +24,8 @@ export var init = (ns, oc, config) => { //jshint ignore:line
 	oc.constant('$Protocol', config.$Protocol);
 	oc.constant('$Secure', config.$Protocol === 'https:' ? true : false);
 
-	oc.constant('$ROUTER_CONSTANTS', { ROUTE_NAMES: ns.ima.router.ROUTE_NAMES, EVENTS: ns.ima.router.EVENTS });
-	oc.constant('$HTTP_STATUS_CODE', ns.ima.http.STATUS_CODE);
+	oc.constant('$ROUTER_CONSTANTS', { ROUTE_NAMES: ns.ima.router.RouteNames, EVENTS: ns.ima.router.Events });
+	oc.constant('$HTTP_STATUS_CODE', ns.ima.http.StatusCode);
 
 	//*************END CONSTANTS*****************
 

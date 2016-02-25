@@ -1,24 +1,24 @@
 // @client-side
 
 import ns from 'ima/namespace';
-import AbstractRouter from 'ima/router/abstractRouter';
+import AbstractRouter from 'ima/router/AbstractRouter';
 
 ns.namespace('ima.router');
 
 /**
  * Names of the DOM events the router responds to.
  *
- * @const
- * @property EVENTS
+ * @enum
+ * @property Events
  * @type {Object<string, string>}
  */
-const EVENTS = Object.freeze({
+const Events = Object.freeze({
 	/**
 	 * Name of the event produced when the user clicks the page using the
 	 * mouse, or touches the page and the touch event is not stopped.
 	 *
 	 * @const
-	 * @property
+	 * @property Events.CLICK
 	 * @type {string}
 	 */
 	CLICK: 'click',
@@ -27,7 +27,7 @@ const EVENTS = Object.freeze({
 	 * Name of the event fired when the user navigates back in the history.
 	 *
 	 * @const
-	 * @property EVENTS.POP_STATE
+	 * @property Events.POP_STATE
 	 * @type {string}
 	 */
 	POP_STATE: 'popstate'
@@ -36,17 +36,17 @@ const EVENTS = Object.freeze({
 /**
  * Address bar content manipulation modes.
  *
- * @const
- * @property MODES
+ * @enum
+ * @property Modes
  * @type {Object<string, string>}
  */
-const MODES = Object.freeze({
+const Modes = Object.freeze({
 	/**
 	 * Address bar manipulation mode in which the current URL in the address
 	 * bar is being udpated using the session history management API.
 	 *
 	 * @const
-	 * @property MODES.HISTORY
+	 * @property Modes.HISTORY
 	 * @type {string}
 	 */
 	HISTORY: 'history',
@@ -56,7 +56,7 @@ const MODES = Object.freeze({
 	 * bar is being udpated by modifying the {@code hash} part.
 	 *
 	 * @const
-	 * @property MODES.HASH
+	 * @property Modes.HASH
 	 * @type {string}
 	 */
 	HASH: 'hash'
@@ -116,7 +116,7 @@ export default class ClientRouter extends AbstractRouter {
 
 		/**
 		 * Current address bar manipulation mode, specified as one of the
-		 * {@code MODES.*} constants..
+		 * {@code Modes.*} constants..
 		 *
 		 * @private
 		 * @property mode
@@ -132,7 +132,7 @@ export default class ClientRouter extends AbstractRouter {
 	 */
 	init(config) {
 		super.init(config);
-		this._mode = this._window.hasHistoryAPI() ? MODES.HISTORY : MODES.HASH;
+		this._mode = this._window.hasHistoryAPI() ? Modes.HISTORY : Modes.HASH;
 		this._host = config.$Host || this._window.getHost();
 
 		return this;
@@ -162,7 +162,7 @@ export default class ClientRouter extends AbstractRouter {
 		var nativeWindow = this._window.getWindow();
 
 		this._setAddressBar(this.getUrl());
-		let eventName = EVENTS.POP_STATE;
+		let eventName = Events.POP_STATE;
 		this._window.bindEventListener(nativeWindow, eventName, (event) => {
 
 			if (event.state) {
@@ -177,7 +177,7 @@ export default class ClientRouter extends AbstractRouter {
 			}
 		});
 
-		this._window.bindEventListener(nativeWindow, EVENTS.CLICK, (event) => {
+		this._window.bindEventListener(nativeWindow, Events.CLICK, (event) => {
 			this._handleClick(event);
 		});
 
@@ -189,7 +189,7 @@ export default class ClientRouter extends AbstractRouter {
 	 * @method redirect
 	 */
 	redirect(url = '', options = {}) {
-		if (this._isSameDomain(url) && this._mode === MODES.HISTORY) {
+		if (this._isSameDomain(url) && this._mode === Modes.HISTORY) {
 			var path = url.replace(this.getDomain(), '');
 			path = this._extractRoutePath(path);
 

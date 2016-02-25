@@ -1,7 +1,7 @@
 // @server-side
 
 import ns from 'ima/namespace';
-import AbstractRouter from 'ima/router/abstractRouter';
+import AbstractRouter from 'ima/router/AbstractRouter';
 
 ns.namespace('ima.router');
 

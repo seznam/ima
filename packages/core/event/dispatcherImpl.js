@@ -1,6 +1,6 @@
 import ns from 'ima/namespace';
-import IMAError from 'ima/error/genericError';
-import DispatcherInterface from 'ima/event/dispatcher';
+import IMAError from 'ima/error/GenericError';
+import DispatcherInterface from 'ima/event/Dispatcher';
 
 ns.namespace('ima.event');
 

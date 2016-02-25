@@ -1,7 +1,7 @@
 import ns from 'ima/namespace';
-import IMAError from 'ima/error/genericError';
+import IMAError from 'ima/error/GenericError';
 import PageStateManagerInterface
-		from 'ima/page/state/pageStateManager';
+		from 'ima/page/state/PageStateManager';
 
 ns.namespace('ima.page.state');
 

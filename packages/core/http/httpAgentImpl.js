@@ -1,6 +1,6 @@
 import ns from 'ima/namespace';
-import IMAError from 'ima/error/genericError';
-import HttpAgentInterface from 'ima/http/httpAgent';
+import IMAError from 'ima/error/GenericError';
+import HttpAgentInterface from 'ima/http/HttpAgent';
 
 ns.namespace('ima.http');
 

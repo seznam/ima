@@ -1,6 +1,6 @@
 import ns from 'ima/namespace';
-import IMAError from 'ima/error/genericError';
-import StorageInterface from 'ima/storage/storage';
+import IMAError from 'ima/error/GenericError';
+import StorageInterface from 'ima/storage/Storage';
 
 ns.namespace('ima.storage');
 

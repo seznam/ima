@@ -5,9 +5,10 @@ ns.namespace('ima.router');
 /**
  * Events constants, which is firing to app.
  *
- * @const
+ * @enum
+ * @property Events
  */
-const EVENTS = Object.freeze({
+const Events = Object.freeze({
 	/**
 	 * Router fire event {@code $IMA.$Router.beforeHandleRoute} before page
 	 * manager handle the route. Event's data contain
@@ -40,6 +41,6 @@ const EVENTS = Object.freeze({
 	AFTER_HANDLE_ROUTE: '$IMA.$Router.afterHandleRoute'
 });
 
-export default EVENTS;
+export default Events;
 
-ns.ima.router.EVENTS = EVENTS;
+ns.ima.router.Events = Events;

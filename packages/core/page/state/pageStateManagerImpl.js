@@ -1,5 +1,5 @@
 import ns from 'ima/namespace';
-import PageStateManagerInterface from 'ima/page/state/pageStateManager';
+import PageStateManagerInterface from 'ima/page/state/PageStateManager';
 
 ns.namespace('ima.page.state');
 

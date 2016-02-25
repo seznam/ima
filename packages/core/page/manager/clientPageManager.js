@@ -1,7 +1,7 @@
 // @client-side
 
 import ns from 'ima/namespace';
-import AbstractPageManager from 'ima/page/manager/abstractPageManager';
+import AbstractPageManager from 'ima/page/manager/AbstractPageManager';
 
 ns.namespace('ima.page.manager');
 

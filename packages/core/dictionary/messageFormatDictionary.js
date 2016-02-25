@@ -1,6 +1,6 @@
 import ns from 'ima/namespace';
-import IMAError from 'ima/error/genericError';
-import DictionaryInterface from 'ima/dictionary/dictionary';
+import IMAError from 'ima/error/GenericError';
+import DictionaryInterface from 'ima/dictionary/Dictionary';
 
 ns.namespace('ima.dictionary');
 

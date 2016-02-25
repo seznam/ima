@@ -1,5 +1,5 @@
 import ns from 'ima/namespace';
-import CacheInterface from 'ima/cache/cache';
+import CacheInterface from 'ima/cache/Cache';
 
 ns.namespace('ima.cache');
 

@@ -1,6 +1,6 @@
 import ns from 'ima/namespace';
-import StorageInterface from 'ima/storage/storage';
-import CacheEntry from 'ima/cache/cacheEntry';
+import StorageInterface from 'ima/storage/Storage';
+import CacheEntry from 'ima/cache/CacheEntry';
 
 ns.namespace('ima.storage');
 

@@ -1,5 +1,5 @@
 import ns from 'ima/namespace';
-import StorageInterface from 'ima/storage/storage';
+import StorageInterface from 'ima/storage/Storage';
 
 ns.namespace('ima.storage');
 

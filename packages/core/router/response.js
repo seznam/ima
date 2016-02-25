@@ -1,7 +1,7 @@
 // @server-side
 
 import ns from 'ima/namespace';
-import IMAError from 'ima/error/genericError';
+import IMAError from 'ima/error/GenericError';
 
 ns.namespace('ima.router');
 

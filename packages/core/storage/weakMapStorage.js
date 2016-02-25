@@ -1,5 +1,5 @@
 import ns from 'ima/namespace';
-import MapStorage from 'ima/storage/mapStorage';
+import MapStorage from 'ima/storage/MapStorage';
 
 ns.namespace('ima.storage');
 

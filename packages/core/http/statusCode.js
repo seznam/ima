@@ -6,10 +6,11 @@ ns.namespace('ima.http');
  * HTTP status code constants, representing the HTTP status codes recognized
  * and processed by this proxy.
  *
- * @const
+ * @enum
+ * @property StatusCode
  * @see http://www.w3.org/Protocols/rfc2616/rfc2616-sec10.html
  */
-const STATUS_CODE = Object.freeze({
+const StatusCode = Object.freeze({
 
 	/**
 	 * OK
@@ -68,6 +69,6 @@ const STATUS_CODE = Object.freeze({
 	SERVER_ERROR: 500
 });
 
-export default STATUS_CODE;
+export default StatusCode;
 
-ns.ima.http.STATUS_CODE = STATUS_CODE;
+ns.ima.http.StatusCode = StatusCode;

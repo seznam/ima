@@ -1,7 +1,7 @@
 // @client-side
 
 import ns from 'ima/namespace';
-import WindowInterface from 'ima/window/window';
+import WindowInterface from 'ima/window/Window';
 
 ns.namespace('ima.window');
 

@@ -1,6 +1,6 @@
 import ns from 'ima/namespace';
-import IMAError from 'ima/error/genericError';
-import ControllerInterface from 'ima/controller/controller';
+import IMAError from 'ima/error/GenericError';
+import ControllerInterface from 'ima/controller/Controller';
 
 ns.namespace('ima.controller');
 

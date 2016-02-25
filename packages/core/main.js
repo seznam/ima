@@ -1,7 +1,7 @@
 import vendorLinker from 'ima/vendorLinker';
 import ns from 'ima/namespace';
-import ObjectContainer from 'ima/objectContainer';
-import Bootstrap from 'ima/bootstrap';
+import ObjectContainer from 'ima/ObjectContainer';
+import Bootstrap from 'ima/Bootstrap';
 
 import { init as initBindIma } from 'ima/config/bind';
 import { init as initServicesIma } from 'ima/config/services';
