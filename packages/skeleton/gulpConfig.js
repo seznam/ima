@@ -30,6 +30,10 @@ var babelConfig = {
 		presets: ['es2015', 'react'],
 		plugins: ['transform-es2015-modules-systemjs', 'external-helpers-2']
 	},
+	ima: {
+		presets: ['es2015'],
+		plugins: ['transform-es2015-modules-systemjs', 'external-helpers-2']
+	},
 	server: {
 		presets: ['es2015'],
 		plugins: ['external-helpers-2']
@@ -43,6 +47,7 @@ if (['production', 'prod', 'test'].indexOf(process.env.NODE_ENV) > -1) {
 		'transform-react-constant-elements',
 		'transform-react-inline-elements'
 	]);
+	babelConfig.ima.presets = ['es2015-loose'];
 	$Debug = false;
 }
 
@@ -81,12 +86,24 @@ exports.files = {
 			server: 'app.server.js',
 			client: 'app.client.js'
 		},
-		src: [].concat(coreDependencies.js, appDependencies.js, coreDependencies.mainjs, appDependencies.mainjs),
+		src: [].concat(appDependencies.js, appDependencies.mainjs),
 		dest: {
 			server: './build/ima/',
 			client: './build/static/js/'
 		},
-		watch:['./ima/**/*.{js,jsx}', '!./ima/vendor.js', './app/**/*.{js,jsx}', '!./app/*.js', './app/main.js']
+		watch:['./app/**/*.{js,jsx}', '!./app/*.js', './app/main.js']
+	},
+	ima: {
+		name: {
+			server: 'ima.server.js',
+			client: 'ima.client.js'
+		},
+		src: [].concat(coreDependencies.js, coreDependencies.mainjs),
+		dest: {
+			server: './build/ima/',
+			client: './build/static/js/'
+		},
+		watch:['./ima/**/*.{js,jsx}']
 	},
 	server: {
 		cwd: '/',

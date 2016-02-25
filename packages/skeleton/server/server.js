@@ -3,6 +3,7 @@
 require("babel-polyfill");
 require('./ima/shim.js');
 require('./ima/vendor.server.js');
+require('./ima/ima.server.js')();
 
 var environmentConfig = require('./ima/config/environment.js');
 var appFactory = () => {
