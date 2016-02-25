@@ -15,13 +15,14 @@ module.exports = function (gulpConfig) {
 	gulp.task('watch', function () {
 
 		runOnChange(files.app.watch, 'app:build');
+		runOnChange(files.ima.watch, 'ima:build');
 		runOnChange(files.less.watch, 'less');
 		runOnChange(files.server.watch, 'server:build');
 		runOnChange(files.locale.watch, 'locale:build');
 		runOnChange('./app/assets/static/**/*', 'copy:appStatic');
 
 		gulp.watch([
-			'./imajs/**/*.{js,jsx}',
+			'./ima/**/*.{js}',
 			'./app/**/*.{js,jsx}',
 			'./build/static/js/locale/*.js'
 		]).on('change', function (e) {
@@ -31,6 +32,11 @@ module.exports = function (gulpConfig) {
 				if (cache.caches['Es6ToEs5:app'][e.path]) {
 					delete cache.caches['Es6ToEs5:app'][e.path];
 					remember.forget('Es6ToEs5:app', e.path);
+				}
+
+				if (cache.caches['Es6ToEs5:ima'][e.path]) {
+					delete cache.caches['Es6ToEs5:ima'][e.path];
+					remember.forget('Es6ToEs5:ima', e.path);
 				}
 			}
 		});

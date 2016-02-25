@@ -20,3 +20,8 @@ gulp.task('server:reload', function (callback) {
 		callback();
 	}, 2000);
 });
+
+gulp.task('server:hotreload', function (callback) {
+	server.notify(sharedState.watchEvent);
+	callback();
+});

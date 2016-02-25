@@ -15,7 +15,14 @@ gulp.task('server:build', function (callback) {
 gulp.task('app:build', function (callback) {
 	return runSequence(
 		'Es6ToEs5:app',
-		'server:restart',
+		'server:hotreload',
+		callback
+	);
+});
+
+gulp.task('ima:build', function (callback) {
+	return runSequence(
+		'Es6ToEs5:ima',
 		'server:reload',
 		callback
 	);

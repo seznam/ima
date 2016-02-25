@@ -97,6 +97,45 @@ gulp.task('Es6ToEs5:app', function () {
 
 });
 
+// build ima
+gulp.task('Es6ToEs5:ima', function () {
+
+	function replaceToIMALoader() {
+		return change(function (content) {
+			content = content.replace(/System.import/g, '$IMA.Loader.import');
+			content = content.replace(/System.register/g, '$IMA.Loader.register');
+
+			return content;
+		});
+	}
+
+	return (
+		gulp.src(files.ima.src)
+			.pipe(resolveNewPath('/'))
+			.pipe(plumber())
+			.pipe(sourcemaps.init())
+			.pipe(cache('Es6ToEs5:ima'))
+			.pipe(babel({
+				moduleIds: true,
+				presets: babelConfig.ima.presets,
+				plugins: babelConfig.ima.plugins
+			 }))
+			.pipe(remember('Es6ToEs5:ima'))
+			.pipe(plumber.stop())
+			.pipe(concat(files.ima.name.client))
+			.pipe(replaceToIMALoader())
+			.pipe(save('Es6ToEs5:ima:source'))
+			.pipe(insert.wrap('(function(){\n', '\n })();\n'))
+			.pipe(sourcemaps.write())
+			.pipe(gulp.dest(files.ima.dest.client))
+			.pipe(save.restore('Es6ToEs5:ima:source'))
+			.pipe(concat(files.ima.name.server))
+			.pipe(insert.wrap('module.exports = (function(){\n', '\n })\n'))
+			.pipe(sourcemaps.write())
+			.pipe(gulp.dest(files.ima.dest.server))
+	);
+});
+
 // build server logic app
 gulp.task('Es6ToEs5:server', function () {
 	return (
