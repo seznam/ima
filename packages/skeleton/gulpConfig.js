@@ -1,4 +1,4 @@
-var coreDependencies = require('./ima/build.js');
+var coreDependencies = require('ima/build.js');
 
 var appDependencies;
 try {
