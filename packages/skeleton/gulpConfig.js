@@ -103,7 +103,7 @@ exports.files = {
 			server: './build/ima/',
 			client: './build/static/js/'
 		},
-		watch:['./ima/**/*.{js,jsx}']
+		watch:['./node_modules/ima/**/*.{js,jsx}']
 	},
 	server: {
 		cwd: '/',
@@ -131,8 +131,8 @@ exports.files = {
 	shim : {
 		name: 'shim.js',
 		src: [
-			'./ima/polyfill/collectionEnumeration.js',
-			'./ima/polyfill/imaLoader.js'
+			'./node_modules/ima/polyfill/collectionEnumeration.js',
+			'./node_modules/ima/polyfill/imaLoader.js'
 		],
 		dest: {
 			client: './build/static/js/',
