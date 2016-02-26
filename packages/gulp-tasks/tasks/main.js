@@ -8,7 +8,7 @@ module.exports = function (gulpConfig) {
 	gulp.task('dev', function (callback) {
 		return runSequence(
 			['copy:appStatic', 'copy:environment', 'shim', 'polyfill'],
-			['Es6ToEs5:app', 'Es6ToEs5:server', 'Es6ToEs5:vendor'],
+			['Es6ToEs5:app', 'Es6ToEs5:ima', 'Es6ToEs5:server', 'Es6ToEs5:vendor'],
 			['less', 'doc', 'locale', 'Es6ToEs5:vendor:client'],
 			['server'],
 			['test:unit:karma:dev', 'watch'],
