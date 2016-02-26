@@ -1,24 +1,26 @@
-import ns from 'imajs/client/core/namespace';
-import { React } from 'app/vendor';
+import ns from 'ima/namespace';
+import AbstractComponent from 'ima/page/AbstractComponent';
+import React from 'react';
 
 const POPUP_SIZE = Object.freeze({
 	width: 550,
 	height: 443
 });
 
-ns.namespace('App.Component.TweetButton');
+ns.namespace('app.component.tweetButton');
 
 /**
  * React component providing the UI for sharing feed items using social media
  * and e-mail.
  *
  * @class View
- * @namespace App.Component.TweetButton
- * @module App
- * @submodule App.Component
+ * @extends AbstractComponent
+ * @namespace app.component.tweetButton
+ * @module app
+ * @submodule app.component
  */
 
-class View extends ns.Core.Abstract.Component {
+class View extends AbstractComponent {
 
 	constructor(props) {
 		super(props);
@@ -132,4 +134,4 @@ class View extends ns.Core.Abstract.Component {
 	}
 }
 
-ns.App.Component.TweetButton.View = View;
+ns.app.component.tweetButton.View = View;

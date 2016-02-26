@@ -1,16 +1,18 @@
-import ns from 'imajs/client/core/namespace';
-import { React } from 'app/vendor';
+import ns from 'ima/namespace';
+import AbstractComponent from 'ima/page/AbstractComponent';
+import React from 'react';
 
-ns.namespace('App.Component.Date');
+ns.namespace('app.component.date');
 
 /**
  * Date Component.
  * @class View
- * @namespace App.Component.Date
- * @module App
- * @submodule Component
+ * @extends ima.page.AbstractComponent
+ * @namespace app.component.date
+ * @module app
+ * @submodule app.component
  */
-class View extends ns.Core.Abstract.Component {
+class View extends AbstractComponent {
 
 	constructor(props) {
 		super(props);
@@ -33,4 +35,4 @@ class View extends ns.Core.Abstract.Component {
 	}
 }
 
-ns.App.Component.Date.View = View;
+ns.app.component.date.View = View;

@@ -8,41 +8,41 @@ export var init = (ns, oc, config) => {
 	//*************END CONSTANT****************
 
 	// Our fake http handler for demo. You can use superagent (It's binded in IMA.js Core like '$Http') instead of fakeHttp.
-	oc.bind('$Http', ns.App.Module.FakeHttp, ['API_BASE_URL']);
+	oc.bind('$Http', ns.app.model.FakeHttp, ['API_BASE_URL']);
 
 	// Category Module
-	oc.constant('CategoryEntity', ns.App.Module.Category.Entity);
-	oc.bind('CategoryFactory', ns.App.Module.Category.Factory, ['CategoryEntity']);
+	oc.constant('CategoryEntity', ns.app.model.category.CategoryEntity);
+	oc.bind('CategoryFactory', ns.app.model.category.CategoryFactory, ['CategoryEntity']);
 
 	//CategoryList Module
-	oc.constant('CategoryListEntity', ns.App.Module.CategoryList.Entity);
-	oc.bind('CategoryListFactory', ns.App.Module.CategoryList.Factory, ['CategoryListEntity', 'CategoryFactory']);
-	oc.bind('CategoryListResource', ns.App.Module.CategoryList.Resource, ['$Http', 'CATEGORIES_API_URL', 'CategoryListFactory', '$Cache']);
-	oc.bind('CategoryListService', ns.App.Module.CategoryList.Service, ['CategoryListResource']);
+	oc.constant('CategoryListEntity', ns.app.model.categoryList.CategoryListEntity);
+	oc.bind('CategoryListFactory', ns.app.model.categoryList.CategoryListFactory, ['CategoryListEntity', 'CategoryFactory']);
+	oc.bind('CategoryListResource', ns.app.model.categoryList.CategoryListResource, ['$Http', 'CATEGORIES_API_URL', 'CategoryListFactory', '$Cache']);
+	oc.bind('CategoryListService', ns.app.model.categoryList.CategoryListService, ['CategoryListResource']);
 
 	// Item Module
-	oc.constant('ItemEntity', ns.App.Module.Item.Entity);
-	oc.bind('ItemFactory', ns.App.Module.Item.Factory, ['ItemEntity']);
-	oc.bind('ItemResource', ns.App.Module.Item.Resource, ['$Http', 'ITEMS_API_URL', 'ItemFactory', '$Cache']);
-	oc.bind('ItemService', ns.App.Module.Item.Service, ['ItemResource']);
+	oc.constant('ItemEntity', ns.app.model.item.ItemEntity);
+	oc.bind('ItemFactory', ns.app.model.item.ItemFactory, ['ItemEntity']);
+	oc.bind('ItemResource', ns.app.model.item.ItemResource, ['$Http', 'ITEMS_API_URL', 'ItemFactory', '$Cache']);
+	oc.bind('ItemService', ns.app.model.item.ItemService, ['ItemResource']);
 
 	// Feed Module
-	oc.constant('FeedEntity', ns.App.Module.Feed.Entity);
-	oc.bind('FeedFactory', ns.App.Module.Feed.Factory, ['FeedEntity', 'ItemFactory']);
-	oc.bind('FeedResource', ns.App.Module.Feed.Resource, ['$Http', 'ITEMS_API_URL', 'FeedFactory', '$Cache']);
-	oc.bind('FeedService', ns.App.Module.Feed.Service, ['FeedResource', 'CategoryListService']);
+	oc.constant('FeedEntity', ns.app.model.feed.FeedEntity);
+	oc.bind('FeedFactory', ns.app.model.feed.FeedFactory, ['FeedEntity', 'ItemFactory']);
+	oc.bind('FeedResource', ns.app.model.feed.FeedResource, ['$Http', 'ITEMS_API_URL', 'FeedFactory', '$Cache']);
+	oc.bind('FeedService', ns.app.model.feed.FeedService, ['FeedResource', 'CategoryListService']);
 
 	// Page Home
-	oc.inject(ns.App.Page.Home.Controller, ['FeedService', 'CategoryListService', 'ItemResource']);
+	oc.inject(ns.app.page.home.Controller, ['FeedService', 'CategoryListService', 'ItemResource']);
 
 	// Page Detail
-	oc.inject(ns.App.Page.Detail.Controller, ['ItemService', 'CategoryListService']);
+	oc.inject(ns.app.page.detail.Controller, ['ItemService', 'CategoryListService']);
 
 	// Error
-	oc.inject(ns.App.Page.Error.Controller, []);
+	oc.inject(ns.app.page.error.Controller, []);
 
 	// Not-Found
-	oc.inject(ns.App.Page.NotFound.Controller, []);
+	oc.inject(ns.app.page.notFound.Controller, []);
 
 	//COMPONENT Utils
 	oc.constant('$Utils', {

@@ -1,19 +1,9 @@
 module.exports = (() => {
 
+	var mainjs = ['./app/main.js'];
+
 	var js = [
-		'./app/config/*.js',
-		'./app/interface/**/*.js',
-		'./app/interface/**/*.jsx',
-		'./app/base/**/*.js',
-		'./app/base/**/*.jsx',
-		'./app/module/**/*.js',
-		'./app/module/**/*.jsx',
-		'./app/component/**/*.js',
-		'./app/component/**/*.jsx',
-		'./app/page/*.js',
-		'./app/page/*.jsx',
-		'./app/page/**/*.js',
-		'./app/page/**/*.jsx'
+		'./app/!(assets)/**/*.{js,jsx}'
 	];
 
 	var less = [
@@ -36,11 +26,23 @@ module.exports = (() => {
 		'en'
 	];
 
+	var vendors = {
+		common: [
+		],
+
+		server: [
+		],
+
+		client: [
+		]
+	};
+
 	var bundle = {
 		js: [
 			'./build/static/js/polyfill.js',
 			'./build/static/js/shim.js',
 			'./build/static/js/vendor.client.js',
+			'./build/static/js/ima.client.js',
 			'./build/static/js/app.client.js',
 			'./server/static/js/facebook.js'
 		],
@@ -50,9 +52,11 @@ module.exports = (() => {
 	};
 
 	return {
-		js: js,
-		less: less,
-		languages: languages,
-		bundle: bundle
+		js,
+		mainjs,
+		vendors,
+		less,
+		languages,
+		bundle
 	};
 })();

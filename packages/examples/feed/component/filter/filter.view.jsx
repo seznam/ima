@@ -1,16 +1,18 @@
-import ns from 'imajs/client/core/namespace';
-import { React } from 'app/vendor';
+import ns from 'ima/namespace';
+import AbstractComponent from 'ima/page/AbstractComponent';
+import React from 'react';
 
-ns.namespace('App.Component.Filter');
+ns.namespace('app.component.filter');
 
 /**
  * Feed writing.
  * @class View
- * @namespace App.Component.Filter
- * @module App
- * @submodule App.Component
+ * @extends ima.page.AbstractComponent
+ * @namespace app.component.filter
+ * @module app
+ * @submodule app.component
  */
-class View extends ns.Core.Abstract.Component {
+class View extends AbstractComponent {
 
 	constructor(props) {
 		super(props);
@@ -93,4 +95,4 @@ class View extends ns.Core.Abstract.Component {
 	}
 }
 
-ns.App.Component.Filter.View = View;
+ns.app.component.filter.View = View;

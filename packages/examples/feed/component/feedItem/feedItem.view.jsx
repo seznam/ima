@@ -1,24 +1,26 @@
-import ns from 'imajs/client/core/namespace';
-import { React } from 'app/vendor';
+import ns from 'ima/namespace';
+import AbstractComponent from 'ima/page/AbstractComponent';
+import React from 'react';
 
-ns.namespace('App.Component.FeedItem');
+ns.namespace('app.component.feedItem');
 
 /**
  * Feed writing.
  * @class View
- * @namespace App.Component.FeedItem
- * @module App
- * @submodule App.Component
+ * @extends ima.page.AbstractComponent
+ * @namespace app.component.feedItem
+ * @module app
+ * @submodule app.component
  */
-class View extends ns.Core.Abstract.Component {
+class View extends AbstractComponent {
 
 	constructor(props) {
 		super(props);
 	}
 
 	render() {
-		var DateComponentDiv = ns.App.Component.Date.View;
-		var ShareDiv = ns.App.Component.Share.View;
+		var DateComponentDiv = ns.app.component.date.View;
+		var ShareDiv = ns.app.component.share.View;
 
 		var entity = this.props.entity;
 		var category = this.props.category;
@@ -76,4 +78,4 @@ class View extends ns.Core.Abstract.Component {
 	}
 }
 
-ns.App.Component.FeedItem.View = View;
+ns.app.component.feedItem.View = View;

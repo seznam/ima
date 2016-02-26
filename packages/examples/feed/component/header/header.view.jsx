@@ -1,17 +1,19 @@
-import ns from 'imajs/client/core/namespace';
-import { React } from 'app/vendor';
+import ns from 'ima/namespace';
+import AbstractComponent from 'ima/page/AbstractComponent';
+import React from 'react';
 
-ns.namespace('App.Component.Header');
+ns.namespace('app.component.header');
 
 /**
  * Header writing.
  *
  * @class View
- * @namespace App.Component.Header
- * @module App
- * @submodule Component
+ * @extends ima.page.AbstractComponent
+ * @namespace app.component.header
+ * @module app
+ * @submodule app.component
  */
- class View extends ns.Core.Abstract.Component {
+ class View extends AbstractComponent {
 
 	constructor(props) {
 		super(props);
@@ -34,4 +36,4 @@ ns.namespace('App.Component.Header');
 	}
 }
 
-ns.App.Component.Header.View = View;
+ns.app.component.header.View = View;

@@ -1,11 +1,11 @@
 export var init = (ns, oc, config) => {
 	var router = oc.get('$Router');
-	var ROUTES = ns.Core.Router.ROUTE_NAMES;
+	var ROUTER_CONSTANTS = oc.get('$ROUTER_CONSTANTS')
 
 	router
-		.add(ROUTES.ERROR, '/error', ns.App.Page.Error.Controller, ns.App.Page.Error.View)
-		.add(ROUTES.NOT_FOUND, '/not-found', ns.App.Page.NotFound.Controller, ns.App.Page.NotFound.View)
-		.add('home', '/', ns.App.Page.Home.Controller, ns.App.Page.Home.View)
-		.add('category', '/:category', ns.App.Page.Home.Controller, ns.App.Page.Home.View)
-		.add('post', '/:category/:itemId', ns.App.Page.Detail.Controller, ns.App.Page.Detail.View);
+		.add(ROUTER_CONSTANTS.ROUTE_NAMES.ERROR, '/error', ns.app.page.error.Controller, ns.app.page.error.View)
+		.add(ROUTER_CONSTANTS.ROUTE_NAMES.NOT_FOUND, '/not-found', ns.app.page.notFound.Controller, ns.app.page.notFound.View)
+		.add('home', '/', ns.app.page.home.Controller, ns.app.page.home.View)
+		.add('category', '/:category', ns.app.page.home.Controller, ns.app.page.home.View)
+		.add('post', '/:category/:itemId', ns.app.page.detail.Controller, ns.app.page.detail.View);
 };

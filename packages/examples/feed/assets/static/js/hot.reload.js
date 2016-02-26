@@ -11,9 +11,10 @@
 			(0, eval)(ev.data.contents);
 
 			$IMA.Loader
-				.import('imajs/client/main')
-				.then((main) => {
-					main.hotReloadIMAJsClientApp();
+				.import('app/main')
+				.then((appMain) => {
+
+					appMain.ima.hotReloadClientApp(appMain.getInitialAppConfigFunctions());
 				}).catch((error) => {
 					console.error(error);
 				});

@@ -1,18 +1,20 @@
-import ns from 'imajs/client/core/namespace';
-import { React } from 'app/vendor';
+import ns from 'ima/namespace';
+import AbstractComponent from 'ima/page/AbstractComponent';
+import React from 'react';
 
-ns.namespace('App.Component.Share');
+ns.namespace('app.component.share');
 
 /**
  * React component providing the UI for sharing feed items using social media
  * and e-mail.
  *
  * @class View
- * @namespace App.Component.Share
- * @module App
- * @submodule App.Component
+ * @extends ima.page.AbstractComponent
+ * @namespace app.component.share
+ * @module app
+ * @submodule app.component
  */
-class View extends ns.Core.Abstract.Component {
+class View extends AbstractComponent {
 
 	constructor(props) {
 		super(props);
@@ -21,7 +23,7 @@ class View extends ns.Core.Abstract.Component {
 	render() {
 		var label = this.utils.$Dictionary.get('home.share');
 
-		var TwitterButton = ns.App.Component.TweetButton.View;
+		var TwitterButton = ns.app.component.tweetButton.View;
 
 		var item = this.props.item;
 		var category = this.props.category;
@@ -150,4 +152,4 @@ class View extends ns.Core.Abstract.Component {
 	}
 }
 
-ns.App.Component.Share.View = View;
+ns.app.component.share.View = View;

@@ -1,16 +1,18 @@
-import ns from 'imajs/client/core/namespace';
-import { React } from 'app/vendor';
+import ns from 'ima/namespace';
+import AbstractComponent from 'ima/page/AbstractComponent';
+import React from 'react';
 
-ns.namespace('App.Component.TextInput');
+ns.namespace('app.component.textInput');
 
 /**
  * Feed input box for messaging.
  * @class View
- * @namespace App.Component.TextInput
- * @module App
- * @submodule Component
+ * @extends ima.page.AbstractComponent
+ * @namespace app.component.textInput
+ * @module app
+ * @submodule app.component
  */
-class View extends ns.Core.Abstract.Component {
+class View extends AbstractComponent {
 
 	constructor(props) {
 		super(props);
@@ -120,4 +122,4 @@ class View extends ns.Core.Abstract.Component {
 	}
 }
 
-ns.App.Component.TextInput.View = View;
+ns.app.component.textInput.View = View;

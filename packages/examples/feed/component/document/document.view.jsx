@@ -1,16 +1,18 @@
-import ns from 'imajs/client/core/namespace';
-import { React } from 'app/vendor';
+import ns from 'ima/namespace';
+import AbstractComponent from 'ima/page/AbstractComponent';
+import React from 'react';
 
-ns.namespace('App.Component.Document');
+ns.namespace('app.component.document');
 
 /**
  * Master Layout.
  * @class View
- * @namespace App.Component.Document
- * @module App
- * @submodule Component
+ * @extends ima.page.AbstractComponent
+ * @namespace app.component.document
+ * @module app
+ * @submodule app.component
  */
-class View extends ns.Core.Abstract.Component {
+class View extends AbstractComponent {
 	render() {
 		var appCssFile = this.utils.$Settings.$Env !== 'dev' ? 'app.bundle.min.css' : 'app.css';
 		appCssFile += `?version=${this.utils.$Settings.$Version}`;
@@ -56,4 +58,4 @@ class View extends ns.Core.Abstract.Component {
 	}
 }
 
-ns.App.Component.Document.View = View;
+ns.app.component.document.View = View;
