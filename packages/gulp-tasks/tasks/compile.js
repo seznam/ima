@@ -129,6 +129,19 @@ gulp.task('Es6ToEs5:vendor', function (done) {
 		clientModules.map(generateVendorInclusion).join('') +
 		linkingFileFooter;
 
+	var normalizedTmpPath = files.vendor.dest.tmp
+			.replace(/^\.\//, '')
+			.replace(/\/\.\//, '/')
+			.split('/');
+	for (var i = 0; i < normalizedTmpPath.length; i++) {
+		var currentPath = './' + normalizedTmpPath.slice(0, i).join('/');
+		try {
+			fs.statSync(currentPath);
+		} catch (e) {
+			fs.mkdirSync(currentPath, 0o774);
+		}
+	}
+
 	fs.writeFile(files.vendor.dest.tmp + files.vendor.name.server, serverModuleLinker, (error) => {
 		if (error) {
 			return done(error);
