@@ -1,18 +1,18 @@
 import ns from 'ima/namespace';
-import AbstractController from 'ima/controller/Controller';
+import AbstractController from 'ima/controller/AbstractController';
 
-ns.namespace('App.Base');
+ns.namespace('app.base');
 
 /**
  * Base controller.
  *
  * @class Controller
- * @extends Core.Abstract.Controller
- * @namespace App.Base
- * @module App
- * @submodule App.Base
+ * @extends ima.controller.AbstractController
+ * @namespace app.base
+ * @module BaseController
+ * @submodule app.base
  */
-export default class Controller extends AbstractController {
+export default class BaseController extends AbstractController {
 
 	/**
 	 * Initializes the controller.
@@ -29,9 +29,9 @@ export default class Controller extends AbstractController {
 	 *
 	 * @method setSeoParams
 	 * @param {Object} loadedResources
-	 * @param {Core.Interface.MetaManager} metaManager
-	 * @param {Core.Interface.Router} router
-	 * @param {Core.Interface.Dictionary} dictionary
+	 * @param {ima.meta.MetaManager} metaManager
+	 * @param {ima.router.Router} router
+	 * @param {ima.dictionary.Dictionary} dictionary
 	 * @param {Object} settings
 	 */
 	setMetaParams(loadedResources, metaManager, router, dictionary, settings) {
@@ -60,4 +60,4 @@ export default class Controller extends AbstractController {
 	}
 }
 
-ns.App.Base.Controller = Controller;
+ns.app.base.BaseController = BaseController;
