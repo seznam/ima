@@ -315,11 +315,30 @@ module.exports = ((environment, logger, languageLoader, appFactory) => {
 		return returnPromise;
 	};
 
-	var requestHandler = (req, res) => {
-		if (_haveToServeSPA(req)) {
-			return showStaticSPAPage(req, res);
+	var _generateResponse = (req, res, appMain) => {
+		var returnPromise = Promise.reject(new Error());
+		var app = _initApp(req, res, appMain);
+		var router = app.oc.get('$Router');
+
+		try {
+			returnPromise = router
+				.route(router.getPath())
+				.then((response) => {
+					instanceRecycler.clearInstance(app);
+
+					return response;
+				})
+				.catch((error) => {
+					return errorHandler(error, req, res, app);
+				});
+		} catch (e) {
+			returnPromise = errorHandler(e, req, res, app);
 		}
 
+		return returnPromise;
+	}
+
+	var requestHandler = (req, res) => {
 		if (environment.$Env === 'dev') {
 			appFactory();
 			instanceRecycler.clear();
@@ -327,26 +346,11 @@ module.exports = ((environment, logger, languageLoader, appFactory) => {
 
 		return _importAppMain()
 			.then((appMain) => {
-				var returnPromise = Promise.reject(new Error());
-				var app = _initApp(req, res, appMain);
-				var router = app.oc.get('$Router');
-
-				try {
-					returnPromise = router
-						.route(router.getPath())
-						.then((response) => {
-							instanceRecycler.clearInstance(app);
-
-							return response;
-						})
-						.catch((error) => {
-							return errorHandler(error, req, res, app);
-						});
-				} catch (e) {
-					returnPromise = errorHandler(e, req, res, app);
+				if (_haveToServeSPA(req)) {
+					return showStaticSPAPage(req, res);
 				}
 
-				return returnPromise;
+				return _generateResponse(req, res, appMain);
 			})
 	};
 
