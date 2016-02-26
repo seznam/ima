@@ -1,6 +1,6 @@
-import ns from 'imajs/client/core/namespace';
+import ns from 'ima/namespace';
 import BaseController from 'app/base/controller';
-//import IMAError from 'imajs/client/core/imaError';
+//import IMAError from 'ima/error/GenericError';
 
 ns.namespace('App.Page.Home');
 

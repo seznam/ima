@@ -59,6 +59,7 @@ export var init = (ns, oc, config) => { // jshint ignore:line
 						'/static/js/polyfill.js' + versionStamp,
 						'/static/js/shim.js' + versionStamp,
 						'/static/js/vendor.client.js' + versionStamp,
+						'/static/js/ima.client.js' + versionStamp,
 						'/static/js/locale/' + config.$Language + '.js' + versionStamp,
 						'/static/js/app.client.js' + versionStamp,
 						'/static/js/hot.reload.js' + versionStamp

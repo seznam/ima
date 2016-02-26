@@ -1,5 +1,5 @@
-import ns from 'imajs/client/core/namespace';
-import AbstractController from 'imajs/client/core/abstract/controller';
+import ns from 'ima/namespace';
+import AbstractController from 'ima/controller/Controller';
 
 ns.namespace('App.Base');
 

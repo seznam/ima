@@ -1,6 +1,6 @@
-import ns from 'imajs/client/core/namespace';
-import AbstractComponent from 'imajs/client/core/abstract/component';
-import { React } from 'app/vendor';
+import ns from 'ima/namespace';
+import AbstractComponent from 'ima/page/AbstractComponent';
+import { React } from 'react';
 
 ns.namespace('App.Page.NotFound');
 

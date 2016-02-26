@@ -1,4 +1,4 @@
-import ns from 'imajs/client/core/namespace';
+import ns from 'ima/namespace';
 import BaseController from 'app/base/controller';
 
 ns.namespace('App.Page.Error');
