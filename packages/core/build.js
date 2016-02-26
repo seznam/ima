@@ -1,10 +1,10 @@
 
 var js = [
-	'ima/**/!(vendorLinker|build|test|*Spec).js',
-	'!ima/polyfill/*.js'
+	'./node_modules/ima/**/!(vendorLinker|build|test|*Spec).js',
+	'!./node_modules/ima/polyfill/*.js'
 ];
 
-var mainjs = ['ima/main.js'];
+var mainjs = ['./node_modules/ima/main.js'];
 
 var vendors = {
 	common: [
