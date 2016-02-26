@@ -1,17 +1,17 @@
 import ns from 'ima/namespace';
-import BaseController from 'app/base/controller';
+import BaseController from 'app/base/BaseController';
 //import IMAError from 'ima/error/GenericError';
 
-ns.namespace('App.Page.Home');
+ns.namespace('app.page.home');
 
 /**
- * @class Controller
- * @extends App.Base.Controller
- * @namespace App.Page.Home
- * @module App
- * @submodule App.Page
+ * @class HomeController
+ * @extends app.base.BaseController
+ * @namespace app.page.home
+ * @module app
+ * @submodule app.page
  */
-export default class Controller extends BaseController {
+export default class HomeController extends BaseController {
 
 	/**
 	 * @method constructor
@@ -25,7 +25,7 @@ export default class Controller extends BaseController {
 	/**
 	 * Callback for initializing the controller with the route parameters.
 	 *
-	 * @inheritDoc
+	 * @inheritdoc
 	 * @override
 	 * @method init
 	 */
@@ -54,7 +54,7 @@ export default class Controller extends BaseController {
 	 * the controller's state using the field names used in the returned map
 	 * object.
 	 *
-	 * @inheritDoc
+	 * @inheritdoc
 	 * @override
 	 * @method load
 	 * @return {Object<string, (Promise|*)>} A map object of promises
@@ -81,7 +81,7 @@ export default class Controller extends BaseController {
 	 * listeners the controller may need to handle the user interaction with the
 	 * page.
 	 *
-	 * @inheritDoc
+	 * @inheritdoc
 	 * @override
 	 * @method activate
 	 */
@@ -95,7 +95,7 @@ export default class Controller extends BaseController {
 	 * The controller should unregister all React and DOM event listeners the
 	 * controller has registered in the {@codelink active()} method.
 	 *
-	 * @inheritDoc
+	 * @inheritdoc
 	 * @override
 	 * @method deactivate
 	 */
@@ -107,16 +107,16 @@ export default class Controller extends BaseController {
 	 * resources, the view has been rendered and (if at the client-side) the
 	 * controller has been provided with the rendered view.
 	 *
-	 * @inheritDoc
+	 * @inheritdoc
 	 * @override
 	 * @method setMetaParams
 	 * @param {Object<string, *>} loadedResources Map of resource names to
 	 *        resources loaded by the {@codelink load} method. This is the same
 	 *        object as the one passed to the {@codelink setState} method when
 	 *        the Promises returned by the {@codelink load} method were resolved.
-	 * @param {Core.Interface.MetaManager} metaManager Meta attributes manager to configure.
-	 * @param {Core.Interface.Router} router The current application router.
-	 * @param {Core.Interface.Dictionary} dictionary The current localization
+	 * @param {ima.meta.MetaManager} metaManager Meta attributes manager to configure.
+	 * @param {ima.router.Router} router The current application router.
+	 * @param {ima.dictionary.Dictionary} dictionary The current localization
 	 *        dictionary.
 	 * @param {Object<string, *>} settings The application settings for the
 	 *        current application environment.
@@ -157,11 +157,11 @@ export default class Controller extends BaseController {
 	 * automatically when the controller instance is destroyed by the garbage
 	 * collector.
 	 *
-	 * @inheritDoc
+	 * @inheritdoc
 	 * @override
 	 * @method destroy
 	 */
 	destroy() {}
 }
 
-ns.App.Page.Home.Controller = Controller;
+ns.app.page.home.HomeController = HomeController;

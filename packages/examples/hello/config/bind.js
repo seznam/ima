@@ -1,6 +1,6 @@
-import HomeController from 'app/page/home/controller';
-import ErrorController from 'app/page/error/controller';
-import NotFoundController from 'app/page/notFound/controller';
+import HomeController from 'app/page/home/HomeController';
+import ErrorController from 'app/page/error/ErrorController';
+import NotFoundController from 'app/page/notFound/NotFoundController';
 
 export var init = (ns, oc, config) => {
 

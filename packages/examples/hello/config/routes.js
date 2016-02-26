@@ -1,9 +1,9 @@
-import HomeController from 'app/page/home/controller';
-import HomeView from 'app/page/home/view';
-import ErrorController from 'app/page/error/controller';
-import ErrorView from 'app/page/error/view';
-import NotFoundController from 'app/page/notFound/controller';
-import NotFoundView from 'app/page/notFound/view';
+import HomeController from 'app/page/home/HomeController';
+import HomeView from 'app/page/home/HomeView';
+import ErrorController from 'app/page/error/ErrorController';
+import ErrorView from 'app/page/error/ErrorView';
+import NotFoundController from 'app/page/notFound/NotFoundController';
+import NotFoundView from 'app/page/notFound/NotFoundView';
 
 export var init = (ns, oc, config) => {
 	var router = oc.get('$Router');

@@ -1,17 +1,18 @@
 import ns from 'ima/namespace';
 import AbstractComponent from 'ima/page/AbstractComponent';
-import { React } from 'react';
+import React from 'react';
 
-ns.namespace('App.Page.Home');
+ns.namespace('app.page.home');
 
 /**
- * Master Layout.
- * @class View
- * @namespace App.Component.Layout.Master
- * @module App
- * @submodule Component
+ * Home page.
+ * @class HomeView
+ * @extends ima.page.AbstractComponent
+ * @namespace app.page.home
+ * @module app
+ * @submodule app.page
  */
-export default class View extends AbstractComponent {
+export default class HomeView extends AbstractComponent {
 
 	render() {
 		return (
@@ -27,4 +28,4 @@ export default class View extends AbstractComponent {
 	}
 }
 
-ns.App.Page.Home.View = View;
+ns.app.page.home.HomeView = HomeView;

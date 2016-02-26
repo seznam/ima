@@ -1,17 +1,18 @@
 import ns from 'ima/namespace';
 import AbstractComponent from 'ima/page/AbstractComponent';
-import { React } from 'react';
+import React from 'react';
 
-ns.namespace('App.Page.Error');
+ns.namespace('app.page.error');
 
 /**
- * Master Layout.
- * @class View
- * @namespace App.Component.Layout.Master
- * @module App
- * @submodule Component
+ * Error page.
+ * @class ErrorView
+ * @extends ima.page.AbstractComponent
+ * @namespace app.page.error
+ * @module app
+ * @submodule app.page
  */
-export default class View extends AbstractComponent {
+export default class ErrorView extends AbstractComponent {
 
 	render() {
 		var error = this.props.error || {};
@@ -32,4 +33,4 @@ export default class View extends AbstractComponent {
 	}
 }
 
-ns.App.Page.Error.View = View;
+ns.app.page.error.ErrorView = ErrorView;
