@@ -186,7 +186,7 @@ var reviveTestClientApp = (initialAppConfigFunctions) => {
 var onLoad = (callback) => {
 	if (typeof window !== 'undefined' && window !== null) {
 		if (document.readyState === 'complete' || document.readyState === 'interactive') {
-			callback()
+			callback();
 		} else {
 			window.addEventListener('DOMContentLoaded', () => {
 				callback();
