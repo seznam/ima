@@ -9,7 +9,7 @@ module.exports = function(config) {
 			'PhantomJS'
 		],
 		files: [
-			'./ima/test.js',
+			'./node_modules/ima/test.js',
 			'./build/static/js/polyfill.js',
 			'./build/static/js/shim.js',
 			'./build/static/js/vendor.client.js',
@@ -17,7 +17,7 @@ module.exports = function(config) {
 			'./build/static/js/app.client.js',
 			'./app/tests/unit/**/*.js',
 			'./app/tests/unit/*.js',
-			'./ima/**/__tests__/*Spec.js'
+			'./node_modules/ima/**/__tests__/*Spec.js'
 		]/*,
 		preprocessors: {
 			'./app/test/*.js': ['babel'],*/
