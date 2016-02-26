@@ -4,7 +4,7 @@ var runSequence = require('run-sequence');
 
 gulp.task('server:build', function (callback) {
 	return runSequence(
-		['copy:imajsServer', 'copy:environment'],
+		'copy:environment',
 		'Es6ToEs5:server',
 		'server:restart',
 		'server:reload',
@@ -15,7 +15,14 @@ gulp.task('server:build', function (callback) {
 gulp.task('app:build', function (callback) {
 	return runSequence(
 		'Es6ToEs5:app',
-		'server:restart',
+		'server:hotreload',
+		callback
+	);
+});
+
+gulp.task('ima:build', function (callback) {
+	return runSequence(
+		'Es6ToEs5:ima',
 		'server:reload',
 		callback
 	);

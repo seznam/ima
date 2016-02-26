@@ -16,19 +16,6 @@ module.exports = function (gulpConfig) {
 		);
 	});
 
-	gulp.task('copy:imajsServer', function () {
-		var filesToMove = [
-			'./imajs/server/**/*.*',
-			'./imajs/server/*.*'
-		];
-
-		return (
-			gulp
-				.src(filesToMove)
-				.pipe(gulp.dest(files.server.base + 'ima/'))
-		);
-	});
-
 	gulp.task('copy:environment', function () {
 		var filesToMove = [
 			'./app/environment.js'
