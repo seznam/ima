@@ -111,7 +111,7 @@ gulp.task('Es6ToEs5:ima', function () {
 
 	return (
 		gulp.src(files.ima.src)
-			.pipe(resolveNewPath('/'))
+			.pipe(resolveNewPath('/node_modules'))
 			.pipe(plumber())
 			.pipe(sourcemaps.init())
 			.pipe(cache('Es6ToEs5:ima'))
@@ -225,11 +225,8 @@ gulp.task('Es6ToEs5:vendor:clean', function () {
  * @return {Stream<File>} Stream processor for files.
  */
 function resolveNewPath(newBase) {
-	return es.mapSync(function (file) {
-		var newBasePath = path.resolve(newBase);
-		var namespaceForFile = '/' + path.relative(file.cwd + '/' + newBase, file.base) + '/';
-		var newPath = newBasePath + namespaceForFile + file.relative;
-
+	return es.mapSync((file) => {
+		file.cwd += newBase;
 		file.base = file.cwd;
 		return file;
 	});
