@@ -1,5 +1,5 @@
 import ns from 'ima/namespace';
-import BaseController from 'app/base/controller';
+import BaseController from 'app/base/Controller';
 
 ns.namespace('app.page.notFound');
 

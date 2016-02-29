@@ -1,6 +1,6 @@
 import ns from 'ima/namespace';
 import GenericError from 'ima/error/GenericError';
-import BaseController from 'app/base/controller';
+import BaseController from 'app/base/Controller';
 
 ns.namespace('app.page.home');
 

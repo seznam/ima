@@ -1,5 +1,5 @@
 import ns from 'ima/namespace';
-import Entity from './entity';
+import Entity from './Entity';
 
 ns.namespace('app.model.listItem');
 
