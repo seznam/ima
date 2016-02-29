@@ -4,6 +4,7 @@
   "description": "Isomorphic javascript application",
   "main": "build/server.js",
   "scripts": {
+    "app:hello": "node node_modules/gulp/bin/gulp.js app:hello",
     "test": "node node_modules/gulp/bin/gulp.js test",
     "dev": "node node_modules/gulp/bin/gulp.js dev",
     "start": "NODE_ENV=production node build/server.js"
