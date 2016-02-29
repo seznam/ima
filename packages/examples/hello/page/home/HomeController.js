@@ -1,6 +1,6 @@
 import ns from 'ima/namespace';
 import BaseController from 'app/base/BaseController';
-//import IMAError from 'ima/error/GenericError';
+//import GenericError from 'ima/error/GenericError';
 
 ns.namespace('app.page.home');
 
@@ -63,8 +63,8 @@ export default class HomeController extends BaseController {
 	 */
 	load() {
 		return {
-			//error: Promise.reject(new IMAError('Try error page.')),
-			//redirect: Promise.reject(new IMAError('Redirect from home page to error page for $Debug = false.', {status: 303, url: 'http://localhost:3001/not-found'})),
+			//error: Promise.reject(new GenericError('Try error page.')),
+			//redirect: Promise.reject(new GenericError('Redirect from home page to error page for $Debug = false.', {status: 303, url: 'http://localhost:3001/not-found'})),
 			message: `I am`,
 			name: `IMA.js`
 		};

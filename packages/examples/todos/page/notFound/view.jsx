@@ -1,10 +1,10 @@
-import ns from 'imajs/client/core/namespace';
-import { React } from 'app/vendor';
+import ns from 'ima/namespace';
+import AbstractComponent from 'ima/page/AbstractComponent';
+import React from 'react';
 
-ns.namespace('App.Page.NotFound');
+ns.namespace('app.page.notFound');
 
-class View extends ns.Core.Abstract.Component {
-
+export default class View extends AbstractComponent {
 	render() {
 		return (
 			<div className='l-not-found'>
@@ -14,4 +14,4 @@ class View extends ns.Core.Abstract.Component {
 	}
 }
 
-ns.App.Page.NotFound.View = View;
+ns.app.page.notFound.View = View;

@@ -1,9 +1,10 @@
-import ns from 'imajs/client/core/namespace';
-import { React } from 'app/vendor';
+import ns from 'ima/namespace';
+import AbstractComponent from 'ima/page/AbstractComponent';
+import React from 'react';
 
-ns.namespace('App.Component.Item');
+ns.namespace('app.component.item');
 
-class View extends ns.Core.Abstract.Component {
+export default class View extends AbstractComponent {
 	constructor(props) {
 		super(props);
 
@@ -14,10 +15,10 @@ class View extends ns.Core.Abstract.Component {
 
 	render() {
 		return (
-			<li
-					className={
-						(this.props.item.completed ? 'completed' : '') + (this.state.editing ? ' editing' : '')
-					}>
+			<li className={this.cssClasses({
+				'completed': this.props.item.completed,
+				'editing': this.state.editing
+			})}>
 				<div className='view'>
 					<input
 							className='toggle'
@@ -27,21 +28,21 @@ class View extends ns.Core.Abstract.Component {
 					<label onDoubleClick={(e) => this.onStartEdit(e)}>
 						{this.props.item.title}
 					</label>
-					<button className='destroy' onClick={(e) => this.onDelete(e)}></button>
+					<button className='destroy' onClick={(e) => this.onDelete(e)}/>
 				</div>
 				{this._generateEditUI()}
 			</li>
 		);
 	}
 
-	onDelete(event) {
-		this.utils.$EventBus.fire(event.target, 'itemDeleted', {
+	onDelete() {
+		this.fire('itemDeleted', {
 			item: this.props.item
 		});
 	}
 
-	onCompletionToggled(event) {
-		this.utils.$EventBus.fire(event.target, 'itemCompletionToggled', {
+	onCompletionToggled() {
+		this.fire('itemCompletionToggled', {
 			item: this.props.item
 		});
 	}
@@ -52,12 +53,11 @@ class View extends ns.Core.Abstract.Component {
 		});
 	}
 
-	onFinishEditing(event) {
-		var editInput = this.findDOMNode(this.refs.edit);
-		var newTitle = editInput.value;
+	onFinishEditing() {
+		let newTitle = this.refs.edit.value;
 
 		if (newTitle !== this.props.item.title) {
-			this.utils.$EventBus.fire(event.targer, 'itemEdited', {
+			this.fire('itemEdited', {
 				item: this.props.item,
 				newTitle: newTitle
 			});
@@ -73,8 +73,7 @@ class View extends ns.Core.Abstract.Component {
 			return;
 		}
 
-		var editInput = this.findDOMNode(this.refs.edit);
-		editInput.focus();
+		this.refs.edit.focus();
 	}
 
 	_generateEditUI() {
@@ -92,4 +91,4 @@ class View extends ns.Core.Abstract.Component {
 	}
 }
 
-ns.App.Component.Item.View = View;
+ns.app.component.item.View = View;

@@ -1,8 +1,9 @@
-import ns from 'imajs/client/core/namespace';
+import ns from 'ima/namespace';
+import BaseController from 'app/base/controller';
 
-ns.namespace('App.Page.Error');
+ns.namespace('app.page.error');
 
-class Controller extends ns.App.Base.Controller {
+export default class Controller extends BaseController {
 	constructor() {
 		super();
 
@@ -17,4 +18,4 @@ class Controller extends ns.App.Base.Controller {
 	}
 }
 
-ns.App.Page.Error.Controller = Controller;
+ns.app.page.error.Controller = Controller;

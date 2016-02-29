@@ -1,8 +1,8 @@
-import ns from 'imajs/client/core/namespace';
+import ns from 'ima/namespace';
 
-ns.namespace('App.Model.ListItem');
+ns.namespace('app.model.listItem');
 
-class Entity {
+export default class Entity {
 	constructor(data) {
 		Object.assign(this, data);
 
@@ -14,4 +14,4 @@ class Entity {
 	}
 }
 
-ns.App.Model.ListItem.Entity = Entity;
+ns.app.model.listItem.Entity = Entity;

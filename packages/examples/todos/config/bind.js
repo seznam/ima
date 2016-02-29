@@ -1,19 +1,19 @@
-export var init = (ns, oc, config) => {
+export let init = (ns, oc, config) => {
 
-	oc.inject(ns.App.Model.ListItem.Resource, []);
-	oc.inject(ns.App.Model.ListItem.Factory, []);
-	oc.inject(ns.App.Model.ListItem.Service, [
-		ns.App.Model.ListItem.Resource,
-		ns.App.Model.ListItem.Factory
+	oc.inject(ns.app.model.listItem.Resource, []);
+	oc.inject(ns.app.model.listItem.Factory, []);
+	oc.inject(ns.app.model.listItem.Service, [
+		ns.app.model.listItem.Resource,
+		ns.app.model.listItem.Factory
 	]);
 
-	oc.inject(ns.App.Page.Home.Controller, [
-		ns.App.Model.ListItem.Service
+	oc.inject(ns.app.page.home.Controller, [
+		ns.app.model.listItem.Service
 	]);
 
-	oc.inject(ns.App.Page.Error.Controller, []);
+	oc.inject(ns.app.page.error.Controller, []);
 
-	oc.inject(ns.App.Page.NotFound.Controller, []);
+	oc.inject(ns.app.page.notFound.Controller, []);
 
 	oc.constant('$Utils', {
 		get $Router() { return oc.get('$Router'); },

@@ -1,15 +1,12 @@
-import ns from 'imajs/client/core/namespace';
+import ns from 'ima/namespace';
+import AbstractController from 'ima/controller/AbstractController';
 
-ns.namespace('App.Base');
+ns.namespace('app.base');
 
-class Controller extends ns.Core.Abstract.Controller {
-	constructor() {
-		super();
-	}
-
+export default class Controller extends AbstractController {
 	setMetaParams(loadedResources, metaManager, router, dictionary, settings) {
 		metaManager.setTitle(dictionary.get('app.title'));
 	}
 }
 
-ns.App.Base.Controller = Controller;
+ns.app.base.Controller = Controller;

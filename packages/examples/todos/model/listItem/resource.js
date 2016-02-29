@@ -1,8 +1,8 @@
-import ns from 'imajs/client/core/namespace';
+import ns from 'ima/namespace';
 
-ns.namespace('App.Model.ListItem');
+ns.namespace('app.model.listItem');
 
-class Resource {
+export default class Resource {
 	constructor() {
 		this._items = [
 			{
@@ -46,7 +46,7 @@ class Resource {
 	}
 
 	update(id, data) {
-		var index = this._findById(id);
+		let index = this._findById(id);
 
 		if (index > -1) {
 			Object.assign(this._items[index], data);
@@ -54,7 +54,7 @@ class Resource {
 	}
 
 	delete(id) {
-		var index = this._findById(id);
+		let index = this._findById(id);
 
 		if (index > -1) {
 			this._items.splice(index, 1);
@@ -62,7 +62,7 @@ class Resource {
 	}
 
 	_findById(id) {
-		var index = -1;
+		let index = -1;
 
 		this._items.some((item, itemIndex) => {
 			if (item.id === id) {
@@ -75,4 +75,4 @@ class Resource {
 	}
 }
 
-ns.App.Model.ListItem.Resource = Resource;
+ns.app.model.listItem.Resource = Resource;

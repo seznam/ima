@@ -1,24 +1,23 @@
-import ns from 'imajs/client/core/namespace';
-import { React } from 'app/vendor';
+import ns from 'ima/namespace';
+import AbstractComponent from 'ima/page/AbstractComponent';
+import React from 'react';
+import Item from 'app/component/item/view';
 
-ns.namespace('App.Page.Home');
+ns.namespace('app.page.home');
 
-class View extends ns.Core.Abstract.Component {
-
+export default class View extends AbstractComponent {
 	render() {
-		var Item = ns.App.Component.Item.View;
-
 		return (
 			<div className='l-home'>
 				<section className='todoapp'>
 					<header id='header'>
-						<h1>{this.localize('title')}</h1>
+						<h1>{this.localize('home.title')}</h1>
 						<input
 								className='new-todo'
-								placeholder={this.localize('new item placeholder')}
+								placeholder={this.localize('home.new item placeholder')}
 								ref='newItem'
-								onBlur={(e) => this.onItemAdded(e)}
-								onKeyUp={(e) => this.onKeyUp(e)}/>
+								onBlur={this.onItemAdded.bind(this)}
+								onKeyUp={this.onKeyUp.bind(this)}/>
 					</header>
 					<section className='main'>
 						<input
@@ -26,46 +25,54 @@ class View extends ns.Core.Abstract.Component {
 								className='toggle-all'
 								type='checkbox'
 								ref='toggleAll'
-								onChange={(e) => this.onToggleAll(e)}
+								onChange={this.onToggleAll.bind(this)}
 								checked={this.props.toggleAllChecked}/>
-						<label htmlFor='toggle-all'>{this.localize('toggle all label')}</label>
+						<label htmlFor='toggle-all'>{this.localize('home.toggle all label')}</label>
 						<ul className='todo-list'>
-							{this.props.items.map((item) => {
-								return <Item item={item} key={item.id} $Utils={this.utils}/>
-							})}
+							{this.props.items.map((item) => (
+								<Item item={item} key={item.id} $Utils={this.utils}/>
+							))}
 						</ul>
 					</section>
 					<footer className='footer'>
 						<span className='todo-count'>
 							<strong>{this.props.items.filter(item => !item.completed).length}</strong>
-							{this.localize('count', { COUNT: this.props.items.filter(item => !item.completed).length })}
+							{this.localize('home.count', {
+								COUNT: this.props.items.filter(item => !item.completed).length
+							})}
 						</span>
 						<ul className='filters'>
 							<li>
-								<a href={this.utils.$Router.link('home', {})} className={this.props.filter === null ? 'selected' : ''}>
-									{this.localize('filters: all')}
+								<a href={this.link('home', {})} className={this.cssClasses({
+									'selected': this.props.filter === null
+								})}>
+									{this.localize('home.filters: all')}
 								</a>
 							</li>
 							<li>
-								<a href={this.utils.$Router.link('filtered', { filter: 'active' })} className={this.props.filter === false ? 'selected' : ''}>
-									{this.localize('filters: active')}
+								<a href={this.link('filtered', { filter: 'active' })} className={this.cssClasses({
+									'selected': this.props.filter === false
+								})}>
+									{this.localize('home.filters: active')}
 								</a>
 							</li>
 							<li>
-								<a href={this.utils.$Router.link('filtered', { filter: 'completed' })} className={this.props.filter === true ? 'selected' : ''}>
-									{this.localize('filters: completed')}
+								<a href={this.link('filtered', { filter: 'completed' })} className={this.cssClasses({
+									'selected': this.props.filter === true
+								})}>
+									{this.localize('home.filters: completed')}
 								</a>
 							</li>
 						</ul>
-						<button onClick={(e) => this.onDeleteCompleted(e)} className={
-							'clear-completed' +
-							(this.props.items.every(item => !item.completed) ? ' hidden' : '')
-						}>{this.localize('clear completed')}</button>
+						<button onClick={this.onDeleteCompleted.bind(this)} className={this.cssClasses({
+							'clear-completed': true,
+							'hidden': this.props.items.every(item => !item.completed)
+						})}>{this.localize('home.clear completed')}</button>
 					</footer>
 				</section>
 				<footer className='info'>
-					<p>{this.localize('info: edit')}</p>
-					<p>{this.localize('info: created by')}</p>
+					<p>{this.localize('home.info: edit')}</p>
+					<p>{this.localize('home.info: created by')}</p>
 					<p>Part of <a href='http://todomvc.com'>TodoMVC</a></p>
 				</footer>
 			</div>
@@ -79,35 +86,31 @@ class View extends ns.Core.Abstract.Component {
 	}
 
 	onItemAdded() {
-		var newItemInput = this.findDOMNode(this.refs.newItem);
+		let newItemInput = this.refs.newItem;
 		if (newItemInput.value) {
-			this.utils.$EventBus.fire(newItemInput, 'itemCreated', {
+			this.fire('itemCreated', {
 				title: newItemInput.value
 			});
 			newItemInput.value = '';
 		}
 	}
 
-	onToggleAll(event) {
-		var toggleAll = this.findDOMNode(this.refs.toggleAll);
-		this.utils.$EventBus.fire(event.target, 'toggleAll', {
+	onToggleAll() {
+		let toggleAll = this.refs.toggleAll;
+		this.fire('toggleAll', {
 			completed: toggleAll.checked
 		});
 	}
 
-	onDeleteCompleted(event) {
-		this.utils.$EventBus.fire(event.target, 'completedItemsDeleted');
+	onDeleteCompleted() {
+		this.fire('completedItemsDeleted');
 	}
 
 	componentDidMount() {
-		var newItemInput = this.findDOMNode(this.refs.newItem);
+		let newItemInput = this.refs.newItem;
 		newItemInput.focus();
-	}
-
-	localize(key, params) {
-		return this.utils.$Dictionary.get(`home.${key}`, params);
 	}
 }
 
-ns.App.Page.Home.View = View;
+ns.app.page.home.View = View;
 

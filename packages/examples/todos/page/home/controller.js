@@ -1,16 +1,15 @@
-import ns from 'imajs/client/core/namespace';
-import IMAError from 'imajs/client/core/imaError';
+import ns from 'ima/namespace';
+import GenericError from 'ima/error/GenericError';
+import BaseController from 'app/base/controller';
 
-ns.namespace('App.Page.Home');
+ns.namespace('app.page.home');
 
-class Controller extends ns.App.Base.Controller {
+export default class Controller extends BaseController {
 	constructor(itemsService) {
 		super();
 
 		this._itemsService = itemsService;
 	}
-
-	init() {}
 
 	load() {
 		var filter;
@@ -25,10 +24,10 @@ class Controller extends ns.App.Base.Controller {
 				filter = null;
 				break;
 			default:
-				throw new IMAError('Invalid URL', {status: 404});
+				throw new GenericError('Invalid URL', { status: 404 });
 		}
 
-		var items = this._itemsService.getAll(filter);
+		let items = this._itemsService.getAll(filter);
 
 		return {
 			items: items,
@@ -37,21 +36,24 @@ class Controller extends ns.App.Base.Controller {
 		};
 	}
 
-	activate() {}
-
-	destroy() {}
-
 	setMetaParams(loadedResources, metaManager, router, dictionary, settings) {
-		var title = 'Isomorphic applications TODO list - IMA.js';
-		var description = 'Demo example of TodoMVC. TodoMVC is a project which offers the same Todo application implemented using MV* concepts in most of the popular JavaScript MV* frameworks of today.';
-		var image = router.getDomain() + settings.$Static.image + '/imajs-share.png';
+		let title = 'Isomorphic applications TODO list - IMA.js';
+		let description = 'Demo example of TodoMVC. TodoMVC is a project ' +
+				'which offers the same Todo application implemented using ' +
+				'MV* concepts in most of the popular JavaScript MV* ' +
+				'frameworks of today.';
+		let image = router.getDomain() + settings.$Static.image +
+				'/imajs-share.png';
 
-		var url = router.getUrl();
+		let url = router.getUrl();
 
 		metaManager.setTitle(title);
 
 		metaManager.setMetaName('description', description);
-		metaManager.setMetaName('keywords', 'IMA.js, isomorphic application, javascript, TODO list');
+		metaManager.setMetaName(
+			'keywords',
+			'IMA.js, isomorphic application, javascript, TODO list'
+		);
 
 		metaManager.setMetaName('twitter:title', title);
 		metaManager.setMetaName('twitter:description', description);
@@ -76,9 +78,9 @@ class Controller extends ns.App.Base.Controller {
 	}
 
 	onToggleAll(data) {
-		var state = this.getState();
+		let state = this.getState();
 
-		for (var item of state.items) {
+		for (let item of state.items) {
 			item.completed = data.completed;
 			this._itemsService.update(item.id, item);
 		}
@@ -90,8 +92,8 @@ class Controller extends ns.App.Base.Controller {
 	}
 
 	onCompletedItemsDeleted() {
-		var items = this.getState().items;
-		for (var item of items) {
+		let items = this.getState().items;
+		for (let item of items) {
 			if (item.completed) {
 				this._itemsService.delete(item.id);
 			}
@@ -111,7 +113,7 @@ class Controller extends ns.App.Base.Controller {
 	}
 
 	onItemCompletionToggled(data) {
-		var item = data.item;
+		let item = data.item;
 		item.completed = !item.completed;
 		this._itemsService.update(item.id, item);
 
@@ -124,7 +126,7 @@ class Controller extends ns.App.Base.Controller {
 	}
 
 	onItemEdited(data) {
-		var {item, newTitle} = data;
+		let {item, newTitle} = data;
 		item.title = newTitle;
 		this._itemsService.update(item.id, item);
 
@@ -134,4 +136,4 @@ class Controller extends ns.App.Base.Controller {
 	}
 }
 
-ns.App.Page.Home.Controller = Controller;
+ns.app.page.home.Controller = Controller;

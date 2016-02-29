@@ -1,8 +1,8 @@
-import ns from 'imajs/client/core/namespace';
+import ns from 'ima/namespace';
 
-ns.namespace('App.Model.ListItem');
+ns.namespace('app.model.listItem');
 
-class Service {
+export default class Service {
 	constructor(resource, factory) {
 		this._resource = resource;
 
@@ -10,7 +10,7 @@ class Service {
 	}
 
 	getAll(completed) {
-		var data = this._resource.getAll(completed);
+		let data = this._resource.getAll(completed);
 		return this._factory.createEntityList(data);
 	}
 
@@ -28,4 +28,4 @@ class Service {
 	}
 }
 
-ns.App.Model.ListItem.Service = Service;
+ns.app.model.listItem.Service = Service;

@@ -1,18 +1,18 @@
-import ns from 'imajs/client/core/namespace';
-import { React } from 'app/vendor';
+import ns from 'ima/namespace';
+import AbstractComponent from 'ima/page/AbstractComponent';
+import React from 'react';
 
-ns.namespace('App.Page.Error');
+ns.namespace('app.page.error');
 
-class View extends ns.Core.Abstract.Component {
-
+export default class View extends AbstractComponent {
 	render() {
-		var error = this.props.error || {};
-		var message = error.message || '';
-		var stack = error.stack || '';
+		let error = this.props.error || {};
+		let message = error.message || '';
+		let stack = error.stack || '';
 
 		return (
 			<div className='l-error'>
-				<h1>500 - Error</h1>
+				<h1>500 &ndash; That's an error</h1>
 				<div className="message">
 					{message}
 				</div>
@@ -24,4 +24,4 @@ class View extends ns.Core.Abstract.Component {
 	}
 }
 
-ns.App.Page.Error.View = View;
+ns.app.page.error.View = View;

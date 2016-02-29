@@ -1,26 +1,21 @@
-import ns from 'imajs/client/core/namespace';
-import { React } from 'app/vendor';
+import ns from 'ima/namespace';
+import AbstractComponent from 'ima/page/AbstractComponent';
+import React from 'react';
 
-ns.namespace('App.Component.Document');
+ns.namespace('app.component.document');
 
-class View extends ns.Core.Abstract.Component {
-
-	constructor(props) {
-		super(props);
-	}
-
+export default class View extends AbstractComponent {
 	render() {
-		var appCssFile = this.utils.$Settings.$Env !== 'dev' ? 'app.bundle.min.css' : 'app.css';
+		let appCssFile = this.utils.$Settings.$Env !== 'dev' ? 'app.bundle.min.css' : 'app.css';
 		appCssFile += `?version=${this.utils.$Settings.$Version}`;
-		var scripts = this.getScripts();
 
 		return (
 			<html lang={'en'} data-framework="imajs">
 				<head>
-					<meta charSet="utf-8" />
-					<meta httpEquiv="X-UA-Compatible" content="IE=edge" />
-					<meta name="viewport" content="width=device-width, initial-scale=1" />
-					<link rel="stylesheet" href={this.utils.$Router.getBaseUrl() + this.utils.$Settings.$Static.css + '/' + appCssFile} />
+					<meta charSet="utf-8"/>
+					<meta httpEquiv="X-UA-Compatible" content="IE=edge"/>
+					<meta name="viewport" content="width=device-width, initial-scale=1"/>
+					<link rel="stylesheet" href={this.utils.$Router.getBaseUrl() + this.utils.$Settings.$Static.css + '/' + appCssFile}/>
 					<title>
 						{this.props.metaManager.getTitle()}
 					</title>
@@ -30,7 +25,7 @@ class View extends ns.Core.Abstract.Component {
 					<div id="page" dangerouslySetInnerHTML={{__html: this.props.page}} />
 					<div id="revivalSettings" dangerouslySetInnerHTML={{__html: this.props.revivalSettings}}/>
 					<div id="scripts">
-						{scripts}
+						{this.getScripts()}
 					</div>
 				</body>
 			</html>
@@ -44,4 +39,4 @@ class View extends ns.Core.Abstract.Component {
 	}
 }
 
-ns.App.Component.Document.View = View;
+ns.app.component.document.View = View;

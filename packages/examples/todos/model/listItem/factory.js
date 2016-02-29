@@ -1,10 +1,10 @@
-import ns from 'imajs/client/core/namespace';
+import ns from 'ima/namespace';
+import Entity from './entity';
 
-ns.namespace('App.Model.ListItem');
+ns.namespace('app.model.listItem');
 
-class Factory {
+export default class Factory {
 	createEntity(data) {
-		var Entity = ns.App.Model.ListItem.Entity;
 		return new Entity(data);
 	}
 
@@ -13,4 +13,4 @@ class Factory {
 	}
 }
 
-ns.App.Model.ListItem.Factory = Factory;
+ns.app.model.listItem.Factory = Factory;
