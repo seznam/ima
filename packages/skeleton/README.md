@@ -24,53 +24,54 @@ Switch to the cloned `IMA.js-skeleton` directory and run the following commands
 to set-up your application:
 
 ```
-git submodule init
-git submodule update
-```
-
-```
-npm install -g gulp
 npm install
-gulp app:hello
-gulp dev
+npm run-script app:hello
+npm run-script dev
 ```
 
-These commands install the [`gulp`](http://gulpjs.com/) command-line tool on
-your computer, locally install the dependencies, prepare the basic demo
+These commands install the dependencies locally, prepare the basic demo
 application and start the development server. Go ahead and open
 [`http://localhost:3001/`](http://localhost:3001/) in your browser!
 
+You also may want to install the [`gulp`](http://gulpjs.com/) tool globally in
+order to access all the available tools, examples and commands (you may need to
+use `sudo` on a UNIX-like system):
+
+```
+npm install -g gulp
+```
+
 ## Production use
 
-If you want deploy your IMA.js application to production, the installation is similar like in dev enviroment.
+If you want deploy your IMA.js application to production, the installation is
+similar to the dev enviroment.
 
 To install the IMA.js application, start by cloning your application git
 repository on your production server:
+
 ```
 git clone https://github.com/seznam/IMA.js-skeleton.git // use your application repository url
 ```
 
-Switch to the cloned directory and run the following commands
-to set-up your application - same like in development mode:
+Switch to the cloned directory and run the following commands to set-up your
+application - same as in the development mode:
 
-```
-git submodule init
-git submodule update
-```
 ```
 npm install -g gulp
 npm install
 NODE_ENV=production gulp build
 ```
 
-Now is your server ready for running IMA.js application.
+Now your server is ready for running the built IMA.js application.
 
-Run it with the following command:
+You can run your application using the following command:
 
 ```
-NODE_ENV=production node build/server.js
+npm run-script start
 ```
-Your application is running on [`http://localhost:3001/`](http://localhost:3001/) (by default) now!
+
+Your application is running at [`http://localhost:3001/`](http://localhost:3001/)
+(unless configured otherwise) now!
 
 ## Tutorial
 
@@ -91,8 +92,10 @@ The IMA.js is divided into the core library, which you'll use to build your
 application, and the application server build on top of Express.js, that brings
 your application to life.
 
-The core library can be found in the `imajs/core/client` directory and we
-encourage you to study the available APIs.
+You can find the core library at
+[https://github.com/seznam/IMA.js-core](https://github.com/seznam/IMA.js-core),
+while the server can be found at
+[https://github.com/seznam/IMA.js-server](https://github.com/seznam/IMA.js-server).
 
 ## Structure of your IMA.js application
 
@@ -138,17 +141,19 @@ There are several configuration files in your IMA.js application:
 - `karma.conf.js` is used to configure the
   [karma](http://karma-runner.github.io/0.13/index.html) test runner.
 - `app/build.js` specifies which JavaScript, JSX, Less CSS and language files
-  your application consists of and in what order they should be included in
-  your built application.
+  your application consists of and should be included in your built
+  application.
+  The file also specifies the 3rd party vendor libraries to link as ES2015
+  modules in your application, separated into three groups: common (shared),
+  server-side and client-side.
   The file also specifies which 3rd party bundled JavaScript and CSS files are
   to be included in your application.
-- `app/vendor.js` loads and sets references to any 3rd party vendor libraries
-  to be linked to your application in the `ns.Vendor` namespace and the
-  `app/vendor` ES2015 module.
 - `app/environment.js` configures the server-side environment. Notice that the
   `dev` and `test` environment configuration automatically inherits values from
   the `prod` environment (except for the `$Language` which has to be configured
   individually).
+- `app/main.js` is the bootstrap of your application. You don't need to concern
+  yourself with this file usually.
 - `app/config/services.js` specifies how the fatal application errors should be
   handled at the client side.
 - `app/config/routes.js` configures your router, mapping routes to the
@@ -174,9 +179,11 @@ There are several directories we have not mentioned so far:
 - `build` contains your built application. All files are generated, so any
   changes you make will be automatically discarded once the application is
   rebuilt.
-- `imajs/examples` contains the example IMA.js applications for you to study.
-  You can install any of the examples into your project skeleton by running
-  the `gulp app:(name of the example)` command.
-- `server` and `imajs/server` contain the application server. You will most
-  likely won't have to concern yourself with these files, but feel free to
-  study them or modify them if the need arises.
+- `node_modules/ima.js-examples` contains the example IMA.js
+  applications for you to study. You can install any of the examples into your
+  project skeleton by running the `gulp app:(name of the example)` command.
+  (It is recommended to run `gulp app:clean` first to remove any extra files
+  that might be left by the previously installed application).
+- `server` contains the application server. You will most likely won't have to
+  concern yourself with these files, but feel free to study them or modify them
+  if the need arises.
