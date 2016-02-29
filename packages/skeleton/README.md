@@ -50,16 +50,15 @@ To install the IMA.js application, start by cloning your application git
 repository on your production server:
 
 ```
-git clone https://github.com/seznam/IMA.js-skeleton.git // use your application repository url
+git clone https://github.com/seznam/IMA.js-skeleton.git // use your application's repository
 ```
 
 Switch to the cloned directory and run the following commands to set-up your
 application - same as in the development mode:
 
 ```
-npm install -g gulp
 npm install
-NODE_ENV=production gulp build
+npm run-script build
 ```
 
 Now your server is ready for running the built IMA.js application.
