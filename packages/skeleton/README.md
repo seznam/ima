@@ -25,8 +25,8 @@ to set-up your application:
 
 ```
 npm install
-npm run-script app:hello
-npm run-script dev
+npm run app:hello
+npm run dev
 ```
 
 These commands install the dependencies locally, prepare the basic demo
@@ -58,7 +58,7 @@ application - same as in the development mode:
 
 ```
 npm install
-npm run-script build
+npm run build
 ```
 
 Now your server is ready for running the built IMA.js application.
