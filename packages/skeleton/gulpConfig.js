@@ -1,4 +1,5 @@
 var coreDependencies = require('ima/build.js');
+var sharedTasksState = require('ima.js-gulp-tasks/gulpState.js');
 
 var appDependencies;
 try {
@@ -162,4 +163,14 @@ exports.files = {
 			dest: './build/static/css/'
 		}
 	}
+};
+
+exports.onTerminate = () => {
+	if (sharedTasksState.karmaServer) {
+		sharedTasksState.karmaServer.stop();
+	}
+
+	setTimeout(() => {
+		process.exit();
+	});
 };
