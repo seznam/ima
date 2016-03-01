@@ -13,7 +13,7 @@ export var init = (ns, oc, config) => { //jshint ignore:line
 	oc.constant('$ReactDOMServer', vendorLinker.get('react-dom/server.js', true));
 
 	//SuperAgent
-	oc.constant('$SuperAgent', ns.vendor.SuperAgent);
+	oc.constant('$SuperAgent', vendorLinker.get('superagent'));
 
 	//*************END VENDORS*****************
 
