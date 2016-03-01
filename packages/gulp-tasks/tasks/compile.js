@@ -65,7 +65,7 @@ gulp.task('Es6ToEs5:app', function () {
 
 	return (
 		gulp.src(files.app.src)
-			.pipe(resolveNewPath('/'))
+			.pipe(resolveNewPath(files.app.base || '/'))
 			.pipe(plumber())
 			.pipe(sourcemaps.init())
 			.pipe(cache('Es6ToEs5:app'))
@@ -111,7 +111,7 @@ gulp.task('Es6ToEs5:ima', function () {
 
 	return (
 		gulp.src(files.ima.src)
-			.pipe(resolveNewPath('/node_modules'))
+			.pipe(resolveNewPath(files.ima.base || '/node_modules'))
 			.pipe(plumber())
 			.pipe(sourcemaps.init())
 			.pipe(cache('Es6ToEs5:ima'))
