@@ -6,3 +6,5 @@
 // maintainability.
 
 exports.watchEvent = null;
+
+exports.karmaServer = null;

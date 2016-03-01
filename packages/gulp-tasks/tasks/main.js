@@ -37,4 +37,10 @@ module.exports = function (gulpConfig) {
 
 			return runSequence.apply(null, tasks);
 		});
+
+	if (gulpConfig.onTerminate) {
+		process.on('SIGINT', gulpConfig.onTerminate.bind(null, 'SIGINT'));
+		process.on('SIGTERM', gulpConfig.onTerminate.bind(null, 'SIGTERM'));
+		process.on('SIGHUP', gulpConfig.onTerminate.bind(null, 'SIGHUP'));
+	}
 };
