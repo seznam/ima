@@ -72,8 +72,8 @@ class VendorLinker {
 		for (let name of this._modules.keys()) {
 			let lib = this._modules.get(name);
 
-			if (typeof lib.__$IMAModuleRegister__ === 'function') {
-				lib.__$IMAModuleRegister__(ns);
+			if (typeof lib.$registerImaPlugin === 'function') {
+				lib.$registerImaPlugin(ns);
 			}
 
 			nsVendor[name] = lib;
