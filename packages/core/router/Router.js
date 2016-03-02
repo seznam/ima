@@ -42,7 +42,13 @@ export default class Router {
 	 * @param {string} pathExpression A path expression specifying the URL path
 	 *        part matching this route (must not contain a query string),
 	 *        optionally containing named parameter placeholders specified as
-	 *        {@code :parameterName}.
+	 *        {@code :parameterName}. The name of the parameter is terminated
+	 *        by a forward slash ({@code /}) or the end of the path expression
+	 *        string.
+	 *        The path expression may also contain optional parameters, which
+	 *        are specified as {@code :?parameterName}. It is recommended to
+	 *        specify the optional parameters at the end of the path
+	 *        expression.
 	 * @param {string} controller The full name of Object Container alias
 	 *        identifying the controller associated with this route.
 	 * @param {string} view The full name or Object Container alias identifying
