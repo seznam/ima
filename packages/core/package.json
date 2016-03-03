@@ -1,6 +1,6 @@
 {
 	"name": "ima",
-	"version": "0.12.0",
+	"version": "0.12.1",
 	"description": "IMA.js framework for isomorphic javascript application",
 	"main": "",
 	"scripts": {
@@ -38,7 +38,7 @@
 	"dependencies": {
 		"babel-polyfill": "^6.5.0",
 		"custom-event-polyfill": "^0.2.2",
-		"ima-babel6-polyfill": "^0.1.1",
+		"ima-babel6-polyfill": "^0.12.0",
 		"ima-helpers": "^0.12.1",
 		"react": "^0.14.7",
 		"react-dom": "^0.14.7",
