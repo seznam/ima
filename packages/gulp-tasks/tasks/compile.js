@@ -75,7 +75,7 @@ gulp.task('Es6ToEs5:app', function () {
 				plugins: babelConfig.app.plugins
 			 }))
 			.pipe(gulpif(isView, sweetjs({
-				modules: [path.resolve('./node_modules/ima.js-gulp-tasks/macros/componentName.sjs')],
+				modules: [path.resolve('./node_modules/ima-gulp-tasks/macros/componentName.sjs')],
 				readableNames: true
 			}), gutil.noop()))
 			.pipe(remember('Es6ToEs5:app'))

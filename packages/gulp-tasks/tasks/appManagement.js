@@ -3,17 +3,17 @@ var gulp = require('gulp');
 var del = require('del');
 
 gulp.task('app:hello', function () {
-	return gulp.src('./node_modules/ima.js-examples/hello/**/*')
+	return gulp.src('./node_modules/ima-examples/hello/**/*')
 		.pipe(gulp.dest('./app'));
 });
 
 gulp.task('app:feed', function () {
-	return gulp.src('./node_modules/ima.js-examples/feed/**/*')
+	return gulp.src('./node_modules/ima-examples/feed/**/*')
 		.pipe(gulp.dest('./app'));
 });
 
 gulp.task('app:todos', function () {
-	return gulp.src('./node_modules/ima.js-examples/todos/**/*')
+	return gulp.src('./node_modules/ima-examples/todos/**/*')
 		.pipe(gulp.dest('./app'));
 });
 

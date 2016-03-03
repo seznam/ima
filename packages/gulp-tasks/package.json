@@ -64,6 +64,7 @@
 		"gulp-util": "^3.0.7",
 		"gulp-watch": "^4.3.5",
 		"gulp-yuidoc": "^0.1.2",
+		"ima-examples": "^0.12.0",
 		"jasmine": "^2.4.1",
 		"jasmine-core": "^2.4.1",
 		"karma": "^0.13.21",

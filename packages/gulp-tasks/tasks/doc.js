@@ -33,7 +33,7 @@ module.exports = function (gulpConfig) {
 
 					return content;
 				}))
-				.pipe(yuidoc({}, { 'themedir': path.resolve('./node_modules/ima.js-gulp-tasks/yuidocTheme') }))
+				.pipe(yuidoc({}, { 'themedir': path.resolve('./node_modules/ima-gulp-tasks/yuidocTheme') }))
 				.pipe(gulp.dest('./doc'))
 		);
 	});
