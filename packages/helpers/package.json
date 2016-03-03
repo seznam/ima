@@ -1,31 +1,34 @@
 {
-  "name": "ima-helpers",
-  "version": "0.12.1",
-  "description": "Various helpers for the IMA.js framework.",
-  "main": "index.js",
-  "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
-  },
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/seznam/IMA.js-helpers.git"
-  },
-  "keywords": [
+	"name": "ima-helpers",
+	"version": "0.12.1",
+	"description": "Various helpers for the IMA.js framework.",
+	"main": "index.js",
+	"scripts": {
+		"test": "echo \"Error: no test specified\" && exit 1"
+	},
+	"repository": {
+		"type": "git",
+		"url": "git+https://github.com/seznam/IMA.js-helpers.git"
+	},
+	"keywords": [
     "ima",
-    "ima.js"
+    "IMA.js"
   ],
-  "author": "Miroslav Jancarik <miroslav.jancarik@firma.seznam.cz>",
-  "license": "MIT",
-  "bugs": {
-    "url": "https://github.com/seznam/IMA.js-helpers/issues"
-  },
-  "homepage": "https://github.com/seznam/IMA.js-helpers#readme",
-  "dependencies": {
-    "clone": "^1.0.2"
-  },
-  "browserify": {
-    "transform": [
+	"author": "Miroslav Jancarik <miroslav.jancarik@firma.seznam.cz>",
+	"license": "MIT",
+	"bugs": {
+		"url": "https://github.com/seznam/IMA.js-helpers/issues"
+	},
+	"homepage": "https://github.com/seznam/IMA.js-helpers#readme",
+	"publishConfig": {
+		"registry": "http://registry.npmjs.org/"
+	},
+	"dependencies": {
+		"clone": "^1.0.2"
+	},
+	"browserify": {
+		"transform": [
       "babelify"
     ]
-  }
+	}
 }
