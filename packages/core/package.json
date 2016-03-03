@@ -1,0 +1,52 @@
+{
+	"name": "ima",
+	"version": "0.12.0",
+	"description": "IMA.js framework for isomorphic javascript application",
+	"main": "",
+	"scripts": {
+		"test": "echo \"Error: no test specified\" && exit 1"
+	},
+	"keywords": [
+		"IMA",
+		"IMA.js",
+		"Isomorphic",
+		"Javascript"
+	],
+	"author": "Miroslav Jancarik <miroslav.jancarik@firma.seznam.cz>",
+	"contributors": [
+		{
+			"name": "Martin Urban",
+			"email": "martin.urban@firma.seznam.cz"
+		},
+		{
+			"name": "Martin Jurča",
+			"email": "martin.jurca@firma.seznam.cz"
+		}
+	],
+	"repository": {
+		"type": "git",
+		"url": "https://github.com/seznam/IMA.js-core.git"
+	},
+	"bugs": {
+		"url": "https://github.com/seznam/IMA.js-core/issues"
+	},
+	"publishConfig": {
+		"registry": "http://registry.npmjs.org/"
+	},
+	"license": "MIT",
+	"devDependencies": {},
+	"dependencies": {
+		"babel-polyfill": "^6.5.0",
+		"custom-event-polyfill": "^0.2.2",
+		"ima-babel6-polyfill": "^0.1.1",
+		"ima-helpers": "^0.12.1",
+		"react": "^0.14.7",
+		"react-dom": "^0.14.7",
+		"superagent": "^1.7.2"
+	},
+	"browserify": {
+		"transform": [
+			"babelify"
+		]
+	}
+}

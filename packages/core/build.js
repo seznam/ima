@@ -1,13 +1,28 @@
-module.exports = (() => {
 
-	var js = [
-		'imajs/client/core/**/!(vendor|imaError.es6).js'
-	];
+var js = [
+	'./node_modules/ima/**/!(vendorLinker|build|test|*Spec).js',
+	'!./node_modules/ima/polyfill/*.js'
+];
 
-	var mainjs = ['imajs/client/main.js'];
+var mainjs = ['./node_modules/ima/main.js'];
 
-	return {
-		js: js,
-		mainjs: mainjs
-	};
-})();
+var vendors = {
+	common: [
+		'ima-helpers',
+		'react',
+		'react-dom',
+		'superagent'
+	],
+
+	server: [
+		'react-dom/server.js'
+	],
+
+	client: []
+};
+
+module.exports = {
+	js,
+	mainjs,
+	vendors
+};
