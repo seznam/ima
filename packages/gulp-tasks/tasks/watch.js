@@ -22,7 +22,7 @@ module.exports = function (gulpConfig) {
 		runOnChange('./app/assets/static/**/*', 'copy:appStatic');
 
 		gulp.watch([
-			'./ima/**/*.{js}',
+			'./ima/**/*.js',
 			'./app/**/*.{js,jsx}',
 			'./build/static/js/locale/*.js'
 		]).on('change', function (e) {
