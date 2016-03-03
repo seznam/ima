@@ -1,5 +1,5 @@
 {
-	"name": "ima.js-server",
+	"name": "ima-server",
 	"version": "0.12.4",
 	"description": "Default dev server for IMA.js applications.",
 	"main": "index.js",
@@ -36,9 +36,9 @@
 	},
 	"dependencies": {
 		"async-each": "^1.0.0",
-		"highlight.js": "^9.0.0",
-		"ima-helpers": "git+https://github.com/seznam/IMA.js-helpers.git",
+		"highlight.js": "^9.2.0",
+		"ima-helpers": "^0.12.1",
 		"stack-trace": "0.0.9",
-		"winston": "^2.1.1"
+		"winston": "^2.2.0"
 	}
 }
