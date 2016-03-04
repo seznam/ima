@@ -3,32 +3,40 @@
 require("babel-polyfill");
 require('./ima/shim.js');
 require('./ima/vendor.server.js');
-require('./ima/ima.server.js')();
 
-var environmentConfig = require('./ima/config/environment.js');
-var appFactory = () => {
-	delete require.cache[require.resolve('./ima/app.server.js')];
-
-	require('./ima/app.server.js')();
-};
-var languageLoader = (language => require('./ima/locale/' + language + '.js'));
-var imaServer = require('ima.js-server')(environmentConfig, languageLoader, appFactory);
+// Node
 var cluster = require('cluster');
 var path = require('path');
 global.appRoot = path.resolve(__dirname);
-var favicon = require('serve-favicon');
+
+// IMA server
+var environmentConfig = require('./ima/config/environment.js');
+var appFactory = () => {
+	delete require.cache[require.resolve('./ima/app.server.js')];
+	delete require.cache[require.resolve('./ima/ima.server.js')];
+
+	require('./ima/ima.server.js')();
+	require('./ima/app.server.js')();
+};
+var languageLoader = (language => require('./ima/locale/' + language + '.js'));
+
+var imaServer = require('ima-server')(environmentConfig, languageLoader, appFactory);
+
 var clientApp = imaServer.clientApp;
 var proxy = imaServer.proxy;
 var urlParser = imaServer.urlParser;
+var environment = imaServer.environment;
+var logger = imaServer.logger;
+var cache = imaServer.cache;
+
+// Middlewares
+var favicon = require('serve-favicon');
 var bodyParser = require('body-parser');
 var multer = require('multer')({ dest: path.resolve(__dirname) + '/static/uploads/' });
 var cookieParser = require('cookie-parser');
 var methodOverride = require('method-override');
-var environment = imaServer.environment;
 var compression = require('compression');
 var helmet = require('helmet');
-var logger = imaServer.logger;
-var cache = imaServer.cache;
 
 process.on('uncaughtException', (error) => {
 	logger.error('Uncaught Exception:', { error });

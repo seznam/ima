@@ -66,7 +66,7 @@ Now your server is ready for running the built IMA.js application.
 You can run your application using the following command:
 
 ```
-npm run-script start
+npm run start
 ```
 
 Your application is running at [`http://localhost:3001/`](http://localhost:3001/)

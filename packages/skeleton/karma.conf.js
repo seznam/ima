@@ -16,9 +16,7 @@ module.exports = function(config) {
 			'./build/static/js/ima.client.js',
 			'./build/static/js/locale/cs.js',
 			'./build/static/js/app.client.js',
-			'./app/tests/unit/**/*.js',
-			'./app/tests/unit/*.js',
-			'./node_modules/ima/**/__tests__/*Spec.js'
+			'./app/**/*Spec.js'
 		]/*,
 		preprocessors: {
 			'./app/test/*.js': ['babel'],*/

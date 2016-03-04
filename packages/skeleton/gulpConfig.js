@@ -1,5 +1,5 @@
 var coreDependencies = require('ima/build.js');
-var sharedTasksState = require('ima.js-gulp-tasks/gulpState.js');
+var sharedTasksState = require('ima-gulp-tasks/gulpState.js');
 
 var appDependencies;
 try {
@@ -92,7 +92,7 @@ exports.files = {
 			server: './build/ima/',
 			client: './build/static/js/'
 		},
-		watch:['./app/**/*.{js,jsx}', '!./app/*.js', './app/main.js']
+		watch:['./app/**/*.{js,jsx}', './app/main.js', '!./app/environment.js',]
 	},
 	ima: {
 		name: {
@@ -145,7 +145,7 @@ exports.files = {
 		src: [
 			'./node_modules/babel-polyfill/dist/polyfill.min.js',
 			'./node_modules/custom-event-polyfill/custom-event-polyfill.js',
-			'./node_modules/ima.js-babel6-polyfill/index.js'
+			'./node_modules/ima-babel6-polyfill/index.js'
 		],
 		dest: {
 			client: './build/static/js/'
