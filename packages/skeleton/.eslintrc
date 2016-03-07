@@ -1,4 +1,5 @@
 {
+  "extends": "eslint:recommended",
   "rules": {
     "brace-style": [1, "1tbs", {"allowSingleLine": false}],
     "camelcase": 1,
@@ -64,12 +65,12 @@
     "no-use-before-define": [0, "nofunc"],
     "no-warning-comments": [0, {"terms": ["todo", "fixme"]}],
     "no-extra-parens": 0,
-    "quotes": [1, "single", "avoid-escape"],
+    "quotes": [0, "single", "avoid-escape"],
     "quote-props": [0, "as-needed"],
     "radix": 1,
     "semi": [2, "always"],
     "semi-spacing": [1, {"before": false, "after": true}],
-    "space-after-keywords": [1, "always"],
+    "keyword-spacing": [2, {"before": true, "after": true, "overrides": {}}],
     "space-before-blocks": [1, "always"],
     "space-before-function-paren": [1, "never"],
     "space-infix-ops": 1,
@@ -77,7 +78,6 @@
     "computed-property-spacing": [2, "never"],
     "array-bracket-spacing": [2, "never"],
     "space-in-parens": [1, "never"],
-    "space-return-throw-case": 1,
     "space-unary-ops": [1, {"words": true, "nonwords": false}],
     "use-isnan": 1,
     "valid-typeof": 1,
@@ -111,33 +111,16 @@
     "ecmascript": 6,
     "jsx": true
   },
-  "ecmaFeatures": {
-    "arrowFunctions": true,
-    "binaryLiterals": true,
-    "blockBindings": true,
-    "classes": true,
-    "defaultParams": true,
-    "destructuring": true,
-    "forOf": true,
-    "generators": true,
-    "modules": true,
-    "objectLiteralComputedProperties": true,
-    "objectLiteralDuplicateProperties": true,
-    "objectLiteralShorthandMethods": true,
-    "objectLiteralShorthandProperties": true,
-    "octalLiterals": true,
-    "regexUFlag": true,
-    "regexYFlag": true,
-    "restParams": true,
-    "spread": true,
-    "superInFunctions": true,
-    "templateStrings": true,
-    "unicodeCodePointEscapes": true,
-    "globalReturn": true,
-    "jsx": true
+  "parserOptions": {
+      "sourceType": "module",
+      "ecmaVersion": 6,
+      "ecmaFeatures": {
+        "jsx": true
+    }
   },
   "env": {
     "browser": true,
-    "node": true
+    "node": true,
+    "es6": true
   }
 }
