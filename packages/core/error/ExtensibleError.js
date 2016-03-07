@@ -92,7 +92,7 @@ export default function ExtensibleError(message,
 	 * @type {boolean}
 	 */
 	this._dropInternalStackFrames = dropInternalStackFrames;
-};
+}
 
 ExtensibleError.prototype = Object.create(Error.prototype);
 ExtensibleError.prototype.constructor = ExtensibleError;
