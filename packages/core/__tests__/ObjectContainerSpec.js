@@ -11,6 +11,10 @@ describe('ima.ObjectContainer', function() {
 
 	var constantName = 'constant';
 	var constantValue = 'value';
+	var constantObjectName = 'constantObject';
+	var constantCompositionName = 'constantObject.path.to.property';
+	var constantObjectProperty = 'property';
+	var constantObjectValue = { path: { to: { property: constantObjectProperty } } };
 
 	var namespacePathUnit = 'test.unit';
 	var namespacePathOC = 'test.unit.ObjectContainer';
@@ -71,7 +75,7 @@ describe('ima.ObjectContainer', function() {
 			expect(oc._constants.get(constantName).sharedInstance, constantValue);
 		});
 
-		it('should be throw Error, if you want to re-set constant value.', function() {
+		it('should be throw Error, if you want to re-set constant value for simple constant name', function() {
 			oc.constant(constantName, constantValue);
 
 			expect(function() {
@@ -79,6 +83,13 @@ describe('ima.ObjectContainer', function() {
 			}).toThrow();
 		});
 
+		it('should be throw Error, if you want to re-set constant value for composition name', function() {
+			oc.constant(constantObjectName, constantObjectValue);
+
+			expect(function() {
+				oc.constant(constantCompositionName, constantObjectProperty);
+			}).toThrow();
+		});
 	});
 
 	describe('inject method', function() {
@@ -307,6 +318,38 @@ describe('ima.ObjectContainer', function() {
 			var entry = oc._getEntry(namespacePathOC);
 
 			expect(entry.sharedInstance).toEqual(value);
+		});
+
+	});
+
+	describe('_getEntryFromConstant method', function() {
+
+		beforeEach(function() {
+			oc.clear();
+		});
+
+		it('should return entry by name from stored constants', function() {
+			oc.constant(constantObjectName, constantObjectValue);
+
+			var entry = oc._getEntryFromConstant(constantObjectName);
+
+			expect(entry.sharedInstance).toEqual(constantObjectValue);
+		});
+
+		it('should return entry by composition name to property from stored constants', function() {
+			oc.constant(constantObjectName, constantObjectValue);
+
+			var entry = oc._getEntryFromConstant(constantCompositionName);
+
+			expect(entry.sharedInstance).toEqual(constantObjectProperty);
+		});
+
+		it('should return null for bad type of composition name', function() {
+			oc.constant(constantObjectName, constantObjectValue);
+
+			var entry = oc._getEntryFromConstant(function() {});
+
+			expect(entry).toEqual(null);
 		});
 
 	});
