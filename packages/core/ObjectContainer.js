@@ -143,7 +143,7 @@ export default class ObjectContainer {
 	 */
 	constant(name, value) {
 		if ($Debug) {
-			if (this._constants.has(name)) {
+			if (this._constants.has(name) || !!this._getEntryFromConstant(name)) {
 				throw new Error(`ima.ObjectContainer:constant method has ` +
 						`already registered name ${name}. Constant method ` +
 						`may be call only once for one name.`);
@@ -303,6 +303,7 @@ export default class ObjectContainer {
 				this._aliases.has(name) ||
 				this._registry.has(name) ||
 				this._providers.has(name) ||
+				!!this._getEntryFromConstant(name) ||
 				!!this._getEntryFromNamespace(name);
 	}
 
@@ -375,6 +376,7 @@ export default class ObjectContainer {
 				this._aliases.get(name) ||
 				this._registry.get(name) ||
 				this._providers.get(name) ||
+				this._getEntryFromConstant(name) ||
 				this._getEntryFromNamespace(name);
 
 		if ($Debug) {
@@ -440,6 +442,43 @@ export default class ObjectContainer {
 		var constructor = entry.classConstructor;
 
 		return new constructor(...dependencies);
+	}
+
+	/**
+	 * Retrieves the constant value denoted by the provided fully qualified
+	 * composition name.
+	 *
+	 * The method returns the entry for the constant if the constant is registered
+	 * with this object container, otherwise return {@code null}.
+	 *
+	 * Finally, if the constant composition name does not resolve to value,
+	 * the method return {@code null}.
+	 *
+	 * @private
+	 * @method _getEntryFromConstant
+	 * @param {string} compositionName
+	 * @return {?Entry<T>} An entry representing the value at the specified
+	 *         composition name in the constants. The method returns {@code null}
+	 *         if the specified composition name does not exist in the constants.
+	 */
+	_getEntryFromConstant(compositionName) {
+		if (typeof compositionName === 'string') {
+			var objectProperties = compositionName.split('.');
+			var constantValue = this._constants.has(objectProperties[0]) ? this._constants.get(objectProperties[0]).sharedInstance : null;
+
+			for (var i = 1; i < objectProperties.length && constantValue; i++) {
+				constantValue = constantValue[objectProperties[i]];
+			}
+
+			if (constantValue !== undefined && constantValue !== null) {
+				var entry = this._createEntry(() => constantValue);
+				entry.sharedInstance = constantValue;
+
+				return entry;
+			}
+		}
+
+		return null;
 	}
 
 	/**
