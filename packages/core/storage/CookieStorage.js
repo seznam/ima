@@ -182,6 +182,7 @@ export default class CookieStorage extends MapStorage {
 
 		if (options.maxAge || options.expires) {
 			options.expires = this._getExpirationAsDate(options.maxAge || options.expires);
+			delete options.maxAge; // we use the expires option instead
 		}
 
 		value = this._sanitizeCookieValue(value + '');

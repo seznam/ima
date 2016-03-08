@@ -235,14 +235,15 @@ export default class Response {
 			}
 		}
 
-		var advanceOptions = Object.assign(
+		var advancedOptions = Object.assign(
 			{},
 			this._cookieTransformFunction,
 			options
 		);
+		delete advancedOptions.maxAge; // we use the expires option instead
 		this._internalCookieStorage.set(name, {
 			value,
-			options: advanceOptions
+			options: advancedOptions
 		});
 
 		return this;
