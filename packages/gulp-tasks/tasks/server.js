@@ -4,24 +4,44 @@ var gls = require('gulp-live-server');
 
 var sharedState = require('../gulpState.js');
 var server = null;
+var isServerRunning = false;
+
+function startServer() {
+	isServerRunning = true;
+	server
+		.start()
+		.then(function(result) {
+			isServerRunning = false;
+		});
+}
 
 gulp.task('server', function () {
 	server = gls.new('./build/server.js');
-	server.start();
+
+	startServer();
 });
 
 gulp.task('server:restart', function () {
-	server.start();
+	startServer();
 });
 
 gulp.task('server:reload', function (callback) {
-	setTimeout(function() {
-		server.notify(sharedState.watchEvent);
+	if (isServerRunning) {
+		setTimeout(function() {
+			server.notify(sharedState.watchEvent);
+			callback();
+		}, 2000);
+	} else {
+		startServer();
 		callback();
-	}, 2000);
+	}
 });
 
 gulp.task('server:hotreload', function (callback) {
-	server.notify(sharedState.watchEvent);
+	if (isServerRunning) {
+		server.notify(sharedState.watchEvent);
+	} else {
+		startServer();
+	}
 	callback();
 });
