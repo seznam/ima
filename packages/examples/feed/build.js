@@ -3,7 +3,7 @@ module.exports = (() => {
 	var mainjs = ['./app/main.js'];
 
 	var js = [
-		'./app/!(assets)/**/*.{js,jsx}'
+		'./app/!(assets|gulp)/**/*.{js,jsx}'
 	];
 
 	var less = [
