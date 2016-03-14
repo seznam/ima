@@ -44,7 +44,8 @@ export default class HttpAgent {
 	 *                 transformedUrl: string,
 	 *                 data: Object<string, (boolean|number|string)>
 	 *             },
-	 *             headers: Object<string, string>, cached: boolean
+	 *             headers: Object<string, string>, cached: boolean,
+	 *             cached: boolean
 	 *         }>}
 	 *         A promise that resolves to the response. The response body will
 	 *         be parsed according to the {@code Content-Type} response
@@ -86,7 +87,8 @@ export default class HttpAgent {
 	 *                 transformedUrl: string,
 	 *                 data: Object<string, (boolean|number|string)>
 	 *             },
-	 *             headers: Object<string, string>, cached: boolean
+	 *             headers: Object<string, string>, cached: boolean,
+	 *             cached: boolean
 	 *         }>}
 	 *         A promise that resolves to the response. The response body will
 	 *         be parsed according to the {@code Content-Type} response
@@ -128,7 +130,8 @@ export default class HttpAgent {
 	 *                 transformedUrl: string,
 	 *                 data: Object<string, (boolean|number|string)>
 	 *             },
-	 *             headers: Object<string, string>, cached: boolean
+	 *             headers: Object<string, string>, cached: boolean,
+	 *             cached: boolean
 	 *         }>}
 	 *         A promise that resolves to the response. The response body will
 	 *         be parsed according to the {@code Content-Type} response
@@ -170,7 +173,8 @@ export default class HttpAgent {
 	 *                 transformedUrl: string,
 	 *                 data: Object<string, (boolean|number|string)>
 	 *             },
-	 *             headers: Object<string, string>, cached: boolean
+	 *             headers: Object<string, string>, cached: boolean,
+	 *             cached: boolean
 	 *         }>}
 	 *         A promise that resolves to the response. The response body will
 	 *         be parsed according to the {@code Content-Type} response
@@ -212,7 +216,8 @@ export default class HttpAgent {
 	 *                 transformedUrl: string,
 	 *                 data: Object<string, (boolean|number|string)>
 	 *             },
-	 *             headers: Object<string, string>, cached: boolean
+	 *             headers: Object<string, string>, cached: boolean,
+	 *             cached: boolean
 	 *         }>}
 	 *         A promise that resolves to the response. The response body will
 	 *         be parsed according to the {@code Content-Type} response
