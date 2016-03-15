@@ -41,6 +41,8 @@ use `sudo` on a UNIX-like system):
 npm install -g gulp
 ```
 
+Check installation and hello world video tutorials on [`imajs.io`](https://imajs.io/videos)!
+
 ## Production use
 
 If you want deploy your IMA.js application to production, the installation is
