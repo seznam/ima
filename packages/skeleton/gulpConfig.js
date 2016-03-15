@@ -80,7 +80,8 @@ exports.files = {
 			server: './build/ima/',
 			client: './build/static/js/',
 			tmp: './build/ima/'
-		}
+		},
+		watch: ['./app/build.js']
 	},
 	app: {
 		name: {
