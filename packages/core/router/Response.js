@@ -1,5 +1,3 @@
-// @server-side
-
 import ns from 'ima/namespace';
 import IMAError from 'ima/error/GenericError';
 
