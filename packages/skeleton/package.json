@@ -36,7 +36,7 @@
 	"license": "MIT",
 	"devDependencies": {
 		"ima-gulp-task-loader": "^0.12.0",
-		"ima-gulp-tasks": "^0.12.15"
+		"ima-gulp-tasks": "^0.12.16"
 	},
 	"dependencies": {
 		"body-parser": "^1.15.0",

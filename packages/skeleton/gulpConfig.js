@@ -88,6 +88,7 @@ exports.files = {
 			server: 'app.server.js',
 			client: 'app.client.js'
 		},
+		clearServerSide: ['production', 'prod', 'test'].indexOf(process.env.NODE_ENV) > -1,
 		src: [].concat(appDependencies.js, appDependencies.mainjs),
 		dest: {
 			server: './build/ima/',
@@ -100,6 +101,7 @@ exports.files = {
 			server: 'ima.server.js',
 			client: 'ima.client.js'
 		},
+		clearServerSide: ['production', 'prod', 'test'].indexOf(process.env.NODE_ENV) > -1,
 		src: [].concat(coreDependencies.js, coreDependencies.mainjs),
 		dest: {
 			server: './build/ima/',
