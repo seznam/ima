@@ -1,5 +1,3 @@
-// @server-side
-
 import ns from 'ima/namespace';
 
 ns.namespace('ima.router');
