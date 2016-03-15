@@ -94,7 +94,7 @@ exports.files = {
 			server: './build/ima/',
 			client: './build/static/js/'
 		},
-		watch:['./app/**/*.{js,jsx}', './app/main.js', '!./app/environment.js',]
+		watch:['./app/**/*.{js,jsx}', './app/main.js', '!./app/environment.js']
 	},
 	ima: {
 		name: {
