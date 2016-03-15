@@ -19,6 +19,7 @@ var save = require('gulp-save');
 var source = require('vinyl-source-stream');
 var sourcemaps = require('gulp-sourcemaps');
 var sweetjs = require('gulp-sweetjs');
+var gulpIgnore = require('gulp-ignore');
 
 var gulpConfig = require('../../../gulpConfig.js');
 var files = gulpConfig.files;
@@ -63,6 +64,10 @@ gulp.task('Es6ToEs5:app', function () {
 		});
 	}
 
+	function excludeServerSideFile(file) {
+		return file.contents.toString().indexOf('@server-side') !== -1 && files.app.clearServerSide;
+	}
+
 	return (
 		gulp.src(files.app.src)
 			.pipe(resolveNewPath(files.app.base || '/'))
@@ -79,17 +84,19 @@ gulp.task('Es6ToEs5:app', function () {
 				readableNames: true
 			}), gutil.noop()))
 			.pipe(remember('Es6ToEs5:app'))
-			.pipe(generateSystemImports())
 			.pipe(plumber.stop())
+			.pipe(save('Es6ToEs5:app:source'))
+			.pipe(gulpIgnore.exclude(excludeServerSideFile))
 			.pipe(concat(files.app.name.client))
 			.pipe(insertSystemImports())
 			.pipe(replaceToIMALoader())
-			.pipe(save('Es6ToEs5:app:source'))
 			.pipe(insert.wrap('(function(){\n', '\n })();\n'))
 			.pipe(sourcemaps.write())
 			.pipe(gulp.dest(files.app.dest.client))
 			.pipe(save.restore('Es6ToEs5:app:source'))
 			.pipe(concat(files.app.name.server))
+			.pipe(insertSystemImports())
+			.pipe(replaceToIMALoader())
 			.pipe(insert.wrap('module.exports = (function(){\n', '\n })\n'))
 			.pipe(sourcemaps.write())
 			.pipe(gulp.dest(files.app.dest.server))
@@ -109,6 +116,10 @@ gulp.task('Es6ToEs5:ima', function () {
 		});
 	}
 
+	function excludeServerSideFile(file) {
+		return file.contents.toString().indexOf('@server-side') !== -1 && files.ima.clearServerSide;
+	}
+
 	return (
 		gulp.src(files.ima.src)
 			.pipe(resolveNewPath(files.ima.base || '/node_modules'))
@@ -122,14 +133,16 @@ gulp.task('Es6ToEs5:ima', function () {
 			 }))
 			.pipe(remember('Es6ToEs5:ima'))
 			.pipe(plumber.stop())
+			.pipe(save('Es6ToEs5:ima:source'))
+			.pipe(gulpIgnore.exclude(excludeServerSideFile))
 			.pipe(concat(files.ima.name.client))
 			.pipe(replaceToIMALoader())
-			.pipe(save('Es6ToEs5:ima:source'))
 			.pipe(insert.wrap('(function(){\n', '\n })();\n'))
 			.pipe(sourcemaps.write())
 			.pipe(gulp.dest(files.ima.dest.client))
 			.pipe(save.restore('Es6ToEs5:ima:source'))
 			.pipe(concat(files.ima.name.server))
+			.pipe(replaceToIMALoader())
 			.pipe(insert.wrap('module.exports = (function(){\n', '\n })\n'))
 			.pipe(sourcemaps.write())
 			.pipe(gulp.dest(files.ima.dest.server))
