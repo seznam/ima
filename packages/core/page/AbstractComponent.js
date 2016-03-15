@@ -101,6 +101,14 @@ export default class AbstractComponent extends React.Component {
 	 * Generate a string of CSS classes from the properties of the passed-in
 	 * object that resolve to true.
 	 *
+	 * @example
+	 *        this.cssClasses('my-class my-class-modificator', this);
+	 * @example
+	 *        this.cssClasses({
+	 *            'my-class': true,
+	 *            'my-class-modificator': this.props.modificator
+	 *        }, true);
+	 *
 	 * @method cssClasses
 	 * @param {(string|Object<string, boolean>)} classRules CSS classes in a
 	 *        string separated by whitespace, or a map of CSS class names to
