@@ -102,7 +102,7 @@ export default class AbstractComponent extends React.Component {
 	 * object that resolve to true.
 	 *
 	 * @example
-	 *        this.cssClasses('my-class my-class-modificator', this);
+	 *        this.cssClasses('my-class my-class-modificator', true);
 	 * @example
 	 *        this.cssClasses({
 	 *            'my-class': true,
