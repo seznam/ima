@@ -2,11 +2,11 @@
 var gulp = require('gulp');
 var runSequence = require('run-sequence');
 
-module.exports = function (gulpConfig) {
+module.exports = function(gulpConfig) {
 	var uglifyCompression = gulpConfig.uglifyCompression;
 
 	gulp
-		.task('dev', function (callback) {
+		.task('dev', function(callback) {
 
 			if (gulpConfig.tasks && gulpConfig.tasks.dev) {
 
@@ -26,7 +26,7 @@ module.exports = function (gulpConfig) {
 
 
 	gulp
-		.task('build', function (callback) {
+		.task('build', function(callback) {
 
 			if (gulpConfig.tasks && gulpConfig.tasks.build) {
 
