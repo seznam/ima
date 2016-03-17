@@ -67,6 +67,22 @@ exports.vendorDependencies = {
 	client: coreDependencies.vendors.client.concat(appDependencies.vendors.client)
 };
 
+exports.tasks = {
+	dev: [
+		['copy:appStatic', 'copy:environment', 'shim', 'polyfill'],
+		['Es6ToEs5:app', 'Es6ToEs5:ima', 'Es6ToEs5:server', 'Es6ToEs5:vendor'],
+		['less', 'doc', 'locale', 'Es6ToEs5:vendor:client'],
+		['server'],
+		['test:unit:karma:dev', 'watch']
+	],
+	build: [
+		['copy:appStatic', 'copy:environment', 'shim', 'polyfill'],
+		['Es6ToEs5:app', 'Es6ToEs5:ima', 'Es6ToEs5:server', 'Es6ToEs5:vendor'],
+		['less', 'doc', 'locale', 'Es6ToEs5:vendor:client'],
+		['bundle:js:app', 'bundle:js:server', 'bundle:css']
+	]
+};
+
 exports.files = {
 	vendor: {
 		src: {
