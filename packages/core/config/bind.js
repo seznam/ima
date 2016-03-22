@@ -32,11 +32,15 @@ export var init = (ns, oc, config) => { //jshint ignore:line
 
 	//*************START IMA**************
 
+	//Request & Response
+	oc.bind('$Request', ns.ima.router.Request);
+	oc.bind('$Response', ns.ima.router.Response);
+
 	//Window helper
 	if (typeof window !== 'undefined' && window !== null) {
 		oc.provide(ns.ima.window.Window, ns.ima.window.ClientWindow);
 	} else {
-		oc.provide(ns.ima.window.Window, ns.ima.window.ServerWindow);
+		oc.provide(ns.ima.window.Window, ns.ima.window.ServerWindow, ['$Request']);
 	}
 	oc.bind('$Window', ns.ima.window.Window);
 
@@ -46,10 +50,6 @@ export var init = (ns, oc, config) => { //jshint ignore:line
 	//Dictionary
 	oc.provide(ns.ima.dictionary.Dictionary, ns.ima.dictionary.MessageFormatDictionary);
 	oc.bind('$Dictionary', ns.ima.dictionary.Dictionary);
-
-	//Request & Response
-	oc.bind('$Request', ns.ima.router.Request);
-	oc.bind('$Response', ns.ima.router.Response);
 
 	//Storage
 	oc.constant('$CookieTransformFunction', { encode: (s) => s, decode: (s) => s });
