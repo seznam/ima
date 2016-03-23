@@ -1,3 +1,5 @@
+'use strict';
+
 module.exports = (environment) => {
 
 	var _getUrlFromRequest = (req) => {
@@ -14,13 +16,63 @@ module.exports = (environment) => {
 					rootExpression.replace('/','\/');
 
 		if (languageParam) {
-			var build = require('../../app/build.js');
-			var languagesExpr = build.languages.join('|');
+			let build = require('../../app/build.js');
+			let languagesExpr = build.languages.join('|');
 			rootReg += '(\/('+languagesExpr+'))?';
 		}
 		rootReg += '.*$';
 
 		return new RegExp(rootReg);
+	};
+
+	var _getProtocolFromForwardedHeader = (req) => {
+		let forwardedHeader = req.get('Forwarded');
+		let protocol = null;
+
+		if (forwardedHeader) {
+			let parts = forwardedHeader.split(';');
+
+			for (let part of parts) {
+
+				if (part.substring(0, 6) === 'proto=') {
+					protocol = part.substring(6);
+					break;
+				}
+			}
+		}
+
+		return protocol;
+	};
+
+	var _getProtocolFromXForwardedProtoHeader = (req) => {
+		let forwardedProtocol = req.get('X-Forwarded-Proto');
+		let protocol = null;
+
+		if (forwardedProtocol) {
+			protocol = forwardedProtocol;
+		}
+
+		return protocol;
+	};
+
+	var _getProtocolFromFrontEndHttpsHeader = (req) => {
+		let httpsHeader = req.get('Front-End-Https');
+		let protocol = null;
+
+		if (httpsHeader) {
+			protocol = (httpsHeader.toLowerCase() === 'on') ? 'https' : 'http';
+		}
+
+		return protocol;
+	};
+
+	var _getProtocol = (req) => {
+		let protocol = _getProtocolFromForwardedHeader(req) ||
+				_getProtocolFromXForwardedProtoHeader(req) ||
+				_getProtocolFromFrontEndHttpsHeader(req) ||
+				req.protocol;
+
+		return protocol + ':';
 	};
 
 	var parseUrl = (req, res, next) => {
@@ -32,11 +84,7 @@ module.exports = (environment) => {
 		var currentLanguagePartPath = '';
 		var currentHost = parsedCurrentUrl[1];
 		var currentRoot = parsedCurrentUrl[2];
-		var currentProtocol = req.protocol + ':';
-
-		if (req.get('X-Forwarded-Proto')) {
-			currentProtocol = req.get('X-Forwarded-Proto') + ':';
-		}
+		var currentProtocol = _getProtocol(req);
 
 		for (var expression of Object.keys(environment.$Language)) {
 			var parsedDomainExpression = expression.match(parseUrlReg);
