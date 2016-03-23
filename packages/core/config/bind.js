@@ -40,7 +40,7 @@ export var init = (ns, oc, config) => { //jshint ignore:line
 	if (typeof window !== 'undefined' && window !== null) {
 		oc.provide(ns.ima.window.Window, ns.ima.window.ClientWindow);
 	} else {
-		oc.provide(ns.ima.window.Window, ns.ima.window.ServerWindow, ['$Request']);
+		oc.provide(ns.ima.window.Window, ns.ima.window.ServerWindow);
 	}
 	oc.bind('$Window', ns.ima.window.Window);
 

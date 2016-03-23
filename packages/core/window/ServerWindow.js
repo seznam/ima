@@ -17,23 +17,6 @@ ns.namespace('ima.window');
 export default class ServerWindow extends WindowInterface {
 
 	/**
-	 * Initializes the server-side window.
-	 * 
-	 * @param {ima.router.Request} request The current HTTP request being
-	 *        handled by the server.
-	 */
-	constructor(request) {
-		super();
-
-		/**
-		 * The current HTTP request being handled by the server.
-		 *
-		 * @type {ima.router.Request}
-		 */
-		this._request = request;
-	}
-	
-	/**
 	 * @inheritdoc
 	 * @method isClient
 	 */
@@ -128,31 +111,7 @@ export default class ServerWindow extends WindowInterface {
 	 * @method getDomain
 	 */
 	getDomain() {
-		let protocol;
-
-		let request = this._request;
-		let forwardedHeader = request.getHeader('Forwarded');
-		let forwardedProtocol = request.getHeader('X-Forwarded-Proto');
-		let httpsHeader = request.getHeader('Front-End-Https');
-		if (forwardedHeader) {
-			let parts = forwardedHeader.split(';');
-			for (let part of parts) {
-				if (part.substring(0, 6) === 'proto=') {
-					protocol = part.substring(6);
-					break;
-				}
-			}
-		} else if (forwardedProtocol) {
-			protocol = forwardedProtocol;
-		} else if (httpsHeader) {
-			protocol = (httpsHeader.toLowerCase() === 'on') ? 'https' : 'http';
-		} else if (request && request._request && request._request.protocol) {
-			protocol = request._request.protocol;
-		} else {
-			protocol = 'http';
-		}
-
-		return `${protocol}://${this.getHost()}`;
+		return '';
 	}
 
 	/**
@@ -160,7 +119,7 @@ export default class ServerWindow extends WindowInterface {
 	 * @method getHost
 	 */
 	getHost() {
-		return this._request.getHeader('Host') || '';
+		return '';
 	}
 
 	/**
@@ -168,7 +127,7 @@ export default class ServerWindow extends WindowInterface {
 	 * @method getPath
 	 */
 	getPath() {
-		return this._request.getPath() || '';
+		return '';
 	}
 
 	/**
@@ -176,7 +135,7 @@ export default class ServerWindow extends WindowInterface {
 	 * @method getUrl
 	 */
 	getUrl() {
-		return `${this.getDomain()}${this.getPath()}`;
+		return '';
 	}
 
 	/**
