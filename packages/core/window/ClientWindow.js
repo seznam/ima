@@ -41,12 +41,8 @@ export default class ClientWindow extends WindowInterface {
 			if (window.sessionStorage) {
 				var sessionKey = 'IMA.jsTest';
 
-				try {
-					sessionStorage.setItem(sessionKey, 1);
-					sessionStorage.removeItem(sessionKey);
-				} catch (e) {
-					return false;
-				}
+				sessionStorage.setItem(sessionKey, 1);
+				sessionStorage.removeItem(sessionKey);
 
 				return true;
 			}
