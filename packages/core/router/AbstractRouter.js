@@ -248,7 +248,7 @@ export default class AbstractRouter extends RouterInterface {
 
 		if (!route) {
 			throw new IMAError(`ima.router.AbstractRouter.getCurrentRouteInfo: ` +
-					`The route for path ${path} is not define.`);
+					`The route for path ${path} is not defined.`);
 		}
 
 		var params = route.extractParameters(path);
