@@ -37,17 +37,20 @@ export default class ClientWindow extends WindowInterface {
 	 * @method hasSessionStorage
 	 */
 	hasSessionStorage() {
-		if (window.sessionStorage) {
-			var sessionKey = 'IMA.jsTest';
+		try {
+			if (window.sessionStorage) {
+				var sessionKey = 'IMA.jsTest';
 
-			try {
 				sessionStorage.setItem(sessionKey, 1);
 				sessionStorage.removeItem(sessionKey);
-			} catch (e) {
-				return false;
-			}
 
-			return true;
+				return true;
+			}
+		} catch (e) {
+			if ($Debug) {
+				console.warn('Session Storage is not accessible!', e);
+			}
+			return false;
 		}
 		return false;
 	}
