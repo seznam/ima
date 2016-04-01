@@ -2,8 +2,19 @@
 
 module.exports = (environment) => {
 
+	var _getHost = (req) => {
+		let forwardedHost = req.get('X-Forwarded-Host');
+		let host = req.get('host');
+
+		if (forwardedHost) {
+			host = forwardedHost;
+		}
+
+		return host;
+	};
+
 	var _getUrlFromRequest = (req) => {
-		return  '//' + req.get('host') + req.originalUrl.replace(/\/$/, '');
+		return  '//' + _getHost(req) + req.originalUrl.replace(/\/$/, '');
 	};
 
 	var _isHostSame = (currentHost, hostExpression) => {
