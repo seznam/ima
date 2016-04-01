@@ -32,7 +32,7 @@ var getClientBootConfig = (initialAppConfigFunctions) => {
 
 		if (window.$IMA.$Host !== window.location.host) {
 			throw new Error(`Your client's host is not same as server's host.` +
-					`For right setting host on the server site set 'X-Forwarded-Proto' header.`);
+					`For right setting host on the server site set 'X-Forwarded-Host' header.`);
 		}
 	}
 
