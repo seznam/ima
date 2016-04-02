@@ -9,31 +9,30 @@ module.exports = function(config) {
 			'PhantomJS'
 		],
 		files: [
-			'./node_modules/ima/test.js',
 			'./build/static/js/polyfill.js',
 			'./build/static/js/shim.js',
-			'./build/static/js/vendor.client.js',
+			'./build/static/js/vendor.client.test.js',
 			'./build/static/js/ima.client.js',
 			'./build/static/js/locale/cs.js',
 			'./build/static/js/app.client.js',
-			'./app/**/*Spec.js'
-		]/*,
+			'./app/**/*Spec.{js,jsx}'
+		],
 		preprocessors: {
-			'./app/test/*.js': ['babel'],*/
+			'./app/**/*Spec.jsx': ['babel']
 		//	'./node_modules/ima/**/__tests__/*Spec.js': ['babel']
-		/*},
+		},
 		babelPreprocessor: {
 			options: {
-				presets: ['es2015'],
+				presets: ['react'],
 				sourceMap: 'inline'
 			},
-			filename: function (file) {
-				return file.originalPath.replace(/\.js$/, '.es5.js');
+			filename: function(file) {
+				return file.originalPath.replace(/\.jsx$/, '.js');
 			},
-			sourceFileName: function (file) {
+			sourceFileName: function(file) {
 				return file.originalPath;
 			}
-		}*/,
+		},
 		customLaunchers: {
 			Chrome_without_security: {
 				base: 'Chrome',
@@ -42,7 +41,7 @@ module.exports = function(config) {
 		},
 		plugins: [
 			'karma-phantomjs-launcher',
-			//'karma-babel-preprocessor',
+			'karma-babel-preprocessor',
 			'karma-jasmine'
 			//'karma-coverage'
 		],
