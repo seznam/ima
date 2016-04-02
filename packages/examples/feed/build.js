@@ -34,6 +34,9 @@ module.exports = (() => {
 		],
 
 		client: [
+		],
+
+		test:[
 		]
 	};
 

@@ -24,7 +24,10 @@ var vendors = {
 	],
 
 	client: [
-	]
+	],
+
+	test: [
+	],
 };
 
 var bundle = {

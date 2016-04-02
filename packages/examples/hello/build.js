@@ -1,7 +1,7 @@
 var mainjs = ['./app/main.js'];
 
 var js = [
-	'./app/!(assets|gulp)/**/!(*Spec).{js,jsx}'
+	'./app/!(assets|gulp)/**/!(*Spec|*E2E).{js,jsx}'
 ];
 
 var less = [
@@ -27,6 +27,9 @@ var vendors = {
 	],
 
 	client: [
+	],
+
+	test: [
 	]
 };
 
