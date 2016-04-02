@@ -168,18 +168,11 @@ gulp.task('Es6ToEs5:vendor', function (done) {
 	var vendorModules = gulpConfig.vendorDependencies;
 	var serverModules = vendorModules.common.concat(vendorModules.server);
 	var clientModules = vendorModules.common.concat(vendorModules.client);
+	var testModules = vendorModules.test || [];
 
-	var linkingFileHeader = `var vendorLinker = require('ima/vendorLinker.js');\n`;
-	var linkingFileFooter = `module.exports = vendorLinker;\n`;
-
-	var serverModuleLinker =
-		linkingFileHeader +
-		serverModules.map(generateVendorInclusion).join('') +
-		linkingFileFooter;
-	var clientModuleLinker =
-		linkingFileHeader +
-		clientModules.map(generateVendorInclusion).join('') +
-		linkingFileFooter;
+	var serverModuleLinker = getModuleLinkerContent(serverModules);
+	var clientModuleLinker = getModuleLinkerContent(clientModules);
+	var testModuleLinker = getModuleLinkerContent(testModules);
 
 	var normalizedTmpPath = files.vendor.dest.tmp
 			.replace(/^\.\//, '')
@@ -200,9 +193,24 @@ gulp.task('Es6ToEs5:vendor', function (done) {
 		}
 
 		fs.writeFile(files.vendor.dest.tmp + files.vendor.src.client, clientModuleLinker, (error) => {
-			done(error);
+			if (error || !files.vendor.src.test) {
+				return done(error);
+			}
+
+			fs.writeFile(files.vendor.dest.tmp + files.vendor.src.test, testModuleLinker, (error) => {
+				done(error);
+			});
 		});
 	});
+
+	function getModuleLinkerContent(modules) {
+		var linkingFileHeader = `var vendorLinker = require('ima/vendorLinker.js');\n`;
+		var linkingFileFooter = `module.exports = vendorLinker;\n`;
+
+		return linkingFileHeader +
+		modules.map(generateVendorInclusion).join('') +
+		linkingFileFooter;
+	}
 
 	function generateVendorInclusion(vendorModuleName) {
 		return `vendorLinker.set('${vendorModuleName}', require('${vendorModuleName}'));\n`;
@@ -222,6 +230,27 @@ gulp.task('Es6ToEs5:vendor:client', function () {
 			.pipe(source(files.vendor.name.client))
 			.pipe(gulp.dest(files.vendor.dest.client))
 	);
+});
+
+gulp.task('Es6ToEs5:vendor:client:test', function () {
+	if (files.vendor.src.test) {
+		var sourceFiles = [
+			files.vendor.dest.tmp + files.vendor.src.test,
+			files.vendor.dest.tmp + files.vendor.src.client
+		];
+		var options ={ debug: false, insertGlobals : false, basedir: '.' };
+
+		return (
+			browserify(sourceFiles, options)
+				.transform(babelify.configure({
+					presets: babelConfig.vendor.presets,
+					plugins: babelConfig.vendor.plugins
+				}))
+				.bundle()
+				.pipe(source(files.vendor.name.test))
+				.pipe(gulp.dest(files.vendor.dest.test))
+		);
+	}
 });
 
 gulp.task('Es6ToEs5:vendor:clean', function () {

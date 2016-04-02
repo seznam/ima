@@ -16,7 +16,7 @@ module.exports = function(gulpConfig) {
 				return runSequence(
 					['copy:appStatic', 'copy:environment', 'shim', 'polyfill'],
 					['Es6ToEs5:app', 'Es6ToEs5:ima', 'Es6ToEs5:server', 'Es6ToEs5:vendor'],
-					['less', 'doc', 'locale', 'Es6ToEs5:vendor:client'],
+					['less', 'doc', 'locale', 'Es6ToEs5:vendor:client', 'Es6ToEs5:vendor:client:test'],
 					['server'],
 					['test:unit:karma:dev', 'watch'],
 					callback
@@ -37,7 +37,7 @@ module.exports = function(gulpConfig) {
 				var tasks = [
 					['copy:appStatic', 'copy:environment', 'shim', 'polyfill'], // copy public folder, concat shim
 					['Es6ToEs5:app', 'Es6ToEs5:ima', 'Es6ToEs5:server', 'Es6ToEs5:vendor'], // compile app and vendor script
-					['less', 'doc', 'locale', 'Es6ToEs5:vendor:client'], // adjust vendors, compile less, create doc
+					['less', 'doc', 'locale', 'Es6ToEs5:vendor:client', 'Es6ToEs5:vendor:client:test'], // adjust vendors, compile less, create doc
 					['bundle:js:app', 'bundle:js:server', 'bundle:css']
 				];
 
