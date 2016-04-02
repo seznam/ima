@@ -190,7 +190,7 @@ There are several directories we have not mentioned so far:
   if the need arises.
 
 ## Plugins
-We have several plugins which you can used:
+We have several plugins which you can use:
 - [Abstract analytic](https://github.com/seznam/IMA.js-plugin-analytic)
 - [3rd party scripts loader](https://github.com/seznam/IMA.js-plugin-script-loader)
 - [Google analytic](https://github.com/seznam/IMA.js-plugin-analytic-google)
