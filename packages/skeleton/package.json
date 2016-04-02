@@ -36,7 +36,7 @@
 	"license": "MIT",
 	"devDependencies": {
 		"ima-gulp-task-loader": "^0.12.0",
-		"ima-gulp-tasks": "^0.12.17"
+		"ima-gulp-tasks": "^0.12.18"
 	},
 	"dependencies": {
 		"body-parser": "^1.15.0",
@@ -44,8 +44,8 @@
 		"cookie-parser": "^1.4.1",
 		"express": "^4.13.4",
 		"helmet": "^1.1.0",
-		"ima": "^0.12.3",
-		"ima-server": "^0.12.4",
+		"ima": "^0.12.5",
+		"ima-server": "^0.12.6",
 		"method-override": "^2.3.5",
 		"multer": "^1.0.6",
 		"serve-favicon": "^2.3.0"
