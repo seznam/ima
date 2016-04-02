@@ -180,7 +180,7 @@ There are several directories we have not mentioned so far:
 - `build` contains your built application. All files are generated, so any
   changes you make will be automatically discarded once the application is
   rebuilt.
-- `node_modules/ima.js-examples` contains the example IMA.js
+- `node_modules/ima-examples` contains the example IMA.js
   applications for you to study. You can install any of the examples into your
   project skeleton by running the `gulp app:(name of the example)` command.
   (It is recommended to run `gulp app:clean` first to remove any extra files
