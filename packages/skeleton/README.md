@@ -188,3 +188,9 @@ There are several directories we have not mentioned so far:
 - `server` contains the application server. You will most likely won't have to
   concern yourself with these files, but feel free to study them or modify them
   if the need arises.
+
+## Plugins
+We have several plugins which you can used:
+- [Abstract analytic](https://github.com/seznam/IMA.js-plugin-analytic)
+- [3rd party scripts loader](https://github.com/seznam/IMA.js-plugin-script-loader)
+- [Google analytic](https://github.com/seznam/IMA.js-plugin-analytic-google)
