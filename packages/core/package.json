@@ -7,22 +7,22 @@
 		"test": "echo \"Error: no test specified\" && exit 1"
 	},
 	"keywords": [
-    "IMA",
-    "IMA.js",
-    "Isomorphic",
-    "Javascript"
-  ],
+		"IMA",
+		"IMA.js",
+		"Isomorphic",
+		"Javascript"
+	],
 	"author": "Miroslav Jancarik <miroslav.jancarik@firma.seznam.cz>",
 	"contributors": [
 		{
 			"name": "Martin Urban",
 			"email": "martin.urban@firma.seznam.cz"
-    },
+		},
 		{
 			"name": "Martin Jurča",
 			"email": "martin.jurca@firma.seznam.cz"
-    }
-  ],
+		}
+	],
 	"repository": {
 		"type": "git",
 		"url": "https://github.com/seznam/IMA.js-core.git"
@@ -47,7 +47,7 @@
 	},
 	"browserify": {
 		"transform": [
-      "babelify"
-    ]
+			"babelify"
+		]
 	}
 }
