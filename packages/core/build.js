@@ -1,6 +1,6 @@
 
 var js = [
-	'./node_modules/ima/**/!(vendorLinker|build|test|*Spec).js',
+	'./node_modules/ima/**/!(vendorLinker|build|test|*Spec).{js,jsx}',
 	'!./node_modules/ima/polyfill/*.js'
 ];
 
@@ -18,7 +18,12 @@ var vendors = {
 		'react-dom/server.js'
 	],
 
-	client: []
+	client: [],
+
+	test: [
+		'ima/test.js',
+		'react-addons-test-utils'
+	]
 };
 
 module.exports = {
