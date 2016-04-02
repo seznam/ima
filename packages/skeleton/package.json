@@ -11,21 +11,21 @@
 		"start": "NODE_ENV=production node build/server.js"
 	},
 	"keywords": [
-    "IMA.js",
-    "Isomorphic",
-    "Javascript"
-  ],
+		"IMA.js",
+		"Isomorphic",
+		"Javascript"
+ 	],
 	"author": "Miroslav Jancarik <miroslav.jancarik@firma.seznam.cz>",
 	"contributors": [
 		{
 			"name": "Martin Urban",
 			"email": "martin.urban@firma.seznam.cz"
-    },
+		},
 		{
 			"name": "Martin Jurča",
 			"email": "martin.jurca@firma.seznam.cz"
-    }
-  ],
+		}
+ 	],
 	"repository": {
 		"type": "git",
 		"url": "https://github.com/seznam/IMA.js-skeleton.git"
