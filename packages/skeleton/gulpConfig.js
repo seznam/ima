@@ -64,21 +64,22 @@ exports.uglifyCompression = {
 exports.vendorDependencies = {
 	common: coreDependencies.vendors.common.concat(appDependencies.vendors.common),
 	server: coreDependencies.vendors.server.concat(appDependencies.vendors.server),
-	client: coreDependencies.vendors.client.concat(appDependencies.vendors.client)
+	client: coreDependencies.vendors.client.concat(appDependencies.vendors.client),
+	test: coreDependencies.vendors.test.concat(appDependencies.vendors.test)
 };
 
 exports.tasks = {
 	dev: [
 		['copy:appStatic', 'copy:environment', 'shim', 'polyfill'],
 		['Es6ToEs5:app', 'Es6ToEs5:ima', 'Es6ToEs5:server', 'Es6ToEs5:vendor'],
-		['less', 'doc', 'locale', 'Es6ToEs5:vendor:client'],
+		['less', 'doc', 'locale', 'Es6ToEs5:vendor:client', 'Es6ToEs5:vendor:client:test'],
 		['server'],
 		['test:unit:karma:dev', 'watch']
 	],
 	build: [
 		['copy:appStatic', 'copy:environment', 'shim', 'polyfill'],
 		['Es6ToEs5:app', 'Es6ToEs5:ima', 'Es6ToEs5:server', 'Es6ToEs5:vendor'],
-		['less', 'doc', 'locale', 'Es6ToEs5:vendor:client'],
+		['less', 'doc', 'locale', 'Es6ToEs5:vendor:client', 'Es6ToEs5:vendor:client:test'],
 		['bundle:js:app', 'bundle:js:server', 'bundle:css']
 	]
 };
@@ -86,18 +87,21 @@ exports.tasks = {
 exports.files = {
 	vendor: {
 		src: {
-			client: 'vendor.client.src.js'
+			client: 'vendor.client.src.js',
+			test: 'vendor.client.test.src.js'
 		},
 		name: {
 			server: 'vendor.server.js',
-			client: 'vendor.client.js'
+			client: 'vendor.client.js',
+			test: 'vendor.client.test.js'
 		},
 		dest: {
 			server: './build/ima/',
 			client: './build/static/js/',
+			test: './build/static/js/',
 			tmp: './build/ima/'
 		},
-		watch: ['./app/build.js']
+		watch: ['./app/build.js', './ima/build.js']
 	},
 	app: {
 		name: {
