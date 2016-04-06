@@ -61,6 +61,10 @@ module.exports = ((environment, logger, languageLoader, appFactory) => {
 				cb();
 			}
 		}, (e, items) => {
+			if (!Array.isArray(items)) {
+				items = [];
+			}
+
 			items = items.filter((item) => {
 				return !!item;
 			});
