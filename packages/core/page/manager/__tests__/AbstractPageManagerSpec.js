@@ -11,7 +11,7 @@ describe('ima.page.manager.AbstractPageManager', function() {
 
 	var Controller = ns.ima.controller.Controller;
 	var Extension = ns.ima.extension.Extension;
-	var View = function () {};
+	var View = function() {};
 	var options = {
 		onlyUpdate: false,
 		autoScroll: true
@@ -293,7 +293,7 @@ describe('ima.page.manager.AbstractPageManager', function() {
 					done();
 				})
 				.catch(function(error) {
-					console.error('ima.page.manager:_loadPageSource', e.message);
+					console.error('ima.page.manager:_loadPageSource', error.message);
 					done();
 				});
 		});
@@ -310,7 +310,7 @@ describe('ima.page.manager.AbstractPageManager', function() {
 					done();
 				})
 				.catch(function(error) {
-					console.error('ima.page.manager:_loadPageSource', e.message);
+					console.error('ima.page.manager:_loadPageSource', error.message);
 					done();
 				});
 		});
@@ -458,7 +458,7 @@ describe('ima.page.manager.AbstractPageManager', function() {
 					done();
 				})
 				.catch(function(error) {
-					console.error('ima.page.manager:_updatePageSource', e.message);
+					console.error('ima.page.manager:_updatePageSource', error.message);
 					done();
 				});
 		});
@@ -642,7 +642,6 @@ describe('ima.page.manager.AbstractPageManager', function() {
 	describe('_preManage method', function() {
 
 		it('should call scroll to', function() {
-			var newOptions = Object.assign({}, options, {autoScroll: true});
 			spyOn(pageManager, 'scrollTo')
 				.and
 				.stub();
@@ -656,7 +655,7 @@ describe('ima.page.manager.AbstractPageManager', function() {
 	describe('_hasOnlyUpdate method', function() {
 
 		it('should return value from onlyUpdate function', function() {
-			var newOptions = Object.assign({}, options, { onlyUpdate: function() {return true;} });
+			var newOptions = Object.assign({}, options, { onlyUpdate: function() { return true; } });
 
 			spyOn(newOptions, 'onlyUpdate')
 				.and
