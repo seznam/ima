@@ -134,7 +134,7 @@ module.exports = (environment, logger) => {
 					Object
 						.keys(response.header)
 						.filter((key) => {
-							return ['set-cookie', 'content-encoding', 'content-type'].indexOf(key) === -1;
+							return ['set-cookie', 'content-encoding', 'content-type', 'content-length', 'transfer-encoding'].indexOf(key) === -1;
 						})
 						.map((key) => {
 							return ({
