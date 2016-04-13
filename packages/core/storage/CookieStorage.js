@@ -442,12 +442,11 @@ export default class CookieStorage extends MapStorage {
 		}
 
 		if (separatorIndexEqual < 0) {
-			name = this._firstLetterToLowerCase(pair.trim());
+			name = pair.trim();
 			value = true;
 		} else {
-			name = this._firstLetterToLowerCase(
-				pair.substring(0, separatorIndexEqual).trim()
-			);
+			name = pair.substring(0, separatorIndexEqual).trim();
+
 			value = this._transformFunction.decode(
 				pair.substring(separatorIndexEqual + 1).trim()
 			);
@@ -457,14 +456,18 @@ export default class CookieStorage extends MapStorage {
 				value = value.slice(1, -1);
 			}
 
-			if (name === 'expires') {
+			if (name === 'Expires') {
 				value = this._getExpirationAsDate(value);
 			}
 
-			if (name === 'max-Age') {
+			if (name === 'Max-Age') {
 				name = 'maxAge';
 				value = parseInt(value, 10);
 			}
+		}
+
+		if (pairIndex !== 0) {
+			name = this._firstLetterToLowerCase(name);
 		}
 
 		return [

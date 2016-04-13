@@ -1,7 +1,9 @@
 describe('ima.storage.CookieStorage', function() {
 
 	var cookieString = 'cok1=hello;Path=/;Expires=Fri, 31 Dec 9999 23:59:59 GMT; cok2=hello2;Path=/;Expires=Fri, 31 Dec 9999 23:59:59 GMT';
+	var cookieString = 'cok1=hello;Path=/;Expires=Fri, 31 Dec 9999 23:59:59 GMT; cok2=hello2;Path=/;Expires=Fri, 31 Dec 9999 23:59:59 GMT';
 	var setCookieString = 'cok3=hello3; Path=/; Expires=Fri, 31 Dec 9999 23:59:59 GMT';
+	var setCookieStringWithFirstLetterUppercase = 'Cok3=hello3; Path=/; Expires=Fri, 31 Dec 9999 23:59:59 GMT';
 	var setCookieStringWithDomain = 'cok3=hello3; Path=/; Domain=localhost:3001; Expires=Fri, 31 Dec 9999 23:59:59 GMT';
 	var setCookieStringWithComplex = 'cok3="hello3"; Domain=localhost:3001; Expires=Fri, 31 Dec 9999 23:59:59 GMT; HttpOnly; Secure; Path=/';
 	var setCookieStringWithMaxAge = 'cok3="hello3"; Domain=localhost:3001; Expires=Fri, 31 Dec 9999 23:59:59 GMT; Max-Age=5; HttpOnly; Secure; Path=/';
@@ -127,6 +129,13 @@ describe('ima.storage.CookieStorage', function() {
 
 			cookie.parseFromSetCookieHeader(setCookieString);
 			expect(cookie.set).toHaveBeenCalledWith('cok3', 'hello3', { expires: new Date('Fri, 31 Dec 9999 23:59:59 UTC'), path: '/' });
+		});
+
+		it('should parse cookie from Set-Cookie header string for cookie name with first letter uppercase', function() {
+			spyOn(cookie, 'set');
+
+			cookie.parseFromSetCookieHeader(setCookieStringWithFirstLetterUppercase);
+			expect(cookie.set).toHaveBeenCalledWith('Cok3', 'hello3', { expires: new Date('Fri, 31 Dec 9999 23:59:59 UTC'), path: '/' });
 		});
 
 		it('should parse cookie from Set-Cookie header string with defined domain', function() {
