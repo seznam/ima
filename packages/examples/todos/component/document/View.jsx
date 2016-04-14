@@ -24,18 +24,36 @@ export default class View extends AbstractComponent {
 				<body>
 					<div id="page" dangerouslySetInnerHTML={{__html: this.props.page}} />
 					<div id="revivalSettings" dangerouslySetInnerHTML={{__html: this.props.revivalSettings}}/>
-					<div id="scripts">
-						{this.getScripts()}
-					</div>
+					{this.utils.$Settings.$Env === 'dev' ? <div id="scripts">{this.getSyncScripts()}</div> : <div id="scripts" dangerouslySetInnerHTML={{ __html: this.getAsyncScripts() }}/>}
 				</body>
 			</html>
 		);
 	}
 
-	getScripts() {
-		return this.utils.$Settings.$Page.$Render.scripts.map((script, index) => {
-			return <script src={script} key={"script" + index}/>;
+	getSyncScripts() {
+		return this.utils.$Settings.$Page.$Render.scripts
+				.map((script, index) => {
+					return <script src={script} key={'script' + index} />;
+				})
+				.concat([<script key={'scriptRunner'}>{'$IMA.Runner.run();'}</script>]);
+	}
+
+	getAsyncScripts() {
+		var scriptResources = `<script>
+			$IMA.Runner = $IMA.Runner || {};
+		 	$IMA.Runner.scripts = [
+				${this.utils.$Settings.$Page.$Render.scripts
+					.map((script) => `"${script}"`)
+					.join()
+				}
+			];
+		</script>`;
+
+		var scriptTags = this.utils.$Settings.$Page.$Render.scripts.map((script, index) => {
+			return `<script src="${script}" async onload="$IMA.Runner.load(this)"></script>`;
 		});
+
+		return [scriptResources].concat(scriptTags).join('');
 	}
 }
 
