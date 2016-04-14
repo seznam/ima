@@ -156,7 +156,8 @@ exports.files = {
 		name: 'shim.js',
 		src: [
 			'./node_modules/ima/polyfill/collectionEnumeration.js',
-			'./node_modules/ima/polyfill/imaLoader.js'
+			'./node_modules/ima/polyfill/imaLoader.js',
+			'./node_modules/ima/polyfill/imaRunner.js'
 		],
 		dest: {
 			client: './build/static/js/',
