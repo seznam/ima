@@ -15,6 +15,7 @@ module.exports = function(config) {
 			'./build/static/js/ima.client.js',
 			'./build/static/js/locale/cs.js',
 			'./build/static/js/app.client.js',
+			'./build/static/js/ima.runner.js',
 			'./app/**/*Spec.{js,jsx}'
 		],
 		preprocessors: {
