@@ -28,31 +28,10 @@ var babelConfig = gulpConfig.babelConfig;
 // build client logic app
 gulp.task('Es6ToEs5:app', function () {
 	var systemImports = [];
-	var view = /view.js$/;
+	var view = /(view.js|View.js)$/;
 
 	function isView(file) {
 		return !!file.relative.match(view);
-	}
-
-	function generateSystemImports() {
-		return es.mapSync(function (file) {
-
-			systemImports.push('System.import("' + file.relative.substr(0, file.relative.lastIndexOf('.')) + '")\n');
-
-			return file;
-		});
-	}
-
-	function insertSystemImports() {
-		return change(function (content) {
-			content = content + '\n' +
-				'$IMA.Loader.initAllModules();\n' +
-				'Promise.all([$IMA.Loader.import("app/main")])\n' +
-				'.catch(function (error) { \n' +
-				'console.error(error); \n });';
-
-			return content;
-		});
 	}
 
 	function replaceToIMALoader() {
@@ -88,7 +67,6 @@ gulp.task('Es6ToEs5:app', function () {
 			.pipe(save('Es6ToEs5:app:source'))
 			.pipe(gulpIgnore.exclude(excludeServerSideFile))
 			.pipe(concat(files.app.name.client))
-			.pipe(insertSystemImports())
 			.pipe(replaceToIMALoader())
 			.pipe(insert.wrap('(function(){\n', '\n })();\n'))
 			.pipe(sourcemaps.write())
