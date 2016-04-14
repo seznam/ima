@@ -14,6 +14,14 @@ var getNamespace = () => {
 	return ns;
 };
 
+var _getRoot = () => {
+	return _isClient() ? window : GLOBAL;
+};
+
+var _isClient = () => {
+	return typeof window !== 'undefined' && window !== null;
+};
+
 var createImaApp = () => {
 	vendorLinker.bindToNamespace(ns);
 
@@ -24,13 +32,15 @@ var createImaApp = () => {
 };
 
 var getClientBootConfig = (initialAppConfigFunctions) => {
-	if ($Debug) {
-		if (window.$IMA.$Protocol !== window.location.protocol) {
+	var root = _getRoot();
+
+	if ($Debug && _isClient()) {
+		if ($IMA.$Protocol !== root.location.protocol) {
 			throw new Error(`Your client's protocol is not same as server's protocol.` +
 					`For right setting protocol on the server site set 'X-Forwarded-Proto' header.`);
 		}
 
-		if (window.$IMA.$Host !== window.location.host) {
+		if ($IMA.$Host !== root.location.host) {
 			throw new Error(`Your client's host is not same as server's host.` +
 					`For right setting host on the server site set 'X-Forwarded-Host' header.`);
 		}
@@ -40,28 +50,28 @@ var getClientBootConfig = (initialAppConfigFunctions) => {
 		services: {
 			respond: null,
 			request: null,
-			$IMA: window.$IMA,
+			$IMA: $IMA,
 			dictionary: {
-				$Language: window.$IMA.$Language,
-				dictionary: window.$IMA.i18n
+				$Language: $IMA.$Language,
+				dictionary: $IMA.i18n
 			},
 			router: {
-				$Protocol: window.$IMA.$Protocol,
-				$Host: window.$IMA.$Host,
-				$Root: window.$IMA.$Root,
-				$LanguagePartPath: window.$IMA.$LanguagePartPath
+				$Protocol: $IMA.$Protocol,
+				$Host: $IMA.$Host,
+				$Root: $IMA.$Root,
+				$LanguagePartPath: $IMA.$LanguagePartPath
 			}
 		},
 		settings: {
-			$Debug: window.$IMA.$Debug,
-			$Env: window.$IMA.$Env,
-			$Version: window.$IMA.$Version,
-			$App: window.$IMA.$App,
-			$Protocol: window.$IMA.$Protocol,
-			$Language: window.$IMA.$Language,
-			$Host: window.$IMA.$Host,
-			$Root: window.$IMA.$Root,
-			$LanguagePartPath: window.$IMA.$LanguagePartPath
+			$Debug: $IMA.$Debug,
+			$Env: $IMA.$Env,
+			$Version: $IMA.$Version,
+			$App: $IMA.$App,
+			$Protocol: $IMA.$Protocol,
+			$Language: $IMA.$Language,
+			$Host: $IMA.$Host,
+			$Root: $IMA.$Root,
+			$LanguagePartPath: $IMA.$LanguagePartPath
 		}
 	};
 
@@ -69,8 +79,9 @@ var getClientBootConfig = (initialAppConfigFunctions) => {
 };
 
 var getTestClientBootConfig = (initialAppConfigFunctions) => {
-	var root = typeof window !== 'undefined' && window !== null ? window : GLOBAL;
-	root.$Debug = true;
+	var root = _getRoot();
+	$IMA.$Debug = true;
+	root.$Debug = $IMA.$Debug;
 
 	var bootConfig = {
 		services: {
@@ -91,7 +102,7 @@ var getTestClientBootConfig = (initialAppConfigFunctions) => {
 			$Env: 'dev',
 			$Language: 'en',
 			$Protocol: 'http:',
-			$Debug: true,
+			$Debug: $IMA.$Debug,
 			$App: {}
 		}
 	};
@@ -103,7 +114,7 @@ var bootClientApp = (app, bootConfig) => {
 	app.bootstrap.run(bootConfig);
 
 	var cache = app.oc.get('$Cache');
-	cache.deserialize(window.$IMA.Cache || {});
+	cache.deserialize($IMA.Cache || {});
 
 	return app;
 };
@@ -156,24 +167,29 @@ var hotReloadClientApp = (initialAppConfigFunctions) => {
 };
 
 var reviveClientApp = (initialAppConfigFunctions) => {
-	//hack for browser Chrome, which has sometimes problem with rendering page
-	document.body.style.display = 'none';
-	document.body.offsetHeight; //eslint-disable-line
-	document.body.style.display = '';
+	var root = _getRoot();
+
+	if (_isClient()) {
+
+		//hack for browser Chrome, which has sometimes problem with rendering page
+		document.body.style.display = 'none';
+		document.body.offsetHeight; //eslint-disable-line
+		document.body.style.display = '';
+	}
 
 	//set React for ReactJS extension for browser
-	window.React = vendorLinker.get('react');
-	window.$Debug = window.$IMA.$Debug;
+	root.React = vendorLinker.get('react');
+	root.$Debug = root.$IMA.$Debug;
 
 	var app = createImaApp();
 	var bootConfig = getClientBootConfig(initialAppConfigFunctions);
 	app = bootClientApp(app, bootConfig);
 
-	routeClientApp(app);
+	return routeClientApp(app);
 };
 
 var reviveTestClientApp = (initialAppConfigFunctions) => {
-	var root = typeof window !== 'undefined' && window !== null ? window : GLOBAL;
+	var root = _getRoot();
 	var app = createImaApp();
 	var bootConfig = getTestClientBootConfig(initialAppConfigFunctions);
 
@@ -184,12 +200,21 @@ var reviveTestClientApp = (initialAppConfigFunctions) => {
 };
 
 var onLoad = (callback) => {
-	if (typeof window !== 'undefined' && window !== null) {
+	if (_isClient()) {
+
 		if (document.readyState === 'complete' || document.readyState === 'interactive') {
-			callback();
+			$IMA.Loader.initAllModules()
+				.then(callback)
+				.catch((error) => {
+					console.error(error);
+				});
 		} else {
 			window.addEventListener('DOMContentLoaded', () => {
-				callback();
+				$IMA.Loader.initAllModules()
+					.then(callback)
+					.catch((error) => {
+						console.error(error);
+					});
 			});
 		}
 	}

@@ -1,7 +1,6 @@
 describe('ima.storage.CookieStorage', function() {
 
 	var cookieString = 'cok1=hello;Path=/;Expires=Fri, 31 Dec 9999 23:59:59 GMT; cok2=hello2;Path=/;Expires=Fri, 31 Dec 9999 23:59:59 GMT';
-	var cookieString = 'cok1=hello;Path=/;Expires=Fri, 31 Dec 9999 23:59:59 GMT; cok2=hello2;Path=/;Expires=Fri, 31 Dec 9999 23:59:59 GMT';
 	var setCookieString = 'cok3=hello3; Path=/; Expires=Fri, 31 Dec 9999 23:59:59 GMT';
 	var setCookieStringWithFirstLetterUppercase = 'Cok3=hello3; Path=/; Expires=Fri, 31 Dec 9999 23:59:59 GMT';
 	var setCookieStringWithDomain = 'cok3=hello3; Path=/; Domain=localhost:3001; Expires=Fri, 31 Dec 9999 23:59:59 GMT';

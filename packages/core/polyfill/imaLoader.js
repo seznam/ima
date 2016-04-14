@@ -11,6 +11,7 @@
 
 	root.$IMA.Loader = {
 		modules: modules,
+		initializedModules: null,
 		register: function(moduleName, dependencies, moduleFactory) {
 			this.modules[moduleName] = {
 				dependencies: dependencies,
@@ -28,9 +29,12 @@
 			return Promise.resolve(resolveModule(moduleName));
 		},
 		initAllModules: function() {
+
 			Object.keys(modules).forEach(function(moduleName) {
 				resolveModule(moduleName);
 			});
+
+			return Promise.resolve();
 		}
 	};
 

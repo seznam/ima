@@ -110,20 +110,45 @@ export default class ServerPageRenderer extends AbstractPageRenderer {
 	 */
 	_getRevivalSettings() {
 		return (
-			'<script>' +
-			' window.$IMA = window.$IMA || {};' +
-			' window.$IMA.Cache = ' + this._cache.serialize() + ';' +
-			' window.$IMA.$Language = "' + this._settings.$Language + '";' +
-			' window.$IMA.$Env = "' + this._settings.$Env + '";' +
-			' window.$IMA.$Debug = ' + this._settings.$Debug + ';' +
-			' window.$IMA.$Version = "' + this._settings.$Version + '";' +
-			' window.$IMA.$App = ' + JSON.stringify(this._settings.$App) + ';' +
-			' window.$IMA.$Protocol = "' + this._settings.$Protocol + '";' +
-			' window.$IMA.$Host = "' + this._settings.$Host + '";' +
-			' window.$IMA.$Root = "' + this._settings.$Root + '";' +
-			' window.$IMA.$LanguagePartPath = "' +
-					this._settings.$LanguagePartPath + '";' +
-			'</script>'
+			`<script>
+			(function(root) {
+				root.$IMA = root.$IMA || {};
+				$IMA.Cache = ${this._cache.serialize()};
+				$IMA.$Language = "${this._settings.$Language}";
+				$IMA.$Env = "${this._settings.$Env}";
+				$IMA.$Debug = ${this._settings.$Debug};
+				$IMA.$Version = "${this._settings.$Version}";
+				$IMA.$App = ${JSON.stringify(this._settings.$App)};
+				$IMA.$Protocol = "${this._settings.$Protocol}";
+				$IMA.$Host = "${this._settings.$Host}";
+				$IMA.$Root = "${this._settings.$Root}";
+				$IMA.$LanguagePartPath = "${this._settings.$LanguagePartPath}";
+			})(typeof window !== 'undefined' && window !== null ? window : GLOBAL);
+
+			(function(root) {
+				root.$IMA = root.$IMA || {};
+				root.$IMA.Runner = root.$IMA.Runner || {
+					scripts: [],
+					loadedScripts: [],
+					load: function(script) {
+						this.loadedScripts.push(script.src);
+						if (this.scripts.length === this.loadedScripts.length) {
+							this.run();
+						}
+					},
+					run: function() {
+						root.$IMA.Loader.initAllModules()
+							.then(function() {
+								return root.$IMA.Loader.import("app/main");
+							})
+							.catch(function(error) {
+								console.error(error);
+							});
+					}
+				};
+			})(typeof window !== 'undefined' && window !== null ? window : GLOBAL);
+
+			</script>`
 		);
 	}
 
