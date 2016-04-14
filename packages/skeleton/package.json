@@ -1,6 +1,6 @@
 {
 	"name": "IMA.js-skeleton",
-	"version": "0.12.1",
+	"version": "0.13.0",
 	"description": "Isomorphic javascript application",
 	"main": "build/server.js",
 	"scripts": {
