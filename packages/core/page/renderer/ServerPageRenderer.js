@@ -100,17 +100,17 @@ export default class ServerPageRenderer extends AbstractPageRenderer {
 	}
 
 	/**
-	 * THe HTML code will include a script settings the "revival" data for the
+	 * The javascript code will include a settings the "revival" data for the
 	 * application at the client-side.
 	 *
 	 * @private
 	 * @method _getRevivalSettings
-	 * @return {string} HTML code containing script element to include into the
+	 * @return {string} The javascript code to include into the
 	 *         rendered page.
 	 */
 	_getRevivalSettings() {
 		return (
-			`<script>
+			`
 			(function(root) {
 				root.$IMA = root.$IMA || {};
 				$IMA.Cache = ${this._cache.serialize()};
@@ -147,8 +147,7 @@ export default class ServerPageRenderer extends AbstractPageRenderer {
 					}
 				};
 			})(typeof window !== 'undefined' && window !== null ? window : GLOBAL);
-
-			</script>`
+			`
 		);
 	}
 
