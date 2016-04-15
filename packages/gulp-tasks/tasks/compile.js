@@ -34,6 +34,18 @@ gulp.task('Es6ToEs5:app', function () {
 		return !!file.relative.match(view);
 	}
 
+	function insertSystemImports() {
+		return change(function (content) {
+			content = content + '\n' +
+				'$IMA.Loader.initAllModules();\n' +
+				'Promise.all([$IMA.Loader.import("app/main")])\n' +
+				'.catch(function (error) { \n' +
+				'console.error(error); \n });';
+
+			return content;
+		});
+	}
+
 	function replaceToIMALoader() {
 		return change(function (content) {
 			content = content.replace(/System.import/g, '$IMA.Loader.import');
