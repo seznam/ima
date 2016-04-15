@@ -23,7 +23,7 @@ export default class View extends AbstractComponent {
 				</head>
 				<body>
 					<div id="page" dangerouslySetInnerHTML={{__html: this.props.page}} />
-					<div id="revivalSettings" dangerouslySetInnerHTML={{__html: this.props.revivalSettings}}/>
+					<script id="revivalSettings" dangerouslySetInnerHTML={{ __html: this.props.revivalSettings }}/>
 					{this.utils.$Settings.$Env === 'dev' ? <div id="scripts">{this.getSyncScripts()}</div> : <div id="scripts" dangerouslySetInnerHTML={{ __html: this.getAsyncScripts() }}/>}
 				</body>
 			</html>
