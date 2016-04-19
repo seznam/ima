@@ -314,6 +314,12 @@ module.exports = ((environment, logger, languageLoader, appFactory) => {
 						return _applyError(error, req, res, app);
 					}
 				})
+				.catch((e) => {
+					showStaticErrorPage(e, req, res);
+
+					instanceRecycler.clearInstance(app);
+					returnPromise = Promise.reject(e);
+				});
 		}
 
 		return returnPromise;
