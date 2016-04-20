@@ -87,6 +87,7 @@ module.exports = ((environment, logger, languageLoader, appFactory) => {
 		Object.assign(
 			bootConfig,
 			appMain.getInitialAppConfigFunctions(),
+			appMain.ima.getInitialPluginConfig(),
 			appMain.ima.getInitialImaConfigFunctions()
 		);
 		app.bootstrap
