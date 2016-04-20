@@ -16,6 +16,14 @@ class VendorLinker {
 		 * @type {Map}
 		 */
 		this._modules = new Map();
+
+		/**
+		 * Internal storage of loaded ima plugins.
+		 *
+		 * @private
+		 * @type {Array<Object<string, *>>}
+		 */
+		this._plugins = [];
 	}
 
 	/**
@@ -64,6 +72,7 @@ class VendorLinker {
 	 * Binds the vendor modules loaded in this vendor linker to the
 	 * {@code Vendor} sub-namespace of the provided namespace.
 	 *
+	 * @method bindToNamespace
 	 * @param {Namespace} ns The namespace to which the vendor modules should
 	 *        be bound.
 	 */
@@ -74,10 +83,21 @@ class VendorLinker {
 
 			if (typeof lib.$registerImaPlugin === 'function') {
 				lib.$registerImaPlugin(ns);
+				this._plugins.push(lib);
 			}
 
 			nsVendor[name] = lib;
 		}
+	}
+
+	/**
+	 * Returns exported objects from ima plugins.
+	 *
+	 * @method getImaPlugins
+	 * @return {Array<Object<string, *>>} Returns array of exported objects from ima plugins.
+	 */
+	getImaPlugins() {
+		return this._plugins;
 	}
 }
 
