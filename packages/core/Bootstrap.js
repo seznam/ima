@@ -89,28 +89,43 @@ export default class Bootstrap {
 	 * @method _initSettings
 	 */
 	_initSettings() {
-		var allSettings = this._config.initSettings(
-			ns,
-			this._oc,
+		var currentApplicationSettings = {};
+
+		var plugins = this._config.plugins.concat([this._config]);
+
+		plugins
+			.filter((plugin) => typeof plugin.initSettings === 'function')
+			.forEach((plugin) => {
+				let allPluginSettings = plugin.initSettings(ns, this._oc, this._config.settings);
+				let environmentPluginSetting = this._getEnvironmentSetting(allPluginSettings);
+
+				$Helper.assignRecursively(
+					currentApplicationSettings,
+					environmentPluginSetting
+				);
+			});
+
+		this._config.bind = Object.assign(
+			this._config.bind || {},
+			currentApplicationSettings,
 			this._config.settings
 		);
+	}
+
+	_getEnvironmentSetting(allSettings) {
 		var environment = this._config.settings.$Env;
-		var currentSettings = allSettings[environment];
+		var environmentSetting = allSettings[environment];
 
 		if (environment !== PRODUCTION_ENVIRONMENT) {
 			var	productionSettings = allSettings[PRODUCTION_ENVIRONMENT];
 			$Helper.assignRecursively(
 				productionSettings,
-				currentSettings
+				environmentSetting
 			);
-			currentSettings = productionSettings;
+			environmentSetting = productionSettings;
 		}
 
-		this._config.bind = Object.assign(
-			this._config.bind || {},
-			currentSettings,
-			this._config.settings
-		);
+		return environmentSetting;
 	}
 
 	/**
@@ -122,6 +137,13 @@ export default class Bootstrap {
 	 */
 	_bindDependencies() {
 		this._config.initBindIma(ns, this._oc, this._config.bind);
+
+		this._config.plugins
+			.filter((plugin) => typeof plugin.initBind === 'function')
+			.forEach((plugin) => {
+				plugin.initBind(ns, this._oc, this._config.bind);
+			});
+
 		this._config.initBindApp(ns, this._oc, this._config.bind);
 	}
 
@@ -132,6 +154,12 @@ export default class Bootstrap {
 	 * @method _initRouting
 	 */
 	_initRouting() {
+		this._config.plugins
+			.filter((plugin) => typeof plugin.initRoutes === 'function')
+			.forEach((plugin) => {
+				plugin.initRoutes(ns, this._oc, this._config.bind);
+			});
+
 		this._config.initRoutes(ns, this._oc, this._config.routes);
 	}
 
@@ -143,6 +171,13 @@ export default class Bootstrap {
 	 */
 	_initServices() {
 		this._config.initServicesIma(ns, this._oc, this._config.services);
+
+		this._config.plugins
+			.filter((plugin) => typeof plugin.initServices === 'function')
+			.forEach((plugin) => {
+				plugin.initServices(ns, this._oc, this._config.services);
+			});
+
 		this._config.initServicesApp(ns, this._oc, this._config.services);
 	}
 }
