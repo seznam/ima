@@ -75,7 +75,7 @@ export default class Bootstrap {
 		this._initSettings();
 		this._bindDependencies();
 		this._initServices();
-		this._initRouting();
+		this._initRoutes();
 	}
 
 	/**
@@ -112,6 +112,14 @@ export default class Bootstrap {
 		);
 	}
 
+	/**
+	 * Returns setting for current environment where base values are from production
+	 * environment and other environments override base values.
+	 *
+	 * @private
+	 * @method _getEnvironmentSetting
+	 * @return {Object<string, *>}
+	 */
 	_getEnvironmentSetting(allSettings) {
 		var environment = this._config.settings.$Env;
 		var environmentSetting = allSettings[environment];
@@ -148,16 +156,16 @@ export default class Bootstrap {
 	}
 
 	/**
-	 * Initalizes the routing.
+	 * Initalizes the routes.
 	 *
 	 * @private
-	 * @method _initRouting
+	 * @method _initRoutes
 	 */
-	_initRouting() {
+	_initRoutes() {
 		this._config.plugins
 			.filter((plugin) => typeof plugin.initRoutes === 'function')
 			.forEach((plugin) => {
-				plugin.initRoutes(ns, this._oc, this._config.bind);
+				plugin.initRoutes(ns, this._oc, this._config.routes);
 			});
 
 		this._config.initRoutes(ns, this._oc, this._config.routes);

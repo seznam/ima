@@ -82,7 +82,8 @@ var getClientBootConfig = (initialAppConfigFunctions) => {
 		bootConfig,
 		initialAppConfigFunctions,
 		getInitialPluginConfig(),
-		getInitialImaConfigFunctions());
+		getInitialImaConfigFunctions()
+	);
 };
 
 var getTestClientBootConfig = (initialAppConfigFunctions) => {
@@ -115,7 +116,12 @@ var getTestClientBootConfig = (initialAppConfigFunctions) => {
 		plugins: []
 	};
 
-	return Object.assign(bootConfig, initialAppConfigFunctions, getInitialImaConfigFunctions());
+	return Object.assign(
+		bootConfig,
+		initialAppConfigFunctions,
+		getInitialPluginConfig(),
+		getInitialImaConfigFunctions()
+	);
 };
 
 var bootClientApp = (app, bootConfig) => {
