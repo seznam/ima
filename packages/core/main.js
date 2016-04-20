@@ -14,6 +14,10 @@ var getNamespace = () => {
 	return ns;
 };
 
+var getInitialPluginConfig = () => {
+	return { plugins: vendorLinker.getImaPlugins() };
+};
+
 var _getRoot = () => {
 	return _isClient() ? window : GLOBAL;
 };
@@ -23,7 +27,6 @@ var _isClient = () => {
 };
 
 var createImaApp = () => {
-	vendorLinker.bindToNamespace(ns);
 
 	var oc = new ObjectContainer(ns);
 	var bootstrap = new Bootstrap(oc);
@@ -75,7 +78,11 @@ var getClientBootConfig = (initialAppConfigFunctions) => {
 		}
 	};
 
-	return Object.assign(bootConfig, initialAppConfigFunctions, getInitialImaConfigFunctions());
+	return Object.assign(
+		bootConfig,
+		initialAppConfigFunctions,
+		getInitialPluginConfig(),
+		getInitialImaConfigFunctions());
 };
 
 var getTestClientBootConfig = (initialAppConfigFunctions) => {
@@ -104,7 +111,8 @@ var getTestClientBootConfig = (initialAppConfigFunctions) => {
 			$Protocol: 'http:',
 			$Debug: $IMA.$Debug,
 			$App: {}
-		}
+		},
+		plugins: []
 	};
 
 	return Object.assign(bootConfig, initialAppConfigFunctions, getInitialImaConfigFunctions());
@@ -220,9 +228,12 @@ var onLoad = (callback) => {
 	}
 };
 
+vendorLinker.bindToNamespace(ns);
+
 export {
 	getInitialImaConfigFunctions,
 	getNamespace,
+	getInitialPluginConfig,
 	createImaApp,
 	getClientBootConfig,
 	getTestClientBootConfig,
