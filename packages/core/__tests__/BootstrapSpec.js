@@ -13,8 +13,7 @@ describe('Bootstrap', function() {
 		initSettings: function() {
 			return environments;
 		},
-		initBind: function() {},
-		initRoutes: function() {}
+		initBind: function() {}
 	};
 	var bootConfig = {
 		plugins: [
@@ -141,14 +140,6 @@ describe('Bootstrap', function() {
 			bootstrap._initRoutes();
 
 			expect(bootConfig.initRoutes).toHaveBeenCalledWith(ns, objectContainer, bootConfig.routes);
-		});
-
-		it('should initalize plugin route', function() {
-			spyOn(plugin, 'initRoutes');
-
-			bootstrap._initRoutes();
-
-			expect(plugin.initRoutes).toHaveBeenCalledWith(ns, objectContainer, bootConfig.routes);
 		});
 
 	});

@@ -162,12 +162,6 @@ export default class Bootstrap {
 	 * @method _initRoutes
 	 */
 	_initRoutes() {
-		this._config.plugins
-			.filter((plugin) => typeof plugin.initRoutes === 'function')
-			.forEach((plugin) => {
-				plugin.initRoutes(ns, this._oc, this._config.routes);
-			});
-
 		this._config.initRoutes(ns, this._oc, this._config.routes);
 	}
 
