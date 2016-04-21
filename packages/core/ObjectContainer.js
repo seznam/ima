@@ -73,6 +73,15 @@ export default class ObjectContainer {
 		 * @type {Map<function(new: *), Entry<*>>}
 		 */
 		this._providers = new Map();
+
+		/**
+		 * The Flag for denying creating new aliases.
+		 *
+		 * @private
+		 * @property _locked
+		 * @type {boolean}
+		 */
+		this._locked = false;
 	}
 
 	/**
@@ -99,6 +108,12 @@ export default class ObjectContainer {
 	 */
 	bind(name, classConstructor, dependencies = []) {
 		if ($Debug) {
+			if (this._locked) {
+				throw new Error(`ima.ObjectContainer:bind Object container ` +
+						`is locked. You don't have permission for creating new ` +
+						`alias name ${name}.`);
+			}
+
 			if (typeof classConstructor !== 'function') {
 				throw new Error(`ima.ObjectContainer:bind method has to ` +
 						`have the second parameter type of function for ` +
@@ -182,7 +197,7 @@ export default class ObjectContainer {
 						`bind.js file.`);
 			}
 
-			if (this._registry.has(classConstructor)) {
+			if (this._registry.has(classConstructor) && !this._locked) {
 				throw new Error(`ima.ObjectContainer:inject method has ` +
 						`already registered class ${classConstructor.name}. ` +
 						`Inject method may be call only once for one class. ` +

@@ -387,7 +387,7 @@ describe('ima.ObjectContainer', function() {
 		});
 
 		it('should be create entry with constant value if namespace return another type than function', function() {
-			var constant = {a: 1};
+			var constant = { a: 1 };
 			namespace.ObjectContainer = constant;
 
 			spyOn(oc, '_createEntry')
