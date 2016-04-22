@@ -2,7 +2,6 @@ describe('Bootstrap', function() {
 
 	var bootstrap = null;
 	var objectContainer = null;
-	var namespace = null;
 	var environments = {
 		prod: {},
 		test: {},
@@ -105,6 +104,22 @@ describe('Bootstrap', function() {
 	});
 
 	describe('_bindDependencies method', function() {
+
+		it('should lock object container', function() {
+			spyOn(objectContainer, 'lock').and.callThrough();
+
+			bootstrap._bindDependencies();
+
+			expect(objectContainer.lock).toHaveBeenCalledWith();
+		});
+
+		it('should unlock object container', function() {
+			spyOn(objectContainer, 'unlock').and.callThrough();
+
+			bootstrap._bindDependencies();
+
+			expect(objectContainer.unlock).toHaveBeenCalledWith();
+		});
 
 		it('should bind ima', function() {
 			spyOn(bootConfig, 'initBindIma');

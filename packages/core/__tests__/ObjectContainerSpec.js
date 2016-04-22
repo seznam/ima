@@ -26,6 +26,10 @@ describe('ima.ObjectContainer', function() {
 
 	});
 
+	it('should be default unlocked', function() {
+		expect(oc.isLock()).toEqual(false);
+	});
+
 	it('should be empty object container', function() {
 		expect(oc._aliases.size).toEqual(0);
 		expect(oc._constants.size).toEqual(0);
@@ -399,5 +403,46 @@ describe('ima.ObjectContainer', function() {
 			expect(entry.sharedInstance).toEqual(constant);
 		});
 
+	});
+
+	describe('lock method', function() {
+
+		beforeEach(function() {
+			oc.clear();
+		});
+
+		it('should lock object container', function() {
+			oc.lock();
+
+			expect(oc.isLock()).toEqual(true);
+		});
+
+		it('should throw error for calling lock method on locked object container', function() {
+			oc.lock();
+
+			expect(function() {
+				oc.lock();
+			}).toThrow();
+		});
+	});
+
+	describe('unlock method', function() {
+
+		beforeEach(function() {
+			oc.clear();
+		});
+
+		it('should unlock object container', function() {
+			oc.lock();
+			oc.unlock();
+
+			expect(oc.isLock()).toEqual(false);
+		});
+
+		it('should throw error for calling unlock method on unlocked object container', function() {
+			expect(function() {
+				oc.unlock();
+			}).toThrow();
+		});
 	});
 });

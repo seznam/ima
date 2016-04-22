@@ -75,13 +75,13 @@ export default class ObjectContainer {
 		this._providers = new Map();
 
 		/**
-		 * The Flag for denying creating new aliases.
+		 * The number of calling lock method.
 		 *
 		 * @private
-		 * @property _locked
-		 * @type {boolean}
+		 * @property _countLock
+		 * @type {number}
 		 */
-		this._locked = false;
+		this._countLock = 0;
 	}
 
 	/**
@@ -108,7 +108,7 @@ export default class ObjectContainer {
 	 */
 	bind(name, classConstructor, dependencies = []) {
 		if ($Debug) {
-			if (this._locked) {
+			if (this.isLock()) {
 				throw new Error(`ima.ObjectContainer:bind Object container ` +
 						`is locked. You don't have permission for creating new ` +
 						`alias name ${name}.`);
@@ -197,7 +197,7 @@ export default class ObjectContainer {
 						`bind.js file.`);
 			}
 
-			if (this._registry.has(classConstructor) && !this._locked) {
+			if (this._registry.has(classConstructor) && !this.isLock()) {
 				throw new Error(`ima.ObjectContainer:inject method has ` +
 						`already registered class ${classConstructor.name}. ` +
 						`Inject method may be call only once for one class. ` +
@@ -248,7 +248,7 @@ export default class ObjectContainer {
 				prototype = Object.getPrototypeOf(prototype);
 			}
 			if (!prototype) {
-				throw new Error('The specified class ' +
+				throw new Error('ima.ObjectContainer:provide The specified class ' +
 						`(${implementationConstructor.name}) does not ` +
 						`implement the ${interfaceConstructor.name} ` +
 						`interface.`);
@@ -347,7 +347,8 @@ export default class ObjectContainer {
 	}
 
 	/**
-	 * Clears all entries from this object container.
+	 * Clears all entries from this object container and reset
+	 * counf of locking object container.
 	 *
 	 * @chainable
 	 * @method clear
@@ -358,6 +359,54 @@ export default class ObjectContainer {
 		this._aliases.clear();
 		this._registry.clear();
 		this._providers.clear();
+		this._countLock = 0;
+
+		return this;
+	}
+
+	/**
+	 * Returns true if object container is locked. It is helpfull for booting
+	 * ima plugin which don't have permissions for creating new aliases.
+	 *
+	 * @method isLock
+	 * @return {boolean}
+	 */
+	isLock() {
+		return !!(this._countLock % 2);
+	}
+
+	/**
+	 * Lock object container for creating new aliases.
+	 *
+	 * @chainable
+	 * @method lock
+	 * @return {ima.ObjectContainer} This object container.
+	 */
+	lock() {
+		if (this.isLock() || this._countLock !== 0) {
+			throw new Error(`ima.ObjectContainer:lock The bootsrap instance ` +
+					`has to call lock method. Other calling are denied.`);
+		}
+
+		this._countLock++;
+
+		return this;
+	}
+
+	/**
+	 * Unlock object container for creating new aliases.
+	 *
+	 * @chainable
+	 * @method unlock
+	 * @return {ima.ObjectContainer} This object container.
+	 */
+	unlock() {
+		if (!this.isLock() || this._countLock !== 1) {
+			throw new Error(`ima.ObjectContainer:unlock The bootstrap instance ` +
+					`has to call unlock method. Other calling are denied.`);
+		}
+
+		this._countLock++;
 
 		return this;
 	}

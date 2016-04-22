@@ -145,6 +145,7 @@ export default class Bootstrap {
 	 */
 	_bindDependencies() {
 		this._config.initBindIma(ns, this._oc, this._config.bind);
+		this._oc.lock();
 
 		this._config.plugins
 			.filter((plugin) => typeof plugin.initBind === 'function')
@@ -152,6 +153,7 @@ export default class Bootstrap {
 				plugin.initBind(ns, this._oc, this._config.bind);
 			});
 
+		this._oc.unlock();
 		this._config.initBindApp(ns, this._oc, this._config.bind);
 	}
 
