@@ -206,12 +206,12 @@ describe('ima.page.renderer.ServerPageRenderer', function() {
 			spyOn(ReactDOMServer, 'renderToString')
 				.and
 				.returnValue(pageMarkup);
-			spyOn(ns, 'get')
-				.and
-				.returnValue(documentView);
 			spyOn(rendererFactory, 'reactCreateFactory')
 				.and
 				.returnValue(documentViewFactory);
+			spyOn(rendererFactory, 'getDocumentView')
+				.and
+				.returnValue(documentView);
 			spyOn(ReactDOMServer, 'renderToStaticMarkup')
 				.and
 				.returnValue(appMarkup);
@@ -238,10 +238,6 @@ describe('ima.page.renderer.ServerPageRenderer', function() {
 
 		it('should render page view to string', function() {
 			expect(ReactDOMServer.renderToString).toHaveBeenCalledWith(wrapedPageViewElement);
-		});
-
-		it('should find document view from namespace', function() {
-			expect(ns.get).toHaveBeenCalledWith(settings.$Page.$Render.documentView);
 		});
 
 		it('should create factory for creating React element from document view', function() {

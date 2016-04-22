@@ -60,6 +60,22 @@ export default class PageRendererFactory {
 	}
 
 	/**
+	 * Return class constructor of document view for page. Document view may be set
+	 * as namespace path or as class constructor.
+	 *
+	 * @method getDocumentView
+	 * @param {(React.Component|string)} documentView
+	 * @return {React.Component}
+	 */
+	getDocumentView(documentView) {
+		if (typeof documentView === 'string') {
+			return ns.get(documentView);
+		}
+
+		return documentView;
+	}
+
+	/**
 	 * Wraps the provided view into the view adapter so it can access the state
 	 * passed from controller through the {@code props} property instead of the
 	 * {@code state} property.
