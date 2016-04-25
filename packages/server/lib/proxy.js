@@ -1,5 +1,4 @@
 var express = require('express');
-var router = express.Router();
 var superAgent = require('superagent');
 
 var firstLetterToLowerCase = (world) => {
@@ -104,6 +103,7 @@ var setCommonRequestHeaders = (httpRequest, headers) => {
 module.exports = (environment, logger) => {
 
 	return (proxyServer) => {
+		var router = express.Router();
 
 		var _callRemoteServer = (req, res) => {
 			var url = req.url;
