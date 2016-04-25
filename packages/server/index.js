@@ -9,7 +9,8 @@ module.exports = (environmentConfig, languageLoader, appFactory) => {
 
 	var logger = require('./lib/logger.js')(environment);
 	var urlParser = require('./lib/urlParser.js')(environment);
-	var proxy = require('./lib/proxy.js')(environment, logger);
+	var proxyFactory = require('./lib/proxy.js')(environment, logger);
+	var proxy = proxyFactory(environment.$Proxy.server);
 	var clientApp = require('./lib/clientApp.js')(environment, logger, languageLoader, appFactory);
 	var cache = require('./lib/cache.js')(environment);
 
@@ -19,6 +20,7 @@ module.exports = (environmentConfig, languageLoader, appFactory) => {
 		urlParser,
 		logger,
 		proxy,
+		proxyFactory,
 		cache
 	};
 };
