@@ -1,4 +1,5 @@
 import ns from 'ima/namespace';
+import AbstractDocumentView from 'ima/page/AbstractDocumentView';
 
 ns.namespace('ima.page.renderer');
 
@@ -60,19 +61,34 @@ export default class PageRendererFactory {
 	}
 
 	/**
-	 * Return class constructor of document view for page. Document view may be set
-	 * as namespace path or as class constructor.
+	 * Returns the class constructor of the specified document view component.
+	 * Document view may be specified as a namespace path or as a class
+	 * constructor.
 	 *
 	 * @method getDocumentView
-	 * @param {(React.Component|string)} documentView
-	 * @return {React.Component}
+	 * @param {(React.Component|string)} documentView The namespace path
+	 *        pointing to the document view component, or the constructor of
+	 *        the document view component.
+	 * @return {React.Component} The constructor of the document view
+	 *         component.
 	 */
 	getDocumentView(documentView) {
+		var documentViewComponent;
 		if (typeof documentView === 'string') {
-			return ns.get(documentView);
+			documentViewComponent = ns.get(documentView);
+		} else {
+			documentViewComponent = documentView;
 		}
 
-		return documentView;
+		if ($Debug) {
+			let componentPrototype = documentViewComponent.prototype;
+			if (!(componentPrototype instanceof AbstractDocumentView)) {
+				throw new Error('The document view component must extend ' +
+						'ima/page/AbstractDocumentView class');
+			}
+		}
+		
+		return documentViewComponent;
 	}
 
 	/**
