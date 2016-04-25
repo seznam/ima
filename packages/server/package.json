@@ -37,7 +37,7 @@
 	"dependencies": {
 		"async-each": "^1.0.0",
 		"highlight.js": "^9.2.0",
-		"ima-helpers": "^0.12.1",
+		"ima-helpers": "git://github.com/seznam/IMA.js-helpers.git#next",
 		"stack-trace": "0.0.9",
 		"winston": "^2.2.0"
 	}
