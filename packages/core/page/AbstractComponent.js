@@ -186,7 +186,7 @@ export default class AbstractComponent extends React.Component {
 	}
 
 	/**
-	 * Unregisters the provided event listener for an IMA.js DOM custom event
+	 * Deregisters the provided event listener for an IMA.js DOM custom event
 	 * of the specified name at the specified event target.
 	 *
 	 * @method unlisten
