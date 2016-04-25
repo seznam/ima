@@ -56,14 +56,15 @@ export default class ClientPageRenderer extends AbstractPageRenderer {
 		 */
 		this._window = window;
 
+		var configuredDocumentView = settings.$Page.$Render.documentView;
+		var documentView = factory.getDocumentView(configuredDocumentView);
+		var masterElementId = documentView.masterElementId;
 		/**
 		 * @property _viewContainer
 		 * @private
 		 * @type {HTMLElement}
 		 */
-		this._viewContainer = this._window.getElementById(
-			this._settings.$Page.$Render.masterElementId
-		);
+		this._viewContainer = this._window.getElementById(masterElementId);
 	}
 
 	/**

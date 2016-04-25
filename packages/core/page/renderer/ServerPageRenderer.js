@@ -215,8 +215,8 @@ export default class ServerPageRenderer extends AbstractPageRenderer {
 	 */
 	_renderPageContentToString(controller, view) {
 		var props = this._generateViewProps(view, controller.getState());
-		var wrapedPageViewElement = this._factory.wrapView(props);
-		var pageMarkup = this._ReactDOM.renderToString(wrapedPageViewElement);
+		var wrappedPageViewElement = this._factory.wrapView(props);
+		var pageMarkup = this._ReactDOM.renderToString(wrappedPageViewElement);
 
 		var documentView = this._factory.getDocumentView(this._settings.$Page.$Render.documentView);
 		var documentViewFactory = this._factory.reactCreateFactory(documentView);
