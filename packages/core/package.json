@@ -39,7 +39,7 @@
 		"babel-polyfill": "^6.7.4",
 		"custom-event-polyfill": "^0.2.2",
 		"ima-babel6-polyfill": "^0.12.0",
-		"ima-helpers": "^0.12.1",
+		"ima-helpers": "git://github.com/seznam/IMA.js-helpers.git#next",
 		"react": "^15.0.1",
 		"react-addons-test-utils": "^15.0.1",
 		"react-dom": "^15.0.1",
