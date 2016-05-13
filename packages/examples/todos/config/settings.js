@@ -28,8 +28,7 @@ export var init = (ns, oc, config) => { // jshint ignore:line
 						'/static/js/locale/' + config.$Language + '.js' + versionStamp,
 						'/static/js/app.bundle.min.js' + versionStamp
 					],
-					documentView: 'app.component.document.View',
-					masterElementId: 'page'
+					documentView: 'app.component.document.View'
 				}
 			},
 			$Static: {

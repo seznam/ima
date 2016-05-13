@@ -26,8 +26,7 @@ export var init = (ns, oc, config) => {
 						'/static/js/locale/' + config.$Language + '.js',
 						'/static/js/app.bundle.min.js'
 					],
-					documentView: 'app.component.document.View',
-					masterElementId: 'page'
+					documentView: 'app.component.document.View'
 				}
 			},
 			$Static: {

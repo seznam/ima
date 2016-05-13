@@ -1,5 +1,5 @@
 import ns from 'ima/namespace';
-import AbstractComponent from 'ima/page/AbstractComponent';
+import AbstractDocumentView from 'ima/page/AbstractDocumentView';
 import React from 'react';
 
 ns.namespace('app.component.document');
@@ -11,7 +11,7 @@ ns.namespace('app.component.document');
  * @module app
  * @submodule app.component
  */
-export default class DocumentView extends AbstractComponent {
+export default class DocumentView extends AbstractDocumentView {
 	render() {
 		var appCssFile = this.utils.$Settings.$Env !== 'dev' ? 'app.bundle.min.css' : 'app.css';
 		appCssFile += `?version=${this.utils.$Settings.$Version}`;
@@ -70,6 +70,10 @@ export default class DocumentView extends AbstractComponent {
 		});
 
 		return [scriptResources].concat(scriptTags).join('');
+	}
+
+	static get masterElementId() {
+		return 'page';
 	}
 }
 
