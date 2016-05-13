@@ -47,13 +47,13 @@ describe('ima.router.ClientRouter', function() {
 			.and
 			.stub();
 
-		spyOn(router, '_setAddressBar')
+		spyOn(router, '_saveScrollHistory')
 			.and
 			.stub();
 
 		router.listen();
 
-		expect(router._setAddressBar).toHaveBeenCalled();
+		expect(router._saveScrollHistory).toHaveBeenCalled();
 		expect(win.bindEventListener.calls.count()).toEqual(2);
 	});
 

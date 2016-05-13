@@ -161,7 +161,7 @@ export default class ClientRouter extends AbstractRouter {
 	listen() {
 		var nativeWindow = this._window.getWindow();
 
-		this._setAddressBar(this.getUrl());
+		this._saveScrollHistory();
 		let eventName = Events.POP_STATE;
 		this._window.bindEventListener(nativeWindow, eventName, (event) => {
 
