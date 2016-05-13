@@ -24,4 +24,8 @@ export default class NotFoundView extends AbstractComponent {
 	}
 }
 
+NotFoundView.contextTypes = {
+	$Utils: React.PropTypes.object
+};
+
 ns.app.page.notFound.NotFoundView = NotFoundView;

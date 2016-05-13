@@ -24,4 +24,8 @@ export default class View extends AbstractComponent {
 	}
 }
 
+View.contextTypes = {
+	$Utils: React.PropTypes.object
+};
+
 ns.app.page.error.View = View;

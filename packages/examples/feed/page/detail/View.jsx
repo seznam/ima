@@ -61,4 +61,8 @@ class View extends AbstractComponent {
 	}
 }
 
+View.contextTypes = {
+	$Utils: React.PropTypes.object
+};
+
 ns.app.page.detail.View = View;

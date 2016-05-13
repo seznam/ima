@@ -28,4 +28,8 @@ export default class HomeView extends AbstractComponent {
 	}
 }
 
+HomeView.contextTypes = {
+	$Utils: React.PropTypes.object
+};
+
 ns.app.page.home.HomeView = HomeView;

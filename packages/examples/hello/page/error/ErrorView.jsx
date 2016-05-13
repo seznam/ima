@@ -33,4 +33,8 @@ export default class ErrorView extends AbstractComponent {
 	}
 }
 
+ErrorView.contextTypes = {
+	$Utils: React.PropTypes.object
+};
+
 ns.app.page.error.ErrorView = ErrorView;

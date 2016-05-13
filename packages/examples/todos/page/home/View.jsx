@@ -112,5 +112,8 @@ export default class View extends AbstractComponent {
 	}
 }
 
-ns.app.page.home.View = View;
+View.contextTypes = {
+	$Utils: React.PropTypes.object
+};
 
+ns.app.page.home.View = View;
