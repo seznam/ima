@@ -81,13 +81,13 @@ export default class PageRendererFactory {
 		}
 
 		if ($Debug) {
-			let componentPrototype = documentViewComponent.prototype;
+			/*let componentPrototype = documentViewComponent.prototype;
 			if (!(componentPrototype instanceof AbstractDocumentView)) {
 				throw new Error('The document view component must extend ' +
 						'ima/page/AbstractDocumentView class');
-			}
+			}*/
 		}
-		
+
 		return documentViewComponent;
 	}
 

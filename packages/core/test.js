@@ -1,4 +1,4 @@
-var root = (typeof window !== 'undefined' && window !== null) ? window : GLOBAL;
+var root = (typeof window !== 'undefined' && window !== null) ? window : global;
 root.$IMA = root.$IMA || {};
 root.$IMA.Test = true;
 

@@ -3,7 +3,7 @@
 	if ((typeof window !== 'undefined') && (window !== null)) {
 		root = window;
 	} else {
-		root = GLOBAL;
+		root = global;
 	}
 
 	root.$IMA = root.$IMA || {};

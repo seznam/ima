@@ -19,7 +19,7 @@ var getInitialPluginConfig = () => {
 };
 
 var _getRoot = () => {
-	return _isClient() ? window : GLOBAL;
+	return _isClient() ? window : global;
 };
 
 var _isClient = () => {

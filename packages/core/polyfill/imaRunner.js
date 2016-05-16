@@ -19,4 +19,4 @@
 				});
 		}
 	};
-})(typeof window !== 'undefined' && window !== null ? window : GLOBAL);
+})(typeof window !== 'undefined' && window !== null ? window : global);

@@ -123,7 +123,7 @@ export default class ServerPageRenderer extends AbstractPageRenderer {
 				$IMA.$Host = "${this._settings.$Host}";
 				$IMA.$Root = "${this._settings.$Root}";
 				$IMA.$LanguagePartPath = "${this._settings.$LanguagePartPath}";
-			})(typeof window !== 'undefined' && window !== null ? window : GLOBAL);
+			})(typeof window !== 'undefined' && window !== null ? window : global);
 
 			(function(root) {
 				root.$IMA = root.$IMA || {};
@@ -146,7 +146,7 @@ export default class ServerPageRenderer extends AbstractPageRenderer {
 							});
 					}
 				};
-			})(typeof window !== 'undefined' && window !== null ? window : GLOBAL);
+			})(typeof window !== 'undefined' && window !== null ? window : global);
 			`
 		);
 	}
