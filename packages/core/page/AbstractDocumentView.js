@@ -55,3 +55,5 @@ export default class AbstractDocumentView extends AbstractComponent {
 		};
 	}
 }
+
+ns.ima.page.AbstractDocumentView = AbstractDocumentView;
