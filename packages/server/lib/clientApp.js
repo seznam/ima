@@ -279,7 +279,7 @@ module.exports = ((environment, logger, languageLoader, appFactory) => {
 
 				return appMain;
 			});
-	}
+	};
 
 	var errorHandler = (error, req, res, app) => {
 		var returnPromise = Promise.reject(error);
@@ -346,7 +346,7 @@ module.exports = ((environment, logger, languageLoader, appFactory) => {
 		}
 
 		return returnPromise;
-	}
+	};
 
 	var requestHandler = (req, res) => {
 		if (environment.$Env === 'dev') {
@@ -361,7 +361,7 @@ module.exports = ((environment, logger, languageLoader, appFactory) => {
 				}
 
 				return _generateResponse(req, res, appMain);
-			})
+			});
 	};
 
 	return {
