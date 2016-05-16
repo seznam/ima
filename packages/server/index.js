@@ -4,8 +4,8 @@ module.exports = (environmentConfig, languageLoader, appFactory) => {
 
 	var environment = require('./lib/environment.js')(environmentConfig);
 
-	GLOBAL.$Debug = environment.$Debug;
-	GLOBAL.$IMA = GLOBAL.$IMA || {};
+	global.$Debug = environment.$Debug;
+	global.$IMA = global.$IMA || {};
 
 	var logger = require('./lib/logger.js')(environment);
 	var urlParser = require('./lib/urlParser.js')(environment);
