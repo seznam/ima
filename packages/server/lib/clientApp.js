@@ -275,7 +275,9 @@ module.exports = ((environment, logger, languageLoader, appFactory) => {
 		return $IMA.Loader
 			.import('app/main')
 			.then((appMain) => {
-				instanceRecycler.init(appMain.ima.createImaApp, environment.$Server.concurrency);
+				if (!instanceRecycler.isInitialized()) {
+					instanceRecycler.init(appMain.ima.createImaApp, environment.$Server.concurrency);
+				}
 
 				return appMain;
 			});
