@@ -108,6 +108,10 @@ var runNodeApp = () => {
 		});
 };
 
+if (environment.$Env !== 'dev') {
+	logger.level = 'warn';
+}
+
 if (environment.$Env === 'dev' || environment.$Server.clusters === 1) {
 
 	runNodeApp();
