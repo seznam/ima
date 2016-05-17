@@ -5,6 +5,9 @@ var appDependencies;
 try {
 	appDependencies = require('./app/build.js');
 } catch (error) {
+	console.info(error.message);
+	console.info('It will be use default application dependencies.');
+
 	appDependencies = {
 		js: [],
 		languages: [],
@@ -19,7 +22,6 @@ try {
 			css: []
 		}
 	};
-	console.log(error);
 }
 
 var babelConfig = {
