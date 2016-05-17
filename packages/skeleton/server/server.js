@@ -7,6 +7,7 @@ require('./ima/vendor.server.js');
 // Node
 var cluster = require('cluster');
 var path = require('path');
+var os = require('os');
 global.appRoot = path.resolve(__dirname);
 
 // IMA server
@@ -120,7 +121,7 @@ if (environment.$Env === 'dev' || environment.$Server.clusters === 1) {
 
 	if (cluster.isMaster) {
 
-		var cpuCount = environment.$Server.clusters || require('os').cpus().length;
+		var cpuCount = environment.$Server.clusters || os.cpus().length;
 
 		// Create a worker for each CPU
 		for (var i = 0; i < cpuCount; i += 1) {
