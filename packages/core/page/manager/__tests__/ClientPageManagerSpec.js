@@ -22,7 +22,8 @@ describe('ima.page.manager.ClientPageManager', function() {
 
 	var options = {
 		onlyUpdate: false,
-		autoScroll: true
+		autoScroll: true,
+		serveSPA: true
 	};
 	var params = {
 		param1: 'param1',

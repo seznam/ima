@@ -7,8 +7,8 @@ describe('ima.router.Route', function() {
 	var pathExpression = '/home/:userId/something/:somethingId/:?optional';
 	var options = {
 		onlyUpdate: false,
-		autoScroll: true
-
+		autoScroll: true,
+		serveSPA: true
 	};
 
 	beforeEach(function() {

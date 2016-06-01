@@ -12,7 +12,8 @@ describe('ima.page.manager.ServerPageManager', function() {
 	var view = function (){};
 	var options = {
 		onlyUpdate: false,
-		autoScroll: true
+		autoScroll: true,
+		serveSPA: true
 	};
 
 	beforeEach(function() {

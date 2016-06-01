@@ -15,7 +15,8 @@ describe('Revive client application', function() {
 
 	var options = {
 		onlyUpdate: false,
-		autoScroll: true
+		autoScroll: true,
+		serveSPA: true
 	};
 
 	function Controller() {}

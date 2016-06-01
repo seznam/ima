@@ -192,7 +192,7 @@ export default class Router {
 	 *
 	 * @method redirect
 	 * @param {string} url The URL to which the client should be redirected.
-	 * @param {{httpStatus: number=, onlyUpdate: boolean=, autoScroll: boolean=}} [options={}]
+	 * @param {{httpStatus: number=, onlyUpdate: boolean=, autoScroll: boolean=, serveSPA: boolean=}} [options={}]
 	 *        The options overrides route options defined in routes.js.
 	 */
 	redirect(url, options = {}) {}
@@ -219,7 +219,7 @@ export default class Router {
 	 * @method route
 	 * @param {string} path The URL path part received from the client, with
 	 *        optional query.
-	 * @param {{onlyUpdate: boolean=, autoScroll: boolean=}} [options={}]
+	 * @param {{onlyUpdate: boolean=, autoScroll: boolean=, serveSPA: boolean=}} [options={}]
 	 *        The options overrides route options defined in routes.js.
 	 * @return {Promise<Object<string, *>>} A promise resolved
 	 *         when the error has been handled and the response has been sent
@@ -234,7 +234,7 @@ export default class Router {
 	 * @method handleError
 	 * @param {Object<string, (Error|string)>} params Parameters extracted from
 	 *        the current URL path and query.
-	 * @param {{onlyUpdate: boolean=, autoScroll: boolean=}} [options={}]
+	 * @param {{onlyUpdate: boolean=, autoScroll: boolean=, serverSPA: boolean=}} [options={}]
 	 *        The options overrides route options defined in routes.js.
 	 * @return {Promise<Object<string, *>>} A promise resolved
 	 *         when the error has been handled and the response has been sent
@@ -249,7 +249,7 @@ export default class Router {
 	 * @method handleNotFound
 	 * @param {Object<string, (Error|string)>} params Parameters extracted from
 	 *        the current URL path and query.
-	 * @param {{onlyUpdate: boolean=, autoScroll: boolean=}} [options={}]
+	 * @param {{onlyUpdate: boolean=, autoScroll: boolean=, serveSPA: boolean=}} [options={}]
 	 *        The options overrides route options defined in routes.js.
 	 * @return {Promise<Object<string, *>>} A promise resolved
 	 *         when the error has been handled and the response has been sent

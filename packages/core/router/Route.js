@@ -77,7 +77,8 @@ export default class Route {
 	 *        identifying the controller associated with this route.
 	 * @param {string} view The full name or Object Container alias identifying
 	 *        the view class associated with this route.
-	 * @param {{onlyUpdate: (boolean|function), autoScroll: boolean}} [options]
+	 * @param {{onlyUpdate: (boolean|function), autoScroll: boolean,
+	 *        serveSPA: boolean}} [options]
 	 *        The route additional options.
 	 */
 	constructor(name, pathExpression, controller, view, options) {
@@ -125,11 +126,11 @@ export default class Route {
 		 *
 		 * @private
 		 * @property _options
-		 * @type {{onlyUpdate: boolean, autoScroll: boolean}}
-		 * @default {onlyUpdate: false, autoScroll: true}
+		 * @type {{onlyUpdate: boolean, autoScroll: boolean, serveSPA: boolean}}
+		 * @default {onlyUpdate: false, autoScroll: true, serveSPA: boolean}
 		 */
 		this._options = Object.assign(
-			{ onlyUpdate: false, autoScroll: true },
+			{ onlyUpdate: false, autoScroll: true, serveSPA: true },
 			options
 		);
 
@@ -242,7 +243,7 @@ export default class Route {
 	 * Return route additional options.
 	 *
 	 * @method getOptions
-	 * @return {{onlyUpdate: (boolean|function), autoScroll: boolean}}
+	 * @return {{onlyUpdate: (boolean|function), autoScroll: boolean, serveSPA: boolean}}
 	 */
 	getOptions() {
 		return this._options;

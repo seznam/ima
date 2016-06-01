@@ -136,7 +136,7 @@ export default class AbstractPageManager extends PageManagerInterface {
 	 * @method _storeManagedPageValue
 	 * @param {(string|function)} controller
 	 * @param {(string|function)} view
-	 * @param {{onlyUpdate: boolean}} options
+	 * @param {{onlyUpdate: boolean, autoScroll: boolean, serveSPA: boolean}} options
 	 * @param {Object<string, string>} params The route parameters.
 	 * @param {ima.controller.AbstractController} controllerInstance
 	 * @param {ima.controller.ControllerDecorator} decoratedController
@@ -561,7 +561,7 @@ export default class AbstractPageManager extends PageManagerInterface {
 	 *
 	 * @protected
 	 * @method _preManage
-	 * @param {{onlyUpdate: boolean, autoScroll: boolean}} options
+	 * @param {{onlyUpdate: boolean, autoScroll: boolean, serveSPA: boolean}} options
 	 */
 	_preManage(options) {
 		if (options.autoScroll) {
@@ -575,7 +575,7 @@ export default class AbstractPageManager extends PageManagerInterface {
 	 *
 	 * @protected
 	 * @method _postManage
-	 * @param {{onlyUpdate: boolean, autoScroll: boolean}} options
+	 * @param {{onlyUpdate: boolean, autoScroll: boolean, serveSPA: boolean}} options
 	 */
 	_postManage(options) {}
 

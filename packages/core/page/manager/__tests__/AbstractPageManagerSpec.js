@@ -14,7 +14,8 @@ describe('ima.page.manager.AbstractPageManager', function() {
 	var View = function() {};
 	var options = {
 		onlyUpdate: false,
-		autoScroll: true
+		autoScroll: true,
+		serveSPA: true
 	};
 	var params = {
 		param1: 'param1',

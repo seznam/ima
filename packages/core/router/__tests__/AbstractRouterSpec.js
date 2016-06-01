@@ -13,7 +13,8 @@ describe('ima.router.AbstractRouter', function() {
 	};
 	var options = {
 		onlyUpdate: false,
-		autoScroll: true
+		autoScroll: true,
+		serveSPA: true
 	};
 	var controller = 'BaseController';
 	var view = 'BaseView';
