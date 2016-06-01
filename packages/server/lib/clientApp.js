@@ -372,6 +372,7 @@ module.exports = ((environment, logger, languageLoader, appFactory) => {
 				var app = _initApp(req, res, appMain);
 
 				if (_haveToServeSPA(req, app)) {
+					instanceRecycler.clearInstance(app);
 					return showStaticSPAPage(req, res);
 				}
 
