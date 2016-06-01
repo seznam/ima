@@ -157,13 +157,24 @@ module.exports = ((environment, logger, languageLoader, appFactory) => {
 		});
 	};
 
-	var _haveToServeSPA = (req) => {
+	var _haveToServeSPA = (req, app) => {
 		var userAgent = req.headers['user-agent'] || '';
 		var isAllowedServeSPA = environment.$Server.serveSPA.allow;
 		var isServerBusy = !instanceRecycler.hasNextInstance();
 		var isAllowedUserAgent = !environment.$Server.serveSPA.blackListReg.test(userAgent);
+		var canBeRouteServeSPA = true;
+		var router = app.oc.get('$Router');
 
-		return isAllowedServeSPA && isServerBusy && isAllowedUserAgent;
+		try {
+			var routeInfo = router.getCurrentRouteInfo();
+			var routeOptions = routeInfo.route.getOptions();
+
+			if (routeOptions.serveSPA === false) {
+				canBeRouteServeSPA = false;
+			}
+		} catch (e) {}
+
+		return isAllowedServeSPA && isServerBusy && isAllowedUserAgent && canBeRouteServeSPA;
 	};
 
 	var _getBootConfig = (req, res) => {
@@ -328,9 +339,8 @@ module.exports = ((environment, logger, languageLoader, appFactory) => {
 		return returnPromise;
 	};
 
-	var _generateResponse = (req, res, appMain) => {
+	var _generateResponse = (req, res, app) => {
 		var returnPromise = Promise.reject(new Error());
-		var app = _initApp(req, res, appMain);
 		var router = app.oc.get('$Router');
 
 		try {
@@ -359,11 +369,13 @@ module.exports = ((environment, logger, languageLoader, appFactory) => {
 
 		return _importAppMain()
 			.then((appMain) => {
-				if (_haveToServeSPA(req)) {
+				var app = _initApp(req, res, appMain);
+
+				if (_haveToServeSPA(req, app)) {
 					return showStaticSPAPage(req, res);
 				}
 
-				return _generateResponse(req, res, appMain);
+				return _generateResponse(req, res, app);
 			});
 	};
 
