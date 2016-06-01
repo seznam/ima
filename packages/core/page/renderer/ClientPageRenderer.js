@@ -125,6 +125,11 @@ export default class ClientPageRenderer extends AbstractPageRenderer {
 				.then((fetchedResources) => {
 					controller.setMetaParams(fetchedResources);
 					this._updateMetaAttributes(controller.getMetaManager());
+
+					return {
+						content: null,
+						status: controller.getHttpStatus()
+					};
 				})
 				.catch((error) => this._handleError(error))
 		);
