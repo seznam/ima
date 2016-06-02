@@ -108,7 +108,7 @@ module.exports = (environment, logger) => {
 		var _callRemoteServer = (req, res) => {
 			var url = req.url;
 
-			if ((req.url.length > 1) && (req.url[req.url.length-1] === '/')) {
+			if ((req.url.length >= 1) && (req.url[req.url.length-1] === '/')) {
 				url = url.substr(0, url.length - 1);
 			}
 
