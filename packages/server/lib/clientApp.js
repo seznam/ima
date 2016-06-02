@@ -160,9 +160,9 @@ module.exports = ((environment, logger, languageLoader, appFactory) => {
 	var _haveToServeSPA = (req, app) => {
 		var userAgent = req.headers['user-agent'] || '';
 		var isAllowedServeSPA = environment.$Server.serveSPA.allow;
-		var isServerBusy = !instanceRecycler.hasNextInstance();
+		var isServerBusy = instanceRecycler.isReachToMaxConcurrencyRequests();
 		var isAllowedUserAgent = !environment.$Server.serveSPA.blackListReg.test(userAgent);
-		var canBeRouteServeSPA = true;
+		var canBeRouteServeAsSPA = true;
 		var router = app.oc.get('$Router');
 
 		try {
@@ -170,11 +170,11 @@ module.exports = ((environment, logger, languageLoader, appFactory) => {
 			var routeOptions = routeInfo.route.getOptions();
 
 			if (routeOptions.serveSPA === false) {
-				canBeRouteServeSPA = false;
+				canBeRouteServeAsSPA = false;
 			}
 		} catch (e) {}
 
-		return isAllowedServeSPA && isServerBusy && isAllowedUserAgent && canBeRouteServeSPA;
+		return isAllowedServeSPA && isServerBusy && isAllowedUserAgent && canBeRouteServeAsSPA;
 	};
 
 	var _getBootConfig = (req, res) => {
