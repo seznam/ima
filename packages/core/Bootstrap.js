@@ -12,7 +12,6 @@ ns.namespace('ima');
  */
 const PRODUCTION_ENVIRONMENT = 'prod';
 
-
 /**
  * Application bootstrap used to initialize the environment and the application
  * itself.
@@ -26,7 +25,7 @@ const PRODUCTION_ENVIRONMENT = 'prod';
 export default class Bootstrap {
 
 	/**
-	 * Initializes the bootstrap
+	 * Initializes the bootstrap.
 	 *
 	 * @constructor
 	 * @method contructor
