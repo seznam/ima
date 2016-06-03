@@ -75,13 +75,18 @@ export default class ObjectContainer {
 		this._providers = new Map();
 
 		/**
-		 * The number of calling lock method.
+		 * The number of calling {@linkcode lock()} and {@linkcode unlock()}
+		 * methods.
+		 *
+		 * The {@linkcode lock()} method may be called only if this field is
+		 * {@code 0}, while the {@linkcode unlock()} method may be called only
+		 * if this field is set to {@code 1}.
 		 *
 		 * @private
-		 * @property _countLock
+		 * @property _lockCounter
 		 * @type {number}
 		 */
-		this._countLock = 0;
+		this._lockCounter = 0;
 	}
 
 	/**
@@ -108,7 +113,7 @@ export default class ObjectContainer {
 	 */
 	bind(name, classConstructor, dependencies = []) {
 		if ($Debug) {
-			if (this.isLock()) {
+			if (this.isLocked()) {
 				throw new Error(`ima.ObjectContainer:bind Object container ` +
 						`is locked. You don't have permission for creating new ` +
 						`alias name ${name}.`);
@@ -197,7 +202,7 @@ export default class ObjectContainer {
 						`bind.js file.`);
 			}
 
-			if (this._registry.has(classConstructor) && !this.isLock()) {
+			if (this._registry.has(classConstructor) && !this.isLocked()) {
 				throw new Error(`ima.ObjectContainer:inject method has ` +
 						`already registered class ${classConstructor.name}. ` +
 						`Inject method may be call only once for one class. ` +
@@ -347,8 +352,8 @@ export default class ObjectContainer {
 	}
 
 	/**
-	 * Clears all entries from this object container and reset
-	 * counf of locking object container.
+	 * Clears all entries from this object container and resets the locking
+	 * mechanism of this object container.
 	 *
 	 * @chainable
 	 * @method clear
@@ -359,54 +364,72 @@ export default class ObjectContainer {
 		this._aliases.clear();
 		this._registry.clear();
 		this._providers.clear();
-		this._countLock = 0;
+		this._lockCounter = 0;
 
 		return this;
 	}
 
 	/**
-	 * Returns true if object container is locked. It is helpfull for booting
-	 * ima plugin which don't have permissions for creating new aliases.
+	 * Returns {@code true} if this object container is locked.
 	 *
-	 * @method isLock
+	 * When the object container is locked, it is impossible to register new
+	 * aliases using the {@linkcode bind()} method, or override the
+	 * default class dependencies of any already-configured class using the
+	 * {@linkcode inject()} method (classes that were not configured yet may be
+	 * configured using the {@linkcode inject()} method).
+	 *
+	 * This prevents the unpriviledged code (e.g. 3rd party plugins) from
+	 * overriding the default dependency configuration provided by ima, or
+	 * overriding the configuration of a 3rd party plugin by another 3rd party
+	 * plugin.
+	 *
+	 * The application itself has always access to the unlocked object
+	 * container.
+	 *
+	 * @method isLocked
 	 * @return {boolean}
 	 */
-	isLock() {
-		return !!(this._countLock % 2);
+	isLocked() {
+		return !!(this._lockCounter % 2);
 	}
 
 	/**
-	 * Lock object container for creating new aliases.
+	 * Locks the object container, preventing creation of new aliases and
+	 * overriding the default dependencies of already configured classes.
 	 *
 	 * @chainable
 	 * @method lock
 	 * @return {ima.ObjectContainer} This object container.
+	 * @see #isLocked()
 	 */
 	lock() {
-		if (this.isLock() || this._countLock !== 0) {
-			throw new Error(`ima.ObjectContainer:lock The bootsrap instance ` +
-					`has to call lock method. Other calling are denied.`);
+		if (this.isLocked() || (this._lockCounter !== 0)) {
+			throw new Error(`ima.ObjectContainer:lock The lock() method has ` +
+					`to be called only by the bootstrap script. Other calls ` +
+					`are now allowed.`);
 		}
 
-		this._countLock++;
+		this._lockCounter++;
 
 		return this;
 	}
 
 	/**
-	 * Unlock object container for creating new aliases.
+	 * Unlocks the object container, allowing the creation of new aliases and
+	 * overriding the default dependencies of already configured classes again.
 	 *
 	 * @chainable
 	 * @method unlock
 	 * @return {ima.ObjectContainer} This object container.
 	 */
 	unlock() {
-		if (!this.isLock() || this._countLock !== 1) {
-			throw new Error(`ima.ObjectContainer:unlock The bootstrap instance ` +
-					`has to call unlock method. Other calling are denied.`);
+		if (!this.isLocked() || (this._lockCounter !== 1)) {
+			throw new Error(`ima.ObjectContainer:unlock The unlock() method ` +
+					`has to be called only by the bootstrap script. Other ` +
+					`calls are not allowed.`);
 		}
 
-		this._countLock++;
+		this._lockCounter++;
 
 		return this;
 	}

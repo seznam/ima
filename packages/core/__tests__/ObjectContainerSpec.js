@@ -27,7 +27,7 @@ describe('ima.ObjectContainer', function() {
 	});
 
 	it('should be default unlocked', function() {
-		expect(oc.isLock()).toEqual(false);
+		expect(oc.isLocked()).toEqual(false);
 	});
 
 	it('should be empty object container', function() {
@@ -414,7 +414,7 @@ describe('ima.ObjectContainer', function() {
 		it('should lock object container', function() {
 			oc.lock();
 
-			expect(oc.isLock()).toEqual(true);
+			expect(oc.isLocked()).toEqual(true);
 		});
 
 		it('should throw error for calling lock method on locked object container', function() {
@@ -436,7 +436,7 @@ describe('ima.ObjectContainer', function() {
 			oc.lock();
 			oc.unlock();
 
-			expect(oc.isLock()).toEqual(false);
+			expect(oc.isLocked()).toEqual(false);
 		});
 
 		it('should throw error for calling unlock method on unlocked object container', function() {
