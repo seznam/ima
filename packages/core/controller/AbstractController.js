@@ -37,7 +37,7 @@ export default class AbstractController extends ControllerInterface {
 		this._pageStateManager = null;
 
 		/**
-		 * Defined extensions for current controller.
+		 * The controller's extensions.
 		 *
 		 * @private
 		 * @property _extensions
@@ -56,7 +56,9 @@ export default class AbstractController extends ControllerInterface {
 		this.status = 200;
 
 		/**
-		 * The route parameters extracted from the current route.
+		 * The route parameters extracted from the current route. This field is
+		 * set externally by IMA right before the {@linkcode init()} or the
+		 * {@linkcode update()} method is called.
 		 *
 		 * @property params
 		 * @public
@@ -96,8 +98,8 @@ export default class AbstractController extends ControllerInterface {
 	 * @method load
 	 */
 	load() {
-		throw new IMAError('The ima.controller.AbstractController.load method is ' +
-				'abstract and must be overridden');
+		throw new IMAError('The ima.controller.AbstractController.load ' +
+				'method is abstract and must be overridden');
 	}
 
 	/**
@@ -152,8 +154,10 @@ export default class AbstractController extends ControllerInterface {
 	 * @method setMetaParams
 	 */
 	setMetaParams(loadedResources, metaManager, router, dictionary, settings) {
-		throw new IMAError('The ima.controller.AbstractController.setMetaParams ' +
-				'method is abstract and must be overridden');
+		throw new IMAError(
+			'The ima.controller.AbstractController.setMetaParams method is ' +
+			'abstract and must be overridden'
+		);
 	}
 
 	/**
