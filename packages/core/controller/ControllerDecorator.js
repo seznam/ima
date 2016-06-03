@@ -5,8 +5,8 @@ ns.namespace('ima.controller');
 
 /**
  * Decorator for page controllers. The decorator manages references to the meta
- * attributes manager and other utilities to provide them to the decorated page
- * controller.
+ * attributes manager and other utilities so these can be easily provided to
+ * the decorated page controller when needed.
  *
  * @class ControllerDecorator
  * @implements ima.controller.Controller
@@ -21,9 +21,10 @@ export default class ControllerDecorator extends ControllerInterface {
 	 *
 	 * @method constructor
 	 * @constructor
-	 * @param {ima.controller.Controller} controller The actual controller
-	 *        being decorated.
-	 * @param {ima.meta.MetaManager} metaManager meta attributes manager.
+	 * @param {ima.controller.Controller} controller The controller being
+	 *        decorated.
+	 * @param {ima.meta.MetaManager} metaManager The meta page attributes
+	 *        manager.
 	 * @param {ima.router.Router} router The application router.
 	 * @param {ima.dictionary.Dictionary} dictionary Localization phrases
 	 *        dictionary.
@@ -34,7 +35,7 @@ export default class ControllerDecorator extends ControllerInterface {
 		super();
 
 		/**
-		 * The actual controller being decorated.
+		 * The controller being decorated.
 		 *
 		 * @property _controller
 		 * @private
@@ -43,7 +44,7 @@ export default class ControllerDecorator extends ControllerInterface {
 		this._controller = controller;
 
 		/**
-		 * Meta attributes manager.
+		 * The meta page attributes manager.
 		 *
 		 * @property _metaManager
 		 * @private
@@ -80,8 +81,6 @@ export default class ControllerDecorator extends ControllerInterface {
 	}
 
 	/**
-	 * Callback for initializing the controller with the route parameters.
-	 *
 	 * @inheritdoc
 	 * @method init
 	 */
@@ -218,11 +217,12 @@ export default class ControllerDecorator extends ControllerInterface {
 	}
 
 	/**
-	 * Returns the meta attributes manager to configured by this controller.
+	 * Returns the meta attributes manager configured by the decorated
+	 * controller.
 	 *
 	 * @method getMetaManager
-	 * @return {ima.meta.MetaManager} meta attributes manager to
-	 *         configured by this controller.
+	 * @return {ima.meta.MetaManager} The Meta attributes manager configured by
+	 *         the decorated controller.
 	 */
 	getMetaManager() {
 		return this._metaManager;
