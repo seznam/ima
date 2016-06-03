@@ -138,8 +138,10 @@ export default class CacheImpl extends CacheInterface {
 			return;
 		}
 
-		var cacheEntry = this._factory
-				.createCacheEntry(this._clone(value), ttl || this._ttl);
+		var cacheEntry = this._factory.createCacheEntry(
+			this._clone(value),
+			ttl || this._ttl
+		);
 
 		this._cache.set(key, cacheEntry);
 	}
@@ -181,12 +183,13 @@ export default class CacheImpl extends CacheInterface {
 
 			if ($Debug) {
 				if (!this._canSerializeValue(serializeEntry.value)) {
-					throw new Error(`ima.cache.CacheImpl:serialize You want ` +
-							`to serialize ` +
-							`${serializeEntry.value.toString()} for key ` +
-							`${key}. Clear value from cache or change their ` +
-							`type so that will be serializable with ` +
-							`JSON.stringify.`);
+					throw new Error(`ima.cache.CacheImpl:serialize An ` +
+							`attempt to serialize ` +
+							`${serializeEntry.value.toString()}, stored ` +
+							`using the key ${key}, was made, but the value ` +
+							`cannot be serialized. Remove this entry from ` +
+							`the cache or change its type so that can be ` +
+							`serialized using JSON.stringify().`);
 				}
 			}
 
@@ -210,31 +213,40 @@ export default class CacheImpl extends CacheInterface {
 	}
 
 	/**
+	 * Tests whether the provided value can be serialized into JSON.
+	 *
 	 * @private
 	 * @method _canSerializeValue
-	 * @param {*} value
-	 * @return {boolean}
+	 * @param {*} value The value to test whether or not it can be serialized.
+	 * @return {boolean} {@code true} if the provided value can be serialized
+	 *         into JSON, {@code false} otherwise.
 	 */
 	_canSerializeValue(value) {
-		if (value instanceof Date ||
-			value instanceof RegExp ||
-			value instanceof Promise ||
-			typeof value === 'function'
+		if (
+			(value === undefined) ||
+			(value instanceof Date) ||
+			(value instanceof RegExp) ||
+			(value instanceof Promise) ||
+			(typeof value === 'function')
 		) {
 			return false;
 		}
 
-		if (value && value.constructor === Array) {
-			for (var partValue of value) {
-				if (!this._canSerializeValue(value[partValue])) {
+		if (!value) {
+			return true;
+		}
+
+		if (value.constructor === Array) {
+			for (var element of value) {
+				if (!this._canSerializeValue(value[element])) {
 					return false;
 				}
 			}
 		}
 
-		if (value && typeof value === 'object') {
-			for (var valueKey of Object.keys(value)) {
-				if (!this._canSerializeValue(value[valueKey])) {
+		if (typeof value === 'object') {
+			for (var propertyName of Object.keys(value)) {
+				if (!this._canSerializeValue(value[propertyName])) {
 					return false;
 				}
 			}
@@ -245,16 +257,19 @@ export default class CacheImpl extends CacheInterface {
 
 	/**
 	 * Clone only mutable values.
+	 * Attempts to clone the provided value, if possible. Values that cannot be
+	 * cloned will be simply returned.
 	 *
 	 * @private
 	 * @method _clone
-	 * @param {*} value
-	 * @return {*}
+	 * @param {*} value The value to clone.
+	 * @return {*} The created clone, or the provided value if the value cannot
+	 *         be cloned.
 	 */
 	_clone(value) {
 		if (
-			value !== null &&
-			typeof value === 'object' &&
+			(value !== null) &&
+			(typeof value === 'object') &&
 			!(value instanceof Promise)
 		) {
 			return this._Helper.clone(value);
