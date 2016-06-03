@@ -115,15 +115,15 @@ export default class ObjectContainer {
 		if ($Debug) {
 			if (this.isLocked()) {
 				throw new Error(`ima.ObjectContainer:bind Object container ` +
-						`is locked. You don't have permission for creating new ` +
-						`alias name ${name}.`);
+						`is locked. You do not have the permission to ` +
+						`create a new alias named ${name}.`);
 			}
 
 			if (typeof classConstructor !== 'function') {
-				throw new Error(`ima.ObjectContainer:bind method has to ` +
-						`have the second parameter type of function for ` +
-						`alias name ${name}. You give type of ` +
-						`${typeof classConstructor}. Fix your bind.js file.`);
+				throw new Error(`ima.ObjectContainer:bind The second ` +
+						`argument has to be a class constructor function, ` +
+						`but ${classConstructor} was provided. Fix your ` +
+						`bind.js file.`);
 			}
 		}
 
@@ -164,9 +164,9 @@ export default class ObjectContainer {
 	constant(name, value) {
 		if ($Debug) {
 			if (this._constants.has(name) || !!this._getEntryFromConstant(name)) {
-				throw new Error(`ima.ObjectContainer:constant method has ` +
-						`already registered name ${name}. Constant method ` +
-						`may be call only once for one name.`);
+				throw new Error(`ima.ObjectContainer:constant The ${name} ` +
+						`constant has already been declared and cannot be ` +
+						`redefined.`);
 			}
 		}
 
@@ -196,18 +196,21 @@ export default class ObjectContainer {
 	inject(classConstructor, dependencies) {
 		if ($Debug) {
 			if (typeof classConstructor !== 'function') {
-				throw new Error(`ima.ObjectContainer:bind method has to ` +
-						`have the first parameter type of function. You ` +
-						`give type of ${typeof classConstructor}. Fix your ` +
+				throw new Error(`ima.ObjectContainer:bind The first ` +
+						`argument has to be a class constructor function, ` +
+						`but ${classConstructor} was provided. Fix your ` +
 						`bind.js file.`);
 			}
 
 			if (this._registry.has(classConstructor) && !this.isLocked()) {
-				throw new Error(`ima.ObjectContainer:inject method has ` +
-						`already registered class ${classConstructor.name}. ` +
-						`Inject method may be call only once for one class. ` +
-						`If you need more different implementation use ` +
-						`method bind.`);
+				throw new Error(`ima.ObjectContainer:inject The ` +
+						`${classConstructor.name} has already had its ` +
+						`default dependencies configured, and the object ` +
+						`container is currently locked, therefore the ` +
+						`dependency configuration cannot be override. The ` +
+						`dependencies of the provided class must be ` +
+						`overridden from the application's bind.js ` +
+						`configuration file.`);
 			}
 		}
 
@@ -242,19 +245,17 @@ export default class ObjectContainer {
 			dependencies = []) {
 		if ($Debug) {
 			if (this._providers.has(interfaceConstructor)) {
-				throw new Error('ima.ObjectContainer:provide The specified' +
-						` interface (${interfaceConstructor.name}) is ` +
-						`already provided with the object container.`);
+				throw new Error('ima.ObjectContainer:provide The ' +
+						'implementation of the provided interface ' +
+						`(${interfaceConstructor.name}) has already been ` +
+						`configured and cannot be overridden.`);
 			}
 
 			// check that implementation really extends interface
 			var prototype = implementationConstructor.prototype;
-			while (prototype && prototype !== interfaceConstructor.prototype) {
-				prototype = Object.getPrototypeOf(prototype);
-			}
-			if (!prototype) {
-				throw new Error('ima.ObjectContainer:provide The specified class ' +
-						`(${implementationConstructor.name}) does not ` +
+			if (!(prototype instanceof interfaceConstructor)) {
+				throw new Error('ima.ObjectContainer:provide The specified ' +
+						`class (${implementationConstructor.name}) does not ` +
 						`implement the ${interfaceConstructor.name} ` +
 						`interface.`);
 			}
@@ -468,11 +469,12 @@ export default class ObjectContainer {
 
 		if ($Debug) {
 			if (!entry) {
-				throw new Error(`ima.ObjectContainer:_getEntry method has ` +
-						`not constant, alias, registered class, provided ` +
-						`interface and namespace name for name ${name}. ` +
-						`Check your bind.js file and add implementation for ` +
-						`name ${name}.`);
+				throw new Error(`ima.ObjectContainer:_getEntry There is no ` +
+						`constant, alias, registered class, registered ` +
+						`interface with configured implementation or ` +
+						`namespace entry identified as ${name}. ` +
+						`Check your bind.js file for typos or register ` +
+						`${name} with the object container.`);
 			}
 		}
 
@@ -551,9 +553,12 @@ export default class ObjectContainer {
 	_getEntryFromConstant(compositionName) {
 		if (typeof compositionName === 'string') {
 			var objectProperties = compositionName.split('.');
-			var constantValue = this._constants.has(objectProperties[0]) ? this._constants.get(objectProperties[0]).sharedInstance : null;
+			var constantValue = this._constants.has(objectProperties[0]) ?
+					this._constants.get(objectProperties[0]).sharedInstance :
+					null;
 
-			for (var i = 1; i < objectProperties.length && constantValue; i++) {
+			var pathLength = objectProperties.length;
+			for (var i = 1; (i < pathLength) && constantValue; i++) {
 				constantValue = constantValue[objectProperties[i]];
 			}
 
@@ -584,7 +589,7 @@ export default class ObjectContainer {
 	 * return an unregistered entry resolved to the value denoted by the
 	 * namespace path.
 	 *
-	 * Alternativelly, if a constructor function is passed in instead of a
+	 * Alternatively, if a constructor function is passed in instead of a
 	 * namespace path, the method returns {@code null}.
 	 *
 	 * @private
