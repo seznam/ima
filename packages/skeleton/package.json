@@ -8,6 +8,7 @@
 		"test": "node node_modules/gulp/bin/gulp.js test",
 		"dev": "node node_modules/gulp/bin/gulp.js dev",
 		"build": "NODE_ENV=production node_modules/gulp/bin/gulp.js build",
+		"build:spa": "NODE_ENV=production node_modules/gulp/bin/gulp.js build:spa",
 		"start": "NODE_ENV=production node build/server.js"
 	},
 	"keywords": [

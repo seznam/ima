@@ -74,6 +74,18 @@ npm run start
 Your application is running at [`http://localhost:3001/`](http://localhost:3001/)
 (unless configured otherwise) now!
 
+### Building for SPA deployment
+
+It is also possible to deploy your IMA.js application as an SPA (single-page
+application). To do that, run the following command to build your application:
+
+```
+npm run build:spa
+```
+
+Your built application will be in the `build` directory, ready for deployment
+to an HTTP server.
+
 ## Tutorial
 
 We have prepared a complex tutorial for you:
