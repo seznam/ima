@@ -2,55 +2,39 @@
 var gulp = require('gulp');
 var runSequence = require('run-sequence');
 
-module.exports = function(gulpConfig) {
-	var uglifyCompression = gulpConfig.uglifyCompression;
+const DEFAULT_DEV_SUBTASKS = [
+	['copy:appStatic', 'copy:environment', 'shim', 'polyfill'],
+	['Es6ToEs5:app', 'Es6ToEs5:ima', 'Es6ToEs5:server', 'Es6ToEs5:vendor'],
+	['less', 'doc', 'locale', 'Es6ToEs5:vendor:client', 'Es6ToEs5:vendor:client:test'],
+	['server'],
+	['test:unit:karma:dev', 'watch']
+];
 
-	gulp
-		.task('dev', function(callback) {
+const DEFAULT_BUILD_SUBTASKS = [
+	['copy:appStatic', 'copy:environment', 'shim', 'polyfill'], // copy public folder, concat shim
+	['Es6ToEs5:app', 'Es6ToEs5:ima', 'Es6ToEs5:server', 'Es6ToEs5:vendor'], // compile app and vendor script
+	['less', 'doc', 'locale', 'Es6ToEs5:vendor:client', 'Es6ToEs5:vendor:client:test'], // adjust vendors, compile less, create doc
+	['bundle:js:app', 'bundle:js:server', 'bundle:css']
+];
+if (['prod', 'production', 'test'].indexOf(process.env.NODE_ENV) > -1) {
+	DEFAULT_BUILD_SUBTASKS.push(
+		['bundle:clean', 'Es6ToEs5:vendor:clean'] // clean vendor
+	);
+}
 
-			if (gulpConfig.tasks && gulpConfig.tasks.dev) {
+module.exports = (gulpConfig) => {
+	var tasks = gulpConfig.tasks || {};
 
-				return runSequence.apply(null, gulpConfig.tasks.dev.concat([callback]));
-			} else {
-
-				return runSequence(
-					['copy:appStatic', 'copy:environment', 'shim', 'polyfill'],
-					['Es6ToEs5:app', 'Es6ToEs5:ima', 'Es6ToEs5:server', 'Es6ToEs5:vendor'],
-					['less', 'doc', 'locale', 'Es6ToEs5:vendor:client', 'Es6ToEs5:vendor:client:test'],
-					['server'],
-					['test:unit:karma:dev', 'watch'],
-					callback
-				);
-			}
-		});
+	gulp.task('dev', (callback) => {
+		var devTasks = tasks.dev || DEFAULT_DEV_SUBTASKS;
+		return runSequence.apply(null, devTasks.concat([callback]));
+	});
 
 
-	gulp
-		.task('build', function(callback) {
-
-			if (gulpConfig.tasks && gulpConfig.tasks.build) {
-
-				return runSequence.apply(null, gulpConfig.tasks.build.concat([callback]));
-			} else {
-				var env = process.env.NODE_ENV;
-
-				var tasks = [
-					['copy:appStatic', 'copy:environment', 'shim', 'polyfill'], // copy public folder, concat shim
-					['Es6ToEs5:app', 'Es6ToEs5:ima', 'Es6ToEs5:server', 'Es6ToEs5:vendor'], // compile app and vendor script
-					['less', 'doc', 'locale', 'Es6ToEs5:vendor:client', 'Es6ToEs5:vendor:client:test'], // adjust vendors, compile less, create doc
-					['bundle:js:app', 'bundle:js:server', 'bundle:css']
-				];
-
-				if (['prod', 'production', 'test'].indexOf(env) > -1) {
-					tasks.push(
-						['bundle:clean', 'Es6ToEs5:vendor:clean'] // clean vendor
-					);
-				}
-				tasks.push(callback);
-
-				return runSequence.apply(null, tasks);
-			}
-		});
+	gulp.task('build', (callback) => {
+		var buildTasks = tasks.build || DEFAULT_BUILD_SUBTASKS;
+		return runSequence.apply(null, buildTasks.concat([callback]));
+	});
 
 
 	if (gulpConfig.onTerminate) {
