@@ -83,6 +83,13 @@ exports.tasks = {
 		['Es6ToEs5:app', 'Es6ToEs5:ima', 'Es6ToEs5:server', 'Es6ToEs5:vendor'],
 		['less', 'doc', 'locale', 'Es6ToEs5:vendor:client', 'Es6ToEs5:vendor:client:test'],
 		['bundle:js:app', 'bundle:js:server', 'bundle:css']
+	],
+	spa: [
+		['copy:appStatic', 'shim', 'polyfill'], // copy public folder, concat shim
+		['Es6ToEs5:app', 'Es6ToEs5:ima', 'Es6ToEs5:vendor'], // compile app and vendor script
+		['less', 'doc', 'locale', 'Es6ToEs5:vendor:client'], // adjust vendors, compile less, create doc
+		['bundle:js:app', 'bundle:css', 'compile:spa'],
+		['clean:spa']
 	]
 };
 
