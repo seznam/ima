@@ -22,6 +22,19 @@ if (['prod', 'production', 'test'].indexOf(process.env.NODE_ENV) > -1) {
 	);
 }
 
+const DEFAULT_SPA_SUBTASKS = [
+	['copy:appStatic', 'shim', 'polyfill'], // copy public folder, concat shim
+	['Es6ToEs5:app', 'Es6ToEs5:ima', 'Es6ToEs5:vendor'], // compile app and vendor script
+	['less', 'doc', 'locale', 'Es6ToEs5:vendor:client'], // adjust vendors, compile less, create doc
+	['bundle:js:app', 'bundle:css', 'compile:spa'],
+	['clean:spa']
+];
+if (['prod', 'production', 'test'].indexOf(process.env.NODE_ENV) > -1) {
+	DEFAULT_SPA_SUBTASKS.push(
+		['bundle:clean', 'Es6ToEs5:vendor:clean'] // clean vendor
+	);
+}
+
 module.exports = (gulpConfig) => {
 	var tasks = gulpConfig.tasks || {};
 
@@ -36,6 +49,10 @@ module.exports = (gulpConfig) => {
 		return runSequence.apply(null, buildTasks.concat([callback]));
 	});
 
+	gulp.task('build:spa', (callback) => {
+		var buildTasks = tasks.spa || DEFAULT_SPA_SUBTASKS;
+		return runSequence.apply(null, buildTasks.concat([callback]));
+	});
 
 	if (gulpConfig.onTerminate) {
 		process.on('SIGINT', gulpConfig.onTerminate.bind(null, 'SIGINT'));
