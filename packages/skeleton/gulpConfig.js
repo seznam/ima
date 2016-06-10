@@ -6,7 +6,7 @@ try {
 	appDependencies = require('./app/build.js');
 } catch (error) {
 	console.info(error.message);
-	console.info('It will be use default application dependencies.');
+	console.info('The default application dependencies will be used.');
 
 	appDependencies = {
 		js: [],
