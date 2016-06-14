@@ -78,10 +78,10 @@ module.exports = ((environment, logger, languageLoader, appFactory) => {
 			// make sure to return something useful
 			if (e) {
 				logger.error('Failed to display error page', { e });
-				return res.send(err.stack);
+				res.send(err.stack);
+			} else {
+				res.send(errorView(err, items));
 			}
-
-			res.send(errorView(err, items));
 		});
 	};
 
