@@ -238,7 +238,7 @@ export default class CacheImpl extends CacheInterface {
 
 		if (value.constructor === Array) {
 			for (var element of value) {
-				if (!this._canSerializeValue(value[element])) {
+				if (!this._canSerializeValue(element)) {
 					return false;
 				}
 			}

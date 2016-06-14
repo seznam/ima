@@ -166,7 +166,7 @@ describe('ima.cache.CacheImpl', function() {
 				number: 1,
 				string: 'string',
 				boolean: true,
-				array: [1, 2, 3, 4],
+				array: [1, 2, 3, { string: 'string' }],
 				object: {
 					number: 1
 				}
