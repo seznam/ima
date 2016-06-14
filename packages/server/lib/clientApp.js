@@ -26,7 +26,12 @@ module.exports = ((environment, logger, languageLoader, appFactory) => {
 
 		asyncEach(stack, function getContentInfo(item, cb) {
 			// exclude core node modules and node modules
-			if ((item.fileName) && (item.fileName.indexOf(sep) !== -1) && !/node_modules/.test(item.fileName)) {
+			if (
+				(item.fileName) &&
+				(item.fileName.indexOf(sep) !== -1) &&
+				!/node_modules/.test(item.fileName)
+				!/internal/.test(item.fileName)
+			) {
 				fs.readFile(item.fileName, 'utf-8', function(err, content) {
 					if (err) {
 						return cb(err);
