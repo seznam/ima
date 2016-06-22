@@ -43,6 +43,13 @@ npm install -g gulp
 
 Check installation and hello world video tutorials on [`imajs.io`](https://imajs.io/videos)!
 
+You may also try other local demos by running either of the following commands:
+
+```
+npm run app:feed
+npm run app:todos
+```
+
 ## Production use
 
 If you want deploy your IMA.js application to production, the installation is
