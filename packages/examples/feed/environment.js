@@ -61,7 +61,10 @@ module.exports = (() => {
 					entryTtl: 60 * 60 * 1000, // milliseconds
 
 					// the time after which the unused entries are discarded
-					unusedEntryTtl: 15 * 60 * 1000 // milliseconds
+					unusedEntryTtl: 15 * 60 * 1000, // milliseconds
+
+					// the maximum entries in cache
+					maxEntries: 500
 				},
 				logger: {
 					formatting: 'simple' // use "simple" or "JSON"
