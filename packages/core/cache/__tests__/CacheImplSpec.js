@@ -132,14 +132,21 @@ describe('ima.cache.CacheImpl', function() {
 	});
 
 	it('should throw error for serialize if value is instance of Promise', function() {
+		spyOn(console, 'warn');
+
 		cache.set('promise', Promise.resolve('promise'));
 
 		expect(function() {
 			cache.serialize();
 		}).toThrow();
+		expect(console.warn).toHaveBeenCalled();
 	});
 
 	describe('_canSerializeValue method', function() {
+
+		beforeEach(function() {
+			spyOn(console, 'warn');
+		});
 
 		it('should return false for Date', function() {
 			expect(cache._canSerializeValue(new Date())).toBe(false);
