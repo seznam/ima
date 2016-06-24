@@ -5,7 +5,7 @@ ns.namespace('app.base');
 
 export default class Controller extends AbstractController {
 	setMetaParams(loadedResources, metaManager, router, dictionary, settings) {
-		metaManager.setTitle(dictionary.get('app.title'));
+		metaManager.setTitle(dictionary.get('home.title'));
 	}
 }
 

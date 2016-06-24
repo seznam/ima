@@ -14,10 +14,14 @@ var less = [
 	'./app/page/**/*.less'
 ];
 
-var languages = [
-	'cs',
-	'en'
-];
+var languages = {
+	cs: [
+		'./app/**/*CS.json'
+	],
+	en : [
+		'./app/**/*EN.json'
+	]
+};
 
 var vendors = {
 	common: [

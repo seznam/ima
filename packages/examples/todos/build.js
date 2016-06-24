@@ -12,9 +12,11 @@ var less = [
 	'./app/page/**/*.less'
 ];
 
-var languages = [
-	'en'
-];
+var languages = {
+	en : [
+		'./app/**/*EN.json'
+	]
+};
 
 var vendors = {
 	common: [
