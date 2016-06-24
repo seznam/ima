@@ -350,7 +350,7 @@ module.exports = ((environment, logger, languageLoader, appFactory) => {
 		return routeInfo;
 	}
 
-	var _addRouteInformationToResponse = (req, res, app) => {
+	var _addImaToResponse = (req, res, app) => {
 		var routeName = 'other';
 		var routeInfo = _getRouteInfo(app);
 
@@ -392,7 +392,7 @@ module.exports = ((environment, logger, languageLoader, appFactory) => {
 		return _importAppMain()
 			.then((appMain) => {
 				var app = _initApp(req, res, appMain);
-				_addRouteInformationToResponse(req, res, app);
+				_addImaToResponse(req, res, app);
 
 				if (_haveToServeSPA(req, app)) {
 					instanceRecycler.clearInstance(app);
