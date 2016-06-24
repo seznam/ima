@@ -159,7 +159,7 @@ exports.files = {
 			server: './build/ima/locale/',
 			client: './build/static/js/locale/'
 		},
-		watch: ['./app/locale/**/*.json']
+		watch: ['./app/**/*.json']
 	},
 	shim : {
 		name: 'shim.js',
