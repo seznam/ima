@@ -67,7 +67,7 @@ export default class ServerPageRenderer extends AbstractPageRenderer {
 	 * @abstract
 	 * @method mount
 	 */
-	mount(controller, view, pageResources) {
+	mount(controller, view, pageResources, routeOptions) {
 		if (this._response.isResponseSent()) {
 			return Promise.resolve(this._response.getResponseParams());
 		}
@@ -76,7 +76,7 @@ export default class ServerPageRenderer extends AbstractPageRenderer {
 			this._Helper
 				.allPromiseHash(pageResources)
 				.then((fetchedResources) => {
-					return this._renderPage(controller, view, fetchedResources);
+					return this._renderPage(controller, view, fetchedResources, routeOptions);
 				})
 		);
 	}
@@ -189,16 +189,17 @@ export default class ServerPageRenderer extends AbstractPageRenderer {
 	 * @param {ima.controller.AbstractController} controller
 	 * @param {React.Component} view
 	 * @param {Object<string, *>} fetchedResources
+	 * @param {Object<string, *>} routeOptions
 	 * @return {{content: string, status: number}}
 	 */
-	_renderPage(controller, view, fetchedResources) {
+	_renderPage(controller, view, fetchedResources, routeOptions) {
 		if (!this._response.isResponseSent()) {
 			controller.setState(fetchedResources);
 			controller.setMetaParams(fetchedResources);
 
 			this._response
 				.status(controller.getHttpStatus())
-				.send(this._renderPageContentToString(controller, view));
+				.send(this._renderPageContentToString(controller, view, routeOptions));
 		}
 
 		return this._response.getResponseParams();
@@ -211,14 +212,15 @@ export default class ServerPageRenderer extends AbstractPageRenderer {
 	 * @method _renderPageContentToString
 	 * @param {ima.controller.AbstractController} controller
 	 * @param {React.Component} view
+	 * @param {Object<string, *>} routeOptions
 	 * @return {string}
 	 */
-	_renderPageContentToString(controller, view) {
+	_renderPageContentToString(controller, view, routeOptions) {
 		var props = this._generateViewProps(view, controller.getState());
 		var wrappedPageViewElement = this._factory.wrapView(props);
 		var pageMarkup = this._ReactDOM.renderToString(wrappedPageViewElement);
 
-		var documentView = this._factory.getDocumentView(this._settings.$Page.$Render.documentView);
+		var documentView = this._factory.getDocumentView(routeOptions.documentView || this._settings.$Page.$Render.documentView);
 		var documentViewFactory = this._factory.reactCreateFactory(documentView);
 		var appMarkup = this._ReactDOM.renderToStaticMarkup(documentViewFactory({
 			page: pageMarkup,

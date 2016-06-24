@@ -72,7 +72,7 @@ export default class ClientPageRenderer extends AbstractPageRenderer {
 	 * @abstract
 	 * @method mount
 	 */
-	mount(controller, view, pageResources) {
+	mount(controller, view, pageResources, routeOptions) {
 		var separatedData = this._separatePromisesAndValues(pageResources);
 		var defaultPageState = separatedData.values;
 		var loadedPromises = separatedData.promises;

@@ -25,6 +25,12 @@ describe('ima.page.renderer.ServerPageRenderer', function() {
 	var settings = oc.get('$Settings');
 	var response = oc.get('$Response');
 	var cache = oc.get('$Cache');
+	var routeOptions = {
+		onlyUpdate: false,
+		autoScroll: false,
+		serveSPA: false,
+		documentView: null
+	};
 
 	beforeEach(function() {
 		response.init(expressResponse);
@@ -80,7 +86,7 @@ describe('ima.page.renderer.ServerPageRenderer', function() {
 				.returnValue(responseParams);
 
 			pageRenderer
-				.mount(controller, view, loadedPageState)
+				.mount(controller, view, loadedPageState, routeOptions)
 				.then(function(page) {
 					expect(page).toEqual(responseParams);
 					done();
@@ -93,7 +99,7 @@ describe('ima.page.renderer.ServerPageRenderer', function() {
 				.stub();
 
 			pageRenderer
-				.mount(controller, view, loadedPageState)
+				.mount(controller, view, loadedPageState, routeOptions)
 				.then(function(page) {
 					expect(pageRenderer._renderPage).toHaveBeenCalled();
 					done();
@@ -151,7 +157,7 @@ describe('ima.page.renderer.ServerPageRenderer', function() {
 					.and
 					.returnValue(responseParams);
 
-				pageRenderResponse = pageRenderer._renderPage(controller, view, fetchedResource);
+				pageRenderResponse = pageRenderer._renderPage(controller, view, fetchedResource, routeOptions);
 			});
 
 			it('should set controller state', function() {
@@ -166,7 +172,7 @@ describe('ima.page.renderer.ServerPageRenderer', function() {
 				expect(response.status).toHaveBeenCalled();
 				expect(response.send).toHaveBeenCalled();
 				expect(controller.getHttpStatus).toHaveBeenCalled();
-				expect(pageRenderer._renderPageContentToString).toHaveBeenCalledWith(controller, view);
+				expect(pageRenderer._renderPageContentToString).toHaveBeenCalledWith(controller, view, routeOptions);
 			});
 
 			it('should return response params', function() {
@@ -225,7 +231,7 @@ describe('ima.page.renderer.ServerPageRenderer', function() {
 				.and
 				.returnValue(utils);
 
-			pageContent = pageRenderer._renderPageContentToString(controller, view);
+			pageContent = pageRenderer._renderPageContentToString(controller, view, routeOptions);
 		});
 
 		it('should generate view props from controller state', function() {
@@ -242,6 +248,13 @@ describe('ima.page.renderer.ServerPageRenderer', function() {
 
 		it('should create factory for creating React element from document view', function() {
 			expect(rendererFactory.reactCreateFactory).toHaveBeenCalledWith(documentView);
+		});
+
+		it('should create factory for creating React element from document view', function() {
+			var routeOptionsWithDocument = Object.assign({}, routeOptions, { documentView: ns.ima.page.AbstractDocumentView });
+			pageContent = pageRenderer._renderPageContentToString(controller, view, routeOptionsWithDocument);
+
+			expect(rendererFactory.getDocumentView).toHaveBeenCalledWith(ns.ima.page.AbstractDocumentView);
 		});
 
 		it('should render static markup from document view', function() {

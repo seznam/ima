@@ -15,7 +15,8 @@ describe('ima.page.manager.AbstractPageManager', function() {
 	var options = {
 		onlyUpdate: false,
 		autoScroll: true,
-		serveSPA: true
+		serveSPA: true,
+		documentView: null
 	};
 	var params = {
 		param1: 'param1',
@@ -290,7 +291,7 @@ describe('ima.page.manager.AbstractPageManager', function() {
 			pageManager
 				._loadPageSource()
 				.then(function() {
-					expect(pageRenderer.mount).toHaveBeenCalledWith(decoratedController, View, pageState);
+					expect(pageRenderer.mount).toHaveBeenCalledWith(decoratedController, View, pageState, options);
 					done();
 				})
 				.catch(function(error) {

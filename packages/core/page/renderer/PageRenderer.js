@@ -37,6 +37,18 @@ export default class PageRenderer {
 	 * @param {React.Component} view The page's view.
 	 * @param {Object<string, (*|Promise<*>)>} pageResources The resources for
 	 *        the view loaded by the controller.
+	 * @param {{
+	 *            onlyUpdate: (
+	 *                boolean|
+	 *                function(
+	 *                    (string|function(new: ima.controller.Controller, ...*)),
+	 *                   (string|function(new: React.Component, Object<string, *>, ?Object<string, *>))
+	 *               ): boolean
+	 *            ),
+	 *           autoScroll: boolean,
+	 *           serveSPA: boolean,
+	 *           documentView: ?ima.page.AbstractDocumentView
+	 *        }} routeOptions The current route options.
 	 * @return {Promise<{status: number, content: ?string}>} A promise that
 	 *         will resolve to information about the rendered page. The
 	 *         {@code status} will contain the HTTP status code to send to the
@@ -45,7 +57,7 @@ export default class PageRenderer {
 	 *         The {@code content} field will contain the rendered markup of
 	 *         the page at the server-side, or {@code null} at the client-side.
 	 */
-	mount(controller, view, pageResources) {}
+	mount(controller, view, pageResources, routeOptions) {}
 
 	/**
 	 * Handles update of the current route that does not replace the current

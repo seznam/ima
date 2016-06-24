@@ -40,11 +40,13 @@ export default class PageManager {
 	 *                boolean|
 	 *                function(
 	 *                    (string|function(new: ima.controller.Controller, ...*)),
-	  *                   (string|function(new: React.Component, Object<string, *>, ?Object<string, *>))
-	  *               ): boolean
+	 *                   (string|function(new: React.Component, Object<string, *>, ?Object<string, *>))
+	 *               ): boolean
 	 *            ),
-	  *           autoScroll: boolean
-	  *       }} options The current route options.
+	 *           autoScroll: boolean,
+	 *           serveSPA: boolean,
+	 *           documentView: ?ima.page.AbstractDocumentView
+	 *        }} options The current route options.
 	 * @param {Object<string, string>=} [params={}] The route parameters of the
 	 *        current route.
 	 * @return {Promise<{status: number, content: ?string}>} A promise that

@@ -14,7 +14,8 @@ describe('ima.router.AbstractRouter', function() {
 	var options = {
 		onlyUpdate: false,
 		autoScroll: true,
-		serveSPA: true
+		serveSPA: true,
+		documentView: null
 	};
 	var controller = 'BaseController';
 	var view = 'BaseView';

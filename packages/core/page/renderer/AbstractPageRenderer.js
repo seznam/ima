@@ -86,7 +86,7 @@ export default class AbstractPageRenderer extends PageRendererInterface {
 	 * @abstract
 	 * @method mount
 	 */
-	mount(controller, view, pageResources) {
+	mount(controller, view, pageResources, routeOptions) {
 		throw new IMAError('The mount() method is abstract and must be ' +
 				'overridden.');
 	}

@@ -265,7 +265,8 @@ export default class AbstractPageManager extends PageManagerInterface {
 				.mount(
 					this._managedPage.decoratedController,
 					this._managedPage.view,
-					loadedPageState
+					loadedPageState,
+					this._managedPage.options
 				)
 				.then((response) => {
 					this._postManage(this._managedPage.options);
@@ -539,7 +540,8 @@ export default class AbstractPageManager extends PageManagerInterface {
 	 * @method _hasOnlyUpdate
 	 * @param {string|function} controller
 	 * @param {string|function} view
-	 * @param {{onlyUpdate: (boolean|function), autoScroll: boolean}} options
+	 * @param {{onlyUpdate: (boolean|function), autoScroll: boolean,
+ 	 *        serveSPA: boolean, documentView: ?ima.page.AbstractDocumentView}} options
 	 * @return {boolean}
 	 */
 	_hasOnlyUpdate(controller, view, options) {
@@ -561,7 +563,8 @@ export default class AbstractPageManager extends PageManagerInterface {
 	 *
 	 * @protected
 	 * @method _preManage
-	 * @param {{onlyUpdate: boolean, autoScroll: boolean, serveSPA: boolean}} options
+	 * @param {{onlyUpdate: (boolean|function), autoScroll: boolean,
+ 	 *        serveSPA: boolean, documentView: ?ima.page.AbstractDocumentView}} options
 	 */
 	_preManage(options) {
 		if (options.autoScroll) {
@@ -575,7 +578,8 @@ export default class AbstractPageManager extends PageManagerInterface {
 	 *
 	 * @protected
 	 * @method _postManage
-	 * @param {{onlyUpdate: boolean, autoScroll: boolean, serveSPA: boolean}} options
+	 * @param {{onlyUpdate: (boolean|function), autoScroll: boolean,
+ 	 *        serveSPA: boolean, documentView: ?ima.page.AbstractDocumentView}} options
 	 */
 	_postManage(options) {}
 
