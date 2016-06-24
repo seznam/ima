@@ -8,7 +8,7 @@ describe('ima.router.Route', function() {
 	var options = {
 		onlyUpdate: false,
 		autoScroll: true,
-		serveSPA: true,
+		allowServeSPA: true,
 		documentView: null
 	};
 

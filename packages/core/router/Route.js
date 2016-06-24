@@ -78,7 +78,7 @@ export default class Route {
 	 * @param {string} view The full name or Object Container alias identifying
 	 *        the view class associated with this route.
 	 * @param {{onlyUpdate: (boolean|function), autoScroll: boolean,
-	 *        serveSPA: boolean, documentView: ?ima.page.AbstractDocumentView}} [options]
+	 *        allowServeSPA: boolean, documentView: ?ima.page.AbstractDocumentView}} [options]
 	 *        The route additional options.
 	 */
 	constructor(name, pathExpression, controller, view, options) {
@@ -126,12 +126,12 @@ export default class Route {
 		 *
 		 * @private
 		 * @property _options
-		 * @type {{onlyUpdate: boolean, autoScroll: boolean, serveSPA: boolean,
+		 * @type {{onlyUpdate: boolean, autoScroll: boolean, allowServeSPA: boolean,
 		 *       documentView: ?ima.page.AbstractDocumentView}}
-		 * @default {onlyUpdate: false, autoScroll: true, serveSPA: boolean, documentView: null}
+		 * @default {onlyUpdate: false, autoScroll: true, allowServeSPA: boolean, documentView: null}
 		 */
 		this._options = Object.assign(
-			{ onlyUpdate: false, autoScroll: true, serveSPA: true, documentView: null },
+			{ onlyUpdate: false, autoScroll: true, allowServeSPA: true, documentView: null },
 			options
 		);
 
@@ -244,7 +244,7 @@ export default class Route {
 	 * Return route additional options.
 	 *
 	 * @method getOptions
-	 * @return {{onlyUpdate: (boolean|function), autoScroll: boolean, serveSPA: boolean,
+	 * @return {{onlyUpdate: (boolean|function), autoScroll: boolean, allowServeSPA: boolean,
  	 *         documentView: ?ima.page.AbstractDocumentView}}
 	 */
 	getOptions() {

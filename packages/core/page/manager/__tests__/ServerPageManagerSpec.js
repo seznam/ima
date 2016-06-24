@@ -13,7 +13,7 @@ describe('ima.page.manager.ServerPageManager', function() {
 	var options = {
 		onlyUpdate: false,
 		autoScroll: true,
-		serveSPA: true
+		allowServeSPA: true
 	};
 
 	beforeEach(function() {
