@@ -168,16 +168,11 @@ module.exports = ((environment, logger, languageLoader, appFactory) => {
 		var isServerBusy = instanceRecycler.isReachToMaxConcurrencyRequests();
 		var isAllowedUserAgent = !environment.$Server.serveSPA.blackListReg.test(userAgent);
 		var canBeRouteServeAsSPA = true;
-		var router = app.oc.get('$Router');
+		var routeInfo = _getRouteInfo(app);
 
-		try {
-			var routeInfo = router.getCurrentRouteInfo();
-			var routeOptions = routeInfo.route.getOptions();
-
-			if (routeOptions.serveSPA === false) {
-				canBeRouteServeAsSPA = false;
-			}
-		} catch (e) {}
+		if (routeInfo && routeInfo.route.getOptions().serveSPA === false) {
+			canBeRouteServeAsSPA = false;
+		}
 
 		return isAllowedServeSPA && isServerBusy && isAllowedUserAgent && canBeRouteServeAsSPA;
 	};
@@ -344,6 +339,28 @@ module.exports = ((environment, logger, languageLoader, appFactory) => {
 		return returnPromise;
 	};
 
+	var _getRouteInfo = (app) => {
+		var router = app.oc.get('$Router');
+		var routeInfo = null;
+
+		try {
+			routeInfo = router.getCurrentRouteInfo();
+		} catch (e) {}
+
+		return routeInfo;
+	}
+
+	var _addRouteInformationToResponse = (req, res, app) => {
+		var routeName = 'other';
+		var routeInfo = _getRouteInfo(app);
+
+		if (routeInfo) {
+			routeName = routeInfo.route.getName();
+		}
+
+		res.$IMA = res.$IMA || { routeName };
+	};
+
 	var _generateResponse = (req, res, app) => {
 		var returnPromise = Promise.reject(new Error());
 		var router = app.oc.get('$Router');
@@ -375,6 +392,7 @@ module.exports = ((environment, logger, languageLoader, appFactory) => {
 		return _importAppMain()
 			.then((appMain) => {
 				var app = _initApp(req, res, appMain);
+				_addRouteInformationToResponse(req, res, app);
 
 				if (_haveToServeSPA(req, app)) {
 					instanceRecycler.clearInstance(app);
