@@ -250,7 +250,7 @@ describe('ima.page.renderer.ServerPageRenderer', function() {
 			expect(rendererFactory.reactCreateFactory).toHaveBeenCalledWith(documentView);
 		});
 
-		it('should create factory for creating React element from document view', function() {
+		it('should create factory for creating React element from route options documentView property', function() {
 			var routeOptionsWithDocument = Object.assign({}, routeOptions, { documentView: ns.ima.page.AbstractDocumentView });
 			pageContent = pageRenderer._renderPageContentToString(controller, view, routeOptionsWithDocument);
 
