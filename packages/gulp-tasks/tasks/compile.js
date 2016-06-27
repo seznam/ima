@@ -196,6 +196,49 @@ gulp.task('Es6ToEs5:vendor', function (done) {
 	function getModuleLinkerContent(modules) {
 		var linkingFileHeader = `var vendorLinker = require('ima/vendorLinker.js');\n`;
 		var linkingFileFooter = `module.exports = vendorLinker;\n`;
+		var duplicity = [];
+
+		return linkingFileHeader +
+		modules
+			.map(function(vendorModuleName) {
+				var alias = vendorModuleName;
+
+				if (typeof vendorModuleName === 'object') {
+					alias = Object.keys(vendorModuleName)[0];
+
+					if (modules.indexOf(alias) !== -1) {
+						duplicity.push(alias);
+					}
+				}
+
+				return vendorModuleName;
+			})
+			.filter(function(vendorModuleName) {
+				return (typeof vendorModuleName === 'string' && duplicity.indexOf(vendorModuleName) === -1) ||
+						(typeof vendorModuleName === 'object');
+			})
+			.map(function(vendorModuleName) {
+				var alias = vendorModuleName;
+				var moduleName = vendorModuleName;
+
+				if (typeof vendorModuleName === 'object') {
+					alias = Object.keys(vendorModuleName)[0];
+					moduleName = vendorModuleName[alias];
+				}
+
+				return generateVendorInclusion(alias, moduleName);
+			})
+			.join('') +
+		linkingFileFooter;
+	}
+
+	function generateVendorInclusion(alias, moduleName) {
+		return `vendorLinker.set('${alias}', require('${moduleName}'));\n`;
+	}
+
+	/*function getModuleLinkerContent(modules) {
+		var linkingFileHeader = `var vendorLinker = require('ima/vendorLinker.js');\n`;
+		var linkingFileFooter = `module.exports = vendorLinker;\n`;
 
 		return linkingFileHeader +
 		modules.map(generateVendorInclusion).join('') +
@@ -204,7 +247,7 @@ gulp.task('Es6ToEs5:vendor', function (done) {
 
 	function generateVendorInclusion(vendorModuleName) {
 		return `vendorLinker.set('${vendorModuleName}', require('${vendorModuleName}'));\n`;
-	}
+	}*/
 });
 
 gulp.task('Es6ToEs5:vendor:client', function () {
