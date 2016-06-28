@@ -63,7 +63,7 @@ class View extends AbstractComponent {
 								id={'radio' + category.getId()}
 								type='radio'
 								name='radio-categories'
-								value={category.getId()}
+								defaultValue={category.getId()}
 								onChange={(e)=>this.setCheckedCategory(e)}
 								defaultChecked={index === 0 ? true : false} />
 						<label htmlFor={'radio' + category.getId()}>
