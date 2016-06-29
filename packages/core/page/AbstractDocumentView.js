@@ -44,6 +44,7 @@ export default class AbstractDocumentView extends AbstractComponent {
 	 * {@code revivalSettings} contains a JavaScript snippet that initializes
 	 * the configuration of the IMA platform at the client-side.
 	 *
+	 * @property propTypes
 	 * @return {{metaManager: *, page: *, revivalSettings: *}} The expected
 	 *         types of the props passed to this component.
 	 */
