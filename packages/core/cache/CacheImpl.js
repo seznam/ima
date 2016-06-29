@@ -223,13 +223,12 @@ export default class CacheImpl extends CacheInterface {
 	 */
 	_canSerializeValue(value) {
 		if (
-			(value === undefined) ||
 			(value instanceof Date) ||
 			(value instanceof RegExp) ||
 			(value instanceof Promise) ||
 			(typeof value === 'function')
 		) {
-			console.warn('The value is not serializable.', value);
+			console.warn('The provided value is not serializable:', value);
 
 			return false;
 		}
@@ -241,7 +240,10 @@ export default class CacheImpl extends CacheInterface {
 		if (value.constructor === Array) {
 			for (var element of value) {
 				if (!this._canSerializeValue(element)) {
-					console.warn('The array is not serializable.', value);
+					console.warn(
+						'The provided array is not serializable: ',
+						value
+					);
 
 					return false;
 				}
@@ -251,7 +253,12 @@ export default class CacheImpl extends CacheInterface {
 		if (typeof value === 'object') {
 			for (var propertyName of Object.keys(value)) {
 				if (!this._canSerializeValue(value[propertyName])) {
-					console.warn('The object is not serializable.', propertyName, value);
+					console.warn(
+						'The provided object is not serializable due to the ' +
+						'following property: ',
+						propertyName,
+						value
+					);
 
 					return false;
 				}
