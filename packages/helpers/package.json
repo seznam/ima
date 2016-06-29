@@ -11,9 +11,9 @@
 		"url": "git+https://github.com/seznam/IMA.js-helpers.git"
 	},
 	"keywords": [
-    "ima",
-    "IMA.js"
-  ],
+		"ima",
+		"IMA.js"
+	],
 	"author": "Miroslav Jancarik <miroslav.jancarik@firma.seznam.cz>",
 	"license": "MIT",
 	"bugs": {
@@ -28,7 +28,7 @@
 	},
 	"browserify": {
 		"transform": [
-      "babelify"
-    ]
+			"babelify"
+		]
 	}
 }

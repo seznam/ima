@@ -13,7 +13,7 @@ function assignRecursively(target) {
 				target[field] = source[field].slice();
 			} else if (source[field] instanceof Object &&
 					!(source[field] instanceof Function)) {
-						
+
 				if (!(target[field] instanceof Object)) {
 					target[field] = {};
 				}
