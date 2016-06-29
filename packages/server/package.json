@@ -1,6 +1,6 @@
 {
 	"name": "ima-server",
-	"version": "0.12.9",
+	"version": "0.13.0",
 	"description": "Default dev server for IMA.js applications.",
 	"main": "index.js",
 	"scripts": {
@@ -27,17 +27,17 @@
 	},
 	"homepage": "https://github.com/seznam/IMA.js-server",
 	"devDependencies": {
-		"express": "^4.13.4",
+		"express": "^4.14.0",
 		"gulp": "^3.9.1",
-		"gulp-jasmine": "^2.3.0",
+		"gulp-jasmine": "^2.4.0",
 		"gulp-plumber": "^1.1.0",
 		"jasmine": "^2.4.1",
-		"superagent": "^1.7.2"
+		"superagent": "^2.0.0"
 	},
 	"dependencies": {
 		"async-each": "^1.0.0",
-		"highlight.js": "^9.2.0",
-		"ima-helpers": "^0.12.1",
+		"highlight.js": "^9.5.0",
+		"ima-helpers": "^0.13.0",
 		"stack-trace": "0.0.9",
 		"winston": "^2.2.0"
 	}

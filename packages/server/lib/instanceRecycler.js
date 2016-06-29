@@ -12,6 +12,7 @@ module.exports = (() => {
 			this._instanceConstructor = null;
 			this._maxInstanceCount = 0;
 			this._instancies = [];
+			this._concurrencyRequests = 0;
 			this._initialized = false;
 		}
 
@@ -42,7 +43,13 @@ module.exports = (() => {
 			return this._instancies.length > 0;
 		}
 
+		isReachToMaxConcurrencyRequests() {
+			return this._concurrencyRequests > this._maxInstanceCount;
+		}
+
 		getInstance() {
+			this._concurrencyRequests = this._concurrencyRequests + 1;
+
 			if (this.hasNextInstance()) {
 				return this._instancies.shift();
 			} else {
@@ -52,11 +59,12 @@ module.exports = (() => {
 		}
 
 		clearInstance(instance) {
+			this._concurrencyRequests = this._concurrencyRequests - 1;
 			instance.oc.clear();
 
 			if (this._instancies.length < this._maxInstanceCount) {
 				this._instancies.push(instance);
-			} 
+			}
 		}
 	}
 

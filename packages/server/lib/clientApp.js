@@ -26,7 +26,12 @@ module.exports = ((environment, logger, languageLoader, appFactory) => {
 
 		asyncEach(stack, function getContentInfo(item, cb) {
 			// exclude core node modules and node modules
-			if ((item.fileName) && (item.fileName.indexOf(sep) !== -1) && !/node_modules/.test(item.fileName)) {
+			if (
+				(item.fileName) &&
+				(item.fileName.indexOf(sep) !== -1) &&
+				!/node_modules/.test(item.fileName) &&
+				!/internal/.test(item.fileName)
+			) {
 				fs.readFile(item.fileName, 'utf-8', function(err, content) {
 					if (err) {
 						return cb(err);
@@ -73,10 +78,10 @@ module.exports = ((environment, logger, languageLoader, appFactory) => {
 			// make sure to return something useful
 			if (e) {
 				logger.error('Failed to display error page', { e });
-				return res.send(err.stack);
+				res.send(err.stack);
+			} else {
+				res.send(errorView(err, items));
 			}
-
-			res.send(errorView(err, items));
 		});
 	};
 
@@ -87,6 +92,7 @@ module.exports = ((environment, logger, languageLoader, appFactory) => {
 		Object.assign(
 			bootConfig,
 			appMain.getInitialAppConfigFunctions(),
+			appMain.ima.getInitialPluginConfig(),
 			appMain.ima.getInitialImaConfigFunctions()
 		);
 		app.bootstrap
@@ -156,13 +162,19 @@ module.exports = ((environment, logger, languageLoader, appFactory) => {
 		});
 	};
 
-	var _haveToServeSPA = (req) => {
+	var _haveToServeSPA = (req, app) => {
 		var userAgent = req.headers['user-agent'] || '';
 		var isAllowedServeSPA = environment.$Server.serveSPA.allow;
-		var isServerBusy = !instanceRecycler.hasNextInstance();
+		var isServerBusy = instanceRecycler.isReachToMaxConcurrencyRequests();
 		var isAllowedUserAgent = !environment.$Server.serveSPA.blackListReg.test(userAgent);
+		var canBeRouteServeAsSPA = true;
+		var routeInfo = _getRouteInfo(app);
 
-		return isAllowedServeSPA && isServerBusy && isAllowedUserAgent;
+		if (routeInfo && routeInfo.route.getOptions().allowSPA === false) {
+			canBeRouteServeAsSPA = false;
+		}
+
+		return isAllowedServeSPA && isServerBusy && isAllowedUserAgent && canBeRouteServeAsSPA;
 	};
 
 	var _getBootConfig = (req, res) => {
@@ -327,9 +339,30 @@ module.exports = ((environment, logger, languageLoader, appFactory) => {
 		return returnPromise;
 	};
 
-	var _generateResponse = (req, res, appMain) => {
+	var _getRouteInfo = (app) => {
+		var router = app.oc.get('$Router');
+		var routeInfo = null;
+
+		try {
+			routeInfo = router.getCurrentRouteInfo();
+		} catch (e) {}
+
+		return routeInfo;
+	}
+
+	var _addImaToResponse = (req, res, app) => {
+		var routeName = 'other';
+		var routeInfo = _getRouteInfo(app);
+
+		if (routeInfo) {
+			routeName = routeInfo.route.getName();
+		}
+
+		res.$IMA = res.$IMA || { routeName };
+	};
+
+	var _generateResponse = (req, res, app) => {
 		var returnPromise = Promise.reject(new Error());
-		var app = _initApp(req, res, appMain);
 		var router = app.oc.get('$Router');
 
 		try {
@@ -358,11 +391,15 @@ module.exports = ((environment, logger, languageLoader, appFactory) => {
 
 		return _importAppMain()
 			.then((appMain) => {
-				if (_haveToServeSPA(req)) {
+				var app = _initApp(req, res, appMain);
+				_addImaToResponse(req, res, app);
+
+				if (_haveToServeSPA(req, app)) {
+					instanceRecycler.clearInstance(app);
 					return showStaticSPAPage(req, res);
 				}
 
-				return _generateResponse(req, res, appMain);
+				return _generateResponse(req, res, app);
 			});
 	};
 

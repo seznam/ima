@@ -44,6 +44,13 @@ class Cache {
 		 */
 		this._keyGenerator = cacheConfig.cacheKeyGenerator ||
 			defaultKeyGenerator;
+
+		/**
+		 * The maximumu cache entries in cache.
+		 *
+		 * @type {number}
+		 */
+		this._maxEntries = cacheConfig.maxEntries || 100;
 	}
 
 	/**
@@ -78,20 +85,27 @@ class Cache {
 	 *
 	 * @param {Express.Request} request The express.js HTTP request.
 	 * @param {string} pageContent The rendered page content.
+	 * @return {boolean}
 	 */
 	set(request, pageContent) {
 		this._runGarbageCollector();
 
 		if (typeof this._enabled === 'boolean') {
 			if (!this._enabled) {
-				return;
+				return false;
 			}
 		} else if (!this._enabled(request)) {
-			return;
+			return false;
+		}
+
+		if (this._cache.size >= this._maxEntries) {
+			return false;
 		}
 
 		let key = this._keyGenerator(request);
 		this._cache.set(key, new Entry(pageContent, this._cacheConfig));
+
+		return true;
 	}
 
 	/**
