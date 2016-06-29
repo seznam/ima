@@ -163,7 +163,7 @@ var hotReloadClientApp = (initialAppConfigFunctions) => {
 
 		try {
 			return pageManager
-				.manage(currentRoute.getController(), currentRoute.getView(), { onlyUpdate: false, autoScroll: false, allowServeSPA: false }, currentRouteInfo.params)
+				.manage(currentRoute.getController(), currentRoute.getView(), { onlyUpdate: false, autoScroll: false, allowSPA: false }, currentRouteInfo.params)
 				.catch((error) => {
 					return router.handleError({ error });
 				})

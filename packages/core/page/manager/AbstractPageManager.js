@@ -136,7 +136,7 @@ export default class AbstractPageManager extends PageManagerInterface {
 	 * @method _storeManagedPageValue
 	 * @param {(string|function)} controller
 	 * @param {(string|function)} view
-	 * @param {{onlyUpdate: boolean, autoScroll: boolean, allowServeSPA: boolean}} options
+	 * @param {{onlyUpdate: boolean, autoScroll: boolean, allowSPA: boolean}} options
 	 * @param {Object<string, string>} params The route parameters.
 	 * @param {ima.controller.AbstractController} controllerInstance
 	 * @param {ima.controller.ControllerDecorator} decoratedController
@@ -541,7 +541,7 @@ export default class AbstractPageManager extends PageManagerInterface {
 	 * @param {string|function} controller
 	 * @param {string|function} view
 	 * @param {{onlyUpdate: (boolean|function), autoScroll: boolean,
- 	 *        allowServeSPA: boolean, documentView: ?ima.page.AbstractDocumentView}} options
+ 	 *        allowSPA: boolean, documentView: ?ima.page.AbstractDocumentView}} options
 	 * @return {boolean}
 	 */
 	_hasOnlyUpdate(controller, view, options) {
@@ -564,7 +564,7 @@ export default class AbstractPageManager extends PageManagerInterface {
 	 * @protected
 	 * @method _preManage
 	 * @param {{onlyUpdate: (boolean|function), autoScroll: boolean,
- 	 *        allowServeSPA: boolean, documentView: ?ima.page.AbstractDocumentView}} options
+ 	 *        allowSPA: boolean, documentView: ?ima.page.AbstractDocumentView}} options
 	 */
 	_preManage(options) {
 		if (options.autoScroll) {
@@ -579,7 +579,7 @@ export default class AbstractPageManager extends PageManagerInterface {
 	 * @protected
 	 * @method _postManage
 	 * @param {{onlyUpdate: (boolean|function), autoScroll: boolean,
- 	 *        allowServeSPA: boolean, documentView: ?ima.page.AbstractDocumentView}} options
+ 	 *        allowSPA: boolean, documentView: ?ima.page.AbstractDocumentView}} options
 	 */
 	_postManage(options) {}
 

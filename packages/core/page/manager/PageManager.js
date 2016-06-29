@@ -44,7 +44,7 @@ export default class PageManager {
 	 *               ): boolean
 	 *            ),
 	 *           autoScroll: boolean,
-	 *           allowServeSPA: boolean,
+	 *           allowSPA: boolean,
 	 *           documentView: ?ima.page.AbstractDocumentView
 	 *        }} options The current route options.
 	 * @param {Object<string, string>=} [params={}] The route parameters of the

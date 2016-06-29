@@ -28,7 +28,7 @@ describe('ima.page.renderer.ServerPageRenderer', function() {
 	var routeOptions = {
 		onlyUpdate: false,
 		autoScroll: false,
-		allowServeSPA: false,
+		allowSPA: false,
 		documentView: null
 	};
 

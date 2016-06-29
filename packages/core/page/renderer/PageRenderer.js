@@ -46,7 +46,7 @@ export default class PageRenderer {
 	 *               ): boolean
 	 *            ),
 	 *           autoScroll: boolean,
-	 *           allowServeSPA: boolean,
+	 *           allowSPA: boolean,
 	 *           documentView: ?ima.page.AbstractDocumentView
 	 *        }} routeOptions The current route options.
 	 * @return {Promise<{status: number, content: ?string}>} A promise that

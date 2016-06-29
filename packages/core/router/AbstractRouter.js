@@ -41,7 +41,7 @@ export default class AbstractRouter extends RouterInterface {
 	 *        'home',
 	 *        ns.app.page.home.Controller,
 	 *        ns.app.page.home.View,
-	 *        { onlyUpdate: false, autoScroll: true, allowServeSPA: true, documentView: null }
+	 *        { onlyUpdate: false, autoScroll: true, allowSPA: true, documentView: null }
 	 *      );
 	 */
 	constructor(pageManager, factory, dispatcher, ROUTER_CONSTANTS) {
@@ -395,7 +395,7 @@ export default class AbstractRouter extends RouterInterface {
 	 *        associated controller rendered via the associated view.
 	 * @param {Object<string, (Error|string)>} params Parameters extracted from
 	 *        the URL path and query.
-	 * @param {{onlyUpdate: boolean=, autoScroll: boolean=, allowServeSPA: boolean=,
+	 * @param {{onlyUpdate: boolean=, autoScroll: boolean=, allowSPA: boolean=,
  	 *        documentView: ima.page.AbstractDocumentView=}} options
 	 *        The options overrides route options defined in routes.js.
 	 * @return {Promise<Object<string, *>>} A promise that resolves when the
