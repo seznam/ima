@@ -170,7 +170,7 @@ module.exports = ((environment, logger, languageLoader, appFactory) => {
 		var canBeRouteServeAsSPA = true;
 		var routeInfo = _getRouteInfo(app);
 
-		if (routeInfo && routeInfo.route.getOptions().allowServeSPA === false) {
+		if (routeInfo && routeInfo.route.getOptions().allowSPA === false) {
 			canBeRouteServeAsSPA = false;
 		}
 
