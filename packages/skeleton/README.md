@@ -41,7 +41,8 @@ use `sudo` on a UNIX-like system):
 npm install -g gulp
 ```
 
-Check installation and hello world video tutorials on [`imajs.io`](https://imajs.io/videos)!
+Check out the installation and hello world video tutorials at
+[`imajs.io`](https://imajs.io/videos)!
 
 You may also try other local demos by running either of the following commands:
 
