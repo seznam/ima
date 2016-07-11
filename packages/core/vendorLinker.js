@@ -40,6 +40,10 @@ class VendorLinker {
 	set(moduleName, moduleValues) {
 		this._modules.set(moduleName, moduleValues);
 
+		if (typeof moduleValues.$registerImaPlugin === 'function') {
+			this._plugins.push(moduleValues);
+		}
+
 		$IMA.Loader.register(moduleName, [], (exports) => ({
 			setters: [],
 			execute: () => {
@@ -87,7 +91,6 @@ class VendorLinker {
 
 			if (typeof lib.$registerImaPlugin === 'function') {
 				lib.$registerImaPlugin(ns);
-				this._plugins.push(lib);
 			}
 
 			nsVendor[name] = lib;
