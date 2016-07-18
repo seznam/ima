@@ -93,7 +93,7 @@ export default class AbstractExtension extends ExtensionInterface {
 	 * @method update
 	 */
 	update(params = {}) {
-		return this.getState();
+		return {};
 	}
 
 	/**

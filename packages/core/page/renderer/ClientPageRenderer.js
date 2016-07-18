@@ -123,7 +123,7 @@ export default class ClientPageRenderer extends AbstractPageRenderer {
 			this._Helper
 				.allPromiseHash(updatedPromises)
 				.then((fetchedResources) => {
-					controller.setMetaParams(fetchedResources);
+					controller.setMetaParams(controller.getState());
 					this._updateMetaAttributes(controller.getMetaManager());
 
 					return {

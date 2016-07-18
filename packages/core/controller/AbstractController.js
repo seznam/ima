@@ -107,7 +107,7 @@ export default class AbstractController extends ControllerInterface {
 	 * @method update
 	 */
 	update(params = {}) {
-		return this.getState();
+		return {};
 	}
 
 	/**
