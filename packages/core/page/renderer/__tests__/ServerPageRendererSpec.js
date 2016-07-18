@@ -34,7 +34,7 @@ describe('ima.page.renderer.ServerPageRenderer', function() {
 
 	beforeEach(function() {
 		response.init(expressResponse);
-		pageRenderer = oc.create('ima.page.renderer.ServerPageRenderer', [rendererFactory, $Helper, ReactDOMServer, settings, response, cache, oc]);
+		pageRenderer = oc.create('ima.page.renderer.ServerPageRenderer', [rendererFactory, $Helper, ReactDOMServer, settings, response, cache]);
 	});
 
 	it('should be wrap each key to promise', function() {
