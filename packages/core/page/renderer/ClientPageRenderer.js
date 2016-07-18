@@ -56,15 +56,12 @@ export default class ClientPageRenderer extends AbstractPageRenderer {
 		 */
 		this._window = window;
 
-		var configuredDocumentView = settings.$Page.$Render.documentView;
-		var documentView = factory.getDocumentView(configuredDocumentView);
-		var masterElementId = documentView.masterElementId;
 		/**
 		 * @property _viewContainer
 		 * @private
-		 * @type {HTMLElement}
+		 * @type {?HTMLElement}
 		 */
-		this._viewContainer = this._window.getElementById(masterElementId);
+		this._viewContainer = null;
 	}
 
 	/**
@@ -79,7 +76,7 @@ export default class ClientPageRenderer extends AbstractPageRenderer {
 
 		if (this._firstTime === false) {
 			controller.setState(defaultPageState);
-			this._renderToDOM(controller, view);
+			this._renderToDOM(controller, view, routeOptions);
 			this._patchPromisesToState(controller, loadedPromises);
 		}
 
@@ -91,7 +88,7 @@ export default class ClientPageRenderer extends AbstractPageRenderer {
 					if (this._firstTime === true) {
 						Object.assign(defaultPageState, fetchedResources);
 						controller.setState(defaultPageState);
-						this._renderToDOM(controller, view);
+						this._renderToDOM(controller, view, routeOptions);
 						this._firstTime = false;
 					}
 
@@ -189,10 +186,27 @@ export default class ClientPageRenderer extends AbstractPageRenderer {
 	 * @method _renderToDOM
 	 * @param {ima.controller.ControllerDecorator} controller
 	 * @param {React.Component} view
+	 * @param {{
+	 *            onlyUpdate: (
+	 *                boolean|
+	 *                function(
+	 *                    (string|function(new: ima.controller.Controller, ...*)),
+	 *                   (string|function(new: React.Component, Object<string, *>, ?Object<string, *>))
+	 *               ): boolean
+	 *            ),
+	 *           autoScroll: boolean,
+	 *           allowSPA: boolean,
+	 *           documentView: ?ima.page.AbstractDocumentView
+	 *        }} options The current route options.
 	 */
-	_renderToDOM(controller, view) {
+	_renderToDOM(controller, view, routeOptions) {
 		var props = this._generateViewProps(view, controller.getState());
 		var reactElementView = this._factory.wrapView(props);
+
+		var configuredDocumentView = routeOptions.documentView || this._settings.$Page.$Render.documentView;
+		var documentView = this._factory.getDocumentView(configuredDocumentView);
+		var masterElementId = documentView.masterElementId;
+		this._viewContainer = this._window.getElementById(masterElementId);
 
 		this._reactiveView = this._ReactDOM.render(
 			reactElementView,
