@@ -67,7 +67,7 @@
     "no-extra-parens": 0,
     "quotes": [0, "single", "avoid-escape"],
     "quote-props": [0, "as-needed"],
-    "radix": 1,
+    "radix": [1, "as-needed"],
     "semi": [2, "always"],
     "semi-spacing": [1, {"before": false, "after": true}],
     "keyword-spacing": [2, {"before": true, "after": true, "overrides": {}}],
