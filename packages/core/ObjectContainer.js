@@ -122,8 +122,8 @@ export default class ObjectContainer {
 			if (typeof classConstructor !== 'function') {
 				throw new Error(`ima.ObjectContainer:bind The second ` +
 						`argument has to be a class constructor function, ` +
-						`but ${classConstructor} was provided. Fix your ` +
-						`bind.js file.`);
+						`but ${classConstructor} was provided. Fix alias ` +
+						`${name} for your bind.js file.`);
 			}
 		}
 
