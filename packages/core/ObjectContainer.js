@@ -196,7 +196,7 @@ export default class ObjectContainer {
 	inject(classConstructor, dependencies) {
 		if ($Debug) {
 			if (typeof classConstructor !== 'function') {
-				throw new Error(`ima.ObjectContainer:bind The first ` +
+				throw new Error(`ima.ObjectContainer:inject The first ` +
 						`argument has to be a class constructor function, ` +
 						`but ${classConstructor} was provided. Fix your ` +
 						`bind.js file.`);
