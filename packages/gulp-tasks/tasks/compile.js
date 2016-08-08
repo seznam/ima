@@ -20,6 +20,7 @@ var source = require('vinyl-source-stream');
 var sourcemaps = require('gulp-sourcemaps');
 var sweetjs = require('gulp-sweetjs');
 var gulpIgnore = require('gulp-ignore');
+var tap = require('gulp-tap');
 
 var gulpConfig = require('../../../gulpConfig.js');
 var files = gulpConfig.files;
@@ -123,6 +124,85 @@ gulp.task('Es6ToEs5:ima', function () {
 			 }))
 			.pipe(remember('Es6ToEs5:ima'))
 			.pipe(plumber.stop())
+			.pipe(save('Es6ToEs5:ima:source'))
+			.pipe(gulpIgnore.exclude(excludeServerSideFile))
+			.pipe(concat(files.ima.name.client))
+			.pipe(replaceToIMALoader())
+			.pipe(insert.wrap('(function(){\n', '\n })();\n'))
+			.pipe(sourcemaps.write())
+			.pipe(gulp.dest(files.ima.dest.client))
+			.pipe(save.restore('Es6ToEs5:ima:source'))
+			.pipe(concat(files.ima.name.server))
+			.pipe(replaceToIMALoader())
+			.pipe(insert.wrap('module.exports = (function(){\n', '\n })\n'))
+			.pipe(sourcemaps.write())
+			.pipe(gulp.dest(files.ima.dest.server))
+	);
+});
+
+// build ima
+gulp.task('Es6ToEs5:ima:hybrid', function () {
+
+	function replaceToIMALoader() {
+		return change(function (content) {
+			content = content.replace(/System.import/g, '$IMA.Loader.import');
+			content = content.replace(/System.register/g, '$IMA.Loader.register');
+
+			return content;
+		});
+	}
+
+	function excludeServerSideFile(file) {
+		return file.contents.toString().indexOf('@server-side') !== -1 && files.ima.clearServerSide;
+	}
+
+	return (
+		gulp.src(files.ima.src)
+			.pipe(resolveNewPath(files.ima.base || '/node_modules'))
+			.pipe(plumber())
+			.pipe(sourcemaps.init())
+			.pipe(cache('Es6ToEs5:ima'))
+			.pipe(babel({
+				moduleIds: true,
+				presets: babelConfig.ima.presets,
+				plugins: babelConfig.ima.plugins
+			}))
+			.pipe(remember('Es6ToEs5:ima'))
+			.pipe(plumber.stop())
+			.pipe(tap((file) => {
+				let moduleName = file.path.replace(/^.*\/node_modules\/ima[/](.*)\.js$/, 'ima/$1');
+
+				let fileContents = file.contents.toString();
+
+				let dependencyMatcher = /require\(['"]([^'"]+)['"]\)/g;
+				let dependencies = [];
+				let match = dependencyMatcher.exec(fileContents);
+				while (match) {
+					dependencies.push(match[1]);
+					match = dependencyMatcher.exec(fileContents);
+				}
+
+				let exportMatcher = /\nexports\.([a-zA-Z_][a-zA-Z_1-9]*)\s*=\s*(\S*);/g;
+				let moduleExports = [];
+				match = exportMatcher.exec(fileContents);
+				while (match) {
+					moduleExports.push({ symbol: match[1], value: match[2] });
+					match = exportMatcher.exec(fileContents);
+				}
+
+				file.contents = new Buffer(
+					`$IMA.Loader.register('${moduleName}', [${dependencies.map(dependency => `'${dependency}'`).join(', ')}], function (_export, _context) {\n` +
+					`	'use strict';\n` +
+					`	return {\n` +
+					`		setters: [${dependencies.map(() => 'function () {}').join(', ')}],\n` +
+					`		execute: function () {\n` +
+					fileContents + '\n\n' +
+					`${moduleExports.map(({ symbol, value }) => `			_export('${symbol}', ${value});`).join('\n')}\n` +
+					`		}\n` +
+					`	};\n` +
+					`});\n`
+				);
+			}))
 			.pipe(save('Es6ToEs5:ima:source'))
 			.pipe(gulpIgnore.exclude(excludeServerSideFile))
 			.pipe(concat(files.ima.name.client))
