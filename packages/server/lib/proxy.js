@@ -162,8 +162,8 @@ module.exports = (environment, logger) => {
 							try {
 								logger.warn('API sent bad header of content-type. More info how you can to fix it: http://visionmedia.github.io/superagent/#parsing-response bodies');
 								result = JSON.parse(response.text);
-							} catch (e) {
-								logger.error('API response is invalid JSON.', { err });
+							} catch (error) {
+								logger.error('API response is invalid JSON.', { error });
 								result = {};
 							}
 						}
