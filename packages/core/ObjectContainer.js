@@ -325,7 +325,8 @@ export default class ObjectContainer {
 				this._registry.has(name) ||
 				this._providers.has(name) ||
 				!!this._getEntryFromConstant(name) ||
-				!!this._getEntryFromNamespace(name);
+				!!this._getEntryFromNamespace(name) ||
+				!!this._getEntryFromClassConstructor(name);
 	}
 
 	/**
@@ -465,7 +466,8 @@ export default class ObjectContainer {
 				this._registry.get(name) ||
 				this._providers.get(name) ||
 				this._getEntryFromConstant(name) ||
-				this._getEntryFromNamespace(name);
+				this._getEntryFromNamespace(name) ||
+				this._getEntryFromClassConstructor(name);
 
 		if ($Debug) {
 			if (!entry) {
@@ -495,6 +497,11 @@ export default class ObjectContainer {
 	 * @return {T} Created instance or generated value.
 	 */
 	_createEntry(classConstructor, dependencies = []) {
+		if (dependencies.length === 0 &&
+				Array.isArray(classConstructor.$dependencies)) {
+			dependencies = classConstructor.$dependencies;
+		}
+
 		return new Entry(classConstructor, dependencies);
 	}
 
@@ -621,6 +628,32 @@ export default class ObjectContainer {
 				entry.sharedInstance = namespaceValue;
 				return entry;
 			}
+		}
+
+		return null;
+	}
+
+	/**
+	 * Retrieves the class denoted by the provided class constructor.
+	 *
+	 * The method then checks whether there are defined {@code $dependecies}
+	 * property for class. Then the class is registered to this object container.
+	 *
+	 * The method returns the entry for the class if the specified class
+	 * does not have defined {@code $dependencies} property return {@code null}.
+	 * @private
+	 * @method _getEntryFromClassConstructor
+	 * @param {function(new: T, ...*)} classConstructor
+	 * @return {?Entry<T>} An entry representing the value at the specified
+	 *         classConstructor. The method returns {@code null}
+	 *         if the specified classConstructor does not have defined {@code $dependencies}.
+	 */
+	_getEntryFromClassConstructor(classConstructor) {
+		if (typeof classConstructor === 'function' &&
+				Array.isArray(classConstructor.$dependencies)) {
+			this.inject(classConstructor, classConstructor.$dependencies);
+
+			return this._registry.get(classConstructor);
 		}
 
 		return null;

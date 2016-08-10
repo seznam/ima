@@ -2,11 +2,14 @@ describe('ima.ObjectContainer', function() {
 
 	var oc = null;
 
+	function classConstructorWithDependencies(dependency) { this.dependecy = dependency };
+	classConstructorWithDependencies.$dependencies = [];
+
 	var alias = 'alias';
 	var classParent = function() { this.parent = this; };
-	var classConstructor = function(dependency) { this.dependecy = dependency};
+	var classConstructor = function(dependency) { this.dependecy = dependency };
 	var classDependency = function() {};
-	var dependencies = [classDependency];
+	var dependencies = [classDependency, classConstructorWithDependencies];
 	extend(classConstructor, classParent);
 
 	var constantName = 'constant';
@@ -219,14 +222,18 @@ describe('ima.ObjectContainer', function() {
 			oc.clear();
 		});
 
-		it('should be return true if name is exist in object container', function() {
+		it('should return true if name is exist in object container', function() {
 			oc.inject(classConstructor, dependencies);
 
 			expect(oc.has(classConstructor)).toEqual(true);
 			expect(oc.has(namespacePathUnit)).toEqual(true);
 		});
 
-		it('should be return false if name is not exist in object container', function() {
+		it('should return true if classConstructor has defined $dependencies property', function() {
+			expect(oc.has(classConstructorWithDependencies)).toEqual(true);
+		});
+
+		it('should return false if name is not exist in object container', function() {
 			expect(oc.has(classConstructor)).toEqual(false);
 			expect(oc.has(namespacePathOC)).toEqual(false);
 		});
@@ -324,6 +331,13 @@ describe('ima.ObjectContainer', function() {
 			expect(entry.sharedInstance).toEqual(value);
 		});
 
+		it('should be return value from registry for class constructor with $dependencies', function() {
+			var entry = oc._getEntry(classConstructorWithDependencies);
+
+			expect(entry.classConstructor).toEqual(classConstructorWithDependencies);
+			expect(entry.dependencies).toEqual(classConstructorWithDependencies.$dependencies);
+		});
+
 	});
 
 	describe('_getEntryFromConstant method', function() {
@@ -401,6 +415,39 @@ describe('ima.ObjectContainer', function() {
 			var entry = oc._getEntryFromNamespace(namespacePathOC);
 
 			expect(entry.sharedInstance).toEqual(constant);
+		});
+
+	});
+
+	describe('_getEntryFromClassConstructor method', function() {
+
+		beforeEach(function() {
+			oc.clear();
+		});
+
+		it('should return null if classConstructor is not a function', function() {
+			expect(oc._getEntryFromClassConstructor()).toEqual(null);
+		});
+
+		it('should return null for not defined $dependencies property', function() {
+			expect(oc._getEntryFromClassConstructor(classConstructor)).toEqual(null);
+		});
+
+		it('should inject class to registry if class has defined $dependencies', function() {
+			spyOn(oc, 'inject')
+				.and
+				.callThrough();
+
+			oc._getEntryFromClassConstructor(classConstructorWithDependencies);
+
+			expect(oc.inject).toHaveBeenCalledWith(classConstructorWithDependencies, classConstructorWithDependencies.$dependencies);
+		});
+
+		it('should return entry if class has defined $dependencies', function() {
+			var entry = oc._getEntryFromClassConstructor(classConstructorWithDependencies);
+
+			expect(entry.classConstructor).toEqual(classConstructorWithDependencies);
+			expect(entry.dependencies).toEqual(classConstructorWithDependencies.$dependencies);
 		});
 
 	});
