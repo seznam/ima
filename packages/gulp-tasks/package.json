@@ -1,6 +1,6 @@
 {
 	"name": "ima-gulp-tasks",
-	"version": "0.13.1",
+	"version": "0.13.2",
 	"description": "Default gulp tasks for IMA.js applications.",
 	"main": "",
 	"scripts": {
@@ -11,10 +11,10 @@
 		"url": "https://github.com/seznam/IMA.js-gulp-tasks.git"
 	},
 	"keywords": [
-    "gulp",
-    "IMA.js",
-    "ima"
-  ],
+		"gulp",
+		"IMA.js",
+		"ima"
+	],
 	"author": "Seznam.cz, a.s.",
 	"license": "MIT",
 	"bugs": {
