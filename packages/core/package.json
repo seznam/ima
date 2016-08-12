@@ -2,9 +2,10 @@
 	"name": "ima",
 	"version": "0.14.0-rc.1",
 	"description": "IMA.js framework for isomorphic javascript application",
-	"main": "",
+	"main": "main.js",
 	"scripts": {
-		"test": "echo \"Error: no test specified\" && exit 1"
+		"test": "echo \"Error: no test specified\" && exit 1",
+		"compile": "node node_modules/gulp/bin/gulp.js ima:compile"
 	},
 	"keywords": [
 		"IMA",
@@ -34,7 +35,15 @@
 		"registry": "http://registry.npmjs.org/"
 	},
 	"license": "MIT",
-	"devDependencies": {},
+	"devDependencies": {
+		"babel-plugin-external-helpers-2": "^6.3.13",
+		"babel-preset-es2015": "^6.13.2",
+		"gulp": "^3.9.1",
+		"gulp-babel": "^6.1.2",
+		"gulp-plumber": "^1.1.0",
+		"gulp-sourcemaps": "^1.6.0",
+		"gulp-tap": "^0.1.3"
+	},
 	"dependencies": {
 		"babel-polyfill": "^6.13.0",
 		"custom-event-polyfill": "^0.2.2",
