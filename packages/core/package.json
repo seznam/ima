@@ -5,7 +5,7 @@
 	"main": "main.js",
 	"scripts": {
 		"test": "echo \"Error: no test specified\" && exit 1",
-		"postinstall": "npm install --ignore-scripts && npm run compile",
+		"postinstall": "npm install --ignore-scripts && npm run compile && rm -rf node_modules",
 		"compile": "node node_modules/gulp/bin/gulp.js ima:compile"
 	},
 	"keywords": [
