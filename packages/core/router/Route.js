@@ -126,12 +126,36 @@ export default class Route {
 		 *
 		 * @private
 		 * @property _options
-		 * @type {{onlyUpdate: boolean, autoScroll: boolean, allowSPA: boolean,
-		 *       documentView: ?ima.page.AbstractDocumentView}}
-		 * @default {onlyUpdate: false, autoScroll: true, allowSPA: boolean, documentView: null}
+		 * @type {{
+		 *         onlyUpdate: (
+		 *           boolean|
+		 *           function(
+		 *             (string|function(new: ima.controller.Controller, ...*)),
+		 *             (string|function(
+		 *               new: React.Component,
+		 *               Object<string, *>,
+		 *               ?Object<string, *>
+		 *             ))
+		 *           ): boolean
+		 *         ),
+		 *         autoScroll: boolean,
+		 *         allowServeSPA: boolean,
+		 *         documentView: ?ima.page.AbstractDocumentView
+		 *       }}
+		 * @default {
+		 *            onlyUpdate: false,
+		 *            autoScroll: true,
+		 *            allowServeSPA: true,
+		 *            documentView: null
+		 *          }
 		 */
 		this._options = Object.assign(
-			{ onlyUpdate: false, autoScroll: true, allowSPA: true, documentView: null },
+			{
+				onlyUpdate: false,
+				autoScroll: true,
+				allowServeSPA: true,
+				documentView: null
+			},
 			options
 		);
 
@@ -192,8 +216,16 @@ export default class Route {
 		var query = [];
 		for (var paramName of Object.keys(params)) {
 			if (this._isParamInPath(path, paramName)) {
-				path = this._substituteParamInPath(path, paramName, params[paramName]);
-				path = this._substituteOptionalParamInPath(path, paramName, params[paramName]);
+				path = this._substituteParamInPath(
+					path,
+					paramName,
+					params[paramName]
+				);
+				path = this._substituteOptionalParamInPath(
+					path,
+					paramName,
+					params[paramName]
+				);
 			} else {
 				var pair = [paramName, params[paramName]];
 				query.push(pair.map(encodeURIComponent).join('='));

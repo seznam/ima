@@ -54,14 +54,20 @@ export default class Router {
 	 * @param {string} view The full name or Object Container alias identifying
 	 *        the view class associated with this route.
 	 * @param {{
-	 *            onlyUpdate: (
-	 *                boolean|
-	 *                function(
-	 *                    (string|function(new: ima.controller.Controller, ...*)),
-	  *                   (string|function(new: React.Component, Object<string, *>, ?Object<string, *>))
-	 *                ): boolean
-	 *            )=,
-	 *            autoScroll: boolean=
+	 *          onlyUpdate: (
+	 *            boolean|
+	 *              function(
+	 *                (string|function(new: ima.controller.Controller, ...*)),
+	 *                (string|function(
+	 *                  new: React.Component,
+	 *                  Object<string, *>,
+	 *                  ?Object<string, *>
+	 *                ))
+	 *              ): boolean
+	 *          )=,
+	 *          autoScroll: boolean=,
+	 *          allowServeSPA: boolean=,
+	 *          documentView: ?ima.page.AbstractDocumentView=
 	 *        }=} options
 	 *        Additional route options, specified how the navigation to the
 	 *        route will be handled.
@@ -75,6 +81,11 @@ export default class Router {
 	 *        The {@code autoScroll} flag signals whether the page should be
 	 *        scrolled to the top when the navigation takes place. This flag is
 	 *        enabled by default.
+	 *        The {@code allowServeSPA} flag can be used to make the route
+	 *        always served from the server and never using the SPA page even
+	 *        if the server is overloaded. This is useful for routes that use
+	 *        different document views (specified by the {@code documentView}
+	 *        option), for example for rendering the content of iframes.
 	 * @return {ima.router.Router} This router.
 	 * @throws {ima.error.Error} Thrown if a route with the same name already
 	 *         exists.

@@ -269,9 +269,8 @@ export default class CacheImpl extends CacheInterface {
 	}
 
 	/**
-	 * Clone only mutable values.
 	 * Attempts to clone the provided value, if possible. Values that cannot be
-	 * cloned will be simply returned.
+	 * cloned (e.g. promises) will be simply returned.
 	 *
 	 * @private
 	 * @method _clone
