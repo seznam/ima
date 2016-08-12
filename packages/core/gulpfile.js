@@ -11,6 +11,7 @@ gulp.task('ima:compile', () => {
 			.src([
 				__dirname + '/main.js',
 				__dirname + '/namespace.js',
+				__dirname + '/Bootstrap.js',
 				__dirname + '/ObjectContainer.js',
 				__dirname + '/!(node_modules)/**/!(*Spec).js'
 			])
