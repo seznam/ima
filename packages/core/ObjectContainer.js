@@ -1,4 +1,4 @@
-import ns from 'ima/namespace';
+import ns from './namespace';
 
 ns.namespace('ima');
 
@@ -103,13 +103,14 @@ export default class ObjectContainer {
 	 * dependencies are provided.
 	 *
 	 * @chainable
+	 * @template T
 	 * @method bind
 	 * @param {string} name Alias name.
 	 * @param {(function(new: T, ...*)|function(...*): T)} classConstructor The
 	 *        class constructor or a factory function.
 	 * @param {*[]} [dependencies=[]] The dependencies to pass into the
 	 *        constructor or factory function.
-	 * @return {ima.ObjectContainer} This object container.
+	 * @return {ObjectContainer} This object container.
 	 */
 	bind(name, classConstructor, dependencies = []) {
 		if ($Debug) {
@@ -129,21 +130,21 @@ export default class ObjectContainer {
 
 		if (dependencies.length === 0) {
 			if (this._registry.has(classConstructor)) {
-				var registryEntry = this._registry.get(classConstructor);
+				let registryEntry = this._registry.get(classConstructor);
 				this._aliases.set(name, registryEntry);
 
 				return this;
 			}
 
 			if (this._providers.has(classConstructor)) {
-				var providerEntry = this._providers.get(classConstructor);
+				let providerEntry = this._providers.get(classConstructor);
 				this._aliases.set(name, providerEntry);
 
 				return this;
 			}
 		}
 
-		var newEntry = this._createEntry(classConstructor, dependencies);
+		let newEntry = this._createEntry(classConstructor, dependencies);
 		this._aliases.set(name, newEntry);
 
 		return this;
@@ -159,7 +160,7 @@ export default class ObjectContainer {
 	 * @method constant
 	 * @param {string} name The constant name.
 	 * @param {*} value The constant value.
-	 * @return {ima.ObjectContainer} This object container.
+	 * @return {ObjectContainer} This object container.
 	 */
 	constant(name, value) {
 		if ($Debug) {
@@ -170,7 +171,7 @@ export default class ObjectContainer {
 			}
 		}
 
-		var constantEntry = this._createEntry(() => value);
+		let constantEntry = this._createEntry(() => value);
 		constantEntry.sharedInstance = value;
 		this._constants.set(name, constantEntry);
 
@@ -191,7 +192,7 @@ export default class ObjectContainer {
 	 * @param {function(new: T, ...*)} classConstructor The class constructor.
 	 * @param {*[]} dependencies The dependencies to pass into the
 	 *        constructor function.
-	 * @return {ima.ObjectContainer} This object container.
+	 * @return {ObjectContainer} This object container.
 	 */
 	inject(classConstructor, dependencies) {
 		if ($Debug) {
@@ -214,7 +215,7 @@ export default class ObjectContainer {
 			}
 		}
 
-		var newEntry = this._createEntry(classConstructor, dependencies);
+		let newEntry = this._createEntry(classConstructor, dependencies);
 		this._registry.set(classConstructor, newEntry);
 
 		return this;
@@ -239,7 +240,7 @@ export default class ObjectContainer {
 	 *        The constructor of the class implementing the service interface.
 	 * @param {*[]} [dependencies=[]] The dependencies to pass into the
 	 *        constructor function.
-	 * @return {ima.ObjectContainer} This object container.
+	 * @return {ObjectContainer} This object container.
 	 */
 	provide(interfaceConstructor, implementationConstructor,
 			dependencies = []) {
@@ -252,7 +253,7 @@ export default class ObjectContainer {
 			}
 
 			// check that implementation really extends interface
-			var prototype = implementationConstructor.prototype;
+			let prototype = implementationConstructor.prototype;
 			if (!(prototype instanceof interfaceConstructor)) {
 				throw new Error('ima.ObjectContainer:provide The specified ' +
 						`class (${implementationConstructor.name}) does not ` +
@@ -261,7 +262,7 @@ export default class ObjectContainer {
 			}
 		}
 
-		var newEntry = this._createEntry(
+		let newEntry = this._createEntry(
 			implementationConstructor,
 			dependencies
 		);
@@ -285,7 +286,7 @@ export default class ObjectContainer {
 	 * @return {T} The shared instance or value.
 	 */
 	get(name) {
-		var entry = this._getEntry(name);
+		let entry = this._getEntry(name);
 
 		if (entry.sharedInstance === null) {
 			entry.sharedInstance = this._createInstanceFromEntry(entry);
@@ -304,7 +305,7 @@ export default class ObjectContainer {
 	 * @return {function(new: T, ...*)} The constructor function.
 	 */
 	getConstructorOf(name) {
-		var entry = this._getEntry(name);
+		let entry = this._getEntry(name);
 
 		return entry.classConstructor;
 	}
@@ -348,7 +349,7 @@ export default class ObjectContainer {
 	 * @return {T} Created instance or generated value.
 	 */
 	create(name, dependencies = []) {
-		var entry = this._getEntry(name);
+		let entry = this._getEntry(name);
 
 		return this._createInstanceFromEntry(entry, dependencies);
 	}
@@ -359,7 +360,7 @@ export default class ObjectContainer {
 	 *
 	 * @chainable
 	 * @method clear
-	 * @return {ima.ObjectContainer} This object container.
+	 * @return {ObjectContainer} This object container.
 	 */
 	clear() {
 		this._constants.clear();
@@ -401,7 +402,7 @@ export default class ObjectContainer {
 	 *
 	 * @chainable
 	 * @method lock
-	 * @return {ima.ObjectContainer} This object container.
+	 * @return {ObjectContainer} This object container.
 	 * @see #isLocked()
 	 */
 	lock() {
@@ -422,7 +423,7 @@ export default class ObjectContainer {
 	 *
 	 * @chainable
 	 * @method unlock
-	 * @return {ima.ObjectContainer} This object container.
+	 * @return {ObjectContainer} This object container.
 	 */
 	unlock() {
 		if (!this.isLocked() || (this._lockCounter !== 1)) {
@@ -461,7 +462,7 @@ export default class ObjectContainer {
 	 *         implementation is known to this object container.
 	 */
 	_getEntry(name) {
-		var entry = this._constants.get(name) ||
+		let entry = this._constants.get(name) ||
 				this._aliases.get(name) ||
 				this._registry.get(name) ||
 				this._providers.get(name) ||
@@ -527,7 +528,7 @@ export default class ObjectContainer {
 		if (dependencies.length === 0) {
 			dependencies = [];
 
-			for (var dependency of entry.dependencies) {
+			for (let dependency of entry.dependencies) {
 				if (['function', 'string'].indexOf(typeof dependency) > -1) {
 					dependencies.push(this.get(dependency));
 				} else {
@@ -535,7 +536,7 @@ export default class ObjectContainer {
 				}
 			}
 		}
-		var constructor = entry.classConstructor;
+		let constructor = entry.classConstructor;
 
 		return new constructor(...dependencies);
 	}
@@ -553,24 +554,24 @@ export default class ObjectContainer {
 	 * @private
 	 * @method _getEntryFromConstant
 	 * @param {string} compositionName
-	 * @return {?Entry<T>} An entry representing the value at the specified
+	 * @return {?Entry<*>} An entry representing the value at the specified
 	 *         composition name in the constants. The method returns {@code null}
 	 *         if the specified composition name does not exist in the constants.
 	 */
 	_getEntryFromConstant(compositionName) {
 		if (typeof compositionName === 'string') {
-			var objectProperties = compositionName.split('.');
-			var constantValue = this._constants.has(objectProperties[0]) ?
+			let objectProperties = compositionName.split('.');
+			let constantValue = this._constants.has(objectProperties[0]) ?
 					this._constants.get(objectProperties[0]).sharedInstance :
 					null;
 
-			var pathLength = objectProperties.length;
-			for (var i = 1; (i < pathLength) && constantValue; i++) {
+			let pathLength = objectProperties.length;
+			for (let i = 1; (i < pathLength) && constantValue; i++) {
 				constantValue = constantValue[objectProperties[i]];
 			}
 
 			if (constantValue !== undefined && constantValue !== null) {
-				var entry = this._createEntry(() => constantValue);
+				let entry = this._createEntry(() => constantValue);
 				entry.sharedInstance = constantValue;
 
 				return entry;
@@ -611,7 +612,7 @@ export default class ObjectContainer {
 	 */
 	_getEntryFromNamespace(path) {
 		if (typeof path === 'string' && this._namespace.has(path)) {
-			var namespaceValue = this._namespace.get(path);
+			let namespaceValue = this._namespace.get(path);
 
 			if (typeof namespaceValue === 'function') {
 				if (this._registry.has(namespaceValue)) {
@@ -624,7 +625,7 @@ export default class ObjectContainer {
 
 				return this._createEntry(namespaceValue);
 			} else {
-				var entry = this._createEntry(() => namespaceValue);
+				let entry = this._createEntry(() => namespaceValue);
 				entry.sharedInstance = namespaceValue;
 				return entry;
 			}
@@ -642,6 +643,7 @@ export default class ObjectContainer {
 	 * The method returns the entry for the class if the specified class
 	 * does not have defined {@code $dependencies} property return {@code null}.
 	 * @private
+	 * @template T
 	 * @method _getEntryFromClassConstructor
 	 * @param {function(new: T, ...*)} classConstructor
 	 * @return {?Entry<T>} An entry representing the value at the specified

@@ -1,5 +1,5 @@
-import ns from 'ima/namespace';
 import React from 'react';
+import ns from '../../namespace';
 
 ns.namespace('ima.page.renderer');
 
@@ -18,9 +18,11 @@ export default class ViewAdapter extends React.Component {
 	 *
 	 * @constructor
 	 * @method constructor
-	 * @param {{state: Object<string, *>, view: function(new:React.Component, Object<string, *>)}} props
-	 *        Component properties, containing the actual page view and the
-	 *        initial page state to pass to the view.
+	 * @param {{
+	 *          state: Object<string, *>,
+	 *          view: function(new:React.Component, Object<string, *>)
+	 *        }} props Component properties, containing the actual page view
+	 *        and the initial page state to pass to the view.
 	 */
 	constructor(props) {
 		super(props.props);

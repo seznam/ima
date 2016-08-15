@@ -1,4 +1,4 @@
-import ns from 'ima/namespace';
+import ns from '../namespace';
 
 ns.namespace('ima.router');
 
@@ -120,7 +120,7 @@ export default class Request {
 	 * request header.
 	 *
 	 * @method getIPs
-	 * @return {Array<string>}
+	 * @return {string[]}
 	 */
 	getIPs() {
 		return this._request ? this._request.ips || [] : [];

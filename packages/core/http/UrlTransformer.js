@@ -1,9 +1,9 @@
-import ns from 'ima/namespace';
+import ns from '../namespace';
 
 ns.namespace('ima.http');
 
 /**
- * Transform given string by defined rules.
+ * Utility for transforming URLs according to the configured replacement rules.
  *
  * @class UrlTransformer
  * @namespace ima.http
@@ -13,6 +13,8 @@ ns.namespace('ima.http');
 export default class UrlTransformer {
 
 	/**
+	 * Initializes the URL transformer.
+	 *
 	 * @method constructor
 	 * @constructor
 	 */
@@ -27,26 +29,29 @@ export default class UrlTransformer {
 	}
 
 	/**
-	 * Add transformation rule to transformer.
+	 * Adds the provided replacement rule to the rules used by this URL
+	 * transformer.
 	 *
 	 * @method addRule
 	 * @chainable
-	 * @param {string} key
-	 * @param {string} value
-	 * @return {ima.http.UrlTransformer} This transformer.
+	 * @param {string} pattern Regexp patter to look for (must be escaped as if
+	 *        for use in the {@linkcode Regexp} constructor).
+	 * @param {string} replacement The replacement of the matched patter in any
+	 *        matched URL.
+	 * @return {UrlTransformer} This transformer.
 	 */
-	addRule(key, value) {
-		this._rules[key] = value;
+	addRule(pattern, replacement) {
+		this._rules[pattern] = replacement;
 
 		return this;
 	}
 
 	/**
-	 * Clear all rules.
+	 * Clears all rules.
 	 *
 	 * @method clear
 	 * @chainable
-	 * @return {ima.http.UrlTransformer} This transformer.
+	 * @return {UrlTransformer} This transformer.
 	 */
 	clear() {
 		this._rules = {};
@@ -55,21 +60,22 @@ export default class UrlTransformer {
 	}
 
 	/**
-	 * For given string apply all rules. Method use all rules and try replace
-	 * defined key of rule with value of rule.
+	 * Applies all rules registered with this URL transformer to the provided
+	 * URL and returns the result. The rules will be applied in the order they
+	 * were registered.
 	 *
 	 * @method transform
-	 * @param {string} str The string for transformation.
-	 * @return {string} transformed string
+	 * @param {string} str The URL for transformation.
+	 * @return {string} Transformed URL.
 	 */
 	transform(str) {
-		var rulesKey = Object.keys(this._rules);
+		let rulesKey = Object.keys(this._rules);
 
 		if (rulesKey.length === 0) {
 			return str;
 		}
 
-		var  reg =  new RegExp(rulesKey.join('|'), 'g');
+		let reg =  new RegExp(rulesKey.join('|'), 'g');
 
 		return str.replace(reg, (ruleKey) => this._rules[ruleKey]);
 	}

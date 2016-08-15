@@ -1,4 +1,4 @@
-import ns from 'ima/namespace';
+import ns from '../namespace';
 import Error from './Error';
 
 ns.namespace('ima.error');
@@ -9,7 +9,7 @@ ns.namespace('ima.error');
  *
  * @class GenericError
  * @extends ExtensibleError
- * @implements ima.error.Error
+ * @implements Error
  * @namespace ima.error
  * @module ima
  * @submodule ima.error

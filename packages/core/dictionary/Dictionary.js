@@ -1,4 +1,4 @@
-import ns from 'ima/namespace';
+import ns from '../namespace';
 
 ns.namespace('ima.dictionary');
 

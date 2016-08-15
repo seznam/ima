@@ -1,16 +1,22 @@
 // @server-side
 
-import ns from 'ima/namespace';
-import AbstractRouter from 'ima/router/AbstractRouter';
+import ns from '../namespace';
+import AbstractRouter from './AbstractRouter';
+import Request from './Request';
+import Response from './Response';
+import RouteFactory from './RouteFactory';
+import Router from './Router';
+import Dispatcher from '../event/Dispatcher';
+import PageRenderer from '../page/renderer/PageRenderer';
 
 ns.namespace('ima.router');
 
 /**
- * The server-side implementation of the {@codelink ima.router.Router}
- * interface.
+ * The server-side implementation of the {@codelink Router} interface.
  *
  * @class Server
- * @extends ima.router.AbstractRouter
+ * @extends AbstractRouter
+ * @implements Router
  * @namespace ima.router
  * @module ima
  * @submodule ima.router
@@ -22,28 +28,21 @@ export default class ServerRouter extends AbstractRouter {
 	 *
 	 * @constructor
 	 * @method constructor
-	 * @param {ima.page.renderer.PageRenderer} pageManager The current page manager.
-	 * @param {ima.router.RouteFactory} factory The router factory used to create
-	 *        routes.
-	 * @param {ima.event.Dispatcher} dispatcher Dispatcher fires events to
-	 *        app.
-	 * @param {{ROUTE_NAMES: Object<string, string>, EVENTS: Object<string, string>}} ROUTER_CONSTANTS
-	 *        The internal router constants. The {@code ROUTE_NAMES}
-	 *        contains internal route names. The {@code EVENTS} contains name
-	  *       of events which are fired with {@code ima.event.Dispatcher}.
-	 * @param {ima.router.Request} request The current HTTP request.
-	 * @param {ima.router.Response} response The current HTTP response.
+	 * @param {PageRenderer} pageManager The current page manager.
+	 * @param {RouteFactory} factory The router factory used to create routes.
+	 * @param {Dispatcher} dispatcher Dispatcher fires events to app.
+	 * @param {Request} request The current HTTP request.
+	 * @param {Response} response The current HTTP response.
 	 */
-	constructor(pageManager, factory, dispatcher, ROUTER_CONSTANTS, request,
-			response) {
-		super(pageManager, factory, dispatcher, ROUTER_CONSTANTS);
+	constructor(pageManager, factory, dispatcher, request, response) {
+		super(pageManager, factory, dispatcher);
 
 		/**
 		 * The current HTTP request.
 		 *
 		 * @private
 		 * @property _request
-		 * @type {ima.router.Request}
+		 * @type {Request}
 		 */
 		this._request = request;
 
@@ -52,7 +51,7 @@ export default class ServerRouter extends AbstractRouter {
 		 *
 		 * @private
 		 * @property _response
-		 * @type {ima.router.Response}
+		 * @type {Response}
 		 */
 		this._response = response;
 	}

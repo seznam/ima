@@ -1,5 +1,5 @@
-import ns from 'ima/namespace';
-import PageStateManagerInterface from 'ima/page/state/PageStateManager';
+import ns from '../../namespace';
+import PageStateManager from './PageStateManager';
 
 ns.namespace('ima.page.state');
 
@@ -9,12 +9,12 @@ const MAX_HISTORY_LIMIT = 10;
  * Class for app state.
  *
  * @class PageStateManagerImpl
- * @implements ima.page.state.PageStateManager
+ * @implements PageStateManager
  * @namespace ima.page.state
  * @module ima
  * @submodule ima.page
  */
-export default class PageStateManagerImpl extends PageStateManagerInterface {
+export default class PageStateManagerImpl extends PageStateManager {
 
 	/**
 	 * @method constructor
@@ -26,7 +26,7 @@ export default class PageStateManagerImpl extends PageStateManagerInterface {
 		/**
 		 * @property _states
 		 * @private
-		 * @type {Array<Object<string, *>>}
+		 * @type {Object<string, *>[]}
 		 * @default []
 		 */
 		this._states = [];
@@ -34,15 +34,15 @@ export default class PageStateManagerImpl extends PageStateManagerInterface {
 		/**
 		 * @property _cursor
 		 * @private
-		 * @type {Number}
-		 * @default 0
+		 * @type {number}
+		 * @default -1
 		 */
 		this._cursor = -1;
 
 		/**
 		 * @property onChange
 		 * @public
-		 * @type {(null|function(Object<string, *>))}
+		 * @type {?function(Object<string, *>)}
 		 * @default null
 		 */
 		this.onChange = null;

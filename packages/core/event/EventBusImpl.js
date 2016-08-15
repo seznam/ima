@@ -1,8 +1,9 @@
 // @client-side
 
-import ns from 'ima/namespace';
-import IMAError from 'ima/error/GenericError';
-import EventBus from 'ima/event/EventBus';
+import ns from '../namespace';
+import EventBus from './EventBus';
+import GenericError from '../error/GenericError';
+import Window from '../window/Window';
 
 ns.namespace('ima.event');
 
@@ -22,7 +23,7 @@ const IMA_EVENT = '$IMA.CustomEvent';
  * and two methods for catching events (e.g. inside view components).
  *
  * @class EventBusImpl
- * @implements ima.event.EventBus
+ * @implements EventBus
  * @namespace ima.event
  * @module ima
  * @submodule ima.event
@@ -33,7 +34,7 @@ export default class EventBusImpl extends EventBus {
 	 *
 	 * @constructor
 	 * @method constructor
-	 * @param {ima.window.Window} window
+	 * @param {Window} window
 	 */
 	constructor(window) {
 		super();
@@ -41,7 +42,7 @@ export default class EventBusImpl extends EventBus {
 		/**
 		 * @private
 		 * @property _window
-		 * @type {ima.window.Window}
+		 * @type {Window}
 		 * @default window
 		 */
 		this._window = window;
@@ -55,7 +56,10 @@ export default class EventBusImpl extends EventBus {
 		 *
 		 * @private
 		 * @property _listeners
-		 * @type {WeakMap<function(Event), WeakMap<EventTarget, Map<string, function(Event)>>>}
+		 * @type {WeakMap<
+		 *         function(Event),
+		 *         WeakMap<EventTarget, Map<string, function(Event)>>
+		 *       >}
 		 */
 		this._listeners = new WeakMap();
 
@@ -88,9 +92,9 @@ export default class EventBusImpl extends EventBus {
 		if (eventTarget && typeof eventTarget.dispatchEvent !== 'undefined') {
 			eventTarget.dispatchEvent(event);
 		} else {
-			throw new IMAError(`ima.event.EventBusImpl.fire: The EventSource ` +
-					`${eventTarget} is not defined or can not dispatch ` +
-					`event '${eventName}' (data: ${data}).`,
+			throw new GenericError(`ima.event.EventBusImpl.fire: The ` +
+					`EventSource ${eventTarget} is not defined or can not ` +
+					`dispatch event '${eventName}' (data: ${data}).`,
 					{ eventTarget, eventName, data, eventInitialization });
 		}
 

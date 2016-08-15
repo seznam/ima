@@ -1,4 +1,4 @@
-import ns from 'ima/namespace';
+import ns from '../../namespace';
 
 ns.namespace('ima.page.state');
 
@@ -44,7 +44,7 @@ export default class PageStateManager {
 	 * therefore the complete history may not be available.
 	 *
 	 * @method getAllStates
-	 * @return {Array<Object<string, *>>} The recorded history of page states.
+	 * @return {Object<string, *>[]} The recorded history of page states.
 	 */
 	getAllStates() {}
 

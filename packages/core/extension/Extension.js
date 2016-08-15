@@ -1,4 +1,5 @@
-import ns from 'ima/namespace';
+import ns from '../namespace';
+import PageStateManager from '../page/state/PageStateManager';
 
 ns.namespace('ima.extension');
 
@@ -159,8 +160,8 @@ export default class Extension {
 	 * Sets the state manager used to manage the controller's state..
 	 *
 	 * @method setPageStateManager
-	 * @param {?ima.page.state.PageStateManager} pageStateManager The current
-	 *        state manager to use.
+	 * @param {?PageStateManager} pageStateManager The current state manager to
+	 *        use.
 	 */
 	setPageStateManager(pageStateManager) {}
 

@@ -1,4 +1,9 @@
-import ns from 'ima/namespace';
+import ns from '../namespace';
+import Dictionary from '../dictionary/Dictionary';
+import Extension from '../extension/Extension';
+import MetaManager from '../meta/MetaManager';
+import PageStateManager from '../page/state/PageStateManager';
+import Router from '../router/Router';
 
 ns.namespace('ima.controller');
 
@@ -165,9 +170,8 @@ export default class Controller {
 	 * added to the controller before the {@codelink init()} method is invoked.
 	 *
 	 * @method addExtension
-	 * @param {ima.extension.Extension} extension The extension to add to this
-	 *        controller.
-	 * @return {ima.controller.Controller} This controller.
+	 * @param {Extension} extension The extension to add to this controller.
+	 * @return {Controller} This controller.
 	 */
 	addExtension(extension) {}
 
@@ -175,8 +179,7 @@ export default class Controller {
 	 * Returns the controller's extensions.
 	 *
 	 * @method getExtensions
-	 * @return {ima.extension.Extension[]} The extensions added to this
-	 *         controller.
+	 * @return {Extension[]} The extensions added to this controller.
 	 */
 	getExtensions() {}
 
@@ -190,11 +193,9 @@ export default class Controller {
 	 *        map of resource names to resources loaded by the
 	 *        {@codelink load()} method. This is the same object as the one
 	 *        passed to the {@codelink setState()} method.
-	 * @param {ima.meta.MetaManager} metaManager Meta attributes manager
-	 *        to configure.
-	 * @param {ima.router.Router} router The current application router.
-	 * @param {ima.dictionary.Dictionary} dictionary The current localization
-	 *        dictionary.
+	 * @param {MetaManager} metaManager Meta attributes manager to configure.
+	 * @param {Router} router The current application router.
+	 * @param {Dictionary} dictionary The current localization dictionary.
 	 * @param {Object<string, *>} settings The application settings for the
 	 *        current application environment.
 	 */
@@ -226,8 +227,8 @@ export default class Controller {
 	 * controller).
 	 *
 	 * @method setPageStateManager
-	 * @param {?ima.page.state.PageStateManager} pageStateManager The current
-	 *        state manager to use.
+	 * @param {?PageStateManager} pageStateManager The current state manager to
+	 *        use.
 	 */
 	setPageStateManager(pageStateManager) {}
 

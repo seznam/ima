@@ -1,6 +1,54 @@
-import vendorLinker from 'ima/vendorLinker';
+import vendorLinker from '../vendorLinker';
+import Cache from '../cache/Cache';
+import CacheEntry from '../cache/CacheEntry';
+import CacheFactory from '../cache/CacheFactory';
+import CacheImpl from '../cache/CacheImpl';
+import ControllerDecorator from '../controller/ControllerDecorator';
+import DevTool from '../debug/DevTool';
+import Dictionary from '../dictionary/Dictionary';
+import MessageFormatDictionary from '../dictionary/MessageFormatDictionary';
+import EventBus from '../event/EventBus';
+import EventBusImpl from '../event/EventBusImpl';
+import Dispatcher from '../event/Dispatcher';
+import DispatcherImpl from '../event/DispatcherImpl';
+import GenericError from '../error/GenericError';
+import HttpAgent from '../http/HttpAgent';
+import HttpAgentImpl from '../http/HttpAgentImpl';
+import HttpProxy from '../http/HttpProxy';
+import UrlTransformer from '../http/UrlTransformer';
+import MetaManager from '../meta/MetaManager';
+import MetaManagerImpl from '../meta/MetaManagerImpl';
+import PageFactory from '../page/PageFactory';
+import ClientPageManager from '../page/manager/ClientPageManager';
+import PageManager from '../page/manager/PageManager';
+import ServerPageManager from '../page/manager/ServerPageManager';
+import ClientPageRenderer from '../page/renderer/ClientPageRenderer';
+import PageRenderer from '../page/renderer/PageRenderer'
+import PageRendererFactory from '../page/renderer/PageRendererFactory';
+import ServerPageRenderer from '../page/renderer/ServerPageRenderer';
+import ViewAdapter from '../page/renderer/ViewAdapter';
+import PageStateManager from '../page/state/PageStateManager';
+import PageStateManagerDecorator from '../page/state/PageStateManagerDecorator';
+import PageStateManagerImpl from '../page/state/PageStateManagerImpl';
+import ClientRouter from '../router/ClientRouter';
+import RouterEvents from '../router/Events';
+import Request from '../router/Request';
+import Response from '../router/Response';
+import Route from '../router/Route';
+import RouteFactory from '../router/RouteFactory';
+import RouteNames from '../router/RouteNames';
+import Router from '../router/Router';
+import ServerRouter from '../router/ServerRouter';
+import CookieStorage from '../storage/CookieStorage';
+import MapStorage from '../storage/MapStorage';
+import SessionMapStorage from '../storage/SessionMapStorage';
+import SessionStorage from '../storage/SessionStorage';
+import WeakMapStorage from '../storage/WeakMapStorage';
+import ClientWindow from '../window/ClientWindow';
+import ServerWindow from '../window/ServerWindow';
+import Window from '../window/Window';
 
-export var init = (ns, oc, config) => { //jshint ignore:line
+export let init = (ns, oc, config) => { //jshint ignore:line
 
 	//**************START VENDORS**************
 
@@ -23,117 +71,113 @@ export var init = (ns, oc, config) => { //jshint ignore:line
 	oc.constant('$Env', config.$Env);
 	oc.constant('$Protocol', config.$Protocol);
 	oc.constant('$Secure', config.$Protocol === 'https:');
-
-	oc.constant('$ROUTER_CONSTANTS', { ROUTE_NAMES: ns.ima.router.RouteNames, EVENTS: ns.ima.router.Events });
-	oc.constant('$HTTP_STATUS_CODE', ns.ima.http.StatusCode);
-
 	//*************END CONSTANTS*****************
 
 
 	//*************START IMA**************
 
 	//Request & Response
-	oc.bind('$Request', ns.ima.router.Request);
-	oc.bind('$Response', ns.ima.router.Response);
+	oc.bind('$Request', Request);
+	oc.bind('$Response', Response);
 
 	//Window helper
-	if (typeof window !== 'undefined' && window !== null) {
-		oc.provide(ns.ima.window.Window, ns.ima.window.ClientWindow);
+	if ((typeof window !== 'undefined') && (window !== null)) {
+		oc.provide(Window, ClientWindow);
 	} else {
-		oc.provide(ns.ima.window.Window, ns.ima.window.ServerWindow);
+		oc.provide(Window, ServerWindow);
 	}
-	oc.bind('$Window', ns.ima.window.Window);
+	oc.bind('$Window', Window);
 
 	//IMA Error
-	oc.bind('$Error', ns.ima.error.GenericError);
+	oc.bind('$Error', GenericError);
 
 	//Dictionary
-	oc.provide(ns.ima.dictionary.Dictionary, ns.ima.dictionary.MessageFormatDictionary);
-	oc.bind('$Dictionary', ns.ima.dictionary.Dictionary);
+	oc.provide(Dictionary, MessageFormatDictionary);
+	oc.bind('$Dictionary', Dictionary);
 
 	//Storage
 	oc.constant('$CookieTransformFunction', { encode: (s) => s, decode: (s) => s });
-	oc.bind('$CookieStorage', ns.ima.storage.CookieStorage, ['$Window', '$Request', '$Response']);
+	oc.bind('$CookieStorage', CookieStorage, ['$Window', '$Request', '$Response']);
 	if (oc.get('$Window').hasSessionStorage()) {
-		oc.bind('$SessionStorage', ns.ima.storage.SessionStorage);
+		oc.bind('$SessionStorage', SessionStorage);
 	} else {
-		oc.bind('$SessionStorage', ns.ima.storage.MapStorage);
+		oc.bind('$SessionStorage', MapStorage);
 	}
-	oc.bind('$MapStorage', ns.ima.storage.MapStorage);
-	oc.bind('$WeakMapStorage', ns.ima.storage.WeakMapStorage, [{
+	oc.bind('$MapStorage', MapStorage);
+	oc.bind('$WeakMapStorage', WeakMapStorage, [{
 		entryTtl: 30 * 60 * 1000,
 		maxEntries: 1000,
 		gcInterval: 60 * 1000,
 		gcEntryCountTreshold: 16
 	}]);
-	oc.bind('$SessionMapStorage', ns.ima.storage.SessionMapStorage, ['$MapStorage', '$SessionStorage']);
+	oc.bind('$SessionMapStorage', SessionMapStorage, ['$MapStorage', '$SessionStorage']);
 
 	// Dispatcher
-	oc.provide(ns.ima.event.Dispatcher, ns.ima.event.DispatcherImpl);
-	oc.bind('$Dispatcher', ns.ima.event.Dispatcher);
+	oc.provide(Dispatcher, DispatcherImpl);
+	oc.bind('$Dispatcher', Dispatcher);
 
 	// Custom Event Bus
-	oc.provide(ns.ima.event.EventBus, ns.ima.event.EventBusImpl, ['$Window']);
-	oc.bind('$EventBus', ns.ima.event.EventBus);
+	oc.provide(EventBus, EventBusImpl, ['$Window']);
+	oc.bind('$EventBus', EventBus);
 
 	//Cache
-	oc.constant('$CacheEntry', ns.ima.cache.CacheEntry);
+	oc.constant('$CacheEntry', CacheEntry);
 
 	if (oc.get('$Window').hasSessionStorage()) {
 		oc.constant('$CacheStorage', oc.get('$SessionMapStorage'));
 	} else {
 		oc.constant('$CacheStorage', oc.get('$MapStorage'));
 	}
-	oc.bind('$CacheFactory', ns.ima.cache.CacheFactory, ['$CacheEntry']);
-	oc.provide(ns.ima.cache.Cache, ns.ima.cache.CacheImpl, ['$CacheStorage', '$CacheFactory', '$Helper', config.$Cache]);
-	oc.bind('$Cache', ns.ima.cache.Cache);
+	oc.bind('$CacheFactory', CacheFactory, ['$CacheEntry']);
+	oc.provide(Cache, CacheImpl, ['$CacheStorage', '$CacheFactory', '$Helper', config.$Cache]);
+	oc.bind('$Cache', Cache);
 
 	//SEO
-	oc.provide(ns.ima.meta.MetaManager, ns.ima.meta.MetaManagerImpl);
-	oc.bind('$MetaManager', ns.ima.meta.MetaManager);
-	oc.bind('$ControllerDecorator', ns.ima.controller.ControllerDecorator);
-	oc.bind('$PageStateManagerDecorator', ns.ima.page.state.PageStateManagerDecorator);
+	oc.provide(MetaManager, MetaManagerImpl);
+	oc.bind('$MetaManager', MetaManager);
+	oc.bind('$ControllerDecorator', ControllerDecorator);
+	oc.bind('$PageStateManagerDecorator', PageStateManagerDecorator);
 
 	//Page
-	oc.provide(ns.ima.page.state.PageStateManager, ns.ima.page.state.PageStateManagerImpl);
-	oc.bind('$PageStateManager', ns.ima.page.state.PageStateManager);
-	oc.bind('$PageFactory', ns.ima.page.PageFactory, [oc]);
-	oc.constant('$PageRendererViewAdapter', ns.ima.page.renderer.ViewAdapter);
-	oc.bind('$PageRendererFactory', ns.ima.page.renderer.PageRendererFactory, [oc, '$React', '$PageRendererViewAdapter']);
+	oc.provide(PageStateManager, PageStateManagerImpl);
+	oc.bind('$PageStateManager', PageStateManager);
+	oc.bind('$PageFactory', PageFactory, [oc]);
+	oc.constant('$PageRendererViewAdapter', ViewAdapter);
+	oc.bind('$PageRendererFactory', PageRendererFactory, [oc, '$React', '$PageRendererViewAdapter']);
 
 	if (oc.get('$Window').isClient()) {
-		oc.provide(ns.ima.page.renderer.PageRenderer, ns.ima.page.renderer.ClientPageRenderer, ['$PageRendererFactory', '$Helper', '$ReactDOM', '$Settings', '$Window']);
+		oc.provide(PageRenderer, ClientPageRenderer, ['$PageRendererFactory', '$Helper', '$ReactDOM', '$Settings', '$Window']);
 	} else {
-		oc.provide(ns.ima.page.renderer.PageRenderer, ns.ima.page.renderer.ServerPageRenderer, ['$PageRendererFactory', '$Helper', '$ReactDOMServer', '$Settings', '$Response', '$Cache']);
+		oc.provide(PageRenderer, ServerPageRenderer, ['$PageRendererFactory', '$Helper', '$ReactDOMServer', '$Settings', '$Response', '$Cache']);
 	}
-	oc.bind('$PageRenderer', ns.ima.page.renderer.PageRenderer);
+	oc.bind('$PageRenderer', PageRenderer);
 
 	if (oc.get('$Window').isClient()) {
-		oc.provide(ns.ima.page.manager.PageManager, ns.ima.page.manager.ClientPageManager, ['$PageFactory', '$PageRenderer', '$PageStateManager', '$Window', '$EventBus']);
+		oc.provide(PageManager, ClientPageManager, ['$PageFactory', '$PageRenderer', '$PageStateManager', '$Window', '$EventBus']);
 	} else {
-		oc.provide(ns.ima.page.manager.PageManager, ns.ima.page.manager.ServerPageManager, ['$PageFactory', '$PageRenderer', '$PageStateManager']);
+		oc.provide(PageManager, ServerPageManager, ['$PageFactory', '$PageRenderer', '$PageStateManager']);
 	}
-	oc.bind('$PageManager', ns.ima.page.manager.PageManager);
+	oc.bind('$PageManager', PageManager);
 
 	//Router
-	oc.constant('$Route', ns.ima.router.Route);
-	oc.bind('$RouteFactory', ns.ima.router.RouteFactory, ['$Route']);
+	oc.constant('$Route', Route);
+	oc.bind('$RouteFactory', RouteFactory, ['$Route']);
 
 	if (oc.get('$Window').isClient()) {
-		oc.provide(ns.ima.router.Router, ns.ima.router.ClientRouter, ['$PageManager', '$RouteFactory', '$Dispatcher', '$ROUTER_CONSTANTS', '$Window']);
+		oc.provide(Router, ClientRouter, ['$PageManager', '$RouteFactory', '$Dispatcher', '$Window']);
 	} else {
-		oc.provide(ns.ima.router.Router, ns.ima.router.ServerRouter, ['$PageManager', '$RouteFactory', '$Dispatcher', '$ROUTER_CONSTANTS', '$Request', '$Response']);
+		oc.provide(Router, ServerRouter, ['$PageManager', '$RouteFactory', '$Dispatcher', '$Request', '$Response']);
 	}
-	oc.bind('$Router', ns.ima.router.Router);
+	oc.bind('$Router', Router);
 
 	//SuperAgent
-	oc.bind('$HttpUrlTransformer', ns.ima.http.UrlTransformer);
-	oc.bind('$SuperAgentProxy', ns.ima.http.SuperAgentProxy, ['$SuperAgent', '$HTTP_STATUS_CODE', '$HttpUrlTransformer', '$Window']);
-	oc.provide(ns.ima.http.HttpAgent, ns.ima.http.HttpAgentImpl, ['$SuperAgentProxy', '$Cache', '$CookieStorage', config.$Http]);
-	oc.bind('$Http', ns.ima.http.HttpAgent);
+	oc.bind('$HttpUrlTransformer', UrlTransformer);
+	oc.bind('$SuperAgentProxy', HttpProxy, ['$SuperAgent', '$HttpUrlTransformer', '$Window']);
+	oc.provide(HttpAgent, HttpAgentImpl, ['$SuperAgentProxy', '$Cache', '$CookieStorage', config.$Http]);
+	oc.bind('$Http', HttpAgent);
 
 	//Dev tools
-	oc.bind('$DevTool', ns.ima.debug.DevTool, ['$PageManager', '$PageStateManager', '$Window', '$Dispatcher', '$EventBus']);
+	oc.bind('$DevTool', DevTool, ['$PageManager', '$PageStateManager', '$Window', '$Dispatcher', '$EventBus']);
 
 	//*************END IMA****************
 

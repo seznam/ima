@@ -1,7 +1,8 @@
 // @server-side
 
-import ns from 'ima/namespace';
-import AbstractPageManager from 'ima/page/manager/AbstractPageManager';
+import ns from '../../namespace';
+import AbstractPageManager from './AbstractPageManager';
+import PageManager from './PageManager';
 
 ns.namespace('ima.page.manager');
 
@@ -9,7 +10,8 @@ ns.namespace('ima.page.manager');
  * Page manager for controller on the server side.
  *
  * @class ServerPageManager
- * @implements ima.page.manager.AbstractPageManager
+ * @extends AbstractPageManager
+ * @implements PageManager
  * @namespace ima.page.manager
  * @module ima
  * @submodule ima.page

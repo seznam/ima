@@ -13,7 +13,7 @@ gulp.task('ima:compile', () => {
 				__dirname + '/namespace.js',
 				__dirname + '/Bootstrap.js',
 				__dirname + '/ObjectContainer.js',
-				__dirname + '/!(node_modules)/**/!(*Spec).js'
+				__dirname + '/!(node_modules|polyfill)/**/!(*Spec).js'
 			])
 			.pipe(plumber())
 			.pipe(sourcemaps.init())
@@ -43,9 +43,13 @@ gulp.task('ima:compile', () => {
 					match = exportMatcher.exec(fileContents);
 				}
 
+				// Note: there is no point in specifying the dependencies in the the
+				// IMA loader's register() method, as these will already be resolved
+				// by browserify's require() function used in the code before
+				// with the IMA loader.
 				file.contents = new Buffer(
 					fileContents + '\n\n' +
-					`$IMA.Loader.register('${moduleName}', [${dependencies.map(dependency => `'${dependency}'`).join(', ')}], function (_export, _context) {\n` +
+					`$IMA.Loader.register('${moduleName}', [], function (_export, _context) {\n` +
 					`	'use strict';\n` +
 					`	return {\n` +
 					`		setters: [${dependencies.map(() => 'function () {}').join(', ')}],\n` +

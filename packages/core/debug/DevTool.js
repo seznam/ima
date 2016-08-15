@@ -1,6 +1,11 @@
 // @client-side
 
-import ns from 'ima/namespace';
+import ns from '../namespace';
+import Dispatcher from '../event/Dispatcher';
+import EventBus from '../event/EventBus';
+import PageManager from '../page/manager/PageManager';
+import PageStateManager from '../page/state/PageStateManager';
+import Window from '../window/Window';
 
 ns.namespace('ima.debug');
 
@@ -17,11 +22,11 @@ export default class DevTool {
 	/**
 	 * @method constructor
 	 * @constructor
-	 * @param {ima.page.manager.PageManager} pageManager
-	 * @param {ima.page.state.PageStateManager} stateManager
-	 * @param {ima.window.Window} window
-	 * @param {ima.event.Dispatcher} dispatcher
-	 * @param {ima.event.EventBus} eventBus
+	 * @param {PageManager} pageManager
+	 * @param {PageStateManager} stateManager
+	 * @param {Window} window
+	 * @param {Dispatcher} dispatcher
+	 * @param {EventBus} eventBus
 	 */
 	constructor(pageManager, stateManager, window, dispatcher, eventBus) {
 
@@ -30,7 +35,7 @@ export default class DevTool {
 		 *
 		 * @private
 		 * @property _pageManager
-		 * @type {ima.page.manager.PageManager}
+		 * @type {PageManager}
 		 */
 		this._pageManager = pageManager;
 
@@ -39,7 +44,7 @@ export default class DevTool {
 		 *
 		 * @private
 		 * @property _stateManager
-		 * @type {ima.page.state.PageStateManager}
+		 * @type {PageStateManager}
 		 */
 		this._stateManager = stateManager;
 
@@ -48,7 +53,7 @@ export default class DevTool {
 		 *
 		 * @private
 		 * @property _window
-		 * @type {ima.window.Window}
+		 * @type {Window}
 		 */
 		this._window = window;
 
@@ -57,7 +62,7 @@ export default class DevTool {
 		 *
 		 * @private
 		 * @property _dispatcher
-		 * @type {ima.event.Dispatcher}
+		 * @type {Dispatcher}
 		 */
 		this._dispatcher = dispatcher;
 
@@ -65,7 +70,7 @@ export default class DevTool {
 		 * $IMA eventBus
 		 *
 		 * @property _eventBus
-		 * @type {ima.event.EventBus}
+		 * @type {EventBus}
 		 */
 		this._eventBus = eventBus;
 	}

@@ -1,4 +1,4 @@
-import ns from 'ima/namespace';
+import ns from '../namespace';
 
 ns.namespace('ima.cache');
 
@@ -58,7 +58,7 @@ export default class CacheEntry {
 	 * @return {boolean} {@code true} if this entry has expired.
 	 */
 	isExpired() {
-		var now = Date.now();
+		let now = Date.now();
 		return now > this._created + this._ttl;
 	}
 

@@ -1,6 +1,6 @@
-import ns from 'ima/namespace';
 import React from 'react';
 import ReactDOM from 'react-dom';
+import ns from '../namespace';
 
 ns.namespace('ima.page');
 
@@ -120,10 +120,10 @@ export default class AbstractComponent extends React.Component {
 	 */
 	cssClasses(classRules, includeComponentClassName = false) {
 		if (typeof classRules === 'string') {
-			var  separatedClassNames = classRules.split(/\s+/);
+			let separatedClassNames = classRules.split(/\s+/);
 			classRules = {};
 
-			for (var className of separatedClassNames) {
+			for (let className of separatedClassNames) {
 				classRules[className] = true;
 			}
 		}
@@ -134,12 +134,12 @@ export default class AbstractComponent extends React.Component {
 		}
 
 		if (includeComponentClassName) {
-			var propClassNames = this.props.className;
+			let propClassNames = this.props.className;
 			if (propClassNames) {
-				var separatedPropClassNames = propClassNames.split(/\s+/);
-				var classNamesMap = {};
+				let separatedPropClassNames = propClassNames.split(/\s+/);
+				let classNamesMap = {};
 
-				for (var propClassName of separatedPropClassNames) {
+				for (let propClassName of separatedPropClassNames) {
 					classNamesMap[propClassName] = true;
 				}
 

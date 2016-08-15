@@ -1,4 +1,4 @@
-import ns from 'ima/namespace';
+import ns from '../namespace';
 
 ns.namespace('ima.http');
 
@@ -44,7 +44,7 @@ export default class HttpAgent {
 	 *                 transformedUrl: string,
 	 *                 data: Object<string, (boolean|number|string)>
 	 *             },
-	 *             headers: Object<string, string>, cached: boolean,
+	 *             headers: Object<string, string>,
 	 *             cached: boolean
 	 *         }>}
 	 *         A promise that resolves to the response. The response body will
@@ -87,7 +87,7 @@ export default class HttpAgent {
 	 *                 transformedUrl: string,
 	 *                 data: Object<string, (boolean|number|string)>
 	 *             },
-	 *             headers: Object<string, string>, cached: boolean,
+	 *             headers: Object<string, string>,
 	 *             cached: boolean
 	 *         }>}
 	 *         A promise that resolves to the response. The response body will
@@ -130,7 +130,7 @@ export default class HttpAgent {
 	 *                 transformedUrl: string,
 	 *                 data: Object<string, (boolean|number|string)>
 	 *             },
-	 *             headers: Object<string, string>, cached: boolean,
+	 *             headers: Object<string, string>,
 	 *             cached: boolean
 	 *         }>}
 	 *         A promise that resolves to the response. The response body will
@@ -173,7 +173,7 @@ export default class HttpAgent {
 	 *                 transformedUrl: string,
 	 *                 data: Object<string, (boolean|number|string)>
 	 *             },
-	 *             headers: Object<string, string>, cached: boolean,
+	 *             headers: Object<string, string>,
 	 *             cached: boolean
 	 *         }>}
 	 *         A promise that resolves to the response. The response body will
@@ -216,7 +216,7 @@ export default class HttpAgent {
 	 *                 transformedUrl: string,
 	 *                 data: Object<string, (boolean|number|string)>
 	 *             },
-	 *             headers: Object<string, string>, cached: boolean,
+	 *             headers: Object<string, string>,
 	 *             cached: boolean
 	 *         }>}
 	 *         A promise that resolves to the response. The response body will
@@ -249,7 +249,7 @@ export default class HttpAgent {
 	 * @param {string} value The header value. To provide multiple values,
 	 *        separate them with commas
 	 *        (see http://www.w3.org/Protocols/rfc2616/rfc2616-sec4.html#sec4.2).
-	 * @return {ima.http.HttpAgent} This HTTP agent.
+	 * @return {HttpAgent} This HTTP agent.
 	 */
 	setDefaultHeader(header, value) {}
 
@@ -257,7 +257,7 @@ export default class HttpAgent {
 	 * Clears all configured default headers.
 	 *
 	 * @method clearDefaultHeaders
-	 * @return {ima.http.HttpAgent} This HTTP agent.
+	 * @return {HttpAgent} This HTTP agent.
 	 */
 	clearDefaultHeaders() {}
 }

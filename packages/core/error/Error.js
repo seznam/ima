@@ -1,4 +1,4 @@
-import ns from 'ima/namespace';
+import ns from '../namespace';
 import ExtensibleError from './ExtensibleError';
 
 ns.namespace('ima.error');

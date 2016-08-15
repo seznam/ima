@@ -1,4 +1,6 @@
-import ns from 'ima/namespace';
+import ns from '../../namespace';
+import AbstractDocumentView from '../AbstractDocumentView';
+import Controller from '../../controller/Controller';
 
 ns.namespace('ima.page.renderer');
 
@@ -32,22 +34,28 @@ export default class PageRenderer {
 	 * invoked at the client.
 	 *
 	 * @method mount
-	 * @param {ima.controller.Controller} controller The current page
-	 *        controller.
+	 * @param {Controller} controller The current page controller.
 	 * @param {React.Component} view The page's view.
 	 * @param {Object<string, (*|Promise<*>)>} pageResources The resources for
 	 *        the view loaded by the controller.
 	 * @param {{
-	 *            onlyUpdate: (
-	 *                boolean|
+	 *          onlyUpdate: (
+	 *            boolean|
+	 *            function(
+	 *              (string|function(new: Controller, ...*)),
+	 *              (
+	 *                string|
 	 *                function(
-	 *                    (string|function(new: ima.controller.Controller, ...*)),
-	 *                   (string|function(new: React.Component, Object<string, *>, ?Object<string, *>))
-	 *               ): boolean
-	 *            ),
-	 *           autoScroll: boolean,
-	 *           allowSPA: boolean,
-	 *           documentView: ?ima.page.AbstractDocumentView
+	 *                  new: React.Component,
+	 *                  Object<string, *>,
+	 *                  ?Object<string, *>
+	 *                )
+	 *              )
+	 *            ): boolean
+	 *          ),
+	 *          autoScroll: boolean,
+	 *          allowSPA: boolean,
+	 *          documentView: ?AbstractDocumentView
 	 *        }} routeOptions The current route options.
 	 * @return {Promise<{status: number, content: ?string}>} A promise that
 	 *         will resolve to information about the rendered page. The
@@ -69,8 +77,7 @@ export default class PageRenderer {
 	 * resolved.
 	 *
 	 * @method update
-	 * @param {ima.controller.Controller} controller The current page
-	 *        controller.
+	 * @param {Controller} controller The current page controller.
 	 * @param {Object<string, (*|Promise<*>)>} resourcesUpdate The resources
 	 *        that represent the update the of current state according to the
 	 *        current route and its parameters.

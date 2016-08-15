@@ -1,7 +1,7 @@
-import ns from 'ima/namespace';
 import React from 'react';
+import ns from '../namespace';
 import AbstractComponent from './AbstractComponent';
-import MetaManager from 'ima/meta/MetaManager';
+import MetaManager from '../meta/MetaManager';
 
 ns.namespace('ima.page');
 

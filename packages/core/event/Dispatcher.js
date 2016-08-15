@@ -1,4 +1,4 @@
-import ns from 'ima/namespace';
+import ns from '../namespace';
 
 ns.namespace('ima.event');
 
@@ -22,7 +22,7 @@ export default class Dispatcher {
 	 * dispatcher.
 	 *
 	 * @method clear
-	 * @return {ima.event.Dispatcher} This dispatcher.
+	 * @return {Dispatcher} This dispatcher.
 	 */
 	clear() {}
 
@@ -42,7 +42,7 @@ export default class Dispatcher {
 	 * @param {function(*)} listener The event listener to register.
 	 * @param {?Object=} scope The object to which the {@code this} keyword
 	 *        will be bound in the event listener.
-	 * @return {ima.event.Dispatcher} This dispatcher.
+	 * @return {Dispatcher} This dispatcher.
 	 */
 	listen(event, listener, scope = null) {}
 
@@ -56,7 +56,7 @@ export default class Dispatcher {
 	 * @param {function(*)} listener The event listener to deregister.
 	 * @param {?Object=} scope The object to which the {@code this} keyword
 	 *        would be bound in the event listener.
-	 * @return {ima.event.Dispatcher} This dispatcher.
+	 * @return {Dispatcher} This dispatcher.
 	 */
 	unlisten(event, listener, scope = null) {}
 
@@ -80,7 +80,7 @@ export default class Dispatcher {
 	 *        custom application event if this flag is not set.
 	 *        The flag is used only for debugging and has no effect on the
 	 *        propagation of the event.
-	 * @return {ima.event.Dispatcher} This dispatcher.
+	 * @return {Dispatcher} This dispatcher.
 	 */
 	fire(event, data, imaInternalEvent = false) {}
 }

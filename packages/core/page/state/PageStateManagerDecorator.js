@@ -1,7 +1,6 @@
-import ns from 'ima/namespace';
-import IMAError from 'ima/error/GenericError';
-import PageStateManagerInterface
-		from 'ima/page/state/PageStateManager';
+import ns from '../../namespace';
+import PageStateManager from './PageStateManager';
+import GenericError from '../../error/GenericError';
 
 ns.namespace('ima.page.state');
 
@@ -10,19 +9,18 @@ ns.namespace('ima.page.state');
  * competence.
  *
  * @class PageStateManagerDecorator
+ * @implements PageStateManager
  * @namespace ima.page.state
  * @module ima
  * @submodule ima.page
- *
- * @extends ima.page.state.PageStateManager
  */
-export default class PageStateManagerDecorator extends PageStateManagerInterface {
+export default class PageStateManagerDecorator extends PageStateManager {
 
 	/**
 	 * @method constructor
 	 * @constructor
-	 * @param {ima.page.state.PageStateManager} pageStateManager
-	 * @param {Array<string>} allowedStateKeys
+	 * @param {PageStateManager} pageStateManager
+	 * @param {string[]} allowedStateKeys
 	 */
 	constructor(pageStateManager, allowedStateKeys) {
 		super();
@@ -32,7 +30,7 @@ export default class PageStateManagerDecorator extends PageStateManagerInterface
 		 *
 		 * @private
 		 * @property _pageStateManager
-		 * @type {ima.page.state.PageStateManager}
+		 * @type {PageStateManager}
 		 */
 		this._pageStateManager = pageStateManager;
 
@@ -41,7 +39,7 @@ export default class PageStateManagerDecorator extends PageStateManagerInterface
 		 *
 		 * @private
 		 * @property _allowedStateKeys
-		 * @type {Array<string>}
+		 * @type {string[]}
 		 */
 		this._allowedStateKeys = allowedStateKeys;
 	}
@@ -60,15 +58,16 @@ export default class PageStateManagerDecorator extends PageStateManagerInterface
 	 */
 	setState(statePatch) {
 		if ($Debug) {
-			var patchKeys = Object.keys(statePatch);
-			var deniedKeys = patchKeys.filter((patchKey) => {
+			let patchKeys = Object.keys(statePatch);
+			let deniedKeys = patchKeys.filter((patchKey) => {
 				return this._allowedStateKeys.indexOf(patchKey) === -1;
 			});
 
 			if (deniedKeys.length > 0) {
-				throw new IMAError(`Extension can not set state for keys ` +
-						`${deniedKeys.join()}. Check your extension or add ` +
-						`keys ${deniedKeys.join()} to getAllowedStateKeys.`);
+				throw new GenericError(`Extension can not set state for ` +
+						`keys ${deniedKeys.join()}. Check your extension or ` +
+						`add keys ${deniedKeys.join()} to ` +
+						`getAllowedStateKeys.`);
 			}
 		}
 

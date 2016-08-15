@@ -1,5 +1,6 @@
-import ns from 'ima/namespace';
 import $Helper from 'ima-helpers';
+import ns from './namespace';
+import ObjectContainer from './ObjectContainer';
 
 ns.namespace('ima');
 
@@ -29,8 +30,8 @@ export default class Bootstrap {
 	 *
 	 * @constructor
 	 * @method contructor
-	 * @param {ima.ObjectContainer} oc The application's object container to
-	 *        use for managing dependencies.
+	 * @param {ObjectContainer} oc The application's object container to use
+	 *        for managing dependencies.
 	 */
 	constructor(oc) {
 
@@ -39,7 +40,7 @@ export default class Bootstrap {
 		 *
 		 * @private
 		 * @property _oc
-		 * @type {ima.ObjectContainer}
+		 * @type {ObjectContainer}
 		 */
 		this._oc = oc;
 
@@ -88,15 +89,21 @@ export default class Bootstrap {
 	 * @method _initSettings
 	 */
 	_initSettings() {
-		var currentApplicationSettings = {};
+		let currentApplicationSettings = {};
 
-		var plugins = this._config.plugins.concat([this._config]);
+		let plugins = this._config.plugins.concat([this._config]);
 
 		plugins
 			.filter((plugin) => typeof plugin.initSettings === 'function')
 			.forEach((plugin) => {
-				let allPluginSettings = plugin.initSettings(ns, this._oc, this._config.settings);
-				let environmentPluginSetting = this._getEnvironmentSetting(allPluginSettings);
+				let allPluginSettings = plugin.initSettings(
+					ns,
+					this._oc,
+					this._config.settings
+				);
+				let environmentPluginSetting = this._getEnvironmentSetting(
+					allPluginSettings
+				);
 
 				$Helper.assignRecursively(
 					currentApplicationSettings,
@@ -120,8 +127,8 @@ export default class Bootstrap {
 	 * @return {Object<string, *>}
 	 */
 	_getEnvironmentSetting(allSettings) {
-		var environment = this._config.settings.$Env;
-		var environmentSetting = allSettings[environment];
+		let environment = this._config.settings.$Env;
+		let environmentSetting = allSettings[environment];
 
 		if (environment !== PRODUCTION_ENVIRONMENT) {
 			var	productionSettings = allSettings[PRODUCTION_ENVIRONMENT];

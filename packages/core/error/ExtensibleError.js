@@ -1,4 +1,4 @@
-import ns from 'ima/namespace';
+import ns from '../namespace';
 
 ns.namespace('ima.error');
 
@@ -113,7 +113,7 @@ Object.defineProperty(ExtensibleError.prototype, 'stack', {
 			return this._stack;
 		}
 
-		var stack = this._nativeError.stack;
+		let stack = this._nativeError.stack;
 		if (typeof stack !== 'string') {
 			return undefined;
 		}
@@ -121,10 +121,10 @@ Object.defineProperty(ExtensibleError.prototype, 'stack', {
 		// drop the stack trace frames referring to the custom error
 		// constructors
 		if (this._dropInternalStackFrames) {
-			var stackLines = stack.split('\n');
+			let stackLines = stack.split('\n');
 
-			var inheritanceDepth = 1;
-			var currentPrototype = Object.getPrototypeOf(this);
+			let inheritanceDepth = 1;
+			let currentPrototype = Object.getPrototypeOf(this);
 			while (currentPrototype !== ExtensibleError.prototype) {
 				currentPrototype = Object.getPrototypeOf(currentPrototype);
 				inheritanceDepth++;

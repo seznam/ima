@@ -1,20 +1,20 @@
-import ns from 'ima/namespace';
-import IMAError from 'ima/error/GenericError';
-import DictionaryInterface from 'ima/dictionary/Dictionary';
+import ns from '../namespace';
+import GenericError from '../error/GenericError';
+import Dictionary from '../dictionary/Dictionary';
 
 ns.namespace('ima.dictionary');
 
 /**
- * Implementation of the {@codelink ima.dictionary.Dictionary} interface that
- * relies on compiled MessageFormat localization messages for its dictionary.
+ * Implementation of the {@codelink Dictionary} interface that relies on
+ * compiled MessageFormat localization messages for its dictionary.
  *
  * @class MessageFormatDictionary
- * @implements ima.dictionary.Dictionary
+ * @implements Dictionary
  * @namespace ima.dictionary
  * @module ima
  * @submodule ima.dictionary
  */
-export default class MessageFormatDictionary extends DictionaryInterface {
+export default class MessageFormatDictionary extends Dictionary {
 
 	/**
 	 * Initializes the dictionary.
@@ -42,7 +42,13 @@ export default class MessageFormatDictionary extends DictionaryInterface {
 		 *
 		 * @private
 		 * @property _dictionary
-		 * @type {Object<string, Object<string, function(Object<string, (number|string)>): string>>}
+		 * @type {Object<
+		 *         string,
+		 *         Object<
+		 *           string,
+		 *           function(Object<string, (number|string)>): string
+		 *         >
+		 *       >}
 		 */
 		this._dictionary = null;
 	}
@@ -80,16 +86,21 @@ export default class MessageFormatDictionary extends DictionaryInterface {
 	 *        denotes the name of the source JSON localization file, while the
 	 *        rest denote a field path within the localization object within
 	 *        the given localization file.
+	 * @param {Object<string, (boolean|number|string|Date)>=} parameters The
+	 *        map of parameter names to the parameter values to use.
+	 *        Defaults to an empty plain object.
 	 */
 	get(key, parameters = {}) {
-		var path = key.split('.');
-		var scope = this._dictionary;
+		let path = key.split('.');
+		let scope = this._dictionary;
 
-		for (var scopeKey of path) {
+		for (let scopeKey of path) {
 			if (!scope[scopeKey]) {
-				throw new IMAError(`ima.dictionary.MessageFormatDictionary.get: The ` +
-						`localization phrase '${key}' does not exists`,
-						{ key, parameters });
+				throw new GenericError(
+					`ima.dictionary.MessageFormatDictionary.get: The ` +
+					`localization phrase '${key}' does not exists`,
+					{ key, parameters }
+				);
 			}
 
 			scope = scope[scopeKey];

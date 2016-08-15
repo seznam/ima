@@ -1,4 +1,4 @@
-import ns from 'ima/namespace';
+import ns from '../namespace';
 
 ns.namespace('ima.meta');
 
@@ -72,7 +72,8 @@ export default class MetaManager {
 	 * properties.
 	 *
 	 * @method getMetaNames
-	 * @return {string[]}
+	 * @return {string[]} The names of the currently specified named meta
+	 *         information properties.
 	 */
 	getMetaNames() {}
 
@@ -103,7 +104,8 @@ export default class MetaManager {
 	 * information properties.
 	 *
 	 * @method getMetaProperties
-	 * @return {Array<string>}
+	 * @return {string[]} The names of the currently specified specialized meta
+	 *         information properties.
 	 */
 	getMetaProperties() {}
 

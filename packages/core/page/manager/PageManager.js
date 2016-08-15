@@ -1,4 +1,5 @@
-import ns from 'ima/namespace';
+import ns from '../../namespace';
+import AbstractDocumentView from '../AbstractDocumentView';
 
 ns.namespace('ima.page.manager');
 
@@ -29,23 +30,35 @@ export default class PageManager {
 	 * server-side).
 	 *
 	 * @method manage
-	 * @param {(string|function(new: ima.controller.Controller, ...*))} controller
-	 *        The alias, namespace path, or constructor of the controller to
-	 *        manage.
-	 * @param {(string|function(new: React.Component, Object<string, *>, ?Object<string, *>))} view
-	 *        The alias, namespace path, or constructor of the page view to
-	 *        manage.
+	 * @param {(
+	 *          string|
+	 *          function(new: ima.controller.Controller, ...*)
+	 *        )} controller The alias, namespace path, or constructor of the
+	 *        controller to manage.
+	 * @param {(
+	 *          string|
+	 *          function(
+	 *            new: React.Component,
+	 *            Object<string, *>,
+	 *            ?Object<string, *>
+	 *          )
+	 *        )} view The alias, namespace path, or constructor of the page
+	 *        view to manage.
 	 * @param {{
-	 *            onlyUpdate: (
-	 *                boolean|
-	 *                function(
-	 *                    (string|function(new: ima.controller.Controller, ...*)),
-	 *                   (string|function(new: React.Component, Object<string, *>, ?Object<string, *>))
-	 *               ): boolean
-	 *            ),
-	 *           autoScroll: boolean,
-	 *           allowSPA: boolean,
-	 *           documentView: ?ima.page.AbstractDocumentView
+	 *          onlyUpdate: (
+	 *            boolean|
+	 *            function(
+	 *              (string|function(new: ima.controller.Controller, ...*)),
+	 *              function(
+	 *                new: React.Component,
+	 *                Object<string, *>,
+	 *                ?Object<string, *>
+	 *              )
+	 *            ): boolean
+	 *          ),
+	 *          autoScroll: boolean,
+	 *          allowSPA: boolean,
+	 *          documentView: ?AbstractDocumentView
 	 *        }} options The current route options.
 	 * @param {Object<string, string>=} [params={}] The route parameters of the
 	 *        current route.

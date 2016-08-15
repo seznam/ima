@@ -1,4 +1,6 @@
-import ns from 'ima/namespace';
+import ns from '../namespace';
+import Controller from '../controller/Controller';
+import AbstractDocumentView from '../page/AbstractDocumentView';
 
 ns.namespace('ima.router');
 
@@ -77,9 +79,22 @@ export default class Route {
 	 *        identifying the controller associated with this route.
 	 * @param {string} view The full name or Object Container alias identifying
 	 *        the view class associated with this route.
-	 * @param {{onlyUpdate: (boolean|function), autoScroll: boolean,
-	 *        allowSPA: boolean, documentView: ?ima.page.AbstractDocumentView}} [options]
-	 *        The route additional options.
+	 * @param {{
+	 *          onlyUpdate: (
+	 *            boolean|
+	 *            function(
+	 *              (string|function(new: Controller, ...*)),
+	 *              (string|function(
+	 *                new: React.Component,
+	 *                Object<string, *>,
+	 *                ?Object<string, *>
+	 *              ))
+	 *            ): boolean
+	 *          )=,
+	 *          autoScroll: boolean=,
+	 *          allowSPA: boolean=,
+	 *          documentView: ?AbstractDocumentView=
+	 *        }} options The route additional options.
 	 */
 	constructor(name, pathExpression, controller, view, options) {
 		/**
@@ -130,7 +145,7 @@ export default class Route {
 		 *         onlyUpdate: (
 		 *           boolean|
 		 *           function(
-		 *             (string|function(new: ima.controller.Controller, ...*)),
+		 *             (string|function(new: Controller, ...*)),
 		 *             (string|function(
 		 *               new: React.Component,
 		 *               Object<string, *>,
@@ -140,7 +155,7 @@ export default class Route {
 		 *         ),
 		 *         autoScroll: boolean,
 		 *         allowServeSPA: boolean,
-		 *         documentView: ?ima.page.AbstractDocumentView
+		 *         documentView: ?AbstractDocumentView
 		 *       }}
 		 * @default {
 		 *            onlyUpdate: false,
@@ -205,16 +220,16 @@ export default class Route {
 	 * placeholders will be appended as the query string.
 	 *
 	 * @method toPath
-	 * @param {Object<string, (number|string)>} [params={}] The route parameter
-	 *        values.
-	 * @return {string} Path and, if neccessary, query parts of the URL
+	 * @param {Object<string, (number|string)>=} [params={}] The route
+	 *        parameter values.
+	 * @return {string} Path and, if necessary, query parts of the URL
 	 *         representing this route with its parameters replaced by the
 	 *         provided parameter values.
 	 */
 	toPath(params = {}) {
-		var path = this._pathExpression;
-		var query = [];
-		for (var paramName of Object.keys(params)) {
+		let path = this._pathExpression;
+		let query = [];
+		for (let paramName of Object.keys(params)) {
 			if (this._isParamInPath(path, paramName)) {
 				path = this._substituteParamInPath(
 					path,
@@ -227,7 +242,7 @@ export default class Route {
 					params[paramName]
 				);
 			} else {
-				var pair = [paramName, params[paramName]];
+				let pair = [paramName, params[paramName]];
 				query.push(pair.map(encodeURIComponent).join('='));
 			}
 		}
@@ -276,8 +291,22 @@ export default class Route {
 	 * Return route additional options.
 	 *
 	 * @method getOptions
-	 * @return {{onlyUpdate: (boolean|function), autoScroll: boolean, allowSPA: boolean,
- 	 *         documentView: ?ima.page.AbstractDocumentView}}
+	 * @return {{
+	 *           onlyUpdate: (
+	 *             boolean|
+	 *             function(
+	 *               (string|function(new: Controller, ...*)),
+	 *               (string|function(
+	 *                 new: React.Component,
+	 *                 Object<string, *>,
+	 *                 ?Object<string, *>
+	 *               ))
+	 *             ): boolean
+	 *           ),
+	 *           autoScroll: boolean,
+	 *           allowServeSPA: boolean,
+	 *           documentView: ?AbstractDocumentView
+	 *         }}
 	 */
 	getOptions() {
 		return this._options;
@@ -303,7 +332,7 @@ export default class Route {
 	 * @return {boolean} {@code true} if the provided path matches this route.
 	 */
 	matches(path) {
-		var trimmedPath = this._getTrimmedPath(path);
+		let trimmedPath = this._getTrimmedPath(path);
 		return this._matcher.test(trimmedPath);
 	}
 
@@ -321,9 +350,9 @@ export default class Route {
 	 *         values.
 	 */
 	extractParameters(path) {
-		var trimmedPath = this._getTrimmedPath(path);
-		var parameters = this._getParameters(trimmedPath);
-		var query = this._getQuery(trimmedPath);
+		let trimmedPath = this._getTrimmedPath(path);
+		let parameters = this._getParameters(trimmedPath);
+		let query = this._getQuery(trimmedPath);
 
 		return Object.assign({}, parameters, query);
 	}
@@ -387,7 +416,7 @@ export default class Route {
 	 * @return {boolean}
 	 */
 	_isParamInPath(path, paramName) {
-		var regexp = new RegExp(`:\??${paramName}(?:[\/\?]|$)`);
+		let regexp = new RegExp(`:\??${paramName}(?:[\/\?]|$)`);
 		return regexp.test(path);
 	}
 
@@ -402,7 +431,7 @@ export default class Route {
 	 * @return {RegExp} The compiled regular expression.
 	 */
 	_compileToRegExp(pathExpression) {
-		var pattern = pathExpression
+		let pattern = pathExpression
 			.replace(LOOSE_SLASHES_REGEXP, '')
 			.replace(CONTROL_CHARACTERS_REGEXP, '\\$&');
 
@@ -417,7 +446,7 @@ export default class Route {
 		pattern = '^\\\/' + pattern;
 
 		// add query parameters matcher
-		var pairPattern = '[^=&;]*(?:=[^&;]*)?';
+		let pairPattern = '[^=&;]*(?:=[^&;]*)?';
 		pattern += `(?:\\?(?:${pairPattern})(?:[&;]${pairPattern})*)?$`;
 
 		return new RegExp(pattern);
@@ -437,7 +466,7 @@ export default class Route {
 			return {};
 		}
 
-		var parameterValues = path.match(this._matcher);
+		let parameterValues = path.match(this._matcher);
 		if (!parameterValues) {
 			return {};
 		}
@@ -456,15 +485,15 @@ export default class Route {
 	 * @return {Object<string, ?string>} Params object.
 	 */
 	_extractParameters(parameterValues) {
-		var parameters = {};
+		let parameters = {};
 
 		// Cycle for names and values from last to 0
-		for (var i = this._parameterNames.length - 1; i >= 0; i--) {
+		for (let i = this._parameterNames.length - 1; i >= 0; i--) {
 			let [rawName, rawValue] = [
 				this._parameterNames[i],
 				parameterValues[i]
 			];
-			var cleanParamName = this._cleanOptParamName(rawName);
+			let cleanParamName = this._cleanOptParamName(rawName);
 
 			parameters[cleanParamName] = this._decodeURIParameter(rawValue);
 		}
@@ -481,7 +510,7 @@ export default class Route {
 	 * @return {string} decodedValue
 	 */
 	_decodeURIParameter(parameterValue) {
-		var decodedValue;
+		let decodedValue;
 		if (parameterValue) {
 			decodedValue = decodeURIComponent(parameterValue);
 		}
@@ -523,15 +552,15 @@ export default class Route {
 	 * @return {Object<string, ?string>} Parsed query parameters.
 	 */
 	_getQuery(path) {
-		var query = {};
-		var queryStart = path.indexOf('?');
-		var hasQuery = queryStart > -1 && queryStart !== path.length - 1;
+		let query = {};
+		let queryStart = path.indexOf('?');
+		let hasQuery = queryStart > -1 && queryStart !== path.length - 1;
 
 		if (hasQuery) {
-			var pairs = path.substring(queryStart + 1).split(/[&;]/);
+			let pairs = path.substring(queryStart + 1).split(/[&;]/);
 
-			for (var parameterPair of pairs) {
-				var pair = parameterPair.split('=');
+			for (let parameterPair of pairs) {
+				let pair = parameterPair.split('=');
 				query[decodeURIComponent(pair[0])] =
 					pair.length > 1 ? decodeURIComponent(pair[1]) : true;
 			}
@@ -562,7 +591,7 @@ export default class Route {
 	 *         path expression.
 	 */
 	_getParameterNames(pathExpression) {
-		var rawNames = pathExpression.match(PARAMS_REGEXP_UNIVERSAL) || [];
+		let rawNames = pathExpression.match(PARAMS_REGEXP_UNIVERSAL) || [];
 
 		return rawNames.map((rawParameterName) => {
 			return rawParameterName.substring(1).replace('?', '');

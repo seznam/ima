@@ -1,5 +1,5 @@
-import ns from 'ima/namespace';
-import IMAError from 'ima/error/GenericError';
+import ns from '../namespace';
+import GenericError from 'ima/error/GenericError';
 
 ns.namespace('ima.router');
 
@@ -67,7 +67,10 @@ export default class Response {
 		 *
 		 * @private
 		 * @property _internalCookieStorage
-		 * @type {Map}
+		 * @type {Map<string, {
+		 *         value: string,
+		 *         options: {domain: string=, expires: (number|string)=}
+		 *       }>}
 		 */
 		this._internalCookieStorage = new Map();
 
@@ -92,7 +95,10 @@ export default class Response {
 	 * @method init
 	 * @param {?Express.Response} response The ExpressJS response, or
 	 *        {@code null} if the code is running at the client side.
-	 * @param {{encode: function, decode: function}} [cookieTransformFunction={}]
+	 * @param {{
+	 *          encode: function(string): string=,
+	 *          decode: function(string): string
+	 *        }=} cookieTransformFunction
 	 * @return {ima.router.Response} This response.
 	 */
 	init(response, cookieTransformFunction = {}) {
@@ -123,15 +129,15 @@ export default class Response {
 	 * @param {string} url The URL to which the client should be redirected.
 	 * @param {number=} [status=302] The HTTP status code to send to the
 	 *        client.
-	 * @return {ima.router.Response} This response.
+	 * @return {Response} This response.
 	 */
 	redirect(url, status = 302) {
 		if ($Debug) {
 			if (this._isSent === true) {
-				var params = this.getResponseParams();
+				let params = this.getResponseParams();
 				params.url = url;
 
-				throw new IMAError('ima.router.Response:redirect The ' +
+				throw new GenericError('ima.router.Response:redirect The ' +
 						'response has already been sent. Check your workflow.',
 						params);
 			}
@@ -158,16 +164,18 @@ export default class Response {
 	 * @method status
 	 * @param {number} httpStatus HTTP response status code to send to the
 	 *        client.
-	 * @return {ima.router.Response} This response.
+	 * @return {Response} This response.
 	 */
 	status(httpStatus) {
 		if ($Debug) {
 			if (this._isSent === true) {
-				var params = this.getResponseParams();
+				let params = this.getResponseParams();
 
-				throw new IMAError('ima.router.Response:status The ' +
-						'response has already been sent. Check your workflow.',
-						params);
+				throw new GenericError(
+					'ima.router.Response:status The response has already ' +
+					'been sent. Check your workflow.',
+					params
+				);
 			}
 		}
 
@@ -184,16 +192,19 @@ export default class Response {
 	 * @chainable
 	 * @method send
 	 * @param {string} content The response body.
-	 * @return {ima.router.Response} This response.
+	 * @return {Response} This response.
 	 */
 	send(content) {
 		if ($Debug) {
 			if (this._isSent === true) {
-				var params = this.getResponseParams();
+				let params = this.getResponseParams();
 				params.content = content;
 
-				throw new IMAError('ima.router.Response:send The response ' +
-						'has already been sent. Check your workflow.', params);
+				throw new GenericError(
+					'ima.router.Response:send The response has already been ' +
+					'sent. Check your workflow.',
+					params
+				);
 			}
 		}
 
@@ -217,23 +228,23 @@ export default class Response {
 	 *        attributes. Only the attributes listed in the type annotation of
 	 *        this field are supported. For documentation and full list of
 	 *        cookie attributes see http://tools.ietf.org/html/rfc2965#page-5
-	 * @return {ima.router.Response} This response.
+	 * @return {Response} This response.
 	 */
 	setCookie(name, value, options = {}) {
 		if ($Debug) {
 			if (this._isSent === true) {
-				var params = this.getResponseParams();
+				let params = this.getResponseParams();
 				params.name = name;
 				params.value = value;
 				params.options = options;
 
-				throw new IMAError('ima.router.Response:setCookie The ' +
+				throw new GenericError('ima.router.Response:setCookie The ' +
 						'response has already been sent. Check your workflow.',
 						params);
 			}
 		}
 
-		var advancedOptions = Object.assign(
+		let advancedOptions = Object.assign(
 			{},
 			this._cookieTransformFunction,
 			options
@@ -274,7 +285,7 @@ export default class Response {
 	 * @method _setCookieHeaders
 	 */
 	_setCookieHeaders() {
-		for (var [name, param] of this._internalCookieStorage) {
+		for (let [name, param] of this._internalCookieStorage) {
 			this._response.cookie(name, param.value, param.options);
 		}
 	}

@@ -1,7 +1,14 @@
 // @client-side
 
-import ns from 'ima/namespace';
-import AbstractPageRenderer from 'ima/page/renderer/AbstractPageRenderer';
+import ns from '../../namespace';
+import AbstractPageRenderer from './AbstractPageRenderer';
+import PageRenderer from './PageRenderer';
+import PageRendererFactory from './PageRendererFactory';
+import AbstractDocumentView from '../AbstractDocumentView';
+import Controller from '../../controller/Controller';
+import ControllerDecorator from '../../controller/ControllerDecorator';
+import MetaManager from '../../meta/MetaManager';
+import Window from '../../window/Window';
 
 ns.namespace('ima.page.renderer');
 
@@ -10,7 +17,8 @@ ns.namespace('ima.page.renderer');
  * server if possible.
  *
  * @class ClientPageRenderer
- * @extends ima.page.renderer.AbstractPageRenderer
+ * @extends AbstractPageRenderer
+ * @implements PageRenderer
  * @namespace ima.page.renderer
  * @module ima
  * @submodule ima.page
@@ -22,15 +30,14 @@ export default class ClientPageRenderer extends AbstractPageRenderer {
 	 *
 	 * @method constructor
 	 * @constructor
-	 * @param {ima.page.renderer.PageRendererFactory} factory Factory for receive $Utils to
-	 *        view.
+	 * @param {PageRendererFactory} factory Factory for receive $Utils to view.
 	 * @param {vendor.$Helper} Helper The IMA.js helper methods.
 	 * @param {vendor.ReactDOM} ReactDOM React framework instance to use to
 	 *        render the page on the client side.
 	 * @param {Object<string, *>} settings The application setting for the
 	 *        current application environment.
-	 * @param {ima.window.Window} window Helper for manipulating the global
-	 *        object ({@code window}) regardless of the client/server-side
+	 * @param {Window} window Helper for manipulating the global object
+	 *        ({@code window}) regardless of the client/server-side
 	 *        environment.
 	 */
 	constructor(factory, Helper, ReactDOM, settings, window) {
@@ -52,7 +59,7 @@ export default class ClientPageRenderer extends AbstractPageRenderer {
 		 *
 		 * @property _window
 		 * @private
-		 * @type {ima.window.Window}
+		 * @type {Window}
 		 */
 		this._window = window;
 
@@ -70,9 +77,9 @@ export default class ClientPageRenderer extends AbstractPageRenderer {
 	 * @method mount
 	 */
 	mount(controller, view, pageResources, routeOptions) {
-		var separatedData = this._separatePromisesAndValues(pageResources);
-		var defaultPageState = separatedData.values;
-		var loadedPromises = separatedData.promises;
+		let separatedData = this._separatePromisesAndValues(pageResources);
+		let defaultPageState = separatedData.values;
+		let loadedPromises = separatedData.promises;
 
 		if (this._firstTime === false) {
 			controller.setState(defaultPageState);
@@ -109,9 +116,9 @@ export default class ClientPageRenderer extends AbstractPageRenderer {
 	 * @method update
 	 */
 	update(controller, resourcesUpdate) {
-		var separatedData = this._separatePromisesAndValues(resourcesUpdate);
-		var defaultPageState = separatedData.values;
-		var updatedPromises = separatedData.promises;
+		let separatedData = this._separatePromisesAndValues(resourcesUpdate);
+		let defaultPageState = separatedData.values;
+		let updatedPromises = separatedData.promises;
 
 		controller.setState(defaultPageState);
 		this._patchPromisesToState(controller, updatedPromises);
@@ -164,8 +171,8 @@ export default class ClientPageRenderer extends AbstractPageRenderer {
 	 * Patch promise values to controller state.
 	 *
 	 * @method _patchPromisesToState
-	 * @param {ima.Controller.ControllerDecorator} controller
-	 * @param {Object<string, Promise>} patchedPromises
+	 * @param {ControllerDecorator} controller
+	 * @param {Object<string, Promise<*>>} patchedPromises
 	 */
 	_patchPromisesToState(controller, patchedPromises) {
 		for (let resourceName of Object.keys(patchedPromises)) {
@@ -184,28 +191,38 @@ export default class ClientPageRenderer extends AbstractPageRenderer {
 	 *
 	 * @private
 	 * @method _renderToDOM
-	 * @param {ima.controller.ControllerDecorator} controller
+	 * @param {ControllerDecorator} controller
 	 * @param {React.Component} view
 	 * @param {{
-	 *            onlyUpdate: (
-	 *                boolean|
+	 *          onlyUpdate: (
+	 *            boolean|
+	 *            function(
+	 *              (string|function(new: Controller, ...*)),
+	 *              (
+	 *                string|
 	 *                function(
-	 *                    (string|function(new: ima.controller.Controller, ...*)),
-	 *                   (string|function(new: React.Component, Object<string, *>, ?Object<string, *>))
-	 *               ): boolean
-	 *            ),
-	 *           autoScroll: boolean,
-	 *           allowSPA: boolean,
-	 *           documentView: ?ima.page.AbstractDocumentView
-	 *        }} options The current route options.
+	 *                  new: React.Component,
+	 *                  Object<string, *>,
+	 *                  ?Object<string, *>
+	 *                )
+	 *              )
+	 *            ): boolean
+	 *          ),
+	 *          autoScroll: boolean,
+	 *          allowSPA: boolean,
+	 *          documentView: ?AbstractDocumentView
+	 *        }} routeOptions The current route options.
 	 */
 	_renderToDOM(controller, view, routeOptions) {
-		var props = this._generateViewProps(view, controller.getState());
-		var reactElementView = this._factory.wrapView(props);
+		let props = this._generateViewProps(view, controller.getState());
+		let reactElementView = this._factory.wrapView(props);
 
-		var configuredDocumentView = routeOptions.documentView || this._settings.$Page.$Render.documentView;
-		var documentView = this._factory.getDocumentView(configuredDocumentView);
-		var masterElementId = documentView.masterElementId;
+		let configuredDocumentView = routeOptions.documentView ||
+				this._settings.$Page.$Render.documentView;
+		let documentView = this._factory.getDocumentView(
+			configuredDocumentView
+		);
+		let masterElementId = documentView.masterElementId;
 		this._viewContainer = this._window.getElementById(masterElementId);
 
 		this._reactiveView = this._ReactDOM.render(
@@ -222,15 +239,17 @@ export default class ClientPageRenderer extends AbstractPageRenderer {
 	 * @method _separatePromisesAndValues
 	 * @private
 	 * @param {Object<string, *>} dataMap A map of data.
-	 * @return {{promises: Object<string, Promise>, values: Object<string, *>}}
-	 *         Return separated promises and other values.
+	 * @return {{
+	 *           promises: Object<string, Promise<*>>,
+	 *           values: Object<string, *>
+	 *         }} Return separated promises and other values.
 	 */
 	_separatePromisesAndValues(dataMap) {
-		var promises = {};
-		var values = {};
+		let promises = {};
+		let values = {};
 
-		for (var field of Object.keys(dataMap)) {
-			var value = dataMap[field];
+		for (let field of Object.keys(dataMap)) {
+			let value = dataMap[field];
 
 			if (value instanceof Promise) {
 				promises[field] = value;
@@ -247,8 +266,8 @@ export default class ClientPageRenderer extends AbstractPageRenderer {
 	 *
 	 * @private
 	 * @method _updateMetaAttributes
-	 * @param {ima.meta.MetaManager} metaManager meta attributes storage
-	 *        providing the new values for page meta elements and title.
+	 * @param {MetaManager} metaManager meta attributes storage providing the
+	 *        new values for page meta elements and title.
 	 */
 	_updateMetaAttributes(metaManager) {
 		this._window.setTitle(metaManager.getTitle());
@@ -263,12 +282,12 @@ export default class ClientPageRenderer extends AbstractPageRenderer {
 	 *
 	 * @private
 	 * @method _updateMetaNameAttributes
-	 * @param {ima.meta.MetaManager} metaManager meta attributes storage
-	 *        providing the new values for page meta elements and title.
+	 * @param {MetaManager} metaManager meta attributes storage providing the
+	 *        new values for page meta elements and title.
 	 */
 	_updateMetaNameAttributes(metaManager) {
-		var metaTagKey = null;
-		var metaTag = null;
+		let metaTagKey = null;
+		let metaTag;
 
 		for (metaTagKey of metaManager.getMetaNames()) {
 			metaTag = this._window.querySelector(`meta[name="${metaTagKey}"]`);
@@ -284,12 +303,12 @@ export default class ClientPageRenderer extends AbstractPageRenderer {
 	 *
 	 * @private
 	 * @method _updateMetaPropertyAttributes
-	 * @param {ima.meta.MetaManager} metaManager meta attributes storage
-	 *        providing the new values for page meta elements and title.
+	 * @param {MetaManager} metaManager meta attributes storage providing the
+	 *        new values for page meta elements and title.
 	 */
 	_updateMetaPropertyAttributes(metaManager) {
-		var metaTagKey = null;
-		var metaTag = null;
+		let metaTagKey = null;
+		let metaTag;
 
 		for (metaTagKey of metaManager.getMetaProperties()) {
 			metaTag = this._window.querySelector(
@@ -307,12 +326,12 @@ export default class ClientPageRenderer extends AbstractPageRenderer {
 	 *
 	 * @private
 	 * @method _updateMetaLinkAttributes
-	 * @param {ima.meta.MetaManager} metaManager meta attributes storage
-	 *        providing the new values for page meta elements and title.
+	 * @param {MetaManager} metaManager meta attributes storage providing the
+	 *        new values for page meta elements and title.
 	 */
 	_updateMetaLinkAttributes(metaManager) {
-		var linkTagKey = null;
-		var linkTag = null;
+		let linkTagKey = null;
+		let linkTag;
 
 		for (linkTagKey of metaManager.getLinks()) {
 			linkTag = this._window.querySelector(

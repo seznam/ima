@@ -42,10 +42,10 @@ class Namespace {
 	 * @return {*} The value at the specified path in the namespace.
 	 */
 	namespace(path) {
-		var self = this;
-		var levels = path.split('.');
+		let self = this;
+		let levels = path.split('.');
 
-		for (var levelName of levels) {
+		for (let levelName of levels) {
 			if (!self.hasOwnProperty(levelName)) {
 				self[levelName] = {};
 			}
@@ -77,10 +77,10 @@ class Namespace {
 	 * @return {*} The value at the specified path in the namespace.
 	 */
 	get(path) {
-		var self = this;
-		var levels = path.split('.');
+		let self = this;
+		let levels = path.split('.');
 
-		for (var level of levels) {
+		for (let level of levels) {
 			if (!self[level]) {
 				return undefined;
 			}

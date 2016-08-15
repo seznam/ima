@@ -47,7 +47,7 @@ describe('ima.page.state.PageStateManagerDecorator', function() {
 
 	describe('setState method', function() {
 
-		it('should throw IMAError for at least one deny key', function() {
+		it('should throw GenericError for at least one deny key', function() {
 			expect(function() {
 				decoratedPageStateManager.setState({ deny: 1 });
 			}).toThrow();

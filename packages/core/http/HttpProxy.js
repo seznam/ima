@@ -1,32 +1,37 @@
-import ns from 'ima/namespace';
+import ns from '../namespace';
+import HttpAgent from './HttpAgent';
+import HttpStatusCode from './StatusCode';
+import UrlTransformer from './UrlTransformer';
+import Window from '../window/Window';
 
 ns.namespace('ima.http');
 
 /**
- * Middleware proxy between {@codelink ima.http.HttpAgent} implementations and
- * the {@codelink Vendor.SuperAgent}, providing a Promise-oriented API for
- * sending the requests.
+ * Middleware proxy between {@linkcode HttpAgent} implementations and the
+ * {@linkcode Vendor.SuperAgent}, providing a Promise-oriented API for sending
+ * the requests.
  *
  * @class SuperAgentProxy
  * @namespace ima.http
  * @module ima
  * @submodule ima.http
  */
-export default class SuperAgentProxy {
+export default class HttpProxy {
 
 	/**
+	 * Initializes the HTTP proxy.
+	 *
 	 * @method constructor
 	 * @constructor
 	 * @param {vendor.SuperAgent} superAgent SuperAgent instance to use for
 	 *        sending the HTTP requests.
-	 * @param {Object} HTTP_STATUS_CODE
-	 * @param {ima.http.Transformer} transformer Transform apply rules to
-	 *        request url.
-	 * @param {ima.window.Window} window Helper for manipulating the global
-	 *        object ({@code window}) regardless of the client/server-side
+	 * @param {UrlTransformer} transformer Transformer of URLs to which the
+	 *        requests are made.
+	 * @param {Window} window Helper for manipulating the global object
+	 *        ({@code window}) regardless of the client/server-side
 	 *        environment.
 	 */
-	constructor(superAgent, HTTP_STATUS_CODE, transformer, window) {
+	constructor(superAgent, transformer, window) {
 		/**
 		 * SuperAgent instance to use for sending the HTTP requests, providing
 		 * uniform API across both the client-side and the server-side
@@ -39,18 +44,11 @@ export default class SuperAgentProxy {
 		this._superAgent = superAgent;
 
 		/**
-		 * HTTP status code constants.
+		 * Transformer of URLs to which the requests are made.
 		 *
-		 * @property HTTP_STATUS_CODE
-		 * @const
-		 * @type {Object}
-		 */
-		this.HTTP_STATUS_CODE = HTTP_STATUS_CODE;
-
-		/**
 		 * @property _transformer
 		 * @private
-		 * @type {ima.http.Transformer}
+		 * @type {UrlTransformer}
 		 */
 		this._transformer = transformer;
 
@@ -60,7 +58,7 @@ export default class SuperAgentProxy {
 		 *
 		 * @property _window
 		 * @private
-		 * @type {ima.window.Window}
+		 * @type {Window}
 		 */
 		this._window = window;
 
@@ -87,12 +85,16 @@ export default class SuperAgentProxy {
 	 *        send to the server. The data will be included as query parameters
 	 *        if the request method is set to {@code GET}, and as request body
 	 *        for any other request method.
-	 * @param {{timeout: number=, ttl: number=, repeatRequest: number=,
-	 *        headers: Object<string, string>=, cache: boolean=,
-	 *        withCredentials: boolean}=} options
-	 *        Optional request options. The {@code timeout} specifies the
-	 *        request timeout in milliseconds, the {@code ttl} specified how
-	 *        long the request may be cached in milliseconds, the
+	 * @param {{
+	 *          timeout: number=,
+	 *          ttl: number=,
+	 *          repeatRequest: number=,
+	 *          headers: Object<string, string>=,
+	 *          cache: boolean=,
+	 *          withCredentials: boolean
+	 *        }=} options Optional request options. The {@code timeout}
+	 *        specifies the request timeout in milliseconds, the {@code ttl}
+	 *        specified how long the request may be cached in milliseconds, the
 	 *        {@code repeatRequest} specifies the maximum number of tries to
 	 *        repeat the request if the request fails, The {@code headers} set
 	 *        request headers. The {@code cache} can be used to bypass the
@@ -107,7 +109,7 @@ export default class SuperAgentProxy {
 	request(method, url, data, options) {
 		return (
 			new Promise((resolve, reject) => {
-				var params = this._composeRequestParams(
+				let params = this._composeRequestParams(
 					method,
 					url,
 					data,
@@ -117,7 +119,7 @@ export default class SuperAgentProxy {
 				if (method === 'delete') {
 					method = 'del';
 				}
-				var request = this._superAgent[method](params.transformedUrl);
+				let request = this._superAgent[method](params.transformedUrl);
 
 				if (method === 'get') {
 					request.query(data);
@@ -160,7 +162,7 @@ export default class SuperAgentProxy {
 	}
 
 	/**
-	 * Constructs and returns an object that describes a failed HTTP requets,
+	 * Constructs and returns an object that describes a failed HTTP requests,
 	 * providing information about both the failure reported by the server and
 	 * how the request has been sent to the server.
 	 *
@@ -186,26 +188,26 @@ export default class SuperAgentProxy {
 	 *         error and the request that lead to it.
 	 */
 	getErrorParams(method, url, data, options, status) {
-		var params = this._composeRequestParams(method, url, data, options);
-		var error = { status };
+		let params = this._composeRequestParams(method, url, data, options);
+		let error = { status };
 
 		switch (status) {
-			case this.HTTP_STATUS_CODE.TIMEOUT:
+			case HttpStatusCode.TIMEOUT:
 				error.errorName = 'Timeout';
 				break;
-			case this.HTTP_STATUS_CODE.BAD_REQUEST:
+			case HttpStatusCode.BAD_REQUEST:
 				error.errorName = 'Bad Request';
 				break;
-			case this.HTTP_STATUS_CODE.UNAUTHORIZED:
+			case HttpStatusCode.UNAUTHORIZED:
 				error.errorName = 'Unauthorized';
 				break;
-			case this.HTTP_STATUS_CODE.FORBIDDEN:
+			case HttpStatusCode.FORBIDDEN:
 				error.errorName = 'Forbidden';
 				break;
-			case this.HTTP_STATUS_CODE.NOT_FOUND:
+			case HttpStatusCode.NOT_FOUND:
 				error.errorName = 'Not Found';
 				break;
-			case this.HTTP_STATUS_CODE.SERVER_ERROR:
+			case HttpStatusCode.SERVER_ERROR:
 				error.errorName = 'Internal Server Error';
 				break;
 			default:
@@ -248,23 +250,21 @@ export default class SuperAgentProxy {
 	 * @chainable
 	 * @param {Vendor.SuperAgent.Request} request The request to send.
 	 * @param {function(Vendor.SuperAgent.Response)} resolve Promise resolution
-	 *        callback to call if the request completes successfuly.
+	 *        callback to call if the request completes successfully.
 	 * @param {function(Object<string, *>)} reject Promise rejection callback
 	 *        to call if the request fails with an error.
 	 * @param {{method: string, url: string, data: Object<string, (boolean|number|string|Date)>, options: Object<string, *>}} params
 	 *        An object representing the complete request parameters used to
 	 *        create and send the HTTP request.
-	 * @return {ima.http.SuperAgentProxy} This instance.
+	 * @return {HttpProxy} This instance.
 	 */
 	_sendRequest(request, resolve, reject, params) {
 		request.end((error, response) => {
-
 			if (error) {
 				this._handleError(error, reject, params);
 			} else {
 				this._handleResponse(response, resolve, reject, params);
 			}
-
 		});
 
 		return this;
@@ -284,18 +284,22 @@ export default class SuperAgentProxy {
 	 *        callback to call if the request has been completed successfuly.
 	 * @param {function(Object<string, *>)} reject Promise rejection callback
 	 *        to call if the request failed with an error.
-	 * @param {{method: string, url: string, data: Object<string, (boolean|number|string|Date)>, options: Object<string, *>}} params
-	 *        An object representing the complete request parameters used to
-	 *        create and send the HTTP request.
+	 * @param {{
+	 *          method: string,
+	 *          url: string,
+	 *          data: Object<string, (boolean|number|string|Date)>,
+	 *          options: Object<string, *>
+	 *        }} params An object representing the complete request parameters
+	 *        used to create and send the HTTP request.
 	 */
 	_handleResponse(response, resolve, reject, params) {
 		if (response.error) {
-			var errorParams = this.getErrorParams(params.method, params.url,
+			let errorParams = this.getErrorParams(params.method, params.url,
 				params.data, params.options, response.status);
 
 			reject(errorParams);
 		} else {
-			params.status = this.HTTP_STATUS_CODE.OK;
+			params.status = HttpStatusCode.OK;
 			response.params = params;
 
 			resolve(response);
@@ -316,12 +320,16 @@ export default class SuperAgentProxy {
 	 *        code, etc.).
 	 * @param {function(Object<string, *>)} reject Promise rejection callback
 	 *        to call.
-	 * @param {{method: string, url: string, data: Object<string, (boolean|number|string|Date)>, options: Object<string, *>}} params
-	 *        An object representing the complete request parameters used to
-	 *        create and send the HTTP request.
+	 * @param {{
+	 *          method: string,
+	 *          url: string,
+	 *          data: Object<string, (boolean|number|string|Date)>,
+	 *          options: Object<string, *>
+	 *        }} params An object representing the complete request parameters
+	 *        used to create and send the HTTP request.
 	 */
 	_handleError(error, reject, params) {
-		var errorParams = {};
+		let errorParams = {};
 
 		if (error.timeout === params.options.timeout) {
 			errorParams = this.getErrorParams(
@@ -329,7 +337,7 @@ export default class SuperAgentProxy {
 				params.url,
 				params.data,
 				params.options,
-				this.HTTP_STATUS_CODE.TIMEOUT
+				HttpStatusCode.TIMEOUT
 			);
 		} else {
 			if (error.crossDomain) {
@@ -338,7 +346,7 @@ export default class SuperAgentProxy {
 					params.url,
 					params.data,
 					params.options,
-					this.HTTP_STATUS_CODE.FORBIDDEN
+					HttpStatusCode.FORBIDDEN
 				);
 			} else {
 				errorParams = this.getErrorParams(
@@ -346,7 +354,7 @@ export default class SuperAgentProxy {
 					params.url,
 					params.data,
 					params.options,
-					error.status || this.HTTP_STATUS_CODE.SERVER_ERROR
+					error.status || HttpStatusCode.SERVER_ERROR
 				);
 			}
 		}
@@ -362,19 +370,23 @@ export default class SuperAgentProxy {
 	 * @chainable
 	 * @param {Vendor.SuperAgent.Request} request The request on which the HTTP
 	 *        headers should be set.
-	 * @param {{timeout: number=, ttl: number=, repeatRequest: number=,
-	 *        headers: Object<string, string>=, cache: boolean=,
-	 *        withCredentials: boolean}=} options
-	 *        Optional request options. The {@code timeout} specifies the
-	 *        request timeout in milliseconds, the {@code ttl} specified how
-	 *        long the request may be cached in milliseconds, the
+	 * @param {{
+	 *          timeout: number=,
+	 *          ttl: number=,
+	 *          repeatRequest: number=,
+	 *          headers: Object<string, string>=,
+	 *          cache: boolean=,
+	 *          withCredentials: boolean
+	 *        }=} options Optional request options. The {@code timeout}
+	 *        specifies the request timeout in milliseconds, the {@code ttl}
+	 *        specified how long the request may be cached in milliseconds, the
 	 *        {@code repeatRequest} specifies the maximum number of tries to
 	 *        repeat the request if the request fails, The {@code headers} set
 	 *        request headers. The {@code cache} can be used to bypass the
 	 *        cache of pending and finished HTTP requests. The
 	 *        {@code withCredentials} that indicates whether requests should be
 	 *        made using credentials such as cookies or authorization headers.
-	 * @return {ima.http.SuperAgentProxy} This instance.
+	 * @return {HttpProxy} This instance.
 	 */
 	_setHeaders(request, options) {
 		for (let [headerName, headerValue] of this._defaultHeaders) {
@@ -397,24 +409,28 @@ export default class SuperAgentProxy {
 	 * not cross-site Access-Control requests should be made using credentials
 	 * such as cookies or authorization headers.
 	 *
-	 * @method _setCredentials
 	 * @private
 	 * @chainable
+	 * @method _setCredentials
 	 * @param {Vendor.SuperAgent.Request} request The request on which the HTTP
 	 *        headers should be set.
-	 * @param {{timeout: number=, ttl: number=, repeatRequest: number=,
-	 *        headers: Object<string, string>=, cache: boolean=,
-	 *        withCredentials: boolean}=} options
-	 *        Optional request options. The {@code timeout} specifies the
-	 *        request timeout in milliseconds, the {@code ttl} specified how
-	 *        long the request may be cached in milliseconds, the
+	 * @param {{
+	 *          timeout: number=,
+	 *          ttl: number=,
+	 *          repeatRequest: number=,
+	 *          headers: Object<string, string>=,
+	 *          cache: boolean=,
+	 *          withCredentials: boolean
+	 *        }=} options Optional request options. The {@code timeout}
+	 *        specifies the request timeout in milliseconds, the {@code ttl}
+	 *        specified how long the request may be cached in milliseconds, the
 	 *        {@code repeatRequest} specifies the maximum number of tries to
 	 *        repeat the request if the request fails, The {@code headers} set
 	 *        request headers. The {@code cache} can be used to bypass the
 	 *        cache of pending and finished HTTP requests. The
 	 *        {@code withCredentials} that indicates whether requests should be
 	 *        made using credentials such as cookies or authorization headers.
-	 * @return {ima.http.SuperAgentProxy} This instance.
+	 * @return {HttpProxy} This instance.
 	 */
 	_setCredentials(request, options) {
 		if (options.withCredentials &&
@@ -436,21 +452,33 @@ export default class SuperAgentProxy {
 	 * @param {string} url The URL to which the request should be sent.
 	 * @param {Object<string, (boolean|number|string|Date)>} data The data to
 	 *        send with the request.
-	 * @param {{timeout: number=, ttl: number=, repeatRequest: number=,
-	 *        headers: Object<string, string>=, cache: boolean=,
-	 *        withCredentials: boolean}=} options
-	 *        Optional request options. The {@code timeout} specifies the
-	 *        request timeout in milliseconds, the {@code ttl} specified how
-	 *        long the request may be cached in milliseconds, the
+	 * @param {{
+	 *          timeout: number=,
+	 *          ttl: number=,
+	 *          repeatRequest: number=,
+	 *          headers: Object<string, string>=,
+	 *          cache: boolean=,
+	 *          withCredentials: boolean
+	 *        }=} options Optional request options. The {@code timeout}
+	 *        specifies the request timeout in milliseconds, the {@code ttl}
+	 *        specified how long the request may be cached in milliseconds, the
 	 *        {@code repeatRequest} specifies the maximum number of tries to
 	 *        repeat the request if the request fails, The {@code headers} set
 	 *        request headers. The {@code cache} can be used to bypass the
 	 *        cache of pending and finished HTTP requests. The
 	 *        {@code withCredentials} that indicates whether requests should be
 	 *        made using credentials such as cookies or authorization headers.
-	 * @return {{method: string, url: string, data: Object<string, (boolean|number|string|Date)>, options: {headers: Object<string, string>, cookie: string}}}
-	 *         An object representing the complete request parameters used to
-	 *         create and send the HTTP request.
+	 * @return {{
+	 *           method: string,
+	 *           url: string,
+	 *           transformedUrl:  string,
+	 *           data: Object<string, (boolean|number|string|Date)>,
+	 *           options: {
+	 *             headers: Object<string, string>,
+	 *             cookie: string
+	 *           }
+	 *         }} An object representing the complete request parameters used
+	 *         to create and send the HTTP request.
 	 */
 	_composeRequestParams(method, url, data, options) {
 		return {
@@ -463,4 +491,4 @@ export default class SuperAgentProxy {
 	}
 }
 
-ns.ima.http.SuperAgentProxy = SuperAgentProxy;
+ns.ima.http.SuperAgentProxy = HttpProxy;

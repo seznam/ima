@@ -1,5 +1,6 @@
-import ns from 'ima/namespace';
-import AbstractDocumentView from 'ima/page/AbstractDocumentView';
+import ns from '../../namespace';
+import AbstractDocumentView from '../AbstractDocumentView';
+import ObjectContainer from '../../ObjectContainer';
 
 ns.namespace('ima.page.renderer');
 
@@ -11,16 +12,16 @@ ns.namespace('ima.page.renderer');
  * @module ima
  * @submodule ima.page
  *
- * @requires ima.ObjectContainer
+ * @requires ObjectContainer
  */
 export default class PageRendererFactory {
 
 	/**
 	 * @method constructor
 	 * @constructor
-	 * @param {ima.ObjectContainer} oc
-	 * @param {React} React React framework instance to use to render
-	 *        the page.
+	 * @param {ObjectContainer} oc The application's dependency injector - the
+	 *        object container.
+	 * @param {React} React React framework instance to use to render the page.
 	 * @param {React.Component} ViewAdapter An adapter component
 	 *        providing the current page controller's state to the page view
 	 *        component through its properties.
@@ -28,9 +29,11 @@ export default class PageRendererFactory {
 	constructor(oc, React, ViewAdapter) {
 
 		/**
+		 * The application's dependency injector - the object container.
+		 *
 		 * @property _oc
 		 * @private
-		 * @type {ima.ObjectContainer}
+		 * @type {ObjectContainer}
 		 */
 		this._oc = oc;
 
@@ -98,8 +101,11 @@ export default class PageRendererFactory {
 	 * {@code state} property.
 	 *
 	 * @method wrapView
-	 * @param {{view: ns.React.Component, state: Object<string, *>, $Utils: Object<string, *>}} props
-	 *        The initial props to pass to the view.
+	 * @param {{
+	 *          view: React.Component,
+	 *          state: Object<string, *>,
+	 *          $Utils: Object<string, *>
+	 *        }} props The initial props to pass to the view.
 	 * @return {React.Component} View adapter handling passing the
 	 *         controller's state to an instance of the specified page view
 	 *         through properties.
@@ -113,7 +119,12 @@ export default class PageRendererFactory {
 	 * Like React.createElement.
 	 *
 	 * @method reactCreateFactory
-	 * @param {(string|ReactClass)} view
+	 * @param {(string|React.Component)} view The react component for which a
+	 *        factory function should be created.
+	 * @return {function(Object<string, *>): React.Element} The created factory
+	 *         function. The factory accepts an object containing the
+	 *         component's properties as the argument and returns a rendered
+	 *         component.
 	 */
 	reactCreateFactory(view) {
 		return this._React.createFactory(view);

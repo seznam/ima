@@ -1,8 +1,13 @@
 // @server-side
 
-import ns from 'ima/namespace';
-import IMAError from 'ima/error/GenericError';
-import AbstractPageRenderer from 'ima/page/renderer/AbstractPageRenderer';
+import ns from '../../namespace';
+import AbstractPageRenderer from './AbstractPageRenderer';
+import PageRenderer from './PageRenderer';
+import PageRendererFactory from './PageRendererFactory';
+import Cache from '../../cache/Cache';
+import AbstractController from '../../controller/AbstractController';
+import GenericError from '../../error/GenericError';
+import Response from '../../router/Response';
 
 ns.namespace('ima.page.renderer');
 
@@ -11,7 +16,8 @@ ns.namespace('ima.page.renderer');
  * markup and sends it to the client.
  *
  * @class ServerPageRenderer
- * @extends ima.page.renderer.AbstractPageRenderer
+ * @extends AbstractPageRenderer
+ * @implements PageRenderer
  * @namespace ima.page.renderer
  * @module ima
  * @submodule ima.page
@@ -23,17 +29,16 @@ export default class ServerPageRenderer extends AbstractPageRenderer {
 	 *
 	 * @method contructor
 	 * @constructor
-	 * @param {ima.page.renderer.PageRendererFactory} factory Factory for receive $Utils to
-	 *        view.
+	 * @param {PageRendererFactory} factory Factory for receive $Utils to view.
 	 * @param {vendor.$Helper} Helper The IMA.js helper methods.
 	 * @param {vendor.ReactDOMServer} ReactDOMServer React framework instance
 	 *        to use to render the page on the server side.
 	 * @param {Object<string, *>} settings Application setting for the current
 	 *        application environment.
-	 * @param {ima.router.Response} response Utility for sending the page
-	 *        markup to the client as a response to the current HTTP request.
-	 * @param {ima.cache.Cache} cache Resource cache caching the results
-	 *        of HTTP requests made by services used by the rendered page.
+	 * @param {Response} response Utility for sending the page markup to the
+	 *        client as a response to the current HTTP request.
+	 * @param {Cache} cache Resource cache caching the results of HTTP requests
+	 *        made by services used by the rendered page.
 	 */
 	constructor(factory, Helper, ReactDOMServer, settings, response, cache) {
 		super(factory, Helper, ReactDOMServer, settings);
@@ -44,7 +49,7 @@ export default class ServerPageRenderer extends AbstractPageRenderer {
 		 *
 		 * @private
 		 * @property _response
-		 * @type {ima.router.Response}
+		 * @type {Response}
 		 */
 		this._response = response;
 
@@ -56,7 +61,7 @@ export default class ServerPageRenderer extends AbstractPageRenderer {
 		 *
 		 * @private
 		 * @property _cache
-		 * @type {ima.cache.Cache}
+		 * @type {Cache}
 		 */
 		this._cache = cache;
 
@@ -86,7 +91,7 @@ export default class ServerPageRenderer extends AbstractPageRenderer {
 	 * @method update
 	 */
 	update(controller, resourcesUpdate) {
-		return Promise.reject(new IMAError(
+		return Promise.reject(new GenericError(
 			'The update() is denied on server side.'
 		));
 	}
@@ -166,10 +171,10 @@ export default class ServerPageRenderer extends AbstractPageRenderer {
 	 *         has all its values wrapped into promises.
 	 */
 	_wrapEachKeyToPromise(dataMap = {}) {
-		var copy = {};
+		let copy = {};
 
-		for (var field of Object.keys(dataMap)) {
-			var value = dataMap[field];
+		for (let field of Object.keys(dataMap)) {
+			let value = dataMap[field];
 
 			if (value instanceof Promise) {
 				copy[field] = value;
@@ -186,7 +191,7 @@ export default class ServerPageRenderer extends AbstractPageRenderer {
 	 *
 	 * @private
 	 * @method _renderPage
-	 * @param {ima.controller.AbstractController} controller
+	 * @param {AbstractController} controller
 	 * @param {React.Component} view
 	 * @param {Object<string, *>} fetchedResources
 	 * @param {Object<string, *>} routeOptions
@@ -210,19 +215,19 @@ export default class ServerPageRenderer extends AbstractPageRenderer {
 	 *
 	 * @private
 	 * @method _renderPageContentToString
-	 * @param {ima.controller.AbstractController} controller
+	 * @param {AbstractController} controller
 	 * @param {React.Component} view
 	 * @param {Object<string, *>} routeOptions
 	 * @return {string}
 	 */
 	_renderPageContentToString(controller, view, routeOptions) {
-		var props = this._generateViewProps(view, controller.getState());
-		var wrappedPageViewElement = this._factory.wrapView(props);
-		var pageMarkup = this._ReactDOM.renderToString(wrappedPageViewElement);
+		let props = this._generateViewProps(view, controller.getState());
+		let wrappedPageViewElement = this._factory.wrapView(props);
+		let pageMarkup = this._ReactDOM.renderToString(wrappedPageViewElement);
 
-		var documentView = this._factory.getDocumentView(routeOptions.documentView || this._settings.$Page.$Render.documentView);
-		var documentViewFactory = this._factory.reactCreateFactory(documentView);
-		var appMarkup = this._ReactDOM.renderToStaticMarkup(documentViewFactory({
+		let documentView = this._factory.getDocumentView(routeOptions.documentView || this._settings.$Page.$Render.documentView);
+		let documentViewFactory = this._factory.reactCreateFactory(documentView);
+		let appMarkup = this._ReactDOM.renderToStaticMarkup(documentViewFactory({
 			page: pageMarkup,
 			revivalSettings: this._getRevivalSettings(),
 			metaManager: controller.getMetaManager(),

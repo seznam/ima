@@ -1,15 +1,15 @@
-import ns from 'ima/namespace';
-import IMAError from 'ima/error/GenericError';
-import PageRendererInterface from 'ima/page/renderer/PageRenderer';
+import ns from '../../namespace';
+import PageRenderer from './PageRenderer';
+import PageRendererFactory from './PageRendererFactory';
+import GenericError from '../../error/GenericError';
 
 ns.namespace('ima.page.renderer');
 
 /**
- * Base class for implementations of the
- * {@codelink ima.page.renderer.PageRenderer} interface.
+ * Base class for implementations of the {@linkcode PageRenderer} interface.
  *
  * @class AbstractPageRenderer
- * @implements ima.page.renderer.PageRenderer
+ * @implements PageRenderer
  * @namespace ima.page.renderer
  * @module ima
  * @submodule ima.page
@@ -17,18 +17,17 @@ ns.namespace('ima.page.renderer');
  * @requires vendor.$Helper
  * @requires ReactDOM
  */
-export default class AbstractPageRenderer extends PageRendererInterface {
+export default class AbstractPageRenderer extends PageRenderer {
 
 	/**
 	 * Initializes the abstract page renderer.
 	 *
 	 * @constructor
 	 * @method constructor
-	 * @param {ima.page.renderer.Factory} factory Factory for receive $Utils to
-	 *        view.
+	 * @param {PageRendererFactory} factory Factory for receive $Utils to view.
 	 * @param {vendor.$Helper} Helper The IMA.js helper methods.
-	 * @param {vendor.ReactDOM} ReactDOM React framework instance, will be used to
-	 *        render the page.
+	 * @param {vendor.ReactDOM} ReactDOM React framework instance, will be used
+	 *        to render the page.
 	 * @param {Object<string, *>} settings Application settings for the current
 	 *        application environment.
 	 */
@@ -40,7 +39,7 @@ export default class AbstractPageRenderer extends PageRendererInterface {
 		 *
 		 * @protected
 		 * @property _factory
-		 * @type {ima.page.renderer.PageRendererFactory}
+		 * @type {PageRendererFactory}
 		 */
 		this._factory = factory;
 
@@ -87,7 +86,7 @@ export default class AbstractPageRenderer extends PageRendererInterface {
 	 * @method mount
 	 */
 	mount(controller, view, pageResources, routeOptions) {
-		throw new IMAError('The mount() method is abstract and must be ' +
+		throw new GenericError('The mount() method is abstract and must be ' +
 				'overridden.');
 	}
 
@@ -96,7 +95,7 @@ export default class AbstractPageRenderer extends PageRendererInterface {
 	 * @method update
 	 */
 	update(controller, resourcesUpdate) {
-		throw new IMAError('The update() method is abstract and must be ' +
+		throw new GenericError('The update() method is abstract and must be ' +
 				'overridden.');
 	}
 
@@ -105,8 +104,8 @@ export default class AbstractPageRenderer extends PageRendererInterface {
 	 * @method unmount
 	 */
 	unmount() {
-		throw new IMAError('The unmount() method is abstract and must be ' +
-				'overridden.');
+		throw new GenericError('The unmount() method is abstract and must ' +
+				'be overridden.');
 	}
 
 	/**
@@ -124,13 +123,13 @@ export default class AbstractPageRenderer extends PageRendererInterface {
 	 *
 	 * @protected
 	 * @method _generateViewProps
-	 * @param {function(new:React.Component, Object<string, *>)} view
-	 *        The page view React component to wrap.
+	 * @param {function(new:React.Component, Object<string, *>)} view The page
+	 *        view React component to wrap.
 	 * @param {Object<string, *>=} [state={}]
 	 * @return {Object<string, *>}
 	 */
 	_generateViewProps(view, state = {}) {
-		var props = {
+		let props = {
 			view,
 			state,
 			$Utils: this._factory.getUtils()

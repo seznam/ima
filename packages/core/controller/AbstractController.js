@@ -1,21 +1,23 @@
-import ns from 'ima/namespace';
-import IMAError from 'ima/error/GenericError';
-import ControllerInterface from 'ima/controller/Controller';
+import ns from '../namespace';
+import GenericError from '../error/GenericError';
+import Controller from './Controller';
+import Extension from '../extension/Extension';
+import PageStateManager from '../page/state/PageStateManager';
 
 ns.namespace('ima.controller');
 
 /**
- * Basic implementation of the {@codelink ima.controller.Controller} interface,
- * providing the default implementation of most of the API.
+ * Basic implementation of the {@codelink Controller} interface, providing the
+ * default implementation of the most of the API.
  *
  * @abstract
  * @class AbstractController
- * @implements ima.controller.Controller
+ * @implements Controller
  * @namespace ima.controller
  * @module ima
  * @submodule ima.controller
  */
-export default class AbstractController extends ControllerInterface {
+export default class AbstractController extends Controller {
 
 	/**
 	 * Initializes the controller.
@@ -31,7 +33,7 @@ export default class AbstractController extends ControllerInterface {
 		 *
 		 * @property _pageStateManager
 		 * @protected
-		 * @type {ima.page.state.PageStateManager}
+		 * @type {PageStateManager}
 		 * @default null
 		 */
 		this._pageStateManager = null;
@@ -41,7 +43,7 @@ export default class AbstractController extends ControllerInterface {
 		 *
 		 * @private
 		 * @property _extensions
-		 * @type {Array<string, ima.extension.Extension>}
+		 * @type {Array<string, Extension>}
 		 */
 		this._extensions = [];
 
@@ -98,7 +100,7 @@ export default class AbstractController extends ControllerInterface {
 	 * @method load
 	 */
 	load() {
-		throw new IMAError('The ima.controller.AbstractController.load ' +
+		throw new GenericError('The ima.controller.AbstractController.load ' +
 				'method is abstract and must be overridden');
 	}
 
@@ -154,7 +156,7 @@ export default class AbstractController extends ControllerInterface {
 	 * @method setMetaParams
 	 */
 	setMetaParams(loadedResources, metaManager, router, dictionary, settings) {
-		throw new IMAError(
+		throw new GenericError(
 			'The ima.controller.AbstractController.setMetaParams method is ' +
 			'abstract and must be overridden'
 		);

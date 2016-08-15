@@ -1,9 +1,10 @@
-import ns from 'ima/namespace';
+import ns from '../namespace';
+import CacheEntry from './CacheEntry';
 
 ns.namespace('ima.cache');
 
 /**
- * Factory for creating instances of ima.cache.CacheEntry.
+ * Factory for creating instances of {@linkcode CacheEntry}.
  *
  * @class CacheFactory
  * @namespace ima.cache
@@ -17,20 +18,20 @@ export default class CacheFactory {
 	 *
 	 * @method constructor
 	 * @constructor
-	 * @param {function(new: ima.cache.CacheEntry, *, number)} CacheEntry
+	 * @param {function(new: CacheEntry, *, number)} CacheEntry
 	 */
 	constructor(CacheEntry) {
 
 		/**
 		 * @property _CacheEntry
 		 * @private
-		 * @type {function(new: ima.cache.CacheEntry, *, number)}
+		 * @type {function(new: CacheEntry, *, number)}
 		 */
 		this._CacheEntry = CacheEntry;
 	}
 
 	/**
-	 * Create new instance of ima.cache.CacheEntry with value a ttl.
+	 * Create new instance of {@linkcode CacheEntry} with value a ttl.
 	 *
 	 * @method createCacheEntry
 	 * @param {*} value The cache entry value.

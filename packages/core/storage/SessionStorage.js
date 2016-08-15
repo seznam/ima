@@ -17,7 +17,7 @@ ns.namespace('ima.storage');
  *
  * @requires SessionStorage
  */
-class SessionStorage extends StorageInterface {
+export default class SessionStorage extends StorageInterface {
 	/**
 	 * Initializes the session storage.
 	 *

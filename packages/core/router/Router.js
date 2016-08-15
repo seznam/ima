@@ -1,4 +1,8 @@
-import ns from 'ima/namespace';
+import ns from '../namespace';
+import Route from './Route';
+import Controller from '../controller/Controller';
+import ImaError from '../error/Error';
+import AbstractDocumentView from '../page/AbstractDocumentView';
 
 ns.namespace('ima.router');
 
@@ -17,8 +21,12 @@ export default class Router {
 	 * Initializes the router with the provided configuration.
 	 *
 	 * @method init
-	 * @param {{$Protocol: string, $Root: string, $LanguagePartPath: string, $Host: string}} config
-	 *        Router configuration.
+	 * @param {{
+	 *          $Protocol: string,
+	 *          $Root: string,
+	 *          $LanguagePartPath: string,
+	 *          $Host: string
+	 *        }} config Router configuration.
 	 *        The {@code $Protocol} field must be the current protocol used to
 	 *        access the application, terminated by a collon (for example
 	 *        {@code https:}).
@@ -56,18 +64,18 @@ export default class Router {
 	 * @param {{
 	 *          onlyUpdate: (
 	 *            boolean|
-	 *              function(
-	 *                (string|function(new: ima.controller.Controller, ...*)),
-	 *                (string|function(
-	 *                  new: React.Component,
-	 *                  Object<string, *>,
-	 *                  ?Object<string, *>
-	 *                ))
-	 *              ): boolean
+	 *            function(
+	 *              (string|function(new: Controller, ...*)),
+	 *              (string|function(
+	 *                new: React.Component,
+	 *                Object<string, *>,
+	 *                ?Object<string, *>
+	 *              ))
+	 *            ): boolean
 	 *          )=,
 	 *          autoScroll: boolean=,
 	 *          allowServeSPA: boolean=,
-	 *          documentView: ?ima.page.AbstractDocumentView=
+	 *          documentView: ?AbstractDocumentView=
 	 *        }=} options
 	 *        Additional route options, specified how the navigation to the
 	 *        route will be handled.
@@ -86,9 +94,8 @@ export default class Router {
 	 *        if the server is overloaded. This is useful for routes that use
 	 *        different document views (specified by the {@code documentView}
 	 *        option), for example for rendering the content of iframes.
-	 * @return {ima.router.Router} This router.
-	 * @throws {ima.error.Error} Thrown if a route with the same name already
-	 *         exists.
+	 * @return {Router} This router.
+	 * @throws {ImaError} Thrown if a route with the same name already exists.
 	 */
 	add(name, pathExpression, controller, view, options = undefined) {}
 
@@ -98,7 +105,7 @@ export default class Router {
 	 * @method remove
 	 * @param {string} name The route's unique name, identifying the route to
 	 *        remove.
-	 * @return {ima.router.Router} This router.
+	 * @return {Router} This router.
 	 */
 	remove(name) {}
 
@@ -159,10 +166,12 @@ export default class Router {
 	 * Returns the information about the currently active route.
 	 *
 	 * @method getCurrentRouteInfo
-	 * @return {{route: ima.router.Route, params: Object<string, string>, path: string}}
-	 *         The information about the current route.
-	 * @throws {ima.error.Error} Thrown if a route is not define for current
-	 *         path.
+	 * @return {{
+	 *           route: Route,
+	 *           params: Object<string, string>,
+	 *           path: string
+	 *         }} The information about the current route.
+	 * @throws {ImaError} Thrown if a route is not define for current path.
 	 */
 	getCurrentRouteInfo() {}
 
@@ -182,7 +191,7 @@ export default class Router {
 	 * at the server side.
 	 *
 	 * @method listen
-	 * @return {ima.router.Router} This router.
+	 * @return {Router} This router.
 	 */
 	listen() {}
 
@@ -203,8 +212,24 @@ export default class Router {
 	 *
 	 * @method redirect
 	 * @param {string} url The URL to which the client should be redirected.
-	 * @param {{httpStatus: number=, onlyUpdate: boolean=, autoScroll: boolean=, allowSPA: boolean=}} [options={}]
-	 *        The options overrides route options defined in routes.js.
+	 * @param {{
+	 *          httpStatus: number=,
+	 *          onlyUpdate: (
+	 *            boolean|
+	 *            function(
+	 *              (string|function(new: Controller, ...*)),
+	 *              (string|function(
+	 *                new: React.Component,
+	 *                Object<string, *>,
+	 *                ?Object<string, *>
+	 *              ))
+	 *            ): boolean
+	 *          )=,
+	 *          autoScroll: boolean=,
+	 *          allowSPA: boolean=,
+	 *          documentView: ?AbstractDocumentView=
+	 *        }} [options={}] The options overrides route options defined in
+	 *        the {@code routes.js} configuration file.
 	 */
 	redirect(url, options = {}) {}
 
@@ -230,8 +255,23 @@ export default class Router {
 	 * @method route
 	 * @param {string} path The URL path part received from the client, with
 	 *        optional query.
-	 * @param {{onlyUpdate: boolean=, autoScroll: boolean=, allowSPA: boolean=}} [options={}]
-	 *        The options overrides route options defined in routes.js.
+	 * @param {{
+	 *          onlyUpdate: (
+	 *            boolean|
+	 *            function(
+	 *              (string|function(new: Controller, ...*)),
+	 *              (string|function(
+	 *                new: React.Component,
+	 *                Object<string, *>,
+	 *                ?Object<string, *>
+	 *              ))
+	 *            ): boolean
+	 *          )=,
+	 *          autoScroll: boolean=,
+	 *          allowSPA: boolean=,
+	 *          documentView: ?AbstractDocumentView=
+	 *        }} [options={}] The options overrides route options defined in
+	 *        the {@code routes.js} configuration file.
 	 * @return {Promise<Object<string, *>>} A promise resolved
 	 *         when the error has been handled and the response has been sent
 	 *         to the client, or displayed if used at the client side.
@@ -245,11 +285,26 @@ export default class Router {
 	 * @method handleError
 	 * @param {Object<string, (Error|string)>} params Parameters extracted from
 	 *        the current URL path and query.
-	 * @param {{onlyUpdate: boolean=, autoScroll: boolean=, serverSPA: boolean=}} [options={}]
-	 *        The options overrides route options defined in routes.js.
-	 * @return {Promise<Object<string, *>>} A promise resolved
-	 *         when the error has been handled and the response has been sent
-	 *         to the client, or displayed if used at the client side.
+	 * @param {{
+	 *          onlyUpdate: (
+	 *            boolean|
+	 *            function(
+	 *              (string|function(new: Controller, ...*)),
+	 *              (string|function(
+	 *                new: React.Component,
+	 *                Object<string, *>,
+	 *                ?Object<string, *>
+	 *              ))
+	 *            ): boolean
+	 *          )=,
+	 *          autoScroll: boolean=,
+	 *          serverSPA: boolean=,
+	 *          documentView: ?AbstractDocumentView=
+	 *        }} [options={}] The options overrides route options defined in
+	 *        the {@code routes.js} configuration file.
+	 * @return {Promise<Object<string, *>>} A promise resolved when the error
+	 *         has been handled and the response has been sent to the client,
+	 *         or displayed if used at the client side.
 	 */
 	handleError(params, options = {}) {}
 
@@ -260,8 +315,23 @@ export default class Router {
 	 * @method handleNotFound
 	 * @param {Object<string, (Error|string)>} params Parameters extracted from
 	 *        the current URL path and query.
-	 * @param {{onlyUpdate: boolean=, autoScroll: boolean=, allowSPA: boolean=}} [options={}]
-	 *        The options overrides route options defined in routes.js.
+	 * @param {{
+	 *          onlyUpdate: (
+	 *            boolean|
+	 *            function(
+	 *              (string|function(new: Controller, ...*)),
+	 *              (string|function(
+	 *                new: React.Component,
+	 *                Object<string, *>,
+	 *                ?Object<string, *>
+	 *              ))
+	 *            ): boolean
+	 *          )=,
+	 *          autoScroll: boolean=,
+	 *          allowSPA: boolean=,
+	 *          documentView: ?AbstractDocumentView=
+	 *        }} [options={}] The options overrides route options defined in
+	 *        the {@code routes.js} configuration file.
 	 * @return {Promise<Object<string, *>>} A promise resolved
 	 *         when the error has been handled and the response has been sent
 	 *         to the client, or displayed if used at the client side.
@@ -274,7 +344,7 @@ export default class Router {
 	 * failure at the server side.
 	 *
 	 * @method isClientError
-	 * @param {(ima.error.Error|Error)} reason The encountered error.
+	 * @param {(ImaError|Error)} reason The encountered error.
 	 * @return {boolean} {@code true} if the error was caused the action of the
 	 *         client.
 	 */
@@ -284,7 +354,7 @@ export default class Router {
 	 * Tests, if possible, whether the specified error lead to redirection.
 	 *
 	 * @method isRedirection
-	 * @param {(ima.error.Error|Error)} reason The encountered error.
+	 * @param {(ImaError|Error)} reason The encountered error.
 	 * @return {boolean} {@code true} if the error was caused the action of the
 	 *         redirection.
 	 */
