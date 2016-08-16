@@ -52,7 +52,7 @@ gulp.task('ima:compile', () => {
 					`$IMA.Loader.register('${moduleName}', [], function (_export, _context) {\n` +
 					`	'use strict';\n` +
 					`	return {\n` +
-					`		setters: [${dependencies.map(() => 'function () {}').join(', ')}],\n` +
+					`		setters: [],\n` +
 					`		execute: function () {\n` +
 					moduleExports.map(({ symbol, value }) => `			_export('${symbol}', exports.${symbol});\n`).join('') +
 					`		}\n` +
