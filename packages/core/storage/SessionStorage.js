@@ -1,23 +1,22 @@
-import ns from 'ima/namespace';
-import IMAError from 'ima/error/GenericError';
-import StorageInterface from 'ima/storage/Storage';
+import ns from '../namespace';
+import GenericError from '../error/GenericError';
+import Storage from './Storage';
 
 ns.namespace('ima.storage');
 
 /**
- * Implementation of the {@codelink ima.storage.Storage} interface that
- * relies on the native {@code sessionStorage} DOM storage for storing its
- * entries.
+ * Implementation of the {@codelink Storage} interface that relies on the
+ * native {@code sessionStorage} DOM storage for storing its entries.
  *
  * @class SessionStorage
- * @implements ima.storage.Storage
+ * @implements Storage
  * @namespace ima.storage
  * @module ima
  * @submodule ima.storage
  *
  * @requires SessionStorage
  */
-export default class SessionStorage extends StorageInterface {
+export default class SessionStorage extends Storage {
 	/**
 	 * Initializes the session storage.
 	 *
@@ -61,9 +60,9 @@ export default class SessionStorage extends StorageInterface {
 		try {
 			return JSON.parse(this._storage.getItem(key)).value;
 		} catch (e) {
-			throw new IMAError('ima.storage.SessionStorage.get: Failed to parse a ' +
-					`session storage item value identified by the key ` +
-					`${key}: ${e.message}`);
+			throw new GenericError('ima.storage.SessionStorage.get: Failed ' +
+					`to parse a session storage item value identified by ` +
+					`the key ${key}: ${e.message}`);
 		}
 	}
 
@@ -78,8 +77,8 @@ export default class SessionStorage extends StorageInterface {
 				value
 			}));
 		} catch (e) {
-			var storage = this._storage;
-			var isItemTooBig = storage.length === 0 ||
+			let storage = this._storage;
+			let isItemTooBig = storage.length === 0 ||
 					storage.length === 1 &&
 					storage.key(0) === key;
 
@@ -135,13 +134,13 @@ export default class SessionStorage extends StorageInterface {
 	 * @method _deleteOldestEntry
 	 */
 	_deleteOldestEntry() {
-		var oldestEntry = {
+		let oldestEntry = {
 			key: null,
 			created: Date.now() + 1
 		};
 
-		for (var key of this.keys()) {
-			var value = JSON.parse(this._storage.getItem(key));
+		for (let key of this.keys()) {
+			let value = JSON.parse(this._storage.getItem(key));
 			if (value.created < oldestEntry.created) {
 				oldestEntry = {
 					key,
@@ -216,7 +215,7 @@ class StorageIterator {
 			};
 		}
 
-		var key = this._storage.key(this._currentKeyIndex);
+		let key = this._storage.key(this._currentKeyIndex);
 		this._currentKeyIndex++;
 
 		return {

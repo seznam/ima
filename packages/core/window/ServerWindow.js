@@ -1,20 +1,20 @@
 // @server-side
 
-import ns from 'ima/namespace';
-import WindowInterface from 'ima/window/Window';
+import ns from '../namespace';
+import Window from './Window';
 
 ns.namespace('ima.window');
 
 /**
- * Server-side implementation of the {@code ima.window.Window} utility API.
+ * Server-side implementation of the {@code Window} utility API.
  *
  * @class ServerWindow
- * @implements ns.ima.window.Window
+ * @implements Window
  * @namespace ima.window
  * @module ima
  * @submodule ima.window
  */
-export default class ServerWindow extends WindowInterface {
+export default class ServerWindow extends Window {
 
 	/**
 	 * @inheritdoc

@@ -1,4 +1,4 @@
-import ns from 'ima/namespace';
+import ns from '../namespace';
 
 ns.namespace('ima.storage');
 
@@ -22,7 +22,7 @@ export default class Storage {
 	 * invoked on this instance.
 	 *
 	 * @method init
-	 * @return {ima.storage.Storage}
+	 * @return {Storage} This storage.
 	 */
 	init() {}
 
@@ -56,7 +56,7 @@ export default class Storage {
 	 * @method set
 	 * @param {string} key The key identifying the storage entry.
 	 * @param {*} value The storage entry value.
-	 * @return {ima.storage.Storage} This storage.
+	 * @return {Storage} This storage.
 	 */
 	set(key, value) {}
 
@@ -65,7 +65,7 @@ export default class Storage {
 	 *
 	 * @method delete
 	 * @param {string} key The key identifying the storage entry.
-	 * @return {ima.storage.Storage} This storage.
+	 * @return {Storage} This storage.
 	 */
 	delete(key) {}
 
@@ -73,7 +73,7 @@ export default class Storage {
 	 * Clears the storage of all entries.
 	 *
 	 * @method clear
-	 * @return {ima.storage.Storage} This storage.
+	 * @return {Storage} This storage.
 	 */
 	clear() {}
 

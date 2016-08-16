@@ -1,20 +1,20 @@
 // @client-side
 
-import ns from 'ima/namespace';
-import WindowInterface from 'ima/window/Window';
+import ns from '../namespace';
+import Window from './Window';
 
 ns.namespace('ima.window');
 
 /**
- * Client-side implementation of the {@code ima.window.Window} utility API.
+ * Client-side implementation of the {@code Window} utility API.
  *
  * @class ClientWindow
- * @implements ima.window.Window
+ * @implements Window
  * @namespace ima.window
  * @module ima
  * @submodule ima.window
  */
-export default class ClientWindow extends WindowInterface {
+export default class ClientWindow extends Window {
 
 	/**
 	 * @inheritdoc
@@ -46,9 +46,9 @@ export default class ClientWindow extends WindowInterface {
 
 				return true;
 			}
-		} catch (e) {
+		} catch (error) {
 			if ($Debug) {
-				console.warn('Session Storage is not accessible!', e);
+				console.warn('Session Storage is not accessible!', error);
 			}
 			return false;
 		}

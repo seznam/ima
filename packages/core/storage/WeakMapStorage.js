@@ -1,15 +1,15 @@
-import ns from 'ima/namespace';
-import MapStorage from 'ima/storage/MapStorage';
+import ns from '../namespace';
+import MapStorage from './MapStorage';
 
 ns.namespace('ima.storage');
 
 /**
- * A specialization of the {@codelink ima.storage.Map} storage mimicking the
- * native {@code WeakMap} using its internal garbage collector used once the
- * size of the storage reaches the configured threshold.
+ * A specialization of the {@codelink MapStorage} storage mimicking the native
+ * {@code WeakMap} using its internal garbage collector used once the size of
+ * the storage reaches the configured threshold.
  *
  * @class WeakMapStorage
- * @extends ima.storage.Map
+ * @extends MapStorage
  * @namespace ima.storage
  * @module ima
  * @submodule ima.storage
@@ -108,8 +108,8 @@ export default class WeakMapStorage extends MapStorage {
 	 * @method _discardExpiredEntries
 	 */
 	_discardExpiredEntries() {
-		for (var key of super.keys()) {
-			var targetReference = super.get(key);
+		for (let key of super.keys()) {
+			let targetReference = super.get(key);
 			if (!targetReference.target) { // the reference has died
 				super.delete(key);
 			}
