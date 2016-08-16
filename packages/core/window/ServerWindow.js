@@ -203,7 +203,7 @@ export default class ServerWindow extends Window {
 	 * @method createCustomEvent
 	 */
 	createCustomEvent(name, options) {
-		var dummyCustomEvent = { initCustomEvent: () => {}, detail: {} };
+		let dummyCustomEvent = { initCustomEvent: () => {}, detail: {} };
 
 		return Object.assign(dummyCustomEvent, options);
 	}
