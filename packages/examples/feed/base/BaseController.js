@@ -26,11 +26,11 @@ export default class BaseController extends AbstractController {
 	 */
 	setMetaParams(resolvedPromises, metaManager, router, dictionary, setting) {
 
-		var title = dictionary.get('home.seoTitle');
-		var description = dictionary.get('home.seoDescription');
-		var image = router.getDomain() + setting.$Static.image + setting.Images.fbShare;
+		let title = dictionary.get('home.seoTitle');
+		let description = dictionary.get('home.seoDescription');
+		let image = router.getDomain() + setting.$Static.image + setting.Images.fbShare;
 
-		var url = router.getUrl();
+		let url = router.getUrl();
 
 		metaManager.setTitle(title);
 

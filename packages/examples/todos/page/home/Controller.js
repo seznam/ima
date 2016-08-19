@@ -12,7 +12,7 @@ export default class Controller extends BaseController {
 	}
 
 	load() {
-		var filter;
+		let filter;
 		switch (this.params.filter) {
 			case 'active':
 				filter = false;
@@ -117,7 +117,7 @@ export default class Controller extends BaseController {
 		item.completed = !item.completed;
 		this._itemsService.update(item.id, item);
 
-		var items = this._itemsService.getAll(this.getState().filter);
+		let items = this._itemsService.getAll(this.getState().filter);
 
 		this.setState({
 			items: items,

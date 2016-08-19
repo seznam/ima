@@ -36,11 +36,11 @@ export default class BaseEntityFactory {
 	 * @return {Array<app.base.BaseEntity>}
 	 */
 	createEntityList(data) {
-		var array = data;
-		var entityList = [];
+		let array = data;
+		let entityList = [];
 
-		for (var arrayData of array) {
-			var entity = this.createEntity(arrayData);
+		for (let arrayData of array) {
+			let entity = this.createEntity(arrayData);
 			entityList.push(entity);
 		}
 

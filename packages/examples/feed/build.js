@@ -1,12 +1,12 @@
 module.exports = (() => {
 
-	var mainjs = ['./app/main.js'];
+	let mainjs = ['./app/main.js'];
 
-	var js = [
+	let js = [
 		'./app/!(assets|gulp)/**/!(*Spec).{js,jsx}'
 	];
 
-	var less = [
+	let less = [
 		'./app/assets/less/trivia.less',
 		'./app/assets/less/rem.less',
 		'./app/assets/less/grid.less',
@@ -22,13 +22,13 @@ module.exports = (() => {
 		'./app/page/**/*.less'
 	];
 
-	var languages = {
+	let languages = {
 		en : [
 			'./app/**/*EN.json'
 		]
 	};
 
-	var vendors = {
+	let vendors = {
 		common: [
 			'ima'
 		],
@@ -43,7 +43,7 @@ module.exports = (() => {
 		]
 	};
 
-	var bundle = {
+	let bundle = {
 		js: [
 			'./build/static/js/polyfill.js',
 			'./build/static/js/shim.js',

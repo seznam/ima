@@ -1,7 +1,7 @@
 import RouteNames from 'ima/router/RouteNames';
 
-export var init = (ns, oc, config) => {
-	var router = oc.get('$Router');
+export let init = (ns, oc, config) => {
+	let router = oc.get('$Router');
 
 	router
 		.add('home', '/', ns.app.page.home.Controller, ns.app.page.home.View)

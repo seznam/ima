@@ -23,9 +23,9 @@ class View extends AbstractComponent {
 	}
 
 	render() {
-		var placeholder = this.utils.$Dictionary.get('home.placeHolder');
-		var sendText = this.utils.$Dictionary.get('home.sendText');
-		var radioCategories = this.getRadioCategories(
+		let placeholder = this.utils.$Dictionary.get('home.placeHolder');
+		let sendText = this.utils.$Dictionary.get('home.sendText');
+		let radioCategories = this.getRadioCategories(
 				this.props.categories, this.props.currentCategory);
 
 		return (
@@ -54,7 +54,7 @@ class View extends AbstractComponent {
 		}
 
 		if (categoryListEntity) {
-			var categories = categoryListEntity.getCategories();
+			let categories = categoryListEntity.getCategories();
 			return categories.map((category, index) => {
 				return (
 					<div
@@ -78,10 +78,10 @@ class View extends AbstractComponent {
 	}
 
 	sendText(e) {
-		var text = this.refs.textInput.value.trim();
+		let text = this.refs.textInput.value.trim();
 		this.refs.textInput.value = '';
 
-		var category = this.state.checkedCategory;
+		let category = this.state.checkedCategory;
 		if (!category) {
 			category = this.getDefaultCategory(this.props);
 		}
@@ -98,7 +98,7 @@ class View extends AbstractComponent {
 		}
 
 		if (props.categories) {
-			var categories = props.categories.getCategories();
+			let categories = props.categories.getCategories();
 			if (categories.length > 0) {
 				return categories[0];
 			}
@@ -108,8 +108,8 @@ class View extends AbstractComponent {
 	}
 
 	setCheckedCategory(e) {
-		var checkedCategoryId = parseInt(e.currentTarget.value, 10);
-		var category = this.props.categories.getCategoryById(checkedCategoryId);
+		let checkedCategoryId = parseInt(e.currentTarget.value, 10);
+		let category = this.props.categories.getCategoryById(checkedCategoryId);
 		this.setState({ checkedCategory: category });
 	}
 

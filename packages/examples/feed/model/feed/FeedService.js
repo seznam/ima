@@ -51,7 +51,7 @@ class FeedService extends BaseService {
 	 */
 	getLastItem(feedEntity) {
 		if (feedEntity && feedEntity.getItems().length > 0) {
-			var items = feedEntity.getItems();
+			let items = feedEntity.getItems();
 
 			return items[0];
 		}
@@ -83,7 +83,7 @@ class FeedService extends BaseService {
 	 * @return {app.model.feed.FeedEntity}
 	 */
 	addItemTofeed(feedEntity, itemEntity) {
-		var items = feedEntity.getItems();
+		let items = feedEntity.getItems();
 		items.push(itemEntity);
 		feedEntity.setItems(items);
 

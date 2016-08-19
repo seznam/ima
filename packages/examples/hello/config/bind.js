@@ -2,7 +2,7 @@ import HomeController from 'app/page/home/HomeController';
 import ErrorController from 'app/page/error/ErrorController';
 import NotFoundController from 'app/page/notFound/NotFoundController';
 
-export var init = (ns, oc, config) => {
+export let init = (ns, oc, config) => {
 
 	// Page Home
 	oc.inject(HomeController, []);

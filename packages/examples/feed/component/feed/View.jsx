@@ -19,8 +19,8 @@ class View extends AbstractComponent {
 	}
 
 	render() {
-		var entity = this.props.entity;
-		var Items = this.getFeedItems(entity);
+		let entity = this.props.entity;
+		let Items = this.getFeedItems(entity);
 
 		return (
 			<div className='feed'>
@@ -31,14 +31,14 @@ class View extends AbstractComponent {
 
 	getFeedItems(entity) {
 		if (entity) {
-			var FeedItem = ns.app.component.feedItem.View;
+			let FeedItem = ns.app.component.feedItem.View;
 
-			var categories = this.props.categories;
+			let categories = this.props.categories;
 
-			var items = entity.getItems();
-			var FeedItems = items.map((item) => {
+			let items = entity.getItems();
+			let FeedItems = items.map((item) => {
 
-				var category = categories.getCategoryById(item.getCategoryId());
+				let category = categories.getCategoryById(item.getCategoryId());
 
 				return (
 					<FeedItem

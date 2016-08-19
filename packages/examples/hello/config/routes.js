@@ -7,8 +7,8 @@ import ErrorView from 'app/page/error/ErrorView';
 import NotFoundController from 'app/page/notFound/NotFoundController';
 import NotFoundView from 'app/page/notFound/NotFoundView';
 
-export var init = (ns, oc, config) => {
-	var router = oc.get('$Router');
+export let init = (ns, oc, config) => {
+	let router = oc.get('$Router');
 
 	router
 		.add('home', '/', HomeController, HomeView)

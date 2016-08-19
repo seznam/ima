@@ -78,7 +78,7 @@ export default class BaseResource {
 	 * @return {Array<app.base.BaseEntity>}
 	 */
 	getEntity(id = null, data = {}, options = {}, force = false) {
-		var url = this._getUrl(id);
+		let url = this._getUrl(id);
 		options = this._getOptions(options);
 
 		if (force) {
@@ -103,7 +103,7 @@ export default class BaseResource {
 	 * @return {app.base.BaseEntity}
 	 */
 	createEntity(data = {}, options = {}) {
-		var url = this._getUrl();
+		let url = this._getUrl();
 		options = this._getOptions(options);
 
 		return this._http
@@ -124,7 +124,7 @@ export default class BaseResource {
 	 * @return {String}
 	 */
 	_getUrl(id = null) {
-		var url = this._apiUrl;
+		let url = this._apiUrl;
 
 		if (id) {
 			url += '/' + id;
@@ -153,7 +153,7 @@ export default class BaseResource {
 	 * @param {Object} data
 	 */
 	_clearCacheForRequest(url, data) {
-		var cacheKey = this._http.getCacheKey(url, data);
+		let cacheKey = this._http.getCacheKey(url, data);
 		this._cache.delete(cacheKey);
 	}
 }

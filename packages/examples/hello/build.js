@@ -1,10 +1,10 @@
-var mainjs = ['./app/main.js'];
+let mainjs = ['./app/main.js'];
 
-var js = [
+let js = [
 	'./app/!(assets|gulp)/**/!(*Spec|*E2E).{js,jsx}'
 ];
 
-var less = [
+let less = [
 	'./app/assets/less/app.less',
 	'./app/assets/less/setting.less',
 	'./app/assets/less/base.less',
@@ -14,7 +14,7 @@ var less = [
 	'./app/page/**/*.less'
 ];
 
-var languages = {
+let languages = {
 	cs: [
 		'./app/**/*CS.json'
 	],
@@ -23,7 +23,7 @@ var languages = {
 	]
 };
 
-var vendors = {
+let vendors = {
 	common: [
 		'ima'
 	],
@@ -38,7 +38,7 @@ var vendors = {
 	]
 };
 
-var bundle = {
+let bundle = {
 	js: [
 		'./build/static/js/polyfill.js',
 		'./build/static/js/shim.js',

@@ -33,7 +33,7 @@ class View extends AbstractComponent {
 	 * @return {*} The component's UI.
 	 */
 	render() {
-		var link = this.composeUrl();
+		let link = this.composeUrl();
 
 		return (
 			<a
@@ -71,8 +71,8 @@ class View extends AbstractComponent {
 	 * @param {SyntheticEvent} event The event wrapper by React.
 	 */
 	onShare(event) {
-		var url = this.composeUrl();
-		var options = {
+		let url = this.composeUrl();
+		let options = {
 			left: Math.floor((screen.width - POPUP_SIZE.width) / 2),
 			top: Math.floor((screen.height - POPUP_SIZE.height) / 2),
 			width: POPUP_SIZE.width,
@@ -88,13 +88,13 @@ class View extends AbstractComponent {
 			scrollbars: 1
 		};
 
-		var optionsString = Object.keys(options).map((optionName) => {
+		let optionsString = Object.keys(options).map((optionName) => {
 			return [optionName, options[optionName]].
 					map(encodeURIComponent).
 					join('=');
 		});
 
-		var openedWindow = window.open(url, 'twitter', optionsString);
+		let openedWindow = window.open(url, 'twitter', optionsString);
 
 		if (openedWindow) {
 			event.preventDefault();
@@ -116,13 +116,13 @@ class View extends AbstractComponent {
 	 *         on the Twitter.
 	 */
 	composeUrl() {
-		var query = {
+		let query = {
 			url: this.props.url,
 			text: this.props.text,
 			hashtags: this.props.hashTags.replace('#', '')
 		};
 
-		var queryString = Object.keys(query)
+		let queryString = Object.keys(query)
 			.map((parameterName) => {
 				return [
 					parameterName,

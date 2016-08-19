@@ -35,11 +35,11 @@ export default class BaseController extends AbstractController {
 	 * @param {Object} settings
 	 */
 	setMetaParams(loadedResources, metaManager, router, dictionary, settings) {
-		var title = 'IMA.js';
-		var description = 'IMA.js is isomorphic javascript application framework.';
-		var image = router.getDomain() + settings.$Static.image + '/imajs-share.png';
+		let title = 'IMA.js';
+		let description = 'IMA.js is isomorphic javascript application framework.';
+		let image = router.getDomain() + settings.$Static.image + '/imajs-share.png';
 
-		var url = router.getUrl();
+		let url = router.getUrl();
 
 		metaManager.setTitle(title);
 

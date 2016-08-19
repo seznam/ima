@@ -1,5 +1,5 @@
-var versionCoef = 1000 * 30;
-var version = '' + (Math.round(new Date().getTime() / versionCoef) * versionCoef);
+let versionCoef = 1000 * 60;
+let version = Math.round(new Date().getTime() / versionCoef).toString(36);
 
 module.exports = (() => {
 

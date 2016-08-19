@@ -21,15 +21,15 @@ class View extends AbstractComponent {
 	}
 
 	render() {
-		var label = this.utils.$Dictionary.get('home.share');
+		let label = this.utils.$Dictionary.get('home.share');
 
-		var TwitterButton = ns.app.component.tweetButton.View;
+		let TwitterButton = ns.app.component.tweetButton.View;
 
-		var item = this.props.item;
-		var category = this.props.category;
+		let item = this.props.item;
+		let category = this.props.category;
 
-		var active = this.props.active ? ' expanded' : '';
-		var postLink = this.getPostLink(item, category);
+		let active = this.props.active ? ' expanded' : '';
+		let postLink = this.getPostLink(item, category);
 
 		return (
 			<div className={'share' + (active)}>
@@ -93,18 +93,18 @@ class View extends AbstractComponent {
 	}
 
 	getMailShareLink(item) {
-		var category = this.props.category;
-		var categoryName = category ?
+		let category = this.props.category;
+		let categoryName = category ?
 				category.name : this.utils.$Dictionary.get('home.defaultPortal');
-		var query = {
+		let query = {
 			subject: this.utils.$Dictionary.get('home.shareMailSubject', {
 				PORTAL: categoryName
 			}),
 			body: this.getPlainTextItemContent(item)
 		};
-		var queryString = Object.keys(query)
+		let queryString = Object.keys(query)
 				.map((parameterName) => {
-					var parts = [parameterName, query[parameterName]];
+					let parts = [parameterName, query[parameterName]];
 					return parts.map(encodeURIComponent).join('=');
 				}).join('&');
 
@@ -113,7 +113,7 @@ class View extends AbstractComponent {
 
 	getPlainTextItemContent(item) {
 		if (item) {
-			var content = item.getContent();
+			let content = item.getContent();
 			return content.replace(/<[^>]*?>/g, '');
 		}
 		return '';
@@ -121,7 +121,7 @@ class View extends AbstractComponent {
 
 	getPostLink(item, category) {
 		if (item && category) {
-			var localLink = this.utils.$Router.link('post', {
+			let localLink = this.utils.$Router.link('post', {
 				category: category.getUrlName(),
 				itemId: item.getId()
 			});
@@ -142,7 +142,7 @@ class View extends AbstractComponent {
 	}
 
 	selectShareLink() {
-		var input = this.refs.shareLink;
+		let input = this.refs.shareLink;
 
 		if (input.setSelectionRange) {
 			input.setSelectionRange(0, input.value.length);

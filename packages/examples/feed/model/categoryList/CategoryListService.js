@@ -51,13 +51,13 @@ class CategoryListService extends BaseService {
 		return this._categoryListResource
 				.getEntity()
 				.then((categoryListEntity) => {
-					var categories = categoryListEntity.getCategories();
+					let categories = categoryListEntity.getCategories();
 
 					if (!urlName) {
 						return null;
 					}
 
-					for (var i = 0; i < categories.length; i++) {
+					for (let i = 0; i < categories.length; i++) {
 						if (categories[i].getUrlName() === urlName) {
 							return categories[i];
 						}

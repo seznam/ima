@@ -1,5 +1,5 @@
-export var init = (ns, oc, config) => { // jshint ignore:line
-	var versionStamp = `?version=${config.$Version}`;
+export let init = (ns, oc, config) => { // jshint ignore:line
+	let versionStamp = `?version=${config.$Version}`;
 
 	return {
 		prod: {

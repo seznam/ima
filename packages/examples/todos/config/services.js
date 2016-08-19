@@ -1,13 +1,13 @@
-export var init = (ns, oc, config) => { // jshint ignore:line
-	var $window = oc.get('$Window');
-	var $router = oc.get('$Router');
+export let init = (ns, oc, config) => { // jshint ignore:line
+	let $window = oc.get('$Window');
+	let $router = oc.get('$Router');
 
-	config.$IMA.fatalErrorHandler = (e) => {
-		console.error('FATAL ERROR HANDLER:', e);
+	config.$IMA.fatalErrorHandler = (error) => {
+		console.error('FATAL ERROR HANDLER:', error);
 	};
 
-	$window.bindEventListener($window.getWindow(), 'error', (e) => {
-		var error = e.error;
+	$window.bindEventListener($window.getWindow(), 'error', (event) => {
+		let error = event.error;
 
 		$router
 			.handleError({ error })

@@ -111,7 +111,7 @@ class Controller extends BaseController {
 	 * @param {Object} event The event fired by the Share component.
 	 */
 	onShareToggle(event) {
-		var state = this.getState();
+		let state = this.getState();
 
 		if (state.sharedItem === event.item) {
 			state.sharedItem = null;
@@ -134,7 +134,7 @@ class Controller extends BaseController {
 			._itemResource
 			.createEntity(data)
 			.then((item) => {
-				var state = this.getState();
+				let state = this.getState();
 				this._feedService.addItemTofeed(state.feed, item);
 				this.setState(state);
 			});

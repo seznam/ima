@@ -23,10 +23,10 @@ class View extends AbstractComponent {
 	}
 
 	render() {
-		var isExpandedClass = this.state.expanded ? ' expanded' : '';
-		var topBar = this.getFilterTopBar(this.props.currentCategory);
-		var categoryLinks = this.getCategoryLinks(this.props.categories);
-		var allLink = this.getAllLink();
+		let isExpandedClass = this.state.expanded ? ' expanded' : '';
+		let topBar = this.getFilterTopBar(this.props.currentCategory);
+		let categoryLinks = this.getCategoryLinks(this.props.categories);
+		let allLink = this.getAllLink();
 
 		return (
 			<div className={'filter' + isExpandedClass}>
@@ -40,8 +40,8 @@ class View extends AbstractComponent {
 	}
 
 	getFilterTopBar(currentCategory) {
-		var label = this.utils.$Dictionary.get('filter.label');
-		var currentCategoryLabel = currentCategory ?
+		let label = this.utils.$Dictionary.get('filter.label');
+		let currentCategoryLabel = currentCategory ?
 				currentCategory.getName() : this.utils.$Dictionary.get('filter.defaultCategory');
 
 		return (
@@ -55,7 +55,7 @@ class View extends AbstractComponent {
 	}
 
 	getAllLink() {
-		var allLabel = this.utils.$Dictionary.get('filter.all');
+		let allLabel = this.utils.$Dictionary.get('filter.all');
 
 		return (
 			<a href={this.utils.$Router.link('home')} className='all'>
@@ -72,7 +72,7 @@ class View extends AbstractComponent {
 				categories
 					.getCategories()
 					.map((category, index) => {
-						var link = this.utils.$Router.link('category', {
+						let link = this.utils.$Router.link('category', {
 							category: category.getUrlName()
 						});
 

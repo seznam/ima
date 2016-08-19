@@ -13,7 +13,7 @@ ns.namespace('app.component.document');
  */
 export default class DocumentView extends AbstractDocumentView {
 	render() {
-		var appCssFile = this.utils.$Settings.$Env !== 'dev' ? 'app.bundle.min.css' : 'app.css';
+		let appCssFile = this.utils.$Settings.$Env !== 'dev' ? 'app.bundle.min.css' : 'app.css';
 		appCssFile += `?version=${this.utils.$Settings.$Version}`;
 
 		return (
@@ -55,7 +55,7 @@ export default class DocumentView extends AbstractDocumentView {
 	}
 
 	getAsyncScripts() {
-		var scriptResources = `<script>
+		let scriptResources = `<script>
 			$IMA.Runner = $IMA.Runner || {};
 		 	$IMA.Runner.scripts = [
 				${this.utils.$Settings.$Page.$Render.scripts
@@ -65,7 +65,7 @@ export default class DocumentView extends AbstractDocumentView {
 			];
 		</script>`;
 
-		var scriptTags = this.utils.$Settings.$Page.$Render.scripts.map((script, index) => {
+		let scriptTags = this.utils.$Settings.$Page.$Render.scripts.map((script, index) => {
 			return `<script src='${script}' async onload='$IMA.Runner.load(this)'></script>`;
 		});
 

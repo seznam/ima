@@ -37,7 +37,7 @@ class FeedResource extends BaseResource {
 	 * @return {app.model.feed.FeedEntity} - Promise of feed entity
 	 */
 	getEntity(category = null, lastItem = null) {
-		var data = {};
+		let data = {};
 
 		if (category) {
 			data.category = category.getId();

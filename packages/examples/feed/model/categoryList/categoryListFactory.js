@@ -32,7 +32,7 @@ class CategoryListFactory extends BaseEntityFactory {
 	 * @return {app.model.categoryList.CategoryListEntity}
 	 */
 	createEntity(data) {
-		var categoryEntityList = this._categoryFactory.createEntityList(data.categories);
+		let categoryEntityList = this._categoryFactory.createEntityList(data.categories);
 
 		return super.createEntity({ _id: 'categories', categories: categoryEntityList });
 	}

@@ -19,17 +19,17 @@ class View extends AbstractComponent {
 	}
 
 	render() {
-		var DateComponentDiv = ns.app.component.date.View;
-		var ShareDiv = ns.app.component.share.View;
+		let DateComponentDiv = ns.app.component.date.View;
+		let ShareDiv = ns.app.component.share.View;
 
-		var entity = this.props.entity;
-		var category = this.props.category;
+		let entity = this.props.entity;
+		let category = this.props.category;
 
-		var sharedItemActive = this.props.sharedItem === entity;
-		var singleItemClass = this.props.singleItem ? ' single-item' : '';
+		let sharedItemActive = this.props.sharedItem === entity;
+		let singleItemClass = this.props.singleItem ? ' single-item' : '';
 
-		var icon = this.getIcon(category);
-		var hashTag = this.getHashTag(category);
+		let icon = this.getIcon(category);
+		let hashTag = this.getHashTag(category);
 
 		return (
 			<div className={'feed-item' + singleItemClass}>
@@ -67,7 +67,7 @@ class View extends AbstractComponent {
 
 	getHashTag(category) {
 		if (category) {
-			var link = this.utils.$Router.link('category', { category: category.getUrlName() });
+			let link = this.utils.$Router.link('category', { category: category.getUrlName() });
 
 			return (
 				<a href={link}>{category.getHashTag()}</a>

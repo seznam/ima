@@ -1,4 +1,4 @@
-export var init = (ns, oc, config) => {
+export let init = (ns, oc, config) => {
 
 	return {
 		prod: {

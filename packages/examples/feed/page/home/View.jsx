@@ -17,10 +17,10 @@ class View extends AbstractComponent {
 
 	render() {
 
-		var TextInput = ns.app.component.textInput.View;
-		var Feed = ns.app.component.feed.View;
-		var Header = ns.app.component.header.View;
-		var Filter = ns.app.component.filter.View;
+		let TextInput = ns.app.component.textInput.View;
+		let Feed = ns.app.component.feed.View;
+		let Header = ns.app.component.header.View;
+		let Filter = ns.app.component.filter.View;
 
 		return (
 			<div className='l-homepage'>

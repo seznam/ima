@@ -32,7 +32,7 @@ class FeedFactory extends BaseEntityFactory {
 	 * @return {app.model.feed.FeedEntity}
 	 */
 	createEntity(data) {
-		var itemEntityList = this._itemFactory.createEntityList(data.items);
+		let itemEntityList = this._itemFactory.createEntityList(data.items);
 
 		return super.createEntity({ _id: 'feed', items: itemEntityList });
 	}

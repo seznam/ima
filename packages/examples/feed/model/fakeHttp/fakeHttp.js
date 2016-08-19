@@ -96,15 +96,15 @@ class FakeHttp {
 	 */
 	get(url, data = {}) {
 		// Universal API BASE URL
-		var apiUrl = url.replace(this._apiBaseUrl, '');
+		let apiUrl = url.replace(this._apiBaseUrl, '');
 
 		switch (apiUrl) {
 			case '/items':
-				var items = this.items;
+				let items = this.items;
 
 				if (data.id) {
-					var id = Number(data.id);
-					var singleItem = this.items.filter((item) => {
+					let id = Number(data.id);
+					let singleItem = this.items.filter((item) => {
 						return item._id === id;
 					});
 					if (singleItem[0]) {
@@ -134,7 +134,7 @@ class FakeHttp {
 	 * return {Object} - Json object with all items.
 	 */
 	post(url, data = {}) {
-		var apiUrl = url.replace(this._apiBaseUrl, '');
+		let apiUrl = url.replace(this._apiBaseUrl, '');
 
 		switch (apiUrl) {
 			case '/items':

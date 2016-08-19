@@ -14,9 +14,9 @@ ns.namespace('app.page.error');
 class View extends AbstractComponent {
 
 	render() {
-		var error = this.props.error || {};
-		var message = error.message || '';
-		var stack = error.stack || '';
+		let error = this.props.error || {};
+		let message = error.message || '';
+		let stack = error.stack || '';
 
 		return (
 			<div className='l-error'>

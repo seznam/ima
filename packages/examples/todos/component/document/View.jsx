@@ -39,7 +39,7 @@ export default class View extends AbstractDocumentView {
 	}
 
 	getAsyncScripts() {
-		var scriptResources = `<script>
+		let scriptResources = `<script>
 			$IMA.Runner = $IMA.Runner || {};
 		 	$IMA.Runner.scripts = [
 				${this.utils.$Settings.$Page.$Render.scripts
@@ -49,7 +49,7 @@ export default class View extends AbstractDocumentView {
 			];
 		</script>`;
 
-		var scriptTags = this.utils.$Settings.$Page.$Render.scripts.map((script, index) => {
+		let scriptTags = this.utils.$Settings.$Page.$Render.scripts.map((script, index) => {
 			return `<script src="${script}" async onload="$IMA.Runner.load(this)"></script>`;
 		});
 

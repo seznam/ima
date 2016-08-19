@@ -1,10 +1,10 @@
-var mainjs = ['./app/main.js'];
+let mainjs = ['./app/main.js'];
 
-var js = [
+let js = [
 	'./app/!(assets|gulp)/**/!(*Spec).{js,jsx}'
 ];
 
-var less = [
+let less = [
 	'./app/assets/less/app.less',
 	'./app/assets/bower/todomvc-common/base.css',
 	'./app/assets/bower/todomvc-app-css/index.css',
@@ -12,13 +12,13 @@ var less = [
 	'./app/page/**/*.less'
 ];
 
-var languages = {
+let languages = {
 	en : [
 		'./app/**/*EN.json'
 	]
 };
 
-var vendors = {
+let vendors = {
 	common: [
 		'ima'
 	],
@@ -33,7 +33,7 @@ var vendors = {
 	]
 };
 
-var bundle = {
+let bundle = {
 	js: [
 		'./build/static/js/polyfill.js',
 		'./build/static/js/shim.js',

@@ -19,9 +19,9 @@ class View extends AbstractComponent {
 	}
 
 	render() {
-		var date = this.props.date || new Date();
+		let date = this.props.date || new Date();
 
-		var formattedDate = this.utils.$Dictionary.get('home.dateFormat', {
+		let formattedDate = this.utils.$Dictionary.get('home.dateFormat', {
 			DATE: date.getDate(),
 			MONTH: date.getMonth() + 1,
 			YEAR: date.getFullYear()

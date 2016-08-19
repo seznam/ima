@@ -16,12 +16,12 @@ ns.namespace('app.page.detail');
 class View extends AbstractComponent {
 
 	render() {
-		var Header = ns.app.component.header.View;
+		let Header = ns.app.component.header.View;
 
-		var entity = this.props.item;
-		var category = this.props.category;
-		var item = this.getItem(entity, category);
-		var moreItemsButton = this.getMoreItemButton();
+		let entity = this.props.item;
+		let category = this.props.category;
+		let item = this.getItem(entity, category);
+		let moreItemsButton = this.getMoreItemButton();
 
 		return (
 			<div className='l-detailpage'>
@@ -38,7 +38,7 @@ class View extends AbstractComponent {
 
 	getItem(entity, category) {
 		if (entity && category) {
-			var FeedItem = ns.app.component.feedItem.View;
+			let FeedItem = ns.app.component.feedItem.View;
 
 			return (
 				<FeedItem
@@ -54,8 +54,8 @@ class View extends AbstractComponent {
 	}
 
 	getMoreItemButton() {
-		var buttonTitle = this.utils.$Dictionary.get('detail.moreItemsButtonTitle');
-		var link = this.utils.$Dictionary.get('detail.moreItemsButtonLink');
+		let buttonTitle = this.utils.$Dictionary.get('detail.moreItemsButtonTitle');
+		let link = this.utils.$Dictionary.get('detail.moreItemsButtonLink');
 
 		return <a href={link} id='more-items-button' className='more-items button'>{buttonTitle}</a>;
 	}
