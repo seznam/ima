@@ -20,14 +20,6 @@ gulp.task('app:build', function (callback) {
 	);
 });
 
-gulp.task('ima:build', function (callback) {
-	return runSequence(
-		'Es6ToEs5:ima',
-		'server:hotreload',
-		callback
-	);
-});
-
 gulp.task('vendor:build', function (callback) {
 	return runSequence(
 		'Es6ToEs5:vendor',

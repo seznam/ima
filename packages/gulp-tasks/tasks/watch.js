@@ -16,28 +16,21 @@ module.exports = function (gulpConfig) {
 
 		runOnChange(files.app.watch, 'app:build');
 		runOnChange(files.vendor.watch, 'vendor:build');
-		runOnChange(files.ima.watch, 'ima:build');
 		runOnChange(files.less.watch, 'less');
 		runOnChange(files.server.watch, 'server:build');
 		runOnChange(files.locale.watch, 'locale:build');
 		runOnChange('./app/assets/static/**/*', 'copy:appStatic');
 
 		gulp.watch([
-			'./ima/**/*.js',
 			'./app/**/*.{js,jsx}',
 			'./build/static/js/locale/*.js'
-		]).on('change', function (e) {
-			sharedState.watchEvent = e;
+		]).on('change', function (event) {
+			sharedState.watchEvent = event;
 
-			if (e.type === 'deleted') {
-				if (cache.caches['Es6ToEs5:app'][e.path]) {
-					delete cache.caches['Es6ToEs5:app'][e.path];
-					remember.forget('Es6ToEs5:app', e.path);
-				}
-
-				if (cache.caches['Es6ToEs5:ima'][e.path]) {
-					delete cache.caches['Es6ToEs5:ima'][e.path];
-					remember.forget('Es6ToEs5:ima', e.path);
+			if (event.type === 'deleted') {
+				if (cache.caches['Es6ToEs5:app'][event.path]) {
+					delete cache.caches['Es6ToEs5:app'][event.path];
+					remember.forget('Es6ToEs5:app', event.path);
 				}
 			}
 		});
