@@ -1,5 +1,5 @@
 {
-	"title": "IMA.js • TodoMVC",
+	"title": "todos",
 	"new item placeholder": "What needs to be done?",
 	"toggle all label": "Mark all as complete",
 	"count": " item{COUNT, plural, 1 {} other {s} } left",
