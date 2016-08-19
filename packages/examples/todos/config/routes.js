@@ -2,7 +2,6 @@ import RouteNames from 'ima/router/RouteNames';
 
 export var init = (ns, oc, config) => {
 	var router = oc.get('$Router');
-	var ROUTER_CONSTANTS = oc.get('$ROUTER_CONSTANTS');
 
 	router
 		.add('home', '/', ns.app.page.home.Controller, ns.app.page.home.View)

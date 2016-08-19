@@ -9,7 +9,6 @@ import NotFoundView from 'app/page/notFound/NotFoundView';
 
 export var init = (ns, oc, config) => {
 	var router = oc.get('$Router');
-	var ROUTER_CONSTANTS = oc.get('$ROUTER_CONSTANTS');
 
 	router
 		.add('home', '/', HomeController, HomeView)
