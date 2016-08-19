@@ -33,10 +33,6 @@ var babelConfig = {
 		presets: ['es2015', 'react'],
 		plugins: ['transform-es2015-modules-systemjs', 'external-helpers-2']
 	},
-	ima: {
-		presets: ['es2015'],
-		plugins: ['transform-es2015-modules-systemjs', 'external-helpers-2']
-	},
 	server: {
 		presets: ['es2015'],
 		plugins: ['external-helpers-2']
@@ -50,7 +46,6 @@ if (['production', 'prod', 'test'].indexOf(process.env.NODE_ENV) > -1) {
 		'transform-react-constant-elements',
 		'transform-react-inline-elements'
 	]);
-	babelConfig.ima.presets = ['es2015-loose'];
 	$Debug = false;
 }
 
@@ -73,20 +68,20 @@ exports.vendorDependencies = {
 exports.tasks = {
 	dev: [
 		['copy:appStatic', 'copy:environment', 'shim', 'polyfill'],
-		['Es6ToEs5:app', 'Es6ToEs5:ima', 'Es6ToEs5:server', 'Es6ToEs5:vendor'],
+		['Es6ToEs5:app', 'Es6ToEs5:server', 'Es6ToEs5:vendor'],
 		['less', 'doc', 'locale', 'Es6ToEs5:vendor:client', 'Es6ToEs5:vendor:client:test'],
 		['server'],
 		['test:unit:karma:dev', 'watch']
 	],
 	build: [
 		['copy:appStatic', 'copy:environment', 'shim', 'polyfill'],
-		['Es6ToEs5:app', 'Es6ToEs5:ima', 'Es6ToEs5:server', 'Es6ToEs5:vendor'],
+		['Es6ToEs5:app', 'Es6ToEs5:server', 'Es6ToEs5:vendor'],
 		['less', 'doc', 'locale', 'Es6ToEs5:vendor:client', 'Es6ToEs5:vendor:client:test'],
 		['bundle:js:app', 'bundle:js:server', 'bundle:css']
 	],
 	spa: [
 		['copy:appStatic', 'shim', 'polyfill'], // copy public folder, concat shim
-		['Es6ToEs5:app', 'Es6ToEs5:ima', 'Es6ToEs5:vendor'], // compile app and vendor script
+		['Es6ToEs5:app', 'Es6ToEs5:vendor'], // compile app and vendor script
 		['less', 'doc', 'locale', 'Es6ToEs5:vendor:client'], // adjust vendors, compile less, create doc
 		['bundle:js:app', 'bundle:css', 'compile:spa'],
 		['clean:spa']
@@ -124,19 +119,6 @@ exports.files = {
 			client: './build/static/js/'
 		},
 		watch:['./app/**/*.{js,jsx}', './app/main.js', '!./app/environment.js']
-	},
-	ima: {
-		name: {
-			server: 'ima.server.js',
-			client: 'ima.client.js'
-		},
-		clearServerSide: ['production', 'prod', 'test'].indexOf(process.env.NODE_ENV) > -1,
-		src: [].concat(coreDependencies.js, coreDependencies.mainjs),
-		dest: {
-			server: './build/ima/',
-			client: './build/static/js/'
-		},
-		watch:['./node_modules/ima/**/*.{js,jsx}']
 	},
 	server: {
 		cwd: '/',
