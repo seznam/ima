@@ -25,6 +25,7 @@ var languages = {
 
 var vendors = {
 	common: [
+		'ima'
 	],
 
 	server: [
@@ -42,7 +43,6 @@ var bundle = {
 		'./build/static/js/polyfill.js',
 		'./build/static/js/shim.js',
 		'./build/static/js/vendor.client.js',
-		'./build/static/js/ima.client.js',
 		'./build/static/js/app.client.js'
 	],
 	css: [
