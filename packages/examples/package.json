@@ -20,5 +20,9 @@
 	"publishConfig": {
 		"registry": "http://registry.npmjs.org/"
 	},
-	"homepage": "https://github.com/seznam/IMA.js-examples"
+	"homepage": "https://github.com/seznam/IMA.js-examples",
+	"engines": {
+		"node": ">=6.4.0",
+		"npm": ">=3.10.3"
+	}
 }
