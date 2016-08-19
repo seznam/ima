@@ -1,7 +1,4 @@
-import ns from 'ima/namespace';
 import BaseController from 'app/base/Controller';
-
-ns.namespace('app.page.error');
 
 /**
  * The error page's controller.
@@ -38,5 +35,3 @@ export default class Controller extends BaseController {
 		};
 	}
 }
-
-ns.app.page.error.Controller = Controller;

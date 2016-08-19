@@ -1,13 +1,13 @@
-import ns from 'ima/namespace';
 import AbstractController from 'ima/controller/AbstractController';
-
-ns.namespace('app.base');
+import Dictionary from 'ima/dictionary/Dictionary';
+import MetaManager from 'ima/meta/MetaManager';
+import Router from 'ima/router/Router';
 
 /**
  * Base controller, providing elementary configuration of the meta manager.
  *
  * @class Controller
- * @extends ima.controller.AbstractController
+ * @extends AbstractController
  * @namespace app.base
  * @module BaseController
  * @submodule app.base
@@ -19,11 +19,11 @@ export default class Controller extends AbstractController {
 	 * @method setSeoParams
 	 * @param {Object<string, *>} loadedResources The resources that were
 	 *        loaded using the controller's {@code load()} method.
-	 * @param {ima.meta.MetaManager} metaManager The IMA meta manager, used to
-	 *        manage the meta information related to SEO.
-	 * @param {ima.router.Router} router The IMA router.
-	 * @param {ima.dictionary.Dictionary} dictionary The IMA dictionary,
-	 *        providing localized phrases.
+	 * @param {MetaManager} metaManager The IMA meta manager, used to manage
+	 *        the meta information related to SEO.
+	 * @param {Router} router The IMA router.
+	 * @param {Dictionary} dictionary The IMA dictionary, providing localized
+	 *        phrases.
 	 * @param {Object<string, *>} settings The application's configuration for
 	 *        the current environment.
 	 */
@@ -31,5 +31,3 @@ export default class Controller extends AbstractController {
 		metaManager.setTitle(dictionary.get('home.title'));
 	}
 }
-
-ns.app.base.Controller = Controller;

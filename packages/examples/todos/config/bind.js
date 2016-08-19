@@ -1,19 +1,20 @@
+import ListItemResource from 'app/model/listItem/Resource';
+import ListItemFactory from 'app/model/listItem/Factory';
+import ListItemService from 'app/model/listItem/Service';
+
+import ErrorController from 'app/page/error/Controller';
+import HomeController from 'app/page/home/Controller';
+import NotFoundController from 'app/page/notFound/Controller';
+
 export let init = (ns, oc, config) => {
 
-	oc.inject(ns.app.model.listItem.Resource, []);
-	oc.inject(ns.app.model.listItem.Factory, []);
-	oc.inject(ns.app.model.listItem.Service, [
-		ns.app.model.listItem.Resource,
-		ns.app.model.listItem.Factory
-	]);
+	oc.inject(ListItemResource, []);
+	oc.inject(ListItemFactory, []);
+	oc.inject(ListItemService, [ListItemResource, ListItemFactory]);
 
-	oc.inject(ns.app.page.home.Controller, [
-		ns.app.model.listItem.Service
-	]);
-
-	oc.inject(ns.app.page.error.Controller, []);
-
-	oc.inject(ns.app.page.notFound.Controller, []);
+	oc.inject(HomeController, [ListItemService]);
+	oc.inject(ErrorController, []);
+	oc.inject(NotFoundController, []);
 
 	oc.constant('$Utils', {
 		get $Router() { return oc.get('$Router'); },

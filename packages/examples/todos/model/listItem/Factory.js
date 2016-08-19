@@ -1,7 +1,4 @@
-import ns from 'ima/namespace';
 import Entity from './Entity';
-
-ns.namespace('app.model.listItem');
 
 export default class Factory {
 	createEntity(data) {
@@ -12,5 +9,3 @@ export default class Factory {
 		return data.map(entityData => this.createEntity(entityData));
 	}
 }
-
-ns.app.model.listItem.Factory = Factory;

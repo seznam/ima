@@ -1,8 +1,5 @@
-import ns from 'ima/namespace';
-import AbstractComponent from 'ima/page/AbstractComponent';
 import React from 'react';
-
-ns.namespace('app.page.error');
+import AbstractComponent from 'ima/page/AbstractComponent';
 
 export default class View extends AbstractComponent {
 	render() {
@@ -27,5 +24,3 @@ export default class View extends AbstractComponent {
 View.contextTypes = {
 	$Utils: React.PropTypes.object
 };
-
-ns.app.page.error.View = View;

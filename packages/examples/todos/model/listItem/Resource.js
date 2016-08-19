@@ -1,6 +1,3 @@
-import ns from 'ima/namespace';
-
-ns.namespace('app.model.listItem');
 
 export default class Resource {
 	constructor() {
@@ -74,5 +71,3 @@ export default class Resource {
 		return index;
 	}
 }
-
-ns.app.model.listItem.Resource = Resource;

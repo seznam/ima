@@ -1,8 +1,5 @@
-import ns from 'ima/namespace';
-import AbstractDocumentView from 'ima/page/AbstractDocumentView';
 import React from 'react';
-
-ns.namespace('app.component.document');
+import AbstractDocumentView from 'ima/page/AbstractDocumentView';
 
 export default class View extends AbstractDocumentView {
 	render() {
@@ -60,5 +57,3 @@ export default class View extends AbstractDocumentView {
 		return 'page';
 	}
 }
-
-ns.app.component.document.View = View;

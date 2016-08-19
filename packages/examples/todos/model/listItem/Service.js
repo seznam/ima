@@ -1,6 +1,3 @@
-import ns from 'ima/namespace';
-
-ns.namespace('app.model.listItem');
 
 export default class Service {
 	constructor(resource, factory) {
@@ -27,5 +24,3 @@ export default class Service {
 		this._resource.delete(id);
 	}
 }
-
-ns.app.model.listItem.Service = Service;

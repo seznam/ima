@@ -1,6 +1,3 @@
-import ns from 'ima/namespace';
-
-ns.namespace('app.model.listItem');
 
 export default class Entity {
 	constructor(data) {
@@ -13,5 +10,3 @@ export default class Entity {
 		this.completed;
 	}
 }
-
-ns.app.model.listItem.Entity = Entity;

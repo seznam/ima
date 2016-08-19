@@ -1,8 +1,5 @@
-import ns from 'ima/namespace';
 import GenericError from 'ima/error/GenericError';
 import BaseController from 'app/base/Controller';
-
-ns.namespace('app.page.home');
 
 export default class Controller extends BaseController {
 	constructor(itemsService) {
@@ -135,5 +132,3 @@ export default class Controller extends BaseController {
 		});
 	}
 }
-
-ns.app.page.home.Controller = Controller;

@@ -1,7 +1,4 @@
-import ns from 'ima/namespace';
 import BaseController from 'app/base/Controller';
-
-ns.namespace('app.page.notFound');
 
 /**
  * Controller for the "not found" error page.
@@ -37,5 +34,3 @@ export default class Controller extends BaseController {
 		};
 	}
 }
-
-ns.app.page.notFound.Controller = Controller;

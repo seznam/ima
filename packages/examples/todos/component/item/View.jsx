@@ -1,8 +1,5 @@
-import ns from 'ima/namespace';
-import AbstractComponent from 'ima/page/AbstractComponent';
 import React from 'react';
-
-ns.namespace('app.component.item');
+import AbstractComponent from 'ima/page/AbstractComponent';
 
 export default class View extends AbstractComponent {
 	constructor(props) {
@@ -91,4 +88,3 @@ export default class View extends AbstractComponent {
 	}
 }
 
-ns.app.component.item.View = View;

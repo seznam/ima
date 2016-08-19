@@ -1,9 +1,6 @@
-import ns from 'ima/namespace';
-import AbstractComponent from 'ima/page/AbstractComponent';
 import React from 'react';
 import Item from 'app/component/item/View';
-
-ns.namespace('app.page.home');
+import AbstractComponent from 'ima/page/AbstractComponent';
 
 export default class View extends AbstractComponent {
 	render() {
@@ -115,5 +112,3 @@ export default class View extends AbstractComponent {
 View.contextTypes = {
 	$Utils: React.PropTypes.object
 };
-
-ns.app.page.home.View = View;
