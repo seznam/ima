@@ -78,11 +78,11 @@ describe('ima.router.Route', function() {
 		expect(route.getName()).toEqual(name);
 	});
 
-	it('should be return route path', function() {
+	it('should return route path', function() {
 		expect(route.getPathExpression()).toEqual(pathExpression);
 	});
 
-	it('should be return route options', function() {
+	it('should return route options', function() {
 		expect(route.getOptions()).toEqual(options);
 	});
 

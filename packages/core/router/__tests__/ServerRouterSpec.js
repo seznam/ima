@@ -7,7 +7,6 @@ describe('ima.router.ServerRouter', function() {
 	var request = null;
 	var response = null;
 	var domain = 'http://locahlost:3002';
-	var ROUTER_CONSTANTS = oc.get('$ROUTER_CONSTANTS');
 
 	beforeEach(function() {
 		pageRenderer = oc.create('ima.page.manager.PageManager');
@@ -15,7 +14,7 @@ describe('ima.router.ServerRouter', function() {
 		dispatcher = oc.create('ima.event.Dispatcher');
 		request = oc.create('ima.router.Request');
 		response = oc.create('ima.router.Response');
-		router = oc.create('ima.router.ServerRouter', [pageRenderer, routeFactory, dispatcher, ROUTER_CONSTANTS, request, response]);
+		router = oc.create('ima.router.ServerRouter', [pageRenderer, routeFactory, dispatcher, request, response]);
 		router.init({ mode: router.MODE_SERVER, domain: domain });
 	});
 

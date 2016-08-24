@@ -6,14 +6,13 @@ describe('ima.router.ClientRouter', function() {
 	var win = null;
 	var host = 'locahlost:3002';
 	var protocol = 'http:';
-	var ROUTER_CONSTANTS = oc.get('$ROUTER_CONSTANTS');
 
 	beforeEach(function() {
 		pageRenderer = oc.create('ima.page.manager.PageManager');
 		routeFactory = oc.create('$RouteFactory');
 		dispatcher = oc.create('ima.event.Dispatcher');
 		win = oc.get('$Window');
-		router = oc.create('ima.router.ClientRouter', [pageRenderer, routeFactory, dispatcher, ROUTER_CONSTANTS, win]);
+		router = oc.create('ima.router.ClientRouter', [pageRenderer, routeFactory, dispatcher, win]);
 
 		spyOn(win, 'hasHistoryAPI')
 			.and

@@ -4,7 +4,6 @@ describe('ima.router.AbstractRouter', function() {
 	var pageManager = null;
 	var routeFactory = null;
 	var dispatcher = null;
-	var ROUTER_CONSTANTS = oc.get('$ROUTER_CONSTANTS');
 	var config = {
 		$Protocol: 'http:',
 		$Root: '/root',
@@ -19,6 +18,21 @@ describe('ima.router.AbstractRouter', function() {
 	};
 	var controller = 'BaseController';
 	var view = 'BaseView';
+	var RouteNames = null;
+	var RouteEvents = null;
+
+	beforeAll(function(done) {
+		$import('ima/router/RouteNames', 'ima/router/Events')
+			.then(function(importedModules) {
+				RouteNames = importedModules[0].default;
+				RouteEvents = importedModules[1].default;
+				done();
+			})
+			.catch(function(error) {
+				console.error(error);
+				done();
+			});
+	});
 
 	beforeEach(function() {
 		oc.bind('BaseController', function() {});
@@ -27,7 +41,7 @@ describe('ima.router.AbstractRouter', function() {
 		pageManager = oc.create('ima.page.manager.PageManager');
 		routeFactory = oc.create('$RouteFactory');
 		dispatcher = oc.create('ima.event.Dispatcher');
-		router = oc.create('ima.router.AbstractRouter', [pageManager, routeFactory, dispatcher, ROUTER_CONSTANTS]);
+		router = oc.create('ima.router.AbstractRouter', [pageManager, routeFactory, dispatcher]);
 
 		router.init(config);
 
@@ -85,7 +99,7 @@ describe('ima.router.AbstractRouter', function() {
 
 	describe('getCurrentRouteInfo method', function() {
 
-		var routeName ='link';
+		var routeName = 'link';
 		var path = '/link';
 		var route = null;
 		var params = {};
@@ -119,13 +133,14 @@ describe('ima.router.AbstractRouter', function() {
 				.and
 				.returnValue(params);
 
-			expect(router.getCurrentRouteInfo()).toEqual({route: route, params: params, path: '/link'});
+			expect(router.getCurrentRouteInfo())
+				.toEqual({ route: route, params: params, path: '/link' });
 		});
 	});
 
 	describe('link method', function() {
 
-		var routeName ='link';
+		var routeName = 'link';
 		var path = '/link';
 		var baseUrl = 'baseUrl';
 
@@ -150,15 +165,16 @@ describe('ima.router.AbstractRouter', function() {
 				.and
 				.returnValue(false);
 
-			expect(function() {router.link('xxx', {});}).toThrow();
+			expect(function() {
+				router.link('xxx', {});
+			}).toThrow();
 		});
 	});
 
 	describe('route method', function() {
 
-		var routeName ='link';
+		var routeName = 'link';
 		var path = '/link';
-		var baseUrl = 'baseUrl';
 		var route = null;
 
 		beforeEach(function() {
@@ -211,13 +227,11 @@ describe('ima.router.AbstractRouter', function() {
 
 	describe('handleError method', function() {
 
-		var routeName = ROUTER_CONSTANTS.ROUTE_NAMES.ERROR;
 		var path = '/error';
-		var baseUrl = 'baseUrl';
 		var route = null;
 
 		beforeEach(function() {
-			route = routeFactory.createRoute(routeName, path, controller, view, options);
+			route = routeFactory.createRoute(RouteNames.ERROR, path, controller, view, options);
 		});
 
 		afterEach(function() {
@@ -268,13 +282,11 @@ describe('ima.router.AbstractRouter', function() {
 
 	describe('handleNotFound method', function() {
 
-		var routeName = ROUTER_CONSTANTS.ROUTE_NAMES.NOT_FOUND;
 		var path = '/not-found';
-		var baseUrl = 'baseUrl';
 		var route = null;
 
 		beforeEach(function() {
-			route = routeFactory.createRoute(routeName, path, controller, view, options);
+			route = routeFactory.createRoute(RouteNames.NOT_FOUND, path, controller, view, options);
 		});
 
 		afterEach(function() {
@@ -367,7 +379,7 @@ describe('ima.router.AbstractRouter', function() {
 
 	describe('_handle method', function() {
 
-		var routeName ='routeName';
+		var routeName = 'routeName';
 		var routePath = '/routePath';
 		var route = null;
 
@@ -417,7 +429,7 @@ describe('ima.router.AbstractRouter', function() {
 
 			router._handle(route, params, options);
 
-			expect(dispatcher.fire).toHaveBeenCalledWith(router.EVENTS.BEFORE_HANDLE_ROUTE, data, true);
+			expect(dispatcher.fire).toHaveBeenCalledWith(RouteEvents.BEFORE_HANDLE_ROUTE, data, true);
 		});
 
 		it('should fire ns.ima.EVENTS.AFTER_HANDLE_ROUTE', function(done) {
@@ -441,7 +453,7 @@ describe('ima.router.AbstractRouter', function() {
 					var data = { route: route, params: params, path: path, response: response, options: options };
 
 					expect(dispatcher.fire)
-						.toHaveBeenCalledWith(router.EVENTS.AFTER_HANDLE_ROUTE, data, true);
+						.toHaveBeenCalledWith(RouteEvents.AFTER_HANDLE_ROUTE, data, true);
 
 					done();
 				});
@@ -468,7 +480,7 @@ describe('ima.router.AbstractRouter', function() {
 					var data = { route: route, params: params, path: path, response: Object.assign({}, response, params), options: options };
 
 					expect(dispatcher.fire)
-						.toHaveBeenCalledWith(router.EVENTS.AFTER_HANDLE_ROUTE, data, true);
+						.toHaveBeenCalledWith(RouteEvents.AFTER_HANDLE_ROUTE, data, true);
 
 					done();
 				});
@@ -510,7 +522,7 @@ describe('ima.router.AbstractRouter', function() {
 			router
 				._handle(route, params, options)
 				.then(function(handleResponse) {
-					expect(handleResponse).toEqual(Object.assign({},response, params));
+					expect(handleResponse).toEqual(Object.assign({}, response, params));
 					done();
 				});
 		});
@@ -524,7 +536,7 @@ describe('ima.router.AbstractRouter', function() {
 		var path = '/path';
 
 		beforeEach(function() {
-			router = oc.create('ima.router.AbstractRouter', [pageManager, routeFactory, dispatcher, ROUTER_CONSTANTS]);
+			router = oc.create('ima.router.AbstractRouter', [pageManager, routeFactory, dispatcher]);
 		});
 
 		it('should clear root from path', function() {

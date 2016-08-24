@@ -74,7 +74,7 @@ export default class Router {
 	 *            ): boolean
 	 *          )=,
 	 *          autoScroll: boolean=,
-	 *          allowServeSPA: boolean=,
+	 *          allowSPA: boolean=,
 	 *          documentView: ?AbstractDocumentView=
 	 *        }=} options
 	 *        Additional route options, specified how the navigation to the
@@ -89,7 +89,7 @@ export default class Router {
 	 *        The {@code autoScroll} flag signals whether the page should be
 	 *        scrolled to the top when the navigation takes place. This flag is
 	 *        enabled by default.
-	 *        The {@code allowServeSPA} flag can be used to make the route
+	 *        The {@code allowSPA} flag can be used to make the route
 	 *        always served from the server and never using the SPA page even
 	 *        if the server is overloaded. This is useful for routes that use
 	 *        different document views (specified by the {@code documentView}

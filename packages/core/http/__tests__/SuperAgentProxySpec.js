@@ -10,10 +10,22 @@ describe('ima.http.SuperAgentProxy', function() {
 	var superAgent = null;
 
 	var data = {};
-	var options = {ttl: 3600000, timeout: 2000, repeatRequest: 1, headers: [], withCredentials: true};
-	var HTTP_STATUS_CODE = oc.get('$HTTP_STATUS_CODE');
+	var options = { ttl: 3600000, timeout: 2000, repeatRequest: 1, headers: [], withCredentials: true };
 	var httpUrlTransformer = oc.get('$HttpUrlTransformer');
 	var windowHelper = oc.get('$Window');
+	var HttpStatusCode = null;
+
+	beforeAll(function(done) {
+		$import('ima/http/StatusCode')
+			.then(function(importedModule) {
+				HttpStatusCode = importedModule.default;
+				done();
+			})
+			.catch(function(error) {
+				console.error(error);
+				done();
+			});
+	});
 
 	beforeEach(function() {
 		superAgent = {
@@ -39,7 +51,7 @@ describe('ima.http.SuperAgentProxy', function() {
 				return this;
 			}
 		};
-		proxy = oc.create('ima.http.SuperAgentProxy', [superAgent, HTTP_STATUS_CODE, httpUrlTransformer, windowHelper]);
+		proxy = oc.create('ima.http.SuperAgentProxy', [superAgent, httpUrlTransformer, windowHelper]);
 
 		jasmine.clock().install();
 	});
@@ -68,19 +80,22 @@ describe('ima.http.SuperAgentProxy', function() {
 						expect(result.body).toEqual(response.body);
 						done();
 					})
-					.catch(function(e){console.log(e); done();});
+					.catch(function(error) {
+						console.log(error);
+						done();
+					});
 			});
 
 			it('should reject promise for Timeout error', function(done) {
 				spyOn(superAgent, 'end')
 					.and
 					.callFake(function(callback) {
-						return callback({timeout: options.timeout});
+						return callback({ timeout: options.timeout });
 					});
 
 				proxy.request(method, apiUrl, data, options)
-					.then(function(){}, function(error){
-						expect(error.status).toEqual(HTTP_STATUS_CODE.TIMEOUT);
+					.then(function() {}, function(error) {
+						expect(error.status).toEqual(HttpStatusCode.TIMEOUT);
 						done();
 					});
 			});
@@ -95,8 +110,8 @@ describe('ima.http.SuperAgentProxy', function() {
 
 
 				proxy.request(method, apiUrl, data, options)
-					.then(function() {},function(error){
-						expect(error.status).toEqual(HTTP_STATUS_CODE.TIMEOUT);
+					.then(function() {}, function(error) {
+						expect(error.status).toEqual(HttpStatusCode.TIMEOUT);
 						done();
 					});
 			});
@@ -109,8 +124,8 @@ describe('ima.http.SuperAgentProxy', function() {
 					});
 
 				proxy.request(method, apiUrl, data, options)
-					.then(function() {}, function(error){
-						expect(error.status).toEqual(HTTP_STATUS_CODE.FORBIDDEN);
+					.then(function() {}, function(error) {
+						expect(error.status).toEqual(HttpStatusCode.FORBIDDEN);
 						done();
 					});
 			});
@@ -119,12 +134,12 @@ describe('ima.http.SuperAgentProxy', function() {
 				spyOn(superAgent, 'end')
 					.and
 					.callFake(function(callback) {
-						return callback({status: 403});
+						return callback({ status: 403 });
 					});
 
 				proxy.request(method, apiUrl, data, options)
-					.then(function() {},function(error){
-						expect(error.status).toEqual(HTTP_STATUS_CODE.FORBIDDEN);
+					.then(function() {}, function(error) {
+						expect(error.status).toEqual(HttpStatusCode.FORBIDDEN);
 						done();
 					});
 			});
@@ -133,12 +148,12 @@ describe('ima.http.SuperAgentProxy', function() {
 				spyOn(superAgent, 'end')
 					.and
 					.callFake(function(callback) {
-						return callback({status: 404});
+						return callback({ status: 404 });
 					});
 
 				proxy.request(method, apiUrl, data, options)
-					.then(function() {},function(error){
-						expect(error.status).toEqual(HTTP_STATUS_CODE.NOT_FOUND);
+					.then(function() {}, function(error) {
+						expect(error.status).toEqual(HttpStatusCode.NOT_FOUND);
 						done();
 					});
 			});
@@ -147,12 +162,12 @@ describe('ima.http.SuperAgentProxy', function() {
 				spyOn(superAgent, 'end')
 					.and
 					.callFake(function(callback) {
-						return callback({status: 500});
+						return callback({ status: 500 });
 					});
 
 				proxy.request(method, apiUrl, data, options)
-					.then(function() {},function(error){
-						expect(error.status).toEqual(HTTP_STATUS_CODE.SERVER_ERROR);
+					.then(function() {}, function(error) {
+						expect(error.status).toEqual(HttpStatusCode.SERVER_ERROR);
 						done();
 					});
 			});
@@ -165,8 +180,8 @@ describe('ima.http.SuperAgentProxy', function() {
 					});
 
 				proxy.request(method, apiUrl, data, options)
-					.then(function() {},function(error){
-						expect(error.status).toEqual(HTTP_STATUS_CODE.SERVER_ERROR);
+					.then(function() {}, function(error) {
+						expect(error.status).toEqual(HttpStatusCode.SERVER_ERROR);
 						done();
 					});
 			});
@@ -187,7 +202,10 @@ describe('ima.http.SuperAgentProxy', function() {
 						expect(proxy._setCredentials).toHaveBeenCalled();
 						done();
 					})
-					.catch(function(e){console.log(e); done();});
+					.catch(function(error) {
+						console.log(error);
+						done();
+					});
 			});
 		});
 	});

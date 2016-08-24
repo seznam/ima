@@ -154,13 +154,13 @@ export default class Route {
 		 *           ): boolean
 		 *         ),
 		 *         autoScroll: boolean,
-		 *         allowServeSPA: boolean,
+		 *         allowSPA: boolean,
 		 *         documentView: ?AbstractDocumentView
 		 *       }}
 		 * @default {
 		 *            onlyUpdate: false,
 		 *            autoScroll: true,
-		 *            allowServeSPA: true,
+		 *            allowSPA: true,
 		 *            documentView: null
 		 *          }
 		 */
@@ -168,7 +168,7 @@ export default class Route {
 			{
 				onlyUpdate: false,
 				autoScroll: true,
-				allowServeSPA: true,
+				allowSPA: true,
 				documentView: null
 			},
 			options
@@ -304,7 +304,7 @@ export default class Route {
 	 *             ): boolean
 	 *           ),
 	 *           autoScroll: boolean,
-	 *           allowServeSPA: boolean,
+	 *           allowSPA: boolean,
 	 *           documentView: ?AbstractDocumentView
 	 *         }}
 	 */

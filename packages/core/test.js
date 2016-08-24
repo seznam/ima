@@ -4,6 +4,7 @@ root.$IMA.Test = true;
 
 root.extend = extend;
 root.using = using;
+root.$import = $import;
 
 function using(values, func) { //jshint ignore:line
 	for (var i = 0, count = values.length; i < count; i++) {
@@ -17,4 +18,17 @@ function using(values, func) { //jshint ignore:line
 function extend(ChildClass, ParentClass) {
 	ChildClass.prototype = new ParentClass();
 	ChildClass.prototype.constructor = ChildClass;
+}
+
+function $import() {
+	var modules = Array.prototype.slice.call(arguments)
+		.map(function(path) {
+			return $IMA.Loader.import(path);
+		});
+
+	if (modules.length === 1) {
+		return modules[0];
+	}
+
+	return Promise.all(modules);
 }

@@ -15,6 +15,7 @@ import GenericError from '../error/GenericError';
 import HttpAgent from '../http/HttpAgent';
 import HttpAgentImpl from '../http/HttpAgentImpl';
 import HttpProxy from '../http/HttpProxy';
+import HttpStatusCode from '../http/StatusCode';
 import UrlTransformer from '../http/UrlTransformer';
 import MetaManager from '../meta/MetaManager';
 import MetaManagerImpl from '../meta/MetaManagerImpl';
@@ -169,12 +170,15 @@ export let init = (ns, oc, config) => { //jshint ignore:line
 		oc.provide(Router, ServerRouter, ['$PageManager', '$RouteFactory', '$Dispatcher', '$Request', '$Response']);
 	}
 	oc.bind('$Router', Router);
+	oc.constant('$RouteNames', RouteNames);
+	oc.constant('$RouterEvents', RouterEvents);
 
 	//SuperAgent
 	oc.bind('$HttpUrlTransformer', UrlTransformer);
 	oc.bind('$SuperAgentProxy', HttpProxy, ['$SuperAgent', '$HttpUrlTransformer', '$Window']);
 	oc.provide(HttpAgent, HttpAgentImpl, ['$SuperAgentProxy', '$Cache', '$CookieStorage', config.$Http]);
 	oc.bind('$Http', HttpAgent);
+	oc.constant('$HttpStatusCode', HttpStatusCode);
 
 	//Dev tools
 	oc.bind('$DevTool', DevTool, ['$PageManager', '$PageStateManager', '$Window', '$Dispatcher', '$EventBus']);
