@@ -1,4 +1,4 @@
-import AbstractController from 'ima/controller/AbstractController';
+import AbstractIMAController from 'ima/controller/AbstractController';
 import Dictionary from 'ima/dictionary/Dictionary';
 import MetaManager from 'ima/meta/MetaManager';
 import Router from 'ima/router/Router';
@@ -7,12 +7,12 @@ import Router from 'ima/router/Router';
  * Base controller, providing elementary configuration of the meta manager.
  *
  * @class Controller
- * @extends AbstractController
+ * @extends AbstractIMAController
  * @namespace app.base
  * @module BaseController
  * @submodule app.base
  */
-export default class Controller extends AbstractController {
+export default class AbstractController extends AbstractIMAController {
 	/**
 	 * Sets the SEO meta information to the provided meta manager.
 	 *

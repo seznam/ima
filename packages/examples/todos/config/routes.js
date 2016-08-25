@@ -1,10 +1,10 @@
 import RouteNames from 'ima/router/RouteNames';
-import ErrorController from 'app/page/error/Controller';
-import ErrorView from 'app/page/error/View';
-import HomeController from 'app/page/home/Controller';
-import HomeView from 'app/page/home/View';
-import NotFoundController from 'app/page/notFound/Controller';
-import NotFoundView from 'app/page/notFound/View';
+import ErrorController from '../page/error/ErrorController';
+import ErrorView from '../page/error/ErrorView';
+import HomeController from '../page/home/HomeController';
+import HomeView from '../page/home/HomeView';
+import NotFoundController from '../page/notFound/NotFoundController';
+import NotFoundView from '../page/notFound/NotFoundView';
 
 export let init = (ns, oc, config) => {
 	let router = oc.get('$Router');

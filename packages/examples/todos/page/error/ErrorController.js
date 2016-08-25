@@ -1,15 +1,15 @@
-import BaseController from 'app/base/Controller';
+import AbstractController from '../AbstractController';
 
 /**
  * The error page's controller.
  * 
- * @class Controller
- * @extends app.base.BaseController
+ * @class ErrorController
+ * @extends AbstractController
  * @namespace app.page.error
  * @module app
  * @submodule app.page
  */
-export default class Controller extends BaseController {
+export default class ErrorController extends AbstractController {
 	/**
 	 * Initializes the constructor.
 	 * 

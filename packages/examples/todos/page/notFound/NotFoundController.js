@@ -1,15 +1,15 @@
-import BaseController from 'app/base/Controller';
+import AbstractController from '../AbstractController';
 
 /**
  * Controller for the "not found" error page.
  *
- * @class Controller
- * @extends app.base.BaseController
+ * @class NotFoundController
+ * @extends AbstractController
  * @namespace app.page.notFound
  * @module app
  * @submodule app.page
  */
-export default class Controller extends BaseController {
+export default class NotFoundController extends AbstractController {
 	/**
 	 * Initializes the controller.
 	 *

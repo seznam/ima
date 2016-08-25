@@ -1,7 +1,7 @@
 import React from 'react';
 import AbstractDocumentView from 'ima/page/AbstractDocumentView';
 
-export default class View extends AbstractDocumentView {
+export default class DocumentView extends AbstractDocumentView {
 	render() {
 		let appCssFile = this.utils.$Settings.$Env !== 'dev' ? 'app.bundle.min.css' : 'app.css';
 		appCssFile += `?version=${this.utils.$Settings.$Version}`;

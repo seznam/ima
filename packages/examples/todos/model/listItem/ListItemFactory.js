@@ -1,4 +1,4 @@
-import Entity from './Entity';
+import Entity from './ListItemEntity';
 
 export default class Factory {
 	createEntity(data) {

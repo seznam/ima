@@ -1,7 +1,7 @@
 import React from 'react';
 import AbstractComponent from 'ima/page/AbstractComponent';
 
-export default class View extends AbstractComponent {
+export default class Item extends AbstractComponent {
 	constructor(props) {
 		super(props);
 

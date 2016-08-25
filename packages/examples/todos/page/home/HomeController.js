@@ -1,7 +1,7 @@
 import GenericError from 'ima/error/GenericError';
-import BaseController from 'app/base/Controller';
+import AbstractController from '../AbstractController';
 
-export default class Controller extends BaseController {
+export default class HomeController extends AbstractController {
 	constructor(itemsService) {
 		super();
 

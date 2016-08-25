@@ -1,4 +1,4 @@
-import DocumentView from 'app/component/document/View';
+import DocumentView from '../component/document/DocumentView';
 
 export let init = (ns, oc, config) => { // jshint ignore:line
 	let versionStamp = `?version=${config.$Version}`;

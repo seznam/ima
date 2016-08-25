@@ -1,7 +1,7 @@
-import React from 'react';
+import React, { PropTypes } from 'react';
 import AbstractComponent from 'ima/page/AbstractComponent';
 
-export default class View extends AbstractComponent {
+export default class ErrorView extends AbstractComponent {
 	render() {
 		let error = this.props.error || {};
 		let message = error.message || '';
@@ -19,8 +19,10 @@ export default class View extends AbstractComponent {
 			</div>
 		);
 	}
-}
 
-View.contextTypes = {
-	$Utils: React.PropTypes.object
-};
+	static get contextTypes() {
+		return {
+			$Utils: PropTypes.object
+		};
+	}
+}
