@@ -99,6 +99,36 @@ var setCommonRequestHeaders = (httpRequest, headers) => {
 	return httpRequest;
 };
 
+var sendJSONResponse = (req, res, error, response) => {
+	var status = 0;
+	var body = { Error: 'API error' };
+	var text = '';
+
+	if (error) {
+		status = error.status || 500;
+		text = error.response.text;
+	}
+
+	if (!error && response) {
+		status = response.status || 200;
+		body = response.body;
+		text= response.text;
+	}
+
+	if ((!body || typeof body === 'object' && Object.keys(body).length === 0) &&
+		typeof(text) === 'string' && response.text !== '') {
+		try {
+			logger.warn('API sent bad header of content-type. More info how you can to fix it: http://visionmedia.github.io/superagent/#parsing-response bodies');
+			body = JSON.parse(response.text);
+		} catch (error) {
+			logger.error('API response is invalid JSON.', { error });
+			body = {};
+		}
+	}
+
+	res.status(status).json(body);
+}
+
 
 module.exports = (environment, logger) => {
 
@@ -127,7 +157,8 @@ module.exports = (environment, logger) => {
 				.end((error, response) => {
 					if (error) {
 						logger.error(`API ERROR: ${req.method} ${proxyUrl} query: ` + JSON.stringify(req.query), { error });
-						res.status(error.status || 500).json({Error: 'API error', message: error.message});
+
+						sendJSONResponse(req, res, error, response);
 					} else if (response) {
 						var settedCookies = response.header['set-cookie'];
 
@@ -156,19 +187,7 @@ module.exports = (environment, logger) => {
 							});
 						}
 
-						var result = response.body;
-						if ((!result || typeof result === 'object' && Object.keys(result).length === 0) &&
-							typeof(response.text) === 'string' && response.text !== '') {
-							try {
-								logger.warn('API sent bad header of content-type. More info how you can to fix it: http://visionmedia.github.io/superagent/#parsing-response bodies');
-								result = JSON.parse(response.text);
-							} catch (error) {
-								logger.error('API response is invalid JSON.', { error });
-								result = {};
-							}
-						}
-
-						res.status(response.status).json(result);
+						sendJSONResponse(req, res, error, response);
 					}
 				});
 		};
