@@ -99,38 +99,48 @@ var setCommonRequestHeaders = (httpRequest, headers) => {
 	return httpRequest;
 };
 
-var sendJSONResponse = (req, res, error, response) => {
-	var status = 0;
-	var body = { Error: 'API error' };
-	var text = '';
-
-	if (error) {
-		status = error.status || 500;
-		text = error.response.text;
-	}
-
-	if (!error && response) {
-		status = response.status || 200;
-		body = response.body;
-		text= response.text;
-	}
-
-	if ((!body || typeof body === 'object' && Object.keys(body).length === 0) &&
-		typeof(text) === 'string' && response.text !== '') {
-		try {
-			logger.warn('API sent bad header of content-type. More info how you can to fix it: http://visionmedia.github.io/superagent/#parsing-response bodies');
-			body = JSON.parse(response.text);
-		} catch (error) {
-			logger.error('API response is invalid JSON.', { error });
-			body = {};
-		}
-	}
-
-	res.status(status).json(body);
-}
-
-
 module.exports = (environment, logger) => {
+
+	function getResponseData(error, response) {
+		var status = 0;
+		var body = {};
+		var text = '';
+
+		if (error) {
+			status = error.status || 500;
+			text = error.response.text;
+		}
+
+		if (!error && response) {
+			status = response.status || 200;
+			body = response.body;
+			text= response.text;
+		}
+
+		if ((!body || typeof body === 'object' && Object.keys(body).length === 0) &&
+				typeof(text) === 'string' && text !== '') {
+			try {
+				logger.warn('API sent bad header of content-type. More info how you can to fix it: http://visionmedia.github.io/superagent/#parsing-response bodies');
+				body = JSON.parse(text);
+			} catch (error) {
+				logger.error('API response is invalid JSON.', { error });
+				body = {};
+			}
+		}
+
+		return { status, body };
+	}
+
+	function sendJSONResponse(req, res, error, response) {
+		let { status, body } = getResponseData(error, response);
+
+		if (Object.keys(body).length === 0) {
+			body = { Error: 'API error' };
+		}
+
+		res.status(status).json(body);
+	}
+
 
 	return (proxyServer) => {
 		var router = express.Router();
