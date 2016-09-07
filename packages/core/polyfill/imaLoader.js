@@ -20,16 +20,18 @@
 			};
 		},
 		import: function(moduleName) {
+			return Promise.resolve(this.importSync(moduleName));
+		},
+		importSync: function(moduleName) {
 			if (!this.modules[moduleName]) {
-				throw new Error('$IMA.Loader.import: Module name ' +
+				throw new Error('$IMA.Loader.importSync: Module name ' +
 						moduleName + ' is not registered. Update your ' +
 						'build.js.');
 			}
 
-			return Promise.resolve(resolveModule(moduleName));
+			return resolveModule(moduleName);
 		},
 		initAllModules: function() {
-
 			Object.keys(modules).forEach(function(moduleName) {
 				resolveModule(moduleName);
 			});
