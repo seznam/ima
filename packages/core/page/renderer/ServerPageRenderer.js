@@ -77,13 +77,14 @@ export default class ServerPageRenderer extends AbstractPageRenderer {
 			return Promise.resolve(this._response.getResponseParams());
 		}
 
-		return (
-			this._Helper
-				.allPromiseHash(pageResources)
-				.then((fetchedResources) => {
-					return this._renderPage(controller, view, fetchedResources, routeOptions);
-				})
-		);
+		return this._Helper
+			.allPromiseHash(pageResources)
+			.then(fetchedResources => this._renderPage(
+				controller,
+				view,
+				fetchedResources,
+				routeOptions
+			));
 	}
 
 	/**
@@ -204,7 +205,11 @@ export default class ServerPageRenderer extends AbstractPageRenderer {
 
 			this._response
 				.status(controller.getHttpStatus())
-				.send(this._renderPageContentToString(controller, view, routeOptions));
+				.send(this._renderPageContentToString(
+					controller,
+					view,
+					routeOptions
+				));
 		}
 
 		return this._response.getResponseParams();
@@ -221,17 +226,22 @@ export default class ServerPageRenderer extends AbstractPageRenderer {
 	 * @return {string}
 	 */
 	_renderPageContentToString(controller, view, routeOptions) {
+		const ReactDOM = this._ReactDOM;
+		let factory = this._factory;
 		let props = this._generateViewProps(view, controller.getState());
-		let wrappedPageViewElement = this._factory.wrapView(props);
-		let pageMarkup = this._ReactDOM.renderToString(wrappedPageViewElement);
+		let wrappedPageViewElement = factory.wrapView(props);
+		let pageMarkup = ReactDOM.renderToString(wrappedPageViewElement);
 
-		let documentView = this._factory.getDocumentView(routeOptions.documentView || this._settings.$Page.$Render.documentView);
-		let documentViewFactory = this._factory.reactCreateFactory(documentView);
-		let appMarkup = this._ReactDOM.renderToStaticMarkup(documentViewFactory({
+		let documentView = factory.getDocumentView(
+			routeOptions.documentView ||
+			this._settings.$Page.$Render.documentView
+		);
+		let documentViewFactory = factory.reactCreateFactory(documentView);
+		let appMarkup = ReactDOM.renderToStaticMarkup(documentViewFactory({
 			page: pageMarkup,
 			revivalSettings: this._getRevivalSettings(),
 			metaManager: controller.getMetaManager(),
-			$Utils: this._factory.getUtils()
+			$Utils: factory.getUtils()
 		}));
 
 		return '<!doctype html>\n' + appMarkup;
