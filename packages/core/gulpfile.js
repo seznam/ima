@@ -1,11 +1,12 @@
 
+let del = require('del');
 let gulp = require('gulp');
 let babel = require('gulp-babel');
 let plumber = require('gulp-plumber');
 let sourcemaps = require('gulp-sourcemaps');
 let tap = require('gulp-tap');
 
-gulp.task('ima:compile', () => {
+gulp.task('compile', () => {
 	return (
 		gulp
 			.src([
@@ -43,10 +44,10 @@ gulp.task('ima:compile', () => {
 					match = exportMatcher.exec(fileContents);
 				}
 
-				// Note: there is no point in specifying the dependencies in the the
-				// IMA loader's register() method, as these will already be resolved
-				// by browserify's require() function used in the code before
-				// with the IMA loader.
+				// Note: there is no point in specifying the dependencies in
+				// the the IMA loader's register() method, as these will
+				// already be resolved by browserify's require() function used
+				// in the code before with the IMA loader.
 				file.contents = new Buffer(
 					fileContents + '\n\n' +
 					`$IMA.Loader.register('${moduleName}', [], function (_export, _context) {\n` +
@@ -61,6 +62,22 @@ gulp.task('ima:compile', () => {
 				);
 			}))
 			.pipe(sourcemaps.write())
-			.pipe(gulp.dest('.'))
+			.pipe(gulp.dest(__dirname + '/dist'))
 	);
+});
+
+gulp.task('copy-metadata', () => {
+	return gulp
+		.src([
+			__dirname + '/LICENSE',
+			__dirname + '/package.json',
+			__dirname + '/README.md'
+		])
+		.pipe(gulp.dest(__dirname + '/dist'));
+});
+
+gulp.task('clean', () => {
+	return del([
+		__dirname + '/dist'
+	]);
 });

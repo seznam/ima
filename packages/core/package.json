@@ -5,8 +5,10 @@
 	"main": "main.js",
 	"scripts": {
 		"test": "echo \"Error: no test specified\" && exit 1",
-		"postinstall": "npm install --ignore-scripts && npm run compile && rm -rf node_modules",
-		"compile": "node node_modules/gulp/bin/gulp.js ima:compile"
+		"publish-package": "npm run clean && npm run compile && npm run copy-metadata && npm publish dist",
+		"clean": "node node_modules/gulp/bin/gulp.js clean",
+		"compile": "node node_modules/gulp/bin/gulp.js compile",
+		"copy-metadata": "node node_modules/gulp/bin/gulp.js copy-metadata"
 	},
 	"keywords": [
 		"IMA",
@@ -39,6 +41,7 @@
 	"devDependencies": {
 		"babel-plugin-external-helpers-2": "^6.3.13",
 		"babel-preset-es2015": "^6.13.2",
+		"del": "^2.2.2",
 		"gulp": "^3.9.1",
 		"gulp-babel": "^6.1.2",
 		"gulp-plumber": "^1.1.0",
