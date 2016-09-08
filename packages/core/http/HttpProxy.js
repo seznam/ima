@@ -354,15 +354,15 @@ export default class HttpProxy {
 		}
 
 		var errorParams = {};
-		var statusCode = 0
+		var statusCode = 0;
 
 		if (error.timeout === params.options.timeout) {
-			statusCode = this.HTTP_STATUS_CODE.TIMEOUT;
+			statusCode = HttpStatusCode.TIMEOUT;
 		} else {
 			if (error.crossDomain) {
-				statusCode = this.HTTP_STATUS_CODE.FORBIDDEN;
+				statusCode = HttpStatusCode.FORBIDDEN;
 			} else {
-				statusCode = error.status || this.HTTP_STATUS_CODE.SERVER_ERROR;
+				statusCode = error.status || HttpStatusCode.SERVER_ERROR;
 			}
 		}
 
