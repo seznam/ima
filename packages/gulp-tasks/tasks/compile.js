@@ -267,6 +267,9 @@ gulp.task('Es6ToEs5:vendor:client:test', function () {
 					presets: babelConfig.vendor.presets,
 					plugins: babelConfig.vendor.plugins
 				}))
+				.external('react/addons')
+				.external('react/lib/ReactContext')
+				.external('react/lib/ExecutionEnvironment')
 				.bundle()
 				.pipe(source(files.vendor.name.test))
 				.pipe(gulp.dest(files.vendor.dest.test))
