@@ -184,12 +184,18 @@ export default class HttpProxy {
 	 *        {@code withCredentials} that indicates whether requests should be
 	 *        made using credentials such as cookies or authorization headers.
 	 * @param {number} status The HTTP response status code send by the server.
+	 * @param {object} body The body of HTTP error response (detailed information)
 	 * @return {Object<string, *>} An object containing both the details of the
 	 *         error and the request that lead to it.
 	 */
-	getErrorParams(method, url, data, options, status) {
+	getErrorParams(method, url, data, options, status, body) {
 		let params = this._composeRequestParams(method, url, data, options);
-		let error = { status };
+
+		if (typeof body === "undefined") {
+			var body = {};
+		}
+
+		let error = { status, body };
 
 		switch (status) {
 			case HttpStatusCode.TIMEOUT:
@@ -261,7 +267,7 @@ export default class HttpProxy {
 	_sendRequest(request, resolve, reject, params) {
 		request.end((error, response) => {
 			if (error) {
-				this._handleError(error, reject, params);
+				this._handleError(error, response, reject, params);
 			} else {
 				this._handleResponse(response, resolve, reject, params);
 			}
@@ -294,8 +300,18 @@ export default class HttpProxy {
 	 */
 	_handleResponse(response, resolve, reject, params) {
 		if (response.error) {
-			let errorParams = this.getErrorParams(params.method, params.url,
-				params.data, params.options, response.status);
+			if (! 'body' in response) {
+				response.body = {}
+			}
+
+			var errorParams = this.getErrorParams(
+				params.method,
+				params.url,
+				params.data,
+				params.options,
+				response.status,
+				response.body
+			);
 
 			reject(errorParams);
 		} else {
@@ -328,36 +344,36 @@ export default class HttpProxy {
 	 *        }} params An object representing the complete request parameters
 	 *        used to create and send the HTTP request.
 	 */
-	_handleError(error, reject, params) {
-		let errorParams = {};
+	_handleError(error, response, reject, params) {
+		if (typeof response === "undefined") {
+			var response = {}
+		}
+
+		if (! 'body' in response) {
+			response.body = {}
+		}
+
+		var errorParams = {};
+		var statusCode = 0;
 
 		if (error.timeout === params.options.timeout) {
-			errorParams = this.getErrorParams(
-				params.method,
-				params.url,
-				params.data,
-				params.options,
-				HttpStatusCode.TIMEOUT
-			);
+			statusCode = HttpStatusCode.TIMEOUT;
 		} else {
 			if (error.crossDomain) {
-				errorParams = this.getErrorParams(
-					params.method,
-					params.url,
-					params.data,
-					params.options,
-					HttpStatusCode.FORBIDDEN
-				);
+				statusCode = HttpStatusCode.FORBIDDEN;
 			} else {
-				errorParams = this.getErrorParams(
-					params.method,
-					params.url,
-					params.data,
-					params.options,
-					error.status || HttpStatusCode.SERVER_ERROR
-				);
+				statusCode = error.status || HttpStatusCode.SERVER_ERROR;
 			}
 		}
+
+		var errorParams = this.getErrorParams(
+			params.method,
+			params.url,
+			params.data,
+			params.options,
+			statusCode,
+			response.body
+		);
 
 		reject(errorParams);
 	}
