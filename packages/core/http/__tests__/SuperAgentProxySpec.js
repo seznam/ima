@@ -86,6 +86,20 @@ describe('ima.http.SuperAgentProxy', function() {
 					});
 			});
 
+			it('should return a "body" field in error object, when promise is rejected', function(done) {
+				spyOn(superAgent, 'end')
+					.and
+					.callFake(function(callback) {
+						return callback({ timeout: options.timeout });
+					});
+
+				proxy.request(method, apiUrl, data, options)
+					.then(function() {}, function(error) {
+						expect(error.body).toBeDefined();
+						done();
+					});
+			});
+
 			it('should reject promise for Timeout error', function(done) {
 				spyOn(superAgent, 'end')
 					.and
