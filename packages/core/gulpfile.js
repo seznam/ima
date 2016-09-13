@@ -14,6 +14,7 @@ gulp.task('compile', () => {
 				__dirname + '/namespace.js',
 				__dirname + '/Bootstrap.js',
 				__dirname + '/ObjectContainer.js',
+				__dirname + '/vendorLinker.js',
 				__dirname + '/!(node_modules|polyfill)/**/!(*Spec).js'
 			])
 			.pipe(plumber())
@@ -69,9 +70,11 @@ gulp.task('compile', () => {
 gulp.task('copy-metadata', () => {
 	return gulp
 		.src([
+			__dirname + '/build.js',
 			__dirname + '/LICENSE',
 			__dirname + '/package.json',
-			__dirname + '/README.md'
+			__dirname + '/README.md',
+			__dirname + '/test.js'
 		])
 		.pipe(gulp.dest(__dirname + '/dist'));
 });
