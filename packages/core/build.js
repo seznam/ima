@@ -1,6 +1,6 @@
 
 var js = [
-	'./node_modules/ima/**/!(vendorLinker|build|test|*Spec).{js,jsx}',
+	'./node_modules/ima/**/!(vendorLinker|gulpfile|build|test|*Spec).{js,jsx}',
 	'!./node_modules/ima/polyfill/*.js'
 ];
 
