@@ -2,6 +2,7 @@
 
 import ns from '../../namespace';
 import AbstractPageRenderer from './AbstractPageRenderer';
+import BlankManagedRootView from './BlankManagedRootView';
 import PageRenderer from './PageRenderer';
 import PageRendererFactory from './PageRendererFactory';
 import Cache from '../../cache/Cache';
@@ -221,14 +222,21 @@ export default class ServerPageRenderer extends AbstractPageRenderer {
 	 * @private
 	 * @method _renderPageContentToString
 	 * @param {AbstractController} controller
-	 * @param {React.Component} view
+	 * @param {function(new: React.Component)} view
 	 * @param {Object<string, *>} routeOptions
 	 * @return {string}
 	 */
 	_renderPageContentToString(controller, view, routeOptions) {
 		const ReactDOM = this._ReactDOM;
 		let factory = this._factory;
-		let props = this._generateViewProps(view, controller.getState());
+		let managedRootView =
+				routeOptions.managedRootView ||
+				this._settings.$Page.$Render.managedRootView ||
+				BlankManagedRootView;
+		let props = this._generateViewProps(
+			managedRootView,
+			Object.assign({}, controller.getState(), { $pageView: view })
+		);
 		let wrappedPageViewElement = factory.wrapView(props);
 		let pageMarkup = ReactDOM.renderToString(wrappedPageViewElement);
 

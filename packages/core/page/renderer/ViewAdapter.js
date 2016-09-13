@@ -14,6 +14,18 @@ ns.namespace('ima.page.renderer');
  */
 export default class ViewAdapter extends React.Component {
 	/**
+	 * @inheritdoc
+	 * @override
+	 * @property childContextTypes
+	 * @return {{$Utils: function(*): ?Error}}
+	 */
+	static get childContextTypes() {
+		return {
+			$Utils: React.PropTypes.object.isRequired
+		};
+	}
+
+	/**
 	 * Initializes the adapter component.
 	 *
 	 * @constructor
@@ -47,6 +59,7 @@ export default class ViewAdapter extends React.Component {
 
 	/**
 	 * @inheritdoc
+	 * @override
 	 * @method render
 	 */
 	render() {
@@ -63,9 +76,5 @@ export default class ViewAdapter extends React.Component {
 		};
 	}
 }
-
-ViewAdapter.childContextTypes = {
-	$Utils: React.PropTypes.object.isRequired
-};
 
 ns.ima.page.renderer.ViewAdapter = ViewAdapter;

@@ -58,7 +58,8 @@ export default class PageManager {
 	 *          ),
 	 *          autoScroll: boolean,
 	 *          allowSPA: boolean,
-	 *          documentView: ?AbstractDocumentView
+	 *          documentView: ?function(new: AbstractDocumentView),
+	 *          managedRootView: ?function(new: React.Component)
 	 *        }} options The current route options.
 	 * @param {Object<string, string>=} [params={}] The route parameters of the
 	 *        current route.
