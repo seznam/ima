@@ -23,12 +23,12 @@ function extend(ChildClass, ParentClass) {
 function $import() {
 	var modules = Array.prototype.slice.call(arguments)
 		.map(function(path) {
-			return $IMA.Loader.import(path);
+			return $IMA.Loader.importSync(path);
 		});
 
 	if (modules.length === 1) {
 		return modules[0];
 	}
 
-	return Promise.all(modules);
+	return modules;
 }
