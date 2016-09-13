@@ -70,9 +70,11 @@ gulp.task('compile', () => {
 gulp.task('copy-metadata', () => {
 	return gulp
 		.src([
+			__dirname + '/polyfill/*.js',
 			__dirname + '/build.js',
 			__dirname + '/LICENSE',
 			__dirname + '/package.json',
+			__dirname + '/.npmignore',
 			__dirname + '/README.md',
 			__dirname + '/test.js'
 		])
