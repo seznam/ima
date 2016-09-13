@@ -9,7 +9,8 @@ describe('ima.router.Route', function() {
 		onlyUpdate: false,
 		autoScroll: true,
 		allowSPA: true,
-		documentView: null
+		documentView: null,
+		managedRootView: null
 	};
 
 	beforeEach(function() {

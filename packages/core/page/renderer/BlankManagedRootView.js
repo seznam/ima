@@ -13,7 +13,7 @@ export default class BlankManagedRootView extends React.Component {
 
 	static get propTypes() {
 		return {
-			$pageView: PropTypes.instanceOf(React.Component)
+			$pageView: PropTypes.func
 		};
 	}
 
@@ -37,3 +37,5 @@ export default class BlankManagedRootView extends React.Component {
 		return React.createElement(pageView, this.props);
 	}
 }
+
+ns.ima.page.renderer.BlankManagedRootView = BlankManagedRootView;
