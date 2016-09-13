@@ -55,7 +55,8 @@ export default class PageRenderer {
 	 *          ),
 	 *          autoScroll: boolean,
 	 *          allowSPA: boolean,
-	 *          documentView: ?AbstractDocumentView
+	 *          documentView: ?function(new: AbstractDocumentView),
+	 *          managedRootView: ?function(new: React.Component)=
 	 *        }} routeOptions The current route options.
 	 * @return {Promise<{status: number, content: ?string}>} A promise that
 	 *         will resolve to information about the rendered page. The

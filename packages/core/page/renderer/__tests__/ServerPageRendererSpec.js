@@ -184,7 +184,7 @@ describe('ima.page.renderer.ServerPageRenderer', function() {
 	describe('_renderPageContentToString method', function() {
 
 		var utils = { $Utils: 'utils' };
-		var state = { state: 'state' };
+		var state = { state: 'state', $pageView: view };
 		var propsView = { view: view };
 		var props = Object.assign({}, state, utils, propsView);
 		var wrapedPageViewElement = { wrapElementView: 'wrapedPageViewElement' };
@@ -235,7 +235,7 @@ describe('ima.page.renderer.ServerPageRenderer', function() {
 		});
 
 		it('should generate view props from controller state', function() {
-			expect(pageRenderer._generateViewProps).toHaveBeenCalledWith(view, state);
+			expect(pageRenderer._generateViewProps).toHaveBeenCalledWith(ns.ima.page.renderer.BlankManagedRootView, state);
 		});
 
 		it('should wrap page view', function() {

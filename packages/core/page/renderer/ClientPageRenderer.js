@@ -2,6 +2,7 @@
 
 import ns from '../../namespace';
 import AbstractPageRenderer from './AbstractPageRenderer';
+import BlankManagedRootView from './BlankManagedRootView';
 import PageRenderer from './PageRenderer';
 import PageRendererFactory from './PageRendererFactory';
 import AbstractDocumentView from '../AbstractDocumentView';
@@ -81,9 +82,9 @@ export default class ClientPageRenderer extends AbstractPageRenderer {
 		let defaultPageState = separatedData.values;
 		let loadedPromises = separatedData.promises;
 
-		if (this._firstTime === false) {
+		if (!this._firstTime) {
 			controller.setState(defaultPageState);
-			this._renderToDOM(controller, view, routeOptions);
+			this._updateDOM(controller, view);
 			this._patchPromisesToState(controller, loadedPromises);
 		}
 
@@ -92,7 +93,7 @@ export default class ClientPageRenderer extends AbstractPageRenderer {
 				.allPromiseHash(loadedPromises)
 				.then((fetchedResources) => {
 
-					if (this._firstTime === true) {
+					if (this._firstTime) {
 						Object.assign(defaultPageState, fetchedResources);
 						controller.setState(defaultPageState);
 						this._renderToDOM(controller, view, routeOptions);
@@ -145,8 +146,9 @@ export default class ClientPageRenderer extends AbstractPageRenderer {
 	 */
 	unmount() {
 		if (this._reactiveView) {
-			this._ReactDOM.unmountComponentAtNode(this._viewContainer);
-			this._reactiveView = null;
+			this._reactiveView.setState({
+				$pageView: null
+			});
 		}
 	}
 
@@ -187,12 +189,31 @@ export default class ClientPageRenderer extends AbstractPageRenderer {
 	}
 
 	/**
-	 * Render React element to DOM for controller state.
+	 * Updates the rendered DOM using the provided controller's state and its
+	 * view.
+	 *
+	 * @private
+	 * @method _updateDOM
+	 * @param {ControllerDecorator} controller
+	 * @param {function(new: React.Component)} view
+	 */
+	_updateDOM(controller, view) {
+		if (!this._reactiveView) {
+			return;
+		}
+
+		this._reactiveView.setState(Object.assign({}, controller.getState(), {
+			$pageView: view
+		}));
+	}
+
+	/**
+	 * Renders the current route to DOM.
 	 *
 	 * @private
 	 * @method _renderToDOM
 	 * @param {ControllerDecorator} controller
-	 * @param {React.Component} view
+	 * @param {function(new: React.Component)} view
 	 * @param {{
 	 *          onlyUpdate: (
 	 *            boolean|
@@ -210,18 +231,27 @@ export default class ClientPageRenderer extends AbstractPageRenderer {
 	 *          ),
 	 *          autoScroll: boolean,
 	 *          allowSPA: boolean,
-	 *          documentView: ?AbstractDocumentView
+	 *          documentView: ?function(new: AbstractDocumentView),
+	 *          managedRootView: ?function(new: React.Component)
 	 *        }} routeOptions The current route options.
 	 */
 	_renderToDOM(controller, view, routeOptions) {
-		let props = this._generateViewProps(view, controller.getState());
+		let managedRootView =
+				routeOptions.managedRootView ||
+				this._settings.$Page.$Render.managedRootView ||
+				BlankManagedRootView;
+		let props = this._generateViewProps(
+			managedRootView,
+			Object.assign({}, controller.getState(), { $pageView: view })
+		);
 		let reactElementView = this._factory.wrapView(props);
 
 		let configuredDocumentView = routeOptions.documentView ||
-				this._settings.$Page.$Render.documentView;
+			this._settings.$Page.$Render.documentView;
 		let documentView = this._factory.getDocumentView(
 			configuredDocumentView
 		);
+
 		let masterElementId = documentView.masterElementId;
 		this._viewContainer = this._window.getElementById(masterElementId);
 

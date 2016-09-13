@@ -155,13 +155,15 @@ export default class Route {
 		 *         ),
 		 *         autoScroll: boolean,
 		 *         allowSPA: boolean,
-		 *         documentView: ?AbstractDocumentView
+		 *         documentView: ?function(new: AbstractDocumentView),
+		 *         managedRootView: ?function(new: React.Component)
 		 *       }}
 		 * @default {
 		 *            onlyUpdate: false,
 		 *            autoScroll: true,
 		 *            allowSPA: true,
-		 *            documentView: null
+		 *            documentView: null,
+		 *            managedRootView: null
 		 *          }
 		 */
 		this._options = Object.assign(
@@ -169,7 +171,8 @@ export default class Route {
 				onlyUpdate: false,
 				autoScroll: true,
 				allowSPA: true,
-				documentView: null
+				documentView: null,
+				managedRootView: null
 			},
 			options
 		);

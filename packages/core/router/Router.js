@@ -75,7 +75,8 @@ export default class Router {
 	 *          )=,
 	 *          autoScroll: boolean=,
 	 *          allowSPA: boolean=,
-	 *          documentView: ?AbstractDocumentView=
+	 *          documentView: ?function(new: AbstractDocumentView)=,
+	 *          managedRootView: ?function(new: React.Component)=
 	 *        }=} options
 	 *        Additional route options, specified how the navigation to the
 	 *        route will be handled.
