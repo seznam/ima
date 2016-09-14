@@ -225,29 +225,28 @@ export default class ServerPageRenderer extends AbstractPageRenderer {
 	 * @return {string}
 	 */
 	_renderPageContentToString(controller, view, routeOptions) {
-		const ReactDOM = this._ReactDOM;
-		let factory = this._factory;
-		let managedRootView =
-				routeOptions.managedRootView ||
-				this._settings.$Page.$Render.managedRootView ||
-				BlankManagedRootView;
+		let managedRootView = this._factory.getManagedRootView(
+			routeOptions.managedRootView ||
+			this._settings.$Page.$Render.managedRootView ||
+			BlankManagedRootView
+		);
 		let props = this._generateViewProps(
 			managedRootView,
 			Object.assign({}, controller.getState(), { $pageView: view })
 		);
-		let wrappedPageViewElement = factory.wrapView(props);
-		let pageMarkup = ReactDOM.renderToString(wrappedPageViewElement);
+		let wrappedPageViewElement = this._factory.wrapView(props);
+		let pageMarkup = this._ReactDOM.renderToString(wrappedPageViewElement);
 
-		let documentView = factory.getDocumentView(
+		let documentView = this._factory.getDocumentView(
 			routeOptions.documentView ||
 			this._settings.$Page.$Render.documentView
 		);
-		let documentViewFactory = factory.reactCreateFactory(documentView);
-		let appMarkup = ReactDOM.renderToStaticMarkup(documentViewFactory({
+		let documentViewFactory = this._factory.reactCreateFactory(documentView);
+		let appMarkup = this._ReactDOM.renderToStaticMarkup(documentViewFactory({
 			page: pageMarkup,
 			revivalSettings: this._getRevivalSettings(),
 			metaManager: controller.getMetaManager(),
-			$Utils: factory.getUtils()
+			$Utils: this._factory.getUtils()
 		}));
 
 		return '<!doctype html>\n' + appMarkup;
