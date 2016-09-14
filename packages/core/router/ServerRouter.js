@@ -1,5 +1,3 @@
-// @server-side
-
 import ns from '../namespace';
 import AbstractRouter from './AbstractRouter';
 import Request from './Request';

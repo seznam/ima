@@ -1,5 +1,3 @@
-// @server-side
-
 import ns from '../../namespace';
 import AbstractPageRenderer from './AbstractPageRenderer';
 import BlankManagedRootView from './BlankManagedRootView';

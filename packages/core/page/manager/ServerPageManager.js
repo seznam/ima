@@ -1,5 +1,3 @@
-// @server-side
-
 import ns from '../../namespace';
 import AbstractPageManager from './AbstractPageManager';
 import PageManager from './PageManager';
