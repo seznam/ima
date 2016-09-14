@@ -57,7 +57,7 @@
 		"react": "^15.3.1",
 		"react-addons-test-utils": "^15.3.1",
 		"react-dom": "^15.3.1",
-		"superagent": "^2.1.0"
+		"superagent": "^2.2.0"
 	},
 	"browserify": {
 		"transform": [
