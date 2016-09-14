@@ -20,15 +20,9 @@ function extend(ChildClass, ParentClass) {
 	ChildClass.prototype.constructor = ChildClass;
 }
 
-function $import() {
-	var modules = Array.prototype.slice.call(arguments)
-		.map(function(path) {
-			return $IMA.Loader.importSync(path);
-		});
+function $import(path, name) {
+	var module = $IMA.Loader.importSync(path);
+	name = name || 'default';
 
-	if (modules.length === 1) {
-		return modules[0];
-	}
-
-	return modules;
+	return module[name];
 }
