@@ -76,12 +76,9 @@ export default class PageRendererFactory {
 	 *         component.
 	 */
 	getDocumentView(documentView) {
-		var documentViewComponent;
-		if (typeof documentView === 'string') {
-			documentViewComponent = ns.get(documentView);
-		} else {
-			documentViewComponent = documentView;
-		}
+		let documentViewComponent = this._resolveClassConstructor(
+			documentView
+		);
 
 		if ($Debug) {
 			let componentPrototype = documentViewComponent.prototype;
@@ -93,6 +90,55 @@ export default class PageRendererFactory {
 		}
 
 		return documentViewComponent;
+	}
+
+	/**
+	 * Returns the class constructor of the specified managed root view
+	 * component. Managed root view may be specified as a namespace
+	 * path or as a class constructor.
+	 *
+	 * @method getManagedRootView
+	 * @param {(React.Component|string)} managedRootView The namespace path
+	 *        pointing to the managed root view component, or the constructor
+	 *        of the React component.
+	 * @return {React.Component} The constructor of the managed root view
+	 *         component.
+	 */
+	getManagedRootView(managedRootView) {
+		let managedRootViewComponent = this._resolveClassConstructor(
+			managedRootView
+		);
+
+		if ($Debug) {
+			let componentPrototype = managedRootViewComponent.prototype;
+
+			if (!(componentPrototype instanceof this._React.Component)) {
+				throw new Error('The managed root view component must extend ' +
+						'React.Component');
+			}
+		}
+
+		return managedRootViewComponent;
+	}
+
+	/**
+	 * Returns the class constructor of the specified view component.
+	 * View may be specified as a namespace path or as a class
+	 * constructor.
+	 *
+	 * @method _resolveClassConstructor
+	 * @param {(React.Component|string)} view The namespace path
+	 *        pointing to the view component, or the constructor
+	 *        of the React.Component.
+	 * @return {React.Component} The constructor of the view
+	 *         component.
+	 */
+	_resolveClassConstructor(view) {
+		if (typeof view === 'string') {
+			view = ns.get(view);
+		}
+
+		return view;
 	}
 
 	/**
