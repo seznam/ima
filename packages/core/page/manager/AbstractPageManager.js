@@ -41,7 +41,7 @@ export default class AbstractPageManager extends PageManager {
 		 * Factory used by the page manager to create instances of the
 		 * controller for the current route, and decorate the controllers and
 		 * page state managers.
-		 * 
+		 *
 		 * @protected
 		 * @property _pageFactory
 		 * @type {PageFactory}
@@ -51,7 +51,7 @@ export default class AbstractPageManager extends PageManager {
 
 		/**
 		 * The current renderer of the page.
-		 * 
+		 *
 		 * @protected
 		 * @property _pageRenderer
 		 * @type {PageRenderer}
@@ -61,7 +61,7 @@ export default class AbstractPageManager extends PageManager {
 
 		/**
 		 * The current page state manager.
-		 * 
+		 *
 		 * @protected
 		 * @property _pageStateManager
 		 * @type {PageStateManager}
@@ -71,7 +71,7 @@ export default class AbstractPageManager extends PageManager {
 
 		/**
 		 * Details of the currently managed page.
-		 * 
+		 *
 		 * @protected
 		 * @property _managedPage
 		 * @type {{
@@ -93,7 +93,8 @@ export default class AbstractPageManager extends PageManager {
 		 *           ),
 		 *           autoScroll: boolean,
 		 *           allowSPA: boolean,
- 		 *           documentView: ?AbstractDocumentView
+ 		 *           documentView: ?function(new: AbstractDocumentView),
+		 *           managedRootView: ?function(new: React.Component)
 		 *         },
 		 *         params: ?Object<string, string>,
 		 *         state: {
@@ -138,6 +139,10 @@ export default class AbstractPageManager extends PageManager {
 		this._deactivatePageSource();
 		this._destroyPageSource();
 
+		this._pageStateManager.clear();
+		this._clearComponentState(options);
+
+		this._clearManagedPageValue();
 		this._storeManagedPageValue(
 			controller,
 			view,
@@ -172,6 +177,8 @@ export default class AbstractPageManager extends PageManager {
 
 		this._deactivatePageSource();
 		this._destroyPageSource();
+
+		this._pageStateManager.clear();
 
 		this._clearManagedPageValue();
 	}
@@ -543,10 +550,6 @@ export default class AbstractPageManager extends PageManager {
 		if (controller) {
 			this._destroyExtensions();
 			this._destroyController();
-
-			this._pageStateManager.clear();
-			this._pageRenderer.unmount();
-			this._clearManagedPageValue();
 		}
 	}
 
@@ -575,6 +578,40 @@ export default class AbstractPageManager extends PageManager {
 		for (let extension of controller.getExtensions()) {
 			extension.destroy();
 			extension.setPageStateManager(null);
+		}
+	}
+
+	/**
+	 * The method clear state on current renderred component to DOM.
+	 *
+	 * @method _clearComponentState
+	 * @param {{
+	 *          onlyUpdate: (
+	 *            boolean|
+	 *            function(
+	 *              (string|function(new: ima.controller.Controller, ...*)),
+	 *              function(
+	 *                new: React.Component,
+	 *                Object<string, *>,
+	 *                ?Object<string, *>
+	 *              )
+	 *            ): boolean
+	 *          ),
+	 *          autoScroll: boolean,
+	 *          allowSPA: boolean,
+	 *          documentView: ?function(new: AbstractDocumentView),
+	 *          managedRootView: ?function(new: React.Component)
+	 *        }} options The current route options.
+	 */
+	_clearComponentState(options) {
+		let managedOptions = this._managedPage.options;
+
+		if (managedOptions &&
+			managedOptions.documentView === options.documentView &&
+				managedOptions.managedRootView === options.managedRootView) {
+			this._pageRenderer.clearState();
+		} else {
+			this._pageRenderer.unmount();
 		}
 	}
 

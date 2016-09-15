@@ -112,6 +112,26 @@ export default class AbstractPageRenderer extends PageRenderer {
 	 * @inheritdoc
 	 * @method setState
 	 */
+	clearState() {
+		if (this._reactiveView &&
+				this._reactiveView.state) {
+
+			let emptyState = Object
+				.keys(this._reactiveView.state)
+				.reduce((state, key) => {
+					state[key] = null;
+
+					return state;
+				}, {});
+
+			this._reactiveView.setState(emptyState);
+		}
+	}
+
+	/**
+	 * @inheritdoc
+	 * @method setState
+	 */
 	setState(state = {}) {
 		if (this._reactiveView) {
 			this._reactiveView.setState(state);

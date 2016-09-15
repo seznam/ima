@@ -60,6 +60,15 @@ export default class ViewAdapter extends React.Component {
 	/**
 	 * @inheritdoc
 	 * @override
+	 * @method componentWillReceiveProps
+	 */
+	componentWillReceiveProps(newProps) {
+		this.setState(newProps.state);
+	}
+
+	/**
+	 * @inheritdoc
+	 * @override
 	 * @method render
 	 */
 	render() {

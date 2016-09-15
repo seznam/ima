@@ -16,7 +16,8 @@ describe('ima.page.manager.AbstractPageManager', function() {
 		onlyUpdate: false,
 		autoScroll: true,
 		allowSPA: true,
-		documentView: null
+		documentView: null,
+		managedRootView: null
 	};
 	var params = {
 		param1: 'param1',
@@ -112,6 +113,18 @@ describe('ima.page.manager.AbstractPageManager', function() {
 			spyOn(pageManager, '_destroyPageSource')
 				.and
 				.stub();
+			spyOn(pageStateManager, 'clear')
+				.and
+				.stub();
+			spyOn(pageManager, '_clearComponentState')
+				.and
+				.stub();
+			spyOn(pageManager, '_clearManagedPageValue')
+				.and
+				.stub();
+			spyOn(pageManager, '_storeManagedPageValue')
+				.and
+				.stub();
 			spyOn(pageManager, '_initPageSource')
 				.and
 				.stub();
@@ -125,6 +138,10 @@ describe('ima.page.manager.AbstractPageManager', function() {
 					expect(pageManager._preManage).toHaveBeenCalled();
 					expect(pageManager._deactivatePageSource).toHaveBeenCalled();
 					expect(pageManager._destroyPageSource).toHaveBeenCalled();
+					expect(pageStateManager.clear).toHaveBeenCalled();
+					expect(pageManager._clearComponentState).toHaveBeenCalledWith(options);
+					expect(pageManager._clearManagedPageValue).toHaveBeenCalled();
+					expect(pageManager._storeManagedPageValue).toHaveBeenCalled();
 					expect(pageManager._initPageSource).toHaveBeenCalled();
 					expect(pageManager._loadPageSource).toHaveBeenCalled();
 					done();
@@ -172,6 +189,16 @@ describe('ima.page.manager.AbstractPageManager', function() {
 			pageManager.destroy();
 
 			expect(pageManager._destroyPageSource).toHaveBeenCalled();
+		});
+
+		it('should clear page state manager', function() {
+			spyOn(pageStateManager, 'clear')
+				.and
+				.stub();
+
+			pageManager.destroy();
+
+			expect(pageStateManager.clear).toHaveBeenCalled();
 		});
 
 	});
@@ -575,23 +602,11 @@ describe('ima.page.manager.AbstractPageManager', function() {
 			spyOn(pageManager, '_destroyExtensions')
 				.and
 				.stub();
-			spyOn(pageStateManager, 'clear')
-				.and
-				.stub();
-			spyOn(pageRenderer, 'unmount')
-				.and
-				.stub();
-			spyOn(pageManager, '_clearManagedPageValue')
-				.and
-				.stub();
 
 			pageManager._destroyPageSource();
 
 			expect(pageManager._destroyController).toHaveBeenCalledWith();
 			expect(pageManager._destroyExtensions).toHaveBeenCalledWith();
-			expect(pageStateManager.clear).toHaveBeenCalledWith();
-			expect(pageRenderer.unmount).toHaveBeenCalledWith();
-			expect(pageManager._clearManagedPageValue).toHaveBeenCalledWith();
 		});
 	});
 
@@ -678,6 +693,32 @@ describe('ima.page.manager.AbstractPageManager', function() {
 			pageManager._managedPage.controller = null;
 
 			expect(pageManager._hasOnlyUpdate(Controller, View, newOptions)).toEqual(false);
+		});
+	});
+
+	describe('_clearComponentState method', function() {
+
+		it('should call page renderer clearState method if route options documentView and managedRootView are same with last one renderred', function() {
+			spyOn(pageRenderer, 'clearState')
+				.and
+				.stub();
+
+			pageManager._clearComponentState({
+				documentView: null,
+				managedRootView: null
+			});
+
+			expect(pageRenderer.clearState).toHaveBeenCalled();
+		});
+
+		it('should call page renderer unmount method if route options documentView and managedRootView are not same with last one renderred', function() {
+			spyOn(pageRenderer, 'unmount')
+				.and
+				.stub();
+
+			pageManager._clearComponentState({});
+
+			expect(pageRenderer.unmount).toHaveBeenCalled();
 		});
 	});
 

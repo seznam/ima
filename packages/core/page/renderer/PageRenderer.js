@@ -93,7 +93,7 @@ export default class PageRenderer {
 	update(controller, resourcesUpdate) {}
 
 	/**
-	 * Unmounts the current view from the DOM.
+	 * Unmounts the view from the DOM.
 	 *
 	 * This method has no effect at the server-side.
 	 *
@@ -111,6 +111,15 @@ export default class PageRenderer {
 	 *        rendered view.
 	 */
 	setState(state = {}) {}
+
+	/**
+	 * Clears the state to the currently rendered view.
+	 *
+	 * This method has no effect at the server-side.
+	 *
+	 * @method clearState
+	 */
+	clearState() {}
 }
 
 ns.ima.page.renderer.PageRenderer = PageRenderer;

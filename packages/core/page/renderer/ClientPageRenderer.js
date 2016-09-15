@@ -84,7 +84,7 @@ export default class ClientPageRenderer extends AbstractPageRenderer {
 
 		if (!this._firstTime) {
 			controller.setState(defaultPageState);
-			this._updateDOM(controller, view);
+			this._renderToDOM(controller, view, routeOptions);
 			this._patchPromisesToState(controller, loadedPromises);
 		}
 
@@ -146,9 +146,8 @@ export default class ClientPageRenderer extends AbstractPageRenderer {
 	 */
 	unmount() {
 		if (this._reactiveView) {
-			this._reactiveView.setState({
-				$pageView: null
-			});
+			this._ReactDOM.unmountComponentAtNode(this._viewContainer);
+			this._reactiveView = null;
 		}
 	}
 
@@ -186,25 +185,6 @@ export default class ClientPageRenderer extends AbstractPageRenderer {
 				})
 				.catch((error) => this._handleError(error));
 		}
-	}
-
-	/**
-	 * Updates the rendered DOM using the provided controller's state and its
-	 * view.
-	 *
-	 * @private
-	 * @method _updateDOM
-	 * @param {ControllerDecorator} controller
-	 * @param {function(new: React.Component)} view
-	 */
-	_updateDOM(controller, view) {
-		if (!this._reactiveView) {
-			return;
-		}
-
-		this._reactiveView.setState(Object.assign({}, controller.getState(), {
-			$pageView: view
-		}));
 	}
 
 	/**

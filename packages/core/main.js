@@ -163,6 +163,15 @@ function hotReloadClientApp(initialAppConfigFunctions) {
 	let pageManager = app.oc.get('$PageManager');
 	let currentRouteInfo = router.getCurrentRouteInfo();
 	let currentRoute = currentRouteInfo.route;
+	let currentRouteOptions = Object.assign(
+		{},
+		currentRoute.getOptions(),
+		{
+			onlyUpdate: false,
+			autoScroll: false,
+			allowSPA: false
+		}
+	);
 
 	router.listen();
 
@@ -171,11 +180,7 @@ function hotReloadClientApp(initialAppConfigFunctions) {
 			.manage(
 				currentRoute.getController(),
 				currentRoute.getView(),
-				{
-					onlyUpdate: false,
-					autoScroll: false,
-					allowSPA: false
-				},
+				currentRouteOptions,
 				currentRouteInfo.params
 			)
 			.catch((error) => {

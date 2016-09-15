@@ -7,6 +7,10 @@ describe('ima.page.renderer.AbstractPageRenderer', function() {
 	var settings = oc.get('$Settings');
 
 	var reactiveComponentView = {
+		state: {
+			key1: 1,
+			key2: 'string'
+		},
 		setState: function() {},
 		replaceState: function() {}
 	};
@@ -51,6 +55,23 @@ describe('ima.page.renderer.AbstractPageRenderer', function() {
 			expect(reactiveComponentView.setState).toHaveBeenCalledWith(state);
 		});
 
+	});
+
+	describe('clearState method', function() {
+
+		it('should be set clear state to reactevie component view', function() {
+			spyOn(reactiveComponentView, 'setState')
+				.and
+				.stub();
+
+			pageRenderer.clearState();
+
+			expect(reactiveComponentView.setState)
+				.toHaveBeenCalledWith({
+					key1: null,
+					key2: null
+				});
+		});
 	});
 
 	describe('_generateViewProps method', function() {
