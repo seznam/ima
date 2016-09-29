@@ -296,7 +296,7 @@ module.exports = ((environment, logger, languageLoader, appFactory) => {
 	};
 
 	var errorHandler = (error, req, res, app) => {
-		var returnPromise = Promise.reject(error);
+		var returnPromise;
 
 		if (environment.$Debug) {
 
@@ -304,6 +304,7 @@ module.exports = ((environment, logger, languageLoader, appFactory) => {
 				instanceRecycler.clearInstance(app);
 			}
 
+			returnPromise = Promise.reject(error);
 			_displayDetails(error, req, res);
 		} else {
 			var appPromise = Promise.resolve(app);
@@ -348,7 +349,7 @@ module.exports = ((environment, logger, languageLoader, appFactory) => {
 		} catch (e) {}
 
 		return routeInfo;
-	}
+	};
 
 	var _addImaToResponse = (req, res, app) => {
 		var routeName = 'other';
@@ -362,7 +363,7 @@ module.exports = ((environment, logger, languageLoader, appFactory) => {
 	};
 
 	var _generateResponse = (req, res, app) => {
-		var returnPromise = Promise.reject(new Error());
+		var returnPromise;
 		var router = app.oc.get('$Router');
 
 		try {
