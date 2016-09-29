@@ -13,10 +13,10 @@
 		"url": "https://github.com/seznam/IMA.js-server.git"
 	},
 	"keywords": [
-    "gulp",
-    "IMA.js",
-    "ima"
-  ],
+		"gulp",
+		"IMA.js",
+		"ima"
+	],
 	"author": "Seznam.cz, a.s.",
 	"license": "MIT",
 	"bugs": {
