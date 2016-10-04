@@ -97,6 +97,14 @@ export default class ClientWindow extends Window {
 
 	/**
 	 * @inheritdoc
+	 * @method getDocument
+	 */
+	getDocument() {
+		return document;
+	}
+
+	/**
+	 * @inheritdoc
 	 * @method getScrollX
 	 */
 	getScrollX() {

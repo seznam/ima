@@ -84,6 +84,14 @@ export default class ServerWindow extends Window {
 
 	/**
 	 * @inheritdoc
+	 * @method getDocument
+	 */
+	getDocument() {
+		return undefined;
+	}
+
+	/**
+	 * @inheritdoc
 	 * @method getScrollX
 	 */
 	getScrollX() {

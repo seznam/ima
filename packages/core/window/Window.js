@@ -86,6 +86,18 @@ export default class Window {
 	getWindow() {}
 
 	/**
+	 * Returns the native {@code document} object representing any web page loaded
+	 * in the browser and serves as an entry point into the web page's content
+	 * which is the DOM tree at the client-side. The method returns {@code undefined}
+	 * if used at the server-side.
+	 *
+	 * @method getDocument
+	 * @return {(undefined|Document)} The {@code document} object at the
+	 *         client-side, or {@code undefined} at the server-side.
+	 */
+	getDocument() {}
+
+	/**
 	 * Returns the number of pixels the viewport is scrolled horizontally.
 	 *
 	 * @method getScrollX
