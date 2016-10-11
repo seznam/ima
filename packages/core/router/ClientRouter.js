@@ -308,6 +308,7 @@ export default class ClientRouter extends AbstractRouter {
 		let isSetTarget = anchorElement.getAttribute('target') !== null;
 		let isLeftButton = event.button === MOUSE_LEFT_BUTTON;
 		let isCtrlPlusLeftButton = event.ctrlKey && isLeftButton;
+		let isCMDPlusLeftButton = event.metaKey && isLeftButton;
 		let isSameDomain = this._isSameDomain(anchorHref);
 		let isHashLink = this._isHashLink(anchorHref);
 		let isLinkPrevented = event.defaultPrevented;
@@ -318,6 +319,7 @@ export default class ClientRouter extends AbstractRouter {
 				!isSameDomain ||
 				isHashLink ||
 				isCtrlPlusLeftButton ||
+				isCMDPlusLeftButton ||
 				isLinkPrevented) {
 			return;
 		}
