@@ -138,6 +138,7 @@ module.exports = ((environment, logger, languageLoader, appFactory) => {
 
 			return Promise.resolve({
 				content: renderedSPAs[cacheKey],
+				pageState: {},
 				status,
 				SPA: true
 			});
@@ -273,6 +274,7 @@ module.exports = ((environment, logger, languageLoader, appFactory) => {
 			instanceRecycler.clearInstance(app);
 			promise = Promise.resolve({
 				content: null,
+				pageState: {}
 				status: error.getHttpStatus(),
 				error: error
 			});
