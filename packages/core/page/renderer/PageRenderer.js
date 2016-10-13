@@ -58,9 +58,9 @@ export default class PageRenderer {
 	 *          documentView: ?function(new: AbstractDocumentView),
 	 *          managedRootView: ?function(new: React.Component)=
 	 *        }} routeOptions The current route options.
-	 * @return {Promise<{status: number, content: ?string}>} A promise that
-	 *         will resolve to information about the rendered page. The
-	 *         {@code status} will contain the HTTP status code to send to the
+	 * @return {Promise<{status: number, content: ?string, pageState: Object<string, ?>
+	 *         }>} A promise that will resolve to information about the rendered page.
+	 *         The {@code status} will contain the HTTP status code to send to the
 	 *         client (at the server side) or determine the type of error page
 	 *         to navigate to (at the client side).
 	 *         The {@code content} field will contain the rendered markup of
@@ -82,9 +82,9 @@ export default class PageRenderer {
 	 * @param {Object<string, (*|Promise<*>)>} resourcesUpdate The resources
 	 *        that represent the update the of current state according to the
 	 *        current route and its parameters.
-	 * @return {Promise<{status: number, content: ?string}>} A promise that
-	 *         will resolve to information about the rendered page. The
-	 *         {@code status} will contain the HTTP status code to send to the
+	 * @return {Promise<{status: number, content: ?string, pageState: Object<string, *>
+	 *         }>} A promise that will resolve to information about the rendered page.
+	 *         The {@code status} will contain the HTTP status code to send to the
 	 *         client (at the server side) or determine the type of error page
 	 *         to navigate to (at the client side).
 	 *         The {@code content} field will contain the rendered markup of

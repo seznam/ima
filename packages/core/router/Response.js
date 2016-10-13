@@ -63,6 +63,16 @@ export default class Response {
 		this._content = '';
 
 		/**
+		 * The rendered page state.
+		 *
+		 * @private
+		 * @property _pageState
+		 * @type {Object<string, *>}
+		 * @default {}
+		 */
+		this._pageState = {};
+
+		/**
 		 * Internal cookie storage for Set-Cookie header.
 		 *
 		 * @private
@@ -110,6 +120,7 @@ export default class Response {
 		this._isSent = false;
 		this._status = 500;
 		this._content = '';
+		this._pageState = {};
 		this._internalCookieStorage = new Map();
 
 		return this;
@@ -217,6 +228,33 @@ export default class Response {
 	}
 
 	/**
+	 * Sets the rendered page state.
+	 *
+	 * @chainable
+	 * @method setPageState
+	 * @param {Object<string, *>} pageState The rendered page state.
+	 * @return {Response} This response.
+	 */
+	setPageState(pageState) {
+		if ($Debug) {
+			if (this._isSent === true) {
+				let params = this.getResponseParams();
+				params.pageState = pageState;
+
+				throw new GenericError(
+					'ima.router.Response:setState The response has already been ' +
+					'sent. Check your workflow.',
+					params
+				);
+			}
+		}
+
+		this._pageState = pageState;
+
+		return this;
+	}
+
+	/**
 	 * Sets a cookie, which will be sent to the client with the response.
 	 *
 	 * @chainable
@@ -259,13 +297,18 @@ export default class Response {
 	}
 
 	/**
-	 * Return object which contains response status and content.
+	 * Return object which contains response status, content and rendered
+	 * page state.
 	 *
 	 * @method getResponseParams
-	 * @return {{status: number, content: string}}
+	 * @return {{status: number, content: string, pageState: Object<string, *>}}
 	 */
 	getResponseParams() {
-		return { status: this._status, content: this._content };
+		return {
+			status: this._status,
+			content: this._content,
+			pageState: this._pageState
+		};
 	}
 
 	/**

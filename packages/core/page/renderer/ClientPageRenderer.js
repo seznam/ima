@@ -92,20 +92,25 @@ export default class ClientPageRenderer extends AbstractPageRenderer {
 			this._Helper
 				.allPromiseHash(loadedPromises)
 				.then((fetchedResources) => {
+					let pageState = Object.assign(
+						{},
+						defaultPageState,
+						fetchedResources
+					);
 
 					if (this._firstTime) {
-						Object.assign(defaultPageState, fetchedResources);
-						controller.setState(defaultPageState);
+						controller.setState(pageState);
 						this._renderToDOM(controller, view, routeOptions);
 						this._firstTime = false;
 					}
 
-					controller.setMetaParams(fetchedResources);
+					controller.setMetaParams(pageState);
 					this._updateMetaAttributes(controller.getMetaManager());
 
 					return {
 						content: null,
-						status: controller.getHttpStatus()
+						status: controller.getHttpStatus(),
+						pageState
 					};
 				})
 				.catch((error) => this._handleError(error))
@@ -133,7 +138,12 @@ export default class ClientPageRenderer extends AbstractPageRenderer {
 
 					return {
 						content: null,
-						status: controller.getHttpStatus()
+						status: controller.getHttpStatus(),
+						pageState: Object.assign(
+							{},
+							defaultPageState,
+							fetchedResources
+						)
 					};
 				})
 				.catch((error) => this._handleError(error))

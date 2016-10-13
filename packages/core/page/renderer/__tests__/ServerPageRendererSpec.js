@@ -75,7 +75,8 @@ describe('ima.page.renderer.ServerPageRenderer', function() {
 		it('should return already sent data to the client', function(done) {
 			var responseParams = {
 				content: '',
-				status: 200
+				status: 200,
+				pageState: loadedPageState
 			};
 
 			spyOn(response, 'isResponseSent')
@@ -116,7 +117,8 @@ describe('ima.page.renderer.ServerPageRenderer', function() {
 		it('should return already sent data to client', function() {
 			var responseParams = {
 				content: '',
-				status: 200
+				status: 200,
+				pageState: fetchedResource
 			};
 
 			spyOn(response, 'isResponseSent')
@@ -131,7 +133,7 @@ describe('ima.page.renderer.ServerPageRenderer', function() {
 
 		describe('render new page', function() {
 
-			var responseParams = { status: 200, content: '' };
+			var responseParams = { status: 200, content: '', pageState: {} };
 			var pageRenderResponse = null;
 
 			beforeEach(function() {
@@ -150,6 +152,9 @@ describe('ima.page.renderer.ServerPageRenderer', function() {
 				spyOn(response, 'status')
 					.and
 					.returnValue(response);
+				spyOn(response, 'setPageState')
+						.and
+						.returnValue(response);
 				spyOn(response, 'send')
 					.and
 					.returnValue(response);
@@ -170,6 +175,7 @@ describe('ima.page.renderer.ServerPageRenderer', function() {
 
 			it('should send response for request', function() {
 				expect(response.status).toHaveBeenCalled();
+				expect(response.setPageState).toHaveBeenCalled();
 				expect(response.send).toHaveBeenCalled();
 				expect(controller.getHttpStatus).toHaveBeenCalled();
 				expect(pageRenderer._renderPageContentToString).toHaveBeenCalledWith(controller, view, routeOptions);

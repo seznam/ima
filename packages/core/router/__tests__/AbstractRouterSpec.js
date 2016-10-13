@@ -19,21 +19,8 @@ describe('ima.router.AbstractRouter', function() {
 	};
 	var controller = 'BaseController';
 	var view = 'BaseView';
-	var RouteNames = null;
-	var RouteEvents = null;
-
-	beforeAll(function(done) {
-		$import('ima/router/RouteNames', 'ima/router/Events')
-			.then(function(importedModules) {
-				RouteNames = importedModules[0].default;
-				RouteEvents = importedModules[1].default;
-				done();
-			})
-			.catch(function(error) {
-				console.error(error);
-				done();
-			});
-	});
+	var RouteNames = $import('ima/router/RouteNames');
+	var RouteEvents = $import('ima/router/Events');
 
 	beforeEach(function() {
 		oc.bind('BaseController', function() {});

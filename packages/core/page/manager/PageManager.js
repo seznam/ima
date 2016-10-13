@@ -63,9 +63,9 @@ export default class PageManager {
 	 *        }} options The current route options.
 	 * @param {Object<string, string>=} [params={}] The route parameters of the
 	 *        current route.
-	 * @return {Promise<{status: number, content: ?string}>} A promise that
-	 *         will resolve to information about the rendered page. The
-	 *         {@code status} will contain the HTTP status code to send to the
+	 * @return {Promise<{status: number, content: ?string, pageState: Object<string, *>
+	 *         }>} A promise that will resolve to information about the rendered page.
+	 *         The {@code status} will contain the HTTP status code to send to the
 	 *         client (at the server side) or determine the type of error page
 	 *         to navigate to (at the client side).
 	 *         The {@code content} field will contain the rendered markup of

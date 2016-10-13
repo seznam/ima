@@ -13,19 +13,7 @@ describe('ima.http.SuperAgentProxy', function() {
 	var options = { ttl: 3600000, timeout: 2000, repeatRequest: 1, headers: [], withCredentials: true };
 	var httpUrlTransformer = oc.get('$HttpUrlTransformer');
 	var windowHelper = oc.get('$Window');
-	var HttpStatusCode = null;
-
-	beforeAll(function(done) {
-		$import('ima/http/StatusCode')
-			.then(function(importedModule) {
-				HttpStatusCode = importedModule.default;
-				done();
-			})
-			.catch(function(error) {
-				console.error(error);
-				done();
-			});
-	});
+	var HttpStatusCode = $import('ima/http/StatusCode');
 
 	beforeEach(function() {
 		superAgent = {

@@ -78,10 +78,10 @@ export default class ServerPageRenderer extends AbstractPageRenderer {
 
 		return this._Helper
 			.allPromiseHash(pageResources)
-			.then(fetchedResources => this._renderPage(
+			.then(pageState => this._renderPage(
 				controller,
 				view,
-				fetchedResources,
+				pageState,
 				routeOptions
 			));
 	}
@@ -193,17 +193,19 @@ export default class ServerPageRenderer extends AbstractPageRenderer {
 	 * @method _renderPage
 	 * @param {AbstractController} controller
 	 * @param {React.Component} view
-	 * @param {Object<string, *>} fetchedResources
+	 * @param {Object<string, *>} pageState
 	 * @param {Object<string, *>} routeOptions
-	 * @return {{content: string, status: number}}
+	 * @return {{content: string, status: number,
+	 *         pageState: Object<string, *>}}
 	 */
-	_renderPage(controller, view, fetchedResources, routeOptions) {
+	_renderPage(controller, view, pageState, routeOptions) {
 		if (!this._response.isResponseSent()) {
-			controller.setState(fetchedResources);
-			controller.setMetaParams(fetchedResources);
+			controller.setState(pageState);
+			controller.setMetaParams(pageState);
 
 			this._response
 				.status(controller.getHttpStatus())
+				.setPageState(pageState)
 				.send(this._renderPageContentToString(
 					controller,
 					view,
