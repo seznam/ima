@@ -274,7 +274,7 @@ module.exports = ((environment, logger, languageLoader, appFactory) => {
 			instanceRecycler.clearInstance(app);
 			promise = Promise.resolve({
 				content: null,
-				pageState: {}
+				pageState: {},
 				status: error.getHttpStatus(),
 				error: error
 			});
