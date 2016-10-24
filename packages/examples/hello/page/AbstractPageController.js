@@ -1,10 +1,13 @@
 import ns from 'ima/namespace';
 import AbstractController from 'ima/controller/AbstractController';
+import Dictionary from 'ima/dictionary/Dictionary';
+import MetaManager from 'ima/meta/MetaManager';
+import Router from 'ima/router/Router';
 
-ns.namespace('app.base');
+ns.namespace('app.page');
 
 /**
- * Base controller.
+ * Basic page controller.
  *
  * @class Controller
  * @extends ima.controller.AbstractController
@@ -12,39 +15,34 @@ ns.namespace('app.base');
  * @module BaseController
  * @submodule app.base
  */
-export default class BaseController extends AbstractController {
-
-	/**
-	 * Initializes the controller.
-	 *
-	 * @constructor
-	 * @method constructor
-	 */
-	constructor() {
-		super();
-	}
+export default class AbstractPageController extends AbstractController {
 
 	/**
 	 * Set seo params.
 	 *
 	 * @method setSeoParams
-	 * @param {Object} loadedResources
-	 * @param {ima.meta.MetaManager} metaManager
-	 * @param {ima.router.Router} router
-	 * @param {ima.dictionary.Dictionary} dictionary
-	 * @param {Object} settings
+	 * @param {Object<string, *>} loadedResources
+	 * @param {MetaManager} metaManager
+	 * @param {Router} router
+	 * @param {Dictionary} dictionary
+	 * @param {Object<string, *>} settings
 	 */
 	setMetaParams(loadedResources, metaManager, router, dictionary, settings) {
 		let title = 'IMA.js';
-		let description = 'IMA.js is isomorphic javascript application framework.';
-		let image = router.getDomain() + settings.$Static.image + '/imajs-share.png';
+		let description;
+		description = 'IMA.js is isomorphic javascript application framework.';
+		let domain = router.getDomain();
+		let image = `${domain}${settings.$Static.image}/imajs-share.png`;
 
 		let url = router.getUrl();
 
 		metaManager.setTitle(title);
 
 		metaManager.setMetaName('description', description);
-		metaManager.setMetaName('keywords', 'IMA.js, isomorphic application, javascript');
+		metaManager.setMetaName(
+			'keywords',
+			'IMA.js, isomorphic application, javascript'
+		);
 
 		metaManager.setMetaName('twitter:title', title);
 		metaManager.setMetaName('twitter:description', description);
@@ -60,4 +58,4 @@ export default class BaseController extends AbstractController {
 	}
 }
 
-ns.app.base.BaseController = BaseController;
+ns.app.page.AbstractPageController = AbstractPageController;

@@ -1,3 +1,5 @@
+import DocumentView from 'app/component/document/DocumentView';
+
 export let init = (ns, oc, config) => { // jshint ignore:line
 	let versionStamp = `?version=${config.$Version}`;
 
@@ -28,7 +30,7 @@ export let init = (ns, oc, config) => { // jshint ignore:line
 						`/static/js/locale/${config.$Language}.js${versionStamp}`,
 						'/static/js/app.bundle.min.js' + versionStamp
 					],
-					documentView: 'app.component.document.DocumentView'
+					documentView: DocumentView
 				}
 			},
 			$Static: {

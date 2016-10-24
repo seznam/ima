@@ -1,16 +1,21 @@
 import ns from 'ima/namespace';
-import BaseController from 'app/base/BaseController';
+import AbstractPageController from 'app/page/AbstractPageController';
 
 ns.namespace('app.page.error');
 
 /**
  * @class ErrorController
- * @extends app.base.BaseController
+ * @extends app.page.AbstractPageController
  * @namespace app.page.error
  * @module app
  * @submodule app.page
  */
-export default class ErrorController extends BaseController {
+export default class ErrorController extends AbstractPageController {
+
+	static get $dependencies() {
+		return [];
+	}
+
 	/**
 	 * @method constructor
 	 * @constructor

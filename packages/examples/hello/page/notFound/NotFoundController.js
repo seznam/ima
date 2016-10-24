@@ -1,16 +1,20 @@
 import ns from 'ima/namespace';
-import BaseController from 'app/base/BaseController';
+import AbstractPageController from 'app/page/AbstractPageController';
 
 ns.namespace('app.page.notFound');
 
 /**
  * @class NotFoundController
- * @extends app.base.BaseController
+ * @extends app.page.AbstractPageController
  * @namespace app.page.notFound
  * @module app
  * @submodule app.page
  */
-export default class NotFoundController extends BaseController {
+export default class NotFoundController extends AbstractPageController {
+
+	static get $dependencies() {
+		return [];
+	}
 
 	/**
 	 * @method constructor

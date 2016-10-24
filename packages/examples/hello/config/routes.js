@@ -1,5 +1,4 @@
 import RouteNames from 'ima/router/RouteNames';
-
 import HomeController from 'app/page/home/HomeController';
 import HomeView from 'app/page/home/HomeView';
 import ErrorController from 'app/page/error/ErrorController';

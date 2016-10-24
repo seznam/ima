@@ -1,17 +1,21 @@
 import ns from 'ima/namespace';
-import BaseController from 'app/base/BaseController';
+import AbstractPageController from 'app/page/AbstractPageController';
 //import GenericError from 'ima/error/GenericError';
 
 ns.namespace('app.page.home');
 
 /**
  * @class HomeController
- * @extends app.base.BaseController
+ * @extends app.page.AbstractPageController
  * @namespace app.page.home
  * @module app
  * @submodule app.page
  */
-export default class HomeController extends BaseController {
+export default class HomeController extends AbstractPageController {
+
+	static get $dependencies() {
+		return [];
+	}
 
 	/**
 	 * @method constructor
@@ -19,7 +23,6 @@ export default class HomeController extends BaseController {
 	 */
 	constructor() {
 		super();
-
 	}
 
 	/**
