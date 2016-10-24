@@ -15,30 +15,8 @@ ns.namespace('ima.router');
  */
 export default class RouteFactory {
 
-	/**
-	 * Initializes the factory.
-	 *
-	 * @constructor
-	 * @method constructor
-	 * @param {function(
-	 *          new: Route,
-	 *          string,
-	 *          string,
-	 *          string,
-	 *          string,
-	 *          Object
-	 *        )} Route The implementation of the route
-	 *        representation to use.
-	 */
-	constructor(Route) {
-		/**
-		 * The implementation of the route representation to use.
-		 *
-		 * @private
-		 * @property _Route
-		 * @type {function(new: Route, string, string, string, string, Object)}
-		 */
-		this._Route = Route;
+	static get $dependencies() {
+		return [];
 	}
 
 	/**
@@ -74,7 +52,7 @@ export default class RouteFactory {
 	 * @return {Route} The constructed route.
 	 */
 	createRoute(name, pathExpression, controller, view, options) {
-		return new this._Route(
+		return new Route(
 			name,
 			pathExpression,
 			controller,

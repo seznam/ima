@@ -1,6 +1,7 @@
 import ns from '../../namespace';
 import AbstractDocumentView from '../AbstractDocumentView';
 import ObjectContainer from '../../ObjectContainer';
+import ViewAdapter from './ViewAdapter';
 
 ns.namespace('ima.page.renderer');
 
@@ -22,11 +23,8 @@ export default class PageRendererFactory {
 	 * @param {ObjectContainer} oc The application's dependency injector - the
 	 *        object container.
 	 * @param {React} React React framework instance to use to render the page.
-	 * @param {React.Component} ViewAdapter An adapter component
-	 *        providing the current page controller's state to the page view
-	 *        component through its properties.
 	 */
-	constructor(oc, React, ViewAdapter) {
+	constructor(oc, React) {
 
 		/**
 		 * The application's dependency injector - the object container.
@@ -45,13 +43,6 @@ export default class PageRendererFactory {
 		 * @type {React}
 		 */
 		this._React = React;
-
-		/**
-		 * @private
-		 * @property _ViewAdapter
-		 * @type {React.Component}
-		 */
-		this._ViewAdapter = ViewAdapter;
 	}
 
 	/**
@@ -152,12 +143,12 @@ export default class PageRendererFactory {
 	 *          state: Object<string, *>,
 	 *          $Utils: Object<string, *>
 	 *        }} props The initial props to pass to the view.
-	 * @return {React.Component} View adapter handling passing the
-	 *         controller's state to an instance of the specified page view
-	 *         through properties.
+	 * @return {React.Element} View adapter handling passing the controller's
+	 *         state to an instance of the specified page view through
+	 *         properties.
 	 */
 	wrapView(props) {
-		return this._React.createElement(this._ViewAdapter, props);
+		return this._React.createElement(ViewAdapter, props);
 	}
 
 	/**

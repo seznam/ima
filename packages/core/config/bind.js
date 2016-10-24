@@ -1,6 +1,5 @@
 import vendorLinker from '../vendorLinker';
 import Cache from '../cache/Cache';
-import CacheEntry from '../cache/CacheEntry';
 import CacheFactory from '../cache/CacheFactory';
 import CacheImpl from '../cache/CacheImpl';
 import ControllerDecorator from '../controller/ControllerDecorator';
@@ -27,7 +26,6 @@ import ClientPageRenderer from '../page/renderer/ClientPageRenderer';
 import PageRenderer from '../page/renderer/PageRenderer'
 import PageRendererFactory from '../page/renderer/PageRendererFactory';
 import ServerPageRenderer from '../page/renderer/ServerPageRenderer';
-import ViewAdapter from '../page/renderer/ViewAdapter';
 import PageStateManager from '../page/state/PageStateManager';
 import PageStateManagerDecorator from '../page/state/PageStateManagerDecorator';
 import PageStateManagerImpl from '../page/state/PageStateManagerImpl';
@@ -35,7 +33,6 @@ import ClientRouter from '../router/ClientRouter';
 import RouterEvents from '../router/Events';
 import Request from '../router/Request';
 import Response from '../router/Response';
-import Route from '../router/Route';
 import RouteFactory from '../router/RouteFactory';
 import RouteNames from '../router/RouteNames';
 import Router from '../router/Router';
@@ -98,7 +95,7 @@ export let init = (ns, oc, config) => { //jshint ignore:line
 	//Storage
 	oc.constant('$CookieTransformFunction', { encode: (s) => s, decode: (s) => s });
 	oc.bind('$CookieStorage', CookieStorage);
-	if (oc.get('$Window').hasSessionStorage()) {
+	if (oc.get(Window).hasSessionStorage()) {
 		oc.bind('$SessionStorage', SessionStorage);
 	} else {
 		oc.bind('$SessionStorage', MapStorage);
@@ -122,14 +119,11 @@ export let init = (ns, oc, config) => { //jshint ignore:line
 	oc.bind('$EventBus', EventBus);
 
 	//Cache
-	oc.constant('$CacheEntry', CacheEntry);
-
 	if (oc.get('$Window').hasSessionStorage()) {
 		oc.constant('$CacheStorage', oc.get(SessionMapStorage));
 	} else {
 		oc.constant('$CacheStorage', oc.get(MapStorage));
 	}
-	oc.inject(CacheFactory, ['$CacheEntry']);
 	oc.bind('$CacheFactory', CacheFactory);
 	oc.provide(Cache, CacheImpl, ['$CacheStorage', CacheFactory, '$Helper', config.$Cache]);
 	oc.bind('$Cache', Cache);
@@ -145,14 +139,13 @@ export let init = (ns, oc, config) => { //jshint ignore:line
 	oc.bind('$PageStateManager', PageStateManager);
 	oc.inject(PageFactory, [oc]);
 	oc.bind('$PageFactory', PageFactory);
-	oc.constant('$PageRendererViewAdapter', ViewAdapter);
-	oc.inject(PageRendererFactory, [oc, '$React', '$PageRendererViewAdapter']);
+	oc.inject(PageRendererFactory, [oc, '$React']);
 	oc.bind('$PageRendererFactory', PageRendererFactory);
 
 	if (oc.get(Window).isClient()) {
-		oc.provide(PageRenderer, ClientPageRenderer, ['$PageRendererFactory', '$Helper', '$ReactDOM', '$Settings', '$Window']);
+		oc.provide(PageRenderer, ClientPageRenderer, [PageRendererFactory, '$Helper', '$ReactDOM', '$Settings', Window]);
 	} else {
-		oc.provide(PageRenderer, ServerPageRenderer, ['$PageRendererFactory', '$Helper', '$ReactDOMServer', '$Settings', '$Response', '$Cache']);
+		oc.provide(PageRenderer, ServerPageRenderer, [PageRendererFactory, '$Helper', '$ReactDOMServer', '$Settings', Response, Cache]);
 	}
 	oc.bind('$PageRenderer', PageRenderer);
 
@@ -164,8 +157,6 @@ export let init = (ns, oc, config) => { //jshint ignore:line
 	oc.bind('$PageManager', PageManager);
 
 	//Router
-	oc.constant('$Route', Route);
-	oc.inject(RouteFactory, ['$Route']);
 	oc.bind('$RouteFactory', RouteFactory);
 
 	if (oc.get(Window).isClient()) {
