@@ -9,8 +9,6 @@ var concat = require('gulp-concat');
 var del = require('del');
 var es = require('event-stream');
 var fs = require('fs');
-var gulpif = require('gulp-if');
-var gutil = require('gulp-util');
 var insert = require('gulp-insert');
 var path = require('path');
 var plumber = require('gulp-plumber');
@@ -18,7 +16,6 @@ var remember = require('gulp-remember');
 var save = require('gulp-save');
 var source = require('vinyl-source-stream');
 var sourcemaps = require('gulp-sourcemaps');
-var sweetjs = require('gulp-sweetjs');
 var gulpIgnore = require('gulp-ignore');
 var tap = require('gulp-tap');
 
@@ -29,10 +26,6 @@ var babelConfig = gulpConfig.babelConfig;
 // build client logic app
 gulp.task('Es6ToEs5:app', () => {
 	var view = /(view.js|View.js)$/;
-
-	function isView(file) {
-		return !!file.relative.match(view);
-	}
 
 	function insertSystemImports() {
 		return change(function (content) {
@@ -70,10 +63,6 @@ gulp.task('Es6ToEs5:app', () => {
 				presets: babelConfig.app.presets,
 				plugins: babelConfig.app.plugins
 			 }))
-			.pipe(gulpif(isView, sweetjs({
-				modules: [path.resolve('./node_modules/ima-gulp-tasks/macros/componentName.sjs')],
-				readableNames: true
-			}), gutil.noop()))
 			.pipe(remember('Es6ToEs5:app'))
 			.pipe(plumber.stop())
 			.pipe(save('Es6ToEs5:app:source'))
