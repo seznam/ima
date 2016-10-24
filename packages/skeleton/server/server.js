@@ -12,13 +12,13 @@ global.appRoot = path.resolve(__dirname);
 
 // IMA server
 let environmentConfig = require('./ima/config/environment.js');
-var appFactory = () => {
+function appFactory() {
 	delete require.cache[require.resolve('./ima/app.server.js')];
 	delete require.cache[require.resolve('./ima/ima.server.js')];
 
 	require('./ima/ima.server.js')();
 	require('./ima/app.server.js')();
-};
+}
 let languageLoader = (language => require(`./ima/locale/${language}.js`));
 
 let imaServer = require('ima-server')(
@@ -49,7 +49,7 @@ process.on('uncaughtException', (error) => {
 	logger.error('Uncaught Exception:', { error });
 });
 
-var renderApp = (req, res, next) => {
+function renderApp (req, res, next) {
 	if (req.method === 'GET') {
 		let cachedPage = cache.get(req);
 		if (cachedPage) {
@@ -85,17 +85,17 @@ var renderApp = (req, res, next) => {
 			logger.error('Cache error', { error });
 			next(error);
 		});
-};
+}
 
-var errorHandler = (err, req, res, next) => {
+function errorHandler(err, req, res, next) {
 	clientApp.errorHandler(err, req, res);
-};
+}
 
-var staticErrorPage = (err, req, res, next) => {
+function staticErrorPage(err, req, res, next) {
 	clientApp.showStaticErrorPage(err, req, res);
-};
+}
 
-var runNodeApp = () => {
+function runNodeApp() {
 	let express = require('express');
 	let app = express();
 
@@ -121,7 +121,7 @@ var runNodeApp = () => {
 				environment.$Server.port
 			);
 		});
-};
+}
 
 if (environment.$Env !== 'dev') {
 	logger.level = 'warn';
