@@ -5,10 +5,10 @@ var insert = require('gulp-insert');
 var sourcemaps = require('gulp-sourcemaps');
 var builderBabelHeleprs = require('babel-core/lib/tools/build-external-helpers');
 
-module.exports = function (gulpConfig) {
+module.exports = (gulpConfig) => {
 	var files = gulpConfig.files;
 
-	gulp.task('shim', function () {
+	gulp.task('shim', () => {
 		var babelHelpers = builderBabelHeleprs();
 
 		return (
@@ -23,14 +23,12 @@ module.exports = function (gulpConfig) {
 		);
 	});
 
-	gulp.task('polyfill', function () {
-		return (
-			gulp
-				.src(files.polyfill.src)
-				.pipe(sourcemaps.init({loadMaps: true}))
-				.pipe(insert.wrap('(function(){', '})();'))
-				.pipe(concat(files.polyfill.name))
-				.pipe(gulp.dest(files.shim.dest.client))
-		);
-	});
+	gulp.task('polyfill', () =>
+		gulp
+			.src(files.polyfill.src)
+			.pipe(sourcemaps.init({loadMaps: true}))
+			.pipe(insert.wrap('(function(){', '})();'))
+			.pipe(concat(files.polyfill.name))
+			.pipe(gulp.dest(files.shim.dest.client))
+	);
 };

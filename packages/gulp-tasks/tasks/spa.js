@@ -48,7 +48,7 @@ module.exports = (gulpConfig) => {
 		});
 
 	});
-	
+
 	gulp.task('clean:spa', () => {
 		return del('./build/ima');
 	});

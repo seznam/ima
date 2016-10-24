@@ -7,10 +7,10 @@ var path = require('path');
 var plumber = require('gulp-plumber');
 var sourcemaps = require('gulp-sourcemaps');
 
-module.exports = function (gulpConfig) {
+module.exports = (gulpConfig) => {
 	var files = gulpConfig.files;
 
-	gulp.task('less', function () {
+	gulp.task('less', () => {
 
 		function fixPipe(stream) {
 			var origPipe = stream.pipe;

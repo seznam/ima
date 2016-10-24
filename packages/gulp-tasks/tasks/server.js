@@ -10,24 +10,24 @@ function startServer() {
 	isServerRunning = true;
 	server
 		.start()
-		.then(function(result) {
+		.then(() => {
 			isServerRunning = false;
 		});
 }
 
-gulp.task('server', function () {
+gulp.task('server', () => {
 	server = gls.new('./build/server.js');
 
 	startServer();
 });
 
-gulp.task('server:restart', function () {
+gulp.task('server:restart', () => {
 	startServer();
 });
 
-gulp.task('server:reload', function (callback) {
+gulp.task('server:reload', (callback) => {
 	if (isServerRunning) {
-		setTimeout(function() {
+		setTimeout(() => {
 			server.notify(sharedState.watchEvent);
 			callback();
 		}, 2000);
@@ -37,11 +37,12 @@ gulp.task('server:reload', function (callback) {
 	}
 });
 
-gulp.task('server:hotreload', function (callback) {
+gulp.task('server:hotreload', (callback) => {
 	if (isServerRunning) {
 		server.notify(sharedState.watchEvent);
 	} else {
 		startServer();
 	}
+
 	callback();
 });

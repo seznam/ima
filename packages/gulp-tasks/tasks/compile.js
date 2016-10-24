@@ -27,8 +27,7 @@ var files = gulpConfig.files;
 var babelConfig = gulpConfig.babelConfig;
 
 // build client logic app
-gulp.task('Es6ToEs5:app', function () {
-	var systemImports = [];
+gulp.task('Es6ToEs5:app', () => {
 	var view = /(view.js|View.js)$/;
 
 	function isView(file) {
@@ -96,7 +95,7 @@ gulp.task('Es6ToEs5:app', function () {
 });
 
 // build ima
-gulp.task('Es6ToEs5:ima', function () {
+gulp.task('Es6ToEs5:ima', () => {
 
 	function replaceToIMALoader() {
 		return change(function (content) {
@@ -141,7 +140,7 @@ gulp.task('Es6ToEs5:ima', function () {
 });
 
 // build server logic app
-gulp.task('Es6ToEs5:server', function () {
+gulp.task('Es6ToEs5:server', () => {
 	return (
 		gulp
 			.src(files.server.src)
@@ -155,7 +154,7 @@ gulp.task('Es6ToEs5:server', function () {
 	);
 });
 
-gulp.task('Es6ToEs5:vendor', function (done) {
+gulp.task('Es6ToEs5:vendor', (done) => {
 	var vendorModules = gulpConfig.vendorDependencies;
 	var serverModules = vendorModules.common.concat(vendorModules.server);
 	var clientModules = vendorModules.common.concat(vendorModules.client);
@@ -201,7 +200,7 @@ gulp.task('Es6ToEs5:vendor', function (done) {
 
 		return linkingFileHeader +
 		modules
-			.map(function(vendorModuleName) {
+			.map((vendorModuleName) => {
 				var alias = vendorModuleName;
 
 				if (typeof vendorModuleName === 'object') {
@@ -214,11 +213,11 @@ gulp.task('Es6ToEs5:vendor', function (done) {
 
 				return vendorModuleName;
 			})
-			.filter(function(vendorModuleName) {
+			.filter((vendorModuleName) => {
 				return (typeof vendorModuleName === 'string' && duplicity.indexOf(vendorModuleName) === -1) ||
 						(typeof vendorModuleName === 'object');
 			})
-			.map(function(vendorModuleName) {
+			.map((vendorModuleName) => {
 				var alias = vendorModuleName;
 				var moduleName = vendorModuleName;
 
@@ -238,9 +237,10 @@ gulp.task('Es6ToEs5:vendor', function (done) {
 	}
 });
 
-gulp.task('Es6ToEs5:vendor:client', function () {
+gulp.task('Es6ToEs5:vendor:client', () => {
 	var sourceFile = files.vendor.dest.tmp + files.vendor.src.client;
 	var options ={ debug: false, insertGlobals : false, basedir: '.' };
+
 	return (
 		browserify(sourceFile, options)
 			.transform(babelify.configure({
@@ -253,7 +253,7 @@ gulp.task('Es6ToEs5:vendor:client', function () {
 	);
 });
 
-gulp.task('Es6ToEs5:vendor:client:test', function () {
+gulp.task('Es6ToEs5:vendor:client:test', () => {
 	if (files.vendor.src.test) {
 		var sourceFiles = [
 			files.vendor.dest.tmp + files.vendor.src.test,
@@ -277,11 +277,9 @@ gulp.task('Es6ToEs5:vendor:client:test', function () {
 	}
 });
 
-gulp.task('Es6ToEs5:vendor:clean', function () {
-	return del([
-		files.vendor.dest.tmp + files.vendor.name.tmp
-	]);
-});
+gulp.task('Es6ToEs5:vendor:clean', () =>
+	del([files.vendor.dest.tmp + files.vendor.name.tmp])
+);
 
 /**
  * "Fix" file path for the babel task to get better-looking module names.

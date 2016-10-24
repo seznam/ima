@@ -5,16 +5,16 @@ var messageFormat = require('gulp-messageformat');
 var insert = require('gulp-insert');
 var rename = require('gulp-rename');
 
-module.exports = function (gulpConfig) {
+module.exports = (gulpConfig) => {
 	var files = gulpConfig.files;
 
-	gulp.task('locale', function () {
+	gulp.task('locale', () => {
 
 		function parseLocale(language, selector) {
 			return (
 				gulp.src(selector)
 					.pipe(plumber())
-					.pipe(rename(function(path) {
+					.pipe(rename((path) => {
 						path.basename = path.basename.replace(new RegExp(language, 'gi'), '')
 					}))
 					.pipe(messageFormat({locale: language, global: 'that'}))
@@ -29,7 +29,7 @@ module.exports = function (gulpConfig) {
 			);
 		}
 
-		var locales = Object.keys(files.locale.src).map(function (language) {
+		var locales = Object.keys(files.locale.src).map((language) => {
 			var selector = files.locale.src[language];
 
 			return parseLocale(language, selector);

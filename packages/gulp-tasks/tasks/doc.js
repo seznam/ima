@@ -4,7 +4,7 @@ var change = require('gulp-change');
 var yuidoc = require('gulp-yuidoc');
 var path = require('path');
 
-module.exports = function (gulpConfig) {
+module.exports = (gulpConfig) => {
 	var files = gulpConfig.files;
 
 	/**
@@ -14,29 +14,26 @@ module.exports = function (gulpConfig) {
 	 */
 	var documentationPreprocessors;
 
-	gulp.task('doc', function () {
-		return (
-			gulp
-				.src(files.app.src)
-				.pipe(change(function (content) {
-					var oldContent = null;
+	gulp.task('doc', () =>
+		gulp.src(files.app.src)
+			.pipe(change(function (content) {
+				var oldContent = null;
 
-					while (content !== oldContent) {
-						oldContent = content;
-						documentationPreprocessors.forEach(function (preprocessor) {
-							content = content.replace(
-								preprocessor.pattern,
-								preprocessor.replace
-							);
-						});
-					}
+				while (content !== oldContent) {
+					oldContent = content;
+					documentationPreprocessors.forEach((preprocessor) => {
+						content = content.replace(
+							preprocessor.pattern,
+							preprocessor.replace
+						);
+					});
+				}
 
-					return content;
-				}))
-				.pipe(yuidoc({}, { 'themedir': path.resolve('./node_modules/ima-gulp-tasks/yuidocTheme') }))
-				.pipe(gulp.dest('./doc'))
-		);
-	});
+				return content;
+			}))
+			.pipe(yuidoc({}, { 'themedir': path.resolve('./node_modules/ima-gulp-tasks/yuidocTheme') }))
+			.pipe(gulp.dest('./doc'))
+	);
 
 	documentationPreprocessors = [
 		{

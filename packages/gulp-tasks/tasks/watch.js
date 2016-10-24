@@ -9,10 +9,10 @@ var watch = require('gulp-watch');
 
 var sharedState = require('../gulpState.js');
 
-module.exports = function (gulpConfig) {
+module.exports = (gulpConfig) => {
 	var files = gulpConfig.files;
 
-	gulp.task('watch', function () {
+	gulp.task('watch', () => {
 
 		runOnChange(files.app.watch, 'app:build');
 		runOnChange(files.vendor.watch, 'vendor:build');
@@ -24,7 +24,7 @@ module.exports = function (gulpConfig) {
 		gulp.watch([
 			'./app/**/*.{js,jsx}',
 			'./build/static/js/locale/*.js'
-		]).on('change', function (event) {
+		]).on('change', (event) => {
 			sharedState.watchEvent = event;
 
 			if (event.type === 'deleted') {
@@ -45,7 +45,7 @@ module.exports = function (gulpConfig) {
 					'**/*.js'
 				]
 			},
-			function (filepath, callback) {
+			(filepath, callback) => {
 				gutil.log('Reloading \'public/' + gutil.colors.cyan(filepath) +
 					'\' with flo...');
 
@@ -58,9 +58,7 @@ module.exports = function (gulpConfig) {
 		);
 
 		function runOnChange(files, tasks) {
-			watch(files, function () {
-				gulp.start(tasks);
-			});
+			watch(files, () => gulp.start(tasks));
 		}
 	});
 };

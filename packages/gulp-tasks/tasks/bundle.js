@@ -6,22 +6,20 @@ var nano = require('gulp-cssnano');
 var plumber = require('gulp-plumber');
 var uglify = require('gulp-uglify');
 
-module.exports = function (gulpConfig) {
+module.exports = (gulpConfig) => {
 	var files = gulpConfig.files;
 	var uglifyCompression = gulpConfig.uglifyCompression;
 
-	gulp.task('bundle:js:app', function () {
-		return (
-			gulp.src(files.bundle.js.src)
-				.pipe(plumber())
-				.pipe(concat(files.bundle.js.name))
-				.pipe(uglify({mangle: true, compress: uglifyCompression}))
-				.pipe(plumber.stop())
-				.pipe(gulp.dest(files.bundle.js.dest))
-		);
-	});
+	gulp.task('bundle:js:app', () =>
+		gulp.src(files.bundle.js.src)
+			.pipe(plumber())
+			.pipe(concat(files.bundle.js.name))
+			.pipe(uglify({mangle: true, compress: uglifyCompression}))
+			.pipe(plumber.stop())
+			.pipe(gulp.dest(files.bundle.js.dest))
+	);
 
-	gulp.task('bundle:js:server', function () {
+	gulp.task('bundle:js:server', () => {
 		var file = files.app.dest.server + files.app.name.server;
 
 		return (
@@ -37,18 +35,16 @@ module.exports = function (gulpConfig) {
 		);
 	});
 
-	gulp.task('bundle:css', function () {
-		return (
-			gulp.src(files.bundle.css.src)
-				.pipe(plumber())
-				.pipe(concat(files.bundle.css.name))
-				.pipe(nano())
-				.pipe(plumber.stop())
-				.pipe(gulp.dest(files.bundle.css.dest))
-		);
-	});
+	gulp.task('bundle:css', () =>
+		gulp.src(files.bundle.css.src)
+			.pipe(plumber())
+			.pipe(concat(files.bundle.css.name))
+			.pipe(nano())
+			.pipe(plumber.stop())
+			.pipe(gulp.dest(files.bundle.css.dest))
+	);
 
-	gulp.task('bundle:clean', function () {
-		return del(files.bundle.css.src.concat(files.bundle.js.src));
-	});
+	gulp.task('bundle:clean', () =>
+		del(files.bundle.css.src.concat(files.bundle.js.src))
+	);
 };
