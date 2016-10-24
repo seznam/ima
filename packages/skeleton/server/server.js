@@ -19,7 +19,7 @@ var appFactory = () => {
 	require('./ima/ima.server.js')();
 	require('./ima/app.server.js')();
 };
-let languageLoader = (language => require('./ima/locale/' + language + '.js'));
+let languageLoader = (language => require(`./ima/locale/${language}.js`));
 
 let imaServer = require('ima-server')(
 	environmentConfig,
