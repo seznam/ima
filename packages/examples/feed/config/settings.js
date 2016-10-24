@@ -1,4 +1,5 @@
 export let init = (ns, oc, config) => {
+	let versionStamp = `?version=${config.$Version}`;
 
 	return {
 		prod: {
@@ -23,7 +24,7 @@ export let init = (ns, oc, config) => {
 			$Page: {
 				$Render: {
 					scripts: [
-						'/static/js/locale/' + config.$Language + '.js',
+						`/static/js/locale/${config.$Language}.js`,
 						'/static/js/app.bundle.min.js'
 					],
 					documentView: 'app.component.document.View'
@@ -42,33 +43,23 @@ export let init = (ns, oc, config) => {
 				fbShare: '/imajs-share.png'
 			}
 		},
+
+		test: {
+		},
+
 		dev: {
 			$Page:{
 				$Render: {
 					scripts: [
-						'/static/js/shim.js',
-						'/static/js/vendor.client.js',
-						'/static/js/locale/' + config.$Language + '.js',
-						'/static/js/app.client.js',
-						'/static/js/facebook.js',
-						'/static/js/hot.reload.js'
+						'/static/js/shim.js' + versionStamp,
+						'/static/js/vendor.client.js' + versionStamp,
+						'/static/js/ima.client.js' + versionStamp,
+						`/static/js/locale/${config.$Language}.js${versionStamp}`,
+						'/static/js/app.client.js' + versionStamp,
+						'/static/js/facebook.js' + versionStamp,
+						'/static/js/hot.reload.js' + versionStamp
 					],
 					documentView: 'app.component.document.View',
-					masterElementId: 'page'
-				}
-			}
-		},
-		test: {
-			$Page: {
-				$Render: {
-					scripts: [
-						'/static/js/shim.js',
-						'/static/js/vendor.client.js',
-						'/static/js/locale/' + config.$Language + '.js',
-						'/static/js/app.client.js',
-						'/static/js/facebook.js'
-					],
-					documentView: 'app.component.Document.View',
 					masterElementId: 'page'
 				}
 			}

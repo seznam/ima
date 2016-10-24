@@ -30,7 +30,6 @@ module.exports = (() => {
 
 	let vendors = {
 		common: [
-			'ima'
 		],
 
 		server: [
