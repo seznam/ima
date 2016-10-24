@@ -12,11 +12,11 @@ if ($IMA.Test) {
 	ima.reviveTestClientApp(getInitialAppConfigFunctions());
 } else {
 
-	ima.onLoad(() => {
+	ima.onLoad().then(() => {
 		if (!$IMA.HotReload) {
 			ima.reviveClientApp(getInitialAppConfigFunctions());
 		}
-	});
+	}).catch(() => {});
 
 }
 
