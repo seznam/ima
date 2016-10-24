@@ -11,13 +11,17 @@ let getInitialAppConfigFunctions = () => {
 if ($IMA.Test) {
 	ima.reviveTestClientApp(getInitialAppConfigFunctions());
 } else {
-
-	ima.onLoad(() => {
-		if (!$IMA.HotReload) {
-			ima.reviveClientApp(getInitialAppConfigFunctions());
-		}
-	});
-
+	ima.onLoad()
+		.then(() => {
+			if (!$IMA.HotReload) {
+				ima.reviveClientApp(getInitialAppConfigFunctions());
+			}
+		})
+		.catch((error) => {
+			if (error) {
+				console.error(error);
+			}
+		});
 }
 
 export {
