@@ -1,6 +1,6 @@
 'use strict';
 
-require("babel-polyfill");
+require('babel-polyfill');
 require('./ima/shim.js');
 require('./ima/vendor.server.js');
 
@@ -14,7 +14,9 @@ global.appRoot = path.resolve(__dirname);
 var environmentConfig = require('./ima/config/environment.js');
 var appFactory = () => {
 	delete require.cache[require.resolve('./ima/app.server.js')];
+	delete require.cache[require.resolve('./ima/ima.server.js')];
 
+	require('./ima/ima.server.js')();
 	require('./ima/app.server.js')();
 };
 var languageLoader = (language => require('./ima/locale/' + language + '.js'));

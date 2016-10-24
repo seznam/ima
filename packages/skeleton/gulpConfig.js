@@ -1,7 +1,7 @@
-var coreDependencies = require('ima/build.js');
-var sharedTasksState = require('ima-gulp-tasks/gulpState.js');
+let coreDependencies = require('ima/build.js');
+let sharedTasksState = require('ima-gulp-tasks/gulpState.js');
 
-var appDependencies;
+let appDependencies;
 try {
 	appDependencies = require('./app/build.js');
 } catch (error) {
@@ -24,28 +24,33 @@ try {
 	};
 }
 
-var babelConfig = {
+let babelConfig = {
 	vendor: {
-		presets: ['es2015', 'react'],
+		presets: ['latest', 'react'],
 		plugins: ['external-helpers-2']
 	},
 	app: {
-		presets: ['es2015', 'react'],
+		presets: ['latest', 'react'],
+		plugins: ['transform-es2015-modules-systemjs', 'external-helpers-2']
+	},
+	ima: {
+		presets: ['latest'],
 		plugins: ['transform-es2015-modules-systemjs', 'external-helpers-2']
 	},
 	server: {
-		presets: ['es2015'],
+		presets: ['latest'],
 		plugins: ['external-helpers-2']
 	}
 };
-var $Debug = true;
+let $Debug = true;
 
-if (['production', 'prod', 'test'].indexOf(process.env.NODE_ENV) > -1) {
-	babelConfig.app.presets = ['es2015-loose', 'react'];
+if (['production', 'prod', 'test'].includes(process.env.NODE_ENV)) {
+	babelConfig.app.presets = ['es2017', 'es2016', ['es2015', { loose: true }], 'react'];
 	babelConfig.app.plugins = babelConfig.app.plugins.concat([
 		'transform-react-constant-elements',
 		'transform-react-inline-elements'
 	]);
+	babelConfig.ima.presets = ['es2017', 'es2016', ['es2015', { loose: true }]];
 	$Debug = false;
 }
 
@@ -68,20 +73,20 @@ exports.vendorDependencies = {
 exports.tasks = {
 	dev: [
 		['copy:appStatic', 'copy:environment', 'shim', 'polyfill'],
-		['Es6ToEs5:app', 'Es6ToEs5:server', 'Es6ToEs5:vendor'],
+		['Es6ToEs5:app', 'Es6ToEs5:ima', 'Es6ToEs5:server', 'Es6ToEs5:vendor'],
 		['less', 'doc', 'locale', 'Es6ToEs5:vendor:client', 'Es6ToEs5:vendor:client:test'],
 		['server'],
 		['test:unit:karma:dev', 'watch']
 	],
 	build: [
 		['copy:appStatic', 'copy:environment', 'shim', 'polyfill'],
-		['Es6ToEs5:app', 'Es6ToEs5:server', 'Es6ToEs5:vendor'],
+		['Es6ToEs5:app', 'Es6ToEs5:ima', 'Es6ToEs5:server', 'Es6ToEs5:vendor'],
 		['less', 'doc', 'locale', 'Es6ToEs5:vendor:client', 'Es6ToEs5:vendor:client:test'],
 		['bundle:js:app', 'bundle:js:server', 'bundle:css']
 	],
 	spa: [
 		['copy:appStatic', 'shim', 'polyfill'], // copy public folder, concat shim
-		['Es6ToEs5:app', 'Es6ToEs5:vendor'], // compile app and vendor script
+		['Es6ToEs5:app', 'Es6ToEs5:ima', 'Es6ToEs5:vendor'], // compile app and vendor script
 		['less', 'doc', 'locale', 'Es6ToEs5:vendor:client'], // adjust vendors, compile less, create doc
 		['bundle:js:app', 'bundle:css', 'compile:spa'],
 		['clean:spa']
@@ -112,13 +117,26 @@ exports.files = {
 			server: 'app.server.js',
 			client: 'app.client.js'
 		},
-		clearServerSide: ['production', 'prod', 'test'].indexOf(process.env.NODE_ENV) > -1,
+		clearServerSide: ['production', 'prod', 'test'].includes(process.env.NODE_ENV),
 		src: [].concat(appDependencies.js, appDependencies.mainjs),
 		dest: {
 			server: './build/ima/',
 			client: './build/static/js/'
 		},
 		watch:['./app/**/*.{js,jsx}', './app/main.js', '!./app/environment.js']
+	},
+	ima: {
+		name: {
+			server: 'ima.server.js',
+			client: 'ima.client.js'
+		},
+		clearServerSide: ['production', 'prod', 'test'].includes(process.env.NODE_ENV),
+		src: [].concat(coreDependencies.js, coreDependencies.mainjs),
+		dest: {
+			server: './build/ima/',
+			client: './build/static/js/'
+		},
+		watch:['./node_modules/ima/**/(!gulpfile).{js,jsx}']
 	},
 	server: {
 		cwd: '/',

@@ -1,4 +1,4 @@
-module.exports = function(config) {
+module.exports = (config) => {
 	config.set({
 		urlRoot: '/',
 		frameworks: ['jasmine'],
@@ -27,12 +27,8 @@ module.exports = function(config) {
 				presets: ['react'],
 				sourceMap: 'inline'
 			},
-			filename: function(file) {
-				return file.originalPath.replace(/\.jsx$/, '.js');
-			},
-			sourceFileName: function(file) {
-				return file.originalPath;
-			}
+			filename: file => file.originalPath.replace(/\.jsx$/, '.js'),
+			sourceFileName: file => file.originalPath
 		},
 		customLaunchers: {
 			Chrome_without_security: {
