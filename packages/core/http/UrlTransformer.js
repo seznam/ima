@@ -12,6 +12,10 @@ ns.namespace('ima.http');
  */
 export default class UrlTransformer {
 
+	static get $dependencies() {
+		return [];
+	}
+
 	/**
 	 * Initializes the URL transformer.
 	 *

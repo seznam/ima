@@ -97,39 +97,41 @@ export let init = (ns, oc, config) => { //jshint ignore:line
 
 	//Storage
 	oc.constant('$CookieTransformFunction', { encode: (s) => s, decode: (s) => s });
-	oc.bind('$CookieStorage', CookieStorage, ['$Window', '$Request', '$Response']);
+	oc.bind('$CookieStorage', CookieStorage);
 	if (oc.get('$Window').hasSessionStorage()) {
 		oc.bind('$SessionStorage', SessionStorage);
 	} else {
 		oc.bind('$SessionStorage', MapStorage);
 	}
 	oc.bind('$MapStorage', MapStorage);
-	oc.bind('$WeakMapStorage', WeakMapStorage, [{
+	oc.inject(WeakMapStorage, [{
 		entryTtl: 30 * 60 * 1000,
 		maxEntries: 1000,
 		gcInterval: 60 * 1000,
 		gcEntryCountTreshold: 16
 	}]);
-	oc.bind('$SessionMapStorage', SessionMapStorage, ['$MapStorage', '$SessionStorage']);
+	oc.bind('$WeakMapStorage', WeakMapStorage);
+	oc.bind('$SessionMapStorage', SessionMapStorage);
 
 	// Dispatcher
 	oc.provide(Dispatcher, DispatcherImpl);
 	oc.bind('$Dispatcher', Dispatcher);
 
 	// Custom Event Bus
-	oc.provide(EventBus, EventBusImpl, ['$Window']);
+	oc.provide(EventBus, EventBusImpl);
 	oc.bind('$EventBus', EventBus);
 
 	//Cache
 	oc.constant('$CacheEntry', CacheEntry);
 
 	if (oc.get('$Window').hasSessionStorage()) {
-		oc.constant('$CacheStorage', oc.get('$SessionMapStorage'));
+		oc.constant('$CacheStorage', oc.get(SessionMapStorage));
 	} else {
-		oc.constant('$CacheStorage', oc.get('$MapStorage'));
+		oc.constant('$CacheStorage', oc.get(MapStorage));
 	}
-	oc.bind('$CacheFactory', CacheFactory, ['$CacheEntry']);
-	oc.provide(Cache, CacheImpl, ['$CacheStorage', '$CacheFactory', '$Helper', config.$Cache]);
+	oc.inject(CacheFactory, ['$CacheEntry']);
+	oc.bind('$CacheFactory', CacheFactory);
+	oc.provide(Cache, CacheImpl, ['$CacheStorage', CacheFactory, '$Helper', config.$Cache]);
 	oc.bind('$Cache', Cache);
 
 	//SEO
@@ -141,32 +143,35 @@ export let init = (ns, oc, config) => { //jshint ignore:line
 	//Page
 	oc.provide(PageStateManager, PageStateManagerImpl);
 	oc.bind('$PageStateManager', PageStateManager);
-	oc.bind('$PageFactory', PageFactory, [oc]);
+	oc.inject(PageFactory, [oc]);
+	oc.bind('$PageFactory', PageFactory);
 	oc.constant('$PageRendererViewAdapter', ViewAdapter);
-	oc.bind('$PageRendererFactory', PageRendererFactory, [oc, '$React', '$PageRendererViewAdapter']);
+	oc.inject(PageRendererFactory, [oc, '$React', '$PageRendererViewAdapter']);
+	oc.bind('$PageRendererFactory', PageRendererFactory);
 
-	if (oc.get('$Window').isClient()) {
+	if (oc.get(Window).isClient()) {
 		oc.provide(PageRenderer, ClientPageRenderer, ['$PageRendererFactory', '$Helper', '$ReactDOM', '$Settings', '$Window']);
 	} else {
 		oc.provide(PageRenderer, ServerPageRenderer, ['$PageRendererFactory', '$Helper', '$ReactDOMServer', '$Settings', '$Response', '$Cache']);
 	}
 	oc.bind('$PageRenderer', PageRenderer);
 
-	if (oc.get('$Window').isClient()) {
-		oc.provide(PageManager, ClientPageManager, ['$PageFactory', '$PageRenderer', '$PageStateManager', '$Window', '$EventBus']);
+	if (oc.get(Window).isClient()) {
+		oc.provide(PageManager, ClientPageManager);
 	} else {
-		oc.provide(PageManager, ServerPageManager, ['$PageFactory', '$PageRenderer', '$PageStateManager']);
+		oc.provide(PageManager, ServerPageManager);
 	}
 	oc.bind('$PageManager', PageManager);
 
 	//Router
 	oc.constant('$Route', Route);
-	oc.bind('$RouteFactory', RouteFactory, ['$Route']);
+	oc.inject(RouteFactory, ['$Route']);
+	oc.bind('$RouteFactory', RouteFactory);
 
-	if (oc.get('$Window').isClient()) {
-		oc.provide(Router, ClientRouter, ['$PageManager', '$RouteFactory', '$Dispatcher', '$Window']);
+	if (oc.get(Window).isClient()) {
+		oc.provide(Router, ClientRouter);
 	} else {
-		oc.provide(Router, ServerRouter, ['$PageManager', '$RouteFactory', '$Dispatcher', '$Request', '$Response']);
+		oc.provide(Router, ServerRouter);
 	}
 	oc.bind('$Router', Router);
 	oc.constant('$RouteNames', RouteNames);
@@ -175,12 +180,12 @@ export let init = (ns, oc, config) => { //jshint ignore:line
 	//SuperAgent
 	oc.bind('$HttpUrlTransformer', UrlTransformer);
 	oc.bind('$SuperAgentProxy', HttpProxy, ['$SuperAgent', '$HttpUrlTransformer', '$Window']);
-	oc.provide(HttpAgent, HttpAgentImpl, ['$SuperAgentProxy', '$Cache', '$CookieStorage', config.$Http]);
+	oc.provide(HttpAgent, HttpAgentImpl, ['$SuperAgentProxy', '$Cache', CookieStorage, config.$Http]);
 	oc.bind('$Http', HttpAgent);
 	oc.constant('$HttpStatusCode', HttpStatusCode);
 
 	//Dev tools
-	oc.bind('$DevTool', DevTool, ['$PageManager', '$PageStateManager', '$Window', '$Dispatcher', '$EventBus']);
+	oc.bind('$DevTool', DevTool);
 
 	//*************END IMA****************
 

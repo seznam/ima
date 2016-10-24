@@ -89,6 +89,10 @@ const MOUSE_LEFT_BUTTON = 0;
  */
 export default class ClientRouter extends AbstractRouter {
 
+	static get $dependencies() {
+		return [PageManager, RouteFactory, Dispatcher, Window];
+	}
+
 	/**
 	 * Initializes the client-side router.
 	 *

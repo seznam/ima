@@ -21,6 +21,11 @@ ns.namespace('ima.storage');
  * @requires SessionStorage
  */
 export default class SessionMapStorage extends Storage {
+
+	static get $dependencies() {
+		return [MapStorage, SessionStorage];
+	}
+
 	/**
 	 * Initializes the storage.
 	 *

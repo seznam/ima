@@ -34,6 +34,11 @@ const EMPTY_SET = Object.freeze(new Set());
  * @submodule ima.event
  */
 export default class DispatcherImpl extends Dispatcher {
+
+	static get $dependencies() {
+		return [];
+	}
+
 	/**
 	 * Initializes the dispatcher.
 	 *

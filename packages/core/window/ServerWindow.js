@@ -14,6 +14,10 @@ ns.namespace('ima.window');
  */
 export default class ServerWindow extends Window {
 
+	static get $dependencies() {
+		return [];
+	}
+
 	/**
 	 * @inheritdoc
 	 * @method isClient

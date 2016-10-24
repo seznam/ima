@@ -19,6 +19,10 @@ ns.namespace('ima.debug');
  */
 export default class DevTool {
 
+	static get $dependencies() {
+		return [PageManager, PageStateManager, Window, Dispatcher, EventBus];
+	}
+
 	/**
 	 * @method constructor
 	 * @constructor

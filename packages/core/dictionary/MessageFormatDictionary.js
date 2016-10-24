@@ -16,6 +16,10 @@ ns.namespace('ima.dictionary');
  */
 export default class MessageFormatDictionary extends Dictionary {
 
+	static get $dependencies() {
+		return [];
+	}
+
 	/**
 	 * Initializes the dictionary.
 	 *

@@ -22,6 +22,7 @@ ns.namespace('ima.http');
  * @requires ima.storage.CookieStorage
  */
 export default class HttpAgentImpl extends HttpAgent {
+
 	/**
 	 * Initializes the HTTP handler.
 	 *

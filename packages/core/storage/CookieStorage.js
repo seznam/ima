@@ -47,6 +47,11 @@ const COOKIE_SEPARATOR = '; ';
  * @requires Response
  */
 export default class CookieStorage extends MapStorage {
+
+	static get $dependencies() {
+		return [Window, Request, Response];
+	}
+
 	/**
 	 * Initializes the cookie storage.
 	 *

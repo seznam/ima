@@ -13,6 +13,7 @@ ns.namespace('ima.page.renderer');
  * @submodule ima.page
  */
 export default class ViewAdapter extends React.Component {
+
 	/**
 	 * @inheritdoc
 	 * @override

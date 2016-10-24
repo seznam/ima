@@ -15,6 +15,7 @@ ns.namespace('ima.storage');
  * @submodule ima.storage
  */
 export default class WeakMapStorage extends MapStorage {
+
 	/**
 	 * Initializes the storage.
 	 *

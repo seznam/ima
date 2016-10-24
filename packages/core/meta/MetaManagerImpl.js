@@ -13,6 +13,11 @@ ns.namespace('ima.meta');
  * @submodule ima.meta
  */
 export default class MetaManagerImpl extends MetaManager {
+
+	static get $dependencies() {
+		return [];
+	}
+
 	/**
 	 * Initializes the meta page attributes manager.
 	 *

@@ -12,6 +12,10 @@ ns.namespace('ima.router');
  */
 export default class Request {
 
+	static get $dependencies() {
+		return [];
+	}
+
 	/**
 	 * Initializes the request.
 	 *

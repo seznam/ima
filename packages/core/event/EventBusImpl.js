@@ -29,6 +29,11 @@ const IMA_EVENT = '$IMA.CustomEvent';
  * @submodule ima.event
  */
 export default class EventBusImpl extends EventBus {
+
+	static get $dependencies() {
+		return [Window];
+	}
+
 	/**
 	 * Initializes the custom event helper.
 	 *

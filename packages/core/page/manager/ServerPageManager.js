@@ -1,4 +1,7 @@
 import ns from '../../namespace';
+import PageFactory from '../PageFactory';
+import PageRenderer from '../renderer/PageRenderer';
+import PageStateManager from '../state/PageStateManager';
 import AbstractPageManager from './AbstractPageManager';
 import PageManager from './PageManager';
 
@@ -15,6 +18,10 @@ ns.namespace('ima.page.manager');
  * @submodule ima.page
  */
 export default class ServerPageManager extends AbstractPageManager {
+
+	static get $dependencies() {
+		return [PageFactory, PageRenderer, PageStateManager];
+	}
 
 	/**
 	 * @inheritdoc

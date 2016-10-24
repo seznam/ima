@@ -5,7 +5,7 @@ import Response from './Response';
 import RouteFactory from './RouteFactory';
 import Router from './Router';
 import Dispatcher from '../event/Dispatcher';
-import PageRenderer from '../page/renderer/PageRenderer';
+import PageManager from '../page/manager/PageManager';
 
 ns.namespace('ima.router');
 
@@ -21,12 +21,16 @@ ns.namespace('ima.router');
  */
 export default class ServerRouter extends AbstractRouter {
 
+	static get $dependencies() {
+		return [PageManager, RouteFactory, Dispatcher, Request, Response];
+	}
+
 	/**
 	 * Initializes the router.
 	 *
 	 * @constructor
 	 * @method constructor
-	 * @param {PageRenderer} pageManager The current page manager.
+	 * @param {PageManager} pageManager The current page manager.
 	 * @param {RouteFactory} factory The router factory used to create routes.
 	 * @param {Dispatcher} dispatcher Dispatcher fires events to app.
 	 * @param {Request} request The current HTTP request.

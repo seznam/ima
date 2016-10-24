@@ -23,6 +23,10 @@ ns.namespace('ima.page.manager');
  */
 export default class ClientPageManager extends AbstractPageManager {
 
+	static get $dependencies() {
+		return [PageFactory, PageRenderer, PageStateManager, Window, EventBus];
+	}
+
 	/**
 	 * @method constructor
 	 * @constructor

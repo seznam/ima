@@ -16,6 +16,11 @@ ns.namespace('ima.storage');
  * @requires Map
  */
 export default class MapStorage extends Storage {
+
+	static get $dependencies() {
+		return [];
+	}
+
 	/**
 	 * Initializes the map storage.
 	 *

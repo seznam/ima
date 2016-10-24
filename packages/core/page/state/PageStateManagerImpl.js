@@ -16,6 +16,10 @@ const MAX_HISTORY_LIMIT = 10;
  */
 export default class PageStateManagerImpl extends PageStateManager {
 
+	static get $dependencies() {
+		return [];
+	}
+
 	/**
 	 * @method constructor
 	 * @constructor
