@@ -233,28 +233,36 @@ function reviveTestClientApp(initialAppConfigFunctions) {
 }
 
 function onLoad(callback) {
-	if (!_isClient()) {
-		return;
+	//TODO remove @0.15.0
+	if ($IMA.$Debug && typeof callback === 'function') {
+		throw new Error(`The onLoad method use promise pattern ` +
+				`instead of callback pattern. Update your app/main.js file.`);
 	}
 
-	if (
-		(document.readyState === 'complete') ||
-		(document.readyState === 'interactive')
-	) {
-		$IMA.Loader.initAllModules()
-			.then(callback)
-			.catch((error) => {
-				console.error(error);
-			});
-	} else {
-		window.addEventListener('DOMContentLoaded', () => {
-			$IMA.Loader.initAllModules()
-				.then(callback)
-				.catch((error) => {
-					console.error(error);
-				});
-		});
+	if (!_isClient()) {
+		return Promise.reject(null);
 	}
+
+	return new Promise((resolve) => {
+		if (
+			(document.readyState === 'complete') ||
+			(document.readyState === 'interactive')
+		) {
+			$IMA.Loader.initAllModules()
+				.then(resolve)
+				.catch((error) => {
+					reject(error);
+				});
+		} else {
+			window.addEventListener('DOMContentLoaded', () => {
+				$IMA.Loader.initAllModules()
+					.then(resolve)
+					.catch((error) => {
+						reject(error);
+					});
+			});
+		}
+	});
 }
 
 vendorLinker.bindToNamespace(ns);
