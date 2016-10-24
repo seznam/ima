@@ -54,7 +54,6 @@ export let init = (ns, oc, config) => { //jshint ignore:line
 	//**************START VENDORS**************
 
 	oc.constant('$Helper', vendorLinker.get('ima-helpers', true));
-	oc.constant('$Promise', Promise);
 
 	//React
 	oc.constant('$React', vendorLinker.get('react', true));
