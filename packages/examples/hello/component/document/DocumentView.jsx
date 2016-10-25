@@ -12,6 +12,11 @@ ns.namespace('app.component.document');
  * @submodule app.component
  */
 export default class DocumentView extends AbstractDocumentView {
+
+	static get masterElementId() {
+		return 'page';
+	}
+
 	render() {
 		let appCssFile = this.utils.$Settings.$Env !== 'dev' ? 'app.bundle.min.css' : 'app.css';
 		appCssFile += `?version=${this.utils.$Settings.$Version}`;
@@ -70,10 +75,6 @@ export default class DocumentView extends AbstractDocumentView {
 		});
 
 		return [scriptResources].concat(scriptTags).join('');
-	}
-
-	static get masterElementId() {
-		return 'page';
 	}
 }
 
