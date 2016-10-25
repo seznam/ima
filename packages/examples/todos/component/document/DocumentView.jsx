@@ -21,10 +21,10 @@ export default class DocumentView extends AbstractDocumentView {
 					<title>
 						{this.props.metaManager.getTitle()}
 					</title>
-					<script src={this.utils.$Router.getBaseUrl() + this.utils.$Settings.$Static.js + '/todomvc-common-base.js'}></script>
+					<script src={this.utils.$Router.getBaseUrl() + this.utils.$Settings.$Static.js + '/todomvc-common-base.js'}/>
 				</head>
 				<body>
-					<div id="page" dangerouslySetInnerHTML={{__html: this.props.page}} />
+					<div id="page" dangerouslySetInnerHTML={{__html: this.props.page}}/>
 					<script id="revivalSettings" dangerouslySetInnerHTML={{ __html: this.props.revivalSettings }}/>
 					{this.utils.$Settings.$Env === 'dev' ?
 						<div id="scripts">{this.getSyncScripts()}</div>
@@ -39,7 +39,7 @@ export default class DocumentView extends AbstractDocumentView {
 	getSyncScripts() {
 		return this.utils.$Settings.$Page.$Render.scripts
 				.map((script, index) => {
-					return <script src={script} key={'script' + index} />;
+					return <script src={script} key={'script' + index}/>;
 				})
 				.concat([
 					<script key={'scriptRunner'}>{'$IMA.Runner.run();'}</script>
@@ -57,7 +57,7 @@ export default class DocumentView extends AbstractDocumentView {
 			];
 		</script>`;
 
-		let scriptTags = this.utils.$Settings.$Page.$Render.scripts.map((script, index) => {
+		let scriptTags = this.utils.$Settings.$Page.$Render.scripts.map((script) => {
 			return `<script src="${script}" async onload="$IMA.Runner.load(this)"></script>`;
 		});
 

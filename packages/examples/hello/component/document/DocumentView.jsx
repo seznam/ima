@@ -54,7 +54,7 @@ export default class DocumentView extends AbstractDocumentView {
 	getSyncScripts() {
 		return this.utils.$Settings.$Page.$Render.scripts
 				.map((script, index) => {
-					return <script src={script} key={'script' + index} />;
+					return <script src={script} key={'script' + index}/>;
 				})
 				.concat([<script key={'scriptRunner'}>{'$IMA.Runner.run();'}</script>]);
 	}
@@ -70,7 +70,7 @@ export default class DocumentView extends AbstractDocumentView {
 			];
 		</script>`;
 
-		let scriptTags = this.utils.$Settings.$Page.$Render.scripts.map((script, index) => {
+		let scriptTags = this.utils.$Settings.$Page.$Render.scripts.map((script) => {
 			return `<script src='${script}' async onload='$IMA.Runner.load(this)'></script>`;
 		});
 
