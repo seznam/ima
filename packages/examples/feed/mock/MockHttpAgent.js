@@ -1,23 +1,24 @@
-import ns from 'ima/namespace';
 import IMAError from 'ima/error/GenericError';
-
-ns.namespace('app.model');
+import HttpAgent from 'ima/http/HttpAgent';
 
 /**
  * Fake data for demo example.
  *
- * @class FakeHttp
- * @namespace app.model
+ * @class MockHttpAgent
+ * @namespace app.mock
  * @module app
- * @submodule app.model
+ * @submodule app.mock
  */
-class FakeHttp {
+export default class MockHttpAgent extends HttpAgent {
+
 	/**
 	 * @constructor
 	 * @method constructor
 	 * @param {string} apiBaseUrl
 	 */
 	constructor(apiBaseUrl) {
+		super();
+
 		this._apiBaseUrl = apiBaseUrl;
 
 		this.categories = [
@@ -89,10 +90,10 @@ class FakeHttp {
 	}
 
 	/**
-	 * Gets all items
+	 * Gets all items.
 	 *
 	 * @method
-	 * return {Object} - Json object with all items.
+	 * @return {Promise<Object<string, *>>}
 	 */
 	get(url, data = {}) {
 		// Universal API BASE URL
@@ -110,7 +111,11 @@ class FakeHttp {
 					if (singleItem[0]) {
 						return Promise.resolve({ body: singleItem[0] });
 					}
-					return Promise.reject(new IMAError('Bad request', { status: 404,  url: apiUrl, fullUrl: url }));
+					return Promise.reject(new IMAError('Bad request', {
+						status: 404,
+						url: apiUrl,
+						fullUrl: url
+					}));
 				}
 
 				if (data.category) {
@@ -121,9 +126,15 @@ class FakeHttp {
 
 				return Promise.resolve({ body: { 'items': items } });
 			case '/categories':
-				return Promise.resolve({ body: { 'categories': this.categories } });
+				return Promise.resolve({
+					body: { 'categories': this.categories }
+				});
 			default:
-				return Promise.reject(new IMAError('Bad request', { status: 404, url: apiUrl, fullUrl: url }));
+				return Promise.reject(new IMAError('Bad request', {
+					status: 404,
+					url: apiUrl,
+					fullUrl: url
+				}));
 		}
 	}
 
@@ -131,7 +142,7 @@ class FakeHttp {
 	 * Post item
 	 *
 	 * @method
-	 * return {Object} - Json object with all items.
+	 * @return {Promise<Object<string, *>>}
 	 */
 	post(url, data = {}) {
 		let apiUrl = url.replace(this._apiBaseUrl, '');
@@ -145,9 +156,11 @@ class FakeHttp {
 
 				return Promise.resolve({ body: data });
 			default:
-				return Promise.reject(new IMAError('Bad request', { status: 500, url: apiUrl, fullUrl: url }));
+				return Promise.reject(new IMAError('Bad request', {
+					status: 500,
+					url: apiUrl,
+					fullUrl: url
+				}));
 		}
 	}
 }
-
-ns.app.model.FakeHttp = FakeHttp;

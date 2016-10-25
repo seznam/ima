@@ -1,27 +1,20 @@
-import ns from 'ima/namespace';
 import AbstractComponent from 'ima/page/AbstractComponent';
 import React from 'react';
-
-ns.namespace('app.component.feedItem');
+import Date from 'app/component/date/Date';
+import Share from 'app/component/share/Share';
 
 /**
- * Feed writing.
- * @class View
+ * Feed item.
+ *
+ * @class FeedItem
  * @extends ima.page.AbstractComponent
  * @namespace app.component.feedItem
  * @module app
  * @submodule app.component
  */
-class View extends AbstractComponent {
-
-	constructor(props) {
-		super(props);
-	}
+export default class FeedItem extends AbstractComponent {
 
 	render() {
-		let DateComponentDiv = ns.app.component.date.View;
-		let ShareDiv = ns.app.component.share.View;
-
 		let entity = this.props.entity;
 		let category = this.props.category;
 
@@ -40,14 +33,12 @@ class View extends AbstractComponent {
 							dangerouslySetInnerHTML={{ __html: entity.getContent() }}/>
 					<div className='toolbar'>
 						{hashTag}
-						<DateComponentDiv
-								date={entity.getPosted()}
-								$Utils={this.utils}/>
-						<ShareDiv
+						<Date
+								date={entity.getPosted()}/>
+						<Share
 								item={entity}
 								category={category}
-								active={sharedItemActive}
-								$Utils={this.utils}/>
+								active={sharedItemActive}/>
 					</div>
 				</div>
 			</div>
@@ -58,7 +49,7 @@ class View extends AbstractComponent {
 		if (category) {
 			return (
 				<div className='service-icon'>
-					<img src={this.utils.$Router.getBaseUrl() + category.getIconUrl()} alt={category.getName()} />
+					<img src={this.utils.$Router.getBaseUrl() + category.getIconUrl()} alt={category.getName()}/>
 				</div>);
 		}
 
@@ -67,7 +58,7 @@ class View extends AbstractComponent {
 
 	getHashTag(category) {
 		if (category) {
-			let link = this.utils.$Router.link('category', { category: category.getUrlName() });
+			let link = this.link('category', { category: category.getUrlName() });
 
 			return (
 				<a href={link}>{category.getHashTag()}</a>
@@ -77,5 +68,3 @@ class View extends AbstractComponent {
 		return '';
 	}
 }
-
-ns.app.component.feedItem.View = View;

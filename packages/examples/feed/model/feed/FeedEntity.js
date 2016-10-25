@@ -1,31 +1,30 @@
-import ns from 'ima/namespace';
-import BaseEntity from 'app/base/BaseEntity';
-
-ns.namespace('app.model.feed');
+import AbstractEntity from 'app/model/AbstractEntity';
+import ItemEntity from 'app/model/item/ItemEntity';
 
 /**
- * Entity of feed. It is collecting all other entities or entity lists from feed.
+ * Feed item entity.
  *
  * @class FeedEntity
- * @extends app.base.BaseEntity
+ * @extends app.model.AbstractEntity
  * @namespace app.model.feed
  * @module app
  * @submodule app.model
  */
-class FeedEntity extends BaseEntity {
+export default class FeedEntity extends AbstractEntity {
+
 	/**
 	 * @constructor
 	 * @method constructor
-	 * @param {Object} data
+	 * @param {Object<string, *>} data
 	 */
 	constructor(data) {
 		super(data._id);
 
 		/**
-		 * Entity list - items for feed.
+		 * Entity list - feed items.
 		 *
 		 * @property items
-		 * @type {Array<app.model.item.ItemEntity>}
+		 * @type {ItemEntity[]}
 		 */
 		this._items = data.items;
 	}
@@ -34,7 +33,7 @@ class FeedEntity extends BaseEntity {
 	 * Getter for items
 	 *
 	 * @method getItems
-	 * @return {Array<app.model.item.ItemEntity>}
+	 * @return {ItemEntity[]}
 	 */
 	getItems() {
 		return this._items;
@@ -44,13 +43,11 @@ class FeedEntity extends BaseEntity {
 	 * Setter for items
 	 *
 	 * @method setItems
-	 * @param {Array[app.model.item.ItemEntity]} items
-	 * @return {app.model.feed.ItemEntity}
+	 * @param {ItemEntity[]} items
+	 * @return {FeedEntity}
 	 */
 	setItems(items) {
 		this._items = items;
 		return this;
 	}
 }
-
-ns.app.model.feed.FeedEntity = FeedEntity;

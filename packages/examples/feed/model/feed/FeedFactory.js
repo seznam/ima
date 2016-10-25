@@ -1,25 +1,29 @@
-import ns from 'ima/namespace';
-import BaseEntityFactory from 'app/base/BaseEntityFactory';
-
-ns.namespace('app.model.feed');
+import AbstractEntityFactory from 'app/model/AbstractEntityFactory';
+import FeedEntity from 'app/model/feed/FeedEntity';
+import ItemFactory from 'app/model/item/ItemFactory';
 
 /**
  * Factory to create feed entity.
  *
  * @class FeedFactory
- * @extends app.base.BaseEntityFactory
+ * @extends app.model.AbstractEntityFactory
  * @namespace app.model.feed
  * @module app
  * @submodule app.model
  */
-class FeedFactory extends BaseEntityFactory {
+export default class FeedFactory extends AbstractEntityFactory {
+
+	static get $dependencies() {
+		return [ItemFactory];
+	}
+
 	/**
 	 * @constructor
 	 * @method constructor
-	 * @param {app.model.feed.FeedEntity} FeedEntityConstructor
+	 * @param {ItemFactory} itemFactory
 	 */
-	constructor(FeedEntityConstructor, itemFactory) {
-		super(FeedEntityConstructor);
+	constructor(itemFactory) {
+		super(FeedEntity);
 
 		this._itemFactory = itemFactory;
 	}
@@ -28,8 +32,8 @@ class FeedFactory extends BaseEntityFactory {
 	 * Creates Entity of feed
 	 *
 	 * @method createEntity
-	 * @param {Object} data
-	 * @return {app.model.feed.FeedEntity}
+	 * @param {Object<string, *>} data
+	 * @return {FeedEntity}
 	 */
 	createEntity(data) {
 		let itemEntityList = this._itemFactory.createEntityList(data.items);
@@ -37,5 +41,3 @@ class FeedFactory extends BaseEntityFactory {
 		return super.createEntity({ _id: 'feed', items: itemEntityList });
 	}
 }
-
-ns.app.model.feed.FeedFactory = FeedFactory;

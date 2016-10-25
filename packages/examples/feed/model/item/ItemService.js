@@ -1,46 +1,37 @@
-import ns from 'ima/namespace';
-import BaseService from 'app/base/BaseService';
-
-ns.namespace('app.model.item');
+import AbstractService from 'app/model/AbstractService';
+import ItemResource from 'app/model/item/ItemResource';
 
 /**
  * Class for the feed model.
  * It's a model of the feed model.
  *
  * @class ItemService
- * @extends app.base.BaseService
+ * @extends app.model.AbstractService
  * @namespace app.model.item
  * @module app
  * @submodule app.model
  */
-class ItemService extends BaseService {
+export default class ItemService extends AbstractService {
+
+	static get $dependencies() {
+		return [ItemResource];
+	}
 
 	/**
-	 * @method constructor
 	 * @constructor
-	 * @param {app.model.item.ItemResource} itemResource
+	 * @method constructor
+	 * @param {ItemResource} itemResource
 	 */
 	constructor(itemResource) {
-		super();
-
-		/**
-		 * @property _itemResource
-		 * @private
-		 * @type {app.model.item.ItemResource}
-		 * @default itemResource
-		 * */
-		this._itemResource = itemResource;
-
+		super(itemResource);
 	}
 
 	/**
 	 * @method load
-	 * @param {string} [itemId=null]
+	 * @param {?string} [itemId=null]
+	 * @return {Promise<ItemEntity>}
 	 */
 	load(itemId) {
-		return this._itemResource
-				.getEntity(itemId);
+		return this._resource.getEntity(itemId);
 	}
 }
-
-ns.app.model.item.ItemService = ItemService;

@@ -1,29 +1,28 @@
-import ns from 'ima/namespace';
-import BaseResouce from 'app/base/BaseResource';
-
-ns.namespace('app.model.categoryList');
+import Cache from 'ima/cache/Cache';
+import HttpAgent from 'ima/http/HttpAgent';
+import AbstractResource from 'app/model/AbstractResource';
+import CategoryListFactory from 'app/model/categoryList/CategoryListFactory';
 
 /**
- * Resource for feed.
+ * Resource for categories.
  *
  * @class CategoryListResource
- * @extends app.base.BaseResouce
+ * @extends app.model.AbstractResource
  * @namespace app.model.categoryList
  * @module app
  * @submodule app.model
  */
-class CategoryListResource extends BaseResouce {
+export default class CategoryListResource extends AbstractResource {
+
 	/**
 	 * @method constructor
 	 * @constructor
-	 * @param {ima.http.HttpAgent} http
-	 * @param {string} url - API URL (Base server + api specific path.)
-	 * @param {app.model.categoryList.categoryListFactory} categoryListFactory
-	 * @param {ima.cache.Cache} cache
+	 * @param {HttpAgent} http
+	 * @param {string} apiUrl API URL (Base server + api specific path.)
+	 * @param {CategoryListFactory} categoryListFactory
+	 * @param {Cache} cache
 	 * */
 	constructor(http, apiUrl, categoryListFactory, cache) {
 		super(http, apiUrl, categoryListFactory, cache);
 	}
 }
-
-ns.app.model.categoryList.CategoryListResource = CategoryListResource;

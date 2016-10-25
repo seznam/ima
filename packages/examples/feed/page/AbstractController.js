@@ -1,41 +1,45 @@
-import ns from 'ima/namespace';
-import AbstractController from 'ima/controller/AbstractController';
-
-ns.namespace('app.base');
+import AbstractIMAController from 'ima/controller/AbstractController';
+import Dictionary from 'ima/dictionary/Dictionary';
+import MetaManager from 'ima/meta/MetaManager';
+import Router from 'ima/router/Router';
 
 /**
  * Base controller for app.
  *
- * @class BaseController
+ * @class AbstractController
  * @extends ima.controller.AbstractController
  * @namespace app.base
  * @module app
  * @submodule app.base
  */
-export default class BaseController extends AbstractController {
+export default class AbstractController extends AbstractIMAController {
 
 	/**
 	 * Set meta params.
 	 *
 	 * @method setSeoParams
-	 * @param {Object} resolvedPromises
-	 * @param {ima.meta.MetaManager} metaManager
-	 * @param {ima.router.Router} router
-	 * @param {ima.dictionary.Dictionary} dictionary
-	 * @param {Object} setting
+	 * @param {Object<string, *>} resolvedPromises
+	 * @param {MetaManager} metaManager
+	 * @param {Router} router
+	 * @param {Dictionary} dictionary
+	 * @param {Object<string, *>} setting
 	 */
 	setMetaParams(resolvedPromises, metaManager, router, dictionary, setting) {
-
 		let title = dictionary.get('home.seoTitle');
 		let description = dictionary.get('home.seoDescription');
-		let image = router.getDomain() + setting.$Static.image + setting.Images.fbShare;
+		let domain = router.getDomain();
+		let fbShareImage = setting.Images.fbShare;
+		let image = `${domain}${setting.$Static.image}${fbShareImage}`;
 
 		let url = router.getUrl();
 
 		metaManager.setTitle(title);
 
 		metaManager.setMetaName('description', description);
-		metaManager.setMetaName('keywords', 'IMA.js, isomorphic application, javascript');
+		metaManager.setMetaName(
+			'keywords',
+			'IMA.js, isomorphic application, javascript'
+		);
 
 		metaManager.setMetaName('twitter:title', title);
 		metaManager.setMetaName('twitter:description', description);
@@ -50,5 +54,3 @@ export default class BaseController extends AbstractController {
 		metaManager.setMetaProperty('og:url', url);
 	}
 }
-
-ns.app.base.BaseController = BaseController;

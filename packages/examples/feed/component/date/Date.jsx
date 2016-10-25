@@ -1,22 +1,16 @@
-import ns from 'ima/namespace';
 import AbstractComponent from 'ima/page/AbstractComponent';
 import React from 'react';
 
-ns.namespace('app.component.date');
-
 /**
  * Date Component.
- * @class View
+ *
+ * @class Date
  * @extends ima.page.AbstractComponent
  * @namespace app.component.date
  * @module app
  * @submodule app.component
  */
-class View extends AbstractComponent {
-
-	constructor(props) {
-		super(props);
-	}
+export default class Date extends AbstractComponent {
 
 	render() {
 		let date = this.props.date || new Date();
@@ -34,5 +28,3 @@ class View extends AbstractComponent {
 		);
 	}
 }
-
-ns.app.component.date.View = View;

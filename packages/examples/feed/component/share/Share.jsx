@@ -1,29 +1,21 @@
-import ns from 'ima/namespace';
 import AbstractComponent from 'ima/page/AbstractComponent';
 import React from 'react';
-
-ns.namespace('app.component.share');
+import TweetButton from 'app/component/tweetButton/TweetButton';
 
 /**
  * React component providing the UI for sharing feed items using social media
  * and e-mail.
  *
- * @class View
+ * @class Share
  * @extends ima.page.AbstractComponent
  * @namespace app.component.share
  * @module app
  * @submodule app.component
  */
-class View extends AbstractComponent {
-
-	constructor(props) {
-		super(props);
-	}
+export default class Share extends AbstractComponent {
 
 	render() {
-		let label = this.utils.$Dictionary.get('home.share');
-
-		let TwitterButton = ns.app.component.tweetButton.View;
+		let label = this.localize('home.share');
 
 		let item = this.props.item;
 		let category = this.props.category;
@@ -32,41 +24,40 @@ class View extends AbstractComponent {
 		let postLink = this.getPostLink(item, category);
 
 		return (
-			<div className={'share' + (active)}>
-				<a href={postLink} className='toggle' onClick={(e) => this.onToggle(e)}>{label}</a>
+			<div className={'share' + active}>
+				<a href={postLink} className='toggle' onClick={(event) => this.onToggle(event)}>{label}</a>
 				<div className='sharing-wrapper'>
 					<div className='sharing-container'>
-						<div className='arrow'></div>
-						<div className='arrow-overlay'></div>
+						<div className='arrow'/>
+						<div className='arrow-overlay'/>
 						<div className='sharing-options'>
 							<input
 									type='text'
 									value={postLink}
 									readOnly={true}
 									ref='shareLink'
-									onClick={(e)=>this.selectShareLink(e)}/>
+									onClick={(event)=>this.selectShareLink(event)}/>
 
 							<a
 									href={postLink}
-									onClick={(e)=>this.onShareOnFacebook(e)}
+									onClick={(event)=>this.onShareOnFacebook(event)}
 									className='facebook'>
 								<img
 										src={this.utils.$Router.getBaseUrl() + this.utils.$Settings.$Static.image + '/share/facebook.png'}
-										alt='Facebook' />
+										alt='Facebook'/>
 								Facebook
 							</a>
 
-							<TwitterButton
+							<TweetButton
 									label='Twitter'
 									url={postLink}
 									text={this.getPlainTextItemContent(item)}
-									hashTags={category.getHashTag()}
-									$Utils={this.utils}/>
+									hashTags={category.getHashTag()}/>
 
 							<a href={this.getMailShareLink(item)} className='email'>
 								<img
 										src={this.utils.$Router.getBaseUrl() + this.utils.$Settings.$Static.image + '/share/email.png'}
-										alt='Email' />
+										alt='Email'/>
 								Email
 							</a>
 						</div>
@@ -95,9 +86,9 @@ class View extends AbstractComponent {
 	getMailShareLink(item) {
 		let category = this.props.category;
 		let categoryName = category ?
-				category.name : this.utils.$Dictionary.get('home.defaultPortal');
+				category.name : this.localize('home.defaultPortal');
 		let query = {
-			subject: this.utils.$Dictionary.get('home.shareMailSubject', {
+			subject: this.localize('home.shareMailSubject', {
 				PORTAL: categoryName
 			}),
 			body: this.getPlainTextItemContent(item)
@@ -121,22 +112,22 @@ class View extends AbstractComponent {
 
 	getPostLink(item, category) {
 		if (item && category) {
-			let localLink = this.utils.$Router.link('post', {
+			let localLink = this.link('post', {
 				category: category.getUrlName(),
 				itemId: item.getId()
 			});
 
 			return localLink;
 		} else {
-			return router.link('home');
+			return this.link('home');
 		}
 	}
 
-	onToggle(e) {
-		e.preventDefault();
-		e.stopPropagation();
+	onToggle(event) {
+		event.preventDefault();
+		event.stopPropagation();
 
-		this.utils.$EventBus.fire(e.target, 'shareToggle', {
+		this.fire('shareToggle', {
 			item: this.props.item
 		});
 	}
@@ -151,5 +142,3 @@ class View extends AbstractComponent {
 		}
 	}
 }
-
-ns.app.component.share.View = View;

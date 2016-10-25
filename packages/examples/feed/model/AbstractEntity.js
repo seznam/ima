@@ -1,20 +1,18 @@
-import ns from 'ima/namespace';
-
-ns.namespace('app.base');
-
 
 /**
- * @class BaseEntity
- * @namespace app.base
+ * Base class for model entities.
+ *
+ * @class AbstractEntity
+ * @namespace app.model
  * @module app
- * @submodule app.base
- * */
-export default class BaseEntity {
+ * @submodule app.model
+ */
+export default class AbstractEntity {
 
 	/**
 	 * @constructor
 	 * @method constructor
-	 * @param {Mixed} id
+	 * @param {*} id
 	 */
 	constructor(id) {
 
@@ -23,7 +21,7 @@ export default class BaseEntity {
 		 *
 		 * @property _id
 		 * @private
-		 * @type {Mixed}
+		 * @type {*}
 		 * @default id
 		 * */
 		this._id = id;
@@ -33,11 +31,9 @@ export default class BaseEntity {
 	 * Return entity unique id.
 	 *
 	 * @method getId
-	 * @return {Mixed}
+	 * @return {*}
 	 * */
 	getId() {
 		return this._id;
 	}
 }
-
-ns.app.base.BaseEntity  = BaseEntity;

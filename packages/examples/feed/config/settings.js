@@ -1,3 +1,5 @@
+import DocumentView from 'app/component/document/DocumentView';
+
 export let init = (ns, oc, config) => {
 	let versionStamp = `?version=${config.$Version}`;
 
@@ -27,7 +29,7 @@ export let init = (ns, oc, config) => {
 						`/static/js/locale/${config.$Language}.js`,
 						'/static/js/app.bundle.min.js'
 					],
-					documentView: 'app.component.document.View'
+					documentView: DocumentView
 				}
 			},
 			$Static: {
@@ -58,9 +60,7 @@ export let init = (ns, oc, config) => {
 						'/static/js/app.client.js' + versionStamp,
 						'/static/js/facebook.js' + versionStamp,
 						'/static/js/hot.reload.js' + versionStamp
-					],
-					documentView: 'app.component.document.View',
-					masterElementId: 'page'
+					]
 				}
 			}
 		}

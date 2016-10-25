@@ -1,20 +1,18 @@
-import BaseEntity from 'app/base/BaseEntity';
-import ns from 'ima/namespace';
-
-ns.namespace('app.model.category');
+import AbstractEntity from 'app/model/AbstractEntity';
 
 /**
- * Entity of portal.
+ * Category entity.
  *
  * @class CategoryEntity
  * @namespace app.model.category
- * @extends app.base.BaseEntity
+ * @extends app.model.AbstractEntity
  * @module app
  * @submodule app.model
  */
-class CategoryEntity extends BaseEntity {
+export default class CategoryEntity extends AbstractEntity {
+
 	constructor(data) {
-		super(data._id, 'services');
+		super(data._id);
 
 		/**
 		 * Name of category.
@@ -30,7 +28,7 @@ class CategoryEntity extends BaseEntity {
 		 *
 		 * @property _urlName
 		 * @private
-		 * @type {number}
+		 * @type {string}
 		 */
 		this._urlName = data.urlname;
 
@@ -94,5 +92,3 @@ class CategoryEntity extends BaseEntity {
 	}
 
 }
-
-ns.app.model.category.CategoryEntity = CategoryEntity;

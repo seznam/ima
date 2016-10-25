@@ -1,12 +1,21 @@
+import Router from 'ima/router/Router';
 import RouteNames from 'ima/router/RouteNames';
+import DetailController from 'app/page/detail/DetailController';
+import DetailView from 'app/page/detail/DetailView';
+import ErrorController from 'app/page/error/ErrorController';
+import ErrorView from 'app/page/error/ErrorView';
+import HomeController from 'app/page/home/HomeController';
+import HomeView from 'app/page/home/HomeView';
+import NotFoundController from 'app/page/notFound/NotFoundController';
+import NotFoundView from 'app/page/notFound/NotFoundView';
 
 export let init = (ns, oc, config) => {
-	let router = oc.get('$Router');
+	let router = oc.get(Router);
 
 	router
-		.add(RouteNames.ERROR, '/error', ns.app.page.error.Controller, ns.app.page.error.View)
-		.add(RouteNames.NOT_FOUND, '/not-found', ns.app.page.notFound.Controller, ns.app.page.notFound.View)
-		.add('home', '/', ns.app.page.home.Controller, ns.app.page.home.View)
-		.add('category', '/:category', ns.app.page.home.Controller, ns.app.page.home.View)
-		.add('post', '/:category/:itemId', ns.app.page.detail.Controller, ns.app.page.detail.View);
+		.add('home', '/', HomeController, HomeView)
+		.add('category', '/:category', HomeController, HomeView)
+		.add('post', '/:category/:itemId', DetailController, DetailView)
+		.add(RouteNames.ERROR, '/error', ErrorController, ErrorView)
+		.add(RouteNames.NOT_FOUND, '/not-found', NotFoundController, NotFoundView);
 };

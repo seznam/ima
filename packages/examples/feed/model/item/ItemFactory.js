@@ -1,26 +1,26 @@
-import ns from 'ima/namespace';
-import BaseEntityFactory from 'app/base/BaseEntityFactory';
-
-ns.namespace('app.model.item');
+import AbstractEntityFactory from 'app/model/AbstractEntityFactory';
+import ItemEntity from 'app/model/item/ItemEntity';
 
 /**
  * Factory  to create item entity.
  *
  * @class ItemFactory
- * @extends app.base.BaseEntityFactory
+ * @extends app.model.AbstractEntityFactory
  * @namespace app.model.item
  * @module app
  * @submodule app.model
  */
-class ItemFactory extends BaseEntityFactory {
+export default class ItemFactory extends AbstractEntityFactory {
+
+	static get $dependencies() {
+		return [];
+	}
+
 	/**
 	 * @constructor
 	 * @method constructor
-	 * @param {app.model.item.ItemEntity} ItemEntityConstructor
 	 */
-	constructor(ItemEntityConstructor) {
-		super(ItemEntityConstructor);
+	constructor() {
+		super(ItemEntity);
 	}
 }
-
-ns.app.model.item.ItemFactory = ItemFactory;

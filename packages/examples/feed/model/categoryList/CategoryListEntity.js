@@ -1,22 +1,21 @@
-import ns from 'ima/namespace';
-import BaseEntity from 'app/base/BaseEntity';
-
-ns.namespace('app.model.categoryList');
+import AbstractEntity from 'app/model/AbstractEntity';
+import CategoryEntity from 'app/model/category/CategoryEntity';
 
 /**
- * Entity of category list. It is collecting all other entities or entity lists from category list.
+ * Entity of containing a list of categories.
  *
  * @class CategoryListEntity
- * @extends app.base.BaseEntity
+ * @extends app.model.AbstractEntity
  * @namespace app.model.categoryList
  * @module app
  * @submodule app.model
  */
-class CategoryListEntity extends BaseEntity {
+export default class CategoryListEntity extends AbstractEntity {
+
 	/**
 	 * @constructor
 	 * @method constructor
-	 * @param {Object} data
+	 * @param {Object<string, *>} data
 	 */
 	constructor(data) {
 		super(data._id);
@@ -25,7 +24,7 @@ class CategoryListEntity extends BaseEntity {
 		 * Entity list - categories for category list.
 		 *
 		 * @property categories
-		 * @type {Array<app.model.category.CategoryEntity>}
+		 * @type {CategoryEntity[]}
 		 */
 		this._categories = data.categories;
 	}
@@ -34,7 +33,7 @@ class CategoryListEntity extends BaseEntity {
 	 * Getter for categories
 	 *
 	 * @method getCategories
-	 * @return {Array<app.model.category.CategoryEntity>}
+	 * @return {CategoryEntity[]}
 	 */
 	getCategories() {
 		return this._categories;
@@ -44,16 +43,9 @@ class CategoryListEntity extends BaseEntity {
 	 * Getter for category by id
 	 *
 	 * @method getCategoryById
-	 * @return {app.model.category.CategoryEntity}
+	 * @return {CategoryEntity}
 	 */
 	getCategoryById(id) {
-		return this._categories.filter((category) => {
-			if (category.getId() === id) {
-				return category;
-			}
-		})[0];
+		return this._categories.filter(category => category.getId() === id)[0];
 	}
-
 }
-
-ns.app.model.categoryList.CategoryListEntity = CategoryListEntity;

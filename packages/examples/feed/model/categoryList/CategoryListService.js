@@ -1,79 +1,63 @@
-import ns from 'ima/namespace';
-import BaseService from 'app/base/BaseService';
 import IMAError from 'ima/error/GenericError';
-
-ns.namespace('app.model.categoryList');
+import AbstractService from 'app/model/AbstractService';
+import CategoryEntity from 'app/model/category/CategoryEntity';
+import CategoryListEntity from 'app/model/categoryList/CategoryListEntity';
+import CategoryListResource from 'app/model/categoryList/CategoryListResource';
 
 /**
- * Class for the feed model.
- * It's a model of the feed model.
+ * Category list model service.
  *
  * @class CategoryListService
- * @extends app.base.BaseService
- * @namespace pp.model.categoryList
+ * @extends app.model.AbstractService
+ * @namespace app.model.categoryList
  * @module app
  * @submodule app.model
  */
-class CategoryListService extends BaseService {
+export default class CategoryListService extends AbstractService {
+
+	static get $dependencies() {
+		return [CategoryListResource];
+	}
 
 	/**
 	 * @method constructor
 	 * @constructor
-	 * @param {app.model.categoryList.CategoryListResource} categoryListResource
+	 * @param {CategoryListResource} categoryListResource
 	 */
 	constructor(categoryListResource) {
-		super();
-
-		/**
-		 * @property _categoryListResource
-		 * @private
-		 * @type {app.model.categoryList.CategoryListResource}
-		 * @default categoryListResource
-		 * */
-		this._categoryListResource = categoryListResource;
+		super(categoryListResource);
 	}
-
-	/**
-	 * Deinitialization model.
-	 *
-	 * @method deinit
-	 * */
-	deinit() {}
 
 	/**
 	 * Get category by url name.
 	 *
 	 * @method getCategoryByUrl
-	 * @param {string|null} urlName
-	 * @return {app.base.CategoryEntity|null}
+	 * @param {?string} urlName
+	 * @return {Promise<?CategoryEntity>}
 	 */
 	getCategoryByUrl(urlName) {
-		return this._categoryListResource
-				.getEntity()
-				.then((categoryListEntity) => {
-					let categories = categoryListEntity.getCategories();
+		return this._resource.getEntity().then((categoryListEntity) => {
+			if (!urlName) {
+				return null;
+			}
 
-					if (!urlName) {
-						return null;
-					}
+			let categories = categoryListEntity.getCategories();
 
-					for (let i = 0; i < categories.length; i++) {
-						if (categories[i].getUrlName() === urlName) {
-							return categories[i];
-						}
-					}
+			for (let i = 0; i < categories.length; i++) {
+				if (categories[i].getUrlName() === urlName) {
+					return categories[i];
+				}
+			}
 
-					throw new IMAError('Category not found.', { status: 404 });
-				});
+			throw new IMAError('Category not found.', { status: 404 });
+		});
 	}
 
 	/**
 	 * @method load
-	 * @return {app.model.categoryList.CategoryListEntity}
+	 * @return {Promise<CategoryListEntity>}
 	 */
 	load() {
-		return this._categoryListResource.getEntity();
+		return this._resource.getEntity();
 	}
 }
-
-ns.app.model.categoryList.CategoryListService = CategoryListService;

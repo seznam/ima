@@ -1,25 +1,29 @@
-import ns from 'ima/namespace';
-import BaseResource from 'app/base/BaseResource';
-
-ns.namespace('app.model.feed');
+import Cache from 'ima/cache/Cache';
+import HttpAgent from 'ima/http/HttpAgent';
+import AbstractResource from 'app/model/AbstractResource';
+import CategoryEntity from 'app/model/category/CategoryEntity';
+import FeedEntity from 'app/model/feed/FeedEntity';
+import FeedFactory from 'app/model/feed/FeedFactory';
+import ItemEntity from 'app/model/item/ItemEntity';
 
 /**
  * Resource for feed.
  *
  * @class FeedResource
- * @extends app.base.BaseResource
+ * @extends app.model.AbstractResource
  * @namespace app.model.feed
  * @module app
  * @submodule app.model
  */
-class FeedResource extends BaseResource {
+export default class FeedResource extends AbstractResource {
+
 	/**
-	 * @method constructor
 	 * @constructor
-	 * @param {ima.http.HttpAgent} http
-	 * @param {string} url - API URL (Base server + api specific path.)
-	 * @param {app.model.factory.FeedFactory} feedFactory
-	 * @param {ima.cache.Cache} cache
+	 * @method constructor
+	 * @param {HttpAgent} http
+	 * @param {string} url API URL (Base server + api specific path.)
+	 * @param {FeedFactory} feedFactory
+	 * @param {Cache} cache
 	 * */
 	constructor(http, url, feedFactory, cache) {
 		super(http, url, feedFactory, cache);
@@ -32,9 +36,9 @@ class FeedResource extends BaseResource {
 	 *   - If AfterItemId is defined, it will returns items following this item.
 	 *
 	 * @method getFeedItems
-	 * @param {app.model.category.CategoryEntity} [category=null] - Category entity.
-	 * @param {app.model.item.ItemEntity} [lastItem=null] - Last item entity.
-	 * @return {app.model.feed.FeedEntity} - Promise of feed entity
+	 * @param {CategoryEntity=} [category=null] Category entity.
+	 * @param {ItemEntity=} [lastItem=null] Last item entity.
+	 * @return {Promise<FeedEntity>} Promise of feed entity
 	 */
 	getEntity(category = null, lastItem = null) {
 		let data = {};
@@ -46,5 +50,3 @@ class FeedResource extends BaseResource {
 		return super.getEntity(null, data);
 	}
 }
-
-ns.app.model.feed.FeedResource = FeedResource;

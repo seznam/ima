@@ -1,26 +1,26 @@
-import ns from 'ima/namespace';
-import BaseEntityFactory from 'app/base/BaseEntityFactory';
-
-ns.namespace('app.model.category');
+import AbstractEntityFactory from 'app/model/AbstractEntityFactory';
+import CategoryEntity from 'app/model/category/CategoryEntity';
 
 /**
  * Factory to create category entity.
  *
  * @class CategoryFactory
- * @extends app.base.BaseEntityFactory
+ * @extends app.model.AbstractEntityFactory
  * @namespace app.model.category
  * @module app
  * @submodule app.model
  */
-class CategoryFactory extends BaseEntityFactory {
+export default class CategoryFactory extends AbstractEntityFactory {
+
+	static get $dependencies() {
+		return [];
+	}
+
 	/**
 	 * @constructor
 	 * @method constructor
-	 * @param {app.model.category.CategoryEntity} CategoryEntityConstructor
 	 */
-	constructor(CategoryEntityConstructor) {
-		super(CategoryEntityConstructor);
+	constructor() {
+		super(CategoryEntity);
 	}
 }
-
-ns.app.model.category.CategoryFactory = CategoryFactory;

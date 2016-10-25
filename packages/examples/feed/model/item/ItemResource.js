@@ -1,7 +1,8 @@
-import ns from 'ima/namespace';
-import BaseResource from 'app/base/BaseResource';
-
-ns.namespace('app.model.item');
+import Cache from 'ima/cache/Cache';
+import HttpAgent from 'ima/http/HttpAgent';
+import AbstractResource from 'app/model/AbstractResource';
+import ItemEntity from 'app/model/item/ItemEntity';
+import ItemFactory from 'app/model/item/ItemFactory';
 
 /**
  * Resource for items.
@@ -12,15 +13,16 @@ ns.namespace('app.model.item');
  * @module app
  * @submodule app.model
  */
-class ItemResource extends BaseResource {
+export default class ItemResource extends AbstractResource {
+
 	/**
-	 * @method constructor
 	 * @constructor
-	 * @param {ima.http.HttpAgent} http
-	 * @param {string} url - API URL (Base server + api specific path.)
-	 * @param {app.model.item.ItemFactory} itemFactory
-	 * @param {ima.Cache.Cache} cache
-	 * */
+	 * @method constructor
+	 * @param {HttpAgent} http
+	 * @param {string} apiUrl API URL (Base server + api specific path.)
+	 * @param {ItemFactory} itemFactory
+	 * @param {Cache} cache
+	 */
 	constructor(http, apiUrl, itemFactory, cache) {
 		super(http, apiUrl, itemFactory, cache);
 	}
@@ -29,8 +31,8 @@ class ItemResource extends BaseResource {
 	 * Method returns entity with list of items.
 	 *
 	 * @method getEntity
-	 * @param {string} id - Id of the item.
-	 * @return {app.model.item.ItemEntity} - Promise of item entity
+	 * @param {string} id Id of the item.
+	 * @return {Promise<ItemEntity>} Promise of item entity
 	 */
 	getEntity(id) {
 		return super.getEntity(null, { id: id });
@@ -40,8 +42,9 @@ class ItemResource extends BaseResource {
 	 * Method make request to API server and returns new entity.
 	 *
 	 * @method createEntity
-	 * @param {Object} data - Data with text and category for create new Entity ({text: <string>, category: <number>}).
-	 * @return {app.model.item.ItemEntity} - Promise of item entity
+	 * @param {Object<string, *>} data Data with text and category for create
+	 *        new entity.
+	 * @return {Promise<ItemEntity>} Promise of item entity
 	 */
 	createEntity(data) {
 		this._cache.clear();
@@ -49,5 +52,3 @@ class ItemResource extends BaseResource {
 		return super.createEntity(data);
 	}
 }
-
-ns.app.model.item.ItemResource = ItemResource;

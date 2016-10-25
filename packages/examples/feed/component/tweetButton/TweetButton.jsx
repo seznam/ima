@@ -1,4 +1,3 @@
-import ns from 'ima/namespace';
 import AbstractComponent from 'ima/page/AbstractComponent';
 import React from 'react';
 
@@ -7,43 +6,29 @@ const POPUP_SIZE = Object.freeze({
 	height: 443
 });
 
-ns.namespace('app.component.tweetButton');
-
 /**
- * React component providing the UI for sharing feed items using social media
- * and e-mail.
+ * React component providing the UI for sharing feed items using the Twitter
+ * social network.
  *
- * @class View
+ * @class TweetButton
  * @extends AbstractComponent
  * @namespace app.component.tweetButton
  * @module app
  * @submodule app.component
  */
 
-class View extends AbstractComponent {
+export default class TweetButton extends AbstractComponent {
 
-	constructor(props) {
-		super(props);
-	}
-
-	/**
-	 * Renders the component.
-	 *
-	 * @method render
-	 * @return {*} The component's UI.
-	 */
 	render() {
-		let link = this.composeUrl();
-
 		return (
 			<a
-					href={link}
-					onClick={(e)=>this.onShare(e)}
+					href={this.composeUrl()}
+					onClick={event => this.onShare(event)}
 					className='tweet-button'
 					target='_blank'>
 				<img
 						src={this.utils.$Router.getBaseUrl() + this.utils.$Settings.$Static.image + '/share/twitter.png'}
-						alt={this.props.label} />
+						alt={this.props.label}/>
 				{this.props.label}
 			</a>
 		);
@@ -52,7 +37,7 @@ class View extends AbstractComponent {
 	/**
 	 * Event handler for the click on the "share via Twitter" button.
 	 *
-	 * The handler attemps to opens a new popup for sharing the feed item on
+	 * The handler attempts to opens a new popup for sharing the feed item on
 	 * the Twitter. The popup will be properly sized and centered on the
 	 * screen, with no utility bars or menus being shown. The popup will be
 	 * resizable and will have its scrollbars enabled.
@@ -63,12 +48,12 @@ class View extends AbstractComponent {
 	 * the task bar if the window with the page is minified.
 	 *
 	 * The handler will prevent the default browser action (following the link)
-	 * only if the popup is successfuly shown. If the browser blocks the popup,
-	 * the default action will not be blocked and the broser will follow the
+	 * only if the popup is successfully shown. If the browser blocks the popup,
+	 * the default action will not be blocked and the browser will follow the
 	 * link of the anchor.
 	 *
 	 * @method onShare
-	 * @param {SyntheticEvent} event The event wrapper by React.
+	 * @param {Event} event The click event.
 	 */
 	onShare(event) {
 		let url = this.composeUrl();
@@ -89,9 +74,9 @@ class View extends AbstractComponent {
 		};
 
 		let optionsString = Object.keys(options).map((optionName) => {
-			return [optionName, options[optionName]].
-					map(encodeURIComponent).
-					join('=');
+			return [optionName, options[optionName]]
+					.map(encodeURIComponent)
+					.join('=');
 		});
 
 		let openedWindow = window.open(url, 'twitter', optionsString);
@@ -103,7 +88,7 @@ class View extends AbstractComponent {
 
 	/**
 	 * Composes the URL to the Twitter sharing API containing the parameters
-	 * neccessary for sharing the current feed item.
+	 * necessary for sharing the current feed item.
 	 *
 	 * The methods expects the following properties set on this React
 	 * component:
@@ -133,5 +118,3 @@ class View extends AbstractComponent {
 		return `https://twitter.com/share?${queryString}`;
 	}
 }
-
-ns.app.component.tweetButton.View = View;

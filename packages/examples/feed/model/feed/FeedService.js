@@ -1,56 +1,52 @@
-import ns from 'ima/namespace';
-import BaseService from 'app/base/BaseService';
-
-ns.namespace('app.model.feed');
+import AbstractService from 'app/model/AbstractService';
+import CategoryListService from 'app/model/categoryList/CategoryListService';
+import FeedEntity from 'app/model/feed/FeedEntity';
+import FeedResource from 'app/model/feed/FeedResource';
+import ItemEntity from 'app/model/item/ItemEntity';
 
 /**
  * Class for the feed model.
  * It's a model of the feed model.
  *
  * @class FeedService
- * @extends app.base.BaseService
+ * @extends app.model.AbstractService
  * @namespace app.model.feed
  * @module app
  * @submodule app.model
  */
-class FeedService extends BaseService {
+export default class FeedService extends AbstractService {
+
+	static get $dependencies() {
+		return [FeedResource, CategoryListService];
+	}
 
 	/**
-	 * @method constructor
 	 * @constructor
-	 * @param {app.model.feed.FeedResource} feedResource
-	 * @param {app.model.category.CategoryListService} categoryListService
+	 * @method constructor
+	 * @param {FeedResource} feedResource
+	 * @param {CategoryListService} categoryListService
 	 */
 	constructor(feedResource, categoryListService) {
-		super();
+		super(feedResource);
 
 		/**
-		 * @property _feedResource
 		 * @private
-		 * @type {app.model.feed.FeedResource}
-		 * @default feedResource
-		 * */
-		this._feedResource = feedResource;
-
-		/**
 		 * @property _categoryListService
-		 * @private
-		 * @type {app.model.categoryList.CategoryListService}
+		 * @type {CategoryListService}
 		 * @default categoryListService
 		 */
 		this._categoryListService = categoryListService;
-
 	}
 
 	/**
 	 * Returns last item entity.
 	 *
 	 * @method getLastItem
-	 * @param {app.model.feed.FeedEntity} feedEntity
-	 * @return {app.model.Item.ItemEntity|null}
+	 * @param {FeedEntity} feedEntity
+	 * @return {?ItemEntity}
 	 */
 	getLastItem(feedEntity) {
-		if (feedEntity && feedEntity.getItems().length > 0) {
+		if (feedEntity && feedEntity.getItems().length) {
 			let items = feedEntity.getItems();
 
 			return items[0];
@@ -61,28 +57,27 @@ class FeedService extends BaseService {
 
 	/**
 	 * @method load
-	 * @param {string=} [currentCategory=null]
+	 * @param {?string=} [currentCategory=null]
+	 * @return {Promise<FeedEntity>}
 	 */
 	load(currentCategory = null) {
 		return this
 			._categoryListService
 			.getCategoryByUrl(currentCategory)
 			.then((categoryEntity) => {
-
-				return this._feedResource
-						.getEntity(categoryEntity);
+				return this._resource.getEntity(categoryEntity);
 			});
 	}
 
 	/**
 	 * Adds new item to feed.
 	 *
-	 * @method addItemToFedd
-	 * @param {app.model.feed.FeedEntity} feedEntity
-	 * @param {app.model.Item.ItemEntity} itemEntity
-	 * @return {app.model.feed.FeedEntity}
+	 * @method addItemToFeed
+	 * @param {FeedEntity} feedEntity
+	 * @param {ItemEntity} itemEntity
+	 * @return {FeedEntity}
 	 */
-	addItemTofeed(feedEntity, itemEntity) {
+	addItemToFeed(feedEntity, itemEntity) {
 		let items = feedEntity.getItems();
 		items.push(itemEntity);
 		feedEntity.setItems(items);
@@ -90,5 +85,3 @@ class FeedService extends BaseService {
 		return feedEntity;
 	}
 }
-
-ns.app.model.feed.FeedService = FeedService;
