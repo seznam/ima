@@ -2,6 +2,7 @@ import React from 'react';
 import AbstractComponent from 'ima/page/AbstractComponent';
 
 export default class Item extends AbstractComponent {
+
 	constructor(props) {
 		super(props);
 
@@ -30,6 +31,14 @@ export default class Item extends AbstractComponent {
 				{this._generateEditUI()}
 			</li>
 		);
+	}
+
+	componentDidUpdate() {
+		if (!this.state.editing) {
+			return;
+		}
+
+		this.refs.edit.focus();
 	}
 
 	onDelete() {
@@ -63,14 +72,6 @@ export default class Item extends AbstractComponent {
 		this.setState({
 			editing: false
 		});
-	}
-
-	componentDidUpdate() {
-		if (!this.state.editing) {
-			return;
-		}
-
-		this.refs.edit.focus();
 	}
 
 	_generateEditUI() {

@@ -2,6 +2,11 @@ import React from 'react';
 import AbstractDocumentView from 'ima/page/AbstractDocumentView';
 
 export default class DocumentView extends AbstractDocumentView {
+
+	static get masterElementId() {
+		return 'page';
+	}
+
 	render() {
 		let appCssFile = this.utils.$Settings.$Env !== 'dev' ? 'app.bundle.min.css' : 'app.css';
 		appCssFile += `?version=${this.utils.$Settings.$Version}`;
@@ -21,7 +26,11 @@ export default class DocumentView extends AbstractDocumentView {
 				<body>
 					<div id="page" dangerouslySetInnerHTML={{__html: this.props.page}} />
 					<script id="revivalSettings" dangerouslySetInnerHTML={{ __html: this.props.revivalSettings }}/>
-					{this.utils.$Settings.$Env === 'dev' ? <div id="scripts">{this.getSyncScripts()}</div> : <div id="scripts" dangerouslySetInnerHTML={{ __html: this.getAsyncScripts() }}/>}
+					{this.utils.$Settings.$Env === 'dev' ?
+						<div id="scripts">{this.getSyncScripts()}</div>
+					:
+						<div id="scripts" dangerouslySetInnerHTML={{ __html: this.getAsyncScripts() }}/>
+					}
 				</body>
 			</html>
 		);
@@ -32,7 +41,9 @@ export default class DocumentView extends AbstractDocumentView {
 				.map((script, index) => {
 					return <script src={script} key={'script' + index} />;
 				})
-				.concat([<script key={'scriptRunner'}>{'$IMA.Runner.run();'}</script>]);
+				.concat([
+					<script key={'scriptRunner'}>{'$IMA.Runner.run();'}</script>
+				]);
 	}
 
 	getAsyncScripts() {
@@ -51,9 +62,5 @@ export default class DocumentView extends AbstractDocumentView {
 		});
 
 		return [scriptResources].concat(scriptTags).join('');
-	}
-
-	static get masterElementId() {
-		return 'page';
 	}
 }

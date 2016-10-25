@@ -1,8 +1,15 @@
-import React from 'react';
-import Item from '../../component/item/Item';
+import React, { PropTypes } from 'react';
 import AbstractComponent from 'ima/page/AbstractComponent';
+import Item from '../../component/item/Item';
 
 export default class HomeView extends AbstractComponent {
+
+	static get contextTypes() {
+		return {
+			$Utils: PropTypes.object
+		};
+	}
+
 	render() {
 		return (
 			<div className='l-home'>
@@ -76,6 +83,11 @@ export default class HomeView extends AbstractComponent {
 		);
 	}
 
+	componentDidMount() {
+		let newItemInput = this.refs.newItem;
+		newItemInput.focus();
+	}
+
 	onKeyUp(event) {
 		if (event.keyCode === 13) {
 			this.onItemAdded();
@@ -101,16 +113,5 @@ export default class HomeView extends AbstractComponent {
 
 	onDeleteCompleted() {
 		this.fire('completedItemsDeleted');
-	}
-
-	componentDidMount() {
-		let newItemInput = this.refs.newItem;
-		newItemInput.focus();
-	}
-
-	static get contextTypes() {
-		return {
-			$Utils: React.PropTypes.object
-		};
 	}
 }

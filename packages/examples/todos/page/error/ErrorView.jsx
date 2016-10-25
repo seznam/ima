@@ -2,6 +2,7 @@ import React, { PropTypes } from 'react';
 import AbstractComponent from 'ima/page/AbstractComponent';
 
 export default class ErrorView extends AbstractComponent {
+
 	render() {
 		let error = this.props.error || {};
 		let message = error.message || '';

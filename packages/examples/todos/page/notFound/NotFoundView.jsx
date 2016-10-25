@@ -1,7 +1,8 @@
-import React from 'react';
+import React, { PropTypes } from 'react';
 import AbstractComponent from 'ima/page/AbstractComponent';
 
 export default class NotFoundView extends AbstractComponent {
+
 	render() {
 		return (
 			<div className='l-not-found'>
@@ -12,7 +13,7 @@ export default class NotFoundView extends AbstractComponent {
 
 	static get contextTypes() {
 		return {
-			$Utils: React.PropTypes.object
+			$Utils: PropTypes.object
 		};
 	}
 }

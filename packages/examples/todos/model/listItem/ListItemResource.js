@@ -1,5 +1,10 @@
 
 export default class Resource {
+
+	static get $dependencies() {
+		return [];
+	}
+
 	constructor() {
 		this._items = [
 			{

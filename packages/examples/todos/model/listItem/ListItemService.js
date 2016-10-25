@@ -1,5 +1,12 @@
+import Resource from './ListItemResource';
+import ListItemFactory from './ListItemFactory';
 
 export default class Service {
+
+	static get $dependencies() {
+		return [Resource, ListItemFactory];
+	}
+
 	constructor(resource, factory) {
 		this._resource = resource;
 

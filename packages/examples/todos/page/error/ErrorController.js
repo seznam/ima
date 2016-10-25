@@ -10,6 +10,11 @@ import AbstractController from '../AbstractController';
  * @submodule app.page
  */
 export default class ErrorController extends AbstractController {
+
+	static get $dependencies() {
+		return [];
+	}
+
 	/**
 	 * Initializes the constructor.
 	 * 

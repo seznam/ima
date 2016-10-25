@@ -1,12 +1,11 @@
 
 export default class Entity {
+
 	constructor(data) {
-		Object.assign(this, data);
+		this.id = data.id;
 
-		this.id;
+		this.title = data.title;
 
-		this.title;
-
-		this.completed;
+		this.completed = data.completed;
 	}
 }

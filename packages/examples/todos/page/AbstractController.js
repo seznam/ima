@@ -13,6 +13,7 @@ import Router from 'ima/router/Router';
  * @submodule app.base
  */
 export default class AbstractController extends AbstractIMAController {
+
 	/**
 	 * Sets the SEO meta information to the provided meta manager.
 	 *

@@ -1,7 +1,13 @@
 import GenericError from 'ima/error/GenericError';
+import ListItemService from '../../model/listItem/ListItemService';
 import AbstractController from '../AbstractController';
 
 export default class HomeController extends AbstractController {
+
+	static get $dependencies() {
+		return [ListItemService];
+	}
+
 	constructor(itemsService) {
 		super();
 
