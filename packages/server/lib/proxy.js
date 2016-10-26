@@ -1,5 +1,5 @@
-var express = require('express');
-var superAgent = require('superagent');
+let express = require('express');
+let superAgent = require('superagent');
 
 function firstLetterToLowerCase(world) {
 	return world.charAt(0).toLowerCase() + world.slice(1);
@@ -10,11 +10,11 @@ function firstLetterToUpperCase(world) {
 }
 
 function parseSetCookieHeader(cookieString) {
-	var cookiePairs = cookieString.split('; ');
+	let cookiePairs = cookieString.split('; ');
 
-	var cookieName = null;
-	var cookieValue = null;
-	var cookieOptions = {
+	let cookieName = null;
+	let cookieValue = null;
+	let cookieOptions = {
 		path: '/',
 		secure: false,
 		expires: new Date('Fri, 31 Dec 9999 23:59:59 UTC'),
@@ -23,9 +23,9 @@ function parseSetCookieHeader(cookieString) {
 	};
 
 	cookiePairs.forEach((pair) => {
-		var separatorIndexEqual = pair.indexOf('=');
-		var name = decodeURIComponent(firstLetterToLowerCase(pair.substr(0, separatorIndexEqual)).trim());
-		var value = decodeURIComponent(pair.substr(separatorIndexEqual + 1).trim());
+		let separatorIndexEqual = pair.indexOf('=');
+		let name = decodeURIComponent(firstLetterToLowerCase(pair.substr(0, separatorIndexEqual)).trim());
+		let value = decodeURIComponent(pair.substr(separatorIndexEqual + 1).trim());
 
 		if (name === '') {
 			name = firstLetterToLowerCase(value);
@@ -54,7 +54,7 @@ function parseSetCookieHeader(cookieString) {
 }
 
 function createHttpRequest(method, proxyUrl, body) {
-	var httpRequest = null;
+	let httpRequest = null;
 
 	switch(method) {
 		case 'POST':
@@ -102,9 +102,9 @@ function setCommonRequestHeaders(httpRequest, headers) {
 module.exports = (environment, logger) => {
 
 	function getResponseData(error, response) {
-		var status = 0;
-		var body = {};
-		var text = '';
+		let status = 0;
+		let body = {};
+		let text = '';
 
 		if (error) {
 			status = error.status || 500;
@@ -114,7 +114,7 @@ module.exports = (environment, logger) => {
 		if (!error && response) {
 			status = response.status || 200;
 			body = response.body;
-			text= response.text;
+			text = response.text;
 		}
 
 		if (
@@ -145,7 +145,7 @@ module.exports = (environment, logger) => {
 	function sendJSONResponse(req, res, error, response) {
 		let { status, body } = getResponseData(error, response);
 
-		if (Object.keys(body).length === 0) {
+		if (!Object.keys(body).length) {
 			body = { Error: 'API error' };
 		}
 
@@ -154,16 +154,16 @@ module.exports = (environment, logger) => {
 
 
 	return (proxyServer) => {
-		var router = express.Router();
+		let router = express.Router();
 
-		var _callRemoteServer = (req, res) => {
-			var url = req.url;
+		let _callRemoteServer = (req, res) => {
+			let url = req.url;
 
-			if ((req.url.length >= 1) && (req.url[req.url.length-1] === '/')) {
+			if (url.length && (url[url.length - 1] === '/')) {
 				url = url.substr(0, url.length - 1);
 			}
 
-			var proxyUrl = proxyServer + url;
+			let proxyUrl = proxyServer + url;
 
 			logger.log(
 				'debug',
@@ -171,7 +171,7 @@ module.exports = (environment, logger) => {
 				JSON.stringify(req.query)
 			);
 
-			var httpRequest = createHttpRequest(req.method, proxyUrl, req.body);
+			let httpRequest = createHttpRequest(req.method, proxyUrl, req.body);
 			httpRequest = setCommonRequestHeaders(httpRequest, req.headers);
 
 			if (req.get('Cookie') && req.get('Cookie') !== '') {
@@ -189,7 +189,7 @@ module.exports = (environment, logger) => {
 
 						sendJSONResponse(req, res, error, response);
 					} else if (response) {
-						var settedCookies = response.header['set-cookie'];
+						let settedCookies = response.header['set-cookie'];
 
 						Object
 							.keys(response.header)
@@ -211,7 +211,7 @@ module.exports = (environment, logger) => {
 
 						if (settedCookies) {
 							settedCookies.forEach((cookieString) => {
-								var cookie = parseSetCookieHeader(cookieString);
+								let cookie = parseSetCookieHeader(cookieString);
 								res.cookie(cookie.name, cookie.value, cookie.options);
 							});
 						}
