@@ -1,15 +1,15 @@
 var express = require('express');
 var superAgent = require('superagent');
 
-var firstLetterToLowerCase = (world) => {
+function firstLetterToLowerCase(world) {
 	return world.charAt(0).toLowerCase() + world.slice(1);
-};
+}
 
-var firstLetterToUpperCase = (world) => {
+function firstLetterToUpperCase(world) {
 	return world.charAt(0).toUpperCase() + world.slice(1);
-};
+}
 
-var parseSetCookieHeader = (cookieString) => {
+function parseSetCookieHeader(cookieString) {
 	var cookiePairs = cookieString.split('; ');
 
 	var cookieName = null;
@@ -23,7 +23,7 @@ var parseSetCookieHeader = (cookieString) => {
 	};
 
 	cookiePairs.forEach((pair) => {
-		var separatorIndexEqual =  pair.indexOf('=');
+		var separatorIndexEqual = pair.indexOf('=');
 		var name = decodeURIComponent(firstLetterToLowerCase(pair.substr(0, separatorIndexEqual)).trim());
 		var value = decodeURIComponent(pair.substr(separatorIndexEqual + 1).trim());
 
@@ -53,7 +53,7 @@ var parseSetCookieHeader = (cookieString) => {
 	};
 }
 
-var createHttpRequest = (method, proxyUrl, body) => {
+function createHttpRequest(method, proxyUrl, body) {
 	var httpRequest = null;
 
 	switch(method) {
@@ -81,23 +81,23 @@ var createHttpRequest = (method, proxyUrl, body) => {
 			httpRequest = superAgent
 				.get(proxyUrl);
 			break;
-	};
+	}
 
 	return httpRequest;
-};
+}
 
-var setCommonRequestHeaders = (httpRequest, headers) => {
+function setCommonRequestHeaders(httpRequest, headers) {
 	Object
 		.keys(headers)
 		.filter((key) => {
-			return ['host', 'Cookie'].indexOf(key) === -1;
+			return !['host', 'Cookie'].includes(key);
 		})
 		.forEach((header) => {
 			httpRequest.set(header, headers[header]);
 		});
 
 	return httpRequest;
-};
+}
 
 module.exports = (environment, logger) => {
 
@@ -117,10 +117,21 @@ module.exports = (environment, logger) => {
 			text= response.text;
 		}
 
-		if ((!body || typeof body === 'object' && Object.keys(body).length === 0) &&
-				typeof(text) === 'string' && text !== '') {
+		if (
+			(
+				!body ||
+				typeof body === 'object' &&
+				Object.keys(body).length === 0
+			) &&
+			typeof(text) === 'string' &&
+			text !== ''
+		) {
 			try {
-				logger.warn('API sent bad header of content-type. More info how you can to fix it: http://visionmedia.github.io/superagent/#parsing-response bodies');
+				logger.warn(
+					'The API sent invalid Content-Type header. More info ' +
+					'about how you can to fix this: ' +
+					'http://visionmedia.github.io/superagent/#parsing-response bodies'
+				);
 				body = JSON.parse(text);
 			} catch (error) {
 				logger.error('API response is invalid JSON.', { error });
@@ -154,7 +165,11 @@ module.exports = (environment, logger) => {
 
 			var proxyUrl = proxyServer + url;
 
-			logger.log('debug', `API proxy: ${req.method} ${proxyUrl} query: ` + JSON.stringify(req.query));
+			logger.log(
+				'debug',
+				`API proxy: ${req.method} ${proxyUrl} query: ` +
+				JSON.stringify(req.query)
+			);
 
 			var httpRequest = createHttpRequest(req.method, proxyUrl, req.body);
 			httpRequest = setCommonRequestHeaders(httpRequest, req.headers);
@@ -166,7 +181,11 @@ module.exports = (environment, logger) => {
 			httpRequest
 				.end((error, response) => {
 					if (error) {
-						logger.error(`API ERROR: ${req.method} ${proxyUrl} query: ` + JSON.stringify(req.query), { error });
+						logger.error(
+							`API ERROR: ${req.method} ${proxyUrl} query: ` +
+							JSON.stringify(req.query),
+							{ error }
+						);
 
 						sendJSONResponse(req, res, error, response);
 					} else if (response) {
@@ -175,7 +194,7 @@ module.exports = (environment, logger) => {
 						Object
 							.keys(response.header)
 							.filter((key) => {
-								return ['set-cookie', 'content-encoding', 'content-type', 'content-length', 'transfer-encoding'].indexOf(key) === -1;
+								return !['set-cookie', 'content-encoding', 'content-type', 'content-length', 'transfer-encoding'].includes(key);
 							})
 							.map((key) => {
 								return ({
@@ -202,7 +221,7 @@ module.exports = (environment, logger) => {
 				});
 		};
 
-		router.all('*', function(req, res) {
+		router.all('*', (req, res) => {
 			_callRemoteServer(req, res);
 		});
 
