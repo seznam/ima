@@ -10,7 +10,7 @@ module.exports = (gulpConfig) => {
 
 	gulp.task(
 		'doc',
-		['doc:preprocess', 'doc:generate', 'doc:clean'],
+		['doc:clear', 'doc:preprocess', 'doc:generate', 'doc:clean'],
 		() => {}
 	);
 
@@ -44,7 +44,7 @@ module.exports = (gulpConfig) => {
 			}));
 	});
 
-	gulp.task('doc:preprocess', () =>
+	gulp.task('doc:preprocess', ['doc:clear'], () =>
 		gulp.src(files.app.src)
 			.pipe(change((content) => {
 				var oldContent = null;
@@ -62,6 +62,10 @@ module.exports = (gulpConfig) => {
 			.pipe(gulp.dest('./doc-src'))
 	);
 
+	gulp.task('doc:clear', () =>
+		del(['./doc-src', './doc'])
+	);
+
 	documentationPreprocessors = [
 		{
 			pattern: /\/[*][*]((?:a|[^a])*?)@(type|param|return)\s*[{]([^}]*?)([a-zA-Z0-9_., *<>|]+)\[\]([^}]*)[}]((a|[^a])*)[*]\//g,
@@ -70,6 +74,10 @@ module.exports = (gulpConfig) => {
 		{
 			pattern: /\/[*][*]((?:a|[^a])*?)[{]@code(?:link)? ([^}]*)[}]((a|[^a])*)[*]\//g,
 			replace: '/**$1<code>$2</code>$3*/'
+		},
+		{
+			pattern: /export default /g,
+			replace: ''
 		}
 	];
 
