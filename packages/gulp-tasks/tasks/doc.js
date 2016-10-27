@@ -3,6 +3,7 @@ let del = require('del');
 let gulp = require('gulp');
 let change = require('gulp-change');
 let jsdoc = require('gulp-jsdoc3');
+let rename = require('gulp-rename');
 
 module.exports = (gulpConfig) => {
 	let files = gulpConfig.files;
@@ -52,8 +53,9 @@ module.exports = (gulpConfig) => {
 					}
 				}
 
-				return content;
+				return `/** @module */\n${content}`;
 			}))
+			.pipe(rename(file => file.extname = '.js'))
 			.pipe(gulp.dest('./doc-src'))
 	);
 
