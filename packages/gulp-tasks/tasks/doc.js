@@ -76,7 +76,7 @@ module.exports = (gulpConfig) => {
 			replace: '/**$1<code>$2</code>$3*/'
 		},
 		{
-			pattern: /export default /g,
+			pattern: /^\s*export\s+default\s+/gm,
 			replace: ''
 		}
 	];
