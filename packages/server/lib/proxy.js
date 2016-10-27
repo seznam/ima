@@ -1,4 +1,5 @@
 let express = require('express');
+let fs = require('fs');
 let superAgent = require('superagent');
 
 function firstLetterToLowerCase(world) {
@@ -53,14 +54,28 @@ function parseSetCookieHeader(cookieString) {
 	};
 }
 
-function createHttpRequest(method, proxyUrl, body) {
+function createHttpRequest(method, proxyUrl, clientRequest) {
 	let httpRequest = null;
+	let body = clientRequest.body;
 
-	switch(method) {
+	switch (method) {
 		case 'POST':
-			httpRequest = superAgent
-				.post(proxyUrl)
-				.send(body);
+			httpRequest = superAgent.post(proxyUrl);
+			let contentType = clientRequest.get('Content-Type');
+			if (/^multipart\/form-data;\s+/i.test(contentType)) {
+				for (let fieldName of Object.keys(body)) {
+					httpRequest.field(fieldName, body[fieldName]);
+				}
+				for (let fieldName of Object.keys(clientRequest.files || {})) {
+					let files = clientRequest.files[fieldName];
+					for (let file of files) {
+						let { fieldname, path, originalname } = file;
+						httpRequest.attach(fieldname, path, originalname);
+					}
+				}
+			} else {
+				httpRequest.send(body);
+			}
 			break;
 		case 'PUT':
 			httpRequest = superAgent
@@ -81,6 +96,9 @@ function createHttpRequest(method, proxyUrl, body) {
 			httpRequest = superAgent
 				.get(proxyUrl);
 			break;
+		default:
+			console.warn(`Unknown HTTP request method: ${method}`);
+			break;
 	}
 
 	return httpRequest;
@@ -97,6 +115,22 @@ function setCommonRequestHeaders(httpRequest, headers) {
 		});
 
 	return httpRequest;
+}
+
+function cleanUpRequest(clientRequest) {
+	if (clientRequest.method !== 'POST') {
+		return;
+	}
+	let contentType = clientRequest.get('Content-Type');
+	if (!/^multipart\/form-data;\s+/i.test(contentType)) {
+		return;
+	}
+
+	for (let fieldName of Object.keys(clientRequest.files || {})) {
+		for (let { path } of clientRequest.files[fieldName]) {
+			fs.unlink(path, () => {});
+		}
+	}
 }
 
 module.exports = (environment, logger) => {
@@ -171,7 +205,7 @@ module.exports = (environment, logger) => {
 				JSON.stringify(req.query)
 			);
 
-			let httpRequest = createHttpRequest(req.method, proxyUrl, req.body);
+			let httpRequest = createHttpRequest(req.method, proxyUrl, req);
 			httpRequest = setCommonRequestHeaders(httpRequest, req.headers);
 
 			if (req.get('Cookie') && req.get('Cookie') !== '') {
@@ -180,6 +214,8 @@ module.exports = (environment, logger) => {
 
 			httpRequest
 				.end((error, response) => {
+					cleanUpRequest(req);
+
 					if (error) {
 						logger.error(
 							`API ERROR: ${req.method} ${proxyUrl} query: ` +
