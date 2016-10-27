@@ -27,14 +27,9 @@ module.exports = (gulpConfig) => {
 
 		gulp.src(['README.md', './doc-src/**/*'], { read: false })
 			.pipe(jsdoc({
-				/*templates: {
-				 default: {
-				 layoutFile: './node_modules/docdash'
-				 }
-				 },
-				 */
 				opts: {
-					destination: './doc'
+					destination: './doc',
+					template: './node_modules/docdash/'
 				}
 			}, () => {
 				if (completionTimeout) {
