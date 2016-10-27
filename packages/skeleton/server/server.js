@@ -107,7 +107,7 @@ function runNodeApp() {
 		.use(environment.$Server.staticFolder, express.static(path.join(__dirname, 'static')))
 		.use(bodyParser.json()) // for parsing application/json
 		.use(bodyParser.urlencoded({ extended: true })) // for parsing application/x-www-form-urlencoded
-		.use(multer.array()) // for parsing multipart/form-data
+		.use(multer.fields([/*{ name: '<file input name>', maxCount: 1 }, ...*/])) // for parsing multipart/form-data
 		.use(cookieParser())
 		.use(methodOverride())
 		.use(environment.$Proxy.path + '/', proxy)
