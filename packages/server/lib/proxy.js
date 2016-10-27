@@ -62,10 +62,12 @@ function createHttpRequest(method, proxyUrl, clientRequest) {
 		case 'POST':
 			httpRequest = superAgent.post(proxyUrl);
 			let contentType = clientRequest.get('Content-Type');
+
 			if (/^multipart\/form-data;\s+/i.test(contentType)) {
 				for (let fieldName of Object.keys(body)) {
 					httpRequest.field(fieldName, body[fieldName]);
 				}
+
 				for (let fieldName of Object.keys(clientRequest.files || {})) {
 					let files = clientRequest.files[fieldName];
 					for (let file of files) {
@@ -121,6 +123,7 @@ function cleanUpRequest(clientRequest) {
 	if (clientRequest.method !== 'POST') {
 		return;
 	}
+
 	let contentType = clientRequest.get('Content-Type');
 	if (!/^multipart\/form-data;\s+/i.test(contentType)) {
 		return;
