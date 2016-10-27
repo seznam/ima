@@ -1,18 +1,16 @@
-import ns from 'ima/namespace';
 import AbstractComponent from 'ima/page/AbstractComponent';
-import React from 'react';
-
-ns.namespace('app.page.error');
+import React, { PropTypes } from 'react';
 
 /**
  * Error page.
- * @class ErrorView
- * @extends ima.page.AbstractComponent
- * @namespace app.page.error
- * @module app
- * @submodule app.page
  */
 export default class ErrorView extends AbstractComponent {
+
+	static get contextTypes() {
+		return {
+			$Utils: PropTypes.object
+		};
+	}
 
 	render() {
 		let error = this.props.error || {};
@@ -21,7 +19,7 @@ export default class ErrorView extends AbstractComponent {
 
 		return (
 			<div className='l-error'>
-				<h1>500 - Error</h1>
+				<h1>500 &ndash; Error</h1>
 				<div className="message">
 					{message}
 				</div>
@@ -32,9 +30,3 @@ export default class ErrorView extends AbstractComponent {
 		);
 	}
 }
-
-ErrorView.contextTypes = {
-	$Utils: React.PropTypes.object
-};
-
-ns.app.page.error.ErrorView = ErrorView;

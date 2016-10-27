@@ -3,6 +3,12 @@ import AbstractComponent from 'ima/page/AbstractComponent';
 
 export default class ErrorView extends AbstractComponent {
 
+	static get contextTypes() {
+		return {
+			$Utils: PropTypes.object
+		};
+	}
+
 	render() {
 		let error = this.props.error || {};
 		let message = error.message || '';
@@ -19,11 +25,5 @@ export default class ErrorView extends AbstractComponent {
 				</pre>
 			</div>
 		);
-	}
-
-	static get contextTypes() {
-		return {
-			$Utils: PropTypes.object
-		};
 	}
 }

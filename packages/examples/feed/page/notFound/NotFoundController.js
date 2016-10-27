@@ -1,22 +1,11 @@
 import AbstractController from 'app/page/AbstractController';
 
-/**
- * @class NotFoundController
- * @extends app.page.AbstractController
- * @namespace app.page.notFound
- * @module app
- * @submodule app.page
- */
 export default class NotFoundController extends AbstractController {
 
 	static get $dependencies() {
 		return [];
 	}
 
-	/**
-	 * @method constructor
-	 * @constructor
-	 */
 	constructor() {
 		super();
 
@@ -26,8 +15,7 @@ export default class NotFoundController extends AbstractController {
 	/**
 	 * Load all needed data.
 	 *
-	 * @method load
-	 * @return {{status: number}} object of promise
+	 * @return {{status: number}} Resources to load.
 	 */
 	load() {
 		return {

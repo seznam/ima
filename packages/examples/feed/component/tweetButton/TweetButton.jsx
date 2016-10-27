@@ -9,14 +9,7 @@ const POPUP_SIZE = Object.freeze({
 /**
  * React component providing the UI for sharing feed items using the Twitter
  * social network.
- *
- * @class TweetButton
- * @extends AbstractComponent
- * @namespace app.component.tweetButton
- * @module app
- * @submodule app.component
  */
-
 export default class TweetButton extends AbstractComponent {
 
 	render() {
@@ -52,7 +45,6 @@ export default class TweetButton extends AbstractComponent {
 	 * the default action will not be blocked and the browser will follow the
 	 * link of the anchor.
 	 *
-	 * @method onShare
 	 * @param {Event} event The click event.
 	 */
 	onShare(event) {
@@ -96,7 +88,6 @@ export default class TweetButton extends AbstractComponent {
 	 * - text - The text to be shared via the tweet.
 	 * - hashTags - hash tags separated by commas to share with the tweet.
 	 *
-	 * @method composeUrl
 	 * @return {string} The full absolute URL to use for sharing the feed item
 	 *         on the Twitter.
 	 */

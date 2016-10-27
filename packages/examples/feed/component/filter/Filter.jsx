@@ -3,12 +3,6 @@ import React from 'react';
 
 /**
  * Feed filter.
- *
- * @class Filter
- * @extends ima.page.AbstractComponent
- * @namespace app.component.filter
- * @module app
- * @submodule app.component
  */
 export  default class Filter extends AbstractComponent {
 

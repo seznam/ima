@@ -2,23 +2,18 @@ import AbstractEntity from 'app/model/AbstractEntity';
 
 /**
  * Category entity.
- *
- * @class CategoryEntity
- * @namespace app.model.category
- * @extends app.model.AbstractEntity
- * @module app
- * @submodule app.model
  */
 export default class CategoryEntity extends AbstractEntity {
 
+	/**
+	 * @param {Object<string, *>} data
+	 */
 	constructor(data) {
 		super(data._id);
 
 		/**
 		 * Name of category.
 		 *
-		 * @property _name
-		 * @private
 		 * @type {string}
 		 */
 		this._name = data.name;
@@ -26,8 +21,6 @@ export default class CategoryEntity extends AbstractEntity {
 		/**
 		 * Name to use in URL.
 		 *
-		 * @property _urlName
-		 * @private
 		 * @type {string}
 		 */
 		this._urlName = data.urlname;
@@ -35,8 +28,6 @@ export default class CategoryEntity extends AbstractEntity {
 		/**
 		 * Hash tag
 		 *
-		 * @property hashTag
-		 * @private
 		 * @type {string}
 		 */
 		this._hashTag = data.hashtag;
@@ -44,8 +35,6 @@ export default class CategoryEntity extends AbstractEntity {
 		/**
 		 * Image Url.
 		 *
-		 * @property _posted
-		 * @private
 		 * @type {string}
 		 */
 		this._iconUrl = data.iconurl;
@@ -54,7 +43,6 @@ export default class CategoryEntity extends AbstractEntity {
 	/**
 	 * Getter for _name.
 	 *
-	 * @method getName
 	 * @return {string}
 	 */
 	getName() {
@@ -64,7 +52,6 @@ export default class CategoryEntity extends AbstractEntity {
 	/**
 	 * Getter for _urlName.
 	 *
-	 * @method getUrlName
 	 * @return {string}
 	 */
 	getUrlName() {
@@ -74,7 +61,6 @@ export default class CategoryEntity extends AbstractEntity {
 	/**
 	 * Getter for _hashTag.
 	 *
-	 * @method getHashTag
 	 * @return {string}
 	 */
 	getHashTag() {
@@ -84,7 +70,6 @@ export default class CategoryEntity extends AbstractEntity {
 	/**
 	 * Getter for _iconUrl.
 	 *
-	 * @method getIconUrl
 	 * @return {string}
 	 */
 	getIconUrl() {

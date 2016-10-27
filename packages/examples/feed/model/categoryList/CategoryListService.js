@@ -6,12 +6,6 @@ import CategoryListResource from 'app/model/categoryList/CategoryListResource';
 
 /**
  * Category list model service.
- *
- * @class CategoryListService
- * @extends app.model.AbstractService
- * @namespace app.model.categoryList
- * @module app
- * @submodule app.model
  */
 export default class CategoryListService extends AbstractService {
 
@@ -20,8 +14,6 @@ export default class CategoryListService extends AbstractService {
 	}
 
 	/**
-	 * @method constructor
-	 * @constructor
 	 * @param {CategoryListResource} categoryListResource
 	 */
 	constructor(categoryListResource) {
@@ -31,7 +23,6 @@ export default class CategoryListService extends AbstractService {
 	/**
 	 * Get category by url name.
 	 *
-	 * @method getCategoryByUrl
 	 * @param {?string} urlName
 	 * @return {Promise<?CategoryEntity>}
 	 */
@@ -54,7 +45,6 @@ export default class CategoryListService extends AbstractService {
 	}
 
 	/**
-	 * @method load
 	 * @return {Promise<CategoryListEntity>}
 	 */
 	load() {

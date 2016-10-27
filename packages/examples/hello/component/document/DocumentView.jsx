@@ -1,15 +1,8 @@
-import ns from 'ima/namespace';
 import AbstractDocumentView from 'ima/page/AbstractDocumentView';
 import React from 'react';
 
-ns.namespace('app.component.document');
-
 /**
  * Master Layout.
- * @class DocumentView
- * @namespace app.component.document
- * @module app
- * @submodule app.component
  */
 export default class DocumentView extends AbstractDocumentView {
 
@@ -77,5 +70,3 @@ export default class DocumentView extends AbstractDocumentView {
 		return [scriptResources].concat(scriptTags).join('');
 	}
 }
-
-ns.app.component.document.DocumentView = DocumentView;

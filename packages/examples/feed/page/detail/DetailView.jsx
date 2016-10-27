@@ -5,12 +5,6 @@ import Header from 'app/component/header/Header';
 
 /**
  * DetailPage view.
- *
- * @class DetailView
- * @extends ima.page.AbstractComponent
- * @namespace app.page.detail
- * @module app
- * @submodule app.page
  */
 export default class DetailView extends AbstractComponent {
 

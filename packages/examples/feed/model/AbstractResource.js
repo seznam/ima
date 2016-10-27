@@ -5,18 +5,10 @@ import AbstractEntityFactory from 'app/model/AbstractEntityFactory';
 
 /**
  * Base class for model resource.
- *
- * @class AbstractResource
- * @namespace app.model
- * @module app.model
- *
- * @requires ima.http.HttpAgent
  */
 export default class AbstractResource {
 
 	/**
-	 * @method constructor
-	 * @constructor
 	 * @param {HttpAgent} http
 	 * @param {string} url API URL (Base server + api specific path.)
 	 * @param {AbstractEntityFactory} entityFactory
@@ -27,8 +19,6 @@ export default class AbstractResource {
 		/**
 		 * Handler for HTTP requests.
 		 *
-		 * @private
-		 * @property _http
 		 * @type {HttpAgent}
 		 */
 		this._http = http;
@@ -36,8 +26,6 @@ export default class AbstractResource {
 		/**
 		 * API URL for specific resource.
 		 *
-		 * @private
-		 * @property _apiUrl
 		 * @type {string}
 		 */
 		this._apiUrl = url;
@@ -45,8 +33,6 @@ export default class AbstractResource {
 		/**
 		 * Cache for caching parts of request response.
 		 *
-		 * @private
-		 * @property _cache
 		 * @type {Cache}
 		 */
 		this._cache = cache;
@@ -54,16 +40,12 @@ export default class AbstractResource {
 		/**
 		 * Factory for creating entities.
 		 *
-		 * @private
-		 * @property _entityFactory
 		 * @type {AbstractEntityFactory}
 		 */
 		this._entityFactory = entityFactory;
 
 		/**
-		 * @property _defaultOptions
 		 * @type {Object<string, number>}
-		 * @default { ttl: 3600000, timeout: 2000, repeatRequest: 1 }
 		 */
 		this._defaultOptions = {
 			ttl: 3600000,
@@ -75,7 +57,6 @@ export default class AbstractResource {
 	/**
 	 * Gets 1 entity from http and returns Entity.
 	 *
-	 * @method getEntity
 	 * @param {?string=} [id=null] ID for get entity from API.
 	 * @param {Object<string, *>=} [data={}]
 	 * @param {{ttl: number=, timeout: number=, repeatRequest: number=}=} options
@@ -103,7 +84,6 @@ export default class AbstractResource {
 	/**
 	 * Posts data to the REST API and returns a new entity.
 	 *
-	 * @method createEntity
 	 * @param {Object<string, *>} [data={}]
 	 * @param {{ttl: number=, timeout: number=, repeatRequest: number=}=} options
 	 *        Request options.
@@ -125,8 +105,6 @@ export default class AbstractResource {
 	/**
 	 * Generates the URL to which the HTTP request should be made.
 	 *
-	 * @private
-	 * @method _getUrl
 	 * @param {?string=} [id=null]
 	 * @return {string}
 	 */
@@ -144,8 +122,6 @@ export default class AbstractResource {
 	 * Composes the HTTP request options using the default options and the
 	 * provided overrides.
 	 *
-	 * @private
-	 * @method _getOptions
 	 * @param {{ttl: number=, timeout: number=, repeatRequest: number=}} options
 	 * @return {{ttl: number, timeout: number, repeatRequest: number}}
 	 */
@@ -156,7 +132,6 @@ export default class AbstractResource {
 	/**
 	 * Clears cache data associated with the specified HTTP request.
 	 *
-	 * @method _clearCacheForRequest
 	 * @param {string} url The URL to which the request was made (without a
 	 *        query string).
 	 * @param {Object<string, (number|string)>} data Query data sent with the

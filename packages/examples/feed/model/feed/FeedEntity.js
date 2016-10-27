@@ -3,18 +3,10 @@ import ItemEntity from 'app/model/item/ItemEntity';
 
 /**
  * Feed item entity.
- *
- * @class FeedEntity
- * @extends app.model.AbstractEntity
- * @namespace app.model.feed
- * @module app
- * @submodule app.model
  */
 export default class FeedEntity extends AbstractEntity {
 
 	/**
-	 * @constructor
-	 * @method constructor
 	 * @param {Object<string, *>} data
 	 */
 	constructor(data) {
@@ -23,7 +15,6 @@ export default class FeedEntity extends AbstractEntity {
 		/**
 		 * Entity list - feed items.
 		 *
-		 * @property items
 		 * @type {ItemEntity[]}
 		 */
 		this._items = data.items;
@@ -32,7 +23,6 @@ export default class FeedEntity extends AbstractEntity {
 	/**
 	 * Getter for items
 	 *
-	 * @method getItems
 	 * @return {ItemEntity[]}
 	 */
 	getItems() {
@@ -42,7 +32,6 @@ export default class FeedEntity extends AbstractEntity {
 	/**
 	 * Setter for items
 	 *
-	 * @method setItems
 	 * @param {ItemEntity[]} items
 	 * @return {FeedEntity}
 	 */

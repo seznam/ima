@@ -4,12 +4,6 @@ import FeedItem from 'app/component/feedItem/FeedItem';
 
 /**
  * Feed of posted feed items.
- *
- * @class Feed
- * @extends ima.page.AbstractComponent
- * @namespace app.component.feed
- * @module app
- * @submodule app.component
  */
 export default class Feed extends AbstractComponent {
 

@@ -2,23 +2,18 @@ import AbstractEntity from 'app/model/AbstractEntity';
 
 /**
  * Feed item entity.
- *
- * @class ItemEntity
- * @namespace app.model.item
- * @extends app.model.AbstractEntity
- * @module app
- * @submodule app.model
  */
 export default class ItemEntity extends AbstractEntity {
 
+	/**
+	 * @param {Object<string, *>} data
+	 */
 	constructor(data) {
 		super(data._id);
 
 		/**
 		 * Text of item.
 		 *
-		 * @private
-		 * @property _text
 		 * @type {string}
 		 */
 		this._content = data.content;
@@ -26,8 +21,6 @@ export default class ItemEntity extends AbstractEntity {
 		/**
 		 * ID of the service to which this feed item is related.
 		 *
-		 * @private
-		 * @property _category
 		 * @type {number}
 		 */
 		this._category = data.category;
@@ -35,8 +28,6 @@ export default class ItemEntity extends AbstractEntity {
 		/**
 		 * Dete of item publication.
 		 *
-		 * @private
-		 * @property _posted
 		 * @type {Date}
 		 */
 		this._posted = new Date(data.date);
@@ -45,7 +36,6 @@ export default class ItemEntity extends AbstractEntity {
 	/**
 	 * Getter for text.
 	 *
-	 * @method getText
 	 * @return {string}
 	 */
 	getContent() {
@@ -55,7 +45,6 @@ export default class ItemEntity extends AbstractEntity {
 	/**
 	 * Getter for service.
 	 *
-	 * @method getService
 	 * @return {number}
 	 */
 	getCategoryId() {
@@ -65,7 +54,6 @@ export default class ItemEntity extends AbstractEntity {
 	/**
 	 * Getter for posted.
 	 *
-	 * @method getPosted
 	 * @return {Date}
 	 */
 	getPosted() {

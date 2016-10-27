@@ -3,18 +3,10 @@ import CategoryEntity from 'app/model/category/CategoryEntity';
 
 /**
  * Entity of containing a list of categories.
- *
- * @class CategoryListEntity
- * @extends app.model.AbstractEntity
- * @namespace app.model.categoryList
- * @module app
- * @submodule app.model
  */
 export default class CategoryListEntity extends AbstractEntity {
 
 	/**
-	 * @constructor
-	 * @method constructor
 	 * @param {Object<string, *>} data
 	 */
 	constructor(data) {
@@ -23,7 +15,6 @@ export default class CategoryListEntity extends AbstractEntity {
 		/**
 		 * Entity list - categories for category list.
 		 *
-		 * @property categories
 		 * @type {CategoryEntity[]}
 		 */
 		this._categories = data.categories;
@@ -32,7 +23,6 @@ export default class CategoryListEntity extends AbstractEntity {
 	/**
 	 * Getter for categories
 	 *
-	 * @method getCategories
 	 * @return {CategoryEntity[]}
 	 */
 	getCategories() {
@@ -42,7 +32,6 @@ export default class CategoryListEntity extends AbstractEntity {
 	/**
 	 * Getter for category by id
 	 *
-	 * @method getCategoryById
 	 * @return {CategoryEntity}
 	 */
 	getCategoryById(id) {

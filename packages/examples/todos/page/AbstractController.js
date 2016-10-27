@@ -5,19 +5,12 @@ import Router from 'ima/router/Router';
 
 /**
  * Base controller, providing elementary configuration of the meta manager.
- *
- * @class Controller
- * @extends AbstractIMAController
- * @namespace app.base
- * @module BaseController
- * @submodule app.base
  */
 export default class AbstractController extends AbstractIMAController {
 
 	/**
 	 * Sets the SEO meta information to the provided meta manager.
 	 *
-	 * @method setSeoParams
 	 * @param {Object<string, *>} loadedResources The resources that were
 	 *        loaded using the controller's {@code load()} method.
 	 * @param {MetaManager} metaManager The IMA meta manager, used to manage

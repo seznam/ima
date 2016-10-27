@@ -5,12 +5,6 @@ import Share from 'app/component/share/Share';
 
 /**
  * Feed item.
- *
- * @class FeedItem
- * @extends ima.page.AbstractComponent
- * @namespace app.component.feedItem
- * @module app
- * @submodule app.component
  */
 export default class FeedItem extends AbstractComponent {
 

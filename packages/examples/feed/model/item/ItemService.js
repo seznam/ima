@@ -4,12 +4,6 @@ import ItemResource from 'app/model/item/ItemResource';
 /**
  * Class for the feed model.
  * It's a model of the feed model.
- *
- * @class ItemService
- * @extends app.model.AbstractService
- * @namespace app.model.item
- * @module app
- * @submodule app.model
  */
 export default class ItemService extends AbstractService {
 
@@ -18,8 +12,6 @@ export default class ItemService extends AbstractService {
 	}
 
 	/**
-	 * @constructor
-	 * @method constructor
 	 * @param {ItemResource} itemResource
 	 */
 	constructor(itemResource) {
@@ -27,7 +19,6 @@ export default class ItemService extends AbstractService {
 	}
 
 	/**
-	 * @method load
 	 * @param {?string} [itemId=null]
 	 * @return {Promise<ItemEntity>}
 	 */

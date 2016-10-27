@@ -3,12 +3,6 @@ import React from 'react';
 
 /**
  * Feed header.
- *
- * @class Header
- * @extends ima.page.AbstractComponent
- * @namespace app.component.header
- * @module app
- * @submodule app.component
  */
 export default class Header extends AbstractComponent {
 

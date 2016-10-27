@@ -2,12 +2,6 @@ import AbstractController from '../AbstractController';
 
 /**
  * The error page's controller.
- * 
- * @class ErrorController
- * @extends AbstractController
- * @namespace app.page.error
- * @module app
- * @submodule app.page
  */
 export default class ErrorController extends AbstractController {
 
@@ -17,9 +11,6 @@ export default class ErrorController extends AbstractController {
 
 	/**
 	 * Initializes the constructor.
-	 * 
-	 * @constructor
-	 * @method constructor
 	 */
 	constructor() {
 		super();
@@ -30,7 +21,6 @@ export default class ErrorController extends AbstractController {
 	/**
 	 * Loads the page state.
 	 * 
-	 * @method load
 	 * @return {{status: number, error: Object<string, string>}}
 	 */
 	load() {

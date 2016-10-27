@@ -7,12 +7,6 @@ import TextInput from 'app/component/textInput/TextInput';
 
 /**
  * HomePage view.
- *
- * @class HomeView
- * @extends ima.page.AbstractComponent
- * @namespace app.page.home
- * @module app
- * @submodule app.page
  */
 export default class HomeView extends AbstractComponent {
 

@@ -1,38 +1,14 @@
-import ns from 'ima/namespace';
+import Dictionary from 'ima/dictionary/Dictionary';
+import MetaManager from 'ima/meta/MetaManager';
+import Router from 'ima/router/Router';
 import AbstractPageController from 'app/page/AbstractPageController';
 //import GenericError from 'ima/error/GenericError';
 
-ns.namespace('app.page.home');
-
-/**
- * @class HomeController
- * @extends app.page.AbstractPageController
- * @namespace app.page.home
- * @module app
- * @submodule app.page
- */
 export default class HomeController extends AbstractPageController {
 
 	static get $dependencies() {
 		return [];
 	}
-
-	/**
-	 * @method constructor
-	 * @constructor
-	 */
-	constructor() {
-		super();
-	}
-
-	/**
-	 * Callback for initializing the controller with the route parameters.
-	 *
-	 * @inheritdoc
-	 * @override
-	 * @method init
-	 */
-	init() {}
 
 	/**
 	 * Callback the controller uses to request the resources it needs to render
@@ -57,9 +33,7 @@ export default class HomeController extends AbstractPageController {
 	 * the controller's state using the field names used in the returned map
 	 * object.
 	 *
-	 * @inheritdoc
 	 * @override
-	 * @method load
 	 * @return {Object<string, (Promise|*)>} A map object of promises
 	 *         resolved when all resources the controller requires are ready. The
 	 *         resolved values will be pushed to the controller's state.
@@ -74,67 +48,40 @@ export default class HomeController extends AbstractPageController {
 	}
 
 	/**
-	 * Callback for activating the controller in the UI. This is the last method
-	 * invoked during controller initialization, called after all the promises
-	 * returned from the {@codelink load()} method has been resolved, the
-	 * controller's reactive view has been set and the controller has configured
-	 * the SEO manager.
-	 *
-	 * The controller may register in this method any React and DOM event
-	 * listeners the controller may need to handle the user interaction with the
-	 * page.
-	 *
-	 * @inheritdoc
-	 * @override
-	 * @method activate
-	 */
-	activate() {}
-
-	/**
-	 * Callback for deactivating the controller in the UI. This is the first method
-	 * invoked during controller deinitialization. This usually happens when the user
-	 * navigates to a different URL.
-	 *
-	 * The controller should unregister all React and DOM event listeners the
-	 * controller has registered in the {@codelink active()} method.
-	 *
-	 * @inheritdoc
-	 * @override
-	 * @method deactivate
-	 */
-	deactivate() {}
-
-	/**
 	 * Callback used to configure the meta attribute manager. The method is called
 	 * after the the controller's state has been patched with the loaded
 	 * resources, the view has been rendered and (if at the client-side) the
 	 * controller has been provided with the rendered view.
 	 *
-	 * @inheritdoc
 	 * @override
-	 * @method setMetaParams
 	 * @param {Object<string, *>} loadedResources Map of resource names to
 	 *        resources loaded by the {@codelink load} method. This is the same
 	 *        object as the one passed to the {@codelink setState} method when
 	 *        the Promises returned by the {@codelink load} method were resolved.
-	 * @param {ima.meta.MetaManager} metaManager Meta attributes manager to configure.
-	 * @param {ima.router.Router} router The current application router.
-	 * @param {ima.dictionary.Dictionary} dictionary The current localization
-	 *        dictionary.
+	 * @param {MetaManager} metaManager Meta attributes manager to configure.
+	 * @param {Router} router The current application router.
+	 * @param {Dictionary} dictionary The current localization dictionary.
 	 * @param {Object<string, *>} settings The application settings for the
 	 *        current application environment.
 	 */
 	setMetaParams(loadedResources, metaManager, router, dictionary, settings) {
 		let title = 'Isomorphic applications hello world - IMA.js';
-		let description = 'IMA.js is isomorphic javascript applications framework. The basic Hello World example. Just the running IMA.js with the only one page. This example is ideal base for new project.';
-		let image = router.getDomain() + settings.$Static.image + '/imajs-share.png';
+		let description = 'IMA.js is isomorphic javascript applications ' +
+				'framework. The basic Hello World example. Just the running ' +
+				'IMA.js with the only one page. This example is ideal base ' +
+				'for new project.';
+		let domain = router.getDomain();
+		let image = domain + settings.$Static.image + '/imajs-share.png';
 
 		let url = router.getUrl();
 
 		metaManager.setTitle(title);
 
 		metaManager.setMetaName('description', description);
-		metaManager.setMetaName('keywords', 'IMA.js, isomorphic application, javascript, hello world');
+		metaManager.setMetaName(
+			'keywords',
+			'IMA.js, isomorphic application, javascript, hello world'
+		);
 
 		metaManager.setMetaName('twitter:title', title);
 		metaManager.setMetaName('twitter:description', description);
@@ -148,23 +95,4 @@ export default class HomeController extends AbstractPageController {
 		metaManager.setMetaProperty('og:image', image);
 		metaManager.setMetaProperty('og:url', url);
 	}
-
-	/**
-	 * Finalization callback, called when the controller is being discarded by
-	 * the application. This usually happens when the user navigates to a
-	 * different URL.
-	 *
-	 * The controller should unregister all React and DOM event listeners the
-	 * controller has registered in the {@codelink active()} method. The
-	 * controller must also release any resources that might not be released
-	 * automatically when the controller instance is destroyed by the garbage
-	 * collector.
-	 *
-	 * @inheritdoc
-	 * @override
-	 * @method destroy
-	 */
-	destroy() {}
 }
-
-ns.app.page.home.HomeController = HomeController;

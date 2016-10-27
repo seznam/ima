@@ -3,17 +3,10 @@ import HttpAgent from 'ima/http/HttpAgent';
 
 /**
  * Fake data for demo example.
- *
- * @class MockHttpAgent
- * @namespace app.mock
- * @module app
- * @submodule app.mock
  */
 export default class MockHttpAgent extends HttpAgent {
 
 	/**
-	 * @constructor
-	 * @method constructor
 	 * @param {string} apiBaseUrl
 	 */
 	constructor(apiBaseUrl) {
@@ -82,8 +75,6 @@ export default class MockHttpAgent extends HttpAgent {
 		/**
 		 * Id generator for posted items.
 		 *
-		 * @property nextId
-		 * @private
 		 * @type {number}
 		 */
 		this._nextId = this.items.slice().pop()._id + 1;
@@ -92,7 +83,6 @@ export default class MockHttpAgent extends HttpAgent {
 	/**
 	 * Gets all items.
 	 *
-	 * @method
 	 * @return {Promise<Object<string, *>>}
 	 */
 	get(url, data = {}) {
@@ -141,7 +131,6 @@ export default class MockHttpAgent extends HttpAgent {
 	/**
 	 * Post item
 	 *
-	 * @method
 	 * @return {Promise<Object<string, *>>}
 	 */
 	post(url, data = {}) {

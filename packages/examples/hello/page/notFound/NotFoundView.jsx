@@ -1,31 +1,22 @@
-import ns from 'ima/namespace';
 import AbstractComponent from 'ima/page/AbstractComponent';
-import React from 'react';
-
-ns.namespace('app.page.notFound');
+import React, { PropTypes } from 'react';
 
 /**
  * Not found page.
- *
- * @class NotFoundView
- * @extends ima.page.AbstractComponent
- * @namespace app.page.notFound
- * @module app
- * @submodule app.page
  */
 export default class NotFoundView extends AbstractComponent {
+
+	static get contextTypes() {
+		return {
+			$Utils: PropTypes.object
+		};
+	}
 
 	render() {
 		return (
 			<div className='l-not-found'>
-				<h1>404 - Not Found</h1>
+				<h1>404 &ndash; Not Found</h1>
 			</div>
 		);
 	}
 }
-
-NotFoundView.contextTypes = {
-	$Utils: React.PropTypes.object
-};
-
-ns.app.page.notFound.NotFoundView = NotFoundView;

@@ -3,12 +3,6 @@ import React from 'react';
 
 /**
  * Feed input box for posting new feed items.
- *
- * @class TextInput
- * @extends ima.page.AbstractComponent
- * @namespace app.component.textInput
- * @module app
- * @submodule app.component
  */
 export default class TextInput extends AbstractComponent {
 

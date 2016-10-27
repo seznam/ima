@@ -4,12 +4,6 @@ import ItemFactory from 'app/model/item/ItemFactory';
 
 /**
  * Factory to create feed entity.
- *
- * @class FeedFactory
- * @extends app.model.AbstractEntityFactory
- * @namespace app.model.feed
- * @module app
- * @submodule app.model
  */
 export default class FeedFactory extends AbstractEntityFactory {
 
@@ -18,8 +12,6 @@ export default class FeedFactory extends AbstractEntityFactory {
 	}
 
 	/**
-	 * @constructor
-	 * @method constructor
 	 * @param {ItemFactory} itemFactory
 	 */
 	constructor(itemFactory) {
@@ -31,7 +23,6 @@ export default class FeedFactory extends AbstractEntityFactory {
 	/**
 	 * Creates Entity of feed
 	 *
-	 * @method createEntity
 	 * @param {Object<string, *>} data
 	 * @return {FeedEntity}
 	 */

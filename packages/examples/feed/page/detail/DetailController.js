@@ -4,12 +4,6 @@ import ItemService from 'app/model/item/ItemService';
 
 /**
  * Controller for the home page, with both enabled and disabled filtering.
- *
- * @class DetailController
- * @extends app.page.AbstractController
- * @namespace app.page.detail
- * @module app
- * @submodule app.page
  */
 export default class DetailController extends AbstractController {
 
@@ -20,8 +14,6 @@ export default class DetailController extends AbstractController {
 	/**
 	 * Initializes the home page controller.
 	 *
-	 * @constructor
-	 * @method constructor
 	 * @param {ItemService} itemService
 	 * @param {CategoryListService} categoryListService
 	 */
@@ -31,8 +23,6 @@ export default class DetailController extends AbstractController {
 		/**
 		 * Service providing the list of feed items loaded from the REST API.
 		 *
-		 * @private
-		 * @property itemService
 		 * @type {ItemService}
 		 */
 		this._itemService = itemService;
@@ -40,8 +30,6 @@ export default class DetailController extends AbstractController {
 		/**
 		 * Service providing the list of portals loaded from the REST API.
 		 *
-		 * @private
-		 * @property categoryListService
 		 * @type {CategoryListService}
 		 */
 		this._categoryListService = categoryListService;
@@ -50,7 +38,6 @@ export default class DetailController extends AbstractController {
 	/**
 	 * Load all needed data.
 	 *
-	 * @method load
 	 * @return {Object<string, *>} object of promise
 	 */
 	load() {
@@ -61,16 +48,4 @@ export default class DetailController extends AbstractController {
 			category: this._categoryListService.getCategoryByUrl(categoryId)
 		};
 	}
-
-	/**
-	 * @override
-	 * @method activate
-	 */
-	activate() {}
-
-	/**
-	 * @override
-	 * @method destroy
-	 */
-	destroy() {}
 }

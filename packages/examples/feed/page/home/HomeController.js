@@ -5,12 +5,6 @@ import ItemResource from 'app/model/item/ItemResource';
 
 /**
  * Controller for the home page, with both enabled and disabled filtering.
- *
- * @class HomeController
- * @extends app.page.AbstractController
- * @namespace app.page.home
- * @module app
- * @submodule app.page
  */
 export default class HomeController extends AbstractController {
 
@@ -21,8 +15,6 @@ export default class HomeController extends AbstractController {
 	/**
 	 * Initializes the home page controller.
 	 *
-	 * @method constructor
-	 * @constructor
 	 * @param {FeedService} feedService
 	 * @param {CategoryListService} categoryListService
 	 * @param {ItemResource} itemResource
@@ -33,8 +25,6 @@ export default class HomeController extends AbstractController {
 		/**
 		 * Service providing the list of feed items loaded from the REST API.
 		 *
-		 * @private
-		 * @property feedService
 		 * @type {FeedService}
 		 */
 		this._feedService = feedService;
@@ -42,8 +32,6 @@ export default class HomeController extends AbstractController {
 		/**
 		 * Service providing the list of categories loaded from the REST API.
 		 *
-		 * @private
-		 * @property categoryListService
 		 * @type {CategoryListService}
 		 */
 		this._categoryListService = categoryListService;
@@ -51,8 +39,6 @@ export default class HomeController extends AbstractController {
 		/**
 		 * Item resource for creating new item entities.
 		 *
-		 * @private
-		 * @property itemResource
 		 * @type {ItemResource}
 		 */
 		this._itemResource = itemResource;
@@ -61,7 +47,6 @@ export default class HomeController extends AbstractController {
 	/**
 	 * Load all needed data.
 	 *
-	 * @method load
 	 * @return {Object<string, *>} object of promise
 	 */
 	load() {
@@ -76,25 +61,12 @@ export default class HomeController extends AbstractController {
 	}
 
 	/**
-	 * @override
-	 * @method activate
-	 */
-	activate() {
-	}
-
-	/**
-	 * @override
-	 * @method destroy
-	 */
-	destroy() {
-	}
-
-	/**
-	 * Event handler for the sharetoggle event fired by the Share component.
+	 * Event handler for the {@code sharetoggle} event fired by the Share
+	 * component.
 	 *
-	 * The handler first checks whether the feed item for which sharing has been
-	 * toggles is the feed item for which the sharing options are currently
-	 * displayed.
+	 * The handler first checks whether the feed item for which sharing has
+	 * been toggles is the feed item for which the sharing options are
+	 * currently displayed.
 	 *
 	 * In such case, the handler resets the sharedItem state field of this
 	 * controller, which results in hiding the sharing UI.
@@ -104,7 +76,6 @@ export default class HomeController extends AbstractController {
 	 * results in hiding the sharing UI of the previosly selected feed item (if
 	 * any), and showing the sharing UI for the newly selected feed item.
 	 *
-	 * @method onShareToggle
 	 * @param {Object} event The event fired by the Share component.
 	 */
 	onShareToggle(event) {
@@ -121,9 +92,8 @@ export default class HomeController extends AbstractController {
 
 	/**
 	 * Button click handler for add new item to feed.
-	 * It cretaes new item entity and adds it to feed.
+	 * It creates new item entity and adds it to feed.
 	 *
-	 * @method addItemToFeed
 	 * @param {Object} data
 	 */
 	onAddItemToFeed(data) {

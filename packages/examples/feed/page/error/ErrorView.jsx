@@ -4,13 +4,6 @@ import AbstractComponent from 'ima/page/AbstractComponent';
 
 ns.namespace('app.page.error');
 
-/**
- * @class ErrorView
- * @extends ima.page.AbstractComponent
- * @namespace app.page.error
- * @module App
- * @submodule app.page
- */
 export default class ErrorView extends AbstractComponent {
 
 	static get contextTypes() {

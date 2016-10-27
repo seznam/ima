@@ -5,19 +5,12 @@ import Router from 'ima/router/Router';
 
 /**
  * Base controller for app.
- *
- * @class AbstractController
- * @extends ima.controller.AbstractController
- * @namespace app.base
- * @module app
- * @submodule app.base
  */
 export default class AbstractController extends AbstractIMAController {
 
 	/**
 	 * Set meta params.
 	 *
-	 * @method setSeoParams
 	 * @param {Object<string, *>} resolvedPromises
 	 * @param {MetaManager} metaManager
 	 * @param {Router} router

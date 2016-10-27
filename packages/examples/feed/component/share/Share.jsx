@@ -5,12 +5,6 @@ import TweetButton from 'app/component/tweetButton/TweetButton';
 /**
  * React component providing the UI for sharing feed items using social media
  * and e-mail.
- *
- * @class Share
- * @extends ima.page.AbstractComponent
- * @namespace app.component.share
- * @module app
- * @submodule app.component
  */
 export default class Share extends AbstractComponent {
 

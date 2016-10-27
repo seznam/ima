@@ -4,12 +4,6 @@ import CategoryListEntity from 'app/model/categoryList/CategoryListEntity';
 
 /**
  * Factory to create feed entity.
- *
- * @class CategoryListFactory
- * @extends app.model.AbstractEntityFactory
- * @namespace app.model.categoryList
- * @module app
- * @submodule app.model
  */
 export default class CategoryListFactory extends AbstractEntityFactory {
 
@@ -18,8 +12,6 @@ export default class CategoryListFactory extends AbstractEntityFactory {
 	}
 
 	/**
-	 * @constructor
-	 * @method constructor
 	 * @param {CategoryFactory} categoryFactory
 	 */
 	constructor(categoryFactory) {
@@ -31,7 +23,6 @@ export default class CategoryListFactory extends AbstractEntityFactory {
 	/**
 	 * Creates Entity of feed
 	 *
-	 * @method createEntity
 	 * @param {Object<string, *>} data
 	 * @return {CategoryListEntity}
 	 */

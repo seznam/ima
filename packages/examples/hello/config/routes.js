@@ -1,3 +1,4 @@
+import Router from 'ima/router/Router';
 import RouteNames from 'ima/router/RouteNames';
 import HomeController from 'app/page/home/HomeController';
 import HomeView from 'app/page/home/HomeView';
@@ -7,7 +8,7 @@ import NotFoundController from 'app/page/notFound/NotFoundController';
 import NotFoundView from 'app/page/notFound/NotFoundView';
 
 export let init = (ns, oc, config) => {
-	let router = oc.get('$Router');
+	let router = oc.get(Router);
 
 	router
 		.add('home', '/', HomeController, HomeView)

@@ -3,12 +3,6 @@ import React from 'react';
 
 /**
  * Date Component.
- *
- * @class Date
- * @extends ima.page.AbstractComponent
- * @namespace app.component.date
- * @module app
- * @submodule app.component
  */
 export default class Date extends AbstractComponent {
 

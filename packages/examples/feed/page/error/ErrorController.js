@@ -1,22 +1,11 @@
 import AbstractController from 'app/page/AbstractController';
 
-/**
- * @class ErrorController
- * @extends app.page.AbstractController
- * @namespace app.page.error
- * @module app
- * @submodule app.page
- */
 export default class ErrorController extends AbstractController {
 
 	static get $dependencies() {
 		return [];
 	}
 
-	/**
-	 * @method constructor
-	 * @constructor
-	 */
 	constructor() {
 		super();
 
@@ -26,7 +15,7 @@ export default class ErrorController extends AbstractController {
 	/**
 	 * Load all needed data.
 	 *
-	 * @method load
+	 * @return {{status: number}}
 	 */
 	load() {
 		return {

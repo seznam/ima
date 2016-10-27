@@ -6,18 +6,10 @@ import ItemFactory from 'app/model/item/ItemFactory';
 
 /**
  * Resource for items.
- *
- * @class ItemResource
- * @extends app.base.BaseResource
- * @namespace app.model.item
- * @module app
- * @submodule app.model
  */
 export default class ItemResource extends AbstractResource {
 
 	/**
-	 * @constructor
-	 * @method constructor
 	 * @param {HttpAgent} http
 	 * @param {string} apiUrl API URL (Base server + api specific path.)
 	 * @param {ItemFactory} itemFactory
@@ -30,7 +22,6 @@ export default class ItemResource extends AbstractResource {
 	/**
 	 * Method returns entity with list of items.
 	 *
-	 * @method getEntity
 	 * @param {string} id Id of the item.
 	 * @return {Promise<ItemEntity>} Promise of item entity
 	 */
@@ -41,7 +32,6 @@ export default class ItemResource extends AbstractResource {
 	/**
 	 * Method make request to API server and returns new entity.
 	 *
-	 * @method createEntity
 	 * @param {Object<string, *>} data Data with text and category for create
 	 *        new entity.
 	 * @return {Promise<ItemEntity>} Promise of item entity

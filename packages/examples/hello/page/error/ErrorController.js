@@ -1,7 +1,4 @@
-import ns from 'ima/namespace';
 import AbstractPageController from 'app/page/AbstractPageController';
-
-ns.namespace('app.page.error');
 
 /**
  * @class ErrorController
@@ -16,10 +13,6 @@ export default class ErrorController extends AbstractPageController {
 		return [];
 	}
 
-	/**
-	 * @method constructor
-	 * @constructor
-	 */
 	constructor() {
 		super();
 
@@ -27,7 +20,6 @@ export default class ErrorController extends AbstractPageController {
 	}
 
 	/**
-	 * @method load
 	 * @return {Object}
 	 */
 	load() {
@@ -37,5 +29,3 @@ export default class ErrorController extends AbstractPageController {
 		};
 	}
 }
-
-ns.app.page.error.ErrorController = ErrorController;

@@ -1,26 +1,16 @@
-import ns from 'ima/namespace';
 import AbstractController from 'ima/controller/AbstractController';
 import Dictionary from 'ima/dictionary/Dictionary';
 import MetaManager from 'ima/meta/MetaManager';
 import Router from 'ima/router/Router';
 
-ns.namespace('app.page');
-
 /**
  * Basic page controller.
- *
- * @class Controller
- * @extends ima.controller.AbstractController
- * @namespace app.base
- * @module BaseController
- * @submodule app.base
  */
 export default class AbstractPageController extends AbstractController {
 
 	/**
 	 * Set seo params.
 	 *
-	 * @method setSeoParams
 	 * @param {Object<string, *>} loadedResources
 	 * @param {MetaManager} metaManager
 	 * @param {Router} router
@@ -57,5 +47,3 @@ export default class AbstractPageController extends AbstractController {
 		metaManager.setMetaProperty('og:url', url);
 	}
 }
-
-ns.app.page.AbstractPageController = AbstractPageController;

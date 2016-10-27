@@ -3,12 +3,6 @@ import React from 'react';
 
 /**
  * Master document layout component.
- *
- * @class DocumentView
- * @extends ima.page.AbstractComponent
- * @namespace app.component.document
- * @module app
- * @submodule app.component
  */
 export default class DocumentView extends AbstractDocumentView {
 

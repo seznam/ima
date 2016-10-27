@@ -7,12 +7,6 @@ import ItemEntity from 'app/model/item/ItemEntity';
 /**
  * Class for the feed model.
  * It's a model of the feed model.
- *
- * @class FeedService
- * @extends app.model.AbstractService
- * @namespace app.model.feed
- * @module app
- * @submodule app.model
  */
 export default class FeedService extends AbstractService {
 
@@ -21,8 +15,6 @@ export default class FeedService extends AbstractService {
 	}
 
 	/**
-	 * @constructor
-	 * @method constructor
 	 * @param {FeedResource} feedResource
 	 * @param {CategoryListService} categoryListService
 	 */
@@ -30,10 +22,7 @@ export default class FeedService extends AbstractService {
 		super(feedResource);
 
 		/**
-		 * @private
-		 * @property _categoryListService
 		 * @type {CategoryListService}
-		 * @default categoryListService
 		 */
 		this._categoryListService = categoryListService;
 	}
@@ -41,7 +30,6 @@ export default class FeedService extends AbstractService {
 	/**
 	 * Returns last item entity.
 	 *
-	 * @method getLastItem
 	 * @param {FeedEntity} feedEntity
 	 * @return {?ItemEntity}
 	 */
@@ -56,7 +44,6 @@ export default class FeedService extends AbstractService {
 	}
 
 	/**
-	 * @method load
 	 * @param {?string=} [currentCategory=null]
 	 * @return {Promise<FeedEntity>}
 	 */
@@ -72,7 +59,6 @@ export default class FeedService extends AbstractService {
 	/**
 	 * Adds new item to feed.
 	 *
-	 * @method addItemToFeed
 	 * @param {FeedEntity} feedEntity
 	 * @param {ItemEntity} itemEntity
 	 * @return {FeedEntity}

@@ -1,25 +1,11 @@
-import ns from 'ima/namespace';
 import AbstractPageController from 'app/page/AbstractPageController';
 
-ns.namespace('app.page.notFound');
-
-/**
- * @class NotFoundController
- * @extends app.page.AbstractPageController
- * @namespace app.page.notFound
- * @module app
- * @submodule app.page
- */
 export default class NotFoundController extends AbstractPageController {
 
 	static get $dependencies() {
 		return [];
 	}
 
-	/**
-	 * @method constructor
-	 * @constructor
-	 */
 	constructor() {
 		super();
 
@@ -27,8 +13,7 @@ export default class NotFoundController extends AbstractPageController {
 	}
 
 	/**
-	 * @method load
-	 * @return {Object}
+	 * @return {{status: number}}
 	 */
 	load() {
 		return {
@@ -36,5 +21,3 @@ export default class NotFoundController extends AbstractPageController {
 		};
 	}
 }
-
-ns.app.page.notFound.NotFoundController = NotFoundController;
