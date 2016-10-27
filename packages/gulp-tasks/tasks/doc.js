@@ -1,84 +1,19 @@
 
-var gulp = require('gulp');
-var change = require('gulp-change');
-var yuidoc = require('gulp-yuidoc');
-var path = require('path');
+let gulp = require('gulp');
+let jsdoc = require('gulp-jsdoc3');
 
 module.exports = (gulpConfig) => {
-	var files = gulpConfig.files;
+	let files = gulpConfig.files;
 
-	/**
-	 * Patterns used to increase compatibility of YUI Doc with jsDoc tags.
-	 *
-	 * @type {{pattern: RegExp, replace: string}[]}
-	 */
-	var documentationPreprocessors;
-
-	gulp.task('doc', () =>
+	gulp.task('doc', (done) =>
 		gulp.src(files.app.src)
-			.pipe(change(function (content) {
-				var oldContent = null;
-
-				while (content !== oldContent) {
-					oldContent = content;
-					documentationPreprocessors.forEach((preprocessor) => {
-						content = content.replace(
-							preprocessor.pattern,
-							preprocessor.replace
-						);
-					});
-				}
-
-				return content;
-			}))
-			.pipe(yuidoc({}, { 'themedir': path.resolve('./node_modules/ima-gulp-tasks/yuidocTheme') }))
-			.pipe(gulp.dest('./doc'))
+			.pipe(jsdoc({
+				/*templates: {
+					default: {
+						layoutFile: 'node_modules/docdash'
+					}
+				}*/
+			}, done))
 	);
 
-	documentationPreprocessors = [
-		{
-			pattern: /\/[*][*]((?:a|[^a])*?)(?: |\t)*[*]\s*@(?:override|inheritdoc|abstract|enum)\n((a|[^a])*)[*]\//g,
-			replace: '/**$1$2*/'
-		},
-		{
-			pattern: /\/[*][*]((?:a|[^a])*?)@implements(?: (.*))?\n((a|[^a])*)[*]\//g,
-			replace: '/**$1@extends $2\n$3*/'
-		},
-		{
-			pattern: /\/[*][*]((?:a|[^a])*?)@interface (.*)\n((a|[^a])*)?[*]\//g,
-			replace: '/**$1@class $2\n$3*/'
-		},
-		{
-			pattern: /\/[*][*]((?:a|[^a])*?)@see (.*)\n((a|[^a])*)[*]\//g,
-			replace: '/**$1\n$3*/'
-		},
-		{
-			pattern: /\/[*][*]((?:a|[^a])*?)[{]@code(?:link)? ([^}]*)[}]((a|[^a])*)[*]\//g,
-			replace: '/**$1<code>$2</code>$3*/'
-		},
-		{
-			pattern: /\/[*][*]((?:a|[^a])*?)@(type|param|return)\s*[{]([^}]*)[*]([^}]*)[}]((a|[^a])*)[*]\//g,
-			replace: '/**$1@$2 {$3any$4}$5*/'
-		},
-		{
-			pattern: /\/[*][*]((?:a|[^a])*?)@(type|param|return)\s*[{]([^}]*)<([^}]*)[}]((a|[^a])*)[*]\//g,
-			replace: '/**$1@$2 {$3&lt;$4}$5*/'
-		},
-		{
-			pattern: /\/[*][*]((?:a|[^a])*?)@(type|param|return)\s*[{]([^}]*)>([^}]*)[}]((a|[^a])*)[*]\//g,
-			replace: '/**$1@$2 {$3&gt;$4}$5*/'
-		},
-		{
-			pattern: /\/[*][*]((?:a|[^a])*?)@(type|param|return)\s*[{]([^}]*?)([a-zA-Z0-9_.]+)\[\]([^}]*)[}]((a|[^a])*)[*]\//g,
-			replace: '/**$1@$2 {$3Array<$4>$5}$6*/'
-		},
-		{
-			pattern: /\/[*][*]((?:a|[^a])*?)(?: |\t)*[*]\s*@template\s*.*\n((a|[^a])*)[*]\//g,
-			replace: '/**$1$2*/'
-		},
-		{
-			pattern: /@(type|param|return)\s{([^{}]*){([^{}]*)}([^{}]*)}/g,
-			replace: '@$1 {$2&#123;$3&#125;$4}'
-		}
-	];
 };
