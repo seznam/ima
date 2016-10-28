@@ -38,13 +38,14 @@ describe('Revive client application', function() {
 			.then(function(app) {
 				oc.clear();
 				app.ima.reviveTestClientApp(Object.assign({}, app.getInitialAppConfigFunctions(), { initBindApp: function(bindNs, bindOc, config) {
-					bindOc.bind('$PageRenderer', bindNs.ima.page.renderer.ClientPageRenderer, ['$PageRendererFactory', '$Helper', ReactDOM, '$Settings', '$Window']);
 					router = bindOc.get('$Router');
 					router.init(routerConfig);
 					router.add('reviveClientApp', '/reviveClientApp', Controller, View, options);
 
 					app.getInitialAppConfigFunctions().initBindApp(bindNs, bindOc, config);
 				} }));
+
+				spyOn(oc.get('$ReactDOM'), 'render');
 
 				oc.inject(Controller, []);
 
@@ -62,16 +63,17 @@ describe('Revive client application', function() {
 			});
 	});
 
-	it('should response with status code 200 and content null', function(done) {
+	it('should response with status code 200, content null and pageState', function(done) {
 		router
 			.route('/reviveClientApp')
 			.then(function(response) {
 				expect(response.status).toEqual(200);
 				expect(response.content).toEqual(null);
+				expect(response.pageState).toEqual({ hello: 'Hello' });
 				done();
 			})
 			.catch(function(error) {
-				console.error('ERROR', error);
+				console.error('INTEGRATION ERROR', error);
 				done(error);
 			});
 	});

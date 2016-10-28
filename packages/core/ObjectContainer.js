@@ -215,8 +215,21 @@ export default class ObjectContainer {
 			}
 		}
 
-		let newEntry = this._createEntry(classConstructor, dependencies);
-		this._registry.set(classConstructor, newEntry);
+		let aliasEntries = Array.from(this._aliases.values())
+			.filter((entry) => {
+				return this._hasEntrySameValues(
+					entry,
+					classConstructor,
+					dependencies
+				);
+			});
+
+		if (aliasEntries.length) {
+			this._registry.set(classConstructor, aliasEntries[0]);
+		} else {
+			let newEntry = this._createEntry(classConstructor, dependencies);
+			this._registry.set(classConstructor, newEntry);
+		}
 
 		return this;
 	}
@@ -659,6 +672,28 @@ export default class ObjectContainer {
 		}
 
 		return null;
+	}
+
+	/**
+	 * Returns true if the defined entry has same classConstructor and
+	 * dependecies with provided classConstructor and dependecies.
+	 *
+	 * @private
+	 * @template T
+	 * @method _hasEntrySameValues
+	 * @param {Entry<function(): *>>} entry
+	 * @param {function(new: T, ...*)} classConstructor
+	 * @param {*[]} dependencies
+	 * @return {boolean}
+	 */
+	_hasEntrySameValues(entry, classConstructor, dependencies) {
+		return entry.classConstructor === classConstructor &&
+			entry.dependencies.length === dependencies.length &&
+			entry.dependencies.every((entryDependency, dependencyIndex) => {
+				let testedDependency = dependencies[dependencyIndex];
+
+				return entryDependency === testedDependency;
+			});
 	}
 }
 

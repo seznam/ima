@@ -25,8 +25,6 @@ describe('ima.ObjectContainer', function() {
 
 	beforeEach(function() {
 		oc = new ns.ima.ObjectContainer(ns);
-		var map = new Map();
-
 	});
 
 	it('should be default unlocked', function() {
@@ -122,6 +120,21 @@ describe('ima.ObjectContainer', function() {
 			expect(oc._registry.get(classConstructor).dependencies).toEqual(dependencies);
 			expect(oc._createEntry).toHaveBeenCalledWith(classConstructor, dependencies);
 			expect(oc._registry.size).toEqual(1);
+		});
+
+		it('should set instance of entry from aliases to the registry', function() {
+			spyOn(oc, '_createEntry')
+				.and
+				.callThrough();
+
+			oc.bind(alias, classConstructor, dependencies);
+			oc.inject(classConstructor, dependencies);
+
+			expect(oc._registry.get(classConstructor).classConstructor).toEqual(classConstructor);
+			expect(oc._registry.get(classConstructor).dependencies).toEqual(dependencies);
+			expect(oc._registry.size).toEqual(1);
+			expect(oc._createEntry.calls.count()).toEqual(1);
+			expect(oc._registry.get(classConstructor)).toEqual(oc._aliases.get(alias));
 		});
 
 		it('should be throw error, if yow call inject more times for same classConstructor', function() {
@@ -450,6 +463,26 @@ describe('ima.ObjectContainer', function() {
 			expect(entry.dependencies).toEqual(classConstructorWithDependencies.$dependencies);
 		});
 
+	});
+
+	describe('_hasEntrySameValues method', function() {
+
+		var entry = {
+			classConstructor: classConstructor,
+			dependencies: dependencies
+		};
+
+		it('should return true for same classConstructor and dependencies', function() {
+			expect(oc._hasEntrySameValues(entry, classConstructor, dependencies)).toEqual(true);
+		});
+
+		it('should return false for different classConstructor', function() {
+			expect(oc._hasEntrySameValues(entry, function() {}, dependencies)).toEqual(false);
+		});
+
+		it('should return false for different dependencies', function() {
+			expect(oc._hasEntrySameValues(entry, classConstructor, [classDependency, 'string'])).toEqual(false);
+		});
 	});
 
 	describe('lock method', function() {
