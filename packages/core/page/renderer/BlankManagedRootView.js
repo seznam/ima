@@ -4,10 +4,10 @@ import ns from '../../namespace';
 ns.namespace('ima.page.renderer');
 
 /**
- * @class BlankManagedRootView
- * @namespace ima.page.renderer
- * @module ima
- * @submodule ima.page
+ * Blank managed root view does not nothing except for rendering the current
+ * page view.
+ *
+ * This is the default managed root view.
  */
 export default class BlankManagedRootView extends React.Component {
 
@@ -25,8 +25,6 @@ export default class BlankManagedRootView extends React.Component {
 
 	/**
 	 * @inheritdoc
-	 * @override
-	 * @method render
 	 */
 	render() {
 		let pageView = this.props.$pageView;

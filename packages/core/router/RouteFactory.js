@@ -7,11 +7,6 @@ ns.namespace('ima.router');
 
 /**
  * Utility factory used by router to create routes.
- *
- * @class RouteFactory
- * @namespace ima.router
- * @module ima
- * @submodule ima.router
  */
 export default class RouteFactory {
 
@@ -22,7 +17,6 @@ export default class RouteFactory {
 	/**
 	 * Create new instance of ima.router.Route.
 	 *
-	 * @method createRoute
 	 * @param {string} name The unique name of this route, identifying it among
 	 *        the rest of the routes in the application.
 	 * @param {string} pathExpression A path expression specifying the URL path

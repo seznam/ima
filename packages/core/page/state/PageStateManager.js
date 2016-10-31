@@ -4,18 +4,11 @@ ns.namespace('ima.page.state');
 
 /**
  * Manager of the current page state and state history.
- *
- * @interface PageStateManager
- * @namespace ima.page.state
- * @module ima
- * @submodule ima.page
  */
 export default class PageStateManager {
 
 	/**
 	 * Clears the state history.
-	 *
-	 * @method clear
 	 */
 	clear() {}
 
@@ -23,7 +16,6 @@ export default class PageStateManager {
 	 * Sets a new page state by applying the provided patch to the current
 	 * state.
 	 *
-	 * @method setState
 	 * @param {Object<string, *>} statePatch The patch of the current state.
 	 */
 	setState(statePatch) {}
@@ -31,7 +23,6 @@ export default class PageStateManager {
 	/**
 	 * Returns the current page state.
 	 *
-	 * @method getState
 	 * @return {Object<string, *>} The current page state.
 	 */
 	getState() {}
@@ -43,7 +34,6 @@ export default class PageStateManager {
 	 * Note that the implementation may limit the size of the recorded history,
 	 * therefore the complete history may not be available.
 	 *
-	 * @method getAllStates
 	 * @return {Object<string, *>[]} The recorded history of page states.
 	 */
 	getAllStates() {}

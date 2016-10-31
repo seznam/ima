@@ -6,14 +6,6 @@ ns.namespace('ima.storage');
 /**
  * Implementation of the {@codelink Storage} interface that relies on the
  * native {@code Map} for storage.
- *
- * @class Map
- * @implements Storage
- * @namespace ima.storage
- * @module ima
- * @submodule ima.storage
- *
- * @requires Map
  */
 export default class MapStorage extends Storage {
 
@@ -23,9 +15,6 @@ export default class MapStorage extends Storage {
 
 	/**
 	 * Initializes the map storage.
-	 *
-	 * @method constructor
-	 * @constructor
 	 */
 	constructor() {
 		super();
@@ -34,7 +23,6 @@ export default class MapStorage extends Storage {
 		 * The internal storage of entries.
 		 *
 		 * @protected
-		 * @property _storage
 		 * @type {Map<string, *>}
 		 */
 		this._storage = new Map();
@@ -42,7 +30,6 @@ export default class MapStorage extends Storage {
 
 	/**
 	 * @inheritdoc
-	 * @method init
 	 */
 	init() {
 		return this;
@@ -50,7 +37,6 @@ export default class MapStorage extends Storage {
 
 	/**
 	 * @inheritdoc
-	 * @method has
 	 */
 	has(key) {
 		return this._storage.has(key);
@@ -58,7 +44,6 @@ export default class MapStorage extends Storage {
 
 	/**
 	 * @inheritdoc
-	 * @method get
 	 */
 	get(key) {
 		return this._storage.get(key);
@@ -66,7 +51,6 @@ export default class MapStorage extends Storage {
 
 	/**
 	 * @inheritdoc
-	 * @method set
 	 */
 	set(key, value) {
 		this._storage.set(key, value);
@@ -75,7 +59,6 @@ export default class MapStorage extends Storage {
 
 	/**
 	 * @inheritdoc
-	 * @method delete
 	 */
 	delete(key) {
 		this._storage.delete(key);
@@ -84,7 +67,6 @@ export default class MapStorage extends Storage {
 
 	/**
 	 * @inheritdoc
-	 * @method clear
 	 */
 	clear() {
 		this._storage.clear();
@@ -93,7 +75,6 @@ export default class MapStorage extends Storage {
 
 	/**
 	 * @inheritdoc
-	 * @method keys
 	 */
 	keys() {
 		return this._storage.keys();
@@ -101,7 +82,6 @@ export default class MapStorage extends Storage {
 
 	/**
 	 * @override
-	 * @method size
 	 */
 	size() {
 		return this._storage.size;

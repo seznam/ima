@@ -7,12 +7,6 @@ ns.namespace('ima.dictionary');
 /**
  * Implementation of the {@codelink Dictionary} interface that relies on
  * compiled MessageFormat localization messages for its dictionary.
- *
- * @class MessageFormatDictionary
- * @implements Dictionary
- * @namespace ima.dictionary
- * @module ima
- * @submodule ima.dictionary
  */
 export default class MessageFormatDictionary extends Dictionary {
 
@@ -23,8 +17,6 @@ export default class MessageFormatDictionary extends Dictionary {
 	/**
 	 * Initializes the dictionary.
 	 *
-	 * @constructor
-	 * @method constructor
 	 * @example
 	 * 		dictionary.get('home.hello', {GENDER: 'UNSPECIFIED'});
 	 */
@@ -35,8 +27,6 @@ export default class MessageFormatDictionary extends Dictionary {
 		 * The language of the phrases in the dictionary, represented as a
 		 * ISO 639-1 language code.
 		 *
-		 * @private
-		 * @property _language
 		 * @type {string}
 		 */
 		this._language = null;
@@ -44,8 +34,6 @@ export default class MessageFormatDictionary extends Dictionary {
 		/**
 		 * Stored dictionary.
 		 *
-		 * @private
-		 * @property _dictionary
 		 * @type {Object<
 		 *         string,
 		 *         Object<
@@ -59,7 +47,6 @@ export default class MessageFormatDictionary extends Dictionary {
 
 	/**
 	 * @inheritdoc
-	 * @method init
 	 * @param {{language: string, dictionary: Object<string, Object<string, function(Object<string, (number|string)>): string>>}} config
 	 *        The dictionary field contains the localization phrases organized
 	 *        in a deep plain object map. The top-level key is the name of the
@@ -76,7 +63,6 @@ export default class MessageFormatDictionary extends Dictionary {
 
 	/**
 	 * @inheritdoc
-	 * @method getLanguage
 	 */
 	getLanguage() {
 		return this._language;
@@ -84,7 +70,6 @@ export default class MessageFormatDictionary extends Dictionary {
 
 	/**
 	 * @inheritdoc
-	 * @method get
 	 * @param {string} key The key identifying the localization phrase. The key
 	 *        consists of at least two parts separated by dots. The first part
 	 *        denotes the name of the source JSON localization file, while the

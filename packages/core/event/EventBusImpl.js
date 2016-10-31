@@ -10,7 +10,6 @@ ns.namespace('ima.event');
 /**
  * Global name of IMA.js custom event.
  *
- * @property IMA_EVENT
  * @const
  * @type {string}
  */
@@ -19,14 +18,8 @@ const IMA_EVENT = '$IMA.CustomEvent';
 /**
  * Helper for custom events.
  *
- * It offers public methods for firing custom events
- * and two methods for catching events (e.g. inside view components).
- *
- * @class EventBusImpl
- * @implements EventBus
- * @namespace ima.event
- * @module ima
- * @submodule ima.event
+ * It offers public methods for firing custom events and two methods for
+ * catching events (e.g. inside view components).
  */
 export default class EventBusImpl extends EventBus {
 
@@ -37,18 +30,15 @@ export default class EventBusImpl extends EventBus {
 	/**
 	 * Initializes the custom event helper.
 	 *
-	 * @constructor
-	 * @method constructor
-	 * @param {Window} window
+	 * @param {Window} window The IMA window helper.
 	 */
 	constructor(window) {
 		super();
 
 		/**
-		 * @private
-		 * @property _window
+		 * The IMA window helper.
+		 *
 		 * @type {Window}
-		 * @default window
 		 */
 		this._window = window;
 
@@ -59,8 +49,6 @@ export default class EventBusImpl extends EventBus {
 		 *
 		 * The "listen all" event listeners are not registered in this map.
 		 *
-		 * @private
-		 * @property _listeners
 		 * @type {WeakMap<
 		 *         function(Event),
 		 *         WeakMap<EventTarget, Map<string, function(Event)>>
@@ -72,8 +60,6 @@ export default class EventBusImpl extends EventBus {
 		 * Map of event targets to listeners executed on all IMA.js event bus
 		 * events.
 		 *
-		 * @private
-		 * @property _allEventListeners
 		 * @type {WeakMap<EventTarget, WeakSet<function(Event)>>}
 		 */
 		this._allEventListeners = new WeakMap();
@@ -81,7 +67,6 @@ export default class EventBusImpl extends EventBus {
 
 	/**
 	 * @inheritdoc
-	 * @method fire
 	 */
 	fire(eventTarget, eventName, data, options = {}) {
 		var eventInitialization = {};
@@ -97,10 +82,12 @@ export default class EventBusImpl extends EventBus {
 		if (eventTarget && typeof eventTarget.dispatchEvent !== 'undefined') {
 			eventTarget.dispatchEvent(event);
 		} else {
-			throw new GenericError(`ima.event.EventBusImpl.fire: The ` +
-					`EventSource ${eventTarget} is not defined or can not ` +
-					`dispatch event '${eventName}' (data: ${data}).`,
-					{ eventTarget, eventName, data, eventInitialization });
+			throw new GenericError(
+				`ima.event.EventBusImpl.fire: The EventSource ` +
+				`${eventTarget} is not defined or can not dispatch event ` +
+				`'${eventName}' (data: ${data}).`,
+				{ eventTarget, eventName, data, eventInitialization }
+			);
 		}
 
 		return this;
@@ -108,7 +95,6 @@ export default class EventBusImpl extends EventBus {
 
 	/**
 	 * @inheritdoc
-	 * @method listenAll
 	 */
 	listenAll(eventTarget, listener) {
 		this._window.bindEventListener(eventTarget, IMA_EVENT, listener);
@@ -123,7 +109,6 @@ export default class EventBusImpl extends EventBus {
 
 	/**
 	 * @inheritdoc
-	 * @method listen
 	 */
 	listen(eventTarget, eventName, listener) {
 		if (!this._listeners.has(listener)) {
@@ -136,9 +121,9 @@ export default class EventBusImpl extends EventBus {
 		}
 
 		var eventNameToNativeListener = targetToEventName.get(eventTarget);
-		var nativeListener = (e) => {
-			if (e.detail.eventName === eventName) {
-				listener(e);
+		var nativeListener = (event) => {
+			if (event.detail.eventName === eventName) {
+				listener(event);
 			}
 		};
 		eventNameToNativeListener.set(eventName, nativeListener);
@@ -150,7 +135,6 @@ export default class EventBusImpl extends EventBus {
 
 	/**
 	 * @inheritdoc
-	 * @method unlistenAll
 	 */
 	unlistenAll(eventTarget, listener) {
 		this._window.unbindEventListener(eventTarget, IMA_EVENT, listener);
@@ -164,8 +148,10 @@ export default class EventBusImpl extends EventBus {
 
 		if ($Debug) {
 			if (!listenerRegistered) {
-				console.warn('The provided listener is not registered on ' +
-						'the specified event target');
+				console.warn(
+					'The provided listener is not registered on the ' +
+					'specified event target'
+				);
 			}
 		}
 
@@ -174,14 +160,14 @@ export default class EventBusImpl extends EventBus {
 
 	/**
 	 * @inheritdoc
-	 * @method unlisten
 	 */
 	unlisten(eventTarget, eventName, listener) {
 		if (!this._listeners.has(listener)) {
 			if ($Debug) {
-				console.warn('The provided listener is not bound to listen ' +
-						'for the specified event on the specified event ' +
-						'target.');
+				console.warn(
+					'The provided listener is not bound to listen for the ' +
+					'specified event on the specified event target.'
+				);
 			}
 
 			return this;
@@ -190,9 +176,10 @@ export default class EventBusImpl extends EventBus {
 		var targets = this._listeners.get(listener);
 		if (!targets.has(eventTarget)) {
 			if ($Debug) {
-				console.warn('The provided listener is not bound to listen ' +
-						'for the specified event on the specified event ' +
-						'target.');
+				console.warn(
+					'The provided listener is not bound to listen for the ' +
+					'specified event on the specified event target.'
+				);
 			}
 
 			return this;
@@ -201,9 +188,10 @@ export default class EventBusImpl extends EventBus {
 		var eventNameToNativeListener = targets.get(eventTarget);
 		if (!eventNameToNativeListener.has(eventName)) {
 			if ($Debug) {
-				console.warn('The provided listener is not bound to listen ' +
-						'for the specified event on the specified event ' +
-						'target.');
+				console.warn(
+					'The provided listener is not bound to listen for the ' +
+					'specified event on the specified event target.'
+				);
 			}
 
 			return this;

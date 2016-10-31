@@ -13,20 +13,12 @@ ns.namespace('ima.page.manager');
 
 /**
  * Page manager for controller.
- *
- * @class AbstractPageManager
- * @implements PageManager
- * @namespace ima.page.manager
- * @module ima
- * @submodule ima.page
  */
 export default class AbstractPageManager extends PageManager {
 
 	/**
 	 * Initializes the page manager.
 	 *
-	 * @method constructor
-	 * @constructor
 	 * @param {PageFactory} pageFactory Factory used by the page manager to
 	 *        create instances of the controller for the current route, and
 	 *        decorate the controllers and page state managers.
@@ -43,9 +35,7 @@ export default class AbstractPageManager extends PageManager {
 		 * page state managers.
 		 *
 		 * @protected
-		 * @property _pageFactory
 		 * @type {PageFactory}
-		 * @default pageFactory
 		 */
 		this._pageFactory = pageFactory;
 
@@ -53,9 +43,7 @@ export default class AbstractPageManager extends PageManager {
 		 * The current renderer of the page.
 		 *
 		 * @protected
-		 * @property _pageRenderer
 		 * @type {PageRenderer}
-		 * @default pageRenderer
 		 */
 		this._pageRenderer = pageRenderer;
 
@@ -63,9 +51,7 @@ export default class AbstractPageManager extends PageManager {
 		 * The current page state manager.
 		 *
 		 * @protected
-		 * @property _pageStateManager
 		 * @type {PageStateManager}
-		 * @default pageStateManager
 		 */
 		this._pageStateManager = pageStateManager;
 
@@ -73,7 +59,6 @@ export default class AbstractPageManager extends PageManager {
 		 * Details of the currently managed page.
 		 *
 		 * @protected
-		 * @property _managedPage
 		 * @type {{
 		 *         controller: ?(string|function(new: Controller)),
 		 *         controllerInstance: ?Controller,
@@ -107,7 +92,6 @@ export default class AbstractPageManager extends PageManager {
 
 	/**
 	 * @inheritdoc
-	 * @method init
 	 */
 	init() {
 		this._clearManagedPageValue();
@@ -118,7 +102,6 @@ export default class AbstractPageManager extends PageManager {
 
 	/**
 	 * @inheritdoc
-	 * @method manage
 	 */
 	manage(controller, view, options, params = {}) {
 		this._preManage(options);
@@ -161,16 +144,15 @@ export default class AbstractPageManager extends PageManager {
 	/**
 	 * @abstract
 	 * @inheritdoc
-	 * @method scrollTo
 	 */
 	scrollTo(x = 0, y = 0) {
-		throw new GenericError('The scrollTo() method is abstract and must ' +
-				'be overridden.');
+		throw new GenericError(
+			'The scrollTo() method is abstract and must be overridden.'
+		);
 	}
 
 	/**
 	 * @inheritdoc
-	 * @method destroy
 	 */
 	destroy() {
 		this._pageStateManager.onChange = null;
@@ -185,7 +167,6 @@ export default class AbstractPageManager extends PageManager {
 
 	/**
 	 * @protected
-	 * @method _storeManagedPageValue
 	 * @param {(string|function)} controller
 	 * @param {(string|function)} view
 	 * @param {{
@@ -228,7 +209,6 @@ export default class AbstractPageManager extends PageManager {
 	 * Clear value from managed page.
 	 *
 	 * @protected
-	 * @method _clearManagedPageValue
 	 */
 	_clearManagedPageValue() {
 		this._managedPage = {
@@ -249,8 +229,6 @@ export default class AbstractPageManager extends PageManager {
 	 * Set page state manager to extension which has restricted rights to set
 	 * global state.
 	 *
-	 * @private
-	 * @method _setRestrictedPageStateManager
 	 * @param {ima.extension.Extension} extension
 	 * @param {Object<string, *>} extensionState
 	 */
@@ -273,7 +251,6 @@ export default class AbstractPageManager extends PageManager {
 	 * extensions.
 	 *
 	 * @protected
-	 * @method _initPageSource
 	 */
 	_initPageSource() {
 		this._initController();
@@ -284,7 +261,6 @@ export default class AbstractPageManager extends PageManager {
 	 * Initializes managed instance of controller with the provided parameters.
 	 *
 	 * @protected
-	 * @method _initController
 	 */
 	_initController() {
 		let controller = this._managedPage.controllerInstance;
@@ -298,7 +274,6 @@ export default class AbstractPageManager extends PageManager {
 	 * provided parameters.
 	 *
 	 * @protected
-	 * @method _initExtensions
 	 */
 	_initExtensions() {
 		let controller = this._managedPage.controllerInstance;
@@ -314,7 +289,6 @@ export default class AbstractPageManager extends PageManager {
 	 * Merge loaded state and render it.
 	 *
 	 * @protected
-	 * @method _loadPageSource
 	 * @return {Object<string, (Promise<*>|*)>}
 	 */
 	_loadPageSource() {
@@ -346,7 +320,6 @@ export default class AbstractPageManager extends PageManager {
 	 * Load controller state from managed instance of controller.
 	 *
 	 * @protected
-	 * @method _getLoadedControllerState
 	 * @return {Object<string, (Promise<*>|*)>}
 	 */
 	_getLoadedControllerState() {
@@ -362,7 +335,6 @@ export default class AbstractPageManager extends PageManager {
 	 * Load extensions state from managed instance of controller.
 	 *
 	 * @protected
-	 * @method _getLoadedExtensionsState
 	 * @return {Object<string, (Promise<*>|*)>}
 	 */
 	_getLoadedExtensionsState() {
@@ -384,7 +356,6 @@ export default class AbstractPageManager extends PageManager {
 	 * extensions.
 	 *
 	 * @protected
-	 * @method _activatePageSource
 	 */
 	_activatePageSource() {
 		let controller = this._managedPage.controllerInstance;
@@ -401,7 +372,6 @@ export default class AbstractPageManager extends PageManager {
 	 * Activate managed instance of controller.
 	 *
 	 * @protected
-	 * @method _activateController
 	 */
 	_activateController() {
 		let controller = this._managedPage.controllerInstance;
@@ -413,7 +383,6 @@ export default class AbstractPageManager extends PageManager {
 	 * Activate extensions for managed instance of controller.
 	 *
 	 * @protected
-	 * @method _activateExtensions
 	 */
 	_activateExtensions() {
 		let controller = this._managedPage.controllerInstance;
@@ -428,7 +397,6 @@ export default class AbstractPageManager extends PageManager {
 	 * extensions. Merge updated state and render it.
 	 *
 	 * @protected
-	 * @method _updatePageSource
 	 * @return {Promise<{status: number, content: ?string}>}
 	 */
 	_updatePageSource() {
@@ -458,7 +426,6 @@ export default class AbstractPageManager extends PageManager {
 	 * Return updated controller state for current page controller.
 	 *
 	 * @protected
-	 * @method _getUpdatedControllerState
 	 * @return {Object<string, (Promise<*>|*)>}
 	 */
 	_getUpdatedControllerState() {
@@ -474,7 +441,6 @@ export default class AbstractPageManager extends PageManager {
 	 * Return updated extensions state for current page controller.
 	 *
 	 * @protected
-	 * @method _getUpdatedExtensionsState
 	 * @return {Object<string, (Promise|*)>}
 	 */
 	_getUpdatedExtensionsState() {
@@ -497,7 +463,6 @@ export default class AbstractPageManager extends PageManager {
 	 * extensions.
 	 *
 	 * @protected
-	 * @method _deactivatePageSource
 	 */
 	_deactivatePageSource() {
 		let controller = this._managedPage.controllerInstance;
@@ -514,7 +479,6 @@ export default class AbstractPageManager extends PageManager {
 	 * activated.
 	 *
 	 * @protected
-	 * @method _deactivateController
 	 */
 	_deactivateController() {
 		let controller = this._managedPage.controllerInstance;
@@ -527,7 +491,6 @@ export default class AbstractPageManager extends PageManager {
 	 * they were activated.
 	 *
 	 * @protected
-	 * @method _deactivateExtensions
 	 */
 	_deactivateExtensions() {
 		let controller = this._managedPage.controllerInstance;
@@ -542,7 +505,6 @@ export default class AbstractPageManager extends PageManager {
 	 * extensions.
 	 *
 	 * @protected
-	 * @method _destroyPageSource
 	 */
 	_destroyPageSource() {
 		let controller = this._managedPage.controllerInstance;
@@ -557,7 +519,6 @@ export default class AbstractPageManager extends PageManager {
 	 * Destroy last managed instance of controller.
 	 *
 	 * @protected
-	 * @method _destroyController
 	 */
 	_destroyController() {
 		let controller = this._managedPage.controllerInstance;
@@ -570,7 +531,6 @@ export default class AbstractPageManager extends PageManager {
 	 * Destroy extensions for last managed instance of controller.
 	 *
 	 * @protected
-	 * @method _destroyExtensions
 	 */
 	_destroyExtensions() {
 		let controller = this._managedPage.controllerInstance;
@@ -584,7 +544,6 @@ export default class AbstractPageManager extends PageManager {
 	/**
 	 * The method clear state on current renderred component to DOM.
 	 *
-	 * @method _clearComponentState
 	 * @param {{
 	 *          onlyUpdate: (
 	 *            boolean|
@@ -618,8 +577,6 @@ export default class AbstractPageManager extends PageManager {
 	/**
 	 * On change event handler set state to view.
 	 *
-	 * @private
-	 * @method _onChangeStateHandler
 	 * @param {Object<string, *>} state
 	 */
 	_onChangeStateHandler(state) {
@@ -634,7 +591,6 @@ export default class AbstractPageManager extends PageManager {
 	 * Return true if manager has to update last managed controller and view.
 	 *
 	 * @protected
-	 * @method _hasOnlyUpdate
 	 * @param {string|function} controller
 	 * @param {string|function} view
 	 * @param {{
@@ -672,7 +628,6 @@ export default class AbstractPageManager extends PageManager {
 	 * change page.
 	 *
 	 * @protected
-	 * @method _preManage
 	 * @param {{
 	 *          onlyUpdate: (
 	 *            boolean|
@@ -700,7 +655,6 @@ export default class AbstractPageManager extends PageManager {
 	 * changed page.
 	 *
 	 * @protected
-	 * @method _postManage
 	 * @param {{
 	 *          onlyUpdate: (
 	 *            boolean|

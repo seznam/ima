@@ -7,14 +7,6 @@ ns.namespace('ima.storage');
 /**
  * Implementation of the {@codelink Storage} interface that relies on the
  * native {@code sessionStorage} DOM storage for storing its entries.
- *
- * @class SessionStorage
- * @implements Storage
- * @namespace ima.storage
- * @module ima
- * @submodule ima.storage
- *
- * @requires SessionStorage
  */
 export default class SessionStorage extends Storage {
 
@@ -24,9 +16,6 @@ export default class SessionStorage extends Storage {
 
 	/**
 	 * Initializes the session storage.
-	 *
-	 * @constructor
-	 * @method constructor
 	 */
 	constructor() {
 		super();
@@ -34,8 +23,6 @@ export default class SessionStorage extends Storage {
 		/**
 		 * The DOM storage providing the actual storage of the entries.
 		 *
-		 * @private
-		 * @property _storage
 		 * @type {Storage}
 		 */
 		this._storage = window.sessionStorage;
@@ -43,7 +30,6 @@ export default class SessionStorage extends Storage {
 
 	/**
 	 * @inheritdoc
-	 * @method init
 	 */
 	init() {
 		return this;
@@ -51,7 +37,6 @@ export default class SessionStorage extends Storage {
 
 	/**
 	 * @inheritdoc
-	 * @method has
 	 */
 	has(key) {
 		return !!this._storage.getItem(key);
@@ -59,21 +44,21 @@ export default class SessionStorage extends Storage {
 
 	/**
 	 * @inheritdoc
-	 * @method get
 	 */
 	get(key) {
 		try {
 			return JSON.parse(this._storage.getItem(key)).value;
-		} catch (e) {
-			throw new GenericError('ima.storage.SessionStorage.get: Failed ' +
-					`to parse a session storage item value identified by ` +
-					`the key ${key}: ${e.message}`);
+		} catch (error) {
+			throw new GenericError(
+				'ima.storage.SessionStorage.get: Failed to parse a session ' +
+				`storage item value identified by the key ${key}: ` +
+				error.message
+			);
 		}
 	}
 
 	/**
 	 * @inheritdoc
-	 * @method set
 	 */
 	set(key, value) {
 		try {
@@ -81,14 +66,14 @@ export default class SessionStorage extends Storage {
 				created: Date.now(),
 				value
 			}));
-		} catch (e) {
+		} catch (error) {
 			let storage = this._storage;
 			let isItemTooBig = storage.length === 0 ||
 					storage.length === 1 &&
 					storage.key(0) === key;
 
 			if (isItemTooBig) {
-				throw e;
+				throw error;
 			}
 
 			this._deleteOldestEntry();
@@ -100,7 +85,6 @@ export default class SessionStorage extends Storage {
 
 	/**
 	 * @inheritdoc
-	 * @method delete
 	 */
 	delete(key) {
 		this._storage.removeItem(key);
@@ -109,7 +93,6 @@ export default class SessionStorage extends Storage {
 
 	/**
 	 * @inheritdoc
-	 * @method clear
 	 */
 	clear() {
 		this._storage.clear();
@@ -118,7 +101,6 @@ export default class SessionStorage extends Storage {
 
 	/**
 	 * @inheritdoc
-	 * @method keys
 	 */
 	keys() {
 		return new StorageIterator(this._storage);
@@ -126,7 +108,6 @@ export default class SessionStorage extends Storage {
 
 	/**
 	 * @override
-	 * @method size
 	 */
 	size() {
 		return this._storage.length;
@@ -134,9 +115,6 @@ export default class SessionStorage extends Storage {
 
 	/**
 	 * Deletes the oldest entry in this storage.
-	 *
-	 * @private
-	 * @method _deleteOldestEntry
 	 */
 	_deleteOldestEntry() {
 		let oldestEntry = {
@@ -164,13 +142,6 @@ export default class SessionStorage extends Storage {
  * Implementation of the iterator protocol and the iterable protocol for DOM
  * storage keys.
  *
- * @private
- * @class StorageIterator
- * @implements Iterable
- * @implements Iterator
- * @namespace ima.storage
- * @module ima
- * @submodule ima.storage
  * @see https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Iteration_protocols
  */
 class StorageIterator {
@@ -178,8 +149,6 @@ class StorageIterator {
 	/**
 	 * Initializes the DOM storage iterator.
 	 *
-	 * @constructor
-	 * @method constructor
 	 * @param {Storage} storage The DOM storage to iterate through.
 	 */
 	constructor(storage) {
@@ -187,8 +156,6 @@ class StorageIterator {
 		/**
 		 * The DOM storage being iterated.
 		 *
-		 * @private
-		 * @property _storage
 		 * @type {Storage}
 		 */
 		this._storage = storage;
@@ -197,8 +164,6 @@ class StorageIterator {
 		 * The current index of the DOM storage key this iterator will return
 		 * next.
 		 *
-		 * @private
-		 * @property _currentKeyIndex
 		 * @type {number}
 		 */
 		this._currentKeyIndex = 0;
@@ -207,7 +172,6 @@ class StorageIterator {
 	/**
 	 * Iterates to the next item. This method implements the iterator protocol.
 	 *
-	 * @method next
 	 * @return {{done: boolean, value: (undefined|string)}} The next value in
 	 *         the sequence and whether the iterator is done iterating through
 	 *         the values.
@@ -234,7 +198,6 @@ class StorageIterator {
 	 * implements the iterable protocol and provides compatibility with the
 	 * {@code for..of} loops.
 	 *
-	 * @method @@Symbol.iterator
 	 * @return {StorageIterator} This iterator.
 	 */
 	[Symbol.iterator]() {

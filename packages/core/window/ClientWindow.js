@@ -7,12 +7,6 @@ ns.namespace('ima.window');
 
 /**
  * Client-side implementation of the {@code Window} utility API.
- *
- * @class ClientWindow
- * @implements Window
- * @namespace ima.window
- * @module ima
- * @submodule ima.window
  */
 export default class ClientWindow extends Window {
 
@@ -22,7 +16,6 @@ export default class ClientWindow extends Window {
 
 	/**
 	 * @inheritdoc
-	 * @method isClient
 	 */
 	isClient() {
 		return true;
@@ -30,7 +23,6 @@ export default class ClientWindow extends Window {
 
 	/**
 	 * @inheritdoc
-	 * @method isCookieEnabled
 	 */
 	isCookieEnabled() {
 		return navigator.cookieEnabled;
@@ -38,7 +30,6 @@ export default class ClientWindow extends Window {
 
 	/**
 	 * @inheritdoc
-	 * @method hasSessionStorage
 	 */
 	hasSessionStorage() {
 		try {
@@ -61,7 +52,6 @@ export default class ClientWindow extends Window {
 
 	/**
 	 * @inheritdoc
-	 * @method hasWebSocket
 	 */
 	hasWebSocket() {
 		return window.WebSocket;
@@ -69,7 +59,6 @@ export default class ClientWindow extends Window {
 
 	/**
 	 * @inheritdoc
-	 * @method hasHistoryAPI
 	 */
 	hasHistoryAPI() {
 		return !!window.history && !!window.history.pushState;
@@ -77,7 +66,6 @@ export default class ClientWindow extends Window {
 
 	/**
 	 * @inheritdoc
-	 * @method setTitle
 	 */
 	setTitle(title) {
 		document.title = title;
@@ -85,7 +73,6 @@ export default class ClientWindow extends Window {
 
 	/**
 	 * @inheritdoc
-	 * @method getWebSocket
 	 */
 	getWebSocket() {
 		return window.WebSocket;
@@ -93,7 +80,6 @@ export default class ClientWindow extends Window {
 
 	/**
 	 * @inheritdoc
-	 * @method getWindow
 	 */
 	getWindow() {
 		return window;
@@ -101,7 +87,6 @@ export default class ClientWindow extends Window {
 
 	/**
 	 * @inheritdoc
-	 * @method getDocument
 	 */
 	getDocument() {
 		return document;
@@ -109,7 +94,6 @@ export default class ClientWindow extends Window {
 
 	/**
 	 * @inheritdoc
-	 * @method getScrollX
 	 */
 	getScrollX() {
 		let pageOffsetSupported = window.pageXOffset !== undefined;
@@ -125,7 +109,6 @@ export default class ClientWindow extends Window {
 
 	/**
 	 * @inheritdoc
-	 * @method getScrollY
 	 */
 	getScrollY() {
 		let pageOffsetSupported = window.pageYOffset !== undefined;
@@ -141,7 +124,6 @@ export default class ClientWindow extends Window {
 
 	/**
 	 * @inheritdoc
-	 * @method scrollTo
 	 */
 	scrollTo(x, y) {
 		window.scrollTo(x, y);
@@ -149,7 +131,6 @@ export default class ClientWindow extends Window {
 
 	/**
 	 * @inheritdoc
-	 * @method getDomain
 	 */
 	getDomain() {
 		return window.location.protocol + '//' + window.location.host;
@@ -157,7 +138,6 @@ export default class ClientWindow extends Window {
 
 	/**
 	 * @inheritdoc
-	 * @method getHost
 	 */
 	getHost() {
 		return window.location.host;
@@ -165,7 +145,6 @@ export default class ClientWindow extends Window {
 
 	/**
 	 * @inheritdoc
-	 * @method getPath
 	 */
 	getPath() {
 		return window.location.pathname + window.location.search;
@@ -173,7 +152,6 @@ export default class ClientWindow extends Window {
 
 	/**
 	 * @inheritdoc
-	 * @method getUrl
 	 */
 	getUrl() {
 		return window.location.href;
@@ -181,7 +159,6 @@ export default class ClientWindow extends Window {
 
 	/**
 	 * @inheritdoc
-	 * @method getBody
 	 */
 	getBody() {
 		return document.body;
@@ -189,7 +166,6 @@ export default class ClientWindow extends Window {
 
 	/**
 	 * @inheritdoc
-	 * @method getElementById
 	 */
 	getElementById(id) {
 		return document.getElementById(id);
@@ -197,7 +173,6 @@ export default class ClientWindow extends Window {
 
 	/**
 	 * @inheritdoc
-	 * @method querySelector
 	 */
 	querySelector(selector) {
 		return document.querySelector(selector);
@@ -205,7 +180,6 @@ export default class ClientWindow extends Window {
 
 	/**
 	 * @inheritdoc
-	 * @method querySelectorAll
 	 */
 	querySelectorAll(selector) {
 		return document.querySelectorAll(selector);
@@ -213,7 +187,6 @@ export default class ClientWindow extends Window {
 
 	/**
 	 * @inheritdoc
-	 * @method redirect
 	 */
 	redirect(url) {
 		window.location.href = url;
@@ -221,7 +194,6 @@ export default class ClientWindow extends Window {
 
 	/**
 	 * @inheritdoc
-	 * @method pushState
 	 */
 	pushState(state, title, url) {
 		if (window.history.pushState) {
@@ -231,7 +203,6 @@ export default class ClientWindow extends Window {
 
 	/**
 	 * @inheritdoc
-	 * @method replaceState
 	 */
 	replaceState(state, title, url) {
 		if (window.history.replaceState) {
@@ -241,7 +212,6 @@ export default class ClientWindow extends Window {
 
 	/**
 	 * @inheritdoc
-	 * @method createCustomEvent
 	 */
 	createCustomEvent(name, options) {
 		return new CustomEvent(name, options);
@@ -249,7 +219,6 @@ export default class ClientWindow extends Window {
 
 	/**
 	 * @inheritdoc
-	 * @method bindEventListener
 	 */
 	bindEventListener(eventTarget, event, listener, useCapture = false) {
 		if (eventTarget.addEventListener) {
@@ -259,7 +228,6 @@ export default class ClientWindow extends Window {
 
 	/**
 	 * @inheritdoc
-	 * @method unbindEventListener
 	 */
 	unbindEventListener(eventTarget, event, listener, useCapture = false) {
 		if (eventTarget.removeEventListener) {

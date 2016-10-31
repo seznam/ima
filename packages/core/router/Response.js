@@ -5,11 +5,6 @@ ns.namespace('ima.router');
 
 /**
  * Wrapper for the ExpressJS response, exposing only the necessary minimum.
- *
- * @class Response
- * @namespace ima.router
- * @module ima
- * @submodule ima.router
  */
 export default class Response {
 
@@ -19,9 +14,6 @@ export default class Response {
 
 	/**
 	 * Initializes the response.
-	 *
-	 * @constructor
-	 * @method constructor
 	 */
 	constructor() {
 
@@ -29,58 +21,41 @@ export default class Response {
 		 * The ExpressJS response object, or {@code null} if running at the
 		 * client side.
 		 *
-		 * @private
-		 * @property _response
 		 * @type {?Express.Response}
-		 * @default null
 		 */
 		this._response = null;
 
 		/**
 		 * It is flag for sent response for request.
 		 *
-		 * @private
-		 * @property _isSent
 		 * @type {boolean}
-		 * @default false
 		 */
 		this._isSent = false;
 
 		/**
 		 * HTTP Status code.
 		 *
-		 * @private
-		 * @property _status
 		 * @type {number}
-		 * @default 500
 		 */
 		this._status = 500;
 
 		/**
 		 * The content of response.
 		 *
-		 * @private
-		 * @property _content
 		 * @type {string}
-		 * @default ''
 		 */
 		this._content = '';
 
 		/**
 		 * The rendered page state.
 		 *
-		 * @private
-		 * @property _pageState
 		 * @type {Object<string, *>}
-		 * @default {}
 		 */
 		this._pageState = {};
 
 		/**
 		 * Internal cookie storage for Set-Cookie header.
 		 *
-		 * @private
-		 * @property _internalCookieStorage
 		 * @type {Map<string, {
 		 *         value: string,
 		 *         options: {domain: string=, expires: (number|string)=}
@@ -91,13 +66,11 @@ export default class Response {
 		/**
 		 * Transform function for cookie value.
 		 *
-		 * @private
-		 * @property _cookieTransformFunction
 		 * @type {{encode: function, decode: function}}
 		 */
 		this._cookieTransformFunction = {
-			encode: (s) => s,
-			decode: (s) => s
+			encode: (value) => value,
+			decode: (value) => value
 		};
 	}
 
@@ -105,8 +78,6 @@ export default class Response {
 	 * Initializes this response wrapper with the provided ExpressJS response
 	 * object.
 	 *
-	 * @chainable
-	 * @method init
 	 * @param {?Express.Response} response The ExpressJS response, or
 	 *        {@code null} if the code is running at the client side.
 	 * @param {{
@@ -139,8 +110,6 @@ export default class Response {
 	 *
 	 * Use this method only at the server side.
 	 *
-	 * @chainable
-	 * @method redirect
 	 * @param {string} url The URL to which the client should be redirected.
 	 * @param {number=} [status=302] The HTTP status code to send to the
 	 *        client.
@@ -152,9 +121,11 @@ export default class Response {
 				let params = this.getResponseParams();
 				params.url = url;
 
-				throw new GenericError('ima.router.Response:redirect The ' +
-						'response has already been sent. Check your workflow.',
-						params);
+				throw new GenericError(
+					'ima.router.Response:redirect The response has already ' +
+					'been sent. Check your workflow.',
+					params
+				);
 			}
 		}
 
@@ -175,8 +146,6 @@ export default class Response {
 	 *
 	 * Use this method only at the server side.
 	 *
-	 * @chainable
-	 * @method status
 	 * @param {number} httpStatus HTTP response status code to send to the
 	 *        client.
 	 * @return {Response} This response.
@@ -204,8 +173,6 @@ export default class Response {
 	 * Sends the response to the client with the provided content. Use this
 	 * method only at the server side.
 	 *
-	 * @chainable
-	 * @method send
 	 * @param {string} content The response body.
 	 * @return {Response} This response.
 	 */
@@ -234,8 +201,6 @@ export default class Response {
 	/**
 	 * Sets the rendered page state.
 	 *
-	 * @chainable
-	 * @method setPageState
 	 * @param {Object<string, *>} pageState The rendered page state.
 	 * @return {Response} This response.
 	 */
@@ -246,8 +211,8 @@ export default class Response {
 				params.pageState = pageState;
 
 				throw new GenericError(
-					'ima.router.Response:setState The response has already been ' +
-					'sent. Check your workflow.',
+					'ima.router.Response:setState The response has already ' +
+					'been sent. Check your workflow.',
 					params
 				);
 			}
@@ -261,8 +226,6 @@ export default class Response {
 	/**
 	 * Sets a cookie, which will be sent to the client with the response.
 	 *
-	 * @chainable
-	 * @method setCookie
 	 * @param {string} name The cookie name.
 	 * @param {(boolean|number|string)} value The cookie value, will be
 	 *        converted to string.
@@ -280,9 +243,11 @@ export default class Response {
 				params.value = value;
 				params.options = options;
 
-				throw new GenericError('ima.router.Response:setCookie The ' +
-						'response has already been sent. Check your workflow.',
-						params);
+				throw new GenericError(
+					'ima.router.Response:setCookie The response has already ' +
+					'been sent. Check your workflow.',
+					params
+				);
 			}
 		}
 
@@ -304,7 +269,6 @@ export default class Response {
 	 * Return object which contains response status, content and rendered
 	 * page state.
 	 *
-	 * @method getResponseParams
 	 * @return {{status: number, content: string, pageState: Object<string, *>}}
 	 */
 	getResponseParams() {
@@ -318,7 +282,6 @@ export default class Response {
 	/**
 	 * Return true if response is sent from server to client.
 	 *
-	 * @method isResponseSent
 	 * @return {boolean}
 	 */
 	isResponseSent() {
@@ -327,9 +290,6 @@ export default class Response {
 
 	/**
 	 * Set cookie headers for response.
-	 *
-	 * @private
-	 * @method _setCookieHeaders
 	 */
 	_setCookieHeaders() {
 		for (let [name, param] of this._internalCookieStorage) {

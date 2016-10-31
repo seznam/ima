@@ -6,19 +6,12 @@ ns.namespace('ima');
  * The Object Container is an enhanced dependency injector with support for
  * aliases and constants, and allowing to reference classes in the application
  * namespace by specifying their fully qualified names.
- *
- * @class ObjectContainer
- * @namespace ima
- * @module ima
- * @requires ima.Namespace
  */
 export default class ObjectContainer {
 
 	/**
 	 * Initializes the object container.
 	 *
-	 * @constructor
-	 * @method constructor
 	 * @param {ima.Namespace} namespace The namespace container, used to
 	 *        access classes and values using their fully qualified names.
 	 */
@@ -28,8 +21,6 @@ export default class ObjectContainer {
 		 * The namespace container, used to access classes and values using
 		 * their fully qualified names.
 		 *
-		 * @private
-		 * @property _namespace
 		 * @type {ima.Namespace}
 		 */
 		this._namespace = namespace;
@@ -38,8 +29,6 @@ export default class ObjectContainer {
 		 * Map of bound aliases to their classes and the dependencies bound
 		 * with the alias.
 		 *
-		 * @private
-		 * @property _aliases
 		 * @type {Map<string, Entry<*>>}
 		 */
 		this._aliases = new Map();
@@ -48,8 +37,6 @@ export default class ObjectContainer {
 		 * Map of constant names to getter function entries for retrieving the
 		 * constant values.
 		 *
-		 * @private
-		 * @property _constants
 		 * @type {Map<string, Entry<function(): *>>}
 		 */
 		this._constants = new Map();
@@ -58,8 +45,6 @@ export default class ObjectContainer {
 		 * Registry of classes and factory functions to their entries
 		 * specifying their default dependencies.
 		 *
-		 * @private
-		 * @property _registry
 		 * @type {Map<(function(new: *, ...*)|function(...*): *), Entry<*>>}
 		 */
 		this._registry = new Map();
@@ -68,8 +53,6 @@ export default class ObjectContainer {
 		 * Map of interfaces to entries representing the default implementation
 		 * providers (classes) and their constructor dependencies.
 		 *
-		 * @private
-		 * @property _providers
 		 * @type {Map<function(new: *), Entry<*>>}
 		 */
 		this._providers = new Map();
@@ -82,8 +65,6 @@ export default class ObjectContainer {
 		 * {@code 0}, while the {@linkcode unlock()} method may be called only
 		 * if this field is set to {@code 1}.
 		 *
-		 * @private
-		 * @property _lockCounter
 		 * @type {number}
 		 */
 		this._lockCounter = 0;
@@ -102,9 +83,7 @@ export default class ObjectContainer {
 	 * The alias will use the default dependencies bound for the class if no
 	 * dependencies are provided.
 	 *
-	 * @chainable
 	 * @template T
-	 * @method bind
 	 * @param {string} name Alias name.
 	 * @param {(function(new: T, ...*)|function(...*): T)} classConstructor The
 	 *        class constructor or a factory function.
@@ -156,8 +135,6 @@ export default class ObjectContainer {
 	 * because the object container treats strings as class, interface, alias
 	 * or constant names.
 	 *
-	 * @chainable
-	 * @method constant
 	 * @param {string} name The constant name.
 	 * @param {*} value The constant value.
 	 * @return {ObjectContainer} This object container.
@@ -186,8 +163,6 @@ export default class ObjectContainer {
 	 * the provided dependencies into constructor unless custom dependencies
 	 * are provided.
 	 *
-	 * @chainable
-	 * @method inject
 	 * @template T
 	 * @param {function(new: T, ...*)} classConstructor The class constructor.
 	 * @param {*[]} dependencies The dependencies to pass into the
@@ -243,10 +218,8 @@ export default class ObjectContainer {
 	 * dependencies or the dependencies provided to the {@codelink create()}
 	 * method.
 	 *
-	 * @chainable
 	 * @template {Interface}
 	 * @template {Implementation} extends Interface
-	 * @method provide
 	 * @param {function(new: Interface)} interfaceConstructor The constructor
 	 *        of the interface representing the service.
 	 * @param {function(new: Implementation, ...*)} implementationConstructor
@@ -292,7 +265,6 @@ export default class ObjectContainer {
 	 * The instance or value is created lazily the first time it is requested.
 	 *
 	 * @template T
-	 * @method get
 	 * @param {(string|function(new: T, ...*)|function(...*): T)} name The name
 	 *        of the alias, class, interface, or the class, interface or a
 	 *        factory function.
@@ -312,7 +284,6 @@ export default class ObjectContainer {
 	 * Returns the class constructor function of the specified class.
 	 *
 	 * @template T
-	 * @method getConstructorOf
 	 * @param {string|function(new: T, ...*)} name The name by which the class
 	 *        is registered with this object container.
 	 * @return {function(new: T, ...*)} The constructor function.
@@ -328,7 +299,6 @@ export default class ObjectContainer {
 	 * registered with this object container.
 	 *
 	 * @template T
-	 * @method has
 	 * @param {string|function(new: T, ...*)} name The resource name.
 	 * @return {boolean} {@code true} if the specified object, class or
 	 *         resource is registered with this object container.
@@ -353,7 +323,6 @@ export default class ObjectContainer {
 	 * custom dependencies are provided.
 	 *
 	 * @template T
-	 * @method create
 	 * @param {(string|function(new: T, ...*)|function(...*): T)} name The name
 	 *        of the alias, class, interface, or the class, interface or a
 	 *        factory function to use.
@@ -371,8 +340,6 @@ export default class ObjectContainer {
 	 * Clears all entries from this object container and resets the locking
 	 * mechanism of this object container.
 	 *
-	 * @chainable
-	 * @method clear
 	 * @return {ObjectContainer} This object container.
 	 */
 	clear() {
@@ -402,8 +369,9 @@ export default class ObjectContainer {
 	 * The application itself has always access to the unlocked object
 	 * container.
 	 *
-	 * @method isLocked
-	 * @return {boolean}
+	 * @return {boolean} {@code true} if the Object container is currently
+	 *         locked and no aliases can be created nor the default class
+	 *         dependencies can be reconfigured.
 	 */
 	isLocked() {
 		return !!(this._lockCounter % 2);
@@ -413,16 +381,16 @@ export default class ObjectContainer {
 	 * Locks the object container, preventing creation of new aliases and
 	 * overriding the default dependencies of already configured classes.
 	 *
-	 * @chainable
-	 * @method lock
 	 * @return {ObjectContainer} This object container.
 	 * @see #isLocked()
 	 */
 	lock() {
 		if (this.isLocked() || (this._lockCounter !== 0)) {
-			throw new Error(`ima.ObjectContainer:lock The lock() method has ` +
-					`to be called only by the bootstrap script. Other calls ` +
-					`are now allowed.`);
+			throw new Error(
+				`ima.ObjectContainer:lock The lock() method has to be ` +
+				`called only by the bootstrap script. Other calls are now ` +
+				`allowed.`
+			);
 		}
 
 		this._lockCounter++;
@@ -434,15 +402,15 @@ export default class ObjectContainer {
 	 * Unlocks the object container, allowing the creation of new aliases and
 	 * overriding the default dependencies of already configured classes again.
 	 *
-	 * @chainable
-	 * @method unlock
 	 * @return {ObjectContainer} This object container.
 	 */
 	unlock() {
 		if (!this.isLocked() || (this._lockCounter !== 1)) {
-			throw new Error(`ima.ObjectContainer:unlock The unlock() method ` +
-					`has to be called only by the bootstrap script. Other ` +
-					`calls are not allowed.`);
+			throw new Error(
+				`ima.ObjectContainer:unlock The unlock() method has to be ` +
+				`called only by the bootstrap script. Other calls are not ` +
+				`allowed.`
+			);
 		}
 
 		this._lockCounter++;
@@ -464,9 +432,7 @@ export default class ObjectContainer {
 	 * the provided identifier is not a valid namespace path specifying an
 	 * existing class, interface or value.
 	 *
-	 * @private
 	 * @template T
-	 * @method _getEntry
 	 * @param {string|function(new: T, ...*)} name Name of a constant or alias,
 	 *        factory function, class or interface constructor, or a fully
 	 *        qualified namespace path.
@@ -485,12 +451,13 @@ export default class ObjectContainer {
 
 		if ($Debug) {
 			if (!entry) {
-				throw new Error(`ima.ObjectContainer:_getEntry There is no ` +
-						`constant, alias, registered class, registered ` +
-						`interface with configured implementation or ` +
-						`namespace entry identified as ${name}. ` +
-						`Check your bind.js file for typos or register ` +
-						`${name} with the object container.`);
+				throw new Error(
+					`ima.ObjectContainer:_getEntry There is no constant, ` +
+					`alias, registered class, registered interface with ` +
+					`configured implementation or namespace entry ` +
+					`identified as ${name}. Check your bind.js file for ` +
+					`typos or register ${name} with the object container.`
+				);
 			}
 		}
 
@@ -501,9 +468,7 @@ export default class ObjectContainer {
 	 * Creates a new entry for the provided class or factory function and the
 	 * provided dependencies.
 	 *
-	 * @private
 	 * @template T
-	 * @method _createEntry
 	 * @param {(function(new: T, ...*)|function(...*): T)} classConstructor The
 	 *        class constructor or factory function.
 	 * @param {*[]} [dependencies=[]] The dependencies to pass into the
@@ -511,8 +476,10 @@ export default class ObjectContainer {
 	 * @return {T} Created instance or generated value.
 	 */
 	_createEntry(classConstructor, dependencies = []) {
-		if (dependencies.length === 0 &&
-				Array.isArray(classConstructor.$dependencies)) {
+		if (
+			(dependencies.length === 0) &&
+			Array.isArray(classConstructor.$dependencies)
+		) {
 			dependencies = classConstructor.$dependencies;
 		}
 
@@ -527,9 +494,7 @@ export default class ObjectContainer {
 	 * The method uses the dependencies specified by the entry if no custom
 	 * dependencies are provided.
 	 *
-	 * @private
 	 * @template T
-	 * @method _createInstanceFromEntry
 	 * @param {Entry<T>} entry The entry representing the class that should
 	 *        have its instance created or factory faction to use to create a
 	 *        value.
@@ -564,31 +529,31 @@ export default class ObjectContainer {
 	 * Finally, if the constant composition name does not resolve to value,
 	 * the method return {@code null}.
 	 *
-	 * @private
-	 * @method _getEntryFromConstant
 	 * @param {string} compositionName
 	 * @return {?Entry<*>} An entry representing the value at the specified
 	 *         composition name in the constants. The method returns {@code null}
 	 *         if the specified composition name does not exist in the constants.
 	 */
 	_getEntryFromConstant(compositionName) {
-		if (typeof compositionName === 'string') {
-			let objectProperties = compositionName.split('.');
-			let constantValue = this._constants.has(objectProperties[0]) ?
-					this._constants.get(objectProperties[0]).sharedInstance :
-					null;
+		if (typeof compositionName !== 'string') {
+			return null;
+		}
 
-			let pathLength = objectProperties.length;
-			for (let i = 1; (i < pathLength) && constantValue; i++) {
-				constantValue = constantValue[objectProperties[i]];
-			}
+		let objectProperties = compositionName.split('.');
+		let constantValue = this._constants.has(objectProperties[0]) ?
+				this._constants.get(objectProperties[0]).sharedInstance :
+				null;
 
-			if (constantValue !== undefined && constantValue !== null) {
-				let entry = this._createEntry(() => constantValue);
-				entry.sharedInstance = constantValue;
+		let pathLength = objectProperties.length;
+		for (let i = 1; (i < pathLength) && constantValue; i++) {
+			constantValue = constantValue[objectProperties[i]];
+		}
 
-				return entry;
-			}
+		if (constantValue !== undefined && constantValue !== null) {
+			let entry = this._createEntry(() => constantValue);
+			entry.sharedInstance = constantValue;
+
+			return entry;
 		}
 
 		return null;
@@ -613,9 +578,7 @@ export default class ObjectContainer {
 	 * Alternatively, if a constructor function is passed in instead of a
 	 * namespace path, the method returns {@code null}.
 	 *
-	 * @private
 	 * @template T
-	 * @method _getEntryFromNamespace
 	 * @param {(string|function(new: T, ...*))} path Namespace path pointing to
 	 *        a class or a value in the application namespace, or a constructor
 	 *        function.
@@ -624,48 +587,52 @@ export default class ObjectContainer {
 	 *         if the specified path does not exist in the namespace.
 	 */
 	_getEntryFromNamespace(path) {
-		if (typeof path === 'string' && this._namespace.has(path)) {
-			let namespaceValue = this._namespace.get(path);
-
-			if (typeof namespaceValue === 'function') {
-				if (this._registry.has(namespaceValue)) {
-					return this._registry.get(namespaceValue);
-				}
-
-				if (this._providers.has(namespaceValue)) {
-					return this._providers.get(namespaceValue);
-				}
-
-				return this._createEntry(namespaceValue);
-			} else {
-				let entry = this._createEntry(() => namespaceValue);
-				entry.sharedInstance = namespaceValue;
-				return entry;
-			}
+		if ((typeof path !== 'string') || !this._namespace.has(path)) {
+			return null;
 		}
 
-		return null;
+		let namespaceValue = this._namespace.get(path);
+
+		if (typeof namespaceValue === 'function') {
+			if (this._registry.has(namespaceValue)) {
+				return this._registry.get(namespaceValue);
+			}
+
+			if (this._providers.has(namespaceValue)) {
+				return this._providers.get(namespaceValue);
+			}
+
+			return this._createEntry(namespaceValue);
+		}
+
+		let entry = this._createEntry(() => namespaceValue);
+		entry.sharedInstance = namespaceValue;
+		return entry;
 	}
 
 	/**
 	 * Retrieves the class denoted by the provided class constructor.
 	 *
 	 * The method then checks whether there are defined {@code $dependecies}
-	 * property for class. Then the class is registered to this object container.
+	 * property for class. Then the class is registered to this object
+	 * container.
 	 *
 	 * The method returns the entry for the class if the specified class
-	 * does not have defined {@code $dependencies} property return {@code null}.
-	 * @private
+	 * does not have defined {@code $dependencies} property return
+	 * {@code null}.
+	 *
 	 * @template T
-	 * @method _getEntryFromClassConstructor
 	 * @param {function(new: T, ...*)} classConstructor
 	 * @return {?Entry<T>} An entry representing the value at the specified
 	 *         classConstructor. The method returns {@code null}
-	 *         if the specified classConstructor does not have defined {@code $dependencies}.
+	 *         if the specified classConstructor does not have defined
+	 *         {@code $dependencies}.
 	 */
 	_getEntryFromClassConstructor(classConstructor) {
-		if (typeof classConstructor === 'function' &&
-				Array.isArray(classConstructor.$dependencies)) {
+		if (
+			(typeof classConstructor === 'function') &&
+			Array.isArray(classConstructor.$dependencies)
+		) {
 			this.inject(classConstructor, classConstructor.$dependencies);
 
 			return this._registry.get(classConstructor);
@@ -703,9 +670,6 @@ ns.ima.ObjectContainer = ObjectContainer;
  * Object container entry, representing either a class, interface, constant or
  * an alias.
  *
- * @class Entry
- * @namespace ima
- * @module ima
  * @template T
  */
 class Entry {
@@ -713,7 +677,6 @@ class Entry {
 	/**
 	 * Initializes the entry.
 	 *
-	 * @method constructor
 	 * @param {(function(new: T, ...*)|function(...*): T)} classConstructor The
 	 *        class constructor or constant value getter.
 	 * @param {*[]} [dependencies=[]] The dependencies to pass into the
@@ -725,7 +688,6 @@ class Entry {
 		 * The constructor of the class represented by this entry, or the
 		 * getter of the value of the constant represented by this entry.
 		 *
-		 * @property classConstructor
 		 * @type {(function(new: T, ...*)|function(...*): T)}
 		 */
 		this.classConstructor = classConstructor;
@@ -734,7 +696,6 @@ class Entry {
 		 * Dependencies of the class constructor of the class represented by
 		 * this entry.
 		 *
-		 * @property dependencies
 		 * @type {*[]}
 		 */
 		this.dependencies = dependencies;
@@ -742,7 +703,6 @@ class Entry {
 		/**
 		 * The shared instance of the class represented by this entry.
 		 *
-		 * @property sharedInstance
 		 * @type {T}
 		 */
 		this.sharedInstance = null;

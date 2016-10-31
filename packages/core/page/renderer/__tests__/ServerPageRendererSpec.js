@@ -219,7 +219,7 @@ describe('ima.page.renderer.ServerPageRenderer', function() {
 			spyOn(ReactDOMServer, 'renderToString')
 				.and
 				.returnValue(pageMarkup);
-			spyOn(rendererFactory, 'reactCreateFactory')
+			spyOn(rendererFactory, 'createReactElementFactory')
 				.and
 				.returnValue(documentViewFactory);
 			spyOn(rendererFactory, 'getDocumentView')
@@ -257,7 +257,7 @@ describe('ima.page.renderer.ServerPageRenderer', function() {
 		});
 
 		it('should create factory for creating React element from document view', function() {
-			expect(rendererFactory.reactCreateFactory).toHaveBeenCalledWith(documentView);
+			expect(rendererFactory.createReactElementFactory).toHaveBeenCalledWith(documentView);
 		});
 
 		it('should return React Component for managedRootView from route options managedRootView property', function() {

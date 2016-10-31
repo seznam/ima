@@ -6,20 +6,11 @@ ns.namespace('ima.error');
 /**
  * Implementation of the ima.error.Error interface, providing more advanced
  * error API.
- *
- * @class GenericError
- * @extends ExtensibleError
- * @implements Error
- * @namespace ima.error
- * @module ima
- * @submodule ima.error
  */
 export default class GenericError extends Error {
 	/**
 	 * Initializes the generic IMA error.
 	 *
-	 * @constructor
-	 * @method constructor
 	 * @param {string} message The message describing the cause of the error.
 	 * @param {Object<string, *>=} [params={}] A data map providing additional
 	 *        details related to the error. It is recommended to set the
@@ -37,8 +28,6 @@ export default class GenericError extends Error {
 		/**
 		 * The data providing additional details related to this error.
 		 *
-		 * @private
-		 * @property _params
 		 * @type {Object<string, *>}
 		 */
 		this._params = params;
@@ -46,8 +35,6 @@ export default class GenericError extends Error {
 
 	/**
 	 * @inheritdoc
-	 * @override
-	 * @method getHttpStatus
 	 */
 	getHttpStatus() {
 		return this._params.status || 500;
@@ -55,8 +42,6 @@ export default class GenericError extends Error {
 
 	/**
 	 * @inheritdoc
-	 * @override
-	 * @method getParams
 	 */
 	getParams() {
 		return this._params;

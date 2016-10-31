@@ -10,24 +10,12 @@ ns.namespace('ima.http');
 /**
  * Implementation of the {@codelink HttpAgent} interface with internal caching
  * of completed and ongoing HTTP requests and cookie storage.
- *
- * @class httpAgentImpl
- * @implements HttpAgent
- * @namespace ima.http
- * @module ima
- * @submodule ima.http
- *
- * @requires ima.http.SuperAgentProxy
- * @requires ima.cache.Cache
- * @requires ima.storage.CookieStorage
  */
 export default class HttpAgentImpl extends HttpAgent {
 
 	/**
 	 * Initializes the HTTP handler.
 	 *
-	 * @method constructor
-	 * @constructor
 	 * @param {HttpProxy} proxy The low-level HTTP proxy for sending the HTTP
 	 *        requests.
 	 * @param {Cache} cache Cache to use for caching ongoing and completed
@@ -63,8 +51,6 @@ export default class HttpAgentImpl extends HttpAgent {
 		/**
 		 * HTTP proxy, used to execute the HTTP requests.
 		 *
-		 * @private
-		 * @property _proxy
 		 * @type {HttpProxy}
 		 */
 		this._proxy = proxy;
@@ -72,8 +58,6 @@ export default class HttpAgentImpl extends HttpAgent {
 		/**
 		 * Internal request cache, used to cache completed request results.
 		 *
-		 * @private
-		 * @property _cache
 		 * @type {Cache}
 		 */
 		this._cache = cache;
@@ -82,8 +66,6 @@ export default class HttpAgentImpl extends HttpAgent {
 		 * Cookie storage, used to keep track of cookies received from the
 		 * server and send them with the subsequent requests to the server.
 		 *
-		 * @private
-		 * @property _cookie
 		 * @type {CookieStorage}
 		 */
 		this._cookie = cookie;
@@ -91,8 +73,6 @@ export default class HttpAgentImpl extends HttpAgent {
 		/**
 		 * Cache options.
 		 *
-		 * @private
-		 * @property _cacheOptions
 		 * @type {Object<string, string>}
 		 */
 		this._cacheOptions = config.cacheOptions;
@@ -100,8 +80,6 @@ export default class HttpAgentImpl extends HttpAgent {
 		/**
 		 * Default request options.
 		 *
-		 * @private
-		 * @property _defaultRequestOptions
 		 * @type {{
 		 *         timeout: number,
 		 *         ttl: number,
@@ -116,8 +94,6 @@ export default class HttpAgentImpl extends HttpAgent {
 		/**
 		 * Internal request cache, used to cache ongoing requests.
 		 *
-		 * @private
-		 * @property _internalCacheOfPromises
 		 * @type {Map<string, Promise<{
 		 *         status: number,
 		 *         body: *,
@@ -136,7 +112,6 @@ export default class HttpAgentImpl extends HttpAgent {
 
 	/**
 	 * @inheritdoc
-	 * @method get
 	 */
 	get(url, data, options = {}) {
 		return this._requestWithCheckCache('get', url, data, options);
@@ -144,7 +119,6 @@ export default class HttpAgentImpl extends HttpAgent {
 
 	/**
 	 * @inheritdoc
-	 * @method post
 	 */
 	post(url, data, options = {}) {
 		return this._requestWithCheckCache(
@@ -157,7 +131,6 @@ export default class HttpAgentImpl extends HttpAgent {
 
 	/**
 	 * @inheritdoc
-	 * @method put
 	 */
 	put(url, data, options = {}) {
 		return this._requestWithCheckCache(
@@ -170,7 +143,6 @@ export default class HttpAgentImpl extends HttpAgent {
 
 	/**
 	 * @inheritdoc
-	 * @method patch
 	 */
 	patch(url, data, options = {}) {
 		return this._requestWithCheckCache(
@@ -183,7 +155,6 @@ export default class HttpAgentImpl extends HttpAgent {
 
 	/**
 	 * @inheritdoc
-	 * @method delete
 	 */
 	delete(url, data, options = {}) {
 		return this._requestWithCheckCache(
@@ -196,7 +167,6 @@ export default class HttpAgentImpl extends HttpAgent {
 
 	/**
 	 * @inheritdoc
-	 * @method getCacheKey
 	 */
 	getCacheKey(method, url, data) {
 		return this._cacheOptions.prefix +
@@ -205,7 +175,6 @@ export default class HttpAgentImpl extends HttpAgent {
 
 	/**
 	 * @inheritdoc
-	 * @method setDefaultHeader
 	 */
 	setDefaultHeader(header, value) {
 		this._proxy.setDefaultHeader(header, value);
@@ -215,7 +184,6 @@ export default class HttpAgentImpl extends HttpAgent {
 
 	/**
 	 * @inheritdoc
-	 * @method clearDefaultHeaders
 	 */
 	clearDefaultHeaders() {
 		this._proxy.clearDefaultHeaders();
@@ -226,8 +194,6 @@ export default class HttpAgentImpl extends HttpAgent {
 	/**
 	 * Check cache and if data isnt available then make real request.
 	 *
-	 * @private
-	 * @method _requestWithCheckCache
 	 * @param {string} method The HTTP method to use.
 	 * @param {string} url The URL to which the request should be sent.
 	 * @param {Object<string, (boolean|number|string|Date)>} data The data to
@@ -284,8 +250,6 @@ export default class HttpAgentImpl extends HttpAgent {
 	 * The method returns {@code null} if no such request is present in the
 	 * cache.
 	 *
-	 * @private
-	 * @method _getCachedData
 	 * @param {string} method The HTTP method used by the request.
 	 * @param {string} url The URL to which the request was made.
 	 * @param {Object<string, (boolean|number|string|Date)>} data The data sent
@@ -327,8 +291,6 @@ export default class HttpAgentImpl extends HttpAgent {
 	 * HTTP method is GET, but the data will be sent as request body for any
 	 * other request method.
 	 *
-	 * @private
-	 * @method _request
 	 * @param {string} method HTTP method to use.
 	 * @param {string} url The URL to which the request is sent.
 	 * @param {Object<string, (boolean|number|string|Date)>} data The data sent
@@ -387,8 +349,6 @@ export default class HttpAgentImpl extends HttpAgent {
 	 * The method also updates the internal cookie storage with the cookies
 	 * received from the server.
 	 *
-	 * @private
-	 * @method _proxyResolved
 	 * @param {Vendor.SuperAgent.Response} response Server response.
 	 * @return {{
 	 *           status: number,
@@ -438,8 +398,6 @@ export default class HttpAgentImpl extends HttpAgent {
 	 * The method rejects the internal request promise if there are no tries
 	 * left.
 	 *
-	 * @private
-	 * @method _proxyRejected
 	 * @param {Object<string, *>} errorParams Error parameters, containing the
 	 *        request url, data, method, options and other useful data.
 	 * @return {Promise<{
@@ -482,8 +440,6 @@ export default class HttpAgentImpl extends HttpAgent {
 	 * Prepares the provided request options object by filling in missing
 	 * options with default values and addding extra options used internally.
 	 *
-	 * @private
-	 * @method _prepareOptions
 	 * @param {{
 	 *          timeout: number=,
 	 *          ttl: number=,
@@ -537,8 +493,6 @@ export default class HttpAgentImpl extends HttpAgent {
 	 * Generates cache key suffix for an HTTP request to the specified URL with
 	 * the specified data.
 	 *
-	 * @private
-	 * @method _getCacheKeySuffix
 	 * @param {string} method The HTTP method used by the request.
 	 * @param {string} url The URL to which the request is sent.
 	 * @param {Object<string, (boolean|number|string|Date)>} data The data sent
@@ -554,8 +508,6 @@ export default class HttpAgentImpl extends HttpAgent {
 	 * Sets all cookies from the {@code Set-Cookie} response header to the
 	 * cookie storage.
 	 *
-	 * @private
-	 * @method setCookiesFromResponse
 	 * @param {{
 	 *          status: number,
 	 *          body: *,
@@ -585,8 +537,6 @@ export default class HttpAgentImpl extends HttpAgent {
 	 * Saves the server response to the cache to be used as the result of the
 	 * next request of the same properties.
 	 *
-	 * @private
-	 * @method _saveAgentResponseToCache
 	 * @param {{
 	 *          status: number,
 	 *          body: *,

@@ -6,18 +6,11 @@ ns.namespace('ima.page.manager');
 /**
  * The page manager is a utility for managing the current controller and its
  * view.
- *
- * @interface PageManager
- * @namespace ima.page.manager
- * @module ima
- * @submodule ima.page
  */
 export default class PageManager {
 
 	/**
 	 * Initializes the page manager.
-	 *
-	 * @method init
 	 */
 	init() {}
 
@@ -29,7 +22,6 @@ export default class PageManager {
 	 * UI (at the client-side) or to the response to send to the client (at the
 	 * server-side).
 	 *
-	 * @method manage
 	 * @param {(
 	 *          string|
 	 *          function(new: ima.controller.Controller, ...*)
@@ -78,7 +70,6 @@ export default class PageManager {
 	 *
 	 * This method has no effect at the server-side.
 	 *
-	 * @method scrollTo
 	 * @param {number=} [x=0] The horizontal offset to scroll to.
 	 * @param {number=} [y=0] The vertical offset to scroll to.
 	 */
@@ -87,8 +78,6 @@ export default class PageManager {
 	/**
 	 * Finalization callback, called when the page manager is being discarded.
 	 * This usually happens when the page is hot-reloaded at the client side.
-	 *
-	 * @method destroy
 	 */
 	destroy() {}
 }

@@ -7,18 +7,12 @@ ns.namespace('ima.page.state');
 /**
  * Decorator for page state manager, which add logic for limiting Extension
  * competence.
- *
- * @class PageStateManagerDecorator
- * @implements PageStateManager
- * @namespace ima.page.state
- * @module ima
- * @submodule ima.page
  */
 export default class PageStateManagerDecorator extends PageStateManager {
 
 	/**
-	 * @method constructor
-	 * @constructor
+	 * Initializes the page state manager decorator.
+	 *
 	 * @param {PageStateManager} pageStateManager
 	 * @param {string[]} allowedStateKeys
 	 */
@@ -28,8 +22,6 @@ export default class PageStateManagerDecorator extends PageStateManager {
 		/**
 		 * The current page state manager.
 		 *
-		 * @private
-		 * @property _pageStateManager
 		 * @type {PageStateManager}
 		 */
 		this._pageStateManager = pageStateManager;
@@ -37,8 +29,6 @@ export default class PageStateManagerDecorator extends PageStateManager {
 		/**
 		 * Array of access keys for state.
 		 *
-		 * @private
-		 * @property _allowedStateKeys
 		 * @type {string[]}
 		 */
 		this._allowedStateKeys = allowedStateKeys;
@@ -46,7 +36,6 @@ export default class PageStateManagerDecorator extends PageStateManager {
 
 	/**
 	 * @inheritdoc
-	 * @method clear
 	 */
 	clear() {
 		this._pageStateManager.clear();
@@ -54,7 +43,6 @@ export default class PageStateManagerDecorator extends PageStateManager {
 
 	/**
 	 * @inheritdoc
-	 * @method setState
 	 */
 	setState(statePatch) {
 		if ($Debug) {
@@ -64,10 +52,11 @@ export default class PageStateManagerDecorator extends PageStateManager {
 			});
 
 			if (deniedKeys.length > 0) {
-				throw new GenericError(`Extension can not set state for ` +
-						`keys ${deniedKeys.join()}. Check your extension or ` +
-						`add keys ${deniedKeys.join()} to ` +
-						`getAllowedStateKeys.`);
+				throw new GenericError(
+					`Extension can not set state for keys ` +
+					`${deniedKeys.join()}. Check your extension or add keys ` +
+					`${deniedKeys.join()} to getAllowedStateKeys.`
+				);
 			}
 		}
 
@@ -76,7 +65,6 @@ export default class PageStateManagerDecorator extends PageStateManager {
 
 	/**
 	 * @inheritdoc
-	 * @method getState
 	 */
 	getState() {
 		return this._pageStateManager.getState();
@@ -84,7 +72,6 @@ export default class PageStateManagerDecorator extends PageStateManager {
 
 	/**
 	 * @inheritdoc
-	 * @method getAllStates
 	 */
 	getAllStates() {
 		return this._pageStateManager.getAllStates();

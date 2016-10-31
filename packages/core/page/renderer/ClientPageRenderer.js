@@ -16,21 +16,12 @@ ns.namespace('ima.page.renderer');
 /**
  * Client-side page renderer. The renderer attempts to reuse the markup sent by
  * server if possible.
- *
- * @class ClientPageRenderer
- * @extends AbstractPageRenderer
- * @implements PageRenderer
- * @namespace ima.page.renderer
- * @module ima
- * @submodule ima.page
  */
 export default class ClientPageRenderer extends AbstractPageRenderer {
 
 	/**
 	 * Initializes the client-side page renderer.
 	 *
-	 * @method constructor
-	 * @constructor
 	 * @param {PageRendererFactory} factory Factory for receive $Utils to view.
 	 * @param {vendor.$Helper} Helper The IMA.js helper methods.
 	 * @param {vendor.ReactDOM} ReactDOM React framework instance to use to
@@ -47,10 +38,7 @@ export default class ClientPageRenderer extends AbstractPageRenderer {
 		/**
 		 * Flag signalling that the page is being rendered for the first time.
 		 *
-		 * @property _firsTime
-		 * @private
 		 * @type {boolean}
-		 * @default true
 		 */
 		this._firstTime = true;
 
@@ -58,15 +46,14 @@ export default class ClientPageRenderer extends AbstractPageRenderer {
 		 * Helper for manipulating the global object ({@code window})
 		 * regardless of the client/server-side environment.
 		 *
-		 * @property _window
-		 * @private
 		 * @type {Window}
 		 */
 		this._window = window;
 
 		/**
-		 * @property _viewContainer
-		 * @private
+		 * The HTML element containing the current application view for the
+		 * current route.
+		 *
 		 * @type {?HTMLElement}
 		 */
 		this._viewContainer = null;
@@ -74,8 +61,6 @@ export default class ClientPageRenderer extends AbstractPageRenderer {
 
 	/**
 	 * @inheritdoc
-	 * @abstract
-	 * @method mount
 	 */
 	mount(controller, view, pageResources, routeOptions) {
 		let separatedData = this._separatePromisesAndValues(pageResources);
@@ -119,7 +104,6 @@ export default class ClientPageRenderer extends AbstractPageRenderer {
 
 	/**
 	 * @inheritdoc
-	 * @method update
 	 */
 	update(controller, resourcesUpdate) {
 		let separatedData = this._separatePromisesAndValues(resourcesUpdate);
@@ -152,7 +136,6 @@ export default class ClientPageRenderer extends AbstractPageRenderer {
 
 	/**
 	 * @inheritdoc
-	 * @method unmount
 	 */
 	unmount() {
 		if (this._reactiveView) {
@@ -165,10 +148,8 @@ export default class ClientPageRenderer extends AbstractPageRenderer {
 	 * Show error to console in $Debug mode and re-throw that error
 	 * for other error handler.
 	 *
-	 * @private
-	 * @method _handleError
 	 * @param {Error} error
-	 * @throws {Error} Re-throw handled error.
+	 * @throws {Error} Re-throws the handled error.
 	 */
 	_handleError(error) {
 		if ($Debug) {
@@ -181,7 +162,6 @@ export default class ClientPageRenderer extends AbstractPageRenderer {
 	/**
 	 * Patch promise values to controller state.
 	 *
-	 * @method _patchPromisesToState
 	 * @param {ControllerDecorator} controller
 	 * @param {Object<string, Promise<*>>} patchedPromises
 	 */
@@ -200,8 +180,6 @@ export default class ClientPageRenderer extends AbstractPageRenderer {
 	/**
 	 * Renders the current route to DOM.
 	 *
-	 * @private
-	 * @method _renderToDOM
 	 * @param {ControllerDecorator} controller
 	 * @param {function(new: React.Component)} view
 	 * @param {{
@@ -259,8 +237,6 @@ export default class ClientPageRenderer extends AbstractPageRenderer {
 	 * for default page state. Promises will be patched to state after their
 	 * resolve.
 	 *
-	 * @method _separatePromisesAndValues
-	 * @private
 	 * @param {Object<string, *>} dataMap A map of data.
 	 * @return {{
 	 *           promises: Object<string, Promise<*>>,
@@ -287,8 +263,6 @@ export default class ClientPageRenderer extends AbstractPageRenderer {
 	/**
 	 * Updates the title and the contents of the meta elements used for SEO.
 	 *
-	 * @private
-	 * @method _updateMetaAttributes
 	 * @param {MetaManager} metaManager meta attributes storage providing the
 	 *        new values for page meta elements and title.
 	 */
@@ -303,8 +277,6 @@ export default class ClientPageRenderer extends AbstractPageRenderer {
 	/**
 	 * Updates the contents of the generic meta elements used for SEO.
 	 *
-	 * @private
-	 * @method _updateMetaNameAttributes
 	 * @param {MetaManager} metaManager meta attributes storage providing the
 	 *        new values for page meta elements and title.
 	 */
@@ -324,8 +296,6 @@ export default class ClientPageRenderer extends AbstractPageRenderer {
 	/**
 	 * Updates the contents of the specialized meta elements used for SEO.
 	 *
-	 * @private
-	 * @method _updateMetaPropertyAttributes
 	 * @param {MetaManager} metaManager meta attributes storage providing the
 	 *        new values for page meta elements and title.
 	 */
@@ -347,8 +317,6 @@ export default class ClientPageRenderer extends AbstractPageRenderer {
 	/**
 	 * Updates the href of the specialized link elements used for SEO.
 	 *
-	 * @private
-	 * @method _updateMetaLinkAttributes
 	 * @param {MetaManager} metaManager meta attributes storage providing the
 	 *        new values for page meta elements and title.
 	 */

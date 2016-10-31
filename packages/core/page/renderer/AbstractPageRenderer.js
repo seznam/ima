@@ -7,23 +7,12 @@ ns.namespace('ima.page.renderer');
 
 /**
  * Base class for implementations of the {@linkcode PageRenderer} interface.
- *
- * @class AbstractPageRenderer
- * @implements PageRenderer
- * @namespace ima.page.renderer
- * @module ima
- * @submodule ima.page
- *
- * @requires vendor.$Helper
- * @requires ReactDOM
  */
 export default class AbstractPageRenderer extends PageRenderer {
 
 	/**
 	 * Initializes the abstract page renderer.
 	 *
-	 * @constructor
-	 * @method constructor
 	 * @param {PageRendererFactory} factory Factory for receive $Utils to view.
 	 * @param {vendor.$Helper} Helper The IMA.js helper methods.
 	 * @param {vendor.ReactDOM} ReactDOM React framework instance, will be used
@@ -38,7 +27,6 @@ export default class AbstractPageRenderer extends PageRenderer {
 		 * Factory for receive $Utils to view.
 		 *
 		 * @protected
-		 * @property _factory
 		 * @type {PageRendererFactory}
 		 */
 		this._factory = factory;
@@ -47,7 +35,6 @@ export default class AbstractPageRenderer extends PageRenderer {
 		 * The IMA.js helper methods.
 		 *
 		 * @protected
-		 * @property _Helper
 		 * @type {Vendor.$Helper}
 		 */
 		this._Helper = Helper;
@@ -56,7 +43,6 @@ export default class AbstractPageRenderer extends PageRenderer {
 		 * Rect framework instance, used to render the page.
 		 *
 		 * @protected
-		 * @property _ReactDOM
 		 * @type {Vendor.ReactDOM}
 		 */
 		this._ReactDOM = ReactDOM;
@@ -65,16 +51,13 @@ export default class AbstractPageRenderer extends PageRenderer {
 		 * Application setting for the current application environment.
 		 *
 		 * @protected
-		 * @property _setting
 		 * @type {Object<string, *>}
 		 */
 		this._settings = settings;
 
 		/**
 		 * @protected
-		 * @property _reactiveView
-		 * @type {React.Component}
-		 * @default null
+		 * @type {?React.Component}
 		 */
 		this._reactiveView = null;
 
@@ -83,34 +66,33 @@ export default class AbstractPageRenderer extends PageRenderer {
 	/**
 	 * @inheritdoc
 	 * @abstract
-	 * @method mount
 	 */
 	mount(controller, view, pageResources, routeOptions) {
-		throw new GenericError('The mount() method is abstract and must be ' +
-				'overridden.');
+		throw new GenericError(
+			'The mount() method is abstract and must be overridden.'
+		);
 	}
 
 	/**
 	 * @inheritdoc
-	 * @method update
 	 */
 	update(controller, resourcesUpdate) {
-		throw new GenericError('The update() method is abstract and must be ' +
-				'overridden.');
+		throw new GenericError(
+			'The update() method is abstract and must be overridden.'
+		);
 	}
 
 	/**
 	 * @inheritdoc
-	 * @method unmount
 	 */
 	unmount() {
-		throw new GenericError('The unmount() method is abstract and must ' +
-				'be overridden.');
+		throw new GenericError(
+			'The unmount() method is abstract and must be overridden.'
+		);
 	}
 
 	/**
 	 * @inheritdoc
-	 * @method setState
 	 */
 	clearState() {
 		if (this._reactiveView &&
@@ -130,7 +112,6 @@ export default class AbstractPageRenderer extends PageRenderer {
 
 	/**
 	 * @inheritdoc
-	 * @method setState
 	 */
 	setState(state = {}) {
 		if (this._reactiveView) {
@@ -142,7 +123,6 @@ export default class AbstractPageRenderer extends PageRenderer {
 	 * Generate properties for view from state.
 	 *
 	 * @protected
-	 * @method _generateViewProps
 	 * @param {function(new:React.Component, Object<string, *>)} view The page
 	 *        view React component to wrap.
 	 * @param {Object<string, *>=} [state={}]

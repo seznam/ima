@@ -13,13 +13,6 @@ ns.namespace('ima.page.manager');
 
 /**
  * Page manager for controller on the client side.
- *
- * @class ClientPageManager
- * @extends AbstractPageManager
- * @implements PageManager
- * @namespace ima.page.manager
- * @module ima
- * @submodule ima.page
  */
 export default class ClientPageManager extends AbstractPageManager {
 
@@ -28,8 +21,8 @@ export default class ClientPageManager extends AbstractPageManager {
 	}
 
 	/**
-	 * @method constructor
-	 * @constructor
+	 * Initializes the client-side page manager.
+	 *
 	 * @param {PageFactory} pageFactory Factory used by the page manager to
 	 *        create instances of the controller for the current route, and
 	 *        decorate the controllers and page state managers.
@@ -47,10 +40,7 @@ export default class ClientPageManager extends AbstractPageManager {
 		 * The utility for manipulating the global context and global
 		 * client-side-specific APIs.
 		 * 
-		 * @private
-		 * @property _window
 		 * @type {ima.window.Window}
-		 * @default window
 		 */
 		this._window = window;
 
@@ -58,10 +48,7 @@ export default class ClientPageManager extends AbstractPageManager {
 		 * The event bus for dispatching and listening for custom IMA events
 		 * propagated through the DOM.
 		 * 
-		 * @private
-		 * @property _eventBus
 		 * @type {ima.event.EventBus}
-		 * @default eventBus
 		 */
 		this._eventBus = eventBus;
 
@@ -69,15 +56,15 @@ export default class ClientPageManager extends AbstractPageManager {
 		 * Event listener for the custom DOM events used by the event bus,
 		 * bound to this instance.
 		 *
-		 * @property _boundOnCustomEventHandler
 		 * @type {function(this: ClientPageManager, Event)}
 		 */
-		this._boundOnCustomEventHandler = (e) => this._onCustomEventHandler(e);
+		this._boundOnCustomEventHandler = (event) => {
+			this._onCustomEventHandler(event);
+		};
 	}
 
 	/**
 	 * @inheritdoc
-	 * @method init
 	 */
 	init() {
 		super.init();
@@ -89,7 +76,6 @@ export default class ClientPageManager extends AbstractPageManager {
 
 	/**
 	 * @inheritdoc
-	 * @method manage
 	 */
 	manage(controller, view, options, params = {}) {
 		return (
@@ -105,7 +91,6 @@ export default class ClientPageManager extends AbstractPageManager {
 
 	/**
 	 * @inheritdoc
-	 * @method scrollTo
 	 */
 	scrollTo(x = 0, y = 0) {
 		setTimeout(() => {
@@ -115,7 +100,6 @@ export default class ClientPageManager extends AbstractPageManager {
 
 	/**
 	 * @inheritdoc
-	 * @method destroy
 	 */
 	destroy() {
 		super.destroy();
@@ -140,8 +124,6 @@ export default class ClientPageManager extends AbstractPageManager {
 	 * The controller's listener will be invoked with the event's data as an
 	 * argument.
 	 *
-	 * @private
-	 * @method _onCustomEventHandler
 	 * @param {CustomEvent} event The encountered event bus DOM event.
 	 */
 	_onCustomEventHandler(event) {
@@ -175,8 +157,6 @@ export default class ClientPageManager extends AbstractPageManager {
 	 * with the expected name of the current controller's method for
 	 * intercepting the event.
 	 *
-	 * @private
-	 * @method _parseCustomEvent
 	 * @param {CustomEvent} event The encountered event bus custom DOM event.
 	 * @return {{ method: string, data: *, eventName: string }} The event's
 	 *         details.
@@ -195,8 +175,6 @@ export default class ClientPageManager extends AbstractPageManager {
 	 * using the current controller. The method returns {@code true} if the
 	 * event is handled by the controller.
 	 *
-	 * @private
-	 * @method _handleEventWithController
 	 * @param {string} method The name of the method the current controller
 	 *        should use to process the currently processed event bus custom
 	 *        DOM event.
@@ -222,8 +200,6 @@ export default class ClientPageManager extends AbstractPageManager {
 	 * using the registered extensions of the current controller. The method
 	 * returns {@code true} if the event is handled by the controller.
 	 *
-	 * @private
-	 * @method _handleEventWithExtensions
 	 * @param {string} method The name of the method the current controller
 	 *        should use to process the currently processed event bus custom
 	 *        DOM event.

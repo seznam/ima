@@ -13,8 +13,7 @@ ns.namespace('ima.router');
 /**
  * Names of the DOM events the router responds to.
  *
- * @enum
- * @property Events
+ * @enum {string}
  * @type {Object<string, string>}
  */
 const Events = Object.freeze({
@@ -23,7 +22,6 @@ const Events = Object.freeze({
 	 * mouse, or touches the page and the touch event is not stopped.
 	 *
 	 * @const
-	 * @property Events.CLICK
 	 * @type {string}
 	 */
 	CLICK: 'click',
@@ -32,7 +30,6 @@ const Events = Object.freeze({
 	 * Name of the event fired when the user navigates back in the history.
 	 *
 	 * @const
-	 * @property Events.POP_STATE
 	 * @type {string}
 	 */
 	POP_STATE: 'popstate'
@@ -41,8 +38,7 @@ const Events = Object.freeze({
 /**
  * Address bar content manipulation modes.
  *
- * @enum
- * @property Modes
+ * @enum {string}
  * @type {Object<string, string>}
  */
 const Modes = Object.freeze({
@@ -51,7 +47,6 @@ const Modes = Object.freeze({
 	 * bar is being udpated using the session history management API.
 	 *
 	 * @const
-	 * @property Modes.HISTORY
 	 * @type {string}
 	 */
 	HISTORY: 'history',
@@ -61,7 +56,6 @@ const Modes = Object.freeze({
 	 * bar is being udpated by modifying the {@code hash} part.
 	 *
 	 * @const
-	 * @property Modes.HASH
 	 * @type {string}
 	 */
 	HASH: 'hash'
@@ -72,20 +66,12 @@ const Modes = Object.freeze({
  * {@code MouseEvent}s.
  *
  * @const
- * @property MOUSE_LEFT_BUTTON
  * @type {number}
  */
 const MOUSE_LEFT_BUTTON = 0;
 
 /**
  * The client-side implementation of the {@codelink Router} interface.
- *
- * @class ClientRouter
- * @extends AbstractRouter
- * @implements Router
- * @namespace ima.router
- * @module ima
- * @submodule ima.router
  */
 export default class ClientRouter extends AbstractRouter {
 
@@ -96,8 +82,6 @@ export default class ClientRouter extends AbstractRouter {
 	/**
 	 * Initializes the client-side router.
 	 *
-	 * @constructor
-	 * @method constructor
 	 * @param {PageManager} pageManager The page manager handling UI rendering,
 	 *        and transitions between pages if at the client side.
 	 * @param {RouteFactory} factory Factory for routes.
@@ -110,8 +94,6 @@ export default class ClientRouter extends AbstractRouter {
 		/**
 		 * Helper for accessing the native client-side APIs.
 		 *
-		 * @private
-		 * @property _window
 		 * @type {Window}
 		 */
 		this._window = window;
@@ -120,17 +102,13 @@ export default class ClientRouter extends AbstractRouter {
 		 * Current address bar manipulation mode, specified as one of the
 		 * {@code Modes.*} constants..
 		 *
-		 * @private
-		 * @property mode
-		 * @type {string}
-		 * @default null
+		 * @type {?string}
 		 */
 		this._mode = null;
 	}
 
 	/**
 	 * @inheritdoc
-	 * @method init
 	 */
 	init(config) {
 		super.init(config);
@@ -142,7 +120,6 @@ export default class ClientRouter extends AbstractRouter {
 
 	/**
 	 * @inheritdoc
-	 * @method getUrl
 	 */
 	getUrl() {
 		return this._window.getUrl();
@@ -150,7 +127,6 @@ export default class ClientRouter extends AbstractRouter {
 
 	/**
 	 * @inheritdoc
-	 * @method getPath
 	 */
 	getPath() {
 		return this._extractRoutePath(this._window.getPath());
@@ -158,7 +134,6 @@ export default class ClientRouter extends AbstractRouter {
 
 	/**
 	 * @inheritdoc
-	 * @method listen
 	 */
 	listen() {
 		let nativeWindow = this._window.getWindow();
@@ -166,7 +141,6 @@ export default class ClientRouter extends AbstractRouter {
 		this._saveScrollHistory();
 		let eventName = Events.POP_STATE;
 		this._window.bindEventListener(nativeWindow, eventName, (event) => {
-
 			if (event.state) {
 				this.route(this.getPath())
 					.then(() => {
@@ -188,7 +162,6 @@ export default class ClientRouter extends AbstractRouter {
 
 	/**
 	 * @inheritdoc
-	 * @method redirect
 	 */
 	redirect(url = '', options = {}) {
 		if (this._isSameDomain(url) && this._mode === Modes.HISTORY) {
@@ -205,7 +178,6 @@ export default class ClientRouter extends AbstractRouter {
 
 	/**
 	 * @inheritdoc
-	 * @method route
 	 */
 	route(path, options = {}) {
 		return (
@@ -222,7 +194,6 @@ export default class ClientRouter extends AbstractRouter {
 
 	/**
 	 * @inheritdoc
-	 * @method handleError
 	 */
 	handleError(params, options = {}) {
 		if ($Debug) {
@@ -254,7 +225,6 @@ export default class ClientRouter extends AbstractRouter {
 
 	/**
 	 * @inheritdoc
-	 * @method handleNotFound
 	 */
 	handleNotFound(params, options = {}) {
 		return (
@@ -270,8 +240,6 @@ export default class ClientRouter extends AbstractRouter {
 	 * Handle a fatal error application state. IMA handle fatal error when IMA
 	 * handle error.
 	 *
-	 * @private
-	 * @method _handleFatalError
 	 * @param {Error} error
 	 */
 	_handleFatalError(error) {
@@ -294,8 +262,6 @@ export default class ClientRouter extends AbstractRouter {
 	 * of the anchor's target location (href) is the same as the current,
 	 * otherwise the method results in a hard redirect.
 	 *
-	 * @private
-	 * @method _handleClick
 	 * @param {MouseEvent} event The click event.
 	 */
 	_handleClick(event) {
@@ -337,8 +303,6 @@ export default class ClientRouter extends AbstractRouter {
 	 * element has been clicked, and if it was, the method returns anchor
 	 * element else null.
 	 *
-	 * @private
-	 * @method _getAnchorElement
 	 * @param {Node} target
 	 * @return {?Node}
 	 */
@@ -363,8 +327,6 @@ export default class ClientRouter extends AbstractRouter {
 	 * Tests whether the provided target URL contains only an update of the
 	 * hash fragment of the current URL.
 	 *
-	 * @private
-	 * @method _isHashLink
 	 * @param {string} targetUrl The target URL.
 	 * @return {boolean} {@code true} if the navigation to target URL would
 	 *         result only in updating the hash fragment of the current URL.
@@ -390,8 +352,6 @@ export default class ClientRouter extends AbstractRouter {
 	 * following structure: {@code {url: string}}. The {@code url} field will
 	 * be set to the provided URL.
 	 *
-	 * @private
-	 * @method _setAddressBar
 	 * @param {string} url The URL.
 	 */
 	_setAddressBar(url) {
@@ -409,8 +369,6 @@ export default class ClientRouter extends AbstractRouter {
 	 *
 	 * Replace scroll values in current state for actual scroll values in
 	 * document.
-	 *
-	 * @method _saveScrollHistory
 	 */
 	_saveScrollHistory() {
 		let url = this.getUrl();
@@ -427,9 +385,7 @@ export default class ClientRouter extends AbstractRouter {
 	 * Tests whether the the protocol and domain of the provided URL are the
 	 * same as the current.
 	 *
-	 * @private
-	 * @method _isSameDomain
-	 * @param {string} [url=''] The URL.
+	 * @param {string=} [url=''] The URL.
 	 * @return {boolean} {@code true} if the protocol and domain of the
 	 *         provided URL are the same as the current.
 	 */

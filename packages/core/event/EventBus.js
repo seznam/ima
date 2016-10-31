@@ -15,10 +15,7 @@ ns.namespace('ima.event');
  * and capture of all fired events. The actual event name is always consistent
  * by the implementation.
  *
- * @interface EventBus
- * @namespace ima.event
- * @module ima
- * @submodule ima.event
+ * @interface
  */
 export default class EventBus {
 
@@ -35,7 +32,6 @@ export default class EventBus {
 	 * default values used in the native custom events
 	 * ({@code { bubbles: false, cancelable: false }}).
 	 *
-	 * @method fire
 	 * @param {EventTarget} eventTarget The event target at which the event
 	 *        will be  dispatched (e.g. element/document/window).
 	 * @param {string} eventName The name of the event to fire.
@@ -45,7 +41,7 @@ export default class EventBus {
 	 *        custom event fired by this event bus.
 	 *        The default options passed to the custom event constructor are
 	 *        {@code { bubbles: true, cancelable: true }}.
-	 * @return {ima.event.EventBus} This custom event bus.
+	 * @return {EventBus} This custom event bus.
 	 * @throws {Error} Thrown if the provided event target cannot be used to
 	 *         fire the event.
 	 * @see https://developer.mozilla.org/en-US/docs/Web/API/Event/Event
@@ -63,12 +59,11 @@ export default class EventBus {
 	 * The order in which the event listeners will be executed is unspecified
 	 * and should not be relied upon.
 	 *
-	 * @method listen
 	 * @param {EventTarget} eventTarget The event target at which the listener
 	 *        should listen for all event bus events.
 	 * @param {function(<CustomEvent>)} listener The event listener to
 	 *        register.
-	 * @return {ima.event.EventBus} This event bus.
+	 * @return {EventBus} This event bus.
 	 */
 	listenAll(eventTarget, listener) {}
 
@@ -83,13 +78,12 @@ export default class EventBus {
 	 * The order in which the event listeners will be executed is unspecified
 	 * and should not be relied upon.
 	 *
-	 * @method listen
 	 * @param {EventTarget} eventTarget The event target at which the listener
 	 *        should listen for the specified event.
 	 * @param {string} eventName The name of the event to listen for.
 	 * @param {function(<CustomEvent>)} listener The event listener to
 	 *        register.
-	 * @return {ima.event.EventBus} This event bus.
+	 * @return {EventBus} This event bus.
 	 */
 	listen(eventTarget, eventName, listener) {}
 
@@ -101,13 +95,11 @@ export default class EventBus {
 	 * The method has no effect if the listener is not registered at the
 	 * specified event target.
 	 *
-	 * @chainable
-	 * @method unlistenAll
 	 * @param {EventTarget} eventTarget The event target at which the event
 	 *        listener listens for events.
 	 * @param {function(<CustomEvent>)} listener The event listener to
 	 *        deregister.
-	 * @return {ima.event.EventBus} This event bus.
+	 * @return {EventBus} This event bus.
 	 */
 	unlistenAll(eventTarget, listener) {}
 
@@ -119,13 +111,12 @@ export default class EventBus {
 	 * The method has no effect if the listener is not registered for the
 	 * specified event at the specified event target.
 	 *
-	 * @method unlisten
 	 * @param {EventTarget} eventTarget The event target at which the listener
 	 *        is listening for the event.
 	 * @param {string} eventName The name of the event listened for.
 	 * @param {function(<CustomEvent>)} listener The event listener to
 	 *        deregister.
-	 * @return {ima.event.EventBus} This event bus.
+	 * @return {EventBus} This event bus.
 	 */
 	unlisten(eventTarget, eventName, listener) {}
 }

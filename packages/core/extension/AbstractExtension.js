@@ -8,89 +8,69 @@ ns.namespace('ima.extension');
 /**
  * Abstract extension
  *
- * @class AbstractExtension
- * @implements Extension
- * @namespace ima.extension
- * @module ima
- * @submodule ima.extension
+ * @abstract
  */
 export default class AbstractExtension extends Extension {
 
-	/**
-	 * @method constructor
-	 * @constructor
-	 */
 	constructor() {
 		super();
 
 		/**
 		 * State manager.
 		 *
-		 * @property _pageStateManager
 		 * @protected
 		 * @type {PageStateManager}
-		 * @default null
 		 */
 		this._pageStateManager = null;
 
 		/**
 		 * The HTTP response code to send to the client.
 		 *
-		 * @property status
-		 * @public
 		 * @type {number}
-		 * @default 200
 		 */
 		this.status = 200;
 
 		/**
 		 * The route parameters extracted from the current route.
 		 *
-		 * @property params
-		 * @public
 		 * @type {Object<string, string>}
-		 * @default {}
 		 */
 		this.params = {};
 	}
 
 	/**
 	 * @inheritdoc
-	 * @method init
 	 */
 	init() {}
 
 	/**
 	 * @inheritdoc
-	 * @method destroy
 	 */
 	destroy() {}
 
 	/**
 	 * @inheritdoc
-	 * @method activate
 	 */
 	activate() {}
 
 	/**
 	 * @inheritdoc
-	 * @method deactivate
 	 */
 	deactivate() {}
 
 	/**
 	 * @inheritdoc
 	 * @abstract
-	 * @method load
 	 */
 	load() {
-		throw new GenericError('The ima.extension.AbstractExtension.load ' +
-				'method is abstract and must be overridden');
+		throw new GenericError(
+			'The ima.extension.AbstractExtension.load method is abstract ' +
+			'and must be overridden'
+		);
 	}
 
 	/**
 	 * @inheritdoc
-	 * @method update
 	 */
 	update(params = {}) {
 		return {};
@@ -98,7 +78,6 @@ export default class AbstractExtension extends Extension {
 
 	/**
 	 * @inheritdoc
-	 * @method setState
 	 */
 	setState(statePatch) {
 		if (this._pageStateManager) {
@@ -108,7 +87,6 @@ export default class AbstractExtension extends Extension {
 
 	/**
 	 * @inheritdoc
-	 * @method getState
 	 */
 	getState() {
 		if (this._pageStateManager) {
@@ -120,7 +98,6 @@ export default class AbstractExtension extends Extension {
 
 	/**
 	 * @inheritdoc
-	 * @method setRouteParams
 	 */
 	setRouteParams(params = {}) {
 		this.params = params;
@@ -128,7 +105,6 @@ export default class AbstractExtension extends Extension {
 
 	/**
 	 * @inheritdoc
-	 * @method getRouteParams
 	 */
 	getRouteParams() {
 		return this.params;
@@ -136,7 +112,6 @@ export default class AbstractExtension extends Extension {
 
 	/**
 	 * @inheritdoc
-	 * @method setPageStateManager
 	 */
 	setPageStateManager(pageStateManager) {
 		this._pageStateManager = pageStateManager;
@@ -144,7 +119,6 @@ export default class AbstractExtension extends Extension {
 
 	/**
 	 * @inheritdoc
-	 * @method getHttpStatus
 	 */
 	getHttpStatus() {
 		return this.status;
@@ -154,7 +128,6 @@ export default class AbstractExtension extends Extension {
 	 * Returns array of allowed state keys for extension.
 	 *
 	 * @inheritdoc
-	 * @method getAllowedStateKeys
 	 */
 	getAllowedStateKeys() {
 		return [];
