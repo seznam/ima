@@ -4,6 +4,10 @@ import ns from '../namespace';
 
 ns.namespace('ima.page');
 
+const PRIVATE = Object.freeze({
+	contextTypes: Symbol('contextTypes')
+});
+
 /**
  * The base class for all view components.
  *
@@ -12,9 +16,17 @@ ns.namespace('ima.page');
 export default class AbstractComponent extends React.Component {
 
 	static get contextTypes() {
+		if (this.hasOwnProperty(PRIVATE.contextTypes)) {
+			return this[PRIVATE.contextTypes];
+		}
+
 		return {
 			$Utils: React.PropTypes.object
 		};
+	}
+
+	static set contextTypes(contextTypes) {
+		this[PRIVATE.contextTypes] = contextTypes;
 	}
 
 	/**
