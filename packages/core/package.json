@@ -51,7 +51,7 @@
 	"dependencies": {
 		"babel-polyfill": "^6.16.0",
 		"custom-event-polyfill": "^0.3.0",
-		"enzyme": "^2.4.1",
+		"enzyme": "^2.5.1",
 		"ima-babel6-polyfill": "^0.12.0",
 		"ima-helpers": "^0.13.0",
 		"react": "^15.3.2",
