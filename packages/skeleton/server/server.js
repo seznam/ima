@@ -49,7 +49,11 @@ process.on('uncaughtException', (error) => {
 	logger.error('Uncaught Exception:', { error });
 });
 
-function renderApp (req, res, next) {
+process.on('unhandledRejection', (error) => {
+	logger.error('Unhandled promise rejection:', { error });
+});
+
+function renderApp(req, res, next) {
 	if (req.method === 'GET') {
 		let cachedPage = cache.get(req);
 		if (cachedPage) {
