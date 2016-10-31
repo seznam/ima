@@ -647,7 +647,6 @@ export default class ObjectContainer {
 	 *
 	 * @private
 	 * @template T
-	 * @method _hasEntrySameValues
 	 * @param {Entry<function(): *>>} entry
 	 * @param {function(new: T, ...*)} classConstructor
 	 * @param {*[]} dependencies
