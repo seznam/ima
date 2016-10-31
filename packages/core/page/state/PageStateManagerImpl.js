@@ -6,13 +6,7 @@ ns.namespace('ima.page.state');
 const MAX_HISTORY_LIMIT = 10;
 
 /**
- * Class for app state.
- *
- * @class PageStateManagerImpl
- * @implements PageStateManager
- * @namespace ima.page.state
- * @module ima
- * @submodule ima.page
+ * The implementation of the {@linkcode PageStateManager} interface.
  */
 export default class PageStateManagerImpl extends PageStateManager {
 
@@ -21,33 +15,23 @@ export default class PageStateManagerImpl extends PageStateManager {
 	}
 
 	/**
-	 * @method constructor
-	 * @constructor
+	 * Initializes the page state manager.
 	 */
 	constructor() {
 		super();
 
 		/**
-		 * @property _states
-		 * @private
 		 * @type {Object<string, *>[]}
-		 * @default []
 		 */
 		this._states = [];
 
 		/**
-		 * @property _cursor
-		 * @private
 		 * @type {number}
-		 * @default -1
 		 */
 		this._cursor = -1;
 
 		/**
-		 * @property onChange
-		 * @public
 		 * @type {?function(Object<string, *>)}
-		 * @default null
 		 */
 		this.onChange = null;
 
@@ -55,7 +39,6 @@ export default class PageStateManagerImpl extends PageStateManager {
 
 	/**
 	 * @inheritdoc
-	 * @method clear
 	 */
 	clear() {
 		this._states = [];
@@ -64,7 +47,6 @@ export default class PageStateManagerImpl extends PageStateManager {
 
 	/**
 	 * @inheritdoc
-	 * @method setState
 	 */
 	setState(statePatch) {
 		var newState = Object.assign({}, this.getState(), statePatch);
@@ -76,7 +58,6 @@ export default class PageStateManagerImpl extends PageStateManager {
 
 	/**
 	 * @inheritdoc
-	 * @method getState
 	 */
 	getState() {
 		return this._states[this._cursor] || {};
@@ -84,7 +65,6 @@ export default class PageStateManagerImpl extends PageStateManager {
 
 	/**
 	 * @inheritdoc
-	 * @method getAllStates
 	 */
 	getAllStates() {
 		return this._states;
@@ -93,9 +73,6 @@ export default class PageStateManagerImpl extends PageStateManager {
 	/**
 	 * Erase the oldest state from storage only if it exceed max
 	 * defined size of history.
-	 *
-	 * @private
-	 * @method _eraseExcessHistory
 	 */
 	_eraseExcessHistory() {
 		if (this._states.length > MAX_HISTORY_LIMIT) {
@@ -107,8 +84,6 @@ export default class PageStateManagerImpl extends PageStateManager {
 	/**
 	 * Push new state to history storage.
 	 *
-	 * @private
-	 * @method _pushToHistory
 	 * @param {Object<string, *>} newState
 	 */
 	_pushToHistory(newState) {
@@ -119,12 +94,10 @@ export default class PageStateManagerImpl extends PageStateManager {
 	/**
 	 * Call registered callback function on (@codelink onChange) with newState.
 	 *
-	 * @private
-	 * @method _callOnChangeCallback
 	 * @param {Object<string, *>} newState
 	 */
 	_callOnChangeCallback(newState) {
-		if (this.onChange && typeof this.onChange === 'function') {
+		if (this.onChange && (typeof this.onChange === 'function')) {
 			this.onChange(newState);
 		}
 	}

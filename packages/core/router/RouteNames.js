@@ -6,8 +6,7 @@ ns.namespace('ima.router');
  * HTTP status code constants, representing the HTTP status codes recognized
  * and processed by this proxy.
  *
- * @enum
- * @property RouteNames
+ * @enum {string}
  * @see http://www.w3.org/Protocols/rfc2616/rfc2616-sec10.html
  */
 const RouteNames = Object.freeze({
@@ -16,7 +15,6 @@ const RouteNames = Object.freeze({
 	 * HTTP status code error page).
 	 *
 	 * @const
-	 * @property RouteNames.NOT_FOUND
 	 * @type {string}
 	 */
 	NOT_FOUND: 'notFound',
@@ -26,7 +24,6 @@ const RouteNames = Object.freeze({
 	 * code error page).
 	 *
 	 * @const
-	 * @property RouteNames.ERROR
 	 * @type {string}
 	 */
 	ERROR: 'error'

@@ -8,26 +8,19 @@ ns.namespace('ima.page');
 
 /**
  * Factory for page.
- *
- * @class PageFactory
- * @namespace ima.page
- * @module ima
- * @submodule ima.page
- *
- * @requires ObjectContainer
  */
 export default class PageFactory {
 
 	/**
-	 * @method constructor
-	 * @constructor
+	 * Factory used by page management classes.
+	 *
 	 * @param {ObjectContainer} oc
 	 */
 	constructor(oc) {
 
 		/**
-		 * @property _oc
-		 * @private
+		 * The current application object container.
+		 *
 		 * @type {ObjectContainer}
 		 */
 		this._oc = oc;
@@ -36,7 +29,6 @@ export default class PageFactory {
 	/**
 	 * Create new instance of {@linkcode Controller}.
 	 *
-	 * @method createController
 	 * @param {(string|function(new:Controller))} controller
 	 * @return {Controller}
 	 */
@@ -47,11 +39,13 @@ export default class PageFactory {
 	}
 
 	/**
-	 * Create instance of view.
+	 * Retrieves the specified react component class.
 	 *
-	 * @method createView
-	 * @param {(string|React.Component)} view
-	 * @return {React.Component}
+	 * @param {(string|function(new: React.Component))} view The namespace
+	 *        referring to a react component class, or a react component class
+	 *        constructor.
+	 * @return {function(new: React.Component)} The react component class
+	 *         constructor.
 	 */
 	createView(view) {
 		if (typeof view === 'function') {
@@ -62,15 +56,15 @@ export default class PageFactory {
 		if (classConstructor) {
 			return classConstructor;
 		} else {
-			throw new GenericError(`ima.page.Factory:createView hasn't name ` +
-					`of view "${view}".`);
+			throw new GenericError(
+				`ima.page.Factory:createView hasn't name of view "${view}".`
+			);
 		}
 	}
 
 	/**
 	 * Returns decorated controller for ease setting seo params in controller.
 	 *
-	 * @method decorateController
 	 * @param {Controller} controller
 	 * @return {Controller}
 	 */
@@ -91,7 +85,6 @@ export default class PageFactory {
 	/**
 	 * Returns decorated page state manager for extension.
 	 *
-	 * @method decoratePageStateManager
 	 * @param {PageStateManager} pageStateManager
 	 * @param {string[]} allowedStateKeys
 	 * @return {PageStateManager}

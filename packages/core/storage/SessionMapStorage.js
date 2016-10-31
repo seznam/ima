@@ -10,15 +10,6 @@ ns.namespace('ima.storage');
  * The {@codelink SessionMap} storage is an implementation of the
  * {@codelink Storage} interface acting as a synchronization proxy between
  * the underlying map storage and the {@code sessionStorage} DOM storage.
- *
- * @class SessionMapStorage
- * @implements Storage
- * @namespace ima.storage
- * @module ima
- * @submodule ima.storage
- *
- * @requires MapStorage
- * @requires SessionStorage
  */
 export default class SessionMapStorage extends Storage {
 
@@ -29,8 +20,6 @@ export default class SessionMapStorage extends Storage {
 	/**
 	 * Initializes the storage.
 	 *
-	 * @constructor
-	 * @method constructor
 	 * @param {MapStorage} map The map storage to use.
 	 * @param {SessionStorage} session The session storage to use.
 	 */
@@ -40,8 +29,6 @@ export default class SessionMapStorage extends Storage {
 		/**
 		 * The map storage, synced with the session storage.
 		 *
-		 * @private
-		 * @property _map
 		 * @type {MapStorage}
 		 */
 		this._map = map;
@@ -49,8 +36,6 @@ export default class SessionMapStorage extends Storage {
 		/**
 		 * The session storage, synced with the map storage.
 		 *
-		 * @private
-		 * @property _session
 		 * @type {SessionStorage}
 		 */
 		this._session = session;
@@ -58,7 +43,6 @@ export default class SessionMapStorage extends Storage {
 
 	/**
 	 * @inheritdoc
-	 * @method init
 	 */
 	init() {
 		this._map.clear();
@@ -71,7 +55,6 @@ export default class SessionMapStorage extends Storage {
 
 	/**
 	 * @inheritdoc
-	 * @method has
 	 */
 	has(key) {
 		return this._map.has(key);
@@ -79,7 +62,6 @@ export default class SessionMapStorage extends Storage {
 
 	/**
 	 * @inheritdoc
-	 * @method get
 	 */
 	get(key) {
 		return this._map.get(key);
@@ -87,7 +69,6 @@ export default class SessionMapStorage extends Storage {
 
 	/**
 	 * @inheritdoc
-	 * @method set
 	 */
 	set(key, value) {
 		let canBeSerializedToJSON =
@@ -106,7 +87,6 @@ export default class SessionMapStorage extends Storage {
 
 	/**
 	 * @inheritdoc
-	 * @method delete
 	 */
 	delete(key) {
 		this._session.delete(key);
@@ -116,7 +96,6 @@ export default class SessionMapStorage extends Storage {
 
 	/**
 	 * @inheritdoc
-	 * @method clear
 	 */
 	clear() {
 		this._session.clear();
@@ -126,7 +105,6 @@ export default class SessionMapStorage extends Storage {
 
 	/**
 	 * @inheritdoc
-	 * @method keys
 	 */
 	keys() {
 		return this._map.keys();
@@ -134,7 +112,6 @@ export default class SessionMapStorage extends Storage {
 
 	/**
 	 * @override
-	 * @method size
 	 */
 	size() {
 		return this._map.size();

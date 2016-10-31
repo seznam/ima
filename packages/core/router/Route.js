@@ -67,8 +67,6 @@ export default class Route {
 	/**
 	 * Initializes the route.
 	 *
-	 * @constructor
-	 * @method constructor
 	 * @param {string} name The unique name of this route, identifying it among
 	 *        the rest of the routes in the application.
 	 * @param {string} pathExpression A path expression specifying the URL path
@@ -101,8 +99,6 @@ export default class Route {
 		 * The unique name of this route, identifying it among the rest of the
 		 * routes in the application.
 		 *
-		 * @private
-		 * @property _name
 		 * @type {string}
 		 */
 		this._name = name;
@@ -110,8 +106,6 @@ export default class Route {
 		/**
 		 * The original URL path expression from which this route was created.
 		 *
-		 * @private
-		 * @property _pathExpression
 		 * @type {string}
 		 */
 		this._pathExpression = pathExpression;
@@ -120,8 +114,6 @@ export default class Route {
 		 * The full name of Object Container alias identifying the controller
 		 * associated with this route.
 		 *
-		 * @private
-		 * @property _controller
 		 * @type {string}
 		 */
 		this._controller = controller;
@@ -130,8 +122,6 @@ export default class Route {
 		 * The full name or Object Container alias identifying the view class
 		 * associated with this route.
 		 *
-		 * @private
-		 * @property _view
 		 * @type {React.Component}
 		 */
 		this._view = view;
@@ -139,8 +129,6 @@ export default class Route {
 		/**
 		 * The route additional options.
 		 *
-		 * @private
-		 * @property _options
 		 * @type {{
 		 *         onlyUpdate: (
 		 *           boolean|
@@ -158,13 +146,6 @@ export default class Route {
 		 *         documentView: ?function(new: AbstractDocumentView),
 		 *         managedRootView: ?function(new: React.Component)
 		 *       }}
-		 * @default {
-		 *            onlyUpdate: false,
-		 *            autoScroll: true,
-		 *            allowSPA: true,
-		 *            documentView: null,
-		 *            managedRootView: null
-		 *          }
 		 */
 		this._options = Object.assign(
 			{
@@ -180,8 +161,6 @@ export default class Route {
 		/**
 		 * The path expression with the trailing slashes trimmed.
 		 *
-		 * @private
-		 * @property _trimmedPathExpression
 		 * @type {string}
 		 */
 		this._trimmedPathExpression = this._getTrimmedPath(pathExpression);
@@ -189,8 +168,6 @@ export default class Route {
 		/**
 		 * The names of the parameters in this route.
 		 *
-		 * @private
-		 * @property _parameterNames
 		 * @type {string[]}
 		 */
 		this._parameterNames = this._getParameterNames(pathExpression);
@@ -198,8 +175,6 @@ export default class Route {
 		/**
 		 * Set to {@code true} if this route contains parameters in its path.
 		 *
-		 * @private
-		 * @property _hasParameters
 		 * @type {boolean}
 		 */
 		this._hasParameters = !!this._parameterNames.length;
@@ -208,8 +183,6 @@ export default class Route {
 		 * A regexp used to match URL path against this route and extract the
 		 * parameter values from the matched URL paths.
 		 *
-		 * @private
-		 * @property _matcher
 		 * @type {RegExp}
 		 */
 		this._matcher = this._compileToRegExp(this._trimmedPathExpression);
@@ -222,7 +195,6 @@ export default class Route {
 	 * The extraneous parameters that do not match any of the route's
 	 * placeholders will be appended as the query string.
 	 *
-	 * @method toPath
 	 * @param {Object<string, (number|string)>=} [params={}] The route
 	 *        parameter values.
 	 * @return {string} Path and, if necessary, query parts of the URL
@@ -259,7 +231,6 @@ export default class Route {
 	/**
 	 * Returns the unique identifying name of this route.
 	 *
-	 * @method getName
 	 * @return {string} The name of the route, identifying it.
 	 */
 	getName() {
@@ -271,7 +242,6 @@ export default class Route {
 	 * matched by the current URL, or an Object Container-registered alias of
 	 * the controller.
 	 *
-	 * @method getController
 	 * @return {string} The name of alias of the controller.
 	 */
 	getController() {
@@ -283,7 +253,6 @@ export default class Route {
 	 * Container-registered alias for the view class, representing the view to
 	 * use when this route is matched by the current URL.
 	 *
-	 * @method getView
 	 * @return {string} The name or alias of the view class.
 	 */
 	getView() {
@@ -293,7 +262,6 @@ export default class Route {
 	/**
 	 * Return route additional options.
 	 *
-	 * @method getOptions
 	 * @return {{
 	 *           onlyUpdate: (
 	 *             boolean|
@@ -319,7 +287,6 @@ export default class Route {
 	 * Returns the path expression, which is the parametrized pattern matching
 	 * the URL paths matched by this route.
 	 *
-	 * @method getPathExpression
 	 * @return {string} The path expression.
 	 */
 	getPathExpression() {
@@ -330,7 +297,6 @@ export default class Route {
 	 * Tests whether the provided URL path matches this route. The provided
 	 * path may contain the query.
 	 *
-	 * @method matches
 	 * @param {string} path The URL path.
 	 * @return {boolean} {@code true} if the provided path matches this route.
 	 */
@@ -347,7 +313,6 @@ export default class Route {
 	 * The method returns an empty hash object if the path does not match this
 	 * route.
 	 *
-	 * @method extractParameters
 	 * @param {string} path
 	 * @return {Object<string, ?string>} Map of parameter names to parameter
 	 *         values.
@@ -363,8 +328,6 @@ export default class Route {
 	/**
 	 *  Replace param placeholder in path with parameter value.
 	 *
-	 * @private
-	 * @method _cleanUnusedOptionalParams
 	 * @param {string} path
 	 * @param {string} paramName
 	 * @param {string} paramValue
@@ -380,8 +343,6 @@ export default class Route {
 	/**
 	 * Replace optional param placeholder in path with parameter value.
 	 *
-	 * @private
-	 * @method _cleanUnusedOptionalParams
 	 * @param {string} path
 	 * @param {string} paramName
 	 * @param {string} paramValue
@@ -397,8 +358,6 @@ export default class Route {
 	/**
 	 * Replace optional param placeholder in path with parameter value.
 	 *
-	 * @private
-	 * @method _cleanUnusedOptionalParams
 	 * @param {string} path
 	 * @return {string} New path.
 	 */
@@ -412,8 +371,6 @@ export default class Route {
 	/**
 	 * Returns true, if paramName is placed in path.
 	 *
-	 * @private
-	 * @method _isParamInPath
 	 * @param {string} path
 	 * @param {string} paramName
 	 * @return {boolean}
@@ -428,8 +385,6 @@ export default class Route {
 	 * for easier matching of URL paths against this route, and extracting the
 	 * path parameter values from the URL path.
 	 *
-	 * @private
-	 * @method _compileToRegExp
 	 * @param {string} pathExpression The path expression to compile.
 	 * @return {RegExp} The compiled regular expression.
 	 */
@@ -459,8 +414,6 @@ export default class Route {
 	 * Parses the provided path and extract the in-path parameters. The method
 	 * decodes the parameters and returns them in a hash object.
 	 *
-	 * @private
-	 * @method _getParameters
 	 * @param {string} path The URL path.
 	 * @return {Object<string, string>} The parsed path parameters.
 	 */
@@ -482,8 +435,6 @@ export default class Route {
 	/**
 	 * Extract parameters from given path.
 	 *
-	 * @private
-	 * @method _extractParameters
 	 * @param {string[]} parameterValues
 	 * @return {Object<string, ?string>} Params object.
 	 */
@@ -507,8 +458,6 @@ export default class Route {
 	/**
 	 * Decoding parameters.
 	 *
-	 * @private
-	 * @method _decodeURIParameter
 	 * @param {string} parameterValue
 	 * @return {string} decodedValue
 	 */
@@ -523,8 +472,6 @@ export default class Route {
 	/**
 	 * Returns optional param name without "?"
 	 *
-	 * @private
-	 * @method _cleanOptParamName
 	 * @param {string} paramName Full param name with "?"
 	 * @return {string} Strict param name without "?"
 	 */
@@ -535,8 +482,6 @@ export default class Route {
 	/**
 	 * Checks if parameter is optional or not.
 	 *
-	 * @private
-	 * @method _isParamOptional
 	 * @param {string} paramName
 	 * @return {boolean} return true if is optional, otherwise false
 	 */
@@ -548,8 +493,6 @@ export default class Route {
 	 * Extracts and decodes the query parameters from the provided URL path and
 	 * query.
 	 *
-	 * @private
-	 * @method _getQuery
 	 * @param {string} path The URL path, including the optional query string
 	 *        (if any).
 	 * @return {Object<string, ?string>} Parsed query parameters.
@@ -575,8 +518,6 @@ export default class Route {
 	/**
 	 * Trims the trailing forward slash from the provided URL path.
 	 *
-	 * @private
-	 * @method getLoosesPath
 	 * @param {string} path The path to trim.
 	 * @return {string} Trimmed path.
 	 */
@@ -587,8 +528,6 @@ export default class Route {
 	/**
 	 * Extracts the parameter names from the provided path expression.
 	 *
-	 * @private
-	 * @method _getParameterNames
 	 * @param {string} pathExpression The path expression.
 	 * @return {string[]} The names of the parameters defined in the provided
 	 *         path expression.

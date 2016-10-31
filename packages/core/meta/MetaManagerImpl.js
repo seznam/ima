@@ -5,12 +5,6 @@ ns.namespace('ima.meta');
 
 /**
  * Default implementation of the {@codelink MetaManager} interface.
- *
- * @class MetaManagerImpl
- * @implements MetaManager
- * @namespace ima.meta
- * @module ima
- * @submodule ima.meta
  */
 export default class MetaManagerImpl extends MetaManager {
 
@@ -20,9 +14,6 @@ export default class MetaManagerImpl extends MetaManager {
 
 	/**
 	 * Initializes the meta page attributes manager.
-	 *
-	 * @method constructor
-	 * @constructor
 	 */
 	constructor() {
 		super();
@@ -30,17 +21,13 @@ export default class MetaManagerImpl extends MetaManager {
 		/**
 		 * The page title.
 		 *
-		 * @property _title
-		 * @private
 		 * @type {string}
-		 * @default ''
 		 */
 		this._title = '';
 
 		/**
 		 * Storage of generic meta information.
 		 *
-		 * @property _metaName
 		 * @type {Map<string, string>}
 		 */
 		this._metaName = new Map();
@@ -48,7 +35,6 @@ export default class MetaManagerImpl extends MetaManager {
 		/**
 		 * Storage of specialized meta information.
 		 *
-		 * @property _metaProperty
 		 * @type {Map<string, string>}
 		 */
 		this._metaProperty = new Map();
@@ -56,7 +42,6 @@ export default class MetaManagerImpl extends MetaManager {
 		/**
 		 * Storage of generic link information.
 		 *
-		 * @property _link
 		 * @type {Map<string, string>}
 		 */
 		this._link = new Map();
@@ -64,7 +49,6 @@ export default class MetaManagerImpl extends MetaManager {
 
 	/**
 	 * @inheritdoc
-	 * @method setTitle
 	 */
 	setTitle(title) {
 		this._title = title;
@@ -72,7 +56,6 @@ export default class MetaManagerImpl extends MetaManager {
 
 	/**
 	 * @inheritdoc
-	 * @method getTitle
 	 */
 	getTitle() {
 		return this._title;
@@ -80,7 +63,6 @@ export default class MetaManagerImpl extends MetaManager {
 
 	/**
 	 * @inheritdoc
-	 * @method setMetaName
 	 */
 	setMetaName(name, value) {
 		this._metaName.set(name, value);
@@ -88,7 +70,6 @@ export default class MetaManagerImpl extends MetaManager {
 
 	/**
 	 * @inheritdoc
-	 * @method getMetaName
 	 */
 	getMetaName(name) {
 		return this._metaName.get(name) || '';
@@ -96,7 +77,6 @@ export default class MetaManagerImpl extends MetaManager {
 
 	/**
 	 * @inheritdoc
-	 * @method getMetaNames
 	 */
 	getMetaNames() {
 		return Array.from(this._metaName.keys());
@@ -104,7 +84,6 @@ export default class MetaManagerImpl extends MetaManager {
 
 	/**
 	 * @inheritdoc
-	 * @method setMetaProperty
 	 */
 	setMetaProperty(name, value) {
 		this._metaProperty.set(name, value);
@@ -112,7 +91,6 @@ export default class MetaManagerImpl extends MetaManager {
 
 	/**
 	 * @inheritdoc
-	 * @method getMetaProperty
 	 */
 	getMetaProperty(name) {
 		return this._metaProperty.get(name) || '';
@@ -120,7 +98,6 @@ export default class MetaManagerImpl extends MetaManager {
 
 	/**
 	 * @inheritdoc
-	 * @method getMetaProperties
 	 */
 	getMetaProperties() {
 		return Array.from(this._metaProperty.keys());
@@ -128,7 +105,6 @@ export default class MetaManagerImpl extends MetaManager {
 
 	/**
 	 * @inheritdoc
-	 * @method setLink
 	 */
 	setLink(relation, value) {
 		this._link.set(relation, value);
@@ -136,7 +112,6 @@ export default class MetaManagerImpl extends MetaManager {
 
 	/**
 	 * @inheritdoc
-	 * @method getLink
 	 */
 	getLink(relation) {
 		return this._link.get(relation) || '';
@@ -144,7 +119,6 @@ export default class MetaManagerImpl extends MetaManager {
 
 	/**
 	 * @inheritdoc
-	 * @method getLinks
 	 */
 	getLinks() {
 		return Array.from(this._link.keys());

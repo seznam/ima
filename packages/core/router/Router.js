@@ -10,17 +10,13 @@ ns.namespace('ima.router');
  * The router manages the application's routing configuration and dispatches
  * controllers and views according to the current URL and the route it matches.
  *
- * @interface Router
- * @namespace ima.router
- * @module ima
- * @submodule ima.router
+ * @interface
  */
 export default class Router {
 
 	/**
 	 * Initializes the router with the provided configuration.
 	 *
-	 * @method init
 	 * @param {{
 	 *          $Protocol: string,
 	 *          $Root: string,
@@ -44,7 +40,6 @@ export default class Router {
 	/**
 	 * Adds a new route to router.
 	 *
-	 * @method add
 	 * @param {string} name The unique name of this route, identifying it among
 	 *        the rest of the routes in the application.
 	 * @param {string} pathExpression A path expression specifying the URL path
@@ -103,7 +98,6 @@ export default class Router {
 	/**
 	 * Removes the specified route from the router's known routes.
 	 *
-	 * @method remove
 	 * @param {string} name The route's unique name, identifying the route to
 	 *        remove.
 	 * @return {Router} This router.
@@ -114,7 +108,6 @@ export default class Router {
 	 * Returns the current path part of the current URL, including the query
 	 * string (if any).
 	 *
-	 * @method getPath
 	 * @return {string} The path and query parts of the current URL.
 	 */
 	getPath() {}
@@ -122,7 +115,6 @@ export default class Router {
 	/**
 	 * Returns the current absolute URL (including protocol, host, query, etc).
 	 *
-	 * @method getUrl
 	 * @return {string} The current absolute URL.
 	 */
 	getUrl() {}
@@ -131,7 +123,6 @@ export default class Router {
 	 * Returns the application's absolute base URL, pointing to the public root
 	 * of the application.
 	 *
-	 * @method getBaseUrl
 	 * @return {string} The application's base URL.
 	 */
 	getBaseUrl() {}
@@ -140,7 +131,6 @@ export default class Router {
 	 * Returns the application's domain in the following form
 	 * {@code `${protocol}//${host}`}.
 	 *
-	 * @method getDomain
 	 * @return {string} The current application's domain.
 	 */
 	getDomain() {}
@@ -148,7 +138,6 @@ export default class Router {
 	/**
 	 * Returns application's host (domain and, if necessary, the port number).
 	 *
-	 * @method getHost
 	 * @return {string} The current application's host.
 	 */
 	getHost() {}
@@ -157,7 +146,6 @@ export default class Router {
 	 * Returns the current protocol used to access the application, terminated
 	 * by a colon (for example {@code https:}).
 	 *
-	 * @method getProtocol
 	 * @return {string} The current application protocol used to access the
 	 *         application.
 	 */
@@ -166,7 +154,6 @@ export default class Router {
 	/**
 	 * Returns the information about the currently active route.
 	 *
-	 * @method getCurrentRouteInfo
 	 * @return {{
 	 *           route: Route,
 	 *           params: Object<string, string>,
@@ -191,7 +178,6 @@ export default class Router {
 	 * The effects of this method cannot be reverted. This method has no effect
 	 * at the server side.
 	 *
-	 * @method listen
 	 * @return {Router} This router.
 	 */
 	listen() {}
@@ -211,7 +197,6 @@ export default class Router {
 	 * the client to the related page if the URL is set at the client side and
 	 * points to the same domain and protocol.
 	 *
-	 * @method redirect
 	 * @param {string} url The URL to which the client should be redirected.
 	 * @param {{
 	 *          httpStatus: number=,
@@ -239,7 +224,6 @@ export default class Router {
 	 * specified route by substituting the route's parameter placeholders with
 	 * the provided parameter values.
 	 *
-	 * @method link
 	 * @param {string} routeName The unique name of the route, identifying the
 	 *        route to use.
 	 * @param {Object<string, string>} params Parameter values for the route's
@@ -253,7 +237,6 @@ export default class Router {
 	 * Routes the application to the route matching the providing path, renders
 	 * the route page and sends the result to the client.
 	 *
-	 * @method route
 	 * @param {string} path The URL path part received from the client, with
 	 *        optional query.
 	 * @param {{
@@ -283,7 +266,6 @@ export default class Router {
 	 * Handles an internal server error by responding with the appropriate
 	 * "internal server error" error page.
 	 *
-	 * @method handleError
 	 * @param {Object<string, (Error|string)>} params Parameters extracted from
 	 *        the current URL path and query.
 	 * @param {{
@@ -313,7 +295,6 @@ export default class Router {
 	 * Handles a "not found" error by responding with the appropriate "not
 	 * found" error page.
 	 *
-	 * @method handleNotFound
 	 * @param {Object<string, (Error|string)>} params Parameters extracted from
 	 *        the current URL path and query.
 	 * @param {{
@@ -344,7 +325,6 @@ export default class Router {
 	 * client's action (for example wrong URL or request encoding) or by a
 	 * failure at the server side.
 	 *
-	 * @method isClientError
 	 * @param {(ImaError|Error)} reason The encountered error.
 	 * @return {boolean} {@code true} if the error was caused the action of the
 	 *         client.
@@ -354,7 +334,6 @@ export default class Router {
 	/**
 	 * Tests, if possible, whether the specified error lead to redirection.
 	 *
-	 * @method isRedirection
 	 * @param {(ImaError|Error)} reason The encountered error.
 	 * @return {boolean} {@code true} if the error was caused the action of the
 	 *         redirection.

@@ -5,8 +5,7 @@ ns.namespace('ima.router');
 /**
  * Events constants, which is firing to app.
  *
- * @enum
- * @property Events
+ * @enum {string}
  */
 const Events = Object.freeze({
 	/**
@@ -19,7 +18,6 @@ const Events = Object.freeze({
 	 * additional options.
 	 *
 	 * @const
-	 * @property BEFORE_HANDLE_ROUTE
 	 * @type {string}
 	 */
 	BEFORE_HANDLE_ROUTE: '$IMA.$Router.beforeHandleRoute',
@@ -35,7 +33,6 @@ const Events = Object.freeze({
 	 * additional options.
 	 *
 	 * @const
-	 * @property AFTER_HANDLE_ROUTE
 	 * @type {string}
 	 */
 	AFTER_HANDLE_ROUTE: '$IMA.$Router.afterHandleRoute'

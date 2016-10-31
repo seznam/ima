@@ -17,19 +17,12 @@ ns.namespace('ima.router');
  * common or default functionality for parts of the API.
  *
  * @abstract
- * @class AbstractRouter
- * @implements Router
- * @namespace ima.router
- * @module ima
- * @submodule ima.router
  */
 export default class AbstractRouter extends Router {
 
 	/**
 	 * Initializes the router.
 	 *
-	 * @constructor
-	 * @method constructor
 	 * @param {PageManager} pageManager The page manager handling UI rendering,
 	 *        and transitions between pages if at the client side.
 	 * @param {RouteFactory} factory Factory for routes.
@@ -59,8 +52,6 @@ export default class AbstractRouter extends Router {
 		 * The page manager handling UI rendering, and transitions between
 		 * pages if at the client side.
 		 *
-		 * @private
-		 * @property _pageManager
 		 * @type {PageManager}
 		 */
 		this._pageManager = pageManager;
@@ -68,8 +59,6 @@ export default class AbstractRouter extends Router {
 		/**
 		 * Factory for routes.
 		 *
-		 * @private
-		 * @property _factory
 		 * @type {RouteFactory}
 		 */
 		this._factory = factory;
@@ -77,8 +66,6 @@ export default class AbstractRouter extends Router {
 		/**
 		 * Dispatcher fires events to app.
 		 *
-		 * @private
-		 * @property _dispatcher
 		 * @type {Dispatcher}
 		 */
 		this._dispatcher = dispatcher;
@@ -87,30 +74,21 @@ export default class AbstractRouter extends Router {
 		 * The current protocol used to access the application, terminated by a
 		 * colon (for example {@code https:}).
 		 *
-		 * @private
-		 * @property _protocol
 		 * @type {string}
-		 * @default ''
 		 */
 		this._protocol = '';
 
 		/**
 		 * The application's host.
 		 *
-		 * @private
-		 * @property _host
 		 * @type {string}
-		 * @default ''
 		 */
 		this._host = '';
 
 		/**
 		 * The URL path pointing to the application's root.
 		 *
-		 * @private
-		 * @property _root
 		 * @type {string}
-		 * @default ''
 		 */
 		this._root = '';
 
@@ -118,18 +96,13 @@ export default class AbstractRouter extends Router {
 		 * The URL path fragment used as a suffix to the {@code _root} field
 		 * that specifies the current language.
 		 *
-		 * @private
-		 * @property _languagePartPath
 		 * @type {string}
-		 * @default ''
 		 */
 		this._languagePartPath = '';
 
 		/**
 		 * Storage of all known routes. The key are the route names.
 		 *
-		 * @private
-		 * @property _routes
 		 * @type {Map<string, Route>}
 		 */
 		this._routes = new Map();
@@ -137,7 +110,6 @@ export default class AbstractRouter extends Router {
 
 	/**
 	 * @inheritdoc
-	 * @method init
 	 */
 	init(config) {
 		this._protocol = config.$Protocol || '';
@@ -148,12 +120,13 @@ export default class AbstractRouter extends Router {
 
 	/**
 	 * @inheritdoc
-	 * @method add
 	 */
 	add(name, pathExpression, controller, view, options = undefined) {
 		if (this._routes.has(name)) {
-			throw new GenericError(`ima.router.AbstractRouter.add: The ` +
-					`route with name ${name} is already defined`);
+			throw new GenericError(
+				`ima.router.AbstractRouter.add: The route with name ${name} ` +
+				`is already defined`
+			);
 		}
 
 		let factory = this._factory;
@@ -171,7 +144,6 @@ export default class AbstractRouter extends Router {
 
 	/**
 	 * @inheritdoc
-	 * @method remove
 	 */
 	remove(name) {
 		this._routes.delete(name);
@@ -181,16 +153,15 @@ export default class AbstractRouter extends Router {
 
 	/**
 	 * @inheritdoc
-	 * @method getPath
 	 */
 	getPath() {
-		throw new GenericError('The getPath() method is abstract and must ' +
-				'be overridden.');
+		throw new GenericError(
+			'The getPath() method is abstract and must be overridden.'
+		);
 	}
 
 	/**
 	 * @inheritdoc
-	 * @method getUrl
 	 */
 	getUrl() {
 		return this.getBaseUrl() + this.getPath();
@@ -198,7 +169,6 @@ export default class AbstractRouter extends Router {
 
 	/**
 	 * @inheritdoc
-	 * @method getBaseUrl
 	 */
 	getBaseUrl() {
 		return this.getDomain() + this._root + this._languagePartPath;
@@ -206,7 +176,6 @@ export default class AbstractRouter extends Router {
 
 	/**
 	 * @inheritdoc
-	 * @method getDomain
 	 */
 	getDomain() {
 		return this._protocol + '//' + this._host;
@@ -214,7 +183,6 @@ export default class AbstractRouter extends Router {
 
 	/**
 	 * @inheritdoc
-	 * @method getHost
 	 */
 	getHost() {
 		return this._host;
@@ -222,7 +190,6 @@ export default class AbstractRouter extends Router {
 
 	/**
 	 * @inheritdoc
-	 * @method getProtocol
 	 */
 	getProtocol() {
 		return this._protocol;
@@ -230,7 +197,6 @@ export default class AbstractRouter extends Router {
 
 	/**
 	 * @inheritdoc
-	 * @method getCurrentRouteInfo
 	 */
 	getCurrentRouteInfo() {
 		let path = this.getPath();
@@ -251,34 +217,34 @@ export default class AbstractRouter extends Router {
 	/**
 	 * @inheritdoc
 	 * @abstract
-	 * @method listen
 	 */
 	listen() {
-		throw new GenericError('The listen() method is abstract and must be ' +
-				'overridden.');
+		throw new GenericError(
+			'The listen() method is abstract and must be overridden.'
+		);
 	}
 
 	/**
 	 * @inheritdoc
 	 * @abstract
-	 * @method redirect
 	 */
 	redirect(url, options) {
-		throw new GenericError('The redirect() method is abstract and must ' +
-				'be overridden.');
+		throw new GenericError(
+			'The redirect() method is abstract and must be overridden.'
+		);
 	}
 
 	/**
 	 * @inheritdoc
-	 * @method link
 	 */
 	link(routeName, params) {
 		let route = this._routes.get(routeName);
 
 		if (!route) {
-			throw new GenericError(`ima.router.AbstractRouter:link has ` +
-					`undefined route with name ${routeName}. Add new route ` +
-					`with that name.`);
+			throw new GenericError(
+				`ima.router.AbstractRouter:link has undefined route with ` +
+				`name ${routeName}. Add new route with that name.`
+			);
 		}
 
 		return this.getBaseUrl() + route.toPath(params);
@@ -286,15 +252,16 @@ export default class AbstractRouter extends Router {
 
 	/**
 	 * @inheritdoc
-	 * @method route
 	 */
 	route(path, options = {}) {
 		let routeForPath = this._getRouteByPath(path);
 		let params = {};
 
 		if (!routeForPath) {
-			params.error = new GenericError(`Route for path ` +
-					`'${path}' is not configured.`, { status: 404 });
+			params.error = new GenericError(
+				`Route for path '${path}' is not configured.`,
+				{ status: 404 }
+			);
 
 			return this.handleNotFound(params);
 		}
@@ -306,7 +273,6 @@ export default class AbstractRouter extends Router {
 
 	/**
 	 * @inheritdoc
-	 * @method handleError
 	 */
 	handleError(params, options = {}) {
 		let routeError = this._routes.get(RouteNames.ERROR);
@@ -327,7 +293,6 @@ export default class AbstractRouter extends Router {
 
 	/**
 	 * @inheritdoc
-	 * @method handleNotFound
 	 */
 	handleNotFound(params, options = {}) {
 		let routeNotFound = this._routes.get(RouteNames.NOT_FOUND);
@@ -349,7 +314,6 @@ export default class AbstractRouter extends Router {
 
 	/**
 	 * @inheritdoc
-	 * @method isClientError
 	 */
 	isClientError(reason) {
 		return reason instanceof GenericError &&
@@ -359,7 +323,6 @@ export default class AbstractRouter extends Router {
 
 	/**
 	 * @inheritdoc
-	 * @method isRedirection
 	 */
 	isRedirection(reason) {
 		return reason instanceof GenericError &&
@@ -372,7 +335,6 @@ export default class AbstractRouter extends Router {
 	 * URL) from the provided path.
 	 *
 	 * @protected
-	 * @method _extractRoutePath
 	 * @param {string} path Relative or absolute URL path.
 	 * @return {string} URL path relative to the application's base URL.
 	 */
@@ -387,8 +349,6 @@ export default class AbstractRouter extends Router {
 	 * The result is then sent to the client if used at the server side, or
 	 * displayed if used as the client side.
 	 *
-	 * @private
-	 * @method _handle
 	 * @param {Route} route The route that should have its
 	 *        associated controller rendered via the associated view.
 	 * @param {Object<string, (Error|string)>} params Parameters extracted from
@@ -447,8 +407,6 @@ export default class AbstractRouter extends Router {
 	 * Returns the route matching the provided URL path part. The path may
 	 * contain a query.
 	 *
-	 * @private
-	 * @method _getRouteByPath
 	 * @param {string} path The URL path.
 	 * @return {?Route} The route matching the path, or {@code null} if no such
 	 *         route exists.

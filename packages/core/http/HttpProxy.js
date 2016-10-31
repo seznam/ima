@@ -10,19 +10,12 @@ ns.namespace('ima.http');
  * Middleware proxy between {@linkcode HttpAgent} implementations and the
  * {@linkcode Vendor.SuperAgent}, providing a Promise-oriented API for sending
  * the requests.
- *
- * @class SuperAgentProxy
- * @namespace ima.http
- * @module ima
- * @submodule ima.http
  */
 export default class HttpProxy {
 
 	/**
 	 * Initializes the HTTP proxy.
 	 *
-	 * @method constructor
-	 * @constructor
 	 * @param {vendor.SuperAgent} superAgent SuperAgent instance to use for
 	 *        sending the HTTP requests.
 	 * @param {UrlTransformer} transformer Transformer of URLs to which the
@@ -37,8 +30,6 @@ export default class HttpProxy {
 		 * uniform API across both the client-side and the server-side
 		 * environments.
 		 *
-		 * @property _superAgent
-		 * @private
 		 * @type {vendor.SuperAgent}
 		 */
 		this._superAgent = superAgent;
@@ -46,8 +37,6 @@ export default class HttpProxy {
 		/**
 		 * Transformer of URLs to which the requests are made.
 		 *
-		 * @property _transformer
-		 * @private
 		 * @type {UrlTransformer}
 		 */
 		this._transformer = transformer;
@@ -56,8 +45,6 @@ export default class HttpProxy {
 		 * Helper for manipulating the global object ({@code window})
 		 * regardless of the client/server-side environment.
 		 *
-		 * @property _window
-		 * @private
 		 * @type {Window}
 		 */
 		this._window = window;
@@ -66,8 +53,6 @@ export default class HttpProxy {
 		 * The default HTTP headers to include with the HTTP requests, unless
 		 * overridden.
 		 *
-		 * @property _defaultHeaders
-		 * @private
 		 * @type {Map<string, string>}
 		 */
 		this._defaultHeaders = new Map();
@@ -77,8 +62,6 @@ export default class HttpProxy {
 	 * Executes an HTTP request to the specified URL using the specified HTTP
 	 * method, carrying the provided data.
 	 *
-	 * @private
-	 * @method request
 	 * @param {string} method The HTTP method to use.
 	 * @param {string} url The URL to which the request should be made.
 	 * @param {Object<string, (boolean|number|string|Date)>} data The data to
@@ -143,7 +126,6 @@ export default class HttpProxy {
 	 * overridden by the request options, or cleared by the
 	 * {@codelink clearDefaultHeaders} method.
 	 *
-	 * @method setDefaultHeader
 	 * @param {string} header The header name.
 	 * @param {string} value The header value.
 	 */
@@ -154,8 +136,6 @@ export default class HttpProxy {
 
 	/**
 	 * Clears all defaults headers sent with all requests.
-	 *
-	 * @method clearDefaultHeaders
 	 */
 	clearDefaultHeaders() {
 		this._defaultHeaders.clear();
@@ -166,7 +146,6 @@ export default class HttpProxy {
 	 * providing information about both the failure reported by the server and
 	 * how the request has been sent to the server.
 	 *
-	 * @method getErrorParams
 	 * @param {string} method The HTTP method used to make the request.
 	 * @param {string} url The URL to which the request has been made.
 	 * @param {Object<string, (boolean|number|string|Date)>} data The data sent
@@ -191,8 +170,8 @@ export default class HttpProxy {
 	getErrorParams(method, url, data, options, status, body) {
 		let params = this._composeRequestParams(method, url, data, options);
 
-		if (typeof body === "undefined") {
-			var body = {};
+		if (typeof body === 'undefined') {
+			body = {};
 		}
 
 		let error = { status, body };
@@ -237,7 +216,6 @@ export default class HttpProxy {
 	 * enabled (which results in cookies being automatically processed by the
 	 * browser), and returns {@code true} or {@code false} accordingly.
 	 *
-	 * @method haveToSetCookiesManually
 	 * @return {boolean} {@code true} if the cookies are not processed
 	 *         automatically by the environment and have to be handled manually
 	 *         by parsing response headers and setting request headers.
@@ -251,9 +229,6 @@ export default class HttpProxy {
 	 * the provided promise resolution or rejection callback depending on the
 	 * request outcome.
 	 *
-	 * @method _sendRequest
-	 * @private
-	 * @chainable
 	 * @param {Vendor.SuperAgent.Request} request The request to send.
 	 * @param {function(Vendor.SuperAgent.Response)} resolve Promise resolution
 	 *        callback to call if the request completes successfully.
@@ -282,8 +257,6 @@ export default class HttpProxy {
 	 * promise representing the request using the provided resolution and
 	 * rejection callbacks accordingly.
 	 *
-	 * @method _handleResponse
-	 * @private
 	 * @param {Vendor.SuperAgent.Response} response The response object
 	 *        representing the server response.
 	 * @param {function(Vendor.SuperAgent.Response)} resolve Promise resolution
@@ -328,8 +301,6 @@ export default class HttpProxy {
 	 * error, and passes the created object to the provided promise rejection
 	 * callback to reject the promise representing the said HTTP request.
 	 *
-	 * @method _handleError
-	 * @private
 	 * @param {Vendor.SuperAgent.Error} error The encountered error. The
 	 *        parameter is actually an {@codelink Error} instance augmented
 	 *        with fields providing additional details (timeout, HTTP status
@@ -345,16 +316,15 @@ export default class HttpProxy {
 	 *        used to create and send the HTTP request.
 	 */
 	_handleError(error, response, reject, params) {
-		if (typeof response === "undefined") {
-			var response = {}
+		if (typeof response === 'undefined') {
+			response = {}
 		}
 
-		if (! 'body' in response) {
+		if (!('body' in response)) {
 			response.body = {}
 		}
 
-		var errorParams = {};
-		var statusCode = 0;
+		let statusCode = 0;
 
 		if (error.timeout === params.options.timeout) {
 			statusCode = HttpStatusCode.TIMEOUT;
@@ -366,7 +336,7 @@ export default class HttpProxy {
 			}
 		}
 
-		var errorParams = this.getErrorParams(
+		let errorParams = this.getErrorParams(
 			params.method,
 			params.url,
 			params.data,
@@ -381,9 +351,6 @@ export default class HttpProxy {
 	/**
 	 * Applies the specified options on the provided request as HTTP headers.
 	 *
-	 * @method _setHeaders
-	 * @private
-	 * @chainable
 	 * @param {Vendor.SuperAgent.Request} request The request on which the HTTP
 	 *        headers should be set.
 	 * @param {{
@@ -425,9 +392,6 @@ export default class HttpProxy {
 	 * not cross-site Access-Control requests should be made using credentials
 	 * such as cookies or authorization headers.
 	 *
-	 * @private
-	 * @chainable
-	 * @method _setCredentials
 	 * @param {Vendor.SuperAgent.Request} request The request on which the HTTP
 	 *        headers should be set.
 	 * @param {{
@@ -449,9 +413,7 @@ export default class HttpProxy {
 	 * @return {HttpProxy} This instance.
 	 */
 	_setCredentials(request, options) {
-		if (options.withCredentials &&
-				request.withCredentials) {
-
+		if (options.withCredentials && request.withCredentials) {
 			request.withCredentials();
 		}
 
@@ -462,8 +424,6 @@ export default class HttpProxy {
 	 * Composes an object representing the HTTP request parameters from the
 	 * provided arguments.
 	 *
-	 * @method _composeRequestParams
-	 * @private
 	 * @param {string} method The HTTP method to use.
 	 * @param {string} url The URL to which the request should be sent.
 	 * @param {Object<string, (boolean|number|string|Date)>} data The data to

@@ -8,7 +8,6 @@ ns.namespace('ima.event');
  * An empty immutable map of event listener to scopes, used for a mismatch in
  * the {@codelink _eventListeners} map.
  *
- * @property EMPTY_MAP
  * @const
  * @type {Map<function (*), Set<?Object>>}
  */
@@ -18,7 +17,6 @@ const EMPTY_MAP = Object.freeze(new Map());
  * An empty immutable set of event listener scopes, used for a mismatch in the
  * {@codelink _eventListeners} map.
  *
- * @property EMPTY_SET
  * @const
  * @type {Set<?Object>}
  */
@@ -26,12 +24,6 @@ const EMPTY_SET = Object.freeze(new Set());
 
 /**
  * Default implementation of the {@codelink Dispatcher} interface.
- *
- * @class DispatcherImpl
- * @implements Dispatcher
- * @namespace ima.event
- * @module ima
- * @submodule ima.event
  */
 export default class DispatcherImpl extends Dispatcher {
 
@@ -41,9 +33,6 @@ export default class DispatcherImpl extends Dispatcher {
 
 	/**
 	 * Initializes the dispatcher.
-	 *
-	 * @constructor
-	 * @method constructor
 	 */
 	constructor() {
 		super();
@@ -53,8 +42,6 @@ export default class DispatcherImpl extends Dispatcher {
 		 * which the event listener should be bound when being executed due to
 		 * the event.
 		 *
-		 * @private
-		 * @property _eventListeners
 		 * @type {Map<string, Map<function(*), Set<?Object>>>}
 		 */
 		this._eventListeners = new Map();
@@ -62,7 +49,6 @@ export default class DispatcherImpl extends Dispatcher {
 
 	/**
 	 * @inheritdoc
-	 * @method clear
 	 */
 	clear() {
 		this._eventListeners.clear();
@@ -72,13 +58,13 @@ export default class DispatcherImpl extends Dispatcher {
 
 	/**
 	 * @inheritdoc
-	 * @method listen
 	 */
 	listen(event, listener, scope = null) {
 		if ($Debug) {
 			if (!(listener instanceof Function)) {
-				throw new GenericError(`The listener must be a function, ` +
-						`${listener} provided.`);
+				throw new GenericError(
+					`The listener must be a function, ${listener} provided.`
+				);
 			}
 		}
 
@@ -97,21 +83,23 @@ export default class DispatcherImpl extends Dispatcher {
 
 	/**
 	 * @inheritdoc
-	 * @method unlisten
 	 */
 	unlisten(event, listener, scope = null) {
 		let scopes = this._getScopesOf(event, listener);
 
 		if ($Debug) {
 			if (!scopes.has(scope)) {
-				console.warn('ima.event.DispatcherImpl.unlisten(): the ' +
-						`provided listener '${listener}' is not registered ` +
-						`for the specified event '${event}' and scope ` +
-						`'${scope}'. Check your workflow.`, {
-							event: event,
-							listener: listener,
-							scope: scope
-						});
+				console.warn(
+					'ima.event.DispatcherImpl.unlisten(): the provided ' +
+					`listener '${listener}' is not registered for the ` +
+					`specified event '${event}' and scope '${scope}'. Check ` +
+					`your workflow.`,
+					{
+						event: event,
+						listener: listener,
+						scope: scope
+					}
+				);
 			}
 		}
 
@@ -130,17 +118,19 @@ export default class DispatcherImpl extends Dispatcher {
 
 	/**
 	 * @inheritdoc
-	 * @method fire
 	 */
 	fire(event, data, imaInternalEvent = false) {
 		let listeners = this._getListenersOf(event);
 
 		if (!listeners.size && !imaInternalEvent) {
-			console.warn('There are no event listeners registered for the ' +
-					`${event} event`, {
-						event: event,
-						data: data
-					});
+			console.warn(
+				`There are no event listeners registered for the ${event} ` +
+				`event`,
+				{
+					event: event,
+					data: data
+				}
+			);
 		}
 
 		for (let [listener, scopes] of listeners) {
@@ -155,8 +145,6 @@ export default class DispatcherImpl extends Dispatcher {
 	/**
 	 * Create new Map storage of listeners for the specified event.
 	 *
-	 * @private
-	 * @method _createNewEvent
 	 * @param {string} event The name of the event.
 	 */
 	_createNewEvent(event) {
@@ -167,8 +155,6 @@ export default class DispatcherImpl extends Dispatcher {
 	/**
 	 * Create new Set storage of scopes for the specified event and listener.
 	 *
-	 * @private
-	 * @method _createNewListener
 	 * @param {string} event The name of the event.
 	 * @param {function(*)} listener The event listener.
 	 */
@@ -181,8 +167,6 @@ export default class DispatcherImpl extends Dispatcher {
 	 * Retrieves the scopes in which the specified event listener should be
 	 * executed for the specified event.
 	 *
-	 * @private
-	 * @method _getScopesOf
 	 * @param {string} event The name of the event.
 	 * @param {function(*)} listener The event listener.
 	 * @return {Set<?Object>} The scopes in which the specified listeners
@@ -203,8 +187,6 @@ export default class DispatcherImpl extends Dispatcher {
 	/**
 	 * Retrieves the map of event listeners to scopes they are bound to.
 	 *
-	 * @private
-	 * @method _getListenersOf
 	 * @param {string} event The name of the event.
 	 * @return {Map<function(*), Set<?Object>>} A map of event listeners to the
 	 *         scopes in which they should be executed. The returned map is an

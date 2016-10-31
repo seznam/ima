@@ -5,12 +5,6 @@ ns.namespace('ima.window');
 
 /**
  * Server-side implementation of the {@code Window} utility API.
- *
- * @class ServerWindow
- * @implements Window
- * @namespace ima.window
- * @module ima
- * @submodule ima.window
  */
 export default class ServerWindow extends Window {
 
@@ -20,7 +14,6 @@ export default class ServerWindow extends Window {
 
 	/**
 	 * @inheritdoc
-	 * @method isClient
 	 */
 	isClient() {
 		return false;
@@ -28,7 +21,6 @@ export default class ServerWindow extends Window {
 
 	/**
 	 * @inheritdoc
-	 * @method isCookieEnabled
 	 */
 	isCookieEnabled() {
 		return false;
@@ -36,7 +28,6 @@ export default class ServerWindow extends Window {
 
 	/**
 	 * @inheritdoc
-	 * @method hasSessionStorage
 	 */
 	hasSessionStorage() {
 		return false;
@@ -44,7 +35,6 @@ export default class ServerWindow extends Window {
 
 	/**
 	 * @inheritdoc
-	 * @method hasWebSocket
 	 */
 	hasWebSocket() {
 		return false;
@@ -52,7 +42,6 @@ export default class ServerWindow extends Window {
 
 	/**
 	 * @inheritdoc
-	 * @method hasHistoryAPI
 	 */
 	hasHistoryAPI() {
 		return false;
@@ -60,13 +49,11 @@ export default class ServerWindow extends Window {
 
 	/**
 	 * @inheritdoc
-	 * @method setTitle
 	 */
 	setTitle(title) {}
 
 	/**
 	 * @inheritdoc
-	 * @method getWebSocket
 	 */
 	getWebSocket() {
 		class DummyWebSocket {
@@ -80,7 +67,6 @@ export default class ServerWindow extends Window {
 
 	/**
 	 * @inheritdoc
-	 * @method getWindow
 	 */
 	getWindow() {
 		return undefined;
@@ -88,7 +74,6 @@ export default class ServerWindow extends Window {
 
 	/**
 	 * @inheritdoc
-	 * @method getDocument
 	 */
 	getDocument() {
 		return undefined;
@@ -96,7 +81,6 @@ export default class ServerWindow extends Window {
 
 	/**
 	 * @inheritdoc
-	 * @method getScrollX
 	 */
 	getScrollX() {
 		return 0;
@@ -104,7 +88,6 @@ export default class ServerWindow extends Window {
 
 	/**
 	 * @inheritdoc
-	 * @method getScrollY
 	 */
 	getScrollY() {
 		return 0;
@@ -112,13 +95,11 @@ export default class ServerWindow extends Window {
 
 	/**
 	 * @inheritdoc
-	 * @method scrollTo
 	 */
 	scrollTo(x, y) {}
 
 	/**
 	 * @inheritdoc
-	 * @method getDomain
 	 */
 	getDomain() {
 		return '';
@@ -126,7 +107,6 @@ export default class ServerWindow extends Window {
 
 	/**
 	 * @inheritdoc
-	 * @method getHost
 	 */
 	getHost() {
 		return '';
@@ -134,7 +114,6 @@ export default class ServerWindow extends Window {
 
 	/**
 	 * @inheritdoc
-	 * @method getPath
 	 */
 	getPath() {
 		return '';
@@ -142,7 +121,6 @@ export default class ServerWindow extends Window {
 
 	/**
 	 * @inheritdoc
-	 * @method getUrl
 	 */
 	getUrl() {
 		return '';
@@ -150,7 +128,6 @@ export default class ServerWindow extends Window {
 
 	/**
 	 * @inheritdoc
-	 * @method getBody
 	 */
 	getBody() {
 		return undefined;
@@ -158,7 +135,6 @@ export default class ServerWindow extends Window {
 
 	/**
 	 * @inheritdoc
-	 * @method getElementById
 	 */
 	getElementById(id) {
 		return null;
@@ -166,7 +142,6 @@ export default class ServerWindow extends Window {
 
 	/**
 	 * @inheritdoc
-	 * @method querySelector
 	 */
 	querySelector(selector) {
 		return null;
@@ -174,7 +149,6 @@ export default class ServerWindow extends Window {
 
 	/**
 	 * @inheritdoc
-	 * @method querySelectorAll
 	 */
 	querySelectorAll(selector) {
 		class DummyNodeList {
@@ -192,25 +166,21 @@ export default class ServerWindow extends Window {
 
 	/**
 	 * @inheritdoc
-	 * @method redirect
 	 */
 	redirect(url) {}
 
 	/**
 	 * @inheritdoc
-	 * @method pushState
 	 */
 	pushState(state, title, url) {}
 
 	/**
 	 * @inheritdoc
-	 * @method replaceState
 	 */
 	replaceState(state, title, url) {}
 
 	/**
 	 * @inheritdoc
-	 * @method createCustomEvent
 	 */
 	createCustomEvent(name, options) {
 		let dummyCustomEvent = { initCustomEvent: () => {}, detail: {} };
@@ -220,13 +190,11 @@ export default class ServerWindow extends Window {
 
 	/**
 	 * @inheritdoc
-	 * @method bindEventListener
 	 */
 	bindEventListener(eventTarget, event, listener, useCapture = false) {}
 
 	/**
 	 * @inheritdoc
-	 * @method unbindEventListener
 	 */
 	unbindEventListener(eventTarget, event, listener, useCapture = false) {}
 }

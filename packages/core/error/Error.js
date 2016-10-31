@@ -13,12 +13,10 @@ ns.namespace('ima.error');
  * OOP standpoint, but is necessary due to limitations of JavaScript, so that
  * IMA errors are instances of both the native errors and of this interface.
  *
- * @interface Error
- * @namespace ima.error
- * @module ima
- * @submodule ima.error
+ * @interface
  */
 export default class Error extends ExtensibleError {
+
 	/**
 	 * Returns the HTTP status to send to the client.
 	 *
@@ -28,7 +26,6 @@ export default class Error extends ExtensibleError {
 	 * This method is a shorthand for the following code snippet:
 	 * {@code this.getParams().status || 500}.
 	 *
-	 * @method getHttpStatus
 	 * @return {number} The HTTP status to send to the client.
 	 * @see http://www.w3.org/Protocols/rfc2616/rfc2616-sec10.html
 	 */
@@ -41,7 +38,6 @@ export default class Error extends ExtensibleError {
 	 * {@code status: number} field which represents the HTTP status to send to
 	 * the client.
 	 *
-	 * @method getParams
 	 * @return {Object<string, *>} The route parameters of the route at which
 	 *         the error has occurred.
 	 * @see getHttpStatus

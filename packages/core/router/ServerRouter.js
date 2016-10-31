@@ -11,13 +11,6 @@ ns.namespace('ima.router');
 
 /**
  * The server-side implementation of the {@codelink Router} interface.
- *
- * @class Server
- * @extends AbstractRouter
- * @implements Router
- * @namespace ima.router
- * @module ima
- * @submodule ima.router
  */
 export default class ServerRouter extends AbstractRouter {
 
@@ -28,8 +21,6 @@ export default class ServerRouter extends AbstractRouter {
 	/**
 	 * Initializes the router.
 	 *
-	 * @constructor
-	 * @method constructor
 	 * @param {PageManager} pageManager The current page manager.
 	 * @param {RouteFactory} factory The router factory used to create routes.
 	 * @param {Dispatcher} dispatcher Dispatcher fires events to app.
@@ -42,8 +33,6 @@ export default class ServerRouter extends AbstractRouter {
 		/**
 		 * The current HTTP request.
 		 *
-		 * @private
-		 * @property _request
 		 * @type {Request}
 		 */
 		this._request = request;
@@ -51,8 +40,6 @@ export default class ServerRouter extends AbstractRouter {
 		/**
 		 * The current HTTP response.
 		 *
-		 * @private
-		 * @property _response
 		 * @type {Response}
 		 */
 		this._response = response;
@@ -60,7 +47,6 @@ export default class ServerRouter extends AbstractRouter {
 
 	/**
 	 * @inheritdoc
-	 * @method getPath
 	 */
 	getPath() {
 		return this._extractRoutePath(this._request.getPath());
@@ -68,7 +54,6 @@ export default class ServerRouter extends AbstractRouter {
 
 	/**
 	 * @inheritdoc
-	 * @method listen
 	 */
 	listen() {
 		return this;
@@ -76,7 +61,6 @@ export default class ServerRouter extends AbstractRouter {
 
 	/**
 	 * @inheritdoc
-	 * @method redirect
 	 */
 	redirect(url = '/', options = {}) {
 		this._response.redirect(url, options.httpStatus || 302);

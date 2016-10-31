@@ -38,15 +38,19 @@ function getClientBootConfig(initialAppConfigFunctions) {
 
 	if ($Debug && _isClient()) {
 		if ($IMA.$Protocol !== root.location.protocol) {
-			throw new Error(`Your client's protocol is not same as server's ` +
-					`protocol. For right setting protocol on the server ` +
-					`site set 'X-Forwarded-Proto' header.`);
+			throw new Error(
+				`Your client's protocol is not same as server's protocol. ` +
+				`For right setting protocol on the server site set ` +
+				`'X-Forwarded-Proto' header.`
+			);
 		}
 
 		if ($IMA.$Host !== root.location.host) {
-			throw new Error(`Your client's host is not same as server's ` +
-					`host. For right setting host on the server site set ` +
-					`'X-Forwarded-Host' header.`);
+			throw new Error(
+				`Your client's host is not same as server's host. For right ` +
+				`setting host on the server site set 'X-Forwarded-Host' ` +
+				`header.`
+			);
 		}
 	}
 
@@ -144,8 +148,10 @@ function routeClientApp(app) {
 			if (typeof $IMA.fatalErrorHandler === 'function') {
 				$IMA.fatalErrorHandler(error);
 			} else {
-				console.warn('Define function config.$IMA.fatalErrorHandler ' +
-						'in services.js.');
+				console.warn(
+					'Define function config.$IMA.fatalErrorHandler in ' +
+					'services.js.'
+				);
 			}
 		});
 }
@@ -190,8 +196,10 @@ function hotReloadClientApp(initialAppConfigFunctions) {
 				if (typeof $IMA.fatalErrorHandler === 'function') {
 					$IMA.fatalErrorHandler(error);
 				} else {
-					console.warn('Define function ' +
-							'config.$IMA.fatalErrorHandler in services.js.');
+					console.warn(
+						'Define the config.$IMA.fatalErrorHandler function ' +
+						'in services.js.'
+					);
 				}
 			});
 	} catch (error) {
@@ -235,8 +243,10 @@ function reviveTestClientApp(initialAppConfigFunctions) {
 function onLoad(callback) {
 	//TODO remove @0.15.0
 	if ($IMA.$Debug && typeof callback === 'function') {
-		throw new Error(`The onLoad method use promise pattern ` +
-				`instead of callback pattern. Update your app/main.js file.`);
+		throw new Error(
+			`The onLoad method use promise pattern instead of callback ` +
+			`pattern. Update your app/main.js file.`
+		);
 	}
 
 	if (!_isClient()) {

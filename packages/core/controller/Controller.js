@@ -13,18 +13,13 @@ ns.namespace('ima.controller');
  * updates the page state according to the events submitted to it by components
  * on the page (or other input).
  *
- * @interface Controller
- * @namespace ima.controller
- * @module ima
- * @submodule ima.controller
+ * @interface
  */
 export default class Controller {
 
 	/**
 	 * Callback for initializing the controller after the route parameters have
 	 * been set on this controller.
-	 *
-	 * @method init
 	 */
 	init() {}
 
@@ -40,8 +35,6 @@ export default class Controller {
 	 * {@codelink init()} method. The controller must release any resources
 	 * that might not be released automatically when the controller's instance
 	 * is destroyed by the garbage collector.
-	 *
-	 * @method destroy
 	 */
 	destroy() {}
 
@@ -54,8 +47,6 @@ export default class Controller {
 	 * The controller may register any React and DOM event listeners in this
 	 * method. The controller may start receiving event bus event after this
 	 * method completes.
-	 *
-	 * @method activate
 	 */
 	activate() {}
 
@@ -69,8 +60,6 @@ export default class Controller {
 	 *
 	 * The controller should deregister listeners registered and release all
 	 * resources obtained in the {@codelink activate()} method.
-	 *
-	 * @method deactivate
 	 */
 	deactivate() {}
 
@@ -104,7 +93,6 @@ export default class Controller {
 	 * the error page. The error page that will be used depends on the status
 	 * code of the error.
 	 *
-	 * @method load
 	 * @return {Object<string, (Promise|*)>} A map object of promises
 	 *         resolved when all resources the controller requires are ready.
 	 *         The resolved values will be pushed to the controller's state.
@@ -126,7 +114,6 @@ export default class Controller {
 	 * {@codelink load()}, {@codelink activate()}, {@codelink deactivate()},
 	 * {@codelink deinit()}) are not call in case this method is used.
 	 *
-	 * @method update
 	 * @param {Object<string, string>=} [prevParams={}] Previous route
 	 *        parameters.
 	 * @return {Object<string, (Promise|*)>} A map object of promises
@@ -151,7 +138,6 @@ export default class Controller {
 	 * resolved values. The field names of the passed object will match the
 	 * field names in the object returned from the {@codelink load()} method.
 	 *
-	 * @method setState
 	 * @param {Object<string, *>} statePatch Patch of the controller's state to
 	 *        apply.
 	 */
@@ -160,7 +146,6 @@ export default class Controller {
 	/**
 	 * Returns the controller's current state.
 	 *
-	 * @method getState
 	 * @return {Object<string, *>} The current state of this controller.
 	 */
 	getState() {}
@@ -169,7 +154,6 @@ export default class Controller {
 	 * Adds the provided extension to this controller. All extensions should be
 	 * added to the controller before the {@codelink init()} method is invoked.
 	 *
-	 * @method addExtension
 	 * @param {Extension} extension The extension to add to this controller.
 	 * @return {Controller} This controller.
 	 */
@@ -178,7 +162,6 @@ export default class Controller {
 	/**
 	 * Returns the controller's extensions.
 	 *
-	 * @method getExtensions
 	 * @return {Extension[]} The extensions added to this controller.
 	 */
 	getExtensions() {}
@@ -188,7 +171,6 @@ export default class Controller {
 	 * called after the the controller's state has been patched with the all
 	 * loaded resources and the view has been rendered.
 	 *
-	 * @method setMetaParams
 	 * @param {Object<string, *>} loadedResources A plain object representing a
 	 *        map of resource names to resources loaded by the
 	 *        {@codelink load()} method. This is the same object as the one
@@ -205,7 +187,6 @@ export default class Controller {
 	 * Sets the current route parameters. This method is invoked before the
 	 * {@code init()} method.
 	 *
-	 * @method setRouteParams
 	 * @param {Object<string, string>} [params={}] The current route
 	 *        parameters.
 	 */
@@ -214,7 +195,6 @@ export default class Controller {
 	/**
 	 * Returns the current route parameters.
 	 *
-	 * @method getRouteParams
 	 * @return {Object<string, string>} The current route parameters.
 	 */
 	getRouteParams() {}
@@ -226,7 +206,6 @@ export default class Controller {
 	 * the user has navigated to a different route using a different
 	 * controller).
 	 *
-	 * @method setPageStateManager
 	 * @param {?PageStateManager} pageStateManager The current state manager to
 	 *        use.
 	 */
@@ -236,7 +215,6 @@ export default class Controller {
 	 * Returns the HTTP status code to send to the client, should the
 	 * controller be used at the server-side.
 	 *
-	 * @method getHttpStatus
 	 * @return {number} The HTTP status code to send to the client.
 	 */
 	getHttpStatus() {}

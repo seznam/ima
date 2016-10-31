@@ -24,9 +24,10 @@
 		},
 		importSync: function(moduleName) {
 			if (!this.modules[moduleName]) {
-				throw new Error('$IMA.Loader.importSync: Module name ' +
-						moduleName + ' is not registered. Update your ' +
-						'build.js.');
+				throw new Error(
+					'$IMA.Loader.importSync: Module name ' + moduleName +
+					' is not registered. Update your build.js.'
+				);
 			}
 
 			return resolveModule(moduleName);
@@ -42,12 +43,13 @@
 
 	function resolveModule(moduleName, dependencyOf) {
 		if (!modules[moduleName]) {
-			throw new Error('$IMA.Loader.import: Module name ' +
-				moduleName + (
+			throw new Error(
+				'$IMA.Loader.import: Module name ' + moduleName + (
 					dependencyOf ?
-						(' (dependency of ' + dependencyOf + ')') :
-						''
-				) + ' is not registered. Update your build.js.');
+					(' (dependency of ' + dependencyOf + ')') :
+					''
+				) + ' is not registered. Update your build.js.'
+			);
 		}
 
 		var module = modules[moduleName];
@@ -87,9 +89,11 @@
 			}
 		} else if (referencedModule.substring(0, 3) === '../') {
 			if (currentModule.indexOf('/') === -1) {
-				throw new Error('The ' + currentModule + ' module imports ' +
-						'from the module ' + referencedModule + ' which may ' +
-						'reside outside of the application directory');
+				throw new Error(
+					'The ' + currentModule + ' module imports from the ' +
+					'module ' + referencedModule + ' which may reside ' +
+					'outside of the application directory'
+				);
 			}
 
 			modulePath = currentModule.substring(
@@ -110,9 +114,11 @@
 		}
 		while (modulePath.indexOf('../') > -1) {
 			if (modulePath.substring(0, 3) === '../') {
-				throw new Error('The ' + currentModule + ' module imports ' +
-						'from the module ' + referencedModule + ' which may ' +
-						'reside outside of the application directory');
+				throw new Error(
+					'The ' + currentModule + ' module imports from the ' +
+					'module ' + referencedModule + ' which may reside ' +
+					'outside of the application directory'
+				);
 			}
 			modulePath = modulePath.replace(/\/[^.][^/]*\/[.][.]\//g, '/');
 			modulePath = modulePath.replace(/^[^.][^/]*\/[.][.]\//g, '');

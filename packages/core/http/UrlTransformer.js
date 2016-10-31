@@ -4,11 +4,6 @@ ns.namespace('ima.http');
 
 /**
  * Utility for transforming URLs according to the configured replacement rules.
- *
- * @class UrlTransformer
- * @namespace ima.http
- * @module ima
- * @submodule ima.http
  */
 export default class UrlTransformer {
 
@@ -18,15 +13,10 @@ export default class UrlTransformer {
 
 	/**
 	 * Initializes the URL transformer.
-	 *
-	 * @method constructor
-	 * @constructor
 	 */
 	constructor() {
 
 		/**
-		 * @property _rules
-		 * @private
 		 * @type {Object<string, string>}
 		 */
 		this._rules = {};
@@ -36,8 +26,6 @@ export default class UrlTransformer {
 	 * Adds the provided replacement rule to the rules used by this URL
 	 * transformer.
 	 *
-	 * @method addRule
-	 * @chainable
 	 * @param {string} pattern Regexp patter to look for (must be escaped as if
 	 *        for use in the {@linkcode Regexp} constructor).
 	 * @param {string} replacement The replacement of the matched patter in any
@@ -53,8 +41,6 @@ export default class UrlTransformer {
 	/**
 	 * Clears all rules.
 	 *
-	 * @method clear
-	 * @chainable
 	 * @return {UrlTransformer} This transformer.
 	 */
 	clear() {
@@ -68,7 +54,6 @@ export default class UrlTransformer {
 	 * URL and returns the result. The rules will be applied in the order they
 	 * were registered.
 	 *
-	 * @method transform
 	 * @param {string} str The URL for transformation.
 	 * @return {string} Transformed URL.
 	 */

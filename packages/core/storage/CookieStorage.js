@@ -9,24 +9,19 @@ import Window from '../window/Window';
 ns.namespace('ima.storage');
 
 /**
- * Implementation note: while this is not the largest possible value for a
- * {@code Date} instance, it is considered "safe enough", because we don't
- * expect this code to be around by the year 10 000. For those whom it might be
- * of intereset, the largest value we know of is
- * {@code new Date('Sat Sep 13 275760 00:00:00 GMT+0000 (UTC)')}.
+ * Implementation note: This is the largest possible safe value that has been
+ * tested, used to represent "infinity".
  *
  * @const
- * @property MAX_EXPIRE_DATE
  * @type {Date}
  */
-const MAX_EXPIRE_DATE = new Date('Fri, 31 Dec 9999 23:59:59 UTC');
+const MAX_EXPIRE_DATE = new Date('Sat Sep 13 275760 00:00:00 GMT+0000 (UTC)');
 
 /**
  * Separator used to separate cookie declarations in the {@code Cookie} HTTP
  * header or the return value of the {@code document.cookie} property.
  *
  * @const
- * @property COOKIE_SEPARATOR
  * @type {string}
  */
 const COOKIE_SEPARATOR = '; ';
@@ -35,16 +30,6 @@ const COOKIE_SEPARATOR = '; ';
  * Storage of cookies, mirroring the cookies to the current request / response
  * at the server side and the {@code document.cookie} property at the client
  * side. The storage caches the cookies internally.
- *
- * @class CookieStorage
- * @extends MapStorage
- * @implements Storage
- * @namespace ima.storage
- * @module ima
- * @submodule ima.storage
- *
- * @requires Request
- * @requires Response
  */
 export default class CookieStorage extends MapStorage {
 
@@ -55,8 +40,6 @@ export default class CookieStorage extends MapStorage {
 	/**
 	 * Initializes the cookie storage.
 	 *
-	 * @constructor
-	 * @method constructor
 	 * @param {Window} window The window utility.
 	 * @param {Request} request The current HTTP request.
 	 * @param {Response} response The current HTTP response.
@@ -73,8 +56,6 @@ export default class CookieStorage extends MapStorage {
 		 * The window utility used to determine whether the IMA is being run
 		 * at the client or at the server.
 		 *
-		 * @private
-		 * @property _window
 		 * @type {Window}
 		 */
 		this._window = window;
@@ -82,8 +63,6 @@ export default class CookieStorage extends MapStorage {
 		/**
 		 * The current HTTP request. This field is used at the server side.
 		 *
-		 * @private
-		 * @property _request
 		 * @type {Request}
 		 */
 		this._request = request;
@@ -91,8 +70,6 @@ export default class CookieStorage extends MapStorage {
 		/**
 		 * The current HTTP response. This field is used at the server side.
 		 *
-		 * @private
-		 * @property _response
 		 * @type {Response}
 		 */
 		this._response = response;
@@ -100,8 +77,6 @@ export default class CookieStorage extends MapStorage {
 		/**
 		 * The overriding cookie attribute values.
 		 *
-		 * @private
-		 * @property _options
 		 * @type {{
 		 *         path: string,
 		 *         secure: boolean,
@@ -123,22 +98,19 @@ export default class CookieStorage extends MapStorage {
 		/**
 		 * Transform encode and decode functions for cookie value.
 		 *
-		 * @private
-		 * @property _transformFunction
 		 * @type {{
 		 *         encode: function(string): string,
 		 *         decode: function(string): string
 		 *       }}
 		 */
 		this._transformFunction = {
-			encode: (s) => s,
-			decode: (s) => s
+			encode: (value) => value,
+			decode: (value) => value
 		};
 	}
 
 	/**
 	 * @inheritdoc
-	 * @method init
 	 * @param {{
 	 *          path: string=,
 	 *          secure: boolean=,
@@ -165,7 +137,6 @@ export default class CookieStorage extends MapStorage {
 
 	/**
 	 * @inheritdoc
-	 * @method has
 	 */
 	has(name) {
 		return super.has(name);
@@ -173,7 +144,6 @@ export default class CookieStorage extends MapStorage {
 
 	/**
 	 * @inheritdoc
-	 * @method get
 	 */
 	get(name) {
 		if (super.has(name)) {
@@ -185,7 +155,6 @@ export default class CookieStorage extends MapStorage {
 
 	/**
 	 * @inheritdoc
-	 * @method set
 	 * @param {string} name The key identifying the storage entry.
 	 * @param {*} value The storage entry value.
 	 * @param {{
@@ -229,7 +198,6 @@ export default class CookieStorage extends MapStorage {
 
 	/**
 	 * @inheritdoc
-	 * @method delete
 	 */
 	delete(name) {
 		if (this.has(name)) {
@@ -242,7 +210,6 @@ export default class CookieStorage extends MapStorage {
 
 	/**
 	 * @inheritdoc
-	 * @method clear
 	 */
 	clear() {
 		for (let cookieName of super.keys()) {
@@ -254,7 +221,6 @@ export default class CookieStorage extends MapStorage {
 
 	/**
 	 * @inheritdoc
-	 * @method keys
 	 */
 	keys() {
 		return super.keys();
@@ -262,7 +228,6 @@ export default class CookieStorage extends MapStorage {
 
 	/**
 	 * @inheritdoc
-	 * @method size
 	 */
 	size() {
 		return super.size();
@@ -272,7 +237,6 @@ export default class CookieStorage extends MapStorage {
 	 * Returns all cookies in this storage serialized to a string compatible
 	 * with the {@code Cookie} HTTP header.
 	 *
-	 * @method getCookiesStringForCookieHeader
 	 * @return {string} All cookies in this storage serialized to a string
 	 *         compatible with the {@code Cookie} HTTP header.
 	 */
@@ -299,7 +263,6 @@ export default class CookieStorage extends MapStorage {
 	 * HTTP response (via the {@code Set-Cookie} HTTP header) if at the server
 	 * side, or the browser (via the {@code document.cookie} property).
 	 *
-	 * @method parseFromSetCookieHeader
 	 * @param {string} setCookieHeader The value of the {@code Set-Cookie} HTTP
 	 *        header.
 	 */
@@ -318,9 +281,6 @@ export default class CookieStorage extends MapStorage {
 	 * The method obtains the cookie string from the request's {@code Cookie}
 	 * HTTP header when used at the server side, and the {@code document.cookie}
 	 * property at the client side.
-	 *
-	 * @private
-	 * @method _parse
 	 */
 	_parse() {
 		let cookiesString = this._window.isClient() ?
@@ -350,8 +310,6 @@ export default class CookieStorage extends MapStorage {
 	 * Creates a copy of the provided word (or text) that has its first
 	 * character converted to lower case.
 	 *
-	 * @private
-	 * @method _firstLetterToLowerCase
 	 * @param {string} word The word (or any text) that should have its first
 	 *        character converted to lower case.
 	 * @return {string} A copy of the provided string with its first character
@@ -369,8 +327,6 @@ export default class CookieStorage extends MapStorage {
 	 * (Note that the {@code Cookie} HTTP header uses a slightly different
 	 * syntax.)
 	 *
-	 * @private
-	 * @method _generateCookieString
 	 * @param {string} name The cookie name.
 	 * @param {(boolean|number|string)} value The cookie value, will be
 	 *        converted to string.
@@ -403,8 +359,6 @@ export default class CookieStorage extends MapStorage {
 	/**
 	 * Converts the provided cookie expiration to a {@code Date} instance.
 	 *
-	 * @private
-	 * @method _getExpirationAsDate
 	 * @param {(number|string|Date)} expiration Cookie expiration in seconds
 	 *        from now, or as a string compatible with the {@code Date}
 	 *        constructor.
@@ -426,8 +380,6 @@ export default class CookieStorage extends MapStorage {
 	/**
 	 * Extract cookie name, value and options from cookie string.
 	 *
-	 * @private
-	 * @method _extractCookie
 	 * @param {string} cookieString The value of the {@code Set-Cookie} HTTP
 	 *        header.
 	 * @return {{
@@ -464,8 +416,6 @@ export default class CookieStorage extends MapStorage {
 	/**
 	 * Extract name and value for defined pair and pair index.
 	 *
-	 * @private
-	 * @method _extractNameAndValue
 	 * @param {string} pair
 	 * @param {number} pairIndex
 	 * @return {(?(boolean|string|Date))[]}
@@ -519,8 +469,6 @@ export default class CookieStorage extends MapStorage {
 	 * (@see http://tools.ietf.org/html/rfc6265#section-4r.1.1). Erase all
 	 * invalid characters from cookie value.
 	 *
-	 * @private
-	 * @method _sanitizeCookieValue
 	 * @param {string} value Cookie value
 	 * @return {string} Sanitized value
 	 */
@@ -541,9 +489,12 @@ export default class CookieStorage extends MapStorage {
 				sanitizedValue += char;
 			} else {
 				if ($Debug) {
-					throw new GenericError(`Invalid char ${char} code ` +
-							`${charCode} in ${value}. Dropping invalid char ` +
-							`from cookie value.`, { value, charCode, char });
+					throw new GenericError(
+						`Invalid char ${char} code ${charCode} in ${value}. ` +
+						`Dropping the invalid character from the cookie's ` +
+						`value.`,
+						{ value, charCode, char }
+					);
 				}
 			}
 		}

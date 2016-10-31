@@ -6,17 +6,13 @@ ns.namespace('ima.http');
  * The {@codelink HttpAgent} defines unifying API for sending HTTP requests at
  * both client-side and server-side.
  *
- * @interface HttpAgent
- * @namespace ima.http
- * @module ima
- * @submodule ima.http
+ * @interface
  */
 export default class HttpAgent {
 	/**
 	 * Sends an HTTP GET request to the specified URL, sending the provided
 	 * data as query parameters.
 	 *
-	 * @method get
 	 * @param {string} url The URL to which the request should be made.
 	 * @param {Object<string, (boolean|number|string)>} data The data to send
 	 *        to the server as query parameters.
@@ -59,7 +55,6 @@ export default class HttpAgent {
 	 * the data will be JSON-encoded. Sending other primitive non-string values
 	 * as the request body is not supported.
 	 *
-	 * @method post
 	 * @param {string} url The URL to which the request should be made.
 	 * @param {(string|Object<string, *>)} data The data to send to the server
 	 *        as the request body.
@@ -102,7 +97,6 @@ export default class HttpAgent {
 	 * the data will be JSON-encoded. Sending other primitive non-string values
 	 * as the request body is not supported.
 	 *
-	 * @method put
 	 * @param {string} url The URL to which the request should be made.
 	 * @param {(string|Object<string, *>)} data The data to send to the server
 	 *        as the request body.
@@ -145,7 +139,6 @@ export default class HttpAgent {
 	 * the data will be JSON-encoded. Sending other primitive non-string values
 	 * as the request body is not supported.
 	 *
-	 * @method patch
 	 * @param {string} url The URL to which the request should be made.
 	 * @param {(string|Object<string, *>)} data The data to send to the server
 	 *        as the request body.
@@ -188,7 +181,6 @@ export default class HttpAgent {
 	 * the data will be JSON-encoded. Sending other primitive non-string values
 	 * as the request body is not supported.
 	 *
-	 * @method delete
 	 * @param {string} url The URL to which the request should be made.
 	 * @param {(string|Object<string, *>)} data The data to send to the server
 	 *        as the request body.
@@ -229,7 +221,6 @@ export default class HttpAgent {
 	 * Generates a cache key to use for identifying a request to the specified
 	 * URL using the specified HTTP method, submitting the provided data.
 	 *
-	 * @method getCacheKey
 	 * @param {string} method The HTTP method used by the request.
 	 * @param {string} url The URL to which the request is sent.
 	 * @param {Object<string, string>} data The data associated with the
@@ -244,7 +235,6 @@ export default class HttpAgent {
 	 * Sets the specified header to be sent with every subsequent HTTP request,
 	 * unless explicitly overridden by request options.
 	 *
-	 * @method setDefaultHeader
 	 * @param {string} header The name of the header.
 	 * @param {string} value The header value. To provide multiple values,
 	 *        separate them with commas
@@ -256,7 +246,6 @@ export default class HttpAgent {
 	/**
 	 * Clears all configured default headers.
 	 *
-	 * @method clearDefaultHeaders
 	 * @return {HttpAgent} This HTTP agent.
 	 */
 	clearDefaultHeaders() {}

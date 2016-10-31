@@ -8,7 +8,6 @@ ns.namespace('ima');
  * Environment name value in the production environment.
  *
  * @const
- * @property PRODUCTION_ENVIRONMENT
  * @type {string}
  */
 const PRODUCTION_ENVIRONMENT = 'prod';
@@ -16,20 +15,12 @@ const PRODUCTION_ENVIRONMENT = 'prod';
 /**
  * Application bootstrap used to initialize the environment and the application
  * itself.
- *
- * @class Bootstrap
- * @namespace ima
- * @module ima
- *
- * @requires ima.Namespace
  */
 export default class Bootstrap {
 
 	/**
 	 * Initializes the bootstrap.
 	 *
-	 * @constructor
-	 * @method contructor
 	 * @param {ObjectContainer} oc The application's object container to use
 	 *        for managing dependencies.
 	 */
@@ -38,8 +29,6 @@ export default class Bootstrap {
 		/**
 		 * The object container used to manage dependencies.
 		 *
-		 * @private
-		 * @property _oc
 		 * @type {ObjectContainer}
 		 */
 		this._oc = oc;
@@ -47,10 +36,7 @@ export default class Bootstrap {
 		/**
 		 * Application configuration.
 		 *
-		 * @private
-		 * @property _config
 		 * @type {Object<string, *>}
-		 * @default {}
 		 */
 		this._config = {};
 	}
@@ -65,7 +51,6 @@ export default class Bootstrap {
 	 * - UI components
 	 * - routing
 	 *
-	 * @method run
 	 * @param {Object<string, *>} config The application environment
 	 *        configuration for the current environment.
 	 */
@@ -84,9 +69,6 @@ export default class Bootstrap {
 	 *
 	 * The method also handles using the values in the production environment
 	 * as default values for configuration items in other environments.
-	 *
-	 * @private
-	 * @method _initSettings
 	 */
 	_initSettings() {
 		let currentApplicationSettings = {};
@@ -122,8 +104,6 @@ export default class Bootstrap {
 	 * Returns setting for current environment where base values are from production
 	 * environment and other environments override base values.
 	 *
-	 * @private
-	 * @method _getEnvironmentSetting
 	 * @return {Object<string, *>}
 	 */
 	_getEnvironmentSetting(allSettings) {
@@ -145,9 +125,6 @@ export default class Bootstrap {
 	/**
 	 * Binds the constants, service providers and class dependencies to the
 	 * object container.
-	 *
-	 * @private
-	 * @method _bindDependencies
 	 */
 	_bindDependencies() {
 		this._config.initBindIma(ns, this._oc, this._config.bind);
@@ -164,10 +141,7 @@ export default class Bootstrap {
 	}
 
 	/**
-	 * Initalizes the routes.
-	 *
-	 * @private
-	 * @method _initRoutes
+	 * Initializes the routes.
 	 */
 	_initRoutes() {
 		this._config.initRoutes(ns, this._oc, this._config.routes);
@@ -175,9 +149,6 @@ export default class Bootstrap {
 
 	/**
 	 * Initializes the basic application services.
-	 *
-	 * @private
-	 * @method _initServices
 	 */
 	_initServices() {
 		this._config.initServicesIma(ns, this._oc, this._config.services);

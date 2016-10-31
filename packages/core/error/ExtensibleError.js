@@ -10,13 +10,9 @@ ns.namespace('ima.error');
  * extending the native JavaScript (Error) classes.
  *
  * @abstract
- * @class ExtensibleError
+ * @class
  * @extends Error
- * @namespace ima.error
- * @module ima
- * @submodule ima.error
- *
- * @param message The message describing the cause of the error.
+ * @param {string} message The message describing the cause of the error.
  * @param {boolean=} dropInternalStackFrames Whether or not the call stack
  *        frames referring to the constructors of the custom errors should be
  *        excluded from the stack of this error (just like the native platform
@@ -38,7 +34,6 @@ export default function ExtensibleError(message,
 	/**
 	 * The name of this error, used in the generated stack trace.
 	 *
-	 * @property name
 	 * @type {string}
 	 */
 	this.name = this.constructor.name;
@@ -46,7 +41,6 @@ export default function ExtensibleError(message,
 	/**
 	 * The message describing the cause of the error.
 	 *
-	 * @property message
 	 * @type {string}
 	 */
 	this.message = message;
@@ -57,8 +51,6 @@ export default function ExtensibleError(message,
 	 * extending the native {@codelink Error} class, so we bypass this
 	 * shortcoming this way.
 	 *
-	 * @private
-	 * @property _nativeError
 	 * @type {Error}
 	 */
 	this._nativeError = new Error(message);
@@ -75,8 +67,6 @@ export default function ExtensibleError(message,
 	 * The internal cache of the generated stack. The cache is filled upon
 	 * first access to the {@codelink stack} property.
 	 *
-	 * @private
-	 * @property _stack
 	 * @type {?string}
 	 */
 	this._stack = null;
@@ -87,8 +77,6 @@ export default function ExtensibleError(message,
 	 * like the native platform call stack frames are dropped by the JS
 	 * engine).
 	 *
-	 * @private
-	 * @property _dropInternalStackFrames
 	 * @type {boolean}
 	 */
 	this._dropInternalStackFrames = dropInternalStackFrames;
@@ -101,7 +89,6 @@ ExtensibleError.prototype.constructor = ExtensibleError;
  * The call stack captured at the moment of creation of this error. The
  * formatting of the stack is browser-dependant.
  *
- * @method getStack
  * @return {string} The call stack captured at the moment of creation of this
  *         error.
  */

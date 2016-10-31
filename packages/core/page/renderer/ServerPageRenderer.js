@@ -243,7 +243,7 @@ export default class ServerPageRenderer extends AbstractPageRenderer {
 			routeOptions.documentView ||
 			this._settings.$Page.$Render.documentView
 		);
-		let documentViewFactory = this._factory.reactCreateFactory(documentView);
+		let documentViewFactory = this._factory.createReactElementFactory(documentView);
 		let appMarkup = this._ReactDOM.renderToStaticMarkup(documentViewFactory({
 			page: pageMarkup,
 			revivalSettings: this._getRevivalSettings(),

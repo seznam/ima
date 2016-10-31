@@ -8,18 +8,18 @@ ns.namespace('ima.page');
  * The base class for all view components.
  *
  * @abstract
- * @class AbstractComponent
- * @namespace ima.page
- * @module ima
- * @submodule ima.page
  */
 export default class AbstractComponent extends React.Component {
+
+	static get contextTypes() {
+		return {
+			$Utils: React.PropTypes.object
+		};
+	}
 
 	/**
 	 * Initializes the constructor.
 	 *
-	 * @constructor
-	 * @method constructor
 	 * @param {Object<string, *>} props The component properties.
 	 * @param {Object<string, *>} context The component context.
 	 */
@@ -29,8 +29,6 @@ export default class AbstractComponent extends React.Component {
 		/**
 		 * The view utilities.
 		 *
-		 * @private
-		 * @property _utils
 		 * @type {Object<string, *>}
 		 */
 		this._utils = context ? context.$Utils || props.$Utils : props.$Utils;
@@ -40,15 +38,15 @@ export default class AbstractComponent extends React.Component {
 	 * Returns the utilities for the view components. The returned value is the
 	 * value bound to the {@code $Utils} object container constant.
 	 *
-	 * @property utils
 	 * @return {Object<string, *>} The utilities for the view components.
 	 */
 	get utils() {
 		if ($Debug) {
 			if (!this._utils) {
-				throw new Error('You cannot access view utils because they ' +
-						'were not passed in the initial props or context as ' +
-						'key name $Utils.');
+				throw new Error(
+					'You cannot access the view utils because they were not ' +
+					'passed in the initial props or context as $Utils.'
+				);
 			}
 		}
 
@@ -61,7 +59,6 @@ export default class AbstractComponent extends React.Component {
 	 *
 	 * Note that this method can be used only at the client-side.
 	 *
-	 * @method findDOMNode
 	 * @param {React.Component} component
 	 * @return {?HTMLElement} The DOM node representing the specified React
 	 *         component, or {@code null} if no such node was found.
@@ -74,7 +71,6 @@ export default class AbstractComponent extends React.Component {
 	 * Returns localize string for defined key. Method replace params in string
 	 * with value of params.
 	 *
-	 * @method localize
 	 * @param {string} key Localization key
 	 * @param {Object<string, (number|string)>=} params Params for replacement
 	 * @return {string} localize string
@@ -87,7 +83,6 @@ export default class AbstractComponent extends React.Component {
 	 * Returns URL for route name. Method replace params in route with defined
 	 * params. Routes is defined in {@code /app/config/routes.js}.
 	 *
-	 * @method link
 	 * @param {string} name The route name.
 	 * @param {Object<string, (number|string)>=} params Router parameters and
 	 *        extraneous parameters to add to the URL as a query string.
@@ -109,7 +104,6 @@ export default class AbstractComponent extends React.Component {
 	 *            'my-class-modificator': this.props.modificator
 	 *        }, true);
 	 *
-	 * @method cssClasses
 	 * @param {(string|Object<string, boolean>)} classRules CSS classes in a
 	 *        string separated by whitespace, or a map of CSS class names to
 	 *        boolean values. The CSS class name will be included in the result
@@ -129,8 +123,10 @@ export default class AbstractComponent extends React.Component {
 		}
 
 		if (!(classRules instanceof Object)) {
-			throw new Error('The class rules must be specified as a plain ' +
-					`object, ${classRules} provided`);
+			throw new Error(
+				'The class rules must be specified as a plain object, ' +
+				`${classRules} provided`
+			);
 		}
 
 		if (includeComponentClassName) {
@@ -158,7 +154,6 @@ export default class AbstractComponent extends React.Component {
 	/**
 	 * Creates and sends a new IMA.js DOM custom event from this component.
 	 *
-	 * @method fire
 	 * @param {string} eventName The name of the event.
 	 * @param {*=} data Data to send within the event.
 	 */
@@ -171,7 +166,6 @@ export default class AbstractComponent extends React.Component {
 	 * DOM custom event of the specified name occurs at the specified event
 	 * target.
 	 *
-	 * @method listen
 	 * @param {(ReactElement|EventTarget)} eventTarget The react component or
 	 *        event target at which the listener should listen for the event.
 	 * @param {string} eventName The name of the event for which to listen.
@@ -189,7 +183,6 @@ export default class AbstractComponent extends React.Component {
 	 * Deregisters the provided event listener for an IMA.js DOM custom event
 	 * of the specified name at the specified event target.
 	 *
-	 * @method unlisten
 	 * @param {(ReactElement|EventTarget)} eventTarget The react component or
 	 *        event target at which the listener should listen for the event.
 	 * @param {string} eventName The name of the event for which to listen.
@@ -203,9 +196,5 @@ export default class AbstractComponent extends React.Component {
 		this._utils.$EventBus.unlisten(eventTarget, eventName, listener);
 	}
 }
-
-AbstractComponent.contextTypes = {
-	$Utils: React.PropTypes.object
-};
 
 ns.ima.page.AbstractComponent = AbstractComponent;
