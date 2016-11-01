@@ -15,6 +15,7 @@ module.exports = (gulpConfig) => {
 	gulp.task('watch', () => {
 
 		runOnChange(files.app.watch, 'app:build');
+		runOnChange(files.ima.watch, 'ima:build');
 		runOnChange(files.vendor.watch, 'vendor:build');
 		runOnChange(files.less.watch, 'less');
 		runOnChange(files.server.watch, 'server:build');
@@ -22,6 +23,7 @@ module.exports = (gulpConfig) => {
 		runOnChange('./app/assets/static/**/*', 'copy:appStatic');
 
 		gulp.watch([
+			'./ima/**/*.js',
 			'./app/**/*.{js,jsx}',
 			'./build/static/js/locale/*.js'
 		]).on('change', (event) => {
@@ -31,6 +33,11 @@ module.exports = (gulpConfig) => {
 				if (cache.caches['Es6ToEs5:app'][event.path]) {
 					delete cache.caches['Es6ToEs5:app'][event.path];
 					remember.forget('Es6ToEs5:app', event.path);
+				}
+
+				if (cache.caches['Es6ToEs5:ima'][event.path]) {
+					delete cache.caches['Es6ToEs5:ima'][event.path];
+					remember.forget('Es6ToEs5:ima', event.path);
 				}
 			}
 		});

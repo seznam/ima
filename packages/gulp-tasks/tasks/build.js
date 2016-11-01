@@ -16,6 +16,13 @@ gulp.task('app:build', callback => runSequence(
 		callback
 ));
 
+gulp.task('ima:build', callback => runSequence(
+ 		'Es6ToEs5:ima',
+ 		'server:hotreload',
+ 		callback
+ 	);
+ });
+
 gulp.task('vendor:build', callback => runSequence(
 	'Es6ToEs5:vendor',
 	['Es6ToEs5:vendor:client', 'Es6ToEs5:vendor:client:test'],
