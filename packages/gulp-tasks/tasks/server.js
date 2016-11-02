@@ -16,15 +16,17 @@ function startServer() {
 }
 
 exports.server = serverTask;
-function serverTask() {
+function serverTask(done) {
 	server = gls.new('./build/server.js');
 
-	startServer();
+	setTimeout(startServer);
+	done()
 }
 
 exports.server_restart = server_restart;
-function server_restart() {
-	startServer();
+function server_restart(done) {
+	setTimeout(startServer);
+	done();
 }
 
 exports.server_reload = server_reload;
