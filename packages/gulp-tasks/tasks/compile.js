@@ -241,7 +241,7 @@ function Es6ToEs5_vendor_client() {
 
 exports.Es6ToEs5_vendor_client_test = Es6ToEs5_vendor_client_test;
 function Es6ToEs5_vendor_client_test() {
-	if (files.vendor.src.test) {
+	if (!files.vendor.src.test) {
 		return;
 	}
 
