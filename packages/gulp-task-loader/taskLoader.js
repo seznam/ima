@@ -1,24 +1,25 @@
 
-var fs = require('fs');
-var path = require('path');
+let fs = require('fs');
+let path = require('path');
 
 /**
- * Loads gulp tasks from defined directories. The
- * newest gulp tasks will override the older tasks if the names
- * match.
+ * Loads gulp tasks from defined directories. The newest gulp tasks will
+ * override the older tasks if the names match.
  *
- * @param {Array<string>} directories
+ * @param {string[]} directories The directories from which the gulp tasks
+ *        should be loaded.
  * @param {Object<string, *>} gulpConfig Configuration of the gulp tasks.
  */
- module.exports = function (directories, gulpConfig) {
- 	console.log('Loading gulp tasks...');
+module.exports = (directories, gulpConfig) => {
+	console.log('Loading gulp tasks...');
+	let tasks = {};
 
- 	for (var i = 0; i < directories.length; i++) {
- 		var directory = directories[i];
+	for (let directory of directories) {
+		tasks = Object.assign(tasks, loadTasks(directory, gulpConfig));
+	}
 
- 		loadTasks(directory, gulpConfig);
- 	}
- };
+	return tasks;
+};
 
 /**
  * Loads the gulp tasks defined in the JavaScript files within the specified
@@ -29,19 +30,27 @@ var path = require('path');
  * @param {Object<string, *>} gulpConfig Configuration of the gulp tasks.
  */
 function loadTasks(directory, gulpConfig) {
-	if (!fs.existsSync(directory)) {
-		console.warn('The gulp tasks directory ' + directory + ' does not ' +
-				'exist, skipping');
+	let directoryFiles;
+	try {
+		directoryFiles = fs.readdirSync(directory);
+	} catch (error) {
+		console.warn(
+			`The gulp tasks directory ${directory} does not exist, skipping`
+		);
 		return;
 	}
 
-	fs.readdirSync(directory).filter(function (file) {
-		return file.match(/[.]js$/i);
-	}).forEach(function (file) {
-		var modulePath = path.resolve(directory + path.sep + file);
-		var factory = require(modulePath);
-		if (factory instanceof Function) {
-			factory(gulpConfig);
+	let allTasks = {};
+	directoryFiles.filter(
+		file => file.match(/[.]js$/i)
+	).forEach((file) => {
+		let modulePath = path.resolve(directory + path.sep + file);
+		let tasks = require(modulePath);
+		if (tasks.__requiresConfig && (typeof tasks.default === 'function')) {
+			tasks = tasks(gulpConfig);
 		}
+		allTasks = Object.assign(allTasks, tasks);
 	});
+
+	return allTasks;
 }
