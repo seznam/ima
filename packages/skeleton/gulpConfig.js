@@ -72,24 +72,24 @@ exports.vendorDependencies = {
 
 exports.tasks = {
 	dev: [
-		['copy:appStatic', 'copy:environment', 'shim', 'polyfill'],
-		['Es6ToEs5:app', 'Es6ToEs5:ima', 'Es6ToEs5:server', 'Es6ToEs5:vendor'],
-		['less', 'doc', 'locale', 'Es6ToEs5:vendor:client', 'Es6ToEs5:vendor:client:test'],
-		['server'],
-		['test:unit:karma:dev', 'watch']
+		['copy_appStatic', 'copy_environment', 'shim', 'polyfill'],
+		['Es6ToEs5_app', 'Es6ToEs5_ima', 'Es6ToEs5_server', 'Es6ToEs5_vendor'],
+		['less', 'doc', 'locale', 'Es6ToEs5_vendor_client', 'Es6ToEs5_vendor_client_test'],
+		'server',
+		['test_unit_karma_dev', 'watch']
 	],
 	build: [
-		['copy:appStatic', 'copy:environment', 'shim', 'polyfill'],
-		['Es6ToEs5:app', 'Es6ToEs5:ima', 'Es6ToEs5:server', 'Es6ToEs5:vendor'],
-		['less', 'doc', 'locale', 'Es6ToEs5:vendor:client', 'Es6ToEs5:vendor:client:test'],
-		['bundle:js:app', 'bundle:js:server', 'bundle:css']
+		['copy_appStatic', 'copy_environment', 'shim', 'polyfill'],
+		['Es6ToEs5_app', 'Es6ToEs5_ima', 'Es6ToEs5_server', 'Es6ToEs5_vendor'],
+		['less', 'doc', 'locale', 'Es6ToEs5_vendor_client', 'Es6ToEs5_vendor_client_test'],
+		['bundle_js_app', 'bundle_js_server', 'bundle_css']
 	],
 	spa: [
-		['copy:appStatic', 'shim', 'polyfill'], // copy public folder, concat shim
-		['Es6ToEs5:app', 'Es6ToEs5:ima', 'Es6ToEs5:vendor'], // compile app and vendor script
-		['less', 'doc', 'locale', 'Es6ToEs5:vendor:client'], // adjust vendors, compile less, create doc
-		['bundle:js:app', 'bundle:css', 'compile:spa'],
-		['clean:spa']
+		['copy_appStatic', 'shim', 'polyfill'], // copy public folder, concat shim
+		['Es6ToEs5_app', 'Es6ToEs5_ima', 'Es6ToEs5_vendor'], // compile app and vendor script
+		['less', 'doc', 'locale', 'Es6ToEs5_vendor_client'], // adjust vendors, compile less, create doc
+		['bundle_js_app', 'bundle_css', 'spa_compile'],
+		'spa_clean'
 	]
 };
 
