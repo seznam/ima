@@ -5,23 +5,19 @@ let change = require('gulp-change');
 let jsdoc = require('gulp-jsdoc3');
 let rename = require('gulp-rename');
 
-module.exports = (gulpConfig) => {
+exports.__requiresConfig = true;
+
+exports.default = (gulpConfig) => {
 	let files = gulpConfig.files;
 	let documentationPreprocessors;
 
-	gulp.task(
-		'doc',
-		['doc:clear', 'doc:preprocess', 'doc:generate', 'doc:clean'],
-		() => {}
-	);
+	function doc_clean() {
+		return del('./doc-src');
+	}
 
-	gulp.task('doc:clean', ['doc:generate'], () =>
-		del('./doc-src')
-	);
-
-	gulp.task('doc:generate', ['doc:preprocess'], (done) => {
+	function doc_generate(done) {
 		// Unfortunately, JSDoc invokes the callback for every file. Because of
-		// this, we have to handle the done callback invokation in a little
+		// this, we have to handle the done callback invocation in a little
 		// bit more complicated way
 		const COMPLETION_TIMEOUT = 1000; // milliseconds
 		let completionTimeout = null;
@@ -38,12 +34,13 @@ module.exports = (gulpConfig) => {
 				}
 				completionTimeout = setTimeout(done, COMPLETION_TIMEOUT);
 			}));
-	});
+	}
 
-	gulp.task('doc:preprocess', ['doc:clear'], () =>
-		gulp.src(files.app.src)
+	function doc_preprocess() {
+		return gulp
+			.src(files.app.src)
 			.pipe(change((content) => {
-				var oldContent = null;
+				let oldContent = null;
 
 				while (content !== oldContent) {
 					oldContent = content;
@@ -56,12 +53,12 @@ module.exports = (gulpConfig) => {
 				return `/** @module */\n${content}`;
 			}))
 			.pipe(rename(file => file.extname = '.js'))
-			.pipe(gulp.dest('./doc-src'))
-	);
+			.pipe(gulp.dest('./doc-src'));
+	}
 
-	gulp.task('doc:clear', () =>
-		del(['./doc-src', './doc'])
-	);
+	function doc_clear() {
+		return del(['./doc-src', './doc']);
+	}
 
 	documentationPreprocessors = [
 		{
@@ -78,4 +75,7 @@ module.exports = (gulpConfig) => {
 		}
 	];
 
+	return {
+		doc: gulp.series(doc_clear, doc_preprocess, doc_generate, doc_clean)
+	};
 };

@@ -1,10 +1,10 @@
 
-var gulp = require('gulp');
-var gls = require('gulp-live-server');
+let gulp = require('gulp');
+let gls = require('gulp-live-server');
 
-var sharedState = require('../gulpState.js');
-var server = null;
-var isServerRunning = false;
+let sharedState = require('../gulpState.js');
+let server = null;
+let isServerRunning = false;
 
 function startServer() {
 	isServerRunning = true;
@@ -15,34 +15,38 @@ function startServer() {
 		});
 }
 
-gulp.task('server', () => {
+exports.server = serverTask;
+function serverTask() {
 	server = gls.new('./build/server.js');
 
 	startServer();
-});
+}
 
-gulp.task('server:restart', () => {
+exports.server_restart = server_restart;
+function server_restart() {
 	startServer();
-});
+}
 
-gulp.task('server:reload', (callback) => {
+exports.server_reload = server_reload;
+function server_reload(done) {
 	if (isServerRunning) {
 		setTimeout(() => {
 			server.notify(sharedState.watchEvent);
-			callback();
+			done();
 		}, 2000);
 	} else {
 		startServer();
-		callback();
+		done();
 	}
-});
+}
 
-gulp.task('server:hotreload', (callback) => {
+exports.server_hotreload = server_hotreload;
+function server_hotreload(done) {
 	if (isServerRunning) {
 		server.notify(sharedState.watchEvent);
 	} else {
 		startServer();
 	}
 
-	callback();
-});
+	done();
+}

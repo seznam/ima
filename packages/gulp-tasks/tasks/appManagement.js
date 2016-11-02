@@ -1,22 +1,29 @@
 
-var gulp = require('gulp');
-var del = require('del');
+let gulp = require('gulp');
+let del = require('del');
 
-gulp.task('app:hello', () =>
-	gulp.src('./node_modules/ima-examples/hello/**/*')
-		.pipe(gulp.dest('./app'))
-);
+exports.app_hello = app_hello;
+function app_hello() {
+	return installExample('hello');
+}
 
-gulp.task('app:feed', () =>
-	gulp.src('./node_modules/ima-examples/feed/**/*')
-		.pipe(gulp.dest('./app'))
-);
+exports.app_feed = app_feed;
+function app_feed() {
+	return installExample('feed');
+}
 
-gulp.task('app:todos', () =>
-	gulp.src('./node_modules/ima-examples/todos/**/*')
-		.pipe(gulp.dest('./app'))
-);
+exports.app_todos = app_todos;
+function app_todos() {
+	return installExample('todos');
+}
 
-gulp.task('app:clean', () =>
-	del(['./app/', './build/'])
-);
+exports.app_clean = app_clean;
+function app_clean() {
+	return del(['./app/', './build/']);
+}
+
+function installExample(exampleName) {
+	return gulp
+		.src(`./node_modules/ima-examples/${exampleName}/**/*`)
+		.pipe(gulp.dest('./app'));
+}

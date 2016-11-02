@@ -1,19 +1,20 @@
 
-var gulp = require('gulp');
-var karma = require('karma');
-var path = require('path');
+let karma = require('karma');
+let path = require('path');
 
-var sharedState = require('../gulpState.js');
+let sharedState = require('../gulpState.js');
 
-gulp.task('test:unit:karma', (done) => {
+exports.test_unit_karma = test_unit_karma;
+function test_unit_karma(done) {
 	sharedState.karmaServer = new karma.Server({
 		configFile: path.resolve('./karma.conf.js'),
 		singleRun: true
 	}, done).start();
-});
+}
 
-gulp.task('test:unit:karma:dev', (done) => {
+exports.test_unit_karma_dev = test_unit_karma_dev;
+function test_unit_karma_dev(done) {
 	sharedState.karmaServer = new karma.Server({
 		configFile: path.resolve('./karma.conf.js')
 	}, done).start();
-});
+}

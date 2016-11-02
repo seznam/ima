@@ -1,38 +1,32 @@
 
-var gulp = require('gulp');
-var runSequence = require('run-sequence');
+let gulp = require('gulp');
 
-gulp.task('server:build', callback => runSequence(
-	'copy:environment',
-	'Es6ToEs5:server',
-	'server:restart',
-	'server:reload',
-	callback
-));
+exports.server_build = gulp.series(
+	'copy_environment',
+	'Es6ToEs5_server',
+	'server_restart',
+	'server_reload',
+);
 
-gulp.task('app:build', callback => runSequence(
-		'Es6ToEs5:app',
-		'server:hotreload',
-		callback
-));
+exports.app_build = gulp.series(
+	'Es6ToEs5_app',
+	'server_hotreload'
+);
 
-gulp.task('ima:build', callback => runSequence(
-		'Es6ToEs5:ima',
-		'server:hotreload',
-		callback
-));
+exports.ima_build = gulp.series(
+	'Es6ToEs5_ima',
+	'server_hotreload'
+);
 
-gulp.task('vendor:build', callback => runSequence(
-	'Es6ToEs5:vendor',
-	['Es6ToEs5:vendor:client', 'Es6ToEs5:vendor:client:test'],
-	'server:restart',
-	'server:reload',
-	callback
-));
+exports.vendor_build = gulp.series(
+	'Es6ToEs5_vendor',
+	gulp.parallel('Es6ToEs5_vendor_client', 'Es6ToEs5_vendor_client_test'),
+	'server_restart',
+	'server_reload'
+);
 
-gulp.task('locale:build', callback => runSequence(
+exports.locale_build = gulp.series(
 	'locale',
-	'server:restart',
-	'server:reload',
-	callback
-));
+	'server_restart',
+	'server_reload'
+);

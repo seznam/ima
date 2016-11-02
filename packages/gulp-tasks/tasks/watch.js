@@ -1,26 +1,27 @@
 
-var gulp = require('gulp');
-var cache = require('gulp-cached');
-var flo = require('fb-flo');
-var fs = require('fs');
-var gutil = require('gulp-util');
-var remember = require('gulp-remember');
-var watch = require('gulp-watch');
+let gulp = require('gulp');
+let cache = require('gulp-cached');
+let flo = require('fb-flo');
+let fs = require('fs');
+let gutil = require('gulp-util');
+let remember = require('gulp-remember');
+let watch = require('gulp-watch');
 
-var sharedState = require('../gulpState.js');
+let sharedState = require('../gulpState.js');
 
-module.exports = (gulpConfig) => {
-	var files = gulpConfig.files;
+exports.__requiresConfig = true;
 
-	gulp.task('watch', () => {
+exports.default = (gulpConfig) => {
+	let files = gulpConfig.files;
 
-		runOnChange(files.app.watch, 'app:build');
-		runOnChange(files.ima.watch, 'ima:build');
-		runOnChange(files.vendor.watch, 'vendor:build');
+	function watchTask() {
+		runOnChange(files.app.watch, 'app_build');
+		runOnChange(files.ima.watch, 'ima_build');
+		runOnChange(files.vendor.watch, 'vendor_build');
 		runOnChange(files.less.watch, 'less');
-		runOnChange(files.server.watch, 'server:build');
-		runOnChange(files.locale.watch, 'locale:build');
-		runOnChange('./app/assets/static/**/*', 'copy:appStatic');
+		runOnChange(files.server.watch, 'server_build');
+		runOnChange(files.locale.watch, 'locale_build');
+		runOnChange('./app/assets/static/**/*', 'copy_appStatic');
 
 		gulp.watch([
 			'./ima/**/*.js',
@@ -30,14 +31,14 @@ module.exports = (gulpConfig) => {
 			sharedState.watchEvent = event;
 
 			if (event.type === 'deleted') {
-				if (cache.caches['Es6ToEs5:app'][event.path]) {
-					delete cache.caches['Es6ToEs5:app'][event.path];
-					remember.forget('Es6ToEs5:app', event.path);
+				if (cache.caches['Es6ToEs5_app'][event.path]) {
+					delete cache.caches['Es6ToEs5_app'][event.path];
+					remember.forget('Es6ToEs5_app', event.path);
 				}
 
-				if (cache.caches['Es6ToEs5:ima'][event.path]) {
-					delete cache.caches['Es6ToEs5:ima'][event.path];
-					remember.forget('Es6ToEs5:ima', event.path);
+				if (cache.caches['Es6ToEs5_ima'][event.path]) {
+					delete cache.caches['Es6ToEs5_ima'][event.path];
+					remember.forget('Es6ToEs5_ima', event.path);
 				}
 			}
 		});
@@ -53,10 +54,14 @@ module.exports = (gulpConfig) => {
 				]
 			},
 			(filepath, callback) => {
-				gutil.log('Reloading \'public/' + gutil.colors.cyan(filepath) +
-					'\' with flo...');
+				gutil.log(
+					`Reloading 'public/${gutil.colors.cyan(filepath)}' with ` +
+					'flo...'
+				);
 
-				var fileContents = fs.readFileSync('./build/static/' + filepath);
+				let fileContents = fs.readFileSync(
+					`./build/static/${filepath}`
+				);
 				callback({
 					resourceURL: 'static/' + filepath,
 					contents: fileContents.toString()
@@ -67,5 +72,9 @@ module.exports = (gulpConfig) => {
 		function runOnChange(files, tasks) {
 			watch(files, () => gulp.start(tasks));
 		}
-	});
+	}
+
+	return {
+		watch: watchTask
+	};
 };

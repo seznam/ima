@@ -1,14 +1,16 @@
 
-var gulp = require('gulp');
-var plumber = require('gulp-plumber');
-var messageFormat = require('gulp-messageformat');
-var insert = require('gulp-insert');
-var rename = require('gulp-rename');
+let gulp = require('gulp');
+let plumber = require('gulp-plumber');
+let messageFormat = require('gulp-messageformat');
+let insert = require('gulp-insert');
+let rename = require('gulp-rename');
 
-module.exports = (gulpConfig) => {
-	var files = gulpConfig.files;
+exports.__requiresConfig = true;
 
-	gulp.task('locale', () => {
+exports.default = (gulpConfig) => {
+	let files = gulpConfig.files;
+
+	function locale() {
 
 		function parseLocale(language, selector) {
 			return (
@@ -20,7 +22,7 @@ module.exports = (gulpConfig) => {
 					.pipe(messageFormat({locale: language, global: 'that'}))
 					.pipe(plumber.stop())
 					.pipe(insert.wrap(
-						'(function () {var $IMA = {}; if ((typeof window !== "undefined") && (window !== null)) { window.$IMA = window.$IMA || {}; $IMA = window.$IMA; } var that = $IMA || {};',
+						'(function () {let $IMA = {}; if ((typeof window !== "undefined") && (window !== null)) { window.$IMA = window.$IMA || {}; $IMA = window.$IMA; } let that = $IMA || {};',
 						' return that.i18n; })();'
 					))
 					.pipe(gulp.dest(files.locale.dest.client))
@@ -29,12 +31,16 @@ module.exports = (gulpConfig) => {
 			);
 		}
 
-		var locales = Object.keys(files.locale.src).map((language) => {
-			var selector = files.locale.src[language];
+		let locales = Object.keys(files.locale.src).map((language) => {
+			let selector = files.locale.src[language];
 
 			return parseLocale(language, selector);
 		});
 
 		return locales[locales.length - 1];
-	});
+	}
+
+	return {
+		locale
+	};
 };

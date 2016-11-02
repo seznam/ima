@@ -1,23 +1,23 @@
 
-var del = require('del');
-var fs = require('fs');
-var gulp = require('gulp');
-var templateProcessor = require('ima-server/lib/templateProcessor');
+let del = require('del');
+let fs = require('fs');
+let templateProcessor = require('ima-server/lib/templateProcessor');
 
-module.exports = (gulpConfig) => {
+exports.__requiresConfig = true;
 
-	var env = process.env.NODE_ENV || 'dev';
+exports.default = (gulpConfig) => {
+
+	let env = process.env.NODE_ENV || 'dev';
 	if (env === 'production') {
 		env = 'prod';
 	}
 
-	gulp.task('compile:spa', (callback) => {
-
-		var environmentConfig = require(
+	function spa_compile(done) {
+		let environmentConfig = require(
 			process.cwd() + '/app/environment.js'
 		)[env];
 
-		var templateVariables = {
+		let templateVariables = {
 			$App: environmentConfig.$App || {},
 			$Language: environmentConfig.$Language[
 				Object.keys(environmentConfig.$Language)[0]
@@ -31,10 +31,11 @@ module.exports = (gulpConfig) => {
 			$LanguagePartPath: ''
 		};
 
-		fs.readFile('./build/static/html/spa.html', 'utf-8', (error, content) => {
+		let sourceTemplate = './build/static/html/spa.html';
+		fs.readFile(sourceTemplate, 'utf-8', (error, content) => {
 			if (error) {
 				console.error(error);
-				callback();
+				done();
 				return;
 			}
 
@@ -43,14 +44,17 @@ module.exports = (gulpConfig) => {
 			content = content.replace(/['"]\{\$Host}['"]/, '{$Host}');
 			content = templateProcessor(content, templateVariables);
 			fs.writeFile('./build/index.html', content, 'utf-8', () => {
-				callback();
+				done();
 			});
 		});
+	}
 
-	});
-
-	gulp.task('clean:spa', () => {
+	function spa_clean() {
 		return del('./build/ima');
-	});
+	}
 
+	return {
+		spa_clean,
+		spa_compile
+	};
 };
