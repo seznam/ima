@@ -25,8 +25,8 @@ const DEFAULT_SPA_SUBTASKS = [
 	['copy_appStatic', 'shim', 'polyfill'], // copy public folder, concat shim
 	['Es6ToEs5_app', 'Es6ToEs5_ima', 'Es6ToEs5_vendor'], // compile app and vendor script
 	['less', 'doc', 'locale', 'Es6ToEs5_vendor_client'], // adjust vendors, compile less, create doc
-	['bundle_js_app', 'bundle_css', 'compile_spa'],
-	'clean_spa'
+	['bundle_js_app', 'bundle_css', 'spa_compile'],
+	'spa_clean'
 ];
 if (['prod', 'production', 'test'].includes(process.env.NODE_ENV)) {
 	DEFAULT_SPA_SUBTASKS.push(
