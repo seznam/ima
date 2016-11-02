@@ -47,7 +47,7 @@ function loadTasks(directory, gulpConfig) {
 		let modulePath = path.resolve(directory + path.sep + file);
 		let tasks = require(modulePath);
 		if (tasks.__requiresConfig && (typeof tasks.default === 'function')) {
-			tasks = tasks(gulpConfig);
+			tasks = tasks.default(gulpConfig);
 		}
 		allTasks = Object.assign(allTasks, tasks);
 	});
