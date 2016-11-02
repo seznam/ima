@@ -69,8 +69,8 @@ exports.default = (gulpConfig) => {
 			}
 		);
 
-		function runOnChange(files, tasks) {
-			watch(files, () => gulp.start(tasks));
+		function runOnChange(files, task) {
+			watch(files, () => gulp.series(task)());
 		}
 	}
 
