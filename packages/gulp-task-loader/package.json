@@ -14,11 +14,11 @@
 		"registry": "http://registry.npmjs.org/"
 	},
 	"keywords": [
-    "gulp",
-    "ima.js",
-    "IMA",
-    "taskloader"
-  ],
+		"gulp",
+		"ima.js",
+		"IMA",
+		"taskloader"
+	],
 	"author": "Seznam.cz, a.s.",
 	"license": "MIT",
 	"bugs": {
