@@ -5,7 +5,7 @@ exports.server_build = gulp.series(
 	'copy_environment',
 	'Es6ToEs5_server',
 	'server_restart',
-	'server_reload',
+	'server_reload'
 );
 
 exports.app_build = gulp.series(
