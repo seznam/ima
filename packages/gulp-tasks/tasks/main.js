@@ -48,11 +48,23 @@ exports.default = (gulpConfig) => {
 		process.on('SIGTERM', gulpConfig.onTerminate.bind(null, 'SIGTERM'));
 		process.on('SIGHUP', gulpConfig.onTerminate.bind(null, 'SIGHUP'));
 	}
+
+	function dev() {
+		return gulp.series(...prepareTasks(devTasks))();
+	}
+
+	function build() {
+		return gulp.series(...prepareTasks(buildTasks))();
+	}
+
+	function build_spa() {
+		return gulp.series(...prepareTasks(buildSpaTasks))();
+	}
 	
 	return {
-		dev: gulp.series(...prepareTasks(devTasks)),
-		build: gulp.series(...prepareTasks(buildTasks)),
-		build_spa: gulp.series(...prepareTasks(buildSpaTasks))
+		dev: dev,
+		build: build,
+		build_spa: build_spa
 	};
 
 	function prepareTasks(groupedTasks) {
