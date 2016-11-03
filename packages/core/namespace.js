@@ -36,6 +36,16 @@ class Namespace {
 	 * @return {*} The value at the specified path in the namespace.
 	 */
 	namespace(path) {
+		if ($Debug && /^app./i.test(path)) {
+			console.warn(
+				'DEPRECATION WARNING: Your application seems to be using ' +
+				`namespaces (attempted to create the ${path} namespace), ` +
+				'but namespaces were deprecated since IMA 0.12.0. Please ' +
+				'switch to ES6 imports as the support for namespaces will ' +
+				'be removed in an upcoming version of IMA.js.'
+			);
+		}
+
 		let self = this;
 		let levels = path.split('.');
 
