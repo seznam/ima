@@ -42,7 +42,7 @@
 		"event-stream": "3.3.4",
 		"fb-flo": "0.5.0",
 		"fibers": "1.0.15",
-		"gulp": "github:gulpjs/gulp#4.0",
+		"gulp": "github:gulpjs/gulp#c120a94",
 		"gulp-autoprefixer": "3.1.1",
 		"gulp-babel": "6.1.2",
 		"gulp-cached": "1.1.0",
