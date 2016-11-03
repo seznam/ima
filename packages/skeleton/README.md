@@ -209,7 +209,35 @@ There are several directories we have not mentioned so far:
   if the need arises.
 
 ## Plugins
-We have several plugins which you can use:
-- [Abstract analytic](https://github.com/seznam/IMA.js-plugin-analytic)
-- [3rd party scripts loader](https://github.com/seznam/IMA.js-plugin-script-loader)
-- [Google analytic](https://github.com/seznam/IMA.js-plugin-analytic-google)
+
+There are several plugins authored by us that can use (and there may be more of
+them provided by the community):
+
+- [3rd party scripts loader](https://github.com/seznam/IMA.js-plugin-script-loader) -
+  a simple utility for lazy loading JavaScript files on demand at the client
+  side, useful for loading Facebook/Twitter SDKs.
+- [Abstract REST API client](https://github.com/jurca/IMA-plugin-rest-client) -
+  the base plugin providing an abstract implementation of a high-level REST API
+  client.
+- [Abstract web analytics](https://github.com/seznam/IMA.js-plugin-analytic) -
+  the base plugin used & extended by other web analytics plugins.
+- [Google analytic](https://github.com/seznam/IMA.js-plugin-analytic-google) -
+  web analytics plugin that provides integration with the
+  [Google Analytics](https://analytics.google.com/analytics/web/) service.
+- [HAL+JSON REST API client](https://github.com/jurca/IMA-plugin-halson-rest-client) -
+  a high-level REST API client for
+  [HAL+JSON](https://tools.ietf.org/html/draft-kelly-json-hal-07) REST APIs.
+- [Managed Abstract Component](https://github.com/jurca/ima-plugin-managed-component) -
+  an extension of the `ima/page/AbstractComponent` class that automatically
+  handled binding of event listeners in the elements returned from the
+  `render()` method, manually bound event, interval and timeout listeners, to
+  the component's instance (`this`). The component also handles automatic
+  unbinding the listeners and canceling pending timeouts and interval when the
+  component is about to be unmounted (see the React component's
+  `componentWillUnmount()` method).
+  This plugin is currently **experimental** and **may not work**.
+- [UI Atoms](https://github.com/seznam/IMA.js-ui-atoms) - elementary web page
+  building elements (hence the name "atoms") for building
+  [AMP HTML](https://www.ampproject.org/)-ready websites with AMP-style
+  lazy-loading of external resources (images, videos, iframes) for regular HTML
+  version of the site.
