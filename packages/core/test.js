@@ -24,5 +24,5 @@ function $import(path, name) {
 	var module = $IMA.Loader.importSync(path);
 	name = name || 'default';
 
-	return module[name];
+	return name === '*' ? module : module[name];
 }

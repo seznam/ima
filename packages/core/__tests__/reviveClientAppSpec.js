@@ -33,34 +33,37 @@ describe('Revive client application', function() {
 	Controller.prototype.load = function() { return { hello: 'Hello' }; };
 
 	beforeAll(function(done) {
-		$IMA.Loader
-			.import('app/main')
-			.then(function(app) {
-				oc.clear();
-				app.ima.reviveTestClientApp(Object.assign({}, app.getInitialAppConfigFunctions(), { initBindApp: function(bindNs, bindOc, config) {
-					router = bindOc.get('$Router');
-					router.init(routerConfig);
-					router.add('reviveClientApp', '/reviveClientApp', Controller, View, options);
+		var app = $import('app/main', '*');
 
-					app.getInitialAppConfigFunctions().initBindApp(bindNs, bindOc, config);
-				} }));
+		oc.clear();
+		app.ima.reviveTestClientApp(Object.assign({}, app.getInitialAppConfigFunctions(), { initBindApp: function(bindNs, bindOc, config) {
+			router = bindOc.get('$Router');
+			router.init(routerConfig);
+			router.add('reviveClientApp', '/reviveClientApp', Controller, View, options);
 
-				spyOn(oc.get('$ReactDOM'), 'render');
+			app.getInitialAppConfigFunctions().initBindApp(bindNs, bindOc, config);
 
-				oc.inject(Controller, []);
+			if (!bindOc.has('$Utils')) {
+				bindOc.constant('$Utils', {});
+			}
+		} }));
 
-				done();
-			});
+		spyOn(oc.get('$ReactDOM'), 'render');
+		spyOn(oc.get('$PageRendererFactory'), 'getDocumentView')
+			.and
+			.returnValue(function() {});
+
+		oc.inject(Controller, []);
+
+		done();
 	});
 
 	afterAll(function(done) {
-		$IMA.Loader
-			.import('app/main')
-			.then(function(app) {
-				oc.clear();
-				app.ima.reviveTestClientApp(app.getInitialAppConfigFunctions());
-				done();
-			});
+		var app = $import('app/main', '*');
+
+		oc.clear();
+		app.ima.reviveTestClientApp(app.getInitialAppConfigFunctions());
+		done();
 	});
 
 	it('should response with status code 200, content null and pageState', function(done) {
