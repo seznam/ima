@@ -15,13 +15,13 @@ exports.default = (gulpConfig) => {
 	let files = gulpConfig.files;
 
 	function watchTask() {
-		runOnChange(files.app.watch, 'app_build');
-		runOnChange(files.ima.watch, 'ima_build');
-		runOnChange(files.vendor.watch, 'vendor_build');
+		runOnChange(files.app.watch, 'app:build');
+		runOnChange(files.ima.watch, 'ima:build');
+		runOnChange(files.vendor.watch, 'vendor:build');
 		runOnChange(files.less.watch, 'less');
-		runOnChange(files.server.watch, 'server_build');
-		runOnChange(files.locale.watch, 'locale_build');
-		runOnChange('./app/assets/static/**/*', 'copy_appStatic');
+		runOnChange(files.server.watch, 'server:build');
+		runOnChange(files.locale.watch, 'locale:build');
+		runOnChange('./app/assets/static/**/*', 'copy:appStatic');
 
 		gulp.watch([
 			'./ima/**/*.js',
@@ -31,14 +31,14 @@ exports.default = (gulpConfig) => {
 			sharedState.watchEvent = event;
 
 			if (event.type === 'deleted') {
-				if (cache.caches['Es6ToEs5_app'][event.path]) {
-					delete cache.caches['Es6ToEs5_app'][event.path];
-					remember.forget('Es6ToEs5_app', event.path);
+				if (cache.caches['Es6ToEs5:app'][event.path]) {
+					delete cache.caches['Es6ToEs5:app'][event.path];
+					remember.forget('Es6ToEs5:app', event.path);
 				}
 
-				if (cache.caches['Es6ToEs5_ima'][event.path]) {
-					delete cache.caches['Es6ToEs5_ima'][event.path];
-					remember.forget('Es6ToEs5_ima', event.path);
+				if (cache.caches['Es6ToEs5:ima'][event.path]) {
+					delete cache.caches['Es6ToEs5:ima'][event.path];
+					remember.forget('Es6ToEs5:ima', event.path);
 				}
 			}
 		});

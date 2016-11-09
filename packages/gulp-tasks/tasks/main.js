@@ -2,35 +2,35 @@
 let gulp = require('gulp');
 
 const DEFAULT_DEV_SUBTASKS = [
-	['copy_appStatic', 'copy_environment', 'shim', 'polyfill'],
-	['Es6ToEs5_app', 'Es6ToEs5_ima', 'Es6ToEs5_server', 'Es6ToEs5_vendor'],
-	['less', 'doc', 'locale', 'Es6ToEs5_vendor_client', 'Es6ToEs5_vendor_client_test'],
+	['copy:appStatic', 'copy:environment', 'shim', 'polyfill'],
+	['Es6ToEs5:app', 'Es6ToEs5:ima', 'Es6ToEs5:server', 'Es6ToEs5:vendor'],
+	['less', 'doc', 'locale', 'Es6ToEs5:vendor:client', 'Es6ToEs5:vendor:client:test'],
 	'server',
-	['test_unit_karma_dev', 'watch']
+	['test:unit:karma:dev', 'watch']
 ];
 
 const DEFAULT_BUILD_SUBTASKS = [
-	['copy_appStatic', 'copy_environment', 'shim', 'polyfill'], // copy public folder, concat shim
-	['Es6ToEs5_app', 'Es6ToEs5_ima', 'Es6ToEs5_server', 'Es6ToEs5_vendor'], // compile app and vendor script
-	['less', 'doc', 'locale', 'Es6ToEs5_vendor_client', 'Es6ToEs5_vendor_client_test'], // adjust vendors, compile less, create doc
-	['bundle_js_app', 'bundle_js_server', 'bundle_css']
+	['copy:appStatic', 'copy:environment', 'shim', 'polyfill'], // copy public folder, concat shim
+	['Es6ToEs5:app', 'Es6ToEs5:ima', 'Es6ToEs5:server', 'Es6ToEs5:vendor'], // compile app and vendor script
+	['less', 'doc', 'locale', 'Es6ToEs5:vendor:client', 'Es6ToEs5:vendor:client:test'], // adjust vendors, compile less, create doc
+	['bundle:js:app', 'bundle:js:server', 'bundle:css']
 ];
 if (['prod', 'production', 'test'].includes(process.env.NODE_ENV)) {
 	DEFAULT_BUILD_SUBTASKS.push(
-		['bundle_clean', 'Es6ToEs5_vendor_clean'] // clean vendor
+		['bundle:clean', 'Es6ToEs5:vendor:clean'] // clean vendor
 	);
 }
 
 const DEFAULT_SPA_SUBTASKS = [
-	['copy_appStatic', 'shim', 'polyfill'], // copy public folder, concat shim
-	['Es6ToEs5_app', 'Es6ToEs5_ima', 'Es6ToEs5_vendor'], // compile app and vendor script
-	['less', 'doc', 'locale', 'Es6ToEs5_vendor_client'], // adjust vendors, compile less, create doc
-	['bundle_js_app', 'bundle_css', 'spa_compile'],
-	'spa_clean'
+	['copy:appStatic', 'shim', 'polyfill'], // copy public folder, concat shim
+	['Es6ToEs5:app', 'Es6ToEs5:ima', 'Es6ToEs5:vendor'], // compile app and vendor script
+	['less', 'doc', 'locale', 'Es6ToEs5:vendor:client'], // adjust vendors, compile less, create doc
+	['bundle:js:app', 'bundle:css', 'spa:compile'],
+	'spa:clean'
 ];
 if (['prod', 'production', 'test'].includes(process.env.NODE_ENV)) {
 	DEFAULT_SPA_SUBTASKS.push(
-		['bundle_clean', 'Es6ToEs5_vendor_clean'] // clean vendor
+		['bundle:clean', 'Es6ToEs5:vendor:clean'] // clean vendor
 	);
 }
 
@@ -57,14 +57,14 @@ exports.default = (gulpConfig) => {
 		return gulp.series(...prepareTasks(buildTasks))();
 	}
 
-	function build_spa() {
+	function buildSpa() {
 		return gulp.series(...prepareTasks(buildSpaTasks))();
 	}
 	
 	return {
 		dev: dev,
 		build: build,
-		build_spa: build_spa
+		'build:spa': buildSpa
 	};
 
 	function prepareTasks(groupedTasks) {

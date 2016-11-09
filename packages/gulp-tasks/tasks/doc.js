@@ -11,11 +11,11 @@ exports.default = (gulpConfig) => {
 	let files = gulpConfig.files;
 	let documentationPreprocessors;
 
-	function doc_clean() {
+	function docClean() {
 		return del('./doc-src');
 	}
 
-	function doc_generate(done) {
+	function docGenerate(done) {
 		// Unfortunately, JSDoc invokes the callback for every file. Because of
 		// this, we have to handle the done callback invocation in a little
 		// bit more complicated way
@@ -36,7 +36,7 @@ exports.default = (gulpConfig) => {
 			}));
 	}
 
-	function doc_preprocess() {
+	function docPreprocess() {
 		return gulp
 			.src(files.app.src)
 			.pipe(change((content) => {
@@ -56,7 +56,7 @@ exports.default = (gulpConfig) => {
 			.pipe(gulp.dest('./doc-src'));
 	}
 
-	function doc_clear() {
+	function docClear() {
 		return del(['./doc-src', './doc']);
 	}
 
@@ -76,6 +76,6 @@ exports.default = (gulpConfig) => {
 	];
 
 	return {
-		doc: gulp.series(doc_clear, doc_preprocess, doc_generate, doc_clean)
+		doc: gulp.series(docClear, docPreprocess, docGenerate, docClean)
 	};
 };

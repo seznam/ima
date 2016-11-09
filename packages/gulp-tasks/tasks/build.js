@@ -1,42 +1,42 @@
 
 let gulp = require('gulp');
 
-exports.server_build = () => {
+exports['server:build'] = () => {
 	return gulp.series(
-		'copy_environment',
-		'Es6ToEs5_server',
-		'server_restart',
-		'server_reload'
+		'copy:environment',
+		'Es6ToEs5:server',
+		'server:restart',
+		'server:reload'
 	)();
 };
 
-exports.app_build = () => {
+exports['app:build'] = () => {
 	return gulp.series(
-		'Es6ToEs5_app',
-		'server_hotreload'
+		'Es6ToEs5:app',
+		'server:hotreload'
 	)();
 };
 
-exports.ima_build = () => {
+exports['ima:build'] = () => {
 	return gulp.series(
-		'Es6ToEs5_ima',
-		'server_hotreload'
+		'Es6ToEs5:ima',
+		'server:hotreload'
 	)();
 };
 
-exports.vendor_build = () => {
+exports['vendor:build'] = () => {
 	gulp.series(
-		'Es6ToEs5_vendor',
-		gulp.parallel('Es6ToEs5_vendor_client', 'Es6ToEs5_vendor_client_test'),
-		'server_restart',
-		'server_reload'
+		'Es6ToEs5:vendor',
+		gulp.parallel('Es6ToEs5:vendor:client', 'Es6ToEs5:vendor:client:test'),
+		'server:restart',
+		'server:reload'
 	)();
 };
 
-exports.locale_build = () => {
+exports['locale:build'] = () => {
 	gulp.series(
 		'locale',
-		'server_restart',
-		'server_reload'
+		'server:restart',
+		'server:reload'
 	)();
 };

@@ -23,14 +23,14 @@ function serverTask(done) {
 	done()
 }
 
-exports.server_restart = server_restart;
-function server_restart(done) {
+exports['server:restart'] = serverRestart;
+function serverRestart(done) {
 	setTimeout(startServer);
 	done();
 }
 
-exports.server_reload = server_reload;
-function server_reload(done) {
+exports['server:reload'] = serverReload;
+function serverReload(done) {
 	if (isServerRunning) {
 		setTimeout(() => {
 			server.notify(sharedState.watchEvent);
@@ -42,8 +42,8 @@ function server_reload(done) {
 	}
 }
 
-exports.server_hotreload = server_hotreload;
-function server_hotreload(done) {
+exports['server:hotreload'] = serverHotreload;
+function serverHotreload(done) {
 	if (isServerRunning) {
 		server.notify(sharedState.watchEvent);
 	} else {

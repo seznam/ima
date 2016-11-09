@@ -6,7 +6,7 @@ exports.__requiresConfig = true;
 exports.default = (gulpConfig) => {
 	let files = gulpConfig.files;
 
-	function copy_appStatic() {
+	function copyAppStatic() {
 		return gulp
 			.src([
 				'./app/assets/static/**/*.*',
@@ -15,14 +15,14 @@ exports.default = (gulpConfig) => {
 			.pipe(gulp.dest(files.server.dest + 'static/'));
 	}
 
-	function copy_environment() {
+	function copyEnvironment() {
 		return gulp
 			.src(['./app/environment.js'])
 			.pipe(gulp.dest(files.server.base + 'ima/config/'));
 	}
 
 	return {
-		copy_appStatic,
-		copy_environment
+		'copy:appStatic': copyAppStatic,
+		'copy:environment': copyEnvironment
 	};
 };

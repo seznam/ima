@@ -2,23 +2,23 @@
 let gulp = require('gulp');
 let del = require('del');
 
-exports.app_hello = app_hello;
-function app_hello() {
+exports['app:hello'] = appHello;
+function appHello() {
 	return installExample('hello');
 }
 
-exports.app_feed = app_feed;
-function app_feed() {
+exports['app:feed'] = appFeed;
+function appFeed() {
 	return installExample('feed');
 }
 
-exports.app_todos = app_todos;
-function app_todos() {
+exports['app:todos'] = appTodos;
+function appTodos() {
 	return installExample('todos');
 }
 
-exports.app_clean = app_clean;
-function app_clean() {
+exports['app:clean'] = appClean;
+function appClean() {
 	return del(['./app/', './build/']);
 }
 

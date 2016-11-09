@@ -6,13 +6,12 @@ let templateProcessor = require('ima-server/lib/templateProcessor');
 exports.__requiresConfig = true;
 
 exports.default = (gulpConfig) => {
-
 	let env = process.env.NODE_ENV || 'dev';
 	if (env === 'production') {
 		env = 'prod';
 	}
 
-	function spa_compile(done) {
+	function spaCompile(done) {
 		let environmentConfig = require(
 			process.cwd() + '/app/environment.js'
 		)[env];
@@ -49,12 +48,12 @@ exports.default = (gulpConfig) => {
 		});
 	}
 
-	function spa_clean() {
+	function spaClean() {
 		return del('./build/ima');
 	}
 
 	return {
-		spa_clean,
-		spa_compile
+		'spa:clean': spaClean,
+		'spa:compile': spaCompile
 	};
 };

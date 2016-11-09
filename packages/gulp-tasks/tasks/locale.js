@@ -13,22 +13,21 @@ exports.default = (gulpConfig) => {
 	function locale() {
 
 		function parseLocale(language, selector) {
-			return (
-				gulp.src(selector)
-					.pipe(plumber())
-					.pipe(rename((path) => {
-						path.basename = path.basename.replace(new RegExp(language, 'gi'), '')
-					}))
-					.pipe(messageFormat({locale: language, global: 'that'}))
-					.pipe(plumber.stop())
-					.pipe(insert.wrap(
-						'(function () {let $IMA = {}; if ((typeof window !== "undefined") && (window !== null)) { window.$IMA = window.$IMA || {}; $IMA = window.$IMA; } let that = $IMA || {};',
-						' return that.i18n; })();'
-					))
-					.pipe(gulp.dest(files.locale.dest.client))
-					.pipe(insert.wrap('module.exports =', ''))
-					.pipe(gulp.dest(files.locale.dest.server))
-			);
+			return gulp
+				.src(selector)
+				.pipe(plumber())
+				.pipe(rename((path) => {
+					path.basename = path.basename.replace(new RegExp(language, 'gi'), '')
+				}))
+				.pipe(messageFormat({locale: language, global: 'that'}))
+				.pipe(plumber.stop())
+				.pipe(insert.wrap(
+					'(function () {let $IMA = {}; if ((typeof window !== "undefined") && (window !== null)) { window.$IMA = window.$IMA || {}; $IMA = window.$IMA; } let that = $IMA || {};',
+					' return that.i18n; })();'
+				))
+				.pipe(gulp.dest(files.locale.dest.client))
+				.pipe(insert.wrap('module.exports =', ''))
+				.pipe(gulp.dest(files.locale.dest.server));
 		}
 
 		let locales = Object.keys(files.locale.src).map((language) => {

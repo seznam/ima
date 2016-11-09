@@ -12,7 +12,7 @@ exports.default = (gulpConfig) => {
 	let files = gulpConfig.files;
 	let uglifyCompression = gulpConfig.uglifyCompression;
 
-	function bundle_js_app() {
+	function bundleJsApp() {
 		return gulp
 			.src(files.bundle.js.src)
 			.pipe(plumber())
@@ -22,7 +22,7 @@ exports.default = (gulpConfig) => {
 			.pipe(gulp.dest(files.bundle.js.dest));
 	}
 
-	function bundle_js_server() {
+	function bundleJsServer() {
 		let file = files.app.dest.server + files.app.name.server;
 
 		return gulp
@@ -37,7 +37,7 @@ exports.default = (gulpConfig) => {
 			.pipe(gulp.dest(files.app.dest.server));
 	}
 
-	function bundle_css() {
+	function bundleCss() {
 		return gulp
 			.src(files.bundle.css.src)
 			.pipe(plumber())
@@ -47,14 +47,14 @@ exports.default = (gulpConfig) => {
 			.pipe(gulp.dest(files.bundle.css.dest));
 	}
 
-	function bundle_clean() {
+	function bundleClean() {
 		return del(files.bundle.css.src.concat(files.bundle.js.src));
 	}
 
 	return {
-		bundle_js_app,
-		bundle_js_server,
-		bundle_css,
-		bundle_clean
+		'bundle:js:app': bundleJsApp,
+		'bundle:js:server': bundleJsServer,
+		'bundle:css': bundleCss,
+		'bundle:clean': bundleClean
 	};
 };
