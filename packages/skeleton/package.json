@@ -4,13 +4,13 @@
 	"description": "Isomorphic javascript application",
 	"main": "build/server.js",
 	"scripts": {
-		"app:hello": "node node_modules/gulp/bin/gulp.js app_hello",
-		"app:feed": "node node_modules/gulp/bin/gulp.js app_feed",
-		"app:todos": "node node_modules/gulp/bin/gulp.js app_todos",
+		"app:hello": "node node_modules/gulp/bin/gulp.js app:hello",
+		"app:feed": "node node_modules/gulp/bin/gulp.js app:feed",
+		"app:todos": "node node_modules/gulp/bin/gulp.js app:todos",
 		"test": "node node_modules/gulp/bin/gulp.js test",
 		"dev": "node node_modules/gulp/bin/gulp.js dev",
 		"build": "NODE_ENV=production node_modules/gulp/bin/gulp.js build",
-		"build:spa": "NODE_ENV=production node_modules/gulp/bin/gulp.js build_spa",
+		"build:spa": "NODE_ENV=production node_modules/gulp/bin/gulp.js build:spa",
 		"start": "NODE_ENV=production node build/server.js"
 	},
 	"keywords": [
