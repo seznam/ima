@@ -34,6 +34,7 @@ class Namespace {
 	 * as an argument, the return value will be the last created namespace
 	 * object.
 	 *
+	 * @deprecated
 	 * @param {string} path The namespace path.
 	 * @return {*} The value at the specified path in the namespace.
 	 */
