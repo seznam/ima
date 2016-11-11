@@ -1,3 +1,4 @@
+import classnames from 'classnames';
 import React from 'react';
 import ReactDOM from 'react-dom';
 import ns from '../namespace';
@@ -125,42 +126,10 @@ export default class AbstractComponent extends React.Component {
 	 *         to {@code true}.
 	 */
 	cssClasses(classRules, includeComponentClassName = false) {
-		if (typeof classRules === 'string') {
-			let separatedClassNames = classRules.split(/\s+/);
-			classRules = {};
-
-			for (let className of separatedClassNames) {
-				classRules[className] = true;
-			}
-		}
-
-		if (!(classRules instanceof Object)) {
-			throw new Error(
-				'The class rules must be specified as a plain object, ' +
-				`${classRules} provided`
-			);
-		}
-
-		if (includeComponentClassName) {
-			let propClassNames = this.props.className;
-			if (propClassNames) {
-				let separatedPropClassNames = propClassNames.split(/\s+/);
-				let classNamesMap = {};
-
-				for (let propClassName of separatedPropClassNames) {
-					classNamesMap[propClassName] = true;
-				}
-
-				classRules = Object.assign({}, classRules, classNamesMap);
-			}
-		}
-
-		return Object
-			.keys(classRules)
-			.filter((cssClassName) => {
-				return classRules[cssClassName];
-			})
-			.join(' ');
+		return classnames(
+			classRules,
+			includeComponentClassName ? this.props.className : ''
+		);
 	}
 
 	/**
