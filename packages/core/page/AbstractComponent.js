@@ -149,7 +149,11 @@ export default class AbstractComponent extends React.Component {
 	 * @param {*=} data Data to send within the event.
 	 */
 	fire(eventName, data = null) {
-		this._utils.$EventBus.fire(this.findDOMNode(), eventName, data);
+		this._utils.$EventBus.fire(
+			ReactDOM.findDOMNode(this),
+			eventName,
+			data
+		);
 	}
 
 	/**
@@ -164,7 +168,7 @@ export default class AbstractComponent extends React.Component {
 	 */
 	listen(eventTarget, eventName, listener) {
 		if (!eventTarget.addEventListener) { // Safari doesn't have EventTarget
-			eventTarget = this.findDOMNode(eventTarget);
+			eventTarget = ReactDOM.findDOMNode(eventTarget);
 		}
 
 		this._utils.$EventBus.listen(eventTarget, eventName, listener);
@@ -181,7 +185,7 @@ export default class AbstractComponent extends React.Component {
 	 */
 	unlisten(eventTarget, eventName, listener) {
 		if (!eventTarget.addEventListener) { // Safari doesn't have EventTarget
-			eventTarget = this.findDOMNode(eventTarget);
+			eventTarget = ReactDOM.findDOMNode(eventTarget);
 		}
 
 		this._utils.$EventBus.unlisten(eventTarget, eventName, listener);
