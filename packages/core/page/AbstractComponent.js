@@ -72,11 +72,21 @@ export default class AbstractComponent extends React.Component {
 	 *
 	 * Note that this method can be used only at the client-side.
 	 *
+	 * @deprecated
 	 * @param {React.Component} component
 	 * @return {?HTMLElement} The DOM node representing the specified React
 	 *         component, or {@code null} if no such node was found.
 	 */
 	findDOMNode(component = this) {
+		if ($Debug) {
+			console.warn(
+				'DEPRECATION WARNING: The findDOMNode() method is ' +
+				'deprecated since IMA 0.14.0. Please switch to using refs ' +
+				'instead, as this method will be removed in an upcoming ' +
+				'version of IMA.'
+			);
+		}
+
 		return ReactDOM.findDOMNode(component);
 	}
 
