@@ -11,9 +11,10 @@ function assignRecursively(target) {
 		Object.keys(source).forEach((field) => {
 			if (source[field] instanceof Array) {
 				target[field] = source[field].slice();
-			} else if (source[field] instanceof Object &&
-					!(source[field] instanceof Function)) {
-
+			} else if (
+				source[field] instanceof Object &&
+				!(source[field] instanceof Function)
+			) {
 				if (!(target[field] instanceof Object)) {
 					target[field] = {};
 				}
