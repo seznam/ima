@@ -97,14 +97,6 @@ export default class ClientRouter extends AbstractRouter {
 		 * @type {Window}
 		 */
 		this._window = window;
-
-		/**
-		 * Current address bar manipulation mode, specified as one of the
-		 * {@code Modes.*} constants..
-		 *
-		 * @type {?string}
-		 */
-		this._mode = null;
 	}
 
 	/**
@@ -112,7 +104,6 @@ export default class ClientRouter extends AbstractRouter {
 	 */
 	init(config) {
 		super.init(config);
-		this._mode = this._window.hasHistoryAPI() ? Modes.HISTORY : Modes.HASH;
 		this._host = config.$Host || this._window.getHost();
 
 		return this;
@@ -164,7 +155,7 @@ export default class ClientRouter extends AbstractRouter {
 	 * @inheritdoc
 	 */
 	redirect(url = '', options = {}) {
-		if (this._isSameDomain(url) && this._mode === Modes.HISTORY) {
+		if (this._isSameDomain(url)) {
 			let path = url.replace(this.getDomain(), '');
 			path = this._extractRoutePath(path);
 

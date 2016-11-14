@@ -54,6 +54,10 @@ export default class ClientWindow extends Window {
 	 * @inheritdoc
 	 */
 	hasWebSocket() {
+		console.warn(
+			'DEPRECATION WARNING: All browsers currently supported by ' +
+			'IMA.js support web sockets.'
+		);
 		return window.WebSocket;
 	}
 
@@ -61,6 +65,11 @@ export default class ClientWindow extends Window {
 	 * @inheritdoc
 	 */
 	hasHistoryAPI() {
+		console.warn(
+			'DEPRECATION WARNING: The history API should never be ' +
+			'manipulated directly in an IMA.js application, and all ' +
+			'browsers supported by IMA.js support the history API.'
+		);
 		return !!window.history && !!window.history.pushState;
 	}
 
@@ -75,6 +84,10 @@ export default class ClientWindow extends Window {
 	 * @inheritdoc
 	 */
 	getWebSocket() {
+		console.warn(
+			'DEPRECATION WARNING: All browsers currently supported by ' +
+			'IMA.js support web sockets, this helper should not be used.'
+		);
 		return window.WebSocket;
 	}
 
