@@ -26,6 +26,18 @@ function assignRecursively(target) {
 	}
 }
 
+function deepFreeze(object) {
+	if (!(object instanceof Object)) {
+		return object;
+	}
+
+	for (let property of Object.keys(object)) {
+		deepFreeze(object[property]);
+	}
+
+	return Object.freeze(object);
+}
+
 function debounce(func, wait) {
 	if (arguments.length < 2) {
 		wait = 100;
@@ -102,6 +114,7 @@ function escapeRegExp(string) {
 
 module.exports = {
 	assignRecursively,
+	deepFreeze,
 	allPromiseHash,
 	escapeRegExp,
 	clone,
