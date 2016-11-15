@@ -1,14 +1,16 @@
 describe('ima.ObjectContainer', function() {
 
+	var ObjectContainer = $import('ima/ObjectContainer');
+
 	var oc = null;
 
 	function classConstructorWithDependencies(dependency) { this.dependecy = dependency };
 	classConstructorWithDependencies.$dependencies = [];
 
 	var alias = 'alias';
-	var classParent = function() { this.parent = this; };
-	var classConstructor = function(dependency) { this.dependecy = dependency };
-	var classDependency = function() {};
+	var classParent = function mockClassParent() { this.parent = this; };
+	var classConstructor = function mockClassConstructor(dependency) { this.dependency = dependency };
+	var classDependency = function mockDependency() {};
 	var dependencies = [classDependency, classConstructorWithDependencies];
 	extend(classConstructor, classParent);
 
@@ -24,60 +26,27 @@ describe('ima.ObjectContainer', function() {
 	ns.namespace(namespacePathUnit);
 
 	beforeEach(function() {
-		oc = new ns.ima.ObjectContainer(ns);
-	});
-
-	it('should be default unlocked', function() {
-		expect(oc.isLocked()).toEqual(false);
+		oc = new ObjectContainer(ns);
 	});
 
 	it('should be empty object container', function() {
-		expect(oc._aliases.size).toEqual(0);
-		expect(oc._constants.size).toEqual(0);
-		expect(oc._registry.size).toEqual(0);
-		expect(oc._providers.size).toEqual(0);
+		expect(oc._entries.size).toEqual(0);
 	});
 
-	it('should be clear all maps', function() {
-		spyOn(oc._constants, 'clear')
-			.and
-			.stub();
-
-		spyOn(oc._aliases, 'clear')
-			.and
-			.stub();
-
-		spyOn(oc._registry, 'clear')
-			.and
-			.stub();
-
-		spyOn(oc._providers, 'clear')
+	it('should be clear entries', function() {
+		spyOn(oc._entries, 'clear')
 			.and
 			.stub();
 
 		oc.clear();
 
-		expect(oc._constants.clear).toHaveBeenCalled();
-		expect(oc._aliases.clear).toHaveBeenCalled();
-		expect(oc._registry.clear).toHaveBeenCalled();
-		expect(oc._providers.clear).toHaveBeenCalled();
+		expect(oc._entries.clear).toHaveBeenCalled();
 	});
 
 	describe('constant method', function() {
 
 		beforeEach(function() {
 			oc.clear();
-		});
-
-		it('should be set constant value', function() {
-			spyOn(oc, '_createEntry')
-				.and
-				.callThrough();
-
-			oc.constant(constantName, constantValue);
-
-			expect(oc._createEntry).toHaveBeenCalled();
-			expect(oc._constants.get(constantName).sharedInstance, constantValue);
 		});
 
 		it('should be throw Error, if you want to re-set constant value for simple constant name', function() {
@@ -95,6 +64,26 @@ describe('ima.ObjectContainer', function() {
 				oc.constant(constantCompositionName, constantObjectProperty);
 			}).toThrow();
 		});
+
+		it('should be throw Error, if you want to set constatn in plugin', function() {
+			oc.setBindingState(ObjectContainer.PLUGIN_BINDING_STATE);
+
+			expect(function() {
+				oc.constant(constantObjectName, constantObjectValue);
+			}).toThrow();
+		});
+
+		it('should be set constant value', function() {
+			spyOn(oc, '_createEntry')
+				.and
+				.callThrough();
+
+			oc.constant(constantName, constantValue);
+
+			expect(oc._createEntry).toHaveBeenCalled();
+			expect(oc._entries.get(constantName).sharedInstance, constantValue);
+		});
+
 	});
 
 	describe('inject method', function() {
@@ -103,26 +92,35 @@ describe('ima.ObjectContainer', function() {
 			oc.clear();
 		});
 
-		it('should be throw error, if classConstructor parameter is not function', function() {
+		it('should throw error, if classConstructor parameter is not function', function() {
 			expect(function() {
 				oc.inject(alias, dependencies);
 			}).toThrow();
 		});
 
-		it('should be create new instance of entry and set it to registry', function() {
+		it('should throw error, if classConstructor is registered and object container is locked for plugin', function() {
+			oc.inject(classConstructor, dependencies);
+			oc.setBindingState(ObjectContainer.PLUGIN_BINDING_STATE);
+
+			expect(function() {
+				oc.inject(classConstructor, dependencies);
+			}).toThrow();
+		});
+
+		it('should be create new instance of entry and set it to entries', function() {
 			spyOn(oc, '_createEntry')
 				.and
 				.callThrough();
 
 			oc.inject(classConstructor, dependencies);
 
-			expect(oc._registry.get(classConstructor).classConstructor).toEqual(classConstructor);
-			expect(oc._registry.get(classConstructor).dependencies).toEqual(dependencies);
+			expect(oc._entries.get(classConstructor).classConstructor).toEqual(classConstructor);
+			expect(oc._entries.get(classConstructor).dependencies).toEqual(dependencies);
 			expect(oc._createEntry).toHaveBeenCalledWith(classConstructor, dependencies);
-			expect(oc._registry.size).toEqual(1);
+			expect(oc._entries.size).toEqual(1);
 		});
 
-		it('should set instance of entry from aliases to the registry', function() {
+		it('should set instance of entry from aliases to the entries', function() {
 			spyOn(oc, '_createEntry')
 				.and
 				.callThrough();
@@ -130,14 +128,15 @@ describe('ima.ObjectContainer', function() {
 			oc.bind(alias, classConstructor, dependencies);
 			oc.inject(classConstructor, dependencies);
 
-			expect(oc._registry.get(classConstructor).classConstructor).toEqual(classConstructor);
-			expect(oc._registry.get(classConstructor).dependencies).toEqual(dependencies);
-			expect(oc._registry.size).toEqual(1);
+			expect(oc._entries.get(classConstructor).classConstructor).toEqual(classConstructor);
+			expect(oc._entries.get(classConstructor).dependencies).toEqual(dependencies);
+			expect(oc._entries.size).toEqual(2);
 			expect(oc._createEntry.calls.count()).toEqual(1);
-			expect(oc._registry.get(classConstructor)).toEqual(oc._aliases.get(alias));
+			expect(oc._entries.get(classConstructor)).toEqual(oc._entries.get(alias));
 		});
 
-		it('should be throw error, if yow call inject more times for same classConstructor', function() {
+		it('should be throw error, if yow call inject more then 2 times for same classConstructor', function() {
+			oc.inject(classConstructor, dependencies);
 			oc.inject(classConstructor, dependencies);
 
 			expect(function() {
@@ -153,6 +152,20 @@ describe('ima.ObjectContainer', function() {
 			oc.clear();
 		});
 
+		it('should be throw Error if classContructor param is not type of function', function() {
+			expect(function() {
+				oc.bind(alias, {}, dependencies);
+			}).toThrow();
+		});
+
+		it('should be throw Error if object container is locked', function() {
+			oc.setBindingState(ObjectContainer.PLUGIN_BINDING_STATE);
+
+			expect(function() {
+				oc.bind(alias, classConstructor, dependencies);
+			}).toThrow();
+		});
+
 		it('should be create new entry for defined dependencies', function() {
 			spyOn(oc, '_createEntry')
 				.and
@@ -163,7 +176,7 @@ describe('ima.ObjectContainer', function() {
 			expect(oc._createEntry).toHaveBeenCalledWith(classConstructor, dependencies);
 		});
 
-		it('should be use entry from registry if entry exist and dependencies is undefined', function() {
+		it('should be use entry from entries which was defined by inject method', function() {
 			oc.inject(classConstructor, dependencies);
 
 			spyOn(oc, '_createEntry')
@@ -173,10 +186,10 @@ describe('ima.ObjectContainer', function() {
 			oc.bind(alias, classConstructor);
 
 			expect(oc._createEntry.calls.count()).toEqual(0);
-			expect(oc._aliases.get(alias)).toEqual(oc._registry.get(classConstructor));
+			expect(oc._entries.get(alias)).toEqual(oc._entries.get(classConstructor));
 		});
 
-		it('should be use entry from providers if entry exist and dependencies is undefined', function() {
+		it('should be use entry from entries which was defined by provide method', function() {
 			oc.provide(classParent, classConstructor, dependencies);
 
 			spyOn(oc, '_createEntry')
@@ -186,13 +199,7 @@ describe('ima.ObjectContainer', function() {
 			oc.bind(alias, classParent);
 
 			expect(oc._createEntry.calls.count()).toEqual(0);
-			expect(oc._aliases.get(alias)).toEqual(oc._providers.get(classParent));
-		});
-
-		it('should be throw Error if classContructor param is not type of function', function() {
-			expect(function() {
-				oc.bind(alias, {}, dependencies);
-			}).toThrow();
+			expect(oc._entries.get(alias)).toEqual(oc._entries.get(classParent));
 		});
 
 	});
@@ -203,18 +210,8 @@ describe('ima.ObjectContainer', function() {
 			oc.clear();
 		});
 
-		it('should be create new Entry and set it to providers', function() {
-			spyOn(oc, '_createEntry')
-				.and
-				.callThrough();
-
-			oc.provide(classParent, classConstructor, dependencies);
-
-			expect(oc._createEntry.calls.count()).toEqual(1);
-			expect(oc._providers.size).toEqual(1);
-		});
-
-		it('should be throw Error if you call provide more time for same interfaceConstructor', function() {
+		it('should be throw Error if you call provide method more times for same interfaceConstructor in plugin', function() {
+			oc.setBindingState(ObjectContainer.PLUGIN_BINDING_STATE);
 			oc.provide(classParent, classConstructor, dependencies);
 
 			expect(function() {
@@ -226,6 +223,17 @@ describe('ima.ObjectContainer', function() {
 			expect(function() {
 				oc.provide(classDependency, classConstructor, dependencies);
 			}).toThrow();
+		});
+
+		it('should be create new Entry and set it to entries', function() {
+			spyOn(oc, '_createEntry')
+				.and
+				.callThrough();
+
+			oc.provide(classParent, classConstructor, dependencies);
+
+			expect(oc._createEntry.calls.count()).toEqual(1);
+			expect(oc._entries.size).toEqual(2);
 		});
 	});
 
@@ -446,14 +454,15 @@ describe('ima.ObjectContainer', function() {
 			expect(oc._getEntryFromClassConstructor(classConstructor)).toEqual(null);
 		});
 
-		it('should inject class to registry if class has defined $dependencies', function() {
-			spyOn(oc, 'inject')
+		it('should set class to entries if class has defined $dependencies', function() {
+			spyOn(oc, '_createEntry')
 				.and
 				.callThrough();
 
 			oc._getEntryFromClassConstructor(classConstructorWithDependencies);
 
-			expect(oc.inject).toHaveBeenCalledWith(classConstructorWithDependencies, classConstructorWithDependencies.$dependencies);
+			expect(oc._createEntry).toHaveBeenCalledWith(classConstructorWithDependencies, classConstructorWithDependencies.$dependencies);
+			expect(oc._entries.size).toEqual(1);
 		});
 
 		it('should return entry if class has defined $dependencies', function() {
@@ -465,64 +474,4 @@ describe('ima.ObjectContainer', function() {
 
 	});
 
-	describe('_hasEntrySameValues method', function() {
-
-		var entry = {
-			classConstructor: classConstructor,
-			dependencies: dependencies
-		};
-
-		it('should return true for same classConstructor and dependencies', function() {
-			expect(oc._hasEntrySameValues(entry, classConstructor, dependencies)).toEqual(true);
-		});
-
-		it('should return false for different classConstructor', function() {
-			expect(oc._hasEntrySameValues(entry, function() {}, dependencies)).toEqual(false);
-		});
-
-		it('should return false for different dependencies', function() {
-			expect(oc._hasEntrySameValues(entry, classConstructor, [classDependency, 'string'])).toEqual(false);
-		});
-	});
-
-	describe('lock method', function() {
-
-		beforeEach(function() {
-			oc.clear();
-		});
-
-		it('should lock object container', function() {
-			oc.lock();
-
-			expect(oc.isLocked()).toEqual(true);
-		});
-
-		it('should throw error for calling lock method on locked object container', function() {
-			oc.lock();
-
-			expect(function() {
-				oc.lock();
-			}).toThrow();
-		});
-	});
-
-	describe('unlock method', function() {
-
-		beforeEach(function() {
-			oc.clear();
-		});
-
-		it('should unlock object container', function() {
-			oc.lock();
-			oc.unlock();
-
-			expect(oc.isLocked()).toEqual(false);
-		});
-
-		it('should throw error for calling unlock method on unlocked object container', function() {
-			expect(function() {
-				oc.unlock();
-			}).toThrow();
-		});
-	});
 });

@@ -127,16 +127,17 @@ export default class Bootstrap {
 	 * object container.
 	 */
 	_bindDependencies() {
+		this._oc.setBindingState(ObjectContainer.IMA_BINDING_STATE);
 		this._config.initBindIma(ns, this._oc, this._config.bind);
-		this._oc.lock();
 
+		this._oc.setBindingState(ObjectContainer.PLUGIN_BINDING_STATE);
 		this._config.plugins
 			.filter((plugin) => typeof plugin.initBind === 'function')
 			.forEach((plugin) => {
 				plugin.initBind(ns, this._oc, this._config.bind);
 			});
 
-		this._oc.unlock();
+		this._oc.setBindingState(ObjectContainer.APP_BINDING_STATE);
 		this._config.initBindApp(ns, this._oc, this._config.bind);
 	}
 

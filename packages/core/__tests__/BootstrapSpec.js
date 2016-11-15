@@ -1,5 +1,8 @@
 describe('Bootstrap', function() {
 
+	var Bootstrap = $import('ima/Bootstrap');
+	var ObjectContainer = $import('ima/ObjectContainer');
+
 	var bootstrap = null;
 	var objectContainer = null;
 	var environments = {
@@ -29,8 +32,8 @@ describe('Bootstrap', function() {
 	};
 
 	beforeEach(function() {
-		objectContainer = new ns.ima.ObjectContainer(ns);
-		bootstrap = new ns.ima.Bootstrap(objectContainer);
+		objectContainer = new ObjectContainer(ns);
+		bootstrap = new Bootstrap(objectContainer);
 
 		bootstrap._config = bootConfig;
 	});
@@ -105,20 +108,28 @@ describe('Bootstrap', function() {
 
 	describe('_bindDependencies method', function() {
 
-		it('should lock object container', function() {
-			spyOn(objectContainer, 'lock').and.callThrough();
+		it('should set ima binding state to object container', function() {
+			spyOn(objectContainer, 'setBindingState').and.callThrough();
 
 			bootstrap._bindDependencies();
 
-			expect(objectContainer.lock).toHaveBeenCalledWith();
+			expect(objectContainer.setBindingState).toHaveBeenCalledWith(ObjectContainer.IMA_BINDING_STATE);
 		});
 
-		it('should unlock object container', function() {
-			spyOn(objectContainer, 'unlock').and.callThrough();
+		it('should set plugin binding state to object container', function() {
+			spyOn(objectContainer, 'setBindingState').and.callThrough();
 
 			bootstrap._bindDependencies();
 
-			expect(objectContainer.unlock).toHaveBeenCalledWith();
+			expect(objectContainer.setBindingState).toHaveBeenCalledWith(ObjectContainer.PLUGIN_BINDING_STATE);
+		});
+
+		it('should set app binding state to object container', function() {
+			spyOn(objectContainer, 'setBindingState').and.callThrough();
+
+			bootstrap._bindDependencies();
+
+			expect(objectContainer.setBindingState).toHaveBeenCalledWith(ObjectContainer.APP_BINDING_STATE);
 		});
 
 		it('should bind ima', function() {

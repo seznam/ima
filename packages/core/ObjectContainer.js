@@ -10,6 +10,65 @@ ns.namespace('ima');
 export default class ObjectContainer {
 
 	/**
+	 * Returns constant for plugin binding state.
+	 *
+	 * When the object container is in plugin binding state, it is impossible
+	 * to register new aliases using the {@linkcode bind()} method and register
+	 * new constant using the {@linkcode constant()} method, or override the
+	 * default class dependencies of any already-configured class using the
+	 * {@linkcode inject()} method (classes that were not configured yet may be
+	 * configured using the {@linkcode inject()} method or {@linkcode provide()}
+ 	 * method).
+	 *
+	 * This prevents the unpriviledged code (e.g. 3rd party plugins) from
+	 * overriding the default dependency configuration provided by ima, or
+	 * overriding the configuration of a 3rd party plugin by another 3rd party
+	 * plugin.
+	 *
+	 * The application itself has always access to the unlocked object
+	 * container.
+	 *
+	 * @return {string} The plugin binding state.
+	 */
+	static get PLUGIN_BINDING_STATE() {
+		return 'plugin';
+	}
+
+	/**
+	 * Returns constant for IMA binding state.
+	 *
+	 * When the object container is in ima binding state, it is possible
+	 * to register new aliases using the {@linkcode bind()} method and register
+	 * new constant using the {@linkcode constant()} method, or override the
+	 * default class dependencies of any already-configured class using the
+	 * {@linkcode inject()} method (classes that were not configured yet may be
+	 * configured using the {@linkcode inject()} method or {@linkcode provide()}
+ 	 * method).
+	 *
+	 * @return {string} The IMA binding state.
+	 */
+	static get IMA_BINDING_STATE() {
+		return 'ima';
+	}
+
+	/**
+	 * Returns constant for app binding state.
+	 *
+	 * When the object container is in app binding state, it is possible
+	 * to register new aliases using the {@linkcode bind()} method and register
+	 * new constant using the {@linkcode constant()} method, or override the
+	 * default class dependencies of any already-configured class using the
+	 * {@linkcode inject()} method (classes that were not configured yet may be
+	 * configured using the {@linkcode inject()} method or {@linkcode provide()}
+ 	 * method).
+	 *
+	 * @return {string} The app binding state.
+	 */
+	static get APP_BINDING_STATE() {
+		return 'app';
+	}
+
+	/**
 	 * Initializes the object container.
 	 *
 	 * @param {ima.Namespace} namespace The namespace container, used to
@@ -26,48 +85,20 @@ export default class ObjectContainer {
 		this._namespace = namespace;
 
 		/**
-		 * Map of bound aliases to their classes and the dependencies bound
-		 * with the alias.
 		 *
-		 * @type {Map<string, Entry<*>>}
+		 * @type {Map<(string|function(new: *, ...*)|function(...*): *), Entry<*>>}
 		 */
-		this._aliases = new Map();
+		this._entries = new Map();
 
 		/**
-		 * Map of constant names to getter function entries for retrieving the
-		 * constant values.
+		 * The current binding state.
 		 *
-		 * @type {Map<string, Entry<function(): *>>}
+		 * The {@linkcode setBindingState()} method may be called for changing
+		 * object container binding state only by the bootstrap script.
+		 *
+		 * @type {?string}
 		 */
-		this._constants = new Map();
-
-		/**
-		 * Registry of classes and factory functions to their entries
-		 * specifying their default dependencies.
-		 *
-		 * @type {Map<(function(new: *, ...*)|function(...*): *), Entry<*>>}
-		 */
-		this._registry = new Map();
-
-		/**
-		 * Map of interfaces to entries representing the default implementation
-		 * providers (classes) and their constructor dependencies.
-		 *
-		 * @type {Map<function(new: *), Entry<*>>}
-		 */
-		this._providers = new Map();
-
-		/**
-		 * The number of calling {@linkcode lock()} and {@linkcode unlock()}
-		 * methods.
-		 *
-		 * The {@linkcode lock()} method may be called only if this field is
-		 * {@code 0}, while the {@linkcode unlock()} method may be called only
-		 * if this field is set to {@code 1}.
-		 *
-		 * @type {number}
-		 */
-		this._lockCounter = 0;
+		this._bindingState = null;
 	}
 
 	/**
@@ -87,13 +118,13 @@ export default class ObjectContainer {
 	 * @param {string} name Alias name.
 	 * @param {(function(new: T, ...*)|function(...*): T)} classConstructor The
 	 *        class constructor or a factory function.
-	 * @param {*[]} [dependencies=[]] The dependencies to pass into the
+	 * @param {?*[]} [dependencies] The dependencies to pass into the
 	 *        constructor or factory function.
 	 * @return {ObjectContainer} This object container.
 	 */
-	bind(name, classConstructor, dependencies = []) {
+	bind(name, classConstructor, dependencies) {
 		if ($Debug) {
-			if (this.isLocked()) {
+			if (this._bindingState === ObjectContainer.PLUGIN_BINDING_STATE) {
 				throw new Error(`ima.ObjectContainer:bind Object container ` +
 						`is locked. You do not have the permission to ` +
 						`create a new alias named ${name}.`);
@@ -107,24 +138,20 @@ export default class ObjectContainer {
 			}
 		}
 
-		if (dependencies.length === 0) {
-			if (this._registry.has(classConstructor)) {
-				let registryEntry = this._registry.get(classConstructor);
-				this._aliases.set(name, registryEntry);
+		let classConstructorEntry = this._entries.get(classConstructor);
 
-				return this;
+		if (classConstructorEntry) {
+			this._entries.set(name, classConstructorEntry);
+
+			if (dependencies) {
+				this._updateEntryValues(classConstructorEntry, classConstructor, dependencies);
 			}
 
-			if (this._providers.has(classConstructor)) {
-				let providerEntry = this._providers.get(classConstructor);
-				this._aliases.set(name, providerEntry);
-
-				return this;
-			}
+		} else {
+			let entry = this._createEntry(classConstructor, dependencies);
+			this._entries.set(classConstructor, entry);
+			this._entries.set(name, entry);
 		}
-
-		let newEntry = this._createEntry(classConstructor, dependencies);
-		this._aliases.set(name, newEntry);
 
 		return this;
 	}
@@ -141,16 +168,22 @@ export default class ObjectContainer {
 	 */
 	constant(name, value) {
 		if ($Debug) {
-			if (this._constants.has(name) || !!this._getEntryFromConstant(name)) {
+			if (this._entries.has(name) || !!this._getEntryFromConstant(name)) {
 				throw new Error(`ima.ObjectContainer:constant The ${name} ` +
 						`constant has already been declared and cannot be ` +
 						`redefined.`);
 			}
+
+			if (this._bindingState === ObjectContainer.PLUGIN_BINDING_STATE) {
+				throw new Error(`ima.ObjectContainer:constant The ${name} ` +
+						`constant can't be declared in plugin. ` +
+						`The constant must be define in app/config/bind.js file.`);
+			}
 		}
 
-		let constantEntry = this._createEntry(() => value);
+		let constantEntry = this._createEntry(() => value, [], { writeable: false });
 		constantEntry.sharedInstance = value;
-		this._constants.set(name, constantEntry);
+		this._entries.set(name, constantEntry);
 
 		return this;
 	}
@@ -165,7 +198,7 @@ export default class ObjectContainer {
 	 *
 	 * @template T
 	 * @param {function(new: T, ...*)} classConstructor The class constructor.
-	 * @param {*[]} dependencies The dependencies to pass into the
+	 * @param {?*[]} dependencies The dependencies to pass into the
 	 *        constructor function.
 	 * @return {ObjectContainer} This object container.
 	 */
@@ -178,7 +211,10 @@ export default class ObjectContainer {
 						`bind.js file.`);
 			}
 
-			if (this._registry.has(classConstructor) && !this.isLocked()) {
+			if (
+				this._entries.has(classConstructor) &&
+				this._bindingState === ObjectContainer.PLUGIN_BINDING_STATE
+			) {
 				throw new Error(`ima.ObjectContainer:inject The ` +
 						`${classConstructor.name} has already had its ` +
 						`default dependencies configured, and the object ` +
@@ -190,20 +226,16 @@ export default class ObjectContainer {
 			}
 		}
 
-		let aliasEntries = Array.from(this._aliases.values())
-			.filter((entry) => {
-				return this._hasEntrySameValues(
-					entry,
-					classConstructor,
-					dependencies
-				);
-			});
+		let classConstructorEntry = this._entries.get(classConstructor);
+		if (classConstructorEntry) {
 
-		if (aliasEntries.length) {
-			this._registry.set(classConstructor, aliasEntries[0]);
+			if (dependencies) {
+				this._updateEntryValues(classConstructorEntry, classConstructor, dependencies);
+			}
+
 		} else {
-			let newEntry = this._createEntry(classConstructor, dependencies);
-			this._registry.set(classConstructor, newEntry);
+			classConstructorEntry = this._createEntry(classConstructor, dependencies);
+			this._entries.set(classConstructor, classConstructorEntry);
 		}
 
 		return this;
@@ -224,14 +256,17 @@ export default class ObjectContainer {
 	 *        of the interface representing the service.
 	 * @param {function(new: Implementation, ...*)} implementationConstructor
 	 *        The constructor of the class implementing the service interface.
-	 * @param {*[]} [dependencies=[]] The dependencies to pass into the
+	 * @param {?*[]} dependencies The dependencies to pass into the
 	 *        constructor function.
 	 * @return {ObjectContainer} This object container.
 	 */
 	provide(interfaceConstructor, implementationConstructor,
-			dependencies = []) {
+			dependencies) {
 		if ($Debug) {
-			if (this._providers.has(interfaceConstructor)) {
+			if (
+				this._entries.has(interfaceConstructor) &&
+				this._bindingState === ObjectContainer.PLUGIN_BINDING_STATE
+			) {
 				throw new Error('ima.ObjectContainer:provide The ' +
 						'implementation of the provided interface ' +
 						`(${interfaceConstructor.name}) has already been ` +
@@ -248,11 +283,18 @@ export default class ObjectContainer {
 			}
 		}
 
-		let newEntry = this._createEntry(
-			implementationConstructor,
-			dependencies
-		);
-		this._providers.set(interfaceConstructor, newEntry);
+		let classConstructorEntry = this._entries.get(implementationConstructor);
+		if (classConstructorEntry) {
+			this._entries.set(interfaceConstructor, classConstructorEntry);
+
+			if (dependencies) {
+				this._updateEntryValues(classConstructorEntry, implementationConstructor, dependencies);
+			}
+		} else {
+			classConstructorEntry = this._createEntry(implementationConstructor, dependencies);
+			this._entries.set(implementationConstructor, classConstructorEntry);
+			this._entries.set(interfaceConstructor, classConstructorEntry);
+		}
 
 		return this;
 	}
@@ -304,10 +346,7 @@ export default class ObjectContainer {
 	 *         resource is registered with this object container.
 	 */
 	has(name) {
-		return this._constants.has(name) ||
-				this._aliases.has(name) ||
-				this._registry.has(name) ||
-				this._providers.has(name) ||
+		return this._entries.has(name) ||
 				!!this._getEntryFromConstant(name) ||
 				!!this._getEntryFromNamespace(name) ||
 				!!this._getEntryFromClassConstructor(name);
@@ -326,11 +365,11 @@ export default class ObjectContainer {
 	 * @param {(string|function(new: T, ...*)|function(...*): T)} name The name
 	 *        of the alias, class, interface, or the class, interface or a
 	 *        factory function to use.
-	 * @param {*[]} [dependencies=[]] The dependencies to pass into the
+	 * @param {?*[]} dependencies The dependencies to pass into the
 	 *        constructor or factory function.
 	 * @return {T} Created instance or generated value.
 	 */
-	create(name, dependencies = []) {
+	create(name, dependencies) {
 		let entry = this._getEntry(name);
 
 		return this._createInstanceFromEntry(entry, dependencies);
@@ -343,79 +382,26 @@ export default class ObjectContainer {
 	 * @return {ObjectContainer} This object container.
 	 */
 	clear() {
-		this._constants.clear();
-		this._aliases.clear();
-		this._registry.clear();
-		this._providers.clear();
-		this._lockCounter = 0;
+		this._entries.clear();
+		this._bindingState = null;
 
 		return this;
 	}
 
 	/**
-	 * Returns {@code true} if this object container is locked.
 	 *
-	 * When the object container is locked, it is impossible to register new
-	 * aliases using the {@linkcode bind()} method, or override the
-	 * default class dependencies of any already-configured class using the
-	 * {@linkcode inject()} method (classes that were not configured yet may be
-	 * configured using the {@linkcode inject()} method).
-	 *
-	 * This prevents the unpriviledged code (e.g. 3rd party plugins) from
-	 * overriding the default dependency configuration provided by ima, or
-	 * overriding the configuration of a 3rd party plugin by another 3rd party
-	 * plugin.
-	 *
-	 * The application itself has always access to the unlocked object
-	 * container.
-	 *
-	 * @return {boolean} {@code true} if the Object container is currently
-	 *         locked and no aliases can be created nor the default class
-	 *         dependencies can be reconfigured.
+	 * @param {?string} bindingState
 	 */
-	isLocked() {
-		return !!(this._lockCounter % 2);
-	}
-
-	/**
-	 * Locks the object container, preventing creation of new aliases and
-	 * overriding the default dependencies of already configured classes.
-	 *
-	 * @return {ObjectContainer} This object container.
-	 * @see #isLocked()
-	 */
-	lock() {
-		if (this.isLocked() || (this._lockCounter !== 0)) {
+	setBindingState(bindingState) {
+		if (this._bindingState === ObjectContainer.APP_BINDING_STATE) {
 			throw new Error(
-				`ima.ObjectContainer:lock The lock() method has to be ` +
-				`called only by the bootstrap script. Other calls are now ` +
-				`allowed.`
+				`ima.ObjectContainer:setBindingState The setBindingState() ` +
+				`method  has to be called only by the bootstrap script. Other ` +
+				`calls are not allowed.`
 			);
 		}
 
-		this._lockCounter++;
-
-		return this;
-	}
-
-	/**
-	 * Unlocks the object container, allowing the creation of new aliases and
-	 * overriding the default dependencies of already configured classes again.
-	 *
-	 * @return {ObjectContainer} This object container.
-	 */
-	unlock() {
-		if (!this.isLocked() || (this._lockCounter !== 1)) {
-			throw new Error(
-				`ima.ObjectContainer:unlock The unlock() method has to be ` +
-				`called only by the bootstrap script. Other calls are not ` +
-				`allowed.`
-			);
-		}
-
-		this._lockCounter++;
-
-		return this;
+		this._bindingState = bindingState;
 	}
 
 	/**
@@ -441,10 +427,7 @@ export default class ObjectContainer {
 	 *         implementation is known to this object container.
 	 */
 	_getEntry(name) {
-		let entry = this._constants.get(name) ||
-				this._aliases.get(name) ||
-				this._registry.get(name) ||
-				this._providers.get(name) ||
+		let entry = this._entries.get(name) ||
 				this._getEntryFromConstant(name) ||
 				this._getEntryFromNamespace(name) ||
 				this._getEntryFromClassConstructor(name);
@@ -465,25 +448,45 @@ export default class ObjectContainer {
 	}
 
 	/**
-	 * Creates a new entry for the provided class or factory function and the
-	 * provided dependencies.
+	 * The method update classConstructor and dependencies for defined entry.
+	 * The entry throw Error for constants and if you try override dependencies
+	 * more than once.
 	 *
 	 * @template T
 	 * @param {(function(new: T, ...*)|function(...*): T)} classConstructor The
 	 *        class constructor or factory function.
-	 * @param {*[]} [dependencies=[]] The dependencies to pass into the
+	 * @param {Entry} entry The entry representing the class that should
+	 *        have its instance created or factory faction to use to create a
+	 *        value.
+	 * @param {*[]} dependencies The dependencies to pass into the
 	 *        constructor or factory function.
+	 */
+	_updateEntryValues(entry, classConstructor, dependencies) {
+		entry.classConstructor = classConstructor;
+		entry.dependencies = dependencies;
+	}
+
+	/**
+	 * Creates a new entry for the provided class or factory function, the
+	 * provided dependencies and entry options.
+	 *
+	 * @template T
+	 * @param {(function(new: T, ...*)|function(...*): T)} classConstructor The
+	 *        class constructor or factory function.
+	 * @param {?*[]} [dependencies] The dependencies to pass into the
+	 *        constructor or factory function.
+	 * @param {{ writeable: boolean }} options
 	 * @return {T} Created instance or generated value.
 	 */
-	_createEntry(classConstructor, dependencies = []) {
+	_createEntry(classConstructor, dependencies, options) {
 		if (
-			(dependencies.length === 0) &&
+			(!dependencies || dependencies.length === 0) &&
 			Array.isArray(classConstructor.$dependencies)
 		) {
 			dependencies = classConstructor.$dependencies;
 		}
 
-		return new Entry(classConstructor, dependencies);
+		return new Entry(classConstructor, dependencies, options);
 	}
 
 	/**
@@ -534,14 +537,14 @@ export default class ObjectContainer {
 	 *         composition name in the constants. The method returns {@code null}
 	 *         if the specified composition name does not exist in the constants.
 	 */
-	_getEntryFromConstant(compositionName) {
+	_getEntryFromConstant(compositionName) { //TODO entries must be
 		if (typeof compositionName !== 'string') {
 			return null;
 		}
 
 		let objectProperties = compositionName.split('.');
-		let constantValue = this._constants.has(objectProperties[0]) ?
-				this._constants.get(objectProperties[0]).sharedInstance :
+		let constantValue = this._entries.has(objectProperties[0]) ?
+				this._entries.get(objectProperties[0]).sharedInstance :
 				null;
 
 		let pathLength = objectProperties.length;
@@ -550,7 +553,7 @@ export default class ObjectContainer {
 		}
 
 		if (constantValue !== undefined && constantValue !== null) {
-			let entry = this._createEntry(() => constantValue);
+			let entry = this._createEntry(() => constantValue, [], { writeable: false });
 			entry.sharedInstance = constantValue;
 
 			return entry;
@@ -594,12 +597,8 @@ export default class ObjectContainer {
 		let namespaceValue = this._namespace.get(path);
 
 		if (typeof namespaceValue === 'function') {
-			if (this._registry.has(namespaceValue)) {
-				return this._registry.get(namespaceValue);
-			}
-
-			if (this._providers.has(namespaceValue)) {
-				return this._providers.get(namespaceValue);
+			if (this._entries.has(namespaceValue)) {
+				return this._entries.get(namespaceValue);
 			}
 
 			return this._createEntry(namespaceValue);
@@ -633,34 +632,15 @@ export default class ObjectContainer {
 			(typeof classConstructor === 'function') &&
 			Array.isArray(classConstructor.$dependencies)
 		) {
-			this.inject(classConstructor, classConstructor.$dependencies);
+			let entry = this._createEntry(classConstructor, classConstructor.$dependencies);
+			this._entries.set(classConstructor, entry);
 
-			return this._registry.get(classConstructor);
+			return entry;
 		}
 
 		return null;
 	}
 
-	/**
-	 * Returns true if the defined entry has same classConstructor and
-	 * dependecies with provided classConstructor and dependecies.
-	 *
-	 * @private
-	 * @template T
-	 * @param {Entry<function(): *>>} entry
-	 * @param {function(new: T, ...*)} classConstructor
-	 * @param {*[]} dependencies
-	 * @return {boolean}
-	 */
-	_hasEntrySameValues(entry, classConstructor, dependencies) {
-		return entry.classConstructor === classConstructor &&
-			entry.dependencies.length === dependencies.length &&
-			entry.dependencies.every((entryDependency, dependencyIndex) => {
-				let testedDependency = dependencies[dependencyIndex];
-
-				return entryDependency === testedDependency;
-			});
-	}
 }
 
 ns.ima.ObjectContainer = ObjectContainer;
@@ -680,8 +660,9 @@ class Entry {
 	 *        class constructor or constant value getter.
 	 * @param {*[]} [dependencies=[]] The dependencies to pass into the
 	 *        constructor function.
+	 * @param {?{ writeable: boolean }} [options] The Entry options.
 	 */
-	constructor(classConstructor, dependencies) {
+	constructor(classConstructor, dependencies, options) {
 
 		/**
 		 * The constructor of the class represented by this entry, or the
@@ -692,18 +673,62 @@ class Entry {
 		this.classConstructor = classConstructor;
 
 		/**
-		 * Dependencies of the class constructor of the class represented by
-		 * this entry.
-		 *
-		 * @type {*[]}
-		 */
-		this.dependencies = dependencies;
-
-		/**
 		 * The shared instance of the class represented by this entry.
 		 *
 		 * @type {T}
 		 */
 		this.sharedInstance = null;
+
+		/**
+		 * The Entry options.
+		 *
+		 * @type {{ writeable: boolean }}
+		 */
+		this._options = options || {
+			writeable: true
+		};
+
+		/**
+		 * Dependencies of the class constructor of the class represented by
+		 * this entry.
+		 *
+		 * @type {*[]}
+		 */
+		this._dependencies = dependencies || [];
+
+		/**
+		 * The override counter
+		 *
+		 * @type {number}
+		 */
+		this._overrideCounter = 0;
 	}
+
+	set dependencies(dependencies) {
+		if ($Debug) {
+			if (!this.writeable) {
+				throw new Error(
+					`The entry ${entry} is constant and you ` +
+					`can't redefined their dependencies ${dependencies}.`
+				);
+			}
+
+			if (this._overrideCounter >= 1) {
+				throw new Error(`The dependencies entry can't be overrided more than once.` +
+						`Fix your bind.js file for classConstructor ${this.classConstructor.name}.`);
+			}
+		}
+
+		this._dependencies = dependencies;
+		this._overrideCounter++;
+	}
+
+	get dependencies() {
+		return this._dependencies;
+	}
+
+	get writeable() {
+		return this._options.writeable;
+	}
+
 }
