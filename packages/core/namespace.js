@@ -1,4 +1,6 @@
 
+let namespaceWarningEmitted = false;
+
 /**
  * Namespace creation, manipulation and traversal utility. This utility is used
  * to create semi-global shared namespaces for registering references to
@@ -32,11 +34,12 @@ class Namespace {
 	 * as an argument, the return value will be the last created namespace
 	 * object.
 	 *
+	 * @deprecated
 	 * @param {string} path The namespace path.
 	 * @return {*} The value at the specified path in the namespace.
 	 */
 	namespace(path) {
-		if ($Debug && /^app./i.test(path)) {
+		if ($Debug && /^app./i.test(path) && !namespaceWarningEmitted) {
 			console.warn(
 				'DEPRECATION WARNING: Your application seems to be using ' +
 				`namespaces (attempted to create the ${path} namespace), ` +
@@ -44,6 +47,7 @@ class Namespace {
 				'switch to ES6 imports as the support for namespaces will ' +
 				'be removed in an upcoming version of IMA.js.'
 			);
+			namespaceWarningEmitted = true;
 		}
 
 		let self = this;

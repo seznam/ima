@@ -1,3 +1,4 @@
+import classnames from 'classnames';
 import React from 'react';
 import ReactDOM from 'react-dom';
 import ns from '../namespace';
@@ -71,11 +72,21 @@ export default class AbstractComponent extends React.Component {
 	 *
 	 * Note that this method can be used only at the client-side.
 	 *
+	 * @deprecated
 	 * @param {React.Component} component
 	 * @return {?HTMLElement} The DOM node representing the specified React
 	 *         component, or {@code null} if no such node was found.
 	 */
 	findDOMNode(component = this) {
+		if ($Debug) {
+			console.warn(
+				'DEPRECATION WARNING: The findDOMNode() method is ' +
+				'deprecated since IMA 0.14.0. Please switch to using refs ' +
+				'instead, as this method will be removed in an upcoming ' +
+				'version of IMA.'
+			);
+		}
+
 		return ReactDOM.findDOMNode(component);
 	}
 
@@ -125,42 +136,10 @@ export default class AbstractComponent extends React.Component {
 	 *         to {@code true}.
 	 */
 	cssClasses(classRules, includeComponentClassName = false) {
-		if (typeof classRules === 'string') {
-			let separatedClassNames = classRules.split(/\s+/);
-			classRules = {};
-
-			for (let className of separatedClassNames) {
-				classRules[className] = true;
-			}
-		}
-
-		if (!(classRules instanceof Object)) {
-			throw new Error(
-				'The class rules must be specified as a plain object, ' +
-				`${classRules} provided`
-			);
-		}
-
-		if (includeComponentClassName) {
-			let propClassNames = this.props.className;
-			if (propClassNames) {
-				let separatedPropClassNames = propClassNames.split(/\s+/);
-				let classNamesMap = {};
-
-				for (let propClassName of separatedPropClassNames) {
-					classNamesMap[propClassName] = true;
-				}
-
-				classRules = Object.assign({}, classRules, classNamesMap);
-			}
-		}
-
-		return Object
-			.keys(classRules)
-			.filter((cssClassName) => {
-				return classRules[cssClassName];
-			})
-			.join(' ');
+		return classnames(
+			classRules,
+			includeComponentClassName ? this.props.className : ''
+		);
 	}
 
 	/**
@@ -170,7 +149,11 @@ export default class AbstractComponent extends React.Component {
 	 * @param {*=} data Data to send within the event.
 	 */
 	fire(eventName, data = null) {
-		this._utils.$EventBus.fire(this.findDOMNode(), eventName, data);
+		this._utils.$EventBus.fire(
+			ReactDOM.findDOMNode(this),
+			eventName,
+			data
+		);
 	}
 
 	/**
@@ -185,7 +168,7 @@ export default class AbstractComponent extends React.Component {
 	 */
 	listen(eventTarget, eventName, listener) {
 		if (!eventTarget.addEventListener) { // Safari doesn't have EventTarget
-			eventTarget = this.findDOMNode(eventTarget);
+			eventTarget = ReactDOM.findDOMNode(eventTarget);
 		}
 
 		this._utils.$EventBus.listen(eventTarget, eventName, listener);
@@ -202,7 +185,7 @@ export default class AbstractComponent extends React.Component {
 	 */
 	unlisten(eventTarget, eventName, listener) {
 		if (!eventTarget.addEventListener) { // Safari doesn't have EventTarget
-			eventTarget = this.findDOMNode(eventTarget);
+			eventTarget = ReactDOM.findDOMNode(eventTarget);
 		}
 
 		this._utils.$EventBus.unlisten(eventTarget, eventName, listener);

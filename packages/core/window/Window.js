@@ -37,6 +37,8 @@ export default class Window {
 	/**
 	 * Returns {@code true} if the WebSockets are supported.
 	 *
+	 * @deprecated All browsers currently supported by IMA.js support web
+	 *             sockets.
 	 * @return {boolean} {@code true} if the WebSockets are supported.
 	 */
 	hasWebSocket() {}
@@ -44,6 +46,9 @@ export default class Window {
 	/**
 	 * Returns {@code true} if the history manipulation API is supported.
 	 *
+	 * @deprecated The history API should never be manipulated directly in an
+	 *             IMA.js application, and all browsers supported by IMA.js
+	 *             support the history API.
 	 * @return {boolean} {@code true} if the history manipulation API is
 	 *         supported.
 	 */
@@ -59,6 +64,10 @@ export default class Window {
 	/**
 	 * Returns the current {@code WebSocket} implementation to use.
 	 *
+	 * @deprecated All browsers currently supported by IMA.js support web
+	 *             sockets, but when used at the server-side, this method
+	 *             should fail unless web sockets are polyfilled by a 3rd party
+	 *             library.
 	 * @return {function(new: WebSocket)} The current {@code WebSocket}
 	 *         implementation.
 	 */
