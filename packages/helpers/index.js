@@ -11,9 +11,10 @@ function assignRecursively(target) {
 		Object.keys(source).forEach((field) => {
 			if (source[field] instanceof Array) {
 				target[field] = source[field].slice();
-			} else if (source[field] instanceof Object &&
-					!(source[field] instanceof Function)) {
-
+			} else if (
+				source[field] instanceof Object &&
+				!(source[field] instanceof Function)
+			) {
 				if (!(target[field] instanceof Object)) {
 					target[field] = {};
 				}
@@ -24,6 +25,18 @@ function assignRecursively(target) {
 			}
 		});
 	}
+}
+
+function deepFreeze(object) {
+	if (!(object instanceof Object)) {
+		return object;
+	}
+
+	for (let property of Object.keys(object)) {
+		deepFreeze(object[property]);
+	}
+
+	return Object.freeze(object);
 }
 
 function debounce(func, wait) {
@@ -102,6 +115,7 @@ function escapeRegExp(string) {
 
 module.exports = {
 	assignRecursively,
+	deepFreeze,
 	allPromiseHash,
 	escapeRegExp,
 	clone,
