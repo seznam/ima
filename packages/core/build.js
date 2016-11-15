@@ -9,6 +9,7 @@ var mainjs = ['./node_modules/ima/main.js'];
 var vendors = {
 	common: [
 		'ima-helpers',
+		'classnames',
 		'react',
 		'react-dom',
 		'superagent'
