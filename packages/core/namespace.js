@@ -1,5 +1,5 @@
 
-let namespaceWarningEmitted = false;
+//let namespaceWarningEmitted = false;
 
 /**
  * Namespace creation, manipulation and traversal utility. This utility is used
