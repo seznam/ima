@@ -1,5 +1,5 @@
 
-//let namespaceWarningEmitted = false;
+let namespaceWarningEmitted = false;
 
 /**
  * Namespace creation, manipulation and traversal utility. This utility is used
@@ -39,16 +39,21 @@ class Namespace {
 	 * @return {*} The value at the specified path in the namespace.
 	 */
 	namespace(path) {
-		// if ($Debug && /^app./i.test(path) && !namespaceWarningEmitted) {
-		// 	console.warn(
-		// 		'DEPRECATION WARNING: Your application seems to be using ' +
-		// 		`namespaces (attempted to create the ${path} namespace), ` +
-		// 		'but namespaces were deprecated since IMA 0.12.0. Please ' +
-		// 		'switch to ES6 imports as the support for namespaces will ' +
-		// 		'be removed in an upcoming version of IMA.js.'
-		// 	);
-		// 	namespaceWarningEmitted = true;
-		// }
+		if (
+			(typeof $Debug !== 'undefined') &&
+			$Debug &&
+			/^app./i.test(path) &&
+			!namespaceWarningEmitted
+		) {
+			console.warn(
+				'DEPRECATION WARNING: Your application seems to be using ' +
+				`namespaces (attempted to create the ${path} namespace), ` +
+				'but namespaces were deprecated since IMA 0.12.0. Please ' +
+				'switch to ES6 imports as the support for namespaces will ' +
+				'be removed in an upcoming version of IMA.js.'
+			);
+			namespaceWarningEmitted = true;
+		}
 
 		let self = this;
 		let levels = path.split('.');
