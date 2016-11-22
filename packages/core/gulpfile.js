@@ -3,7 +3,6 @@ let del = require('del');
 let gulp = require('gulp');
 let babel = require('gulp-babel');
 let plumber = require('gulp-plumber');
-let sourcemaps = require('gulp-sourcemaps');
 let tap = require('gulp-tap');
 
 gulp.task('compile', () => {
@@ -18,7 +17,6 @@ gulp.task('compile', () => {
 				__dirname + '/!(node_modules|polyfill)/**/!(*Spec).js'
 			])
 			.pipe(plumber())
-			.pipe(sourcemaps.init())
 			.pipe(babel({
 				moduleIds: true,
 				presets: ['es2015'],
@@ -62,7 +60,6 @@ gulp.task('compile', () => {
 					`});\n`
 				);
 			}))
-			.pipe(sourcemaps.write())
 			.pipe(gulp.dest(__dirname + '/dist'))
 	);
 });
