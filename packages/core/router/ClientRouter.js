@@ -132,7 +132,7 @@ export default class ClientRouter extends AbstractRouter {
 		this._saveScrollHistory();
 		let eventName = Events.POP_STATE;
 		this._window.bindEventListener(nativeWindow, eventName, (event) => {
-			if (event.state) {
+			if (event.state && !event.defaultPrevented) {
 				this.route(this.getPath())
 					.then(() => {
 						let scroll = event.state.scroll;
