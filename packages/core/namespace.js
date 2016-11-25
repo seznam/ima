@@ -1,5 +1,5 @@
 
-let namespaceWarningEmitted = false;
+//let namespaceWarningEmitted = false;
 
 /**
  * Namespace creation, manipulation and traversal utility. This utility is used
@@ -39,7 +39,7 @@ class Namespace {
 	 * @return {*} The value at the specified path in the namespace.
 	 */
 	namespace(path) {
-		if (
+		/*if (
 			(typeof $Debug !== 'undefined') &&
 			$Debug &&
 			/^app./i.test(path) &&
@@ -53,7 +53,7 @@ class Namespace {
 				'be removed in an upcoming version of IMA.js.'
 			);
 			namespaceWarningEmitted = true;
-		}
+		}*/
 
 		let self = this;
 		let levels = path.split('.');
