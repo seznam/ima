@@ -1,36 +1,24 @@
-import Dispatcher from '../event/Dispatcher';
-import DevTool from '../debug/DevTool';
-import Dictionary from '../dictionary/Dictionary';
-import UrlTransformer from '../http/UrlTransformer';
-import PageManager from '../page/manager/PageManager';
-import PageStateManager from '../page/state/PageStateManager';
-import Request from '../router/Request';
-import Response from '../router/Response';
-import Router from '../router/Router';
-import CookieStorage from '../storage/CookieStorage';
-import Window from '../window/Window';
-
 export let init = (ns, oc, config) => {
 
 	oc
-		.get(Dictionary)
+		.get('$Dictionary')
 		.init(config.dictionary);
 
 	oc
-		.get(Dispatcher)
+		.get('$Dispatcher')
 		.clear();
 
 	oc
-		.get(Request)
+		.get('$Request')
 		.init(config.request);
 
 	oc
-		.get(Response)
+		.get('$Response')
 		.init(config.response, oc.get('$CookieTransformFunction'));
 
-	if (!oc.get(Window).isClient()) {
+	if (!oc.get('$Window').isClient()) {
 		oc
-			.get(CookieStorage)
+			.get('$CookieStorage')
 			.clear();
 
 		oc
@@ -43,7 +31,7 @@ export let init = (ns, oc, config) => {
 	}
 
 	oc
-		.get(CookieStorage)
+		.get('$CookieStorage')
 		.init(
 			{ secure: oc.get('$Secure') },
 			oc.get('$CookieTransformFunction')
@@ -58,23 +46,23 @@ export let init = (ns, oc, config) => {
 		.init();
 
 	oc
-		.get(Router)
+		.get('$Router')
 		.init(config.router);
 
 	oc
-		.get(PageManager)
+		.get('$PageManager')
 		.init();
 
 	oc
-		.get(PageStateManager)
+		.get('$PageStateManager')
 		.clear();
 
 	oc
-		.get(UrlTransformer)
+		.get('$HttpUrlTransformer')
 		.clear();
 
 	oc
-		.get(DevTool)
+		.get('$DevTool')
 		.init();
 
 };
