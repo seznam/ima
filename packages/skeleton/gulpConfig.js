@@ -136,7 +136,7 @@ exports.files = {
 			server: './build/ima/',
 			client: './build/static/js/'
 		},
-		watch:['./node_modules/ima/**/(!gulpfile).{js,jsx}']
+		watch:['./node_modules/ima/**/*.{js,jsx}', '!./node_modules/ima/gulpfile.js']
 	},
 	server: {
 		cwd: '/',
