@@ -23,7 +23,7 @@ import ClientPageManager from '../page/manager/ClientPageManager';
 import PageManager from '../page/manager/PageManager';
 import ServerPageManager from '../page/manager/ServerPageManager';
 import ClientPageRenderer from '../page/renderer/ClientPageRenderer';
-import PageRenderer from '../page/renderer/PageRenderer'
+import PageRenderer from '../page/renderer/PageRenderer';
 import PageRendererFactory from '../page/renderer/PageRendererFactory';
 import ServerPageRenderer from '../page/renderer/ServerPageRenderer';
 import PageStateManager from '../page/state/PageStateManager';
