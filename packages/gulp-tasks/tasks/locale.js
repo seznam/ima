@@ -22,7 +22,7 @@ exports.default = (gulpConfig) => {
 				.pipe(messageFormat({locale: language, global: 'that'}))
 				.pipe(plumber.stop())
 				.pipe(insert.wrap(
-					'(function () {let $IMA = {}; if ((typeof window !== "undefined") && (window !== null)) { window.$IMA = window.$IMA || {}; $IMA = window.$IMA; } let that = $IMA || {};',
+					'(function () {var $IMA = {}; if ((typeof window !== "undefined") && (window !== null)) { window.$IMA = window.$IMA || {}; $IMA = window.$IMA; } var that = $IMA || {};',
 					' return that.i18n; })();'
 				))
 				.pipe(gulp.dest(files.locale.dest.client))
