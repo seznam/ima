@@ -143,7 +143,7 @@ exports.files = {
 		src: ['./server/*.js', './server/**/*.js'],
 		base: './server/',
 		dest: './build/',
-		watch: ['./server/*.js', './server/**/*.js', './app/*.js']
+		watch: ['./server/*.js', './server/**/*.js', './app/*.js', '!./server/ima/config/*.js']
 	},
 	less: {
 		cwd: '/',
