@@ -68,8 +68,8 @@ describe('ima.page.renderer.AbstractPageRenderer', function() {
 
 			expect(reactiveComponentView.setState)
 				.toHaveBeenCalledWith({
-					key1: null,
-					key2: null
+					key1: undefined,
+					key2: undefined
 				});
 		});
 	});

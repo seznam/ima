@@ -101,7 +101,7 @@ export default class AbstractPageRenderer extends PageRenderer {
 			let emptyState = Object
 				.keys(this._reactiveView.state)
 				.reduce((state, key) => {
-					state[key] = null;
+					state[key] = undefined;
 
 					return state;
 				}, {});
