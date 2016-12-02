@@ -139,12 +139,14 @@ export default class ObjectContainer {
 		}
 
 		let classConstructorEntry = this._entries.get(classConstructor);
+		let nameEntry = this._entries.get(name);
+		let entry = classConstructorEntry || nameEntry;
 
-		if (classConstructorEntry) {
-			this._entries.set(name, classConstructorEntry);
+		if (entry) {
+			this._entries.set(name, entry);
 
 			if (dependencies) {
-				this._updateEntryValues(classConstructorEntry, classConstructor, dependencies);
+				this._updateEntryValues(entry, classConstructor, dependencies);
 			}
 
 		} else {

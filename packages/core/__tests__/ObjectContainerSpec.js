@@ -202,6 +202,26 @@ describe('ima.ObjectContainer', function() {
 			expect(oc._entries.get(alias)).toEqual(oc._entries.get(classParent));
 		});
 
+		it('should use entry from entries which was provided and binded', function() {
+			oc.provide(classParent, classConstructor, dependencies);
+			oc.bind(alias, classParent);
+			var aliasEntry = oc._entries.get(alias);
+
+			spyOn(oc, '_updateEntryValues')
+				.and
+				.callThrough();
+
+			oc.bind(alias, classConstructorWithDependencies, classConstructorWithDependencies.$dependencies);
+
+			expect(oc._updateEntryValues).toHaveBeenCalledWith(
+				aliasEntry,
+				classConstructorWithDependencies,
+				classConstructorWithDependencies.$dependencies
+			);
+			expect(aliasEntry.classConstructor).toEqual(classConstructorWithDependencies);
+			expect(aliasEntry.dependencies).toEqual(classConstructorWithDependencies.$dependencies);
+		});
+
 	});
 
 	describe('provide method', function() {
