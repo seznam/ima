@@ -9,7 +9,6 @@ let less = [
 	'./app/assets/less/setting.less',
 	'./app/assets/less/base.less',
 	'./app/assets/less/layout.less',
-	'./app/assets/less/main.less',
 	'./app/component/**/*.less',
 	'./app/page/**/*.less'
 ];

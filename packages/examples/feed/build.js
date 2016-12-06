@@ -7,17 +7,13 @@ module.exports = (() => {
 	];
 
 	let less = [
-		'./app/assets/less/trivia.less',
 		'./app/assets/less/rem.less',
 		'./app/assets/less/grid.less',
 		'./app/assets/less/app.less',
-		'./app/assets/bower/1680540/reset.less',
-		'./app/assets/bower/lesshat/build/lesshat-prefixed.less',
+		'./app/assets/less/reset.less',
 		'./app/assets/less/setting.less',
-		'./app/assets/bower/Responsable-Framework/assets/less/grid.less',
 		'./app/assets/less/base.less',
 		'./app/assets/less/layout.less',
-		'./app/assets/less/main.less',
 		'./app/component/**/*.less',
 		'./app/page/**/*.less'
 	];
