@@ -38,8 +38,8 @@
 	},
 	"license": "MIT",
 	"devDependencies": {
-		"ima-gulp-task-loader": "github:seznam/IMA.js-gulp-task-loader#master",
-		"ima-gulp-tasks": "github:seznam/IMA.js-gulp-tasks#next"
+		"ima-gulp-task-loader": "0.14.0-rc.1",
+		"ima-gulp-tasks": "0.14.0-rc.8"
 	},
 	"dependencies": {
 		"body-parser": "1.15.2",
@@ -47,10 +47,10 @@
 		"cookie-parser": "1.4.3",
 		"express": "4.14.0",
 		"helmet": "^2.1.1",
-		"ima": "0.14.0-rc.10",
+		"ima": "0.14.0-rc.13",
 		"ima-server": "0.14.0-rc.3",
-		"method-override": "2.3.6",
+		"method-override": "2.3.7",
 		"multer": "^1.0.6",
-		"serve-favicon": "2.3.0"
+		"serve-favicon": "2.3.2"
 	}
 }
