@@ -256,7 +256,7 @@ export default class Response {
 			this._cookieTransformFunction,
 			options
 		);
-		delete advancedOptions.maxAge; // we use the expires option instead
+
 		this._internalCookieStorage.set(name, {
 			value,
 			options: advancedOptions
@@ -293,6 +293,10 @@ export default class Response {
 	 */
 	_setCookieHeaders() {
 		for (let [name, param] of this._internalCookieStorage) {
+			if (param.options && param.options.maxAge) {
+				param.options.maxAge *= 1000;
+			}
+
 			this._response.cookie(name, param.value, param.options);
 		}
 	}

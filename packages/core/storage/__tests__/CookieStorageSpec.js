@@ -199,4 +199,24 @@ describe('ima.storage.CookieStorage', function() {
 
 	});
 
+	describe('_recomputeCookieMaxAgeAndExpires', function() {
+		it('should compute expires as date', function() {
+			var options = { maxAge: 10 };
+			cookie._recomputeCookieMaxAgeAndExpires(options);
+			expect(options.expires).toEqual(jasmine.any(Date));
+		});
+
+		it('should compute maxAge as number', function() {
+			var options = { expires: new Date() };
+			cookie._recomputeCookieMaxAgeAndExpires(options);
+			expect(options.maxAge).toEqual(jasmine.any(Number));
+		});
+
+		it('should compute maxAge as number and expires as date', function() {
+			var options = { expires: 60 };
+			cookie._recomputeCookieMaxAgeAndExpires(options);
+			expect(options.maxAge).toEqual(jasmine.any(Number));
+			expect(options.expires).toEqual(jasmine.any(Date));
+		});
+	})
 });
