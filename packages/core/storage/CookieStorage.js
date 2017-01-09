@@ -176,12 +176,11 @@ export default class CookieStorage extends MapStorage {
 		options = Object.assign({}, this._options, options);
 
 		if (value === undefined) {
-			options.expires = -1;
-		}
-
-		if (options.maxAge || options.expires) {
-			options.expires = this._getExpirationAsDate(options.maxAge || options.expires);
-			delete options.maxAge; // we use the expires option instead
+			// Deletes the cookie
+			options.maxAge = 0;
+			options.expires = this._getExpirationAsDate(-1);
+		} else {
+			this._recomputeCookieMaxAgeAndExpires(options);
 		}
 
 		value = this._sanitizeCookieValue(value + '');
@@ -334,6 +333,7 @@ export default class CookieStorage extends MapStorage {
 	 *          path: string=,
 	 *          domain: string=,
 	 *          expires: Date=,
+	 *          maxAge: Number=,
 	 *          secure: boolean=
 	 *        }} options Cookie attributes. Only the attributes listed in the
 	 *        type annotation of this field are supported. For documentation
@@ -350,6 +350,7 @@ export default class CookieStorage extends MapStorage {
 		cookieString += options.path ? ';Path=' + options.path : '';
 		cookieString += options.expires ?
 				';Expires=' + options.expires.toUTCString() : '';
+		cookieString += options.maxAge ? ';Max-Age=' + options.maxAge : '';
 		cookieString += options.httpOnly ? ';HttpOnly' : '';
 		cookieString += options.secure ? ';Secure' : '';
 
@@ -500,6 +501,32 @@ export default class CookieStorage extends MapStorage {
 		}
 
 		return sanitizedValue;
+	}
+
+	/**
+	 * Recomputes cookie's attributes maxAge and expires between each other.
+	 *
+	 * @param {{
+	 *          path: string=,
+	 *          domain: string=,
+	 *          expires: Date=,
+	 *          maxAge: Number=,
+	 *          secure: boolean=
+	 *        }} options Cookie attributes. Only the attributes listed in the
+	 *        type annotation of this field are supported. For documentation
+	 *        and full list of cookie attributes see
+	 *        http://tools.ietf.org/html/rfc2965#page-5
+	 */
+	_recomputeCookieMaxAgeAndExpires(options) {
+		if (options.maxAge || options.expires) {
+			options.expires = this._getExpirationAsDate(
+				options.maxAge || options.expires);
+		}
+
+		if (!options.maxAge && options.expires) {
+			options.maxAge = Math.floor(
+				(options.expires.valueOf() - Date.now()) / 1000);
+		}
 	}
 }
 
