@@ -27,6 +27,7 @@ describe('ima.http.SuperAgentProxy', function() {
 			accept: function() { return this; },
 			query: function() { return this; },
 			send: function() { return this; },
+			on: function() { return this; },
 			withCredentials: function() { return this; },
 			timeout: function() {
 				var self = this;
@@ -208,6 +209,46 @@ describe('ima.http.SuperAgentProxy', function() {
 						console.log(error);
 						done();
 					});
+			});
+
+			it('should call private method _setListeners for each request', function(done) {
+				spyOn(superAgent, 'end')
+					.and
+					.callFake(function(callback) {
+						return callback(null, response);
+					});
+
+				spyOn(proxy, '_setListeners')
+					.and
+					.returnValue(proxy);
+
+				proxy.request(method, apiUrl, data, options)
+					.then(function() {
+						expect(proxy._setListeners).toHaveBeenCalled();
+						done();
+					})
+			});
+
+			it('should add listener for "progress" to request', function(done) {
+				spyOn(superAgent, 'on')
+					.and
+					.stub()
+
+				spyOn(superAgent, 'end')
+					.and
+					.callFake(function(callback) {
+						return callback(null, response);
+					})
+
+				function dummy() {}
+				var reqOptions = Object.assign({}, options, { 'listeners': { 'progress': dummy } })
+
+				proxy.request(method, apiUrl, data, reqOptions)
+					.then(function() {
+						expect(superAgent.on).toHaveBeenCalledWith('progress', dummy)
+						expect(superAgent.on.calls.count()).toEqual(1)
+						done()
+					})
 			});
 		});
 	});

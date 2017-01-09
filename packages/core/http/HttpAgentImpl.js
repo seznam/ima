@@ -32,7 +32,8 @@ export default class HttpAgentImpl extends HttpAgent {
 	 *              withCredentials: true,
 	 *              timeout: 2000,
 	 *              accept: 'application/json',
-	 *              language: 'en'
+	 *              language: 'en',
+	 *              listeners: { 'progress': callbackFunction }
 	 *          })
 	 *          .then((response) => {
 	 *              //resolve

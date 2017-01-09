@@ -74,7 +74,8 @@ export default class HttpProxy {
 	 *          repeatRequest: number=,
 	 *          headers: Object<string, string>=,
 	 *          cache: boolean=,
-	 *          withCredentials: boolean
+	 *          withCredentials: boolean,
+	 *			listeners: object<string, function(*)>=
 	 *        }=} options Optional request options. The {@code timeout}
 	 *        specifies the request timeout in milliseconds, the {@code ttl}
 	 *        specified how long the request may be cached in milliseconds, the
@@ -84,6 +85,7 @@ export default class HttpProxy {
 	 *        cache of pending and finished HTTP requests. The
 	 *        {@code withCredentials} that indicates whether requests should be
 	 *        made using credentials such as cookies or authorization headers.
+	 *		  The {@code listeners} Add listeners for request.
 	 * @return {Promise<Vendor.SuperAgent.Response>} A promise that resolves to
 	 *         the server response. The promise rejects on failure with an
 	 *         error and request descriptor object instead of an
@@ -114,6 +116,7 @@ export default class HttpProxy {
 
 				this
 					._setHeaders(request, options)
+					._setListeners(request, options)
 					._setCredentials(request, options)
 					._sendRequest(request, resolve, reject, params);
 			})
@@ -359,7 +362,8 @@ export default class HttpProxy {
 	 *          repeatRequest: number=,
 	 *          headers: Object<string, string>=,
 	 *          cache: boolean=,
-	 *          withCredentials: boolean
+	 *          withCredentials: boolean,
+	 *          listeners: object<string, function(*)>=
 	 *        }=} options Optional request options. The {@code timeout}
 	 *        specifies the request timeout in milliseconds, the {@code ttl}
 	 *        specified how long the request may be cached in milliseconds, the
@@ -369,6 +373,7 @@ export default class HttpProxy {
 	 *        cache of pending and finished HTTP requests. The
 	 *        {@code withCredentials} that indicates whether requests should be
 	 *        made using credentials such as cookies or authorization headers.
+	 *        The {@code listeners} Add listeners for request.
 	 * @return {HttpProxy} This instance.
 	 */
 	_setHeaders(request, options) {
@@ -400,7 +405,8 @@ export default class HttpProxy {
 	 *          repeatRequest: number=,
 	 *          headers: Object<string, string>=,
 	 *          cache: boolean=,
-	 *          withCredentials: boolean
+	 *          withCredentials: boolean,
+	 *          listeners: object<string, function(*)>=
 	 *        }=} options Optional request options. The {@code timeout}
 	 *        specifies the request timeout in milliseconds, the {@code ttl}
 	 *        specified how long the request may be cached in milliseconds, the
@@ -410,12 +416,55 @@ export default class HttpProxy {
 	 *        cache of pending and finished HTTP requests. The
 	 *        {@code withCredentials} that indicates whether requests should be
 	 *        made using credentials such as cookies or authorization headers.
+	 *        The {@code listeners} Add listeners for request.
 	 * @return {HttpProxy} This instance.
 	 */
 	_setCredentials(request, options) {
 		if (options.withCredentials && request.withCredentials) {
 			request.withCredentials();
 		}
+
+		return this;
+	}
+
+	/**
+	 * Add listeners for HTTP request.
+	 *
+	 * @param {Vendor.SuperAgent.Request} request The request on which the HTTP
+	 *        listeners should be set.
+	 * @param {{
+	 *          timeout: number=,
+	 *          ttl: number=,
+	 *          repeatRequest: number=,
+	 *          headers: Object<string, string>=,
+	 *          cache: boolean=,
+	 *          withCredentials: boolean,
+	 *          listeners: object<string, function(*)>=
+	 *        }=} options Optional request options. The {@code timeout}
+	 *        specifies the request timeout in milliseconds, the {@code ttl}
+	 *        specified how long the request may be cached in milliseconds, the
+	 *        {@code repeatRequest} specifies the maximum number of tries to
+	 *        repeat the request if the request fails, The {@code headers} set
+	 *        request headers. The {@code cache} can be used to bypass the
+	 *        cache of pending and finished HTTP requests. The
+	 *        {@code withCredentials} that indicates whether requests should be
+	 *        made using credentials such as cookies or authorization headers.
+	 *        The {@code listeners} Add listeners for request.
+	 * @return {HttpProxy} This instance.
+	 */
+	_setListeners(request, options) {
+		let listeners = options.listeners || {};
+
+		Object.keys(listeners).forEach((eventName) => {
+			let listener = listeners[eventName];
+
+			if (!listener instanceof Function && $Debug) {
+				throw new Error(`ima.http.HttpProxy: The listener must be a ` +
+						`function, for event ${eventName} ${listener} provided.`);
+			} 
+			
+			request.on(eventName, listener);
+		})
 
 		return this;
 	}
@@ -434,7 +483,8 @@ export default class HttpProxy {
 	 *          repeatRequest: number=,
 	 *          headers: Object<string, string>=,
 	 *          cache: boolean=,
-	 *          withCredentials: boolean
+	 *          withCredentials: boolean,
+	 *          listeners: object<string, function(*)>=
 	 *        }=} options Optional request options. The {@code timeout}
 	 *        specifies the request timeout in milliseconds, the {@code ttl}
 	 *        specified how long the request may be cached in milliseconds, the
@@ -444,6 +494,7 @@ export default class HttpProxy {
 	 *        cache of pending and finished HTTP requests. The
 	 *        {@code withCredentials} that indicates whether requests should be
 	 *        made using credentials such as cookies or authorization headers.
+	 *        The {@code listeners} Add listeners for request.
 	 * @return {{
 	 *           method: string,
 	 *           url: string,

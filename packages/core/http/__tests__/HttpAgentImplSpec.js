@@ -121,7 +121,7 @@ describe('ima.http.HttpAgentImpl', function() {
 					});
 			});
 
-			it('should be setted cookie', function(done) {
+			it('should be set cookie', function(done) {
 				spyOn(proxy, 'request')
 					.and
 					.callFake(function() {
