@@ -15,7 +15,15 @@ describe('ima.page.renderer.AbstractPageRenderer', function() {
 		replaceState: function() {}
 	};
 
+	var controller = new ns.ima.controller.Controller();
 	var view = function() {};
+
+	var routeOptions = {
+		onlyUpdate: false,
+		autoScroll: false,
+		allowSPA: false,
+		documentView: null
+	};
 
 	beforeEach(function() {
 		pageRenderer = oc.create('ima.page.renderer.AbstractPageRenderer', [rendererFactory, $Helper, ReactDOM, settings]);
@@ -87,21 +95,71 @@ describe('ima.page.renderer.AbstractPageRenderer', function() {
 		});
 	});
 
-	/*it('should be wrap each key to promise', function() {
-		var param1 = 'param1'
-		var dataMap = {
-			param1: param1,
-			param2: Promise.resolve('param2')
-		};
+	describe('_getWrappedPageView method', function() {
 
-		spyOn(Promise, 'resolve')
-			.and
-			.callThrough();
+		var utils = { $Utils: 'utils' };
+		var state = { state: 'state', $pageView: view };
+		var propsView = { view: view };
+		var props = Object.assign({}, state, utils, propsView);
+		var wrapedPageViewElement = { wrapElementView: 'wrapedPageViewElement' };
+		var managedRootView = function() {};
 
-		pageRenderer._wrapEachKeyToPromise(dataMap);
+		beforeEach(function() {
+			spyOn(pageRenderer, '_generateViewProps')
+				.and
+				.returnValue(props);
+			spyOn(controller, 'getState')
+				.and
+				.returnValue(state);
+			spyOn(rendererFactory, 'wrapView')
+				.and
+				.returnValue(wrapedPageViewElement);
+			spyOn(rendererFactory, 'getManagedRootView')
+				.and
+				.returnValue(managedRootView);
+		});
 
-		expect(Promise.resolve).toHaveBeenCalledWith(param1);
-		expect(Promise.resolve.calls.count()).toEqual(1);
-	});*/
+		it('should generate view props from controller state', function() {
+			pageRenderer._getWrappedPageView(controller, view, routeOptions);
+
+			expect(pageRenderer._generateViewProps).toHaveBeenCalledWith(managedRootView, state);
+		});
+
+		it('should return React Component for managedRootView from route options managedRootView property', function() {
+			var routeOptionsWithManagedRouteView = Object.assign({}, routeOptions, { managedRootView: ns.ima.page.renderer.BlankManagedRootView });
+			pageRenderer._getWrappedPageView(controller, view, routeOptionsWithManagedRouteView);
+
+			expect(rendererFactory.getManagedRootView).toHaveBeenCalledWith(ns.ima.page.renderer.BlankManagedRootView);
+		});
+
+		it('should call wrapView with default ViewAdapter', function() {
+			pageRenderer._getWrappedPageView(controller, view, routeOptions);
+
+			expect(rendererFactory.wrapView).toHaveBeenCalledWith(ns.ima.page.renderer.ViewAdapter, props);
+		});
+	});
+
+	describe('_getDocumentView method', function() {
+
+		beforeEach(function() {
+			spyOn(rendererFactory, 'getDocumentView')
+				.and
+				.stub();
+		});
+
+		it('should return default document view which is set in settings.$Page.$Render.documentView', function() {
+			pageRenderer._getDocumentView(routeOptions);
+
+			expect(rendererFactory.getDocumentView).toHaveBeenCalledWith(settings.$Page.$Render.documentView);
+		});
+
+		it('should return document view which is defined in routeOptions.documentView', function() {
+			var routeOptionsWithDocumentView = Object.assign({}, routeOptions, { documentView: ns.ima.page.AbstractDocumentView });
+			pageRenderer._getDocumentView(routeOptionsWithDocumentView);
+
+			expect(rendererFactory.getDocumentView).toHaveBeenCalledWith(ns.ima.page.AbstractDocumentView);
+		});
+
+	});
 
 });

@@ -1,6 +1,5 @@
 import ns from '../../namespace';
 import AbstractPageRenderer from './AbstractPageRenderer';
-import BlankManagedRootView from './BlankManagedRootView';
 import PageRenderer from './PageRenderer';
 import PageRendererFactory from './PageRendererFactory';
 import Cache from '../../cache/Cache';
@@ -26,8 +25,6 @@ export default class ServerPageRenderer extends AbstractPageRenderer {
 	/**
 	 * Initializes the server-side page renderer.
 	 *
-	 * @method contructor
-	 * @constructor
 	 * @param {PageRendererFactory} factory Factory for receive $Utils to view.
 	 * @param {vendor.$Helper} Helper The IMA.js helper methods.
 	 * @param {vendor.ReactDOMServer} ReactDOMServer React framework instance
@@ -46,8 +43,6 @@ export default class ServerPageRenderer extends AbstractPageRenderer {
 		 * Utility for sending the page markup to the client as a response to
 		 * the current HTTP request.
 		 *
-		 * @private
-		 * @property _response
 		 * @type {Response}
 		 */
 		this._response = response;
@@ -58,8 +53,6 @@ export default class ServerPageRenderer extends AbstractPageRenderer {
 		 * then be serialized and sent to the client to re-initialize the page
 		 * at the client side.
 		 *
-		 * @private
-		 * @property _cache
 		 * @type {Cache}
 		 */
 		this._cache = cache;
@@ -108,8 +101,6 @@ export default class ServerPageRenderer extends AbstractPageRenderer {
 	 * The javascript code will include a settings the "revival" data for the
 	 * application at the client-side.
 	 *
-	 * @private
-	 * @method _getRevivalSettings
 	 * @return {string} The javascript code to include into the
 	 *         rendered page.
 	 */
@@ -163,8 +154,6 @@ export default class ServerPageRenderer extends AbstractPageRenderer {
 	 * The the values that are already Promises will referenced directly
 	 * without wrapping then into another Promise.
 	 *
-	 * @protected
-	 * @method _wrapEachKeyToPromise
 	 * @param {Object<string, *>=} [dataMap={}] A map of data that should have
 	 *        its values wrapped into Promises.
 	 * @return {Object<string, Promise>} A copy of the provided data map that
@@ -189,8 +178,6 @@ export default class ServerPageRenderer extends AbstractPageRenderer {
 	/**
 	 * Render page after all promises from loaded resources is resolved.
 	 *
-	 * @private
-	 * @method _renderPage
 	 * @param {AbstractController} controller
 	 * @param {React.Component} view
 	 * @param {Object<string, *>} pageState
@@ -219,30 +206,20 @@ export default class ServerPageRenderer extends AbstractPageRenderer {
 	/**
 	 * Render page content to a string containing HTML markup.
 	 *
-	 * @private
-	 * @method _renderPageContentToString
 	 * @param {AbstractController} controller
 	 * @param {function(new: React.Component)} view
 	 * @param {Object<string, *>} routeOptions
 	 * @return {string}
 	 */
 	_renderPageContentToString(controller, view, routeOptions) {
-		let managedRootView = this._factory.getManagedRootView(
-			routeOptions.managedRootView ||
-			this._settings.$Page.$Render.managedRootView ||
-			BlankManagedRootView
+		let reactElementView = this._getWrappedPageView(
+			controller,
+			view,
+			routeOptions
 		);
-		let props = this._generateViewProps(
-			managedRootView,
-			Object.assign({}, controller.getState(), { $pageView: view })
-		);
-		let wrappedPageViewElement = this._factory.wrapView(props);
-		let pageMarkup = this._ReactDOM.renderToString(wrappedPageViewElement);
+		let pageMarkup = this._ReactDOM.renderToString(reactElementView);
 
-		let documentView = this._factory.getDocumentView(
-			routeOptions.documentView ||
-			this._settings.$Page.$Render.documentView
-		);
+		let documentView = this._getDocumentView(routeOptions);
 		let documentViewFactory = this._factory.createReactElementFactory(documentView);
 		let appMarkup = this._ReactDOM.renderToStaticMarkup(documentViewFactory({
 			page: pageMarkup,

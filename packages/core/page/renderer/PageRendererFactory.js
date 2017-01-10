@@ -127,6 +127,9 @@ export default class PageRendererFactory {
 	 * passed from controller through the {@code props} property instead of the
 	 * {@code state} property.
 	 *
+	 * @param {(function(new: React.Component)|string)} view The namespace path
+	 *        pointing to the view component, or the constructor
+	 *        of the {@code React.Component}.
 	 * @param {{
 	 *          view: React.Component,
 	 *          state: Object<string, *>,
@@ -136,8 +139,11 @@ export default class PageRendererFactory {
 	 *         state to an instance of the specified page view through
 	 *         properties.
 	 */
-	wrapView(props) {
-		return this._React.createElement(ViewAdapter, props);
+	wrapView(view, props) {
+		return this._React.createElement(
+			this._resolveClassConstructor(view),
+			props
+		);
 	}
 
 	/**

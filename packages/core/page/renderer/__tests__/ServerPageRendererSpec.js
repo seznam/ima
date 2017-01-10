@@ -190,12 +190,8 @@ describe('ima.page.renderer.ServerPageRenderer', function() {
 	describe('_renderPageContentToString method', function() {
 
 		var utils = { $Utils: 'utils' };
-		var state = { state: 'state', $pageView: view };
-		var propsView = { view: view };
-		var props = Object.assign({}, state, utils, propsView);
 		var wrapedPageViewElement = { wrapElementView: 'wrapedPageViewElement' };
 		var pageMarkup = '<body></body>';
-		var managedRootView = function() {};
 		var documentView = function() {};
 		var documentViewElement = function() {};
 		var documentViewFactory = function() {
@@ -207,33 +203,24 @@ describe('ima.page.renderer.ServerPageRenderer', function() {
 		var pageContent = null;
 
 		beforeEach(function() {
-			spyOn(pageRenderer, '_generateViewProps')
-				.and
-				.returnValue(props);
-			spyOn(controller, 'getState')
-				.and
-				.returnValue(state);
-			spyOn(rendererFactory, 'wrapView')
-				.and
-				.returnValue(wrapedPageViewElement);
 			spyOn(ReactDOMServer, 'renderToString')
 				.and
 				.returnValue(pageMarkup);
 			spyOn(rendererFactory, 'createReactElementFactory')
 				.and
 				.returnValue(documentViewFactory);
-			spyOn(rendererFactory, 'getDocumentView')
-				.and
-				.returnValue(documentView);
-			spyOn(rendererFactory, 'getManagedRootView')
-				.and
-				.returnValue(managedRootView);
 			spyOn(ReactDOMServer, 'renderToStaticMarkup')
 				.and
 				.returnValue(appMarkup);
 			spyOn(pageRenderer, '_getRevivalSettings')
 				.and
 				.returnValue(revivalSettings);
+			spyOn(pageRenderer, '_getWrappedPageView')
+				.and
+				.returnValue(wrapedPageViewElement);
+			spyOn(pageRenderer, '_getDocumentView')
+				.and
+				.returnValue(documentView);
 			spyOn(controller, 'getMetaManager')
 				.and
 				.returnValue(metaManager);
@@ -244,12 +231,8 @@ describe('ima.page.renderer.ServerPageRenderer', function() {
 			pageContent = pageRenderer._renderPageContentToString(controller, view, routeOptions);
 		});
 
-		it('should generate view props from controller state', function() {
-			expect(pageRenderer._generateViewProps).toHaveBeenCalledWith(managedRootView, state);
-		});
-
 		it('should wrap page view', function() {
-			expect(rendererFactory.wrapView).toHaveBeenCalledWith(props);
+			expect(pageRenderer._getWrappedPageView).toHaveBeenCalledWith(controller, view, routeOptions);
 		});
 
 		it('should render page view to string', function() {
@@ -258,20 +241,6 @@ describe('ima.page.renderer.ServerPageRenderer', function() {
 
 		it('should create factory for creating React element from document view', function() {
 			expect(rendererFactory.createReactElementFactory).toHaveBeenCalledWith(documentView);
-		});
-
-		it('should return React Component for managedRootView from route options managedRootView property', function() {
-			var routeOptionsWithDocument = Object.assign({}, routeOptions, { managedRootView: ns.ima.page.renderer.BlankManagedRootView });
-			pageContent = pageRenderer._renderPageContentToString(controller, view, routeOptionsWithDocument);
-
-			expect(rendererFactory.getManagedRootView).toHaveBeenCalledWith(ns.ima.page.renderer.BlankManagedRootView);
-		});
-
-		it('should create factory for creating React element from route options documentView property', function() {
-			var routeOptionsWithDocument = Object.assign({}, routeOptions, { documentView: ns.ima.page.AbstractDocumentView });
-			pageContent = pageRenderer._renderPageContentToString(controller, view, routeOptionsWithDocument);
-
-			expect(rendererFactory.getDocumentView).toHaveBeenCalledWith(ns.ima.page.AbstractDocumentView);
 		});
 
 		it('should render static markup from document view', function() {
@@ -284,6 +253,7 @@ describe('ima.page.renderer.ServerPageRenderer', function() {
 		it('should return page content', function() {
 			expect(pageContent).toEqual('<!doctype html>\n' + appMarkup);
 		});
+
 	});
 
 });

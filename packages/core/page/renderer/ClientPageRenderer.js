@@ -2,7 +2,6 @@
 
 import ns from '../../namespace';
 import AbstractPageRenderer from './AbstractPageRenderer';
-import BlankManagedRootView from './BlankManagedRootView';
 import PageRenderer from './PageRenderer';
 import PageRendererFactory from './PageRendererFactory';
 import AbstractDocumentView from '../AbstractDocumentView';
@@ -204,25 +203,13 @@ export default class ClientPageRenderer extends AbstractPageRenderer {
 	 *        }} routeOptions The current route options.
 	 */
 	_renderToDOM(controller, view, routeOptions) {
-		let configuredManagedRootView =
-				routeOptions.managedRootView ||
-				this._settings.$Page.$Render.managedRootView ||
-				BlankManagedRootView;
-		let managedRootView = this._factory.getManagedRootView(
-			configuredManagedRootView
-		);
-		let props = this._generateViewProps(
-			managedRootView,
-			Object.assign({}, controller.getState(), { $pageView: view })
-		);
-		let reactElementView = this._factory.wrapView(props);
-
-		let configuredDocumentView = routeOptions.documentView ||
-			this._settings.$Page.$Render.documentView;
-		let documentView = this._factory.getDocumentView(
-			configuredDocumentView
+		let reactElementView = this._getWrappedPageView(
+			controller,
+			view,
+			routeOptions
 		);
 
+		let documentView = this._getDocumentView(routeOptions);
 		let masterElementId = documentView.masterElementId;
 		this._viewContainer = this._window.getElementById(masterElementId);
 

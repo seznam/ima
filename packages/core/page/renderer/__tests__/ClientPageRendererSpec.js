@@ -224,4 +224,41 @@ describe('ima.page.renderer.ClientPageRenderer', function() {
 
 	});
 
+	describe('_renderToDOM method', function() {
+
+		var wrapedPageViewElement = { wrapElementView: 'wrapedPageViewElement' };
+		var documentView = {
+			masterElementId: 'id'
+		};
+		var htmlNode = {
+			type: 'div'
+		};
+
+		beforeEach(function() {
+			spyOn(ReactDOM, 'render')
+				.and
+				.stub();
+			spyOn(pageRenderer, '_getWrappedPageView')
+				.and
+				.returnValue(wrapedPageViewElement);
+			spyOn(pageRenderer, '_getDocumentView')
+				.and
+				.returnValue(documentView);
+			spyOn(win, 'getElementById')
+				.and
+				.returnValue(htmlNode);
+
+			pageContent = pageRenderer._renderToDOM(controller, view, routeOptions);
+		});
+
+		it('should wrap page view', function() {
+			expect(pageRenderer._getWrappedPageView).toHaveBeenCalledWith(controller, view, routeOptions);
+		});
+
+		it('should render react component to defined element', function() {
+			expect(ReactDOM.render).toHaveBeenCalledWith(wrapedPageViewElement, htmlNode);
+		});
+
+	});
+
 });
