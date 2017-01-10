@@ -18,7 +18,7 @@ export default class HttpAgent {
 	 *        to the server as query parameters.
 	 * @param {{timeout: number=, ttl: number=, repeatRequest: number=,
 	 *        headers: Object<string, string>=, cache: boolean=,
-	 *        withCredentials: boolean}=} options
+	 *        withCredentials: boolean, listeners: object<string, function>}=} options
 	 *        Optional request options. The {@code timeout} specifies the
 	 *        request timeout in milliseconds, the {@code ttl} specified how
 	 *        long the request may be cached in milliseconds, the
@@ -30,7 +30,7 @@ export default class HttpAgent {
 	 *        default, also applies to requests in progress). The
 	 *        {@code withCredentials} flag indicates whether the request should
 	 *        be made using credentials such as cookies or authorization
-	 *        headers.
+	 *        headers. The {@code listeners} Add listeners for request.
 	 * @return {Promise<{
 	 *             status: number,
 	 *             body: *,
