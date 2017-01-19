@@ -5,8 +5,8 @@
 	"main": "index.js",
 	"scripts": {
 		"prepublish": "npm run test",
-		"test": "node node_modules/gulp/bin/gulp.js test --harmony_destructuring",
-		"dev": "node node_modules/gulp/bin/gulp.js dev --harmony_destructuring"
+		"test": "node node_modules/gulp/bin/gulp.js test",
+		"dev": "node node_modules/gulp/bin/gulp.js dev"
 	},
 	"repository": {
 		"type": "git",
@@ -29,16 +29,16 @@
 	"devDependencies": {
 		"express": "^4.14.0",
 		"gulp": "^3.9.1",
-		"gulp-jasmine": "^2.4.0",
+		"gulp-jasmine": "^2.4.2",
 		"gulp-plumber": "^1.1.0",
-		"jasmine": "^2.4.1",
-		"superagent": "^2.0.0"
+		"jasmine": "^2.5.3",
+		"superagent": "^3.3.2"
 	},
 	"dependencies": {
-		"async-each": "^1.0.0",
-		"highlight.js": "^9.5.0",
-		"ima-helpers": "^0.13.0",
+		"async-each": "1.0.1",
+		"highlight.js": "9.9.0",
+		"ima-helpers": "0.14.0-rc.1",
 		"stack-trace": "0.0.9",
-		"winston": "^2.2.0"
+		"winston": "2.3.0"
 	}
 }
