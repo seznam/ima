@@ -145,6 +145,7 @@ module.exports = (environment, logger) => {
 
 		if (error) {
 			status = error.status || 500;
+			body = error.response.body || {};
 			text = error.response.text;
 		}
 
