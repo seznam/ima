@@ -10,6 +10,7 @@ import EventBus from '../event/EventBus';
 import EventBusImpl from '../event/EventBusImpl';
 import Dispatcher from '../event/Dispatcher';
 import DispatcherImpl from '../event/DispatcherImpl';
+import AbstractExtension from '../extension/AbstractExtension';
 import GenericError from '../error/GenericError';
 import HttpAgent from '../http/HttpAgent';
 import HttpAgentImpl from '../http/HttpAgentImpl';
