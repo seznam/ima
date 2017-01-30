@@ -7,7 +7,7 @@ import ErrorView from 'app/page/error/ErrorView';
 import NotFoundController from 'app/page/notFound/NotFoundController';
 import NotFoundView from 'app/page/notFound/NotFoundView';
 
-export let init = (ns, oc, config) => {
+export default (ns, oc, config) => {
 	let router = oc.get(Router);
 
 	router

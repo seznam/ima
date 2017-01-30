@@ -11,7 +11,7 @@ import FeedResource from 'app/model/feed/FeedResource';
 import ItemFactory from 'app/model/item/ItemFactory';
 import ItemResource from 'app/model/item/ItemResource';
 
-export let init = (ns, oc, config) => {
+export default (ns, oc, config) => {
 
 	//*************START CONSTANT**************
 	oc.constant('API_BASE_URL', config.Api.baseUrl);

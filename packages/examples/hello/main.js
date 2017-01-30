@@ -1,7 +1,7 @@
-import { init as initBindApp } from 'app/config/bind';
-import { init as initRoutes } from 'app/config/routes';
-import { init as initServicesApp } from 'app/config/services';
-import { init as initSettings } from 'app/config/settings';
+import initBindApp from 'app/config/bind';
+import initRoutes from 'app/config/routes';
+import initServicesApp from 'app/config/services';
+import initSettings from 'app/config/settings';
 import * as ima from 'ima/main';
 
 let getInitialAppConfigFunctions = () => {

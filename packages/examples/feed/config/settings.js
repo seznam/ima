@@ -1,6 +1,6 @@
 import DocumentView from 'app/component/document/DocumentView';
 
-export let init = (ns, oc, config) => {
+export default (ns, oc, config) => {
 	let versionStamp = `?version=${config.$Version}`;
 
 	return {

@@ -7,7 +7,7 @@ import HomeView from '../page/home/HomeView';
 import NotFoundController from '../page/notFound/NotFoundController';
 import NotFoundView from '../page/notFound/NotFoundView';
 
-export let init = (ns, oc, config) => {
+export default (ns, oc, config) => {
 	let router = oc.get(Router);
 
 	router

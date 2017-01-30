@@ -4,7 +4,7 @@ import EventBus from 'ima/event/EventBus';
 import Router from 'ima/router/Router';
 import Window from 'ima/window/Window';
 
-export let init = (ns, oc, config) => {
+export default (ns, oc, config) => {
 
 	//COMPONENT Utils
 	oc.constant('$Utils', {
