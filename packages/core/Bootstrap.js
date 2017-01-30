@@ -111,7 +111,7 @@ export default class Bootstrap {
 		let environmentSetting = allSettings[environment];
 
 		if (environment !== PRODUCTION_ENVIRONMENT) {
-			var	productionSettings = allSettings[PRODUCTION_ENVIRONMENT];
+			let	productionSettings = allSettings[PRODUCTION_ENVIRONMENT];
 			$Helper.assignRecursively(
 				productionSettings,
 				environmentSetting
