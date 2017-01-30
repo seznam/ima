@@ -1,6 +1,7 @@
 import $Helper from 'ima-helpers';
 import ns from './namespace';
 import ObjectContainer from './ObjectContainer';
+import Router from './router/Router';
 
 ns.namespace('ima');
 
@@ -111,7 +112,7 @@ export default class Bootstrap {
 		let environmentSetting = allSettings[environment];
 
 		if (environment !== PRODUCTION_ENVIRONMENT) {
-			var	productionSettings = allSettings[PRODUCTION_ENVIRONMENT];
+			let	productionSettings = allSettings[PRODUCTION_ENVIRONMENT];
 			$Helper.assignRecursively(
 				productionSettings,
 				environmentSetting
@@ -145,7 +146,8 @@ export default class Bootstrap {
 	 * Initializes the routes.
 	 */
 	_initRoutes() {
-		this._config.initRoutes(ns, this._oc, this._config.routes);
+		let router = this._oc.get(Router);
+		this._config.initRoutes(ns, this._oc, this._config.routes, router);
 	}
 
 	/**
