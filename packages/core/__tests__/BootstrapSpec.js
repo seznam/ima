@@ -158,11 +158,16 @@ describe('Bootstrap', () => {
 	describe('_initRoutes method', () => {
 
 		it('should initalize app route', () => {
+			let router = {};
+
 			spyOn(bootConfig, 'initRoutes');
+			spyOn(objectContainer, 'get')
+				.and
+				.returnValue(router);
 
 			bootstrap._initRoutes();
 
-			expect(bootConfig.initRoutes).toHaveBeenCalledWith(namespace, objectContainer, bootConfig.routes);
+			expect(bootConfig.initRoutes).toHaveBeenCalledWith(namespace, objectContainer, bootConfig.routes, router);
 		});
 
 	});
