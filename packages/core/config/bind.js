@@ -46,7 +46,7 @@ import ClientWindow from '../window/ClientWindow';
 import ServerWindow from '../window/ServerWindow';
 import Window from '../window/Window';
 
-export let init = (ns, oc, config) => { //jshint ignore:line
+export default (ns, oc, config) => {
 
 	//**************START VENDORS**************
 
