@@ -1,4 +1,3 @@
-import Router from 'ima/router/Router';
 import RouteNames from 'ima/router/RouteNames';
 import ErrorController from '../page/error/ErrorController';
 import ErrorView from '../page/error/ErrorView';
