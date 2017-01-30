@@ -1,51 +1,52 @@
-describe('ima.http.SuperAgentProxy', function() {
+import HttpProxy from 'http/HttpProxy';
+import StatusCode from 'http/StatusCode';
+import UrlTransformer from 'http/UrlTransformer';
+import Window from 'window/Window';
 
-	var proxy = null;
-	var apiUrl = 'http://localhost:3001/api/';
-	var response = {
+describe('ima.http.SuperAgentProxy', () => {
+
+	let proxy = null;
+	let apiUrl = 'http://localhost:3001/api/';
+	let response = {
 		body: {
 			data: 'some data'
 		}
 	};
-	var superAgent = null;
+	let superAgent = null;
 
-	var data = {};
-	var options = { ttl: 3600000, timeout: 2000, repeatRequest: 1, headers: [], withCredentials: true };
-	var httpUrlTransformer = oc.get('$HttpUrlTransformer');
-	var windowHelper = oc.get('$Window');
-	var HttpStatusCode = $import('ima/http/StatusCode');
+	let data = {};
+	let options = { ttl: 3600000, timeout: 2000, repeatRequest: 1, headers: [], withCredentials: true };
+	let urlTransformer = new UrlTransformer();
+	let windowHelper = new Window();
 
-	beforeEach(function() {
+	beforeEach(() => {
 		superAgent = {
 			funcError: null,
-			get: function() { return this; },
-			post: function(){ return this; },
-			put: function(){ return this; },
-			del: function(){ return this; },
-			patch: function() { return this; },
-			set: function() { return this; },
-			accept: function() { return this; },
-			query: function() { return this; },
-			send: function() { return this; },
-			on: function() { return this; },
-			withCredentials: function() { return this; },
-			timeout: function() {
-				var self = this;
-				setTimeout(function() {
-					self.funcError({ timeout: options.timeout });
+			get: () => superAgent,
+			post: () => superAgent,
+			put: () => superAgent,
+			del: () => superAgent,
+			patch: () => superAgent,
+			set: () => superAgent,
+			accept: () => superAgent,
+			query: () => superAgent,
+			send: () => superAgent,
+			on: () => superAgent,
+			withCredentials: () => superAgent,
+			timeout: () => {
+				setTimeout(() => {
+					superAgent.funcError({ timeout: options.timeout });
 				}, options.timeout);
-				return this;
+				return superAgent;
 			},
-			end: function() {
-				return this;
-			}
+			end: () => superAgent
 		};
-		proxy = oc.create('ima.http.SuperAgentProxy', [superAgent, httpUrlTransformer, windowHelper]);
+		proxy = new HttpProxy(superAgent, urlTransformer, windowHelper);
 
 		jasmine.clock().install();
 	});
 
-	afterEach(function() {
+	afterEach(() => {
 		jasmine.clock().uninstall();
 	});
 
@@ -55,144 +56,144 @@ describe('ima.http.SuperAgentProxy', function() {
 		'put',
 		'delete',
 		'patch'
-	], function(method) {
-		describe('method ' + method, function() {
-			it('should return promise with response body', function(done) {
+	], (method) => {
+		describe('method ' + method, () => {
+			it('should return promise with response body', (done) => {
 				spyOn(superAgent, 'end')
 					.and
-					.callFake(function(callback) {
+					.callFake((callback) => {
 						return callback(null, response);
 					});
 
 				proxy.request(method, apiUrl, data, options)
-					.then(function(result) {
+					.then((result) => {
 						expect(result.body).toEqual(response.body);
 						done();
 					})
-					.catch(function(error) {
+					.catch((error) => {
 						console.log(error);
 						done();
 					});
 			});
 
-			it('should return a "body" field in error object, when promise is rejected', function(done) {
+			it('should return a "body" field in error object, when promise is rejected', (done) => {
 				spyOn(superAgent, 'end')
 					.and
-					.callFake(function(callback) {
+					.callFake((callback) => {
 						return callback({ timeout: options.timeout });
 					});
 
 				proxy.request(method, apiUrl, data, options)
-					.then(function() {}, function(error) {
+					.then(() => {}, (error) => {
 						expect(error.body).toBeDefined();
 						done();
 					});
 			});
 
-			it('should reject promise for Timeout error', function(done) {
+			it('should reject promise for Timeout error', (done) => {
 				spyOn(superAgent, 'end')
 					.and
-					.callFake(function(callback) {
+					.callFake((callback) => {
 						return callback({ timeout: options.timeout });
 					});
 
 				proxy.request(method, apiUrl, data, options)
-					.then(function() {}, function(error) {
-						expect(error.status).toEqual(HttpStatusCode.TIMEOUT);
+					.then(() => {}, (error) => {
+						expect(error.status).toEqual(StatusCode.TIMEOUT);
 						done();
 					});
 			});
 
-			it('should be timeouted for longer request then options.timeout', function(done) {
+			it('should be timeouted for longer request then options.timeout', (done) => {
 				spyOn(superAgent, 'end')
 					.and
-					.callFake(function(callback) {
+					.callFake((callback) => {
 						superAgent.funcError = callback;
 						jasmine.clock().tick(options.timeout + 1);
 					});
 
 
 				proxy.request(method, apiUrl, data, options)
-					.then(function() {}, function(error) {
-						expect(error.status).toEqual(HttpStatusCode.TIMEOUT);
+					.then(() => {}, (error) => {
+						expect(error.status).toEqual(StatusCode.TIMEOUT);
 						done();
 					});
 			});
 
-			it('should reject promise for CORS', function(done) {
+			it('should reject promise for CORS', (done) => {
 				spyOn(superAgent, 'end')
 					.and
-					.callFake(function(callback) {
+					.callFake((callback) => {
 						return callback({ crossDomain: true });
 					});
 
 				proxy.request(method, apiUrl, data, options)
-					.then(function() {}, function(error) {
-						expect(error.status).toEqual(HttpStatusCode.FORBIDDEN);
+					.then(() => {}, (error) => {
+						expect(error.status).toEqual(StatusCode.FORBIDDEN);
 						done();
 					});
 			});
 
-			it('should reject promise for Forbidden', function(done) {
+			it('should reject promise for Forbidden', (done) => {
 				spyOn(superAgent, 'end')
 					.and
-					.callFake(function(callback) {
+					.callFake((callback) => {
 						return callback({ status: 403 });
 					});
 
 				proxy.request(method, apiUrl, data, options)
-					.then(function() {}, function(error) {
-						expect(error.status).toEqual(HttpStatusCode.FORBIDDEN);
+					.then(() => {}, (error) => {
+						expect(error.status).toEqual(StatusCode.FORBIDDEN);
 						done();
 					});
 			});
 
-			it('should reject promise for Not found', function(done) {
+			it('should reject promise for Not found', (done) => {
 				spyOn(superAgent, 'end')
 					.and
-					.callFake(function(callback) {
+					.callFake((callback) => {
 						return callback({ status: 404 });
 					});
 
 				proxy.request(method, apiUrl, data, options)
-					.then(function() {}, function(error) {
-						expect(error.status).toEqual(HttpStatusCode.NOT_FOUND);
+					.then(() => {}, (error) => {
+						expect(error.status).toEqual(StatusCode.NOT_FOUND);
 						done();
 					});
 			});
 
-			it('should reject promise for Internal Server Error', function(done) {
+			it('should reject promise for Internal Server Error', (done) => {
 				spyOn(superAgent, 'end')
 					.and
-					.callFake(function(callback) {
+					.callFake((callback) => {
 						return callback({ status: 500 });
 					});
 
 				proxy.request(method, apiUrl, data, options)
-					.then(function() {}, function(error) {
-						expect(error.status).toEqual(HttpStatusCode.SERVER_ERROR);
+					.then(() => {}, (error) => {
+						expect(error.status).toEqual(StatusCode.SERVER_ERROR);
 						done();
 					});
 			});
 
-			it('should reject promise for UNKNOWN', function(done) {
+			it('should reject promise for UNKNOWN', (done) => {
 				spyOn(superAgent, 'end')
 					.and
-					.callFake(function(callback) {
+					.callFake((callback) => {
 						return callback({});
 					});
 
 				proxy.request(method, apiUrl, data, options)
-					.then(function() {}, function(error) {
-						expect(error.status).toEqual(HttpStatusCode.SERVER_ERROR);
+					.then(() => {}, (error) => {
+						expect(error.status).toEqual(StatusCode.SERVER_ERROR);
 						done();
 					});
 			});
 
-			it('should set credentials to request', function(done) {
+			it('should set credentials to request', (done) => {
 				spyOn(superAgent, 'end')
 					.and
-					.callFake(function(callback) {
+					.callFake((callback) => {
 						return callback(null, response);
 					});
 
@@ -201,20 +202,20 @@ describe('ima.http.SuperAgentProxy', function() {
 					.returnValue(proxy);
 
 				proxy.request(method, apiUrl, data, options)
-					.then(function(result) {
+					.then((result) => {
 						expect(proxy._setCredentials).toHaveBeenCalled();
 						done();
 					})
-					.catch(function(error) {
+					.catch((error) => {
 						console.log(error);
 						done();
 					});
 			});
 
-			it('should call private method _setListeners for each request', function(done) {
+			it('should call private method _setListeners for each request', (done) => {
 				spyOn(superAgent, 'end')
 					.and
-					.callFake(function(callback) {
+					.callFake((callback) => {
 						return callback(null, response);
 					});
 
@@ -223,32 +224,32 @@ describe('ima.http.SuperAgentProxy', function() {
 					.returnValue(proxy);
 
 				proxy.request(method, apiUrl, data, options)
-					.then(function() {
+					.then(() => {
 						expect(proxy._setListeners).toHaveBeenCalled();
 						done();
-					})
+					});
 			});
 
-			it('should add listener for "progress" to request', function(done) {
+			it('should add listener for "progress" to request', (done) => {
 				spyOn(superAgent, 'on')
 					.and
-					.stub()
+					.stub();
 
 				spyOn(superAgent, 'end')
 					.and
-					.callFake(function(callback) {
+					.callFake((callback) => {
 						return callback(null, response);
-					})
+					});
 
 				function dummy() {}
-				var reqOptions = Object.assign({}, options, { 'listeners': { 'progress': dummy } })
+				let reqOptions = Object.assign({}, options, { 'listeners': { 'progress': dummy } });
 
 				proxy.request(method, apiUrl, data, reqOptions)
-					.then(function() {
-						expect(superAgent.on).toHaveBeenCalledWith('progress', dummy)
-						expect(superAgent.on.calls.count()).toEqual(1)
-						done()
-					})
+					.then(() => {
+						expect(superAgent.on).toHaveBeenCalledWith('progress', dummy);
+						expect(superAgent.on.calls.count()).toEqual(1);
+						done();
+					});
 			});
 		});
 	});

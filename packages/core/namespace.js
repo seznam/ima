@@ -9,7 +9,7 @@
  *
  * @deprecated
  */
-class Namespace {
+export class Namespace {
 	/**
 	 * Initializes the namespace provider.
 	 *

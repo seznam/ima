@@ -1,31 +1,34 @@
-describe('ima.cache.CacheEntry', function() {
+import CacheEntry from 'cache/CacheEntry';
 
-	var cacheData = null;
-	beforeEach(function() {
-		cacheData = oc.create('ima.cache.CacheEntry', [123, 1000]);
+describe('ima.cache.CacheEntry', () => {
+
+	let cacheEntry = null;
+
+	beforeEach(() => {
+		cacheEntry = new CacheEntry(123, 1000);
 		jasmine.clock().install();
 	});
 
-	afterEach(function() {
+	afterEach(() => {
 		jasmine.clock().uninstall();
 	});
 
-	it('should be return true if is expired', function() {
+	it('should be return true if is expired', () => {
 		jasmine.clock().mockDate(new Date());
 
 		jasmine.clock().tick(500);
-		expect(cacheData.isExpired()).toBe(false);
+		expect(cacheEntry.isExpired()).toBe(false);
 
 		jasmine.clock().tick(1001);
-		expect(cacheData.isExpired()).toBe(true);
+		expect(cacheEntry.isExpired()).toBe(true);
 	});
 
-	it('should return value', function() {
-		expect(cacheData.getValue()).toEqual(123);
+	it('should return value', () => {
+		expect(cacheEntry.getValue()).toEqual(123);
 	});
 
-	it('should be return object for serialization', function() {
-		expect(cacheData.serialize().value).toEqual(123);
-		expect(cacheData.serialize().ttl).toEqual(1000);
+	it('should be return object for serialization', () => {
+		expect(cacheEntry.serialize().value).toEqual(123);
+		expect(cacheEntry.serialize().ttl).toEqual(1000);
 	});
 });

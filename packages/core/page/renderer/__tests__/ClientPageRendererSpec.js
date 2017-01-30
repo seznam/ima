@@ -1,30 +1,44 @@
+jest.mock('page/renderer/PageRendererFactory');
+
+import Helper from 'ima-helpers';
+import Controller from 'controller/Controller';
+import ClientPageRenderer from 'page/renderer/ClientPageRenderer';
+import RendererFactory from 'page/renderer/PageRendererFactory';
+import Window from 'window/Window';
+
 describe('ima.page.renderer.ClientPageRenderer', function() {
 
-	var param1 = 'param1';
-	var param2 = 'param2';
-	var params = {
+	let param1 = 'param1';
+	let param2 = 'param2';
+	let params = {
 		param1: param1,
 		param2: Promise.resolve(param2)
 	};
-	var pageState = {
+	let pageState = {
 		param1: param1,
 		param2: param2
 	};
 
-	var controller = new ns.ima.controller.Controller();
+	let controller = new Controller();
 	controller.getMetaManager = function() {};
-	var view = function() {};
+	let view = function() {};
 
-	var pageRenderer = null;
-	var $Helper = oc.get('$Helper');
-	var rendererFactory = oc.get('$PageRendererFactory');
-	var ReactDOM = {
+	let win = null;
+	let rendererFactory = null;
+	let pageRenderer = null;
+	let ReactDOM = {
 		unmountComponentAtNode: function() {},
 		render: function() {}
 	};
-	var settings = oc.get('$Settings');
-	var win = oc.get('$Window');
-	var routeOptions = {
+	let settings = {
+		$Page: {
+			$Render: {
+				scripts: [],
+				documentView: 'app.component.document.DocumentView'
+			}
+		}
+	};
+	let routeOptions = {
 		onlyUpdate: false,
 		autoScroll: false,
 		allowSPA: false,
@@ -32,7 +46,9 @@ describe('ima.page.renderer.ClientPageRenderer', function() {
 	};
 
 	beforeEach(function() {
-		pageRenderer = oc.create('ima.page.renderer.ClientPageRenderer', [rendererFactory, $Helper, ReactDOM, settings, win]);
+		rendererFactory = new RendererFactory();
+		win = new Window();
+		pageRenderer = new ClientPageRenderer(rendererFactory, Helper, ReactDOM, settings, win);
 	});
 
 	describe('mount method', function() {
@@ -226,11 +242,11 @@ describe('ima.page.renderer.ClientPageRenderer', function() {
 
 	describe('_renderToDOM method', function() {
 
-		var wrapedPageViewElement = { wrapElementView: 'wrapedPageViewElement' };
-		var documentView = {
+		let wrapedPageViewElement = { wrapElementView: 'wrapedPageViewElement' };
+		let documentView = {
 			masterElementId: 'id'
 		};
-		var htmlNode = {
+		let htmlNode = {
 			type: 'div'
 		};
 
@@ -248,7 +264,7 @@ describe('ima.page.renderer.ClientPageRenderer', function() {
 				.and
 				.returnValue(htmlNode);
 
-			pageContent = pageRenderer._renderToDOM(controller, view, routeOptions);
+			let pageContent = pageRenderer._renderToDOM(controller, view, routeOptions);
 		});
 
 		it('should wrap page view', function() {

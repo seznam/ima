@@ -1,23 +1,30 @@
-describe('ima.http.HttpAgentImpl', function() {
+jest.mock('http/HttpProxy');
+jest.mock('storage/CookieStorage');
 
-	var proxy = null;
-	var http = null;
-	var cache = null;
-	var cookie = null;
-	var options = null;
-	var data = null;
-	var httpConfig = null;
-	var cacheStorage = null;
-	var cacheFactory = null;
-	var Helper = oc.get('$Helper');
+import Helper from 'ima-helpers';
+import Cache from 'cache/Cache';
+import GenericError from 'error/GenericError';
+import HttpAgentImpl from 'http/HttpAgentImpl';
+import SuperAgentProxy from 'http/HttpProxy';
+import CookieStorage from 'storage/CookieStorage';
+import Storage from 'storage/Storage';
 
-	beforeEach(function() {
-		cacheStorage = oc.create('$MapStorage');
-		cacheFactory = oc.create('$CacheFactory');
-		cache = oc.create('ima.cache.CacheImpl', [cacheStorage, cacheFactory, Helper, { enabled: true, ttl: 1000 }]);
+describe('ima.http.HttpAgentImpl', () => {
 
-		proxy = oc.create('$SuperAgentProxy');
-		cookie = oc.create('$CookieStorage');
+	let proxy = null;
+	let http = null;
+	let cache = null;
+	let cookie = null;
+	let options = null;
+	let data = null;
+	let httpConfig = null;
+	let cacheStorage = null;
+	let cacheFactory = null;
+
+	beforeEach(() => {
+		cache = new Cache();
+		proxy = new SuperAgentProxy();
+		cookie = new CookieStorage();
 		httpConfig = {
 			defaultRequestOptions: {
 				timeout: 7000,
@@ -33,8 +40,7 @@ describe('ima.http.HttpAgentImpl', function() {
 				prefix: 'http.'
 			}
 		};
-
-		http = oc.create('ima.http.HttpAgentImpl', [proxy, cache, cookie, httpConfig]);
+		http = new HttpAgentImpl(proxy, cache, cookie, httpConfig);
 
 		options = {
 			ttl: httpConfig.defaultRequestOptions.ttl,
@@ -69,17 +75,17 @@ describe('ima.http.HttpAgentImpl', function() {
 		'put',
 		'patch',
 		'delete'
-	], function(method) {
-		describe(method + ' method', function() {
+	], (method) => {
+		describe(method + ' method', () => {
 
-			beforeEach(function() {
+			beforeEach(() => {
 				data.params.method = method;
 			});
 
-			it('should be return resolved promise with data', function(done) {
+			it('should be return resolved promise with data', (done) => {
 				spyOn(proxy, 'request')
 					.and
-					.callFake(function() {
+					.callFake(() => {
 						return Promise.resolve(data);
 					});
 
@@ -88,8 +94,8 @@ describe('ima.http.HttpAgentImpl', function() {
 					.returnValue(false);
 
 				http[method](data.params.url, data.params.data, data.params.options)
-					.then(function(response) {
-						var agentResponse = {
+					.then((response) => {
+						let agentResponse = {
 							status: data.status,
 							params: data.params,
 							body: data.body,
@@ -100,31 +106,31 @@ describe('ima.http.HttpAgentImpl', function() {
 						expect(response).toEqual(agentResponse);
 						done();
 					})
-					.catch(function(e) {
+					.catch((e) => {
 						console.error(e.message, e.stack);
 						done();
 					});
 			});
 
-			it('should be rejected with error', function(done) {
+			it('should be rejected with error', (done) => {
 				spyOn(proxy, 'request')
 					.and
-					.callFake(function() {
+					.callFake(() => {
 						return Promise.reject(data.params);
 					});
 
 				http[method](data.params.url, data.params.data, data.params.options)
-					.then(function() {}, function(error) {
-						expect(error instanceof ns.ima.error.GenericError).toBe(true);
+					.then(() => {}, (error) => {
+						expect(error instanceof GenericError).toBe(true);
 						expect(proxy.request.calls.count()).toEqual(2);
 						done();
 					});
 			});
 
-			it('should be set cookie', function(done) {
+			it('should be set cookie', (done) => {
 				spyOn(proxy, 'request')
 					.and
-					.callFake(function() {
+					.callFake(() => {
 						return Promise.resolve(data);
 					});
 				spyOn(proxy, 'haveToSetCookiesManually')
@@ -133,7 +139,7 @@ describe('ima.http.HttpAgentImpl', function() {
 				spyOn(cookie, 'parseFromSetCookieHeader');
 
 				http[method](data.params.url, data.params.data, data.params.options)
-					.then(function() {
+					.then(() => {
 						expect(cookie.parseFromSetCookieHeader.calls.count()).toEqual(2);
 						done();
 					});

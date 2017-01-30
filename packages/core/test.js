@@ -1,6 +1,7 @@
 var root = (typeof window !== 'undefined' && window !== null) ? window : global;
 root.$IMA = root.$IMA || {};
 root.$IMA.Test = true;
+root.$Debug = true;
 
 root.extend = extend;
 root.using = using;

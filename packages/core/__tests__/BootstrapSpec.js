@@ -1,46 +1,43 @@
-describe('Bootstrap', function() {
+import Bootstrap from 'Bootstrap';
+import ObjectContainer from 'ObjectContainer';
+import namespace from 'namespace';
 
-	var Bootstrap = $import('ima/Bootstrap');
-	var ObjectContainer = $import('ima/ObjectContainer');
+describe('Bootstrap', () => {
 
-	var bootstrap = null;
-	var objectContainer = null;
-	var environments = {
+	let bootstrap = null;
+	let objectContainer = null;
+	let environments = {
 		prod: {},
 		test: {},
 		dev: {}
 	};
-	var plugin = {
-		$registerImaPlugin: function() {},
-		initSettings: function() {
-			return environments;
-		},
-		initBind: function() {}
+	let plugin = {
+		$registerImaPlugin: () => {},
+		initSettings: () => environments,
+		initBind: () => {}
 	};
-	var bootConfig = {
+	let bootConfig = {
 		plugins: [
 			plugin
 		],
-		initSettings: function() {
-			return environments;
-		},
-		initBindIma: function() {},
-		initBindApp: function() {},
-		initRoutes: function() {},
+		initSettings: () => environments,
+		initBindIma: () => {},
+		initBindApp: () => {},
+		initRoutes: () => {},
 		bind: {},
 		routes: {}
 	};
 
-	beforeEach(function() {
-		objectContainer = new ObjectContainer(ns);
+	beforeEach(() => {
+		objectContainer = new ObjectContainer(namespace);
 		bootstrap = new Bootstrap(objectContainer);
 
 		bootstrap._config = bootConfig;
 	});
 
-	describe('run method', function() {
+	describe('run method', () => {
 
-		beforeEach(function() {
+		beforeEach(() => {
 			spyOn(bootstrap, '_initSettings')
 				.and
 				.stub();
@@ -60,32 +57,32 @@ describe('Bootstrap', function() {
 			bootstrap.run(bootConfig);
 		});
 
-		it('should initialize settings', function() {
+		it('should initialize settings', () => {
 			expect(bootstrap._initSettings).toHaveBeenCalled();
 		});
 
-		it('should bind dependencies', function() {
+		it('should bind dependencies', () => {
 			expect(bootstrap._bindDependencies).toHaveBeenCalled();
 		});
 
-		it('should initialize services', function() {
+		it('should initialize services', () => {
 			expect(bootstrap._initServices).toHaveBeenCalled();
 		});
 
-		it('should initialize routes', function() {
+		it('should initialize routes', () => {
 			expect(bootstrap._initRoutes).toHaveBeenCalled();
 		});
 	});
 
-	describe('_initSettings method', function() {
+	describe('_initSettings method', () => {
 
-		beforeEach(function() {
+		beforeEach(() => {
 			spyOn(bootstrap, '_getEnvironmentSetting')
 				.and
 				.returnValue({});
 		});
 
-		it('it should call initSettings method for app', function() {
+		it('it should call initSettings method for app', () => {
 			spyOn(bootConfig, 'initSettings')
 				.and
 				.callThrough();
@@ -95,7 +92,7 @@ describe('Bootstrap', function() {
 			expect(bootConfig.initSettings).toHaveBeenCalled();
 		});
 
-		it('it should call initSettings method for plugin', function() {
+		it('it should call initSettings method for plugin', () => {
 			spyOn(plugin, 'initSettings')
 				.and
 				.callThrough();
@@ -106,9 +103,9 @@ describe('Bootstrap', function() {
 		});
 	});
 
-	describe('_bindDependencies method', function() {
+	describe('_bindDependencies method', () => {
 
-		it('should set ima binding state to object container', function() {
+		it('should set ima binding state to object container', () => {
 			spyOn(objectContainer, 'setBindingState').and.callThrough();
 
 			bootstrap._bindDependencies();
@@ -116,7 +113,7 @@ describe('Bootstrap', function() {
 			expect(objectContainer.setBindingState).toHaveBeenCalledWith(ObjectContainer.IMA_BINDING_STATE);
 		});
 
-		it('should set plugin binding state to object container', function() {
+		it('should set plugin binding state to object container', () => {
 			spyOn(objectContainer, 'setBindingState').and.callThrough();
 
 			bootstrap._bindDependencies();
@@ -124,7 +121,7 @@ describe('Bootstrap', function() {
 			expect(objectContainer.setBindingState).toHaveBeenCalledWith(ObjectContainer.PLUGIN_BINDING_STATE);
 		});
 
-		it('should set app binding state to object container', function() {
+		it('should set app binding state to object container', () => {
 			spyOn(objectContainer, 'setBindingState').and.callThrough();
 
 			bootstrap._bindDependencies();
@@ -132,40 +129,40 @@ describe('Bootstrap', function() {
 			expect(objectContainer.setBindingState).toHaveBeenCalledWith(ObjectContainer.APP_BINDING_STATE);
 		});
 
-		it('should bind ima', function() {
+		it('should bind ima', () => {
 			spyOn(bootConfig, 'initBindIma');
 
 			bootstrap._bindDependencies();
 
-			expect(bootConfig.initBindIma).toHaveBeenCalledWith(ns, objectContainer, {});
+			expect(bootConfig.initBindIma).toHaveBeenCalledWith(namespace, objectContainer, {});
 		});
 
-		it('should bind ima plugin', function() {
+		it('should bind ima plugin', () => {
 			spyOn(plugin, 'initBind');
 
 			bootstrap._bindDependencies();
 
-			expect(plugin.initBind).toHaveBeenCalledWith(ns, objectContainer, {});
+			expect(plugin.initBind).toHaveBeenCalledWith(namespace, objectContainer, {});
 		});
 
-		it('should bind app', function() {
+		it('should bind app', () => {
 			spyOn(bootConfig, 'initBindApp');
 
 			bootstrap._bindDependencies();
 
-			expect(bootConfig.initBindApp).toHaveBeenCalledWith(ns, objectContainer, {});
+			expect(bootConfig.initBindApp).toHaveBeenCalledWith(namespace, objectContainer, {});
 		});
 
 	});
 
-	describe('_initRoutes method', function() {
+	describe('_initRoutes method', () => {
 
-		it('should initalize app route', function() {
+		it('should initalize app route', () => {
 			spyOn(bootConfig, 'initRoutes');
 
 			bootstrap._initRoutes();
 
-			expect(bootConfig.initRoutes).toHaveBeenCalledWith(ns, objectContainer, bootConfig.routes);
+			expect(bootConfig.initRoutes).toHaveBeenCalledWith(namespace, objectContainer, bootConfig.routes);
 		});
 
 	});

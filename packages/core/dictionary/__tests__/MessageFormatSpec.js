@@ -1,4 +1,6 @@
-describe('ima.MessageFormatDictionary', function() {
+import MessageFormatDictionary from 'dictionary/MessageFormatDictionary';
+
+describe('ima.dictionary.MessageFormatDictionary', function() {
 
 	var dictionary = null;
 	var config = {
@@ -15,7 +17,7 @@ describe('ima.MessageFormatDictionary', function() {
 		}
 	};
 	beforeEach(function() {
-		dictionary = oc.create('ima.dictionary.MessageFormatDictionary');
+		dictionary = new MessageFormatDictionary();
 
 		dictionary.init(config);
 	});

@@ -1,23 +1,27 @@
-describe('ima.cache.CacheImpl', function() {
+import Helper from 'ima-helpers';
+import CacheFactory from 'cache/CacheFactory';
+import Cache from 'cache/CacheImpl';
+import MapStorage from 'storage/MapStorage';
 
-	var cache = null;
-	var cacheStorage = null;
-	var cacheFactory = null;
-	var Helper = oc.get('$Helper');
+describe('ima.cache.CacheImpl', () => {
 
-	beforeEach(function() {
-		cacheStorage = oc.create('$MapStorage');
-		cacheFactory = oc.create('$CacheFactory');
-		cache = oc.create('ima.cache.CacheImpl', [cacheStorage, cacheFactory, Helper, { enabled: true, ttl: 1000 }]);
+	let cache = null;
+	let cacheStorage = null;
+	let cacheFactory = null;
+
+	beforeEach(() => {
+		cacheStorage = new MapStorage();
+		cacheFactory = new CacheFactory();
+		cache = new Cache(cacheStorage, cacheFactory, Helper, { enabled: true, ttl: 1000 });
 		cache.set('aaa', 123);
 		jasmine.clock().install();
 	});
 
-	afterEach(function() {
+	afterEach(() => {
 		jasmine.clock().uninstall();
 	});
 
-	it('should store value for key', function() {
+	it('should store value for key', () => {
 		jasmine.clock().mockDate(new Date());
 		cache.set('bbb', 456);
 		cache.set('ccc', 321, 2000);
@@ -29,10 +33,10 @@ describe('ima.cache.CacheImpl', function() {
 		expect(cache.has('ccc')).toBe(true);
 	});
 
-	describe('set method', function() {
+	describe('set method', () => {
 
-		it('should store deep clone', function() {
-			var object = {
+		it('should store deep clone', () => {
+			let object = {
 				number: 1,
 				boolean: true,
 				string: 'text',
@@ -41,7 +45,7 @@ describe('ima.cache.CacheImpl', function() {
 					number: 1,
 					boolean: true,
 					string: 'text',
-					array: [1, 2, 3, [4, 5], {number: 1}]
+					array: [1, 2, 3, [4, 5], { number: 1 }]
 				}
 			};
 
@@ -51,15 +55,15 @@ describe('ima.cache.CacheImpl', function() {
 			object.object.array[3] = 4;
 			object.object.array[4].number = 2;
 
-			var cacheObject = cache.get('object');
+			let cacheObject = cache.get('object');
 
 			expect(cacheObject.object.number).toEqual(1);
 			expect(cacheObject.object.array[3]).toEqual([4, 5]);
 			expect(cacheObject.object.array[4].number).toEqual(1);
 		});
 
-		it('should returns deep clone', function() {
-			var object = {
+		it('should returns deep clone', () => {
+			let object = {
 				number: 1,
 				boolean: true,
 				string: 'text',
@@ -68,12 +72,12 @@ describe('ima.cache.CacheImpl', function() {
 					number: 1,
 					boolean: true,
 					string: 'text',
-					array: [1, 2, 3, [4, 5], {number: 1}]
+					array: [1, 2, 3, [4, 5], { number: 1 }]
 				}
 			};
 
 			cache.set('object', object);
-			var cloneObject = cache.get('object');
+			let cloneObject = cache.get('object');
 
 			cloneObject.object.number = 2;
 			cloneObject.object.array[3] = 4;
@@ -82,8 +86,8 @@ describe('ima.cache.CacheImpl', function() {
 			expect(cache.get('object')).toEqual(object);
 		});
 
-		it('should return same value for instance of Promise', function() {
-			var promise = Promise.resolve('promise');
+		it('should return same value for instance of Promise', () => {
+			let promise = Promise.resolve('promise');
 			spyOn(Helper, 'clone')
 				.and
 				.stub();
@@ -95,7 +99,7 @@ describe('ima.cache.CacheImpl', function() {
 		});
 	});
 
-	it('should return false for undefined cacheEntry', function() {
+	it('should return false for undefined cacheEntry', () => {
 		spyOn(cacheStorage, 'has')
 			.and
 			.returnValue(true);
@@ -103,73 +107,73 @@ describe('ima.cache.CacheImpl', function() {
 		expect(cache.has('bbb')).toBe(false);
 	});
 
-	it('should return cached value for exist key', function() {
+	it('should return cached value for exist key', () => {
 		expect(cache.get('aaa')).toEqual(123);
 	});
 
-	it('should return null for not exist key', function() {
+	it('should return null for not exist key', () => {
 		expect(cache.get('bbb')).toEqual(null);
 	});
 
-	it('should cleared cache', function() {
+	it('should cleared cache', () => {
 		cache.clear();
 
 		expect(cache.has('aaa')).toBe(false);
 	});
 
-	it('should cache disabled', function() {
+	it('should cache disabled', () => {
 		cache.disable();
 
 		expect(cache.has('aaa')).toBe(false);
 	});
 
-	it('should serialize and deserialize', function() {
-		var serialization = cache.serialize();
+	it('should serialize and deserialize', () => {
+		let serialization = cache.serialize();
 		cache.clear();
 		cache.deserialize(serialization);
 
 		expect(cache.has('aaa')).toBe(false);
 	});
 
-	it('should throw error for serialize if value is instance of Promise', function() {
+	it('should throw error for serialize if value is instance of Promise', () => {
 		spyOn(console, 'warn');
 
 		cache.set('promise', Promise.resolve('promise'));
 
-		expect(function() {
+		expect(() => {
 			cache.serialize();
 		}).toThrow();
 		expect(console.warn).toHaveBeenCalled();
 	});
 
-	describe('_canSerializeValue method', function() {
+	describe('_canSerializeValue method', () => {
 
-		beforeEach(function() {
+		beforeEach(() => {
 			spyOn(console, 'warn');
 		});
 
-		it('should return false for Date', function() {
+		it('should return false for Date', () => {
 			expect(cache._canSerializeValue(new Date())).toBe(false);
 		});
 
-		it('should return false for RegExp', function() {
+		it('should return false for RegExp', () => {
 			expect(cache._canSerializeValue(new RegExp('/'))).toBe(false);
 		});
 
-		it('should return false for resolved promise', function() {
+		it('should return false for resolved promise', () => {
 			expect(cache._canSerializeValue(Promise.resolve(1))).toBe(false);
 		});
 
-		it('should return false for object with bad type of keys', function() {
-			var object = {
+		it('should return false for object with bad type of keys', () => {
+			let object = {
 				date: new Date()
 			};
 
 			expect(cache._canSerializeValue(object)).toBe(false);
 		});
 
-		it('should return true for serializable object', function() {
-			var object = {
+		it('should return true for serializable object', () => {
+			let object = {
 				number: 1,
 				string: 'string',
 				boolean: true,

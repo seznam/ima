@@ -1,18 +1,25 @@
-describe('ima.router.ClientRouter', function() {
-	var router = null;
-	var pageRenderer = null;
-	var routeFactory = null;
-	var dispatcher = null;
-	var win = null;
-	var host = 'locahlost:3002';
-	var protocol = 'http:';
+import Dispatcher from 'event/Dispatcher';
+import PageManager from 'page/manager/PageManager';
+import ClientRouter from 'router/ClientRouter';
+import RouteFactory from 'router/RouteFactory';
+import Window from 'window/Window';
 
-	beforeEach(function() {
-		pageRenderer = oc.create('ima.page.manager.PageManager');
-		routeFactory = oc.create('$RouteFactory');
-		dispatcher = oc.create('ima.event.Dispatcher');
-		win = oc.get('$Window');
-		router = oc.create('ima.router.ClientRouter', [pageRenderer, routeFactory, dispatcher, win]);
+describe('ima.router.ClientRouter', () => {
+
+	let router = null;
+	let pageRenderer = null;
+	let routeFactory = null;
+	let dispatcher = null;
+	let win = null;
+	let host = 'locahlost:3002';
+	let protocol = 'http:';
+
+	beforeEach(() => {
+		pageRenderer = new PageManager();
+		routeFactory = new RouteFactory();
+		dispatcher = new Dispatcher();
+		win = new Window();
+		router = new ClientRouter(pageRenderer, routeFactory, dispatcher, win);
 
 		spyOn(win, 'hasHistoryAPI')
 			.and
@@ -21,7 +28,7 @@ describe('ima.router.ClientRouter', function() {
 		router.init({ $Host: host, $Protocol: protocol });
 	});
 
-	it('should be return actual path', function() {
+	it('should be return actual path', () => {
 		spyOn(win, 'getPath')
 			.and
 			.returnValue('');
@@ -31,7 +38,7 @@ describe('ima.router.ClientRouter', function() {
 		expect(win.getPath).toHaveBeenCalled();
 	});
 
-	it('should be return actual url', function() {
+	it('should be return actual url', () => {
 		spyOn(win, 'getUrl')
 			.and
 			.stub();
@@ -41,7 +48,7 @@ describe('ima.router.ClientRouter', function() {
 		expect(win.getUrl).toHaveBeenCalled();
 	});
 
-	it('should be add listener to popState event, click event and add first page state to history', function() {
+	it('should be add listener to popState event, click event and add first page state to history', () => {
 		spyOn(win, 'bindEventListener')
 			.and
 			.stub();
@@ -56,12 +63,12 @@ describe('ima.router.ClientRouter', function() {
 		expect(win.bindEventListener.calls.count()).toEqual(2);
 	});
 
-	describe('redirect method', function() {
+	describe('redirect method', () => {
 
-		it('should be save scroll history and set address bar', function() {
-			var path = '/somePath';
-			var url = protocol + '//' + host + path;
-			var options = { httpStatus: 302 };
+		it('should be save scroll history and set address bar', () => {
+			let path = '/somePath';
+			let url = protocol + '//' + host + path;
+			let options = { httpStatus: 302 };
 
 			spyOn(router, '_setAddressBar')
 				.and
@@ -82,8 +89,8 @@ describe('ima.router.ClientRouter', function() {
 			expect(router.route).toHaveBeenCalledWith(path, options);
 		});
 
-		it('return null for non exist route', function() {
-			var url = 'http://example.com/somePath';
+		it('return null for non exist route', () => {
+			let url = 'http://example.com/somePath';
 
 			spyOn(win, 'redirect')
 				.and
@@ -95,16 +102,16 @@ describe('ima.router.ClientRouter', function() {
 		});
 	});
 
-	describe('route method', function() {
+	describe('route method', () => {
 
-		it('should be call handleError for throwing error in super.router', function(done) {
+		it('should be call handleError for throwing error in super.router', (done) => {
 			spyOn(router, 'handleError')
 				.and
 				.returnValue(Promise.resolve());
 
 			router
 				.route('/something')
-				.then(function() {
+				.then(() => {
 					expect(router.handleError).toHaveBeenCalled();
 					done();
 				});
@@ -112,16 +119,16 @@ describe('ima.router.ClientRouter', function() {
 
 	});
 
-	describe('handleNotFound method', function() {
+	describe('handleNotFound method', () => {
 
-		it('should be call router.handleError function for throwing error', function(done) {
+		it('should be call router.handleError function for throwing error', (done) => {
 			spyOn(router, 'handleError')
 				.and
 				.returnValue(Promise.resolve('ok'));
 
 			router
 				.handleNotFound({ path: '/path' })
-				.then(function() {
+				.then(() => {
 					expect(router.handleError).toHaveBeenCalled();
 					done();
 
@@ -130,30 +137,30 @@ describe('ima.router.ClientRouter', function() {
 
 	});
 
-	describe('_isSameDomain method', function() {
+	describe('_isSameDomain method', () => {
 
-		it('should be return true for same domain', function() {
-			var path = '/somePath';
-			var url = protocol + '//' + host + path;
+		it('should be return true for same domain', () => {
+			let path = '/somePath';
+			let url = protocol + '//' + host + path;
 
 			expect(router._isSameDomain(url)).toEqual(true);
 		});
 
-		it('should be retrun false for strange domain', function() {
-			var path = '/somePath';
-			var url = protocol + '//' + 'www.strangeDomain.com' + path;
+		it('should be retrun false for strange domain', () => {
+			let path = '/somePath';
+			let url = protocol + '//' + 'www.strangeDomain.com' + path;
 
 			expect(router._isSameDomain(url)).toEqual(false);
 		});
 	});
 
-	describe('_isHashLink method', function() {
+	describe('_isHashLink method', () => {
 		using([
 			{ targetUrl:'http://localhost/aaa#hash', baseUrl: 'http://localhost/aaa', result: true },
 			{ targetUrl:'http://localhost/bbb#hash', baseUrl: 'http://localhost/aaa', result: false },
 			{ targetUrl:'http://localhost/aaa', baseUrl: 'http://localhost/aaa', result: false }
-		], function(value) {
-			it('should be for ' + value.targetUrl + ' and base url ' + value.baseUrl + ' return ' + value.result, function() {
+		], (value) => {
+			it('should be for ' + value.targetUrl + ' and base url ' + value.baseUrl + ' return ' + value.result, () => {
 				spyOn(win, 'getUrl')
 					.and
 					.returnValue(value.baseUrl);
@@ -163,7 +170,7 @@ describe('ima.router.ClientRouter', function() {
 		});
 	});
 
-	it('_saveScrollHistory method should be call window.replaceState', function() {
+	it('_saveScrollHistory method should be call window.replaceState', () => {
 		spyOn(win, 'replaceState')
 			.and
 			.stub();
@@ -173,7 +180,7 @@ describe('ima.router.ClientRouter', function() {
 		expect(win.replaceState).toHaveBeenCalled();
 	});
 
-	it('_setAddressBar method should be call window.pushState', function() {
+	it('_setAddressBar method should be call window.pushState', () => {
 		spyOn(win, 'pushState')
 			.and
 			.stub();

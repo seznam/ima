@@ -1,43 +1,62 @@
-describe('ima.page.renderer.ServerPageRenderer', function() {
+jest.mock('page/renderer/PageRendererFactory');
+jest.mock('router/Response');
 
-	var param1 = 'param1';
-	var param2 = 'param2';
-	var params = {
+import Helper from 'ima-helpers';
+import Cache from 'cache/Cache';
+import Controller from 'controller/Controller';
+import GenericError from 'error/GenericError';
+import ServerPageRenderer from 'page/renderer/ServerPageRenderer';
+import RendererFactory from 'page/renderer/PageRendererFactory';
+import Response from 'router/Response';
+
+describe('ima.page.renderer.ServerPageRenderer', () => {
+
+	let param1 = 'param1';
+	let param2 = 'param2';
+	let params = {
 		param1: param1,
 		param2: Promise.resolve(param2)
 	};
 
-	var controller = new ns.ima.controller.Controller();
-	controller.getMetaManager = function() {};
-	var view = function() {};
-	var expressResponse = {
-		status: function() {},
-		send: function() {}
+	let controller = new Controller();
+	controller.getMetaManager = () => {};
+	let view = () => {};
+	let expressResponse = {
+		status: () => {},
+		send: () => {}
 	};
 
-	var pageRenderer = null;
-	var $Helper = oc.get('$Helper');
-	var rendererFactory = oc.get('$PageRendererFactory');
-	var ReactDOMServer = {
-		renderToString: function() {},
-		renderToStaticMarkup: function() {}
+	let cache = null;
+	let response = null;
+	let pageRenderer = null;
+	let rendererFactory = null;
+	let ReactDOMServer = {
+		renderToString: () => {},
+		renderToStaticMarkup: () => {}
 	};
-	var settings = oc.get('$Settings');
-	var response = oc.get('$Response');
-	var cache = oc.get('$Cache');
-	var routeOptions = {
+	let settings = {
+		$Page: {
+			$Render: {
+				scripts: [],
+				documentView: 'app.component.document.DocumentView'
+			}
+		}
+	};
+	let routeOptions = {
 		onlyUpdate: false,
 		autoScroll: false,
 		allowSPA: false,
 		documentView: null
 	};
 
-	beforeEach(function() {
-		response.init(expressResponse);
-		pageRenderer = oc.create('ima.page.renderer.ServerPageRenderer', [rendererFactory, $Helper, ReactDOMServer, settings, response, cache]);
+	beforeEach(() => {
+		cache = new Cache();
+		response = new Response();
+		rendererFactory = new RendererFactory();
+		pageRenderer = new ServerPageRenderer(rendererFactory, Helper, ReactDOMServer, settings, response, cache);
 	});
 
-	it('should be wrap each key to promise', function() {
+	it('should be wrap each key to promise', () => {
 		spyOn(Promise, 'resolve')
 			.and
 			.callThrough();
@@ -48,32 +67,32 @@ describe('ima.page.renderer.ServerPageRenderer', function() {
 		expect(Promise.resolve.calls.count()).toEqual(1);
 	});
 
-	describe('update method', function() {
+	describe('update method', () => {
 
-		it('should reject promise with error', function(done) {
+		it('should reject promise with error', (done) => {
 			spyOn(pageRenderer, 'mount')
 				.and
 				.stub();
 
 			pageRenderer
 				.update(controller, params)
-				.catch(function(error) {
-					expect(error instanceof ns.ima.error.GenericError).toEqual(true);
+				.catch((error) => {
+					expect(error instanceof GenericError).toEqual(true);
 					done();
 				});
 		});
 
 	});
 
-	describe('mount method', function() {
+	describe('mount method', () => {
 
-		var loadedPageState = {
+		let loadedPageState = {
 			param1: 'param1',
 			param2: Promise.resolve('param2')
 		};
 
-		it('should return already sent data to the client', function(done) {
-			var responseParams = {
+		it('should return already sent data to the client', (done) => {
+			let responseParams = {
 				content: '',
 				status: 200,
 				pageState: loadedPageState
@@ -88,20 +107,20 @@ describe('ima.page.renderer.ServerPageRenderer', function() {
 
 			pageRenderer
 				.mount(controller, view, loadedPageState, routeOptions)
-				.then(function(page) {
+				.then((page) => {
 					expect(page).toEqual(responseParams);
 					done();
 				});
 		});
 
-		it('should call _renderPage method', function(done) {
+		it('should call _renderPage method', (done) => {
 			spyOn(pageRenderer, '_renderPage')
 				.and
 				.stub();
 
 			pageRenderer
 				.mount(controller, view, loadedPageState, routeOptions)
-				.then(function(page) {
+				.then((page) => {
 					expect(pageRenderer._renderPage).toHaveBeenCalled();
 					done();
 				});
@@ -109,13 +128,13 @@ describe('ima.page.renderer.ServerPageRenderer', function() {
 
 	});
 
-	describe('_renderPage method', function() {
-		var fetchedResource = {
+	describe('_renderPage method', () => {
+		let fetchedResource = {
 			resource: 'json'
 		};
 
-		it('should return already sent data to client', function() {
-			var responseParams = {
+		it('should return already sent data to client', () => {
+			let responseParams = {
 				content: '',
 				status: 200,
 				pageState: fetchedResource
@@ -131,12 +150,12 @@ describe('ima.page.renderer.ServerPageRenderer', function() {
 			expect(pageRenderer._renderPage(controller, view, fetchedResource)).toEqual(responseParams);
 		});
 
-		describe('render new page', function() {
+		describe('render new page', () => {
 
-			var responseParams = { status: 200, content: '', pageState: {} };
-			var pageRenderResponse = null;
+			let responseParams = { status: 200, content: '', pageState: {} };
+			let pageRenderResponse = null;
 
-			beforeEach(function() {
+			beforeEach(() => {
 				spyOn(controller, 'setState')
 					.and
 					.stub();
@@ -165,15 +184,15 @@ describe('ima.page.renderer.ServerPageRenderer', function() {
 				pageRenderResponse = pageRenderer._renderPage(controller, view, fetchedResource, routeOptions);
 			});
 
-			it('should set controller state', function() {
+			it('should set controller state', () => {
 				expect(controller.setState).toHaveBeenCalledWith(fetchedResource);
 			});
 
-			it('should set meta params', function() {
+			it('should set meta params', () => {
 				expect(controller.setMetaParams).toHaveBeenCalledWith(fetchedResource);
 			});
 
-			it('should send response for request', function() {
+			it('should send response for request', () => {
 				expect(response.status).toHaveBeenCalled();
 				expect(response.setPageState).toHaveBeenCalled();
 				expect(response.send).toHaveBeenCalled();
@@ -181,28 +200,28 @@ describe('ima.page.renderer.ServerPageRenderer', function() {
 				expect(pageRenderer._renderPageContentToString).toHaveBeenCalledWith(controller, view, routeOptions);
 			});
 
-			it('should return response params', function() {
+			it('should return response params', () => {
 				expect(pageRenderResponse).toEqual(responseParams);
 			});
 		});
 	});
 
-	describe('_renderPageContentToString method', function() {
+	describe('_renderPageContentToString method', () => {
 
-		var utils = { $Utils: 'utils' };
-		var wrapedPageViewElement = { wrapElementView: 'wrapedPageViewElement' };
-		var pageMarkup = '<body></body>';
-		var documentView = function() {};
-		var documentViewElement = function() {};
-		var documentViewFactory = function() {
+		let utils = { $Utils: 'utils' };
+		let wrapedPageViewElement = { wrapElementView: 'wrapedPageViewElement' };
+		let pageMarkup = '<body></body>';
+		let documentView = () => {};
+		let documentViewElement = () => {};
+		let documentViewFactory = () => {
 			return documentViewElement;
 		};
-		var appMarkup = '<html>' + pageMarkup + '</html>';
-		var revivalSettings = { revivalSettings: 'revivalSettings' };
-		var metaManager = { metaManager: 'metaManager' };
-		var pageContent = null;
+		let appMarkup = '<html>' + pageMarkup + '</html>';
+		let revivalSettings = { revivalSettings: 'revivalSettings' };
+		let metaManager = { metaManager: 'metaManager' };
+		let pageContent = null;
 
-		beforeEach(function() {
+		beforeEach(() => {
 			spyOn(ReactDOMServer, 'renderToString')
 				.and
 				.returnValue(pageMarkup);
@@ -231,26 +250,26 @@ describe('ima.page.renderer.ServerPageRenderer', function() {
 			pageContent = pageRenderer._renderPageContentToString(controller, view, routeOptions);
 		});
 
-		it('should wrap page view', function() {
+		it('should wrap page view', () => {
 			expect(pageRenderer._getWrappedPageView).toHaveBeenCalledWith(controller, view, routeOptions);
 		});
 
-		it('should render page view to string', function() {
+		it('should render page view to string', () => {
 			expect(ReactDOMServer.renderToString).toHaveBeenCalledWith(wrapedPageViewElement);
 		});
 
-		it('should create factory for creating React element from document view', function() {
+		it('should create factory for creating React element from document view', () => {
 			expect(rendererFactory.createReactElementFactory).toHaveBeenCalledWith(documentView);
 		});
 
-		it('should render static markup from document view', function() {
+		it('should render static markup from document view', () => {
 			expect(rendererFactory.getUtils).toHaveBeenCalled();
 			expect(controller.getMetaManager).toHaveBeenCalled();
 			expect(pageRenderer._getRevivalSettings).toHaveBeenCalled();
 			expect(ReactDOMServer.renderToStaticMarkup).toHaveBeenCalledWith(documentViewElement);
 		});
 
-		it('should return page content', function() {
+		it('should return page content', () => {
 			expect(pageContent).toEqual('<!doctype html>\n' + appMarkup);
 		});
 

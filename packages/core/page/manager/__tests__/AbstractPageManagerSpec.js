@@ -1,54 +1,54 @@
-describe('ima.page.manager.AbstractPageManager', function() {
-	var pageFactory = {
-		createController: function(Controller) { return new Controller(); },
-		decorateController: function(controller) { return controller; },
-		decoratePageStateManager: function(pageStateManger) { return pageStateManger; },
-		createView: function(view) { return view; }
-	};
-	var pageRenderer = oc.create('ima.page.renderer.PageRenderer');
-	var pageStateManager = oc.create('ima.page.state.PageStateManager');
-	var pageManager = null;
+import Controller from 'controller/Controller';
+import Extension from 'extension/Extension';
+import AbstractPageManager from 'page/manager/AbstractPageManager';
+import PageRenderer from 'page/renderer/PageRenderer';
+import PageStateManager from 'page/state/PageStateManager';
 
-	var Controller = ns.ima.controller.Controller;
-	var Extension = ns.ima.extension.Extension;
-	var View = function() {};
-	var options = {
+describe('ima.page.manager.AbstractPageManager', () => {
+
+	let pageFactory = {
+		createController: (Controller) => new Controller(),
+		decorateController: (controller) => controller,
+		decoratePageStateManager: (pageStateManger) =>  pageStateManger,
+		createView: (view) => view
+	};
+	let pageRenderer = null;
+	let pageStateManager = null;
+	let pageManager = null;
+
+	let View = () => {};
+	let options = {
 		onlyUpdate: false,
 		autoScroll: true,
 		allowSPA: true,
 		documentView: null,
 		managedRootView: null
 	};
-	var params = {
+	let params = {
 		param1: 'param1',
 		param2: 2
 	};
 
-	var controllerInstance = pageFactory.createController(Controller);
-	var decoratedController = pageFactory.decorateController(controllerInstance);
-	var viewInstance = pageFactory.createView(View);
-	var extensionInstance = new Extension();
+	let controllerInstance = pageFactory.createController(Controller);
+	let decoratedController = pageFactory.decorateController(controllerInstance);
+	let viewInstance = pageFactory.createView(View);
+	let extensionInstance = new Extension();
 
-	var controllerState = {
+	let controllerState = {
 		controller: 'controller',
 		share: 'controller'
 	};
-	var extensionsState = {
+	let extensionsState = {
 		extension: 'extension',
 		share: 'extension'
 	};
-	var extensionState = {};
-	var pageState = Object.assign({}, extensionsState, controllerState);
+	let extensionState = {};
+	let pageState = Object.assign({}, extensionsState, controllerState);
 
-	beforeEach(function() {
-		pageManager =
-			oc.create('ima.page.manager.AbstractPageManager',
-				[
-					pageFactory,
-					pageRenderer,
-					pageStateManager
-				]
-			);
+	beforeEach(() => {
+		pageRenderer = new PageRenderer();
+		pageStateManager = new PageStateManager();
+		pageManager = new AbstractPageManager(pageFactory, pageRenderer, pageStateManager);
 
 		spyOn(controllerInstance, 'getExtensions')
 			.and
@@ -57,25 +57,25 @@ describe('ima.page.manager.AbstractPageManager', function() {
 		pageManager._storeManagedPageValue(Controller, View, options, params, controllerInstance, decoratedController, viewInstance);
 	});
 
-	afterEach(function() {
+	afterEach(() => {
 		pageManager._clearManagedPageValue();
 	});
 
-	it('should be observe state manager', function() {
+	it('should be observe state manager', () => {
 		pageManager.init();
 
 		expect(pageStateManager.onChange).not.toEqual(null);
 	});
 
-	it('scrollTo method should throw Error', function() {
-		expect(function() {
+	it('scrollTo method should throw Error', () => {
+		expect(() => {
 			pageManager.scrollTo(0, 0);
 		}).toThrow();
 	});
 
-	describe('manage method', function() {
+	describe('manage method', () => {
 
-		it('should only update last managed controller and view', function(done) {
+		it('should only update last managed controller and view', (done) => {
 			spyOn(pageManager, '_hasOnlyUpdate')
 				.and
 				.returnValue(true);
@@ -88,19 +88,19 @@ describe('ima.page.manager.AbstractPageManager', function() {
 
 			pageManager
 				.manage(Controller, View, options, params)
-				.then(function() {
+				.then(() => {
 					expect(pageManager._preManage).toHaveBeenCalled();
 					expect(pageManager._managedPage.params).toEqual(params);
 					expect(pageManager._updatePageSource).toHaveBeenCalled();
 					done();
 				})
-				.catch(function(e) {
-					console.error('ima.page.manager:manage', e.message);
-					done();
+				.catch((error) => {
+					console.error('ima.page.manager:manage', error.message);
+					done(error);
 				});
 		});
 
-		it('should mount new controller and view', function(done) {
+		it('should mount new controller and view', (done) => {
 			spyOn(pageManager, '_hasOnlyUpdate')
 				.and
 				.returnValue(false);
@@ -134,7 +134,7 @@ describe('ima.page.manager.AbstractPageManager', function() {
 
 			pageManager
 				.manage(Controller, View, options, params)
-				.then(function() {
+				.then(() => {
 					expect(pageManager._preManage).toHaveBeenCalled();
 					expect(pageManager._deactivatePageSource).toHaveBeenCalled();
 					expect(pageManager._destroyPageSource).toHaveBeenCalled();
@@ -146,16 +146,16 @@ describe('ima.page.manager.AbstractPageManager', function() {
 					expect(pageManager._loadPageSource).toHaveBeenCalled();
 					done();
 				})
-				.catch(function(e) {
-					console.error('ima.page.manager:manage', e.message);
-					done();
+				.catch((error) => {
+					console.error('ima.page.manager:manage', error.message);
+					done(error);
 				});
 		});
 	});
 
-	describe('destroy method', function() {
+	describe('destroy method', () => {
 
-		it('should clear managed page value', function() {
+		it('should clear managed page value', () => {
 			spyOn(pageManager, '_clearManagedPageValue')
 				.and
 				.stub();
@@ -165,13 +165,13 @@ describe('ima.page.manager.AbstractPageManager', function() {
 			expect(pageManager._clearManagedPageValue).toHaveBeenCalled();
 		});
 
-		it('should remove listener for onChange event from page state manager', function() {
+		it('should remove listener for onChange event from page state manager', () => {
 			pageManager.destroy();
 
 			expect(pageStateManager.onChange).toBeNull();
 		});
 
-		it('should deactivate page source', function() {
+		it('should deactivate page source', () => {
 			spyOn(pageManager, '_deactivatePageSource')
 				.and
 				.stub();
@@ -181,7 +181,7 @@ describe('ima.page.manager.AbstractPageManager', function() {
 			expect(pageManager._deactivatePageSource).toHaveBeenCalled();
 		});
 
-		it('should destroy page source', function() {
+		it('should destroy page source', () => {
 			spyOn(pageManager, '_destroyPageSource')
 				.and
 				.stub();
@@ -191,7 +191,7 @@ describe('ima.page.manager.AbstractPageManager', function() {
 			expect(pageManager._destroyPageSource).toHaveBeenCalled();
 		});
 
-		it('should clear page state manager', function() {
+		it('should clear page state manager', () => {
 			spyOn(pageStateManager, 'clear')
 				.and
 				.stub();
@@ -203,12 +203,12 @@ describe('ima.page.manager.AbstractPageManager', function() {
 
 	});
 
-	describe('_setRestrictedPageStateManager', function() {
+	describe('_setRestrictedPageStateManager', () => {
 
-		var allowedStateKeys = ['user'];
-		var allAllowedStateKeys = Object.keys(extensionState).concat(allowedStateKeys);
+		let allowedStateKeys = ['user'];
+		let allAllowedStateKeys = Object.keys(extensionState).concat(allowedStateKeys);
 
-		beforeEach(function() {
+		beforeEach(() => {
 			spyOn(extensionInstance, 'getAllowedStateKeys')
 				.and
 				.returnValue(allowedStateKeys);
@@ -222,13 +222,13 @@ describe('ima.page.manager.AbstractPageManager', function() {
 				.stub();
 		});
 
-		it('should create restricted page state manager for extension', function() {
+		it('should create restricted page state manager for extension', () => {
 			pageManager._setRestrictedPageStateManager(extensionInstance, extensionState);
 
 			expect(pageFactory.decoratePageStateManager).toHaveBeenCalledWith(pageStateManager, allAllowedStateKeys);
 		});
 
-		it('should set restricted page state manager to extension', function() {
+		it('should set restricted page state manager to extension', () => {
 			pageManager._setRestrictedPageStateManager(extensionInstance, extensionState);
 
 			expect(extensionInstance.setPageStateManager).toHaveBeenCalledWith(pageStateManager);
@@ -236,9 +236,9 @@ describe('ima.page.manager.AbstractPageManager', function() {
 
 	});
 
-	describe('_initPageSource method', function() {
+	describe('_initPageSource method', () => {
 
-		it('should initialization page source', function() {
+		it('should initialization page source', () => {
 			spyOn(pageManager, '_initController')
 				.and
 				.stub();
@@ -253,9 +253,9 @@ describe('ima.page.manager.AbstractPageManager', function() {
 		});
 	});
 
-	describe('_initController method', function() {
+	describe('_initController method', () => {
 
-		it('should set route params to controller instance', function() {
+		it('should set route params to controller instance', () => {
 			spyOn(controllerInstance, 'setRouteParams')
 				.and
 				.stub();
@@ -265,7 +265,7 @@ describe('ima.page.manager.AbstractPageManager', function() {
 			expect(controllerInstance.setRouteParams).toHaveBeenCalledWith(params);
 		});
 
-		it('should call init function on controller instance', function() {
+		it('should call init function on controller instance', () => {
 			spyOn(controllerInstance, 'init')
 				.and
 				.stub();
@@ -276,9 +276,9 @@ describe('ima.page.manager.AbstractPageManager', function() {
 		});
 	});
 
-	describe('_initExtensions method', function() {
+	describe('_initExtensions method', () => {
 
-		it('should set route params to extension instance', function() {
+		it('should set route params to extension instance', () => {
 			spyOn(extensionInstance, 'setRouteParams')
 				.and
 				.stub();
@@ -288,7 +288,7 @@ describe('ima.page.manager.AbstractPageManager', function() {
 			expect(extensionInstance.setRouteParams).toHaveBeenCalledWith(params);
 		});
 
-		it('should call init function on controller instance', function() {
+		it('should call init function on controller instance', () => {
 			spyOn(extensionInstance, 'init')
 				.and
 				.stub();
@@ -299,9 +299,9 @@ describe('ima.page.manager.AbstractPageManager', function() {
 		});
 	});
 
-	describe('_loadPageSource method', function() {
+	describe('_loadPageSource method', () => {
 
-		beforeEach(function() {
+		beforeEach(() => {
 			spyOn(pageManager, '_getLoadedControllerState')
 				.and
 				.returnValue(controllerState);
@@ -314,40 +314,40 @@ describe('ima.page.manager.AbstractPageManager', function() {
 				.returnValue(Promise.resolve());
 		});
 
-		it('should be merge state from controller and extensions to loaded page state', function(done) {
+		it('should be merge state from controller and extensions to loaded page state', (done) => {
 			pageManager
 				._loadPageSource()
-				.then(function() {
+				.then(() => {
 					expect(pageRenderer.mount).toHaveBeenCalledWith(decoratedController, View, pageState, options);
 					done();
 				})
-				.catch(function(error) {
+				.catch((error) => {
 					console.error('ima.page.manager:_loadPageSource', error.message);
-					done();
+					done(error);
 				});
 		});
 
-		it('should make post manage action', function(done) {
+		it('should make post manage action', (done) => {
 			spyOn(pageManager, '_postManage')
 				.and
 				.stub();
 
 			pageManager
 				._loadPageSource()
-				.then(function() {
+				.then(() => {
 					expect(pageManager._postManage).toHaveBeenCalledWith(options);
 					done();
 				})
-				.catch(function(error) {
+				.catch((error) => {
 					console.error('ima.page.manager:_loadPageSource', error.message);
-					done();
+					done(error);
 				});
 		});
 	});
 
-	describe('_getLoadedControllerState method', function() {
+	describe('_getLoadedControllerState method', () => {
 
-		it('should calls controller load method', function() {
+		it('should calls controller load method', () => {
 			spyOn(controllerInstance, 'load')
 				.and
 				.stub();
@@ -357,7 +357,7 @@ describe('ima.page.manager.AbstractPageManager', function() {
 			expect(controllerInstance.load).toHaveBeenCalled();
 		});
 
-		it('should set pageStateManager to controller instance', function() {
+		it('should set pageStateManager to controller instance', () => {
 			spyOn(controllerInstance, 'setPageStateManager')
 				.and
 				.stub();
@@ -368,21 +368,21 @@ describe('ima.page.manager.AbstractPageManager', function() {
 		});
 	});
 
-	describe('_getLoadedExtensionsState method', function() {
+	describe('_getLoadedExtensionsState method', () => {
 
-		beforeEach(function() {
+		beforeEach(() => {
 			spyOn(extensionInstance, 'load')
 				.and
 				.returnValue(extensionState);
 		});
 
-		it('should call extensions load method', function() {
+		it('should call extensions load method', () => {
 			pageManager._getLoadedExtensionsState();
 
 			expect(extensionInstance.load).toHaveBeenCalled();
 		});
 
-		it('should set restricted pageStateManager to extension instance', function() {
+		it('should set restricted pageStateManager to extension instance', () => {
 			spyOn(pageManager, '_setRestrictedPageStateManager')
 				.and
 				.stub();
@@ -393,9 +393,9 @@ describe('ima.page.manager.AbstractPageManager', function() {
 		});
 	});
 
-	describe('_activatePageSource method', function() {
+	describe('_activatePageSource method', () => {
 
-		beforeEach(function() {
+		beforeEach(() => {
 			spyOn(pageManager, '_activateController')
 				.and
 				.stub();
@@ -405,7 +405,7 @@ describe('ima.page.manager.AbstractPageManager', function() {
 				.stub();
 		});
 
-		it('should activate controller and extensions', function() {
+		it('should activate controller and extensions', () => {
 			pageManager._activatePageSource();
 
 			expect(pageManager._activateController).toHaveBeenCalled();
@@ -413,7 +413,7 @@ describe('ima.page.manager.AbstractPageManager', function() {
 			expect(pageManager._managedPage.state.activated).toEqual(true);
 		});
 
-		it('should not call method activate more times', function() {
+		it('should not call method activate more times', () => {
 			pageManager._managedPage.state.activated = true;
 
 			expect(pageManager._activateController).not.toHaveBeenCalled();
@@ -421,9 +421,9 @@ describe('ima.page.manager.AbstractPageManager', function() {
 		});
 	});
 
-	describe('_activateController method', function() {
+	describe('_activateController method', () => {
 
-		it('should call activate method on controller', function() {
+		it('should call activate method on controller', () => {
 			spyOn(controllerInstance, 'activate')
 				.and
 				.stub();
@@ -434,9 +434,9 @@ describe('ima.page.manager.AbstractPageManager', function() {
 		});
 	});
 
-	describe('_activateExtensions method', function() {
+	describe('_activateExtensions method', () => {
 
-		it('should call activate method on extensions', function() {
+		it('should call activate method on extensions', () => {
 			spyOn(extensionInstance, 'activate')
 				.and
 				.stub();
@@ -447,9 +447,9 @@ describe('ima.page.manager.AbstractPageManager', function() {
 		});
 	});
 
-	describe('_updatePageSource method', function() {
+	describe('_updatePageSource method', () => {
 
-		beforeEach(function() {
+		beforeEach(() => {
 			spyOn(pageManager, '_getUpdatedControllerState')
 				.and
 				.returnValue(controllerState);
@@ -462,40 +462,40 @@ describe('ima.page.manager.AbstractPageManager', function() {
 				.returnValue(Promise.resolve());
 		});
 
-		it('should be merge state from controller and extensions to updated page state', function(done) {
+		it('should be merge state from controller and extensions to updated page state', (done) => {
 			pageManager
 				._updatePageSource()
-				.then(function() {
+				.then(() => {
 					expect(pageRenderer.update).toHaveBeenCalledWith(decoratedController, pageState);
 					done();
 				})
-				.catch(function(error) {
+				.catch((error) => {
 					console.error('ima.page.manager:_updatePageSource', e.message);
-					done();
+					done(error);
 				});
 		});
 
-		it('should make post manage action', function(done) {
+		it('should make post manage action', (done) => {
 			spyOn(pageManager, '_postManage')
 				.and
 				.stub();
 
 			pageManager
 				._updatePageSource()
-				.then(function() {
+				.then(() => {
 					expect(pageManager._postManage).toHaveBeenCalledWith(options);
 					done();
 				})
-				.catch(function(error) {
+				.catch((error) => {
 					console.error('ima.page.manager:_updatePageSource', error.message);
-					done();
+					done(error);
 				});
 		});
 	});
 
-	describe('_getUpdatedControllerState method', function() {
+	describe('_getUpdatedControllerState method', () => {
 
-		it('should calls controller update method', function() {
+		it('should calls controller update method', () => {
 			spyOn(controllerInstance, 'update')
 				.and
 				.stub();
@@ -509,15 +509,15 @@ describe('ima.page.manager.AbstractPageManager', function() {
 		});
 	});
 
-	describe('_getUpdatedExtensionsState method', function() {
+	describe('_getUpdatedExtensionsState method', () => {
 
-		beforeEach(function() {
+		beforeEach(() => {
 			spyOn(extensionInstance, 'update')
 				.and
 				.returnValue(extensionState);
 		});
 
-		it('should call extensions update method', function() {
+		it('should call extensions update method', () => {
 			spyOn(extensionInstance, 'getRouteParams')
 				.and
 				.returnValue(params);
@@ -527,7 +527,7 @@ describe('ima.page.manager.AbstractPageManager', function() {
 			expect(extensionInstance.update).toHaveBeenCalledWith(params);
 		});
 
-		it('should set restricted pageStateManager to extension instance', function() {
+		it('should set restricted pageStateManager to extension instance', () => {
 			spyOn(pageManager, '_setRestrictedPageStateManager')
 				.and
 				.stub();
@@ -538,9 +538,9 @@ describe('ima.page.manager.AbstractPageManager', function() {
 		});
 	});
 
-	describe('_deactivatePageSource method', function() {
+	describe('_deactivatePageSource method', () => {
 
-		beforeEach(function() {
+		beforeEach(() => {
 			spyOn(pageManager, '_deactivateController')
 				.and
 				.stub();
@@ -550,7 +550,7 @@ describe('ima.page.manager.AbstractPageManager', function() {
 				.stub();
 		});
 
-		it('should activate controller and extensions', function() {
+		it('should activate controller and extensions', () => {
 			pageManager._managedPage.state.activated = true;
 
 			pageManager._deactivatePageSource();
@@ -559,7 +559,7 @@ describe('ima.page.manager.AbstractPageManager', function() {
 			expect(pageManager._deactivateExtensions).toHaveBeenCalled();
 		});
 
-		it('should not call method activate more times', function() {
+		it('should not call method activate more times', () => {
 			pageManager._managedPage.state.activated = false;
 
 			expect(pageManager._deactivateController).not.toHaveBeenCalled();
@@ -567,9 +567,9 @@ describe('ima.page.manager.AbstractPageManager', function() {
 		});
 	});
 
-	describe('_deactivateController method', function() {
+	describe('_deactivateController method', () => {
 
-		it('should call deactivate method on controller', function() {
+		it('should call deactivate method on controller', () => {
 			spyOn(controllerInstance, 'deactivate')
 				.and
 				.stub();
@@ -580,9 +580,9 @@ describe('ima.page.manager.AbstractPageManager', function() {
 		});
 	});
 
-	describe('_deactivateExtensions method', function() {
+	describe('_deactivateExtensions method', () => {
 
-		it('should call deactivate method on extensions', function() {
+		it('should call deactivate method on extensions', () => {
 			spyOn(extensionInstance, 'deactivate')
 				.and
 				.stub();
@@ -593,9 +593,9 @@ describe('ima.page.manager.AbstractPageManager', function() {
 		});
 	});
 
-	describe('_destroyPageSource method', function() {
+	describe('_destroyPageSource method', () => {
 
-		it('should destroy page resource', function() {
+		it('should destroy page resource', () => {
 			spyOn(pageManager, '_destroyController')
 				.and
 				.stub();
@@ -610,9 +610,9 @@ describe('ima.page.manager.AbstractPageManager', function() {
 		});
 	});
 
-	describe('_destroyController method', function() {
+	describe('_destroyController method', () => {
 
-		it('should call destroy on controller instance', function() {
+		it('should call destroy on controller instance', () => {
 			spyOn(controllerInstance, 'destroy')
 				.and
 				.stub();
@@ -622,7 +622,7 @@ describe('ima.page.manager.AbstractPageManager', function() {
 			expect(controllerInstance.destroy).toHaveBeenCalled();
 		});
 
-		it('should unset pageStateManager to controller', function() {
+		it('should unset pageStateManager to controller', () => {
 			spyOn(controllerInstance, 'setPageStateManager')
 				.and
 				.stub();
@@ -633,9 +633,9 @@ describe('ima.page.manager.AbstractPageManager', function() {
 		});
 	});
 
-	describe('_destroyExtensions method', function() {
+	describe('_destroyExtensions method', () => {
 
-		it('should call destroy on extension instance', function() {
+		it('should call destroy on extension instance', () => {
 			spyOn(extensionInstance, 'destroy')
 				.and
 				.stub();
@@ -645,7 +645,7 @@ describe('ima.page.manager.AbstractPageManager', function() {
 			expect(extensionInstance.destroy).toHaveBeenCalled();
 		});
 
-		it('should unset pageStateManager to extension', function() {
+		it('should unset pageStateManager to extension', () => {
 			spyOn(extensionInstance, 'setPageStateManager')
 				.and
 				.stub();
@@ -656,9 +656,9 @@ describe('ima.page.manager.AbstractPageManager', function() {
 		});
 	});
 
-	describe('_preManage method', function() {
+	describe('_preManage method', () => {
 
-		it('should call scroll to', function() {
+		it('should call scroll to', () => {
 			spyOn(pageManager, 'scrollTo')
 				.and
 				.stub();
@@ -669,10 +669,10 @@ describe('ima.page.manager.AbstractPageManager', function() {
 		});
 	});
 
-	describe('_hasOnlyUpdate method', function() {
+	describe('_hasOnlyUpdate method', () => {
 
-		it('should return value from onlyUpdate function', function() {
-			var newOptions = Object.assign({}, options, { onlyUpdate: function() { return true; } });
+		it('should return value from onlyUpdate function', () => {
+			let newOptions = Object.assign({}, options, { onlyUpdate: () =>  true });
 
 			spyOn(newOptions, 'onlyUpdate')
 				.and
@@ -682,23 +682,23 @@ describe('ima.page.manager.AbstractPageManager', function() {
 			expect(newOptions.onlyUpdate).toHaveBeenCalledWith(Controller, View);
 		});
 
-		it('should return true for option onlyUpdate set to true and for same controller and view', function() {
-			var newOptions = Object.assign({}, options, { onlyUpdate: true });
+		it('should return true for option onlyUpdate set to true and for same controller and view', () => {
+			let newOptions = Object.assign({}, options, { onlyUpdate: true });
 
 			expect(pageManager._hasOnlyUpdate(Controller, View, newOptions)).toEqual(true);
 		});
 
-		it('should return false for option onlyUpdate set to true and for different controller and view', function() {
-			var newOptions = Object.assign({}, options, { onlyUpdate: true });
+		it('should return false for option onlyUpdate set to true and for different controller and view', () => {
+			let newOptions = Object.assign({}, options, { onlyUpdate: true });
 			pageManager._managedPage.controller = null;
 
 			expect(pageManager._hasOnlyUpdate(Controller, View, newOptions)).toEqual(false);
 		});
 	});
 
-	describe('_clearComponentState method', function() {
+	describe('_clearComponentState method', () => {
 
-		it('should call page renderer clearState method if route options documentView and managedRootView are same with last one renderred', function() {
+		it('should call page renderer clearState method if route options documentView and managedRootView are same with last one renderred', () => {
 			spyOn(pageRenderer, 'clearState')
 				.and
 				.stub();
@@ -711,7 +711,7 @@ describe('ima.page.manager.AbstractPageManager', function() {
 			expect(pageRenderer.clearState).toHaveBeenCalled();
 		});
 
-		it('should call page renderer unmount method if route options documentView and managedRootView are not same with last one renderred', function() {
+		it('should call page renderer unmount method if route options documentView and managedRootView are not same with last one renderred', () => {
 			spyOn(pageRenderer, 'unmount')
 				.and
 				.stub();
@@ -722,10 +722,10 @@ describe('ima.page.manager.AbstractPageManager', function() {
 		});
 	});
 
-	describe('_onChangeStateHandler method', function() {
+	describe('_onChangeStateHandler method', () => {
 
-		it('should call setState', function() {
-			var state = { state: 'state' };
+		it('should call setState', () => {
+			let state = { state: 'state' };
 
 			spyOn(pageRenderer, 'setState')
 				.and

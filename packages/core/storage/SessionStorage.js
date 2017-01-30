@@ -1,6 +1,7 @@
 import ns from '../namespace';
 import GenericError from '../error/GenericError';
 import Storage from './Storage';
+import Window from '../window/Window';
 
 ns.namespace('ima.storage');
 
@@ -11,13 +12,14 @@ ns.namespace('ima.storage');
 export default class SessionStorage extends Storage {
 
 	static get $dependencies() {
-		return [];
+		return [Window];
 	}
 
 	/**
 	 * Initializes the session storage.
+	 * @param {Window} window
 	 */
-	constructor() {
+	constructor(window) {
 		super();
 
 		/**
@@ -25,7 +27,7 @@ export default class SessionStorage extends Storage {
 		 *
 		 * @type {Storage}
 		 */
-		this._storage = window.sessionStorage;
+		this._storage = window.getWindow().sessionStorage;
 	}
 
 	/**

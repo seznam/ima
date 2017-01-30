@@ -13,7 +13,7 @@ ns.namespace('ima.event');
  * @const
  * @type {string}
  */
-const IMA_EVENT = '$IMA.CustomEvent';
+export const IMA_EVENT = '$IMA.CustomEvent';
 
 /**
  * Helper for custom events.

@@ -1,12 +1,28 @@
+jest.mock('page/renderer/PageRendererFactory');
+
+import Helper from 'ima-helpers';
+import ReactDOM from 'react-dom';
+import Controller from 'controller/Controller';
+import AbstractDocumentView from 'page/AbstractDocumentView';
+import AbstractPageRenderer from 'page/renderer/AbstractPageRenderer';
+import BlankManagedRootView from 'page/renderer/BlankManagedRootView';
+import RendererFactory from 'page/renderer/PageRendererFactory';
+import ViewAdapter from 'page/renderer/ViewAdapter';
+
 describe('ima.page.renderer.AbstractPageRenderer', function() {
 
-	var pageRenderer = null;
-	var rendererFactory = oc.get('$PageRendererFactory');
-	var $Helper = oc.get('$Helper');
-	var ReactDOM = oc.get('$ReactDOM');
-	var settings = oc.get('$Settings');
+	let pageRenderer = null;
+	let rendererFactory = null;
+	let settings = {
+		$Page: {
+			$Render: {
+				scripts: [],
+				documentView: 'app.component.document.DocumentView'
+			}
+		}
+	};
 
-	var reactiveComponentView = {
+	let reactiveComponentView = {
 		state: {
 			key1: 1,
 			key2: 'string'
@@ -15,10 +31,10 @@ describe('ima.page.renderer.AbstractPageRenderer', function() {
 		replaceState: function() {}
 	};
 
-	var controller = new ns.ima.controller.Controller();
-	var view = function() {};
+	let controller = new Controller();
+	let view = function() {};
 
-	var routeOptions = {
+	let routeOptions = {
 		onlyUpdate: false,
 		autoScroll: false,
 		allowSPA: false,
@@ -26,7 +42,8 @@ describe('ima.page.renderer.AbstractPageRenderer', function() {
 	};
 
 	beforeEach(function() {
-		pageRenderer = oc.create('ima.page.renderer.AbstractPageRenderer', [rendererFactory, $Helper, ReactDOM, settings]);
+		rendererFactory = new RendererFactory();
+		pageRenderer = new AbstractPageRenderer(rendererFactory, Helper, ReactDOM, settings);
 
 		pageRenderer._reactiveView = reactiveComponentView;
 	});
@@ -52,7 +69,7 @@ describe('ima.page.renderer.AbstractPageRenderer', function() {
 	describe('setState method', function() {
 
 		it('should be set new state to reactive component view', function() {
-			var state = { state: 'state' };
+			let state = { state: 'state' };
 
 			spyOn(reactiveComponentView, 'setState')
 				.and
@@ -85,7 +102,7 @@ describe('ima.page.renderer.AbstractPageRenderer', function() {
 	describe('_generateViewProps method', function() {
 
 		it('should be set $Utils to props', function() {
-			var utils = { router: 'router' };
+			let utils = { router: 'router' };
 
 			spyOn(rendererFactory, 'getUtils')
 				.and
@@ -97,12 +114,12 @@ describe('ima.page.renderer.AbstractPageRenderer', function() {
 
 	describe('_getWrappedPageView method', function() {
 
-		var utils = { $Utils: 'utils' };
-		var state = { state: 'state', $pageView: view };
-		var propsView = { view: view };
-		var props = Object.assign({}, state, utils, propsView);
-		var wrapedPageViewElement = { wrapElementView: 'wrapedPageViewElement' };
-		var managedRootView = function() {};
+		let utils = { $Utils: 'utils' };
+		let state = { state: 'state', $pageView: view };
+		let propsView = { view: view };
+		let props = Object.assign({}, state, utils, propsView);
+		let wrapedPageViewElement = { wrapElementView: 'wrapedPageViewElement' };
+		let managedRootView = function() {};
 
 		beforeEach(function() {
 			spyOn(pageRenderer, '_generateViewProps')
@@ -126,16 +143,16 @@ describe('ima.page.renderer.AbstractPageRenderer', function() {
 		});
 
 		it('should return React Component for managedRootView from route options managedRootView property', function() {
-			var routeOptionsWithManagedRouteView = Object.assign({}, routeOptions, { managedRootView: ns.ima.page.renderer.BlankManagedRootView });
+			let routeOptionsWithManagedRouteView = Object.assign({}, routeOptions, { managedRootView: BlankManagedRootView });
 			pageRenderer._getWrappedPageView(controller, view, routeOptionsWithManagedRouteView);
 
-			expect(rendererFactory.getManagedRootView).toHaveBeenCalledWith(ns.ima.page.renderer.BlankManagedRootView);
+			expect(rendererFactory.getManagedRootView).toHaveBeenCalledWith(BlankManagedRootView);
 		});
 
 		it('should call wrapView with default ViewAdapter', function() {
 			pageRenderer._getWrappedPageView(controller, view, routeOptions);
 
-			expect(rendererFactory.wrapView).toHaveBeenCalledWith(ns.ima.page.renderer.ViewAdapter, props);
+			expect(rendererFactory.wrapView).toHaveBeenCalledWith(ViewAdapter, props);
 		});
 	});
 
@@ -154,10 +171,10 @@ describe('ima.page.renderer.AbstractPageRenderer', function() {
 		});
 
 		it('should return document view which is defined in routeOptions.documentView', function() {
-			var routeOptionsWithDocumentView = Object.assign({}, routeOptions, { documentView: ns.ima.page.AbstractDocumentView });
+			let routeOptionsWithDocumentView = Object.assign({}, routeOptions, { documentView: AbstractDocumentView });
 			pageRenderer._getDocumentView(routeOptionsWithDocumentView);
 
-			expect(rendererFactory.getDocumentView).toHaveBeenCalledWith(ns.ima.page.AbstractDocumentView);
+			expect(rendererFactory.getDocumentView).toHaveBeenCalledWith(AbstractDocumentView);
 		});
 
 	});
