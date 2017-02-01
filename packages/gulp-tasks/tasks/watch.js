@@ -23,7 +23,7 @@ exports.default = (gulpConfig) => {
 		runOnChange(files.locale.watch, 'locale:build');
 		runOnChange('./app/assets/static/**/*', 'copy:appStatic');
 
-		gulp.watch([
+		watch([
 			'./ima/**/*.js',
 			'./app/**/*.{js,jsx}',
 			'./build/static/js/locale/*.js'
