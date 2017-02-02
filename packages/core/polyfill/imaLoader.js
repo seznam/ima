@@ -70,9 +70,9 @@
 			moduleInstance[key] = value;
 			// The exported values have been updated, notify the modules that
 			// depend on this one - this is required for circular dependencies.
-			module.dependencyOf.forEach(function (dependencySetter) {
-				dependencySetter(moduleInstance)
-			})
+			module.dependencyOf.forEach(function(dependencySetter) {
+				dependencySetter(moduleInstance);
+			});
 		});
 		module.instance = moduleInstance; // allow lazy circular dependencies
 
