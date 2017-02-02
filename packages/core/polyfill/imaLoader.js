@@ -20,6 +20,19 @@
 				instance: null
 			};
 		},
+		replaceModule: function(moduleName, dependencies, moduleFactory) {
+			var moduleDescriptor = this.modules[moduleName];
+			if (!moduleDescriptor) {
+				throw new Error('You must register module "' + moduleName + '" at first.');
+			}
+
+			moduleDescriptor.dependencies = dependencies;
+			moduleDescriptor.factory = moduleFactory;
+			moduleDescriptor.dependencyOf = [];
+			moduleDescriptor.instance = null;
+
+			return resolveModule(moduleName);
+		},
 		import: function(moduleName) {
 			return Promise.resolve(this.importSync(moduleName));
 		},
