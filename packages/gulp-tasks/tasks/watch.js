@@ -1,13 +1,12 @@
-
 let gulp = require('gulp');
 let cache = require('gulp-cached');
 let flo = require('fb-flo');
-let fs = require('fs');
 let gutil = require('gulp-util');
 let remember = require('gulp-remember');
 let watch = require('gulp-watch');
+let path = require('path');
 
-let sharedState = require('../gulpState.js');
+let sharedState = require('ima-gulp-tasks/gulpState.js');
 
 exports.__requiresConfig = true;
 
@@ -15,6 +14,8 @@ exports.default = (gulpConfig) => {
 	let files = gulpConfig.files;
 
 	function watchTask() {
+		let hotReloadedCacheKeys = [];
+
 		runOnChange(files.app.watch, 'app:build');
 		runOnChange(files.ima.watch, 'ima:build');
 		runOnChange(files.vendor.watch, 'vendor:build');
@@ -23,22 +24,26 @@ exports.default = (gulpConfig) => {
 		runOnChange(files.locale.watch, 'locale:build');
 		runOnChange('./app/assets/static/**/*', 'copy:appStatic');
 
-		watch([
+		gulp.watch([
 			'./ima/**/*.js',
 			'./app/**/*.{js,jsx}',
 			'./build/static/js/locale/*.js'
-		]).on('change', (event) => {
-			sharedState.watchEvent = event;
+		]).on('all', (event, filePath, stats) => {
+			sharedState.watchEvent = { path: filePath };
+			let absoluteFilePath = path.resolve(gulpConfig.__dirname, filePath);
 
-			if (event.type === 'deleted') {
-				if (cache.caches['Es6ToEs5:app'][event.path]) {
-					delete cache.caches['Es6ToEs5:app'][event.path];
-					remember.forget('Es6ToEs5:app', event.path);
+			let cacheKey = absoluteFilePath.toLowerCase().replace('.jsx', '.js');
+			hotReloadedCacheKeys.push(cacheKey);
+
+			if (event === 'unlink') {
+				if (cache.caches['Es6ToEs5:app'][absoluteFilePath]) {
+					delete cache.caches['Es6ToEs5:app'][absoluteFilePath];
+					remember.forget('Es6ToEs5:app', absoluteFilePath.replace('.jsx', '.js'));
 				}
 
-				if (cache.caches['Es6ToEs5:ima'][event.path]) {
-					delete cache.caches['Es6ToEs5:ima'][event.path];
-					remember.forget('Es6ToEs5:ima', event.path);
+				if (cache.caches['Es6ToEs5:ima'][absoluteFilePath]) {
+					delete cache.caches['Es6ToEs5:ima'][absoluteFilePath];
+					remember.forget('Es6ToEs5:ima', absoluteFilePath.replace('.jsx', '.js'));
 				}
 			}
 		});
@@ -59,12 +64,22 @@ exports.default = (gulpConfig) => {
 					'flo...'
 				);
 
-				let fileContents = fs.readFileSync(
-					`./build/static/${filepath}`
-				);
+				let hotReloadedContents = hotReloadedCacheKeys.map((cacheKey) => {
+					let file = remember.cacheFor('Es6ToEs5:app')[cacheKey];
+					if (!file) {
+						return '';
+					}
+
+					return file.contents
+							.toString()
+							.replace(/System.import/g, '$IMA.Loader.import')
+							.replace(/System.register/g, '$IMA.Loader.replaceModule');
+				});
+				hotReloadedCacheKeys = [];
+
 				callback({
 					resourceURL: 'static/' + filepath,
-					contents: fileContents.toString()
+					contents: hotReloadedContents
 				});
 			}
 		);
