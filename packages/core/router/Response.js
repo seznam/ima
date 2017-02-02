@@ -293,8 +293,11 @@ export default class Response {
 	 */
 	_setCookieHeaders() {
 		for (let [name, param] of this._internalCookieStorage) {
-			if (param.options && param.options.maxAge) {
+			if (param.options && typeof param.options.maxAge == 'number') {
 				param.options.maxAge *= 1000;
+			} else if (param.options &&
+					typeof param.options.maxAge != 'number') {
+				delete param.options.maxAge;
 			}
 
 			this._response.cookie(name, param.value, param.options);
