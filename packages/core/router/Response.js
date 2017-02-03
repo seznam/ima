@@ -229,10 +229,11 @@ export default class Response {
 	 * @param {string} name The cookie name.
 	 * @param {(boolean|number|string)} value The cookie value, will be
 	 *        converted to string.
-	 * @param {{domain: string=, expires: (number|string)=}} options Cookie
-	 *        attributes. Only the attributes listed in the type annotation of
-	 *        this field are supported. For documentation and full list of
-	 *        cookie attributes see http://tools.ietf.org/html/rfc2965#page-5
+	 * @param {{domain: string=, expires: (number|string)=, maxAge: number=}}
+	 *        options Cookie attributes. Only the attributes listed in the type
+	 *        annotation of this field are supported. For documentation and full
+	 *        list of cookie attributes
+	 *        see http://tools.ietf.org/html/rfc2965#page-5
 	 * @return {Response} This response.
 	 */
 	setCookie(name, value, options = {}) {
@@ -293,14 +294,32 @@ export default class Response {
 	 */
 	_setCookieHeaders() {
 		for (let [name, param] of this._internalCookieStorage) {
-			if (param.options && typeof param.options.maxAge == 'number') {
-				param.options.maxAge *= 1000;
-			} else if (param.options &&
-					typeof param.options.maxAge != 'number') {
-				delete param.options.maxAge;
+			if (param.options) {
+				this._prepareCookieOptionsForExpress(param.options);
 			}
 
 			this._response.cookie(name, param.value, param.options);
+		}
+	}
+
+	/**
+	 * Prepares cookie options for Express.
+	 *
+	 * @param {{domain: string=, expires: (number|string)=, maxAge: number=}}
+	 *        options Cookie attributes. Only the attributes listed in the type
+	 *        annotation of this field are supported. For documentation and full
+	 *        list of cookie attributes
+	 *        see http://tools.ietf.org/html/rfc2965#page-5
+	 */
+	_prepareCookieOptionsForExpress(options) {
+		if (!options) {
+			return;
+		}
+
+		if (typeof options.maxAge === 'number') {
+			options.maxAge *= 1000;
+		} else {
+			delete options.maxAge;
 		}
 	}
 }
