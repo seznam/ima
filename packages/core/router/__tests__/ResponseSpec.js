@@ -7,4 +7,8 @@ describe('ima.router.Response', () => {
 	beforeEach(() => {
 		response = new Response();
 	});
+
+	it('should be 1', () => {
+		expect(1).toEqual(1);
+	});
 });
