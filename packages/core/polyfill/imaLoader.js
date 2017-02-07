@@ -11,7 +11,6 @@
 
 	root.$IMA.Loader = {
 		modules: modules,
-		initializedModules: null,
 		register: function(moduleName, dependencies, moduleFactory) {
 			this.modules[moduleName] = {
 				dependencies: dependencies,
