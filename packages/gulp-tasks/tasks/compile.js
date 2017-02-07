@@ -1,7 +1,6 @@
 
 let gulp = require('gulp');
 let babel = require('gulp-babel');
-let babelify = require('babelify');
 let browserify = require('browserify');
 let cache = require('gulp-cached');
 let change = require('gulp-change');
@@ -226,13 +225,13 @@ exports.default = (gulpConfig) => {
 
 	function Es6ToEs5VendorClient() {
 		let sourceFile = files.vendor.dest.tmp + files.vendor.src.client;
-		let options = {debug: false, insertGlobals: false, basedir: '.'};
+		let options = { debug: false, insertGlobals: false, basedir: '.' };
 
 		return browserify(sourceFile, options)
-			.transform(babelify.configure({
+			.transform('babelify', {
 				presets: babelConfig.vendor.presets,
 				plugins: babelConfig.vendor.plugins
-			}))
+			})
 			.bundle()
 			.pipe(source(files.vendor.name.client))
 			.pipe(gulp.dest(files.vendor.dest.client));
@@ -247,13 +246,13 @@ exports.default = (gulpConfig) => {
 			files.vendor.dest.tmp + files.vendor.src.test,
 			files.vendor.dest.tmp + files.vendor.src.client
 		];
-		let options = {debug: false, insertGlobals: false, basedir: '.'};
+		let options = { debug: false, insertGlobals: false, basedir: '.' };
 
 		return browserify(sourceFiles, options)
-			.transform(babelify.configure({
+			.transform('babelify', {
 				presets: babelConfig.vendor.presets,
 				plugins: babelConfig.vendor.plugins
-			}))
+			})
 			.external('react/addons')
 			.external('react/lib/ReactContext')
 			.external('react/lib/ExecutionEnvironment')
