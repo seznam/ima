@@ -294,11 +294,8 @@ export default class Response {
 	 */
 	_setCookieHeaders() {
 		for (let [name, param] of this._internalCookieStorage) {
-			if (param.options) {
-				this._prepareCookieOptionsForExpress(param.options);
-			}
-
-			this._response.cookie(name, param.value, param.options);
+			let options = this._prepareCookieOptionsForExpress(param.options);
+			this._response.cookie(name, param.value, options);
 		}
 	}
 
@@ -310,17 +307,18 @@ export default class Response {
 	 *        annotation of this field are supported. For documentation and full
 	 *        list of cookie attributes
 	 *        see http://tools.ietf.org/html/rfc2965#page-5
+	 * @return {Object} Cookie options prepared for Express.
 	 */
 	_prepareCookieOptionsForExpress(options) {
-		if (!options) {
-			return;
+		let expressOptions = Object.assign({}, options);
+
+		if (typeof expressOptions.maxAge === 'number') {
+			expressOptions.maxAge *= 1000;
+		} else {
+			delete expressOptions.maxAge;
 		}
 
-		if (typeof options.maxAge === 'number') {
-			options.maxAge *= 1000;
-		} else {
-			delete options.maxAge;
-		}
+		return expressOptions;
 	}
 }
 
