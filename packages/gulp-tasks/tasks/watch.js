@@ -5,6 +5,7 @@ let gutil = require('gulp-util');
 let remember = require('gulp-remember');
 let watch = require('gulp-watch');
 let path = require('path');
+let fs = require('fs');
 
 let sharedState = require('ima-gulp-tasks/gulpState.js');
 
@@ -64,18 +65,24 @@ exports.default = (gulpConfig) => {
 					'flo...'
 				);
 
-				let hotReloadedContents = hotReloadedCacheKeys.map((cacheKey) => {
-					let file = remember.cacheFor('Es6ToEs5:app')[cacheKey];
-					if (!file) {
-						return '';
-					}
+				let hotReloadedContents = '';
 
-					return file.contents
-							.toString()
-							.replace(/System.import/g, '$IMA.Loader.import')
-							.replace(/System.register/g, '$IMA.Loader.replaceModule');
-				});
-				hotReloadedCacheKeys = [];
+				if (path.parse(filepath).ext === '.css') {
+					hotReloadedContents = fs.readFileSync('./build/static/' + filepath);
+				} else {
+					hotReloadedContents = hotReloadedCacheKeys.map((cacheKey) => {
+						let file = remember.cacheFor('Es6ToEs5:app')[cacheKey];
+						if (!file) {
+							return '';
+						}
+
+						return file.contents
+								.toString()
+								.replace(/System.import/g, '$IMA.Loader.import')
+								.replace(/System.register/g, '$IMA.Loader.replaceModule');
+					});
+					hotReloadedCacheKeys = [];
+				}
 
 				callback({
 					resourceURL: 'static/' + filepath,
