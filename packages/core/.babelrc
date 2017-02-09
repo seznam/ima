@@ -1,8 +1,5 @@
 {
 	"plugins": [
-		"transform-es2015-modules-commonjs",
-		[ "module-resolver", {
-			"root": [ "./" ]
-		} ]
+		"transform-es2015-modules-commonjs"
 	]
 }
