@@ -27,7 +27,7 @@ try {
 
 let babelConfig = {
 	vendor: {
-		presets: ['latest', 'react'],
+		presets: ['latest'],
 		plugins: ['external-helpers-2']
 	},
 	app: {
@@ -61,7 +61,7 @@ if (
 ) {
 	babelConfig.app.presets = ['react'];
 	babelConfig.ima.presets = [];
-	babelConfig.vendor.presets = ['react'];
+	babelConfig.vendor.presets = [];
 	babelConfig.server.presets = [];
 	babelConfig.server.plugins = ['transform-es2015-modules-commonjs', 'external-helpers-2'];
 }
