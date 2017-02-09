@@ -177,8 +177,7 @@ exports.files = {
 		name: 'polyfill.js',
 		src: [
 			'./node_modules/babel-polyfill/dist/polyfill.min.js',
-			'./node_modules/custom-event-polyfill/custom-event-polyfill.js',
-			'./node_modules/ima-babel6-polyfill/index.js'
+			'./node_modules/custom-event-polyfill/custom-event-polyfill.js'
 		],
 		dest: {
 			client: './build/static/js/'
