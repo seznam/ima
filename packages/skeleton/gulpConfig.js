@@ -1,5 +1,6 @@
 let coreDependencies = require('ima/build.js');
 let sharedTasksState = require('ima-gulp-tasks/gulpState.js');
+let fs = require('fs');
 
 let appDependencies;
 try {
@@ -53,6 +54,20 @@ if (['production', 'prod', 'test'].includes(process.env.NODE_ENV)) {
 	babelConfig.ima.presets = ['es2017', 'es2016', ['es2015', { loose: true }]];
 	$Debug = false;
 }
+
+if (
+	['dev', undefined].includes(process.env.NODE_ENV) &&
+	!process.argv.some(arg => /^--legacy-compat-mode$/.test(arg))
+) {
+	babelConfig.app.presets = ['react'];
+	babelConfig.ima.presets = [];
+	babelConfig.vendor.presets = ['react'];
+	babelConfig.server.presets = [];
+	babelConfig.server.plugins = ['transform-es2015-modules-commonjs', 'external-helpers-2'];
+}
+
+// we need to generate a .babelrc file to enable proper compilation of the vendors
+fs.writeFileSync('./.babelrc', JSON.stringify(babelConfig.vendor));
 
 exports.babelConfig = babelConfig;
 
