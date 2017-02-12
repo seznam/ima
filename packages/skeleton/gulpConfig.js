@@ -221,3 +221,5 @@ exports.onTerminate = () => {
 		process.exit();
 	});
 };
+
+exports.__dirname = __dirname;
