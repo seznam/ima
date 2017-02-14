@@ -1,10 +1,11 @@
 let coreDependencies = require('ima/build.js');
+let path = require('path');
 let sharedTasksState = require('./gulpState');
 let fs = require('fs');
 
 let appDependencies;
 try {
-	appDependencies = require('./app/build.js');
+	appDependencies = require(path.resolve('.', 'app/build.js'));
 } catch (error) {
 	console.info(error.message);
 	console.info('The default application dependencies will be used.');
