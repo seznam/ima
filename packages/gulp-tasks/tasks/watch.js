@@ -31,7 +31,7 @@ exports.default = (gulpConfig) => {
 			'./build/static/js/locale/*.js'
 		]).on('all', (event, filePath, stats) => {
 			sharedState.watchEvent = { path: filePath };
-			let absoluteFilePath = path.resolve(gulpConfig.__dirname, filePath);
+			let absoluteFilePath = path.resolve('.', filePath);
 
 			let cacheKey = absoluteFilePath.toLowerCase().replace('.jsx', '.js');
 			hotReloadedCacheKeys.push(cacheKey);
