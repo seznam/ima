@@ -45,6 +45,16 @@ export default class Dictionary {
 	 *         evaluated using the provided parameters.
 	 */
 	get(key, parameters = {}) {}
+
+	/**
+	 * Tests whether the specified localization phrase exists in the
+	 * dictionary.
+	 *
+	 * @param {string} key The key identifying the localization phrase.
+	 * @return {boolean} {@code true} if the key exists and denotes a single
+	 *         localization phrase.
+	 */
+	has(key) {}
 }
 
 ns.ima.dictionary.Dictionary = Dictionary;

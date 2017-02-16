@@ -80,22 +80,76 @@ export default class MessageFormatDictionary extends Dictionary {
 	 *        Defaults to an empty plain object.
 	 */
 	get(key, parameters = {}) {
+		const scope = this._getScope(key);
+
+		if (!scope) {
+			throw new GenericError(
+				`ima.dictionary.MessageFormatDictionary.get: The ` +
+				`localization phrase '${key}' does not exists`,
+				{ key, parameters }
+			);
+		}
+
+		return scope(parameters);
+	}
+
+	/**
+	 * @inheritdoc
+	 * @param {string} key The key identifying the localization phrase. The key
+	 *        consists of at least two parts separated by dots. The first part
+	 *        denotes the name of the source JSON localization file, while the
+	 *        rest denote a field path within the localization object within
+	 *        the given localization file.
+	 */
+	has(key) {
+		if (!/^[^.]+\.[^.]+$/.test(key)) {
+			throw new Error(
+				`The provided key (${key}) is not a valid localization ` +
+				`phrase key, expecting a "file_name.identifier" notation`
+			);
+		}
+
+		return !!this._getScope(key);
+	}
+
+	/**
+	 * Retrieves the localization scope denoted by the provided partial key.
+	 * This may be either an object representing a sub-group of location phrase
+	 * generators, or a single generator if the provided keys denotes a single
+	 * localization phrase
+	 *
+	 * @private
+	 * @param {string} key The key identifying the localization phrase. The key
+	 *        consists of at least two parts separated by dots. The first part
+	 *        denotes the name of the source JSON localization file, while the
+	 *        rest denote a field path within the localization object within
+	 *        the given localization file.
+	 * @return {?(
+	 *             function(
+	 *                 Object<string, (boolean|number|string|Date)>
+	 *             ): string|
+	 *             Object<
+	 *               string, 
+	 *               function(
+	 *                   Object<string, (boolean|number|string|Date)>
+	 *               ): string
+	 *             >
+	 *         )} The requested localization scope, or {@code null} if the
+	 *         specified scope does not exist.
+	 */
+	_getScope(key) {
 		let path = key.split('.');
 		let scope = this._dictionary;
 
 		for (let scopeKey of path) {
 			if (!scope[scopeKey]) {
-				throw new GenericError(
-					`ima.dictionary.MessageFormatDictionary.get: The ` +
-					`localization phrase '${key}' does not exists`,
-					{ key, parameters }
-				);
+				return null;
 			}
 
 			scope = scope[scopeKey];
 		}
 
-		return scope(parameters);
+		return scope;
 	}
 }
 
