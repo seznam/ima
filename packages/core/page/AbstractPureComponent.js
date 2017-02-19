@@ -1,16 +1,12 @@
 import React from 'react';
-import ReactDOM from 'react-dom';
-import ns from '../namespace';
 import * as helpers from './componentHelpers';
 
-ns.namespace('ima.page');
-
 /**
- * The base class for all view components.
+ * The base class for all pure (state-less) view components.
  *
  * @abstract
  */
-export default class AbstractComponent extends React.Component {
+export default class AbstractPureComponent extends React.PureComponent {
 
 	static get contextTypes() {
 		return helpers.getContextTypes(this);
@@ -50,30 +46,6 @@ export default class AbstractComponent extends React.Component {
 		}
 
 		return this._utils;
-	}
-
-	/**
-	 * Finds and returns the DOM node representing the specified React
-	 * component.
-	 *
-	 * Note that this method can be used only at the client-side.
-	 *
-	 * @deprecated Use refs instead.
-	 * @param {React.Component} component
-	 * @return {?HTMLElement} The DOM node representing the specified React
-	 *         component, or {@code null} if no such node was found.
-	 */
-	findDOMNode(component = this) {
-		if ($Debug) {
-			console.warn(
-				'DEPRECATION WARNING: The findDOMNode() method is ' +
-				'deprecated since IMA 0.14.0. Please switch to using refs ' +
-				'instead, as this method will be removed in an upcoming ' +
-				'version of IMA.'
-			);
-		}
-
-		return ReactDOM.findDOMNode(component);
 	}
 
 	/**
@@ -134,33 +106,4 @@ export default class AbstractComponent extends React.Component {
 	fire(eventName, data = null) {
 		helpers.fire(this, eventName, data);
 	}
-
-	/**
-	 * Registers the provided event listener for execution whenever an IMA.js
-	 * DOM custom event of the specified name occurs at the specified event
-	 * target.
-	 *
-	 * @param {(React.Element|EventTarget)} eventTarget The react component or
-	 *        event target at which the listener should listen for the event.
-	 * @param {string} eventName The name of the event for which to listen.
-	 * @param {function(Event)} listener The listener for event to register.
-	 */
-	listen(eventTarget, eventName, listener) {
-		helpers.listen(this, eventTarget, eventName, listener);
-	}
-
-	/**
-	 * Deregisters the provided event listener for an IMA.js DOM custom event
-	 * of the specified name at the specified event target.
-	 *
-	 * @param {(React.Element|EventTarget)} eventTarget The react component or
-	 *        event target at which the listener should listen for the event.
-	 * @param {string} eventName The name of the event for which to listen.
-	 * @param {function(Event)} listener The listener for event to register.
-	 */
-	unlisten(eventTarget, eventName, listener) {
-		helpers.unlisten(this, eventTarget, eventName, listener);
-	}
 }
-
-ns.ima.page.AbstractComponent = AbstractComponent;
