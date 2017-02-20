@@ -3,6 +3,18 @@ root.$IMA = root.$IMA || {};
 root.$IMA.Test = true;
 root.$Debug = true;
 
+root.$IMA.Loader = root.$IMA.Loader || {
+	register: function() {},
+	replaceModule: function() {},
+	import: function() {
+		return Promise.resolve();
+	},
+	importSync: function() {},
+	initAllModules: function() {
+		return Promise.resolve();
+	}
+};
+
 root.extend = extend;
 root.using = using;
 root.$import = $import;

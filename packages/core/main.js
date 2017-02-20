@@ -6,6 +6,10 @@ import Bootstrap from './Bootstrap';
 import initBindIma from 'ima/config/bind';
 import initServicesIma from 'ima/config/services';
 
+function bindToNamespace() {
+	vendorLinker.bindToNamespace(ns);
+}
+
 function getInitialImaConfigFunctions() {
 	return { initBindIma, initServicesIma };
 }
@@ -207,7 +211,7 @@ function hotReloadClientApp(initialAppConfigFunctions) {
 	}
 }
 
-function reviveClientApp (initialAppConfigFunctions) {
+function reviveClientApp(initialAppConfigFunctions) {
 	let root = _getRoot();
 
 	if (_isClient()) {
@@ -275,9 +279,9 @@ function onLoad(callback) {
 	});
 }
 
-vendorLinker.bindToNamespace(ns);
 
 export {
+	bindToNamespace,
 	getInitialImaConfigFunctions,
 	getNamespace,
 	getInitialPluginConfig,

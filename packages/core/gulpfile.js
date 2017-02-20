@@ -71,7 +71,7 @@ function compile() {
 		.pipe(gulp.dest(__dirname + '/dist'));
 }
 
-function copy() {
+function copyFiles() {
 	return gulp
 		.src([
 			__dirname + '/polyfill/*.js',
@@ -83,6 +83,18 @@ function copy() {
 			__dirname + '/test.js'
 		])
 		.pipe(gulp.dest(__dirname + '/dist'));
+}
+
+function copyPolyfill() {
+	return gulp
+		.src([
+			__dirname + '/polyfill/*.js'
+		])
+		.pipe(gulp.dest(__dirname + '/dist/polyfill'));
+}
+
+function copy() {
+	return gulp.parallel(copyFiles, copyPolyfill)();
 }
 
 function clean() {

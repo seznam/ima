@@ -4,7 +4,7 @@
  * Utility for linking vendor node modules with the application by exporting
  * them to the IMA loader's modules.
  */
-class VendorLinker {
+export class VendorLinker {
 	/**
 	 * Initializes the vendor linker.
 	 */
@@ -100,14 +100,4 @@ class VendorLinker {
 	}
 }
 
-let vendorLinker = new VendorLinker();
-
-module.exports = vendorLinker;
-$IMA.Loader.register('ima/vendorLinker', [], (exports) => {
-	return {
-		setters: [],
-		execute: () => {
-			exports('default', vendorLinker);
-		}
-	};
-});
+export default new VendorLinker();
