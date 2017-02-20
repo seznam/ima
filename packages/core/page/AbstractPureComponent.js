@@ -49,20 +49,24 @@ export default class AbstractPureComponent extends React.PureComponent {
 	}
 
 	/**
-	 * Returns localize string for defined key. Method replace params in string
-	 * with value of params.
+	 * Returns the localized phrase identified by the specified key. The
+	 * placeholders in the localization phrase will be replaced by the provided
+	 * values.
 	 *
-	 * @param {string} key Localization key
-	 * @param {Object<string, (number|string)>=} params Params for replacement
-	 * @return {string} localize string
+	 * @param {string} key Localization key.
+	 * @param {Object<string, (number|string)>=} params Values for replacing
+	 *        the placeholders in the localization phrase.
+	 * @return {string} Localized phrase.
 	 */
 	localize(key, params = {}) {
 		return helpers.localize(this, key, params);
 	}
 
 	/**
-	 * Returns URL for route name. Method replace params in route with defined
-	 * params. Routes is defined in {@code /app/config/routes.js}.
+	 * Generates an absolute URL using the provided route name (see the
+	 * <code>app/config/routes.js</code> file). The provided parameters will
+	 * replace the placeholders in the route pattern, while the extraneous
+	 * parameters will be appended to the generated URL's query string.
 	 *
 	 * @param {string} name The route name.
 	 * @param {Object<string, (number|string)>=} params Router parameters and
