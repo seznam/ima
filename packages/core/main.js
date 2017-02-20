@@ -6,10 +6,6 @@ import Bootstrap from './Bootstrap';
 import initBindIma from 'ima/config/bind';
 import initServicesIma from 'ima/config/services';
 
-function bindToNamespace() {
-	vendorLinker.bindToNamespace(ns);
-}
-
 function getInitialImaConfigFunctions() {
 	return { initBindIma, initServicesIma };
 }
@@ -234,6 +230,8 @@ function reviveClientApp(initialAppConfigFunctions) {
 }
 
 function reviveTestClientApp(initialAppConfigFunctions) {
+	vendorLinker.bindToNamespace(ns);
+
 	let root = _getRoot();
 	let app = createImaApp();
 	let bootConfig = getTestClientBootConfig(initialAppConfigFunctions);
@@ -252,6 +250,8 @@ function onLoad(callback) {
 			`pattern. Update your app/main.js file.`
 		);
 	}
+
+	vendorLinker.bindToNamespace(ns);
 
 	if (!_isClient()) {
 		return Promise.reject(null);
@@ -281,7 +281,6 @@ function onLoad(callback) {
 
 
 export {
-	bindToNamespace,
 	getInitialImaConfigFunctions,
 	getNamespace,
 	getInitialPluginConfig,

@@ -74,7 +74,6 @@ function compile() {
 function copyFiles() {
 	return gulp
 		.src([
-			__dirname + '/polyfill/*.js',
 			__dirname + '/build.js',
 			__dirname + '/LICENSE',
 			__dirname + '/package.json',
