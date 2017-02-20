@@ -25,6 +25,14 @@
 				throw new Error('You must register module "' + moduleName + '" at first.');
 			}
 
+			Object.keys(this.modules).forEach(function(modulePath) {
+				var module = root.$IMA.Loader.modules[modulePath];
+
+				if (module.dependencies.indexOf(moduleName) > -1) {
+					module.instance = null;
+				}
+			});
+
 			moduleDescriptor.dependencies = dependencies;
 			moduleDescriptor.factory = moduleFactory;
 			moduleDescriptor.dependencyOf = [];
