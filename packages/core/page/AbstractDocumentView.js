@@ -1,6 +1,6 @@
-import React, { PropTypes } from 'react';
+import { PropTypes } from 'react';
 import ns from '../namespace';
-import AbstractComponent from './AbstractComponent';
+import AbstractPureComponent from './AbstractPureComponent';
 import MetaManager from '../meta/MetaManager';
 
 ns.namespace('ima.page');
@@ -12,11 +12,12 @@ ns.namespace('ima.page');
  * route.
  *
  * Note that the document views are always rendered only at the server-side and
- * cannot be switched at the client-side.
+ * cannot be switched at the client-side. Because of this, the document view
+ * component must be pure and cannot contain a state.
  *
  * @abstract
  */
-export default class AbstractDocumentView extends AbstractComponent {
+export default class AbstractDocumentView extends AbstractPureComponent {
 
 	/**
 	 * Returns the ID of the element (the value of the {@code id} attribute)
