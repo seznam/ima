@@ -177,7 +177,7 @@ exports.default = (gulpConfig) => {
 		});
 
 		function getModuleLinkerContent(modules) {
-			let linkingFileHeader = `let vendorLinker = require('ima/vendorLinker.js');\n`;
+			let linkingFileHeader = `let vendorLinker = require('ima/vendorLinker.js').default;\n`;
 			let linkingFileFooter = `module.exports = vendorLinker;\n`;
 			let duplicity = [];
 
