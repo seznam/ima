@@ -199,16 +199,20 @@ export default class CookieStorage extends MapStorage {
 	 * Deletes the cookie identified by the specified name.
 	 *
 	 * @param {string} name Name identifying the cookie.
-	 * @param {string} [domain=''] Domain of the cookie we want to delete.
+	 * @param {{
+	 *          domain: string=,
+	 *          path: string=,
+	 *          httpOnly: boolean=,
+	 *          secure: boolean=
+	 *        }=} options The cookie options. The {@code domain} and
+	 *        {@code path} specify the cookie's domain and path. The
+	 *        {@code httpOnly} and {@code secure} flags set the flags of the
+	 *        same name of the cookie.
 	 * @return {Storage} This storage.
 	 */
-	delete(name, domain = '') {
+	delete(name, options = {}) {
 		if (this.has(name)) {
-			if (!domain) {
-				this.set(name);
-			} else {
-				this.set(name, undefined, { domain });
-			}
+			this.set(name, undefined, options);
 			super.delete(name);
 		}
 
