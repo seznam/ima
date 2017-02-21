@@ -196,11 +196,19 @@ export default class CookieStorage extends MapStorage {
 	}
 
 	/**
-	 * @inheritdoc
+	 * Deletes the cookie identified by the specified name.
+	 *
+	 * @param {string} name Name identifying the cookie.
+	 * @param {string} [domain=''] Domain of the cookie we want to delete.
+	 * @return {Storage} This storage.
 	 */
-	delete(name) {
+	delete(name, domain = '') {
 		if (this.has(name)) {
-			this.set(name);
+			if (!domain) {
+				this.set(name);
+			} else {
+				this.set(name, undefined, { domain });
+			}
 			super.delete(name);
 		}
 
