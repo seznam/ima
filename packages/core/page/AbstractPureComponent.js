@@ -4,7 +4,16 @@ import * as helpers from './componentHelpers';
 /**
  * The base class for all pure (state-less) view components.
  *
+ * Unlike the "regular" components, pure components do not have any external
+ * state, and therefore are pure functions of their props and state. This
+ * allows for some nice optimizations on react's part (see the link).
+ *
+ * Because of this, this class does not provide all the APIs provided by the
+ * {@linkcode AbstractComponent} class (e.g. {@code listen}) as there is next
+ * to none use of them with pure components.
+ *
  * @abstract
+ * @see https://facebook.github.io/react/docs/react-api.html#react.purecomponent
  */
 export default class AbstractPureComponent extends React.PureComponent {
 
