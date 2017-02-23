@@ -3,8 +3,8 @@ import ns from './namespace';
 import ObjectContainer from './ObjectContainer';
 import Bootstrap from './Bootstrap';
 
-import initBindIma from 'ima/config/bind';
-import initServicesIma from 'ima/config/services';
+import initBindIma from './config/bind';
+import initServicesIma from './config/services';
 
 function getInitialImaConfigFunctions() {
 	return { initBindIma, initServicesIma };
