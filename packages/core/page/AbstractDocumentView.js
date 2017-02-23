@@ -8,6 +8,7 @@ ns.namespace('ima.page');
 const PRIVATE = {
 	masterElementId: Symbol('masterElementId')
 };
+
 if ($Debug) {
 	Object.freeze(PRIVATE);
 }
@@ -63,7 +64,7 @@ export default class AbstractDocumentView extends AbstractComponent {
 			}
 		}
 
-		this[PRIVATE.masterElementId] = masterElementId
+		this[PRIVATE.masterElementId] = masterElementId;
 	}
 
 	/**
