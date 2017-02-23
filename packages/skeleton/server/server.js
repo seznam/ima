@@ -1,8 +1,6 @@
 'use strict';
 
 require('babel-polyfill');
-require('./ima/shim.js');
-require('./ima/vendor.server.js');
 
 // Node
 let cluster = require('cluster');
@@ -11,21 +9,7 @@ let os = require('os');
 global.appRoot = path.resolve(__dirname);
 
 // IMA server
-let environmentConfig = require('./ima/config/environment.js');
-function appFactory() {
-	delete require.cache[require.resolve('./ima/app.server.js')];
-	delete require.cache[require.resolve('./ima/ima.server.js')];
-
-	require('./ima/ima.server.js')();
-	require('./ima/app.server.js')();
-}
-let languageLoader = (language => require(`./ima/locale/${language}.js`));
-
-let imaServer = require('ima-server')(
-	environmentConfig,
-	languageLoader,
-	appFactory
-);
+let imaServer = require('ima-server');
 
 let clientApp = imaServer.clientApp;
 let proxy = imaServer.proxy;
