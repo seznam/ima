@@ -28,49 +28,49 @@ try {
 
 let babelConfig = {
 	vendor: {
-		presets: ['latest'],
+		presets: [],
 		plugins: ['external-helpers-2']
 	},
 	app: {
-		presets: ['latest', 'react'],
+		presets: ['react'],
 		plugins: ['transform-es2015-modules-systemjs', 'external-helpers-2']
 	},
-	ima: {
+
+	oldClient: {
 		presets: ['latest'],
-		plugins: ['transform-es2015-modules-systemjs', 'external-helpers-2']
+		plugins: []
 	},
+
 	server: {
-		presets: ['latest'],
-		plugins: ['external-helpers-2']
+		presets: [],
+		plugins: ['transform-es2015-modules-commonjs']
 	}
 };
 let $Debug = true;
+let legacyCompactMode = false;
 
 if (['production', 'prod', 'test'].includes(process.env.NODE_ENV)) {
-	babelConfig.app.presets = ['es2017', 'es2016', ['es2015', { loose: true }], 'react'];
 	babelConfig.app.plugins = babelConfig.app.plugins.concat([
 		'transform-react-constant-elements',
 		'transform-react-inline-elements'
 	]);
-	babelConfig.ima.presets = ['es2017', 'es2016', ['es2015', { loose: true }]];
+	babelConfig.oldClient.presets = ['es2017', 'es2016', ['es2015', { loose: true }]];
+	babelConfig.vendor.presets = ['es2017', 'es2016', ['es2015', { loose: true }],  'react'];
 	$Debug = false;
+	legacyCompactMode = true;
 }
 
 if (
 	['dev', undefined].includes(process.env.NODE_ENV) &&
-	!process.argv.some(arg => /^--legacy-compat-mode$/.test(arg)) &&
-	!Object.keys(process.env).includes('npm_config_legacy_compat_mode')
+	(process.argv.some(arg => /^--legacy-compat-mode$/.test(arg)) ||
+	Object.keys(process.env).includes('npm_config_legacy_compat_mode'))
 ) {
-	babelConfig.app.presets = ['react'];
-	babelConfig.ima.presets = [];
-	babelConfig.vendor.presets = [];
-	babelConfig.server.presets = [];
-	babelConfig.server.plugins = ['transform-es2015-modules-commonjs', 'external-helpers-2'];
+	babelConfig.vendor.presets = ['latest', 'react'];
+	babelConfig.server.presets = ['latest', 'react'];
+	legacyCompactMode = true;
 }
 
-// We need to generate a .babelrc file to enable proper compilation of the vendors
-fs.writeFileSync('./.babelrc', JSON.stringify(babelConfig.vendor));
-
+exports.legacyCompactMode = legacyCompactMode;
 exports.babelConfig = babelConfig;
 
 exports.uglifyCompression = {
@@ -90,20 +90,20 @@ exports.vendorDependencies = {
 exports.tasks = {
 	dev: [
 		['copy:appStatic', 'copy:environment', 'shim', 'polyfill'],
-		['Es6ToEs5:app', 'Es6ToEs5:ima', 'Es6ToEs5:server', 'Es6ToEs5:vendor'],
+		['Es6ToEs5:app', 'Es6ToEs5:server', 'Es6ToEs5:vendor'],
 		['less', 'doc', 'locale', 'Es6ToEs5:vendor:client', 'Es6ToEs5:vendor:client:test'],
 		'server',
 		['test:unit:karma:dev', 'watch']
 	],
 	build: [
 		['copy:appStatic', 'copy:environment', 'shim', 'polyfill'],
-		['Es6ToEs5:app', 'Es6ToEs5:ima', 'Es6ToEs5:server', 'Es6ToEs5:vendor'],
+		['Es6ToEs5:app', 'Es6ToEs5:server', 'Es6ToEs5:vendor'],
 		['less', 'doc', 'locale', 'Es6ToEs5:vendor:client', 'Es6ToEs5:vendor:client:test'],
 		['bundle:js:app', 'bundle:js:server', 'bundle:css']
 	],
 	spa: [
 		['copy:appStatic', 'shim', 'polyfill'],
-		['Es6ToEs5:app', 'Es6ToEs5:ima', 'Es6ToEs5:vendor'],
+		['Es6ToEs5:app', 'Es6ToEs5:vendor'],
 		['less', 'doc', 'locale', 'Es6ToEs5:vendor:client'],
 		['bundle:js:app', 'bundle:css', 'spa:compile'],
 		'spa:clean'

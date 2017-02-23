@@ -17,6 +17,7 @@ let source = require('vinyl-source-stream');
 let sourcemaps = require('gulp-sourcemaps');
 let gulpIgnore = require('gulp-ignore');
 let tap = require('gulp-tap');
+let gutil = require('gulp-util');
 
 let gulpConfig = require('../../../gulpConfig.js');
 let files = gulpConfig.files;
@@ -53,6 +54,24 @@ exports.default = (gulpConfig) => {
 				files.app.clearServerSide;
 		}
 
+		function compileToLegacyCode() {
+			if (gulpConfig.legacyCompactMode) {
+				return babel({
+					moduleIds: true,
+					presets: babelConfig.oldClient ?
+						babelConfig.oldClient.presets
+					:
+						[],
+					plugins: babelConfig.oldClient ?
+						babelConfig.oldClient.plugins
+					:
+						[]
+				})
+			} else {
+				return gutil.noop();
+			}
+		}
+
 		return gulp
 			.src(files.app.src)
 			.pipe(resolveNewPath(files.app.base || '/'))
@@ -60,6 +79,7 @@ exports.default = (gulpConfig) => {
 			.pipe(sourcemaps.init())
 			.pipe(cache('Es6ToEs5:app'))
 			.pipe(babel({
+				babelrc: false,
 				moduleIds: true,
 				presets: babelConfig.app.presets,
 				plugins: babelConfig.app.plugins
@@ -68,6 +88,7 @@ exports.default = (gulpConfig) => {
 			.pipe(plumber.stop())
 			.pipe(save('Es6ToEs5:app:source'))
 			.pipe(gulpIgnore.exclude(excludeServerSideFile))
+			.pipe(compileToLegacyCode())
 			.pipe(concat(files.app.name.client))
 			.pipe(replaceToIMALoader())
 			.pipe(insert.wrap('(function(){\n', '\n })();\n'))
@@ -82,54 +103,12 @@ exports.default = (gulpConfig) => {
 			.pipe(gulp.dest(files.app.dest.server));
 	}
 
-	function Es6ToEs5Ima() {
-		function replaceToIMALoader() {
-			return change((content) => {
-				content = content.replace(/System.import/g, '$IMA.Loader.import');
-				content = content.replace(/System.register/g, '$IMA.Loader.register');
-
-				return content;
-			});
-		}
-
-		function excludeServerSideFile(file) {
-			return (file.contents.toString().indexOf('@server-side') !== -1) &&
-				files.ima.clearServerSide;
-		}
-
-		return gulp
-			.src(files.ima.src)
-			.pipe(resolveNewPath(files.ima.base || '/node_modules'))
-			.pipe(plumber())
-			.pipe(sourcemaps.init())
-			.pipe(cache('Es6ToEs5:ima'))
-			.pipe(babel({
-				moduleIds: true,
-				presets: babelConfig.ima.presets,
-				plugins: babelConfig.ima.plugins
-			}))
-			.pipe(remember('Es6ToEs5:ima'))
-			.pipe(plumber.stop())
-			.pipe(save('Es6ToEs5:ima:source'))
-			.pipe(gulpIgnore.exclude(excludeServerSideFile))
-			.pipe(concat(files.ima.name.client))
-			.pipe(replaceToIMALoader())
-			.pipe(insert.wrap('(function(){\n', '\n })();\n'))
-			.pipe(sourcemaps.write())
-			.pipe(gulp.dest(files.ima.dest.client))
-			.pipe(save.restore('Es6ToEs5:ima:source'))
-			.pipe(concat(files.ima.name.server))
-			.pipe(replaceToIMALoader())
-			.pipe(insert.wrap('module.exports = (function(){\n', '\n })\n'))
-			.pipe(sourcemaps.write())
-			.pipe(gulp.dest(files.ima.dest.server));
-	}
-
 	function Es6ToEs5Server() {
 		return gulp
 			.src(files.server.src)
 			.pipe(plumber())
 			.pipe(babel({
+				babelrc: false,
 				presets: babelConfig.server.presets,
 				plugins: babelConfig.server.plugins
 			}))
@@ -229,6 +208,8 @@ exports.default = (gulpConfig) => {
 
 		return browserify(sourceFile, options)
 			.transform('babelify', {
+				babelrc: false,
+				global: true,
 				presets: babelConfig.vendor.presets,
 				plugins: babelConfig.vendor.plugins
 			})
@@ -250,6 +231,8 @@ exports.default = (gulpConfig) => {
 
 		return browserify(sourceFiles, options)
 			.transform('babelify', {
+				babelrc: false,
+				global: true,
 				presets: babelConfig.vendor.presets,
 				plugins: babelConfig.vendor.plugins
 			})
@@ -282,7 +265,6 @@ exports.default = (gulpConfig) => {
 
 	return {
 		'Es6ToEs5:app': Es6ToEs5App,
-		'Es6ToEs5:ima': Es6ToEs5Ima,
 		'Es6ToEs5:server': Es6ToEs5Server,
 		'Es6ToEs5:vendor': Es6ToEs5Vendor,
 		'Es6ToEs5:vendor:client': Es6ToEs5VendorClient,

@@ -17,7 +17,7 @@ exports.default = (gulpConfig) => {
 			.src(files.bundle.js.src)
 			.pipe(plumber())
 			.pipe(concat(files.bundle.js.name))
-			.pipe(uglify({mangle: true, compress: uglifyCompression}))
+			.pipe(uglify({ mangle: true, compress: uglifyCompression }))
 			.pipe(plumber.stop())
 			.pipe(gulp.dest(files.bundle.js.dest));
 	}
@@ -27,13 +27,6 @@ exports.default = (gulpConfig) => {
 
 		return gulp
 			.src(file)
-			.pipe(plumber())
-			.pipe(uglify({
-				mangle: false,
-				output: {beautify: true},
-				compress: uglifyCompression
-			}))
-			.pipe(plumber.stop())
 			.pipe(gulp.dest(files.app.dest.server));
 	}
 
