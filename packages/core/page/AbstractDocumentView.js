@@ -84,8 +84,16 @@ export default class AbstractDocumentView extends AbstractPureComponent {
 		return {
 			metaManager: PropTypes.instanceOf(MetaManager).isRequired,
 			page: PropTypes.string.isRequired,
-			revivalSettings: PropTypes.string.isRequired
+			revivalSettings: PropTypes.string.isRequired,
+			$Utils: PropTypes.object.isRequired
 		};
+	}
+
+	/**
+	 * @inheritdoc
+	 */
+	static get contextTypes() {
+		return {};
 	}
 }
 

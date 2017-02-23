@@ -19,6 +19,7 @@ import HttpStatusCode from '../http/StatusCode';
 import UrlTransformer from '../http/UrlTransformer';
 import MetaManager from '../meta/MetaManager';
 import MetaManagerImpl from '../meta/MetaManagerImpl';
+import AbstractComponent from '../page/AbstractComponent';
 import PageFactory from '../page/PageFactory';
 import ClientPageManager from '../page/manager/ClientPageManager';
 import PageManager from '../page/manager/PageManager';
