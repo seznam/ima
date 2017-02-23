@@ -92,8 +92,8 @@ function copyPolyfill() {
 		.pipe(gulp.dest(__dirname + '/dist/polyfill'));
 }
 
-function copy() {
-	return gulp.parallel(copyFiles, copyPolyfill)();
+function copy(done) {
+	return gulp.parallel(copyFiles, copyPolyfill)(done);
 }
 
 function clean() {
