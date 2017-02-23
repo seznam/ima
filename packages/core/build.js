@@ -1,13 +1,13 @@
-var js = [
+const js = [
 	'./node_modules/ima/**/!(vendorLinker|gulpfile|build|test|*Spec).{js,jsx}',
 	'!./node_modules/ima/polyfill/*.js'
 ];
 
-var mainjs = [
+const mainjs = [
 	'./node_modules/ima/main.js'
 ];
 
-var vendors = {
+const vendors = {
 	common: [
 		'ima-helpers',
 		'classnames',
