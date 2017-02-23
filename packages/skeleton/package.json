@@ -9,6 +9,7 @@
 		"app:todos": "node node_modules/gulp/bin/gulp.js app:todos",
 		"test": "node node_modules/gulp/bin/gulp.js test",
 		"dev": "node node_modules/gulp/bin/gulp.js dev",
+		"gulp": "node node_modules/.bin/gulp",
 		"build": "NODE_ENV=production node_modules/gulp/bin/gulp.js build",
 		"build:spa": "NODE_ENV=production node_modules/gulp/bin/gulp.js build:spa",
 		"start": "NODE_ENV=production node build/server.js"
@@ -39,18 +40,18 @@
 	"license": "MIT",
 	"devDependencies": {
 		"ima-gulp-task-loader": "0.14.0-rc.1",
-		"ima-gulp-tasks": "0.14.0-rc.10"
+		"ima-gulp-tasks": "0.14.0-rc.12"
 	},
 	"dependencies": {
-		"body-parser": "1.15.2",
+		"body-parser": "1.16.1",
 		"compression": "1.6.2",
 		"cookie-parser": "1.4.3",
-		"express": "4.14.0",
-		"helmet": "^2.1.1",
-		"ima": "0.14.0-rc.16",
+		"express": "4.14.1",
+		"helmet": "3.4.0",
+		"ima": "0.14.0-rc.17",
 		"ima-server": "0.14.0-rc.4",
 		"method-override": "2.3.7",
-		"multer": "^1.0.6",
-		"serve-favicon": "2.3.2"
+		"multer": "1.3.0",
+		"serve-favicon": "2.4.0"
 	}
 }
