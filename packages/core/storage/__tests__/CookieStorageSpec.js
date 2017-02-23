@@ -77,6 +77,13 @@ describe('ima.storage.CookieStorage', () => {
 		expect(cookie._storage.size).toEqual(1);
 	});
 
+	it('should be delete value from cookie with options', () => {
+		cookie.delete('cok2', { domain: 'localhost' });
+
+		expect(response.setCookie).toHaveBeenCalled();
+		expect(cookie._storage.size).toEqual(1);
+	});
+
 	it('should be delete all cookies', () => {
 		cookie.clear();
 
