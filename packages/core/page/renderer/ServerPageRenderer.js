@@ -9,6 +9,18 @@ import Response from '../../router/Response';
 
 ns.namespace('ima.page.renderer');
 
+let imaLoader = '';
+let imaRunner = '';
+
+if ((typeof window === 'undefined') || (window === null)) {
+	let nodeFs = 'fs';
+	let fs = require(nodeFs);
+	let folder = require.resolve('../../').replace('/main.js', '');
+
+	imaLoader = fs.readFileSync(`${folder}/polyfill/imaLoader.js`, 'utf8');
+	imaRunner = fs.readFileSync(`${folder}/polyfill/imaRunner.js`, 'utf8');
+}
+
 /**
  * Server-side page renderer. The renderer renders the page into the HTML
  * markup and sends it to the client.
@@ -108,6 +120,7 @@ export default class ServerPageRenderer extends AbstractPageRenderer {
 		return (
 			`
 			(function(root) {
+				root.$Debug = ${this._settings.$Debug};
 				root.$IMA = root.$IMA || {};
 				$IMA.Cache = ${this._cache.serialize()};
 				$IMA.$Language = "${this._settings.$Language}";
@@ -120,29 +133,8 @@ export default class ServerPageRenderer extends AbstractPageRenderer {
 				$IMA.$Root = "${this._settings.$Root}";
 				$IMA.$LanguagePartPath = "${this._settings.$LanguagePartPath}";
 			})(typeof window !== 'undefined' && window !== null ? window : global);
-
-			(function(root) {
-				root.$IMA = root.$IMA || {};
-				root.$IMA.Runner = root.$IMA.Runner || {
-					scripts: [],
-					loadedScripts: [],
-					load: function(script) {
-						this.loadedScripts.push(script.src);
-						if (this.scripts.length === this.loadedScripts.length) {
-							this.run();
-						}
-					},
-					run: function() {
-						root.$IMA.Loader.initAllModules()
-							.then(function() {
-								return root.$IMA.Loader.import("app/main");
-							})
-							.catch(function(error) {
-								console.error(error);
-							});
-					}
-				};
-			})(typeof window !== 'undefined' && window !== null ? window : global);
+			${imaRunner}
+			${imaLoader}
 			`
 		);
 	}
