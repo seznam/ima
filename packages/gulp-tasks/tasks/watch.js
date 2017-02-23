@@ -18,7 +18,6 @@ exports.default = (gulpConfig) => {
 		let hotReloadedCacheKeys = [];
 
 		runOnChange(files.app.watch, 'app:build');
-		runOnChange(files.ima.watch, 'ima:build');
 		runOnChange(files.vendor.watch, 'vendor:build');
 		runOnChange(files.less.watch, 'less');
 		runOnChange(files.server.watch, 'server:build');
