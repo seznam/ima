@@ -49,7 +49,7 @@
 		"express": "4.14.1",
 		"helmet": "3.4.0",
 		"ima": "0.14.0-rc.17",
-		"ima-server": "0.14.0-rc.4",
+		"ima-server": "0.14.0-rc.5",
 		"method-override": "2.3.7",
 		"multer": "1.3.0",
 		"serve-favicon": "2.4.0"
