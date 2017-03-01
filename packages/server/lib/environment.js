@@ -24,7 +24,18 @@ module.exports = (environment) => {
 		currentEnvironment.$Language = $Language;
 	}
 
-	currentEnvironment.$Server.serveSPA.blackListReg = new RegExp(currentEnvironment.$Server.serveSPA.blackList.join('|'), 'g');
+	var blacklistTester;
+	if (currentEnvironment.$Server.serveSPA.blackList.length) {
+		var blacklistPattern = currentEnvironment.$Server.serveSPA.blackList.join('|');
+		blacklistTester = new RegExp(blacklistPattern, 'g');
+	} else {
+		blacklistTester = {
+			test() {
+				return false;
+			}
+		};
+	}
+	currentEnvironment.$Server.serveSPA.blackListReg = blacklistTester;
 
 	currentEnvironment['$Env'] = env;
 
