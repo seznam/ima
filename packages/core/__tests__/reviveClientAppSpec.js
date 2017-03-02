@@ -1,89 +1,143 @@
+import React from 'react';
+import jsdom from 'jsdom';
+import $Helper from 'ima-helpers';
+import SuperAgent from 'superagent';
+import ControllerInterface from '../controller/Controller';
+import AbstractDocumentView from '../page/AbstractDocumentView';
+import * as ima from '../main';
+import vendorLinker from '../vendorLinker';
+
 describe('Revive client application', () => {
 
-	it('should review app', () => {
-		expect(1).toEqual(1);
+	let router = null;
+	let ReactDOM = {
+		render() {
+			return {
+				setState: () => {}
+			};
+		},
+		renderToDOM() {
+
+		}
+	};
+
+	let routerConfig = {
+		$Protocol: 'http:',
+		$Root: '',
+		$LanguagePartPath: '',
+		$Host: 'www.domain.com'
+	};
+
+	function View() {
+		return React.createElement('div', {});
+	}
+
+	class DocumentView extends AbstractDocumentView {
+		static get masterElementId() {}
+	}
+
+	class Controller extends ControllerInterface {
+
+		getHttpStatus() {
+			return 200;
+		}
+
+		getExtensions() {
+			return [];
+		}
+
+		load() {
+			return { hello: 'Hello' };
+		}
+	}
+
+	let options = {
+		onlyUpdate: false,
+		autoScroll: true,
+		allowSPA: true,
+		documentView: DocumentView
+	};
+
+	function propagateToGlobal(win) {
+		for (let key of Object.keys(win)) {
+			global[key] = global[key] ? global[key] : win[key];
+		}
+	}
+
+	beforeAll((done) => {
+		let doc = jsdom.jsdom(undefined);
+
+		propagateToGlobal(doc.defaultView);
+
+		global.$IMA = Object.assign({},
+			global.$IMA || {},
+			routerConfig,
+			{
+				$Env: 'prod',
+				$Version: 1
+			}
+		);
+
+		global.document = doc;
+		global.window = doc.defaultView;
+		global.window.$IMA = global.$IMA;
+		global.window.$Debug = global.$Debug;
+		jsdom.changeURL(global.window, `${routerConfig.$Protocol}//${routerConfig.$Host}`);
+
+		vendorLinker.set('react', React);
+		vendorLinker.set('react-dom', ReactDOM);
+		vendorLinker.set('superagent', SuperAgent);
+		vendorLinker.set('ima-helpers', $Helper);
+
+		spyOn(ReactDOM, 'renderToDOM');
+
+		done();
 	});
 
-	// var router = null;
-	// var React = ns.vendor.react;
-	// var ReactDOM = {
-	// 	render: function() { return { setState: function() {} }; }
-	// };
-	//
-	// var routerConfig = {
-	// 	$Protocol: 'http:',
-	// 	$Root: '',
-	// 	$LanguagePartPath: '',
-	// 	$Host: 'www.domain.com'
-	// };
-	//
-	// var options = {
-	// 	onlyUpdate: false,
-	// 	autoScroll: true,
-	// 	allowSPA: true,
-	// 	documentView: null
-	// };
-	//
-	// function Controller() {}
-	//
-	// function View() {
-	// 	return React.createElement('div', {});
-	// }
-	//
-	// Controller.prototype = Object.create(ns.ima.controller.Controller.prototype);
-	// Controller.prototype.constructor = Controller;
-	// Controller.prototype.getHttpStatus = function() { return 200; };
-	// Controller.prototype.getExtensions = function() { return []; };
-	// Controller.prototype.load = function() { return { hello: 'Hello' }; };
-	//
-	// beforeAll(function(done) {
-	// 	var app = $import('app/main', '*');
-	//
-	// 	oc.clear();
-	// 	app.ima.reviveTestClientApp(Object.assign({}, app.getInitialAppConfigFunctions(), { initBindApp: function(bindNs, bindOc, config) {
-	// 		router = bindOc.get('$Router');
-	// 		router.init(routerConfig);
-	// 		router.add('reviveClientApp', '/reviveClientApp', Controller, View, options);
-	//
-	// 		app.getInitialAppConfigFunctions().initBindApp(bindNs, bindOc, config);
-	//
-	// 		if (!bindOc.has('$Utils')) {
-	// 			bindOc.constant('$Utils', {});
-	// 		}
-	// 	} }));
-	//
-	// 	spyOn(oc.get('$ReactDOM'), 'render');
-	// 	spyOn(oc.get('$PageRendererFactory'), 'getDocumentView')
-	// 		.and
-	// 		.returnValue(function() {});
-	//
-	// 	oc.inject(Controller, []);
-	//
-	// 	done();
-	// });
-	//
-	// afterAll(function(done) {
-	// 	var app = $import('app/main', '*');
-	//
-	// 	oc.clear();
-	// 	app.ima.reviveTestClientApp(app.getInitialAppConfigFunctions());
-	// 	done();
-	// });
-	//
-	// it('should response with status code 200, content null and pageState', function(done) {
-	// 	router
-	// 		.route('/reviveClientApp')
-	// 		.then(function(response) {
-	// 			expect(response.status).toEqual(200);
-	// 			expect(response.content).toEqual(null);
-	// 			expect(response.pageState).toEqual({ hello: 'Hello' });
-	// 			done();
-	// 		})
-	// 		.catch(function(error) {
-	// 			console.error('INTEGRATION ERROR', error);
-	// 			done(error);
-	// 		});
-	// });
+	it('revive client app', (done) => {
+		let bootConfig = Object.assign(
+			{
+				initServicesApp: () => {},
+				initBindApp: () => {},
+				initRoutes: () => {},
+				initSettings: () => {
+					return {
+						prod: {
+							$Page: {
+								$Render: {}
+							}
+						}
+					};
+				}
+			},
+			{
+				initBindApp: (ns, oc, config) => {
+					router = oc.get('$Router');
+					router.init(routerConfig);
+					router.add('reviveClientApp', '/', Controller, View, options);
+
+					oc.inject(Controller, []);
+
+					if (!oc.has('$Utils')) {
+						oc.constant('$Utils', {});
+					}
+				}
+			}
+		);
+
+
+		ima.reviveClientApp(bootConfig).then((response) => {
+			expect(response.status).toEqual(200);
+			expect(response.pageState).toEqual({ hello: 'Hello' });
+			expect(response.content).toEqual(null);
+			expect(ReactDOM.renderToDOM).toHaveBeenCalled();
+			done();
+		})
+		.catch((error) => {
+			done(error);
+		})
+
+	});
 
 
 });
