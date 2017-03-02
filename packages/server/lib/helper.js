@@ -1,113 +1,100 @@
 'use strict';
-var clone = require('clone');
 
-module.exports = (function () {
+const clone = require('clone');
 
-	var assignRecursively = function (target) {
-		var sources = [].slice.call(arguments, 1);
-		sources.forEach(function (source)  { assign(target, source) });
+module.exports = (() => {
+
+	function assignRecursively(target, ...sources) {
+		for (let source of sources) {
+			assign(target, source);
+		}
 
 		return target;
 
 		function assign(target, source) {
-			Object.keys(source).forEach(function (field) {
-				if (source[field] instanceof Array) {
-					target[field] = source[field].slice();
-				} else if (source[field] instanceof Object) {
+			for (let field of Object.keys(source)) {
+				let value = source[field];
+				if (value instanceof Array) {
+					target[field] = value.slice();
+				} else if (value instanceof Object) {
 					if (!(target[field] instanceof Object)) {
 						target[field] = {};
 					}
 
-					assign(target[field], source[field]);
+					assign(target[field], value);
 				} else {
-					target[field] = source[field];
+					target[field] = value;
 				}
-			});
+			}
 		}
-	};
+	}
 
-	var debounce = function (func, wait) {
-		if (arguments.length < 2) {
-			wait = 100;
-		}
-		var timeout = null;
+	function debounce(func, wait = 100) {
+		let timeout = null;
 
-		return function () {
-			var args = [].slice.call(arguments);
+		return (...args) => {
 			clearTimeout(timeout);
-			timeout = setTimeout(function () {
-				func.apply(null, args);
-			}, wait);
+			timeout = setTimeout(() => func(...args), wait);
 		};
-	};
+	}
 
-	var throttle = function (func, interval, scope) {
-		if (arguments.length < 2) {
-			interval = 100;
-		}
-		if (arguments.length < 3) {
-			scope = null;
-		}
-		var timeout = null;
-		var args = [];
-		var shouldFireMethod = false;
+	function throttle(func, interval = 100, scope = null) {
+		let timeout = null;
+		let args = [];
+		let shouldFireFunction = false;
 
 		if (scope) {
-			func= func.bind(scope);
+			func = func.bind(scope);
 		}
 
-		var fireMethod = function () {
-			timeout = setTimeout(function () {
+		function fireFunction() {
+			timeout = setTimeout(() => {
 				timeout = null;
-				if (shouldFireMethod) {
-					shouldFireMethod = false;
-					fireMethod();
+				if (shouldFireFunction) {
+					shouldFireFunction = false;
+					fireFunction();
 				}
 			}, interval);
-			func.apply(null, args);
-		};
+			func(...args);
+		}
 
-		return function () {
-			var rest = [].slice.call(arguments);
-			args = rest;
-
+		return (...currentArgs) => {
+			args = currentArgs;
 			if (!timeout) {
-				fireMethod();
+				fireFunction();
 			} else {
-				shouldFireMethod = true;
+				shouldFireFunction = true;
 			}
 		};
-	};
+	}
 
-	var allPromiseHash = function (hash) {
-		var keys = Object.keys(hash);
-		var loadPromises = keys.map(function (key) {
-			return Promise.resolve(hash[key]);
-		});
+	function allPromiseHash(hash) {
+		let keys = Object.keys(hash);
+		let promises = keys.map(key => Promise.resolve(hash[key]));
 
 		return Promise
-				.all(loadPromises)
-				.then(function (resolvedValues) {
-					var result = {};
+				.all(promises)
+				.then(resolvedValues => {
+					let result = {};
 
-					keys.forEach(function (key) {
+					for (let key of keys) {
 						result[key] = resolvedValues.shift();
-					});
+					}
 
 					return result;
 				});
-	};
+	}
 
-	var escapeRegExp = function (string) {
+	function escapeRegExp(string) {
 		return string.replace(/([.*+?^=!:${}()|\[\]\/\\])/g, "\\$1");
-	};
+	}
 
 	return {
-		assignRecursively: assignRecursively,
-		allPromiseHash: allPromiseHash,
-		escapeRegExp: escapeRegExp,
-		clone: clone,
-		debounce: debounce,
-		throttle: throttle
+		assignRecursively,
+		allPromiseHash,
+		escapeRegExp,
+		clone,
+		debounce,
+		throttle
 	};
 })();

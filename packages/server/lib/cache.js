@@ -46,7 +46,7 @@ class Cache {
 			defaultKeyGenerator;
 
 		/**
-		 * The maximumu cache entries in cache.
+		 * The maximum cache entries in cache.
 		 *
 		 * @type {number}
 		 */
@@ -66,7 +66,7 @@ class Cache {
 	get(request) {
 		this._runGarbageCollector();
 
-		var key = this._keyGenerator(request);
+		let key = this._keyGenerator(request);
 		if (this._cache.has(key)) {
 			return this._cache.get(key).value;
 		}
@@ -115,9 +115,9 @@ class Cache {
 	 * @private
 	 */
 	_runGarbageCollector() {
-		for (var pair of this._cache.entries()) {
-			var key = pair[0];
-			var entry = pair[1];
+		for (let pair of this._cache.entries()) {
+			let key = pair[0];
+			let entry = pair[1];
 			if (entry.shouldBeDiscarded) {
 				this._cache.delete(key);
 			}
@@ -153,7 +153,7 @@ class Entry {
 		 */
 		this._unusedEntryTtl = cacheConfig.unusedEntryTtl;
 
-		var now = Date.now();
+		let now = Date.now();
 
 		/**
 		 * UNIX timestamp with milliseconds precision marking when this entry
@@ -179,7 +179,7 @@ class Entry {
 	 * @return {boolean} {@code true} if this entry should be discarded.
 	 */
 	get shouldBeDiscarded() {
-		var now = Date.now();
+		let now = Date.now();
 
 		return (now > this._expiredAfter) ||
 			(now > this._discardIfUnusedAfter);
@@ -207,13 +207,11 @@ class Entry {
  * @return {string} The generated cache key.
  */
 function defaultKeyGenerator(request) {
-	var protocol = request.protocol;
-	var host = request.get('Host');
-	var url = request.originalUrl;
+	let protocol = request.protocol;
+	let host = request.get('Host');
+	let url = request.originalUrl;
 
 	return protocol + ':' + host + url;
 }
 
-module.exports = (environment) => {
-	return new Cache(environment.$Server.cache);
-};
+module.exports = environment => new Cache(environment.$Server.cache);

@@ -1,6 +1,6 @@
 'use strict';
 
-let instanceRecycler = require('../lib/instanceRecycler.js');
+const instanceRecycler = require('../lib/instanceRecycler.js');
 
 describe('InstranceRecycler', () => {
 

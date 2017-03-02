@@ -1,6 +1,6 @@
 'use strict';
 
-let CacheFactory = require('../lib/cache.js');
+const CacheFactory = require('../lib/cache.js');
 
 describe('Cache', () => {
 

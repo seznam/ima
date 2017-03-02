@@ -1,6 +1,6 @@
 'use strict';
 
-let proxy = require('../lib/proxy.js');
+const proxy = require('../lib/proxy.js');
 
 describe('Proxy', () => {
 
