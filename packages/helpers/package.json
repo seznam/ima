@@ -4,6 +4,7 @@
 	"description": "Various helpers for the IMA.js framework.",
 	"main": "index.js",
 	"scripts": {
+		"prepublishOnly": "npm test",
 		"test": "node_modules/gulp/bin/gulp.js test"
 	},
 	"repository": {
