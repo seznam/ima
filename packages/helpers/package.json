@@ -24,7 +24,11 @@
 		"registry": "http://registry.npmjs.org/"
 	},
 	"dependencies": {
-		"clone": "^1.0.2"
+		"clone": "^2.1.0"
+	},
+	"engines": {
+		"node": ">=6",
+		"npm": ">=4 <6"
 	},
 	"browserify": {
 		"transform": [

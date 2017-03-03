@@ -1,29 +1,31 @@
 'use strict';
 let clone = require('clone');
 
-function assignRecursively(target) {
-	let sources = [].slice.call(arguments, 1);
-	sources.forEach(source => assign(target, source));
+function assignRecursively(target, ...sources) {
+	for (let source of sources) {
+		assign(target, source);
+	}
 
 	return target;
 
 	function assign(target, source) {
-		Object.keys(source).forEach((field) => {
-			if (source[field] instanceof Array) {
-				target[field] = source[field].slice();
+		for (let field of Object.keys(source)) {
+			let value = source[field];
+			if (value instanceof Array) {
+				target[field] = value.slice();
 			} else if (
-				source[field] instanceof Object &&
-				!(source[field] instanceof Function)
+				value instanceof Object &&
+				!(value instanceof Function)
 			) {
 				if (!(target[field] instanceof Object)) {
 					target[field] = {};
 				}
 
-				assign(target[field], source[field]);
+				assign(target[field], value);
 			} else {
-				target[field] = source[field];
+				target[field] = value;
 			}
-		});
+		}
 	}
 }
 
@@ -39,14 +41,10 @@ function deepFreeze(object) {
 	return Object.freeze(object);
 }
 
-function debounce(func, wait) {
-	if (arguments.length < 2) {
-		wait = 100;
-	}
+function debounce(func, wait = 100) {
 	let timeout = null;
 
-	return function () {
-		let args = [].slice.call(arguments);
+	return (...args) => {
 		clearTimeout(timeout);
 		timeout = setTimeout(() => {
 			func(...args);
@@ -54,40 +52,33 @@ function debounce(func, wait) {
 	};
 }
 
-function throttle(func, interval, scope) {
-	if (arguments.length < 2) {
-		interval = 100;
-	}
-	if (arguments.length < 3) {
-		scope = null;
-	}
+function throttle(func, interval = 100, scope = null) {
 	let timeout = null;
 	let args = [];
-	let shouldFireMethod = false;
+	let shouldFireFunction = false;
 
 	if (scope) {
 		func= func.bind(scope);
 	}
 
 	function callCallback() {
-		timeout = setTimeout(function () {
+		timeout = setTimeout(() => {
 			timeout = null;
-			if (shouldFireMethod) {
-				shouldFireMethod = false;
+			if (shouldFireFunction) {
+				shouldFireFunction = false;
 				callCallback();
 			}
 		}, interval);
 		func(...args);
 	}
 
-	return function () {
-		let rest = [].slice.call(arguments);
-		args = rest;
+	return (...currentArgs) => {
+		args = currentArgs;
 
 		if (!timeout) {
 			callCallback();
 		} else {
-			shouldFireMethod = true;
+			shouldFireFunction = true;
 		}
 	};
 }
@@ -98,12 +89,12 @@ function allPromiseHash(hash) {
 
 	return Promise
 		.all(loadPromises)
-		.then((resolvedValues) => {
+		.then(resolvedValues => {
 			let result = {};
 
-			keys.forEach((key) => {
+			for (let key of keys) {
 				result[key] = resolvedValues.shift();
-			});
+			}
 
 			return result;
 		});
