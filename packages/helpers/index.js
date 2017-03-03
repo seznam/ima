@@ -1,5 +1,6 @@
 'use strict';
-let clone = require('clone');
+
+const clone = require('clone');
 
 function assignRecursively(target, ...sources) {
 	for (let source of sources) {
