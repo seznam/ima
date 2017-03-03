@@ -35,11 +35,11 @@
 		"superagent": "^3.3.2"
 	},
 	"dependencies": {
-		"async-each": "1.0.1",
-		"highlight.js": "9.9.0",
-		"ima-helpers": "0.14.0-rc.1",
-		"stack-trace": "0.0.9",
-		"winston": "2.3.0"
+		"async-each": "^1.0.1",
+		"highlight.js": "^9.9.0",
+		"ima-helpers": "^0.14.0-rc.2",
+		"stack-trace": "^0.0.9",
+		"winston": "^2.3.1"
 	},
 	"engines": {
 		"node": ">=6",
