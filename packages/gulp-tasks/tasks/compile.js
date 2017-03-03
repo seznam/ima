@@ -19,13 +19,11 @@ let gulpIgnore = require('gulp-ignore');
 let tap = require('gulp-tap');
 let gutil = require('gulp-util');
 
-let gulpConfig = require('../../../gulpConfig.js');
-let files = gulpConfig.files;
-let babelConfig = gulpConfig.babelConfig;
-
 exports.__requiresConfig = true;
 
 exports.default = (gulpConfig) => {
+	let files = gulpConfig.files;
+	let babelConfig = gulpConfig.babelConfig;
 
 	function Es6ToEs5App() {
 		function insertSystemImports() {
