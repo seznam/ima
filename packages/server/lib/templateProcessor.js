@@ -58,9 +58,8 @@ function replaceVariable(template, name, value) {
  * @return {string} Processed template.
  */
 function evaluateConditions(template, variables) {
+	let source = template;
 	do {
-		let source = template;
-
 		template = processSimpleConditions(template, variables);
 		template = processIfElseConditions(template, variables);
 	} while (source !== template);
