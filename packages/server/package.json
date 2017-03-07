@@ -31,15 +31,18 @@
 		"gulp": "github:gulpjs/gulp#3f5aba2",
 		"gulp-jasmine": "^2.4.2",
 		"gulp-plumber": "^1.1.0",
+		"ima-helpers": "^0.14.0-rc.2",
 		"jasmine": "^2.5.3",
 		"superagent": "^3.3.2"
 	},
 	"dependencies": {
 		"async-each": "^1.0.1",
 		"highlight.js": "^9.9.0",
-		"ima-helpers": "^0.14.0-rc.2",
 		"stack-trace": "^0.0.9",
 		"winston": "^2.3.1"
+	},
+	"peerDependencies": {
+		"ima-helpers": "0.14.x"
 	},
 	"engines": {
 		"node": ">=6",
