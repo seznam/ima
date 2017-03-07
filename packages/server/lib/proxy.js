@@ -1,6 +1,6 @@
-let express = require('express');
-let fs = require('fs');
-let superAgent = require('superagent');
+const express = require('express');
+const fs = require('fs');
+const superAgent = require('superagent');
 
 function firstLetterToLowerCase(world) {
 	return world.charAt(0).toLowerCase() + world.slice(1);
@@ -23,10 +23,14 @@ function parseSetCookieHeader(cookieString) {
 		'max-Age': null
 	};
 
-	cookiePairs.forEach((pair) => {
+	cookiePairs.forEach(pair => {
 		let separatorIndexEqual = pair.indexOf('=');
-		let name = decodeURIComponent(firstLetterToLowerCase(pair.substr(0, separatorIndexEqual)).trim());
-		let value = decodeURIComponent(pair.substr(separatorIndexEqual + 1).trim());
+		let name = decodeURIComponent(
+			firstLetterToLowerCase(pair.substr(0, separatorIndexEqual)).trim()
+		);
+		let value = decodeURIComponent(
+			pair.substr(separatorIndexEqual + 1).trim()
+		);
 
 		if (name === '') {
 			name = firstLetterToLowerCase(value);
@@ -34,13 +38,11 @@ function parseSetCookieHeader(cookieString) {
 		}
 
 		if (cookieOptions.hasOwnProperty(name)) {
-
 			if (name === 'expires') {
 				cookieOptions[name] = new Date(value);
 			} else {
 				cookieOptions[name] = value;
 			}
-
 		} else {
 			cookieName = name;
 			cookieValue = value;
@@ -168,7 +170,8 @@ module.exports = (environment, logger) => {
 				logger.warn(
 					'The API sent invalid Content-Type header. More info ' +
 					'about how you can to fix this: ' +
-					'http://visionmedia.github.io/superagent/#parsing-response bodies'
+					'http://visionmedia.github.io/superagent/#parsing-response ' +
+					'bodies'
 				);
 				body = JSON.parse(text);
 			} catch (error) {
@@ -229,30 +232,41 @@ module.exports = (environment, logger) => {
 
 						sendJSONResponse(req, res, error, response);
 					} else if (response) {
-						let settedCookies = response.header['set-cookie'];
+						let hasSetCookies = response.header['set-cookie'];
 
 						Object
 							.keys(response.header)
-							.filter((key) => {
-								return !['set-cookie', 'content-encoding', 'content-type', 'content-length', 'transfer-encoding'].includes(key);
+							.filter(key => {
+								return ![
+									'set-cookie',
+									'content-encoding',
+									'content-type',
+									'content-length',
+									'transfer-encoding'
+								].includes(key);
 							})
-							.map((key) => {
-								return ({
-									headerName: key
-											.split('-')
-											.map(firstLetterToUpperCase)
-											.join('-'),
-									key: key
-								});
-							})
-							.forEach((item) => {
-								res.set(item.headerName, response.header[item.key]);
+							.map(key => ({
+								headerName: key
+										.split('-')
+										.map(firstLetterToUpperCase)
+										.join('-'),
+								key: key
+							}))
+							.forEach(item => {
+								res.set(
+									item.headerName,
+									response.header[item.key]
+								);
 							});
 
-						if (settedCookies) {
-							settedCookies.forEach((cookieString) => {
+						if (hasSetCookies) {
+							hasSetCookies.forEach((cookieString) => {
 								let cookie = parseSetCookieHeader(cookieString);
-								res.cookie(cookie.name, cookie.value, cookie.options);
+								res.cookie(
+									cookie.name,
+									cookie.value,
+									cookie.options
+								);
 							});
 						}
 

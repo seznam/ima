@@ -1,14 +1,15 @@
-var fs = require('fs');
-var stackTrace = require('stack-trace');
-var asyncEach = require('async-each');
-var hljs = require('highlight.js');
-var sep = require('path').sep;
-var errorView = require('./template/errorView.js');
-var instanceRecycler = require('./instanceRecycler.js');
-var helper = require('ima-helpers');
-var templateProcessor = require('./templateProcessor.js');
+'use strict';
 
-var renderedSPAs = {};
+const fs = require('fs');
+const stackTrace = require('stack-trace');
+const asyncEach = require('async-each');
+const hljs = require('highlight.js');
+const sep = require('path').sep;
+const errorView = require('./template/errorView.js');
+const instanceRecycler = require('./instanceRecycler.js');
+const templateProcessor = require('./templateProcessor.js');
+
+const renderedSPAs = {};
 
 hljs.configure({
 	tabReplace: '  ',
@@ -18,76 +19,78 @@ hljs.configure({
 module.exports = ((environment, logger, languageLoader, appFactory) => {
 	appFactory();
 
-	var _displayDetails = (err, req, res) => {
-		var stack = stackTrace.parse(err);
-		var fileIndex = 1;
+	function _displayDetails(err, req, res) {
+		let callstack = stackTrace.parse(err);
+		let fileIndex = 1;
 
 		logger.error('The application crashed due to an uncaught exception', { err });
 
-		asyncEach(stack, function getContentInfo(item, cb) {
+		asyncEach(callstack, (stackFrame, cb) => {
 			// exclude core node modules and node modules
 			if (
-				(item.fileName) &&
-				(item.fileName.indexOf(sep) !== -1) &&
-				!/node_modules/.test(item.fileName) &&
-				!/internal/.test(item.fileName)
+				!stackFrame.fileName ||
+				!stackFrame.fileName.includes(sep) ||
+				/node_modules/.test(stackFrame.fileName) ||
+				/internal/.test(stackFrame.fileName)
 			) {
-				fs.readFile(item.fileName, 'utf-8', function(err, content) {
-					if (err) {
-						return cb(err);
-					}
-
-					content = hljs.highlight('javascript', content);
-
-					// start a few lines before the error or at the beginning of the file
-					var start = Math.max(item.lineNumber - 11, 0);
-					var lines = content.value.split('\n').map((line) => {
-						return '<span class="line">' + line + '</span>';
-					});
-					// end a few lines after the error or the last line of the file
-					var end = Math.min(item.lineNumber + 10, lines.length);
-					var snippet = lines.slice(start, end);
-					// array starts at 0 but lines numbers begin with 1, so we have to
-					// subtract 1 to get the error line position in the array
-					var errLine = item.lineNumber - start - 1;
-
-					snippet[errLine] = snippet[errLine].replace('<span class="line">', '<span class="line error-line">');
-
-					item.content = snippet.join('\n');
-					item.errLine = errLine;
-					item.startLine = start;
-					item.id = 'file-' + fileIndex;
-
-					fileIndex++;
-
-					cb(null, item);
-				});
-			} else {
-				cb();
-			}
-		}, (e, items) => {
-			if (!Array.isArray(items)) {
-				items = [];
+				return cb();
 			}
 
-			items = items.filter((item) => {
-				return !!item;
+			fs.readFile(stackFrame.fileName, 'utf-8', (err, content) => {
+				if (err) {
+					return cb(err);
+				}
+
+				content = hljs.highlight('javascript', content);
+
+				// start a few lines before the error or at the beginning of
+				// the file
+				let start = Math.max(stackFrame.lineNumber - 11, 0);
+				let lines = content.value.split('\n').map(
+					line => `<span class="line">${line}</span>`
+				);
+				// end a few lines after the error or the last line of the file
+				let end = Math.min(stackFrame.lineNumber + 10, lines.length);
+				let snippet = lines.slice(start, end);
+				// array starts at 0 but lines numbers begin with 1, so we have
+				// to subtract 1 to get the error line position in the array
+				let errLine = stackFrame.lineNumber - start - 1;
+
+				snippet[errLine] = snippet[errLine].replace(
+					'<span class="line">',
+					'<span class="line error-line">'
+				);
+
+				stackFrame.content = snippet.join('\n');
+				stackFrame.errLine = errLine;
+				stackFrame.startLine = start;
+				stackFrame.id = 'file-' + fileIndex;
+
+				fileIndex++;
+
+				cb(null, stackFrame);
 			});
+		}, (error, callstack) => {
+			if (!Array.isArray(callstack)) {
+				callstack = [];
+			}
 
-			// if something bad happened while processing the stacktrace
-			// make sure to return something useful
-			if (e) {
-				logger.error('Failed to display error page', { e });
+			callstack = callstack.filter(item => !!item);
+
+			// if something bad happened while processing the stacktrace make
+			// sure to return something useful
+			if (error) {
+				logger.error('Failed to display error page', { error });
 				res.send(err.stack);
 			} else {
-				res.send(errorView(err, items));
+				res.send(errorView(err, callstack));
 			}
 		});
-	};
+	}
 
-	var _initApp = (req, res, appMain) => {
-		var bootConfig = _getBootConfig(req, res);
-		var app = instanceRecycler.getInstance();
+	function _initApp(req, res, appMain) {
+		let bootConfig = _getBootConfig(req, res);
+		let app = instanceRecycler.getInstance();
 
 		Object.assign(
 			bootConfig,
@@ -99,19 +102,23 @@ module.exports = ((environment, logger, languageLoader, appFactory) => {
 			.run(bootConfig);
 
 		return app;
-	};
+	}
 
-	var showStaticErrorPage = (error, req, res) => {
-		logger.error('Failed to display error page, displaying the static error page', { error });
+	function showStaticErrorPage(error, req, res) {
+		logger.error(
+			'Failed to display error page, displaying the static error page',
+			{ error }
+		);
 
 		return new Promise((resolve, reject) => {
-			fs.readFile('./build/static/html/error.html', 'utf-8', (e, content) => {
-				var status = 500;
+			const filePath = './build/static/html/error.html';
+			fs.readFile(filePath, 'utf-8', (error, content) => {
+				let status = 500;
 				res.status(status);
 
-				if (e) {
+				if (error) {
 					res.send('500');
-					reject(e);
+					reject(error);
 				}
 
 				res.send(content);
@@ -119,13 +126,13 @@ module.exports = ((environment, logger, languageLoader, appFactory) => {
 				resolve({ content, status, error });
 			});
 		});
-	};
+	}
 
-	var showStaticSPAPage = (req, res) => {
-		var bootConfig = _getBootConfig(req, res);
-		var status = 200;
+	function showStaticSPAPage(req, res) {
+		let bootConfig = _getBootConfig(req, res);
+		let status = 200;
 
-		var cacheKey = [
+		let cacheKey = [
 			bootConfig.settings.$Protocol,
 			bootConfig.settings.$Language,
 			bootConfig.settings.$Host,
@@ -145,49 +152,55 @@ module.exports = ((environment, logger, languageLoader, appFactory) => {
 		}
 
 		return new Promise((resolve, reject) => {
-			fs.readFile('./build/static/html/spa.html', 'utf-8', (error, content) => {
+			const filePath = './build/static/html/spa.html';
+			fs.readFile(filePath, 'utf-8', (error, content) => {
 				if (error) {
 					showStaticErrorPage(error, req, res);
 					reject(error);
-				} else {
-					content = templateProcessor(content, bootConfig.settings);
-
-					renderedSPAs[cacheKey] = content;
-
-					res.status(status);
-					res.send(content);
-
-					resolve({ content, status, SPA: true, error: null });
+					return;
 				}
+
+				content = templateProcessor(content, bootConfig.settings);
+
+				renderedSPAs[cacheKey] = content;
+
+				res.status(status);
+				res.send(content);
+
+				resolve({ content, status, SPA: true, error: null });
 			});
 		});
-	};
+	}
 
-	var _haveToServeSPA = (req, app) => {
-		var userAgent = req.headers['user-agent'] || '';
-		var isAllowedServeSPA = environment.$Server.serveSPA.allow;
-		var isServerBusy = instanceRecycler.isReachToMaxConcurrencyRequests();
-		var isAllowedUserAgent = !environment.$Server.serveSPA.blackListReg.test(userAgent);
-		var canBeRouteServeAsSPA = true;
-		var routeInfo = _getRouteInfo(app);
+	function _hasToServeSPA(req, app) {
+		let userAgent = req.headers['user-agent'] || '';
+		let spaConfig = environment.$Server.serveSPA;
+		let isAllowedServeSPA = spaConfig.allow;
+		let isServerBusy = instanceRecycler.hasReachedMaxConcurrentRequests();
+		let isAllowedUserAgent = !spaConfig.blackListReg.test(userAgent);
+		let canBeRouteServeAsSPA = true;
+		let routeInfo = _getRouteInfo(app);
 
 		if (routeInfo && routeInfo.route.getOptions().allowSPA === false) {
 			canBeRouteServeAsSPA = false;
 		}
 
-		return isAllowedServeSPA && isServerBusy && isAllowedUserAgent && canBeRouteServeAsSPA;
-	};
+		return isAllowedServeSPA &&
+			isServerBusy &&
+			isAllowedUserAgent &&
+			canBeRouteServeAsSPA;
+	}
 
-	var _getBootConfig = (req, res) => {
-		var language = res.locals.language;
-		var languagePartPath = res.locals.languagePartPath;
-		var host = res.locals.host;
-		var root = res.locals.root;
-		var protocol = res.locals.protocol;
+	function _getBootConfig(req, res) {
+		let language = res.locals.language;
+		let languagePartPath = res.locals.languagePartPath;
+		let host = res.locals.host;
+		let root = res.locals.root;
+		let protocol = res.locals.protocol;
 
-		var dictionary = languageLoader(language);
+		let dictionary = languageLoader(language);
 
-		var bootConfig = {
+		let bootConfig = {
 			services: {
 				request: req,
 				response: res,
@@ -217,10 +230,10 @@ module.exports = ((environment, logger, languageLoader, appFactory) => {
 		};
 
 		return bootConfig;
-	};
+	}
 
-	var _applyError = (error, req, res, app) => {
-		var promise = Promise.reject(error);
+	function _applyError(error, req, res, app) {
+		let promise;
 
 		try {
 			promise = app.oc.get('$Router')
@@ -243,10 +256,10 @@ module.exports = ((environment, logger, languageLoader, appFactory) => {
 		}
 
 		return promise;
-	};
+	}
 
-	var _applyNotFound = (error, req, res, app) => {
-		var promise = Promise.reject(error);
+	function _applyNotFound(error, req, res, app) {
+		let promise;
 
 		try {
 			promise = app.oc.get('$Router')
@@ -264,13 +277,16 @@ module.exports = ((environment, logger, languageLoader, appFactory) => {
 		}
 
 		return promise;
-	};
+	}
 
-	var _applyRedirect = (error, req, res, app) => {
-		var promise = Promise.reject(error);
+	function _applyRedirect(error, req, res, app) {
+		let promise;
 
 		try {
-			app.oc.get('$Router').redirect(error.getParams().url, { httpStatus: error.getHttpStatus() });
+			app.oc.get('$Router').redirect(
+				error.getParams().url,
+				{ httpStatus: error.getHttpStatus() }
+			);
 			instanceRecycler.clearInstance(app);
 			promise = Promise.resolve({
 				content: null,
@@ -283,25 +299,27 @@ module.exports = ((environment, logger, languageLoader, appFactory) => {
 		}
 
 		return promise;
-	};
+	}
 
-	var _importAppMain = () => {
+	function _importAppMain() {
 		return $IMA.Loader
 			.import('app/main')
-			.then((appMain) => {
+			.then(appMain => {
 				if (!instanceRecycler.isInitialized()) {
-					instanceRecycler.init(appMain.ima.createImaApp, environment.$Server.concurrency);
+					instanceRecycler.init(
+						appMain.ima.createImaApp,
+						environment.$Server.concurrency
+					);
 				}
 
 				return appMain;
 			});
-	};
+	}
 
-	var errorHandler = (error, req, res, app) => {
-		var returnPromise;
+	function errorHandler(error, req, res, app) {
+		let returnPromise;
 
 		if (environment.$Debug) {
-
 			if (app) {
 				instanceRecycler.clearInstance(app);
 			}
@@ -309,7 +327,7 @@ module.exports = ((environment, logger, languageLoader, appFactory) => {
 			returnPromise = Promise.reject(error);
 			_displayDetails(error, req, res);
 		} else {
-			var appPromise = Promise.resolve(app);
+			let appPromise = Promise.resolve(app);
 
 			if (!app) {
 				appPromise = _importAppMain()
@@ -320,7 +338,7 @@ module.exports = ((environment, logger, languageLoader, appFactory) => {
 
 			returnPromise = appPromise
 				.then((app) => {
-					var router = app.oc.get('$Router');
+					let router = app.oc.get('$Router');
 					app.oc.get('$Cache').clear();
 
 					if (router.isClientError(error)) {
@@ -340,33 +358,35 @@ module.exports = ((environment, logger, languageLoader, appFactory) => {
 		}
 
 		return returnPromise;
-	};
+	}
 
-	var _getRouteInfo = (app) => {
-		var router = app.oc.get('$Router');
-		var routeInfo = null;
+	function _getRouteInfo(app) {
+		let router = app.oc.get('$Router');
+		let routeInfo = null;
 
 		try {
 			routeInfo = router.getCurrentRouteInfo();
-		} catch (e) {}
+		} catch (e) {
+			logger.warn('Failed to retrieve current route info', { error: e });
+		}
 
 		return routeInfo;
-	};
+	}
 
-	var _addImaToResponse = (req, res, app) => {
-		var routeName = 'other';
-		var routeInfo = _getRouteInfo(app);
+	function _addImaToResponse(req, res, app) {
+		let routeName = 'other';
+		let routeInfo = _getRouteInfo(app);
 
 		if (routeInfo) {
 			routeName = routeInfo.route.getName();
 		}
 
 		res.$IMA = res.$IMA || { routeName };
-	};
+	}
 
-	var _generateResponse = (req, res, app) => {
-		var returnPromise;
-		var router = app.oc.get('$Router');
+	function _generateResponse(req, res, app) {
+		let returnPromise;
+		let router = app.oc.get('$Router');
 
 		try {
 			returnPromise = router
@@ -384,9 +404,9 @@ module.exports = ((environment, logger, languageLoader, appFactory) => {
 		}
 
 		return returnPromise;
-	};
+	}
 
-	var requestHandler = (req, res) => {
+	function requestHandler(req, res) {
 		if (environment.$Env === 'dev') {
 			appFactory();
 			instanceRecycler.clear();
@@ -394,17 +414,17 @@ module.exports = ((environment, logger, languageLoader, appFactory) => {
 
 		return _importAppMain()
 			.then((appMain) => {
-				var app = _initApp(req, res, appMain);
+				let app = _initApp(req, res, appMain);
 				_addImaToResponse(req, res, app);
 
-				if (_haveToServeSPA(req, app)) {
+				if (_hasToServeSPA(req, app)) {
 					instanceRecycler.clearInstance(app);
 					return showStaticSPAPage(req, res);
 				}
 
 				return _generateResponse(req, res, app);
 			});
-	};
+	}
 
 	return {
 		errorHandler,

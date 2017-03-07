@@ -1,13 +1,15 @@
-var winston = require('winston');
+'use strict';
+
+const winston = require('winston');
 
 function formatMetaSimple(meta) {
-	var keys = Object.keys(meta);
+	let keys = Object.keys(meta);
 	if (!meta || !keys.length) {
 		return '';
 	}
 
-	var lines = keys.map((key) => {
-		var value = meta[key];
+	let lines = keys.map(key => {
+		let value = meta[key];
 		if (value instanceof Error) {
 			return key + ': ' + indentLines(value.stack, '   ', true);
 		} else if (value instanceof Object) {
@@ -25,9 +27,9 @@ function formatMetaSimple(meta) {
 }
 
 function indentLines(string, spaces, skipFirstLine) {
-	var lines = string.split('\n');
+	let lines = string.split('\n');
 
-	var indentedLines = lines.map((line, index) => {
+	let indentedLines = lines.map((line, index) => {
 		if (!index && skipFirstLine) {
 			return line;
 		}
@@ -39,13 +41,13 @@ function indentLines(string, spaces, skipFirstLine) {
 }
 
 function formatMetaJSON(meta) {
-	var keys = Object.keys(meta);
+	let keys = Object.keys(meta);
 	if (!meta || !keys.length) {
 		return '';
 	}
 
-	var clone = {};
-	for (var key of keys) {
+	let clone = {};
+	for (let key of keys) {
 		if (meta[key] instanceof Error) {
 			clone[key] = formatError(meta[key]);
 		} else {
@@ -57,10 +59,10 @@ function formatMetaJSON(meta) {
 }
 
 function formatError(error) {
-	var matcher = /^\s+at\s+([^(]+?)\s+[(](.+):(\d+):(\d+)[)]/;
+	let matcher = /^\s+at\s+([^(]+?)\s+[(](.+):(\d+):(\d+)[)]/;
 
-	var stack = error.stack.split('\n').slice(1).map((line) => {
-		var parts = line.match(matcher);
+	let stack = error.stack.split('\n').slice(1).map((line) => {
+		let parts = line.match(matcher);
 		if (!parts) {
 			return line;
 		}
@@ -73,7 +75,7 @@ function formatError(error) {
 		};
 	});
 
-	var description = {
+	let description = {
 		type: error.name,
 		message: error.message,
 		stack
@@ -87,35 +89,37 @@ function formatError(error) {
 }
 
 module.exports = (environment) => {
-	var FORMATTING = environment.$Server.logger.formatting;
+	let FORMATTING = environment.$Server.logger.formatting;
 
 	if (['simple', 'JSON'].indexOf(FORMATTING) === -1) {
-		throw new Error('Invalid logger configuration: the formatting has to be ' +
-				`either "simple" or "JSON", ${FORMATTING} was provided`);
+		throw new Error(
+			'Invalid logger configuration: the formatting has to be ' +
+			`either "simple" or "JSON", ${FORMATTING} was provided`
+		);
 	}
 
-	var logger = new (winston.Logger)({
+	let logger = new (winston.Logger)({
 		transports: [
 			new (winston.transports.Console)({
-				timestamp: () => {
-					var now = new Date();
-					var date = now.getFullYear() + '-' +
+				timestamp() {
+					let now = new Date();
+					let date = now.getFullYear() + '-' +
 							formatNumber(now.getMonth() + 1) + '-' +
 							formatNumber(now.getDate());
-					var time = formatNumber(now.getHours()) + ':' +
+					let time = formatNumber(now.getHours()) + ':' +
 							formatNumber(now.getMinutes()) + ':' +
 							formatNumber(now.getSeconds()) + '.' +
 							now.getMilliseconds();
 
-					return date + ' ' + time;
+					return `${date} ${time}`;
 
 					function formatNumber(number) {
-						var asString = '' + number;
+						let asString = '' + number;
 						return asString.length > 1 ? asString : ('0' + asString);
 					}
 				},
 
-				formatter: (options) => {
+				formatter(options) {
 					return options.timestamp() +
 							' [' + options.level.toUpperCase() + '] ' +
 							(options.message || '') +
@@ -132,7 +136,9 @@ module.exports = (environment) => {
 			case 'simple':
 				return formatMetaSimple(meta);
 			default:
-				throw new Error(`Unrecognized log message formatting: ${FORMATTING}`);
+				throw new Error(
+					`Unrecognized log message formatting: ${FORMATTING}`
+				);
 		}
 	}
 

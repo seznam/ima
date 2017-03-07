@@ -4,7 +4,7 @@
 	"description": "Default dev server for IMA.js applications.",
 	"main": "index.js",
 	"scripts": {
-		"prepublish": "npm run test",
+		"prepublishOnly": "npm run test",
 		"test": "node node_modules/gulp/bin/gulp.js test",
 		"dev": "node node_modules/gulp/bin/gulp.js dev"
 	},
@@ -28,17 +28,21 @@
 	"homepage": "https://github.com/seznam/IMA.js-server",
 	"devDependencies": {
 		"express": "^4.14.0",
-		"gulp": "^3.9.1",
+		"gulp": "github:gulpjs/gulp#3f5aba2",
 		"gulp-jasmine": "^2.4.2",
 		"gulp-plumber": "^1.1.0",
 		"jasmine": "^2.5.3",
 		"superagent": "^3.3.2"
 	},
 	"dependencies": {
-		"async-each": "1.0.1",
-		"highlight.js": "9.9.0",
-		"ima-helpers": "0.14.0-rc.1",
-		"stack-trace": "0.0.9",
-		"winston": "2.3.0"
+		"async-each": "^1.0.1",
+		"highlight.js": "^9.9.0",
+		"ima-helpers": "^0.14.0-rc.2",
+		"stack-trace": "^0.0.9",
+		"winston": "^2.3.1"
+	},
+	"engines": {
+		"node": ">=6",
+		"npm": ">=4 <6"
 	}
 }

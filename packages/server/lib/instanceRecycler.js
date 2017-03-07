@@ -9,29 +9,27 @@ module.exports = (() => {
 	class InstanceRecycler {
 
 		clear() {
-			this._instanceConstructor = null;
+			this._instanceFactory = null;
 			this._maxInstanceCount = 0;
-			this._instancies = [];
-			this._concurrencyRequests = 0;
+			this._instances = [];
+			this._concurrentRequests = 0;
 			this._initialized = false;
 		}
 
-		init(instanceConstructor, maxInstanceCount) {
+		init(instanceFactory, maxInstanceCount = 1) {
 			if (this.isInitialized()) {
-				throw new Error('InstanceRecycler is initialized. At first you must call ' +
-						'clear method for new initialization.');
-			}
-
-			if (arguments.length < 2) {
-				maxInstanceCount = 1;
+				throw new Error(
+					'InstanceRecycler is already initialized. Use the ' +
+					'clear() method first to re-initialize.'
+				);
 			}
 
 			this._initialized = true;
-			this._instanceConstructor = instanceConstructor;
+			this._instanceFactory = instanceFactory;
 			this._maxInstanceCount = maxInstanceCount;
 
-			for(var i = 0; i < maxInstanceCount; i++) {
-			  this._instancies.push(this._instanceConstructor());
+			for (let i = 0; i < maxInstanceCount; i++) {
+			  this._instances.push(this._instanceFactory());
 			}
 		}
 
@@ -40,35 +38,35 @@ module.exports = (() => {
 		}
 
 		hasNextInstance() {
-			return this._instancies.length > 0;
+			return this._instances.length > 0;
 		}
 
-		isReachToMaxConcurrencyRequests() {
-			return this._concurrencyRequests > this._maxInstanceCount;
+		hasReachedMaxConcurrentRequests() {
+			return this._concurrentRequests > this._maxInstanceCount;
 		}
 
 		getInstance() {
-			this._concurrencyRequests = this._concurrencyRequests + 1;
+			this._concurrentRequests++;
 
 			if (this.hasNextInstance()) {
-				return this._instancies.shift();
+				return this._instances.shift();
 			} else {
-				return this._instanceConstructor();
+				return this._instanceFactory();
 			}
 
 		}
 
 		clearInstance(instance) {
-			this._concurrencyRequests = this._concurrencyRequests - 1;
+			this._concurrentRequests--;
 			instance.oc.clear();
 
-			if (this._instancies.length < this._maxInstanceCount) {
-				this._instancies.push(instance);
+			if (this._instances.length < this._maxInstanceCount) {
+				this._instances.push(instance);
 			}
 		}
 	}
 
-	var instanceRecycler = new InstanceRecycler();
+	const instanceRecycler = new InstanceRecycler();
 	instanceRecycler.clear();
 
 	return instanceRecycler;

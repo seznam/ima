@@ -1,10 +1,11 @@
+'use strict';
 
-var helper = require('ima-helpers');
+const helpers = require('ima-helpers');
 
-module.exports = (environment) => {
-	var prod = 'prod';
-	var dev = 'dev';
-	var env = process.env.NODE_ENV || dev;
+module.exports = environment => {
+	let prod = 'prod';
+	let dev = 'dev';
+	let env = process.env.NODE_ENV || dev;
 
 	if (env === 'development') {
 		env = dev;
@@ -14,19 +15,19 @@ module.exports = (environment) => {
 		env = prod;
 	}
 
-	var productEnvironment = environment[prod];
-	var currentEnvironment = environment[env];
+	let productEnvironment = environment[prod];
+	let currentEnvironment = environment[env];
 
 	if (env !== prod) {
-		var $Language = Object.assign({}, currentEnvironment.$Language);
-		helper.assignRecursively(productEnvironment, currentEnvironment);
+		let $Language = Object.assign({}, currentEnvironment.$Language);
+		helpers.assignRecursively(productEnvironment, currentEnvironment);
 		currentEnvironment = productEnvironment;
 		currentEnvironment.$Language = $Language;
 	}
 
-	var blacklistTester;
+	let blacklistTester;
 	if (currentEnvironment.$Server.serveSPA.blackList.length) {
-		var blacklistPattern = currentEnvironment.$Server.serveSPA.blackList.join('|');
+		let blacklistPattern = currentEnvironment.$Server.serveSPA.blackList.join('|');
 		blacklistTester = new RegExp(blacklistPattern, 'g');
 	} else {
 		blacklistTester = {
