@@ -119,4 +119,31 @@ export default class AbstractPureComponent extends React.PureComponent {
 	fire(eventName, data = null) {
 		helpers.fire(this, eventName, data);
 	}
+
+	/**
+	 * Registers the provided event listener for execution whenever an IMA.js
+	 * DOM custom event of the specified name occurs at the specified event
+	 * target.
+	 *
+	 * @param {(React.Element|EventTarget)} eventTarget The react component or
+	 *        event target at which the listener should listen for the event.
+	 * @param {string} eventName The name of the event for which to listen.
+	 * @param {function(Event)} listener The listener for event to register.
+	 */
+	listen(eventTarget, eventName, listener) {
+		helpers.listen(this, eventTarget, eventName, listener);
+	}
+
+	/**
+	 * Deregisters the provided event listener for an IMA.js DOM custom event
+	 * of the specified name at the specified event target.
+	 *
+	 * @param {(React.Element|EventTarget)} eventTarget The react component or
+	 *        event target at which the listener should listen for the event.
+	 * @param {string} eventName The name of the event for which to listen.
+	 * @param {function(Event)} listener The listener for event to register.
+	 */
+	unlisten(eventTarget, eventName, listener) {
+		helpers.unlisten(this, eventTarget, eventName, listener);
+	}
 }
