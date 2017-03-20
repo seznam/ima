@@ -11,7 +11,6 @@ ns.namespace('ima.router');
  * be compiled to a regular expression.
  *
  * @const
- * @property
  * @type {RegExp}
  */
 const CONTROL_CHARACTERS_REGEXP = /[\\.+*?\^$\[\](){}\/\'#]/g;
@@ -21,7 +20,6 @@ const CONTROL_CHARACTERS_REGEXP = /[\\.+*?\^$\[\](){}\/\'#]/g;
  * forward slashes from a path expression or a URL path.
  *
  * @const
- * @property
  * @type {RegExp}
  */
 const LOOSE_SLASHES_REGEXP = /^\/|\/$/g;
@@ -30,7 +28,6 @@ const LOOSE_SLASHES_REGEXP = /^\/|\/$/g;
  * Regular expression used to match the parameter names from a path expression.
  *
  * @const
- * @property PARAMS_REGEXP
  * @type {RegExp}
  */
 const PARAMS_REGEXP_UNIVERSAL = /:\??([a-zA-Z0-9_-]+)/g;
@@ -39,7 +36,6 @@ const PARAMS_REGEXP_UNIVERSAL = /:\??([a-zA-Z0-9_-]+)/g;
  * Regular expression used to match the parameter names from a path expression.
  *
  * @const
- * @property PARAMS_REGEXP
  * @type {RegExp}
  */
 const PARAMS_REGEXP = /:([a-zA-Z0-9_-]+)/g;
@@ -48,7 +44,6 @@ const PARAMS_REGEXP = /:([a-zA-Z0-9_-]+)/g;
  * Regular expression used to match the parameter names from a path expression.
  *
  * @const
- * @property PARAMS_REGEXP
  * @type {RegExp}
  */
 const PARAMS_REGEXP_OPT = /(?:^:\\\?([a-zA-Z0-9_-]+)(\\\/)?)|(?:(\\\/):\\\?([a-zA-Z0-9_-]+))|(?::\\\?([a-zA-Z0-9_-]+))/g;
@@ -56,11 +51,6 @@ const PARAMS_REGEXP_OPT = /(?:^:\\\?([a-zA-Z0-9_-]+)(\\\/)?)|(?:(\\\/):\\\?([a-z
 /**
  * Utility for representing and manipulating a single route in the router's
  * configuration.
- *
- * @class Route
- * @namespace ima.router
- * @module ima
- * @submodule ima.router
  */
 export default class Route {
 

@@ -431,7 +431,7 @@ export default class CookieStorage extends MapStorage {
 	 *
 	 * @param {string} pair
 	 * @param {number} pairIndex
-	 * @return {(?(boolean|string|Date))[]}
+	 * @return {Array<?(boolean|string|Date)>}
 	 */
 	_extractNameAndValue(pair, pairIndex) {
 		let separatorIndexEqual = pair.indexOf('=');
