@@ -61,7 +61,7 @@ export default class EventBus {
 	 *
 	 * @param {EventTarget} eventTarget The event target at which the listener
 	 *        should listen for all event bus events.
-	 * @param {function(<CustomEvent>)} listener The event listener to
+	 * @param {function(CustomEvent)} listener The event listener to
 	 *        register.
 	 * @return {EventBus} This event bus.
 	 */
@@ -81,7 +81,7 @@ export default class EventBus {
 	 * @param {EventTarget} eventTarget The event target at which the listener
 	 *        should listen for the specified event.
 	 * @param {string} eventName The name of the event to listen for.
-	 * @param {function(<CustomEvent>)} listener The event listener to
+	 * @param {function(CustomEvent)} listener The event listener to
 	 *        register.
 	 * @return {EventBus} This event bus.
 	 */
@@ -97,7 +97,7 @@ export default class EventBus {
 	 *
 	 * @param {EventTarget} eventTarget The event target at which the event
 	 *        listener listens for events.
-	 * @param {function(<CustomEvent>)} listener The event listener to
+	 * @param {function(CustomEvent)} listener The event listener to
 	 *        deregister.
 	 * @return {EventBus} This event bus.
 	 */
@@ -114,7 +114,7 @@ export default class EventBus {
 	 * @param {EventTarget} eventTarget The event target at which the listener
 	 *        is listening for the event.
 	 * @param {string} eventName The name of the event listened for.
-	 * @param {function(<CustomEvent>)} listener The event listener to
+	 * @param {function(CustomEvent)} listener The event listener to
 	 *        deregister.
 	 * @return {EventBus} This event bus.
 	 */
