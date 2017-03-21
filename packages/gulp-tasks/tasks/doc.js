@@ -15,24 +15,13 @@ exports.default = (gulpConfig) => {
 		return del('./doc-src');
 	}
 
-	function docGenerate(done) {
-		// Unfortunately, JSDoc invokes the callback for every file. Because of
-		// this, we have to handle the done callback invocation in a little
-		// bit more complicated way
-		const COMPLETION_TIMEOUT = 1000; // milliseconds
-		let completionTimeout = null;
-
-		gulp.src(['README.md', './doc-src/**/*'], { read: false })
+	function docGenerate() {
+		return gulp.src(['README.md', './doc-src/**/*.(js,jsx)'], { read: false })
 			.pipe(jsdoc({
 				opts: {
 					destination: './doc',
 					template: './node_modules/docdash/'
 				}
-			}, () => {
-				if (completionTimeout) {
-					clearTimeout(completionTimeout);
-				}
-				completionTimeout = setTimeout(done, COMPLETION_TIMEOUT);
 			}));
 	}
 
