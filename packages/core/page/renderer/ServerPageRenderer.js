@@ -14,8 +14,10 @@ let imaRunner = '';
 
 if ((typeof window === 'undefined') || (window === null)) {
 	let nodeFs = 'fs';
+	let nodePath = 'path';
 	let fs = require(nodeFs);
-	let folder = require.resolve('../../').replace('/main.js', '');
+	let path = require(nodePath);
+	let folder = path.dirname(require.resolve('../../'));
 
 	imaLoader = fs.readFileSync(`${folder}/polyfill/imaLoader.js`, 'utf8');
 	imaRunner = fs.readFileSync(`${folder}/polyfill/imaRunner.js`, 'utf8');
