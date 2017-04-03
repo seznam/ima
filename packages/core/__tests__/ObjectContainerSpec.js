@@ -11,8 +11,12 @@ describe('ima.ObjectContainer', () => {
 	classConstructorWithDependencies.$dependencies = [];
 
 	let alias = 'alias';
-	let classParent = function mockClassParent() { this.parent = this; };
-	let classConstructor = function mockClassConstructor(dependency) { this.dependency = dependency };
+	let classParent = function mockClassParent() {
+		this.parent = this;
+	};
+	let classConstructor = function mockClassConstructor(dependency) {
+		this.dependency = dependency;
+	};
 	let classDependency = function mockDependency() {};
 	let dependencies = [classDependency, classConstructorWithDependencies];
 	extend(classConstructor, classParent);
