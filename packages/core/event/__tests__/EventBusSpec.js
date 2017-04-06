@@ -1,5 +1,5 @@
-import EventBus from 'event/EventBusImpl';
-//import IMA_EVENT from 'event/EventBusImpl';
+import toMock from 'to-mock';
+import EventBus, { IMA_EVENT } from 'event/EventBusImpl';
 import Window from 'window/Window';
 
 describe('ima.event.EventBusImpl', () => {
@@ -15,15 +15,17 @@ describe('ima.event.EventBusImpl', () => {
 	let notEventSource = {};
 	let eventTarget = {};
 	let event = 'event';
-	let IMA_EVENT = '$IMA.CustomEvent';
+	//let IMA_EVENT = '$IMA.CustomEvent';
 	let data = {
 		data: 'data'
 	};
 
+	let MockedWindow = toMock(Window);
 	let windowInterface = null;
 	let eventBus = null;
+
 	beforeEach(() => {
-		windowInterface = new Window();
+		windowInterface = new MockedWindow();
 		eventBus = new EventBus(windowInterface);
 	});
 

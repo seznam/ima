@@ -52,8 +52,8 @@ describe('ima.dictionary.MessageFormatDictionary', () => {
 		});
 
 		it('should be throw Error for key not referring to a localization phrase', () => {
-			expect(() => dictionary.has('non-exists-phrase') ).toThrow();
-			expect(() => dictionary.has('home') ).toThrow();
+			expect(() => dictionary.has('non-exists-phrase')).toThrow();
+			expect(() => dictionary.has('home')).toThrow();
 		});
 	});
 

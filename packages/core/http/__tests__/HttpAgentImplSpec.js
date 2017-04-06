@@ -1,15 +1,16 @@
-jest.mock('http/HttpProxy');
-jest.mock('storage/CookieStorage');
+import toMock from 'to-mock';
 
-import Helper from 'ima-helpers';
 import Cache from 'cache/Cache';
 import GenericError from 'error/GenericError';
 import HttpAgentImpl from 'http/HttpAgentImpl';
 import SuperAgentProxy from 'http/HttpProxy';
 import CookieStorage from 'storage/CookieStorage';
-import Storage from 'storage/Storage';
 
 describe('ima.http.HttpAgentImpl', () => {
+
+	let MockedCache = toMock(Cache);
+	let MockedSuperAgentProxy = toMock(SuperAgentProxy);
+	let MockedCookieStorage = toMock(CookieStorage);
 
 	let proxy = null;
 	let http = null;
@@ -22,9 +23,9 @@ describe('ima.http.HttpAgentImpl', () => {
 	let cacheFactory = null;
 
 	beforeEach(() => {
-		cache = new Cache();
-		proxy = new SuperAgentProxy();
-		cookie = new CookieStorage();
+		cache = new MockedCache();
+		proxy = new MockedSuperAgentProxy();
+		cookie = new MockedCookieStorage();
 		httpConfig = {
 			defaultRequestOptions: {
 				timeout: 7000,
