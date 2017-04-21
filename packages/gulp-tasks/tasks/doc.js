@@ -22,7 +22,7 @@ exports.default = (gulpConfig) => {
 		const COMPLETION_TIMEOUT = 1000; // milliseconds
 		let completionTimeout = null;
 
-		gulp.src(['README.md', './doc-src/**/*'], { read: false })
+		gulp.src(['./README.md', './doc-src/**/*.{js,jsx}'], { read: false })
 			.pipe(jsdoc({
 				opts: {
 					destination: './doc',
