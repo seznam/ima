@@ -196,11 +196,13 @@ module.exports = ((environment, logger, languageLoader, appFactory) => {
 		let languagePartPath = res.locals.languagePartPath;
 		let host = res.locals.host;
 		let root = res.locals.root;
+		let urlPath = res.locals.path;
 		let protocol = res.locals.protocol;
 
 		let dictionary = languageLoader(language);
 
 		let bootConfig = {
+
 			services: {
 				request: req,
 				response: res,
@@ -212,6 +214,7 @@ module.exports = ((environment, logger, languageLoader, appFactory) => {
 				router: {
 					$Protocol: protocol,
 					$Host: host,
+					$Path: urlPath,
 					$Root: root,
 					$LanguagePartPath: languagePartPath
 				}
@@ -224,6 +227,7 @@ module.exports = ((environment, logger, languageLoader, appFactory) => {
 				$Protocol: protocol,
 				$Language: language,
 				$Host: host,
+				$Path: urlPath,
 				$Root: root,
 				$LanguagePartPath: languagePartPath
 			}

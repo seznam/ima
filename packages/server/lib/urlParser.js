@@ -94,6 +94,7 @@ module.exports = environment => {
 		let currentLanguagePartPath = '';
 		let currentHost = parsedCurrentUrl[1];
 		let currentRoot = parsedCurrentUrl[2];
+		let currentPath = currentRoot;
 		let currentProtocol = _getProtocol(req);
 
 		for (let expression of Object.keys(environment.$Language)) {
@@ -148,6 +149,7 @@ module.exports = environment => {
 		res.locals.language = currentLanguage;
 		res.locals.languagePartPath = currentLanguagePartPath;
 		res.locals.host = currentHost;
+		res.locals.path = currentPath;
 		res.locals.protocol = currentProtocol;
 		res.locals.root = currentRoot;
 
