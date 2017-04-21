@@ -33,11 +33,11 @@
 		"gulp-plumber": "^1.1.0",
 		"ima-helpers": "^0.14.0-rc.2",
 		"jasmine": "^2.5.3",
-		"superagent": "^3.3.2"
+		"superagent": "^3.5.2"
 	},
 	"dependencies": {
 		"async-each": "^1.0.1",
-		"highlight.js": "^9.9.0",
+		"highlight.js": "^9.11.0",
 		"stack-trace": "^0.0.9",
 		"winston": "^2.3.1"
 	},
