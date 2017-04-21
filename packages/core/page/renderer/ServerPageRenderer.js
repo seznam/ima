@@ -132,6 +132,7 @@ export default class ServerPageRenderer extends AbstractPageRenderer {
 				$IMA.$App = ${JSON.stringify(this._settings.$App)};
 				$IMA.$Protocol = "${this._settings.$Protocol}";
 				$IMA.$Host = "${this._settings.$Host}";
+				$IMA.$Path = "${this._settings.$Path}";
 				$IMA.$Root = "${this._settings.$Root}";
 				$IMA.$LanguagePartPath = "${this._settings.$LanguagePartPath}";
 			})(typeof window !== 'undefined' && window !== null ? window : global);

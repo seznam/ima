@@ -66,6 +66,7 @@ function getClientBootConfig(initialAppConfigFunctions) {
 			router: {
 				$Protocol: $IMA.$Protocol,
 				$Host: $IMA.$Host,
+				$Path: $IMA.$Path,
 				$Root: $IMA.$Root,
 				$LanguagePartPath: $IMA.$LanguagePartPath
 			}
@@ -78,6 +79,7 @@ function getClientBootConfig(initialAppConfigFunctions) {
 			$Protocol: $IMA.$Protocol,
 			$Language: $IMA.$Language,
 			$Host: $IMA.$Host,
+			$Path: $IMA.$Path,
 			$Root: $IMA.$Root,
 			$LanguagePartPath: $IMA.$LanguagePartPath
 		}
@@ -108,6 +110,7 @@ function getTestClientBootConfig(initialAppConfigFunctions) {
 			router: {
 				$Host: $IMA.$Host,
 				$Root: $IMA.$Root,
+				$Path: $IMA.$Path,
 				$LanguagePartPath: $IMA.$LanguagePartPath
 			}
 		},

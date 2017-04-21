@@ -1,4 +1,4 @@
-import { PropTypes } from 'react';
+import PropTypes from 'prop-types';
 import ns from '../namespace';
 import AbstractPureComponent from './AbstractPureComponent';
 import MetaManager from '../meta/MetaManager';

@@ -1,5 +1,6 @@
 
 import classnames from 'classnames';
+import PropTypes from 'prop-types';
 import React from 'react';
 import ReactDOM from 'react-dom';
 
@@ -24,7 +25,7 @@ export function getContextTypes(classConstructor) {
 	}
 
 	return {
-		$Utils: React.PropTypes.object.isRequired
+		$Utils: PropTypes.object.isRequired
 	};
 }
 
