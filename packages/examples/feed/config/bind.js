@@ -32,6 +32,7 @@ export default (ns, oc, config) => {
 		$Dictionary: oc.get(Dictionary),
 		$EventBus: oc.get(EventBus),
 		$Settings: oc.get('$Settings'),
-		$Window: oc.get(Window)
+		$Window: oc.get(Window),
+		$CssClasses: oc.get('$CssClasses')
 	});
 };

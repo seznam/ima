@@ -13,6 +13,7 @@ export default (ns, oc, config) => {
 		$EventBus: oc.get(EventBus),
 		$Dictionary: oc.get(Dictionary),
 		$Settings: oc.get('$Settings'),
-		$Window: oc.get(Window)
+		$Window: oc.get(Window),
+		$CssClasses: oc.get('$CssClasses')
 	});
 };
