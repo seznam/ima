@@ -19,6 +19,7 @@ import HttpStatusCode from '../http/StatusCode';
 import UrlTransformer from '../http/UrlTransformer';
 import MetaManager from '../meta/MetaManager';
 import MetaManagerImpl from '../meta/MetaManagerImpl';
+import { defaultCssClasses as cssClassNameProcessor } from '../page/componentHelpers';
 import AbstractComponent from '../page/AbstractComponent';
 import AbstractPureComponent from '../page/AbstractPureComponent';
 import PageFactory from '../page/PageFactory';
@@ -136,6 +137,9 @@ export default (ns, oc, config) => {
 	oc.bind('$MetaManager', MetaManager);
 	oc.bind('$ControllerDecorator', ControllerDecorator);
 	oc.bind('$PageStateManagerDecorator', PageStateManagerDecorator);
+
+	// UI components
+	oc.bind('$CssClasses', cssClassNameProcessor);
 
 	//Page
 	oc.provide(PageStateManager, PageStateManagerImpl);

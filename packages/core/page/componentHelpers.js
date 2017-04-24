@@ -102,7 +102,7 @@ export function link(component, name, params) {
 
 /**
  * Generate a string of CSS classes from the properties of the passed-in
- * object that resolve to true.
+ * object that resolve to {@code true}.
  *
  * @example
  *        this.cssClasses('my-class my-class-modificator', true);
@@ -122,9 +122,32 @@ export function link(component, name, params) {
  *         to {@code true}.
  */
 export function cssClasses(component, classRules, includeComponentClassName) {
+	return component.utils.$CssClasses(
+		classRules,
+		includeComponentClassName && component
+	);
+}
+
+/**
+ * Generate a string of CSS classes from the properties of the passed-in
+ * object that resolve to {@code true}.
+ *
+ * @param {(string|Object<string, boolean>)} classRules CSS classes in a
+ *        string separated by whitespace, or a map of CSS class names to
+ *        boolean values. The CSS class name will be included in the result
+ *        only if the value is {@code true}.
+ * @param {?(AbstractComponent|AbstractPureComponent)} component The component
+ *        requiring the composition of the CSS class names, if it has the
+ *        {@code className} property set and requires its inclusion this time.
+ * @return {string} String of CSS classes that had their property resolved
+ *         to {@code true}.
+ */
+export function defaultCssClasses(
+	classRules, component
+) {
 	return classnames(
 		classRules,
-		includeComponentClassName ? component.props.className : ''
+		component && component.props.className
 	);
 }
 
