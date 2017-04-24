@@ -138,6 +138,9 @@ export default (ns, oc, config) => {
 	oc.bind('$ControllerDecorator', ControllerDecorator);
 	oc.bind('$PageStateManagerDecorator', PageStateManagerDecorator);
 
+	// UI components
+	oc.bind('$CssClasses', cssClassNameProcessor);
+
 	//Page
 	oc.provide(PageStateManager, PageStateManagerImpl);
 	oc.bind('$PageStateManager', PageStateManager);
