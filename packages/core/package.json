@@ -1,6 +1,6 @@
 {
 	"name": "ima",
-	"version": "0.14.0-rc.20",
+	"version": "0.14.0-rc.21",
 	"description": "IMA.js framework for isomorphic javascript application",
 	"main": "main.js",
 	"scripts": {
