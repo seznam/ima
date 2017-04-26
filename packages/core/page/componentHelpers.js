@@ -145,9 +145,13 @@ export function cssClasses(component, classRules, includeComponentClassName) {
 export function defaultCssClasses(
 	classRules, component
 ) {
+	let extraClasses = component instanceof React.Component ?
+		component.props.className
+	:
+		component;
 	return classnames(
 		classRules,
-		component && component.props.className
+		extraClasses
 	);
 }
 
