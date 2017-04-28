@@ -9,7 +9,7 @@ const PRIVATE = {
 	masterElementId: Symbol('masterElementId')
 };
 
-if ($Debug) {
+if (typeof $Debug !== 'undefined' && $Debug) {
 	Object.freeze(PRIVATE);
 }
 

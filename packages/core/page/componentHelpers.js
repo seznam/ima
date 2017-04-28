@@ -7,7 +7,7 @@ import ReactDOM from 'react-dom';
 const PRIVATE = {
 	contextTypes: Symbol('contextTypes')
 };
-if ($Debug) {
+if (typeof $Debug !== 'undefined' && $Debug) {
 	Object.freeze(PRIVATE);
 }
 
