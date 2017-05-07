@@ -8,7 +8,7 @@ describe('ima.storage.WeakMapStorage', () => {
 		map = new WeakMapStorage({
 			entryTtl: 100
 		});
-
+		Date.now = () => 1000;
 		map.set('a', { num: 1 });
 	});
 
@@ -57,9 +57,7 @@ describe('ima.storage.WeakMapStorage', () => {
 	it("should discard expired entries", () => {
 		expect(map.size()).toBe(1);
 
-		jasmine.clock().install();
-		jasmine.clock().mockDate(new Date());
-		jasmine.clock().tick(101);
+		Date.now = () => 1101;
 
 		expect(map.size()).toBe(0);
 	});

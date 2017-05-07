@@ -21,7 +21,7 @@ describe('ima.http.SuperAgentProxy', () => {
 
 	beforeEach(() => {
 		superAgent = {
-			funcError: null,
+			funcError: () => superAgent,
 			get: () => superAgent,
 			post: () => superAgent,
 			put: () => superAgent,
@@ -42,12 +42,6 @@ describe('ima.http.SuperAgentProxy', () => {
 			end: () => superAgent
 		};
 		proxy = new HttpProxy(superAgent, urlTransformer, windowHelper);
-
-		jasmine.clock().install();
-	});
-
-	afterEach(() => {
-		jasmine.clock().uninstall();
 	});
 
 	using([
@@ -105,13 +99,14 @@ describe('ima.http.SuperAgentProxy', () => {
 			});
 
 			it('should be timeouted for longer request then options.timeout', (done) => {
+				jest.useFakeTimers();
+
 				spyOn(superAgent, 'end')
 					.and
 					.callFake((callback) => {
 						superAgent.funcError = callback;
-						jasmine.clock().tick(options.timeout + 1);
+						jest.runOnlyPendingTimers();
 					});
-
 
 				proxy.request(method, apiUrl, data, options)
 					.then(() => {}, (error) => {

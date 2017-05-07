@@ -65,9 +65,9 @@ describe('Revive client application', () => {
 	}
 
 	beforeAll((done) => {
-		let doc = jsdom.jsdom(undefined);
+		let doc = Reflect.construct(jsdom.JSDOM, [`<!DOCTYPE html><html><head></head><body></body></html>`]);
 
-		propagateToGlobal(doc.defaultView);
+		propagateToGlobal(doc.window);
 
 		global.$IMA = Object.assign({},
 			global.$IMA || {},
@@ -78,11 +78,14 @@ describe('Revive client application', () => {
 			}
 		);
 
-		global.document = doc;
-		global.window = doc.defaultView;
+		global.document = doc.window.document;
+		global.window = doc.window;
 		global.window.$IMA = global.$IMA;
 		global.window.$Debug = global.$Debug;
-		jsdom.changeURL(global.window, `${routerConfig.$Protocol}//${routerConfig.$Host}`);
+		doc.reconfigure({ url: `${routerConfig.$Protocol}//${routerConfig.$Host}` });
+
+		//mock
+		global.window.scrollTo = () => {};
 
 		vendorLinker.set('react', React);
 		vendorLinker.set('react-dom', ReactDOM);
@@ -135,7 +138,7 @@ describe('Revive client application', () => {
 		})
 		.catch((error) => {
 			done(error);
-		})
+		});
 
 	});
 

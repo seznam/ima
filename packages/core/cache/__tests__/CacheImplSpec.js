@@ -13,20 +13,15 @@ describe('ima.cache.CacheImpl', () => {
 		cacheStorage = new MapStorage();
 		cacheFactory = new CacheFactory();
 		cache = new Cache(cacheStorage, cacheFactory, Helper, { enabled: true, ttl: 1000 });
+		Date.now = () => 1000;
 		cache.set('aaa', 123);
-		jasmine.clock().install();
-	});
-
-	afterEach(() => {
-		jasmine.clock().uninstall();
 	});
 
 	it('should store value for key', () => {
-		jasmine.clock().mockDate(new Date());
 		cache.set('bbb', 456);
 		cache.set('ccc', 321, 2000);
 
-		jasmine.clock().tick(1001);
+		Date.now = () => 2001;
 
 		expect(cache.has('aaa')).toBe(false);
 		expect(cache.has('bbb')).toBe(false);

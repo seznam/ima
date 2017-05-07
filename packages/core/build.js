@@ -25,7 +25,7 @@ const vendors = {
 
 	test: [
 		'ima/test.js',
-		'react-addons-test-utils',
+		'react-test-renderer',
 		'enzyme'
 	]
 };

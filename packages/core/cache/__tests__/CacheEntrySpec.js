@@ -5,22 +5,18 @@ describe('ima.cache.CacheEntry', () => {
 	let cacheEntry = null;
 
 	beforeEach(() => {
+		Date.now = () => 1000;
 		cacheEntry = new CacheEntry(123, 1000);
-		jasmine.clock().install();
-	});
-
-	afterEach(() => {
-		jasmine.clock().uninstall();
 	});
 
 	it('should be return true if is expired', () => {
-		jasmine.clock().mockDate(new Date());
-
-		jasmine.clock().tick(500);
-		expect(cacheEntry.isExpired()).toBe(false);
-
-		jasmine.clock().tick(1001);
+		Date.now = () => 2001;
 		expect(cacheEntry.isExpired()).toBe(true);
+	});
+
+	it('should be return false if is not expired', () => {
+		Date.now = () => 1500;
+		expect(cacheEntry.isExpired()).toBe(false);
 	});
 
 	it('should return value', () => {

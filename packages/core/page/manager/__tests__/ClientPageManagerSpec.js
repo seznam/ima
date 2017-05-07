@@ -95,10 +95,9 @@ describe('ima.page.manager.ClientPageManager', () => {
 			.and
 			.stub();
 
-		jasmine.clock().install();
+		jest.useFakeTimers();
 		pageManager.scrollTo(0, 0);
-		jasmine.clock().tick(1);
-		jasmine.clock().uninstall();
+		jest.runOnlyPendingTimers();
 
 		expect(windowInterface.scrollTo).toHaveBeenCalledWith(0, 0);
 	});
