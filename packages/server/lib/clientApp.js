@@ -412,8 +412,9 @@ module.exports = ((environment, logger, languageLoader, appFactory) => {
 
 	function requestHandler(req, res) {
 		if (environment.$Env === 'dev') {
-			appFactory();
 			instanceRecycler.clear();
+			$IMA.Loader.modules = {};
+			appFactory();
 		}
 
 		return _importAppMain()
