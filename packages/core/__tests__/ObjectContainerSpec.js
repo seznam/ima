@@ -11,6 +11,7 @@ describe('ima.ObjectContainer', () => {
 	classConstructorWithDependencies.$dependencies = [];
 
 	let alias = 'alias';
+	let alias2 = 'alias2';
 	let classParent = function mockClassParent() {
 		this.parent = this;
 	};
@@ -227,6 +228,21 @@ describe('ima.ObjectContainer', () => {
 			);
 			expect(aliasEntry.classConstructor).toEqual(classConstructorWithDependencies);
 			expect(aliasEntry.dependencies).toEqual(classConstructorWithDependencies.$dependencies);
+		});
+
+		it('should create new entry for unregistered alias with defined dependencies, it is feature for AB tests', () => {
+			oc.inject(classConstructor, dependencies);
+			oc.bind(alias, classConstructor);
+
+			spyOn(oc, '_createEntry')
+				.and
+				.callThrough();
+
+			oc.bind(alias2, classConstructor, []);
+
+			expect(oc._createEntry.calls.count()).toEqual(1);
+			expect(oc._entries.get(alias2)).not.toEqual(oc._entries.get(classConstructor));
+			expect(oc._entries.get(alias2).dependencies).toEqual([]);
 		});
 
 	});
