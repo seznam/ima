@@ -39,6 +39,11 @@ describe('ima.router.Route', function() {
 			expect(route.toPath()).toEqual('/home/:userId/something/:somethingId');
 		});
 
+		it('encode path params', function() {
+			route = new Route(name, '/home/:encodeString', controller, view, options);
+			expect(route.toPath({ encodeString: 'á/b?č#d:ě%25' })).toEqual('/home/%C3%A1%2Fb%3F%C4%8D%23d%3A%C4%9B%2525')
+		});
+
 		using([
 			{ pathExpression: ':?optional/home/:userId/something/:somethingId/:?optional2', params: { userId: 1, somethingId: 2, optional: 'en' }, result: '/en/home/1/something/2' },
 			{ pathExpression: ':?optional/home/:userId/something/:somethingId/:?optional2', params: { userId: 1, somethingId: 2, optional2: 'today' }, result: '/home/1/something/2/today' },
@@ -106,7 +111,8 @@ describe('ima.router.Route', function() {
 			{ pathExpression: '/something/:?somethingId/:userId', path: '/something/user1', params: { userId: 'user1' } },
 			{ pathExpression: '/something/:?somethingId/:userId', path: '/something/param1/user1', params: { somethingId: 'param1', userId: 'user1' } },
 			{ pathExpression: '/something/:?somethingId/:?userId', path: '/something/param1', params: { somethingId: 'param1' } },
-			{ pathExpression: '/something/:?somethingId/:?userId', path: '/something/param1/user1', params: { somethingId: 'param1', userId: 'user1' } }
+			{ pathExpression: '/something/:?somethingId/:?userId', path: '/something/param1/user1', params: { somethingId: 'param1', userId: 'user1' } },
+			{ pathExpression: '/:encodeString', path: '/%C3%A1%2Fb%3F%C4%8D%23d%3A%C4%9B%2525', params: { encodeString: 'á/b?č#d:ě%25' } }
 		], function(value) {
 			it(value.pathExpression, function() {
 				var routeLocal = new Route('unknown', value.pathExpression, 'unknown');

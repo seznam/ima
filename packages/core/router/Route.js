@@ -326,7 +326,7 @@ export default class Route {
 	_substituteParamInPath(path, paramName, paramValue) {
 		return path.replace(
 			new RegExp(`(^|\/):${paramName}([\/\?]|$)`),
-			paramValue ? '$1' + paramValue +  '$2' : ''
+			paramValue ? '$1' + encodeURIComponent(paramValue) +  '$2' : ''
 		);
 	}
 
@@ -341,7 +341,7 @@ export default class Route {
 	_substituteOptionalParamInPath(path, paramName, paramValue) {
 		return path.replace(
 			new RegExp(`(^|\/):\\\?${paramName}([\/\?]|$)`),
-			paramValue ? '$1' + paramValue +  '$2' : ''
+			paramValue ? '$1' + encodeURIComponent(paramValue) +  '$2' : ''
 		);
 	}
 
