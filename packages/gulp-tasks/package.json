@@ -1,6 +1,6 @@
 {
 	"name": "ima-gulp-tasks",
-	"version": "0.14.0-rc.14",
+	"version": "0.14.0-rc.15",
 	"description": "Default gulp tasks for IMA.js applications.",
 	"main": "",
 	"scripts": {
