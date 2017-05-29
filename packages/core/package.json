@@ -39,15 +39,15 @@
 	"devDependencies": {
 		"babel-plugin-transform-es2015-modules-commonjs": "6.24.1",
 		"del": "2.2.2",
-		"eslint": "^3.19.0",
-		"eslint-plugin-react": "7.0.0",
+		"eslint": "3.19.0",
+		"eslint-plugin-react": "7.0.1",
 		"gulp": "github:gulpjs/gulp#c120a94",
 		"gulp-babel": "6.1.2",
 		"gulp-plumber": "1.1.0",
-		"gulp-tap": "0.4.2",
-		"jest": "20.0.0",
-		"jsdom": "10.1.0",
-		"to-mock": "0.0.4"
+		"gulp-tap": "1.0.1",
+		"jest": "20.0.4",
+		"jsdom": "11.0.0",
+		"to-mock": "1.0.0"
 	},
 	"dependencies": {
 		"babel-polyfill": "6.23.0",
@@ -55,7 +55,7 @@
 		"custom-event-polyfill": "0.3.0",
 		"enzyme": "2.8.2",
 		"ima-helpers": "0.14.0-rc.2",
-		"prop-types": "15.5.8",
+		"prop-types": "15.5.10",
 		"react": "15.5.4",
 		"react-dom": "15.5.4",
 		"react-test-renderer": "15.5.4",
