@@ -259,7 +259,7 @@ export default class ClientRouter extends AbstractRouter {
 		let target = event.target || event.srcElement;
 		let anchorElement = this._getAnchorElement(target);
 
-		if (!anchorElement) {
+		if (!anchorElement || typeof anchorElement.href !== 'string') {
 			return;
 		}
 
