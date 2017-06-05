@@ -97,7 +97,6 @@ exports.default = (gulpConfig) => {
 			.pipe(insertSystemImports())
 			.pipe(replaceToIMALoader())
 			.pipe(insert.wrap('module.exports = (function(){\n', '\n })\n'))
-			.pipe(sourcemaps.write())
 			.pipe(gulp.dest(files.app.dest.server));
 	}
 
