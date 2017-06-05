@@ -4,14 +4,18 @@ let gls = require('gulp-live-server');
 
 let sharedState = require('../gulpState.js');
 let server = null;
-let isServerRunning = false;
+let runningServers = 0;
+
+function isServerRunning() {
+	return runningServers > 0;
+}
 
 function startServer() {
-	isServerRunning = true;
+	runningServers++;
 	server
 		.start()
 		.then(() => {
-			isServerRunning = false;
+			runningServers--;
 		});
 }
 
@@ -31,7 +35,7 @@ function serverRestart(done) {
 
 exports['server:reload'] = serverReload;
 function serverReload(done) {
-	if (isServerRunning) {
+	if (isServerRunning()) {
 		setTimeout(() => {
 			server.notify(sharedState.watchEvent);
 			done();
@@ -44,7 +48,7 @@ function serverReload(done) {
 
 exports['server:hotreload'] = serverHotreload;
 function serverHotreload(done) {
-	if (isServerRunning) {
+	if (isServerRunning()) {
 		server.notify(sharedState.watchEvent);
 	} else {
 		startServer();
