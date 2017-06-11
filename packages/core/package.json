@@ -57,6 +57,7 @@
 		"ima-helpers": "0.14.0-rc.2",
 		"prop-types": "15.5.10",
 		"react": "15.5.4",
+		"react-addons-test-utils": "15.5.1",
 		"react-dom": "15.5.4",
 		"react-test-renderer": "15.5.4",
 		"superagent": "3.5.2"
