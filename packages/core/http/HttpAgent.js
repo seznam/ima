@@ -18,7 +18,8 @@ export default class HttpAgent {
 	 *        to the server as query parameters.
 	 * @param {{timeout: number=, ttl: number=, repeatRequest: number=,
 	 *        headers: Object<string, string>=, cache: boolean=,
-	 *        withCredentials: boolean, listeners: object<string, function>}=} options
+	 *        withCredentials: boolean, listeners: Object<string, function>}=,
+	 *        postProcessor: function(Object<string, *>)= } options
 	 *        Optional request options. The {@code timeout} specifies the
 	 *        request timeout in milliseconds, the {@code ttl} specified how
 	 *        long the request may be cached in milliseconds, the
@@ -31,6 +32,8 @@ export default class HttpAgent {
 	 *        {@code withCredentials} flag indicates whether the request should
 	 *        be made using credentials such as cookies or authorization
 	 *        headers. The {@code listeners} Add listeners for request.
+	 *        The {@code postProcessor} is method for changing agent response
+	 *        before than the response is saved in cache and returned in promise.
 	 * @return {Promise<{
 	 *             status: number,
 	 *             body: *,
@@ -60,7 +63,8 @@ export default class HttpAgent {
 	 *        as the request body.
 	 * @param {{timeout: number=, ttl: number=, repeatRequest: number=,
 	 *        headers: Object<string, string>=, cache: boolean=,
-	 *        withCredentials: boolean}=} options
+	 *        withCredentials: boolean}=, listeners: Object<string, function>}=,
+	 *        postProcessor: function(Object<string, *>)= } options
 	 *        Optional request options. The {@code timeout} specifies the
 	 *        request timeout in milliseconds, the {@code ttl} specified how
 	 *        long the request may be cached in milliseconds, the
@@ -72,7 +76,9 @@ export default class HttpAgent {
 	 *        default, also applies to requests in progress). The
 	 *        {@code withCredentials} flag indicates whether the request should
 	 *        be made using credentials such as cookies or authorization
-	 *        headers.
+	 *        headers. The {@code listeners} Add listeners for request.
+	 *        The {@code postProcessor} is method for changing agent response
+	 *        before than the response is saved in cache and returned in promise.
 	 * @return {Promise<{
 	 *             status: number,
 	 *             body: *,
@@ -102,7 +108,8 @@ export default class HttpAgent {
 	 *        as the request body.
 	 * @param {{timeout: number=, ttl: number=, repeatRequest: number=,
 	 *        headers: Object<string, string>=, cache: boolean=,
-	 *        withCredentials: boolean}=} options
+	 *        withCredentials: boolean}=, listeners: Object<string, function>}=,
+	 *        postProcessor: function(Object<string, *>)= } options
 	 *        Optional request options. The {@code timeout} specifies the
 	 *        request timeout in milliseconds, the {@code ttl} specified how
 	 *        long the request may be cached in milliseconds, the
@@ -114,7 +121,9 @@ export default class HttpAgent {
 	 *        default, also applies to requests in progress). The
 	 *        {@code withCredentials} flag indicates whether the request should
 	 *        be made using credentials such as cookies or authorization
-	 *        headers.
+	 *        headers. The {@code listeners} Add listeners for request.
+	 *        The {@code postProcessor} is method for changing agent response
+	 *        before than the response is saved in cache and returned in promise.
 	 * @return {Promise<{
 	 *             status: number,
 	 *             body: *,
@@ -144,7 +153,8 @@ export default class HttpAgent {
 	 *        as the request body.
 	 * @param {{timeout: number=, ttl: number=, repeatRequest: number=,
 	 *        headers: Object<string, string>=, cache: boolean=,
-	 *        withCredentials: boolean}=} options
+	 *        withCredentials: boolean}=, listeners: Object<string, function>}=,
+	 *        postProcessor: function(Object<string, *>)= } options
 	 *        Optional request options. The {@code timeout} specifies the
 	 *        request timeout in milliseconds, the {@code ttl} specified how
 	 *        long the request may be cached in milliseconds, the
@@ -156,7 +166,9 @@ export default class HttpAgent {
 	 *        default, also applies to requests in progress). The
 	 *        {@code withCredentials} flag indicates whether the request should
 	 *        be made using credentials such as cookies or authorization
-	 *        headers.
+	 *        headers. The {@code listeners} Add listeners for request.
+	 *        The {@code postProcessor} is method for changing agent response
+	 *        before than the response is saved in cache and returned in promise.
 	 * @return {Promise<{
 	 *             status: number,
 	 *             body: *,
@@ -186,7 +198,8 @@ export default class HttpAgent {
 	 *        as the request body.
 	 * @param {{timeout: number=, ttl: number=, repeatRequest: number=,
 	 *        headers: Object<string, string>=, cache: boolean=,
-	 *        withCredentials: boolean}=} options
+	 *        withCredentials: boolean}=, listeners: Object<string, function>}=,
+	 *        postProcessor: function(Object<string, *>)= } options
 	 *        Optional request options. The {@code timeout} specifies the
 	 *        request timeout in milliseconds, the {@code ttl} specified how
 	 *        long the request may be cached in milliseconds, the
@@ -198,7 +211,9 @@ export default class HttpAgent {
 	 *        default, also applies to requests in progress). The
 	 *        {@code withCredentials} flag indicates whether the request should
 	 *        be made using credentials such as cookies or authorization
-	 *        headers.
+	 *        headers. The {@code listeners} Add listeners for request.
+	 *        The {@code postProcessor} is method for changing agent response
+	 *        before than the response is saved in cache and returned in promise.
 	 * @return {Promise<{
 	 *             status: number,
 	 *             body: *,

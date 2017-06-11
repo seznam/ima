@@ -35,7 +35,8 @@ describe('ima.http.HttpAgentImpl', () => {
 					'Accept': 'application/json',
 					'Accept-Language': 'en'
 				},
-				cache: true
+				cache: true,
+				postProcessor: (agentResponse) => agentResponse
 			},
 			cacheOptions: {
 				prefix: 'http.'
@@ -50,6 +51,7 @@ describe('ima.http.HttpAgentImpl', () => {
 			headers: {},
 			cache: true,
 			withCredentials: true,
+			postProcessor: httpConfig.defaultRequestOptions.postProcessor,
 			language: httpConfig.defaultRequestOptions.language
 		};
 
@@ -142,6 +144,23 @@ describe('ima.http.HttpAgentImpl', () => {
 				http[method](data.params.url, data.params.data, data.params.options)
 					.then(() => {
 						expect(cookie.parseFromSetCookieHeader.calls.count()).toEqual(2);
+						done();
+					});
+			});
+
+			it('should call postProcessor function', (done) => {
+				spyOn(proxy, 'request')
+					.and
+					.callFake(() => {
+						return Promise.resolve(data);
+					});
+				spyOn(data.params.options, 'postProcessor')
+					.and
+					.callThrough();
+
+				http[method](data.params.url, data.params.data, data.params.options)
+					.then(() => {
+						expect(data.params.options.postProcessor).toHaveBeenCalled();
 						done();
 					});
 			});

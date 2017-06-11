@@ -87,7 +87,8 @@ export default class HttpAgentImpl extends HttpAgent {
 		 *         repeatRequest: number,
 		 *         headers: Object<string, string>,
 		 *         cache: boolean,
-		 *         withCredentials: boolean
+		 *         withCredentials: boolean,
+		 *         postProcessor: function(Object<string, *>)
 		 *       }}
 		 */
 		this._defaultRequestOptions = config.defaultRequestOptions;
@@ -206,6 +207,7 @@ export default class HttpAgentImpl extends HttpAgent {
 	 *          headers: Object<string, string>=,
 	 *          cache: boolean=,
 	 *          withCredentials: boolean=
+	 *          postProcessor: function(Object<string, *>)=
 	 *        }=} options Optional request options. The {@code timeout}
 	 *        specifies the request timeout in milliseconds, the {@code ttl}
 	 *        specified how long the request may be cached in milliseconds, the
@@ -215,6 +217,8 @@ export default class HttpAgentImpl extends HttpAgent {
 	 *        cache of pending and finished HTTP requests. The
 	 *        {@code withCredentials} that indicates whether requests should be
 	 *        made using credentials such as cookies or authorization headers.
+	 *        The {@code postProcessor} is method for changing agent response
+	 *        before than the response is saved in cache and returned in promise.
 	 * @return {Promise<{
 	 *           status: number,
 	 *           body: *,
@@ -302,7 +306,8 @@ export default class HttpAgentImpl extends HttpAgent {
 	 *          repeatRequest: number=,
 	 *          headers: Object<string, string>=,
 	 *          cache: boolean=,
-	 *          withCredentials: boolean=
+	 *          withCredentials: boolean=,
+	 *          postProcessor: function(Object<string, *>)=
 	 *        }=} options Optional request options. The {@code timeout}
 	 *        specifies the request timeout in milliseconds, the {@code ttl}
 	 *        specified how long the request may be cached in milliseconds, the
@@ -312,6 +317,8 @@ export default class HttpAgentImpl extends HttpAgent {
 	 *        cache of pending and finished HTTP requests. The
 	 *        {@code withCredentials} that indicates whether requests should be
 	 *        made using credentials such as cookies or authorization headers.
+	 *        The {@code postProcessor} is method for changing agent response
+	 *        before than the response is saved in cache and returned in promise.
 	 * @return {Promise<{
 	 *           status: number,
 	 *           body: *,
@@ -380,12 +387,17 @@ export default class HttpAgentImpl extends HttpAgent {
 
 		this._internalCacheOfPromises.delete(cacheKey);
 
-		if (agentResponse.params.options.cache) {
-			this._saveAgentResponseToCache(agentResponse);
-		}
-
 		if (this._proxy.haveToSetCookiesManually()) {
 			this._setCookiesFromResponse(agentResponse);
+		}
+
+		let { postProcessor, cache } = agentResponse.params.options;
+		if (typeof postProcessor === 'function') {
+			agentResponse = postProcessor(agentResponse);
+		}
+
+		if (cache) {
+			this._saveAgentResponseToCache(agentResponse);
 		}
 
 		return agentResponse;
@@ -447,7 +459,8 @@ export default class HttpAgentImpl extends HttpAgent {
 	 *          repeatRequest: number=,
 	 *          headers: Object<string, string>=,
 	 *          cache: boolean=,
-	 *          withCredentials: boolean=
+	 *          withCredentials: boolean=,
+	 *          postProcessor: function(Object<string, *>)=
 	 *        }} options Optional request options. The {@code timeout}
 	 *        specifies the request timeout in milliseconds, the {@code ttl}
 	 *        specified how long the request may be cached in milliseconds, the
@@ -457,6 +470,8 @@ export default class HttpAgentImpl extends HttpAgent {
 	 *        cache of pending and finished HTTP requests. The
 	 *        {@code withCredentials} that indicates whether requests should be
 	 *        made using credentials such as cookies or authorization headers.
+	 *        The {@code postProcessor} is method for changing agent response
+	 *        before than the response is saved in cache and returned in promise.
 	 * @return {{
 	 *           timeout: number,
 	 *           ttl: number,
@@ -465,6 +480,7 @@ export default class HttpAgentImpl extends HttpAgent {
 	 *           headers: Object<string, string>,
 	 *           cache: boolean,
 	 *           withCredentials: boolean
+	 *           postProcessor: function(Object<string, *>)=
 	 *         }} Request options with set filled-in default values for missing
 	 *         fields, and extra options used internally.
 	 */
