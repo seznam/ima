@@ -61,30 +61,30 @@ describe('Render server application', () => {
 		vendorLinker.set('superagent', SuperAgent);
 		vendorLinker.set('ima-helpers', $Helper);
 
-		ima.reviveClientApp(
-			Object.assign(
-				{
-					initServicesApp: (ns, oc, config) => {
-						oc.get(Response).init(expressReponse);
-					},
-					initBindApp: () => {},
-					initRoutes: () => {}
+		let app = ima.createImaApp();
+		let bootConfig = ima.getClientBootConfig(Object.assign(
+			{
+				initServicesApp: (ns, oc, config) => {
+					oc.get(Response).init(expressReponse);
 				},
-				{
-					initBindApp: (ns, oc, config) => {
-						router = oc.get('$Router');
-						router.init(routerConfig);
-						router.add('reviveClientApp', '/reviveClientApp', Controller, View, options);
+				initBindApp: () => {},
+				initRoutes: () => {}
+			},
+			{
+				initBindApp: (ns, oc, config) => {
+					router = oc.get('$Router');
+					router.init(routerConfig);
+					router.add('reviveClientApp', '/reviveClientApp', Controller, View, options);
 
-						oc.inject(Controller, []);
+					oc.inject(Controller, []);
 
-						if (!oc.has('$Utils')) {
-							oc.constant('$Utils', {});
-						}
+					if (!oc.has('$Utils')) {
+						oc.constant('$Utils', {});
 					}
 				}
-			)
-		);
+			}
+		));
+		app = ima.bootClientApp(app, bootConfig);
 
 		spyOn(ReactDOM, 'render');
 
