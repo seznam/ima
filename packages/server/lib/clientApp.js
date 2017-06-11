@@ -413,7 +413,22 @@ module.exports = ((environment, logger, languageLoader, appFactory) => {
 	function requestHandler(req, res) {
 		if (environment.$Env === 'dev') {
 			instanceRecycler.clear();
-			$IMA.Loader.modules = {};
+
+			Object.keys($IMA.Loader.modules)
+				.forEach((modulePath) => {
+					let module = root.$IMA.Loader.modules[modulePath];
+
+					root.$IMA.Loader.modules[modulePath] = Object.assign(
+						{},
+						module,
+						{
+							instance: null,
+							dependencyOf: [],
+							dependencies: module.dependencies.slice()
+						}
+					);
+				});
+
 			appFactory();
 		}
 
