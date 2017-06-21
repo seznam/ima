@@ -28,13 +28,14 @@ let cookieParser = require('cookie-parser');
 let methodOverride = require('method-override');
 let compression = require('compression');
 let helmet = require('helmet');
+let errorToJSON = require('error-to-json');
 
 process.on('uncaughtException', (error) => {
-	logger.error('Uncaught Exception:', { error });
+	logger.error('Uncaught Exception:', { error: errorToJSON(error) });
 });
 
 process.on('unhandledRejection', (error) => {
-	logger.error('Unhandled promise rejection:', { error });
+	logger.error('Unhandled promise rejection:', { error: errorToJSON(error) });
 });
 
 function renderApp(req, res, next) {
@@ -54,7 +55,7 @@ function renderApp(req, res, next) {
 			// logger.info('Request handled successfully', { response: { status: number, content: string, SPA: boolean=, error: Error= } });
 
 			if (response.error) {
-				logger.error('App error', { error: response.error });
+				logger.error('App error', { error: errorToJSON(response.error) });
 			}
 
 			if (
@@ -70,7 +71,7 @@ function renderApp(req, res, next) {
 			next(error);
 		})
 		.catch((error) => {
-			logger.error('Cache error', { error });
+			logger.error('Cache error', { error: errorToJSON(error) });
 			next(error);
 		});
 }
