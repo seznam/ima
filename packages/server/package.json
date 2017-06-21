@@ -1,6 +1,6 @@
 {
 	"name": "ima-server",
-	"version": "0.14.0-rc.10",
+	"version": "0.14.0-rc.11",
 	"description": "Default dev server for IMA.js applications.",
 	"main": "index.js",
 	"scripts": {
