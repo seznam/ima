@@ -12,7 +12,7 @@
     "eol-last": 1,
     "guard-for-in": 0,
     "indent": [2, "tab", {"SwitchCase": 1}],
-   "key-spacing": 0,
+    "key-spacing": 0,
     "new-cap": [1, {"capIsNew": false, "newIsCap": true}],
     "new-parens": 0,
     "no-alert": 0,

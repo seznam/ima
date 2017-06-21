@@ -19,8 +19,6 @@ describe('ima.http.HttpAgentImpl', () => {
 	let options = null;
 	let data = null;
 	let httpConfig = null;
-	let cacheStorage = null;
-	let cacheFactory = null;
 
 	beforeEach(() => {
 		cache = new MockedCache();

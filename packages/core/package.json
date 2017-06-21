@@ -15,16 +15,13 @@
 		"Javascript"
 	],
 	"author": "Miroslav Jancarik <miroslav.jancarik@firma.seznam.cz>",
-	"contributors": [
-		{
-			"name": "Martin Urban",
-			"email": "martin.urban@firma.seznam.cz"
-		},
-		{
-			"name": "Martin Jurča",
-			"email": "martin.jurca@firma.seznam.cz"
-		}
-	],
+	"contributors": [{
+		"name": "Martin Urban",
+		"email": "martin.urban@firma.seznam.cz"
+	}, {
+		"name": "Martin Jurča",
+		"email": "martin.jurca@firma.seznam.cz"
+	}],
 	"repository": {
 		"type": "git",
 		"url": "https://github.com/seznam/IMA.js-core.git"
@@ -56,10 +53,10 @@
 		"enzyme": "2.8.2",
 		"ima-helpers": "0.14.0-rc.2",
 		"prop-types": "15.5.10",
-		"react": "15.5.4",
-		"react-addons-test-utils": "15.5.1",
-		"react-dom": "15.5.4",
-		"react-test-renderer": "15.5.4",
+		"react": "15.6.1",
+		"react-addons-test-utils": "15.6.0",
+		"react-dom": "15.6.1",
+		"react-test-renderer": "15.6.1",
 		"superagent": "3.5.2"
 	},
 	"browserify": {
