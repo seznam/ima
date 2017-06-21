@@ -8,6 +8,7 @@ const sep = require('path').sep;
 const errorView = require('./template/errorView.js');
 const instanceRecycler = require('./instanceRecycler.js');
 const templateProcessor = require('./templateProcessor.js');
+const errorToJSON = require('error-to-json');
 
 const renderedSPAs = {};
 
@@ -23,7 +24,7 @@ module.exports = ((environment, logger, languageLoader, appFactory) => {
 		let callstack = stackTrace.parse(err);
 		let fileIndex = 1;
 
-		logger.error('The application crashed due to an uncaught exception', { err });
+		logger.error('The application crashed due to an uncaught exception', { error: errorToJSON(err) });
 
 		asyncEach(callstack, (stackFrame, cb) => {
 			// exclude core node modules and node modules
@@ -80,7 +81,7 @@ module.exports = ((environment, logger, languageLoader, appFactory) => {
 			// if something bad happened while processing the stacktrace make
 			// sure to return something useful
 			if (error) {
-				logger.error('Failed to display error page', { error });
+				logger.error('Failed to display error page', { error: errorToJSON(error) });
 				res.send(err.stack);
 			} else {
 				res.send(errorView(err, callstack));
@@ -107,7 +108,7 @@ module.exports = ((environment, logger, languageLoader, appFactory) => {
 	function showStaticErrorPage(error, req, res) {
 		logger.error(
 			'Failed to display error page, displaying the static error page',
-			{ error }
+			{ error: errorToJSON(error) }
 		);
 
 		return new Promise((resolve, reject) => {
@@ -328,7 +329,12 @@ module.exports = ((environment, logger, languageLoader, appFactory) => {
 				instanceRecycler.clearInstance(app);
 			}
 
-			returnPromise = Promise.reject(error);
+			returnPromise = Promise.resolve({
+				content: null,
+				pageState: {},
+				status: 500,
+				error: error
+			});
 			_displayDetails(error, req, res);
 		} else {
 			let appPromise = Promise.resolve(app);
@@ -371,7 +377,7 @@ module.exports = ((environment, logger, languageLoader, appFactory) => {
 		try {
 			routeInfo = router.getCurrentRouteInfo();
 		} catch (e) {
-			logger.warn('Failed to retrieve current route info', { error: e });
+			logger.warn('Failed to retrieve current route info', { error: errorToJSON(e) });
 		}
 
 		return routeInfo;
