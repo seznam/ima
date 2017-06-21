@@ -1,40 +1,28 @@
-import ns from 'ima/namespace';
-import CacheInterface from 'ima/cache/Cache';
+import ns from '../namespace';
+import Cache from './Cache';
+import CacheFactory from './CacheFactory';
+import Storage from '../storage/Storage';
 
 ns.namespace('ima.cache');
 
 /**
- * Configurable generic implementation of the {@codelink ima.cache.Cache}
- * interface.
- *
- * @class CacheImpl
- * @implements ima.cache.Cache
- * @namespace ima.cache
- * @module ima
- * @submodule ima.cache
- *
- * @requires ima.storage.Storage
- * @requires vendor.$Helper
+ * Configurable generic implementation of the {@codelink Cache} interface.
  *
  * @example
  *   if (cache.has('model.articles')) {
  *     return cache.get('model.articles');
  *   } else {
- *     var articles = getArticlesFromStorage();
+ *     let articles = getArticlesFromStorage();
  *     // cache for an hour
  *     cache.set('model.articles', articles, 60 * 60 * 1000);
  *   }
  */
-export default class CacheImpl extends CacheInterface {
+export default class CacheImpl extends Cache {
 	/**
 	 * Initializes the cache.
 	 *
-	 * @method constructor
-	 * @constructor
-	 * @param {ima.storage.Storage} cacheStorage The cache entry storage to
-	 *        use.
-	 * @param {ima.cache.CacheFactory} factory Which create new instance of cache
-	 *        entry.
+	 * @param {Storage} cacheStorage The cache entry storage to use.
+	 * @param {CacheFactory} factory Which create new instance of cache entry.
 	 * @param {vendor.$Helper} Helper The IMA.js helper methods.
 	 * @param {{ttl: number, enabled: boolean}} [config={ttl: 30000, enabled: false}]
 	 *        The cache configuration.
@@ -46,24 +34,18 @@ export default class CacheImpl extends CacheInterface {
 		/**
 		 * Cache entry storage.
 		 *
-		 * @property _cache
-		 * @private
-		 * @type {ima.storage.Storage}
+		 * @type {Storage}
 		 */
 		this._cache = cacheStorage;
 
 		/**
-		 * @property _factory
-		 * @private
-		 * @type {ima.cache.CacheFactory}
+		 * @type {CacheFactory}
 		 */
 		this._factory = factory;
 
 		/**
 		 * Tha IMA.js helper methods.
 		 *
-		 * @private
-		 * @property _Helper
 		 * @type {vendor.$Helper}
 		 */
 		this._Helper = Helper;
@@ -71,18 +53,13 @@ export default class CacheImpl extends CacheInterface {
 		/**
 		 * Default cache entry time to live in milliseconds.
 		 *
-		 * @property _ttl
-		 * @private
 		 * @type {number}
-		 * @default this._config.ttl
 		 */
 		this._ttl = config.ttl;
 
 		/**
 		 * Flag signalling whether the cache is currently enabled.
 		 *
-		 * @property _enabled
-		 * @private
 		 * @type {boolean}
 		 */
 		this._enabled = config.enabled;
@@ -90,7 +67,6 @@ export default class CacheImpl extends CacheInterface {
 
 	/**
 	 * @inheritdoc
-	 * @method clear
 	 */
 	clear() {
 		this._cache.clear();
@@ -98,14 +74,13 @@ export default class CacheImpl extends CacheInterface {
 
 	/**
 	 * @inheritdoc
-	 * @method has
 	 */
 	has(key) {
 		if (!this._enabled || !this._cache.has(key)) {
 			return false;
 		}
 
-		var cacheEntry = this._cache.get(key);
+		let cacheEntry = this._cache.get(key);
 		if (cacheEntry && !cacheEntry.isExpired()) {
 			return true;
 		}
@@ -117,11 +92,10 @@ export default class CacheImpl extends CacheInterface {
 
 	/**
 	 * @inheritdoc
-	 * @method get
 	 */
 	get(key) {
 		if (this.has(key)) {
-			var value = this._cache.get(key).getValue();
+			let value = this._cache.get(key).getValue();
 
 			return this._clone(value);
 		}
@@ -131,14 +105,13 @@ export default class CacheImpl extends CacheInterface {
 
 	/**
 	 * @inheritdoc
-	 * @method set
 	 */
 	set(key, value, ttl = null) {
 		if (!this._enabled) {
 			return;
 		}
 
-		var cacheEntry = this._factory.createCacheEntry(
+		let cacheEntry = this._factory.createCacheEntry(
 			this._clone(value),
 			ttl || this._ttl
 		);
@@ -148,7 +121,6 @@ export default class CacheImpl extends CacheInterface {
 
 	/**
 	 * @inheritdoc
-	 * @method delete
 	 */
 	delete(key) {
 		this._cache.delete(key);
@@ -156,7 +128,6 @@ export default class CacheImpl extends CacheInterface {
 
 	/**
 	 * @inheritdoc
-	 * @method disable
 	 */
 	disable() {
 		this._enabled = false;
@@ -165,7 +136,6 @@ export default class CacheImpl extends CacheInterface {
 
 	/**
 	 * @inheritdoc
-	 * @method enable
 	 */
 	enable() {
 		this._enabled = true;
@@ -173,13 +143,12 @@ export default class CacheImpl extends CacheInterface {
 
 	/**
 	 * @inheritdoc
-	 * @method serialize
 	 */
 	serialize() {
-		var dataToSerialize = {};
+		let dataToSerialize = {};
 
-		for (var key of this._cache.keys()) {
-			var serializeEntry = this._cache.get(key).serialize();
+		for (let key of this._cache.keys()) {
+			let serializeEntry = this._cache.get(key).serialize();
 
 			if ($Debug) {
 				if (!this._canSerializeValue(serializeEntry.value)) {
@@ -203,11 +172,10 @@ export default class CacheImpl extends CacheInterface {
 
 	/**
 	 * @inheritdoc
-	 * @method deserialize
 	 */
 	deserialize(serializedData) {
-		for (var key of Object.keys(serializedData)) {
-			var cacheEntryItem = serializedData[key];
+		for (let key of Object.keys(serializedData)) {
+			let cacheEntryItem = serializedData[key];
 			this.set(key, cacheEntryItem.value, cacheEntryItem.ttl);
 		}
 	}
@@ -215,8 +183,6 @@ export default class CacheImpl extends CacheInterface {
 	/**
 	 * Tests whether the provided value can be serialized into JSON.
 	 *
-	 * @private
-	 * @method _canSerializeValue
 	 * @param {*} value The value to test whether or not it can be serialized.
 	 * @return {boolean} {@code true} if the provided value can be serialized
 	 *         into JSON, {@code false} otherwise.
@@ -228,7 +194,7 @@ export default class CacheImpl extends CacheInterface {
 			(value instanceof Promise) ||
 			(typeof value === 'function')
 		) {
-			console.warn('The provided value is not serializable:', value);
+			console.warn('The provided value is not serializable: ', value);
 
 			return false;
 		}
@@ -238,7 +204,7 @@ export default class CacheImpl extends CacheInterface {
 		}
 
 		if (value.constructor === Array) {
-			for (var element of value) {
+			for (let element of value) {
 				if (!this._canSerializeValue(element)) {
 					console.warn(
 						'The provided array is not serializable: ',
@@ -251,7 +217,7 @@ export default class CacheImpl extends CacheInterface {
 		}
 
 		if (typeof value === 'object') {
-			for (var propertyName of Object.keys(value)) {
+			for (let propertyName of Object.keys(value)) {
 				if (!this._canSerializeValue(value[propertyName])) {
 					console.warn(
 						'The provided object is not serializable due to the ' +
@@ -269,12 +235,9 @@ export default class CacheImpl extends CacheInterface {
 	}
 
 	/**
-	 * Clone only mutable values.
 	 * Attempts to clone the provided value, if possible. Values that cannot be
-	 * cloned will be simply returned.
+	 * cloned (e.g. promises) will be simply returned.
 	 *
-	 * @private
-	 * @method _clone
 	 * @param {*} value The value to clone.
 	 * @return {*} The created clone, or the provided value if the value cannot
 	 *         be cloned.

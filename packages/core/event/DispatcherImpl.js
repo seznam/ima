@@ -1,6 +1,6 @@
-import ns from 'ima/namespace';
-import IMAError from 'ima/error/GenericError';
-import DispatcherInterface from 'ima/event/Dispatcher';
+import ns from '../namespace';
+import Dispatcher from './Dispatcher';
+import GenericError from '../error/GenericError';
 
 ns.namespace('ima.event');
 
@@ -8,7 +8,6 @@ ns.namespace('ima.event');
  * An empty immutable map of event listener to scopes, used for a mismatch in
  * the {@codelink _eventListeners} map.
  *
- * @property EMPTY_MAP
  * @const
  * @type {Map<function (*), Set<?Object>>}
  */
@@ -18,28 +17,22 @@ const EMPTY_MAP = Object.freeze(new Map());
  * An empty immutable set of event listener scopes, used for a mismatch in the
  * {@codelink _eventListeners} map.
  *
- * @property EMPTY_SET
  * @const
  * @type {Set<?Object>}
  */
 const EMPTY_SET = Object.freeze(new Set());
 
 /**
- * Default implementation of the {@codelink ima.event.Dispatcher}
- * interface.
- *
- * @class DispatcherImpl
- * @implements ima.event.Dispatcher
- * @namespace ima.event
- * @module ima
- * @submodule ima.event
+ * Default implementation of the {@codelink Dispatcher} interface.
  */
-export default class DispatcherImpl extends DispatcherInterface {
+export default class DispatcherImpl extends Dispatcher {
+
+	static get $dependencies() {
+		return [];
+	}
+
 	/**
 	 * Initializes the dispatcher.
-	 *
-	 * @constructor
-	 * @method constructor
 	 */
 	constructor() {
 		super();
@@ -49,8 +42,6 @@ export default class DispatcherImpl extends DispatcherInterface {
 		 * which the event listener should be bound when being executed due to
 		 * the event.
 		 *
-		 * @private
-		 * @property _eventListeners
 		 * @type {Map<string, Map<function(*), Set<?Object>>>}
 		 */
 		this._eventListeners = new Map();
@@ -58,7 +49,6 @@ export default class DispatcherImpl extends DispatcherInterface {
 
 	/**
 	 * @inheritdoc
-	 * @method clear
 	 */
 	clear() {
 		this._eventListeners.clear();
@@ -68,20 +58,20 @@ export default class DispatcherImpl extends DispatcherInterface {
 
 	/**
 	 * @inheritdoc
-	 * @method listen
 	 */
 	listen(event, listener, scope = null) {
 		if ($Debug) {
 			if (!(listener instanceof Function)) {
-				throw new IMAError(`The listener must be a function, ` +
-						`${listener} provided.`);
+				throw new GenericError(
+					`The listener must be a function, ${listener} provided.`
+				);
 			}
 		}
 
 		if (!this._eventListeners.has(event)) {
 			this._createNewEvent(event);
 		}
-		var listeners = this._getListenersOf(event);
+		let listeners = this._getListenersOf(event);
 
 		if (!listeners.has(listener)) {
 			this._createNewListener(event, listener);
@@ -93,27 +83,29 @@ export default class DispatcherImpl extends DispatcherInterface {
 
 	/**
 	 * @inheritdoc
-	 * @method unlisten
 	 */
 	unlisten(event, listener, scope = null) {
-		var scopes = this._getScopesOf(event, listener);
+		let scopes = this._getScopesOf(event, listener);
 
 		if ($Debug) {
 			if (!scopes.has(scope)) {
-				console.warn('ima.event.DispatcherImpl.unlisten(): the ' +
-						`provided listener '${listener}' is not registered ` +
-						`for the specified event '${event}' and scope ` +
-						`'${scope}'. Check your workflow.`, {
-							event: event,
-							listener: listener,
-							scope: scope
-						});
+				console.warn(
+					'ima.event.DispatcherImpl.unlisten(): the provided ' +
+					`listener '${listener}' is not registered for the ` +
+					`specified event '${event}' and scope '${scope}'. Check ` +
+					`your workflow.`,
+					{
+						event: event,
+						listener: listener,
+						scope: scope
+					}
+				);
 			}
 		}
 
 		scopes.delete(scope);
 		if (!scopes.size) {
-			var listeners = this._getListenersOf(event);
+			let listeners = this._getListenersOf(event);
 			listeners.delete(listener);
 
 			if (!listeners.size) {
@@ -126,21 +118,23 @@ export default class DispatcherImpl extends DispatcherInterface {
 
 	/**
 	 * @inheritdoc
-	 * @method fire
 	 */
 	fire(event, data, imaInternalEvent = false) {
-		var listeners = this._getListenersOf(event);
+		let listeners = this._getListenersOf(event);
 
 		if (!listeners.size && !imaInternalEvent) {
-			console.warn('There are no event listeners registered for the ' +
-					`${event} event`, {
-						event: event,
-						data: data
-					});
+			console.warn(
+				`There are no event listeners registered for the ${event} ` +
+				`event`,
+				{
+					event: event,
+					data: data
+				}
+			);
 		}
 
-		for (var [listener, scopes] of listeners) {
-			for (var scope of scopes) {
+		for (let [listener, scopes] of listeners) {
+			for (let scope of scopes) {
 				listener.bind(scope)(data);
 			}
 		}
@@ -151,25 +145,21 @@ export default class DispatcherImpl extends DispatcherInterface {
 	/**
 	 * Create new Map storage of listeners for the specified event.
 	 *
-	 * @private
-	 * @method _createNewEvent
 	 * @param {string} event The name of the event.
 	 */
 	_createNewEvent(event) {
-		var listeners = new Map();
+		let listeners = new Map();
 		this._eventListeners.set(event, listeners);
 	}
 
 	/**
 	 * Create new Set storage of scopes for the specified event and listener.
 	 *
-	 * @private
-	 * @method _createNewListener
 	 * @param {string} event The name of the event.
 	 * @param {function(*)} listener The event listener.
 	 */
 	_createNewListener(event, listener) {
-		var scopes = new Set();
+		let scopes = new Set();
 		this._eventListeners.get(event).set(listener, scopes);
 	}
 
@@ -177,8 +167,6 @@ export default class DispatcherImpl extends DispatcherInterface {
 	 * Retrieves the scopes in which the specified event listener should be
 	 * executed for the specified event.
 	 *
-	 * @private
-	 * @method _getScopesOf
 	 * @param {string} event The name of the event.
 	 * @param {function(*)} listener The event listener.
 	 * @return {Set<?Object>} The scopes in which the specified listeners
@@ -187,7 +175,7 @@ export default class DispatcherImpl extends DispatcherInterface {
 	 *         for the event.
 	 */
 	_getScopesOf(event, listener) {
-		var listenersToScopes = this._getListenersOf(event);
+		let listenersToScopes = this._getListenersOf(event);
 
 		if (listenersToScopes.has(listener)) {
 			return listenersToScopes.get(listener);
@@ -199,8 +187,6 @@ export default class DispatcherImpl extends DispatcherInterface {
 	/**
 	 * Retrieves the map of event listeners to scopes they are bound to.
 	 *
-	 * @private
-	 * @method _getListenersOf
 	 * @param {string} event The name of the event.
 	 * @return {Map<function(*), Set<?Object>>} A map of event listeners to the
 	 *         scopes in which they should be executed. The returned map is an

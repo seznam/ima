@@ -1,31 +1,36 @@
-describe('ima.event.EventBusImpl', function () {
+import toMock from 'to-mock';
+import EventBus, { IMA_EVENT } from 'event/EventBusImpl';
+import Window from 'window/Window';
 
-	var listeners = {
-		listener1: function () {},
-		listener2: function () {}
+describe('ima.event.EventBusImpl', () => {
+
+	let listeners = {
+		listener1: () => {},
+		listener2: () => {}
 	};
 
-	var eventSource = {
-		dispatchEvent: function (e) {}
+	let eventSource = {
+		dispatchEvent: (e) => {}
 	};
-	var notEventSource = {
-	};
-	var eventTarget = {};
-	var event = 'event';
-	var IMA_EVENT = '$IMA.CustomEvent';
-	var data = {
+	let notEventSource = {};
+	let eventTarget = {};
+	let event = 'event';
+	//let IMA_EVENT = '$IMA.CustomEvent';
+	let data = {
 		data: 'data'
 	};
 
-	var windowInterface = null;
-	var eventBus = null;
-	beforeEach(function () {
-		windowInterface = oc.create('ima.window.Window');
-		eventBus = oc.create('ima.event.EventBusImpl', [ windowInterface ]);
+	let MockedWindow = toMock(Window);
+	let windowInterface = null;
+	let eventBus = null;
+
+	beforeEach(() => {
+		windowInterface = new MockedWindow();
+		eventBus = new EventBus(windowInterface);
 	});
 
-	describe('listen method', function () {
-		it('should bind listener for specific event', function () {
+	describe('listen method', () => {
+		it('should bind listener for specific event', () => {
 			spyOn(windowInterface, 'bindEventListener');
 
 			eventBus.listen(eventTarget, event, listeners.listener1);
@@ -39,8 +44,8 @@ describe('ima.event.EventBusImpl', function () {
 		});
 	});
 
-	describe('listenAll method', function () {
-		it('should bind listener for any event', function () {
+	describe('listenAll method', () => {
+		it('should bind listener for any event', () => {
 			spyOn(windowInterface, 'bindEventListener');
 
 			eventBus.listenAll(eventTarget, listeners.listener1);
@@ -53,14 +58,18 @@ describe('ima.event.EventBusImpl', function () {
 	});
 
 
-	describe('fire method', function () {
+	describe('fire method', () => {
 
-		it('should fire event for listeners', function () {
+		it('should fire event for listeners', () => {
 			spyOn(eventSource, 'dispatchEvent');
+			spyOn(windowInterface, 'createCustomEvent')
+				.and
+				.callFake((IMA_EVENT, options) => {
+					return options;
+				});
 
-			var event = 'event1';
-
-			var data = { data: ''};
+			let event = 'event1';
+			let data = { data: '' };
 
 			eventBus.fire(eventSource, event, data);
 
@@ -72,15 +81,15 @@ describe('ima.event.EventBusImpl', function () {
 			expect(eventSource.dispatchEvent.calls.argsFor(0)[0].cancelable).toEqual(true);
 		});
 
-		it('should throw error for incorrect eventSource', function () {
-			expect(function () {
+		it('should throw error for incorrect eventSource', () => {
+			expect(() => {
 				eventBus.fire(notEventSource, event, data);
 			}).toThrow();
 		});
 	});
 
-	describe('unlisten method', function () {
-		it('should unbind bound listeners', function () {
+	describe('unlisten method', () => {
+		it('should unbind bound listeners', () => {
 			spyOn(windowInterface, 'unbindEventListener');
 
 			eventBus.listen(eventTarget, event, listeners.listener1);
@@ -92,8 +101,8 @@ describe('ima.event.EventBusImpl', function () {
 		});
 	});
 
-	describe('unlistenAll method', function () {
-		it('should unbind bound listeners', function () {
+	describe('unlistenAll method', () => {
+		it('should unbind bound listeners', () => {
 			spyOn(windowInterface, 'unbindEventListener');
 
 			eventBus.listenAll(eventTarget, listeners.listener1);

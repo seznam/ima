@@ -1,67 +1,97 @@
-import ns from 'ima/namespace';
-import IMAError from 'ima/error/GenericError';
-import PageManagerInterface from 'ima/page/manager/PageManager';
+import ns from '../../namespace';
+import PageManager from './PageManager';
+import PageFactory from '../PageFactory';
+import AbstractDocumentView from '../AbstractDocumentView';
+import PageRenderer from '../renderer/PageRenderer';
+import PageStateManager from '../state/PageStateManager';
+import AbstractController from '../../controller/AbstractController';
+import Controller from '../../controller/Controller';
+import ControllerDecorator from '../../controller/ControllerDecorator';
+import GenericError from '../../error/GenericError';
 
 ns.namespace('ima.page.manager');
 
 /**
  * Page manager for controller.
- *
- * @class AbstractPageManager
- * @implements ima.page.manager.PageManager
- * @namespace ima.page.manager
- * @module ima
- * @submodule ima.page
  */
-export default class AbstractPageManager extends PageManagerInterface {
+export default class AbstractPageManager extends PageManager {
 
 	/**
 	 * Initializes the page manager.
 	 *
-	 * @method constructor
-	 * @constructor
-	 * @param {ima.page.PageFactory} pageFactory
-	 * @param {ima.page.Renderer.PageRenderer} pageRenderer
-	 * @param {ima.page.State.PageStateManager} pageStateManager
+	 * @param {PageFactory} pageFactory Factory used by the page manager to
+	 *        create instances of the controller for the current route, and
+	 *        decorate the controllers and page state managers.
+	 * @param {PageRenderer} pageRenderer The current renderer of the page.
+	 * @param {PageStateManager} pageStateManager The current page state
+	 *        manager.
 	 */
 	constructor(pageFactory, pageRenderer, pageStateManager) {
 		super();
 
 		/**
+		 * Factory used by the page manager to create instances of the
+		 * controller for the current route, and decorate the controllers and
+		 * page state managers.
+		 *
 		 * @protected
-		 * @property _pageFactory
-		 * @type {ima.page.Factory}
-		 * @default pageFactory
+		 * @type {PageFactory}
 		 */
 		this._pageFactory = pageFactory;
 
 		/**
+		 * The current renderer of the page.
+		 *
 		 * @protected
-		 * @property _pageRenderer
-		 * @type {ima.page.renderer.AbstractPageRenderer}
-		 * @default pageRenderer
+		 * @type {PageRenderer}
 		 */
 		this._pageRenderer = pageRenderer;
 
 		/**
+		 * The current page state manager.
+		 *
 		 * @protected
-		 * @property _pageStateManager
-		 * @type {ima.page.state.PageStateManager}
-		 * @default pageStateManager
+		 * @type {PageStateManager}
 		 */
 		this._pageStateManager = pageStateManager;
 
 		/**
+		 * Details of the currently managed page.
+		 *
 		 * @protected
-		 * @property _managedPage
-		 * @type {Object<string, *>}
+		 * @type {{
+		 *         controller: ?(string|function(new: Controller)),
+		 *         controllerInstance: ?Controller,
+		 *         decoratedController: ?Controller,
+		 *         view: ?React.Component,
+		 *         viewInstance: ?React.Element,
+		 *         options: ?{
+		 *           onlyUpdate: (
+		 *             boolean|
+		 *             function(
+		 *               (string|function(new: Controller)),
+		 *               function(new: React.Component,
+		 *                Object<string, *>,
+		 *                ?Object<string, *>
+		 *              )
+		 *             ): boolean
+		 *           ),
+		 *           autoScroll: boolean,
+		 *           allowSPA: boolean,
+ 		 *           documentView: ?function(new: AbstractDocumentView),
+		 *           managedRootView: ?function(new: React.Component)
+		 *         },
+		 *         params: ?Object<string, string>,
+		 *         state: {
+		 *           activated: boolean
+		 *         }
+		 *       }}
 		 */
 		this._managedPage = {};
 	}
 
 	/**
 	 * @inheritdoc
-	 * @method init
 	 */
 	init() {
 		this._clearManagedPageValue();
@@ -72,7 +102,6 @@ export default class AbstractPageManager extends PageManagerInterface {
 
 	/**
 	 * @inheritdoc
-	 * @method manage
 	 */
 	manage(controller, view, options, params = {}) {
 		this._preManage(options);
@@ -84,15 +113,19 @@ export default class AbstractPageManager extends PageManagerInterface {
 		}
 
 		let pageFactory = this._pageFactory;
-		var controllerInstance = pageFactory.createController(controller);
-		var decoratedController = pageFactory.decorateController(
+		let controllerInstance = pageFactory.createController(controller);
+		let decoratedController = pageFactory.decorateController(
 			controllerInstance
 		);
-		var viewInstance = pageFactory.createView(view);
+		let viewInstance = pageFactory.createView(view);
 
 		this._deactivatePageSource();
 		this._destroyPageSource();
 
+		this._pageStateManager.clear();
+		this._clearComponentState(options);
+
+		this._clearManagedPageValue();
 		this._storeManagedPageValue(
 			controller,
 			view,
@@ -111,16 +144,15 @@ export default class AbstractPageManager extends PageManagerInterface {
 	/**
 	 * @abstract
 	 * @inheritdoc
-	 * @method scrollTo
 	 */
 	scrollTo(x = 0, y = 0) {
-		throw new IMAError('The scrollTo() method is abstract and must be ' +
-				'overridden.');
+		throw new GenericError(
+			'The scrollTo() method is abstract and must be overridden.'
+		);
 	}
 
 	/**
 	 * @inheritdoc
-	 * @method destroy
 	 */
 	destroy() {
 		this._pageStateManager.onChange = null;
@@ -128,18 +160,33 @@ export default class AbstractPageManager extends PageManagerInterface {
 		this._deactivatePageSource();
 		this._destroyPageSource();
 
+		this._pageStateManager.clear();
+
 		this._clearManagedPageValue();
 	}
 
 	/**
 	 * @protected
-	 * @method _storeManagedPageValue
 	 * @param {(string|function)} controller
 	 * @param {(string|function)} view
-	 * @param {{onlyUpdate: boolean, autoScroll: boolean, allowSPA: boolean}} options
+	 * @param {{
+	 *          onlyUpdate: (
+	 *            boolean|
+	 *            function(
+	 *              (string|function(new: Controller)),
+	 *              function(new: React.Component,
+	 *                Object<string, *>,
+	 *                ?Object<string, *>
+	 *              )
+	 *            ): boolean
+	 *          ),
+	 *          autoScroll: boolean,
+	 *          allowSPA: boolean,
+ 	 *          documentView: ?AbstractDocumentView
+	 *        }} options
 	 * @param {Object<string, string>} params The route parameters.
-	 * @param {ima.controller.AbstractController} controllerInstance
-	 * @param {ima.controller.ControllerDecorator} decoratedController
+	 * @param {AbstractController} controllerInstance
+	 * @param {ControllerDecorator} decoratedController
 	 * @param {React.Component} viewInstance
 	 */
 	_storeManagedPageValue(controller, view, options, params,
@@ -162,7 +209,6 @@ export default class AbstractPageManager extends PageManagerInterface {
 	 * Clear value from managed page.
 	 *
 	 * @protected
-	 * @method _clearManagedPageValue
 	 */
 	_clearManagedPageValue() {
 		this._managedPage = {
@@ -183,18 +229,16 @@ export default class AbstractPageManager extends PageManagerInterface {
 	 * Set page state manager to extension which has restricted rights to set
 	 * global state.
 	 *
-	 * @private
-	 * @method _setRestrictedPageStateManager
 	 * @param {ima.extension.Extension} extension
 	 * @param {Object<string, *>} extensionState
 	 */
 	_setRestrictedPageStateManager(extension, extensionState) {
-		var stateKeys = Object.keys(extensionState);
+		let stateKeys = Object.keys(extensionState);
 		let allowedKey = extension.getAllowedStateKeys();
-		var allAllowedStateKeys = stateKeys.concat(allowedKey);
+		let allAllowedStateKeys = stateKeys.concat(allowedKey);
 
-		var pageFactory = this._pageFactory;
-		var decoratedPageStateManager = pageFactory.decoratePageStateManager(
+		let pageFactory = this._pageFactory;
+		let decoratedPageStateManager = pageFactory.decoratePageStateManager(
 			this._pageStateManager,
 			allAllowedStateKeys
 		);
@@ -207,7 +251,6 @@ export default class AbstractPageManager extends PageManagerInterface {
 	 * extensions.
 	 *
 	 * @protected
-	 * @method _initPageSource
 	 */
 	_initPageSource() {
 		this._initController();
@@ -218,10 +261,9 @@ export default class AbstractPageManager extends PageManagerInterface {
 	 * Initializes managed instance of controller with the provided parameters.
 	 *
 	 * @protected
-	 * @method _initController
 	 */
 	_initController() {
-		var controller = this._managedPage.controllerInstance;
+		let controller = this._managedPage.controllerInstance;
 
 		controller.setRouteParams(this._managedPage.params);
 		controller.init();
@@ -232,12 +274,11 @@ export default class AbstractPageManager extends PageManagerInterface {
 	 * provided parameters.
 	 *
 	 * @protected
-	 * @method _initExtensions
 	 */
 	_initExtensions() {
-		var controller = this._managedPage.controllerInstance;
+		let controller = this._managedPage.controllerInstance;
 
-		for (var extension of controller.getExtensions()) {
+		for (let extension of controller.getExtensions()) {
 			extension.setRouteParams(this._managedPage.params);
 			extension.init();
 		}
@@ -248,13 +289,12 @@ export default class AbstractPageManager extends PageManagerInterface {
 	 * Merge loaded state and render it.
 	 *
 	 * @protected
-	 * @method _loadPageSource
-	 * @return {Object<string, (Promise|*)>}
+	 * @return {Object<string, (Promise<*>|*)>}
 	 */
 	_loadPageSource() {
-		var controllerState = this._getLoadedControllerState();
-		var extensionsState = this._getLoadedExtensionsState();
-		var loadedPageState = Object.assign(
+		let controllerState = this._getLoadedControllerState();
+		let extensionsState = this._getLoadedExtensionsState();
+		let loadedPageState = Object.assign(
 			{},
 			extensionsState,
 			controllerState
@@ -280,12 +320,11 @@ export default class AbstractPageManager extends PageManagerInterface {
 	 * Load controller state from managed instance of controller.
 	 *
 	 * @protected
-	 * @method _getLoadedControllerState
-	 * @return {Object<string, (Promise|*)>}
+	 * @return {Object<string, (Promise<*>|*)>}
 	 */
 	_getLoadedControllerState() {
-		var controller = this._managedPage.controllerInstance;
-		var controllerState = controller.load();
+		let controller = this._managedPage.controllerInstance;
+		let controllerState = controller.load();
 
 		controller.setPageStateManager(this._pageStateManager);
 
@@ -296,15 +335,14 @@ export default class AbstractPageManager extends PageManagerInterface {
 	 * Load extensions state from managed instance of controller.
 	 *
 	 * @protected
-	 * @method _getLoadedExtensionsState
-	 * @return {Object<string, (Promise|*)>}
+	 * @return {Object<string, (Promise<*>|*)>}
 	 */
 	_getLoadedExtensionsState() {
-		var controller = this._managedPage.controllerInstance;
-		var extensionsState = {};
+		let controller = this._managedPage.controllerInstance;
+		let extensionsState = {};
 
-		for (var extension of controller.getExtensions()) {
-			var extensionState = extension.load();
+		for (let extension of controller.getExtensions()) {
+			let extensionState = extension.load();
 
 			this._setRestrictedPageStateManager(extension, extensionState);
 			Object.assign(extensionsState, extensionState);
@@ -314,14 +352,14 @@ export default class AbstractPageManager extends PageManagerInterface {
 	}
 
 	/**
-	 * Activate page source so call activate method on controller and his extensions.
+	 * Activate page source so call activate method on controller and his
+	 * extensions.
 	 *
 	 * @protected
-	 * @method _activatePageSource
 	 */
 	_activatePageSource() {
-		var controller = this._managedPage.controllerInstance;
-		var isNotActivated = !this._managedPage.state.activated;
+		let controller = this._managedPage.controllerInstance;
+		let isNotActivated = !this._managedPage.state.activated;
 
 		if (controller && isNotActivated) {
 			this._activateController();
@@ -334,10 +372,9 @@ export default class AbstractPageManager extends PageManagerInterface {
 	 * Activate managed instance of controller.
 	 *
 	 * @protected
-	 * @method _activateController
 	 */
 	_activateController() {
-		var controller = this._managedPage.controllerInstance;
+		let controller = this._managedPage.controllerInstance;
 
 		controller.activate();
 	}
@@ -346,28 +383,26 @@ export default class AbstractPageManager extends PageManagerInterface {
 	 * Activate extensions for managed instance of controller.
 	 *
 	 * @protected
-	 * @method _activateExtensions
 	 */
 	_activateExtensions() {
-		var controller = this._managedPage.controllerInstance;
+		let controller = this._managedPage.controllerInstance;
 
-		for (var extension of controller.getExtensions()) {
+		for (let extension of controller.getExtensions()) {
 			extension.activate();
 		}
 	}
 
 	/**
-	 * Update page source so call update method on controller and his extensions.
-	 * Merge updated state and render it.
+	 * Update page source so call update method on controller and his
+	 * extensions. Merge updated state and render it.
 	 *
 	 * @protected
-	 * @method _updatePageSource
-	 * @return {Promise}
+	 * @return {Promise<{status: number, content: ?string}>}
 	 */
 	_updatePageSource() {
-		var updatedControllerState = this._getUpdatedControllerState();
-		var updatedExtensionState = this._getUpdatedExtensionsState();
-		var updatedPageState = Object.assign(
+		let updatedControllerState = this._getUpdatedControllerState();
+		let updatedExtensionState = this._getUpdatedExtensionsState();
+		let updatedPageState = Object.assign(
 			{},
 			updatedExtensionState,
 			updatedControllerState
@@ -391,12 +426,11 @@ export default class AbstractPageManager extends PageManagerInterface {
 	 * Return updated controller state for current page controller.
 	 *
 	 * @protected
-	 * @method _getUpdatedControllerState
-	 * @return {Promise}
+	 * @return {Object<string, (Promise<*>|*)>}
 	 */
 	_getUpdatedControllerState() {
-		var controller = this._managedPage.controllerInstance;
-		var lastRouteParams = controller.getRouteParams();
+		let controller = this._managedPage.controllerInstance;
+		let lastRouteParams = controller.getRouteParams();
 
 		controller.setRouteParams(this._managedPage.params);
 
@@ -407,16 +441,15 @@ export default class AbstractPageManager extends PageManagerInterface {
 	 * Return updated extensions state for current page controller.
 	 *
 	 * @protected
-	 * @method _getUpdatedExtensionsState
 	 * @return {Object<string, (Promise|*)>}
 	 */
 	_getUpdatedExtensionsState() {
-		var controller = this._managedPage.controllerInstance;
-		var extensionsState = {};
+		let controller = this._managedPage.controllerInstance;
+		let extensionsState = {};
 
-		for (var extension of controller.getExtensions()) {
-			var lastRouteParams = extension.getRouteParams();
-			var extensionState = extension.update(lastRouteParams);
+		for (let extension of controller.getExtensions()) {
+			let lastRouteParams = extension.getRouteParams();
+			let extensionState = extension.update(lastRouteParams);
 
 			this._setRestrictedPageStateManager(extension, extensionState);
 			Object.assign(extensionsState, extensionState);
@@ -430,11 +463,10 @@ export default class AbstractPageManager extends PageManagerInterface {
 	 * extensions.
 	 *
 	 * @protected
-	 * @method _deactivatePageSource
 	 */
 	_deactivatePageSource() {
-		var controller = this._managedPage.controllerInstance;
-		var isActivated = this._managedPage.state.activated;
+		let controller = this._managedPage.controllerInstance;
+		let isActivated = this._managedPage.state.activated;
 
 		if (controller && isActivated) {
 			this._deactivateExtensions();
@@ -447,10 +479,9 @@ export default class AbstractPageManager extends PageManagerInterface {
 	 * activated.
 	 *
 	 * @protected
-	 * @method _deactivateController
 	 */
 	_deactivateController() {
-		var controller = this._managedPage.controllerInstance;
+		let controller = this._managedPage.controllerInstance;
 
 		controller.deactivate();
 	}
@@ -460,12 +491,11 @@ export default class AbstractPageManager extends PageManagerInterface {
 	 * they were activated.
 	 *
 	 * @protected
-	 * @method _deactivateExtensions
 	 */
 	_deactivateExtensions() {
-		var controller = this._managedPage.controllerInstance;
+		let controller = this._managedPage.controllerInstance;
 
-		for (var extension of controller.getExtensions()) {
+		for (let extension of controller.getExtensions()) {
 			extension.deactivate();
 		}
 	}
@@ -475,18 +505,13 @@ export default class AbstractPageManager extends PageManagerInterface {
 	 * extensions.
 	 *
 	 * @protected
-	 * @method _destroyPageSource
 	 */
 	_destroyPageSource() {
-		var controller = this._managedPage.controllerInstance;
+		let controller = this._managedPage.controllerInstance;
 
 		if (controller) {
 			this._destroyExtensions();
 			this._destroyController();
-
-			this._pageStateManager.clear();
-			this._pageRenderer.unmount();
-			this._clearManagedPageValue();
 		}
 	}
 
@@ -494,10 +519,9 @@ export default class AbstractPageManager extends PageManagerInterface {
 	 * Destroy last managed instance of controller.
 	 *
 	 * @protected
-	 * @method _destroyController
 	 */
 	_destroyController() {
-		var controller = this._managedPage.controllerInstance;
+		let controller = this._managedPage.controllerInstance;
 
 		controller.destroy();
 		controller.setPageStateManager(null);
@@ -507,26 +531,56 @@ export default class AbstractPageManager extends PageManagerInterface {
 	 * Destroy extensions for last managed instance of controller.
 	 *
 	 * @protected
-	 * @method _destroyExtensions
 	 */
 	_destroyExtensions() {
-		var controller = this._managedPage.controllerInstance;
+		let controller = this._managedPage.controllerInstance;
 
-		for (var extension of controller.getExtensions()) {
+		for (let extension of controller.getExtensions()) {
 			extension.destroy();
 			extension.setPageStateManager(null);
 		}
 	}
 
 	/**
+	 * The method clear state on current renderred component to DOM.
+	 *
+	 * @param {{
+	 *          onlyUpdate: (
+	 *            boolean|
+	 *            function(
+	 *              (string|function(new: ima.controller.Controller, ...*)),
+	 *              function(
+	 *                new: React.Component,
+	 *                Object<string, *>,
+	 *                ?Object<string, *>
+	 *              )
+	 *            ): boolean
+	 *          ),
+	 *          autoScroll: boolean,
+	 *          allowSPA: boolean,
+	 *          documentView: ?function(new: AbstractDocumentView),
+	 *          managedRootView: ?function(new: React.Component)
+	 *        }} options The current route options.
+	 */
+	_clearComponentState(options) {
+		let managedOptions = this._managedPage.options;
+
+		if (managedOptions &&
+			managedOptions.documentView === options.documentView &&
+				managedOptions.managedRootView === options.managedRootView) {
+			this._pageRenderer.clearState();
+		} else {
+			this._pageRenderer.unmount();
+		}
+	}
+
+	/**
 	 * On change event handler set state to view.
 	 *
-	 * @private
-	 * @method _onChangeStateHandler
 	 * @param {Object<string, *>} state
 	 */
 	_onChangeStateHandler(state) {
-		var controller = this._managedPage.controllerInstance;
+		let controller = this._managedPage.controllerInstance;
 
 		if (controller) {
 			this._pageRenderer.setState(state);
@@ -537,11 +591,23 @@ export default class AbstractPageManager extends PageManagerInterface {
 	 * Return true if manager has to update last managed controller and view.
 	 *
 	 * @protected
-	 * @method _hasOnlyUpdate
 	 * @param {string|function} controller
 	 * @param {string|function} view
-	 * @param {{onlyUpdate: (boolean|function), autoScroll: boolean,
- 	 *        allowSPA: boolean, documentView: ?ima.page.AbstractDocumentView}} options
+	 * @param {{
+	 *          onlyUpdate: (
+	 *            boolean|
+	 *            function(
+	 *              (string|function(new: Controller)),
+	 *              function(new: React.Component,
+	 *                Object<string, *>,
+	 *                ?Object<string, *>
+	 *              )
+	 *            ): boolean
+	 *          ),
+	 *          autoScroll: boolean,
+ 	 *          allowSPA: boolean,
+ 	 *          documentView: ?AbstractDocumentView
+ 	 *        }} options
 	 * @return {boolean}
 	 */
 	_hasOnlyUpdate(controller, view, options) {
@@ -562,9 +628,21 @@ export default class AbstractPageManager extends PageManagerInterface {
 	 * change page.
 	 *
 	 * @protected
-	 * @method _preManage
-	 * @param {{onlyUpdate: (boolean|function), autoScroll: boolean,
- 	 *        allowSPA: boolean, documentView: ?ima.page.AbstractDocumentView}} options
+	 * @param {{
+	 *          onlyUpdate: (
+	 *            boolean|
+	 *            function(
+	 *              (string|function(new: Controller)),
+	 *              function(new: React.Component,
+	 *                Object<string, *>,
+	 *                ?Object<string, *>
+	 *              )
+	 *            ): boolean
+	 *          ),
+	 *          autoScroll: boolean,
+ 	 *          allowSPA: boolean,
+ 	 *          documentView: ?AbstractDocumentView
+ 	 *        }} options
 	 */
 	_preManage(options) {
 		if (options.autoScroll) {
@@ -577,9 +655,21 @@ export default class AbstractPageManager extends PageManagerInterface {
 	 * changed page.
 	 *
 	 * @protected
-	 * @method _postManage
-	 * @param {{onlyUpdate: (boolean|function), autoScroll: boolean,
- 	 *        allowSPA: boolean, documentView: ?ima.page.AbstractDocumentView}} options
+	 * @param {{
+	 *          onlyUpdate: (
+	 *            boolean|
+	 *            function(
+	 *              (string|function(new: Controller)),
+	 *              function(new: React.Component,
+	 *                Object<string, *>,
+	 *                ?Object<string, *>
+	 *              )
+	 *            ): boolean
+	 *          ),
+	 *          autoScroll: boolean,
+ 	 *          allowSPA: boolean,
+ 	 *          documentView: ?AbstractDocumentView
+ 	 *        }} options
 	 */
 	_postManage(options) {}
 

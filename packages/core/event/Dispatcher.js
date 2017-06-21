@@ -1,4 +1,4 @@
-import ns from 'ima/namespace';
+import ns from '../namespace';
 
 ns.namespace('ima.event');
 
@@ -11,18 +11,14 @@ ns.namespace('ima.event');
  * propagate events from controllers to UI components when modifying/passing
  * the state is impractical for any reason.
  *
- * @interface Dispatcher
- * @namespace ima.event
- * @module ima
- * @submodule ima.event
+ * @interface
  */
 export default class Dispatcher {
 	/**
 	 * Deregisters all event listeners currently registered with this
 	 * dispatcher.
 	 *
-	 * @method clear
-	 * @return {ima.event.Dispatcher} This dispatcher.
+	 * @return {Dispatcher} This dispatcher.
 	 */
 	clear() {}
 
@@ -37,12 +33,11 @@ export default class Dispatcher {
 	 * and should not be relied upon. Registering the same listener for the
 	 * same event and with the same scope multiple times has no effect.
 	 *
-	 * @method listen
 	 * @param {string} event The name of the event to listen for.
 	 * @param {function(*)} listener The event listener to register.
 	 * @param {?Object=} scope The object to which the {@code this} keyword
 	 *        will be bound in the event listener.
-	 * @return {ima.event.Dispatcher} This dispatcher.
+	 * @return {Dispatcher} This dispatcher.
 	 */
 	listen(event, listener, scope = null) {}
 
@@ -50,13 +45,12 @@ export default class Dispatcher {
 	 * Deregisters the provided event listener, so it will no longer be
 	 * executed with the specified scope when the specified event is fired.
 	 *
-	 * @method unlisten
 	 * @param {string} event The name of the event for which the listener
 	 *        should be deregistered.
 	 * @param {function(*)} listener The event listener to deregister.
 	 * @param {?Object=} scope The object to which the {@code this} keyword
 	 *        would be bound in the event listener.
-	 * @return {ima.event.Dispatcher} This dispatcher.
+	 * @return {Dispatcher} This dispatcher.
 	 */
 	unlisten(event, listener, scope = null) {}
 
@@ -71,8 +65,6 @@ export default class Dispatcher {
 	 * data in any way. The order in which the event listeners will be executed
 	 * is unspecified and should not be relied upon.
 	 *
-	 * @chainable
-	 * @method fire
 	 * @param {string} event The name of the event to fire.
 	 * @param {Object<string, *>} data The data to pass to the event listeners.
 	 * @param {boolean=} [imaInternalEvent=false] The flag signalling whether
@@ -80,7 +72,7 @@ export default class Dispatcher {
 	 *        custom application event if this flag is not set.
 	 *        The flag is used only for debugging and has no effect on the
 	 *        propagation of the event.
-	 * @return {ima.event.Dispatcher} This dispatcher.
+	 * @return {Dispatcher} This dispatcher.
 	 */
 	fire(event, data, imaInternalEvent = false) {}
 }

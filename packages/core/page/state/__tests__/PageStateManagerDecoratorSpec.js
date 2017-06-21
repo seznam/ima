@@ -1,23 +1,21 @@
-describe('ima.page.state.PageStateManagerDecorator', function() {
-	var pageStateManager = oc.create('ima.page.state.PageStateManagerImpl');
-	var allowedStateKeys = ['allow'];
-	var decoratedPageStateManager = null;
-	var state = {
+import PageStateManager from 'page/state/PageStateManagerImpl';
+import PageStateManagerDecorator from 'page/state/PageStateManagerDecorator';
+
+describe('ima.page.state.PageStateManagerDecorator', () => {
+	let pageStateManager = null;
+	let allowedStateKeys = ['allow'];
+	let decoratedPageStateManager = null;
+	let state = {
 		allow: 1,
 		deny: 0
 	};
 
-	beforeEach(function() {
-		decoratedPageStateManager =
-			oc.create('ima.page.state.PageStateManagerDecorator',
-				[
-					pageStateManager,
-					allowedStateKeys
-				]
-			);
+	beforeEach(() => {
+		pageStateManager = new PageStateManager();
+		decoratedPageStateManager = new PageStateManagerDecorator(pageStateManager, allowedStateKeys);
 	});
 
-	it('should call method clear', function() {
+	it('should call method clear', () => {
 		spyOn(pageStateManager, 'clear')
 			.and
 			.stub();
@@ -27,7 +25,7 @@ describe('ima.page.state.PageStateManagerDecorator', function() {
 		expect(pageStateManager.clear).toHaveBeenCalled();
 	});
 
-	it('should return current page state', function() {
+	it('should return current page state', () => {
 		spyOn(pageStateManager, 'getState')
 			.and
 			.returnValue(state);
@@ -37,7 +35,7 @@ describe('ima.page.state.PageStateManagerDecorator', function() {
 		expect(decoratedPageStateManager.getState()).toEqual(state);
 	});
 
-	it('should return all history of states', function() {
+	it('should return all history of states', () => {
 		spyOn(pageStateManager, 'getAllStates')
 			.and
 			.returnValue([state]);
@@ -45,16 +43,16 @@ describe('ima.page.state.PageStateManagerDecorator', function() {
 		expect(decoratedPageStateManager.getAllStates()).toEqual([state]);
 	});
 
-	describe('setState method', function() {
+	describe('setState method', () => {
 
-		it('should throw IMAError for at least one deny key', function() {
-			expect(function() {
+		it('should throw GenericError for at least one deny key', () => {
+			expect(() => {
 				decoratedPageStateManager.setState({ deny: 1 });
 			}).toThrow();
 		});
 
-		it('should setState for all allowed keys', function() {
-			var patchState = {
+		it('should setState for all allowed keys', () => {
+			let patchState = {
 				allow: 0
 			};
 

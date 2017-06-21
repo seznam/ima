@@ -1,22 +1,24 @@
-describe('ima.event.DispatcherImpl', function() {
+import Dispatcher from 'event/DispatcherImpl';
 
-	var handlers = {
-		handler1: function() {},
-		handler2: function() {}
+describe('ima.event.DispatcherImpl', () => {
+
+	let handlers = {
+		handler1: () => {},
+		handler2: () => {}
 	};
 
-	var event = 'event';
-	var data = {
+	let event = 'event';
+	let data = {
 		data: 'data'
 	};
 
-	var dispatcher = null;
-	beforeEach(function() {
-		dispatcher = oc.create('ima.event.DispatcherImpl');
+	let dispatcher = null;
+	beforeEach(() => {
+		dispatcher = new Dispatcher();
 	});
 
-	describe('listen method', function() {
-		it('should add handler for event', function() {
+	describe('listen method', () => {
+		it('should add handler for event', () => {
 
 			dispatcher.listen(event, handlers.handler1);
 			dispatcher.listen(event, handlers.handler2);
@@ -25,7 +27,7 @@ describe('ima.event.DispatcherImpl', function() {
 			expect(dispatcher._eventListeners.get(event).get(handlers.handler2).size).toEqual(1);
 		});
 
-		it('should add handler with their scope for event', function() {
+		it('should add handler with their scope for event', () => {
 
 			dispatcher.listen(event, handlers.handler1, handlers);
 			dispatcher.listen(event, handlers.handler2, handlers);
@@ -34,26 +36,26 @@ describe('ima.event.DispatcherImpl', function() {
 			expect(dispatcher._eventListeners.get(event).get(handlers.handler2).size).toEqual(1);
 		});
 
-		it('should throw error if handler isnt function', function() {
-			expect(function() {
+		it('should throw error if handler isnt function', () => {
+			expect(() => {
 				dispatcher.listen(event, 'string');
 			}).toThrow();
-			expect(function() {
+			expect(() => {
 				dispatcher.listen(event, 1);
 			}).toThrow();
-			expect(function() {
+			expect(() => {
 				dispatcher.listen(event, {});
 			}).toThrow();
 		});
 	});
 
-	describe('unlisten method', function() {
+	describe('unlisten method', () => {
 
-		beforeEach(function() {
+		beforeEach(() => {
 			dispatcher.clear();
 		});
 
-		it('should remove handler for event', function() {
+		it('should remove handler for event', () => {
 			dispatcher.listen(event, handlers.handler1);
 			dispatcher.listen(event, handlers.handler2);
 
@@ -62,7 +64,7 @@ describe('ima.event.DispatcherImpl', function() {
 			expect(dispatcher._eventListeners.get(event).size).toEqual(1);
 		});
 
-		it('should remove handler with their scope for event', function() {
+		it('should remove handler with their scope for event', () => {
 			dispatcher.listen(event, handlers.handler1, handlers);
 			dispatcher.listen(event, handlers.handler2, handlers);
 
@@ -71,25 +73,25 @@ describe('ima.event.DispatcherImpl', function() {
 			expect(dispatcher._eventListeners.get(event).size).toEqual(1);
 		});
 
-		it('should remove handler with their scope for event, if scope is not changing', function() {
+		it('should remove handler with their scope for event, if scope is not changing', () => {
 			dispatcher.listen(event, handlers.handler1, handlers);
 			dispatcher.unlisten(event, handlers.handler1, handlers);
 
 			expect(dispatcher._eventListeners.get(event)).toBeUndefined();
 		});
 
-		it('should remove handler with their scope for event, if scope is changing', function() {
+		it('should remove handler with their scope for event, if scope is changing', () => {
 
 			dispatcher.listen(event, handlers.handler1, handlers);
 
-			handlers.handler3 = function() {};
+			handlers.handler3 = () => {};
 
 			dispatcher.unlisten(event, handlers.handler1, handlers);
 
 			expect(dispatcher._eventListeners.get(event)).toBeUndefined();
 		});
 
-		it('should show warning for undefined event', function() {
+		it('should show warning for undefined event', () => {
 			spyOn(console, 'warn')
 				.and
 				.stub();
@@ -99,7 +101,7 @@ describe('ima.event.DispatcherImpl', function() {
 			expect(console.warn).toHaveBeenCalled();
 		});
 
-		it('should show warning for undefined handler for event', function() {
+		it('should show warning for undefined handler for event', () => {
 			spyOn(console, 'warn')
 				.and
 				.stub();
@@ -111,8 +113,8 @@ describe('ima.event.DispatcherImpl', function() {
 		});
 	});
 
-	describe('fire method', function() {
-		it('should fire event for handlers', function() {
+	describe('fire method', () => {
+		it('should fire event for handlers', () => {
 			spyOn(handlers, 'handler1');
 			spyOn(handlers, 'handler2');
 
@@ -125,7 +127,7 @@ describe('ima.event.DispatcherImpl', function() {
 			expect(handlers.handler2).toHaveBeenCalledWith(data);
 		});
 
-		it('should show warning for none listeners', function() {
+		it('should show warning for none listeners', () => {
 			spyOn(console, 'warn')
 				.and
 				.stub();
@@ -135,7 +137,7 @@ describe('ima.event.DispatcherImpl', function() {
 			expect(console.warn).toHaveBeenCalled();
 		});
 
-		it('should not show warning for $IMA internal event', function() {
+		it('should not show warning for $IMA internal event', () => {
 			spyOn(console, 'warn')
 				.and
 				.stub();
@@ -146,8 +148,8 @@ describe('ima.event.DispatcherImpl', function() {
 		});
 	});
 
-	describe('clear method', function() {
-		it('should cleared dispatcher', function() {
+	describe('clear method', () => {
+		it('should cleared dispatcher', () => {
 			dispatcher.listen(event, handlers.handler1, handlers);
 			dispatcher.listen(event, handlers.handler2, handlers);
 

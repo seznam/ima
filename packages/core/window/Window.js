@@ -1,4 +1,4 @@
-import ns from 'ima/namespace';
+import ns from '../namespace';
 
 ns.namespace('ima.window');
 
@@ -7,17 +7,13 @@ ns.namespace('ima.window');
  * cross-environment usage of various low-level client-side JavaScript APIs
  * available through various global objects.
  *
- * @interface Window
- * @namespace ima.window
- * @module ima
- * @submodule ima.window
+ * @interface
  */
 export default class Window {
 
 	/**
 	 * Returns {@code true} if invoked at the client side.
 	 *
-	 * @method isClient
 	 * @return {boolean} {@code true} if invoked at the client side.
 	 */
 	isClient() {}
@@ -26,7 +22,6 @@ export default class Window {
 	 * Returns {@code true} if the cookies are set and processed with every
 	 * HTTP request and response automatically by the environment.
 	 *
-	 * @method isCookieEnabled
 	 * @return {boolean} {@code true} if cookies are handled automatically by
 	 *         the environment.
 	 */
@@ -35,7 +30,6 @@ export default class Window {
 	/**
 	 * Returns {@code true} if the session storage is supported.
 	 *
-	 * @method hasSessionStorage
 	 * @return {boolean} {@code true} if the session storage is supported.
 	 */
 	hasSessionStorage() {}
@@ -43,7 +37,8 @@ export default class Window {
 	/**
 	 * Returns {@code true} if the WebSockets are supported.
 	 *
-	 * @method hasWebSocket
+	 * @deprecated All browsers currently supported by IMA.js support web
+	 *             sockets.
 	 * @return {boolean} {@code true} if the WebSockets are supported.
 	 */
 	hasWebSocket() {}
@@ -51,7 +46,9 @@ export default class Window {
 	/**
 	 * Returns {@code true} if the history manipulation API is supported.
 	 *
-	 * @method hasHistoryAPI
+	 * @deprecated The history API should never be manipulated directly in an
+	 *             IMA.js application, and all browsers supported by IMA.js
+	 *             support the history API.
 	 * @return {boolean} {@code true} if the history manipulation API is
 	 *         supported.
 	 */
@@ -60,7 +57,6 @@ export default class Window {
 	/**
 	 * Sets the new page title of the document.
 	 *
-	 * @method setTitle
 	 * @param {string} title The new page title.
 	 */
 	setTitle(title) {}
@@ -68,7 +64,10 @@ export default class Window {
 	/**
 	 * Returns the current {@code WebSocket} implementation to use.
 	 *
-	 * @method getWebSocket
+	 * @deprecated All browsers currently supported by IMA.js support web
+	 *             sockets, but when used at the server-side, this method
+	 *             should fail unless web sockets are polyfilled by a 3rd party
+	 *             library.
 	 * @return {function(new: WebSocket)} The current {@code WebSocket}
 	 *         implementation.
 	 */
@@ -79,16 +78,25 @@ export default class Window {
 	 * at the client-side. The method returns {@code undefined} if used at the
 	 * server-side.
 	 *
-	 * @method getWindow
 	 * @return {(undefined|Window)} The {@code window} object at the
 	 *         client-side, or {@code undefined} at the server-side.
 	 */
 	getWindow() {}
 
 	/**
+	 * Returns the native {@code document} object representing any web page loaded
+	 * in the browser and serves as an entry point into the web page's content
+	 * which is the DOM tree at the client-side. The method returns {@code undefined}
+	 * if used at the server-side.
+	 *
+	 * @return {(undefined|Document)} The {@code document} object at the
+	 *         client-side, or {@code undefined} at the server-side.
+	 */
+	getDocument() {}
+
+	/**
 	 * Returns the number of pixels the viewport is scrolled horizontally.
 	 *
-	 * @method getScrollX
 	 * @return {number} The number of pixels the viewport is scrolled
 	 *         horizontally.
 	 */
@@ -97,7 +105,6 @@ export default class Window {
 	/**
 	 * Returns the number of pixels the document is scrolled vertically.
 	 *
-	 * @method getScrollY
 	 * @return {number} The number of pixels the document is scrolled
 	 *         vertically.
 	 */
@@ -106,7 +113,6 @@ export default class Window {
 	/**
 	 * Scrolls the viewport to the specified location (if possible).
 	 *
-	 * @method scrollTo
 	 * @param {number} x Horizontal scroll offset in pixels.
 	 * @param {number} y Vertical scroll offset in pixels.
 	 */
@@ -116,7 +122,6 @@ export default class Window {
 	 * Returns the domain of the current document's URL as
 	 * {@code `${protocol}://${host}`}.
 	 *
-	 * @method getDomain
 	 * @return {string} The current domain.
 	 */
 	getDomain() {}
@@ -124,7 +129,6 @@ export default class Window {
 	/**
 	 * Returns the application's host.
 	 *
-	 * @method getHost
 	 * @return {string} The current host.
 	 */
 	getHost() {}
@@ -132,7 +136,6 @@ export default class Window {
 	/**
 	 * Returns the path part of the current URL, including the query string.
 	 *
-	 * @method getPath
 	 * @return {string} The path and query string parts of the current URL.
 	 */
 	getPath() {}
@@ -140,7 +143,6 @@ export default class Window {
 	/**
 	 * Returns the current document's URL.
 	 *
-	 * @method getUrl
 	 * @return {string} The current document's URL.
 	 */
 	getUrl() {}
@@ -149,7 +151,6 @@ export default class Window {
 	 * Returns the document's body element. The method returns
 	 * {@code undefined} if invoked at the server-side.
 	 *
-	 * @method getBody
 	 * @return {(undefined|HTMLBodyElement)} The document's body element, or
 	 *         {@code undefined} if invoked at the server side.
 	 */
@@ -158,7 +159,6 @@ export default class Window {
 	/**
 	 * Returns the HTML element with the specified {@code id} attribute value.
 	 *
-	 * @method getElementById
 	 * @param {string} id The value of the {@code id} attribute to look for.
 	 * @return {?HTMLElement} The element with the specified id, or
 	 *         {@code null} if no such element exists.
@@ -168,7 +168,6 @@ export default class Window {
 	/**
 	 * Returns the first element matching the specified CSS 3 selector.
 	 *
-	 * @method querySelector
 	 * @param {string} selector The CSS selector.
 	 * @return {?HTMLElement} The first element matching the CSS selector or
 	 *         {@code null} if no such element exists.
@@ -179,7 +178,6 @@ export default class Window {
 	 * Returns a node list of all elements matching the specified CSS 3
 	 * selector.
 	 *
-	 * @method querySelectorAll
 	 * @param {string} selector The CSS selector.
 	 * @return {NodeList} A node list containing all elements matching the
 	 *         specified CSS selector.
@@ -190,7 +188,6 @@ export default class Window {
 	 * Performs a hard redirect (discarding the current JavaScript state) to
 	 * the specified URL.
 	 *
-	 * @method redirect
 	 * @param {string} url The URL to which the browser will be redirected.
 	 */
 	redirect(url) {}
@@ -199,7 +196,6 @@ export default class Window {
 	 * Pushes a new state to the browser history. The method has no effect if
 	 * the current browser does not support the history API (IE9).
 	 *
-	 * @method pushState
 	 * @param {Object<string, *>} state A state object associated with the
 	 *        history item, preferably representing the page state.
 	 * @param {string} title The page title related to the state. Note that
@@ -212,7 +208,6 @@ export default class Window {
 	 * Replaces the current history entry. The method has no effect if the
 	 * current browser does not support the history API (IE9).
 	 *
-	 * @method replaceState
 	 * @param {Object<string, *>} state A state object associated with the
 	 *        history item, preferably representing the page state.
 	 * @param {string} title The page title related to the state. Note that
@@ -225,7 +220,6 @@ export default class Window {
 	 * Create new instance of CustomEvent of the specified name and using the
 	 * provided options.
 	 *
-	 * @method createCustomEvent
 	 * @param {string} name Custom event's name (sometimes referred to as the
 	 *        event's type).
 	 * @param {Object<string, *>} options The custom event's options.
@@ -242,7 +236,6 @@ export default class Window {
 	 * target with the same {@code useCapture} flag value repeatedly has no
 	 * effect.
 	 *
-	 * @method bindEventListener
 	 * @param {EventTarget} eventTarget The event target.
 	 * @param {string} event The name of the event.
 	 * @param {function(Event)} listener The event listener.
@@ -262,7 +255,6 @@ export default class Window {
 	 * The method has no effect if the provided event listener is not
 	 * registered to be executed at the specified event.
 	 *
-	 * @method unbindEventListener
 	 * @param {EventTarget} eventTarget The event target.
 	 * @param {string} event The name of the event.
 	 * @param {function(Event)} listener The event listener.

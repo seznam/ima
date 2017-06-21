@@ -1,4 +1,11 @@
-describe('ima.router.ServerRouter', function() {
+import Dispatcher from 'event/Dispatcher';
+import PageManager from 'page/manager/PageManager';
+import Request from 'router/Request';
+import Response from 'router/Response';
+import RouteFactory from 'router/RouteFactory';
+import ServerRouter from 'router/ServerRouter';
+
+describe('ima.router.ServerRouter', () => {
 
 	var router = null;
 	var pageRenderer = null;
@@ -7,19 +14,18 @@ describe('ima.router.ServerRouter', function() {
 	var request = null;
 	var response = null;
 	var domain = 'http://locahlost:3002';
-	var ROUTER_CONSTANTS = oc.get('$ROUTER_CONSTANTS');
 
-	beforeEach(function() {
-		pageRenderer = oc.create('ima.page.manager.PageManager');
-		routeFactory = oc.create('$RouteFactory');
-		dispatcher = oc.create('ima.event.Dispatcher');
-		request = oc.create('ima.router.Request');
-		response = oc.create('ima.router.Response');
-		router = oc.create('ima.router.ServerRouter', [pageRenderer, routeFactory, dispatcher, ROUTER_CONSTANTS, request, response]);
+	beforeEach(() => {
+		pageRenderer = new PageManager();
+		routeFactory = new RouteFactory();
+		dispatcher = new Dispatcher();
+		request = new Request();
+		response = new Response();
+		router = new ServerRouter(pageRenderer, routeFactory, dispatcher, request, response);
 		router.init({ mode: router.MODE_SERVER, domain: domain });
 	});
 
-	it('should be return actual path', function() {
+	it('should be return actual path', () => {
 		spyOn(request, 'getPath')
 			.and
 			.returnValue('');
@@ -29,7 +35,7 @@ describe('ima.router.ServerRouter', function() {
 		expect(request.getPath).toHaveBeenCalled();
 	});
 
-	it('should be redirect to url', function() {
+	it('should be redirect to url', () => {
 		var url = domain + '/redirectUrl';
 		var options = { httpStatus: 303 };
 

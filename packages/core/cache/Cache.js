@@ -1,4 +1,4 @@
-import ns from 'ima/namespace';
+import ns from '../namespace';
 
 ns.namespace('ima.cache');
 
@@ -8,16 +8,11 @@ ns.namespace('ima.cache');
  * (CPU-heavy computation or networking) to speed up the application's
  * performance when the same information needs to be retrieved multiple times.
  *
- * @interface Cache
- * @namespace ima.cache
- * @module ima
- * @submodule ima.cache
+ * @interface
  */
 export default class Cache {
 	/**
 	 * Clears the cache by deleting all entries.
-	 *
-	 * @method clear
 	 */
 	clear() {}
 
@@ -28,7 +23,6 @@ export default class Cache {
 	 * The method always returns {@code false} if the cache is currently
 	 * disabled.
 	 *
-	 * @method has
 	 * @param {string} key The identifier of the cache entry.
 	 * @return {boolean} {@code true} if the cache is enabled, the entry exists
 	 *         and has not expired yet.
@@ -41,7 +35,6 @@ export default class Cache {
 	 * The method returns {@code null} if the specified entry does not exist,
 	 * has already expired, or the cache is currently disabled.
 	 *
-	 * @method get
 	 * @param {string} key The identifier of the cache entry.
 	 * @return {*} The value of the specified cache entry, or {@code null} if
 	 *         the entry is not available.
@@ -54,7 +47,6 @@ export default class Cache {
 	 *
 	 * The method has no effect if the cache is currently disabled.
 	 *
-	 * @method set
 	 * @param {string} key The identifier of the cache entry.
 	 * @param {*} value The cache entry value.
 	 * @param {?number=} ttl Cache entry time to live in milliseconds. The
@@ -68,7 +60,6 @@ export default class Cache {
 	 * Deletes the specified cache entry. The method has no effect if the entry
 	 * does not exist.
 	 *
-	 * @method delete
 	 * @param {string} key The identifier of the cache entry.
 	 */
 	delete(key) {}
@@ -82,8 +73,6 @@ export default class Cache {
 	 * Disabling the cache also clears all of its current entries.
 	 *
 	 * The method has no effect if the cache is already disabled.
-	 *
-	 * @method disable
 	 */
 	disable() {}
 
@@ -91,8 +80,6 @@ export default class Cache {
 	 * Enables the cache, allowing the retrieval of cache entries.
 	 *
 	 * The method has no effect if the cache is already enabled.
-	 *
-	 * @method enable
 	 */
 	enable() {}
 
@@ -101,7 +88,6 @@ export default class Cache {
 	 * obtained by parsing the result of this method are compatible with the
 	 * {@linkcode deserialize()} method.
 	 *
-	 * @method serialize
 	 * @return {string} A JSON string containing an object representing of the
 	 *         current state of this cache.
 	 */
@@ -112,7 +98,6 @@ export default class Cache {
 	 * present in this cache but not specified in the provided data will remain
 	 * in this cache intact.
 	 *
-	 * @method deserialize
 	 * @param {Object<string, {value: *, ttl: number}>} serializedData An
 	 *        object representing the state of the cache to load, obtained by
 	 *        parsing the JSON string returned by the {@codelink serialize}

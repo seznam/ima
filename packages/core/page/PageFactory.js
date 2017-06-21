@@ -1,85 +1,82 @@
-import ns from 'ima/namespace';
-import IMAError from 'ima/error/GenericError';
+import ns from '../namespace';
+import PageStateManager from './state/PageStateManager';
+import ObjectContainer from '../ObjectContainer';
+import Controller from '../controller/Controller';
+import GenericError from '../error/GenericError';
 
 ns.namespace('ima.page');
 
 /**
  * Factory for page.
- *
- * @class PageFactory
- * @namespace ima.page
- * @module ima
- * @submodule ima.page
- *
- * @requires ima.ObjectContainer
  */
 export default class PageFactory {
 
 	/**
-	 * @method constructor
-	 * @constructor
-	 * @param {ima.ObjectContainer} oc
+	 * Factory used by page management classes.
+	 *
+	 * @param {ObjectContainer} oc
 	 */
 	constructor(oc) {
 
 		/**
-		 * @property _oc
-		 * @private
-		 * @type {ima.ObjectContainer}
+		 * The current application object container.
+		 *
+		 * @type {ObjectContainer}
 		 */
 		this._oc = oc;
 	}
 
 	/**
-	 * Create new instance of ima.controller.Controller.
+	 * Create new instance of {@linkcode Controller}.
 	 *
-	 * @method createController
-	 * @param {string} controller
-	 * @return {ima.controller.Controller}
+	 * @param {(string|function(new:Controller))} controller
+	 * @return {Controller}
 	 */
 	createController(controller) {
-		var controllerInstantion = this._oc.create(controller);
+		let controllerInstance = this._oc.create(controller);
 
-		return controllerInstantion;
+		return controllerInstance;
 	}
 
 	/**
-	 * Create instance of view.
+	 * Retrieves the specified react component class.
 	 *
-	 * @method createView
-	 * @param {string|React.Component} view
-	 * @return {React.Component}
+	 * @param {(string|function(new: React.Component))} view The namespace
+	 *        referring to a react component class, or a react component class
+	 *        constructor.
+	 * @return {function(new: React.Component)} The react component class
+	 *         constructor.
 	 */
 	createView(view) {
 		if (typeof view === 'function') {
 			return view;
 		}
-		var classConstructor = this._oc.getConstructorOf(view);
+		let classConstructor = this._oc.getConstructorOf(view);
 
 		if (classConstructor) {
 			return classConstructor;
 		} else {
-			throw new IMAError(`ima.page.Factory:createView hasn't name ` +
-					`of view "${view}".`);
+			throw new GenericError(
+				`ima.page.Factory:createView hasn't name of view "${view}".`
+			);
 		}
 	}
 
 	/**
 	 * Returns decorated controller for ease setting seo params in controller.
 	 *
-	 * @method decorateController
-	 * @param {ima.controller.Controller} controller
-	 * @return {ima.controller.Controller}
+	 * @param {Controller} controller
+	 * @return {Controller}
 	 */
 	decorateController(controller) {
-		var metaManager = this._oc.get('$MetaManager');
-		var router = this._oc.get('$Router');
-		var dictionary = this._oc.get('$Dictionary');
-		var settings = this._oc.get('$Settings');
+		let metaManager = this._oc.get('$MetaManager');
+		let router = this._oc.get('$Router');
+		let dictionary = this._oc.get('$Dictionary');
+		let settings = this._oc.get('$Settings');
 
-		var decoratedController = this._oc.create(
-				'$ControllerDecorator',
-				[controller, metaManager, router, dictionary, settings]
+		let decoratedController = this._oc.create(
+			'$ControllerDecorator',
+			[controller, metaManager, router, dictionary, settings]
 		);
 
 		return decoratedController;
@@ -88,15 +85,14 @@ export default class PageFactory {
 	/**
 	 * Returns decorated page state manager for extension.
 	 *
-	 * @method decoratePageStateManager
-	 * @param {ima.page.state.PageStateManager} pageStateManager
-	 * @param {Array<string>} allowedStateKeys
-	 * @return {ima.page.state.PageStateManager}
+	 * @param {PageStateManager} pageStateManager
+	 * @param {string[]} allowedStateKeys
+	 * @return {PageStateManager}
 	 */
 	decoratePageStateManager(pageStateManager, allowedStateKeys) {
-		var decoratedPageStateManager = this._oc.create(
-				'$PageStateManagerDecorator',
-				[pageStateManager, allowedStateKeys]
+		let decoratedPageStateManager = this._oc.create(
+			'$PageStateManagerDecorator',
+			[pageStateManager, allowedStateKeys]
 		);
 
 		return decoratedPageStateManager;

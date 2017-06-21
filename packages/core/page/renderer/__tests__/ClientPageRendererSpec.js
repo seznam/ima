@@ -1,26 +1,44 @@
+jest.mock('page/renderer/PageRendererFactory');
+
+import Helper from 'ima-helpers';
+import Controller from 'controller/Controller';
+import ClientPageRenderer from 'page/renderer/ClientPageRenderer';
+import RendererFactory from 'page/renderer/PageRendererFactory';
+import Window from 'window/Window';
+
 describe('ima.page.renderer.ClientPageRenderer', function() {
 
-	var param1 = 'param1';
-	var param2 = 'param2';
-	var params = {
+	let param1 = 'param1';
+	let param2 = 'param2';
+	let params = {
 		param1: param1,
 		param2: Promise.resolve(param2)
 	};
+	let pageState = {
+		param1: param1,
+		param2: param2
+	};
 
-	var controller = new ns.ima.controller.Controller();
+	let controller = new Controller();
 	controller.getMetaManager = function() {};
-	var view = function() {};
+	let view = function() {};
 
-	var pageRenderer = null;
-	var $Helper = oc.get('$Helper');
-	var rendererFactory = oc.get('$PageRendererFactory');
-	var ReactDOM = {
+	let win = null;
+	let rendererFactory = null;
+	let pageRenderer = null;
+	let ReactDOM = {
 		unmountComponentAtNode: function() {},
 		render: function() {}
 	};
-	var settings = oc.get('$Settings');
-	var win = oc.get('$Window');
-	var routeOptions = {
+	let settings = {
+		$Page: {
+			$Render: {
+				scripts: [],
+				documentView: 'app.component.document.DocumentView'
+			}
+		}
+	};
+	let routeOptions = {
 		onlyUpdate: false,
 		autoScroll: false,
 		allowSPA: false,
@@ -28,7 +46,104 @@ describe('ima.page.renderer.ClientPageRenderer', function() {
 	};
 
 	beforeEach(function() {
-		pageRenderer = oc.create('ima.page.renderer.ClientPageRenderer', [rendererFactory, $Helper, ReactDOM, settings, win]);
+		rendererFactory = new RendererFactory();
+		win = new Window();
+		pageRenderer = new ClientPageRenderer(rendererFactory, Helper, ReactDOM, settings, win);
+	});
+
+	describe('mount method', function() {
+		beforeEach(function() {
+			spyOn(pageRenderer, '_separatePromisesAndValues')
+				.and
+				.returnValue({ values: { param1: params.param1 }, promises: { param2: params.param2 } });
+
+			spyOn(pageRenderer, '_updateMetaAttributes');
+			spyOn(pageRenderer, '_renderToDOM');
+		});
+
+		it('should set default page state values', function(done) {
+			spyOn(controller, 'setState');
+
+			pageRenderer
+				.mount(controller, view, params, routeOptions)
+				.then(function() {
+					expect(controller.setState).toHaveBeenCalledWith(pageState);
+					done();
+				})
+				.catch(function(error) {
+					console.error(error);
+					done(error);
+				});
+		});
+
+		it('should patch promises to state', function(done) {
+			spyOn(pageRenderer, '_patchPromisesToState');
+			pageRenderer._firstTime = false;
+
+			pageRenderer
+				.mount(controller, view, params, routeOptions)
+				.then(function() {
+					expect(pageRenderer._patchPromisesToState).toHaveBeenCalledWith(controller, { param2: params.param2 });
+					done();
+				})
+				.catch(function(error) {
+					console.error(error);
+					done(error);
+				});
+		});
+
+		it('should set page meta params', function(done) {
+			spyOn(controller, 'setMetaParams');
+			spyOn(controller, 'getState')
+				.and
+				.returnValue(pageState);
+
+			pageRenderer
+				.mount(controller, view, params, routeOptions)
+				.then(function() {
+					expect(controller.setMetaParams).toHaveBeenCalledWith(pageState);
+					done();
+				})
+				.catch(function(error) {
+					console.error(error);
+					done(error);
+				});
+		});
+
+		it('should update page meta attributes', function(done) {
+			pageRenderer
+				.mount(controller, view, params, routeOptions)
+				.then(function() {
+					expect(pageRenderer._updateMetaAttributes).toHaveBeenCalled();
+					done();
+				})
+				.catch(function(error) {
+					console.error(error);
+					done(error);
+				});
+		});
+
+		it('should return resolved promise with object of property content, status and pageState', function(done) {
+			spyOn(controller, 'getHttpStatus')
+				.and
+				.returnValue(200);
+
+			pageRenderer
+				.mount(controller, view, params, routeOptions)
+				.then(function(response) {
+					expect(response).toEqual({
+						status: 200,
+						content: null,
+						pageState: pageState
+					});
+					done();
+				})
+				.catch(function(error) {
+					console.error(error);
+					done(error);
+				});
+		});
+
 	});
 
 	describe('update method', function() {
@@ -54,7 +169,6 @@ describe('ima.page.renderer.ClientPageRenderer', function() {
 					console.error(error);
 					done(error);
 				});
-
 		});
 
 		it('should patch promises to state', function(done) {
@@ -101,6 +215,64 @@ describe('ima.page.renderer.ClientPageRenderer', function() {
 					console.error(error);
 					done(error);
 				});
+		});
+
+		it('should return resolved promise with object of property content, status and pageState', function(done) {
+			spyOn(controller, 'getHttpStatus')
+				.and
+				.returnValue(200);
+
+			pageRenderer
+				.update(controller, params)
+				.then(function(response) {
+					expect(response).toEqual({
+						status: 200,
+						content: null,
+						pageState: pageState
+					});
+					done();
+				})
+				.catch(function(error) {
+					console.error(error);
+					done(error);
+				});
+		});
+
+	});
+
+	describe('_renderToDOM method', function() {
+
+		let wrapedPageViewElement = { wrapElementView: 'wrapedPageViewElement' };
+		let documentView = {
+			masterElementId: 'id'
+		};
+		let htmlNode = {
+			type: 'div'
+		};
+
+		beforeEach(function() {
+			spyOn(ReactDOM, 'render')
+				.and
+				.stub();
+			spyOn(pageRenderer, '_getWrappedPageView')
+				.and
+				.returnValue(wrapedPageViewElement);
+			spyOn(pageRenderer, '_getDocumentView')
+				.and
+				.returnValue(documentView);
+			spyOn(win, 'getElementById')
+				.and
+				.returnValue(htmlNode);
+
+			let pageContent = pageRenderer._renderToDOM(controller, view, routeOptions);
+		});
+
+		it('should wrap page view', function() {
+			expect(pageRenderer._getWrappedPageView).toHaveBeenCalledWith(controller, view, routeOptions);
+		});
+
+		it('should render react component to defined element', function() {
+			expect(ReactDOM.render).toHaveBeenCalledWith(wrapedPageViewElement, htmlNode);
 		});
 
 	});

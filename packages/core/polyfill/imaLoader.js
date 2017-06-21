@@ -11,25 +11,49 @@
 
 	root.$IMA.Loader = {
 		modules: modules,
-		initializedModules: null,
 		register: function(moduleName, dependencies, moduleFactory) {
 			this.modules[moduleName] = {
 				dependencies: dependencies,
+				dependencyOf: [],
 				factory: moduleFactory,
 				instance: null
 			};
 		},
-		import: function(moduleName) {
-			if (!this.modules[moduleName]) {
-				throw new Error('$IMA.Loader.import: Module name ' +
-						moduleName + ' is not registered. Update your ' +
-						'build.js.');
+		replaceModule: function(moduleName, dependencies, moduleFactory) {
+			var moduleDescriptor = this.modules[moduleName];
+			if (!moduleDescriptor) {
+				throw new Error('You must register module "' + moduleName + '" at first.');
 			}
 
-			return Promise.resolve(resolveModule(moduleName));
+			Object.keys(this.modules).forEach(function(modulePath) {
+				var module = root.$IMA.Loader.modules[modulePath];
+
+				if (module.dependencies.indexOf(moduleName) > -1) {
+					module.instance = null;
+				}
+			});
+
+			moduleDescriptor.dependencies = dependencies;
+			moduleDescriptor.factory = moduleFactory;
+			moduleDescriptor.dependencyOf = [];
+			moduleDescriptor.instance = null;
+
+			return resolveModule(moduleName);
+		},
+		import: function(moduleName) {
+			return Promise.resolve(this.importSync(moduleName));
+		},
+		importSync: function(moduleName) {
+			if (!this.modules[moduleName]) {
+				throw new Error(
+					'$IMA.Loader.importSync: Module name ' + moduleName +
+					' is not registered. Update your build.js.'
+				);
+			}
+
+			return resolveModule(moduleName);
 		},
 		initAllModules: function() {
-
 			Object.keys(modules).forEach(function(moduleName) {
 				resolveModule(moduleName);
 			});
@@ -38,17 +62,25 @@
 		}
 	};
 
-	function resolveModule(moduleName, dependencyOf) {
+	function resolveModule(moduleName, dependencyOf, parentDependencySetter) {
 		if (!modules[moduleName]) {
-			throw new Error('$IMA.Loader.import: Module name ' +
-				moduleName + (
+			throw new Error(
+				'$IMA.Loader.import: Module name ' + moduleName + (
 					dependencyOf ?
-						(' (dependency of ' + dependencyOf + ')') :
-						''
-				) + ' is not registered. Update your build.js.');
+					(' (dependency of ' + dependencyOf + ')') :
+					''
+				) + ' is not registered. Update your build.js.'
+			);
 		}
 
 		var module = modules[moduleName];
+		if (
+			parentDependencySetter &&
+			module.dependencyOf.indexOf(parentDependencySetter) === -1
+		) {
+			// This is required for circular dependencies
+			module.dependencyOf.push(parentDependencySetter);
+		}
 		if (module.instance) {
 			return module.instance;
 		}
@@ -56,15 +88,19 @@
 		var moduleInstance = {};
 		var moduleInitializer = module.factory(function _export(key, value) {
 			moduleInstance[key] = value;
+			// The exported values have been updated, notify the modules that
+			// depend on this one - this is required for circular dependencies.
+			module.dependencyOf.forEach(function(dependencySetter) {
+				dependencySetter(moduleInstance);
+			});
 		});
 		module.instance = moduleInstance; // allow lazy circular dependencies
 
-		var dependencies = module.dependencies.map(function(dependencyName) {
+		module.dependencies.forEach(function(dependencyName, index) {
 			var resolvedName = resolveModuleName(moduleName, dependencyName);
-			return resolveModule(resolvedName, moduleName);
-		});
-		dependencies.forEach(function(dependency, index) {
-			moduleInitializer.setters[index](dependency);
+			var setter = moduleInitializer.setters[index];
+			var dependency = resolveModule(resolvedName, moduleName, setter);
+			setter(dependency);
 		});
 
 		moduleInitializer.execute();
@@ -85,9 +121,11 @@
 			}
 		} else if (referencedModule.substring(0, 3) === '../') {
 			if (currentModule.indexOf('/') === -1) {
-				throw new Error('The ' + currentModule + ' module imports ' +
-						'from the module ' + referencedModule + ' which may ' +
-						'reside outside of the application directory');
+				throw new Error(
+					'The ' + currentModule + ' module imports from the ' +
+					'module ' + referencedModule + ' which may reside ' +
+					'outside of the application directory'
+				);
 			}
 
 			modulePath = currentModule.substring(
@@ -108,9 +146,11 @@
 		}
 		while (modulePath.indexOf('../') > -1) {
 			if (modulePath.substring(0, 3) === '../') {
-				throw new Error('The ' + currentModule + ' module imports ' +
-						'from the module ' + referencedModule + ' which may ' +
-						'reside outside of the application directory');
+				throw new Error(
+					'The ' + currentModule + ' module imports from the ' +
+					'module ' + referencedModule + ' which may reside ' +
+					'outside of the application directory'
+				);
 			}
 			modulePath = modulePath.replace(/\/[^.][^/]*\/[.][.]\//g, '/');
 			modulePath = modulePath.replace(/^[^.][^/]*\/[.][.]\//g, '');

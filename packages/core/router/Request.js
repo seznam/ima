@@ -1,22 +1,18 @@
-import ns from 'ima/namespace';
+import ns from '../namespace';
 
 ns.namespace('ima.router');
 
 /**
- * Wrapper for the ExpressJS request, exposing only the neccessary minimum.
- *
- * @class Request
- * @namespace ima.router
- * @module ima
- * @submodule ima.router
+ * Wrapper for the ExpressJS request, exposing only the necessary minimum.
  */
 export default class Request {
 
+	static get $dependencies() {
+		return [];
+	}
+
 	/**
 	 * Initializes the request.
-	 *
-	 * @constructor
-	 * @method constructor
 	 */
 	constructor() {
 
@@ -24,10 +20,7 @@ export default class Request {
 		 * The current ExpressJS request object, or {@code null} if running at
 		 * the client side.
 		 *
-		 * @private
-		 * @property _request
 		 * @type {?Express.Request}
-		 * @default null
 		 */
 		this._request = null;
 	}
@@ -35,7 +28,6 @@ export default class Request {
 	/**
 	 * Initializes the request using the provided ExpressJS request object.
 	 *
-	 * @method init
 	 * @param {?Express.Request} request The ExpressJS request object
 	 *        representing the current request. Use {@code null} at the client
 	 *        side.
@@ -47,7 +39,6 @@ export default class Request {
 	/**
 	 * Returns the path part of the URL to which the request was made.
 	 *
-	 * @method getPath
 	 * @return {string} The path to which the request was made.
 	 */
 	getPath() {
@@ -57,7 +48,6 @@ export default class Request {
 	/**
 	 * Returns the {@code Cookie} HTTP header value.
 	 *
-	 * @method getCookieHeader
 	 * @return {string} The value of the {@code Cookie} header.
 	 */
 	getCookieHeader() {
@@ -67,7 +57,6 @@ export default class Request {
 	/**
 	 * Returns uploaded file to server and meta information.
 	 *
-	 * @method getFile
 	 * @return {?Object<string, *>}
 	 */
 	getFile() {
@@ -77,7 +66,6 @@ export default class Request {
 	/**
 	 * Returns upaloaded files to server with their meta information.
 	 *
-	 * @method getFiles
 	 * @return {?Object<string, *>}
 	 */
 	getFiles() {
@@ -87,7 +75,6 @@ export default class Request {
 	/**
 	 * Returns body of request.
 	 *
-	 * @method getBody
 	 * @return {?string}
 	 */
 	getBody() {
@@ -97,7 +84,6 @@ export default class Request {
 	/**
 	 * Returns the specified HTTP request header.
 	 *
-	 * @method getHeader
 	 * @param {string} header
 	 * @return {?string}
 	 */
@@ -108,7 +94,6 @@ export default class Request {
 	/**
 	 * Returns the remote IP address of the request.
 	 *
-	 * @method getIP
 	 * @return {?string}
 	 */
 	getIP() {
@@ -119,8 +104,7 @@ export default class Request {
 	 * Returns array of IP addresses specified in the “X-Forwarded-For”
 	 * request header.
 	 *
-	 * @method getIPs
-	 * @return {Array<string>}
+	 * @return {string[]}
 	 */
 	getIPs() {
 		return this._request ? this._request.ips || [] : [];

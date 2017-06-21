@@ -4,7 +4,7 @@
  * Utility for linking vendor node modules with the application by exporting
  * them to the IMA loader's modules.
  */
-class VendorLinker {
+export class VendorLinker {
 	/**
 	 * Initializes the vendor linker.
 	 */
@@ -12,18 +12,14 @@ class VendorLinker {
 		/**
 		 * Internal storage of loaded modules.
 		 *
-		 * @private
-		 * @property _modules
-		 * @type {Map}
+		 * @type {Map<string, Object<string, *>>}
 		 */
 		this._modules = new Map();
 
 		/**
 		 * Internal storage of loaded IMA plugins.
 		 *
-		 * @private
-		 * @property _plugins
-		 * @type {Array<Object<string, *>>}
+		 * @type {Object<string, *>[]}
 		 */
 		this._plugins = [];
 	}
@@ -33,7 +29,6 @@ class VendorLinker {
 	 * vendor linker, and registers an IMA loader module of the same name,
 	 * exporting the same values.
 	 *
-	 * @method set
 	 * @param {string} moduleName The name of the module.
 	 * @param {Object<string, *>} moduleValues Values exported from the module.
 	 */
@@ -62,7 +57,6 @@ class VendorLinker {
 	 * Returns the provided vendor node module from the internal registry of this
 	 * vendor linker.
 	 *
-	 * @method get
 	 * @param {string} moduleName The name of the module.
 	 * @param {?boolean} [imaInternalModule]
 	 * @return {Object<string, *>} moduleValues Values exported from the module.
@@ -80,7 +74,6 @@ class VendorLinker {
 	 * Binds the vendor modules loaded in this vendor linker to the
 	 * {@code Vendor} sub-namespace of the provided namespace.
 	 *
-	 * @method bindToNamespace
 	 * @param {Namespace} ns The namespace to which the vendor modules should
 	 *        be bound.
 	 */
@@ -100,7 +93,6 @@ class VendorLinker {
 	/**
 	 * Returns the loaded IMA plugins as an array of export objects.
 	 *
-	 * @method getImaPlugins
 	 * @return {Array<Object<string, *>>} The loaded IMA plugins.
 	 */
 	getImaPlugins() {
@@ -108,14 +100,4 @@ class VendorLinker {
 	}
 }
 
-let vendorLinker = new VendorLinker();
-
-module.exports = vendorLinker;
-$IMA.Loader.register('ima/vendorLinker', [], (exports) => {
-	return {
-		setters: [],
-		execute: () => {
-			exports('default', vendorLinker);
-		}
-	};
-});
+export default new VendorLinker();

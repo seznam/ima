@@ -1,10 +1,12 @@
 {
 	"name": "ima",
-	"version": "0.13.4",
+	"version": "0.14.0-rc.26",
 	"description": "IMA.js framework for isomorphic javascript application",
-	"main": "",
+	"main": "main.js",
 	"scripts": {
-		"test": "echo \"Error: no test specified\" && exit 1"
+		"test": "node_modules/.bin/jest",
+		"publish-package": "npm test && npm run build && npm publish dist",
+		"build": "node node_modules/gulp/bin/gulp.js build"
 	},
 	"keywords": [
 		"IMA",
@@ -13,16 +15,13 @@
 		"Javascript"
 	],
 	"author": "Miroslav Jancarik <miroslav.jancarik@firma.seznam.cz>",
-	"contributors": [
-		{
-			"name": "Martin Urban",
-			"email": "martin.urban@firma.seznam.cz"
-		},
-		{
-			"name": "Martin Jurča",
-			"email": "martin.jurca@firma.seznam.cz"
-		}
-	],
+	"contributors": [{
+		"name": "Martin Urban",
+		"email": "martin.urban@firma.seznam.cz"
+	}, {
+		"name": "Martin Jurča",
+		"email": "martin.jurca@firma.seznam.cz"
+	}],
 	"repository": {
 		"type": "git",
 		"url": "https://github.com/seznam/IMA.js-core.git"
@@ -34,20 +33,49 @@
 		"registry": "http://registry.npmjs.org/"
 	},
 	"license": "MIT",
-	"devDependencies": {},
+	"devDependencies": {
+		"babel-plugin-transform-es2015-modules-commonjs": "6.24.1",
+		"del": "3.0.0",
+		"eslint": "3.19.0",
+		"eslint-plugin-react": "7.0.1",
+		"gulp": "github:gulpjs/gulp#c120a94",
+		"gulp-babel": "6.1.2",
+		"gulp-plumber": "1.1.0",
+		"gulp-tap": "1.0.1",
+		"jest": "20.0.4",
+		"jsdom": "11.0.0",
+		"to-mock": "1.0.0"
+	},
 	"dependencies": {
-		"babel-polyfill": "^6.9.1",
-		"custom-event-polyfill": "^0.2.2",
-		"ima-babel6-polyfill": "^0.12.0",
-		"ima-helpers": "^0.13.0",
-		"react": "^15.2.1",
-		"react-addons-test-utils": "^15.2.1",
-		"react-dom": "^15.2.1",
-		"superagent": "^2.1.0"
+		"babel-polyfill": "6.23.0",
+		"classnames": "2.2.5",
+		"custom-event-polyfill": "0.3.0",
+		"enzyme": "2.8.2",
+		"ima-helpers": "0.14.0-rc.2",
+		"prop-types": "15.5.10",
+		"react": "15.6.1",
+		"react-addons-test-utils": "15.6.0",
+		"react-dom": "15.6.1",
+		"react-test-renderer": "15.6.1",
+		"superagent": "3.5.2"
 	},
 	"browserify": {
 		"transform": [
 			"babelify"
 		]
+	},
+	"jest": {
+		"bail": false,
+		"verbose": true,
+		"testEnvironment": "node",
+		"setupFiles": [
+			"./test.js",
+			"./polyfill/imaLoader.js",
+			"./polyfill/imaRunner.js"
+		],
+		"modulePaths": [
+			"<rootDir>/"
+		],
+		"testRegex": "(/__tests__/.*|(\\.|/)(Spec))\\.jsx?$"
 	}
 }

@@ -1,24 +1,19 @@
-// @server-side
-
-import ns from 'ima/namespace';
-import WindowInterface from 'ima/window/Window';
+import ns from '../namespace';
+import Window from './Window';
 
 ns.namespace('ima.window');
 
 /**
- * Server-side implementation of the {@code ima.window.Window} utility API.
- *
- * @class ServerWindow
- * @implements ns.ima.window.Window
- * @namespace ima.window
- * @module ima
- * @submodule ima.window
+ * Server-side implementation of the {@code Window} utility API.
  */
-export default class ServerWindow extends WindowInterface {
+export default class ServerWindow extends Window {
+
+	static get $dependencies() {
+		return [];
+	}
 
 	/**
 	 * @inheritdoc
-	 * @method isClient
 	 */
 	isClient() {
 		return false;
@@ -26,7 +21,6 @@ export default class ServerWindow extends WindowInterface {
 
 	/**
 	 * @inheritdoc
-	 * @method isCookieEnabled
 	 */
 	isCookieEnabled() {
 		return false;
@@ -34,7 +28,6 @@ export default class ServerWindow extends WindowInterface {
 
 	/**
 	 * @inheritdoc
-	 * @method hasSessionStorage
 	 */
 	hasSessionStorage() {
 		return false;
@@ -42,31 +35,46 @@ export default class ServerWindow extends WindowInterface {
 
 	/**
 	 * @inheritdoc
-	 * @method hasWebSocket
 	 */
 	hasWebSocket() {
+		console.warn(
+			'DEPRECATION WARNING: All browsers currently supported by ' +
+			'IMA.js support web sockets and the web sockets should not be ' +
+			'used at the server-side unless polyfilled.'
+		);
 		return false;
 	}
 
 	/**
 	 * @inheritdoc
-	 * @method hasHistoryAPI
 	 */
 	hasHistoryAPI() {
+		console.warn(
+			'DEPRECATION WARNING: The history API should never be ' +
+			'manipulated directly in an IMA.js application, and all ' +
+			'browsers supported by IMA.js support the history API. The ' +
+			'history API should not be used at the server-side anyway.'
+		);
 		return false;
 	}
 
 	/**
 	 * @inheritdoc
-	 * @method setTitle
 	 */
 	setTitle(title) {}
 
 	/**
 	 * @inheritdoc
-	 * @method getWebSocket
 	 */
 	getWebSocket() {
+		console.warn(
+			'DEPRECATION WARNING: All browsers currently supported by ' +
+			'IMA.js support web sockets, this helper should not be used. ' +
+			'When used at the server-side, this method should fail unless ' +
+			'web sockets are polyfilled by a 3rd party library, but it ' +
+			'always returns a dummy web socket-like object.'
+		);
+
 		class DummyWebSocket {
 			open() {}
 			close() {}
@@ -78,7 +86,6 @@ export default class ServerWindow extends WindowInterface {
 
 	/**
 	 * @inheritdoc
-	 * @method getWindow
 	 */
 	getWindow() {
 		return undefined;
@@ -86,7 +93,13 @@ export default class ServerWindow extends WindowInterface {
 
 	/**
 	 * @inheritdoc
-	 * @method getScrollX
+	 */
+	getDocument() {
+		return undefined;
+	}
+
+	/**
+	 * @inheritdoc
 	 */
 	getScrollX() {
 		return 0;
@@ -94,7 +107,6 @@ export default class ServerWindow extends WindowInterface {
 
 	/**
 	 * @inheritdoc
-	 * @method getScrollY
 	 */
 	getScrollY() {
 		return 0;
@@ -102,13 +114,11 @@ export default class ServerWindow extends WindowInterface {
 
 	/**
 	 * @inheritdoc
-	 * @method scrollTo
 	 */
 	scrollTo(x, y) {}
 
 	/**
 	 * @inheritdoc
-	 * @method getDomain
 	 */
 	getDomain() {
 		return '';
@@ -116,7 +126,6 @@ export default class ServerWindow extends WindowInterface {
 
 	/**
 	 * @inheritdoc
-	 * @method getHost
 	 */
 	getHost() {
 		return '';
@@ -124,7 +133,6 @@ export default class ServerWindow extends WindowInterface {
 
 	/**
 	 * @inheritdoc
-	 * @method getPath
 	 */
 	getPath() {
 		return '';
@@ -132,7 +140,6 @@ export default class ServerWindow extends WindowInterface {
 
 	/**
 	 * @inheritdoc
-	 * @method getUrl
 	 */
 	getUrl() {
 		return '';
@@ -140,7 +147,6 @@ export default class ServerWindow extends WindowInterface {
 
 	/**
 	 * @inheritdoc
-	 * @method getBody
 	 */
 	getBody() {
 		return undefined;
@@ -148,7 +154,6 @@ export default class ServerWindow extends WindowInterface {
 
 	/**
 	 * @inheritdoc
-	 * @method getElementById
 	 */
 	getElementById(id) {
 		return null;
@@ -156,7 +161,6 @@ export default class ServerWindow extends WindowInterface {
 
 	/**
 	 * @inheritdoc
-	 * @method querySelector
 	 */
 	querySelector(selector) {
 		return null;
@@ -164,7 +168,6 @@ export default class ServerWindow extends WindowInterface {
 
 	/**
 	 * @inheritdoc
-	 * @method querySelectorAll
 	 */
 	querySelectorAll(selector) {
 		class DummyNodeList {
@@ -182,41 +185,35 @@ export default class ServerWindow extends WindowInterface {
 
 	/**
 	 * @inheritdoc
-	 * @method redirect
 	 */
 	redirect(url) {}
 
 	/**
 	 * @inheritdoc
-	 * @method pushState
 	 */
 	pushState(state, title, url) {}
 
 	/**
 	 * @inheritdoc
-	 * @method replaceState
 	 */
 	replaceState(state, title, url) {}
 
 	/**
 	 * @inheritdoc
-	 * @method createCustomEvent
 	 */
 	createCustomEvent(name, options) {
-		var dummyCustomEvent = { initCustomEvent: () => {}, detail: {} };
+		let dummyCustomEvent = { initCustomEvent: () => {}, detail: {} };
 
 		return Object.assign(dummyCustomEvent, options);
 	}
 
 	/**
 	 * @inheritdoc
-	 * @method bindEventListener
 	 */
 	bindEventListener(eventTarget, event, listener, useCapture = false) {}
 
 	/**
 	 * @inheritdoc
-	 * @method unbindEventListener
 	 */
 	unbindEventListener(eventTarget, event, listener, useCapture = false) {}
 }

@@ -1,17 +1,35 @@
-// @server-side
-
-import ns from 'ima/namespace';
-import IMAError from 'ima/error/GenericError';
-import AbstractPageRenderer from 'ima/page/renderer/AbstractPageRenderer';
+import ns from '../../namespace';
+import AbstractPageRenderer from './AbstractPageRenderer';
+import PageRenderer from './PageRenderer';
+import PageRendererFactory from './PageRendererFactory';
+import Cache from '../../cache/Cache';
+import AbstractController from '../../controller/AbstractController';
+import GenericError from '../../error/GenericError';
+import Response from '../../router/Response';
 
 ns.namespace('ima.page.renderer');
+
+let imaLoader = '';
+let imaRunner = '';
+
+if ((typeof window === 'undefined') || (window === null)) {
+	let nodeFs = 'fs';
+	let nodePath = 'path';
+	let fs = require(nodeFs);
+	let path = require(nodePath);
+	let folder = path.dirname(require.resolve('../../'));
+
+	imaLoader = fs.readFileSync(`${folder}/polyfill/imaLoader.js`, 'utf8');
+	imaRunner = fs.readFileSync(`${folder}/polyfill/imaRunner.js`, 'utf8');
+}
 
 /**
  * Server-side page renderer. The renderer renders the page into the HTML
  * markup and sends it to the client.
  *
  * @class ServerPageRenderer
- * @extends ima.page.renderer.AbstractPageRenderer
+ * @extends AbstractPageRenderer
+ * @implements PageRenderer
  * @namespace ima.page.renderer
  * @module ima
  * @submodule ima.page
@@ -21,19 +39,16 @@ export default class ServerPageRenderer extends AbstractPageRenderer {
 	/**
 	 * Initializes the server-side page renderer.
 	 *
-	 * @method contructor
-	 * @constructor
-	 * @param {ima.page.renderer.PageRendererFactory} factory Factory for receive $Utils to
-	 *        view.
+	 * @param {PageRendererFactory} factory Factory for receive $Utils to view.
 	 * @param {vendor.$Helper} Helper The IMA.js helper methods.
 	 * @param {vendor.ReactDOMServer} ReactDOMServer React framework instance
 	 *        to use to render the page on the server side.
 	 * @param {Object<string, *>} settings Application setting for the current
 	 *        application environment.
-	 * @param {ima.router.Response} response Utility for sending the page
-	 *        markup to the client as a response to the current HTTP request.
-	 * @param {ima.cache.Cache} cache Resource cache caching the results
-	 *        of HTTP requests made by services used by the rendered page.
+	 * @param {Response} response Utility for sending the page markup to the
+	 *        client as a response to the current HTTP request.
+	 * @param {Cache} cache Resource cache caching the results of HTTP requests
+	 *        made by services used by the rendered page.
 	 */
 	constructor(factory, Helper, ReactDOMServer, settings, response, cache) {
 		super(factory, Helper, ReactDOMServer, settings);
@@ -42,9 +57,7 @@ export default class ServerPageRenderer extends AbstractPageRenderer {
 		 * Utility for sending the page markup to the client as a response to
 		 * the current HTTP request.
 		 *
-		 * @private
-		 * @property _response
-		 * @type {ima.router.Response}
+		 * @type {Response}
 		 */
 		this._response = response;
 
@@ -54,9 +67,7 @@ export default class ServerPageRenderer extends AbstractPageRenderer {
 		 * then be serialized and sent to the client to re-initialize the page
 		 * at the client side.
 		 *
-		 * @private
-		 * @property _cache
-		 * @type {ima.cache.Cache}
+		 * @type {Cache}
 		 */
 		this._cache = cache;
 
@@ -72,13 +83,14 @@ export default class ServerPageRenderer extends AbstractPageRenderer {
 			return Promise.resolve(this._response.getResponseParams());
 		}
 
-		return (
-			this._Helper
-				.allPromiseHash(pageResources)
-				.then((fetchedResources) => {
-					return this._renderPage(controller, view, fetchedResources, routeOptions);
-				})
-		);
+		return this._Helper
+			.allPromiseHash(pageResources)
+			.then(pageState => this._renderPage(
+				controller,
+				view,
+				pageState,
+				routeOptions
+			));
 	}
 
 	/**
@@ -86,7 +98,7 @@ export default class ServerPageRenderer extends AbstractPageRenderer {
 	 * @method update
 	 */
 	update(controller, resourcesUpdate) {
-		return Promise.reject(new IMAError(
+		return Promise.reject(new GenericError(
 			'The update() is denied on server side.'
 		));
 	}
@@ -103,8 +115,6 @@ export default class ServerPageRenderer extends AbstractPageRenderer {
 	 * The javascript code will include a settings the "revival" data for the
 	 * application at the client-side.
 	 *
-	 * @private
-	 * @method _getRevivalSettings
 	 * @return {string} The javascript code to include into the
 	 *         rendered page.
 	 */
@@ -112,6 +122,7 @@ export default class ServerPageRenderer extends AbstractPageRenderer {
 		return (
 			`
 			(function(root) {
+				root.$Debug = ${this._settings.$Debug};
 				root.$IMA = root.$IMA || {};
 				$IMA.Cache = ${this._cache.serialize()};
 				$IMA.$Language = "${this._settings.$Language}";
@@ -121,32 +132,12 @@ export default class ServerPageRenderer extends AbstractPageRenderer {
 				$IMA.$App = ${JSON.stringify(this._settings.$App)};
 				$IMA.$Protocol = "${this._settings.$Protocol}";
 				$IMA.$Host = "${this._settings.$Host}";
+				$IMA.$Path = "${this._settings.$Path}";
 				$IMA.$Root = "${this._settings.$Root}";
 				$IMA.$LanguagePartPath = "${this._settings.$LanguagePartPath}";
 			})(typeof window !== 'undefined' && window !== null ? window : global);
-
-			(function(root) {
-				root.$IMA = root.$IMA || {};
-				root.$IMA.Runner = root.$IMA.Runner || {
-					scripts: [],
-					loadedScripts: [],
-					load: function(script) {
-						this.loadedScripts.push(script.src);
-						if (this.scripts.length === this.loadedScripts.length) {
-							this.run();
-						}
-					},
-					run: function() {
-						root.$IMA.Loader.initAllModules()
-							.then(function() {
-								return root.$IMA.Loader.import("app/main");
-							})
-							.catch(function(error) {
-								console.error(error);
-							});
-					}
-				};
-			})(typeof window !== 'undefined' && window !== null ? window : global);
+			${imaRunner}
+			${imaLoader}
 			`
 		);
 	}
@@ -158,18 +149,16 @@ export default class ServerPageRenderer extends AbstractPageRenderer {
 	 * The the values that are already Promises will referenced directly
 	 * without wrapping then into another Promise.
 	 *
-	 * @protected
-	 * @method _wrapEachKeyToPromise
 	 * @param {Object<string, *>=} [dataMap={}] A map of data that should have
 	 *        its values wrapped into Promises.
 	 * @return {Object<string, Promise>} A copy of the provided data map that
 	 *         has all its values wrapped into promises.
 	 */
 	_wrapEachKeyToPromise(dataMap = {}) {
-		var copy = {};
+		let copy = {};
 
-		for (var field of Object.keys(dataMap)) {
-			var value = dataMap[field];
+		for (let field of Object.keys(dataMap)) {
+			let value = dataMap[field];
 
 			if (value instanceof Promise) {
 				copy[field] = value;
@@ -184,22 +173,26 @@ export default class ServerPageRenderer extends AbstractPageRenderer {
 	/**
 	 * Render page after all promises from loaded resources is resolved.
 	 *
-	 * @private
-	 * @method _renderPage
-	 * @param {ima.controller.AbstractController} controller
+	 * @param {AbstractController} controller
 	 * @param {React.Component} view
-	 * @param {Object<string, *>} fetchedResources
+	 * @param {Object<string, *>} pageState
 	 * @param {Object<string, *>} routeOptions
-	 * @return {{content: string, status: number}}
+	 * @return {{content: string, status: number,
+	 *         pageState: Object<string, *>}}
 	 */
-	_renderPage(controller, view, fetchedResources, routeOptions) {
+	_renderPage(controller, view, pageState, routeOptions) {
 		if (!this._response.isResponseSent()) {
-			controller.setState(fetchedResources);
-			controller.setMetaParams(fetchedResources);
+			controller.setState(pageState);
+			controller.setMetaParams(pageState);
 
 			this._response
 				.status(controller.getHttpStatus())
-				.send(this._renderPageContentToString(controller, view, routeOptions));
+				.setPageState(pageState)
+				.send(this._renderPageContentToString(
+					controller,
+					view,
+					routeOptions
+				));
 		}
 
 		return this._response.getResponseParams();
@@ -208,21 +201,22 @@ export default class ServerPageRenderer extends AbstractPageRenderer {
 	/**
 	 * Render page content to a string containing HTML markup.
 	 *
-	 * @private
-	 * @method _renderPageContentToString
-	 * @param {ima.controller.AbstractController} controller
-	 * @param {React.Component} view
+	 * @param {AbstractController} controller
+	 * @param {function(new: React.Component)} view
 	 * @param {Object<string, *>} routeOptions
 	 * @return {string}
 	 */
 	_renderPageContentToString(controller, view, routeOptions) {
-		var props = this._generateViewProps(view, controller.getState());
-		var wrappedPageViewElement = this._factory.wrapView(props);
-		var pageMarkup = this._ReactDOM.renderToString(wrappedPageViewElement);
+		let reactElementView = this._getWrappedPageView(
+			controller,
+			view,
+			routeOptions
+		);
+		let pageMarkup = this._ReactDOM.renderToString(reactElementView);
 
-		var documentView = this._factory.getDocumentView(routeOptions.documentView || this._settings.$Page.$Render.documentView);
-		var documentViewFactory = this._factory.reactCreateFactory(documentView);
-		var appMarkup = this._ReactDOM.renderToStaticMarkup(documentViewFactory({
+		let documentView = this._getDocumentView(routeOptions);
+		let documentViewFactory = this._factory.createReactElementFactory(documentView);
+		let appMarkup = this._ReactDOM.renderToStaticMarkup(documentViewFactory({
 			page: pageMarkup,
 			revivalSettings: this._getRevivalSettings(),
 			metaManager: controller.getMetaManager(),

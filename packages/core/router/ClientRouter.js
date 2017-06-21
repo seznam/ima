@@ -1,15 +1,19 @@
 // @client-side
 
-import ns from 'ima/namespace';
-import AbstractRouter from 'ima/router/AbstractRouter';
+import ns from '../namespace';
+import AbstractRouter from './AbstractRouter';
+import RouteFactory from './RouteFactory';
+import Router from './Router';
+import Dispatcher from '../event/Dispatcher';
+import PageManager from '../page/manager/PageManager';
+import Window from '../window/Window';
 
 ns.namespace('ima.router');
 
 /**
  * Names of the DOM events the router responds to.
  *
- * @enum
- * @property Events
+ * @enum {string}
  * @type {Object<string, string>}
  */
 const Events = Object.freeze({
@@ -18,7 +22,6 @@ const Events = Object.freeze({
 	 * mouse, or touches the page and the touch event is not stopped.
 	 *
 	 * @const
-	 * @property Events.CLICK
 	 * @type {string}
 	 */
 	CLICK: 'click',
@@ -27,7 +30,6 @@ const Events = Object.freeze({
 	 * Name of the event fired when the user navigates back in the history.
 	 *
 	 * @const
-	 * @property Events.POP_STATE
 	 * @type {string}
 	 */
 	POP_STATE: 'popstate'
@@ -36,8 +38,7 @@ const Events = Object.freeze({
 /**
  * Address bar content manipulation modes.
  *
- * @enum
- * @property Modes
+ * @enum {string}
  * @type {Object<string, string>}
  */
 const Modes = Object.freeze({
@@ -46,7 +47,6 @@ const Modes = Object.freeze({
 	 * bar is being udpated using the session history management API.
 	 *
 	 * @const
-	 * @property Modes.HISTORY
 	 * @type {string}
 	 */
 	HISTORY: 'history',
@@ -56,7 +56,6 @@ const Modes = Object.freeze({
 	 * bar is being udpated by modifying the {@code hash} part.
 	 *
 	 * @const
-	 * @property Modes.HASH
 	 * @type {string}
 	 */
 	HASH: 'hash'
@@ -67,72 +66,44 @@ const Modes = Object.freeze({
  * {@code MouseEvent}s.
  *
  * @const
- * @property MOUSE_LEFT_BUTTON
  * @type {number}
  */
 const MOUSE_LEFT_BUTTON = 0;
 
 /**
- * The client-side implementation of the {@codelink ima.router.Router}
- * interface.
- *
- * @class ClientRouter
- * @extends ima.router.AbstractRouter
- * @namespace ima.router
- * @module ima
- * @submodule ima.router
+ * The client-side implementation of the {@codelink Router} interface.
  */
 export default class ClientRouter extends AbstractRouter {
+
+	static get $dependencies() {
+		return [PageManager, RouteFactory, Dispatcher, Window];
+	}
 
 	/**
 	 * Initializes the client-side router.
 	 *
-	 * @constructor
-	 * @method constructor
-	 * @param {ima.page.manager.PageManager} pageManager The page manager
-	 *        handling UI rendering, and transitions between pages if at the
-	 *        client side.
-	 * @param {ima.router.RouteFactory} factory Factory for routes.
-	 * @param {ima.event.Dispatcher} dispatcher Dispatcher fires events to
-	 *        app.
-	 * @param {{ROUTE_NAMES: Object<string, string>, EVENTS: Object<string, string>}} ROUTER_CONSTANTS
-	 *        The internal router constants. The {@code ROUTE_NAMES}
-	 *        contains internal route names. The {@code EVENTS} contains name
-	 *        of events which are fired with {@code ima.Event.Dispatcher}.
-	 * @param {ima.window.Window} window The current global client-side
-	 *        APIs provider.
+	 * @param {PageManager} pageManager The page manager handling UI rendering,
+	 *        and transitions between pages if at the client side.
+	 * @param {RouteFactory} factory Factory for routes.
+	 * @param {Dispatcher} dispatcher Dispatcher fires events to app.
+	 * @param {Window} window The current global client-side APIs provider.
 	 */
-	constructor(pageManager, factory, dispatcher, ROUTER_CONSTANTS, window) {
-		super(pageManager, factory, dispatcher, ROUTER_CONSTANTS);
+	constructor(pageManager, factory, dispatcher, window) {
+		super(pageManager, factory, dispatcher);
 
 		/**
 		 * Helper for accessing the native client-side APIs.
 		 *
-		 * @private
-		 * @property _window
-		 * @type {ima.window.Window}
+		 * @type {Window}
 		 */
 		this._window = window;
-
-		/**
-		 * Current address bar manipulation mode, specified as one of the
-		 * {@code Modes.*} constants..
-		 *
-		 * @private
-		 * @property mode
-		 * @type {string}
-		 * @default null
-		 */
-		this._mode = null;
 	}
 
 	/**
 	 * @inheritdoc
-	 * @method init
 	 */
 	init(config) {
 		super.init(config);
-		this._mode = this._window.hasHistoryAPI() ? Modes.HISTORY : Modes.HASH;
 		this._host = config.$Host || this._window.getHost();
 
 		return this;
@@ -140,7 +111,6 @@ export default class ClientRouter extends AbstractRouter {
 
 	/**
 	 * @inheritdoc
-	 * @method getUrl
 	 */
 	getUrl() {
 		return this._window.getUrl();
@@ -148,7 +118,6 @@ export default class ClientRouter extends AbstractRouter {
 
 	/**
 	 * @inheritdoc
-	 * @method getPath
 	 */
 	getPath() {
 		return this._extractRoutePath(this._window.getPath());
@@ -156,19 +125,17 @@ export default class ClientRouter extends AbstractRouter {
 
 	/**
 	 * @inheritdoc
-	 * @method listen
 	 */
 	listen() {
-		var nativeWindow = this._window.getWindow();
+		let nativeWindow = this._window.getWindow();
 
 		this._saveScrollHistory();
 		let eventName = Events.POP_STATE;
 		this._window.bindEventListener(nativeWindow, eventName, (event) => {
-
-			if (event.state) {
+			if (event.state && !event.defaultPrevented) {
 				this.route(this.getPath())
 					.then(() => {
-						var scroll = event.state.scroll;
+						let scroll = event.state.scroll;
 
 						if (scroll) {
 							this._pageManager.scrollTo(scroll.x, scroll.y);
@@ -186,11 +153,10 @@ export default class ClientRouter extends AbstractRouter {
 
 	/**
 	 * @inheritdoc
-	 * @method redirect
 	 */
 	redirect(url = '', options = {}) {
-		if (this._isSameDomain(url) && this._mode === Modes.HISTORY) {
-			var path = url.replace(this.getDomain(), '');
+		if (this._isSameDomain(url)) {
+			let path = url.replace(this.getDomain(), '');
 			path = this._extractRoutePath(path);
 
 			this._saveScrollHistory();
@@ -203,7 +169,6 @@ export default class ClientRouter extends AbstractRouter {
 
 	/**
 	 * @inheritdoc
-	 * @method route
 	 */
 	route(path, options = {}) {
 		return (
@@ -220,7 +185,6 @@ export default class ClientRouter extends AbstractRouter {
 
 	/**
 	 * @inheritdoc
-	 * @method handleError
 	 */
 	handleError(params, options = {}) {
 		if ($Debug) {
@@ -252,7 +216,6 @@ export default class ClientRouter extends AbstractRouter {
 
 	/**
 	 * @inheritdoc
-	 * @method handleNotFound
 	 */
 	handleNotFound(params, options = {}) {
 		return (
@@ -268,8 +231,6 @@ export default class ClientRouter extends AbstractRouter {
 	 * Handle a fatal error application state. IMA handle fatal error when IMA
 	 * handle error.
 	 *
-	 * @private
-	 * @method _handleFatalError
 	 * @param {Error} error
 	 */
 	_handleFatalError(error) {
@@ -292,27 +253,26 @@ export default class ClientRouter extends AbstractRouter {
 	 * of the anchor's target location (href) is the same as the current,
 	 * otherwise the method results in a hard redirect.
 	 *
-	 * @private
-	 * @method _handleClick
 	 * @param {MouseEvent} event The click event.
 	 */
 	_handleClick(event) {
-		var target = event.target || event.srcElement;
-		var anchorElement = this._getAnchorElement(target);
+		let target = event.target || event.srcElement;
+		let anchorElement = this._getAnchorElement(target);
 
-		if (!anchorElement) {
+		if (!anchorElement || typeof anchorElement.href !== 'string') {
 			return;
 		}
 
-		var anchorHref = anchorElement.href;
-		var isDefinedTargetHref = anchorHref !== undefined &&
+		let anchorHref = anchorElement.href;
+		let isDefinedTargetHref = anchorHref !== undefined &&
 				anchorHref !== null;
-		var isSetTarget = anchorElement.getAttribute('target') !== null;
-		var isLeftButton = event.button === MOUSE_LEFT_BUTTON;
-		var isCtrlPlusLeftButton = event.ctrlKey && isLeftButton;
-		var isSameDomain = this._isSameDomain(anchorHref);
-		var isHashLink = this._isHashLink(anchorHref);
-		var isLinkPrevented = event.defaultPrevented;
+		let isSetTarget = anchorElement.getAttribute('target') !== null;
+		let isLeftButton = event.button === MOUSE_LEFT_BUTTON;
+		let isCtrlPlusLeftButton = event.ctrlKey && isLeftButton;
+		let isCMDPlusLeftButton = event.metaKey && isLeftButton;
+		let isSameDomain = this._isSameDomain(anchorHref);
+		let isHashLink = this._isHashLink(anchorHref);
+		let isLinkPrevented = event.defaultPrevented;
 
 		if (!isDefinedTargetHref ||
 				isSetTarget ||
@@ -320,6 +280,7 @@ export default class ClientRouter extends AbstractRouter {
 				!isSameDomain ||
 				isHashLink ||
 				isCtrlPlusLeftButton ||
+				isCMDPlusLeftButton ||
 				isLinkPrevented) {
 			return;
 		}
@@ -333,13 +294,11 @@ export default class ClientRouter extends AbstractRouter {
 	 * element has been clicked, and if it was, the method returns anchor
 	 * element else null.
 	 *
-	 * @private
-	 * @method _getAnchorElement
 	 * @param {Node} target
 	 * @return {?Node}
 	 */
 	_getAnchorElement(target) {
-		var self = this;
+		let self = this;
 
 		while (target && !hasReachedAnchor(target)) {
 			target = target.parentNode;
@@ -359,8 +318,6 @@ export default class ClientRouter extends AbstractRouter {
 	 * Tests whether the provided target URL contains only an update of the
 	 * hash fragment of the current URL.
 	 *
-	 * @private
-	 * @method _isHashLink
 	 * @param {string} targetUrl The target URL.
 	 * @return {boolean} {@code true} if the navigation to target URL would
 	 *         result only in updating the hash fragment of the current URL.
@@ -370,10 +327,10 @@ export default class ClientRouter extends AbstractRouter {
 			return false;
 		}
 
-		var currentUrl = this._window.getUrl();
-		var trimmedCurrentUrl = currentUrl.indexOf('#') === -1 ? currentUrl :
+		let currentUrl = this._window.getUrl();
+		let trimmedCurrentUrl = currentUrl.indexOf('#') === -1 ? currentUrl :
 				currentUrl.substring(0, currentUrl.indexOf('#'));
-		var trimmedTargetUrl = targetUrl.substring(0, targetUrl.indexOf('#'));
+		let trimmedTargetUrl = targetUrl.substring(0, targetUrl.indexOf('#'));
 
 		return trimmedTargetUrl === trimmedCurrentUrl;
 	}
@@ -386,16 +343,14 @@ export default class ClientRouter extends AbstractRouter {
 	 * following structure: {@code {url: string}}. The {@code url} field will
 	 * be set to the provided URL.
 	 *
-	 * @private
-	 * @method _setAddressBar
 	 * @param {string} url The URL.
 	 */
 	_setAddressBar(url) {
-		var scroll = {
+		let scroll = {
 			x: 0,
 			y: 0
 		};
-		var state = { url, scroll };
+		let state = { url, scroll };
 
 		this._window.pushState(state, null, url);
 	}
@@ -405,16 +360,14 @@ export default class ClientRouter extends AbstractRouter {
 	 *
 	 * Replace scroll values in current state for actual scroll values in
 	 * document.
-	 *
-	 * @method _saveScrollHistory
 	 */
 	_saveScrollHistory() {
-		var url = this.getUrl();
-		var scroll = {
+		let url = this.getUrl();
+		let scroll = {
 			x: this._window.getScrollX(),
 			y: this._window.getScrollY()
 		};
-		var state = { url, scroll };
+		let state = { url, scroll };
 
 		this._window.replaceState(state, null, url);
 	}
@@ -423,9 +376,7 @@ export default class ClientRouter extends AbstractRouter {
 	 * Tests whether the the protocol and domain of the provided URL are the
 	 * same as the current.
 	 *
-	 * @private
-	 * @method _isSameDomain
-	 * @param {string} [url=''] The URL.
+	 * @param {string=} [url=''] The URL.
 	 * @return {boolean} {@code true} if the protocol and domain of the
 	 *         provided URL are the same as the current.
 	 */

@@ -1,31 +1,27 @@
-import ns from 'ima/namespace';
-import StorageInterface from 'ima/storage/Storage';
-import CacheEntry from 'ima/cache/CacheEntry';
+import ns from '../namespace';
+import MapStorage from './MapStorage';
+import SessionStorage from './SessionStorage';
+import Storage from './Storage';
+import CacheEntry from '../cache/CacheEntry';
 
 ns.namespace('ima.storage');
 
 /**
  * The {@codelink SessionMap} storage is an implementation of the
- * {@codelink ima.storage.Storage} interface acting as a synchronization
- * proxy between
- *
- * @class SessionMapStorage
- * @implements ima.storage.Storage
- * @namespace ima.storage
- * @module ima
- * @submodule ima.storage
- *
- * @requires ima.storage.MapStorage
- * @requires ima.storage.SessionStorage
+ * {@codelink Storage} interface acting as a synchronization proxy between
+ * the underlying map storage and the {@code sessionStorage} DOM storage.
  */
-export default class SessionMapStorage extends StorageInterface {
+export default class SessionMapStorage extends Storage {
+
+	static get $dependencies() {
+		return [MapStorage, SessionStorage];
+	}
+
 	/**
 	 * Initializes the storage.
 	 *
-	 * @constructor
-	 * @method constructor
-	 * @param {ima.storage.MapStorage} map The map storage to use.
-	 * @param {ima.storage.SessionStorage} session The session storage to use.
+	 * @param {MapStorage} map The map storage to use.
+	 * @param {SessionStorage} session The session storage to use.
 	 */
 	constructor(map, session) {
 		super();
@@ -33,29 +29,24 @@ export default class SessionMapStorage extends StorageInterface {
 		/**
 		 * The map storage, synced with the session storage.
 		 *
-		 * @private
-		 * @property _map
-		 * @type {ima.storage.MapStorage}
+		 * @type {MapStorage}
 		 */
 		this._map = map;
 
 		/**
 		 * The session storage, synced with the map storage.
 		 *
-		 * @private
-		 * @property _session
-		 * @type {ima.storage.SessionStorage}
+		 * @type {SessionStorage}
 		 */
 		this._session = session;
 	}
 
 	/**
 	 * @inheritdoc
-	 * @method init
 	 */
 	init() {
 		this._map.clear();
-		for (var key of this._session.keys()) {
+		for (let key of this._session.keys()) {
 			this._map.set(key, this._session[key]);
 		}
 
@@ -64,7 +55,6 @@ export default class SessionMapStorage extends StorageInterface {
 
 	/**
 	 * @inheritdoc
-	 * @method has
 	 */
 	has(key) {
 		return this._map.has(key);
@@ -72,7 +62,6 @@ export default class SessionMapStorage extends StorageInterface {
 
 	/**
 	 * @inheritdoc
-	 * @method get
 	 */
 	get(key) {
 		return this._map.get(key);
@@ -80,10 +69,9 @@ export default class SessionMapStorage extends StorageInterface {
 
 	/**
 	 * @inheritdoc
-	 * @method set
 	 */
 	set(key, value) {
-		var canBeSerializedToJSON =
+		let canBeSerializedToJSON =
 				!(value instanceof Promise) &&
 				(
 					!(value instanceof CacheEntry) ||
@@ -99,7 +87,6 @@ export default class SessionMapStorage extends StorageInterface {
 
 	/**
 	 * @inheritdoc
-	 * @method delete
 	 */
 	delete(key) {
 		this._session.delete(key);
@@ -109,7 +96,6 @@ export default class SessionMapStorage extends StorageInterface {
 
 	/**
 	 * @inheritdoc
-	 * @method clear
 	 */
 	clear() {
 		this._session.clear();
@@ -119,7 +105,6 @@ export default class SessionMapStorage extends StorageInterface {
 
 	/**
 	 * @inheritdoc
-	 * @method keys
 	 */
 	keys() {
 		return this._map.keys();
@@ -127,7 +112,6 @@ export default class SessionMapStorage extends StorageInterface {
 
 	/**
 	 * @override
-	 * @method size
 	 */
 	size() {
 		return this._map.size();

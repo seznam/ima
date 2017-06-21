@@ -1,4 +1,4 @@
-import ns from 'ima/namespace';
+import ns from '../namespace';
 
 ns.namespace('ima.http');
 
@@ -6,23 +6,20 @@ ns.namespace('ima.http');
  * The {@codelink HttpAgent} defines unifying API for sending HTTP requests at
  * both client-side and server-side.
  *
- * @interface HttpAgent
- * @namespace ima.http
- * @module ima
- * @submodule ima.http
+ * @interface
  */
 export default class HttpAgent {
 	/**
 	 * Sends an HTTP GET request to the specified URL, sending the provided
 	 * data as query parameters.
 	 *
-	 * @method get
 	 * @param {string} url The URL to which the request should be made.
 	 * @param {Object<string, (boolean|number|string)>} data The data to send
 	 *        to the server as query parameters.
 	 * @param {{timeout: number=, ttl: number=, repeatRequest: number=,
 	 *        headers: Object<string, string>=, cache: boolean=,
-	 *        withCredentials: boolean}=} options
+	 *        withCredentials: boolean, listeners: Object<string, function>}=,
+	 *        postProcessor: function(Object<string, *>)= } options
 	 *        Optional request options. The {@code timeout} specifies the
 	 *        request timeout in milliseconds, the {@code ttl} specified how
 	 *        long the request may be cached in milliseconds, the
@@ -34,7 +31,9 @@ export default class HttpAgent {
 	 *        default, also applies to requests in progress). The
 	 *        {@code withCredentials} flag indicates whether the request should
 	 *        be made using credentials such as cookies or authorization
-	 *        headers.
+	 *        headers. The {@code listeners} Add listeners for request.
+	 *        The {@code postProcessor} is method for changing agent response
+	 *        before than the response is saved in cache and returned in promise.
 	 * @return {Promise<{
 	 *             status: number,
 	 *             body: *,
@@ -44,7 +43,7 @@ export default class HttpAgent {
 	 *                 transformedUrl: string,
 	 *                 data: Object<string, (boolean|number|string)>
 	 *             },
-	 *             headers: Object<string, string>, cached: boolean,
+	 *             headers: Object<string, string>,
 	 *             cached: boolean
 	 *         }>}
 	 *         A promise that resolves to the response. The response body will
@@ -59,13 +58,13 @@ export default class HttpAgent {
 	 * the data will be JSON-encoded. Sending other primitive non-string values
 	 * as the request body is not supported.
 	 *
-	 * @method post
 	 * @param {string} url The URL to which the request should be made.
 	 * @param {(string|Object<string, *>)} data The data to send to the server
 	 *        as the request body.
 	 * @param {{timeout: number=, ttl: number=, repeatRequest: number=,
 	 *        headers: Object<string, string>=, cache: boolean=,
-	 *        withCredentials: boolean}=} options
+	 *        withCredentials: boolean}=, listeners: Object<string, function>}=,
+	 *        postProcessor: function(Object<string, *>)= } options
 	 *        Optional request options. The {@code timeout} specifies the
 	 *        request timeout in milliseconds, the {@code ttl} specified how
 	 *        long the request may be cached in milliseconds, the
@@ -77,7 +76,9 @@ export default class HttpAgent {
 	 *        default, also applies to requests in progress). The
 	 *        {@code withCredentials} flag indicates whether the request should
 	 *        be made using credentials such as cookies or authorization
-	 *        headers.
+	 *        headers. The {@code listeners} Add listeners for request.
+	 *        The {@code postProcessor} is method for changing agent response
+	 *        before than the response is saved in cache and returned in promise.
 	 * @return {Promise<{
 	 *             status: number,
 	 *             body: *,
@@ -87,7 +88,7 @@ export default class HttpAgent {
 	 *                 transformedUrl: string,
 	 *                 data: Object<string, (boolean|number|string)>
 	 *             },
-	 *             headers: Object<string, string>, cached: boolean,
+	 *             headers: Object<string, string>,
 	 *             cached: boolean
 	 *         }>}
 	 *         A promise that resolves to the response. The response body will
@@ -102,13 +103,13 @@ export default class HttpAgent {
 	 * the data will be JSON-encoded. Sending other primitive non-string values
 	 * as the request body is not supported.
 	 *
-	 * @method put
 	 * @param {string} url The URL to which the request should be made.
 	 * @param {(string|Object<string, *>)} data The data to send to the server
 	 *        as the request body.
 	 * @param {{timeout: number=, ttl: number=, repeatRequest: number=,
 	 *        headers: Object<string, string>=, cache: boolean=,
-	 *        withCredentials: boolean}=} options
+	 *        withCredentials: boolean}=, listeners: Object<string, function>}=,
+	 *        postProcessor: function(Object<string, *>)= } options
 	 *        Optional request options. The {@code timeout} specifies the
 	 *        request timeout in milliseconds, the {@code ttl} specified how
 	 *        long the request may be cached in milliseconds, the
@@ -120,7 +121,9 @@ export default class HttpAgent {
 	 *        default, also applies to requests in progress). The
 	 *        {@code withCredentials} flag indicates whether the request should
 	 *        be made using credentials such as cookies or authorization
-	 *        headers.
+	 *        headers. The {@code listeners} Add listeners for request.
+	 *        The {@code postProcessor} is method for changing agent response
+	 *        before than the response is saved in cache and returned in promise.
 	 * @return {Promise<{
 	 *             status: number,
 	 *             body: *,
@@ -130,7 +133,7 @@ export default class HttpAgent {
 	 *                 transformedUrl: string,
 	 *                 data: Object<string, (boolean|number|string)>
 	 *             },
-	 *             headers: Object<string, string>, cached: boolean,
+	 *             headers: Object<string, string>,
 	 *             cached: boolean
 	 *         }>}
 	 *         A promise that resolves to the response. The response body will
@@ -145,13 +148,13 @@ export default class HttpAgent {
 	 * the data will be JSON-encoded. Sending other primitive non-string values
 	 * as the request body is not supported.
 	 *
-	 * @method patch
 	 * @param {string} url The URL to which the request should be made.
 	 * @param {(string|Object<string, *>)} data The data to send to the server
 	 *        as the request body.
 	 * @param {{timeout: number=, ttl: number=, repeatRequest: number=,
 	 *        headers: Object<string, string>=, cache: boolean=,
-	 *        withCredentials: boolean}=} options
+	 *        withCredentials: boolean}=, listeners: Object<string, function>}=,
+	 *        postProcessor: function(Object<string, *>)= } options
 	 *        Optional request options. The {@code timeout} specifies the
 	 *        request timeout in milliseconds, the {@code ttl} specified how
 	 *        long the request may be cached in milliseconds, the
@@ -163,7 +166,9 @@ export default class HttpAgent {
 	 *        default, also applies to requests in progress). The
 	 *        {@code withCredentials} flag indicates whether the request should
 	 *        be made using credentials such as cookies or authorization
-	 *        headers.
+	 *        headers. The {@code listeners} Add listeners for request.
+	 *        The {@code postProcessor} is method for changing agent response
+	 *        before than the response is saved in cache and returned in promise.
 	 * @return {Promise<{
 	 *             status: number,
 	 *             body: *,
@@ -173,7 +178,7 @@ export default class HttpAgent {
 	 *                 transformedUrl: string,
 	 *                 data: Object<string, (boolean|number|string)>
 	 *             },
-	 *             headers: Object<string, string>, cached: boolean,
+	 *             headers: Object<string, string>,
 	 *             cached: boolean
 	 *         }>}
 	 *         A promise that resolves to the response. The response body will
@@ -188,13 +193,13 @@ export default class HttpAgent {
 	 * the data will be JSON-encoded. Sending other primitive non-string values
 	 * as the request body is not supported.
 	 *
-	 * @method delete
 	 * @param {string} url The URL to which the request should be made.
 	 * @param {(string|Object<string, *>)} data The data to send to the server
 	 *        as the request body.
 	 * @param {{timeout: number=, ttl: number=, repeatRequest: number=,
 	 *        headers: Object<string, string>=, cache: boolean=,
-	 *        withCredentials: boolean}=} options
+	 *        withCredentials: boolean}=, listeners: Object<string, function>}=,
+	 *        postProcessor: function(Object<string, *>)= } options
 	 *        Optional request options. The {@code timeout} specifies the
 	 *        request timeout in milliseconds, the {@code ttl} specified how
 	 *        long the request may be cached in milliseconds, the
@@ -206,7 +211,9 @@ export default class HttpAgent {
 	 *        default, also applies to requests in progress). The
 	 *        {@code withCredentials} flag indicates whether the request should
 	 *        be made using credentials such as cookies or authorization
-	 *        headers.
+	 *        headers. The {@code listeners} Add listeners for request.
+	 *        The {@code postProcessor} is method for changing agent response
+	 *        before than the response is saved in cache and returned in promise.
 	 * @return {Promise<{
 	 *             status: number,
 	 *             body: *,
@@ -216,7 +223,7 @@ export default class HttpAgent {
 	 *                 transformedUrl: string,
 	 *                 data: Object<string, (boolean|number|string)>
 	 *             },
-	 *             headers: Object<string, string>, cached: boolean,
+	 *             headers: Object<string, string>,
 	 *             cached: boolean
 	 *         }>}
 	 *         A promise that resolves to the response. The response body will
@@ -229,7 +236,6 @@ export default class HttpAgent {
 	 * Generates a cache key to use for identifying a request to the specified
 	 * URL using the specified HTTP method, submitting the provided data.
 	 *
-	 * @method getCacheKey
 	 * @param {string} method The HTTP method used by the request.
 	 * @param {string} url The URL to which the request is sent.
 	 * @param {Object<string, string>} data The data associated with the
@@ -244,20 +250,18 @@ export default class HttpAgent {
 	 * Sets the specified header to be sent with every subsequent HTTP request,
 	 * unless explicitly overridden by request options.
 	 *
-	 * @method setDefaultHeader
 	 * @param {string} header The name of the header.
 	 * @param {string} value The header value. To provide multiple values,
 	 *        separate them with commas
 	 *        (see http://www.w3.org/Protocols/rfc2616/rfc2616-sec4.html#sec4.2).
-	 * @return {ima.http.HttpAgent} This HTTP agent.
+	 * @return {HttpAgent} This HTTP agent.
 	 */
 	setDefaultHeader(header, value) {}
 
 	/**
 	 * Clears all configured default headers.
 	 *
-	 * @method clearDefaultHeaders
-	 * @return {ima.http.HttpAgent} This HTTP agent.
+	 * @return {HttpAgent} This HTTP agent.
 	 */
 	clearDefaultHeaders() {}
 }

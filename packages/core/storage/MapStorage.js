@@ -1,26 +1,20 @@
-import ns from 'ima/namespace';
-import StorageInterface from 'ima/storage/Storage';
+import ns from '../namespace';
+import Storage from './Storage';
 
 ns.namespace('ima.storage');
 
 /**
- * Implementation of the {@codelink ima.storage.Storage} interface that
- * relies on the native {@code Map} for storage.
- *
- * @class Map
- * @implements ima.storage.Storage
- * @namespace ima.storage
- * @module ima
- * @submodule ima.storage
- *
- * @requires Map
+ * Implementation of the {@codelink Storage} interface that relies on the
+ * native {@code Map} for storage.
  */
-export default class MapStorage extends StorageInterface {
+export default class MapStorage extends Storage {
+
+	static get $dependencies() {
+		return [];
+	}
+
 	/**
 	 * Initializes the map storage.
-	 *
-	 * @method constructor
-	 * @constructor
 	 */
 	constructor() {
 		super();
@@ -29,7 +23,6 @@ export default class MapStorage extends StorageInterface {
 		 * The internal storage of entries.
 		 *
 		 * @protected
-		 * @property _storage
 		 * @type {Map<string, *>}
 		 */
 		this._storage = new Map();
@@ -37,7 +30,6 @@ export default class MapStorage extends StorageInterface {
 
 	/**
 	 * @inheritdoc
-	 * @method init
 	 */
 	init() {
 		return this;
@@ -45,7 +37,6 @@ export default class MapStorage extends StorageInterface {
 
 	/**
 	 * @inheritdoc
-	 * @method has
 	 */
 	has(key) {
 		return this._storage.has(key);
@@ -53,7 +44,6 @@ export default class MapStorage extends StorageInterface {
 
 	/**
 	 * @inheritdoc
-	 * @method get
 	 */
 	get(key) {
 		return this._storage.get(key);
@@ -61,7 +51,6 @@ export default class MapStorage extends StorageInterface {
 
 	/**
 	 * @inheritdoc
-	 * @method set
 	 */
 	set(key, value) {
 		this._storage.set(key, value);
@@ -70,7 +59,6 @@ export default class MapStorage extends StorageInterface {
 
 	/**
 	 * @inheritdoc
-	 * @method delete
 	 */
 	delete(key) {
 		this._storage.delete(key);
@@ -79,7 +67,6 @@ export default class MapStorage extends StorageInterface {
 
 	/**
 	 * @inheritdoc
-	 * @method clear
 	 */
 	clear() {
 		this._storage.clear();
@@ -88,7 +75,6 @@ export default class MapStorage extends StorageInterface {
 
 	/**
 	 * @inheritdoc
-	 * @method keys
 	 */
 	keys() {
 		return this._storage.keys();
@@ -96,7 +82,6 @@ export default class MapStorage extends StorageInterface {
 
 	/**
 	 * @override
-	 * @method size
 	 */
 	size() {
 		return this._storage.size;

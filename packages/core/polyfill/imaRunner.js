@@ -12,7 +12,7 @@
 		run: function() {
 			root.$IMA.Loader.initAllModules()
 				.then(function() {
-					return root.$IMA.Loader.import("app/main");
+					return root.$IMA.Loader.import('app/main');
 				})
 				.catch(function(error) {
 					console.error(error);

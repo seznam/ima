@@ -1,4 +1,5 @@
-import ns from 'ima/namespace';
+import ns from '../namespace';
+import PageStateManager from '../page/state/PageStateManager';
 
 ns.namespace('ima.extension');
 
@@ -17,18 +18,13 @@ ns.namespace('ima.extension');
  * before the controller is initialized. After that, the extensions will go
  * through the same lifecycle as the controller.
  *
- * @interface Extension
- * @namespace ima.extension
- * @module ima
- * @submodule ima.extension
+ * @interface
  */
 export default class Extension {
 
 	/**
 	 * Callback for initializing the controller extension after the route
 	 * parameters have been set on this extension.
-	 *
-	 * @method init
 	 */
 	init() {}
 
@@ -44,8 +40,6 @@ export default class Extension {
 	 * {@codelink init()} method. The extension must release any resources
 	 * that might not be released automatically when the extensions's instance
 	 * is destroyed by the garbage collector.
-	 *
-	 * @method destroy
 	 */
 	destroy() {}
 
@@ -58,8 +52,6 @@ export default class Extension {
 	 * The extension may register any React and DOM event listeners in this
 	 * method. The extension may start receiving event bus event after this
 	 * method completes.
-	 *
-	 * @method activate
 	 */
 	activate() {}
 
@@ -73,8 +65,6 @@ export default class Extension {
 	 *
 	 * The extension should deregister listeners registered and release all
 	 * resources obtained in the {@codelink activate()} method.
-	 *
-	 * @method deactivate
 	 */
 	deactivate() {}
 
@@ -99,7 +89,6 @@ export default class Extension {
 	 * the error page. The error page that will be used depends on the status
 	 * code of the error.
 	 *
-	 * @method load
 	 * @return {Object<string, (Promise|*)>} A map object of promises
 	 *         resolved when all resources the extension requires are ready.
 	 *         The resolved values will be pushed to the controller's state.
@@ -121,7 +110,6 @@ export default class Extension {
 	 * {@codelink load()}, {@codelink activate()}, {@codelink deactivate()},
 	 * {@codelink deinit()}) are not call in case this method is used.
 	 *
-	 * @method update
 	 * @param {Object<string, string>=} [prevParams={}] Previous route
 	 *        parameters.
 	 * @return {Object<string, (Promise|*)>} A map object of promises
@@ -141,7 +129,6 @@ export default class Extension {
 	 * Note that the extension may modify only the fields of the state that it
 	 * has specified by its {@linkcode getAllowedStateKeys} method.
 	 *
-	 * @method setState
 	 * @param {Object<string, *>} statePatch Patch of the controller's state to
 	 *        apply.
 	 */
@@ -150,7 +137,6 @@ export default class Extension {
 	/**
 	 * Returns the current state of the controller using this extension.
 	 *
-	 * @method getState
 	 * @return {Object<string, *>} The current state of the controller.
 	 */
 	getState() {}
@@ -158,9 +144,8 @@ export default class Extension {
 	/**
 	 * Sets the state manager used to manage the controller's state..
 	 *
-	 * @method setPageStateManager
-	 * @param {?ima.page.state.PageStateManager} pageStateManager The current
-	 *        state manager to use.
+	 * @param {?PageStateManager} pageStateManager The current state manager to
+	 *        use.
 	 */
 	setPageStateManager(pageStateManager) {}
 
@@ -168,7 +153,6 @@ export default class Extension {
 	 * Sets the current route parameters. This method is invoked before the
 	 * {@code init()} method.
 	 *
-	 * @method setRouteParams
 	 * @param {Object<string, string>} [params={}] The current route
 	 *        parameters.
 	 */
@@ -177,7 +161,6 @@ export default class Extension {
 	/**
 	 * Returns the current route parameters.
 	 *
-	 * @method getRouteParams
 	 * @return {Object<string, string>} The current route parameters.
 	 */
 	getRouteParams() {}
@@ -186,7 +169,6 @@ export default class Extension {
 	 * Returns the names of the state fields that may be manipulated by this
 	 * extension. Manipulations of other fields of the state will be ignored.
 	 *
-	 * @method getAllowedStateKeys
 	 * @return {string[]} The names of the state fields that may be manipulated
 	 *         by this extension.
 	 */

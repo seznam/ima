@@ -1,5 +1,8 @@
-import ns from 'ima/namespace';
-import ControllerInterface from 'ima/controller/Controller';
+import ns from '../namespace';
+import Controller from './Controller';
+import Dictionary from '../dictionary/Dictionary';
+import MetaManager from '../meta/MetaManager';
+import Router from '../router/Router';
 
 ns.namespace('ima.controller');
 
@@ -7,27 +10,16 @@ ns.namespace('ima.controller');
  * Decorator for page controllers. The decorator manages references to the meta
  * attributes manager and other utilities so these can be easily provided to
  * the decorated page controller when needed.
- *
- * @class ControllerDecorator
- * @implements ima.controller.Controller
- * @namespace ima.controller
- * @module ima
- * @submodule ima.controller
  */
-export default class ControllerDecorator extends ControllerInterface {
+export default class ControllerDecorator extends Controller {
 
 	/**
 	 * Initializes the controller decorator.
 	 *
-	 * @method constructor
-	 * @constructor
-	 * @param {ima.controller.Controller} controller The controller being
-	 *        decorated.
-	 * @param {ima.meta.MetaManager} metaManager The meta page attributes
-	 *        manager.
-	 * @param {ima.router.Router} router The application router.
-	 * @param {ima.dictionary.Dictionary} dictionary Localization phrases
-	 *        dictionary.
+	 * @param {Controller} controller The controller being decorated.
+	 * @param {MetaManager} metaManager The meta page attributes manager.
+	 * @param {Router} router The application router.
+	 * @param {Dictionary} dictionary Localization phrases dictionary.
 	 * @param {Object<string, *>} settings  Application settings for the
 	 *        current application environment.
 	 */
@@ -37,44 +29,34 @@ export default class ControllerDecorator extends ControllerInterface {
 		/**
 		 * The controller being decorated.
 		 *
-		 * @property _controller
-		 * @private
-		 * @type {ima.controller.Controller}
+		 * @type {Controller}
 		 */
 		this._controller = controller;
 
 		/**
 		 * The meta page attributes manager.
 		 *
-		 * @property _metaManager
-		 * @private
-		 * @type {ima.meta.MetaManager}
+		 * @type {MetaManager}
 		 */
 		this._metaManager = metaManager;
 
 		/**
 		 * The application router.
 		 *
-		 * @property _router
-		 * @private
-		 * @type {ima.router.Router}
+		 * @type {Router}
 		 */
 		this._router = router;
 
 		/**
 		 * Localization phrases dictionary.
 		 *
-		 * @property _dictionary
-		 * @private
-		 * @type {ima.dictionary.Dictionary}
+		 * @type {Dictionary}
 		 */
 		this._dictionary = dictionary;
 
 		/**
 		 * Application settings for the current application environment.
 		 *
-		 * @property _setting
-		 * @private
 		 * @type {Object<string, *>}
 		 */
 		this._settings = settings;
@@ -82,7 +64,6 @@ export default class ControllerDecorator extends ControllerInterface {
 
 	/**
 	 * @inheritdoc
-	 * @method init
 	 */
 	init() {
 		this._controller.init();
@@ -90,7 +71,6 @@ export default class ControllerDecorator extends ControllerInterface {
 
 	/**
 	 * @inheritdoc
-	 * @method destroy
 	 */
 	destroy() {
 		this._controller.destroy();
@@ -98,7 +78,6 @@ export default class ControllerDecorator extends ControllerInterface {
 
 	/**
 	 * @inheritdoc
-	 * @method activate
 	 */
 	activate() {
 		this._controller.activate();
@@ -106,7 +85,6 @@ export default class ControllerDecorator extends ControllerInterface {
 
 	/**
 	 * @inheritdoc
-	 * @method deactivate
 	 */
 	deactivate() {
 		this._controller.deactivate();
@@ -114,7 +92,6 @@ export default class ControllerDecorator extends ControllerInterface {
 
 	/**
 	 * @inheritdoc
-	 * @method load
 	 */
 	load() {
 		return this._controller.load();
@@ -122,7 +99,6 @@ export default class ControllerDecorator extends ControllerInterface {
 
 	/**
 	 * @inheritdoc
-	 * @method update
 	 */
 	update(params = {}) {
 		return this._controller.update(params);
@@ -130,7 +106,6 @@ export default class ControllerDecorator extends ControllerInterface {
 
 	/**
 	 * @inheritdoc
-	 * @method setReactiveView
 	 */
 	setReactiveView(reactiveView) {
 		this._controller.setReactiveView(reactiveView);
@@ -138,7 +113,6 @@ export default class ControllerDecorator extends ControllerInterface {
 
 	/**
 	 * @inheritdoc
-	 * @method setState
 	 */
 	setState(statePatch) {
 		this._controller.setState(statePatch);
@@ -146,7 +120,6 @@ export default class ControllerDecorator extends ControllerInterface {
 
 	/**
 	 * @inheritdoc
-	 * @method getState
 	 */
 	getState() {
 		return this._controller.getState();
@@ -154,7 +127,6 @@ export default class ControllerDecorator extends ControllerInterface {
 
 	/**
 	 * @inheritdoc
-	 * @method addExtension
 	 */
 	addExtension(extension) {
 		this._controller.addExtension(extension);
@@ -164,7 +136,6 @@ export default class ControllerDecorator extends ControllerInterface {
 
 	/**
 	 * @inheritdoc
-	 * @method getExtensions
 	 */
 	getExtensions() {
 		return this._controller.getExtensions();
@@ -172,7 +143,6 @@ export default class ControllerDecorator extends ControllerInterface {
 
 	/**
 	 * @inheritdoc
-	 * @method setMetaParams
 	 */
 	setMetaParams(loadedResources, metaManager, router, dictionary, settings) {
 		this._controller.setMetaParams(
@@ -186,7 +156,6 @@ export default class ControllerDecorator extends ControllerInterface {
 
 	/**
 	 * @inheritdoc
-	 * @method setRouteParams
 	 */
 	setRouteParams(params = {}) {
 		this._controller.setRouteParams(params);
@@ -194,7 +163,6 @@ export default class ControllerDecorator extends ControllerInterface {
 
 	/**
 	 * @inheritdoc
-	 * @method getRouteParams
 	 */
 	getRouteParams() {
 		return this._controller.getRouteParams();
@@ -202,7 +170,6 @@ export default class ControllerDecorator extends ControllerInterface {
 
 	/**
 	 * @inheritdoc
-	 * @method setPageStateManager
 	 */
 	setPageStateManager(pageStateManager) {
 		this._controller.setPageStateManager(pageStateManager);
@@ -210,7 +177,6 @@ export default class ControllerDecorator extends ControllerInterface {
 
 	/**
 	 * @inheritdoc
-	 * @method getHttpStatus
 	 */
 	getHttpStatus() {
 		return this._controller.getHttpStatus();
@@ -220,9 +186,8 @@ export default class ControllerDecorator extends ControllerInterface {
 	 * Returns the meta attributes manager configured by the decorated
 	 * controller.
 	 *
-	 * @method getMetaManager
-	 * @return {ima.meta.MetaManager} The Meta attributes manager configured by
-	 *         the decorated controller.
+	 * @return {MetaManager} The Meta attributes manager configured by the
+	 *         decorated controller.
 	 */
 	getMetaManager() {
 		return this._metaManager;

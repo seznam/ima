@@ -1,55 +1,60 @@
-import vendorLinker from 'ima/vendorLinker';
-import ns from 'ima/namespace';
-import ObjectContainer from 'ima/ObjectContainer';
-import Bootstrap from 'ima/Bootstrap';
+import vendorLinker from './vendorLinker';
+import ns from './namespace';
+import ObjectContainer from './ObjectContainer';
+import Bootstrap from './Bootstrap';
 
-import { init as initBindIma } from 'ima/config/bind';
-import { init as initServicesIma } from 'ima/config/services';
+import initBindIma from './config/bind';
+import initServicesIma from './config/services';
 
-var getInitialImaConfigFunctions = () => {
+function getInitialImaConfigFunctions() {
 	return { initBindIma, initServicesIma };
-};
+}
 
-var getNamespace = () => {
+function getNamespace() {
 	return ns;
-};
+}
 
-var getInitialPluginConfig = () => {
+function getInitialPluginConfig() {
 	return { plugins: vendorLinker.getImaPlugins() };
-};
+}
 
-var _getRoot = () => {
+function _getRoot() {
 	return _isClient() ? window : global;
-};
+}
 
-var _isClient = () => {
+function _isClient() {
 	return typeof window !== 'undefined' && window !== null;
-};
+}
 
-var createImaApp = () => {
-
-	var oc = new ObjectContainer(ns);
-	var bootstrap = new Bootstrap(oc);
+function createImaApp() {
+	let oc = new ObjectContainer(ns);
+	let bootstrap = new Bootstrap(oc);
 
 	return { oc, bootstrap };
-};
+}
 
-var getClientBootConfig = (initialAppConfigFunctions) => {
-	var root = _getRoot();
+function getClientBootConfig(initialAppConfigFunctions) {
+	let root = _getRoot();
 
 	if ($Debug && _isClient()) {
 		if ($IMA.$Protocol !== root.location.protocol) {
-			throw new Error(`Your client's protocol is not same as server's protocol.` +
-					`For right setting protocol on the server site set 'X-Forwarded-Proto' header.`);
+			throw new Error(
+				`Your client's protocol is not same as server's protocol. ` +
+				`For right setting protocol on the server site set ` +
+				`'X-Forwarded-Proto' header.`
+			);
 		}
 
 		if ($IMA.$Host !== root.location.host) {
-			throw new Error(`Your client's host is not same as server's host.` +
-					`For right setting host on the server site set 'X-Forwarded-Host' header.`);
+			throw new Error(
+				`Your client's host is not same as server's host. For right ` +
+				`setting host on the server site set 'X-Forwarded-Host' ` +
+				`header.`
+			);
 		}
 	}
 
-	var bootConfig = {
+	let bootConfig = {
 		services: {
 			respond: null,
 			request: null,
@@ -61,6 +66,7 @@ var getClientBootConfig = (initialAppConfigFunctions) => {
 			router: {
 				$Protocol: $IMA.$Protocol,
 				$Host: $IMA.$Host,
+				$Path: $IMA.$Path,
 				$Root: $IMA.$Root,
 				$LanguagePartPath: $IMA.$LanguagePartPath
 			}
@@ -73,6 +79,7 @@ var getClientBootConfig = (initialAppConfigFunctions) => {
 			$Protocol: $IMA.$Protocol,
 			$Language: $IMA.$Language,
 			$Host: $IMA.$Host,
+			$Path: $IMA.$Path,
 			$Root: $IMA.$Root,
 			$LanguagePartPath: $IMA.$LanguagePartPath
 		}
@@ -84,14 +91,14 @@ var getClientBootConfig = (initialAppConfigFunctions) => {
 		getInitialPluginConfig(),
 		getInitialImaConfigFunctions()
 	);
-};
+}
 
-var getTestClientBootConfig = (initialAppConfigFunctions) => {
-	var root = _getRoot();
+function getTestClientBootConfig(initialAppConfigFunctions) {
+	let root = _getRoot();
 	$IMA.$Debug = true;
 	root.$Debug = $IMA.$Debug;
 
-	var bootConfig = {
+	let bootConfig = {
 		services: {
 			respond: null,
 			request: null,
@@ -103,6 +110,7 @@ var getTestClientBootConfig = (initialAppConfigFunctions) => {
 			router: {
 				$Host: $IMA.$Host,
 				$Root: $IMA.$Root,
+				$Path: $IMA.$Path,
 				$LanguagePartPath: $IMA.$LanguagePartPath
 			}
 		},
@@ -122,19 +130,19 @@ var getTestClientBootConfig = (initialAppConfigFunctions) => {
 		getInitialPluginConfig(),
 		getInitialImaConfigFunctions()
 	);
-};
+}
 
-var bootClientApp = (app, bootConfig) => {
+function bootClientApp(app, bootConfig) {
 	app.bootstrap.run(bootConfig);
 
-	var cache = app.oc.get('$Cache');
+	let cache = app.oc.get('$Cache');
 	cache.deserialize($IMA.Cache || {});
 
 	return app;
-};
+}
 
-var routeClientApp = (app) => {
-	var router = app.oc.get('$Router');
+function routeClientApp(app) {
+	let router = app.oc.get('$Router');
 
 	return router
 		.listen()
@@ -143,49 +151,71 @@ var routeClientApp = (app) => {
 			if (typeof $IMA.fatalErrorHandler === 'function') {
 				$IMA.fatalErrorHandler(error);
 			} else {
-				console.warn('Define function config.$IMA.fatalErrorHandler in services.js.');
+				console.warn(
+					'Define function config.$IMA.fatalErrorHandler in ' +
+					'services.js.'
+				);
 			}
 		});
-};
+}
 
-var hotReloadClientApp = (initialAppConfigFunctions) => {
-	if ($Debug) {
-		var app = createImaApp();
-		var bootConfig = getClientBootConfig(initialAppConfigFunctions);
-		app = bootClientApp(app, bootConfig);
-
-		var router = app.oc.get('$Router');
-		var pageManager = app.oc.get('$PageManager');
-		var currentRouteInfo = router.getCurrentRouteInfo();
-		var currentRoute = currentRouteInfo.route;
-
-		router.listen();
-
-		try {
-			return pageManager
-				.manage(currentRoute.getController(), currentRoute.getView(), { onlyUpdate: false, autoScroll: false, allowSPA: false }, currentRouteInfo.params)
-				.catch((error) => {
-					return router.handleError({ error });
-				})
-				.catch((error) => {
-					if (typeof $IMA.fatalErrorHandler === 'function') {
-						$IMA.fatalErrorHandler(error);
-					} else {
-						console.warn('Define function config.$IMA.fatalErrorHandler in services.js.');
-					}
-				});
-		} catch (error) {
-			return router.handleError({ error });
-		}
+function hotReloadClientApp(initialAppConfigFunctions) {
+	if (!$Debug) {
+		return;
 	}
-};
 
-var reviveClientApp = (initialAppConfigFunctions) => {
-	var root = _getRoot();
+	let app = createImaApp();
+	let bootConfig = getClientBootConfig(initialAppConfigFunctions);
+	app = bootClientApp(app, bootConfig);
+
+	let router = app.oc.get('$Router');
+	let pageManager = app.oc.get('$PageManager');
+	let currentRouteInfo = router.getCurrentRouteInfo();
+	let currentRoute = currentRouteInfo.route;
+	let currentRouteOptions = Object.assign(
+		{},
+		currentRoute.getOptions(),
+		{
+			onlyUpdate: false,
+			autoScroll: false,
+			allowSPA: false
+		}
+	);
+
+	router.listen();
+
+	try {
+		return pageManager
+			.manage(
+				currentRoute.getController(),
+				currentRoute.getView(),
+				currentRouteOptions,
+				currentRouteInfo.params
+			)
+			.catch((error) => {
+				return router.handleError({ error });
+			})
+			.catch((error) => {
+				if (typeof $IMA.fatalErrorHandler === 'function') {
+					$IMA.fatalErrorHandler(error);
+				} else {
+					console.warn(
+						'Define the config.$IMA.fatalErrorHandler function ' +
+						'in services.js.'
+					);
+				}
+			});
+	} catch (error) {
+		return router.handleError({ error });
+	}
+}
+
+function reviveClientApp(initialAppConfigFunctions) {
+	let root = _getRoot();
 
 	if (_isClient()) {
-
-		//hack for browser Chrome, which has sometimes problem with rendering page
+		// hack for the Chrome browser, which sometimes has problems with
+		// rendering the page
 		document.body.style.display = 'none';
 		document.body.offsetHeight; //eslint-disable-line
 		document.body.style.display = '';
@@ -195,46 +225,63 @@ var reviveClientApp = (initialAppConfigFunctions) => {
 	root.React = vendorLinker.get('react');
 	root.$Debug = root.$IMA.$Debug;
 
-	var app = createImaApp();
-	var bootConfig = getClientBootConfig(initialAppConfigFunctions);
+	let app = createImaApp();
+	let bootConfig = getClientBootConfig(initialAppConfigFunctions);
 	app = bootClientApp(app, bootConfig);
 
 	return routeClientApp(app);
-};
+}
 
-var reviveTestClientApp = (initialAppConfigFunctions) => {
-	var root = _getRoot();
-	var app = createImaApp();
-	var bootConfig = getTestClientBootConfig(initialAppConfigFunctions);
+function reviveTestClientApp(initialAppConfigFunctions) {
+	vendorLinker.bindToNamespace(ns);
+
+	let root = _getRoot();
+	let app = createImaApp();
+	let bootConfig = getTestClientBootConfig(initialAppConfigFunctions);
 
 	app = bootClientApp(app, bootConfig);
 
 	root.ns = ns;
 	root.oc = app.oc;
-};
+}
 
-var onLoad = (callback) => {
-	if (_isClient()) {
+function onLoad(callback) {
+	//TODO remove @0.15.0
+	if ($IMA.$Debug && typeof callback === 'function') {
+		throw new Error(
+			`The onLoad method use promise pattern instead of callback ` +
+			`pattern. Update your app/main.js file.`
+		);
+	}
 
-		if (document.readyState === 'complete' || document.readyState === 'interactive') {
+	vendorLinker.bindToNamespace(ns);
+
+	if (!_isClient()) {
+		return Promise.reject(null);
+	}
+
+	return new Promise((resolve) => {
+		if (
+			(document.readyState === 'complete') ||
+			(document.readyState === 'interactive')
+		) {
 			$IMA.Loader.initAllModules()
-				.then(callback)
+				.then(resolve)
 				.catch((error) => {
-					console.error(error);
+					reject(error);
 				});
 		} else {
 			window.addEventListener('DOMContentLoaded', () => {
 				$IMA.Loader.initAllModules()
-					.then(callback)
+					.then(resolve)
 					.catch((error) => {
-						console.error(error);
+						reject(error);
 					});
 			});
 		}
-	}
-};
+	});
+}
 
-vendorLinker.bindToNamespace(ns);
 
 export {
 	getInitialImaConfigFunctions,

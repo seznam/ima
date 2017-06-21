@@ -1,44 +1,27 @@
-import ns from 'ima/namespace';
+import ns from '../namespace';
+import CacheEntry from './CacheEntry';
 
 ns.namespace('ima.cache');
 
 /**
- * Factory for creating instances of ima.cache.CacheEntry.
- *
- * @class CacheFactory
- * @namespace ima.cache
- * @module ima
- * @submodule ima.cache
+ * Factory for creating instances of {@linkcode CacheEntry}.
  */
 export default class CacheFactory {
 
-	/**
-	 * Initializes the cache entry factory.
-	 *
-	 * @method constructor
-	 * @constructor
-	 * @param {function(new: ima.cache.CacheEntry, *, number)} CacheEntry
-	 */
-	constructor(CacheEntry) {
-
-		/**
-		 * @property _CacheEntry
-		 * @private
-		 * @type {function(new: ima.cache.CacheEntry, *, number)}
-		 */
-		this._CacheEntry = CacheEntry;
+	static get $dependencies() {
+		return [];
 	}
 
 	/**
-	 * Create new instance of ima.cache.CacheEntry with value a ttl.
+	 * Create new instance of {@linkcode CacheEntry} with value a ttl.
 	 *
-	 * @method createCacheEntry
 	 * @param {*} value The cache entry value.
 	 * @param {?number=} ttl Cache entry time to live in milliseconds. The
 	 *        entry will expire after the specified amount of milliseconds.
+	 * @return {CacheEntry} The created cache entry.
 	 */
 	createCacheEntry(value, ttl) {
-		return new this._CacheEntry(value, ttl);
+		return new CacheEntry(value, ttl);
 	}
 }
 

@@ -1,4 +1,5 @@
 .DS_Store
-.idea
+.idea/
 .sublime-gulp.cache
-node_modules
+dist/
+node_modules/

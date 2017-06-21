@@ -1,23 +1,16 @@
-import ns from 'ima/namespace';
+import ns from '../namespace';
 
 ns.namespace('ima.cache');
 
 /**
  * The cache entry is a typed container of cache data used to track the
  * creation and expiration of cache entries.
- *
- * @class CacheEntry
- * @namespace ima.cache
- * @module ima
- * @submodule ima.cache
  */
 export default class CacheEntry {
 
 	/**
 	 * Initializes the cache entry.
 	 *
-	 * @constructor
-	 * @method constructor
 	 * @param {*} value The cache entry value.
 	 * @param {number} ttl The time to live in milliseconds.
 	 */
@@ -25,8 +18,6 @@ export default class CacheEntry {
 		/**
 		 * Cache entry value.
 		 *
-		 * @property _value
-		 * @private
 		 * @type {*}
 		 */
 		this._value = value;
@@ -35,8 +26,6 @@ export default class CacheEntry {
 		 * The time to live in milliseconds. The cache entry is considered
 		 * expired after this time.
 		 *
-		 * @property _ttl
-		 * @private
 		 * @type {number}
 		 */
 		this._ttl = ttl;
@@ -44,8 +33,6 @@ export default class CacheEntry {
 		/**
 		 * The timestamp of creation of this cache entry.
 		 *
-		 * @property _created
-		 * @private
 		 * @type {number}
 		 */
 		this._created = Date.now();
@@ -54,18 +41,16 @@ export default class CacheEntry {
 	/**
 	 * Returns {@code true} if this entry has expired.
 	 *
-	 * @method isExpired
 	 * @return {boolean} {@code true} if this entry has expired.
 	 */
 	isExpired() {
-		var now = Date.now();
+		let now = Date.now();
 		return now > this._created + this._ttl;
 	}
 
 	/**
 	 * Exports this cache entry into a JSON-serializable object.
 	 *
-	 * @method serialize
 	 * @return {{value: *, ttl: number}} This entry exported to a
 	 *         JSON-serializable object.
 	 */
@@ -77,7 +62,6 @@ export default class CacheEntry {
 	 * Returns the entry value. If entry value is type of object returns clone
 	 * of that object.
 	 *
-	 * @method getValue
 	 * @return {*} The entry value.
 	 */
 	getValue() {

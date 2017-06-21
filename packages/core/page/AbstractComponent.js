@@ -1,6 +1,7 @@
-import ns from 'ima/namespace';
 import React from 'react';
 import ReactDOM from 'react-dom';
+import ns from '../namespace';
+import * as helpers from './componentHelpers';
 
 ns.namespace('ima.page');
 
@@ -8,18 +9,20 @@ ns.namespace('ima.page');
  * The base class for all view components.
  *
  * @abstract
- * @class AbstractComponent
- * @namespace ima.page
- * @module ima
- * @submodule ima.page
  */
 export default class AbstractComponent extends React.Component {
 
+	static get contextTypes() {
+		return helpers.getContextTypes(this);
+	}
+
+	static set contextTypes(contextTypes) {
+		helpers.setContextTypes(this, contextTypes);
+	}
+
 	/**
-	 * Initializes the constructor.
+	 * Initializes the component.
 	 *
-	 * @constructor
-	 * @method constructor
 	 * @param {Object<string, *>} props The component properties.
 	 * @param {Object<string, *>} context The component context.
 	 */
@@ -27,29 +30,23 @@ export default class AbstractComponent extends React.Component {
 		super(props, context);
 
 		/**
-		 * The view utilities.
+		 * The view utilities, initialized lazily upon first use from either
+		 * the context, or the component's props.
 		 *
-		 * @private
-		 * @property _utils
-		 * @type {Object<string, *>}
+		 * @type {?Object<string, *>}
 		 */
-		this._utils = context ? context.$Utils || props.$Utils : props.$Utils;
+		this._utils = null;
 	}
 
 	/**
 	 * Returns the utilities for the view components. The returned value is the
 	 * value bound to the {@code $Utils} object container constant.
 	 *
-	 * @property utils
 	 * @return {Object<string, *>} The utilities for the view components.
 	 */
 	get utils() {
-		if ($Debug) {
-			if (!this._utils) {
-				throw new Error('You cannot access view utils because they ' +
-						'were not passed in the initial props or context as ' +
-						'key name $Utils.');
-			}
+		if (!this._utils) {
+			this._utils = helpers.getUtils(this.props, this.context);
 		}
 
 		return this._utils;
@@ -61,40 +58,51 @@ export default class AbstractComponent extends React.Component {
 	 *
 	 * Note that this method can be used only at the client-side.
 	 *
-	 * @method findDOMNode
+	 * @deprecated Use refs instead.
 	 * @param {React.Component} component
 	 * @return {?HTMLElement} The DOM node representing the specified React
 	 *         component, or {@code null} if no such node was found.
 	 */
 	findDOMNode(component = this) {
+		if ($Debug) {
+			console.warn(
+				'DEPRECATION WARNING: The findDOMNode() method is ' +
+				'deprecated since IMA 0.14.0. Please switch to using refs ' +
+				'instead, as this method will be removed in an upcoming ' +
+				'version of IMA.'
+			);
+		}
+
 		return ReactDOM.findDOMNode(component);
 	}
 
 	/**
-	 * Returns localize string for defined key. Method replace params in string
-	 * with value of params.
+	 * Returns the localized phrase identified by the specified key. The
+	 * placeholders in the localization phrase will be replaced by the provided
+	 * values.
 	 *
-	 * @method localize
-	 * @param {string} key Localization key
-	 * @param {Object<string, (number|string)>=} params Params for replacement
-	 * @return {string} localize string
+	 * @param {string} key Localization key.
+	 * @param {Object<string, (number|string)>=} params Values for replacing
+	 *        the placeholders in the localization phrase.
+	 * @return {string} Localized phrase.
 	 */
 	localize(key, params = {}) {
-		return this._utils.$Dictionary.get(key, params);
+		return helpers.localize(this, key, params);
 	}
 
 	/**
-	 * Returns URL for route name. Method replace params in route with defined
-	 * params. Routes is defined in {@code /app/config/routes.js}.
+	 * Generates an absolute URL using the provided route name (see the
+	 * <code>app/config/routes.js</code> file). The provided parameters will
+	 * replace the placeholders in the route pattern, while the extraneous
+	 * parameters will be appended to the generated URL's query string.
 	 *
-	 * @method link
 	 * @param {string} name The route name.
 	 * @param {Object<string, (number|string)>=} params Router parameters and
 	 *        extraneous parameters to add to the URL as a query string.
 	 * @return {string} The generated URL.
 	 */
 	link(name, params = {}) {
-		return this._utils.$Router.link(name, params);
+		return helpers.link(this, name, params);
 	}
 
 	/**
@@ -109,7 +117,6 @@ export default class AbstractComponent extends React.Component {
 	 *            'my-class-modificator': this.props.modificator
 	 *        }, true);
 	 *
-	 * @method cssClasses
 	 * @param {(string|Object<string, boolean>)} classRules CSS classes in a
 	 *        string separated by whitespace, or a map of CSS class names to
 	 *        boolean values. The CSS class name will be included in the result
@@ -119,51 +126,17 @@ export default class AbstractComponent extends React.Component {
 	 *         to {@code true}.
 	 */
 	cssClasses(classRules, includeComponentClassName = false) {
-		if (typeof classRules === 'string') {
-			var  separatedClassNames = classRules.split(/\s+/);
-			classRules = {};
-
-			for (var className of separatedClassNames) {
-				classRules[className] = true;
-			}
-		}
-
-		if (!(classRules instanceof Object)) {
-			throw new Error('The class rules must be specified as a plain ' +
-					`object, ${classRules} provided`);
-		}
-
-		if (includeComponentClassName) {
-			var propClassNames = this.props.className;
-			if (propClassNames) {
-				var separatedPropClassNames = propClassNames.split(/\s+/);
-				var classNamesMap = {};
-
-				for (var propClassName of separatedPropClassNames) {
-					classNamesMap[propClassName] = true;
-				}
-
-				classRules = Object.assign({}, classRules, classNamesMap);
-			}
-		}
-
-		return Object
-			.keys(classRules)
-			.filter((cssClassName) => {
-				return classRules[cssClassName];
-			})
-			.join(' ');
+		return helpers.cssClasses(this, classRules, includeComponentClassName);
 	}
 
 	/**
 	 * Creates and sends a new IMA.js DOM custom event from this component.
 	 *
-	 * @method fire
 	 * @param {string} eventName The name of the event.
 	 * @param {*=} data Data to send within the event.
 	 */
 	fire(eventName, data = null) {
-		this._utils.$EventBus.fire(this.findDOMNode(), eventName, data);
+		helpers.fire(this, eventName, data);
 	}
 
 	/**
@@ -171,41 +144,27 @@ export default class AbstractComponent extends React.Component {
 	 * DOM custom event of the specified name occurs at the specified event
 	 * target.
 	 *
-	 * @method listen
-	 * @param {(ReactElement|EventTarget)} eventTarget The react component or
+	 * @param {(React.Element|EventTarget)} eventTarget The react component or
 	 *        event target at which the listener should listen for the event.
 	 * @param {string} eventName The name of the event for which to listen.
 	 * @param {function(Event)} listener The listener for event to register.
 	 */
 	listen(eventTarget, eventName, listener) {
-		if (!eventTarget.addEventListener) { // Safari doesn't have EventTarget
-			eventTarget = this.findDOMNode(eventTarget);
-		}
-
-		this._utils.$EventBus.listen(eventTarget, eventName, listener);
+		helpers.listen(this, eventTarget, eventName, listener);
 	}
 
 	/**
 	 * Deregisters the provided event listener for an IMA.js DOM custom event
 	 * of the specified name at the specified event target.
 	 *
-	 * @method unlisten
-	 * @param {(ReactElement|EventTarget)} eventTarget The react component or
+	 * @param {(React.Element|EventTarget)} eventTarget The react component or
 	 *        event target at which the listener should listen for the event.
 	 * @param {string} eventName The name of the event for which to listen.
 	 * @param {function(Event)} listener The listener for event to register.
 	 */
 	unlisten(eventTarget, eventName, listener) {
-		if (!eventTarget.addEventListener) { // Safari doesn't have EventTarget
-			eventTarget = this.findDOMNode(eventTarget);
-		}
-
-		this._utils.$EventBus.unlisten(eventTarget, eventName, listener);
+		helpers.unlisten(this, eventTarget, eventName, listener);
 	}
 }
-
-AbstractComponent.contextTypes = {
-	$Utils: React.PropTypes.object
-};
 
 ns.ima.page.AbstractComponent = AbstractComponent;

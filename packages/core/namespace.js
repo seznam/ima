@@ -1,4 +1,6 @@
 
+//let namespaceWarningEmitted = false;
+
 /**
  * Namespace creation, manipulation and traversal utility. This utility is used
  * to create semi-global shared namespaces for registering references to
@@ -6,11 +8,8 @@
  * each other more easily than by using the ES6 import/export mechanism.
  *
  * @deprecated
- * @class Namespace
- * @namespace ima
- * @module ima
  */
-class Namespace {
+export class Namespace {
 	/**
 	 * Initializes the namespace provider.
 	 *
@@ -18,8 +17,6 @@ class Namespace {
 	 * instance to create and use namespaces (see the examples).
 	 *
 	 * @private
-	 * @constructor
-	 * @method constructor
 	 * @example
 	 *        import ns from 'ima/namespace/ns.js';
 	 *        ns.namespace('ima');
@@ -37,15 +34,31 @@ class Namespace {
 	 * as an argument, the return value will be the last created namespace
 	 * object.
 	 *
-	 * @method namespace
+	 * @deprecated
 	 * @param {string} path The namespace path.
 	 * @return {*} The value at the specified path in the namespace.
 	 */
 	namespace(path) {
-		var self = this;
-		var levels = path.split('.');
+		/*if (
+			(typeof $Debug !== 'undefined') &&
+			$Debug &&
+			/^app./i.test(path) &&
+			!namespaceWarningEmitted
+		) {
+			console.warn(
+				'DEPRECATION WARNING: Your application seems to be using ' +
+				`namespaces (attempted to create the ${path} namespace), ` +
+				'but namespaces were deprecated since IMA 0.12.0. Please ' +
+				'switch to ES6 imports as the support for namespaces will ' +
+				'be removed in an upcoming version of IMA.js.'
+			);
+			namespaceWarningEmitted = true;
+		}*/
 
-		for (var levelName of levels) {
+		let self = this;
+		let levels = path.split('.');
+
+		for (let levelName of levels) {
 			if (!self.hasOwnProperty(levelName)) {
 				self[levelName] = {};
 			}
@@ -60,7 +73,6 @@ class Namespace {
 	 * Verifies that the specified namespace path point to an existing
 	 * namespace or terminal value.
 	 *
-	 * @method has
 	 * @param {string} path The namespace path to test.
 	 * @return {boolean} {@code true} if the namespace or terminal value exists
 	 *         at the specified path.
@@ -72,15 +84,14 @@ class Namespace {
 	/**
 	 * Return value for the specified namespace path point.
 	 *
-	 * @method get
 	 * @param {string} path The namespace path to test.
 	 * @return {*} The value at the specified path in the namespace.
 	 */
 	get(path) {
-		var self = this;
-		var levels = path.split('.');
+		let self = this;
+		let levels = path.split('.');
 
-		for (var level of levels) {
+		for (let level of levels) {
 			if (!self[level]) {
 				return undefined;
 			}

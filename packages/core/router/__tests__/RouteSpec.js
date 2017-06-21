@@ -1,3 +1,5 @@
+import Route from 'router/Route';
+
 describe('ima.router.Route', function() {
 
 	var route = null;
@@ -9,11 +11,12 @@ describe('ima.router.Route', function() {
 		onlyUpdate: false,
 		autoScroll: true,
 		allowSPA: true,
-		documentView: null
+		documentView: null,
+		managedRootView: null
 	};
 
 	beforeEach(function() {
-		route = oc.create('ima.router.Route', [name, pathExpression, controller, view, options]);
+		route = new Route(name, pathExpression, controller, view, options);
 	});
 
 	describe('should create right path -', function() {
@@ -26,7 +29,7 @@ describe('ima.router.Route', function() {
 			{ pathExpression: '/home/:userId/:?optional/something/:somethingId', params: { userId: 1, somethingId: 2 }, result: '/home/1/something/2' },
 			{ pathExpression: '/home/:userId/:?optional/something/:somethingId/', params: { userId: 1, somethingId: 2 }, result: '/home/1/something/2' }
 		], function(value) {
-			route = oc.create('ima.router.Route', [name, value.pathExpression, controller, view, options]);
+			route = new Route(name, value.pathExpression, controller, view, options);
 			it('for path params for pathExpr ' + value.pathExpression + ' and params ' + JSON.stringify(value.params), function() {
 				expect(route.toPath(value.params)).toEqual(value.result);
 			});
@@ -36,6 +39,11 @@ describe('ima.router.Route', function() {
 			expect(route.toPath()).toEqual('/home/:userId/something/:somethingId');
 		});
 
+		it('encode path params', function() {
+			route = new Route(name, '/home/:encodeString', controller, view, options);
+			expect(route.toPath({ encodeString: 'á/b?č#d:ě%25' })).toEqual('/home/%C3%A1%2Fb%3F%C4%8D%23d%3A%C4%9B%2525')
+		});
+
 		using([
 			{ pathExpression: ':?optional/home/:userId/something/:somethingId/:?optional2', params: { userId: 1, somethingId: 2, optional: 'en' }, result: '/en/home/1/something/2' },
 			{ pathExpression: ':?optional/home/:userId/something/:somethingId/:?optional2', params: { userId: 1, somethingId: 2, optional2: 'today' }, result: '/home/1/something/2/today' },
@@ -43,7 +51,7 @@ describe('ima.router.Route', function() {
 			{ pathExpression: ':?optional/home/:userId/something/:somethingId/:?optional2', params: { userId: 1, somethingId: 2, optional: 'en' }, result: '/en/home/1/something/2' },
 			{ pathExpression: ':?optional/home/:userId/something/:somethingId/:?optional2', params: { userId: 1, somethingId: 2, optional: 'en', optional2: 'today' }, result: '/en/home/1/something/2/today' }
 		], function(value) {
-			var route = oc.create('ima.router.Route', [name, value.pathExpression, controller, view, options]);
+			var route = new Route(name, value.pathExpression, controller, view, options);
 
 			it('for optional param will be return defined path for pathExpr ' + value.pathExpression + ' and params ' + JSON.stringify(value.params), function() {
 				expect(route.toPath(value.params)).toEqual(value.result);
@@ -58,7 +66,7 @@ describe('ima.router.Route', function() {
 			{ pathExpression: ':?optional/', params: { optional: 'en' }, result: '/en' },
 			{ pathExpression: ':?optional/:?optional2', params: { optional: 'en', optional2: 'cs' }, result: '/en/cs' }
 		], function(value) {
-			var route = oc.create('ima.router.Route', [name, value.pathExpression, controller, view, options]);
+			var route = new Route(name, value.pathExpression, controller, view, options);
 
 			it('for only optional param will be return defined path for pathExpr ' + value.pathExpression + ' and params ' + JSON.stringify(value.params), function() {
 				expect(route.toPath(value.params)).toEqual(value.result);
@@ -78,11 +86,11 @@ describe('ima.router.Route', function() {
 		expect(route.getName()).toEqual(name);
 	});
 
-	it('should be return route path', function() {
+	it('should return route path', function() {
 		expect(route.getPathExpression()).toEqual(pathExpression);
 	});
 
-	it('should be return route options', function() {
+	it('should return route options', function() {
 		expect(route.getOptions()).toEqual(options);
 	});
 
@@ -103,10 +111,11 @@ describe('ima.router.Route', function() {
 			{ pathExpression: '/something/:?somethingId/:userId', path: '/something/user1', params: { userId: 'user1' } },
 			{ pathExpression: '/something/:?somethingId/:userId', path: '/something/param1/user1', params: { somethingId: 'param1', userId: 'user1' } },
 			{ pathExpression: '/something/:?somethingId/:?userId', path: '/something/param1', params: { somethingId: 'param1' } },
-			{ pathExpression: '/something/:?somethingId/:?userId', path: '/something/param1/user1', params: { somethingId: 'param1', userId: 'user1' } }
+			{ pathExpression: '/something/:?somethingId/:?userId', path: '/something/param1/user1', params: { somethingId: 'param1', userId: 'user1' } },
+			{ pathExpression: '/:encodeString', path: '/%C3%A1%2Fb%3F%C4%8D%23d%3A%C4%9B%2525', params: { encodeString: 'á/b?č#d:ě%25' } }
 		], function(value) {
 			it(value.pathExpression, function() {
-				var routeLocal = oc.create('ima.router.Route', ['unknown', value.pathExpression, 'unknown']);
+				var routeLocal = new Route('unknown', value.pathExpression, 'unknown');
 
 				var routeParams = routeLocal.extractParameters(value.path);
 				var keys = Object.keys(value.params);
@@ -146,7 +155,7 @@ describe('ima.router.Route', function() {
 			{ pathExpression: '/:?param1/:param2/:?param3', path: '/p1', result: true },
 			{ pathExpression: '/:param1/:?param2/:param3', path: '/p1/p2', result: true }
 		], function(value) {
-			var route = oc.create('ima.router.Route', [name, value.pathExpression, controller, view, options]);
+			var route = new Route(name, value.pathExpression, controller, view, options);
 
 			it(value.path + ' for ' + value.pathExpression, function() {
 				expect(route.matches(value.path)).toEqual(value.result);
@@ -182,7 +191,7 @@ describe('ima.router.Route', function() {
 			{ pathExpression: '/:param1/something/:?param2/:param3', path: '/p1/something2/p2', result: false }
 		], function(value) {
 			it('for pathExpression ' + value.pathExpression + ' and path ' + value.path, function() {
-				var routeLocal = oc.create('ima.router.Route', ['unknown', value.pathExpression, 'unknown']);
+				var routeLocal = new Route('unknown', value.pathExpression, 'unknown');
 
 				expect(routeLocal.matches(value.path)).toEqual(value.result);
 			});
@@ -194,7 +203,7 @@ describe('ima.router.Route', function() {
 		var route = null;
 
 		beforeEach(function() {
-			route = oc.create('ima.router.Route', ['foo', '/:first/:second', 'foo', 'bar']);
+			route = new Route('foo', '/:first/:second', 'foo', 'bar');
 		});
 
 		it('should allow query to override path parameters', function() {

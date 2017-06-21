@@ -1,51 +1,56 @@
-describe('ima.router.AbstractRouter', function() {
+import GenericError from 'error/GenericError';
+import Dispatcher from 'event/Dispatcher';
+import PageManager from 'page/manager/PageManager';
+import AbstractRouter from 'router/AbstractRouter';
+import RouteEvents from 'router/Events';
+import RouteFactory from 'router/RouteFactory';
+import RouteNames from 'router/RouteNames';
 
-	var router = null;
-	var pageManager = null;
-	var routeFactory = null;
-	var dispatcher = null;
-	var ROUTER_CONSTANTS = oc.get('$ROUTER_CONSTANTS');
-	var config = {
+describe('ima.router.AbstractRouter', () => {
+
+	let router = null;
+	let pageManager = null;
+	let routeFactory = null;
+	let dispatcher = null;
+	let config = {
 		$Protocol: 'http:',
 		$Root: '/root',
 		$LanguagePartPath: '',
 		$Host: 'www.domain.com'
 	};
-	var options = {
+	let options = {
 		onlyUpdate: false,
 		autoScroll: true,
 		allowSPA: true,
-		documentView: null
+		documentView: null,
+		managedRootView: null
 	};
-	var controller = 'BaseController';
-	var view = 'BaseView';
+	let Controller = function Controller() {};
+	let View = function View() {};
 
-	beforeEach(function() {
-		oc.bind('BaseController', function() {});
-		oc.bind('BaseView', function() {});
-
-		pageManager = oc.create('ima.page.manager.PageManager');
-		routeFactory = oc.create('$RouteFactory');
-		dispatcher = oc.create('ima.event.Dispatcher');
-		router = oc.create('ima.router.AbstractRouter', [pageManager, routeFactory, dispatcher, ROUTER_CONSTANTS]);
+	beforeEach(() => {
+		pageManager = new PageManager();
+		routeFactory = new RouteFactory();
+		dispatcher = new Dispatcher();
+		router = new AbstractRouter(pageManager, routeFactory, dispatcher);
 
 		router.init(config);
 
-		router.add('home', '/', controller, view, options);
-		router.add('contact', '/contact', controller, view, options);
+		router.add('home', '/', Controller, View, options);
+		router.add('contact', '/contact', Controller, View, options);
 	});
 
-	it('should have 2 routes in Array', function() {
+	it('should have 2 routes in Array', () => {
 		expect(router._routes.size).toEqual(2);
 	});
 
-	it('should remove path from router', function() {
+	it('should remove path from router', () => {
 		router.remove('home');
 
 		expect(router._routes.size).toEqual(1);
 	});
 
-	it('should return absolute current url', function() {
+	it('should return absolute current url', () => {
 		spyOn(router, 'getPath')
 			.and
 			.returnValue('/path');
@@ -53,62 +58,62 @@ describe('ima.router.AbstractRouter', function() {
 		expect(router.getUrl()).toEqual('http://www.domain.com/root/path');
 	});
 
-	it('should return base url of application', function() {
+	it('should return base url of application', () => {
 		expect(router.getBaseUrl()).toEqual('http://www.domain.com/root');
 	});
 
-	it('should return route for defined path', function() {
-		var route = router._getRouteByPath('/');
+	it('should return route for defined path', () => {
+		let route = router._getRouteByPath('/');
 
 		expect(route.getName()).toEqual('home');
 	});
 
-	describe('add method', function() {
+	describe('add method', () => {
 
-		it('should be throw error if you try add route with exists name', function() {
-			expect(function() {
-				router.add('home', '/home', controller, view, options);
+		it('should be throw error if you try add route with exists name', () => {
+			expect(() => {
+				router.add('home', '/home', Controller, View, options);
 			}).toThrow();
 		});
 
-		it('should create new ima.Route', function() {
+		it('should create new ima.Route', () => {
 			spyOn(routeFactory, 'createRoute')
 				.and
 				.callThrough();
 
-			router.add('routeName', '/routePath', controller, view, options);
+			router.add('routeName', '/routePath', Controller, View, options);
 
-			expect(routeFactory.createRoute).toHaveBeenCalledWith('routeName', '/routePath', controller, view, options);
+			expect(routeFactory.createRoute).toHaveBeenCalledWith('routeName', '/routePath', Controller, View, options);
 
 		});
 	});
 
-	describe('getCurrentRouteInfo method', function() {
+	describe('getCurrentRouteInfo method', () => {
 
-		var routeName ='link';
-		var path = '/link';
-		var route = null;
-		var params = {};
+		let routeName = 'link';
+		let path = '/link';
+		let route = null;
+		let params = {};
 
-		beforeEach(function() {
-			route = routeFactory.createRoute(routeName, path, controller, view, options);
+		beforeEach(() => {
+			route = routeFactory.createRoute(routeName, path, Controller, View, options);
 		});
 
-		afterEach(function() {
+		afterEach(() => {
 			route = null;
 		});
 
-		it('should throw error for not exist route', function() {
+		it('should throw error for not exist route', () => {
 			spyOn(router, 'getPath')
 				.and
 				.returnValue(null);
 
-			expect(function() {
+			expect(() => {
 				router.getCurrentRouteInfo();
 			}).toThrow();
 		});
 
-		it('should return current route information', function() {
+		it('should return current route information', () => {
 			spyOn(router, 'getPath')
 				.and
 				.returnValue(path);
@@ -119,25 +124,26 @@ describe('ima.router.AbstractRouter', function() {
 				.and
 				.returnValue(params);
 
-			expect(router.getCurrentRouteInfo()).toEqual({route: route, params: params, path: '/link'});
+			expect(router.getCurrentRouteInfo())
+				.toEqual({ route: route, params: params, path: '/link' });
 		});
 	});
 
-	describe('link method', function() {
+	describe('link method', () => {
 
-		var routeName ='link';
-		var path = '/link';
-		var baseUrl = 'baseUrl';
+		let routeName = 'link';
+		let path = '/link';
+		let baseUrl = 'baseUrl';
 
-		beforeEach(function() {
-			router.add(routeName, path, controller, view, options);
+		beforeEach(() => {
+			router.add(routeName, path, Controller, View, options);
 		});
 
-		afterEach(function() {
+		afterEach(() => {
 			router.remove(routeName);
 		});
 
-		it('should return link for valid route with params', function() {
+		it('should return link for valid route with params', () => {
 			spyOn(router, 'getBaseUrl')
 				.and
 				.returnValue(baseUrl);
@@ -145,31 +151,32 @@ describe('ima.router.AbstractRouter', function() {
 			expect(router.link(routeName, {})).toEqual(baseUrl + path);
 		});
 
-		it('should throw Error for not valid route with params', function() {
+		it('should throw Error for not valid route with params', () => {
 			spyOn(router._routes, 'has')
 				.and
 				.returnValue(false);
 
-			expect(function() {router.link('xxx', {});}).toThrow();
+			expect(() => {
+				router.link('xxx', {});
+			}).toThrow();
 		});
 	});
 
-	describe('route method', function() {
+	describe('route method', () => {
 
-		var routeName ='link';
-		var path = '/link';
-		var baseUrl = 'baseUrl';
-		var route = null;
+		let routeName = 'link';
+		let path = '/link';
+		let route = null;
 
-		beforeEach(function() {
-			route = routeFactory.createRoute(routeName, path, controller, view, options);
+		beforeEach(() => {
+			route = routeFactory.createRoute(routeName, path, Controller, View, options);
 		});
 
-		afterEach(function() {
+		afterEach(() => {
 			route = null;
 		});
 
-		it('should handle valid route path', function() {
+		it('should handle valid route path', () => {
 			spyOn(router, '_getRouteByPath')
 				.and
 				.returnValue(route);
@@ -188,44 +195,42 @@ describe('ima.router.AbstractRouter', function() {
 			expect(router._handle).toHaveBeenCalledWith(route, {}, options);
 		});
 
-		it('should handle "not-found" route', function(done) {
+		it('should handle "not-found" route', (done) => {
 			spyOn(router, '_getRouteByPath')
 				.and
 				.returnValue(null);
 
 			spyOn(router, 'handleNotFound')
 				.and
-				.callFake(function(params) {
+				.callFake((params) => {
 					return Promise.resolve(params);
 				});
 
 			router
 				.route(path)
-				.then(function(params) {
-					expect(params.error instanceof ns.ima.error.GenericError).toBe(true);
+				.then((params) => {
+					expect(params.error instanceof GenericError).toBe(true);
 					done();
 				});
 		});
 
 	});
 
-	describe('handleError method', function() {
+	describe('handleError method', () => {
 
-		var routeName = ROUTER_CONSTANTS.ROUTE_NAMES.ERROR;
-		var path = '/error';
-		var baseUrl = 'baseUrl';
-		var route = null;
+		let path = '/error';
+		let route = null;
 
-		beforeEach(function() {
-			route = routeFactory.createRoute(routeName, path, controller, view, options);
+		beforeEach(() => {
+			route = routeFactory.createRoute(RouteNames.ERROR, path, Controller, View, options);
 		});
 
-		afterEach(function() {
+		afterEach(() => {
 			route = null;
 		});
 
-		it('should handle "error" route', function(done) {
-			var params = { error: new Error('test') };
+		it('should handle "error" route', (done) => {
+			let params = { error: new Error('test') };
 
 			spyOn(router._routes, 'get')
 				.and
@@ -237,20 +242,20 @@ describe('ima.router.AbstractRouter', function() {
 
 			router
 				.handleError(params, options)
-				.then(function(response) {
+				.then((response) => {
 					expect(router._handle).toHaveBeenCalledWith(route, params, options);
 					expect(response.error).toEqual(params.error);
 					done();
 				})
-				.catch(function(error) {
+				.catch((error) => {
 					console.error('ima.router.AbstractRouter.handleError', error);
 					done();
 				});
 
 		});
 
-		it('should reject promise with error for undefined "error" route', function(done) {
-			var params = { error: new Error('test') };
+		it('should reject promise with error for undefined "error" route', (done) => {
+			let params = { error: new Error('test') };
 
 			spyOn(router._routes, 'get')
 				.and
@@ -259,30 +264,28 @@ describe('ima.router.AbstractRouter', function() {
 
 			router
 				.handleError(params)
-				.catch(function(reason) {
-					expect(reason instanceof ns.ima.error.GenericError).toBe(true);
+				.catch((reason) => {
+					expect(reason instanceof GenericError).toBe(true);
 					done();
 				});
 		});
 	});
 
-	describe('handleNotFound method', function() {
+	describe('handleNotFound method', () => {
 
-		var routeName = ROUTER_CONSTANTS.ROUTE_NAMES.NOT_FOUND;
-		var path = '/not-found';
-		var baseUrl = 'baseUrl';
-		var route = null;
+		let path = '/not-found';
+		let route = null;
 
-		beforeEach(function() {
-			route = routeFactory.createRoute(routeName, path, controller, view, options);
+		beforeEach(() => {
+			route = routeFactory.createRoute(RouteNames.NOT_FOUND, path, Controller, View, options);
 		});
 
-		afterEach(function() {
+		afterEach(() => {
 			route = null;
 		});
 
-		it('should handle "notFound" route', function(done) {
-			var params = { error: new ns.ima.error.GenericError() };
+		it('should handle "notFound" route', (done) => {
+			let params = { error: new GenericError() };
 
 			spyOn(router._routes, 'get')
 				.and
@@ -294,19 +297,19 @@ describe('ima.router.AbstractRouter', function() {
 
 			router
 				.handleNotFound(params, options)
-				.then(function(response) {
+				.then((response) => {
 					expect(router._handle).toHaveBeenCalledWith(route, params, options);
-					expect(response.error instanceof ns.ima.error.GenericError).toEqual(true);
+					expect(response.error instanceof GenericError).toEqual(true);
 					done();
 				})
-				.catch(function(error) {
+				.catch((error) => {
 					console.error('ima.router.AbstractRouter.handleNotFound', error);
 					done();
 				});
 		});
 
-		it('should reject promise with error for undefined "error" route', function(done) {
-			var params = { error: new Error() };
+		it('should reject promise with error for undefined "error" route', (done) => {
+			let params = { error: new Error() };
 
 			spyOn(router._routes, 'get')
 				.and
@@ -314,72 +317,72 @@ describe('ima.router.AbstractRouter', function() {
 
 			router
 				.handleNotFound(params)
-				.catch(function(reason) {
-					expect(reason instanceof ns.ima.error.GenericError).toBe(true);
+				.catch((reason) => {
+					expect(reason instanceof GenericError).toBe(true);
 					done();
 				});
 		});
 	});
 
-	describe('isClientError method', function() {
+	describe('isClientError method', () => {
 
-		it('should return true for client error, which return status 4**', function() {
-			var isClientError = router.isClientError(oc.create('$Error', ['Client error', { status: 404 }]));
+		it('should return true for client error, which return status 4**', () => {
+			let isClientError = router.isClientError(new GenericError('Client error', { status: 404 }));
 
 			expect(isClientError).toEqual(true);
 		});
 
-		it('should return false for client error, which return status 5**', function() {
-			var isClientError = router.isClientError(oc.create('$Error', ['Server error', { status: 500 }]));
+		it('should return false for client error, which return status 5**', () => {
+			let isClientError = router.isClientError(new GenericError('Server error', { status: 500 }));
 
 			expect(isClientError).toEqual(false);
 		});
 
-		it('should return false for any error', function() {
-			var isClientError = router.isClientError(new Error('some error'));
+		it('should return false for any error', () => {
+			let isClientError = router.isClientError(new Error('some error'));
 
 			expect(isClientError).toEqual(false);
 		});
 
 	});
 
-	describe('isRedirection method', function() {
+	describe('isRedirection method', () => {
 
-		it('should return true for redirection, which return status 3**', function() {
-			var isRedireciton = router.isRedirection(oc.create('$Error', ['Redirection', { status: 300, url: 'http://www.example.com/redirect' }]));
+		it('should return true for redirection, which return status 3**', () => {
+			let isRedireciton = router.isRedirection(new GenericError('Redirection', { status: 300, url: 'http://www.example.com/redirect' }));
 
 			expect(isRedireciton).toEqual(true);
 		});
 
-		it('should return true for client error, which return status 4**', function() {
-			var isRedireciton = router.isRedirection(oc.create('$Error', ['Client error', { status: 400 }]));
+		it('should return true for client error, which return status 4**', () => {
+			let isRedireciton = router.isRedirection(new GenericError('Client error', { status: 400 }));
 
 			expect(isRedireciton).toEqual(false);
 		});
 
-		it('should return false for any error', function() {
-			var isClientError = router.isClientError(new Error('some error'));
+		it('should return false for any error', () => {
+			let isClientError = router.isClientError(new Error('some error'));
 
 			expect(isClientError).toEqual(false);
 		});
 
 	});
 
-	describe('_handle method', function() {
+	describe('_handle method', () => {
 
-		var routeName ='routeName';
-		var routePath = '/routePath';
-		var route = null;
+		let routeName = 'routeName';
+		let routePath = '/routePath';
+		let route = null;
 
-		beforeEach(function() {
-			route = routeFactory.createRoute(routeName, routePath, controller, view, options);
+		beforeEach(() => {
+			route = routeFactory.createRoute(routeName, routePath, Controller, View, options);
 		});
 
-		afterEach(function() {
+		afterEach(() => {
 			route = null;
 		});
 
-		it('should call paga manager', function(done) {
+		it('should call paga manager', (done) => {
 			spyOn(router, 'getPath')
 				.and
 				.returnValue(routePath);
@@ -392,18 +395,18 @@ describe('ima.router.AbstractRouter', function() {
 
 			router
 				._handle(route, {})
-				.then(function() {
-					expect(pageManager.manage).toHaveBeenCalledWith(controller, view, options, {});
+				.then(() => {
+					expect(pageManager.manage).toHaveBeenCalledWith(Controller, View, options, {});
 					done();
 				});
 
 		});
 
-		it('should fire ns.ima.EVENTS.BEFORE_HANDLE_ROUTE', function() {
-			var response = { content: null, status: 200 };
-			var params = {};
-			var path = '/';
-			var data = { route: route, params: params, path: path, options: options };
+		it('should fire ns.ima.EVENTS.BEFORE_HANDLE_ROUTE', () => {
+			let response = { content: null, status: 200 };
+			let params = {};
+			let path = '/';
+			let data = { route: route, params: params, path: path, options: options };
 
 			spyOn(router, 'getPath')
 				.and
@@ -417,13 +420,13 @@ describe('ima.router.AbstractRouter', function() {
 
 			router._handle(route, params, options);
 
-			expect(dispatcher.fire).toHaveBeenCalledWith(router.EVENTS.BEFORE_HANDLE_ROUTE, data, true);
+			expect(dispatcher.fire).toHaveBeenCalledWith(RouteEvents.BEFORE_HANDLE_ROUTE, data, true);
 		});
 
-		it('should fire ns.ima.EVENTS.AFTER_HANDLE_ROUTE', function(done) {
-			var response = { content: null, status: 200 };
-			var params = {};
-			var path = '/';
+		it('should fire ns.ima.EVENTS.AFTER_HANDLE_ROUTE', (done) => {
+			let response = { content: null, status: 200 };
+			let params = {};
+			let path = '/';
 
 			spyOn(router, 'getPath')
 				.and
@@ -437,20 +440,20 @@ describe('ima.router.AbstractRouter', function() {
 
 			router
 				._handle(route, params, options)
-				.then(function() {
-					var data = { route: route, params: params, path: path, response: response, options: options };
+				.then(() => {
+					let data = { route: route, params: params, path: path, response: response, options: options };
 
 					expect(dispatcher.fire)
-						.toHaveBeenCalledWith(router.EVENTS.AFTER_HANDLE_ROUTE, data, true);
+						.toHaveBeenCalledWith(RouteEvents.AFTER_HANDLE_ROUTE, data, true);
 
 					done();
 				});
 		});
 
-		it('should fire ns.ima.EVENTS.AFTER_HANDLE_ROUTE with error', function(done) {
-			var response = { content: null, status: 200 };
-			var params = { error: new Error('test') };
-			var path = '/';
+		it('should fire ns.ima.EVENTS.AFTER_HANDLE_ROUTE with error', (done) => {
+			let response = { content: null, status: 200 };
+			let params = { error: new Error('test') };
+			let path = '/';
 
 			spyOn(router, 'getPath')
 				.and
@@ -464,20 +467,20 @@ describe('ima.router.AbstractRouter', function() {
 
 			router
 				._handle(route, params, options)
-				.then(function() {
-					var data = { route: route, params: params, path: path, response: Object.assign({}, response, params), options: options };
+				.then(() => {
+					let data = { route: route, params: params, path: path, response: Object.assign({}, response, params), options: options };
 
 					expect(dispatcher.fire)
-						.toHaveBeenCalledWith(router.EVENTS.AFTER_HANDLE_ROUTE, data, true);
+						.toHaveBeenCalledWith(RouteEvents.AFTER_HANDLE_ROUTE, data, true);
 
 					done();
 				});
 		});
 
-		it('should return response', function(done) {
-			var response = { content: null, status: 200 };
-			var params = {};
-			var path = '/';
+		it('should return response', (done) => {
+			let response = { content: null, status: 200 };
+			let params = {};
+			let path = '/';
 
 			spyOn(router, 'getPath')
 				.and
@@ -488,16 +491,16 @@ describe('ima.router.AbstractRouter', function() {
 
 			router
 				._handle(route, params, options)
-				.then(function(handleResponse) {
+				.then((handleResponse) => {
 					expect(handleResponse).toEqual(response);
 					done();
 				});
 		});
 
-		it('should return response with handled error', function(done) {
-			var response = { content: null, status: 500 };
-			var params = { error: new Error('test') };
-			var path = '/';
+		it('should return response with handled error', (done) => {
+			let response = { content: null, status: 500 };
+			let params = { error: new Error('test') };
+			let path = '/';
 
 			spyOn(router, 'getPath')
 				.and
@@ -509,43 +512,43 @@ describe('ima.router.AbstractRouter', function() {
 
 			router
 				._handle(route, params, options)
-				.then(function(handleResponse) {
-					expect(handleResponse).toEqual(Object.assign({},response, params));
+				.then((handleResponse) => {
+					expect(handleResponse).toEqual(Object.assign({}, response, params));
 					done();
 				});
 		});
 	});
 
-	describe('_extractRoutePath method', function() {
+	describe('_extractRoutePath method', () => {
 
-		var pathWithRoot = '/root/path';
-		var pathWithLanguage = '/en/path';
-		var pathWithRootAndLanguage = '/root/en/path';
-		var path = '/path';
+		let pathWithRoot = '/root/path';
+		let pathWithLanguage = '/en/path';
+		let pathWithRootAndLanguage = '/root/en/path';
+		let path = '/path';
 
-		beforeEach(function() {
-			router = oc.create('ima.router.AbstractRouter', [pageManager, routeFactory, dispatcher, ROUTER_CONSTANTS]);
+		beforeEach(() => {
+			router = new AbstractRouter(pageManager, routeFactory, dispatcher);
 		});
 
-		it('should clear root from path', function() {
+		it('should clear root from path', () => {
 			router.init({ $Root: '/root' });
 
 			expect(router._extractRoutePath(pathWithRoot)).toEqual(path);
 		});
 
-		it('should clear root and language from path', function() {
+		it('should clear root and language from path', () => {
 			router.init({ $Root: '/root', $LanguagePartPath: '/en' });
 
 			expect(router._extractRoutePath(pathWithRootAndLanguage)).toEqual(path);
 		});
 
-		it('should clear language from path', function() {
+		it('should clear language from path', () => {
 			router.init({ $LanguagePartPath: '/en' });
 
 			expect(router._extractRoutePath(pathWithLanguage)).toEqual(path);
 		});
 
-		it('should return path for empty root and undefined language in path', function() {
+		it('should return path for empty root and undefined language in path', () => {
 			router.init({});
 
 			expect(router._extractRoutePath(path)).toEqual(path);

@@ -1,36 +1,34 @@
 // @client-side
 
-import ns from 'ima/namespace';
-import AbstractPageRenderer from 'ima/page/renderer/AbstractPageRenderer';
+import ns from '../../namespace';
+import AbstractPageRenderer from './AbstractPageRenderer';
+import PageRenderer from './PageRenderer';
+import PageRendererFactory from './PageRendererFactory';
+import AbstractDocumentView from '../AbstractDocumentView';
+import Controller from '../../controller/Controller';
+import ControllerDecorator from '../../controller/ControllerDecorator';
+import MetaManager from '../../meta/MetaManager';
+import Window from '../../window/Window';
 
 ns.namespace('ima.page.renderer');
 
 /**
  * Client-side page renderer. The renderer attempts to reuse the markup sent by
  * server if possible.
- *
- * @class ClientPageRenderer
- * @extends ima.page.renderer.AbstractPageRenderer
- * @namespace ima.page.renderer
- * @module ima
- * @submodule ima.page
  */
 export default class ClientPageRenderer extends AbstractPageRenderer {
 
 	/**
 	 * Initializes the client-side page renderer.
 	 *
-	 * @method constructor
-	 * @constructor
-	 * @param {ima.page.renderer.PageRendererFactory} factory Factory for receive $Utils to
-	 *        view.
+	 * @param {PageRendererFactory} factory Factory for receive $Utils to view.
 	 * @param {vendor.$Helper} Helper The IMA.js helper methods.
 	 * @param {vendor.ReactDOM} ReactDOM React framework instance to use to
 	 *        render the page on the client side.
 	 * @param {Object<string, *>} settings The application setting for the
 	 *        current application environment.
-	 * @param {ima.window.Window} window Helper for manipulating the global
-	 *        object ({@code window}) regardless of the client/server-side
+	 * @param {Window} window Helper for manipulating the global object
+	 *        ({@code window}) regardless of the client/server-side
 	 *        environment.
 	 */
 	constructor(factory, Helper, ReactDOM, settings, window) {
@@ -39,10 +37,7 @@ export default class ClientPageRenderer extends AbstractPageRenderer {
 		/**
 		 * Flag signalling that the page is being rendered for the first time.
 		 *
-		 * @property _firsTime
-		 * @private
 		 * @type {boolean}
-		 * @default true
 		 */
 		this._firstTime = true;
 
@@ -50,15 +45,14 @@ export default class ClientPageRenderer extends AbstractPageRenderer {
 		 * Helper for manipulating the global object ({@code window})
 		 * regardless of the client/server-side environment.
 		 *
-		 * @property _window
-		 * @private
-		 * @type {ima.window.Window}
+		 * @type {Window}
 		 */
 		this._window = window;
 
 		/**
-		 * @property _viewContainer
-		 * @private
+		 * The HTML element containing the current application view for the
+		 * current route.
+		 *
 		 * @type {?HTMLElement}
 		 */
 		this._viewContainer = null;
@@ -66,15 +60,13 @@ export default class ClientPageRenderer extends AbstractPageRenderer {
 
 	/**
 	 * @inheritdoc
-	 * @abstract
-	 * @method mount
 	 */
 	mount(controller, view, pageResources, routeOptions) {
-		var separatedData = this._separatePromisesAndValues(pageResources);
-		var defaultPageState = separatedData.values;
-		var loadedPromises = separatedData.promises;
+		let separatedData = this._separatePromisesAndValues(pageResources);
+		let defaultPageState = separatedData.values;
+		let loadedPromises = separatedData.promises;
 
-		if (this._firstTime === false) {
+		if (!this._firstTime) {
 			controller.setState(defaultPageState);
 			this._renderToDOM(controller, view, routeOptions);
 			this._patchPromisesToState(controller, loadedPromises);
@@ -84,20 +76,25 @@ export default class ClientPageRenderer extends AbstractPageRenderer {
 			this._Helper
 				.allPromiseHash(loadedPromises)
 				.then((fetchedResources) => {
+					let pageState = Object.assign(
+						{},
+						defaultPageState,
+						fetchedResources
+					);
 
-					if (this._firstTime === true) {
-						Object.assign(defaultPageState, fetchedResources);
-						controller.setState(defaultPageState);
+					if (this._firstTime) {
+						controller.setState(pageState);
 						this._renderToDOM(controller, view, routeOptions);
 						this._firstTime = false;
 					}
 
-					controller.setMetaParams(fetchedResources);
+					controller.setMetaParams(pageState);
 					this._updateMetaAttributes(controller.getMetaManager());
 
 					return {
 						content: null,
-						status: controller.getHttpStatus()
+						status: controller.getHttpStatus(),
+						pageState
 					};
 				})
 				.catch((error) => this._handleError(error))
@@ -106,12 +103,11 @@ export default class ClientPageRenderer extends AbstractPageRenderer {
 
 	/**
 	 * @inheritdoc
-	 * @method update
 	 */
 	update(controller, resourcesUpdate) {
-		var separatedData = this._separatePromisesAndValues(resourcesUpdate);
-		var defaultPageState = separatedData.values;
-		var updatedPromises = separatedData.promises;
+		let separatedData = this._separatePromisesAndValues(resourcesUpdate);
+		let defaultPageState = separatedData.values;
+		let updatedPromises = separatedData.promises;
 
 		controller.setState(defaultPageState);
 		this._patchPromisesToState(controller, updatedPromises);
@@ -125,7 +121,12 @@ export default class ClientPageRenderer extends AbstractPageRenderer {
 
 					return {
 						content: null,
-						status: controller.getHttpStatus()
+						status: controller.getHttpStatus(),
+						pageState: Object.assign(
+							{},
+							defaultPageState,
+							fetchedResources
+						)
 					};
 				})
 				.catch((error) => this._handleError(error))
@@ -134,7 +135,6 @@ export default class ClientPageRenderer extends AbstractPageRenderer {
 
 	/**
 	 * @inheritdoc
-	 * @method unmount
 	 */
 	unmount() {
 		if (this._reactiveView) {
@@ -147,10 +147,8 @@ export default class ClientPageRenderer extends AbstractPageRenderer {
 	 * Show error to console in $Debug mode and re-throw that error
 	 * for other error handler.
 	 *
-	 * @private
-	 * @method _handleError
 	 * @param {Error} error
-	 * @throws {Error} Re-throw handled error.
+	 * @throws {Error} Re-throws the handled error.
 	 */
 	_handleError(error) {
 		if ($Debug) {
@@ -163,9 +161,8 @@ export default class ClientPageRenderer extends AbstractPageRenderer {
 	/**
 	 * Patch promise values to controller state.
 	 *
-	 * @method _patchPromisesToState
-	 * @param {ima.Controller.ControllerDecorator} controller
-	 * @param {Object<string, Promise>} patchedPromises
+	 * @param {ControllerDecorator} controller
+	 * @param {Object<string, Promise<*>>} patchedPromises
 	 */
 	_patchPromisesToState(controller, patchedPromises) {
 		for (let resourceName of Object.keys(patchedPromises)) {
@@ -180,32 +177,40 @@ export default class ClientPageRenderer extends AbstractPageRenderer {
 	}
 
 	/**
-	 * Render React element to DOM for controller state.
+	 * Renders the current route to DOM.
 	 *
-	 * @private
-	 * @method _renderToDOM
-	 * @param {ima.controller.ControllerDecorator} controller
-	 * @param {React.Component} view
+	 * @param {ControllerDecorator} controller
+	 * @param {function(new: React.Component)} view
 	 * @param {{
-	 *            onlyUpdate: (
-	 *                boolean|
+	 *          onlyUpdate: (
+	 *            boolean|
+	 *            function(
+	 *              (string|function(new: Controller, ...*)),
+	 *              (
+	 *                string|
 	 *                function(
-	 *                    (string|function(new: ima.controller.Controller, ...*)),
-	 *                   (string|function(new: React.Component, Object<string, *>, ?Object<string, *>))
-	 *               ): boolean
-	 *            ),
-	 *           autoScroll: boolean,
-	 *           allowSPA: boolean,
-	 *           documentView: ?ima.page.AbstractDocumentView
-	 *        }} options The current route options.
+	 *                  new: React.Component,
+	 *                  Object<string, *>,
+	 *                  ?Object<string, *>
+	 *                )
+	 *              )
+	 *            ): boolean
+	 *          ),
+	 *          autoScroll: boolean,
+	 *          allowSPA: boolean,
+	 *          documentView: ?function(new: AbstractDocumentView),
+	 *          managedRootView: ?function(new: React.Component)
+	 *        }} routeOptions The current route options.
 	 */
 	_renderToDOM(controller, view, routeOptions) {
-		var props = this._generateViewProps(view, controller.getState());
-		var reactElementView = this._factory.wrapView(props);
+		let reactElementView = this._getWrappedPageView(
+			controller,
+			view,
+			routeOptions
+		);
 
-		var configuredDocumentView = routeOptions.documentView || this._settings.$Page.$Render.documentView;
-		var documentView = this._factory.getDocumentView(configuredDocumentView);
-		var masterElementId = documentView.masterElementId;
+		let documentView = this._getDocumentView(routeOptions);
+		let masterElementId = documentView.masterElementId;
 		this._viewContainer = this._window.getElementById(masterElementId);
 
 		this._reactiveView = this._ReactDOM.render(
@@ -219,18 +224,18 @@ export default class ClientPageRenderer extends AbstractPageRenderer {
 	 * for default page state. Promises will be patched to state after their
 	 * resolve.
 	 *
-	 * @method _separatePromisesAndValues
-	 * @private
 	 * @param {Object<string, *>} dataMap A map of data.
-	 * @return {{promises: Object<string, Promise>, values: Object<string, *>}}
-	 *         Return separated promises and other values.
+	 * @return {{
+	 *           promises: Object<string, Promise<*>>,
+	 *           values: Object<string, *>
+	 *         }} Return separated promises and other values.
 	 */
 	_separatePromisesAndValues(dataMap) {
-		var promises = {};
-		var values = {};
+		let promises = {};
+		let values = {};
 
-		for (var field of Object.keys(dataMap)) {
-			var value = dataMap[field];
+		for (let field of Object.keys(dataMap)) {
+			let value = dataMap[field];
 
 			if (value instanceof Promise) {
 				promises[field] = value;
@@ -245,10 +250,8 @@ export default class ClientPageRenderer extends AbstractPageRenderer {
 	/**
 	 * Updates the title and the contents of the meta elements used for SEO.
 	 *
-	 * @private
-	 * @method _updateMetaAttributes
-	 * @param {ima.meta.MetaManager} metaManager meta attributes storage
-	 *        providing the new values for page meta elements and title.
+	 * @param {MetaManager} metaManager meta attributes storage providing the
+	 *        new values for page meta elements and title.
 	 */
 	_updateMetaAttributes(metaManager) {
 		this._window.setTitle(metaManager.getTitle());
@@ -261,14 +264,12 @@ export default class ClientPageRenderer extends AbstractPageRenderer {
 	/**
 	 * Updates the contents of the generic meta elements used for SEO.
 	 *
-	 * @private
-	 * @method _updateMetaNameAttributes
-	 * @param {ima.meta.MetaManager} metaManager meta attributes storage
-	 *        providing the new values for page meta elements and title.
+	 * @param {MetaManager} metaManager meta attributes storage providing the
+	 *        new values for page meta elements and title.
 	 */
 	_updateMetaNameAttributes(metaManager) {
-		var metaTagKey = null;
-		var metaTag = null;
+		let metaTagKey = null;
+		let metaTag;
 
 		for (metaTagKey of metaManager.getMetaNames()) {
 			metaTag = this._window.querySelector(`meta[name="${metaTagKey}"]`);
@@ -282,14 +283,12 @@ export default class ClientPageRenderer extends AbstractPageRenderer {
 	/**
 	 * Updates the contents of the specialized meta elements used for SEO.
 	 *
-	 * @private
-	 * @method _updateMetaPropertyAttributes
-	 * @param {ima.meta.MetaManager} metaManager meta attributes storage
-	 *        providing the new values for page meta elements and title.
+	 * @param {MetaManager} metaManager meta attributes storage providing the
+	 *        new values for page meta elements and title.
 	 */
 	_updateMetaPropertyAttributes(metaManager) {
-		var metaTagKey = null;
-		var metaTag = null;
+		let metaTagKey = null;
+		let metaTag;
 
 		for (metaTagKey of metaManager.getMetaProperties()) {
 			metaTag = this._window.querySelector(
@@ -305,14 +304,12 @@ export default class ClientPageRenderer extends AbstractPageRenderer {
 	/**
 	 * Updates the href of the specialized link elements used for SEO.
 	 *
-	 * @private
-	 * @method _updateMetaLinkAttributes
-	 * @param {ima.meta.MetaManager} metaManager meta attributes storage
-	 *        providing the new values for page meta elements and title.
+	 * @param {MetaManager} metaManager meta attributes storage providing the
+	 *        new values for page meta elements and title.
 	 */
 	_updateMetaLinkAttributes(metaManager) {
-		var linkTagKey = null;
-		var linkTag = null;
+		let linkTagKey = null;
+		let linkTag;
 
 		for (linkTagKey of metaManager.getLinks()) {
 			linkTag = this._window.querySelector(

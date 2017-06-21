@@ -1,80 +1,72 @@
 // @client-side
 
-import ns from 'ima/namespace';
+import ns from '../namespace';
+import Dispatcher from '../event/Dispatcher';
+import EventBus from '../event/EventBus';
+import PageManager from '../page/manager/PageManager';
+import PageStateManager from '../page/state/PageStateManager';
+import Window from '../window/Window';
 
 ns.namespace('ima.debug');
 
 /**
- * DevTool
- *
- * @class DevTool
- * @namespace ima.debug
- * @module ima
- * @submodule ima.debug
+ * Developer tools, used mostly for navigating the page state history.
  */
 export default class DevTool {
 
+	static get $dependencies() {
+		return [PageManager, PageStateManager, Window, Dispatcher, EventBus];
+	}
+
 	/**
-	 * @method constructor
-	 * @constructor
-	 * @param {ima.page.manager.PageManager} pageManager
-	 * @param {ima.page.state.PageStateManager} stateManager
-	 * @param {ima.window.Window} window
-	 * @param {ima.event.Dispatcher} dispatcher
-	 * @param {ima.event.EventBus} eventBus
+	 * Initializes the developer tools.
+	 *
+	 * @param {PageManager} pageManager Application page manager.
+	 * @param {PageStateManager} stateManager Application state manager.
+	 * @param {Window} window IMA window wrapper.
+	 * @param {Dispatcher} dispatcher IMA event dispatcher.
+	 * @param {EventBus} eventBus IMA DOM event bus.
 	 */
 	constructor(pageManager, stateManager, window, dispatcher, eventBus) {
 
 		/**
-		 * App page manager.
+		 * Application page manager.
 		 *
-		 * @private
-		 * @property _pageManager
-		 * @type {ima.page.manager.PageManager}
+		 * @type {PageManager}
 		 */
 		this._pageManager = pageManager;
 
 		/**
-		 * App state manager.
+		 * Application state manager.
 		 *
-		 * @private
-		 * @property _stateManager
-		 * @type {ima.page.state.PageStateManager}
+		 * @type {PageStateManager}
 		 */
 		this._stateManager = stateManager;
 
 		/**
-		 * $IMA wrapper for window.
+		 * IMA window wrapper.
 		 *
-		 * @private
-		 * @property _window
-		 * @type {ima.window.Window}
+		 * @type {Window}
 		 */
 		this._window = window;
 
 		/**
-		 * $IMA dispatcher.
+		 * IMA event dispatcher.
 		 *
-		 * @private
-		 * @property _dispatcher
-		 * @type {ima.event.Dispatcher}
+		 * @type {Dispatcher}
 		 */
 		this._dispatcher = dispatcher;
 
 		/**
-		 * $IMA eventBus
+		 * IMA DOM event bus.
 		 *
-		 * @property _eventBus
-		 * @type {ima.event.EventBus}
+		 * @type {EventBus}
 		 */
 		this._eventBus = eventBus;
 	}
 
 	/**
-	 * Initialization Dev tool
-	 *
-	 * @method init
-	 *
+	 * Initializes the developer tools.
 	 */
 	init() {
 		if ($Debug) {
@@ -92,33 +84,28 @@ export default class DevTool {
 	}
 
 	/**
-	 * Set state to state manager.
+	 * Sets the provided state to the state manager.
 	 *
-	 * @method setState
-	 * @param {Object<string, *>} statePatch
+	 * @param {Object<string, *>} statePatch A patch of the current page state.
 	 */
 	setState(statePatch) {
 		this._stateManager.setState(statePatch);
 	}
 
 	/**
-	 * Returns current state of page.
+	 * Returns the current page state.
 	 *
-	 * @method getState
-	 * @return {Object<string, *>}
+	 * @return {Object<string, *>} The current page state.
 	 */
 	getState() {
 		return this._stateManager.getState();
 	}
 
 	/**
-	 * Clear app source from page.
-	 *
-	 * @method clearAppSource
+	 * Clears the current application state.
 	 */
 	clearAppSource() {
 		this._pageManager.destroy();
-
 		this._dispatcher.clear();
 	}
 }

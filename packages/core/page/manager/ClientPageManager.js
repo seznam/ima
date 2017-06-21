@@ -1,61 +1,70 @@
 // @client-side
 
-import ns from 'ima/namespace';
-import AbstractPageManager from 'ima/page/manager/AbstractPageManager';
+import ns from '../../namespace';
+import AbstractPageManager from './AbstractPageManager';
+import PageManager from './PageManager';
+import PageFactory from '../PageFactory';
+import PageRenderer from '../renderer/PageRenderer';
+import PageStateManager from '../state/PageStateManager';
+import EventBus from '../../event/EventBus';
+import Window from '../../window/Window';
 
 ns.namespace('ima.page.manager');
 
 /**
  * Page manager for controller on the client side.
- *
- * @class ClientPageManager
- * @implements ima.page.manager.AbstractPageManager
- * @namespace ima.page.manager
- * @module ima
- * @submodule ima.page
  */
 export default class ClientPageManager extends AbstractPageManager {
 
+	static get $dependencies() {
+		return [PageFactory, PageRenderer, PageStateManager, Window, EventBus];
+	}
+
 	/**
-	 * @method constructor
-	 * @constructor
-	 * @param {ima.page.Factory} pageFactory
-	 * @param {ima.page.renderer.PageRenderer} pageRenderer
-	 * @param {ima.page.state.PageStateManager} stateManager
-	 * @param {ima.window.Window} window
-	 * @param {ima.event.EventBus} eventBus
+	 * Initializes the client-side page manager.
+	 *
+	 * @param {PageFactory} pageFactory Factory used by the page manager to
+	 *        create instances of the controller for the current route, and
+	 *        decorate the controllers and page state managers.
+	 * @param {PageRenderer} pageRenderer The current renderer of the page.
+	 * @param {PageStateManager} stateManager The current page state manager.
+	 * @param {Window} window The utility for manipulating the global context
+	 *        and global client-side-specific APIs.
+	 * @param {EventBus} eventBus The event bus for dispatching and listening
+	 *        for custom IMA events propagated through the DOM.
 	 */
 	constructor(pageFactory, pageRenderer, stateManager, window, eventBus) {
 		super(pageFactory, pageRenderer, stateManager);
 
 		/**
-		 * @private
-		 * @property _window
+		 * The utility for manipulating the global context and global
+		 * client-side-specific APIs.
+		 * 
 		 * @type {ima.window.Window}
-		 * @default window
 		 */
 		this._window = window;
 
 		/**
-		 * @private
-		 * @property _eventBus
+		 * The event bus for dispatching and listening for custom IMA events
+		 * propagated through the DOM.
+		 * 
 		 * @type {ima.event.EventBus}
-		 * @default eventBus
 		 */
 		this._eventBus = eventBus;
 
 		/**
-		 * Binded custom event handler.
+		 * Event listener for the custom DOM events used by the event bus,
+		 * bound to this instance.
 		 *
-		 * @property _boundOnCustomEventHandler
-		 * @type {function}
+		 * @type {function(this: ClientPageManager, Event)}
 		 */
-		this._boundOnCustomEventHandler = (e) => this._onCustomEventHandler(e);
+		this._boundOnCustomEventHandler = (event) => {
+			this._onCustomEventHandler(event);
+		};
 	}
 
 	/**
 	 * @inheritdoc
-	 * @method init
 	 */
 	init() {
 		super.init();
@@ -67,7 +76,6 @@ export default class ClientPageManager extends AbstractPageManager {
 
 	/**
 	 * @inheritdoc
-	 * @method manage
 	 */
 	manage(controller, view, options, params = {}) {
 		return (
@@ -83,7 +91,6 @@ export default class ClientPageManager extends AbstractPageManager {
 
 	/**
 	 * @inheritdoc
-	 * @method scrollTo
 	 */
 	scrollTo(x = 0, y = 0) {
 		setTimeout(() => {
@@ -93,7 +100,6 @@ export default class ClientPageManager extends AbstractPageManager {
 
 	/**
 	 * @inheritdoc
-	 * @method destroy
 	 */
 	destroy() {
 		super.destroy();
@@ -105,22 +111,27 @@ export default class ClientPageManager extends AbstractPageManager {
 	}
 
 	/**
-	 * On custom event handler.
+	 * Custom DOM event handler.
 	 *
-	 * It calls listener in the active controller. Name of listener is defined
-	 * by prefix 'on' and event name. If event name is 'toggle', listener
-	 * should be 'onToggle'.
+	 * The handler invokes the event listener in the active controller, if such
+	 * listener is present. The name of the controller's listener method is
+	 * created by turning the first symbol of the event's name to upper case,
+	 * and then prefixing the result with the 'on' prefix.
+	 * 
+	 * For example: for an event named 'toggle' the controller's listener
+	 * would be named 'onToggle'.
+	 * 
+	 * The controller's listener will be invoked with the event's data as an
+	 * argument.
 	 *
-	 * @private
-	 * @method _onCustomEventHandler
-	 * @param {CustomEvent} event
+	 * @param {CustomEvent} event The encountered event bus DOM event.
 	 */
 	_onCustomEventHandler(event) {
-		var { method, data, eventName } = this._parseCustomEvent(event);
-		var controllerInstance = this._managedPage.controllerInstance;
+		let { method, data, eventName } = this._parseCustomEvent(event);
+		let controllerInstance = this._managedPage.controllerInstance;
 
 		if (controllerInstance) {
-			var handled = this._handleEventWithController(method, data);
+			let handled = this._handleEventWithController(method, data);
 
 			if (!handled) {
 				handled = this._handleEventWithExtensions(method, data);
@@ -142,35 +153,38 @@ export default class ClientPageManager extends AbstractPageManager {
 	}
 
 	/**
-	 * Return parsed custom event as object with keys method, data and
-	 * eventName.
+	 * Extracts the details of the provided event bus custom DOM event, along
+	 * with the expected name of the current controller's method for
+	 * intercepting the event.
 	 *
-	 * @private
-	 * @method _parseCustomEvent
-	 * @param {CustomEvent} event
-	 * @return {Object<string, *>}	The parsed custom event.
+	 * @param {CustomEvent} event The encountered event bus custom DOM event.
+	 * @return {{ method: string, data: *, eventName: string }} The event's
+	 *         details.
 	 */
 	_parseCustomEvent(event) {
-		var eventName = event.detail.eventName;
-		var method = 'on' + eventName.charAt(0).toUpperCase() +
+		let eventName = event.detail.eventName;
+		let method = 'on' + eventName.charAt(0).toUpperCase() +
 				eventName.slice(1);
-		var data = event.detail.data;
+		let data = event.detail.data;
 
 		return { method, data, eventName };
 	}
 
 	/**
-	 * Try handle event with controller. If event is handled by
-	 * controller then return true else return false.
+	 * Attempts to handle the currently processed event bus custom DOM event
+	 * using the current controller. The method returns {@code true} if the
+	 * event is handled by the controller.
 	 *
-	 * @private
-	 * @method _handleEventWithController
-	 * @param {string} method
-	 * @param {Object<string, *>} data
-	 * @return {boolean}
+	 * @param {string} method The name of the method the current controller
+	 *        should use to process the currently processed event bus custom
+	 *        DOM event.
+	 * @param {Object<string, *>} data The custom event's data.
+	 * @return {boolean} {@code true} if the event has been handled by the
+	 *         controller, {@code false} if the controller does not have a
+	 *         method for processing the event.
 	 */
 	_handleEventWithController(method, data) {
-		var controllerInstance = this._managedPage.controllerInstance;
+		let controllerInstance = this._managedPage.controllerInstance;
 
 		if (typeof controllerInstance[method] === 'function') {
 			controllerInstance[method](data);
@@ -182,20 +196,23 @@ export default class ClientPageManager extends AbstractPageManager {
 	}
 
 	/**
-	 * Try handle event with extensions. If event is handled by
-	 * extension then return true else return false.
+	 * Attempts to handle the currently processed event bus custom DOM event
+	 * using the registered extensions of the current controller. The method
+	 * returns {@code true} if the event is handled by the controller.
 	 *
-	 * @private
-	 * @method _handleEventWithExtensions
-	 * @param {string} method
-	 * @param {Object<string, *>} data
-	 * @return {boolean}
+	 * @param {string} method The name of the method the current controller
+	 *        should use to process the currently processed event bus custom
+	 *        DOM event.
+	 * @param {Object<string, *>} data The custom event's data.
+	 * @return {boolean} {@code true} if the event has been handled by one of
+	 *         the controller's extensions, {@code false} if none of the
+	 *         controller's extensions has a method for processing the event.
 	 */
 	_handleEventWithExtensions(method, data) {
-		var controllerInstance = this._managedPage.controllerInstance;
-		var extensions = controllerInstance.getExtensions();
+		let controllerInstance = this._managedPage.controllerInstance;
+		let extensions = controllerInstance.getExtensions();
 
-		for (var extension of extensions) {
+		for (let extension of extensions) {
 			if (typeof extension[method] === 'function') {
 				extension[method](data);
 

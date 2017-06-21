@@ -1,29 +1,31 @@
-describe('ima.page.state.PageStateManagerImpl', function() {
+import PageStateManager from 'page/state/PageStateManagerImpl';
 
-	var stateManager = null;
-	var defaultState = { state: 'state', patch: null };
-	var patchState = { patch: 'patch' };
+describe('ima.page.state.PageStateManagerImpl', () => {
 
-	beforeEach(function() {
-		stateManager = oc.create('$PageStateManager');
+	let stateManager = null;
+	let defaultState = { state: 'state', patch: null };
+	let patchState = { patch: 'patch' };
+
+	beforeEach(() => {
+		stateManager = new PageStateManager();
 
 		stateManager._pushToHistory(defaultState);
 	});
 
-	it('should clear history', function() {
+	it('should clear history', () => {
 		stateManager.clear();
 
 		expect(stateManager._states.length).toEqual(0);
 		expect(stateManager._cursor).toEqual(-1);
 	});
 
-	describe('getState method', function() {
+	describe('getState method', () => {
 
-		it('should returns default state', function() {
+		it('should returns default state', () => {
 			expect(stateManager.getState()).toEqual(defaultState);
 		});
 
-		it('should returns empty object for empty history', function() {
+		it('should returns empty object for empty history', () => {
 			stateManager.clear();
 
 			expect(stateManager.getState()).toEqual({});
@@ -31,10 +33,10 @@ describe('ima.page.state.PageStateManagerImpl', function() {
 
 	});
 
-	describe('setState method', function() {
+	describe('setState method', () => {
 
-		it('should set smooth copy last state and state patch', function() {
-			var newState = Object.assign({}, defaultState, patchState);
+		it('should set smooth copy last state and state patch', () => {
+			let newState = Object.assign({}, defaultState, patchState);
 
 			spyOn(stateManager, '_eraseExcessHistory')
 				.and
@@ -57,7 +59,7 @@ describe('ima.page.state.PageStateManagerImpl', function() {
 		});
 	});
 
-	it('should return history of states', function() {
+	it('should return history of states', () => {
 		expect(stateManager.getAllStates()).toEqual([defaultState]);
 	});
 

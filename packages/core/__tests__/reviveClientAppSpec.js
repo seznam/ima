@@ -1,79 +1,145 @@
-describe('Revive client application', function() {
+import React from 'react';
+import jsdom from 'jsdom';
+import $Helper from 'ima-helpers';
+import SuperAgent from 'superagent';
+import ControllerInterface from '../controller/Controller';
+import AbstractDocumentView from '../page/AbstractDocumentView';
+import * as ima from '../main';
+import vendorLinker from '../vendorLinker';
 
-	var router = null;
-	var React = ns.vendor.react;
-	var ReactDOM = {
-		render: function() { return { setState: function() {} }; }
+describe('Revive client application', () => {
+
+	let router = null;
+	let ReactDOM = {
+		render() {
+			return {
+				setState: () => {}
+			};
+		},
+		renderToDOM() {
+
+		}
 	};
 
-	var routerConfig = {
+	let routerConfig = {
 		$Protocol: 'http:',
 		$Root: '',
 		$LanguagePartPath: '',
 		$Host: 'www.domain.com'
 	};
 
-	var options = {
-		onlyUpdate: false,
-		autoScroll: true,
-		allowSPA: true,
-		documentView: null
-	};
-
-	function Controller() {}
-
 	function View() {
 		return React.createElement('div', {});
 	}
 
-	Controller.prototype = Object.create(ns.ima.controller.Controller.prototype);
-	Controller.prototype.constructor = Controller;
-	Controller.prototype.getHttpStatus = function() { return 200; };
-	Controller.prototype.getExtensions = function() { return []; };
-	Controller.prototype.load = function() { return { hello: 'Hello' }; };
+	class DocumentView extends AbstractDocumentView {
+		static get masterElementId() {}
+	}
 
-	beforeAll(function(done) {
-		$IMA.Loader
-			.import('app/main')
-			.then(function(app) {
-				oc.clear();
-				app.ima.reviveTestClientApp(Object.assign({}, app.getInitialAppConfigFunctions(), { initBindApp: function(bindNs, bindOc, config) {
-					bindOc.bind('$PageRenderer', bindNs.ima.page.renderer.ClientPageRenderer, ['$PageRendererFactory', '$Helper', ReactDOM, '$Settings', '$Window']);
-					router = bindOc.get('$Router');
+	class Controller extends ControllerInterface {
+
+		getHttpStatus() {
+			return 200;
+		}
+
+		getExtensions() {
+			return [];
+		}
+
+		load() {
+			return { hello: 'Hello' };
+		}
+	}
+
+	let options = {
+		onlyUpdate: false,
+		autoScroll: true,
+		allowSPA: true,
+		documentView: DocumentView
+	};
+
+	function propagateToGlobal(win) {
+		for (let key of Object.keys(win)) {
+			global[key] = global[key] ? global[key] : win[key];
+		}
+	}
+
+	beforeAll((done) => {
+		let doc = Reflect.construct(jsdom.JSDOM, [`<!DOCTYPE html><html><head></head><body></body></html>`]);
+
+		propagateToGlobal(doc.window);
+
+		global.$IMA = Object.assign({},
+			global.$IMA || {},
+			routerConfig,
+			{
+				$Env: 'prod',
+				$Version: 1
+			}
+		);
+
+		global.document = doc.window.document;
+		global.window = doc.window;
+		global.window.$IMA = global.$IMA;
+		global.window.$Debug = global.$Debug;
+		doc.reconfigure({ url: `${routerConfig.$Protocol}//${routerConfig.$Host}` });
+
+		//mock
+		global.window.scrollTo = () => {};
+
+		vendorLinker.set('react', React);
+		vendorLinker.set('react-dom', ReactDOM);
+		vendorLinker.set('superagent', SuperAgent);
+		vendorLinker.set('ima-helpers', $Helper);
+
+		spyOn(ReactDOM, 'renderToDOM');
+
+		done();
+	});
+
+	it('revive client app', (done) => {
+		let bootConfig = Object.assign(
+			{
+				initServicesApp: () => {},
+				initBindApp: () => {},
+				initRoutes: () => {},
+				initSettings: () => {
+					return {
+						prod: {
+							$Page: {
+								$Render: {}
+							}
+						}
+					};
+				}
+			},
+			{
+				initBindApp: (ns, oc, config) => {
+					router = oc.get('$Router');
 					router.init(routerConfig);
-					router.add('reviveClientApp', '/reviveClientApp', Controller, View, options);
+					router.add('reviveClientApp', '/', Controller, View, options);
 
-					app.getInitialAppConfigFunctions().initBindApp(bindNs, bindOc, config);
-				} }));
+					oc.inject(Controller, []);
 
-				oc.inject(Controller, []);
+					if (!oc.has('$Utils')) {
+						oc.constant('$Utils', {});
+					}
+				}
+			}
+		);
 
-				done();
-			});
-	});
 
-	afterAll(function(done) {
-		$IMA.Loader
-			.import('app/main')
-			.then(function(app) {
-				oc.clear();
-				app.ima.reviveTestClientApp(app.getInitialAppConfigFunctions());
-				done();
-			});
-	});
+		ima.reviveClientApp(bootConfig).then((response) => {
+			expect(response.status).toEqual(200);
+			expect(response.pageState).toEqual({ hello: 'Hello' });
+			expect(response.content).toEqual(null);
+			expect(ReactDOM.renderToDOM).toHaveBeenCalled();
+			done();
+		})
+		.catch((error) => {
+			done(error);
+		});
 
-	it('should response with status code 200 and content null', function(done) {
-		router
-			.route('/reviveClientApp')
-			.then(function(response) {
-				expect(response.status).toEqual(200);
-				expect(response.content).toEqual(null);
-				done();
-			})
-			.catch(function(error) {
-				console.error('ERROR', error);
-				done(error);
-			});
 	});
 
 

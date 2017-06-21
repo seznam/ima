@@ -1,4 +1,4 @@
-import ns from 'ima/namespace';
+import ns from '../namespace';
 
 ns.namespace('ima.http');
 
@@ -6,8 +6,8 @@ ns.namespace('ima.http');
  * HTTP status code constants, representing the HTTP status codes recognized
  * and processed by this proxy.
  *
- * @enum
- * @property StatusCode
+ * @enum {number}
+ * @const
  * @see http://www.w3.org/Protocols/rfc2616/rfc2616-sec10.html
  */
 const StatusCode = Object.freeze({
@@ -15,7 +15,6 @@ const StatusCode = Object.freeze({
 	/**
 	 * OK
 	 *
-	 * @property HTTP_STATUS_CODE.OK
 	 * @type {number}
 	 */
 	OK: 200,
@@ -23,7 +22,6 @@ const StatusCode = Object.freeze({
 	/**
 	 * Bad request
 	 *
-	 * @property HTTP_STATUS_CODE.BAD_REQUEST
 	 * @type {number}
 	 */
 	BAD_REQUEST: 400,
@@ -31,7 +29,6 @@ const StatusCode = Object.freeze({
 	/**
 	 * Unauthorized
 	 *
-	 * @property HTTP_STATUS_CODE.UNAUTHORIZED
 	 * @type {number}
 	 */
 	UNAUTHORIZED: 401,
@@ -39,7 +36,6 @@ const StatusCode = Object.freeze({
 	/**
 	 * Forbidden
 	 *
-	 * @property HTTP_STATUS_CODE.FORBIDDEN
 	 * @type {number}
 	 */
 	FORBIDDEN: 403,
@@ -47,7 +43,6 @@ const StatusCode = Object.freeze({
 	/**
 	 * Not found
 	 *
-	 * @property HTTP_STATUS_CODE.NOT_FOUND
 	 * @type {number}
 	 */
 	NOT_FOUND: 404,
@@ -55,7 +50,6 @@ const StatusCode = Object.freeze({
 	/**
 	 * Request timeout
 	 *
-	 * @property HTTP_STATUS_CODE.TIMEOUT
 	 * @type {number}
 	 */
 	TIMEOUT: 408,
@@ -63,7 +57,6 @@ const StatusCode = Object.freeze({
 	/**
 	 * Internal Server Error
 	 *
-	 * @property HTTP_STATUS_CODE.SERVER_ERROR
 	 * @type {number}
 	 */
 	SERVER_ERROR: 500

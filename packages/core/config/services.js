@@ -1,4 +1,4 @@
-export var init = (ns, oc, config) => {
+export default (ns, oc, config) => {
 
 	oc
 		.get('$Dictionary')

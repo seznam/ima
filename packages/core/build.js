@@ -1,16 +1,19 @@
-
-var js = [
-	'./node_modules/ima/**/!(vendorLinker|build|test|*Spec).{js,jsx}',
+const js = [
+	'./node_modules/ima/**/!(vendorLinker|gulpfile|build|test|*Spec).{js,jsx}',
 	'!./node_modules/ima/polyfill/*.js'
 ];
 
-var mainjs = ['./node_modules/ima/main.js'];
+const mainjs = [
+	'./node_modules/ima/main.js'
+];
 
-var vendors = {
+const vendors = {
 	common: [
 		'ima-helpers',
+		'classnames',
 		'react',
 		'react-dom',
+		'prop-types',
 		'superagent'
 	],
 
@@ -22,7 +25,8 @@ var vendors = {
 
 	test: [
 		'ima/test.js',
-		'react-addons-test-utils'
+		'react-test-renderer',
+		'enzyme'
 	]
 };
 
