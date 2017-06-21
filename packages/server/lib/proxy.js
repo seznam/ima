@@ -1,6 +1,7 @@
 const express = require('express');
 const fs = require('fs');
 const superAgent = require('superagent');
+const errorToJSON = require('error-to-json');
 
 function firstLetterToLowerCase(world) {
 	return world.charAt(0).toLowerCase() + world.slice(1);
@@ -175,7 +176,7 @@ module.exports = (environment, logger) => {
 				);
 				body = JSON.parse(text);
 			} catch (error) {
-				logger.error('API response is invalid JSON.', { error });
+				logger.error('API response is invalid JSON.', { error: errorToJSON(error) });
 				body = {};
 			}
 		}
@@ -227,7 +228,7 @@ module.exports = (environment, logger) => {
 						logger.error(
 							`API ERROR: ${req.method} ${proxyUrl} query: ` +
 							JSON.stringify(req.query),
-							{ error }
+							{ error: errorToJSON(error) }
 						);
 
 						sendJSONResponse(req, res, error, response);
