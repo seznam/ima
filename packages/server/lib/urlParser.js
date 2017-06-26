@@ -1,8 +1,8 @@
 'use strict';
 
-module.exports = (environment) => {
+module.exports = environment => {
 
-	var _getHost = (req) => {
+	function _getHost(req) {
 		let forwardedHost = req.get('X-Forwarded-Host');
 		let host = req.get('host');
 
@@ -11,20 +11,20 @@ module.exports = (environment) => {
 		}
 
 		return host;
-	};
+	}
 
-	var _getUrlFromRequest = (req) => {
+	function _getUrlFromRequest(req) {
 		return  '//' + _getHost(req) + req.originalUrl.replace(/\/$/, '');
-	};
+	}
 
-	var _isHostSame = (currentHost, hostExpression) => {
+	function _isHostSame(currentHost, hostExpression) {
 		return currentHost === hostExpression;
-	};
+	}
 
-	var _getRootRegExp = (hostExpression, rootExpression, languageParam) => {
-		var rootReg = '\/\/' +
-					hostExpression.replace(/[\\.+*?\^$\[\](){}\/\'#]/g, '\\$&') +
-					rootExpression.replace('/','\/');
+	function _getRootRegExp(hostExpression, rootExpression, languageParam) {
+		let rootReg = '\/\/' +
+				hostExpression.replace(/[\\.+*?\^$\[\](){}\/\'#]/g, '\\$&') +
+				rootExpression.replace('/','\/');
 
 		if (languageParam) {
 			let build = require('../../app/build.js');
@@ -34,9 +34,9 @@ module.exports = (environment) => {
 		rootReg += '.*$';
 
 		return new RegExp(rootReg);
-	};
+	}
 
-	var _getProtocolFromForwardedHeader = (req) => {
+	function _getProtocolFromForwardedHeader(req) {
 		let forwardedHeader = req.get('Forwarded');
 		let protocol = null;
 
@@ -44,8 +44,7 @@ module.exports = (environment) => {
 			let parts = forwardedHeader.split(';');
 
 			for (let part of parts) {
-
-				if (part.substring(0, 6) === 'proto=') {
+				if (part.startsWith('proto=')) {
 					protocol = part.substring(6);
 					break;
 				}
@@ -53,9 +52,9 @@ module.exports = (environment) => {
 		}
 
 		return protocol;
-	};
+	}
 
-	var _getProtocolFromXForwardedProtoHeader = (req) => {
+	function _getProtocolFromXForwardedProtoHeader(req) {
 		let forwardedProtocol = req.get('X-Forwarded-Proto');
 		let protocol = null;
 
@@ -64,9 +63,9 @@ module.exports = (environment) => {
 		}
 
 		return protocol;
-	};
+	}
 
-	var _getProtocolFromFrontEndHttpsHeader = (req) => {
+	function _getProtocolFromFrontEndHttpsHeader(req) {
 		let httpsHeader = req.get('Front-End-Https');
 		let protocol = null;
 
@@ -75,54 +74,67 @@ module.exports = (environment) => {
 		}
 
 		return protocol;
-	};
+	}
 
-	var _getProtocol = (req) => {
+	function _getProtocol(req) {
 		let protocol = _getProtocolFromForwardedHeader(req) ||
 				_getProtocolFromXForwardedProtoHeader(req) ||
 				_getProtocolFromFrontEndHttpsHeader(req) ||
 				req.protocol;
 
 		return protocol + ':';
-	};
+	}
 
-	var parseUrl = (req, res, next) => {
-		var parseUrlReg = /^.*\/\/([^\/]*)((?:\/[^\/:]+)*)?(\/\:language)?$/;
-		var currentUrl = _getUrlFromRequest(req);
-		var parsedCurrentUrl = currentUrl.match(parseUrlReg);
+	function parseUrl(req, res, next) {
+		let parseUrlReg = /^.*\/\/([^\/]*)((?:\/[^\/:]+)*)?(\/\:language)?$/;
+		let currentUrl = _getUrlFromRequest(req);
+		let parsedCurrentUrl = currentUrl.match(parseUrlReg);
 
-		var currentLanguage = null;
-		var currentLanguagePartPath = '';
-		var currentHost = parsedCurrentUrl[1];
-		var currentRoot = parsedCurrentUrl[2];
-		var currentProtocol = _getProtocol(req);
+		let currentLanguage = null;
+		let currentLanguagePartPath = '';
+		let currentHost = parsedCurrentUrl[1];
+		let currentRoot = parsedCurrentUrl[2];
+		let currentPath = currentRoot;
+		let currentProtocol = _getProtocol(req);
 
-		for (var expression of Object.keys(environment.$Language)) {
-			var parsedDomainExpression = expression.match(parseUrlReg);
+		for (let expression of Object.keys(environment.$Language)) {
+			let parsedDomainExpression = expression.match(parseUrlReg);
 
-			var hostExpression = parsedDomainExpression[1] === '*:*' ? currentHost : parsedDomainExpression[1] || '';
-			var rootExpression = parsedDomainExpression[2] || '';
-			var languageInPath = parsedDomainExpression[3];
+			let hostExpression = parsedDomainExpression[1] === '*:*' ?
+				currentHost : parsedDomainExpression[1] || '';
+			let rootExpression = parsedDomainExpression[2] || '';
+			let languageInPath = parsedDomainExpression[3];
 
 			if (_isHostSame(currentHost, hostExpression)) {
 
-				var rootRegExp = _getRootRegExp(hostExpression, rootExpression, languageInPath);
+				let rootRegExp = _getRootRegExp(
+					hostExpression,
+					rootExpression,
+					languageInPath
+				);
 
 				if (rootRegExp.test(currentUrl)) {
 					currentRoot = rootExpression;
 
 					if (languageInPath) {
-						var matchedLanguage = currentUrl.match(rootRegExp);
+						let matchedLanguage = currentUrl.match(rootRegExp);
 
 						currentLanguagePartPath = matchedLanguage[1];
 						currentLanguage = matchedLanguage[2];
 
 						if (!currentLanguage) {
-							currentLanguagePartPath = '/'+environment.$Language[expression];
+							currentLanguagePartPath =
+									'/' + environment.$Language[expression];
 							currentLanguage = environment.$Language[expression];
 
 							// REDIRECT
-							res.redirect(currentProtocol + '//'+currentHost+currentRoot+currentLanguagePartPath);
+							res.redirect(
+								currentProtocol +
+								'//' +
+								currentHost +
+								currentRoot +
+								currentLanguagePartPath
+							);
 							return;
 						}
 					} else {
@@ -137,6 +149,7 @@ module.exports = (environment) => {
 		res.locals.language = currentLanguage;
 		res.locals.languagePartPath = currentLanguagePartPath;
 		res.locals.host = currentHost;
+		res.locals.path = currentPath;
 		res.locals.protocol = currentProtocol;
 		res.locals.root = currentRoot;
 

@@ -1,22 +1,22 @@
 {
 	"name": "ima-server",
-	"version": "0.13.3",
+	"version": "0.14.0-rc.12",
 	"description": "Default dev server for IMA.js applications.",
 	"main": "index.js",
 	"scripts": {
-		"prepublish": "npm run test",
-		"test": "node node_modules/gulp/bin/gulp.js test --harmony_destructuring",
-		"dev": "node node_modules/gulp/bin/gulp.js dev --harmony_destructuring"
+		"prepublishOnly": "npm run test",
+		"test": "node node_modules/gulp/bin/gulp.js test",
+		"dev": "node node_modules/gulp/bin/gulp.js dev"
 	},
 	"repository": {
 		"type": "git",
 		"url": "https://github.com/seznam/IMA.js-server.git"
 	},
 	"keywords": [
-    "gulp",
-    "IMA.js",
-    "ima"
-  ],
+		"gulp",
+		"IMA.js",
+		"ima"
+	],
 	"author": "Seznam.cz, a.s.",
 	"license": "MIT",
 	"bugs": {
@@ -27,18 +27,26 @@
 	},
 	"homepage": "https://github.com/seznam/IMA.js-server",
 	"devDependencies": {
-		"express": "^4.14.0",
-		"gulp": "^3.9.1",
-		"gulp-jasmine": "^2.4.0",
+		"express": "^4.15.3",
+		"gulp": "github:gulpjs/gulp#3f5aba2",
+		"gulp-jasmine": "^2.4.2",
 		"gulp-plumber": "^1.1.0",
-		"jasmine": "^2.4.1",
-		"superagent": "^2.0.0"
+		"ima-helpers": "^0.14.0-rc.2",
+		"jasmine": "^2.6.0",
+		"superagent": "^3.5.2"
 	},
 	"dependencies": {
-		"async-each": "^1.0.0",
-		"highlight.js": "^9.5.0",
-		"ima-helpers": "^0.13.0",
-		"stack-trace": "0.0.9",
-		"winston": "^2.2.0"
+		"async-each": "1.0.1",
+		"error-to-json": "1.1.0",
+		"highlight.js": "9.12.0",
+		"stack-trace": "0.0.10",
+		"winston": "2.3.1"
+	},
+	"peerDependencies": {
+		"ima-helpers": "0.14.x"
+	},
+	"engines": {
+		"node": ">=6",
+		"npm": ">=4 <6"
 	}
 }
