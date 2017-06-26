@@ -1,6 +1,6 @@
 {
 	"name": "IMA.js-skeleton",
-	"version": "0.13.0",
+	"version": "0.14.0",
 	"description": "Isomorphic javascript application",
 	"main": "build/server.js",
 	"scripts": {
@@ -9,6 +9,7 @@
 		"app:todos": "node node_modules/gulp/bin/gulp.js app:todos",
 		"test": "node node_modules/gulp/bin/gulp.js test",
 		"dev": "node node_modules/gulp/bin/gulp.js dev",
+		"gulp": "node node_modules/.bin/gulp",
 		"build": "NODE_ENV=production node_modules/gulp/bin/gulp.js build",
 		"build:spa": "NODE_ENV=production node_modules/gulp/bin/gulp.js build:spa",
 		"start": "NODE_ENV=production node build/server.js"
@@ -16,8 +17,8 @@
 	"keywords": [
 		"IMA.js",
 		"Isomorphic",
-		"Javascript"
- 	],
+		"JavaScript"
+	],
 	"author": "Miroslav Jancarik <miroslav.jancarik@firma.seznam.cz>",
 	"contributors": [
 		{
@@ -28,7 +29,7 @@
 			"name": "Martin Jurča",
 			"email": "martin.jurca@firma.seznam.cz"
 		}
- 	],
+	],
 	"repository": {
 		"type": "git",
 		"url": "https://github.com/seznam/IMA.js-skeleton.git"
@@ -38,19 +39,19 @@
 	},
 	"license": "MIT",
 	"devDependencies": {
-		"ima-gulp-task-loader": "^0.12.0",
-		"ima-gulp-tasks": "^0.13.1"
+		"ima-gulp-task-loader": "0.14.0-rc.1",
+		"ima-gulp-tasks": "0.14.0-rc.17"
 	},
 	"dependencies": {
-		"body-parser": "^1.15.2",
-		"compression": "^1.6.2",
-		"cookie-parser": "^1.4.3",
-		"express": "^4.14.0",
-		"helmet": "^2.1.1",
-		"ima": "^0.13.2",
-		"ima-server": "^0.13.0",
-		"method-override": "^2.3.6",
-		"multer": "^1.0.6",
-		"serve-favicon": "^2.3.0"
+		"body-parser": "1.17.2",
+		"compression": "1.6.2",
+		"cookie-parser": "1.4.3",
+		"express": "4.15.3",
+		"helmet": "3.6.1",
+		"ima": "0.14.0-rc.26",
+		"ima-server": "0.14.0-rc.12",
+		"method-override": "2.3.9",
+		"multer": "1.3.0",
+		"serve-favicon": "2.4.3"
 	}
 }
