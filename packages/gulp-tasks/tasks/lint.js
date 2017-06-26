@@ -1,14 +1,21 @@
 
-var gulp = require('gulp');
-var eslint = require('gulp-eslint');
+let gulp = require('gulp');
+let eslint = require('gulp-eslint');
 
-module.exports = function (gulpConfig) {
-	var files = gulpConfig.files;
+exports.__requiresConfig = true;
 
-	gulp.task('lint', function () {
-		return gulp.src(files.app.src)
+exports.default = (gulpConfig) => {
+	let files = gulpConfig.files;
+
+	function lint() {
+		return gulp
+			.src(files.app.src)
 			.pipe(eslint())
 			.pipe(eslint.format())
 			.pipe(eslint.failOnError());
-	});
+	}
+
+	return {
+		lint
+	};
 };

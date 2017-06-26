@@ -1,30 +1,28 @@
 
-var gulp = require('gulp');
+let gulp = require('gulp');
 
-module.exports = function (gulpConfig) {
-	var files = gulpConfig.files;
+exports.__requiresConfig = true;
 
-	gulp.task('copy:appStatic', function () {
-		var filesToMove = [
-			'./app/assets/static/**/*.*',
-			'./app/assets/static/*.*'
-		];
-		return (
-			gulp
-				.src(filesToMove)
-				.pipe(gulp.dest(files.server.dest + 'static/'))
-		);
-	});
+exports.default = (gulpConfig) => {
+	let files = gulpConfig.files;
 
-	gulp.task('copy:environment', function () {
-		var filesToMove = [
-			'./app/environment.js'
-		];
+	function copyAppStatic() {
+		return gulp
+			.src([
+				'./app/assets/static/**/*.*',
+				'./app/assets/static/*.*'
+			])
+			.pipe(gulp.dest(files.server.dest + 'static/'));
+	}
 
-		return (
-			gulp
-				.src(filesToMove)
-				.pipe(gulp.dest(files.server.base + 'ima/config/'))
-		);
-	});
+	function copyEnvironment() {
+		return gulp
+			.src(['./app/environment.js'])
+			.pipe(gulp.dest(files.server.base + 'ima/config/'));
+	}
+
+	return {
+		'copy:appStatic': copyAppStatic,
+		'copy:environment': copyEnvironment
+	};
 };

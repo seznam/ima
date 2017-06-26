@@ -1,22 +1,24 @@
+let gulp = require('gulp');
+let cache = require('gulp-cached');
+let flo = require('fb-flo');
+let gutil = require('gulp-util');
+let remember = require('gulp-remember');
+let watch = require('gulp-watch');
+let path = require('path');
+let fs = require('fs');
 
-var gulp = require('gulp');
-var cache = require('gulp-cached');
-var flo = require('fb-flo');
-var fs = require('fs');
-var gutil = require('gulp-util');
-var remember = require('gulp-remember');
-var watch = require('gulp-watch');
+let sharedState = require('ima-gulp-tasks/gulpState.js');
 
-var sharedState = require('../gulpState.js');
+exports.__requiresConfig = true;
 
-module.exports = function (gulpConfig) {
-	var files = gulpConfig.files;
+exports.default = (gulpConfig) => {
+	let files = gulpConfig.files;
 
-	gulp.task('watch', function () {
+	function watchTask() {
+		let hotReloadedCacheKeys = [];
 
 		runOnChange(files.app.watch, 'app:build');
 		runOnChange(files.vendor.watch, 'vendor:build');
-		runOnChange(files.ima.watch, 'ima:build');
 		runOnChange(files.less.watch, 'less');
 		runOnChange(files.server.watch, 'server:build');
 		runOnChange(files.locale.watch, 'locale:build');
@@ -26,18 +28,22 @@ module.exports = function (gulpConfig) {
 			'./ima/**/*.js',
 			'./app/**/*.{js,jsx}',
 			'./build/static/js/locale/*.js'
-		]).on('change', function (e) {
-			sharedState.watchEvent = e;
+		]).on('all', (event, filePath, stats) => {
+			sharedState.watchEvent = { path: filePath };
+			let absoluteFilePath = path.resolve('.', filePath);
 
-			if (e.type === 'deleted') {
-				if (cache.caches['Es6ToEs5:app'][e.path]) {
-					delete cache.caches['Es6ToEs5:app'][e.path];
-					remember.forget('Es6ToEs5:app', e.path);
+			let cacheKey = absoluteFilePath.toLowerCase().replace('.jsx', '.js');
+			hotReloadedCacheKeys.push(cacheKey);
+
+			if (event === 'unlink') {
+				if (cache.caches['Es6ToEs5:app'][absoluteFilePath]) {
+					delete cache.caches['Es6ToEs5:app'][absoluteFilePath];
+					remember.forget('Es6ToEs5:app', absoluteFilePath.replace('.jsx', '.js'));
 				}
 
-				if (cache.caches['Es6ToEs5:ima'][e.path]) {
-					delete cache.caches['Es6ToEs5:ima'][e.path];
-					remember.forget('Es6ToEs5:ima', e.path);
+				if (cache.caches['Es6ToEs5:ima'][absoluteFilePath]) {
+					delete cache.caches['Es6ToEs5:ima'][absoluteFilePath];
+					remember.forget('Es6ToEs5:ima', absoluteFilePath.replace('.jsx', '.js'));
 				}
 			}
 		});
@@ -52,22 +58,44 @@ module.exports = function (gulpConfig) {
 					'**/*.js'
 				]
 			},
-			function (filepath, callback) {
-				gutil.log('Reloading \'public/' + gutil.colors.cyan(filepath) +
-					'\' with flo...');
+			(filepath, callback) => {
+				gutil.log(
+					`Reloading 'public/${gutil.colors.cyan(filepath)}' with ` +
+					'flo...'
+				);
 
-				var fileContents = fs.readFileSync('./build/static/' + filepath);
+				let hotReloadedContents = '';
+
+				if (path.parse(filepath).ext === '.css') {
+					hotReloadedContents = fs.readFileSync('./build/static/' + filepath);
+				} else {
+					hotReloadedContents = hotReloadedCacheKeys.map((cacheKey) => {
+						let file = remember.cacheFor('Es6ToEs5:app')[cacheKey];
+						if (!file) {
+							return '';
+						}
+
+						return file.contents
+								.toString()
+								.replace(/System.import/g, '$IMA.Loader.import')
+								.replace(/System.register/g, '$IMA.Loader.replaceModule');
+					});
+					hotReloadedCacheKeys = [];
+				}
+
 				callback({
 					resourceURL: 'static/' + filepath,
-					contents: fileContents.toString()
+					contents: hotReloadedContents
 				});
 			}
 		);
 
-		function runOnChange(files, tasks) {
-			watch(files, function () {
-				gulp.start(tasks);
-			});
+		function runOnChange(files, task) {
+			watch(files, () => gulp.series(task)());
 		}
-	});
+	}
+
+	return {
+		watch: watchTask
+	};
 };

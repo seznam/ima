@@ -1,36 +1,39 @@
 
-var gulp = require('gulp');
-var concat = require('gulp-concat');
-var insert = require('gulp-insert');
-var sourcemaps = require('gulp-sourcemaps');
-var builderBabelHeleprs = require('babel-core/lib/tools/build-external-helpers');
+let gulp = require('gulp');
+let concat = require('gulp-concat');
+let insert = require('gulp-insert');
+let sourcemaps = require('gulp-sourcemaps');
+let builderBabelHeleprs = require('babel-core/lib/tools/build-external-helpers');
 
-module.exports = function (gulpConfig) {
-	var files = gulpConfig.files;
+exports.__requiresConfig = true;
 
-	gulp.task('shim', function () {
-		var babelHelpers = builderBabelHeleprs();
+exports.default = (gulpConfig) => {
+	let files = gulpConfig.files;
 
-		return (
-			gulp
-				.src(files.shim.src)
-				.pipe(sourcemaps.init({loadMaps: true}))
-				.pipe(insert.wrap('(function(){', '})();'))
-				.pipe(concat(files.shim.name))
-				.pipe(insert.append(babelHelpers))
-				.pipe(gulp.dest(files.shim.dest.client))
-				.pipe(gulp.dest(files.shim.dest.server))
-		);
-	});
+	function shim() {
+		let babelHelpers = builderBabelHeleprs();
 
-	gulp.task('polyfill', function () {
-		return (
-			gulp
-				.src(files.polyfill.src)
-				.pipe(sourcemaps.init({loadMaps: true}))
-				.pipe(insert.wrap('(function(){', '})();'))
-				.pipe(concat(files.polyfill.name))
-				.pipe(gulp.dest(files.shim.dest.client))
-		);
-	});
+		return gulp
+			.src(files.shim.src)
+			.pipe(sourcemaps.init({loadMaps: true}))
+			.pipe(insert.wrap('(function(){', '})();'))
+			.pipe(concat(files.shim.name))
+			.pipe(insert.append(babelHelpers))
+			.pipe(gulp.dest(files.shim.dest.client))
+			.pipe(gulp.dest(files.shim.dest.server));
+	}
+
+	function polyfill() {
+		return gulp
+			.src(files.polyfill.src)
+			.pipe(sourcemaps.init({loadMaps: true}))
+			.pipe(insert.wrap('(function(){', '})();'))
+			.pipe(concat(files.polyfill.name))
+			.pipe(gulp.dest(files.shim.dest.client))
+	}
+
+	return {
+		polyfill,
+		shim
+	};
 };
