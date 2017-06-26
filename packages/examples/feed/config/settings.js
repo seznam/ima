@@ -1,6 +1,6 @@
 import DocumentView from 'app/component/document/DocumentView';
 
-export let init = (ns, oc, config) => {
+export default (ns, oc, config) => {
 	let versionStamp = `?version=${config.$Version}`;
 
 	return {
@@ -55,7 +55,6 @@ export let init = (ns, oc, config) => {
 					scripts: [
 						'/static/js/shim.js' + versionStamp,
 						'/static/js/vendor.client.js' + versionStamp,
-						'/static/js/ima.client.js' + versionStamp,
 						`/static/js/locale/${config.$Language}.js${versionStamp}`,
 						'/static/js/app.client.js' + versionStamp,
 						'/static/js/facebook.js' + versionStamp,

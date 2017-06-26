@@ -1,4 +1,5 @@
-import React, { PropTypes } from 'react';
+import PropTypes from 'prop-types';
+import React from 'react';
 import AbstractComponent from 'ima/page/AbstractComponent';
 import FeedItem from 'app/component/feedItem/FeedItem';
 import Header from 'app/component/header/Header';

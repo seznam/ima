@@ -26,6 +26,7 @@ module.exports = (() => {
 
 	let vendors = {
 		common: [
+			'ima'
 		],
 
 		server: [
@@ -44,7 +45,7 @@ module.exports = (() => {
 			'./build/static/js/shim.js',
 			'./build/static/js/vendor.client.js',
 			'./build/static/js/app.client.js',
-			'./server/static/js/facebook.js'
+			'./build/static/js/facebook.js'
 		],
 		css: [
 			'./build/static/css/app.css'

@@ -1,5 +1,6 @@
 import AbstractComponent from 'ima/page/AbstractComponent';
-import React, { PropTypes } from 'react';
+import PropTypes from 'prop-types';
+import React from 'react';
 import Feed from 'app/component/feed/Feed';
 import Filter from 'app/component/filter/Filter';
 import Header from 'app/component/header/Header';

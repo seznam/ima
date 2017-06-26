@@ -6,19 +6,25 @@
 
 		if (/static\/js\//.test(ev.data.url)) {
 			$IMA.$DevTool.clearAppSource();
-			$IMA.HotReload = true;
 
 			(0, eval)(ev.data.contents);
 
-			$IMA.Loader
-				.import('imajs/client/main')
-				.then((main) => {
-					main.hotReloadIMAJsClientApp();
-				}).catch((error) => {
+			$IMA.HotReload = true;
+
+			$IMA.Loader.initAllModules()
+				.then(function() {
+
+					return $IMA.Loader
+						.import('app/main')
+						.then(function(appMain) {
+							appMain.ima.hotReloadClientApp(appMain.getInitialAppConfigFunctions());
+
+							$IMA.HotReload = false;
+						});
+				}).catch(function(error) {
 					console.error(error);
 				});
 
-			$IMA.HotReload = false;
 		}
 	});
 })();

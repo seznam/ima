@@ -4,7 +4,7 @@ import EventBus from 'ima/event/EventBus';
 import Router from 'ima/router/Router';
 import Window from 'ima/window/Window';
 
-export let init = (ns, oc, config) => {
+export default (ns, oc, config) => {
 
 	//COMPONENT Utils
 	oc.constant('$Utils', {
@@ -13,6 +13,7 @@ export let init = (ns, oc, config) => {
 		$EventBus: oc.get(EventBus),
 		$Dictionary: oc.get(Dictionary),
 		$Settings: oc.get('$Settings'),
-		$Window: oc.get(Window)
+		$Window: oc.get(Window),
+		$CssClasses: oc.get('$CssClasses')
 	});
 };

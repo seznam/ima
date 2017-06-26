@@ -22,6 +22,7 @@
 		</div>
 		<div id="revivalSettings">
 			<script type="application/javascript">
+				window.$Debug = {$Debug};
 				window.$IMA = window.$IMA || {};
 				window.$IMA.Cache = {};
 				window.$IMA.$App = {$App|json};
@@ -31,6 +32,7 @@
 				window.$IMA.$Debug = {$Debug};
 				window.$IMA.$Protocol = "{$Protocol}";
 				window.$IMA.$Host = "{$Host}";
+				window.$IMA.$Path = location.pathname;
 				window.$IMA.$Root = "{$Root}";
 				window.$IMA.$LanguagePartPath = "{$LanguagePartPath}";
 			</script>
@@ -44,7 +46,6 @@
 				<script type="application/javascript" src="/static/js/polyfill.js?version={$Version}"></script>
 				<script type="application/javascript" src="/static/js/shim.js?version={$Version}"></script>
 				<script type="application/javascript" src="/static/js/vendor.client.js?version={$Version}"></script>
-				<script type="application/javascript" src="/static/js/ima.client.js?version={$Version}"></script>
 				<script type="application/javascript" src="/static/js/locale/{$Language}.js?version={$Version}"></script>
 				<script type="application/javascript" src="/static/js/app.client.js?version={$Version}"></script>
 				<script type="application/javascript">window.$IMA.Runner.run();</script>
