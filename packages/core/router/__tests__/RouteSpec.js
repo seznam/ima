@@ -2,12 +2,12 @@ import Route from 'router/Route';
 
 describe('ima.router.Route', function() {
 
-	var route = null;
-	var name = 'home';
-	var controller = function() {};
-	var view = function() {};
-	var pathExpression = '/home/:userId/something/:somethingId/:?optional';
-	var options = {
+	let route = null;
+	const name = 'home';
+	const controller = function() {};
+	const view = function() {};
+	const pathExpression = '/home/:userId/something/:somethingId/:?optional';
+	const options = {
 		onlyUpdate: false,
 		autoScroll: true,
 		allowSPA: true,
@@ -25,13 +25,31 @@ describe('ima.router.Route', function() {
 			{ pathExpression: '/home/:userId/something/:somethingId', params: { userId: 1, somethingId: 2 }, result: '/home/1/something/2' },
 			{ pathExpression: '/home/:userId/something/:somethingId/', params: { userId: 1, somethingId: 2 }, result: '/home/1/something/2' },
 			{ pathExpression: ':?optional/home/:userId/something/:somethingId/', params: { userId: 1, somethingId: 2 }, result: '/home/1/something/2' },
+
+			{ pathExpression: '/list/:route/:action/:sort/:page', params: { route: 'users', action: 'view', 'sort': 'price', page: 5 }, result: '/list/users/view/price/5' },
+			{ pathExpression: '/list/:route/:action/:sort/:page', params: { action: 'view', route: 'users', 'sort': 'price', page: 5 }, result: '/list/users/view/price/5' },
+
+			{ pathExpression: '/list/:?route/:?action/:?sort/:?page', params: { route: 'users', action: 'view' }, result: '/list/users/view' },
+			{ pathExpression: '/list/:?route/:?action/:?sort/:?page', params: { action: 'view', route: 'users' }, result: '/list/users/view' },
+
+			{ pathExpression: '/search/:?phrase/:?action/:?sort/:?page', params: { phrase: 'users', action: '' }, result: '/search/users' },
+			{ pathExpression: '/search/:?phrase/:?action/:?sort/:?page', params: { action: '', phrase: 'users' }, result: '/search/users' },
+
+			{ pathExpression: '/search/:phrase/:?action/:?sort/:?page', params: { phrase: 'users', action: '' }, result: '/search/users' },
+			{ pathExpression: '/search/:phrase/:?action/:?sort/:?page', params: { action: '', phrase: 'users' }, result: '/search/users' },
+
+			{ pathExpression: '/search/:phrase/:?sort/:?page', params: { phrase: '' }, result: '/search' },
+
+			{ pathExpression: '/:?route/:?action/:?sort/:?page', params: { route: 'users', action: 'view' }, result: '/users/view' },
+			{ pathExpression: '/:?route/:?action/:?sort/:?page', params: { action: 'view', route: 'users' }, result: '/users/view' },
+
 			{ pathExpression: '/home/:userId/something/:somethingId/:?optional', params: { userId: 'hello', somethingId: 'job' }, result: '/home/hello/something/job' },
 			{ pathExpression: '/home/:userId/:?optional/something/:somethingId', params: { userId: 1, somethingId: 2 }, result: '/home/1/something/2' },
 			{ pathExpression: '/home/:userId/:?optional/something/:somethingId/', params: { userId: 1, somethingId: 2 }, result: '/home/1/something/2' }
 		], function(value) {
-			route = new Route(name, value.pathExpression, controller, view, options);
+			const localRoute = new Route(name, value.pathExpression, controller, view, options);
 			it('for path params for pathExpr ' + value.pathExpression + ' and params ' + JSON.stringify(value.params), function() {
-				expect(route.toPath(value.params)).toEqual(value.result);
+				expect(localRoute.toPath(value.params)).toEqual(value.result);
 			});
 		});
 
@@ -40,8 +58,8 @@ describe('ima.router.Route', function() {
 		});
 
 		it('encode path params', function() {
-			route = new Route(name, '/home/:encodeString', controller, view, options);
-			expect(route.toPath({ encodeString: 'á/b?č#d:ě%25' })).toEqual('/home/%C3%A1%2Fb%3F%C4%8D%23d%3A%C4%9B%2525')
+			const localRoute = new Route(name, '/home/:encodeString', controller, view, options);
+			expect(localRoute.toPath({ encodeString: 'á/b?č#d:ě%25' })).toEqual('/home/%C3%A1%2Fb%3F%C4%8D%23d%3A%C4%9B%2525')
 		});
 
 		using([
@@ -51,10 +69,10 @@ describe('ima.router.Route', function() {
 			{ pathExpression: ':?optional/home/:userId/something/:somethingId/:?optional2', params: { userId: 1, somethingId: 2, optional: 'en' }, result: '/en/home/1/something/2' },
 			{ pathExpression: ':?optional/home/:userId/something/:somethingId/:?optional2', params: { userId: 1, somethingId: 2, optional: 'en', optional2: 'today' }, result: '/en/home/1/something/2/today' }
 		], function(value) {
-			var route = new Route(name, value.pathExpression, controller, view, options);
+			const localRoute = new Route(name, value.pathExpression, controller, view, options);
 
 			it('for optional param will be return defined path for pathExpr ' + value.pathExpression + ' and params ' + JSON.stringify(value.params), function() {
-				expect(route.toPath(value.params)).toEqual(value.result);
+				expect(localRoute.toPath(value.params)).toEqual(value.result);
 			});
 		});
 
@@ -66,10 +84,10 @@ describe('ima.router.Route', function() {
 			{ pathExpression: ':?optional/', params: { optional: 'en' }, result: '/en' },
 			{ pathExpression: ':?optional/:?optional2', params: { optional: 'en', optional2: 'cs' }, result: '/en/cs' }
 		], function(value) {
-			var route = new Route(name, value.pathExpression, controller, view, options);
+			const localRoute = new Route(name, value.pathExpression, controller, view, options);
 
 			it('for only optional param will be return defined path for pathExpr ' + value.pathExpression + ' and params ' + JSON.stringify(value.params), function() {
-				expect(route.toPath(value.params)).toEqual(value.result);
+				expect(localRoute.toPath(value.params)).toEqual(value.result);
 			});
 		});
 
@@ -115,14 +133,14 @@ describe('ima.router.Route', function() {
 			{ pathExpression: '/:encodeString', path: '/%C3%A1%2Fb%3F%C4%8D%23d%3A%C4%9B%2525', params: { encodeString: 'á/b?č#d:ě%25' } }
 		], function(value) {
 			it(value.pathExpression, function() {
-				var routeLocal = new Route('unknown', value.pathExpression, 'unknown');
+				const localRoute = new Route('unknown', value.pathExpression, 'unknown')
 
-				var routeParams = routeLocal.extractParameters(value.path);
-				var keys = Object.keys(value.params);
+				const routeParams = localRoute.extractParameters(value.path)
+				const keys = Object.keys(value.params)
 
-				for (var i = 0; i < keys.length; i++) {
-					expect(routeParams[keys[i]]).toEqual(value.params[keys[i]]);
-				}
+				keys.forEach(key => {
+					expect(routeParams[key]).toEqual(value.params[key]);
+				})
 			});
 		});
 
@@ -131,15 +149,15 @@ describe('ima.router.Route', function() {
 	describe('should return true for matched route regular', function() {
 
 		using([
-			{ path: '/home/1/something/2', result:true },
-			{ path: '/home/1/something', result:false },
+			{ path: '/home/1/something/2', result: true },
+			{ path: '/home/1/something', result: false },
 			{ path: '/home/param1/something/param2', result: true },
 			{ path: '/home/param1/something/param2/optional', result: true },
 			{ path: 'optional/home/param1/something/param2/optional', result: false },
 			{ path: '/home/param1/something/param2?query=param3', result: true }
 		], function(value) {
 
-			it(value.path + ' for ' + route.getPathExpression(), function() {
+			it(value.path + ' for ' + pathExpression, function() {
 				expect(route.matches(value.path)).toEqual(value.result);
 			});
 		});
@@ -155,10 +173,10 @@ describe('ima.router.Route', function() {
 			{ pathExpression: '/:?param1/:param2/:?param3', path: '/p1', result: true },
 			{ pathExpression: '/:param1/:?param2/:param3', path: '/p1/p2', result: true }
 		], function(value) {
-			var route = new Route(name, value.pathExpression, controller, view, options);
+			const localRoute = new Route(name, value.pathExpression, controller, view, options);
 
 			it(value.path + ' for ' + value.pathExpression, function() {
-				expect(route.matches(value.path)).toEqual(value.result);
+				expect(localRoute.matches(value.path)).toEqual(value.result);
 			});
 		});
 
@@ -200,7 +218,7 @@ describe('ima.router.Route', function() {
 	});
 
 	describe('query string parser', function() {
-		var route = null;
+		let route = null;
 
 		beforeEach(function() {
 			route = new Route('foo', '/:first/:second', 'foo', 'bar');
