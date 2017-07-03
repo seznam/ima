@@ -206,8 +206,9 @@ export default class Route {
 					paramName,
 					params[paramName]
 				);
+
 			} else {
-				let pair = [paramName, params[paramName]];
+				const pair = [paramName, params[paramName]];
 				query.push(pair.map(encodeURIComponent).join('='));
 			}
 		}
@@ -341,7 +342,7 @@ export default class Route {
 	_substituteOptionalParamInPath(path, paramName, paramValue) {
 		return path.replace(
 			new RegExp(`(^|\/):\\\?${paramName}([\/\?]|$)`),
-			paramValue ? '$1' + encodeURIComponent(paramValue) +  '$2' : ''
+			paramValue ? '$1' + encodeURIComponent(paramValue) +  '$2' : '/'
 		);
 	}
 
