@@ -39,19 +39,19 @@
 	},
 	"license": "MIT",
 	"devDependencies": {
-		"ima-gulp-task-loader": "0.14.0-rc.1",
-		"ima-gulp-tasks": "0.14.0-rc.17"
+		"ima-gulp-task-loader": "^0.14.0",
+		"ima-gulp-tasks": "^0.14.0"
 	},
 	"dependencies": {
-		"body-parser": "1.17.2",
-		"compression": "1.6.2",
-		"cookie-parser": "1.4.3",
-		"express": "4.15.3",
-		"helmet": "3.6.1",
-		"ima": "0.14.0-rc.26",
-		"ima-server": "0.14.0-rc.12",
-		"method-override": "2.3.9",
-		"multer": "1.3.0",
-		"serve-favicon": "2.4.3"
+		"body-parser": "^1.17.2",
+		"compression": "^1.6.2",
+		"cookie-parser": "^1.4.3",
+		"express": "^4.15.3",
+		"helmet": "^3.6.1",
+		"ima": "^0.14.0",
+		"ima-server": "^0.14.0",
+		"method-override": "^2.3.9",
+		"multer": "^1.3.0",
+		"serve-favicon": "^2.4.3"
 	}
 }
