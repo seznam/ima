@@ -217,6 +217,9 @@ them provided by the community):
 - [3rd party scripts loader](https://github.com/seznam/IMA.js-plugin-script-loader) -
   a simple utility for lazy loading JavaScript files on demand at the client
   side, useful for loading Facebook/Twitter SDKs.
+- [3rd party styles loader](https://github.com/seznam/IMA.js-plugin-style-loader) -
+  a simple utility for lazy loading CSS files on demand at the client
+  side, useful for loading not critical CSS.
 - [Abstract REST API client](https://github.com/jurca/IMA-plugin-rest-client) -
   the base plugin providing an abstract implementation of a high-level REST API
   client.
