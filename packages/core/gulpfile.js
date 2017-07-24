@@ -55,6 +55,7 @@ function compile() {
 			// in the code before with the IMA loader.
 			file.contents = new Buffer(
 				fileContents + '\n\n' +
+				`typeof $IMA !== 'undefined' && $IMA !== null && $IMA.Loader && ` +
 				`$IMA.Loader.register('${moduleName}', [], function (_export, _context) {\n` +
 				`	'use strict';\n` +
 				`	return {\n` +
