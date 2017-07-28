@@ -206,7 +206,7 @@ export default class HttpAgentImpl extends HttpAgent {
 	 *          repeatRequest: number=,
 	 *          headers: Object<string, string>=,
 	 *          cache: boolean=,
-	 *          withCredentials: boolean=
+	 *          withCredentials: boolean=,
 	 *          postProcessor: function(Object<string, *>)=
 	 *        }=} options Optional request options. The {@code timeout}
 	 *        specifies the request timeout in milliseconds, the {@code ttl}
@@ -479,7 +479,7 @@ export default class HttpAgentImpl extends HttpAgent {
 	 *           cookie: string,
 	 *           headers: Object<string, string>,
 	 *           cache: boolean,
-	 *           withCredentials: boolean
+	 *           withCredentials: boolean,
 	 *           postProcessor: function(Object<string, *>)=
 	 *         }} Request options with set filled-in default values for missing
 	 *         fields, and extra options used internally.

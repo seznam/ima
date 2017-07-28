@@ -18,8 +18,8 @@ export default class HttpAgent {
 	 *        to the server as query parameters.
 	 * @param {{timeout: number=, ttl: number=, repeatRequest: number=,
 	 *        headers: Object<string, string>=, cache: boolean=,
-	 *        withCredentials: boolean, listeners: Object<string, function>}=,
-	 *        postProcessor: function(Object<string, *>)= } options
+	 *        withCredentials: boolean=, listeners: Object<string, function>=,
+	 *        postProcessor: function(Object<string, *>)=}=} options
 	 *        Optional request options. The {@code timeout} specifies the
 	 *        request timeout in milliseconds, the {@code ttl} specified how
 	 *        long the request may be cached in milliseconds, the
@@ -63,8 +63,8 @@ export default class HttpAgent {
 	 *        as the request body.
 	 * @param {{timeout: number=, ttl: number=, repeatRequest: number=,
 	 *        headers: Object<string, string>=, cache: boolean=,
-	 *        withCredentials: boolean}=, listeners: Object<string, function>}=,
-	 *        postProcessor: function(Object<string, *>)= } options
+	 *        withCredentials: boolean=, listeners: Object<string, function>=,
+	 *        postProcessor: function(Object<string, *>)=}=} options
 	 *        Optional request options. The {@code timeout} specifies the
 	 *        request timeout in milliseconds, the {@code ttl} specified how
 	 *        long the request may be cached in milliseconds, the
@@ -108,8 +108,8 @@ export default class HttpAgent {
 	 *        as the request body.
 	 * @param {{timeout: number=, ttl: number=, repeatRequest: number=,
 	 *        headers: Object<string, string>=, cache: boolean=,
-	 *        withCredentials: boolean}=, listeners: Object<string, function>}=,
-	 *        postProcessor: function(Object<string, *>)= } options
+	 *        withCredentials: boolean=, listeners: Object<string, function>=,
+	 *        postProcessor: function(Object<string, *>)=}=} options
 	 *        Optional request options. The {@code timeout} specifies the
 	 *        request timeout in milliseconds, the {@code ttl} specified how
 	 *        long the request may be cached in milliseconds, the
@@ -153,8 +153,8 @@ export default class HttpAgent {
 	 *        as the request body.
 	 * @param {{timeout: number=, ttl: number=, repeatRequest: number=,
 	 *        headers: Object<string, string>=, cache: boolean=,
-	 *        withCredentials: boolean}=, listeners: Object<string, function>}=,
-	 *        postProcessor: function(Object<string, *>)= } options
+	 *        withCredentials: boolean=, listeners: Object<string, function>=,
+	 *        postProcessor: function(Object<string, *>)=}=} options
 	 *        Optional request options. The {@code timeout} specifies the
 	 *        request timeout in milliseconds, the {@code ttl} specified how
 	 *        long the request may be cached in milliseconds, the
@@ -198,8 +198,8 @@ export default class HttpAgent {
 	 *        as the request body.
 	 * @param {{timeout: number=, ttl: number=, repeatRequest: number=,
 	 *        headers: Object<string, string>=, cache: boolean=,
-	 *        withCredentials: boolean}=, listeners: Object<string, function>}=,
-	 *        postProcessor: function(Object<string, *>)= } options
+	 *        withCredentials: boolean=, listeners: Object<string, function>=,
+	 *        postProcessor: function(Object<string, *>)=}=} options
 	 *        Optional request options. The {@code timeout} specifies the
 	 *        request timeout in milliseconds, the {@code ttl} specified how
 	 *        long the request may be cached in milliseconds, the
