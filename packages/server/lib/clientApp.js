@@ -249,14 +249,14 @@ module.exports = ((environment, logger, languageLoader, appFactory) => {
 					return response;
 				})
 				.catch((fatalError) => {
-					showStaticErrorPage(fatalError, req, res);
 					instanceRecycler.clearInstance(app);
+					showStaticErrorPage(fatalError, req, res);
 
 					return Promise.reject(fatalError);
 				});
 		} catch (e) {
-			showStaticErrorPage(e, req, res);
 			instanceRecycler.clearInstance(app);
+			showStaticErrorPage(e, req, res);
 			promise = Promise.reject(e);
 		}
 
