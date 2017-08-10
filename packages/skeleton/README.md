@@ -27,6 +27,9 @@ to set-up your application:
 npm install
 npm run app:hello
 npm run dev
+
+// for older browser (IE11)
+npm run dev --legacy-compat-mode
 ```
 
 These commands install the dependencies locally, prepare the basic demo
