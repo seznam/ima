@@ -1,5 +1,5 @@
 import ns from '../namespace';
-import GenericError from 'ima/error/GenericError';
+import GenericError from '../error/GenericError';
 
 ns.namespace('ima.router');
 
