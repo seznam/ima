@@ -109,7 +109,7 @@ export default class Bootstrap {
 	 */
 	_getEnvironmentSetting(allSettings) {
 		let environment = this._config.settings.$Env;
-		let environmentSetting = allSettings[environment];
+		let environmentSetting = allSettings[environment] || {};
 
 		if (environment !== PRODUCTION_ENVIRONMENT) {
 			let	productionSettings = allSettings[PRODUCTION_ENVIRONMENT];
