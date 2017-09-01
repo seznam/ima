@@ -9,8 +9,7 @@ const errorView = require('./template/errorView.js');
 const instanceRecycler = require('./instanceRecycler.js');
 const templateProcessor = require('./templateProcessor.js');
 const errorToJSON = require('error-to-json');
-
-const renderedSPAs = {};
+const Cache = require('./cache.js').Cache;
 
 hljs.configure({
 	tabReplace: '  ',
@@ -19,6 +18,12 @@ hljs.configure({
 
 module.exports = ((environment, logger, languageLoader, appFactory) => {
 	appFactory();
+
+	const spaCache = new Cache(
+		Object.assign({}, environment.$Server.cache, {
+			cacheKeyGenerator: null
+		})
+	);
 
 	function _displayDetails(err, req, res) {
 		let callstack = stackTrace.parse(err);
@@ -132,20 +137,14 @@ module.exports = ((environment, logger, languageLoader, appFactory) => {
 	function showStaticSPAPage(req, res) {
 		let bootConfig = _getBootConfig(req, res);
 		let status = 200;
+		let cachedContent = spaCache.get(req);
 
-		let cacheKey = [
-			bootConfig.settings.$Protocol,
-			bootConfig.settings.$Language,
-			bootConfig.settings.$Host,
-			bootConfig.settings.$Root,
-			bootConfig.settings.$LanguagePartPath
-		].join('|');
-		if (renderedSPAs[cacheKey]) {
+		if (cachedContent) {
 			res.status(status);
-			res.send(renderedSPAs[cacheKey]);
+			res.send(cachedContent);
 
 			return Promise.resolve({
-				content: renderedSPAs[cacheKey],
+				content: cachedContent,
 				pageState: {},
 				status,
 				SPA: true
@@ -163,7 +162,7 @@ module.exports = ((environment, logger, languageLoader, appFactory) => {
 
 				content = templateProcessor(content, bootConfig.settings);
 
-				renderedSPAs[cacheKey] = content;
+				spaCache.set(req, content);
 
 				res.status(status);
 				res.send(content);
