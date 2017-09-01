@@ -27,13 +27,13 @@
 	},
 	"homepage": "https://github.com/seznam/IMA.js-server",
 	"devDependencies": {
-		"express": "^4.15.3",
+		"express": "^4.15.4",
 		"gulp": "github:gulpjs/gulp#3f5aba2",
 		"gulp-jasmine": "^2.4.2",
 		"gulp-plumber": "^1.1.0",
-		"ima-helpers": "^0.14.0-rc.2",
-		"jasmine": "^2.6.0",
-		"superagent": "^3.5.2"
+		"ima-helpers": "^0.14.0",
+		"jasmine": "^2.8.0",
+		"superagent": "^3.6.0"
 	},
 	"dependencies": {
 		"async-each": "^1.0.1",
