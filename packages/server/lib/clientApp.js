@@ -155,9 +155,11 @@ module.exports = ((environment, logger, languageLoader, appFactory) => {
 			const filePath = './build/static/html/spa.html';
 			fs.readFile(filePath, 'utf-8', (error, content) => {
 				if (error) {
-					showStaticErrorPage(error, req, res);
-					reject(error);
-					return;
+					return showStaticErrorPage(error, req, res).then((response) => {
+						resolve(response);
+					}, (error) => {
+						reject(error);
+					});
 				}
 
 				content = templateProcessor(content, bootConfig.settings);
@@ -249,14 +251,13 @@ module.exports = ((environment, logger, languageLoader, appFactory) => {
 				})
 				.catch((fatalError) => {
 					instanceRecycler.clearInstance(app);
-					showStaticErrorPage(fatalError, req, res);
 
-					return Promise.reject(fatalError);
+					return showStaticErrorPage(fatalError, req, res);
 				});
 		} catch (e) {
 			instanceRecycler.clearInstance(app);
-			showStaticErrorPage(e, req, res);
-			promise = Promise.reject(e);
+
+			return showStaticErrorPage(e, req, res);
 		}
 
 		return promise;
@@ -359,10 +360,11 @@ module.exports = ((environment, logger, languageLoader, appFactory) => {
 					}
 				})
 				.catch((e) => {
-					showStaticErrorPage(e, req, res);
+					appPromise.then((app) => {
+						instanceRecycler.clearInstance(app);
+					});
 
-					instanceRecycler.clearInstance(app);
-					returnPromise = Promise.reject(e);
+					return showStaticErrorPage(e, req, res);
 				});
 		}
 
