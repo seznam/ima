@@ -129,7 +129,7 @@ module.exports = ((environment, logger, languageLoader, appFactory) => {
 
 				res.send(content);
 
-				resolve({ content, status, error });
+				resolve({ content, status, error, SPA: false, pageState: {} });
 			});
 		});
 	}
@@ -167,7 +167,7 @@ module.exports = ((environment, logger, languageLoader, appFactory) => {
 				res.status(status);
 				res.send(content);
 
-				resolve({ content, status, SPA: true, error: null });
+				resolve({ content, status, SPA: true, error: null, pageState: {} });
 			});
 		});
 	}
