@@ -9,8 +9,6 @@ let getInitialAppConfigFunctions = () => {
 	return { initBindApp, initRoutes, initServicesApp, initSettings };
 };
 
-vendorLinker.bindToNamespace(ima.getNamespace());
-
 if ($IMA.Test) {
 	ima.reviveTestClientApp(getInitialAppConfigFunctions());
 } else {
