@@ -3,7 +3,6 @@ import initRoutes from 'app/config/routes';
 import initServicesApp from 'app/config/services';
 import initSettings from 'app/config/settings';
 import * as ima from 'ima/main';
-import vendorLinker from 'ima/vendorLinker';
 
 let getInitialAppConfigFunctions = () => {
 	return { initBindApp, initRoutes, initServicesApp, initSettings };
