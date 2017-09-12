@@ -2,6 +2,7 @@
 let gulp = require('gulp');
 let babel = require('gulp-babel');
 let browserify = require('browserify');
+let watchify = require('watchify');
 let cache = require('gulp-cached');
 let change = require('gulp-change');
 let concat = require('gulp-concat');
@@ -18,6 +19,9 @@ let sourcemaps = require('gulp-sourcemaps');
 let gulpIgnore = require('gulp-ignore');
 let tap = require('gulp-tap');
 let gutil = require('gulp-util');
+
+let vendorBundle = null;
+let vendorTestBundle = null;
 
 exports.__requiresConfig = true;
 
@@ -201,15 +205,20 @@ exports.default = (gulpConfig) => {
 
 	function Es6ToEs5VendorClient() {
 		let sourceFile = files.vendor.dest.tmp + files.vendor.src.client;
-		let options = { debug: false, insertGlobals: false, basedir: '.' };
+		let options = { debug: false, insertGlobals: false, basedir: '.',  cache: {}, packageCache: {} };
 
-		return browserify(sourceFile, options)
-			.transform('babelify', {
-				babelrc: false,
-				global: true,
-				presets: babelConfig.vendor.presets,
-				plugins: babelConfig.vendor.plugins
-			})
+		if (!vendorBundle) {
+			vendorBundle = browserify(sourceFile, options)
+				.transform('babelify', {
+					babelrc: false,
+					global: true,
+					presets: babelConfig.vendor.presets,
+					plugins: babelConfig.vendor.plugins
+				})
+				.plugin([watchify]);
+		}
+
+		return vendorBundle
 			.bundle()
 			.pipe(source(files.vendor.name.client))
 			.pipe(gulp.dest(files.vendor.dest.client));
@@ -224,18 +233,23 @@ exports.default = (gulpConfig) => {
 			files.vendor.dest.tmp + files.vendor.src.test,
 			files.vendor.dest.tmp + files.vendor.src.client
 		];
-		let options = { debug: false, insertGlobals: false, basedir: '.' };
+		let options = { debug: false, insertGlobals: false, basedir: '.', cache: {}, packageCache: {} };
 
-		return browserify(sourceFiles, options)
-			.transform('babelify', {
-				babelrc: false,
-				global: true,
-				presets: babelConfig.vendor.presets,
-				plugins: babelConfig.vendor.plugins
-			})
-			.external('react/addons')
-			.external('react/lib/ReactContext')
-			.external('react/lib/ExecutionEnvironment')
+		if (!vendorTestBundle) {
+			vendorTestBundle = browserify(sourceFiles, options)
+				.transform('babelify', {
+					babelrc: false,
+					global: true,
+					presets: babelConfig.vendor.presets,
+					plugins: babelConfig.vendor.plugins
+				})
+				.external('react/addons')
+				.external('react/lib/ReactContext')
+				.external('react/lib/ExecutionEnvironment')
+				.plugin([watchify]);
+		}
+
+		return vendorTestBundle
 			.bundle()
 			.pipe(source(files.vendor.name.test))
 			.pipe(gulp.dest(files.vendor.dest.test));
