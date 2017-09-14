@@ -1,11 +1,8 @@
-import ns from '../namespace';
 import HttpAgent from './HttpAgent';
 import HttpStatusCode from './StatusCode';
 import UrlTransformer from './UrlTransformer';
 import GenericError from '../error/GenericError';
 import Window from '../window/Window';
-
-ns.namespace('ima.http');
 
 /**
  * An object representing the complete request parameters used to create and
@@ -368,5 +365,3 @@ export default class HttpProxy {
 		);
 	}
 }
-
-ns.ima.http.SuperAgentProxy = HttpProxy;

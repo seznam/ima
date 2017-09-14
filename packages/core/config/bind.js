@@ -171,7 +171,7 @@ export default (ns, oc, config) => {
 	oc.constant('$RouteNames', RouteNames);
 	oc.constant('$RouterEvents', RouterEvents);
 
-	//SuperAgent
+	//Http agent
 	oc.bind('$HttpUrlTransformer', UrlTransformer);
 	oc.bind('$HttpAgentProxy', HttpProxy, ['$HttpUrlTransformer', '$Window']);
 	oc.provide(HttpAgent, HttpAgentImpl, ['$HttpAgentProxy', '$Cache', CookieStorage, config.$Http]);

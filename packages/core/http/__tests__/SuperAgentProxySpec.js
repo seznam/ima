@@ -3,7 +3,7 @@ import StatusCode from 'http/StatusCode';
 import UrlTransformer from 'http/UrlTransformer';
 import Window from 'window/Window';
 
-describe('ima.http.SuperAgentProxy', () => {
+xdescribe('ima.http.HttpProxy', () => {
 
 	let proxy = null;
 	let apiUrl = 'http://localhost:3001/api/';
@@ -20,28 +20,7 @@ describe('ima.http.SuperAgentProxy', () => {
 	let windowHelper = new Window();
 
 	beforeEach(() => {
-		superAgent = {
-			funcError: () => superAgent,
-			get: () => superAgent,
-			post: () => superAgent,
-			put: () => superAgent,
-			del: () => superAgent,
-			patch: () => superAgent,
-			set: () => superAgent,
-			accept: () => superAgent,
-			query: () => superAgent,
-			send: () => superAgent,
-			on: () => superAgent,
-			withCredentials: () => superAgent,
-			timeout: () => {
-				setTimeout(() => {
-					superAgent.funcError({ timeout: options.timeout });
-				}, options.timeout);
-				return superAgent;
-			},
-			end: () => superAgent
-		};
-		proxy = new HttpProxy(superAgent, urlTransformer, windowHelper);
+		proxy = new HttpProxy(urlTransformer, windowHelper);
 	});
 
 	using([

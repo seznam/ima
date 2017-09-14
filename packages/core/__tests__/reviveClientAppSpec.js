@@ -1,7 +1,6 @@
 import React from 'react';
 import jsdom from 'jsdom';
 import $Helper from 'ima-helpers';
-import SuperAgent from 'superagent';
 import ControllerInterface from '../controller/Controller';
 import AbstractDocumentView from '../page/AbstractDocumentView';
 import * as ima from '../main';
@@ -89,7 +88,6 @@ describe('Revive client application', () => {
 
 		vendorLinker.set('react', React);
 		vendorLinker.set('react-dom', ReactDOM);
-		vendorLinker.set('superagent', SuperAgent);
 		vendorLinker.set('ima-helpers', $Helper);
 
 		spyOn(ReactDOM, 'renderToDOM');
