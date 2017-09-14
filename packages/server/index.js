@@ -34,8 +34,6 @@ function languageLoader(language) {
 
 let logger = require('./lib/logger.js')(environment);
 let urlParser = require('./lib/urlParser.js')(environment);
-let proxyFactory = require('./lib/proxy.js')(environment, logger);
-let proxy = proxyFactory(environment.$Proxy.server);
 let clientApp = require('./lib/clientApp.js')(
 	environment,
 	logger,
@@ -49,7 +47,5 @@ module.exports =  {
 	clientApp,
 	urlParser,
 	logger,
-	proxy,
-	proxyFactory,
 	cache
 };
