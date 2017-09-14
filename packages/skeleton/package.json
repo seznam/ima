@@ -47,6 +47,7 @@
 		"compression": "1.6.2",
 		"cookie-parser": "1.4.3",
 		"express": "4.15.3",
+		"express-http-proxy": "^1.0.6",
 		"helmet": "3.6.1",
 		"ima": "0.14.0-rc.26",
 		"ima-server": "0.14.0-rc.12",
