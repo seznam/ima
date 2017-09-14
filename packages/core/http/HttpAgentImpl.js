@@ -270,11 +270,10 @@ export default class HttpAgentImpl extends HttpAgent {
 		let cachePromise = (
 			this._proxy
 				.request(method, url, data, options)
-				.then((response) => {
-					return this._proxyResolved(response);
-				}, (errorParams) => {
-					return this._proxyRejected(errorParams);
-				})
+				.then(
+					response => this._proxyResolved(response),
+					error => this._proxyRejected(error)
+				)
 		);
 
 		this._internalCacheOfPromises.set(cacheKey, cachePromise);
@@ -288,7 +287,7 @@ export default class HttpAgentImpl extends HttpAgent {
 	 * The method also updates the internal cookie storage with the cookies
 	 * received from the server.
 	 *
-	 * @param {Vendor.SuperAgent.Response} response Server response.
+	 * @param {AgentResponse} response Server response.
 	 * @return {AgentResponse} The post-processed server response.
 	 */
 	_proxyResolved(response) {
@@ -331,15 +330,17 @@ export default class HttpAgentImpl extends HttpAgent {
 	 * The method rejects the internal request promise if there are no tries
 	 * left.
 	 *
-	 * @param {Object<string, *>} errorParams Error parameters, containing the
-	 *        request url, data, method, options and other useful data.
+	 * @param {GenericError} error The error provided by the HttpProxy,
+	 *        carrying the error parameters, such as the request url, data,
+	 *        method, options and other useful data.
 	 * @return {Promise<AgentResponse>} A promise that will either resolve to a
 	 *         server's response (with the body parsed as JSON) if there are
 	 *         any tries left and the re-tried request succeeds, or rejects
 	 *         with an error containing details of the cause of the request's
 	 *         failure.
 	 */
-	_proxyRejected(errorParams) {
+	_proxyRejected(error) {
+		let errorParams = error.getParams();
 		let method = errorParams.method;
 		let url = errorParams.url;
 		let data = errorParams.data;
@@ -353,7 +354,9 @@ export default class HttpAgentImpl extends HttpAgent {
 			this._internalCacheOfPromises.delete(cacheKey);
 
 			let errorName = errorParams.errorName;
-			let errorMessage = `${errorName}: ima.http.Agent:_proxyRejected`;
+			let errorMessage = (
+				`${errorName}: ima.http.Agent:_proxyRejected: ${error.message}`
+			);
 			let error = new GenericError(errorMessage, errorParams);
 			return Promise.reject(error);
 		}
