@@ -55,11 +55,12 @@
 		"custom-event-polyfill": "^0.3.0",
 		"enzyme": "^2.8.2",
 		"ima-helpers": "^0.14.0",
+		"node-fetch": "^1.7.3",
 		"prop-types": "^15.5.10",
 		"react": "^15.6.1",
 		"react-addons-test-utils": "^15.6.0",
 		"react-dom": "^15.6.1",
-		"react-test-renderer": "^15.6.1",
+		"react-test-renderer": "^15.6.1"
 	},
 	"browserify": {
 		"transform": [
