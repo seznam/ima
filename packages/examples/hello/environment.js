@@ -77,7 +77,13 @@ module.exports = (() => {
 			          // concerns.
 				path: '/api', // Path at which the proxy will be listening for
 				              // request
-				server: 'https://example.com/api/v1'
+				server: 'example.com',
+				options: { // options to pass to the express-http-proxy
+					https: true,
+					limit: '100mb',
+					timeout: 10000, // milliseconds
+					proxyReqPathResolver: request => `/api/v1${request.url}`
+				}
 			}
 		},
 
@@ -86,7 +92,10 @@ module.exports = (() => {
 				'//*:*': 'en'
 			},
 			$Proxy: {
-				server: 'http://example.test/api'
+				server: 'example.test',
+				options: {
+					proxyReqPathResolver: request => `/api${request.url}`
+				}
 			}
 		},
 
@@ -99,7 +108,10 @@ module.exports = (() => {
 				concurrency: 1
 			},
 			$Proxy: {
-				server: 'http://localhost:3001/api'
+				server: 'localhost:3001',
+				options: {
+					proxyReqPathResolver: request => `/api${request.url}`
+				}
 			}
 		}
 	};
