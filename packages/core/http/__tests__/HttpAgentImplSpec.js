@@ -117,7 +117,7 @@ describe('ima.http.HttpAgentImpl', () => {
 				spyOn(proxy, 'request')
 					.and
 					.callFake(() => {
-						return Promise.reject(data.params);
+						return Promise.reject(new GenericError('', data.params));
 					});
 
 				http[method](data.params.url, data.params.data, data.params.options)
