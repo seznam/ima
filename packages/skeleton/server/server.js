@@ -12,7 +12,6 @@ global.appRoot = path.resolve(__dirname);
 let imaServer = require('ima-server');
 
 let clientApp = imaServer.clientApp;
-let proxy = imaServer.proxy;
 let urlParser = imaServer.urlParser;
 let environment = imaServer.environment;
 let logger = imaServer.logger;
@@ -29,6 +28,7 @@ let methodOverride = require('method-override');
 let compression = require('compression');
 let helmet = require('helmet');
 let errorToJSON = require('error-to-json');
+let proxy = require('express-http-proxy');
 
 process.on('uncaughtException', (error) => {
 	logger.error('Uncaught Exception:', { error: errorToJSON(error) });
@@ -99,7 +99,7 @@ function runNodeApp() {
 		.use(multer.fields([/*{ name: '<file input name>', maxCount: 1 }, ...*/])) // for parsing multipart/form-data
 		.use(cookieParser())
 		.use(methodOverride())
-		.use(environment.$Proxy.path + '/', proxy)
+		.use(environment.$Proxy.path + '/', proxy(environment.$Proxy.server, environment.$Proxy.options))
 		.use(urlParser)
 		.use(renderApp)
 		.use(errorHandler)
