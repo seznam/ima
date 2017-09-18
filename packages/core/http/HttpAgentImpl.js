@@ -357,8 +357,8 @@ export default class HttpAgentImpl extends HttpAgent {
 			let errorMessage = (
 				`${errorName}: ima.http.Agent:_proxyRejected: ${error.message}`
 			);
-			let error = new GenericError(errorMessage, errorParams);
-			return Promise.reject(error);
+			let agentError = new GenericError(errorMessage, errorParams);
+			return Promise.reject(agentError);
 		}
 	}
 
