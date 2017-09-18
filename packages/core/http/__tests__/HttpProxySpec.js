@@ -8,7 +8,6 @@ describe('ima.http.HttpProxy', () => {
 
 	let proxy = null;
 	let apiUrl = 'http://localhost:3001/api/';
-	let superAgent = null;
 	let response;
 
 	let data = {};
