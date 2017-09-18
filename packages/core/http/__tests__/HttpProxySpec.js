@@ -2,25 +2,39 @@ import HttpProxy from 'http/HttpProxy';
 import StatusCode from 'http/StatusCode';
 import UrlTransformer from 'http/UrlTransformer';
 import Window from 'window/Window';
+import GenericError from "../../error/GenericError";
 
-xdescribe('ima.http.HttpProxy', () => {
+describe('ima.http.HttpProxy', () => {
 
 	let proxy = null;
 	let apiUrl = 'http://localhost:3001/api/';
-	let response = {
-		body: {
-			data: 'some data'
-		}
-	};
 	let superAgent = null;
+	let response;
 
 	let data = {};
+	let fetchResult;
 	let options = { ttl: 3600000, timeout: 2000, repeatRequest: 1, headers: [], withCredentials: true };
 	let urlTransformer = new UrlTransformer();
 	let windowHelper = new Window();
 
+	const fetchApiMock = () => {
+		return fetchResult;
+	};
+
 	beforeEach(() => {
 		proxy = new HttpProxy(urlTransformer, windowHelper);
+		response = {
+			ok: true,
+			status: 200,
+			headers: new Map(), // compatible enough with Headers
+			json() {
+				return Promise.resolve(this.body);
+			},
+			body: {
+				data: 'some data'
+			}
+		};
+		fetchResult = Promise.resolve(response);
 	});
 
 	using([
@@ -32,11 +46,9 @@ xdescribe('ima.http.HttpProxy', () => {
 	], (method) => {
 		describe('method ' + method, () => {
 			it('should return promise with response body', (done) => {
-				spyOn(superAgent, 'end')
+				spyOn(proxy, '_getFetchApi')
 					.and
-					.callFake((callback) => {
-						return callback(null, response);
-					});
+					.callFake(() => fetchApiMock);
 
 				proxy.request(method, apiUrl, data, options)
 					.then((result) => {
@@ -50,20 +62,23 @@ xdescribe('ima.http.HttpProxy', () => {
 			});
 
 			it('should return a "body" field in error object, when promise is rejected', (done) => {
-				spyOn(superAgent, 'end')
+				spyOn(proxy, '_getFetchApi')
 					.and
-					.callFake((callback) => {
-						return callback({ timeout: options.timeout });
-					});
+					.callFake(() => fetchApiMock);
+				fetchResult = Promise.reject(
+					new GenericError('The HTTP request timed out', {
+						status: StatusCode.TIMEOUT
+					})
+				);
 
 				proxy.request(method, apiUrl, data, options)
 					.then(() => {}, (error) => {
-						expect(error.body).toBeDefined();
+						expect(error.getParams().body).toBeDefined();
 						done();
 					});
 			});
 
-			it('should reject promise for Timeout error', (done) => {
+			xit('should reject promise for Timeout error', (done) => {
 				spyOn(superAgent, 'end')
 					.and
 					.callFake((callback) => {
@@ -77,7 +92,7 @@ xdescribe('ima.http.HttpProxy', () => {
 					});
 			});
 
-			it('should be timeouted for longer request then options.timeout', (done) => {
+			xit('should be timeouted for longer request then options.timeout', (done) => {
 				jest.useFakeTimers();
 
 				spyOn(superAgent, 'end')
@@ -94,7 +109,7 @@ xdescribe('ima.http.HttpProxy', () => {
 					});
 			});
 
-			it('should reject promise for CORS', (done) => {
+			xit('should reject promise for CORS', (done) => {
 				spyOn(superAgent, 'end')
 					.and
 					.callFake((callback) => {
@@ -108,7 +123,7 @@ xdescribe('ima.http.HttpProxy', () => {
 					});
 			});
 
-			it('should reject promise for Forbidden', (done) => {
+			xit('should reject promise for Forbidden', (done) => {
 				spyOn(superAgent, 'end')
 					.and
 					.callFake((callback) => {
@@ -122,7 +137,7 @@ xdescribe('ima.http.HttpProxy', () => {
 					});
 			});
 
-			it('should reject promise for Not found', (done) => {
+			xit('should reject promise for Not found', (done) => {
 				spyOn(superAgent, 'end')
 					.and
 					.callFake((callback) => {
@@ -136,7 +151,7 @@ xdescribe('ima.http.HttpProxy', () => {
 					});
 			});
 
-			it('should reject promise for Internal Server Error', (done) => {
+			xit('should reject promise for Internal Server Error', (done) => {
 				spyOn(superAgent, 'end')
 					.and
 					.callFake((callback) => {
@@ -150,7 +165,7 @@ xdescribe('ima.http.HttpProxy', () => {
 					});
 			});
 
-			it('should reject promise for UNKNOWN', (done) => {
+			xit('should reject promise for UNKNOWN', (done) => {
 				spyOn(superAgent, 'end')
 					.and
 					.callFake((callback) => {
@@ -164,7 +179,7 @@ xdescribe('ima.http.HttpProxy', () => {
 					});
 			});
 
-			it('should set credentials to request', (done) => {
+			xit('should set credentials to request', (done) => {
 				spyOn(superAgent, 'end')
 					.and
 					.callFake((callback) => {
@@ -186,7 +201,7 @@ xdescribe('ima.http.HttpProxy', () => {
 					});
 			});
 
-			it('should call private method _setListeners for each request', (done) => {
+			xit('should call private method _setListeners for each request', (done) => {
 				spyOn(superAgent, 'end')
 					.and
 					.callFake((callback) => {
@@ -204,7 +219,7 @@ xdescribe('ima.http.HttpProxy', () => {
 					});
 			});
 
-			it('should add listener for "progress" to request', (done) => {
+			xit('should add listener for "progress" to request', (done) => {
 				spyOn(superAgent, 'on')
 					.and
 					.stub();

@@ -97,12 +97,12 @@ export default class HttpProxy {
 				clearTimeout(requestTimeoutId);
 				return response.json().then(body => [response, body]);
 			}).then(([response, responseBody]) => this._processResponse(
+				requestParams,
 				response,
-				responseBody,
-				requestParams
+				responseBody
 			)).then(resolve, reject);
 		}).catch((fetchError) => {
-			throw this._processError(fetchError);
+			throw this._processError(fetchError, requestParams);
 		});
 	}
 
@@ -138,17 +138,18 @@ export default class HttpProxy {
 	 * @param {AgentRequestOptions} options Optional request options.
 	 * @param {number} status The HTTP response status code send by the server.
 	 * @param {object} body The body of HTTP error response (detailed information)
+	 * @param {Error} cause The low-level cause error.
 	 * @return {Object<string, *>} An object containing both the details of the
 	 *         error and the request that lead to it.
 	 */
-	getErrorParams(method, url, data, options, status, body) {
+	getErrorParams(method, url, data, options, status, body, cause) {
 		let params = this._composeRequestParams(method, url, data, options);
 
 		if (typeof body === 'undefined') {
 			body = {};
 		}
 
-		let error = { status, body };
+		let error = { status, body, cause };
 
 		switch (status) {
 			case HttpStatusCode.TIMEOUT:
@@ -245,15 +246,17 @@ export default class HttpProxy {
 	 * to expose to the calling API.
 	 *
 	 * @param {Error} fetchError The internal error to process.
+	 * @param {ProxyRequestParams} requestParams The parameters that were used
+	 *        to create the request.
 	 * @return {GenericError} The error to provide to the calling API.
 	 */
-	_processError(fetchError) {
+	_processError(fetchError, requestParams) {
 		const errorParams = fetchError instanceof GenericError ?
 			fetchError.getParams()
 			:
 			{};
 		return this._createError(
-			fetchError.message,
+			fetchError,
 			requestParams,
 			errorParams.status || HttpStatusCode.SERVER_ERROR,
 			errorParams.body || null
@@ -263,23 +266,24 @@ export default class HttpProxy {
 	/**
 	 * Creates an error that represents a failed HTTP request.
 	 *
-	 * @param {string} message The error's message.
+	 * @param {Error} cause The error's message.
 	 * @param {ProxyRequestParams} requestParams The parameters that were used
 	 *        to create the request.
 	 * @param {number} status Server's response HTTP status code.
 	 * @param {*} responseBody The body of the server's response, if any.
 	 * @return {GenericError} The error representing a failed HTTP request.
 	 */
-	_createError(message, requestParams, status, responseBody = null) {
+	_createError(cause, requestParams, status, responseBody = null) {
 		return new GenericError(
-			message,
+			cause.message,
 			this.getErrorParams(
 				requestParams.method,
 				requestParams.url,
 				requestParams.data,
 				requestParams.options,
 				status,
-				responseBody
+				responseBody,
+				cause
 			)
 		);
 	}
