@@ -78,165 +78,151 @@ describe('ima.http.HttpProxy', () => {
 					});
 			});
 
-			xit('should reject promise for Timeout error', (done) => {
-				spyOn(superAgent, 'end')
+			it('should reject promise for Timeout error', (done) => {
+				spyOn(proxy, '_getFetchApi')
 					.and
-					.callFake((callback) => {
-						return callback({ timeout: options.timeout });
-					});
+					.callFake(() => fetchApiMock);
+				fetchResult = Promise.reject(
+					new GenericError('The HTTP request timed out', {
+						status: StatusCode.TIMEOUT
+					})
+				);
 
 				proxy.request(method, apiUrl, data, options)
 					.then(() => {}, (error) => {
-						expect(error.status).toEqual(StatusCode.TIMEOUT);
+						expect(error.getParams().status).toEqual(StatusCode.TIMEOUT);
 						done();
 					});
 			});
 
-			xit('should be timeouted for longer request then options.timeout', (done) => {
+			it('should be timeouted for longer request then options.timeout', (done) => {
 				jest.useFakeTimers();
 
-				spyOn(superAgent, 'end')
+				spyOn(proxy, '_getFetchApi')
 					.and
-					.callFake((callback) => {
-						superAgent.funcError = callback;
+					.callFake(() => {
 						jest.runOnlyPendingTimers();
 					});
 
 				proxy.request(method, apiUrl, data, options)
 					.then(() => {}, (error) => {
-						expect(error.status).toEqual(StatusCode.TIMEOUT);
+						expect(error.getParams().status).toEqual(StatusCode.TIMEOUT);
 						done();
 					});
 			});
 
-			xit('should reject promise for CORS', (done) => {
-				spyOn(superAgent, 'end')
+			it('should reject promise for Forbidden', (done) => {
+				spyOn(proxy, '_getFetchApi')
 					.and
-					.callFake((callback) => {
-						return callback({ crossDomain: true });
-					});
+					.callFake(() => fetchApiMock);
+				response = {
+					ok: false,
+					status: StatusCode.FORBIDDEN,
+					headers: new Map(), // compatible enough with Headers
+					json() {
+						return Promise.resolve(this.body);
+					},
+					body: {
+						data: 'some data'
+					}
+				};
+				fetchResult = Promise.resolve(response);
 
 				proxy.request(method, apiUrl, data, options)
 					.then(() => {}, (error) => {
-						expect(error.status).toEqual(StatusCode.FORBIDDEN);
+						expect(error.getParams().status).toEqual(StatusCode.FORBIDDEN);
 						done();
 					});
 			});
 
-			xit('should reject promise for Forbidden', (done) => {
-				spyOn(superAgent, 'end')
+			it('should reject promise for Not found', (done) => {
+				spyOn(proxy, '_getFetchApi')
 					.and
-					.callFake((callback) => {
-						return callback({ status: 403 });
-					});
+					.callFake(() => fetchApiMock);
+				response = {
+					ok: false,
+					status: StatusCode.NOT_FOUND,
+					headers: new Map(), // compatible enough with Headers
+					json() {
+						return Promise.resolve(this.body);
+					},
+					body: {
+						data: 'some data'
+					}
+				};
+				fetchResult = Promise.resolve(response);
 
 				proxy.request(method, apiUrl, data, options)
 					.then(() => {}, (error) => {
-						expect(error.status).toEqual(StatusCode.FORBIDDEN);
+						expect(error.getParams().status).toEqual(StatusCode.NOT_FOUND);
 						done();
 					});
 			});
 
-			xit('should reject promise for Not found', (done) => {
-				spyOn(superAgent, 'end')
+			it('should reject promise for Internal Server Error', (done) => {
+				spyOn(proxy, '_getFetchApi')
 					.and
-					.callFake((callback) => {
-						return callback({ status: 404 });
-					});
+					.callFake(() => fetchApiMock);
+				response = {
+					ok: false,
+					status: StatusCode.SERVER_ERROR,
+					headers: new Map(), // compatible enough with Headers
+					json() {
+						return Promise.resolve(this.body);
+					},
+					body: {
+						data: 'some data'
+					}
+				};
+				fetchResult = Promise.resolve(response);
 
 				proxy.request(method, apiUrl, data, options)
 					.then(() => {}, (error) => {
-						expect(error.status).toEqual(StatusCode.NOT_FOUND);
+						expect(error.getParams().status).toEqual(StatusCode.SERVER_ERROR);
 						done();
 					});
 			});
 
-			xit('should reject promise for Internal Server Error', (done) => {
-				spyOn(superAgent, 'end')
+			it('should reject promise for UNKNOWN', (done) => {
+				spyOn(proxy, '_getFetchApi')
 					.and
-					.callFake((callback) => {
-						return callback({ status: 500 });
-					});
+					.callFake(() => fetchApiMock);
+				response = {
+					ok: false,
+					status: null,
+					headers: new Map(), // compatible enough with Headers
+					json() {
+						return Promise.resolve(this.body);
+					},
+					body: {
+						data: 'some data'
+					}
+				};
+				fetchResult = Promise.resolve(response);
 
 				proxy.request(method, apiUrl, data, options)
 					.then(() => {}, (error) => {
-						expect(error.status).toEqual(StatusCode.SERVER_ERROR);
+						expect(error.getParams().status).toEqual(StatusCode.SERVER_ERROR);
 						done();
 					});
 			});
 
-			xit('should reject promise for UNKNOWN', (done) => {
-				spyOn(superAgent, 'end')
+			it('should set credentials to request', (done) => {
+				let passedOptions;
+				spyOn(proxy, '_getFetchApi')
 					.and
-					.callFake((callback) => {
-						return callback({});
+					.callFake(() => (_, options) => {
+						passedOptions = options;
+						return fetchApiMock();
 					});
-
-				proxy.request(method, apiUrl, data, options)
-					.then(() => {}, (error) => {
-						expect(error.status).toEqual(StatusCode.SERVER_ERROR);
-						done();
-					});
-			});
-
-			xit('should set credentials to request', (done) => {
-				spyOn(superAgent, 'end')
-					.and
-					.callFake((callback) => {
-						return callback(null, response);
-					});
-
-				spyOn(proxy, '_setCredentials')
-					.and
-					.returnValue(proxy);
 
 				proxy.request(method, apiUrl, data, options)
 					.then((result) => {
-						expect(proxy._setCredentials).toHaveBeenCalled();
+						expect(passedOptions.credentials).toBe('include');
 						done();
 					})
 					.catch((error) => {
 						console.log(error);
-						done();
-					});
-			});
-
-			xit('should call private method _setListeners for each request', (done) => {
-				spyOn(superAgent, 'end')
-					.and
-					.callFake((callback) => {
-						return callback(null, response);
-					});
-
-				spyOn(proxy, '_setListeners')
-					.and
-					.returnValue(proxy);
-
-				proxy.request(method, apiUrl, data, options)
-					.then(() => {
-						expect(proxy._setListeners).toHaveBeenCalled();
-						done();
-					});
-			});
-
-			xit('should add listener for "progress" to request', (done) => {
-				spyOn(superAgent, 'on')
-					.and
-					.stub();
-
-				spyOn(superAgent, 'end')
-					.and
-					.callFake((callback) => {
-						return callback(null, response);
-					});
-
-				function dummy() {}
-				let reqOptions = Object.assign({}, options, { 'listeners': { 'progress': dummy } });
-
-				proxy.request(method, apiUrl, data, reqOptions)
-					.then(() => {
-						expect(superAgent.on).toHaveBeenCalledWith('progress', dummy);
-						expect(superAgent.on.calls.count()).toEqual(1);
 						done();
 					});
 			});
