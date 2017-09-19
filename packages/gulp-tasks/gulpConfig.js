@@ -1,7 +1,6 @@
 let coreDependencies = require('ima/build.js');
 let path = require('path');
 let sharedTasksState = require('./gulpState');
-let fs = require('fs');
 
 let appDependencies;
 try {

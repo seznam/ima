@@ -1,5 +1,6 @@
 
 let gulp = require('gulp');
+let sharedTasksState = require('../gulpState');
 
 const DEFAULT_DEV_SUBTASKS = [
 	['copy:appStatic', 'copy:environment', 'shim', 'polyfill'],
@@ -50,6 +51,8 @@ exports.default = (gulpConfig) => {
 	}
 
 	function dev() {
+		sharedTasksState.watchMode = true;
+
 		return gulp.series(...prepareTasks(devTasks))();
 	}
 
@@ -60,7 +63,7 @@ exports.default = (gulpConfig) => {
 	function buildSpa() {
 		return gulp.series(...prepareTasks(buildSpaTasks))();
 	}
-	
+
 	return {
 		dev: dev,
 		build: build,

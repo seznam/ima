@@ -1,6 +1,6 @@
 {
 	"name": "ima-gulp-tasks",
-	"version": "0.14.1",
+	"version": "0.14.2",
 	"description": "Default gulp tasks for IMA.js applications.",
 	"main": "",
 	"scripts": {
@@ -26,7 +26,7 @@
 	"homepage": "https://github.com/seznam/IMA.js-gulp-tasks",
 	"devDependencies": {},
 	"dependencies": {
-		"babel-core": "^6.25.0",
+		"babel-core": "^6.26.0",
 		"babel-plugin-external-helpers-2": "^6.3.13",
 		"babel-plugin-transform-es2015-modules-systemjs": "^6.24.1",
 		"babel-plugin-transform-react-constant-elements": "^6.23.0",
@@ -72,7 +72,7 @@
 		"karma-babel-preprocessor": "^6.0.1",
 		"karma-jasmine": "^1.1.0",
 		"karma-phantomjs-launcher": "^1.0.4",
-		"phantomjs-prebuilt": "^2.1.14",
+		"phantomjs-prebuilt": "^2.1.15",
 		"vinyl-source-stream": "^1.1.0",
 		"watchify": "^3.9.0"
 	}

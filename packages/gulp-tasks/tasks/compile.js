@@ -20,6 +20,8 @@ let gulpIgnore = require('gulp-ignore');
 let tap = require('gulp-tap');
 let gutil = require('gulp-util');
 
+let sharedTasksState = require('../gulpState');
+
 let vendorBundle = null;
 let vendorTestBundle = null;
 
@@ -68,7 +70,7 @@ exports.default = (gulpConfig) => {
 						babelConfig.oldClient.plugins
 					:
 						[]
-				})
+				});
 			} else {
 				return gutil.noop();
 			}
@@ -214,8 +216,11 @@ exports.default = (gulpConfig) => {
 					global: true,
 					presets: babelConfig.vendor.presets,
 					plugins: babelConfig.vendor.plugins
-				})
-				.plugin([watchify]);
+				});
+
+			if (sharedTasksState.watchMode) {
+				vendorBundle.plugin([watchify]);
+			}
 		}
 
 		return vendorBundle
@@ -245,8 +250,11 @@ exports.default = (gulpConfig) => {
 				})
 				.external('react/addons')
 				.external('react/lib/ReactContext')
-				.external('react/lib/ExecutionEnvironment')
-				.plugin([watchify]);
+				.external('react/lib/ExecutionEnvironment');
+
+			if (sharedTasksState.watchMode) {
+				vendorTestBundle.plugin([watchify]);
+			}
 		}
 
 		return vendorTestBundle
