@@ -3,13 +3,13 @@ import toMock from 'to-mock';
 import Cache from 'cache/Cache';
 import GenericError from 'error/GenericError';
 import HttpAgentImpl from 'http/HttpAgentImpl';
-import SuperAgentProxy from 'http/HttpProxy';
+import HttpAgentProxy from 'http/HttpProxy';
 import CookieStorage from 'storage/CookieStorage';
 
 describe('ima.http.HttpAgentImpl', () => {
 
 	let MockedCache = toMock(Cache);
-	let MockedSuperAgentProxy = toMock(SuperAgentProxy);
+	let MockedHttpAgentProxy = toMock(HttpAgentProxy);
 	let MockedCookieStorage = toMock(CookieStorage);
 
 	let proxy = null;
@@ -22,7 +22,7 @@ describe('ima.http.HttpAgentImpl', () => {
 
 	beforeEach(() => {
 		cache = new MockedCache();
-		proxy = new MockedSuperAgentProxy();
+		proxy = new MockedHttpAgentProxy();
 		cookie = new MockedCookieStorage();
 		httpConfig = {
 			defaultRequestOptions: {
@@ -117,7 +117,7 @@ describe('ima.http.HttpAgentImpl', () => {
 				spyOn(proxy, 'request')
 					.and
 					.callFake(() => {
-						return Promise.reject(data.params);
+						return Promise.reject(new GenericError('', data.params));
 					});
 
 				http[method](data.params.url, data.params.data, data.params.options)

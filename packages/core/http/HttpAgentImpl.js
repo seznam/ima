@@ -200,38 +200,9 @@ export default class HttpAgentImpl extends HttpAgent {
 	 * @param {string} url The URL to which the request should be sent.
 	 * @param {Object<string, (boolean|number|string|Date)>} data The data to
 	 *        send with the request.
-	 * @param {{
-	 *          timeout: number=,
-	 *          ttl: number=,
-	 *          repeatRequest: number=,
-	 *          headers: Object<string, string>=,
-	 *          cache: boolean=,
-	 *          withCredentials: boolean=,
-	 *          postProcessor: function(Object<string, *>)=
-	 *        }=} options Optional request options. The {@code timeout}
-	 *        specifies the request timeout in milliseconds, the {@code ttl}
-	 *        specified how long the request may be cached in milliseconds, the
-	 *        {@code repeatRequest} specifies the maximum number of tries to
-	 *        repeat the request if the request fails, The {@code headers} set
-	 *        request headers. The {@code cache} can be used to bypass the
-	 *        cache of pending and finished HTTP requests. The
-	 *        {@code withCredentials} that indicates whether requests should be
-	 *        made using credentials such as cookies or authorization headers.
-	 *        The {@code postProcessor} is method for changing agent response
-	 *        before than the response is saved in cache and returned in promise.
-	 * @return {Promise<{
-	 *           status: number,
-	 *           body: *,
-	 *           params: {
-	 *             method: string,
-	 *             url: string,
-	 *             transformedUrl: string,
-	 *             data: Object<string, (boolean|number|string)>
-	 *           },
-	 *           headers: Object<string, string>,
-	 *           cached: boolean
-	 *         }>} A promise that resolves to the response with body
-	 *         parsed as JSON.
+	 * @param {AgentRequestOptions=} options Optional request options.
+	 * @return {Promise<AgentResponse>} A promise that resolves to the response
+	 *         with body parsed as JSON.
 	 */
 	_requestWithCheckCache(method, url, data, options) {
 		options = this._prepareOptions(options);
@@ -259,20 +230,9 @@ export default class HttpAgentImpl extends HttpAgent {
 	 * @param {string} url The URL to which the request was made.
 	 * @param {Object<string, (boolean|number|string|Date)>} data The data sent
 	 *        to the server with the request.
-	 * @return {?Promise<{
-	 *           status: number,
-	 *           body: *,
-	 *           params: {
-	 *             method: string,
-	 *             url: string,
-	 *             transformedUrl: string,
-	 *             data: Object<string, (boolean|number|string)>
-	 *           },
-	 *           headers: Object<string, string>,
-	 *           cached: boolean
-	 *         }>} A promise that will resolve to the server response with the
-	 *         body parsed as JSON, or {@code null} if no such request is
-	 *         present in the cache.
+	 * @return {?Promise<AgentResponse>} A promise that will resolve to the
+	 *         server response with the body parsed as JSON, or {@code null} if
+	 *         no such request is present in the cache.
 	 */
 	_getCachedData(method, url, data) {
 		let cacheKey = this.getCacheKey(method, url, data);
@@ -300,38 +260,9 @@ export default class HttpAgentImpl extends HttpAgent {
 	 * @param {string} url The URL to which the request is sent.
 	 * @param {Object<string, (boolean|number|string|Date)>} data The data sent
 	 *        with the request.
-	 * @param {{
-	 *          timeout: number=,
-	 *          ttl: number=,
-	 *          repeatRequest: number=,
-	 *          headers: Object<string, string>=,
-	 *          cache: boolean=,
-	 *          withCredentials: boolean=,
-	 *          postProcessor: function(Object<string, *>)=
-	 *        }=} options Optional request options. The {@code timeout}
-	 *        specifies the request timeout in milliseconds, the {@code ttl}
-	 *        specified how long the request may be cached in milliseconds, the
-	 *        {@code repeatRequest} specifies the maximum number of tries to
-	 *        repeat the request if the request fails, The {@code headers} set
-	 *        request headers. The {@code cache} can be used to bypass the
-	 *        cache of pending and finished HTTP requests. The
-	 *        {@code withCredentials} that indicates whether requests should be
-	 *        made using credentials such as cookies or authorization headers.
-	 *        The {@code postProcessor} is method for changing agent response
-	 *        before than the response is saved in cache and returned in promise.
-	 * @return {Promise<{
-	 *           status: number,
-	 *           body: *,
-	 *           params: {
-	 *             method: string,
-	 *             url: string,
-	 *             transformedUrl: string,
-	 *             data: Object<string, (boolean|number|string)>
-	 *           },
-	 *           headers: Object<string, string>,
-	 *           cached: boolean
-	 *         }>} A promise that resolves to the response with the body parsed
-	 *         as JSON.
+	 * @param {AgentRequestOptions=} options Optional request options.
+	 * @return {Promise<AgentResponse>} A promise that resolves to the response
+	 *         with the body parsed as JSON.
 	 */
 	_request(method, url, data, options) {
 		let cacheKey = this.getCacheKey(method, url, data);
@@ -339,11 +270,10 @@ export default class HttpAgentImpl extends HttpAgent {
 		let cachePromise = (
 			this._proxy
 				.request(method, url, data, options)
-				.then((response) => {
-					return this._proxyResolved(response);
-				}, (errorParams) => {
-					return this._proxyRejected(errorParams);
-				})
+				.then(
+					response => this._proxyResolved(response),
+					error => this._proxyRejected(error)
+				)
 		);
 
 		this._internalCacheOfPromises.set(cacheKey, cachePromise);
@@ -357,19 +287,8 @@ export default class HttpAgentImpl extends HttpAgent {
 	 * The method also updates the internal cookie storage with the cookies
 	 * received from the server.
 	 *
-	 * @param {Vendor.SuperAgent.Response} response Server response.
-	 * @return {{
-	 *           status: number,
-	 *           body: *,
-	 *           params: {
-	 *             method: string,
-	 *             url: string,
-	 *             transformedUrl: string,
-	 *             data: Object<string, (boolean|number|string)>
-	 *           },
-	 *           headers: Object<string, string>,
-	 *           cached: boolean
-	 *         }} The post-processed server response.
+	 * @param {AgentResponse} response Server response.
+	 * @return {AgentResponse} The post-processed server response.
 	 */
 	_proxyResolved(response) {
 		let agentResponse = {
@@ -411,25 +330,17 @@ export default class HttpAgentImpl extends HttpAgent {
 	 * The method rejects the internal request promise if there are no tries
 	 * left.
 	 *
-	 * @param {Object<string, *>} errorParams Error parameters, containing the
-	 *        request url, data, method, options and other useful data.
-	 * @return {Promise<{
-	 *           status: number,
-	 *           body: *,
-	 *           params: {
-	 *             method: string,
-	 *             url: string,
-	 *             transformedUrl: string,
-	 *             data: Object<string, (boolean|number|string)>
-	 *           },
-	 *           headers: Object<string, string>,
-	 *           cached: boolean
-	 *         }>} A promise that will either resolve to a server's response
-	 *         (with the body parsed as JSON) if there are any tries left and
-	 *         the re-tried request succeeds, or rejects with an error
-	 *         containing details of the cause of the request's failure.
+	 * @param {GenericError} error The error provided by the HttpProxy,
+	 *        carrying the error parameters, such as the request url, data,
+	 *        method, options and other useful data.
+	 * @return {Promise<AgentResponse>} A promise that will either resolve to a
+	 *         server's response (with the body parsed as JSON) if there are
+	 *         any tries left and the re-tried request succeeds, or rejects
+	 *         with an error containing details of the cause of the request's
+	 *         failure.
 	 */
-	_proxyRejected(errorParams) {
+	_proxyRejected(error) {
+		let errorParams = error.getParams();
 		let method = errorParams.method;
 		let url = errorParams.url;
 		let data = errorParams.data;
@@ -443,9 +354,11 @@ export default class HttpAgentImpl extends HttpAgent {
 			this._internalCacheOfPromises.delete(cacheKey);
 
 			let errorName = errorParams.errorName;
-			let errorMessage = `${errorName}: ima.http.Agent:_proxyRejected`;
-			let error = new GenericError(errorMessage, errorParams);
-			return Promise.reject(error);
+			let errorMessage = (
+				`${errorName}: ima.http.Agent:_proxyRejected: ${error.message}`
+			);
+			let agentError = new GenericError(errorMessage, errorParams);
+			return Promise.reject(agentError);
 		}
 	}
 
@@ -453,36 +366,9 @@ export default class HttpAgentImpl extends HttpAgent {
 	 * Prepares the provided request options object by filling in missing
 	 * options with default values and addding extra options used internally.
 	 *
-	 * @param {{
-	 *          timeout: number=,
-	 *          ttl: number=,
-	 *          repeatRequest: number=,
-	 *          headers: Object<string, string>=,
-	 *          cache: boolean=,
-	 *          withCredentials: boolean=,
-	 *          postProcessor: function(Object<string, *>)=
-	 *        }} options Optional request options. The {@code timeout}
-	 *        specifies the request timeout in milliseconds, the {@code ttl}
-	 *        specified how long the request may be cached in milliseconds, the
-	 *        {@code repeatRequest} specifies the maximum number of tries to
-	 *        repeat the request if the request fails, The {@code headers} set
-	 *        request headers. The {@code cache} can be used to bypass the
-	 *        cache of pending and finished HTTP requests. The
-	 *        {@code withCredentials} that indicates whether requests should be
-	 *        made using credentials such as cookies or authorization headers.
-	 *        The {@code postProcessor} is method for changing agent response
-	 *        before than the response is saved in cache and returned in promise.
-	 * @return {{
-	 *           timeout: number,
-	 *           ttl: number,
-	 *           repeatRequest: number,
-	 *           cookie: string,
-	 *           headers: Object<string, string>,
-	 *           cache: boolean,
-	 *           withCredentials: boolean,
-	 *           postProcessor: function(Object<string, *>)=
-	 *         }} Request options with set filled-in default values for missing
-	 *         fields, and extra options used internally.
+	 * @param {AgentRequestOptions} options Optional request options.
+	 * @return {AgentRequestOptions} Request options with set filled-in default
+	 *         values for missing fields, and extra options used internally.
 	 */
 	_prepareOptions(options) {
 		let extraOptions = {
@@ -525,18 +411,7 @@ export default class HttpAgentImpl extends HttpAgent {
 	 * Sets all cookies from the {@code Set-Cookie} response header to the
 	 * cookie storage.
 	 *
-	 * @param {{
-	 *          status: number,
-	 *          body: *,
-	 *          params: {
-	 *            method: string,
-	 *            url: string,
-	 *            transformedUrl: string,
-	 *            data: Object<string, (boolean|number|string)>
-	 *          },
-	 *          headers: Object<string, string>,
-	 *          cached: boolean
-	 *        }} agentResponse The response of the server.
+	 * @param {AgentResponse} agentResponse The response of the server.
 	 */
 	_setCookiesFromResponse(agentResponse) {
 		if (agentResponse.headers) {
@@ -554,18 +429,7 @@ export default class HttpAgentImpl extends HttpAgent {
 	 * Saves the server response to the cache to be used as the result of the
 	 * next request of the same properties.
 	 *
-	 * @param {{
-	 *          status: number,
-	 *          body: *,
-	 *          params: {
-	 *            method: string,
-	 *            url: string,
-	 *            transformedUrl: string,
-	 *            data: Object<string, (boolean|number|string)>
-	 *          },
-	 *          headers: Object<string, string>,
-	 *          cached: boolean
-	 *        }} agentResponse The response of the server.
+	 * @param {AgentResponse} agentResponse The response of the server.
 	 */
 	_saveAgentResponseToCache(agentResponse) {
 		let cacheKey = this.getCacheKey(

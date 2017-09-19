@@ -13,8 +13,7 @@ const vendors = {
 		'classnames',
 		'react',
 		'react-dom',
-		'prop-types',
-		'superagent'
+		'prop-types'
 	],
 
 	server: [

@@ -3,6 +3,44 @@ import ns from '../namespace';
 ns.namespace('ima.http');
 
 /**
+ * Options for a request sent using the HTTP agent.
+ * @typedef {Object} AgentRequestOptions
+ * @property {number} [timeout] Specifies the request timeout in milliseconds.
+ * @property {number} [ttl] Specified how long the request may be cached in
+ *           milliseconds.
+ * @property {number} [repeatRequest] Specifies the maximum number of tries to
+ *           repeat the request if the request fails.
+ * @property {Object<string, string>} [headers] Sets the additional request
+ *           headers (the keys are case-insensitive header names, the values
+ *           are header values).
+ * @property {boolean} [cache] Flag that enables caching the HTTP request
+ *           (enabled by default, also applies to requests in progress).
+ * @property {boolean} [withCredentials] Flag that indicates whether the
+ *           request should be made using credentials such as cookies or
+ *           authorization headers.
+ * @property {{progress: function=}} [listeners] Listeners for request events.
+ * @property {function(AgentResponse)} [postProcessor] Response post-processor
+ *           applied just before the response is stored in the cache and
+ *           returned.
+ */
+
+/**
+ * @typedef {Object} AgentResponse
+ * @property {number} status The HTTP response status code.
+ * @property {*} body The parsed response body, parsed as JSON.
+ * @property {string} params.method The HTTP method used to make the request.
+ * @property {string} params.url The original URL to which the request should
+ *           have been made.
+ * @property {string} params.transformedUrl The final URL after all
+ *           pre-processors have been applied. This is the URL to which the
+ *           request was made.
+ * @property {Object<string, (boolean|number|string)>} params.data The data
+ *           sent in the original request.
+ * @property {Object<string, string>} headers The response HTTP headers.
+ * @property {boolean} cached Whether or not the response has been cached.
+ */
+
+/**
  * The {@codelink HttpAgent} defines unifying API for sending HTTP requests at
  * both client-side and server-side.
  *
@@ -16,39 +54,9 @@ export default class HttpAgent {
 	 * @param {string} url The URL to which the request should be made.
 	 * @param {Object<string, (boolean|number|string)>} data The data to send
 	 *        to the server as query parameters.
-	 * @param {{timeout: number=, ttl: number=, repeatRequest: number=,
-	 *        headers: Object<string, string>=, cache: boolean=,
-	 *        withCredentials: boolean=, listeners: Object<string, function>=,
-	 *        postProcessor: function(Object<string, *>)=}=} options
-	 *        Optional request options. The {@code timeout} specifies the
-	 *        request timeout in milliseconds, the {@code ttl} specified how
-	 *        long the request may be cached in milliseconds, the
-	 *        {@code repeatRequest} specifies the maximum number of tries to
-	 *        repeat the request if the request fails. The {@code headers}
-	 *        field sets the additional request headers (the keys are
-	 *        case-insensitive header names, the values are header values). The
-	 *        {@code cache} flag enables caching the HTTP request (enabled by
-	 *        default, also applies to requests in progress). The
-	 *        {@code withCredentials} flag indicates whether the request should
-	 *        be made using credentials such as cookies or authorization
-	 *        headers. The {@code listeners} Add listeners for request.
-	 *        The {@code postProcessor} is method for changing agent response
-	 *        before than the response is saved in cache and returned in promise.
-	 * @return {Promise<{
-	 *             status: number,
-	 *             body: *,
-	 *             params: {
-	 *                 method: string,
-	 *                 url: string,
-	 *                 transformedUrl: string,
-	 *                 data: Object<string, (boolean|number|string)>
-	 *             },
-	 *             headers: Object<string, string>,
-	 *             cached: boolean
-	 *         }>}
-	 *         A promise that resolves to the response. The response body will
-	 *         be parsed according to the {@code Content-Type} response
-	 *         header's value.
+	 * @param {AgentRequestOptions=} options Optional request options.
+	 * @return {Promise<AgentResponse>} A promise that resolves to the
+	 *         response.
 	 */
 	get(url, data, options = {}) {}
 
@@ -61,39 +69,9 @@ export default class HttpAgent {
 	 * @param {string} url The URL to which the request should be made.
 	 * @param {(string|Object<string, *>)} data The data to send to the server
 	 *        as the request body.
-	 * @param {{timeout: number=, ttl: number=, repeatRequest: number=,
-	 *        headers: Object<string, string>=, cache: boolean=,
-	 *        withCredentials: boolean=, listeners: Object<string, function>=,
-	 *        postProcessor: function(Object<string, *>)=}=} options
-	 *        Optional request options. The {@code timeout} specifies the
-	 *        request timeout in milliseconds, the {@code ttl} specified how
-	 *        long the request may be cached in milliseconds, the
-	 *        {@code repeatRequest} specifies the maximum number of tries to
-	 *        repeat the request if the request fails. The {@code headers}
-	 *        field sets the additional request headers (the keys are
-	 *        case-insensitive header names, the values are header values). The
-	 *        {@code cache} flag enables caching the HTTP request (enabled by
-	 *        default, also applies to requests in progress). The
-	 *        {@code withCredentials} flag indicates whether the request should
-	 *        be made using credentials such as cookies or authorization
-	 *        headers. The {@code listeners} Add listeners for request.
-	 *        The {@code postProcessor} is method for changing agent response
-	 *        before than the response is saved in cache and returned in promise.
-	 * @return {Promise<{
-	 *             status: number,
-	 *             body: *,
-	 *             params: {
-	 *                 method: string,
-	 *                 url: string,
-	 *                 transformedUrl: string,
-	 *                 data: Object<string, (boolean|number|string)>
-	 *             },
-	 *             headers: Object<string, string>,
-	 *             cached: boolean
-	 *         }>}
-	 *         A promise that resolves to the response. The response body will
-	 *         be parsed according to the {@code Content-Type} response
-	 *         header's value.
+	 * @param {AgentRequestOptions=} options Optional request options.
+	 * @return {Promise<AgentResponse>} A promise that resolves to the
+	 *         response.
 	 */
 	post(url, data, options = {}) {}
 
@@ -106,39 +84,9 @@ export default class HttpAgent {
 	 * @param {string} url The URL to which the request should be made.
 	 * @param {(string|Object<string, *>)} data The data to send to the server
 	 *        as the request body.
-	 * @param {{timeout: number=, ttl: number=, repeatRequest: number=,
-	 *        headers: Object<string, string>=, cache: boolean=,
-	 *        withCredentials: boolean=, listeners: Object<string, function>=,
-	 *        postProcessor: function(Object<string, *>)=}=} options
-	 *        Optional request options. The {@code timeout} specifies the
-	 *        request timeout in milliseconds, the {@code ttl} specified how
-	 *        long the request may be cached in milliseconds, the
-	 *        {@code repeatRequest} specifies the maximum number of tries to
-	 *        repeat the request if the request fails. The {@code headers}
-	 *        field sets the additional request headers (the keys are
-	 *        case-insensitive header names, the values are header values). The
-	 *        {@code cache} flag enables caching the HTTP request (enabled by
-	 *        default, also applies to requests in progress). The
-	 *        {@code withCredentials} flag indicates whether the request should
-	 *        be made using credentials such as cookies or authorization
-	 *        headers. The {@code listeners} Add listeners for request.
-	 *        The {@code postProcessor} is method for changing agent response
-	 *        before than the response is saved in cache and returned in promise.
-	 * @return {Promise<{
-	 *             status: number,
-	 *             body: *,
-	 *             params: {
-	 *                 method: string,
-	 *                 url: string,
-	 *                 transformedUrl: string,
-	 *                 data: Object<string, (boolean|number|string)>
-	 *             },
-	 *             headers: Object<string, string>,
-	 *             cached: boolean
-	 *         }>}
-	 *         A promise that resolves to the response. The response body will
-	 *         be parsed according to the {@code Content-Type} response
-	 *         header's value.
+	 * @param {AgentRequestOptions=} options Optional request options.
+	 * @return {Promise<AgentResponse>} A promise that resolves to the
+	 *         response.
 	 */
 	put(url, data, options = {}) {}
 
@@ -151,39 +99,9 @@ export default class HttpAgent {
 	 * @param {string} url The URL to which the request should be made.
 	 * @param {(string|Object<string, *>)} data The data to send to the server
 	 *        as the request body.
-	 * @param {{timeout: number=, ttl: number=, repeatRequest: number=,
-	 *        headers: Object<string, string>=, cache: boolean=,
-	 *        withCredentials: boolean=, listeners: Object<string, function>=,
-	 *        postProcessor: function(Object<string, *>)=}=} options
-	 *        Optional request options. The {@code timeout} specifies the
-	 *        request timeout in milliseconds, the {@code ttl} specified how
-	 *        long the request may be cached in milliseconds, the
-	 *        {@code repeatRequest} specifies the maximum number of tries to
-	 *        repeat the request if the request fails. The {@code headers}
-	 *        field sets the additional request headers (the keys are
-	 *        case-insensitive header names, the values are header values). The
-	 *        {@code cache} flag enables caching the HTTP request (enabled by
-	 *        default, also applies to requests in progress). The
-	 *        {@code withCredentials} flag indicates whether the request should
-	 *        be made using credentials such as cookies or authorization
-	 *        headers. The {@code listeners} Add listeners for request.
-	 *        The {@code postProcessor} is method for changing agent response
-	 *        before than the response is saved in cache and returned in promise.
-	 * @return {Promise<{
-	 *             status: number,
-	 *             body: *,
-	 *             params: {
-	 *                 method: string,
-	 *                 url: string,
-	 *                 transformedUrl: string,
-	 *                 data: Object<string, (boolean|number|string)>
-	 *             },
-	 *             headers: Object<string, string>,
-	 *             cached: boolean
-	 *         }>}
-	 *         A promise that resolves to the response. The response body will
-	 *         be parsed according to the {@code Content-Type} response
-	 *         header's value.
+	 * @param {AgentRequestOptions=} options Optional request options.
+	 * @return {Promise<AgentResponse>} A promise that resolves to the
+	 *         response.
 	 */
 	patch(url, data, options = {}) {}
 
@@ -196,39 +114,9 @@ export default class HttpAgent {
 	 * @param {string} url The URL to which the request should be made.
 	 * @param {(string|Object<string, *>)} data The data to send to the server
 	 *        as the request body.
-	 * @param {{timeout: number=, ttl: number=, repeatRequest: number=,
-	 *        headers: Object<string, string>=, cache: boolean=,
-	 *        withCredentials: boolean=, listeners: Object<string, function>=,
-	 *        postProcessor: function(Object<string, *>)=}=} options
-	 *        Optional request options. The {@code timeout} specifies the
-	 *        request timeout in milliseconds, the {@code ttl} specified how
-	 *        long the request may be cached in milliseconds, the
-	 *        {@code repeatRequest} specifies the maximum number of tries to
-	 *        repeat the request if the request fails. The {@code headers}
-	 *        field sets the additional request headers (the keys are
-	 *        case-insensitive header names, the values are header values). The
-	 *        {@code cache} flag enables caching the HTTP request (enabled by
-	 *        default, also applies to requests in progress). The
-	 *        {@code withCredentials} flag indicates whether the request should
-	 *        be made using credentials such as cookies or authorization
-	 *        headers. The {@code listeners} Add listeners for request.
-	 *        The {@code postProcessor} is method for changing agent response
-	 *        before than the response is saved in cache and returned in promise.
-	 * @return {Promise<{
-	 *             status: number,
-	 *             body: *,
-	 *             params: {
-	 *                 method: string,
-	 *                 url: string,
-	 *                 transformedUrl: string,
-	 *                 data: Object<string, (boolean|number|string)>
-	 *             },
-	 *             headers: Object<string, string>,
-	 *             cached: boolean
-	 *         }>}
-	 *         A promise that resolves to the response. The response body will
-	 *         be parsed according to the {@code Content-Type} response
-	 *         header's value.
+	 * @param {AgentRequestOptions=} options Optional request options.
+	 * @return {Promise<AgentResponse>} A promise that resolves to the
+	 *         response.
 	 */
 	delete(url, data, options = {}) {}
 

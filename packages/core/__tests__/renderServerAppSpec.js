@@ -1,6 +1,5 @@
 import React from 'react';
 import $Helper from 'ima-helpers';
-import SuperAgent from 'superagent';
 import ControllerInterface from '../controller/Controller';
 import ServerPageRenderer from '../page/renderer/ServerPageRenderer';
 import Response from '../router/Response';
@@ -58,7 +57,6 @@ describe('Render server application', () => {
 	beforeAll((done) => {
 		vendorLinker.set('react', React);
 		vendorLinker.set('react-dom', ReactDOM);
-		vendorLinker.set('superagent', SuperAgent);
 		vendorLinker.set('ima-helpers', $Helper);
 
 		let app = ima.createImaApp();

@@ -60,10 +60,6 @@ export default (ns, oc, config) => {
 	oc.constant('$React', vendorLinker.get('react', true));
 	oc.constant('$ReactDOM', vendorLinker.get('react-dom', true));
 	oc.constant('$ReactDOMServer', vendorLinker.get('react-dom/server.js', true));
-
-	//SuperAgent
-	oc.constant('$SuperAgent', vendorLinker.get('superagent'));
-
 	//*************END VENDORS*****************
 
 
@@ -175,10 +171,10 @@ export default (ns, oc, config) => {
 	oc.constant('$RouteNames', RouteNames);
 	oc.constant('$RouterEvents', RouterEvents);
 
-	//SuperAgent
+	//Http agent
 	oc.bind('$HttpUrlTransformer', UrlTransformer);
-	oc.bind('$SuperAgentProxy', HttpProxy, ['$SuperAgent', '$HttpUrlTransformer', '$Window']);
-	oc.provide(HttpAgent, HttpAgentImpl, ['$SuperAgentProxy', '$Cache', CookieStorage, config.$Http]);
+	oc.bind('$HttpAgentProxy', HttpProxy, ['$HttpUrlTransformer', '$Window']);
+	oc.provide(HttpAgent, HttpAgentImpl, ['$HttpAgentProxy', '$Cache', CookieStorage, config.$Http]);
 	oc.bind('$Http', HttpAgent);
 	oc.constant('$HttpStatusCode', HttpStatusCode);
 
