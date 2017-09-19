@@ -1,6 +1,7 @@
 let coreDependencies = require('ima/build.js');
 let path = require('path');
 let sharedTasksState = require('./gulpState');
+let macroTasks = require('./macroTasks.js');
 
 let appDependencies;
 try {
@@ -87,26 +88,9 @@ exports.vendorDependencies = {
 };
 
 exports.tasks = {
-	dev: [
-		['copy:appStatic', 'copy:environment', 'shim', 'polyfill'],
-		['Es6ToEs5:app', 'Es6ToEs5:server', 'Es6ToEs5:vendor'],
-		['less', 'doc', 'locale', 'Es6ToEs5:vendor:client', 'Es6ToEs5:vendor:client:test'],
-		'server',
-		['test:unit:karma:dev', 'watch']
-	],
-	build: [
-		['copy:appStatic', 'copy:environment', 'shim', 'polyfill'],
-		['Es6ToEs5:app', 'Es6ToEs5:server', 'Es6ToEs5:vendor'],
-		['less', 'doc', 'locale', 'Es6ToEs5:vendor:client', 'Es6ToEs5:vendor:client:test'],
-		['bundle:js:app', 'bundle:js:server', 'bundle:css']
-	],
-	spa: [
-		['copy:appStatic', 'shim', 'polyfill'],
-		['Es6ToEs5:app', 'Es6ToEs5:vendor'],
-		['less', 'doc', 'locale', 'Es6ToEs5:vendor:client'],
-		['bundle:js:app', 'bundle:css', 'spa:compile'],
-		'spa:clean'
-	]
+	dev: macroTasks.DEFAULT_DEV_SUBTASKS,
+	build: macroTasks.DEFAULT_BUILD_SUBTASKS,
+	spa: macroTasks.DEFAULT_SPA_SUBTASKS
 };
 
 exports.files = {
@@ -199,6 +183,17 @@ exports.files = {
 			client: './build/static/js/'
 		}
 	},
+	extraPolyfills: [
+		{
+			name: 'fetch-polyfill.js',
+			src: [
+				'./node_modules/whatwg-fetch/fetch.js'
+			],
+			dest: {
+				client: './build/static/js/'
+			}
+		}
+	],
 	bundle: {
 		js: {
 			name: 'app.bundle.min.js',
