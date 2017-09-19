@@ -13,6 +13,7 @@ export default class DocumentView extends AbstractDocumentView {
 	render() {
 		let appCssFile = this.utils.$Settings.$Env !== 'dev' ? 'app.bundle.min.css' : 'app.css';
 		appCssFile += `?version=${this.utils.$Settings.$Version}`;
+		let jsBaseUrl = this.utils.$Router.getBaseUrl() + this.utils.$Settings.$Static.js;
 
 		return (
 			<html>
@@ -39,6 +40,11 @@ export default class DocumentView extends AbstractDocumentView {
 					<div id='fb-root' />
 					<div id='page' dangerouslySetInnerHTML={{ __html: this.props.page }}/>
 					<script id='revivalSettings' dangerouslySetInnerHTML={{ __html: this.props.revivalSettings }}/>
+					<script>
+						{`if (!window.fetch) {
+							document.write('<script src="${jsBaseUrl}/fetch-polyfill.js"></' + 'script>')
+						}`}
+					</script>
 					{this.utils.$Settings.$Env === 'dev' ?
 						<div id='scripts'>{this.getSyncScripts()}</div>
 					:
