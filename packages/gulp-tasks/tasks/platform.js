@@ -29,11 +29,22 @@ exports.default = (gulpConfig) => {
 			.pipe(sourcemaps.init({loadMaps: true}))
 			.pipe(insert.wrap('(function(){', '})();'))
 			.pipe(concat(files.polyfill.name))
-			.pipe(gulp.dest(files.shim.dest.client))
+			.pipe(gulp.dest(files.polyfill.dest.client))
+	}
+
+	function extraPolyfills() {
+		return gulp.parallel(...files.extraPolyfills.map(polyfill => gulp
+			.src(polyfill.src)
+			.pipe(sourcemaps.init({loadMaps: true}))
+			.pipe(insert.wrap('(function(){', '})();'))
+			.pipe(concat(polyfill.name))
+			.pipe(gulp.dest(polyfill.dest.client))
+		))();
 	}
 
 	return {
 		polyfill,
+		extraPolyfills,
 		shim
 	};
 };
