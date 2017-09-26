@@ -24,28 +24,43 @@ describe('ima.router.Route', function() {
 		using([
 			{ pathExpression: '/home/:userId/something/:somethingId', params: { userId: 1, somethingId: 2 }, result: '/home/1/something/2' },
 			{ pathExpression: '/home/:userId/something/:somethingId/', params: { userId: 1, somethingId: 2 }, result: '/home/1/something/2' },
-			{ pathExpression: ':?optional/home/:userId/something/:somethingId/', params: { userId: 1, somethingId: 2 }, result: '/home/1/something/2' },
 
 			{ pathExpression: '/list/:route/:action/:sort/:page', params: { route: 'users', action: 'view', 'sort': 'price', page: 5 }, result: '/list/users/view/price/5' },
 			{ pathExpression: '/list/:route/:action/:sort/:page', params: { action: 'view', route: 'users', 'sort': 'price', page: 5 }, result: '/list/users/view/price/5' },
-
 			{ pathExpression: '/list/:?route/:?action/:?sort/:?page', params: { route: 'users', action: 'view' }, result: '/list/users/view' },
 			{ pathExpression: '/list/:?route/:?action/:?sort/:?page', params: { action: 'view', route: 'users' }, result: '/list/users/view' },
-
 			{ pathExpression: '/search/:?phrase/:?action/:?sort/:?page', params: { phrase: 'users', action: '' }, result: '/search/users' },
 			{ pathExpression: '/search/:?phrase/:?action/:?sort/:?page', params: { action: '', phrase: 'users' }, result: '/search/users' },
-
 			{ pathExpression: '/search/:phrase/:?action/:?sort/:?page', params: { phrase: 'users', action: '' }, result: '/search/users' },
 			{ pathExpression: '/search/:phrase/:?action/:?sort/:?page', params: { action: '', phrase: 'users' }, result: '/search/users' },
 
 			{ pathExpression: '/search/:phrase/:?sort/:?page', params: { phrase: '' }, result: '/search' },
 
+			{ pathExpression: '/:someId-:?someName/:?cntr/:?price/:?sort/:?page', params: { someId: 11, cntr: 'gb', price: 'all', sort: 'top', page: 2 }, result: '/11-/gb/all/top/2' },
+			{ pathExpression: '/:someId-:?someName/:?locality/:?price/:?sort/:?page', params: { someId: 11, locality: 'cz', price: 'all-prices' }, result: '/11-/cz/all-prices' },
+			{ pathExpression: '/:someId-:?anotherId-:?someName/:?locality/:?price/:?sort/:?page', params: { someId: 11, locality: 'cz', price: 'all-prices' }, result: '/11--/cz/all-prices' },
+
 			{ pathExpression: '/:?route/:?action/:?sort/:?page', params: { route: 'users', action: 'view' }, result: '/users/view' },
 			{ pathExpression: '/:?route/:?action/:?sort/:?page', params: { action: 'view', route: 'users' }, result: '/users/view' },
 
 			{ pathExpression: '/home/:userId/something/:somethingId/:?optional', params: { userId: 'hello', somethingId: 'job' }, result: '/home/hello/something/job' },
-			{ pathExpression: '/home/:userId/:?optional/something/:somethingId', params: { userId: 1, somethingId: 2 }, result: '/home/1/something/2' },
-			{ pathExpression: '/home/:userId/:?optional/something/:somethingId/', params: { userId: 1, somethingId: 2 }, result: '/home/1/something/2' }
+
+			{ pathExpression: '/:catId-:catName', params: { catId: 2012, catName: 'some-category' }, result: '/2012-some-category' },
+			{ pathExpression: '/:someId-:?someName', params: { someId: 2012, someName: 'some-name' }, result: '/2012-some-name' },
+			{ pathExpression: '/:someId-:?someName', params: { someId: 2012 }, result: '/2012-' },
+			{ pathExpression: '/:catId-special-event-:catName', params: { catId: '12', catName: 'yellow-roses' }, result: '/12-special-event-yellow-roses' },
+			{ pathExpression: '/:detailId-:catId-:detailName', params: { detailId: '125569', catId: '1992', detailName: 'skoda-105' }, result: '/125569-1992-skoda-105' },
+			{ pathExpression: '/:?detailId-:?catId-:?detailName', params: { detailId: '125569', catId: '1992', detailName: 'skoda-105' }, result: '/125569-1992-skoda-105' },
+			{ pathExpression: '/:detailId-:catId/:?name', params: { detailId: '125569', catId: '1992' }, result: '/125569-1992' },
+			{ pathExpression: '/:detailId-:catId/:?name', params: { detailId: '125569', catId: '6992', name: 'skoda-rapid' }, result: '/125569-6992/skoda-rapid' },
+			{ pathExpression: '/cars/:detailId-:catId/:name', params: { detailId: '125569', catId: '6992', name: 'skoda-rapid' }, result: '/cars/125569-6992/skoda-rapid' },
+
+			{ pathExpression: ':param/home/:userId/something/:?somethingId/', params: { param: 'cool', userId: 1, somethingId: 2 }, result: '/cool/home/1/something/2' },
+
+			// invalid parametres order
+			{ pathExpression: '/:?optional/home/:userId/something/:someId/', params: { optional: 'too-bad', userId: 1, someId: 2 }, result: '/too-bad/home/1/something/2' },
+			{ pathExpression: '/home/:userId/:?optional/something/:someId', params: { userId: 1, someId: 2 }, result: '/home/1/something/2' }
+
 		], function(value) {
 			const localRoute = new Route(name, value.pathExpression, controller, view, options);
 			it('for path params for pathExpr ' + value.pathExpression + ' and params ' + JSON.stringify(value.params), function() {
@@ -70,9 +85,10 @@ describe('ima.router.Route', function() {
 			{ pathExpression: ':?optional/home/:userId/something/:somethingId/:?optional2', params: { userId: 1, somethingId: 2, optional: 'en', optional2: 'today' }, result: '/en/home/1/something/2/today' }
 		], function(value) {
 			const localRoute = new Route(name, value.pathExpression, controller, view, options);
+			const { params, result } = value;
 
-			it('for optional param will be return defined path for pathExpr ' + value.pathExpression + ' and params ' + JSON.stringify(value.params), function() {
-				expect(localRoute.toPath(value.params)).toEqual(value.result);
+			it('for optional param will be return defined path for pathExpr ' + value.pathExpression + ' and params ' + JSON.stringify(params), function() {
+				expect(localRoute.toPath(params)).toEqual(result);
 			});
 		});
 
@@ -85,9 +101,10 @@ describe('ima.router.Route', function() {
 			{ pathExpression: ':?optional/:?optional2', params: { optional: 'en', optional2: 'cs' }, result: '/en/cs' }
 		], function(value) {
 			const localRoute = new Route(name, value.pathExpression, controller, view, options);
+			const { params, result } = value;
 
-			it('for only optional param will be return defined path for pathExpr ' + value.pathExpression + ' and params ' + JSON.stringify(value.params), function() {
-				expect(localRoute.toPath(value.params)).toEqual(value.result);
+			it('for only optional param will be return defined path for pathExpr ' + value.pathExpression + ' and params ' + JSON.stringify(params), function() {
+				expect(localRoute.toPath(params)).toEqual(result);
 			});
 		});
 
@@ -113,38 +130,113 @@ describe('ima.router.Route', function() {
 	});
 
 	describe('should get params from path', function() {
+		const multipleParamsExpr = '/offer/:group/:catId-:catName/:?productId/:?promo';
 
 		using([
 			{ pathExpression: '/:userId', path: '/user12', params: { userId: 'user12' } },
+			{ pathExpression: '/:category', path: '/89524174-white-roses', params: { 'category': '89524174-white-roses' } },
+			{ pathExpression: '/:userId-', path: '/895174-bad-user', params: {} },
+			{ pathExpression: '/:?userId-', path: '/895174-bad-user', params: {} },
+			{ pathExpression: '/:userId_', path: '/895174_bad-user', params: {} },
+			{ pathExpression: '/:?userId_', path: '/895174_bad-user', params: {} },
+			{ pathExpression: '/:userId ', path: '/895174 bad-user', params: {} },
+			{ pathExpression: '/:?userId ', path: '/895174 bad-user', params: {} },
+
+			{ pathExpression: '/:catId-:catName', path: '/89524171-yellow-roses', params: { catId: '89524171', catName: 'yellow-roses' } },
+			{ pathExpression: '/:catId_:catName', path: '/89524171-yellow-roses', params: {} },
+			{ pathExpression: '/:catId_:catName', path: '/89524171_yellow-roses', params: { catId: '89524171', catName: 'yellow-roses' } },
+			{ pathExpression: '/:catId-special-event-:catName', path: '/12-special-event-roses-mixed', params: { catId: '12', catName: 'roses-mixed' } },
+			{ pathExpression: '/:detailId-:catId-:detailName', path: '/125569-12-skoda-105', params: { detailId: '125569', catId: '12', detailName: 'skoda-105' } },
+
+			{ pathExpression: '/:?catId-:catName', path: '/89524171-yellow-roses', params: { catId: '89524171', catName: 'yellow-roses' } },
+			{ pathExpression: '/:?catId-:catName', path: '/-yellow-roses', params: { catName: 'yellow-roses' } },
+			{ pathExpression: '/:?catId-:?catName', path: '/89524171-yellow-roses', params: { catId: '89524171', catName: 'yellow-roses' } },
+			{ pathExpression: '/:?catId-:?catName', path: '/89524171-', params: { catId: '89524171' } },
+			{ pathExpression: '/:?catId-:?catName', path: '/-yellow-roses', params: { catName: 'yellow-roses' } },
+			{ pathExpression: '/:?catId-:?catName', path: '/-', params: {} },
+
+			{ pathExpression: '/:?catId_:catName', path: '/89524331_yellow-roses', params: { catId: '89524331', catName: 'yellow-roses' } },
+			{ pathExpression: '/:?catId_:catName', path: '/_yellow-roses', params: { catName: 'yellow-roses' } },
+			{ pathExpression: '/:?catId_:catName', path: '/-yellow-roses', params: {} },
+			{ pathExpression: '/:?catId_:?catName', path: '/89524331_yellow-roses', params: { catId: '89524331', catName: 'yellow-roses' } },
+			{ pathExpression: '/:?catId_:?catName', path: '/89524331_', params: { catId: '89524331' } },
+			{ pathExpression: '/:?catId_:?catName', path: '/_yellow-roses', params: { catName: 'yellow-roses' } },
+
+			{ pathExpression: '/:?catId :catName', path: '/89524171 yellow-roses', params: {} },
+			{ pathExpression: '/:?catId :catName', path: '/ yellow-roses', params: {} },
+			{ pathExpression: '/:?catId :?catName', path: '/89524171 yellow-roses', params: {} },
+			{ pathExpression: '/:?catId :?catName', path: '/89524171 ', params: {} },
+			{ pathExpression: '/:?catId :?catName', path: '/ yellow-roses', params: {} },
+			{ pathExpression: '/:?catId :?catName', path: '/ ', params: {} },
+
+			{ pathExpression: '/:?catId-some-expected-string-:catName', path: '/89524221-some-expected-string-pink-roses', params: { catId: '89524221', catName: 'pink-roses' } },
+			{ pathExpression: '/:?catId-some-expected-string-:catName', path: '/-some-expected-string-pink-roses', params: { catName: 'pink-roses' } },
+			{ pathExpression: '/:?catId-some-expected-string-:?catName', path: '/89524221-some-expected-string-pink-roses', params: { catId: '89524221', catName: 'pink-roses' } },
+			{ pathExpression: '/:?catId-some-expected-string-:?catName', path: '/89524221-some-unexpected-string-pink-roses', params: {} },
+			{ pathExpression: '/:?catId-some-expected-string-:?catName', path: '/-some-expected-string-', params: {} },
+			{ pathExpression: '/:?catId-some-expected-string-:?catName', path: '/-some-expected-string-pink-roses', params: { catName: 'pink-roses' } },
+			{ pathExpression: '/:?catId-some-expected-string-:?catName', path: '/89524221-some-expected-string-', params: { catId: '89524221' } },
+
+			{ pathExpression: '/:?catId_some_expected_string_:catName', path: '/89524221_some_expected_string_pink_roses', params: { catId: '89524221', catName: 'pink_roses' } },
+			{ pathExpression: '/:?catId_some_expected_string_:catName', path: '/_some_expected_string_pink_roses', params: { catName: 'pink_roses' } },
+			{ pathExpression: '/:?catId_some_expected_string_:?catName', path: '/89524221_some_expected_string_pink_roses', params: { catId: '89524221', catName: 'pink_roses' } },
+			{ pathExpression: '/:?catId_some_expected_string_:?catName', path: '/_some_expected_string_', params: {} },
+			{ pathExpression: '/:?catId_some_expected_string_:?catName', path: '/_some_expected_string_pink_roses', params: { catName: 'pink_roses' } },
+			{ pathExpression: '/:?catId_some_expected_string_:?catName', path: '/89524221_some_expected_string_', params: { catId: '89524221' } },
+
+			{ pathExpression: '/:?catId some expected string :catName', path: '/89524521 some expected string pink roses', params: {} },
+			{ pathExpression: '/:?catId some expected string :catName', path: '/ some expected string pink roses', params: {} },
+			{ pathExpression: '/:?catId some expected string :?catName', path: '/89524521 some expected string pink roses', params: {} },
+			{ pathExpression: '/:?catId some expected string :?catName', path: '/ some expected string pink roses', params: {} },
+			{ pathExpression: '/:?catId some expected string :?catName', path: '/89524521 some expected string ', params: {} },
+
+			{ pathExpression: '/:userId/:detailId-:catId-:detailName', path: '/1986/125569-12-skoda-105', params: { userId: '1986', detailId: '125569', catId: '12', detailName: 'skoda-105' } },
+			{ pathExpression: '/:catId-:catName/:?someId/:?anotherId', path: '/578742-roses', params: { catId: '578742', catName: 'roses' } },
+			{ pathExpression: '/:catId-:catName/:?someId/:?another', path: '/578742-roses/8999', params: { catId: '578742', catName: 'roses', someId: '8999' } },
+			{ pathExpression: '/:catId-:catName/:?someId/:?another', path: '/578742-roses/8999/75258-eoc', params: { catId: '578742', catName: 'roses', someId: '8999', another: '75258-eoc' } },
+
+			{ pathExpression: '/something/:group/:catId-:catName', path: '/something/flowers/', params: {} },
+			{ pathExpression: '/something/:group/:catId-:catName', path: '/something/flowers/89524175-red-roses', params: { group: 'flowers', catId: '89524175', catName: 'red-roses' } },
+			{ pathExpression: multipleParamsExpr, path: '/offer/flowers/524175', params: {} },
+			{ pathExpression: multipleParamsExpr, path: '/offer/flowers/524175-red-roses', params: { group: 'flowers', catId: '524175', catName: 'red-roses' } },
+			{ pathExpression: multipleParamsExpr, path: '/offer/flowers/524175-red-roses/120415247', params: { group: 'flowers', catId: '524175', catName: 'red-roses', productId: '120415247' } },
+			{ pathExpression: multipleParamsExpr, path: '/offer/flowers/524175-red-roses/120415247/winter2017', params: { group: 'flowers', catId: '524175', catName: 'red-roses', productId: '120415247', promo: 'winter2017' } },
+
 			{ pathExpression: '/home/:userId/something/:somethingId', path: '/home/1/something/2', params:{ userId: '1', somethingId: '2' } },
 			{ pathExpression: '/home/:userId/something/:somethingId', path: '/home/1/something', params:{ userId: undefined, somethingId: undefined } },
 			{ pathExpression: '/home/:userId/something/:somethingId', path: '/home/param1/something/param2', params:{ userId: 'param1', somethingId: 'param2' } },
+
 			{ pathExpression: '/home/:userId/something/:somethingId', path: '/home/param1/something/param2?query=param3', params:{ userId: 'param1', somethingId: 'param2', query: 'param3' } },
+
 			{ pathExpression: '/:?userId', path: '/user12', params: { userId: 'user12' } },
 			{ pathExpression: '/:?userId', path: '/', params: { userId: undefined } },
-			{ pathExpression: '/:?userId/something/:somethingId', path: '/something/param1', params: { somethingId: 'param1' } },
-			{ pathExpression: '/:?userId/something/:somethingId', path: 'user1/something/param1', params: { userId: 'user1', somethingId: 'param1' } },
+
 			{ pathExpression: '/:userId/something/:?somethingId', path: 'user1/something', params: { userId: 'user1' } },
 			{ pathExpression: '/:userId/something/:?somethingId', path: 'user1/something/param1', params: { userId: 'user1', somethingId: 'param1' } },
-			{ pathExpression: '/something/:?somethingId/:userId', path: '/something/user1', params: { userId: 'user1' } },
-			{ pathExpression: '/something/:?somethingId/:userId', path: '/something/param1/user1', params: { somethingId: 'param1', userId: 'user1' } },
 			{ pathExpression: '/something/:?somethingId/:?userId', path: '/something/param1', params: { somethingId: 'param1' } },
 			{ pathExpression: '/something/:?somethingId/:?userId', path: '/something/param1/user1', params: { somethingId: 'param1', userId: 'user1' } },
-			{ pathExpression: '/:encodeString', path: '/%C3%A1%2Fb%3F%C4%8D%23d%3A%C4%9B%2525', params: { encodeString: 'á/b?č#d:ě%25' } }
+			{ pathExpression: '/:encodeString', path: '/%C3%A1%2Fb%3F%C4%8D%23d%3A%C4%9B%2525', params: { encodeString: 'á/b?č#d:ě%25' } },
+
+			// invalid parametres order (required vs. optional)
+			{ pathExpression: '/:?userId/something/:someId', path: '/something/param1', params: {} },
+			{ pathExpression: '/:?userId/something/:someId', path: 'user1/something/param1', params: {} },
+			{ pathExpression: '/something/:?someId/:userId', path: '/something/user1', params: {} },
+			{ pathExpression: '/something/:?someId/:userId', path: '/something/param1/user1', params: {} }
+
 		], function(value) {
 			it(value.pathExpression, function() {
-				const localRoute = new Route('unknown', value.pathExpression, 'unknown')
+				const localRoute = new Route('unknown', value.pathExpression, 'unknown');
 
-				const routeParams = localRoute.extractParameters(value.path)
-				const keys = Object.keys(value.params)
+				const routeParams = localRoute.extractParameters(value.path);
+				const keys = Object.keys(value.params);
 
 				keys.forEach(key => {
 					expect(routeParams[key]).toEqual(value.params[key]);
-				})
+				});
 			});
 		});
-
 	});
+
 
 	describe('should return true for matched route regular', function() {
 
@@ -156,27 +248,82 @@ describe('ima.router.Route', function() {
 			{ path: 'optional/home/param1/something/param2/optional', result: false },
 			{ path: '/home/param1/something/param2?query=param3', result: true }
 		], function(value) {
-
-			it(value.path + ' for ' + pathExpression, function() {
-				expect(route.matches(value.path)).toEqual(value.result);
+			const { path, result } = value;
+			it(path + ' for ' + pathExpression + ` [${result.toString()}]`, function() {
+				expect(route.matches(path)).toEqual(result);
 			});
 		});
 
 		using([
+			{ pathExpression: '/:param1/:param2/:param3', path: '/p1/p2/p3', result: true },
+			{ pathExpression: '/:param1/:param2/:param3', path: '/home-and-furniture/medium-mattresses/extra-class', result: true },
+			{ pathExpression: '/:param1/:param2/:param3', path: '/p1/p2', result: false },
+			{ pathExpression: '/:param1/:?param2/:?param3', path: '/p1/p2', result: true },
+			{ pathExpression: '/:param1/:?param2/:?param3', path: '/home-and-furniture/medium-mattresses', result: true },
 			{ pathExpression: '/:?param1/:?param2/:?param3', path: '/', result: true },
 			{ pathExpression: '/:?param1/:?param2/:?param3', path: '/p1', result: true },
 			{ pathExpression: '/:?param1/:?param2/:?param3', path: '/p2', result: true },
 			{ pathExpression: '/:?param1/:?param2/:?param3', path: '/p1/p2', result: true },
 			{ pathExpression: '/:?param1/:?param2/:?param3', path: '/p1/p2/p3', result: true },
 			{ pathExpression: '/:?param1/:?param2/:?param3', path: '/p1/p2/p3/p4', result: false },
+
+			{ pathExpression: '/:catId-:catName', path: '/mattresses', result: false },
+			{ pathExpression: '/:catId_:catName', path: '/-medium-mattresses', result: false },
+			{ pathExpression: '/:catId-:catName', path: '/5820-medium-mattresses', result: true },
+
+			{ pathExpression: '/:catId-:catName/:paramA', path: '/5812-medium-mattresses', result: false },
+			{ pathExpression: '/:catId-:catName/:paramA', path: '/5812-medium-mattresses/big-sale', result: true },
+			{ pathExpression: '/:catId-:catName/:?paramA', path: '/5812-medium-mattresses', result: true },
+			{ pathExpression: '/:catId-:catName/:?paramA', path: '/5812-medium-mattresses/big-sale', result: true },
+
+			{ pathExpression: '/:catId-:catName', path: '/5812-medium-mattresses', result: true },
+			{ pathExpression: '/:catId-:catName', path: '/x-medium-mattresses', result: true },
+			{ pathExpression: '/:catId_:catName', path: '/5812_medium-mattresses', result: true },
+			{ pathExpression: '/something/:catId_:catName', path: '/something/5812_medium-mattresses', result: true },
+			{ pathExpression: '/something/:catId_:catName/:detailId-:color', path: '/something/5812_medium-mattresses/5687710-white', result: true },
+
+			{ pathExpression: '/:?parám1/:?parám2/:?parám3', path: '/p1/p2/p3', result: false },
+			{ pathExpression: '/something/:catId_:catName/:?detailId-:?color', path: '/something/5812_medium-mattresses', result: false },
+
+			{ pathExpression: '/something/:catId_:catName/:?detailId-:?color', path: '/something/5812_medium-%C5%A1rot/5687710-white', result: true },
+
+			{ pathExpression: '/something/:catId_:catName_:parentCatId/:?detailId-:?color-:?size', path: '/something/5812_medium-mattresses_5687/5687710-white-210', result: true },
+			{ pathExpression: '/something/:catId_:catName_:parentCatId/:?detailId-:?color_:?size', path: '/something/5812_medium-mattresses_5687/5687710-white-black_210-65', result: true },
+			{ pathExpression: '/something/:catId_:catName/:?detailId-:?color', path: '/something/5812_medium-mattresses/5687710-white', result: true },
+			{ pathExpression: '/something/:catId_:catName/:?detailId-:?color', path: '/something/5812_medium-mattresses/5687710-', result: true },
+			{ pathExpression: '/something/:catId_:catName/:?detailId-:?color/:?promo', path: '/something/5812_medium-mattresses/5687710-black/WINTER', result: true },
+
+			{ pathExpression: '/:?catId_:catName', path: '/5821_medium-mattresses', result: true },
+			{ pathExpression: '/:?catId_:catName', path: '/_medium-mattresses', result: true },
+			{ pathExpression: '/something/:?catId_:catName', path: '/something/5821_medium-mattresses', result: true },
+			{ pathExpression: '/something/:?catId_:catName', path: '/something/_medium-mattresses', result: true },
+			{ pathExpression: '/something/:?catId_:?catName', path: '/something/_medium-mattresses', result: true },
+
+			{ pathExpression: '/:?catId_:?catName', path: '/5812_medium-mattresses', result: true },
+			{ pathExpression: '/:?catId_:?catName', path: '/_medium-mattresses', result: true },
+			{ pathExpression: '/:?catId_:?catName', path: '/_', result: true },
+
+			{ pathExpression: '/:catId-:catName/:sorting', path: '/5741-mattresses', result: false },
+			{ pathExpression: '/:catId-:catName/:sorting', path: '/5741-mattresses/by-price', result: true },
+			{ pathExpression: '/:catId-:catName/:sorting/:?promo', path: '/5741-mattresses/by-price/AUTUMN', result: true },
+			{ pathExpression: '/:userName', path: '/ja.T.O.M.I.K', result: true },
+			{ pathExpression: '/:userName', path: '/2002', result: true },
+
+			// invalid subparams definition
+			{ pathExpression: '/:catId:catName', path: '/5812medium-mattresses', result: false },
+
+			// detect wrong params order (optional and then required parameter)
+			{ pathExpression: '/something/:?catId/:?catName/:detailId/:color/:promo', path: '/something/5812/medium-mattresses/5687710/black/WINTER', result: false },
+			{ pathExpression: '/:param1/:?param2/:param3', path: '/p1/p2', result: false },
 			{ pathExpression: '/:?param1/:param2/:?param3', path: '/', result: false },
-			{ pathExpression: '/:?param1/:param2/:?param3', path: '/p1', result: true },
-			{ pathExpression: '/:param1/:?param2/:param3', path: '/p1/p2', result: true }
+			{ pathExpression: '/:?param1/:param2/:?param3', path: '/p1', result: false }
+
 		], function(value) {
 			const localRoute = new Route(name, value.pathExpression, controller, view, options);
+			const { path, result } = value;
 
-			it(value.path + ' for ' + value.pathExpression, function() {
-				expect(localRoute.matches(value.path)).toEqual(value.result);
+			it(path + ' for ' + value.pathExpression + ` [${result.toString()}]`, function() {
+				expect(localRoute.matches(path)).toEqual(result);
 			});
 		});
 
@@ -191,30 +338,116 @@ describe('ima.router.Route', function() {
 			{ pathExpression: '/:param1', path: '/', result:false },
 			{ pathExpression: '/:param1', path: '/param1', result:true },
 			{ pathExpression: '/:param1', path: '/param1/', result:true },
+
+			{ pathExpression: '/:paramA-:paramB', path: '/param1', result: false },
+			{ pathExpression: '/:paramA-:paramB', path: '/param1-param2', result: true },
+			{ pathExpression: '/:paramA-some-text-:paramB', path: '/param1-some-text-param2', result: true },
+			{ pathExpression: '/:?paramA-:paramB', path: '/param1-param2', result: true },
+			{ pathExpression: '/:?paramA-:?paramB', path: '/param1-param2', result: true },
+			{ pathExpression: '/:?paramA-:?paramB/:?optParam', path: '/param1-param2', result: true },
+			{ pathExpression: '/:?paramA-:paramB/:?optParam', path: '/param1-param2/another', result: true },
+			{ pathExpression: '/:paramA-:paramB/:?optParam', path: '/param1-param2/another', result: true },
+
 			{ pathExpression: '/something', path: '/something/', result:true },
 			{ pathExpression: '/something/:param1', path: '/something/param1/', result:true },
+
 			{ pathExpression: '/something/:param1', path: '/something/param1?query=query', result:true },
+
 			{ pathExpression: '/something/:param1', path: '/something/param1/param2/param3/', result: false },
-			{ pathExpression: '/something/:param1/neco/:param2', path: '/something/param1/neco/param2', result: true },
+			{ pathExpression: '/something/:param1/preview/:param2', path: '/something/param1/preview/param2', result: true },
 			{ pathExpression: '/:?param1/:?param2/:?param3', path: '/', result: true },
 			{ pathExpression: '/:?param1/:?param2/:?param3', path: '/p1', result: true },
 			{ pathExpression: '/:?param1/:?param2/:?param3', path: '/p2', result: true },
 			{ pathExpression: '/:?param1/:?param2/:?param3', path: '/p1/p2', result: true },
 			{ pathExpression: '/:?param1/:?param2/:?param3', path: '/p1/p2/p3', result: true },
 			{ pathExpression: '/:?param1/:?param2/:?param3', path: '/p1/p2/p3/p4', result: false },
+
+			{ pathExpression: '/:param1/:?param2/:?param3', path: '/p1/p2', result: true },
+			{ pathExpression: '/:param1/something/:?param2/:?param3', path: '/p1/something/p2/p3', result: true },
+			{ pathExpression: '/:param1/something/:?param2/:?param3', path: '/p1/something2/p2', result: false },
+			{ pathExpression: '/:param1/something/:?param2/:param3', path: '/p1/something2/p2', result: false },
+
+			// Test wrong params order.
+			{ pathExpression: '/:param1/something/:?param2/:param3', path: '/p1/something/p2', result: false },
 			{ pathExpression: '/:?param1/:param2/:?param3', path: '/', result: false },
-			{ pathExpression: '/:?param1/:param2/:?param3', path: '/p1', result: true },
-			{ pathExpression: '/:param1/:?param2/:param3', path: '/p1/p2', result: true },
-			{ pathExpression: '/:param1/something/:?param2/:param3', path: '/p1/something/p2', result: true },
-			{ pathExpression: '/:param1/something/:?param2/:param3', path: '/p1/something2/p2', result: false }
+			{ pathExpression: '/:?param1/:param2/:?param3', path: '/p1', result: false }
 		], function(value) {
-			it('for pathExpression ' + value.pathExpression + ' and path ' + value.path, function() {
+			const { path, result } = value;
+			it('for pathExpression ' + value.pathExpression + ' and path ' + path + ` [${result.toString()}]`, function() {
 				var routeLocal = new Route('unknown', value.pathExpression, 'unknown');
 
-				expect(routeLocal.matches(value.path)).toEqual(value.result);
+				expect(routeLocal.matches(path)).toEqual(result);
 			});
 		});
 
+	});
+
+	describe('should pass helper methods used in _compileToRegExp()', function() {
+
+		using([
+			{ path: '/something/:?someId/:?userId', clearPathExpr: 'something\\\/:\\\?someId\\\/:\\\?userId', result: true },
+			{ path: '/:catId-:catName/:param/:?someId/:?anotherId', clearPathExpr: ':catId-:catName\\\/:param\\\/:\\\?someId\\\/:\\\?anotherId', result: true },
+			{ path: '/:?userId/something/:someId', clearPathExpr: ':\\\?userId\\\/something\\\/:someId', result: false },
+			{ path: '/:?someId/:userId', clearPathExpr: ':\\\?someId\\\/:userId', result: false },
+			{ path: '/something/:?someId/:userId', clearPathExpr: 'something\\\/:\\\?someId\\\/:userId', result: false }
+
+		], function(value) {
+			const { path, clearPathExpr, result } = value;
+			it(`should check parametres order for '${path}' [${result.toString()}]`, function() {
+				const localRoute = new Route('unknown', path, 'unknown');
+
+				const isCorrectParamOrder = localRoute._checkParametersOrder(clearPathExpr);
+				expect(isCorrectParamOrder).toEqual(result);
+			});
+		});
+
+		using([
+			{ path: '/:?someId', clearPathExpr: ':\?someId', optionalParams: [':\?someId'], result: '(?:([^/?]+)?(?=/|$)?)?' },
+			{ path: '/something/:?someId', clearPathExpr: 'something\/:\?someId', optionalParams: [':\?someId'], result: 'something/(?:([^/?]+)?(?=/|$)?)?' }
+
+		], function(value) {
+			const { path, clearPathExpr, optionalParams, result } = value;
+			it(`should replace optional parametres in ${path}`, function() {
+				const localRoute = new Route('unknown', path, 'unknown');
+
+				const pattern = localRoute._replaceOptionalParametersInPath(clearPathExpr, optionalParams);
+				expect(pattern).toEqual(result);
+			});
+		});
+
+		using([
+			{ path: '/:someId-:someName', clearPathExpr: ':someId-:someName', result: '([^-]+)-([^/?]+)' },
+			{ path: '/something/:someId-:someName', clearPathExpr: 'something\/:someId-:someName', result: 'something/([^-]+)-([^/?]+)' }
+
+		], function(value) {
+			const { path, clearPathExpr, result } = value;
+			it(`should replace required subparametres in ${path}`, function() {
+				const localRoute = new Route('unknown', path, 'unknown');
+
+				const pattern = localRoute._replaceRequiredSubParametersInPath(clearPathExpr, clearPathExpr);
+				expect(pattern).toEqual(result);
+			});
+		});
+
+		using([
+			{	path: '/:?someId-:someName', clearPathExpr: ':\?someId-:someName',
+				optionalSubparamsOthers: [':\?someId'], optionalSubparamsLast: [], result: '([^-]+)?-:someName'
+			},
+			{	path: '/:?someId-:?someName', clearPathExpr: ':\?someId-:\?someName',
+				optionalSubparamsOthers: [':\?someId'], optionalSubparamsLast: [':\?someName'], result: '([^-]+)?-:([^/?]+)?'
+			},
+			{	path: '/something/:?someId-:?someName', clearPathExpr: 'something\/:\?someId-:\?someName',
+				optionalSubparamsOthers: [':\?someId'], optionalSubparamsLast: [':\?someName'], result: 'something/([^-]+)?-:([^/?]+)?'
+			}
+		], function(value) {
+			const { path, clearPathExpr, optionalSubparamsOthers, optionalSubparamsLast, result } = value;
+			it(`should replace optional parametres in ${path}`, function() {
+				const localRoute = new Route('unknown', path, 'unknown');
+
+				const pattern = localRoute._replaceOptionalSubParametersInPath(clearPathExpr, optionalSubparamsOthers, optionalSubparamsLast);
+				expect(pattern).toEqual(result);
+			});
+		});
 	});
 
 	describe('query string parser', function() {
