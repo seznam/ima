@@ -91,7 +91,7 @@ export default class HttpProxy {
 
 			const fetch = this._getFetchApi();
 			fetch(
-				this._composeRequestUrl(url, method === 'get' ? {} : data),
+				this._composeRequestUrl(url, method === 'get' ? data : {}),
 				this._composeFetchParameters(method, data, options)
 			).then((response) => {
 				clearTimeout(requestTimeoutId);
