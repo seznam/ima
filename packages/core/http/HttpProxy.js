@@ -235,8 +235,16 @@ export default class HttpProxy {
 	 */
 	_headersToPlainObject(headers) {
 		const plainHeaders = {};
-		for (const [key, value] of headers.entries()) {
-			plainHeaders[key] = value;
+		// TODO: switch to headers.entries() once node-fetch releases 2.0.0
+		if (headers.entries) {
+			for (const [key, value] of headers.entries()) {
+				plainHeaders[key] = value;
+			}
+		} else {
+			headers.forEach((_, headerName) => {
+				const value = headers.getAll(headerName).join(', ');
+				plainHeaders[headerName] = value;
+			});
 		}
 		return plainHeaders;
 	}
