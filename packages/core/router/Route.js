@@ -485,6 +485,7 @@ export default class Route {
 	 */
 	_getSubparamPattern(delimeter) {
 		const pattern = `([^${delimeter}]+)`;
+		
 		return pattern;
 	}
 
@@ -573,25 +574,23 @@ export default class Route {
 		const requiredSubparamsOthers = clearedPathExpr.match(SUBPARAMS_REQUIRED_REGEXP.OTHERS) || [];
 		const requiredSubparamsLast = clearedPathExpr.match(SUBPARAMS_REQUIRED_REGEXP.LAST) || [];
 
-		let pattern = path;
-
-		pattern = requiredSubparamsOthers.reduce((pattern, paramExpr) => {
+		path = requiredSubparamsOthers.reduce((pattern, paramExpr) => {
 			const paramIdx = pattern.indexOf(paramExpr) + paramExpr.length;
 			const delimeter = pattern.substr(paramIdx, 1);
 
 			const regExpr = this._getSubparamPattern(delimeter);
 
 			return pattern.replace(paramExpr, regExpr);
-		}, pattern);
+		}, path);
 
-		pattern = requiredSubparamsLast.reduce((pattern, rawParamExpr) => {
+		path = requiredSubparamsLast.reduce((pattern, rawParamExpr) => {
 			const paramExpr = rawParamExpr.substr(1);
 			const regExpr = '([^/?]+)';
 
 			return pattern.replace(paramExpr, regExpr);
-		}, pattern);
+		}, path);
 
-		return pattern;
+		return path;
 	}
 
 	/**
@@ -603,25 +602,23 @@ export default class Route {
 	 * @return {string} RegExp pattern.
 	 */
 	_replaceOptionalSubParametersInPath(path, optionalSubparamsOthers, optionalSubparamsLast) {
-		let pattern = path;
-
-		pattern = optionalSubparamsOthers.reduce((pattern, paramExpr) => {
+		path = optionalSubparamsOthers.reduce((pattern, paramExpr) => {
 			const paramIdx = pattern.indexOf(paramExpr) + paramExpr.length;
 			const delimeter = pattern.substr(paramIdx, 1);
 			const paramPattern = this._getSubparamPattern(delimeter);
 			const regExpr = paramPattern + '?';
 
 			return pattern.replace(paramExpr, regExpr);
-		}, pattern);
+		}, path);
 
-		pattern = optionalSubparamsLast.reduce((pattern, rawParamExpr) => {
+		path = optionalSubparamsLast.reduce((pattern, rawParamExpr) => {
 			const paramExpr = rawParamExpr.substr(1);
 			const regExpr = '([^/?]+)?';
 
 			return pattern.replace(paramExpr, regExpr);
-		}, pattern);
+		}, path);
 
-		return pattern;
+		return path;
 	}
 
 	/**
@@ -650,6 +647,7 @@ export default class Route {
 
 		const optionalParams = optionalMatches.filter(paramExpr => {
 			const param = this._getClearParamName(paramExpr);
+
 			return !optionalSubparamsCleanNames.includes(param);
 		});
 
@@ -661,10 +659,8 @@ export default class Route {
 			}
 		}
 
-		let pattern = '';
-
 		// convert required parameters to capture sequences
-		pattern = requiredMatches.reduce((pattern, rawParamExpr) => {
+		let pattern = requiredMatches.reduce((pattern, rawParamExpr) => {
 			const paramExpr = ':' + this._getClearParamName(rawParamExpr);
 			const regExpr = '([^/?]+)';
 
