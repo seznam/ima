@@ -345,6 +345,11 @@ export default class HttpProxy {
 	 *         <code>fetch</code> function.
 	 */
 	_composeFetchParameters(method, data, options) {
+
+		if (!options.headers['Content-Type']) {
+			options.headers['Content-Type'] = this._getContentType(data);
+		}
+
 		return {
 			method,
 			headers: options.headers,
@@ -353,6 +358,29 @@ export default class HttpProxy {
 			redirect: 'follow'
 		};
 	}
+
+	/**
+	 * Get the content type.
+	 *
+	 * @param {Any} data The data to send in the request (content).
+	 * @return {string}
+	 */
+	_getContentType(data) {
+		const dataType = typeof data;
+
+		switch (dataType) {
+
+			case 'object':
+				return 'application/json';
+
+			case 'string':
+				return 'text/plain';
+
+			default:
+				return '';
+		}
+	}
+
 
 	/**
 	 * Transforms the provided URL using the current URL transformer and adds
@@ -370,10 +398,12 @@ export default class HttpProxy {
 			key => [key, data[key]].map(encodeURIComponent).join('=')
 		).join('&');
 
+		const delimeter = queryString ?
+			(transformedUrl.includes('?') ? '&' : '?')
+			: '';
+
 		return (
-			transformedUrl +
-			(transformedUrl.includes('?') ? '&' : '?') +
-			queryString
+			transformedUrl + delimeter + queryString
 		);
 	}
 }
