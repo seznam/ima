@@ -32,14 +32,23 @@ exports.default = (gulpConfig) => {
 			.pipe(gulp.dest(files.polyfill.dest.client))
 	}
 
-	function extraPolyfills() {
-		return gulp.parallel(...files.extraPolyfills.map(polyfill => gulp
-			.src(polyfill.src)
-			.pipe(sourcemaps.init({loadMaps: true}))
-			.pipe(insert.wrap('(function(){', '})();'))
-			.pipe(concat(polyfill.name))
-			.pipe(gulp.dest(polyfill.dest.client))
-		))();
+	function extraPolyfills(done) {
+		return gulp.series(
+			gulp.parallel(
+				...files.extraPolyfills.map(polyfill =>
+					() => gulp
+						.src(polyfill.src)
+						.pipe(sourcemaps.init({loadMaps: true}))
+						.pipe(insert.wrap('(function(){', '})();'))
+						.pipe(concat(polyfill.name))
+						.pipe(gulp.dest(polyfill.dest.client))
+				)
+			),
+			(subDone) => {
+				subDone();
+				done();
+			}
+		)();
 	}
 
 	return {
