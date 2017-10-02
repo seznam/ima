@@ -40,11 +40,11 @@ export default class DocumentView extends AbstractDocumentView {
 					<div id='fb-root' />
 					<div id='page' dangerouslySetInnerHTML={{ __html: this.props.page }}/>
 					<script id='revivalSettings' dangerouslySetInnerHTML={{ __html: this.props.revivalSettings }}/>
-					<script>
-						{`if (!window.fetch) {
+					<script dangerouslySetInnerHTML={{ __html: `
+						if (!window.fetch) {
 							document.write('<script src="${jsBaseUrl}/fetch-polyfill.js"></' + 'script>')
-						}`}
-					</script>
+						}
+					` }}/>
 					{this.utils.$Settings.$Env === 'dev' ?
 						<div id='scripts'>{this.getSyncScripts()}</div>
 					:
