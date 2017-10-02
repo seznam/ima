@@ -65,7 +65,7 @@
 		"gulp-uglify": "^3.0.0",
 		"gulp-util": "^3.0.8",
 		"gulp-watch": "^4.3.11",
-		"ima-examples": "^0.15.0-beta1",
+		"ima-examples": "^0.15.0-beta2",
 		"jasmine": "^2.6.0",
 		"jasmine-core": "^2.6.3",
 		"karma": "^1.7.0",
