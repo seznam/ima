@@ -1,6 +1,6 @@
 {
 	"name": "IMA.js-skeleton",
-	"version": "0.14.0",
+	"version": "0.15.0-beta1",
 	"description": "Isomorphic javascript application",
 	"main": "build/server.js",
 	"scripts": {
@@ -39,8 +39,8 @@
 	},
 	"license": "MIT",
 	"devDependencies": {
-		"ima-gulp-task-loader": "0.14.0-rc.1",
-		"ima-gulp-tasks": "0.14.0-rc.17"
+		"ima-gulp-task-loader": "^0.14.0",
+		"ima-gulp-tasks": "^0.15.0-beta1"
 	},
 	"dependencies": {
 		"body-parser": "1.17.2",
