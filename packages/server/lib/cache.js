@@ -215,3 +215,4 @@ function defaultKeyGenerator(request) {
 }
 
 module.exports = environment => new Cache(environment.$Server.cache);
+module.exports.Cache = Cache;
