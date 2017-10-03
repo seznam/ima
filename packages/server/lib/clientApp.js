@@ -9,8 +9,7 @@ const errorView = require('./template/errorView.js');
 const instanceRecycler = require('./instanceRecycler.js');
 const templateProcessor = require('./templateProcessor.js');
 const errorToJSON = require('error-to-json');
-
-const renderedSPAs = {};
+const Cache = require('./cache.js').Cache;
 
 hljs.configure({
 	tabReplace: '  ',
@@ -19,6 +18,12 @@ hljs.configure({
 
 module.exports = ((environment, logger, languageLoader, appFactory) => {
 	appFactory();
+
+	const spaCache = new Cache(
+		Object.assign({}, environment.$Server.cache, {
+			cacheKeyGenerator: null
+		})
+	);
 
 	function _displayDetails(err, req, res) {
 		let callstack = stackTrace.parse(err);
@@ -124,7 +129,7 @@ module.exports = ((environment, logger, languageLoader, appFactory) => {
 
 				res.send(content);
 
-				resolve({ content, status, error });
+				resolve({ content, status, error, SPA: false, pageState: {} });
 			});
 		});
 	}
@@ -132,20 +137,14 @@ module.exports = ((environment, logger, languageLoader, appFactory) => {
 	function showStaticSPAPage(req, res) {
 		let bootConfig = _getBootConfig(req, res);
 		let status = 200;
+		let cachedContent = spaCache.get(req);
 
-		let cacheKey = [
-			bootConfig.settings.$Protocol,
-			bootConfig.settings.$Language,
-			bootConfig.settings.$Host,
-			bootConfig.settings.$Root,
-			bootConfig.settings.$LanguagePartPath
-		].join('|');
-		if (renderedSPAs[cacheKey]) {
+		if (cachedContent) {
 			res.status(status);
-			res.send(renderedSPAs[cacheKey]);
+			res.send(cachedContent);
 
 			return Promise.resolve({
-				content: renderedSPAs[cacheKey],
+				content: cachedContent,
 				pageState: {},
 				status,
 				SPA: true
@@ -156,19 +155,21 @@ module.exports = ((environment, logger, languageLoader, appFactory) => {
 			const filePath = './build/static/html/spa.html';
 			fs.readFile(filePath, 'utf-8', (error, content) => {
 				if (error) {
-					showStaticErrorPage(error, req, res);
-					reject(error);
-					return;
+					return showStaticErrorPage(error, req, res).then((response) => {
+						resolve(response);
+					}, (error) => {
+						reject(error);
+					});
 				}
 
 				content = templateProcessor(content, bootConfig.settings);
 
-				renderedSPAs[cacheKey] = content;
+				spaCache.set(req, content);
 
 				res.status(status);
 				res.send(content);
 
-				resolve({ content, status, SPA: true, error: null });
+				resolve({ content, status, SPA: true, error: null, pageState: {} });
 			});
 		});
 	}
@@ -250,14 +251,13 @@ module.exports = ((environment, logger, languageLoader, appFactory) => {
 				})
 				.catch((fatalError) => {
 					instanceRecycler.clearInstance(app);
-					showStaticErrorPage(fatalError, req, res);
 
-					return Promise.reject(fatalError);
+					return showStaticErrorPage(fatalError, req, res);
 				});
 		} catch (e) {
 			instanceRecycler.clearInstance(app);
-			showStaticErrorPage(e, req, res);
-			promise = Promise.reject(e);
+
+			return showStaticErrorPage(e, req, res);
 		}
 
 		return promise;
@@ -360,10 +360,11 @@ module.exports = ((environment, logger, languageLoader, appFactory) => {
 					}
 				})
 				.catch((e) => {
-					showStaticErrorPage(e, req, res);
+					appPromise.then((app) => {
+						instanceRecycler.clearInstance(app);
+					});
 
-					instanceRecycler.clearInstance(app);
-					returnPromise = Promise.reject(e);
+					return showStaticErrorPage(e, req, res);
 				});
 		}
 

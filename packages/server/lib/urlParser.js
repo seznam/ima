@@ -94,7 +94,7 @@ module.exports = environment => {
 		let currentLanguagePartPath = '';
 		let currentHost = parsedCurrentUrl[1];
 		let currentRoot = parsedCurrentUrl[2];
-		let currentPath = currentRoot;
+		let currentPath = currentRoot || '';
 		let currentProtocol = _getProtocol(req);
 
 		for (let expression of Object.keys(environment.$Language)) {
