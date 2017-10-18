@@ -47,7 +47,6 @@
 		"to-mock": "^1.0.0"
 	},
 	"dependencies": {
-		"babel-polyfill": "^6.26.0",
 		"classnames": "^2.2.5",
 		"custom-event-polyfill": "^0.3.0",
 		"enzyme": "^2.8.2",
