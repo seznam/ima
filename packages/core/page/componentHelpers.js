@@ -148,7 +148,7 @@ export function defaultCssClasses(
 	let extraClasses = component instanceof React.Component ?
 		component.props.className
 	:
-		component;
+		null;
 	return classnames(
 		classRules,
 		extraClasses
