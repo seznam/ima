@@ -4,7 +4,7 @@ ns.namespace('ima.http');
 
 /**
  * Options for a request sent using the HTTP agent.
- * @typedef {Object} AgentRequestOptions
+ * @typedef {Object} HttpAgent~RequestOptions
  * @property {number} [timeout] Specifies the request timeout in milliseconds.
  * @property {number} [ttl] Specified how long the request may be cached in
  *           milliseconds.
@@ -19,23 +19,17 @@ ns.namespace('ima.http');
  *           request should be made using credentials such as cookies or
  *           authorization headers.
  * @property {{progress: function=}} [listeners] Listeners for request events.
- * @property {function(AgentResponse)} [postProcessor] Response post-processor
- *           applied just before the response is stored in the cache and
- *           returned.
+ * @property {function(HttpAgent~Response)} [postProcessor] Response
+ *           post-processor applied just before the response is stored in the
+ *           cache and returned.
  */
 
 /**
- * @typedef {Object} AgentResponse
+ * A response from the server.
+ * @typedef {Object} HttpAgent~Response
  * @property {number} status The HTTP response status code.
  * @property {*} body The parsed response body, parsed as JSON.
- * @property {string} params.method The HTTP method used to make the request.
- * @property {string} params.url The original URL to which the request should
- *           have been made.
- * @property {string} params.transformedUrl The final URL after all
- *           pre-processors have been applied. This is the URL to which the
- *           request was made.
- * @property {Object<string, (boolean|number|string)>} params.data The data
- *           sent in the original request.
+ * @property {HttpProxy~RequestParams} params The original request params.
  * @property {Object<string, string>} headers The response HTTP headers.
  * @property {boolean} cached Whether or not the response has been cached.
  */
@@ -54,8 +48,8 @@ export default class HttpAgent {
 	 * @param {string} url The URL to which the request should be made.
 	 * @param {Object<string, (boolean|number|string)>} data The data to send
 	 *        to the server as query parameters.
-	 * @param {AgentRequestOptions=} options Optional request options.
-	 * @return {Promise<AgentResponse>} A promise that resolves to the
+	 * @param {HttpAgent~RequestOptions=} options Optional request options.
+	 * @return {Promise<HttpAgent~Response>} A promise that resolves to the
 	 *         response.
 	 */
 	get(url, data, options = {}) {}
@@ -69,8 +63,8 @@ export default class HttpAgent {
 	 * @param {string} url The URL to which the request should be made.
 	 * @param {(string|Object<string, *>)} data The data to send to the server
 	 *        as the request body.
-	 * @param {AgentRequestOptions=} options Optional request options.
-	 * @return {Promise<AgentResponse>} A promise that resolves to the
+	 * @param {HttpAgent~RequestOptions=} options Optional request options.
+	 * @return {Promise<HttpAgent~Response>} A promise that resolves to the
 	 *         response.
 	 */
 	post(url, data, options = {}) {}
@@ -84,8 +78,8 @@ export default class HttpAgent {
 	 * @param {string} url The URL to which the request should be made.
 	 * @param {(string|Object<string, *>)} data The data to send to the server
 	 *        as the request body.
-	 * @param {AgentRequestOptions=} options Optional request options.
-	 * @return {Promise<AgentResponse>} A promise that resolves to the
+	 * @param {HttpAgent~RequestOptions=} options Optional request options.
+	 * @return {Promise<HttpAgent~Response>} A promise that resolves to the
 	 *         response.
 	 */
 	put(url, data, options = {}) {}
@@ -99,8 +93,8 @@ export default class HttpAgent {
 	 * @param {string} url The URL to which the request should be made.
 	 * @param {(string|Object<string, *>)} data The data to send to the server
 	 *        as the request body.
-	 * @param {AgentRequestOptions=} options Optional request options.
-	 * @return {Promise<AgentResponse>} A promise that resolves to the
+	 * @param {HttpAgent~RequestOptions=} options Optional request options.
+	 * @return {Promise<HttpAgent~Response>} A promise that resolves to the
 	 *         response.
 	 */
 	patch(url, data, options = {}) {}
@@ -114,8 +108,8 @@ export default class HttpAgent {
 	 * @param {string} url The URL to which the request should be made.
 	 * @param {(string|Object<string, *>)} data The data to send to the server
 	 *        as the request body.
-	 * @param {AgentRequestOptions=} options Optional request options.
-	 * @return {Promise<AgentResponse>} A promise that resolves to the
+	 * @param {HttpAgent~RequestOptions=} options Optional request options.
+	 * @return {Promise<HttpAgent~Response>} A promise that resolves to the
 	 *         response.
 	 */
 	delete(url, data, options = {}) {}

@@ -200,8 +200,8 @@ export default class HttpAgentImpl extends HttpAgent {
 	 * @param {string} url The URL to which the request should be sent.
 	 * @param {Object<string, (boolean|number|string|Date)>} data The data to
 	 *        send with the request.
-	 * @param {AgentRequestOptions=} options Optional request options.
-	 * @return {Promise<AgentResponse>} A promise that resolves to the response
+	 * @param {HttpAgent~RequestOptions=} options Optional request options.
+	 * @return {Promise<HttpAgent~Response>} A promise that resolves to the response
 	 *         with body parsed as JSON.
 	 */
 	_requestWithCheckCache(method, url, data, options) {
@@ -230,7 +230,7 @@ export default class HttpAgentImpl extends HttpAgent {
 	 * @param {string} url The URL to which the request was made.
 	 * @param {Object<string, (boolean|number|string|Date)>} data The data sent
 	 *        to the server with the request.
-	 * @return {?Promise<AgentResponse>} A promise that will resolve to the
+	 * @return {?Promise<HttpAgent~Response>} A promise that will resolve to the
 	 *         server response with the body parsed as JSON, or {@code null} if
 	 *         no such request is present in the cache.
 	 */
@@ -260,8 +260,8 @@ export default class HttpAgentImpl extends HttpAgent {
 	 * @param {string} url The URL to which the request is sent.
 	 * @param {Object<string, (boolean|number|string|Date)>} data The data sent
 	 *        with the request.
-	 * @param {AgentRequestOptions=} options Optional request options.
-	 * @return {Promise<AgentResponse>} A promise that resolves to the response
+	 * @param {HttpAgent~RequestOptions=} options Optional request options.
+	 * @return {Promise<HttpAgent~Response>} A promise that resolves to the response
 	 *         with the body parsed as JSON.
 	 */
 	_request(method, url, data, options) {
@@ -287,8 +287,8 @@ export default class HttpAgentImpl extends HttpAgent {
 	 * The method also updates the internal cookie storage with the cookies
 	 * received from the server.
 	 *
-	 * @param {AgentResponse} response Server response.
-	 * @return {AgentResponse} The post-processed server response.
+	 * @param {HttpAgent~Response} response Server response.
+	 * @return {HttpAgent~Response} The post-processed server response.
 	 */
 	_proxyResolved(response) {
 		let agentResponse = {
@@ -333,7 +333,7 @@ export default class HttpAgentImpl extends HttpAgent {
 	 * @param {GenericError} error The error provided by the HttpProxy,
 	 *        carrying the error parameters, such as the request url, data,
 	 *        method, options and other useful data.
-	 * @return {Promise<AgentResponse>} A promise that will either resolve to a
+	 * @return {Promise<HttpAgent~Response>} A promise that will either resolve to a
 	 *         server's response (with the body parsed as JSON) if there are
 	 *         any tries left and the re-tried request succeeds, or rejects
 	 *         with an error containing details of the cause of the request's
@@ -366,9 +366,10 @@ export default class HttpAgentImpl extends HttpAgent {
 	 * Prepares the provided request options object by filling in missing
 	 * options with default values and addding extra options used internally.
 	 *
-	 * @param {AgentRequestOptions} options Optional request options.
-	 * @return {AgentRequestOptions} Request options with set filled-in default
-	 *         values for missing fields, and extra options used internally.
+	 * @param {HttpAgent~RequestOptions} options Optional request options.
+	 * @return {HttpAgent~RequestOptions} Request options with set filled-in
+	 *         default values for missing fields, and extra options used
+	 *         internally.
 	 */
 	_prepareOptions(options) {
 		let extraOptions = {
@@ -411,7 +412,7 @@ export default class HttpAgentImpl extends HttpAgent {
 	 * Sets all cookies from the {@code Set-Cookie} response header to the
 	 * cookie storage.
 	 *
-	 * @param {AgentResponse} agentResponse The response of the server.
+	 * @param {HttpAgent~Response} agentResponse The response of the server.
 	 */
 	_setCookiesFromResponse(agentResponse) {
 		if (agentResponse.headers) {
@@ -429,7 +430,7 @@ export default class HttpAgentImpl extends HttpAgent {
 	 * Saves the server response to the cache to be used as the result of the
 	 * next request of the same properties.
 	 *
-	 * @param {AgentResponse} agentResponse The response of the server.
+	 * @param {HttpAgent~Response} agentResponse The response of the server.
 	 */
 	_saveAgentResponseToCache(agentResponse) {
 		let cacheKey = this.getCacheKey(
