@@ -9,7 +9,6 @@ ns.namespace('ima.dictionary');
  * compiled MessageFormat localization messages for its dictionary.
  */
 export default class MessageFormatDictionary extends Dictionary {
-
 	static get $dependencies() {
 		return [];
 	}
@@ -85,7 +84,7 @@ export default class MessageFormatDictionary extends Dictionary {
 		if (!scope) {
 			throw new GenericError(
 				`ima.dictionary.MessageFormatDictionary.get: The ` +
-				`localization phrase '${key}' does not exists`,
+					`localization phrase '${key}' does not exists`,
 				{ key, parameters }
 			);
 		}
@@ -105,7 +104,7 @@ export default class MessageFormatDictionary extends Dictionary {
 		if (!/^[^.]+\.[^.]+$/.test(key)) {
 			throw new Error(
 				`The provided key (${key}) is not a valid localization ` +
-				`phrase key, expecting a "file_name.identifier" notation`
+					`phrase key, expecting a "file_name.identifier" notation`
 			);
 		}
 

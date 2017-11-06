@@ -1,9 +1,6 @@
 import ns from '../namespace';
 import HttpAgent from './HttpAgent';
-import HttpProxy from './HttpProxy';
-import Cache from '../cache/Cache';
 import GenericError from '../error/GenericError';
-import CookieStorage from '../storage/CookieStorage';
 
 ns.namespace('ima.http');
 
@@ -12,7 +9,6 @@ ns.namespace('ima.http');
  * of completed and ongoing HTTP requests and cookie storage.
  */
 export default class HttpAgentImpl extends HttpAgent {
-
 	/**
 	 * Initializes the HTTP handler.
 	 *
@@ -171,8 +167,10 @@ export default class HttpAgentImpl extends HttpAgent {
 	 * @inheritdoc
 	 */
 	getCacheKey(method, url, data) {
-		return this._cacheOptions.prefix +
-				this._getCacheKeySuffix(method, url, data);
+		return (
+			this._cacheOptions.prefix +
+			this._getCacheKeySuffix(method, url, data)
+		);
 	}
 
 	/**
@@ -267,14 +265,12 @@ export default class HttpAgentImpl extends HttpAgent {
 	_request(method, url, data, options) {
 		let cacheKey = this.getCacheKey(method, url, data);
 
-		let cachePromise = (
-			this._proxy
-				.request(method, url, data, options)
-				.then(
-					response => this._proxyResolved(response),
-					error => this._proxyRejected(error)
-				)
-		);
+		let cachePromise = this._proxy
+			.request(method, url, data, options)
+			.then(
+				response => this._proxyResolved(response),
+				error => this._proxyRejected(error)
+			);
 
 		this._internalCacheOfPromises.set(cacheKey, cachePromise);
 
@@ -354,9 +350,7 @@ export default class HttpAgentImpl extends HttpAgent {
 			this._internalCacheOfPromises.delete(cacheKey);
 
 			let errorName = errorParams.errorName;
-			let errorMessage = (
-				`${errorName}: ima.http.Agent:_proxyRejected: ${error.message}`
-			);
+			let errorMessage = `${errorName}: ima.http.Agent:_proxyRejected: ${error.message}`;
 			let agentError = new GenericError(errorMessage, errorParams);
 			return Promise.reject(agentError);
 		}
@@ -419,7 +413,7 @@ export default class HttpAgentImpl extends HttpAgent {
 			let receivedCookies = agentResponse.headers['set-cookie'];
 
 			if (receivedCookies) {
-				receivedCookies.forEach((cookieHeader) => {
+				receivedCookies.forEach(cookieHeader => {
 					this._cookie.parseFromSetCookieHeader(cookieHeader);
 				});
 			}

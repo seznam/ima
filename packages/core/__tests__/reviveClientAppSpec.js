@@ -7,7 +7,6 @@ import * as ima from '../main';
 import vendorLinker from '../vendorLinker';
 
 describe('Revive client application', () => {
-
 	let router = null;
 	let ReactDOM = {
 		render() {
@@ -15,8 +14,10 @@ describe('Revive client application', () => {
 				setState: () => {}
 			};
 		},
-		renderToDOM() {
-
+		hydrate() {
+			return {
+				setState: () => {}
+			};
 		}
 	};
 
@@ -36,7 +37,6 @@ describe('Revive client application', () => {
 	}
 
 	class Controller extends ControllerInterface {
-
 		getHttpStatus() {
 			return 200;
 		}
@@ -63,25 +63,25 @@ describe('Revive client application', () => {
 		}
 	}
 
-	beforeAll((done) => {
-		let doc = Reflect.construct(jsdom.JSDOM, [`<!DOCTYPE html><html><head></head><body></body></html>`]);
+	beforeAll(done => {
+		let doc = Reflect.construct(jsdom.JSDOM, [
+			`<!DOCTYPE html><html><head></head><body></body></html>`
+		]);
 
 		propagateToGlobal(doc.window);
 
-		global.$IMA = Object.assign({},
-			global.$IMA || {},
-			routerConfig,
-			{
-				$Env: 'prod',
-				$Version: 1
-			}
-		);
+		global.$IMA = Object.assign({}, global.$IMA || {}, routerConfig, {
+			$Env: 'prod',
+			$Version: 1
+		});
 
 		global.document = doc.window.document;
 		global.window = doc.window;
 		global.window.$IMA = global.$IMA;
 		global.window.$Debug = global.$Debug;
-		doc.reconfigure({ url: `${routerConfig.$Protocol}//${routerConfig.$Host}` });
+		doc.reconfigure({
+			url: `${routerConfig.$Protocol}//${routerConfig.$Host}`
+		});
 
 		//mock
 		global.window.scrollTo = () => {};
@@ -90,12 +90,12 @@ describe('Revive client application', () => {
 		vendorLinker.set('react-dom', ReactDOM);
 		vendorLinker.set('ima-helpers', $Helper);
 
-		spyOn(ReactDOM, 'renderToDOM');
+		spyOn(ReactDOM, 'render');
 
 		done();
 	});
 
-	it('revive client app', (done) => {
+	it('revive client app', done => {
 		let bootConfig = Object.assign(
 			{
 				initServicesApp: () => {},
@@ -115,7 +115,13 @@ describe('Revive client application', () => {
 				initBindApp: (ns, oc, config) => {
 					router = oc.get('$Router');
 					router.init(routerConfig);
-					router.add('reviveClientApp', '/', Controller, View, options);
+					router.add(
+						'reviveClientApp',
+						'/',
+						Controller,
+						View,
+						options
+					);
 
 					oc.inject(Controller, []);
 
@@ -126,19 +132,17 @@ describe('Revive client application', () => {
 			}
 		);
 
-
-		ima.reviveClientApp(bootConfig).then((response) => {
-			expect(response.status).toEqual(200);
-			expect(response.pageState).toEqual({ hello: 'Hello' });
-			expect(response.content).toEqual(null);
-			expect(ReactDOM.renderToDOM).toHaveBeenCalled();
-			done();
-		})
-		.catch((error) => {
-			done(error);
-		});
-
+		ima
+			.reviveClientApp(bootConfig)
+			.then(response => {
+				expect(response.status).toEqual(200);
+				expect(response.pageState).toEqual({ hello: 'Hello' });
+				expect(response.content).toEqual(null);
+				expect(ReactDOM.render).toHaveBeenCalled();
+				done();
+			})
+			.catch(error => {
+				done(error);
+			});
 	});
-
-
 });

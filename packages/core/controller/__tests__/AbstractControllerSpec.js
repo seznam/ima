@@ -3,7 +3,6 @@ import AbstractController from 'controller/AbstractController';
 import PageStateManager from 'page/state/PageStateManager';
 
 describe('ima.controller.AbstractController', () => {
-
 	let MockedPageStateManager = toMock(PageStateManager);
 	let controller = null;
 	let pageStateManager = null;
@@ -24,9 +23,7 @@ describe('ima.controller.AbstractController', () => {
 	it('should be set state to PageStateManager', () => {
 		let state = { state: 'state' };
 
-		spyOn(pageStateManager, 'setState')
-			.and
-			.stub();
+		spyOn(pageStateManager, 'setState').and.stub();
 
 		controller.setState(state);
 
@@ -34,11 +31,8 @@ describe('ima.controller.AbstractController', () => {
 	});
 
 	describe('getState method', () => {
-
 		it('should be get state from PageStateManager for setted stateManager', () => {
-			spyOn(pageStateManager, 'getState')
-				.and
-				.stub();
+			spyOn(pageStateManager, 'getState').and.stub();
 
 			controller.getState();
 

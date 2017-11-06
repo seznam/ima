@@ -1,7 +1,5 @@
 import ns from '../namespace';
 import Cache from './Cache';
-import CacheFactory from './CacheFactory';
-import Storage from '../storage/Storage';
 
 ns.namespace('ima.cache');
 
@@ -27,8 +25,12 @@ export default class CacheImpl extends Cache {
 	 * @param {{ttl: number, enabled: boolean}} [config={ttl: 30000, enabled: false}]
 	 *        The cache configuration.
 	 */
-	constructor(cacheStorage, factory, Helper,
-			config = { ttl: 30000, enabled: false }) {
+	constructor(
+		cacheStorage,
+		factory,
+		Helper,
+		config = { ttl: 30000, enabled: false }
+	) {
 		super();
 
 		/**
@@ -152,22 +154,25 @@ export default class CacheImpl extends Cache {
 
 			if ($Debug) {
 				if (!this._canSerializeValue(serializeEntry.value)) {
-					throw new Error(`ima.cache.CacheImpl:serialize An ` +
+					throw new Error(
+						`ima.cache.CacheImpl:serialize An ` +
 							`attempt to serialize ` +
 							`${serializeEntry.value.toString()}, stored ` +
 							`using the key ${key}, was made, but the value ` +
 							`cannot be serialized. Remove this entry from ` +
 							`the cache or change its type so that can be ` +
-							`serialized using JSON.stringify().`);
+							`serialized using JSON.stringify().`
+					);
 				}
 			}
 
 			dataToSerialize[key] = serializeEntry;
 		}
 
-		return JSON
-				.stringify(dataToSerialize)
-				.replace(/<\/script/g, '<\\/script');
+		return JSON.stringify(dataToSerialize).replace(
+			/<\/script/g,
+			'<\\/script'
+		);
 	}
 
 	/**
@@ -189,10 +194,10 @@ export default class CacheImpl extends Cache {
 	 */
 	_canSerializeValue(value) {
 		if (
-			(value instanceof Date) ||
-			(value instanceof RegExp) ||
-			(value instanceof Promise) ||
-			(typeof value === 'function')
+			value instanceof Date ||
+			value instanceof RegExp ||
+			value instanceof Promise ||
+			typeof value === 'function'
 		) {
 			console.warn('The provided value is not serializable: ', value);
 
@@ -221,7 +226,7 @@ export default class CacheImpl extends Cache {
 				if (!this._canSerializeValue(value[propertyName])) {
 					console.warn(
 						'The provided object is not serializable due to the ' +
-						'following property: ',
+							'following property: ',
 						propertyName,
 						value
 					);
@@ -244,8 +249,8 @@ export default class CacheImpl extends Cache {
 	 */
 	_clone(value) {
 		if (
-			(value !== null) &&
-			(typeof value === 'object') &&
+			value !== null &&
+			typeof value === 'object' &&
 			!(value instanceof Promise)
 		) {
 			return this._Helper.clone(value);

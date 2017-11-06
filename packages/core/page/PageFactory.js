@@ -1,7 +1,4 @@
 import ns from '../namespace';
-import PageStateManager from './state/PageStateManager';
-import ObjectContainer from '../ObjectContainer';
-import Controller from '../controller/Controller';
 import GenericError from '../error/GenericError';
 
 ns.namespace('ima.page');
@@ -10,14 +7,12 @@ ns.namespace('ima.page');
  * Factory for page.
  */
 export default class PageFactory {
-
 	/**
 	 * Factory used by page management classes.
 	 *
 	 * @param {ObjectContainer} oc
 	 */
 	constructor(oc) {
-
 		/**
 		 * The current application object container.
 		 *
@@ -74,10 +69,13 @@ export default class PageFactory {
 		let dictionary = this._oc.get('$Dictionary');
 		let settings = this._oc.get('$Settings');
 
-		let decoratedController = this._oc.create(
-			'$ControllerDecorator',
-			[controller, metaManager, router, dictionary, settings]
-		);
+		let decoratedController = this._oc.create('$ControllerDecorator', [
+			controller,
+			metaManager,
+			router,
+			dictionary,
+			settings
+		]);
 
 		return decoratedController;
 	}

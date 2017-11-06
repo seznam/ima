@@ -7,12 +7,11 @@ import PageStateManager from 'page/state/PageStateManager';
 import Window from 'window/Window';
 
 describe('ima.page.manager.ClientPageManager', () => {
-
 	let pageFactory = {
-		createController: (Controller) => new Controller(),
-		decorateController: (controller) => controller,
-		decoratePageStateManager: (pageStateManger) =>  pageStateManger,
-		createView: (view) => view
+		createController: Controller => new Controller(),
+		decorateController: controller => controller,
+		decoratePageStateManager: pageStateManger => pageStateManger,
+		createView: view => view
 	};
 	let pageRenderer = null;
 	let pageStateManager = null;
@@ -23,7 +22,9 @@ describe('ima.page.manager.ClientPageManager', () => {
 	let View = () => {};
 
 	let controllerInstance = pageFactory.createController(Controller);
-	let decoratedController = pageFactory.decorateController(controllerInstance);
+	let decoratedController = pageFactory.decorateController(
+		controllerInstance
+	);
 	let viewInstance = pageFactory.createView(View);
 	let extensionInstance = new Extension();
 
@@ -63,37 +64,45 @@ describe('ima.page.manager.ClientPageManager', () => {
 
 		pageManager._clearManagedPageValue();
 
-		pageManager._storeManagedPageValue(Controller, View, options, params, controllerInstance, decoratedController, viewInstance);
+		pageManager._storeManagedPageValue(
+			Controller,
+			View,
+			options,
+			params,
+			controllerInstance,
+			decoratedController,
+			viewInstance
+		);
 
-
-		spyOn(controllerInstance, 'getExtensions')
-			.and
-			.returnValue([extensionInstance]);
+		spyOn(controllerInstance, 'getExtensions').and.returnValue([
+			extensionInstance
+		]);
 	});
 
 	it('should be listen for all custom events', () => {
 		let window = {};
 
-		spyOn(eventBusInterface, 'listenAll')
-			.and
-			.stub();
-		spyOn(windowInterface, 'getWindow')
-			.and
-			.returnValue(window);
+		spyOn(eventBusInterface, 'listenAll').and.stub();
+		spyOn(windowInterface, 'getWindow').and.returnValue(window);
 
 		pageManager.init();
 
-		expect(eventBusInterface.listenAll).toHaveBeenCalledWith(window, pageManager._boundOnCustomEventHandler);
+		expect(eventBusInterface.listenAll).toHaveBeenCalledWith(
+			window,
+			pageManager._boundOnCustomEventHandler
+		);
 	});
 
 	it('should return parsed custom event', () => {
-		expect(pageManager._parseCustomEvent(event)).toEqual({ method: 'onMethod', eventName: 'method', data: data });
+		expect(pageManager._parseCustomEvent(event)).toEqual({
+			method: 'onMethod',
+			eventName: 'method',
+			data: data
+		});
 	});
 
 	it('scrollTo method should be call window.scrollTo async', () => {
-		spyOn(windowInterface, 'scrollTo')
-			.and
-			.stub();
+		spyOn(windowInterface, 'scrollTo').and.stub();
 
 		jest.useFakeTimers();
 		pageManager.scrollTo(0, 0);
@@ -105,16 +114,15 @@ describe('ima.page.manager.ClientPageManager', () => {
 	it('should be unlisten for all custom events', () => {
 		let window = {};
 
-		spyOn(eventBusInterface, 'unlistenAll')
-			.and
-			.stub();
-		spyOn(windowInterface, 'getWindow')
-			.and
-			.returnValue(window);
+		spyOn(eventBusInterface, 'unlistenAll').and.stub();
+		spyOn(windowInterface, 'getWindow').and.returnValue(window);
 
 		pageManager.destroy();
 
-		expect(eventBusInterface.unlistenAll).toHaveBeenCalledWith(window, pageManager._boundOnCustomEventHandler);
+		expect(eventBusInterface.unlistenAll).toHaveBeenCalledWith(
+			window,
+			pageManager._boundOnCustomEventHandler
+		);
 	});
 
 	describe('_onCustomEventHanler method', () => {
@@ -125,13 +133,11 @@ describe('ima.page.manager.ClientPageManager', () => {
 		};
 
 		beforeEach(() => {
-			spyOn(pageManager, '_parseCustomEvent')
-				.and
-				.returnValue(parsedCustomEvent);
+			spyOn(pageManager, '_parseCustomEvent').and.returnValue(
+				parsedCustomEvent
+			);
 
-			spyOn(console, 'warn')
-				.and
-				.stub();
+			spyOn(console, 'warn').and.stub();
 		});
 
 		it('should do nothing if active controller is null', () => {
@@ -143,38 +149,50 @@ describe('ima.page.manager.ClientPageManager', () => {
 		});
 
 		it('should handle event only with controller', () => {
-			spyOn(pageManager, '_handleEventWithController')
-				.and
-				.returnValue(true);
+			spyOn(pageManager, '_handleEventWithController').and.returnValue(
+				true
+			);
 
-			spyOn(pageManager, '_handleEventWithExtensions')
-				.and
-				.stub();
+			spyOn(pageManager, '_handleEventWithExtensions').and.stub();
 
 			pageManager._onCustomEventHandler(event);
 
 			expect(console.warn).not.toHaveBeenCalled();
-			expect(pageManager._handleEventWithExtensions).not.toHaveBeenCalledWith(parsedCustomEvent.method, parsedCustomEvent.data);
-			expect(pageManager._handleEventWithController).toHaveBeenCalledWith(parsedCustomEvent.method, parsedCustomEvent.data);
+			expect(
+				pageManager._handleEventWithExtensions
+			).not.toHaveBeenCalledWith(
+				parsedCustomEvent.method,
+				parsedCustomEvent.data
+			);
+			expect(pageManager._handleEventWithController).toHaveBeenCalledWith(
+				parsedCustomEvent.method,
+				parsedCustomEvent.data
+			);
 		});
 
 		it('should handle event with some extension', () => {
-			spyOn(pageManager, '_handleEventWithController')
-				.and
-				.returnValue(false);
+			spyOn(pageManager, '_handleEventWithController').and.returnValue(
+				false
+			);
 
-			spyOn(pageManager, '_handleEventWithExtensions')
-				.and
-				.returnValue(true);
+			spyOn(pageManager, '_handleEventWithExtensions').and.returnValue(
+				true
+			);
 
 			pageManager._onCustomEventHandler(event);
 
 			expect(console.warn).not.toHaveBeenCalled();
-			expect(pageManager._handleEventWithExtensions).toHaveBeenCalledWith(parsedCustomEvent.method, parsedCustomEvent.data);
-			expect(pageManager._handleEventWithController).toHaveBeenCalledWith(parsedCustomEvent.method, parsedCustomEvent.data);
+			expect(pageManager._handleEventWithExtensions).toHaveBeenCalledWith(
+				parsedCustomEvent.method,
+				parsedCustomEvent.data
+			);
+			expect(pageManager._handleEventWithController).toHaveBeenCalledWith(
+				parsedCustomEvent.method,
+				parsedCustomEvent.data
+			);
 		});
 
-		it('should throw error because active controller and their extensions haven\'t defined event listener', () => {
+		it("should throw error because active controller and their extensions haven't defined event listener", () => {
 			pageManager._onCustomEventHandler(event);
 
 			expect(console.warn).toHaveBeenCalled();
@@ -187,18 +205,14 @@ describe('ima.page.manager.ClientPageManager', () => {
 
 			expect(console.warn).not.toHaveBeenCalled();
 		});
-
 	});
 
 	describe('manage method', () => {
-
-		it('should activate page source after loading all resources', (done) => {
-			spyOn(pageManager, '_activatePageSource')
-				.and
-				.stub();
-			spyOn(pageManager.__proto__.__proto__, 'manage')
-				.and
-				.returnValue(Promise.resolve({}));
+		it('should activate page source after loading all resources', done => {
+			spyOn(pageManager, '_activatePageSource').and.stub();
+			spyOn(pageManager.__proto__.__proto__, 'manage').and.returnValue(
+				Promise.resolve({})
+			);
 
 			pageManager
 				.manage(null, null, {}, {})
@@ -206,17 +220,21 @@ describe('ima.page.manager.ClientPageManager', () => {
 					expect(pageManager._activatePageSource).toHaveBeenCalled();
 					done();
 				})
-				.catch((error) => {
-					console.error('ima.page.manager.Client: CATCH ERROR: ', error);
+				.catch(error => {
+					console.error(
+						'ima.page.manager.Client: CATCH ERROR: ',
+						error
+					);
 					done(error);
 				});
 		});
 	});
 
 	describe('_handleEventWithController method', () => {
-
 		it('should return false for undefined method on controller', () => {
-			expect(pageManager._handleEventWithController('onMethod', {})).toEqual(false);
+			expect(
+				pageManager._handleEventWithController('onMethod', {})
+			).toEqual(false);
 		});
 
 		it('should call method on controller and return true', () => {
@@ -224,24 +242,30 @@ describe('ima.page.manager.ClientPageManager', () => {
 				onMethod: () => {}
 			};
 
-			spyOn(pageManager._managedPage.controllerInstance, 'onMethod')
-				.and
-				.stub();
+			spyOn(
+				pageManager._managedPage.controllerInstance,
+				'onMethod'
+			).and.stub();
 
-			expect(pageManager._handleEventWithController('onMethod', data)).toEqual(true);
-			expect(pageManager._managedPage.controllerInstance.onMethod).toHaveBeenCalledWith(data);
+			expect(
+				pageManager._handleEventWithController('onMethod', data)
+			).toEqual(true);
+			expect(
+				pageManager._managedPage.controllerInstance.onMethod
+			).toHaveBeenCalledWith(data);
 		});
 	});
 
 	describe('_handleEventWithExtensions method', () => {
-
 		it('should return false for undefined method on extensions', () => {
-			expect(pageManager._handleEventWithExtensions('onMethod', {})).toEqual(false);
+			expect(
+				pageManager._handleEventWithExtensions('onMethod', {})
+			).toEqual(false);
 		});
 
 		it('should call method on someone extension and return true', () => {
 			let dumpExtensionInstance = {
-				'onMethod': () => {}
+				onMethod: () => {}
 			};
 			pageManager._managedPage.controllerInstance = {
 				getExtensions: () => {
@@ -249,13 +273,12 @@ describe('ima.page.manager.ClientPageManager', () => {
 				}
 			};
 
-			spyOn(dumpExtensionInstance, 'onMethod')
-				.and
-				.stub();
+			spyOn(dumpExtensionInstance, 'onMethod').and.stub();
 
-			expect(pageManager._handleEventWithExtensions('onMethod', data)).toEqual(true);
+			expect(
+				pageManager._handleEventWithExtensions('onMethod', data)
+			).toEqual(true);
 			expect(dumpExtensionInstance.onMethod).toHaveBeenCalledWith(data);
 		});
 	});
-
 });

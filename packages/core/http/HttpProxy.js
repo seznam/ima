@@ -38,7 +38,6 @@ import GenericError from '../error/GenericError';
  * providing a Promise-oriented API for sending requests.
  */
 export default class HttpProxy {
-
 	/**
 	 * Initializes the HTTP proxy.
 	 *
@@ -99,10 +98,11 @@ export default class HttpProxy {
 
 			if (options.timeout) {
 				requestTimeoutId = setTimeout(() => {
-					reject(new GenericError(
-						'The HTTP request timed out',
-						{ status: HttpStatusCode.TIMEOUT }
-					));
+					reject(
+						new GenericError('The HTTP request timed out', {
+							status: HttpStatusCode.TIMEOUT
+						})
+					);
 				}, options.timeout);
 			}
 
@@ -113,27 +113,30 @@ export default class HttpProxy {
 					!this._shouldRequestHaveBody(method) ? data : {}
 				),
 				this._composeRequestInit(method, data, options)
-			).then((response) => {
-				if (requestTimeoutId) {
-					clearTimeout(requestTimeoutId);
-				}
+			)
+				.then(response => {
+					if (requestTimeoutId) {
+						clearTimeout(requestTimeoutId);
+					}
 
-				const contentType = response.headers.get('content-type');
+					const contentType = response.headers.get('content-type');
 
-				if (response.status === HttpStatusCode.NO_CONTENT) {
-					return Promise.resolve([response, null]);
-				} else if (contentType &&
-						contentType.includes('application/json')) {
-					return response.json().then(body => [response, body]);
-				} else {
-					return response.text().then(body => [response, body]);
-				}
-			}).then(([response, responseBody]) => this._processResponse(
-				requestParams,
-				response,
-				responseBody
-			)).then(resolve, reject);
-		}).catch((fetchError) => {
+					if (response.status === HttpStatusCode.NO_CONTENT) {
+						return Promise.resolve([response, null]);
+					} else if (
+						contentType &&
+						contentType.includes('application/json')
+					) {
+						return response.json().then(body => [response, body]);
+					} else {
+						return response.text().then(body => [response, body]);
+					}
+				})
+				.then(([response, responseBody]) =>
+					this._processResponse(requestParams, response, responseBody)
+				)
+				.then(resolve, reject);
+		}).catch(fetchError => {
 			throw this._processError(fetchError, requestParams);
 		});
 	}
@@ -306,10 +309,8 @@ export default class HttpProxy {
 	 * @return {GenericError} The error to provide to the calling API.
 	 */
 	_processError(fetchError, requestParams) {
-		const errorParams = fetchError instanceof GenericError ?
-			fetchError.getParams()
-			:
-			{};
+		const errorParams =
+			fetchError instanceof GenericError ? fetchError.getParams() : {};
 		return this._createError(
 			fetchError,
 			requestParams,
@@ -353,9 +354,9 @@ export default class HttpProxy {
 	 *         implementation of the Fetch API to use.
 	 */
 	_getFetchApi() {
-		return this._window.isClient() ?
-			this._window.getWindow().fetch :
-			require('node-fetch');
+		return this._window.isClient()
+			? this._window.getWindow().fetch
+			: require('node-fetch');
 	}
 
 	/**
@@ -442,14 +443,14 @@ export default class HttpProxy {
 	 */
 	_composeRequestUrl(url, data) {
 		const transformedUrl = this._transformer.transform(url);
-		const queryString = Object.keys(data).map(
-			key => [key, data[key]].map(encodeURIComponent).join('=')
-		).join('&');
-		const delimeter = queryString ?
-			(transformedUrl.includes('?') ? '&' : '?') :
-			'';
+		const queryString = Object.keys(data)
+			.map(key => [key, data[key]].map(encodeURIComponent).join('='))
+			.join('&');
+		const delimeter = queryString
+			? transformedUrl.includes('?') ? '&' : '?'
+			: '';
 
-		return `${ transformedUrl }${ delimeter }${ queryString }`;
+		return `${transformedUrl}${delimeter}${queryString}`;
 	}
 
 	/**

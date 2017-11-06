@@ -1,12 +1,11 @@
 import MessageFormatDictionary from 'dictionary/MessageFormatDictionary';
 
 describe('ima.dictionary.MessageFormatDictionary', () => {
-
 	let dictionary = null;
 	const config = {
 		language: 'cs',
 		dictionary: {
-			home:{
+			home: {
 				title: () => 'title',
 				message: () => 'message'
 			}
@@ -27,11 +26,14 @@ describe('ima.dictionary.MessageFormatDictionary', () => {
 		expect(dictionary.getLanguage()).toEqual(config.language);
 	});
 
-
 	describe('get method', () => {
 		it('should be return translated text', () => {
-			expect(dictionary.get('home.title')).toEqual(config.dictionary.home.title());
-			expect(dictionary.get('home.message')).toEqual(config.dictionary.home.message());
+			expect(dictionary.get('home.title')).toEqual(
+				config.dictionary.home.title()
+			);
+			expect(dictionary.get('home.message')).toEqual(
+				config.dictionary.home.message()
+			);
 		});
 
 		it('should be throw Error for undefined vocabulary key', () => {
@@ -56,5 +58,4 @@ describe('ima.dictionary.MessageFormatDictionary', () => {
 			expect(() => dictionary.has('home')).toThrow();
 		});
 	});
-
 });

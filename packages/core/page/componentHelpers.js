@@ -1,4 +1,3 @@
-
 import classnames from 'classnames';
 import PropTypes from 'prop-types';
 import React from 'react';
@@ -41,7 +40,7 @@ export function getContextTypes(classConstructor) {
  *         declarations.
  */
 export function setContextTypes(classConstructor, contextTypes) {
-	return classConstructor[PRIVATE.contextTypes] = contextTypes;
+	return (classConstructor[PRIVATE.contextTypes] = contextTypes);
 }
 
 /**
@@ -60,7 +59,7 @@ export function getUtils(props, context) {
 	if ($Debug && !utils) {
 		throw new Error(
 			'The component cannot access the view utils because they were ' +
-			'not passed in the initial props or context as $Utils.'
+				'not passed in the initial props or context as $Utils.'
 		);
 	}
 
@@ -142,17 +141,10 @@ export function cssClasses(component, classRules, includeComponentClassName) {
  * @return {string} String of CSS classes that had their property resolved
  *         to {@code true}.
  */
-export function defaultCssClasses(
-	classRules, component
-) {
-	let extraClasses = component instanceof React.Component ?
-		component.props.className
-	:
-		null;
-	return classnames(
-		classRules,
-		extraClasses
-	);
+export function defaultCssClasses(classRules, component) {
+	let extraClasses =
+		component instanceof React.Component ? component.props.className : null;
+	return classnames(classRules, extraClasses);
 }
 
 /**
@@ -165,7 +157,7 @@ export function defaultCssClasses(
  */
 export function fire(component, eventName, data = null) {
 	return component.utils.$EventBus.fire(
-		ReactDOM.findDOMNode(component),
+		ReactDOM.findDOMNode(component), //eslint-disable-line react/no-find-dom-node
 		eventName,
 		data
 	);
@@ -184,8 +176,9 @@ export function fire(component, eventName, data = null) {
  * @param {function(Event)} listener The listener for event to register.
  */
 export function listen(component, eventTarget, eventName, listener) {
-	if (!eventTarget.addEventListener) { // Safari doesn't have EventTarget
-		eventTarget = ReactDOM.findDOMNode(eventTarget);
+	if (!eventTarget.addEventListener) {
+		// Safari doesn't have EventTarget
+		eventTarget = ReactDOM.findDOMNode(eventTarget); //eslint-disable-line react/no-find-dom-node
 	}
 
 	return component.utils.$EventBus.listen(eventTarget, eventName, listener);
@@ -203,8 +196,9 @@ export function listen(component, eventTarget, eventName, listener) {
  * @param {function(Event)} listener The listener for event to register.
  */
 export function unlisten(component, eventTarget, eventName, listener) {
-	if (!eventTarget.addEventListener) { // Safari doesn't have EventTarget
-		eventTarget = ReactDOM.findDOMNode(eventTarget);
+	if (!eventTarget.addEventListener) {
+		// Safari doesn't have EventTarget
+		eventTarget = ReactDOM.findDOMNode(eventTarget); //eslint-disable-line react/no-find-dom-node
 	}
 
 	const eventBus = component.utils.$EventBus;

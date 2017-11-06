@@ -1,5 +1,4 @@
 import React from 'react';
-import ReactDOM from 'react-dom';
 import ns from '../namespace';
 import * as helpers from './componentHelpers';
 
@@ -11,7 +10,6 @@ ns.namespace('ima.page');
  * @abstract
  */
 export default class AbstractComponent extends React.Component {
-
 	static get contextTypes() {
 		return helpers.getContextTypes(this);
 	}
@@ -50,30 +48,6 @@ export default class AbstractComponent extends React.Component {
 		}
 
 		return this._utils;
-	}
-
-	/**
-	 * Finds and returns the DOM node representing the specified React
-	 * component.
-	 *
-	 * Note that this method can be used only at the client-side.
-	 *
-	 * @deprecated Use refs instead.
-	 * @param {React.Component} component
-	 * @return {?HTMLElement} The DOM node representing the specified React
-	 *         component, or {@code null} if no such node was found.
-	 */
-	findDOMNode(component = this) {
-		if ($Debug) {
-			console.warn(
-				'DEPRECATION WARNING: The findDOMNode() method is ' +
-				'deprecated since IMA 0.14.0. Please switch to using refs ' +
-				'instead, as this method will be removed in an upcoming ' +
-				'version of IMA.'
-			);
-		}
-
-		return ReactDOM.findDOMNode(component);
 	}
 
 	/**

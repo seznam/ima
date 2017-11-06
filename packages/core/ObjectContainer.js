@@ -8,7 +8,6 @@ ns.namespace('ima');
  * namespace by specifying their fully qualified names.
  */
 export default class ObjectContainer {
-
 	/**
 	 * Returns constant for plugin binding state.
 	 *
@@ -75,7 +74,6 @@ export default class ObjectContainer {
 	 *        access classes and values using their fully qualified names.
 	 */
 	constructor(namespace) {
-
 		/**
 		 * The namespace container, used to access classes and values using
 		 * their fully qualified names.
@@ -125,16 +123,20 @@ export default class ObjectContainer {
 	bind(name, classConstructor, dependencies) {
 		if ($Debug) {
 			if (this._bindingState === ObjectContainer.PLUGIN_BINDING_STATE) {
-				throw new Error(`ima.ObjectContainer:bind Object container ` +
+				throw new Error(
+					`ima.ObjectContainer:bind Object container ` +
 						`is locked. You do not have the permission to ` +
-						`create a new alias named ${name}.`);
+						`create a new alias named ${name}.`
+				);
 			}
 
 			if (typeof classConstructor !== 'function') {
-				throw new Error(`ima.ObjectContainer:bind The second ` +
+				throw new Error(
+					`ima.ObjectContainer:bind The second ` +
 						`argument has to be a class constructor function, ` +
 						`but ${classConstructor} was provided. Fix alias ` +
-						`${name} for your bind.js file.`);
+						`${name} for your bind.js file.`
+				);
 			}
 		}
 
@@ -155,7 +157,6 @@ export default class ObjectContainer {
 			if (dependencies) {
 				this._updateEntryValues(entry, classConstructor, dependencies);
 			}
-
 		} else {
 			let entry = this._createEntry(classConstructor, dependencies);
 			this._entries.set(classConstructor, entry);
@@ -178,19 +179,25 @@ export default class ObjectContainer {
 	constant(name, value) {
 		if ($Debug) {
 			if (this._entries.has(name) || !!this._getEntryFromConstant(name)) {
-				throw new Error(`ima.ObjectContainer:constant The ${name} ` +
+				throw new Error(
+					`ima.ObjectContainer:constant The ${name} ` +
 						`constant has already been declared and cannot be ` +
-						`redefined.`);
+						`redefined.`
+				);
 			}
 
 			if (this._bindingState === ObjectContainer.PLUGIN_BINDING_STATE) {
-				throw new Error(`ima.ObjectContainer:constant The ${name} ` +
+				throw new Error(
+					`ima.ObjectContainer:constant The ${name} ` +
 						`constant can't be declared in plugin. ` +
-						`The constant must be define in app/config/bind.js file.`);
+						`The constant must be define in app/config/bind.js file.`
+				);
 			}
 		}
 
-		let constantEntry = this._createEntry(() => value, [], { writeable: false });
+		let constantEntry = this._createEntry(() => value, [], {
+			writeable: false
+		});
 		constantEntry.sharedInstance = value;
 		this._entries.set(name, constantEntry);
 
@@ -214,36 +221,45 @@ export default class ObjectContainer {
 	inject(classConstructor, dependencies) {
 		if ($Debug) {
 			if (typeof classConstructor !== 'function') {
-				throw new Error(`ima.ObjectContainer:inject The first ` +
+				throw new Error(
+					`ima.ObjectContainer:inject The first ` +
 						`argument has to be a class constructor function, ` +
 						`but ${classConstructor} was provided. Fix your ` +
-						`bind.js file.`);
+						`bind.js file.`
+				);
 			}
 
 			if (
 				this._entries.has(classConstructor) &&
 				this._bindingState === ObjectContainer.PLUGIN_BINDING_STATE
 			) {
-				throw new Error(`ima.ObjectContainer:inject The ` +
+				throw new Error(
+					`ima.ObjectContainer:inject The ` +
 						`${classConstructor.name} has already had its ` +
 						`default dependencies configured, and the object ` +
 						`container is currently locked, therefore the ` +
 						`dependency configuration cannot be override. The ` +
 						`dependencies of the provided class must be ` +
 						`overridden from the application's bind.js ` +
-						`configuration file.`);
+						`configuration file.`
+				);
 			}
 		}
 
 		let classConstructorEntry = this._entries.get(classConstructor);
 		if (classConstructorEntry) {
-
 			if (dependencies) {
-				this._updateEntryValues(classConstructorEntry, classConstructor, dependencies);
+				this._updateEntryValues(
+					classConstructorEntry,
+					classConstructor,
+					dependencies
+				);
 			}
-
 		} else {
-			classConstructorEntry = this._createEntry(classConstructor, dependencies);
+			classConstructorEntry = this._createEntry(
+				classConstructor,
+				dependencies
+			);
 			this._entries.set(classConstructor, classConstructorEntry);
 		}
 
@@ -269,38 +285,50 @@ export default class ObjectContainer {
 	 *        constructor function.
 	 * @return {ObjectContainer} This object container.
 	 */
-	provide(interfaceConstructor, implementationConstructor,
-			dependencies) {
+	provide(interfaceConstructor, implementationConstructor, dependencies) {
 		if ($Debug) {
 			if (
 				this._entries.has(interfaceConstructor) &&
 				this._bindingState === ObjectContainer.PLUGIN_BINDING_STATE
 			) {
-				throw new Error('ima.ObjectContainer:provide The ' +
+				throw new Error(
+					'ima.ObjectContainer:provide The ' +
 						'implementation of the provided interface ' +
 						`(${interfaceConstructor.name}) has already been ` +
-						`configured and cannot be overridden.`);
+						`configured and cannot be overridden.`
+				);
 			}
 
 			// check that implementation really extends interface
 			let prototype = implementationConstructor.prototype;
 			if (!(prototype instanceof interfaceConstructor)) {
-				throw new Error('ima.ObjectContainer:provide The specified ' +
+				throw new Error(
+					'ima.ObjectContainer:provide The specified ' +
 						`class (${implementationConstructor.name}) does not ` +
 						`implement the ${interfaceConstructor.name} ` +
-						`interface.`);
+						`interface.`
+				);
 			}
 		}
 
-		let classConstructorEntry = this._entries.get(implementationConstructor);
+		let classConstructorEntry = this._entries.get(
+			implementationConstructor
+		);
 		if (classConstructorEntry) {
 			this._entries.set(interfaceConstructor, classConstructorEntry);
 
 			if (dependencies) {
-				this._updateEntryValues(classConstructorEntry, implementationConstructor, dependencies);
+				this._updateEntryValues(
+					classConstructorEntry,
+					implementationConstructor,
+					dependencies
+				);
 			}
 		} else {
-			classConstructorEntry = this._createEntry(implementationConstructor, dependencies);
+			classConstructorEntry = this._createEntry(
+				implementationConstructor,
+				dependencies
+			);
 			this._entries.set(implementationConstructor, classConstructorEntry);
 			this._entries.set(interfaceConstructor, classConstructorEntry);
 		}
@@ -355,10 +383,12 @@ export default class ObjectContainer {
 	 *         resource is registered with this object container.
 	 */
 	has(name) {
-		return this._entries.has(name) ||
-				!!this._getEntryFromConstant(name) ||
-				!!this._getEntryFromNamespace(name) ||
-				!!this._getEntryFromClassConstructor(name);
+		return (
+			this._entries.has(name) ||
+			!!this._getEntryFromConstant(name) ||
+			!!this._getEntryFromNamespace(name) ||
+			!!this._getEntryFromClassConstructor(name)
+		);
 	}
 
 	/**
@@ -405,8 +435,8 @@ export default class ObjectContainer {
 		if (this._bindingState === ObjectContainer.APP_BINDING_STATE) {
 			throw new Error(
 				`ima.ObjectContainer:setBindingState The setBindingState() ` +
-				`method  has to be called only by the bootstrap script. Other ` +
-				`calls are not allowed.`
+					`method  has to be called only by the bootstrap script. Other ` +
+					`calls are not allowed.`
 			);
 		}
 
@@ -436,19 +466,20 @@ export default class ObjectContainer {
 	 *         implementation is known to this object container.
 	 */
 	_getEntry(name) {
-		let entry = this._entries.get(name) ||
-				this._getEntryFromConstant(name) ||
-				this._getEntryFromNamespace(name) ||
-				this._getEntryFromClassConstructor(name);
+		let entry =
+			this._entries.get(name) ||
+			this._getEntryFromConstant(name) ||
+			this._getEntryFromNamespace(name) ||
+			this._getEntryFromClassConstructor(name);
 
 		if ($Debug) {
 			if (!entry) {
 				throw new Error(
 					`ima.ObjectContainer:_getEntry There is no constant, ` +
-					`alias, registered class, registered interface with ` +
-					`configured implementation or namespace entry ` +
-					`identified as ${name}. Check your bind.js file for ` +
-					`typos or register ${name} with the object container.`
+						`alias, registered class, registered interface with ` +
+						`configured implementation or namespace entry ` +
+						`identified as ${name}. Check your bind.js file for ` +
+						`typos or register ${name} with the object container.`
 				);
 			}
 		}
@@ -546,23 +577,26 @@ export default class ObjectContainer {
 	 *         composition name in the constants. The method returns {@code null}
 	 *         if the specified composition name does not exist in the constants.
 	 */
-	_getEntryFromConstant(compositionName) { //TODO entries must be
+	_getEntryFromConstant(compositionName) {
+		//TODO entries must be
 		if (typeof compositionName !== 'string') {
 			return null;
 		}
 
 		let objectProperties = compositionName.split('.');
-		let constantValue = this._entries.has(objectProperties[0]) ?
-				this._entries.get(objectProperties[0]).sharedInstance :
-				null;
+		let constantValue = this._entries.has(objectProperties[0])
+			? this._entries.get(objectProperties[0]).sharedInstance
+			: null;
 
 		let pathLength = objectProperties.length;
-		for (let i = 1; (i < pathLength) && constantValue; i++) {
+		for (let i = 1; i < pathLength && constantValue; i++) {
 			constantValue = constantValue[objectProperties[i]];
 		}
 
 		if (constantValue !== undefined && constantValue !== null) {
-			let entry = this._createEntry(() => constantValue, [], { writeable: false });
+			let entry = this._createEntry(() => constantValue, [], {
+				writeable: false
+			});
 			entry.sharedInstance = constantValue;
 
 			return entry;
@@ -599,7 +633,7 @@ export default class ObjectContainer {
 	 *         if the specified path does not exist in the namespace.
 	 */
 	_getEntryFromNamespace(path) {
-		if ((typeof path !== 'string') || !this._namespace.has(path)) {
+		if (typeof path !== 'string' || !this._namespace.has(path)) {
 			return null;
 		}
 
@@ -638,10 +672,13 @@ export default class ObjectContainer {
 	 */
 	_getEntryFromClassConstructor(classConstructor) {
 		if (
-			(typeof classConstructor === 'function') &&
+			typeof classConstructor === 'function' &&
 			Array.isArray(classConstructor.$dependencies)
 		) {
-			let entry = this._createEntry(classConstructor, classConstructor.$dependencies);
+			let entry = this._createEntry(
+				classConstructor,
+				classConstructor.$dependencies
+			);
 			this._entries.set(classConstructor, entry);
 
 			return entry;
@@ -649,7 +686,6 @@ export default class ObjectContainer {
 
 		return null;
 	}
-
 }
 
 ns.ima.ObjectContainer = ObjectContainer;
@@ -661,7 +697,6 @@ ns.ima.ObjectContainer = ObjectContainer;
  * @template T
  */
 class Entry {
-
 	/**
 	 * Initializes the entry.
 	 *
@@ -672,7 +707,6 @@ class Entry {
 	 * @param {?{ writeable: boolean }} [options] The Entry options.
 	 */
 	constructor(classConstructor, dependencies, options) {
-
 		/**
 		 * The constructor of the class represented by this entry, or the
 		 * getter of the value of the constant represented by this entry.
@@ -717,14 +751,17 @@ class Entry {
 		if ($Debug) {
 			if (!this.writeable) {
 				throw new Error(
-					`The entry ${entry} is constant and you ` +
-					`can't redefined their dependencies ${dependencies}.`
+					`The entry is constant and you ` +
+						`can't redefined their dependencies ${dependencies}.`
 				);
 			}
 
 			if (this._overrideCounter >= 1) {
-				throw new Error(`The dependencies entry can't be overrided more than once.` +
-						`Fix your bind.js file for classConstructor ${this.classConstructor.name}.`);
+				throw new Error(
+					`The dependencies entry can't be overrided more than once.` +
+						`Fix your bind.js file for classConstructor ${this
+							.classConstructor.name}.`
+				);
 			}
 		}
 
@@ -739,5 +776,4 @@ class Entry {
 	get writeable() {
 		return this._options.writeable;
 	}
-
 }

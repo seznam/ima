@@ -2,13 +2,6 @@
 
 import ns from '../../namespace';
 import AbstractPageRenderer from './AbstractPageRenderer';
-import PageRenderer from './PageRenderer';
-import PageRendererFactory from './PageRendererFactory';
-import AbstractDocumentView from '../AbstractDocumentView';
-import Controller from '../../controller/Controller';
-import ControllerDecorator from '../../controller/ControllerDecorator';
-import MetaManager from '../../meta/MetaManager';
-import Window from '../../window/Window';
 
 ns.namespace('ima.page.renderer');
 
@@ -17,7 +10,6 @@ ns.namespace('ima.page.renderer');
  * server if possible.
  */
 export default class ClientPageRenderer extends AbstractPageRenderer {
-
 	/**
 	 * Initializes the client-side page renderer.
 	 *
@@ -72,33 +64,31 @@ export default class ClientPageRenderer extends AbstractPageRenderer {
 			this._patchPromisesToState(controller, loadedPromises);
 		}
 
-		return (
-			this._Helper
-				.allPromiseHash(loadedPromises)
-				.then((fetchedResources) => {
-					let pageState = Object.assign(
-						{},
-						defaultPageState,
-						fetchedResources
-					);
+		return this._Helper
+			.allPromiseHash(loadedPromises)
+			.then(fetchedResources => {
+				let pageState = Object.assign(
+					{},
+					defaultPageState,
+					fetchedResources
+				);
 
-					if (this._firstTime) {
-						controller.setState(pageState);
-						this._renderToDOM(controller, view, routeOptions);
-						this._firstTime = false;
-					}
+				if (this._firstTime) {
+					controller.setState(pageState);
+					this._renderToDOM(controller, view, routeOptions);
+					this._firstTime = false;
+				}
 
-					controller.setMetaParams(pageState);
-					this._updateMetaAttributes(controller.getMetaManager());
+				controller.setMetaParams(pageState);
+				this._updateMetaAttributes(controller.getMetaManager());
 
-					return {
-						content: null,
-						status: controller.getHttpStatus(),
-						pageState
-					};
-				})
-				.catch((error) => this._handleError(error))
-		);
+				return {
+					content: null,
+					status: controller.getHttpStatus(),
+					pageState
+				};
+			})
+			.catch(error => this._handleError(error));
 	}
 
 	/**
@@ -112,25 +102,23 @@ export default class ClientPageRenderer extends AbstractPageRenderer {
 		controller.setState(defaultPageState);
 		this._patchPromisesToState(controller, updatedPromises);
 
-		return (
-			this._Helper
-				.allPromiseHash(updatedPromises)
-				.then((fetchedResources) => {
-					controller.setMetaParams(controller.getState());
-					this._updateMetaAttributes(controller.getMetaManager());
+		return this._Helper
+			.allPromiseHash(updatedPromises)
+			.then(fetchedResources => {
+				controller.setMetaParams(controller.getState());
+				this._updateMetaAttributes(controller.getMetaManager());
 
-					return {
-						content: null,
-						status: controller.getHttpStatus(),
-						pageState: Object.assign(
-							{},
-							defaultPageState,
-							fetchedResources
-						)
-					};
-				})
-				.catch((error) => this._handleError(error))
-		);
+				return {
+					content: null,
+					status: controller.getHttpStatus(),
+					pageState: Object.assign(
+						{},
+						defaultPageState,
+						fetchedResources
+					)
+				};
+			})
+			.catch(error => this._handleError(error));
 	}
 
 	/**
@@ -167,12 +155,12 @@ export default class ClientPageRenderer extends AbstractPageRenderer {
 	_patchPromisesToState(controller, patchedPromises) {
 		for (let resourceName of Object.keys(patchedPromises)) {
 			patchedPromises[resourceName]
-				.then((resource) => {
+				.then(resource => {
 					controller.setState({
 						[resourceName]: resource
 					});
 				})
-				.catch((error) => this._handleError(error));
+				.catch(error => this._handleError(error));
 		}
 	}
 
@@ -213,10 +201,17 @@ export default class ClientPageRenderer extends AbstractPageRenderer {
 		let masterElementId = documentView.masterElementId;
 		this._viewContainer = this._window.getElementById(masterElementId);
 
-		this._reactiveView = this._ReactDOM.render(
-			reactElementView,
-			this._viewContainer
-		);
+		if (this._viewContainer && this._viewContainer.children.length) {
+			this._reactiveView = this._ReactDOM.hydrate(
+				reactElementView,
+				this._viewContainer
+			);
+		} else {
+			this._reactiveView = this._ReactDOM.render(
+				reactElementView,
+				this._viewContainer
+			);
+		}
 	}
 
 	/**
@@ -312,9 +307,7 @@ export default class ClientPageRenderer extends AbstractPageRenderer {
 		let linkTag;
 
 		for (linkTagKey of metaManager.getLinks()) {
-			linkTag = this._window.querySelector(
-				`link[rel="${linkTagKey}"]`
-			);
+			linkTag = this._window.querySelector(`link[rel="${linkTagKey}"]`);
 
 			if (linkTag && linkTag.href) {
 				linkTag.href = metaManager.getLink(linkTagKey);

@@ -1,8 +1,6 @@
 import ns from '../namespace';
 import GenericError from '../error/GenericError';
 import Controller from './Controller';
-import Extension from '../extension/Extension';
-import PageStateManager from '../page/state/PageStateManager';
 
 ns.namespace('ima.controller');
 
@@ -13,7 +11,6 @@ ns.namespace('ima.controller');
  * @abstract
  */
 export default class AbstractController extends Controller {
-
 	/**
 	 * Initializes the controller.
 	 */
@@ -79,7 +76,7 @@ export default class AbstractController extends Controller {
 	load() {
 		throw new GenericError(
 			'The ima.controller.AbstractController.load method is abstract ' +
-			'and must be overridden'
+				'and must be overridden'
 		);
 	}
 
@@ -131,7 +128,7 @@ export default class AbstractController extends Controller {
 	setMetaParams(loadedResources, metaManager, router, dictionary, settings) {
 		throw new GenericError(
 			'The ima.controller.AbstractController.setMetaParams method is ' +
-			'abstract and must be overridden'
+				'abstract and must be overridden'
 		);
 	}
 

@@ -26,7 +26,6 @@ const EMPTY_SET = Object.freeze(new Set());
  * Default implementation of the {@codelink Dispatcher} interface.
  */
 export default class DispatcherImpl extends Dispatcher {
-
 	static get $dependencies() {
 		return [];
 	}
@@ -91,9 +90,9 @@ export default class DispatcherImpl extends Dispatcher {
 			if (!scopes.has(scope)) {
 				console.warn(
 					'ima.event.DispatcherImpl.unlisten(): the provided ' +
-					`listener '${listener}' is not registered for the ` +
-					`specified event '${event}' and scope '${scope}'. Check ` +
-					`your workflow.`,
+						`listener '${listener}' is not registered for the ` +
+						`specified event '${event}' and scope '${scope}'. Check ` +
+						`your workflow.`,
 					{
 						event: event,
 						listener: listener,
@@ -125,7 +124,7 @@ export default class DispatcherImpl extends Dispatcher {
 		if (!listeners.size && !imaInternalEvent) {
 			console.warn(
 				`There are no event listeners registered for the ${event} ` +
-				`event`,
+					`event`,
 				{
 					event: event,
 					data: data

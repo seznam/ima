@@ -18,7 +18,6 @@ ns.namespace('ima.event');
  * @interface
  */
 export default class EventBus {
-
 	/**
 	 * Fires a new custom event of the specified name, carrying the provided
 	 * data.

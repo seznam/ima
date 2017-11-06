@@ -1,7 +1,5 @@
 import ns from '../../namespace';
 import AbstractDocumentView from '../AbstractDocumentView';
-import ObjectContainer from '../../ObjectContainer';
-import ViewAdapter from './ViewAdapter';
 
 ns.namespace('ima.page.renderer');
 
@@ -9,7 +7,6 @@ ns.namespace('ima.page.renderer');
  * Factory for page render.
  */
 export default class PageRendererFactory {
-
 	/**
 	 * Initializes the factory used by the page renderer.
 	 *
@@ -19,7 +16,6 @@ export default class PageRendererFactory {
 	 *        page.
 	 */
 	constructor(oc, React) {
-
 		/**
 		 * The application's dependency injector - the object container.
 		 *
@@ -55,9 +51,7 @@ export default class PageRendererFactory {
 	 *         view component.
 	 */
 	getDocumentView(documentView) {
-		let documentViewComponent = this._resolveClassConstructor(
-			documentView
-		);
+		let documentViewComponent = this._resolveClassConstructor(documentView);
 
 		if ($Debug) {
 			let componentPrototype = documentViewComponent.prototype;
@@ -65,7 +59,7 @@ export default class PageRendererFactory {
 			if (!(componentPrototype instanceof AbstractDocumentView)) {
 				throw new Error(
 					'The document view component must extend ' +
-					'ima/page/AbstractDocumentView class'
+						'ima/page/AbstractDocumentView class'
 				);
 			}
 		}
@@ -95,7 +89,7 @@ export default class PageRendererFactory {
 			if (!(componentPrototype instanceof this._React.Component)) {
 				throw new Error(
 					'The managed root view component must extend ' +
-					'React.Component'
+						'React.Component'
 				);
 			}
 		}

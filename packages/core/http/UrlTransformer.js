@@ -6,7 +6,6 @@ ns.namespace('ima.http');
  * Utility for transforming URLs according to the configured replacement rules.
  */
 export default class UrlTransformer {
-
 	static get $dependencies() {
 		return [];
 	}
@@ -15,7 +14,6 @@ export default class UrlTransformer {
 	 * Initializes the URL transformer.
 	 */
 	constructor() {
-
 		/**
 		 * @type {Object<string, string>}
 		 */
@@ -64,9 +62,9 @@ export default class UrlTransformer {
 			return str;
 		}
 
-		let reg =  new RegExp(rulesKey.join('|'), 'g');
+		let reg = new RegExp(rulesKey.join('|'), 'g');
 
-		return str.replace(reg, (ruleKey) => this._rules[ruleKey]);
+		return str.replace(reg, ruleKey => this._rules[ruleKey]);
 	}
 }
 

@@ -7,7 +7,6 @@ import RouteFactory from 'router/RouteFactory';
 import RouteNames from 'router/RouteNames';
 
 describe('ima.router.AbstractRouter', () => {
-
 	let router = null;
 	let pageManager = null;
 	let routeFactory = null;
@@ -51,9 +50,7 @@ describe('ima.router.AbstractRouter', () => {
 	});
 
 	it('should return absolute current url', () => {
-		spyOn(router, 'getPath')
-			.and
-			.returnValue('/path');
+		spyOn(router, 'getPath').and.returnValue('/path');
 
 		expect(router.getUrl()).toEqual('http://www.domain.com/root/path');
 	});
@@ -69,7 +66,6 @@ describe('ima.router.AbstractRouter', () => {
 	});
 
 	describe('add method', () => {
-
 		it('should be throw error if you try add route with exists name', () => {
 			expect(() => {
 				router.add('home', '/home', Controller, View, options);
@@ -77,26 +73,34 @@ describe('ima.router.AbstractRouter', () => {
 		});
 
 		it('should create new ima.Route', () => {
-			spyOn(routeFactory, 'createRoute')
-				.and
-				.callThrough();
+			spyOn(routeFactory, 'createRoute').and.callThrough();
 
 			router.add('routeName', '/routePath', Controller, View, options);
 
-			expect(routeFactory.createRoute).toHaveBeenCalledWith('routeName', '/routePath', Controller, View, options);
-
+			expect(routeFactory.createRoute).toHaveBeenCalledWith(
+				'routeName',
+				'/routePath',
+				Controller,
+				View,
+				options
+			);
 		});
 	});
 
 	describe('getCurrentRouteInfo method', () => {
-
 		let routeName = 'link';
 		let path = '/link';
 		let route = null;
 		let params = {};
 
 		beforeEach(() => {
-			route = routeFactory.createRoute(routeName, path, Controller, View, options);
+			route = routeFactory.createRoute(
+				routeName,
+				path,
+				Controller,
+				View,
+				options
+			);
 		});
 
 		afterEach(() => {
@@ -104,9 +108,7 @@ describe('ima.router.AbstractRouter', () => {
 		});
 
 		it('should throw error for not exist route', () => {
-			spyOn(router, 'getPath')
-				.and
-				.returnValue(null);
+			spyOn(router, 'getPath').and.returnValue(null);
 
 			expect(() => {
 				router.getCurrentRouteInfo();
@@ -114,23 +116,19 @@ describe('ima.router.AbstractRouter', () => {
 		});
 
 		it('should return current route information', () => {
-			spyOn(router, 'getPath')
-				.and
-				.returnValue(path);
-			spyOn(router, '_getRouteByPath')
-				.and
-				.returnValue(route);
-			spyOn(route, 'extractParameters')
-				.and
-				.returnValue(params);
+			spyOn(router, 'getPath').and.returnValue(path);
+			spyOn(router, '_getRouteByPath').and.returnValue(route);
+			spyOn(route, 'extractParameters').and.returnValue(params);
 
-			expect(router.getCurrentRouteInfo())
-				.toEqual({ route: route, params: params, path: '/link' });
+			expect(router.getCurrentRouteInfo()).toEqual({
+				route: route,
+				params: params,
+				path: '/link'
+			});
 		});
 	});
 
 	describe('link method', () => {
-
 		let routeName = 'link';
 		let path = '/link';
 		let baseUrl = 'baseUrl';
@@ -144,17 +142,13 @@ describe('ima.router.AbstractRouter', () => {
 		});
 
 		it('should return link for valid route with params', () => {
-			spyOn(router, 'getBaseUrl')
-				.and
-				.returnValue(baseUrl);
+			spyOn(router, 'getBaseUrl').and.returnValue(baseUrl);
 
 			expect(router.link(routeName, {})).toEqual(baseUrl + path);
 		});
 
 		it('should throw Error for not valid route with params', () => {
-			spyOn(router._routes, 'has')
-				.and
-				.returnValue(false);
+			spyOn(router._routes, 'has').and.returnValue(false);
 
 			expect(() => {
 				router.link('xxx', {});
@@ -163,13 +157,18 @@ describe('ima.router.AbstractRouter', () => {
 	});
 
 	describe('route method', () => {
-
 		let routeName = 'link';
 		let path = '/link';
 		let route = null;
 
 		beforeEach(() => {
-			route = routeFactory.createRoute(routeName, path, Controller, View, options);
+			route = routeFactory.createRoute(
+				routeName,
+				path,
+				Controller,
+				View,
+				options
+			);
 		});
 
 		afterEach(() => {
@@ -177,17 +176,11 @@ describe('ima.router.AbstractRouter', () => {
 		});
 
 		it('should handle valid route path', () => {
-			spyOn(router, '_getRouteByPath')
-				.and
-				.returnValue(route);
+			spyOn(router, '_getRouteByPath').and.returnValue(route);
 
-			spyOn(router, '_handle')
-				.and
-				.stub();
+			spyOn(router, '_handle').and.stub();
 
-			spyOn(route, 'extractParameters')
-				.and
-				.callThrough();
+			spyOn(route, 'extractParameters').and.callThrough();
 
 			router.route(path, options);
 
@@ -195,145 +188,161 @@ describe('ima.router.AbstractRouter', () => {
 			expect(router._handle).toHaveBeenCalledWith(route, {}, options);
 		});
 
-		it('should handle "not-found" route', (done) => {
-			spyOn(router, '_getRouteByPath')
-				.and
-				.returnValue(null);
+		it('should handle "not-found" route', done => {
+			spyOn(router, '_getRouteByPath').and.returnValue(null);
 
-			spyOn(router, 'handleNotFound')
-				.and
-				.callFake((params) => {
-					return Promise.resolve(params);
-				});
+			spyOn(router, 'handleNotFound').and.callFake(params => {
+				return Promise.resolve(params);
+			});
 
-			router
-				.route(path)
-				.then((params) => {
-					expect(params.error instanceof GenericError).toBe(true);
-					done();
-				});
+			router.route(path).then(params => {
+				expect(params.error instanceof GenericError).toBe(true);
+				done();
+			});
 		});
-
 	});
 
 	describe('handleError method', () => {
-
 		let path = '/error';
 		let route = null;
 
 		beforeEach(() => {
-			route = routeFactory.createRoute(RouteNames.ERROR, path, Controller, View, options);
+			route = routeFactory.createRoute(
+				RouteNames.ERROR,
+				path,
+				Controller,
+				View,
+				options
+			);
 		});
 
 		afterEach(() => {
 			route = null;
 		});
 
-		it('should handle "error" route', (done) => {
+		it('should handle "error" route', done => {
 			let params = { error: new Error('test') };
 
-			spyOn(router._routes, 'get')
-				.and
-				.returnValue(route);
+			spyOn(router._routes, 'get').and.returnValue(route);
 
-			spyOn(router, '_handle')
-				.and
-				.returnValue(Promise.resolve({ content: '', status: 200, error: params.error }));
+			spyOn(router, '_handle').and.returnValue(
+				Promise.resolve({
+					content: '',
+					status: 200,
+					error: params.error
+				})
+			);
 
 			router
 				.handleError(params, options)
-				.then((response) => {
-					expect(router._handle).toHaveBeenCalledWith(route, params, options);
+				.then(response => {
+					expect(router._handle).toHaveBeenCalledWith(
+						route,
+						params,
+						options
+					);
 					expect(response.error).toEqual(params.error);
 					done();
 				})
-				.catch((error) => {
-					console.error('ima.router.AbstractRouter.handleError', error);
+				.catch(error => {
+					console.error(
+						'ima.router.AbstractRouter.handleError',
+						error
+					);
 					done();
 				});
-
 		});
 
-		it('should reject promise with error for undefined "error" route', (done) => {
+		it('should reject promise with error for undefined "error" route', done => {
 			let params = { error: new Error('test') };
 
-			spyOn(router._routes, 'get')
-				.and
-				.returnValue(null);
+			spyOn(router._routes, 'get').and.returnValue(null);
 
-
-			router
-				.handleError(params)
-				.catch((reason) => {
-					expect(reason instanceof GenericError).toBe(true);
-					done();
-				});
+			router.handleError(params).catch(reason => {
+				expect(reason instanceof GenericError).toBe(true);
+				done();
+			});
 		});
 	});
 
 	describe('handleNotFound method', () => {
-
 		let path = '/not-found';
 		let route = null;
 
 		beforeEach(() => {
-			route = routeFactory.createRoute(RouteNames.NOT_FOUND, path, Controller, View, options);
+			route = routeFactory.createRoute(
+				RouteNames.NOT_FOUND,
+				path,
+				Controller,
+				View,
+				options
+			);
 		});
 
 		afterEach(() => {
 			route = null;
 		});
 
-		it('should handle "notFound" route', (done) => {
+		it('should handle "notFound" route', done => {
 			let params = { error: new GenericError() };
 
-			spyOn(router._routes, 'get')
-				.and
-				.returnValue(route);
+			spyOn(router._routes, 'get').and.returnValue(route);
 
-			spyOn(router, '_handle')
-				.and
-				.returnValue(Promise.resolve({ content: '', status: 200, error: params.error }));
+			spyOn(router, '_handle').and.returnValue(
+				Promise.resolve({
+					content: '',
+					status: 200,
+					error: params.error
+				})
+			);
 
 			router
 				.handleNotFound(params, options)
-				.then((response) => {
-					expect(router._handle).toHaveBeenCalledWith(route, params, options);
-					expect(response.error instanceof GenericError).toEqual(true);
+				.then(response => {
+					expect(router._handle).toHaveBeenCalledWith(
+						route,
+						params,
+						options
+					);
+					expect(response.error instanceof GenericError).toEqual(
+						true
+					);
 					done();
 				})
-				.catch((error) => {
-					console.error('ima.router.AbstractRouter.handleNotFound', error);
+				.catch(error => {
+					console.error(
+						'ima.router.AbstractRouter.handleNotFound',
+						error
+					);
 					done();
 				});
 		});
 
-		it('should reject promise with error for undefined "error" route', (done) => {
+		it('should reject promise with error for undefined "error" route', done => {
 			let params = { error: new Error() };
 
-			spyOn(router._routes, 'get')
-				.and
-				.returnValue(null);
+			spyOn(router._routes, 'get').and.returnValue(null);
 
-			router
-				.handleNotFound(params)
-				.catch((reason) => {
-					expect(reason instanceof GenericError).toBe(true);
-					done();
-				});
+			router.handleNotFound(params).catch(reason => {
+				expect(reason instanceof GenericError).toBe(true);
+				done();
+			});
 		});
 	});
 
 	describe('isClientError method', () => {
-
 		it('should return true for client error, which return status 4**', () => {
-			let isClientError = router.isClientError(new GenericError('Client error', { status: 404 }));
+			let isClientError = router.isClientError(
+				new GenericError('Client error', { status: 404 })
+			);
 
 			expect(isClientError).toEqual(true);
 		});
 
 		it('should return false for client error, which return status 5**', () => {
-			let isClientError = router.isClientError(new GenericError('Server error', { status: 500 }));
+			let isClientError = router.isClientError(
+				new GenericError('Server error', { status: 500 })
+			);
 
 			expect(isClientError).toEqual(false);
 		});
@@ -343,19 +352,24 @@ describe('ima.router.AbstractRouter', () => {
 
 			expect(isClientError).toEqual(false);
 		});
-
 	});
 
 	describe('isRedirection method', () => {
-
 		it('should return true for redirection, which return status 3**', () => {
-			let isRedireciton = router.isRedirection(new GenericError('Redirection', { status: 300, url: 'http://www.example.com/redirect' }));
+			let isRedireciton = router.isRedirection(
+				new GenericError('Redirection', {
+					status: 300,
+					url: 'http://www.example.com/redirect'
+				})
+			);
 
 			expect(isRedireciton).toEqual(true);
 		});
 
 		it('should return true for client error, which return status 4**', () => {
-			let isRedireciton = router.isRedirection(new GenericError('Client error', { status: 400 }));
+			let isRedireciton = router.isRedirection(
+				new GenericError('Client error', { status: 400 })
+			);
 
 			expect(isRedireciton).toEqual(false);
 		});
@@ -365,162 +379,168 @@ describe('ima.router.AbstractRouter', () => {
 
 			expect(isClientError).toEqual(false);
 		});
-
 	});
 
 	describe('_handle method', () => {
-
 		let routeName = 'routeName';
 		let routePath = '/routePath';
 		let route = null;
 
 		beforeEach(() => {
-			route = routeFactory.createRoute(routeName, routePath, Controller, View, options);
+			route = routeFactory.createRoute(
+				routeName,
+				routePath,
+				Controller,
+				View,
+				options
+			);
 		});
 
 		afterEach(() => {
 			route = null;
 		});
 
-		it('should call paga manager', (done) => {
-			spyOn(router, 'getPath')
-				.and
-				.returnValue(routePath);
-			spyOn(pageManager, 'manage')
-				.and
-				.returnValue(Promise.resolve({ content: null, status: 200 }));
-			spyOn(dispatcher, 'fire')
-				.and
-				.stub();
+		it('should call paga manager', done => {
+			spyOn(router, 'getPath').and.returnValue(routePath);
+			spyOn(pageManager, 'manage').and.returnValue(
+				Promise.resolve({ content: null, status: 200 })
+			);
+			spyOn(dispatcher, 'fire').and.stub();
 
-			router
-				._handle(route, {})
-				.then(() => {
-					expect(pageManager.manage).toHaveBeenCalledWith(Controller, View, options, {});
-					done();
-				});
-
+			router._handle(route, {}).then(() => {
+				expect(pageManager.manage).toHaveBeenCalledWith(
+					Controller,
+					View,
+					options,
+					{}
+				);
+				done();
+			});
 		});
 
 		it('should fire ns.ima.EVENTS.BEFORE_HANDLE_ROUTE', () => {
 			let response = { content: null, status: 200 };
 			let params = {};
 			let path = '/';
-			let data = { route: route, params: params, path: path, options: options };
+			let data = {
+				route: route,
+				params: params,
+				path: path,
+				options: options
+			};
 
-			spyOn(router, 'getPath')
-				.and
-				.returnValue(path);
-			spyOn(pageManager, 'manage')
-				.and
-				.returnValue(Promise.resolve(response));
-			spyOn(dispatcher, 'fire')
-				.and
-				.stub();
+			spyOn(router, 'getPath').and.returnValue(path);
+			spyOn(pageManager, 'manage').and.returnValue(
+				Promise.resolve(response)
+			);
+			spyOn(dispatcher, 'fire').and.stub();
 
 			router._handle(route, params, options);
 
-			expect(dispatcher.fire).toHaveBeenCalledWith(RouteEvents.BEFORE_HANDLE_ROUTE, data, true);
+			expect(dispatcher.fire).toHaveBeenCalledWith(
+				RouteEvents.BEFORE_HANDLE_ROUTE,
+				data,
+				true
+			);
 		});
 
-		it('should fire ns.ima.EVENTS.AFTER_HANDLE_ROUTE', (done) => {
+		it('should fire ns.ima.EVENTS.AFTER_HANDLE_ROUTE', done => {
 			let response = { content: null, status: 200 };
 			let params = {};
 			let path = '/';
 
-			spyOn(router, 'getPath')
-				.and
-				.returnValue(path);
-			spyOn(pageManager, 'manage')
-				.and
-				.returnValue(Promise.resolve(Object.assign({}, response)));
-			spyOn(dispatcher, 'fire')
-				.and
-				.stub();
+			spyOn(router, 'getPath').and.returnValue(path);
+			spyOn(pageManager, 'manage').and.returnValue(
+				Promise.resolve(Object.assign({}, response))
+			);
+			spyOn(dispatcher, 'fire').and.stub();
 
-			router
-				._handle(route, params, options)
-				.then(() => {
-					let data = { route: route, params: params, path: path, response: response, options: options };
+			router._handle(route, params, options).then(() => {
+				let data = {
+					route: route,
+					params: params,
+					path: path,
+					response: response,
+					options: options
+				};
 
-					expect(dispatcher.fire)
-						.toHaveBeenCalledWith(RouteEvents.AFTER_HANDLE_ROUTE, data, true);
+				expect(dispatcher.fire).toHaveBeenCalledWith(
+					RouteEvents.AFTER_HANDLE_ROUTE,
+					data,
+					true
+				);
 
-					done();
-				});
+				done();
+			});
 		});
 
-		it('should fire ns.ima.EVENTS.AFTER_HANDLE_ROUTE with error', (done) => {
+		it('should fire ns.ima.EVENTS.AFTER_HANDLE_ROUTE with error', done => {
 			let response = { content: null, status: 200 };
 			let params = { error: new Error('test') };
 			let path = '/';
 
-			spyOn(router, 'getPath')
-				.and
-				.returnValue(path);
-			spyOn(pageManager, 'manage')
-				.and
-				.returnValue(Promise.resolve(Object.assign({}, response)));
-			spyOn(dispatcher, 'fire')
-				.and
-				.stub();
+			spyOn(router, 'getPath').and.returnValue(path);
+			spyOn(pageManager, 'manage').and.returnValue(
+				Promise.resolve(Object.assign({}, response))
+			);
+			spyOn(dispatcher, 'fire').and.stub();
 
-			router
-				._handle(route, params, options)
-				.then(() => {
-					let data = { route: route, params: params, path: path, response: Object.assign({}, response, params), options: options };
+			router._handle(route, params, options).then(() => {
+				let data = {
+					route: route,
+					params: params,
+					path: path,
+					response: Object.assign({}, response, params),
+					options: options
+				};
 
-					expect(dispatcher.fire)
-						.toHaveBeenCalledWith(RouteEvents.AFTER_HANDLE_ROUTE, data, true);
+				expect(dispatcher.fire).toHaveBeenCalledWith(
+					RouteEvents.AFTER_HANDLE_ROUTE,
+					data,
+					true
+				);
 
-					done();
-				});
+				done();
+			});
 		});
 
-		it('should return response', (done) => {
+		it('should return response', done => {
 			let response = { content: null, status: 200 };
 			let params = {};
 			let path = '/';
 
-			spyOn(router, 'getPath')
-				.and
-				.returnValue(path);
-			spyOn(pageManager, 'manage')
-				.and
-				.returnValue(Promise.resolve(Object.assign({}, response)));
+			spyOn(router, 'getPath').and.returnValue(path);
+			spyOn(pageManager, 'manage').and.returnValue(
+				Promise.resolve(Object.assign({}, response))
+			);
 
-			router
-				._handle(route, params, options)
-				.then((handleResponse) => {
-					expect(handleResponse).toEqual(response);
-					done();
-				});
+			router._handle(route, params, options).then(handleResponse => {
+				expect(handleResponse).toEqual(response);
+				done();
+			});
 		});
 
-		it('should return response with handled error', (done) => {
+		it('should return response with handled error', done => {
 			let response = { content: null, status: 500 };
 			let params = { error: new Error('test') };
 			let path = '/';
 
-			spyOn(router, 'getPath')
-				.and
-				.returnValue(path);
+			spyOn(router, 'getPath').and.returnValue(path);
 
-			spyOn(pageManager, 'manage')
-				.and
-				.returnValue(Promise.resolve(Object.assign({}, response)));
+			spyOn(pageManager, 'manage').and.returnValue(
+				Promise.resolve(Object.assign({}, response))
+			);
 
-			router
-				._handle(route, params, options)
-				.then((handleResponse) => {
-					expect(handleResponse).toEqual(Object.assign({}, response, params));
-					done();
-				});
+			router._handle(route, params, options).then(handleResponse => {
+				expect(handleResponse).toEqual(
+					Object.assign({}, response, params)
+				);
+				done();
+			});
 		});
 	});
 
 	describe('_extractRoutePath method', () => {
-
 		let pathWithRoot = '/root/path';
 		let pathWithLanguage = '/en/path';
 		let pathWithRootAndLanguage = '/root/en/path';
@@ -539,7 +559,9 @@ describe('ima.router.AbstractRouter', () => {
 		it('should clear root and language from path', () => {
 			router.init({ $Root: '/root', $LanguagePartPath: '/en' });
 
-			expect(router._extractRoutePath(pathWithRootAndLanguage)).toEqual(path);
+			expect(router._extractRoutePath(pathWithRootAndLanguage)).toEqual(
+				path
+			);
 		});
 
 		it('should clear language from path', () => {

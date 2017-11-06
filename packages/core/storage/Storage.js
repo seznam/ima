@@ -10,7 +10,6 @@ ns.namespace('ima.storage');
  * @interface
  */
 export default class Storage {
-
 	/**
 	 * This method is used to finalize the initialization of the storage after
 	 * the dependencies provided through the constructor have been prepared for

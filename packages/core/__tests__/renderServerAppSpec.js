@@ -7,7 +7,6 @@ import * as ima from '../main';
 import vendorLinker from '../vendorLinker';
 
 describe('Render server application', () => {
-
 	let router = null;
 	let ReactDOM = {
 		render() {
@@ -40,7 +39,6 @@ describe('Render server application', () => {
 	}
 
 	class Controller extends ControllerInterface {
-
 		getHttpStatus() {
 			return 200;
 		}
@@ -54,55 +52,65 @@ describe('Render server application', () => {
 		}
 	}
 
-	beforeAll((done) => {
+	beforeAll(done => {
 		vendorLinker.set('react', React);
 		vendorLinker.set('react-dom', ReactDOM);
 		vendorLinker.set('ima-helpers', $Helper);
 
 		let app = ima.createImaApp();
-		let bootConfig = ima.getClientBootConfig(Object.assign(
-			{
-				initServicesApp: (ns, oc, config) => {
-					oc.get(Response).init(expressReponse);
+		let bootConfig = ima.getClientBootConfig(
+			Object.assign(
+				{
+					initServicesApp: (ns, oc, config) => {
+						oc.get(Response).init(expressReponse);
+					},
+					initBindApp: () => {},
+					initRoutes: () => {}
 				},
-				initBindApp: () => {},
-				initRoutes: () => {}
-			},
-			{
-				initBindApp: (ns, oc, config) => {
-					router = oc.get('$Router');
-					router.init(routerConfig);
-					router.add('reviveClientApp', '/reviveClientApp', Controller, View, options);
+				{
+					initBindApp: (ns, oc, config) => {
+						router = oc.get('$Router');
+						router.init(routerConfig);
+						router.add(
+							'reviveClientApp',
+							'/reviveClientApp',
+							Controller,
+							View,
+							options
+						);
 
-					oc.inject(Controller, []);
+						oc.inject(Controller, []);
 
-					if (!oc.has('$Utils')) {
-						oc.constant('$Utils', {});
+						if (!oc.has('$Utils')) {
+							oc.constant('$Utils', {});
+						}
 					}
 				}
-			}
-		));
-		app = ima.bootClientApp(app, bootConfig);
+			)
+		);
+		ima.bootClientApp(app, bootConfig);
 
 		spyOn(ReactDOM, 'render');
 
 		done();
 	});
 
-	it('should response with status code 200, content null and pageState', (done) => {
-		spyOn(ServerPageRenderer.prototype, '_renderPageContentToString').and.returnValue('html');
+	it('should response with status code 200, content null and pageState', done => {
+		spyOn(
+			ServerPageRenderer.prototype,
+			'_renderPageContentToString'
+		).and.returnValue('html');
 
 		router
 			.route('/reviveClientApp')
-			.then((response) => {
+			.then(response => {
 				expect(response.status).toEqual(200);
 				expect(response.content).toEqual('html');
 				expect(response.pageState).toEqual({ hello: 'Hello' });
 				done();
 			})
-			.catch((error) => {
+			.catch(error => {
 				done(error);
 			});
 	});
-
 });

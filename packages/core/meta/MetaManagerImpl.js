@@ -7,7 +7,6 @@ ns.namespace('ima.meta');
  * Default implementation of the {@codelink MetaManager} interface.
  */
 export default class MetaManagerImpl extends MetaManager {
-
 	static get $dependencies() {
 		return [];
 	}

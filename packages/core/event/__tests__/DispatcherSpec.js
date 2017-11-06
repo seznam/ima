@@ -1,7 +1,6 @@
 import Dispatcher from 'event/DispatcherImpl';
 
 describe('ima.event.DispatcherImpl', () => {
-
 	let handlers = {
 		handler1: () => {},
 		handler2: () => {}
@@ -19,21 +18,31 @@ describe('ima.event.DispatcherImpl', () => {
 
 	describe('listen method', () => {
 		it('should add handler for event', () => {
-
 			dispatcher.listen(event, handlers.handler1);
 			dispatcher.listen(event, handlers.handler2);
 			expect(dispatcher._eventListeners.get(event).size).toEqual(2);
-			expect(dispatcher._eventListeners.get(event).get(handlers.handler1).size).toEqual(1);
-			expect(dispatcher._eventListeners.get(event).get(handlers.handler2).size).toEqual(1);
+			expect(
+				dispatcher._eventListeners.get(event).get(handlers.handler1)
+					.size
+			).toEqual(1);
+			expect(
+				dispatcher._eventListeners.get(event).get(handlers.handler2)
+					.size
+			).toEqual(1);
 		});
 
 		it('should add handler with their scope for event', () => {
-
 			dispatcher.listen(event, handlers.handler1, handlers);
 			dispatcher.listen(event, handlers.handler2, handlers);
 			expect(dispatcher._eventListeners.get(event).size).toEqual(2);
-			expect(dispatcher._eventListeners.get(event).get(handlers.handler1).size).toEqual(1);
-			expect(dispatcher._eventListeners.get(event).get(handlers.handler2).size).toEqual(1);
+			expect(
+				dispatcher._eventListeners.get(event).get(handlers.handler1)
+					.size
+			).toEqual(1);
+			expect(
+				dispatcher._eventListeners.get(event).get(handlers.handler2)
+					.size
+			).toEqual(1);
 		});
 
 		it('should throw error if handler isnt function', () => {
@@ -50,7 +59,6 @@ describe('ima.event.DispatcherImpl', () => {
 	});
 
 	describe('unlisten method', () => {
-
 		beforeEach(() => {
 			dispatcher.clear();
 		});
@@ -81,7 +89,6 @@ describe('ima.event.DispatcherImpl', () => {
 		});
 
 		it('should remove handler with their scope for event, if scope is changing', () => {
-
 			dispatcher.listen(event, handlers.handler1, handlers);
 
 			handlers.handler3 = () => {};
@@ -92,9 +99,7 @@ describe('ima.event.DispatcherImpl', () => {
 		});
 
 		it('should show warning for undefined event', () => {
-			spyOn(console, 'warn')
-				.and
-				.stub();
+			spyOn(console, 'warn').and.stub();
 
 			dispatcher.unlisten(event, handlers.handler1);
 
@@ -102,9 +107,7 @@ describe('ima.event.DispatcherImpl', () => {
 		});
 
 		it('should show warning for undefined handler for event', () => {
-			spyOn(console, 'warn')
-				.and
-				.stub();
+			spyOn(console, 'warn').and.stub();
 
 			dispatcher.listen(event, handlers.handler1);
 			dispatcher.unlisten(event, handlers.handler2);
@@ -128,9 +131,7 @@ describe('ima.event.DispatcherImpl', () => {
 		});
 
 		it('should show warning for none listeners', () => {
-			spyOn(console, 'warn')
-				.and
-				.stub();
+			spyOn(console, 'warn').and.stub();
 
 			dispatcher.fire(event, data);
 
@@ -138,9 +139,7 @@ describe('ima.event.DispatcherImpl', () => {
 		});
 
 		it('should not show warning for $IMA internal event', () => {
-			spyOn(console, 'warn')
-				.and
-				.stub();
+			spyOn(console, 'warn').and.stub();
 
 			dispatcher.fire(event, data, true);
 
@@ -157,7 +156,5 @@ describe('ima.event.DispatcherImpl', () => {
 
 			expect(dispatcher._eventListeners.size).toEqual(0);
 		});
-
 	});
-
 });

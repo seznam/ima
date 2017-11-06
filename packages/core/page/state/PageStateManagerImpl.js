@@ -9,7 +9,6 @@ const MAX_HISTORY_LIMIT = 10;
  * The implementation of the {@linkcode PageStateManager} interface.
  */
 export default class PageStateManagerImpl extends PageStateManager {
-
 	static get $dependencies() {
 		return [];
 	}
@@ -34,7 +33,6 @@ export default class PageStateManagerImpl extends PageStateManager {
 		 * @type {?function(Object<string, *>)}
 		 */
 		this.onChange = null;
-
 	}
 
 	/**
@@ -97,11 +95,10 @@ export default class PageStateManagerImpl extends PageStateManager {
 	 * @param {Object<string, *>} newState
 	 */
 	_callOnChangeCallback(newState) {
-		if (this.onChange && (typeof this.onChange === 'function')) {
+		if (this.onChange && typeof this.onChange === 'function') {
 			this.onChange(newState);
 		}
 	}
-
 }
 
 ns.ima.page.state.PageStateManagerImpl = PageStateManagerImpl;

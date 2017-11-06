@@ -9,7 +9,6 @@ ns.namespace('ima.page.state');
  * competence.
  */
 export default class PageStateManagerDecorator extends PageStateManager {
-
 	/**
 	 * Initializes the page state manager decorator.
 	 *
@@ -47,15 +46,15 @@ export default class PageStateManagerDecorator extends PageStateManager {
 	setState(statePatch) {
 		if ($Debug) {
 			let patchKeys = Object.keys(statePatch);
-			let deniedKeys = patchKeys.filter((patchKey) => {
+			let deniedKeys = patchKeys.filter(patchKey => {
 				return this._allowedStateKeys.indexOf(patchKey) === -1;
 			});
 
 			if (deniedKeys.length > 0) {
 				throw new GenericError(
 					`Extension can not set state for keys ` +
-					`${deniedKeys.join()}. Check your extension or add keys ` +
-					`${deniedKeys.join()} to getAllowedStateKeys.`
+						`${deniedKeys.join()}. Check your extension or add keys ` +
+						`${deniedKeys.join()} to getAllowedStateKeys.`
 				);
 			}
 		}

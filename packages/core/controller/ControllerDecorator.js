@@ -1,8 +1,5 @@
 import ns from '../namespace';
 import Controller from './Controller';
-import Dictionary from '../dictionary/Dictionary';
-import MetaManager from '../meta/MetaManager';
-import Router from '../router/Router';
 
 ns.namespace('ima.controller');
 
@@ -12,7 +9,6 @@ ns.namespace('ima.controller');
  * the decorated page controller when needed.
  */
 export default class ControllerDecorator extends Controller {
-
 	/**
 	 * Initializes the controller decorator.
 	 *

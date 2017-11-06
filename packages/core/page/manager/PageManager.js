@@ -1,5 +1,4 @@
 import ns from '../../namespace';
-import AbstractDocumentView from '../AbstractDocumentView';
 
 ns.namespace('ima.page.manager');
 
@@ -8,7 +7,6 @@ ns.namespace('ima.page.manager');
  * view.
  */
 export default class PageManager {
-
 	/**
 	 * Initializes the page manager.
 	 */

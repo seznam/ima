@@ -39,7 +39,7 @@ export class VendorLinker {
 			this._plugins.push(moduleValues);
 		}
 
-		$IMA.Loader.register(moduleName, [], (exports) => ({
+		$IMA.Loader.register(moduleName, [], exports => ({
 			setters: [],
 			execute: () => {
 				// commonjs module compatibility
@@ -52,7 +52,6 @@ export class VendorLinker {
 		}));
 	}
 
-
 	/**
 	 * Returns the provided vendor node module from the internal registry of this
 	 * vendor linker.
@@ -63,8 +62,10 @@ export class VendorLinker {
 	 */
 	get(moduleName, imaInternalModule) {
 		if (!this._modules.has(moduleName) && !imaInternalModule) {
-			throw new Error(`The module '${moduleName}' is not registered.` +
-					`Add the module to vendors in build.js`);
+			throw new Error(
+				`The module '${moduleName}' is not registered.` +
+					`Add the module to vendors in build.js`
+			);
 		}
 
 		return this._modules.get(moduleName);

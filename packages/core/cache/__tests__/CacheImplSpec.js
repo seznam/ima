@@ -4,7 +4,6 @@ import Cache from 'cache/CacheImpl';
 import MapStorage from 'storage/MapStorage';
 
 describe('ima.cache.CacheImpl', () => {
-
 	let cache = null;
 	let cacheStorage = null;
 	let cacheFactory = null;
@@ -12,7 +11,10 @@ describe('ima.cache.CacheImpl', () => {
 	beforeEach(() => {
 		cacheStorage = new MapStorage();
 		cacheFactory = new CacheFactory();
-		cache = new Cache(cacheStorage, cacheFactory, Helper, { enabled: true, ttl: 1000 });
+		cache = new Cache(cacheStorage, cacheFactory, Helper, {
+			enabled: true,
+			ttl: 1000
+		});
 		Date.now = () => 1000;
 		cache.set('aaa', 123);
 	});
@@ -29,7 +31,6 @@ describe('ima.cache.CacheImpl', () => {
 	});
 
 	describe('set method', () => {
-
 		it('should store deep clone', () => {
 			let object = {
 				number: 1,
@@ -83,9 +84,7 @@ describe('ima.cache.CacheImpl', () => {
 
 		it('should return same value for instance of Promise', () => {
 			let promise = Promise.resolve('promise');
-			spyOn(Helper, 'clone')
-				.and
-				.stub();
+			spyOn(Helper, 'clone').and.stub();
 
 			cache.set('promise', promise);
 
@@ -95,9 +94,7 @@ describe('ima.cache.CacheImpl', () => {
 	});
 
 	it('should return false for undefined cacheEntry', () => {
-		spyOn(cacheStorage, 'has')
-			.and
-			.returnValue(true);
+		spyOn(cacheStorage, 'has').and.returnValue(true);
 
 		expect(cache.has('bbb')).toBe(false);
 	});
@@ -142,7 +139,6 @@ describe('ima.cache.CacheImpl', () => {
 	});
 
 	describe('_canSerializeValue method', () => {
-
 		beforeEach(() => {
 			spyOn(console, 'warn');
 		});

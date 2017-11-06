@@ -8,7 +8,6 @@ ns.namespace('ima.storage');
  * native {@code Map} for storage.
  */
 export default class MapStorage extends Storage {
-
 	static get $dependencies() {
 		return [];
 	}

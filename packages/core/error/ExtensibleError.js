@@ -19,14 +19,18 @@ ns.namespace('ima.error');
  *        call stack frames are dropped by the JS engine).
  *        This flag is enabled by default.
  */
-export default function ExtensibleError(message,
-		dropInternalStackFrames = true) {
+export default function ExtensibleError(
+	message,
+	dropInternalStackFrames = true
+) {
 	if (!(this instanceof ExtensibleError)) {
 		throw new TypeError('Cannot call a class as a function');
 	}
 	if (this.constructor === ExtensibleError) {
-		throw new TypeError('The ExtensibleError is an abstract class and ' +
-				'must be extended before it can be instantiated.');
+		throw new TypeError(
+			'The ExtensibleError is an abstract class and ' +
+				'must be extended before it can be instantiated.'
+		);
 	}
 
 	Error.call(this, message); // super-constructor call;

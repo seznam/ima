@@ -2,7 +2,6 @@
 
 import ns from '../../namespace';
 import AbstractPageManager from './AbstractPageManager';
-import PageManager from './PageManager';
 import PageFactory from '../PageFactory';
 import PageRenderer from '../renderer/PageRenderer';
 import PageStateManager from '../state/PageStateManager';
@@ -15,7 +14,6 @@ ns.namespace('ima.page.manager');
  * Page manager for controller on the client side.
  */
 export default class ClientPageManager extends AbstractPageManager {
-
 	static get $dependencies() {
 		return [PageFactory, PageRenderer, PageStateManager, Window, EventBus];
 	}
@@ -39,7 +37,7 @@ export default class ClientPageManager extends AbstractPageManager {
 		/**
 		 * The utility for manipulating the global context and global
 		 * client-side-specific APIs.
-		 * 
+		 *
 		 * @type {ima.window.Window}
 		 */
 		this._window = window;
@@ -47,7 +45,7 @@ export default class ClientPageManager extends AbstractPageManager {
 		/**
 		 * The event bus for dispatching and listening for custom IMA events
 		 * propagated through the DOM.
-		 * 
+		 *
 		 * @type {ima.event.EventBus}
 		 */
 		this._eventBus = eventBus;
@@ -58,7 +56,7 @@ export default class ClientPageManager extends AbstractPageManager {
 		 *
 		 * @type {function(this: ClientPageManager, Event)}
 		 */
-		this._boundOnCustomEventHandler = (event) => {
+		this._boundOnCustomEventHandler = event => {
 			this._onCustomEventHandler(event);
 		};
 	}
@@ -78,15 +76,13 @@ export default class ClientPageManager extends AbstractPageManager {
 	 * @inheritdoc
 	 */
 	manage(controller, view, options, params = {}) {
-		return (
-			super
-				.manage(controller, view, options, params)
-				.then((response) => {
-					this._activatePageSource();
+		return super
+			.manage(controller, view, options, params)
+			.then(response => {
+				this._activatePageSource();
 
-					return response;
-				})
-		);
+				return response;
+			});
 	}
 
 	/**
@@ -117,10 +113,10 @@ export default class ClientPageManager extends AbstractPageManager {
 	 * listener is present. The name of the controller's listener method is
 	 * created by turning the first symbol of the event's name to upper case,
 	 * and then prefixing the result with the 'on' prefix.
-	 * 
+	 *
 	 * For example: for an event named 'toggle' the controller's listener
 	 * would be named 'onToggle'.
-	 * 
+	 *
 	 * The controller's listener will be invoked with the event's data as an
 	 * argument.
 	 *
@@ -139,14 +135,16 @@ export default class ClientPageManager extends AbstractPageManager {
 
 			if ($Debug) {
 				if (!handled) {
-					console.warn(`The active controller has no listener for ` +
+					console.warn(
+						`The active controller has no listener for ` +
 							`the encountered event '${eventName}'. Check ` +
 							`your event name for typos, or create an ` +
 							`'${method}' event listener method on the ` +
 							`active controller or add an event listener ` +
 							`that stops the propagation of this event to ` +
 							`an ancestor component of the component that ` +
-							`fired this event.`);
+							`fired this event.`
+					);
 				}
 			}
 		}
@@ -163,8 +161,8 @@ export default class ClientPageManager extends AbstractPageManager {
 	 */
 	_parseCustomEvent(event) {
 		let eventName = event.detail.eventName;
-		let method = 'on' + eventName.charAt(0).toUpperCase() +
-				eventName.slice(1);
+		let method =
+			'on' + eventName.charAt(0).toUpperCase() + eventName.slice(1);
 		let data = event.detail.data;
 
 		return { method, data, eventName };

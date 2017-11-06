@@ -10,7 +10,6 @@ ns.namespace('ima.storage');
  * native {@code sessionStorage} DOM storage for storing its entries.
  */
 export default class SessionStorage extends Storage {
-
 	static get $dependencies() {
 		return [Window];
 	}
@@ -53,8 +52,8 @@ export default class SessionStorage extends Storage {
 		} catch (error) {
 			throw new GenericError(
 				'ima.storage.SessionStorage.get: Failed to parse a session ' +
-				`storage item value identified by the key ${key}: ` +
-				error.message
+					`storage item value identified by the key ${key}: ` +
+					error.message
 			);
 		}
 	}
@@ -64,15 +63,18 @@ export default class SessionStorage extends Storage {
 	 */
 	set(key, value) {
 		try {
-			this._storage.setItem(key, JSON.stringify({
-				created: Date.now(),
-				value
-			}));
+			this._storage.setItem(
+				key,
+				JSON.stringify({
+					created: Date.now(),
+					value
+				})
+			);
 		} catch (error) {
 			let storage = this._storage;
-			let isItemTooBig = storage.length === 0 ||
-					storage.length === 1 &&
-					storage.key(0) === key;
+			let isItemTooBig =
+				storage.length === 0 ||
+				(storage.length === 1 && storage.key(0) === key);
 
 			if (isItemTooBig) {
 				throw error;
@@ -147,14 +149,12 @@ export default class SessionStorage extends Storage {
  * @see https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Iteration_protocols
  */
 class StorageIterator {
-
 	/**
 	 * Initializes the DOM storage iterator.
 	 *
 	 * @param {Storage} storage The DOM storage to iterate through.
 	 */
 	constructor(storage) {
-
 		/**
 		 * The DOM storage being iterated.
 		 *

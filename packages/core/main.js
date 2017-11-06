@@ -40,16 +40,16 @@ function getClientBootConfig(initialAppConfigFunctions) {
 		if ($IMA.$Protocol !== root.location.protocol) {
 			throw new Error(
 				`Your client's protocol is not same as server's protocol. ` +
-				`For right setting protocol on the server site set ` +
-				`'X-Forwarded-Proto' header.`
+					`For right setting protocol on the server site set ` +
+					`'X-Forwarded-Proto' header.`
 			);
 		}
 
 		if ($IMA.$Host !== root.location.host) {
 			throw new Error(
 				`Your client's host is not same as server's host. For right ` +
-				`setting host on the server site set 'X-Forwarded-Host' ` +
-				`header.`
+					`setting host on the server site set 'X-Forwarded-Host' ` +
+					`header.`
 			);
 		}
 	}
@@ -147,13 +147,13 @@ function routeClientApp(app) {
 	return router
 		.listen()
 		.route(router.getPath())
-		.catch((error) => {
+		.catch(error => {
 			if (typeof $IMA.fatalErrorHandler === 'function') {
 				$IMA.fatalErrorHandler(error);
 			} else {
 				console.warn(
 					'Define function config.$IMA.fatalErrorHandler in ' +
-					'services.js.'
+						'services.js.'
 				);
 			}
 		});
@@ -172,15 +172,11 @@ function hotReloadClientApp(initialAppConfigFunctions) {
 	let pageManager = app.oc.get('$PageManager');
 	let currentRouteInfo = router.getCurrentRouteInfo();
 	let currentRoute = currentRouteInfo.route;
-	let currentRouteOptions = Object.assign(
-		{},
-		currentRoute.getOptions(),
-		{
-			onlyUpdate: false,
-			autoScroll: false,
-			allowSPA: false
-		}
-	);
+	let currentRouteOptions = Object.assign({}, currentRoute.getOptions(), {
+		onlyUpdate: false,
+		autoScroll: false,
+		allowSPA: false
+	});
 
 	router.listen();
 
@@ -192,16 +188,16 @@ function hotReloadClientApp(initialAppConfigFunctions) {
 				currentRouteOptions,
 				currentRouteInfo.params
 			)
-			.catch((error) => {
+			.catch(error => {
 				return router.handleError({ error });
 			})
-			.catch((error) => {
+			.catch(error => {
 				if (typeof $IMA.fatalErrorHandler === 'function') {
 					$IMA.fatalErrorHandler(error);
 				} else {
 					console.warn(
 						'Define the config.$IMA.fatalErrorHandler function ' +
-						'in services.js.'
+							'in services.js.'
 					);
 				}
 			});
@@ -250,7 +246,7 @@ function onLoad(callback) {
 	if ($IMA.$Debug && typeof callback === 'function') {
 		throw new Error(
 			`The onLoad method use promise pattern instead of callback ` +
-			`pattern. Update your app/main.js file.`
+				`pattern. Update your app/main.js file.`
 		);
 	}
 
@@ -260,28 +256,29 @@ function onLoad(callback) {
 		return Promise.reject(null);
 	}
 
-	return new Promise((resolve) => {
+	return new Promise((resolve, reject) => {
 		if (
-			(document.readyState === 'complete') ||
-			(document.readyState === 'interactive')
+			document.readyState === 'complete' ||
+			document.readyState === 'interactive'
 		) {
-			$IMA.Loader.initAllModules()
+			$IMA.Loader
+				.initAllModules()
 				.then(resolve)
-				.catch((error) => {
+				.catch(error => {
 					reject(error);
 				});
 		} else {
 			window.addEventListener('DOMContentLoaded', () => {
-				$IMA.Loader.initAllModules()
+				$IMA.Loader
+					.initAllModules()
 					.then(resolve)
-					.catch((error) => {
+					.catch(error => {
 						reject(error);
 					});
 			});
 		}
 	});
 }
-
 
 export {
 	getInitialImaConfigFunctions,

@@ -1,5 +1,4 @@
 import ns from '../namespace';
-import PageStateManager from '../page/state/PageStateManager';
 
 ns.namespace('ima.extension');
 
@@ -21,7 +20,6 @@ ns.namespace('ima.extension');
  * @interface
  */
 export default class Extension {
-
 	/**
 	 * Callback for initializing the controller extension after the route
 	 * parameters have been set on this extension.

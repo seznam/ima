@@ -4,13 +4,18 @@ import ServerWindow from 'window/ServerWindow';
 import CookieStorage from 'storage/CookieStorage';
 
 describe('ima.storage.CookieStorage', () => {
-
-	let cookieString = 'cok1=hello;Path=/;Expires=Fri, 31 Dec 9999 23:59:59 GMT; cok2=hello2;Path=/;Expires=Fri, 31 Dec 9999 23:59:59 GMT';
-	let setCookieString = 'cok3=hello3; Path=/; Expires=Fri, 31 Dec 9999 23:59:59 GMT';
-	let setCookieStringWithFirstLetterUppercase = 'Cok3=hello3; Path=/; Expires=Fri, 31 Dec 9999 23:59:59 GMT';
-	let setCookieStringWithDomain = 'cok3=hello3; Path=/; Domain=localhost:3001; Expires=Fri, 31 Dec 9999 23:59:59 GMT';
-	let setCookieStringWithComplex = 'cok3="hello3"; Domain=localhost:3001; Expires=Fri, 31 Dec 9999 23:59:59 GMT; HttpOnly; Secure; Path=/';
-	let setCookieStringWithMaxAge = 'cok3="hello3"; Domain=localhost:3001; Expires=Fri, 31 Dec 9999 23:59:59 GMT; Max-Age=5; HttpOnly; Secure; Path=/';
+	let cookieString =
+		'cok1=hello;Path=/;Expires=Fri, 31 Dec 9999 23:59:59 GMT; cok2=hello2;Path=/;Expires=Fri, 31 Dec 9999 23:59:59 GMT';
+	let setCookieString =
+		'cok3=hello3; Path=/; Expires=Fri, 31 Dec 9999 23:59:59 GMT';
+	let setCookieStringWithFirstLetterUppercase =
+		'Cok3=hello3; Path=/; Expires=Fri, 31 Dec 9999 23:59:59 GMT';
+	let setCookieStringWithDomain =
+		'cok3=hello3; Path=/; Domain=localhost:3001; Expires=Fri, 31 Dec 9999 23:59:59 GMT';
+	let setCookieStringWithComplex =
+		'cok3="hello3"; Domain=localhost:3001; Expires=Fri, 31 Dec 9999 23:59:59 GMT; HttpOnly; Secure; Path=/';
+	let setCookieStringWithMaxAge =
+		'cok3="hello3"; Domain=localhost:3001; Expires=Fri, 31 Dec 9999 23:59:59 GMT; Max-Age=5; HttpOnly; Secure; Path=/';
 	let cookiesStringForCookieHeader = 'cok1=hello; cok2=hello2';
 
 	let request = null;
@@ -35,13 +40,9 @@ describe('ima.storage.CookieStorage', () => {
 		request.init({});
 		response.init({}, transformFunction);
 
-		spyOn(request, 'getCookieHeader')
-			.and
-			.returnValue(cookieString);
+		spyOn(request, 'getCookieHeader').and.returnValue(cookieString);
 
-		spyOn(response, 'setCookie')
-			.and
-			.stub();
+		spyOn(response, 'setCookie').and.stub();
 
 		cookie.init({ secure: false }, transformFunction);
 	});
@@ -50,7 +51,6 @@ describe('ima.storage.CookieStorage', () => {
 		expect(request.getCookieHeader).toHaveBeenCalled();
 		expect(cookie._storage.size).toEqual(2);
 	});
-
 
 	it('should be has method, which return true for exist cookie other false', () => {
 		expect(cookie.has('cok1')).toBe(true);
@@ -92,19 +92,17 @@ describe('ima.storage.CookieStorage', () => {
 	});
 
 	it('should be get cookies string', () => {
-		spyOn(cookie._transformFunction, 'encode')
-			.and
-			.callThrough();
+		spyOn(cookie._transformFunction, 'encode').and.callThrough();
 
-		expect(cookie.getCookiesStringForCookieHeader()).toEqual(cookiesStringForCookieHeader);
+		expect(cookie.getCookiesStringForCookieHeader()).toEqual(
+			cookiesStringForCookieHeader
+		);
 		expect(cookie._transformFunction.encode.calls.count()).toEqual(2);
 	});
 
 	describe('set method', () => {
 		it('should set cookie as expired for undefined value', () => {
-			spyOn(cookie, '_getExpirationAsDate')
-				.and
-				.stub();
+			spyOn(cookie, '_getExpirationAsDate').and.stub();
 
 			cookie.set('cok2');
 
@@ -112,9 +110,7 @@ describe('ima.storage.CookieStorage', () => {
 		});
 
 		it('should prefer maxAge before expires', () => {
-			spyOn(cookie, '_getExpirationAsDate')
-				.and
-				.stub();
+			spyOn(cookie, '_getExpirationAsDate').and.stub();
 
 			cookie.set('cok2', 'val2', { expires: new Date(), maxAge: 5 });
 
@@ -122,33 +118,37 @@ describe('ima.storage.CookieStorage', () => {
 		});
 
 		it('should set session cookie', () => {
-			spyOn(cookie, '_getExpirationAsDate')
-				.and
-				.stub();
+			spyOn(cookie, '_getExpirationAsDate').and.stub();
 
 			cookie.set('cok2', 'val2');
 
 			expect(cookie._getExpirationAsDate).not.toHaveBeenCalled();
 		});
-
 	});
 
 	describe('parseFromSetCookieHeader method', () => {
-
 		it('should parse cookie from Set-Cookie header string', () => {
 			spyOn(cookie, 'set');
 
 			cookie.parseFromSetCookieHeader(setCookieString);
 
-			expect(cookie.set).toHaveBeenCalledWith('cok3', 'hello3', { expires: new Date('Fri, 31 Dec 9999 23:59:59 UTC'), path: '/' });
+			expect(cookie.set).toHaveBeenCalledWith('cok3', 'hello3', {
+				expires: new Date('Fri, 31 Dec 9999 23:59:59 UTC'),
+				path: '/'
+			});
 		});
 
 		it('should parse cookie from Set-Cookie header string for cookie name with first letter uppercase', () => {
 			spyOn(cookie, 'set');
 
-			cookie.parseFromSetCookieHeader(setCookieStringWithFirstLetterUppercase);
+			cookie.parseFromSetCookieHeader(
+				setCookieStringWithFirstLetterUppercase
+			);
 
-			expect(cookie.set).toHaveBeenCalledWith('Cok3', 'hello3', { expires: new Date('Fri, 31 Dec 9999 23:59:59 UTC'), path: '/' });
+			expect(cookie.set).toHaveBeenCalledWith('Cok3', 'hello3', {
+				expires: new Date('Fri, 31 Dec 9999 23:59:59 UTC'),
+				path: '/'
+			});
 		});
 
 		it('should parse cookie from Set-Cookie header string with defined domain', () => {
@@ -156,7 +156,11 @@ describe('ima.storage.CookieStorage', () => {
 
 			cookie.parseFromSetCookieHeader(setCookieStringWithDomain);
 
-			expect(cookie.set).toHaveBeenCalledWith('cok3', 'hello3', { expires: new Date('Fri, 31 Dec 9999 23:59:59 UTC'), path: '/', domain: 'localhost:3001' });
+			expect(cookie.set).toHaveBeenCalledWith('cok3', 'hello3', {
+				expires: new Date('Fri, 31 Dec 9999 23:59:59 UTC'),
+				path: '/',
+				domain: 'localhost:3001'
+			});
 		});
 
 		it('should parse cookie from Set-Cookie header string with complex options', () => {
@@ -164,7 +168,13 @@ describe('ima.storage.CookieStorage', () => {
 
 			cookie.parseFromSetCookieHeader(setCookieStringWithComplex);
 
-			expect(cookie.set).toHaveBeenCalledWith('cok3', 'hello3', { expires: new Date('Fri, 31 Dec 9999 23:59:59 UTC'), httpOnly: true, secure: true, path: '/', domain: 'localhost:3001' });
+			expect(cookie.set).toHaveBeenCalledWith('cok3', 'hello3', {
+				expires: new Date('Fri, 31 Dec 9999 23:59:59 UTC'),
+				httpOnly: true,
+				secure: true,
+				path: '/',
+				domain: 'localhost:3001'
+			});
 		});
 
 		it('should parse cookie from Set-Cookie header string with Max-Age option', () => {
@@ -172,29 +182,39 @@ describe('ima.storage.CookieStorage', () => {
 
 			cookie.parseFromSetCookieHeader(setCookieStringWithMaxAge);
 
-			expect(cookie.set).toHaveBeenCalledWith('cok3', 'hello3', { expires: new Date('Fri, 31 Dec 9999 23:59:59 UTC'), maxAge: 5, httpOnly: true, secure: true, path: '/', domain: 'localhost:3001' });
-		});
-
-	});
-
-	describe('should get expires date', () => {
-		using([
-			1,
-			2,
-			1000,
-			Infinity,
-			null,
-			'Fri, 31 Dec 2000 23:59:59 GMT',
-			new Date('Fri, 31 Dec 2000 23:59:59 GMT')
-		], (value) => {
-			it('for value ' + value, () => {
-				expect(cookie._getExpirationAsDate(value) instanceof Date).toEqual(true);
+			expect(cookie.set).toHaveBeenCalledWith('cok3', 'hello3', {
+				expires: new Date('Fri, 31 Dec 9999 23:59:59 UTC'),
+				maxAge: 5,
+				httpOnly: true,
+				secure: true,
+				path: '/',
+				domain: 'localhost:3001'
 			});
 		});
 	});
 
-	describe('_sanitizeCookieValue method', () => {
+	describe('should get expires date', () => {
+		using(
+			[
+				1,
+				2,
+				1000,
+				Infinity,
+				null,
+				'Fri, 31 Dec 2000 23:59:59 GMT',
+				new Date('Fri, 31 Dec 2000 23:59:59 GMT')
+			],
+			value => {
+				it('for value ' + value, () => {
+					expect(
+						cookie._getExpirationAsDate(value) instanceof Date
+					).toEqual(true);
+				});
+			}
+		);
+	});
 
+	describe('_sanitizeCookieValue method', () => {
 		beforeEach(() => {
 			$Debug = false;
 		});
@@ -203,17 +223,27 @@ describe('ima.storage.CookieStorage', () => {
 			$Debug = true;
 		});
 
-		using([
-			{ value: '1', sanitizedValue: '1' },
-			{ value: '7|AABBCCD===', sanitizedValue: '7|AABBCCD===' },
-			{ value: '7|AABBCCD=== ', sanitizedValue: '7|AABBCCD===' },
-			{ value: undefined + '', sanitizedValue: 'undefined' }
-		], (item) => {
-			it('should return ' + item.sanitizedValue + 'for value ' + item.value, () => {
-				expect(cookie._sanitizeCookieValue(item.value)).toEqual(item.sanitizedValue);
-			});
-		});
-
+		using(
+			[
+				{ value: '1', sanitizedValue: '1' },
+				{ value: '7|AABBCCD===', sanitizedValue: '7|AABBCCD===' },
+				{ value: '7|AABBCCD=== ', sanitizedValue: '7|AABBCCD===' },
+				{ value: undefined + '', sanitizedValue: 'undefined' }
+			],
+			item => {
+				it(
+					'should return ' +
+						item.sanitizedValue +
+						'for value ' +
+						item.value,
+					() => {
+						expect(cookie._sanitizeCookieValue(item.value)).toEqual(
+							item.sanitizedValue
+						);
+					}
+				);
+			}
+		);
 	});
 
 	describe('_recomputeCookieMaxAgeAndExpires', () => {

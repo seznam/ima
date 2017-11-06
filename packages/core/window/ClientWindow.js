@@ -9,7 +9,6 @@ ns.namespace('ima.window');
  * Client-side implementation of the {@code Window} utility API.
  */
 export default class ClientWindow extends Window {
-
 	static get $dependencies() {
 		return [];
 	}
@@ -53,42 +52,8 @@ export default class ClientWindow extends Window {
 	/**
 	 * @inheritdoc
 	 */
-	hasWebSocket() {
-		console.warn(
-			'DEPRECATION WARNING: All browsers currently supported by ' +
-			'IMA.js support web sockets.'
-		);
-		return window.WebSocket;
-	}
-
-	/**
-	 * @inheritdoc
-	 */
-	hasHistoryAPI() {
-		console.warn(
-			'DEPRECATION WARNING: The history API should never be ' +
-			'manipulated directly in an IMA.js application, and all ' +
-			'browsers supported by IMA.js support the history API.'
-		);
-		return !!window.history && !!window.history.pushState;
-	}
-
-	/**
-	 * @inheritdoc
-	 */
 	setTitle(title) {
 		document.title = title;
-	}
-
-	/**
-	 * @inheritdoc
-	 */
-	getWebSocket() {
-		console.warn(
-			'DEPRECATION WARNING: All browsers currently supported by ' +
-			'IMA.js support web sockets, this helper should not be used.'
-		);
-		return window.WebSocket;
 	}
 
 	/**
@@ -112,12 +77,11 @@ export default class ClientWindow extends Window {
 		let pageOffsetSupported = window.pageXOffset !== undefined;
 		let isCSS1Compatible = (document.compatMode || '') === 'CSS1Compat';
 
-		return pageOffsetSupported ? window.pageXOffset :
-				(
-					isCSS1Compatible ?
-					document.documentElement.scrollLeft :
-					document.body.scrollLeft
-				);
+		return pageOffsetSupported
+			? window.pageXOffset
+			: isCSS1Compatible
+				? document.documentElement.scrollLeft
+				: document.body.scrollLeft;
 	}
 
 	/**
@@ -127,12 +91,11 @@ export default class ClientWindow extends Window {
 		let pageOffsetSupported = window.pageYOffset !== undefined;
 		let isCSS1Compatible = (document.compatMode || '') === 'CSS1Compat';
 
-		return pageOffsetSupported ? window.pageYOffset :
-				(
-					isCSS1Compatible ?
-					document.documentElement.scrollTop :
-					document.body.scrollTop
-				);
+		return pageOffsetSupported
+			? window.pageYOffset
+			: isCSS1Compatible
+				? document.documentElement.scrollTop
+				: document.body.scrollTop;
 	}
 
 	/**

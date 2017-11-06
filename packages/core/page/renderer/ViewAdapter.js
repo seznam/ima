@@ -9,7 +9,6 @@ ns.namespace('ima.page.renderer');
  * page view component through its properties.
  */
 export default class ViewAdapter extends React.Component {
-
 	/**
 	 * @inheritdoc
 	 * @return {{$Utils: function(*): ?Error}}

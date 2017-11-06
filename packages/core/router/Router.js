@@ -1,8 +1,4 @@
 import ns from '../namespace';
-import Route from './Route';
-import Controller from '../controller/Controller';
-import ImaError from '../error/Error';
-import AbstractDocumentView from '../page/AbstractDocumentView';
 
 ns.namespace('ima.router');
 
@@ -13,7 +9,6 @@ ns.namespace('ima.router');
  * @interface
  */
 export default class Router {
-
 	/**
 	 * Initializes the router with the provided configuration.
 	 *

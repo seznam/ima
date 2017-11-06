@@ -4,7 +4,7 @@
 	"description": "IMA.js framework for isomorphic javascript application",
 	"main": "main.js",
 	"scripts": {
-		"lint": "node_modules/.bin/eslint --fix './**/*.{js,jsx}'",
+		"lint": "node_modules/.bin/eslint -c ./.eslintrc.js --fix './**/*.{js,jsx}' --ignore-pattern /coverage /doc",
 		"test": "node_modules/.bin/jest",
 		"publish-package": "npm test && npm run lint && npm run build && npm publish dist",
 		"build": "node node_modules/gulp/bin/gulp.js build"

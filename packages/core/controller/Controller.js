@@ -1,9 +1,4 @@
 import ns from '../namespace';
-import Dictionary from '../dictionary/Dictionary';
-import Extension from '../extension/Extension';
-import MetaManager from '../meta/MetaManager';
-import PageStateManager from '../page/state/PageStateManager';
-import Router from '../router/Router';
 
 ns.namespace('ima.controller');
 
@@ -16,7 +11,6 @@ ns.namespace('ima.controller');
  * @interface
  */
 export default class Controller {
-
 	/**
 	 * Callback for initializing the controller after the route parameters have
 	 * been set on this controller.

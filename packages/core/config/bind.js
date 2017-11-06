@@ -10,7 +10,7 @@ import EventBus from '../event/EventBus';
 import EventBusImpl from '../event/EventBusImpl';
 import Dispatcher from '../event/Dispatcher';
 import DispatcherImpl from '../event/DispatcherImpl';
-import AbstractExtension from '../extension/AbstractExtension';
+import AbstractExtension from '../extension/AbstractExtension'; //eslint-disable-line no-unused-vars
 import GenericError from '../error/GenericError';
 import HttpAgent from '../http/HttpAgent';
 import HttpAgentImpl from '../http/HttpAgentImpl';
@@ -20,8 +20,8 @@ import UrlTransformer from '../http/UrlTransformer';
 import MetaManager from '../meta/MetaManager';
 import MetaManagerImpl from '../meta/MetaManagerImpl';
 import { defaultCssClasses as cssClassNameProcessor } from '../page/componentHelpers';
-import AbstractComponent from '../page/AbstractComponent';
-import AbstractPureComponent from '../page/AbstractPureComponent';
+import AbstractComponent from '../page/AbstractComponent'; //eslint-disable-line no-unused-vars
+import AbstractPureComponent from '../page/AbstractPureComponent'; //eslint-disable-line no-unused-vars
 import PageFactory from '../page/PageFactory';
 import ClientPageManager from '../page/manager/ClientPageManager';
 import PageManager from '../page/manager/PageManager';
@@ -51,7 +51,6 @@ import ServerWindow from '../window/ServerWindow';
 import Window from '../window/Window';
 
 export default (ns, oc, config) => {
-
 	//**************START VENDORS**************
 
 	oc.constant('$Helper', vendorLinker.get('ima-helpers', true));
@@ -59,9 +58,11 @@ export default (ns, oc, config) => {
 	//React
 	oc.constant('$React', vendorLinker.get('react', true));
 	oc.constant('$ReactDOM', vendorLinker.get('react-dom', true));
-	oc.constant('$ReactDOMServer', vendorLinker.get('react-dom/server.js', true));
+	oc.constant(
+		'$ReactDOMServer',
+		vendorLinker.get('react-dom/server.js', true)
+	);
 	//*************END VENDORS*****************
-
 
 	//*************START CONSTANTS*****************
 	oc.constant('$Settings', config);
@@ -70,7 +71,6 @@ export default (ns, oc, config) => {
 	oc.constant('$Secure', config.$Protocol === 'https:');
 	//*************END CONSTANTS*****************
 
-
 	//*************START IMA**************
 
 	//Request & Response
@@ -78,7 +78,7 @@ export default (ns, oc, config) => {
 	oc.bind('$Response', Response);
 
 	//Window helper
-	if ((typeof window !== 'undefined') && (window !== null)) {
+	if (typeof window !== 'undefined' && window !== null) {
 		oc.provide(Window, ClientWindow);
 	} else {
 		oc.provide(Window, ServerWindow);
@@ -93,7 +93,7 @@ export default (ns, oc, config) => {
 	oc.bind('$Dictionary', Dictionary);
 
 	//Storage
-	oc.constant('$CookieTransformFunction', { encode: (s) => s, decode: (s) => s });
+	oc.constant('$CookieTransformFunction', { encode: s => s, decode: s => s });
 	oc.bind('$CookieStorage', CookieStorage);
 	if (oc.get(Window).hasSessionStorage()) {
 		oc.bind('$SessionStorage', SessionStorage);
@@ -101,12 +101,14 @@ export default (ns, oc, config) => {
 		oc.bind('$SessionStorage', MapStorage);
 	}
 	oc.bind('$MapStorage', MapStorage);
-	oc.inject(WeakMapStorage, [{
-		entryTtl: 30 * 60 * 1000,
-		maxEntries: 1000,
-		gcInterval: 60 * 1000,
-		gcEntryCountTreshold: 16
-	}]);
+	oc.inject(WeakMapStorage, [
+		{
+			entryTtl: 30 * 60 * 1000,
+			maxEntries: 1000,
+			gcInterval: 60 * 1000,
+			gcEntryCountTreshold: 16
+		}
+	]);
 	oc.bind('$WeakMapStorage', WeakMapStorage);
 	oc.bind('$SessionMapStorage', SessionMapStorage);
 
@@ -125,7 +127,12 @@ export default (ns, oc, config) => {
 		oc.constant('$CacheStorage', oc.get(MapStorage));
 	}
 	oc.bind('$CacheFactory', CacheFactory);
-	oc.provide(Cache, CacheImpl, ['$CacheStorage', CacheFactory, '$Helper', config.$Cache]);
+	oc.provide(Cache, CacheImpl, [
+		'$CacheStorage',
+		CacheFactory,
+		'$Helper',
+		config.$Cache
+	]);
 	oc.bind('$Cache', Cache);
 
 	//SEO
@@ -135,7 +142,9 @@ export default (ns, oc, config) => {
 	oc.bind('$PageStateManagerDecorator', PageStateManagerDecorator);
 
 	// UI components
-	oc.bind('$CssClasses', function() { return cssClassNameProcessor });
+	oc.bind('$CssClasses', function() {
+		return cssClassNameProcessor;
+	});
 
 	//Page
 	oc.provide(PageStateManager, PageStateManagerImpl);
@@ -146,9 +155,22 @@ export default (ns, oc, config) => {
 	oc.bind('$PageRendererFactory', PageRendererFactory);
 
 	if (oc.get(Window).isClient()) {
-		oc.provide(PageRenderer, ClientPageRenderer, [PageRendererFactory, '$Helper', '$ReactDOM', '$Settings', Window]);
+		oc.provide(PageRenderer, ClientPageRenderer, [
+			PageRendererFactory,
+			'$Helper',
+			'$ReactDOM',
+			'$Settings',
+			Window
+		]);
 	} else {
-		oc.provide(PageRenderer, ServerPageRenderer, [PageRendererFactory, '$Helper', '$ReactDOMServer', '$Settings', Response, Cache]);
+		oc.provide(PageRenderer, ServerPageRenderer, [
+			PageRendererFactory,
+			'$Helper',
+			'$ReactDOMServer',
+			'$Settings',
+			Response,
+			Cache
+		]);
 	}
 	oc.bind('$PageRenderer', PageRenderer);
 
@@ -174,7 +196,12 @@ export default (ns, oc, config) => {
 	//Http agent
 	oc.bind('$HttpUrlTransformer', UrlTransformer);
 	oc.bind('$HttpAgentProxy', HttpProxy, ['$HttpUrlTransformer', '$Window']);
-	oc.provide(HttpAgent, HttpAgentImpl, ['$HttpAgentProxy', '$Cache', CookieStorage, config.$Http]);
+	oc.provide(HttpAgent, HttpAgentImpl, [
+		'$HttpAgentProxy',
+		'$Cache',
+		CookieStorage,
+		config.$Http
+	]);
 	oc.bind('$Http', HttpAgent);
 	oc.constant('$HttpStatusCode', HttpStatusCode);
 
@@ -182,5 +209,4 @@ export default (ns, oc, config) => {
 	oc.bind('$DevTool', DevTool);
 
 	//*************END IMA****************
-
 };

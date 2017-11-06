@@ -3,10 +3,9 @@ import StatusCode from 'http/StatusCode';
 import UrlTransformer from 'http/UrlTransformer';
 import { toMockedInstance } from 'to-mock';
 import Window from 'window/Window';
-import GenericError from "../../error/GenericError";
+import GenericError from '../../error/GenericError';
 
 describe('ima.http.HttpProxy', () => {
-
 	const API_URL = 'http://localhost:3001/api/';
 	const OPTIONS = {
 		ttl: 3600000,
@@ -40,27 +39,18 @@ describe('ima.http.HttpProxy', () => {
 			body: { data: 'some data' }
 		};
 		fetchResult = Promise.resolve(response);
-		spyOn(proxy, '_getFetchApi')
-			.and
-			.callFake(() => (_, init) => {
-				requestInit = init;
+		spyOn(proxy, '_getFetchApi').and.callFake(() => (_, init) => {
+			requestInit = init;
 
-				return fetchResult;
-			});
+			return fetchResult;
+		});
 	});
 
-	[
-		'get',
-		'head',
-		'post',
-		'put',
-		'delete',
-		'patch'
-	].forEach(method => {
-		describe(`method ${ method }`, () => {
+	['get', 'head', 'post', 'put', 'delete', 'patch'].forEach(method => {
+		describe(`method ${method}`, () => {
 			it('should return promise with response body', async done => {
 				try {
-					const result = await proxy.request(method, API_URL, DATA, OPTIONS);
+					await proxy.request(method, API_URL, DATA, OPTIONS);
 					done();
 				} catch (error) {
 					done.fail(error);
@@ -94,7 +84,9 @@ describe('ima.http.HttpProxy', () => {
 					await proxy.request(method, API_URL, DATA, OPTIONS);
 					done.fail();
 				} catch (error) {
-					expect(error.getParams().status).toEqual(StatusCode.TIMEOUT);
+					expect(error.getParams().status).toEqual(
+						StatusCode.TIMEOUT
+					);
 					done();
 				}
 			});
@@ -102,17 +94,17 @@ describe('ima.http.HttpProxy', () => {
 			it('should be timeouted for longer request then options.timeout', async done => {
 				jest.useFakeTimers();
 
-				proxy._getFetchApi
-					.and
-					.callFake(() => {
-						jest.runOnlyPendingTimers();
-					});
+				proxy._getFetchApi.and.callFake(() => {
+					jest.runOnlyPendingTimers();
+				});
 
 				try {
 					await proxy.request(method, API_URL, DATA, OPTIONS);
 					done.fail();
 				} catch (error) {
-					expect(error.getParams().status).toEqual(StatusCode.TIMEOUT);
+					expect(error.getParams().status).toEqual(
+						StatusCode.TIMEOUT
+					);
 					done();
 				}
 			});
@@ -127,7 +119,9 @@ describe('ima.http.HttpProxy', () => {
 					await proxy.request(method, API_URL, DATA, OPTIONS);
 					done.fail();
 				} catch (error) {
-					expect(error.getParams().status).toEqual(StatusCode.FORBIDDEN);
+					expect(error.getParams().status).toEqual(
+						StatusCode.FORBIDDEN
+					);
 					done();
 				}
 			});
@@ -142,7 +136,9 @@ describe('ima.http.HttpProxy', () => {
 					await proxy.request(method, API_URL, DATA, OPTIONS);
 					done.fail();
 				} catch (error) {
-					expect(error.getParams().status).toEqual(StatusCode.NOT_FOUND);
+					expect(error.getParams().status).toEqual(
+						StatusCode.NOT_FOUND
+					);
 					done();
 				}
 			});
@@ -157,7 +153,9 @@ describe('ima.http.HttpProxy', () => {
 					await proxy.request(method, API_URL, DATA, OPTIONS);
 					done.fail();
 				} catch (error) {
-					expect(error.getParams().status).toEqual(StatusCode.SERVER_ERROR);
+					expect(error.getParams().status).toEqual(
+						StatusCode.SERVER_ERROR
+					);
 					done();
 				}
 			});
@@ -170,9 +168,11 @@ describe('ima.http.HttpProxy', () => {
 
 				try {
 					await proxy.request(method, API_URL, DATA, OPTIONS);
-					done.fail()
+					done.fail();
 				} catch (error) {
-					expect(error.getParams().status).toEqual(StatusCode.SERVER_ERROR);
+					expect(error.getParams().status).toEqual(
+						StatusCode.SERVER_ERROR
+					);
 					done();
 				}
 			});
@@ -199,7 +199,12 @@ describe('ima.http.HttpProxy', () => {
 
 			it('should return null body for HTTP status NO_CONTENT', async () => {
 				response.status = StatusCode.NO_CONTENT;
-				const result = await proxy.request(method, API_URL, DATA, OPTIONS);
+				const result = await proxy.request(
+					method,
+					API_URL,
+					DATA,
+					OPTIONS
+				);
 				expect(result.body).toBeNull();
 			});
 		});

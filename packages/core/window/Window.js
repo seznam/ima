@@ -10,7 +10,6 @@ ns.namespace('ima.window');
  * @interface
  */
 export default class Window {
-
 	/**
 	 * Returns {@code true} if invoked at the client side.
 	 *
@@ -33,26 +32,6 @@ export default class Window {
 	 * @return {boolean} {@code true} if the session storage is supported.
 	 */
 	hasSessionStorage() {}
-
-	/**
-	 * Returns {@code true} if the WebSockets are supported.
-	 *
-	 * @deprecated All browsers currently supported by IMA.js support web
-	 *             sockets.
-	 * @return {boolean} {@code true} if the WebSockets are supported.
-	 */
-	hasWebSocket() {}
-
-	/**
-	 * Returns {@code true} if the history manipulation API is supported.
-	 *
-	 * @deprecated The history API should never be manipulated directly in an
-	 *             IMA.js application, and all browsers supported by IMA.js
-	 *             support the history API.
-	 * @return {boolean} {@code true} if the history manipulation API is
-	 *         supported.
-	 */
-	hasHistoryAPI() {}
 
 	/**
 	 * Sets the new page title of the document.

@@ -1,7 +1,5 @@
 import ns from '../namespace';
 import Route from './Route';
-import Controller from '../controller/Controller';
-import AbstractDocumentView from '../page/AbstractDocumentView';
 
 ns.namespace('ima.router');
 
@@ -9,7 +7,6 @@ ns.namespace('ima.router');
  * Utility factory used by router to create routes.
  */
 export default class RouteFactory {
-
 	static get $dependencies() {
 		return [];
 	}
@@ -46,13 +43,7 @@ export default class RouteFactory {
 	 * @return {Route} The constructed route.
 	 */
 	createRoute(name, pathExpression, controller, view, options) {
-		return new Route(
-			name,
-			pathExpression,
-			controller,
-			view,
-			options
-		);
+		return new Route(name, pathExpression, controller, view, options);
 	}
 }
 

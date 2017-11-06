@@ -22,7 +22,6 @@ export const IMA_EVENT = '$IMA.CustomEvent';
  * catching events (e.g. inside view components).
  */
 export default class EventBusImpl extends EventBus {
-
 	static get $dependencies() {
 		return [Window];
 	}
@@ -84,8 +83,8 @@ export default class EventBusImpl extends EventBus {
 		} else {
 			throw new GenericError(
 				`ima.event.EventBusImpl.fire: The EventSource ` +
-				`${eventTarget} is not defined or can not dispatch event ` +
-				`'${eventName}' (data: ${data}).`,
+					`${eventTarget} is not defined or can not dispatch event ` +
+					`'${eventName}' (data: ${data}).`,
 				{ eventTarget, eventName, data, eventInitialization }
 			);
 		}
@@ -121,7 +120,7 @@ export default class EventBusImpl extends EventBus {
 		}
 
 		var eventNameToNativeListener = targetToEventName.get(eventTarget);
-		var nativeListener = (event) => {
+		var nativeListener = event => {
 			if (event.detail.eventName === eventName) {
 				listener(event);
 			}
@@ -140,8 +139,8 @@ export default class EventBusImpl extends EventBus {
 		this._window.unbindEventListener(eventTarget, IMA_EVENT, listener);
 
 		var listenerRegistered =
-				this._allEventListeners.has(eventTarget) &&
-				this._allEventListeners.get(eventTarget).has(listener);
+			this._allEventListeners.has(eventTarget) &&
+			this._allEventListeners.get(eventTarget).has(listener);
 		if (listenerRegistered) {
 			this._allEventListeners.get(eventTarget).delete(listener);
 		}
@@ -150,7 +149,7 @@ export default class EventBusImpl extends EventBus {
 			if (!listenerRegistered) {
 				console.warn(
 					'The provided listener is not registered on the ' +
-					'specified event target'
+						'specified event target'
 				);
 			}
 		}
@@ -166,7 +165,7 @@ export default class EventBusImpl extends EventBus {
 			if ($Debug) {
 				console.warn(
 					'The provided listener is not bound to listen for the ' +
-					'specified event on the specified event target.'
+						'specified event on the specified event target.'
 				);
 			}
 
@@ -178,7 +177,7 @@ export default class EventBusImpl extends EventBus {
 			if ($Debug) {
 				console.warn(
 					'The provided listener is not bound to listen for the ' +
-					'specified event on the specified event target.'
+						'specified event on the specified event target.'
 				);
 			}
 
@@ -190,7 +189,7 @@ export default class EventBusImpl extends EventBus {
 			if ($Debug) {
 				console.warn(
 					'The provided listener is not bound to listen for the ' +
-					'specified event on the specified event target.'
+						'specified event on the specified event target.'
 				);
 			}
 

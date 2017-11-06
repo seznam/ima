@@ -1,25 +1,21 @@
-import MapStorage from 'storage/MapStorage';
 import SessionStorage from 'storage/SessionStorage';
 import Window from 'window/Window';
 
 describe('ima.storage.SessionStorage', () => {
-
 	let session;
 	let window;
 	let sessionStorage = {
 		_storage: new Map(),
 		setItem: (key, value) => sessionStorage._storage.set(key, value),
-		getItem: (key) => sessionStorage._storage.get(key),
-		removeItem: (key) => sessionStorage._storage.delete(key),
+		getItem: key => sessionStorage._storage.get(key),
+		removeItem: key => sessionStorage._storage.delete(key),
 		clear: () => sessionStorage._storage.clear()
 	};
 
 	beforeEach(() => {
 		window = new Window();
 
-		spyOn(window, 'getWindow')
-			.and
-			.returnValue({ sessionStorage });
+		spyOn(window, 'getWindow').and.returnValue({ sessionStorage });
 
 		session = new SessionStorage(window);
 

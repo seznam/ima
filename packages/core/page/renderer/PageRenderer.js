@@ -1,6 +1,4 @@
 import ns from '../../namespace';
-import AbstractDocumentView from '../AbstractDocumentView';
-import Controller from '../../controller/Controller';
 
 ns.namespace('ima.page.renderer');
 

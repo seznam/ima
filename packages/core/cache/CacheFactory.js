@@ -7,7 +7,6 @@ ns.namespace('ima.cache');
  * Factory for creating instances of {@linkcode CacheEntry}.
  */
 export default class CacheFactory {
-
 	static get $dependencies() {
 		return [];
 	}

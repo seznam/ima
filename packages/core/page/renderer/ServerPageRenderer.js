@@ -1,18 +1,13 @@
 import ns from '../../namespace';
 import AbstractPageRenderer from './AbstractPageRenderer';
-import PageRenderer from './PageRenderer';
-import PageRendererFactory from './PageRendererFactory';
-import Cache from '../../cache/Cache';
-import AbstractController from '../../controller/AbstractController';
 import GenericError from '../../error/GenericError';
-import Response from '../../router/Response';
 
 ns.namespace('ima.page.renderer');
 
 let imaLoader = '';
 let imaRunner = '';
 
-if ((typeof window === 'undefined') || (window === null)) {
+if (typeof window === 'undefined' || window === null) {
 	let nodeFs = 'fs';
 	let nodePath = 'path';
 	let fs = require(nodeFs);
@@ -35,7 +30,6 @@ if ((typeof window === 'undefined') || (window === null)) {
  * @submodule ima.page
  */
 export default class ServerPageRenderer extends AbstractPageRenderer {
-
 	/**
 	 * Initializes the server-side page renderer.
 	 *
@@ -70,7 +64,6 @@ export default class ServerPageRenderer extends AbstractPageRenderer {
 		 * @type {Cache}
 		 */
 		this._cache = cache;
-
 	}
 
 	/**
@@ -85,12 +78,9 @@ export default class ServerPageRenderer extends AbstractPageRenderer {
 
 		return this._Helper
 			.allPromiseHash(pageResources)
-			.then(pageState => this._renderPage(
-				controller,
-				view,
-				pageState,
-				routeOptions
-			));
+			.then(pageState =>
+				this._renderPage(controller, view, pageState, routeOptions)
+			);
 	}
 
 	/**
@@ -98,9 +88,9 @@ export default class ServerPageRenderer extends AbstractPageRenderer {
 	 * @method update
 	 */
 	update(controller, resourcesUpdate) {
-		return Promise.reject(new GenericError(
-			'The update() is denied on server side.'
-		));
+		return Promise.reject(
+			new GenericError('The update() is denied on server side.')
+		);
 	}
 
 	/**
@@ -119,8 +109,7 @@ export default class ServerPageRenderer extends AbstractPageRenderer {
 	 *         rendered page.
 	 */
 	_getRevivalSettings() {
-		return (
-			`
+		return `
 			(function(root) {
 				root.$Debug = ${this._settings.$Debug};
 				root.$IMA = root.$IMA || {};
@@ -138,8 +127,7 @@ export default class ServerPageRenderer extends AbstractPageRenderer {
 			})(typeof window !== 'undefined' && window !== null ? window : global);
 			${imaRunner}
 			${imaLoader}
-			`
-		);
+			`;
 	}
 
 	/**
@@ -188,11 +176,13 @@ export default class ServerPageRenderer extends AbstractPageRenderer {
 			this._response
 				.status(controller.getHttpStatus())
 				.setPageState(pageState)
-				.send(this._renderPageContentToString(
-					controller,
-					view,
-					routeOptions
-				));
+				.send(
+					this._renderPageContentToString(
+						controller,
+						view,
+						routeOptions
+					)
+				);
 		}
 
 		return this._response.getResponseParams();
@@ -215,13 +205,17 @@ export default class ServerPageRenderer extends AbstractPageRenderer {
 		let pageMarkup = this._ReactDOM.renderToString(reactElementView);
 
 		let documentView = this._getDocumentView(routeOptions);
-		let documentViewFactory = this._factory.createReactElementFactory(documentView);
-		let appMarkup = this._ReactDOM.renderToStaticMarkup(documentViewFactory({
-			page: pageMarkup,
-			revivalSettings: this._getRevivalSettings(),
-			metaManager: controller.getMetaManager(),
-			$Utils: this._factory.getUtils()
-		}));
+		let documentViewFactory = this._factory.createReactElementFactory(
+			documentView
+		);
+		let appMarkup = this._ReactDOM.renderToStaticMarkup(
+			documentViewFactory({
+				page: pageMarkup,
+				revivalSettings: this._getRevivalSettings(),
+				metaManager: controller.getMetaManager(),
+				$Utils: this._factory.getUtils()
+			})
+		);
 
 		return '<!doctype html>\n' + appMarkup;
 	}

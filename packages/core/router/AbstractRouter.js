@@ -1,14 +1,8 @@
 import ns from '../namespace';
-import RouteFactory from './RouteFactory';
 import Events from './Events';
-import Route from './Route';
 import Router from './Router';
 import RouteNames from './RouteNames';
-import Controller from '../controller/Controller';
 import GenericError from '../error/GenericError';
-import Dispatcher from '../event/Dispatcher';
-import AbstractDocumentView from '../page/AbstractDocumentView';
-import PageManager from '../page/manager/PageManager';
 
 ns.namespace('ima.router');
 
@@ -19,7 +13,6 @@ ns.namespace('ima.router');
  * @abstract
  */
 export default class AbstractRouter extends Router {
-
 	/**
 	 * Initializes the router.
 	 *
@@ -125,7 +118,7 @@ export default class AbstractRouter extends Router {
 		if (this._routes.has(name)) {
 			throw new GenericError(
 				`ima.router.AbstractRouter.add: The route with name ${name} ` +
-				`is already defined`
+					`is already defined`
 			);
 		}
 
@@ -205,7 +198,7 @@ export default class AbstractRouter extends Router {
 		if (!route) {
 			throw new GenericError(
 				`ima.router.AbstractRouter.getCurrentRouteInfo: The route ` +
-				`for path ${path} is not defined.`
+					`for path ${path} is not defined.`
 			);
 		}
 
@@ -243,7 +236,7 @@ export default class AbstractRouter extends Router {
 		if (!route) {
 			throw new GenericError(
 				`ima.router.AbstractRouter:link has undefined route with ` +
-				`name ${routeName}. Add new route with that name.`
+					`name ${routeName}. Add new route with that name.`
 			);
 		}
 
@@ -280,8 +273,8 @@ export default class AbstractRouter extends Router {
 		if (!routeError) {
 			let error = new GenericError(
 				`ima.router.AbstractRouter:handleError cannot process the ` +
-				`error because no error page route has been configured. Add ` +
-				`a new route named '${RouteNames.ERROR}'.`,
+					`error because no error page route has been configured. Add ` +
+					`a new route named '${RouteNames.ERROR}'.`,
 				params
 			);
 
@@ -300,9 +293,9 @@ export default class AbstractRouter extends Router {
 		if (!routeNotFound) {
 			let error = new GenericError(
 				`ima.router.AbstractRouter:handleNotFound cannot processes ` +
-				`a non-matching route because no not found page route has ` +
-				`been configured. Add new route named ` +
-				`'${RouteNames.NOT_FOUND}'.`,
+					`a non-matching route because no not found page route has ` +
+					`been configured. Add new route named ` +
+					`'${RouteNames.NOT_FOUND}'.`,
 				params
 			);
 
@@ -316,18 +309,22 @@ export default class AbstractRouter extends Router {
 	 * @inheritdoc
 	 */
 	isClientError(reason) {
-		return reason instanceof GenericError &&
-				reason.getHttpStatus() >= 400 &&
-				reason.getHttpStatus() < 500;
+		return (
+			reason instanceof GenericError &&
+			reason.getHttpStatus() >= 400 &&
+			reason.getHttpStatus() < 500
+		);
 	}
 
 	/**
 	 * @inheritdoc
 	 */
 	isRedirection(reason) {
-		return reason instanceof GenericError &&
-				reason.getHttpStatus() >= 300 &&
-				reason.getHttpStatus() < 400;
+		return (
+			reason instanceof GenericError &&
+			reason.getHttpStatus() >= 300 &&
+			reason.getHttpStatus() < 400
+		);
 	}
 
 	/**
@@ -380,27 +377,23 @@ export default class AbstractRouter extends Router {
 		options = Object.assign({}, route.getOptions(), options);
 		let data = { route, params, path: this.getPath(), options };
 
-		this._dispatcher
-			.fire(Events.BEFORE_HANDLE_ROUTE, data, true);
+		this._dispatcher.fire(Events.BEFORE_HANDLE_ROUTE, data, true);
 
-		return (
-			this._pageManager
-				.manage(controller, view, options, params)
-				.then((response) => {
-					response = response || {};
+		return this._pageManager
+			.manage(controller, view, options, params)
+			.then(response => {
+				response = response || {};
 
-					if (params.error && params.error instanceof Error) {
-						response.error = params.error;
-					}
+				if (params.error && params.error instanceof Error) {
+					response.error = params.error;
+				}
 
-					data.response = response;
+				data.response = response;
 
-					this._dispatcher
-						.fire(Events.AFTER_HANDLE_ROUTE, data, true);
+				this._dispatcher.fire(Events.AFTER_HANDLE_ROUTE, data, true);
 
-					return response;
-				})
-		);
+				return response;
+			});
 	}
 
 	/**

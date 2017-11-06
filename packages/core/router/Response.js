@@ -7,7 +7,6 @@ ns.namespace('ima.router');
  * Wrapper for the ExpressJS response, exposing only the necessary minimum.
  */
 export default class Response {
-
 	static get $dependencies() {
 		return [];
 	}
@@ -16,7 +15,6 @@ export default class Response {
 	 * Initializes the response.
 	 */
 	constructor() {
-
 		/**
 		 * The ExpressJS response object, or {@code null} if running at the
 		 * client side.
@@ -69,8 +67,8 @@ export default class Response {
 		 * @type {{encode: function, decode: function}}
 		 */
 		this._cookieTransformFunction = {
-			encode: (value) => value,
-			decode: (value) => value
+			encode: value => value,
+			decode: value => value
 		};
 	}
 
@@ -123,7 +121,7 @@ export default class Response {
 
 				throw new GenericError(
 					'ima.router.Response:redirect The response has already ' +
-					'been sent. Check your workflow.',
+						'been sent. Check your workflow.',
 					params
 				);
 			}
@@ -157,7 +155,7 @@ export default class Response {
 
 				throw new GenericError(
 					'ima.router.Response:status The response has already ' +
-					'been sent. Check your workflow.',
+						'been sent. Check your workflow.',
 					params
 				);
 			}
@@ -184,7 +182,7 @@ export default class Response {
 
 				throw new GenericError(
 					'ima.router.Response:send The response has already been ' +
-					'sent. Check your workflow.',
+						'sent. Check your workflow.',
 					params
 				);
 			}
@@ -212,7 +210,7 @@ export default class Response {
 
 				throw new GenericError(
 					'ima.router.Response:setState The response has already ' +
-					'been sent. Check your workflow.',
+						'been sent. Check your workflow.',
 					params
 				);
 			}
@@ -246,7 +244,7 @@ export default class Response {
 
 				throw new GenericError(
 					'ima.router.Response:setCookie The response has already ' +
-					'been sent. Check your workflow.',
+						'been sent. Check your workflow.',
 					params
 				);
 			}

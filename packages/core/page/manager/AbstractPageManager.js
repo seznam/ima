@@ -1,12 +1,5 @@
 import ns from '../../namespace';
 import PageManager from './PageManager';
-import PageFactory from '../PageFactory';
-import AbstractDocumentView from '../AbstractDocumentView';
-import PageRenderer from '../renderer/PageRenderer';
-import PageStateManager from '../state/PageStateManager';
-import AbstractController from '../../controller/AbstractController';
-import Controller from '../../controller/Controller';
-import ControllerDecorator from '../../controller/ControllerDecorator';
 import GenericError from '../../error/GenericError';
 
 ns.namespace('ima.page.manager');
@@ -15,7 +8,6 @@ ns.namespace('ima.page.manager');
  * Page manager for controller.
  */
 export default class AbstractPageManager extends PageManager {
-
 	/**
 	 * Initializes the page manager.
 	 *
@@ -95,7 +87,7 @@ export default class AbstractPageManager extends PageManager {
 	 */
 	init() {
 		this._clearManagedPageValue();
-		this._pageStateManager.onChange = (newState) => {
+		this._pageStateManager.onChange = newState => {
 			this._onChangeStateHandler(newState);
 		};
 	}
@@ -189,8 +181,15 @@ export default class AbstractPageManager extends PageManager {
 	 * @param {ControllerDecorator} decoratedController
 	 * @param {React.Component} viewInstance
 	 */
-	_storeManagedPageValue(controller, view, options, params,
-			controllerInstance, decoratedController, viewInstance) {
+	_storeManagedPageValue(
+		controller,
+		view,
+		options,
+		params,
+		controllerInstance,
+		decoratedController,
+		viewInstance
+	) {
 		this._managedPage = {
 			controller,
 			controllerInstance,
@@ -300,20 +299,18 @@ export default class AbstractPageManager extends PageManager {
 			controllerState
 		);
 
-		return (
-			this._pageRenderer
-				.mount(
-					this._managedPage.decoratedController,
-					this._managedPage.view,
-					loadedPageState,
-					this._managedPage.options
-				)
-				.then((response) => {
-					this._postManage(this._managedPage.options);
+		return this._pageRenderer
+			.mount(
+				this._managedPage.decoratedController,
+				this._managedPage.view,
+				loadedPageState,
+				this._managedPage.options
+			)
+			.then(response => {
+				this._postManage(this._managedPage.options);
 
-					return response;
-				})
-		);
+				return response;
+			});
 	}
 
 	/**
@@ -408,18 +405,13 @@ export default class AbstractPageManager extends PageManager {
 			updatedControllerState
 		);
 
-		return (
-			this._pageRenderer
-				.update(
-					this._managedPage.decoratedController,
-					updatedPageState
-				)
-				.then((response) => {
-					this._postManage(this._managedPage.options);
+		return this._pageRenderer
+			.update(this._managedPage.decoratedController, updatedPageState)
+			.then(response => {
+				this._postManage(this._managedPage.options);
 
-					return response;
-				})
-		);
+				return response;
+			});
 	}
 
 	/**
@@ -565,9 +557,11 @@ export default class AbstractPageManager extends PageManager {
 	_clearComponentState(options) {
 		let managedOptions = this._managedPage.options;
 
-		if (managedOptions &&
+		if (
+			managedOptions &&
 			managedOptions.documentView === options.documentView &&
-				managedOptions.managedRootView === options.managedRootView) {
+			managedOptions.managedRootView === options.managedRootView
+		) {
 			this._pageRenderer.clearState();
 		} else {
 			this._pageRenderer.unmount();
@@ -618,9 +612,11 @@ export default class AbstractPageManager extends PageManager {
 			);
 		}
 
-		return options.onlyUpdate &&
-				this._managedPage.controller === controller &&
-				this._managedPage.view === view;
+		return (
+			options.onlyUpdate &&
+			this._managedPage.controller === controller &&
+			this._managedPage.view === view
+		);
 	}
 
 	/**
@@ -672,7 +668,6 @@ export default class AbstractPageManager extends PageManager {
  	 *        }} options
 	 */
 	_postManage(options) {}
-
 }
 
 ns.ima.page.manager.AbstractPageManager = AbstractPageManager;

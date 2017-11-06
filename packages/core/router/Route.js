@@ -1,6 +1,4 @@
 import ns from '../namespace';
-import Controller from '../controller/Controller';
-import AbstractDocumentView from '../page/AbstractDocumentView';
 
 ns.namespace('ima.router');
 
@@ -13,7 +11,7 @@ ns.namespace('ima.router');
  * @const
  * @type {RegExp}
  */
-const CONTROL_CHARACTERS_REGEXP = /[\\.+*?\^$\[\](){}\/\'#]/g;
+const CONTROL_CHARACTERS_REGEXP = /[\\.+*?^$[\](){}/'#]/g;
 
 /**
  * Regular expression used to match and remove the starting and trailing
@@ -30,7 +28,7 @@ const LOOSE_SLASHES_REGEXP = /^\/|\/$/g;
  * @const
  * @type {RegExp}
  */
-const PARAMS_REGEXP_UNIVERSAL = /:\??([\w\-]+)/g;
+const PARAMS_REGEXP_UNIVERSAL = /:\??([\w-]+)/g;
 
 /**
  * Regular expression used to match the required parameter names from a path expression.
@@ -38,7 +36,7 @@ const PARAMS_REGEXP_UNIVERSAL = /:\??([\w\-]+)/g;
  * @const
  * @type {RegExp}
  */
-const PARAMS_REGEXP_REQUIRED = /(?:^|\\\/):([a-z0-9]+)(?=\\\/|$)/ig;
+const PARAMS_REGEXP_REQUIRED = /(?:^|\\\/):([a-z0-9]+)(?=\\\/|$)/gi;
 
 /**
  * Regular expression used to separate a camelCase parameter name
@@ -54,7 +52,7 @@ const PARAMS_REGEXP_CORE_NAME = /[a-z0-9]+/i;
  * @const
  * @type {String}
  */
-const PARAMS_START_PATTERN = '(^|\/|[_\-])';
+const PARAMS_START_PATTERN = '(^|/|[_-])';
 
 /**
  * Regular expression used to match end of parameter names from a path expression.
@@ -62,7 +60,7 @@ const PARAMS_START_PATTERN = '(^|\/|[_\-])';
  * @const
  * @type {String}
  */
-const PARAMS_END_PATTERN = '[\/\?_\-]|$';
+const PARAMS_END_PATTERN = '[/?_-]|$';
 
 /**
  * Regular expression used to never match the parameter names from a path expression.
@@ -79,7 +77,7 @@ const PARAMS_NEVER_MATCH_REGEXP = /$a/;
  * @const
  * @type {RegExp}
  */
-const PARAMS_MAIN_REGEXP = /(?:\\\/|^):\\\?([a-z0-9]+)(?=\\\/|$)|(?:^|\\\/):([a-z0-9]+)(?=\\\/|$)/ig;
+const PARAMS_MAIN_REGEXP = /(?:\\\/|^):\\\?([a-z0-9]+)(?=\\\/|$)|(?:^|\\\/):([a-z0-9]+)(?=\\\/|$)/gi;
 
 /**
  * Regular expression used to match the required subparameter names from a path expression.
@@ -89,8 +87,8 @@ const PARAMS_MAIN_REGEXP = /(?:\\\/|^):\\\?([a-z0-9]+)(?=\\\/|$)|(?:^|\\\/):([a-
  * @type {Object<String, RegExp>}
  */
 const SUBPARAMS_REQUIRED_REGEXP = {
-	LAST: /([_-]{1})((\w\-)?:[a-z0-9]+)(?=\\\/|$)/ig,
-	OTHERS: /(:[a-z0-9]+)(?=[_-]{1})/ig
+	LAST: /([_-]{1})((\w-)?:[a-z0-9]+)(?=\\\/|$)/gi,
+	OTHERS: /(:[a-z0-9]+)(?=[_-]{1})/gi
 };
 
 /**
@@ -100,8 +98,8 @@ const SUBPARAMS_REQUIRED_REGEXP = {
  * @type {Object<String, RegExp>}
  */
 const SUBPARAMS_OPT_REGEXP = {
-	LAST: /([_-]{1}(\w\-)?:\\\?[a-z0-9]+)(?=\\\/|$)/ig,
-	OTHERS: /(:\\\?[a-z0-9]+)(?=[_-]{1}(\w\-)?)/ig
+	LAST: /([_-]{1}(\w-)?:\\\?[a-z0-9]+)(?=\\\/|$)/gi,
+	OTHERS: /(:\\\?[a-z0-9]+)(?=[_-]{1}(\w-)?)/gi
 };
 
 /**
@@ -110,14 +108,13 @@ const SUBPARAMS_OPT_REGEXP = {
  * @const
  * @type {RegExp}
  */
-const PARAMS_REGEXP_OPT = /(?:^:\\\?([a-z0-9]+)(?=\\\/|$))|(?:(\\\/):\\\?([a-z0-9]+)(?=\\\/|$))/ig; // last part: |(?::\\\?([a-z0-9]+)(?=\\\/|$))
+const PARAMS_REGEXP_OPT = /(?:^:\\\?([a-z0-9]+)(?=\\\/|$))|(?:(\\\/):\\\?([a-z0-9]+)(?=\\\/|$))/gi; // last part: |(?::\\\?([a-z0-9]+)(?=\\\/|$))
 
 /**
  * Utility for representing and manipulating a single route in the router's
  * configuration.
  */
 export default class Route {
-
 	/**
 	 * Initializes the route.
 	 *
@@ -272,7 +269,6 @@ export default class Route {
 					paramName,
 					params[paramName]
 				);
-
 			} else {
 				const pair = [paramName, params[paramName]];
 				query.push(pair.map(encodeURIComponent).join('='));
@@ -392,7 +388,9 @@ export default class Route {
 	 */
 	_substituteRequiredParamInPath(path, paramName, paramValue) {
 		return path.replace(
-			new RegExp(`${PARAMS_START_PATTERN}:${paramName}(${PARAMS_END_PATTERN})`),
+			new RegExp(
+				`${PARAMS_START_PATTERN}:${paramName}(${PARAMS_END_PATTERN})`
+			),
 			paramValue ? '$1' + encodeURIComponent(paramValue) + '$2' : ''
 		);
 	}
@@ -406,7 +404,7 @@ export default class Route {
 	 * @return {string} New path.
 	 */
 	_substituteOptionalParamInPath(path, paramName, paramValue) {
-		const paramRegexp = `${PARAMS_START_PATTERN}:\\\?${paramName}(${PARAMS_END_PATTERN})`;
+		const paramRegexp = `${PARAMS_START_PATTERN}:\\?${paramName}(${PARAMS_END_PATTERN})`;
 		return path.replace(
 			new RegExp(paramRegexp),
 			paramValue ? '$1' + encodeURIComponent(paramValue) + '$2' : '/'
@@ -424,13 +422,13 @@ export default class Route {
 
 		// remove last subparameters
 		replacedPath = replacedPath.replace(
-			/([_\-])(:\?([a-z0-9]+))(?=\/)/ig,
+			/([_-])(:\?([a-z0-9]+))(?=\/)/gi,
 			'$1'
 		);
 
 		// remove parameters
 		replacedPath = replacedPath.replace(
-			/(\/:\?([a-z0-9]+))|(:\?([a-z0-9]+)\/?)/ig,
+			/(\/:\?([a-z0-9]+))|(:\?([a-z0-9]+)\/?)/gi,
 			''
 		);
 
@@ -445,7 +443,7 @@ export default class Route {
 	 * @return {boolean}
 	 */
 	_isOptionalParamInPath(path, paramName) {
-		const paramRegexp = `${PARAMS_START_PATTERN}:\\\?${paramName}(?:${PARAMS_END_PATTERN})`;
+		const paramRegexp = `${PARAMS_START_PATTERN}:\\?${paramName}(?:${PARAMS_END_PATTERN})`;
 		let regexp = new RegExp(paramRegexp);
 		return regexp.test(path);
 	}
@@ -485,7 +483,7 @@ export default class Route {
 	 */
 	_getSubparamPattern(delimeter) {
 		const pattern = `([^${delimeter}]+)`;
-		
+
 		return pattern;
 	}
 
@@ -522,11 +520,15 @@ export default class Route {
 	 * @return {Bool} Returns TRUE if order is correct.
 	 */
 	_checkParametersOrder(clearedPathExpr) {
-		const mainParamsMatches = clearedPathExpr.match(PARAMS_MAIN_REGEXP) || [];
-		const allMainParamsCleared = mainParamsMatches
-			.map(paramExpr => this._getClearParamName(paramExpr));
+		const mainParamsMatches =
+			clearedPathExpr.match(PARAMS_MAIN_REGEXP) || [];
+		const allMainParamsCleared = mainParamsMatches.map(paramExpr =>
+			this._getClearParamName(paramExpr)
+		);
 
-		const isCorrectParamOrder = this._checkOptionalParamsOrder(allMainParamsCleared);
+		const isCorrectParamOrder = this._checkOptionalParamsOrder(
+			allMainParamsCleared
+		);
 		return isCorrectParamOrder;
 	}
 
@@ -538,27 +540,29 @@ export default class Route {
 	 * @return {string} RegExp pattern.
 	 */
 	_replaceOptionalParametersInPath(path, optionalParams) {
-		const pattern = optionalParams.reduce((path, paramExpr, idx, matches) => {
-			const lastIdx = matches.length - 1;
-			const hasSlash = (paramExpr.substr(0, 2) === "\\/");
+		const pattern = optionalParams.reduce(
+			(path, paramExpr, idx, matches) => {
+				const lastIdx = matches.length - 1;
+				const hasSlash = paramExpr.substr(0, 2) === '\\/';
 
-			let separator = '';
+				let separator = '';
 
-			if (idx === 0) {
-				separator = '(?:' + (hasSlash ? '\/' : '');
+				if (idx === 0) {
+					separator = '(?:' + (hasSlash ? '/' : '');
+				} else {
+					separator = hasSlash ? '/?' : '';
+				}
 
-			} else {
-				separator = hasSlash ? '\/?' : '';
-			}
+				let regExpr = separator + `([^/?]+)?(?=/|$)?`;
 
-			let regExpr = separator + `([^/?]+)?(?=\/|$)?`;
+				if (idx === lastIdx) {
+					regExpr += ')?';
+				}
 
-			if (idx === lastIdx) {
-				regExpr += ')?';
-			}
-
-			return path.replace(paramExpr, regExpr);
-		}, path);
+				return path.replace(paramExpr, regExpr);
+			},
+			path
+		);
 
 		return pattern;
 	}
@@ -571,8 +575,10 @@ export default class Route {
 	 * @return {string} RegExp pattern.
 	 */
 	_replaceRequiredSubParametersInPath(path, clearedPathExpr) {
-		const requiredSubparamsOthers = clearedPathExpr.match(SUBPARAMS_REQUIRED_REGEXP.OTHERS) || [];
-		const requiredSubparamsLast = clearedPathExpr.match(SUBPARAMS_REQUIRED_REGEXP.LAST) || [];
+		const requiredSubparamsOthers =
+			clearedPathExpr.match(SUBPARAMS_REQUIRED_REGEXP.OTHERS) || [];
+		const requiredSubparamsLast =
+			clearedPathExpr.match(SUBPARAMS_REQUIRED_REGEXP.LAST) || [];
 
 		path = requiredSubparamsOthers.reduce((pattern, paramExpr) => {
 			const paramIdx = pattern.indexOf(paramExpr) + paramExpr.length;
@@ -601,7 +607,11 @@ export default class Route {
 	 * @param {array<string>} optionalSubparamsLast List of last subparam. expressions
 	 * @return {string} RegExp pattern.
 	 */
-	_replaceOptionalSubParametersInPath(path, optionalSubparamsOthers, optionalSubparamsLast) {
+	_replaceOptionalSubParametersInPath(
+		path,
+		optionalSubparamsOthers,
+		optionalSubparamsLast
+	) {
 		path = optionalSubparamsOthers.reduce((pattern, paramExpr) => {
 			const paramIdx = pattern.indexOf(paramExpr) + paramExpr.length;
 			const delimeter = pattern.substr(paramIdx, 1);
@@ -634,12 +644,18 @@ export default class Route {
 			.replace(LOOSE_SLASHES_REGEXP, '')
 			.replace(CONTROL_CHARACTERS_REGEXP, '\\$&');
 
-		const requiredMatches = clearedPathExpr.match(PARAMS_REGEXP_REQUIRED) || [];
+		const requiredMatches =
+			clearedPathExpr.match(PARAMS_REGEXP_REQUIRED) || [];
 		const optionalMatches = clearedPathExpr.match(PARAMS_REGEXP_OPT) || [];
 
-		const optionalSubparamsLast = clearedPathExpr.match(SUBPARAMS_OPT_REGEXP.LAST) || [];
-		const optionalSubparamsOthers = clearedPathExpr.match(SUBPARAMS_OPT_REGEXP.OTHERS) || [];
-		const optionalSubparams = [...optionalSubparamsOthers, ...optionalSubparamsLast];
+		const optionalSubparamsLast =
+			clearedPathExpr.match(SUBPARAMS_OPT_REGEXP.LAST) || [];
+		const optionalSubparamsOthers =
+			clearedPathExpr.match(SUBPARAMS_OPT_REGEXP.OTHERS) || [];
+		const optionalSubparams = [
+			...optionalSubparamsOthers,
+			...optionalSubparamsLast
+		];
 
 		const optionalSubparamsCleanNames = optionalSubparams.map(paramExpr => {
 			return this._getClearParamName(paramExpr);
@@ -652,7 +668,9 @@ export default class Route {
 		});
 
 		if (!!requiredMatches.length && !!optionalParams.length) {
-			const isCorrectParamOrder = this._checkParametersOrder(clearedPathExpr);
+			const isCorrectParamOrder = this._checkParametersOrder(
+				clearedPathExpr
+			);
 
 			if (!isCorrectParamOrder) {
 				return PARAMS_NEVER_MATCH_REGEXP;
@@ -667,12 +685,22 @@ export default class Route {
 			return pattern.replace(paramExpr, regExpr);
 		}, clearedPathExpr);
 
-		pattern = this._replaceOptionalParametersInPath(pattern, optionalParams);
-		pattern = this._replaceRequiredSubParametersInPath(pattern, clearedPathExpr);
-		pattern = this._replaceOptionalSubParametersInPath(pattern, optionalSubparamsOthers, optionalSubparamsLast);
+		pattern = this._replaceOptionalParametersInPath(
+			pattern,
+			optionalParams
+		);
+		pattern = this._replaceRequiredSubParametersInPath(
+			pattern,
+			clearedPathExpr
+		);
+		pattern = this._replaceOptionalSubParametersInPath(
+			pattern,
+			optionalSubparamsOthers,
+			optionalSubparamsLast
+		);
 
 		// add path root
-		pattern = '^\\\/' + pattern;
+		pattern = '^\\/' + pattern;
 
 		// add query parameters matcher
 		let pairPattern = '[^=&;]*(?:=[^&;]*)?';
@@ -814,7 +842,7 @@ export default class Route {
 	_getParameterNames(pathExpression) {
 		let rawNames = pathExpression.match(PARAMS_REGEXP_UNIVERSAL) || [];
 
-		return rawNames.map((rawParameterName) => {
+		return rawNames.map(rawParameterName => {
 			return rawParameterName.substring(1).replace('?', '');
 		});
 	}

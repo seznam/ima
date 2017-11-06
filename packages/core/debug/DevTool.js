@@ -13,7 +13,6 @@ ns.namespace('ima.debug');
  * Developer tools, used mostly for navigating the page state history.
  */
 export default class DevTool {
-
 	static get $dependencies() {
 		return [PageManager, PageStateManager, Window, Dispatcher, EventBus];
 	}
@@ -28,7 +27,6 @@ export default class DevTool {
 	 * @param {EventBus} eventBus IMA DOM event bus.
 	 */
 	constructor(pageManager, stateManager, window, dispatcher, eventBus) {
-
 		/**
 		 * Application page manager.
 		 *
@@ -75,9 +73,10 @@ export default class DevTool {
 			}
 
 			let window = this._window.getWindow();
-			this._window.bindEventListener(window, 'keydown', (e) => {
-				if (e.altKey && e.keyCode === 83) { // Alt + S
-					console.log(this._stateManager.getState());
+			this._window.bindEventListener(window, 'keydown', e => {
+				if (e.altKey && e.keyCode === 83) {
+					// Alt + S
+					console.log(this._stateManager.getState()); //eslint-disable-line no-console
 				}
 			});
 		}

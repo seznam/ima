@@ -7,7 +7,6 @@ ns.namespace('ima.cache');
  * creation and expiration of cache entries.
  */
 export default class CacheEntry {
-
 	/**
 	 * Initializes the cache entry.
 	 *

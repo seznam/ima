@@ -18,7 +18,6 @@ const PRODUCTION_ENVIRONMENT = 'prod';
  * itself.
  */
 export default class Bootstrap {
-
 	/**
 	 * Initializes the bootstrap.
 	 *
@@ -26,7 +25,6 @@ export default class Bootstrap {
 	 *        for managing dependencies.
 	 */
 	constructor(oc) {
-
 		/**
 		 * The object container used to manage dependencies.
 		 *
@@ -77,8 +75,8 @@ export default class Bootstrap {
 		let plugins = this._config.plugins.concat([this._config]);
 
 		plugins
-			.filter((plugin) => typeof plugin.initSettings === 'function')
-			.forEach((plugin) => {
+			.filter(plugin => typeof plugin.initSettings === 'function')
+			.forEach(plugin => {
 				let allPluginSettings = plugin.initSettings(
 					ns,
 					this._oc,
@@ -112,11 +110,8 @@ export default class Bootstrap {
 		let environmentSetting = allSettings[environment] || {};
 
 		if (environment !== PRODUCTION_ENVIRONMENT) {
-			let	productionSettings = allSettings[PRODUCTION_ENVIRONMENT];
-			$Helper.assignRecursively(
-				productionSettings,
-				environmentSetting
-			);
+			let productionSettings = allSettings[PRODUCTION_ENVIRONMENT];
+			$Helper.assignRecursively(productionSettings, environmentSetting);
 			environmentSetting = productionSettings;
 		}
 
@@ -133,8 +128,8 @@ export default class Bootstrap {
 
 		this._oc.setBindingState(ObjectContainer.PLUGIN_BINDING_STATE);
 		this._config.plugins
-			.filter((plugin) => typeof plugin.initBind === 'function')
-			.forEach((plugin) => {
+			.filter(plugin => typeof plugin.initBind === 'function')
+			.forEach(plugin => {
 				plugin.initBind(ns, this._oc, this._config.bind);
 			});
 
@@ -157,8 +152,8 @@ export default class Bootstrap {
 		this._config.initServicesIma(ns, this._oc, this._config.services);
 
 		this._config.plugins
-			.filter((plugin) => typeof plugin.initServices === 'function')
-			.forEach((plugin) => {
+			.filter(plugin => typeof plugin.initServices === 'function')
+			.forEach(plugin => {
 				plugin.initServices(ns, this._oc, this._config.services);
 			});
 

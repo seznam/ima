@@ -3,7 +3,6 @@ import AbstractRouter from './AbstractRouter';
 import Request from './Request';
 import Response from './Response';
 import RouteFactory from './RouteFactory';
-import Router from './Router';
 import Dispatcher from '../event/Dispatcher';
 import PageManager from '../page/manager/PageManager';
 
@@ -13,7 +12,6 @@ ns.namespace('ima.router');
  * The server-side implementation of the {@codelink Router} interface.
  */
 export default class ServerRouter extends AbstractRouter {
-
 	static get $dependencies() {
 		return [PageManager, RouteFactory, Dispatcher, Request, Response];
 	}

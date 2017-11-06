@@ -3,7 +3,6 @@
 import ns from '../namespace';
 import AbstractRouter from './AbstractRouter';
 import RouteFactory from './RouteFactory';
-import Router from './Router';
 import Dispatcher from '../event/Dispatcher';
 import PageManager from '../page/manager/PageManager';
 import Window from '../window/Window';
@@ -36,32 +35,6 @@ const Events = Object.freeze({
 });
 
 /**
- * Address bar content manipulation modes.
- *
- * @enum {string}
- * @type {Object<string, string>}
- */
-const Modes = Object.freeze({
-	/**
-	 * Address bar manipulation mode in which the current URL in the address
-	 * bar is being udpated using the session history management API.
-	 *
-	 * @const
-	 * @type {string}
-	 */
-	HISTORY: 'history',
-
-	/**
-	 * Address bar manipulation mode in which the current URL in the address
-	 * bar is being udpated by modifying the {@code hash} part.
-	 *
-	 * @const
-	 * @type {string}
-	 */
-	HASH: 'hash'
-});
-
-/**
  * The number used as the index of the mouse left button in DOM
  * {@code MouseEvent}s.
  *
@@ -74,7 +47,6 @@ const MOUSE_LEFT_BUTTON = 0;
  * The client-side implementation of the {@codelink Router} interface.
  */
 export default class ClientRouter extends AbstractRouter {
-
 	static get $dependencies() {
 		return [PageManager, RouteFactory, Dispatcher, Window];
 	}
@@ -131,20 +103,19 @@ export default class ClientRouter extends AbstractRouter {
 
 		this._saveScrollHistory();
 		let eventName = Events.POP_STATE;
-		this._window.bindEventListener(nativeWindow, eventName, (event) => {
+		this._window.bindEventListener(nativeWindow, eventName, event => {
 			if (event.state && !event.defaultPrevented) {
-				this.route(this.getPath())
-					.then(() => {
-						let scroll = event.state.scroll;
+				this.route(this.getPath()).then(() => {
+					let scroll = event.state.scroll;
 
-						if (scroll) {
-							this._pageManager.scrollTo(scroll.x, scroll.y);
-						}
-					});
+					if (scroll) {
+						this._pageManager.scrollTo(scroll.x, scroll.y);
+					}
+				});
 			}
 		});
 
-		this._window.bindEventListener(nativeWindow, Events.CLICK, (event) => {
+		this._window.bindEventListener(nativeWindow, Events.CLICK, event => {
 			this._handleClick(event);
 		});
 
@@ -171,16 +142,14 @@ export default class ClientRouter extends AbstractRouter {
 	 * @inheritdoc
 	 */
 	route(path, options = {}) {
-		return (
-			super
-				.route(path, options)
-				.catch((error) => {
-					return this.handleError({ error });
-				})
-				.catch((error) => {
-					this._handleFatalError(error);
-				})
-		);
+		return super
+			.route(path, options)
+			.catch(error => {
+				return this.handleError({ error });
+			})
+			.catch(error => {
+				this._handleFatalError(error);
+			});
 	}
 
 	/**
@@ -205,26 +174,18 @@ export default class ClientRouter extends AbstractRouter {
 			});
 		}
 
-		return (
-			super
-				.handleError(params, options)
-				.catch((error) => {
-					this._handleFatalError(error);
-				})
-		);
+		return super.handleError(params, options).catch(error => {
+			this._handleFatalError(error);
+		});
 	}
 
 	/**
 	 * @inheritdoc
 	 */
 	handleNotFound(params, options = {}) {
-		return (
-			super
-				.handleNotFound(params, options)
-				.catch((error) => {
-					return this.handleError({ error });
-				})
-		);
+		return super.handleNotFound(params, options).catch(error => {
+			return this.handleError({ error });
+		});
 	}
 
 	/**
@@ -237,10 +198,11 @@ export default class ClientRouter extends AbstractRouter {
 		if ($IMA && typeof $IMA.fatalErrorHandler === 'function') {
 			$IMA.fatalErrorHandler(error);
 		} else {
-
 			if ($Debug) {
-				console.warn('You must implement $IMA.fatalErrorHandler in ' +
-						'services.js');
+				console.warn(
+					'You must implement $IMA.fatalErrorHandler in ' +
+						'services.js'
+				);
 			}
 		}
 	}
@@ -264,8 +226,8 @@ export default class ClientRouter extends AbstractRouter {
 		}
 
 		let anchorHref = anchorElement.href;
-		let isDefinedTargetHref = anchorHref !== undefined &&
-				anchorHref !== null;
+		let isDefinedTargetHref =
+			anchorHref !== undefined && anchorHref !== null;
 		let isSetTarget = anchorElement.getAttribute('target') !== null;
 		let isLeftButton = event.button === MOUSE_LEFT_BUTTON;
 		let isCtrlPlusLeftButton = event.ctrlKey && isLeftButton;
@@ -274,14 +236,16 @@ export default class ClientRouter extends AbstractRouter {
 		let isHashLink = this._isHashLink(anchorHref);
 		let isLinkPrevented = event.defaultPrevented;
 
-		if (!isDefinedTargetHref ||
-				isSetTarget ||
-				!isLeftButton ||
-				!isSameDomain ||
-				isHashLink ||
-				isCtrlPlusLeftButton ||
-				isCMDPlusLeftButton ||
-				isLinkPrevented) {
+		if (
+			!isDefinedTargetHref ||
+			isSetTarget ||
+			!isLeftButton ||
+			!isSameDomain ||
+			isHashLink ||
+			isCtrlPlusLeftButton ||
+			isCMDPlusLeftButton ||
+			isLinkPrevented
+		) {
 			return;
 		}
 
@@ -305,10 +269,12 @@ export default class ClientRouter extends AbstractRouter {
 		}
 
 		function hasReachedAnchor(nodeElement) {
-			return nodeElement.parentNode &&
-					nodeElement !== self._window.getBody() &&
-					nodeElement.href !== undefined &&
-					nodeElement.href !== null;
+			return (
+				nodeElement.parentNode &&
+				nodeElement !== self._window.getBody() &&
+				nodeElement.href !== undefined &&
+				nodeElement.href !== null
+			);
 		}
 
 		return target;
@@ -328,8 +294,10 @@ export default class ClientRouter extends AbstractRouter {
 		}
 
 		let currentUrl = this._window.getUrl();
-		let trimmedCurrentUrl = currentUrl.indexOf('#') === -1 ? currentUrl :
-				currentUrl.substring(0, currentUrl.indexOf('#'));
+		let trimmedCurrentUrl =
+			currentUrl.indexOf('#') === -1
+				? currentUrl
+				: currentUrl.substring(0, currentUrl.indexOf('#'));
 		let trimmedTargetUrl = targetUrl.substring(0, targetUrl.indexOf('#'));
 
 		return trimmedTargetUrl === trimmedCurrentUrl;

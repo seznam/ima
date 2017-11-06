@@ -2,7 +2,6 @@ import MapStorage from 'storage/MapStorage';
 import SessionMapStorage from 'storage/SessionMapStorage';
 
 describe('ima.storage.SessionMapStorage', () => {
-
 	let sessionMap;
 	let mapStorage = null;
 	let sessionStorage = null;
@@ -14,7 +13,6 @@ describe('ima.storage.SessionMapStorage', () => {
 
 		sessionMap.init();
 		sessionMap.clear();
-
 	});
 
 	afterEach(() => {
@@ -41,9 +39,7 @@ describe('ima.storage.SessionMapStorage', () => {
 	});
 
 	it('should set promise value only to map storage', () => {
-		spyOn(sessionStorage, 'set')
-			.and
-			.stub();
+		spyOn(sessionStorage, 'set').and.stub();
 
 		sessionMap.set('promise', Promise.resolve(1));
 
@@ -104,7 +100,6 @@ describe('ima.storage.SessionMapStorage', () => {
 					break;
 			}
 			item = iterator.next();
-
 		} while (item.done !== true);
 	});
 });

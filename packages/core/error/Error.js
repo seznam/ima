@@ -16,7 +16,6 @@ ns.namespace('ima.error');
  * @interface
  */
 export default class Error extends ExtensibleError {
-
 	/**
 	 * Returns the HTTP status to send to the client.
 	 *

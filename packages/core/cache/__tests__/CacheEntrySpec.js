@@ -1,7 +1,6 @@
 import CacheEntry from 'cache/CacheEntry';
 
 describe('ima.cache.CacheEntry', () => {
-
 	let cacheEntry = null;
 
 	beforeEach(() => {

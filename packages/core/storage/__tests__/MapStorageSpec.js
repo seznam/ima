@@ -1,7 +1,6 @@
 import MapStorage from 'storage/MapStorage';
 
 describe('ima.storage.Map', () => {
-
 	let map;
 
 	beforeEach(() => {
@@ -16,7 +15,6 @@ describe('ima.storage.Map', () => {
 	});
 
 	it('should set and get items', () => {
-
 		map.set('item1', 1);
 		expect(map.get('item1')).toEqual(1);
 
@@ -89,8 +87,6 @@ describe('ima.storage.Map', () => {
 					break;
 			}
 			item = iterator.next();
-
 		} while (item.done !== true);
-
 	});
 });

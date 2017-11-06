@@ -6,7 +6,6 @@ ns.namespace('ima.page.state');
  * Manager of the current page state and state history.
  */
 export default class PageStateManager {
-
 	/**
 	 * Clears the state history.
 	 */
@@ -37,7 +36,6 @@ export default class PageStateManager {
 	 * @return {Object<string, *>[]} The recorded history of page states.
 	 */
 	getAllStates() {}
-
 }
 
 ns.ima.page.state.PageStateManager = PageStateManager;

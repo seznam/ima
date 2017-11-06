@@ -12,7 +12,6 @@ ns.namespace('ima.storage');
  * the underlying map storage and the {@code sessionStorage} DOM storage.
  */
 export default class SessionMapStorage extends Storage {
-
 	static get $dependencies() {
 		return [MapStorage, SessionStorage];
 	}
@@ -72,11 +71,9 @@ export default class SessionMapStorage extends Storage {
 	 */
 	set(key, value) {
 		let canBeSerializedToJSON =
-				!(value instanceof Promise) &&
-				(
-					!(value instanceof CacheEntry) ||
-					!(value.getValue() instanceof Promise)
-				);
+			!(value instanceof Promise) &&
+			(!(value instanceof CacheEntry) ||
+				!(value.getValue() instanceof Promise));
 		if (canBeSerializedToJSON) {
 			this._session.set(key, value);
 		}

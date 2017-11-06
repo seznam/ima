@@ -2,7 +2,6 @@ import ObjectContainer from 'ObjectContainer';
 import ns from 'namespace';
 
 describe('ima.ObjectContainer', () => {
-
 	let oc = null;
 
 	function classConstructorWithDependencies(dependency) {
@@ -27,7 +26,9 @@ describe('ima.ObjectContainer', () => {
 	let constantObjectName = 'constantObject';
 	let constantCompositionName = 'constantObject.path.to.property';
 	let constantObjectProperty = 'property';
-	let constantObjectValue = { path: { to: { property: constantObjectProperty } } };
+	let constantObjectValue = {
+		path: { to: { property: constantObjectProperty } }
+	};
 
 	let namespacePathUnit = 'test.unit';
 	let namespacePathOC = 'test.unit.ObjectContainer';
@@ -42,9 +43,7 @@ describe('ima.ObjectContainer', () => {
 	});
 
 	it('should be clear entries', () => {
-		spyOn(oc._entries, 'clear')
-			.and
-			.stub();
+		spyOn(oc._entries, 'clear').and.stub();
 
 		oc.clear();
 
@@ -52,7 +51,6 @@ describe('ima.ObjectContainer', () => {
 	});
 
 	describe('constant method', () => {
-
 		beforeEach(() => {
 			oc.clear();
 		});
@@ -82,20 +80,18 @@ describe('ima.ObjectContainer', () => {
 		});
 
 		it('should be set constant value', () => {
-			spyOn(oc, '_createEntry')
-				.and
-				.callThrough();
+			spyOn(oc, '_createEntry').and.callThrough();
 
 			oc.constant(constantName, constantValue);
 
 			expect(oc._createEntry).toHaveBeenCalled();
-			expect(oc._entries.get(constantName).sharedInstance, constantValue);
+			expect(oc._entries.get(constantName).sharedInstance).toEqual(
+				constantValue
+			);
 		});
-
 	});
 
 	describe('inject method', () => {
-
 		beforeEach(() => {
 			oc.clear();
 		});
@@ -116,31 +112,40 @@ describe('ima.ObjectContainer', () => {
 		});
 
 		it('should be create new instance of entry and set it to entries', () => {
-			spyOn(oc, '_createEntry')
-				.and
-				.callThrough();
+			spyOn(oc, '_createEntry').and.callThrough();
 
 			oc.inject(classConstructor, dependencies);
 
-			expect(oc._entries.get(classConstructor).classConstructor).toEqual(classConstructor);
-			expect(oc._entries.get(classConstructor).dependencies).toEqual(dependencies);
-			expect(oc._createEntry).toHaveBeenCalledWith(classConstructor, dependencies);
+			expect(oc._entries.get(classConstructor).classConstructor).toEqual(
+				classConstructor
+			);
+			expect(oc._entries.get(classConstructor).dependencies).toEqual(
+				dependencies
+			);
+			expect(oc._createEntry).toHaveBeenCalledWith(
+				classConstructor,
+				dependencies
+			);
 			expect(oc._entries.size).toEqual(1);
 		});
 
 		it('should set instance of entry from aliases to the entries', () => {
-			spyOn(oc, '_createEntry')
-				.and
-				.callThrough();
+			spyOn(oc, '_createEntry').and.callThrough();
 
 			oc.bind(alias, classConstructor, dependencies);
 			oc.inject(classConstructor, dependencies);
 
-			expect(oc._entries.get(classConstructor).classConstructor).toEqual(classConstructor);
-			expect(oc._entries.get(classConstructor).dependencies).toEqual(dependencies);
+			expect(oc._entries.get(classConstructor).classConstructor).toEqual(
+				classConstructor
+			);
+			expect(oc._entries.get(classConstructor).dependencies).toEqual(
+				dependencies
+			);
 			expect(oc._entries.size).toEqual(2);
 			expect(oc._createEntry.calls.count()).toEqual(1);
-			expect(oc._entries.get(classConstructor)).toEqual(oc._entries.get(alias));
+			expect(oc._entries.get(classConstructor)).toEqual(
+				oc._entries.get(alias)
+			);
 		});
 
 		it('should be throw error, if yow call inject more then 2 times for same classConstructor', () => {
@@ -153,9 +158,7 @@ describe('ima.ObjectContainer', () => {
 		});
 	});
 
-
 	describe('bind method', () => {
-
 		beforeEach(() => {
 			oc.clear();
 		});
@@ -175,39 +178,40 @@ describe('ima.ObjectContainer', () => {
 		});
 
 		it('should be create new entry for defined dependencies', () => {
-			spyOn(oc, '_createEntry')
-				.and
-				.callThrough();
+			spyOn(oc, '_createEntry').and.callThrough();
 
 			oc.bind(alias, classConstructor, dependencies);
 
-			expect(oc._createEntry).toHaveBeenCalledWith(classConstructor, dependencies);
+			expect(oc._createEntry).toHaveBeenCalledWith(
+				classConstructor,
+				dependencies
+			);
 		});
 
 		it('should be use entry from entries which was defined by inject method', () => {
 			oc.inject(classConstructor, dependencies);
 
-			spyOn(oc, '_createEntry')
-				.and
-				.callThrough();
+			spyOn(oc, '_createEntry').and.callThrough();
 
 			oc.bind(alias, classConstructor);
 
 			expect(oc._createEntry.calls.count()).toEqual(0);
-			expect(oc._entries.get(alias)).toEqual(oc._entries.get(classConstructor));
+			expect(oc._entries.get(alias)).toEqual(
+				oc._entries.get(classConstructor)
+			);
 		});
 
 		it('should be use entry from entries which was defined by provide method', () => {
 			oc.provide(classParent, classConstructor, dependencies);
 
-			spyOn(oc, '_createEntry')
-				.and
-				.callThrough();
+			spyOn(oc, '_createEntry').and.callThrough();
 
 			oc.bind(alias, classParent);
 
 			expect(oc._createEntry.calls.count()).toEqual(0);
-			expect(oc._entries.get(alias)).toEqual(oc._entries.get(classParent));
+			expect(oc._entries.get(alias)).toEqual(
+				oc._entries.get(classParent)
+			);
 		});
 
 		it('should use entry from entries which was provided and binded', () => {
@@ -215,40 +219,44 @@ describe('ima.ObjectContainer', () => {
 			oc.bind(alias, classParent);
 			let aliasEntry = oc._entries.get(alias);
 
-			spyOn(oc, '_updateEntryValues')
-				.and
-				.callThrough();
+			spyOn(oc, '_updateEntryValues').and.callThrough();
 
-			oc.bind(alias, classConstructorWithDependencies, classConstructorWithDependencies.$dependencies);
+			oc.bind(
+				alias,
+				classConstructorWithDependencies,
+				classConstructorWithDependencies.$dependencies
+			);
 
 			expect(oc._updateEntryValues).toHaveBeenCalledWith(
 				aliasEntry,
 				classConstructorWithDependencies,
 				classConstructorWithDependencies.$dependencies
 			);
-			expect(aliasEntry.classConstructor).toEqual(classConstructorWithDependencies);
-			expect(aliasEntry.dependencies).toEqual(classConstructorWithDependencies.$dependencies);
+			expect(aliasEntry.classConstructor).toEqual(
+				classConstructorWithDependencies
+			);
+			expect(aliasEntry.dependencies).toEqual(
+				classConstructorWithDependencies.$dependencies
+			);
 		});
 
 		it('should create new entry for unregistered alias with defined dependencies, it is feature for AB tests', () => {
 			oc.inject(classConstructor, dependencies);
 			oc.bind(alias, classConstructor);
 
-			spyOn(oc, '_createEntry')
-				.and
-				.callThrough();
+			spyOn(oc, '_createEntry').and.callThrough();
 
 			oc.bind(alias2, classConstructor, []);
 
 			expect(oc._createEntry.calls.count()).toEqual(1);
-			expect(oc._entries.get(alias2)).not.toEqual(oc._entries.get(classConstructor));
+			expect(oc._entries.get(alias2)).not.toEqual(
+				oc._entries.get(classConstructor)
+			);
 			expect(oc._entries.get(alias2).dependencies).toEqual([]);
 		});
-
 	});
 
 	describe('provide method', () => {
-
 		beforeEach(() => {
 			oc.clear();
 		});
@@ -269,9 +277,7 @@ describe('ima.ObjectContainer', () => {
 		});
 
 		it('should be create new Entry and set it to entries', () => {
-			spyOn(oc, '_createEntry')
-				.and
-				.callThrough();
+			spyOn(oc, '_createEntry').and.callThrough();
 
 			oc.provide(classParent, classConstructor, dependencies);
 
@@ -281,7 +287,6 @@ describe('ima.ObjectContainer', () => {
 	});
 
 	describe('has method', () => {
-
 		beforeEach(() => {
 			oc.clear();
 		});
@@ -301,11 +306,9 @@ describe('ima.ObjectContainer', () => {
 			expect(oc.has(classConstructor)).toEqual(false);
 			expect(oc.has(namespacePathOC)).toEqual(false);
 		});
-
 	});
 
 	describe('get method', () => {
-
 		let entry;
 
 		beforeEach(() => {
@@ -319,34 +322,24 @@ describe('ima.ObjectContainer', () => {
 		it('should return shared instance', () => {
 			entry.sharedInstance = false;
 
-			spyOn(oc, '_getEntry')
-				.and
-				.returnValue(entry);
-			spyOn(oc, '_createInstanceFromEntry')
-				.and
-				.stub();
+			spyOn(oc, '_getEntry').and.returnValue(entry);
+			spyOn(oc, '_createInstanceFromEntry').and.stub();
 
 			expect(oc.get('entry')).toEqual(entry.sharedInstance);
 			expect(oc._createInstanceFromEntry.calls.count()).toEqual(0);
 		});
 
 		it('should create new instance', () => {
-			spyOn(oc, '_getEntry')
-				.and
-				.returnValue(entry);
-			spyOn(oc, '_createInstanceFromEntry')
-				.and
-				.stub();
+			spyOn(oc, '_getEntry').and.returnValue(entry);
+			spyOn(oc, '_createInstanceFromEntry').and.stub();
 
 			oc.get('entry');
 
 			expect(oc._createInstanceFromEntry).toHaveBeenCalledWith(entry);
 		});
-
 	});
 
 	describe('_getEntry method', () => {
-
 		beforeEach(() => {
 			oc.clear();
 		});
@@ -364,7 +357,9 @@ describe('ima.ObjectContainer', () => {
 		it('should be return entry from constants', () => {
 			oc.constant(constantName, constantValue);
 
-			expect(oc._getEntry(constantName).sharedInstance).toEqual(constantValue);
+			expect(oc._getEntry(constantName).sharedInstance).toEqual(
+				constantValue
+			);
 		});
 
 		it('should be return entry from aliases', () => {
@@ -398,14 +393,16 @@ describe('ima.ObjectContainer', () => {
 		it('should be return value from registry for class constructor with $dependencies', () => {
 			let entry = oc._getEntry(classConstructorWithDependencies);
 
-			expect(entry.classConstructor).toEqual(classConstructorWithDependencies);
-			expect(entry.dependencies).toEqual(classConstructorWithDependencies.$dependencies);
+			expect(entry.classConstructor).toEqual(
+				classConstructorWithDependencies
+			);
+			expect(entry.dependencies).toEqual(
+				classConstructorWithDependencies.$dependencies
+			);
 		});
-
 	});
 
 	describe('_getEntryFromConstant method', () => {
-
 		beforeEach(() => {
 			oc.clear();
 		});
@@ -433,11 +430,9 @@ describe('ima.ObjectContainer', () => {
 
 			expect(entry).toEqual(null);
 		});
-
 	});
 
 	describe('_getEntryFromNamespace method', () => {
-
 		let namespace = null;
 		beforeEach(() => {
 			namespace = ns.get(namespacePathUnit);
@@ -458,9 +453,7 @@ describe('ima.ObjectContainer', () => {
 		it('should be create new entry if namespace return function with zero dependencies and their dependencies is not injected', () => {
 			namespace.ObjectContainer = classDependency;
 
-			spyOn(oc, '_createEntry')
-				.and
-				.callThrough();
+			spyOn(oc, '_createEntry').and.callThrough();
 
 			let entry = oc._getEntryFromNamespace(namespacePathOC);
 
@@ -472,19 +465,15 @@ describe('ima.ObjectContainer', () => {
 			let constant = { a: 1 };
 			namespace.ObjectContainer = constant;
 
-			spyOn(oc, '_createEntry')
-				.and
-				.callThrough();
+			spyOn(oc, '_createEntry').and.callThrough();
 
 			let entry = oc._getEntryFromNamespace(namespacePathOC);
 
 			expect(entry.sharedInstance).toEqual(constant);
 		});
-
 	});
 
 	describe('_getEntryFromClassConstructor method', () => {
-
 		beforeEach(() => {
 			oc.clear();
 		});
@@ -494,27 +483,34 @@ describe('ima.ObjectContainer', () => {
 		});
 
 		it('should return null for not defined $dependencies property', () => {
-			expect(oc._getEntryFromClassConstructor(classConstructor)).toEqual(null);
+			expect(oc._getEntryFromClassConstructor(classConstructor)).toEqual(
+				null
+			);
 		});
 
 		it('should set class to entries if class has defined $dependencies', () => {
-			spyOn(oc, '_createEntry')
-				.and
-				.callThrough();
+			spyOn(oc, '_createEntry').and.callThrough();
 
 			oc._getEntryFromClassConstructor(classConstructorWithDependencies);
 
-			expect(oc._createEntry).toHaveBeenCalledWith(classConstructorWithDependencies, classConstructorWithDependencies.$dependencies);
+			expect(oc._createEntry).toHaveBeenCalledWith(
+				classConstructorWithDependencies,
+				classConstructorWithDependencies.$dependencies
+			);
 			expect(oc._entries.size).toEqual(1);
 		});
 
 		it('should return entry if class has defined $dependencies', () => {
-			let entry = oc._getEntryFromClassConstructor(classConstructorWithDependencies);
+			let entry = oc._getEntryFromClassConstructor(
+				classConstructorWithDependencies
+			);
 
-			expect(entry.classConstructor).toEqual(classConstructorWithDependencies);
-			expect(entry.dependencies).toEqual(classConstructorWithDependencies.$dependencies);
+			expect(entry.classConstructor).toEqual(
+				classConstructorWithDependencies
+			);
+			expect(entry.dependencies).toEqual(
+				classConstructorWithDependencies.$dependencies
+			);
 		});
-
 	});
-
 });

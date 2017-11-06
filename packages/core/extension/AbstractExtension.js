@@ -1,7 +1,6 @@
 import ns from '../namespace';
 import Extension from './Extension';
 import GenericError from '../error/GenericError';
-import PageStateManager from '../page/state/PageStateManager';
 
 ns.namespace('ima.extension');
 
@@ -11,7 +10,6 @@ ns.namespace('ima.extension');
  * @abstract
  */
 export default class AbstractExtension extends Extension {
-
 	constructor() {
 		super();
 
@@ -65,7 +63,7 @@ export default class AbstractExtension extends Extension {
 	load() {
 		throw new GenericError(
 			'The ima.extension.AbstractExtension.load method is abstract ' +
-			'and must be overridden'
+				'and must be overridden'
 		);
 	}
 

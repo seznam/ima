@@ -3,23 +3,15 @@ import PageRenderer from 'page/renderer/PageRenderer';
 import PageStateManager from 'page/state/PageStateManager';
 
 describe('ima.page.manager.ServerPageManager', () => {
-
 	let pageFactory = {
-		createController: (Controller) => new Controller(),
-		decorateController: (controller) => controller,
-		decoratePageStateManager: (pageStateManger) =>  pageStateManger,
-		createView: (view) => view
+		createController: Controller => new Controller(),
+		decorateController: controller => controller,
+		decoratePageStateManager: pageStateManger => pageStateManger,
+		createView: view => view
 	};
 	let pageRenderer = null;
 	let stateManager = null;
 	let pageManager = null;
-
-	let view = () => {};
-	let options = {
-		onlyUpdate: false,
-		autoScroll: true,
-		allowSPA: true
-	};
 
 	beforeEach(() => {
 		pageRenderer = new PageRenderer();
@@ -30,7 +22,6 @@ describe('ima.page.manager.ServerPageManager', () => {
 			stateManager
 		);
 	});
-
 
 	it('scrollTo method should be override', () => {
 		expect(() => {

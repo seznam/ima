@@ -7,7 +7,6 @@ ns.namespace('ima.window');
  * Server-side implementation of the {@code Window} utility API.
  */
 export default class ServerWindow extends Window {
-
 	static get $dependencies() {
 		return [];
 	}
@@ -36,53 +35,7 @@ export default class ServerWindow extends Window {
 	/**
 	 * @inheritdoc
 	 */
-	hasWebSocket() {
-		console.warn(
-			'DEPRECATION WARNING: All browsers currently supported by ' +
-			'IMA.js support web sockets and the web sockets should not be ' +
-			'used at the server-side unless polyfilled.'
-		);
-		return false;
-	}
-
-	/**
-	 * @inheritdoc
-	 */
-	hasHistoryAPI() {
-		console.warn(
-			'DEPRECATION WARNING: The history API should never be ' +
-			'manipulated directly in an IMA.js application, and all ' +
-			'browsers supported by IMA.js support the history API. The ' +
-			'history API should not be used at the server-side anyway.'
-		);
-		return false;
-	}
-
-	/**
-	 * @inheritdoc
-	 */
 	setTitle(title) {}
-
-	/**
-	 * @inheritdoc
-	 */
-	getWebSocket() {
-		console.warn(
-			'DEPRECATION WARNING: All browsers currently supported by ' +
-			'IMA.js support web sockets, this helper should not be used. ' +
-			'When used at the server-side, this method should fail unless ' +
-			'web sockets are polyfilled by a 3rd party library, but it ' +
-			'always returns a dummy web socket-like object.'
-		);
-
-		class DummyWebSocket {
-			open() {}
-			close() {}
-			send() {}
-		}
-
-		return DummyWebSocket;
-	}
 
 	/**
 	 * @inheritdoc

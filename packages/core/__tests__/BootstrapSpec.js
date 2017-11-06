@@ -3,7 +3,6 @@ import ObjectContainer from 'ObjectContainer';
 import namespace from 'namespace';
 
 describe('Bootstrap', () => {
-
 	let bootstrap = null;
 	let objectContainer = null;
 	let environments = {
@@ -17,9 +16,7 @@ describe('Bootstrap', () => {
 		initBind: () => {}
 	};
 	let bootConfig = {
-		plugins: [
-			plugin
-		],
+		plugins: [plugin],
 		initSettings: () => environments,
 		initBindIma: () => {},
 		initBindApp: () => {},
@@ -36,23 +33,14 @@ describe('Bootstrap', () => {
 	});
 
 	describe('run method', () => {
-
 		beforeEach(() => {
-			spyOn(bootstrap, '_initSettings')
-				.and
-				.stub();
+			spyOn(bootstrap, '_initSettings').and.stub();
 
-			spyOn(bootstrap, '_bindDependencies')
-				.and
-				.stub();
+			spyOn(bootstrap, '_bindDependencies').and.stub();
 
-			spyOn(bootstrap, '_initServices')
-				.and
-				.stub();
+			spyOn(bootstrap, '_initServices').and.stub();
 
-			spyOn(bootstrap, '_initRoutes')
-				.and
-				.stub();
+			spyOn(bootstrap, '_initRoutes').and.stub();
 
 			bootstrap.run(bootConfig);
 		});
@@ -75,17 +63,12 @@ describe('Bootstrap', () => {
 	});
 
 	describe('_initSettings method', () => {
-
 		beforeEach(() => {
-			spyOn(bootstrap, '_getEnvironmentSetting')
-				.and
-				.returnValue({});
+			spyOn(bootstrap, '_getEnvironmentSetting').and.returnValue({});
 		});
 
 		it('it should call initSettings method for app', () => {
-			spyOn(bootConfig, 'initSettings')
-				.and
-				.callThrough();
+			spyOn(bootConfig, 'initSettings').and.callThrough();
 
 			bootstrap._initSettings();
 
@@ -93,9 +76,7 @@ describe('Bootstrap', () => {
 		});
 
 		it('it should call initSettings method for plugin', () => {
-			spyOn(plugin, 'initSettings')
-				.and
-				.callThrough();
+			spyOn(plugin, 'initSettings').and.callThrough();
 
 			bootstrap._initSettings();
 
@@ -104,13 +85,14 @@ describe('Bootstrap', () => {
 	});
 
 	describe('_bindDependencies method', () => {
-
 		it('should set ima binding state to object container', () => {
 			spyOn(objectContainer, 'setBindingState').and.callThrough();
 
 			bootstrap._bindDependencies();
 
-			expect(objectContainer.setBindingState).toHaveBeenCalledWith(ObjectContainer.IMA_BINDING_STATE);
+			expect(objectContainer.setBindingState).toHaveBeenCalledWith(
+				ObjectContainer.IMA_BINDING_STATE
+			);
 		});
 
 		it('should set plugin binding state to object container', () => {
@@ -118,7 +100,9 @@ describe('Bootstrap', () => {
 
 			bootstrap._bindDependencies();
 
-			expect(objectContainer.setBindingState).toHaveBeenCalledWith(ObjectContainer.PLUGIN_BINDING_STATE);
+			expect(objectContainer.setBindingState).toHaveBeenCalledWith(
+				ObjectContainer.PLUGIN_BINDING_STATE
+			);
 		});
 
 		it('should set app binding state to object container', () => {
@@ -126,7 +110,9 @@ describe('Bootstrap', () => {
 
 			bootstrap._bindDependencies();
 
-			expect(objectContainer.setBindingState).toHaveBeenCalledWith(ObjectContainer.APP_BINDING_STATE);
+			expect(objectContainer.setBindingState).toHaveBeenCalledWith(
+				ObjectContainer.APP_BINDING_STATE
+			);
 		});
 
 		it('should bind ima', () => {
@@ -134,7 +120,11 @@ describe('Bootstrap', () => {
 
 			bootstrap._bindDependencies();
 
-			expect(bootConfig.initBindIma).toHaveBeenCalledWith(namespace, objectContainer, {});
+			expect(bootConfig.initBindIma).toHaveBeenCalledWith(
+				namespace,
+				objectContainer,
+				{}
+			);
 		});
 
 		it('should bind ima plugin', () => {
@@ -142,7 +132,11 @@ describe('Bootstrap', () => {
 
 			bootstrap._bindDependencies();
 
-			expect(plugin.initBind).toHaveBeenCalledWith(namespace, objectContainer, {});
+			expect(plugin.initBind).toHaveBeenCalledWith(
+				namespace,
+				objectContainer,
+				{}
+			);
 		});
 
 		it('should bind app', () => {
@@ -150,26 +144,29 @@ describe('Bootstrap', () => {
 
 			bootstrap._bindDependencies();
 
-			expect(bootConfig.initBindApp).toHaveBeenCalledWith(namespace, objectContainer, {});
+			expect(bootConfig.initBindApp).toHaveBeenCalledWith(
+				namespace,
+				objectContainer,
+				{}
+			);
 		});
-
 	});
 
 	describe('_initRoutes method', () => {
-
 		it('should initalize app route', () => {
 			let router = {};
 
 			spyOn(bootConfig, 'initRoutes');
-			spyOn(objectContainer, 'get')
-				.and
-				.returnValue(router);
+			spyOn(objectContainer, 'get').and.returnValue(router);
 
 			bootstrap._initRoutes();
 
-			expect(bootConfig.initRoutes).toHaveBeenCalledWith(namespace, objectContainer, bootConfig.routes, router);
+			expect(bootConfig.initRoutes).toHaveBeenCalledWith(
+				namespace,
+				objectContainer,
+				bootConfig.routes,
+				router
+			);
 		});
-
 	});
-
 });

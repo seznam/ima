@@ -1,4 +1,3 @@
-
 //let namespaceWarningEmitted = false;
 
 /**

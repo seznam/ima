@@ -1,9 +1,7 @@
 import ns from '../../namespace';
 import BlankManagedRootView from './BlankManagedRootView';
 import PageRenderer from './PageRenderer';
-import PageRendererFactory from './PageRendererFactory';
 import ViewAdapter from './ViewAdapter';
-import ControllerDecorator from '../../controller/ControllerDecorator';
 import GenericError from '../../error/GenericError';
 
 ns.namespace('ima.page.renderer');
@@ -12,7 +10,6 @@ ns.namespace('ima.page.renderer');
  * Base class for implementations of the {@linkcode PageRenderer} interface.
  */
 export default class AbstractPageRenderer extends PageRenderer {
-
 	/**
 	 * Initializes the abstract page renderer.
 	 *
@@ -63,7 +60,6 @@ export default class AbstractPageRenderer extends PageRenderer {
 		 * @type {?React.Component}
 		 */
 		this._reactiveView = null;
-
 	}
 
 	/**
@@ -98,16 +94,14 @@ export default class AbstractPageRenderer extends PageRenderer {
 	 * @inheritdoc
 	 */
 	clearState() {
-		if (this._reactiveView &&
-				this._reactiveView.state) {
+		if (this._reactiveView && this._reactiveView.state) {
+			let emptyState = Object.keys(
+				this._reactiveView.state
+			).reduce((state, key) => {
+				state[key] = undefined;
 
-			let emptyState = Object
-				.keys(this._reactiveView.state)
-				.reduce((state, key) => {
-					state[key] = undefined;
-
-					return state;
-				}, {});
+				return state;
+			}, {});
 
 			this._reactiveView.setState(emptyState);
 		}
@@ -170,8 +164,8 @@ export default class AbstractPageRenderer extends PageRenderer {
 	_getWrappedPageView(controller, view, routeOptions) {
 		let managedRootView = this._factory.getManagedRootView(
 			routeOptions.managedRootView ||
-			this._settings.$Page.$Render.managedRootView ||
-			BlankManagedRootView
+				this._settings.$Page.$Render.managedRootView ||
+				BlankManagedRootView
 		);
 		let props = this._generateViewProps(
 			managedRootView,
@@ -196,7 +190,7 @@ export default class AbstractPageRenderer extends PageRenderer {
 	_getDocumentView(routeOptions) {
 		return this._factory.getDocumentView(
 			routeOptions.documentView ||
-			this._settings.$Page.$Render.documentView
+				this._settings.$Page.$Render.documentView
 		);
 	}
 }

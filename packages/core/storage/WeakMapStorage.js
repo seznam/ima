@@ -9,7 +9,6 @@ ns.namespace('ima.storage');
  * the storage reaches the configured threshold.
  */
 export default class WeakMapStorage extends MapStorage {
-
 	/**
 	 * Initializes the storage.
 	 *
@@ -92,7 +91,8 @@ export default class WeakMapStorage extends MapStorage {
 	_discardExpiredEntries() {
 		for (let key of super.keys()) {
 			let targetReference = super.get(key);
-			if (!targetReference.target) { // the reference has died
+			if (!targetReference.target) {
+				// the reference has died
 				super.delete(key);
 			}
 		}
@@ -122,7 +122,7 @@ class WeakRef {
 			if (!(target instanceof Object)) {
 				throw new TypeError(
 					'The target reference must point to an object, ' +
-					'primitive values are not allowed'
+						'primitive values are not allowed'
 				);
 			}
 			if (ttl <= 0) {
@@ -155,7 +155,7 @@ class WeakRef {
 	 *         has been discarded by the garbage collector.
 	 */
 	get target() {
-		if (this._reference && (Date.now() >= this._expiration)) {
+		if (this._reference && Date.now() >= this._expiration) {
 			this._reference = null; // let the GC do its job
 		}
 

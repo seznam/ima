@@ -1,6 +1,5 @@
 import ns from '../namespace';
 import MapStorage from './MapStorage';
-import Storage from './Storage';
 import GenericError from '../error/GenericError';
 import Request from '../router/Request';
 import Response from '../router/Response';
@@ -32,7 +31,6 @@ const COOKIE_SEPARATOR = '; ';
  * side. The storage caches the cookies internally.
  */
 export default class CookieStorage extends MapStorage {
-
 	static get $dependencies() {
 		return [Window, Request, Response];
 	}
@@ -104,8 +102,8 @@ export default class CookieStorage extends MapStorage {
 		 *       }}
 		 */
 		this._transformFunction = {
-			encode: (value) => value,
-			decode: (value) => value
+			encode: value => value,
+			decode: value => value
 		};
 	}
 
@@ -257,11 +255,9 @@ export default class CookieStorage extends MapStorage {
 		for (let cookieName of super.keys()) {
 			let cookieItem = super.get(cookieName);
 
-			cookieStrings.push(this._generateCookieString(
-				cookieName,
-				cookieItem.value,
-				{}
-			));
+			cookieStrings.push(
+				this._generateCookieString(cookieName, cookieItem.value, {})
+			);
 		}
 
 		return cookieStrings.join(COOKIE_SEPARATOR);
@@ -294,10 +290,12 @@ export default class CookieStorage extends MapStorage {
 	 * property at the client side.
 	 */
 	_parse() {
-		let cookiesString = this._window.isClient() ?
-			document.cookie : this._request.getCookieHeader();
-		let cookiesArray = cookiesString ?
-			cookiesString.split(COOKIE_SEPARATOR) : [];
+		let cookiesString = this._window.isClient()
+			? document.cookie
+			: this._request.getCookieHeader();
+		let cookiesArray = cookiesString
+			? cookiesString.split(COOKIE_SEPARATOR)
+			: [];
 
 		for (let i = 0; i < cookiesArray.length; i++) {
 			let cookie = this._extractCookie(cookiesArray[i]);
@@ -360,8 +358,9 @@ export default class CookieStorage extends MapStorage {
 
 		cookieString += options.domain ? ';Domain=' + options.domain : '';
 		cookieString += options.path ? ';Path=' + options.path : '';
-		cookieString += options.expires ?
-				';Expires=' + options.expires.toUTCString() : '';
+		cookieString += options.expires
+			? ';Expires=' + options.expires.toUTCString()
+			: '';
 		cookieString += options.maxAge ? ';Max-Age=' + options.maxAge : '';
 		cookieString += options.httpOnly ? ';HttpOnly' : '';
 		cookieString += options.secure ? ';Secure' : '';
@@ -383,8 +382,9 @@ export default class CookieStorage extends MapStorage {
 		}
 
 		if (typeof expiration === 'number') {
-			return expiration === Infinity ?
-				MAX_EXPIRE_DATE : new Date(Date.now() + expiration * 1000);
+			return expiration === Infinity
+				? MAX_EXPIRE_DATE
+				: new Date(Date.now() + expiration * 1000);
 		}
 
 		return expiration ? new Date(expiration) : MAX_EXPIRE_DATE;
@@ -471,10 +471,7 @@ export default class CookieStorage extends MapStorage {
 			name = this._firstLetterToLowerCase(name);
 		}
 
-		return [
-			name,
-			value
-		];
+		return [name, value];
 	}
 
 	/**
@@ -493,19 +490,19 @@ export default class CookieStorage extends MapStorage {
 			let char = value[keyChar];
 
 			let isValid =
-					(charCode >= 33) &&
-					(charCode <= 126) &&
-					(char !== '"') &&
-					(char !== ';') &&
-					(char !== '\\');
+				charCode >= 33 &&
+				charCode <= 126 &&
+				char !== '"' &&
+				char !== ';' &&
+				char !== '\\';
 			if (isValid) {
 				sanitizedValue += char;
 			} else {
 				if ($Debug) {
 					throw new GenericError(
 						`Invalid char ${char} code ${charCode} in ${value}. ` +
-						`Dropping the invalid character from the cookie's ` +
-						`value.`,
+							`Dropping the invalid character from the cookie's ` +
+							`value.`,
 						{ value, charCode, char }
 					);
 				}
@@ -532,12 +529,14 @@ export default class CookieStorage extends MapStorage {
 	_recomputeCookieMaxAgeAndExpires(options) {
 		if (options.maxAge || options.expires) {
 			options.expires = this._getExpirationAsDate(
-				options.maxAge || options.expires);
+				options.maxAge || options.expires
+			);
 		}
 
 		if (!options.maxAge && options.expires) {
 			options.maxAge = Math.floor(
-				(options.expires.valueOf() - Date.now()) / 1000);
+				(options.expires.valueOf() - Date.now()) / 1000
+			);
 		}
 	}
 }

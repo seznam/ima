@@ -6,7 +6,6 @@ ns.namespace('ima.router');
  * Wrapper for the ExpressJS request, exposing only the necessary minimum.
  */
 export default class Request {
-
 	static get $dependencies() {
 		return [];
 	}
@@ -15,7 +14,6 @@ export default class Request {
 	 * Initializes the request.
 	 */
 	constructor() {
-
 		/**
 		 * The current ExpressJS request object, or {@code null} if running at
 		 * the client side.

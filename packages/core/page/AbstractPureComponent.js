@@ -16,7 +16,6 @@ import * as helpers from './componentHelpers';
  * @see https://facebook.github.io/react/docs/react-api.html#react.purecomponent
  */
 export default class AbstractPureComponent extends React.PureComponent {
-
 	static get contextTypes() {
 		return helpers.getContextTypes(this);
 	}

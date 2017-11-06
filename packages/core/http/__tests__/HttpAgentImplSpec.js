@@ -7,7 +7,6 @@ import HttpAgentProxy from 'http/HttpProxy';
 import CookieStorage from 'storage/CookieStorage';
 
 describe('ima.http.HttpAgentImpl', () => {
-
 	let MockedCache = toMock(Cache);
 	let MockedHttpAgentProxy = toMock(HttpAgentProxy);
 	let MockedCookieStorage = toMock(CookieStorage);
@@ -30,11 +29,11 @@ describe('ima.http.HttpAgentImpl', () => {
 				repeatRequest: 1,
 				ttl: 0,
 				headers: {
-					'Accept': 'application/json',
+					Accept: 'application/json',
 					'Accept-Language': 'en'
 				},
 				cache: true,
-				postProcessor: (agentResponse) => agentResponse
+				postProcessor: agentResponse => agentResponse
 			},
 			cacheOptions: {
 				prefix: 'http.'
@@ -56,46 +55,36 @@ describe('ima.http.HttpAgentImpl', () => {
 		data = {
 			status: 200,
 			body: 111,
-			params:{
+			params: {
 				url: 'url',
 				data: {},
 				options: options
 			},
-			header:{
-				'set-cookie':[
-					'cookie1=cookie1',
-					'cookie2=cookie2'
-				]
+			header: {
+				'set-cookie': ['cookie1=cookie1', 'cookie2=cookie2']
 			}
 		};
 	});
 
-	using([
-		'get',
-		'post',
-		'put',
-		'patch',
-		'delete'
-	], (method) => {
+	using(['get', 'post', 'put', 'patch', 'delete'], method => {
 		describe(method + ' method', () => {
-
 			beforeEach(() => {
 				data.params.method = method;
 			});
 
-			it('should be return resolved promise with data', (done) => {
-				spyOn(proxy, 'request')
-					.and
-					.callFake(() => {
-						return Promise.resolve(data);
-					});
+			it('should be return resolved promise with data', done => {
+				spyOn(proxy, 'request').and.callFake(() => {
+					return Promise.resolve(data);
+				});
 
-				spyOn(proxy, 'haveToSetCookiesManually')
-					.and
-					.returnValue(false);
+				spyOn(proxy, 'haveToSetCookiesManually').and.returnValue(false);
 
-				http[method](data.params.url, data.params.data, data.params.options)
-					.then((response) => {
+				http[method](
+					data.params.url,
+					data.params.data,
+					data.params.options
+				)
+					.then(response => {
 						let agentResponse = {
 							status: data.status,
 							params: data.params,
@@ -107,60 +96,66 @@ describe('ima.http.HttpAgentImpl', () => {
 						expect(response).toEqual(agentResponse);
 						done();
 					})
-					.catch((e) => {
+					.catch(e => {
 						console.error(e.message, e.stack);
 						done();
 					});
 			});
 
-			it('should be rejected with error', (done) => {
-				spyOn(proxy, 'request')
-					.and
-					.callFake(() => {
-						return Promise.reject(new GenericError('', data.params));
-					});
+			it('should be rejected with error', done => {
+				spyOn(proxy, 'request').and.callFake(() => {
+					return Promise.reject(new GenericError('', data.params));
+				});
 
-				http[method](data.params.url, data.params.data, data.params.options)
-					.then(() => {}, (error) => {
+				http[method](
+					data.params.url,
+					data.params.data,
+					data.params.options
+				).then(
+					() => {},
+					error => {
 						expect(error instanceof GenericError).toBe(true);
 						expect(proxy.request.calls.count()).toEqual(2);
 						done();
-					});
+					}
+				);
 			});
 
-			it('should be set cookie', (done) => {
-				spyOn(proxy, 'request')
-					.and
-					.callFake(() => {
-						return Promise.resolve(data);
-					});
-				spyOn(proxy, 'haveToSetCookiesManually')
-					.and
-					.returnValue(true);
+			it('should be set cookie', done => {
+				spyOn(proxy, 'request').and.callFake(() => {
+					return Promise.resolve(data);
+				});
+				spyOn(proxy, 'haveToSetCookiesManually').and.returnValue(true);
 				spyOn(cookie, 'parseFromSetCookieHeader');
 
-				http[method](data.params.url, data.params.data, data.params.options)
-					.then(() => {
-						expect(cookie.parseFromSetCookieHeader.calls.count()).toEqual(2);
-						done();
-					});
+				http[method](
+					data.params.url,
+					data.params.data,
+					data.params.options
+				).then(() => {
+					expect(
+						cookie.parseFromSetCookieHeader.calls.count()
+					).toEqual(2);
+					done();
+				});
 			});
 
-			it('should call postProcessor function', (done) => {
-				spyOn(proxy, 'request')
-					.and
-					.callFake(() => {
-						return Promise.resolve(data);
-					});
-				spyOn(data.params.options, 'postProcessor')
-					.and
-					.callThrough();
+			it('should call postProcessor function', done => {
+				spyOn(proxy, 'request').and.callFake(() => {
+					return Promise.resolve(data);
+				});
+				spyOn(data.params.options, 'postProcessor').and.callThrough();
 
-				http[method](data.params.url, data.params.data, data.params.options)
-					.then(() => {
-						expect(data.params.options.postProcessor).toHaveBeenCalled();
-						done();
-					});
+				http[method](
+					data.params.url,
+					data.params.data,
+					data.params.options
+				).then(() => {
+					expect(
+						data.params.options.postProcessor
+					).toHaveBeenCalled();
+					done();
+				});
 			});
 		});
 	});

@@ -10,7 +10,6 @@ import RendererFactory from 'page/renderer/PageRendererFactory';
 import Response from 'router/Response';
 
 describe('ima.page.renderer.ServerPageRenderer', () => {
-
 	let param1 = 'param1';
 	let param2 = 'param2';
 	let params = {
@@ -21,10 +20,6 @@ describe('ima.page.renderer.ServerPageRenderer', () => {
 	let controller = new Controller();
 	controller.getMetaManager = () => {};
 	let view = () => {};
-	let expressResponse = {
-		status: () => {},
-		send: () => {}
-	};
 
 	let cache = null;
 	let response = null;
@@ -53,13 +48,18 @@ describe('ima.page.renderer.ServerPageRenderer', () => {
 		cache = new Cache();
 		response = new Response();
 		rendererFactory = new RendererFactory();
-		pageRenderer = new ServerPageRenderer(rendererFactory, Helper, ReactDOMServer, settings, response, cache);
+		pageRenderer = new ServerPageRenderer(
+			rendererFactory,
+			Helper,
+			ReactDOMServer,
+			settings,
+			response,
+			cache
+		);
 	});
 
 	it('should be wrap each key to promise', () => {
-		spyOn(Promise, 'resolve')
-			.and
-			.callThrough();
+		spyOn(Promise, 'resolve').and.callThrough();
 
 		pageRenderer._wrapEachKeyToPromise(params);
 
@@ -68,64 +68,52 @@ describe('ima.page.renderer.ServerPageRenderer', () => {
 	});
 
 	describe('update method', () => {
+		it('should reject promise with error', done => {
+			spyOn(pageRenderer, 'mount').and.stub();
 
-		it('should reject promise with error', (done) => {
-			spyOn(pageRenderer, 'mount')
-				.and
-				.stub();
-
-			pageRenderer
-				.update(controller, params)
-				.catch((error) => {
-					expect(error instanceof GenericError).toEqual(true);
-					done();
-				});
+			pageRenderer.update(controller, params).catch(error => {
+				expect(error instanceof GenericError).toEqual(true);
+				done();
+			});
 		});
-
 	});
 
 	describe('mount method', () => {
-
 		let loadedPageState = {
 			param1: 'param1',
 			param2: Promise.resolve('param2')
 		};
 
-		it('should return already sent data to the client', (done) => {
+		it('should return already sent data to the client', done => {
 			let responseParams = {
 				content: '',
 				status: 200,
 				pageState: loadedPageState
 			};
 
-			spyOn(response, 'isResponseSent')
-				.and
-				.returnValue(true);
-			spyOn(response, 'getResponseParams')
-				.and
-				.returnValue(responseParams);
+			spyOn(response, 'isResponseSent').and.returnValue(true);
+			spyOn(response, 'getResponseParams').and.returnValue(
+				responseParams
+			);
 
 			pageRenderer
 				.mount(controller, view, loadedPageState, routeOptions)
-				.then((page) => {
+				.then(page => {
 					expect(page).toEqual(responseParams);
 					done();
 				});
 		});
 
-		it('should call _renderPage method', (done) => {
-			spyOn(pageRenderer, '_renderPage')
-				.and
-				.stub();
+		it('should call _renderPage method', done => {
+			spyOn(pageRenderer, '_renderPage').and.stub();
 
 			pageRenderer
 				.mount(controller, view, loadedPageState, routeOptions)
-				.then((page) => {
+				.then(page => {
 					expect(pageRenderer._renderPage).toHaveBeenCalled();
 					done();
 				});
 		});
-
 	});
 
 	describe('_renderPage method', () => {
@@ -140,56 +128,50 @@ describe('ima.page.renderer.ServerPageRenderer', () => {
 				pageState: fetchedResource
 			};
 
-			spyOn(response, 'isResponseSent')
-				.and
-				.returnValue(true);
-			spyOn(response, 'getResponseParams')
-				.and
-				.returnValue(responseParams);
+			spyOn(response, 'isResponseSent').and.returnValue(true);
+			spyOn(response, 'getResponseParams').and.returnValue(
+				responseParams
+			);
 
-			expect(pageRenderer._renderPage(controller, view, fetchedResource)).toEqual(responseParams);
+			expect(
+				pageRenderer._renderPage(controller, view, fetchedResource)
+			).toEqual(responseParams);
 		});
 
 		describe('render new page', () => {
-
 			let responseParams = { status: 200, content: '', pageState: {} };
 			let pageRenderResponse = null;
 
 			beforeEach(() => {
-				spyOn(controller, 'setState')
-					.and
-					.stub();
-				spyOn(controller, 'setMetaParams')
-					.and
-					.stub();
-				spyOn(controller, 'getHttpStatus')
-					.and
-					.stub();
-				spyOn(pageRenderer, '_renderPageContentToString')
-					.and
-					.stub();
-				spyOn(response, 'status')
-					.and
-					.returnValue(response);
-				spyOn(response, 'setPageState')
-						.and
-						.returnValue(response);
-				spyOn(response, 'send')
-					.and
-					.returnValue(response);
-				spyOn(response, 'getResponseParams')
-					.and
-					.returnValue(responseParams);
+				spyOn(controller, 'setState').and.stub();
+				spyOn(controller, 'setMetaParams').and.stub();
+				spyOn(controller, 'getHttpStatus').and.stub();
+				spyOn(pageRenderer, '_renderPageContentToString').and.stub();
+				spyOn(response, 'status').and.returnValue(response);
+				spyOn(response, 'setPageState').and.returnValue(response);
+				spyOn(response, 'send').and.returnValue(response);
+				spyOn(response, 'getResponseParams').and.returnValue(
+					responseParams
+				);
 
-				pageRenderResponse = pageRenderer._renderPage(controller, view, fetchedResource, routeOptions);
+				pageRenderResponse = pageRenderer._renderPage(
+					controller,
+					view,
+					fetchedResource,
+					routeOptions
+				);
 			});
 
 			it('should set controller state', () => {
-				expect(controller.setState).toHaveBeenCalledWith(fetchedResource);
+				expect(controller.setState).toHaveBeenCalledWith(
+					fetchedResource
+				);
 			});
 
 			it('should set meta params', () => {
-				expect(controller.setMetaParams).toHaveBeenCalledWith(fetchedResource);
+				expect(controller.setMetaParams).toHaveBeenCalledWith(
+					fetchedResource
+				);
 			});
 
 			it('should send response for request', () => {
@@ -197,7 +179,9 @@ describe('ima.page.renderer.ServerPageRenderer', () => {
 				expect(response.setPageState).toHaveBeenCalled();
 				expect(response.send).toHaveBeenCalled();
 				expect(controller.getHttpStatus).toHaveBeenCalled();
-				expect(pageRenderer._renderPageContentToString).toHaveBeenCalledWith(controller, view, routeOptions);
+				expect(
+					pageRenderer._renderPageContentToString
+				).toHaveBeenCalledWith(controller, view, routeOptions);
 			});
 
 			it('should return response params', () => {
@@ -207,9 +191,10 @@ describe('ima.page.renderer.ServerPageRenderer', () => {
 	});
 
 	describe('_renderPageContentToString method', () => {
-
 		let utils = { $Utils: 'utils' };
-		let wrapedPageViewElement = { wrapElementView: 'wrapedPageViewElement' };
+		let wrapedPageViewElement = {
+			wrapElementView: 'wrapedPageViewElement'
+		};
 		let pageMarkup = '<body></body>';
 		let documentView = () => {};
 		let documentViewElement = () => {};
@@ -222,57 +207,63 @@ describe('ima.page.renderer.ServerPageRenderer', () => {
 		let pageContent = null;
 
 		beforeEach(() => {
-			spyOn(ReactDOMServer, 'renderToString')
-				.and
-				.returnValue(pageMarkup);
-			spyOn(rendererFactory, 'createReactElementFactory')
-				.and
-				.returnValue(documentViewFactory);
-			spyOn(ReactDOMServer, 'renderToStaticMarkup')
-				.and
-				.returnValue(appMarkup);
-			spyOn(pageRenderer, '_getRevivalSettings')
-				.and
-				.returnValue(revivalSettings);
-			spyOn(pageRenderer, '_getWrappedPageView')
-				.and
-				.returnValue(wrapedPageViewElement);
-			spyOn(pageRenderer, '_getDocumentView')
-				.and
-				.returnValue(documentView);
-			spyOn(controller, 'getMetaManager')
-				.and
-				.returnValue(metaManager);
-			spyOn(rendererFactory, 'getUtils')
-				.and
-				.returnValue(utils);
+			spyOn(ReactDOMServer, 'renderToString').and.returnValue(pageMarkup);
+			spyOn(rendererFactory, 'createReactElementFactory').and.returnValue(
+				documentViewFactory
+			);
+			spyOn(ReactDOMServer, 'renderToStaticMarkup').and.returnValue(
+				appMarkup
+			);
+			spyOn(pageRenderer, '_getRevivalSettings').and.returnValue(
+				revivalSettings
+			);
+			spyOn(pageRenderer, '_getWrappedPageView').and.returnValue(
+				wrapedPageViewElement
+			);
+			spyOn(pageRenderer, '_getDocumentView').and.returnValue(
+				documentView
+			);
+			spyOn(controller, 'getMetaManager').and.returnValue(metaManager);
+			spyOn(rendererFactory, 'getUtils').and.returnValue(utils);
 
-			pageContent = pageRenderer._renderPageContentToString(controller, view, routeOptions);
+			pageContent = pageRenderer._renderPageContentToString(
+				controller,
+				view,
+				routeOptions
+			);
 		});
 
 		it('should wrap page view', () => {
-			expect(pageRenderer._getWrappedPageView).toHaveBeenCalledWith(controller, view, routeOptions);
+			expect(pageRenderer._getWrappedPageView).toHaveBeenCalledWith(
+				controller,
+				view,
+				routeOptions
+			);
 		});
 
 		it('should render page view to string', () => {
-			expect(ReactDOMServer.renderToString).toHaveBeenCalledWith(wrapedPageViewElement);
+			expect(ReactDOMServer.renderToString).toHaveBeenCalledWith(
+				wrapedPageViewElement
+			);
 		});
 
 		it('should create factory for creating React element from document view', () => {
-			expect(rendererFactory.createReactElementFactory).toHaveBeenCalledWith(documentView);
+			expect(
+				rendererFactory.createReactElementFactory
+			).toHaveBeenCalledWith(documentView);
 		});
 
 		it('should render static markup from document view', () => {
 			expect(rendererFactory.getUtils).toHaveBeenCalled();
 			expect(controller.getMetaManager).toHaveBeenCalled();
 			expect(pageRenderer._getRevivalSettings).toHaveBeenCalled();
-			expect(ReactDOMServer.renderToStaticMarkup).toHaveBeenCalledWith(documentViewElement);
+			expect(ReactDOMServer.renderToStaticMarkup).toHaveBeenCalledWith(
+				documentViewElement
+			);
 		});
 
 		it('should return page content', () => {
 			expect(pageContent).toEqual('<!doctype html>\n' + appMarkup);
 		});
-
 	});
-
 });

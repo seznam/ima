@@ -11,7 +11,6 @@ ns.namespace('ima.page.renderer');
  * This is the default managed root view.
  */
 export default class BlankManagedRootView extends React.Component {
-
 	static get propTypes() {
 		return {
 			$pageView: PropTypes.func

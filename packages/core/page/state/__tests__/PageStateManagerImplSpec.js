@@ -1,7 +1,6 @@
 import PageStateManager from 'page/state/PageStateManagerImpl';
 
 describe('ima.page.state.PageStateManagerImpl', () => {
-
 	let stateManager = null;
 	let defaultState = { state: 'state', patch: null };
 	let patchState = { patch: 'patch' };
@@ -20,7 +19,6 @@ describe('ima.page.state.PageStateManagerImpl', () => {
 	});
 
 	describe('getState method', () => {
-
 		it('should returns default state', () => {
 			expect(stateManager.getState()).toEqual(defaultState);
 		});
@@ -30,37 +28,29 @@ describe('ima.page.state.PageStateManagerImpl', () => {
 
 			expect(stateManager.getState()).toEqual({});
 		});
-
 	});
 
 	describe('setState method', () => {
-
 		it('should set smooth copy last state and state patch', () => {
 			let newState = Object.assign({}, defaultState, patchState);
 
-			spyOn(stateManager, '_eraseExcessHistory')
-				.and
-				.stub();
+			spyOn(stateManager, '_eraseExcessHistory').and.stub();
 
-			spyOn(stateManager, '_pushToHistory')
-				.and
-				.stub();
+			spyOn(stateManager, '_pushToHistory').and.stub();
 
-			spyOn(stateManager, '_callOnChangeCallback')
-				.and
-				.stub();
-
+			spyOn(stateManager, '_callOnChangeCallback').and.stub();
 
 			stateManager.setState(patchState);
 
 			expect(stateManager._eraseExcessHistory).toHaveBeenCalledWith();
 			expect(stateManager._pushToHistory).toHaveBeenCalledWith(newState);
-			expect(stateManager._callOnChangeCallback).toHaveBeenCalledWith(newState);
+			expect(stateManager._callOnChangeCallback).toHaveBeenCalledWith(
+				newState
+			);
 		});
 	});
 
 	it('should return history of states', () => {
 		expect(stateManager.getAllStates()).toEqual([defaultState]);
 	});
-
 });
