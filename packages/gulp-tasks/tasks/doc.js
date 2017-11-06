@@ -25,9 +25,11 @@ exports.default = (gulpConfig) => {
 		gulp.src(['./README.md', './doc-src/**/*.{js,jsx}'], { read: false })
 			.pipe(jsdoc({
 				opts: {
-					destination: './doc',
-					template: './node_modules/docdash/'
-				}
+					destination: './doc'
+				},
+				plugins: [
+					'plugins/markdown'
+				]
 			}, () => {
 				if (completionTimeout) {
 					clearTimeout(completionTimeout);
@@ -50,7 +52,7 @@ exports.default = (gulpConfig) => {
 					}
 				}
 
-				return `/** @module */\n${content}`;
+				return content;
 			}))
 			.pipe(rename(file => file.extname = '.js'))
 			.pipe(gulp.dest('./doc-src'));
