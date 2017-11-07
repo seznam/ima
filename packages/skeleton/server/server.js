@@ -30,11 +30,11 @@ let helmet = require('helmet');
 let errorToJSON = require('error-to-json');
 let proxy = require('express-http-proxy');
 
-process.on('uncaughtException', (error) => {
+process.on('uncaughtException', error => {
 	logger.error('Uncaught Exception:', { error: errorToJSON(error) });
 });
 
-process.on('unhandledRejection', (error) => {
+process.on('unhandledRejection', error => {
 	logger.error('Unhandled promise rejection:', { error: errorToJSON(error) });
 });
 
@@ -51,36 +51,41 @@ function renderApp(req, res, next) {
 
 	clientApp
 		.requestHandler(req, res)
-		.then((response) => {
-			// logger.info('Request handled successfully', { response: { status: number, content: string, SPA: boolean=, error: Error= } });
+		.then(
+			response => {
+				// logger.info('Request handled successfully', { response: { status: number, content: string, SPA: boolean=, error: Error= } });
 
-			if (response.error) {
-				logger.error('App error', { error: errorToJSON(response.error) });
-			}
+				if (response.error) {
+					logger.error('App error', {
+						error: errorToJSON(response.error)
+					});
+				}
 
-			if (
-				(req.method === 'GET') &&
-				(response.status === 200) &&
-				!response.SPA &&
-				!response.error
-			) {
-				cache.set(req, response.content);
+				if (
+					req.method === 'GET' &&
+					response.status === 200 &&
+					!response.SPA &&
+					!response.error
+				) {
+					cache.set(req, response.content);
+				}
+			},
+			error => {
+				// logger.error('REJECT', { error });
+				next(error);
 			}
-		}, (error) => {
-			// logger.error('REJECT', { error });
-			next(error);
-		})
-		.catch((error) => {
+		)
+		.catch(error => {
 			logger.error('Cache error', { error: errorToJSON(error) });
 			next(error);
 		});
 }
 
-function errorHandler(err, req, res, next) {
+function errorHandler(err, req, res) {
 	clientApp.errorHandler(err, req, res);
 }
 
-function staticErrorPage(err, req, res, next) {
+function staticErrorPage(err, req, res) {
 	clientApp.showStaticErrorPage(err, req, res);
 }
 
@@ -90,16 +95,27 @@ function runNodeApp() {
 
 	app.set('trust proxy', true);
 
-	app.use(helmet())
+	app
+		.use(helmet())
 		.use(compression())
 		.use(favicon(path.resolve(__dirname) + '/static/img/favicon.ico'))
-		.use(environment.$Server.staticFolder, express.static(path.join(__dirname, 'static')))
+		.use(
+			environment.$Server.staticFolder,
+			express.static(path.join(__dirname, 'static'))
+		)
 		.use(bodyParser.json()) // for parsing application/json
 		.use(bodyParser.urlencoded({ extended: true })) // for parsing application/x-www-form-urlencoded
-		.use(multer.fields([/*{ name: '<file input name>', maxCount: 1 }, ...*/])) // for parsing multipart/form-data
+		.use(
+			multer.fields([
+				/*{ name: '<file input name>', maxCount: 1 }, ...*/
+			])
+		) // for parsing multipart/form-data
 		.use(cookieParser())
 		.use(methodOverride())
-		.use(environment.$Proxy.path + '/', proxy(environment.$Proxy.server, environment.$Proxy.options))
+		.use(
+			environment.$Proxy.path + '/',
+			proxy(environment.$Proxy.server, environment.$Proxy.options)
+		)
 		.use(urlParser)
 		.use(renderApp)
 		.use(errorHandler)
@@ -107,7 +123,7 @@ function runNodeApp() {
 		.listen(environment.$Server.port, () => {
 			return logger.info(
 				'Point your browser at http://localhost:' +
-				environment.$Server.port
+					environment.$Server.port
 			);
 		});
 }
@@ -116,7 +132,7 @@ if (environment.$Env !== 'dev') {
 	logger.level = 'warn';
 }
 
-if ((environment.$Env === 'dev') || (environment.$Server.clusters === 1)) {
+if (environment.$Env === 'dev' || environment.$Server.clusters === 1) {
 	runNodeApp();
 } else {
 	if (cluster.isMaster) {
@@ -128,7 +144,7 @@ if ((environment.$Env === 'dev') || (environment.$Server.clusters === 1)) {
 		}
 
 		// Listen for dying workers
-		cluster.on('exit', (worker) => {
+		cluster.on('exit', worker => {
 			logger.warn(`Worker ${worker.id} died :(`);
 			cluster.fork();
 		});

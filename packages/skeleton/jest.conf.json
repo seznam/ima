@@ -1,0 +1,17 @@
+{
+	"bail": true,
+	"verbose": true,
+	"testEnvironment": "node",
+	"setupFiles": [
+		"ima/test.js",
+		"ima/polyfill/imaLoader.js",
+		"ima/polyfill/imaRunner.js"
+	],
+	"modulePaths": [
+		"<rootDir>/"
+	],
+	"transform": {
+		"\\.jsx?": "ima-gulp-tasks/preprocess.js"
+	},
+	"testRegex": "(/__tests__/).*Spec\\.jsx?$"
+}
