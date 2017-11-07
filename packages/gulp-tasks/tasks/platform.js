@@ -23,19 +23,10 @@ exports.default = (gulpConfig) => {
 			.pipe(gulp.dest(files.shim.dest.server));
 	}
 
-	function polyfill() {
-		return gulp
-			.src(files.polyfill.src)
-			.pipe(sourcemaps.init({loadMaps: true}))
-			.pipe(insert.wrap('(function(){', '})();'))
-			.pipe(concat(files.polyfill.name))
-			.pipe(gulp.dest(files.polyfill.dest.client))
-	}
-
-	function extraPolyfills(done) {
+	function polyfill(done) {
 		return gulp.series(
 			gulp.parallel(
-				...files.extraPolyfills.map(polyfill =>
+				...Object.values(files.polyfill).map(polyfill =>
 					() => gulp
 						.src(polyfill.src)
 						.pipe(sourcemaps.init({loadMaps: true}))
@@ -53,7 +44,6 @@ exports.default = (gulpConfig) => {
 
 	return {
 		polyfill,
-		extraPolyfills,
 		shim
 	};
 };

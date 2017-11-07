@@ -21,28 +21,35 @@ try {
 		},
 		bundle: {
 			js: [],
+			es: [],
 			css: []
 		}
 	};
 }
 
 let babelConfig = {
-	vendor: {
-		presets: [],
+	esVendor: {
+		presets: ['react'],
 		plugins: ['external-helpers-2']
 	},
-	app: {
+
+	vendor: {
+		presets: ['react'],
+		plugins: ['external-helpers-2']
+	},
+
+	esApp: {
 		presets: ['react'],
 		plugins: ['transform-es2015-modules-systemjs', 'external-helpers-2']
 	},
 
-	oldClient: {
-		presets: ['latest'],
+	app: {
+		presets: [],
 		plugins: []
 	},
 
 	server: {
-		presets: [],
+		presets: ['react'],
 		plugins: ['transform-es2015-modules-commonjs']
 	}
 };
@@ -50,11 +57,13 @@ let $Debug = true;
 let legacyCompactMode = false;
 
 if (['production', 'prod', 'test'].includes(process.env.NODE_ENV)) {
-	babelConfig.app.plugins = babelConfig.app.plugins.concat([
+	const esPlugins = [
 		'transform-react-constant-elements',
 		'transform-react-inline-elements'
-	]);
-	babelConfig.oldClient.presets = ['es2017', 'es2016', ['es2015', { loose: true }]];
+	];
+	babelConfig.esApp.plugins = babelConfig.esApp.plugins.concat(esPlugins);
+	babelConfig.esVendor.plugins = babelConfig.esVendor.plugins.concat(esPlugins);
+	babelConfig.app.presets = ['es2017', 'es2016', ['es2015', { loose: true }]];
 	babelConfig.vendor.presets = ['es2017', 'es2016', ['es2015', { loose: true }],  'react'];
 	$Debug = false;
 	legacyCompactMode = true;
@@ -65,8 +74,8 @@ if (
 	(process.argv.some(arg => /^--legacy-compat-mode$/.test(arg)) ||
 	Object.keys(process.env).includes('npm_config_legacy_compat_mode'))
 ) {
-	babelConfig.vendor.presets = ['latest', 'react'];
-	babelConfig.server.presets = ['latest', 'react'];
+	babelConfig.app.presets = ['es2017', 'es2016', ['es2015', { loose: true }]];
+	babelConfig.vendor.presets = ['es2017', 'es2016', ['es2015', { loose: true }],  'react'];
 	legacyCompactMode = true;
 }
 
@@ -96,18 +105,16 @@ exports.tasks = {
 exports.files = {
 	vendor: {
 		src: {
-			client: 'vendor.client.src.js',
-			test: 'vendor.client.test.src.js'
+			client: 'vendor.client.src.js'
 		},
 		name: {
 			server: 'vendor.server.js',
-			client: 'vendor.client.js',
-			test: 'vendor.client.test.js'
+			esClient: 'vendor.client.es.js',
+			client: 'vendor.client.js'
 		},
 		dest: {
 			server: './build/ima/',
 			client: './build/static/js/',
-			test: './build/static/js/',
 			tmp: './build/ima/'
 		},
 		watch: ['./app/build.js', './ima/build.js']
@@ -115,7 +122,8 @@ exports.files = {
 	app: {
 		name: {
 			server: 'app.server.js',
-			client: 'app.client.js'
+			client: 'app.client.js',
+			esClient: 'app.client.es.js'
 		},
 		clearServerSide: ['production', 'prod', 'test'].includes(process.env.NODE_ENV),
 		src: [].concat(appDependencies.js, appDependencies.mainjs),
@@ -124,19 +132,6 @@ exports.files = {
 			client: './build/static/js/'
 		},
 		watch:['./app/**/*.{js,jsx}', './app/main.js', '!./app/environment.js']
-	},
-	ima: {
-		name: {
-			server: 'ima.server.js',
-			client: 'ima.client.js'
-		},
-		clearServerSide: ['production', 'prod', 'test'].includes(process.env.NODE_ENV),
-		src: [].concat(coreDependencies.js, coreDependencies.mainjs),
-		dest: {
-			server: './build/ima/',
-			client: './build/static/js/'
-		},
-		watch:['./node_modules/ima/**/*.{js,jsx}', '!./node_modules/ima/gulpfile.js']
 	},
 	server: {
 		cwd: '/',
@@ -164,9 +159,7 @@ exports.files = {
 	shim : {
 		name: 'shim.js',
 		src: [
-			'./node_modules/ima/polyfill/collectionEnumeration.js',
-			'./node_modules/ima/polyfill/imaLoader.js',
-			'./node_modules/ima/polyfill/imaRunner.js'
+			'./node_modules/ima/polyfill/collectionEnumeration.js'
 		],
 		dest: {
 			client: './build/static/js/',
@@ -174,17 +167,26 @@ exports.files = {
 		}
 	},
 	polyfill: {
-		name: 'polyfill.js',
-		src: [
-			'./node_modules/babel-polyfill/dist/polyfill.min.js',
-			'./node_modules/custom-event-polyfill/custom-event-polyfill.js'
-		],
-		dest: {
-			client: './build/static/js/'
-		}
-	},
-	extraPolyfills: [
-		{
+		js: {
+			name: 'polyfill.js',
+			src: [
+				'./node_modules/babel-polyfill/dist/polyfill.min.js',
+				'./node_modules/custom-event-polyfill/custom-event-polyfill.js'
+			],
+			dest: {
+				client: './build/static/js/'
+			}
+		},
+		es: {
+			name: 'polyfill.es.js',
+			src: [
+				'./node_modules/custom-event-polyfill/custom-event-polyfill.js'
+			],
+			dest: {
+				client: './build/static/js/'
+			}
+		},
+		fetch: {
 			name: 'fetch-polyfill.js',
 			src: [
 				'./node_modules/whatwg-fetch/fetch.js'
@@ -193,11 +195,16 @@ exports.files = {
 				client: './build/static/js/'
 			}
 		}
-	],
+	},
 	bundle: {
 		js: {
 			name: 'app.bundle.min.js',
 			src: appDependencies.bundle.js,
+			dest: './build/static/js/'
+		},
+		es: {
+			name: 'app.bundle.es.min.js',
+			src: appDependencies.bundle.es,
 			dest: './build/static/js/'
 		},
 		css: {

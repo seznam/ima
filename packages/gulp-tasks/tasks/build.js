@@ -27,7 +27,7 @@ exports['ima:build'] = () => {
 exports['vendor:build'] = () => {
 	gulp.series(
 		'Es6ToEs5:vendor',
-		gulp.parallel('Es6ToEs5:vendor:client', 'Es6ToEs5:vendor:client:test'),
+		gulp.parallel('Es6ToEs5:vendor:client'),
 		'server:restart',
 		'server:reload'
 	)();

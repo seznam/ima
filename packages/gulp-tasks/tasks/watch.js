@@ -7,7 +7,7 @@ let watch = require('gulp-watch');
 let path = require('path');
 let fs = require('fs');
 
-let sharedState = require('ima-gulp-tasks/gulpState.js');
+let sharedState = require('../gulpState.js');
 
 exports.__requiresConfig = true;
 
@@ -36,14 +36,9 @@ exports.default = (gulpConfig) => {
 			hotReloadedCacheKeys.push(cacheKey);
 
 			if (event === 'unlink') {
-				if (cache.caches['Es6ToEs5:app'][absoluteFilePath]) {
-					delete cache.caches['Es6ToEs5:app'][absoluteFilePath];
-					remember.forget('Es6ToEs5:app', absoluteFilePath.replace('.jsx', '.js'));
-				}
-
-				if (cache.caches['Es6ToEs5:ima'][absoluteFilePath]) {
-					delete cache.caches['Es6ToEs5:ima'][absoluteFilePath];
-					remember.forget('Es6ToEs5:ima', absoluteFilePath.replace('.jsx', '.js'));
+				if (cache.caches['Es6ToEs5:es:app'][absoluteFilePath]) {
+					delete cache.caches['Es6ToEs5:es:app'][absoluteFilePath];
+					remember.forget('Es6ToEs5:es:app', absoluteFilePath.replace('.jsx', '.js'));
 				}
 			}
 		});
@@ -70,7 +65,7 @@ exports.default = (gulpConfig) => {
 					hotReloadedContents = fs.readFileSync('./build/static/' + filepath);
 				} else {
 					hotReloadedContents = hotReloadedCacheKeys.map((cacheKey) => {
-						let file = remember.cacheFor('Es6ToEs5:app')[cacheKey];
+						let file = remember.cacheFor('Es6ToEs5:es:app')[cacheKey];
 						if (!file) {
 							return '';
 						}

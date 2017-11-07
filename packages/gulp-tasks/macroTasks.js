@@ -2,30 +2,30 @@
 const isProductionBuild = ['prod', 'production', 'test'].includes(process.env.NODE_ENV);
 
 const DEFAULT_DEV_SUBTASKS = [
-	['copy:appStatic', 'copy:environment', 'shim', 'polyfill', 'extraPolyfills'],
+	['copy:appStatic', 'copy:environment', 'shim', 'polyfill'],
 	['Es6ToEs5:app', 'Es6ToEs5:server', 'Es6ToEs5:vendor'],
-	['less', 'doc', 'locale', 'Es6ToEs5:vendor:client', 'Es6ToEs5:vendor:client:test'],
+	['less', 'doc', 'locale', 'Es6ToEs5:vendor:client'],
 	'server',
-	['test:unit:karma:dev', 'watch']
+	['watch']
 ];
 
 const DEFAULT_BUILD_SUBTASKS = [
-	['copy:appStatic', 'copy:environment', 'shim', 'polyfill', 'extraPolyfills'],
+	['copy:appStatic', 'copy:environment', 'shim', 'polyfill'],
 	['Es6ToEs5:app', 'Es6ToEs5:server', 'Es6ToEs5:vendor'],
-	['less', 'doc', 'locale', 'Es6ToEs5:vendor:client', 'Es6ToEs5:vendor:client:test'],
-	['bundle:js:app', 'bundle:js:server', 'bundle:css']
+	['less', 'locale', 'Es6ToEs5:vendor:client'],
+	['bundle:js:app', 'bundle:es:app', 'bundle:js:server', 'bundle:css']
 ];
-if (isProductionBuild) {
-	DEFAULT_BUILD_SUBTASKS.push(
-		['bundle:clean', 'Es6ToEs5:vendor:clean']
-	);
-}
+// if (isProductionBuild) {
+// 	DEFAULT_BUILD_SUBTASKS.push(
+// 		//['bundle:clean', 'Es6ToEs5:vendor:clean']
+// 	);
+// }
 
 const DEFAULT_SPA_SUBTASKS = [
-	['copy:appStatic', 'shim', 'polyfill', 'extraPolyfills'],
+	['copy:appStatic', 'shim', 'polyfill'],
 	['Es6ToEs5:app', 'Es6ToEs5:vendor'],
 	['less', 'doc', 'locale', 'Es6ToEs5:vendor:client'],
-	['bundle:js:app', 'bundle:css', 'spa:compile'],
+	['bundle:js:app', 'bundle:es:app', 'bundle:css', 'spa:compile'],
 	'spa:clean'
 ];
 if (isProductionBuild) {

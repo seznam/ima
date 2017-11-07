@@ -23,7 +23,7 @@ let gutil = require('gulp-util');
 let sharedTasksState = require('../gulpState');
 
 let vendorBundle = null;
-let vendorTestBundle = null;
+let vendorEsBundle = null;
 
 exports.__requiresConfig = true;
 
@@ -62,12 +62,12 @@ exports.default = (gulpConfig) => {
 			if (gulpConfig.legacyCompactMode) {
 				return babel({
 					moduleIds: true,
-					presets: babelConfig.oldClient ?
-						babelConfig.oldClient.presets
+					presets: babelConfig.app ?
+						babelConfig.app.presets
 					:
 						[],
-					plugins: babelConfig.oldClient ?
-						babelConfig.oldClient.plugins
+					plugins: babelConfig.app ?
+						babelConfig.app.plugins
 					:
 						[]
 				});
@@ -81,27 +81,32 @@ exports.default = (gulpConfig) => {
 			.pipe(resolveNewPath(files.app.base || '/'))
 			.pipe(plumber())
 			.pipe(sourcemaps.init())
-			.pipe(cache('Es6ToEs5:app'))
+			.pipe(cache('Es6ToEs5:es:app'))
 			.pipe(babel({
 				babelrc: false,
 				moduleIds: true,
-				presets: babelConfig.app.presets,
-				plugins: babelConfig.app.plugins
+				presets: babelConfig.esApp.presets,
+				plugins: babelConfig.esApp.plugins
 			}))
-			.pipe(remember('Es6ToEs5:app'))
+			.pipe(remember('Es6ToEs5:es:app'))
 			.pipe(plumber.stop())
-			.pipe(save('Es6ToEs5:app:source'))
-			.pipe(gulpIgnore.exclude(excludeServerSideFile))
-			.pipe(compileToLegacyCode())
-			.pipe(concat(files.app.name.client))
 			.pipe(replaceToIMALoader())
+			.pipe(save('Es6ToEs5:es:app:source'))
+			.pipe(gulpIgnore.exclude(excludeServerSideFile))
+			.pipe(save('Es6ToEs5:es:app:client'))
+			.pipe(concat(files.app.name.esClient))
 			.pipe(insert.wrap('(function(){\n', '\n })();\n'))
 			.pipe(sourcemaps.write())
 			.pipe(gulp.dest(files.app.dest.client))
-			.pipe(save.restore('Es6ToEs5:app:source'))
+			.pipe(save.restore('Es6ToEs5:es:app:client'))
+			.pipe(compileToLegacyCode())
+			.pipe(concat(files.app.name.client))
+			.pipe(insert.wrap('(function(){\n', '\n })();\n'))
+			.pipe(sourcemaps.write())
+			.pipe(gulp.dest(files.app.dest.client))
+			.pipe(save.restore('Es6ToEs5:es:app:source'))
 			.pipe(concat(files.app.name.server))
 			.pipe(insertSystemImports())
-			.pipe(replaceToIMALoader())
 			.pipe(insert.wrap('module.exports = (function(){\n', '\n })\n'))
 			.pipe(gulp.dest(files.app.dest.server));
 	}
@@ -205,7 +210,15 @@ exports.default = (gulpConfig) => {
 		}
 	}
 
-	function Es6ToEs5VendorClient() {
+	function Es6ToEs5VendorClient(done) {
+		return gulp.parallel(vendorClient, esVendorClient)(done);
+	}
+
+	function vendorClient() {
+		if (!gulpConfig.legacyCompactMode) {
+			return Promise.resolve();
+		}
+
 		let sourceFile = files.vendor.dest.tmp + files.vendor.src.client;
 		let options = { debug: false, insertGlobals: false, basedir: '.',  cache: {}, packageCache: {} };
 
@@ -229,38 +242,28 @@ exports.default = (gulpConfig) => {
 			.pipe(gulp.dest(files.vendor.dest.client));
 	}
 
-	function Es6ToEs5VendorClientTest() {
-		if (!files.vendor.src.test) {
-			return;
-		}
+	function esVendorClient() {
+		let sourceFile = files.vendor.dest.tmp + files.vendor.src.client;
+		let options = { debug: false, insertGlobals: false, basedir: '.',  cache: {}, packageCache: {} };
 
-		let sourceFiles = [
-			files.vendor.dest.tmp + files.vendor.src.test,
-			files.vendor.dest.tmp + files.vendor.src.client
-		];
-		let options = { debug: false, insertGlobals: false, basedir: '.', cache: {}, packageCache: {} };
-
-		if (!vendorTestBundle) {
-			vendorTestBundle = browserify(sourceFiles, options)
+		if (!vendorEsBundle) {
+			vendorEsBundle = browserify(sourceFile, options)
 				.transform('babelify', {
 					babelrc: false,
 					global: true,
-					presets: babelConfig.vendor.presets,
-					plugins: babelConfig.vendor.plugins
-				})
-				.external('react/addons')
-				.external('react/lib/ReactContext')
-				.external('react/lib/ExecutionEnvironment');
+					presets: babelConfig.esVendor.presets,
+					plugins: babelConfig.esVendor.plugins
+				});
 
 			if (sharedTasksState.watchMode) {
-				vendorTestBundle.plugin([watchify]);
+				vendorEsBundle.plugin([watchify]);
 			}
 		}
 
-		return vendorTestBundle
+		return vendorEsBundle
 			.bundle()
-			.pipe(source(files.vendor.name.test))
-			.pipe(gulp.dest(files.vendor.dest.test));
+			.pipe(source(files.vendor.name.esClient))
+			.pipe(gulp.dest(files.vendor.dest.client));
 	}
 
 	function Es6ToEs5VendorClean() {
@@ -287,7 +290,6 @@ exports.default = (gulpConfig) => {
 		'Es6ToEs5:server': Es6ToEs5Server,
 		'Es6ToEs5:vendor': Es6ToEs5Vendor,
 		'Es6ToEs5:vendor:client': Es6ToEs5VendorClient,
-		'Es6ToEs5:vendor:client:test': Es6ToEs5VendorClientTest,
 		'Es6ToEs5:vendor:clean': Es6ToEs5VendorClean
 	};
 };
