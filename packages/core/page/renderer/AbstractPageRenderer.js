@@ -10,7 +10,7 @@ ns.namespace('ima.page.renderer');
  * Base class for implementations of the {@linkcode PageRenderer} interface.
  */
 export default class AbstractPageRenderer extends PageRenderer {
-	/**
+  /**
 	 * Initializes the abstract page renderer.
 	 *
 	 * @param {PageRendererFactory} factory Factory for receive $Utils to view.
@@ -20,103 +20,103 @@ export default class AbstractPageRenderer extends PageRenderer {
 	 * @param {Object<string, *>} settings Application settings for the current
 	 *        application environment.
 	 */
-	constructor(factory, Helper, ReactDOM, settings) {
-		super();
+  constructor(factory, Helper, ReactDOM, settings) {
+    super();
 
-		/**
+    /**
 		 * Factory for receive $Utils to view.
 		 *
 		 * @protected
 		 * @type {PageRendererFactory}
 		 */
-		this._factory = factory;
+    this._factory = factory;
 
-		/**
+    /**
 		 * The IMA.js helper methods.
 		 *
 		 * @protected
 		 * @type {Vendor.$Helper}
 		 */
-		this._Helper = Helper;
+    this._Helper = Helper;
 
-		/**
+    /**
 		 * Rect framework instance, used to render the page.
 		 *
 		 * @protected
 		 * @type {Vendor.ReactDOM}
 		 */
-		this._ReactDOM = ReactDOM;
+    this._ReactDOM = ReactDOM;
 
-		/**
+    /**
 		 * Application setting for the current application environment.
 		 *
 		 * @protected
 		 * @type {Object<string, *>}
 		 */
-		this._settings = settings;
+    this._settings = settings;
 
-		/**
+    /**
 		 * @protected
 		 * @type {?React.Component}
 		 */
-		this._reactiveView = null;
-	}
+    this._reactiveView = null;
+  }
 
-	/**
+  /**
 	 * @inheritdoc
 	 * @abstract
 	 */
-	mount(controller, view, pageResources, routeOptions) {
-		throw new GenericError(
-			'The mount() method is abstract and must be overridden.'
-		);
-	}
+  mount(controller, view, pageResources, routeOptions) {
+    throw new GenericError(
+      'The mount() method is abstract and must be overridden.'
+    );
+  }
 
-	/**
+  /**
 	 * @inheritdoc
 	 */
-	update(controller, resourcesUpdate) {
-		throw new GenericError(
-			'The update() method is abstract and must be overridden.'
-		);
-	}
+  update(controller, resourcesUpdate) {
+    throw new GenericError(
+      'The update() method is abstract and must be overridden.'
+    );
+  }
 
-	/**
+  /**
 	 * @inheritdoc
 	 */
-	unmount() {
-		throw new GenericError(
-			'The unmount() method is abstract and must be overridden.'
-		);
-	}
+  unmount() {
+    throw new GenericError(
+      'The unmount() method is abstract and must be overridden.'
+    );
+  }
 
-	/**
+  /**
 	 * @inheritdoc
 	 */
-	clearState() {
-		if (this._reactiveView && this._reactiveView.state) {
-			let emptyState = Object.keys(
-				this._reactiveView.state
-			).reduce((state, key) => {
-				state[key] = undefined;
+  clearState() {
+    if (this._reactiveView && this._reactiveView.state) {
+      let emptyState = Object.keys(
+        this._reactiveView.state
+      ).reduce((state, key) => {
+        state[key] = undefined;
 
-				return state;
-			}, {});
+        return state;
+      }, {});
 
-			this._reactiveView.setState(emptyState);
-		}
-	}
+      this._reactiveView.setState(emptyState);
+    }
+  }
 
-	/**
+  /**
 	 * @inheritdoc
 	 */
-	setState(state = {}) {
-		if (this._reactiveView) {
-			this._reactiveView.setState(state);
-		}
-	}
+  setState(state = {}) {
+    if (this._reactiveView) {
+      this._reactiveView.setState(state);
+    }
+  }
 
-	/**
+  /**
 	 * Generate properties for view from state.
 	 *
 	 * @protected
@@ -125,17 +125,17 @@ export default class AbstractPageRenderer extends PageRenderer {
 	 * @param {Object<string, *>=} [state={}]
 	 * @return {Object<string, *>}
 	 */
-	_generateViewProps(view, state = {}) {
-		let props = {
-			view,
-			state,
-			$Utils: this._factory.getUtils()
-		};
+  _generateViewProps(view, state = {}) {
+    let props = {
+      view,
+      state,
+      $Utils: this._factory.getUtils()
+    };
 
-		return props;
-	}
+    return props;
+  }
 
-	/**
+  /**
 	 * Returns wrapped page view component with managed root view and view adapter.
 	 *
 	 * @param {ControllerDecorator} controller
@@ -161,24 +161,24 @@ export default class AbstractPageRenderer extends PageRenderer {
 	 *          managedRootView: ?function(new: React.Component)
 	 *        }} routeOptions The current route options.
 	 */
-	_getWrappedPageView(controller, view, routeOptions) {
-		let managedRootView = this._factory.getManagedRootView(
-			routeOptions.managedRootView ||
-				this._settings.$Page.$Render.managedRootView ||
-				BlankManagedRootView
-		);
-		let props = this._generateViewProps(
-			managedRootView,
-			Object.assign({}, controller.getState(), { $pageView: view })
-		);
+  _getWrappedPageView(controller, view, routeOptions) {
+    let managedRootView = this._factory.getManagedRootView(
+      routeOptions.managedRootView ||
+        this._settings.$Page.$Render.managedRootView ||
+        BlankManagedRootView
+    );
+    let props = this._generateViewProps(
+      managedRootView,
+      Object.assign({}, controller.getState(), { $pageView: view })
+    );
 
-		return this._factory.wrapView(
-			this._settings.$Page.$Render.viewAdapter || ViewAdapter,
-			props
-		);
-	}
+    return this._factory.wrapView(
+      this._settings.$Page.$Render.viewAdapter || ViewAdapter,
+      props
+    );
+  }
 
-	/**
+  /**
 	 * Returns the class constructor of the specified document view component.
 	 *
 	 * @param {(function(new: React.Component)|string)} documentView The
@@ -187,12 +187,11 @@ export default class AbstractPageRenderer extends PageRenderer {
 	 * @return {function(new: React.Component)} The constructor of the document
 	 *         view component.
 	 */
-	_getDocumentView(routeOptions) {
-		return this._factory.getDocumentView(
-			routeOptions.documentView ||
-				this._settings.$Page.$Render.documentView
-		);
-	}
+  _getDocumentView(routeOptions) {
+    return this._factory.getDocumentView(
+      routeOptions.documentView || this._settings.$Page.$Render.documentView
+    );
+  }
 }
 
 ns.ima.page.renderer.AbstractPageRenderer = AbstractPageRenderer;

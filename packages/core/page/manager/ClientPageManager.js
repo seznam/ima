@@ -14,11 +14,11 @@ ns.namespace('ima.page.manager');
  * Page manager for controller on the client side.
  */
 export default class ClientPageManager extends AbstractPageManager {
-	static get $dependencies() {
-		return [PageFactory, PageRenderer, PageStateManager, Window, EventBus];
-	}
+  static get $dependencies() {
+    return [PageFactory, PageRenderer, PageStateManager, Window, EventBus];
+  }
 
-	/**
+  /**
 	 * Initializes the client-side page manager.
 	 *
 	 * @param {PageFactory} pageFactory Factory used by the page manager to
@@ -31,82 +31,80 @@ export default class ClientPageManager extends AbstractPageManager {
 	 * @param {EventBus} eventBus The event bus for dispatching and listening
 	 *        for custom IMA events propagated through the DOM.
 	 */
-	constructor(pageFactory, pageRenderer, stateManager, window, eventBus) {
-		super(pageFactory, pageRenderer, stateManager);
+  constructor(pageFactory, pageRenderer, stateManager, window, eventBus) {
+    super(pageFactory, pageRenderer, stateManager);
 
-		/**
+    /**
 		 * The utility for manipulating the global context and global
 		 * client-side-specific APIs.
 		 *
 		 * @type {ima.window.Window}
 		 */
-		this._window = window;
+    this._window = window;
 
-		/**
+    /**
 		 * The event bus for dispatching and listening for custom IMA events
 		 * propagated through the DOM.
 		 *
 		 * @type {ima.event.EventBus}
 		 */
-		this._eventBus = eventBus;
+    this._eventBus = eventBus;
 
-		/**
+    /**
 		 * Event listener for the custom DOM events used by the event bus,
 		 * bound to this instance.
 		 *
 		 * @type {function(this: ClientPageManager, Event)}
 		 */
-		this._boundOnCustomEventHandler = event => {
-			this._onCustomEventHandler(event);
-		};
-	}
+    this._boundOnCustomEventHandler = event => {
+      this._onCustomEventHandler(event);
+    };
+  }
 
-	/**
+  /**
 	 * @inheritdoc
 	 */
-	init() {
-		super.init();
-		this._eventBus.listenAll(
-			this._window.getWindow(),
-			this._boundOnCustomEventHandler
-		);
-	}
+  init() {
+    super.init();
+    this._eventBus.listenAll(
+      this._window.getWindow(),
+      this._boundOnCustomEventHandler
+    );
+  }
 
-	/**
+  /**
 	 * @inheritdoc
 	 */
-	manage(controller, view, options, params = {}) {
-		return super
-			.manage(controller, view, options, params)
-			.then(response => {
-				this._activatePageSource();
+  manage(controller, view, options, params = {}) {
+    return super.manage(controller, view, options, params).then(response => {
+      this._activatePageSource();
 
-				return response;
-			});
-	}
+      return response;
+    });
+  }
 
-	/**
+  /**
 	 * @inheritdoc
 	 */
-	scrollTo(x = 0, y = 0) {
-		setTimeout(() => {
-			this._window.scrollTo(x, y);
-		}, 0);
-	}
+  scrollTo(x = 0, y = 0) {
+    setTimeout(() => {
+      this._window.scrollTo(x, y);
+    }, 0);
+  }
 
-	/**
+  /**
 	 * @inheritdoc
 	 */
-	destroy() {
-		super.destroy();
+  destroy() {
+    super.destroy();
 
-		this._eventBus.unlistenAll(
-			this._window.getWindow(),
-			this._boundOnCustomEventHandler
-		);
-	}
+    this._eventBus.unlistenAll(
+      this._window.getWindow(),
+      this._boundOnCustomEventHandler
+    );
+  }
 
-	/**
+  /**
 	 * Custom DOM event handler.
 	 *
 	 * The handler invokes the event listener in the active controller, if such
@@ -122,35 +120,35 @@ export default class ClientPageManager extends AbstractPageManager {
 	 *
 	 * @param {CustomEvent} event The encountered event bus DOM event.
 	 */
-	_onCustomEventHandler(event) {
-		let { method, data, eventName } = this._parseCustomEvent(event);
-		let controllerInstance = this._managedPage.controllerInstance;
+  _onCustomEventHandler(event) {
+    let { method, data, eventName } = this._parseCustomEvent(event);
+    let controllerInstance = this._managedPage.controllerInstance;
 
-		if (controllerInstance) {
-			let handled = this._handleEventWithController(method, data);
+    if (controllerInstance) {
+      let handled = this._handleEventWithController(method, data);
 
-			if (!handled) {
-				handled = this._handleEventWithExtensions(method, data);
-			}
+      if (!handled) {
+        handled = this._handleEventWithExtensions(method, data);
+      }
 
-			if ($Debug) {
-				if (!handled) {
-					console.warn(
-						`The active controller has no listener for ` +
-							`the encountered event '${eventName}'. Check ` +
-							`your event name for typos, or create an ` +
-							`'${method}' event listener method on the ` +
-							`active controller or add an event listener ` +
-							`that stops the propagation of this event to ` +
-							`an ancestor component of the component that ` +
-							`fired this event.`
-					);
-				}
-			}
-		}
-	}
+      if ($Debug) {
+        if (!handled) {
+          console.warn(
+            `The active controller has no listener for ` +
+              `the encountered event '${eventName}'. Check ` +
+              `your event name for typos, or create an ` +
+              `'${method}' event listener method on the ` +
+              `active controller or add an event listener ` +
+              `that stops the propagation of this event to ` +
+              `an ancestor component of the component that ` +
+              `fired this event.`
+          );
+        }
+      }
+    }
+  }
 
-	/**
+  /**
 	 * Extracts the details of the provided event bus custom DOM event, along
 	 * with the expected name of the current controller's method for
 	 * intercepting the event.
@@ -159,16 +157,15 @@ export default class ClientPageManager extends AbstractPageManager {
 	 * @return {{ method: string, data: *, eventName: string }} The event's
 	 *         details.
 	 */
-	_parseCustomEvent(event) {
-		let eventName = event.detail.eventName;
-		let method =
-			'on' + eventName.charAt(0).toUpperCase() + eventName.slice(1);
-		let data = event.detail.data;
+  _parseCustomEvent(event) {
+    let eventName = event.detail.eventName;
+    let method = 'on' + eventName.charAt(0).toUpperCase() + eventName.slice(1);
+    let data = event.detail.data;
 
-		return { method, data, eventName };
-	}
+    return { method, data, eventName };
+  }
 
-	/**
+  /**
 	 * Attempts to handle the currently processed event bus custom DOM event
 	 * using the current controller. The method returns {@code true} if the
 	 * event is handled by the controller.
@@ -181,19 +178,19 @@ export default class ClientPageManager extends AbstractPageManager {
 	 *         controller, {@code false} if the controller does not have a
 	 *         method for processing the event.
 	 */
-	_handleEventWithController(method, data) {
-		let controllerInstance = this._managedPage.controllerInstance;
+  _handleEventWithController(method, data) {
+    let controllerInstance = this._managedPage.controllerInstance;
 
-		if (typeof controllerInstance[method] === 'function') {
-			controllerInstance[method](data);
+    if (typeof controllerInstance[method] === 'function') {
+      controllerInstance[method](data);
 
-			return true;
-		}
+      return true;
+    }
 
-		return false;
-	}
+    return false;
+  }
 
-	/**
+  /**
 	 * Attempts to handle the currently processed event bus custom DOM event
 	 * using the registered extensions of the current controller. The method
 	 * returns {@code true} if the event is handled by the controller.
@@ -206,20 +203,20 @@ export default class ClientPageManager extends AbstractPageManager {
 	 *         the controller's extensions, {@code false} if none of the
 	 *         controller's extensions has a method for processing the event.
 	 */
-	_handleEventWithExtensions(method, data) {
-		let controllerInstance = this._managedPage.controllerInstance;
-		let extensions = controllerInstance.getExtensions();
+  _handleEventWithExtensions(method, data) {
+    let controllerInstance = this._managedPage.controllerInstance;
+    let extensions = controllerInstance.getExtensions();
 
-		for (let extension of extensions) {
-			if (typeof extension[method] === 'function') {
-				extension[method](data);
+    for (let extension of extensions) {
+      if (typeof extension[method] === 'function') {
+        extension[method](data);
 
-				return true;
-			}
-		}
+        return true;
+      }
+    }
 
-		return false;
-	}
+    return false;
+  }
 }
 
 ns.ima.page.manager.ClientPageManager = ClientPageManager;

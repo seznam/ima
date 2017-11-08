@@ -10,14 +10,14 @@ ns.namespace('ima.page.manager');
  * Page manager for controller on the server side.
  */
 export default class ServerPageManager extends AbstractPageManager {
-	static get $dependencies() {
-		return [PageFactory, PageRenderer, PageStateManager];
-	}
+  static get $dependencies() {
+    return [PageFactory, PageRenderer, PageStateManager];
+  }
 
-	/**
+  /**
 	 * @inheritdoc
 	 */
-	scrollTo(x = 0, y = 0) {}
+  scrollTo(x = 0, y = 0) {}
 }
 
 ns.ima.page.manager.ServerPageManager = ServerPageManager;

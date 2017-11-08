@@ -8,7 +8,7 @@ ns.namespace('ima.error');
  * error API.
  */
 export default class GenericError extends Error {
-	/**
+  /**
 	 * Initializes the generic IMA error.
 	 *
 	 * @param {string} message The message describing the cause of the error.
@@ -22,30 +22,30 @@ export default class GenericError extends Error {
 	 *        platform call stack frames are dropped by the JS engine).
 	 *        This flag is enabled by default.
 	 */
-	constructor(message, params = {}, dropInternalStackFrames = true) {
-		super(message, dropInternalStackFrames);
+  constructor(message, params = {}, dropInternalStackFrames = true) {
+    super(message, dropInternalStackFrames);
 
-		/**
+    /**
 		 * The data providing additional details related to this error.
 		 *
 		 * @type {Object<string, *>}
 		 */
-		this._params = params;
-	}
+    this._params = params;
+  }
 
-	/**
+  /**
 	 * @inheritdoc
 	 */
-	getHttpStatus() {
-		return this._params.status || 500;
-	}
+  getHttpStatus() {
+    return this._params.status || 500;
+  }
 
-	/**
+  /**
 	 * @inheritdoc
 	 */
-	getParams() {
-		return this._params;
-	}
+  getParams() {
+    return this._params;
+  }
 }
 
 ns.ima.error.GenericError = GenericError;

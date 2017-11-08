@@ -1,22 +1,22 @@
 const js = [
-	'./node_modules/ima/**/!(vendorLinker|gulpfile|build|test|*Spec).{js,jsx}',
-	'!./node_modules/ima/polyfill/*.js'
+  './node_modules/ima/**/!(vendorLinker|gulpfile|build|test|*Spec).{js,jsx}',
+  '!./node_modules/ima/polyfill/*.js'
 ];
 
 const mainjs = ['./node_modules/ima/main.js'];
 
 const vendors = {
-	common: ['ima-helpers', 'classnames', 'react', 'react-dom', 'prop-types'],
+  common: ['ima-helpers', 'classnames', 'react', 'react-dom', 'prop-types'],
 
-	server: ['react-dom/server.js'],
+  server: ['react-dom/server.js'],
 
-	client: [],
+  client: [],
 
-	test: ['ima/test.js', 'react-test-renderer', 'enzyme']
+  test: ['ima/test.js', 'react-test-renderer', 'enzyme']
 };
 
 module.exports = {
-	js,
-	mainjs,
-	vendors
+  js,
+  mainjs,
+  vendors
 };

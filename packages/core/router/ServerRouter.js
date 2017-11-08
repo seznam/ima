@@ -12,11 +12,11 @@ ns.namespace('ima.router');
  * The server-side implementation of the {@codelink Router} interface.
  */
 export default class ServerRouter extends AbstractRouter {
-	static get $dependencies() {
-		return [PageManager, RouteFactory, Dispatcher, Request, Response];
-	}
+  static get $dependencies() {
+    return [PageManager, RouteFactory, Dispatcher, Request, Response];
+  }
 
-	/**
+  /**
 	 * Initializes the router.
 	 *
 	 * @param {PageManager} pageManager The current page manager.
@@ -25,44 +25,44 @@ export default class ServerRouter extends AbstractRouter {
 	 * @param {Request} request The current HTTP request.
 	 * @param {Response} response The current HTTP response.
 	 */
-	constructor(pageManager, factory, dispatcher, request, response) {
-		super(pageManager, factory, dispatcher);
+  constructor(pageManager, factory, dispatcher, request, response) {
+    super(pageManager, factory, dispatcher);
 
-		/**
+    /**
 		 * The current HTTP request.
 		 *
 		 * @type {Request}
 		 */
-		this._request = request;
+    this._request = request;
 
-		/**
+    /**
 		 * The current HTTP response.
 		 *
 		 * @type {Response}
 		 */
-		this._response = response;
-	}
+    this._response = response;
+  }
 
-	/**
+  /**
 	 * @inheritdoc
 	 */
-	getPath() {
-		return this._extractRoutePath(this._request.getPath());
-	}
+  getPath() {
+    return this._extractRoutePath(this._request.getPath());
+  }
 
-	/**
+  /**
 	 * @inheritdoc
 	 */
-	listen() {
-		return this;
-	}
+  listen() {
+    return this;
+  }
 
-	/**
+  /**
 	 * @inheritdoc
 	 */
-	redirect(url = '/', options = {}) {
-		this._response.redirect(url, options.httpStatus || 302);
-	}
+  redirect(url = '/', options = {}) {
+    this._response.redirect(url, options.httpStatus || 302);
+  }
 }
 
 ns.ima.router.ServerRouter = ServerRouter;

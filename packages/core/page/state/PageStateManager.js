@@ -6,27 +6,27 @@ ns.namespace('ima.page.state');
  * Manager of the current page state and state history.
  */
 export default class PageStateManager {
-	/**
+  /**
 	 * Clears the state history.
 	 */
-	clear() {}
+  clear() {}
 
-	/**
+  /**
 	 * Sets a new page state by applying the provided patch to the current
 	 * state.
 	 *
 	 * @param {Object<string, *>} statePatch The patch of the current state.
 	 */
-	setState(statePatch) {}
+  setState(statePatch) {}
 
-	/**
+  /**
 	 * Returns the current page state.
 	 *
 	 * @return {Object<string, *>} The current page state.
 	 */
-	getState() {}
+  getState() {}
 
-	/**
+  /**
 	 * Returns the recorded history of page states. The states will be
 	 * chronologically sorted from the oldest to the newest.
 	 *
@@ -35,7 +35,7 @@ export default class PageStateManager {
 	 *
 	 * @return {Object<string, *>[]} The recorded history of page states.
 	 */
-	getAllStates() {}
+  getAllStates() {}
 }
 
 ns.ima.page.state.PageStateManager = PageStateManager;

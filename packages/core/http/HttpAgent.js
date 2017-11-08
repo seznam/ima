@@ -41,7 +41,7 @@ ns.namespace('ima.http');
  * @interface
  */
 export default class HttpAgent {
-	/**
+  /**
 	 * Sends an HTTP GET request to the specified URL, sending the provided
 	 * data as query parameters.
 	 *
@@ -52,9 +52,9 @@ export default class HttpAgent {
 	 * @return {Promise<HttpAgent~Response>} A promise that resolves to the
 	 *         response.
 	 */
-	get(url, data, options = {}) {}
+  get(url, data, options = {}) {}
 
-	/**
+  /**
 	 * Sends an HTTP POST request to the specified URL, sending the provided
 	 * data as the request body. If an object is provided as the request data,
 	 * the data will be JSON-encoded. Sending other primitive non-string values
@@ -67,9 +67,9 @@ export default class HttpAgent {
 	 * @return {Promise<HttpAgent~Response>} A promise that resolves to the
 	 *         response.
 	 */
-	post(url, data, options = {}) {}
+  post(url, data, options = {}) {}
 
-	/**
+  /**
 	 * Sends an HTTP PUT request to the specified URL, sending the provided
 	 * data as the request body. If an object is provided as the request data,
 	 * the data will be JSON-encoded. Sending other primitive non-string values
@@ -82,9 +82,9 @@ export default class HttpAgent {
 	 * @return {Promise<HttpAgent~Response>} A promise that resolves to the
 	 *         response.
 	 */
-	put(url, data, options = {}) {}
+  put(url, data, options = {}) {}
 
-	/**
+  /**
 	 * Sends an HTTP PATCH request to the specified URL, sending the provided
 	 * data as the request body. If an object is provided as the request data,
 	 * the data will be JSON-encoded. Sending other primitive non-string values
@@ -97,9 +97,9 @@ export default class HttpAgent {
 	 * @return {Promise<HttpAgent~Response>} A promise that resolves to the
 	 *         response.
 	 */
-	patch(url, data, options = {}) {}
+  patch(url, data, options = {}) {}
 
-	/**
+  /**
 	 * Sends an HTTP DELETE request to the specified URL, sending the provided
 	 * data as the request body. If an object is provided as the request data,
 	 * the data will be JSON-encoded. Sending other primitive non-string values
@@ -112,9 +112,9 @@ export default class HttpAgent {
 	 * @return {Promise<HttpAgent~Response>} A promise that resolves to the
 	 *         response.
 	 */
-	delete(url, data, options = {}) {}
+  delete(url, data, options = {}) {}
 
-	/**
+  /**
 	 * Generates a cache key to use for identifying a request to the specified
 	 * URL using the specified HTTP method, submitting the provided data.
 	 *
@@ -126,9 +126,9 @@ export default class HttpAgent {
 	 * @return {string} The key to use for identifying such a request in the
 	 *         cache.
 	 */
-	getCacheKey(method, url, data) {}
+  getCacheKey(method, url, data) {}
 
-	/**
+  /**
 	 * Sets the specified header to be sent with every subsequent HTTP request,
 	 * unless explicitly overridden by request options.
 	 *
@@ -138,14 +138,14 @@ export default class HttpAgent {
 	 *        (see http://www.w3.org/Protocols/rfc2616/rfc2616-sec4.html#sec4.2).
 	 * @return {HttpAgent} This HTTP agent.
 	 */
-	setDefaultHeader(header, value) {}
+  setDefaultHeader(header, value) {}
 
-	/**
+  /**
 	 * Clears all configured default headers.
 	 *
 	 * @return {HttpAgent} This HTTP agent.
 	 */
-	clearDefaultHeaders() {}
+  clearDefaultHeaders() {}
 }
 
 ns.ima.http.HttpAgent = HttpAgent;

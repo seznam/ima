@@ -9,7 +9,7 @@ ns.namespace('ima.router');
  * @interface
  */
 export default class Router {
-	/**
+  /**
 	 * Initializes the router with the provided configuration.
 	 *
 	 * @param {{
@@ -30,9 +30,9 @@ export default class Router {
 	 *        port number if other than the default is used) in the following
 	 *        form: {@code `${protocol}//${host}`}.
 	 */
-	init(config) {}
+  init(config) {}
 
-	/**
+  /**
 	 * Adds a new route to router.
 	 *
 	 * @param {string} name The unique name of this route, identifying it among
@@ -88,65 +88,65 @@ export default class Router {
 	 * @return {Router} This router.
 	 * @throws {ImaError} Thrown if a route with the same name already exists.
 	 */
-	add(name, pathExpression, controller, view, options = undefined) {}
+  add(name, pathExpression, controller, view, options = undefined) {}
 
-	/**
+  /**
 	 * Removes the specified route from the router's known routes.
 	 *
 	 * @param {string} name The route's unique name, identifying the route to
 	 *        remove.
 	 * @return {Router} This router.
 	 */
-	remove(name) {}
+  remove(name) {}
 
-	/**
+  /**
 	 * Returns the current path part of the current URL, including the query
 	 * string (if any).
 	 *
 	 * @return {string} The path and query parts of the current URL.
 	 */
-	getPath() {}
+  getPath() {}
 
-	/**
+  /**
 	 * Returns the current absolute URL (including protocol, host, query, etc).
 	 *
 	 * @return {string} The current absolute URL.
 	 */
-	getUrl() {}
+  getUrl() {}
 
-	/**
+  /**
 	 * Returns the application's absolute base URL, pointing to the public root
 	 * of the application.
 	 *
 	 * @return {string} The application's base URL.
 	 */
-	getBaseUrl() {}
+  getBaseUrl() {}
 
-	/**
+  /**
 	 * Returns the application's domain in the following form
 	 * {@code `${protocol}//${host}`}.
 	 *
 	 * @return {string} The current application's domain.
 	 */
-	getDomain() {}
+  getDomain() {}
 
-	/**
+  /**
 	 * Returns application's host (domain and, if necessary, the port number).
 	 *
 	 * @return {string} The current application's host.
 	 */
-	getHost() {}
+  getHost() {}
 
-	/**
+  /**
 	 * Returns the current protocol used to access the application, terminated
 	 * by a colon (for example {@code https:}).
 	 *
 	 * @return {string} The current application protocol used to access the
 	 *         application.
 	 */
-	getProtocol() {}
+  getProtocol() {}
 
-	/**
+  /**
 	 * Returns the information about the currently active route.
 	 *
 	 * @return {{
@@ -156,9 +156,9 @@ export default class Router {
 	 *         }} The information about the current route.
 	 * @throws {ImaError} Thrown if a route is not define for current path.
 	 */
-	getCurrentRouteInfo() {}
+  getCurrentRouteInfo() {}
 
-	/**
+  /**
 	 * Registers event listeners at the client side window object allowing the
 	 * router to capture user's history (history pop state - going "back") and
 	 * page (clicking links) navigation.
@@ -175,9 +175,9 @@ export default class Router {
 	 *
 	 * @return {Router} This router.
 	 */
-	listen() {}
+  listen() {}
 
-	/**
+  /**
 	 * Redirects the client to the specified location.
 	 *
 	 * At the server side the method results in responding to the client with a
@@ -212,9 +212,9 @@ export default class Router {
 	 *        }} [options={}] The options overrides route options defined in
 	 *        the {@code routes.js} configuration file.
 	 */
-	redirect(url, options = {}) {}
+  redirect(url, options = {}) {}
 
-	/**
+  /**
 	 * Generates an absolute URL (including protocol, domain, etc) for the
 	 * specified route by substituting the route's parameter placeholders with
 	 * the provided parameter values.
@@ -226,9 +226,9 @@ export default class Router {
 	 *        URL query.
 	 * @return {string} An absolute URL for the specified route and parameters.
 	 */
-	link(routeName, params) {}
+  link(routeName, params) {}
 
-	/**
+  /**
 	 * Routes the application to the route matching the providing path, renders
 	 * the route page and sends the result to the client.
 	 *
@@ -255,9 +255,9 @@ export default class Router {
 	 *         when the error has been handled and the response has been sent
 	 *         to the client, or displayed if used at the client side.
 	 */
-	route(path, options = {}) {}
+  route(path, options = {}) {}
 
-	/**
+  /**
 	 * Handles an internal server error by responding with the appropriate
 	 * "internal server error" error page.
 	 *
@@ -284,9 +284,9 @@ export default class Router {
 	 *         has been handled and the response has been sent to the client,
 	 *         or displayed if used at the client side.
 	 */
-	handleError(params, options = {}) {}
+  handleError(params, options = {}) {}
 
-	/**
+  /**
 	 * Handles a "not found" error by responding with the appropriate "not
 	 * found" error page.
 	 *
@@ -313,9 +313,9 @@ export default class Router {
 	 *         when the error has been handled and the response has been sent
 	 *         to the client, or displayed if used at the client side.
 	 */
-	handleNotFound(params, options = {}) {}
+  handleNotFound(params, options = {}) {}
 
-	/**
+  /**
 	 * Tests, if possible, whether the specified error was caused by the
 	 * client's action (for example wrong URL or request encoding) or by a
 	 * failure at the server side.
@@ -324,16 +324,16 @@ export default class Router {
 	 * @return {boolean} {@code true} if the error was caused the action of the
 	 *         client.
 	 */
-	isClientError(reason) {}
+  isClientError(reason) {}
 
-	/**
+  /**
 	 * Tests, if possible, whether the specified error lead to redirection.
 	 *
 	 * @param {(ImaError|Error)} reason The encountered error.
 	 * @return {boolean} {@code true} if the error was caused the action of the
 	 *         redirection.
 	 */
-	isRedirection(reason) {}
+  isRedirection(reason) {}
 }
 
 ns.ima.router.Router = Router;

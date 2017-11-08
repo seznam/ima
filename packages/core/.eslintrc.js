@@ -6,8 +6,6 @@ module.exports = {
 			'error', {
 				singleQuote: true,
 				semi: true,
-				useTabs: true,
-				tabWidth: 4,
 				jsxBracketSameLine: true
 			}
 		],

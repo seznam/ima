@@ -21,14 +21,14 @@ ns.namespace('ima.meta');
  * @interface
  */
 export default class MetaManager {
-	/**
+  /**
 	 * Sets the page title.
 	 *
 	 * @param {string} title The new page title.
 	 */
-	setTitle(title) {}
+  setTitle(title) {}
 
-	/**
+  /**
 	 * Returns the page title. The method returns an empty string if no page
 	 * title has been set yet.
 	 *
@@ -38,18 +38,18 @@ export default class MetaManager {
 	 *
 	 * @return {string} The current page title.
 	 */
-	getTitle() {}
+  getTitle() {}
 
-	/**
+  /**
 	 * Set the specified named meta information property.
 	 *
 	 * @param {string} name Meta information property name, for example
 	 *        {@code keywords}.
 	 * @param {string} value The meta information value.
 	 */
-	setMetaName(name, value) {}
+  setMetaName(name, value) {}
 
-	/**
+  /**
 	 * Returns the value of the specified named meta information property. The
 	 * method returns an empty string for missing meta information (to make the
 	 * returned value React-friendly).
@@ -58,26 +58,26 @@ export default class MetaManager {
 	 * @return {string} The value of the generic meta information, or an empty
 	 *         string.
 	 */
-	getMetaName(name) {}
+  getMetaName(name) {}
 
-	/**
+  /**
 	 * Returns the names of the currently specified named meta information
 	 * properties.
 	 *
 	 * @return {string[]} The names of the currently specified named meta
 	 *         information properties.
 	 */
-	getMetaNames() {}
+  getMetaNames() {}
 
-	/**
+  /**
 	 * Sets the specified specialized meta information property.
 	 *
 	 * @param {string} name Name of the specialized meta information property.
 	 * @param {string} value The value of the meta information property.
 	 */
-	setMetaProperty(name, value) {}
+  setMetaProperty(name, value) {}
 
-	/**
+  /**
 	 * Returns the value of the specified specialized meta information
 	 * property. The method returns an empty string for missing meta
 	 * information (to make the returned value React-friendly).
@@ -87,18 +87,18 @@ export default class MetaManager {
 	 * @return {string} The value of the specified meta information, or an
 	 *         empty string.
 	 */
-	getMetaProperty(name) {}
+  getMetaProperty(name) {}
 
-	/**
+  /**
 	 * Returns the names of the currently specified specialized meta
 	 * information properties.
 	 *
 	 * @return {string[]} The names of the currently specified specialized meta
 	 *         information properties.
 	 */
-	getMetaProperties() {}
+  getMetaProperties() {}
 
-	/**
+  /**
 	 * Sets the specified specialized link information.
 	 *
 	 * @param {string} relation The relation of the link target to the current
@@ -106,9 +106,9 @@ export default class MetaManager {
 	 * @param {string} reference The reference to the location of the related
 	 *        document, e.g. a URL.
 	 */
-	setLink(relation, reference) {}
+  setLink(relation, reference) {}
 
-	/**
+  /**
 	 * Return the reference to the specified related linked document. The
 	 * method returns an empty string for missing meta information (to make the
 	 * returned value React-friendly).
@@ -118,15 +118,15 @@ export default class MetaManager {
 	 * @return {string} The reference to the location of the related document,
 	 *         e.g. a URL.
 	 */
-	getLink(relation) {}
+  getLink(relation) {}
 
-	/**
+  /**
 	 * Returns the relations of the currently set related documents linked to
 	 * the current page.
 	 *
 	 * @return {string[]}
 	 */
-	getLinks() {}
+  getLinks() {}
 }
 
 ns.ima.meta.MetaManager = MetaManager;

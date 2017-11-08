@@ -9,17 +9,17 @@ ns.namespace('ima.page.renderer');
  * page view component through its properties.
  */
 export default class ViewAdapter extends React.Component {
-	/**
+  /**
 	 * @inheritdoc
 	 * @return {{$Utils: function(*): ?Error}}
 	 */
-	static get childContextTypes() {
-		return {
-			$Utils: PropTypes.object.isRequired
-		};
-	}
+  static get childContextTypes() {
+    return {
+      $Utils: PropTypes.object.isRequired
+    };
+  }
 
-	/**
+  /**
 	 * Initializes the adapter component.
 	 *
 	 * @param {{
@@ -28,46 +28,46 @@ export default class ViewAdapter extends React.Component {
 	 *        }} props Component properties, containing the actual page view
 	 *        and the initial page state to pass to the view.
 	 */
-	constructor(props) {
-		super(props.props);
+  constructor(props) {
+    super(props.props);
 
-		/**
+    /**
 		 * The current page state as provided by the controller.
 		 *
 		 * @type {Object<string, *>}
 		 */
-		this.state = props.state;
+    this.state = props.state;
 
-		/**
+    /**
 		 * The actual page view to render.
 		 *
 		 * @type {function(new:React.Component, Object<string, *>)}
 		 */
-		this._view = props.view;
-	}
+    this._view = props.view;
+  }
 
-	/**
+  /**
 	 * @inheritdoc
 	 */
-	componentWillReceiveProps(newProps) {
-		this.setState(newProps.state);
-	}
+  componentWillReceiveProps(newProps) {
+    this.setState(newProps.state);
+  }
 
-	/**
+  /**
 	 * @inheritdoc
 	 */
-	render() {
-		return React.createElement(this._view, this.state);
-	}
+  render() {
+    return React.createElement(this._view, this.state);
+  }
 
-	/**
+  /**
 	 * @inheritdoc
 	 */
-	getChildContext() {
-		return {
-			$Utils: this.props.$Utils
-		};
-	}
+  getChildContext() {
+    return {
+      $Utils: this.props.$Utils
+    };
+  }
 }
 
 ns.ima.page.renderer.ViewAdapter = ViewAdapter;

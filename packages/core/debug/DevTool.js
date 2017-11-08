@@ -13,11 +13,11 @@ ns.namespace('ima.debug');
  * Developer tools, used mostly for navigating the page state history.
  */
 export default class DevTool {
-	static get $dependencies() {
-		return [PageManager, PageStateManager, Window, Dispatcher, EventBus];
-	}
+  static get $dependencies() {
+    return [PageManager, PageStateManager, Window, Dispatcher, EventBus];
+  }
 
-	/**
+  /**
 	 * Initializes the developer tools.
 	 *
 	 * @param {PageManager} pageManager Application page manager.
@@ -26,87 +26,87 @@ export default class DevTool {
 	 * @param {Dispatcher} dispatcher IMA event dispatcher.
 	 * @param {EventBus} eventBus IMA DOM event bus.
 	 */
-	constructor(pageManager, stateManager, window, dispatcher, eventBus) {
-		/**
+  constructor(pageManager, stateManager, window, dispatcher, eventBus) {
+    /**
 		 * Application page manager.
 		 *
 		 * @type {PageManager}
 		 */
-		this._pageManager = pageManager;
+    this._pageManager = pageManager;
 
-		/**
+    /**
 		 * Application state manager.
 		 *
 		 * @type {PageStateManager}
 		 */
-		this._stateManager = stateManager;
+    this._stateManager = stateManager;
 
-		/**
+    /**
 		 * IMA window wrapper.
 		 *
 		 * @type {Window}
 		 */
-		this._window = window;
+    this._window = window;
 
-		/**
+    /**
 		 * IMA event dispatcher.
 		 *
 		 * @type {Dispatcher}
 		 */
-		this._dispatcher = dispatcher;
+    this._dispatcher = dispatcher;
 
-		/**
+    /**
 		 * IMA DOM event bus.
 		 *
 		 * @type {EventBus}
 		 */
-		this._eventBus = eventBus;
-	}
+    this._eventBus = eventBus;
+  }
 
-	/**
+  /**
 	 * Initializes the developer tools.
 	 */
-	init() {
-		if ($Debug) {
-			if (this._window.isClient()) {
-				this._window.getWindow().$IMA.$DevTool = this;
-			}
+  init() {
+    if ($Debug) {
+      if (this._window.isClient()) {
+        this._window.getWindow().$IMA.$DevTool = this;
+      }
 
-			let window = this._window.getWindow();
-			this._window.bindEventListener(window, 'keydown', e => {
-				if (e.altKey && e.keyCode === 83) {
-					// Alt + S
-					console.log(this._stateManager.getState()); //eslint-disable-line no-console
-				}
-			});
-		}
-	}
+      let window = this._window.getWindow();
+      this._window.bindEventListener(window, 'keydown', e => {
+        if (e.altKey && e.keyCode === 83) {
+          // Alt + S
+          console.log(this._stateManager.getState()); //eslint-disable-line no-console
+        }
+      });
+    }
+  }
 
-	/**
+  /**
 	 * Sets the provided state to the state manager.
 	 *
 	 * @param {Object<string, *>} statePatch A patch of the current page state.
 	 */
-	setState(statePatch) {
-		this._stateManager.setState(statePatch);
-	}
+  setState(statePatch) {
+    this._stateManager.setState(statePatch);
+  }
 
-	/**
+  /**
 	 * Returns the current page state.
 	 *
 	 * @return {Object<string, *>} The current page state.
 	 */
-	getState() {
-		return this._stateManager.getState();
-	}
+  getState() {
+    return this._stateManager.getState();
+  }
 
-	/**
+  /**
 	 * Clears the current application state.
 	 */
-	clearAppSource() {
-		this._pageManager.destroy();
-		this._dispatcher.clear();
-	}
+  clearAppSource() {
+    this._pageManager.destroy();
+    this._dispatcher.clear();
+  }
 }
 
 ns.ima.debug.DevTool = DevTool;

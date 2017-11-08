@@ -7,33 +7,33 @@ ns.namespace('ima.page');
  * Factory for page.
  */
 export default class PageFactory {
-	/**
+  /**
 	 * Factory used by page management classes.
 	 *
 	 * @param {ObjectContainer} oc
 	 */
-	constructor(oc) {
-		/**
+  constructor(oc) {
+    /**
 		 * The current application object container.
 		 *
 		 * @type {ObjectContainer}
 		 */
-		this._oc = oc;
-	}
+    this._oc = oc;
+  }
 
-	/**
+  /**
 	 * Create new instance of {@linkcode Controller}.
 	 *
 	 * @param {(string|function(new:Controller))} controller
 	 * @return {Controller}
 	 */
-	createController(controller) {
-		let controllerInstance = this._oc.create(controller);
+  createController(controller) {
+    let controllerInstance = this._oc.create(controller);
 
-		return controllerInstance;
-	}
+    return controllerInstance;
+  }
 
-	/**
+  /**
 	 * Retrieves the specified react component class.
 	 *
 	 * @param {(string|function(new: React.Component))} view The namespace
@@ -42,59 +42,59 @@ export default class PageFactory {
 	 * @return {function(new: React.Component)} The react component class
 	 *         constructor.
 	 */
-	createView(view) {
-		if (typeof view === 'function') {
-			return view;
-		}
-		let classConstructor = this._oc.getConstructorOf(view);
+  createView(view) {
+    if (typeof view === 'function') {
+      return view;
+    }
+    let classConstructor = this._oc.getConstructorOf(view);
 
-		if (classConstructor) {
-			return classConstructor;
-		} else {
-			throw new GenericError(
-				`ima.page.Factory:createView hasn't name of view "${view}".`
-			);
-		}
-	}
+    if (classConstructor) {
+      return classConstructor;
+    } else {
+      throw new GenericError(
+        `ima.page.Factory:createView hasn't name of view "${view}".`
+      );
+    }
+  }
 
-	/**
+  /**
 	 * Returns decorated controller for ease setting seo params in controller.
 	 *
 	 * @param {Controller} controller
 	 * @return {Controller}
 	 */
-	decorateController(controller) {
-		let metaManager = this._oc.get('$MetaManager');
-		let router = this._oc.get('$Router');
-		let dictionary = this._oc.get('$Dictionary');
-		let settings = this._oc.get('$Settings');
+  decorateController(controller) {
+    let metaManager = this._oc.get('$MetaManager');
+    let router = this._oc.get('$Router');
+    let dictionary = this._oc.get('$Dictionary');
+    let settings = this._oc.get('$Settings');
 
-		let decoratedController = this._oc.create('$ControllerDecorator', [
-			controller,
-			metaManager,
-			router,
-			dictionary,
-			settings
-		]);
+    let decoratedController = this._oc.create('$ControllerDecorator', [
+      controller,
+      metaManager,
+      router,
+      dictionary,
+      settings
+    ]);
 
-		return decoratedController;
-	}
+    return decoratedController;
+  }
 
-	/**
+  /**
 	 * Returns decorated page state manager for extension.
 	 *
 	 * @param {PageStateManager} pageStateManager
 	 * @param {string[]} allowedStateKeys
 	 * @return {PageStateManager}
 	 */
-	decoratePageStateManager(pageStateManager, allowedStateKeys) {
-		let decoratedPageStateManager = this._oc.create(
-			'$PageStateManagerDecorator',
-			[pageStateManager, allowedStateKeys]
-		);
+  decoratePageStateManager(pageStateManager, allowedStateKeys) {
+    let decoratedPageStateManager = this._oc.create(
+      '$PageStateManagerDecorator',
+      [pageStateManager, allowedStateKeys]
+    );
 
-		return decoratedPageStateManager;
-	}
+    return decoratedPageStateManager;
+  }
 }
 
 ns.ima.page.PageFactory = PageFactory;

@@ -14,15 +14,15 @@ ns.namespace('ima.event');
  * @interface
  */
 export default class Dispatcher {
-	/**
+  /**
 	 * Deregisters all event listeners currently registered with this
 	 * dispatcher.
 	 *
 	 * @return {Dispatcher} This dispatcher.
 	 */
-	clear() {}
+  clear() {}
 
-	/**
+  /**
 	 * Registers the provided event listener to be executed when the specified
 	 * event is fired on this dispatcher.
 	 *
@@ -39,9 +39,9 @@ export default class Dispatcher {
 	 *        will be bound in the event listener.
 	 * @return {Dispatcher} This dispatcher.
 	 */
-	listen(event, listener, scope = null) {}
+  listen(event, listener, scope = null) {}
 
-	/**
+  /**
 	 * Deregisters the provided event listener, so it will no longer be
 	 * executed with the specified scope when the specified event is fired.
 	 *
@@ -52,9 +52,9 @@ export default class Dispatcher {
 	 *        would be bound in the event listener.
 	 * @return {Dispatcher} This dispatcher.
 	 */
-	unlisten(event, listener, scope = null) {}
+  unlisten(event, listener, scope = null) {}
 
-	/**
+  /**
 	 * Fires a new event of the specified name, carrying the provided data.
 	 *
 	 * The method will synchronously execute all event listeners registered for
@@ -74,7 +74,7 @@ export default class Dispatcher {
 	 *        propagation of the event.
 	 * @return {Dispatcher} This dispatcher.
 	 */
-	fire(event, data, imaInternalEvent = false) {}
+  fire(event, data, imaInternalEvent = false) {}
 }
 
 ns.ima.event.Dispatcher = Dispatcher;

@@ -10,7 +10,7 @@ ns.namespace('ima.dictionary');
  * @interface
  */
 export default class Dictionary {
-	/**
+  /**
 	 * Initializes this dictionary with the provided language and localization
 	 * phrases.
 	 *
@@ -21,18 +21,18 @@ export default class Dictionary {
 	 *        The dictionary field contains the localization phrases organized
 	 *        in an implementation-specific way.
 	 */
-	init(config) {}
+  init(config) {}
 
-	/**
+  /**
 	 * Returns the ISO 639-1 language code of the language this dictionary was
 	 * initialized with.
 	 *
 	 * @return {string} The language code representing the language of the
 	 *         localization phrases in this dictionary.
 	 */
-	getLanguage() {}
+  getLanguage() {}
 
-	/**
+  /**
 	 * Retrieves the localization phrase identified by the specified key,
 	 * evaluates the phrase's placeholder expressions using the provided
 	 * parameters and returns the result.
@@ -44,9 +44,9 @@ export default class Dictionary {
 	 * @return {string} The specified localization phrase with its placeholders
 	 *         evaluated using the provided parameters.
 	 */
-	get(key, parameters = {}) {}
+  get(key, parameters = {}) {}
 
-	/**
+  /**
 	 * Tests whether the specified localization phrase exists in the
 	 * dictionary.
 	 *
@@ -54,7 +54,7 @@ export default class Dictionary {
 	 * @return {boolean} {@code true} if the key exists and denotes a single
 	 *         localization phrase.
 	 */
-	has(key) {}
+  has(key) {}
 }
 
 ns.ima.dictionary.Dictionary = Dictionary;

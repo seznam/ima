@@ -7,11 +7,11 @@ ns.namespace('ima.router');
  * Utility factory used by router to create routes.
  */
 export default class RouteFactory {
-	static get $dependencies() {
-		return [];
-	}
+  static get $dependencies() {
+    return [];
+  }
 
-	/**
+  /**
 	 * Create new instance of ima.router.Route.
 	 *
 	 * @param {string} name The unique name of this route, identifying it among
@@ -42,9 +42,9 @@ export default class RouteFactory {
 	 *        }} options The route additional options.
 	 * @return {Route} The constructed route.
 	 */
-	createRoute(name, pathExpression, controller, view, options) {
-		return new Route(name, pathExpression, controller, view, options);
-	}
+  createRoute(name, pathExpression, controller, view, options) {
+    return new Route(name, pathExpression, controller, view, options);
+  }
 }
 
 ns.ima.router.RouteFactory = RouteFactory;

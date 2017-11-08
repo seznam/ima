@@ -4,10 +4,10 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 
 const PRIVATE = {
-	contextTypes: Symbol('contextTypes')
+  contextTypes: Symbol('contextTypes')
 };
 if (typeof $Debug !== 'undefined' && $Debug) {
-	Object.freeze(PRIVATE);
+  Object.freeze(PRIVATE);
 }
 
 /**
@@ -19,13 +19,13 @@ if (typeof $Debug !== 'undefined' && $Debug) {
  *         declarations associated with the specified component.
  */
 export function getContextTypes(classConstructor) {
-	if (classConstructor.hasOwnProperty(PRIVATE.contextTypes)) {
-		return this[PRIVATE.contextTypes];
-	}
+  if (classConstructor.hasOwnProperty(PRIVATE.contextTypes)) {
+    return this[PRIVATE.contextTypes];
+  }
 
-	return {
-		$Utils: PropTypes.object.isRequired
-	};
+  return {
+    $Utils: PropTypes.object.isRequired
+  };
 }
 
 /**
@@ -40,7 +40,7 @@ export function getContextTypes(classConstructor) {
  *         declarations.
  */
 export function setContextTypes(classConstructor, contextTypes) {
-	return (classConstructor[PRIVATE.contextTypes] = contextTypes);
+  return (classConstructor[PRIVATE.contextTypes] = contextTypes);
 }
 
 /**
@@ -54,16 +54,16 @@ export function setContextTypes(classConstructor, contextTypes) {
  *         properties nor context.
  */
 export function getUtils(props, context) {
-	const utils = context ? context.$Utils || props.$Utils : props.$Utils;
+  const utils = context ? context.$Utils || props.$Utils : props.$Utils;
 
-	if ($Debug && !utils) {
-		throw new Error(
-			'The component cannot access the view utils because they were ' +
-				'not passed in the initial props or context as $Utils.'
-		);
-	}
+  if ($Debug && !utils) {
+    throw new Error(
+      'The component cannot access the view utils because they were ' +
+        'not passed in the initial props or context as $Utils.'
+    );
+  }
 
-	return utils;
+  return utils;
 }
 
 /**
@@ -79,7 +79,7 @@ export function getUtils(props, context) {
  * @return {string} Localized phrase.
  */
 export function localize(component, key, params) {
-	return component.utils.$Dictionary.get(key, params);
+  return component.utils.$Dictionary.get(key, params);
 }
 
 /**
@@ -96,7 +96,7 @@ export function localize(component, key, params) {
  * @return {string} The generated URL.
  */
 export function link(component, name, params) {
-	return component.utils.$Router.link(name, params);
+  return component.utils.$Router.link(name, params);
 }
 
 /**
@@ -121,10 +121,10 @@ export function link(component, name, params) {
  *         to {@code true}.
  */
 export function cssClasses(component, classRules, includeComponentClassName) {
-	return component.utils.$CssClasses(
-		classRules,
-		includeComponentClassName && component
-	);
+  return component.utils.$CssClasses(
+    classRules,
+    includeComponentClassName && component
+  );
 }
 
 /**
@@ -142,9 +142,9 @@ export function cssClasses(component, classRules, includeComponentClassName) {
  *         to {@code true}.
  */
 export function defaultCssClasses(classRules, component) {
-	let extraClasses =
-		component instanceof React.Component ? component.props.className : null;
-	return classnames(classRules, extraClasses);
+  let extraClasses =
+    component instanceof React.Component ? component.props.className : null;
+  return classnames(classRules, extraClasses);
 }
 
 /**
@@ -156,11 +156,11 @@ export function defaultCssClasses(classRules, component) {
  * @param {*=} data Data to send within the event.
  */
 export function fire(component, eventName, data = null) {
-	return component.utils.$EventBus.fire(
-		ReactDOM.findDOMNode(component), //eslint-disable-line react/no-find-dom-node
-		eventName,
-		data
-	);
+  return component.utils.$EventBus.fire(
+    ReactDOM.findDOMNode(component), //eslint-disable-line react/no-find-dom-node
+    eventName,
+    data
+  );
 }
 
 /**
@@ -176,12 +176,12 @@ export function fire(component, eventName, data = null) {
  * @param {function(Event)} listener The listener for event to register.
  */
 export function listen(component, eventTarget, eventName, listener) {
-	if (!eventTarget.addEventListener) {
-		// Safari doesn't have EventTarget
-		eventTarget = ReactDOM.findDOMNode(eventTarget); //eslint-disable-line react/no-find-dom-node
-	}
+  if (!eventTarget.addEventListener) {
+    // Safari doesn't have EventTarget
+    eventTarget = ReactDOM.findDOMNode(eventTarget); //eslint-disable-line react/no-find-dom-node
+  }
 
-	return component.utils.$EventBus.listen(eventTarget, eventName, listener);
+  return component.utils.$EventBus.listen(eventTarget, eventName, listener);
 }
 
 /**
@@ -196,11 +196,11 @@ export function listen(component, eventTarget, eventName, listener) {
  * @param {function(Event)} listener The listener for event to register.
  */
 export function unlisten(component, eventTarget, eventName, listener) {
-	if (!eventTarget.addEventListener) {
-		// Safari doesn't have EventTarget
-		eventTarget = ReactDOM.findDOMNode(eventTarget); //eslint-disable-line react/no-find-dom-node
-	}
+  if (!eventTarget.addEventListener) {
+    // Safari doesn't have EventTarget
+    eventTarget = ReactDOM.findDOMNode(eventTarget); //eslint-disable-line react/no-find-dom-node
+  }
 
-	const eventBus = component.utils.$EventBus;
-	return eventBus.unlisten(eventTarget, eventName, listener);
+  const eventBus = component.utils.$EventBus;
+  return eventBus.unlisten(eventTarget, eventName, listener);
 }

@@ -10,7 +10,7 @@ ns.namespace('ima.storage');
  * @interface
  */
 export default class Storage {
-	/**
+  /**
 	 * This method is used to finalize the initialization of the storage after
 	 * the dependencies provided through the constructor have been prepared for
 	 * use.
@@ -20,18 +20,18 @@ export default class Storage {
 	 *
 	 * @return {Storage} This storage.
 	 */
-	init() {}
+  init() {}
 
-	/**
+  /**
 	 * Returns {@code true} if the entry identified by the specified key exists
 	 * in this storage.
 	 *
 	 * @param {string} key The key identifying the storage entry.
 	 * @return {boolean} {@code true} if the storage entry exists.
 	 */
-	has(key) {}
+  has(key) {}
 
-	/**
+  /**
 	 * Retrieves the value of the entry identified by the specified key. The
 	 * method returns {@code undefined} if the entry does not exists.
 	 *
@@ -41,9 +41,9 @@ export default class Storage {
 	 * @param {string} key The key identifying the storage entry.
 	 * @return {*} The value of the storage entry.
 	 */
-	get(key) {}
+  get(key) {}
 
-	/**
+  /**
 	 * Sets the storage entry identified by the specified key to the provided
 	 * value. The method creates the entry if it does not exist already.
 	 *
@@ -51,24 +51,24 @@ export default class Storage {
 	 * @param {*} value The storage entry value.
 	 * @return {Storage} This storage.
 	 */
-	set(key, value) {}
+  set(key, value) {}
 
-	/**
+  /**
 	 * Deletes the entry identified by the specified key from this storage.
 	 *
 	 * @param {string} key The key identifying the storage entry.
 	 * @return {Storage} This storage.
 	 */
-	delete(key) {}
+  delete(key) {}
 
-	/**
+  /**
 	 * Clears the storage of all entries.
 	 *
 	 * @return {Storage} This storage.
 	 */
-	clear() {}
+  clear() {}
 
-	/**
+  /**
 	 * Returns an iterator for traversing the keys in this storage. The order
 	 * in which the keys are traversed is undefined.
 	 *
@@ -77,14 +77,14 @@ export default class Storage {
 	 *         returning itself as its own iterator, allowing it to be used in
 	 *         a {@code for..of} loop.
 	 */
-	keys() {}
+  keys() {}
 
-	/**
+  /**
 	 * Returns the number of entries in this storage.
 	 *
 	 * @return {number} The number of entries in this storage.
 	 */
-	size() {}
+  size() {}
 }
 
 ns.ima.storage.Storage = Storage;

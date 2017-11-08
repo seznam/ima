@@ -8,7 +8,7 @@ ns.namespace('ima.router');
  * @enum {string}
  */
 const Events = Object.freeze({
-	/**
+  /**
 	 * Router fire event {@code $IMA.$Router.beforeHandleRoute} before page
 	 * manager handle the route. Event's data contain
 	 * {@code { params: Object<string, string>}, route: ima.router.Route,
@@ -20,9 +20,9 @@ const Events = Object.freeze({
 	 * @const
 	 * @type {string}
 	 */
-	BEFORE_HANDLE_ROUTE: '$IMA.$Router.beforeHandleRoute',
+  BEFORE_HANDLE_ROUTE: '$IMA.$Router.beforeHandleRoute',
 
-	/**
+  /**
 	 * Router fire event {@code $IMA.$Router.afterHandleRoute} after page
 	 * manager handle the route. Event's data contain
 	 * {@code {response: Object<string, *>, params: Object<string, string>},
@@ -35,7 +35,7 @@ const Events = Object.freeze({
 	 * @const
 	 * @type {string}
 	 */
-	AFTER_HANDLE_ROUTE: '$IMA.$Router.afterHandleRoute'
+  AFTER_HANDLE_ROUTE: '$IMA.$Router.afterHandleRoute'
 });
 
 export default Events;

@@ -7,7 +7,7 @@ ns.namespace('ima.page.renderer');
  * client-side or the server-side, handling the differences in the environment.
  */
 export default class PageRenderer {
-	/**
+  /**
 	 * Renders the page using the provided controller and view. The actual
 	 * behavior of this method differs at the client-side and the at
 	 * server-side in the following way:
@@ -61,9 +61,9 @@ export default class PageRenderer {
 	 *         The {@code content} field will contain the rendered markup of
 	 *         the page at the server-side, or {@code null} at the client-side.
 	 */
-	mount(controller, view, pageResources, routeOptions) {}
+  mount(controller, view, pageResources, routeOptions) {}
 
-	/**
+  /**
 	 * Handles update of the current route that does not replace the current
 	 * controller and view.
 	 *
@@ -87,16 +87,16 @@ export default class PageRenderer {
 	 *         The {@code content} field will contain the rendered markup of
 	 *         the page at the server-side, or {@code null} at the client-side.
 	 */
-	update(controller, resourcesUpdate) {}
+  update(controller, resourcesUpdate) {}
 
-	/**
+  /**
 	 * Unmounts the view from the DOM.
 	 *
 	 * This method has no effect at the server-side.
 	 */
-	unmount() {}
+  unmount() {}
 
-	/**
+  /**
 	 * Sets the provided state to the currently rendered view.
 	 *
 	 * This method has no effect at the server-side.
@@ -104,14 +104,14 @@ export default class PageRenderer {
 	 * @param {Object<string, *>=} [state={}] The state to set to the currently
 	 *        rendered view.
 	 */
-	setState(state = {}) {}
+  setState(state = {}) {}
 
-	/**
+  /**
 	 * Clears the state to the currently rendered view.
 	 *
 	 * This method has no effect at the server-side.
 	 */
-	clearState() {}
+  clearState() {}
 }
 
 ns.ima.page.renderer.PageRenderer = PageRenderer;

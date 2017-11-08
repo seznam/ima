@@ -11,12 +11,12 @@ ns.namespace('ima.cache');
  * @interface
  */
 export default class Cache {
-	/**
+  /**
 	 * Clears the cache by deleting all entries.
 	 */
-	clear() {}
+  clear() {}
 
-	/**
+  /**
 	 * Tests whether the cache contains a fresh entry for the specified key. A
 	 * cache entry is fresh if the has not expired its TTL (time to live).
 	 *
@@ -27,9 +27,9 @@ export default class Cache {
 	 * @return {boolean} {@code true} if the cache is enabled, the entry exists
 	 *         and has not expired yet.
 	 */
-	has(key) {}
+  has(key) {}
 
-	/**
+  /**
 	 * Returns the value of the entry identified by the specified key.
 	 *
 	 * The method returns {@code null} if the specified entry does not exist,
@@ -39,9 +39,9 @@ export default class Cache {
 	 * @return {*} The value of the specified cache entry, or {@code null} if
 	 *         the entry is not available.
 	 */
-	get(key) {}
+  get(key) {}
 
-	/**
+  /**
 	 * Sets the cache entry identified by the specified key to the provided
 	 * value. The entry is created if it does not exist yet.
 	 *
@@ -54,17 +54,17 @@ export default class Cache {
 	 *        {@code null} or omit the parameter to use the default TTL of this
 	 *        cache.
 	 */
-	set(key, value, ttl = null) {}
+  set(key, value, ttl = null) {}
 
-	/**
+  /**
 	 * Deletes the specified cache entry. The method has no effect if the entry
 	 * does not exist.
 	 *
 	 * @param {string} key The identifier of the cache entry.
 	 */
-	delete(key) {}
+  delete(key) {}
 
-	/**
+  /**
 	 * Disables the cache, preventing the retrieval of any cached entries and
 	 * reporting all cache entries as non-existing. Disabling the cache does
 	 * not however prevent modifying the existing or creating new cache
@@ -74,16 +74,16 @@ export default class Cache {
 	 *
 	 * The method has no effect if the cache is already disabled.
 	 */
-	disable() {}
+  disable() {}
 
-	/**
+  /**
 	 * Enables the cache, allowing the retrieval of cache entries.
 	 *
 	 * The method has no effect if the cache is already enabled.
 	 */
-	enable() {}
+  enable() {}
 
-	/**
+  /**
 	 * Exports the state of this cache to an HTML-safe JSON string. The data
 	 * obtained by parsing the result of this method are compatible with the
 	 * {@linkcode deserialize()} method.
@@ -91,9 +91,9 @@ export default class Cache {
 	 * @return {string} A JSON string containing an object representing of the
 	 *         current state of this cache.
 	 */
-	serialize() {}
+  serialize() {}
 
-	/**
+  /**
 	 * Loads the provided serialized cache data into this cache. Entries
 	 * present in this cache but not specified in the provided data will remain
 	 * in this cache intact.
@@ -103,7 +103,7 @@ export default class Cache {
 	 *        parsing the JSON string returned by the {@codelink serialize}
 	 *        method.
 	 */
-	deserialize(serializedData) {}
+  deserialize(serializedData) {}
 }
 
 ns.ima.cache.Cache = Cache;

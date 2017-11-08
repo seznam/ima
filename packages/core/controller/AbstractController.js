@@ -11,154 +11,154 @@ ns.namespace('ima.controller');
  * @abstract
  */
 export default class AbstractController extends Controller {
-	/**
+  /**
 	 * Initializes the controller.
 	 */
-	constructor() {
-		super();
+  constructor() {
+    super();
 
-		/**
+    /**
 		 * State manager.
 		 *
 		 * @protected
 		 * @type {PageStateManager}
 		 */
-		this._pageStateManager = null;
+    this._pageStateManager = null;
 
-		/**
+    /**
 		 * The controller's extensions.
 		 *
 		 * @type {Extension[]}
 		 */
-		this._extensions = [];
+    this._extensions = [];
 
-		/**
+    /**
 		 * The HTTP response code to send to the client.
 		 *
 		 * @type {number}
 		 */
-		this.status = 200;
+    this.status = 200;
 
-		/**
+    /**
 		 * The route parameters extracted from the current route. This field is
 		 * set externally by IMA right before the {@linkcode init()} or the
 		 * {@linkcode update()} method is called.
 		 *
 		 * @type {Object<string, string>}
 		 */
-		this.params = {};
-	}
+    this.params = {};
+  }
 
-	/**
+  /**
 	 * @inheritdoc
 	 */
-	init() {}
+  init() {}
 
-	/**
+  /**
 	 * @inheritdoc
 	 */
-	destroy() {}
+  destroy() {}
 
-	/**
+  /**
 	 * @inheritdoc
 	 */
-	activate() {}
+  activate() {}
 
-	/**
+  /**
 	 * @inheritdoc
 	 */
-	deactivate() {}
+  deactivate() {}
 
-	/**
-	 * @inheritdoc
-	 * @abstract
-	 */
-	load() {
-		throw new GenericError(
-			'The ima.controller.AbstractController.load method is abstract ' +
-				'and must be overridden'
-		);
-	}
-
-	/**
-	 * @inheritdoc
-	 */
-	update(params = {}) {
-		return {};
-	}
-
-	/**
-	 * @inheritdoc
-	 */
-	setState(statePatch) {
-		if (this._pageStateManager) {
-			this._pageStateManager.setState(statePatch);
-		}
-	}
-
-	/**
-	 * @inheritdoc
-	 */
-	getState() {
-		if (this._pageStateManager) {
-			return this._pageStateManager.getState();
-		} else {
-			return {};
-		}
-	}
-
-	/**
-	 * @inheritdoc
-	 */
-	addExtension(extension) {
-		this._extensions.push(extension);
-	}
-
-	/**
-	 * @inheritdoc
-	 */
-	getExtensions() {
-		return this._extensions;
-	}
-
-	/**
+  /**
 	 * @inheritdoc
 	 * @abstract
 	 */
-	setMetaParams(loadedResources, metaManager, router, dictionary, settings) {
-		throw new GenericError(
-			'The ima.controller.AbstractController.setMetaParams method is ' +
-				'abstract and must be overridden'
-		);
-	}
+  load() {
+    throw new GenericError(
+      'The ima.controller.AbstractController.load method is abstract ' +
+        'and must be overridden'
+    );
+  }
 
-	/**
+  /**
 	 * @inheritdoc
 	 */
-	setRouteParams(params = {}) {
-		this.params = params;
-	}
+  update(params = {}) {
+    return {};
+  }
 
-	/**
+  /**
 	 * @inheritdoc
 	 */
-	getRouteParams() {
-		return this.params;
-	}
+  setState(statePatch) {
+    if (this._pageStateManager) {
+      this._pageStateManager.setState(statePatch);
+    }
+  }
 
-	/**
+  /**
 	 * @inheritdoc
 	 */
-	setPageStateManager(pageStateManager) {
-		this._pageStateManager = pageStateManager;
-	}
+  getState() {
+    if (this._pageStateManager) {
+      return this._pageStateManager.getState();
+    } else {
+      return {};
+    }
+  }
 
-	/**
+  /**
 	 * @inheritdoc
 	 */
-	getHttpStatus() {
-		return this.status;
-	}
+  addExtension(extension) {
+    this._extensions.push(extension);
+  }
+
+  /**
+	 * @inheritdoc
+	 */
+  getExtensions() {
+    return this._extensions;
+  }
+
+  /**
+	 * @inheritdoc
+	 * @abstract
+	 */
+  setMetaParams(loadedResources, metaManager, router, dictionary, settings) {
+    throw new GenericError(
+      'The ima.controller.AbstractController.setMetaParams method is ' +
+        'abstract and must be overridden'
+    );
+  }
+
+  /**
+	 * @inheritdoc
+	 */
+  setRouteParams(params = {}) {
+    this.params = params;
+  }
+
+  /**
+	 * @inheritdoc
+	 */
+  getRouteParams() {
+    return this.params;
+  }
+
+  /**
+	 * @inheritdoc
+	 */
+  setPageStateManager(pageStateManager) {
+    this._pageStateManager = pageStateManager;
+  }
+
+  /**
+	 * @inheritdoc
+	 */
+  getHttpStatus() {
+    return this.status;
+  }
 }
 
 ns.ima.controller.AbstractController = AbstractController;

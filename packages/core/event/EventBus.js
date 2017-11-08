@@ -18,7 +18,7 @@ ns.namespace('ima.event');
  * @interface
  */
 export default class EventBus {
-	/**
+  /**
 	 * Fires a new custom event of the specified name, carrying the provided
 	 * data.
 	 *
@@ -45,9 +45,9 @@ export default class EventBus {
 	 *         fire the event.
 	 * @see https://developer.mozilla.org/en-US/docs/Web/API/Event/Event
 	 */
-	fire(eventTarget, eventName, data, options = {}) {}
+  fire(eventTarget, eventName, data, options = {}) {}
 
-	/**
+  /**
 	 * Registers the provided event listener to be executed when any custom
 	 * event is fired using the same implementation of the event bus and passes
 	 * through the specified event target.
@@ -64,9 +64,9 @@ export default class EventBus {
 	 *        register.
 	 * @return {EventBus} This event bus.
 	 */
-	listenAll(eventTarget, listener) {}
+  listenAll(eventTarget, listener) {}
 
-	/**
+  /**
 	 * Registers the provided event listener to be executed when the specific
 	 * custom event is fired by the same implementation of the event bus and
 	 * passes through the specified event target.
@@ -84,9 +84,9 @@ export default class EventBus {
 	 *        register.
 	 * @return {EventBus} This event bus.
 	 */
-	listen(eventTarget, eventName, listener) {}
+  listen(eventTarget, eventName, listener) {}
 
-	/**
+  /**
 	 * Removes the provided event listener from the set of event listeners
 	 * executed when the any custom event fired by the same implementation
 	 * passes through the specified event target.
@@ -100,9 +100,9 @@ export default class EventBus {
 	 *        deregister.
 	 * @return {EventBus} This event bus.
 	 */
-	unlistenAll(eventTarget, listener) {}
+  unlistenAll(eventTarget, listener) {}
 
-	/**
+  /**
 	 * Removes the provided event listener from the set of event listeners
 	 * executed when the specified custom event fired by the same
 	 * implementation passes through the specified event target.
@@ -117,7 +117,7 @@ export default class EventBus {
 	 *        deregister.
 	 * @return {EventBus} This event bus.
 	 */
-	unlisten(eventTarget, eventName, listener) {}
+  unlisten(eventTarget, eventName, listener) {}
 }
 
 ns.ima.event.EventBus = EventBus;

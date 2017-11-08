@@ -11,13 +11,13 @@ ns.namespace('ima.controller');
  * @interface
  */
 export default class Controller {
-	/**
+  /**
 	 * Callback for initializing the controller after the route parameters have
 	 * been set on this controller.
 	 */
-	init() {}
+  init() {}
 
-	/**
+  /**
 	 * Finalization callback, called when the controller is being discarded by
 	 * the application. This usually happens when the user navigates to a
 	 * different URL.
@@ -30,9 +30,9 @@ export default class Controller {
 	 * that might not be released automatically when the controller's instance
 	 * is destroyed by the garbage collector.
 	 */
-	destroy() {}
+  destroy() {}
 
-	/**
+  /**
 	 * Callback for activating the controller in the UI. This is the last
 	 * method invoked during controller initialization, called after all the
 	 * promises returned from the {@codelink load()} method have been resolved
@@ -42,9 +42,9 @@ export default class Controller {
 	 * method. The controller may start receiving event bus event after this
 	 * method completes.
 	 */
-	activate() {}
+  activate() {}
 
-	/**
+  /**
 	 * Callback for deactivating the controller in the UI. This is the first
 	 * method invoked during controller deinitialization. This usually happens
 	 * when the user navigates to a different URL.
@@ -55,9 +55,9 @@ export default class Controller {
 	 * The controller should deregister listeners registered and release all
 	 * resources obtained in the {@codelink activate()} method.
 	 */
-	deactivate() {}
+  deactivate() {}
 
-	/**
+  /**
 	 * Callback the controller uses to request the resources it needs to render
 	 * its view. This method is invoked after the {@codelink init()} method.
 	 *
@@ -91,9 +91,9 @@ export default class Controller {
 	 *         resolved when all resources the controller requires are ready.
 	 *         The resolved values will be pushed to the controller's state.
 	 */
-	load() {}
+  load() {}
 
-	/**
+  /**
 	 * Callback for updating the controller after a route update. This method
 	 * is invoked if the current route has the {@code onlyUpdate} flag set to
 	 * {@code true} and the current controller and view match those used by the
@@ -114,9 +114,9 @@ export default class Controller {
 	 *         resolved when all resources the controller requires are ready.
 	 *         The resolved values will be pushed to the controller's state.
 	 */
-	update(prevParams = {}) {}
+  update(prevParams = {}) {}
 
-	/**
+  /**
 	 * Patches the state of this controller using the provided object by
 	 * copying the provided patch object fields to the controller's state
 	 * object.
@@ -135,32 +135,32 @@ export default class Controller {
 	 * @param {Object<string, *>} statePatch Patch of the controller's state to
 	 *        apply.
 	 */
-	setState(statePatch) {}
+  setState(statePatch) {}
 
-	/**
+  /**
 	 * Returns the controller's current state.
 	 *
 	 * @return {Object<string, *>} The current state of this controller.
 	 */
-	getState() {}
+  getState() {}
 
-	/**
+  /**
 	 * Adds the provided extension to this controller. All extensions should be
 	 * added to the controller before the {@codelink init()} method is invoked.
 	 *
 	 * @param {Extension} extension The extension to add to this controller.
 	 * @return {Controller} This controller.
 	 */
-	addExtension(extension) {}
+  addExtension(extension) {}
 
-	/**
+  /**
 	 * Returns the controller's extensions.
 	 *
 	 * @return {Extension[]} The extensions added to this controller.
 	 */
-	getExtensions() {}
+  getExtensions() {}
 
-	/**
+  /**
 	 * Callback used to configure the meta attribute manager. The method is
 	 * called after the the controller's state has been patched with the all
 	 * loaded resources and the view has been rendered.
@@ -175,25 +175,25 @@ export default class Controller {
 	 * @param {Object<string, *>} settings The application settings for the
 	 *        current application environment.
 	 */
-	setMetaParams(loadedResources, metaManager, router, dictionary, settings) {}
+  setMetaParams(loadedResources, metaManager, router, dictionary, settings) {}
 
-	/**
+  /**
 	 * Sets the current route parameters. This method is invoked before the
 	 * {@code init()} method.
 	 *
 	 * @param {Object<string, string>} [params={}] The current route
 	 *        parameters.
 	 */
-	setRouteParams(params = {}) {}
+  setRouteParams(params = {}) {}
 
-	/**
+  /**
 	 * Returns the current route parameters.
 	 *
 	 * @return {Object<string, string>} The current route parameters.
 	 */
-	getRouteParams() {}
+  getRouteParams() {}
 
-	/**
+  /**
 	 * Sets the page state manager. The page state manager manages the
 	 * controller's state. The state manager can be set to {@code null} if this
 	 * controller loses the right to modify the state of the current page (e.g.
@@ -203,15 +203,15 @@ export default class Controller {
 	 * @param {?PageStateManager} pageStateManager The current state manager to
 	 *        use.
 	 */
-	setPageStateManager(pageStateManager) {}
+  setPageStateManager(pageStateManager) {}
 
-	/**
+  /**
 	 * Returns the HTTP status code to send to the client, should the
 	 * controller be used at the server-side.
 	 *
 	 * @return {number} The HTTP status code to send to the client.
 	 */
-	getHttpStatus() {}
+  getHttpStatus() {}
 }
 
 ns.ima.controller.Controller = Controller;

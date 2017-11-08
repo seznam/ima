@@ -9,7 +9,7 @@
  * @deprecated
  */
 export class Namespace {
-	/**
+  /**
 	 * Initializes the namespace provider.
 	 *
 	 * This is a private constructor, you should use the exported {@code ns}
@@ -21,9 +21,9 @@ export class Namespace {
 	 *        ns.namespace('ima');
 	 *        ns.has('ima');
 	 */
-	constructor() {}
+  constructor() {}
 
-	/**
+  /**
 	 * Verifies that the specified path in namespace exists, creates it if it
 	 * does not, and returns the value at the specified path in the namespace.
 	 *
@@ -37,8 +37,8 @@ export class Namespace {
 	 * @param {string} path The namespace path.
 	 * @return {*} The value at the specified path in the namespace.
 	 */
-	namespace(path) {
-		/*if (
+  namespace(path) {
+    /*if (
 			(typeof $Debug !== 'undefined') &&
 			$Debug &&
 			/^app./i.test(path) &&
@@ -54,21 +54,21 @@ export class Namespace {
 			namespaceWarningEmitted = true;
 		}*/
 
-		let self = this;
-		let levels = path.split('.');
+    let self = this;
+    let levels = path.split('.');
 
-		for (let levelName of levels) {
-			if (!self.hasOwnProperty(levelName)) {
-				self[levelName] = {};
-			}
+    for (let levelName of levels) {
+      if (!self.hasOwnProperty(levelName)) {
+        self[levelName] = {};
+      }
 
-			self = self[levelName];
-		}
+      self = self[levelName];
+    }
 
-		return self;
-	}
+    return self;
+  }
 
-	/**
+  /**
 	 * Verifies that the specified namespace path point to an existing
 	 * namespace or terminal value.
 	 *
@@ -76,30 +76,30 @@ export class Namespace {
 	 * @return {boolean} {@code true} if the namespace or terminal value exists
 	 *         at the specified path.
 	 */
-	has(path) {
-		return typeof this.get(path) !== 'undefined';
-	}
+  has(path) {
+    return typeof this.get(path) !== 'undefined';
+  }
 
-	/**
+  /**
 	 * Return value for the specified namespace path point.
 	 *
 	 * @param {string} path The namespace path to test.
 	 * @return {*} The value at the specified path in the namespace.
 	 */
-	get(path) {
-		let self = this;
-		let levels = path.split('.');
+  get(path) {
+    let self = this;
+    let levels = path.split('.');
 
-		for (let level of levels) {
-			if (!self[level]) {
-				return undefined;
-			}
+    for (let level of levels) {
+      if (!self[level]) {
+        return undefined;
+      }
 
-			self = self[level];
-		}
+      self = self[level];
+    }
 
-		return self;
-	}
+    return self;
+  }
 }
 
 export default new Namespace();

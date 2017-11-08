@@ -11,29 +11,29 @@ ns.namespace('ima.page.renderer');
  * This is the default managed root view.
  */
 export default class BlankManagedRootView extends React.Component {
-	static get propTypes() {
-		return {
-			$pageView: PropTypes.func
-		};
-	}
+  static get propTypes() {
+    return {
+      $pageView: PropTypes.func
+    };
+  }
 
-	static get defaultProps() {
-		return {
-			$pageView: null
-		};
-	}
+  static get defaultProps() {
+    return {
+      $pageView: null
+    };
+  }
 
-	/**
+  /**
 	 * @inheritdoc
 	 */
-	render() {
-		let pageView = this.props.$pageView;
-		if (!pageView) {
-			return null;
-		}
+  render() {
+    let pageView = this.props.$pageView;
+    if (!pageView) {
+      return null;
+    }
 
-		return React.createElement(pageView, this.props);
-	}
+    return React.createElement(pageView, this.props);
+  }
 }
 
 ns.ima.page.renderer.BlankManagedRootView = BlankManagedRootView;

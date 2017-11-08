@@ -7,168 +7,168 @@ ns.namespace('ima.window');
  * Server-side implementation of the {@code Window} utility API.
  */
 export default class ServerWindow extends Window {
-	static get $dependencies() {
-		return [];
-	}
+  static get $dependencies() {
+    return [];
+  }
 
-	/**
+  /**
 	 * @inheritdoc
 	 */
-	isClient() {
-		return false;
-	}
+  isClient() {
+    return false;
+  }
 
-	/**
+  /**
 	 * @inheritdoc
 	 */
-	isCookieEnabled() {
-		return false;
-	}
+  isCookieEnabled() {
+    return false;
+  }
 
-	/**
+  /**
 	 * @inheritdoc
 	 */
-	hasSessionStorage() {
-		return false;
-	}
+  hasSessionStorage() {
+    return false;
+  }
 
-	/**
+  /**
 	 * @inheritdoc
 	 */
-	setTitle(title) {}
+  setTitle(title) {}
 
-	/**
+  /**
 	 * @inheritdoc
 	 */
-	getWindow() {
-		return undefined;
-	}
+  getWindow() {
+    return undefined;
+  }
 
-	/**
+  /**
 	 * @inheritdoc
 	 */
-	getDocument() {
-		return undefined;
-	}
+  getDocument() {
+    return undefined;
+  }
 
-	/**
+  /**
 	 * @inheritdoc
 	 */
-	getScrollX() {
-		return 0;
-	}
+  getScrollX() {
+    return 0;
+  }
 
-	/**
+  /**
 	 * @inheritdoc
 	 */
-	getScrollY() {
-		return 0;
-	}
+  getScrollY() {
+    return 0;
+  }
 
-	/**
+  /**
 	 * @inheritdoc
 	 */
-	scrollTo(x, y) {}
+  scrollTo(x, y) {}
 
-	/**
+  /**
 	 * @inheritdoc
 	 */
-	getDomain() {
-		return '';
-	}
+  getDomain() {
+    return '';
+  }
 
-	/**
+  /**
 	 * @inheritdoc
 	 */
-	getHost() {
-		return '';
-	}
+  getHost() {
+    return '';
+  }
 
-	/**
+  /**
 	 * @inheritdoc
 	 */
-	getPath() {
-		return '';
-	}
+  getPath() {
+    return '';
+  }
 
-	/**
+  /**
 	 * @inheritdoc
 	 */
-	getUrl() {
-		return '';
-	}
+  getUrl() {
+    return '';
+  }
 
-	/**
+  /**
 	 * @inheritdoc
 	 */
-	getBody() {
-		return undefined;
-	}
+  getBody() {
+    return undefined;
+  }
 
-	/**
+  /**
 	 * @inheritdoc
 	 */
-	getElementById(id) {
-		return null;
-	}
+  getElementById(id) {
+    return null;
+  }
 
-	/**
+  /**
 	 * @inheritdoc
 	 */
-	querySelector(selector) {
-		return null;
-	}
+  querySelector(selector) {
+    return null;
+  }
 
-	/**
+  /**
 	 * @inheritdoc
 	 */
-	querySelectorAll(selector) {
-		class DummyNodeList {
-			constructor() {
-				this.length = 0;
-			}
+  querySelectorAll(selector) {
+    class DummyNodeList {
+      constructor() {
+        this.length = 0;
+      }
 
-			item() {
-				return null;
-			}
-		}
+      item() {
+        return null;
+      }
+    }
 
-		return new DummyNodeList();
-	}
+    return new DummyNodeList();
+  }
 
-	/**
+  /**
 	 * @inheritdoc
 	 */
-	redirect(url) {}
+  redirect(url) {}
 
-	/**
+  /**
 	 * @inheritdoc
 	 */
-	pushState(state, title, url) {}
+  pushState(state, title, url) {}
 
-	/**
+  /**
 	 * @inheritdoc
 	 */
-	replaceState(state, title, url) {}
+  replaceState(state, title, url) {}
 
-	/**
+  /**
 	 * @inheritdoc
 	 */
-	createCustomEvent(name, options) {
-		let dummyCustomEvent = { initCustomEvent: () => {}, detail: {} };
+  createCustomEvent(name, options) {
+    let dummyCustomEvent = { initCustomEvent: () => {}, detail: {} };
 
-		return Object.assign(dummyCustomEvent, options);
-	}
+    return Object.assign(dummyCustomEvent, options);
+  }
 
-	/**
+  /**
 	 * @inheritdoc
 	 */
-	bindEventListener(eventTarget, event, listener, useCapture = false) {}
+  bindEventListener(eventTarget, event, listener, useCapture = false) {}
 
-	/**
+  /**
 	 * @inheritdoc
 	 */
-	unbindEventListener(eventTarget, event, listener, useCapture = false) {}
+  unbindEventListener(eventTarget, event, listener, useCapture = false) {}
 }
 
 ns.ima.window.ServerWindow = ServerWindow;

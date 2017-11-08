@@ -7,12 +7,12 @@ ns.namespace('ima.page.manager');
  * view.
  */
 export default class PageManager {
-	/**
+  /**
 	 * Initializes the page manager.
 	 */
-	init() {}
+  init() {}
 
-	/**
+  /**
 	 * Starts to manage the provided controller and its view. The manager
 	 * stops the management of any previously managed controller and view.
 	 *
@@ -61,9 +61,9 @@ export default class PageManager {
 	 *         The {@code content} field will contain the rendered markup of
 	 *         the page at the server-side, or {@code null} at the client-side.
 	 */
-	manage(controller, view, options, params = {}) {}
+  manage(controller, view, options, params = {}) {}
 
-	/**
+  /**
 	 * Scrolls the viewport to the specified horizontal and vertical offset.
 	 *
 	 * This method has no effect at the server-side.
@@ -71,13 +71,13 @@ export default class PageManager {
 	 * @param {number=} [x=0] The horizontal offset to scroll to.
 	 * @param {number=} [y=0] The vertical offset to scroll to.
 	 */
-	scrollTo(x = 0, y = 0) {}
+  scrollTo(x = 0, y = 0) {}
 
-	/**
+  /**
 	 * Finalization callback, called when the page manager is being discarded.
 	 * This usually happens when the page is hot-reloaded at the client side.
 	 */
-	destroy() {}
+  destroy() {}
 }
 
 ns.ima.page.manager.PageManager = PageManager;

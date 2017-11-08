@@ -20,13 +20,13 @@ ns.namespace('ima.extension');
  * @interface
  */
 export default class Extension {
-	/**
+  /**
 	 * Callback for initializing the controller extension after the route
 	 * parameters have been set on this extension.
 	 */
-	init() {}
+  init() {}
 
-	/**
+  /**
 	 * Finalization callback, called when the controller is being discarded by
 	 * the application. This usually happens when the user navigates to a
 	 * different URL.
@@ -39,9 +39,9 @@ export default class Extension {
 	 * that might not be released automatically when the extensions's instance
 	 * is destroyed by the garbage collector.
 	 */
-	destroy() {}
+  destroy() {}
 
-	/**
+  /**
 	 * Callback for activating the extension in the UI. This is the last
 	 * method invoked during controller (and extensions) initialization, called
 	 * after all the promises returned from the {@codelink load()} method have
@@ -51,9 +51,9 @@ export default class Extension {
 	 * method. The extension may start receiving event bus event after this
 	 * method completes.
 	 */
-	activate() {}
+  activate() {}
 
-	/**
+  /**
 	 * Callback for deactivating the extension in the UI. This is the first
 	 * method invoked during extension deinitialization. This usually happens
 	 * when the user navigates to a different URL.
@@ -64,9 +64,9 @@ export default class Extension {
 	 * The extension should deregister listeners registered and release all
 	 * resources obtained in the {@codelink activate()} method.
 	 */
-	deactivate() {}
+  deactivate() {}
 
-	/**
+  /**
 	 * Callback the extension uses to request the resources it needs to render
 	 * its related parts of the view. This method is invoked after the
 	 * {@codelink init()} method.
@@ -91,9 +91,9 @@ export default class Extension {
 	 *         resolved when all resources the extension requires are ready.
 	 *         The resolved values will be pushed to the controller's state.
 	 */
-	load() {}
+  load() {}
 
-	/**
+  /**
 	 * Callback for updating the extension after a route update. This method
 	 * is invoked if the current route has the {@code onlyUpdate} flag set to
 	 * {@code true} and the current controller and view match those used by the
@@ -114,9 +114,9 @@ export default class Extension {
 	 *         resolved when all resources the extension requires are ready.
 	 *         The resolved values will be pushed to the controller's state.
 	 */
-	update(prevParams = {}) {}
+  update(prevParams = {}) {}
 
-	/**
+  /**
 	 * Patches the state of the controller using this extension by using the
 	 * provided object by copying the provided patch object fields to the
 	 * controller's state object.
@@ -130,47 +130,47 @@ export default class Extension {
 	 * @param {Object<string, *>} statePatch Patch of the controller's state to
 	 *        apply.
 	 */
-	setState(statePatch) {}
+  setState(statePatch) {}
 
-	/**
+  /**
 	 * Returns the current state of the controller using this extension.
 	 *
 	 * @return {Object<string, *>} The current state of the controller.
 	 */
-	getState() {}
+  getState() {}
 
-	/**
+  /**
 	 * Sets the state manager used to manage the controller's state..
 	 *
 	 * @param {?PageStateManager} pageStateManager The current state manager to
 	 *        use.
 	 */
-	setPageStateManager(pageStateManager) {}
+  setPageStateManager(pageStateManager) {}
 
-	/**
+  /**
 	 * Sets the current route parameters. This method is invoked before the
 	 * {@code init()} method.
 	 *
 	 * @param {Object<string, string>} [params={}] The current route
 	 *        parameters.
 	 */
-	setRouteParams(params = {}) {}
+  setRouteParams(params = {}) {}
 
-	/**
+  /**
 	 * Returns the current route parameters.
 	 *
 	 * @return {Object<string, string>} The current route parameters.
 	 */
-	getRouteParams() {}
+  getRouteParams() {}
 
-	/**
+  /**
 	 * Returns the names of the state fields that may be manipulated by this
 	 * extension. Manipulations of other fields of the state will be ignored.
 	 *
 	 * @return {string[]} The names of the state fields that may be manipulated
 	 *         by this extension.
 	 */
-	getAllowedStateKeys() {}
+  getAllowedStateKeys() {}
 }
 
 ns.ima.extension.Extension = Extension;

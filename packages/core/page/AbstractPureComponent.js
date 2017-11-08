@@ -16,47 +16,47 @@ import * as helpers from './componentHelpers';
  * @see https://facebook.github.io/react/docs/react-api.html#react.purecomponent
  */
 export default class AbstractPureComponent extends React.PureComponent {
-	static get contextTypes() {
-		return helpers.getContextTypes(this);
-	}
+  static get contextTypes() {
+    return helpers.getContextTypes(this);
+  }
 
-	static set contextTypes(contextTypes) {
-		helpers.setContextTypes(this, contextTypes);
-	}
+  static set contextTypes(contextTypes) {
+    helpers.setContextTypes(this, contextTypes);
+  }
 
-	/**
+  /**
 	 * Initializes the component.
 	 *
 	 * @param {Object<string, *>} props The component properties.
 	 * @param {Object<string, *>} context The component context.
 	 */
-	constructor(props, context) {
-		super(props, context);
+  constructor(props, context) {
+    super(props, context);
 
-		/**
+    /**
 		 * The view utilities, initialized lazily upon first use from either
 		 * the context, or the component's props.
 		 *
 		 * @type {?Object<string, *>}
 		 */
-		this._utils = null;
-	}
+    this._utils = null;
+  }
 
-	/**
+  /**
 	 * Returns the utilities for the view components. The returned value is the
 	 * value bound to the {@code $Utils} object container constant.
 	 *
 	 * @return {Object<string, *>} The utilities for the view components.
 	 */
-	get utils() {
-		if (!this._utils) {
-			this._utils = helpers.getUtils(this.props, this.context);
-		}
+  get utils() {
+    if (!this._utils) {
+      this._utils = helpers.getUtils(this.props, this.context);
+    }
 
-		return this._utils;
-	}
+    return this._utils;
+  }
 
-	/**
+  /**
 	 * Returns the localized phrase identified by the specified key. The
 	 * placeholders in the localization phrase will be replaced by the provided
 	 * values.
@@ -66,11 +66,11 @@ export default class AbstractPureComponent extends React.PureComponent {
 	 *        the placeholders in the localization phrase.
 	 * @return {string} Localized phrase.
 	 */
-	localize(key, params = {}) {
-		return helpers.localize(this, key, params);
-	}
+  localize(key, params = {}) {
+    return helpers.localize(this, key, params);
+  }
 
-	/**
+  /**
 	 * Generates an absolute URL using the provided route name (see the
 	 * <code>app/config/routes.js</code> file). The provided parameters will
 	 * replace the placeholders in the route pattern, while the extraneous
@@ -81,11 +81,11 @@ export default class AbstractPureComponent extends React.PureComponent {
 	 *        extraneous parameters to add to the URL as a query string.
 	 * @return {string} The generated URL.
 	 */
-	link(name, params = {}) {
-		return helpers.link(this, name, params);
-	}
+  link(name, params = {}) {
+    return helpers.link(this, name, params);
+  }
 
-	/**
+  /**
 	 * Generate a string of CSS classes from the properties of the passed-in
 	 * object that resolve to true.
 	 *
@@ -105,21 +105,21 @@ export default class AbstractPureComponent extends React.PureComponent {
 	 * @return {string} String of CSS classes that had their property resolved
 	 *         to {@code true}.
 	 */
-	cssClasses(classRules, includeComponentClassName = false) {
-		return helpers.cssClasses(this, classRules, includeComponentClassName);
-	}
+  cssClasses(classRules, includeComponentClassName = false) {
+    return helpers.cssClasses(this, classRules, includeComponentClassName);
+  }
 
-	/**
+  /**
 	 * Creates and sends a new IMA.js DOM custom event from this component.
 	 *
 	 * @param {string} eventName The name of the event.
 	 * @param {*=} data Data to send within the event.
 	 */
-	fire(eventName, data = null) {
-		helpers.fire(this, eventName, data);
-	}
+  fire(eventName, data = null) {
+    helpers.fire(this, eventName, data);
+  }
 
-	/**
+  /**
 	 * Registers the provided event listener for execution whenever an IMA.js
 	 * DOM custom event of the specified name occurs at the specified event
 	 * target.
@@ -129,11 +129,11 @@ export default class AbstractPureComponent extends React.PureComponent {
 	 * @param {string} eventName The name of the event for which to listen.
 	 * @param {function(Event)} listener The listener for event to register.
 	 */
-	listen(eventTarget, eventName, listener) {
-		helpers.listen(this, eventTarget, eventName, listener);
-	}
+  listen(eventTarget, eventName, listener) {
+    helpers.listen(this, eventTarget, eventName, listener);
+  }
 
-	/**
+  /**
 	 * Deregisters the provided event listener for an IMA.js DOM custom event
 	 * of the specified name at the specified event target.
 	 *
@@ -142,7 +142,7 @@ export default class AbstractPureComponent extends React.PureComponent {
 	 * @param {string} eventName The name of the event for which to listen.
 	 * @param {function(Event)} listener The listener for event to register.
 	 */
-	unlisten(eventTarget, eventName, listener) {
-		helpers.unlisten(this, eventTarget, eventName, listener);
-	}
+  unlisten(eventTarget, eventName, listener) {
+    helpers.unlisten(this, eventTarget, eventName, listener);
+  }
 }
