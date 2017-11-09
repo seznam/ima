@@ -1,7 +1,3 @@
-import ns from '../namespace';
-
-ns.namespace('ima.http');
-
 /**
  * Options for a request sent using the HTTP agent.
  * @typedef {Object} HttpAgent~RequestOptions
@@ -147,5 +143,3 @@ export default class HttpAgent {
 	 */
   clearDefaultHeaders() {}
 }
-
-ns.ima.http.HttpAgent = HttpAgent;

@@ -1,7 +1,3 @@
-import ns from '../namespace';
-
-ns.namespace('ima.extension');
-
 /**
  * Extensions provide means of extending the page controllers with additional
  * managed state and logic.
@@ -172,5 +168,3 @@ export default class Extension {
 	 */
   getAllowedStateKeys() {}
 }
-
-ns.ima.extension.Extension = Extension;

@@ -1,7 +1,4 @@
-import ns from '../namespace';
 import MapStorage from './MapStorage';
-
-ns.namespace('ima.storage');
 
 /**
  * A specialization of the {@codelink MapStorage} storage mimicking the native
@@ -98,8 +95,6 @@ export default class WeakMapStorage extends MapStorage {
     }
   }
 }
-
-ns.ima.storage.WeakMapStorage = WeakMapStorage;
 
 /**
  * A simple reference wrapper that emulates a weak reference. We seem to have

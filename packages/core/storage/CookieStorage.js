@@ -1,11 +1,8 @@
-import ns from '../namespace';
 import MapStorage from './MapStorage';
 import GenericError from '../error/GenericError';
 import Request from '../router/Request';
 import Response from '../router/Response';
 import Window from '../window/Window';
-
-ns.namespace('ima.storage');
 
 /**
  * Implementation note: This is the largest possible safe value that has been
@@ -536,5 +533,3 @@ export default class CookieStorage extends MapStorage {
     }
   }
 }
-
-ns.ima.storage.CookieStorage = CookieStorage;

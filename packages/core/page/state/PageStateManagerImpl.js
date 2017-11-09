@@ -1,7 +1,4 @@
-import ns from '../../namespace';
 import PageStateManager from './PageStateManager';
-
-ns.namespace('ima.page.state');
 
 const MAX_HISTORY_LIMIT = 10;
 
@@ -100,5 +97,3 @@ export default class PageStateManagerImpl extends PageStateManager {
     }
   }
 }
-
-ns.ima.page.state.PageStateManagerImpl = PageStateManagerImpl;

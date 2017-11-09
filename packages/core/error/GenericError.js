@@ -1,7 +1,4 @@
-import ns from '../namespace';
 import Error from './Error';
-
-ns.namespace('ima.error');
 
 /**
  * Implementation of the ima.error.Error interface, providing more advanced
@@ -47,5 +44,3 @@ export default class GenericError extends Error {
     return this._params;
   }
 }
-
-ns.ima.error.GenericError = GenericError;

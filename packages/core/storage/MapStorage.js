@@ -1,7 +1,4 @@
-import ns from '../namespace';
 import Storage from './Storage';
-
-ns.namespace('ima.storage');
 
 /**
  * Implementation of the {@codelink Storage} interface that relies on the
@@ -86,5 +83,3 @@ export default class MapStorage extends Storage {
     return this._storage.size;
   }
 }
-
-ns.ima.storage.MapStorage = MapStorage;

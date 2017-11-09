@@ -1,8 +1,5 @@
-import ns from '../../namespace';
 import AbstractPageRenderer from './AbstractPageRenderer';
 import GenericError from '../../error/GenericError';
-
-ns.namespace('ima.page.renderer');
 
 // @server-side export default class ServerPageRenderer extends AbstractPageRenderer {}
 
@@ -216,5 +213,3 @@ export default class ServerPageRenderer extends AbstractPageRenderer {
     return '<!doctype html>\n' + appMarkup;
   }
 }
-
-ns.ima.page.renderer.ServerPageRenderer = ServerPageRenderer;

@@ -1,10 +1,7 @@
-import ns from '../namespace';
 import Events from './Events';
 import Router from './Router';
 import RouteNames from './RouteNames';
 import GenericError from '../error/GenericError';
-
-ns.namespace('ima.router');
 
 /**
  * The basic implementation of the {@codelink Router} interface, providing the
@@ -414,5 +411,3 @@ export default class AbstractRouter extends Router {
     return null;
   }
 }
-
-ns.ima.router.AbstractRouter = AbstractRouter;

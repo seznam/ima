@@ -1,7 +1,3 @@
-import ns from '../namespace';
-
-ns.namespace('ima.controller');
-
 /**
  * Interface defining the common API of page controllers. A page controller is
  * used to manage the overall state and view of a single application page, and
@@ -213,5 +209,3 @@ export default class Controller {
 	 */
   getHttpStatus() {}
 }
-
-ns.ima.controller.Controller = Controller;

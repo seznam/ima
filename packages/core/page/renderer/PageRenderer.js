@@ -1,7 +1,3 @@
-import ns from '../../namespace';
-
-ns.namespace('ima.page.renderer');
-
 /**
  * The page renderer is a utility for rendering the page at either the
  * client-side or the server-side, handling the differences in the environment.
@@ -113,5 +109,3 @@ export default class PageRenderer {
 	 */
   clearState() {}
 }
-
-ns.ima.page.renderer.PageRenderer = PageRenderer;

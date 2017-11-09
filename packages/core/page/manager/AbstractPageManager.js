@@ -1,8 +1,5 @@
-import ns from '../../namespace';
 import PageManager from './PageManager';
 import GenericError from '../../error/GenericError';
-
-ns.namespace('ima.page.manager');
 
 /**
  * Page manager for controller.
@@ -665,5 +662,3 @@ export default class AbstractPageManager extends PageManager {
 	 */
   _postManage(options) {}
 }
-
-ns.ima.page.manager.AbstractPageManager = AbstractPageManager;

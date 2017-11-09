@@ -1,7 +1,4 @@
-import ns from '../namespace';
 import GenericError from '../error/GenericError';
-
-ns.namespace('ima.router');
 
 // @server-side export default class {}
 
@@ -321,5 +318,3 @@ export default class Response {
     return expressOptions;
   }
 }
-
-ns.ima.router.Response = Response;

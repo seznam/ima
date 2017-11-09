@@ -1,9 +1,6 @@
 import PropTypes from 'prop-types';
-import ns from '../namespace';
 import AbstractPureComponent from './AbstractPureComponent';
 import MetaManager from '../meta/MetaManager';
-
-ns.namespace('ima.page');
 
 const PRIVATE = {
   masterElementId: Symbol('masterElementId')
@@ -95,5 +92,3 @@ export default class AbstractDocumentView extends AbstractPureComponent {
     return {};
   }
 }
-
-ns.ima.page.AbstractDocumentView = AbstractDocumentView;

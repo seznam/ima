@@ -1,9 +1,6 @@
 // @client-side
 
-import ns from '../namespace';
 import Window from './Window';
-
-ns.namespace('ima.window');
 
 /**
  * Client-side implementation of the {@code Window} utility API.
@@ -211,5 +208,3 @@ export default class ClientWindow extends Window {
     }
   }
 }
-
-ns.ima.window.ClientWindow = ClientWindow;

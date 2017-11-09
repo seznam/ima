@@ -1,8 +1,5 @@
-import ns from '../namespace';
 import GenericError from '../error/GenericError';
 import Dictionary from '../dictionary/Dictionary';
-
-ns.namespace('ima.dictionary');
 
 /**
  * Implementation of the {@codelink Dictionary} interface that relies on
@@ -128,7 +125,7 @@ export default class MessageFormatDictionary extends Dictionary {
 	 *                 Object<string, (boolean|number|string|Date)>
 	 *             ): string|
 	 *             Object<
-	 *               string, 
+	 *               string,
 	 *               function(
 	 *                   Object<string, (boolean|number|string|Date)>
 	 *               ): string
@@ -151,5 +148,3 @@ export default class MessageFormatDictionary extends Dictionary {
     return scope;
   }
 }
-
-ns.ima.dictionary.MessageFormatDictionary = MessageFormatDictionary;

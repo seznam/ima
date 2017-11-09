@@ -1,13 +1,10 @@
 // @client-side
 
-import ns from '../namespace';
 import Dispatcher from '../event/Dispatcher';
 import EventBus from '../event/EventBus';
 import PageManager from '../page/manager/PageManager';
 import PageStateManager from '../page/state/PageStateManager';
 import Window from '../window/Window';
-
-ns.namespace('ima.debug');
 
 /**
  * Developer tools, used mostly for navigating the page state history.
@@ -108,5 +105,3 @@ export default class DevTool {
     this._dispatcher.clear();
   }
 }
-
-ns.ima.debug.DevTool = DevTool;

@@ -1,13 +1,10 @@
 // @client-side
 
-import ns from '../namespace';
 import AbstractRouter from './AbstractRouter';
 import RouteFactory from './RouteFactory';
 import Dispatcher from '../event/Dispatcher';
 import PageManager from '../page/manager/PageManager';
 import Window from '../window/Window';
-
-ns.namespace('ima.router');
 
 /**
  * Names of the DOM events the router responds to.
@@ -350,5 +347,3 @@ export default class ClientRouter extends AbstractRouter {
     return !!url.match(this.getBaseUrl());
   }
 }
-
-ns.ima.router.ClientRouter = ClientRouter;

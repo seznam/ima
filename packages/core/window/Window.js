@@ -1,7 +1,3 @@
-import ns from '../namespace';
-
-ns.namespace('ima.window');
-
 /**
  * The {@codelink Window} interface defines various utility API for easier
  * cross-environment usage of various low-level client-side JavaScript APIs
@@ -242,5 +238,3 @@ export default class Window {
 	 */
   unbindEventListener(eventTarget, event, listener, useCapture = false) {}
 }
-
-ns.ima.window.Window = Window;

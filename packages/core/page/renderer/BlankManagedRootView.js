@@ -1,8 +1,5 @@
 import PropTypes from 'prop-types';
 import React from 'react';
-import ns from '../../namespace';
-
-ns.namespace('ima.page.renderer');
 
 /**
  * Blank managed root view does not nothing except for rendering the current
@@ -35,5 +32,3 @@ export default class BlankManagedRootView extends React.Component {
     return React.createElement(pageView, this.props);
   }
 }
-
-ns.ima.page.renderer.BlankManagedRootView = BlankManagedRootView;

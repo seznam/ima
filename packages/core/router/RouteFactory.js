@@ -1,7 +1,4 @@
-import ns from '../namespace';
 import Route from './Route';
-
-ns.namespace('ima.router');
 
 /**
  * Utility factory used by router to create routes.
@@ -46,5 +43,3 @@ export default class RouteFactory {
     return new Route(name, pathExpression, controller, view, options);
   }
 }
-
-ns.ima.router.RouteFactory = RouteFactory;

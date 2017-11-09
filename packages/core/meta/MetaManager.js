@@ -1,7 +1,3 @@
-import ns from '../namespace';
-
-ns.namespace('ima.meta');
-
 /**
  * The Meta manager is a utility for managing various page attributes related
  * to the SEO (search engine optimization) and social network integration.
@@ -128,5 +124,3 @@ export default class MetaManager {
 	 */
   getLinks() {}
 }
-
-ns.ima.meta.MetaManager = MetaManager;

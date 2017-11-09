@@ -1,10 +1,7 @@
-import ns from '../namespace';
 import MapStorage from './MapStorage';
 import SessionStorage from './SessionStorage';
 import Storage from './Storage';
 import CacheEntry from '../cache/CacheEntry';
-
-ns.namespace('ima.storage');
 
 /**
  * The {@codelink SessionMap} storage is an implementation of the
@@ -114,5 +111,3 @@ export default class SessionMapStorage extends Storage {
     return this._map.size();
   }
 }
-
-ns.ima.storage.SessionMapStorage = SessionMapStorage;

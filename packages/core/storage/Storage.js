@@ -1,7 +1,3 @@
-import ns from '../namespace';
-
-ns.namespace('ima.storage');
-
 /**
  * The {@codelink Storage} is an unordered collection of named values of any
  * type. Values in the storage are named using {@code string} keys. The storage
@@ -86,5 +82,3 @@ export default class Storage {
 	 */
   size() {}
 }
-
-ns.ima.storage.Storage = Storage;

@@ -1,7 +1,4 @@
-import ns from '../namespace';
 import MetaManager from './MetaManager';
-
-ns.namespace('ima.meta');
 
 /**
  * Default implementation of the {@codelink MetaManager} interface.
@@ -123,5 +120,3 @@ export default class MetaManagerImpl extends MetaManager {
     return Array.from(this._link.keys());
   }
 }
-
-ns.ima.meta.MetaManagerImpl = MetaManagerImpl;

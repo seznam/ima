@@ -1,7 +1,3 @@
-import ns from '../namespace';
-
-ns.namespace('ima.router');
-
 /**
  * HTTP status code constants, representing the HTTP status codes recognized
  * and processed by this proxy.
@@ -30,5 +26,3 @@ const RouteNames = Object.freeze({
 });
 
 export default RouteNames;
-
-ns.ima.router.RouteNames = RouteNames;

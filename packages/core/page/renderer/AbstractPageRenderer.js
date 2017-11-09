@@ -1,10 +1,7 @@
-import ns from '../../namespace';
 import BlankManagedRootView from './BlankManagedRootView';
 import PageRenderer from './PageRenderer';
 import ViewAdapter from './ViewAdapter';
 import GenericError from '../../error/GenericError';
-
-ns.namespace('ima.page.renderer');
 
 /**
  * Base class for implementations of the {@linkcode PageRenderer} interface.
@@ -193,5 +190,3 @@ export default class AbstractPageRenderer extends PageRenderer {
     );
   }
 }
-
-ns.ima.page.renderer.AbstractPageRenderer = AbstractPageRenderer;

@@ -1,7 +1,4 @@
-import ns from '../namespace';
 import Controller from './Controller';
-
-ns.namespace('ima.controller');
 
 /**
  * Decorator for page controllers. The decorator manages references to the meta
@@ -189,5 +186,3 @@ export default class ControllerDecorator extends Controller {
     return this._metaManager;
   }
 }
-
-ns.ima.controller.ControllerDecorator = ControllerDecorator;

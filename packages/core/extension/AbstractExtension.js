@@ -1,8 +1,5 @@
-import ns from '../namespace';
 import Extension from './Extension';
 import GenericError from '../error/GenericError';
-
-ns.namespace('ima.extension');
 
 /**
  * Abstract extension
@@ -131,5 +128,3 @@ export default class AbstractExtension extends Extension {
     return [];
   }
 }
-
-ns.ima.extension.AbstractExtension = AbstractExtension;

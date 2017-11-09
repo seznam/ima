@@ -1,8 +1,5 @@
-import ns from '../namespace';
 import HttpAgent from './HttpAgent';
 import GenericError from '../error/GenericError';
-
-ns.namespace('ima.http');
 
 /**
  * Implementation of the {@codelink HttpAgent} interface with internal caching
@@ -438,5 +435,3 @@ export default class HttpAgentImpl extends HttpAgent {
     agentResponse.cached = false;
   }
 }
-
-ns.ima.http.HttpAgentImpl = HttpAgentImpl;

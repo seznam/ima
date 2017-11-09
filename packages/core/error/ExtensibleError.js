@@ -1,7 +1,3 @@
-import ns from '../namespace';
-
-ns.namespace('ima.error');
-
 /**
  * Base class of custom error classes, extending the native {@linkcode Error}
  * class.
@@ -130,5 +126,3 @@ Object.defineProperty(ExtensibleError.prototype, 'stack', {
     return this._stack;
   }
 });
-
-ns.ima.error.ExtensibleError = ExtensibleError;

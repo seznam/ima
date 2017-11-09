@@ -1,7 +1,3 @@
-import ns from '../namespace';
-
-ns.namespace('ima.cache');
-
 /**
  * The cache entry is a typed container of cache data used to track the
  * creation and expiration of cache entries.
@@ -67,5 +63,3 @@ export default class CacheEntry {
     return this._value;
   }
 }
-
-ns.ima.cache.CacheEntry = CacheEntry;

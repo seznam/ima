@@ -1,8 +1,5 @@
-import ns from '../namespace';
 import GenericError from '../error/GenericError';
 import Controller from './Controller';
-
-ns.namespace('ima.controller');
 
 /**
  * Basic implementation of the {@codelink Controller} interface, providing the
@@ -160,5 +157,3 @@ export default class AbstractController extends Controller {
     return this.status;
   }
 }
-
-ns.ima.controller.AbstractController = AbstractController;

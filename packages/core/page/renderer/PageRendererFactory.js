@@ -1,7 +1,4 @@
-import ns from '../../namespace';
 import AbstractDocumentView from '../AbstractDocumentView';
-
-ns.namespace('ima.page.renderer');
 
 /**
  * Factory for page render.
@@ -154,5 +151,3 @@ export default class PageRendererFactory {
     return this._React.createFactory(view);
   }
 }
-
-ns.ima.page.renderer.PageRendererFactory = PageRendererFactory;

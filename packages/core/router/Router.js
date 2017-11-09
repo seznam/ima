@@ -1,7 +1,3 @@
-import ns from '../namespace';
-
-ns.namespace('ima.router');
-
 /**
  * The router manages the application's routing configuration and dispatches
  * controllers and views according to the current URL and the route it matches.
@@ -335,5 +331,3 @@ export default class Router {
 	 */
   isRedirection(reason) {}
 }
-
-ns.ima.router.Router = Router;

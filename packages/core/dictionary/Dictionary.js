@@ -1,7 +1,3 @@
-import ns from '../namespace';
-
-ns.namespace('ima.dictionary');
-
 /**
  * The Dictionary is a manager and preprocessor of localization phrases for a
  * single language. The format of the localization phrases depends on the
@@ -56,5 +52,3 @@ export default class Dictionary {
 	 */
   has(key) {}
 }
-
-ns.ima.dictionary.Dictionary = Dictionary;

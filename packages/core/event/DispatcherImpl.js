@@ -1,8 +1,5 @@
-import ns from '../namespace';
 import Dispatcher from './Dispatcher';
 import GenericError from '../error/GenericError';
-
-ns.namespace('ima.event');
 
 /**
  * An empty immutable map of event listener to scopes, used for a mismatch in
@@ -199,5 +196,3 @@ export default class DispatcherImpl extends Dispatcher {
     return EMPTY_MAP;
   }
 }
-
-ns.ima.event.DispatcherImpl = DispatcherImpl;

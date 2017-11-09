@@ -1,7 +1,4 @@
-import ns from '../namespace';
 import CacheEntry from './CacheEntry';
-
-ns.namespace('ima.cache');
 
 /**
  * Factory for creating instances of {@linkcode CacheEntry}.
@@ -23,5 +20,3 @@ export default class CacheFactory {
     return new CacheEntry(value, ttl);
   }
 }
-
-ns.ima.cache.CacheFactory = CacheFactory;

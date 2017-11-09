@@ -1,7 +1,3 @@
-import ns from '../../namespace';
-
-ns.namespace('ima.page.state');
-
 /**
  * Manager of the current page state and state history.
  */
@@ -37,5 +33,3 @@ export default class PageStateManager {
 	 */
   getAllStates() {}
 }
-
-ns.ima.page.state.PageStateManager = PageStateManager;

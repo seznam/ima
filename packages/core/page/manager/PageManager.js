@@ -1,7 +1,3 @@
-import ns from '../../namespace';
-
-ns.namespace('ima.page.manager');
-
 /**
  * The page manager is a utility for managing the current controller and its
  * view.
@@ -79,5 +75,3 @@ export default class PageManager {
 	 */
   destroy() {}
 }
-
-ns.ima.page.manager.PageManager = PageManager;

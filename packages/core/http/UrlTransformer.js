@@ -1,7 +1,3 @@
-import ns from '../namespace';
-
-ns.namespace('ima.http');
-
 /**
  * Utility for transforming URLs according to the configured replacement rules.
  */
@@ -67,5 +63,3 @@ export default class UrlTransformer {
     return str.replace(reg, ruleKey => this._rules[ruleKey]);
   }
 }
-
-ns.ima.http.UrlTransformer = UrlTransformer;

@@ -1,7 +1,3 @@
-import ns from '../namespace';
-
-ns.namespace('ima.router');
-
 /**
  * Events constants, which is firing to app.
  *
@@ -39,5 +35,3 @@ const Events = Object.freeze({
 });
 
 export default Events;
-
-ns.ima.router.Events = Events;

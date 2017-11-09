@@ -1,8 +1,5 @@
-import ns from '../../namespace';
 import PageStateManager from './PageStateManager';
 import GenericError from '../../error/GenericError';
-
-ns.namespace('ima.page.state');
 
 /**
  * Decorator for page state manager, which add logic for limiting Extension
@@ -76,5 +73,3 @@ export default class PageStateManagerDecorator extends PageStateManager {
     return this._pageStateManager.getAllStates();
   }
 }
-
-ns.ima.page.state.PageStateManagerDecorator = PageStateManagerDecorator;

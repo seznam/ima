@@ -1,11 +1,8 @@
 // @client-side
 
-import ns from '../namespace';
 import EventBus from './EventBus';
 import GenericError from '../error/GenericError';
 import Window from '../window/Window';
-
-ns.namespace('ima.event');
 
 /**
  * Global name of IMA.js custom event.
@@ -206,5 +203,3 @@ export default class EventBusImpl extends EventBus {
     return this;
   }
 }
-
-ns.ima.event.EventBusImpl = EventBusImpl;

@@ -1,7 +1,3 @@
-import ns from '../namespace';
-
-ns.namespace('ima.router');
-
 /**
  * Regular expression matching all control characters used in regular
  * expressions. The regular expression is used to match these characters in
@@ -829,5 +825,3 @@ export default class Route {
     });
   }
 }
-
-ns.ima.router.Route = Route;

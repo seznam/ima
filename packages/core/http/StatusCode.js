@@ -1,7 +1,3 @@
-import ns from '../namespace';
-
-ns.namespace('ima.http');
-
 /**
  * HTTP status code constants, representing the HTTP status codes recognized
  * and processed by this proxy.
@@ -69,5 +65,3 @@ const StatusCode = Object.freeze({
 });
 
 export default StatusCode;
-
-ns.ima.http.StatusCode = StatusCode;

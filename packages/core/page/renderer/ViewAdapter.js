@@ -1,8 +1,5 @@
 import PropTypes from 'prop-types';
 import React from 'react';
-import ns from '../../namespace';
-
-ns.namespace('ima.page.renderer');
 
 /**
  * An adapter component providing the current page controller's state to the
@@ -69,5 +66,3 @@ export default class ViewAdapter extends React.Component {
     };
   }
 }
-
-ns.ima.page.renderer.ViewAdapter = ViewAdapter;

@@ -1,7 +1,4 @@
-import ns from '../namespace';
 import Cache from './Cache';
-
-ns.namespace('ima.cache');
 
 /**
  * Configurable generic implementation of the {@codelink Cache} interface.
@@ -253,5 +250,3 @@ export default class CacheImpl extends Cache {
     return value;
   }
 }
-
-ns.ima.cache.CacheImpl = CacheImpl;

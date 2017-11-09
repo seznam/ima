@@ -1,9 +1,6 @@
-import ns from '../namespace';
 import GenericError from '../error/GenericError';
 import Storage from './Storage';
 import Window from '../window/Window';
-
-ns.namespace('ima.storage');
 
 /**
  * Implementation of the {@codelink Storage} interface that relies on the
@@ -206,5 +203,3 @@ class StorageIterator {
     return this;
   }
 }
-
-ns.ima.storage.SessionStorage = SessionStorage;

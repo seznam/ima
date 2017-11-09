@@ -1,8 +1,5 @@
 import React from 'react';
-import ns from '../namespace';
 import * as helpers from './componentHelpers';
-
-ns.namespace('ima.page');
 
 /**
  * The base class for all view components.
@@ -140,5 +137,3 @@ export default class AbstractComponent extends React.Component {
     helpers.unlisten(this, eventTarget, eventName, listener);
   }
 }
-
-ns.ima.page.AbstractComponent = AbstractComponent;

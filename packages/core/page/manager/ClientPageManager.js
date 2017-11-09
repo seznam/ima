@@ -1,14 +1,11 @@
 // @client-side
 
-import ns from '../../namespace';
 import AbstractPageManager from './AbstractPageManager';
 import PageFactory from '../PageFactory';
 import PageRenderer from '../renderer/PageRenderer';
 import PageStateManager from '../state/PageStateManager';
 import EventBus from '../../event/EventBus';
 import Window from '../../window/Window';
-
-ns.namespace('ima.page.manager');
 
 /**
  * Page manager for controller on the client side.
@@ -218,5 +215,3 @@ export default class ClientPageManager extends AbstractPageManager {
     return false;
   }
 }
-
-ns.ima.page.manager.ClientPageManager = ClientPageManager;

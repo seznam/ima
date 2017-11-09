@@ -1,7 +1,3 @@
-import ns from '../namespace';
-
-ns.namespace('ima.event');
-
 /**
  * A Dispatcher is a utility that manager event listeners registered for events
  * and allows distributing (firing) events to the listeners registered for the
@@ -76,5 +72,3 @@ export default class Dispatcher {
 	 */
   fire(event, data, imaInternalEvent = false) {}
 }
-
-ns.ima.event.Dispatcher = Dispatcher;

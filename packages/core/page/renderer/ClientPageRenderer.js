@@ -1,9 +1,6 @@
 // @client-side
 
-import ns from '../../namespace';
 import AbstractPageRenderer from './AbstractPageRenderer';
-
-ns.namespace('ima.page.renderer');
 
 /**
  * Client-side page renderer. The renderer attempts to reuse the markup sent by
@@ -305,5 +302,3 @@ export default class ClientPageRenderer extends AbstractPageRenderer {
     }
   }
 }
-
-ns.ima.page.renderer.ClientPageRenderer = ClientPageRenderer;

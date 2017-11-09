@@ -1,7 +1,3 @@
-import ns from '../namespace';
-
-ns.namespace('ima.event');
-
 /**
  * Utility for sending and intercepting wrapped custom DOM events on the DOM or
  * propagating them to the current controller.
@@ -119,5 +115,3 @@ export default class EventBus {
 	 */
   unlisten(eventTarget, eventName, listener) {}
 }
-
-ns.ima.event.EventBus = EventBus;

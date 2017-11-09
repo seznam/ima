@@ -1,12 +1,9 @@
-import ns from '../namespace';
 import AbstractRouter from './AbstractRouter';
 import Request from './Request';
 import Response from './Response';
 import RouteFactory from './RouteFactory';
 import Dispatcher from '../event/Dispatcher';
 import PageManager from '../page/manager/PageManager';
-
-ns.namespace('ima.router');
 
 // @server-side export default class ServerRouter extends AbstractRouter {}
 
@@ -66,5 +63,3 @@ export default class ServerRouter extends AbstractRouter {
     this._response.redirect(url, options.httpStatus || 302);
   }
 }
-
-ns.ima.router.ServerRouter = ServerRouter;

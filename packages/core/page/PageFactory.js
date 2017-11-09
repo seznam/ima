@@ -1,7 +1,4 @@
-import ns from '../namespace';
 import GenericError from '../error/GenericError';
-
-ns.namespace('ima.page');
 
 /**
  * Factory for page.
@@ -96,5 +93,3 @@ export default class PageFactory {
     return decoratedPageStateManager;
   }
 }
-
-ns.ima.page.PageFactory = PageFactory;

@@ -1,7 +1,3 @@
-import ns from '../namespace';
-
-ns.namespace('ima.router');
-
 // @server-side export default class {}
 
 /**
@@ -110,5 +106,3 @@ export default class Request {
     return this._request ? this._request.ips || [] : [];
   }
 }
-
-ns.ima.router.Request = Request;

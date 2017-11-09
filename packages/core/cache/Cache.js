@@ -1,7 +1,3 @@
-import ns from '../namespace';
-
-ns.namespace('ima.cache');
-
 /**
  * The cache provides a temporary storage for expirable information. The
  * primary use of a cache is caching information obtained via costly means
@@ -105,5 +101,3 @@ export default class Cache {
 	 */
   deserialize(serializedData) {}
 }
-
-ns.ima.cache.Cache = Cache;

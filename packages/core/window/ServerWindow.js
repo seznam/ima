@@ -1,7 +1,4 @@
-import ns from '../namespace';
 import Window from './Window';
-
-ns.namespace('ima.window');
 
 // @server-side export default class ServerWindow extends Window {}
 
@@ -172,5 +169,3 @@ export default class ServerWindow extends Window {
 	 */
   unbindEventListener(eventTarget, event, listener, useCapture = false) {}
 }
-
-ns.ima.window.ServerWindow = ServerWindow;
