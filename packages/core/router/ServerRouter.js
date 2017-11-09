@@ -8,6 +8,8 @@ import PageManager from '../page/manager/PageManager';
 
 ns.namespace('ima.router');
 
+// @server-side export default class ServerRouter extends AbstractRouter {}
+
 /**
  * The server-side implementation of the {@codelink Router} interface.
  */

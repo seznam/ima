@@ -3,6 +3,8 @@ import GenericError from '../error/GenericError';
 
 ns.namespace('ima.router');
 
+// @server-side export default class {}
+
 /**
  * Wrapper for the ExpressJS response, exposing only the necessary minimum.
  */

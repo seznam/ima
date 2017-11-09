@@ -4,6 +4,8 @@ import GenericError from '../../error/GenericError';
 
 ns.namespace('ima.page.renderer');
 
+// @server-side export default class ServerPageRenderer extends AbstractPageRenderer {}
+
 let imaLoader = '';
 let imaRunner = '';
 

@@ -3,6 +3,8 @@ import Window from './Window';
 
 ns.namespace('ima.window');
 
+// @server-side export default class ServerWindow extends Window {}
+
 /**
  * Server-side implementation of the {@code Window} utility API.
  */

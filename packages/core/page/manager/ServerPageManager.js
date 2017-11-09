@@ -6,6 +6,8 @@ import AbstractPageManager from './AbstractPageManager';
 
 ns.namespace('ima.page.manager');
 
+// @server-side export default class ServerPageManager extends AbstractPageManager {}
+
 /**
  * Page manager for controller on the server side.
  */

@@ -2,6 +2,8 @@ import ns from '../namespace';
 
 ns.namespace('ima.router');
 
+// @server-side export default class {}
+
 /**
  * Wrapper for the ExpressJS request, exposing only the necessary minimum.
  */
