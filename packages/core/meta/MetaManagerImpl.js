@@ -9,113 +9,113 @@ export default class MetaManagerImpl extends MetaManager {
   }
 
   /**
-	 * Initializes the meta page attributes manager.
-	 */
+   * Initializes the meta page attributes manager.
+   */
   constructor() {
     super();
 
     /**
-		 * The page title.
-		 *
-		 * @type {string}
-		 */
+     * The page title.
+     *
+     * @type {string}
+     */
     this._title = '';
 
     /**
-		 * Storage of generic meta information.
-		 *
-		 * @type {Map<string, string>}
-		 */
+     * Storage of generic meta information.
+     *
+     * @type {Map<string, string>}
+     */
     this._metaName = new Map();
 
     /**
-		 * Storage of specialized meta information.
-		 *
-		 * @type {Map<string, string>}
-		 */
+     * Storage of specialized meta information.
+     *
+     * @type {Map<string, string>}
+     */
     this._metaProperty = new Map();
 
     /**
-		 * Storage of generic link information.
-		 *
-		 * @type {Map<string, string>}
-		 */
+     * Storage of generic link information.
+     *
+     * @type {Map<string, string>}
+     */
     this._link = new Map();
   }
 
   /**
-	 * @inheritdoc
-	 */
+   * @inheritdoc
+   */
   setTitle(title) {
     this._title = title;
   }
 
   /**
-	 * @inheritdoc
-	 */
+   * @inheritdoc
+   */
   getTitle() {
     return this._title;
   }
 
   /**
-	 * @inheritdoc
-	 */
+   * @inheritdoc
+   */
   setMetaName(name, value) {
     this._metaName.set(name, value);
   }
 
   /**
-	 * @inheritdoc
-	 */
+   * @inheritdoc
+   */
   getMetaName(name) {
     return this._metaName.get(name) || '';
   }
 
   /**
-	 * @inheritdoc
-	 */
+   * @inheritdoc
+   */
   getMetaNames() {
     return Array.from(this._metaName.keys());
   }
 
   /**
-	 * @inheritdoc
-	 */
+   * @inheritdoc
+   */
   setMetaProperty(name, value) {
     this._metaProperty.set(name, value);
   }
 
   /**
-	 * @inheritdoc
-	 */
+   * @inheritdoc
+   */
   getMetaProperty(name) {
     return this._metaProperty.get(name) || '';
   }
 
   /**
-	 * @inheritdoc
-	 */
+   * @inheritdoc
+   */
   getMetaProperties() {
     return Array.from(this._metaProperty.keys());
   }
 
   /**
-	 * @inheritdoc
-	 */
+   * @inheritdoc
+   */
   setLink(relation, value) {
     this._link.set(relation, value);
   }
 
   /**
-	 * @inheritdoc
-	 */
+   * @inheritdoc
+   */
   getLink(relation) {
     return this._link.get(relation) || '';
   }
 
   /**
-	 * @inheritdoc
-	 */
+   * @inheritdoc
+   */
   getLinks() {
     return Array.from(this._link.keys());
   }

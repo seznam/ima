@@ -14,32 +14,32 @@ export default class SessionMapStorage extends Storage {
   }
 
   /**
-	 * Initializes the storage.
-	 *
-	 * @param {MapStorage} map The map storage to use.
-	 * @param {SessionStorage} session The session storage to use.
-	 */
+   * Initializes the storage.
+   *
+   * @param {MapStorage} map The map storage to use.
+   * @param {SessionStorage} session The session storage to use.
+   */
   constructor(map, session) {
     super();
 
     /**
-		 * The map storage, synced with the session storage.
-		 *
-		 * @type {MapStorage}
-		 */
+     * The map storage, synced with the session storage.
+     *
+     * @type {MapStorage}
+     */
     this._map = map;
 
     /**
-		 * The session storage, synced with the map storage.
-		 *
-		 * @type {SessionStorage}
-		 */
+     * The session storage, synced with the map storage.
+     *
+     * @type {SessionStorage}
+     */
     this._session = session;
   }
 
   /**
-	 * @inheritdoc
-	 */
+   * @inheritdoc
+   */
   init() {
     this._map.clear();
     for (let key of this._session.keys()) {
@@ -50,22 +50,22 @@ export default class SessionMapStorage extends Storage {
   }
 
   /**
-	 * @inheritdoc
-	 */
+   * @inheritdoc
+   */
   has(key) {
     return this._map.has(key);
   }
 
   /**
-	 * @inheritdoc
-	 */
+   * @inheritdoc
+   */
   get(key) {
     return this._map.get(key);
   }
 
   /**
-	 * @inheritdoc
-	 */
+   * @inheritdoc
+   */
   set(key, value) {
     let canBeSerializedToJSON =
       !(value instanceof Promise) &&
@@ -80,8 +80,8 @@ export default class SessionMapStorage extends Storage {
   }
 
   /**
-	 * @inheritdoc
-	 */
+   * @inheritdoc
+   */
   delete(key) {
     this._session.delete(key);
     this._map.delete(key);
@@ -89,8 +89,8 @@ export default class SessionMapStorage extends Storage {
   }
 
   /**
-	 * @inheritdoc
-	 */
+   * @inheritdoc
+   */
   clear() {
     this._session.clear();
     this._map.clear();
@@ -98,15 +98,15 @@ export default class SessionMapStorage extends Storage {
   }
 
   /**
-	 * @inheritdoc
-	 */
+   * @inheritdoc
+   */
   keys() {
     return this._map.keys();
   }
 
   /**
-	 * @override
-	 */
+   * @override
+   */
   size() {
     return this._map.size();
   }

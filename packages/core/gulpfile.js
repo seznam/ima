@@ -53,7 +53,9 @@ function compile() {
           fileContents +
             '\n\n' +
             `typeof $IMA !== 'undefined' && $IMA !== null && $IMA.Loader && ` +
-            `$IMA.Loader.register('${moduleName}', [], function (_export, _context) {\n` +
+            `$IMA.Loader.register('${
+              moduleName
+            }', [], function (_export, _context) {\n` +
             `	'use strict';\n` +
             `	return {\n` +
             `		setters: [],\n` +

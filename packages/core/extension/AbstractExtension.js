@@ -11,52 +11,52 @@ export default class AbstractExtension extends Extension {
     super();
 
     /**
-		 * State manager.
-		 *
-		 * @protected
-		 * @type {PageStateManager}
-		 */
+     * State manager.
+     *
+     * @protected
+     * @type {PageStateManager}
+     */
     this._pageStateManager = null;
 
     /**
-		 * The HTTP response code to send to the client.
-		 *
-		 * @type {number}
-		 */
+     * The HTTP response code to send to the client.
+     *
+     * @type {number}
+     */
     this.status = 200;
 
     /**
-		 * The route parameters extracted from the current route.
-		 *
-		 * @type {Object<string, string>}
-		 */
+     * The route parameters extracted from the current route.
+     *
+     * @type {Object<string, string>}
+     */
     this.params = {};
   }
 
   /**
-	 * @inheritdoc
-	 */
+   * @inheritdoc
+   */
   init() {}
 
   /**
-	 * @inheritdoc
-	 */
+   * @inheritdoc
+   */
   destroy() {}
 
   /**
-	 * @inheritdoc
-	 */
+   * @inheritdoc
+   */
   activate() {}
 
   /**
-	 * @inheritdoc
-	 */
+   * @inheritdoc
+   */
   deactivate() {}
 
   /**
-	 * @inheritdoc
-	 * @abstract
-	 */
+   * @inheritdoc
+   * @abstract
+   */
   load() {
     throw new GenericError(
       'The ima.extension.AbstractExtension.load method is abstract ' +
@@ -65,15 +65,15 @@ export default class AbstractExtension extends Extension {
   }
 
   /**
-	 * @inheritdoc
-	 */
+   * @inheritdoc
+   */
   update(params = {}) {
     return {};
   }
 
   /**
-	 * @inheritdoc
-	 */
+   * @inheritdoc
+   */
   setState(statePatch) {
     if (this._pageStateManager) {
       this._pageStateManager.setState(statePatch);
@@ -81,8 +81,8 @@ export default class AbstractExtension extends Extension {
   }
 
   /**
-	 * @inheritdoc
-	 */
+   * @inheritdoc
+   */
   getState() {
     if (this._pageStateManager) {
       return this._pageStateManager.getState();
@@ -92,38 +92,38 @@ export default class AbstractExtension extends Extension {
   }
 
   /**
-	 * @inheritdoc
-	 */
+   * @inheritdoc
+   */
   setRouteParams(params = {}) {
     this.params = params;
   }
 
   /**
-	 * @inheritdoc
-	 */
+   * @inheritdoc
+   */
   getRouteParams() {
     return this.params;
   }
 
   /**
-	 * @inheritdoc
-	 */
+   * @inheritdoc
+   */
   setPageStateManager(pageStateManager) {
     this._pageStateManager = pageStateManager;
   }
 
   /**
-	 * @inheritdoc
-	 */
+   * @inheritdoc
+   */
   getHttpStatus() {
     return this.status;
   }
 
   /**
-	 * Returns array of allowed state keys for extension.
-	 *
-	 * @inheritdoc
-	 */
+   * Returns array of allowed state keys for extension.
+   *
+   * @inheritdoc
+   */
   getAllowedStateKeys() {
     return [];
   }

@@ -8,59 +8,59 @@
  */
 const StatusCode = Object.freeze({
   /**
-	 * OK
-	 *
-	 * @type {number}
-	 */
+   * OK
+   *
+   * @type {number}
+   */
   OK: 200,
 
   /**
-	 * No content
-	 *
-	 * @type {number}
-	 */
+   * No content
+   *
+   * @type {number}
+   */
   NO_CONTENT: 203,
 
   /**
-	 * Bad request
-	 *
-	 * @type {number}
-	 */
+   * Bad request
+   *
+   * @type {number}
+   */
   BAD_REQUEST: 400,
 
   /**
-	 * Unauthorized
-	 *
-	 * @type {number}
-	 */
+   * Unauthorized
+   *
+   * @type {number}
+   */
   UNAUTHORIZED: 401,
 
   /**
-	 * Forbidden
-	 *
-	 * @type {number}
-	 */
+   * Forbidden
+   *
+   * @type {number}
+   */
   FORBIDDEN: 403,
 
   /**
-	 * Not found
-	 *
-	 * @type {number}
-	 */
+   * Not found
+   *
+   * @type {number}
+   */
   NOT_FOUND: 404,
 
   /**
-	 * Request timeout
-	 *
-	 * @type {number}
-	 */
+   * Request timeout
+   *
+   * @type {number}
+   */
   TIMEOUT: 408,
 
   /**
-	 * Internal Server Error
-	 *
-	 * @type {number}
-	 */
+   * Internal Server Error
+   *
+   * @type {number}
+   */
   SERVER_ERROR: 500
 });
 

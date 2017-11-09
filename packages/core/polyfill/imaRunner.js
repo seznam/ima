@@ -10,8 +10,7 @@
       }
     },
     run: function() {
-      root.$IMA.Loader
-        .initAllModules()
+      root.$IMA.Loader.initAllModules()
         .then(function() {
           return root.$IMA.Loader.import('app/main');
         })

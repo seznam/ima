@@ -14,7 +14,7 @@ export default class ServerPageManager extends AbstractPageManager {
   }
 
   /**
-	 * @inheritdoc
-	 */
+   * @inheritdoc
+   */
   scrollTo(x = 0, y = 0) {}
 }

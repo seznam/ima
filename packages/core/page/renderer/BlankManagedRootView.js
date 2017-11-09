@@ -21,8 +21,8 @@ export default class BlankManagedRootView extends React.Component {
   }
 
   /**
-	 * @inheritdoc
-	 */
+   * @inheritdoc
+   */
   render() {
     let pageView = this.props.$pageView;
     if (!pageView) {

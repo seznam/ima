@@ -11,38 +11,38 @@ export default class PageStateManagerImpl extends PageStateManager {
   }
 
   /**
-	 * Initializes the page state manager.
-	 */
+   * Initializes the page state manager.
+   */
   constructor() {
     super();
 
     /**
-		 * @type {Object<string, *>[]}
-		 */
+     * @type {Object<string, *>[]}
+     */
     this._states = [];
 
     /**
-		 * @type {number}
-		 */
+     * @type {number}
+     */
     this._cursor = -1;
 
     /**
-		 * @type {?function(Object<string, *>)}
-		 */
+     * @type {?function(Object<string, *>)}
+     */
     this.onChange = null;
   }
 
   /**
-	 * @inheritdoc
-	 */
+   * @inheritdoc
+   */
   clear() {
     this._states = [];
     this._cursor = -1;
   }
 
   /**
-	 * @inheritdoc
-	 */
+   * @inheritdoc
+   */
   setState(statePatch) {
     var newState = Object.assign({}, this.getState(), statePatch);
 
@@ -52,23 +52,23 @@ export default class PageStateManagerImpl extends PageStateManager {
   }
 
   /**
-	 * @inheritdoc
-	 */
+   * @inheritdoc
+   */
   getState() {
     return this._states[this._cursor] || {};
   }
 
   /**
-	 * @inheritdoc
-	 */
+   * @inheritdoc
+   */
   getAllStates() {
     return this._states;
   }
 
   /**
-	 * Erase the oldest state from storage only if it exceed max
-	 * defined size of history.
-	 */
+   * Erase the oldest state from storage only if it exceed max
+   * defined size of history.
+   */
   _eraseExcessHistory() {
     if (this._states.length > MAX_HISTORY_LIMIT) {
       this._states.shift();
@@ -77,20 +77,20 @@ export default class PageStateManagerImpl extends PageStateManager {
   }
 
   /**
-	 * Push new state to history storage.
-	 *
-	 * @param {Object<string, *>} newState
-	 */
+   * Push new state to history storage.
+   *
+   * @param {Object<string, *>} newState
+   */
   _pushToHistory(newState) {
     this._states.push(newState);
     this._cursor += 1;
   }
 
   /**
-	 * Call registered callback function on (@codelink onChange) with newState.
-	 *
-	 * @param {Object<string, *>} newState
-	 */
+   * Call registered callback function on (@codelink onChange) with newState.
+   *
+   * @param {Object<string, *>} newState
+   */
   _callOnChangeCallback(newState) {
     if (this.onChange && typeof this.onChange === 'function') {
       this.onChange(newState);

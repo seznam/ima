@@ -7,9 +7,9 @@ import React from 'react';
  */
 export default class ViewAdapter extends React.Component {
   /**
-	 * @inheritdoc
-	 * @return {{$Utils: function(*): ?Error}}
-	 */
+   * @inheritdoc
+   * @return {{$Utils: function(*): ?Error}}
+   */
   static get childContextTypes() {
     return {
       $Utils: PropTypes.object.isRequired
@@ -17,49 +17,49 @@ export default class ViewAdapter extends React.Component {
   }
 
   /**
-	 * Initializes the adapter component.
-	 *
-	 * @param {{
-	 *          state: Object<string, *>,
-	 *          view: function(new:React.Component, Object<string, *>)
-	 *        }} props Component properties, containing the actual page view
-	 *        and the initial page state to pass to the view.
-	 */
+   * Initializes the adapter component.
+   *
+   * @param {{
+   *          state: Object<string, *>,
+   *          view: function(new:React.Component, Object<string, *>)
+   *        }} props Component properties, containing the actual page view
+   *        and the initial page state to pass to the view.
+   */
   constructor(props) {
     super(props.props);
 
     /**
-		 * The current page state as provided by the controller.
-		 *
-		 * @type {Object<string, *>}
-		 */
+     * The current page state as provided by the controller.
+     *
+     * @type {Object<string, *>}
+     */
     this.state = props.state;
 
     /**
-		 * The actual page view to render.
-		 *
-		 * @type {function(new:React.Component, Object<string, *>)}
-		 */
+     * The actual page view to render.
+     *
+     * @type {function(new:React.Component, Object<string, *>)}
+     */
     this._view = props.view;
   }
 
   /**
-	 * @inheritdoc
-	 */
+   * @inheritdoc
+   */
   componentWillReceiveProps(newProps) {
     this.setState(newProps.state);
   }
 
   /**
-	 * @inheritdoc
-	 */
+   * @inheritdoc
+   */
   render() {
     return React.createElement(this._view, this.state);
   }
 
   /**
-	 * @inheritdoc
-	 */
+   * @inheritdoc
+   */
   getChildContext() {
     return {
       $Utils: this.props.$Utils

@@ -16,49 +16,49 @@ export default class ServerRouter extends AbstractRouter {
   }
 
   /**
-	 * Initializes the router.
-	 *
-	 * @param {PageManager} pageManager The current page manager.
-	 * @param {RouteFactory} factory The router factory used to create routes.
-	 * @param {Dispatcher} dispatcher Dispatcher fires events to app.
-	 * @param {Request} request The current HTTP request.
-	 * @param {Response} response The current HTTP response.
-	 */
+   * Initializes the router.
+   *
+   * @param {PageManager} pageManager The current page manager.
+   * @param {RouteFactory} factory The router factory used to create routes.
+   * @param {Dispatcher} dispatcher Dispatcher fires events to app.
+   * @param {Request} request The current HTTP request.
+   * @param {Response} response The current HTTP response.
+   */
   constructor(pageManager, factory, dispatcher, request, response) {
     super(pageManager, factory, dispatcher);
 
     /**
-		 * The current HTTP request.
-		 *
-		 * @type {Request}
-		 */
+     * The current HTTP request.
+     *
+     * @type {Request}
+     */
     this._request = request;
 
     /**
-		 * The current HTTP response.
-		 *
-		 * @type {Response}
-		 */
+     * The current HTTP response.
+     *
+     * @type {Response}
+     */
     this._response = response;
   }
 
   /**
-	 * @inheritdoc
-	 */
+   * @inheritdoc
+   */
   getPath() {
     return this._extractRoutePath(this._request.getPath());
   }
 
   /**
-	 * @inheritdoc
-	 */
+   * @inheritdoc
+   */
   listen() {
     return this;
   }
 
   /**
-	 * @inheritdoc
-	 */
+   * @inheritdoc
+   */
   redirect(url = '/', options = {}) {
     this._response.redirect(url, options.httpStatus || 302);
   }

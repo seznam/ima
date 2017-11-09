@@ -1,94 +1,94 @@
 {
-  "name": "ima",
-  "version": "0.15.0-beta5",
-  "description": "IMA.js framework for isomorphic javascript application",
-  "main": "main.js",
-  "scripts": {
-    "lint": "node_modules/.bin/eslint -c ./.eslintrc.js --fix './**/*.{js,jsx}' --ignore-pattern /coverage /doc",
-    "test": "node_modules/.bin/jest",
-    "preversion": "npm test && npm run lint",
-    "postversion": "npm run build && git commit -am $npm_package_version && git tag $npm_package_version && git push && git push --tags && npm publish dist",
-    "build": "node node_modules/gulp/bin/gulp.js build"
-  },
-  "keywords": [
-    "IMA",
-    "IMA.js",
-    "Isomorphic",
-    "Javascript"
-  ],
-  "author": "Miroslav Jancarik <miroslav.jancarik@firma.seznam.cz>",
-  "contributors": [{
-    "name": "Martin Urban",
-    "email": "martin.urban@firma.seznam.cz"
-  }, {
-    "name": "Martin Jurča",
-    "email": "martin.jurca@firma.seznam.cz"
-  }, {
-    "name": "Ondřej Baše",
-    "email": "ondrej.base@firma.seznam.cz"
-  }],
-  "repository": {
-    "type": "git",
-    "url": "https://github.com/seznam/IMA.js-core.git"
-  },
-  "bugs": {
-    "url": "https://github.com/seznam/IMA.js-core/issues"
-  },
-  "publishConfig": {
-    "registry": "http://registry.npmjs.org/"
-  },
-  "license": "MIT",
-  "devDependencies": {
-    "babel-eslint": "^8.0.1",
-    "babel-plugin-transform-es2015-modules-commonjs": "^6.26.0",
-    "del": "^3.0.0",
-    "enzyme": "^3.1.0",
-    "eslint": "^4.10.0",
-    "eslint-config-last": "^0.0.3",
-    "eslint-config-prettier": "^2.7.0",
-    "eslint-plugin-jasmine": "^2.9.1",
-    "eslint-plugin-jest": "^21.2.0",
-    "eslint-plugin-prettier": "^2.3.1",
-    "eslint-plugin-react": "^7.4.0",
-    "gulp": "github:gulpjs/gulp#c120a94",
-    "gulp-babel": "^7.0.0",
-    "gulp-plumber": "^1.1.0",
-    "gulp-tap": "^1.0.1",
-    "jest": "^21.2.1",
-    "jsdom": "^11.3.0",
-    "prettier": "^1.7.4",
-    "prop-types": "^15.6.0",
-    "react": "^16.0.0",
-    "react-dom": "^16.0.0",
-    "to-mock": "^1.2.0"
-  },
-  "dependencies": {
-    "classnames": "^2.2.5",
-    "ima-helpers": "^0.14.0",
-    "node-fetch": "^1.7.3"
-  },
-  "peerDependencies": {
-    "prop-types": "15.6.x",
-    "react": "16.x",
-    "react-dom": "16.x"
-  },
-  "browserify": {
-    "transform": [
-      "babelify"
-    ]
-  },
-  "jest": {
-    "bail": false,
-    "verbose": true,
-    "testEnvironment": "node",
-    "setupFiles": [
-      "./test.js",
-      "./polyfill/imaLoader.js",
-      "./polyfill/imaRunner.js"
+    "name": "ima",
+    "version": "0.15.0-beta5",
+    "description": "IMA.js framework for isomorphic javascript application",
+    "main": "main.js",
+    "scripts": {
+        "lint": "node_modules/.bin/eslint -c ./.eslintrc.js --fix './**/*.{js,jsx}' --ignore-path ./.prettierignore",
+        "test": "node_modules/.bin/jest",
+        "preversion": "npm test && npm run lint",
+        "postversion": "npm run build && git commit -am $npm_package_version && git tag $npm_package_version && git push && git push --tags && npm publish dist",
+        "build": "node node_modules/gulp/bin/gulp.js build"
+    },
+    "keywords": [
+        "IMA",
+        "IMA.js",
+        "Isomorphic",
+        "Javascript"
     ],
-    "modulePaths": [
-      "<rootDir>/"
-    ],
-    "testRegex": "(/__tests__/.*|(\\.|/)(Spec))\\.jsx?$"
-  }
+    "author": "Miroslav Jancarik <miroslav.jancarik@firma.seznam.cz>",
+    "contributors": [{
+        "name": "Martin Urban",
+        "email": "martin.urban@firma.seznam.cz"
+    }, {
+        "name": "Martin Jurča",
+        "email": "martin.jurca@firma.seznam.cz"
+    }, {
+        "name": "Ondřej Baše",
+        "email": "ondrej.base@firma.seznam.cz"
+    }],
+    "repository": {
+        "type": "git",
+        "url": "https://github.com/seznam/IMA.js-core.git"
+    },
+    "bugs": {
+        "url": "https://github.com/seznam/IMA.js-core/issues"
+    },
+    "publishConfig": {
+        "registry": "http://registry.npmjs.org/"
+    },
+    "license": "MIT",
+    "devDependencies": {
+        "babel-eslint": "^8.0.2",
+        "babel-plugin-transform-es2015-modules-commonjs": "^6.26.0",
+        "del": "^3.0.0",
+        "enzyme": "^3.1.0",
+        "eslint": "^4.10.0",
+        "eslint-config-last": "^0.0.3",
+        "eslint-config-prettier": "^2.7.0",
+        "eslint-plugin-jasmine": "^2.9.1",
+        "eslint-plugin-jest": "^21.3.2",
+        "eslint-plugin-prettier": "^2.3.1",
+        "eslint-plugin-react": "^7.4.0",
+        "gulp": "github:gulpjs/gulp#c120a94",
+        "gulp-babel": "^7.0.0",
+        "gulp-plumber": "^1.1.0",
+        "gulp-tap": "^1.0.1",
+        "jest": "^21.2.1",
+        "jsdom": "^11.3.0",
+        "prettier": "^1.8.2",
+        "prop-types": "^15.6.0",
+        "react": "^16.0.0",
+        "react-dom": "^16.0.0",
+        "to-mock": "^1.2.0"
+    },
+    "dependencies": {
+        "classnames": "^2.2.5",
+        "ima-helpers": "^0.14.0",
+        "node-fetch": "^1.7.3"
+    },
+    "peerDependencies": {
+        "prop-types": "15.6.x",
+        "react": "16.x",
+        "react-dom": "16.x"
+    },
+    "browserify": {
+        "transform": [
+            "babelify"
+        ]
+    },
+    "jest": {
+        "bail": false,
+        "verbose": true,
+        "testEnvironment": "node",
+        "setupFiles": [
+            "./test.js",
+            "./polyfill/imaLoader.js",
+            "./polyfill/imaRunner.js"
+        ],
+        "modulePaths": [
+            "<rootDir>/"
+        ],
+        "testRegex": "(/__tests__/.*|(\\.|/)(Spec))\\.jsx?$"
+    }
 }

@@ -5,25 +5,25 @@ import GenericError from '../error/GenericError';
  */
 export default class PageFactory {
   /**
-	 * Factory used by page management classes.
-	 *
-	 * @param {ObjectContainer} oc
-	 */
+   * Factory used by page management classes.
+   *
+   * @param {ObjectContainer} oc
+   */
   constructor(oc) {
     /**
-		 * The current application object container.
-		 *
-		 * @type {ObjectContainer}
-		 */
+     * The current application object container.
+     *
+     * @type {ObjectContainer}
+     */
     this._oc = oc;
   }
 
   /**
-	 * Create new instance of {@linkcode Controller}.
-	 *
-	 * @param {(string|function(new:Controller))} controller
-	 * @return {Controller}
-	 */
+   * Create new instance of {@linkcode Controller}.
+   *
+   * @param {(string|function(new:Controller))} controller
+   * @return {Controller}
+   */
   createController(controller) {
     let controllerInstance = this._oc.create(controller);
 
@@ -31,14 +31,14 @@ export default class PageFactory {
   }
 
   /**
-	 * Retrieves the specified react component class.
-	 *
-	 * @param {(string|function(new: React.Component))} view The namespace
-	 *        referring to a react component class, or a react component class
-	 *        constructor.
-	 * @return {function(new: React.Component)} The react component class
-	 *         constructor.
-	 */
+   * Retrieves the specified react component class.
+   *
+   * @param {(string|function(new: React.Component))} view The namespace
+   *        referring to a react component class, or a react component class
+   *        constructor.
+   * @return {function(new: React.Component)} The react component class
+   *         constructor.
+   */
   createView(view) {
     if (typeof view === 'function') {
       return view;
@@ -55,11 +55,11 @@ export default class PageFactory {
   }
 
   /**
-	 * Returns decorated controller for ease setting seo params in controller.
-	 *
-	 * @param {Controller} controller
-	 * @return {Controller}
-	 */
+   * Returns decorated controller for ease setting seo params in controller.
+   *
+   * @param {Controller} controller
+   * @return {Controller}
+   */
   decorateController(controller) {
     let metaManager = this._oc.get('$MetaManager');
     let router = this._oc.get('$Router');
@@ -78,12 +78,12 @@ export default class PageFactory {
   }
 
   /**
-	 * Returns decorated page state manager for extension.
-	 *
-	 * @param {PageStateManager} pageStateManager
-	 * @param {string[]} allowedStateKeys
-	 * @return {PageStateManager}
-	 */
+   * Returns decorated page state manager for extension.
+   *
+   * @param {PageStateManager} pageStateManager
+   * @param {string[]} allowedStateKeys
+   * @return {PageStateManager}
+   */
   decoratePageStateManager(pageStateManager, allowedStateKeys) {
     let decoratedPageStateManager = this._oc.create(
       '$PageStateManagerDecorator',
