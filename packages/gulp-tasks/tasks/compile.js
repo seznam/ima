@@ -213,7 +213,12 @@ exports.default = (gulpConfig) => {
     }
 
     function Es6ToEs5VendorClient(done) {
-        return gulp.parallel(vendorClient, esVendorClient)(done);
+        return gulp.series(
+            gulp.parallel(vendorClient, esVendorClient),
+        (subDone) => {
+            subDone();
+            done();
+        })();
     }
 
     function vendorClient() {
@@ -277,7 +282,7 @@ exports.default = (gulpConfig) => {
         .pipe(uglifyEs({ compress: gulpConfig.uglifyCompression }))
         .pipe(gulp.dest(files.vendor.dest.client));
     }
-    
+
     function Es6ToEs5VendorClean() {
         return del([files.vendor.dest.tmp + files.vendor.name.tmp]);
     }
