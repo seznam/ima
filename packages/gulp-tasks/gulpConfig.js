@@ -86,7 +86,7 @@ exports.uglifyCompression = {
     global_defs: {
         $Debug: $Debug
     },
-    ema: 6,
+    ecma: 6,
     dead_code: true
 };
 
