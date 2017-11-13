@@ -4,19 +4,17 @@ const babel = require('gulp-babel');
 const plumber = require('gulp-plumber');
 const tap = require('gulp-tap');
 const parentDir = __dirname + '/../';
+let config;
 
-module.exports = gulp.series(clean, gulp.parallel(compile, copy));
+module.exports = (gulpConfig) => {
+  config = gulpConfig;
+
+  return gulp.series(clean, gulp.parallel(compile, copy));
+};
 
 function compile() {
   return gulp
-    .src([
-      `${ parentDir }main.js`,
-      `${ parentDir }namespace.js`,
-      `${ parentDir }Bootstrap.js`,
-      `${ parentDir }ObjectContainer.js`,
-      `${ parentDir }vendorLinker.js`,
-      `${ parentDir }!(node_modules|doc|dist|gulp|polyfill)/**/!(*Spec).js`
-    ])
+    .src(config.files.js)
     .pipe(plumber())
     .pipe(
       babel({

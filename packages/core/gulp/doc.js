@@ -3,7 +3,6 @@ const gulp = require('gulp');
 const change = require('gulp-change');
 const jsdoc = require('gulp-jsdoc3');
 const rename = require('gulp-rename');
-
 const dir = {
   parent: `${ __dirname }/../`,
   docSrc: `${ __dirname }/../doc-src/`,
@@ -23,8 +22,13 @@ const documentationPreprocessors = [
     replace: ''
   }
 ];
+let config;
 
-module.exports = gulp.series(docClear, docPreprocess, docGenerate, docClean);
+module.exports = (gulpConfig) => {
+  config = gulpConfig;
+
+  return gulp.series(docClear, docPreprocess, docGenerate, docClean);
+};
 
 function docClear() {
   return del([dir.docSrc, dir.doc]);
@@ -32,14 +36,7 @@ function docClear() {
 
 function docPreprocess() {
   return gulp
-    .src([
-      `${ dir.parent }main.js`,
-      `${ dir.parent }namespace.js`,
-      `${ dir.parent }Bootstrap.js`,
-      `${ dir.parent }ObjectContainer.js`,
-      `${ dir.parent }vendorLinker.js`,
-      `${ dir.parent }!(node_modules|doc|dist|gulp|polyfill)/**/!(*Spec).js`
-    ])
+    .src(config.files.js)
     .pipe(change((content) => {
       let oldContent = null;
 
