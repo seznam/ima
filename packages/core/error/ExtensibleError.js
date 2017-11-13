@@ -1,7 +1,3 @@
-import ns from '../namespace';
-
-ns.namespace('ima.error');
-
 /**
  * Base class of custom error classes, extending the native {@linkcode Error}
  * class.
@@ -36,27 +32,27 @@ export default function ExtensibleError(
   Error.call(this, message); // super-constructor call;
 
   /**
-	 * The name of this error, used in the generated stack trace.
-	 *
-	 * @type {string}
-	 */
+   * The name of this error, used in the generated stack trace.
+   *
+   * @type {string}
+   */
   this.name = this.constructor.name;
 
   /**
-	 * The message describing the cause of the error.
-	 *
-	 * @type {string}
-	 */
+   * The message describing the cause of the error.
+   *
+   * @type {string}
+   */
   this.message = message;
 
   /**
-	 * Native error instance we use to generate the call stack. For some reason
-	 * some browsers do not generate call stacks for instances of classes
-	 * extending the native {@codelink Error} class, so we bypass this
-	 * shortcoming this way.
-	 *
-	 * @type {Error}
-	 */
+   * Native error instance we use to generate the call stack. For some reason
+   * some browsers do not generate call stacks for instances of classes
+   * extending the native {@codelink Error} class, so we bypass this
+   * shortcoming this way.
+   *
+   * @type {Error}
+   */
   this._nativeError = new Error(message);
   this._nativeError.name = this.name;
 
@@ -68,21 +64,21 @@ export default function ExtensibleError(
   }
 
   /**
-	 * The internal cache of the generated stack. The cache is filled upon
-	 * first access to the {@codelink stack} property.
-	 *
-	 * @type {?string}
-	 */
+   * The internal cache of the generated stack. The cache is filled upon
+   * first access to the {@codelink stack} property.
+   *
+   * @type {?string}
+   */
   this._stack = null;
 
   /**
-	 * Whether or not the call stack frames referring to the constructors of
-	 * the custom errors should be excluded from the stack of this error (just
-	 * like the native platform call stack frames are dropped by the JS
-	 * engine).
-	 *
-	 * @type {boolean}
-	 */
+   * Whether or not the call stack frames referring to the constructors of
+   * the custom errors should be excluded from the stack of this error (just
+   * like the native platform call stack frames are dropped by the JS
+   * engine).
+   *
+   * @type {boolean}
+   */
   this._dropInternalStackFrames = dropInternalStackFrames;
 }
 
@@ -130,5 +126,3 @@ Object.defineProperty(ExtensibleError.prototype, 'stack', {
     return this._stack;
   }
 });
-
-ns.ima.error.ExtensibleError = ExtensibleError;

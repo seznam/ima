@@ -1,9 +1,6 @@
 // @client-side
 
-import ns from '../namespace';
 import Window from './Window';
-
-ns.namespace('ima.window');
 
 /**
  * Client-side implementation of the {@code Window} utility API.
@@ -14,22 +11,22 @@ export default class ClientWindow extends Window {
   }
 
   /**
-	 * @inheritdoc
-	 */
+   * @inheritdoc
+   */
   isClient() {
     return true;
   }
 
   /**
-	 * @inheritdoc
-	 */
+   * @inheritdoc
+   */
   isCookieEnabled() {
     return navigator.cookieEnabled;
   }
 
   /**
-	 * @inheritdoc
-	 */
+   * @inheritdoc
+   */
   hasSessionStorage() {
     try {
       if (window.sessionStorage) {
@@ -50,29 +47,29 @@ export default class ClientWindow extends Window {
   }
 
   /**
-	 * @inheritdoc
-	 */
+   * @inheritdoc
+   */
   setTitle(title) {
     document.title = title;
   }
 
   /**
-	 * @inheritdoc
-	 */
+   * @inheritdoc
+   */
   getWindow() {
     return window;
   }
 
   /**
-	 * @inheritdoc
-	 */
+   * @inheritdoc
+   */
   getDocument() {
     return document;
   }
 
   /**
-	 * @inheritdoc
-	 */
+   * @inheritdoc
+   */
   getScrollX() {
     let pageOffsetSupported = window.pageXOffset !== undefined;
     let isCSS1Compatible = (document.compatMode || '') === 'CSS1Compat';
@@ -85,8 +82,8 @@ export default class ClientWindow extends Window {
   }
 
   /**
-	 * @inheritdoc
-	 */
+   * @inheritdoc
+   */
   getScrollY() {
     let pageOffsetSupported = window.pageYOffset !== undefined;
     let isCSS1Compatible = (document.compatMode || '') === 'CSS1Compat';
@@ -99,78 +96,78 @@ export default class ClientWindow extends Window {
   }
 
   /**
-	 * @inheritdoc
-	 */
+   * @inheritdoc
+   */
   scrollTo(x, y) {
     window.scrollTo(x, y);
   }
 
   /**
-	 * @inheritdoc
-	 */
+   * @inheritdoc
+   */
   getDomain() {
     return window.location.protocol + '//' + window.location.host;
   }
 
   /**
-	 * @inheritdoc
-	 */
+   * @inheritdoc
+   */
   getHost() {
     return window.location.host;
   }
 
   /**
-	 * @inheritdoc
-	 */
+   * @inheritdoc
+   */
   getPath() {
     return window.location.pathname + window.location.search;
   }
 
   /**
-	 * @inheritdoc
-	 */
+   * @inheritdoc
+   */
   getUrl() {
     return window.location.href;
   }
 
   /**
-	 * @inheritdoc
-	 */
+   * @inheritdoc
+   */
   getBody() {
     return document.body;
   }
 
   /**
-	 * @inheritdoc
-	 */
+   * @inheritdoc
+   */
   getElementById(id) {
     return document.getElementById(id);
   }
 
   /**
-	 * @inheritdoc
-	 */
+   * @inheritdoc
+   */
   querySelector(selector) {
     return document.querySelector(selector);
   }
 
   /**
-	 * @inheritdoc
-	 */
+   * @inheritdoc
+   */
   querySelectorAll(selector) {
     return document.querySelectorAll(selector);
   }
 
   /**
-	 * @inheritdoc
-	 */
+   * @inheritdoc
+   */
   redirect(url) {
     window.location.href = url;
   }
 
   /**
-	 * @inheritdoc
-	 */
+   * @inheritdoc
+   */
   pushState(state, title, url) {
     if (window.history.pushState) {
       window.history.pushState(state, title, url);
@@ -178,8 +175,8 @@ export default class ClientWindow extends Window {
   }
 
   /**
-	 * @inheritdoc
-	 */
+   * @inheritdoc
+   */
   replaceState(state, title, url) {
     if (window.history.replaceState) {
       window.history.replaceState(state, title, url);
@@ -187,15 +184,15 @@ export default class ClientWindow extends Window {
   }
 
   /**
-	 * @inheritdoc
-	 */
+   * @inheritdoc
+   */
   createCustomEvent(name, options) {
     return new CustomEvent(name, options);
   }
 
   /**
-	 * @inheritdoc
-	 */
+   * @inheritdoc
+   */
   bindEventListener(eventTarget, event, listener, useCapture = false) {
     if (eventTarget.addEventListener) {
       eventTarget.addEventListener(event, listener, useCapture);
@@ -203,13 +200,11 @@ export default class ClientWindow extends Window {
   }
 
   /**
-	 * @inheritdoc
-	 */
+   * @inheritdoc
+   */
   unbindEventListener(eventTarget, event, listener, useCapture = false) {
     if (eventTarget.removeEventListener) {
       eventTarget.removeEventListener(event, listener, useCapture);
     }
   }
 }
-
-ns.ima.window.ClientWindow = ClientWindow;

@@ -1,9 +1,6 @@
 // @client-side
 
-import ns from '../../namespace';
 import AbstractPageRenderer from './AbstractPageRenderer';
-
-ns.namespace('ima.page.renderer');
 
 /**
  * Client-side page renderer. The renderer attempts to reuse the markup sent by
@@ -11,48 +8,48 @@ ns.namespace('ima.page.renderer');
  */
 export default class ClientPageRenderer extends AbstractPageRenderer {
   /**
-	 * Initializes the client-side page renderer.
-	 *
-	 * @param {PageRendererFactory} factory Factory for receive $Utils to view.
-	 * @param {vendor.$Helper} Helper The IMA.js helper methods.
-	 * @param {vendor.ReactDOM} ReactDOM React framework instance to use to
-	 *        render the page on the client side.
-	 * @param {Object<string, *>} settings The application setting for the
-	 *        current application environment.
-	 * @param {Window} window Helper for manipulating the global object
-	 *        ({@code window}) regardless of the client/server-side
-	 *        environment.
-	 */
+   * Initializes the client-side page renderer.
+   *
+   * @param {PageRendererFactory} factory Factory for receive $Utils to view.
+   * @param {vendor.$Helper} Helper The IMA.js helper methods.
+   * @param {vendor.ReactDOM} ReactDOM React framework instance to use to
+   *        render the page on the client side.
+   * @param {Object<string, *>} settings The application setting for the
+   *        current application environment.
+   * @param {Window} window Helper for manipulating the global object
+   *        ({@code window}) regardless of the client/server-side
+   *        environment.
+   */
   constructor(factory, Helper, ReactDOM, settings, window) {
     super(factory, Helper, ReactDOM, settings);
 
     /**
-		 * Flag signalling that the page is being rendered for the first time.
-		 *
-		 * @type {boolean}
-		 */
+     * Flag signalling that the page is being rendered for the first time.
+     *
+     * @type {boolean}
+     */
     this._firstTime = true;
 
     /**
-		 * Helper for manipulating the global object ({@code window})
-		 * regardless of the client/server-side environment.
-		 *
-		 * @type {Window}
-		 */
+     * Helper for manipulating the global object ({@code window})
+     * regardless of the client/server-side environment.
+     *
+     * @type {Window}
+     */
     this._window = window;
 
     /**
-		 * The HTML element containing the current application view for the
-		 * current route.
-		 *
-		 * @type {?HTMLElement}
-		 */
+     * The HTML element containing the current application view for the
+     * current route.
+     *
+     * @type {?HTMLElement}
+     */
     this._viewContainer = null;
   }
 
   /**
-	 * @inheritdoc
-	 */
+   * @inheritdoc
+   */
   mount(controller, view, pageResources, routeOptions) {
     let separatedData = this._separatePromisesAndValues(pageResources);
     let defaultPageState = separatedData.values;
@@ -88,8 +85,8 @@ export default class ClientPageRenderer extends AbstractPageRenderer {
   }
 
   /**
-	 * @inheritdoc
-	 */
+   * @inheritdoc
+   */
   update(controller, resourcesUpdate) {
     let separatedData = this._separatePromisesAndValues(resourcesUpdate);
     let defaultPageState = separatedData.values;
@@ -114,8 +111,8 @@ export default class ClientPageRenderer extends AbstractPageRenderer {
   }
 
   /**
-	 * @inheritdoc
-	 */
+   * @inheritdoc
+   */
   unmount() {
     if (this._reactiveView) {
       this._ReactDOM.unmountComponentAtNode(this._viewContainer);
@@ -124,12 +121,12 @@ export default class ClientPageRenderer extends AbstractPageRenderer {
   }
 
   /**
-	 * Show error to console in $Debug mode and re-throw that error
-	 * for other error handler.
-	 *
-	 * @param {Error} error
-	 * @throws {Error} Re-throws the handled error.
-	 */
+   * Show error to console in $Debug mode and re-throw that error
+   * for other error handler.
+   *
+   * @param {Error} error
+   * @throws {Error} Re-throws the handled error.
+   */
   _handleError(error) {
     if ($Debug) {
       console.error('Render Error:', error);
@@ -139,11 +136,11 @@ export default class ClientPageRenderer extends AbstractPageRenderer {
   }
 
   /**
-	 * Patch promise values to controller state.
-	 *
-	 * @param {ControllerDecorator} controller
-	 * @param {Object<string, Promise<*>>} patchedPromises
-	 */
+   * Patch promise values to controller state.
+   *
+   * @param {ControllerDecorator} controller
+   * @param {Object<string, Promise<*>>} patchedPromises
+   */
   _patchPromisesToState(controller, patchedPromises) {
     for (let resourceName of Object.keys(patchedPromises)) {
       patchedPromises[resourceName]
@@ -157,31 +154,31 @@ export default class ClientPageRenderer extends AbstractPageRenderer {
   }
 
   /**
-	 * Renders the current route to DOM.
-	 *
-	 * @param {ControllerDecorator} controller
-	 * @param {function(new: React.Component)} view
-	 * @param {{
-	 *          onlyUpdate: (
-	 *            boolean|
-	 *            function(
-	 *              (string|function(new: Controller, ...*)),
-	 *              (
-	 *                string|
-	 *                function(
-	 *                  new: React.Component,
-	 *                  Object<string, *>,
-	 *                  ?Object<string, *>
-	 *                )
-	 *              )
-	 *            ): boolean
-	 *          ),
-	 *          autoScroll: boolean,
-	 *          allowSPA: boolean,
-	 *          documentView: ?function(new: AbstractDocumentView),
-	 *          managedRootView: ?function(new: React.Component)
-	 *        }} routeOptions The current route options.
-	 */
+   * Renders the current route to DOM.
+   *
+   * @param {ControllerDecorator} controller
+   * @param {function(new: React.Component)} view
+   * @param {{
+   *          onlyUpdate: (
+   *            boolean|
+   *            function(
+   *              (string|function(new: Controller, ...*)),
+   *              (
+   *                string|
+   *                function(
+   *                  new: React.Component,
+   *                  Object<string, *>,
+   *                  ?Object<string, *>
+   *                )
+   *              )
+   *            ): boolean
+   *          ),
+   *          autoScroll: boolean,
+   *          allowSPA: boolean,
+   *          documentView: ?function(new: AbstractDocumentView),
+   *          managedRootView: ?function(new: React.Component)
+   *        }} routeOptions The current route options.
+   */
   _renderToDOM(controller, view, routeOptions) {
     let reactElementView = this._getWrappedPageView(
       controller,
@@ -207,16 +204,16 @@ export default class ClientPageRenderer extends AbstractPageRenderer {
   }
 
   /**
-	 * Separate promises and values from provided data map. Values will be use
-	 * for default page state. Promises will be patched to state after their
-	 * resolve.
-	 *
-	 * @param {Object<string, *>} dataMap A map of data.
-	 * @return {{
-	 *           promises: Object<string, Promise<*>>,
-	 *           values: Object<string, *>
-	 *         }} Return separated promises and other values.
-	 */
+   * Separate promises and values from provided data map. Values will be use
+   * for default page state. Promises will be patched to state after their
+   * resolve.
+   *
+   * @param {Object<string, *>} dataMap A map of data.
+   * @return {{
+   *           promises: Object<string, Promise<*>>,
+   *           values: Object<string, *>
+   *         }} Return separated promises and other values.
+   */
   _separatePromisesAndValues(dataMap) {
     let promises = {};
     let values = {};
@@ -235,11 +232,11 @@ export default class ClientPageRenderer extends AbstractPageRenderer {
   }
 
   /**
-	 * Updates the title and the contents of the meta elements used for SEO.
-	 *
-	 * @param {MetaManager} metaManager meta attributes storage providing the
-	 *        new values for page meta elements and title.
-	 */
+   * Updates the title and the contents of the meta elements used for SEO.
+   *
+   * @param {MetaManager} metaManager meta attributes storage providing the
+   *        new values for page meta elements and title.
+   */
   _updateMetaAttributes(metaManager) {
     this._window.setTitle(metaManager.getTitle());
 
@@ -249,11 +246,11 @@ export default class ClientPageRenderer extends AbstractPageRenderer {
   }
 
   /**
-	 * Updates the contents of the generic meta elements used for SEO.
-	 *
-	 * @param {MetaManager} metaManager meta attributes storage providing the
-	 *        new values for page meta elements and title.
-	 */
+   * Updates the contents of the generic meta elements used for SEO.
+   *
+   * @param {MetaManager} metaManager meta attributes storage providing the
+   *        new values for page meta elements and title.
+   */
   _updateMetaNameAttributes(metaManager) {
     let metaTagKey = null;
     let metaTag;
@@ -268,11 +265,11 @@ export default class ClientPageRenderer extends AbstractPageRenderer {
   }
 
   /**
-	 * Updates the contents of the specialized meta elements used for SEO.
-	 *
-	 * @param {MetaManager} metaManager meta attributes storage providing the
-	 *        new values for page meta elements and title.
-	 */
+   * Updates the contents of the specialized meta elements used for SEO.
+   *
+   * @param {MetaManager} metaManager meta attributes storage providing the
+   *        new values for page meta elements and title.
+   */
   _updateMetaPropertyAttributes(metaManager) {
     let metaTagKey = null;
     let metaTag;
@@ -287,11 +284,11 @@ export default class ClientPageRenderer extends AbstractPageRenderer {
   }
 
   /**
-	 * Updates the href of the specialized link elements used for SEO.
-	 *
-	 * @param {MetaManager} metaManager meta attributes storage providing the
-	 *        new values for page meta elements and title.
-	 */
+   * Updates the href of the specialized link elements used for SEO.
+   *
+   * @param {MetaManager} metaManager meta attributes storage providing the
+   *        new values for page meta elements and title.
+   */
   _updateMetaLinkAttributes(metaManager) {
     let linkTagKey = null;
     let linkTag;
@@ -305,5 +302,3 @@ export default class ClientPageRenderer extends AbstractPageRenderer {
     }
   }
 }
-
-ns.ima.page.renderer.ClientPageRenderer = ClientPageRenderer;

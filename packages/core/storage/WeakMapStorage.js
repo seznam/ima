@@ -1,7 +1,4 @@
-import ns from '../namespace';
 import MapStorage from './MapStorage';
-
-ns.namespace('ima.storage');
 
 /**
  * A specialization of the {@codelink MapStorage} storage mimicking the native
@@ -10,26 +7,26 @@ ns.namespace('ima.storage');
  */
 export default class WeakMapStorage extends MapStorage {
   /**
-	 * Initializes the storage.
-	 *
-	 * @param {{entryTtl: number}} config Weak map storage configuration. The
-	 *        fields have the following meaning:
-	 *        - entryTtl The time-to-live of a storage entry in milliseconds.
-	 */
+   * Initializes the storage.
+   *
+   * @param {{entryTtl: number}} config Weak map storage configuration. The
+   *        fields have the following meaning:
+   *        - entryTtl The time-to-live of a storage entry in milliseconds.
+   */
   constructor(config) {
     super();
 
     /**
-		 * The time-to-live of a storage entry in milliseconds.
-		 *
-		 * @type {number}
-		 */
+     * The time-to-live of a storage entry in milliseconds.
+     *
+     * @type {number}
+     */
     this._entryTtl = config.entryTtl;
   }
 
   /**
-	 * @inheritdoc
-	 */
+   * @inheritdoc
+   */
   has(key) {
     this._discardExpiredEntries();
 
@@ -37,8 +34,8 @@ export default class WeakMapStorage extends MapStorage {
   }
 
   /**
-	 * @inheritdoc
-	 */
+   * @inheritdoc
+   */
   get(key) {
     this._discardExpiredEntries();
 
@@ -50,8 +47,8 @@ export default class WeakMapStorage extends MapStorage {
   }
 
   /**
-	 * @inheritdoc
-	 */
+   * @inheritdoc
+   */
   set(key, value) {
     this._discardExpiredEntries();
 
@@ -59,8 +56,8 @@ export default class WeakMapStorage extends MapStorage {
   }
 
   /**
-	 * @inheritdoc
-	 */
+   * @inheritdoc
+   */
   delete(key) {
     this._discardExpiredEntries();
 
@@ -68,8 +65,8 @@ export default class WeakMapStorage extends MapStorage {
   }
 
   /**
-	 * @inheritdoc
-	 */
+   * @inheritdoc
+   */
   keys() {
     this._discardExpiredEntries();
 
@@ -77,8 +74,8 @@ export default class WeakMapStorage extends MapStorage {
   }
 
   /**
-	 * @inheritdoc
-	 */
+   * @inheritdoc
+   */
   size() {
     this._discardExpiredEntries();
 
@@ -86,8 +83,8 @@ export default class WeakMapStorage extends MapStorage {
   }
 
   /**
-	 * Deletes all expired entries from this storage.
-	 */
+   * Deletes all expired entries from this storage.
+   */
   _discardExpiredEntries() {
     for (let key of super.keys()) {
       let targetReference = super.get(key);
@@ -99,8 +96,6 @@ export default class WeakMapStorage extends MapStorage {
   }
 }
 
-ns.ima.storage.WeakMapStorage = WeakMapStorage;
-
 /**
  * A simple reference wrapper that emulates a weak reference. We seem to have
  * no other option, since WeakMap and WeakSet are not enumerable (so what is
@@ -109,14 +104,14 @@ ns.ima.storage.WeakMapStorage = WeakMapStorage;
  */
 class WeakRef {
   /**
-	 * Initializes the weak reference to the target reference.
-	 *
-	 * @param {Object} target The target reference that should be referenced by
-	 *        this weak reference.
-	 * @param {number} ttl The maximum number of milliseconds the weak
-	 *        reference should be kept. The reference will be discarded once
-	 *        ACCESSED after the specified timeout.
-	 */
+   * Initializes the weak reference to the target reference.
+   *
+   * @param {Object} target The target reference that should be referenced by
+   *        this weak reference.
+   * @param {number} ttl The maximum number of milliseconds the weak
+   *        reference should be kept. The reference will be discarded once
+   *        ACCESSED after the specified timeout.
+   */
   constructor(target, ttl) {
     if ($Debug) {
       if (!(target instanceof Object)) {
@@ -131,29 +126,29 @@ class WeakRef {
     }
 
     /**
-		 * The actual target reference, or {@code null} if the reference has
-		 * been already discarded.
-		 *
-		 * @type {?Object}
-		 */
+     * The actual target reference, or {@code null} if the reference has
+     * been already discarded.
+     *
+     * @type {?Object}
+     */
     this._reference = target;
 
     /**
-		 * The UNIX timestamp with millisecond precision marking the moment at
-		 * or after which the reference will be discarded.
-		 *
-		 * @type {number}
-		 */
+     * The UNIX timestamp with millisecond precision marking the moment at
+     * or after which the reference will be discarded.
+     *
+     * @type {number}
+     */
     this._expiration = Date.now() + ttl;
   }
 
   /**
-	 * Returns the target reference, provided that the target reference is
-	 * still alive. Returns {@code null} if the reference has been discarded.
-	 *
-	 * @return {?Object} The target reference, or {@code null} if the reference
-	 *         has been discarded by the garbage collector.
-	 */
+   * Returns the target reference, provided that the target reference is
+   * still alive. Returns {@code null} if the reference has been discarded.
+   *
+   * @return {?Object} The target reference, or {@code null} if the reference
+   *         has been discarded by the garbage collector.
+   */
   get target() {
     if (this._reference && Date.now() >= this._expiration) {
       this._reference = null; // let the GC do its job

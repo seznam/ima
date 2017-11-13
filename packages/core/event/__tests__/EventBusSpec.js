@@ -75,12 +75,11 @@ describe('ima.event.EventBusImpl', () => {
   describe('fire method', () => {
     it('should fire event for listeners', () => {
       spyOn(eventSource, 'dispatchEvent');
-      spyOn(
-        windowInterface,
-        'createCustomEvent'
-      ).and.callFake((IMA_EVENT, options) => {
-        return options;
-      });
+      spyOn(windowInterface, 'createCustomEvent').and.callFake(
+        (IMA_EVENT, options) => {
+          return options;
+        }
+      );
 
       let event = 'event1';
       let data = { data: '' };

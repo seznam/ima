@@ -38,7 +38,7 @@ function docPreprocess() {
       `${ dir.parent }Bootstrap.js`,
       `${ dir.parent }ObjectContainer.js`,
       `${ dir.parent }vendorLinker.js`,
-      `${ dir.parent }!(node_modules|dist|gulp|polyfill)/**/!(*Spec).js`
+      `${ dir.parent }!(node_modules|doc|dist|gulp|polyfill)/**/!(*Spec).js`
     ])
     .pipe(change((content) => {
       let oldContent = null;

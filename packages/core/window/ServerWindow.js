@@ -1,7 +1,6 @@
-import ns from '../namespace';
 import Window from './Window';
 
-ns.namespace('ima.window');
+// @server-side export default class ServerWindow extends Window {}
 
 /**
  * Server-side implementation of the {@code Window} utility API.
@@ -12,116 +11,116 @@ export default class ServerWindow extends Window {
   }
 
   /**
-	 * @inheritdoc
-	 */
+   * @inheritdoc
+   */
   isClient() {
     return false;
   }
 
   /**
-	 * @inheritdoc
-	 */
+   * @inheritdoc
+   */
   isCookieEnabled() {
     return false;
   }
 
   /**
-	 * @inheritdoc
-	 */
+   * @inheritdoc
+   */
   hasSessionStorage() {
     return false;
   }
 
   /**
-	 * @inheritdoc
-	 */
+   * @inheritdoc
+   */
   setTitle(title) {}
 
   /**
-	 * @inheritdoc
-	 */
+   * @inheritdoc
+   */
   getWindow() {
     return undefined;
   }
 
   /**
-	 * @inheritdoc
-	 */
+   * @inheritdoc
+   */
   getDocument() {
     return undefined;
   }
 
   /**
-	 * @inheritdoc
-	 */
+   * @inheritdoc
+   */
   getScrollX() {
     return 0;
   }
 
   /**
-	 * @inheritdoc
-	 */
+   * @inheritdoc
+   */
   getScrollY() {
     return 0;
   }
 
   /**
-	 * @inheritdoc
-	 */
+   * @inheritdoc
+   */
   scrollTo(x, y) {}
 
   /**
-	 * @inheritdoc
-	 */
+   * @inheritdoc
+   */
   getDomain() {
     return '';
   }
 
   /**
-	 * @inheritdoc
-	 */
+   * @inheritdoc
+   */
   getHost() {
     return '';
   }
 
   /**
-	 * @inheritdoc
-	 */
+   * @inheritdoc
+   */
   getPath() {
     return '';
   }
 
   /**
-	 * @inheritdoc
-	 */
+   * @inheritdoc
+   */
   getUrl() {
     return '';
   }
 
   /**
-	 * @inheritdoc
-	 */
+   * @inheritdoc
+   */
   getBody() {
     return undefined;
   }
 
   /**
-	 * @inheritdoc
-	 */
+   * @inheritdoc
+   */
   getElementById(id) {
     return null;
   }
 
   /**
-	 * @inheritdoc
-	 */
+   * @inheritdoc
+   */
   querySelector(selector) {
     return null;
   }
 
   /**
-	 * @inheritdoc
-	 */
+   * @inheritdoc
+   */
   querySelectorAll(selector) {
     class DummyNodeList {
       constructor() {
@@ -137,23 +136,23 @@ export default class ServerWindow extends Window {
   }
 
   /**
-	 * @inheritdoc
-	 */
+   * @inheritdoc
+   */
   redirect(url) {}
 
   /**
-	 * @inheritdoc
-	 */
+   * @inheritdoc
+   */
   pushState(state, title, url) {}
 
   /**
-	 * @inheritdoc
-	 */
+   * @inheritdoc
+   */
   replaceState(state, title, url) {}
 
   /**
-	 * @inheritdoc
-	 */
+   * @inheritdoc
+   */
   createCustomEvent(name, options) {
     let dummyCustomEvent = { initCustomEvent: () => {}, detail: {} };
 
@@ -161,14 +160,12 @@ export default class ServerWindow extends Window {
   }
 
   /**
-	 * @inheritdoc
-	 */
+   * @inheritdoc
+   */
   bindEventListener(eventTarget, event, listener, useCapture = false) {}
 
   /**
-	 * @inheritdoc
-	 */
+   * @inheritdoc
+   */
   unbindEventListener(eventTarget, event, listener, useCapture = false) {}
 }
-
-ns.ima.window.ServerWindow = ServerWindow;

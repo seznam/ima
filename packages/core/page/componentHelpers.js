@@ -135,15 +135,23 @@ export function cssClasses(component, classRules, includeComponentClassName) {
  *        string separated by whitespace, or a map of CSS class names to
  *        boolean values. The CSS class name will be included in the result
  *        only if the value is {@code true}.
- * @param {?(AbstractComponent|AbstractPureComponent)} component The component
+ * @param {?(AbstractComponent|AbstractPureComponent|string)} component The component
  *        requiring the composition of the CSS class names, if it has the
  *        {@code className} property set and requires its inclusion this time.
  * @return {string} String of CSS classes that had their property resolved
  *         to {@code true}.
  */
 export function defaultCssClasses(classRules, component) {
-  let extraClasses =
-    component instanceof React.Component ? component.props.className : null;
+  let extraClasses = typeof component === 'string' ? component : null;
+
+  if (
+    !extraClasses &&
+    (component instanceof React.Component ||
+      component instanceof React.PureComponent)
+  ) {
+    extraClasses = component.props.className;
+  }
+
   return classnames(classRules, extraClasses);
 }
 

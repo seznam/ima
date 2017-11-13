@@ -1,7 +1,4 @@
-import ns from '../namespace';
 import Controller from './Controller';
-
-ns.namespace('ima.controller');
 
 /**
  * Decorator for page controllers. The decorator manages references to the meta
@@ -10,120 +7,120 @@ ns.namespace('ima.controller');
  */
 export default class ControllerDecorator extends Controller {
   /**
-	 * Initializes the controller decorator.
-	 *
-	 * @param {Controller} controller The controller being decorated.
-	 * @param {MetaManager} metaManager The meta page attributes manager.
-	 * @param {Router} router The application router.
-	 * @param {Dictionary} dictionary Localization phrases dictionary.
-	 * @param {Object<string, *>} settings  Application settings for the
-	 *        current application environment.
-	 */
+   * Initializes the controller decorator.
+   *
+   * @param {Controller} controller The controller being decorated.
+   * @param {MetaManager} metaManager The meta page attributes manager.
+   * @param {Router} router The application router.
+   * @param {Dictionary} dictionary Localization phrases dictionary.
+   * @param {Object<string, *>} settings  Application settings for the
+   *        current application environment.
+   */
   constructor(controller, metaManager, router, dictionary, settings) {
     super();
 
     /**
-		 * The controller being decorated.
-		 *
-		 * @type {Controller}
-		 */
+     * The controller being decorated.
+     *
+     * @type {Controller}
+     */
     this._controller = controller;
 
     /**
-		 * The meta page attributes manager.
-		 *
-		 * @type {MetaManager}
-		 */
+     * The meta page attributes manager.
+     *
+     * @type {MetaManager}
+     */
     this._metaManager = metaManager;
 
     /**
-		 * The application router.
-		 *
-		 * @type {Router}
-		 */
+     * The application router.
+     *
+     * @type {Router}
+     */
     this._router = router;
 
     /**
-		 * Localization phrases dictionary.
-		 *
-		 * @type {Dictionary}
-		 */
+     * Localization phrases dictionary.
+     *
+     * @type {Dictionary}
+     */
     this._dictionary = dictionary;
 
     /**
-		 * Application settings for the current application environment.
-		 *
-		 * @type {Object<string, *>}
-		 */
+     * Application settings for the current application environment.
+     *
+     * @type {Object<string, *>}
+     */
     this._settings = settings;
   }
 
   /**
-	 * @inheritdoc
-	 */
+   * @inheritdoc
+   */
   init() {
     this._controller.init();
   }
 
   /**
-	 * @inheritdoc
-	 */
+   * @inheritdoc
+   */
   destroy() {
     this._controller.destroy();
   }
 
   /**
-	 * @inheritdoc
-	 */
+   * @inheritdoc
+   */
   activate() {
     this._controller.activate();
   }
 
   /**
-	 * @inheritdoc
-	 */
+   * @inheritdoc
+   */
   deactivate() {
     this._controller.deactivate();
   }
 
   /**
-	 * @inheritdoc
-	 */
+   * @inheritdoc
+   */
   load() {
     return this._controller.load();
   }
 
   /**
-	 * @inheritdoc
-	 */
+   * @inheritdoc
+   */
   update(params = {}) {
     return this._controller.update(params);
   }
 
   /**
-	 * @inheritdoc
-	 */
+   * @inheritdoc
+   */
   setReactiveView(reactiveView) {
     this._controller.setReactiveView(reactiveView);
   }
 
   /**
-	 * @inheritdoc
-	 */
+   * @inheritdoc
+   */
   setState(statePatch) {
     this._controller.setState(statePatch);
   }
 
   /**
-	 * @inheritdoc
-	 */
+   * @inheritdoc
+   */
   getState() {
     return this._controller.getState();
   }
 
   /**
-	 * @inheritdoc
-	 */
+   * @inheritdoc
+   */
   addExtension(extension) {
     this._controller.addExtension(extension);
 
@@ -131,15 +128,15 @@ export default class ControllerDecorator extends Controller {
   }
 
   /**
-	 * @inheritdoc
-	 */
+   * @inheritdoc
+   */
   getExtensions() {
     return this._controller.getExtensions();
   }
 
   /**
-	 * @inheritdoc
-	 */
+   * @inheritdoc
+   */
   setMetaParams(loadedResources, metaManager, router, dictionary, settings) {
     this._controller.setMetaParams(
       loadedResources,
@@ -151,43 +148,41 @@ export default class ControllerDecorator extends Controller {
   }
 
   /**
-	 * @inheritdoc
-	 */
+   * @inheritdoc
+   */
   setRouteParams(params = {}) {
     this._controller.setRouteParams(params);
   }
 
   /**
-	 * @inheritdoc
-	 */
+   * @inheritdoc
+   */
   getRouteParams() {
     return this._controller.getRouteParams();
   }
 
   /**
-	 * @inheritdoc
-	 */
+   * @inheritdoc
+   */
   setPageStateManager(pageStateManager) {
     this._controller.setPageStateManager(pageStateManager);
   }
 
   /**
-	 * @inheritdoc
-	 */
+   * @inheritdoc
+   */
   getHttpStatus() {
     return this._controller.getHttpStatus();
   }
 
   /**
-	 * Returns the meta attributes manager configured by the decorated
-	 * controller.
-	 *
-	 * @return {MetaManager} The Meta attributes manager configured by the
-	 *         decorated controller.
-	 */
+   * Returns the meta attributes manager configured by the decorated
+   * controller.
+   *
+   * @return {MetaManager} The Meta attributes manager configured by the
+   *         decorated controller.
+   */
   getMetaManager() {
     return this._metaManager;
   }
 }
-
-ns.ima.controller.ControllerDecorator = ControllerDecorator;

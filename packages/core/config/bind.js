@@ -3,6 +3,7 @@ import Cache from '../cache/Cache';
 import CacheFactory from '../cache/CacheFactory';
 import CacheImpl from '../cache/CacheImpl';
 import ControllerDecorator from '../controller/ControllerDecorator';
+import AbstractController from '../controller/AbstractController'; //eslint-disable-line no-unused-vars
 import DevTool from '../debug/DevTool';
 import Dictionary from '../dictionary/Dictionary';
 import MessageFormatDictionary from '../dictionary/MessageFormatDictionary';

@@ -1,8 +1,5 @@
-import ns from '../namespace';
 import GenericError from '../error/GenericError';
 import Controller from './Controller';
-
-ns.namespace('ima.controller');
 
 /**
  * Basic implementation of the {@codelink Controller} interface, providing the
@@ -12,67 +9,67 @@ ns.namespace('ima.controller');
  */
 export default class AbstractController extends Controller {
   /**
-	 * Initializes the controller.
-	 */
+   * Initializes the controller.
+   */
   constructor() {
     super();
 
     /**
-		 * State manager.
-		 *
-		 * @protected
-		 * @type {PageStateManager}
-		 */
+     * State manager.
+     *
+     * @protected
+     * @type {PageStateManager}
+     */
     this._pageStateManager = null;
 
     /**
-		 * The controller's extensions.
-		 *
-		 * @type {Extension[]}
-		 */
+     * The controller's extensions.
+     *
+     * @type {Extension[]}
+     */
     this._extensions = [];
 
     /**
-		 * The HTTP response code to send to the client.
-		 *
-		 * @type {number}
-		 */
+     * The HTTP response code to send to the client.
+     *
+     * @type {number}
+     */
     this.status = 200;
 
     /**
-		 * The route parameters extracted from the current route. This field is
-		 * set externally by IMA right before the {@linkcode init()} or the
-		 * {@linkcode update()} method is called.
-		 *
-		 * @type {Object<string, string>}
-		 */
+     * The route parameters extracted from the current route. This field is
+     * set externally by IMA right before the {@linkcode init()} or the
+     * {@linkcode update()} method is called.
+     *
+     * @type {Object<string, string>}
+     */
     this.params = {};
   }
 
   /**
-	 * @inheritdoc
-	 */
+   * @inheritdoc
+   */
   init() {}
 
   /**
-	 * @inheritdoc
-	 */
+   * @inheritdoc
+   */
   destroy() {}
 
   /**
-	 * @inheritdoc
-	 */
+   * @inheritdoc
+   */
   activate() {}
 
   /**
-	 * @inheritdoc
-	 */
+   * @inheritdoc
+   */
   deactivate() {}
 
   /**
-	 * @inheritdoc
-	 * @abstract
-	 */
+   * @inheritdoc
+   * @abstract
+   */
   load() {
     throw new GenericError(
       'The ima.controller.AbstractController.load method is abstract ' +
@@ -81,15 +78,15 @@ export default class AbstractController extends Controller {
   }
 
   /**
-	 * @inheritdoc
-	 */
+   * @inheritdoc
+   */
   update(params = {}) {
     return {};
   }
 
   /**
-	 * @inheritdoc
-	 */
+   * @inheritdoc
+   */
   setState(statePatch) {
     if (this._pageStateManager) {
       this._pageStateManager.setState(statePatch);
@@ -97,8 +94,8 @@ export default class AbstractController extends Controller {
   }
 
   /**
-	 * @inheritdoc
-	 */
+   * @inheritdoc
+   */
   getState() {
     if (this._pageStateManager) {
       return this._pageStateManager.getState();
@@ -108,23 +105,23 @@ export default class AbstractController extends Controller {
   }
 
   /**
-	 * @inheritdoc
-	 */
+   * @inheritdoc
+   */
   addExtension(extension) {
     this._extensions.push(extension);
   }
 
   /**
-	 * @inheritdoc
-	 */
+   * @inheritdoc
+   */
   getExtensions() {
     return this._extensions;
   }
 
   /**
-	 * @inheritdoc
-	 * @abstract
-	 */
+   * @inheritdoc
+   * @abstract
+   */
   setMetaParams(loadedResources, metaManager, router, dictionary, settings) {
     throw new GenericError(
       'The ima.controller.AbstractController.setMetaParams method is ' +
@@ -133,32 +130,30 @@ export default class AbstractController extends Controller {
   }
 
   /**
-	 * @inheritdoc
-	 */
+   * @inheritdoc
+   */
   setRouteParams(params = {}) {
     this.params = params;
   }
 
   /**
-	 * @inheritdoc
-	 */
+   * @inheritdoc
+   */
   getRouteParams() {
     return this.params;
   }
 
   /**
-	 * @inheritdoc
-	 */
+   * @inheritdoc
+   */
   setPageStateManager(pageStateManager) {
     this._pageStateManager = pageStateManager;
   }
 
   /**
-	 * @inheritdoc
-	 */
+   * @inheritdoc
+   */
   getHttpStatus() {
     return this.status;
   }
 }
-
-ns.ima.controller.AbstractController = AbstractController;

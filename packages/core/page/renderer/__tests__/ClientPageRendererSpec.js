@@ -89,11 +89,12 @@ describe('ima.page.renderer.ClientPageRenderer', function() {
       pageRenderer
         .mount(controller, view, params, routeOptions)
         .then(function() {
-          expect(
-            pageRenderer._patchPromisesToState
-          ).toHaveBeenCalledWith(controller, {
-            param2: params.param2
-          });
+          expect(pageRenderer._patchPromisesToState).toHaveBeenCalledWith(
+            controller,
+            {
+              param2: params.param2
+            }
+          );
           done();
         })
         .catch(function(error) {
@@ -186,11 +187,12 @@ describe('ima.page.renderer.ClientPageRenderer', function() {
       pageRenderer
         .update(controller, params)
         .then(function() {
-          expect(
-            pageRenderer._patchPromisesToState
-          ).toHaveBeenCalledWith(controller, {
-            param2: params.param2
-          });
+          expect(pageRenderer._patchPromisesToState).toHaveBeenCalledWith(
+            controller,
+            {
+              param2: params.param2
+            }
+          );
           done();
         })
         .catch(function(error) {

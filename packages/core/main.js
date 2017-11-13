@@ -260,16 +260,14 @@ function onLoad(callback) {
       document.readyState === 'complete' ||
       document.readyState === 'interactive'
     ) {
-      $IMA.Loader
-        .initAllModules()
+      $IMA.Loader.initAllModules()
         .then(resolve)
         .catch(error => {
           reject(error);
         });
     } else {
       window.addEventListener('DOMContentLoaded', () => {
-        $IMA.Loader
-          .initAllModules()
+        $IMA.Loader.initAllModules()
           .then(resolve)
           .catch(error => {
             reject(error);

@@ -19,40 +19,40 @@ const PRODUCTION_ENVIRONMENT = 'prod';
  */
 export default class Bootstrap {
   /**
-	 * Initializes the bootstrap.
-	 *
-	 * @param {ObjectContainer} oc The application's object container to use
-	 *        for managing dependencies.
-	 */
+   * Initializes the bootstrap.
+   *
+   * @param {ObjectContainer} oc The application's object container to use
+   *        for managing dependencies.
+   */
   constructor(oc) {
     /**
-		 * The object container used to manage dependencies.
-		 *
-		 * @type {ObjectContainer}
-		 */
+     * The object container used to manage dependencies.
+     *
+     * @type {ObjectContainer}
+     */
     this._oc = oc;
 
     /**
-		 * Application configuration.
-		 *
-		 * @type {Object<string, *>}
-		 */
+     * Application configuration.
+     *
+     * @type {Object<string, *>}
+     */
     this._config = {};
   }
 
   /**
-	 * Initializes the application by running the bootstrap sequence. The
-	 * sequence initializes the components of the application in the following
-	 * order:
-	 * - application settings
-	 * - constants, service providers and class dependencies configuration
-	 * - services
-	 * - UI components
-	 * - routing
-	 *
-	 * @param {Object<string, *>} config The application environment
-	 *        configuration for the current environment.
-	 */
+   * Initializes the application by running the bootstrap sequence. The
+   * sequence initializes the components of the application in the following
+   * order:
+   * - application settings
+   * - constants, service providers and class dependencies configuration
+   * - services
+   * - UI components
+   * - routing
+   *
+   * @param {Object<string, *>} config The application environment
+   *        configuration for the current environment.
+   */
   run(config) {
     this._config = config;
 
@@ -63,12 +63,12 @@ export default class Bootstrap {
   }
 
   /**
-	 * Initializes the application settings. The method loads the settings for
-	 * all environments and then pics the settings for the current environment.
-	 *
-	 * The method also handles using the values in the production environment
-	 * as default values for configuration items in other environments.
-	 */
+   * Initializes the application settings. The method loads the settings for
+   * all environments and then pics the settings for the current environment.
+   *
+   * The method also handles using the values in the production environment
+   * as default values for configuration items in other environments.
+   */
   _initSettings() {
     let currentApplicationSettings = {};
 
@@ -100,11 +100,11 @@ export default class Bootstrap {
   }
 
   /**
-	 * Returns setting for current environment where base values are from production
-	 * environment and other environments override base values.
-	 *
-	 * @return {Object<string, *>}
-	 */
+   * Returns setting for current environment where base values are from production
+   * environment and other environments override base values.
+   *
+   * @return {Object<string, *>}
+   */
   _getEnvironmentSetting(allSettings) {
     let environment = this._config.settings.$Env;
     let environmentSetting = allSettings[environment] || {};
@@ -119,9 +119,9 @@ export default class Bootstrap {
   }
 
   /**
-	 * Binds the constants, service providers and class dependencies to the
-	 * object container.
-	 */
+   * Binds the constants, service providers and class dependencies to the
+   * object container.
+   */
   _bindDependencies() {
     this._oc.setBindingState(ObjectContainer.IMA_BINDING_STATE);
     this._config.initBindIma(ns, this._oc, this._config.bind);
@@ -138,16 +138,16 @@ export default class Bootstrap {
   }
 
   /**
-	 * Initializes the routes.
-	 */
+   * Initializes the routes.
+   */
   _initRoutes() {
     let router = this._oc.get(Router);
     this._config.initRoutes(ns, this._oc, this._config.routes, router);
   }
 
   /**
-	 * Initializes the basic application services.
-	 */
+   * Initializes the basic application services.
+   */
   _initServices() {
     this._config.initServicesIma(ns, this._oc, this._config.services);
 

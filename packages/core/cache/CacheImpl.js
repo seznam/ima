@@ -1,7 +1,4 @@
-import ns from '../namespace';
 import Cache from './Cache';
-
-ns.namespace('ima.cache');
 
 /**
  * Configurable generic implementation of the {@codelink Cache} interface.
@@ -17,14 +14,14 @@ ns.namespace('ima.cache');
  */
 export default class CacheImpl extends Cache {
   /**
-	 * Initializes the cache.
-	 *
-	 * @param {Storage} cacheStorage The cache entry storage to use.
-	 * @param {CacheFactory} factory Which create new instance of cache entry.
-	 * @param {vendor.$Helper} Helper The IMA.js helper methods.
-	 * @param {{ttl: number, enabled: boolean}} [config={ttl: 30000, enabled: false}]
-	 *        The cache configuration.
-	 */
+   * Initializes the cache.
+   *
+   * @param {Storage} cacheStorage The cache entry storage to use.
+   * @param {CacheFactory} factory Which create new instance of cache entry.
+   * @param {vendor.$Helper} Helper The IMA.js helper methods.
+   * @param {{ttl: number, enabled: boolean}} [config={ttl: 30000, enabled: false}]
+   *        The cache configuration.
+   */
   constructor(
     cacheStorage,
     factory,
@@ -34,49 +31,49 @@ export default class CacheImpl extends Cache {
     super();
 
     /**
-		 * Cache entry storage.
-		 *
-		 * @type {Storage}
-		 */
+     * Cache entry storage.
+     *
+     * @type {Storage}
+     */
     this._cache = cacheStorage;
 
     /**
-		 * @type {CacheFactory}
-		 */
+     * @type {CacheFactory}
+     */
     this._factory = factory;
 
     /**
-		 * Tha IMA.js helper methods.
-		 *
-		 * @type {vendor.$Helper}
-		 */
+     * Tha IMA.js helper methods.
+     *
+     * @type {vendor.$Helper}
+     */
     this._Helper = Helper;
 
     /**
-		 * Default cache entry time to live in milliseconds.
-		 *
-		 * @type {number}
-		 */
+     * Default cache entry time to live in milliseconds.
+     *
+     * @type {number}
+     */
     this._ttl = config.ttl;
 
     /**
-		 * Flag signalling whether the cache is currently enabled.
-		 *
-		 * @type {boolean}
-		 */
+     * Flag signalling whether the cache is currently enabled.
+     *
+     * @type {boolean}
+     */
     this._enabled = config.enabled;
   }
 
   /**
-	 * @inheritdoc
-	 */
+   * @inheritdoc
+   */
   clear() {
     this._cache.clear();
   }
 
   /**
-	 * @inheritdoc
-	 */
+   * @inheritdoc
+   */
   has(key) {
     if (!this._enabled || !this._cache.has(key)) {
       return false;
@@ -93,8 +90,8 @@ export default class CacheImpl extends Cache {
   }
 
   /**
-	 * @inheritdoc
-	 */
+   * @inheritdoc
+   */
   get(key) {
     if (this.has(key)) {
       let value = this._cache.get(key).getValue();
@@ -106,8 +103,8 @@ export default class CacheImpl extends Cache {
   }
 
   /**
-	 * @inheritdoc
-	 */
+   * @inheritdoc
+   */
   set(key, value, ttl = null) {
     if (!this._enabled) {
       return;
@@ -122,30 +119,30 @@ export default class CacheImpl extends Cache {
   }
 
   /**
-	 * @inheritdoc
-	 */
+   * @inheritdoc
+   */
   delete(key) {
     this._cache.delete(key);
   }
 
   /**
-	 * @inheritdoc
-	 */
+   * @inheritdoc
+   */
   disable() {
     this._enabled = false;
     this.clear();
   }
 
   /**
-	 * @inheritdoc
-	 */
+   * @inheritdoc
+   */
   enable() {
     this._enabled = true;
   }
 
   /**
-	 * @inheritdoc
-	 */
+   * @inheritdoc
+   */
   serialize() {
     let dataToSerialize = {};
 
@@ -173,8 +170,8 @@ export default class CacheImpl extends Cache {
   }
 
   /**
-	 * @inheritdoc
-	 */
+   * @inheritdoc
+   */
   deserialize(serializedData) {
     for (let key of Object.keys(serializedData)) {
       let cacheEntryItem = serializedData[key];
@@ -183,12 +180,12 @@ export default class CacheImpl extends Cache {
   }
 
   /**
-	 * Tests whether the provided value can be serialized into JSON.
-	 *
-	 * @param {*} value The value to test whether or not it can be serialized.
-	 * @return {boolean} {@code true} if the provided value can be serialized
-	 *         into JSON, {@code false} otherwise.
-	 */
+   * Tests whether the provided value can be serialized into JSON.
+   *
+   * @param {*} value The value to test whether or not it can be serialized.
+   * @return {boolean} {@code true} if the provided value can be serialized
+   *         into JSON, {@code false} otherwise.
+   */
   _canSerializeValue(value) {
     if (
       value instanceof Date ||
@@ -234,13 +231,13 @@ export default class CacheImpl extends Cache {
   }
 
   /**
-	 * Attempts to clone the provided value, if possible. Values that cannot be
-	 * cloned (e.g. promises) will be simply returned.
-	 *
-	 * @param {*} value The value to clone.
-	 * @return {*} The created clone, or the provided value if the value cannot
-	 *         be cloned.
-	 */
+   * Attempts to clone the provided value, if possible. Values that cannot be
+   * cloned (e.g. promises) will be simply returned.
+   *
+   * @param {*} value The value to clone.
+   * @return {*} The created clone, or the provided value if the value cannot
+   *         be cloned.
+   */
   _clone(value) {
     if (
       value !== null &&
@@ -253,5 +250,3 @@ export default class CacheImpl extends Cache {
     return value;
   }
 }
-
-ns.ima.cache.CacheImpl = CacheImpl;

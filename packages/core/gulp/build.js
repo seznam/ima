@@ -15,7 +15,7 @@ function compile() {
       `${ parentDir }Bootstrap.js`,
       `${ parentDir }ObjectContainer.js`,
       `${ parentDir }vendorLinker.js`,
-      `${ parentDir }!(node_modules|polyfill)/**/!(*Spec).js`
+      `${ parentDir }!(node_modules|doc|dist|gulp|polyfill)/**/!(*Spec).js`
     ])
     .pipe(plumber())
     .pipe(
@@ -54,19 +54,21 @@ function compile() {
           fileContents +
             '\n\n' +
             `typeof $IMA !== 'undefined' && $IMA !== null && $IMA.Loader && ` +
-            `$IMA.Loader.register('${moduleName}', [], function (_export, _context) {\n` +
-            `	'use strict';\n` +
-            `	return {\n` +
-            `		setters: [],\n` +
-            `		execute: function () {\n` +
+            `$IMA.Loader.register('${
+              moduleName
+            }', [], function (_export, _context) {\n` +
+            ` 'use strict';\n` +
+            ` return {\n` +
+            `   setters: [],\n` +
+            `   execute: function () {\n` +
             moduleExports
               .map(
                 ({ symbol, value }) =>
-                  `			_export('${symbol}', exports.${symbol});\n`
+                  `     _export('${symbol}', exports.${symbol});\n`
               )
               .join('') +
-            `		}\n` +
-            `	};\n` +
+            `   }\n` +
+            ` };\n` +
             `});\n`
         );
       })

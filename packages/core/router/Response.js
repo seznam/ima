@@ -1,7 +1,6 @@
-import ns from '../namespace';
 import GenericError from '../error/GenericError';
 
-ns.namespace('ima.router');
+// @server-side export default class {}
 
 /**
  * Wrapper for the ExpressJS response, exposing only the necessary minimum.
@@ -12,60 +11,60 @@ export default class Response {
   }
 
   /**
-	 * Initializes the response.
-	 */
+   * Initializes the response.
+   */
   constructor() {
     /**
-		 * The ExpressJS response object, or {@code null} if running at the
-		 * client side.
-		 *
-		 * @type {?Express.Response}
-		 */
+     * The ExpressJS response object, or {@code null} if running at the
+     * client side.
+     *
+     * @type {?Express.Response}
+     */
     this._response = null;
 
     /**
-		 * It is flag for sent response for request.
-		 *
-		 * @type {boolean}
-		 */
+     * It is flag for sent response for request.
+     *
+     * @type {boolean}
+     */
     this._isSent = false;
 
     /**
-		 * HTTP Status code.
-		 *
-		 * @type {number}
-		 */
+     * HTTP Status code.
+     *
+     * @type {number}
+     */
     this._status = 500;
 
     /**
-		 * The content of response.
-		 *
-		 * @type {string}
-		 */
+     * The content of response.
+     *
+     * @type {string}
+     */
     this._content = '';
 
     /**
-		 * The rendered page state.
-		 *
-		 * @type {Object<string, *>}
-		 */
+     * The rendered page state.
+     *
+     * @type {Object<string, *>}
+     */
     this._pageState = {};
 
     /**
-		 * Internal cookie storage for Set-Cookie header.
-		 *
-		 * @type {Map<string, {
-		 *         value: string,
-		 *         options: {domain: string=, expires: (number|string)=}
-		 *       }>}
-		 */
+     * Internal cookie storage for Set-Cookie header.
+     *
+     * @type {Map<string, {
+     *         value: string,
+     *         options: {domain: string=, expires: (number|string)=}
+     *       }>}
+     */
     this._internalCookieStorage = new Map();
 
     /**
-		 * Transform function for cookie value.
-		 *
-		 * @type {{encode: function, decode: function}}
-		 */
+     * Transform function for cookie value.
+     *
+     * @type {{encode: function, decode: function}}
+     */
     this._cookieTransformFunction = {
       encode: value => value,
       decode: value => value
@@ -73,17 +72,17 @@ export default class Response {
   }
 
   /**
-	 * Initializes this response wrapper with the provided ExpressJS response
-	 * object.
-	 *
-	 * @param {?Express.Response} response The ExpressJS response, or
-	 *        {@code null} if the code is running at the client side.
-	 * @param {{
-	 *          encode: function(string): string=,
-	 *          decode: function(string): string
-	 *        }=} cookieTransformFunction
-	 * @return {ima.router.Response} This response.
-	 */
+   * Initializes this response wrapper with the provided ExpressJS response
+   * object.
+   *
+   * @param {?Express.Response} response The ExpressJS response, or
+   *        {@code null} if the code is running at the client side.
+   * @param {{
+   *          encode: function(string): string=,
+   *          decode: function(string): string
+   *        }=} cookieTransformFunction
+   * @return {ima.router.Response} This response.
+   */
   init(response, cookieTransformFunction = {}) {
     this._cookieTransformFunction = Object.assign(
       this._cookieTransformFunction,
@@ -100,19 +99,19 @@ export default class Response {
   }
 
   /**
-	 * Redirects the client to the specified location, with the specified
-	 * redirect HTTP response code.
-	 *
-	 * For full list of HTTP response status codes see
-	 * http://www.w3.org/Protocols/rfc2616/rfc2616-sec10.html
-	 *
-	 * Use this method only at the server side.
-	 *
-	 * @param {string} url The URL to which the client should be redirected.
-	 * @param {number=} [status=302] The HTTP status code to send to the
-	 *        client.
-	 * @return {Response} This response.
-	 */
+   * Redirects the client to the specified location, with the specified
+   * redirect HTTP response code.
+   *
+   * For full list of HTTP response status codes see
+   * http://www.w3.org/Protocols/rfc2616/rfc2616-sec10.html
+   *
+   * Use this method only at the server side.
+   *
+   * @param {string} url The URL to which the client should be redirected.
+   * @param {number=} [status=302] The HTTP status code to send to the
+   *        client.
+   * @return {Response} This response.
+   */
   redirect(url, status = 302) {
     if ($Debug) {
       if (this._isSent === true) {
@@ -136,18 +135,18 @@ export default class Response {
   }
 
   /**
-	 * Sets the HTTP status code that will be sent to the client when the
-	 * response is sent.
-	 *
-	 * For full list of available response codes see
-	 * http://www.w3.org/Protocols/rfc2616/rfc2616-sec10.html
-	 *
-	 * Use this method only at the server side.
-	 *
-	 * @param {number} httpStatus HTTP response status code to send to the
-	 *        client.
-	 * @return {Response} This response.
-	 */
+   * Sets the HTTP status code that will be sent to the client when the
+   * response is sent.
+   *
+   * For full list of available response codes see
+   * http://www.w3.org/Protocols/rfc2616/rfc2616-sec10.html
+   *
+   * Use this method only at the server side.
+   *
+   * @param {number} httpStatus HTTP response status code to send to the
+   *        client.
+   * @return {Response} This response.
+   */
   status(httpStatus) {
     if ($Debug) {
       if (this._isSent === true) {
@@ -168,12 +167,12 @@ export default class Response {
   }
 
   /**
-	 * Sends the response to the client with the provided content. Use this
-	 * method only at the server side.
-	 *
-	 * @param {string} content The response body.
-	 * @return {Response} This response.
-	 */
+   * Sends the response to the client with the provided content. Use this
+   * method only at the server side.
+   *
+   * @param {string} content The response body.
+   * @return {Response} This response.
+   */
   send(content) {
     if ($Debug) {
       if (this._isSent === true) {
@@ -197,11 +196,11 @@ export default class Response {
   }
 
   /**
-	 * Sets the rendered page state.
-	 *
-	 * @param {Object<string, *>} pageState The rendered page state.
-	 * @return {Response} This response.
-	 */
+   * Sets the rendered page state.
+   *
+   * @param {Object<string, *>} pageState The rendered page state.
+   * @return {Response} This response.
+   */
   setPageState(pageState) {
     if ($Debug) {
       if (this._isSent === true) {
@@ -222,18 +221,18 @@ export default class Response {
   }
 
   /**
-	 * Sets a cookie, which will be sent to the client with the response.
-	 *
-	 * @param {string} name The cookie name.
-	 * @param {(boolean|number|string)} value The cookie value, will be
-	 *        converted to string.
-	 * @param {{domain: string=, expires: (number|string)=, maxAge: number=}}
-	 *        options Cookie attributes. Only the attributes listed in the type
-	 *        annotation of this field are supported. For documentation and full
-	 *        list of cookie attributes
-	 *        see http://tools.ietf.org/html/rfc2965#page-5
-	 * @return {Response} This response.
-	 */
+   * Sets a cookie, which will be sent to the client with the response.
+   *
+   * @param {string} name The cookie name.
+   * @param {(boolean|number|string)} value The cookie value, will be
+   *        converted to string.
+   * @param {{domain: string=, expires: (number|string)=, maxAge: number=}}
+   *        options Cookie attributes. Only the attributes listed in the type
+   *        annotation of this field are supported. For documentation and full
+   *        list of cookie attributes
+   *        see http://tools.ietf.org/html/rfc2965#page-5
+   * @return {Response} This response.
+   */
   setCookie(name, value, options = {}) {
     if ($Debug) {
       if (this._isSent === true) {
@@ -265,11 +264,11 @@ export default class Response {
   }
 
   /**
-	 * Return object which contains response status, content and rendered
-	 * page state.
-	 *
-	 * @return {{status: number, content: string, pageState: Object<string, *>}}
-	 */
+   * Return object which contains response status, content and rendered
+   * page state.
+   *
+   * @return {{status: number, content: string, pageState: Object<string, *>}}
+   */
   getResponseParams() {
     return {
       status: this._status,
@@ -279,17 +278,17 @@ export default class Response {
   }
 
   /**
-	 * Return true if response is sent from server to client.
-	 *
-	 * @return {boolean}
-	 */
+   * Return true if response is sent from server to client.
+   *
+   * @return {boolean}
+   */
   isResponseSent() {
     return this._isSent;
   }
 
   /**
-	 * Set cookie headers for response.
-	 */
+   * Set cookie headers for response.
+   */
   _setCookieHeaders() {
     for (let [name, param] of this._internalCookieStorage) {
       let options = this._prepareCookieOptionsForExpress(param.options);
@@ -298,15 +297,15 @@ export default class Response {
   }
 
   /**
-	 * Prepares cookie options for Express.
-	 *
-	 * @param {{domain: string=, expires: (number|string)=, maxAge: number=}}
-	 *        options Cookie attributes. Only the attributes listed in the type
-	 *        annotation of this field are supported. For documentation and full
-	 *        list of cookie attributes
-	 *        see http://tools.ietf.org/html/rfc2965#page-5
-	 * @return {Object} Cookie options prepared for Express.
-	 */
+   * Prepares cookie options for Express.
+   *
+   * @param {{domain: string=, expires: (number|string)=, maxAge: number=}}
+   *        options Cookie attributes. Only the attributes listed in the type
+   *        annotation of this field are supported. For documentation and full
+   *        list of cookie attributes
+   *        see http://tools.ietf.org/html/rfc2965#page-5
+   * @return {Object} Cookie options prepared for Express.
+   */
   _prepareCookieOptionsForExpress(options) {
     let expressOptions = Object.assign({}, options);
 
@@ -319,5 +318,3 @@ export default class Response {
     return expressOptions;
   }
 }
-
-ns.ima.router.Response = Response;

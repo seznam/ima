@@ -1,9 +1,6 @@
-import ns from '../namespace';
 import GenericError from '../error/GenericError';
 import Storage from './Storage';
 import Window from '../window/Window';
-
-ns.namespace('ima.storage');
 
 /**
  * Implementation of the {@codelink Storage} interface that relies on the
@@ -15,37 +12,37 @@ export default class SessionStorage extends Storage {
   }
 
   /**
-	 * Initializes the session storage.
-	 * @param {Window} window
-	 */
+   * Initializes the session storage.
+   * @param {Window} window
+   */
   constructor(window) {
     super();
 
     /**
-		 * The DOM storage providing the actual storage of the entries.
-		 *
-		 * @type {Storage}
-		 */
+     * The DOM storage providing the actual storage of the entries.
+     *
+     * @type {Storage}
+     */
     this._storage = window.getWindow().sessionStorage;
   }
 
   /**
-	 * @inheritdoc
-	 */
+   * @inheritdoc
+   */
   init() {
     return this;
   }
 
   /**
-	 * @inheritdoc
-	 */
+   * @inheritdoc
+   */
   has(key) {
     return !!this._storage.getItem(key);
   }
 
   /**
-	 * @inheritdoc
-	 */
+   * @inheritdoc
+   */
   get(key) {
     try {
       return JSON.parse(this._storage.getItem(key)).value;
@@ -59,8 +56,8 @@ export default class SessionStorage extends Storage {
   }
 
   /**
-	 * @inheritdoc
-	 */
+   * @inheritdoc
+   */
   set(key, value) {
     try {
       this._storage.setItem(
@@ -88,38 +85,38 @@ export default class SessionStorage extends Storage {
   }
 
   /**
-	 * @inheritdoc
-	 */
+   * @inheritdoc
+   */
   delete(key) {
     this._storage.removeItem(key);
     return this;
   }
 
   /**
-	 * @inheritdoc
-	 */
+   * @inheritdoc
+   */
   clear() {
     this._storage.clear();
     return this;
   }
 
   /**
-	 * @inheritdoc
-	 */
+   * @inheritdoc
+   */
   keys() {
     return new StorageIterator(this._storage);
   }
 
   /**
-	 * @override
-	 */
+   * @override
+   */
   size() {
     return this._storage.length;
   }
 
   /**
-	 * Deletes the oldest entry in this storage.
-	 */
+   * Deletes the oldest entry in this storage.
+   */
   _deleteOldestEntry() {
     let oldestEntry = {
       key: null,
@@ -150,34 +147,34 @@ export default class SessionStorage extends Storage {
  */
 class StorageIterator {
   /**
-	 * Initializes the DOM storage iterator.
-	 *
-	 * @param {Storage} storage The DOM storage to iterate through.
-	 */
+   * Initializes the DOM storage iterator.
+   *
+   * @param {Storage} storage The DOM storage to iterate through.
+   */
   constructor(storage) {
     /**
-		 * The DOM storage being iterated.
-		 *
-		 * @type {Storage}
-		 */
+     * The DOM storage being iterated.
+     *
+     * @type {Storage}
+     */
     this._storage = storage;
 
     /**
-		 * The current index of the DOM storage key this iterator will return
-		 * next.
-		 *
-		 * @type {number}
-		 */
+     * The current index of the DOM storage key this iterator will return
+     * next.
+     *
+     * @type {number}
+     */
     this._currentKeyIndex = 0;
   }
 
   /**
-	 * Iterates to the next item. This method implements the iterator protocol.
-	 *
-	 * @return {{done: boolean, value: (undefined|string)}} The next value in
-	 *         the sequence and whether the iterator is done iterating through
-	 *         the values.
-	 */
+   * Iterates to the next item. This method implements the iterator protocol.
+   *
+   * @return {{done: boolean, value: (undefined|string)}} The next value in
+   *         the sequence and whether the iterator is done iterating through
+   *         the values.
+   */
   next() {
     if (this._currentKeyIndex >= this._storage.length) {
       return {
@@ -196,15 +193,13 @@ class StorageIterator {
   }
 
   /**
-	 * Returns the iterator for this object (this iterator). This method
-	 * implements the iterable protocol and provides compatibility with the
-	 * {@code for..of} loops.
-	 *
-	 * @return {StorageIterator} This iterator.
-	 */
+   * Returns the iterator for this object (this iterator). This method
+   * implements the iterable protocol and provides compatibility with the
+   * {@code for..of} loops.
+   *
+   * @return {StorageIterator} This iterator.
+   */
   [Symbol.iterator]() {
     return this;
   }
 }
-
-ns.ima.storage.SessionStorage = SessionStorage;
