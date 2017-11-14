@@ -8,7 +8,8 @@
         "test": "node_modules/.bin/jest",
         "preversion": "npm test && npm run lint",
         "postversion": "npm run build && git commit -am $npm_package_version && git tag $npm_package_version && git push && git push --tags && npm publish dist",
-        "build": "node node_modules/gulp/bin/gulp.js build"
+        "build": "node_modules/.bin/gulp build",
+        "doc": "node_modules/.bin/gulp doc"
     },
     "keywords": [
         "IMA",
@@ -43,6 +44,7 @@
     },
     "license": "MIT",
     "devDependencies": {
+        "babel-core": "^6.26.0",
         "babel-eslint": "^8.0.2",
         "babel-plugin-transform-es2015-modules-commonjs": "^6.26.0",
         "del": "^3.0.0",
@@ -56,7 +58,10 @@
         "eslint-plugin-react": "^7.4.0",
         "gulp": "github:gulpjs/gulp#c120a94",
         "gulp-babel": "^7.0.0",
+        "gulp-change": "^1.0.0",
+        "gulp-jsdoc3": "^1.0.1",
         "gulp-plumber": "^1.1.0",
+        "gulp-rename": "^1.2.2",
         "gulp-tap": "^1.0.1",
         "jest": "^21.2.1",
         "jsdom": "^11.3.0",
