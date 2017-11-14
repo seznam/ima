@@ -8,8 +8,8 @@ const gulpConfig = {
       `${__dirname}/vendorLinker.js`,
       `${__dirname}/!(node_modules|doc|dist|gulp|polyfill)/**/!(*Spec).js`
     ]
-	},
-	parentDir: __dirname
+  },
+  parentDir: __dirname
 };
 
 exports.build = require('./gulp/build')(gulpConfig);
