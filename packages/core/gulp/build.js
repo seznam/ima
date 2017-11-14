@@ -3,11 +3,12 @@ const gulp = require('gulp');
 const babel = require('gulp-babel');
 const plumber = require('gulp-plumber');
 const tap = require('gulp-tap');
-const parentDir = __dirname + '/../';
 let config;
+let parentDir;
 
 module.exports = gulpConfig => {
   config = gulpConfig;
+  parentDir = config.parentDir;
 
   return gulp.series(clean, gulp.parallel(compile, copy));
 };
@@ -71,20 +72,20 @@ function compile() {
         );
       })
     )
-    .pipe(gulp.dest(`${parentDir}dist`));
+    .pipe(gulp.dest(`${parentDir}/dist`));
 }
 
 function copyFiles() {
   return gulp
     .src([
-      `${parentDir}build.js`,
-      `${parentDir}LICENSE`,
-      `${parentDir}package.json`,
-      `${parentDir}.npmignore`,
-      `${parentDir}README.md`,
-      `${parentDir}test.js`
+      `${parentDir}/build.js`,
+      `${parentDir}/LICENSE`,
+      `${parentDir}/package.json`,
+      `${parentDir}/.npmignore`,
+      `${parentDir}/README.md`,
+      `${parentDir}/test.js`
     ])
-    .pipe(gulp.dest(`${parentDir}dist`));
+    .pipe(gulp.dest(`${parentDir}/dist`));
 }
 
 function copyPolyfill() {
