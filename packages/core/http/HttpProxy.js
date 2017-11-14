@@ -110,7 +110,7 @@ export default class HttpProxy {
       fetch(
         this._composeRequestUrl(
           url,
-          !this._shouldRequestHaveBody(method) ? data : {}
+          !this._shouldRequestHaveBody(method) && data ? data : {}
         ),
         this._composeRequestInit(method, data, options)
       )
