@@ -429,12 +429,13 @@ export default class AbstractPageManager extends PageManager {
    * @return {Object<string, (Promise|*)>}
    */
   _getUpdatedExtensionsState() {
-    let controller = this._managedPage.controllerInstance;
+    const controller = this._managedPage.controllerInstance;
     let extensionsState = {};
 
     for (let extension of controller.getExtensions()) {
-      let lastRouteParams = extension.getRouteParams();
-      let extensionState = extension.update(lastRouteParams);
+      const lastRouteParams = extension.getRouteParams();
+      extension.setRouteParams(this._managedPage.params);
+      const extensionState = extension.update(lastRouteParams);
 
       this._setRestrictedPageStateManager(extension, extensionState);
       Object.assign(extensionsState, extensionState);
