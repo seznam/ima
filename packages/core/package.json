@@ -1,6 +1,6 @@
 {
 	"name": "ima",
-	"version": "0.15.0-beta10",
+	"version": "0.15.0-beta11",
 	"description": "IMA.js framework for isomorphic javascript application",
 	"main": "main.js",
 	"scripts": {
