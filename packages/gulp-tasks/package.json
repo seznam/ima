@@ -63,7 +63,7 @@
 		"gulp-save": "^1.2.1",
 		"gulp-sourcemaps": "^2.6.0",
 		"gulp-tap": "^1.0.1",
-		"gulp-uglify-es": "^0.1.3",
+		"gulp-uglify-es": "^0.1.4",
 		"gulp-util": "^3.0.8",
 		"gulp-watch": "^4.3.11",
 		"ima-examples": "^0.15.0-beta2",
