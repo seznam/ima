@@ -190,6 +190,7 @@ exports.files = {
         fetch: {
             name: 'fetch-polyfill.js',
             src: [
+				'./node_modules/core-js/client/shim.min.js',
                 './node_modules/whatwg-fetch/fetch.js'
             ],
             dest: {
