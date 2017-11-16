@@ -4,9 +4,13 @@
     scripts: [],
     loadedScripts: [],
     load: function(script) {
-      this.loadedScripts.push(script.src);
-      if (this.scripts.length === this.loadedScripts.length) {
-        this.run();
+      var runner = root.$IMA.Runner;
+      runner.loadedScripts.push(script.src);
+      if (runner.scripts.length === runner.loadedScripts.length) {
+        if (typeof runner.onLoad === 'function') {
+          runner.onLoad();
+        }
+        runner.run();
       }
     },
     run: function() {
@@ -15,6 +19,10 @@
           return root.$IMA.Loader.import('app/main');
         })
         .catch(function(error) {
+          var runner = root.$IMA.Runner;
+          if (typeof runner.onError === 'function') {
+            root.$IMA.Runner.onError(error);
+          }
           console.error(error);
         });
     }
