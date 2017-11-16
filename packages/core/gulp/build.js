@@ -90,8 +90,8 @@ function copyFiles() {
 
 function copyPolyfill() {
   return gulp
-    .src([`${parentDir}polyfill/*.js`])
-    .pipe(gulp.dest(`${parentDir}dist/polyfill`));
+    .src([`${parentDir}/polyfill/*.js`])
+    .pipe(gulp.dest(`${parentDir}/dist/polyfill`));
 }
 
 function copy(done) {
@@ -99,5 +99,5 @@ function copy(done) {
 }
 
 function clean() {
-  return del(`${parentDir}dist`);
+  return del(`${parentDir}/dist`);
 }
