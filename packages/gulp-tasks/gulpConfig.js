@@ -32,7 +32,8 @@ let vendorOptions = {
 	insertGlobals: false,
 	basedir: '.',
 	cache: {},
-	packageCache: {}
+	packageCache: {},
+	noParse: ['clone']
 };
 let babelConfig = {
     esVendor: {
