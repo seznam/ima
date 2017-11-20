@@ -28,24 +28,24 @@ try {
 }
 
 let vendorOptions = {
-	debug: false,
-	insertGlobals: false,
-	basedir: '.',
-	cache: {},
-	packageCache: {},
-	noParse: ['clone']
+    debug: false,
+    insertGlobals: false,
+    basedir: '.',
+    cache: {},
+    packageCache: {},
+    noParse: ['clone']
 };
 let babelConfig = {
     esVendor: {
         presets: ['react'],
         plugins: ['external-helpers-2'],
-		options: Object.assign({}, vendorOptions)
+        options: Object.assign({}, vendorOptions)
     },
 
     vendor: {
         presets: ['react'],
         plugins: ['external-helpers-2'],
-		options: Object.assign({}, vendorOptions)
+        options: Object.assign({}, vendorOptions)
     },
 
     esApp: {

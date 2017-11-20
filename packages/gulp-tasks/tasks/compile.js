@@ -237,7 +237,8 @@ exports.default = (gulpConfig) => {
             })
             .transform('loose-envify', {
                 NODE_ENV: process.env.NODE_ENV || 'development'
-            });
+            })
+            .transform('ima-clientify');
 
             if (sharedTasksState.watchMode) {
                 vendorBundle.plugin([watchify]);
@@ -264,7 +265,8 @@ exports.default = (gulpConfig) => {
             })
             .transform('loose-envify', {
                 NODE_ENV: process.env.NODE_ENV || 'development'
-            });
+            })
+            .transform('ima-clientify');
 
             if (sharedTasksState.watchMode) {
                 vendorEsBundle.plugin([watchify]);
