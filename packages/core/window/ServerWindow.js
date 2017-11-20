@@ -1,6 +1,6 @@
 import Window from './Window';
 
-// @server-side export default class ServerWindow extends Window {}
+// @server-side class ServerWindow extends __VARIABLE__ {__CLEAR__}\nexports.default = ServerWindow;
 
 /**
  * Server-side implementation of the {@code Window} utility API.

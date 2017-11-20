@@ -1,4 +1,4 @@
-// @server-side export default class {}
+// @server-side class Request extends __VARIABLE__ {__CLEAR__}\nexports.default = Request;
 
 /**
  * Wrapper for the ExpressJS request, exposing only the necessary minimum.

@@ -1,6 +1,6 @@
 import GenericError from '../error/GenericError';
 
-// @server-side export default class {}
+// @server-side class Response extends __VARIABLE__ {__CLEAR__}\nexports.default = Response;
 
 /**
  * Wrapper for the ExpressJS response, exposing only the necessary minimum.

@@ -3,11 +3,13 @@ export default (ns, oc, config) => {
 
   oc.get('$Dispatcher').clear();
 
-  oc.get('$Request').init(config.request);
-
-  oc.get('$Response').init(config.response, oc.get('$CookieTransformFunction'));
-
   if (!oc.get('$Window').isClient()) {
+    oc.get('$Request').init(config.request);
+
+    oc
+      .get('$Response')
+      .init(config.response, oc.get('$CookieTransformFunction'));
+
     oc.get('$CookieStorage').clear();
 
     oc.get('$SessionStorage').clear();

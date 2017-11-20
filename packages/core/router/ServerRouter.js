@@ -5,7 +5,7 @@ import RouteFactory from './RouteFactory';
 import Dispatcher from '../event/Dispatcher';
 import PageManager from '../page/manager/PageManager';
 
-// @server-side export default class ServerRouter extends AbstractRouter {}
+// @server-side class ServerRouter extends __VARIABLE__ {__CLEAR__}\nexports.default = ServerRouter;
 
 /**
  * The server-side implementation of the {@codelink Router} interface.

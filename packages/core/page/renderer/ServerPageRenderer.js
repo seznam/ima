@@ -1,7 +1,7 @@
 import AbstractPageRenderer from './AbstractPageRenderer';
 import GenericError from '../../error/GenericError';
 
-// @server-side export default class ServerPageRenderer extends AbstractPageRenderer {}
+// @server-side class ServerPageRenderer extends __VARIABLE__ {__CLEAR__}\nexports.default = ServerPageRenderer;
 
 let imaLoader = '';
 let imaRunner = '';

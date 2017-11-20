@@ -3,7 +3,7 @@ import PageRenderer from '../renderer/PageRenderer';
 import PageStateManager from '../state/PageStateManager';
 import AbstractPageManager from './AbstractPageManager';
 
-// @server-side export default class ServerPageManager extends AbstractPageManager {}
+// @server-side class ServerPageManager extends __VARIABLE__ {__CLEAR__}\nexports.default = ServerPageManager;
 
 /**
  * Page manager for controller on the server side.
