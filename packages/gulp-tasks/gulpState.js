@@ -1,4 +1,3 @@
-
 // This file contains the shared state of gulp tasks, so that we wouldn't have
 // to resort to using globals.
 //

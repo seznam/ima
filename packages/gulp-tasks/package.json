@@ -4,6 +4,7 @@
 	"description": "Default gulp tasks for IMA.js applications.",
 	"main": "",
 	"scripts": {
+		"lint": "node_modules/.bin/eslint -c ./.eslintrc.js --fix './**/*.js' --ignore-path ./.prettierignore",
 		"test": "echo \"Error: no test specified\" && exit 1"
 	},
 	"repository": {
@@ -24,10 +25,17 @@
 		"registry": "http://registry.npmjs.org/"
 	},
 	"homepage": "https://github.com/seznam/IMA.js-gulp-tasks",
-	"devDependencies": {},
+	"devDependencies": {
+		"babel-eslint": "^8.0.2",
+		"eslint": "^4.10.0",
+		"eslint-config-last": "^0.0.3",
+		"eslint-config-prettier": "^2.7.0",
+		"eslint-plugin-prettier": "^2.3.1",
+		"prettier": "^1.8.2"
+	},
 	"dependencies": {
 		"babel-core": "^6.26.0",
-		"babel-plugin-external-helpers-2": "^6.3.13",
+		"babel-plugin-external-helpers": "^6.22.0",
 		"babel-plugin-transform-es2015-modules-systemjs": "^6.24.1",
 		"babel-plugin-transform-react-constant-elements": "^6.23.0",
 		"babel-plugin-transform-react-inline-elements": "^6.22.0",
@@ -62,7 +70,6 @@
 		"gulp-rename": "^1.2.2",
 		"gulp-save": "^1.2.1",
 		"gulp-sourcemaps": "^2.6.0",
-		"gulp-tap": "^1.0.1",
 		"gulp-uglify-es": "^0.1.4",
 		"gulp-util": "^3.0.8",
 		"gulp-watch": "^4.3.11",
