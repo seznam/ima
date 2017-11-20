@@ -227,10 +227,9 @@ exports.default = (gulpConfig) => {
         }
 
         let sourceFile = files.vendor.dest.tmp + files.vendor.src.client;
-        let options = { debug: false, insertGlobals: false, basedir: '.',  cache: {}, packageCache: {} };
 
         if (!vendorBundle) {
-            vendorBundle = browserify(sourceFile, options)
+            vendorBundle = browserify(sourceFile, babelConfig.vendor.options)
             .transform('babelify', {
                 babelrc: false,
                 presets: babelConfig.vendor.presets,
@@ -255,10 +254,9 @@ exports.default = (gulpConfig) => {
 
     function esVendorClient() {
         let sourceFile = files.vendor.dest.tmp + files.vendor.src.client;
-        let options = { debug: false, insertGlobals: false, basedir: '.',  cache: {}, packageCache: {} };
 
         if (!vendorEsBundle) {
-            vendorEsBundle = browserify(sourceFile, options)
+            vendorEsBundle = browserify(sourceFile, babelConfig.esVendor.options)
             .transform('babelify', {
                 babelrc: false,
                 presets: babelConfig.esVendor.presets,
