@@ -233,7 +233,6 @@ exports.default = (gulpConfig) => {
             vendorBundle = browserify(sourceFile, options)
             .transform('babelify', {
                 babelrc: false,
-                global: true,
                 presets: babelConfig.vendor.presets,
                 plugins: babelConfig.vendor.plugins
             })
@@ -262,7 +261,6 @@ exports.default = (gulpConfig) => {
             vendorEsBundle = browserify(sourceFile, options)
             .transform('babelify', {
                 babelrc: false,
-                global: true,
                 presets: babelConfig.esVendor.presets,
                 plugins: babelConfig.esVendor.plugins
             })
