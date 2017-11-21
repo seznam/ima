@@ -365,8 +365,9 @@ export default class HttpAgentImpl extends HttpAgent {
    */
   _prepareOptions(options) {
     let extraOptions = {
-      cookie: this._cookie.getCookiesStringForCookieHeader(),
-      headers: {}
+      headers: {
+		  cookie: this._cookie.getCookiesStringForCookieHeader()
+	  }
     };
 
     let composedOptions = Object.assign(
