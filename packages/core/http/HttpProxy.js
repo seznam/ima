@@ -110,7 +110,7 @@ export default class HttpProxy {
       fetch(
         this._composeRequestUrl(
           url,
-          !this._shouldRequestHaveBody(method) && data ? data : {}
+          !this._shouldRequestHaveBody(method, data) ? data : {}
         ),
         this._composeRequestInit(method, data, options)
       )
@@ -393,9 +393,11 @@ export default class HttpProxy {
    * @return {RequestInit} A `RequestInit` object of the Fetch API.
    */
   _composeRequestInit(method, data, options) {
-    if (!options.headers['Content-Type']) {
-      options.headers['Content-Type'] = this._getContentType(data);
-    }
+    options.headers['Content-Type'] = this._getContentType(
+      method,
+      data,
+      options
+    );
 
     let requestInit = {
       method: method.toUpperCase(),
@@ -404,7 +406,7 @@ export default class HttpProxy {
       redirect: 'follow'
     };
 
-    if (this._shouldRequestHaveBody(method)) {
+    if (this._shouldRequestHaveBody(method, data)) {
       requestInit.body = JSON.stringify(data);
     }
 
@@ -414,22 +416,25 @@ export default class HttpProxy {
   }
 
   /**
-   * Gets a `Content-Type` header value by the data.
+   * Gets a `Content-Type` header value for defined method, data and options.
    *
-   * @param {*} data The data to be send with a request.
+   * @param {string} method The HTTP method to use.
+   * @param {Object.<string, (boolean|number|string|Date)>} data The data to
+   *        be send with a request.
+   * @param {HttpAgent~RequestOptions} options Options provided by the HTTP
+   *        agent.
    * @return {string} A `Content-Type` header value.
    */
-  _getContentType(data) {
-    switch (typeof data) {
-      case 'object':
-        return 'application/json';
-
-      case 'string':
-        return 'text/plain';
-
-      default:
-        return '';
+  _getContentType(method, data, options) {
+    if (options.headers['Content-Type']) {
+      return options.headers['Content-Type'];
     }
+
+    if (this._shouldRequestHaveBody(method, data)) {
+      return 'application/json';
+    }
+
+    return '';
   }
 
   /**
@@ -459,9 +464,15 @@ export default class HttpProxy {
    * have a body).
    *
    * @param {string} method The HTTP method.
+   * @param {Object.<string, (boolean|number|string|Date)>} data The data to
+   *        be send with a request.
    * @return {boolean} `true` if a request has a body, otherwise `false`.
    */
-  _shouldRequestHaveBody(method) {
-    return ['get', 'head'].indexOf(method.toLowerCase()) === -1;
+  _shouldRequestHaveBody(method, data) {
+    return (
+      ['get', 'head'].indexOf(method.toLowerCase()) === -1 &&
+      data &&
+      Object.keys(data).length !== 0
+    );
   }
 }

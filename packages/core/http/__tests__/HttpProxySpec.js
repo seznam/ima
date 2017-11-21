@@ -14,9 +14,13 @@ describe('ima.http.HttpProxy', () => {
     headers: [],
     withCredentials: true
   };
-  const DATA = {};
+  const DATA = {
+    something: 'query'
+  };
 
-  const mockedUrlTransformer = toMockedInstance(UrlTransformer);
+  const mockedUrlTransformer = toMockedInstance(UrlTransformer, {
+    transform: url => url
+  });
   const mockedWindowHelper = toMockedInstance(Window);
 
   let proxy;
