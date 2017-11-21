@@ -408,6 +408,8 @@ export default class HttpProxy {
       requestInit.body = JSON.stringify(data);
     }
 
+    Object.assign(requestInit, options.fetchOptions || {});
+
     return requestInit;
   }
 

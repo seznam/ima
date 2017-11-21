@@ -9,6 +9,7 @@
  * @property {Object<string, string>} [headers] Sets the additional request
  *           headers (the keys are case-insensitive header names, the values
  *           are header values).
+ * @property {Object<string, *>} [fetchOptions] Sets the fetch request options.
  * @property {boolean} [cache] Flag that enables caching the HTTP request
  *           (enabled by default, also applies to requests in progress).
  * @property {boolean} [withCredentials] Flag that indicates whether the

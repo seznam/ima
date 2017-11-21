@@ -81,6 +81,7 @@ export default class HttpAgentImpl extends HttpAgent {
      *         headers: Object<string, string>,
      *         cache: boolean,
      *         withCredentials: boolean,
+     *         fetchOptions: Object<string, *>,
      *         postProcessor: function(Object<string, *>)
      *       }}
      */
@@ -366,8 +367,8 @@ export default class HttpAgentImpl extends HttpAgent {
   _prepareOptions(options) {
     let extraOptions = {
       headers: {
-		  cookie: this._cookie.getCookiesStringForCookieHeader()
-	  }
+        cookie: this._cookie.getCookiesStringForCookieHeader()
+      }
     };
 
     let composedOptions = Object.assign(
