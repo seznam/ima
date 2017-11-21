@@ -10,6 +10,8 @@ if (typeof $Debug !== 'undefined' && $Debug) {
   Object.freeze(PRIVATE);
 }
 
+// @server-side class AbstractDocumentView extends __VARIABLE__ {__CLEAR__}\nexports.default = AbstractDocumentView;
+
 /**
  * The base class for document view components. The document view components
  * create the basic markup, i.e. the {@code html} or {@code head} elements,
