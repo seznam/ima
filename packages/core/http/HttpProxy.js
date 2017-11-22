@@ -449,7 +449,7 @@ export default class HttpProxy {
    */
   _composeRequestUrl(url, data) {
     const transformedUrl = this._transformer.transform(url);
-    const queryString = Object.keys(data)
+    const queryString = Object.keys(data || {})
       .map(key => [key, data[key]].map(encodeURIComponent).join('='))
       .join('&');
     const delimeter = queryString
