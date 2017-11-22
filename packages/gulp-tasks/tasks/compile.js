@@ -242,7 +242,7 @@ exports.default = gulpConfig => {
       vendorBundle = browserify(sourceFile, babelConfig.vendor.options)
         .transform('babelify', {
           babelrc: false,
-		  global: true,
+          global: true,
           presets: babelConfig.vendor.presets,
           plugins: babelConfig.vendor.plugins
         })
