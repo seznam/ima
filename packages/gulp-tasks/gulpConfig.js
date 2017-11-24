@@ -55,7 +55,7 @@ let babelConfig = {
 
   app: {
     presets: [],
-    plugins: []
+    plugins: ['external-helpers']
   },
 
   server: {
@@ -69,7 +69,8 @@ let legacyCompactMode = false;
 if (['production', 'prod', 'test'].includes(process.env.NODE_ENV)) {
   const esPlugins = [
     'transform-react-constant-elements',
-    'transform-react-inline-elements'
+    'transform-react-inline-elements',
+    'transform-react-remove-prop-types'
   ];
   babelConfig.esApp.plugins = babelConfig.esApp.plugins.concat(esPlugins);
   babelConfig.esVendor.plugins = babelConfig.esVendor.plugins.concat(esPlugins);
