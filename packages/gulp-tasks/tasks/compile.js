@@ -14,10 +14,10 @@ let remember = require('gulp-remember');
 let save = require('gulp-save');
 let source = require('vinyl-source-stream');
 let sourcemaps = require('gulp-sourcemaps');
-let gulpIgnore = require('gulp-ignore');
 let gutil = require('gulp-util');
 let uglifyEs = require('gulp-uglify-es').default;
 let buffer = require('vinyl-buffer');
+let clientify = require('ima-clientify').clientify;
 
 let sharedTasksState = require('../gulpState');
 
@@ -54,19 +54,35 @@ exports.default = gulpConfig => {
       });
     }
 
-    function excludeServerSideFile(file) {
-      return (
-        file.contents.toString().indexOf('@server-side') !== -1 &&
-        files.app.clearServerSide
-      );
+    function excludeServerSideFile() {
+      return change(content => {
+        return clientify(content, true);
+      });
     }
 
     function compileToLegacyCode() {
       if (gulpConfig.legacyCompactMode) {
         return babel({
+          babelrc: false,
           moduleIds: true,
           presets: babelConfig.app ? babelConfig.app.presets : [],
           plugins: babelConfig.app ? babelConfig.app.plugins : []
+        });
+      } else {
+        return gutil.noop();
+      }
+    }
+
+    function compileToEsCode() {
+      if (
+        babelConfig.esApp.presets.length ||
+        babelConfig.esApp.plugins.length
+      ) {
+        return babel({
+          babelrc: false,
+          moduleIds: true,
+          presets: babelConfig.esApp.presets,
+          plugins: babelConfig.esApp.plugins
         });
       } else {
         return gutil.noop();
@@ -78,20 +94,21 @@ exports.default = gulpConfig => {
       .pipe(resolveNewPath(files.app.base || '/'))
       .pipe(plumber())
       .pipe(sourcemaps.init())
-      .pipe(cache('Es6ToEs5:es:app'))
+      .pipe(cache('Es6ToEs5:server:app'))
       .pipe(
         babel({
           babelrc: false,
           moduleIds: true,
-          presets: babelConfig.esApp.presets,
-          plugins: babelConfig.esApp.plugins
+          presets: babelConfig.serverApp.presets,
+          plugins: babelConfig.serverApp.plugins
         })
       )
-      .pipe(remember('Es6ToEs5:es:app'))
+      .pipe(remember('Es6ToEs5:server:app'))
       .pipe(plumber.stop())
       .pipe(replaceToIMALoader())
       .pipe(save('Es6ToEs5:es:app:source'))
-      .pipe(gulpIgnore.exclude(excludeServerSideFile))
+      .pipe(compileToEsCode())
+      .pipe(excludeServerSideFile())
       .pipe(save('Es6ToEs5:es:app:client'))
       .pipe(concat(files.app.name.esClient))
       .pipe(insert.wrap('(function(){\n', '\n })();\n'))

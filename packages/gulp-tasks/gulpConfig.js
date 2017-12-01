@@ -41,23 +41,23 @@ let babelConfig = {
     plugins: ['external-helpers'],
     options: Object.assign({}, vendorOptions)
   },
-
   vendor: {
-    presets: ['react'],
+    presets: ['es2017', 'es2016', ['es2015', { loose: true }], 'react'],
     plugins: ['external-helpers'],
     options: Object.assign({}, vendorOptions)
   },
-
-  esApp: {
+  serverApp: {
     presets: ['react'],
     plugins: ['transform-es2015-modules-systemjs', 'external-helpers']
   },
-
-  app: {
+  esApp: {
     presets: [],
     plugins: ['external-helpers']
   },
-
+  app: {
+    presets: ['es2017', 'es2016', ['es2015', { loose: true }]],
+    plugins: ['external-helpers']
+  },
   server: {
     presets: ['react'],
     plugins: ['transform-es2015-modules-commonjs']
@@ -74,13 +74,6 @@ if (['production', 'prod', 'test'].includes(process.env.NODE_ENV)) {
   ];
   babelConfig.esApp.plugins = babelConfig.esApp.plugins.concat(esPlugins);
   babelConfig.esVendor.plugins = babelConfig.esVendor.plugins.concat(esPlugins);
-  babelConfig.app.presets = ['es2017', 'es2016', ['es2015', { loose: true }]];
-  babelConfig.vendor.presets = [
-    'es2017',
-    'es2016',
-    ['es2015', { loose: true }],
-    'react'
-  ];
   $Debug = false;
   legacyCompactMode = true;
 }
@@ -90,13 +83,6 @@ if (
   (process.argv.some(arg => /^--legacy-compat-mode$/.test(arg)) ||
     Object.keys(process.env).includes('npm_config_legacy_compat_mode'))
 ) {
-  babelConfig.app.presets = ['es2017', 'es2016', ['es2015', { loose: true }]];
-  babelConfig.vendor.presets = [
-    'es2017',
-    'es2016',
-    ['es2015', { loose: true }],
-    'react'
-  ];
   legacyCompactMode = true;
 }
 

@@ -38,10 +38,10 @@ exports.default = gulpConfig => {
         hotReloadedCacheKeys.push(cacheKey);
 
         if (event === 'unlink') {
-          if (cache.caches['Es6ToEs5:es:app'][absoluteFilePath]) {
-            delete cache.caches['Es6ToEs5:es:app'][absoluteFilePath];
+          if (cache.caches['Es6ToEs5:server:app'][absoluteFilePath]) {
+            delete cache.caches['Es6ToEs5:server:app'][absoluteFilePath];
             remember.forget(
-              'Es6ToEs5:es:app',
+              'Es6ToEs5:server:app',
               absoluteFilePath.replace('.jsx', '.js')
             );
           }
@@ -66,7 +66,7 @@ exports.default = gulpConfig => {
           hotReloadedContents = fs.readFileSync('./build/static/' + filepath);
         } else {
           hotReloadedContents = hotReloadedCacheKeys.map(cacheKey => {
-            let file = remember.cacheFor('Es6ToEs5:es:app')[cacheKey];
+            let file = remember.cacheFor('Es6ToEs5:server:app')[cacheKey];
             if (!file) {
               return '';
             }
