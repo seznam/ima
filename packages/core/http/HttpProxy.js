@@ -469,10 +469,6 @@ export default class HttpProxy {
    * @return {boolean} `true` if a request has a body, otherwise `false`.
    */
   _shouldRequestHaveBody(method, data) {
-    return (
-      ['get', 'head'].indexOf(method.toLowerCase()) === -1 &&
-      data &&
-      Object.keys(data).length !== 0
-    );
+    return ['get', 'head'].indexOf(method.toLowerCase()) === -1 && data;
   }
 }

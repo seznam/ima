@@ -189,6 +189,15 @@ describe('ima.http.HttpProxy', () => {
         }
       });
 
+      it('should set body and Content-Type: application/json for other requests than GET/HEAD even for an empty object', async () => {
+        await proxy.request(method, API_URL, {}, OPTIONS);
+
+        if (['get', 'head'].indexOf(method) === -1) {
+          expect(requestInit.body).toBeDefined();
+          expect(requestInit.headers['Content-Type']).toBe('application/json');
+        }
+      });
+
       it('should return null body for HTTP status NO_CONTENT', async () => {
         response.status = StatusCode.NO_CONTENT;
         const result = await proxy.request(method, API_URL, DATA, OPTIONS);
