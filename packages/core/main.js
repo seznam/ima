@@ -135,6 +135,8 @@ function getTestClientBootConfig(initialAppConfigFunctions) {
 function bootClientApp(app, bootConfig) {
   app.bootstrap.run(bootConfig);
 
+  $IMA.$Dispatcher = app.oc.get('$Dispatcher');
+
   let cache = app.oc.get('$Cache');
   cache.deserialize($IMA.Cache || {});
 
