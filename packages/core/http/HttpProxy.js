@@ -399,6 +399,10 @@ export default class HttpProxy {
       options
     );
 
+    for (let [headerName, headerValue] of this._defaultHeaders) {
+      options.headers[headerName] = headerValue;
+    }
+
     let requestInit = {
       method: method.toUpperCase(),
       headers: options.headers,
