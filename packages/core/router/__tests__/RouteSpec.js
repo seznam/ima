@@ -1352,9 +1352,7 @@ describe('ima.router.Route', function() {
       ],
       function(value) {
         const { path, clearPathExpr, result } = value;
-        it(`should check parametres order for '${
-          path
-        }' [${result.toString()}]`, function() {
+        it(`should check parametres order for '${path}' [${result.toString()}]`, function() {
           const localRoute = new Route('unknown', path, 'unknown');
 
           const isCorrectParamOrder = localRoute._checkParametersOrder(

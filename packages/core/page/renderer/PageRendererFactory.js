@@ -107,9 +107,7 @@ export default class PageRendererFactory {
   _resolveClassConstructor(view) {
     if ($Debug && typeof view === 'string') {
       throw new Error(
-        `The namespace was removed. You must pass react component instead of namespace ${
-          view
-        }.`
+        `The namespace was removed. You must pass react component instead of namespace ${view}.`
       );
     }
 

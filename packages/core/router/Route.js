@@ -398,9 +398,7 @@ export default class Route {
    * @return {string} New path.
    */
   _substituteOptionalParamInPath(path, paramName, paramValue) {
-    const paramRegexp = `${PARAMS_START_PATTERN}:\\?${paramName}(${
-      PARAMS_END_PATTERN
-    })`;
+    const paramRegexp = `${PARAMS_START_PATTERN}:\\?${paramName}(${PARAMS_END_PATTERN})`;
     return path.replace(
       new RegExp(paramRegexp),
       paramValue ? '$1' + encodeURIComponent(paramValue) + '$2' : '/'
@@ -436,9 +434,7 @@ export default class Route {
    * @return {boolean}
    */
   _isOptionalParamInPath(path, paramName) {
-    const paramRegexp = `${PARAMS_START_PATTERN}:\\?${paramName}(?:${
-      PARAMS_END_PATTERN
-    })`;
+    const paramRegexp = `${PARAMS_START_PATTERN}:\\?${paramName}(?:${PARAMS_END_PATTERN})`;
     let regexp = new RegExp(paramRegexp);
     return regexp.test(path);
   }

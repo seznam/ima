@@ -132,9 +132,7 @@ describe('ima.page.renderer.ClientPageRenderer', function() {
         });
     });
 
-    it('should return resolved promise with object of property content, status and pageState', function(
-      done
-    ) {
+    it('should return resolved promise with object of property content, status and pageState', function(done) {
       spyOn(controller, 'getHttpStatus').and.returnValue(200);
 
       pageRenderer
@@ -230,9 +228,7 @@ describe('ima.page.renderer.ClientPageRenderer', function() {
         });
     });
 
-    it('should return resolved promise with object of property content, status and pageState', function(
-      done
-    ) {
+    it('should return resolved promise with object of property content, status and pageState', function(done) {
       spyOn(controller, 'getHttpStatus').and.returnValue(200);
 
       pageRenderer
