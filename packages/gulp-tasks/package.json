@@ -26,12 +26,12 @@
 	},
 	"homepage": "https://github.com/seznam/IMA.js-gulp-tasks",
 	"devDependencies": {
-		"babel-eslint": "^8.0.2",
-		"eslint": "^4.10.0",
-		"eslint-config-last": "^0.0.3",
-		"eslint-config-prettier": "^2.7.0",
+		"babel-eslint": "^8.0.3",
+		"eslint": "^4.12.1",
+		"eslint-config-last": "^0.0.5",
+		"eslint-config-prettier": "^2.9.0",
 		"eslint-plugin-prettier": "^2.3.1",
-		"prettier": "^1.8.2"
+		"prettier": "^1.9.1"
 	},
 	"dependencies": {
 		"babel-core": "^6.26.0",
@@ -70,7 +70,7 @@
 		"gulp-rename": "^1.2.2",
 		"gulp-save": "^1.2.1",
 		"gulp-sourcemaps": "^2.6.0",
-		"gulp-uglify-es": "^0.1.4",
+		"gulp-uglify-es": "^0.1.8",
 		"gulp-util": "^3.0.8",
 		"gulp-watch": "^4.3.11",
 		"ima-clientify": "^0.1.2",
