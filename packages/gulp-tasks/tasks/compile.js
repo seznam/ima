@@ -311,6 +311,11 @@ exports.default = gulpConfig => {
 
     return vendorEsBundle
       .bundle()
+      .on('error', function(err) {
+        throw new gutil.PluginError('Es6ToEs5:vendor:client', err, {
+          showStack: true
+        });
+      })
       .pipe(source(files.vendor.name.esClient))
       .pipe(buffer())
       .pipe(

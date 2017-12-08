@@ -17,18 +17,18 @@ exports.default = gulpConfig => {
     process.on('SIGHUP', gulpConfig.onTerminate.bind(null, 'SIGHUP'));
   }
 
-  function dev() {
+  function dev(done) {
     sharedTasksState.watchMode = true;
 
-    return gulp.series(...prepareTasks(devTasks))();
+    return gulp.series(...prepareTasks(devTasks))(done);
   }
 
-  function build() {
-    return gulp.series(...prepareTasks(buildTasks))();
+  function build(done) {
+    return gulp.series(...prepareTasks(buildTasks))(done);
   }
 
-  function buildSpa() {
-    return gulp.series(...prepareTasks(buildSpaTasks))();
+  function buildSpa(done) {
+    return gulp.series(...prepareTasks(buildSpaTasks))(done);
   }
 
   return {
