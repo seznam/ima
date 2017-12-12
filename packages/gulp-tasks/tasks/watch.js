@@ -73,8 +73,7 @@ exports.default = gulpConfig => {
 
             return file.contents
               .toString()
-              .replace(/System.import/g, '$IMA.Loader.import')
-              .replace(/System.register/g, '$IMA.Loader.replaceModule');
+              .replace(/\$IMA.Loader.register/g, '$IMA.Loader.replaceModule');
           });
           hotReloadedCacheKeys = [];
         }

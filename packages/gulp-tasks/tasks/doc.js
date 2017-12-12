@@ -1,6 +1,6 @@
 let del = require('del');
 let gulp = require('gulp');
-let change = require('gulp-change');
+let tap = require('gulp-tap');
 let jsdoc = require('gulp-jsdoc3');
 let rename = require('gulp-rename');
 
@@ -43,7 +43,8 @@ exports.default = gulpConfig => {
     return gulp
       .src(files.app.src)
       .pipe(
-        change(content => {
+        tap(file => {
+          let content = file.contents.toString();
           let oldContent = null;
 
           while (content !== oldContent) {
@@ -54,7 +55,8 @@ exports.default = gulpConfig => {
             }
           }
 
-          return content;
+          file = file.clone();
+          file.contents = new Buffer(content);
         })
       )
       .pipe(rename(file => (file.extname = '.js')))
