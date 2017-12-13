@@ -55,8 +55,9 @@ exports.default = gulpConfig => {
             }
           }
 
-          file = file.clone();
-          file.contents = new Buffer(content);
+          if (content) {
+            file.contents = new Buffer(content);
+          }
         })
       )
       .pipe(rename(file => (file.extname = '.js')))

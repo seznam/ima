@@ -3,7 +3,7 @@ let babel = require('gulp-babel');
 let browserify = require('browserify');
 let watchify = require('watchify');
 let cache = require('gulp-cached');
-let change = require('gulp-change');
+let tap = require('gulp-tap');
 let concat = require('gulp-concat');
 let del = require('del');
 let es = require('event-stream');
@@ -32,42 +32,47 @@ exports.default = gulpConfig => {
 
   function Es6ToEs5App() {
     function insertSystemImports() {
-      return change(content => {
-        content =
-          content +
-          '\n' +
-          '$IMA.Loader.initAllModules();\n' +
-          'Promise.all([$IMA.Loader.import("app/main")])\n' +
-          '.catch(function (error) { \n' +
-          'console.error(error); \n });';
-
-        return content;
+      return tap(file => {
+        file.contents = Buffer.concat([
+          file.contents,
+          new Buffer(
+            '\n' +
+              '$IMA.Loader.initAllModules();\n' +
+              'Promise.all([$IMA.Loader.import("app/main")])\n' +
+              '.catch(function (error) { \n' +
+              'console.error(error); \n });'
+          )
+        ]);
       });
     }
 
     function replaceToIMALoader() {
-      return change(content => {
-        content = content.replace(/System.import/g, '$IMA.Loader.import');
-        content = content.replace(/System.register/g, '$IMA.Loader.register');
+      return tap(file => {
+        let content = file.contents.toString();
 
-        return content;
+        if (content) {
+          content = content.replace(/System.import/g, '$IMA.Loader.import');
+          content = content.replace(/System.register/g, '$IMA.Loader.register');
+
+          file.contents = new Buffer(content);
+        }
       });
     }
 
     function excludeServerSideFile() {
-      return change(content => {
-        return clientify(content, true);
+      return tap(file => {
+        let content = file.contents.toString();
+
+        if (content) {
+          content = clientify(content, true);
+          file.contents = new Buffer(content);
+        }
       });
     }
 
-    function compileToLegacyCode() {
+    function doOnlyForLegacy(action) {
       if (gulpConfig.legacyCompactMode) {
-        return babel({
-          babelrc: false,
-          moduleIds: true,
-          presets: babelConfig.app ? babelConfig.app.presets : [],
-          plugins: babelConfig.app ? babelConfig.app.plugins : []
-        });
+        return action;
       } else {
         return gutil.noop();
       }
@@ -107,19 +112,32 @@ exports.default = gulpConfig => {
       .pipe(plumber.stop())
       .pipe(replaceToIMALoader())
       .pipe(save('Es6ToEs5:es:app:source'))
+      .pipe(cache('Es6ToEs5:es:app'))
       .pipe(compileToEsCode())
       .pipe(excludeServerSideFile())
+      .pipe(remember('Es6ToEs5:es:app'))
       .pipe(save('Es6ToEs5:es:app:client'))
       .pipe(concat(files.app.name.esClient))
       .pipe(insert.wrap('(function(){\n', '\n })();\n'))
       .pipe(sourcemaps.write())
       .pipe(gulp.dest(files.app.dest.client))
-      .pipe(save.restore('Es6ToEs5:es:app:client'))
-      .pipe(compileToLegacyCode())
-      .pipe(concat(files.app.name.client))
-      .pipe(insert.wrap('(function(){\n', '\n })();\n'))
-      .pipe(sourcemaps.write())
-      .pipe(gulp.dest(files.app.dest.client))
+      .pipe(doOnlyForLegacy(save.restore('Es6ToEs5:es:app:client')))
+      .pipe(doOnlyForLegacy(cache('Es6ToEs5:legacy:app')))
+      .pipe(
+        doOnlyForLegacy(
+          babel({
+            babelrc: false,
+            moduleIds: true,
+            presets: babelConfig.app ? babelConfig.app.presets : [],
+            plugins: babelConfig.app ? babelConfig.app.plugins : []
+          })
+        )
+      )
+      .pipe(doOnlyForLegacy(remember('Es6ToEs5:legacy:app')))
+      .pipe(doOnlyForLegacy(concat(files.app.name.client)))
+      .pipe(doOnlyForLegacy(insert.wrap('(function(){\n', '\n })();\n')))
+      .pipe(doOnlyForLegacy(sourcemaps.write()))
+      .pipe(doOnlyForLegacy(gulp.dest(files.app.dest.client)))
       .pipe(save.restore('Es6ToEs5:es:app:source'))
       .pipe(concat(files.app.name.server))
       .pipe(insertSystemImports())
