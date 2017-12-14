@@ -114,6 +114,13 @@ export default class ServerWindow extends Window {
   /**
    * @inheritdoc
    */
+  getHistoryState() {
+    return {};
+  }
+
+  /**
+   * @inheritdoc
+   */
   querySelector(selector) {
     return null;
   }
