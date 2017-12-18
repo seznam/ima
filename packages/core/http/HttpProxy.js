@@ -520,10 +520,11 @@ export default class HttpProxy {
    * @private
    */
   _convertObjectToFormData(object) {
-    if (window.FormData === undefined) {
+    const window = this._window.getWindow();
+
+    if (!window || !window.FormData) {
       return object;
     }
-
     const formDataObject = new FormData();
     Object.keys(object).forEach(key => formDataObject.append(key, object[key]));
 
