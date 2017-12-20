@@ -141,6 +141,13 @@ export default class Window {
   getElementById(id) {}
 
   /**
+   * Returns the history state.
+   *
+   * @return {Object} The current history state
+   */
+  getHistoryState() {}
+
+  /**
    * Returns the first element matching the specified CSS 3 selector.
    *
    * @param {string} selector The CSS selector.
