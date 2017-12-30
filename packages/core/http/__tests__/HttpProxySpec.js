@@ -182,51 +182,49 @@ describe('ima.http.HttpProxy', () => {
       it('should not set any body to a GET/HEAD request', async () => {
         await proxy.request(method, API_URL, DATA, OPTIONS);
 
-        if (['get', 'head'].indexOf(method) >= 0) {
+        if (['get', 'head'].includes(method) === true) {
           expect(requestInit.body).not.toBeDefined();
         } else {
           expect(requestInit.body).toBeDefined();
         }
       });
 
-      it('should set body and Content-Type: application/json for other requests than GET/HEAD even for an empty object', async () => {
-        await proxy.request(method, API_URL, {}, OPTIONS);
+      if (['get', 'head'].includes(method) === false) {
+        it('should set body and Content-Type: application/json for other requests than GET/HEAD even for an empty object', async () => {
+          await proxy.request(method, API_URL, {}, OPTIONS);
 
-        if (['get', 'head'].indexOf(method) === -1) {
           expect(requestInit.body).toBeDefined();
           expect(requestInit.headers['Content-Type']).toBe('application/json');
-        }
-      });
-
-      it(`should convert body to query string if header 'Content-Type' is set to 'application/x-www-form-urlencoded'`, async () => {
-        const options = Object.assign({}, OPTIONS, {
-          headers: {
-            'Content-Type': 'application/x-www-form-urlencoded'
-          }
         });
-        const data = { testKey: 'testValue', testKey2: 'testValue2' };
-        await proxy.request(method, API_URL, data, options);
 
-        if (['get', 'head'].indexOf(method) === -1) {
+        it(`should convert body to query string if header 'Content-Type' is set to 'application/x-www-form-urlencoded'`, async () => {
+          const options = Object.assign({}, OPTIONS, {
+            headers: {
+              'Content-Type': 'application/x-www-form-urlencoded'
+            }
+          });
+
+          const data = { testKey: 'testValue', testKey2: 'testValue2' };
+          await proxy.request(method, API_URL, data, options);
+
           expect(requestInit.body).toBeDefined();
           expect(typeof requestInit.body).toEqual('string');
-        }
-      });
-
-      it(`should convert body to FormData/Object if header 'Content-Type' is set to 'multipart/form-data'`, async () => {
-        const options = Object.assign({}, OPTIONS, {
-          headers: {
-            'Content-Type': 'multipart/form-data'
-          }
         });
-        const data = { testKey: 'testValue', testKey2: 'testValue2' };
-        await proxy.request(method, API_URL, data, options);
 
-        if (['get', 'head'].indexOf(method) === -1) {
+        it(`should convert body to FormData/Object if header 'Content-Type' is set to 'multipart/form-data'`, async () => {
+          const options = Object.assign({}, OPTIONS, {
+            headers: {
+              'Content-Type': 'multipart/form-data'
+            }
+          });
+
+          const data = { testKey: 'testValue', testKey2: 'testValue2' };
+          await proxy.request(method, API_URL, data, options);
+
           expect(requestInit.body).toBeDefined();
           expect(typeof requestInit.body).toEqual('object');
-        }
-      });
+        });
+      }
 
       it('should return null body for HTTP status NO_CONTENT', async () => {
         response.status = StatusCode.NO_CONTENT;
