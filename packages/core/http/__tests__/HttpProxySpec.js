@@ -11,7 +11,7 @@ describe('ima.http.HttpProxy', () => {
     ttl: 3600000,
     timeout: 2000,
     repeatRequest: 1,
-    headers: [],
+    headers: {},
     withCredentials: true
   };
   const DATA = {
@@ -182,27 +182,96 @@ describe('ima.http.HttpProxy', () => {
       it('should not set any body to a GET/HEAD request', async () => {
         await proxy.request(method, API_URL, DATA, OPTIONS);
 
-        if (['get', 'head'].indexOf(method) >= 0) {
+        if (['get', 'head'].includes(method) === true) {
           expect(requestInit.body).not.toBeDefined();
         } else {
           expect(requestInit.body).toBeDefined();
         }
       });
 
-      it('should set body and Content-Type: application/json for other requests than GET/HEAD even for an empty object', async () => {
-        await proxy.request(method, API_URL, {}, OPTIONS);
+      if (['get', 'head'].includes(method) === false) {
+        it('should set body and Content-Type: application/json for other requests than GET/HEAD even for an empty object', async () => {
+          await proxy.request(method, API_URL, {}, OPTIONS);
 
-        if (['get', 'head'].indexOf(method) === -1) {
           expect(requestInit.body).toBeDefined();
           expect(requestInit.headers['Content-Type']).toBe('application/json');
-        }
-      });
+        });
+
+        it(`should convert body to query string if header 'Content-Type' is set to 'application/x-www-form-urlencoded'`, async () => {
+          const options = Object.assign({}, OPTIONS, {
+            headers: {
+              'Content-Type': 'application/x-www-form-urlencoded'
+            }
+          });
+
+          const data = { testKey: 'testValue', testKey2: 'testValue2' };
+          await proxy.request(method, API_URL, data, options);
+
+          expect(requestInit.body).toBeDefined();
+          expect(typeof requestInit.body).toEqual('string');
+        });
+
+        it(`should convert body to FormData/Object if header 'Content-Type' is set to 'multipart/form-data'`, async () => {
+          const options = Object.assign({}, OPTIONS, {
+            headers: {
+              'Content-Type': 'multipart/form-data'
+            }
+          });
+
+          const data = { testKey: 'testValue', testKey2: 'testValue2' };
+          await proxy.request(method, API_URL, data, options);
+
+          expect(requestInit.body).toBeDefined();
+          expect(typeof requestInit.body).toEqual('object');
+        });
+      }
 
       it('should return null body for HTTP status NO_CONTENT', async () => {
         response.status = StatusCode.NO_CONTENT;
         const result = await proxy.request(method, API_URL, DATA, OPTIONS);
         expect(result.body).toBeNull();
       });
+    });
+  });
+
+  describe('_convertObjectToQueryString', () => {
+    it('should create query string representation of given object', () => {
+      const testObject = { testKey: 'testValue', testKey2: 'testValue2' };
+      const queryString = proxy._convertObjectToQueryString(testObject);
+
+      expect(typeof queryString).toEqual('string');
+      expect(queryString).toEqual('testKey=testValue&testKey2=testValue2');
+    });
+
+    it('should properly escape special characters', () => {
+      const testObject = {
+        testKey: 'test test/test|test?test',
+        testKey2: 'test#test$test^test{test}'
+      };
+      const queryString = proxy._convertObjectToQueryString(testObject);
+      expect(typeof queryString).toEqual('string');
+
+      // testKey
+      expect(queryString.substr(12, 3)).toEqual('%20');
+      expect(queryString.substr(19, 3)).toEqual('%2F');
+      expect(queryString.substr(26, 3)).toEqual('%7C');
+      expect(queryString.substr(33, 3)).toEqual('%3F');
+
+      // testKey2
+      expect(queryString.substr(54, 3)).toEqual('%23');
+      expect(queryString.substr(61, 3)).toEqual('%24');
+      expect(queryString.substr(68, 3)).toEqual('%5E');
+      expect(queryString.substr(75, 3)).toEqual('%7B');
+    });
+  });
+
+  describe('_convertObjectToFormData', () => {
+    it('should return either FormData or Object instance', () => {
+      const testObject = { testKey: 'testValue', testKey2: 'testValue2' };
+      const convertedObject = proxy._convertObjectToFormData(testObject);
+
+      expect(convertedObject).toBeDefined();
+      expect(typeof convertedObject).toEqual('object');
     });
   });
 });

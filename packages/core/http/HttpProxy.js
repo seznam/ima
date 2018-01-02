@@ -411,7 +411,7 @@ export default class HttpProxy {
     };
 
     if (this._shouldRequestHaveBody(method, data)) {
-      requestInit.body = JSON.stringify(data);
+      requestInit.body = this._transformRequestBody(data, options.headers);
     }
 
     Object.assign(requestInit, options.fetchOptions || {});
@@ -453,9 +453,7 @@ export default class HttpProxy {
    */
   _composeRequestUrl(url, data) {
     const transformedUrl = this._transformer.transform(url);
-    const queryString = Object.keys(data || {})
-      .map(key => [key, data[key]].map(encodeURIComponent).join('='))
-      .join('&');
+    const queryString = this._convertObjectToQueryString(data || {});
     const delimeter = queryString
       ? transformedUrl.includes('?') ? '&' : '?'
       : '';
@@ -474,5 +472,62 @@ export default class HttpProxy {
    */
   _shouldRequestHaveBody(method, data) {
     return ['get', 'head'].indexOf(method.toLowerCase()) === -1 && data;
+  }
+
+  /**
+   * Formats request body according to request headers.
+   *
+   * @param {Object.<string, (boolean|number|string|Date)>} data The data to
+   *        be send with a request.
+   * @param {Object.<string, string>} headers Headers object from options provided by the HTTP
+   *        agent.
+   * @returns {string|Object|FormData}
+   * @private
+   */
+  _transformRequestBody(data, headers) {
+    switch (headers['Content-Type']) {
+      case 'application/json':
+        return JSON.stringify(data);
+      case 'application/x-www-form-urlencoded':
+        return this._convertObjectToQueryString(data);
+      case 'multipart/form-data':
+        return this._convertObjectToFormData(data);
+      default:
+        return data;
+    }
+  }
+
+  /**
+   * Returns query string representation of the data parameter.
+   * (Returned string does not contain ? at the beginning)
+   *
+   * @param {Object.<string, (boolean|number|string|Date)>} object The object to be converted
+   * @returns {string} Query string representation of the given object
+   * @private
+   */
+  _convertObjectToQueryString(object) {
+    return Object.keys(object)
+      .map(key => [key, object[key]].map(encodeURIComponent).join('='))
+      .join('&');
+  }
+
+  /**
+   * Converts given data to FormData object.
+   * If FormData object is not supported by the browser the original object is returned.
+   *
+   * @param {Object.<string, (boolean|number|string|Date)>} object The object to be converted
+   * @returns {Object|FormData}
+   * @private
+   */
+  _convertObjectToFormData(object) {
+    const window = this._window.getWindow();
+
+    if (!window || !window.FormData) {
+      return object;
+    }
+    const formDataObject = new FormData();
+    Object.keys(object).forEach(key => formDataObject.append(key, object[key]));
+
+    return formDataObject;
   }
 }
