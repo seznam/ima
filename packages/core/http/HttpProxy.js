@@ -273,23 +273,40 @@ export default class HttpProxy {
       for (let [key, value] of headers.entries()) {
         plainHeaders[key] = value;
       }
-    } else if (headers.getAll) {
+    } else if (headers.forEach) {
       /**
-       * @todo This branch should be removed with node-fetch release
-       *       2.0.0.
+       * Check for forEach() has to be here because in old Firefoxes (versions lower than 44) there is not
+       * possibility to iterate through all the headers - according to docs
+       * (https://developer.mozilla.org/en-US/docs/Web/API/Headers) where is "entries(), keys(), values(), and support
+       * of for...of" is supported from Firefox version 44
        */
-      headers.forEach((_, headerName) => {
-        const headerValue = headers.getAll(headerName).join(', ');
-        plainHeaders[headerName] = headerValue;
-      });
-    } else {
-      /**
-       * @todo If Microsoft Edge supported headers.entries(), we'd remove
-       *       this branch.
-       */
-      headers.forEach((headerValue, headerName) => {
-        plainHeaders[headerName] = headerValue;
-      });
+      if (headers.getAll) {
+        /**
+         * @todo This branch should be removed with node-fetch release
+         *       2.0.0.
+         */
+        headers.forEach((_, headerName) => {
+          plainHeaders[headerName] = headers.getAll(headerName).join(', ');
+        });
+      } else if (headers.get) {
+        /**
+         * In case that Headers.getAll() from previous branch doesn't exist because it is obsolete and deprecated - in
+         * newer versions of the Fetch spec, Headers.getAll() has been deleted, and Headers.get() has been updated to
+         * fetch all header values instead of only the first one - according to docs
+         * (https://developer.mozilla.org/en-US/docs/Web/API/Headers/getAll)
+         */
+        headers.forEach((_, headerName) => {
+          plainHeaders[headerName] = headers.get(headerName).join(', ');
+        });
+      } else {
+        /**
+         * @todo If Microsoft Edge supported headers.entries(), we'd remove
+         *       this branch.
+         */
+        headers.forEach((headerValue, headerName) => {
+          plainHeaders[headerName] = headerValue;
+        });
+      }
     }
 
     return plainHeaders;
@@ -411,7 +428,7 @@ export default class HttpProxy {
     };
 
     if (this._shouldRequestHaveBody(method, data)) {
-      requestInit.body = JSON.stringify(data);
+      requestInit.body = this._transformRequestBody(data, options.headers);
     }
 
     Object.assign(requestInit, options.fetchOptions || {});
@@ -453,9 +470,7 @@ export default class HttpProxy {
    */
   _composeRequestUrl(url, data) {
     const transformedUrl = this._transformer.transform(url);
-    const queryString = Object.keys(data || {})
-      .map(key => [key, data[key]].map(encodeURIComponent).join('='))
-      .join('&');
+    const queryString = this._convertObjectToQueryString(data || {});
     const delimeter = queryString
       ? transformedUrl.includes('?') ? '&' : '?'
       : '';
@@ -474,5 +489,62 @@ export default class HttpProxy {
    */
   _shouldRequestHaveBody(method, data) {
     return ['get', 'head'].indexOf(method.toLowerCase()) === -1 && data;
+  }
+
+  /**
+   * Formats request body according to request headers.
+   *
+   * @param {Object.<string, (boolean|number|string|Date)>} data The data to
+   *        be send with a request.
+   * @param {Object.<string, string>} headers Headers object from options provided by the HTTP
+   *        agent.
+   * @returns {string|Object|FormData}
+   * @private
+   */
+  _transformRequestBody(data, headers) {
+    switch (headers['Content-Type']) {
+      case 'application/json':
+        return JSON.stringify(data);
+      case 'application/x-www-form-urlencoded':
+        return this._convertObjectToQueryString(data);
+      case 'multipart/form-data':
+        return this._convertObjectToFormData(data);
+      default:
+        return data;
+    }
+  }
+
+  /**
+   * Returns query string representation of the data parameter.
+   * (Returned string does not contain ? at the beginning)
+   *
+   * @param {Object.<string, (boolean|number|string|Date)>} object The object to be converted
+   * @returns {string} Query string representation of the given object
+   * @private
+   */
+  _convertObjectToQueryString(object) {
+    return Object.keys(object)
+      .map(key => [key, object[key]].map(encodeURIComponent).join('='))
+      .join('&');
+  }
+
+  /**
+   * Converts given data to FormData object.
+   * If FormData object is not supported by the browser the original object is returned.
+   *
+   * @param {Object.<string, (boolean|number|string|Date)>} object The object to be converted
+   * @returns {Object|FormData}
+   * @private
+   */
+  _convertObjectToFormData(object) {
+    const window = this._window.getWindow();
+
+    if (!window || !window.FormData) {
+      return object;
+    }
+    const formDataObject = new FormData();
+    Object.keys(object).forEach(key => formDataObject.append(key, object[key]));
+
+    return formDataObject;
   }
 }

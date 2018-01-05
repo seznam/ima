@@ -332,7 +332,10 @@ export default class ClientRouter extends AbstractRouter {
     };
     let state = { url, scroll };
 
-    this._window.replaceState(state, null, url);
+    let oldState = this._window.getHistoryState();
+    let newState = Object.assign({}, oldState, state);
+
+    this._window.replaceState(newState, null, url);
   }
 
   /**

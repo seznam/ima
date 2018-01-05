@@ -149,6 +149,13 @@ export default class ClientWindow extends Window {
   /**
    * @inheritdoc
    */
+  getHistoryState() {
+    return window.history.state;
+  }
+
+  /**
+   * @inheritdoc
+   */
   querySelector(selector) {
     return document.querySelector(selector);
   }
