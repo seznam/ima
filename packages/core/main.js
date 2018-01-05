@@ -241,26 +241,7 @@ function onLoad(callback) {
     return Promise.reject(null);
   }
 
-  return new Promise((resolve, reject) => {
-    if (
-      document.readyState === 'complete' ||
-      document.readyState === 'interactive'
-    ) {
-      $IMA.Loader.initAllModules()
-        .then(resolve)
-        .catch(error => {
-          reject(error);
-        });
-    } else {
-      window.addEventListener('DOMContentLoaded', () => {
-        $IMA.Loader.initAllModules()
-          .then(resolve)
-          .catch(error => {
-            reject(error);
-          });
-      });
-    }
-  });
+  return Promise.resolve();
 }
 
 export {
