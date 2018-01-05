@@ -235,14 +235,6 @@ function reviveTestClientApp(initialAppConfigFunctions) {
 }
 
 function onLoad(callback) {
-  //TODO remove @0.15.0
-  if ($IMA.$Debug && typeof callback === 'function') {
-    throw new Error(
-      `The onLoad method use promise pattern instead of callback ` +
-        `pattern. Update your app/main.js file.`
-    );
-  }
-
   vendorLinker.bindToNamespace(ns);
 
   if (!_isClient()) {
