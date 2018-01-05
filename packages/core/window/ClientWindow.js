@@ -71,11 +71,12 @@ export default class ClientWindow extends Window {
    * @inheritdoc
    */
   getScrollX() {
-    let pageOffsetSupported = window.pageXOffset !== undefined;
+    let { pageXOffset } = window;
+    let pageOffsetSupported = pageXOffset !== undefined;
     let isCSS1Compatible = (document.compatMode || '') === 'CSS1Compat';
 
     return pageOffsetSupported
-      ? window.pageXOffset
+      ? pageXOffset
       : isCSS1Compatible
         ? document.documentElement.scrollLeft
         : document.body.scrollLeft;
@@ -85,11 +86,12 @@ export default class ClientWindow extends Window {
    * @inheritdoc
    */
   getScrollY() {
-    let pageOffsetSupported = window.pageYOffset !== undefined;
+    let { pageYOffset } = window;
+    let pageOffsetSupported = pageYOffset !== undefined;
     let isCSS1Compatible = (document.compatMode || '') === 'CSS1Compat';
 
     return pageOffsetSupported
-      ? window.pageYOffset
+      ? pageYOffset
       : isCSS1Compatible
         ? document.documentElement.scrollTop
         : document.body.scrollTop;
