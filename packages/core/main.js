@@ -210,14 +210,6 @@ function hotReloadClientApp(initialAppConfigFunctions) {
 function reviveClientApp(initialAppConfigFunctions) {
   let root = _getRoot();
 
-  if (_isClient()) {
-    // hack for the Chrome browser, which sometimes has problems with
-    // rendering the page
-    document.body.style.display = 'none';
-		document.body.offsetHeight; //eslint-disable-line
-    document.body.style.display = '';
-  }
-
   //set React for ReactJS extension for browser
   root.React = vendorLinker.get('react');
   root.$Debug = root.$IMA.$Debug;
