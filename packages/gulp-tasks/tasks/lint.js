@@ -1,5 +1,5 @@
-let gulp = require('gulp');
-let eslint = require('gulp-eslint');
+const gulp = require('gulp');
+const eslint = require('gulp-eslint');
 
 exports.__requiresConfig = true;
 

@@ -1,9 +1,9 @@
-let gulp = require('gulp');
-let concat = require('gulp-concat');
-let del = require('del');
-let nano = require('gulp-cssnano');
-let plumber = require('gulp-plumber');
-let uglifyEs = require('gulp-uglify-es').default;
+const gulp = require('gulp');
+const concat = require('gulp-concat');
+const del = require('del');
+const nano = require('gulp-cssnano');
+const plumber = require('gulp-plumber');
+const uglifyEs = require('gulp-uglify-es').default;
 
 exports.__requiresConfig = true;
 

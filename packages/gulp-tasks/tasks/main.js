@@ -1,6 +1,6 @@
-let gulp = require('gulp');
-let sharedTasksState = require('../gulpState');
-let macroTasks = require('../macroTasks.js');
+const gulp = require('gulp');
+const sharedTasksState = require('../gulpState');
+const macroTasks = require('../macroTasks.js');
 
 exports.__requiresConfig = true;
 

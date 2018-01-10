@@ -1,8 +1,8 @@
-let del = require('del');
-let gulp = require('gulp');
-let tap = require('gulp-tap');
-let jsdoc = require('gulp-jsdoc3');
-let rename = require('gulp-rename');
+const del = require('del');
+const gulp = require('gulp');
+const tap = require('gulp-tap');
+const jsdoc = require('gulp-jsdoc3');
+const rename = require('gulp-rename');
 
 exports.__requiresConfig = true;
 

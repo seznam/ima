@@ -1,4 +1,4 @@
-let gulp = require('gulp');
+const gulp = require('gulp');
 
 exports.__requiresConfig = true;
 

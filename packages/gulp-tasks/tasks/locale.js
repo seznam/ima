@@ -1,8 +1,8 @@
-let gulp = require('gulp');
-let plumber = require('gulp-plumber');
-let messageFormat = require('gulp-messageformat');
-let insert = require('gulp-insert');
-let rename = require('gulp-rename');
+const gulp = require('gulp');
+const plumber = require('gulp-plumber');
+const messageFormat = require('gulp-messageformat');
+const insert = require('gulp-insert');
+const rename = require('gulp-rename');
 
 exports.__requiresConfig = true;
 

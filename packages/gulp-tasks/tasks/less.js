@@ -1,10 +1,10 @@
-let gulp = require('gulp');
-let autoprefixer = require('gulp-autoprefixer');
-let concat = require('gulp-concat');
-let gulpLess = require('gulp-less');
-let path = require('path');
-let plumber = require('gulp-plumber');
-let sourcemaps = require('gulp-sourcemaps');
+const gulp = require('gulp');
+const autoprefixer = require('gulp-autoprefixer');
+const concat = require('gulp-concat');
+const gulpLess = require('gulp-less');
+const path = require('path');
+const plumber = require('gulp-plumber');
+const sourcemaps = require('gulp-sourcemaps');
 
 exports.__requiresConfig = true;
 

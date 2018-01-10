@@ -1,13 +1,13 @@
-let gulp = require('gulp');
-let cache = require('gulp-cached');
-let flo = require('fb-flo');
-let gutil = require('gulp-util');
-let remember = require('gulp-remember');
-let watch = require('gulp-watch');
-let path = require('path');
-let fs = require('fs');
+const gulp = require('gulp');
+const cache = require('gulp-cached');
+const flo = require('fb-flo');
+const gutil = require('gulp-util');
+const remember = require('gulp-remember');
+const watch = require('gulp-watch');
+const path = require('path');
+const fs = require('fs');
 
-let sharedState = require('../gulpState.js');
+const sharedState = require('../gulpState.js');
 
 exports.__requiresConfig = true;
 

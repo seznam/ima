@@ -1,6 +1,6 @@
-let gls = require('gulp-live-server');
+const gls = require('gulp-live-server');
 
-let sharedState = require('../gulpState.js');
+const sharedState = require('../gulpState.js');
 let server = null;
 let runningServers = 0;
 

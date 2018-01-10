@@ -1,5 +1,5 @@
-let gulp = require('gulp');
-let del = require('del');
+const gulp = require('gulp');
+const del = require('del');
 
 exports['app:hello'] = appHello;
 function appHello() {
