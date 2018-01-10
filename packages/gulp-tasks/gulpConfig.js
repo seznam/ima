@@ -179,11 +179,20 @@ exports.files = {
     watch: ['./app/**/*.json']
   },
   shim: {
-    name: 'shim.js',
-    src: ['./node_modules/ima/polyfill/collectionEnumeration.js'],
-    dest: {
-      client: './build/static/js/',
-      server: './build/ima/'
+    js: {
+      name: 'shim.js',
+      src: ['./node_modules/ima/polyfill/collectionEnumeration.js'],
+      dest: {
+        client: './build/static/js/'
+      }
+    },
+    es: {
+      name: 'shim.es.js',
+      src: [],
+      dest: {
+        client: './build/static/js/',
+        server: './build/ima/'
+      }
     }
   },
   polyfill: {
