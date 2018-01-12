@@ -288,7 +288,7 @@ export default class HttpAgentImpl extends HttpAgent {
       status: response.status,
       body: response.body,
       params: response.params,
-      headers: response.header,
+      headers: response.headers,
       cached: false
     };
     let cacheKey = this.getCacheKey(

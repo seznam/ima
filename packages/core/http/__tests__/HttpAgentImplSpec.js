@@ -60,7 +60,7 @@ describe('ima.http.HttpAgentImpl', () => {
         data: {},
         options: options
       },
-      header: {
+      headers: {
         'set-cookie': ['cookie1=cookie1', 'cookie2=cookie2']
       }
     };
@@ -85,7 +85,7 @@ describe('ima.http.HttpAgentImpl', () => {
               status: data.status,
               params: data.params,
               body: data.body,
-              headers: data.header,
+              headers: data.headers,
               cached: false
             };
 
