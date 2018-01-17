@@ -14,6 +14,7 @@ export default (ns, oc, config) => {
 						'Accept': 'application/json',
 						'Accept-Language': config.$Language
 					},
+					fetchOptions: {},
 					cache: true
 				},
 				cacheOptions: {
