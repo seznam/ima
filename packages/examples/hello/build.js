@@ -44,6 +44,12 @@ let bundle = {
 		'./build/static/js/vendor.client.js',
 		'./build/static/js/app.client.js'
 	],
+	es: [
+		'./build/static/js/polyfill.es.js',
+		'./build/static/js/shim.js',
+		'./build/static/js/vendor.client.es.js',
+		'./build/static/js/app.client.es.js'
+	],
 	css: [
 		'./build/static/css/app.css'
 	]

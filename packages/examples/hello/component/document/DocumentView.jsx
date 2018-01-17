@@ -60,19 +60,33 @@ export default class DocumentView extends AbstractDocumentView {
 
 	getAsyncScripts() {
 		let scriptResources = `<script>
-			$IMA.Runner = $IMA.Runner || {};
-		 	$IMA.Runner.scripts = [
-				${this.utils.$Settings.$Page.$Render.scripts
-					.map((script) => `'${script}'`)
-					.join()
-				}
-			];
-		</script>`;
-
-		let scriptTags = this.utils.$Settings.$Page.$Render.scripts.map((script) => {
-			return `<script src='${script}' async onload='$IMA.Runner.load(this)'></script>`;
-		});
-
-		return [scriptResources].concat(scriptTags).join('');
+    		$IMA.Runner = $IMA.Runner || {};
+    		if (Object.values && ${!this.utils.LegacyBrowserDetector.isOutDatedClient()}) {
+        		$IMA.Runner.scripts = [
+            		${this.utils.$Settings.$Page.$Render.esScripts
+						.map(script => `'${script}'`)
+						.join()
+					}
+                ];
+    		} else {
+        		$IMA.Runner.scripts = [
+            		${this.utils.$Settings.$Page.$Render.scripts
+						.map(script => `'${script}'`)
+						.join()
+					}
+            	];
+    		}
+    		if (!window.fetch) {
+        		$IMA.Runner.scripts.unshift('${this.utils.$Settings.$Static.js}/fetch-polyfill.js');
+    		}
+    		$IMA.Runner.scripts.forEach(function(source) {
+		        var script = document.createElement('script');
+		        script.async = $IMA.$Env !== 'dev';
+		        script.onload = $IMA.Runner.load;
+		        script.src = source;
+		        document.getElementById('scripts').appendChild(script);
+    		});
+    	</script>`;
+		return scriptResources;
 	}
 }

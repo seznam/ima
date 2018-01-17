@@ -9,7 +9,7 @@ export default class HomeView extends AbstractComponent {
 
 	static get contextTypes() {
 		return {
-			$Utils: React.PropTypes.object
+			$Utils: PropTypes.object
 		};
 	}
 
