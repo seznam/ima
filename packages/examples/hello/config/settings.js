@@ -31,6 +31,10 @@ export default (ns, oc, config) => {
 						`/static/js/locale/${config.$Language}.js${versionStamp}`,
 						'/static/js/app.bundle.min.js' + versionStamp
 					],
+					esScripts: [
+						'/static/js/locale/' + config.$Language + '.js' + versionStamp,
+						'/static/js/app.bundle.es.min.js' + versionStamp
+					],
 					documentView: DocumentView
 				}
 			},
@@ -63,6 +67,14 @@ export default (ns, oc, config) => {
 						'/static/js/vendor.client.js' + versionStamp,
 						`/static/js/locale/${config.$Language}.js${versionStamp}`,
 						'/static/js/app.client.js' + versionStamp,
+						'/static/js/hot.reload.js' + versionStamp
+					],
+					esScripts: [
+						'/static/js/polyfill.es.js' + versionStamp,
+						'/static/js/shim.js' + versionStamp,
+						'/static/js/vendor.client.es.js' + versionStamp,
+						`/static/js/locale/${config.$Language}.js${versionStamp}`,
+						'/static/js/app.client.es.js' + versionStamp,
 						'/static/js/hot.reload.js' + versionStamp
 					]
 				}
