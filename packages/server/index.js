@@ -1,5 +1,4 @@
 'use strict';
-const DEFAULT_LANGUAGE = 'cs';
 
 let path = require('path');
 let applicationFolder = path.resolve('.');
@@ -27,7 +26,7 @@ function appFactory() {
 
 function languageLoader(language) {
 	if (!language) {
-		language = environment.$Language[Object.keys(environment.$Language)[0]] || DEFAULT_LANGUAGE;
+		language = environment.$Language[Object.keys(environment.$Language)[0]];
 	}
 
 	return require(
