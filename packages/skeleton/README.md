@@ -159,8 +159,6 @@ update the configuration accordingly).
 There are several configuration files in your IMA.js application:
 - `gulpConfig.js` contains configuration for the gulp tasks we use to build and
   run your application.
-- `karma.conf.js` is used to configure the
-  [karma](http://karma-runner.github.io/0.13/index.html) test runner.
 - `app/build.js` specifies which JavaScript, JSX, Less CSS and language files
   your application consists of and should be included in your built
   application.
