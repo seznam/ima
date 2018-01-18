@@ -29,6 +29,10 @@ export default (ns, oc, config) => {
 						`/static/js/locale/${config.$Language}.js`,
 						'/static/js/app.bundle.min.js'
 					],
+					esScripts: [
+						'/static/js/locale/' + config.$Language + '.js' + versionStamp,
+						'/static/js/app.bundle.es.min.js' + versionStamp
+					],
 					documentView: DocumentView
 				}
 			},
@@ -53,10 +57,20 @@ export default (ns, oc, config) => {
 			$Page:{
 				$Render: {
 					scripts: [
+						'/static/js/polyfill.js' + versionStamp,
 						'/static/js/shim.js' + versionStamp,
 						'/static/js/vendor.client.js' + versionStamp,
 						`/static/js/locale/${config.$Language}.js${versionStamp}`,
 						'/static/js/app.client.js' + versionStamp,
+						'/static/js/facebook.js' + versionStamp,
+						'/static/js/hot.reload.js' + versionStamp
+					],
+					esScripts: [
+						'/static/js/polyfill.es.js' + versionStamp,
+						'/static/js/shim.js' + versionStamp,
+						'/static/js/vendor.client.es.js' + versionStamp,
+						`/static/js/locale/${config.$Language}.js${versionStamp}`,
+						'/static/js/app.client.es.js' + versionStamp,
 						'/static/js/facebook.js' + versionStamp,
 						'/static/js/hot.reload.js' + versionStamp
 					]

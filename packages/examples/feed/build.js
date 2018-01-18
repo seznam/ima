@@ -47,6 +47,12 @@ module.exports = (() => {
 			'./build/static/js/app.client.js',
 			'./build/static/js/facebook.js'
 		],
+		es: [
+			'./build/static/js/polyfill.es.js',
+			'./build/static/js/shim.js',
+			'./build/static/js/vendor.client.es.js',
+			'./build/static/js/app.client.es.js'
+		],
 		css: [
 			'./build/static/css/app.css'
 		]
