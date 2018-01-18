@@ -55,7 +55,7 @@ export default class DocumentView extends AbstractDocumentView {
 		let scriptResources = `<script>
 		function checkAsyncAwait () {
 			try {
-				new Function('(async () => ({}))()')
+				new Function('(async () => ({}))()');
 				return true;
 			} catch (e) {
 				return false;
