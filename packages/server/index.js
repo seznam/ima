@@ -25,6 +25,10 @@ function appFactory() {
 }
 
 function languageLoader(language) {
+	if (!language) {
+		language = environment.$Language[Object.keys(environment.$Language)[0]];
+	}
+
 	return require(
 		path.resolve(
 			applicationFolder,

@@ -90,6 +90,10 @@ module.exports = environment => {
 		let currentUrl = _getUrlFromRequest(req);
 		let parsedCurrentUrl = currentUrl.match(parseUrlReg);
 
+		if (!parsedCurrentUrl) {
+			throw new Error(`Current URL adress is incorect and can't be parsed.`);
+		}
+
 		let currentLanguage = null;
 		let currentLanguagePartPath = '';
 		let currentHost = parsedCurrentUrl[1];
