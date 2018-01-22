@@ -18,20 +18,16 @@
 		"Javascript"
 	],
 	"author": "Miroslav Jancarik <miroslav.jancarik@firma.seznam.cz>",
-	"contributors": [
-		{
-			"name": "Martin Urban",
-			"email": "martin.urban@firma.seznam.cz"
-		},
-		{
-			"name": "Martin Jurča",
-			"email": "martin.jurca@firma.seznam.cz"
-		},
-		{
-			"name": "Ondřej Baše",
-			"email": "ondrej.base@firma.seznam.cz"
-		}
-	],
+	"contributors": [{
+		"name": "Martin Urban",
+		"email": "martin.urban@firma.seznam.cz"
+	}, {
+		"name": "Martin Jurča",
+		"email": "martin.jurca@firma.seznam.cz"
+	}, {
+		"name": "Ondřej Baše",
+		"email": "ondrej.base@firma.seznam.cz"
+	}],
 	"repository": {
 		"type": "git",
 		"url": "https://github.com/seznam/IMA.js-core.git"
@@ -45,27 +41,27 @@
 	"license": "MIT",
 	"devDependencies": {
 		"babel-core": "^6.26.0",
-		"babel-eslint": "^8.0.3",
+		"babel-eslint": "^8.2.1",
 		"babel-plugin-transform-es2015-modules-commonjs": "^6.26.0",
 		"del": "^3.0.0",
-		"enzyme": "^3.2.0",
+		"enzyme": "^3.3.0",
 		"eslint": "^4.12.1",
 		"eslint-config-last": "^0.0.5",
 		"eslint-config-prettier": "^2.9.0",
 		"eslint-plugin-jasmine": "^2.9.1",
-		"eslint-plugin-jest": "^21.4.2",
-		"eslint-plugin-prettier": "^2.3.1",
+		"eslint-plugin-jest": "^21.7.0",
+		"eslint-plugin-prettier": "^2.5.0",
 		"eslint-plugin-react": "^7.5.1",
 		"gulp": "github:gulpjs/gulp#c120a94",
 		"gulp-babel": "^7.0.0",
 		"gulp-change": "^1.0.0",
 		"gulp-jsdoc3": "^1.0.1",
-		"gulp-plumber": "^1.1.0",
+		"gulp-plumber": "^1.2.0",
 		"gulp-rename": "^1.2.2",
 		"gulp-tap": "^1.0.1",
-		"jest": "^21.2.1",
-		"jsdom": "^11.5.1",
-		"prettier": "^1.9.1",
+		"jest": "^22.1.4",
+		"jsdom": "^11.6.0",
+		"prettier": "^1.10.2",
 		"prop-types": "^15.6.0",
 		"react": "^16.2.0",
 		"react-dom": "^16.2.0",
