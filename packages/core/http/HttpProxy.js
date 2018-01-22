@@ -296,7 +296,7 @@ export default class HttpProxy {
          * (https://developer.mozilla.org/en-US/docs/Web/API/Headers/getAll)
          */
         headers.forEach((_, headerName) => {
-          plainHeaders[headerName] = headers.get(headerName).join(', ');
+          plainHeaders[headerName] = headers.get(headerName);
         });
       } else {
         /**
