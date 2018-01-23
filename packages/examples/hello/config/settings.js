@@ -14,7 +14,9 @@ export default (ns, oc, config) => {
 						'Accept': 'application/json',
 						'Accept-Language': config.$Language
 					},
-					fetchOptions: {},
+					fetchOptions: {
+						mode: 'cors'
+					},
 					cache: true // if value exists in cache then returned it else make request to remote server.
 				},
 				cacheOptions: {

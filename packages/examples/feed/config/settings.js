@@ -13,6 +13,9 @@ export default (ns, oc, config) => {
 					headers: {  // Set default request headers
 						'Accept': 'application/json',
 						'Accept-Language': config.$Language
+					},
+					fetchOptions: {
+						mode: 'cors'
 					}
 				},
 				cacheOptions: {
