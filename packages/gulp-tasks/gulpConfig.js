@@ -208,7 +208,7 @@ exports.files = {
     },
     es: {
       name: 'polyfill.es.js',
-      src: ['./node_modules/custom-event-polyfill/custom-event-polyfill.js'],
+      src: [],
       dest: {
         client: './build/static/js/'
       }

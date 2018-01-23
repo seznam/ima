@@ -60,14 +60,23 @@ exports.default = gulpConfig => {
   function polyfill(done) {
     return gulp.series(
       gulp.parallel(
-        ...Object.values(files.polyfill).map(polyfill => () =>
-          gulp
+        ...Object.values(files.polyfill).map(polyfill => () => {
+          if (polyfill.src.length === 0) {
+            const content = '(function(){})();';
+
+            mkdirp.sync(polyfill.dest.client);
+            fs.writeFileSync(polyfill.dest.client + polyfill.name, content);
+
+            return Promise.resolve();
+          }
+
+          return gulp
             .src(polyfill.src)
             .pipe(sourcemaps.init({ loadMaps: true }))
             .pipe(insert.wrap('(function(){', '})();'))
             .pipe(concat(polyfill.name))
-            .pipe(gulp.dest(polyfill.dest.client))
-        )
+            .pipe(gulp.dest(polyfill.dest.client));
+        })
       ),
       subDone => {
         subDone();
