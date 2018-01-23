@@ -41,7 +41,7 @@
 	"license": "MIT",
 	"devDependencies": {
 		"ima-gulp-task-loader": "^0.14.0",
-		"ima-gulp-tasks": "^0.15.0-beta3"
+		"ima-gulp-tasks": "^0.15.0-beta15"
 	},
 	"dependencies": {
 		"babel-eslint": "8.0.1",
@@ -59,13 +59,16 @@
 		"express": "4.15.3",
 		"express-http-proxy": "1.0.6",
 		"helmet": "3.6.1",
-		"ima": "0.15.0-beta4",
+		"ima": "0.15.0-beta18",
 		"ima-server": "0.15.0-beta1",
 		"jest": "21.2.1",
 		"jest-serializer-enzyme": "1.0.0",
 		"method-override": "2.3.9",
 		"multer": "1.3.0",
 		"prettier": "1.7.4",
+		"prop-types": "15.6.0",
+		"react": "16.2.0",
+		"react-dom": "16.2.0",
 		"react-test-renderer": "16.0.0",
 		"serve-favicon": "2.4.3"
 	}
