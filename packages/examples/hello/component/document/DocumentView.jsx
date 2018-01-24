@@ -44,35 +44,49 @@ export default class DocumentView extends AbstractDocumentView {
 							document.write('<script src="${jsBaseUrl}/fetch-polyfill.js"></' + 'script>')
 						}
 					` }}/>
-					{this.utils.$Settings.$Env === 'dev' ? <div id='scripts'>{this.getSyncScripts()}</div> : <div id='scripts' dangerouslySetInnerHTML={{ __html: this.getAsyncScripts() }}/>}
+					<div id='scripts' dangerouslySetInnerHTML={{ __html: this.getAsyncScripts() }}/>
 				</body>
 			</html>
 		);
 	}
 
-	getSyncScripts() {
-		return this.utils.$Settings.$Page.$Render.scripts
-				.map((script, index) => {
-					return <script src={script} key={'script' + index}/>;
-				})
-				.concat([<script key={'scriptRunner'}>{'$IMA.Runner.run();'}</script>]);
-	}
-
 	getAsyncScripts() {
 		let scriptResources = `<script>
-			$IMA.Runner = $IMA.Runner || {};
-		 	$IMA.Runner.scripts = [
-				${this.utils.$Settings.$Page.$Render.scripts
-					.map((script) => `'${script}'`)
-					.join()
-				}
-			];
-		</script>`;
-
-		let scriptTags = this.utils.$Settings.$Page.$Render.scripts.map((script) => {
-			return `<script src='${script}' async onload='$IMA.Runner.load(this)'></script>`;
-		});
-
-		return [scriptResources].concat(scriptTags).join('');
+		    function checkAsyncAwait () {
+		        try {
+		            new Function('(async () => ({}))()');
+		            return true;
+		        } catch (e) {
+		            return false;
+		        }
+		    }
+		    $IMA.Runner = $IMA.Runner || {};
+		    if (Object.values && checkAsyncAwait()) {
+		        $IMA.Runner.scripts = [
+		            ${this.utils.$Settings.$Page.$Render.esScripts
+						.map(script => `'${script}'`)
+						.join()
+					}
+	            ];
+		    } else {
+		        $IMA.Runner.scripts = [
+		            ${this.utils.$Settings.$Page.$Render.scripts
+						.map(script => `'${script}'`)
+						.join()
+					}
+	            ];
+		    }
+		    if (!window.fetch) {
+		        $IMA.Runner.scripts.unshift('${this.utils.$Settings.$Static.js}/fetch-polyfill.js');
+		    }
+		    $IMA.Runner.scripts.forEach(function(source) {
+		        var script = document.createElement('script');
+		        script.async = $IMA.$Env !== 'dev';
+		        script.onload = $IMA.Runner.load;
+		        script.src = source;
+		        document.getElementById('scripts').appendChild(script);
+		    });
+	    </script>`;
+		return scriptResources;
 	}
 }
