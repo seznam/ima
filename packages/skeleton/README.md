@@ -1,3 +1,5 @@
+![IMA.js logo](https://imajs.io/static/img/imajs-logo.png)
+
 # IMA.js skeleton application
 
 The IMA.js is an application development stack for developing isomorphic
@@ -164,7 +166,7 @@ There are several configuration files in your IMA.js application:
   server-side and client-side.
   The file also specifies which 3rd party bundled JavaScript and CSS files are
   to be included in your application.
-- `app/environment.js` configures the server-side environment. Notice that the
+- `app/environment.js` configures the server-side environment. Note that the
   `dev` and `test` environment configuration automatically inherits values from
   the `prod` environment (except for the `$Language` which has to be configured
   individually).
@@ -175,7 +177,7 @@ There are several configuration files in your IMA.js application:
 - `app/config/routes.js` configures your router, mapping routes to the
   controllers and views in your application.
 - `app/config/settings.js` configures your application and IMA.js services.
-  Notice how, again, the `dev` and `test` environment configuration
+  Note that, again, the `dev` and `test` environment configuration
   automatically inherits values from the `prod` environment.
 - and finally, the `app/config/bind.js` configures the object container (think
   of it as a more powerful dependency injector) with support for constants,
