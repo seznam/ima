@@ -38,17 +38,27 @@ let vendorOptions = {
 let babelConfig = {
   esVendor: {
     presets: ['react'],
-    plugins: ['external-helpers', ["transform-react-jsx", { "useBuiltIns": true }]],
+    plugins: [
+      'external-helpers',
+      ['transform-react-jsx', { useBuiltIns: true }]
+    ],
     options: Object.assign({}, vendorOptions)
   },
   vendor: {
     presets: ['es2017', 'es2016', ['es2015', { loose: true }], 'react'],
-    plugins: ['external-helpers', ["transform-react-jsx", { "useBuiltIns": true }]],
+    plugins: [
+      'external-helpers',
+      ['transform-react-jsx', { useBuiltIns: true }]
+    ],
     options: Object.assign({}, vendorOptions)
   },
   serverApp: {
     presets: ['react'],
-    plugins: ['transform-es2015-modules-systemjs', 'external-helpers', ["transform-react-jsx", { "useBuiltIns": true }]]
+    plugins: [
+      'transform-es2015-modules-systemjs',
+      'external-helpers',
+      ['transform-react-jsx', { useBuiltIns: true }]
+    ]
   },
   esApp: {
     presets: [],
@@ -60,7 +70,10 @@ let babelConfig = {
   },
   server: {
     presets: ['react'],
-    plugins: ['transform-es2015-modules-commonjs', ["transform-react-jsx", { "useBuiltIns": true }]]
+    plugins: [
+      'transform-es2015-modules-commonjs',
+      ['transform-react-jsx', { useBuiltIns: true }]
+    ]
   }
 };
 let $Debug = true;
