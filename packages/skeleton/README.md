@@ -207,7 +207,7 @@ There are several directories we have not mentioned so far:
   if the need arises.
 
 ## Plugins
-We have several plugins which you can use:
+Here's a list of plugins maintained by Seznam.cz and other contributors that you can safely use in your app:
 - [Abstract analytic](https://github.com/seznam/IMA.js-plugin-analytic)
 - [Google analytic](https://github.com/seznam/IMA.js-plugin-analytic-google)
 - [3rd party scripts loader](https://github.com/seznam/IMA.js-plugin-script-loader)
