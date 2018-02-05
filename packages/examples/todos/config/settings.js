@@ -73,7 +73,7 @@ export default (ns, oc, config) => {
 					],
 					esScripts: [
 						'/static/js/polyfill.es.js' + versionStamp,
-						'/static/js/shim.js' + versionStamp,
+						'/static/js/shim.es.js' + versionStamp,
 						'/static/js/vendor.client.es.js' + versionStamp,
 						`/static/js/locale/${config.$Language}.js${versionStamp}`,
 						'/static/js/app.client.es.js' + versionStamp,
