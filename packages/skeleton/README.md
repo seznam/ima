@@ -209,5 +209,11 @@ There are several directories we have not mentioned so far:
 ## Plugins
 We have several plugins which you can use:
 - [Abstract analytic](https://github.com/seznam/IMA.js-plugin-analytic)
-- [3rd party scripts loader](https://github.com/seznam/IMA.js-plugin-script-loader)
 - [Google analytic](https://github.com/seznam/IMA.js-plugin-analytic-google)
+- [3rd party scripts loader](https://github.com/seznam/IMA.js-plugin-script-loader)
+- [3rd party styles loader](https://github.com/seznam/IMA.js-plugin-style-loader)
+- [REST-API Client](https://github.com/jurca/IMA-plugin-rest-client)
+- [XHR](https://github.com/seznam/IMA.js-plugin-xhr) *(This is not a replacement for the fetch API that IMA.js uses by default.)*
+- [UI Atoms](https://github.com/seznam/IMA.js-ui-atoms)
+- [Extra-props selector](https://github.com/seznam/IMA.js-plugin-select)
+- [Self XSS](https://github.com/seznam/IMA.js-plugin-self-xss)
