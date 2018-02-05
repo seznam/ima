@@ -35,6 +35,8 @@ These commands install the dependencies locally, prepare the basic demo
 application and start the development server. Go ahead and open
 [`http://localhost:3001/`](http://localhost:3001/) in your browser!
 
+Running `npm run dev` builds ES6 version of your app. Transpiling to ES5 happens only when you append `--legacy-compat-mode` flag or when running `npm run build` command *(see [Production use](#production-use))*.
+
 You also may want to install the [`gulp`](http://gulpjs.com/) tool globally in
 order to access all the available tools, examples and commands (you may need to
 use `sudo` on a UNIX-like system):
@@ -45,10 +47,10 @@ npm install -g gulp
 
 You may also try other local demos by running either of the following commands:
 
-```
-npm run app:feed
-npm run app:todos
-```
+
+`npm run app:feed` - [Demo](https://imajs.io/examples/feed) - [Source code](https://github.com/seznam/IMA.js-examples/tree/master/feed)
+
+`npm run app:todos` - [Demo](https://imajs.io/examples/todos) - [Source code](https://github.com/seznam/IMA.js-examples/tree/master/todos)
 
 ## Production use
 
