@@ -15,7 +15,7 @@ user experience (or UX for short).
 
 ## Why we use IMA.js and you should too?
 
-Here at Seznam.cz, development of a frontend application comes with many checkboxes that need to be ticked off befere the project goes public. Mainly because of a diverse audience and challenging product requirements. 
+Here at Seznam.cz, development of a frontend application comes with many checkboxes that need to be ticked off before the project goes public. Mainly because of a diverse audience and challenging product requirements. 
 
 In order to **not** reinvent the wheel on every project and to address all of these problems (checkboxes) we created the IMA.js framework. Here are a few outlines that we're most proud of:
 
