@@ -48,14 +48,13 @@ use `sudo` on a UNIX-like system):
 npm install -g gulp
 ```
 
-You may also try other local demos by running either of the following commands:
+You probably will have to install also [`node-gyp`](https://github.com/nodejs/node-gyp#installation) - follow the installation instructions for your operating system in the linked README.md.
 
+You may also try other local demos by running either of the following commands:
 
 `npm run app:feed` - [Demo](https://imajs.io/examples/feed) - [Source code](https://github.com/seznam/IMA.js-examples/tree/master/feed)
 
 `npm run app:todos` - [Demo](https://imajs.io/examples/todos) - [Source code](https://github.com/seznam/IMA.js-examples/tree/master/todos)
-
-You probably will have to install also [`node-gyp`](https://github.com/nodejs/node-gyp#installation) - follow the installation instructions for your operating system in the linked README.md.
 
 ## Production use
 
