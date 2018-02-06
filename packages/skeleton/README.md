@@ -3,15 +3,18 @@
 # IMA.js skeleton application
 
 The IMA.js is an application development stack for developing isomorphic
-applications written in pure JavaScript.
+applications written in pure JavaScript and React.
 
-Isomorphic applications consist of a single application logic that is first
-executed at the server-side, generates the page markup, and then the
-application logic is executed at the client-side, automatically binds to the
-server-generated markup and acts like a single-page application (or a
-multi-page application if the client does not support JavaScript). This allows
-for fast load times, out-of-box support for web crawlers and greater overall
-user experience (or UX for short).
+## Why we use IMA.js and you should too?
+
+Here at [Seznam.cz](https://www.seznam.cz/vychytavky/), development of a frontend application comes with many checkboxes that need to be ticked off before the project goes public. Mainly because of a diverse audience and a challenging product requirements. 
+
+In order to **not** reinvent the wheel on every project and to address all of these problems (checkboxes) we created the IMA.js framework. Here are a few outlines that we're most proud of:
+
+- [X] **Isomorphic** - application logic is first executed at the server-side, generates the page markup, and then when the application logic is executed at the client-side it automatically binds to the server-generated markup and acts like a single-page application (or a multi-page application if the client does not support JavaScript). This allows for fast load times, out-of-box support for web crawlers and greater overall user experienc (or UX for short).
+- [X] **React compatible** - IMA.js Views extend the React Component and are in tight cooperation with our Controllers. That means you can use the full magic of React v16 without loosing anything.
+- [X] **Production ready** - there's no need for additional setup or configuration. IMA.js uses evironment-specific configurations from the start.
+- [X] **Battle tested** - IMA.js is used on various projects across Seznam.cz. Some of them pushing the limits of what a frontend application can do.
 
 ## Installation
 
