@@ -112,7 +112,7 @@ exports.uglifyCompression = {
 };
 
 exports.liveServer = {
-	port: undefined
+  port: undefined
 };
 
 exports.vendorDependencies = {
