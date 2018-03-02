@@ -111,6 +111,10 @@ exports.uglifyCompression = {
   dead_code: true
 };
 
+exports.liveServer = {
+  port: undefined
+};
+
 exports.vendorDependencies = {
   common: coreDependencies.vendors.common.concat(
     appDependencies.vendors.common
