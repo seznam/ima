@@ -1,54 +1,60 @@
 const gls = require('gulp-live-server');
 
 const sharedState = require('../gulpState.js');
-let server = null;
-let runningServers = 0;
 
-function isServerRunning() {
-  return runningServers > 0;
-}
+exports.default = gulpConfig => {
+  let server = null;
+  let runningServers = 0;
 
-function startServer() {
-  runningServers++;
-  server.start().then(() => {
-    runningServers--;
-  });
-}
+  function isServerRunning() {
+    return runningServers > 0;
+  }
 
-exports.server = serverTask;
-function serverTask(done) {
-  server = gls.new('./build/server.js');
+  function startServer() {
+    runningServers++;
+    server.start().then(() => {
+      runningServers--;
+    });
+  }
 
-  setTimeout(startServer);
-  done();
-}
+  function serverTask(done) {
+    server = gls('./build/server.js', undefined, gulpConfig.liveServer.port);
 
-exports['server:restart'] = serverRestart;
-function serverRestart(done) {
-  setTimeout(startServer);
-  done();
-}
-
-exports['server:reload'] = serverReload;
-function serverReload(done) {
-  if (isServerRunning()) {
-    setTimeout(() => {
-      server.notify(sharedState.watchEvent);
-      done();
-    }, 2000);
-  } else {
-    startServer();
+    setTimeout(startServer);
     done();
   }
-}
 
-exports['server:hotreload'] = serverHotreload;
-function serverHotreload(done) {
-  if (isServerRunning()) {
-    server.notify(sharedState.watchEvent);
-  } else {
-    startServer();
+  function serverRestart(done) {
+    setTimeout(startServer);
+    done();
   }
 
-  done();
+  function serverReload(done) {
+    if (isServerRunning()) {
+      setTimeout(() => {
+        server.notify(sharedState.watchEvent);
+        done();
+      }, 2000);
+    } else {
+      startServer();
+      done();
+    }
+  }
+
+  function serverHotreload(done) {
+    if (isServerRunning()) {
+      server.notify(sharedState.watchEvent);
+    } else {
+      startServer();
+    }
+
+    done();
+  }
+
+  return {
+    'server': serverTask,
+    'server:restart': serverRestart,
+    'server:reload': serverReload,
+    'server:hotreload': serverHotreload
+  };
 }
