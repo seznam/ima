@@ -34,9 +34,9 @@ export default class CacheEntry {
   }
 
   /**
-   * Returns {@code true} if this entry has expired.
+   * Returns `true` if this entry has expired.
    *
-   * @return {boolean} {@code true} if this entry has expired.
+   * @return {boolean} `true` if this entry has expired.
    */
   isExpired() {
     let now = Date.now();
@@ -54,8 +54,7 @@ export default class CacheEntry {
   }
 
   /**
-   * Returns the entry value. If entry value is type of object returns clone
-   * of that object.
+   * Returns the entry value.
    *
    * @return {*} The entry value.
    */

@@ -5,6 +5,7 @@ import GenericError from '../error/GenericError';
  * Abstract extension
  *
  * @abstract
+ * @extends Extension
  */
 export default class AbstractExtension extends Extension {
   constructor() {

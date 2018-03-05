@@ -4,6 +4,8 @@ import Controller from './Controller';
  * Decorator for page controllers. The decorator manages references to the meta
  * attributes manager and other utilities so these can be easily provided to
  * the decorated page controller when needed.
+ *
+ * @extends Controller
  */
 export default class ControllerDecorator extends Controller {
   /**

@@ -18,11 +18,11 @@ export default class Controller {
    * the application. This usually happens when the user navigates to a
    * different URL.
    *
-   * This method is the lifecycle counterpart of the {@linkcode init()}
+   * This method is the lifecycle counterpart of the {@link Controller#init}
    * method.
    *
    * The controller should release all resources obtained in the
-   * {@codelink init()} method. The controller must release any resources
+   * {@link Controller#init} method. The controller must release any resources
    * that might not be released automatically when the controller's instance
    * is destroyed by the garbage collector.
    */
@@ -31,8 +31,8 @@ export default class Controller {
   /**
    * Callback for activating the controller in the UI. This is the last
    * method invoked during controller initialization, called after all the
-   * promises returned from the {@codelink load()} method have been resolved
-   * and the controller has configured the meta manager.
+   * promises returned from the {@link Controller#load} method have been
+   * resolved and the controller has configured the meta manager.
    *
    * The controller may register any React and DOM event listeners in this
    * method. The controller may start receiving event bus event after this
@@ -45,17 +45,18 @@ export default class Controller {
    * method invoked during controller deinitialization. This usually happens
    * when the user navigates to a different URL.
    *
-   * This method is the lifecycle counterpart of the {@linkcode activate()}
-   * method.
+   * This method is the lifecycle counterpart of the
+   * {@link Controller#activate} method.
    *
    * The controller should deregister listeners registered and release all
-   * resources obtained in the {@codelink activate()} method.
+   * resources obtained in the {@link Controller#activate} method.
    */
   deactivate() {}
 
   /**
    * Callback the controller uses to request the resources it needs to render
-   * its view. This method is invoked after the {@codelink init()} method.
+   * its view. This method is invoked after the {@link Controller#init}
+   * method.
    *
    * The controller should request all resources it needs in this method, and
    * represent each resource request as a promise that will resolve once the
@@ -91,18 +92,19 @@ export default class Controller {
 
   /**
    * Callback for updating the controller after a route update. This method
-   * is invoked if the current route has the {@code onlyUpdate} flag set to
-   * {@code true} and the current controller and view match those used by the
-   * previously active route, or, the {@code onlyUpdate} option of the
-   * current route is a callback and returned {@code true}.
+   * is invoked if the current route has the `onlyUpdate` flag set to `true` and
+   * the current controller and view match those used by the previously active
+   * route, or, the `onlyUpdate` option of the current route is a callback and
+   * returned `true`.
    *
    * The method must return an object with the same semantics as the result
-   * of the {@codelink load()} method. The controller's state will only be
-   * patched by the returned object instead of replacing it completely.
+   * of the {@link Controller#load} method. The controller's state will only
+   * be patched by the returned object instead of replacing it completely.
    *
-   * The other controller lifecycle callbacks ({@codelink init()},
-   * {@codelink load()}, {@codelink activate()}, {@codelink deactivate()},
-   * {@codelink deinit()}) are not call in case this method is used.
+   * The other controller lifecycle callbacks ({@link Controller#init},
+   * {@link Controller#load}, {@link Controller#activate},
+   * {@link Controller#deactivate}, {@link Controller#deinit}) are not call
+   * in case this method is used.
    *
    * @param {Object<string, string>=} [prevParams={}] Previous route
    *        parameters.
@@ -123,10 +125,11 @@ export default class Controller {
    * Note that the state is not patched recursively but by replacing the
    * values of the top-level fields of the state object.
    *
-   * Once the promises returned by the {@codelink load()} method are
+   * Once the promises returned by the {@link Controller#load} method are
    * resolved, this method is called with the an object containing the
    * resolved values. The field names of the passed object will match the
-   * field names in the object returned from the {@codelink load()} method.
+   * field names in the object returned from the {@link Controller#load}
+   * method.
    *
    * @param {Object<string, *>} statePatch Patch of the controller's state to
    *        apply.
@@ -142,7 +145,8 @@ export default class Controller {
 
   /**
    * Adds the provided extension to this controller. All extensions should be
-   * added to the controller before the {@codelink init()} method is invoked.
+   * added to the controller before the {@link Controller#init} method is
+   * invoked.
    *
    * @param {Extension} extension The extension to add to this controller.
    * @return {Controller} This controller.
@@ -163,8 +167,8 @@ export default class Controller {
    *
    * @param {Object<string, *>} loadedResources A plain object representing a
    *        map of resource names to resources loaded by the
-   *        {@codelink load()} method. This is the same object as the one
-   *        passed to the {@codelink setState()} method.
+   *        {@link Controller#load} method. This is the same object as the one
+   *        passed to the {@link Controller#setState} method.
    * @param {MetaManager} metaManager Meta attributes manager to configure.
    * @param {Router} router The current application router.
    * @param {Dictionary} dictionary The current localization dictionary.
@@ -175,10 +179,9 @@ export default class Controller {
 
   /**
    * Sets the current route parameters. This method is invoked before the
-   * {@code init()} method.
+   * {@link Controller#init} method.
    *
-   * @param {Object<string, string>} [params={}] The current route
-   *        parameters.
+   * @param {Object<string, string>} [params={}] The current route parameters.
    */
   setRouteParams(params = {}) {}
 
@@ -191,7 +194,7 @@ export default class Controller {
 
   /**
    * Sets the page state manager. The page state manager manages the
-   * controller's state. The state manager can be set to {@code null} if this
+   * controller's state. The state manager can be set to `null` if this
    * controller loses the right to modify the state of the current page (e.g.
    * the user has navigated to a different route using a different
    * controller).
