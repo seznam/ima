@@ -7,7 +7,7 @@
  * event bus events and modify the state of the page just like an ordinary
  * controller, except that the modifications are restricted to the state fields
  * which the extension explicitly specifies using its
- * {@linkcode getAllowedStateKeys()} method.
+ * {@link Extension#getAllowedStateKeys} method.
  *
  * All extensions to be used on a page must be added to the current controller
  * before the controller is initialized. After that, the extensions will go
@@ -27,11 +27,11 @@ export default class Extension {
    * the application. This usually happens when the user navigates to a
    * different URL.
    *
-   * This method is the lifecycle counterpart of the {@linkcode init()}
+   * This method is the lifecycle counterpart of the {@link Extension#init}
    * method.
    *
    * The extension should release all resources obtained in the
-   * {@codelink init()} method. The extension must release any resources
+   * {@link Extension#init} method. The extension must release any resources
    * that might not be released automatically when the extensions's instance
    * is destroyed by the garbage collector.
    */
@@ -40,7 +40,7 @@ export default class Extension {
   /**
    * Callback for activating the extension in the UI. This is the last
    * method invoked during controller (and extensions) initialization, called
-   * after all the promises returned from the {@codelink load()} method have
+   * after all the promises returned from the {@link Extension#load} method have
    * been resolved and the controller has configured the meta manager.
    *
    * The extension may register any React and DOM event listeners in this
@@ -54,18 +54,18 @@ export default class Extension {
    * method invoked during extension deinitialization. This usually happens
    * when the user navigates to a different URL.
    *
-   * This method is the lifecycle counterpart of the {@linkcode activate()}
+   * This method is the lifecycle counterpart of the {@link Extension#activate}
    * method.
    *
    * The extension should deregister listeners registered and release all
-   * resources obtained in the {@codelink activate()} method.
+   * resources obtained in the {@link Extension#activate} method.
    */
   deactivate() {}
 
   /**
    * Callback the extension uses to request the resources it needs to render
    * its related parts of the view. This method is invoked after the
-   * {@codelink init()} method.
+   * {@link Extension#init} method.
    *
    * The extension should request all resources it needs in this method, and
    * represent each resource request as a promise that will resolve once the
@@ -91,18 +91,19 @@ export default class Extension {
 
   /**
    * Callback for updating the extension after a route update. This method
-   * is invoked if the current route has the {@code onlyUpdate} flag set to
-   * {@code true} and the current controller and view match those used by the
-   * previously active route, or, the {@code onlyUpdate} option of the
-   * current route is a callback and returned {@code true}.
+   * is invoked if the current route has the `onlyUpdate` flag set to `true` and
+   * the current controller and view match those used by the previously active
+   * route, or, the `onlyUpdate` option of the current route is a callback and
+   * returned `true`.
    *
    * The method must return an object with the same semantics as the result
-   * of the {@codelink load()} method. The controller's state will then be
+   * of the {@link Extension#load} method. The controller's state will then be
    * patched by the returned object.
    *
-   * The other extension lifecycle callbacks ({@codelink init()},
-   * {@codelink load()}, {@codelink activate()}, {@codelink deactivate()},
-   * {@codelink deinit()}) are not call in case this method is used.
+   * The other extension lifecycle callbacks ({@link Extension#init},
+   * {@link Extension#load}, {@link Extension#activate},
+   * {@link Extension#deactivate}, {@link Extension#deinit}) are not call in
+   * case this method is used.
    *
    * @param {Object<string, string>=} [prevParams={}] Previous route
    *        parameters.
@@ -121,7 +122,7 @@ export default class Extension {
    * values of the top-level fields of the state object.
    *
    * Note that the extension may modify only the fields of the state that it
-   * has specified by its {@linkcode getAllowedStateKeys} method.
+   * has specified by its {@link Extension#getAllowedStateKeys} method.
    *
    * @param {Object<string, *>} statePatch Patch of the controller's state to
    *        apply.
@@ -145,7 +146,7 @@ export default class Extension {
 
   /**
    * Sets the current route parameters. This method is invoked before the
-   * {@code init()} method.
+   * {@link Extension#init} method.
    *
    * @param {Object<string, string>} [params={}] The current route
    *        parameters.
