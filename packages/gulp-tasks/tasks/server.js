@@ -52,9 +52,9 @@ exports.default = gulpConfig => {
   }
 
   return {
-    'server': serverTask,
+    server: serverTask,
     'server:restart': serverRestart,
     'server:reload': serverReload,
     'server:hotreload': serverHotreload
   };
-}
+};
