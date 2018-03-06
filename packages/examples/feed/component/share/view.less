@@ -1,127 +1,127 @@
 .share {
-	position: relative;
-	width: auto;
-	min-width: 0 !important;
+    position: relative;
+    width: auto;
+    min-width: 0 !important;
 
-	.toggle {
-		cursor: pointer;
-	}
+    .toggle {
+        cursor: pointer;
+    }
 
-	.sharing-wrapper {
-		width: 0;
-	}
+    .sharing-wrapper {
+        width: 0;
+    }
 
-	.sharing-container {
-		position: relative;
-		maring-top: 0;
-		.grid(margin-left; -25);
-		.grid(width; 75);
+    .sharing-container {
+        position: relative;
+        maring-top: 0;
+        .grid(margin-left; -25);
+        .grid(width; 75);
 
-		opacity: 0;
-		padding: 0;
-		max-height: 0;
-		transition: 0.3s;
-		overflow: hidden;
+        opacity: 0;
+        padding: 0;
+        max-height: 0;
+        transition: 0.3s;
+        overflow: hidden;
 
-		a {
-			display: block;
-			float: left;
-			.grid(height; 4);
-			.grid(margin-right; 13);
-			.rem(font-size; 14px);
+        a {
+            display: block;
+            float: left;
+            .grid(height; 4);
+            .grid(margin-right; 13);
+            .rem(font-size; 14px);
 
-			color: black;
-			background: left center no-repeat;
+            color: black;
+            background: left center no-repeat;
 
-			img {
-				.grid(padding-left; 2);
-				.grid(padding-right; 2);
-			}
+            img {
+                .grid(padding-left; 2);
+                .grid(padding-right; 2);
+            }
 
-			span {
-				position: relative;
-				top: -12px;
-			}
-		}
+            span {
+                position: relative;
+                top: -12px;
+            }
+        }
 
-		a:last-child {
-			margin-right: 0;
-		}
+        a:last-child {
+            margin-right: 0;
+        }
 
-		.facebook {
-			//background-image: url('@{images}/share/facebook.png');
-		}
+        .facebook {
+            //background-image: url('@{images}/share/facebook.png');
+        }
 
-		.tweet-button {
-			//background-image: url('@{images}/share/twitter.png');
-		}
+        .tweet-button {
+            //background-image: url('@{images}/share/twitter.png');
+        }
 
-		.email {
-			//background-image: url('@{images}/share/email.png');
-		}
-	}
+        .email {
+            //background-image: url('@{images}/share/email.png');
+        }
+    }
 
-	.arrow,
-	.arrow-overlay {
-		.grid(width; 1);
-		.grid(height; 1);
-		
-		position: absolute;
-		.grid(top; 0.5);
-		.grid(left; 27);
+    .arrow,
+    .arrow-overlay {
+        .grid(width; 1);
+        .grid(height; 1);
 
-		transform: rotate(45deg);
-	}
+        position: absolute;
+        .grid(top; 0.5);
+        .grid(left; 27);
 
-	.arrow {
-		box-shadow: -0.5px -0.5px 3px #dcdcdc;
-	}
+        transform: rotate(45deg);
+    }
 
-	.arrow-overlay {
-		z-index: 1;
-		background: white;
-	}
+    .arrow {
+        box-shadow: -0.5px -0.5px 3px #dcdcdc;
+    }
 
-	.sharing-options {
-		.clearfix();
+    .arrow-overlay {
+        z-index: 1;
+        background: white;
+    }
 
-		position: relative;
+    .sharing-options {
+        .clearfix();
 
-		.grid(width; 73);
-		.grid(margin-left; 1);
-		.grid(margin-top; 1);
-		.grid(padding; 2);
-		box-shadow: 0 0 3px #c9c9c9;
-		border-radius: 2px;
-		background: white;
+        position: relative;
 
-		.grid(line-height; 4);
-		font-weight: normal;
-	}
+        .grid(width; 73);
+        .grid(margin-left; 1);
+        .grid(margin-top; 1);
+        .grid(padding; 2);
+        box-shadow: 0 0 3px #c9c9c9;
+        border-radius: 2px;
+        background: white;
 
-	input {
-		width: 100%;
-		.grid(height; 4);
+        .grid(line-height; 4);
+        font-weight: normal;
+    }
 
-		.grid(padding; 0 1);
-		
-		.grid(margin-bottom; 3);
+    input {
+        width: 100%;
+        .grid(height; 4);
 
-		border: 1px solid #cccccc;
-		color: #808080;
-		cursor: text;
-	}
+        .grid(padding; 0 1);
 
-	&.expanded {
-		color: #cc0000 !important;
+        .grid(margin-bottom; 3);
 
-		.sharing-container {
-			opacity: 1;
-			.grid(margin-top; 1);
-			.grid(max-height; 17);
-			.grid(padding-bottom; 1);
-		}
+        border: 1px solid #cccccc;
+        color: #808080;
+        cursor: text;
+    }
 
-		
-	}
+    &.expanded {
+        color: #cc0000 !important;
+
+        .sharing-container {
+            opacity: 1;
+            .grid(margin-top; 1);
+            .grid(max-height; 17);
+            .grid(padding-bottom; 1);
+        }
+
+
+    }
 }

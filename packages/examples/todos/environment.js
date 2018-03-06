@@ -2,15 +2,14 @@ let versionCoef = 1000 * 60;
 let version = Math.round(new Date().getTime() / versionCoef).toString(36);
 
 module.exports = (() => {
-
-	return {
-		// The production environment is used as a template for configuration
-		// of other environments
-		prod: {
-			$Debug: false, // Debug mode
-			$Version: version, // Current server version. Version value is used
-							   // for static assets timestamp.
-			/*
+  return {
+    // The production environment is used as a template for configuration
+    // of other environments
+    prod: {
+      $Debug: false, // Debug mode
+      $Version: version, // Current server version. Version value is used
+      // for static assets timestamp.
+      /*
 			 * Key-value pairs used for configuring the languages used with
 			 * specific hosts or starting paths.
 			 *
@@ -25,95 +24,96 @@ module.exports = (() => {
 			 *          when the path part specifying the language is not
 			 *          present in the current URL.
 			 */
-			$Language: {
-				'//*:*': 'en'
-			},
-			$Server: {
-				port: 3001, // The port at which the server listens for
-							// incoming HTTP connections
-				staticFolder: '/static', // Define the path to the folder with
-										 // static assets
-				concurrency: 100, // The number of application instances (not
-								  // threads) used to handle concurrent
-								  // connections within a single thread
-				clusters: null, // Define the number of server processes you
-								// want to start. Use null for the current
-								// number of available CPU cores.
-				serveSPA: {
-					allow: true, // When enabled, and the number of concurrent
-								 // connection exceeds the concurrency, the
-								 // server will serve the application in SPA
-								 // mode (without server-side rendering)
-					blackList: ['Googlebot', 'SeznamBot'] // These user agents
-														  // will always be
-														  // served a
-														  // server-rendered
-														  // page
-				},
-				cache: {
-					// boolean, or function(Express.Request): boolean
-					enabled: false,
+      $Language: {
+        '//*:*': 'en'
+      },
+      $Server: {
+        port: 3001, // The port at which the server listens for
+        // incoming HTTP connections
+        staticFolder: '/static', // Define the path to the folder with
+        // static assets
+        concurrency: 100, // The number of application instances (not
+        // threads) used to handle concurrent
+        // connections within a single thread
+        clusters: null, // Define the number of server processes you
+        // want to start. Use null for the current
+        // number of available CPU cores.
+        serveSPA: {
+          allow: true, // When enabled, and the number of concurrent
+          // connection exceeds the concurrency, the
+          // server will serve the application in SPA
+          // mode (without server-side rendering)
+          blackList: ['Googlebot', 'SeznamBot'] // These user agents
+          // will always be
+          // served a
+          // server-rendered
+          // page
+        },
+        cache: {
+          // boolean, or function(Express.Request): boolean
+          enabled: false,
 
-					// null or function(Express.Request): string
-					cacheKeyGenerator: null,
+          // null or function(Express.Request): string
+          cacheKeyGenerator: null,
 
-					// the maximum time a cache entry is kept
-					entryTtl: 60 * 60 * 1000, // milliseconds
+          // the maximum time a cache entry is kept
+          entryTtl: 60 * 60 * 1000, // milliseconds
 
-					// the time after which the unused entries are discarded
-					unusedEntryTtl: 15 * 60 * 1000, // milliseconds
+          // the time after which the unused entries are discarded
+          unusedEntryTtl: 15 * 60 * 1000, // milliseconds
 
-					// the maximum entries in cache
-					maxEntries: 500
-				},
-				logger: {
-					formatting: 'simple' // use "simple" or "JSON"
-				}
-			},
-			$Proxy: { // Configuration of REST API proxy. All requests to the
-			          // specified path will be proxies to the specified
-			          // server. This proxy should be used only in dev
-			          // environment because of performance a possible security
-			          // concerns.
-				path: '/api', // Path at which the proxy will be listening for
-							  // request
-				server: 'example.com',
-				options: { // options to pass to the express-http-proxy
-					https: true,
-					limit: '100mb',
-					timeout: 10000, // milliseconds
-					proxyReqPathResolver: request => `/api/v1${request.url}`
-				}
-			}
-		},
+          // the maximum entries in cache
+          maxEntries: 500
+        },
+        logger: {
+          formatting: 'simple' // use "simple" or "JSON"
+        }
+      },
+      $Proxy: {
+        // Configuration of REST API proxy. All requests to the
+        // specified path will be proxies to the specified
+        // server. This proxy should be used only in dev
+        // environment because of performance a possible security
+        // concerns.
+        path: '/api', // Path at which the proxy will be listening for
+        // request
+        server: 'example.com',
+        options: {
+          // options to pass to the express-http-proxy
+          https: true,
+          limit: '100mb',
+          timeout: 10000, // milliseconds
+          proxyReqPathResolver: request => `/api/v1${request.url}`
+        }
+      }
+    },
 
-		test: {
-			$Language: {
-				'//*:*': 'en'
-			},
-			$Proxy: {
-				server: 'example.test',
-				options: {
-					proxyReqPathResolver: request => `/api${request.url}`
-				}
-			}
-		},
+    test: {
+      $Language: {
+        '//*:*': 'en'
+      },
+      $Proxy: {
+        server: 'example.test',
+        options: {
+          proxyReqPathResolver: request => `/api${request.url}`
+        }
+      }
+    },
 
-		dev: {
-			$Debug: true,
-			$Language: {
-				'//*:*': 'en'
-			},
-			$Server: {
-				concurrency: 1
-			},
-			$Proxy: {
-				server: 'localhost:3001',
-				options: {
-					proxyReqPathResolver: request => `/api${request.url}`
-				}
-			}
-		}
-	};
-
+    dev: {
+      $Debug: true,
+      $Language: {
+        '//*:*': 'en'
+      },
+      $Server: {
+        concurrency: 1
+      },
+      $Proxy: {
+        server: 'localhost:3001',
+        options: {
+          proxyReqPathResolver: request => `/api${request.url}`
+        }
+      }
+    }
+  };
 })();

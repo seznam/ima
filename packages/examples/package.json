@@ -1,28 +1,41 @@
 {
-	"name": "ima-examples",
-	"version": "0.15.0-beta2",
-	"description": "Example IMA.js applications.",
-	"main": "index.js",
-	"scripts": {},
-	"repository": {
-		"type": "git",
-		"url": "https://github.com/seznam/IMA.js-examples.git"
-	},
-	"keywords": [
-		"IMA.js",
-		"ima"
-	],
-	"author": "Seznam.cz, a.s.",
-	"license": "MIT",
-	"bugs": {
-		"url": "https://github.com/seznam/IMA.js-examples/issues"
-	},
-	"publishConfig": {
-		"registry": "http://registry.npmjs.org/"
-	},
-	"homepage": "https://github.com/seznam/IMA.js-examples",
-	"engines": {
-		"node": ">=6.4.0",
-		"npm": ">=3.10.3"
-	}
+    "name": "ima-examples",
+    "version": "0.15.0-beta2",
+    "description": "Example IMA.js applications.",
+    "main": "index.js",
+    "scripts": {
+        "lint": "node_modules/.bin/eslint --fix './{hello,feed,todos}/!(assets)/**/*.{js,jsx}'",
+        "prepublish": "npm run lint"
+    },
+    "repository": {
+        "type": "git",
+        "url": "https://github.com/seznam/IMA.js-examples.git"
+    },
+    "keywords": [
+        "IMA.js",
+        "ima"
+    ],
+    "author": "Seznam.cz, a.s.",
+    "license": "MIT",
+    "bugs": {
+        "url": "https://github.com/seznam/IMA.js-examples/issues"
+    },
+    "publishConfig": {
+        "registry": "http://registry.npmjs.org/"
+    },
+    "homepage": "https://github.com/seznam/IMA.js-examples",
+    "engines": {
+        "node": ">=6.4.0",
+        "npm": ">=3.10.3"
+    },
+    "devDependencies": {
+        "babel-eslint": "8.2.2",
+        "eslint": "4.18.2",
+        "eslint-config-prettier": "2.9.0",
+        "eslint-plugin-jasmine": "2.9.3",
+        "eslint-plugin-jest": "21.13.0",
+        "eslint-plugin-prettier": "2.6.0",
+        "eslint-plugin-react": "7.7.0",
+        "prettier": "1.11.1"
+    }
 }

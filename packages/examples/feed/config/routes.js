@@ -9,9 +9,9 @@ import NotFoundController from 'app/page/notFound/NotFoundController';
 import NotFoundView from 'app/page/notFound/NotFoundView';
 
 export default (ns, oc, routesConfig, router) =>
-	router
-		.add('home', '/', HomeController, HomeView)
-		.add('category', '/:category', HomeController, HomeView)
-		.add('post', '/:category/:itemId', DetailController, DetailView)
-		.add(RouteNames.ERROR, '/error', ErrorController, ErrorView)
-		.add(RouteNames.NOT_FOUND, '/not-found', NotFoundController, NotFoundView);
+  router
+    .add('home', '/', HomeController, HomeView)
+    .add('category', '/:category', HomeController, HomeView)
+    .add('post', '/:category/:itemId', DetailController, DetailView)
+    .add(RouteNames.ERROR, '/error', ErrorController, ErrorView)
+    .add(RouteNames.NOT_FOUND, '/not-found', NotFoundController, NotFoundView);

@@ -1,72 +1,72 @@
 /**
- * Base styles – mixins, global rules and common modules rules.
- */
+* Base styles – mixins, global rules and common modules rules.
+*/
 
 /**
- * ---------------
- * @section Mixins
- * ---------------
- */
+* ---------------
+* @section Mixins
+* ---------------
+*/
 .font-size(@rem: 1) {
-	font-size: @font-size * @rem * 1px;
-	font-size: @rem * 1rem;
+    font-size: @font-size * @rem * 1px;
+    font-size: @rem * 1rem;
 }
 
 /**
- * ----------------
- * @section Modules
- * ----------------
- */
+* ----------------
+* @section Modules
+* ----------------
+*/
 .screen-reader {
-	position: absolute;
-	left: -5000px;
-	top: -5000px;
-	width: 1px;
-	height: 1px;
-	overflow: hidden;
+    position: absolute;
+    left: -5000px;
+    top: -5000px;
+    width: 1px;
+    height: 1px;
+    overflow: hidden;
 }
 
 /* The micro clearfix http://nicolasgallagher.com/micro-clearfix-hack */
 .clearfix(){
-	*zoom:1;
-	
-	&:before,
-	&:after{
-	    content:"";
-	    display:table;
-	}
-	&:after{
-	    clear:both;
-	}
+    *zoom:1;
+
+    &:before,
+    &:after{
+        content:"";
+        display:table;
+    }
+    &:after{
+        clear:both;
+    }
 }
 
 /**
- * --------------------------------
- * @section Mixins from lesshat.com
- * --------------------------------
- */
+* --------------------------------
+* @section Mixins from lesshat.com
+* --------------------------------
+*/
 
 .box-sizing(...) {
-  @process: ~`(function(e){return e=e||"content-box"})((function(){var e="@{arguments}";return e=e.replace(/^\[|\]$/g,"")})())`;
-  -webkit-box-sizing: @process;
-  -moz-box-sizing: @process;
-  box-sizing: @process;
+    @process: ~`(function(e){return e=e||"content-box"})((function(){var e="@{arguments}";return e=e.replace(/^\[|\]$/g,"")})())`;
+    -webkit-box-sizing: @process;
+    -moz-box-sizing: @process;
+    box-sizing: @process;
 }
 
 .opacity(...) {
-  @process_ms: ~`(function(e){return e=e||"filter: alpha(opacity=100)","alpha(opacity="+Math.floor(100*e)+")"})((function(){var e="@{arguments}";return e=e.replace(/^\[|\]$/g,"")})())`;
-  @process: ~`(function(e){return e=e||"1"})((function(){var e="@{arguments}";return e=e.replace(/^\[|\]$/g,"")})())`;
-  zoom: 1; filter: @process_ms;
-  -webkit-opacity: @process;
-  -moz-opacity: @process;
-  opacity: @process;
+    @process_ms: ~`(function(e){return e=e||"filter: alpha(opacity=100)","alpha(opacity="+Math.floor(100*e)+")"})((function(){var e="@{arguments}";return e=e.replace(/^\[|\]$/g,"")})())`;
+    @process: ~`(function(e){return e=e||"1"})((function(){var e="@{arguments}";return e=e.replace(/^\[|\]$/g,"")})())`;
+    zoom: 1; filter: @process_ms;
+    -webkit-opacity: @process;
+    -moz-opacity: @process;
+    opacity: @process;
 }
 
 /**
- * ---------------------
- * @section Global rules
- * ---------------------
- */
+* ---------------------
+* @section Global rules
+* ---------------------
+*/
 
 html, body, div, span, applet, object, iframe,
 h1, h2, h3, h4, h5, h6, p, blockquote, pre,
@@ -77,52 +77,52 @@ b, u, i, center,
 dl, dt, dd, ol, ul, li,
 fieldset, form, label, legend,
 table, caption, tbody, tfoot, thead, tr, th, td,
-article, aside, canvas, details, embed, 
-figure, figcaption, footer, header, hgroup, 
+article, aside, canvas, details, embed,
+figure, figcaption, footer, header, hgroup,
 menu, nav, output, ruby, section, summary,
 time, mark, audio, video {
-	font: inherit;
+    font: inherit;
 }
 
 html {
-	font-size: @font-size * 1px;
-	font-family: @font-family;
+    font-size: @font-size * 1px;
+    font-family: @font-family;
 }
 
 body {
-	background: @color-background;
-	color: @color-text;
+    background: @color-background;
+    color: @color-text;
 }
 
 a {
-	color: @color-red;
-	text-decoration: none;
+    color: @color-red;
+    text-decoration: none;
 }
 
 h1 {
-	color: @color-text;
+    color: @color-text;
 }
 
 h2 {
-	.font-size(1.8);
-	color: @color-text;
-	margin-bottom: 10px;
+    .font-size(1.8);
+    color: @color-text;
+    margin-bottom: 10px;
 }
 
 h3 {
-	.font-size(1.6);
-	color: @color-text;
-	margin-bottom: 4px;
+    .font-size(1.6);
+    color: @color-text;
+    margin-bottom: 4px;
 }
 
 ul {
-	list-style-type: none;
+    list-style-type: none;
 }
 
 label {
-	.font-size(1.3);
+    .font-size(1.3);
 }
 
 strong {
-	font-weight: bold;
+    font-weight: bold;
 }

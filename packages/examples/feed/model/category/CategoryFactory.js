@@ -5,12 +5,11 @@ import CategoryEntity from 'app/model/category/CategoryEntity';
  * Factory to create category entity.
  */
 export default class CategoryFactory extends AbstractEntityFactory {
+  static get $dependencies() {
+    return [];
+  }
 
-	static get $dependencies() {
-		return [];
-	}
-
-	constructor() {
-		super(CategoryEntity);
-	}
+  constructor() {
+    super(CategoryEntity);
+  }
 }

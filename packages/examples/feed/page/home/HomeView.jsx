@@ -10,28 +10,30 @@ import TextInput from 'app/component/textInput/TextInput';
  * HomePage view.
  */
 export default class HomeView extends AbstractComponent {
+  static get contextTypes() {
+    return {
+      $Utils: PropTypes.object
+    };
+  }
 
-	static get contextTypes() {
-		return {
-			$Utils: PropTypes.object
-		};
-	}
-
-	render() {
-		return (
-			<div className='l-homepage'>
-				<Header/>
-				<TextInput
-						categories={this.props.categories}
-						currentCategory={this.props.currentCategory}/>
-				<Filter
-						categories={this.props.categories}
-						currentCategory={this.props.currentCategory}/>
-				<Feed
-						entity={this.props.feed}
-						categories={this.props.categories}
-						sharedItem={this.props.sharedItem}/>
-			</div>
-		);
-	}
+  render() {
+    return (
+      <div className="l-homepage">
+        <Header />
+        <TextInput
+          categories={this.props.categories}
+          currentCategory={this.props.currentCategory}
+        />
+        <Filter
+          categories={this.props.categories}
+          currentCategory={this.props.currentCategory}
+        />
+        <Feed
+          entity={this.props.feed}
+          categories={this.props.categories}
+          sharedItem={this.props.sharedItem}
+        />
+      </div>
+    );
+  }
 }

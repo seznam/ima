@@ -5,26 +5,24 @@ import initSettings from 'app/config/settings';
 import * as ima from 'ima/main';
 
 let getInitialAppConfigFunctions = () => {
-	return { initBindApp, initRoutes, initServicesApp, initSettings };
+  return { initBindApp, initRoutes, initServicesApp, initSettings };
 };
 
 if ($IMA.Test) {
-	ima.reviveTestClientApp(getInitialAppConfigFunctions());
+  ima.reviveTestClientApp(getInitialAppConfigFunctions());
 } else {
-	ima.onLoad()
-		.then(() => {
-			if (!$IMA.HotReload) {
-				ima.reviveClientApp(getInitialAppConfigFunctions());
-			}
-		})
-		.catch((error) => {
-			if (error) {
-				console.error(error);
-			}
-		});
+  ima
+    .onLoad()
+    .then(() => {
+      if (!$IMA.HotReload) {
+        ima.reviveClientApp(getInitialAppConfigFunctions());
+      }
+    })
+    .catch(error => {
+      if (error) {
+        console.error(error);
+      }
+    });
 }
 
-export {
-	getInitialAppConfigFunctions,
-	ima
-};
+export { getInitialAppConfigFunctions, ima };

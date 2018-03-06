@@ -1,62 +1,62 @@
 .filter {
-	.grid(max-width; 66);
-	.grid(max-height; 5);
-	overflow: hidden;
-	margin: 0 auto;
-	transition: 0.3s;
+    .grid(max-width; 66);
+    .grid(max-height; 5);
+    overflow: hidden;
+    margin: 0 auto;
+    transition: 0.3s;
 
-	border-top: 1px solid #f2f2f2;
-	border-bottom: 1px solid #f2f2f2;
+    border-top: 1px solid #f2f2f2;
+    border-bottom: 1px solid #f2f2f2;
 
-	.top {
-		.grid(line-height; 5);
-		text-align: center;
+    .top {
+        .grid(line-height; 5);
+        text-align: center;
 
-		.toggle {
-			.grid(padding-right; 3);
-			color: #cc0000;
-			cursor: pointer;
-			background: url('@{images}/filter/expand.png') right center no-repeat;
-		}
-	}
+        .toggle {
+            .grid(padding-right; 3);
+            color: #cc0000;
+            cursor: pointer;
+            background: url('@{images}/filter/expand.png') right center no-repeat;
+        }
+    }
+    
+    .categories {
+        .clearfix();
+        .grid(padding; 2 0);
 
-	.categories {
-		.clearfix();
-		.grid(padding; 2 0);
+        a {
+            display: block;
+            width: 33.333%;
+            float: left;
+            .grid(line-height; 3);
+        }
 
-		a {
-			display: block;
-			width: 33.333%;
-			float: left;
-			.grid(line-height; 3);
-		}
+        .all {
+            width: 100%;
+            font-weight: bold;
+        }
+    }
 
-		.all {
-			width: 100%;
-			font-weight: bold;
-		}
-	}
+    &.expanded {
+        .grid(max-height; 45);
 
-	&.expanded {
-		.grid(max-height; 45);
+        .top .toggle {
+            background-image: url('@{images}/filter/collapse.png');
+        }
+    }
 
-		.top .toggle {
-			background-image: url('@{images}/filter/collapse.png');
-		}
-	}
+    @media (max-width: 480px) {
+        .categories {
 
-	@media (max-width: 480px) {
-		.categories {
+            .grid(padding; 2 3);
 
-			.grid(padding; 2 3);
+            .all {
+                width: 50%;
+            }
 
-			.all {
-				width: 50%;
-			}
-
-			a {
-				width: 50%;
-			}
-		}
-	}
+            a {
+                width: 50%;
+            }
+        }
+    }
 }

@@ -1,37 +1,37 @@
 /**
- * Nastavi hodnotu zadane vlastnosti v em.
- * @property - nazev css vlastnosti
- * @size-px-list - 1 az 4 rozmery v px, oddelene mezerou, ktere budou prepocitany na em
- * @font-size-px - font-size, podle ktereho prepocitavame, defaultne zakladni velikost fontu na webu.
- *
- * Example:
- *
- * elm1 {
- *     .em(margin; 0 20px);
- *     .em(padding; 12 0 16);
- *     .em(border-width; 0 10px 10px 0);
- *     .em(top; 5);
- * }
- * elm2 {
- *     .em(font-size; 10);                // = .hp-font-size-em(10)
- *     .em(padding; 20; 10);              // chceme padding siroky 24px, musime ale zadat aktualni font-size v px, at je to spravne
- *     .em(margin; 10 10px 10em 10%; 10); // jednotky budou ignorovany ... 10 je proste 10 (pixelu)
- * }
- *
- *  --->
- *
- * elm1 {
- *     margin: 0em 1.25em;
- *     padding: 0.75em 0em 1em;
- *     border-width: 0em 0.625em 0.625em 0em;
- *     top: 0.3125em;
- * }
- * elm2 {
- *     font-size: 0.625em;
- *     padding: 2em;
- *     margin: 1em 1em 1em 1em;
- * }
- */
+* Nastavi hodnotu zadane vlastnosti v em.
+* @property - nazev css vlastnosti
+* @size-px-list - 1 az 4 rozmery v px, oddelene mezerou, ktere budou prepocitany na em
+* @font-size-px - font-size, podle ktereho prepocitavame, defaultne zakladni velikost fontu na webu.
+*
+* Example:
+*
+* elm1 {
+*     .em(margin; 0 20px);
+*     .em(padding; 12 0 16);
+*     .em(border-width; 0 10px 10px 0);
+*     .em(top; 5);
+* }
+* elm2 {
+*     .em(font-size; 10);                // = .hp-font-size-em(10)
+*     .em(padding; 20; 10);              // chceme padding siroky 24px, musime ale zadat aktualni font-size v px, at je to spravne
+*     .em(margin; 10 10px 10em 10%; 10); // jednotky budou ignorovany ... 10 je proste 10 (pixelu)
+* }
+*
+*  --->
+*
+* elm1 {
+*     margin: 0em 1.25em;
+*     padding: 0.75em 0em 1em;
+*     border-width: 0em 0.625em 0.625em 0em;
+*     top: 0.3125em;
+* }
+* elm2 {
+*     font-size: 0.625em;
+*     padding: 2em;
+*     margin: 1em 1em 1em 1em;
+* }
+*/
 
 @base-font-size: 16px;
 
@@ -99,45 +99,45 @@ when ( isnumber(extract(@size-px-list, 1)) ) and not ( isnumber(extract(@size-px
 /*-----------------konec .em()-----------------*/
 
 /**
- * Prepocita velikost zadanou v px na em, vysledek ulozi do promenne @em-size.
- * Lze pouzit pouze 1x v aktualnim scope!
- *
- * @size-px - nejaky rozmer v px
- * @font-size-px - aktualni velikost font-size v px, defaultne zakladni velikost fontu na webu.
- *
- * Example:
- *
- * .neco {
- *     .em-size(5px);
- *     border: @em-size solid #000;
- *
- *     //umele vyrabime kontexty
- *     & {
- *         .em-size(460px);
- *         @media screen and (max-width: @em-size) {...}
- *     }
- *     & {
- *         .em-size(320px);
- *         @media screen and (max-width: @em-size) {...}
- *     }
- * }
- */
+* Prepocita velikost zadanou v px na em, vysledek ulozi do promenne @em-size.
+* Lze pouzit pouze 1x v aktualnim scope!
+*
+* @size-px - nejaky rozmer v px
+* @font-size-px - aktualni velikost font-size v px, defaultne zakladni velikost fontu na webu.
+*
+* Example:
+*
+* .neco {
+*     .em-size(5px);
+*     border: @em-size solid #000;
+*
+*     //umele vyrabime kontexty
+*     & {
+*         .em-size(460px);
+*         @media screen and (max-width: @em-size) {...}
+*     }
+*     & {
+*         .em-size(320px);
+*         @media screen and (max-width: @em-size) {...}
+*     }
+* }
+*/
 .em-size(@size-px; @font-size-px: @hp-base-font-size-px) {
     @em-size: unit(@size-px / @font-size-px, em);
 }
 
 /**
- * Prevede transform pravidla na em hodnoty.
- *
- * Example:
- *
- * .em-translate3D( 60px 100px 10px );
- * .em-translate3D( 60px 100px 10px; 12px );
- * .em-translate2D( 60px 100px );
- * .em-translate2D( 60px 100px; 12px );
- * .em-transform( translateX; 60px );
- * .em-transform( translateX; 60px; 12px );
- */
+* Prevede transform pravidla na em hodnoty.
+*
+* Example:
+*
+* .em-translate3D( 60px 100px 10px );
+* .em-translate3D( 60px 100px 10px; 12px );
+* .em-translate2D( 60px 100px );
+* .em-translate2D( 60px 100px; 12px );
+* .em-transform( translateX; 60px );
+* .em-transform( translateX; 60px; 12px );
+*/
 
 // translate3D
 .em-translate3D(@size-px-list; @font-size-px: @hp-base-font-size-px)

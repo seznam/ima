@@ -6,34 +6,33 @@ import CategoryListEntity from 'app/model/categoryList/CategoryListEntity';
  * Factory to create feed entity.
  */
 export default class CategoryListFactory extends AbstractEntityFactory {
+  static get $dependencies() {
+    return [CategoryFactory];
+  }
 
-	static get $dependencies() {
-		return [CategoryFactory];
-	}
+  /**
+   * @param {CategoryFactory} categoryFactory
+   */
+  constructor(categoryFactory) {
+    super(CategoryListEntity);
 
-	/**
-	 * @param {CategoryFactory} categoryFactory
-	 */
-	constructor(categoryFactory) {
-		super(CategoryListEntity);
+    this._categoryFactory = categoryFactory;
+  }
 
-		this._categoryFactory = categoryFactory;
-	}
+  /**
+   * Creates Entity of feed
+   *
+   * @param {Object<string, *>} data
+   * @return {CategoryListEntity}
+   */
+  createEntity(data) {
+    let categoryEntityList = this._categoryFactory.createEntityList(
+      data.categories
+    );
 
-	/**
-	 * Creates Entity of feed
-	 *
-	 * @param {Object<string, *>} data
-	 * @return {CategoryListEntity}
-	 */
-	createEntity(data) {
-		let categoryEntityList = this._categoryFactory.createEntityList(
-			data.categories
-		);
-
-		return super.createEntity({
-			_id: 'categories',
-			categories: categoryEntityList
-		});
-	}
+    return super.createEntity({
+      _id: 'categories',
+      categories: categoryEntityList
+    });
+  }
 }

@@ -8,24 +8,23 @@ import AbstractPageController from 'app/page/AbstractPageController';
  * @submodule app.page
  */
 export default class ErrorController extends AbstractPageController {
+  static get $dependencies() {
+    return [];
+  }
 
-	static get $dependencies() {
-		return [];
-	}
+  constructor() {
+    super();
 
-	constructor() {
-		super();
+    this.status = 500;
+  }
 
-		this.status = 500;
-	}
-
-	/**
-	 * @return {Object}
-	 */
-	load() {
-		return {
-			status: this.status,
-			error: this.params
-		};
-	}
+  /**
+   * @return {Object}
+   */
+  load() {
+    return {
+      status: this.status,
+      error: this.params
+    };
+  }
 }
