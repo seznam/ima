@@ -1,7 +1,7 @@
 import CacheEntry from './CacheEntry';
 
 /**
- * Factory for creating instances of {@linkcode CacheEntry}.
+ * Factory for creating instances of {@link CacheEntry}.
  */
 export default class CacheFactory {
   static get $dependencies() {
@@ -9,7 +9,7 @@ export default class CacheFactory {
   }
 
   /**
-   * Create new instance of {@linkcode CacheEntry} with value a ttl.
+   * Create a new instance of {@link CacheEntry} with value and ttl.
    *
    * @param {*} value The cache entry value.
    * @param {?number=} ttl Cache entry time to live in milliseconds. The

@@ -1,16 +1,17 @@
 import Cache from './Cache';
 
 /**
- * Configurable generic implementation of the {@codelink Cache} interface.
+ * Configurable generic implementation of the {@link Cache} interface.
  *
  * @example
- *   if (cache.has('model.articles')) {
- *     return cache.get('model.articles');
- *   } else {
- *     let articles = getArticlesFromStorage();
- *     // cache for an hour
- *     cache.set('model.articles', articles, 60 * 60 * 1000);
- *   }
+ * if (cache.has('model.articles')) {
+ *   return cache.get('model.articles');
+ * } else {
+ *   let articles = getArticlesFromStorage();
+ *   // cache for an hour
+ *   cache.set('model.articles', articles, 60 * 60 * 1000);
+ * }
+ * @extends Cache
  */
 export default class CacheImpl extends Cache {
   /**
@@ -183,8 +184,8 @@ export default class CacheImpl extends Cache {
    * Tests whether the provided value can be serialized into JSON.
    *
    * @param {*} value The value to test whether or not it can be serialized.
-   * @return {boolean} {@code true} if the provided value can be serialized
-   *         into JSON, {@code false} otherwise.
+   * @return {boolean} `true` if the provided value can be serialized into JSON,
+   *         `false` otherwise.
    */
   _canSerializeValue(value) {
     if (
@@ -235,8 +236,8 @@ export default class CacheImpl extends Cache {
    * cloned (e.g. promises) will be simply returned.
    *
    * @param {*} value The value to clone.
-   * @return {*} The created clone, or the provided value if the value cannot
-   *         be cloned.
+   * @return {*} The created clone, or the provided value if the value cannot be
+   *         cloned.
    */
   _clone(value) {
     if (

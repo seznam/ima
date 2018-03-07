@@ -16,24 +16,23 @@ export default class Cache {
    * Tests whether the cache contains a fresh entry for the specified key. A
    * cache entry is fresh if the has not expired its TTL (time to live).
    *
-   * The method always returns {@code false} if the cache is currently
-   * disabled.
+   * The method always returns `false` if the cache is currently disabled.
    *
    * @param {string} key The identifier of the cache entry.
-   * @return {boolean} {@code true} if the cache is enabled, the entry exists
-   *         and has not expired yet.
+   * @return {boolean} `true` if the cache is enabled, the entry exists and has
+   *         not expired yet.
    */
   has(key) {}
 
   /**
    * Returns the value of the entry identified by the specified key.
    *
-   * The method returns {@code null} if the specified entry does not exist,
-   * has already expired, or the cache is currently disabled.
+   * The method returns `null` if the specified entry does not exist, has
+   * already expired, or the cache is currently disabled.
    *
    * @param {string} key The identifier of the cache entry.
-   * @return {*} The value of the specified cache entry, or {@code null} if
-   *         the entry is not available.
+   * @return {*} The value of the specified cache entry, or `null` if the entry
+   *         is not available.
    */
   get(key) {}
 
@@ -47,8 +46,7 @@ export default class Cache {
    * @param {*} value The cache entry value.
    * @param {?number=} ttl Cache entry time to live in milliseconds. The
    *        entry will expire after the specified amount of milliseconds. Use
-   *        {@code null} or omit the parameter to use the default TTL of this
-   *        cache.
+   *        `null` or omit the parameter to use the default TTL of this cache.
    */
   set(key, value, ttl = null) {}
 
@@ -82,7 +80,7 @@ export default class Cache {
   /**
    * Exports the state of this cache to an HTML-safe JSON string. The data
    * obtained by parsing the result of this method are compatible with the
-   * {@linkcode deserialize()} method.
+   * {@link Cache#deserialize} method.
    *
    * @return {string} A JSON string containing an object representing of the
    *         current state of this cache.
@@ -96,7 +94,7 @@ export default class Cache {
    *
    * @param {Object<string, {value: *, ttl: number}>} serializedData An
    *        object representing the state of the cache to load, obtained by
-   *        parsing the JSON string returned by the {@codelink serialize}
+   *        parsing the JSON string returned by the {@link Cache#serialize}
    *        method.
    */
   deserialize(serializedData) {}

@@ -2,10 +2,11 @@ import GenericError from '../error/GenericError';
 import Controller from './Controller';
 
 /**
- * Basic implementation of the {@codelink Controller} interface, providing the
+ * Basic implementation of the {@link Controller} interface, providing the
  * default implementation of the most of the API.
  *
  * @abstract
+ * @extends Controller
  */
 export default class AbstractController extends Controller {
   /**
@@ -38,8 +39,8 @@ export default class AbstractController extends Controller {
 
     /**
      * The route parameters extracted from the current route. This field is
-     * set externally by IMA right before the {@linkcode init()} or the
-     * {@linkcode update()} method is called.
+     * set externally by IMA right before the {@link Controller#init} or the
+     * {@link Controller#update} method is called.
      *
      * @type {Object<string, string>}
      */
