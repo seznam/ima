@@ -19,7 +19,7 @@ export default class HomeView extends AbstractComponent {
             <input
               className="new-todo"
               placeholder={this.localize('home.new item placeholder')}
-              ref={newItem => (this.newItem = newItem)}
+              ref={newItemInput => (this.newItemInput = newItemInput)}
               onBlur={this.onItemAdded.bind(this)}
               onKeyUp={this.onKeyUp.bind(this)}
             />
