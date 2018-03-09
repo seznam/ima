@@ -21,16 +21,20 @@
         "JavaScript"
     ],
     "author": "Miroslav Jancarik <miroslav.jancarik@firma.seznam.cz>",
-    "contributors": [{
-        "name": "Martin Urban",
-        "email": "martin.urban@firma.seznam.cz"
-    }, {
-        "name": "Martin Jurča",
-        "email": "martin.jurca@firma.seznam.cz"
-    }, {
-        "name": "Ondřej Baše",
-        "email": "ondrej.base@firma.seznam.cz"
-    }],
+    "contributors": [
+        {
+            "name": "Martin Urban",
+            "email": "martin.urban@firma.seznam.cz"
+        },
+        {
+            "name": "Martin Jurča",
+            "email": "martin.jurca@firma.seznam.cz"
+        },
+        {
+            "name": "Ondřej Baše",
+            "email": "ondrej.base@firma.seznam.cz"
+        }
+    ],
     "repository": {
         "type": "git",
         "url": "https://github.com/seznam/IMA.js-skeleton.git"
@@ -59,7 +63,7 @@
         "express": "4.16.2",
         "express-http-proxy": "1.1.0",
         "helmet": "3.12.0",
-        "ima": "0.15.0-beta22",
+        "ima": "0.15.0-beta23",
         "ima-server": "0.15.0-beta3",
         "jest": "22.4.2",
         "jest-serializer-enzyme": "1.0.0",
