@@ -2,6 +2,8 @@ const gls = require('gulp-live-server');
 
 const sharedState = require('../gulpState.js');
 
+exports.__requiresConfig = true;
+
 exports.default = gulpConfig => {
   let server = null;
   let runningServers = 0;
