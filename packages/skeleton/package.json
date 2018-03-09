@@ -1,75 +1,75 @@
 {
-	"name": "IMA.js-skeleton",
-	"version": "0.15.0-beta2",
-	"description": "Isomorphic javascript application",
-	"main": "build/server.js",
-	"scripts": {
-		"app:hello": "node_modules/.bin/gulp app:hello",
-		"app:feed": "node_modules/.bin/gulp app:feed",
-		"app:todos": "node_modules/.bin/gulp app:todos",
-		"test": "node_modules/.bin/jest --config jest.conf.json",
-		"lint": "node_modules/.bin/eslint --fix './{app,server}/**/*.{js,jsx}'",
-		"dev": "node_modules/.bin/gulp dev",
-		"gulp": "node_modules/.bin/gulp",
-		"build": "NODE_ENV=production node node_modules/gulp/bin/gulp build",
-		"build:spa": "NODE_ENV=production node node_modules/gulp/bin/gulp build:spa",
-		"start": "NODE_ENV=production node build/server"
-	},
-	"keywords": [
-		"IMA.js",
-		"Isomorphic",
-		"JavaScript"
-	],
-	"author": "Miroslav Jancarik <miroslav.jancarik@firma.seznam.cz>",
-	"contributors": [{
-		"name": "Martin Urban",
-		"email": "martin.urban@firma.seznam.cz"
-	}, {
-		"name": "Martin Jurča",
-		"email": "martin.jurca@firma.seznam.cz"
-	}, {
-		"name": "Ondřej Baše",
-		"email": "ondrej.base@firma.seznam.cz"
-	}],
-	"repository": {
-		"type": "git",
-		"url": "https://github.com/seznam/IMA.js-skeleton.git"
-	},
-	"bugs": {
-		"url": "https://github.com/seznam/IMA.js-skeleton/issues"
-	},
-	"license": "MIT",
-	"devDependencies": {
-		"ima-gulp-task-loader": "^0.14.0",
-		"ima-gulp-tasks": "^0.15.0-beta17"
-	},
-	"dependencies": {
-		"babel-eslint": "8.2.2",
-		"body-parser": "1.18.2",
-		"compression": "1.7.2",
-		"cookie-parser": "1.4.3",
-		"enzyme": "3.3.0",
-		"enzyme-adapter-react-16": "1.1.0",
-		"eslint": "4.18.2",
-		"eslint-config-prettier": "2.9.0",
-		"eslint-plugin-jasmine": "2.9.3",
-		"eslint-plugin-jest": "21.13.0",
-		"eslint-plugin-prettier": "2.6.0",
-		"eslint-plugin-react": "7.7.0",
-		"express": "4.16.2",
-		"express-http-proxy": "1.1.0",
-		"helmet": "3.12.0",
-		"ima": "0.15.0-beta21",
-		"ima-server": "0.15.0-beta2",
-		"jest": "22.4.2",
-		"jest-serializer-enzyme": "1.0.0",
-		"method-override": "2.3.10",
-		"multer": "1.3.0",
-		"prettier": "1.11.1",
-		"prop-types": "15.6.1",
-		"react": "16.2.0",
-		"react-dom": "16.2.0",
-		"react-test-renderer": "16.2.0",
-		"serve-favicon": "2.4.5"
-	}
+    "name": "IMA.js-skeleton",
+    "version": "0.15.0-beta2",
+    "description": "Isomorphic javascript application",
+    "main": "build/server.js",
+    "scripts": {
+        "app:hello": "node_modules/.bin/gulp app:hello",
+        "app:feed": "node_modules/.bin/gulp app:feed",
+        "app:todos": "node_modules/.bin/gulp app:todos",
+        "test": "node_modules/.bin/jest --config jest.conf.json",
+        "lint": "node_modules/.bin/eslint --fix './{app,server}/**/*.{js,jsx}'",
+        "dev": "node_modules/.bin/gulp dev",
+        "gulp": "node_modules/.bin/gulp",
+        "build": "NODE_ENV=production node node_modules/gulp/bin/gulp build",
+        "build:spa": "NODE_ENV=production node node_modules/gulp/bin/gulp build:spa",
+        "start": "NODE_ENV=production node build/server"
+    },
+    "keywords": [
+        "IMA.js",
+        "Isomorphic",
+        "JavaScript"
+    ],
+    "author": "Miroslav Jancarik <miroslav.jancarik@firma.seznam.cz>",
+    "contributors": [{
+        "name": "Martin Urban",
+        "email": "martin.urban@firma.seznam.cz"
+    }, {
+        "name": "Martin Jurča",
+        "email": "martin.jurca@firma.seznam.cz"
+    }, {
+        "name": "Ondřej Baše",
+        "email": "ondrej.base@firma.seznam.cz"
+    }],
+    "repository": {
+        "type": "git",
+        "url": "https://github.com/seznam/IMA.js-skeleton.git"
+    },
+    "bugs": {
+        "url": "https://github.com/seznam/IMA.js-skeleton/issues"
+    },
+    "license": "MIT",
+    "devDependencies": {
+        "ima-gulp-task-loader": "^0.14.0",
+        "ima-gulp-tasks": "^0.15.0-beta19"
+    },
+    "dependencies": {
+        "babel-eslint": "8.2.2",
+        "body-parser": "1.18.2",
+        "compression": "1.7.2",
+        "cookie-parser": "1.4.3",
+        "enzyme": "3.3.0",
+        "enzyme-adapter-react-16": "1.1.1",
+        "eslint": "4.18.2",
+        "eslint-config-prettier": "2.9.0",
+        "eslint-plugin-jasmine": "2.9.3",
+        "eslint-plugin-jest": "21.13.0",
+        "eslint-plugin-prettier": "2.6.0",
+        "eslint-plugin-react": "7.7.0",
+        "express": "4.16.2",
+        "express-http-proxy": "1.1.0",
+        "helmet": "3.12.0",
+        "ima": "0.15.0-beta22",
+        "ima-server": "0.15.0-beta3",
+        "jest": "22.4.2",
+        "jest-serializer-enzyme": "1.0.0",
+        "method-override": "2.3.10",
+        "multer": "1.3.0",
+        "prettier": "1.11.1",
+        "prop-types": "15.6.1",
+        "react": "16.2.0",
+        "react-dom": "16.2.0",
+        "react-test-renderer": "16.2.0",
+        "serve-favicon": "2.4.5"
+    }
 }
