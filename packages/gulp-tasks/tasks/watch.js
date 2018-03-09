@@ -19,7 +19,7 @@ exports.default = gulpConfig => {
 
     runOnChange(files.app.watch, 'app:build');
     runOnChange(files.vendor.watch, 'vendor:build');
-    runOnChange(files.less.watch, 'less');
+    runOnChange(files.less.watch, 'less:build');
     runOnChange(files.server.watch, 'server:build');
     runOnChange(files.locale.watch, 'locale:build');
     runOnChange('./app/assets/static/**/*', 'copy:appStatic');

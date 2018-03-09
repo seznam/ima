@@ -17,6 +17,10 @@ exports['ima:build'] = () => {
   return gulp.series('Es6ToEs5:ima', 'server:hotreload')();
 };
 
+exports['less:build'] = () => {
+  return gulp.series('less', 'server:hotreload')();
+};
+
 exports['vendor:build'] = () => {
   gulp.series(
     'Es6ToEs5:vendor',
