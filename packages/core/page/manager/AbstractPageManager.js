@@ -300,6 +300,7 @@ export default class AbstractPageManager extends PageManager {
         this._managedPage.options
       )
       .then(response => {
+        this._managedPage.controllerInstance.clearPartialState();
         this._postManage(this._managedPage.options);
 
         return response;
@@ -317,6 +318,7 @@ export default class AbstractPageManager extends PageManager {
     let controllerState = controller.load();
 
     controller.setPageStateManager(this._pageStateManager);
+    controller.setPartialState(controllerState);
 
     return controllerState;
   }
@@ -329,12 +331,15 @@ export default class AbstractPageManager extends PageManager {
    */
   _getLoadedExtensionsState() {
     let controller = this._managedPage.controllerInstance;
-    let extensionsState = {};
+    let extensionsState = Object.assign({}, controller.getPartialState());
+    let extensionState = {};
 
     for (let extension of controller.getExtensions()) {
-      let extensionState = extension.load();
+      extension.setPartialState(extensionsState);
+      extensionState = extension.load();
 
       this._setRestrictedPageStateManager(extension, extensionState);
+
       Object.assign(extensionsState, extensionState);
     }
 

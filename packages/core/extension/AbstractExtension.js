@@ -32,6 +32,8 @@ export default class AbstractExtension extends Extension {
      * @type {Object<string, string>}
      */
     this.params = {};
+
+    this._partialStateSymbol = Symbol('partialState');
   }
 
   /**
@@ -81,6 +83,15 @@ export default class AbstractExtension extends Extension {
     }
   }
 
+  setPartialState(partialStatePatch) {
+    var newPartialState = Object.assign(
+      {},
+      this[this._partialStateSymbol],
+      partialStatePatch
+    );
+    this[this._partialStateSymbol] = newPartialState;
+  }
+
   /**
    * @inheritdoc
    */
@@ -88,8 +99,16 @@ export default class AbstractExtension extends Extension {
     if (this._pageStateManager) {
       return this._pageStateManager.getState();
     } else {
-      return {};
+      return this.getPartialState();
     }
+  }
+
+  getPartialState() {
+    return this[this._partialStateSymbol] || {};
+  }
+
+  clearPartialState() {
+    this[this._partialStateSymbol] = {};
   }
 
   /**
