@@ -10,12 +10,11 @@ export default class Dictionary {
    * Initializes this dictionary with the provided language and localization
    * phrases.
    *
-   * @param {{language: string, dictionary: *}} config The dictionary
-   *        configuration.
-   *        The language field is an ISO 639-1 language code specifying the
-   *        language of the provided phrases.
-   *        The dictionary field contains the localization phrases organized
-   *        in an implementation-specific way.
+   * @param {Object.<string, *>} config The dictionary configuration.
+   * @param {string} config.language The language property is an ISO 639-1
+   *        language code specifying the language of the provided phrases.
+   * @param {*} config.dictionary The dictionary property contains the
+   *        localization phrases organized in an implementation-specific way.
    */
   init(config) {}
 
@@ -47,8 +46,8 @@ export default class Dictionary {
    * dictionary.
    *
    * @param {string} key The key identifying the localization phrase.
-   * @return {boolean} {@code true} if the key exists and denotes a single
-   *         localization phrase.
+   * @return {boolean} `true` if the key exists and denotes a single
+   *                   localization phrase, otherwise `false`.
    */
   has(key) {}
 }

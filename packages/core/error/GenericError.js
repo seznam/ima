@@ -1,8 +1,10 @@
 import Error from './Error';
 
 /**
- * Implementation of the ima.error.Error interface, providing more advanced
+ * Implementation of the {@link Error} interface, providing more advanced
  * error API.
+ *
+ * @extends Error
  */
 export default class GenericError extends Error {
   /**
