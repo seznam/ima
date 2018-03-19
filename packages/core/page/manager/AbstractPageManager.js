@@ -281,6 +281,19 @@ export default class AbstractPageManager extends PageManager {
   }
 
   /**
+   * Clears partialState of extensions for managed instance of controller.
+   *
+   * @protected
+   */
+  _clearPartialState() {
+    const controller = this._managedPage.controllerInstance;
+
+    for (let extension of controller.getExtensions()) {
+      extension.clearPartialState();
+    }
+  }
+
+  /**
    * Load page source so call load method on controller and his extensions.
    * Merge loaded state and render it.
    *
@@ -289,7 +302,7 @@ export default class AbstractPageManager extends PageManager {
    */
   _loadPageSource() {
     let controllerState = this._getLoadedControllerState();
-    let extensionsState = this._getLoadedExtensionsState();
+    let extensionsState = this._getLoadedExtensionsState(controllerState);
     let loadedPageState = Object.assign({}, extensionsState, controllerState);
 
     return this._pageRenderer
@@ -300,7 +313,7 @@ export default class AbstractPageManager extends PageManager {
         this._managedPage.options
       )
       .then(response => {
-        this._managedPage.controllerInstance.clearPartialState();
+        this._clearPartialState();
         this._postManage(this._managedPage.options);
 
         return response;
@@ -318,7 +331,6 @@ export default class AbstractPageManager extends PageManager {
     let controllerState = controller.load();
 
     controller.setPageStateManager(this._pageStateManager);
-    controller.setPartialState(controllerState);
 
     return controllerState;
   }
@@ -327,16 +339,16 @@ export default class AbstractPageManager extends PageManager {
    * Load extensions state from managed instance of controller.
    *
    * @protected
+   * @param {Object<string, *>} controllerState
    * @return {Object<string, (Promise<*>|*)>}
    */
-  _getLoadedExtensionsState() {
-    let controller = this._managedPage.controllerInstance;
-    let extensionsState = Object.assign({}, controller.getPartialState());
-    let extensionState = {};
+  _getLoadedExtensionsState(controllerState) {
+    const controller = this._managedPage.controllerInstance;
+    let extensionsState = Object.assign({}, controllerState);
 
     for (let extension of controller.getExtensions()) {
       extension.setPartialState(extensionsState);
-      extensionState = extension.load();
+      const extensionState = extension.load();
 
       this._setRestrictedPageStateManager(extension, extensionState);
 
@@ -396,7 +408,9 @@ export default class AbstractPageManager extends PageManager {
    */
   _updatePageSource() {
     let updatedControllerState = this._getUpdatedControllerState();
-    let updatedExtensionState = this._getUpdatedExtensionsState();
+    let updatedExtensionState = this._getUpdatedExtensionsState(
+      updatedControllerState
+    );
     let updatedPageState = Object.assign(
       {},
       updatedExtensionState,
@@ -406,6 +420,7 @@ export default class AbstractPageManager extends PageManager {
     return this._pageRenderer
       .update(this._managedPage.decoratedController, updatedPageState)
       .then(response => {
+        this._clearPartialState();
         this._postManage(this._managedPage.options);
 
         return response;
@@ -431,18 +446,21 @@ export default class AbstractPageManager extends PageManager {
    * Return updated extensions state for current page controller.
    *
    * @protected
+   * @param {Object<string, *>} controllerState
    * @return {Object<string, (Promise|*)>}
    */
-  _getUpdatedExtensionsState() {
+  _getUpdatedExtensionsState(controllerState) {
     const controller = this._managedPage.controllerInstance;
-    let extensionsState = {};
+    let extensionsState = Object.assign({}, controllerState);
 
     for (let extension of controller.getExtensions()) {
       const lastRouteParams = extension.getRouteParams();
       extension.setRouteParams(this._managedPage.params);
+      extension.setPartialState(extensionsState);
       const extensionState = extension.update(lastRouteParams);
 
       this._setRestrictedPageStateManager(extension, extensionState);
+
       Object.assign(extensionsState, extensionState);
     }
 

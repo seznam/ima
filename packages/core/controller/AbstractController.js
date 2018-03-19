@@ -45,8 +45,6 @@ export default class AbstractController extends Controller {
      * @type {Object<string, string>}
      */
     this.params = {};
-
-    this._partialStateSymbol = Symbol('partialState');
   }
 
   /**
@@ -96,15 +94,6 @@ export default class AbstractController extends Controller {
     }
   }
 
-  setPartialState(partialStatePatch) {
-    var newPartialState = Object.assign(
-      {},
-      this[this._partialStateSymbol],
-      partialStatePatch
-    );
-    this[this._partialStateSymbol] = newPartialState;
-  }
-
   /**
    * @inheritdoc
    */
@@ -113,18 +102,6 @@ export default class AbstractController extends Controller {
       return this._pageStateManager.getState();
     } else {
       return {};
-    }
-  }
-
-  getPartialState() {
-    return this[this._partialStateSymbol] || {};
-  }
-
-  clearPartialState() {
-    this[this._partialStateSymbol] = {};
-
-    for (let extension of this.getExtensions()) {
-      extension.clearPartialState();
     }
   }
 
