@@ -1,6 +1,5 @@
 /**
- * Base class of custom error classes, extending the native {@linkcode Error}
- * class.
+ * Base class of custom error classes, extending the native `Error` class.
  *
  * This class has been introduced to fix the Babel-related issues with
  * extending the native JavaScript (Error) classes.
@@ -48,8 +47,7 @@ export default function ExtensibleError(
   /**
    * Native error instance we use to generate the call stack. For some reason
    * some browsers do not generate call stacks for instances of classes
-   * extending the native {@codelink Error} class, so we bypass this
-   * shortcoming this way.
+   * extending the native `Error` class, so we bypass this shortcoming this way.
    *
    * @type {Error}
    */
@@ -64,8 +62,8 @@ export default function ExtensibleError(
   }
 
   /**
-   * The internal cache of the generated stack. The cache is filled upon
-   * first access to the {@codelink stack} property.
+   * The internal cache of the generated stack. The cache is filled upon first
+   * access to the {@link ExtensibleError#stack} property.
    *
    * @type {?string}
    */
@@ -89,8 +87,7 @@ ExtensibleError.prototype.constructor = ExtensibleError;
  * The call stack captured at the moment of creation of this error. The
  * formatting of the stack is browser-dependant.
  *
- * @return {string} The call stack captured at the moment of creation of this
- *         error.
+ * @var {string} ExtensibleError#stack
  */
 Object.defineProperty(ExtensibleError.prototype, 'stack', {
   configurable: true,
