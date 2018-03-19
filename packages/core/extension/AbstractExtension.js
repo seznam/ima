@@ -83,6 +83,20 @@ export default class AbstractExtension extends Extension {
     }
   }
 
+  /**
+   * @inheritdoc
+   */
+  getState() {
+    if (this._pageStateManager) {
+      return this._pageStateManager.getState();
+    } else {
+      return this.getPartialState();
+    }
+  }
+
+  /**
+   * @inheritdoc
+   */
   setPartialState(partialStatePatch) {
     var newPartialState = Object.assign(
       {},
@@ -95,18 +109,13 @@ export default class AbstractExtension extends Extension {
   /**
    * @inheritdoc
    */
-  getState() {
-    if (this._pageStateManager) {
-      return this._pageStateManager.getState();
-    } else {
-      return this.getPartialState();
-    }
-  }
-
   getPartialState() {
     return this[this._partialStateSymbol] || {};
   }
 
+  /**
+   * @inheritdoc
+   */
   clearPartialState() {
     this[this._partialStateSymbol] = {};
   }

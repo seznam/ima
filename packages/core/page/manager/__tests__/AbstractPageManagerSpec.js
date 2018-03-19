@@ -315,6 +315,21 @@ describe('ima.page.manager.AbstractPageManager', () => {
           done(error);
         });
     });
+
+    it('should clear partialState', done => {
+      spyOn(pageManager, '_clearPartialState').and.stub();
+
+      pageManager
+        ._loadPageSource()
+        .then(() => {
+          expect(pageManager._clearPartialState).toHaveBeenCalled();
+          done();
+        })
+        .catch(error => {
+          console.error('ima.page.manager:_clearPartialState', error.message);
+          done(error);
+        });
+    });
   });
 
   describe('_getLoadedControllerState method', () => {
@@ -338,17 +353,16 @@ describe('ima.page.manager.AbstractPageManager', () => {
   });
 
   describe('_getLoadedExtensionsState method', () => {
-    beforeEach(() => {
-      spyOn(extensionInstance, 'load').and.returnValue(extensionState);
-    });
-
     it('should call extensions load method', () => {
+      spyOn(extensionInstance, 'load').and.returnValue(extensionState);
+
       pageManager._getLoadedExtensionsState();
 
       expect(extensionInstance.load).toHaveBeenCalled();
     });
 
     it('should set restricted pageStateManager to extension instance', () => {
+      spyOn(extensionInstance, 'load').and.returnValue(extensionState);
       spyOn(pageManager, '_setRestrictedPageStateManager').and.stub();
 
       pageManager._getLoadedExtensionsState();
@@ -357,6 +371,30 @@ describe('ima.page.manager.AbstractPageManager', () => {
         extensionInstance,
         extensionState
       );
+    });
+
+    it('should call extensions setPartialState method', () => {
+      spyOn(extensionInstance, 'setPartialState').and.stub();
+      spyOn(extensionInstance, 'load').and.returnValue(extensionState);
+
+      pageManager._getLoadedExtensionsState();
+
+      expect(extensionInstance.setPartialState).toHaveBeenCalled();
+    });
+
+    it('should return extensions state together with active controller state', () => {
+      spyOn(extensionInstance, 'load').and.returnValue({
+        extension: 'extension'
+      });
+      spyOn(pageManager, '_setRestrictedPageStateManager').and.stub();
+
+      let result = pageManager._getLoadedExtensionsState(controllerState);
+
+      expect(result).toEqual({
+        controller: 'controller',
+        share: 'controller',
+        extension: 'extension'
+      });
     });
   });
 
@@ -445,6 +483,21 @@ describe('ima.page.manager.AbstractPageManager', () => {
           done(error);
         });
     });
+
+    it('should clear partialState', done => {
+      spyOn(pageManager, '_clearPartialState').and.stub();
+
+      pageManager
+        ._updatePageSource()
+        .then(() => {
+          expect(pageManager._clearPartialState).toHaveBeenCalled();
+          done();
+        })
+        .catch(error => {
+          console.error('ima.page.manager:_clearPartialState', error.message);
+          done(error);
+        });
+    });
   });
 
   describe('_getUpdatedControllerState method', () => {
@@ -459,12 +512,9 @@ describe('ima.page.manager.AbstractPageManager', () => {
   });
 
   describe('_getUpdatedExtensionsState method', () => {
-    beforeEach(() => {
-      spyOn(extensionInstance, 'update').and.returnValue(extensionState);
-    });
-
     it('should call extensions update method', () => {
       spyOn(extensionInstance, 'getRouteParams').and.returnValue(params);
+      spyOn(extensionInstance, 'update').and.returnValue(extensionState);
 
       pageManager._getUpdatedExtensionsState();
 
@@ -473,6 +523,7 @@ describe('ima.page.manager.AbstractPageManager', () => {
 
     it('should set restricted pageStateManager to extension instance', () => {
       spyOn(pageManager, '_setRestrictedPageStateManager').and.stub();
+      spyOn(extensionInstance, 'update').and.returnValue(extensionState);
 
       pageManager._getUpdatedExtensionsState();
 
@@ -480,6 +531,30 @@ describe('ima.page.manager.AbstractPageManager', () => {
         extensionInstance,
         extensionState
       );
+    });
+
+    it('should call extensions setPartialState method', () => {
+      spyOn(extensionInstance, 'setPartialState').and.stub();
+      spyOn(extensionInstance, 'update').and.returnValue(extensionState);
+
+      pageManager._getUpdatedExtensionsState();
+
+      expect(extensionInstance.setPartialState).toHaveBeenCalled();
+    });
+
+    it('should return extensions state together with active controller state', () => {
+      spyOn(extensionInstance, 'update').and.returnValue({
+        extension: 'extension'
+      });
+      spyOn(pageManager, '_setRestrictedPageStateManager').and.stub();
+
+      let result = pageManager._getUpdatedExtensionsState(controllerState);
+
+      expect(result).toEqual({
+        controller: 'controller',
+        share: 'controller',
+        extension: 'extension'
+      });
     });
   });
 
