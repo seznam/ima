@@ -29,7 +29,7 @@
 
       Object.keys(this.modules).forEach(function(modulePath) {
         var module = root.$IMA.Loader.modules[modulePath];
-        module.dependencies.forEach(dependency => {
+        module.dependencies.forEach(function(dependency) {
           if (resolveModuleName(modulePath, dependency) === moduleName) {
             module.instance = null;
           }
