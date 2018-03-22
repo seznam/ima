@@ -1,43 +1,43 @@
 {
-	"name": "ima-helpers",
-	"version": "0.14.0-rc.2",
-	"description": "Various helpers for the IMA.js framework.",
-	"main": "index.js",
-	"scripts": {
-		"prepublishOnly": "npm test",
-		"test": "node_modules/gulp/bin/gulp.js test"
-	},
-	"repository": {
-		"type": "git",
-		"url": "git+https://github.com/seznam/IMA.js-helpers.git"
-	},
-	"keywords": [
-		"ima",
-		"IMA.js"
-	],
-	"author": "Miroslav Jancarik <miroslav.jancarik@firma.seznam.cz>",
-	"license": "MIT",
-	"bugs": {
-		"url": "https://github.com/seznam/IMA.js-helpers/issues"
-	},
-	"homepage": "https://github.com/seznam/IMA.js-helpers#readme",
-	"publishConfig": {
-		"registry": "http://registry.npmjs.org/"
-	},
-	"dependencies": {
-		"clone": "^2.1.0"
-	},
-	"devDependencies": {
-		"gulp": "github:gulpjs/gulp#3f5aba2",
-		"gulp-jasmine": "^2.4.2"
-	},
-	"engines": {
-		"node": ">=6",
-		"npm": ">=4 <6"
-	},
-	"browserify": {
-		"transform": [
-			"babelify"
-		]
-	}
+    "name": "ima-helpers",
+    "version": "0.14.0-rc.2",
+    "description": "Various helpers for the IMA.js framework.",
+    "main": "index.js",
+    "scripts": {
+        "prepublishOnly": "npm test",
+        "test": "node_modules/gulp/bin/gulp.js test"
+    },
+    "repository": {
+        "type": "git",
+        "url": "git+https://github.com/seznam/IMA.js-helpers.git"
+    },
+    "keywords": [
+        "ima",
+        "IMA.js"
+    ],
+    "author": "Miroslav Jancarik <miroslav.jancarik@firma.seznam.cz>",
+    "license": "MIT",
+    "bugs": {
+        "url": "https://github.com/seznam/IMA.js-helpers/issues"
+    },
+    "homepage": "https://github.com/seznam/IMA.js-helpers#readme",
+    "publishConfig": {
+        "registry": "http://registry.npmjs.org/"
+    },
+    "dependencies": {
+        "clone": "^2.1.2"
+    },
+    "devDependencies": {
+        "gulp": "github:gulpjs/gulp#3f5aba2",
+        "gulp-jasmine": "^2.4.2"
+    },
+    "engines": {
+        "node": ">=6",
+        "npm": ">=4 <6"
+    },
+    "browserify": {
+        "transform": [
+            "babelify"
+        ]
+    }
 }
