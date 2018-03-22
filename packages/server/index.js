@@ -12,7 +12,7 @@ let environment = require('./lib/environment.js')(environmentConfig);
 global.$Debug = environment.$Debug;
 global.$IMA = global.$IMA || {};
 
-require(path.resolve(applicationFolder, './build/ima/shim.js'));
+require(path.resolve(applicationFolder, './build/ima/shim.es.js'));
 require(path.resolve(applicationFolder, './build/ima/vendor.server.js'));
 
 function appFactory() {
@@ -34,8 +34,6 @@ function languageLoader(language) {
 
 let logger = require('./lib/logger.js')(environment);
 let urlParser = require('./lib/urlParser.js')(environment);
-let proxyFactory = require('./lib/proxy.js')(environment, logger);
-let proxy = proxyFactory(environment.$Proxy.server);
 let clientApp = require('./lib/clientApp.js')(
 	environment,
 	logger,
@@ -49,7 +47,5 @@ module.exports =  {
 	clientApp,
 	urlParser,
 	logger,
-	proxy,
-	proxyFactory,
 	cache
 };
