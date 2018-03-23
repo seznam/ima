@@ -9,7 +9,7 @@ describe('ima.event.EventBusImpl', () => {
   };
 
   let eventSource = {
-    dispatchEvent: e => {}
+    dispatchEvent: () => {}
   };
   let notEventSource = {};
   let eventTarget = {};

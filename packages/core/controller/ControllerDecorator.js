@@ -139,7 +139,7 @@ export default class ControllerDecorator extends Controller {
   /**
    * @inheritdoc
    */
-  setMetaParams(loadedResources, metaManager, router, dictionary, settings) {
+  setMetaParams(loadedResources) {
     this._controller.setMetaParams(
       loadedResources,
       this._metaManager,

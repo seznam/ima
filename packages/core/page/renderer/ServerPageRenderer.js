@@ -86,7 +86,7 @@ export default class ServerPageRenderer extends AbstractPageRenderer {
    * @inheritdoc
    * @method update
    */
-  update(controller, resourcesUpdate) {
+  update() {
     return Promise.reject(
       new GenericError('The update() is denied on server side.')
     );

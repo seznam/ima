@@ -107,7 +107,7 @@ describe('ima.page.renderer.ServerPageRenderer', () => {
 
       pageRenderer
         .mount(controller, view, loadedPageState, routeOptions)
-        .then(page => {
+        .then(() => {
           expect(pageRenderer._renderPage).toHaveBeenCalled();
           done();
         });

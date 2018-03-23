@@ -111,7 +111,7 @@ export default class Extension {
    *         resolved when all resources the extension requires are ready.
    *         The resolved values will be pushed to the controller's state.
    */
-  update(prevParams = {}) {}
+  update() {}
 
   /**
    * Patches the state of the controller using this extension by using the
@@ -127,7 +127,7 @@ export default class Extension {
    * @param {Object<string, *>} statePatch Patch of the controller's state to
    *        apply.
    */
-  setState(statePatch) {}
+  setState() {}
 
   /**
    * Returns the current state of the controller using this extension.
@@ -142,7 +142,7 @@ export default class Extension {
    * @param {?PageStateManager} pageStateManager The current state manager to
    *        use.
    */
-  setPageStateManager(pageStateManager) {}
+  setPageStateManager() {}
 
   /**
    * Sets the current route parameters. This method is invoked before the
@@ -151,7 +151,7 @@ export default class Extension {
    * @param {Object<string, string>} [params={}] The current route
    *        parameters.
    */
-  setRouteParams(params = {}) {}
+  setRouteParams() {}
 
   /**
    * Returns the current route parameters.

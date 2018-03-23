@@ -57,7 +57,7 @@ export default class PageManager {
    *         The {@code content} field will contain the rendered markup of
    *         the page at the server-side, or {@code null} at the client-side.
    */
-  manage(controller, view, options, params = {}) {}
+  manage() {}
 
   /**
    * Scrolls the viewport to the specified horizontal and vertical offset.
@@ -67,7 +67,7 @@ export default class PageManager {
    * @param {number=} [x=0] The horizontal offset to scroll to.
    * @param {number=} [y=0] The vertical offset to scroll to.
    */
-  scrollTo(x = 0, y = 0) {}
+  scrollTo() {}
 
   /**
    * Finalization callback, called when the page manager is being discarded.

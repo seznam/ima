@@ -41,7 +41,7 @@ export default class EventBus {
    *         fire the event.
    * @see https://developer.mozilla.org/en-US/docs/Web/API/Event/Event
    */
-  fire(eventTarget, eventName, data, options = {}) {}
+  fire() {}
 
   /**
    * Registers the provided event listener to be executed when any custom
@@ -60,7 +60,7 @@ export default class EventBus {
    *        register.
    * @return {EventBus} This event bus.
    */
-  listenAll(eventTarget, listener) {}
+  listenAll() {}
 
   /**
    * Registers the provided event listener to be executed when the specific
@@ -80,7 +80,7 @@ export default class EventBus {
    *        register.
    * @return {EventBus} This event bus.
    */
-  listen(eventTarget, eventName, listener) {}
+  listen() {}
 
   /**
    * Removes the provided event listener from the set of event listeners
@@ -96,7 +96,7 @@ export default class EventBus {
    *        deregister.
    * @return {EventBus} This event bus.
    */
-  unlistenAll(eventTarget, listener) {}
+  unlistenAll() {}
 
   /**
    * Removes the provided event listener from the set of event listeners
@@ -113,5 +113,5 @@ export default class EventBus {
    *        deregister.
    * @return {EventBus} This event bus.
    */
-  unlisten(eventTarget, eventName, listener) {}
+  unlisten() {}
 }

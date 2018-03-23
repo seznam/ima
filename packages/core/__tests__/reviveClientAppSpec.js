@@ -112,7 +112,7 @@ describe('Revive client application', () => {
         }
       },
       {
-        initBindApp: (ns, oc, config) => {
+        initBindApp: (ns, oc) => {
           router = oc.get('$Router');
           router.init(routerConfig);
           router.add('reviveClientApp', '/', Controller, View, options);

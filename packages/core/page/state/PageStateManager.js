@@ -13,7 +13,7 @@ export default class PageStateManager {
    *
    * @param {Object<string, *>} statePatch The patch of the current state.
    */
-  setState(statePatch) {}
+  setState() {}
 
   /**
    * Returns the current page state.

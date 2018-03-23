@@ -134,7 +134,7 @@ export default class AbstractPageManager extends PageManager {
    * @abstract
    * @inheritdoc
    */
-  scrollTo(x = 0, y = 0) {
+  scrollTo() {
     throw new GenericError(
       'The scrollTo() method is abstract and must be overridden.'
     );
@@ -661,5 +661,5 @@ export default class AbstractPageManager extends PageManager {
    *          documentView: ?AbstractDocumentView
    *        }} options
    */
-  _postManage(options) {}
+  _postManage() {}
 }

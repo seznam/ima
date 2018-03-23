@@ -26,7 +26,7 @@ export default class Router {
    *        port number if other than the default is used) in the following
    *        form: {@code `${protocol}//${host}`}.
    */
-  init(config) {}
+  init() {}
 
   /**
    * Adds a new route to router.
@@ -84,7 +84,7 @@ export default class Router {
    * @return {Router} This router.
    * @throws {ImaError} Thrown if a route with the same name already exists.
    */
-  add(name, pathExpression, controller, view, options = undefined) {}
+  add() {}
 
   /**
    * Removes the specified route from the router's known routes.
@@ -93,7 +93,7 @@ export default class Router {
    *        remove.
    * @return {Router} This router.
    */
-  remove(name) {}
+  remove() {}
 
   /**
    * Returns the current path part of the current URL, including the query
@@ -208,7 +208,7 @@ export default class Router {
    *        }} [options={}] The options overrides route options defined in
    *        the {@code routes.js} configuration file.
    */
-  redirect(url, options = {}) {}
+  redirect() {}
 
   /**
    * Generates an absolute URL (including protocol, domain, etc) for the
@@ -222,7 +222,7 @@ export default class Router {
    *        URL query.
    * @return {string} An absolute URL for the specified route and parameters.
    */
-  link(routeName, params) {}
+  link() {}
 
   /**
    * Routes the application to the route matching the providing path, renders
@@ -251,7 +251,7 @@ export default class Router {
    *         when the error has been handled and the response has been sent
    *         to the client, or displayed if used at the client side.
    */
-  route(path, options = {}) {}
+  route() {}
 
   /**
    * Handles an internal server error by responding with the appropriate
@@ -280,7 +280,7 @@ export default class Router {
    *         has been handled and the response has been sent to the client,
    *         or displayed if used at the client side.
    */
-  handleError(params, options = {}) {}
+  handleError() {}
 
   /**
    * Handles a "not found" error by responding with the appropriate "not
@@ -309,7 +309,7 @@ export default class Router {
    *         when the error has been handled and the response has been sent
    *         to the client, or displayed if used at the client side.
    */
-  handleNotFound(params, options = {}) {}
+  handleNotFound() {}
 
   /**
    * Tests, if possible, whether the specified error was caused by the
@@ -320,7 +320,7 @@ export default class Router {
    * @return {boolean} {@code true} if the error was caused the action of the
    *         client.
    */
-  isClientError(reason) {}
+  isClientError() {}
 
   /**
    * Tests, if possible, whether the specified error lead to redirection.
@@ -329,5 +329,5 @@ export default class Router {
    * @return {boolean} {@code true} if the error was caused the action of the
    *         redirection.
    */
-  isRedirection(reason) {}
+  isRedirection() {}
 }

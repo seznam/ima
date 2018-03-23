@@ -34,7 +34,7 @@ export default class Window {
    *
    * @param {string} title The new page title.
    */
-  setTitle(title) {}
+  setTitle() {}
 
   /**
    * Returns the current {@code WebSocket} implementation to use.
@@ -91,7 +91,7 @@ export default class Window {
    * @param {number} x Horizontal scroll offset in pixels.
    * @param {number} y Vertical scroll offset in pixels.
    */
-  scrollTo(x, y) {}
+  scrollTo() {}
 
   /**
    * Returns the domain of the current document's URL as
@@ -138,7 +138,7 @@ export default class Window {
    * @return {?HTMLElement} The element with the specified id, or
    *         {@code null} if no such element exists.
    */
-  getElementById(id) {}
+  getElementById() {}
 
   /**
    * Returns the history state.
@@ -154,7 +154,7 @@ export default class Window {
    * @return {?HTMLElement} The first element matching the CSS selector or
    *         {@code null} if no such element exists.
    */
-  querySelector(selector) {}
+  querySelector() {}
 
   /**
    * Returns a node list of all elements matching the specified CSS 3
@@ -164,7 +164,7 @@ export default class Window {
    * @return {NodeList} A node list containing all elements matching the
    *         specified CSS selector.
    */
-  querySelectorAll(selector) {}
+  querySelectorAll() {}
 
   /**
    * Performs a hard redirect (discarding the current JavaScript state) to
@@ -172,7 +172,7 @@ export default class Window {
    *
    * @param {string} url The URL to which the browser will be redirected.
    */
-  redirect(url) {}
+  redirect() {}
 
   /**
    * Pushes a new state to the browser history. The method has no effect if
@@ -184,7 +184,7 @@ export default class Window {
    *        this parameter is ignored by some browsers.
    * @param {string} url The new URL at which the state is available.
    */
-  pushState(state, title, url) {}
+  pushState() {}
 
   /**
    * Replaces the current history entry. The method has no effect if the
@@ -196,7 +196,7 @@ export default class Window {
    *        this parameter is ignored by some browsers.
    * @param {string} url The new URL at which the state is available.
    */
-  replaceState(state, title, url) {}
+  replaceState() {}
 
   /**
    * Create new instance of CustomEvent of the specified name and using the
@@ -208,7 +208,7 @@ export default class Window {
    * @return {CustomEvent} The created custom event.
    * @see https://developer.mozilla.org/en-US/docs/Web/API/CustomEvent/CustomEvent
    */
-  createCustomEvent(name, options) {}
+  createCustomEvent() {}
 
   /**
    * Registers the provided event listener to be executed when the specified
@@ -228,7 +228,7 @@ export default class Window {
    *        which are bubbling upward through the tree will not trigger a
    *        listener designated to use capture.
    */
-  bindEventListener(eventTarget, event, listener, useCapture = false) {}
+  bindEventListener() {}
 
   /**
    * Deregisters the provided event listener, so it will no longer we
@@ -243,5 +243,5 @@ export default class Window {
    * @param {boolean=} [useCapture=false] The {@code useCapture} flag value
    *        that was used when the listener was registered.
    */
-  unbindEventListener(eventTarget, event, listener, useCapture = false) {}
+  unbindEventListener() {}
 }

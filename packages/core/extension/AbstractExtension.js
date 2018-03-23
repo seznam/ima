@@ -68,7 +68,7 @@ export default class AbstractExtension extends Extension {
   /**
    * @inheritdoc
    */
-  update(params = {}) {
+  update() {
     return {};
   }
 

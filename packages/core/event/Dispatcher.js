@@ -35,7 +35,7 @@ export default class Dispatcher {
    *        will be bound in the event listener.
    * @return {Dispatcher} This dispatcher.
    */
-  listen(event, listener, scope = null) {}
+  listen() {}
 
   /**
    * Deregisters the provided event listener, so it will no longer be
@@ -48,7 +48,7 @@ export default class Dispatcher {
    *        would be bound in the event listener.
    * @return {Dispatcher} This dispatcher.
    */
-  unlisten(event, listener, scope = null) {}
+  unlisten() {}
 
   /**
    * Fires a new event of the specified name, carrying the provided data.
@@ -70,5 +70,5 @@ export default class Dispatcher {
    *        propagation of the event.
    * @return {Dispatcher} This dispatcher.
    */
-  fire(event, data, imaInternalEvent = false) {}
+  fire() {}
 }

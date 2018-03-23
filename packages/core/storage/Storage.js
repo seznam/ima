@@ -25,10 +25,10 @@ export default class Storage {
    * @param {string} key The key identifying the storage entry.
    * @return {boolean} {@code true} if the storage entry exists.
    */
-  has(key) {}
+  has() {}
 
   /**
-   * Retrieves the value of the entry identified by the specified key. The
+   * Retrieves the value of the entry identified by the specified . The
    * method returns {@code undefined} if the entry does not exists.
    *
    * Entries set to the {@code undefined} value can be tested for existence
@@ -37,7 +37,7 @@ export default class Storage {
    * @param {string} key The key identifying the storage entry.
    * @return {*} The value of the storage entry.
    */
-  get(key) {}
+  get() {}
 
   /**
    * Sets the storage entry identified by the specified key to the provided
@@ -47,7 +47,7 @@ export default class Storage {
    * @param {*} value The storage entry value.
    * @return {Storage} This storage.
    */
-  set(key, value) {}
+  set() {}
 
   /**
    * Deletes the entry identified by the specified key from this storage.
@@ -55,7 +55,7 @@ export default class Storage {
    * @param {string} key The key identifying the storage entry.
    * @return {Storage} This storage.
    */
-  delete(key) {}
+  delete() {}
 
   /**
    * Clears the storage of all entries.

@@ -57,7 +57,7 @@ export default class PageRenderer {
    *         The {@code content} field will contain the rendered markup of
    *         the page at the server-side, or {@code null} at the client-side.
    */
-  mount(controller, view, pageResources, routeOptions) {}
+  mount() {}
 
   /**
    * Handles update of the current route that does not replace the current
@@ -83,7 +83,7 @@ export default class PageRenderer {
    *         The {@code content} field will contain the rendered markup of
    *         the page at the server-side, or {@code null} at the client-side.
    */
-  update(controller, resourcesUpdate) {}
+  update() {}
 
   /**
    * Unmounts the view from the DOM.
@@ -100,7 +100,7 @@ export default class PageRenderer {
    * @param {Object<string, *>=} [state={}] The state to set to the currently
    *        rendered view.
    */
-  setState(state = {}) {}
+  setState() {}
 
   /**
    * Clears the state to the currently rendered view.

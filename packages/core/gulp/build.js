@@ -60,7 +60,7 @@ function compile() {
             `   execute: function () {\n` +
             moduleExports
               .map(
-                ({ symbol, value }) =>
+                ({ symbol }) =>
                   `     _export('${symbol}', exports.${symbol});\n`
               )
               .join('') +

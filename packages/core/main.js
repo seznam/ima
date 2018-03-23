@@ -234,7 +234,7 @@ function reviveTestClientApp(initialAppConfigFunctions) {
   root.oc = app.oc;
 }
 
-function onLoad(callback) {
+function onLoad() {
   vendorLinker.bindToNamespace(ns);
 
   if (!_isClient()) {

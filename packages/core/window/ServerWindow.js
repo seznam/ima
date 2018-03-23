@@ -34,7 +34,7 @@ export default class ServerWindow extends Window {
   /**
    * @inheritdoc
    */
-  setTitle(title) {}
+  setTitle() {}
 
   /**
    * @inheritdoc
@@ -67,7 +67,7 @@ export default class ServerWindow extends Window {
   /**
    * @inheritdoc
    */
-  scrollTo(x, y) {}
+  scrollTo() {}
 
   /**
    * @inheritdoc
@@ -107,7 +107,7 @@ export default class ServerWindow extends Window {
   /**
    * @inheritdoc
    */
-  getElementById(id) {
+  getElementById() {
     return null;
   }
 
@@ -121,14 +121,14 @@ export default class ServerWindow extends Window {
   /**
    * @inheritdoc
    */
-  querySelector(selector) {
+  querySelector() {
     return null;
   }
 
   /**
    * @inheritdoc
    */
-  querySelectorAll(selector) {
+  querySelectorAll() {
     class DummyNodeList {
       constructor() {
         this.length = 0;
@@ -145,17 +145,17 @@ export default class ServerWindow extends Window {
   /**
    * @inheritdoc
    */
-  redirect(url) {}
+  redirect() {}
 
   /**
    * @inheritdoc
    */
-  pushState(state, title, url) {}
+  pushState() {}
 
   /**
    * @inheritdoc
    */
-  replaceState(state, title, url) {}
+  replaceState() {}
 
   /**
    * @inheritdoc
@@ -169,10 +169,10 @@ export default class ServerWindow extends Window {
   /**
    * @inheritdoc
    */
-  bindEventListener(eventTarget, event, listener, useCapture = false) {}
+  bindEventListener() {}
 
   /**
    * @inheritdoc
    */
-  unbindEventListener(eventTarget, event, listener, useCapture = false) {}
+  unbindEventListener() {}
 }

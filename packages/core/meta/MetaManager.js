@@ -22,7 +22,7 @@ export default class MetaManager {
    *
    * @param {string} title The new page title.
    */
-  setTitle(title) {}
+  setTitle() {}
 
   /**
    * Returns the page title. The method returns an empty string if no page
@@ -43,7 +43,7 @@ export default class MetaManager {
    *        {@code keywords}.
    * @param {string} value The meta information value.
    */
-  setMetaName(name, value) {}
+  setMetaName() {}
 
   /**
    * Returns the value of the specified named meta information property. The
@@ -54,7 +54,7 @@ export default class MetaManager {
    * @return {string} The value of the generic meta information, or an empty
    *         string.
    */
-  getMetaName(name) {}
+  getMetaName() {}
 
   /**
    * Returns the names of the currently specified named meta information
@@ -71,7 +71,7 @@ export default class MetaManager {
    * @param {string} name Name of the specialized meta information property.
    * @param {string} value The value of the meta information property.
    */
-  setMetaProperty(name, value) {}
+  setMetaProperty() {}
 
   /**
    * Returns the value of the specified specialized meta information
@@ -83,7 +83,7 @@ export default class MetaManager {
    * @return {string} The value of the specified meta information, or an
    *         empty string.
    */
-  getMetaProperty(name) {}
+  getMetaProperty() {}
 
   /**
    * Returns the names of the currently specified specialized meta
@@ -102,7 +102,7 @@ export default class MetaManager {
    * @param {string} reference The reference to the location of the related
    *        document, e.g. a URL.
    */
-  setLink(relation, reference) {}
+  setLink() {}
 
   /**
    * Return the reference to the specified related linked document. The
@@ -114,7 +114,7 @@ export default class MetaManager {
    * @return {string} The reference to the location of the related document,
    *         e.g. a URL.
    */
-  getLink(relation) {}
+  getLink() {}
 
   /**
    * Returns the relations of the currently set related documents linked to

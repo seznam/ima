@@ -63,7 +63,7 @@ export default class AbstractPageRenderer extends PageRenderer {
    * @inheritdoc
    * @abstract
    */
-  mount(controller, view, pageResources, routeOptions) {
+  mount() {
     throw new GenericError(
       'The mount() method is abstract and must be overridden.'
     );
@@ -72,7 +72,7 @@ export default class AbstractPageRenderer extends PageRenderer {
   /**
    * @inheritdoc
    */
-  update(controller, resourcesUpdate) {
+  update() {
     throw new GenericError(
       'The update() method is abstract and must be overridden.'
     );

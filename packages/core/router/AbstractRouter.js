@@ -218,7 +218,7 @@ export default class AbstractRouter extends Router {
    * @inheritdoc
    * @abstract
    */
-  redirect(url, options) {
+  redirect() {
     throw new GenericError(
       'The redirect() method is abstract and must be overridden.'
     );

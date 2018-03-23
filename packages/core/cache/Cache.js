@@ -22,7 +22,7 @@ export default class Cache {
    * @return {boolean} `true` if the cache is enabled, the entry exists and has
    *         not expired yet.
    */
-  has(key) {}
+  has() {}
 
   /**
    * Returns the value of the entry identified by the specified key.
@@ -34,7 +34,7 @@ export default class Cache {
    * @return {*} The value of the specified cache entry, or `null` if the entry
    *         is not available.
    */
-  get(key) {}
+  get() {}
 
   /**
    * Sets the cache entry identified by the specified key to the provided
@@ -48,7 +48,7 @@ export default class Cache {
    *        entry will expire after the specified amount of milliseconds. Use
    *        `null` or omit the parameter to use the default TTL of this cache.
    */
-  set(key, value, ttl = null) {}
+  set() {}
 
   /**
    * Deletes the specified cache entry. The method has no effect if the entry
@@ -56,7 +56,7 @@ export default class Cache {
    *
    * @param {string} key The identifier of the cache entry.
    */
-  delete(key) {}
+  delete() {}
 
   /**
    * Disables the cache, preventing the retrieval of any cached entries and
@@ -97,5 +97,5 @@ export default class Cache {
    *        parsing the JSON string returned by the {@link Cache#serialize}
    *        method.
    */
-  deserialize(serializedData) {}
+  deserialize() {}
 }

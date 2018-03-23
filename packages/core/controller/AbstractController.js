@@ -81,7 +81,7 @@ export default class AbstractController extends Controller {
   /**
    * @inheritdoc
    */
-  update(params = {}) {
+  update() {
     return {};
   }
 
@@ -123,7 +123,7 @@ export default class AbstractController extends Controller {
    * @inheritdoc
    * @abstract
    */
-  setMetaParams(loadedResources, metaManager, router, dictionary, settings) {
+  setMetaParams() {
     throw new GenericError(
       'The ima.controller.AbstractController.setMetaParams method is ' +
         'abstract and must be overridden'

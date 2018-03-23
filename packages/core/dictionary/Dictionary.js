@@ -16,7 +16,7 @@ export default class Dictionary {
    * @param {*} config.dictionary The dictionary property contains the
    *        localization phrases organized in an implementation-specific way.
    */
-  init(config) {}
+  init() {}
 
   /**
    * Returns the ISO 639-1 language code of the language this dictionary was
@@ -39,7 +39,7 @@ export default class Dictionary {
    * @return {string} The specified localization phrase with its placeholders
    *         evaluated using the provided parameters.
    */
-  get(key, parameters = {}) {}
+  get() {}
 
   /**
    * Tests whether the specified localization phrase exists in the
@@ -49,5 +49,5 @@ export default class Dictionary {
    * @return {boolean} `true` if the key exists and denotes a single
    *                   localization phrase, otherwise `false`.
    */
-  has(key) {}
+  has() {}
 }

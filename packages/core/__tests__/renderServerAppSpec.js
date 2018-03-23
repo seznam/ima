@@ -61,14 +61,14 @@ describe('Render server application', () => {
     let bootConfig = ima.getClientBootConfig(
       Object.assign(
         {
-          initServicesApp: (ns, oc, config) => {
+          initServicesApp: (ns, oc) => {
             oc.get(Response).init(expressReponse);
           },
           initBindApp: () => {},
           initRoutes: () => {}
         },
         {
-          initBindApp: (ns, oc, config) => {
+          initBindApp: (ns, oc) => {
             router = oc.get('$Router');
             router.init(routerConfig);
             router.add(

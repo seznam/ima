@@ -49,7 +49,7 @@ export default class HttpAgent {
    * @return {Promise<HttpAgent~Response>} A promise that resolves to the
    *         response.
    */
-  get(url, data, options = {}) {}
+  get() {}
 
   /**
    * Sends an HTTP POST request to the specified URL, sending the provided
@@ -64,7 +64,7 @@ export default class HttpAgent {
    * @return {Promise<HttpAgent~Response>} A promise that resolves to the
    *         response.
    */
-  post(url, data, options = {}) {}
+  post() {}
 
   /**
    * Sends an HTTP PUT request to the specified URL, sending the provided
@@ -79,7 +79,7 @@ export default class HttpAgent {
    * @return {Promise<HttpAgent~Response>} A promise that resolves to the
    *         response.
    */
-  put(url, data, options = {}) {}
+  put() {}
 
   /**
    * Sends an HTTP PATCH request to the specified URL, sending the provided
@@ -94,7 +94,7 @@ export default class HttpAgent {
    * @return {Promise<HttpAgent~Response>} A promise that resolves to the
    *         response.
    */
-  patch(url, data, options = {}) {}
+  patch() {}
 
   /**
    * Sends an HTTP DELETE request to the specified URL, sending the provided
@@ -109,7 +109,7 @@ export default class HttpAgent {
    * @return {Promise<HttpAgent~Response>} A promise that resolves to the
    *         response.
    */
-  delete(url, data, options = {}) {}
+  delete() {}
 
   /**
    * Generates a cache key to use for identifying a request to the specified
@@ -123,7 +123,7 @@ export default class HttpAgent {
    * @return {string} The key to use for identifying such a request in the
    *         cache.
    */
-  getCacheKey(method, url, data) {}
+  getCacheKey() {}
 
   /**
    * Sets the specified header to be sent with every subsequent HTTP request,
@@ -135,7 +135,7 @@ export default class HttpAgent {
    *        (see http://www.w3.org/Protocols/rfc2616/rfc2616-sec4.html#sec4.2).
    * @return {HttpAgent} This HTTP agent.
    */
-  setDefaultHeader(header, value) {}
+  setDefaultHeader() {}
 
   /**
    * Clears all configured default headers.

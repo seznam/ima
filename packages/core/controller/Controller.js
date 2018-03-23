@@ -112,7 +112,7 @@ export default class Controller {
    *         resolved when all resources the controller requires are ready.
    *         The resolved values will be pushed to the controller's state.
    */
-  update(prevParams = {}) {}
+  update() {}
 
   /**
    * Patches the state of this controller using the provided object by
@@ -134,7 +134,7 @@ export default class Controller {
    * @param {Object<string, *>} statePatch Patch of the controller's state to
    *        apply.
    */
-  setState(statePatch) {}
+  setState() {}
 
   /**
    * Returns the controller's current state.
@@ -151,7 +151,7 @@ export default class Controller {
    * @param {Extension} extension The extension to add to this controller.
    * @return {Controller} This controller.
    */
-  addExtension(extension) {}
+  addExtension() {}
 
   /**
    * Returns the controller's extensions.
@@ -175,7 +175,7 @@ export default class Controller {
    * @param {Object<string, *>} settings The application settings for the
    *        current application environment.
    */
-  setMetaParams(loadedResources, metaManager, router, dictionary, settings) {}
+  setMetaParams() {}
 
   /**
    * Sets the current route parameters. This method is invoked before the
@@ -183,7 +183,7 @@ export default class Controller {
    *
    * @param {Object<string, string>} [params={}] The current route parameters.
    */
-  setRouteParams(params = {}) {}
+  setRouteParams() {}
 
   /**
    * Returns the current route parameters.
@@ -202,7 +202,7 @@ export default class Controller {
    * @param {?PageStateManager} pageStateManager The current state manager to
    *        use.
    */
-  setPageStateManager(pageStateManager) {}
+  setPageStateManager() {}
 
   /**
    * Returns the HTTP status code to send to the client, should the
