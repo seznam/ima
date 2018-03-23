@@ -9,7 +9,8 @@
         "preversion": "npm test && npm run lint && npm run doc",
         "postversion": "npm run build && git commit -am $npm_package_version && git tag $npm_package_version && git push && git push --tags && npm publish dist",
         "build": "node_modules/.bin/gulp build",
-        "doc": "node_modules/.bin/gulp doc"
+        "doc": "node_modules/.bin/gulp doc",
+        "security": "node_modules/.bin/nsp check"
     },
     "keywords": [
         "IMA",
@@ -61,10 +62,12 @@
         "gulp-tap": "^1.0.1",
         "jest": "^22.4.3",
         "jsdom": "^11.6.2",
+        "nsp": "^3.2.1",
         "prettier": "^1.11.1",
         "prop-types": "^15.6.1",
         "react": "^16.2.0",
         "react-dom": "^16.2.0",
+        "snyk": "^1.70.3",
         "to-mock": "^1.2.1"
     },
     "dependencies": {
