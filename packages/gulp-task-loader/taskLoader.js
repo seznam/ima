@@ -1,6 +1,5 @@
-
-let fs = require('fs');
-let path = require('path');
+const fs = require('fs');
+const path = require('path');
 
 /**
  * Loads gulp tasks from defined directories. The newest gulp tasks will
@@ -11,14 +10,14 @@ let path = require('path');
  * @param {Object<string, *>} gulpConfig Configuration of the gulp tasks.
  */
 module.exports = (directories, gulpConfig) => {
-	console.log('Loading gulp tasks...');
-	let tasks = {};
+  console.info('Loading gulp tasks...');
+  let tasks = {};
 
-	for (let directory of directories) {
-		tasks = Object.assign(tasks, loadTasks(directory, gulpConfig));
-	}
+  for (let directory of directories) {
+    tasks = Object.assign(tasks, loadTasks(directory, gulpConfig));
+  }
 
-	return tasks;
+  return tasks;
 };
 
 /**
@@ -30,27 +29,25 @@ module.exports = (directories, gulpConfig) => {
  * @param {Object<string, *>} gulpConfig Configuration of the gulp tasks.
  */
 function loadTasks(directory, gulpConfig) {
-	let directoryFiles;
-	try {
-		directoryFiles = fs.readdirSync(directory);
-	} catch (error) {
-		console.warn(
-			`The gulp tasks directory ${directory} does not exist, skipping`
-		);
-		return;
-	}
+  let directoryFiles;
+  try {
+    directoryFiles = fs.readdirSync(directory);
+  } catch (error) {
+    console.warn(
+      `The gulp tasks directory ${directory} does not exist, skipping`
+    );
+    return;
+  }
 
-	let allTasks = {};
-	directoryFiles.filter(
-		file => file.match(/[.]js$/i)
-	).forEach((file) => {
-		let modulePath = path.resolve(directory + path.sep + file);
-		let tasks = require(modulePath);
-		if (tasks.__requiresConfig && (typeof tasks.default === 'function')) {
-			tasks = tasks.default(gulpConfig);
-		}
-		allTasks = Object.assign(allTasks, tasks);
-	});
+  let allTasks = {};
+  directoryFiles.filter(file => file.match(/[.]js$/i)).forEach(file => {
+    let modulePath = path.resolve(directory + path.sep + file);
+    let tasks = require(modulePath);
+    if (tasks.__requiresConfig && typeof tasks.default === 'function') {
+      tasks = tasks.default(gulpConfig);
+    }
+    allTasks = Object.assign(allTasks, tasks);
+  });
 
-	return allTasks;
+  return allTasks;
 }
