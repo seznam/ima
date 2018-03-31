@@ -5,7 +5,9 @@
     "main": "",
     "scripts": {
         "lint": "node_modules/.bin/eslint -c ./.eslintrc.js --fix './**/*.js' --ignore-path ./.prettierignore",
-        "test": "echo \"Error: no test specified\" && exit 1"
+        "preversion": "npm test && npm run lint",
+        "postversion": "git commit -am $npm_package_version && git tag $npm_package_version && git push && git push --tags && npm publish",
+        "test": "echo \"Error: no test specified\" && exit 0"
     },
     "repository": {
         "type": "git",
