@@ -1,4 +1,7 @@
 .idea/
 .gitignore
+.prettierignore
+.eslintrc.js
 gulpfile.js
 indexSpec.js
+README.md

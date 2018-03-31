@@ -1,2 +1,5 @@
-.idea/
 node_modules/
+.idea/
+.DS_Store
+.npmrc
+package-lock.json

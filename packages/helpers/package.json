@@ -4,7 +4,9 @@
     "description": "Various helpers for the IMA.js framework.",
     "main": "index.js",
     "scripts": {
-        "prepublishOnly": "npm test",
+        "lint": "node_modules/.bin/eslint -c ./.eslintrc.js --fix './*.js' --ignore-path ./.prettierignore",
+        "preversion": "npm test && npm run lint",
+        "postversion": "git commit -am $npm_package_version && git tag $npm_package_version && git push && git push --tags && npm publish",
         "test": "node_modules/gulp/bin/gulp.js test"
     },
     "repository": {
@@ -28,6 +30,13 @@
         "clone": "^2.1.2"
     },
     "devDependencies": {
+        "babel-eslint": "^8.2.2",
+        "eslint": "^4.19.1",
+        "eslint-config-last": "^0.0.5",
+        "eslint-config-prettier": "^2.9.0",
+        "eslint-plugin-jasmine": "^2.9.3",
+        "eslint-plugin-prettier": "^2.6.0",
+        "prettier": "^1.11.1",
         "gulp": "github:gulpjs/gulp#3f5aba2",
         "gulp-jasmine": "^2.4.2"
     },
