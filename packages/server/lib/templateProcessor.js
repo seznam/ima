@@ -4,10 +4,8 @@ const helper = require('ima-helpers');
 
 module.exports = processTemplate;
 
-const SIMPLE_ENV_CONDITION_MATCHER =
-		/[{]ifEnv\s+([^}]+)[}]([^{]*)[{]\/ifEnv[}]/;
-const IF_ELSE_ENV_CONDITION_MATCHER =
-		/[{]ifEnv\s+([^}]+)[}]([^{]*)[{]else[}]([^{]*)[{]\/ifEnv[}]/;
+const SIMPLE_ENV_CONDITION_MATCHER = /[{]ifEnv\s+([^}]+)[}]([^{]*)[{]\/ifEnv[}]/;
+const IF_ELSE_ENV_CONDITION_MATCHER = /[{]ifEnv\s+([^}]+)[}]([^{]*)[{]else[}]([^{]*)[{]\/ifEnv[}]/;
 
 /**
  * Processes the provided template, replacing variable placeholders with the
@@ -18,14 +16,14 @@ const IF_ELSE_ENV_CONDITION_MATCHER =
  * @return {string} The processed template.
  */
 function processTemplate(template, variables) {
-	for (let variableName of Object.keys(variables)) {
-		let value = variables[variableName];
-		template = replaceVariable(template, variableName, value);
-	}
+  for (let variableName of Object.keys(variables)) {
+    let value = variables[variableName];
+    template = replaceVariable(template, variableName, value);
+  }
 
-	template = evaluateConditions(template, variables);
+  template = evaluateConditions(template, variables);
 
-	return template;
+  return template;
 }
 
 /**
@@ -39,14 +37,12 @@ function processTemplate(template, variables) {
  * @return {string} Processed template.
  */
 function replaceVariable(template, name, value) {
-	let key = `{${name}}`;
-	let reg = new RegExp(helper.escapeRegExp(key), 'g');
-	let encodedReg = new RegExp(helper.escapeRegExp(`{${name}|json}`), 'g');
-	let encodedValue = JSON
-		.stringify(value)
-		.replace(/<\/script/gi, '<\\/script');
+  let key = `{${name}}`;
+  let reg = new RegExp(helper.escapeRegExp(key), 'g');
+  let encodedReg = new RegExp(helper.escapeRegExp(`{${name}|json}`), 'g');
+  let encodedValue = JSON.stringify(value).replace(/<\/script/gi, '<\\/script');
 
-	return template.replace(reg, value).replace(encodedReg, encodedValue);
+  return template.replace(reg, value).replace(encodedReg, encodedValue);
 }
 
 /**
@@ -58,14 +54,14 @@ function replaceVariable(template, name, value) {
  * @return {string} Processed template.
  */
 function evaluateConditions(template, variables) {
-	let source;
-	do {
-		source = template;
-		template = processSimpleConditions(template, variables);
-		template = processIfElseConditions(template, variables);
-	} while (source !== template);
+  let source;
+  do {
+    source = template;
+    template = processSimpleConditions(template, variables);
+    template = processIfElseConditions(template, variables);
+  } while (source !== template);
 
-	return template;
+  return template;
 }
 
 /**
@@ -77,7 +73,7 @@ function evaluateConditions(template, variables) {
  * @return {string} Processed template.
  */
 function processSimpleConditions(template, variables) {
-	return processCondition(template, variables, SIMPLE_ENV_CONDITION_MATCHER);
+  return processCondition(template, variables, SIMPLE_ENV_CONDITION_MATCHER);
 }
 
 /**
@@ -89,11 +85,7 @@ function processSimpleConditions(template, variables) {
  * @return {string} Processed template.
  */
 function processIfElseConditions(template, variables) {
-	return processCondition(
-		template,
-		variables,
-		IF_ELSE_ENV_CONDITION_MATCHER
-	);
+  return processCondition(template, variables, IF_ELSE_ENV_CONDITION_MATCHER);
 }
 
 /**
@@ -108,25 +100,25 @@ function processIfElseConditions(template, variables) {
  * @return {string} Processed template.
  */
 function processCondition(template, variables, matcher) {
-	while (true) {
-		let matchedCondition = template.match(matcher);
-		if (!matchedCondition) {
-			break;
-		}
+  // eslint-disable-next-line no-constant-condition
+  while (true) {
+    let matchedCondition = template.match(matcher);
+    if (!matchedCondition) {
+      break;
+    }
 
-		let fragment = matchedCondition[0];
-		let conditionCode = matchedCondition[1];
+    let fragment = matchedCondition[0];
+    let conditionCode = matchedCondition[1];
 
-		let testResult = evaluateCondition(conditionCode, variables);
-		let replaceWith =
-				testResult ?
-				matchedCondition[2] :
-				(matchedCondition[3] || '');
+    let testResult = evaluateCondition(conditionCode, variables);
+    let replaceWith = testResult
+      ? matchedCondition[2]
+      : matchedCondition[3] || '';
 
-		template = template.replace(fragment, replaceWith);
-	}
+    template = template.replace(fragment, replaceWith);
+  }
 
-	return template;
+  return template;
 }
 
 /**
@@ -140,19 +132,19 @@ function processCondition(template, variables, matcher) {
  *         boolean.
  */
 function evaluateCondition(conditionCode, variables) {
-	let trimmedCondition = conditionCode.trim();
+  let trimmedCondition = conditionCode.trim();
 
-	if ($Debug) {
-		if (!/^!?('[^']*'|"[^"]*")$/.test(trimmedCondition)) {
-			throw new Error('Invalid expected value: ' + trimmedCondition);
-		}
-	}
+  if ($Debug) {
+    if (!/^!?('[^']*'|"[^"]*")$/.test(trimmedCondition)) {
+      throw new Error('Invalid expected value: ' + trimmedCondition);
+    }
+  }
 
-	let negate = trimmedCondition.charAt(0) === '!';
+  let negate = trimmedCondition.charAt(0) === '!';
 
-	let expectedValue = trimmedCondition.slice(negate ? 2 : 1, -1);
+  let expectedValue = trimmedCondition.slice(negate ? 2 : 1, -1);
 
-	return negate ?
-			(expectedValue !== variables.$Env) :
-			(expectedValue === variables.$Env);
+  return negate
+    ? expectedValue !== variables.$Env
+    : expectedValue === variables.$Env;
 }

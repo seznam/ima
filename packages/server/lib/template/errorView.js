@@ -193,25 +193,34 @@ const ERROR_PAGE_STYLE = `<style>
 </style>`;
 
 module.exports = (error, callStack) => {
-	let responseBody = `${ERROR_PAGE_STYLE}\n<h1>${error.name}: ${error.message}</h1>`;
+  let responseBody = `${ERROR_PAGE_STYLE}\n<h1>${error.name}: ${
+    error.message
+  }</h1>`;
 
-	let encodedParams = '';
+  let encodedParams = '';
 
-	if (error && error.getParams) {
-		encodedParams = String(JSON.stringify(error.getParams())).replace(
-			/[\u00A0-\u9999<>\&]/gim, char => `&#${char.charCodeAt(0)};`
-		);
-	}
+  if (error && error.getParams) {
+    encodedParams = String(JSON.stringify(error.getParams())).replace(
+      /[\u00A0-\u9999<>&]/gim,
+      char => `&#${char.charCodeAt(0)};`
+    );
+  }
 
-	responseBody += `<h3>Params: ${encodedParams}</h3>`;
-	responseBody += `<ul>`;
-	responseBody += callStack.map(item =>
-		`<li>at <span class='functionName'>${item.functionName || 'anonymous'}</span> ${item.fileName}:${item.lineNumber}:${item.columnNumber}
+  responseBody += `<h3>Params: ${encodedParams}</h3>`;
+  responseBody += `<ul>`;
+  responseBody += callStack
+    .map(
+      item =>
+        `<li>at <span class='functionName'>${item.functionName ||
+          'anonymous'}</span> ${item.fileName}:${item.lineNumber}:${
+          item.columnNumber
+        }
 		<style> pre#${item.id}{counter-increment:lines ${item.startLine};}</style>
 		<pre id='${item.id}'><code class='hljs lang-js'>${item.content}</code></pre>
 		</li>`
-	).join('');
-	responseBody += `</ul>`;
+    )
+    .join('');
+  responseBody += `</ul>`;
 
-	return responseBody;
+  return responseBody;
 };

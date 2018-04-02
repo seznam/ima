@@ -1,73 +1,71 @@
 module.exports = (() => {
-	'use strict';
+  'use strict';
 
-	/**
-	 * Instance Recycler.
-	 *
-	 * @class InstanceRecycler
-	 */
-	class InstanceRecycler {
+  /**
+   * Instance Recycler.
+   *
+   * @class InstanceRecycler
+   */
+  class InstanceRecycler {
+    clear() {
+      this._instanceFactory = null;
+      this._maxInstanceCount = 0;
+      this._instances = [];
+      this._concurrentRequests = 0;
+      this._initialized = false;
+    }
 
-		clear() {
-			this._instanceFactory = null;
-			this._maxInstanceCount = 0;
-			this._instances = [];
-			this._concurrentRequests = 0;
-			this._initialized = false;
-		}
+    init(instanceFactory, maxInstanceCount = 1) {
+      if (this.isInitialized()) {
+        throw new Error(
+          'InstanceRecycler is already initialized. Use the ' +
+            'clear() method first to re-initialize.'
+        );
+      }
 
-		init(instanceFactory, maxInstanceCount = 1) {
-			if (this.isInitialized()) {
-				throw new Error(
-					'InstanceRecycler is already initialized. Use the ' +
-					'clear() method first to re-initialize.'
-				);
-			}
+      this._initialized = true;
+      this._instanceFactory = instanceFactory;
+      this._maxInstanceCount = maxInstanceCount;
 
-			this._initialized = true;
-			this._instanceFactory = instanceFactory;
-			this._maxInstanceCount = maxInstanceCount;
+      for (let i = 0; i < maxInstanceCount; i++) {
+        this._instances.push(this._instanceFactory());
+      }
+    }
 
-			for (let i = 0; i < maxInstanceCount; i++) {
-			  this._instances.push(this._instanceFactory());
-			}
-		}
+    isInitialized() {
+      return this._initialized;
+    }
 
-		isInitialized() {
-			return this._initialized;
-		}
+    hasNextInstance() {
+      return this._instances.length > 0;
+    }
 
-		hasNextInstance() {
-			return this._instances.length > 0;
-		}
+    hasReachedMaxConcurrentRequests() {
+      return this._concurrentRequests > this._maxInstanceCount;
+    }
 
-		hasReachedMaxConcurrentRequests() {
-			return this._concurrentRequests > this._maxInstanceCount;
-		}
+    getInstance() {
+      this._concurrentRequests++;
 
-		getInstance() {
-			this._concurrentRequests++;
+      if (this.hasNextInstance()) {
+        return this._instances.shift();
+      } else {
+        return this._instanceFactory();
+      }
+    }
 
-			if (this.hasNextInstance()) {
-				return this._instances.shift();
-			} else {
-				return this._instanceFactory();
-			}
+    clearInstance(instance) {
+      this._concurrentRequests--;
+      instance.oc.clear();
 
-		}
+      if (this._instances.length < this._maxInstanceCount) {
+        this._instances.push(instance);
+      }
+    }
+  }
 
-		clearInstance(instance) {
-			this._concurrentRequests--;
-			instance.oc.clear();
+  const instanceRecycler = new InstanceRecycler();
+  instanceRecycler.clear();
 
-			if (this._instances.length < this._maxInstanceCount) {
-				this._instances.push(instance);
-			}
-		}
-	}
-
-	const instanceRecycler = new InstanceRecycler();
-	instanceRecycler.clear();
-
-	return instanceRecycler;
+  return instanceRecycler;
 })();
