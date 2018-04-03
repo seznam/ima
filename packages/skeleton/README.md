@@ -1,15 +1,20 @@
+![IMA.js logo](https://imajs.io/static/img/imajs-logo.png)
+
 # IMA.js skeleton application
 
 The IMA.js is an application development stack for developing isomorphic
-applications written in pure JavaScript.
+applications written in pure JavaScript and React.
 
-Isomorphic applications consist of a single application logic that is first
-executed at the server-side, generates the page markup, and then the
-application logic is executed at the client-side, automatically binds to the
-server-generated markup and acts like a single-page application (or a
-multi-page application if the client does not support JavaScript). This allows
-for fast load times, out-of-box support for web crawlers and greater overall
-user experience (or UX for short).
+## Why we use IMA.js and you should too?
+
+Here at [Seznam.cz](https://www.seznam.cz/vychytavky/), development of a frontend application comes with many checkboxes that need to be ticked off before the project goes public. Mainly because of a diverse audience and a challenging product requirements.
+
+In order to **not** reinvent the wheel on every project and to address all of these problems (checkboxes) we created the IMA.js framework. Here are a few outlines that we're most proud of:
+
+- [X] **Isomorphic** - application logic is first executed at the server-side, generates the page markup, and then when the application logic is executed at the client-side it automatically binds to the server-generated markup and acts like a single-page application (or a multi-page application if the client does not support JavaScript). This allows for fast load times, out-of-box support for web crawlers and greater overall user experienc (or UX for short).
+- [X] **React compatible** - IMA.js Views extend the React Component and are in tight cooperation with our Controllers. That means you can use the full magic of React v16 without loosing anything.
+- [X] **Production ready** - there's no need for additional setup or configuration. IMA.js uses evironment-specific configurations from the start.
+- [X] **Battle tested** - IMA.js is used on various projects across Seznam.cz. Some of them pushing the limits of what a frontend application can do.
 
 ## Installation
 
@@ -36,6 +41,8 @@ These commands install the dependencies locally, prepare the basic demo
 application and start the development server. Go ahead and open
 [`http://localhost:3001/`](http://localhost:3001/) in your browser!
 
+Running `npm run dev` builds ES6 version of your app. Transpiling to ES5 happens only when you append `--legacy-compat-mode` flag or when running `npm run build` command *(see [Production use](#production-use))*.
+
 You also may want to install the [`gulp`](http://gulpjs.com/) tool globally in
 order to access all the available tools, examples and commands (you may need to
 use `sudo` on a UNIX-like system):
@@ -44,15 +51,13 @@ use `sudo` on a UNIX-like system):
 npm install -g gulp
 ```
 
-Check out the installation and hello world video tutorials at
-[`imajs.io`](https://imajs.io/videos)!
+You probably will have to install also [`node-gyp`](https://github.com/nodejs/node-gyp#installation) - follow the installation instructions for your operating system in the linked README.md.
 
 You may also try other local demos by running either of the following commands:
 
-```
-npm run app:feed
-npm run app:todos
-```
+`npm run app:feed` - [Demo](https://imajs.io/examples/feed) - [Source code](https://github.com/seznam/IMA.js-examples/tree/master/feed)
+
+`npm run app:todos` - [Demo](https://imajs.io/examples/todos) - [Source code](https://github.com/seznam/IMA.js-examples/tree/master/todos)
 
 ## Production use
 
@@ -162,8 +167,6 @@ update the configuration accordingly).
 There are several configuration files in your IMA.js application:
 - `gulpConfig.js` contains configuration for the gulp tasks we use to build and
   run your application.
-- `karma.conf.js` is used to configure the
-  [karma](http://karma-runner.github.io/0.13/index.html) test runner.
 - `app/build.js` specifies which JavaScript, JSX, Less CSS and language files
   your application consists of and should be included in your built
   application.
@@ -172,7 +175,7 @@ There are several configuration files in your IMA.js application:
   server-side and client-side.
   The file also specifies which 3rd party bundled JavaScript and CSS files are
   to be included in your application.
-- `app/environment.js` configures the server-side environment. Notice that the
+- `app/environment.js` configures the server-side environment. Note that the
   `dev` and `test` environment configuration automatically inherits values from
   the `prod` environment (except for the `$Language` which has to be configured
   individually).
@@ -183,7 +186,7 @@ There are several configuration files in your IMA.js application:
 - `app/config/routes.js` configures your router, mapping routes to the
   controllers and views in your application.
 - `app/config/settings.js` configures your application and IMA.js services.
-  Notice how, again, the `dev` and `test` environment configuration
+  Note that, again, the `dev` and `test` environment configuration
   automatically inherits values from the `prod` environment.
 - and finally, the `app/config/bind.js` configures the object container (think
   of it as a more powerful dependency injector) with support for constants,
@@ -213,38 +216,13 @@ There are several directories we have not mentioned so far:
   if the need arises.
 
 ## Plugins
-
-There are several plugins authored by us that can use (and there may be more of
-them provided by the community):
-
-- [3rd party scripts loader](https://github.com/seznam/IMA.js-plugin-script-loader) -
-  a simple utility for lazy loading JavaScript files on demand at the client
-  side, useful for loading Facebook/Twitter SDKs.
-- [3rd party styles loader](https://github.com/seznam/IMA.js-plugin-style-loader) -
-  a simple utility for lazy loading CSS files on demand at the client
-  side, useful for loading not critical CSS.
-- [Abstract REST API client](https://github.com/jurca/IMA-plugin-rest-client) -
-  the base plugin providing an abstract implementation of a high-level REST API
-  client.
-- [Abstract web analytics](https://github.com/seznam/IMA.js-plugin-analytic) -
-  the base plugin used & extended by other web analytics plugins.
-- [Google analytic](https://github.com/seznam/IMA.js-plugin-analytic-google) -
-  web analytics plugin that provides integration with the
-  [Google Analytics](https://analytics.google.com/analytics/web/) service.
-- [HAL+JSON REST API client](https://github.com/jurca/IMA-plugin-halson-rest-client) -
-  a high-level REST API client for
-  [HAL+JSON](https://tools.ietf.org/html/draft-kelly-json-hal-07) REST APIs.
-- [Managed Abstract Component](https://github.com/jurca/ima-plugin-managed-component) -
-  an extension of the `ima/page/AbstractComponent` class that automatically
-  handled binding of event listeners in the elements returned from the
-  `render()` method, manually bound event, interval and timeout listeners, to
-  the component's instance (`this`). The component also handles automatic
-  unbinding the listeners and canceling pending timeouts and interval when the
-  component is about to be unmounted (see the React component's
-  `componentWillUnmount()` method).
-  This plugin is currently **experimental** and **may not work**.
-- [UI Atoms](https://github.com/seznam/IMA.js-ui-atoms) - elementary web page
-  building elements (hence the name "atoms") for building
-  [AMP HTML](https://www.ampproject.org/)-ready websites with AMP-style
-  lazy-loading of external resources (images, videos, iframes) for regular HTML
-  version of the site.
+Here's a list of plugins maintained by Seznam.cz and other contributors that you can safely use in your app:
+- [Abstract analytic](https://github.com/seznam/IMA.js-plugin-analytic)
+- [Google analytic](https://github.com/seznam/IMA.js-plugin-analytic-google)
+- [3rd party scripts loader](https://github.com/seznam/IMA.js-plugin-script-loader)
+- [3rd party styles loader](https://github.com/seznam/IMA.js-plugin-style-loader)
+- [REST-API Client](https://github.com/jurca/IMA-plugin-rest-client)
+- [XHR](https://github.com/seznam/IMA.js-plugin-xhr) *(This is not a replacement for the fetch API that IMA.js uses by default.)*
+- [UI Atoms](https://github.com/seznam/IMA.js-ui-atoms)
+- [Extra-props selector](https://github.com/seznam/IMA.js-plugin-select)
+- [Self XSS](https://github.com/seznam/IMA.js-plugin-self-xss)
