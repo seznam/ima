@@ -403,7 +403,7 @@ export default class HttpAgentImpl extends HttpAgent {
    * @param {HttpAgent~Response} agentResponse The response of the server.
    */
   _setCookiesFromResponse(agentResponse) {
-    if (agentResponse.headers) {
+    if (agentResponse.headersRaw) {
       let receivedCookies = agentResponse.headersRaw.raw()['set-cookie'];
 
       if (receivedCookies) {
