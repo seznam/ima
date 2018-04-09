@@ -289,6 +289,7 @@ export default class HttpAgentImpl extends HttpAgent {
       body: response.body,
       params: response.params,
       headers: response.headers,
+      headersRaw: response.headersRaw,
       cached: false
     };
     let cacheKey = this.getCacheKey(
@@ -402,8 +403,8 @@ export default class HttpAgentImpl extends HttpAgent {
    * @param {HttpAgent~Response} agentResponse The response of the server.
    */
   _setCookiesFromResponse(agentResponse) {
-    if (agentResponse.headers) {
-      let receivedCookies = agentResponse.headers['set-cookie'];
+    if (agentResponse.headersRaw) {
+      let receivedCookies = agentResponse.headersRaw.raw()['set-cookie'];
 
       if (receivedCookies) {
         receivedCookies.forEach(cookieHeader => {
