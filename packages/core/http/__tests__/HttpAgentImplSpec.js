@@ -64,7 +64,9 @@ describe('ima.http.HttpAgentImpl', () => {
         'set-cookie': 'cookie1=cookie1, cookie2=cookie2'
       },
       headersRaw: {
-        raw() { return {'set-cookie': ['cookie1=cookie1', 'cookie2=cookie2']} },
+        raw() {
+          return { 'set-cookie': ['cookie1=cookie1', 'cookie2=cookie2'] };
+        },
         'set-cookie': 'cookie1=cookie1, cookie2=cookie2'
       }
     };
