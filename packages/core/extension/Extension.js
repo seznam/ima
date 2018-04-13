@@ -137,6 +137,28 @@ export default class Extension {
   getState() {}
 
   /**
+   * Patches the partial state of the extension. The extension is able
+   * during its load and update phase receive state from active controller
+   * using this extension and from previously loaded/updated extensions.
+   *
+   * @param {Object<string, *>} partialStatePatch Patch of the controller's state to
+   *        apply.
+   */
+  setPartialState(partialStatePatch) {}
+
+  /**
+   * Returns the current partial state of the extension.
+   *
+   * @return {Object<string, *>} The current partial state of the extension.
+   */
+  getPartialState() {}
+
+  /**
+   * Clears the current partial state of the extension and sets it value to empty object.
+   */
+  clearPartialState() {}
+
+  /**
    * Sets the state manager used to manage the controller's state..
    *
    * @param {?PageStateManager} pageStateManager The current state manager to
