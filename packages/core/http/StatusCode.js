@@ -19,7 +19,7 @@ const StatusCode = Object.freeze({
    *
    * @type {number}
    */
-  NO_CONTENT: 203,
+  NO_CONTENT: 204,
 
   /**
    * Bad request
