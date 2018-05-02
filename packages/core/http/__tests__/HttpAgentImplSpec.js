@@ -92,6 +92,7 @@ describe('ima.http.HttpAgentImpl', () => {
               params: data.params,
               body: data.body,
               headers: data.headers,
+              headersRaw: data.headersRaw,
               cached: false
             };
 
@@ -100,7 +101,7 @@ describe('ima.http.HttpAgentImpl', () => {
           })
           .catch(e => {
             console.error(e.message, e.stack);
-            done();
+            done(e);
           });
       });
 
