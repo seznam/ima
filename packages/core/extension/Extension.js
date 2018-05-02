@@ -144,7 +144,7 @@ export default class Extension {
    * @param {Object<string, *>} partialStatePatch Patch of the controller's state to
    *        apply.
    */
-  setPartialState(partialStatePatch) {}
+  setPartialState() {}
 
   /**
    * Returns the current partial state of the extension.
