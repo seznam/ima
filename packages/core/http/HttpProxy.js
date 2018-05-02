@@ -250,6 +250,7 @@ export default class HttpProxy {
         body: responseBody,
         params: requestParams,
         headers: this._headersToPlainObject(response.headers),
+        headersRaw: response.headers,
         cached: false
       };
     } else {

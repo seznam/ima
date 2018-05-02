@@ -61,7 +61,13 @@ describe('ima.http.HttpAgentImpl', () => {
         options: options
       },
       headers: {
-        'set-cookie': ['cookie1=cookie1', 'cookie2=cookie2']
+        'set-cookie': 'cookie1=cookie1, cookie2=cookie2'
+      },
+      headersRaw: {
+        raw() {
+          return { 'set-cookie': ['cookie1=cookie1', 'cookie2=cookie2'] };
+        },
+        'set-cookie': 'cookie1=cookie1, cookie2=cookie2'
       }
     };
   });
@@ -86,6 +92,7 @@ describe('ima.http.HttpAgentImpl', () => {
               params: data.params,
               body: data.body,
               headers: data.headers,
+              headersRaw: data.headersRaw,
               cached: false
             };
 
@@ -94,7 +101,7 @@ describe('ima.http.HttpAgentImpl', () => {
           })
           .catch(e => {
             console.error(e.message, e.stack);
-            done();
+            done(e);
           });
       });
 
