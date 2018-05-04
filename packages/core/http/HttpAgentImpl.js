@@ -393,7 +393,7 @@ export default class HttpAgentImpl extends HttpAgent {
    *         specified URL, carrying the specified data.
    */
   _getCacheKeySuffix(method, url, data) {
-    return `${method}:${url}?${JSON.stringify(data)}`;
+    return `${method}:${url}?${JSON.stringify(data).replace(/<\/script/gi, '<\\/script')}`;
   }
 
   /**
