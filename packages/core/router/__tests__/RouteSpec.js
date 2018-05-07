@@ -976,6 +976,16 @@ describe('ima.router.Route', function() {
           result: true
         },
         {
+          pathExpression: '/promo/:promoId',
+          path: '/promo/2-mattresses?utm_source=seznam&utm_medium=link&utm_campaign=email-reply-confirm&utm_content=seller-link-box',
+          result: true
+        },
+        {
+          pathExpression: '/promo/:promoId',
+          path: '/promo/3-mattresses/',
+          result: true
+        },
+        {
           pathExpression: '/:catId_:catName',
           path: '/5812_medium-mattresses',
           result: true
@@ -1129,6 +1139,31 @@ describe('ima.router.Route', function() {
         {
           pathExpression: '/:?param1/:param2/:?param3',
           path: '/p1',
+          result: false
+        },
+        {
+          pathExpression: '/:shopSeo/:?sort/:?page',
+          path: '/shopper?utm_source=sbazar&utm_medium=email&utm_campaign=email-reply-confirm&utm_content=seller-link-box',
+          result: true
+        },
+        {
+          pathExpression: '/:categoryId-:categoryName',
+          path: '/shopper?utm_source=sbazar&utm_medium=email&utm_campaign=email-reply-confirm&utm_content=seller-link-box',
+          result: false
+        },
+        {
+          pathExpression: '/:categoryId-:categoryName',
+          path: '/125-children-up-to-10?utm_source=sbazar&utm_medium=email&utm_campaign=email-reply-confirm&utm_content=seller-link-box',
+          result: true
+        },
+        {
+          pathExpression: '/:categoryId-:?categoryName',
+          path: '/shopper?utm_source=sbazar&utm_medium=email&utm_campaign=email-reply-confirm&utm_content=seller-link-box',
+          result: false
+        },
+        {
+          pathExpression: '/:categoryId-:?categoryName/:?locality/:?price/:?sort/:?page',
+          path: '/shopper?utm_source=sbazar&utm_medium=email&utm_campaign=email-reply-confirm&utm_content=seller-link-box',
           result: false
         }
       ],
@@ -1392,17 +1427,20 @@ describe('ima.router.Route', function() {
       }
     );
 
+    const notLastOptRegEx = '([^-?]+)?';
+    const notLastRegEx = '([^-?]+)';
+
     using(
       [
         {
           path: '/:someId-:someName',
           clearPathExpr: ':someId-:someName',
-          result: '([^-]+)-([^/?]+)'
+          result: `${notLastRegEx}-([^/?]+)`
         },
         {
           path: '/something/:someId-:someName',
           clearPathExpr: 'something/:someId-:someName',
-          result: 'something/([^-]+)-([^/?]+)'
+          result: `something/${notLastRegEx}-([^/?]+)`
         }
       ],
       function(value) {
@@ -1426,21 +1464,21 @@ describe('ima.router.Route', function() {
           clearPathExpr: ':?someId-:someName',
           optionalSubparamsOthers: [':?someId'],
           optionalSubparamsLast: [],
-          result: '([^-]+)?-:someName'
+          result: `${notLastOptRegEx}-:someName`
         },
         {
           path: '/:?someId-:?someName',
           clearPathExpr: ':?someId-:?someName',
           optionalSubparamsOthers: [':?someId'],
           optionalSubparamsLast: [':?someName'],
-          result: '([^-]+)?-:([^/?]+)?'
+          result: `${notLastOptRegEx}-:([^/?]+)?`
         },
         {
           path: '/something/:?someId-:?someName',
           clearPathExpr: 'something/:?someId-:?someName',
           optionalSubparamsOthers: [':?someId'],
           optionalSubparamsLast: [':?someName'],
-          result: 'something/([^-]+)?-:([^/?]+)?'
+          result: `something/${notLastOptRegEx}-:([^/?]+)?`
         }
       ],
       function(value) {
@@ -1451,7 +1489,7 @@ describe('ima.router.Route', function() {
           optionalSubparamsLast,
           result
         } = value;
-        it(`should replace optional parametres in ${path}`, function() {
+        it(`should replace optional parametres in ${path} to ${result}`, function() {
           const localRoute = new Route('unknown', path, 'unknown');
 
           const pattern = localRoute._replaceOptionalSubParametersInPath(
