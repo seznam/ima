@@ -977,7 +977,8 @@ describe('ima.router.Route', function() {
         },
         {
           pathExpression: '/promo/:promoId',
-          path: '/promo/2-mattresses?utm_source=seznam&utm_medium=link&utm_campaign=email-reply-confirm&utm_content=seller-link-box',
+          path:
+            '/promo/2-mattresses?utm_source=seznam&utm_medium=link&utm_campaign=email-reply-confirm&utm_content=seller-link-box',
           result: true
         },
         {
@@ -1143,27 +1144,33 @@ describe('ima.router.Route', function() {
         },
         {
           pathExpression: '/:shopSeo/:?sort/:?page',
-          path: '/shopper?utm_source=sbazar&utm_medium=email&utm_campaign=email-reply-confirm&utm_content=seller-link-box',
+          path:
+            '/shopper?utm_source=sbazar&utm_medium=email&utm_campaign=email-reply-confirm&utm_content=seller-link-box',
           result: true
         },
         {
           pathExpression: '/:categoryId-:categoryName',
-          path: '/shopper?utm_source=sbazar&utm_medium=email&utm_campaign=email-reply-confirm&utm_content=seller-link-box',
+          path:
+            '/shopper?utm_source=sbazar&utm_medium=email&utm_campaign=email-reply-confirm&utm_content=seller-link-box',
           result: false
         },
         {
           pathExpression: '/:categoryId-:categoryName',
-          path: '/125-children-up-to-10?utm_source=sbazar&utm_medium=email&utm_campaign=email-reply-confirm&utm_content=seller-link-box',
+          path:
+            '/125-children-up-to-10?utm_source=sbazar&utm_medium=email&utm_campaign=email-reply-confirm&utm_content=seller-link-box',
           result: true
         },
         {
           pathExpression: '/:categoryId-:?categoryName',
-          path: '/shopper?utm_source=sbazar&utm_medium=email&utm_campaign=email-reply-confirm&utm_content=seller-link-box',
+          path:
+            '/shopper?utm_source=sbazar&utm_medium=email&utm_campaign=email-reply-confirm&utm_content=seller-link-box',
           result: false
         },
         {
-          pathExpression: '/:categoryId-:?categoryName/:?locality/:?price/:?sort/:?page',
-          path: '/shopper?utm_source=sbazar&utm_medium=email&utm_campaign=email-reply-confirm&utm_content=seller-link-box',
+          pathExpression:
+            '/:categoryId-:?categoryName/:?locality/:?price/:?sort/:?page',
+          path:
+            '/shopper?utm_source=sbazar&utm_medium=email&utm_campaign=email-reply-confirm&utm_content=seller-link-box',
           result: false
         }
       ],
