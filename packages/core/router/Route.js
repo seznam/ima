@@ -473,7 +473,7 @@ export default class Route {
    * @return {string}
    */
   _getSubparamPattern(delimeter) {
-    const pattern = `([^${delimeter}?]+)`;
+    const pattern = `([^${delimeter}?/]+)`;
 
     return pattern;
   }
