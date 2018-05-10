@@ -685,7 +685,6 @@ describe('ima.router.Route', function() {
             another: '75258-eoc'
           }
         },
-
         {
           pathExpression: '/something/:group/:catId-:catName',
           path: '/something/flowers/',
@@ -797,6 +796,18 @@ describe('ima.router.Route', function() {
           pathExpression: '/:encodeString',
           path: '/%C3%A1%2Fb%3F%C4%8D%23d%3A%C4%9B%2525',
           params: { encodeString: 'á/b?č#d:ě%25' }
+        },
+
+        // not matched route
+        {
+          pathExpression: '/:catId-:catName/:?someParam/:?another',
+          path: '/rondam/moje-inzeraty/nejlevneji',
+          params: {}
+        },
+        {
+          pathExpression: '/:catId-:catName/:?someParam/:?another',
+          path: '/rondam?name=moje-inzeraty&param=nejlevneji',
+          params: {}
         },
 
         // invalid parametres order (required vs. optional)
@@ -943,7 +954,16 @@ describe('ima.router.Route', function() {
           path: '/5820-medium-mattresses',
           result: true
         },
-
+        {
+          pathExpression: '/:catId-:catName',
+          path: '/5820-',
+          result: false
+        },
+        {
+          pathExpression: '/:catId-:catName',
+          path: '/12-sale/top',
+          result: false
+        },
         {
           pathExpression: '/:catId-:catName/:paramA',
           path: '/5812-medium-mattresses',
@@ -1171,6 +1191,12 @@ describe('ima.router.Route', function() {
             '/:categoryId-:?categoryName/:?locality/:?price/:?sort/:?page',
           path:
             '/shopper?utm_source=sbazar&utm_medium=email&utm_campaign=email-reply-confirm&utm_content=seller-link-box',
+          result: false
+        },
+        {
+          pathExpression:
+            '/:categoryId-:?categoryName/:?locality/:?price/:?sort/:?page',
+          path: '/rondam/moje-inzeraty/nejlevneji',
           result: false
         }
       ],
@@ -1434,8 +1460,8 @@ describe('ima.router.Route', function() {
       }
     );
 
-    const notLastOptRegEx = '([^-?]+)?';
-    const notLastRegEx = '([^-?]+)';
+    const notLastOptRegEx = '([^-?/]+)?';
+    const notLastRegEx = '([^-?/]+)';
 
     using(
       [
