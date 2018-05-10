@@ -473,9 +473,7 @@ export default class HttpProxy {
     const transformedUrl = this._transformer.transform(url);
     const queryString = this._convertObjectToQueryString(data || {});
     const delimeter = queryString
-      ? transformedUrl.includes('?')
-        ? '&'
-        : '?'
+      ? transformedUrl.includes('?') ? '&' : '?'
       : '';
 
     return `${transformedUrl}${delimeter}${queryString}`;
