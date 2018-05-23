@@ -4,5 +4,6 @@ gulpfile.js
 .eslintrc.js
 .gitignore
 .prettierignore
+resolver.js
 LICENSE.md
 README.md

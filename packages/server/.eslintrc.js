@@ -34,6 +34,7 @@ module.exports = {
     },
     'globals': {
         '$IMA': true,
-        '$Debug': true
+        '$Debug': true,
+        'jest': true
     }
 };
