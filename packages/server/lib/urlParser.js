@@ -1,5 +1,9 @@
 'use strict';
 
+const { URL } = require('url');
+
+const BUILD_JS_PATH = '../../app/build.js';
+
 module.exports = environment => {
   function _getHost(req) {
     let forwardedHost = req.get('X-Forwarded-Host');
@@ -27,8 +31,10 @@ module.exports = environment => {
       rootExpression.replace('/', '/');
 
     if (languageParam) {
-      let build = require('../../app/build.js');
-      let languagesExpr = build.languages.join('|');
+      let build = require(BUILD_JS_PATH);
+
+      const langCodes = Object.keys(build.languages);
+      let languagesExpr = langCodes.join('|');
       rootReg += '(/(' + languagesExpr + '))?';
     }
     rootReg += '.*$';
@@ -87,19 +93,29 @@ module.exports = environment => {
   }
 
   function parseUrl(req, res, next) {
-    let parseUrlReg = /^.*\/\/([^/]*)((?:\/[^/:]+)*)?(\/:language)?$/;
-    let currentUrl = _getUrlFromRequest(req);
-    let parsedCurrentUrl = currentUrl.match(parseUrlReg);
+    const parseUrlReg = /^.*\/\/([^/]*)((?:\/[^/:]+)*)?(\/:language)?$/;
+
+    const currentProtocol = _getProtocol(req);
+    const currentUrl = _getUrlFromRequest(req);
+
+    const parsedCurrentUrl = new URL(currentProtocol + currentUrl);
+    const pathname = parsedCurrentUrl.pathname.replace(/\/$/, '');
+
+    const currentHost = parsedCurrentUrl.host;
+    let currentRoot = pathname + parsedCurrentUrl.search;
 
     let currentLanguage = null;
     let currentLanguagePartPath = '';
-    let currentHost = parsedCurrentUrl[1];
-    let currentRoot = parsedCurrentUrl[2];
     let currentPath = currentRoot || '';
-    let currentProtocol = _getProtocol(req);
 
     for (let expression of Object.keys(environment.$Language)) {
       let parsedDomainExpression = expression.match(parseUrlReg);
+
+      if (!parsedDomainExpression) {
+        throw new Error(
+          `You have invalid language expression definition (${expression}). Set current domain "//${currentHost}" or "//*:*" to attribute $Language in environment.js.`
+        );
+      }
 
       let hostExpression =
         parsedDomainExpression[1] === '*:*'
@@ -153,8 +169,6 @@ module.exports = environment => {
     res.locals.path = currentPath;
     res.locals.protocol = currentProtocol;
     res.locals.root = currentRoot;
-
-    //res.send(`${currentUrl} : ${currentHost} : ${currentRoot} : ${currentLanguage} : ${currentLanguagePartPath} : ${req.get('origin')} : ${req.hostname}`);
 
     if (!currentLanguage) {
       throw new Error(
