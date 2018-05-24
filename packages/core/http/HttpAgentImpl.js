@@ -393,10 +393,18 @@ export default class HttpAgentImpl extends HttpAgent {
    *         specified URL, carrying the specified data.
    */
   _getCacheKeySuffix(method, url, data) {
-    return `${method}:${url}?${JSON.stringify(data).replace(
-      /<\/script/gi,
-      '<\\/script'
-    )}`;
+    let dataQuery = '';
+    if (data) {
+      try {
+        dataQuery = JSON.stringify(data).replace(
+          /<\/script/gi,
+          '<\\/script'
+        );
+      } catch (error) {      
+        console.warn('The provided data does not have valid JSON format', data);
+      }
+    }
+    return `${method}:${url}?${dataQuery}`;
   }
 
   /**
