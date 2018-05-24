@@ -396,11 +396,8 @@ export default class HttpAgentImpl extends HttpAgent {
     let dataQuery = '';
     if (data) {
       try {
-        dataQuery = JSON.stringify(data).replace(
-          /<\/script/gi,
-          '<\\/script'
-        );
-      } catch (error) {      
+        dataQuery = JSON.stringify(data).replace(/<\/script/gi, '<\\/script');
+      } catch (error) {
         console.warn('The provided data does not have valid JSON format', data);
       }
     }
