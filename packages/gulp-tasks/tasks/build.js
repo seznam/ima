@@ -22,7 +22,7 @@ exports['less:build'] = () => {
 };
 
 exports['vendor:build'] = () => {
-  gulp.series(
+  return gulp.series(
     'Es6ToEs5:vendor',
     gulp.parallel('Es6ToEs5:vendor:client'),
     'server:restart',
@@ -31,5 +31,5 @@ exports['vendor:build'] = () => {
 };
 
 exports['locale:build'] = () => {
-  gulp.series('locale', 'server:restart', 'server:reload')();
+  return gulp.series('locale', 'server:restart', 'server:reload')();
 };
