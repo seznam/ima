@@ -22,7 +22,8 @@ describe('ima.router.AbstractRouter', () => {
     autoScroll: true,
     allowSPA: true,
     documentView: null,
-    managedRootView: null
+    managedRootView: null,
+    viewAdapter: null
   };
   let Controller = function Controller() {};
   let View = function View() {};
