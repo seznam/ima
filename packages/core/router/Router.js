@@ -62,7 +62,8 @@ export default class Router {
    *          autoScroll: boolean=,
    *          allowSPA: boolean=,
    *          documentView: ?function(new: AbstractDocumentView)=,
-   *          managedRootView: ?function(new: React.Component)=
+   *          managedRootView: ?function(new: React.Component)=,
+   *          viewAdapter: ?function(new: React.Component)=
    *        }=} options
    *        Additional route options, specified how the navigation to the
    *        route will be handled.
@@ -204,7 +205,9 @@ export default class Router {
    *          )=,
    *          autoScroll: boolean=,
    *          allowSPA: boolean=,
-   *          documentView: ?AbstractDocumentView=
+   *          documentView: ?AbstractDocumentView=,
+   *          managedRootView: ?function(new: React.Component)=,
+   *          viewAdapter: ?function(new: React.Component)=
    *        }} [options={}] The options overrides route options defined in
    *        the {@code routes.js} configuration file.
    */
@@ -244,7 +247,9 @@ export default class Router {
    *          )=,
    *          autoScroll: boolean=,
    *          allowSPA: boolean=,
-   *          documentView: ?AbstractDocumentView=
+   *          documentView: ?AbstractDocumentView=,
+   *          managedRootView: ?function(new: React.Component)=,
+   *          viewAdapter: ?function(new: React.Component)=
    *        }} [options={}] The options overrides route options defined in
    *        the {@code routes.js} configuration file.
    * @return {Promise<Object<string, *>>} A promise resolved
@@ -273,7 +278,9 @@ export default class Router {
    *          )=,
    *          autoScroll: boolean=,
    *          serverSPA: boolean=,
-   *          documentView: ?AbstractDocumentView=
+   *          documentView: ?AbstractDocumentView=,
+   *          managedRootView: ?function(new: React.Component)=,
+   *          viewAdapter: ?function(new: React.Component)=
    *        }} [options={}] The options overrides route options defined in
    *        the {@code routes.js} configuration file.
    * @return {Promise<Object<string, *>>} A promise resolved when the error
@@ -302,7 +309,9 @@ export default class Router {
    *          )=,
    *          autoScroll: boolean=,
    *          allowSPA: boolean=,
-   *          documentView: ?AbstractDocumentView=
+   *          documentView: ?AbstractDocumentView=,
+   *          managedRootView: ?function(new: React.Component),
+   *          viewAdapter: ?function(new: React.Component)
    *        }} [options={}] The options overrides route options defined in
    *        the {@code routes.js} configuration file.
    * @return {Promise<Object<string, *>>} A promise resolved

@@ -138,7 +138,9 @@ export default class Route {
    *          )=,
    *          autoScroll: boolean=,
    *          allowSPA: boolean=,
-   *          documentView: ?AbstractDocumentView=
+   *          documentView: ?AbstractDocumentView=,
+   *          managedRootView: ?function(new: React.Component)=,
+   *          viewAdapter: ?function(new: React.Component)=
    *        }} options The route additional options.
    */
   constructor(name, pathExpression, controller, view, options) {
@@ -191,7 +193,8 @@ export default class Route {
      *         autoScroll: boolean,
      *         allowSPA: boolean,
      *         documentView: ?function(new: AbstractDocumentView),
-     *         managedRootView: ?function(new: React.Component)
+     *         managedRootView: ?function(new: React.Component),
+     *         viewAdapter: ?function(new: React.Component)
      *       }}
      */
     this._options = Object.assign(
@@ -200,7 +203,8 @@ export default class Route {
         autoScroll: true,
         allowSPA: true,
         documentView: null,
-        managedRootView: null
+        managedRootView: null,
+        viewAdapter: null
       },
       options
     );
@@ -325,7 +329,9 @@ export default class Route {
    *           ),
    *           autoScroll: boolean,
    *           allowSPA: boolean,
-   *           documentView: ?AbstractDocumentView
+   *           documentView: ?AbstractDocumentView,
+   *           managedRootView: ?function(new: React.Component),
+   *           viewAdapter: ?function(new: React.Component)
    *         }}
    */
   getOptions() {
@@ -473,7 +479,7 @@ export default class Route {
    * @return {string}
    */
   _getSubparamPattern(delimeter) {
-    const pattern = `([^${delimeter}]+)`;
+    const pattern = `([^${delimeter}?/]+)`;
 
     return pattern;
   }

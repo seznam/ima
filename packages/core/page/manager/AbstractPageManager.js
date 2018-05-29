@@ -68,7 +68,8 @@ export default class AbstractPageManager extends PageManager {
      *           autoScroll: boolean,
      *           allowSPA: boolean,
      *           documentView: ?function(new: AbstractDocumentView),
-     *           managedRootView: ?function(new: React.Component)
+     *           managedRootView: ?function(new: React.Component),
+     *           viewAdapter: ?function(new: React.Component)
      *         },
      *         params: ?Object<string, string>,
      *         state: {
@@ -171,7 +172,9 @@ export default class AbstractPageManager extends PageManager {
    *          ),
    *          autoScroll: boolean,
    *          allowSPA: boolean,
-   *          documentView: ?AbstractDocumentView
+   *          documentView: ?AbstractDocumentView,
+   *          managedRootView: ?function(new: React.Component),
+   *          viewAdapter: ?function(new: React.Component)
    *        }} options
    * @param {Object<string, string>} params The route parameters.
    * @param {AbstractController} controllerInstance
@@ -568,7 +571,8 @@ export default class AbstractPageManager extends PageManager {
    *          autoScroll: boolean,
    *          allowSPA: boolean,
    *          documentView: ?function(new: AbstractDocumentView),
-   *          managedRootView: ?function(new: React.Component)
+   *          managedRootView: ?function(new: React.Component),
+   *          viewAdapter: ?function(new: React.Component)
    *        }} options The current route options.
    */
   _clearComponentState(options) {
@@ -577,7 +581,8 @@ export default class AbstractPageManager extends PageManager {
     if (
       managedOptions &&
       managedOptions.documentView === options.documentView &&
-      managedOptions.managedRootView === options.managedRootView
+      managedOptions.managedRootView === options.managedRootView &&
+      managedOptions.viewAdapter === options.viewAdapter
     ) {
       this._pageRenderer.clearState();
     } else {
@@ -617,7 +622,9 @@ export default class AbstractPageManager extends PageManager {
    *          ),
    *          autoScroll: boolean,
    *          allowSPA: boolean,
-   *          documentView: ?AbstractDocumentView
+   *          documentView: ?AbstractDocumentView,
+   *          managedRootView: ?function(new: React.Component),
+   *          viewAdapter: ?function(new: React.Component)
    *        }} options
    * @return {boolean}
    */
@@ -654,7 +661,9 @@ export default class AbstractPageManager extends PageManager {
    *          ),
    *          autoScroll: boolean,
    *          allowSPA: boolean,
-   *          documentView: ?AbstractDocumentView
+   *          documentView: ?AbstractDocumentView,
+   *          managedRootView: ?function(new: React.Component),
+   *          viewAdapter: ?function(new: React.Component)
    *        }} options
    */
   _preManage(options) {
@@ -681,7 +690,9 @@ export default class AbstractPageManager extends PageManager {
    *          ),
    *          autoScroll: boolean,
    *          allowSPA: boolean,
-   *          documentView: ?AbstractDocumentView
+   *          documentView: ?AbstractDocumentView,
+   *          managedRootView: ?function(new: React.Component),
+   *          viewAdapter: ?function(new: React.Component)
    *        }} options
    */
   _postManage() {}

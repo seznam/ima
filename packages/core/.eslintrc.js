@@ -15,7 +15,8 @@ module.exports = {
         }],
 
         'react/prop-types': 0,
-        'react/wrap-multilines': 0
+        'react/wrap-multilines': 0,
+        'react/no-deprecated': 0
     },
     'plugins': [
         'prettier',

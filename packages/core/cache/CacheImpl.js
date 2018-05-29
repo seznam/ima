@@ -167,7 +167,7 @@ export default class CacheImpl extends Cache {
       dataToSerialize[key] = serializeEntry;
     }
 
-    return JSON.stringify(dataToSerialize).replace(/<\/script/g, '<\\/script');
+    return JSON.stringify(dataToSerialize).replace(/<\/script/gi, '<\\/script');
   }
 
   /**

@@ -31,7 +31,9 @@ export default class AbstractRouter extends Router {
    *          onlyUpdate: false,
    *          autoScroll: true,
    *          allowSPA: true,
-   *          documentView: null
+   *          documentView: null,
+   *          managedRootView: null,
+   *          viewAdapter: null
    *        }
    *      );
    */
@@ -361,7 +363,9 @@ export default class AbstractRouter extends Router {
    *          )=,
    *          autoScroll: boolean=,
    *          allowSPA: boolean=,
-   *          documentView: ?AbstractDocumentView=
+   *          documentView: ?AbstractDocumentView=,
+   *          managedRootView: ?function(new: React.Component)=,
+   *          viewAdapter: ?function(new: React.Component)=
    *        }} options The options overrides route options defined in the
    *        {@code routes.js} configuration file.
    * @return {Promise<Object<string, *>>} A promise that resolves when the

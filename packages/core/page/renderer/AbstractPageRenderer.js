@@ -156,7 +156,8 @@ export default class AbstractPageRenderer extends PageRenderer {
    *          autoScroll: boolean,
    *          allowSPA: boolean,
    *          documentView: ?function(new: AbstractDocumentView),
-   *          managedRootView: ?function(new: React.Component)
+   *          managedRootView: ?function(new: React.Component),
+   *          viewAdapter: ?function(new: React.Component)
    *        }} routeOptions The current route options.
    */
   _getWrappedPageView(controller, view, routeOptions) {
@@ -171,7 +172,9 @@ export default class AbstractPageRenderer extends PageRenderer {
     );
 
     return this._factory.wrapView(
-      this._settings.$Page.$Render.viewAdapter || ViewAdapter,
+      routeOptions.viewAdapter ||
+        this._settings.$Page.$Render.viewAdapter ||
+        ViewAdapter,
       props
     );
   }
