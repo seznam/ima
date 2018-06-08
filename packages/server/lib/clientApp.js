@@ -88,6 +88,8 @@ module.exports = (environment, logger, languageLoader, appFactory) => {
 
         callstack = callstack.filter(item => !!item);
 
+        res.status(500);
+
         // if something bad happened while processing the stacktrace make
         // sure to return something useful
         if (error) {
