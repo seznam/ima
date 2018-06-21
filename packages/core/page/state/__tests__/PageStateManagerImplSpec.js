@@ -1,12 +1,16 @@
 import PageStateManager from 'page/state/PageStateManagerImpl';
+import Dispatcher from 'event/Dispatcher';
+import Events from '../Events';
+import { toMockedInstance } from 'to-mock';
 
 describe('ima.page.state.PageStateManagerImpl', () => {
   let stateManager = null;
   let defaultState = { state: 'state', patch: null };
   let patchState = { patch: 'patch' };
+  let dispatcher = toMockedInstance(Dispatcher);
 
   beforeEach(() => {
-    stateManager = new PageStateManager();
+    stateManager = new PageStateManager(dispatcher);
 
     stateManager._pushToHistory(defaultState);
   });
@@ -38,13 +42,25 @@ describe('ima.page.state.PageStateManagerImpl', () => {
 
       spyOn(stateManager, '_pushToHistory').and.stub();
 
-      spyOn(stateManager, '_callOnChangeCallback').and.stub();
+      spyOn(stateManager, '_callOnChangeCallback').and.callThrough();
+
+      spyOn(dispatcher, 'fire');
 
       stateManager.setState(patchState);
 
       expect(stateManager._eraseExcessHistory).toHaveBeenCalledWith();
       expect(stateManager._pushToHistory).toHaveBeenCalledWith(newState);
       expect(stateManager._callOnChangeCallback).toHaveBeenCalledWith(newState);
+      expect(dispatcher.fire).toHaveBeenCalledWith(
+        Events.BEFORE_CHANGE_STATE,
+        { newState, patchState, oldState: defaultState },
+        true
+      );
+      expect(dispatcher.fire).toHaveBeenCalledWith(
+        Events.AFTER_CHANGE_STATE,
+        { newState },
+        true
+      );
     });
   });
 
