@@ -72,6 +72,18 @@ export class VendorLinker {
   }
 
   /**
+   * Clears all loaded modules and plugins from this vendor linker.
+   *
+   * @return {VendorLinker} This vendor linker.
+   */
+  clear() {
+    this._modules.clear();
+    this._plugins = [];
+
+    return this;
+  }
+
+  /**
    * Binds the vendor modules loaded in this vendor linker to the
    * {@code Vendor} sub-namespace of the provided namespace.
    *
