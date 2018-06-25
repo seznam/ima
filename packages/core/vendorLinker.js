@@ -72,7 +72,7 @@ export class VendorLinker {
   }
 
   /**
-   * Cleares all loaded modules and plugins from this vendor linker.
+   * Clears all loaded modules and plugins from this vendor linker.
    *
    * @return {VendorLinker} This vendor linker.
    */
