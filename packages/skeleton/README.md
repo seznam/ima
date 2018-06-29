@@ -61,7 +61,7 @@ You may also try other local demos by running either of the following commands:
 
 ## Production use
 
-If you want deploy your IMA.js application to production, the installation is
+If you want to deploy your IMA.js application to production, the installation is
 similar to the dev enviroment.
 
 To install the IMA.js application, start by cloning your application git
