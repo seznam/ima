@@ -1,55 +1,57 @@
 <!DOCTYPE html>
 <html>
-	<head>
-		<meta charSet="utf-8"/>
-		<meta httpEquiv="X-UA-Compatible" content="IE=edge"/>
+<head>
+    <meta charSet="utf-8"/>
+    <meta httpEquiv="X-UA-Compatible" content="IE=edge"/>
 
-		<meta name="description" content=""/>
-		<meta name="keywords" content=""/>
+    <meta name="description" content=""/>
+    <meta name="keywords" content=""/>
 
-		<meta property="og:title" content=""/>
-		<meta property="og:description" content=""/>
-		<meta property="og:type" content=""/>
-		<meta property="og:url" content=""/>
-		<meta property="og:image" content=""/>
+    <meta property="og:title" content=""/>
+    <meta property="og:description" content=""/>
+    <meta property="og:type" content=""/>
+    <meta property="og:url" content=""/>
+    <meta property="og:image" content=""/>
 
-		<meta name="viewport" content="width=device-width, initial-scale=1"/>
-		<link rel="stylesheet" href="/static/css/app{ifEnv !'dev'}.bundle.min{/ifEnv}.css?version={$Version}"/>
-		<title></title>
-	</head>
-	<body>
-		<div id="page">
-		</div>
-		<div id="revivalSettings">
-			<script type="application/javascript">
-				window.$Debug = {$Debug};
-				window.$IMA = window.$IMA || {};
-				window.$IMA.Cache = {};
-				window.$IMA.$App = {$App|json};
-				window.$IMA.$Language = "{$Language}";
-				window.$IMA.$Version = "{$Version}";
-				window.$IMA.$Env = "{$Env}";
-				window.$IMA.$Debug = {$Debug};
-				window.$IMA.$Protocol = "{$Protocol}";
-				window.$IMA.$Host = "{$Host}";
-				window.$IMA.$Path = location.pathname;
-				window.$IMA.$Root = "{$Root}";
-				window.$IMA.$LanguagePartPath = "{$LanguagePartPath}";
-			</script>
-		</div>
-		<div id="scripts">
-			{ifEnv !'dev'}
-				<script type="application/javascript" src="/static/js/locale/{$Language}.js?version={$Version}"></script>
-				<script type="application/javascript" src="/static/js/app.bundle.min.js?version={$Version}"></script>
-				<script type="application/javascript">window.$IMA.Runner.run();</script>
-			{else}
-				<script type="application/javascript" src="/static/js/polyfill.js?version={$Version}"></script>
-				<script type="application/javascript" src="/static/js/shim.js?version={$Version}"></script>
-				<script type="application/javascript" src="/static/js/vendor.client.js?version={$Version}"></script>
-				<script type="application/javascript" src="/static/js/locale/{$Language}.js?version={$Version}"></script>
-				<script type="application/javascript" src="/static/js/app.client.js?version={$Version}"></script>
-				<script type="application/javascript">window.$IMA.Runner.run();</script>
-			{/ifEnv}
-		</div>
-	</body>
+    <meta name="viewport" content="width=device-width, initial-scale=1"/>
+    <link rel="stylesheet" href="/static/css/app{ifEnv !'dev'}.bundle.min{/ifEnv}.css?version={$Version}"/>
+    <title></title>
+</head>
+<body>
+    <div id="page">
+    </div>
+    <div id="revivalSettings">
+        <script type="application/javascript">
+        window.$Debug = {$Debug};
+        window.$IMA = window.$IMA || {};
+        window.$IMA.Cache = {};
+        window.$IMA.$App = {$App|json};
+        window.$IMA.$Language = "{$Language}";
+        window.$IMA.$Version = "{$Version}";
+        window.$IMA.$Env = "{$Env}";
+        window.$IMA.$Debug = {$Debug};
+        window.$IMA.$Protocol = "{$Protocol}";
+        window.$IMA.$Host = "{$Host}";
+        window.$IMA.$Path = location.pathname;
+        window.$IMA.$Root = "{$Root}";
+        window.$IMA.$LanguagePartPath = "{$LanguagePartPath}";
+        </script>
+    </div>
+    <div id="scripts">
+        {ifEnv !'dev'}
+            <script type="application/javascript" src="/static/js/ima-polyfill.js?version={$Version}"></script>
+            <script type="application/javascript" src="/static/js/locale/{$Language}.js?version={$Version}"></script>
+            <script type="application/javascript" src="/static/js/app.bundle.min.js?version={$Version}"></script>
+            <script type="application/javascript">window.$IMA.Runner.run();</script>
+        {else}
+            <script type="application/javascript" src="/static/js/ima-polyfill.js?version={$Version}"></script>
+            <script type="application/javascript" src="/static/js/polyfill.js?version={$Version}"></script>
+            <script type="application/javascript" src="/static/js/shim.js?version={$Version}"></script>
+            <script type="application/javascript" src="/static/js/vendor.client.js?version={$Version}"></script>
+            <script type="application/javascript" src="/static/js/locale/{$Language}.js?version={$Version}"></script>
+            <script type="application/javascript" src="/static/js/app.client.js?version={$Version}"></script>
+            <script type="application/javascript">window.$IMA.Runner.run();</script>
+        {/ifEnv}
+    </div>
+</body>
 </html>
