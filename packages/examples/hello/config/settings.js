@@ -9,7 +9,7 @@ export default (ns, oc, config) => {
         defaultRequestOptions: {
           timeout: 7000, // Request timeout
           repeatRequest: 1, // Count of automatic repeated request after failing request.
-          ttl: 0, // Default time to live for cached request in ms.
+          ttl: 60000, // Default time to live for cached request in ms.
           headers: {
             // Set default request headers
             Accept: 'application/json',
