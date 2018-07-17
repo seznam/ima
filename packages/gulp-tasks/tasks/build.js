@@ -1,4 +1,5 @@
 const gulp = require('gulp');
+const del = require('del');
 
 exports['server:build'] = () => {
   return gulp.series(
@@ -11,6 +12,10 @@ exports['server:build'] = () => {
 
 exports['app:build'] = () => {
   return gulp.series('Es6ToEs5:app', 'server:hotreload')();
+};
+
+exports['clear:build'] = () => {
+  return del(['./build']);
 };
 
 exports['ima:build'] = () => {
