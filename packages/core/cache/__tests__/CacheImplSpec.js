@@ -127,6 +127,24 @@ describe('ima.cache.CacheImpl', () => {
     expect(cache.has('aaa')).toBe(false);
   });
 
+  it('should serialize only instances of the CacheEntry', () => {
+    spyOn(cacheFactory, 'createCacheEntry').and.returnValue({ foo: 'bar' });
+
+    cache.set('myKey', {
+      foo: 'bar'
+    });
+    const serialization = cache.serialize();
+
+    expect(serialization).toEqual(
+      JSON.stringify({
+        aaa: {
+          value: 123,
+          ttl: 1000
+        }
+      })
+    );
+  });
+
   it('should throw error for serialize if value is instance of Promise', () => {
     spyOn(console, 'warn');
 
