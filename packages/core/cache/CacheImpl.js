@@ -1,4 +1,5 @@
 import Cache from './Cache';
+import CacheEntry from './CacheEntry';
 
 /**
  * Configurable generic implementation of the {@link Cache} interface.
@@ -148,23 +149,27 @@ export default class CacheImpl extends Cache {
     let dataToSerialize = {};
 
     for (let key of this._cache.keys()) {
-      let serializeEntry = this._cache.get(key).serialize();
+      const currentValue = this._cache.get(key);
 
-      if ($Debug) {
-        if (!this._canSerializeValue(serializeEntry.value)) {
-          throw new Error(
-            `ima.cache.CacheImpl:serialize An ` +
-              `attempt to serialize ` +
-              `${serializeEntry.value.toString()}, stored ` +
-              `using the key ${key}, was made, but the value ` +
-              `cannot be serialized. Remove this entry from ` +
-              `the cache or change its type so that can be ` +
-              `serialized using JSON.stringify().`
-          );
+      if (currentValue instanceof CacheEntry) {
+        const serializeEntry = currentValue.serialize();
+
+        if ($Debug) {
+          if (!this._canSerializeValue(serializeEntry.value)) {
+            throw new Error(
+              `ima.cache.CacheImpl:serialize An ` +
+                `attempt to serialize ` +
+                `${serializeEntry.value.toString()}, stored ` +
+                `using the key ${key}, was made, but the value ` +
+                `cannot be serialized. Remove this entry from ` +
+                `the cache or change its type so that can be ` +
+                `serialized using JSON.stringify().`
+            );
+          }
         }
-      }
 
-      dataToSerialize[key] = serializeEntry;
+        dataToSerialize[key] = serializeEntry;
+      }
     }
 
     return JSON.stringify(dataToSerialize).replace(/<\/script/gi, '<\\/script');

@@ -6,9 +6,10 @@ export default (ns, oc, config) => {
   if (!oc.get('$Window').isClient()) {
     oc.get('$Request').init(config.request);
 
-    oc
-      .get('$Response')
-      .init(config.response, oc.get('$CookieTransformFunction'));
+    oc.get('$Response').init(
+      config.response,
+      oc.get('$CookieTransformFunction')
+    );
 
     oc.get('$CookieStorage').clear();
 
@@ -17,9 +18,10 @@ export default (ns, oc, config) => {
     oc.get('$CacheStorage').clear();
   }
 
-  oc
-    .get('$CookieStorage')
-    .init({ secure: oc.get('$Secure') }, oc.get('$CookieTransformFunction'));
+  oc.get('$CookieStorage').init(
+    { secure: oc.get('$Secure') },
+    oc.get('$CookieTransformFunction')
+  );
 
   oc.get('$SessionStorage').init();
 
