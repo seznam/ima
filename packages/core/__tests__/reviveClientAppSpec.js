@@ -58,7 +58,13 @@ describe('Revive client application', () => {
   };
 
   function propagateToGlobal(win) {
+    const forbiddenKeys = ['localStorage', 'sessionStorage'];
+
     for (let key of Object.keys(win)) {
+      if (forbiddenKeys.includes(key)) {
+        return;
+      }
+
       global[key] = global[key] ? global[key] : win[key];
     }
   }
