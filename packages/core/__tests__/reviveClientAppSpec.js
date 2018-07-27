@@ -62,7 +62,7 @@ describe('Revive client application', () => {
 
     for (let key of Object.keys(win)) {
       if (forbiddenKeys.includes(key)) {
-          return;
+        return;
       }
 
       global[key] = global[key] ? global[key] : win[key];
