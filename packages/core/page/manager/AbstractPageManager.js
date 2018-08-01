@@ -1,5 +1,43 @@
 import PageManager from './PageManager';
-import GenericError from '../../error/GenericError';
+
+/**
+ * An Object used to configure a route
+ * 
+ * @typedef {{
+ *            onlyUpdate: (
+ *              boolean|
+ *              function(
+ *                (string|function(new: Controller)),
+ *                function(new: React.Component,
+ *                 Object<string, *>,
+ *                 ?Object<string, *>
+ *               )
+ *              ): boolean
+ *            ),
+ *            autoScroll: boolean,
+ *            allowSPA: boolean,
+ *            documentView: ?function(new: AbstractDocumentView),
+ *            managedRootView: ?function(new: React.Component),
+ *            viewAdapter: ?function(new: React.Component)
+ *          }} RouteOptions
+ */
+
+/**
+ * An object representing a page that's currently managed by PageManager
+ * 
+ * @typedef {{
+ *            controller: ?(string|function(new: Controller)),
+ *            controllerInstance: ?Controller,
+ *            decoratedController: ?Controller,
+ *            view: ?React.Component,
+ *            viewInstance: ?React.Element,
+ *            options: ?RouteOptions,
+ *            params: ?Object<string, string>,
+ *            state: {
+ *              activated: boolean
+ *            }
+ *          }} ManagedPage
+ */
 
 /**
  * Page manager for controller.
@@ -14,9 +52,15 @@ export default class AbstractPageManager extends PageManager {
    * @param {PageRenderer} pageRenderer The current renderer of the page.
    * @param {PageStateManager} pageStateManager The current page state
    *        manager.
+   * @param {Array<PageManagerHandler>} pageManagerHandlers List of handlers
+   *        that will be called before and after managing a page life cycle.
    */
-  constructor(pageFactory, pageRenderer, pageStateManager) {
+  constructor(pageFactory, pageRenderer, pageStateManager, pageManagerHandlers) {
     super();
+
+    if (!Array.isArray(pageManagerHandlers)) {
+      pageManagerHandlers = [pageManagerHandlers];
+    }
 
     /**
      * Factory used by the page manager to create instances of the
@@ -48,36 +92,27 @@ export default class AbstractPageManager extends PageManager {
      * Details of the currently managed page.
      *
      * @protected
-     * @type {{
-     *         controller: ?(string|function(new: Controller)),
-     *         controllerInstance: ?Controller,
-     *         decoratedController: ?Controller,
-     *         view: ?React.Component,
-     *         viewInstance: ?React.Element,
-     *         options: ?{
-     *           onlyUpdate: (
-     *             boolean|
-     *             function(
-     *               (string|function(new: Controller)),
-     *               function(new: React.Component,
-     *                Object<string, *>,
-     *                ?Object<string, *>
-     *              )
-     *             ): boolean
-     *           ),
-     *           autoScroll: boolean,
-     *           allowSPA: boolean,
-     *           documentView: ?function(new: AbstractDocumentView),
-     *           managedRootView: ?function(new: React.Component),
-     *           viewAdapter: ?function(new: React.Component)
-     *         },
-     *         params: ?Object<string, string>,
-     *         state: {
-     *           activated: boolean
-     *         }
-     *       }}
+     * @type {ManagedPage}
      */
     this._managedPage = {};
+
+    /**
+     * Snapshot of the previously managed page before it was replaced with
+     * a new one
+     *
+     * @protected
+     * @type {ManagedPage}
+     */
+    this._previousManagedPage = {};
+
+    /**
+     * List of handlers that will be called before and after managing a page 
+     * life cycle.
+     *
+     * @protected
+     * @type {Array<PageManagerHandler>}
+     */
+    this._pageManagerHandlers = pageManagerHandlers;
   }
 
   /**
@@ -94,29 +129,25 @@ export default class AbstractPageManager extends PageManager {
    * @inheritdoc
    */
   manage(controller, view, options, params = {}) {
-    this._preManage(options);
+    this._storeManagedPageSnapshot();
 
     if (this._hasOnlyUpdate(controller, view, options)) {
       this._managedPage.params = params;
+      this._runPreManageHandlers(this._managedPage);
 
       return this._updatePageSource();
     }
 
-    let pageFactory = this._pageFactory;
-    let controllerInstance = pageFactory.createController(controller);
-    let decoratedController = pageFactory.decorateController(
+    // Construct new managedPage value
+    const pageFactory = this._pageFactory;
+    const controllerInstance = pageFactory.createController(controller);
+    const decoratedController = pageFactory.decorateController(
       controllerInstance
     );
-    let viewInstance = pageFactory.createView(view);
-
-    this._deactivatePageSource();
-    this._destroyPageSource();
-
-    this._pageStateManager.clear();
-    this._clearComponentState(options);
+    const viewInstance = pageFactory.createView(view);
 
     this._clearManagedPageValue();
-    this._storeManagedPageValue(
+    const newManagedPage = this._constructManagedPageValue(
       controller,
       view,
       options,
@@ -126,19 +157,22 @@ export default class AbstractPageManager extends PageManager {
       viewInstance
     );
 
+    // Run pre-manage handlers before affecting anything
+    this._runPreManageHandlers(newManagedPage);
+
+    // Deactivate the old instances and clearing state
+    this._deactivatePageSource();
+    this._destroyPageSource();
+
+    this._pageStateManager.clear();
+    this._clearComponentState(options);
+
+    // Store the new managedPage object and initialize controllers and 
+    // extensions
+    this._managedPage = newManagedPage
     this._initPageSource();
 
     return this._loadPageSource();
-  }
-
-  /**
-   * @abstract
-   * @inheritdoc
-   */
-  scrollTo() {
-    throw new GenericError(
-      'The scrollTo() method is abstract and must be overridden.'
-    );
   }
 
   /**
@@ -159,29 +193,14 @@ export default class AbstractPageManager extends PageManager {
    * @protected
    * @param {(string|function)} controller
    * @param {(string|function)} view
-   * @param {{
-   *          onlyUpdate: (
-   *            boolean|
-   *            function(
-   *              (string|function(new: Controller)),
-   *              function(new: React.Component,
-   *                Object<string, *>,
-   *                ?Object<string, *>
-   *              )
-   *            ): boolean
-   *          ),
-   *          autoScroll: boolean,
-   *          allowSPA: boolean,
-   *          documentView: ?AbstractDocumentView,
-   *          managedRootView: ?function(new: React.Component),
-   *          viewAdapter: ?function(new: React.Component)
-   *        }} options
+   * @param {RouteOptions} options
    * @param {Object<string, string>} params The route parameters.
    * @param {AbstractController} controllerInstance
    * @param {ControllerDecorator} decoratedController
    * @param {React.Component} viewInstance
+   * @returns {ManagedPage}
    */
-  _storeManagedPageValue(
+  _constructManagedPageValue(
     controller,
     view,
     options,
@@ -190,7 +209,7 @@ export default class AbstractPageManager extends PageManager {
     decoratedController,
     viewInstance
   ) {
-    this._managedPage = {
+    return {
       controller,
       controllerInstance,
       decoratedController,
@@ -202,6 +221,21 @@ export default class AbstractPageManager extends PageManager {
         activated: false
       }
     };
+  }
+
+  /**
+   * Creates a cloned version of currently managed page and stores it in
+   * a helper property.
+   * Snapshot is used in manager handlers to easily determine differences
+   * between the current and the previous state.
+   *
+   * @protected
+   * @returns {ManagedPage}
+   */
+  _storeManagedPageSnapshot() {
+    this._previousManagedPage = Object.assign({}, this._managedPage);
+
+    return this._previousManagedPage;
   }
 
   /**
@@ -222,6 +256,24 @@ export default class AbstractPageManager extends PageManager {
         activated: false
       }
     };
+  }
+
+  /**
+   * Removes properties we do not want to propagate outside of the page manager
+   *
+   * @protected
+   * @param {ManagedPage} value The managed page object to strip down
+   * @returns {{
+   *            controller: ?(string|function(new: Controller)),
+   *            view: ?React.Component,
+   *            options: ?RouteOptions,
+   *            params: ?Object<string, string>
+   *          }}
+   */
+  _stripManagedPageValueForPublic(value) {
+    const { controller, view, options, params } = value;
+
+    return { controller, view, options, params };
   }
 
   /**
@@ -317,7 +369,7 @@ export default class AbstractPageManager extends PageManager {
       )
       .then(response => {
         this._clearPartialState();
-        this._postManage(this._managedPage.options);
+        this._runPostManageHandlers();
 
         return response;
       });
@@ -424,7 +476,7 @@ export default class AbstractPageManager extends PageManager {
       .update(this._managedPage.decoratedController, updatedPageState)
       .then(response => {
         this._clearPartialState();
-        this._postManage(this._managedPage.options);
+        this._runPostManageHandlers();
 
         return response;
       });
@@ -556,24 +608,7 @@ export default class AbstractPageManager extends PageManager {
   /**
    * The method clear state on current renderred component to DOM.
    *
-   * @param {{
-   *          onlyUpdate: (
-   *            boolean|
-   *            function(
-   *              (string|function(new: ima.controller.Controller, ...*)),
-   *              function(
-   *                new: React.Component,
-   *                Object<string, *>,
-   *                ?Object<string, *>
-   *              )
-   *            ): boolean
-   *          ),
-   *          autoScroll: boolean,
-   *          allowSPA: boolean,
-   *          documentView: ?function(new: AbstractDocumentView),
-   *          managedRootView: ?function(new: React.Component),
-   *          viewAdapter: ?function(new: React.Component)
-   *        }} options The current route options.
+   * @param {RouteOptions} options The current route options.
    */
   _clearComponentState(options) {
     let managedOptions = this._managedPage.options;
@@ -609,23 +644,7 @@ export default class AbstractPageManager extends PageManager {
    * @protected
    * @param {string|function} controller
    * @param {string|function} view
-   * @param {{
-   *          onlyUpdate: (
-   *            boolean|
-   *            function(
-   *              (string|function(new: Controller)),
-   *              function(new: React.Component,
-   *                Object<string, *>,
-   *                ?Object<string, *>
-   *              )
-   *            ): boolean
-   *          ),
-   *          autoScroll: boolean,
-   *          allowSPA: boolean,
-   *          documentView: ?AbstractDocumentView,
-   *          managedRootView: ?function(new: React.Component),
-   *          viewAdapter: ?function(new: React.Component)
-   *        }} options
+   * @param {RouteOptions} options
    * @return {boolean}
    */
   _hasOnlyUpdate(controller, view, options) {
@@ -644,56 +663,21 @@ export default class AbstractPageManager extends PageManager {
   }
 
   /**
-   * Make defined instruction as scroll for current page options before than
-   * change page.
+   *
    *
    * @protected
-   * @param {{
-   *          onlyUpdate: (
-   *            boolean|
-   *            function(
-   *              (string|function(new: Controller)),
-   *              function(new: React.Component,
-   *                Object<string, *>,
-   *                ?Object<string, *>
-   *              )
-   *            ): boolean
-   *          ),
-   *          autoScroll: boolean,
-   *          allowSPA: boolean,
-   *          documentView: ?AbstractDocumentView,
-   *          managedRootView: ?function(new: React.Component),
-   *          viewAdapter: ?function(new: React.Component)
-   *        }} options
+   * @param {ManagedPage} newManagedPage
    */
-  _preManage(options) {
-    if (options.autoScroll) {
-      this.scrollTo();
-    }
+  _runPreManageHandlers(newManagedPage) {
+    // TODO implement me!
   }
 
   /**
-   * Make defined instruction for current page options after that
-   * changed page.
+   *
    *
    * @protected
-   * @param {{
-   *          onlyUpdate: (
-   *            boolean|
-   *            function(
-   *              (string|function(new: Controller)),
-   *              function(new: React.Component,
-   *                Object<string, *>,
-   *                ?Object<string, *>
-   *              )
-   *            ): boolean
-   *          ),
-   *          autoScroll: boolean,
-   *          allowSPA: boolean,
-   *          documentView: ?AbstractDocumentView,
-   *          managedRootView: ?function(new: React.Component),
-   *          viewAdapter: ?function(new: React.Component)
-   *        }} options
    */
-  _postManage() {}
+  _runPostManageHandlers() {
+    // TODO implement me!
+  }
 }

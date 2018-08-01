@@ -61,16 +61,6 @@ export default class PageManager {
   manage() {}
 
   /**
-   * Scrolls the viewport to the specified horizontal and vertical offset.
-   *
-   * This method has no effect at the server-side.
-   *
-   * @param {number=} [x=0] The horizontal offset to scroll to.
-   * @param {number=} [y=0] The vertical offset to scroll to.
-   */
-  scrollTo() {}
-
-  /**
    * Finalization callback, called when the page manager is being discarded.
    * This usually happens when the page is hot-reloaded at the client side.
    */
