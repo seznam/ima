@@ -245,7 +245,7 @@ export default class AbstractRouter extends Router {
   /**
    * @inheritdoc
    */
-  route(path, options = {}) {
+  route(path, options = {}, action) {
     let routeForPath = this._getRouteByPath(path);
     let params = {};
 
@@ -260,7 +260,7 @@ export default class AbstractRouter extends Router {
 
     params = routeForPath.extractParameters(path);
 
-    return this._handle(routeForPath, params, options);
+    return this._handle(routeForPath, params, options, action);
   }
 
   /**
@@ -368,20 +368,22 @@ export default class AbstractRouter extends Router {
    *          viewAdapter: ?function(new: React.Component)=
    *        }} options The options overrides route options defined in the
    *        {@code routes.js} configuration file.
+   * @param {{ type: string, event: Event, url: string }} [action] An action
+   *        object describing what triggered this routing.
    * @return {Promise<Object<string, *>>} A promise that resolves when the
    *         page is rendered and the result is sent to the client, or
    *         displayed if used at the client side.
    */
-  _handle(route, params, options) {
+  _handle(route, params, options, action) {
     let controller = route.getController();
     let view = route.getView();
     options = Object.assign({}, route.getOptions(), options);
-    let data = { route, params, path: this.getPath(), options };
+    let data = { route, params, path: this.getPath(), options, action };
 
     this._dispatcher.fire(Events.BEFORE_HANDLE_ROUTE, data, true);
 
     return this._pageManager
-      .manage(controller, view, options, params)
+      .manage(controller, view, options, params, action)
       .then(response => {
         response = response || {};
 

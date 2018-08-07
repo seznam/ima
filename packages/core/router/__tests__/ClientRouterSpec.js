@@ -1,6 +1,6 @@
 import Dispatcher from 'event/Dispatcher';
 import PageManager from 'page/manager/PageManager';
-import ClientRouter from 'router/ClientRouter';
+import ClientRouter, { ActionTypes } from 'router/ClientRouter';
 import RouteFactory from 'router/RouteFactory';
 import Window from 'window/Window';
 
@@ -9,7 +9,7 @@ describe('ima.router.ClientRouter', () => {
   let pageRenderer = null;
   let routeFactory = null;
   let dispatcher = null;
-  let win = null;
+  let window = null;
   let host = 'locahlost:3002';
   let protocol = 'http:';
 
@@ -17,71 +17,66 @@ describe('ima.router.ClientRouter', () => {
     pageRenderer = new PageManager();
     routeFactory = new RouteFactory();
     dispatcher = new Dispatcher();
-    win = new Window();
-    router = new ClientRouter(pageRenderer, routeFactory, dispatcher, win);
+    window = new Window();
+    router = new ClientRouter(pageRenderer, routeFactory, dispatcher, window);
 
     router.init({ $Host: host, $Protocol: protocol });
   });
 
   it('should be return actual path', () => {
-    spyOn(win, 'getPath').and.returnValue('');
+    spyOn(window, 'getPath').and.returnValue('');
 
     router.getPath();
 
-    expect(win.getPath).toHaveBeenCalled();
+    expect(window.getPath).toHaveBeenCalled();
   });
 
   it('should be return actual url', () => {
-    spyOn(win, 'getUrl').and.stub();
+    spyOn(window, 'getUrl').and.stub();
 
     router.getUrl();
 
-    expect(win.getUrl).toHaveBeenCalled();
+    expect(window.getUrl).toHaveBeenCalled();
   });
 
-  it('should be add listener to popState event, click event and add first page state to history', () => {
-    spyOn(win, 'bindEventListener').and.stub();
-
-    spyOn(router, '_saveScrollHistory').and.stub();
+  it('should add listener to popState event, click event', () => {
+    spyOn(window, 'bindEventListener').and.stub();
 
     router.listen();
 
-    expect(router._saveScrollHistory).toHaveBeenCalled();
-    expect(win.bindEventListener.calls.count()).toEqual(2);
+    expect(window.bindEventListener.calls.count()).toEqual(2);
   });
 
   describe('redirect method', () => {
-    it('should be save scroll history and set address bar', () => {
+    it('redirect to a new page', () => {
       let path = '/somePath';
       let url = protocol + '//' + host + path;
       let options = { httpStatus: 302 };
-
-      spyOn(router, '_setAddressBar').and.stub();
-
-      spyOn(router, '_saveScrollHistory').and.stub();
 
       spyOn(router, 'route').and.stub();
 
       router.redirect(url, options);
 
-      expect(router._setAddressBar).toHaveBeenCalledWith(url);
-      expect(router._saveScrollHistory).toHaveBeenCalled();
-      expect(router.route).toHaveBeenCalledWith(path, options);
+      expect(router.route).toHaveBeenCalledWith(path, options, {
+        type: ActionTypes.REDIRECT,
+        event: undefined,
+        url: 'http://locahlost:3002/somePath'
+      });
     });
 
     it('return null for non exist route', () => {
       let url = 'http://example.com/somePath';
 
-      spyOn(win, 'redirect').and.stub();
+      spyOn(window, 'redirect').and.stub();
 
       router.redirect(url);
 
-      expect(win.redirect).toHaveBeenCalledWith(url);
+      expect(window.redirect).toHaveBeenCalledWith(url);
     });
   });
 
   describe('route method', () => {
-    it('should be call handleError for throwing error in super.router', done => {
+    it('should call handleError for throwing error in super.router', done => {
       spyOn(router, 'handleError').and.returnValue(Promise.resolve());
 
       router.route('/something').then(() => {
@@ -146,28 +141,12 @@ describe('ima.router.ClientRouter', () => {
             ' return ' +
             value.result,
           () => {
-            spyOn(win, 'getUrl').and.returnValue(value.baseUrl);
+            spyOn(window, 'getUrl').and.returnValue(value.baseUrl);
 
             expect(router._isHashLink(value.targetUrl)).toEqual(value.result);
           }
         );
       }
     );
-  });
-
-  it('_saveScrollHistory method should be call window.replaceState', () => {
-    spyOn(win, 'replaceState').and.stub();
-
-    router._saveScrollHistory();
-
-    expect(win.replaceState).toHaveBeenCalled();
-  });
-
-  it('_setAddressBar method should be call window.pushState', () => {
-    spyOn(win, 'pushState').and.stub();
-
-    router._setAddressBar('url');
-
-    expect(win.pushState).toHaveBeenCalled();
   });
 });

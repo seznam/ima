@@ -1,8 +1,9 @@
 import PageManager from './PageManager';
+import SerialBatch from 'execution/SerialBatch';
 
 /**
  * An Object used to configure a route
- * 
+ *
  * @typedef {{
  *            onlyUpdate: (
  *              boolean|
@@ -24,7 +25,7 @@ import PageManager from './PageManager';
 
 /**
  * An object representing a page that's currently managed by PageManager
- * 
+ *
  * @typedef {{
  *            controller: ?(string|function(new: Controller)),
  *            controllerInstance: ?Controller,
@@ -55,12 +56,25 @@ export default class AbstractPageManager extends PageManager {
    * @param {Array<PageManagerHandler>} pageManagerHandlers List of handlers
    *        that will be called before and after managing a page life cycle.
    */
-  constructor(pageFactory, pageRenderer, pageStateManager, pageManagerHandlers) {
+  constructor(
+    pageFactory,
+    pageRenderer,
+    pageStateManager,
+    pageManagerHandlers = []
+  ) {
     super();
 
     if (!Array.isArray(pageManagerHandlers)) {
       pageManagerHandlers = [pageManagerHandlers];
     }
+
+    const preManageHandlers = pageManagerHandlers.map(handler =>
+      handler.handlePreManagedState.bind(handler)
+    );
+
+    const postManageHandlers = pageManagerHandlers.map(handler =>
+      handler.handlePostManagedState.bind(handler)
+    );
 
     /**
      * Factory used by the page manager to create instances of the
@@ -106,13 +120,22 @@ export default class AbstractPageManager extends PageManager {
     this._previousManagedPage = {};
 
     /**
-     * List of handlers that will be called before and after managing a page 
+     * List of handlers that will be called before managing a page
      * life cycle.
      *
      * @protected
-     * @type {Array<PageManagerHandler>}
+     * @type {SerialBatch}
      */
-    this._pageManagerHandlers = pageManagerHandlers;
+    this._preManageHandlers = new SerialBatch(preManageHandlers);
+
+    /**
+     * List of handlers that will be called after managing a page
+     * life cycle.
+     *
+     * @protected
+     * @type {SerialBatch}
+     */
+    this._postManageHandlers = new SerialBatch(postManageHandlers);
   }
 
   /**
@@ -128,14 +151,17 @@ export default class AbstractPageManager extends PageManager {
   /**
    * @inheritdoc
    */
-  manage(controller, view, options, params = {}) {
+  async manage(controller, view, options, params = {}, action) {
     this._storeManagedPageSnapshot();
 
     if (this._hasOnlyUpdate(controller, view, options)) {
       this._managedPage.params = params;
-      this._runPreManageHandlers(this._managedPage);
 
-      return this._updatePageSource();
+      await this._runPreManageHandlers(this._managedPage, action);
+      const response = await this._updatePageSource();
+      await this._runPostManageHandlers(this._previousManagedPage, action);
+
+      return response;
     }
 
     // Construct new managedPage value
@@ -158,7 +184,7 @@ export default class AbstractPageManager extends PageManager {
     );
 
     // Run pre-manage handlers before affecting anything
-    this._runPreManageHandlers(newManagedPage);
+    await this._runPreManageHandlers(newManagedPage, action);
 
     // Deactivate the old instances and clearing state
     this._deactivatePageSource();
@@ -167,12 +193,15 @@ export default class AbstractPageManager extends PageManager {
     this._pageStateManager.clear();
     this._clearComponentState(options);
 
-    // Store the new managedPage object and initialize controllers and 
+    // Store the new managedPage object and initialize controllers and
     // extensions
-    this._managedPage = newManagedPage
+    this._managedPage = newManagedPage;
     this._initPageSource();
 
-    return this._loadPageSource();
+    const response = await this._loadPageSource();
+    await this._runPostManageHandlers(this._previousManagedPage, action);
+
+    return response;
   }
 
   /**
@@ -355,24 +384,20 @@ export default class AbstractPageManager extends PageManager {
    * @protected
    * @return {Object<string, (Promise<*>|*)>}
    */
-  _loadPageSource() {
-    let controllerState = this._getLoadedControllerState();
-    let extensionsState = this._getLoadedExtensionsState(controllerState);
-    let loadedPageState = Object.assign({}, extensionsState, controllerState);
+  async _loadPageSource() {
+    const controllerState = this._getLoadedControllerState();
+    const extensionsState = this._getLoadedExtensionsState(controllerState);
+    const loadedPageState = Object.assign({}, extensionsState, controllerState);
 
-    return this._pageRenderer
-      .mount(
-        this._managedPage.decoratedController,
-        this._managedPage.view,
-        loadedPageState,
-        this._managedPage.options
-      )
-      .then(response => {
-        this._clearPartialState();
-        this._runPostManageHandlers();
+    const response = await this._pageRenderer.mount(
+      this._managedPage.decoratedController,
+      this._managedPage.view,
+      loadedPageState,
+      this._managedPage.options
+    );
+    this._clearPartialState();
 
-        return response;
-      });
+    return response;
   }
 
   /**
@@ -461,25 +486,24 @@ export default class AbstractPageManager extends PageManager {
    * @protected
    * @return {Promise<{status: number, content: ?string}>}
    */
-  _updatePageSource() {
-    let updatedControllerState = this._getUpdatedControllerState();
-    let updatedExtensionState = this._getUpdatedExtensionsState(
+  async _updatePageSource() {
+    const updatedControllerState = this._getUpdatedControllerState();
+    const updatedExtensionState = this._getUpdatedExtensionsState(
       updatedControllerState
     );
-    let updatedPageState = Object.assign(
+    const updatedPageState = Object.assign(
       {},
       updatedExtensionState,
       updatedControllerState
     );
 
-    return this._pageRenderer
-      .update(this._managedPage.decoratedController, updatedPageState)
-      .then(response => {
-        this._clearPartialState();
-        this._runPostManageHandlers();
+    const response = await this._pageRenderer.update(
+      this._managedPage.decoratedController,
+      updatedPageState
+    );
+    this._clearPartialState();
 
-        return response;
-      });
+    return response;
   }
 
   /**
@@ -666,18 +690,28 @@ export default class AbstractPageManager extends PageManager {
    *
    *
    * @protected
-   * @param {ManagedPage} newManagedPage
+   * @param {ManagedPage} nextManagedPage
+   * @param {{ type: string, payload: Object|Event}}
    */
-  _runPreManageHandlers(newManagedPage) {
-    // TODO implement me!
+  _runPreManageHandlers(nextManagedPage, action) {
+    return this._preManageHandlers.execute(
+      nextManagedPage,
+      this._managedPage,
+      action
+    );
   }
 
   /**
    *
    *
    * @protected
+   * @param {ManagedPage} previousManagedPage
    */
-  _runPostManageHandlers() {
-    // TODO implement me!
+  _runPostManageHandlers(previousManagedPage, action) {
+    return this._postManageHandlers.execute(
+      previousManagedPage,
+      this._managedPage,
+      action
+    );
   }
 }

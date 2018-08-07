@@ -12,9 +12,4 @@ export default class ServerPageManager extends AbstractPageManager {
   static get $dependencies() {
     return [PageFactory, PageRenderer, PageStateManager];
   }
-
-  /**
-   * @inheritdoc
-   */
-  scrollTo() {}
 }

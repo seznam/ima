@@ -47,17 +47,23 @@ describe('ima.page.manager.AbstractPageManager', () => {
   beforeEach(() => {
     pageRenderer = new PageRenderer();
     pageStateManager = new PageStateManager();
+    let pageManagerHandler = {
+      handlePreManagedState: jest.fn(() => true),
+      handlePostManagedState: jest.fn(() => true)
+    };
+
     pageManager = new AbstractPageManager(
       pageFactory,
       pageRenderer,
-      pageStateManager
+      pageStateManager,
+      [pageManagerHandler]
     );
 
     spyOn(controllerInstance, 'getExtensions').and.returnValue([
       extensionInstance
     ]);
 
-    pageManager._storeManagedPageValue(
+    pageManager._managedPage = pageManager._constructManagedPageValue(
       Controller,
       View,
       options,
@@ -78,16 +84,15 @@ describe('ima.page.manager.AbstractPageManager', () => {
     expect(pageStateManager.onChange).not.toEqual(null);
   });
 
-  it('scrollTo method should throw Error', () => {
-    expect(() => {
-      pageManager.scrollTo(0, 0);
-    }).toThrow();
-  });
-
   describe('manage method', () => {
     it('should only update last managed controller and view', done => {
       spyOn(pageManager, '_hasOnlyUpdate').and.returnValue(true);
-      spyOn(pageManager, '_preManage').and.stub();
+      spyOn(pageManager, '_runPreManageHandlers').and.returnValue(
+        Promise.resolve()
+      );
+      spyOn(pageManager, '_runPostManageHandlers').and.returnValue(
+        Promise.resolve()
+      );
       spyOn(pageManager, '_updatePageSource').and.returnValue(
         Promise.resolve()
       );
@@ -95,9 +100,10 @@ describe('ima.page.manager.AbstractPageManager', () => {
       pageManager
         .manage(Controller, View, options, params)
         .then(() => {
-          expect(pageManager._preManage).toHaveBeenCalled();
+          expect(pageManager._runPreManageHandlers).toHaveBeenCalled();
           expect(pageManager._managedPage.params).toEqual(params);
           expect(pageManager._updatePageSource).toHaveBeenCalled();
+          expect(pageManager._runPostManageHandlers).toHaveBeenCalled();
           done();
         })
         .catch(error => {
@@ -108,20 +114,25 @@ describe('ima.page.manager.AbstractPageManager', () => {
 
     it('should mount new controller and view', done => {
       spyOn(pageManager, '_hasOnlyUpdate').and.returnValue(false);
-      spyOn(pageManager, '_preManage').and.stub();
+      spyOn(pageManager, '_runPreManageHandlers').and.returnValue(
+        Promise.resolve()
+      );
+      spyOn(pageManager, '_runPostManageHandlers').and.returnValue(
+        Promise.resolve()
+      );
       spyOn(pageManager, '_deactivatePageSource').and.stub();
       spyOn(pageManager, '_destroyPageSource').and.stub();
       spyOn(pageStateManager, 'clear').and.stub();
       spyOn(pageManager, '_clearComponentState').and.stub();
       spyOn(pageManager, '_clearManagedPageValue').and.stub();
-      spyOn(pageManager, '_storeManagedPageValue').and.stub();
+      spyOn(pageManager, '_constructManagedPageValue').and.stub();
       spyOn(pageManager, '_initPageSource').and.stub();
       spyOn(pageManager, '_loadPageSource').and.returnValue(Promise.resolve());
 
       pageManager
         .manage(Controller, View, options, params)
         .then(() => {
-          expect(pageManager._preManage).toHaveBeenCalled();
+          expect(pageManager._runPreManageHandlers).toHaveBeenCalled();
           expect(pageManager._deactivatePageSource).toHaveBeenCalled();
           expect(pageManager._destroyPageSource).toHaveBeenCalled();
           expect(pageStateManager.clear).toHaveBeenCalled();
@@ -129,9 +140,10 @@ describe('ima.page.manager.AbstractPageManager', () => {
             options
           );
           expect(pageManager._clearManagedPageValue).toHaveBeenCalled();
-          expect(pageManager._storeManagedPageValue).toHaveBeenCalled();
+          expect(pageManager._constructManagedPageValue).toHaveBeenCalled();
           expect(pageManager._initPageSource).toHaveBeenCalled();
           expect(pageManager._loadPageSource).toHaveBeenCalled();
+          expect(pageManager._runPostManageHandlers).toHaveBeenCalled();
           done();
         })
         .catch(error => {
@@ -224,7 +236,7 @@ describe('ima.page.manager.AbstractPageManager', () => {
   });
 
   describe('_initPageSource method', () => {
-    it('should initialization page source', () => {
+    it('should initialize page source', () => {
       spyOn(pageManager, '_initController').and.stub();
       spyOn(pageManager, '_initExtensions').and.stub();
 
@@ -293,21 +305,6 @@ describe('ima.page.manager.AbstractPageManager', () => {
             pageState,
             options
           );
-          done();
-        })
-        .catch(error => {
-          console.error('ima.page.manager:_loadPageSource', error.message);
-          done(error);
-        });
-    });
-
-    it('should make post manage action', done => {
-      spyOn(pageManager, '_postManage').and.stub();
-
-      pageManager
-        ._loadPageSource()
-        .then(() => {
-          expect(pageManager._postManage).toHaveBeenCalledWith(options);
           done();
         })
         .catch(error => {
@@ -461,21 +458,6 @@ describe('ima.page.manager.AbstractPageManager', () => {
             decoratedController,
             pageState
           );
-          done();
-        })
-        .catch(error => {
-          console.error('ima.page.manager:_updatePageSource', error.message);
-          done(error);
-        });
-    });
-
-    it('should make post manage action', done => {
-      spyOn(pageManager, '_postManage').and.stub();
-
-      pageManager
-        ._updatePageSource()
-        .then(() => {
-          expect(pageManager._postManage).toHaveBeenCalledWith(options);
           done();
         })
         .catch(error => {
@@ -647,16 +629,6 @@ describe('ima.page.manager.AbstractPageManager', () => {
       pageManager._destroyExtensions();
 
       expect(extensionInstance.setPageStateManager).toHaveBeenCalledWith(null);
-    });
-  });
-
-  describe('_preManage method', () => {
-    it('should call scroll to', () => {
-      spyOn(pageManager, 'scrollTo').and.stub();
-
-      pageManager._preManage(options);
-
-      expect(pageManager.scrollTo).toHaveBeenCalled();
     });
   });
 

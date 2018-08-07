@@ -51,18 +51,23 @@ describe('ima.page.manager.ClientPageManager', () => {
     pageStateManager = new PageStateManager();
     windowInterface = new Window();
     eventBusInterface = new EventBus();
+    let pageManagerHandler = {
+      handlePreManagedState: jest.fn(() => true),
+      handlePostManagedState: jest.fn(() => true)
+    };
 
     pageManager = new ClientPageManager(
       pageFactory,
       pageRenderer,
       pageStateManager,
+      [pageManagerHandler],
       windowInterface,
       eventBusInterface
     );
 
     pageManager._clearManagedPageValue();
 
-    pageManager._storeManagedPageValue(
+    pageManager._managedPage = pageManager._constructManagedPageValue(
       Controller,
       View,
       options,
@@ -77,7 +82,7 @@ describe('ima.page.manager.ClientPageManager', () => {
     ]);
   });
 
-  it('should be listen for all custom events', () => {
+  it('should be listening for all custom events', () => {
     let window = {};
 
     spyOn(eventBusInterface, 'listenAll').and.stub();
@@ -99,17 +104,7 @@ describe('ima.page.manager.ClientPageManager', () => {
     });
   });
 
-  it('scrollTo method should be call window.scrollTo async', () => {
-    spyOn(windowInterface, 'scrollTo').and.stub();
-
-    jest.useFakeTimers();
-    pageManager.scrollTo(0, 0);
-    jest.runOnlyPendingTimers();
-
-    expect(windowInterface.scrollTo).toHaveBeenCalledWith(0, 0);
-  });
-
-  it('should be unlisten for all custom events', () => {
+  it('should unlisten for all custom events', () => {
     let window = {};
 
     spyOn(eventBusInterface, 'unlistenAll').and.stub();
