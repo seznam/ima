@@ -12,6 +12,10 @@ exports.default = gulpConfig => {
   let uglifyCompression = gulpConfig.uglifyCompression;
 
   function bundleJsApp() {
+    if (!gulpConfig.legacyCompactMode) {
+      return Promise.resolve();
+    }
+
     return gulp
       .src(files.bundle.js.src)
       .pipe(plumber())
