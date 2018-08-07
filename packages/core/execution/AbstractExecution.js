@@ -34,7 +34,7 @@ export default class AbstractExecution extends Execution {
   execute() {
     throw new GenericError(
       'The ima.execution.AbstractExecution.execute method is abstract ' +
-        'and must be overridden'
+      'and must be overridden'
     );
   }
 
@@ -47,20 +47,20 @@ export default class AbstractExecution extends Execution {
    */
   _validateJob(job) {
     if (typeof job === 'function') {
-      const jobStringRep = Function.prototype.toString.call(job);
-
-      if (!CLASS_REGEX.test(jobStringRep)) {
+      if (!CLASS_REGEX.test(job.toString())) {
         return true;
       }
     }
 
-    console.warn(
-      'ima.execution.AbstractExecution: Given job is not a callable ' +
+    if ($Debug) {
+      console.warn(
+        'ima.execution.AbstractExecution: Given job is not a callable ' +
         'function therefore it will be excluded from execution.',
-      {
-        job
-      }
-    );
+        {
+          job
+        }
+      );
+    }
 
     return false;
   }
