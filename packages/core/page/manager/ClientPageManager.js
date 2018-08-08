@@ -16,7 +16,7 @@ export default class ClientPageManager extends AbstractPageManager {
       PageFactory,
       PageRenderer,
       PageStateManager,
-      '$PAGE_MANAGER_HANDLERS',
+      '$HandlerRegistry',
       Window,
       EventBus
     ];
@@ -30,8 +30,8 @@ export default class ClientPageManager extends AbstractPageManager {
    *        decorate the controllers and page state managers.
    * @param {PageRenderer} pageRenderer The current renderer of the page.
    * @param {PageStateManager} stateManager The current page state manager.
-   * @param {Array<PageManagerHandler>} pageManagerHandlers List of handlers
-   *        that will be called before and after managing a page life cycle.
+   * @param {HandlerRegistry} handlerRegistry Instance of HandlerRegistry that
+   *        holds a list of pre-manage and post-manage handlers.
    * @param {Window} window The utility for manipulating the global context
    *        and global client-side-specific APIs.
    * @param {EventBus} eventBus The event bus for dispatching and listening
@@ -41,11 +41,11 @@ export default class ClientPageManager extends AbstractPageManager {
     pageFactory,
     pageRenderer,
     stateManager,
-    pageManagerHandlers,
+    handlerRegistry,
     window,
     eventBus
   ) {
-    super(pageFactory, pageRenderer, stateManager, pageManagerHandlers);
+    super(pageFactory, pageRenderer, stateManager, handlerRegistry);
 
     /**
      * The utility for manipulating the global context and global

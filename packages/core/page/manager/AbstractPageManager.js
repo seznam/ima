@@ -1,5 +1,4 @@
 import PageManager from './PageManager';
-import SerialBatch from 'execution/SerialBatch';
 
 /**
  * An Object used to configure a route
@@ -53,28 +52,16 @@ export default class AbstractPageManager extends PageManager {
    * @param {PageRenderer} pageRenderer The current renderer of the page.
    * @param {PageStateManager} pageStateManager The current page state
    *        manager.
-   * @param {Array<PageManagerHandler>} pageManagerHandlers List of handlers
-   *        that will be called before and after managing a page life cycle.
+   * @param {HandlerRegistry} handlerRegistry Instance of HandlerRegistry that
+   *        holds a list of pre-manage and post-manage handlers.
    */
   constructor(
     pageFactory,
     pageRenderer,
     pageStateManager,
-    pageManagerHandlers = []
+    handlerRegistry = null
   ) {
     super();
-
-    if (!Array.isArray(pageManagerHandlers)) {
-      pageManagerHandlers = [pageManagerHandlers];
-    }
-
-    const preManageHandlers = pageManagerHandlers.map(handler =>
-      handler.handlePreManagedState.bind(handler)
-    );
-
-    const postManageHandlers = pageManagerHandlers.map(handler =>
-      handler.handlePostManagedState.bind(handler)
-    );
 
     /**
      * Factory used by the page manager to create instances of the
@@ -103,6 +90,14 @@ export default class AbstractPageManager extends PageManager {
     this._pageStateManager = pageStateManager;
 
     /**
+     * A registry that holds a list of pre-manage and post-manage handlers.
+     *
+     * @protected
+     * @type {HandlerRegistry}
+     */
+    this._handlerRegistry = handlerRegistry;
+
+    /**
      * Details of the currently managed page.
      *
      * @protected
@@ -118,24 +113,6 @@ export default class AbstractPageManager extends PageManager {
      * @type {ManagedPage}
      */
     this._previousManagedPage = {};
-
-    /**
-     * List of handlers that will be called before managing a page
-     * life cycle.
-     *
-     * @protected
-     * @type {SerialBatch}
-     */
-    this._preManageHandlers = new SerialBatch(preManageHandlers);
-
-    /**
-     * List of handlers that will be called after managing a page
-     * life cycle.
-     *
-     * @protected
-     * @type {SerialBatch}
-     */
-    this._postManageHandlers = new SerialBatch(postManageHandlers);
   }
 
   /**
@@ -692,9 +669,14 @@ export default class AbstractPageManager extends PageManager {
    * @protected
    * @param {ManagedPage} nextManagedPage
    * @param {{ type: string, payload: Object|Event}}
+   * @returns {Promise<any>}
    */
-  _runPreManageHandlers(nextManagedPage, action) {
-    return this._preManageHandlers.execute(
+  async _runPreManageHandlers(nextManagedPage, action) {
+    if (!this._handlerRegistry) {
+      return;
+    }
+
+    return this._handlerRegistry.invokePreManageHandlers(
       nextManagedPage,
       this._managedPage,
       action
@@ -708,7 +690,11 @@ export default class AbstractPageManager extends PageManager {
    * @param {ManagedPage} previousManagedPage
    */
   _runPostManageHandlers(previousManagedPage, action) {
-    return this._postManageHandlers.execute(
+    if (!this._handlerRegistry) {
+      return;
+    }
+
+    return this._handlerRegistry.invokePostManageHandlers(
       previousManagedPage,
       this._managedPage,
       action

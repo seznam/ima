@@ -24,6 +24,7 @@ import { defaultCssClasses as cssClassNameProcessor } from '../page/componentHel
 import AbstractComponent from '../page/AbstractComponent'; //eslint-disable-line no-unused-vars
 import AbstractPureComponent from '../page/AbstractPureComponent'; //eslint-disable-line no-unused-vars
 import PageFactory from '../page/PageFactory';
+import HandlerRegistry from '../page/handler/HandlerRegistry';
 import ScrollHandler from '../page/handler/ScrollHandler';
 import ClientPageManager from '../page/manager/ClientPageManager';
 import PageManager from '../page/manager/PageManager';
@@ -174,9 +175,10 @@ export default (ns, oc, config) => {
   oc.bind('$PageRenderer', PageRenderer);
 
   if (oc.get(Window).isClient()) {
-    oc.constant('$PAGE_MANAGER_HANDLERS', [oc.create(ScrollHandler)]);
+    oc.bind('$HandlerRegistry', HandlerRegistry, [ScrollHandler]);
     oc.provide(PageManager, ClientPageManager);
   } else {
+    oc.bind('$HandlerRegistry', HandlerRegistry, []);
     oc.provide(PageManager, ServerPageManager);
   }
   oc.bind('$PageManager', PageManager);

@@ -1,5 +1,6 @@
 import Controller from 'controller/Controller';
 import Extension from 'extension/Extension';
+import HandlerRegistry from 'page/handler/HandlerRegistry';
 import AbstractPageManager from 'page/manager/AbstractPageManager';
 import PageRenderer from 'page/renderer/PageRenderer';
 import PageStateManager from 'page/state/PageStateManager';
@@ -14,6 +15,7 @@ describe('ima.page.manager.AbstractPageManager', () => {
   let pageRenderer = null;
   let pageStateManager = null;
   let pageManager = null;
+  let handlerRegistry = null;
 
   let View = () => {};
   let options = {
@@ -44,19 +46,21 @@ describe('ima.page.manager.AbstractPageManager', () => {
   let extensionState = {};
   let pageState = Object.assign({}, extensionsState, controllerState);
 
+  let pageManagerHandler = {
+    handlePreManagedState: jest.fn(() => true),
+    handlePostManagedState: jest.fn(() => true)
+  };
+
   beforeEach(() => {
     pageRenderer = new PageRenderer();
     pageStateManager = new PageStateManager();
-    let pageManagerHandler = {
-      handlePreManagedState: jest.fn(() => true),
-      handlePostManagedState: jest.fn(() => true)
-    };
+    handlerRegistry = new HandlerRegistry(pageManagerHandler);
 
     pageManager = new AbstractPageManager(
       pageFactory,
       pageRenderer,
       pageStateManager,
-      [pageManagerHandler]
+      handlerRegistry
     );
 
     spyOn(controllerInstance, 'getExtensions').and.returnValue([

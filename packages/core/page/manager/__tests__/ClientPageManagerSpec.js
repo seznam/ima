@@ -1,6 +1,7 @@
 import Controller from 'controller/Controller';
 import EventBus from 'event/EventBus';
 import Extension from 'extension/Extension';
+import HandlerRegistry from 'page/handler/HandlerRegistry';
 import ClientPageManager from 'page/manager/ClientPageManager';
 import PageRenderer from 'page/renderer/PageRenderer';
 import PageStateManager from 'page/state/PageStateManager';
@@ -18,6 +19,7 @@ describe('ima.page.manager.ClientPageManager', () => {
   let windowInterface = null;
   let eventBusInterface = null;
   let pageManager = null;
+  let handlerRegistry = null;
 
   let View = () => {};
 
@@ -47,20 +49,21 @@ describe('ima.page.manager.ClientPageManager', () => {
   };
 
   beforeEach(() => {
-    pageRenderer = new PageRenderer();
-    pageStateManager = new PageStateManager();
-    windowInterface = new Window();
-    eventBusInterface = new EventBus();
     let pageManagerHandler = {
       handlePreManagedState: jest.fn(() => true),
       handlePostManagedState: jest.fn(() => true)
     };
+    pageRenderer = new PageRenderer();
+    pageStateManager = new PageStateManager();
+    windowInterface = new Window();
+    eventBusInterface = new EventBus();
+    handlerRegistry = new HandlerRegistry(pageManagerHandler);
 
     pageManager = new ClientPageManager(
       pageFactory,
       pageRenderer,
       pageStateManager,
-      [pageManagerHandler],
+      handlerRegistry,
       windowInterface,
       eventBusInterface
     );
