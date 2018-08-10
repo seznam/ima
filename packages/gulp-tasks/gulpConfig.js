@@ -1,5 +1,4 @@
 let autoprefixer = require('autoprefixer');
-let cleanCss = require('postcss-clean');
 let coreDependencies = require('ima/build.js');
 let path = require('path');
 let sharedTasksState = require('./gulpState');
