@@ -1,3 +1,5 @@
+let autoprefixer = require('autoprefixer');
+let cleanCss = require('postcss-clean');
 let coreDependencies = require('ima/build.js');
 let path = require('path');
 let sharedTasksState = require('./gulpState');
@@ -185,7 +187,8 @@ exports.files = {
     name: './app/assets/less/app.less',
     src: appDependencies.less,
     dest: './build/static/css/',
-    watch: ['./app/**/*.less', '!./app/assets/bower/']
+    watch: ['./app/**/*.less', '!./app/assets/bower/'],
+    postCssPlugins: [autoprefixer()]
   },
   locale: {
     src: appDependencies.languages,
@@ -266,7 +269,8 @@ exports.files = {
       name: 'app.bundle.min.css',
       src: appDependencies.bundle.css,
       dest: './build/static/css/'
-    }
+    },
+    postCssPlugins: []
   }
 };
 
