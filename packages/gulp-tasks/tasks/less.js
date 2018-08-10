@@ -1,9 +1,9 @@
 const gulp = require('gulp');
-const autoprefixer = require('gulp-autoprefixer');
 const concat = require('gulp-concat');
 const gulpLess = require('gulp-less');
 const path = require('path');
 const plumber = require('gulp-plumber');
+const postCss = require('gulp-postcss');
 const sourcemaps = require('gulp-sourcemaps');
 
 exports.__requiresConfig = true;
@@ -40,8 +40,8 @@ exports.default = gulpConfig => {
           cwd: files.less.cwd
         })
       )
-      .pipe(gulpLess({ compress: true, paths: [path.join(__dirname)] }))
-      .pipe(autoprefixer())
+      .pipe(gulpLess({ paths: [path.join(__dirname)] }))
+      .pipe(postCss(gulpConfig.files.less.postCssPlugins))
       .pipe(sourcemaps.write())
       .pipe(plumber.stop())
       .pipe(gulp.dest(files.less.dest));

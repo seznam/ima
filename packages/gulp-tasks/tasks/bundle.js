@@ -3,6 +3,7 @@ const concat = require('gulp-concat');
 const del = require('del');
 const nano = require('gulp-cssnano');
 const plumber = require('gulp-plumber');
+const postCss = require('gulp-postcss');
 const uglifyEs = require('gulp-uglify-es').default;
 
 exports.__requiresConfig = true;
@@ -52,6 +53,7 @@ exports.default = gulpConfig => {
       .pipe(plumber())
       .pipe(concat(files.bundle.css.name))
       .pipe(nano())
+      .pipe(postCss(gulpConfig.files.bundle.postCssPlugins))
       .pipe(plumber.stop())
       .pipe(gulp.dest(files.bundle.css.dest));
   }
