@@ -52,14 +52,14 @@ export default class AbstractPageManager extends PageManager {
    * @param {PageRenderer} pageRenderer The current renderer of the page.
    * @param {PageStateManager} pageStateManager The current page state
    *        manager.
-   * @param {HandlerRegistry} handlerRegistry Instance of HandlerRegistry that
+   * @param {HandlerRegistry} pageHandlerRegistry Instance of HandlerRegistry that
    *        holds a list of pre-manage and post-manage handlers.
    */
   constructor(
     pageFactory,
     pageRenderer,
     pageStateManager,
-    handlerRegistry = null
+    pageHandlerRegistry = null
   ) {
     super();
 
@@ -93,9 +93,9 @@ export default class AbstractPageManager extends PageManager {
      * A registry that holds a list of pre-manage and post-manage handlers.
      *
      * @protected
-     * @type {HandlerRegistry}
+     * @type {PageHandlerRegistry}
      */
-    this._handlerRegistry = handlerRegistry;
+    this._pageHandlerRegistry = pageHandlerRegistry;
 
     /**
      * Details of the currently managed page.
@@ -672,11 +672,11 @@ export default class AbstractPageManager extends PageManager {
    * @returns {Promise<any>}
    */
   async _runPreManageHandlers(nextManagedPage, action) {
-    if (!this._handlerRegistry) {
+    if (!this._pageHandlerRegistry) {
       return;
     }
 
-    return this._handlerRegistry.invokePreManageHandlers(
+    return this._pageHandlerRegistry.handlePreManagedState(
       nextManagedPage,
       this._managedPage,
       action
@@ -690,11 +690,11 @@ export default class AbstractPageManager extends PageManager {
    * @param {ManagedPage} previousManagedPage
    */
   _runPostManageHandlers(previousManagedPage, action) {
-    if (!this._handlerRegistry) {
+    if (!this._pageHandlerRegistry) {
       return;
     }
 
-    return this._handlerRegistry.invokePostManageHandlers(
+    return this._pageHandlerRegistry.handlePostManagedState(
       previousManagedPage,
       this._managedPage,
       action

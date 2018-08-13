@@ -1,24 +1,26 @@
-import ScrollHandler from 'page/handler/ScrollHandler';
+import PageNavigationHandler from 'page/handler/PageNavigationHandler';
 import Window from 'window/Window';
 
 jest.useFakeTimers();
 
-describe('ima.page.handler.ScrollHandler', () => {
+describe('ima.page.handler.PageNavigationHandler', () => {
   let handler;
   let window;
 
   beforeEach(() => {
     window = new Window();
-    handler = new ScrollHandler(window);
+    handler = new PageNavigationHandler(window);
   });
 
   describe('handlePreManagedState() method', () => {
-    it('should call window.replaceState method', () => {
-      spyOn(window, 'replaceState').and.stub();
+    it('should call window.replaceState and then window.pushState method', () => {
+      const replaceStateMock = spyOn(window, 'replaceState');
+      const pushStateMock = spyOn(window, 'pushState').and.stub();
 
-      handler.handlePreManagedState();
+      handler.handlePreManagedState(null, null, { url: 'http://localhost/' });
 
-      expect(window.replaceState).toHaveBeenCalled();
+      expect(replaceStateMock).toHaveBeenCalled();
+      expect(pushStateMock).toHaveBeenCalled();
     });
   });
 

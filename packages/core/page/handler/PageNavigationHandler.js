@@ -1,10 +1,10 @@
-import PageManagerHandler from './PageManagerHandler';
+import PageManagerHandler from './PageHandler';
 import Window from 'window/Window';
 
 /**
  *
  */
-export default class ScrollHandler extends PageManagerHandler {
+export default class PageNavigationHandler extends PageManagerHandler {
   static get $dependencies() {
     return [Window];
   }
@@ -28,8 +28,9 @@ export default class ScrollHandler extends PageManagerHandler {
   /**
    * @inheritDoc
    */
-  handlePreManagedState() {
+  handlePreManagedState(previousManagedPage, managedPage, action) {
     this._saveScrollHistory();
+    this._setAddressBar(action.url);
   }
 
   /**
@@ -66,11 +67,35 @@ export default class ScrollHandler extends PageManagerHandler {
   }
 
   /**
-   * @inheritdoc
+   * Scrolls to give coordinates on a page.
+   *
+   * @param {Object} scroll
+   * @param {number} [scroll.x]
+   * @param {number} [scroll.y]
    */
   _scrollTo({ x = 0, y = 0 }) {
     setTimeout(() => {
       this._window.scrollTo(x, y);
     }, 0);
+  }
+
+  /**
+   * Sets the provided URL to the browser's address bar by pushing a new
+   * state to the history.
+   *
+   * The state object pushed to the history will be an object with the
+   * following structure: {@code {url: string}}. The {@code url} field will
+   * be set to the provided URL.
+   *
+   * @param {string} url The URL.
+   */
+  _setAddressBar(url) {
+    let scroll = {
+      x: 0,
+      y: 0
+    };
+    let state = { url, scroll };
+
+    this._window.pushState(state, null, url);
   }
 }

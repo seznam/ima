@@ -1,6 +1,7 @@
+import PageHandler from 'page/handler/PageHandler';
 import SerialBatch from 'execution/SerialBatch';
 
-export default class HandlerRegistry {
+export default class PageHandlerRegistry extends PageHandler {
   /**
    * Creates an instance of HandlerRegistry and creates {@code SerialBatch}
    * instance for pre-handlers and post-handlers.
@@ -9,6 +10,8 @@ export default class HandlerRegistry {
    * @memberof HandlerRegistry
    */
   constructor(...handlers) {
+    super();
+
     this._preManageHandlers = new SerialBatch(
       handlers.map(handler => handler.handlePreManagedState.bind(handler))
     );
@@ -26,7 +29,7 @@ export default class HandlerRegistry {
    * @param {{ type: string, payload: Object|Event}} action
    * @return {Promise<any>}
    */
-  invokePreManageHandlers(nextManagedPage, managedPage, action) {
+  handlePreManagedState(nextManagedPage, managedPage, action) {
     return this._preManageHandlers.execute(
       nextManagedPage,
       managedPage,
@@ -42,7 +45,7 @@ export default class HandlerRegistry {
    * @param {{ type: string, payload: Object|Event}} action
    * @return {Promise<any>}
    */
-  invokePostManageHandlers(previousManagedPage, managedPage, action) {
+  handlePostManagedState(previousManagedPage, managedPage, action) {
     return this._postManageHandlers.execute(
       previousManagedPage,
       managedPage,

@@ -1,9 +1,7 @@
-import HandlerRegistry from 'page/handler/HandlerRegistry';
+import PageHandlerRegistry from 'page/handler/PageHandlerRegistry';
 import SerialBatch from 'execution/SerialBatch';
 
-jest.useFakeTimers();
-
-describe('ima.page.handler.HandlerRegistry', () => {
+describe('ima.page.handler.PageHandlerRegistry', () => {
   let registry;
   let pageManagerHandler = {
     handlePreManagedState: jest.fn(() => true),
@@ -11,7 +9,7 @@ describe('ima.page.handler.HandlerRegistry', () => {
   };
 
   beforeEach(() => {
-    registry = new HandlerRegistry(pageManagerHandler);
+    registry = new PageHandlerRegistry(pageManagerHandler);
   });
 
   describe('constructor', () => {
@@ -21,17 +19,17 @@ describe('ima.page.handler.HandlerRegistry', () => {
     });
   });
 
-  describe('invokePreManageHandlers() method', () => {
-    it('should call pre-manage handlers', () => {
-      return registry.invokePreManageHandlers(null, null, null).then(() => {
+  describe('handlePreManagedState() method', () => {
+    it('should call subsequent pre-manage handlers', () => {
+      return registry.handlePreManagedState(null, null, null).then(() => {
         expect(pageManagerHandler.handlePreManagedState).toHaveBeenCalled();
       });
     });
   });
 
-  describe('invokePostManageHandlers() method', () => {
-    it('should call post-manage handlers', () => {
-      return registry.invokePostManageHandlers(null, null, null).then(() => {
+  describe('handlePostManagedState() method', () => {
+    it('should call subsequent post-manage handlers', () => {
+      return registry.handlePostManagedState(null, null, null).then(() => {
         expect(pageManagerHandler.handlePostManagedState).toHaveBeenCalled();
       });
     });

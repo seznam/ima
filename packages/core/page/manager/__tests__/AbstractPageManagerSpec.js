@@ -1,6 +1,6 @@
 import Controller from 'controller/Controller';
 import Extension from 'extension/Extension';
-import HandlerRegistry from 'page/handler/HandlerRegistry';
+import PageHandlerRegistry from 'page/handler/PageHandlerRegistry';
 import AbstractPageManager from 'page/manager/AbstractPageManager';
 import PageRenderer from 'page/renderer/PageRenderer';
 import PageStateManager from 'page/state/PageStateManager';
@@ -54,7 +54,7 @@ describe('ima.page.manager.AbstractPageManager', () => {
   beforeEach(() => {
     pageRenderer = new PageRenderer();
     pageStateManager = new PageStateManager();
-    handlerRegistry = new HandlerRegistry(pageManagerHandler);
+    handlerRegistry = new PageHandlerRegistry(pageManagerHandler);
 
     pageManager = new AbstractPageManager(
       pageFactory,

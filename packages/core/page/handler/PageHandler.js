@@ -1,7 +1,7 @@
 /**
  *
  */
-export default class PageManagerHandler {
+export default class PageHandler {
   /**
    * Called before a PageManager starts to transition from previous page to
    * a new one.

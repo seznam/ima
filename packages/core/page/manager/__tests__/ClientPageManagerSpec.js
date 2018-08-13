@@ -1,7 +1,7 @@
 import Controller from 'controller/Controller';
 import EventBus from 'event/EventBus';
 import Extension from 'extension/Extension';
-import HandlerRegistry from 'page/handler/HandlerRegistry';
+import PageHandlerRegistry from 'page/handler/PageHandlerRegistry';
 import ClientPageManager from 'page/manager/ClientPageManager';
 import PageRenderer from 'page/renderer/PageRenderer';
 import PageStateManager from 'page/state/PageStateManager';
@@ -57,7 +57,7 @@ describe('ima.page.manager.ClientPageManager', () => {
     pageStateManager = new PageStateManager();
     windowInterface = new Window();
     eventBusInterface = new EventBus();
-    handlerRegistry = new HandlerRegistry(pageManagerHandler);
+    handlerRegistry = new PageHandlerRegistry(pageManagerHandler);
 
     pageManager = new ClientPageManager(
       pageFactory,

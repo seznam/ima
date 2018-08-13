@@ -16,7 +16,7 @@ export default class ClientPageManager extends AbstractPageManager {
       PageFactory,
       PageRenderer,
       PageStateManager,
-      '$HandlerRegistry',
+      '$PageHandlerRegistry',
       Window,
       EventBus
     ];
@@ -222,34 +222,5 @@ export default class ClientPageManager extends AbstractPageManager {
     }
 
     return false;
-  }
-
-  /**
-   * @inheritDoc
-   */
-  async _runPreManageHandlers(nextManagedPage, action) {
-    await super._runPreManageHandlers(nextManagedPage, action);
-
-    this._setAddressBar(action.url);
-  }
-
-  /**
-   * Sets the provided URL to the browser's address bar by pushing a new
-   * state to the history.
-   *
-   * The state object pushed to the history will be an object with the
-   * following structure: {@code {url: string}}. The {@code url} field will
-   * be set to the provided URL.
-   *
-   * @param {string} url The URL.
-   */
-  _setAddressBar(url) {
-    let scroll = {
-      x: 0,
-      y: 0
-    };
-    let state = { url, scroll };
-
-    this._window.pushState(state, null, url);
   }
 }
