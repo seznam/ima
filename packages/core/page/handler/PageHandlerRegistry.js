@@ -12,11 +12,11 @@ export default class PageHandlerRegistry extends PageHandler {
   constructor(...handlers) {
     super();
 
-    this._preManageHandlers = new SerialBatch(
+    this._preManageHandlers = new PageHandlerRegistry.ExecutionMethod(
       handlers.map(handler => handler.handlePreManagedState.bind(handler))
     );
 
-    this._postManageHandlers = new SerialBatch(
+    this._postManageHandlers = new PageHandlerRegistry.ExecutionMethod(
       handlers.map(handler => handler.handlePostManagedState.bind(handler))
     );
   }
@@ -53,3 +53,5 @@ export default class PageHandlerRegistry extends PageHandler {
     );
   }
 }
+
+PageHandlerRegistry.ExecutionMethod = SerialBatch;
