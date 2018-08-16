@@ -672,10 +672,6 @@ export default class AbstractPageManager extends PageManager {
    * @returns {Promise<any>}
    */
   async _runPreManageHandlers(nextManagedPage, action) {
-    if (!this._pageHandlerRegistry) {
-      return;
-    }
-
     return this._pageHandlerRegistry.handlePreManagedState(
       nextManagedPage,
       this._managedPage,
@@ -690,10 +686,6 @@ export default class AbstractPageManager extends PageManager {
    * @param {ManagedPage} previousManagedPage
    */
   _runPostManageHandlers(previousManagedPage, action) {
-    if (!this._pageHandlerRegistry) {
-      return;
-    }
-
     return this._pageHandlerRegistry.handlePostManagedState(
       previousManagedPage,
       this._managedPage,
