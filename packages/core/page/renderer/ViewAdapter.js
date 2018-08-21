@@ -51,6 +51,15 @@ export default class ViewAdapter extends React.Component {
   }
 
   /**
+   * Fixes an issue where when there's an error in React component,
+   * the defined ErrorPage may not get re-rendered and white
+   * blank page appears instead.
+   *
+   * @inheritdoc
+   */
+  componentDidCatch() {}
+
+  /**
    * @inheritdoc
    */
   render() {
