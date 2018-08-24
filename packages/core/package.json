@@ -75,6 +75,7 @@
     },
     "dependencies": {
         "classnames": "^2.2.6",
+        "consume-multiple-contexts": "^0.3.0",
         "ima-helpers": "^0.15.0",
         "node-fetch": "^2.1.2"
     },
