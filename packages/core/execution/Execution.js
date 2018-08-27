@@ -20,7 +20,7 @@ export default class Execution {
    * Adds a new job to be executed. The job is appended at the end of the
    * list of current jobs therefore is executed last.
    *
-   * @param {Function.<Promise>[]} jobs The jobs to be executed.
+   * @param {Array<function(): Promise>} jobs The jobs to be executed.
    */
   append() {}
 

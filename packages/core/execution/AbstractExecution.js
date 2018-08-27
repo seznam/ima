@@ -34,7 +34,7 @@ export default class AbstractExecution extends Execution {
   execute() {
     throw new GenericError(
       'The ima.execution.AbstractExecution.execute method is abstract ' +
-      'and must be overridden'
+        'and must be overridden'
     );
   }
 
@@ -42,7 +42,7 @@ export default class AbstractExecution extends Execution {
    * Return {@code true} if the given job can be executed
    *
    * @protected
-   * @param {Function.<Promise>} job
+   * @param {function(): Promise} job
    * @returns {boolean}
    */
   _validateJob(job) {
@@ -55,7 +55,7 @@ export default class AbstractExecution extends Execution {
     if ($Debug) {
       console.warn(
         'ima.execution.AbstractExecution: Given job is not a callable ' +
-        'function therefore it will be excluded from execution.',
+          'function therefore it will be excluded from execution.',
         {
           job
         }
