@@ -1,5 +1,6 @@
 import PropTypes from 'prop-types';
 import React from 'react';
+import { Provider } from './Context';
 
 /**
  * An adapter component providing the current page controller's state to the
@@ -51,10 +52,23 @@ export default class ViewAdapter extends React.Component {
   }
 
   /**
+   * Fixes an issue where when there's an error in React component,
+   * the defined ErrorPage may not get re-rendered and white
+   * blank page appears instead.
+   *
+   * @inheritdoc
+   */
+  componentDidCatch() {}
+
+  /**
    * @inheritdoc
    */
   render() {
-    return React.createElement(this._view, this.state);
+    return React.createElement(
+      Provider,
+      { value: this.props.$Utils },
+      React.createElement(this._view, this.state)
+    );
   }
 
   /**
