@@ -26,7 +26,10 @@ module.exports = {
     ],
     'settings': {
         'ecmascript': 2015,
-        'jsx': true
+        'jsx': true,
+        'react': {
+            'version': '16.4'
+        }
     },
     'parserOptions': {
         'sourceType': 'module',

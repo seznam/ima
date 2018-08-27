@@ -33,7 +33,9 @@ describe('Revive client application', () => {
   }
 
   class DocumentView extends AbstractDocumentView {
-    static get masterElementId() {}
+    static get masterElementId() {
+      return 'some-id';
+    }
   }
 
   class Controller extends ControllerInterface {
