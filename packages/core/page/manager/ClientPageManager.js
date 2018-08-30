@@ -12,7 +12,14 @@ import Window from '../../window/Window';
  */
 export default class ClientPageManager extends AbstractPageManager {
   static get $dependencies() {
-    return [PageFactory, PageRenderer, PageStateManager, Window, EventBus];
+    return [
+      PageFactory,
+      PageRenderer,
+      PageStateManager,
+      '$PageHandlerRegistry',
+      Window,
+      EventBus
+    ];
   }
 
   /**
@@ -23,13 +30,22 @@ export default class ClientPageManager extends AbstractPageManager {
    *        decorate the controllers and page state managers.
    * @param {PageRenderer} pageRenderer The current renderer of the page.
    * @param {PageStateManager} stateManager The current page state manager.
+   * @param {HandlerRegistry} handlerRegistry Instance of HandlerRegistry that
+   *        holds a list of pre-manage and post-manage handlers.
    * @param {Window} window The utility for manipulating the global context
    *        and global client-side-specific APIs.
    * @param {EventBus} eventBus The event bus for dispatching and listening
    *        for custom IMA events propagated through the DOM.
    */
-  constructor(pageFactory, pageRenderer, stateManager, window, eventBus) {
-    super(pageFactory, pageRenderer, stateManager);
+  constructor(
+    pageFactory,
+    pageRenderer,
+    stateManager,
+    handlerRegistry,
+    window,
+    eventBus
+  ) {
+    super(pageFactory, pageRenderer, stateManager, handlerRegistry);
 
     /**
      * The utility for manipulating the global context and global
@@ -72,21 +88,14 @@ export default class ClientPageManager extends AbstractPageManager {
   /**
    * @inheritdoc
    */
-  manage(controller, view, options, params = {}) {
-    return super.manage(controller, view, options, params).then(response => {
-      this._activatePageSource();
+  manage(controller, view, options, params = {}, action) {
+    return super
+      .manage(controller, view, options, params, action)
+      .then(response => {
+        this._activatePageSource();
 
-      return response;
-    });
-  }
-
-  /**
-   * @inheritdoc
-   */
-  scrollTo(x = 0, y = 0) {
-    setTimeout(() => {
-      this._window.scrollTo(x, y);
-    }, 0);
+        return response;
+      });
   }
 
   /**

@@ -32,6 +32,32 @@ const Events = Object.freeze({
 });
 
 /**
+ * Name of actions that can trigger routing
+ *
+ * @enum {string}
+ * @type {Object<string, string>}
+ */
+export const ActionTypes = Object.freeze({
+  /**
+   * @const
+   * @type {string}
+   */
+  REDIRECT: 'redirect',
+
+  /**
+   * @const
+   * @type {string}
+   */
+  CLICK: 'click',
+
+  /**
+   * @const
+   * @type {string}
+   */
+  POP_STATE: 'popstate'
+});
+
+/**
  * The number used as the index of the mouse left button in DOM
  * {@code MouseEvent}s.
  *
@@ -98,17 +124,10 @@ export default class ClientRouter extends AbstractRouter {
   listen() {
     let nativeWindow = this._window.getWindow();
 
-    this._saveScrollHistory();
     let eventName = Events.POP_STATE;
     this._window.bindEventListener(nativeWindow, eventName, event => {
       if (event.state && !event.defaultPrevented) {
-        this.route(this.getPath()).then(() => {
-          let scroll = event.state.scroll;
-
-          if (scroll) {
-            this._pageManager.scrollTo(scroll.x, scroll.y);
-          }
-        });
+        this.route(this.getPath(), {}, { type: ActionTypes.POP_STATE, event });
       }
     });
 
@@ -122,14 +141,16 @@ export default class ClientRouter extends AbstractRouter {
   /**
    * @inheritdoc
    */
-  redirect(url = '', options = {}) {
+  redirect(
+    url = '',
+    options = {},
+    { type = ActionTypes.REDIRECT, event } = {}
+  ) {
     if (this._isSameDomain(url)) {
       let path = url.replace(this.getDomain(), '');
       path = this._extractRoutePath(path);
 
-      this._saveScrollHistory();
-      this._setAddressBar(url);
-      this.route(path, options);
+      this.route(path, options, { type, event, url });
     } else {
       this._window.redirect(url);
     }
@@ -138,9 +159,18 @@ export default class ClientRouter extends AbstractRouter {
   /**
    * @inheritdoc
    */
-  route(path, options = {}) {
+  route(
+    path,
+    options = {},
+    { event = null, type = ActionTypes.REDIRECT, url = null } = {}
+  ) {
+    const action = {
+      event,
+      type,
+      url: url || this.getUrl()
+    };
     return super
-      .route(path, options)
+      .route(path, options, action)
       .catch(error => {
         return this.handleError({ error });
       })
@@ -245,7 +275,7 @@ export default class ClientRouter extends AbstractRouter {
     }
 
     event.preventDefault();
-    this.redirect(anchorHref);
+    this.redirect(anchorHref, {}, ActionTypes.CLICK, event);
   }
 
   /**
@@ -296,46 +326,6 @@ export default class ClientRouter extends AbstractRouter {
     let trimmedTargetUrl = targetUrl.substring(0, targetUrl.indexOf('#'));
 
     return trimmedTargetUrl === trimmedCurrentUrl;
-  }
-
-  /**
-   * Sets the provided URL to the browser's address bar by pushing a new
-   * state to the history.
-   *
-   * The state object pushed to the history will be an object with the
-   * following structure: {@code {url: string}}. The {@code url} field will
-   * be set to the provided URL.
-   *
-   * @param {string} url The URL.
-   */
-  _setAddressBar(url) {
-    let scroll = {
-      x: 0,
-      y: 0
-    };
-    let state = { url, scroll };
-
-    this._window.pushState(state, null, url);
-  }
-
-  /**
-   * Save user's scroll state to history.
-   *
-   * Replace scroll values in current state for actual scroll values in
-   * document.
-   */
-  _saveScrollHistory() {
-    let url = this.getUrl();
-    let scroll = {
-      x: this._window.getScrollX(),
-      y: this._window.getScrollY()
-    };
-    let state = { url, scroll };
-
-    let oldState = this._window.getHistoryState();
-    let newState = Object.assign({}, oldState, state);
-
-    this._window.replaceState(newState, null, url);
   }
 
   /**

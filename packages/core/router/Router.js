@@ -210,6 +210,8 @@ export default class Router {
    *          viewAdapter: ?function(new: React.Component)=
    *        }} [options={}] The options overrides route options defined in
    *        the {@code routes.js} configuration file.
+   * @param {{ type: string, payload: Object|Event }} [action] An action object
+   *        describing what triggered this routing.
    */
   redirect() {}
 
@@ -252,6 +254,8 @@ export default class Router {
    *          viewAdapter: ?function(new: React.Component)=
    *        }} [options={}] The options overrides route options defined in
    *        the {@code routes.js} configuration file.
+   * @param {{ type: string, event: Event|null, url: string|null }} [action] An action object
+   *        describing what triggered this routing.
    * @return {Promise<Object<string, *>>} A promise resolved
    *         when the error has been handled and the response has been sent
    *         to the client, or displayed if used at the client side.

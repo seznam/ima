@@ -50,6 +50,8 @@ export default class PageManager {
    *        }} options The current route options.
    * @param {Object<string, string>=} [params={}] The route parameters of the
    *        current route.
+   * @param {{ type: string, event: Event, url: string }} [action] An action
+   *        object describing what triggered the routing.
    * @return {Promise<{status: number, content: ?string, pageState: Object<string, *>
    *         }>} A promise that will resolve to information about the rendered page.
    *         The {@code status} will contain the HTTP status code to send to the
@@ -59,16 +61,6 @@ export default class PageManager {
    *         the page at the server-side, or {@code null} at the client-side.
    */
   manage() {}
-
-  /**
-   * Scrolls the viewport to the specified horizontal and vertical offset.
-   *
-   * This method has no effect at the server-side.
-   *
-   * @param {number=} [x=0] The horizontal offset to scroll to.
-   * @param {number=} [y=0] The vertical offset to scroll to.
-   */
-  scrollTo() {}
 
   /**
    * Finalization callback, called when the page manager is being discarded.

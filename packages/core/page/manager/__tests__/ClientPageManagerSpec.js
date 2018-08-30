@@ -1,6 +1,7 @@
 import Controller from 'controller/Controller';
 import EventBus from 'event/EventBus';
 import Extension from 'extension/Extension';
+import PageHandlerRegistry from 'page/handler/PageHandlerRegistry';
 import ClientPageManager from 'page/manager/ClientPageManager';
 import PageRenderer from 'page/renderer/PageRenderer';
 import PageStateManager from 'page/state/PageStateManager';
@@ -18,6 +19,7 @@ describe('ima.page.manager.ClientPageManager', () => {
   let windowInterface = null;
   let eventBusInterface = null;
   let pageManager = null;
+  let handlerRegistry = null;
 
   let View = () => {};
 
@@ -47,22 +49,28 @@ describe('ima.page.manager.ClientPageManager', () => {
   };
 
   beforeEach(() => {
+    let pageManagerHandler = {
+      handlePreManagedState: jest.fn(() => true),
+      handlePostManagedState: jest.fn(() => true)
+    };
     pageRenderer = new PageRenderer();
     pageStateManager = new PageStateManager();
     windowInterface = new Window();
     eventBusInterface = new EventBus();
+    handlerRegistry = new PageHandlerRegistry(pageManagerHandler);
 
     pageManager = new ClientPageManager(
       pageFactory,
       pageRenderer,
       pageStateManager,
+      handlerRegistry,
       windowInterface,
       eventBusInterface
     );
 
     pageManager._clearManagedPageValue();
 
-    pageManager._storeManagedPageValue(
+    pageManager._managedPage = pageManager._constructManagedPageValue(
       Controller,
       View,
       options,
@@ -77,7 +85,7 @@ describe('ima.page.manager.ClientPageManager', () => {
     ]);
   });
 
-  it('should be listen for all custom events', () => {
+  it('should be listening for all custom events', () => {
     let window = {};
 
     spyOn(eventBusInterface, 'listenAll').and.stub();
@@ -99,17 +107,7 @@ describe('ima.page.manager.ClientPageManager', () => {
     });
   });
 
-  it('scrollTo method should be call window.scrollTo async', () => {
-    spyOn(windowInterface, 'scrollTo').and.stub();
-
-    jest.useFakeTimers();
-    pageManager.scrollTo(0, 0);
-    jest.runOnlyPendingTimers();
-
-    expect(windowInterface.scrollTo).toHaveBeenCalledWith(0, 0);
-  });
-
-  it('should be unlisten for all custom events', () => {
+  it('should unlisten for all custom events', () => {
     let window = {};
 
     spyOn(eventBusInterface, 'unlistenAll').and.stub();

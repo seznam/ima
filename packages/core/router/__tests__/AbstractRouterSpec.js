@@ -5,6 +5,7 @@ import AbstractRouter from 'router/AbstractRouter';
 import RouteEvents from 'router/Events';
 import RouteFactory from 'router/RouteFactory';
 import RouteNames from 'router/RouteNames';
+import { ActionTypes } from 'router/ClientRouter';
 
 describe('ima.router.AbstractRouter', () => {
   let router = null;
@@ -24,6 +25,9 @@ describe('ima.router.AbstractRouter', () => {
     documentView: null,
     managedRootView: null,
     viewAdapter: null
+  };
+  let action = {
+    type: ActionTypes.REDIRECT
   };
   let Controller = function Controller() {};
   let View = function View() {};
@@ -183,10 +187,10 @@ describe('ima.router.AbstractRouter', () => {
 
       spyOn(route, 'extractParameters').and.callThrough();
 
-      router.route(path, options);
+      router.route(path, options, action);
 
       expect(route.extractParameters).toHaveBeenCalled();
-      expect(router._handle).toHaveBeenCalledWith(route, {}, options);
+      expect(router._handle).toHaveBeenCalledWith(route, {}, options, action);
     });
 
     it('should handle "not-found" route', done => {
@@ -392,12 +396,13 @@ describe('ima.router.AbstractRouter', () => {
       );
       spyOn(dispatcher, 'fire').and.stub();
 
-      router._handle(route, {}).then(() => {
+      router._handle(route, {}, {}, action).then(() => {
         expect(pageManager.manage).toHaveBeenCalledWith(
           Controller,
           View,
           options,
-          {}
+          {},
+          action
         );
         done();
       });
