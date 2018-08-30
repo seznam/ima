@@ -1,5 +1,4 @@
 import AbstractExecution from 'execution/AbstractExecution';
-import { exec } from 'child_process';
 
 describe('ima.execution.AbstractExecution', () => {
   let execution = null;

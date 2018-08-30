@@ -10,6 +10,11 @@ import AbstractPageManager from './AbstractPageManager';
  */
 export default class ServerPageManager extends AbstractPageManager {
   static get $dependencies() {
-    return [PageFactory, PageRenderer, PageStateManager, '$PageHandlerRegistry'];
+    return [
+      PageFactory,
+      PageRenderer,
+      PageStateManager,
+      '$PageHandlerRegistry'
+    ];
   }
 }
