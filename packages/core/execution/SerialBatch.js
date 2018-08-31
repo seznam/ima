@@ -3,7 +3,7 @@ import AbstractExecution from './AbstractExecution';
 /**
  *
  *
- * @extends SerialBatch
+ * @extends AbstractExecution
  */
 export default class SerialBatch extends AbstractExecution {
   /**
