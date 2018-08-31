@@ -1,0 +1,15 @@
+baseurl: "/IMA.js-core"
+exclude: ["_partials"]
+permalink: /doc/:categories/:title:output_ext
+defaults:
+  -
+    scope:
+      path: ""
+    values:
+      layout: "default"
+  -
+    scope:
+      path: ""
+      type: "posts"
+    values:
+      layout: "doc"

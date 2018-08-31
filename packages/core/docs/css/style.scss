@@ -1,0 +1,79 @@
+---
+---
+
+@import "custom-bulma";
+@import "rouge-github";
+
+#doc {
+	&>div:first-child {
+		border-right: 1px solid $grey-lighter;
+		flex-shrink: 0;
+		margin-bottom: 1.5rem;
+		margin-right: 1rem;
+		padding-right: 0.5rem;
+	}
+}
+
+#root {
+	margin: 1.5rem;
+}
+
+.card {
+	margin-right: 1rem;
+
+	.card-content>p {
+		margin-bottom: 1rem;
+
+		&:last-child {
+			margin-bottom: 0;
+		}
+	}
+
+	&:last-child {
+		margin-right: 0;
+	}
+}
+
+.column {
+	flex-direction: column;
+
+	.card {
+		margin: 0;
+	}
+}
+
+.footer {
+	margin-top: 3rem;
+}
+
+.hidden {
+	display: none;
+}
+
+.icon-margin {
+	margin-right: 1rem;
+}
+
+.img {
+	width: 50%;
+	margin: 1.5rem 25%;
+}
+
+.separator {
+	margin-top: 6rem;
+
+	&::before {
+		background-color: $grey-lighter;
+		content: '';
+		height: 1px;
+		left: 0;
+		position: absolute;
+		width: 100%;
+	}
+}
+
+.table {
+	td {
+		vertical-align: middle;
+	}
+}
