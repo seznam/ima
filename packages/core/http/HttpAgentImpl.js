@@ -121,7 +121,7 @@ export default class HttpAgentImpl extends HttpAgent {
       'post',
       url,
       data,
-      Object.assign({}, options, { cache: false })
+      Object.assign({ cache: false }, options)
     );
   }
 
@@ -133,7 +133,7 @@ export default class HttpAgentImpl extends HttpAgent {
       'put',
       url,
       data,
-      Object.assign({}, options, { cache: false })
+      Object.assign({ cache: false }, options)
     );
   }
 
@@ -145,7 +145,7 @@ export default class HttpAgentImpl extends HttpAgent {
       'patch',
       url,
       data,
-      Object.assign({}, options, { cache: false })
+      Object.assign({ cache: false }, options)
     );
   }
 
@@ -157,7 +157,7 @@ export default class HttpAgentImpl extends HttpAgent {
       'delete',
       url,
       data,
-      Object.assign({}, options, { cache: false })
+      Object.assign({ cache: false }, options)
     );
   }
 
