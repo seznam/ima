@@ -18,8 +18,6 @@ exports.default = gulpConfig => {
   }
 
   function dev(done) {
-    sharedTasksState.watchMode = true;
-
     return gulp.series(...prepareTasks(devTasks))(done);
   }
 

@@ -19,7 +19,7 @@ module.exports = {
 		'prettier'
 	],
 	'settings': {
-		'ecmascript': 2015
+		'ecmascript': 2016
 	},
 	'parserOptions': {
 		'sourceType': 'module',

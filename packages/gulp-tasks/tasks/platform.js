@@ -5,7 +5,7 @@ const concat = require('gulp-concat');
 const insert = require('gulp-insert');
 const sourcemaps = require('gulp-sourcemaps');
 const mkdirp = require('mkdirp');
-const builderBabelHeleprs = require('babel-core/lib/tools/build-external-helpers');
+const builderBabelHeleprs = require('@babel/core/lib/tools/build-external-helpers');
 
 exports.__requiresConfig = true;
 

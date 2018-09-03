@@ -22,12 +22,12 @@ exports.default = gulpConfig => {
             );
           })
         )
-        .pipe(messageFormat({ locale: language, global: 'that' }))
+        .pipe(messageFormat({ locale: language, namespace: '$IMA.i18n' }))
         .pipe(plumber.stop())
         .pipe(
           insert.wrap(
-            '(function () {var $IMA = {}; if ((typeof window !== "undefined") && (window !== null)) { window.$IMA = window.$IMA || {}; $IMA = window.$IMA; } var that = $IMA || {};',
-            ' return that.i18n; })();'
+            '(function () {var $IMA = {}; if ((typeof window !== "undefined") && (window !== null)) { window.$IMA = window.$IMA || {}; $IMA = window.$IMA; }',
+            ';return $IMA.i18n; })();'
           )
         )
         .pipe(gulp.dest(files.locale.dest.client))
