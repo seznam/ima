@@ -375,12 +375,14 @@ export default class AbstractRouter extends Router {
    *         displayed if used at the client side.
    */
   _handle(route, params, options, action) {
-    let controller = route.getController();
-    let view = route.getView();
+    const controller = route.getController();
+    const view = route.getView();
     options = Object.assign({}, route.getOptions(), options);
-    let data = { route, params, path: this.getPath(), options, action };
 
-    this._dispatcher.fire(Events.BEFORE_HANDLE_ROUTE, data, true);
+    const eventData = { route, params, path: this.getPath(), options };
+    action = Object.assign({}, eventData, action);
+
+    this._dispatcher.fire(Events.BEFORE_HANDLE_ROUTE, eventData, true);
 
     return this._pageManager
       .manage(controller, view, options, params, action)
@@ -391,9 +393,9 @@ export default class AbstractRouter extends Router {
           response.error = params.error;
         }
 
-        data.response = response;
+        eventData.response = response;
 
-        this._dispatcher.fire(Events.AFTER_HANDLE_ROUTE, data, true);
+        this._dispatcher.fire(Events.AFTER_HANDLE_ROUTE, eventData, true);
 
         return response;
       });

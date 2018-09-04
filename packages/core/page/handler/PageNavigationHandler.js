@@ -1,5 +1,5 @@
 import PageManagerHandler from './PageHandler';
-import Window from 'window/Window';
+import Window from '../../window/Window';
 
 /**
  *
