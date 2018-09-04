@@ -378,9 +378,8 @@ export default class AbstractRouter extends Router {
     const controller = route.getController();
     const view = route.getView();
     options = Object.assign({}, route.getOptions(), options);
-
+    action.route = route;
     const eventData = { route, params, path: this.getPath(), options };
-    action = Object.assign({}, eventData, action);
 
     this._dispatcher.fire(Events.BEFORE_HANDLE_ROUTE, eventData, true);
 
