@@ -404,8 +404,7 @@ describe('ima.router.AbstractRouter', () => {
 
       router._handle(route, {}, {}, action).then(() => {
         expect(pageManager.manage).toHaveBeenCalledWith(
-          Controller,
-          View,
+          route,
           options,
           {},
           action
