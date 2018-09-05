@@ -16,20 +16,8 @@ export default class PageManager {
    * UI (at the client-side) or to the response to send to the client (at the
    * server-side).
    *
-   * @param {(
-   *          string|
-   *          function(new: ima.controller.Controller, ...*)
-   *        )} controller The alias, namespace path, or constructor of the
-   *        controller to manage.
-   * @param {(
-   *          string|
-   *          function(
-   *            new: React.Component,
-   *            Object<string, *>,
-   *            ?Object<string, *>
-   *          )
-   *        )} view The alias, namespace path, or constructor of the page
-   *        view to manage.
+   * @param {Route} route A route instance that holds information about the
+   *        page we should manage.
    * @param {{
    *          onlyUpdate: (
    *            boolean|
@@ -50,8 +38,11 @@ export default class PageManager {
    *        }} options The current route options.
    * @param {Object<string, string>=} [params={}] The route parameters of the
    *        current route.
-   * @param {{ type: string, event: Event, url: string }} [action] An action
-   *        object describing what triggered the routing.
+   * @param {{
+   *          type: string,
+   *          event: Event,
+   *          url: string
+   *        }} [action] An action object describing what triggered the routing.
    * @return {Promise<{status: number, content: ?string, pageState: Object<string, *>
    *         }>} A promise that will resolve to information about the rendered page.
    *         The {@code status} will contain the HTTP status code to send to the

@@ -4,6 +4,7 @@ import PageHandlerRegistry from 'page/handler/PageHandlerRegistry';
 import AbstractPageManager from 'page/manager/AbstractPageManager';
 import PageRenderer from 'page/renderer/PageRenderer';
 import PageStateManager from 'page/state/PageStateManager';
+import RouteFactory from 'router/RouteFactory';
 
 describe('ima.page.manager.AbstractPageManager', () => {
   let pageFactory = {
@@ -16,8 +17,14 @@ describe('ima.page.manager.AbstractPageManager', () => {
   let pageStateManager = null;
   let pageManager = null;
   let handlerRegistry = null;
+  let routeFactory = null;
 
   let View = () => {};
+
+  let routeName = 'link';
+  let routePath = '/link';
+  let route = null;
+
   let options = {
     onlyUpdate: false,
     autoScroll: true,
@@ -55,6 +62,7 @@ describe('ima.page.manager.AbstractPageManager', () => {
     pageRenderer = new PageRenderer();
     pageStateManager = new PageStateManager();
     handlerRegistry = new PageHandlerRegistry(pageManagerHandler);
+    routeFactory = new RouteFactory();
 
     pageManager = new AbstractPageManager(
       pageFactory,
@@ -67,9 +75,18 @@ describe('ima.page.manager.AbstractPageManager', () => {
       extensionInstance
     ]);
 
+    route = routeFactory.createRoute(
+      routeName,
+      routePath,
+      Controller,
+      View,
+      options
+    );
+
     pageManager._managedPage = pageManager._constructManagedPageValue(
       Controller,
       View,
+      route,
       options,
       params,
       controllerInstance,
@@ -102,7 +119,7 @@ describe('ima.page.manager.AbstractPageManager', () => {
       );
 
       pageManager
-        .manage(Controller, View, options, params)
+        .manage(route, options, params)
         .then(() => {
           expect(pageManager._runPreManageHandlers).toHaveBeenCalled();
           expect(pageManager._managedPage.params).toEqual(params);
@@ -134,7 +151,7 @@ describe('ima.page.manager.AbstractPageManager', () => {
       spyOn(pageManager, '_loadPageSource').and.returnValue(Promise.resolve());
 
       pageManager
-        .manage(Controller, View, options, params)
+        .manage(route, options, params)
         .then(() => {
           expect(pageManager._runPreManageHandlers).toHaveBeenCalled();
           expect(pageManager._deactivatePageSource).toHaveBeenCalled();

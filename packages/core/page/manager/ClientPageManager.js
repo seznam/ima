@@ -88,14 +88,12 @@ export default class ClientPageManager extends AbstractPageManager {
   /**
    * @inheritdoc
    */
-  manage(controller, view, options, params = {}, action) {
-    return super
-      .manage(controller, view, options, params, action)
-      .then(response => {
-        this._activatePageSource();
+  manage(route, options, params = {}, action) {
+    return super.manage(route, options, params, action).then(response => {
+      this._activatePageSource();
 
-        return response;
-      });
+      return response;
+    });
   }
 
   /**

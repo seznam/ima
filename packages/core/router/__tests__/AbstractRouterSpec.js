@@ -27,7 +27,10 @@ describe('ima.router.AbstractRouter', () => {
     viewAdapter: null
   };
   let action = {
-    type: ActionTypes.REDIRECT
+    type: ActionTypes.REDIRECT,
+    options,
+    route: null,
+    params: {}
   };
   let Controller = function Controller() {};
   let View = function View() {};
@@ -174,6 +177,7 @@ describe('ima.router.AbstractRouter', () => {
         View,
         options
       );
+      action.route = route;
     });
 
     afterEach(() => {
@@ -383,6 +387,8 @@ describe('ima.router.AbstractRouter', () => {
         View,
         options
       );
+      action.route = route;
+      action.path = routePath;
     });
 
     afterEach(() => {
@@ -398,8 +404,7 @@ describe('ima.router.AbstractRouter', () => {
 
       router._handle(route, {}, {}, action).then(() => {
         expect(pageManager.manage).toHaveBeenCalledWith(
-          Controller,
-          View,
+          route,
           options,
           {},
           action

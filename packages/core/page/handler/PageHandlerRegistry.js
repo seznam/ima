@@ -1,5 +1,5 @@
-import PageHandler from 'page/handler/PageHandler';
-import SerialBatch from 'execution/SerialBatch';
+import PageHandler from './PageHandler';
+import SerialBatch from '../../execution/SerialBatch';
 
 export default class PageHandlerRegistry extends PageHandler {
   /**
