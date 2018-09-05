@@ -375,16 +375,13 @@ export default class AbstractRouter extends Router {
    *         displayed if used at the client side.
    */
   _handle(route, params, options, action) {
-    const controller = route.getController();
-    const view = route.getView();
     options = Object.assign({}, route.getOptions(), options);
-    action.route = route;
-    const eventData = { route, params, path: this.getPath(), options };
+    const eventData = { route, params, path: this.getPath(), options, action };
 
     this._dispatcher.fire(Events.BEFORE_HANDLE_ROUTE, eventData, true);
 
     return this._pageManager
-      .manage(controller, view, options, params, action)
+      .manage(route, options, params, action)
       .then(response => {
         response = response || {};
 

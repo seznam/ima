@@ -16,20 +16,8 @@ export default class PageManager {
    * UI (at the client-side) or to the response to send to the client (at the
    * server-side).
    *
-   * @param {(
-   *          string|
-   *          function(new: ima.controller.Controller, ...*)
-   *        )} controller The alias, namespace path, or constructor of the
-   *        controller to manage.
-   * @param {(
-   *          string|
-   *          function(
-   *            new: React.Component,
-   *            Object<string, *>,
-   *            ?Object<string, *>
-   *          )
-   *        )} view The alias, namespace path, or constructor of the page
-   *        view to manage.
+   * @param {Route} route A route instance that holds information about the
+   *        page we should manage.
    * @param {{
    *          onlyUpdate: (
    *            boolean|

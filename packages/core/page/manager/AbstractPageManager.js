@@ -128,7 +128,10 @@ export default class AbstractPageManager extends PageManager {
   /**
    * @inheritdoc
    */
-  async manage(controller, view, options, params = {}, action) {
+  async manage(route, options, params = {}, action) {
+    const controller = route.getController();
+    const view = route.getView();
+
     this._storeManagedPageSnapshot();
 
     if (this._hasOnlyUpdate(controller, view, options)) {
@@ -153,6 +156,7 @@ export default class AbstractPageManager extends PageManager {
     const newManagedPage = this._constructManagedPageValue(
       controller,
       view,
+      route,
       options,
       params,
       controllerInstance,
@@ -199,6 +203,7 @@ export default class AbstractPageManager extends PageManager {
    * @protected
    * @param {(string|function)} controller
    * @param {(string|function)} view
+   * @param {Route} route
    * @param {RouteOptions} options
    * @param {Object<string, string>} params The route parameters.
    * @param {AbstractController} controllerInstance
@@ -209,6 +214,7 @@ export default class AbstractPageManager extends PageManager {
   _constructManagedPageValue(
     controller,
     view,
+    route,
     options,
     params,
     controllerInstance,
@@ -221,6 +227,7 @@ export default class AbstractPageManager extends PageManager {
       decoratedController,
       view,
       viewInstance,
+      route,
       options,
       params,
       state: {
@@ -256,6 +263,7 @@ export default class AbstractPageManager extends PageManager {
       decoratedController: null,
       view: null,
       viewInstance: null,
+      route: null,
       options: null,
       params: null,
       state: {
@@ -272,14 +280,15 @@ export default class AbstractPageManager extends PageManager {
    * @returns {{
    *            controller: ?(string|function(new: Controller)),
    *            view: ?React.Component,
+   *            route: Route,
    *            options: ?RouteOptions,
    *            params: ?Object<string, string>
    *          }}
    */
   _stripManagedPageValueForPublic(value) {
-    const { controller, view, options, params } = value;
+    const { controller, view, route, options, params } = value;
 
-    return { controller, view, options, params };
+    return { controller, view, route, options, params };
   }
 
   /**
