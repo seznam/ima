@@ -13,8 +13,7 @@ export default class PageHandler {
    * @param {{
    *          type: string,
    *          event: Event,
-   *          url: string,
-   *          route: Route
+   *          url: string
    *        }} [action] An action object describing what triggered the routing.
    */
   handlePreManagedState() {}
@@ -29,8 +28,7 @@ export default class PageHandler {
    * @param {{
    *          type: string,
    *          event: Event,
-   *          url: string,
-   *          route: Route
+   *          url: string
    *        }} [action] An action object describing what triggered the routing.
    */
   handlePostManagedState() {}

@@ -41,8 +41,7 @@ export default class PageManager {
    * @param {{
    *          type: string,
    *          event: Event,
-   *          url: string,
-   *          route: Route
+   *          url: string
    *        }} [action] An action object describing what triggered the routing.
    * @return {Promise<{status: number, content: ?string, pageState: Object<string, *>
    *         }>} A promise that will resolve to information about the rendered page.
