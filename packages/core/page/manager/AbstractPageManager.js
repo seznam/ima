@@ -128,7 +128,7 @@ export default class AbstractPageManager extends PageManager {
   /**
    * @inheritdoc
    */
-  async manage(route, options, params = {}, action) {
+  async manage(route, options, params = {}, action = {}) {
     const controller = route.getController();
     const view = route.getView();
 
