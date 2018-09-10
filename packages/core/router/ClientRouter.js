@@ -275,7 +275,7 @@ export default class ClientRouter extends AbstractRouter {
     }
 
     event.preventDefault();
-    this.redirect(anchorHref, {}, ActionTypes.CLICK, event);
+    this.redirect(anchorHref, {}, { type: ActionTypes.CLICK, event });
   }
 
   /**
