@@ -1,7 +1,8 @@
 const gulp = require('gulp');
 const cache = require('gulp-cached');
 const flo = require('fb-flo');
-const gutil = require('gulp-util');
+const color = require('ansi-colors');
+const log = require('fancy-log');
 const remember = require('gulp-remember');
 const watch = require('gulp-watch');
 const path = require('path');
@@ -56,9 +57,7 @@ exports.default = gulpConfig => {
         glob: ['**/*.css', '**/*.js']
       },
       (filepath, callback) => {
-        gutil.log(
-          `Reloading 'public/${gutil.colors.cyan(filepath)}' with ` + 'flo...'
-        );
+        log(`Reloading 'public/${color.cyan(filepath)}' with ` + 'flo...');
 
         let hotReloadedContents = '';
 

@@ -14,7 +14,8 @@ const remember = require('gulp-remember');
 const save = require('gulp-save');
 const source = require('vinyl-source-stream');
 const sourcemaps = require('gulp-sourcemaps');
-const gutil = require('gulp-util');
+const through2 = require('through2');
+const PluginError = require('plugin-error');
 const uglifyEs = require('gulp-uglify-es').default;
 const buffer = require('vinyl-buffer');
 const clientify = require('ima-clientify').clientify;
@@ -74,7 +75,7 @@ exports.default = gulpConfig => {
       if (gulpConfig.legacyCompactMode) {
         return action;
       } else {
-        return gutil.noop();
+        return through2.obj();
       }
     }
 
@@ -90,7 +91,7 @@ exports.default = gulpConfig => {
           plugins: babelConfig.esApp.plugins
         });
       } else {
-        return gutil.noop();
+        return through2.obj();
       }
     }
 
@@ -302,7 +303,7 @@ exports.default = gulpConfig => {
                 ecma: 5
               })
             })
-          : gutil.noop()
+          : through2.obj()
       )
       .pipe(gulp.dest(files.vendor.dest.client));
   }
@@ -330,7 +331,7 @@ exports.default = gulpConfig => {
     return vendorEsBundle
       .bundle()
       .on('error', function(err) {
-        throw new gutil.PluginError('Es6ToEs5:vendor:client', err, {
+        throw new PluginError('Es6ToEs5:vendor:client', err, {
           showStack: true
         });
       })
@@ -339,7 +340,7 @@ exports.default = gulpConfig => {
       .pipe(
         !gulpConfig.$Debug
           ? uglifyEs({ compress: gulpConfig.uglifyCompression })
-          : gutil.noop()
+          : through2.obj()
       )
       .pipe(gulp.dest(files.vendor.dest.client));
   }

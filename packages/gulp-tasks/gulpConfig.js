@@ -218,8 +218,8 @@ exports.files = {
     js: {
       name: 'polyfill.js',
       src: [
-        './node_modules/babel-polyfill/dist/polyfill.min.js',
-        './node_modules/custom-event-polyfill/custom-event-polyfill.js'
+        './node_modules/@babel/polyfill/dist/polyfill.min.js',
+        './node_modules/custom-event-polyfill/polyfill.js'
       ],
       dest: {
         client: './build/static/js/'
@@ -236,7 +236,7 @@ exports.files = {
       name: 'fetch-polyfill.js',
       src: [
         './node_modules/core-js/client/shim.min.js',
-        './node_modules/whatwg-fetch/fetch.js'
+        './node_modules/whatwg-fetch/dist/fetch.umd.js'
       ],
       dest: {
         client: './build/static/js/'
