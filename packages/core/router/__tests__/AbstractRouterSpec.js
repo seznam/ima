@@ -421,7 +421,8 @@ describe('ima.router.AbstractRouter', () => {
         route: route,
         params: params,
         path: path,
-        options: options
+        options: options,
+        action: {}
       };
 
       spyOn(router, 'getPath').and.returnValue(path);
@@ -454,7 +455,8 @@ describe('ima.router.AbstractRouter', () => {
           params: params,
           path: path,
           response: response,
-          options: options
+          options: options,
+          action: {}
         };
 
         expect(dispatcher.fire).toHaveBeenCalledWith(
@@ -484,7 +486,8 @@ describe('ima.router.AbstractRouter', () => {
           params: params,
           path: path,
           response: Object.assign({}, response, params),
-          options: options
+          options: options,
+          action: {}
         };
 
         expect(dispatcher.fire).toHaveBeenCalledWith(
