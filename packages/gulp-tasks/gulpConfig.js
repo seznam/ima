@@ -27,8 +27,9 @@ try {
     }
   };
 }
-
-let vendorOptions = {
+sharedTasksState.watchMode = process.argv.some(arg => /^dev$/.test(arg));
+const isProduction = ['production', 'prod', 'test'].includes(process.env.NODE_ENV);
+const vendorOptions = {
   debug: false,
   insertGlobals: false,
   basedir: '.',
@@ -36,30 +37,58 @@ let vendorOptions = {
   packageCache: {},
   noParse: ['clone']
 };
+const esPlugins = [
+  'transform-react-constant-elements',
+  'transform-react-inline-elements',
+  'transform-react-remove-prop-types'
+];
+const baseBabelPlugins = [
+  'external-helpers',
+  ['transform-react-jsx', { useBuiltIns: true }]
+];
+
 let babelConfig = {
   esVendor: {
-    presets: ['react'],
-    plugins: [
-      'external-helpers',
-      ['transform-react-jsx', { useBuiltIns: true }]
+    transform: [
+        ['babelify', {
+          babelrc: false,
+          global: true,
+          presets: ['react'],
+          plugins: isProduction ? [].concat(baseBabelPlugins, esPlugins) : baseBabelPlugins
+        }],
+        ['loose-envify', {
+          NODE_ENV: process.env.NODE_ENV || 'development'
+        }],
+        ['ima-clientify']
     ],
+    plugin: sharedTasksState.watchMode ? [
+        ['watchify']
+    ] : [],
     options: Object.assign({}, vendorOptions)
   },
   vendor: {
-    presets: ['es2017', 'es2016', ['es2015', { loose: true }], 'react'],
-    plugins: [
-      'external-helpers',
-      ['transform-react-jsx', { useBuiltIns: true }]
+    transform: [
+      ['babelify', {
+        babelrc: false,
+        global: true,
+        presets: ['es2017', 'es2016', ['es2015', { loose: true }], 'react'],
+        plugins: baseBabelPlugins
+      }],
+      ['loose-envify', {
+        NODE_ENV: process.env.NODE_ENV || 'development'
+      }],
+      ['ima-clientify']
     ],
+    plugin: sharedTasksState.watchMode ? [
+      ['watchify']
+    ] : [],
     options: Object.assign({}, vendorOptions)
   },
   serverApp: {
     presets: ['react'],
     plugins: [
       'transform-es2015-modules-systemjs',
-      'external-helpers',
-      ['transform-react-jsx', { useBuiltIns: true }]
-    ]
+    ].concat(baseBabelPlugins)
   },
   esApp: {
     presets: [],
@@ -80,14 +109,8 @@ let babelConfig = {
 let $Debug = true;
 let legacyCompactMode = false;
 
-if (['production', 'prod', 'test'].includes(process.env.NODE_ENV)) {
-  const esPlugins = [
-    'transform-react-constant-elements',
-    'transform-react-inline-elements',
-    'transform-react-remove-prop-types'
-  ];
+if (isProduction) {
   babelConfig.esApp.plugins = babelConfig.esApp.plugins.concat(esPlugins);
-  babelConfig.esVendor.plugins = babelConfig.esVendor.plugins.concat(esPlugins);
   $Debug = false;
   legacyCompactMode = true;
 }
@@ -158,9 +181,7 @@ exports.files = {
       client: 'app.client.js',
       esClient: 'app.client.es.js'
     },
-    clearServerSide: ['production', 'prod', 'test'].includes(
-      process.env.NODE_ENV
-    ),
+    clearServerSide: isProduction,
     src: [].concat(appDependencies.js, appDependencies.mainjs),
     dest: {
       server: './build/ima/',
@@ -274,10 +295,6 @@ exports.files = {
 };
 
 exports.onTerminate = () => {
-  if (sharedTasksState.karmaServer) {
-    sharedTasksState.karmaServer.stop();
-  }
-
   setTimeout(() => {
     process.exit();
   });

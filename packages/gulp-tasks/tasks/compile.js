@@ -267,6 +267,18 @@ exports.default = gulpConfig => {
     })();
   }
 
+  function applyToBrowserifyBundle(method, config, bundle) {
+     return  config[method].reduce((bundle, item) => {
+          if (!item) {
+              return item;
+          }
+
+          let [name, ...rest] = item;
+
+          return bundle[method](name, ...rest);
+      }, bundle);
+  }
+
   function vendorClient() {
     if (!gulpConfig.legacyCompactMode) {
       return Promise.resolve();
@@ -276,20 +288,8 @@ exports.default = gulpConfig => {
 
     if (!vendorBundle) {
       vendorBundle = browserify(sourceFile, babelConfig.vendor.options)
-        .transform('babelify', {
-          babelrc: false,
-          global: true,
-          presets: babelConfig.vendor.presets,
-          plugins: babelConfig.vendor.plugins
-        })
-        .transform('loose-envify', {
-          NODE_ENV: process.env.NODE_ENV || 'development'
-        })
-        .transform('ima-clientify');
-
-      if (sharedTasksState.watchMode) {
-        vendorBundle.plugin([watchify]);
-      }
+      vendorBundle = applyToBrowserifyBundle('transform', babelConfig.vendor, vendorBundle);
+      vendorBundle = applyToBrowserifyBundle('plugin', babelConfig.vendor, vendorBundle);
     }
 
     return vendorBundle
@@ -312,20 +312,9 @@ exports.default = gulpConfig => {
     let sourceFile = files.vendor.dest.tmp + files.vendor.src.client;
 
     if (!vendorEsBundle) {
-      vendorEsBundle = browserify(sourceFile, babelConfig.esVendor.options)
-        .transform('babelify', {
-          babelrc: false,
-          presets: babelConfig.esVendor.presets,
-          plugins: babelConfig.esVendor.plugins
-        })
-        .transform('loose-envify', {
-          NODE_ENV: process.env.NODE_ENV || 'development'
-        })
-        .transform('ima-clientify');
-
-      if (sharedTasksState.watchMode) {
-        vendorEsBundle.plugin([watchify]);
-      }
+      vendorEsBundle = browserify(sourceFile, babelConfig.esVendor.options);
+      vendorEsBundle = applyToBrowserifyBundle('transform', babelConfig.esVendor, vendorEsBundle);
+      vendorEsBundle = applyToBrowserifyBundle('plugin', babelConfig.esVendor, vendorEsBundle);
     }
 
     return vendorEsBundle
