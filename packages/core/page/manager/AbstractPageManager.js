@@ -128,7 +128,7 @@ export default class AbstractPageManager extends PageManager {
   /**
    * @inheritdoc
    */
-  async manage(route, options, params = {}, action) {
+  async manage(route, options, params = {}, action = {}) {
     const controller = route.getController();
     const view = route.getView();
 
@@ -164,7 +164,6 @@ export default class AbstractPageManager extends PageManager {
 
     // Run pre-manage handlers before affecting anything
     await this._runPreManageHandlers(newManagedPage, action);
-    this._clearManagedPageValue();
 
     // Deactivate the old instances and clearing state
     this._deactivatePageSource();
@@ -172,6 +171,7 @@ export default class AbstractPageManager extends PageManager {
 
     this._pageStateManager.clear();
     this._clearComponentState(options);
+    this._clearManagedPageValue();
 
     // Store the new managedPage object and initialize controllers and
     // extensions
