@@ -151,8 +151,6 @@ export default class AbstractPageManager extends PageManager {
       controllerInstance
     );
     const viewInstance = pageFactory.createView(view);
-
-    this._clearManagedPageValue();
     const newManagedPage = this._constructManagedPageValue(
       controller,
       view,
@@ -166,6 +164,7 @@ export default class AbstractPageManager extends PageManager {
 
     // Run pre-manage handlers before affecting anything
     await this._runPreManageHandlers(newManagedPage, action);
+    this._clearManagedPageValue();
 
     // Deactivate the old instances and clearing state
     this._deactivatePageSource();
@@ -682,8 +681,10 @@ export default class AbstractPageManager extends PageManager {
    */
   async _runPreManageHandlers(nextManagedPage, action) {
     return this._pageHandlerRegistry.handlePreManagedState(
-      nextManagedPage,
-      this._managedPage,
+      this._stripManagedPageValueForPublic(nextManagedPage),
+      this._managedPage.controller
+        ? this._stripManagedPageValueForPublic(this._managedPage)
+        : null,
       action
     );
   }
@@ -696,8 +697,10 @@ export default class AbstractPageManager extends PageManager {
    */
   _runPostManageHandlers(previousManagedPage, action) {
     return this._pageHandlerRegistry.handlePostManagedState(
-      previousManagedPage,
-      this._managedPage,
+      this._stripManagedPageValueForPublic(previousManagedPage),
+      this._managedPage.controller
+        ? this._stripManagedPageValueForPublic(this._managedPage)
+        : null,
       action
     );
   }

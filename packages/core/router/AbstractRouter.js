@@ -374,7 +374,7 @@ export default class AbstractRouter extends Router {
    *         page is rendered and the result is sent to the client, or
    *         displayed if used at the client side.
    */
-  _handle(route, params, options, action) {
+  _handle(route, params, options, action = {}) {
     options = Object.assign({}, route.getOptions(), options);
     const eventData = { route, params, path: this.getPath(), options, action };
 

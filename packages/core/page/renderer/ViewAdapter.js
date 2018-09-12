@@ -1,6 +1,6 @@
 import PropTypes from 'prop-types';
 import React from 'react';
-import { Provider } from './Context';
+import { Provider } from '../context';
 
 /**
  * An adapter component providing the current page controller's state to the

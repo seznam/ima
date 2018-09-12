@@ -1,0 +1,50 @@
+{% include header.html %}
+<div id="doc" class="is-flex">
+	<div>
+		<div class="field">
+			<p class="control has-icons-left">
+				<input id="search" class="input" type="text" placeholder="Search...">
+				<span class="icon is-small is-left">
+					<i class="fas fa-search"></i>
+				</span>
+			</p>
+		</div>
+		<aside id="results" class="menu hidden">
+			<div class="level">
+				<div class="level-left">
+					<div class="level-item">
+						Results found:&nbsp;<span id="results-count" class="has-text-weight-bold">0</span>
+					</div>
+				</div>
+				<div class="level-right">
+					<div class="level-item">
+						<button id="results-close" class="delete"></button>
+					</div>
+				</div>
+			</div>
+			<ul id="results-list" class="menu-list"></ul>
+		</aside>
+		<aside id="menu" class="menu">
+				{% for category in site.categories %}
+				<p class="menu-label">{{ category | first }}</p>
+				<ul class="menu-list">
+					{% assign sorted_posts = category[1] | sort: 'title' %}
+					{% for post in sorted_posts %}
+						{% if post.url %}
+							<li>
+								<a href="{{ post.url | relative_url }}"{% if post.url == page.url %}class="is-active"{% endif %}>{{ post.title }}</a>
+							</li>
+						{% endif %}
+					{% endfor %}
+				</ul>
+				{% endfor %}
+			</ul>
+		</aside>
+	</div>
+	<div class="content">
+		{{ content }}
+	</div>
+	<script src="{{ '/js/lunr.js?v=' | append: site.github.build_revision | relative_url }}"></script>
+	<script src="{{ '/js/search.js?v=' | append: site.github.build_revision | relative_url }}" async></script>
+</div>
+{% include footer.html %}
