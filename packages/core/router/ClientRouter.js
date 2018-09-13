@@ -127,7 +127,15 @@ export default class ClientRouter extends AbstractRouter {
     let eventName = Events.POP_STATE;
     this._window.bindEventListener(nativeWindow, eventName, event => {
       if (event.state && !event.defaultPrevented) {
-        this.route(this.getPath(), {}, { type: ActionTypes.POP_STATE, event });
+        this.route(
+          this.getPath(),
+          {},
+          {
+            type: ActionTypes.POP_STATE,
+            event,
+            url: this.getUrl()
+          }
+        );
       }
     });
 
@@ -275,7 +283,11 @@ export default class ClientRouter extends AbstractRouter {
     }
 
     event.preventDefault();
-    this.redirect(anchorHref, {}, { type: ActionTypes.CLICK, event });
+    this.redirect(
+      anchorHref,
+      {},
+      { type: ActionTypes.CLICK, event, url: anchorHref }
+    );
   }
 
   /**

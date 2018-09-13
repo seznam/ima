@@ -108,6 +108,7 @@ export default class AbstractRouter extends Router {
     this._root = config.$Root || '';
     this._languagePartPath = config.$LanguagePartPath || '';
     this._host = config.$Host;
+    this._currentlyRoutedPath = this.getPath();
   }
 
   /**
@@ -246,6 +247,7 @@ export default class AbstractRouter extends Router {
    * @inheritdoc
    */
   route(path, options = {}, action) {
+    this._currentlyRoutedPath = path;
     let routeForPath = this._getRouteByPath(path);
     let params = {};
 
@@ -376,7 +378,13 @@ export default class AbstractRouter extends Router {
    */
   _handle(route, params, options, action = {}) {
     options = Object.assign({}, route.getOptions(), options);
-    const eventData = { route, params, path: this.getPath(), options, action };
+    const eventData = {
+      route,
+      params,
+      path: this._getCurrentlyRoutedPath(),
+      options,
+      action
+    };
 
     this._dispatcher.fire(Events.BEFORE_HANDLE_ROUTE, eventData, true);
 
@@ -413,5 +421,15 @@ export default class AbstractRouter extends Router {
     }
 
     return null;
+  }
+
+  /**
+   * Returns path that is stored in private property when a {@code route}
+   * method is called.
+   *
+   * @returns {string}
+   */
+  _getCurrentlyRoutedPath() {
+    return this._currentlyRoutedPath;
   }
 }

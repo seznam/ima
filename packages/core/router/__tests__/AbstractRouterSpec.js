@@ -27,11 +27,9 @@ describe('ima.router.AbstractRouter', () => {
     viewAdapter: null
   };
   let action = {
-    type: ActionTypes.REDIRECT,
-    options,
-    route: null,
-    params: {}
+    type: ActionTypes.REDIRECT
   };
+  let currentRoutePath = '/currentRoutePath';
   let Controller = function Controller() {};
   let View = function View() {};
 
@@ -40,6 +38,8 @@ describe('ima.router.AbstractRouter', () => {
     routeFactory = new RouteFactory();
     dispatcher = new Dispatcher();
     router = new AbstractRouter(pageManager, routeFactory, dispatcher);
+
+    spyOn(router, 'getPath').and.returnValue(currentRoutePath);
 
     router.init(config);
 
@@ -58,9 +58,9 @@ describe('ima.router.AbstractRouter', () => {
   });
 
   it('should return absolute current url', () => {
-    spyOn(router, 'getPath').and.returnValue('/path');
-
-    expect(router.getUrl()).toEqual('http://www.domain.com/root/path');
+    expect(router.getUrl()).toEqual(
+      'http://www.domain.com/root/currentRoutePath'
+    );
   });
 
   it('should return base url of application', () => {
@@ -83,11 +83,11 @@ describe('ima.router.AbstractRouter', () => {
     it('should create new ima.Route', () => {
       spyOn(routeFactory, 'createRoute').and.callThrough();
 
-      router.add('routeName', '/routePath', Controller, View, options);
+      router.add('routeName', '/newRoutePath', Controller, View, options);
 
       expect(routeFactory.createRoute).toHaveBeenCalledWith(
         'routeName',
-        '/routePath',
+        '/newRoutePath',
         Controller,
         View,
         options
@@ -115,8 +115,8 @@ describe('ima.router.AbstractRouter', () => {
       route = null;
     });
 
-    it('should throw error for not exist route', () => {
-      spyOn(router, 'getPath').and.returnValue(null);
+    it('should throw error for not existing route', () => {
+      router.getPath.and.returnValue(null);
 
       expect(() => {
         router.getCurrentRouteInfo();
@@ -124,15 +124,11 @@ describe('ima.router.AbstractRouter', () => {
     });
 
     it('should return current route information', () => {
-      spyOn(router, 'getPath').and.returnValue(path);
+      router.getPath.and.returnValue(path);
       spyOn(router, '_getRouteByPath').and.returnValue(route);
       spyOn(route, 'extractParameters').and.returnValue(params);
 
-      expect(router.getCurrentRouteInfo()).toEqual({
-        route: route,
-        params: params,
-        path: '/link'
-      });
+      expect(router.getCurrentRouteInfo()).toEqual({ route, params, path });
     });
   });
 
@@ -194,6 +190,7 @@ describe('ima.router.AbstractRouter', () => {
       router.route(path, options, action);
 
       expect(route.extractParameters).toHaveBeenCalled();
+      expect(router._currentlyRoutedPath).toBe(path);
       expect(router._handle).toHaveBeenCalledWith(route, {}, options, action);
     });
 
@@ -387,8 +384,7 @@ describe('ima.router.AbstractRouter', () => {
         View,
         options
       );
-      action.route = route;
-      action.path = routePath;
+      spyOn(router, '_getCurrentlyRoutedPath').and.returnValue(routePath);
     });
 
     afterEach(() => {
@@ -396,7 +392,7 @@ describe('ima.router.AbstractRouter', () => {
     });
 
     it('should call paga manager', done => {
-      spyOn(router, 'getPath').and.returnValue(routePath);
+      router.getPath.and.returnValue(routePath);
       spyOn(pageManager, 'manage').and.returnValue(
         Promise.resolve({ content: null, status: 200 })
       );
@@ -416,16 +412,15 @@ describe('ima.router.AbstractRouter', () => {
     it('should fire ns.ima.EVENTS.BEFORE_HANDLE_ROUTE', () => {
       let response = { content: null, status: 200 };
       let params = {};
-      let path = '/';
       let data = {
         route: route,
         params: params,
-        path: path,
+        path: routePath,
         options: options,
         action: {}
       };
 
-      spyOn(router, 'getPath').and.returnValue(path);
+      router.getPath.and.returnValue(routePath);
       spyOn(pageManager, 'manage').and.returnValue(Promise.resolve(response));
       spyOn(dispatcher, 'fire').and.stub();
 
@@ -441,9 +436,8 @@ describe('ima.router.AbstractRouter', () => {
     it('should fire ns.ima.EVENTS.AFTER_HANDLE_ROUTE', done => {
       let response = { content: null, status: 200 };
       let params = {};
-      let path = '/';
 
-      spyOn(router, 'getPath').and.returnValue(path);
+      router.getPath.and.returnValue(routePath);
       spyOn(pageManager, 'manage').and.returnValue(
         Promise.resolve(Object.assign({}, response))
       );
@@ -453,7 +447,7 @@ describe('ima.router.AbstractRouter', () => {
         let data = {
           route: route,
           params: params,
-          path: path,
+          path: routePath,
           response: response,
           options: options,
           action: {}
@@ -472,9 +466,8 @@ describe('ima.router.AbstractRouter', () => {
     it('should fire ns.ima.EVENTS.AFTER_HANDLE_ROUTE with error', done => {
       let response = { content: null, status: 200 };
       let params = { error: new Error('test') };
-      let path = '/';
 
-      spyOn(router, 'getPath').and.returnValue(path);
+      router.getPath.and.returnValue(routePath);
       spyOn(pageManager, 'manage').and.returnValue(
         Promise.resolve(Object.assign({}, response))
       );
@@ -484,7 +477,7 @@ describe('ima.router.AbstractRouter', () => {
         let data = {
           route: route,
           params: params,
-          path: path,
+          path: routePath,
           response: Object.assign({}, response, params),
           options: options,
           action: {}
@@ -503,9 +496,8 @@ describe('ima.router.AbstractRouter', () => {
     it('should return response', done => {
       let response = { content: null, status: 200 };
       let params = {};
-      let path = '/';
 
-      spyOn(router, 'getPath').and.returnValue(path);
+      router.getPath.and.returnValue(routePath);
       spyOn(pageManager, 'manage').and.returnValue(
         Promise.resolve(Object.assign({}, response))
       );
@@ -519,9 +511,8 @@ describe('ima.router.AbstractRouter', () => {
     it('should return response with handled error', done => {
       let response = { content: null, status: 500 };
       let params = { error: new Error('test') };
-      let path = '/';
 
-      spyOn(router, 'getPath').and.returnValue(path);
+      router.getPath.and.returnValue(routePath);
 
       spyOn(pageManager, 'manage').and.returnValue(
         Promise.resolve(Object.assign({}, response))
@@ -542,6 +533,7 @@ describe('ima.router.AbstractRouter', () => {
 
     beforeEach(() => {
       router = new AbstractRouter(pageManager, routeFactory, dispatcher);
+      spyOn(router, 'getPath').and.returnValue(path);
     });
 
     it('should clear root from path', () => {
