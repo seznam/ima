@@ -20,10 +20,13 @@ describe('ima.router.ClientRouter', () => {
     window = new Window();
     router = new ClientRouter(pageRenderer, routeFactory, dispatcher, window);
 
+    spyOn(router, 'getPath').and.returnValue('/routePath');
+
     router.init({ $Host: host, $Protocol: protocol });
   });
 
   it('should be return actual path', () => {
+    router.getPath.and.callThrough();
     spyOn(window, 'getPath').and.returnValue('');
 
     router.getPath();
