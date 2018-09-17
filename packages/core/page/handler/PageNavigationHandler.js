@@ -43,6 +43,8 @@ export default class PageNavigationHandler extends PageManagerHandler {
     const { event } = action;
 
     if (!event || !event.state || !event.state.scroll) {
+      this._scrollTo({ x: 0, y: 0 });
+
       return;
     }
 
