@@ -63,7 +63,7 @@ describe('ima.page.handler.PageNavigationHandler', () => {
       expect(window.scrollTo).toHaveBeenCalledWith(scroll.x, scroll.y);
     });
 
-    it('should scroll to top of page for undefined scroll position', () => {
+    it('should scroll to the top of page for undefined scroll position', () => {
       spyOn(window, 'scrollTo').and.stub();
 
       const scroll = { x: 0, y: 0 };
