@@ -45,7 +45,7 @@ client-side-specific APIs.
 
 * * *
 
-### pageNavigationHandler._saveScrollHistory()&nbsp;<a name="PageNavigationHandler+_saveScrollHistory" href="https://github.com/seznam/IMA.js-core/tree/stable/page/handler/PageNavigationHandler.js#L58" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a>
+### pageNavigationHandler._saveScrollHistory()&nbsp;<a name="PageNavigationHandler+_saveScrollHistory" href="https://github.com/seznam/IMA.js-core/tree/stable/page/handler/PageNavigationHandler.js#L60" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a>
 Save user's scroll state to history.
 
 Replace scroll values in current state for actual scroll values in
@@ -55,7 +55,7 @@ document.
 
 * * *
 
-### pageNavigationHandler._scrollTo(scroll)&nbsp;<a name="PageNavigationHandler+_scrollTo" href="https://github.com/seznam/IMA.js-core/tree/stable/page/handler/PageNavigationHandler.js#L79" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a>
+### pageNavigationHandler._scrollTo(scroll)&nbsp;<a name="PageNavigationHandler+_scrollTo" href="https://github.com/seznam/IMA.js-core/tree/stable/page/handler/PageNavigationHandler.js#L81" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a>
 Scrolls to give coordinates on a page.
 
 **Kind**: instance method of [<code>PageNavigationHandler</code>](#PageNavigationHandler)  
@@ -69,7 +69,7 @@ Scrolls to give coordinates on a page.
 
 * * *
 
-### pageNavigationHandler._setAddressBar(url)&nbsp;<a name="PageNavigationHandler+_setAddressBar" href="https://github.com/seznam/IMA.js-core/tree/stable/page/handler/PageNavigationHandler.js#L95" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a>
+### pageNavigationHandler._setAddressBar(url)&nbsp;<a name="PageNavigationHandler+_setAddressBar" href="https://github.com/seznam/IMA.js-core/tree/stable/page/handler/PageNavigationHandler.js#L97" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a>
 Sets the provided URL to the browser's address bar by pushing a new
 state to the history.
 
