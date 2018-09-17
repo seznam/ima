@@ -24,15 +24,15 @@ export default class PageHandlerRegistry extends PageHandler {
   /**
    * Executes the pre-manage handlers with given arguments
    *
-   * @param {ManagedPage} nextManagedPage
-   * @param {ManagedPage} managedPage
-   * @param {{ type: string, payload: Object|Event}} action
+   * @param {?ManagedPage} managedPage
+   * @param {?ManagedPage} nextManagedPage
+   * @param {{ type: string, event: Event, url: string }} action
    * @return {Promise<any>}
    */
-  handlePreManagedState(nextManagedPage, managedPage, action) {
+  handlePreManagedState(managedPage, nextManagedPage, action) {
     return this._preManageHandlers.execute(
-      nextManagedPage,
       managedPage,
+      nextManagedPage,
       action
     );
   }
@@ -40,15 +40,15 @@ export default class PageHandlerRegistry extends PageHandler {
   /**
    * Executes the post-manage handlers with given arguments
    *
-   * @param {ManagedPage} previousManagedPage
-   * @param {ManagedPage} managedPage
-   * @param {{ type: string, payload: Object|Event}} action
+   * @param {?ManagedPage} managedPage
+   * @param {?ManagedPage} previousManagedPage
+   * @param {{ type: string, event: Event, url: string }} action
    * @return {Promise<any>}
    */
-  handlePostManagedState(previousManagedPage, managedPage, action) {
+  handlePostManagedState(managedPage, previousManagedPage, action) {
     return this._postManageHandlers.execute(
-      previousManagedPage,
       managedPage,
+      previousManagedPage,
       action
     );
   }

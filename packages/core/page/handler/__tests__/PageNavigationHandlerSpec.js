@@ -1,5 +1,6 @@
 import PageNavigationHandler from 'page/handler/PageNavigationHandler';
 import Window from 'window/Window';
+import { ActionTypes } from 'router/ClientRouter';
 
 jest.useFakeTimers();
 
@@ -17,10 +18,34 @@ describe('ima.page.handler.PageNavigationHandler', () => {
       const replaceStateMock = spyOn(window, 'replaceState');
       const pushStateMock = spyOn(window, 'pushState').and.stub();
 
-      handler.handlePreManagedState(null, null, { url: 'http://localhost/' });
+      handler.handlePreManagedState({}, {}, { url: 'http://localhost/' });
 
       expect(replaceStateMock).toHaveBeenCalled();
       expect(pushStateMock).toHaveBeenCalled();
+    });
+
+    it('should not call window.pushState after loading page because url is set alright from browser', () => {
+      const replaceStateMock = spyOn(window, 'replaceState');
+      const pushStateMock = spyOn(window, 'pushState').and.stub();
+
+      handler.handlePreManagedState(null, {}, { url: 'http://localhost/' });
+
+      expect(replaceStateMock).not.toHaveBeenCalled();
+      expect(pushStateMock).not.toHaveBeenCalled();
+    });
+
+    it('should not call window.pushState after POP_STATE action because url is set alright from browser', () => {
+      const replaceStateMock = spyOn(window, 'replaceState');
+      const pushStateMock = spyOn(window, 'pushState').and.stub();
+
+      handler.handlePreManagedState(
+        null,
+        {},
+        { url: 'http://localhost/', action: ActionTypes.POP_STATE }
+      );
+
+      expect(replaceStateMock).not.toHaveBeenCalled();
+      expect(pushStateMock).not.toHaveBeenCalled();
     });
   });
 

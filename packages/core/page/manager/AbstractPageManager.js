@@ -676,15 +676,15 @@ export default class AbstractPageManager extends PageManager {
    *
    * @protected
    * @param {ManagedPage} nextManagedPage
-   * @param {{ type: string, payload: Object|Event}}
+   * @param {{ type: string, event: Event}}
    * @returns {Promise<any>}
    */
   async _runPreManageHandlers(nextManagedPage, action) {
     return this._pageHandlerRegistry.handlePreManagedState(
-      this._stripManagedPageValueForPublic(nextManagedPage),
       this._managedPage.controller
         ? this._stripManagedPageValueForPublic(this._managedPage)
         : null,
+      this._stripManagedPageValueForPublic(nextManagedPage) || null,
       action
     );
   }
@@ -694,13 +694,15 @@ export default class AbstractPageManager extends PageManager {
    *
    * @protected
    * @param {ManagedPage} previousManagedPage
+   * @param {{ type: string, event: Event}}
+   * @returns {Promise<any>}
    */
   _runPostManageHandlers(previousManagedPage, action) {
     return this._pageHandlerRegistry.handlePostManagedState(
-      this._stripManagedPageValueForPublic(previousManagedPage),
       this._managedPage.controller
         ? this._stripManagedPageValueForPublic(this._managedPage)
         : null,
+      this._stripManagedPageValueForPublic(previousManagedPage) || null,
       action
     );
   }

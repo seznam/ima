@@ -1,5 +1,6 @@
 import PageManagerHandler from './PageHandler';
 import Window from '../../window/Window';
+import { ActionTypes } from '../../router/ClientRouter';
 
 /**
  *
@@ -28,15 +29,17 @@ export default class PageNavigationHandler extends PageManagerHandler {
   /**
    * @inheritDoc
    */
-  handlePreManagedState(previousManagedPage, managedPage, action) {
-    this._saveScrollHistory();
-    this._setAddressBar(action.url);
+  handlePreManagedState(managedPage, nextManagedState, action) {
+    if (managedPage && action && action.type !== ActionTypes.POP_STATE) {
+      this._saveScrollHistory();
+      this._setAddressBar(action.url);
+    }
   }
 
   /**
    * @inheritDoc
    */
-  handlePostManagedState(previousManagedPage, managedPage, action) {
+  handlePostManagedState(managedPage, previousManagedPage, action) {
     const { event } = action;
 
     if (!event || !event.state || !event.state.scroll) {
