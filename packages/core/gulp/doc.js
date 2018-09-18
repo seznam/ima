@@ -154,9 +154,13 @@ function generate(done) {
             item.kind === 'constructor'
               ? `new_${item.name}_new`
               : item.id.replace('#', '+');
+          const textValues = new Set([item.memberof, item.name, name]);
+          if (item.augments) {
+            item.augments.forEach(augment => textValues.add(augment));
+          }
           lunrDocuments.push({
             name,
-            text: [item.memberof, item.name, name].filter(value => !!value),
+            text: Array.from(textValues.values()).filter(value => !!value),
             url: `${urlPrefix}/${filename}.html#${hash}`
           });
 
