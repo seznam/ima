@@ -173,12 +173,11 @@ function generate(done) {
       })
     )
     .on('end', () => {
+      const lunrFile = `${dir.docData}lunr.json`;
+
       fs.ensureDirSync(dir.docData);
-      fs.emptyDirSync(dir.docData);
-      fs.writeFileSync(
-        `${dir.docData}lunr.json`,
-        JSON.stringify(lunrDocuments)
-      );
+      fs.removeSync(lunrFile);
+      fs.writeFileSync(lunrFile, JSON.stringify(lunrDocuments));
       done();
     });
 }

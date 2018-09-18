@@ -1,60 +1,17 @@
 <!DOCTYPE html>
 <html lang="en">
-	<head>
-		<meta charset="UTF-8">
-		<meta name="viewport" content="width=device-width, initial-scale=1">
-		<title>{{ site.github.repository_name }}</title>
-		<link rel="stylesheet" href="{{ '/css/all.min.css?v='| append: site.github.build_revision | relative_url }}">
-		<link rel="stylesheet" href="{{ '/css/style.css?v=' | append: site.github.build_revision | relative_url }}">
-	</head>
-	<body>
-		<div id="root">
-			<nav class="level">
-				<p class="level-item is-narrow has-text-centered">
-					<a href="{{ '/'  | relative_url }}" class="has-text-primary">Home</a>
-				</p>
-				<p class="level-item is-narrow has-text-centered">
-					<a
-						href="{{ 'examples'  | relative_url }}"
-						title="Check out our demos and learn by example."
-						class="has-text-primary">
-						Examples
-					</a>
-				</p>
-				<p class="level-item is-narrow has-text-centered">
-					<a
-						href="https://github.com/seznam/IMA.js-skeleton/blob/master/README.md"
-						title="Seen enough already? Click here to get started."
-						target="_blank"
-						class="has-text-primary">
-						Quick Start
-					</a>
-				</p>
-				<p class="level-item is-narrow has-text-centered">
-					<a
-						href="https://github.com/seznam/IMA.js-skeleton/wiki/Tutorial,-part-1"
-						title="Start by learning the basics and master the art of building an IMA.js web application."
-						target="_blank"
-						class="has-text-primary">
-						Tutorial
-					</a>
-				</p>
-				<p class="level-item is-narrow has-text-centered">
-					<a
-						href="{{ 'doc'  | relative_url }}"
-						title="Browse through the documentation for details on code usage."
-						class="has-text-primary">
-						Documentation
-					</a>
-				</p>
-				<p class="level-item is-narrow has-text-centered">
-					<a
-						href="https://github.com/seznam/IMA.js-skeleton/archive/master.zip"
-						title="Get the latest release as a ZIP archive."
-						target="_blank"
-						class="has-text-primary">
-						Download
-					</a>
-				</p>
-			</nav>
-			<article>
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>{{ site.github.repository_name }}</title>
+    <link rel="stylesheet" href="{{ '/css/all.min.css?v='| append: site.github.build_revision | relative_url }}">
+    <link rel="stylesheet" href="{{ '/css/style.css?v=' | append: site.github.build_revision | relative_url }}">
+  </head>
+  <body>
+    <div id="root">
+      <nav id="menu" class="level">
+        {% for item in site.data.menu %}
+          {% include menu-item.html text=item.text title=item.title url=item.url %}
+        {% endfor %}
+      </nav>
+      <article>

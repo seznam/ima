@@ -13,3 +13,4 @@ defaults:
       type: "posts"
     values:
       layout: "doc"
+      menuUrl: "doc"
