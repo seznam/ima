@@ -24,6 +24,13 @@ export default class PageNavigationHandler extends PageManagerHandler {
      * @type {ima.window.Window}
      */
     this._window = window;
+
+    // Setup history object to leave the scrolling to us and to not interfere
+    const browserWindow = window.getWindow();
+
+    if ('scrollRestoration' in browserWindow.history) {
+      browserWindow.history.scrollRestoration = 'manual';
+    }
   }
 
   /**
