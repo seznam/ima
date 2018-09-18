@@ -1,0 +1,14 @@
+[
+  {
+    "text": "Use the familiar MVC pattern in combination with React for rendering your UI. See [Hello](https://github.com/seznam/IMA.js-examples/tree/master/hello){:target=\"_blank\"} example.",
+    "title": "Production-ready Full Application Stack"
+  },
+  {
+    "text": "IMA.js comes with a built-in [router](doc/router/router-abstract-router.html) for processing GET and POST HTTP requests.",
+    "title": "Routing"
+  },
+  {
+    "text": "ES2015 (JSX Harmony), Gulp, flo, Live Reaload and other [technologies](#technologies).",
+    "title": "Bleeding Edge Technologies"
+  }
+]

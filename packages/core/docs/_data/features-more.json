@@ -1,0 +1,26 @@
+[
+  {
+    "text": "Application can be switched between [IMA, SPA and MPA modes](https://github.com/seznam/IMA.js-examples/blob/master/hello/environment.js#L42-L52){:target=\"_blank\"} or combine them."
+  },
+  {
+    "text": "[Configuration](https://github.com/seznam/IMA.js-examples/blob/master/hello/environment.js){:target=\"_blank\"} for all your environments in one place with inheritance."
+  },
+  {
+    "text": "Out-of-box [configurable server-side caching](https://github.com/seznam/IMA.js-examples/blob/master/hello/environment.js#L53-L65){:target=\"_blank\"}."
+  },
+  {
+    "text": "Out-of-box REST API [localhost proxy](https://github.com/seznam/IMA.js-skeleton/blob/master/server/server.js#L116){:target=\"_blank\"} with communication logging."
+  },
+  {
+    "text": "[REST API cache](https://github.com/seznam/IMA.js-examples/blob/master/hello/config/settings.js#L6-L20){:target=\"_blank\"}."
+  },
+  {
+    "text": "Advanced error handling for greater stability and faster development."
+  },
+  {
+    "text": "High-fidelity debug mode."
+  },
+  {
+    "text": "[Dependency injection](doc/general/object-container.html)."
+  }
+]

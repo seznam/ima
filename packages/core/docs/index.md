@@ -15,68 +15,29 @@
 </div>
 {% include separator.html icon="fa-star" %}
 <h2 class="title has-text-centered">Features</h2>
-<div class="columns">
-  <div class="column">
-    <h3 class="title is-4">Fully Isomorphic</h3>
-    <p>
-      Write and run the same code at both the server side and the client side! IMA.js provides abstraction for APIs that differ at the client side javascript and the server side javascript.
-    </p>
+<div id="features">
+  <div class="columns">
+    {% for feature in site.data.features-0 %}
+      {% include feature.html text=feature.text title=feature.title %}
+    {% endfor %}
   </div>
-  <div class="column">
-    <h3 class="title is-4">SEO</h3>
-    <p>
-      Page metadata are centrally managed, allowing easier <a href="{{ '/doc/meta/meta-meta-manager-impl.html' | relative_url }}">management</a> of all your keywords and og meta-tags.
-    </p>
+  <div class="columns">
+    {% for feature in site.data.features-1 %}
+      {% include feature.html text=feature.text title=feature.title %}
+    {% endfor %}
   </div>
-  <div class="column">
-    <h3 class="title is-4">Benchmarks and Tests</h3>
-    <p>
-      Real-world heavy-load web services are run on the IMA.js platform. With hundreds of <a href="https://github.com/seznam/IMA.js-core" target="_blank">unit tests</a> covering all of our code, you can rely on IMA.js to be a stable base of your application.
-    </p>
-  </div>
+  <h3 class="title has-text-centered is-size-4">
+    <span>...and more</span>
+    <span class="icon">
+      <i class="fas fa-caret-down has-text-primary"></i>
+    </span>
+  </h3>
+  <ul class="has-text-centered">
+    {% for feature in site.data.features-more %}
+      {% include feature-more.html text=feature.text %}
+    {% endfor %}
+  </ul>
 </div>
-<div class="columns">
-  <div class="column">
-    <h3 class="title is-4">Production-ready Full Application Stack</h3>
-    <p>
-      Use the familiar MVC pattern in combination with React for rendering your UI. See <a href="https://github.com/seznam/IMA.js-examples/tree/master/hello" target="_blank">Hello</a> example.
-    </p>
-  </div>
-  <div class="column">
-    <h3 class="title is-4">Routing</h3>
-    <p>
-      IMA.js comes with a built-in <a href="{{ '/doc/router/router-abstract-router.html' | relative_url }}">router</a> for processing GET and POST HTTP requests.
-    </p>
-  </div>
-  <div class="column">
-    <h3 class="title is-4">Bleeding Edge Technologies</h3>
-    <p>
-      ES2015 (JSX Harmony), Gulp, flo, Live Reaload and other <a href="#technologies">technologies</a>.
-    </p>
-  </div>
-</div>
-<h3 class="title has-text-centered">
-  <span>...and more</span>
-  <span class="icon">
-    <i class="fas fa-caret-down"></i>
-  </span>
-</h3>
-<ul class="has-text-centered">
-  <li>
-    <i class="fas fa-asterisk has-text-primary"></i>&nbsp;Application can be switched between <a href="https://github.com/seznam/IMA.js-examples/blob/master/hello/environment.js#L42-L52" target="_blank">IMA, SPA and MPA modes</a> or combine them.
-  </li>
-  <li>
-    <i class="fas fa-asterisk has-text-primary"></i>&nbsp;<a href="https://github.com/seznam/IMA.js-examples/blob/master/hello/environment.js" target="_blank">Configuration</a> for all your environments in one place with inheritance.
-  </li>
-  <li>
-    <i class="fas fa-asterisk has-text-primary"></i>&nbsp;Out-of-box <a href="https://github.com/seznam/IMA.js-examples/blob/master/hello/environment.js#L53-L65" target="_blank">configurable server-side caching</a>.
-  </li>
-  <li><i class="fas fa-asterisk has-text-primary"></i>&nbsp;Out-of-box REST API <a href="https://github.com/seznam/IMA.js-server/blob/master/lib/proxy.js" target="_blank">localhost proxy</a> with communication logging.</li>
-  <li><i class="fas fa-asterisk has-text-primary"></i>&nbsp;<a href="https://github.com/seznam/IMA.js-examples/blob/master/hello/config/settings.js#L6-L20" target="_blank">REST API cache</a>.</li>
-  <li><i class="fas fa-asterisk has-text-primary"></i>&nbsp;Advanced error handling for greater stability and faster development.</li>
-  <li><i class="fas fa-asterisk has-text-primary"></i>&nbsp;High-fidelity debug mode.</li>
-  <li><i class="fas fa-asterisk has-text-primary"></i>&nbsp;<a href="{{ '/doc/general/object-container.html' | relative_url }}">Dependency injection</a>.</li>
-</ul>
 {% include separator.html icon="fa-newspaper" %}
 <h2 class="title has-text-centered">References</h2>
 <div class="columns">
@@ -247,7 +208,7 @@
   <strong>SPA</strong> runs as single-page application.
 </p>
 {% include separator.html icon="fa-wrench" %}
-<h2 class="title has-text-centered">Used Technologies</h2>
+<h2 id="technologies" class="title has-text-centered">Used Technologies</h2>
 <div class="is-flex">
   <a href="https://nodejs.org/" title="NodeJS" target="_blank">
     <img src="{{ '/img/technologies/nodejs.png?v=' | append: site.github.build_revision | relative_url }}" alt="NodeJS"/>

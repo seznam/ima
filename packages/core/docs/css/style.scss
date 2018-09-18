@@ -14,9 +14,25 @@
 	}
 }
 
+#features {
+	.columns {
+		margin: 0 auto;
+		max-width: 64rem;
+	}
+
+	li {
+		margin-bottom: 0.5rem;
+
+		p {
+			display: inline-block;
+			margin-left: 0.25rem;
+		}
+	}
+}
+
 #menu {
 	justify-content: space-around;
-	
+
 	.is-active {
 		border-bottom: 2px solid $red;
 	}

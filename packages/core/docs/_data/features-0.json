@@ -1,0 +1,14 @@
+[
+  {
+    "text": "Write and run the same code at both the server side and the client side! IMA.js provides abstraction for APIs that differ at the client side javascript and the server side javascript.",
+    "title": "Fully Isomorphic"
+  },
+  {
+    "text": "Page metadata are centrally managed, allowing easier [management](doc/meta/meta-meta-manager-impl.html) of all your keywords and og meta-tags.",
+    "title": "SEO"
+  },
+  {
+    "text": "Real-world heavy-load web services are run on the IMA.js platform. With hundreds of [unit tests](https://github.com/seznam/IMA.js-core){:target=\"_blank\"} covering all of our code, you can rely on IMA.js to be a stable base of your application.",
+    "title": "Benchmarks and Tests"
+  }
+]
