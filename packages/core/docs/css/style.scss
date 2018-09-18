@@ -30,18 +30,6 @@
 	}
 }
 
-#menu {
-	justify-content: space-around;
-
-	.is-active {
-		border-bottom: 2px solid $red;
-	}
-}
-
-#root {
-	margin: 1.5rem;
-}
-
 .card {
 	margin-right: 1rem;
 
@@ -64,10 +52,6 @@
 	.card {
 		margin: 0;
 	}
-}
-
-.footer {
-	margin-top: 3rem;
 }
 
 .hidden {

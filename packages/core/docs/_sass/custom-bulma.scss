@@ -1,11 +1,11 @@
 @charset "utf-8";
 
 $red: #de0304;
-$white: hsl(0, 0%, 100%);
 
-$footer-background-color: $white;
+$footer-background-color: hsl(0, 0%, 100%);
 $link: $red;
 $menu-item-active-background-color: $red;
+$navbar-item-active-color: $red;
 $primary: $red;
 
 @import "bulma";

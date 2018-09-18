@@ -4,14 +4,47 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>{{ site.github.repository_name }}</title>
+    <script src="{{ '/js/menu.js?v=' | append: site.github.build_revision | relative_url }}" async></script>
     <link rel="stylesheet" href="{{ '/css/all.min.css?v='| append: site.github.build_revision | relative_url }}">
     <link rel="stylesheet" href="{{ '/css/style.css?v=' | append: site.github.build_revision | relative_url }}">
   </head>
   <body>
-    <div id="root">
-      <nav id="menu" class="level">
-        {% for item in site.data.menu %}
-          {% include menu-item.html text=item.text title=item.title url=item.url %}
-        {% endfor %}
-      </nav>
-      <article>
+    <div id="hero is-fullheight">
+      <div class="hero-head">
+          <nav class="navbar">
+            <div class="navbar-brand">
+              <a class="navbar-item" href="{{ '/' | relative_url }}">
+                <img src="{{ '/img/imajs-logo-small.png?v=' | append: site.github.build_revision | relative_url }}" alt="IMA.js logo">
+              </a>
+              <a role="button" class="navbar-burger" data-target="menu" aria-label="menu" aria-expanded="false">
+                <span aria-hidden="true"></span>
+                <span aria-hidden="true"></span>
+                <span aria-hidden="true"></span>
+              </a>
+            </div>
+            <div id="menu" class="navbar-menu">
+              <div class="navbar-start">
+                {% for item in site.data.menu %}
+                  {% include navbar-item.html text=item.text title=item.title url=item.url %}
+                {% endfor %}
+              </div>
+              <div class="navbar-end">
+                <span class="navbar-item">
+                  <a class="button is-primary is-inverted" href="https://stackoverflow.com/questions/tagged/ima.js" target="_blank">
+                    <span class="icon">
+                      <i class="fab fa-stack-overflow fa-lg"></i>
+                    </span>
+                  </a>
+                </span>
+                <span class="navbar-item">
+                  <a class="button is-primary is-inverted" href="https://github.com/seznam/IMA.js-core" target="_blank">
+                    <span class="icon">
+                      <i class="fab fa-github fa-lg"></i>
+                    </span>
+                  </a>
+                </span>
+              </div>
+            </div>
+          </nav>
+      </div>
+      <div class="hero-body">
