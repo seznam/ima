@@ -10,7 +10,18 @@ describe('ima.page.handler.PageNavigationHandler', () => {
 
   beforeEach(() => {
     window = new Window();
+    spyOn(window, 'getWindow').and.returnValue({
+      history: { scrollRestoration: 'auto' }
+    });
+
     handler = new PageNavigationHandler(window);
+  });
+
+  describe('constructor()', () => {
+    it("should set 'scrollRestoration' property to 'manual'", () => {
+      const browserWindow = window.getWindow();
+      expect(browserWindow.history.scrollRestoration).toBe('manual');
+    });
   });
 
   describe('handlePreManagedState() method', () => {
