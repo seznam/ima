@@ -15,13 +15,13 @@ const lunrIndex = lunr(function() {
 	}, this);
 });
 
-const menuElement = document.getElementById('menu');
+const menuElement = document.getElementById('doc-menu');
 const resultsCloseElement = document.getElementById('results-close');
 const resultsCountElement = document.getElementById('results-count');
 const resultsElement = document.getElementById('results');
 const resultsListElement = document.getElementById('results-list');
 const searchInput = document.getElementById('search');
-const searchTimeout = null;
+let searchTimeout = null;
 
 resultsCloseElement.addEventListener('click', () => {
 	menuElement.classList.remove(HIDDEN_CLASS);
