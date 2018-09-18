@@ -3,7 +3,7 @@
 
 <div class="is-flex column">
   <img class="img" src="{{ '/img/imajs-logo.png?v=' | append: site.github.build_revision | relative_url }}" alt="IMA.js logo">
-  <h1 class="title has-text-centered">IMA.js is a framework for creating isomorphic javascript applications</h1>
+  <h1 class="title has-text-centered">IMA.js is a framework for creating isomorphic javascript applications.</h1>
   <p class="has-text-centered">
     <a href="https://github.com/seznam/IMA.js-skeleton/archive/master.zip" class="button is-primary">
         <span class="icon">
@@ -13,14 +13,7 @@
     </a>
   </p>
 </div>
-<div class="level separator">
-  <div class="level-item">
-    <span class="fa-stack fa-2x">
-      <i class="fas fa-circle fa-stack-2x has-text-primary"></i>
-      <i class="fas fa-star fa-stack-1x has-text-white"></i>
-    </span>
-  </div>
-</div>
+{% include separator.html icon="fa-star" %}
 <h2 class="title has-text-centered">Features</h2>
 <div class="columns">
   <div class="column">
@@ -84,14 +77,7 @@
   <li><i class="fas fa-asterisk has-text-primary"></i>&nbsp;High-fidelity debug mode.</li>
   <li><i class="fas fa-asterisk has-text-primary"></i>&nbsp;<a href="{{ '/doc/general/object-container.html' | relative_url }}">Dependency injection</a>.</li>
 </ul>
-<div class="level separator">
-  <div class="level-item">
-    <span class="fa-stack fa-2x">
-      <i class="fas fa-circle fa-stack-2x has-text-primary"></i>
-      <i class="far fa-newspaper fa-stack-1x has-text-white"></i>
-    </span>
-  </div>
-</div>
+{% include separator.html icon="fa-newspaper" %}
 <h2 class="title has-text-centered">References</h2>
 <div class="columns">
   <div class="column">
@@ -183,14 +169,7 @@
   </div>
   <div class="column"></div>
 </div>
-<div class="level separator">
-  <div class="level-item">
-    <span class="fa-stack fa-2x">
-      <i class="fas fa-circle fa-stack-2x has-text-primary"></i>
-      <i class="fas fa-server fa-stack-1x has-text-white"></i>
-    </span>
-  </div>
-</div>
+{% include separator.html icon="fa-server" %}
 <h2 class="title has-text-centered">Platforms</h2>
 <table class="table is-fullwidth">
   <tbody>
@@ -267,14 +246,7 @@
   <strong>MPA</strong> runs as multi-page application.
   <strong>SPA</strong> runs as single-page application.
 </p>
-<div class="level separator">
-  <div class="level-item">
-    <span class="fa-stack fa-2x">
-      <i class="fas fa-circle fa-stack-2x has-text-primary"></i>
-      <i class="fas fa-wrench fa-stack-1x has-text-white"></i>
-    </span>
-  </div>
-</div>
+{% include separator.html icon="fa-wrench" %}
 <h2 class="title has-text-centered">Used Technologies</h2>
 <div class="is-flex">
   <a href="https://nodejs.org/" title="NodeJS" target="_blank">
