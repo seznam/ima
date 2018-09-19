@@ -84,7 +84,7 @@
 </div>
 {% include separator.html icon="fa-wrench" %}
 <h2 id="technologies" class="title has-text-centered">Used Technologies</h2>
-<div class="is-flex">
+<div class="is-flex is-limited-width">
   <a href="https://nodejs.org/" title="NodeJS" target="_blank">
     <img src="{{ '/img/technologies/nodejs.png?v=' | append: site.github.build_revision | relative_url }}" alt="NodeJS"/>
   </a>
