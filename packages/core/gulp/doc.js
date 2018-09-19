@@ -154,7 +154,12 @@ function generate(done) {
             item.kind === 'constructor'
               ? `new_${item.name}_new`
               : item.id.replace('#', '+');
-          const textValues = new Set([item.memberof, item.name, name]);
+          const textValues = new Set([
+            item.imaMenuCategory,
+            item.memberof,
+            item.name,
+            name
+          ]);
           if (item.augments) {
             item.augments.forEach(augment => textValues.add(augment));
           }
