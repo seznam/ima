@@ -5,83 +5,91 @@
 @import "rouge-github";
 
 #doc {
-	&>div:first-child {
-		border-right: 1px solid $grey-lighter;
-		flex-shrink: 0;
-		margin-bottom: 1.5rem;
-		margin-right: 1rem;
-		padding-right: 0.5rem;
-	}
+  &>div:first-child {
+    flex-shrink: 0;
+    margin-bottom: 1.5rem;
+    margin-right: 1rem;
+    padding-right: 0.5rem;
+  }
 }
 
 #features {
-	.columns {
-		margin: 0 auto;
-		max-width: 64rem;
-	}
+  li {
+    margin-bottom: 0.5rem;
 
-	li {
-		margin-bottom: 0.5rem;
+    p {
+      display: inline-block;
+      margin-left: 0.25rem;
+    }
+  }
+}
 
-		p {
-			display: inline-block;
-			margin-left: 0.25rem;
-		}
-	}
+#imajs {
+  .logo {
+    margin: 0 auto;
+    width: 60%;
+
+    figure {
+      margin-bottom: 2.5rem;
+    }
+  }
+}
+
+#platforms {
+  .columns {
+    border-bottom: 1px solid $grey-lighter;
+
+    .column {
+      justify-content: center;
+      line-height: 3rem;
+    }
+  }
 }
 
 .card {
-	margin-right: 1rem;
+  margin-right: 1rem;
 
-	.card-content>p {
-		margin-bottom: 1rem;
+  .card-content>p {
+    margin-bottom: 1rem;
 
-		&:last-child {
-			margin-bottom: 0;
-		}
-	}
+    &:last-child {
+      margin-bottom: 0;
+    }
+  }
 
-	&:last-child {
-		margin-right: 0;
-	}
-}
-
-.column {
-	flex-direction: column;
-
-	.card {
-		margin: 0;
-	}
-}
-
-.hidden {
-	display: none;
-}
-
-.icon-margin {
-	margin-right: 1rem;
-}
-
-.img {
-	width: 50%;
-	margin: 1.5rem 25%;
+  &:last-child {
+    margin-right: 0;
+  }
 }
 
 .separator {
-	margin-top: 6rem;
+  margin-top: 6rem;
+  position: relative;
 
-	&::before {
-		background-color: $grey-lighter;
-		content: '';
-		height: 1px;
-		left: 0;
-		position: absolute;
-		width: 100%;
-	}
+  &:first-child {
+    margin-top: 0;
+  }
+
+  &::before {
+    background-color: $grey-lighter;
+    content: '';
+    height: 1px;
+    left: 0;
+    position: absolute;
+    top: 50%;
+    width: 100%;
+  }
 }
 
-.table {
-	td {
-		vertical-align: middle;
-	}
+.is-flex-column {
+  flex-flow: column;
+}
+
+.is-hidden {
+  display: none;
+}
+
+.is-limited-width {
+  margin: 0 auto;
+  max-width: 64rem;
 }

@@ -1,0 +1,10 @@
+[
+  {
+    "img": "/img/platforms/cordova.png",
+    "title": "Cordova"
+  },
+  {
+    "img": "/img/platforms/phonegap.png",
+    "title": "Phonegap"
+  }
+]

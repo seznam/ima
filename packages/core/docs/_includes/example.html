@@ -1,0 +1,21 @@
+<div class="column{% if include.title == empty %} is-invisible{% endif %}">
+  <div class="card is-shadowless">
+    <div class="card-header is-shadowless">
+      <p class="card-header-title is-centered">{{ include.title }}</p>
+    </div>
+    <div class="card-image">
+      <figure class="image is-5by3">
+        <img src="{{ include.img | append: '?v=' | append: site.github.build_revision | relative_url }}" alt="{{ include.title }} Screenhot">
+      </figure>
+    </div>
+    <div class="card-content">
+      {{ include.text | markdownify }}
+      <p><a href="{{ include.url }}" target="_blank" title="Source Code">Source Code</a></p>
+      <p>
+        {% for tag in include.tags %}
+          <span class="tag">{{ tag }}</span>
+        {% endfor %}
+      </p>
+    </div>
+  </div>
+</div>
