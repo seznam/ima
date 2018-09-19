@@ -24,6 +24,12 @@
   }
 }
 
+#imajs {
+  figure {
+    margin-bottom: 2.5rem;
+  }
+}
+
 #platforms {
   .columns {
     border-bottom: 1px solid $grey-lighter;
@@ -53,6 +59,7 @@
 
 .separator {
   margin-top: 6rem;
+  position: relative;
 
   &:first-child {
     margin-top: 0;
@@ -64,6 +71,7 @@
     height: 1px;
     left: 0;
     position: absolute;
+    top: 50%;
     width: 100%;
   }
 }

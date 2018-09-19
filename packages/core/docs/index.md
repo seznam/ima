@@ -1,17 +1,21 @@
 ---
 ---
 
-<div class="is-flex is-flex-column">
-  <img class="is-limited-width" src="{{ '/img/imajs-logo.png?v=' | append: site.github.build_revision | relative_url }}" alt="IMA.js logo">
-  <h1 class="title has-text-centered">IMA.js is a framework for creating isomorphic javascript applications.</h1>
-  <p class="has-text-centered">
-    <a href="https://github.com/seznam/IMA.js-skeleton/archive/master.zip" class="button is-primary">
-        <span class="icon">
-          <i class="fas fa-download"></i>
-        </span>
-        <span>Download Latest</span>
-    </a>
-  </p>
+<div id="imajs">
+  <div class="is-flex is-flex-column is-limited-width">
+    <figure class="image is-3by1">
+      <img src="{{ '/img/imajs-logo.png?v=' | append: site.github.build_revision | relative_url }}" alt="IMA.js logo">
+    </figure>
+    <h1 class="title has-text-centered">IMA.js is a framework for creating isomorphic javascript applications.</h1>
+    <p class="has-text-centered">
+      <a href="https://github.com/seznam/IMA.js-skeleton/archive/master.zip" class="button is-primary">
+          <span class="icon">
+            <i class="fas fa-download"></i>
+          </span>
+          <span>Download Latest</span>
+      </a>
+    </p>
+  </div>
 </div>
 {% include separator.html icon="fa-star" %}
 <h2 class="title has-text-centered">Features</h2>
