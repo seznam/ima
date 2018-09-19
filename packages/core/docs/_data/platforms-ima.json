@@ -1,0 +1,38 @@
+[
+  {
+    "img": "/img/platforms/ie.png",
+    "title": "IE 10+"
+  },
+  {
+    "img": "/img/platforms/edge.png",
+    "title": "Edge"
+  },
+  {
+    "img": "/img/platforms/firefox.png",
+    "title": "Firefox"
+  },
+  {
+    "img": "/img/platforms/chrome.png",
+    "title": "Chrome"
+  },
+  {
+    "img": "/img/platforms/safari.png",
+    "title": "Safari"
+  },
+  {
+    "img": "/img/platforms/opera.png",
+    "title": "Opera"
+  },
+  {
+    "img": "/img/platforms/ios-safari.png",
+    "title": "iOS"
+  },
+  {
+    "img": "/img/platforms/android-browser.png",
+    "title": "Android Browser"
+  },
+  {
+    "img": "/img/platforms/android.png",
+    "title": "Chrome for Android"
+  }
+]
