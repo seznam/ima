@@ -39,6 +39,7 @@
     </div>
     <div id="scripts">
         {ifEnv !'dev'}
+            <script type="application/javascript" src="/static/js/fetch-polyfill.js?version={$Version}"></script>
             <script type="application/javascript" src="/static/js/ima-polyfill.js?version={$Version}"></script>
             <script type="application/javascript" src="/static/js/locale/{$Language}.js?version={$Version}"></script>
             <script type="application/javascript" src="/static/js/app.bundle.min.js?version={$Version}"></script>
