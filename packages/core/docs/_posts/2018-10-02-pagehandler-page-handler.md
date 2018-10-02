@@ -3,7 +3,7 @@ category: "page/handler"
 title: "PageHandler"
 ---
 
-## PageHandler&nbsp;<a name="PageHandler" href="https://github.com/seznam/IMA.js-core/tree/0.16.0-alpha.4/page/handler/PageHandler.js#L4" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a>
+## PageHandler&nbsp;<a name="PageHandler" href="https://github.com/seznam/IMA.js-core/tree/0.16.0-alpha.5/page/handler/PageHandler.js#L4" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a>
 **Kind**: global class  
 
 * [PageHandler](#PageHandler)
@@ -15,14 +15,14 @@ title: "PageHandler"
 
 * * *
 
-### pageHandler.init()&nbsp;<a name="PageHandler+init" href="https://github.com/seznam/IMA.js-core/tree/0.16.0-alpha.4/page/handler/PageHandler.js#L8" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a>
+### pageHandler.init()&nbsp;<a name="PageHandler+init" href="https://github.com/seznam/IMA.js-core/tree/0.16.0-alpha.5/page/handler/PageHandler.js#L8" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a>
 Initializes the page handler.
 
 **Kind**: instance method of [<code>PageHandler</code>](#PageHandler)  
 
 * * *
 
-### pageHandler.handlePreManagedState(managedPage, nextManagedPage, [action])&nbsp;<a name="PageHandler+handlePreManagedState" href="https://github.com/seznam/IMA.js-core/tree/0.16.0-alpha.4/page/handler/PageHandler.js#L24" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a>
+### pageHandler.handlePreManagedState(managedPage, nextManagedPage, [action])&nbsp;<a name="PageHandler+handlePreManagedState" href="https://github.com/seznam/IMA.js-core/tree/0.16.0-alpha.5/page/handler/PageHandler.js#L24" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a>
 Called before a PageManager starts to transition from previous page to
 a new one.
 
@@ -37,7 +37,7 @@ a new one.
 
 * * *
 
-### pageHandler.handlePostManagedState(managedPage, previousManagedPage, [action])&nbsp;<a name="PageHandler+handlePostManagedState" href="https://github.com/seznam/IMA.js-core/tree/0.16.0-alpha.4/page/handler/PageHandler.js#L39" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a>
+### pageHandler.handlePostManagedState(managedPage, previousManagedPage, [action])&nbsp;<a name="PageHandler+handlePostManagedState" href="https://github.com/seznam/IMA.js-core/tree/0.16.0-alpha.5/page/handler/PageHandler.js#L39" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a>
 Called after a PageManager finishes transition from previous page to
 a new one.
 
@@ -52,7 +52,7 @@ a new one.
 
 * * *
 
-### pageHandler.destroy()&nbsp;<a name="PageHandler+destroy" href="https://github.com/seznam/IMA.js-core/tree/0.16.0-alpha.4/page/handler/PageHandler.js#L45" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a>
+### pageHandler.destroy()&nbsp;<a name="PageHandler+destroy" href="https://github.com/seznam/IMA.js-core/tree/0.16.0-alpha.5/page/handler/PageHandler.js#L45" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a>
 Finalization callback, called when the page manager is being discarded.
 This usually happens when the page is hot-reloaded at the client side.
 

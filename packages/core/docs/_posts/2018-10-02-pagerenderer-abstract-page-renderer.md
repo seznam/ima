@@ -3,7 +3,7 @@ category: "page/renderer"
 title: "AbstractPageRenderer"
 ---
 
-## AbstractPageRenderer&nbsp;<a name="AbstractPageRenderer" href="https://github.com/seznam/IMA.js-core/tree/0.16.0-alpha.4/page/renderer/AbstractPageRenderer.js#L9" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a>
+## AbstractPageRenderer&nbsp;<a name="AbstractPageRenderer" href="https://github.com/seznam/IMA.js-core/tree/0.16.0-alpha.5/page/renderer/AbstractPageRenderer.js#L9" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a>
 Base class for implementations of the {@linkcode PageRenderer} interface.
 
 **Kind**: global class  
@@ -41,7 +41,7 @@ Initializes the abstract page renderer.
 
 * * *
 
-### abstractPageRenderer._factory : <code>PageRendererFactory</code>&nbsp;<a name="AbstractPageRenderer+_factory" href="https://github.com/seznam/IMA.js-core/tree/0.16.0-alpha.4/page/renderer/AbstractPageRenderer.js#L29" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a>
+### abstractPageRenderer._factory : <code>PageRendererFactory</code>&nbsp;<a name="AbstractPageRenderer+_factory" href="https://github.com/seznam/IMA.js-core/tree/0.16.0-alpha.5/page/renderer/AbstractPageRenderer.js#L29" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a>
 Factory for receive $Utils to view.
 
 **Kind**: instance property of [<code>AbstractPageRenderer</code>](#AbstractPageRenderer)  
@@ -49,7 +49,7 @@ Factory for receive $Utils to view.
 
 * * *
 
-### abstractPageRenderer._Helper : <code>Vendor.$Helper</code>&nbsp;<a name="AbstractPageRenderer+_Helper" href="https://github.com/seznam/IMA.js-core/tree/0.16.0-alpha.4/page/renderer/AbstractPageRenderer.js#L37" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a>
+### abstractPageRenderer._Helper : <code>Vendor.$Helper</code>&nbsp;<a name="AbstractPageRenderer+_Helper" href="https://github.com/seznam/IMA.js-core/tree/0.16.0-alpha.5/page/renderer/AbstractPageRenderer.js#L37" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a>
 The IMA.js helper methods.
 
 **Kind**: instance property of [<code>AbstractPageRenderer</code>](#AbstractPageRenderer)  
@@ -57,7 +57,7 @@ The IMA.js helper methods.
 
 * * *
 
-### abstractPageRenderer._ReactDOM : <code>Vendor.ReactDOM</code>&nbsp;<a name="AbstractPageRenderer+_ReactDOM" href="https://github.com/seznam/IMA.js-core/tree/0.16.0-alpha.4/page/renderer/AbstractPageRenderer.js#L45" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a>
+### abstractPageRenderer._ReactDOM : <code>Vendor.ReactDOM</code>&nbsp;<a name="AbstractPageRenderer+_ReactDOM" href="https://github.com/seznam/IMA.js-core/tree/0.16.0-alpha.5/page/renderer/AbstractPageRenderer.js#L45" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a>
 Rect framework instance, used to render the page.
 
 **Kind**: instance property of [<code>AbstractPageRenderer</code>](#AbstractPageRenderer)  
@@ -65,7 +65,7 @@ Rect framework instance, used to render the page.
 
 * * *
 
-### abstractPageRenderer._settings : <code>Object.&lt;string, \*&gt;</code>&nbsp;<a name="AbstractPageRenderer+_settings" href="https://github.com/seznam/IMA.js-core/tree/0.16.0-alpha.4/page/renderer/AbstractPageRenderer.js#L53" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a>
+### abstractPageRenderer._settings : <code>Object.&lt;string, \*&gt;</code>&nbsp;<a name="AbstractPageRenderer+_settings" href="https://github.com/seznam/IMA.js-core/tree/0.16.0-alpha.5/page/renderer/AbstractPageRenderer.js#L53" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a>
 Application setting for the current application environment.
 
 **Kind**: instance property of [<code>AbstractPageRenderer</code>](#AbstractPageRenderer)  
@@ -73,38 +73,38 @@ Application setting for the current application environment.
 
 * * *
 
-### abstractPageRenderer._reactiveView : <code>React.Component</code>&nbsp;<a name="AbstractPageRenderer+_reactiveView" href="https://github.com/seznam/IMA.js-core/tree/0.16.0-alpha.4/page/renderer/AbstractPageRenderer.js#L59" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a>
+### abstractPageRenderer._reactiveView : <code>React.Component</code>&nbsp;<a name="AbstractPageRenderer+_reactiveView" href="https://github.com/seznam/IMA.js-core/tree/0.16.0-alpha.5/page/renderer/AbstractPageRenderer.js#L59" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a>
 **Kind**: instance property of [<code>AbstractPageRenderer</code>](#AbstractPageRenderer)  
 **Access**: protected  
 
 * * *
 
-### *abstractPageRenderer.mount()*&nbsp;<a name="AbstractPageRenderer+mount" href="https://github.com/seznam/IMA.js-core/tree/0.16.0-alpha.4/page/renderer/AbstractPageRenderer.js#L66" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a>
+### *abstractPageRenderer.mount()*&nbsp;<a name="AbstractPageRenderer+mount" href="https://github.com/seznam/IMA.js-core/tree/0.16.0-alpha.5/page/renderer/AbstractPageRenderer.js#L66" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a>
 **Kind**: instance abstract method of [<code>AbstractPageRenderer</code>](#AbstractPageRenderer)  
 
 * * *
 
-### abstractPageRenderer.update()&nbsp;<a name="AbstractPageRenderer+update" href="https://github.com/seznam/IMA.js-core/tree/0.16.0-alpha.4/page/renderer/AbstractPageRenderer.js#L75" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a>
+### abstractPageRenderer.update()&nbsp;<a name="AbstractPageRenderer+update" href="https://github.com/seznam/IMA.js-core/tree/0.16.0-alpha.5/page/renderer/AbstractPageRenderer.js#L75" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a>
 **Kind**: instance method of [<code>AbstractPageRenderer</code>](#AbstractPageRenderer)  
 
 * * *
 
-### abstractPageRenderer.unmount()&nbsp;<a name="AbstractPageRenderer+unmount" href="https://github.com/seznam/IMA.js-core/tree/0.16.0-alpha.4/page/renderer/AbstractPageRenderer.js#L84" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a>
+### abstractPageRenderer.unmount()&nbsp;<a name="AbstractPageRenderer+unmount" href="https://github.com/seznam/IMA.js-core/tree/0.16.0-alpha.5/page/renderer/AbstractPageRenderer.js#L84" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a>
 **Kind**: instance method of [<code>AbstractPageRenderer</code>](#AbstractPageRenderer)  
 
 * * *
 
-### abstractPageRenderer.clearState()&nbsp;<a name="AbstractPageRenderer+clearState" href="https://github.com/seznam/IMA.js-core/tree/0.16.0-alpha.4/page/renderer/AbstractPageRenderer.js#L93" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a>
+### abstractPageRenderer.clearState()&nbsp;<a name="AbstractPageRenderer+clearState" href="https://github.com/seznam/IMA.js-core/tree/0.16.0-alpha.5/page/renderer/AbstractPageRenderer.js#L93" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a>
 **Kind**: instance method of [<code>AbstractPageRenderer</code>](#AbstractPageRenderer)  
 
 * * *
 
-### abstractPageRenderer.setState()&nbsp;<a name="AbstractPageRenderer+setState" href="https://github.com/seznam/IMA.js-core/tree/0.16.0-alpha.4/page/renderer/AbstractPageRenderer.js#L111" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a>
+### abstractPageRenderer.setState()&nbsp;<a name="AbstractPageRenderer+setState" href="https://github.com/seznam/IMA.js-core/tree/0.16.0-alpha.5/page/renderer/AbstractPageRenderer.js#L111" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a>
 **Kind**: instance method of [<code>AbstractPageRenderer</code>](#AbstractPageRenderer)  
 
 * * *
 
-### abstractPageRenderer._generateViewProps(view, [state]) ⇒ <code>Object.&lt;string, \*&gt;</code>&nbsp;<a name="AbstractPageRenderer+_generateViewProps" href="https://github.com/seznam/IMA.js-core/tree/0.16.0-alpha.4/page/renderer/AbstractPageRenderer.js#L126" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a>
+### abstractPageRenderer._generateViewProps(view, [state]) ⇒ <code>Object.&lt;string, \*&gt;</code>&nbsp;<a name="AbstractPageRenderer+_generateViewProps" href="https://github.com/seznam/IMA.js-core/tree/0.16.0-alpha.5/page/renderer/AbstractPageRenderer.js#L126" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a>
 Generate properties for view from state.
 
 **Kind**: instance method of [<code>AbstractPageRenderer</code>](#AbstractPageRenderer)  
@@ -118,7 +118,7 @@ Generate properties for view from state.
 
 * * *
 
-### abstractPageRenderer._getWrappedPageView(controller, view, routeOptions)&nbsp;<a name="AbstractPageRenderer+_getWrappedPageView" href="https://github.com/seznam/IMA.js-core/tree/0.16.0-alpha.4/page/renderer/AbstractPageRenderer.js#L163" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a>
+### abstractPageRenderer._getWrappedPageView(controller, view, routeOptions)&nbsp;<a name="AbstractPageRenderer+_getWrappedPageView" href="https://github.com/seznam/IMA.js-core/tree/0.16.0-alpha.5/page/renderer/AbstractPageRenderer.js#L163" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a>
 Returns wrapped page view component with managed root view and view adapter.
 
 **Kind**: instance method of [<code>AbstractPageRenderer</code>](#AbstractPageRenderer)  
@@ -132,7 +132,7 @@ Returns wrapped page view component with managed root view and view adapter.
 
 * * *
 
-### abstractPageRenderer._getDocumentView(documentView) ⇒ <code>function</code>&nbsp;<a name="AbstractPageRenderer+_getDocumentView" href="https://github.com/seznam/IMA.js-core/tree/0.16.0-alpha.4/page/renderer/AbstractPageRenderer.js#L191" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a>
+### abstractPageRenderer._getDocumentView(documentView) ⇒ <code>function</code>&nbsp;<a name="AbstractPageRenderer+_getDocumentView" href="https://github.com/seznam/IMA.js-core/tree/0.16.0-alpha.5/page/renderer/AbstractPageRenderer.js#L191" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a>
 Returns the class constructor of the specified document view component.
 
 **Kind**: instance method of [<code>AbstractPageRenderer</code>](#AbstractPageRenderer)  

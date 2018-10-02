@@ -3,7 +3,7 @@ category: "dictionary"
 title: "Dictionary"
 ---
 
-## Dictionary&nbsp;<a name="Dictionary" href="https://github.com/seznam/IMA.js-core/tree/0.16.0-alpha.4/dictionary/Dictionary.js#L8" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a>
+## Dictionary&nbsp;<a name="Dictionary" href="https://github.com/seznam/IMA.js-core/tree/0.16.0-alpha.5/dictionary/Dictionary.js#L8" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a>
 **Kind**: global interface  
 
 * [Dictionary](#Dictionary)
@@ -15,7 +15,7 @@ title: "Dictionary"
 
 * * *
 
-### dictionary.init(config)&nbsp;<a name="Dictionary+init" href="https://github.com/seznam/IMA.js-core/tree/0.16.0-alpha.4/dictionary/Dictionary.js#L19" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a>
+### dictionary.init(config)&nbsp;<a name="Dictionary+init" href="https://github.com/seznam/IMA.js-core/tree/0.16.0-alpha.5/dictionary/Dictionary.js#L19" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a>
 Initializes this dictionary with the provided language and localization
 phrases.
 
@@ -30,7 +30,7 @@ phrases.
 
 * * *
 
-### dictionary.getLanguage() ⇒ <code>string</code>&nbsp;<a name="Dictionary+getLanguage" href="https://github.com/seznam/IMA.js-core/tree/0.16.0-alpha.4/dictionary/Dictionary.js#L28" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a>
+### dictionary.getLanguage() ⇒ <code>string</code>&nbsp;<a name="Dictionary+getLanguage" href="https://github.com/seznam/IMA.js-core/tree/0.16.0-alpha.5/dictionary/Dictionary.js#L28" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a>
 Returns the ISO 639-1 language code of the language this dictionary was
 initialized with.
 
@@ -40,7 +40,7 @@ initialized with.
 
 * * *
 
-### dictionary.get(key, [parameters]) ⇒ <code>string</code>&nbsp;<a name="Dictionary+get" href="https://github.com/seznam/IMA.js-core/tree/0.16.0-alpha.4/dictionary/Dictionary.js#L42" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a>
+### dictionary.get(key, [parameters]) ⇒ <code>string</code>&nbsp;<a name="Dictionary+get" href="https://github.com/seznam/IMA.js-core/tree/0.16.0-alpha.5/dictionary/Dictionary.js#L42" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a>
 Retrieves the localization phrase identified by the specified key,
 evaluates the phrase's placeholder expressions using the provided
 parameters and returns the result.
@@ -57,7 +57,7 @@ parameters and returns the result.
 
 * * *
 
-### dictionary.has(key) ⇒ <code>boolean</code>&nbsp;<a name="Dictionary+has" href="https://github.com/seznam/IMA.js-core/tree/0.16.0-alpha.4/dictionary/Dictionary.js#L52" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a>
+### dictionary.has(key) ⇒ <code>boolean</code>&nbsp;<a name="Dictionary+has" href="https://github.com/seznam/IMA.js-core/tree/0.16.0-alpha.5/dictionary/Dictionary.js#L52" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a>
 Tests whether the specified localization phrase exists in the
 dictionary.
 

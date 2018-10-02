@@ -20,7 +20,7 @@ itself.</p>
 </dd>
 </dl>
 
-## Bootstrap&nbsp;<a name="Bootstrap" href="https://github.com/seznam/IMA.js-core/tree/0.16.0-alpha.4/Bootstrap.js#L20" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a>
+## Bootstrap&nbsp;<a name="Bootstrap" href="https://github.com/seznam/IMA.js-core/tree/0.16.0-alpha.5/Bootstrap.js#L20" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a>
 Application bootstrap used to initialize the environment and the application
 itself.
 
@@ -51,21 +51,21 @@ Initializes the bootstrap.
 
 * * *
 
-### bootstrap._oc : <code>ObjectContainer</code>&nbsp;<a name="Bootstrap+_oc" href="https://github.com/seznam/IMA.js-core/tree/0.16.0-alpha.4/Bootstrap.js#L33" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a>
+### bootstrap._oc : <code>ObjectContainer</code>&nbsp;<a name="Bootstrap+_oc" href="https://github.com/seznam/IMA.js-core/tree/0.16.0-alpha.5/Bootstrap.js#L33" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a>
 The object container used to manage dependencies.
 
 **Kind**: instance property of [<code>Bootstrap</code>](#Bootstrap)  
 
 * * *
 
-### bootstrap._config : <code>Object.&lt;string, \*&gt;</code>&nbsp;<a name="Bootstrap+_config" href="https://github.com/seznam/IMA.js-core/tree/0.16.0-alpha.4/Bootstrap.js#L40" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a>
+### bootstrap._config : <code>Object.&lt;string, \*&gt;</code>&nbsp;<a name="Bootstrap+_config" href="https://github.com/seznam/IMA.js-core/tree/0.16.0-alpha.5/Bootstrap.js#L40" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a>
 Application configuration.
 
 **Kind**: instance property of [<code>Bootstrap</code>](#Bootstrap)  
 
 * * *
 
-### bootstrap.run(config)&nbsp;<a name="Bootstrap+run" href="https://github.com/seznam/IMA.js-core/tree/0.16.0-alpha.4/Bootstrap.js#L56" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a>
+### bootstrap.run(config)&nbsp;<a name="Bootstrap+run" href="https://github.com/seznam/IMA.js-core/tree/0.16.0-alpha.5/Bootstrap.js#L56" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a>
 Initializes the application by running the bootstrap sequence. The
 sequence initializes the components of the application in the following
 order:
@@ -84,7 +84,7 @@ order:
 
 * * *
 
-### bootstrap._initSettings()&nbsp;<a name="Bootstrap+_initSettings" href="https://github.com/seznam/IMA.js-core/tree/0.16.0-alpha.4/Bootstrap.js#L72" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a>
+### bootstrap._initSettings()&nbsp;<a name="Bootstrap+_initSettings" href="https://github.com/seznam/IMA.js-core/tree/0.16.0-alpha.5/Bootstrap.js#L72" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a>
 Initializes the application settings. The method loads the settings for
 all environments and then pics the settings for the current environment.
 
@@ -95,7 +95,7 @@ as default values for configuration items in other environments.
 
 * * *
 
-### bootstrap._getEnvironmentSetting() ⇒ <code>Object.&lt;string, \*&gt;</code>&nbsp;<a name="Bootstrap+_getEnvironmentSetting" href="https://github.com/seznam/IMA.js-core/tree/0.16.0-alpha.4/Bootstrap.js#L108" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a>
+### bootstrap._getEnvironmentSetting() ⇒ <code>Object.&lt;string, \*&gt;</code>&nbsp;<a name="Bootstrap+_getEnvironmentSetting" href="https://github.com/seznam/IMA.js-core/tree/0.16.0-alpha.5/Bootstrap.js#L108" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a>
 Returns setting for current environment where base values are from production
 environment and other environments override base values.
 
@@ -103,7 +103,7 @@ environment and other environments override base values.
 
 * * *
 
-### bootstrap._bindDependencies()&nbsp;<a name="Bootstrap+_bindDependencies" href="https://github.com/seznam/IMA.js-core/tree/0.16.0-alpha.4/Bootstrap.js#L125" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a>
+### bootstrap._bindDependencies()&nbsp;<a name="Bootstrap+_bindDependencies" href="https://github.com/seznam/IMA.js-core/tree/0.16.0-alpha.5/Bootstrap.js#L125" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a>
 Binds the constants, service providers and class dependencies to the
 object container.
 
@@ -111,21 +111,21 @@ object container.
 
 * * *
 
-### bootstrap._initRoutes()&nbsp;<a name="Bootstrap+_initRoutes" href="https://github.com/seznam/IMA.js-core/tree/0.16.0-alpha.4/Bootstrap.js#L143" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a>
+### bootstrap._initRoutes()&nbsp;<a name="Bootstrap+_initRoutes" href="https://github.com/seznam/IMA.js-core/tree/0.16.0-alpha.5/Bootstrap.js#L143" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a>
 Initializes the routes.
 
 **Kind**: instance method of [<code>Bootstrap</code>](#Bootstrap)  
 
 * * *
 
-### bootstrap._initServices()&nbsp;<a name="Bootstrap+_initServices" href="https://github.com/seznam/IMA.js-core/tree/0.16.0-alpha.4/Bootstrap.js#L151" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a>
+### bootstrap._initServices()&nbsp;<a name="Bootstrap+_initServices" href="https://github.com/seznam/IMA.js-core/tree/0.16.0-alpha.5/Bootstrap.js#L151" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a>
 Initializes the basic application services.
 
 **Kind**: instance method of [<code>Bootstrap</code>](#Bootstrap)  
 
 * * *
 
-## PRODUCTION_ENVIRONMENT : <code>string</code>&nbsp;<a name="PRODUCTION_ENVIRONMENT" href="https://github.com/seznam/IMA.js-core/tree/0.16.0-alpha.4/Bootstrap.js#L14" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a>
+## PRODUCTION_ENVIRONMENT : <code>string</code>&nbsp;<a name="PRODUCTION_ENVIRONMENT" href="https://github.com/seznam/IMA.js-core/tree/0.16.0-alpha.5/Bootstrap.js#L14" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a>
 Environment name value in the production environment.
 
 **Kind**: global constant  

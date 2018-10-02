@@ -3,7 +3,7 @@ category: "http"
 title: "HttpProxy"
 ---
 
-## HttpProxy&nbsp;<a name="HttpProxy" href="https://github.com/seznam/IMA.js-core/tree/0.16.0-alpha.4/http/HttpProxy.js#L40" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a>
+## HttpProxy&nbsp;<a name="HttpProxy" href="https://github.com/seznam/IMA.js-core/tree/0.16.0-alpha.5/http/HttpProxy.js#L40" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a>
 Middleware proxy between [HttpAgent](HttpAgent) implementations and the
 [Fetch API](https://developer.mozilla.org/en-US/docs/Web/API/Fetch_API),
 providing a Promise-oriented API for sending requests.
@@ -50,14 +50,14 @@ Initializes the HTTP proxy.
 
 * * *
 
-### httpProxy._transformer : <code>UrlTransformer</code>&nbsp;<a name="HttpProxy+_transformer" href="https://github.com/seznam/IMA.js-core/tree/0.16.0-alpha.4/http/HttpProxy.js#L55" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a>
+### httpProxy._transformer : <code>UrlTransformer</code>&nbsp;<a name="HttpProxy+_transformer" href="https://github.com/seznam/IMA.js-core/tree/0.16.0-alpha.5/http/HttpProxy.js#L55" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a>
 A transformer of URLs to which requests are made.
 
 **Kind**: instance property of [<code>HttpProxy</code>](#HttpProxy)  
 
 * * *
 
-### httpProxy._window : <code>Window</code>&nbsp;<a name="HttpProxy+_window" href="https://github.com/seznam/IMA.js-core/tree/0.16.0-alpha.4/http/HttpProxy.js#L63" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a>
+### httpProxy._window : <code>Window</code>&nbsp;<a name="HttpProxy+_window" href="https://github.com/seznam/IMA.js-core/tree/0.16.0-alpha.5/http/HttpProxy.js#L63" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a>
 Helper for manipulating the global object `window` regardless of the
 client/server-side environment.
 
@@ -65,7 +65,7 @@ client/server-side environment.
 
 * * *
 
-### httpProxy._defaultHeaders : <code>Map.&lt;string, string&gt;</code>&nbsp;<a name="HttpProxy+_defaultHeaders" href="https://github.com/seznam/IMA.js-core/tree/0.16.0-alpha.4/http/HttpProxy.js#L71" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a>
+### httpProxy._defaultHeaders : <code>Map.&lt;string, string&gt;</code>&nbsp;<a name="HttpProxy+_defaultHeaders" href="https://github.com/seznam/IMA.js-core/tree/0.16.0-alpha.5/http/HttpProxy.js#L71" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a>
 The default HTTP headers to include with the HTTP requests, unless
 overridden.
 
@@ -73,7 +73,7 @@ overridden.
 
 * * *
 
-### httpProxy.request(method, url, data, [options]) ⇒ <code>Promise.&lt;HttpAgent~Response&gt;</code>&nbsp;<a name="HttpProxy+request" href="https://github.com/seznam/IMA.js-core/tree/0.16.0-alpha.4/http/HttpProxy.js#L88" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a>
+### httpProxy.request(method, url, data, [options]) ⇒ <code>Promise.&lt;HttpAgent~Response&gt;</code>&nbsp;<a name="HttpProxy+request" href="https://github.com/seznam/IMA.js-core/tree/0.16.0-alpha.5/http/HttpProxy.js#L88" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a>
 Executes a HTTP request to the specified URL using the specified HTTP
 method, carrying the provided data.
 
@@ -91,7 +91,7 @@ method, carrying the provided data.
 
 * * *
 
-### httpProxy.setDefaultHeader(header, value)&nbsp;<a name="HttpProxy+setDefaultHeader" href="https://github.com/seznam/IMA.js-core/tree/0.16.0-alpha.4/http/HttpProxy.js#L150" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a>
+### httpProxy.setDefaultHeader(header, value)&nbsp;<a name="HttpProxy+setDefaultHeader" href="https://github.com/seznam/IMA.js-core/tree/0.16.0-alpha.5/http/HttpProxy.js#L150" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a>
 Sets the specified default HTTP header. The header will be sent with all
 subsequent HTTP requests unless reconfigured using this method,
 overridden by request options, or cleared by
@@ -107,14 +107,14 @@ overridden by request options, or cleared by
 
 * * *
 
-### httpProxy.clearDefaultHeaders()&nbsp;<a name="HttpProxy+clearDefaultHeaders" href="https://github.com/seznam/IMA.js-core/tree/0.16.0-alpha.4/http/HttpProxy.js#L157" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a>
+### httpProxy.clearDefaultHeaders()&nbsp;<a name="HttpProxy+clearDefaultHeaders" href="https://github.com/seznam/IMA.js-core/tree/0.16.0-alpha.5/http/HttpProxy.js#L157" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a>
 Clears all defaults headers sent with all requests.
 
 **Kind**: instance method of [<code>HttpProxy</code>](#HttpProxy)  
 
 * * *
 
-### httpProxy.getErrorParams(method, url, data, options, status, body, cause) ⇒ [<code>ErrorParams</code>](#HttpProxy..ErrorParams)&nbsp;<a name="HttpProxy+getErrorParams" href="https://github.com/seznam/IMA.js-core/tree/0.16.0-alpha.4/http/HttpProxy.js#L178" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a>
+### httpProxy.getErrorParams(method, url, data, options, status, body, cause) ⇒ [<code>ErrorParams</code>](#HttpProxy..ErrorParams)&nbsp;<a name="HttpProxy+getErrorParams" href="https://github.com/seznam/IMA.js-core/tree/0.16.0-alpha.5/http/HttpProxy.js#L178" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a>
 Gets an object that describes a failed HTTP request, providing
 information about both the failure reported by the server and how the
 request has been sent to the server.
@@ -136,7 +136,7 @@ request has been sent to the server.
 
 * * *
 
-### httpProxy.haveToSetCookiesManually() ⇒ <code>boolean</code>&nbsp;<a name="HttpProxy+haveToSetCookiesManually" href="https://github.com/seznam/IMA.js-core/tree/0.16.0-alpha.4/http/HttpProxy.js#L231" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a>
+### httpProxy.haveToSetCookiesManually() ⇒ <code>boolean</code>&nbsp;<a name="HttpProxy+haveToSetCookiesManually" href="https://github.com/seznam/IMA.js-core/tree/0.16.0-alpha.5/http/HttpProxy.js#L231" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a>
 Returns `true` if cookies have to be processed manually by setting
 `Cookie` HTTP header on requests and parsing the `Set-Cookie` HTTP
 response header.
@@ -156,7 +156,7 @@ browser), and returns `true` or `false` accordingly.
 
 * * *
 
-### httpProxy._processResponse(requestParams, response, responseBody) ⇒ <code>HttpAgent~Response</code>&nbsp;<a name="HttpProxy+_processResponse" href="https://github.com/seznam/IMA.js-core/tree/0.16.0-alpha.4/http/HttpProxy.js#L246" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a>
+### httpProxy._processResponse(requestParams, response, responseBody) ⇒ <code>HttpAgent~Response</code>&nbsp;<a name="HttpProxy+_processResponse" href="https://github.com/seznam/IMA.js-core/tree/0.16.0-alpha.5/http/HttpProxy.js#L246" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a>
 Processes the response received from the server.
 
 **Kind**: instance method of [<code>HttpProxy</code>](#HttpProxy)  
@@ -172,7 +172,7 @@ Processes the response received from the server.
 
 * * *
 
-### httpProxy._headersToPlainObject(headers) ⇒ <code>Object.&lt;string, string&gt;</code>&nbsp;<a name="HttpProxy+_headersToPlainObject" href="https://github.com/seznam/IMA.js-core/tree/0.16.0-alpha.4/http/HttpProxy.js#L270" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a>
+### httpProxy._headersToPlainObject(headers) ⇒ <code>Object.&lt;string, string&gt;</code>&nbsp;<a name="HttpProxy+_headersToPlainObject" href="https://github.com/seznam/IMA.js-core/tree/0.16.0-alpha.5/http/HttpProxy.js#L270" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a>
 Converts the provided Fetch API's `Headers` object to a plain object.
 
 **Kind**: instance method of [<code>HttpProxy</code>](#HttpProxy)  
@@ -185,7 +185,7 @@ Converts the provided Fetch API's `Headers` object to a plain object.
 
 * * *
 
-### httpProxy._processError(fetchError, requestParams) ⇒ <code>GenericError</code>&nbsp;<a name="HttpProxy+_processError" href="https://github.com/seznam/IMA.js-core/tree/0.16.0-alpha.4/http/HttpProxy.js#L326" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a>
+### httpProxy._processError(fetchError, requestParams) ⇒ <code>GenericError</code>&nbsp;<a name="HttpProxy+_processError" href="https://github.com/seznam/IMA.js-core/tree/0.16.0-alpha.5/http/HttpProxy.js#L326" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a>
 Processes the provided Fetch API or internal error and creates an error
 to expose to the calling API.
 
@@ -200,7 +200,7 @@ to expose to the calling API.
 
 * * *
 
-### httpProxy._createError(cause, requestParams, status, responseBody) ⇒ <code>GenericError</code>&nbsp;<a name="HttpProxy+_createError" href="https://github.com/seznam/IMA.js-core/tree/0.16.0-alpha.4/http/HttpProxy.js#L348" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a>
+### httpProxy._createError(cause, requestParams, status, responseBody) ⇒ <code>GenericError</code>&nbsp;<a name="HttpProxy+_createError" href="https://github.com/seznam/IMA.js-core/tree/0.16.0-alpha.5/http/HttpProxy.js#L348" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a>
 Creates an error that represents a failed HTTP request.
 
 **Kind**: instance method of [<code>HttpProxy</code>](#HttpProxy)  
@@ -216,7 +216,7 @@ Creates an error that represents a failed HTTP request.
 
 * * *
 
-### httpProxy._getFetchApi() ⇒ <code>function</code>&nbsp;<a name="HttpProxy+_getFetchApi" href="https://github.com/seznam/IMA.js-core/tree/0.16.0-alpha.4/http/HttpProxy.js#L371" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a>
+### httpProxy._getFetchApi() ⇒ <code>function</code>&nbsp;<a name="HttpProxy+_getFetchApi" href="https://github.com/seznam/IMA.js-core/tree/0.16.0-alpha.5/http/HttpProxy.js#L371" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a>
 Returns [window.fetch](https://developer.mozilla.org/en-US/docs/Web/API/WindowOrWorkerGlobalScope/fetch)
 compatible API to use, depending on the method being used at the server
 (polyfill) or client (native/polyfill) side.
@@ -227,7 +227,7 @@ compatible API to use, depending on the method being used at the server
 
 * * *
 
-### httpProxy._composeRequestParams(method, url, data, options) ⇒ [<code>RequestParams</code>](#HttpProxy..RequestParams)&nbsp;<a name="HttpProxy+_composeRequestParams" href="https://github.com/seznam/IMA.js-core/tree/0.16.0-alpha.4/http/HttpProxy.js#L392" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a>
+### httpProxy._composeRequestParams(method, url, data, options) ⇒ [<code>RequestParams</code>](#HttpProxy..RequestParams)&nbsp;<a name="HttpProxy+_composeRequestParams" href="https://github.com/seznam/IMA.js-core/tree/0.16.0-alpha.5/http/HttpProxy.js#L392" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a>
 Composes an object representing the HTTP request parameters from the
 provided arguments.
 
@@ -246,7 +246,7 @@ provided arguments.
 
 * * *
 
-### httpProxy._composeRequestInit(method, data, options) ⇒ <code>RequestInit</code>&nbsp;<a name="HttpProxy+_composeRequestInit" href="https://github.com/seznam/IMA.js-core/tree/0.16.0-alpha.4/http/HttpProxy.js#L413" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a>
+### httpProxy._composeRequestInit(method, data, options) ⇒ <code>RequestInit</code>&nbsp;<a name="HttpProxy+_composeRequestInit" href="https://github.com/seznam/IMA.js-core/tree/0.16.0-alpha.5/http/HttpProxy.js#L413" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a>
 Composes an init object, which can be used as a second argument of
 `window.fetch` method.
 
@@ -262,7 +262,7 @@ Composes an init object, which can be used as a second argument of
 
 * * *
 
-### httpProxy._getContentType(method, data, options) ⇒ <code>string</code>&nbsp;<a name="HttpProxy+_getContentType" href="https://github.com/seznam/IMA.js-core/tree/0.16.0-alpha.4/http/HttpProxy.js#L450" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a>
+### httpProxy._getContentType(method, data, options) ⇒ <code>string</code>&nbsp;<a name="HttpProxy+_getContentType" href="https://github.com/seznam/IMA.js-core/tree/0.16.0-alpha.5/http/HttpProxy.js#L450" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a>
 Gets a `Content-Type` header value for defined method, data and options.
 
 **Kind**: instance method of [<code>HttpProxy</code>](#HttpProxy)  
@@ -277,7 +277,7 @@ Gets a `Content-Type` header value for defined method, data and options.
 
 * * *
 
-### httpProxy._composeRequestUrl(url, data) ⇒ <code>string</code>&nbsp;<a name="HttpProxy+_composeRequestUrl" href="https://github.com/seznam/IMA.js-core/tree/0.16.0-alpha.4/http/HttpProxy.js#L472" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a>
+### httpProxy._composeRequestUrl(url, data) ⇒ <code>string</code>&nbsp;<a name="HttpProxy+_composeRequestUrl" href="https://github.com/seznam/IMA.js-core/tree/0.16.0-alpha.5/http/HttpProxy.js#L472" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a>
 Transforms the provided URL using the current URL transformer and adds
 the provided data to the URL's query string.
 
@@ -293,7 +293,7 @@ the provided data to the URL's query string.
 
 * * *
 
-### httpProxy._shouldRequestHaveBody(method, data) ⇒ <code>boolean</code>&nbsp;<a name="HttpProxy+_shouldRequestHaveBody" href="https://github.com/seznam/IMA.js-core/tree/0.16.0-alpha.4/http/HttpProxy.js#L493" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a>
+### httpProxy._shouldRequestHaveBody(method, data) ⇒ <code>boolean</code>&nbsp;<a name="HttpProxy+_shouldRequestHaveBody" href="https://github.com/seznam/IMA.js-core/tree/0.16.0-alpha.5/http/HttpProxy.js#L493" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a>
 Checks if a request should have a body (`GET` and `HEAD` requests don't
 have a body).
 
@@ -308,7 +308,7 @@ have a body).
 
 * * *
 
-### HttpProxy~RequestParams : <code>Object</code>&nbsp;<a name="HttpProxy..RequestParams" href="https://github.com/seznam/IMA.js-core/tree/0.16.0-alpha.4/http/HttpProxy.js#L4" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a>
+### HttpProxy~RequestParams : <code>Object</code>&nbsp;<a name="HttpProxy..RequestParams" href="https://github.com/seznam/IMA.js-core/tree/0.16.0-alpha.5/http/HttpProxy.js#L4" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a>
 An object representing the complete request parameters used to create and
 send the HTTP request.
 
@@ -326,7 +326,7 @@ send the HTTP request.
 
 * * *
 
-### HttpProxy~ErrorParams : <code>Object</code>&nbsp;<a name="HttpProxy..ErrorParams" href="https://github.com/seznam/IMA.js-core/tree/0.16.0-alpha.4/http/HttpProxy.js#L19" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a>
+### HttpProxy~ErrorParams : <code>Object</code>&nbsp;<a name="HttpProxy..ErrorParams" href="https://github.com/seznam/IMA.js-core/tree/0.16.0-alpha.5/http/HttpProxy.js#L19" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a>
 An object that describes a failed HTTP request, providing
 information about both the failure reported by the server and how the
 request has been sent to the server.

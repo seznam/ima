@@ -3,7 +3,7 @@ category: "http"
 title: "UrlTransformer"
 ---
 
-## UrlTransformer&nbsp;<a name="UrlTransformer" href="https://github.com/seznam/IMA.js-core/tree/0.16.0-alpha.4/http/UrlTransformer.js#L4" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a>
+## UrlTransformer&nbsp;<a name="UrlTransformer" href="https://github.com/seznam/IMA.js-core/tree/0.16.0-alpha.5/http/UrlTransformer.js#L4" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a>
 Utility for transforming URLs according to the configured replacement rules.
 
 **Kind**: global class  
@@ -24,12 +24,12 @@ Initializes the URL transformer.
 
 * * *
 
-### urlTransformer._rules : <code>Object.&lt;string, string&gt;</code>&nbsp;<a name="UrlTransformer+_rules" href="https://github.com/seznam/IMA.js-core/tree/0.16.0-alpha.4/http/UrlTransformer.js#L16" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a>
+### urlTransformer._rules : <code>Object.&lt;string, string&gt;</code>&nbsp;<a name="UrlTransformer+_rules" href="https://github.com/seznam/IMA.js-core/tree/0.16.0-alpha.5/http/UrlTransformer.js#L16" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a>
 **Kind**: instance property of [<code>UrlTransformer</code>](#UrlTransformer)  
 
 * * *
 
-### urlTransformer.addRule(pattern, replacement) ⇒ [<code>UrlTransformer</code>](#UrlTransformer)&nbsp;<a name="UrlTransformer+addRule" href="https://github.com/seznam/IMA.js-core/tree/0.16.0-alpha.4/http/UrlTransformer.js#L29" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a>
+### urlTransformer.addRule(pattern, replacement) ⇒ [<code>UrlTransformer</code>](#UrlTransformer)&nbsp;<a name="UrlTransformer+addRule" href="https://github.com/seznam/IMA.js-core/tree/0.16.0-alpha.5/http/UrlTransformer.js#L29" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a>
 Adds the provided replacement rule to the rules used by this URL
 transformer.
 
@@ -44,7 +44,7 @@ transformer.
 
 * * *
 
-### urlTransformer.clear() ⇒ [<code>UrlTransformer</code>](#UrlTransformer)&nbsp;<a name="UrlTransformer+clear" href="https://github.com/seznam/IMA.js-core/tree/0.16.0-alpha.4/http/UrlTransformer.js#L40" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a>
+### urlTransformer.clear() ⇒ [<code>UrlTransformer</code>](#UrlTransformer)&nbsp;<a name="UrlTransformer+clear" href="https://github.com/seznam/IMA.js-core/tree/0.16.0-alpha.5/http/UrlTransformer.js#L40" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a>
 Clears all rules.
 
 **Kind**: instance method of [<code>UrlTransformer</code>](#UrlTransformer)  
@@ -52,7 +52,7 @@ Clears all rules.
 
 * * *
 
-### urlTransformer.transform(str) ⇒ <code>string</code>&nbsp;<a name="UrlTransformer+transform" href="https://github.com/seznam/IMA.js-core/tree/0.16.0-alpha.4/http/UrlTransformer.js#L54" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a>
+### urlTransformer.transform(str) ⇒ <code>string</code>&nbsp;<a name="UrlTransformer+transform" href="https://github.com/seznam/IMA.js-core/tree/0.16.0-alpha.5/http/UrlTransformer.js#L54" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a>
 Applies all rules registered with this URL transformer to the provided
 URL and returns the result. The rules will be applied in the order they
 were registered.

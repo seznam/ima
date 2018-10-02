@@ -16,7 +16,7 @@ storage keys.</p>
 </dd>
 </dl>
 
-## SessionStorage&nbsp;<a name="SessionStorage" href="https://github.com/seznam/IMA.js-core/tree/0.16.0-alpha.4/storage/SessionStorage.js#L9" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a>
+## SessionStorage&nbsp;<a name="SessionStorage" href="https://github.com/seznam/IMA.js-core/tree/0.16.0-alpha.5/storage/SessionStorage.js#L9" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a>
 Implementation of the <code>Storage</code> interface that relies on the
 native <code>sessionStorage</code> DOM storage for storing its entries.
 
@@ -49,61 +49,61 @@ Initializes the session storage.
 
 * * *
 
-### sessionStorage._storage : <code>Storage</code>&nbsp;<a name="SessionStorage+_storage" href="https://github.com/seznam/IMA.js-core/tree/0.16.0-alpha.4/storage/SessionStorage.js#L26" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a>
+### sessionStorage._storage : <code>Storage</code>&nbsp;<a name="SessionStorage+_storage" href="https://github.com/seznam/IMA.js-core/tree/0.16.0-alpha.5/storage/SessionStorage.js#L26" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a>
 The DOM storage providing the actual storage of the entries.
 
 **Kind**: instance property of [<code>SessionStorage</code>](#SessionStorage)  
 
 * * *
 
-### sessionStorage.init()&nbsp;<a name="SessionStorage+init" href="https://github.com/seznam/IMA.js-core/tree/0.16.0-alpha.4/storage/SessionStorage.js#L32" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a>
+### sessionStorage.init()&nbsp;<a name="SessionStorage+init" href="https://github.com/seznam/IMA.js-core/tree/0.16.0-alpha.5/storage/SessionStorage.js#L32" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a>
 **Kind**: instance method of [<code>SessionStorage</code>](#SessionStorage)  
 
 * * *
 
-### sessionStorage.has()&nbsp;<a name="SessionStorage+has" href="https://github.com/seznam/IMA.js-core/tree/0.16.0-alpha.4/storage/SessionStorage.js#L39" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a>
+### sessionStorage.has()&nbsp;<a name="SessionStorage+has" href="https://github.com/seznam/IMA.js-core/tree/0.16.0-alpha.5/storage/SessionStorage.js#L39" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a>
 **Kind**: instance method of [<code>SessionStorage</code>](#SessionStorage)  
 
 * * *
 
-### sessionStorage.get()&nbsp;<a name="SessionStorage+get" href="https://github.com/seznam/IMA.js-core/tree/0.16.0-alpha.4/storage/SessionStorage.js#L46" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a>
+### sessionStorage.get()&nbsp;<a name="SessionStorage+get" href="https://github.com/seznam/IMA.js-core/tree/0.16.0-alpha.5/storage/SessionStorage.js#L46" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a>
 **Kind**: instance method of [<code>SessionStorage</code>](#SessionStorage)  
 
 * * *
 
-### sessionStorage.set()&nbsp;<a name="SessionStorage+set" href="https://github.com/seznam/IMA.js-core/tree/0.16.0-alpha.4/storage/SessionStorage.js#L61" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a>
+### sessionStorage.set()&nbsp;<a name="SessionStorage+set" href="https://github.com/seznam/IMA.js-core/tree/0.16.0-alpha.5/storage/SessionStorage.js#L61" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a>
 **Kind**: instance method of [<code>SessionStorage</code>](#SessionStorage)  
 
 * * *
 
-### sessionStorage.delete()&nbsp;<a name="SessionStorage+delete" href="https://github.com/seznam/IMA.js-core/tree/0.16.0-alpha.4/storage/SessionStorage.js#L90" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a>
+### sessionStorage.delete()&nbsp;<a name="SessionStorage+delete" href="https://github.com/seznam/IMA.js-core/tree/0.16.0-alpha.5/storage/SessionStorage.js#L90" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a>
 **Kind**: instance method of [<code>SessionStorage</code>](#SessionStorage)  
 
 * * *
 
-### sessionStorage.clear()&nbsp;<a name="SessionStorage+clear" href="https://github.com/seznam/IMA.js-core/tree/0.16.0-alpha.4/storage/SessionStorage.js#L98" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a>
+### sessionStorage.clear()&nbsp;<a name="SessionStorage+clear" href="https://github.com/seznam/IMA.js-core/tree/0.16.0-alpha.5/storage/SessionStorage.js#L98" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a>
 **Kind**: instance method of [<code>SessionStorage</code>](#SessionStorage)  
 
 * * *
 
-### sessionStorage.keys()&nbsp;<a name="SessionStorage+keys" href="https://github.com/seznam/IMA.js-core/tree/0.16.0-alpha.4/storage/SessionStorage.js#L106" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a>
+### sessionStorage.keys()&nbsp;<a name="SessionStorage+keys" href="https://github.com/seznam/IMA.js-core/tree/0.16.0-alpha.5/storage/SessionStorage.js#L106" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a>
 **Kind**: instance method of [<code>SessionStorage</code>](#SessionStorage)  
 
 * * *
 
-### sessionStorage.size()&nbsp;<a name="SessionStorage+size" href="https://github.com/seznam/IMA.js-core/tree/0.16.0-alpha.4/storage/SessionStorage.js#L113" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a>
+### sessionStorage.size()&nbsp;<a name="SessionStorage+size" href="https://github.com/seznam/IMA.js-core/tree/0.16.0-alpha.5/storage/SessionStorage.js#L113" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a>
 **Kind**: instance method of [<code>SessionStorage</code>](#SessionStorage)  
 
 * * *
 
-### sessionStorage._deleteOldestEntry()&nbsp;<a name="SessionStorage+_deleteOldestEntry" href="https://github.com/seznam/IMA.js-core/tree/0.16.0-alpha.4/storage/SessionStorage.js#L120" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a>
+### sessionStorage._deleteOldestEntry()&nbsp;<a name="SessionStorage+_deleteOldestEntry" href="https://github.com/seznam/IMA.js-core/tree/0.16.0-alpha.5/storage/SessionStorage.js#L120" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a>
 Deletes the oldest entry in this storage.
 
 **Kind**: instance method of [<code>SessionStorage</code>](#SessionStorage)  
 
 * * *
 
-## StorageIterator&nbsp;<a name="StorageIterator" href="https://github.com/seznam/IMA.js-core/tree/0.16.0-alpha.4/storage/SessionStorage.js#L148" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a>
+## StorageIterator&nbsp;<a name="StorageIterator" href="https://github.com/seznam/IMA.js-core/tree/0.16.0-alpha.5/storage/SessionStorage.js#L148" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a>
 Implementation of the iterator protocol and the iterable protocol for DOM
 storage keys.
 
@@ -130,14 +130,14 @@ Initializes the DOM storage iterator.
 
 * * *
 
-### storageIterator._storage : <code>Storage</code>&nbsp;<a name="StorageIterator+_storage" href="https://github.com/seznam/IMA.js-core/tree/0.16.0-alpha.4/storage/SessionStorage.js#L160" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a>
+### storageIterator._storage : <code>Storage</code>&nbsp;<a name="StorageIterator+_storage" href="https://github.com/seznam/IMA.js-core/tree/0.16.0-alpha.5/storage/SessionStorage.js#L160" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a>
 The DOM storage being iterated.
 
 **Kind**: instance property of [<code>StorageIterator</code>](#StorageIterator)  
 
 * * *
 
-### storageIterator._currentKeyIndex : <code>number</code>&nbsp;<a name="StorageIterator+_currentKeyIndex" href="https://github.com/seznam/IMA.js-core/tree/0.16.0-alpha.4/storage/SessionStorage.js#L168" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a>
+### storageIterator._currentKeyIndex : <code>number</code>&nbsp;<a name="StorageIterator+_currentKeyIndex" href="https://github.com/seznam/IMA.js-core/tree/0.16.0-alpha.5/storage/SessionStorage.js#L168" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a>
 The current index of the DOM storage key this iterator will return
 next.
 
@@ -145,7 +145,7 @@ next.
 
 * * *
 
-### storageIterator.next() ⇒ <code>Object</code>&nbsp;<a name="StorageIterator+next" href="https://github.com/seznam/IMA.js-core/tree/0.16.0-alpha.4/storage/SessionStorage.js#L178" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a>
+### storageIterator.next() ⇒ <code>Object</code>&nbsp;<a name="StorageIterator+next" href="https://github.com/seznam/IMA.js-core/tree/0.16.0-alpha.5/storage/SessionStorage.js#L178" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a>
 Iterates to the next item. This method implements the iterator protocol.
 
 **Kind**: instance method of [<code>StorageIterator</code>](#StorageIterator)  

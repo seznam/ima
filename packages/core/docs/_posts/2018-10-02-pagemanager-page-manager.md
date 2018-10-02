@@ -3,7 +3,7 @@ category: "page/manager"
 title: "PageManager"
 ---
 
-## PageManager&nbsp;<a name="PageManager" href="https://github.com/seznam/IMA.js-core/tree/0.16.0-alpha.4/page/manager/PageManager.js#L5" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a>
+## PageManager&nbsp;<a name="PageManager" href="https://github.com/seznam/IMA.js-core/tree/0.16.0-alpha.5/page/manager/PageManager.js#L5" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a>
 The page manager is a utility for managing the current controller and its
 view.
 
@@ -17,14 +17,14 @@ view.
 
 * * *
 
-### pageManager.init()&nbsp;<a name="PageManager+init" href="https://github.com/seznam/IMA.js-core/tree/0.16.0-alpha.4/page/manager/PageManager.js#L9" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a>
+### pageManager.init()&nbsp;<a name="PageManager+init" href="https://github.com/seznam/IMA.js-core/tree/0.16.0-alpha.5/page/manager/PageManager.js#L9" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a>
 Initializes the page manager.
 
 **Kind**: instance method of [<code>PageManager</code>](#PageManager)  
 
 * * *
 
-### pageManager.manage(route, options, [params], [action]) ⇒ <code>Promise.&lt;{status: number, content: ?string, pageState: Object.&lt;string, \*&gt;}&gt;</code>&nbsp;<a name="PageManager+manage" href="https://github.com/seznam/IMA.js-core/tree/0.16.0-alpha.4/page/manager/PageManager.js#L54" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a>
+### pageManager.manage(route, options, [params], [action]) ⇒ <code>Promise.&lt;{status: number, content: ?string, pageState: Object.&lt;string, \*&gt;}&gt;</code>&nbsp;<a name="PageManager+manage" href="https://github.com/seznam/IMA.js-core/tree/0.16.0-alpha.5/page/manager/PageManager.js#L54" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a>
 Starts to manage the provided controller and its view. The manager
 stops the management of any previously managed controller and view.
 
@@ -50,7 +50,7 @@ server-side).
 
 * * *
 
-### pageManager.destroy()&nbsp;<a name="PageManager+destroy" href="https://github.com/seznam/IMA.js-core/tree/0.16.0-alpha.4/page/manager/PageManager.js#L60" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a>
+### pageManager.destroy()&nbsp;<a name="PageManager+destroy" href="https://github.com/seznam/IMA.js-core/tree/0.16.0-alpha.5/page/manager/PageManager.js#L60" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a>
 Finalization callback, called when the page manager is being discarded.
 This usually happens when the page is hot-reloaded at the client side.
 

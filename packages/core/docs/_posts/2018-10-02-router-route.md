@@ -59,7 +59,7 @@ It&#39;s used for wrong parameters order (optional vs. required ones)</p>
 </dd>
 </dl>
 
-## Route&nbsp;<a name="Route" href="https://github.com/seznam/IMA.js-core/tree/0.16.0-alpha.4/router/Route.js#L113" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a>
+## Route&nbsp;<a name="Route" href="https://github.com/seznam/IMA.js-core/tree/0.16.0-alpha.5/router/Route.js#L113" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a>
 Utility for representing and manipulating a single route in the router's
 configuration.
 
@@ -124,7 +124,7 @@ Initializes the route.
 
 * * *
 
-### route._name : <code>string</code>&nbsp;<a name="Route+_name" href="https://github.com/seznam/IMA.js-core/tree/0.16.0-alpha.4/router/Route.js#L153" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a>
+### route._name : <code>string</code>&nbsp;<a name="Route+_name" href="https://github.com/seznam/IMA.js-core/tree/0.16.0-alpha.5/router/Route.js#L153" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a>
 The unique name of this route, identifying it among the rest of the
 routes in the application.
 
@@ -132,14 +132,14 @@ routes in the application.
 
 * * *
 
-### route._pathExpression : <code>string</code>&nbsp;<a name="Route+_pathExpression" href="https://github.com/seznam/IMA.js-core/tree/0.16.0-alpha.4/router/Route.js#L160" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a>
+### route._pathExpression : <code>string</code>&nbsp;<a name="Route+_pathExpression" href="https://github.com/seznam/IMA.js-core/tree/0.16.0-alpha.5/router/Route.js#L160" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a>
 The original URL path expression from which this route was created.
 
 **Kind**: instance property of [<code>Route</code>](#Route)  
 
 * * *
 
-### route._controller : <code>string</code>&nbsp;<a name="Route+_controller" href="https://github.com/seznam/IMA.js-core/tree/0.16.0-alpha.4/router/Route.js#L168" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a>
+### route._controller : <code>string</code>&nbsp;<a name="Route+_controller" href="https://github.com/seznam/IMA.js-core/tree/0.16.0-alpha.5/router/Route.js#L168" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a>
 The full name of Object Container alias identifying the controller
 associated with this route.
 
@@ -147,7 +147,7 @@ associated with this route.
 
 * * *
 
-### route._view : <code>React.Component</code>&nbsp;<a name="Route+_view" href="https://github.com/seznam/IMA.js-core/tree/0.16.0-alpha.4/router/Route.js#L176" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a>
+### route._view : <code>React.Component</code>&nbsp;<a name="Route+_view" href="https://github.com/seznam/IMA.js-core/tree/0.16.0-alpha.5/router/Route.js#L176" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a>
 The full name or Object Container alias identifying the view class
 associated with this route.
 
@@ -155,35 +155,35 @@ associated with this route.
 
 * * *
 
-### route._options : <code>Object</code>&nbsp;<a name="Route+_options" href="https://github.com/seznam/IMA.js-core/tree/0.16.0-alpha.4/router/Route.js#L200" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a>
+### route._options : <code>Object</code>&nbsp;<a name="Route+_options" href="https://github.com/seznam/IMA.js-core/tree/0.16.0-alpha.5/router/Route.js#L200" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a>
 The route additional options.
 
 **Kind**: instance property of [<code>Route</code>](#Route)  
 
 * * *
 
-### route._trimmedPathExpression : <code>string</code>&nbsp;<a name="Route+_trimmedPathExpression" href="https://github.com/seznam/IMA.js-core/tree/0.16.0-alpha.4/router/Route.js#L217" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a>
+### route._trimmedPathExpression : <code>string</code>&nbsp;<a name="Route+_trimmedPathExpression" href="https://github.com/seznam/IMA.js-core/tree/0.16.0-alpha.5/router/Route.js#L217" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a>
 The path expression with the trailing slashes trimmed.
 
 **Kind**: instance property of [<code>Route</code>](#Route)  
 
 * * *
 
-### route._parameterNames : <code>Array.&lt;string&gt;</code>&nbsp;<a name="Route+_parameterNames" href="https://github.com/seznam/IMA.js-core/tree/0.16.0-alpha.4/router/Route.js#L224" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a>
+### route._parameterNames : <code>Array.&lt;string&gt;</code>&nbsp;<a name="Route+_parameterNames" href="https://github.com/seznam/IMA.js-core/tree/0.16.0-alpha.5/router/Route.js#L224" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a>
 The names of the parameters in this route.
 
 **Kind**: instance property of [<code>Route</code>](#Route)  
 
 * * *
 
-### route._hasParameters : <code>boolean</code>&nbsp;<a name="Route+_hasParameters" href="https://github.com/seznam/IMA.js-core/tree/0.16.0-alpha.4/router/Route.js#L231" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a>
+### route._hasParameters : <code>boolean</code>&nbsp;<a name="Route+_hasParameters" href="https://github.com/seznam/IMA.js-core/tree/0.16.0-alpha.5/router/Route.js#L231" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a>
 Set to <code>true</code> if this route contains parameters in its path.
 
 **Kind**: instance property of [<code>Route</code>](#Route)  
 
 * * *
 
-### route._matcher : <code>RegExp</code>&nbsp;<a name="Route+_matcher" href="https://github.com/seznam/IMA.js-core/tree/0.16.0-alpha.4/router/Route.js#L239" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a>
+### route._matcher : <code>RegExp</code>&nbsp;<a name="Route+_matcher" href="https://github.com/seznam/IMA.js-core/tree/0.16.0-alpha.5/router/Route.js#L239" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a>
 A regexp used to match URL path against this route and extract the
 parameter values from the matched URL paths.
 
@@ -191,7 +191,7 @@ parameter values from the matched URL paths.
 
 * * *
 
-### route.toPath([params]) ⇒ <code>string</code>&nbsp;<a name="Route+toPath" href="https://github.com/seznam/IMA.js-core/tree/0.16.0-alpha.4/router/Route.js#L255" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a>
+### route.toPath([params]) ⇒ <code>string</code>&nbsp;<a name="Route+toPath" href="https://github.com/seznam/IMA.js-core/tree/0.16.0-alpha.5/router/Route.js#L255" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a>
 Creates the URL and query parts of a URL by substituting the route's
 parameter placeholders by the provided parameter value.
 
@@ -210,7 +210,7 @@ placeholders will be appended as the query string.
 
 * * *
 
-### route.getName() ⇒ <code>string</code>&nbsp;<a name="Route+getName" href="https://github.com/seznam/IMA.js-core/tree/0.16.0-alpha.4/router/Route.js#L289" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a>
+### route.getName() ⇒ <code>string</code>&nbsp;<a name="Route+getName" href="https://github.com/seznam/IMA.js-core/tree/0.16.0-alpha.5/router/Route.js#L289" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a>
 Returns the unique identifying name of this route.
 
 **Kind**: instance method of [<code>Route</code>](#Route)  
@@ -218,7 +218,7 @@ Returns the unique identifying name of this route.
 
 * * *
 
-### route.getController() ⇒ <code>string</code>&nbsp;<a name="Route+getController" href="https://github.com/seznam/IMA.js-core/tree/0.16.0-alpha.4/router/Route.js#L300" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a>
+### route.getController() ⇒ <code>string</code>&nbsp;<a name="Route+getController" href="https://github.com/seznam/IMA.js-core/tree/0.16.0-alpha.5/router/Route.js#L300" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a>
 Returns the full name of the controller to use when this route is
 matched by the current URL, or an Object Container-registered alias of
 the controller.
@@ -228,7 +228,7 @@ the controller.
 
 * * *
 
-### route.getView() ⇒ <code>string</code>&nbsp;<a name="Route+getView" href="https://github.com/seznam/IMA.js-core/tree/0.16.0-alpha.4/router/Route.js#L311" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a>
+### route.getView() ⇒ <code>string</code>&nbsp;<a name="Route+getView" href="https://github.com/seznam/IMA.js-core/tree/0.16.0-alpha.5/router/Route.js#L311" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a>
 Returns the full name of the view class or an Object
 Container-registered alias for the view class, representing the view to
 use when this route is matched by the current URL.
@@ -238,14 +238,14 @@ use when this route is matched by the current URL.
 
 * * *
 
-### route.getOptions() ⇒ <code>Object</code>&nbsp;<a name="Route+getOptions" href="https://github.com/seznam/IMA.js-core/tree/0.16.0-alpha.4/router/Route.js#L337" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a>
+### route.getOptions() ⇒ <code>Object</code>&nbsp;<a name="Route+getOptions" href="https://github.com/seznam/IMA.js-core/tree/0.16.0-alpha.5/router/Route.js#L337" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a>
 Return route additional options.
 
 **Kind**: instance method of [<code>Route</code>](#Route)  
 
 * * *
 
-### route.getPathExpression() ⇒ <code>string</code>&nbsp;<a name="Route+getPathExpression" href="https://github.com/seznam/IMA.js-core/tree/0.16.0-alpha.4/router/Route.js#L347" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a>
+### route.getPathExpression() ⇒ <code>string</code>&nbsp;<a name="Route+getPathExpression" href="https://github.com/seznam/IMA.js-core/tree/0.16.0-alpha.5/router/Route.js#L347" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a>
 Returns the path expression, which is the parametrized pattern matching
 the URL paths matched by this route.
 
@@ -254,7 +254,7 @@ the URL paths matched by this route.
 
 * * *
 
-### route.matches(path) ⇒ <code>boolean</code>&nbsp;<a name="Route+matches" href="https://github.com/seznam/IMA.js-core/tree/0.16.0-alpha.4/router/Route.js#L358" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a>
+### route.matches(path) ⇒ <code>boolean</code>&nbsp;<a name="Route+matches" href="https://github.com/seznam/IMA.js-core/tree/0.16.0-alpha.5/router/Route.js#L358" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a>
 Tests whether the provided URL path matches this route. The provided
 path may contain the query.
 
@@ -268,7 +268,7 @@ path may contain the query.
 
 * * *
 
-### route.extractParameters(path) ⇒ <code>Object.&lt;string, ?string&gt;</code>&nbsp;<a name="Route+extractParameters" href="https://github.com/seznam/IMA.js-core/tree/0.16.0-alpha.4/router/Route.js#L375" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a>
+### route.extractParameters(path) ⇒ <code>Object.&lt;string, ?string&gt;</code>&nbsp;<a name="Route+extractParameters" href="https://github.com/seznam/IMA.js-core/tree/0.16.0-alpha.5/router/Route.js#L375" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a>
 Extracts the parameter values from the provided path. The method
 extracts both the in-path parameters and parses the query, allowing the
 query parameters to override the in-path parameters.
@@ -287,7 +287,7 @@ route.
 
 * * *
 
-### route._substituteRequiredParamInPath(path, paramName, paramValue) ⇒ <code>string</code>&nbsp;<a name="Route+_substituteRequiredParamInPath" href="https://github.com/seznam/IMA.js-core/tree/0.16.0-alpha.4/router/Route.js#L391" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a>
+### route._substituteRequiredParamInPath(path, paramName, paramValue) ⇒ <code>string</code>&nbsp;<a name="Route+_substituteRequiredParamInPath" href="https://github.com/seznam/IMA.js-core/tree/0.16.0-alpha.5/router/Route.js#L391" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a>
 Replace required parameter placeholder in path with parameter value.
 
 **Kind**: instance method of [<code>Route</code>](#Route)  
@@ -302,7 +302,7 @@ Replace required parameter placeholder in path with parameter value.
 
 * * *
 
-### route._substituteOptionalParamInPath(path, paramName, paramValue) ⇒ <code>string</code>&nbsp;<a name="Route+_substituteOptionalParamInPath" href="https://github.com/seznam/IMA.js-core/tree/0.16.0-alpha.4/router/Route.js#L406" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a>
+### route._substituteOptionalParamInPath(path, paramName, paramValue) ⇒ <code>string</code>&nbsp;<a name="Route+_substituteOptionalParamInPath" href="https://github.com/seznam/IMA.js-core/tree/0.16.0-alpha.5/router/Route.js#L406" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a>
 Replace optional param placeholder in path with parameter value.
 
 **Kind**: instance method of [<code>Route</code>](#Route)  
@@ -317,7 +317,7 @@ Replace optional param placeholder in path with parameter value.
 
 * * *
 
-### route._cleanUnusedOptionalParams(path) ⇒ <code>string</code>&nbsp;<a name="Route+_cleanUnusedOptionalParams" href="https://github.com/seznam/IMA.js-core/tree/0.16.0-alpha.4/router/Route.js#L420" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a>
+### route._cleanUnusedOptionalParams(path) ⇒ <code>string</code>&nbsp;<a name="Route+_cleanUnusedOptionalParams" href="https://github.com/seznam/IMA.js-core/tree/0.16.0-alpha.5/router/Route.js#L420" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a>
 Remove unused optional param placeholders in path.
 
 **Kind**: instance method of [<code>Route</code>](#Route)  
@@ -330,7 +330,7 @@ Remove unused optional param placeholders in path.
 
 * * *
 
-### route._isOptionalParamInPath(path, paramName) ⇒ <code>boolean</code>&nbsp;<a name="Route+_isOptionalParamInPath" href="https://github.com/seznam/IMA.js-core/tree/0.16.0-alpha.4/router/Route.js#L442" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a>
+### route._isOptionalParamInPath(path, paramName) ⇒ <code>boolean</code>&nbsp;<a name="Route+_isOptionalParamInPath" href="https://github.com/seznam/IMA.js-core/tree/0.16.0-alpha.5/router/Route.js#L442" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a>
 Returns true, if paramName is placed in path.
 
 **Kind**: instance method of [<code>Route</code>](#Route)  
@@ -343,7 +343,7 @@ Returns true, if paramName is placed in path.
 
 * * *
 
-### route._isRequiredParamInPath(path, paramName) ⇒ <code>boolean</code>&nbsp;<a name="Route+_isRequiredParamInPath" href="https://github.com/seznam/IMA.js-core/tree/0.16.0-alpha.4/router/Route.js#L455" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a>
+### route._isRequiredParamInPath(path, paramName) ⇒ <code>boolean</code>&nbsp;<a name="Route+_isRequiredParamInPath" href="https://github.com/seznam/IMA.js-core/tree/0.16.0-alpha.5/router/Route.js#L455" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a>
 Returns true, if paramName is placed in path and it's required.
 
 **Kind**: instance method of [<code>Route</code>](#Route)  
@@ -356,7 +356,7 @@ Returns true, if paramName is placed in path and it's required.
 
 * * *
 
-### route._getClearParamName(rawParam) ⇒ <code>string</code>&nbsp;<a name="Route+_getClearParamName" href="https://github.com/seznam/IMA.js-core/tree/0.16.0-alpha.4/router/Route.js#L467" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a>
+### route._getClearParamName(rawParam) ⇒ <code>string</code>&nbsp;<a name="Route+_getClearParamName" href="https://github.com/seznam/IMA.js-core/tree/0.16.0-alpha.5/router/Route.js#L467" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a>
 Extract clear parameter name, e.q. '?name' or 'name'
 
 **Kind**: instance method of [<code>Route</code>](#Route)  
@@ -368,7 +368,7 @@ Extract clear parameter name, e.q. '?name' or 'name'
 
 * * *
 
-### route._getSubparamPattern(delimeter) ⇒ <code>string</code>&nbsp;<a name="Route+_getSubparamPattern" href="https://github.com/seznam/IMA.js-core/tree/0.16.0-alpha.4/router/Route.js#L481" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a>
+### route._getSubparamPattern(delimeter) ⇒ <code>string</code>&nbsp;<a name="Route+_getSubparamPattern" href="https://github.com/seznam/IMA.js-core/tree/0.16.0-alpha.5/router/Route.js#L481" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a>
 Get pattern for subparameter.
 
 **Kind**: instance method of [<code>Route</code>](#Route)  
@@ -380,7 +380,7 @@ Get pattern for subparameter.
 
 * * *
 
-### route._checkOptionalParamsOrder(allMainParams) ⇒ <code>boolean</code>&nbsp;<a name="Route+_checkOptionalParamsOrder" href="https://github.com/seznam/IMA.js-core/tree/0.16.0-alpha.4/router/Route.js#L493" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a>
+### route._checkOptionalParamsOrder(allMainParams) ⇒ <code>boolean</code>&nbsp;<a name="Route+_checkOptionalParamsOrder" href="https://github.com/seznam/IMA.js-core/tree/0.16.0-alpha.5/router/Route.js#L493" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a>
 Check if all optional params are below required ones
 
 **Kind**: instance method of [<code>Route</code>](#Route)  
@@ -392,7 +392,7 @@ Check if all optional params are below required ones
 
 * * *
 
-### route._checkParametersOrder(clearedPathExpr) ⇒ <code>Bool</code>&nbsp;<a name="Route+_checkParametersOrder" href="https://github.com/seznam/IMA.js-core/tree/0.16.0-alpha.4/router/Route.js#L519" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a>
+### route._checkParametersOrder(clearedPathExpr) ⇒ <code>Bool</code>&nbsp;<a name="Route+_checkParametersOrder" href="https://github.com/seznam/IMA.js-core/tree/0.16.0-alpha.5/router/Route.js#L519" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a>
 Check if main parametres have correct order.
 It means that required param cannot follow optional one.
 
@@ -406,7 +406,7 @@ It means that required param cannot follow optional one.
 
 * * *
 
-### route._replaceOptionalParametersInPath(path, optionalParams) ⇒ <code>string</code>&nbsp;<a name="Route+_replaceOptionalParametersInPath" href="https://github.com/seznam/IMA.js-core/tree/0.16.0-alpha.4/router/Route.js#L538" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a>
+### route._replaceOptionalParametersInPath(path, optionalParams) ⇒ <code>string</code>&nbsp;<a name="Route+_replaceOptionalParametersInPath" href="https://github.com/seznam/IMA.js-core/tree/0.16.0-alpha.5/router/Route.js#L538" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a>
 Convert main optional parameters to capture sequences
 
 **Kind**: instance method of [<code>Route</code>](#Route)  
@@ -420,7 +420,7 @@ Convert main optional parameters to capture sequences
 
 * * *
 
-### route._replaceRequiredSubParametersInPath(path, clearedPathExpr) ⇒ <code>string</code>&nbsp;<a name="Route+_replaceRequiredSubParametersInPath" href="https://github.com/seznam/IMA.js-core/tree/0.16.0-alpha.4/router/Route.js#L570" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a>
+### route._replaceRequiredSubParametersInPath(path, clearedPathExpr) ⇒ <code>string</code>&nbsp;<a name="Route+_replaceRequiredSubParametersInPath" href="https://github.com/seznam/IMA.js-core/tree/0.16.0-alpha.5/router/Route.js#L570" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a>
 Convert required subparameters to capture sequences
 
 **Kind**: instance method of [<code>Route</code>](#Route)  
@@ -434,7 +434,7 @@ Convert required subparameters to capture sequences
 
 * * *
 
-### route._replaceOptionalSubParametersInPath(path, optionalSubparamsOthers, optionalSubparamsLast) ⇒ <code>string</code>&nbsp;<a name="Route+_replaceOptionalSubParametersInPath" href="https://github.com/seznam/IMA.js-core/tree/0.16.0-alpha.4/router/Route.js#L603" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a>
+### route._replaceOptionalSubParametersInPath(path, optionalSubparamsOthers, optionalSubparamsLast) ⇒ <code>string</code>&nbsp;<a name="Route+_replaceOptionalSubParametersInPath" href="https://github.com/seznam/IMA.js-core/tree/0.16.0-alpha.5/router/Route.js#L603" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a>
 Convert optional subparameters to capture sequences
 
 **Kind**: instance method of [<code>Route</code>](#Route)  
@@ -449,7 +449,7 @@ Convert optional subparameters to capture sequences
 
 * * *
 
-### route._compileToRegExp(pathExpression) ⇒ <code>RegExp</code>&nbsp;<a name="Route+_compileToRegExp" href="https://github.com/seznam/IMA.js-core/tree/0.16.0-alpha.4/router/Route.js#L635" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a>
+### route._compileToRegExp(pathExpression) ⇒ <code>RegExp</code>&nbsp;<a name="Route+_compileToRegExp" href="https://github.com/seznam/IMA.js-core/tree/0.16.0-alpha.5/router/Route.js#L635" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a>
 Compiles the path expression to a regular expression that can be used
 for easier matching of URL paths against this route, and extracting the
 path parameter values from the URL path.
@@ -464,7 +464,7 @@ path parameter values from the URL path.
 
 * * *
 
-### route._getParameters(path) ⇒ <code>Object.&lt;string, string&gt;</code>&nbsp;<a name="Route+_getParameters" href="https://github.com/seznam/IMA.js-core/tree/0.16.0-alpha.4/router/Route.js#L706" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a>
+### route._getParameters(path) ⇒ <code>Object.&lt;string, string&gt;</code>&nbsp;<a name="Route+_getParameters" href="https://github.com/seznam/IMA.js-core/tree/0.16.0-alpha.5/router/Route.js#L706" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a>
 Parses the provided path and extract the in-path parameters. The method
 decodes the parameters and returns them in a hash object.
 
@@ -478,7 +478,7 @@ decodes the parameters and returns them in a hash object.
 
 * * *
 
-### route._extractParameters(parameterValues) ⇒ <code>Object.&lt;string, ?string&gt;</code>&nbsp;<a name="Route+_extractParameters" href="https://github.com/seznam/IMA.js-core/tree/0.16.0-alpha.4/router/Route.js#L727" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a>
+### route._extractParameters(parameterValues) ⇒ <code>Object.&lt;string, ?string&gt;</code>&nbsp;<a name="Route+_extractParameters" href="https://github.com/seznam/IMA.js-core/tree/0.16.0-alpha.5/router/Route.js#L727" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a>
 Extract parameters from given path.
 
 **Kind**: instance method of [<code>Route</code>](#Route)  
@@ -491,7 +491,7 @@ Extract parameters from given path.
 
 * * *
 
-### route._decodeURIParameter(parameterValue) ⇒ <code>string</code>&nbsp;<a name="Route+_decodeURIParameter" href="https://github.com/seznam/IMA.js-core/tree/0.16.0-alpha.4/router/Route.js#L755" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a>
+### route._decodeURIParameter(parameterValue) ⇒ <code>string</code>&nbsp;<a name="Route+_decodeURIParameter" href="https://github.com/seznam/IMA.js-core/tree/0.16.0-alpha.5/router/Route.js#L755" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a>
 Decoding parameters.
 
 **Kind**: instance method of [<code>Route</code>](#Route)  
@@ -504,7 +504,7 @@ Decoding parameters.
 
 * * *
 
-### route._cleanOptParamName(paramName) ⇒ <code>string</code>&nbsp;<a name="Route+_cleanOptParamName" href="https://github.com/seznam/IMA.js-core/tree/0.16.0-alpha.4/router/Route.js#L769" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a>
+### route._cleanOptParamName(paramName) ⇒ <code>string</code>&nbsp;<a name="Route+_cleanOptParamName" href="https://github.com/seznam/IMA.js-core/tree/0.16.0-alpha.5/router/Route.js#L769" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a>
 Returns optional param name without "?"
 
 **Kind**: instance method of [<code>Route</code>](#Route)  
@@ -517,7 +517,7 @@ Returns optional param name without "?"
 
 * * *
 
-### route._isParamOptional(paramName) ⇒ <code>boolean</code>&nbsp;<a name="Route+_isParamOptional" href="https://github.com/seznam/IMA.js-core/tree/0.16.0-alpha.4/router/Route.js#L779" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a>
+### route._isParamOptional(paramName) ⇒ <code>boolean</code>&nbsp;<a name="Route+_isParamOptional" href="https://github.com/seznam/IMA.js-core/tree/0.16.0-alpha.5/router/Route.js#L779" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a>
 Checks if parameter is optional or not.
 
 **Kind**: instance method of [<code>Route</code>](#Route)  
@@ -530,7 +530,7 @@ Checks if parameter is optional or not.
 
 * * *
 
-### route._getQuery(path) ⇒ <code>Object.&lt;string, ?string&gt;</code>&nbsp;<a name="Route+_getQuery" href="https://github.com/seznam/IMA.js-core/tree/0.16.0-alpha.4/router/Route.js#L791" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a>
+### route._getQuery(path) ⇒ <code>Object.&lt;string, ?string&gt;</code>&nbsp;<a name="Route+_getQuery" href="https://github.com/seznam/IMA.js-core/tree/0.16.0-alpha.5/router/Route.js#L791" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a>
 Extracts and decodes the query parameters from the provided URL path and
 query.
 
@@ -544,7 +544,7 @@ query.
 
 * * *
 
-### route._getTrimmedPath(path) ⇒ <code>string</code>&nbsp;<a name="Route+_getTrimmedPath" href="https://github.com/seznam/IMA.js-core/tree/0.16.0-alpha.4/router/Route.js#L815" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a>
+### route._getTrimmedPath(path) ⇒ <code>string</code>&nbsp;<a name="Route+_getTrimmedPath" href="https://github.com/seznam/IMA.js-core/tree/0.16.0-alpha.5/router/Route.js#L815" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a>
 Trims the trailing forward slash from the provided URL path.
 
 **Kind**: instance method of [<code>Route</code>](#Route)  
@@ -557,7 +557,7 @@ Trims the trailing forward slash from the provided URL path.
 
 * * *
 
-### route._getParameterNames(pathExpression) ⇒ <code>Array.&lt;string&gt;</code>&nbsp;<a name="Route+_getParameterNames" href="https://github.com/seznam/IMA.js-core/tree/0.16.0-alpha.4/router/Route.js#L826" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a>
+### route._getParameterNames(pathExpression) ⇒ <code>Array.&lt;string&gt;</code>&nbsp;<a name="Route+_getParameterNames" href="https://github.com/seznam/IMA.js-core/tree/0.16.0-alpha.5/router/Route.js#L826" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a>
 Extracts the parameter names from the provided path expression.
 
 **Kind**: instance method of [<code>Route</code>](#Route)  
@@ -571,7 +571,7 @@ Extracts the parameter names from the provided path expression.
 
 * * *
 
-## CONTROL_CHARACTERS_REGEXP : <code>RegExp</code>&nbsp;<a name="CONTROL_CHARACTERS_REGEXP" href="https://github.com/seznam/IMA.js-core/tree/0.16.0-alpha.4/router/Route.js#L10" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a>
+## CONTROL_CHARACTERS_REGEXP : <code>RegExp</code>&nbsp;<a name="CONTROL_CHARACTERS_REGEXP" href="https://github.com/seznam/IMA.js-core/tree/0.16.0-alpha.5/router/Route.js#L10" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a>
 Regular expression matching all control characters used in regular
 expressions. The regular expression is used to match these characters in
 path expressions and replace them appropriately so the path expression can
@@ -581,7 +581,7 @@ be compiled to a regular expression.
 
 * * *
 
-## LOOSE_SLASHES_REGEXP : <code>RegExp</code>&nbsp;<a name="LOOSE_SLASHES_REGEXP" href="https://github.com/seznam/IMA.js-core/tree/0.16.0-alpha.4/router/Route.js#L19" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a>
+## LOOSE_SLASHES_REGEXP : <code>RegExp</code>&nbsp;<a name="LOOSE_SLASHES_REGEXP" href="https://github.com/seznam/IMA.js-core/tree/0.16.0-alpha.5/router/Route.js#L19" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a>
 Regular expression used to match and remove the starting and trailing
 forward slashes from a path expression or a URL path.
 
@@ -589,42 +589,42 @@ forward slashes from a path expression or a URL path.
 
 * * *
 
-## PARAMS_REGEXP_UNIVERSAL : <code>RegExp</code>&nbsp;<a name="PARAMS_REGEXP_UNIVERSAL" href="https://github.com/seznam/IMA.js-core/tree/0.16.0-alpha.4/router/Route.js#L27" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a>
+## PARAMS_REGEXP_UNIVERSAL : <code>RegExp</code>&nbsp;<a name="PARAMS_REGEXP_UNIVERSAL" href="https://github.com/seznam/IMA.js-core/tree/0.16.0-alpha.5/router/Route.js#L27" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a>
 Regular expression used to match the parameter names from a path expression.
 
 **Kind**: global constant  
 
 * * *
 
-## PARAMS_REGEXP_REQUIRED : <code>RegExp</code>&nbsp;<a name="PARAMS_REGEXP_REQUIRED" href="https://github.com/seznam/IMA.js-core/tree/0.16.0-alpha.4/router/Route.js#L35" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a>
+## PARAMS_REGEXP_REQUIRED : <code>RegExp</code>&nbsp;<a name="PARAMS_REGEXP_REQUIRED" href="https://github.com/seznam/IMA.js-core/tree/0.16.0-alpha.5/router/Route.js#L35" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a>
 Regular expression used to match the required parameter names from a path expression.
 
 **Kind**: global constant  
 
 * * *
 
-## PARAMS_REGEXP_CORE_NAME : <code>RegExp</code>&nbsp;<a name="PARAMS_REGEXP_CORE_NAME" href="https://github.com/seznam/IMA.js-core/tree/0.16.0-alpha.4/router/Route.js#L43" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a>
+## PARAMS_REGEXP_CORE_NAME : <code>RegExp</code>&nbsp;<a name="PARAMS_REGEXP_CORE_NAME" href="https://github.com/seznam/IMA.js-core/tree/0.16.0-alpha.5/router/Route.js#L43" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a>
 Regular expression used to separate a camelCase parameter name
 
 **Kind**: global constant  
 
 * * *
 
-## PARAMS_START_PATTERN : <code>String</code>&nbsp;<a name="PARAMS_START_PATTERN" href="https://github.com/seznam/IMA.js-core/tree/0.16.0-alpha.4/router/Route.js#L51" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a>
+## PARAMS_START_PATTERN : <code>String</code>&nbsp;<a name="PARAMS_START_PATTERN" href="https://github.com/seznam/IMA.js-core/tree/0.16.0-alpha.5/router/Route.js#L51" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a>
 Regular expression used to match start of parameter names from a path expression.
 
 **Kind**: global constant  
 
 * * *
 
-## PARAMS_END_PATTERN : <code>String</code>&nbsp;<a name="PARAMS_END_PATTERN" href="https://github.com/seznam/IMA.js-core/tree/0.16.0-alpha.4/router/Route.js#L59" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a>
+## PARAMS_END_PATTERN : <code>String</code>&nbsp;<a name="PARAMS_END_PATTERN" href="https://github.com/seznam/IMA.js-core/tree/0.16.0-alpha.5/router/Route.js#L59" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a>
 Regular expression used to match end of parameter names from a path expression.
 
 **Kind**: global constant  
 
 * * *
 
-## PARAMS_NEVER_MATCH_REGEXP : <code>RegExp</code>&nbsp;<a name="PARAMS_NEVER_MATCH_REGEXP" href="https://github.com/seznam/IMA.js-core/tree/0.16.0-alpha.4/router/Route.js#L68" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a>
+## PARAMS_NEVER_MATCH_REGEXP : <code>RegExp</code>&nbsp;<a name="PARAMS_NEVER_MATCH_REGEXP" href="https://github.com/seznam/IMA.js-core/tree/0.16.0-alpha.5/router/Route.js#L68" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a>
 Regular expression used to never match the parameter names from a path expression.
 It's used for wrong parameters order (optional vs. required ones)
 
@@ -632,14 +632,14 @@ It's used for wrong parameters order (optional vs. required ones)
 
 * * *
 
-## PARAMS_MAIN_REGEXP : <code>RegExp</code>&nbsp;<a name="PARAMS_MAIN_REGEXP" href="https://github.com/seznam/IMA.js-core/tree/0.16.0-alpha.4/router/Route.js#L76" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a>
+## PARAMS_MAIN_REGEXP : <code>RegExp</code>&nbsp;<a name="PARAMS_MAIN_REGEXP" href="https://github.com/seznam/IMA.js-core/tree/0.16.0-alpha.5/router/Route.js#L76" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a>
 Regular expression used to match all main parameter names from a path expression.
 
 **Kind**: global constant  
 
 * * *
 
-## SUBPARAMS_REQUIRED_REGEXP : <code>Object.&lt;String, RegExp&gt;</code>&nbsp;<a name="SUBPARAMS_REQUIRED_REGEXP" href="https://github.com/seznam/IMA.js-core/tree/0.16.0-alpha.4/router/Route.js#L85" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a>
+## SUBPARAMS_REQUIRED_REGEXP : <code>Object.&lt;String, RegExp&gt;</code>&nbsp;<a name="SUBPARAMS_REQUIRED_REGEXP" href="https://github.com/seznam/IMA.js-core/tree/0.16.0-alpha.5/router/Route.js#L85" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a>
 Regular expression used to match the required subparameter names from a path expression.
 (e.g. for path '/:paramA-:paramB/:nextParam' are subparametres 'paramA' and 'paramB')
 
@@ -647,14 +647,14 @@ Regular expression used to match the required subparameter names from a path exp
 
 * * *
 
-## SUBPARAMS_OPT_REGEXP : <code>Object.&lt;String, RegExp&gt;</code>&nbsp;<a name="SUBPARAMS_OPT_REGEXP" href="https://github.com/seznam/IMA.js-core/tree/0.16.0-alpha.4/router/Route.js#L96" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a>
+## SUBPARAMS_OPT_REGEXP : <code>Object.&lt;String, RegExp&gt;</code>&nbsp;<a name="SUBPARAMS_OPT_REGEXP" href="https://github.com/seznam/IMA.js-core/tree/0.16.0-alpha.5/router/Route.js#L96" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a>
 Regular expression used to match the optional parameter names from a path expression.
 
 **Kind**: global constant  
 
 * * *
 
-## PARAMS_REGEXP_OPT : <code>RegExp</code>&nbsp;<a name="PARAMS_REGEXP_OPT" href="https://github.com/seznam/IMA.js-core/tree/0.16.0-alpha.4/router/Route.js#L107" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a>
+## PARAMS_REGEXP_OPT : <code>RegExp</code>&nbsp;<a name="PARAMS_REGEXP_OPT" href="https://github.com/seznam/IMA.js-core/tree/0.16.0-alpha.5/router/Route.js#L107" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a>
 Regular expression used to match the parameter names from a path expression.
 
 **Kind**: global constant  

@@ -19,7 +19,7 @@ there is no native way to create a weak reference.</p>
 </dd>
 </dl>
 
-## WeakMapStorage&nbsp;<a name="WeakMapStorage" href="https://github.com/seznam/IMA.js-core/tree/0.16.0-alpha.4/storage/WeakMapStorage.js#L8" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a>
+## WeakMapStorage&nbsp;<a name="WeakMapStorage" href="https://github.com/seznam/IMA.js-core/tree/0.16.0-alpha.5/storage/WeakMapStorage.js#L8" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a>
 A specialization of the <code>MapStorage</code> storage mimicking the native
 <code>WeakMap</code> using its internal garbage collector used once the size of
 the storage reaches the configured threshold.
@@ -51,51 +51,51 @@ Initializes the storage.
 
 * * *
 
-### weakMapStorage._entryTtl : <code>number</code>&nbsp;<a name="WeakMapStorage+_entryTtl" href="https://github.com/seznam/IMA.js-core/tree/0.16.0-alpha.4/storage/WeakMapStorage.js#L24" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a>
+### weakMapStorage._entryTtl : <code>number</code>&nbsp;<a name="WeakMapStorage+_entryTtl" href="https://github.com/seznam/IMA.js-core/tree/0.16.0-alpha.5/storage/WeakMapStorage.js#L24" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a>
 The time-to-live of a storage entry in milliseconds.
 
 **Kind**: instance property of [<code>WeakMapStorage</code>](#WeakMapStorage)  
 
 * * *
 
-### weakMapStorage.has()&nbsp;<a name="WeakMapStorage+has" href="https://github.com/seznam/IMA.js-core/tree/0.16.0-alpha.4/storage/WeakMapStorage.js#L30" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a>
+### weakMapStorage.has()&nbsp;<a name="WeakMapStorage+has" href="https://github.com/seznam/IMA.js-core/tree/0.16.0-alpha.5/storage/WeakMapStorage.js#L30" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a>
 **Kind**: instance method of [<code>WeakMapStorage</code>](#WeakMapStorage)  
 
 * * *
 
-### weakMapStorage.get()&nbsp;<a name="WeakMapStorage+get" href="https://github.com/seznam/IMA.js-core/tree/0.16.0-alpha.4/storage/WeakMapStorage.js#L39" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a>
+### weakMapStorage.get()&nbsp;<a name="WeakMapStorage+get" href="https://github.com/seznam/IMA.js-core/tree/0.16.0-alpha.5/storage/WeakMapStorage.js#L39" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a>
 **Kind**: instance method of [<code>WeakMapStorage</code>](#WeakMapStorage)  
 
 * * *
 
-### weakMapStorage.set()&nbsp;<a name="WeakMapStorage+set" href="https://github.com/seznam/IMA.js-core/tree/0.16.0-alpha.4/storage/WeakMapStorage.js#L52" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a>
+### weakMapStorage.set()&nbsp;<a name="WeakMapStorage+set" href="https://github.com/seznam/IMA.js-core/tree/0.16.0-alpha.5/storage/WeakMapStorage.js#L52" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a>
 **Kind**: instance method of [<code>WeakMapStorage</code>](#WeakMapStorage)  
 
 * * *
 
-### weakMapStorage.delete()&nbsp;<a name="WeakMapStorage+delete" href="https://github.com/seznam/IMA.js-core/tree/0.16.0-alpha.4/storage/WeakMapStorage.js#L61" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a>
+### weakMapStorage.delete()&nbsp;<a name="WeakMapStorage+delete" href="https://github.com/seznam/IMA.js-core/tree/0.16.0-alpha.5/storage/WeakMapStorage.js#L61" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a>
 **Kind**: instance method of [<code>WeakMapStorage</code>](#WeakMapStorage)  
 
 * * *
 
-### weakMapStorage.keys()&nbsp;<a name="WeakMapStorage+keys" href="https://github.com/seznam/IMA.js-core/tree/0.16.0-alpha.4/storage/WeakMapStorage.js#L70" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a>
+### weakMapStorage.keys()&nbsp;<a name="WeakMapStorage+keys" href="https://github.com/seznam/IMA.js-core/tree/0.16.0-alpha.5/storage/WeakMapStorage.js#L70" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a>
 **Kind**: instance method of [<code>WeakMapStorage</code>](#WeakMapStorage)  
 
 * * *
 
-### weakMapStorage.size()&nbsp;<a name="WeakMapStorage+size" href="https://github.com/seznam/IMA.js-core/tree/0.16.0-alpha.4/storage/WeakMapStorage.js#L79" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a>
+### weakMapStorage.size()&nbsp;<a name="WeakMapStorage+size" href="https://github.com/seznam/IMA.js-core/tree/0.16.0-alpha.5/storage/WeakMapStorage.js#L79" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a>
 **Kind**: instance method of [<code>WeakMapStorage</code>](#WeakMapStorage)  
 
 * * *
 
-### weakMapStorage._discardExpiredEntries()&nbsp;<a name="WeakMapStorage+_discardExpiredEntries" href="https://github.com/seznam/IMA.js-core/tree/0.16.0-alpha.4/storage/WeakMapStorage.js#L88" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a>
+### weakMapStorage._discardExpiredEntries()&nbsp;<a name="WeakMapStorage+_discardExpiredEntries" href="https://github.com/seznam/IMA.js-core/tree/0.16.0-alpha.5/storage/WeakMapStorage.js#L88" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a>
 Deletes all expired entries from this storage.
 
 **Kind**: instance method of [<code>WeakMapStorage</code>](#WeakMapStorage)  
 
 * * *
 
-## WeakRef&nbsp;<a name="WeakRef" href="https://github.com/seznam/IMA.js-core/tree/0.16.0-alpha.4/storage/WeakMapStorage.js#L105" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a>
+## WeakRef&nbsp;<a name="WeakRef" href="https://github.com/seznam/IMA.js-core/tree/0.16.0-alpha.5/storage/WeakMapStorage.js#L105" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a>
 A simple reference wrapper that emulates a weak reference. We seem to have
 no other option, since WeakMap and WeakSet are not enumerable (so what is
 the point of WeakMap and WeakSet if you still need to manage the keys?!) and
@@ -124,7 +124,7 @@ Initializes the weak reference to the target reference.
 
 * * *
 
-### weakRef._reference : <code>Object</code>&nbsp;<a name="WeakRef+_reference" href="https://github.com/seznam/IMA.js-core/tree/0.16.0-alpha.4/storage/WeakMapStorage.js#L134" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a>
+### weakRef._reference : <code>Object</code>&nbsp;<a name="WeakRef+_reference" href="https://github.com/seznam/IMA.js-core/tree/0.16.0-alpha.5/storage/WeakMapStorage.js#L134" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a>
 The actual target reference, or <code>null</code> if the reference has
 been already discarded.
 
@@ -132,7 +132,7 @@ been already discarded.
 
 * * *
 
-### weakRef._expiration : <code>number</code>&nbsp;<a name="WeakRef+_expiration" href="https://github.com/seznam/IMA.js-core/tree/0.16.0-alpha.4/storage/WeakMapStorage.js#L142" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a>
+### weakRef._expiration : <code>number</code>&nbsp;<a name="WeakRef+_expiration" href="https://github.com/seznam/IMA.js-core/tree/0.16.0-alpha.5/storage/WeakMapStorage.js#L142" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a>
 The UNIX timestamp with millisecond precision marking the moment at
 or after which the reference will be discarded.
 
@@ -140,7 +140,7 @@ or after which the reference will be discarded.
 
 * * *
 
-### weakRef.target ⇒ <code>Object</code>&nbsp;<a name="WeakRef+target" href="https://github.com/seznam/IMA.js-core/tree/0.16.0-alpha.4/storage/WeakMapStorage.js#L152" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a>
+### weakRef.target ⇒ <code>Object</code>&nbsp;<a name="WeakRef+target" href="https://github.com/seznam/IMA.js-core/tree/0.16.0-alpha.5/storage/WeakMapStorage.js#L152" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a>
 Returns the target reference, provided that the target reference is
 still alive. Returns <code>null</code> if the reference has been discarded.
 

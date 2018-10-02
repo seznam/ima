@@ -3,7 +3,7 @@ category: "page"
 title: "AbstractPureComponent"
 ---
 
-## *AbstractPureComponent*&nbsp;<a name="AbstractPureComponent" href="https://github.com/seznam/IMA.js-core/tree/0.16.0-alpha.4/page/AbstractPureComponent.js#L18" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a>
+## *AbstractPureComponent*&nbsp;<a name="AbstractPureComponent" href="https://github.com/seznam/IMA.js-core/tree/0.16.0-alpha.5/page/AbstractPureComponent.js#L18" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a>
 The base class for all pure (state-less) view components.
 
 Unlike the "regular" components, pure components do not have any external
@@ -43,7 +43,7 @@ Initializes the component.
 
 * * *
 
-### *abstractPureComponent._utils : <code>Object.&lt;string, \*&gt;</code>*&nbsp;<a name="AbstractPureComponent+_utils" href="https://github.com/seznam/IMA.js-core/tree/0.16.0-alpha.4/page/AbstractPureComponent.js#L42" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a>
+### *abstractPureComponent._utils : <code>Object.&lt;string, \*&gt;</code>*&nbsp;<a name="AbstractPureComponent+_utils" href="https://github.com/seznam/IMA.js-core/tree/0.16.0-alpha.5/page/AbstractPureComponent.js#L42" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a>
 The view utilities, initialized lazily upon first use from either
 the context, or the component's props.
 
@@ -51,7 +51,7 @@ the context, or the component's props.
 
 * * *
 
-### *abstractPureComponent.utils ⇒ <code>Object.&lt;string, \*&gt;</code>*&nbsp;<a name="AbstractPureComponent+utils" href="https://github.com/seznam/IMA.js-core/tree/0.16.0-alpha.4/page/AbstractPureComponent.js#L51" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a>
+### *abstractPureComponent.utils ⇒ <code>Object.&lt;string, \*&gt;</code>*&nbsp;<a name="AbstractPureComponent+utils" href="https://github.com/seznam/IMA.js-core/tree/0.16.0-alpha.5/page/AbstractPureComponent.js#L51" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a>
 Returns the utilities for the view components. The returned value is the
 value bound to the <code>$Utils</code> object container constant.
 
@@ -60,7 +60,7 @@ value bound to the <code>$Utils</code> object container constant.
 
 * * *
 
-### *abstractPureComponent.localize(key, [params]) ⇒ <code>string</code>*&nbsp;<a name="AbstractPureComponent+localize" href="https://github.com/seznam/IMA.js-core/tree/0.16.0-alpha.4/page/AbstractPureComponent.js#L69" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a>
+### *abstractPureComponent.localize(key, [params]) ⇒ <code>string</code>*&nbsp;<a name="AbstractPureComponent+localize" href="https://github.com/seznam/IMA.js-core/tree/0.16.0-alpha.5/page/AbstractPureComponent.js#L69" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a>
 Returns the localized phrase identified by the specified key. The
 placeholders in the localization phrase will be replaced by the provided
 values.
@@ -76,7 +76,7 @@ values.
 
 * * *
 
-### *abstractPureComponent.link(name, [params]) ⇒ <code>string</code>*&nbsp;<a name="AbstractPureComponent+link" href="https://github.com/seznam/IMA.js-core/tree/0.16.0-alpha.4/page/AbstractPureComponent.js#L84" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a>
+### *abstractPureComponent.link(name, [params]) ⇒ <code>string</code>*&nbsp;<a name="AbstractPureComponent+link" href="https://github.com/seznam/IMA.js-core/tree/0.16.0-alpha.5/page/AbstractPureComponent.js#L84" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a>
 Generates an absolute URL using the provided route name (see the
 <code>app/config/routes.js</code> file). The provided parameters will
 replace the placeholders in the route pattern, while the extraneous
@@ -93,7 +93,7 @@ parameters will be appended to the generated URL's query string.
 
 * * *
 
-### *abstractPureComponent.cssClasses(classRules, includeComponentClassName) ⇒ <code>string</code>*&nbsp;<a name="AbstractPureComponent+cssClasses" href="https://github.com/seznam/IMA.js-core/tree/0.16.0-alpha.4/page/AbstractPureComponent.js#L108" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a>
+### *abstractPureComponent.cssClasses(classRules, includeComponentClassName) ⇒ <code>string</code>*&nbsp;<a name="AbstractPureComponent+cssClasses" href="https://github.com/seznam/IMA.js-core/tree/0.16.0-alpha.5/page/AbstractPureComponent.js#L108" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a>
 Generate a string of CSS classes from the properties of the passed-in
 object that resolve to true.
 
@@ -120,7 +120,7 @@ this.cssClasses({
 
 * * *
 
-### *abstractPureComponent.fire(eventName, [data])*&nbsp;<a name="AbstractPureComponent+fire" href="https://github.com/seznam/IMA.js-core/tree/0.16.0-alpha.4/page/AbstractPureComponent.js#L118" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a>
+### *abstractPureComponent.fire(eventName, [data])*&nbsp;<a name="AbstractPureComponent+fire" href="https://github.com/seznam/IMA.js-core/tree/0.16.0-alpha.5/page/AbstractPureComponent.js#L118" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a>
 Creates and sends a new IMA.js DOM custom event from this component.
 
 **Kind**: instance method of [<code>AbstractPureComponent</code>](#AbstractPureComponent)  
@@ -133,7 +133,7 @@ Creates and sends a new IMA.js DOM custom event from this component.
 
 * * *
 
-### *abstractPureComponent.listen(eventTarget, eventName, listener)*&nbsp;<a name="AbstractPureComponent+listen" href="https://github.com/seznam/IMA.js-core/tree/0.16.0-alpha.4/page/AbstractPureComponent.js#L132" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a>
+### *abstractPureComponent.listen(eventTarget, eventName, listener)*&nbsp;<a name="AbstractPureComponent+listen" href="https://github.com/seznam/IMA.js-core/tree/0.16.0-alpha.5/page/AbstractPureComponent.js#L132" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a>
 Registers the provided event listener for execution whenever an IMA.js
 DOM custom event of the specified name occurs at the specified event
 target.
@@ -149,7 +149,7 @@ target.
 
 * * *
 
-### *abstractPureComponent.unlisten(eventTarget, eventName, listener)*&nbsp;<a name="AbstractPureComponent+unlisten" href="https://github.com/seznam/IMA.js-core/tree/0.16.0-alpha.4/page/AbstractPureComponent.js#L145" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a>
+### *abstractPureComponent.unlisten(eventTarget, eventName, listener)*&nbsp;<a name="AbstractPureComponent+unlisten" href="https://github.com/seznam/IMA.js-core/tree/0.16.0-alpha.5/page/AbstractPureComponent.js#L145" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a>
 Deregisters the provided event listener for an IMA.js DOM custom event
 of the specified name at the specified event target.
 
