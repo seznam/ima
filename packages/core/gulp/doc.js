@@ -86,7 +86,9 @@ function generate(done) {
       `${dir.docPartials}main.hbs`
     ]
   };
-  const gitUrl = `${packageData.repository.url.slice(0, -4)}/tree/stable`;
+  const gitUrl = `${packageData.repository.url.slice(0, -4)}/tree/${
+    packageData.version
+  }`;
   const lunrDocuments = [];
 
   fs.ensureDirSync(dir.docPosts);
@@ -182,11 +184,19 @@ function generate(done) {
       })
     )
     .on('end', () => {
-      const lunrFile = `${dir.docData}lunr.json`;
-
       fs.ensureDirSync(dir.docData);
+
+      const lunrFile = `${dir.docData}lunr.json`;
       fs.removeSync(lunrFile);
       fs.writeFileSync(lunrFile, JSON.stringify(lunrDocuments));
+
+      const commonFile = `${dir.docData}common.json`;
+      fs.removeSync(commonFile);
+      fs.writeFileSync(
+        commonFile,
+        JSON.stringify({ version: packageData.version })
+      );
+
       done();
     });
 }
