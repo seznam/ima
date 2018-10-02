@@ -86,7 +86,9 @@ function generate(done) {
       `${dir.docPartials}main.hbs`
     ]
   };
-  const gitUrl = `${packageData.repository.url.slice(0, -4)}/tree/stable`;
+  const gitUrl = `${packageData.repository.url.slice(0, -4)}/tree/${
+    packageData.version
+  }`;
   const lunrDocuments = [];
 
   fs.ensureDirSync(dir.docPosts);
@@ -154,9 +156,18 @@ function generate(done) {
             item.kind === 'constructor'
               ? `new_${item.name}_new`
               : item.id.replace('#', '+');
+          const textValues = new Set([
+            item.imaMenuCategory,
+            item.memberof,
+            item.name,
+            name
+          ]);
+          if (item.augments) {
+            item.augments.forEach(augment => textValues.add(augment));
+          }
           lunrDocuments.push({
             name,
-            text: [item.memberof, item.name, name].filter(value => !!value),
+            text: Array.from(textValues.values()).filter(value => !!value),
             url: `${urlPrefix}/${filename}.html#${hash}`
           });
 
@@ -174,11 +185,18 @@ function generate(done) {
     )
     .on('end', () => {
       fs.ensureDirSync(dir.docData);
-      fs.emptyDirSync(dir.docData);
+
+      const lunrFile = `${dir.docData}lunr.json`;
+      fs.removeSync(lunrFile);
+      fs.writeFileSync(lunrFile, JSON.stringify(lunrDocuments));
+
+      const commonFile = `${dir.docData}common.json`;
+      fs.removeSync(commonFile);
       fs.writeFileSync(
-        `${dir.docData}lunr.json`,
-        JSON.stringify(lunrDocuments)
+        commonFile,
+        JSON.stringify({ version: packageData.version })
       );
+
       done();
     });
 }

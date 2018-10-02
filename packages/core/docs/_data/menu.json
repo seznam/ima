@@ -1,0 +1,32 @@
+[
+  {
+    "text": "Home",
+    "title": "",
+    "url": "/"
+  },
+  {
+    "text": "Examples",
+    "title": "Check out our demos and learn by example.",
+    "url": "examples"
+  },
+  {
+    "text": "Quick Start",
+    "title": "Seen enough already? Click here to get started.",
+    "url": "https://github.com/seznam/IMA.js-skeleton/blob/master/README.md"
+  },
+  {
+    "text": "Tutorial",
+    "title": "Start by learning the basics and master the art of building an IMA.js web application.",
+    "url": "https://github.com/seznam/IMA.js-skeleton/wiki/Tutorial,-part-1"
+  },
+  {
+    "text": "Documentation",
+    "title": "Browse through the documentation for details on code usage.",
+    "url": "doc"
+  },
+  {
+    "text": "Download",
+    "title": "Get the latest release as a ZIP archive.",
+    "url": "https://github.com/seznam/IMA.js-skeleton/archive/master.zip"
+  }
+]

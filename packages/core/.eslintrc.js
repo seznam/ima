@@ -28,7 +28,11 @@ module.exports = {
         'ecmascript': 2015,
         'jsx': true,
         'react': {
+<<<<<<< HEAD
             'version': '16.4'
+=======
+            'version': '16'
+>>>>>>> master
         }
     },
     'parserOptions': {

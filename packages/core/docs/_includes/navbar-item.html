@@ -1,0 +1,13 @@
+{% assign compareUrl = include.url | prepend: '/' | append: '.html' %}
+<a
+  class="navbar-item{% if compareUrl == page.url or include.url == page.url or include.url == page.menuUrl %} is-active{% endif %}"
+  href="{{ include.url | relative_url }}"
+  {% if include.title and include.title != empty %}
+  title="{{ include.title }}"
+  {% endif %}
+  {% if include.url contains "https://" %}
+  target="_blank"
+  {% endif %}
+  class="has-text-primary">
+  {{ include.text }}
+</a>

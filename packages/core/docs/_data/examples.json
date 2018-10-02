@@ -1,0 +1,23 @@
+[
+  {
+    "img": "/img/examples/hello.png",
+    "tags": ["HelloWorld", "minimal-structure", "how-to-run-IMA.js", "get-started"],
+    "text": "The basic Hello World example. Just the running IMA.js with the only one page. This example is ideal base for new project.",
+    "title": "Hello World",
+    "url": "https://github.com/seznam/IMA.js-examples/tree/master/hello"
+  },
+  {
+    "img": "/img/examples/todo.png",
+    "tags": ["TodoMVC", "basic-structure", "page-view", "MVC", "simple-component"],
+    "text": "Demo example of TodoMVC. TodoMVC is a project which offers the same Todo application implemented using MV* concepts in most of the popular JavaScript MV* frameworks of today.",
+    "title": "TODO List",
+    "url": "https://github.com/seznam/IMA.js-examples/tree/master/todos"
+  },
+  {
+    "img": "/img/examples/feed.png",
+    "tags": ["complex-solution", "API", "controller-view-communication", "components", "global-state", "local-state"],
+    "text": "Demo example with fake REST API for reading and writing posts. These post are displayed in the feed and could be filtered by category.",
+    "title": "Twitter-Like Feed",
+    "url": "https://github.com/seznam/IMA.js-examples/tree/master/feed"
+  }
+]

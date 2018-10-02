@@ -2,7 +2,7 @@
 layout: null
 ---
 
-const HIDDEN_CLASS = 'hidden';
+const HIDDEN_CLASS = 'is-hidden';
 const PREFIX_URL = '{{ 'doc/' | relative_url }}';
 
 const lunrDocuments = {{ site.data.lunr | jsonify }};
@@ -15,13 +15,13 @@ const lunrIndex = lunr(function() {
 	}, this);
 });
 
-const menuElement = document.getElementById('menu');
+const menuElement = document.getElementById('doc-menu');
 const resultsCloseElement = document.getElementById('results-close');
 const resultsCountElement = document.getElementById('results-count');
 const resultsElement = document.getElementById('results');
 const resultsListElement = document.getElementById('results-list');
 const searchInput = document.getElementById('search');
-const searchTimeout = null;
+let searchTimeout = null;
 
 resultsCloseElement.addEventListener('click', () => {
 	menuElement.classList.remove(HIDDEN_CLASS);

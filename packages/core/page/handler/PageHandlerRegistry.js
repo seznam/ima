@@ -16,7 +16,7 @@ export default class PageHandlerRegistry extends PageHandler {
      * Page handlers.
      *
      * @protected
-     * @type {[PageHandler]}
+     * @type {PageHandler[]}
      */
     this._pageHandlers = pageHandlers;
 
