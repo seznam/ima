@@ -6,18 +6,57 @@ export default class PageHandlerRegistry extends PageHandler {
    * Creates an instance of HandlerRegistry and creates {@code SerialBatch}
    * instance for pre-handlers and post-handlers.
    *
-   * @param {...PageManagerHandler} handlers
+   * @param {...PageHandler} pageHandlers
    * @memberof HandlerRegistry
    */
-  constructor(...handlers) {
-    super();
+  constructor(...pageHandlers) {
+    super(...pageHandlers);
 
-    this._preManageHandlers = new PageHandlerRegistry.ExecutionMethod(
-      handlers.map(handler => handler.handlePreManagedState.bind(handler))
+    /**
+     * Page handlers.
+     *
+     * @protected
+     * @type {[PageHandler]}
+     */
+    this._pageHandlers = pageHandlers;
+
+    /**
+     * Page handlers.
+     *
+     * @protected
+     * @type {Execution}
+     */
+    this._preManageHandlers = pageHandlers;
+
+    /**
+     * Page handlers.
+     *
+     * @protected
+     * @type {Execution}
+     */
+    this._postManageHandlers = pageHandlers;
+  }
+
+  /**
+   * @inheritdoc
+   */
+  init() {
+    this._preManageHandlers = Reflect.construct(
+      PageHandlerRegistry.ExecutionMethod,
+      [
+        this._pageHandlers.map(handler =>
+          handler.handlePreManagedState.bind(handler)
+        )
+      ]
     );
 
-    this._postManageHandlers = new PageHandlerRegistry.ExecutionMethod(
-      handlers.map(handler => handler.handlePostManagedState.bind(handler))
+    this._postManageHandlers = Reflect.construct(
+      PageHandlerRegistry.ExecutionMethod,
+      [
+        this._pageHandlers.map(handler =>
+          handler.handlePostManagedState.bind(handler)
+        )
+      ]
     );
   }
 
@@ -51,6 +90,15 @@ export default class PageHandlerRegistry extends PageHandler {
       previousManagedPage,
       action
     );
+  }
+
+  /**
+   * @inheritdoc
+   */
+  destroy() {
+    this._preManageHandlers = null;
+    this._postManageHandlers = null;
+    this._pageHandlers = null;
   }
 }
 

@@ -123,6 +123,7 @@ export default class AbstractPageManager extends PageManager {
     this._pageStateManager.onChange = newState => {
       this._onChangeStateHandler(newState);
     };
+    this._pageHandlerRegistry.init();
   }
 
   /**
@@ -188,6 +189,7 @@ export default class AbstractPageManager extends PageManager {
    * @inheritdoc
    */
   destroy() {
+    this._pageHandlerRegistry.destroy();
     this._pageStateManager.onChange = null;
 
     this._deactivatePageSource();

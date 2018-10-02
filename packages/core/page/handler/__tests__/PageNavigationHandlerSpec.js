@@ -15,6 +15,11 @@ describe('ima.page.handler.PageNavigationHandler', () => {
     });
 
     handler = new PageNavigationHandler(window);
+    handler.init();
+  });
+
+  afterEach(() => {
+    handler.destroy();
   });
 
   describe('constructor()', () => {

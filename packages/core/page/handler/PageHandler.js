@@ -3,6 +3,11 @@
  */
 export default class PageHandler {
   /**
+   * Initializes the page handler.
+   */
+  init() {}
+
+  /**
    * Called before a PageManager starts to transition from previous page to
    * a new one.
    *
@@ -32,4 +37,10 @@ export default class PageHandler {
    *        }} [action] An action object describing what triggered the routing.
    */
   handlePostManagedState() {}
+
+  /**
+   * Finalization callback, called when the page manager is being discarded.
+   * This usually happens when the page is hot-reloaded at the client side.
+   */
+  destroy() {}
 }

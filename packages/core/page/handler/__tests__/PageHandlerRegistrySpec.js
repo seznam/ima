@@ -10,6 +10,11 @@ describe('ima.page.handler.PageHandlerRegistry', () => {
 
   beforeEach(() => {
     registry = new PageHandlerRegistry(pageManagerHandler);
+    registry.init();
+  });
+
+  afterEach(() => {
+    registry.destroy();
   });
 
   describe('constructor', () => {
