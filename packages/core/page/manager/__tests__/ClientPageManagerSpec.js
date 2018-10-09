@@ -50,8 +50,10 @@ describe('ima.page.manager.ClientPageManager', () => {
 
   beforeEach(() => {
     let pageManagerHandler = {
+      init: jest.fn(),
       handlePreManagedState: jest.fn(() => true),
-      handlePostManagedState: jest.fn(() => true)
+      handlePostManagedState: jest.fn(() => true),
+      destroy: jest.fn()
     };
     pageRenderer = new PageRenderer();
     pageStateManager = new PageStateManager();
