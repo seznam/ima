@@ -1,10 +1,12 @@
 import Controller from 'controller/Controller';
 import Extension from 'extension/Extension';
+import PageHandler from 'page/handler/PageHandler';
 import PageHandlerRegistry from 'page/handler/PageHandlerRegistry';
 import AbstractPageManager from 'page/manager/AbstractPageManager';
 import PageRenderer from 'page/renderer/PageRenderer';
 import PageStateManager from 'page/state/PageStateManager';
 import RouteFactory from 'router/RouteFactory';
+import { toMockedInstance } from 'to-mock';
 
 describe('ima.page.manager.AbstractPageManager', () => {
   let pageFactory = {
@@ -53,10 +55,7 @@ describe('ima.page.manager.AbstractPageManager', () => {
   let extensionState = {};
   let pageState = Object.assign({}, extensionsState, controllerState);
 
-  let pageManagerHandler = {
-    handlePreManagedState: jest.fn(() => true),
-    handlePostManagedState: jest.fn(() => true)
-  };
+  let pageManagerHandler = toMockedInstance(PageHandler);
 
   beforeEach(() => {
     pageRenderer = new PageRenderer();

@@ -1,14 +1,15 @@
+import PageHandler from 'page/handler/PageHandler';
 import PageHandlerRegistry from 'page/handler/PageHandlerRegistry';
 import SerialBatch from 'execution/SerialBatch';
+import { toMockedInstance } from 'to-mock';
 
 describe('ima.page.handler.PageHandlerRegistry', () => {
   let registry;
-  let pageManagerHandler = {
-    handlePreManagedState: jest.fn(() => true),
-    handlePostManagedState: jest.fn(() => true)
-  };
+  let pageManagerHandler = toMockedInstance(PageHandler);
 
   beforeEach(() => {
+    spyOn(pageManagerHandler, 'handlePreManagedState');
+    spyOn(pageManagerHandler, 'handlePostManagedState');
     registry = new PageHandlerRegistry(pageManagerHandler);
     registry.init();
   });
