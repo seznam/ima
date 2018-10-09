@@ -41,6 +41,8 @@ export default class PageHandlerRegistry extends PageHandler {
    * @inheritdoc
    */
   init() {
+    this.pageHandlers.forEach(handler => handler.init());
+
     this._preManageHandlers = Reflect.construct(
       PageHandlerRegistry.ExecutionMethod,
       [
@@ -96,6 +98,8 @@ export default class PageHandlerRegistry extends PageHandler {
    * @inheritdoc
    */
   destroy() {
+    this.pageHandlers.forEach(handler => handler.destroy());
+
     this._preManageHandlers = null;
     this._postManageHandlers = null;
     this._pageHandlers = null;
