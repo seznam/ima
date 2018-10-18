@@ -90,12 +90,18 @@ export default class EventBusImpl extends EventBus {
    * @inheritdoc
    */
   listenAll(eventTarget, listener) {
-    this._window.bindEventListener(eventTarget, IMA_EVENT, listener);
+    var nativeListener = event => {
+      if (event.detail.eventName && event.type === IMA_EVENT) {
+        listener(event);
+      }
+    };
+
+    this._window.bindEventListener(eventTarget, IMA_EVENT, nativeListener);
 
     if (!this._allEventListeners.has(eventTarget)) {
       this._allEventListeners.set(eventTarget, new WeakSet());
     }
-    this._allEventListeners.get(eventTarget).add(listener);
+    this._allEventListeners.get(eventTarget).add(nativeListener);
 
     return this;
   }
@@ -115,7 +121,7 @@ export default class EventBusImpl extends EventBus {
 
     var eventNameToNativeListener = targetToEventName.get(eventTarget);
     var nativeListener = event => {
-      if (event.detail.eventName === eventName) {
+      if (event.detail.eventName === eventName && event.type === IMA_EVENT) {
         listener(event);
       }
     };
