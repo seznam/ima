@@ -78,6 +78,7 @@
         "gulp-watch": "^5.0.0",
         "ima-clientify": "^0.1.2",
         "ima-examples": "^0.15.1",
+        "ima-server": "^0.15.2",
         "loose-envify": "^1.4.0",
         "mkdirp": "^0.5.1",
         "vinyl-buffer": "^1.0.1",
