@@ -90,18 +90,18 @@ export default class EventBusImpl extends EventBus {
    * @inheritdoc
    */
   listenAll(eventTarget, listener) {
+    if (!this._allEventListeners.has(listener)) {
+      this._allEventListeners.set(listener, new WeakMap());
+    }
+
     var nativeListener = event => {
       if (event.detail.eventName && event.type === IMA_EVENT) {
         listener(event);
       }
     };
+    this._allEventListeners.get(listener).set(eventTarget, nativeListener);
 
     this._window.bindEventListener(eventTarget, IMA_EVENT, nativeListener);
-
-    if (!this._allEventListeners.has(eventTarget)) {
-      this._allEventListeners.set(eventTarget, new WeakSet());
-    }
-    this._allEventListeners.get(eventTarget).add(nativeListener);
 
     return this;
   }
@@ -136,23 +136,38 @@ export default class EventBusImpl extends EventBus {
    * @inheritdoc
    */
   unlistenAll(eventTarget, listener) {
-    this._window.unbindEventListener(eventTarget, IMA_EVENT, listener);
-
-    var listenerRegistered =
-      this._allEventListeners.has(eventTarget) &&
-      this._allEventListeners.get(eventTarget).has(listener);
-    if (listenerRegistered) {
-      this._allEventListeners.get(eventTarget).delete(listener);
-    }
-
-    if ($Debug) {
-      if (!listenerRegistered) {
+    if (!this._allEventListeners.has(listener)) {
+      if ($Debug) {
         console.warn(
           'The provided listener is not registered on the ' +
             'specified event target'
         );
       }
+
+      return this;
     }
+
+    var targets = this._allEventListeners.get(listener);
+    if (!targets.has(eventTarget)) {
+      if ($Debug) {
+        console.warn(
+          'The provided listener is not registered on the ' +
+            'specified event target'
+        );
+      }
+
+      return this;
+    }
+
+    var nativeListener = targets.get(eventTarget);
+    this._window.unbindEventListener(eventTarget, IMA_EVENT, nativeListener);
+
+    targets.delete(eventTarget);
+    if (targets.size) {
+      return this;
+    }
+
+    this._allEventListeners.delete(listener);
 
     return this;
   }
