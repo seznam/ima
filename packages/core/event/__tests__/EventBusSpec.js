@@ -136,11 +136,12 @@ describe('ima.event.EventBusImpl', () => {
       eventBus.unlistenAll(eventTarget, listeners.listener1);
 
       expect(windowInterface.unbindEventListener.calls.count()).toEqual(1);
-      expect(windowInterface.unbindEventListener.calls.argsFor(0)).toEqual([
-        eventTarget,
-        IMA_EVENT,
-        listeners.listener1
-      ]);
+      expect(windowInterface.unbindEventListener.calls.argsFor(0)[0]).toEqual(
+        eventTarget
+      );
+      expect(windowInterface.unbindEventListener.calls.argsFor(0)[1]).toEqual(
+        IMA_EVENT
+      );
     });
   });
 });
