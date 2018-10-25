@@ -28,7 +28,9 @@ try {
   };
 }
 sharedTasksState.watchMode = process.argv.some(arg => /^dev$/.test(arg));
-const isProduction = ['production', 'prod', 'test'].includes(process.env.NODE_ENV);
+const isProduction = ['production', 'prod', 'test'].includes(
+  process.env.NODE_ENV
+);
 const vendorOptions = {
   debug: false,
   insertGlobals: false,
@@ -38,71 +40,84 @@ const vendorOptions = {
   noParse: ['clone']
 };
 const esPlugins = [
-  'transform-react-constant-elements',
-  'transform-react-inline-elements',
-  'transform-react-remove-prop-types'
+  '@babel/plugin-transform-react-constant-elements',
+  '@babel/plugin-transform-react-inline-elements',
+  '@babel/plugin-transform-react-remove-prop-types'
 ];
 const baseBabelPlugins = [
-  'external-helpers',
-  ['transform-react-jsx', { useBuiltIns: true }]
+  '@babel/plugin-external-helpers',
+  ['@babel/plugin-transform-react-jsx', { useBuiltIns: true }]
 ];
 
 let babelConfig = {
   esVendor: {
     transform: [
-        ['babelify', {
+      [
+        'babelify',
+        {
           babelrc: false,
           global: true,
-          presets: ['react'],
-          plugins: isProduction ? [].concat(baseBabelPlugins, esPlugins) : baseBabelPlugins
-        }],
-        ['loose-envify', {
+          presets: ['@babel/preset-react'],
+          plugins: isProduction
+            ? [].concat(baseBabelPlugins, esPlugins)
+            : baseBabelPlugins
+        }
+      ],
+      [
+        'loose-envify',
+        {
           NODE_ENV: process.env.NODE_ENV || 'development'
-        }],
-        ['ima-clientify']
+        }
+      ],
+      ['ima-clientify']
     ],
-    plugin: sharedTasksState.watchMode ? [
-        ['watchify']
-    ] : [],
+    plugin: sharedTasksState.watchMode ? [['watchify']] : [],
     options: Object.assign({}, vendorOptions)
   },
   vendor: {
     transform: [
-      ['babelify', {
-        babelrc: false,
-        global: true,
-        presets: ['es2017', 'es2016', ['es2015', { loose: true }], 'react'],
-        plugins: baseBabelPlugins
-      }],
-      ['loose-envify', {
-        NODE_ENV: process.env.NODE_ENV || 'development'
-      }],
+      [
+        'babelify',
+        {
+          babelrc: false,
+          global: true,
+          presets: [
+            ['@babel/preset-env', { loose: true }],
+            '@babel/preset-react'
+          ],
+          plugins: baseBabelPlugins
+        }
+      ],
+      [
+        'loose-envify',
+        {
+          NODE_ENV: process.env.NODE_ENV || 'development'
+        }
+      ],
       ['ima-clientify']
     ],
-    plugin: sharedTasksState.watchMode ? [
-      ['watchify']
-    ] : [],
+    plugin: sharedTasksState.watchMode ? [['watchify']] : [],
     options: Object.assign({}, vendorOptions)
   },
   serverApp: {
-    presets: ['react'],
-    plugins: [
-      'transform-es2015-modules-systemjs',
-    ].concat(baseBabelPlugins)
+    presets: ['@babel/preset-react'],
+    plugins: ['@babel/plugin-transform-es2015-modules-systemjs'].concat(
+      baseBabelPlugins
+    )
   },
   esApp: {
     presets: [],
-    plugins: ['external-helpers']
+    plugins: ['@babel/plugin-external-helpers']
   },
   app: {
-    presets: ['es2017', 'es2016', ['es2015', { loose: true }]],
-    plugins: ['external-helpers']
+    presets: [['@babel/preset-env', { loose: true }]],
+    plugins: ['@babel/plugin-external-helpers']
   },
   server: {
-    presets: ['react'],
+    presets: ['@babel/preset-react'],
     plugins: [
-      'transform-es2015-modules-commonjs',
-      ['transform-react-jsx', { useBuiltIns: true }]
+      '@babel/plugin-transform-es2015-modules-commonjs',
+      ['@babel/plugin-transform-react-jsx', { useBuiltIns: true }]
     ]
   }
 };
@@ -131,7 +146,7 @@ exports.uglifyCompression = {
   global_defs: {
     $Debug: $Debug
   },
-  ecma: 6,
+  ecma: 7,
   dead_code: true
 };
 

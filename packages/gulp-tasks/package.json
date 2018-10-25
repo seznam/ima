@@ -37,8 +37,13 @@
     },
     "dependencies": {
         "@babel/core": "^7.0.0",
+        "@babel/plugin-external-helpers": "^7.0.0",
+        "@babel/plugin-transform-modules-systemjs": "^7.0.0",
+        "@babel/plugin-transform-react-constant-elements": "^7.0.0",
+        "@babel/plugin-transform-react-inline-elements": "^7.0.0",
         "@babel/polyfill": "^7.0.0",
         "@babel/preset-env": "^7.0.0",
+        "@babel/preset-react": "^7.0.0",
         "ansi-colors": "^3.0.5",
         "autoprefixer": "^9.1.5",
         "babel-plugin-external-helpers": "^6.22.0",
