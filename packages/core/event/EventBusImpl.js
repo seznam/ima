@@ -58,7 +58,7 @@ export default class EventBusImpl extends EventBus {
      *
      * @type {WeakMap<EventTarget, WeakSet<function(Event)>>}
      */
-    this._allEventListeners = new WeakMap();
+    this._allListenersTargets = new WeakMap();
   }
 
   /**
@@ -90,8 +90,8 @@ export default class EventBusImpl extends EventBus {
    * @inheritdoc
    */
   listenAll(eventTarget, listener) {
-    if (!this._allEventListeners.has(listener)) {
-      this._allEventListeners.set(listener, new WeakMap());
+    if (!this._allListenersTargets.has(eventTarget)) {
+      this._allListenersTargets.set(eventTarget, new WeakMap());
     }
 
     var nativeListener = event => {
@@ -99,7 +99,7 @@ export default class EventBusImpl extends EventBus {
         listener(event);
       }
     };
-    this._allEventListeners.get(listener).set(eventTarget, nativeListener);
+    this._allListenersTargets.get(eventTarget).set(listener, nativeListener);
 
     this._window.bindEventListener(eventTarget, IMA_EVENT, nativeListener);
 
@@ -136,7 +136,7 @@ export default class EventBusImpl extends EventBus {
    * @inheritdoc
    */
   unlistenAll(eventTarget, listener) {
-    if (!this._allEventListeners.has(listener)) {
+    if (!this._allListenersTargets.has(eventTarget)) {
       if ($Debug) {
         console.warn(
           'The provided listener is not registered on the ' +
@@ -147,8 +147,8 @@ export default class EventBusImpl extends EventBus {
       return this;
     }
 
-    var targets = this._allEventListeners.get(listener);
-    if (!targets.has(eventTarget)) {
+    var listeners = this._allListenersTargets.get(eventTarget);
+    if (!listeners.has(listener)) {
       if ($Debug) {
         console.warn(
           'The provided listener is not registered on the ' +
@@ -159,15 +159,15 @@ export default class EventBusImpl extends EventBus {
       return this;
     }
 
-    var nativeListener = targets.get(eventTarget);
+    var nativeListener = listeners.get(listener);
     this._window.unbindEventListener(eventTarget, IMA_EVENT, nativeListener);
 
-    targets.delete(eventTarget);
-    if (targets.size) {
+    listeners.delete(listener);
+    if (listeners.size) {
       return this;
     }
 
-    this._allEventListeners.delete(listener);
+    this._allListenersTargets.delete(eventTarget);
 
     return this;
   }
