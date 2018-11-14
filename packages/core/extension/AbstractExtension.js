@@ -90,7 +90,7 @@ export default class AbstractExtension extends Extension {
     if (this._pageStateManager) {
       return this._pageStateManager.getState();
     } else {
-      return this.getPartialState();
+      return {};
     }
   }
 
@@ -110,6 +110,14 @@ export default class AbstractExtension extends Extension {
    * @inheritdoc
    */
   getPartialState() {
+    if ($Debug && !this[this._partialStateSymbol]) {
+      throw new GenericError(
+        'ima.extension.AbstractExtension: Calling `getPartialState` method ' +
+          'outside of `load` or `update` method. Partial state is ' +
+          'accessible only in `load` and `update` method of the extension ' +
+          'until all the returned promises resolve.'
+      );
+    }
     return this[this._partialStateSymbol] || {};
   }
 
@@ -117,7 +125,7 @@ export default class AbstractExtension extends Extension {
    * @inheritdoc
    */
   clearPartialState() {
-    this[this._partialStateSymbol] = {};
+    this[this._partialStateSymbol] = null;
   }
 
   /**
