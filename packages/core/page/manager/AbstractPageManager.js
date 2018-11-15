@@ -352,14 +352,16 @@ export default class AbstractPageManager extends PageManager {
   }
 
   /**
-   * Clears partialState of extensions for managed instance of controller.
+   * Iterates over extensions of current controller and switches each one to
+   * pageStateManager and clears their partial state.
    *
    * @protected
    */
-  _clearPartialState() {
+  _switchToPageStateManager() {
     const controller = this._managedPage.controllerInstance;
 
     for (let extension of controller.getExtensions()) {
+      extension.switchToStateManager();
       extension.clearPartialState();
     }
   }
@@ -382,7 +384,7 @@ export default class AbstractPageManager extends PageManager {
       loadedPageState,
       this._managedPage.options
     );
-    this._clearPartialState();
+    this._switchToPageStateManager();
 
     return response;
   }
@@ -415,6 +417,7 @@ export default class AbstractPageManager extends PageManager {
 
     for (let extension of controller.getExtensions()) {
       extension.setPartialState(extensionsState);
+      extension.switchToPartialState();
       const extensionState = extension.load();
 
       this._setRestrictedPageStateManager(extension, extensionState);
@@ -488,7 +491,7 @@ export default class AbstractPageManager extends PageManager {
       this._managedPage.decoratedController,
       updatedPageState
     );
-    this._clearPartialState();
+    this._switchToPageStateManager();
 
     return response;
   }
@@ -523,6 +526,7 @@ export default class AbstractPageManager extends PageManager {
       const lastRouteParams = extension.getRouteParams();
       extension.setRouteParams(this._managedPage.params);
       extension.setPartialState(extensionsState);
+      extension.switchToPartialState();
       const extensionState = extension.update(lastRouteParams);
 
       this._setRestrictedPageStateManager(extension, extensionState);

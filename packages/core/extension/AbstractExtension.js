@@ -20,6 +20,15 @@ export default class AbstractExtension extends Extension {
     this._pageStateManager = null;
 
     /**
+     * Flag indicating whether the PageStateManager should be used instead
+     * of partial state.
+     *
+     * @protected
+     * @type {boolean}
+     */
+    this._usingStateManager = false;
+
+    /**
      * The HTTP response code to send to the client.
      *
      * @type {number}
@@ -87,7 +96,7 @@ export default class AbstractExtension extends Extension {
    * @inheritdoc
    */
   getState() {
-    if (this._pageStateManager) {
+    if (this._usingStateManager && this._pageStateManager) {
       return this._pageStateManager.getState();
     } else {
       return this.getPartialState();
@@ -98,7 +107,7 @@ export default class AbstractExtension extends Extension {
    * @inheritdoc
    */
   setPartialState(partialStatePatch) {
-    var newPartialState = Object.assign(
+    const newPartialState = Object.assign(
       {},
       this[this._partialStateSymbol],
       partialStatePatch
@@ -139,6 +148,20 @@ export default class AbstractExtension extends Extension {
    */
   setPageStateManager(pageStateManager) {
     this._pageStateManager = pageStateManager;
+  }
+
+  /**
+   * @inheritdoc
+   */
+  switchToStateManager() {
+    this._usingStateManager = true;
+  }
+
+  /**
+   * @inheritdoc
+   */
+  switchToPartialState() {
+    this._usingStateManager = false;
   }
 
   /**

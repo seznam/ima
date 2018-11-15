@@ -333,17 +333,20 @@ describe('ima.page.manager.AbstractPageManager', () => {
         });
     });
 
-    it('should clear partialState', done => {
-      spyOn(pageManager, '_clearPartialState').and.stub();
+    it('should switch extensions to PageStateManager', done => {
+      spyOn(pageManager, '_switchToPageStateManager').and.stub();
 
       pageManager
         ._loadPageSource()
         .then(() => {
-          expect(pageManager._clearPartialState).toHaveBeenCalled();
+          expect(pageManager._switchToPageStateManager).toHaveBeenCalled();
           done();
         })
         .catch(error => {
-          console.error('ima.page.manager:_clearPartialState', error.message);
+          console.error(
+            'ima.page.manager:_switchToPageStateManager',
+            error.message
+          );
           done(error);
         });
     });
@@ -390,13 +393,15 @@ describe('ima.page.manager.AbstractPageManager', () => {
       );
     });
 
-    it('should call extensions setPartialState method', () => {
+    it("should call extension's setPartialState method and switch extension to partial state", () => {
       spyOn(extensionInstance, 'setPartialState').and.stub();
+      spyOn(extensionInstance, 'switchToPartialState').and.stub();
       spyOn(extensionInstance, 'load').and.returnValue(extensionState);
 
       pageManager._getLoadedExtensionsState();
 
       expect(extensionInstance.setPartialState).toHaveBeenCalled();
+      expect(extensionInstance.switchToPartialState).toHaveBeenCalled();
     });
 
     it('should return extensions state together with active controller state', () => {
@@ -486,17 +491,20 @@ describe('ima.page.manager.AbstractPageManager', () => {
         });
     });
 
-    it('should clear partialState', done => {
-      spyOn(pageManager, '_clearPartialState').and.stub();
+    it('should switch extensions to PageStateManager', done => {
+      spyOn(pageManager, '_switchToPageStateManager').and.stub();
 
       pageManager
         ._updatePageSource()
         .then(() => {
-          expect(pageManager._clearPartialState).toHaveBeenCalled();
+          expect(pageManager._switchToPageStateManager).toHaveBeenCalled();
           done();
         })
         .catch(error => {
-          console.error('ima.page.manager:_clearPartialState', error.message);
+          console.error(
+            'ima.page.manager:_switchToPageStateManager',
+            error.message
+          );
           done(error);
         });
     });
@@ -535,13 +543,15 @@ describe('ima.page.manager.AbstractPageManager', () => {
       );
     });
 
-    it('should call extensions setPartialState method', () => {
+    it("should call extension's setPartialState method and switch extension to partial state", () => {
       spyOn(extensionInstance, 'setPartialState').and.stub();
+      spyOn(extensionInstance, 'switchToPartialState').and.stub();
       spyOn(extensionInstance, 'update').and.returnValue(extensionState);
 
       pageManager._getUpdatedExtensionsState();
 
       expect(extensionInstance.setPartialState).toHaveBeenCalled();
+      expect(extensionInstance.switchToPartialState).toHaveBeenCalled();
     });
 
     it('should return extensions state together with active controller state', () => {

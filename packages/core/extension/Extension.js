@@ -167,6 +167,16 @@ export default class Extension {
   setPageStateManager() {}
 
   /**
+   * Enables using PageStateManager for getting state.
+   */
+  switchToStateManager() {}
+
+  /**
+   * Disables using PageStateManager for getting state.
+   */
+  switchToPartialState() {}
+
+  /**
    * Sets the current route parameters. This method is invoked before the
    * {@link Extension#init} method.
    *
