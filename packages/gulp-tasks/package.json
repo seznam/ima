@@ -27,12 +27,16 @@
         "registry": "https://registry.npmjs.org/"
     },
     "homepage": "https://github.com/seznam/IMA.js-gulp-tasks",
+    "peerDependencies": {
+        "ima-server": "^0.15.2"
+    },
     "devDependencies": {
         "babel-eslint": "^9.0.0",
         "eslint": "^5.5.0",
         "eslint-config-last": "^0.0.5",
         "eslint-config-prettier": "^3.0.1",
         "eslint-plugin-prettier": "^2.6.2",
+        "ima-server": "^0.15.2",
         "prettier": "^1.14.2"
     },
     "dependencies": {

@@ -1,8 +1,12 @@
-let autoprefixer = require('autoprefixer');
-let coreDependencies = require('ima/build.js');
-let path = require('path');
-let sharedTasksState = require('./gulpState');
-let macroTasks = require('./macroTasks.js');
+const autoprefixer = require('autoprefixer');
+const coreDependencies = require('ima/build.js');
+const path = require('path');
+
+const sharedTasksState = require('./gulpState');
+const macroTasks = require('./macroTasks.js');
+
+const environmentConfig = require(path.resolve('./app/environment.js'));
+const environment = require('ima-server/lib/environment')(environmentConfig);
 
 let appDependencies;
 try {
@@ -307,6 +311,12 @@ exports.files = {
     },
     postCssPlugins: []
   }
+};
+
+exports.occupiedPorts = {
+  'server': environment.$Server.port,
+  'livereload': exports.liveServer.port || 35729,
+  'fb-flo': 5888
 };
 
 exports.onTerminate = () => {

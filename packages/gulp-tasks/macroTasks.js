@@ -3,6 +3,7 @@ const isProductionBuild = ['prod', 'production', 'test'].includes(
 );
 
 const DEFAULT_DEV_SUBTASKS = [
+  'watch:releasePorts',
   ['copy:appStatic', 'copy:environment', 'shim', 'polyfill'],
   ['Es6ToEs5:app', 'Es6ToEs5:server', 'Es6ToEs5:vendor'],
   ['less', 'doc', 'locale', 'Es6ToEs5:vendor:client'],
