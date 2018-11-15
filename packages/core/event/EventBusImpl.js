@@ -58,7 +58,7 @@ export default class EventBusImpl extends EventBus {
      *
      * @type {WeakMap<EventTarget, WeakSet<function(Event)>>}
      */
-    this._allEventListeners = new WeakMap();
+    this._allListenersTargets = new WeakMap();
   }
 
   /**
@@ -90,12 +90,18 @@ export default class EventBusImpl extends EventBus {
    * @inheritdoc
    */
   listenAll(eventTarget, listener) {
-    this._window.bindEventListener(eventTarget, IMA_EVENT, listener);
-
-    if (!this._allEventListeners.has(eventTarget)) {
-      this._allEventListeners.set(eventTarget, new WeakSet());
+    if (!this._allListenersTargets.has(eventTarget)) {
+      this._allListenersTargets.set(eventTarget, new WeakMap());
     }
-    this._allEventListeners.get(eventTarget).add(listener);
+
+    var nativeListener = event => {
+      if (event.detail.eventName && event.type === IMA_EVENT) {
+        listener(event);
+      }
+    };
+    this._allListenersTargets.get(eventTarget).set(listener, nativeListener);
+
+    this._window.bindEventListener(eventTarget, IMA_EVENT, nativeListener);
 
     return this;
   }
@@ -115,7 +121,7 @@ export default class EventBusImpl extends EventBus {
 
     var eventNameToNativeListener = targetToEventName.get(eventTarget);
     var nativeListener = event => {
-      if (event.detail.eventName === eventName) {
+      if (event.detail.eventName === eventName && event.type === IMA_EVENT) {
         listener(event);
       }
     };
@@ -130,23 +136,38 @@ export default class EventBusImpl extends EventBus {
    * @inheritdoc
    */
   unlistenAll(eventTarget, listener) {
-    this._window.unbindEventListener(eventTarget, IMA_EVENT, listener);
-
-    var listenerRegistered =
-      this._allEventListeners.has(eventTarget) &&
-      this._allEventListeners.get(eventTarget).has(listener);
-    if (listenerRegistered) {
-      this._allEventListeners.get(eventTarget).delete(listener);
-    }
-
-    if ($Debug) {
-      if (!listenerRegistered) {
+    if (!this._allListenersTargets.has(eventTarget)) {
+      if ($Debug) {
         console.warn(
           'The provided listener is not registered on the ' +
             'specified event target'
         );
       }
+
+      return this;
     }
+
+    var listeners = this._allListenersTargets.get(eventTarget);
+    if (!listeners.has(listener)) {
+      if ($Debug) {
+        console.warn(
+          'The provided listener is not registered on the ' +
+            'specified event target'
+        );
+      }
+
+      return this;
+    }
+
+    var nativeListener = listeners.get(listener);
+    this._window.unbindEventListener(eventTarget, IMA_EVENT, nativeListener);
+
+    listeners.delete(listener);
+    if (listeners.size) {
+      return this;
+    }
+
+    this._allListenersTargets.delete(eventTarget);
 
     return this;
   }
