@@ -314,8 +314,8 @@ exports.files = {
 };
 
 exports.occupiedPorts = {
-  'server': environment.$Server.port,
-  'livereload': exports.liveServer.port || 35729,
+  server: environment.$Server.port,
+  livereload: exports.liveServer.port || 35729,
   'fb-flo': 5888
 };
 

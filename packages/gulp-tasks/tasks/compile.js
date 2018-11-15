@@ -1,7 +1,6 @@
 const gulp = require('gulp');
 const babel = require('gulp-babel');
 const browserify = require('browserify');
-const watchify = require('watchify');
 const cache = require('gulp-cached');
 const tap = require('gulp-tap');
 const concat = require('gulp-concat');
@@ -19,8 +18,6 @@ const PluginError = require('plugin-error');
 const uglifyEs = require('gulp-uglify-es').default;
 const buffer = require('vinyl-buffer');
 const clientify = require('ima-clientify').clientify;
-
-let sharedTasksState = require('../gulpState');
 
 let vendorBundle = null;
 let vendorEsBundle = null;
@@ -268,15 +265,15 @@ exports.default = gulpConfig => {
   }
 
   function applyToBrowserifyBundle(method, config, bundle) {
-     return  config[method].reduce((bundle, item) => {
-          if (!item) {
-              return item;
-          }
+    return config[method].reduce((bundle, item) => {
+      if (!item) {
+        return item;
+      }
 
-          let [name, ...rest] = item;
+      let [name, ...rest] = item;
 
-          return bundle[method](name, ...rest);
-      }, bundle);
+      return bundle[method](name, ...rest);
+    }, bundle);
   }
 
   function vendorClient() {
@@ -287,9 +284,17 @@ exports.default = gulpConfig => {
     let sourceFile = files.vendor.dest.tmp + files.vendor.src.client;
 
     if (!vendorBundle) {
-      vendorBundle = browserify(sourceFile, babelConfig.vendor.options)
-      vendorBundle = applyToBrowserifyBundle('transform', babelConfig.vendor, vendorBundle);
-      vendorBundle = applyToBrowserifyBundle('plugin', babelConfig.vendor, vendorBundle);
+      vendorBundle = browserify(sourceFile, babelConfig.vendor.options);
+      vendorBundle = applyToBrowserifyBundle(
+        'transform',
+        babelConfig.vendor,
+        vendorBundle
+      );
+      vendorBundle = applyToBrowserifyBundle(
+        'plugin',
+        babelConfig.vendor,
+        vendorBundle
+      );
     }
 
     return vendorBundle
@@ -313,8 +318,16 @@ exports.default = gulpConfig => {
 
     if (!vendorEsBundle) {
       vendorEsBundle = browserify(sourceFile, babelConfig.esVendor.options);
-      vendorEsBundle = applyToBrowserifyBundle('transform', babelConfig.esVendor, vendorEsBundle);
-      vendorEsBundle = applyToBrowserifyBundle('plugin', babelConfig.esVendor, vendorEsBundle);
+      vendorEsBundle = applyToBrowserifyBundle(
+        'transform',
+        babelConfig.esVendor,
+        vendorEsBundle
+      );
+      vendorEsBundle = applyToBrowserifyBundle(
+        'plugin',
+        babelConfig.esVendor,
+        vendorEsBundle
+      );
     }
 
     return vendorEsBundle

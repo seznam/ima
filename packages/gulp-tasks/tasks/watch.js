@@ -15,7 +15,7 @@ const sharedState = require('../gulpState.js');
 exports.__requiresConfig = true;
 
 exports.default = gulpConfig => {
-  const { files, occupiedPorts } = gulpConfig;
+  const { files, occupiedPorts } = gulpConfig;
 
   function watchTask() {
     let hotReloadedCacheKeys = [];
@@ -94,24 +94,29 @@ exports.default = gulpConfig => {
 
   function checkAndReleasePorts() {
     const occupants = Object.keys(occupiedPorts);
-    
-    gutil.log(`Releasing ports occupied by ${occupants.join(', ')}`);
 
-    return Promise.all(occupants.map(occupant => {
-      const port = occupiedPorts[occupant];
+    log(`Releasing ports occupied by ${occupants.join(', ')}`);
 
-      const command = process.platform === 'win32'
-        ? `Stop-Process -Id (Get-NetTCPConnection -LocalPort ${port}).OwningProcess -Force`
-        : `lsof -i:${port} | grep LISTEN | awk '{print $2}' | xargs kill -9`;
+    return Promise.all(
+      occupants.map(occupant => {
+        const port = occupiedPorts[occupant];
 
-      return exec(command).catch(() => {
-        throw Error(`Unable to free port ${port} occupied by ${occupant}. Try freeing this port manually.`);
-      });
-    }));
+        const command =
+          process.platform === 'win32'
+            ? `Stop-Process -Id (Get-NetTCPConnection -LocalPort ${port}).OwningProcess -Force`
+            : `lsof -i:${port} | grep LISTEN | awk '{print $2}' | xargs kill -9`;
+
+        return exec(command).catch(() => {
+          throw Error(
+            `Unable to free port ${port} occupied by ${occupant}. Try freeing this port manually.`
+          );
+        });
+      })
+    );
   }
 
   return {
-    'watch': watchTask,
+    watch: watchTask,
     'watch:releasePorts': checkAndReleasePorts
   };
 };
