@@ -20,6 +20,15 @@ export default class AbstractExtension extends Extension {
     this._pageStateManager = null;
 
     /**
+     * Flag indicating whether the PageStateManager should be used instead
+     * of partial state.
+     *
+     * @protected
+     * @type {boolean}
+     */
+    this._usingStateManager = false;
+
+    /**
      * The HTTP response code to send to the client.
      *
      * @type {number}
@@ -87,10 +96,10 @@ export default class AbstractExtension extends Extension {
    * @inheritdoc
    */
   getState() {
-    if (this._pageStateManager) {
+    if (this._usingStateManager && this._pageStateManager) {
       return this._pageStateManager.getState();
     } else {
-      return {};
+      return this.getPartialState();
     }
   }
 
@@ -98,7 +107,7 @@ export default class AbstractExtension extends Extension {
    * @inheritdoc
    */
   setPartialState(partialStatePatch) {
-    var newPartialState = Object.assign(
+    const newPartialState = Object.assign(
       {},
       this[this._partialStateSymbol],
       partialStatePatch
@@ -110,14 +119,6 @@ export default class AbstractExtension extends Extension {
    * @inheritdoc
    */
   getPartialState() {
-    if ($Debug && !this[this._partialStateSymbol]) {
-      throw new GenericError(
-        'ima.extension.AbstractExtension: Calling `getPartialState` method ' +
-          'outside of `load` or `update` method. Partial state is ' +
-          'accessible only in `load` and `update` method of the extension ' +
-          'until all the returned promises resolve.'
-      );
-    }
     return this[this._partialStateSymbol] || {};
   }
 
@@ -125,7 +126,7 @@ export default class AbstractExtension extends Extension {
    * @inheritdoc
    */
   clearPartialState() {
-    this[this._partialStateSymbol] = null;
+    this[this._partialStateSymbol] = {};
   }
 
   /**
@@ -147,6 +148,20 @@ export default class AbstractExtension extends Extension {
    */
   setPageStateManager(pageStateManager) {
     this._pageStateManager = pageStateManager;
+  }
+
+  /**
+   * @inheritdoc
+   */
+  switchToStateManager() {
+    this._usingStateManager = true;
+  }
+
+  /**
+   * @inheritdoc
+   */
+  switchToPartialState() {
+    this._usingStateManager = false;
   }
 
   /**
