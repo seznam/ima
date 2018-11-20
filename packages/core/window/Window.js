@@ -194,7 +194,7 @@ export default class Window {
    *        history item, preferably representing the page state.
    * @param {string} title The page title related to the state. Note that
    *        this parameter is ignored by some browsers.
-   * @param {string} url The new URL at which the state is available.
+   * @param {string=} [url=null] The new URL at which the state is available.
    */
   replaceState() {}
 
