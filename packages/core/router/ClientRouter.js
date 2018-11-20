@@ -54,7 +54,13 @@ export const ActionTypes = Object.freeze({
    * @const
    * @type {string}
    */
-  POP_STATE: 'popstate'
+  POP_STATE: 'popstate',
+
+  /**
+   * @const
+   * @type {string}
+   */
+  ERROR: 'error'
 });
 
 /**
