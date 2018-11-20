@@ -282,7 +282,9 @@ export default class AbstractRouter extends Router {
       return Promise.reject(error);
     }
 
-    return this._handle(routeError, params, options);
+    return this._handle(routeError, params, options, {
+      url: this.getUrl()
+    });
   }
 
   /**
@@ -303,7 +305,9 @@ export default class AbstractRouter extends Router {
       return Promise.reject(error);
     }
 
-    return this._handle(routeNotFound, params, options);
+    return this._handle(routeNotFound, params, options, {
+      url: this.getUrl()
+    });
   }
 
   /**
@@ -370,7 +374,7 @@ export default class AbstractRouter extends Router {
    *          viewAdapter: ?function(new: React.Component)=
    *        }} options The options overrides route options defined in the
    *        {@code routes.js} configuration file.
-   * @param {{ type: string, event: Event, url: string }} [action] An action
+   * @param {{url: string}} [action] An action
    *        object describing what triggered this routing.
    * @return {Promise<Object<string, *>>} A promise that resolves when the
    *         page is rendered and the result is sent to the client, or
