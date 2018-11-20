@@ -105,7 +105,7 @@ let babelConfig = {
   },
   serverApp: {
     presets: ['@babel/preset-react'],
-    plugins: ['@babel/plugin-transform-es2015-modules-systemjs'].concat(
+    plugins: ['@babel/plugin-transform-modules-systemjs'].concat(
       baseBabelPlugins
     )
   },
@@ -120,7 +120,7 @@ let babelConfig = {
   server: {
     presets: ['@babel/preset-react'],
     plugins: [
-      '@babel/plugin-transform-es2015-modules-commonjs',
+      '@babel/plugin-transform-modules-commonjs',
       ['@babel/plugin-transform-react-jsx', { useBuiltIns: true }]
     ]
   }
