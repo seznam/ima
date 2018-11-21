@@ -1,6 +1,7 @@
 // @client-side
 
 import AbstractRouter from './AbstractRouter';
+import { ActionTypes } from './ActionTypes';
 import RouteFactory from './RouteFactory';
 import Dispatcher from '../event/Dispatcher';
 import PageManager from '../page/manager/PageManager';
@@ -25,32 +26,6 @@ const Events = Object.freeze({
   /**
    * Name of the event fired when the user navigates back in the history.
    *
-   * @const
-   * @type {string}
-   */
-  POP_STATE: 'popstate'
-});
-
-/**
- * Name of actions that can trigger routing
- *
- * @enum {string}
- * @type {Object<string, string>}
- */
-export const ActionTypes = Object.freeze({
-  /**
-   * @const
-   * @type {string}
-   */
-  REDIRECT: 'redirect',
-
-  /**
-   * @const
-   * @type {string}
-   */
-  CLICK: 'click',
-
-  /**
    * @const
    * @type {string}
    */

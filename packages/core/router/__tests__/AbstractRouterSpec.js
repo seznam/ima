@@ -2,10 +2,10 @@ import GenericError from 'error/GenericError';
 import Dispatcher from 'event/Dispatcher';
 import PageManager from 'page/manager/PageManager';
 import AbstractRouter from 'router/AbstractRouter';
+import { ActionTypes } from 'router/ActionTypes';
 import RouteEvents from 'router/Events';
 import RouteFactory from 'router/RouteFactory';
 import RouteNames from 'router/RouteNames';
-import { ActionTypes } from 'router/ClientRouter';
 
 describe('ima.router.AbstractRouter', () => {
   let router = null;
@@ -28,6 +28,10 @@ describe('ima.router.AbstractRouter', () => {
   };
   let action = {
     type: ActionTypes.REDIRECT
+  };
+  let errorAction = {
+    type: ActionTypes.ERROR,
+    url: 'http://www.domain.com/root/currentRoutePath'
   };
   let currentRoutePath = '/currentRoutePath';
   let Controller = function Controller() {};
@@ -242,7 +246,12 @@ describe('ima.router.AbstractRouter', () => {
       router
         .handleError(params, options)
         .then(response => {
-          expect(router._handle).toHaveBeenCalledWith(route, params, options);
+          expect(router._handle).toHaveBeenCalledWith(
+            route,
+            params,
+            options,
+            errorAction
+          );
           expect(response.error).toEqual(params.error);
           done();
         })
@@ -298,7 +307,12 @@ describe('ima.router.AbstractRouter', () => {
       router
         .handleNotFound(params, options)
         .then(response => {
-          expect(router._handle).toHaveBeenCalledWith(route, params, options);
+          expect(router._handle).toHaveBeenCalledWith(
+            route,
+            params,
+            options,
+            errorAction
+          );
           expect(response.error instanceof GenericError).toEqual(true);
           done();
         })

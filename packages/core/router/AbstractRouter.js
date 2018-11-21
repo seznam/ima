@@ -1,3 +1,4 @@
+import { ActionTypes } from './ActionTypes';
 import Events from './Events';
 import Router from './Router';
 import RouteNames from './RouteNames';
@@ -282,7 +283,10 @@ export default class AbstractRouter extends Router {
       return Promise.reject(error);
     }
 
-    return this._handle(routeError, params, options);
+    return this._handle(routeError, params, options, {
+      url: this.getUrl(),
+      type: ActionTypes.ERROR
+    });
   }
 
   /**
@@ -303,7 +307,10 @@ export default class AbstractRouter extends Router {
       return Promise.reject(error);
     }
 
-    return this._handle(routeNotFound, params, options);
+    return this._handle(routeNotFound, params, options, {
+      url: this.getUrl(),
+      type: ActionTypes.ERROR
+    });
   }
 
   /**

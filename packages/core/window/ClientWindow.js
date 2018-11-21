@@ -177,7 +177,7 @@ export default class ClientWindow extends Window {
   /**
    * @inheritdoc
    */
-  pushState(state, title, url) {
+  pushState(state, title, url = null) {
     if (window.history.pushState) {
       window.history.pushState(state, title, url);
     }
@@ -186,7 +186,7 @@ export default class ClientWindow extends Window {
   /**
    * @inheritdoc
    */
-  replaceState(state, title, url) {
+  replaceState(state, title, url = null) {
     if (window.history.replaceState) {
       window.history.replaceState(state, title, url);
     }
