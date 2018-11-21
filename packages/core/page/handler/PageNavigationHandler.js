@@ -42,7 +42,12 @@ export default class PageNavigationHandler extends PageManagerHandler {
    * @inheritDoc
    */
   handlePreManagedState(managedPage, nextManagedState, action) {
-    if (managedPage && action && action.type !== ActionTypes.POP_STATE) {
+    if (
+      managedPage &&
+      action &&
+      action.type !== ActionTypes.POP_STATE &&
+      action.type !== ActionTypes.ERROR
+    ) {
       this._saveScrollHistory();
       this._setAddressBar(action.url);
     }
