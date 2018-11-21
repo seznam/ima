@@ -1,4 +1,4 @@
-import { ActionTypes } from "router/ClientRouter";
+import { ActionTypes } from './ActionTypes';
 import Events from './Events';
 import Router from './Router';
 import RouteNames from './RouteNames';

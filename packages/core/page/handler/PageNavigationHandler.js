@@ -1,6 +1,6 @@
 import PageManagerHandler from './PageHandler';
 import Window from '../../window/Window';
-import { ActionTypes } from '../../router/ClientRouter';
+import { ActionTypes } from '../../router/ActionTypes';
 
 /**
  *
