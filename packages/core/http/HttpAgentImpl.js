@@ -415,6 +415,9 @@ export default class HttpAgentImpl extends HttpAgent {
       let receivedCookies = agentResponse.headersRaw.raw()['set-cookie'];
 
       if (receivedCookies) {
+        if (!Array.isArray(receivedCookies)) {
+          receivedCookies = [receivedCookies];
+        }
         receivedCookies.forEach(cookieHeader => {
           this._cookie.parseFromSetCookieHeader(cookieHeader);
         });
