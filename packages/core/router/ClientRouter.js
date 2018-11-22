@@ -1,7 +1,7 @@
 // @client-side
 
 import AbstractRouter from './AbstractRouter';
-import { ActionTypes } from './ActionTypes';
+import ActionTypes from './ActionTypes';
 import RouteFactory from './RouteFactory';
 import Dispatcher from '../event/Dispatcher';
 import PageManager from '../page/manager/PageManager';

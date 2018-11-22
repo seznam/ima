@@ -1,6 +1,6 @@
 import Dispatcher from 'event/Dispatcher';
 import PageManager from 'page/manager/PageManager';
-import { ActionTypes } from 'router/ActionTypes';
+import ActionTypes from 'router/ActionTypes';
 import ClientRouter from 'router/ClientRouter';
 import RouteFactory from 'router/RouteFactory';
 import Window from 'window/Window';

@@ -4,7 +4,7 @@
  * @enum {string}
  * @type {Object<string, string>}
  */
-export const ActionTypes = Object.freeze({
+const ActionTypes = Object.freeze({
   /**
    * @const
    * @type {string}
@@ -29,3 +29,5 @@ export const ActionTypes = Object.freeze({
    */
   ERROR: 'error'
 });
+
+export default ActionTypes;

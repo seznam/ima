@@ -2,7 +2,7 @@ import GenericError from 'error/GenericError';
 import Dispatcher from 'event/Dispatcher';
 import PageManager from 'page/manager/PageManager';
 import AbstractRouter from 'router/AbstractRouter';
-import { ActionTypes } from 'router/ActionTypes';
+import ActionTypes from 'router/ActionTypes';
 import RouteEvents from 'router/Events';
 import RouteFactory from 'router/RouteFactory';
 import RouteNames from 'router/RouteNames';
