@@ -4,7 +4,8 @@ const concat = require('gulp-concat');
 const insert = require('gulp-insert');
 const sourcemaps = require('gulp-sourcemaps');
 const mkdirp = require('mkdirp');
-const builderBabelHelprs = require('@babel/core/lib/tools/build-external-helpers').default;
+const builderBabelHelpers = require('@babel/core/lib/tools/build-external-helpers')
+  .default;
 
 exports.__requiresConfig = true;
 
@@ -16,7 +17,7 @@ exports.default = gulpConfig => {
       return Promise.resolve();
     }
 
-    let babelHelpers = builderBabelHelprs();
+    let babelHelpers = builderBabelHelpers();
 
     return gulp
       .src(files.shim.js.src)
