@@ -39,46 +39,26 @@ function deepFreeze(object) {
   return Object.freeze(object);
 }
 
-function debounce(func, wait = 100) {
-  let timeout = null;
+const PRODUCTION_ENV_LONG = 'production';
+const PRODUCTION_ENV_SHORT = 'prod';
 
-  return (...args) => {
-    clearTimeout(timeout);
-    timeout = setTimeout(() => {
-      func(...args);
-    }, wait);
-  };
-}
+function resolveEnvironmentSetting(
+  settings = {},
+  currentEnv = PRODUCTION_ENV_LONG
+) {
+  let baseSetting =
+    settings[PRODUCTION_ENV_SHORT] || settings[PRODUCTION_ENV_LONG] || {};
+  let currentSetting = settings[currentEnv];
 
-function throttle(func, interval = 100, scope = null) {
-  let timeout = null;
-  let args = [];
-  let shouldFireFunction = false;
-
-  if (scope) {
-    func = func.bind(scope);
+  if (
+    currentEnv !== PRODUCTION_ENV_SHORT &&
+    currentEnv !== PRODUCTION_ENV_LONG &&
+    currentSetting
+  ) {
+    assignRecursively(baseSetting, currentSetting);
   }
 
-  function callCallback() {
-    timeout = setTimeout(() => {
-      timeout = null;
-      if (shouldFireFunction) {
-        shouldFireFunction = false;
-        callCallback();
-      }
-    }, interval);
-    func(...args);
-  }
-
-  return (...currentArgs) => {
-    args = currentArgs;
-
-    if (!timeout) {
-      callCallback();
-    } else {
-      shouldFireFunction = true;
-    }
-  };
+  return baseSetting;
 }
 
 function allPromiseHash(hash) {
@@ -105,7 +85,6 @@ module.exports = {
   deepFreeze,
   allPromiseHash,
   escapeRegExp,
-  clone,
-  debounce,
-  throttle
+  resolveEnvironmentSetting,
+  clone
 };

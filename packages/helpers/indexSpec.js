@@ -36,44 +36,33 @@ describe('helper', () => {
     });
   });
 
-  describe('debounce', () => {
-    it('should delay all calls to a function to a single call', done => {
-      let counter = 0;
-      function inc() {
-        counter++;
+  describe('resolveEnvironmentSetting', () => {
+    const settings = {
+      prod: {
+        string: 'something',
+        deep: {
+          number: 1
+        }
+      },
+      dev: {
+        deep: {
+          number: 2
+        }
       }
-      let debouncedInc = helpers.debounce(inc);
+    };
 
-      Array.from({ length: 10 }).forEach(debouncedInc);
+    it('should return production setting', () => {
+      let currentSetting = helpers.resolveEnvironmentSetting(settings, 'prod');
 
-      setTimeout(() => {
-        expect(counter).toBe(1);
-        done();
-      }, 100); // the default delay
+      expect(currentSetting.string).toEqual(settings.prod.string);
+      expect(currentSetting.deep.number).toEqual(settings.prod.deep.number);
     });
-  });
 
-  describe('throttle', () => {
-    it('should throttle the calls to a function', done => {
-      let counter = 0;
-      let scope = {};
-      function inc() {
-        expect(this).toBe(scope);
-        counter++;
-      }
-      let throttledInc = helpers.throttle(inc, 50, scope);
+    it('should return development setting', () => {
+      let currentSetting = helpers.resolveEnvironmentSetting(settings, 'dev');
 
-      Array.from({ length: 10 }).forEach(throttledInc);
-
-      expect(counter).toBe(1);
-      setTimeout(() => {
-        expect(counter).toBe(1);
-
-        setTimeout(() => {
-          expect(counter).toBe(2);
-          done();
-        }, 55);
-      }, 5);
+      expect(currentSetting.string).toEqual(settings.prod.string);
+      expect(currentSetting.deep.number).toEqual(settings.dev.deep.number);
     });
   });
 
