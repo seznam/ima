@@ -1,52 +1,52 @@
 {
-    "name": "ima-helpers",
-    "version": "0.15.1",
-    "description": "Various helpers for the IMA.js framework.",
-    "main": "index.js",
-    "scripts": {
-        "lint": "node_modules/.bin/eslint -c ./.eslintrc.js --fix './*.js' --ignore-path ./.prettierignore",
-        "preversion": "npm test && npm run lint",
-        "postversion": "git commit -am $npm_package_version && git tag $npm_package_version && git push && git push --tags && npm publish",
-        "test": "node_modules/gulp/bin/gulp.js test"
-    },
-    "repository": {
-        "type": "git",
-        "url": "git+https://github.com/seznam/IMA.js-helpers.git"
-    },
-    "keywords": [
-        "ima",
-        "IMA.js"
-    ],
-    "author": "Miroslav Jancarik <miroslav.jancarik@firma.seznam.cz>",
-    "license": "MIT",
-    "bugs": {
-        "url": "https://github.com/seznam/IMA.js-helpers/issues"
-    },
-    "homepage": "https://github.com/seznam/IMA.js-helpers#readme",
-    "publishConfig": {
-        "registry": "http://registry.npmjs.org/"
-    },
-    "dependencies": {
-        "clone": "^2.1.2"
-    },
-    "devDependencies": {
-        "babel-eslint": "^10.0.1",
-        "eslint": "^5.9.0",
-        "eslint-config-last": "^0.0.5",
-        "eslint-config-prettier": "^3.3.0",
-        "eslint-plugin-jasmine": "^2.10.1",
-        "eslint-plugin-prettier": "^3.0.0",
-        "prettier": "^1.15.3",
-        "gulp": "^4.0.0",
-        "gulp-jasmine": "^4.0.0"
-    },
-    "engines": {
-        "node": ">=6",
-        "npm": ">=4 <6"
-    },
-    "browserify": {
-        "transform": [
-            "babelify"
-        ]
-    }
+  "name": "ima-helpers",
+  "version": "0.15.1",
+  "description": "Various helpers for the IMA.js framework.",
+  "main": "index.js",
+  "scripts": {
+    "lint": "node_modules/.bin/eslint -c ./.eslintrc.js --fix './*.js' --ignore-path ./.prettierignore",
+    "preversion": "npm test && npm run lint",
+    "postversion": "git commit -am $npm_package_version && git tag $npm_package_version && git push && git push --tags && npm publish",
+    "test": "node_modules/gulp/bin/gulp.js test"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/seznam/IMA.js-helpers.git"
+  },
+  "keywords": [
+    "ima",
+    "IMA.js"
+  ],
+  "author": "Miroslav Jancarik <miroslav.jancarik@firma.seznam.cz>",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/seznam/IMA.js-helpers/issues"
+  },
+  "homepage": "https://github.com/seznam/IMA.js-helpers#readme",
+  "publishConfig": {
+    "registry": "http://registry.npmjs.org/"
+  },
+  "dependencies": {
+    "clone": "^2.1.2"
+  },
+  "devDependencies": {
+    "babel-eslint": "^10.0.1",
+    "eslint": "^5.9.0",
+    "eslint-config-last": "^0.0.5",
+    "eslint-config-prettier": "^3.3.0",
+    "eslint-plugin-jasmine": "^2.10.1",
+    "eslint-plugin-prettier": "^3.0.0",
+    "prettier": "^1.15.3",
+    "gulp": "^4.0.0",
+    "gulp-jasmine": "^4.0.0"
+  },
+  "engines": {
+    "node": ">=10",
+    "npm": ">=6"
+  },
+  "browserify": {
+    "transform": [
+      "babelify"
+    ]
+  }
 }
