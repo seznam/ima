@@ -82,8 +82,9 @@ export default class Bootstrap {
           this._oc,
           this._config.settings
         );
-        let environmentPluginSetting = this._getEnvironmentSetting(
-          allPluginSettings
+        let environmentPluginSetting = $Helper.resolveEnvironmentSetting(
+          allPluginSettings,
+          this._config.settings.$Env
         );
 
         $Helper.assignRecursively(

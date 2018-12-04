@@ -16,6 +16,9 @@ describe('Bootstrap', () => {
     initBind: () => {}
   };
   let bootConfig = {
+    settings: {
+      $Env: 'prod'
+    },
     plugins: [plugin],
     initSettings: () => environments,
     initBindIma: () => {},
@@ -123,7 +126,9 @@ describe('Bootstrap', () => {
       expect(bootConfig.initBindIma).toHaveBeenCalledWith(
         namespace,
         objectContainer,
-        {}
+        {
+          $Env: 'prod'
+        }
       );
     });
 
@@ -135,7 +140,9 @@ describe('Bootstrap', () => {
       expect(plugin.initBind).toHaveBeenCalledWith(
         namespace,
         objectContainer,
-        {}
+        {
+          $Env: 'prod'
+        }
       );
     });
 
@@ -147,7 +154,9 @@ describe('Bootstrap', () => {
       expect(bootConfig.initBindApp).toHaveBeenCalledWith(
         namespace,
         objectContainer,
-        {}
+        {
+          $Env: 'prod'
+        }
       );
     });
   });

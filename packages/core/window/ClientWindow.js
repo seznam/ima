@@ -78,8 +78,8 @@ export default class ClientWindow extends Window {
     return pageOffsetSupported
       ? pageXOffset
       : isCSS1Compatible
-        ? document.documentElement.scrollLeft
-        : document.body.scrollLeft;
+      ? document.documentElement.scrollLeft
+      : document.body.scrollLeft;
   }
 
   /**
@@ -93,8 +93,8 @@ export default class ClientWindow extends Window {
     return pageOffsetSupported
       ? pageYOffset
       : isCSS1Compatible
-        ? document.documentElement.scrollTop
-        : document.body.scrollTop;
+      ? document.documentElement.scrollTop
+      : document.body.scrollTop;
   }
 
   /**
