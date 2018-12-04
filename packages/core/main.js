@@ -93,45 +93,6 @@ function getClientBootConfig(initialAppConfigFunctions) {
   );
 }
 
-function getTestClientBootConfig(initialAppConfigFunctions) {
-  let root = _getRoot();
-  $IMA.$Debug = true;
-  root.$Debug = $IMA.$Debug;
-
-  let bootConfig = {
-    services: {
-      respond: null,
-      request: null,
-      $IMA: $IMA,
-      dictionary: {
-        $Language: $IMA.$Language,
-        dictionary: $IMA.i18n
-      },
-      router: {
-        $Host: $IMA.$Host,
-        $Root: $IMA.$Root,
-        $Path: $IMA.$Path,
-        $LanguagePartPath: $IMA.$LanguagePartPath
-      }
-    },
-    settings: {
-      $Env: 'dev',
-      $Language: 'en',
-      $Protocol: 'http:',
-      $Debug: $IMA.$Debug,
-      $App: {}
-    },
-    plugins: []
-  };
-
-  return Object.assign(
-    bootConfig,
-    initialAppConfigFunctions,
-    getInitialPluginConfig(),
-    getInitialImaConfigFunctions()
-  );
-}
-
 function bootClientApp(app, bootConfig) {
   app.bootstrap.run(bootConfig);
 
@@ -221,19 +182,6 @@ function reviveClientApp(initialAppConfigFunctions) {
   return routeClientApp(app);
 }
 
-function reviveTestClientApp(initialAppConfigFunctions) {
-  vendorLinker.bindToNamespace(ns);
-
-  let root = _getRoot();
-  let app = createImaApp();
-  let bootConfig = getTestClientBootConfig(initialAppConfigFunctions);
-
-  app = bootClientApp(app, bootConfig);
-
-  root.ns = ns;
-  root.oc = app.oc;
-}
-
 function onLoad() {
   vendorLinker.bindToNamespace(ns);
 
@@ -250,11 +198,9 @@ export {
   getInitialPluginConfig,
   createImaApp,
   getClientBootConfig,
-  getTestClientBootConfig,
   bootClientApp,
   routeClientApp,
   hotReloadClientApp,
   reviveClientApp,
-  reviveTestClientApp,
   onLoad
 };
