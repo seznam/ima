@@ -64,6 +64,12 @@ describe('helper', () => {
       expect(currentSetting.string).toEqual(settings.prod.string);
       expect(currentSetting.deep.number).toEqual(settings.dev.deep.number);
     });
+
+    it('should return empty setting', () => {
+      let currentSetting = helpers.resolveEnvironmentSetting();
+
+      expect(currentSetting).toEqual({});
+    });
   });
 
   describe('allPromiseHash', () => {
