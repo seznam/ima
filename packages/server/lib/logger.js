@@ -1,9 +1,12 @@
 'use strict';
 
-const winston = require('winston');
+const { createLogger, format, transports } = require('winston');
+const { printf, combine } = format;
 
 function formatMetaSimple(meta) {
-  let keys = Object.keys(meta);
+  let keys = Object.keys(meta).filter(
+    key => ['level', 'timestamp', 'message'].indexOf(key) === -1
+  );
   if (!meta || !keys.length) {
     return '';
   }
@@ -39,7 +42,9 @@ function indentLines(string, spaces, skipFirstLine) {
 }
 
 function formatMetaJSON(meta) {
-  let keys = Object.keys(meta);
+  let keys = Object.keys(meta).filter(
+    key => ['level', 'timestamp', 'message'].indexOf(key) === -1
+  );
   if (!meta || !keys.length) {
     return '';
   }
@@ -99,46 +104,46 @@ module.exports = environment => {
     );
   }
 
-  let logger = new winston.Logger({
-    transports: [
-      new winston.transports.Console({
-        timestamp() {
-          let now = new Date();
-          let date =
-            now.getFullYear() +
-            '-' +
-            formatNumber(now.getMonth() + 1) +
-            '-' +
-            formatNumber(now.getDate());
-          let time =
-            formatNumber(now.getHours()) +
-            ':' +
-            formatNumber(now.getMinutes()) +
-            ':' +
-            formatNumber(now.getSeconds()) +
-            '.' +
-            now.getMilliseconds();
+  let logger = createLogger({
+    format: combine(
+      format(info => {
+        let now = new Date();
+        let date =
+          now.getFullYear() +
+          '-' +
+          formatNumber(now.getMonth() + 1) +
+          '-' +
+          formatNumber(now.getDate());
+        let time =
+          formatNumber(now.getHours()) +
+          ':' +
+          formatNumber(now.getMinutes()) +
+          ':' +
+          formatNumber(now.getSeconds()) +
+          '.' +
+          now.getMilliseconds();
 
-          return `${date} ${time}`;
+        info.timestamp = `${date} ${time}`;
 
-          function formatNumber(number) {
-            let asString = '' + number;
-            return asString.length > 1 ? asString : '0' + asString;
-          }
-        },
+        return info;
 
-        formatter(options) {
-          return (
-            options.timestamp() +
-            ' [' +
-            options.level.toUpperCase() +
-            '] ' +
-            (options.message || '') +
-            formatMeta(options.meta)
-          );
+        function formatNumber(number) {
+          let asString = '' + number;
+          return asString.length > 1 ? asString : '0' + asString;
         }
+      })(),
+      printf(info => {
+        return (
+          info.timestamp +
+          ' [' +
+          info.level.toUpperCase() +
+          '] ' +
+          (info.message || '') +
+          formatMeta(info)
+        );
       })
-    ]
+    ),
+    transports: [new transports.Console()]
   });
 
   function formatMeta(meta) {
