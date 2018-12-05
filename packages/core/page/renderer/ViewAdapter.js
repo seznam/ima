@@ -1,6 +1,6 @@
 import PropTypes from 'prop-types';
 import React from 'react';
-import { Provider } from '../context';
+import Context from '../context';
 
 /**
  * An adapter component providing the current page controller's state to the
@@ -65,7 +65,7 @@ export default class ViewAdapter extends React.Component {
    */
   render() {
     return React.createElement(
-      Provider,
+      Context.Provider,
       { value: this.props.$Utils },
       React.createElement(this._view, this.state)
     );

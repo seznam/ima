@@ -6,14 +6,7 @@ const js = [
 const mainjs = ['./node_modules/ima/main.js'];
 
 const vendors = {
-  common: [
-    'ima-helpers',
-    'classnames',
-    'react',
-    'react-dom',
-    'prop-types',
-    'consume-multiple-contexts'
-  ],
+  common: ['ima-helpers', 'classnames', 'react', 'react-dom', 'prop-types'],
 
   server: ['react-dom/server.js'],
 
