@@ -6,7 +6,12 @@ const sharedTasksState = require('./gulpState');
 const macroTasks = require('./macroTasks.js');
 
 const environmentConfig = require(path.resolve('./app/environment.js'));
-const environment = require('ima-server/lib/environment')(environmentConfig);
+const nodeEnv =
+  process.env.NODE_ENV === 'development' ? 'dev' : process.env.NODE_ENV;
+const environment = require('ima-helpers').resolveEnvironmentSetting(
+  environmentConfig,
+  nodeEnv
+);
 
 let appDependencies;
 try {
