@@ -1,80 +1,76 @@
 {
-    "name": "ima-server",
-    "version": "0.15.2",
-    "description": "Default dev server for IMA.js applications.",
-    "main": "index.js",
-    "scripts": {
-        "lint": "node_modules/.bin/eslint -c ./.eslintrc.js --fix './**/*.js' --ignore-path ./.prettierignore",
-        "preversion": "npm test && npm run lint",
-        "postversion": "git commit -am $npm_package_version && git tag $npm_package_version && git push && git push --tags && npm publish",
-        "test": "jest"
-    },
-    "repository": {
-        "type": "git",
-        "url": "https://github.com/seznam/IMA.js-server.git"
-    },
-    "keywords": [
-        "gulp",
-        "IMA.js",
-        "ima"
+  "name": "ima-server",
+  "version": "0.15.2",
+  "description": "Default dev server for IMA.js applications.",
+  "main": "index.js",
+  "scripts": {
+    "lint": "node_modules/.bin/eslint -c ./.eslintrc.js --fix './**/*.js' --ignore-path ./.prettierignore",
+    "preversion": "npm test && npm run lint",
+    "postversion": "git commit -am $npm_package_version && git tag $npm_package_version && git push && git push --tags && npm publish",
+    "test": "jest"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/seznam/IMA.js-server.git"
+  },
+  "keywords": [
+    "gulp",
+    "IMA.js",
+    "ima"
+  ],
+  "author": "Seznam.cz, a.s.",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/seznam/IMA.js-server/issues"
+  },
+  "publishConfig": {
+    "registry": "http://registry.npmjs.org/"
+  },
+  "homepage": "https://github.com/seznam/IMA.js-server",
+  "devDependencies": {
+    "express": "^4.16.4",
+    "ima-helpers": "^0.16.0",
+    "jest": "^23.6.0",
+    "babel-eslint": "^10.0.1",
+    "eslint": "^5.9.0",
+    "eslint-config-last": "^0.0.5",
+    "eslint-plugin-jasmine": "^2.9.3",
+    "eslint-config-prettier": "^3.3.0",
+    "eslint-plugin-prettier": "^3.0.0",
+    "prettier": "^1.15.3"
+  },
+  "dependencies": {
+    "async-each": "^1.0.1",
+    "error-to-json": "^1.1.0",
+    "highlight.js": "^9.13.1",
+    "stack-trace": "^0.0.10",
+    "winston": "^3.1.0"
+  },
+  "peerDependencies": {
+    "ima-helpers": "0.16.x"
+  },
+  "engines": {
+    "node": ">=6",
+    "npm": ">=4 <6"
+  },
+  "jest": {
+    "bail": false,
+    "verbose": true,
+    "testEnvironment": "node",
+    "setupFiles": [],
+    "resolver": "<rootDir>/resolver.js",
+    "modulePaths": [
+      "<rootDir>/"
     ],
-    "author": "Seznam.cz, a.s.",
-    "license": "MIT",
-    "bugs": {
-        "url": "https://github.com/seznam/IMA.js-server/issues"
-    },
-    "publishConfig": {
-        "registry": "http://registry.npmjs.org/"
-    },
-    "homepage": "https://github.com/seznam/IMA.js-server",
-    "devDependencies": {
-        "express": "^4.16.3",
-        "gulp": "github:gulpjs/gulp#3f5aba2",
-        "gulp-jasmine": "^3.0.0",
-        "ima-helpers": "^0.15.0",
-        "jest": "^22.4.3",
-        "babel-eslint": "^8.2.2",
-        "eslint": "^4.19.1",
-        "eslint-config-last": "^0.0.5",
-        "eslint-plugin-jasmine": "^2.9.3",
-        "eslint-config-prettier": "^2.9.0",
-        "eslint-plugin-prettier": "^2.6.0",
-        "prettier": "^1.11.1"
-    },
-    "dependencies": {
-        "async-each": "^1.0.1",
-        "error-to-json": "^1.1.0",
-        "highlight.js": "^9.12.0",
-        "stack-trace": "^0.0.10",
-        "winston": "^2.4.1"
-    },
-    "peerDependencies": {
-        "ima-helpers": "0.15.x"
-    },
-    "engines": {
-        "node": ">=6",
-        "npm": ">=4 <6"
-    },
-    "jest": {
-        "bail": false,
-        "verbose": true,
-        "testEnvironment": "node",
-        "setupFiles": [],
-        "resolver": "<rootDir>/resolver.js",
-        "modulePaths": [
-            "<rootDir>/"
-        ],
-        "testMatch": [
-            "**/__tests__/*.js"
-        ]
-    },
-    "jestConfig": {
-        "mockRules": {
-            "lib": [
-                {
-                    "../../app/build.js": "./__mocks__/build.js"
-                }
-            ]
-        }
+    "testMatch": [
+      "**/__tests__/*.js"
+    ]
+  },
+  "jestConfig": {
+    "mockRules": {
+      "lib": [{
+        "../../app/build.js": "./__mocks__/build.js"
+      }]
     }
+  }
 }
