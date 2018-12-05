@@ -124,7 +124,7 @@ describe('ima.http.HttpAgentImpl', () => {
         );
       });
 
-      it('should be set cookie', done => {
+      it('should be set cookie to response', done => {
         spyOn(proxy, 'request').and.callFake(() => {
           return Promise.resolve(data);
         });
@@ -153,6 +153,22 @@ describe('ima.http.HttpAgentImpl', () => {
           data.params.options
         ).then(() => {
           expect(data.params.options.postProcessor).toHaveBeenCalled();
+          done();
+        });
+      });
+
+      it('should not set Cookie header only for request with withCredentials option set to false', done => {
+        spyOn(proxy, 'request').and.callFake(() => {
+          return Promise.resolve(data);
+        });
+        spyOn(cookie, 'getCookiesStringForCookieHeader').and.callThrough();
+
+        http[method](
+          data.params.url,
+          data.params.data,
+          Object.assign({}, data.params.options, { withCredentials: false })
+        ).then(() => {
+          expect(cookie.getCookiesStringForCookieHeader).not.toHaveBeenCalled();
           done();
         });
       });

@@ -137,13 +137,9 @@ describe('Bootstrap', () => {
 
       bootstrap._bindDependencies();
 
-      expect(plugin.initBind).toHaveBeenCalledWith(
-        namespace,
-        objectContainer,
-        {
-          $Env: 'prod'
-        }
-      );
+      expect(plugin.initBind).toHaveBeenCalledWith(namespace, objectContainer, {
+        $Env: 'prod'
+      });
     });
 
     it('should bind app', () => {

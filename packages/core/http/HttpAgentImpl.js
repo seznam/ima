@@ -371,9 +371,14 @@ export default class HttpAgentImpl extends HttpAgent {
       this._defaultRequestOptions,
       options
     );
+    let cookieHeader = {};
+
+    if (composedOptions.withCredentials) {
+      cookieHeader = { Cookie: this._cookie.getCookiesStringForCookieHeader() };
+    }
 
     composedOptions.headers = Object.assign(
-      { Cookie: this._cookie.getCookiesStringForCookieHeader() },
+      cookieHeader,
       this._defaultRequestOptions.headers,
       options.headers || {}
     );
