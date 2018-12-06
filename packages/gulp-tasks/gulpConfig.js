@@ -5,13 +5,25 @@ const path = require('path');
 const sharedTasksState = require('./gulpState');
 const macroTasks = require('./macroTasks.js');
 
-const environmentConfig = require(path.resolve('./app/environment.js'));
-const nodeEnv =
-  process.env.NODE_ENV === 'development' ? 'dev' : process.env.NODE_ENV;
-const environment = require('ima-helpers').resolveEnvironmentSetting(
-  environmentConfig,
-  nodeEnv
-);
+let environment;
+try {
+  const environmentConfig = require(path.resolve('./app/environment.js'));
+  const nodeEnv =
+    process.env.NODE_ENV === 'development' ? 'dev' : process.env.NODE_ENV;
+  environment = require('ima-helpers').resolveEnvironmentSetting(
+    environmentConfig,
+    nodeEnv
+  );
+} catch (error) {
+  console.info(error.message);
+  console.info('The default environment config will be used.');
+
+  environment = {
+    $Server: {
+      port: 3001
+    }
+  };
+}
 
 let appDependencies;
 try {
