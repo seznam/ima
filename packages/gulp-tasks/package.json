@@ -80,7 +80,6 @@
     "gulp-uglify-es": "^1.0.4",
     "gulp-watch": "^5.0.0",
     "ima-clientify": "^0.1.2",
-    "ima-examples": "^0.15.1",
     "loose-envify": "^1.4.0",
     "mkdirp": "^0.5.1",
     "plugin-error": "^1.0.1",
