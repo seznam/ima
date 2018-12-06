@@ -32,7 +32,8 @@ export default class HomeView extends AbstractComponent {
               target="_blank"
               rel="noopener noreferrer">
               {this.props.name}
-            </a>!
+            </a>
+            !
           </h1>
         </div>
       </div>

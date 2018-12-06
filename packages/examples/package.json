@@ -1,41 +1,42 @@
 {
-    "name": "ima-examples",
-    "version": "0.15.1",
-    "description": "Example IMA.js applications.",
-    "main": "index.js",
-    "scripts": {
-        "lint": "node_modules/.bin/eslint --fix './{hello,feed,todos}/!(assets)/**/*.{js,jsx}'",
-        "prepublish": "npm run lint"
-    },
-    "repository": {
-        "type": "git",
-        "url": "https://github.com/seznam/IMA.js-examples.git"
-    },
-    "keywords": [
-        "IMA.js",
-        "ima"
-    ],
-    "author": "Seznam.cz, a.s.",
-    "license": "MIT",
-    "bugs": {
-        "url": "https://github.com/seznam/IMA.js-examples/issues"
-    },
-    "publishConfig": {
-        "registry": "http://registry.npmjs.org/"
-    },
-    "homepage": "https://github.com/seznam/IMA.js-examples",
-    "engines": {
-        "node": ">=6.4.0",
-        "npm": ">=3.10.3"
-    },
-    "devDependencies": {
-        "babel-eslint": "8.2.2",
-        "eslint": "4.18.2",
-        "eslint-config-prettier": "2.9.0",
-        "eslint-plugin-jasmine": "2.9.3",
-        "eslint-plugin-jest": "21.13.0",
-        "eslint-plugin-prettier": "2.6.0",
-        "eslint-plugin-react": "7.7.0",
-        "prettier": "1.11.1"
-    }
+  "name": "ima-examples",
+  "version": "0.15.1",
+  "description": "Example IMA.js applications.",
+  "main": "index.js",
+  "scripts": {
+    "lint": "node_modules/.bin/eslint --fix './{hello,feed,todos}/!(assets)/**/*.{js,jsx}'",
+    "preversion": "npm run lint",
+    "postversion": "git commit -am $npm_package_version && git tag $npm_package_version && git push && git push --tags && npm publish"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/seznam/IMA.js-examples.git"
+  },
+  "keywords": [
+    "IMA.js",
+    "ima"
+  ],
+  "author": "Seznam.cz, a.s.",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/seznam/IMA.js-examples/issues"
+  },
+  "publishConfig": {
+    "registry": "http://registry.npmjs.org/"
+  },
+  "homepage": "https://github.com/seznam/IMA.js-examples",
+  "engines": {
+    "node": ">=6.4.0",
+    "npm": ">=3.10.3"
+  },
+  "devDependencies": {
+    "babel-eslint": "10.0.1",
+    "eslint": "5.9.0",
+    "eslint-config-prettier": "3.3.0",
+    "eslint-plugin-jasmine": "2.10.1",
+    "eslint-plugin-jest": "22.1.2",
+    "eslint-plugin-prettier": "3.0.0",
+    "eslint-plugin-react": "7.11.1",
+    "prettier": "1.15.3"
+  }
 }
