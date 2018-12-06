@@ -25,6 +25,11 @@ IMA.js, but you will encounter some more advanced concepts in there as well.
 
 For a more in-depth information about the IMA.js see a [full documentation](https://github.com/seznam/IMA.js-skeleton/wiki/Documentation).
 
+## Main IMA.js parts
+- [IMA core](https://github.com/seznam/IMA.js-core) - it contains base classes and common classes for every days work which allow you server side rendering and hydrating application in browser.
+- [IMA server](https://github.com/seznam/IMA.js-server) - it contains methods which allow you connect IMA application with express framework.
+- [IMA bundle](https://github.com/seznam/IMA.js-gulp-tasks) - IMA.js use for bundling and automatisation gulp. There are prepared common tasks and base configuration.
+
 ## Plugins
 Here's a list of plugins maintained by Seznam.cz and other contributors that you can safely use in your app:
 - [Abstract analytic](https://github.com/seznam/IMA.js-plugin-analytic)
