@@ -63,7 +63,7 @@ const vendorOptions = {
 const esPlugins = [
   '@babel/plugin-transform-react-constant-elements',
   '@babel/plugin-transform-react-inline-elements',
-  '@babel/plugin-transform-react-remove-prop-types'
+  'babel-plugin-transform-react-remove-prop-types'
 ];
 const baseBabelPlugins = [
   '@babel/plugin-external-helpers',
