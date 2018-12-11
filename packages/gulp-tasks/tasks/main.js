@@ -1,5 +1,4 @@
 const gulp = require('gulp');
-const sharedTasksState = require('../gulpState');
 const macroTasks = require('../macroTasks.js');
 
 exports.__requiresConfig = true;
@@ -18,8 +17,6 @@ exports.default = gulpConfig => {
   }
 
   function dev(done) {
-    sharedTasksState.watchMode = true;
-
     return gulp.series(...prepareTasks(devTasks))(done);
   }
 
@@ -38,8 +35,8 @@ exports.default = gulpConfig => {
   };
 
   function prepareTasks(groupedTasks) {
-    return groupedTasks.map(
-      tasks => (tasks instanceof Array ? gulp.parallel(...tasks) : tasks)
+    return groupedTasks.map(tasks =>
+      tasks instanceof Array ? gulp.parallel(...tasks) : tasks
     );
   }
 };

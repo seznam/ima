@@ -1,7 +1,8 @@
 const gulp = require('gulp');
 const cache = require('gulp-cached');
 const flo = require('fb-flo');
-const gutil = require('gulp-util');
+const color = require('ansi-colors');
+const log = require('fancy-log');
 const remember = require('gulp-remember');
 const watch = require('gulp-watch');
 const path = require('path');
@@ -59,9 +60,7 @@ exports.default = gulpConfig => {
         glob: ['**/*.css', '**/*.js']
       },
       (filepath, callback) => {
-        gutil.log(
-          `Reloading 'public/${gutil.colors.cyan(filepath)}' with ` + 'flo...'
-        );
+        log(`Reloading 'public/${color.cyan(filepath)}' with ` + 'flo...');
 
         let hotReloadedContents = '';
 
@@ -97,28 +96,27 @@ exports.default = gulpConfig => {
   function checkAndReleasePorts() {
     const occupants = Object.keys(occupiedPorts);
 
-    return Promise.all(occupants.map(occupant => {
-      const port = occupiedPorts[occupant];
+    log(`Releasing ports occupied by ${occupants.join(', ')}`);
 
-      return isPortOccupied(port)
-        .then(occupied => {
-          if (!occupied) {
-            return;
-          }
+    return isPortOccupied(port)
+      .then(occupied => {
+        if (!occupied) {
+          return;
+        }
 
-          gutil.log(`Releasing port occupied by ${occupant}.`);
+        gutil.log(`Releasing port occupied by ${occupant}.`);
 
-          const command = process.platform === 'win32'
-            ? `Stop-Process -Id (Get-NetTCPConnection -LocalPort ${port}).OwningProcess -Force`
-            : `lsof -i:${port} | grep LISTEN | awk '{print $2}' | xargs kill -9`;
+        const command = process.platform === 'win32'
+          ? `Stop-Process -Id (Get-NetTCPConnection -LocalPort ${port}).OwningProcess -Force`
+          : `lsof -i:${port} | grep LISTEN | awk '{print $2}' | xargs kill -9`;
 
-          return exec(command).catch(() => null);
-        })
-        .catch(error => {
-          throw Error(`Unable to determine if port ${port} is occupied.`);
-        });
-    }));
-  }
+        return exec(command).catch(() => null);
+      })
+      .catch(error => {
+        throw Error(`Unable to determine if port ${port} is occupied.`);
+      });
+  };
+
 
   function isPortOccupied(port) {
 
@@ -143,7 +141,7 @@ exports.default = gulpConfig => {
   }
 
   return {
-    'watch': watchTask,
+    watch: watchTask,
     'watch:releasePorts': checkAndReleasePorts
   };
 };

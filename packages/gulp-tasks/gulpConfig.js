@@ -5,8 +5,25 @@ const path = require('path');
 const sharedTasksState = require('./gulpState');
 const macroTasks = require('./macroTasks.js');
 
-const environmentConfig = require(path.resolve('./app/environment.js'));
-const environment = require('ima-server/lib/environment')(environmentConfig);
+let environment;
+try {
+  const environmentConfig = require(path.resolve('./app/environment.js'));
+  const nodeEnv =
+    process.env.NODE_ENV === 'development' ? 'dev' : process.env.NODE_ENV;
+  environment = require('ima-helpers').resolveEnvironmentSetting(
+    environmentConfig,
+    nodeEnv
+  );
+} catch (error) {
+  console.info(error.message);
+  console.info('The default environment config will be used.');
+
+  environment = {
+    $Server: {
+      port: 3001
+    }
+  };
+}
 
 let appDependencies;
 try {
@@ -31,8 +48,11 @@ try {
     }
   };
 }
-
-let vendorOptions = {
+sharedTasksState.watchMode = process.argv.some(arg => /^dev$/.test(arg));
+const isProduction = ['production', 'prod', 'test'].includes(
+  process.env.NODE_ENV
+);
+const vendorOptions = {
   debug: false,
   insertGlobals: false,
   basedir: '.',
@@ -40,58 +60,93 @@ let vendorOptions = {
   packageCache: {},
   noParse: ['clone']
 };
+const esPlugins = [
+  '@babel/plugin-transform-react-constant-elements',
+  '@babel/plugin-transform-react-inline-elements',
+  'babel-plugin-transform-react-remove-prop-types'
+];
+const baseBabelPlugins = [
+  '@babel/plugin-external-helpers',
+  ['@babel/plugin-transform-react-jsx', { useBuiltIns: true }]
+];
+
 let babelConfig = {
   esVendor: {
-    presets: ['react'],
-    plugins: [
-      'external-helpers',
-      ['transform-react-jsx', { useBuiltIns: true }]
+    transform: [
+      [
+        'babelify',
+        {
+          babelrc: false,
+          global: true,
+          presets: ['@babel/preset-react'],
+          plugins: isProduction
+            ? [].concat(baseBabelPlugins, esPlugins)
+            : baseBabelPlugins
+        }
+      ],
+      [
+        'loose-envify',
+        {
+          NODE_ENV: process.env.NODE_ENV || 'development'
+        }
+      ],
+      ['ima-clientify']
     ],
+    plugin: sharedTasksState.watchMode ? [['watchify']] : [],
     options: Object.assign({}, vendorOptions)
   },
   vendor: {
-    presets: ['es2017', 'es2016', ['es2015', { loose: true }], 'react'],
-    plugins: [
-      'external-helpers',
-      ['transform-react-jsx', { useBuiltIns: true }]
+    transform: [
+      [
+        'babelify',
+        {
+          babelrc: false,
+          global: true,
+          presets: [
+            ['@babel/preset-env', { loose: true }],
+            '@babel/preset-react'
+          ],
+          plugins: baseBabelPlugins
+        }
+      ],
+      [
+        'loose-envify',
+        {
+          NODE_ENV: process.env.NODE_ENV || 'development'
+        }
+      ],
+      ['ima-clientify']
     ],
+    plugin: sharedTasksState.watchMode ? [['watchify']] : [],
     options: Object.assign({}, vendorOptions)
   },
   serverApp: {
-    presets: ['react'],
-    plugins: [
-      'transform-es2015-modules-systemjs',
-      'external-helpers',
-      ['transform-react-jsx', { useBuiltIns: true }]
-    ]
+    presets: ['@babel/preset-react'],
+    plugins: ['@babel/plugin-transform-modules-systemjs'].concat(
+      baseBabelPlugins
+    )
   },
   esApp: {
     presets: [],
-    plugins: ['external-helpers']
+    plugins: ['@babel/plugin-external-helpers']
   },
   app: {
-    presets: ['es2017', 'es2016', ['es2015', { loose: true }]],
-    plugins: ['external-helpers']
+    presets: [['@babel/preset-env', { loose: true }]],
+    plugins: ['@babel/plugin-external-helpers']
   },
   server: {
-    presets: ['react'],
+    presets: ['@babel/preset-react'],
     plugins: [
-      'transform-es2015-modules-commonjs',
-      ['transform-react-jsx', { useBuiltIns: true }]
+      '@babel/plugin-transform-modules-commonjs',
+      ['@babel/plugin-transform-react-jsx', { useBuiltIns: true }]
     ]
   }
 };
 let $Debug = true;
 let legacyCompactMode = false;
 
-if (['production', 'prod', 'test'].includes(process.env.NODE_ENV)) {
-  const esPlugins = [
-    'transform-react-constant-elements',
-    'transform-react-inline-elements',
-    'transform-react-remove-prop-types'
-  ];
+if (isProduction) {
   babelConfig.esApp.plugins = babelConfig.esApp.plugins.concat(esPlugins);
-  babelConfig.esVendor.plugins = babelConfig.esVendor.plugins.concat(esPlugins);
   $Debug = false;
   legacyCompactMode = true;
 }
@@ -112,7 +167,7 @@ exports.uglifyCompression = {
   global_defs: {
     $Debug: $Debug
   },
-  ecma: 6,
+  ecma: 7,
   dead_code: true
 };
 
@@ -162,9 +217,7 @@ exports.files = {
       client: 'app.client.js',
       esClient: 'app.client.es.js'
     },
-    clearServerSide: ['production', 'prod', 'test'].includes(
-      process.env.NODE_ENV
-    ),
+    clearServerSide: isProduction,
     src: [].concat(appDependencies.js, appDependencies.mainjs),
     dest: {
       server: './build/ima/',
@@ -222,8 +275,8 @@ exports.files = {
     js: {
       name: 'polyfill.js',
       src: [
-        './node_modules/babel-polyfill/dist/polyfill.min.js',
-        './node_modules/custom-event-polyfill/custom-event-polyfill.js'
+        './node_modules/@babel/polyfill/dist/polyfill.min.js',
+        './node_modules/custom-event-polyfill/polyfill.js'
       ],
       dest: {
         client: './build/static/js/'
@@ -240,7 +293,7 @@ exports.files = {
       name: 'fetch-polyfill.js',
       src: [
         './node_modules/core-js/client/shim.min.js',
-        './node_modules/whatwg-fetch/fetch.js'
+        './node_modules/whatwg-fetch/dist/fetch.umd.js'
       ],
       dest: {
         client: './build/static/js/'
@@ -278,16 +331,12 @@ exports.files = {
 };
 
 exports.occupiedPorts = {
-  'server': environment.$Server.port,
-  'livereload': exports.liveServer.port || 35729,
+  server: environment.$Server.port,
+  livereload: exports.liveServer.port || 35729,
   'fb-flo': 5888
 };
 
 exports.onTerminate = () => {
-  if (sharedTasksState.karmaServer) {
-    sharedTasksState.karmaServer.stop();
-  }
-
   setTimeout(() => {
     process.exit();
   });

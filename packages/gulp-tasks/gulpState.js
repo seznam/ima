@@ -6,6 +6,4 @@
 
 exports.watchEvent = null;
 
-exports.karmaServer = null;
-
 exports.watchMode = false;
