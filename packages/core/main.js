@@ -40,16 +40,16 @@ function getClientBootConfig(initialAppConfigFunctions) {
     if ($IMA.$Protocol !== root.location.protocol) {
       throw new Error(
         `Your client's protocol is not same as server's protocol. ` +
-        `For right setting protocol on the server site set ` +
-        `'X-Forwarded-Proto' header.`
+          `For right setting protocol on the server site set ` +
+          `'X-Forwarded-Proto' header.`
       );
     }
 
     if ($IMA.$Host !== root.location.host) {
       throw new Error(
         `Your client's host is not same as server's host. For right ` +
-        `setting host on the server site set 'X-Forwarded-Host' ` +
-        `header.`
+          `setting host on the server site set 'X-Forwarded-Host' ` +
+          `header.`
       );
     }
   }
@@ -159,7 +159,7 @@ function hotReloadClientApp(initialAppConfigFunctions) {
         } else {
           console.warn(
             'Define the config.$IMA.fatalErrorHandler function ' +
-            'in services.js.'
+              'in services.js.'
           );
         }
       });
