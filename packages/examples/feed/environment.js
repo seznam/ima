@@ -43,7 +43,8 @@ module.exports = (() => {
           // connection exceeds the concurrency, the
           // server will serve the application in SPA
           // mode (without server-side rendering)
-          blackList: new RegExp('Googlebot|SeznamBot', 'g') // These user agents
+          blackList: userAgent =>
+            new RegExp('Googlebot|SeznamBot', 'g').test(userAgent) // These user agents
           // will always be
           // served a
           // server-rendered
