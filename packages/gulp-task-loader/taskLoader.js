@@ -40,14 +40,16 @@ function loadTasks(directory, gulpConfig) {
   }
 
   let allTasks = {};
-  directoryFiles.filter(file => file.match(/[.]js$/i)).forEach(file => {
-    let modulePath = path.resolve(directory + path.sep + file);
-    let tasks = require(modulePath);
-    if (tasks.__requiresConfig && typeof tasks.default === 'function') {
-      tasks = tasks.default(gulpConfig);
-    }
-    allTasks = Object.assign(allTasks, tasks);
-  });
+  directoryFiles
+    .filter(file => file.match(/[.]js$/i))
+    .forEach(file => {
+      let modulePath = path.resolve(directory + path.sep + file);
+      let tasks = require(modulePath);
+      if (tasks.__requiresConfig && typeof tasks.default === 'function') {
+        tasks = tasks.default(gulpConfig);
+      }
+      allTasks = Object.assign(allTasks, tasks);
+    });
 
   return allTasks;
 }
