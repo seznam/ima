@@ -1,4 +1,4 @@
-baseurl: "/IMA.js-core"
+baseurl: "/"
 exclude: ["_partials"]
 permalink: /doc/:categories/:title:output_ext
 defaults:
