@@ -10,20 +10,20 @@ module.exports = (() => {
       $Version: version, // Current server version. Version value is used
       // for static assets timestamp.
       /*
-			 * Key-value pairs used for configuring the languages used with
-			 * specific hosts or starting paths.
-			 *
-			 * - Key: Has to start with '//' instead of a protocol, and you can
-			 *        define the root path. Optional parameter ":language"
-			 *        could be defined at the end to display language in the
-			 *        URL.
-			 *
-			 * - Value: Language to use when the key is matched by the current
-			 *          URL. If the ":language" parameter is used, the language
-			 *          specified in this value is used as the default language
-			 *          when the path part specifying the language is not
-			 *          present in the current URL.
-			 */
+       * Key-value pairs used for configuring the languages used with
+       * specific hosts or starting paths.
+       *
+       * - Key: Has to start with '//' instead of a protocol, and you can
+       *        define the root path. Optional parameter ":language"
+       *        could be defined at the end to display language in the
+       *        URL.
+       *
+       * - Value: Language to use when the key is matched by the current
+       *          URL. If the ":language" parameter is used, the language
+       *          specified in this value is used as the default language
+       *          when the path part specifying the language is not
+       *          present in the current URL.
+       */
       $Language: {
         '//*:*': 'en'
       },
