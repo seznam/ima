@@ -193,8 +193,8 @@ module.exports = (environment, logger, languageLoader, appFactory) => {
     let isServerBusy = instanceRecycler.hasReachedMaxConcurrentRequests();
     let isAllowedUserAgent = !(
       spaConfig.blackList &&
-      typeof spaConfig.blackList.test === 'function' &&
-      spaConfig.blackList.test(userAgent)
+      typeof spaConfig.blackList === 'function' &&
+      spaConfig.blackList(userAgent)
     );
     let canBeRouteServeAsSPA = true;
     let routeInfo = _getRouteInfo(app);
