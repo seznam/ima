@@ -21,7 +21,7 @@ catching events (e.g. inside view components).</p>
 </dd>
 </dl>
 
-## EventBusImpl&nbsp;<a name="EventBusImpl" href="https://github.com/seznam/IMA.js-core/tree/0.16.0-alpha.11/event/EventBusImpl.js#L21" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a>
+## EventBusImpl&nbsp;<a name="EventBusImpl" href="https://github.com/seznam/IMA.js-core/tree/0.16.0/event/EventBusImpl.js#L21" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a>
 Helper for custom events.
 
 It offers public methods for firing custom events and two methods for
@@ -54,14 +54,14 @@ Initializes the custom event helper.
 
 * * *
 
-### eventBusImpl.\_window : <code>Window</code>&nbsp;<a name="EventBusImpl+_window" href="https://github.com/seznam/IMA.js-core/tree/0.16.0-alpha.11/event/EventBusImpl.js#L39" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a>
+### eventBusImpl.\_window : <code>Window</code>&nbsp;<a name="EventBusImpl+_window" href="https://github.com/seznam/IMA.js-core/tree/0.16.0/event/EventBusImpl.js#L39" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a>
 The IMA window helper.
 
 **Kind**: instance property of [<code>EventBusImpl</code>](#EventBusImpl)  
 
 * * *
 
-### eventBusImpl.\_listeners : <code>WeakMap.&lt;function(Event), WeakMap.&lt;EventTarget, Map.&lt;string, function(Event)&gt;&gt;&gt;</code>&nbsp;<a name="EventBusImpl+_listeners" href="https://github.com/seznam/IMA.js-core/tree/0.16.0-alpha.11/event/EventBusImpl.js#L53" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a>
+### eventBusImpl.\_listeners : <code>WeakMap.&lt;function(Event), WeakMap.&lt;EventTarget, Map.&lt;string, function(Event)&gt;&gt;&gt;</code>&nbsp;<a name="EventBusImpl+_listeners" href="https://github.com/seznam/IMA.js-core/tree/0.16.0/event/EventBusImpl.js#L53" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a>
 Map of listeners provided to the public API of this event bus to a
 map of event targets to a map of event names to actual listeners
 bound to the native API.
@@ -72,7 +72,7 @@ The "listen all" event listeners are not registered in this map.
 
 * * *
 
-### eventBusImpl.\_allListenersTargets : <code>WeakMap.&lt;EventTarget, WeakSet.&lt;function(Event)&gt;&gt;</code>&nbsp;<a name="EventBusImpl+_allListenersTargets" href="https://github.com/seznam/IMA.js-core/tree/0.16.0-alpha.11/event/EventBusImpl.js#L61" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a>
+### eventBusImpl.\_allListenersTargets : <code>WeakMap.&lt;EventTarget, WeakSet.&lt;function(Event)&gt;&gt;</code>&nbsp;<a name="EventBusImpl+_allListenersTargets" href="https://github.com/seznam/IMA.js-core/tree/0.16.0/event/EventBusImpl.js#L61" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a>
 Map of event targets to listeners executed on all IMA.js event bus
 events.
 
@@ -80,32 +80,32 @@ events.
 
 * * *
 
-### eventBusImpl.fire()&nbsp;<a name="EventBusImpl+fire" href="https://github.com/seznam/IMA.js-core/tree/0.16.0-alpha.11/event/EventBusImpl.js#L67" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a>
+### eventBusImpl.fire()&nbsp;<a name="EventBusImpl+fire" href="https://github.com/seznam/IMA.js-core/tree/0.16.0/event/EventBusImpl.js#L67" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a>
 **Kind**: instance method of [<code>EventBusImpl</code>](#EventBusImpl)  
 
 * * *
 
-### eventBusImpl.listenAll()&nbsp;<a name="EventBusImpl+listenAll" href="https://github.com/seznam/IMA.js-core/tree/0.16.0-alpha.11/event/EventBusImpl.js#L92" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a>
+### eventBusImpl.listenAll()&nbsp;<a name="EventBusImpl+listenAll" href="https://github.com/seznam/IMA.js-core/tree/0.16.0/event/EventBusImpl.js#L92" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a>
 **Kind**: instance method of [<code>EventBusImpl</code>](#EventBusImpl)  
 
 * * *
 
-### eventBusImpl.listen()&nbsp;<a name="EventBusImpl+listen" href="https://github.com/seznam/IMA.js-core/tree/0.16.0-alpha.11/event/EventBusImpl.js#L112" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a>
+### eventBusImpl.listen()&nbsp;<a name="EventBusImpl+listen" href="https://github.com/seznam/IMA.js-core/tree/0.16.0/event/EventBusImpl.js#L112" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a>
 **Kind**: instance method of [<code>EventBusImpl</code>](#EventBusImpl)  
 
 * * *
 
-### eventBusImpl.unlistenAll()&nbsp;<a name="EventBusImpl+unlistenAll" href="https://github.com/seznam/IMA.js-core/tree/0.16.0-alpha.11/event/EventBusImpl.js#L138" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a>
+### eventBusImpl.unlistenAll()&nbsp;<a name="EventBusImpl+unlistenAll" href="https://github.com/seznam/IMA.js-core/tree/0.16.0/event/EventBusImpl.js#L138" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a>
 **Kind**: instance method of [<code>EventBusImpl</code>](#EventBusImpl)  
 
 * * *
 
-### eventBusImpl.unlisten()&nbsp;<a name="EventBusImpl+unlisten" href="https://github.com/seznam/IMA.js-core/tree/0.16.0-alpha.11/event/EventBusImpl.js#L178" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a>
+### eventBusImpl.unlisten()&nbsp;<a name="EventBusImpl+unlisten" href="https://github.com/seznam/IMA.js-core/tree/0.16.0/event/EventBusImpl.js#L178" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a>
 **Kind**: instance method of [<code>EventBusImpl</code>](#EventBusImpl)  
 
 * * *
 
-## IMA\_EVENT : <code>string</code>&nbsp;<a name="IMA_EVENT" href="https://github.com/seznam/IMA.js-core/tree/0.16.0-alpha.11/event/EventBusImpl.js#L13" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a>
+## IMA\_EVENT : <code>string</code>&nbsp;<a name="IMA_EVENT" href="https://github.com/seznam/IMA.js-core/tree/0.16.0/event/EventBusImpl.js#L13" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a>
 Global name of IMA.js custom event.
 
 **Kind**: global constant  

@@ -3,7 +3,7 @@ category: "window"
 title: "Window"
 ---
 
-## Window&nbsp;<a name="Window" href="https://github.com/seznam/IMA.js-core/tree/0.16.0-alpha.11/window/Window.js#L8" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a>
+## Window&nbsp;<a name="Window" href="https://github.com/seznam/IMA.js-core/tree/0.16.0/window/Window.js#L8" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a>
 **Kind**: global interface  
 
 * [Window](#Window)
@@ -36,7 +36,7 @@ title: "Window"
 
 * * *
 
-### window.isClient() ⇒ <code>boolean</code>&nbsp;<a name="Window+isClient" href="https://github.com/seznam/IMA.js-core/tree/0.16.0-alpha.11/window/Window.js#L14" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a>
+### window.isClient() ⇒ <code>boolean</code>&nbsp;<a name="Window+isClient" href="https://github.com/seznam/IMA.js-core/tree/0.16.0/window/Window.js#L14" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a>
 Returns <code>true</code> if invoked at the client side.
 
 **Kind**: instance method of [<code>Window</code>](#Window)  
@@ -44,7 +44,7 @@ Returns <code>true</code> if invoked at the client side.
 
 * * *
 
-### window.isCookieEnabled() ⇒ <code>boolean</code>&nbsp;<a name="Window+isCookieEnabled" href="https://github.com/seznam/IMA.js-core/tree/0.16.0-alpha.11/window/Window.js#L23" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a>
+### window.isCookieEnabled() ⇒ <code>boolean</code>&nbsp;<a name="Window+isCookieEnabled" href="https://github.com/seznam/IMA.js-core/tree/0.16.0/window/Window.js#L23" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a>
 Returns <code>true</code> if the cookies are set and processed with every
 HTTP request and response automatically by the environment.
 
@@ -54,7 +54,7 @@ HTTP request and response automatically by the environment.
 
 * * *
 
-### window.hasSessionStorage() ⇒ <code>boolean</code>&nbsp;<a name="Window+hasSessionStorage" href="https://github.com/seznam/IMA.js-core/tree/0.16.0-alpha.11/window/Window.js#L30" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a>
+### window.hasSessionStorage() ⇒ <code>boolean</code>&nbsp;<a name="Window+hasSessionStorage" href="https://github.com/seznam/IMA.js-core/tree/0.16.0/window/Window.js#L30" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a>
 Returns <code>true</code> if the session storage is supported.
 
 **Kind**: instance method of [<code>Window</code>](#Window)  
@@ -62,7 +62,7 @@ Returns <code>true</code> if the session storage is supported.
 
 * * *
 
-### window.setTitle(title)&nbsp;<a name="Window+setTitle" href="https://github.com/seznam/IMA.js-core/tree/0.16.0-alpha.11/window/Window.js#L37" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a>
+### window.setTitle(title)&nbsp;<a name="Window+setTitle" href="https://github.com/seznam/IMA.js-core/tree/0.16.0/window/Window.js#L37" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a>
 Sets the new page title of the document.
 
 **Kind**: instance method of [<code>Window</code>](#Window)  
@@ -74,7 +74,7 @@ Sets the new page title of the document.
 
 * * *
 
-### ~~window.getWebSocket() ⇒ <code>function</code>~~&nbsp;<a name="Window+getWebSocket" href="https://github.com/seznam/IMA.js-core/tree/0.16.0-alpha.11/window/Window.js#L49" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a>
+### ~~window.getWebSocket() ⇒ <code>function</code>~~&nbsp;<a name="Window+getWebSocket" href="https://github.com/seznam/IMA.js-core/tree/0.16.0/window/Window.js#L49" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a>
 ***Deprecated***
 
 Returns the current <code>WebSocket</code> implementation to use.
@@ -85,7 +85,7 @@ Returns the current <code>WebSocket</code> implementation to use.
 
 * * *
 
-### window.getWindow() ⇒ <code>undefined</code> \| [<code>Window</code>](#Window)&nbsp;<a name="Window+getWindow" href="https://github.com/seznam/IMA.js-core/tree/0.16.0-alpha.11/window/Window.js#L59" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a>
+### window.getWindow() ⇒ <code>undefined</code> \| [<code>Window</code>](#Window)&nbsp;<a name="Window+getWindow" href="https://github.com/seznam/IMA.js-core/tree/0.16.0/window/Window.js#L59" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a>
 Returns the native <code>window</code> object representing the global context
 at the client-side. The method returns <code>undefined</code> if used at the
 server-side.
@@ -96,7 +96,7 @@ server-side.
 
 * * *
 
-### window.getDocument() ⇒ <code>undefined</code> \| <code>Document</code>&nbsp;<a name="Window+getDocument" href="https://github.com/seznam/IMA.js-core/tree/0.16.0-alpha.11/window/Window.js#L70" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a>
+### window.getDocument() ⇒ <code>undefined</code> \| <code>Document</code>&nbsp;<a name="Window+getDocument" href="https://github.com/seznam/IMA.js-core/tree/0.16.0/window/Window.js#L70" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a>
 Returns the native <code>document</code> object representing any web page loaded
 in the browser and serves as an entry point into the web page's content
 which is the DOM tree at the client-side. The method returns <code>undefined</code>
@@ -108,7 +108,7 @@ if used at the server-side.
 
 * * *
 
-### window.getScrollX() ⇒ <code>number</code>&nbsp;<a name="Window+getScrollX" href="https://github.com/seznam/IMA.js-core/tree/0.16.0-alpha.11/window/Window.js#L78" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a>
+### window.getScrollX() ⇒ <code>number</code>&nbsp;<a name="Window+getScrollX" href="https://github.com/seznam/IMA.js-core/tree/0.16.0/window/Window.js#L78" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a>
 Returns the number of pixels the viewport is scrolled horizontally.
 
 **Kind**: instance method of [<code>Window</code>](#Window)  
@@ -117,7 +117,7 @@ Returns the number of pixels the viewport is scrolled horizontally.
 
 * * *
 
-### window.getScrollY() ⇒ <code>number</code>&nbsp;<a name="Window+getScrollY" href="https://github.com/seznam/IMA.js-core/tree/0.16.0-alpha.11/window/Window.js#L86" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a>
+### window.getScrollY() ⇒ <code>number</code>&nbsp;<a name="Window+getScrollY" href="https://github.com/seznam/IMA.js-core/tree/0.16.0/window/Window.js#L86" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a>
 Returns the number of pixels the document is scrolled vertically.
 
 **Kind**: instance method of [<code>Window</code>](#Window)  
@@ -126,7 +126,7 @@ Returns the number of pixels the document is scrolled vertically.
 
 * * *
 
-### window.scrollTo(x, y)&nbsp;<a name="Window+scrollTo" href="https://github.com/seznam/IMA.js-core/tree/0.16.0-alpha.11/window/Window.js#L94" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a>
+### window.scrollTo(x, y)&nbsp;<a name="Window+scrollTo" href="https://github.com/seznam/IMA.js-core/tree/0.16.0/window/Window.js#L94" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a>
 Scrolls the viewport to the specified location (if possible).
 
 **Kind**: instance method of [<code>Window</code>](#Window)  
@@ -139,7 +139,7 @@ Scrolls the viewport to the specified location (if possible).
 
 * * *
 
-### window.getDomain() ⇒ <code>string</code>&nbsp;<a name="Window+getDomain" href="https://github.com/seznam/IMA.js-core/tree/0.16.0-alpha.11/window/Window.js#L102" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a>
+### window.getDomain() ⇒ <code>string</code>&nbsp;<a name="Window+getDomain" href="https://github.com/seznam/IMA.js-core/tree/0.16.0/window/Window.js#L102" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a>
 Returns the domain of the current document's URL as
 <code>`${protocol</code>://${host}`}.
 
@@ -148,7 +148,7 @@ Returns the domain of the current document's URL as
 
 * * *
 
-### window.getHost() ⇒ <code>string</code>&nbsp;<a name="Window+getHost" href="https://github.com/seznam/IMA.js-core/tree/0.16.0-alpha.11/window/Window.js#L109" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a>
+### window.getHost() ⇒ <code>string</code>&nbsp;<a name="Window+getHost" href="https://github.com/seznam/IMA.js-core/tree/0.16.0/window/Window.js#L109" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a>
 Returns the application's host.
 
 **Kind**: instance method of [<code>Window</code>](#Window)  
@@ -156,7 +156,7 @@ Returns the application's host.
 
 * * *
 
-### window.getPath() ⇒ <code>string</code>&nbsp;<a name="Window+getPath" href="https://github.com/seznam/IMA.js-core/tree/0.16.0-alpha.11/window/Window.js#L116" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a>
+### window.getPath() ⇒ <code>string</code>&nbsp;<a name="Window+getPath" href="https://github.com/seznam/IMA.js-core/tree/0.16.0/window/Window.js#L116" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a>
 Returns the path part of the current URL, including the query string.
 
 **Kind**: instance method of [<code>Window</code>](#Window)  
@@ -164,7 +164,7 @@ Returns the path part of the current URL, including the query string.
 
 * * *
 
-### window.getUrl() ⇒ <code>string</code>&nbsp;<a name="Window+getUrl" href="https://github.com/seznam/IMA.js-core/tree/0.16.0-alpha.11/window/Window.js#L123" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a>
+### window.getUrl() ⇒ <code>string</code>&nbsp;<a name="Window+getUrl" href="https://github.com/seznam/IMA.js-core/tree/0.16.0/window/Window.js#L123" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a>
 Returns the current document's URL.
 
 **Kind**: instance method of [<code>Window</code>](#Window)  
@@ -172,7 +172,7 @@ Returns the current document's URL.
 
 * * *
 
-### window.getBody() ⇒ <code>undefined</code> \| <code>HTMLBodyElement</code>&nbsp;<a name="Window+getBody" href="https://github.com/seznam/IMA.js-core/tree/0.16.0-alpha.11/window/Window.js#L132" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a>
+### window.getBody() ⇒ <code>undefined</code> \| <code>HTMLBodyElement</code>&nbsp;<a name="Window+getBody" href="https://github.com/seznam/IMA.js-core/tree/0.16.0/window/Window.js#L132" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a>
 Returns the document's body element. The method returns
 <code>undefined</code> if invoked at the server-side.
 
@@ -182,7 +182,7 @@ Returns the document's body element. The method returns
 
 * * *
 
-### window.getElementById(id) ⇒ <code>HTMLElement</code>&nbsp;<a name="Window+getElementById" href="https://github.com/seznam/IMA.js-core/tree/0.16.0-alpha.11/window/Window.js#L141" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a>
+### window.getElementById(id) ⇒ <code>HTMLElement</code>&nbsp;<a name="Window+getElementById" href="https://github.com/seznam/IMA.js-core/tree/0.16.0/window/Window.js#L141" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a>
 Returns the HTML element with the specified <code>id</code> attribute value.
 
 **Kind**: instance method of [<code>Window</code>](#Window)  
@@ -196,7 +196,7 @@ Returns the HTML element with the specified <code>id</code> attribute value.
 
 * * *
 
-### window.getHistoryState() ⇒ <code>Object</code>&nbsp;<a name="Window+getHistoryState" href="https://github.com/seznam/IMA.js-core/tree/0.16.0-alpha.11/window/Window.js#L148" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a>
+### window.getHistoryState() ⇒ <code>Object</code>&nbsp;<a name="Window+getHistoryState" href="https://github.com/seznam/IMA.js-core/tree/0.16.0/window/Window.js#L148" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a>
 Returns the history state.
 
 **Kind**: instance method of [<code>Window</code>](#Window)  
@@ -204,7 +204,7 @@ Returns the history state.
 
 * * *
 
-### window.querySelector(selector) ⇒ <code>HTMLElement</code>&nbsp;<a name="Window+querySelector" href="https://github.com/seznam/IMA.js-core/tree/0.16.0-alpha.11/window/Window.js#L157" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a>
+### window.querySelector(selector) ⇒ <code>HTMLElement</code>&nbsp;<a name="Window+querySelector" href="https://github.com/seznam/IMA.js-core/tree/0.16.0/window/Window.js#L157" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a>
 Returns the first element matching the specified CSS 3 selector.
 
 **Kind**: instance method of [<code>Window</code>](#Window)  
@@ -218,7 +218,7 @@ Returns the first element matching the specified CSS 3 selector.
 
 * * *
 
-### window.querySelectorAll(selector) ⇒ <code>NodeList</code>&nbsp;<a name="Window+querySelectorAll" href="https://github.com/seznam/IMA.js-core/tree/0.16.0-alpha.11/window/Window.js#L167" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a>
+### window.querySelectorAll(selector) ⇒ <code>NodeList</code>&nbsp;<a name="Window+querySelectorAll" href="https://github.com/seznam/IMA.js-core/tree/0.16.0/window/Window.js#L167" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a>
 Returns a node list of all elements matching the specified CSS 3
 selector.
 
@@ -233,7 +233,7 @@ selector.
 
 * * *
 
-### window.redirect(url)&nbsp;<a name="Window+redirect" href="https://github.com/seznam/IMA.js-core/tree/0.16.0-alpha.11/window/Window.js#L175" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a>
+### window.redirect(url)&nbsp;<a name="Window+redirect" href="https://github.com/seznam/IMA.js-core/tree/0.16.0/window/Window.js#L175" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a>
 Performs a hard redirect (discarding the current JavaScript state) to
 the specified URL.
 
@@ -246,7 +246,7 @@ the specified URL.
 
 * * *
 
-### window.pushState(state, title, url)&nbsp;<a name="Window+pushState" href="https://github.com/seznam/IMA.js-core/tree/0.16.0-alpha.11/window/Window.js#L187" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a>
+### window.pushState(state, title, url)&nbsp;<a name="Window+pushState" href="https://github.com/seznam/IMA.js-core/tree/0.16.0/window/Window.js#L187" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a>
 Pushes a new state to the browser history. The method has no effect if
 the current browser does not support the history API (IE9).
 
@@ -261,7 +261,7 @@ the current browser does not support the history API (IE9).
 
 * * *
 
-### window.replaceState(state, title, [url])&nbsp;<a name="Window+replaceState" href="https://github.com/seznam/IMA.js-core/tree/0.16.0-alpha.11/window/Window.js#L199" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a>
+### window.replaceState(state, title, [url])&nbsp;<a name="Window+replaceState" href="https://github.com/seznam/IMA.js-core/tree/0.16.0/window/Window.js#L199" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a>
 Replaces the current history entry. The method has no effect if the
 current browser does not support the history API (IE9).
 
@@ -276,7 +276,7 @@ current browser does not support the history API (IE9).
 
 * * *
 
-### window.createCustomEvent(name, options) ⇒ <code>CustomEvent</code>&nbsp;<a name="Window+createCustomEvent" href="https://github.com/seznam/IMA.js-core/tree/0.16.0-alpha.11/window/Window.js#L211" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a>
+### window.createCustomEvent(name, options) ⇒ <code>CustomEvent</code>&nbsp;<a name="Window+createCustomEvent" href="https://github.com/seznam/IMA.js-core/tree/0.16.0/window/Window.js#L211" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a>
 Create new instance of CustomEvent of the specified name and using the
 provided options.
 
@@ -292,7 +292,7 @@ provided options.
 
 * * *
 
-### window.bindEventListener(eventTarget, event, listener, [useCapture])&nbsp;<a name="Window+bindEventListener" href="https://github.com/seznam/IMA.js-core/tree/0.16.0-alpha.11/window/Window.js#L231" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a>
+### window.bindEventListener(eventTarget, event, listener, [useCapture])&nbsp;<a name="Window+bindEventListener" href="https://github.com/seznam/IMA.js-core/tree/0.16.0/window/Window.js#L231" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a>
 Registers the provided event listener to be executed when the specified
 event occurs on the specified event target.
 
@@ -312,7 +312,7 @@ effect.
 
 * * *
 
-### window.unbindEventListener(eventTarget, event, listener, [useCapture])&nbsp;<a name="Window+unbindEventListener" href="https://github.com/seznam/IMA.js-core/tree/0.16.0-alpha.11/window/Window.js#L246" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a>
+### window.unbindEventListener(eventTarget, event, listener, [useCapture])&nbsp;<a name="Window+unbindEventListener" href="https://github.com/seznam/IMA.js-core/tree/0.16.0/window/Window.js#L246" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a>
 Deregisters the provided event listener, so it will no longer we
 executed when the specified event occurs on the specified event target.
 

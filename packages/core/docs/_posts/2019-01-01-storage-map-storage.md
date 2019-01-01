@@ -3,7 +3,7 @@ category: "storage"
 title: "MapStorage"
 ---
 
-## MapStorage&nbsp;<a name="MapStorage" href="https://github.com/seznam/IMA.js-core/tree/0.16.0-alpha.11/storage/MapStorage.js#L7" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a>
+## MapStorage&nbsp;<a name="MapStorage" href="https://github.com/seznam/IMA.js-core/tree/0.16.0/storage/MapStorage.js#L7" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a>
 Implementation of the <code>Storage</code> interface that relies on the
 native <code>Map</code> for storage.
 
@@ -30,7 +30,7 @@ Initializes the map storage.
 
 * * *
 
-### mapStorage.\_storage : <code>Map.&lt;string, \*&gt;</code>&nbsp;<a name="MapStorage+_storage" href="https://github.com/seznam/IMA.js-core/tree/0.16.0-alpha.11/storage/MapStorage.js#L24" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a>
+### mapStorage.\_storage : <code>Map.&lt;string, \*&gt;</code>&nbsp;<a name="MapStorage+_storage" href="https://github.com/seznam/IMA.js-core/tree/0.16.0/storage/MapStorage.js#L24" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a>
 The internal storage of entries.
 
 **Kind**: instance property of [<code>MapStorage</code>](#MapStorage)  
@@ -38,42 +38,42 @@ The internal storage of entries.
 
 * * *
 
-### mapStorage.init()&nbsp;<a name="MapStorage+init" href="https://github.com/seznam/IMA.js-core/tree/0.16.0-alpha.11/storage/MapStorage.js#L30" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a>
+### mapStorage.init()&nbsp;<a name="MapStorage+init" href="https://github.com/seznam/IMA.js-core/tree/0.16.0/storage/MapStorage.js#L30" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a>
 **Kind**: instance method of [<code>MapStorage</code>](#MapStorage)  
 
 * * *
 
-### mapStorage.has()&nbsp;<a name="MapStorage+has" href="https://github.com/seznam/IMA.js-core/tree/0.16.0-alpha.11/storage/MapStorage.js#L37" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a>
+### mapStorage.has()&nbsp;<a name="MapStorage+has" href="https://github.com/seznam/IMA.js-core/tree/0.16.0/storage/MapStorage.js#L37" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a>
 **Kind**: instance method of [<code>MapStorage</code>](#MapStorage)  
 
 * * *
 
-### mapStorage.get()&nbsp;<a name="MapStorage+get" href="https://github.com/seznam/IMA.js-core/tree/0.16.0-alpha.11/storage/MapStorage.js#L44" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a>
+### mapStorage.get()&nbsp;<a name="MapStorage+get" href="https://github.com/seznam/IMA.js-core/tree/0.16.0/storage/MapStorage.js#L44" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a>
 **Kind**: instance method of [<code>MapStorage</code>](#MapStorage)  
 
 * * *
 
-### mapStorage.set()&nbsp;<a name="MapStorage+set" href="https://github.com/seznam/IMA.js-core/tree/0.16.0-alpha.11/storage/MapStorage.js#L51" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a>
+### mapStorage.set()&nbsp;<a name="MapStorage+set" href="https://github.com/seznam/IMA.js-core/tree/0.16.0/storage/MapStorage.js#L51" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a>
 **Kind**: instance method of [<code>MapStorage</code>](#MapStorage)  
 
 * * *
 
-### mapStorage.delete()&nbsp;<a name="MapStorage+delete" href="https://github.com/seznam/IMA.js-core/tree/0.16.0-alpha.11/storage/MapStorage.js#L59" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a>
+### mapStorage.delete()&nbsp;<a name="MapStorage+delete" href="https://github.com/seznam/IMA.js-core/tree/0.16.0/storage/MapStorage.js#L59" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a>
 **Kind**: instance method of [<code>MapStorage</code>](#MapStorage)  
 
 * * *
 
-### mapStorage.clear()&nbsp;<a name="MapStorage+clear" href="https://github.com/seznam/IMA.js-core/tree/0.16.0-alpha.11/storage/MapStorage.js#L67" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a>
+### mapStorage.clear()&nbsp;<a name="MapStorage+clear" href="https://github.com/seznam/IMA.js-core/tree/0.16.0/storage/MapStorage.js#L67" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a>
 **Kind**: instance method of [<code>MapStorage</code>](#MapStorage)  
 
 * * *
 
-### mapStorage.keys()&nbsp;<a name="MapStorage+keys" href="https://github.com/seznam/IMA.js-core/tree/0.16.0-alpha.11/storage/MapStorage.js#L75" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a>
+### mapStorage.keys()&nbsp;<a name="MapStorage+keys" href="https://github.com/seznam/IMA.js-core/tree/0.16.0/storage/MapStorage.js#L75" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a>
 **Kind**: instance method of [<code>MapStorage</code>](#MapStorage)  
 
 * * *
 
-### mapStorage.size()&nbsp;<a name="MapStorage+size" href="https://github.com/seznam/IMA.js-core/tree/0.16.0-alpha.11/storage/MapStorage.js#L82" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a>
+### mapStorage.size()&nbsp;<a name="MapStorage+size" href="https://github.com/seznam/IMA.js-core/tree/0.16.0/storage/MapStorage.js#L82" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a>
 **Kind**: instance method of [<code>MapStorage</code>](#MapStorage)  
 
 * * *

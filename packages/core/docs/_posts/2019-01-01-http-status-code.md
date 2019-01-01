@@ -32,63 +32,63 @@ title: "StatusCode"
 </dd>
 </dl>
 
-## OK : <code>number</code>&nbsp;<a name="OK" href="https://github.com/seznam/IMA.js-core/tree/0.16.0-alpha.11/http/StatusCode.js#L15" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a>
+## OK : <code>number</code>&nbsp;<a name="OK" href="https://github.com/seznam/IMA.js-core/tree/0.16.0/http/StatusCode.js#L15" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a>
 OK
 
 **Kind**: global variable  
 
 * * *
 
-## NO\_CONTENT : <code>number</code>&nbsp;<a name="NO_CONTENT" href="https://github.com/seznam/IMA.js-core/tree/0.16.0-alpha.11/http/StatusCode.js#L22" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a>
+## NO\_CONTENT : <code>number</code>&nbsp;<a name="NO_CONTENT" href="https://github.com/seznam/IMA.js-core/tree/0.16.0/http/StatusCode.js#L22" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a>
 No content
 
 **Kind**: global variable  
 
 * * *
 
-## BAD\_REQUEST : <code>number</code>&nbsp;<a name="BAD_REQUEST" href="https://github.com/seznam/IMA.js-core/tree/0.16.0-alpha.11/http/StatusCode.js#L29" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a>
+## BAD\_REQUEST : <code>number</code>&nbsp;<a name="BAD_REQUEST" href="https://github.com/seznam/IMA.js-core/tree/0.16.0/http/StatusCode.js#L29" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a>
 Bad request
 
 **Kind**: global variable  
 
 * * *
 
-## UNAUTHORIZED : <code>number</code>&nbsp;<a name="UNAUTHORIZED" href="https://github.com/seznam/IMA.js-core/tree/0.16.0-alpha.11/http/StatusCode.js#L36" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a>
+## UNAUTHORIZED : <code>number</code>&nbsp;<a name="UNAUTHORIZED" href="https://github.com/seznam/IMA.js-core/tree/0.16.0/http/StatusCode.js#L36" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a>
 Unauthorized
 
 **Kind**: global variable  
 
 * * *
 
-## FORBIDDEN : <code>number</code>&nbsp;<a name="FORBIDDEN" href="https://github.com/seznam/IMA.js-core/tree/0.16.0-alpha.11/http/StatusCode.js#L43" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a>
+## FORBIDDEN : <code>number</code>&nbsp;<a name="FORBIDDEN" href="https://github.com/seznam/IMA.js-core/tree/0.16.0/http/StatusCode.js#L43" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a>
 Forbidden
 
 **Kind**: global variable  
 
 * * *
 
-## NOT\_FOUND : <code>number</code>&nbsp;<a name="NOT_FOUND" href="https://github.com/seznam/IMA.js-core/tree/0.16.0-alpha.11/http/StatusCode.js#L50" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a>
+## NOT\_FOUND : <code>number</code>&nbsp;<a name="NOT_FOUND" href="https://github.com/seznam/IMA.js-core/tree/0.16.0/http/StatusCode.js#L50" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a>
 Not found
 
 **Kind**: global variable  
 
 * * *
 
-## TIMEOUT : <code>number</code>&nbsp;<a name="TIMEOUT" href="https://github.com/seznam/IMA.js-core/tree/0.16.0-alpha.11/http/StatusCode.js#L57" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a>
+## TIMEOUT : <code>number</code>&nbsp;<a name="TIMEOUT" href="https://github.com/seznam/IMA.js-core/tree/0.16.0/http/StatusCode.js#L57" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a>
 Request timeout
 
 **Kind**: global variable  
 
 * * *
 
-## SERVER\_ERROR : <code>number</code>&nbsp;<a name="SERVER_ERROR" href="https://github.com/seznam/IMA.js-core/tree/0.16.0-alpha.11/http/StatusCode.js#L64" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a>
+## SERVER\_ERROR : <code>number</code>&nbsp;<a name="SERVER_ERROR" href="https://github.com/seznam/IMA.js-core/tree/0.16.0/http/StatusCode.js#L64" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a>
 Internal Server Error
 
 **Kind**: global variable  
 
 * * *
 
-## StatusCode : <code>enum</code>&nbsp;<a name="StatusCode" href="https://github.com/seznam/IMA.js-core/tree/0.16.0-alpha.11/http/StatusCode.js#L9" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a>
+## StatusCode : <code>enum</code>&nbsp;<a name="StatusCode" href="https://github.com/seznam/IMA.js-core/tree/0.16.0/http/StatusCode.js#L9" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a>
 HTTP status code constants, representing the HTTP status codes recognized
 and processed by this proxy.
 

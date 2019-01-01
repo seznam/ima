@@ -16,7 +16,7 @@ code error page).</p>
 </dd>
 </dl>
 
-## RouteNames : <code>enum</code>&nbsp;<a name="RouteNames" href="https://github.com/seznam/IMA.js-core/tree/0.16.0-alpha.11/router/RouteNames.js#L8" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a>
+## RouteNames : <code>enum</code>&nbsp;<a name="RouteNames" href="https://github.com/seznam/IMA.js-core/tree/0.16.0/router/RouteNames.js#L8" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a>
 HTTP status code constants, representing the HTTP status codes recognized
 and processed by this proxy.
 
@@ -25,7 +25,7 @@ and processed by this proxy.
 
 * * *
 
-## NOT\_FOUND : <code>string</code>&nbsp;<a name="NOT_FOUND" href="https://github.com/seznam/IMA.js-core/tree/0.16.0-alpha.11/router/RouteNames.js#L16" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a>
+## NOT\_FOUND : <code>string</code>&nbsp;<a name="NOT_FOUND" href="https://github.com/seznam/IMA.js-core/tree/0.16.0/router/RouteNames.js#L16" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a>
 The internal route name used for the "not found" error page (the 4XX
 HTTP status code error page).
 
@@ -33,7 +33,7 @@ HTTP status code error page).
 
 * * *
 
-## ERROR : <code>string</code>&nbsp;<a name="ERROR" href="https://github.com/seznam/IMA.js-core/tree/0.16.0-alpha.11/router/RouteNames.js#L25" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a>
+## ERROR : <code>string</code>&nbsp;<a name="ERROR" href="https://github.com/seznam/IMA.js-core/tree/0.16.0/router/RouteNames.js#L25" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a>
 The internal route name used for the error page (the 5XX HTTP status
 code error page).
 

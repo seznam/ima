@@ -3,7 +3,7 @@ category: "storage"
 title: "Storage"
 ---
 
-## Storage&nbsp;<a name="Storage" href="https://github.com/seznam/IMA.js-core/tree/0.16.0-alpha.11/storage/Storage.js#L8" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a>
+## Storage&nbsp;<a name="Storage" href="https://github.com/seznam/IMA.js-core/tree/0.16.0/storage/Storage.js#L8" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a>
 **Kind**: global interface  
 
 * [Storage](#Storage)
@@ -19,7 +19,7 @@ title: "Storage"
 
 * * *
 
-### storage.init() ⇒ [<code>Storage</code>](#Storage)&nbsp;<a name="Storage+init" href="https://github.com/seznam/IMA.js-core/tree/0.16.0-alpha.11/storage/Storage.js#L19" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a>
+### storage.init() ⇒ [<code>Storage</code>](#Storage)&nbsp;<a name="Storage+init" href="https://github.com/seznam/IMA.js-core/tree/0.16.0/storage/Storage.js#L19" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a>
 This method is used to finalize the initialization of the storage after
 the dependencies provided through the constructor have been prepared for
 use.
@@ -32,7 +32,7 @@ invoked on this instance.
 
 * * *
 
-### storage.has(key) ⇒ <code>boolean</code>&nbsp;<a name="Storage+has" href="https://github.com/seznam/IMA.js-core/tree/0.16.0-alpha.11/storage/Storage.js#L28" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a>
+### storage.has(key) ⇒ <code>boolean</code>&nbsp;<a name="Storage+has" href="https://github.com/seznam/IMA.js-core/tree/0.16.0/storage/Storage.js#L28" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a>
 Returns <code>true</code> if the entry identified by the specified key exists
 in this storage.
 
@@ -46,7 +46,7 @@ in this storage.
 
 * * *
 
-### storage.get(key) ⇒ <code>\*</code>&nbsp;<a name="Storage+get" href="https://github.com/seznam/IMA.js-core/tree/0.16.0-alpha.11/storage/Storage.js#L40" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a>
+### storage.get(key) ⇒ <code>\*</code>&nbsp;<a name="Storage+get" href="https://github.com/seznam/IMA.js-core/tree/0.16.0/storage/Storage.js#L40" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a>
 Retrieves the value of the entry identified by the specified . The
 method returns <code>undefined</code> if the entry does not exists.
 
@@ -63,7 +63,7 @@ using the <code>has</code> method.
 
 * * *
 
-### storage.set(key, value) ⇒ [<code>Storage</code>](#Storage)&nbsp;<a name="Storage+set" href="https://github.com/seznam/IMA.js-core/tree/0.16.0-alpha.11/storage/Storage.js#L50" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a>
+### storage.set(key, value) ⇒ [<code>Storage</code>](#Storage)&nbsp;<a name="Storage+set" href="https://github.com/seznam/IMA.js-core/tree/0.16.0/storage/Storage.js#L50" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a>
 Sets the storage entry identified by the specified key to the provided
 value. The method creates the entry if it does not exist already.
 
@@ -78,7 +78,7 @@ value. The method creates the entry if it does not exist already.
 
 * * *
 
-### storage.delete(key) ⇒ [<code>Storage</code>](#Storage)&nbsp;<a name="Storage+delete" href="https://github.com/seznam/IMA.js-core/tree/0.16.0-alpha.11/storage/Storage.js#L58" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a>
+### storage.delete(key) ⇒ [<code>Storage</code>](#Storage)&nbsp;<a name="Storage+delete" href="https://github.com/seznam/IMA.js-core/tree/0.16.0/storage/Storage.js#L58" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a>
 Deletes the entry identified by the specified key from this storage.
 
 **Kind**: instance method of [<code>Storage</code>](#Storage)  
@@ -91,7 +91,7 @@ Deletes the entry identified by the specified key from this storage.
 
 * * *
 
-### storage.clear() ⇒ [<code>Storage</code>](#Storage)&nbsp;<a name="Storage+clear" href="https://github.com/seznam/IMA.js-core/tree/0.16.0-alpha.11/storage/Storage.js#L65" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a>
+### storage.clear() ⇒ [<code>Storage</code>](#Storage)&nbsp;<a name="Storage+clear" href="https://github.com/seznam/IMA.js-core/tree/0.16.0/storage/Storage.js#L65" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a>
 Clears the storage of all entries.
 
 **Kind**: instance method of [<code>Storage</code>](#Storage)  
@@ -99,7 +99,7 @@ Clears the storage of all entries.
 
 * * *
 
-### storage.keys() ⇒ <code>Iterator.&lt;string&gt;</code>&nbsp;<a name="Storage+keys" href="https://github.com/seznam/IMA.js-core/tree/0.16.0-alpha.11/storage/Storage.js#L76" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a>
+### storage.keys() ⇒ <code>Iterator.&lt;string&gt;</code>&nbsp;<a name="Storage+keys" href="https://github.com/seznam/IMA.js-core/tree/0.16.0/storage/Storage.js#L76" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a>
 Returns an iterator for traversing the keys in this storage. The order
 in which the keys are traversed is undefined.
 
@@ -111,7 +111,7 @@ in which the keys are traversed is undefined.
 
 * * *
 
-### storage.size() ⇒ <code>number</code>&nbsp;<a name="Storage+size" href="https://github.com/seznam/IMA.js-core/tree/0.16.0-alpha.11/storage/Storage.js#L83" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a>
+### storage.size() ⇒ <code>number</code>&nbsp;<a name="Storage+size" href="https://github.com/seznam/IMA.js-core/tree/0.16.0/storage/Storage.js#L83" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a>
 Returns the number of entries in this storage.
 
 **Kind**: instance method of [<code>Storage</code>](#Storage)  

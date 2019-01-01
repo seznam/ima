@@ -24,7 +24,7 @@ the <code>_eventListeners</code> map.</p>
 </dd>
 </dl>
 
-## DispatcherImpl&nbsp;<a name="DispatcherImpl" href="https://github.com/seznam/IMA.js-core/tree/0.16.0-alpha.11/event/DispatcherImpl.js#L25" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a>
+## DispatcherImpl&nbsp;<a name="DispatcherImpl" href="https://github.com/seznam/IMA.js-core/tree/0.16.0/event/DispatcherImpl.js#L25" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a>
 Default implementation of the <code>Dispatcher</code> interface.
 
 **Kind**: global class  
@@ -50,7 +50,7 @@ Initializes the dispatcher.
 
 * * *
 
-### dispatcherImpl.\_eventListeners : <code>Map.&lt;string, Map.&lt;function(\*), Set.&lt;?Object&gt;&gt;&gt;</code>&nbsp;<a name="DispatcherImpl+_eventListeners" href="https://github.com/seznam/IMA.js-core/tree/0.16.0-alpha.11/event/DispatcherImpl.js#L43" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a>
+### dispatcherImpl.\_eventListeners : <code>Map.&lt;string, Map.&lt;function(\*), Set.&lt;?Object&gt;&gt;&gt;</code>&nbsp;<a name="DispatcherImpl+_eventListeners" href="https://github.com/seznam/IMA.js-core/tree/0.16.0/event/DispatcherImpl.js#L43" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a>
 Map of event names to a map of event listeners to a set of scopes to
 which the event listener should be bound when being executed due to
 the event.
@@ -59,27 +59,27 @@ the event.
 
 * * *
 
-### dispatcherImpl.clear()&nbsp;<a name="DispatcherImpl+clear" href="https://github.com/seznam/IMA.js-core/tree/0.16.0-alpha.11/event/DispatcherImpl.js#L49" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a>
+### dispatcherImpl.clear()&nbsp;<a name="DispatcherImpl+clear" href="https://github.com/seznam/IMA.js-core/tree/0.16.0/event/DispatcherImpl.js#L49" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a>
 **Kind**: instance method of [<code>DispatcherImpl</code>](#DispatcherImpl)  
 
 * * *
 
-### dispatcherImpl.listen()&nbsp;<a name="DispatcherImpl+listen" href="https://github.com/seznam/IMA.js-core/tree/0.16.0-alpha.11/event/DispatcherImpl.js#L58" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a>
+### dispatcherImpl.listen()&nbsp;<a name="DispatcherImpl+listen" href="https://github.com/seznam/IMA.js-core/tree/0.16.0/event/DispatcherImpl.js#L58" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a>
 **Kind**: instance method of [<code>DispatcherImpl</code>](#DispatcherImpl)  
 
 * * *
 
-### dispatcherImpl.unlisten()&nbsp;<a name="DispatcherImpl+unlisten" href="https://github.com/seznam/IMA.js-core/tree/0.16.0-alpha.11/event/DispatcherImpl.js#L83" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a>
+### dispatcherImpl.unlisten()&nbsp;<a name="DispatcherImpl+unlisten" href="https://github.com/seznam/IMA.js-core/tree/0.16.0/event/DispatcherImpl.js#L83" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a>
 **Kind**: instance method of [<code>DispatcherImpl</code>](#DispatcherImpl)  
 
 * * *
 
-### dispatcherImpl.fire()&nbsp;<a name="DispatcherImpl+fire" href="https://github.com/seznam/IMA.js-core/tree/0.16.0-alpha.11/event/DispatcherImpl.js#L118" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a>
+### dispatcherImpl.fire()&nbsp;<a name="DispatcherImpl+fire" href="https://github.com/seznam/IMA.js-core/tree/0.16.0/event/DispatcherImpl.js#L118" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a>
 **Kind**: instance method of [<code>DispatcherImpl</code>](#DispatcherImpl)  
 
 * * *
 
-### dispatcherImpl.\_createNewEvent(event)&nbsp;<a name="DispatcherImpl+_createNewEvent" href="https://github.com/seznam/IMA.js-core/tree/0.16.0-alpha.11/event/DispatcherImpl.js#L145" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a>
+### dispatcherImpl.\_createNewEvent(event)&nbsp;<a name="DispatcherImpl+_createNewEvent" href="https://github.com/seznam/IMA.js-core/tree/0.16.0/event/DispatcherImpl.js#L145" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a>
 Create new Map storage of listeners for the specified event.
 
 **Kind**: instance method of [<code>DispatcherImpl</code>](#DispatcherImpl)  
@@ -91,7 +91,7 @@ Create new Map storage of listeners for the specified event.
 
 * * *
 
-### dispatcherImpl.\_createNewListener(event, listener)&nbsp;<a name="DispatcherImpl+_createNewListener" href="https://github.com/seznam/IMA.js-core/tree/0.16.0-alpha.11/event/DispatcherImpl.js#L156" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a>
+### dispatcherImpl.\_createNewListener(event, listener)&nbsp;<a name="DispatcherImpl+_createNewListener" href="https://github.com/seznam/IMA.js-core/tree/0.16.0/event/DispatcherImpl.js#L156" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a>
 Create new Set storage of scopes for the specified event and listener.
 
 **Kind**: instance method of [<code>DispatcherImpl</code>](#DispatcherImpl)  
@@ -104,7 +104,7 @@ Create new Set storage of scopes for the specified event and listener.
 
 * * *
 
-### dispatcherImpl.\_getScopesOf(event, listener) ⇒ <code>Set.&lt;?Object&gt;</code>&nbsp;<a name="DispatcherImpl+_getScopesOf" href="https://github.com/seznam/IMA.js-core/tree/0.16.0-alpha.11/event/DispatcherImpl.js#L172" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a>
+### dispatcherImpl.\_getScopesOf(event, listener) ⇒ <code>Set.&lt;?Object&gt;</code>&nbsp;<a name="DispatcherImpl+_getScopesOf" href="https://github.com/seznam/IMA.js-core/tree/0.16.0/event/DispatcherImpl.js#L172" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a>
 Retrieves the scopes in which the specified event listener should be
 executed for the specified event.
 
@@ -122,7 +122,7 @@ executed for the specified event.
 
 * * *
 
-### dispatcherImpl.\_getListenersOf(event) ⇒ <code>Map.&lt;function(\*), Set.&lt;?Object&gt;&gt;</code>&nbsp;<a name="DispatcherImpl+_getListenersOf" href="https://github.com/seznam/IMA.js-core/tree/0.16.0-alpha.11/event/DispatcherImpl.js#L191" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a>
+### dispatcherImpl.\_getListenersOf(event) ⇒ <code>Map.&lt;function(\*), Set.&lt;?Object&gt;&gt;</code>&nbsp;<a name="DispatcherImpl+_getListenersOf" href="https://github.com/seznam/IMA.js-core/tree/0.16.0/event/DispatcherImpl.js#L191" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a>
 Retrieves the map of event listeners to scopes they are bound to.
 
 **Kind**: instance method of [<code>DispatcherImpl</code>](#DispatcherImpl)  
@@ -138,7 +138,7 @@ Retrieves the map of event listeners to scopes they are bound to.
 
 * * *
 
-## EMPTY\_MAP : <code>Map.&lt;function(\*), Set.&lt;?Object&gt;&gt;</code>&nbsp;<a name="EMPTY_MAP" href="https://github.com/seznam/IMA.js-core/tree/0.16.0-alpha.11/event/DispatcherImpl.js#L11" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a>
+## EMPTY\_MAP : <code>Map.&lt;function(\*), Set.&lt;?Object&gt;&gt;</code>&nbsp;<a name="EMPTY_MAP" href="https://github.com/seznam/IMA.js-core/tree/0.16.0/event/DispatcherImpl.js#L11" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a>
 An empty immutable map of event listener to scopes, used for a mismatch in
 the <code>_eventListeners</code> map.
 
@@ -146,7 +146,7 @@ the <code>_eventListeners</code> map.
 
 * * *
 
-## EMPTY\_SET : <code>Set.&lt;?Object&gt;</code>&nbsp;<a name="EMPTY_SET" href="https://github.com/seznam/IMA.js-core/tree/0.16.0-alpha.11/event/DispatcherImpl.js#L20" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a>
+## EMPTY\_SET : <code>Set.&lt;?Object&gt;</code>&nbsp;<a name="EMPTY_SET" href="https://github.com/seznam/IMA.js-core/tree/0.16.0/event/DispatcherImpl.js#L20" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a>
 An empty immutable set of event listener scopes, used for a mismatch in the
 <code>_eventListeners</code> map.
 

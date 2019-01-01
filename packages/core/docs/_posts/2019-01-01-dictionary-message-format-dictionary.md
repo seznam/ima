@@ -3,7 +3,7 @@ category: "dictionary"
 title: "MessageFormatDictionary"
 ---
 
-## MessageFormatDictionary ⇐ <code>Dictionary</code>&nbsp;<a name="MessageFormatDictionary" href="https://github.com/seznam/IMA.js-core/tree/0.16.0-alpha.11/dictionary/MessageFormatDictionary.js#L10" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a>
+## MessageFormatDictionary ⇐ <code>Dictionary</code>&nbsp;<a name="MessageFormatDictionary" href="https://github.com/seznam/IMA.js-core/tree/0.16.0/dictionary/MessageFormatDictionary.js#L10" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a>
 Implementation of the [Dictionary](Dictionary) interface that relies on
 compiled MessageFormat localization messages for its dictionary.
 
@@ -28,7 +28,7 @@ Initializes the dictionary.
 
 * * *
 
-### messageFormatDictionary.\_language : <code>string</code>&nbsp;<a name="MessageFormatDictionary+_language" href="https://github.com/seznam/IMA.js-core/tree/0.16.0-alpha.11/dictionary/MessageFormatDictionary.js#L30" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a>
+### messageFormatDictionary.\_language : <code>string</code>&nbsp;<a name="MessageFormatDictionary+_language" href="https://github.com/seznam/IMA.js-core/tree/0.16.0/dictionary/MessageFormatDictionary.js#L30" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a>
 The language of the phrases in the dictionary, represented as a
 ISO 639-1 language code.
 
@@ -36,14 +36,14 @@ ISO 639-1 language code.
 
 * * *
 
-### messageFormatDictionary.\_dictionary : <code>Object.&lt;string, Object.&lt;string, function(Object.&lt;string, (number\|string)&gt;): string&gt;&gt;</code>&nbsp;<a name="MessageFormatDictionary+_dictionary" href="https://github.com/seznam/IMA.js-core/tree/0.16.0-alpha.11/dictionary/MessageFormatDictionary.js#L43" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a>
+### messageFormatDictionary.\_dictionary : <code>Object.&lt;string, Object.&lt;string, function(Object.&lt;string, (number\|string)&gt;): string&gt;&gt;</code>&nbsp;<a name="MessageFormatDictionary+_dictionary" href="https://github.com/seznam/IMA.js-core/tree/0.16.0/dictionary/MessageFormatDictionary.js#L43" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a>
 Stored dictionary.
 
 **Kind**: instance property of [<code>MessageFormatDictionary</code>](#MessageFormatDictionary)  
 
 * * *
 
-### messageFormatDictionary.init(config)&nbsp;<a name="MessageFormatDictionary+init" href="https://github.com/seznam/IMA.js-core/tree/0.16.0-alpha.11/dictionary/MessageFormatDictionary.js#L64" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a>
+### messageFormatDictionary.init(config)&nbsp;<a name="MessageFormatDictionary+init" href="https://github.com/seznam/IMA.js-core/tree/0.16.0/dictionary/MessageFormatDictionary.js#L64" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a>
 Initializes this dictionary with the provided language and localization
 phrases.
 
@@ -58,12 +58,12 @@ phrases.
 
 * * *
 
-### messageFormatDictionary.getLanguage()&nbsp;<a name="MessageFormatDictionary+getLanguage" href="https://github.com/seznam/IMA.js-core/tree/0.16.0-alpha.11/dictionary/MessageFormatDictionary.js#L72" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a>
+### messageFormatDictionary.getLanguage()&nbsp;<a name="MessageFormatDictionary+getLanguage" href="https://github.com/seznam/IMA.js-core/tree/0.16.0/dictionary/MessageFormatDictionary.js#L72" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a>
 **Kind**: instance method of [<code>MessageFormatDictionary</code>](#MessageFormatDictionary)  
 
 * * *
 
-### messageFormatDictionary.get(key, [parameters]) ⇒ <code>string</code>&nbsp;<a name="MessageFormatDictionary+get" href="https://github.com/seznam/IMA.js-core/tree/0.16.0-alpha.11/dictionary/MessageFormatDictionary.js#L92" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a>
+### messageFormatDictionary.get(key, [parameters]) ⇒ <code>string</code>&nbsp;<a name="MessageFormatDictionary+get" href="https://github.com/seznam/IMA.js-core/tree/0.16.0/dictionary/MessageFormatDictionary.js#L92" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a>
 Retrieves the localization phrase identified by the specified key,
 evaluates the phrase's placeholder expressions using the provided
 parameters and returns the result.
@@ -80,7 +80,7 @@ parameters and returns the result.
 
 * * *
 
-### messageFormatDictionary.has(key) ⇒ <code>boolean</code>&nbsp;<a name="MessageFormatDictionary+has" href="https://github.com/seznam/IMA.js-core/tree/0.16.0-alpha.11/dictionary/MessageFormatDictionary.js#L118" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a>
+### messageFormatDictionary.has(key) ⇒ <code>boolean</code>&nbsp;<a name="MessageFormatDictionary+has" href="https://github.com/seznam/IMA.js-core/tree/0.16.0/dictionary/MessageFormatDictionary.js#L118" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a>
 Tests whether the specified localization phrase exists in the
 dictionary.
 

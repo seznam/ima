@@ -3,7 +3,7 @@ category: "general"
 title: "namespace"
 ---
 
-## ~~Namespace~~&nbsp;<a name="Namespace" href="https://github.com/seznam/IMA.js-core/tree/0.16.0-alpha.11/namespace.js#L11" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a>
+## ~~Namespace~~&nbsp;<a name="Namespace" href="https://github.com/seznam/IMA.js-core/tree/0.16.0/namespace.js#L11" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a>
 ***Deprecated***
 
 Namespace creation, manipulation and traversal utility. This utility is used
@@ -31,7 +31,7 @@ instance to create and use namespaces (see the examples).
 
 * * *
 
-### ~~namespace.namespace(path) ⇒ <code>\*</code>~~&nbsp;<a name="Namespace+namespace" href="https://github.com/seznam/IMA.js-core/tree/0.16.0-alpha.11/namespace.js#L40" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a>
+### ~~namespace.namespace(path) ⇒ <code>\*</code>~~&nbsp;<a name="Namespace+namespace" href="https://github.com/seznam/IMA.js-core/tree/0.16.0/namespace.js#L40" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a>
 ***Deprecated***
 
 Verifies that the specified path in namespace exists, creates it if it
@@ -53,7 +53,7 @@ object.
 
 * * *
 
-### namespace.has(path) ⇒ <code>boolean</code>&nbsp;<a name="Namespace+has" href="https://github.com/seznam/IMA.js-core/tree/0.16.0-alpha.11/namespace.js#L79" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a>
+### namespace.has(path) ⇒ <code>boolean</code>&nbsp;<a name="Namespace+has" href="https://github.com/seznam/IMA.js-core/tree/0.16.0/namespace.js#L79" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a>
 Verifies that the specified namespace path point to an existing
 namespace or terminal value.
 
@@ -68,7 +68,7 @@ namespace or terminal value.
 
 * * *
 
-### namespace.get(path) ⇒ <code>\*</code>&nbsp;<a name="Namespace+get" href="https://github.com/seznam/IMA.js-core/tree/0.16.0-alpha.11/namespace.js#L89" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a>
+### namespace.get(path) ⇒ <code>\*</code>&nbsp;<a name="Namespace+get" href="https://github.com/seznam/IMA.js-core/tree/0.16.0/namespace.js#L89" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a>
 Return value for the specified namespace path point.
 
 **Kind**: instance method of [<code>Namespace</code>](#Namespace)  

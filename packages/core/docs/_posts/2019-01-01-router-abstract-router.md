@@ -3,7 +3,7 @@ category: "router"
 title: "AbstractRouter"
 ---
 
-## *AbstractRouter*&nbsp;<a name="AbstractRouter" href="https://github.com/seznam/IMA.js-core/tree/0.16.0-alpha.11/router/AbstractRouter.js#L13" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a>
+## *AbstractRouter*&nbsp;<a name="AbstractRouter" href="https://github.com/seznam/IMA.js-core/tree/0.16.0/router/AbstractRouter.js#L13" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a>
 The basic implementation of the <code>Router</code> interface, providing the
 common or default functionality for parts of the API.
 
@@ -58,7 +58,7 @@ Initializes the router.
 
 * * *
 
-### *abstractRouter.\_pageManager : <code>PageManager</code>*&nbsp;<a name="AbstractRouter+_pageManager" href="https://github.com/seznam/IMA.js-core/tree/0.16.0-alpha.11/router/AbstractRouter.js#L50" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a>
+### *abstractRouter.\_pageManager : <code>PageManager</code>*&nbsp;<a name="AbstractRouter+_pageManager" href="https://github.com/seznam/IMA.js-core/tree/0.16.0/router/AbstractRouter.js#L50" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a>
 The page manager handling UI rendering, and transitions between
 pages if at the client side.
 
@@ -66,21 +66,21 @@ pages if at the client side.
 
 * * *
 
-### *abstractRouter.\_factory : <code>RouteFactory</code>*&nbsp;<a name="AbstractRouter+_factory" href="https://github.com/seznam/IMA.js-core/tree/0.16.0-alpha.11/router/AbstractRouter.js#L57" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a>
+### *abstractRouter.\_factory : <code>RouteFactory</code>*&nbsp;<a name="AbstractRouter+_factory" href="https://github.com/seznam/IMA.js-core/tree/0.16.0/router/AbstractRouter.js#L57" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a>
 Factory for routes.
 
 **Kind**: instance property of [<code>AbstractRouter</code>](#AbstractRouter)  
 
 * * *
 
-### *abstractRouter.\_dispatcher : <code>Dispatcher</code>*&nbsp;<a name="AbstractRouter+_dispatcher" href="https://github.com/seznam/IMA.js-core/tree/0.16.0-alpha.11/router/AbstractRouter.js#L64" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a>
+### *abstractRouter.\_dispatcher : <code>Dispatcher</code>*&nbsp;<a name="AbstractRouter+_dispatcher" href="https://github.com/seznam/IMA.js-core/tree/0.16.0/router/AbstractRouter.js#L64" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a>
 Dispatcher fires events to app.
 
 **Kind**: instance property of [<code>AbstractRouter</code>](#AbstractRouter)  
 
 * * *
 
-### *abstractRouter.\_protocol : <code>string</code>*&nbsp;<a name="AbstractRouter+_protocol" href="https://github.com/seznam/IMA.js-core/tree/0.16.0-alpha.11/router/AbstractRouter.js#L72" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a>
+### *abstractRouter.\_protocol : <code>string</code>*&nbsp;<a name="AbstractRouter+_protocol" href="https://github.com/seznam/IMA.js-core/tree/0.16.0/router/AbstractRouter.js#L72" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a>
 The current protocol used to access the application, terminated by a
 colon (for example <code>https:</code>).
 
@@ -88,21 +88,21 @@ colon (for example <code>https:</code>).
 
 * * *
 
-### *abstractRouter.\_host : <code>string</code>*&nbsp;<a name="AbstractRouter+_host" href="https://github.com/seznam/IMA.js-core/tree/0.16.0-alpha.11/router/AbstractRouter.js#L79" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a>
+### *abstractRouter.\_host : <code>string</code>*&nbsp;<a name="AbstractRouter+_host" href="https://github.com/seznam/IMA.js-core/tree/0.16.0/router/AbstractRouter.js#L79" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a>
 The application's host.
 
 **Kind**: instance property of [<code>AbstractRouter</code>](#AbstractRouter)  
 
 * * *
 
-### *abstractRouter.\_root : <code>string</code>*&nbsp;<a name="AbstractRouter+_root" href="https://github.com/seznam/IMA.js-core/tree/0.16.0-alpha.11/router/AbstractRouter.js#L86" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a>
+### *abstractRouter.\_root : <code>string</code>*&nbsp;<a name="AbstractRouter+_root" href="https://github.com/seznam/IMA.js-core/tree/0.16.0/router/AbstractRouter.js#L86" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a>
 The URL path pointing to the application's root.
 
 **Kind**: instance property of [<code>AbstractRouter</code>](#AbstractRouter)  
 
 * * *
 
-### *abstractRouter.\_languagePartPath : <code>string</code>*&nbsp;<a name="AbstractRouter+_languagePartPath" href="https://github.com/seznam/IMA.js-core/tree/0.16.0-alpha.11/router/AbstractRouter.js#L94" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a>
+### *abstractRouter.\_languagePartPath : <code>string</code>*&nbsp;<a name="AbstractRouter+_languagePartPath" href="https://github.com/seznam/IMA.js-core/tree/0.16.0/router/AbstractRouter.js#L94" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a>
 The URL path fragment used as a suffix to the <code>_root</code> field
 that specifies the current language.
 
@@ -110,104 +110,104 @@ that specifies the current language.
 
 * * *
 
-### *abstractRouter.\_routes : <code>Map.&lt;string, Route&gt;</code>*&nbsp;<a name="AbstractRouter+_routes" href="https://github.com/seznam/IMA.js-core/tree/0.16.0-alpha.11/router/AbstractRouter.js#L101" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a>
+### *abstractRouter.\_routes : <code>Map.&lt;string, Route&gt;</code>*&nbsp;<a name="AbstractRouter+_routes" href="https://github.com/seznam/IMA.js-core/tree/0.16.0/router/AbstractRouter.js#L101" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a>
 Storage of all known routes. The key are the route names.
 
 **Kind**: instance property of [<code>AbstractRouter</code>](#AbstractRouter)  
 
 * * *
 
-### *abstractRouter.init()*&nbsp;<a name="AbstractRouter+init" href="https://github.com/seznam/IMA.js-core/tree/0.16.0-alpha.11/router/AbstractRouter.js#L107" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a>
+### *abstractRouter.init()*&nbsp;<a name="AbstractRouter+init" href="https://github.com/seznam/IMA.js-core/tree/0.16.0/router/AbstractRouter.js#L107" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a>
 **Kind**: instance method of [<code>AbstractRouter</code>](#AbstractRouter)  
 
 * * *
 
-### *abstractRouter.add()*&nbsp;<a name="AbstractRouter+add" href="https://github.com/seznam/IMA.js-core/tree/0.16.0-alpha.11/router/AbstractRouter.js#L118" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a>
+### *abstractRouter.add()*&nbsp;<a name="AbstractRouter+add" href="https://github.com/seznam/IMA.js-core/tree/0.16.0/router/AbstractRouter.js#L118" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a>
 **Kind**: instance method of [<code>AbstractRouter</code>](#AbstractRouter)  
 
 * * *
 
-### *abstractRouter.remove()*&nbsp;<a name="AbstractRouter+remove" href="https://github.com/seznam/IMA.js-core/tree/0.16.0-alpha.11/router/AbstractRouter.js#L142" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a>
+### *abstractRouter.remove()*&nbsp;<a name="AbstractRouter+remove" href="https://github.com/seznam/IMA.js-core/tree/0.16.0/router/AbstractRouter.js#L142" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a>
 **Kind**: instance method of [<code>AbstractRouter</code>](#AbstractRouter)  
 
 * * *
 
-### *abstractRouter.getPath()*&nbsp;<a name="AbstractRouter+getPath" href="https://github.com/seznam/IMA.js-core/tree/0.16.0-alpha.11/router/AbstractRouter.js#L151" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a>
+### *abstractRouter.getPath()*&nbsp;<a name="AbstractRouter+getPath" href="https://github.com/seznam/IMA.js-core/tree/0.16.0/router/AbstractRouter.js#L151" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a>
 **Kind**: instance method of [<code>AbstractRouter</code>](#AbstractRouter)  
 
 * * *
 
-### *abstractRouter.getUrl()*&nbsp;<a name="AbstractRouter+getUrl" href="https://github.com/seznam/IMA.js-core/tree/0.16.0-alpha.11/router/AbstractRouter.js#L160" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a>
+### *abstractRouter.getUrl()*&nbsp;<a name="AbstractRouter+getUrl" href="https://github.com/seznam/IMA.js-core/tree/0.16.0/router/AbstractRouter.js#L160" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a>
 **Kind**: instance method of [<code>AbstractRouter</code>](#AbstractRouter)  
 
 * * *
 
-### *abstractRouter.getBaseUrl()*&nbsp;<a name="AbstractRouter+getBaseUrl" href="https://github.com/seznam/IMA.js-core/tree/0.16.0-alpha.11/router/AbstractRouter.js#L167" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a>
+### *abstractRouter.getBaseUrl()*&nbsp;<a name="AbstractRouter+getBaseUrl" href="https://github.com/seznam/IMA.js-core/tree/0.16.0/router/AbstractRouter.js#L167" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a>
 **Kind**: instance method of [<code>AbstractRouter</code>](#AbstractRouter)  
 
 * * *
 
-### *abstractRouter.getDomain()*&nbsp;<a name="AbstractRouter+getDomain" href="https://github.com/seznam/IMA.js-core/tree/0.16.0-alpha.11/router/AbstractRouter.js#L174" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a>
+### *abstractRouter.getDomain()*&nbsp;<a name="AbstractRouter+getDomain" href="https://github.com/seznam/IMA.js-core/tree/0.16.0/router/AbstractRouter.js#L174" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a>
 **Kind**: instance method of [<code>AbstractRouter</code>](#AbstractRouter)  
 
 * * *
 
-### *abstractRouter.getHost()*&nbsp;<a name="AbstractRouter+getHost" href="https://github.com/seznam/IMA.js-core/tree/0.16.0-alpha.11/router/AbstractRouter.js#L181" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a>
+### *abstractRouter.getHost()*&nbsp;<a name="AbstractRouter+getHost" href="https://github.com/seznam/IMA.js-core/tree/0.16.0/router/AbstractRouter.js#L181" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a>
 **Kind**: instance method of [<code>AbstractRouter</code>](#AbstractRouter)  
 
 * * *
 
-### *abstractRouter.getProtocol()*&nbsp;<a name="AbstractRouter+getProtocol" href="https://github.com/seznam/IMA.js-core/tree/0.16.0-alpha.11/router/AbstractRouter.js#L188" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a>
+### *abstractRouter.getProtocol()*&nbsp;<a name="AbstractRouter+getProtocol" href="https://github.com/seznam/IMA.js-core/tree/0.16.0/router/AbstractRouter.js#L188" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a>
 **Kind**: instance method of [<code>AbstractRouter</code>](#AbstractRouter)  
 
 * * *
 
-### *abstractRouter.getCurrentRouteInfo()*&nbsp;<a name="AbstractRouter+getCurrentRouteInfo" href="https://github.com/seznam/IMA.js-core/tree/0.16.0-alpha.11/router/AbstractRouter.js#L195" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a>
+### *abstractRouter.getCurrentRouteInfo()*&nbsp;<a name="AbstractRouter+getCurrentRouteInfo" href="https://github.com/seznam/IMA.js-core/tree/0.16.0/router/AbstractRouter.js#L195" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a>
 **Kind**: instance method of [<code>AbstractRouter</code>](#AbstractRouter)  
 
 * * *
 
-### **abstractRouter.listen()**&nbsp;<a name="AbstractRouter+listen" href="https://github.com/seznam/IMA.js-core/tree/0.16.0-alpha.11/router/AbstractRouter.js#L215" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a>
+### **abstractRouter.listen()**&nbsp;<a name="AbstractRouter+listen" href="https://github.com/seznam/IMA.js-core/tree/0.16.0/router/AbstractRouter.js#L215" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a>
 **Kind**: instance abstract method of [<code>AbstractRouter</code>](#AbstractRouter)  
 
 * * *
 
-### **abstractRouter.redirect()**&nbsp;<a name="AbstractRouter+redirect" href="https://github.com/seznam/IMA.js-core/tree/0.16.0-alpha.11/router/AbstractRouter.js#L225" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a>
+### **abstractRouter.redirect()**&nbsp;<a name="AbstractRouter+redirect" href="https://github.com/seznam/IMA.js-core/tree/0.16.0/router/AbstractRouter.js#L225" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a>
 **Kind**: instance abstract method of [<code>AbstractRouter</code>](#AbstractRouter)  
 
 * * *
 
-### *abstractRouter.link()*&nbsp;<a name="AbstractRouter+link" href="https://github.com/seznam/IMA.js-core/tree/0.16.0-alpha.11/router/AbstractRouter.js#L234" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a>
+### *abstractRouter.link()*&nbsp;<a name="AbstractRouter+link" href="https://github.com/seznam/IMA.js-core/tree/0.16.0/router/AbstractRouter.js#L234" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a>
 **Kind**: instance method of [<code>AbstractRouter</code>](#AbstractRouter)  
 
 * * *
 
-### *abstractRouter.route()*&nbsp;<a name="AbstractRouter+route" href="https://github.com/seznam/IMA.js-core/tree/0.16.0-alpha.11/router/AbstractRouter.js#L250" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a>
+### *abstractRouter.route()*&nbsp;<a name="AbstractRouter+route" href="https://github.com/seznam/IMA.js-core/tree/0.16.0/router/AbstractRouter.js#L250" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a>
 **Kind**: instance method of [<code>AbstractRouter</code>](#AbstractRouter)  
 
 * * *
 
-### *abstractRouter.handleError()*&nbsp;<a name="AbstractRouter+handleError" href="https://github.com/seznam/IMA.js-core/tree/0.16.0-alpha.11/router/AbstractRouter.js#L272" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a>
+### *abstractRouter.handleError()*&nbsp;<a name="AbstractRouter+handleError" href="https://github.com/seznam/IMA.js-core/tree/0.16.0/router/AbstractRouter.js#L272" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a>
 **Kind**: instance method of [<code>AbstractRouter</code>](#AbstractRouter)  
 
 * * *
 
-### *abstractRouter.handleNotFound()*&nbsp;<a name="AbstractRouter+handleNotFound" href="https://github.com/seznam/IMA.js-core/tree/0.16.0-alpha.11/router/AbstractRouter.js#L295" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a>
+### *abstractRouter.handleNotFound()*&nbsp;<a name="AbstractRouter+handleNotFound" href="https://github.com/seznam/IMA.js-core/tree/0.16.0/router/AbstractRouter.js#L295" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a>
 **Kind**: instance method of [<code>AbstractRouter</code>](#AbstractRouter)  
 
 * * *
 
-### *abstractRouter.isClientError()*&nbsp;<a name="AbstractRouter+isClientError" href="https://github.com/seznam/IMA.js-core/tree/0.16.0-alpha.11/router/AbstractRouter.js#L319" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a>
+### *abstractRouter.isClientError()*&nbsp;<a name="AbstractRouter+isClientError" href="https://github.com/seznam/IMA.js-core/tree/0.16.0/router/AbstractRouter.js#L319" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a>
 **Kind**: instance method of [<code>AbstractRouter</code>](#AbstractRouter)  
 
 * * *
 
-### *abstractRouter.isRedirection()*&nbsp;<a name="AbstractRouter+isRedirection" href="https://github.com/seznam/IMA.js-core/tree/0.16.0-alpha.11/router/AbstractRouter.js#L330" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a>
+### *abstractRouter.isRedirection()*&nbsp;<a name="AbstractRouter+isRedirection" href="https://github.com/seznam/IMA.js-core/tree/0.16.0/router/AbstractRouter.js#L330" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a>
 **Kind**: instance method of [<code>AbstractRouter</code>](#AbstractRouter)  
 
 * * *
 
-### *abstractRouter.\_extractRoutePath(path) ⇒ <code>string</code>*&nbsp;<a name="AbstractRouter+_extractRoutePath" href="https://github.com/seznam/IMA.js-core/tree/0.16.0-alpha.11/router/AbstractRouter.js#L346" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a>
+### *abstractRouter.\_extractRoutePath(path) ⇒ <code>string</code>*&nbsp;<a name="AbstractRouter+_extractRoutePath" href="https://github.com/seznam/IMA.js-core/tree/0.16.0/router/AbstractRouter.js#L346" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a>
 Strips the URL path part that points to the application's root (base
 URL) from the provided path.
 
@@ -222,7 +222,7 @@ URL) from the provided path.
 
 * * *
 
-### *abstractRouter.\_handle(route, params, options, [action]) ⇒ <code>Promise.&lt;Object.&lt;string, \*&gt;&gt;</code>*&nbsp;<a name="AbstractRouter+_handle" href="https://github.com/seznam/IMA.js-core/tree/0.16.0-alpha.11/router/AbstractRouter.js#L386" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a>
+### *abstractRouter.\_handle(route, params, options, [action]) ⇒ <code>Promise.&lt;Object.&lt;string, \*&gt;&gt;</code>*&nbsp;<a name="AbstractRouter+_handle" href="https://github.com/seznam/IMA.js-core/tree/0.16.0/router/AbstractRouter.js#L386" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a>
 Handles the provided route and parameters by initializing the route's
 controller and rendering its state via the route's view.
 
@@ -244,7 +244,7 @@ displayed if used as the client side.
 
 * * *
 
-### *abstractRouter.\_getRouteByPath(path) ⇒ <code>Route</code>*&nbsp;<a name="AbstractRouter+_getRouteByPath" href="https://github.com/seznam/IMA.js-core/tree/0.16.0-alpha.11/router/AbstractRouter.js#L423" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a>
+### *abstractRouter.\_getRouteByPath(path) ⇒ <code>Route</code>*&nbsp;<a name="AbstractRouter+_getRouteByPath" href="https://github.com/seznam/IMA.js-core/tree/0.16.0/router/AbstractRouter.js#L423" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a>
 Returns the route matching the provided URL path part. The path may
 contain a query.
 
@@ -259,7 +259,7 @@ contain a query.
 
 * * *
 
-### *abstractRouter.\_getCurrentlyRoutedPath() ⇒ <code>string</code>*&nbsp;<a name="AbstractRouter+_getCurrentlyRoutedPath" href="https://github.com/seznam/IMA.js-core/tree/0.16.0-alpha.11/router/AbstractRouter.js#L439" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a>
+### *abstractRouter.\_getCurrentlyRoutedPath() ⇒ <code>string</code>*&nbsp;<a name="AbstractRouter+_getCurrentlyRoutedPath" href="https://github.com/seznam/IMA.js-core/tree/0.16.0/router/AbstractRouter.js#L439" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a>
 Returns path that is stored in private property when a <code>route</code>
 method is called.
 

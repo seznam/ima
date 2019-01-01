@@ -3,7 +3,7 @@ category: "http"
 title: "HttpAgent"
 ---
 
-## HttpAgent&nbsp;<a name="HttpAgent" href="https://github.com/seznam/IMA.js-core/tree/0.16.0-alpha.11/http/HttpAgent.js#L40" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a>
+## HttpAgent&nbsp;<a name="HttpAgent" href="https://github.com/seznam/IMA.js-core/tree/0.16.0/http/HttpAgent.js#L40" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a>
 **Kind**: global interface  
 
 * [HttpAgent](#HttpAgent)
@@ -23,7 +23,7 @@ title: "HttpAgent"
 
 * * *
 
-### httpAgent.get(url, data, [options]) ⇒ [<code>Promise.&lt;Response&gt;</code>](#HttpAgent..Response)&nbsp;<a name="HttpAgent+get" href="https://github.com/seznam/IMA.js-core/tree/0.16.0-alpha.11/http/HttpAgent.js#L52" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a>
+### httpAgent.get(url, data, [options]) ⇒ [<code>Promise.&lt;Response&gt;</code>](#HttpAgent..Response)&nbsp;<a name="HttpAgent+get" href="https://github.com/seznam/IMA.js-core/tree/0.16.0/http/HttpAgent.js#L52" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a>
 Sends an HTTP GET request to the specified URL, sending the provided
 data as query parameters.
 
@@ -40,7 +40,7 @@ data as query parameters.
 
 * * *
 
-### httpAgent.post(url, data, [options]) ⇒ [<code>Promise.&lt;Response&gt;</code>](#HttpAgent..Response)&nbsp;<a name="HttpAgent+post" href="https://github.com/seznam/IMA.js-core/tree/0.16.0-alpha.11/http/HttpAgent.js#L67" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a>
+### httpAgent.post(url, data, [options]) ⇒ [<code>Promise.&lt;Response&gt;</code>](#HttpAgent..Response)&nbsp;<a name="HttpAgent+post" href="https://github.com/seznam/IMA.js-core/tree/0.16.0/http/HttpAgent.js#L67" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a>
 Sends an HTTP POST request to the specified URL, sending the provided
 data as the request body. If an object is provided as the request data,
 the data will be JSON-encoded. Sending other primitive non-string values
@@ -59,7 +59,7 @@ as the request body is not supported.
 
 * * *
 
-### httpAgent.put(url, data, [options]) ⇒ [<code>Promise.&lt;Response&gt;</code>](#HttpAgent..Response)&nbsp;<a name="HttpAgent+put" href="https://github.com/seznam/IMA.js-core/tree/0.16.0-alpha.11/http/HttpAgent.js#L82" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a>
+### httpAgent.put(url, data, [options]) ⇒ [<code>Promise.&lt;Response&gt;</code>](#HttpAgent..Response)&nbsp;<a name="HttpAgent+put" href="https://github.com/seznam/IMA.js-core/tree/0.16.0/http/HttpAgent.js#L82" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a>
 Sends an HTTP PUT request to the specified URL, sending the provided
 data as the request body. If an object is provided as the request data,
 the data will be JSON-encoded. Sending other primitive non-string values
@@ -78,7 +78,7 @@ as the request body is not supported.
 
 * * *
 
-### httpAgent.patch(url, data, [options]) ⇒ [<code>Promise.&lt;Response&gt;</code>](#HttpAgent..Response)&nbsp;<a name="HttpAgent+patch" href="https://github.com/seznam/IMA.js-core/tree/0.16.0-alpha.11/http/HttpAgent.js#L97" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a>
+### httpAgent.patch(url, data, [options]) ⇒ [<code>Promise.&lt;Response&gt;</code>](#HttpAgent..Response)&nbsp;<a name="HttpAgent+patch" href="https://github.com/seznam/IMA.js-core/tree/0.16.0/http/HttpAgent.js#L97" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a>
 Sends an HTTP PATCH request to the specified URL, sending the provided
 data as the request body. If an object is provided as the request data,
 the data will be JSON-encoded. Sending other primitive non-string values
@@ -97,7 +97,7 @@ as the request body is not supported.
 
 * * *
 
-### httpAgent.delete(url, data, [options]) ⇒ [<code>Promise.&lt;Response&gt;</code>](#HttpAgent..Response)&nbsp;<a name="HttpAgent+delete" href="https://github.com/seznam/IMA.js-core/tree/0.16.0-alpha.11/http/HttpAgent.js#L112" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a>
+### httpAgent.delete(url, data, [options]) ⇒ [<code>Promise.&lt;Response&gt;</code>](#HttpAgent..Response)&nbsp;<a name="HttpAgent+delete" href="https://github.com/seznam/IMA.js-core/tree/0.16.0/http/HttpAgent.js#L112" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a>
 Sends an HTTP DELETE request to the specified URL, sending the provided
 data as the request body. If an object is provided as the request data,
 the data will be JSON-encoded. Sending other primitive non-string values
@@ -116,7 +116,7 @@ as the request body is not supported.
 
 * * *
 
-### httpAgent.getCacheKey(method, url, data) ⇒ <code>string</code>&nbsp;<a name="HttpAgent+getCacheKey" href="https://github.com/seznam/IMA.js-core/tree/0.16.0-alpha.11/http/HttpAgent.js#L126" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a>
+### httpAgent.getCacheKey(method, url, data) ⇒ <code>string</code>&nbsp;<a name="HttpAgent+getCacheKey" href="https://github.com/seznam/IMA.js-core/tree/0.16.0/http/HttpAgent.js#L126" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a>
 Generates a cache key to use for identifying a request to the specified
 URL using the specified HTTP method, submitting the provided data.
 
@@ -133,7 +133,7 @@ URL using the specified HTTP method, submitting the provided data.
 
 * * *
 
-### httpAgent.setDefaultHeader(header, value) ⇒ [<code>HttpAgent</code>](#HttpAgent)&nbsp;<a name="HttpAgent+setDefaultHeader" href="https://github.com/seznam/IMA.js-core/tree/0.16.0-alpha.11/http/HttpAgent.js#L138" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a>
+### httpAgent.setDefaultHeader(header, value) ⇒ [<code>HttpAgent</code>](#HttpAgent)&nbsp;<a name="HttpAgent+setDefaultHeader" href="https://github.com/seznam/IMA.js-core/tree/0.16.0/http/HttpAgent.js#L138" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a>
 Sets the specified header to be sent with every subsequent HTTP request,
 unless explicitly overridden by request options.
 
@@ -148,7 +148,7 @@ unless explicitly overridden by request options.
 
 * * *
 
-### httpAgent.clearDefaultHeaders() ⇒ [<code>HttpAgent</code>](#HttpAgent)&nbsp;<a name="HttpAgent+clearDefaultHeaders" href="https://github.com/seznam/IMA.js-core/tree/0.16.0-alpha.11/http/HttpAgent.js#L145" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a>
+### httpAgent.clearDefaultHeaders() ⇒ [<code>HttpAgent</code>](#HttpAgent)&nbsp;<a name="HttpAgent+clearDefaultHeaders" href="https://github.com/seznam/IMA.js-core/tree/0.16.0/http/HttpAgent.js#L145" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a>
 Clears all configured default headers.
 
 **Kind**: instance method of [<code>HttpAgent</code>](#HttpAgent)  
@@ -156,7 +156,7 @@ Clears all configured default headers.
 
 * * *
 
-### HttpAgent~RequestOptions : <code>Object</code>&nbsp;<a name="HttpAgent..RequestOptions" href="https://github.com/seznam/IMA.js-core/tree/0.16.0-alpha.11/http/HttpAgent.js#L1" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a>
+### HttpAgent~RequestOptions : <code>Object</code>&nbsp;<a name="HttpAgent..RequestOptions" href="https://github.com/seznam/IMA.js-core/tree/0.16.0/http/HttpAgent.js#L1" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a>
 Options for a request sent using the HTTP agent.
 
 **Kind**: inner typedef of [<code>HttpAgent</code>](#HttpAgent)  
@@ -177,7 +177,7 @@ Options for a request sent using the HTTP agent.
 
 * * *
 
-### HttpAgent~Response : <code>Object</code>&nbsp;<a name="HttpAgent..Response" href="https://github.com/seznam/IMA.js-core/tree/0.16.0-alpha.11/http/HttpAgent.js#L24" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a>
+### HttpAgent~Response : <code>Object</code>&nbsp;<a name="HttpAgent..Response" href="https://github.com/seznam/IMA.js-core/tree/0.16.0/http/HttpAgent.js#L24" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a>
 A response from the server.
 
 **Kind**: inner typedef of [<code>HttpAgent</code>](#HttpAgent)  

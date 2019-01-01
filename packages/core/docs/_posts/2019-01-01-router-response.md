@@ -3,7 +3,7 @@ category: "router"
 title: "Response"
 ---
 
-## Response&nbsp;<a name="Response" href="https://github.com/seznam/IMA.js-core/tree/0.16.0-alpha.11/router/Response.js#L8" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a>
+## Response&nbsp;<a name="Response" href="https://github.com/seznam/IMA.js-core/tree/0.16.0/router/Response.js#L8" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a>
 Wrapper for the ExpressJS response, exposing only the necessary minimum.
 
 **Kind**: global class  
@@ -37,7 +37,7 @@ Initializes the response.
 
 * * *
 
-### response.\_response : <code>Express.Response</code>&nbsp;<a name="Response+_response" href="https://github.com/seznam/IMA.js-core/tree/0.16.0-alpha.11/router/Response.js#L23" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a>
+### response.\_response : <code>Express.Response</code>&nbsp;<a name="Response+_response" href="https://github.com/seznam/IMA.js-core/tree/0.16.0/router/Response.js#L23" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a>
 The ExpressJS response object, or <code>null</code> if running at the
 client side.
 
@@ -45,49 +45,49 @@ client side.
 
 * * *
 
-### response.\_isSent : <code>boolean</code>&nbsp;<a name="Response+_isSent" href="https://github.com/seznam/IMA.js-core/tree/0.16.0-alpha.11/router/Response.js#L30" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a>
+### response.\_isSent : <code>boolean</code>&nbsp;<a name="Response+_isSent" href="https://github.com/seznam/IMA.js-core/tree/0.16.0/router/Response.js#L30" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a>
 It is flag for sent response for request.
 
 **Kind**: instance property of [<code>Response</code>](#Response)  
 
 * * *
 
-### response.\_status : <code>number</code>&nbsp;<a name="Response+_status" href="https://github.com/seznam/IMA.js-core/tree/0.16.0-alpha.11/router/Response.js#L37" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a>
+### response.\_status : <code>number</code>&nbsp;<a name="Response+_status" href="https://github.com/seznam/IMA.js-core/tree/0.16.0/router/Response.js#L37" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a>
 HTTP Status code.
 
 **Kind**: instance property of [<code>Response</code>](#Response)  
 
 * * *
 
-### response.\_content : <code>string</code>&nbsp;<a name="Response+_content" href="https://github.com/seznam/IMA.js-core/tree/0.16.0-alpha.11/router/Response.js#L44" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a>
+### response.\_content : <code>string</code>&nbsp;<a name="Response+_content" href="https://github.com/seznam/IMA.js-core/tree/0.16.0/router/Response.js#L44" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a>
 The content of response.
 
 **Kind**: instance property of [<code>Response</code>](#Response)  
 
 * * *
 
-### response.\_pageState : <code>Object.&lt;string, \*&gt;</code>&nbsp;<a name="Response+_pageState" href="https://github.com/seznam/IMA.js-core/tree/0.16.0-alpha.11/router/Response.js#L51" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a>
+### response.\_pageState : <code>Object.&lt;string, \*&gt;</code>&nbsp;<a name="Response+_pageState" href="https://github.com/seznam/IMA.js-core/tree/0.16.0/router/Response.js#L51" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a>
 The rendered page state.
 
 **Kind**: instance property of [<code>Response</code>](#Response)  
 
 * * *
 
-### response.\_internalCookieStorage : <code>Map.&lt;string, {value: string, options: {domain: string&#x3D;, expires: (number\|string)&#x3D;}}&gt;</code>&nbsp;<a name="Response+_internalCookieStorage" href="https://github.com/seznam/IMA.js-core/tree/0.16.0-alpha.11/router/Response.js#L61" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a>
+### response.\_internalCookieStorage : <code>Map.&lt;string, {value: string, options: {domain: string&#x3D;, expires: (number\|string)&#x3D;}}&gt;</code>&nbsp;<a name="Response+_internalCookieStorage" href="https://github.com/seznam/IMA.js-core/tree/0.16.0/router/Response.js#L61" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a>
 Internal cookie storage for Set-Cookie header.
 
 **Kind**: instance property of [<code>Response</code>](#Response)  
 
 * * *
 
-### response.\_cookieTransformFunction : <code>Object</code>&nbsp;<a name="Response+_cookieTransformFunction" href="https://github.com/seznam/IMA.js-core/tree/0.16.0-alpha.11/router/Response.js#L68" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a>
+### response.\_cookieTransformFunction : <code>Object</code>&nbsp;<a name="Response+_cookieTransformFunction" href="https://github.com/seznam/IMA.js-core/tree/0.16.0/router/Response.js#L68" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a>
 Transform function for cookie value.
 
 **Kind**: instance property of [<code>Response</code>](#Response)  
 
 * * *
 
-### response.init(response, [cookieTransformFunction]) ⇒ <code>ima.router.Response</code>&nbsp;<a name="Response+init" href="https://github.com/seznam/IMA.js-core/tree/0.16.0-alpha.11/router/Response.js#L86" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a>
+### response.init(response, [cookieTransformFunction]) ⇒ <code>ima.router.Response</code>&nbsp;<a name="Response+init" href="https://github.com/seznam/IMA.js-core/tree/0.16.0/router/Response.js#L86" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a>
 Initializes this response wrapper with the provided ExpressJS response
 object.
 
@@ -102,7 +102,7 @@ object.
 
 * * *
 
-### response.redirect(url, [status]) ⇒ [<code>Response</code>](#Response)&nbsp;<a name="Response+redirect" href="https://github.com/seznam/IMA.js-core/tree/0.16.0-alpha.11/router/Response.js#L115" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a>
+### response.redirect(url, [status]) ⇒ [<code>Response</code>](#Response)&nbsp;<a name="Response+redirect" href="https://github.com/seznam/IMA.js-core/tree/0.16.0/router/Response.js#L115" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a>
 Redirects the client to the specified location, with the specified
 redirect HTTP response code.
 
@@ -122,7 +122,7 @@ Use this method only at the server side.
 
 * * *
 
-### response.status(httpStatus) ⇒ [<code>Response</code>](#Response)&nbsp;<a name="Response+status" href="https://github.com/seznam/IMA.js-core/tree/0.16.0-alpha.11/router/Response.js#L150" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a>
+### response.status(httpStatus) ⇒ [<code>Response</code>](#Response)&nbsp;<a name="Response+status" href="https://github.com/seznam/IMA.js-core/tree/0.16.0/router/Response.js#L150" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a>
 Sets the HTTP status code that will be sent to the client when the
 response is sent.
 
@@ -141,7 +141,7 @@ Use this method only at the server side.
 
 * * *
 
-### response.send(content) ⇒ [<code>Response</code>](#Response)&nbsp;<a name="Response+send" href="https://github.com/seznam/IMA.js-core/tree/0.16.0-alpha.11/router/Response.js#L176" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a>
+### response.send(content) ⇒ [<code>Response</code>](#Response)&nbsp;<a name="Response+send" href="https://github.com/seznam/IMA.js-core/tree/0.16.0/router/Response.js#L176" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a>
 Sends the response to the client with the provided content. Use this
 method only at the server side.
 
@@ -155,7 +155,7 @@ method only at the server side.
 
 * * *
 
-### response.setPageState(pageState) ⇒ [<code>Response</code>](#Response)&nbsp;<a name="Response+setPageState" href="https://github.com/seznam/IMA.js-core/tree/0.16.0-alpha.11/router/Response.js#L204" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a>
+### response.setPageState(pageState) ⇒ [<code>Response</code>](#Response)&nbsp;<a name="Response+setPageState" href="https://github.com/seznam/IMA.js-core/tree/0.16.0/router/Response.js#L204" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a>
 Sets the rendered page state.
 
 **Kind**: instance method of [<code>Response</code>](#Response)  
@@ -168,7 +168,7 @@ Sets the rendered page state.
 
 * * *
 
-### response.setCookie(name, value, options) ⇒ [<code>Response</code>](#Response)&nbsp;<a name="Response+setCookie" href="https://github.com/seznam/IMA.js-core/tree/0.16.0-alpha.11/router/Response.js#L236" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a>
+### response.setCookie(name, value, options) ⇒ [<code>Response</code>](#Response)&nbsp;<a name="Response+setCookie" href="https://github.com/seznam/IMA.js-core/tree/0.16.0/router/Response.js#L236" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a>
 Sets a cookie, which will be sent to the client with the response.
 
 **Kind**: instance method of [<code>Response</code>](#Response)  
@@ -183,7 +183,7 @@ Sets a cookie, which will be sent to the client with the response.
 
 * * *
 
-### response.getResponseParams() ⇒ <code>Object</code>&nbsp;<a name="Response+getResponseParams" href="https://github.com/seznam/IMA.js-core/tree/0.16.0-alpha.11/router/Response.js#L272" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a>
+### response.getResponseParams() ⇒ <code>Object</code>&nbsp;<a name="Response+getResponseParams" href="https://github.com/seznam/IMA.js-core/tree/0.16.0/router/Response.js#L272" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a>
 Return object which contains response status, content and rendered
 page state.
 
@@ -191,21 +191,21 @@ page state.
 
 * * *
 
-### response.isResponseSent() ⇒ <code>boolean</code>&nbsp;<a name="Response+isResponseSent" href="https://github.com/seznam/IMA.js-core/tree/0.16.0-alpha.11/router/Response.js#L285" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a>
+### response.isResponseSent() ⇒ <code>boolean</code>&nbsp;<a name="Response+isResponseSent" href="https://github.com/seznam/IMA.js-core/tree/0.16.0/router/Response.js#L285" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a>
 Return true if response is sent from server to client.
 
 **Kind**: instance method of [<code>Response</code>](#Response)  
 
 * * *
 
-### response.\_setCookieHeaders()&nbsp;<a name="Response+_setCookieHeaders" href="https://github.com/seznam/IMA.js-core/tree/0.16.0-alpha.11/router/Response.js#L292" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a>
+### response.\_setCookieHeaders()&nbsp;<a name="Response+_setCookieHeaders" href="https://github.com/seznam/IMA.js-core/tree/0.16.0/router/Response.js#L292" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a>
 Set cookie headers for response.
 
 **Kind**: instance method of [<code>Response</code>](#Response)  
 
 * * *
 
-### response.\_prepareCookieOptionsForExpress(options) ⇒ <code>Object</code>&nbsp;<a name="Response+_prepareCookieOptionsForExpress" href="https://github.com/seznam/IMA.js-core/tree/0.16.0-alpha.11/router/Response.js#L309" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a>
+### response.\_prepareCookieOptionsForExpress(options) ⇒ <code>Object</code>&nbsp;<a name="Response+_prepareCookieOptionsForExpress" href="https://github.com/seznam/IMA.js-core/tree/0.16.0/router/Response.js#L309" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a>
 Prepares cookie options for Express.
 
 **Kind**: instance method of [<code>Response</code>](#Response)  

@@ -3,7 +3,7 @@ category: "router"
 title: "Request"
 ---
 
-## Request&nbsp;<a name="Request" href="https://github.com/seznam/IMA.js-core/tree/0.16.0-alpha.11/router/Request.js#L6" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a>
+## Request&nbsp;<a name="Request" href="https://github.com/seznam/IMA.js-core/tree/0.16.0/router/Request.js#L6" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a>
 Wrapper for the ExpressJS request, exposing only the necessary minimum.
 
 **Kind**: global class  
@@ -30,7 +30,7 @@ Initializes the request.
 
 * * *
 
-### request.\_request : <code>Express.Request</code>&nbsp;<a name="Request+_request" href="https://github.com/seznam/IMA.js-core/tree/0.16.0-alpha.11/router/Request.js#L21" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a>
+### request.\_request : <code>Express.Request</code>&nbsp;<a name="Request+_request" href="https://github.com/seznam/IMA.js-core/tree/0.16.0/router/Request.js#L21" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a>
 The current ExpressJS request object, or <code>null</code> if running at
 the client side.
 
@@ -38,7 +38,7 @@ the client side.
 
 * * *
 
-### request.init(request)&nbsp;<a name="Request+init" href="https://github.com/seznam/IMA.js-core/tree/0.16.0-alpha.11/router/Request.js#L31" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a>
+### request.init(request)&nbsp;<a name="Request+init" href="https://github.com/seznam/IMA.js-core/tree/0.16.0/router/Request.js#L31" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a>
 Initializes the request using the provided ExpressJS request object.
 
 **Kind**: instance method of [<code>Request</code>](#Request)  
@@ -50,7 +50,7 @@ Initializes the request using the provided ExpressJS request object.
 
 * * *
 
-### request.getPath() ⇒ <code>string</code>&nbsp;<a name="Request+getPath" href="https://github.com/seznam/IMA.js-core/tree/0.16.0-alpha.11/router/Request.js#L40" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a>
+### request.getPath() ⇒ <code>string</code>&nbsp;<a name="Request+getPath" href="https://github.com/seznam/IMA.js-core/tree/0.16.0/router/Request.js#L40" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a>
 Returns the path part of the URL to which the request was made.
 
 **Kind**: instance method of [<code>Request</code>](#Request)  
@@ -58,7 +58,7 @@ Returns the path part of the URL to which the request was made.
 
 * * *
 
-### request.getCookieHeader() ⇒ <code>string</code>&nbsp;<a name="Request+getCookieHeader" href="https://github.com/seznam/IMA.js-core/tree/0.16.0-alpha.11/router/Request.js#L49" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a>
+### request.getCookieHeader() ⇒ <code>string</code>&nbsp;<a name="Request+getCookieHeader" href="https://github.com/seznam/IMA.js-core/tree/0.16.0/router/Request.js#L49" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a>
 Returns the <code>Cookie</code> HTTP header value.
 
 **Kind**: instance method of [<code>Request</code>](#Request)  
@@ -66,28 +66,28 @@ Returns the <code>Cookie</code> HTTP header value.
 
 * * *
 
-### request.getFile() ⇒ <code>Object.&lt;string, \*&gt;</code>&nbsp;<a name="Request+getFile" href="https://github.com/seznam/IMA.js-core/tree/0.16.0-alpha.11/router/Request.js#L58" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a>
+### request.getFile() ⇒ <code>Object.&lt;string, \*&gt;</code>&nbsp;<a name="Request+getFile" href="https://github.com/seznam/IMA.js-core/tree/0.16.0/router/Request.js#L58" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a>
 Returns uploaded file to server and meta information.
 
 **Kind**: instance method of [<code>Request</code>](#Request)  
 
 * * *
 
-### request.getFiles() ⇒ <code>Object.&lt;string, \*&gt;</code>&nbsp;<a name="Request+getFiles" href="https://github.com/seznam/IMA.js-core/tree/0.16.0-alpha.11/router/Request.js#L67" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a>
+### request.getFiles() ⇒ <code>Object.&lt;string, \*&gt;</code>&nbsp;<a name="Request+getFiles" href="https://github.com/seznam/IMA.js-core/tree/0.16.0/router/Request.js#L67" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a>
 Returns upaloaded files to server with their meta information.
 
 **Kind**: instance method of [<code>Request</code>](#Request)  
 
 * * *
 
-### request.getBody() ⇒ <code>string</code>&nbsp;<a name="Request+getBody" href="https://github.com/seznam/IMA.js-core/tree/0.16.0-alpha.11/router/Request.js#L76" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a>
+### request.getBody() ⇒ <code>string</code>&nbsp;<a name="Request+getBody" href="https://github.com/seznam/IMA.js-core/tree/0.16.0/router/Request.js#L76" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a>
 Returns body of request.
 
 **Kind**: instance method of [<code>Request</code>](#Request)  
 
 * * *
 
-### request.getHeader(header) ⇒ <code>string</code>&nbsp;<a name="Request+getHeader" href="https://github.com/seznam/IMA.js-core/tree/0.16.0-alpha.11/router/Request.js#L86" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a>
+### request.getHeader(header) ⇒ <code>string</code>&nbsp;<a name="Request+getHeader" href="https://github.com/seznam/IMA.js-core/tree/0.16.0/router/Request.js#L86" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a>
 Returns the specified HTTP request header.
 
 **Kind**: instance method of [<code>Request</code>](#Request)  
@@ -99,14 +99,14 @@ Returns the specified HTTP request header.
 
 * * *
 
-### request.getIP() ⇒ <code>string</code>&nbsp;<a name="Request+getIP" href="https://github.com/seznam/IMA.js-core/tree/0.16.0-alpha.11/router/Request.js#L95" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a>
+### request.getIP() ⇒ <code>string</code>&nbsp;<a name="Request+getIP" href="https://github.com/seznam/IMA.js-core/tree/0.16.0/router/Request.js#L95" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a>
 Returns the remote IP address of the request.
 
 **Kind**: instance method of [<code>Request</code>](#Request)  
 
 * * *
 
-### request.getIPs() ⇒ <code>Array.&lt;string&gt;</code>&nbsp;<a name="Request+getIPs" href="https://github.com/seznam/IMA.js-core/tree/0.16.0-alpha.11/router/Request.js#L105" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a>
+### request.getIPs() ⇒ <code>Array.&lt;string&gt;</code>&nbsp;<a name="Request+getIPs" href="https://github.com/seznam/IMA.js-core/tree/0.16.0/router/Request.js#L105" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a>
 Returns array of IP addresses specified in the “X-Forwarded-For”
 request header.
 

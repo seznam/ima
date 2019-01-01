@@ -3,7 +3,7 @@ category: "meta"
 title: "MetaManager"
 ---
 
-## MetaManager&nbsp;<a name="MetaManager" href="https://github.com/seznam/IMA.js-core/tree/0.16.0-alpha.11/meta/MetaManager.js#L19" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a>
+## MetaManager&nbsp;<a name="MetaManager" href="https://github.com/seznam/IMA.js-core/tree/0.16.0/meta/MetaManager.js#L19" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a>
 **Kind**: global interface  
 
 * [MetaManager](#MetaManager)
@@ -22,7 +22,7 @@ title: "MetaManager"
 
 * * *
 
-### metaManager.setTitle(title)&nbsp;<a name="MetaManager+setTitle" href="https://github.com/seznam/IMA.js-core/tree/0.16.0-alpha.11/meta/MetaManager.js#L25" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a>
+### metaManager.setTitle(title)&nbsp;<a name="MetaManager+setTitle" href="https://github.com/seznam/IMA.js-core/tree/0.16.0/meta/MetaManager.js#L25" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a>
 Sets the page title.
 
 **Kind**: instance method of [<code>MetaManager</code>](#MetaManager)  
@@ -34,7 +34,7 @@ Sets the page title.
 
 * * *
 
-### metaManager.getTitle() ⇒ <code>string</code>&nbsp;<a name="MetaManager+getTitle" href="https://github.com/seznam/IMA.js-core/tree/0.16.0-alpha.11/meta/MetaManager.js#L37" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a>
+### metaManager.getTitle() ⇒ <code>string</code>&nbsp;<a name="MetaManager+getTitle" href="https://github.com/seznam/IMA.js-core/tree/0.16.0/meta/MetaManager.js#L37" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a>
 Returns the page title. The method returns an empty string if no page
 title has been set yet.
 
@@ -47,7 +47,7 @@ modified by a 3rd party code.
 
 * * *
 
-### metaManager.setMetaName(name, value)&nbsp;<a name="MetaManager+setMetaName" href="https://github.com/seznam/IMA.js-core/tree/0.16.0-alpha.11/meta/MetaManager.js#L46" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a>
+### metaManager.setMetaName(name, value)&nbsp;<a name="MetaManager+setMetaName" href="https://github.com/seznam/IMA.js-core/tree/0.16.0/meta/MetaManager.js#L46" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a>
 Set the specified named meta information property.
 
 **Kind**: instance method of [<code>MetaManager</code>](#MetaManager)  
@@ -60,7 +60,7 @@ Set the specified named meta information property.
 
 * * *
 
-### metaManager.getMetaName(name) ⇒ <code>string</code>&nbsp;<a name="MetaManager+getMetaName" href="https://github.com/seznam/IMA.js-core/tree/0.16.0-alpha.11/meta/MetaManager.js#L57" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a>
+### metaManager.getMetaName(name) ⇒ <code>string</code>&nbsp;<a name="MetaManager+getMetaName" href="https://github.com/seznam/IMA.js-core/tree/0.16.0/meta/MetaManager.js#L57" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a>
 Returns the value of the specified named meta information property. The
 method returns an empty string for missing meta information (to make the
 returned value React-friendly).
@@ -76,7 +76,7 @@ returned value React-friendly).
 
 * * *
 
-### metaManager.getMetaNames() ⇒ <code>Array.&lt;string&gt;</code>&nbsp;<a name="MetaManager+getMetaNames" href="https://github.com/seznam/IMA.js-core/tree/0.16.0-alpha.11/meta/MetaManager.js#L66" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a>
+### metaManager.getMetaNames() ⇒ <code>Array.&lt;string&gt;</code>&nbsp;<a name="MetaManager+getMetaNames" href="https://github.com/seznam/IMA.js-core/tree/0.16.0/meta/MetaManager.js#L66" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a>
 Returns the names of the currently specified named meta information
 properties.
 
@@ -86,7 +86,7 @@ properties.
 
 * * *
 
-### metaManager.setMetaProperty(name, value)&nbsp;<a name="MetaManager+setMetaProperty" href="https://github.com/seznam/IMA.js-core/tree/0.16.0-alpha.11/meta/MetaManager.js#L74" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a>
+### metaManager.setMetaProperty(name, value)&nbsp;<a name="MetaManager+setMetaProperty" href="https://github.com/seznam/IMA.js-core/tree/0.16.0/meta/MetaManager.js#L74" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a>
 Sets the specified specialized meta information property.
 
 **Kind**: instance method of [<code>MetaManager</code>](#MetaManager)  
@@ -99,7 +99,7 @@ Sets the specified specialized meta information property.
 
 * * *
 
-### metaManager.getMetaProperty(name) ⇒ <code>string</code>&nbsp;<a name="MetaManager+getMetaProperty" href="https://github.com/seznam/IMA.js-core/tree/0.16.0-alpha.11/meta/MetaManager.js#L86" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a>
+### metaManager.getMetaProperty(name) ⇒ <code>string</code>&nbsp;<a name="MetaManager+getMetaProperty" href="https://github.com/seznam/IMA.js-core/tree/0.16.0/meta/MetaManager.js#L86" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a>
 Returns the value of the specified specialized meta information
 property. The method returns an empty string for missing meta
 information (to make the returned value React-friendly).
@@ -115,7 +115,7 @@ information (to make the returned value React-friendly).
 
 * * *
 
-### metaManager.getMetaProperties() ⇒ <code>Array.&lt;string&gt;</code>&nbsp;<a name="MetaManager+getMetaProperties" href="https://github.com/seznam/IMA.js-core/tree/0.16.0-alpha.11/meta/MetaManager.js#L95" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a>
+### metaManager.getMetaProperties() ⇒ <code>Array.&lt;string&gt;</code>&nbsp;<a name="MetaManager+getMetaProperties" href="https://github.com/seznam/IMA.js-core/tree/0.16.0/meta/MetaManager.js#L95" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a>
 Returns the names of the currently specified specialized meta
 information properties.
 
@@ -125,7 +125,7 @@ information properties.
 
 * * *
 
-### metaManager.setLink(relation, reference)&nbsp;<a name="MetaManager+setLink" href="https://github.com/seznam/IMA.js-core/tree/0.16.0-alpha.11/meta/MetaManager.js#L105" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a>
+### metaManager.setLink(relation, reference)&nbsp;<a name="MetaManager+setLink" href="https://github.com/seznam/IMA.js-core/tree/0.16.0/meta/MetaManager.js#L105" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a>
 Sets the specified specialized link information.
 
 **Kind**: instance method of [<code>MetaManager</code>](#MetaManager)  
@@ -138,7 +138,7 @@ Sets the specified specialized link information.
 
 * * *
 
-### metaManager.getLink(relation) ⇒ <code>string</code>&nbsp;<a name="MetaManager+getLink" href="https://github.com/seznam/IMA.js-core/tree/0.16.0-alpha.11/meta/MetaManager.js#L117" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a>
+### metaManager.getLink(relation) ⇒ <code>string</code>&nbsp;<a name="MetaManager+getLink" href="https://github.com/seznam/IMA.js-core/tree/0.16.0/meta/MetaManager.js#L117" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a>
 Return the reference to the specified related linked document. The
 method returns an empty string for missing meta information (to make the
 returned value React-friendly).
@@ -154,7 +154,7 @@ returned value React-friendly).
 
 * * *
 
-### metaManager.getLinks() ⇒ <code>Array.&lt;string&gt;</code>&nbsp;<a name="MetaManager+getLinks" href="https://github.com/seznam/IMA.js-core/tree/0.16.0-alpha.11/meta/MetaManager.js#L125" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a>
+### metaManager.getLinks() ⇒ <code>Array.&lt;string&gt;</code>&nbsp;<a name="MetaManager+getLinks" href="https://github.com/seznam/IMA.js-core/tree/0.16.0/meta/MetaManager.js#L125" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a>
 Returns the relations of the currently set related documents linked to
 the current page.
 

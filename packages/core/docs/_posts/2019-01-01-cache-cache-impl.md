@@ -3,7 +3,7 @@ category: "cache"
 title: "CacheImpl"
 ---
 
-## CacheImpl ⇐ <code>Cache</code>&nbsp;<a name="CacheImpl" href="https://github.com/seznam/IMA.js-core/tree/0.16.0-alpha.11/cache/CacheImpl.js#L17" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a>
+## CacheImpl ⇐ <code>Cache</code>&nbsp;<a name="CacheImpl" href="https://github.com/seznam/IMA.js-core/tree/0.16.0/cache/CacheImpl.js#L17" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a>
 Configurable generic implementation of the [Cache](Cache) interface.
 
 **Kind**: global class  
@@ -55,85 +55,85 @@ if (cache.has('model.articles')) {
 
 * * *
 
-### cacheImpl.\_cache : <code>Storage</code>&nbsp;<a name="CacheImpl+_cache" href="https://github.com/seznam/IMA.js-core/tree/0.16.0-alpha.11/cache/CacheImpl.js#L40" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a>
+### cacheImpl.\_cache : <code>Storage</code>&nbsp;<a name="CacheImpl+_cache" href="https://github.com/seznam/IMA.js-core/tree/0.16.0/cache/CacheImpl.js#L40" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a>
 Cache entry storage.
 
 **Kind**: instance property of [<code>CacheImpl</code>](#CacheImpl)  
 
 * * *
 
-### cacheImpl.\_factory : <code>CacheFactory</code>&nbsp;<a name="CacheImpl+_factory" href="https://github.com/seznam/IMA.js-core/tree/0.16.0-alpha.11/cache/CacheImpl.js#L45" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a>
+### cacheImpl.\_factory : <code>CacheFactory</code>&nbsp;<a name="CacheImpl+_factory" href="https://github.com/seznam/IMA.js-core/tree/0.16.0/cache/CacheImpl.js#L45" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a>
 **Kind**: instance property of [<code>CacheImpl</code>](#CacheImpl)  
 
 * * *
 
-### cacheImpl.\_Helper : <code>vendor.$Helper</code>&nbsp;<a name="CacheImpl+_Helper" href="https://github.com/seznam/IMA.js-core/tree/0.16.0-alpha.11/cache/CacheImpl.js#L52" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a>
+### cacheImpl.\_Helper : <code>vendor.$Helper</code>&nbsp;<a name="CacheImpl+_Helper" href="https://github.com/seznam/IMA.js-core/tree/0.16.0/cache/CacheImpl.js#L52" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a>
 Tha IMA.js helper methods.
 
 **Kind**: instance property of [<code>CacheImpl</code>](#CacheImpl)  
 
 * * *
 
-### cacheImpl.\_ttl : <code>number</code>&nbsp;<a name="CacheImpl+_ttl" href="https://github.com/seznam/IMA.js-core/tree/0.16.0-alpha.11/cache/CacheImpl.js#L59" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a>
+### cacheImpl.\_ttl : <code>number</code>&nbsp;<a name="CacheImpl+_ttl" href="https://github.com/seznam/IMA.js-core/tree/0.16.0/cache/CacheImpl.js#L59" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a>
 Default cache entry time to live in milliseconds.
 
 **Kind**: instance property of [<code>CacheImpl</code>](#CacheImpl)  
 
 * * *
 
-### cacheImpl.\_enabled : <code>boolean</code>&nbsp;<a name="CacheImpl+_enabled" href="https://github.com/seznam/IMA.js-core/tree/0.16.0-alpha.11/cache/CacheImpl.js#L66" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a>
+### cacheImpl.\_enabled : <code>boolean</code>&nbsp;<a name="CacheImpl+_enabled" href="https://github.com/seznam/IMA.js-core/tree/0.16.0/cache/CacheImpl.js#L66" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a>
 Flag signalling whether the cache is currently enabled.
 
 **Kind**: instance property of [<code>CacheImpl</code>](#CacheImpl)  
 
 * * *
 
-### cacheImpl.clear()&nbsp;<a name="CacheImpl+clear" href="https://github.com/seznam/IMA.js-core/tree/0.16.0-alpha.11/cache/CacheImpl.js#L72" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a>
+### cacheImpl.clear()&nbsp;<a name="CacheImpl+clear" href="https://github.com/seznam/IMA.js-core/tree/0.16.0/cache/CacheImpl.js#L72" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a>
 **Kind**: instance method of [<code>CacheImpl</code>](#CacheImpl)  
 
 * * *
 
-### cacheImpl.has()&nbsp;<a name="CacheImpl+has" href="https://github.com/seznam/IMA.js-core/tree/0.16.0-alpha.11/cache/CacheImpl.js#L79" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a>
+### cacheImpl.has()&nbsp;<a name="CacheImpl+has" href="https://github.com/seznam/IMA.js-core/tree/0.16.0/cache/CacheImpl.js#L79" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a>
 **Kind**: instance method of [<code>CacheImpl</code>](#CacheImpl)  
 
 * * *
 
-### cacheImpl.get()&nbsp;<a name="CacheImpl+get" href="https://github.com/seznam/IMA.js-core/tree/0.16.0-alpha.11/cache/CacheImpl.js#L97" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a>
+### cacheImpl.get()&nbsp;<a name="CacheImpl+get" href="https://github.com/seznam/IMA.js-core/tree/0.16.0/cache/CacheImpl.js#L97" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a>
 **Kind**: instance method of [<code>CacheImpl</code>](#CacheImpl)  
 
 * * *
 
-### cacheImpl.set()&nbsp;<a name="CacheImpl+set" href="https://github.com/seznam/IMA.js-core/tree/0.16.0-alpha.11/cache/CacheImpl.js#L110" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a>
+### cacheImpl.set()&nbsp;<a name="CacheImpl+set" href="https://github.com/seznam/IMA.js-core/tree/0.16.0/cache/CacheImpl.js#L110" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a>
 **Kind**: instance method of [<code>CacheImpl</code>](#CacheImpl)  
 
 * * *
 
-### cacheImpl.delete()&nbsp;<a name="CacheImpl+delete" href="https://github.com/seznam/IMA.js-core/tree/0.16.0-alpha.11/cache/CacheImpl.js#L126" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a>
+### cacheImpl.delete()&nbsp;<a name="CacheImpl+delete" href="https://github.com/seznam/IMA.js-core/tree/0.16.0/cache/CacheImpl.js#L126" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a>
 **Kind**: instance method of [<code>CacheImpl</code>](#CacheImpl)  
 
 * * *
 
-### cacheImpl.disable()&nbsp;<a name="CacheImpl+disable" href="https://github.com/seznam/IMA.js-core/tree/0.16.0-alpha.11/cache/CacheImpl.js#L133" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a>
+### cacheImpl.disable()&nbsp;<a name="CacheImpl+disable" href="https://github.com/seznam/IMA.js-core/tree/0.16.0/cache/CacheImpl.js#L133" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a>
 **Kind**: instance method of [<code>CacheImpl</code>](#CacheImpl)  
 
 * * *
 
-### cacheImpl.enable()&nbsp;<a name="CacheImpl+enable" href="https://github.com/seznam/IMA.js-core/tree/0.16.0-alpha.11/cache/CacheImpl.js#L141" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a>
+### cacheImpl.enable()&nbsp;<a name="CacheImpl+enable" href="https://github.com/seznam/IMA.js-core/tree/0.16.0/cache/CacheImpl.js#L141" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a>
 **Kind**: instance method of [<code>CacheImpl</code>](#CacheImpl)  
 
 * * *
 
-### cacheImpl.serialize()&nbsp;<a name="CacheImpl+serialize" href="https://github.com/seznam/IMA.js-core/tree/0.16.0-alpha.11/cache/CacheImpl.js#L148" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a>
+### cacheImpl.serialize()&nbsp;<a name="CacheImpl+serialize" href="https://github.com/seznam/IMA.js-core/tree/0.16.0/cache/CacheImpl.js#L148" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a>
 **Kind**: instance method of [<code>CacheImpl</code>](#CacheImpl)  
 
 * * *
 
-### cacheImpl.deserialize()&nbsp;<a name="CacheImpl+deserialize" href="https://github.com/seznam/IMA.js-core/tree/0.16.0-alpha.11/cache/CacheImpl.js#L181" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a>
+### cacheImpl.deserialize()&nbsp;<a name="CacheImpl+deserialize" href="https://github.com/seznam/IMA.js-core/tree/0.16.0/cache/CacheImpl.js#L181" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a>
 **Kind**: instance method of [<code>CacheImpl</code>](#CacheImpl)  
 
 * * *
 
-### cacheImpl.\_canSerializeValue(value) ⇒ <code>boolean</code>&nbsp;<a name="CacheImpl+_canSerializeValue" href="https://github.com/seznam/IMA.js-core/tree/0.16.0-alpha.11/cache/CacheImpl.js#L195" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a>
+### cacheImpl.\_canSerializeValue(value) ⇒ <code>boolean</code>&nbsp;<a name="CacheImpl+_canSerializeValue" href="https://github.com/seznam/IMA.js-core/tree/0.16.0/cache/CacheImpl.js#L195" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a>
 Tests whether the provided value can be serialized into JSON.
 
 **Kind**: instance method of [<code>CacheImpl</code>](#CacheImpl)  
@@ -147,7 +147,7 @@ Tests whether the provided value can be serialized into JSON.
 
 * * *
 
-### cacheImpl.\_clone(value) ⇒ <code>\*</code>&nbsp;<a name="CacheImpl+_clone" href="https://github.com/seznam/IMA.js-core/tree/0.16.0-alpha.11/cache/CacheImpl.js#L247" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a>
+### cacheImpl.\_clone(value) ⇒ <code>\*</code>&nbsp;<a name="CacheImpl+_clone" href="https://github.com/seznam/IMA.js-core/tree/0.16.0/cache/CacheImpl.js#L247" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a>
 Attempts to clone the provided value, if possible. Values that cannot be
 cloned (e.g. promises) will be simply returned.
 

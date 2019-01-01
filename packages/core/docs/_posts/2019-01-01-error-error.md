@@ -3,7 +3,7 @@ category: "error"
 title: "Error"
 ---
 
-## Error ⇐ <code>ExtensibleError</code>&nbsp;<a name="Error" href="https://github.com/seznam/IMA.js-core/tree/0.16.0-alpha.11/error/Error.js#L15" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a>
+## Error ⇐ <code>ExtensibleError</code>&nbsp;<a name="Error" href="https://github.com/seznam/IMA.js-core/tree/0.16.0/error/Error.js#L15" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a>
 **Kind**: global interface  
 **Extends**: <code>ExtensibleError</code>  
 
@@ -14,7 +14,7 @@ title: "Error"
 
 * * *
 
-### error.getHttpStatus() ⇒ <code>number</code>&nbsp;<a name="Error+getHttpStatus" href="https://github.com/seznam/IMA.js-core/tree/0.16.0-alpha.11/error/Error.js#L28" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a>
+### error.getHttpStatus() ⇒ <code>number</code>&nbsp;<a name="Error+getHttpStatus" href="https://github.com/seznam/IMA.js-core/tree/0.16.0/error/Error.js#L28" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a>
 Returns the HTTP status to send to the client.
 
 If the error has occurred at the client-side, the status code is used to
@@ -29,7 +29,7 @@ This method is a shorthand for the following code snippet:
 
 * * *
 
-### error.getParams() ⇒ <code>Object.&lt;string, \*&gt;</code>&nbsp;<a name="Error+getParams" href="https://github.com/seznam/IMA.js-core/tree/0.16.0-alpha.11/error/Error.js#L41" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a>
+### error.getParams() ⇒ <code>Object.&lt;string, \*&gt;</code>&nbsp;<a name="Error+getParams" href="https://github.com/seznam/IMA.js-core/tree/0.16.0/error/Error.js#L41" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a>
 Returns the error parameters providing additional details about the
 error. The structure of the returned object is always
 situation-dependent, but the returned object usually contains the

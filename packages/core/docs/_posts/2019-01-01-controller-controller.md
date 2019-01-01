@@ -3,7 +3,7 @@ category: "controller"
 title: "Controller"
 ---
 
-## Controller&nbsp;<a name="Controller" href="https://github.com/seznam/IMA.js-core/tree/0.16.0-alpha.11/controller/Controller.js#L9" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a>
+## Controller&nbsp;<a name="Controller" href="https://github.com/seznam/IMA.js-core/tree/0.16.0/controller/Controller.js#L9" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a>
 **Kind**: global interface  
 
 * [Controller](#Controller)
@@ -26,7 +26,7 @@ title: "Controller"
 
 * * *
 
-### controller.init()&nbsp;<a name="Controller+init" href="https://github.com/seznam/IMA.js-core/tree/0.16.0-alpha.11/controller/Controller.js#L14" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a>
+### controller.init()&nbsp;<a name="Controller+init" href="https://github.com/seznam/IMA.js-core/tree/0.16.0/controller/Controller.js#L14" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a>
 Callback for initializing the controller after the route parameters have
 been set on this controller.
 
@@ -34,7 +34,7 @@ been set on this controller.
 
 * * *
 
-### controller.destroy()&nbsp;<a name="Controller+destroy" href="https://github.com/seznam/IMA.js-core/tree/0.16.0-alpha.11/controller/Controller.js#L29" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a>
+### controller.destroy()&nbsp;<a name="Controller+destroy" href="https://github.com/seznam/IMA.js-core/tree/0.16.0/controller/Controller.js#L29" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a>
 Finalization callback, called when the controller is being discarded by
 the application. This usually happens when the user navigates to a
 different URL.
@@ -51,7 +51,7 @@ is destroyed by the garbage collector.
 
 * * *
 
-### controller.activate()&nbsp;<a name="Controller+activate" href="https://github.com/seznam/IMA.js-core/tree/0.16.0-alpha.11/controller/Controller.js#L41" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a>
+### controller.activate()&nbsp;<a name="Controller+activate" href="https://github.com/seznam/IMA.js-core/tree/0.16.0/controller/Controller.js#L41" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a>
 Callback for activating the controller in the UI. This is the last
 method invoked during controller initialization, called after all the
 promises returned from the [load](#Controller+load) method have been
@@ -65,7 +65,7 @@ method completes.
 
 * * *
 
-### controller.deactivate()&nbsp;<a name="Controller+deactivate" href="https://github.com/seznam/IMA.js-core/tree/0.16.0-alpha.11/controller/Controller.js#L54" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a>
+### controller.deactivate()&nbsp;<a name="Controller+deactivate" href="https://github.com/seznam/IMA.js-core/tree/0.16.0/controller/Controller.js#L54" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a>
 Callback for deactivating the controller in the UI. This is the first
 method invoked during controller deinitialization. This usually happens
 when the user navigates to a different URL.
@@ -80,7 +80,7 @@ resources obtained in the [activate](#Controller+activate) method.
 
 * * *
 
-### controller.load() ⇒ <code>Object.&lt;string, (Promise\|\*)&gt;</code>&nbsp;<a name="Controller+load" href="https://github.com/seznam/IMA.js-core/tree/0.16.0-alpha.11/controller/Controller.js#L91" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a>
+### controller.load() ⇒ <code>Object.&lt;string, (Promise\|\*)&gt;</code>&nbsp;<a name="Controller+load" href="https://github.com/seznam/IMA.js-core/tree/0.16.0/controller/Controller.js#L91" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a>
 Callback the controller uses to request the resources it needs to render
 its view. This method is invoked after the [init](#Controller+init)
 method.
@@ -118,7 +118,7 @@ code of the error.
 
 * * *
 
-### controller.update([prevParams]) ⇒ <code>Object.&lt;string, (Promise\|\*)&gt;</code>&nbsp;<a name="Controller+update" href="https://github.com/seznam/IMA.js-core/tree/0.16.0-alpha.11/controller/Controller.js#L115" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a>
+### controller.update([prevParams]) ⇒ <code>Object.&lt;string, (Promise\|\*)&gt;</code>&nbsp;<a name="Controller+update" href="https://github.com/seznam/IMA.js-core/tree/0.16.0/controller/Controller.js#L115" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a>
 Callback for updating the controller after a route update. This method
 is invoked if the current route has the `onlyUpdate` flag set to `true` and
 the current controller and view match those used by the previously active
@@ -146,7 +146,7 @@ in case this method is used.
 
 * * *
 
-### controller.setState(statePatch)&nbsp;<a name="Controller+setState" href="https://github.com/seznam/IMA.js-core/tree/0.16.0-alpha.11/controller/Controller.js#L137" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a>
+### controller.setState(statePatch)&nbsp;<a name="Controller+setState" href="https://github.com/seznam/IMA.js-core/tree/0.16.0/controller/Controller.js#L137" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a>
 Patches the state of this controller using the provided object by
 copying the provided patch object fields to the controller's state
 object.
@@ -172,7 +172,7 @@ method.
 
 * * *
 
-### controller.getState() ⇒ <code>Object.&lt;string, \*&gt;</code>&nbsp;<a name="Controller+getState" href="https://github.com/seznam/IMA.js-core/tree/0.16.0-alpha.11/controller/Controller.js#L144" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a>
+### controller.getState() ⇒ <code>Object.&lt;string, \*&gt;</code>&nbsp;<a name="Controller+getState" href="https://github.com/seznam/IMA.js-core/tree/0.16.0/controller/Controller.js#L144" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a>
 Returns the controller's current state.
 
 **Kind**: instance method of [<code>Controller</code>](#Controller)  
@@ -180,7 +180,7 @@ Returns the controller's current state.
 
 * * *
 
-### controller.addExtension(extension) ⇒ [<code>Controller</code>](#Controller)&nbsp;<a name="Controller+addExtension" href="https://github.com/seznam/IMA.js-core/tree/0.16.0-alpha.11/controller/Controller.js#L154" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a>
+### controller.addExtension(extension) ⇒ [<code>Controller</code>](#Controller)&nbsp;<a name="Controller+addExtension" href="https://github.com/seznam/IMA.js-core/tree/0.16.0/controller/Controller.js#L154" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a>
 Adds the provided extension to this controller. All extensions should be
 added to the controller before the [init](#Controller+init) method is
 invoked.
@@ -195,7 +195,7 @@ invoked.
 
 * * *
 
-### controller.getExtensions() ⇒ <code>Array.&lt;Extension&gt;</code>&nbsp;<a name="Controller+getExtensions" href="https://github.com/seznam/IMA.js-core/tree/0.16.0-alpha.11/controller/Controller.js#L161" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a>
+### controller.getExtensions() ⇒ <code>Array.&lt;Extension&gt;</code>&nbsp;<a name="Controller+getExtensions" href="https://github.com/seznam/IMA.js-core/tree/0.16.0/controller/Controller.js#L161" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a>
 Returns the controller's extensions.
 
 **Kind**: instance method of [<code>Controller</code>](#Controller)  
@@ -203,7 +203,7 @@ Returns the controller's extensions.
 
 * * *
 
-### controller.setMetaParams(loadedResources, metaManager, router, dictionary, settings)&nbsp;<a name="Controller+setMetaParams" href="https://github.com/seznam/IMA.js-core/tree/0.16.0-alpha.11/controller/Controller.js#L178" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a>
+### controller.setMetaParams(loadedResources, metaManager, router, dictionary, settings)&nbsp;<a name="Controller+setMetaParams" href="https://github.com/seznam/IMA.js-core/tree/0.16.0/controller/Controller.js#L178" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a>
 Callback used to configure the meta attribute manager. The method is
 called after the the controller's state has been patched with the all
 loaded resources and the view has been rendered.
@@ -221,7 +221,7 @@ loaded resources and the view has been rendered.
 
 * * *
 
-### controller.setRouteParams([params])&nbsp;<a name="Controller+setRouteParams" href="https://github.com/seznam/IMA.js-core/tree/0.16.0-alpha.11/controller/Controller.js#L186" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a>
+### controller.setRouteParams([params])&nbsp;<a name="Controller+setRouteParams" href="https://github.com/seznam/IMA.js-core/tree/0.16.0/controller/Controller.js#L186" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a>
 Sets the current route parameters. This method is invoked before the
 [init](#Controller+init) method.
 
@@ -234,7 +234,7 @@ Sets the current route parameters. This method is invoked before the
 
 * * *
 
-### controller.getRouteParams() ⇒ <code>Object.&lt;string, string&gt;</code>&nbsp;<a name="Controller+getRouteParams" href="https://github.com/seznam/IMA.js-core/tree/0.16.0-alpha.11/controller/Controller.js#L193" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a>
+### controller.getRouteParams() ⇒ <code>Object.&lt;string, string&gt;</code>&nbsp;<a name="Controller+getRouteParams" href="https://github.com/seznam/IMA.js-core/tree/0.16.0/controller/Controller.js#L193" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a>
 Returns the current route parameters.
 
 **Kind**: instance method of [<code>Controller</code>](#Controller)  
@@ -242,7 +242,7 @@ Returns the current route parameters.
 
 * * *
 
-### controller.setPageStateManager(pageStateManager)&nbsp;<a name="Controller+setPageStateManager" href="https://github.com/seznam/IMA.js-core/tree/0.16.0-alpha.11/controller/Controller.js#L205" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a>
+### controller.setPageStateManager(pageStateManager)&nbsp;<a name="Controller+setPageStateManager" href="https://github.com/seznam/IMA.js-core/tree/0.16.0/controller/Controller.js#L205" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a>
 Sets the page state manager. The page state manager manages the
 controller's state. The state manager can be set to `null` if this
 controller loses the right to modify the state of the current page (e.g.
@@ -258,7 +258,7 @@ controller).
 
 * * *
 
-### controller.getHttpStatus() ⇒ <code>number</code>&nbsp;<a name="Controller+getHttpStatus" href="https://github.com/seznam/IMA.js-core/tree/0.16.0-alpha.11/controller/Controller.js#L213" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a>
+### controller.getHttpStatus() ⇒ <code>number</code>&nbsp;<a name="Controller+getHttpStatus" href="https://github.com/seznam/IMA.js-core/tree/0.16.0/controller/Controller.js#L213" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a>
 Returns the HTTP status code to send to the client, should the
 controller be used at the server-side.
 

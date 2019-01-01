@@ -27,14 +27,14 @@ additional options.</p>
 </dd>
 </dl>
 
-## Events : <code>enum</code>&nbsp;<a name="Events" href="https://github.com/seznam/IMA.js-core/tree/0.16.0-alpha.11/router/Events.js#L6" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a>
+## Events : <code>enum</code>&nbsp;<a name="Events" href="https://github.com/seznam/IMA.js-core/tree/0.16.0/router/Events.js#L6" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a>
 Events constants, which is firing to app.
 
 **Kind**: global enum  
 
 * * *
 
-## BEFORE\_HANDLE\_ROUTE : <code>string</code>&nbsp;<a name="BEFORE_HANDLE_ROUTE" href="https://github.com/seznam/IMA.js-core/tree/0.16.0-alpha.11/router/Events.js#L19" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a>
+## BEFORE\_HANDLE\_ROUTE : <code>string</code>&nbsp;<a name="BEFORE_HANDLE_ROUTE" href="https://github.com/seznam/IMA.js-core/tree/0.16.0/router/Events.js#L19" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a>
 Router fire event <code>$IMA.$Router.beforeHandleRoute</code> before page
 manager handle the route. Event's data contain
 <code>{ params: Object<string, string></code>, route: ima.router.Route,
@@ -47,7 +47,7 @@ additional options.
 
 * * *
 
-## AFTER\_HANDLE\_ROUTE : <code>string</code>&nbsp;<a name="AFTER_HANDLE_ROUTE" href="https://github.com/seznam/IMA.js-core/tree/0.16.0-alpha.11/router/Events.js#L34" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a>
+## AFTER\_HANDLE\_ROUTE : <code>string</code>&nbsp;<a name="AFTER_HANDLE_ROUTE" href="https://github.com/seznam/IMA.js-core/tree/0.16.0/router/Events.js#L34" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a>
 Router fire event <code>$IMA.$Router.afterHandleRoute</code> after page
 manager handle the route. Event's data contain
 <code>{response: Object<string, *>, params: Object<string, string></code>,

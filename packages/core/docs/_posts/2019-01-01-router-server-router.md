@@ -3,7 +3,7 @@ category: "router"
 title: "ServerRouter"
 ---
 
-## ServerRouter&nbsp;<a name="ServerRouter" href="https://github.com/seznam/IMA.js-core/tree/0.16.0-alpha.11/router/ServerRouter.js#L13" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a>
+## ServerRouter&nbsp;<a name="ServerRouter" href="https://github.com/seznam/IMA.js-core/tree/0.16.0/router/ServerRouter.js#L13" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a>
 The server-side implementation of the <code>Router</code> interface.
 
 **Kind**: global class  
@@ -34,31 +34,31 @@ Initializes the router.
 
 * * *
 
-### serverRouter.\_request : <code>Request</code>&nbsp;<a name="ServerRouter+_request" href="https://github.com/seznam/IMA.js-core/tree/0.16.0-alpha.11/router/ServerRouter.js#L35" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a>
+### serverRouter.\_request : <code>Request</code>&nbsp;<a name="ServerRouter+_request" href="https://github.com/seznam/IMA.js-core/tree/0.16.0/router/ServerRouter.js#L35" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a>
 The current HTTP request.
 
 **Kind**: instance property of [<code>ServerRouter</code>](#ServerRouter)  
 
 * * *
 
-### serverRouter.\_response : <code>Response</code>&nbsp;<a name="ServerRouter+_response" href="https://github.com/seznam/IMA.js-core/tree/0.16.0-alpha.11/router/ServerRouter.js#L42" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a>
+### serverRouter.\_response : <code>Response</code>&nbsp;<a name="ServerRouter+_response" href="https://github.com/seznam/IMA.js-core/tree/0.16.0/router/ServerRouter.js#L42" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a>
 The current HTTP response.
 
 **Kind**: instance property of [<code>ServerRouter</code>](#ServerRouter)  
 
 * * *
 
-### serverRouter.getPath()&nbsp;<a name="ServerRouter+getPath" href="https://github.com/seznam/IMA.js-core/tree/0.16.0-alpha.11/router/ServerRouter.js#L48" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a>
+### serverRouter.getPath()&nbsp;<a name="ServerRouter+getPath" href="https://github.com/seznam/IMA.js-core/tree/0.16.0/router/ServerRouter.js#L48" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a>
 **Kind**: instance method of [<code>ServerRouter</code>](#ServerRouter)  
 
 * * *
 
-### serverRouter.listen()&nbsp;<a name="ServerRouter+listen" href="https://github.com/seznam/IMA.js-core/tree/0.16.0-alpha.11/router/ServerRouter.js#L55" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a>
+### serverRouter.listen()&nbsp;<a name="ServerRouter+listen" href="https://github.com/seznam/IMA.js-core/tree/0.16.0/router/ServerRouter.js#L55" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a>
 **Kind**: instance method of [<code>ServerRouter</code>](#ServerRouter)  
 
 * * *
 
-### serverRouter.redirect()&nbsp;<a name="ServerRouter+redirect" href="https://github.com/seznam/IMA.js-core/tree/0.16.0-alpha.11/router/ServerRouter.js#L62" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a>
+### serverRouter.redirect()&nbsp;<a name="ServerRouter+redirect" href="https://github.com/seznam/IMA.js-core/tree/0.16.0/router/ServerRouter.js#L62" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a>
 **Kind**: instance method of [<code>ServerRouter</code>](#ServerRouter)  
 
 * * *

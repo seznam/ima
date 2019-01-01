@@ -3,7 +3,7 @@ category: "event"
 title: "Dispatcher"
 ---
 
-## Dispatcher&nbsp;<a name="Dispatcher" href="https://github.com/seznam/IMA.js-core/tree/0.16.0-alpha.11/event/Dispatcher.js#L12" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a>
+## Dispatcher&nbsp;<a name="Dispatcher" href="https://github.com/seznam/IMA.js-core/tree/0.16.0/event/Dispatcher.js#L12" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a>
 **Kind**: global interface  
 
 * [Dispatcher](#Dispatcher)
@@ -15,7 +15,7 @@ title: "Dispatcher"
 
 * * *
 
-### dispatcher.clear() ⇒ [<code>Dispatcher</code>](#Dispatcher)&nbsp;<a name="Dispatcher+clear" href="https://github.com/seznam/IMA.js-core/tree/0.16.0-alpha.11/event/Dispatcher.js#L19" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a>
+### dispatcher.clear() ⇒ [<code>Dispatcher</code>](#Dispatcher)&nbsp;<a name="Dispatcher+clear" href="https://github.com/seznam/IMA.js-core/tree/0.16.0/event/Dispatcher.js#L19" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a>
 Deregisters all event listeners currently registered with this
 dispatcher.
 
@@ -24,7 +24,7 @@ dispatcher.
 
 * * *
 
-### dispatcher.listen(event, listener, [scope]) ⇒ [<code>Dispatcher</code>](#Dispatcher)&nbsp;<a name="Dispatcher+listen" href="https://github.com/seznam/IMA.js-core/tree/0.16.0-alpha.11/event/Dispatcher.js#L38" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a>
+### dispatcher.listen(event, listener, [scope]) ⇒ [<code>Dispatcher</code>](#Dispatcher)&nbsp;<a name="Dispatcher+listen" href="https://github.com/seznam/IMA.js-core/tree/0.16.0/event/Dispatcher.js#L38" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a>
 Registers the provided event listener to be executed when the specified
 event is fired on this dispatcher.
 
@@ -47,7 +47,7 @@ same event and with the same scope multiple times has no effect.
 
 * * *
 
-### dispatcher.unlisten(event, listener, [scope]) ⇒ [<code>Dispatcher</code>](#Dispatcher)&nbsp;<a name="Dispatcher+unlisten" href="https://github.com/seznam/IMA.js-core/tree/0.16.0-alpha.11/event/Dispatcher.js#L51" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a>
+### dispatcher.unlisten(event, listener, [scope]) ⇒ [<code>Dispatcher</code>](#Dispatcher)&nbsp;<a name="Dispatcher+unlisten" href="https://github.com/seznam/IMA.js-core/tree/0.16.0/event/Dispatcher.js#L51" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a>
 Deregisters the provided event listener, so it will no longer be
 executed with the specified scope when the specified event is fired.
 
@@ -63,7 +63,7 @@ executed with the specified scope when the specified event is fired.
 
 * * *
 
-### dispatcher.fire(event, data, [imaInternalEvent]) ⇒ [<code>Dispatcher</code>](#Dispatcher)&nbsp;<a name="Dispatcher+fire" href="https://github.com/seznam/IMA.js-core/tree/0.16.0-alpha.11/event/Dispatcher.js#L73" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a>
+### dispatcher.fire(event, data, [imaInternalEvent]) ⇒ [<code>Dispatcher</code>](#Dispatcher)&nbsp;<a name="Dispatcher+fire" href="https://github.com/seznam/IMA.js-core/tree/0.16.0/event/Dispatcher.js#L73" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a>
 Fires a new event of the specified name, carrying the provided data.
 
 The method will synchronously execute all event listeners registered for
