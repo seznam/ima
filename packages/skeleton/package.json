@@ -1,6 +1,6 @@
 {
   "name": "IMA.js-skeleton",
-  "version": "0.15.0",
+  "version": "0.16.0",
   "description": "Isomorphic javascript application",
   "main": "build/server.js",
   "scripts": {
@@ -21,20 +21,16 @@
     "JavaScript"
   ],
   "author": "Miroslav Jancarik <miroslav.jancarik@firma.seznam.cz>",
-  "contributors": [
-    {
-      "name": "Martin Urban",
-      "email": "martin.urban@firma.seznam.cz"
-    },
-    {
-      "name": "Martin Jurča",
-      "email": "martin.jurca@firma.seznam.cz"
-    },
-    {
-      "name": "Ondřej Baše",
-      "email": "ondrej.base@firma.seznam.cz"
-    }
-  ],
+  "contributors": [{
+    "name": "Martin Urban",
+    "email": "martin.urban@firma.seznam.cz"
+  }, {
+    "name": "Martin Jurča",
+    "email": "martin.jurca@firma.seznam.cz"
+  }, {
+    "name": "Ondřej Baše",
+    "email": "ondrej.base@firma.seznam.cz"
+  }],
   "repository": {
     "type": "git",
     "url": "https://github.com/seznam/IMA.js-skeleton.git"
@@ -45,18 +41,18 @@
   "license": "MIT",
   "devDependencies": {
     "babel-eslint": "10.0.1",
-    "enzyme": "3.7.0",
-    "enzyme-adapter-react-16": "1.7.0",
+    "enzyme": "3.8.0",
+    "enzyme-adapter-react-16": "1.7.1",
     "enzyme-to-json": "^3.3.5",
-    "eslint": "5.9.0",
+    "eslint": "5.11.1",
     "eslint-config-prettier": "3.3.0",
     "eslint-plugin-jasmine": "2.10.1",
     "eslint-plugin-jest": "22.1.2",
-    "eslint-plugin-prettier": "3.0.0",
-    "eslint-plugin-react": "7.11.1",
-    "ima-examples": "^0.16.0-alpha.1",
-    "ima-gulp-task-loader": "^0.15.0",
-    "ima-gulp-tasks": "^0.16.0-alpha.5",
+    "eslint-plugin-prettier": "3.0.1",
+    "eslint-plugin-react": "7.12.0",
+    "ima-examples": "^0.16.0",
+    "ima-gulp-task-loader": "^0.16.0",
+    "ima-gulp-tasks": "^0.16.0",
     "jest": "23.6.0",
     "prettier": "1.15.3"
   },
@@ -67,13 +63,13 @@
     "express": "4.16.4",
     "express-http-proxy": "1.5.0",
     "helmet": "3.15.0",
-    "ima": "0.16.0-alpha.10",
-    "ima-server": "0.16.0-alpha.1",
+    "ima": "0.16.0",
+    "ima-server": "0.16.0",
     "method-override": "3.0.0",
     "multer": "1.4.1",
     "prop-types": "15.6.2",
-    "react": "16.6.3",
-    "react-dom": "16.6.3",
+    "react": "16.7.0",
+    "react-dom": "16.7.0",
     "serve-favicon": "2.5.0"
   }
 }
