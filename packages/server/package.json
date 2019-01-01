@@ -32,11 +32,11 @@
     "ima-helpers": "^0.16.0",
     "jest": "^23.6.0",
     "babel-eslint": "^10.0.1",
-    "eslint": "^5.9.0",
+    "eslint": "^5.11.1",
     "eslint-config-last": "^0.0.5",
     "eslint-plugin-jasmine": "^2.9.3",
     "eslint-config-prettier": "^3.3.0",
-    "eslint-plugin-prettier": "^3.0.0",
+    "eslint-plugin-prettier": "^3.0.1",
     "prettier": "^1.15.3"
   },
   "dependencies": {
@@ -68,11 +68,9 @@
   },
   "jestConfig": {
     "mockRules": {
-      "lib": [
-        {
-          "../../app/build.js": "./__mocks__/build.js"
-        }
-      ]
+      "lib": [{
+        "../../app/build.js": "./__mocks__/build.js"
+      }]
     }
   }
 }
