@@ -98,23 +98,29 @@ exports.default = gulpConfig => {
 
     log(`Releasing ports occupied by ${occupants.join(', ')}`);
 
-    return isPortOccupied(port)
-      .then(occupied => {
-        if (!occupied) {
-          return;
-        }
+    return Promise.all(
+      occupants.map(occupant => {
+        const port = occupiedPorts[occupant];
 
-        gutil.log(`Releasing port occupied by ${occupant}.`);
+        return isPortOccupied(port)
+          .then(occupied => {
+            if (!occupied) {
+              return;
+            }
 
-        const command = process.platform === 'win32'
-          ? `Stop-Process -Id (Get-NetTCPConnection -LocalPort ${port}).OwningProcess -Force`
-          : `lsof -i:${port} | grep LISTEN | awk '{print $2}' | xargs kill -9`;
+            gutil.log(`Releasing port occupied by ${occupant}.`);
 
-        return exec(command).catch(() => null);
+            const command = process.platform === 'win32'
+              ? `Stop-Process -Id (Get-NetTCPConnection -LocalPort ${port}).OwningProcess -Force`
+              : `lsof -i:${port} | grep LISTEN | awk '{print $2}' | xargs kill -9`;
+
+            return exec(command).catch(() => null);
+          })
+          .catch(error => {
+            throw Error(`Unable to determine if port ${port} is occupied.`);
+          });
       })
-      .catch(error => {
-        throw Error(`Unable to determine if port ${port} is occupied.`);
-      });
+    );
   };
 
 
