@@ -7,6 +7,7 @@ const remember = require('gulp-remember');
 const watch = require('gulp-watch');
 const path = require('path');
 const fs = require('fs');
+const net = require('net');
 const { promisify } = require('util');
 const exec = promisify(require('child_process').exec);
 
@@ -101,18 +102,48 @@ exports.default = gulpConfig => {
       occupants.map(occupant => {
         const port = occupiedPorts[occupant];
 
-        const command =
-          process.platform === 'win32'
-            ? `Stop-Process -Id (Get-NetTCPConnection -LocalPort ${port}).OwningProcess -Force`
-            : `lsof -i:${port} | grep LISTEN | awk '{print $2}' | xargs kill -9`;
+        return isPortOccupied(port)
+          .then(occupied => {
+            if (!occupied) {
+              return;
+            }
 
-        return exec(command).catch(() => {
-          throw Error(
-            `Unable to free port ${port} occupied by ${occupant}. Try freeing this port manually.`
-          );
-        });
+            gutil.log(`Releasing port occupied by ${occupant}.`);
+
+            const command = process.platform === 'win32'
+              ? `Stop-Process -Id (Get-NetTCPConnection -LocalPort ${port}).OwningProcess -Force`
+              : `lsof -i:${port} | grep LISTEN | awk '{print $2}' | xargs kill -9`;
+
+            return exec(command).catch(() => null);
+          })
+          .catch(error => {
+            throw Error(`Unable to determine if port ${port} is occupied.`);
+          });
       })
     );
+  };
+
+
+  function isPortOccupied(port) {
+
+    return new Promise((resolve, reject) => {
+      const tester = net.createServer();
+
+      tester.once('error', error => {
+        if (error.code !== 'EADDRINUSE') {
+          return reject(error);
+        }
+        resolve(true);
+      });
+
+      tester.once('listening', () => {
+        tester
+          .once('close', () => resolve(false))
+          .close()
+      });
+
+      tester.listen(port);
+    });
   }
 
   return {
