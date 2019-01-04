@@ -108,24 +108,24 @@ exports.default = gulpConfig => {
               return;
             }
 
-            gutil.log(`Releasing port occupied by ${occupant}.`);
+            log(`Releasing port occupied by ${occupant}.`);
 
-            const command = process.platform === 'win32'
-              ? `Stop-Process -Id (Get-NetTCPConnection -LocalPort ${port}).OwningProcess -Force`
-              : `lsof -i:${port} | grep LISTEN | awk '{print $2}' | xargs kill -9`;
+            const command =
+              process.platform === 'win32'
+                ? `Stop-Process -Id (Get-NetTCPConnection -LocalPort ${port}).OwningProcess -Force`
+                : `lsof -i:${port} | grep LISTEN | awk '{print $2}' | xargs kill -9`;
 
             return exec(command).catch(() => null);
           })
           .catch(error => {
+            log(error);
             throw Error(`Unable to determine if port ${port} is occupied.`);
           });
       })
     );
-  };
-
+  }
 
   function isPortOccupied(port) {
-
     return new Promise((resolve, reject) => {
       const tester = net.createServer();
 
@@ -137,9 +137,7 @@ exports.default = gulpConfig => {
       });
 
       tester.once('listening', () => {
-        tester
-          .once('close', () => resolve(false))
-          .close()
+        tester.once('close', () => resolve(false)).close();
       });
 
       tester.listen(port);

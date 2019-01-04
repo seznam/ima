@@ -5,7 +5,6 @@ const cache = require('gulp-cached');
 const tap = require('gulp-tap');
 const concat = require('gulp-concat');
 const del = require('del');
-const es = require('event-stream');
 const fs = require('fs');
 const insert = require('gulp-insert');
 const plumber = require('gulp-plumber');
@@ -352,6 +351,28 @@ exports.default = gulpConfig => {
   }
 
   /**
+   * Apply method for stream.
+   *
+   * @param {function} transformation
+   * @return {Stream<File>} Stream processor for files.
+   */
+  function mapSync(transformation) {
+    return through2.obj(function write(chunk, _, callback) {
+      let mappedData;
+      try {
+        mappedData = transformation(chunk);
+      } catch (error) {
+        callback(error);
+      }
+      if (mappedData !== undefined) {
+        this.push(mappedData);
+      }
+
+      callback();
+    });
+  }
+
+  /**
    * "Fix" file path for the babel task to get better-looking module names.
    *
    * @param {string} newBase The base directory against which the file path
@@ -359,7 +380,7 @@ exports.default = gulpConfig => {
    * @return {Stream<File>} Stream processor for files.
    */
   function resolveNewPath(newBase) {
-    return es.mapSync(file => {
+    return mapSync(file => {
       file.cwd += newBase;
       file.base = file.cwd;
       return file;
