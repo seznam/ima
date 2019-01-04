@@ -1,4 +1,4 @@
-![IMA.js logo](https://imajs.io/static/img/imajs-logo.png)
+![IMA.js logo](https://imajs.io/img/imajs-logo.png)
 
 # IMA.js skeleton application
 
