@@ -95,7 +95,7 @@ export default class EventBusImpl extends EventBus {
     }
 
     var nativeListener = event => {
-      if (event.detail.eventName && event.type === IMA_EVENT) {
+      if (event.type === IMA_EVENT && event.detail && event.detail.eventName) {
         listener(event);
       }
     };
@@ -121,7 +121,7 @@ export default class EventBusImpl extends EventBus {
 
     var eventNameToNativeListener = targetToEventName.get(eventTarget);
     var nativeListener = event => {
-      if (event.detail.eventName === eventName && event.type === IMA_EVENT) {
+      if (event.type === IMA_EVENT && event.detail && event.detail.eventName === eventName) {
         listener(event);
       }
     };
