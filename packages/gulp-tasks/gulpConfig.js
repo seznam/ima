@@ -19,7 +19,9 @@ function getModuleChildPath(parentModule, childModule) {
     }
   }
 
-  throw Error(`Could not find path for child module ${childModule} of parent module ${parentModule}`);
+  throw Error(
+    `Could not find path for child module ${childModule} of parent module ${parentModule}`
+  );
 }
 
 let environment;
@@ -309,7 +311,8 @@ exports.files = {
     fetch: {
       name: 'fetch-polyfill.js',
       src: [
-        getModuleChildPath('@babel/polyfill', 'core-js') + '/client/shim.min.js',
+        getModuleChildPath('@babel/polyfill', 'core-js') +
+          '/client/shim.min.js',
         './node_modules/whatwg-fetch/dist/fetch.umd.js'
       ],
       dest: {
