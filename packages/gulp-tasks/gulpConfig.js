@@ -1,9 +1,26 @@
 const autoprefixer = require('autoprefixer');
 const coreDependencies = require('ima/build.js');
 const path = require('path');
+const fs = require('fs');
 
 const sharedTasksState = require('./gulpState');
 const macroTasks = require('./macroTasks.js');
+
+function getModuleChildPath(parentModule, childModule) {
+  const paths = [
+    `./node_modules/ima-gulp-tasks/${parentModule}/node_modules/${childModule}`,
+    `./node_modules/${parentModule}/node_modules/${childModule}`,
+    `./node_modules/${childModule}`
+  ];
+
+  for (let modulePath of paths) {
+    if (fs.existsSync(modulePath)) {
+      return modulePath;
+    }
+  }
+
+  throw Error(`Could not find path for child module ${childModule} of parent module ${parentModule}`);
+}
 
 let environment;
 try {
@@ -292,7 +309,7 @@ exports.files = {
     fetch: {
       name: 'fetch-polyfill.js',
       src: [
-        './node_modules/core-js/client/shim.min.js',
+        getModuleChildPath('@babel/polyfill', 'core-js') + '/client/shim.min.js',
         './node_modules/whatwg-fetch/dist/fetch.umd.js'
       ],
       dest: {
