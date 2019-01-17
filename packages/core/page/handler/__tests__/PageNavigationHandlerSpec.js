@@ -69,7 +69,7 @@ describe('ima.page.handler.PageNavigationHandler', () => {
     it('should call window.scrollTo method', () => {
       spyOn(window, 'scrollTo').and.stub();
 
-	  const managedPage = { options: { autoScroll: true } };
+      const managedPage = { options: { autoScroll: true } };
       const scroll = { x: 0, y: 340 };
 
       handler.handlePostManagedState(managedPage, null, {
@@ -91,7 +91,7 @@ describe('ima.page.handler.PageNavigationHandler', () => {
       jest.runAllTimers();
       expect(window.scrollTo).toHaveBeenCalledWith(scroll.x, scroll.y);
     });
-    
+
     it('should not call window.scrollTo if current route has autoScroll set to false', () => {
       spyOn(window, 'scrollTo').and.stub();
 
@@ -104,6 +104,6 @@ describe('ima.page.handler.PageNavigationHandler', () => {
 
       jest.runAllTimers();
       expect(window.scrollTo).not.toHaveBeenCalled();
-	});
+    });
   });
 });

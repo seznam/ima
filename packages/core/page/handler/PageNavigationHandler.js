@@ -57,12 +57,14 @@ export default class PageNavigationHandler extends PageManagerHandler {
    * @inheritDoc
    */
   handlePostManagedState(managedPage, previousManagedPage, action) {
-	const { event } = action;
-	const { options: { autoScroll } } = managedPage;
+    const { event } = action;
+    const {
+      options: { autoScroll }
+    } = managedPage;
 
-	if (!autoScroll) {
-		return;
-	}
+    if (!autoScroll) {
+      return;
+    }
 
     if (!event || !event.state || !event.state.scroll) {
       this._scrollTo({ x: 0, y: 0 });
