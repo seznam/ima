@@ -46,7 +46,7 @@ sleep 5
 
 # Run test
 cd "$ROOT_DIR/utils/benchmark"
-node_modules/.bin/autocannon -c $PARALLEL_TEST_CONNECTIONS "$TARGET_WEB_URL"
+node_modules/.bin/autocannon -c $PARALLEL_TEST_CONNECTIONS -n "$TARGET_WEB_URL"
 
 # Cleanup
 kill $NPM_LOCAL_REGISTRY_PID
