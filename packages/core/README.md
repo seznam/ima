@@ -9,3 +9,18 @@ not what you are looking for.
 
 You can find the IMA.js skeleton application at
 <https://github.com/seznam/IMA.js-skeleton>.
+
+## Contributing
+
+Contributing to this repository is done via [Pull-Requests](https://github.com/seznam/IMA.js-core/pulls).
+Any commit that you make must follow simple rules that are automatically validated upon committing.
+1. type of change (`build`, `ci`, `chore`, `docs`, `feat`, `fix`, `perf`, `refactor`, `revert`, `style`, `test`)
+2. scope of change in brackets `( ... )`. This should be one-word description of what part of the repository you've changed.
+3. colon `:`
+4. message (lower-case)
+
+`fix(iframe): message`
+
+`feat(loader): message`
+
+To simplify this process you can use `npm run commit` command that will interactively prompt for details and will also run linter before you commit. For more information see [commitizen/cz-cli](https://github.com/commitizen/cz-cli) repository.
