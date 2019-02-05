@@ -6,7 +6,7 @@ const gulpConfig = {
       `${__dirname}/Bootstrap.js`,
       `${__dirname}/ObjectContainer.js`,
       `${__dirname}/vendorLinker.js`,
-      `${__dirname}/!(node_modules|doc|dist|gulp|polyfill|docs)/**/!(*Spec).js`
+      `${__dirname}/!(node_modules|doc|dist|gulp|polyfill|docs|utils)/**/!(*Spec).js`
     ]
   },
   parentDir: __dirname
