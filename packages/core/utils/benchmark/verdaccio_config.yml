@@ -3,9 +3,6 @@ uplinks:
   npmjs:
     url: https://registry.npmjs.org/
 packages:
-  'ima':
-    access: $all
-    publish: $all
   '**':
     access: $all
     publish: $all
