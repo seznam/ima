@@ -126,7 +126,7 @@
   "husky": {
     "hooks": {
       "pre-commit": "npm run precommit",
-      "commit-msg": "commitlint -E HUSKY_GIT_PARAMS"
+      "commit-msg": "node_modules/.bin/commitlint -E HUSKY_GIT_PARAMS"
     }
   },
   "jest": {
