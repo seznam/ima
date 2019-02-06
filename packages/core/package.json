@@ -6,6 +6,7 @@
   "scripts": {
     "lint": "node_modules/.bin/eslint -c ./.eslintrc.js --fix './**/*.{js,jsx}' --ignore-path ./.prettierignore",
     "test": "node_modules/.bin/jest --no-watchman",
+    "benchmark": "utils/benchmark/benchmark.sh",
     "preversion": "npm test && npm run lint && npm run doc && npm audit",
     "postversion": "npm run build && npm run doc && git add docs/. && git commit -am $npm_package_version && git tag $npm_package_version && git push && git push --tags && npm publish dist",
     "build": "node_modules/.bin/gulp build",
@@ -48,6 +49,7 @@
     "@commitlint/config-conventional": "^7.5.0",
     "@babel/core": "^7.2.2",
     "@fortawesome/fontawesome-free": "^5.7.1",
+    "autocannon": "^3.2.0",
     "babel-core": "^6.26.0",
     "babel-eslint": "^10.0.1",
     "babel-plugin-transform-es2015-modules-commonjs": "^6.26.0",
@@ -80,7 +82,8 @@
     "prop-types": "^15.6.2",
     "react": "16.7.0",
     "react-dom": "16.7.0",
-    "to-mock": "^1.4.0"
+    "to-mock": "^1.4.0",
+    "verdaccio": "^3.11.0"
   },
   "dependencies": {
     "classnames": "^2.2.6",
