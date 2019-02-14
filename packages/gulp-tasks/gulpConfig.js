@@ -81,12 +81,12 @@ const vendorOptions = {
 };
 const esPlugins = [
   '@babel/plugin-transform-react-constant-elements',
-  '@babel/plugin-transform-react-inline-elements',
-  'babel-plugin-transform-react-remove-prop-types'
+  '@babel/plugin-transform-react-inline-elements'
 ];
 const baseBabelPlugins = [
   '@babel/plugin-external-helpers',
-  ['@babel/plugin-transform-react-jsx', { useBuiltIns: true }]
+  ['@babel/plugin-transform-react-jsx', { useBuiltIns: true }],
+  'babel-plugin-react-prop-types-remover'
 ];
 
 let babelConfig = {
@@ -147,11 +147,17 @@ let babelConfig = {
   },
   esApp: {
     presets: [],
-    plugins: ['@babel/plugin-external-helpers']
+    plugins: [
+      '@babel/plugin-external-helpers',
+      'babel-plugin-react-prop-types-remover'
+    ]
   },
   app: {
     presets: [['@babel/preset-env', { loose: true }]],
-    plugins: ['@babel/plugin-external-helpers']
+    plugins: [
+      '@babel/plugin-external-helpers',
+      'babel-plugin-react-prop-types-remover'
+    ]
   },
   server: {
     presets: ['@babel/preset-react'],
