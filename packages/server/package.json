@@ -30,21 +30,21 @@
   "devDependencies": {
     "express": "^4.16.4",
     "ima-helpers": "^0.16.0",
-    "jest": "^23.6.0",
+    "jest": "^24.1.0",
     "babel-eslint": "^10.0.1",
-    "eslint": "^5.11.1",
+    "eslint": "^5.14.1",
     "eslint-config-last": "^0.0.5",
     "eslint-plugin-jasmine": "^2.9.3",
-    "eslint-config-prettier": "^3.3.0",
+    "eslint-config-prettier": "^4.0.0",
     "eslint-plugin-prettier": "^3.0.1",
-    "prettier": "^1.15.3"
+    "prettier": "^1.16.4"
   },
   "dependencies": {
-    "async-each": "^1.0.1",
-    "error-to-json": "^1.1.0",
-    "highlight.js": "^9.13.1",
-    "stack-trace": "^0.0.10",
-    "winston": "^3.1.0"
+    "async-each": "1.0.1",
+    "error-to-json": "1.1.0",
+    "highlight.js": "9.13.1",
+    "stack-trace": "0.0.10",
+    "winston": "3.2.1"
   },
   "peerDependencies": {
     "ima-helpers": "0.16.x"
@@ -68,11 +68,9 @@
   },
   "jestConfig": {
     "mockRules": {
-      "lib": [
-        {
-          "../../app/build.js": "./__mocks__/build.js"
-        }
-      ]
+      "lib": [{
+        "../../app/build.js": "./__mocks__/build.js"
+      }]
     }
   }
 }
