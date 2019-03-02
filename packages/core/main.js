@@ -191,7 +191,7 @@ function onLoad() {
     return Promise.reject(null);
   }
 
-  return Promise.resolve();
+  return new Promise(resolve => setTimeout(resolve, 1000 / 240));
 }
 
 export {
