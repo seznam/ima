@@ -145,8 +145,7 @@ function hotReloadClientApp(initialAppConfigFunctions) {
   try {
     return pageManager
       .manage(
-        currentRoute.getController(),
-        currentRoute.getView(),
+        currentRoute,
         currentRouteOptions,
         currentRouteInfo.params
       )
