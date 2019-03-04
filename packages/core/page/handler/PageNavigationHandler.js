@@ -42,6 +42,10 @@ export default class PageNavigationHandler extends PageManagerHandler {
    * @inheritDoc
    */
   handlePreManagedState(managedPage, nextManagedPage, action) {
+    const {
+      options: { autoScroll }
+    } = nextManagedPage;
+
     if (
       managedPage &&
       action &&
@@ -50,6 +54,10 @@ export default class PageNavigationHandler extends PageManagerHandler {
     ) {
       this._saveScrollHistory();
       this._setAddressBar(action.url);
+    }
+
+    if (autoScroll) {
+      this._scrollTo({ x: 0, y: 0 });
     }
   }
 
@@ -62,17 +70,9 @@ export default class PageNavigationHandler extends PageManagerHandler {
       options: { autoScroll }
     } = managedPage;
 
-    if (!autoScroll) {
-      return;
+    if (event && event.state && event.state.scroll && autoScroll) {
+      this._scrollTo(event.state.scroll);
     }
-
-    if (!event || !event.state || !event.state.scroll) {
-      this._scrollTo({ x: 0, y: 0 });
-
-      return;
-    }
-
-    this._scrollTo(event.state.scroll);
   }
 
   /**
