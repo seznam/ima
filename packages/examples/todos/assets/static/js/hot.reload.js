@@ -1,13 +1,22 @@
 (function() {
   console.log('HOT RELOADING'); //eslint-disable-line no-console
 
-  window.addEventListener('fb-flo-reload', function(ev) {
-    console.log('Resource ' + ev.data.url + ' has just been replaced.'); //eslint-disable-line no-console
+  if (!('WebSocket' in window)) {
+    console.error('Hot reloading: WebSocket is not supported by this browser.'); //eslint-disable-line no-console
+    return;
+  }
 
-    if (/static\/js\//.test(ev.data.url)) {
+  var hostname = window.location.hostname || 'localhost';
+  var myWebSocket = new WebSocket('ws://' + hostname + ':5888');
+
+  myWebSocket.onmessage = function(ev) {
+    var data = JSON.parse(ev.data);
+    console.log('Resource ' + data.resourceURL + ' has just been replaced.'); //eslint-disable-line no-console
+
+    if (/static\/js\//.test(data.resourceURL)) {
       $IMA.$DevTool.clearAppSource();
 
-      (0, eval)(ev.data.contents);
+      (0, eval)(data.contents);
 
       $IMA.HotReload = true;
 
@@ -17,7 +26,6 @@
             appMain.ima.hotReloadClientApp(
               appMain.getInitialAppConfigFunctions()
             );
-
             $IMA.HotReload = false;
           });
         })
@@ -25,5 +33,5 @@
           console.error(error);
         });
     }
-  });
+  };
 })();
