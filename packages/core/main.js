@@ -144,11 +144,7 @@ function hotReloadClientApp(initialAppConfigFunctions) {
 
   try {
     return pageManager
-      .manage(
-        currentRoute,
-        currentRouteOptions,
-        currentRouteInfo.params
-      )
+      .manage(currentRoute, currentRouteOptions, currentRouteInfo.params)
       .catch(error => {
         return router.handleError({ error });
       })
