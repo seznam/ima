@@ -40,6 +40,16 @@ process.on('unhandledRejection', error => {
 });
 
 function renderApp(req, res, next) {
+  if (
+    req.headers['x-moz'] &&
+    req.headers['x-moz'] === 'prefetch'
+  ) {
+    res.status(204);
+    res.send();
+
+    return;
+  }
+
   if (req.method === 'GET') {
     let cachedPage = cache.get(req);
     if (cachedPage) {
