@@ -1,6 +1,6 @@
 {
   "name": "ima-examples",
-  "version": "0.16.0",
+  "version": "0.16.1",
   "description": "Example IMA.js applications.",
   "main": "index.js",
   "scripts": {
