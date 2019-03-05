@@ -25,20 +25,16 @@
     "Javascript"
   ],
   "author": "Miroslav Jancarik <miroslav.jancarik@firma.seznam.cz>",
-  "contributors": [
-    {
-      "name": "Martin Urban",
-      "email": "martin.urban@firma.seznam.cz"
-    },
-    {
-      "name": "Martin Jurča",
-      "email": "martin.jurca@firma.seznam.cz"
-    },
-    {
-      "name": "Ondřej Baše",
-      "email": "ondrej.base@firma.seznam.cz"
-    }
-  ],
+  "contributors": [{
+    "name": "Martin Urban",
+    "email": "martin.urban@firma.seznam.cz"
+  }, {
+    "name": "Martin Jurča",
+    "email": "martin.jurca@firma.seznam.cz"
+  }, {
+    "name": "Ondřej Baše",
+    "email": "ondrej.base@firma.seznam.cz"
+  }],
   "repository": {
     "type": "git",
     "url": "https://github.com/seznam/IMA.js-core.git"
@@ -73,7 +69,6 @@
     "fs-extra": "^7.0.0",
     "gulp": "^4.0.0",
     "gulp-change": "^1.0.0",
-    "gulp-plumber": "^1.2.0",
     "gulp-rename": "^1.3.0",
     "husky": "^1.3.1",
     "jest": "^24.1.0",

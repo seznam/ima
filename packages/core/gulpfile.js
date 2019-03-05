@@ -12,5 +12,4 @@ const gulpConfig = {
   parentDir: __dirname
 };
 
-exports.build = require('./gulp/build')(gulpConfig);
 exports.doc = require('./gulp/doc')(gulpConfig);
