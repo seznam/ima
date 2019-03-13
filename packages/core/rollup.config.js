@@ -1,4 +1,5 @@
 import json from 'rollup-plugin-json';
+import replace from 'rollup-plugin-replace';
 
 const config = [
   {
@@ -24,6 +25,11 @@ const config = [
         preferConst: true, // Default: false
         compact: true, // Default: false
         namedExports: true // Default: true
+      }),
+      replace({
+        "path.dirname(path.resolve('ima'))":
+          "path.dirname(require.resolve('ima'))",
+        delimiters: ['', '']
       })
     ]
   }
