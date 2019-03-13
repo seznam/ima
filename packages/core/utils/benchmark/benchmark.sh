@@ -21,6 +21,7 @@ npm config set "//$NPM_LOCAL_REGISTRY_URL_NO_PROTOCOL/:_authToken" "0"
 # Release ima-core
 npm run build
 echo $PACKAGE_VERSION
+cd dist
 sed -i "" "s/\"version\":\s\".*\"/\"version\": \"$PACKAGE_VERSION\"/" package.json
 sed -i "" "s#https://registry.npmjs.org/#${NPM_LOCAL_REGISTRY_URL}#" package.json
 npm publish
