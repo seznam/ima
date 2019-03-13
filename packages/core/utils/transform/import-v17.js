@@ -9,14 +9,19 @@ module.exports = function(fileInfo, api) {
       return regexIma.test(node.value.source.value);
     });
 
-  if (importDeclarations.size() != 0) {
+  if (importDeclarations.size() !== 0) {
     const specifiers = [];
     importDeclarations.forEach(node => {
       specifiers.push(...node.value.specifiers);
     });
 
     specifiers.forEach(specifier => {
-      if (specifier.type != 'ImportSpecifier') {
+      const isImaNamespaceImport =
+        //import * as ima from 'ima{/whatever}'
+        specifier.type === 'ImportNamespaceSpecifier' &&
+        specifier.local.name === 'ima';
+
+      if (specifier.type !== 'ImportSpecifier' && !isImaNamespaceImport) {
         specifier.type = 'ImportSpecifier';
         specifier.imported = Object.assign({}, specifier.local);
       }
