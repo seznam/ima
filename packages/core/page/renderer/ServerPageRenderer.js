@@ -6,6 +6,7 @@ import GenericError from '../../error/GenericError';
 let imaLoader = '';
 let imaRunner = '';
 
+//#if _SERVER
 if (typeof window === 'undefined' || window === null) {
   let nodeFs = 'fs';
   let nodePath = 'path';
@@ -16,6 +17,7 @@ if (typeof window === 'undefined' || window === null) {
   imaLoader = fs.readFileSync(`${folder}/polyfill/imaLoader.js`, 'utf8');
   imaRunner = fs.readFileSync(`${folder}/polyfill/imaRunner.js`, 'utf8');
 }
+//#endif
 
 /**
  * Server-side page renderer. The renderer renders the page into the HTML
@@ -29,6 +31,7 @@ if (typeof window === 'undefined' || window === null) {
  * @submodule ima.page
  */
 export default class ServerPageRenderer extends AbstractPageRenderer {
+  //#if _SERVER
   /**
    * Initializes the server-side page renderer.
    *
@@ -212,4 +215,5 @@ export default class ServerPageRenderer extends AbstractPageRenderer {
 
     return '<!doctype html>\n' + appMarkup;
   }
+  //#endif
 }

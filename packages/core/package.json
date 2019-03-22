@@ -2,8 +2,8 @@
   "name": "ima",
   "version": "0.16.4",
   "description": "IMA.js framework for isomorphic javascript application",
-  "main": "ima.cjs.js",
-  "module": "ima.cjs.js",
+  "main": "ima.server.cjs.js",
+  "module": "ima.server.esm.js",
   "scripts": {
     "lint": "node_modules/.bin/eslint -c ./.eslintrc.js --fix './**/*.{js,jsx}' --ignore-path ./.prettierignore",
     "test": "node_modules/.bin/jest --no-watchman",
@@ -26,20 +26,16 @@
     "Javascript"
   ],
   "author": "Miroslav Jancarik <miroslav.jancarik@firma.seznam.cz>",
-  "contributors": [
-    {
-      "name": "Martin Urban",
-      "email": "martin.urban@firma.seznam.cz"
-    },
-    {
-      "name": "Martin Jurča",
-      "email": "martin.jurca@firma.seznam.cz"
-    },
-    {
-      "name": "Ondřej Baše",
-      "email": "ondrej.base@firma.seznam.cz"
-    }
-  ],
+  "contributors": [{
+    "name": "Martin Urban",
+    "email": "martin.urban@firma.seznam.cz"
+  }, {
+    "name": "Martin Jurča",
+    "email": "martin.jurca@firma.seznam.cz"
+  }, {
+    "name": "Ondřej Baše",
+    "email": "ondrej.base@firma.seznam.cz"
+  }],
   "repository": {
     "type": "git",
     "url": "https://github.com/seznam/IMA.js-core.git"
@@ -87,6 +83,7 @@
     "react": "16.8.3",
     "react-dom": "16.8.3",
     "rollup": "^1.4.1",
+    "rollup-plugin-jscc": "^1.0.0",
     "rollup-plugin-json": "^3.1.0",
     "rollup-plugin-replace": "^2.1.0",
     "to-mock": "^1.4.1",

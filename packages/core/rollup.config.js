@@ -1,8 +1,9 @@
 import json from 'rollup-plugin-json';
 import replace from 'rollup-plugin-replace';
+import jscc from 'rollup-plugin-jscc';
 
-const config = [
-  {
+function generateConfig(environemnt) {
+  return {
     external: ['ima-helpers', 'classnames', 'prop-types', 'react', 'react-dom'],
     input: 'main.js',
     treeshake: {
@@ -10,12 +11,12 @@ const config = [
     },
     output: [
       {
-        file: './dist/ima.cjs.js',
+        file: `./dist/ima.${environemnt}.cjs.js`,
         format: 'cjs',
         exports: 'named'
       },
       {
-        file: './dist/ima.es.js',
+        file: `./dist/ima.${environemnt}.esm.js`,
         format: 'esm',
         exports: 'named'
       }
@@ -30,9 +31,14 @@ const config = [
         "path.dirname(path.resolve('ima'))":
           "path.dirname(require.resolve('ima'))",
         delimiters: ['', '']
+      }),
+      jscc({
+        values: { _SERVER: environemnt === 'server' }
       })
     ]
-  }
-];
+  };
+}
+
+const config = [generateConfig('server'), generateConfig('client')];
 
 export default config;

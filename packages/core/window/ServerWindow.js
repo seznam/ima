@@ -6,6 +6,7 @@ import Window from './Window';
  * Server-side implementation of the {@code Window} utility API.
  */
 export default class ServerWindow extends Window {
+  //#if _SERVER
   static get $dependencies() {
     return [];
   }
@@ -175,4 +176,5 @@ export default class ServerWindow extends Window {
    * @inheritdoc
    */
   unbindEventListener() {}
+  //#endif
 }
