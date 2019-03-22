@@ -9,8 +9,7 @@ NPM_LOCAL_REGISTRY_URL_NO_PROTOCOL="localhost:4873"
 NPM_LOCAL_REGISTRY_URL="http://${NPM_LOCAL_REGISTRY_URL_NO_PROTOCOL}/"
 
 ROOT_DIR=`pwd`
-PACKAGE_VERSION_OLD=`cat package.json | grep \"version\" | cut -d':' -f2 | cut -d'"' -f2`
-PACKAGE_VERSION=$PACKAGE_VERSION_OLD-next
+PACKAGE_VERSION=`cat package.json | grep \"version\" | cut -d':' -f2 | cut -d'"' -f2`-next
 PACKAGE_NAME=`cat package.json | grep \"name\" | head -1 | cut -d':' -f2 | cut -d'"' -f2`
 
 # Setup local registry
@@ -22,14 +21,14 @@ npm config set "//$NPM_LOCAL_REGISTRY_URL_NO_PROTOCOL/:_authToken" "0"
 # Release ima-core
 npm run build
 cd dist
-sed -i "" -e "s/\"version\": \"$PACKAGE_VERSION_OLD\"/\"version\": \"$PACKAGE_VERSION\"/" package.json
-sed -i "" -e "s#https://registry.npmjs.org/#${NPM_LOCAL_REGISTRY_URL}#" package.json
+sed -i "s/\"version\":\s\".*\"/\"version\": \"$PACKAGE_VERSION\"/" package.json
+sed -i "s#https://registry.npmjs.org/#${NPM_LOCAL_REGISTRY_URL}#" package.json
 npm publish
 
 # Setup IMA.js-skeleton
 git clone "$SKELETON_URL" ima-skeleton
 cd ima-skeleton
-sed -i "s/\"$PACKAGE_NAME\": \".*\"/\"$PACKAGE_NAME\": \"$PACKAGE_VERSION\"/" package.json
+sed -i "s/\"$PACKAGE_NAME\":\s\".*\"/\"$PACKAGE_NAME\": \"$PACKAGE_VERSION\"/" package.json
 npm install --registry="$NPM_LOCAL_REGISTRY_URL"
 npm run app:feed
 npm run build
