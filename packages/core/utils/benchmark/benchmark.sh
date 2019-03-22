@@ -22,9 +22,8 @@ npm config set "//$NPM_LOCAL_REGISTRY_URL_NO_PROTOCOL/:_authToken" "0"
 # Release ima-core
 npm run build
 cd dist
-ls -l
-sed -i "" "s/\"version\": \"$PACKAGE_VERSION_OLD\"/\"version\": \"$PACKAGE_VERSION\"/" package.json
-sed -i "" "s#https://registry.npmjs.org/#${NPM_LOCAL_REGISTRY_URL}#" package.json
+sed -i "" -e "s/\"version\": \"$PACKAGE_VERSION_OLD\"/\"version\": \"$PACKAGE_VERSION\"/" package.json
+sed -i "" -e "s#https://registry.npmjs.org/#${NPM_LOCAL_REGISTRY_URL}#" package.json
 npm publish
 
 # Setup IMA.js-skeleton
