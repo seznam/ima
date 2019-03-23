@@ -8,11 +8,10 @@
     "lint": "node_modules/.bin/eslint -c ./.eslintrc.js --fix './**/*.{js,jsx}' --ignore-path ./.prettierignore",
     "test": "node_modules/.bin/jest --no-watchman",
     "benchmark": "utils/benchmark/benchmark.sh",
-    "preversion": "npm test && npm run lint && npm run doc && npm audit",
-    "postversion": "npm run clean && npm run build && npm run doc && git add docs/. && git commit -am $npm_package_version && git tag $npm_package_version && git push && git push --tags && npm publish dist && npm run clean",
+    "preversion": "npm test && npm run lint && npm run doc",
+    "postversion": "npm run changelog && npm run clean && npm run build && npm run doc && git add docs/. && git commit -am $npm_package_version && git tag $npm_package_version && git push && git push --tags && npm publish dist && npm run clean",
     "clean": "node_modules/.bin/gulp clean",
     "build": "node_modules/.bin/gulp build && node_modules/.bin/rollup --config",
-    "codeshift": "node_modules/.bin/jscodeshift test_jscodeshift.js",
     "doc": "node_modules/.bin/gulp doc",
     "commit": "node_modules/.bin/git-cz",
     "precommit": "node_modules/.bin/lint-staged",
@@ -72,7 +71,6 @@
     "gulp-rename": "^1.3.0",
     "husky": "^1.3.1",
     "jest": "^24.5.0",
-    "jscodeshift": "^0.6.3",
     "jsdoc-to-markdown": "^4.0.1",
     "jsdom": "^14.0.0",
     "lint-staged": "^8.1.5",
@@ -129,7 +127,7 @@
   "husky": {
     "hooks": {
       "pre-commit": "npm run precommit",
-      "commit-msg": "commitlint -E HUSKY_GIT_PARAMS"
+      "commit-msg": "node_modules/.bin/commitlint -E HUSKY_GIT_PARAMS"
     }
   },
   "jest": {
