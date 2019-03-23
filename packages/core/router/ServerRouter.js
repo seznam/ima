@@ -11,6 +11,7 @@ import PageManager from '../page/manager/PageManager';
  * The server-side implementation of the {@codelink Router} interface.
  */
 export default class ServerRouter extends AbstractRouter {
+  //#if _SERVER
   static get $dependencies() {
     return [PageManager, RouteFactory, Dispatcher, Request, Response];
   }
@@ -62,4 +63,5 @@ export default class ServerRouter extends AbstractRouter {
   redirect(url = '/', options = {}) {
     this._response.redirect(url, options.httpStatus || 302);
   }
+  //#endif
 }

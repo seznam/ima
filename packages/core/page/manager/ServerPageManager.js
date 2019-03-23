@@ -9,6 +9,7 @@ import AbstractPageManager from './AbstractPageManager';
  * Page manager for controller on the server side.
  */
 export default class ServerPageManager extends AbstractPageManager {
+  //#if _SERVER
   static get $dependencies() {
     return [
       PageFactory,
@@ -17,4 +18,5 @@ export default class ServerPageManager extends AbstractPageManager {
       '$PageHandlerRegistry'
     ];
   }
+  //#endif
 }

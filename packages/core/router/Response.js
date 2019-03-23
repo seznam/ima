@@ -6,6 +6,7 @@ import GenericError from '../error/GenericError';
  * Wrapper for the ExpressJS response, exposing only the necessary minimum.
  */
 export default class Response {
+  //#if _SERVER
   static get $dependencies() {
     return [];
   }
@@ -317,4 +318,5 @@ export default class Response {
 
     return expressOptions;
   }
+  //#endif
 }
