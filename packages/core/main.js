@@ -14,7 +14,6 @@ import CacheImpl from './cache/CacheImpl';
 import AbstractController from './controller/AbstractController';
 import Controller from './controller/Controller';
 import ControllerDecorator from './controller/ControllerDecorator';
-import DevTool from './debug/DevTool';
 import Dictionary from './dictionary/Dictionary';
 import MessageFormatDictionary from './dictionary/MessageFormatDictionary';
 import Error from './error/Error';
@@ -295,7 +294,6 @@ export {
   AbstractController,
   Controller,
   ControllerDecorator,
-  DevTool,
   Dictionary,
   MessageFormatDictionary,
   Error,

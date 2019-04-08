@@ -3,7 +3,6 @@ import Cache from '../cache/Cache';
 import CacheFactory from '../cache/CacheFactory';
 import CacheImpl from '../cache/CacheImpl';
 import ControllerDecorator from '../controller/ControllerDecorator';
-import DevTool from '../debug/DevTool';
 import Dictionary from '../dictionary/Dictionary';
 import MessageFormatDictionary from '../dictionary/MessageFormatDictionary';
 import EventBus from '../event/EventBus';
@@ -204,9 +203,6 @@ export default (ns, oc, config) => {
   ]);
   oc.bind('$Http', HttpAgent);
   oc.constant('$HttpStatusCode', HttpStatusCode);
-
-  //Dev tools
-  oc.bind('$DevTool', DevTool);
 
   //*************END IMA****************
 };
