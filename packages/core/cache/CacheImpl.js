@@ -154,6 +154,10 @@ export default class CacheImpl extends Cache {
       if (currentValue instanceof CacheEntry) {
         const serializeEntry = currentValue.serialize();
 
+        if (serializeEntry.ttl === Infinity) {
+          serializeEntry.ttl = 'Infinity';
+        }
+
         if ($Debug) {
           if (!this._canSerializeValue(serializeEntry.value)) {
             throw new Error(
@@ -181,6 +185,11 @@ export default class CacheImpl extends Cache {
   deserialize(serializedData) {
     for (let key of Object.keys(serializedData)) {
       let cacheEntryItem = serializedData[key];
+
+      if (cacheEntryItem.ttl === 'Infinity') {
+        cacheEntryItem.ttl = Infinity;
+      }
+
       this.set(key, cacheEntryItem.value, cacheEntryItem.ttl);
     }
   }
