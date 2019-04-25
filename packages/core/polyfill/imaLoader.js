@@ -90,7 +90,14 @@
 
     var moduleInstance = {};
     var moduleInitializer = module.factory(function _export(key, value) {
-      moduleInstance[key] = value;
+      // when exporting only functions, all of them are packed as object and sent as a key
+      if (typeof key === 'object') {
+        Object.keys(key).forEach(innerKey => {
+          moduleInstance[innerKey] = key[innerKey];
+        });
+      } else {
+        moduleInstance[key] = value;
+      }
       // The exported values have been updated, notify the modules that
       // depend on this one - this is required for circular dependencies.
       module.dependencyOf.forEach(function(dependencySetter) {

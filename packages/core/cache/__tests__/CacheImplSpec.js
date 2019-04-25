@@ -145,6 +145,49 @@ describe('ima.cache.CacheImpl', () => {
     );
   });
 
+  it('should serialize javascript Infinity value ttl to "Infinity" string ttl', () => {
+    cache.clear();
+    cache.set('key', 'value', Infinity);
+    const serialization = cache.serialize();
+
+    expect(serialization).toEqual(
+      JSON.stringify({
+        key: {
+          value: 'value',
+          ttl: 'Infinity'
+        }
+      })
+    );
+  });
+
+  it('should serialize number value ttl to string', () => {
+    cache.clear();
+    cache.set('key', 'value', 60000);
+    const serialization = cache.serialize();
+
+    expect(serialization).toEqual(
+      JSON.stringify({
+        key: {
+          value: 'value',
+          ttl: 60000
+        }
+      })
+    );
+  });
+
+  fit('should deserialize "Infinity" string value ttl to javascript Infinity value', () => {
+    const serialization = {
+      key: {
+        value: 'value',
+        ttl: 'Infinity'
+      }
+    };
+    cache.clear();
+    cache.deserialize(serialization);
+
+    expect(cache._cache.get('key')._ttl).toEqual(Infinity);
+  });
+
   it('should throw error for serialize if value is instance of Promise', () => {
     spyOn(console, 'warn');
 
