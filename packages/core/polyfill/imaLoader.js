@@ -92,7 +92,7 @@
     var moduleInitializer = module.factory(function _export(key, value) {
       // when exporting only functions, all of them are packed as object and sent as a key
       if (typeof key === 'object') {
-        Object.keys(key).forEach(innerKey => {
+        Object.keys(key).forEach(function(innerKey) {
           moduleInstance[innerKey] = key[innerKey];
         });
       } else {
