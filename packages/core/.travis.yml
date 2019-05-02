@@ -9,6 +9,8 @@ jobs:
   include:
       - name: "Unit Tests"
         script: npm test
+      - name: "Ecmascript check"
+        script: npm run test:es
       - name: "Lint"
         script: npm run lint
       - name: "Docs"
