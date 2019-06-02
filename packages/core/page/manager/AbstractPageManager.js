@@ -314,6 +314,24 @@ export default class AbstractPageManager extends PageManager {
   }
 
   /**
+   * For defined extension switches to pageStageManager and clears partial state
+   * after extension state is loaded.
+   *
+   * @param {ima.extension.Extension} extension
+   * @param {Object<string, *>} extensionState
+   */
+  _switchToPageStateManagerAfterLoaded(extension, extensionState) {
+    let stateValues = Object.values(extensionState);
+
+    Promise.all(stateValues)
+      .then(() => {
+        extension.switchToStateManager();
+        extension.clearPartialState();
+      })
+      .catch(() => {});
+  }
+
+  /**
    * Initialize page source so call init method on controller and his
    * extensions.
    *
@@ -384,7 +402,6 @@ export default class AbstractPageManager extends PageManager {
       loadedPageState,
       this._managedPage.options
     );
-    this._switchToPageStateManager();
 
     return response;
   }
@@ -420,6 +437,7 @@ export default class AbstractPageManager extends PageManager {
       extension.switchToPartialState();
       const extensionState = extension.load();
 
+      this._switchToPageStateManagerAfterLoaded(extension, extensionState);
       this._setRestrictedPageStateManager(extension, extensionState);
 
       Object.assign(extensionsState, extensionState);
@@ -491,7 +509,6 @@ export default class AbstractPageManager extends PageManager {
       this._managedPage.decoratedController,
       updatedPageState
     );
-    this._switchToPageStateManager();
 
     return response;
   }
@@ -529,6 +546,7 @@ export default class AbstractPageManager extends PageManager {
       extension.switchToPartialState();
       const extensionState = extension.update(lastRouteParams);
 
+      this._switchToPageStateManagerAfterLoaded(extension, extensionState);
       this._setRestrictedPageStateManager(extension, extensionState);
 
       Object.assign(extensionsState, extensionState);

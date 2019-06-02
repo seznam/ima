@@ -9,6 +9,19 @@ import RouteFactory from 'router/RouteFactory';
 import { toMockedInstance } from 'to-mock';
 
 describe('ima.page.manager.AbstractPageManager', () => {
+  let controllerState = {
+    controller: 'controller',
+    share: 'controller'
+  };
+  let extensionsState = {
+    extension: 'extension',
+    share: 'extension'
+  };
+  let extensionState = {
+    extension: 'extension'
+  };
+  let pageState = Object.assign({}, extensionsState, controllerState);
+
   let pageFactory = {
     createController: Controller => new Controller(),
     decorateController: controller => controller,
@@ -42,18 +55,11 @@ describe('ima.page.manager.AbstractPageManager', () => {
   let controllerInstance = pageFactory.createController(Controller);
   let decoratedController = pageFactory.decorateController(controllerInstance);
   let viewInstance = pageFactory.createView(View);
-  let extensionInstance = new Extension();
-
-  let controllerState = {
-    controller: 'controller',
-    share: 'controller'
-  };
-  let extensionsState = {
-    extension: 'extension',
-    share: 'extension'
-  };
-  let extensionState = {};
-  let pageState = Object.assign({}, extensionsState, controllerState);
+  let extensionInstance = toMockedInstance(Extension, {
+    load() {
+      return extensionState;
+    }
+  });
 
   let pageManagerHandler = toMockedInstance(PageHandler);
 
@@ -332,24 +338,6 @@ describe('ima.page.manager.AbstractPageManager', () => {
           done(error);
         });
     });
-
-    it('should switch extensions to PageStateManager', done => {
-      spyOn(pageManager, '_switchToPageStateManager').and.stub();
-
-      pageManager
-        ._loadPageSource()
-        .then(() => {
-          expect(pageManager._switchToPageStateManager).toHaveBeenCalled();
-          done();
-        })
-        .catch(error => {
-          console.error(
-            'ima.page.manager:_switchToPageStateManager',
-            error.message
-          );
-          done(error);
-        });
-    });
   });
 
   describe('_getLoadedControllerState method', () => {
@@ -417,6 +405,16 @@ describe('ima.page.manager.AbstractPageManager', () => {
         share: 'controller',
         extension: 'extension'
       });
+    });
+
+    it('should switch extensions to PageStateManager after all resources are loaded', () => {
+      spyOn(pageManager, '_switchToPageStateManagerAfterLoaded').and.stub();
+
+      pageManager._getLoadedExtensionsState();
+
+      expect(
+        pageManager._switchToPageStateManagerAfterLoaded
+      ).toHaveBeenCalled();
     });
   });
 
@@ -490,24 +488,6 @@ describe('ima.page.manager.AbstractPageManager', () => {
           done(error);
         });
     });
-
-    it('should switch extensions to PageStateManager', done => {
-      spyOn(pageManager, '_switchToPageStateManager').and.stub();
-
-      pageManager
-        ._updatePageSource()
-        .then(() => {
-          expect(pageManager._switchToPageStateManager).toHaveBeenCalled();
-          done();
-        })
-        .catch(error => {
-          console.error(
-            'ima.page.manager:_switchToPageStateManager',
-            error.message
-          );
-          done(error);
-        });
-    });
   });
 
   describe('_getUpdatedControllerState method', () => {
@@ -567,6 +547,16 @@ describe('ima.page.manager.AbstractPageManager', () => {
         share: 'controller',
         extension: 'extension'
       });
+    });
+
+    it('should switch extensions to PageStateManager after all resources are updated', () => {
+      spyOn(pageManager, '_switchToPageStateManagerAfterLoaded').and.stub();
+
+      pageManager._getLoadedExtensionsState();
+
+      expect(
+        pageManager._switchToPageStateManagerAfterLoaded
+      ).toHaveBeenCalled();
     });
   });
 
