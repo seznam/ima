@@ -29,7 +29,7 @@ module.exports = function(fileInfo, api) {
 
     const newImport = jscodeshift.importDeclaration(
       specifiers,
-      jscodeshift.literal('ima')
+      jscodeshift.literal('@ima/core')
     );
 
     importDeclarations.remove();
