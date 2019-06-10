@@ -1,6 +1,3 @@
-jest.mock('page/renderer/PageRendererFactory');
-jest.mock('router/Response');
-
 import Helper from 'ima-helpers';
 import Cache from 'cache/Cache';
 import Controller from 'controller/Controller';
@@ -8,6 +5,16 @@ import GenericError from 'error/GenericError';
 import ServerPageRenderer from 'page/renderer/ServerPageRenderer';
 import RendererFactory from 'page/renderer/PageRendererFactory';
 import Response from 'router/Response';
+import Dispatcher from 'event/Dispatcher';
+import {
+  toMockedInstance,
+  setGlobalMockMethod,
+  setGlobalKeepUnmock,
+  objectKeepUnmock
+} from 'to-mock';
+
+setGlobalMockMethod(jest.fn);
+setGlobalKeepUnmock(objectKeepUnmock);
 
 describe('ima.page.renderer.ServerPageRenderer', () => {
   let param1 = 'param1';
@@ -25,6 +32,7 @@ describe('ima.page.renderer.ServerPageRenderer', () => {
   let response = null;
   let pageRenderer = null;
   let rendererFactory = null;
+  let dispatcher = null;
   let ReactDOMServer = {
     renderToString: () => {},
     renderToStaticMarkup: () => {}
@@ -45,13 +53,15 @@ describe('ima.page.renderer.ServerPageRenderer', () => {
   };
 
   beforeEach(() => {
-    cache = new Cache();
-    response = new Response();
-    rendererFactory = new RendererFactory();
+    cache = toMockedInstance(Cache);
+    dispatcher = toMockedInstance(Dispatcher);
+    response = toMockedInstance(Response);
+    rendererFactory = toMockedInstance(RendererFactory);
     pageRenderer = new ServerPageRenderer(
       rendererFactory,
       Helper,
       ReactDOMServer,
+      dispatcher,
       settings,
       response,
       cache

@@ -1,6 +1,8 @@
 import BlankManagedRootView from './BlankManagedRootView';
 import PageRenderer from './PageRenderer';
 import ViewAdapter from './ViewAdapter';
+import Events from './Events';
+import Types from './Types';
 import GenericError from '../../error/GenericError';
 
 /**
@@ -14,10 +16,11 @@ export default class AbstractPageRenderer extends PageRenderer {
    * @param {vendor.$Helper} Helper The IMA.js helper methods.
    * @param {vendor.ReactDOM} ReactDOM React framework instance, will be used
    *        to render the page.
+   * @param {Dispatcher} dispatcher Dispatcher fires events to app.
    * @param {Object<string, *>} settings Application settings for the current
    *        application environment.
    */
-  constructor(factory, Helper, ReactDOM, settings) {
+  constructor(factory, Helper, ReactDOM, dispatcher, settings) {
     super();
 
     /**
@@ -43,6 +46,13 @@ export default class AbstractPageRenderer extends PageRenderer {
      * @type {Vendor.ReactDOM}
      */
     this._ReactDOM = ReactDOM;
+
+    /**
+     * Dispatcher fires events to app.
+     *
+     * @type {Dispatcher}
+     */
+    this._dispatcher = dispatcher;
 
     /**
      * Application setting for the current application environment.
@@ -101,7 +111,13 @@ export default class AbstractPageRenderer extends PageRenderer {
         {}
       );
 
-      this._reactiveView.setState(emptyState);
+      this._reactiveView.setState(emptyState, () => {
+        this._dispatcher.fire(
+          Events.UNMOUNTED,
+          { type: Types.CLEAR_STATE },
+          true
+        );
+      });
     }
   }
 
@@ -110,7 +126,9 @@ export default class AbstractPageRenderer extends PageRenderer {
    */
   setState(state = {}) {
     if (this._reactiveView) {
-      this._reactiveView.setState(state);
+      this._reactiveView.setState(state, () => {
+        this._dispatcher.fire(Events.UPDATED, { state }, true);
+      });
     }
   }
 

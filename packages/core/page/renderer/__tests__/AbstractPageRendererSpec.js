@@ -1,5 +1,3 @@
-jest.mock('page/renderer/PageRendererFactory');
-
 import Helper from 'ima-helpers';
 import ReactDOM from 'react-dom';
 import Controller from 'controller/Controller';
@@ -8,10 +6,21 @@ import AbstractPageRenderer from 'page/renderer/AbstractPageRenderer';
 import BlankManagedRootView from 'page/renderer/BlankManagedRootView';
 import RendererFactory from 'page/renderer/PageRendererFactory';
 import ViewAdapter from 'page/renderer/ViewAdapter';
+import Dispatcher from 'event/Dispatcher';
+import {
+  toMockedInstance,
+  setGlobalMockMethod,
+  setGlobalKeepUnmock,
+  objectKeepUnmock
+} from 'to-mock';
+
+setGlobalMockMethod(jest.fn);
+setGlobalKeepUnmock(objectKeepUnmock);
 
 describe('ima.page.renderer.AbstractPageRenderer', function() {
   let pageRenderer = null;
   let rendererFactory = null;
+  let dispatcher = null;
   let settings = {
     $Page: {
       $Render: {
@@ -30,7 +39,7 @@ describe('ima.page.renderer.AbstractPageRenderer', function() {
     replaceState: function() {}
   };
 
-  let controller = new Controller();
+  let controller = toMockedInstance(Controller);
   let view = function() {};
 
   let routeOptions = {
@@ -41,11 +50,13 @@ describe('ima.page.renderer.AbstractPageRenderer', function() {
   };
 
   beforeEach(function() {
-    rendererFactory = new RendererFactory();
+    rendererFactory = toMockedInstance(RendererFactory);
+    dispatcher = toMockedInstance(Dispatcher);
     pageRenderer = new AbstractPageRenderer(
       rendererFactory,
       Helper,
       ReactDOM,
+      dispatcher,
       settings
     );
 
@@ -78,7 +89,10 @@ describe('ima.page.renderer.AbstractPageRenderer', function() {
 
       pageRenderer.setState(state);
 
-      expect(reactiveComponentView.setState).toHaveBeenCalledWith(state);
+      expect(reactiveComponentView.setState).toHaveBeenCalledWith(
+        state,
+        expect.any(Function)
+      );
     });
   });
 
@@ -88,10 +102,13 @@ describe('ima.page.renderer.AbstractPageRenderer', function() {
 
       pageRenderer.clearState();
 
-      expect(reactiveComponentView.setState).toHaveBeenCalledWith({
-        key1: undefined,
-        key2: undefined
-      });
+      expect(reactiveComponentView.setState).toHaveBeenCalledWith(
+        {
+          key1: undefined,
+          key2: undefined
+        },
+        expect.any(Function)
+      );
     });
   });
 
