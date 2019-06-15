@@ -100,6 +100,20 @@ export class Namespace {
 
     return self;
   }
+
+  /**
+   * Set value for the specified namespace path point.
+   *
+   * @param {string} path The namespace path to set.
+   * @param {*} value
+   */
+  set(path, value) {
+    let levels = path.split('.');
+    const lastKey = levels.pop();
+    let namespace = this.namespace(levels.join('.'));
+
+    namespace[lastKey] = value;
+  }
 }
 
 export default new Namespace();
