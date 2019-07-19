@@ -341,18 +341,18 @@ describe('ima.page.manager.AbstractPageManager', () => {
   });
 
   describe('_getLoadedControllerState method', () => {
-    it('should calls controller load method', () => {
+    it('should calls controller load method', async () => {
       spyOn(controllerInstance, 'load').and.stub();
 
-      pageManager._getLoadedControllerState();
+      await pageManager._getLoadedControllerState();
 
       expect(controllerInstance.load).toHaveBeenCalled();
     });
 
-    it('should set pageStateManager to controller instance', () => {
+    it('should set pageStateManager to controller instance', async () => {
       spyOn(controllerInstance, 'setPageStateManager').and.stub();
 
-      pageManager._getLoadedControllerState();
+      await pageManager._getLoadedControllerState();
 
       expect(controllerInstance.setPageStateManager).toHaveBeenCalledWith(
         pageStateManager
@@ -361,19 +361,19 @@ describe('ima.page.manager.AbstractPageManager', () => {
   });
 
   describe('_getLoadedExtensionsState method', () => {
-    it('should call extensions load method', () => {
+    it('should call extensions load method', async () => {
       spyOn(extensionInstance, 'load').and.returnValue(extensionState);
 
-      pageManager._getLoadedExtensionsState();
+      await pageManager._getLoadedExtensionsState();
 
       expect(extensionInstance.load).toHaveBeenCalled();
     });
 
-    it('should set restricted pageStateManager to extension instance', () => {
+    it('should set restricted pageStateManager to extension instance', async () => {
       spyOn(extensionInstance, 'load').and.returnValue(extensionState);
       spyOn(pageManager, '_setRestrictedPageStateManager').and.stub();
 
-      pageManager._getLoadedExtensionsState();
+      await pageManager._getLoadedExtensionsState();
 
       expect(pageManager._setRestrictedPageStateManager).toHaveBeenCalledWith(
         extensionInstance,
@@ -381,24 +381,24 @@ describe('ima.page.manager.AbstractPageManager', () => {
       );
     });
 
-    it("should call extension's setPartialState method and switch extension to partial state", () => {
+    it("should call extension's setPartialState method and switch extension to partial state", async () => {
       spyOn(extensionInstance, 'setPartialState').and.stub();
       spyOn(extensionInstance, 'switchToPartialState').and.stub();
       spyOn(extensionInstance, 'load').and.returnValue(extensionState);
 
-      pageManager._getLoadedExtensionsState();
+      await pageManager._getLoadedExtensionsState();
 
       expect(extensionInstance.setPartialState).toHaveBeenCalled();
       expect(extensionInstance.switchToPartialState).toHaveBeenCalled();
     });
 
-    it('should return extensions state together with active controller state', () => {
+    it('should return extensions state together with active controller state', async () => {
       spyOn(extensionInstance, 'load').and.returnValue({
         extension: 'extension'
       });
       spyOn(pageManager, '_setRestrictedPageStateManager').and.stub();
 
-      let result = pageManager._getLoadedExtensionsState(controllerState);
+      let result = await pageManager._getLoadedExtensionsState(controllerState);
 
       expect(result).toEqual({
         controller: 'controller',
@@ -407,10 +407,10 @@ describe('ima.page.manager.AbstractPageManager', () => {
       });
     });
 
-    it('should switch extensions to PageStateManager after all resources are loaded', () => {
+    it('should switch extensions to PageStateManager after all resources are loaded', async () => {
       spyOn(pageManager, '_switchToPageStateManagerAfterLoaded').and.stub();
 
-      pageManager._getLoadedExtensionsState();
+      await pageManager._getLoadedExtensionsState();
 
       expect(
         pageManager._switchToPageStateManagerAfterLoaded
@@ -502,20 +502,20 @@ describe('ima.page.manager.AbstractPageManager', () => {
   });
 
   describe('_getUpdatedExtensionsState method', () => {
-    it('should call extensions update method', () => {
+    it('should call extensions update method', async () => {
       spyOn(extensionInstance, 'getRouteParams').and.returnValue(params);
       spyOn(extensionInstance, 'update').and.returnValue(extensionState);
 
-      pageManager._getUpdatedExtensionsState();
+      await pageManager._getUpdatedExtensionsState();
 
       expect(extensionInstance.update).toHaveBeenCalledWith(params);
     });
 
-    it('should set restricted pageStateManager to extension instance', () => {
+    it('should set restricted pageStateManager to extension instance', async () => {
       spyOn(pageManager, '_setRestrictedPageStateManager').and.stub();
       spyOn(extensionInstance, 'update').and.returnValue(extensionState);
 
-      pageManager._getUpdatedExtensionsState();
+      await pageManager._getUpdatedExtensionsState();
 
       expect(pageManager._setRestrictedPageStateManager).toHaveBeenCalledWith(
         extensionInstance,
@@ -523,24 +523,26 @@ describe('ima.page.manager.AbstractPageManager', () => {
       );
     });
 
-    it("should call extension's setPartialState method and switch extension to partial state", () => {
+    it("should call extension's setPartialState method and switch extension to partial state", async () => {
       spyOn(extensionInstance, 'setPartialState').and.stub();
       spyOn(extensionInstance, 'switchToPartialState').and.stub();
       spyOn(extensionInstance, 'update').and.returnValue(extensionState);
 
-      pageManager._getUpdatedExtensionsState();
+      await pageManager._getUpdatedExtensionsState();
 
       expect(extensionInstance.setPartialState).toHaveBeenCalled();
       expect(extensionInstance.switchToPartialState).toHaveBeenCalled();
     });
 
-    it('should return extensions state together with active controller state', () => {
+    it('should return extensions state together with active controller state', async () => {
       spyOn(extensionInstance, 'update').and.returnValue({
         extension: 'extension'
       });
       spyOn(pageManager, '_setRestrictedPageStateManager').and.stub();
 
-      let result = pageManager._getUpdatedExtensionsState(controllerState);
+      let result = await pageManager._getUpdatedExtensionsState(
+        controllerState
+      );
 
       expect(result).toEqual({
         controller: 'controller',
@@ -549,10 +551,10 @@ describe('ima.page.manager.AbstractPageManager', () => {
       });
     });
 
-    it('should switch extensions to PageStateManager after all resources are updated', () => {
+    it('should switch extensions to PageStateManager after all resources are updated', async () => {
       spyOn(pageManager, '_switchToPageStateManagerAfterLoaded').and.stub();
 
-      pageManager._getLoadedExtensionsState();
+      await pageManager._getLoadedExtensionsState();
 
       expect(
         pageManager._switchToPageStateManagerAfterLoaded

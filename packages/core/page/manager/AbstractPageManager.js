@@ -392,8 +392,10 @@ export default class AbstractPageManager extends PageManager {
    * @return {Object<string, (Promise<*>|*)>}
    */
   async _loadPageSource() {
-    const controllerState = this._getLoadedControllerState();
-    const extensionsState = this._getLoadedExtensionsState(controllerState);
+    const controllerState = await this._getLoadedControllerState();
+    const extensionsState = await this._getLoadedExtensionsState(
+      controllerState
+    );
     const loadedPageState = Object.assign({}, extensionsState, controllerState);
 
     const response = await this._pageRenderer.mount(
@@ -412,9 +414,9 @@ export default class AbstractPageManager extends PageManager {
    * @protected
    * @return {Object<string, (Promise<*>|*)>}
    */
-  _getLoadedControllerState() {
+  async _getLoadedControllerState() {
     let controller = this._managedPage.controllerInstance;
-    let controllerState = controller.load();
+    let controllerState = await controller.load();
 
     controller.setPageStateManager(this._pageStateManager);
 
@@ -428,14 +430,14 @@ export default class AbstractPageManager extends PageManager {
    * @param {Object<string, *>} controllerState
    * @return {Object<string, (Promise<*>|*)>}
    */
-  _getLoadedExtensionsState(controllerState) {
+  async _getLoadedExtensionsState(controllerState) {
     const controller = this._managedPage.controllerInstance;
     let extensionsState = Object.assign({}, controllerState);
 
     for (let extension of controller.getExtensions()) {
       extension.setPartialState(extensionsState);
       extension.switchToPartialState();
-      const extensionState = extension.load();
+      const extensionState = await extension.load();
 
       this._switchToPageStateManagerAfterLoaded(extension, extensionState);
       this._setRestrictedPageStateManager(extension, extensionState);
@@ -495,8 +497,8 @@ export default class AbstractPageManager extends PageManager {
    * @return {Promise<{status: number, content: ?string}>}
    */
   async _updatePageSource() {
-    const updatedControllerState = this._getUpdatedControllerState();
-    const updatedExtensionState = this._getUpdatedExtensionsState(
+    const updatedControllerState = await this._getUpdatedControllerState();
+    const updatedExtensionState = await this._getUpdatedExtensionsState(
       updatedControllerState
     );
     const updatedPageState = Object.assign(
@@ -535,7 +537,7 @@ export default class AbstractPageManager extends PageManager {
    * @param {Object<string, *>} controllerState
    * @return {Object<string, (Promise|*)>}
    */
-  _getUpdatedExtensionsState(controllerState) {
+  async _getUpdatedExtensionsState(controllerState) {
     const controller = this._managedPage.controllerInstance;
     let extensionsState = Object.assign({}, controllerState);
 
@@ -544,7 +546,7 @@ export default class AbstractPageManager extends PageManager {
       extension.setRouteParams(this._managedPage.params);
       extension.setPartialState(extensionsState);
       extension.switchToPartialState();
-      const extensionState = extension.update(lastRouteParams);
+      const extensionState = await extension.update(lastRouteParams);
 
       this._switchToPageStateManagerAfterLoaded(extension, extensionState);
       this._setRestrictedPageStateManager(extension, extensionState);
