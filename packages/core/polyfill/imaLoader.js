@@ -113,7 +113,16 @@
       setter(dependency);
     });
 
-    moduleInitializer.execute();
+    try {
+      moduleInitializer.execute();
+    } catch (error) {
+      throw new Error(
+        'The module ' +
+          moduleName +
+          ' throw error during initialization. ' +
+          error.message
+      );
+    }
 
     return moduleInstance;
   }
