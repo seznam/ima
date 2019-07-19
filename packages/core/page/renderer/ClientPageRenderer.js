@@ -1,6 +1,8 @@
 // @client-side
 
 import AbstractPageRenderer from './AbstractPageRenderer';
+import Events from './Events';
+import Types from './Types';
 
 /**
  * Client-side page renderer. The renderer attempts to reuse the markup sent by
@@ -14,14 +16,15 @@ export default class ClientPageRenderer extends AbstractPageRenderer {
    * @param {vendor.$Helper} Helper The IMA.js helper methods.
    * @param {vendor.ReactDOM} ReactDOM React framework instance to use to
    *        render the page on the client side.
+   * @param {Dispatcher} dispatcher Dispatcher fires events to app.
    * @param {Object<string, *>} settings The application setting for the
    *        current application environment.
    * @param {Window} window Helper for manipulating the global object
    *        ({@code window}) regardless of the client/server-side
    *        environment.
    */
-  constructor(factory, Helper, ReactDOM, settings, window) {
-    super(factory, Helper, ReactDOM, settings);
+  constructor(factory, Helper, ReactDOM, dispatcher, settings, window) {
+    super(factory, Helper, ReactDOM, dispatcher, settings);
 
     /**
      * Flag signalling that the page is being rendered for the first time.
@@ -115,7 +118,9 @@ export default class ClientPageRenderer extends AbstractPageRenderer {
    */
   unmount() {
     if (this._reactiveView) {
-      this._ReactDOM.unmountComponentAtNode(this._viewContainer);
+      this._ReactDOM.unmountComponentAtNode(this._viewContainer, () => {
+        this._dispatcher.fire(Events.UNMOUNTED, { type: Types.UNMOUNT }, true);
+      });
       this._reactiveView = null;
     }
   }
@@ -196,14 +201,24 @@ export default class ClientPageRenderer extends AbstractPageRenderer {
         () => {
           this._reactiveView = this._ReactDOM.hydrate(
             reactElementView,
-            this._viewContainer
+            this._viewContainer,
+            () => {
+              this._dispatcher.fire(
+                Events.MOUNTED,
+                { type: Types.HYDRATE },
+                true
+              );
+            }
           );
         }
       );
     } else {
       this._reactiveView = this._ReactDOM.render(
         reactElementView,
-        this._viewContainer
+        this._viewContainer,
+        () => {
+          this._dispatcher.fire(Events.MOUNTED, { type: Types.RENDER }, true);
+        }
       );
       return Promise.resolve();
     }

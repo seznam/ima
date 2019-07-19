@@ -398,7 +398,7 @@ export default class AbstractPageManager extends PageManager {
 
     const response = await this._pageRenderer.mount(
       this._managedPage.decoratedController,
-      this._managedPage.view,
+      this._managedPage.viewInstance,
       loadedPageState,
       this._managedPage.options
     );

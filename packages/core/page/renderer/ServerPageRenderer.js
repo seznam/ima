@@ -39,6 +39,7 @@ export default class ServerPageRenderer extends AbstractPageRenderer {
    * @param {vendor.$Helper} Helper The IMA.js helper methods.
    * @param {vendor.ReactDOMServer} ReactDOMServer React framework instance
    *        to use to render the page on the server side.
+   * @param {Dispatcher} dispatcher Dispatcher fires events to app.
    * @param {Object<string, *>} settings Application setting for the current
    *        application environment.
    * @param {Response} response Utility for sending the page markup to the
@@ -46,8 +47,16 @@ export default class ServerPageRenderer extends AbstractPageRenderer {
    * @param {Cache} cache Resource cache caching the results of HTTP requests
    *        made by services used by the rendered page.
    */
-  constructor(factory, Helper, ReactDOMServer, settings, response, cache) {
-    super(factory, Helper, ReactDOMServer, settings);
+  constructor(
+    factory,
+    Helper,
+    ReactDOMServer,
+    dispatcher,
+    settings,
+    response,
+    cache
+  ) {
+    super(factory, Helper, ReactDOMServer, dispatcher, settings);
 
     /**
      * Utility for sending the page markup to the client as a response to

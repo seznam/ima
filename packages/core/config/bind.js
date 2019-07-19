@@ -154,6 +154,7 @@ export default (ns, oc, config) => {
       PageRendererFactory,
       '$Helper',
       '$ReactDOM',
+      '$Dispatcher',
       '$Settings',
       Window
     ]);
@@ -162,6 +163,7 @@ export default (ns, oc, config) => {
       PageRendererFactory,
       '$Helper',
       '$ReactDOMServer',
+      '$Dispatcher',
       '$Settings',
       Response,
       Cache

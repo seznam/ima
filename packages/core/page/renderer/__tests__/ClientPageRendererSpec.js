@@ -1,10 +1,18 @@
-jest.mock('page/renderer/PageRendererFactory');
-
 import Helper from 'ima-helpers';
 import Controller from 'controller/Controller';
 import ClientPageRenderer from 'page/renderer/ClientPageRenderer';
 import RendererFactory from 'page/renderer/PageRendererFactory';
 import Window from 'window/Window';
+import Dispatcher from 'event/Dispatcher';
+import {
+  toMockedInstance,
+  setGlobalMockMethod,
+  setGlobalKeepUnmock,
+  objectKeepUnmock
+} from 'to-mock';
+
+setGlobalMockMethod(jest.fn);
+setGlobalKeepUnmock(objectKeepUnmock);
 
 describe('ima.page.renderer.ClientPageRenderer', function() {
   let param1 = 'param1';
@@ -23,6 +31,7 @@ describe('ima.page.renderer.ClientPageRenderer', function() {
   let view = function() {};
 
   let win = null;
+  let dispatcher = null;
   let rendererFactory = null;
   let pageRenderer = null;
   let ReactDOM = {
@@ -45,12 +54,15 @@ describe('ima.page.renderer.ClientPageRenderer', function() {
   };
 
   beforeEach(function() {
-    rendererFactory = new RendererFactory();
-    win = new Window();
+    rendererFactory = toMockedInstance(RendererFactory);
+    win = toMockedInstance(Window);
+    dispatcher = toMockedInstance(Dispatcher);
+
     pageRenderer = new ClientPageRenderer(
       rendererFactory,
       Helper,
       ReactDOM,
+      dispatcher,
       settings,
       win
     );
@@ -284,7 +296,8 @@ describe('ima.page.renderer.ClientPageRenderer', function() {
     it('should render react component to defined element', function() {
       expect(ReactDOM.render).toHaveBeenCalledWith(
         wrapedPageViewElement,
-        htmlNode
+        htmlNode,
+        expect.any(Function)
       );
     });
   });
