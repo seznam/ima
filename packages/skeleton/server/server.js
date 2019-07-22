@@ -123,7 +123,7 @@ function runNodeApp() {
     ) // for parsing multipart/form-data
     .use(cookieParser())
     .use(methodOverride())
-    .use(environment.$Proxy.path + '/', proxy(environment.$Proxy.server))
+    .use(environment.$Proxy.path + '/', proxy(environment.$Proxy.server, environment.$Proxy.options || {}))
     .use(urlParser)
     .use(renderApp)
     .use(errorHandler)
