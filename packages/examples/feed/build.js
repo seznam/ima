@@ -39,7 +39,7 @@ module.exports = (() => {
     ],
     es: [
       './build/static/js/polyfill.es.js',
-      './build/static/js/shim.js',
+      './build/static/js/shim.es.js',
       './build/static/js/vendor.client.es.js',
       './build/static/js/app.client.es.js'
     ],
