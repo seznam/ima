@@ -6,6 +6,11 @@ const fs = require('fs');
 const sharedTasksState = require('./gulpState');
 const macroTasks = require('./macroTasks.js');
 
+const defaultMessageJobs = {
+  'jsx?': ['vendor:build'],
+  'less': ['less:build']
+};
+
 function getModuleChildPath(parentModule, childModule) {
   const paths = [
     `./node_modules/ima-gulp-tasks/${parentModule}/node_modules/${childModule}`,
@@ -40,6 +45,11 @@ try {
   environment = {
     $Server: {
       port: 3001
+    },
+    notifier: {
+      server: 'localhost',
+      port: 4445,
+      messageJobs: defaultMessageJobs
     }
   };
 }
@@ -358,8 +368,15 @@ exports.files = {
 
 exports.occupiedPorts = {
   server: environment.$Server.port,
+  notifier: environment.notifier.port,
   livereload: exports.liveServer.port || 35729,
   'fb-flo': 5888
+};
+
+exports.notifyServerEnv = {
+  port: environment.notifier.port,
+  server: environment.notifier.server || 'localhost',
+  messageJobs: environment.notifier.messageJobs || defaultMessageJobs
 };
 
 exports.onTerminate = () => {

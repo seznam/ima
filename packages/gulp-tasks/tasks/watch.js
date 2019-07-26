@@ -13,10 +13,13 @@ const exec = promisify(require('child_process').exec);
 
 const sharedState = require('../gulpState.js');
 
+const dgram = require('dgram');
+const notifyServer = dgram.createSocket('udp4');
+
 exports.__requiresConfig = true;
 
 exports.default = gulpConfig => {
-  const { files, occupiedPorts } = gulpConfig;
+  const { files, occupiedPorts, notifyServerEnv } = gulpConfig;
 
   function watchTask() {
     let hotReloadedCacheKeys = [];
@@ -27,6 +30,32 @@ exports.default = gulpConfig => {
     runOnChange(files.server.watch, 'server:build');
     runOnChange(files.locale.watch, 'locale:build');
     runOnChange('./app/assets/static/**/*', 'copy:appStatic');
+
+    notifyServer.bind({
+      address: notifyServerEnv.server,
+      port: notifyServerEnv.port,
+      exclusive: true
+    });
+
+    notifyServer.on('listening', () => {
+      console.info(
+        `source files changes notification server listening on ${notifyServerEnv.server}:${notifyServerEnv.port}`
+      );
+    });
+
+    notifyServer.on('message', message => {
+      const changedSubject = message.toString();
+      Object.keys(notifyServerEnv.messageJobs).map(testRegexp => {
+        const test = new RegExp(testRegexp, 'i');
+        if (test.test(changedSubject)) {
+          console.info(
+            `source files '*.${changedSubject}' changed, starting jobs:`,
+            notifyServerEnv.messageJobs[testRegexp]
+          );
+          gulp.series(notifyServerEnv.messageJobs[testRegexp])();
+        }
+      });
+    });
 
     gulp
       .watch([
