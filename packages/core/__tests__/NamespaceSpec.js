@@ -1,4 +1,4 @@
-import { Namespace } from '../Namespace';
+import { Namespace } from '../namespace';
 
 describe('Namespace', () => {
   let ns = null;
