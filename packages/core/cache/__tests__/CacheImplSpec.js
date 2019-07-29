@@ -175,7 +175,7 @@ describe('ima.cache.CacheImpl', () => {
     );
   });
 
-  fit('should deserialize "Infinity" string value ttl to javascript Infinity value', () => {
+  it('should deserialize "Infinity" string value ttl to javascript Infinity value', () => {
     const serialization = {
       key: {
         value: 'value',
