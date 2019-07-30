@@ -2,7 +2,10 @@
 
 const { URL } = require('url');
 
-const BUILD_JS_PATH = '../../app/build.js';
+let path = require('path');
+let applicationFolder = path.resolve('.');
+
+const BUILD_JS_PATH = path.resolve(applicationFolder, './app/build.js');
 
 module.exports = environment => {
   function _getHost(req) {
