@@ -1,5 +1,11 @@
 'use strict';
 
+jest.mock('path');
+
+const path = require('path');
+
+path.resolve.mockImplementation((...rest) => rest.join(''));
+
 const UrlParser = require('../urlParser.js');
 
 const HOST = 'local.domain.cz';
