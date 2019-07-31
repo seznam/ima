@@ -754,9 +754,7 @@ class Entry {
       if (this._overrideCounter >= 1) {
         throw new Error(
           `The dependencies entry can't be overrided more than once.` +
-            `Fix your bind.js file for classConstructor ${
-              this.classConstructor.name
-            }.`
+            `Fix your bind.js file for classConstructor ${this.classConstructor.name}.`
         );
       }
     }
