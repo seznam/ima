@@ -227,7 +227,7 @@ module.exports = (environment, logger, languageLoader, appFactory) => {
         response: res,
         $IMA: {},
         dictionary: {
-          $Language: language,
+          language: language,
           dictionary: dictionary
         },
         router: {
