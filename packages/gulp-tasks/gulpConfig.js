@@ -6,9 +6,15 @@ const fs = require('fs');
 const sharedTasksState = require('./gulpState');
 const macroTasks = require('./macroTasks.js');
 
-const defaultMessageJobs = {
-  'jsx?': ['vendor:build'],
-  'less': ['less:build']
+const defaultNotifyServerEnv = {
+  enabled: false,
+  jobRunTimeout: 500,
+  server: 'localhost',
+  port: 4445,
+  messageJobs: {
+    '(js|ejs|jsx)': ['vendor:build'],
+    '(css|sass|less)': ['less:build']
+  }
 };
 
 function getModuleChildPath(parentModule, childModule) {
@@ -33,7 +39,9 @@ let environment;
 try {
   const environmentConfig = require(path.resolve('./app/environment.js'));
   const nodeEnv =
-    process.env.NODE_ENV === 'development' ? 'dev' : process.env.NODE_ENV;
+    process.env.NODE_ENV === 'development' || process.env.NODE_ENV === undefined
+      ? 'dev'
+      : process.env.NODE_ENV;
   environment = require('ima-helpers').resolveEnvironmentSetting(
     environmentConfig,
     nodeEnv
@@ -46,11 +54,7 @@ try {
     $Server: {
       port: 3001
     },
-    notifier: {
-      server: 'localhost',
-      port: 4445,
-      messageJobs: defaultMessageJobs
-    }
+    notifyServer: defaultNotifyServerEnv
   };
 }
 
@@ -368,15 +372,30 @@ exports.files = {
 
 exports.occupiedPorts = {
   server: environment.$Server.port,
-  notifier: environment.notifier.port,
+  notifyServer:
+    (environment.notifyServer && environment.notifyServer.port) ||
+    defaultNotifyServerEnv.port,
   livereload: exports.liveServer.port || 35729,
   'fb-flo': 5888
 };
 
 exports.notifyServerEnv = {
-  port: environment.notifier.port,
-  server: environment.notifier.server || 'localhost',
-  messageJobs: environment.notifier.messageJobs || defaultMessageJobs
+  enabled:
+    environment.notifyServer && environment.notifyServer.enabled !== undefined
+      ? environment.notifyServer.enabled
+      : defaultNotifyServerEnv.enabled,
+  jobRunTimeout:
+    (environment.notifyServer && environment.notifyServer.jobRunTimeout) ||
+    defaultNotifyServerEnv.jobRunTimeout,
+  port:
+    (environment.notifyServer && environment.notifyServer.port) ||
+    defaultNotifyServerEnv.port,
+  server:
+    (environment.notifyServer && environment.notifyServer.server) ||
+    defaultNotifyServerEnv.server,
+  messageJobs:
+    (environment.notifyServer && environment.notifyServer.messageJobs) ||
+    defaultNotifyServerEnv.messageJobs
 };
 
 exports.onTerminate = () => {

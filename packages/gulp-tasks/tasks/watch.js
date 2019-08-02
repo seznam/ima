@@ -15,6 +15,8 @@ const sharedState = require('../gulpState.js');
 
 const dgram = require('dgram');
 const notifyServer = dgram.createSocket('udp4');
+let notifyServerMessageTimeout = null;
+let notifyServerJobQueue = [];
 
 exports.__requiresConfig = true;
 
@@ -31,31 +33,45 @@ exports.default = gulpConfig => {
     runOnChange(files.locale.watch, 'locale:build');
     runOnChange('./app/assets/static/**/*', 'copy:appStatic');
 
-    notifyServer.bind({
-      address: notifyServerEnv.server,
-      port: notifyServerEnv.port,
-      exclusive: true
-    });
-
-    notifyServer.on('listening', () => {
-      console.info(
-        `source files changes notification server listening on ${notifyServerEnv.server}:${notifyServerEnv.port}`
-      );
-    });
-
-    notifyServer.on('message', message => {
-      const changedSubject = message.toString();
-      Object.keys(notifyServerEnv.messageJobs).map(testRegexp => {
-        const test = new RegExp(testRegexp, 'i');
-        if (test.test(changedSubject)) {
-          console.info(
-            `source files '*.${changedSubject}' changed, starting jobs:`,
-            notifyServerEnv.messageJobs[testRegexp]
-          );
-          gulp.series(notifyServerEnv.messageJobs[testRegexp])();
-        }
+    if (notifyServerEnv.enabled) {
+      notifyServer.bind({
+        address: notifyServerEnv.server,
+        port: notifyServerEnv.port,
+        exclusive: true
       });
-    });
+
+      notifyServer.on('listening', () => {
+        console.info(
+          `Notification server listening on ${notifyServerEnv.server}:${
+            notifyServerEnv.port
+          } for messages [ ${Object.keys(notifyServerEnv.messageJobs)} ]`
+        );
+      });
+
+      notifyServer.on('message', message => {
+        const changedSubject = message.toString();
+        Object.keys(notifyServerEnv.messageJobs).map(testRegexp => {
+          const test = new RegExp(testRegexp, 'i');
+          if (test.test(changedSubject)) {
+            clearTimeout(notifyServerMessageTimeout);
+            console.info(
+              `Notify message [ '${changedSubject}' ] queueing jobs:`,
+              notifyServerEnv.messageJobs[testRegexp]
+            );
+            notifyServerJobQueue = notifyServerJobQueue.concat(
+              notifyServerEnv.messageJobs[testRegexp].filter(job => {
+                return !notifyServerJobQueue.includes(job);
+              })
+            );
+            notifyServerMessageTimeout = setTimeout(() => {
+              console.info(`Starting queued jobs:`, notifyServerJobQueue);
+              gulp.parallel(notifyServerJobQueue)();
+              notifyServerJobQueue = [];
+            }, notifyServerEnv.jobRunTimeout);
+          }
+        });
+      });
+    }
 
     gulp
       .watch([
