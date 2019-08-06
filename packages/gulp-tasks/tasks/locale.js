@@ -17,7 +17,7 @@ exports.default = gulpConfig => {
         .pipe(
           rename(path => {
             path.basename = path.basename.replace(
-              new RegExp(language, 'gi'),
+              new RegExp(language.toUpperCase(), 'g'),
               ''
             );
           })
