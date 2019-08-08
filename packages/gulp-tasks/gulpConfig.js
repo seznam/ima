@@ -8,7 +8,7 @@ const macroTasks = require('./macroTasks.js');
 
 const defaultNotifyServerEnv = {
   enabled: false,
-  jobRunTimeout: 500,
+  jobRunTimeout: 200,
   server: 'localhost',
   port: 4445,
   messageJobs: {
