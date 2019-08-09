@@ -3,6 +3,36 @@
 This repository houses the default build tasks implementation for IMA.js
 applications.
 
+## Watch task notifications
+
+By default the watch task is used to run specific gulp tasks depends on source files change.
+
+From version 0.16.4 the watch task can be configured to run native DGRAM/UDP4 server. This server is waiting for messages and runs assigned gulp tasks if any message matches the configured jobs key/regex.
+
+The configuration can be set in app environment:
+
+```
+const appEnvironment = {
+    ...
+    dev: {
+        ...
+        notifyServer: {
+            enabled: true, /* this is only one required option to enable this feature. Disabled by default */
+            /* Default settings: */
+            jobRunTimeout: 200, /* this timeout specify how long to wait before task run after first message is received, shoud be set to higher time than the same type of messages can be sent from client within one link procecss */
+            server: 'localhost',
+            port: 4445,
+            messageJobs: {
+                '(js|ejs|jsx)': ['vendor:build'], /* value declares gulp tasks to run when the message matches the regex represented by the key */
+                '(css|sass|less)': ['less:build']
+            }
+        }
+        ...
+    }
+    ...
+}
+```
+
 If you are looking for a way to start a new IMA.js application, you should
 follow this link:
 [https://github.com/seznam/IMA.js-skeleton](https://github.com/seznam/IMA.js-skeleton).
