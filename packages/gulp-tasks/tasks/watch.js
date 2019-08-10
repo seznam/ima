@@ -41,7 +41,7 @@ exports.default = gulpConfig => {
       });
 
       notifyServer.on('listening', () => {
-        console.info(
+        log(
           `Notification server listening on ${notifyServerConfig.server}:${
             notifyServerConfig.port
           } for messages [ ${Object.keys(notifyServerConfig.messageJobs)} ]`
@@ -54,8 +54,10 @@ exports.default = gulpConfig => {
           const test = new RegExp(testRegexp, 'i');
           if (test.test(changedSubject)) {
             clearTimeout(notifyServerMessageTimeout);
-            console.info(
-              `Notify message [ '${changedSubject}' ] queueing jobs:`,
+            log(
+              `Notify message [ '${color.cyan(
+                changedSubject
+              )}' ] queueing jobs:`,
               notifyServerConfig.messageJobs[testRegexp]
             );
             notifyServerJobQueue = notifyServerJobQueue.concat(
@@ -64,7 +66,11 @@ exports.default = gulpConfig => {
               })
             );
             notifyServerMessageTimeout = setTimeout(() => {
-              console.info(`Starting queued jobs:`, notifyServerJobQueue);
+              log(
+                `Starting queued jobs: ${color.cyan(
+                  notifyServerJobQueue.join(',')
+                )}`
+              );
               gulp.parallel(notifyServerJobQueue)();
               notifyServerJobQueue = [];
             }, notifyServerConfig.jobRunTimeout);
