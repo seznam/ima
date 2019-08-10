@@ -21,7 +21,7 @@ let notifyServerJobQueue = [];
 exports.__requiresConfig = true;
 
 exports.default = gulpConfig => {
-  const { files, occupiedPorts, notifyServerEnv } = gulpConfig;
+  const { files, occupiedPorts, notifyServer: notifyServerConfig } = gulpConfig;
 
   function watchTask() {
     let hotReloadedCacheKeys = [];
@@ -33,33 +33,33 @@ exports.default = gulpConfig => {
     runOnChange(files.locale.watch, 'locale:build');
     runOnChange('./app/assets/static/**/*', 'copy:appStatic');
 
-    if (notifyServerEnv.enabled) {
+    if (notifyServerConfig.enable) {
       notifyServer.bind({
-        address: notifyServerEnv.server,
-        port: notifyServerEnv.port,
+        address: notifyServerConfig.server,
+        port: notifyServerConfig.port,
         exclusive: true
       });
 
       notifyServer.on('listening', () => {
         console.info(
-          `Notification server listening on ${notifyServerEnv.server}:${
-            notifyServerEnv.port
-          } for messages [ ${Object.keys(notifyServerEnv.messageJobs)} ]`
+          `Notification server listening on ${notifyServerConfig.server}:${
+            notifyServerConfig.port
+          } for messages [ ${Object.keys(notifyServerConfig.messageJobs)} ]`
         );
       });
 
       notifyServer.on('message', message => {
         const changedSubject = message.toString();
-        Object.keys(notifyServerEnv.messageJobs).map(testRegexp => {
+        Object.keys(notifyServerConfig.messageJobs).map(testRegexp => {
           const test = new RegExp(testRegexp, 'i');
           if (test.test(changedSubject)) {
             clearTimeout(notifyServerMessageTimeout);
             console.info(
               `Notify message [ '${changedSubject}' ] queueing jobs:`,
-              notifyServerEnv.messageJobs[testRegexp]
+              notifyServerConfig.messageJobs[testRegexp]
             );
             notifyServerJobQueue = notifyServerJobQueue.concat(
-              notifyServerEnv.messageJobs[testRegexp].filter(job => {
+              notifyServerConfig.messageJobs[testRegexp].filter(job => {
                 return !notifyServerJobQueue.includes(job);
               })
             );
@@ -67,7 +67,7 @@ exports.default = gulpConfig => {
               console.info(`Starting queued jobs:`, notifyServerJobQueue);
               gulp.parallel(notifyServerJobQueue)();
               notifyServerJobQueue = [];
-            }, notifyServerEnv.jobRunTimeout);
+            }, notifyServerConfig.jobRunTimeout);
           }
         });
       });

@@ -6,17 +6,6 @@ const fs = require('fs');
 const sharedTasksState = require('./gulpState');
 const macroTasks = require('./macroTasks.js');
 
-const defaultNotifyServerEnv = {
-  enabled: false,
-  jobRunTimeout: 200,
-  server: 'localhost',
-  port: 4445,
-  messageJobs: {
-    '(js|ejs|jsx)': ['vendor:build'],
-    '(css|sass|less)': ['less:build']
-  }
-};
-
 function getModuleChildPath(parentModule, childModule) {
   const paths = [
     `./node_modules/ima-gulp-tasks/${parentModule}/node_modules/${childModule}`,
@@ -53,8 +42,7 @@ try {
   environment = {
     $Server: {
       port: 3001
-    },
-    notifyServer: defaultNotifyServerEnv
+    }
   };
 }
 
@@ -370,33 +358,25 @@ exports.files = {
   }
 };
 
+const defaultNotifyServer = {
+  enable: false,
+  jobRunTimeout: 200,
+  server: 'localhost',
+  port: 4445,
+  messageJobs: {
+    '(js|ejs|jsx)': ['vendor:build'],
+    '(css|sass|less)': ['less:build']
+  }
+};
+
 exports.occupiedPorts = {
   server: environment.$Server.port,
-  notifyServer:
-    (environment.notifyServer && environment.notifyServer.port) ||
-    defaultNotifyServerEnv.port,
+  notifyServer: defaultNotifyServer.port,
   livereload: exports.liveServer.port || 35729,
   'fb-flo': 5888
 };
 
-exports.notifyServerEnv = {
-  enabled:
-    environment.notifyServer && environment.notifyServer.enabled !== undefined
-      ? environment.notifyServer.enabled
-      : defaultNotifyServerEnv.enabled,
-  jobRunTimeout:
-    (environment.notifyServer && environment.notifyServer.jobRunTimeout) ||
-    defaultNotifyServerEnv.jobRunTimeout,
-  port:
-    (environment.notifyServer && environment.notifyServer.port) ||
-    defaultNotifyServerEnv.port,
-  server:
-    (environment.notifyServer && environment.notifyServer.server) ||
-    defaultNotifyServerEnv.server,
-  messageJobs:
-    (environment.notifyServer && environment.notifyServer.messageJobs) ||
-    defaultNotifyServerEnv.messageJobs
-};
+exports.notifyServer = defaultNotifyServer;
 
 exports.onTerminate = () => {
   setTimeout(() => {
