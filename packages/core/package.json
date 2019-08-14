@@ -25,20 +25,16 @@
     "Javascript"
   ],
   "author": "Miroslav Jancarik <miroslav.jancarik@firma.seznam.cz>",
-  "contributors": [
-    {
-      "name": "Martin Urban",
-      "email": "martin.urban@firma.seznam.cz"
-    },
-    {
-      "name": "Martin Jurča",
-      "email": "martin.jurca@firma.seznam.cz"
-    },
-    {
-      "name": "Ondřej Baše",
-      "email": "ondrej.base@firma.seznam.cz"
-    }
-  ],
+  "contributors": [{
+    "name": "Martin Urban",
+    "email": "martin.urban@firma.seznam.cz"
+  }, {
+    "name": "Martin Jurča",
+    "email": "martin.jurca@firma.seznam.cz"
+  }, {
+    "name": "Ondřej Baše",
+    "email": "ondrej.base@firma.seznam.cz"
+  }],
   "repository": {
     "type": "git",
     "url": "https://github.com/seznam/IMA.js-core.git"
@@ -55,20 +51,20 @@
     "@babel/plugin-transform-modules-commonjs": "^7.4.0",
     "@commitlint/cli": "^8.0.0",
     "@commitlint/config-conventional": "^8.0.0",
-    "@fortawesome/fontawesome-free": "^5.8.2",
+    "@fortawesome/fontawesome-free": "^5.10.1",
     "autocannon": "^4.0.0",
     "babel-eslint": "^10.0.1",
     "bulma": "^0.7.5",
-    "commitizen": "^3.0.0",
-    "cz-conventional-changelog": "^2.1.0",
+    "commitizen": "^4.0.3",
+    "cz-conventional-changelog": "^3.0.2",
     "del": "^4.1.0",
     "enzyme": "^3.8.0",
     "es-check": "^5.0.0",
-    "eslint": "^5.15.3",
+    "eslint": "^6.1.0",
     "eslint-config-last": "^0.0.5",
-    "eslint-config-prettier": "^4.3.0",
+    "eslint-config-prettier": "^6.0.0",
     "eslint-plugin-jasmine": "^2.9.3",
-    "eslint-plugin-jest": "^22.6.4",
+    "eslint-plugin-jest": "^22.15.1",
     "eslint-plugin-prettier": "^3.1.0",
     "eslint-plugin-react": "^7.13.0",
     "fs-extra": "^8.0.1",
@@ -79,7 +75,7 @@
     "jest": "^24.8.0",
     "jsdoc-to-markdown": "^5.0.0",
     "jsdom": "^15.1.1",
-    "lint-staged": "^8.1.7",
+    "lint-staged": "^9.2.1",
     "lunr": "^2.3.3",
     "prettier": "^1.17.1",
     "prop-types": "^15.6.2",
@@ -110,14 +106,9 @@
     ]
   },
   "lint-staged": {
-    "linters": {
-      "**/*.{js,jsx}": [
-        "node_modules/.bin/eslint -c ./.eslintrc.js --fix --ignore-path ./.prettierignore",
-        "git add"
-      ]
-    },
-    "ignore": [
-      "/(dist|coverage|docs|doc|node_modules)/**/*"
+    "**/*.{js,jsx}": [
+      "eslint -c ./.eslintrc.js --fix --ignore-path ./.prettierignore",
+      "git add"
     ]
   },
   "config": {

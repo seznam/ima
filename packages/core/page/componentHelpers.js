@@ -19,7 +19,9 @@ if (typeof $Debug !== 'undefined' && $Debug) {
  *         declarations associated with the specified component.
  */
 export function getContextTypes(classConstructor) {
-  if (classConstructor.hasOwnProperty(PRIVATE.contextTypes)) {
+  if (
+    Object.prototype.hasOwnProperty.call(classConstructor, PRIVATE.contextTypes)
+  ) {
     return this[PRIVATE.contextTypes];
   }
 
