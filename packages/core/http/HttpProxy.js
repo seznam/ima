@@ -229,7 +229,7 @@ export default class HttpProxy {
    *         response headers and setting request headers, otherwise `false`.
    */
   haveToSetCookiesManually() {
-    return !this._window.isCookieEnabled();
+    return !this._window.isClient();
   }
 
   /**
