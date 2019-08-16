@@ -50,16 +50,16 @@ export default class ComponentUtils {
    * @returns {Object<string, Object>}
    */
   getUtils() {
-    if (this._oc.has('$Utils')) {
-      // fallback for backward compatibility
-      return this._oc.get('$Utils');
-    }
-
     const utilities = {};
 
     // create instance of each utility class
     for (const utilityAlias of Object.keys(this._utilities)) {
       utilities[utilityAlias] = this._oc.get(this._utilities[utilityAlias]);
+    }
+
+    if (this._oc.has('$Utils')) {
+      // fallback for backward compatibility
+      Object.assign(utilities, this._oc.get('$Utils'));
     }
 
     return utilities;
