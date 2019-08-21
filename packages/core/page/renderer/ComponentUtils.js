@@ -16,30 +16,45 @@ export default class ComponentUtils {
     /**
      * Map of registered utilities.
      *
+     * @type {Object<string, function(new: T, ...*)|function(...*): T>}
+     */
+    this._utilityClasses = {};
+
+    /**
+     * Map of instantiated utilities
+     *
      * @type {Object<string, Object>}
      */
-    this._utilities = {};
+    this._utilities = null;
   }
 
   /**
    * Registers single utility class or multiple classes in alias->class mapping.
    *
-   * @param {function(new: Object)|Object<string, function(new: Object)>} componentUtilityClass
-   * @param {string|null} alias
-   * @returns {Object|Object<string, Object>}
+   * @param {string|Object<string, function(new: T, ...*)|function(...*): T>} name
+   * @param {function(new: T, ...*)|function(...*): T} componentUtilityClass
    */
-  register(componentUtilityClass, alias = null) {
+  register(name, componentUtilityClass) {
     if (typeof componentUtilityClass === 'function') {
-      this._utilities[
-        alias || componentUtilityClass.name
-      ] = componentUtilityClass;
-    } else if (typeof componentUtilityClass === 'object') {
-      for (const alias of Object.keys(componentUtilityClass)) {
-        if (!componentUtilityClass.hasOwnProperty(alias)) {
+      const alias = String(name);
+      this._utilityClasses[alias] = componentUtilityClass;
+
+      if (this._utilities) {
+        this._createUtilityInstance(alias, componentUtilityClass);
+      }
+    } else if (typeof name === 'object') {
+      const utilityClasses = name;
+
+      for (const alias of Object.keys(utilityClasses)) {
+        if (!utilityClasses.hasOwnProperty(alias)) {
           continue;
         }
 
-        this._utilities[alias] = componentUtilityClass[alias];
+        this._utilityClasses[alias] = utilityClasses[alias];
+
+        if (this._utilities) {
+          this._createUtilityInstance(alias, utilityClasses[alias]);
+        }
       }
     }
   }
@@ -50,18 +65,32 @@ export default class ComponentUtils {
    * @returns {Object<string, Object>}
    */
   getUtils() {
-    const utilities = {};
+    if (this._utilities) {
+      return this._utilities;
+    }
+
+    this._utilities = {};
 
     // create instance of each utility class
-    for (const utilityAlias of Object.keys(this._utilities)) {
-      utilities[utilityAlias] = this._oc.get(this._utilities[utilityAlias]);
+    for (const alias of Object.keys(this._utilityClasses)) {
+      this._createUtilityInstance(alias, this._utilityClasses[alias]);
     }
 
     if (this._oc.has('$Utils')) {
       // fallback for backward compatibility
-      Object.assign(utilities, this._oc.get('$Utils'));
+      Object.assign(this._utilities, this._oc.get('$Utils'));
     }
 
-    return utilities;
+    return this._utilities;
+  }
+
+  /**
+   * @template T
+   * @param {string} alias
+   * @param {function(new: T, ...*)|function(...*): T} utilityClass
+   * @return {T}
+   */
+  _createUtilityInstance(alias, utilityClass) {
+    return (this._utilities[alias] = this._oc.get(utilityClass));
   }
 }
