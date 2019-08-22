@@ -2,29 +2,57 @@
 
 const clone = require('clone');
 
+function assign(target, source, parentField = null) {
+  let fieldList = [];
+
+  for (const field of Object.keys(source)) {
+    const value = source[field];
+    const fieldPath = parentField ? parentField + '.' + field : field;
+    fieldList.push(fieldPath);
+
+    if (value instanceof Array) {
+      target[field] = value.slice();
+
+    } else if (value instanceof Object && !(value instanceof Function)) {
+      if (!(target[field] instanceof Object)) {
+        target[field] = {};
+      }
+
+      fieldList = fieldList.concat(assign(target[field], value, fieldPath));
+    } else {
+      target[field] = value;
+    }
+  }
+
+  return fieldList;
+}
+
 function assignRecursively(target, ...sources) {
   for (let source of sources) {
     assign(target, source);
   }
 
-  return target;
+  return target;  
+}
 
-  function assign(target, source) {
-    for (let field of Object.keys(source)) {
-      let value = source[field];
-      if (value instanceof Array) {
-        target[field] = value.slice();
-      } else if (value instanceof Object && !(value instanceof Function)) {
-        if (!(target[field] instanceof Object)) {
-          target[field] = {};
-        }
+function assignRecursivelyWithTracking(referrer) {
+  return function (target, ...sources) {
+    let fieldsList = [];
 
-        assign(target[field], value);
-      } else {
-        target[field] = value;
-      }
+    for (const source of sources) {
+      fieldsList = fieldsList.concat(assign(target, source));
     }
-  }
+
+    if (!(target.__meta__ instanceof Object)) {
+      target.__meta__ = {};
+    }
+
+    for (const field of fieldsList) {
+      target.__meta__[field] = referrer;
+    }
+  
+    return target;
+  };
 }
 
 function deepFreeze(object) {
@@ -82,6 +110,7 @@ function escapeRegExp(string) {
 
 module.exports = {
   assignRecursively,
+  assignRecursivelyWithTracking,
   deepFreeze,
   allPromiseHash,
   escapeRegExp,
