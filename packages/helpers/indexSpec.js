@@ -14,6 +14,34 @@ describe('helper', () => {
     });
   });
 
+  describe('assignRecursivelyWithTracking', () => {
+   
+
+    it('should recursively assign all sources to the target and create __meta__ property', () => {
+      let target = { a: 1 };
+
+      helpers.assignRecursivelyWithTracking('ref-1')(
+        target,
+        { b: 3 },
+        { c: { d: 5 } },
+        { c: { e: [5] } }
+      );
+
+      expect(target).toEqual({ a: 1, b: 3, c: { d: 5, e: [5] }, __meta__: { b: 'ref-1', c: 'ref-1', 'c.d': 'ref-1', 'c.e': 'ref-1' }});
+    });
+
+    it('should override referrers in __meta__ property', () => {
+      let target = { a: 1, b: 3, c: { d: 5, e: [5] }, __meta__: { b: 'ref-1', c: 'ref-1', 'c.d': 'ref-1', 'c.e': 'ref-1' }};
+
+      helpers.assignRecursivelyWithTracking('ref-2')(
+        target,
+        { c: { e: 6 } },
+      );
+
+      expect(target).toEqual({ a: 1, b: 3, c: { d: 5, e: 6 }, __meta__: { b: 'ref-1', c: 'ref-2', 'c.d': 'ref-1', 'c.e': 'ref-2' }});
+    });
+  });
+
   describe('deepFreeze', () => {
     it('should deeply freeze any object', () => {
       'use strict'; // throw TypeError when manipulating a frozen object
