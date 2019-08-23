@@ -42,7 +42,11 @@ export default class ComponentUtils {
       if (this._utilities) {
         this._createUtilityInstance(alias, componentUtilityClass);
       }
-    } else if (typeof name === 'object') {
+    } else if (
+      name &&
+      typeof name === 'object' &&
+      name.constructor === Object
+    ) {
       const utilityClasses = name;
 
       for (const alias of Object.keys(utilityClasses)) {
