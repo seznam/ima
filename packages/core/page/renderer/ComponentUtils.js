@@ -54,11 +54,7 @@ export default class ComponentUtils {
           continue;
         }
 
-        this._utilityClasses[alias] = utilityClasses[alias];
-
-        if (this._utilities) {
-          this._createUtilityInstance(alias, utilityClasses[alias]);
-        }
+        this.register(alias, utilityClasses[alias]);
       }
     }
   }

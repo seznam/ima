@@ -17,20 +17,13 @@ describe('ComponentUtils', () => {
   });
 
   describe('register() method', () => {
-    it('should register utility class under its own real name.', () => {
-      componentUtils.register(SomeMockHelper);
+    it('should register utility class', () => {
+      componentUtils.register('SomeHelper', SomeMockHelper);
 
-      expect(componentUtils._utilities['SomeMockHelper']).not.toBeUndefined();
-      expect(componentUtils._utilities['SomeMockHelper']).toEqual(
+      expect(componentUtils._utilityClasses['SomeHelper']).not.toBeUndefined();
+      expect(componentUtils._utilityClasses['SomeHelper']).toEqual(
         SomeMockHelper
       );
-    });
-
-    it('should register utility class under given alias.', () => {
-      componentUtils.register(SomeMockHelper, 'MockHelper');
-
-      expect(componentUtils._utilities['MockHelper']).not.toBeUndefined();
-      expect(componentUtils._utilities['MockHelper']).toEqual(SomeMockHelper);
     });
 
     it('should register multiple classes given in form of an Object.', () => {
@@ -39,8 +32,10 @@ describe('ComponentUtils', () => {
         SomeHelper
       });
 
-      expect(componentUtils._utilities['MockHelper']).toEqual(SomeMockHelper);
-      expect(componentUtils._utilities['SomeHelper']).toEqual(SomeHelper);
+      expect(componentUtils._utilityClasses['MockHelper']).toEqual(
+        SomeMockHelper
+      );
+      expect(componentUtils._utilityClasses['SomeHelper']).toEqual(SomeHelper);
     });
   });
 
@@ -70,6 +65,14 @@ describe('ComponentUtils', () => {
       expect(oc.get).toHaveBeenCalledTimes(2);
       expect(utils['SomeHelper'] instanceof SomeHelper).toBeTruthy();
       expect(utils['SomeMockHelper'] instanceof SomeMockHelper).toBeTruthy();
+    });
+
+    it('should not create instances again.', () => {
+      const utils = (componentUtils._utilities = {});
+      spyOn(componentUtils, '_createUtilityInstance').and.stub();
+
+      expect(componentUtils.getUtils()).toBe(utils);
+      expect(componentUtils._createUtilityInstance).not.toHaveBeenCalled();
     });
   });
 });
