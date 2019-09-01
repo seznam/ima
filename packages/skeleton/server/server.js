@@ -45,19 +45,16 @@ function errorToString(error) {
   return errorString;
 }
 
-process.on('uncaughtException', (error) => {
-	logger.error(`Uncaught Exception:\n${errorToString(error)}`);
+process.on('uncaughtException', error => {
+  logger.error(`Uncaught Exception:\n${errorToString(error)}`);
 });
 
-process.on('unhandledRejection', (error) => {
-	logger.error(`Unhandled promise rejection:\n${errorToString(error)}`);
+process.on('unhandledRejection', error => {
+  logger.error(`Unhandled promise rejection:\n${errorToString(error)}`);
 });
 
 function renderApp(req, res, next) {
-  if (
-    req.headers['x-moz'] &&
-    req.headers['x-moz'] === 'prefetch'
-  ) {
+  if (req.headers['x-moz'] && req.headers['x-moz'] === 'prefetch') {
     res.status(204);
     res.send();
 
@@ -137,7 +134,10 @@ function runNodeApp() {
     ) // for parsing multipart/form-data
     .use(cookieParser())
     .use(methodOverride())
-    .use(environment.$Proxy.path + '/', proxy(environment.$Proxy.server, environment.$Proxy.options || {}))
+    .use(
+      environment.$Proxy.path + '/',
+      proxy(environment.$Proxy.server, environment.$Proxy.options || {})
+    )
     .use(urlParser)
     .use(renderApp)
     .use(errorHandler)
