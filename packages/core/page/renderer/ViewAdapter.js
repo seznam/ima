@@ -1,20 +1,13 @@
-import PropTypes from 'prop-types';
 import React from 'react';
-import Context from '../context';
+import Context from '../Context';
 
 /**
  * An adapter component providing the current page controller's state to the
  * page view component through its properties.
  */
 export default class ViewAdapter extends React.Component {
-  /**
-   * @inheritdoc
-   * @return {{$Utils: function(*): ?Error}}
-   */
-  static get childContextTypes() {
-    return {
-      $Utils: PropTypes.object.isRequired
-    };
+  static getDerivedStateFromProps(props) {
+    return props.state;
   }
 
   /**
@@ -45,13 +38,6 @@ export default class ViewAdapter extends React.Component {
   }
 
   /**
-   * @inheritdoc
-   */
-  componentWillReceiveProps(newProps) {
-    this.setState(newProps.state);
-  }
-
-  /**
    * Fixes an issue where when there's an error in React component,
    * the defined ErrorPage may not get re-rendered and white
    * blank page appears instead.
@@ -66,17 +52,8 @@ export default class ViewAdapter extends React.Component {
   render() {
     return React.createElement(
       Context.Provider,
-      { value: this.props.$Utils },
+      { value: { $Utils: this.props.$Utils } },
       React.createElement(this._view, this.state)
     );
-  }
-
-  /**
-   * @inheritdoc
-   */
-  getChildContext() {
-    return {
-      $Utils: this.props.$Utils
-    };
   }
 }

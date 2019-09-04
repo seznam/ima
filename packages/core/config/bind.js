@@ -50,7 +50,6 @@ import Window from '../window/Window';
 
 export default (ns, oc, config) => {
   //**************START VENDORS**************
-
   oc.constant('$Helper', vendorLinker.get('ima-helpers', true));
 
   //React

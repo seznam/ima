@@ -87,12 +87,5 @@ export default class AbstractDocumentView extends AbstractPureComponent {
       $Utils: PropTypes.object.isRequired
     };
   }
-
-  /**
-   * @inheritdoc
-   */
-  static get contextTypes() {
-    return {};
-  }
   //#endif
 }

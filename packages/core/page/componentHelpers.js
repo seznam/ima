@@ -1,49 +1,6 @@
 import classnames from 'classnames';
-import PropTypes from 'prop-types';
 import React from 'react';
 import ReactDOM from 'react-dom';
-
-const PRIVATE = {
-  contextTypes: Symbol('contextTypes')
-};
-if (typeof $Debug !== 'undefined' && $Debug) {
-  Object.freeze(PRIVATE);
-}
-
-/**
- * Retrieves the context type declarations for the specified component.
- *
- * @param {function(new: React.Component, ...*)} classConstructor The
- *        constructor of the react component.
- * @return {Object<string, function(...*): boolean>} The context type
- *         declarations associated with the specified component.
- */
-export function getContextTypes(classConstructor) {
-  if (
-    Object.prototype.hasOwnProperty.call(classConstructor, PRIVATE.contextTypes)
-  ) {
-    return this[PRIVATE.contextTypes];
-  }
-
-  return {
-    $Utils: PropTypes.object.isRequired
-  };
-}
-
-/**
- * Overrides the previously associated context type declarations for the
- * specified component to the provided ones.
- *
- * @param {function(new: React.Component, ...*)} classConstructor The
- *        constructor of the react component.
- * @param {Object<string, function(...*): boolean>} contextTypes The new
- *        context type declarations to associate with the specified component.
- * @return {Object<string, function(...*): boolean>} The provided context type
- *         declarations.
- */
-export function setContextTypes(classConstructor, contextTypes) {
-  return (classConstructor[PRIVATE.contextTypes] = contextTypes);
-}
 
 /**
  * Retrieves the view utilities from the component's current context or
