@@ -209,46 +209,38 @@ exports.default = gulpConfig => {
     );
 
     function getModuleLinkerContent(modules) {
-      let linkingFileHeader = `let vendorLinker = require('ima/vendorLinker.js').default;\n`;
+      let vendors = getVendors(modules);
+
+      let linkingFileHeader = `let vendorLinker = require('${vendors[
+        '@ima/core'
+      ] || '@ima/core'}').vendorLinker;\n`;
       let linkingFileFooter = `module.exports = vendorLinker;\n`;
-      let duplicity = [];
 
       return (
         linkingFileHeader +
-        modules
-          .map(vendorModuleName => {
-            let alias = vendorModuleName;
-
-            if (typeof vendorModuleName === 'object') {
-              alias = Object.keys(vendorModuleName)[0];
-
-              if (modules.indexOf(alias) !== -1) {
-                duplicity.push(alias);
-              }
-            }
-
-            return vendorModuleName;
-          })
-          .filter(
-            vendorModuleName =>
-              (typeof vendorModuleName === 'string' &&
-                duplicity.indexOf(vendorModuleName) === -1) ||
-              typeof vendorModuleName === 'object'
+        Object.entries(vendors)
+          .map(([alias, moduleName]) =>
+            generateVendorInclusion(alias, moduleName)
           )
-          .map(vendorModuleName => {
-            let alias = vendorModuleName;
-            let moduleName = vendorModuleName;
-
-            if (typeof vendorModuleName === 'object') {
-              alias = Object.keys(vendorModuleName)[0];
-              moduleName = vendorModuleName[alias];
-            }
-
-            return generateVendorInclusion(alias, moduleName);
-          })
           .join('') +
         linkingFileFooter
       );
+    }
+
+    function getVendors(modules) {
+      return modules.reduce((vendors, vendorModuleName) => {
+        let alias = vendorModuleName;
+        let moduleName = vendorModuleName;
+
+        if (typeof vendorModuleName === 'object') {
+          alias = Object.keys(vendorModuleName)[0];
+          moduleName = vendorModuleName[alias];
+        }
+
+        vendors[alias] = moduleName;
+
+        return vendors;
+      }, {});
     }
 
     function generateVendorInclusion(alias, moduleName) {
