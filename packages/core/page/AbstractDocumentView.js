@@ -1,6 +1,4 @@
-import PropTypes from 'prop-types';
 import AbstractPureComponent from './AbstractPureComponent';
-import MetaManager from '../meta/MetaManager';
 
 const PRIVATE = {
   masterElementId: Symbol('masterElementId')
@@ -65,27 +63,6 @@ export default class AbstractDocumentView extends AbstractPureComponent {
     }
 
     this[PRIVATE.masterElementId] = masterElementId;
-  }
-
-  /**
-   * Returns the expected types of the props passed to this component.
-   *
-   * The {@code metaManager} is used to generate the {@code meta} tags in the
-   * {@code head} and the content of the {@code title} element. The
-   * {@code page} contains the rendered HTML of the current view. The
-   * {@code revivalSettings} contains a JavaScript snippet that initializes
-   * the configuration of the IMA platform at the client-side.
-   *
-   * @return {{metaManager: *, page: *, revivalSettings: *}} The expected
-   *         types of the props passed to this component.
-   */
-  static get propTypes() {
-    return {
-      metaManager: PropTypes.instanceOf(MetaManager).isRequired,
-      page: PropTypes.string.isRequired,
-      revivalSettings: PropTypes.string.isRequired,
-      $Utils: PropTypes.object.isRequired
-    };
   }
   //#endif
 }

@@ -78,7 +78,6 @@
     "lint-staged": "^9.2.1",
     "lunr": "^2.3.3",
     "prettier": "^1.17.1",
-    "prop-types": "^15.6.2",
     "react": "16.8.6",
     "react-dom": "16.8.6",
     "rollup": "^1.13.1",
@@ -94,7 +93,6 @@
     "node-fetch": "^2.6.0"
   },
   "peerDependencies": {
-    "prop-types": "15.x",
     "react": "16.x",
     "react-dom": "16.x"
   },
