@@ -30,14 +30,14 @@
     "clone": "^2.1.2"
   },
   "devDependencies": {
-    "babel-eslint": "^10.0.1",
-    "eslint": "^5.9.0",
+    "babel-eslint": "^10.0.3",
+    "eslint": "^6.3.0",
     "eslint-config-last": "^0.0.5",
-    "eslint-config-prettier": "^3.3.0",
+    "eslint-config-prettier": "^6.2.0",
     "eslint-plugin-jasmine": "^2.10.1",
-    "eslint-plugin-prettier": "^3.0.0",
-    "prettier": "^1.15.3",
-    "gulp": "^4.0.0",
+    "eslint-plugin-prettier": "^3.1.0",
+    "prettier": "^1.18.2",
+    "gulp": "^4.0.2",
     "gulp-jasmine": "^4.0.0"
   },
   "engines": {

@@ -12,7 +12,6 @@ function assign(target, source, parentField = null) {
 
     if (value instanceof Array) {
       target[field] = value.slice();
-
     } else if (value instanceof Object && !(value instanceof Function)) {
       if (!(target[field] instanceof Object)) {
         target[field] = {};
@@ -32,12 +31,12 @@ function assignRecursively(target, ...sources) {
     assign(target, source);
   }
 
-  return target;  
+  return target;
 }
 
-function assignRecursivelyWithTracking(referrer) {
-  return function (target, ...sources) {
-    let fieldsList = [];
+function assignRecursivelyWithTracking(referrer) {
+  return function(target, ...sources) {
+    let fieldsList = [];
 
     for (const source of sources) {
       fieldsList = fieldsList.concat(assign(target, source));
@@ -50,7 +49,7 @@ function assignRecursivelyWithTracking(referrer) {
     for (const field of fieldsList) {
       target.__meta__[field] = referrer;
     }
-  
+
     return target;
   };
 }

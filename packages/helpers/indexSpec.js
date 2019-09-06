@@ -15,30 +15,40 @@ describe('helper', () => {
   });
 
   describe('assignRecursivelyWithTracking', () => {
-   
-
     it('should recursively assign all sources to the target and create __meta__ property', () => {
       let target = { a: 1 };
 
       helpers.assignRecursivelyWithTracking('ref-1')(
         target,
-        { b: 3 },
+        { b: 3 },
         { c: { d: 5 } },
         { c: { e: [5] } }
       );
 
-      expect(target).toEqual({ a: 1, b: 3, c: { d: 5, e: [5] }, __meta__: { b: 'ref-1', c: 'ref-1', 'c.d': 'ref-1', 'c.e': 'ref-1' }});
+      expect(target).toEqual({
+        a: 1,
+        b: 3,
+        c: { d: 5, e: [5] },
+        __meta__: { b: 'ref-1', c: 'ref-1', 'c.d': 'ref-1', 'c.e': 'ref-1' }
+      });
     });
 
     it('should override referrers in __meta__ property', () => {
-      let target = { a: 1, b: 3, c: { d: 5, e: [5] }, __meta__: { b: 'ref-1', c: 'ref-1', 'c.d': 'ref-1', 'c.e': 'ref-1' }};
+      let target = {
+        a: 1,
+        b: 3,
+        c: { d: 5, e: [5] },
+        __meta__: { b: 'ref-1', c: 'ref-1', 'c.d': 'ref-1', 'c.e': 'ref-1' }
+      };
 
-      helpers.assignRecursivelyWithTracking('ref-2')(
-        target,
-        { c: { e: 6 } },
-      );
+      helpers.assignRecursivelyWithTracking('ref-2')(target, { c: { e: 6 } });
 
-      expect(target).toEqual({ a: 1, b: 3, c: { d: 5, e: 6 }, __meta__: { b: 'ref-1', c: 'ref-2', 'c.d': 'ref-1', 'c.e': 'ref-2' }});
+      expect(target).toEqual({
+        a: 1,
+        b: 3,
+        c: { d: 5, e: 6 },
+        __meta__: { b: 'ref-1', c: 'ref-2', 'c.d': 'ref-1', 'c.e': 'ref-2' }
+      });
     });
   });
 
