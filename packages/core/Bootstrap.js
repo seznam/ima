@@ -72,7 +72,9 @@ export default class Bootstrap {
   _initSettings() {
     let currentApplicationSettings = {};
 
-    let plugins = this._config.plugins.concat([this._config]);
+    let plugins = this._config.plugins.concat([
+      { name: 'app', module: this._config }
+    ]);
 
     plugins
       .filter(plugin => typeof plugin.module.initSettings === 'function')

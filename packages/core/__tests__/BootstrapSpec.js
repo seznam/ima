@@ -19,7 +19,7 @@ describe('Bootstrap', () => {
     settings: {
       $Env: 'prod'
     },
-    plugins: [plugin],
+    plugins: [{ name: 'test-plugin', module: plugin }],
     initSettings: () => environments,
     initBindIma: () => {},
     initBindApp: () => {},
@@ -104,7 +104,8 @@ describe('Bootstrap', () => {
       bootstrap._bindDependencies();
 
       expect(objectContainer.setBindingState).toHaveBeenCalledWith(
-        ObjectContainer.PLUGIN_BINDING_STATE
+        ObjectContainer.PLUGIN_BINDING_STATE,
+        'test-plugin'
       );
     });
 
@@ -127,8 +128,10 @@ describe('Bootstrap', () => {
         namespace,
         objectContainer,
         {
-          $Env: 'prod'
-        }
+          $Env: 'prod',
+          __meta__: {}
+        },
+        'ima'
       );
     });
 
@@ -137,9 +140,15 @@ describe('Bootstrap', () => {
 
       bootstrap._bindDependencies();
 
-      expect(plugin.initBind).toHaveBeenCalledWith(namespace, objectContainer, {
-        $Env: 'prod'
-      });
+      expect(plugin.initBind).toHaveBeenCalledWith(
+        namespace,
+        objectContainer,
+        {
+          $Env: 'prod',
+          __meta__: {}
+        },
+        'test-plugin'
+      );
     });
 
     it('should bind app', () => {
@@ -151,8 +160,10 @@ describe('Bootstrap', () => {
         namespace,
         objectContainer,
         {
-          $Env: 'prod'
-        }
+          $Env: 'prod',
+          __meta__: {}
+        },
+        'app'
       );
     });
   });
