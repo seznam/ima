@@ -36,7 +36,7 @@ export class VendorLinker {
     this._modules.set(moduleName, moduleValues);
 
     if (typeof moduleValues.$registerImaPlugin === 'function') {
-      this._plugins.push(moduleValues);
+      this._plugins.push({ name: moduleName, module: moduleValues });
     }
 
     $IMA.Loader.register(moduleName, [], exports => ({

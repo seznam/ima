@@ -26,6 +26,13 @@ export default class ComponentUtils {
      * @type {Object<string, Object>}
      */
     this._utilities = null;
+
+    /**
+     * Map of referrers to utilities
+     *
+     * @type {Object<string, string>}
+     */
+    this._utilityReferrers = {};
   }
 
   /**
@@ -33,11 +40,16 @@ export default class ComponentUtils {
    *
    * @param {string|Object<string, function(new: T, ...*)|function(...*): T>} name
    * @param {function(new: T, ...*)|function(...*): T} componentUtilityClass
+   * @param {?string} referrer
    */
-  register(name, componentUtilityClass) {
+  register(name, componentUtilityClass, referrer = null) {
     if (typeof componentUtilityClass === 'function') {
       const alias = String(name);
       this._utilityClasses[alias] = componentUtilityClass;
+
+      if (referrer && typeof referrer === 'string') {
+        this._utilityReferrers[alias] = referrer;
+      }
 
       if (this._utilities) {
         this._createUtilityInstance(alias, componentUtilityClass);
@@ -48,13 +60,14 @@ export default class ComponentUtils {
       name.constructor === Object
     ) {
       const utilityClasses = name;
+      referrer = componentUtilityClass;
 
       for (const alias of Object.keys(utilityClasses)) {
         if (!utilityClasses.hasOwnProperty(alias)) {
           continue;
         }
 
-        this.register(alias, utilityClasses[alias]);
+        this.register(alias, utilityClasses[alias], referrer);
       }
     }
   }
@@ -82,6 +95,13 @@ export default class ComponentUtils {
     }
 
     return this._utilities;
+  }
+
+  /**
+   * @returns {Object<string, string>}
+   */
+  getReferrers() {
+    return this._utilityReferrers;
   }
 
   /**
