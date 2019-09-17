@@ -1,4 +1,5 @@
 import React from 'react';
+import memoizeOne from 'memoize-one';
 import Context from '../Context';
 
 /**
@@ -6,10 +7,6 @@ import Context from '../Context';
  * page view component through its properties.
  */
 export default class ViewAdapter extends React.Component {
-  static getDerivedStateFromProps(props) {
-    return props.state;
-  }
-
   /**
    * Initializes the adapter component.
    *
@@ -35,6 +32,15 @@ export default class ViewAdapter extends React.Component {
      * @type {function(new:React.Component, Object<string, *>)}
      */
     this._view = props.view;
+
+    /**
+     * The memoized context value.
+     *
+     * @type {function}
+     */
+    this._getContextValue = memoizeOne($Utils => {
+      return { $Utils };
+    });
   }
 
   /**
@@ -52,7 +58,7 @@ export default class ViewAdapter extends React.Component {
   render() {
     return React.createElement(
       Context.Provider,
-      { value: { $Utils: this.props.$Utils } },
+      { value: this._getContextValue(this.props.$Utils) },
       React.createElement(this._view, this.state)
     );
   }
