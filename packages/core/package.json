@@ -49,9 +49,9 @@
   },
   "license": "MIT",
   "devDependencies": {
-    "@commitlint/cli": "^7.5.0",
-    "@commitlint/config-conventional": "^7.5.0",
     "@babel/core": "^7.2.2",
+    "@commitlint/cli": "^8.1.0",
+    "@commitlint/config-conventional": "^7.5.0",
     "@fortawesome/fontawesome-free": "^5.7.1",
     "autocannon": "^3.2.0",
     "babel-core": "^6.26.0",
@@ -87,11 +87,11 @@
     "react": "16.8.3",
     "react-dom": "16.8.3",
     "to-mock": "^1.4.1",
-    "verdaccio": "^3.11.0"
+    "verdaccio": "^4.2.2"
   },
   "dependencies": {
     "classnames": "^2.2.6",
-    "ima-helpers": "^0.16.0",
+    "ima-helpers": "^0.16.1",
     "node-fetch": "^2.1.2"
   },
   "peerDependencies": {
