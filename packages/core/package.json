@@ -8,6 +8,7 @@
     "lint": "node_modules/.bin/eslint -c ./.eslintrc.js --fix './**/*.{js,jsx}' --ignore-path ./.prettierignore",
     "test": "node_modules/.bin/jest --no-watchman",
     "test:es": "node_modules/.bin/es-check es5 './polyfill/*.js'",
+    "test:size": "node_modules/.bin/size-limit",
     "benchmark": "utils/benchmark/benchmark.sh",
     "preversion": "npm test && npm run lint && npm run doc && npm run test:es",
     "postversion": "npm run changelog && npm run clean && npm run build && npm run doc && git add docs/. && git commit -am $npm_package_version && git tag $npm_package_version && git push && git push --tags && npm publish dist && npm run clean",
@@ -25,20 +26,16 @@
     "Javascript"
   ],
   "author": "Miroslav Jancarik <miroslav.jancarik@firma.seznam.cz>",
-  "contributors": [
-    {
-      "name": "Martin Urban",
-      "email": "martin.urban@firma.seznam.cz"
-    },
-    {
-      "name": "Martin Jurča",
-      "email": "martin.jurca@firma.seznam.cz"
-    },
-    {
-      "name": "Ondřej Baše",
-      "email": "ondrej.base@firma.seznam.cz"
-    }
-  ],
+  "contributors": [{
+    "name": "Martin Urban",
+    "email": "martin.urban@firma.seznam.cz"
+  }, {
+    "name": "Martin Jurča",
+    "email": "martin.jurca@firma.seznam.cz"
+  }, {
+    "name": "Ondřej Baše",
+    "email": "ondrej.base@firma.seznam.cz"
+  }],
   "repository": {
     "type": "git",
     "url": "https://github.com/seznam/IMA.js-core.git"
@@ -56,6 +53,7 @@
     "@commitlint/cli": "^8.0.0",
     "@commitlint/config-conventional": "^8.0.0",
     "@fortawesome/fontawesome-free": "^5.10.2",
+    "@size-limit/preset-big-lib": "^2.1.5",
     "autocannon": "^4.1.1",
     "babel-eslint": "^10.0.3",
     "bulma": "^0.7.5",
@@ -143,5 +141,12 @@
       "<rootDir>/"
     ],
     "testRegex": "(/__tests__/.*|(\\.|/)(Spec))\\.jsx?$"
-  }
+  },
+  "size-limit": [{
+    "limit": "1 s",
+    "path": "dist/ima.client.cjs.js"
+  }, {
+    "limit": "1 s",
+    "path": "dist/ima.client.esm.js"
+  }]
 }
