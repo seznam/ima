@@ -1,9 +1,11 @@
-module.exports = function(fileInfo, api) {
+import { getOptions } from './transformUtils/testUtils';
+
+module.exports = function(fileInfo, api, options) {
   const jscodeshift = api.jscodeshift;
-  const root = jscodeshift(fileInfo.source);
+  const ast = jscodeshift(fileInfo.source);
   const regexIma = /ima\//;
 
-  const importDeclarations = root
+  const importDeclarations = ast
     .find(jscodeshift.ImportDeclaration)
     .filter(node => {
       return regexIma.test(node.value.source.value);
@@ -34,8 +36,8 @@ module.exports = function(fileInfo, api) {
 
     importDeclarations.remove();
 
-    root.get().node.program.body.unshift(newImport);
+    ast.get().node.program.body.unshift(newImport);
   }
 
-  return root.toSource({ quote: 'single' });
+  return ast.toSource(Object.assign({}, getOptions(), options));
 };
