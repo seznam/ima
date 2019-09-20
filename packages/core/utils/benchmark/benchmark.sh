@@ -12,6 +12,9 @@ ROOT_DIR=`pwd`
 PACKAGE_VERSION=`cat package.json | grep \"version\" | cut -d':' -f2 | cut -d'"' -f2`-next
 PACKAGE_NAME=`cat package.json | grep \"name\" | head -1 | cut -d':' -f2 | cut -d'"' -f2`
 
+# Cleanup before the test run
+rm -rf dist
+
 # Setup local registry
 node_modules/.bin/verdaccio -l "$NPM_LOCAL_REGISTRY_URL_NO_PROTOCOL" -c utils/benchmark/verdaccio_config.yml >/dev/null &
 NPM_LOCAL_REGISTRY_PID=$!
