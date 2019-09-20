@@ -34,8 +34,11 @@ cd ima-skeleton
 if [ "$TRAVIS_BRANCH" == "next" ] ; then
     git checkout next
 fi
+
 sed -i "s#\"$PACKAGE_NAME\":\s\".*\"#\"$PACKAGE_NAME\": \"$PACKAGE_VERSION\"#" package.json
-npm install --registry="$NPM_LOCAL_REGISTRY_URL"
+npm config set @ima/core:registry=$NPM_LOCAL_REGISTRY_URL
+npm install
+npm config delete @ima/core:registry
 npm run app:feed
 npm run build
 mv build/ima/config/environment.js build/ima/config/environment.orig.js
