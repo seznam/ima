@@ -31,6 +31,9 @@ npm publish
 # Setup IMA.js-skeleton
 git clone "$SKELETON_URL" ima-skeleton
 cd ima-skeleton
+if [ "$TRAVIS_BRANCH" == "next" ] ; then
+    git checkout next
+fi
 sed -i "s#\"$PACKAGE_NAME\":\s\".*\"#\"$PACKAGE_NAME\": \"$PACKAGE_VERSION\"#" package.json
 npm install --registry="$NPM_LOCAL_REGISTRY_URL"
 npm run app:feed
