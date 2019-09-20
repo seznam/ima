@@ -1,6 +1,6 @@
-import { defineInlineTest } from 'jscodeshift/src/testUtils';
-import { getOptions } from '../transformUtils/testUtils';
-import transform from '../context-api-v17';
+const { defineInlineTest } = require('jscodeshift/src/testUtils');
+const { getOptions } = require('../transformUtils/testUtils');
+const transform = require('../context-api-v17');
 
 describe('ima.utils.transform.context-api-v17', () => {
   defineInlineTest(

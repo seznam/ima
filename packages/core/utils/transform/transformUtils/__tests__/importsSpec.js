@@ -1,6 +1,6 @@
-import j from 'jscodeshift';
-import { source } from '../testUtils';
-import { addNamedImports, findImport } from '../imports';
+const j = require('jscodeshift');
+const { source } = require('../testUtils');
+const { addNamedImports, findImport } = require('../imports');
 
 describe('ima.utils.transform.transformUtils.imports', () => {
   let ast = null;

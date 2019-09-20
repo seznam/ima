@@ -6,7 +6,7 @@
  * @param {string} pkg Package name.
  * @returns {Collection}
  */
-export function findImport(j, ast, pkg) {
+function findImport(j, ast, pkg) {
   return ast.find(j.ImportDeclaration, {
     source: {
       value: pkg
@@ -28,7 +28,7 @@ export function findImport(j, ast, pkg) {
  * @param {[string]} names Named import names.
  * @param {string} pkg Package name.
  */
-export function addNamedImports(j, ast, names, pkg) {
+function addNamedImports(j, ast, names, pkg) {
   // Add to existing import declaration if it exists
   const existingImport = findImport(j, ast, pkg);
   if (existingImport.size()) {
@@ -62,3 +62,8 @@ export function addNamedImports(j, ast, names, pkg) {
       );
   }
 }
+
+module.exports = {
+  findImport,
+  addNamedImports
+};

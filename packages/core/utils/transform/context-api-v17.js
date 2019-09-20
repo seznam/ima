@@ -1,5 +1,5 @@
-import { addNamedImports } from './transformUtils/imports';
-import { getOptions } from './transformUtils/testUtils';
+const { addNamedImports } = require('./transformUtils/imports');
+const { getOptions } = require('./transformUtils/testUtils');
 
 module.exports = function(fileInfo, api, options) {
   const { jscodeshift: j } = api;
