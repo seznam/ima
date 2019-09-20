@@ -7,18 +7,17 @@ export default class PageRendererFactory {
   /**
    * Initializes the factory used by the page renderer.
    *
-   * @param {ObjectContainer} oc The application's dependency injector - the
-   *        object container.
+   * @param {ComponentUtils} componentUtils The registry of component utilities.
    * @param {React} React The React framework instance to use to render the
    *        page.
    */
-  constructor(oc, React) {
+  constructor(componentUtils, React) {
     /**
-     * The application's dependency injector - the object container.
+     * The registry of component utilities.
      *
-     * @type {ObjectContainer}
+     * @type {ComponentUtils}
      */
-    this._oc = oc;
+    this._componentUtils = componentUtils;
 
     /**
      * Rect framework instance, used to render the page.
@@ -33,7 +32,7 @@ export default class PageRendererFactory {
    * Return object of services which are defined for alias $Utils.
    */
   getUtils() {
-    return this._oc.get('$Utils');
+    return this._componentUtils.getUtils();
   }
 
   /**

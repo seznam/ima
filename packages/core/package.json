@@ -26,16 +26,20 @@
     "Javascript"
   ],
   "author": "Miroslav Jancarik <miroslav.jancarik@firma.seznam.cz>",
-  "contributors": [{
-    "name": "Martin Urban",
-    "email": "martin.urban@firma.seznam.cz"
-  }, {
-    "name": "Martin Jurča",
-    "email": "martin.jurca@firma.seznam.cz"
-  }, {
-    "name": "Ondřej Baše",
-    "email": "ondrej.base@firma.seznam.cz"
-  }],
+  "contributors": [
+    {
+      "name": "Martin Urban",
+      "email": "martin.urban@firma.seznam.cz"
+    },
+    {
+      "name": "Martin Jurča",
+      "email": "martin.jurca@firma.seznam.cz"
+    },
+    {
+      "name": "Ondřej Baše",
+      "email": "ondrej.base@firma.seznam.cz"
+    }
+  ],
   "repository": {
     "type": "git",
     "url": "https://github.com/seznam/IMA.js-core.git"
@@ -50,7 +54,7 @@
   "devDependencies": {
     "@babel/core": "^7.6.0",
     "@babel/plugin-transform-modules-commonjs": "^7.6.0",
-    "@commitlint/cli": "^8.0.0",
+    "@commitlint/cli": "^8.1.0",
     "@commitlint/config-conventional": "^8.0.0",
     "@fortawesome/fontawesome-free": "^5.10.2",
     "@size-limit/preset-big-lib": "^2.1.5",
@@ -142,11 +146,14 @@
     ],
     "testRegex": "(/__tests__/.*|(\\.|/)(Spec))\\.jsx?$"
   },
-  "size-limit": [{
-    "limit": "1 s",
-    "path": "dist/ima.client.cjs.js"
-  }, {
-    "limit": "1 s",
-    "path": "dist/ima.client.esm.js"
-  }]
+  "size-limit": [
+    {
+      "limit": "1 s",
+      "path": "dist/ima.client.cjs.js"
+    },
+    {
+      "limit": "1 s",
+      "path": "dist/ima.client.esm.js"
+    }
+  ]
 }
