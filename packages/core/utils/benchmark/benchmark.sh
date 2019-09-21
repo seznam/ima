@@ -12,6 +12,9 @@ ROOT_DIR=`pwd`
 PACKAGE_VERSION=`cat package.json | grep \"version\" | cut -d':' -f2 | cut -d'"' -f2`-next
 PACKAGE_NAME=`cat package.json | grep \"name\" | head -1 | cut -d':' -f2 | cut -d'"' -f2`
 
+# Cleanup before the test run
+rm -rf dist
+
 # Setup local registry
 node_modules/.bin/verdaccio -l "$NPM_LOCAL_REGISTRY_URL_NO_PROTOCOL" -c utils/benchmark/verdaccio_config.yml >/dev/null &
 NPM_LOCAL_REGISTRY_PID=$!
@@ -28,8 +31,14 @@ npm publish
 # Setup IMA.js-skeleton
 git clone "$SKELETON_URL" ima-skeleton
 cd ima-skeleton
-sed -i "s/\"$PACKAGE_NAME\":\s\".*\"/\"$PACKAGE_NAME\": \"$PACKAGE_VERSION\"/" package.json
-npm install --registry="$NPM_LOCAL_REGISTRY_URL"
+if [ "$TRAVIS_BRANCH" == "next" ] ; then
+    git checkout next
+fi
+
+sed -i "s#\"$PACKAGE_NAME\":\s\".*\"#\"$PACKAGE_NAME\": \"$PACKAGE_VERSION\"#" package.json
+npm config set @ima/core:registry=$NPM_LOCAL_REGISTRY_URL
+npm install
+npm config delete @ima/core:registry
 npm run app:feed
 npm run build
 mv build/ima/config/environment.js build/ima/config/environment.orig.js

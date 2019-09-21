@@ -3,7 +3,7 @@ import MessageFormatDictionary from 'dictionary/MessageFormatDictionary';
 describe('ima.dictionary.MessageFormatDictionary', () => {
   let dictionary = null;
   const config = {
-    language: 'cs',
+    $Language: 'cs',
     dictionary: {
       home: {
         title: () => 'title',
@@ -23,7 +23,7 @@ describe('ima.dictionary.MessageFormatDictionary', () => {
   });
 
   it('should be return current language', () => {
-    expect(dictionary.getLanguage()).toEqual(config.language);
+    expect(dictionary.getLanguage()).toEqual(config.$Language);
   });
 
   describe('get method', () => {

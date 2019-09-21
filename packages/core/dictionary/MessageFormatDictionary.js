@@ -48,7 +48,7 @@ export default class MessageFormatDictionary extends Dictionary {
    * phrases.
    *
    * @param {Object.<string, *>} config The dictionary configuration.
-   * @param {string} config.language The language property is an ISO 639-1
+   * @param {string} config.$Language The language property is an ISO 639-1
    *        language code specifying the language of the provided phrases.
    * @param {Object<string, Object<string, function(Object<string, (number|string)>): string>>}
    *        config.dictionary
@@ -62,7 +62,7 @@ export default class MessageFormatDictionary extends Dictionary {
    * @inheritdoc
    */
   init(config) {
-    this._language = config.language;
+    this._language = config.$Language;
     this._dictionary = config.dictionary;
   }
 

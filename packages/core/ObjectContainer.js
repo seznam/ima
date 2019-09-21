@@ -97,6 +97,16 @@ export default class ObjectContainer {
      * @type {?string}
      */
     this._bindingState = null;
+
+    /**
+     * The current plugin binding to OC.
+     *
+     * The {@linkcode setBindingState()} method may be called for changing
+     * object container binding state only by the bootstrap script.
+     *
+     * @type {?string}
+     */
+    this._bindingPlugin = null;
   }
 
   /**
@@ -418,6 +428,7 @@ export default class ObjectContainer {
   clear() {
     this._entries.clear();
     this._bindingState = null;
+    this._bindingPlugin = null;
 
     return this;
   }
@@ -425,8 +436,9 @@ export default class ObjectContainer {
   /**
    *
    * @param {?string} bindingState
+   * @param {?string} bindingPluginName
    */
-  setBindingState(bindingState) {
+  setBindingState(bindingState, bindingPluginName = null) {
     if (this._bindingState === ObjectContainer.APP_BINDING_STATE) {
       throw new Error(
         `ima.ObjectContainer:setBindingState The setBindingState() ` +
@@ -436,6 +448,10 @@ export default class ObjectContainer {
     }
 
     this._bindingState = bindingState;
+    this._bindingPlugin =
+      bindingState === ObjectContainer.PLUGIN_BINDING_STATE
+        ? bindingPluginName
+        : null;
   }
 
   /**
@@ -521,7 +537,13 @@ export default class ObjectContainer {
       dependencies = classConstructor.$dependencies;
     }
 
-    return new Entry(classConstructor, dependencies, options);
+    let referrer = this._bindingState;
+
+    if (this._bindingState === ObjectContainer.PLUGIN_BINDING_STATE) {
+      referrer = this._bindingPlugin;
+    }
+
+    return new Entry(classConstructor, dependencies, referrer, options);
   }
 
   /**
@@ -699,9 +721,11 @@ class Entry {
    *        class constructor or constant value getter.
    * @param {*[]} [dependencies=[]] The dependencies to pass into the
    *        constructor function.
+   * @param {?string} referrer Reference to part of application that created
+   *        this entry.
    * @param {?{ writeable: boolean }} [options] The Entry options.
    */
-  constructor(classConstructor, dependencies, options) {
+  constructor(classConstructor, dependencies, referrer, options) {
     /**
      * The constructor of the class represented by this entry, or the
      * getter of the value of the constant represented by this entry.
@@ -725,6 +749,14 @@ class Entry {
     this._options = options || {
       writeable: true
     };
+
+    /**
+     * Reference to part of application that created
+     * this entry.
+     *
+     * @type {string}
+     */
+    this._referrer = referrer;
 
     /**
      * Dependencies of the class constructor of the class represented by
@@ -754,9 +786,7 @@ class Entry {
       if (this._overrideCounter >= 1) {
         throw new Error(
           `The dependencies entry can't be overrided more than once.` +
-            `Fix your bind.js file for classConstructor ${
-              this.classConstructor.name
-            }.`
+            `Fix your bind.js file for classConstructor ${this.classConstructor.name}.`
         );
       }
     }
@@ -767,6 +797,10 @@ class Entry {
 
   get dependencies() {
     return this._dependencies;
+  }
+
+  get referrer() {
+    return this._referrer;
   }
 
   get writeable() {

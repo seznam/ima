@@ -2,9 +2,11 @@ import json from 'rollup-plugin-json';
 import replace from 'rollup-plugin-replace';
 import jscc from 'rollup-plugin-jscc';
 
+const { vendors } = require('./build');
+
 function generateConfig(environemnt) {
   return {
-    external: ['ima-helpers', 'classnames', 'prop-types', 'react', 'react-dom'],
+    external: vendors.common,
     input: 'main.js',
     treeshake: {
       pureExternalModules: true

@@ -72,12 +72,14 @@ export default class Bootstrap {
   _initSettings() {
     let currentApplicationSettings = {};
 
-    let plugins = this._config.plugins.concat([this._config]);
+    let plugins = this._config.plugins.concat([
+      { name: ObjectContainer.APP_BINDING_STATE, module: this._config }
+    ]);
 
     plugins
-      .filter(plugin => typeof plugin.initSettings === 'function')
+      .filter(plugin => typeof plugin.module.initSettings === 'function')
       .forEach(plugin => {
-        let allPluginSettings = plugin.initSettings(
+        let allPluginSettings = plugin.module.initSettings(
           ns,
           this._oc,
           this._config.settings
@@ -87,7 +89,7 @@ export default class Bootstrap {
           this._config.settings.$Env
         );
 
-        $Helper.assignRecursively(
+        $Helper.assignRecursivelyWithTracking(plugin.name)(
           currentApplicationSettings,
           environmentPluginSetting
         );
@@ -125,17 +127,30 @@ export default class Bootstrap {
    */
   _bindDependencies() {
     this._oc.setBindingState(ObjectContainer.IMA_BINDING_STATE);
-    this._config.initBindIma(ns, this._oc, this._config.bind);
+    this._config.initBindIma(
+      ns,
+      this._oc,
+      this._config.bind,
+      ObjectContainer.IMA_BINDING_STATE
+    );
 
-    this._oc.setBindingState(ObjectContainer.PLUGIN_BINDING_STATE);
     this._config.plugins
-      .filter(plugin => typeof plugin.initBind === 'function')
+      .filter(plugin => typeof plugin.module.initBind === 'function')
       .forEach(plugin => {
-        plugin.initBind(ns, this._oc, this._config.bind);
+        this._oc.setBindingState(
+          ObjectContainer.PLUGIN_BINDING_STATE,
+          plugin.name
+        );
+        plugin.module.initBind(ns, this._oc, this._config.bind, plugin.name);
       });
 
     this._oc.setBindingState(ObjectContainer.APP_BINDING_STATE);
-    this._config.initBindApp(ns, this._oc, this._config.bind);
+    this._config.initBindApp(
+      ns,
+      this._oc,
+      this._config.bind,
+      ObjectContainer.APP_BINDING_STATE
+    );
   }
 
   /**
@@ -153,9 +168,9 @@ export default class Bootstrap {
     this._config.initServicesIma(ns, this._oc, this._config.services);
 
     this._config.plugins
-      .filter(plugin => typeof plugin.initServices === 'function')
+      .filter(plugin => typeof plugin.module.initServices === 'function')
       .forEach(plugin => {
-        plugin.initServices(ns, this._oc, this._config.services);
+        plugin.module.initServices(ns, this._oc, this._config.services);
       });
 
     this._config.initServicesApp(ns, this._oc, this._config.services);

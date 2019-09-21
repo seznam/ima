@@ -25,6 +25,7 @@ import ClientPageManager from '../page/manager/ClientPageManager';
 import PageManager from '../page/manager/PageManager';
 import ServerPageManager from '../page/manager/ServerPageManager';
 import ClientPageRenderer from '../page/renderer/ClientPageRenderer';
+import ComponentUtils from '../page/renderer/ComponentUtils';
 import PageRenderer from '../page/renderer/PageRenderer';
 import PageRendererFactory from '../page/renderer/PageRendererFactory';
 import ServerPageRenderer from '../page/renderer/ServerPageRenderer';
@@ -50,7 +51,6 @@ import Window from '../window/Window';
 
 export default (ns, oc, config) => {
   //**************START VENDORS**************
-
   oc.constant('$Helper', vendorLinker.get('ima-helpers', true));
 
   //React
@@ -144,9 +144,14 @@ export default (ns, oc, config) => {
   //Page
   oc.provide(PageStateManager, PageStateManagerImpl);
   oc.bind('$PageStateManager', PageStateManager);
+
   oc.inject(PageFactory, [oc]);
   oc.bind('$PageFactory', PageFactory);
-  oc.inject(PageRendererFactory, [oc, '$React']);
+
+  oc.inject(ComponentUtils, [oc]);
+  oc.bind('$ComponentUtils', ComponentUtils);
+
+  oc.inject(PageRendererFactory, [ComponentUtils, '$React']);
   oc.bind('$PageRendererFactory', PageRendererFactory);
 
   if (oc.get(Window).isClient()) {

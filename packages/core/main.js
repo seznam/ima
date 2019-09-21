@@ -57,8 +57,6 @@ import AbstractComponent from './page/AbstractComponent';
 import AbstractDocumentView from './page/AbstractDocumentView';
 import AbstractPureComponent from './page/AbstractPureComponent';
 import {
-  getContextTypes,
-  setContextTypes,
   getUtils,
   localize,
   link,
@@ -68,7 +66,7 @@ import {
   listen,
   unlisten
 } from './page/componentHelpers';
-import context from './page/context';
+import PageContext from './page/Context';
 import PageFactory from './page/PageFactory';
 import AbstractRouter from './router/AbstractRouter';
 import ActionTypes from './router/ActionTypes';
@@ -147,7 +145,7 @@ function getClientBootConfig(initialAppConfigFunctions) {
       request: null,
       $IMA: $IMA,
       dictionary: {
-        $Language: $IMA.$Language,
+        language: $IMA.$Language,
         dictionary: $IMA.i18n
       },
       router: {
@@ -336,7 +334,7 @@ export {
   AbstractComponent,
   AbstractDocumentView,
   AbstractPureComponent,
-  context,
+  PageContext,
   PageFactory,
   AbstractRouter,
   ActionTypes,
@@ -358,8 +356,6 @@ export {
   Window,
   ServerWindow,
   ClientWindow,
-  getContextTypes,
-  setContextTypes,
   getUtils,
   localize,
   link,

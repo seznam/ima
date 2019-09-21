@@ -1,5 +1,6 @@
 import React from 'react';
 import * as helpers from './componentHelpers';
+import Context from './Context';
 
 /**
  * The base class for all view components.
@@ -7,14 +8,9 @@ import * as helpers from './componentHelpers';
  * @abstract
  */
 export default class AbstractComponent extends React.Component {
-  static get contextTypes() {
-    return helpers.getContextTypes(this);
+  static get contextType() {
+    return Context;
   }
-
-  static set contextTypes(contextTypes) {
-    helpers.setContextTypes(this, contextTypes);
-  }
-
   /**
    * Initializes the component.
    *

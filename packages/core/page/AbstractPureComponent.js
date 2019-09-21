@@ -1,5 +1,6 @@
 import React from 'react';
 import * as helpers from './componentHelpers';
+import Context from './Context';
 
 /**
  * The base class for all pure (state-less) view components.
@@ -16,14 +17,9 @@ import * as helpers from './componentHelpers';
  * @see https://facebook.github.io/react/docs/react-api.html#react.purecomponent
  */
 export default class AbstractPureComponent extends React.PureComponent {
-  static get contextTypes() {
-    return helpers.getContextTypes(this);
+  static get contextType() {
+    return Context;
   }
-
-  static set contextTypes(contextTypes) {
-    helpers.setContextTypes(this, contextTypes);
-  }
-
   /**
    * Initializes the component.
    *
