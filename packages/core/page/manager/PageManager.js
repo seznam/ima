@@ -56,6 +56,8 @@ export default class PageManager {
   /**
    * Finalization callback, called when the page manager is being discarded.
    * This usually happens when the page is hot-reloaded at the client side.
+   *
+   * @return {Promise<undefined>}
    */
   destroy() {}
 }

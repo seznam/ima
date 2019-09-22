@@ -19,6 +19,8 @@ export default class Extension {
   /**
    * Callback for initializing the controller extension after the route
    * parameters have been set on this extension.
+   *
+   * @return {(Promise<undefined>|undefined)}
    */
   init() {}
 
@@ -34,6 +36,8 @@ export default class Extension {
    * {@link Extension#init} method. The extension must release any resources
    * that might not be released automatically when the extensions's instance
    * is destroyed by the garbage collector.
+   *
+   * @return {(Promise<undefined>|undefined)}
    */
   destroy() {}
 
@@ -46,6 +50,8 @@ export default class Extension {
    * The extension may register any React and DOM event listeners in this
    * method. The extension may start receiving event bus event after this
    * method completes.
+   *
+   * @return {(Promise<undefined>|undefined)}
    */
   activate() {}
 
@@ -59,6 +65,8 @@ export default class Extension {
    *
    * The extension should deregister listeners registered and release all
    * resources obtained in the {@link Extension#activate} method.
+   *
+   * @return {(Promise<undefined>|undefined)}
    */
   deactivate() {}
 
@@ -83,9 +91,10 @@ export default class Extension {
    * the error page. The error page that will be used depends on the status
    * code of the error.
    *
-   * @return {Object<string, (Promise|*)>} A map object of promises
-   *         resolved when all resources the extension requires are ready.
-   *         The resolved values will be pushed to the controller's state.
+   * @return {(Promise<Object<string, (Promise|*)>>|Object<string, (Promise|*)>)}
+   *         A map object of promises resolved when all resources the controller
+   *         requires are ready. The resolved values will be pushed to the
+   *         controller's state.
    */
   load() {}
 
@@ -106,10 +115,11 @@ export default class Extension {
    * case this method is used.
    *
    * @param {Object<string, string>=} [prevParams={}] Previous route
-   *        parameters.
-   * @return {Object<string, (Promise|*)>} A map object of promises
-   *         resolved when all resources the extension requires are ready.
-   *         The resolved values will be pushed to the controller's state.
+   *         parameters.
+   * @return {(Promise<Object<string, (Promise|*)>>|Object<string, (Promise|*)>)}
+   *         A map object of promises resolved when all resources the controller
+   *         requires are ready. The resolved values will be pushed to the
+   *         controller's state.
    */
   update() {}
 
