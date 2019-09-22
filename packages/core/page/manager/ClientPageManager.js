@@ -88,19 +88,18 @@ export default class ClientPageManager extends AbstractPageManager {
   /**
    * @inheritdoc
    */
-  manage(route, options, params = {}, action) {
-    return super.manage(route, options, params, action).then(response => {
-      this._activatePageSource();
+  async manage(route, options, params = {}, action) {
+    const response = await super.manage(route, options, params, action);
+    await this._activatePageSource();
 
-      return response;
-    });
+    return response;
   }
 
   /**
    * @inheritdoc
    */
-  destroy() {
-    super.destroy();
+  async destroy() {
+    await super.destroy();
 
     this._eventBus.unlistenAll(
       this._window.getWindow(),
