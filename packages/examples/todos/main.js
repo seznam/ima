@@ -8,9 +8,7 @@ let getInitialAppConfigFunctions = () => {
   return { initBindApp, initRoutes, initServicesApp, initSettings };
 };
 
-if ($IMA.Test) {
-  ima.reviveTestClientApp(getInitialAppConfigFunctions());
-} else {
+if (!$IMA.Test) {
   ima
     .onLoad()
     .then(() => {
