@@ -58,9 +58,13 @@
       return resolveModule(moduleName);
     },
     initAllModules: function() {
-      Object.keys(modules).forEach(function(moduleName) {
-        resolveModule(moduleName);
-      });
+      try {
+        Object.keys(modules).forEach(function(moduleName) {
+          resolveModule(moduleName);
+        });
+      } catch (e) {
+        return Promise.reject(e);
+      }
 
       return Promise.resolve();
     }
