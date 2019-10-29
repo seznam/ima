@@ -195,7 +195,20 @@ export default class ClientPageRenderer extends AbstractPageRenderer {
     let masterElementId = documentView.masterElementId;
     this._viewContainer = this._window.getElementById(masterElementId);
 
-    if (this._viewContainer && this._viewContainer.children.length) {
+    if (!this._viewContainer) {
+      const errorMsg =
+        'ClientPageRenderer: _renderToDOM: No this._viewContainer';
+
+      if ($Debug) {
+        console.warn(errorMsg);
+      }
+
+      this._dispatcher.fire(Events.ERROR, { message: errorMsg }, true);
+
+      return;
+    }
+
+    if (this._viewContainer.children.length) {
       this._reactiveView = this._ReactDOM.hydrate(
         reactElementView,
         this._viewContainer,

@@ -6,6 +6,8 @@ import AbstractDocumentView from '../page/AbstractDocumentView';
 import * as ima from '../main';
 import vendorLinker from '../vendorLinker';
 
+const MASTER_ELEMENT_ID = 'some-id';
+
 describe('Revive client application', () => {
   let router = null;
   let ReactDOM = {
@@ -34,7 +36,7 @@ describe('Revive client application', () => {
 
   class DocumentView extends AbstractDocumentView {
     static get masterElementId() {
-      return 'some-id';
+      return MASTER_ELEMENT_ID;
     }
   }
 
@@ -73,7 +75,7 @@ describe('Revive client application', () => {
 
   beforeAll(done => {
     let doc = Reflect.construct(jsdom.JSDOM, [
-      `<!DOCTYPE html><html><head></head><body></body></html>`
+      `<!DOCTYPE html><html><head></head><body><div id="${MASTER_ELEMENT_ID}"></div></body></html>`
     ]);
 
     propagateToGlobal(doc.window);

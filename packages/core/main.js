@@ -179,6 +179,10 @@ function reviveClientApp(initialAppConfigFunctions) {
   });
 }
 
+function isDocumentInteractive() {
+  return ['interactive', 'complete'].includes(document.readyState);
+}
+
 function onLoad() {
   vendorLinker.bindToNamespace(ns);
 
@@ -186,7 +190,21 @@ function onLoad() {
     return Promise.reject(null);
   }
 
-  return Promise.resolve();
+  if (isDocumentInteractive()) {
+    return Promise.resolve();
+  }
+
+  return new Promise(resolve => {
+    document.addEventListener(
+      'readystatechange',
+      () => {
+        if (isDocumentInteractive()) {
+          return resolve();
+        }
+      },
+      { once: true }
+    );
+  });
 }
 
 export {
