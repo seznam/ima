@@ -196,14 +196,16 @@ export default class ClientPageRenderer extends AbstractPageRenderer {
     this._viewContainer = this._window.getElementById(masterElementId);
 
     if (!this._viewContainer) {
-      const errorMsg =
-        'ClientPageRenderer: _renderToDOM: No this._viewContainer';
+      const errorMessage =
+        `ima.page.renderer.ClientPageRenderer:_renderToDOM: ` +
+        `Element with ID "${masterElementId}" was not found in the DOM. ` +
+        `Maybe the DOM is not in the interactive mode yet.`;
 
       if ($Debug) {
-        console.warn(errorMsg);
+        console.warn(errorMessage);
       }
 
-      this._dispatcher.fire(Events.ERROR, { message: errorMsg }, true);
+      this._dispatcher.fire(Events.ERROR, { message: errorMessage }, true);
 
       return;
     }
