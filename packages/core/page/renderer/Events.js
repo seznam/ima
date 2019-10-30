@@ -32,7 +32,17 @@ const Events = Object.freeze({
    * @const
    * @type {string}
    */
-  UNMOUNTED: '$IMA.$PageRenderer.unmounted'
+  UNMOUNTED: '$IMA.$PageRenderer.unmounted',
+
+  /**
+   * PageRenderer fire event {@code $IMA.$PageRenderer.error} when there is
+   * no _viewContainer in _renderToDOM method. Event's data contain
+   * {@code {message: string}}.
+   *
+   * @const
+   * @type {string}
+   */
+  ERROR: '$IMA.$PageRenderer.error'
 });
 
 export default Events;

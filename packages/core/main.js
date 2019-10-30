@@ -186,7 +186,15 @@ function onLoad() {
     return Promise.reject(null);
   }
 
-  return Promise.resolve();
+  if (document.readyState !== 'loading') {
+    return Promise.resolve();
+  }
+
+  return new Promise(resolve => {
+    document.addEventListener('DOMContentLoaded', () => resolve(), {
+      once: true
+    });
+  });
 }
 
 export {
