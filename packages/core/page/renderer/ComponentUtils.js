@@ -63,7 +63,7 @@ export default class ComponentUtils {
       referrer = componentUtilityClass;
 
       for (const alias of Object.keys(utilityClasses)) {
-        if (!utilityClasses.hasOwnProperty(alias)) {
+        if (!Object.prototype.hasOwnProperty.call(utilityClasses, alias)) {
           continue;
         }
 

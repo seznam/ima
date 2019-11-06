@@ -10,6 +10,8 @@ export default class Controller {
   /**
    * Callback for initializing the controller after the route parameters have
    * been set on this controller.
+   *
+   * @return {(Promise<undefined>|undefined)}
    */
   init() {}
 
@@ -25,6 +27,8 @@ export default class Controller {
    * {@link Controller#init} method. The controller must release any resources
    * that might not be released automatically when the controller's instance
    * is destroyed by the garbage collector.
+   *
+   * @return {(Promise<undefined>|undefined)}
    */
   destroy() {}
 
@@ -37,6 +41,8 @@ export default class Controller {
    * The controller may register any React and DOM event listeners in this
    * method. The controller may start receiving event bus event after this
    * method completes.
+   *
+   * @return {(Promise<undefined>|undefined)}
    */
   activate() {}
 
@@ -50,6 +56,8 @@ export default class Controller {
    *
    * The controller should deregister listeners registered and release all
    * resources obtained in the {@link Controller#activate} method.
+   *
+   * @return {(Promise<undefined>|undefined)}
    */
   deactivate() {}
 
@@ -84,9 +92,10 @@ export default class Controller {
    * the error page. The error page that will be used depends on the status
    * code of the error.
    *
-   * @return {Object<string, (Promise|*)>} A map object of promises
-   *         resolved when all resources the controller requires are ready.
-   *         The resolved values will be pushed to the controller's state.
+   * @return {(Promise<Object<string, (Promise|*)>>|Object<string, (Promise|*)>)}
+   *         A map object of promises resolved when all resources the controller
+   *         requires are ready. The resolved values will be pushed to the
+   *         controller's state.
    */
   load() {}
 
@@ -107,10 +116,11 @@ export default class Controller {
    * in case this method is used.
    *
    * @param {Object<string, string>=} [prevParams={}] Previous route
-   *        parameters.
-   * @return {Object<string, (Promise|*)>} A map object of promises
-   *         resolved when all resources the controller requires are ready.
-   *         The resolved values will be pushed to the controller's state.
+   *         parameters.
+   * @return {(Promise<Object<string, (Promise|*)>>|Object<string, (Promise|*)>)}
+   *         A map object of promises resolved when all resources the controller
+   *         requires are ready. The resolved values will be pushed to the
+   *         controller's state.
    */
   update() {}
 

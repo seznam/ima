@@ -1,4 +1,3 @@
-import PropTypes from 'prop-types';
 import React from 'react';
 
 /**
@@ -8,12 +7,6 @@ import React from 'react';
  * This is the default managed root view.
  */
 export default class BlankManagedRootView extends React.Component {
-  static get propTypes() {
-    return {
-      $pageView: PropTypes.func
-    };
-  }
-
   static get defaultProps() {
     return {
       $pageView: null

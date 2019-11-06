@@ -4,6 +4,7 @@
  * Wrapper for the ExpressJS request, exposing only the necessary minimum.
  */
 export default class Request {
+  //#if _SERVER
   static get $dependencies() {
     return [];
   }
@@ -105,4 +106,5 @@ export default class Request {
   getIPs() {
     return this._request ? this._request.ips || [] : [];
   }
+  //#endif
 }

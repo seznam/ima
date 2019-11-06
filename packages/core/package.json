@@ -1,17 +1,20 @@
 {
-  "name": "ima",
+  "name": "@ima/core",
   "version": "0.16.11",
   "description": "IMA.js framework for isomorphic javascript application",
-  "main": "main.js",
+  "main": "ima.server.cjs.js",
+  "module": "ima.server.esm.js",
   "scripts": {
     "lint": "node_modules/.bin/eslint -c ./.eslintrc.js --fix './**/*.{js,jsx}' --ignore-path ./.prettierignore",
     "test": "node_modules/.bin/jest --no-watchman",
+    "test:es": "node_modules/.bin/es-check es5 './polyfill/*.js'",
+    "test:size": "node_modules/.bin/size-limit",
     "benchmark": "utils/benchmark/benchmark.sh",
-    "preversion": "npm test && npm run lint && npm run doc",
-    "postversion": "npm run build && npm run doc && git add docs/. && git commit -am $npm_package_version && git tag $npm_package_version && git push && git push --tags && npm publish dist",
-    "build": "node_modules/.bin/gulp build",
+    "preversion": "npm test && npm run lint && npm run doc && npm run test:es",
+    "postversion": "npm run changelog && npm run clean && npm run build && npm run doc && git add docs/. && git commit -am $npm_package_version && git tag $npm_package_version && git push && git push --tags && npm publish dist && npm run clean",
+    "clean": "node_modules/.bin/gulp clean",
+    "build": "node_modules/.bin/gulp build && node_modules/.bin/rollup --config",
     "doc": "node_modules/.bin/gulp doc",
-    "security": "npm audit",
     "commit": "node_modules/.bin/git-cz",
     "precommit": "node_modules/.bin/lint-staged",
     "changelog": "node_modules/.bin/conventional-changelog -p angular -i CHANGELOG.md -s -r 1"
@@ -49,53 +52,55 @@
   },
   "license": "MIT",
   "devDependencies": {
-    "@babel/core": "^7.2.2",
+    "@babel/core": "^7.6.0",
+    "@babel/plugin-transform-modules-commonjs": "^7.6.0",
     "@commitlint/cli": "^8.1.0",
-    "@commitlint/config-conventional": "^7.5.0",
-    "@fortawesome/fontawesome-free": "^5.7.1",
-    "autocannon": "^3.2.0",
-    "babel-core": "^6.26.0",
-    "babel-eslint": "^10.0.1",
-    "babel-plugin-transform-es2015-modules-commonjs": "^6.26.0",
-    "bulma": "^0.7.1",
-    "commitizen": "^3.0.0",
-    "cz-conventional-changelog": "^2.1.0",
-    "del": "^3.0.0",
+    "@commitlint/config-conventional": "^8.0.0",
+    "@fortawesome/fontawesome-free": "^5.10.2",
+    "@size-limit/preset-big-lib": "^2.1.5",
+    "autocannon": "^4.1.1",
+    "babel-eslint": "^10.0.3",
+    "bulma": "^0.7.5",
+    "commitizen": "^4.0.3",
+    "cz-conventional-changelog": "^3.0.2",
+    "del": "^4.1.0",
     "enzyme": "^3.8.0",
-    "eslint": "^5.15.1",
+    "es-check": "^5.0.0",
+    "eslint": "^6.4.0",
     "eslint-config-last": "^0.0.5",
-    "eslint-config-prettier": "^4.0.0",
+    "eslint-config-prettier": "^6.3.0",
     "eslint-plugin-jasmine": "^2.9.3",
-    "eslint-plugin-jest": "^22.2.2",
-    "eslint-plugin-prettier": "^3.0.1",
-    "eslint-plugin-react": "^7.12.4",
-    "fs-extra": "^7.0.0",
-    "gulp": "^4.0.0",
-    "gulp-babel": "^8.0.0",
+    "eslint-plugin-jest": "^22.17.0",
+    "eslint-plugin-prettier": "^3.1.0",
+    "eslint-plugin-react": "^7.13.0",
+    "fs-extra": "^8.0.1",
+    "gulp": "^4.0.2",
     "gulp-change": "^1.0.0",
-    "gulp-plumber": "^1.2.0",
     "gulp-rename": "^1.3.0",
-    "gulp-tap": "^1.0.1",
-    "husky": "^1.3.1",
-    "jest": "^24.1.0",
-    "jsdoc-to-markdown": "^5.0.0",
-    "jsdom": "^13.2.0",
-    "lint-staged": "^8.1.5",
+    "husky": "^3.0.5",
+    "jest": "^24.9.0",
+    "jscodeshift": "^0.6.4",
+    "jsdoc-to-markdown": "^5.0.1",
+    "jsdom": "^15.1.1",
+    "lint-staged": "^9.2.5",
     "lunr": "^2.3.3",
-    "prettier": "^1.16.4",
-    "prop-types": "^15.6.2",
-    "react": "16.8.3",
-    "react-dom": "16.8.3",
-    "to-mock": "^1.4.1",
+    "prettier": "^1.17.1",
+    "react": "16.9.0",
+    "react-dom": "16.9.0",
+    "rollup": "^1.21.4",
+    "rollup-plugin-jscc": "^1.0.0",
+    "rollup-plugin-json": "^4.0.0",
+    "rollup-plugin-replace": "^2.1.1",
+    "to-mock": "^1.5.3",
     "verdaccio": "^4.2.2"
   },
   "dependencies": {
     "classnames": "^2.2.6",
     "ima-helpers": "^0.16.1",
-    "node-fetch": "^2.1.2"
+    "memoize-one": "^5.1.1",
+    "node-fetch": "^2.6.0"
   },
   "peerDependencies": {
-    "prop-types": "15.x",
     "react": "16.x",
     "react-dom": "16.x"
   },
@@ -107,14 +112,9 @@
     ]
   },
   "lint-staged": {
-    "linters": {
-      "**/*.{js,jsx}": [
-        "node_modules/.bin/eslint -c ./.eslintrc.js --fix --ignore-path ./.prettierignore",
-        "git add"
-      ]
-    },
-    "ignore": [
-      "/(dist|coverage|docs|doc|node_modules)/**/*"
+    "**/*.{js,jsx}": [
+      "eslint -c ./.eslintrc.js --fix --ignore-path ./.prettierignore",
+      "git add"
     ]
   },
   "config": {
@@ -130,7 +130,7 @@
   "husky": {
     "hooks": {
       "pre-commit": "npm run precommit",
-      "commit-msg": "commitlint -E HUSKY_GIT_PARAMS"
+      "commit-msg": "node_modules/.bin/commitlint -E HUSKY_GIT_PARAMS"
     }
   },
   "jest": {
@@ -146,5 +146,15 @@
       "<rootDir>/"
     ],
     "testRegex": "(/__tests__/.*|(\\.|/)(Spec))\\.jsx?$"
-  }
+  },
+  "size-limit": [
+    {
+      "limit": "1 s",
+      "path": "dist/ima.client.cjs.js"
+    },
+    {
+      "limit": "1 s",
+      "path": "dist/ima.client.esm.js"
+    }
+  ]
 }

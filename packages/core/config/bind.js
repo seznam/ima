@@ -3,15 +3,12 @@ import Cache from '../cache/Cache';
 import CacheFactory from '../cache/CacheFactory';
 import CacheImpl from '../cache/CacheImpl';
 import ControllerDecorator from '../controller/ControllerDecorator';
-import AbstractController from '../controller/AbstractController'; //eslint-disable-line no-unused-vars
-import DevTool from '../debug/DevTool';
 import Dictionary from '../dictionary/Dictionary';
 import MessageFormatDictionary from '../dictionary/MessageFormatDictionary';
 import EventBus from '../event/EventBus';
 import EventBusImpl from '../event/EventBusImpl';
 import Dispatcher from '../event/Dispatcher';
 import DispatcherImpl from '../event/DispatcherImpl';
-import AbstractExtension from '../extension/AbstractExtension'; //eslint-disable-line no-unused-vars
 import GenericError from '../error/GenericError';
 import HttpAgent from '../http/HttpAgent';
 import HttpAgentImpl from '../http/HttpAgentImpl';
@@ -21,8 +18,6 @@ import UrlTransformer from '../http/UrlTransformer';
 import MetaManager from '../meta/MetaManager';
 import MetaManagerImpl from '../meta/MetaManagerImpl';
 import { defaultCssClasses as cssClassNameProcessor } from '../page/componentHelpers';
-import AbstractComponent from '../page/AbstractComponent'; //eslint-disable-line no-unused-vars
-import AbstractPureComponent from '../page/AbstractPureComponent'; //eslint-disable-line no-unused-vars
 import PageFactory from '../page/PageFactory';
 import PageHandlerRegistry from '../page/handler/PageHandlerRegistry';
 import PageNavigationHandler from '../page/handler/PageNavigationHandler';
@@ -56,7 +51,6 @@ import Window from '../window/Window';
 
 export default (ns, oc, config) => {
   //**************START VENDORS**************
-
   oc.constant('$Helper', vendorLinker.get('ima-helpers', true));
 
   //React
@@ -216,9 +210,6 @@ export default (ns, oc, config) => {
   ]);
   oc.bind('$Http', HttpAgent);
   oc.constant('$HttpStatusCode', HttpStatusCode);
-
-  //Dev tools
-  oc.bind('$DevTool', DevTool);
 
   //*************END IMA****************
 };

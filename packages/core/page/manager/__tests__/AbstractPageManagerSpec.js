@@ -9,6 +9,19 @@ import RouteFactory from 'router/RouteFactory';
 import { toMockedInstance } from 'to-mock';
 
 describe('ima.page.manager.AbstractPageManager', () => {
+  let controllerState = {
+    controller: 'controller',
+    share: 'controller'
+  };
+  let extensionsState = {
+    extension: 'extension',
+    share: 'extension'
+  };
+  let extensionState = {
+    extension: 'extension'
+  };
+  let pageState = Object.assign({}, extensionsState, controllerState);
+
   let pageFactory = {
     createController: Controller => new Controller(),
     decorateController: controller => controller,
@@ -42,18 +55,11 @@ describe('ima.page.manager.AbstractPageManager', () => {
   let controllerInstance = pageFactory.createController(Controller);
   let decoratedController = pageFactory.decorateController(controllerInstance);
   let viewInstance = pageFactory.createView(View);
-  let extensionInstance = new Extension();
-
-  let controllerState = {
-    controller: 'controller',
-    share: 'controller'
-  };
-  let extensionsState = {
-    extension: 'extension',
-    share: 'extension'
-  };
-  let extensionState = {};
-  let pageState = Object.assign({}, extensionsState, controllerState);
+  let extensionInstance = toMockedInstance(Extension, {
+    load() {
+      return extensionState;
+    }
+  });
 
   let pageManagerHandler = toMockedInstance(PageHandler);
 
@@ -174,40 +180,40 @@ describe('ima.page.manager.AbstractPageManager', () => {
   });
 
   describe('destroy method', () => {
-    it('should clear managed page value', () => {
+    it('should clear managed page value', async () => {
       spyOn(pageManager, '_clearManagedPageValue').and.stub();
 
-      pageManager.destroy();
+      await pageManager.destroy();
 
       expect(pageManager._clearManagedPageValue).toHaveBeenCalled();
     });
 
-    it('should remove listener for onChange event from page state manager', () => {
-      pageManager.destroy();
+    it('should remove listener for onChange event from page state manager', async () => {
+      await pageManager.destroy();
 
       expect(pageStateManager.onChange).toBeNull();
     });
 
-    it('should deactivate page source', () => {
+    it('should deactivate page source', async () => {
       spyOn(pageManager, '_deactivatePageSource').and.stub();
 
-      pageManager.destroy();
+      await pageManager.destroy();
 
       expect(pageManager._deactivatePageSource).toHaveBeenCalled();
     });
 
-    it('should destroy page source', () => {
+    it('should destroy page source', async () => {
       spyOn(pageManager, '_destroyPageSource').and.stub();
 
-      pageManager.destroy();
+      await pageManager.destroy();
 
       expect(pageManager._destroyPageSource).toHaveBeenCalled();
     });
 
-    it('should clear page state manager', () => {
+    it('should clear page state manager', async () => {
       spyOn(pageStateManager, 'clear').and.stub();
 
-      pageManager.destroy();
+      await pageManager.destroy();
 
       expect(pageStateManager.clear).toHaveBeenCalled();
     });
@@ -256,11 +262,11 @@ describe('ima.page.manager.AbstractPageManager', () => {
   });
 
   describe('_initPageSource method', () => {
-    it('should initialize page source', () => {
+    it('should initialize page source', async () => {
       spyOn(pageManager, '_initController').and.stub();
       spyOn(pageManager, '_initExtensions').and.stub();
 
-      pageManager._initPageSource();
+      await pageManager._initPageSource();
 
       expect(pageManager._initController).toHaveBeenCalledWith();
       expect(pageManager._initExtensions).toHaveBeenCalledWith();
@@ -268,36 +274,36 @@ describe('ima.page.manager.AbstractPageManager', () => {
   });
 
   describe('_initController method', () => {
-    it('should set route params to controller instance', () => {
+    it('should set route params to controller instance', async () => {
       spyOn(controllerInstance, 'setRouteParams').and.stub();
 
-      pageManager._initController();
+      await pageManager._initController();
 
       expect(controllerInstance.setRouteParams).toHaveBeenCalledWith(params);
     });
 
-    it('should call init function on controller instance', () => {
+    it('should call init function on controller instance', async () => {
       spyOn(controllerInstance, 'init').and.stub();
 
-      pageManager._initController();
+      await pageManager._initController();
 
       expect(controllerInstance.init).toHaveBeenCalled();
     });
   });
 
   describe('_initExtensions method', () => {
-    it('should set route params to extension instance', () => {
+    it('should set route params to extension instance', async () => {
       spyOn(extensionInstance, 'setRouteParams').and.stub();
 
-      pageManager._initExtensions();
+      await pageManager._initExtensions();
 
       expect(extensionInstance.setRouteParams).toHaveBeenCalledWith(params);
     });
 
-    it('should call init function on controller instance', () => {
+    it('should call init function on controller instance', async () => {
       spyOn(extensionInstance, 'init').and.stub();
 
-      pageManager._initExtensions();
+      await pageManager._initExtensions();
 
       expect(extensionInstance.init).toHaveBeenCalled();
     });
@@ -332,39 +338,21 @@ describe('ima.page.manager.AbstractPageManager', () => {
           done(error);
         });
     });
-
-    it('should switch extensions to PageStateManager', done => {
-      spyOn(pageManager, '_switchToPageStateManager').and.stub();
-
-      pageManager
-        ._loadPageSource()
-        .then(() => {
-          expect(pageManager._switchToPageStateManager).toHaveBeenCalled();
-          done();
-        })
-        .catch(error => {
-          console.error(
-            'ima.page.manager:_switchToPageStateManager',
-            error.message
-          );
-          done(error);
-        });
-    });
   });
 
   describe('_getLoadedControllerState method', () => {
-    it('should calls controller load method', () => {
+    it('should calls controller load method', async () => {
       spyOn(controllerInstance, 'load').and.stub();
 
-      pageManager._getLoadedControllerState();
+      await pageManager._getLoadedControllerState();
 
       expect(controllerInstance.load).toHaveBeenCalled();
     });
 
-    it('should set pageStateManager to controller instance', () => {
+    it('should set pageStateManager to controller instance', async () => {
       spyOn(controllerInstance, 'setPageStateManager').and.stub();
 
-      pageManager._getLoadedControllerState();
+      await pageManager._getLoadedControllerState();
 
       expect(controllerInstance.setPageStateManager).toHaveBeenCalledWith(
         pageStateManager
@@ -373,19 +361,19 @@ describe('ima.page.manager.AbstractPageManager', () => {
   });
 
   describe('_getLoadedExtensionsState method', () => {
-    it('should call extensions load method', () => {
+    it('should call extensions load method', async () => {
       spyOn(extensionInstance, 'load').and.returnValue(extensionState);
 
-      pageManager._getLoadedExtensionsState();
+      await pageManager._getLoadedExtensionsState();
 
       expect(extensionInstance.load).toHaveBeenCalled();
     });
 
-    it('should set restricted pageStateManager to extension instance', () => {
+    it('should set restricted pageStateManager to extension instance', async () => {
       spyOn(extensionInstance, 'load').and.returnValue(extensionState);
       spyOn(pageManager, '_setRestrictedPageStateManager').and.stub();
 
-      pageManager._getLoadedExtensionsState();
+      await pageManager._getLoadedExtensionsState();
 
       expect(pageManager._setRestrictedPageStateManager).toHaveBeenCalledWith(
         extensionInstance,
@@ -393,30 +381,40 @@ describe('ima.page.manager.AbstractPageManager', () => {
       );
     });
 
-    it("should call extension's setPartialState method and switch extension to partial state", () => {
+    it("should call extension's setPartialState method and switch extension to partial state", async () => {
       spyOn(extensionInstance, 'setPartialState').and.stub();
       spyOn(extensionInstance, 'switchToPartialState').and.stub();
       spyOn(extensionInstance, 'load').and.returnValue(extensionState);
 
-      pageManager._getLoadedExtensionsState();
+      await pageManager._getLoadedExtensionsState();
 
       expect(extensionInstance.setPartialState).toHaveBeenCalled();
       expect(extensionInstance.switchToPartialState).toHaveBeenCalled();
     });
 
-    it('should return extensions state together with active controller state', () => {
+    it('should return extensions state together with active controller state', async () => {
       spyOn(extensionInstance, 'load').and.returnValue({
         extension: 'extension'
       });
       spyOn(pageManager, '_setRestrictedPageStateManager').and.stub();
 
-      let result = pageManager._getLoadedExtensionsState(controllerState);
+      let result = await pageManager._getLoadedExtensionsState(controllerState);
 
       expect(result).toEqual({
         controller: 'controller',
         share: 'controller',
         extension: 'extension'
       });
+    });
+
+    it('should switch extensions to PageStateManager after all resources are loaded', async () => {
+      spyOn(pageManager, '_switchToPageStateManagerAfterLoaded').and.stub();
+
+      await pageManager._getLoadedExtensionsState();
+
+      expect(
+        pageManager._switchToPageStateManagerAfterLoaded
+      ).toHaveBeenCalled();
     });
   });
 
@@ -427,16 +425,18 @@ describe('ima.page.manager.AbstractPageManager', () => {
       spyOn(pageManager, '_activateExtensions').and.stub();
     });
 
-    it('should activate controller and extensions', () => {
-      pageManager._activatePageSource();
+    it('should activate controller and extensions', async () => {
+      await pageManager._activatePageSource();
 
       expect(pageManager._activateController).toHaveBeenCalled();
       expect(pageManager._activateExtensions).toHaveBeenCalled();
       expect(pageManager._managedPage.state.activated).toEqual(true);
     });
 
-    it('should not call method activate more times', () => {
+    it('should not call method activate more times', async () => {
       pageManager._managedPage.state.activated = true;
+
+      await pageManager._activatePageSource();
 
       expect(pageManager._activateController).not.toHaveBeenCalled();
       expect(pageManager._activateExtensions).not.toHaveBeenCalled();
@@ -444,20 +444,20 @@ describe('ima.page.manager.AbstractPageManager', () => {
   });
 
   describe('_activateController method', () => {
-    it('should call activate method on controller', () => {
+    it('should call activate method on controller', async () => {
       spyOn(controllerInstance, 'activate').and.stub();
 
-      pageManager._activateController();
+      await pageManager._activateController();
 
       expect(controllerInstance.activate).toHaveBeenCalled();
     });
   });
 
   describe('_activateExtensions method', () => {
-    it('should call activate method on extensions', () => {
+    it('should call activate method on extensions', async () => {
       spyOn(extensionInstance, 'activate').and.stub();
 
-      pageManager._activateExtensions();
+      await pageManager._activateExtensions();
 
       expect(extensionInstance.activate).toHaveBeenCalled();
     });
@@ -490,24 +490,6 @@ describe('ima.page.manager.AbstractPageManager', () => {
           done(error);
         });
     });
-
-    it('should switch extensions to PageStateManager', done => {
-      spyOn(pageManager, '_switchToPageStateManager').and.stub();
-
-      pageManager
-        ._updatePageSource()
-        .then(() => {
-          expect(pageManager._switchToPageStateManager).toHaveBeenCalled();
-          done();
-        })
-        .catch(error => {
-          console.error(
-            'ima.page.manager:_switchToPageStateManager',
-            error.message
-          );
-          done(error);
-        });
-    });
   });
 
   describe('_getUpdatedControllerState method', () => {
@@ -522,20 +504,20 @@ describe('ima.page.manager.AbstractPageManager', () => {
   });
 
   describe('_getUpdatedExtensionsState method', () => {
-    it('should call extensions update method', () => {
+    it('should call extensions update method', async () => {
       spyOn(extensionInstance, 'getRouteParams').and.returnValue(params);
       spyOn(extensionInstance, 'update').and.returnValue(extensionState);
 
-      pageManager._getUpdatedExtensionsState();
+      await pageManager._getUpdatedExtensionsState();
 
       expect(extensionInstance.update).toHaveBeenCalledWith(params);
     });
 
-    it('should set restricted pageStateManager to extension instance', () => {
+    it('should set restricted pageStateManager to extension instance', async () => {
       spyOn(pageManager, '_setRestrictedPageStateManager').and.stub();
       spyOn(extensionInstance, 'update').and.returnValue(extensionState);
 
-      pageManager._getUpdatedExtensionsState();
+      await pageManager._getUpdatedExtensionsState();
 
       expect(pageManager._setRestrictedPageStateManager).toHaveBeenCalledWith(
         extensionInstance,
@@ -543,30 +525,42 @@ describe('ima.page.manager.AbstractPageManager', () => {
       );
     });
 
-    it("should call extension's setPartialState method and switch extension to partial state", () => {
+    it("should call extension's setPartialState method and switch extension to partial state", async () => {
       spyOn(extensionInstance, 'setPartialState').and.stub();
       spyOn(extensionInstance, 'switchToPartialState').and.stub();
       spyOn(extensionInstance, 'update').and.returnValue(extensionState);
 
-      pageManager._getUpdatedExtensionsState();
+      await pageManager._getUpdatedExtensionsState();
 
       expect(extensionInstance.setPartialState).toHaveBeenCalled();
       expect(extensionInstance.switchToPartialState).toHaveBeenCalled();
     });
 
-    it('should return extensions state together with active controller state', () => {
+    it('should return extensions state together with active controller state', async () => {
       spyOn(extensionInstance, 'update').and.returnValue({
         extension: 'extension'
       });
       spyOn(pageManager, '_setRestrictedPageStateManager').and.stub();
 
-      let result = pageManager._getUpdatedExtensionsState(controllerState);
+      let result = await pageManager._getUpdatedExtensionsState(
+        controllerState
+      );
 
       expect(result).toEqual({
         controller: 'controller',
         share: 'controller',
         extension: 'extension'
       });
+    });
+
+    it('should switch extensions to PageStateManager after all resources are updated', async () => {
+      spyOn(pageManager, '_switchToPageStateManagerAfterLoaded').and.stub();
+
+      await pageManager._getLoadedExtensionsState();
+
+      expect(
+        pageManager._switchToPageStateManagerAfterLoaded
+      ).toHaveBeenCalled();
     });
   });
 
@@ -577,17 +571,19 @@ describe('ima.page.manager.AbstractPageManager', () => {
       spyOn(pageManager, '_deactivateExtensions').and.stub();
     });
 
-    it('should activate controller and extensions', () => {
+    it('should activate controller and extensions', async () => {
       pageManager._managedPage.state.activated = true;
 
-      pageManager._deactivatePageSource();
+      await pageManager._deactivatePageSource();
 
       expect(pageManager._deactivateController).toHaveBeenCalled();
       expect(pageManager._deactivateExtensions).toHaveBeenCalled();
     });
 
-    it('should not call method activate more times', () => {
+    it('should not call method activate more times', async () => {
       pageManager._managedPage.state.activated = false;
+
+      await pageManager._deactivatePageSource();
 
       expect(pageManager._deactivateController).not.toHaveBeenCalled();
       expect(pageManager._deactivateExtensions).not.toHaveBeenCalled();
@@ -595,31 +591,31 @@ describe('ima.page.manager.AbstractPageManager', () => {
   });
 
   describe('_deactivateController method', () => {
-    it('should call deactivate method on controller', () => {
+    it('should call deactivate method on controller', async () => {
       spyOn(controllerInstance, 'deactivate').and.stub();
 
-      pageManager._deactivateController();
+      await pageManager._deactivateController();
 
       expect(controllerInstance.deactivate).toHaveBeenCalled();
     });
   });
 
   describe('_deactivateExtensions method', () => {
-    it('should call deactivate method on extensions', () => {
+    it('should call deactivate method on extensions', async () => {
       spyOn(extensionInstance, 'deactivate').and.stub();
 
-      pageManager._deactivateExtensions();
+      await pageManager._deactivateExtensions();
 
       expect(extensionInstance.deactivate).toHaveBeenCalled();
     });
   });
 
   describe('_destroyPageSource method', () => {
-    it('should destroy page resource', () => {
+    it('should destroy page resource', async () => {
       spyOn(pageManager, '_destroyController').and.stub();
       spyOn(pageManager, '_destroyExtensions').and.stub();
 
-      pageManager._destroyPageSource();
+      await pageManager._destroyPageSource();
 
       expect(pageManager._destroyController).toHaveBeenCalledWith();
       expect(pageManager._destroyExtensions).toHaveBeenCalledWith();
@@ -627,36 +623,36 @@ describe('ima.page.manager.AbstractPageManager', () => {
   });
 
   describe('_destroyController method', () => {
-    it('should call destroy on controller instance', () => {
+    it('should call destroy on controller instance', async () => {
       spyOn(controllerInstance, 'destroy').and.stub();
 
-      pageManager._destroyController();
+      await pageManager._destroyController();
 
       expect(controllerInstance.destroy).toHaveBeenCalled();
     });
 
-    it('should unset pageStateManager to controller', () => {
+    it('should unset pageStateManager to controller', async () => {
       spyOn(controllerInstance, 'setPageStateManager').and.stub();
 
-      pageManager._destroyController();
+      await pageManager._destroyController();
 
       expect(controllerInstance.setPageStateManager).toHaveBeenCalledWith(null);
     });
   });
 
   describe('_destroyExtensions method', () => {
-    it('should call destroy on extension instance', () => {
+    it('should call destroy on extension instance', async () => {
       spyOn(extensionInstance, 'destroy').and.stub();
 
-      pageManager._destroyExtensions();
+      await pageManager._destroyExtensions();
 
       expect(extensionInstance.destroy).toHaveBeenCalled();
     });
 
-    it('should unset pageStateManager to extension', () => {
+    it('should unset pageStateManager to extension', async () => {
       spyOn(extensionInstance, 'setPageStateManager').and.stub();
 
-      pageManager._destroyExtensions();
+      await pageManager._destroyExtensions();
 
       expect(extensionInstance.setPageStateManager).toHaveBeenCalledWith(null);
     });

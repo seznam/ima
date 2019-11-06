@@ -106,13 +106,13 @@ describe('ima.page.manager.ClientPageManager', () => {
     });
   });
 
-  it('should unlisten for all custom events', () => {
+  it('should unlisten for all custom events', async () => {
     let window = {};
 
     spyOn(eventBusInterface, 'unlistenAll').and.stub();
     spyOn(windowInterface, 'getWindow').and.returnValue(window);
 
-    pageManager.destroy();
+    await pageManager.destroy();
 
     expect(eventBusInterface.unlistenAll).toHaveBeenCalledWith(
       window,

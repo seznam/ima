@@ -53,25 +53,25 @@ export default class ClientPageRenderer extends AbstractPageRenderer {
   /**
    * @inheritdoc
    */
-  mount(controller, view, pageResources, routeOptions) {
+  async mount(controller, view, pageResources, routeOptions) {
     let separatedData = this._separatePromisesAndValues(pageResources);
     let defaultPageState = separatedData.values;
     let loadedPromises = separatedData.promises;
 
     if (!this._firstTime) {
       controller.setState(defaultPageState);
-      this._renderToDOM(controller, view, routeOptions);
+      await this._renderToDOM(controller, view, routeOptions);
       this._patchPromisesToState(controller, loadedPromises);
     }
 
     return this._Helper
       .allPromiseHash(loadedPromises)
-      .then(fetchedResources => {
+      .then(async fetchedResources => {
         let pageState = Object.assign({}, defaultPageState, fetchedResources);
 
         if (this._firstTime) {
           controller.setState(pageState);
-          this._renderToDOM(controller, view, routeOptions);
+          await this._renderToDOM(controller, view, routeOptions);
           this._firstTime = false;
         }
 
@@ -183,6 +183,7 @@ export default class ClientPageRenderer extends AbstractPageRenderer {
    *          documentView: ?function(new: AbstractDocumentView),
    *          managedRootView: ?function(new: React.Component)
    *        }} routeOptions The current route options.
+   * @return {Promise<undefined>}
    */
   _renderToDOM(controller, view, routeOptions) {
     let reactElementView = this._getWrappedPageView(
@@ -207,15 +208,23 @@ export default class ClientPageRenderer extends AbstractPageRenderer {
 
       this._dispatcher.fire(Events.ERROR, { message: errorMessage }, true);
 
-      return;
+      return Promise.resolve();
     }
 
     if (this._viewContainer.children.length) {
-      this._reactiveView = this._ReactDOM.hydrate(
-        reactElementView,
-        this._viewContainer,
+      return new Promise(resolve => setTimeout(resolve, 1000 / 240)).then(
         () => {
-          this._dispatcher.fire(Events.MOUNTED, { type: Types.HYDRATE }, true);
+          this._reactiveView = this._ReactDOM.hydrate(
+            reactElementView,
+            this._viewContainer,
+            () => {
+              this._dispatcher.fire(
+                Events.MOUNTED,
+                { type: Types.HYDRATE },
+                true
+              );
+            }
+          );
         }
       );
     } else {
@@ -226,6 +235,7 @@ export default class ClientPageRenderer extends AbstractPageRenderer {
           this._dispatcher.fire(Events.MOUNTED, { type: Types.RENDER }, true);
         }
       );
+      return Promise.resolve();
     }
   }
 

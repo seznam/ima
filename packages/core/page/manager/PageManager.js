@@ -43,7 +43,10 @@ export default class PageManager {
    *          event: Event,
    *          url: string
    *        }} [action] An action object describing what triggered the routing.
-   * @return {Promise<{status: number, content: ?string, pageState: Object<string, *>
+   * @return {Promise<{
+   *           status: number,
+   *           content: ?string,
+   *           pageState: Object<string, *>
    *         }>} A promise that will resolve to information about the rendered page.
    *         The {@code status} will contain the HTTP status code to send to the
    *         client (at the server side) or determine the type of error page
@@ -56,6 +59,8 @@ export default class PageManager {
   /**
    * Finalization callback, called when the page manager is being discarded.
    * This usually happens when the page is hot-reloaded at the client side.
+   *
+   * @return {Promise<undefined>}
    */
   destroy() {}
 }

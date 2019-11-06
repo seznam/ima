@@ -34,6 +34,4 @@ export default (ns, oc, config) => {
   oc.get('$PageStateManager').clear();
 
   oc.get('$HttpUrlTransformer').clear();
-
-  oc.get('$DevTool').init();
 };

@@ -58,7 +58,7 @@ export class Namespace {
     let levels = path.split('.');
 
     for (let levelName of levels) {
-      if (!self.hasOwnProperty(levelName)) {
+      if (!Object.prototype.hasOwnProperty.call(self, levelName)) {
         self[levelName] = {};
       }
 

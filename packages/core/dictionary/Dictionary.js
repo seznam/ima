@@ -11,7 +11,7 @@ export default class Dictionary {
    * phrases.
    *
    * @param {Object.<string, *>} config The dictionary configuration.
-   * @param {string} config.language The language property is an ISO 639-1
+   * @param {string} config.$Language The language property is an ISO 639-1
    *        language code specifying the language of the provided phrases.
    * @param {*} config.dictionary The dictionary property contains the
    *        localization phrases organized in an implementation-specific way.

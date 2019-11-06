@@ -1,22 +1,12 @@
-import PropTypes from 'prop-types';
 import React from 'react';
-import Context from '../context';
+import memoizeOne from 'memoize-one';
+import Context from '../Context';
 
 /**
  * An adapter component providing the current page controller's state to the
  * page view component through its properties.
  */
 export default class ViewAdapter extends React.Component {
-  /**
-   * @inheritdoc
-   * @return {{$Utils: function(*): ?Error}}
-   */
-  static get childContextTypes() {
-    return {
-      $Utils: PropTypes.object.isRequired
-    };
-  }
-
   /**
    * Initializes the adapter component.
    *
@@ -42,13 +32,15 @@ export default class ViewAdapter extends React.Component {
      * @type {function(new:React.Component, Object<string, *>)}
      */
     this._view = props.view;
-  }
 
-  /**
-   * @inheritdoc
-   */
-  componentWillReceiveProps(newProps) {
-    this.setState(newProps.state);
+    /**
+     * The memoized context value.
+     *
+     * @type {function}
+     */
+    this._getContextValue = memoizeOne($Utils => {
+      return { $Utils };
+    });
   }
 
   /**
@@ -66,17 +58,8 @@ export default class ViewAdapter extends React.Component {
   render() {
     return React.createElement(
       Context.Provider,
-      { value: this.props.$Utils },
+      { value: this._getContextValue(this.props.$Utils) },
       React.createElement(this._view, this.state)
     );
-  }
-
-  /**
-   * @inheritdoc
-   */
-  getChildContext() {
-    return {
-      $Utils: this.props.$Utils
-    };
   }
 }
