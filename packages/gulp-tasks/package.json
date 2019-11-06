@@ -1,17 +1,15 @@
 {
-  "name": "ima-gulp-tasks",
+  "name": "@ima/gulp-tasks",
   "version": "0.16.4",
   "description": "Default gulp tasks for IMA.js applications.",
   "main": "",
   "scripts": {
-    "lint": "node_modules/.bin/eslint -c ./.eslintrc.js --fix './**/*.js' --ignore-path ./.prettierignore",
-    "preversion": "npm test && npm run lint",
-    "postversion": "git commit -am $npm_package_version && git tag $npm_package_version && git push && git push --tags && npm publish",
+    "preversion": "npm test",
     "test": "echo \"Error: no test specified\" && exit 0"
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/seznam/IMA.js-gulp-tasks.git"
+    "url": "https://github.com/seznam/ima.git"
   },
   "keywords": [
     "gulp",
@@ -21,23 +19,17 @@
   "author": "Seznam.cz, a.s.",
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/seznam/IMA.js-gulp-tasks/issues"
+    "url": "https://github.com/seznam/ima/issues"
   },
   "publishConfig": {
     "registry": "https://registry.npmjs.org/"
   },
-  "homepage": "https://github.com/seznam/IMA.js-gulp-tasks",
+  "homepage": "https://github.com/seznam/ima",
   "peerDependencies": {
     "ima-helpers": "^0.16.0"
   },
   "devDependencies": {
-    "babel-eslint": "^10.0.2",
-    "eslint": "^6.1.0",
-    "eslint-config-last": "^0.0.5",
-    "eslint-config-prettier": "^6.0.0",
-    "eslint-plugin-prettier": "^3.1.0",
-    "ima-helpers": "^0.16.0",
-    "prettier": "^1.18.2"
+    "ima-helpers": "^0.16.0"
   },
   "dependencies": {
     "@babel/core": "^7.5.5",

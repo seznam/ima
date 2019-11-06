@@ -43,8 +43,7 @@
     "url": "https://github.com/seznam/ima/issues"
   },
   "publishConfig": {
-    "registry": "https://registry.npmjs.org/",
-    "dir": "dist"
+    "registry": "https://registry.npmjs.org/"
   },
   "license": "MIT",
   "devDependencies": {

@@ -36,7 +36,9 @@ try {
     nodeEnv
   );
 } catch (error) {
+  // eslint-disable-next-line no-console
   console.info(error.message);
+  // eslint-disable-next-line no-console
   console.info('The default environment config will be used.');
 
   environment = {
@@ -50,7 +52,9 @@ let appDependencies;
 try {
   appDependencies = require(path.resolve('.', 'app/build.js'));
 } catch (error) {
+  // eslint-disable-next-line no-console
   console.info(error.message);
+  // eslint-disable-next-line no-console
   console.info('The default application dependencies will be used.');
 
   appDependencies = {

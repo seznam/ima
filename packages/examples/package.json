@@ -1,16 +1,15 @@
 {
-  "name": "ima-examples",
+  "name": "@ima/examples",
   "version": "0.16.3",
   "description": "Example IMA.js applications.",
   "main": "index.js",
   "scripts": {
-    "lint": "node_modules/.bin/eslint --fix './{hello,feed,todos}/!(assets)/**/*.{js,jsx}'",
-    "preversion": "npm run lint",
-    "postversion": "git commit -am $npm_package_version && git tag $npm_package_version && git push && git push --tags && npm publish"
+    "preversion": "npm test",
+    "test": "echo \"Error: no test specified\" && exit 0"
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/seznam/IMA.js-examples.git"
+    "url": "https://github.com/seznam/ima.git"
   },
   "keywords": [
     "IMA.js",
@@ -19,24 +18,14 @@
   "author": "Seznam.cz, a.s.",
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/seznam/IMA.js-examples/issues"
+    "url": "https://github.com/seznam/ima/issues"
   },
   "publishConfig": {
     "registry": "http://registry.npmjs.org/"
   },
-  "homepage": "https://github.com/seznam/IMA.js-examples",
+  "homepage": "https://github.com/seznam/ima",
   "engines": {
     "node": ">=6.4.0",
     "npm": ">=3.10.3"
-  },
-  "devDependencies": {
-    "babel-eslint": "10.0.1",
-    "eslint": "5.11.1",
-    "eslint-config-prettier": "3.3.0",
-    "eslint-plugin-jasmine": "2.10.1",
-    "eslint-plugin-jest": "22.1.2",
-    "eslint-plugin-prettier": "3.0.1",
-    "eslint-plugin-react": "7.12.0",
-    "prettier": "1.15.3"
   }
 }

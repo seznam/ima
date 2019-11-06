@@ -193,9 +193,7 @@ const ERROR_PAGE_STYLE = `<style>
 </style>`;
 
 module.exports = (error, callStack) => {
-  let responseBody = `${ERROR_PAGE_STYLE}\n<h1>${error.name}: ${
-    error.message
-  }</h1>`;
+  let responseBody = `${ERROR_PAGE_STYLE}\n<h1>${error.name}: ${error.message}</h1>`;
 
   let encodedParams = '';
 
