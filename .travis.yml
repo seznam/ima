@@ -18,14 +18,12 @@ jobs:
         script: npm run benchmark
       - name: "Audit"
         script: npm audit || echo \"audit found some vulnerabilities.\"
-
-before_deploy:
-  - echo "//registry.npmjs.org/:_authToken=\${NPM_TOKEN}" >> $HOME/.npmrc 2> /dev/null
-
-deploy:
-  provider: script
-  script: "npm run release:publish"
-  skip_cleanup: true
-  on:
-    node: "8"
-    tags: true
+      - stage: "deploy"
+        before:
+          - echo "//registry.npmjs.org/:_authToken=\${NPM_TOKEN}" >> $HOME/.npmrc 2> /dev/null
+        provider: script
+        script: "npm run release:publish"
+        skip_cleanup: true
+        on:
+          node: "10"
+          tags: true

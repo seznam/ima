@@ -7,11 +7,11 @@
   "scripts": {
     "test": "npm run test:jest && npm run test:es && npm run test:size",
     "test:jest": "jest --no-watchman -c jest.conf.js",
-    "test:es": "node_modules/.bin/es-check es5 './polyfill/*.js'",
-    "test:size": "node_modules/.bin/size-limit",
+    "test:es": "es-check es5 './polyfill/*.js'",
+    "test:size": "size-limit",
     "preversion": "npm test",
     "clean": "gulp clean",
-    "build": "gulp build && node_modules/.bin/rollup --config",
+    "build": "gulp build && rollup --config",
     "prepare": "npm run build"
   },
   "keywords": [
