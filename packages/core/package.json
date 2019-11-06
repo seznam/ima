@@ -10,9 +10,9 @@
     "test:es": "node_modules/.bin/es-check es5 './polyfill/*.js'",
     "test:size": "node_modules/.bin/size-limit",
     "preversion": "npm test",
-    "clean": "../../node_modules/.bin/gulp clean",
-    "build": "../../node_modules/.bin/gulp build && node_modules/.bin/rollup --config",
-    "prepublish": "npm run build"
+    "clean": "gulp clean",
+    "build": "gulp build && node_modules/.bin/rollup --config",
+    "prepare": "npm run build"
   },
   "keywords": [
     "IMA",

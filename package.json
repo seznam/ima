@@ -1,7 +1,6 @@
 {
   "name": "ima",
-  "description": "IMA.js monorepo",
-  "main": "index.js",
+  "description": "IMA.js framework for isomorphic javascript application",
   "devDependencies": {
     "@commitlint/cli": "^8.1.0",
     "@commitlint/config-conventional": "^7.5.0",
@@ -37,6 +36,7 @@
   },
   "scripts": {
     "benchmark": "utils/benchmark/benchmark.sh",
+    "doc": "gulp doc",
     "test": "lerna run test",
     "release": "lerna version --no-push",
     "release:next": "npm run release -- prerelease",
@@ -49,8 +49,8 @@
     "precommit": "node_modules/.bin/lint-staged",
     "commit": "node_modules/.bin/git-cz"
   },
-  "author": "",
-  "license": "ISC",
+  "author": "Miroslav Jancarik <miroslav.jancarik@firma.seznam.cz>",
+  "license": "MIT",
   "repository": {
     "type": "git",
     "url": "https://github.com/seznam/ima.git"
