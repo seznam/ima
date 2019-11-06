@@ -1,0 +1,22 @@
+{
+	"pageTitle": "Demo: Isomorphic applications",
+
+	"seoTitle": "Isomorphic applications feed - IMA.js",
+	"seoDescription": "Demo example with fake REST API for reading and writing posts. These post are displayed in the feed and could be filtered by category.",
+	"seoUrl": "http://imajs.io/",
+	"seoCategoryTitle": "IMA.js - Demo isomorphic applications: Feed - category: {CATEGORY}",
+	"seoCategoryDescription": "This is category {CATEGORY} in IMA.js demo application.",
+
+	"defaultCategory": "IMA.js",
+	"defaultHashTag": "#IMA.js",
+	"portalIconAlt": "Icon {CATEGORY}",
+
+	"share": "Share",
+	"shareMailSubject": "IMA.js DEMO: Feed - {CATEGORY}",
+
+	"dateFormat": "{DATE}.{MONTH}.{YEAR}",
+	"placeHolder": "Write new contribution...",
+	"sendText": "Post",
+
+	"imaLink": "imajs.io"
+}

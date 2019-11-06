@@ -1,0 +1,19 @@
+{
+  "bail": true,
+  "modulePaths": [
+    "<rootDir>/"
+  ],
+  "setupFiles": [
+    "ima/test.js",
+    "ima/polyfill/imaLoader.js",
+    "ima/polyfill/imaRunner.js",
+    "<rootDir>/jest.setup.js"
+  ],
+  "snapshotSerializers": ["enzyme-to-json/serializer"],
+  "testEnvironment": "node",
+  "testRegex": "(/__tests__/).*Spec\\.jsx?$",
+  "transform": {
+    "\\.jsx?": "ima-gulp-tasks/preprocess.js"
+  },
+  "verbose": true
+}

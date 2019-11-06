@@ -1,0 +1,14 @@
+*.swp
+.DS_Store
+.idea
+.sublime-gulp.cache
+.babelrc
+node_modules/
+npm-debug.log
+server/ima/
+doc/
+build/
+.tmp/es5transformedApp.js
+app/assets/bower
+.npmrc
+package-lock.json

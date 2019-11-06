@@ -1,0 +1,78 @@
+{
+  "name": "ima-server",
+  "version": "0.16.3",
+  "description": "Default dev server for IMA.js applications.",
+  "main": "index.js",
+  "scripts": {
+    "lint": "node_modules/.bin/eslint -c ./.eslintrc.js --fix './**/*.js' --ignore-path ./.prettierignore",
+    "preversion": "npm test && npm run lint",
+    "postversion": "git commit -am $npm_package_version && git tag $npm_package_version && git push && git push --tags && npm publish",
+    "test": "jest"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/seznam/IMA.js-server.git"
+  },
+  "keywords": [
+    "gulp",
+    "IMA.js",
+    "ima"
+  ],
+  "author": "Seznam.cz, a.s.",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/seznam/IMA.js-server/issues"
+  },
+  "publishConfig": {
+    "registry": "http://registry.npmjs.org/"
+  },
+  "homepage": "https://github.com/seznam/IMA.js-server",
+  "devDependencies": {
+    "express": "^4.16.4",
+    "ima-helpers": "^0.16.0",
+    "jest": "^24.1.0",
+    "babel-eslint": "^10.0.1",
+    "eslint": "^5.14.1",
+    "eslint-config-last": "^0.0.5",
+    "eslint-plugin-jasmine": "^2.9.3",
+    "eslint-config-prettier": "^4.0.0",
+    "eslint-plugin-prettier": "^3.0.1",
+    "prettier": "^1.16.4"
+  },
+  "dependencies": {
+    "async-each": "1.0.1",
+    "error-to-json": "1.1.0",
+    "highlight.js": "9.13.1",
+    "stack-trace": "0.0.10",
+    "winston": "3.2.1"
+  },
+  "peerDependencies": {
+    "ima-helpers": "0.16.x"
+  },
+  "engines": {
+    "node": ">=6",
+    "npm": ">=4 <6"
+  },
+  "jest": {
+    "bail": false,
+    "verbose": true,
+    "testEnvironment": "node",
+    "setupFiles": [],
+    "resolver": "<rootDir>/resolver.js",
+    "modulePaths": [
+      "<rootDir>/"
+    ],
+    "testMatch": [
+      "**/__tests__/*.js"
+    ]
+  },
+  "jestConfig": {
+    "mockRules": {
+      "lib": [
+        {
+          "../app/build.js": "./__mocks__/build.js"
+        }
+      ]
+    }
+  }
+}
