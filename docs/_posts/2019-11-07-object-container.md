@@ -17,7 +17,7 @@ an alias.</p>
 </dd>
 </dl>
 
-## ObjectContainer&nbsp;<a name="ObjectContainer" href="https://github.com/seznam/ima/tree/17.0.0-rc.1/ObjectContainer.js#L76" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a>
+## ObjectContainer&nbsp;<a name="ObjectContainer" href="https://github.com/seznam/ima/tree/17.0.0-rc.2/ObjectContainer.js#L76" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a>
 The Object Container is an enhanced dependency injector with support for
 aliases and constants, and allowing to reference classes in the application
 namespace by specifying their fully qualified names.
@@ -67,7 +67,7 @@ Initializes the object container.
 
 * * *
 
-### objectContainer.\_namespace : <code>ima.Namespace</code>&nbsp;<a name="ObjectContainer+_namespace" href="https://github.com/seznam/ima/tree/17.0.0-rc.1/ObjectContainer.js#L83" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a>
+### objectContainer.\_namespace : <code>ima.Namespace</code>&nbsp;<a name="ObjectContainer+_namespace" href="https://github.com/seznam/ima/tree/17.0.0-rc.2/ObjectContainer.js#L83" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a>
 The namespace container, used to access classes and values using
 their fully qualified names.
 
@@ -75,12 +75,12 @@ their fully qualified names.
 
 * * *
 
-### objectContainer.\_entries : <code>Map.&lt;(string\|function(new:\*, ...\*)\|function(...\*): \*), Entry.&lt;\*&gt;&gt;</code>&nbsp;<a name="ObjectContainer+_entries" href="https://github.com/seznam/ima/tree/17.0.0-rc.1/ObjectContainer.js#L89" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a>
+### objectContainer.\_entries : <code>Map.&lt;(string\|function(new:\*, ...\*)\|function(...\*): \*), Entry.&lt;\*&gt;&gt;</code>&nbsp;<a name="ObjectContainer+_entries" href="https://github.com/seznam/ima/tree/17.0.0-rc.2/ObjectContainer.js#L89" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a>
 **Kind**: instance property of [<code>ObjectContainer</code>](#ObjectContainer)  
 
 * * *
 
-### objectContainer.\_bindingState : <code>string</code>&nbsp;<a name="ObjectContainer+_bindingState" href="https://github.com/seznam/ima/tree/17.0.0-rc.1/ObjectContainer.js#L99" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a>
+### objectContainer.\_bindingState : <code>string</code>&nbsp;<a name="ObjectContainer+_bindingState" href="https://github.com/seznam/ima/tree/17.0.0-rc.2/ObjectContainer.js#L99" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a>
 The current binding state.
 
 The {@linkcode setBindingState()} method may be called for changing
@@ -90,7 +90,7 @@ object container binding state only by the bootstrap script.
 
 * * *
 
-### objectContainer.\_bindingPlugin : <code>string</code>&nbsp;<a name="ObjectContainer+_bindingPlugin" href="https://github.com/seznam/ima/tree/17.0.0-rc.1/ObjectContainer.js#L109" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a>
+### objectContainer.\_bindingPlugin : <code>string</code>&nbsp;<a name="ObjectContainer+_bindingPlugin" href="https://github.com/seznam/ima/tree/17.0.0-rc.2/ObjectContainer.js#L109" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a>
 The current plugin binding to OC.
 
 The {@linkcode setBindingState()} method may be called for changing
@@ -100,7 +100,7 @@ object container binding state only by the bootstrap script.
 
 * * *
 
-### objectContainer.bind(name, classConstructor, [dependencies]) ⇒ [<code>ObjectContainer</code>](#ObjectContainer)&nbsp;<a name="ObjectContainer+bind" href="https://github.com/seznam/ima/tree/17.0.0-rc.1/ObjectContainer.js#L133" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a>
+### objectContainer.bind(name, classConstructor, [dependencies]) ⇒ [<code>ObjectContainer</code>](#ObjectContainer)&nbsp;<a name="ObjectContainer+bind" href="https://github.com/seznam/ima/tree/17.0.0-rc.2/ObjectContainer.js#L133" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a>
 Binds the specified class or factory function and dependencies to the
 specified alias. Binding a class or factory function to an alias allows
 the class or function to be specied as a dependency by specifying the
@@ -125,7 +125,7 @@ dependencies are provided.
 
 * * *
 
-### objectContainer.constant(name, value) ⇒ [<code>ObjectContainer</code>](#ObjectContainer)&nbsp;<a name="ObjectContainer+constant" href="https://github.com/seznam/ima/tree/17.0.0-rc.1/ObjectContainer.js#L189" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a>
+### objectContainer.constant(name, value) ⇒ [<code>ObjectContainer</code>](#ObjectContainer)&nbsp;<a name="ObjectContainer+constant" href="https://github.com/seznam/ima/tree/17.0.0-rc.2/ObjectContainer.js#L189" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a>
 Defines a new constant registered with this object container. Note that
 this is the only way of passing <code>string</code> values to constructors
 because the object container treats strings as class, interface, alias
@@ -142,7 +142,7 @@ or constant names.
 
 * * *
 
-### objectContainer.inject(classConstructor, dependencies) ⇒ [<code>ObjectContainer</code>](#ObjectContainer)&nbsp;<a name="ObjectContainer+inject" href="https://github.com/seznam/ima/tree/17.0.0-rc.1/ObjectContainer.js#L231" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a>
+### objectContainer.inject(classConstructor, dependencies) ⇒ [<code>ObjectContainer</code>](#ObjectContainer)&nbsp;<a name="ObjectContainer+inject" href="https://github.com/seznam/ima/tree/17.0.0-rc.2/ObjectContainer.js#L231" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a>
 Configures the object loader with the specified default dependencies for
 the specified class.
 
@@ -161,7 +161,7 @@ are provided.
 
 * * *
 
-### objectContainer.provide(interfaceConstructor, implementationConstructor, dependencies) ⇒ [<code>ObjectContainer</code>](#ObjectContainer)&nbsp;<a name="ObjectContainer+provide" href="https://github.com/seznam/ima/tree/17.0.0-rc.1/ObjectContainer.js#L295" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a>
+### objectContainer.provide(interfaceConstructor, implementationConstructor, dependencies) ⇒ [<code>ObjectContainer</code>](#ObjectContainer)&nbsp;<a name="ObjectContainer+provide" href="https://github.com/seznam/ima/tree/17.0.0-rc.2/ObjectContainer.js#L295" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a>
 Configures the default implementation of the specified interface to use
 when an implementation provider of the specified interface is requested
 from this object container.
@@ -182,7 +182,7 @@ method.
 
 * * *
 
-### objectContainer.get(name) ⇒ <code>T</code>&nbsp;<a name="ObjectContainer+get" href="https://github.com/seznam/ima/tree/17.0.0-rc.1/ObjectContainer.js#L357" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a>
+### objectContainer.get(name) ⇒ <code>T</code>&nbsp;<a name="ObjectContainer+get" href="https://github.com/seznam/ima/tree/17.0.0-rc.2/ObjectContainer.js#L357" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a>
 Retrieves the shared instance or value of the specified constant, alias,
 class or factory function, interface, or fully qualified namespace path
 (the method checks these in this order in case of a name clash).
@@ -199,7 +199,7 @@ The instance or value is created lazily the first time it is requested.
 
 * * *
 
-### objectContainer.getConstructorOf(name) ⇒ <code>function</code>&nbsp;<a name="ObjectContainer+getConstructorOf" href="https://github.com/seznam/ima/tree/17.0.0-rc.1/ObjectContainer.js#L375" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a>
+### objectContainer.getConstructorOf(name) ⇒ <code>function</code>&nbsp;<a name="ObjectContainer+getConstructorOf" href="https://github.com/seznam/ima/tree/17.0.0-rc.2/ObjectContainer.js#L375" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a>
 Returns the class constructor function of the specified class.
 
 **Kind**: instance method of [<code>ObjectContainer</code>](#ObjectContainer)  
@@ -212,7 +212,7 @@ Returns the class constructor function of the specified class.
 
 * * *
 
-### objectContainer.has(name) ⇒ <code>boolean</code>&nbsp;<a name="ObjectContainer+has" href="https://github.com/seznam/ima/tree/17.0.0-rc.1/ObjectContainer.js#L390" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a>
+### objectContainer.has(name) ⇒ <code>boolean</code>&nbsp;<a name="ObjectContainer+has" href="https://github.com/seznam/ima/tree/17.0.0-rc.2/ObjectContainer.js#L390" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a>
 Returns <code>true</code> if the specified object, class or resource is
 registered with this object container.
 
@@ -227,7 +227,7 @@ registered with this object container.
 
 * * *
 
-### objectContainer.create(name, dependencies) ⇒ <code>T</code>&nbsp;<a name="ObjectContainer+create" href="https://github.com/seznam/ima/tree/17.0.0-rc.1/ObjectContainer.js#L416" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a>
+### objectContainer.create(name, dependencies) ⇒ <code>T</code>&nbsp;<a name="ObjectContainer+create" href="https://github.com/seznam/ima/tree/17.0.0-rc.2/ObjectContainer.js#L416" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a>
 Creates a new instance of the class or retrieves the value generated by
 the factory function identified by the provided name, class, interface,
 or factory function, passing in the provided dependencies.
@@ -247,7 +247,7 @@ custom dependencies are provided.
 
 * * *
 
-### objectContainer.clear() ⇒ [<code>ObjectContainer</code>](#ObjectContainer)&nbsp;<a name="ObjectContainer+clear" href="https://github.com/seznam/ima/tree/17.0.0-rc.1/ObjectContainer.js#L428" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a>
+### objectContainer.clear() ⇒ [<code>ObjectContainer</code>](#ObjectContainer)&nbsp;<a name="ObjectContainer+clear" href="https://github.com/seznam/ima/tree/17.0.0-rc.2/ObjectContainer.js#L428" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a>
 Clears all entries from this object container and resets the locking
 mechanism of this object container.
 
@@ -256,7 +256,7 @@ mechanism of this object container.
 
 * * *
 
-### objectContainer.setBindingState(bindingState, bindingPluginName)&nbsp;<a name="ObjectContainer+setBindingState" href="https://github.com/seznam/ima/tree/17.0.0-rc.1/ObjectContainer.js#L441" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a>
+### objectContainer.setBindingState(bindingState, bindingPluginName)&nbsp;<a name="ObjectContainer+setBindingState" href="https://github.com/seznam/ima/tree/17.0.0-rc.2/ObjectContainer.js#L441" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a>
 **Kind**: instance method of [<code>ObjectContainer</code>](#ObjectContainer)  
 
 | Param | Type | Default |
@@ -267,7 +267,7 @@ mechanism of this object container.
 
 * * *
 
-### objectContainer.\_getEntry(name) ⇒ <code>Entry.&lt;T&gt;</code>&nbsp;<a name="ObjectContainer+_getEntry" href="https://github.com/seznam/ima/tree/17.0.0-rc.1/ObjectContainer.js#L479" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a>
+### objectContainer.\_getEntry(name) ⇒ <code>Entry.&lt;T&gt;</code>&nbsp;<a name="ObjectContainer+_getEntry" href="https://github.com/seznam/ima/tree/17.0.0-rc.2/ObjectContainer.js#L479" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a>
 Retrieves the entry for the specified constant, alias, class or factory
 function, interface, or fully qualified namespace path (the method
 checks these in this order in case of a name clash).
@@ -296,7 +296,7 @@ existing class, interface or value.
 
 * * *
 
-### objectContainer.\_updateEntryValues(classConstructor, entry, dependencies)&nbsp;<a name="ObjectContainer+_updateEntryValues" href="https://github.com/seznam/ima/tree/17.0.0-rc.1/ObjectContainer.js#L515" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a>
+### objectContainer.\_updateEntryValues(classConstructor, entry, dependencies)&nbsp;<a name="ObjectContainer+_updateEntryValues" href="https://github.com/seznam/ima/tree/17.0.0-rc.2/ObjectContainer.js#L515" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a>
 The method update classConstructor and dependencies for defined entry.
 The entry throw Error for constants and if you try override dependencies
 more than once.
@@ -312,7 +312,7 @@ more than once.
 
 * * *
 
-### objectContainer.\_createEntry(classConstructor, [dependencies], options) ⇒ <code>T</code>&nbsp;<a name="ObjectContainer+_createEntry" href="https://github.com/seznam/ima/tree/17.0.0-rc.1/ObjectContainer.js#L532" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a>
+### objectContainer.\_createEntry(classConstructor, [dependencies], options) ⇒ <code>T</code>&nbsp;<a name="ObjectContainer+_createEntry" href="https://github.com/seznam/ima/tree/17.0.0-rc.2/ObjectContainer.js#L532" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a>
 Creates a new entry for the provided class or factory function, the
 provided dependencies and entry options.
 
@@ -328,7 +328,7 @@ provided dependencies and entry options.
 
 * * *
 
-### objectContainer.\_createInstanceFromEntry(entry, [dependencies]) ⇒ <code>T</code>&nbsp;<a name="ObjectContainer+_createInstanceFromEntry" href="https://github.com/seznam/ima/tree/17.0.0-rc.1/ObjectContainer.js#L565" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a>
+### objectContainer.\_createInstanceFromEntry(entry, [dependencies]) ⇒ <code>T</code>&nbsp;<a name="ObjectContainer+_createInstanceFromEntry" href="https://github.com/seznam/ima/tree/17.0.0-rc.2/ObjectContainer.js#L565" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a>
 Creates a new instance of the class or retrieves the value generated by
 the factory function represented by the provided entry, passing in the
 provided dependencies.
@@ -347,7 +347,7 @@ dependencies are provided.
 
 * * *
 
-### objectContainer.\_getEntryFromConstant(compositionName) ⇒ <code>Entry.&lt;\*&gt;</code>&nbsp;<a name="ObjectContainer+_getEntryFromConstant" href="https://github.com/seznam/ima/tree/17.0.0-rc.1/ObjectContainer.js#L597" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a>
+### objectContainer.\_getEntryFromConstant(compositionName) ⇒ <code>Entry.&lt;\*&gt;</code>&nbsp;<a name="ObjectContainer+_getEntryFromConstant" href="https://github.com/seznam/ima/tree/17.0.0-rc.2/ObjectContainer.js#L597" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a>
 Retrieves the constant value denoted by the provided fully qualified
 composition name.
 
@@ -369,7 +369,7 @@ the method return <code>null</code>.
 
 * * *
 
-### objectContainer.\_getEntryFromNamespace(path) ⇒ <code>Entry.&lt;T&gt;</code>&nbsp;<a name="ObjectContainer+_getEntryFromNamespace" href="https://github.com/seznam/ima/tree/17.0.0-rc.1/ObjectContainer.js#L652" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a>
+### objectContainer.\_getEntryFromNamespace(path) ⇒ <code>Entry.&lt;T&gt;</code>&nbsp;<a name="ObjectContainer+_getEntryFromNamespace" href="https://github.com/seznam/ima/tree/17.0.0-rc.2/ObjectContainer.js#L652" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a>
 Retrieves the class denoted by the provided fully qualified name within
 the application namespace.
 
@@ -400,7 +400,7 @@ namespace path, the method returns <code>null</code>.
 
 * * *
 
-### objectContainer.\_getEntryFromClassConstructor(classConstructor) ⇒ <code>Entry.&lt;T&gt;</code>&nbsp;<a name="ObjectContainer+_getEntryFromClassConstructor" href="https://github.com/seznam/ima/tree/17.0.0-rc.1/ObjectContainer.js#L690" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a>
+### objectContainer.\_getEntryFromClassConstructor(classConstructor) ⇒ <code>Entry.&lt;T&gt;</code>&nbsp;<a name="ObjectContainer+_getEntryFromClassConstructor" href="https://github.com/seznam/ima/tree/17.0.0-rc.2/ObjectContainer.js#L690" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a>
 Retrieves the class denoted by the provided class constructor.
 
 The method then checks whether there are defined <code>$dependecies</code>
@@ -424,7 +424,7 @@ does not have defined <code>$dependencies</code> property return
 
 * * *
 
-### ObjectContainer.PLUGIN\_BINDING\_STATE ⇒ <code>string</code>&nbsp;<a name="ObjectContainer.PLUGIN_BINDING_STATE" href="https://github.com/seznam/ima/tree/17.0.0-rc.1/ObjectContainer.js#L32" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a>
+### ObjectContainer.PLUGIN\_BINDING\_STATE ⇒ <code>string</code>&nbsp;<a name="ObjectContainer.PLUGIN_BINDING_STATE" href="https://github.com/seznam/ima/tree/17.0.0-rc.2/ObjectContainer.js#L32" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a>
 Returns constant for plugin binding state.
 
 When the object container is in plugin binding state, it is impossible
@@ -448,7 +448,7 @@ container.
 
 * * *
 
-### ObjectContainer.IMA\_BINDING\_STATE ⇒ <code>string</code>&nbsp;<a name="ObjectContainer.IMA_BINDING_STATE" href="https://github.com/seznam/ima/tree/17.0.0-rc.1/ObjectContainer.js#L49" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a>
+### ObjectContainer.IMA\_BINDING\_STATE ⇒ <code>string</code>&nbsp;<a name="ObjectContainer.IMA_BINDING_STATE" href="https://github.com/seznam/ima/tree/17.0.0-rc.2/ObjectContainer.js#L49" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a>
 Returns constant for IMA binding state.
 
 When the object container is in ima binding state, it is possible
@@ -464,7 +464,7 @@ method).
 
 * * *
 
-### ObjectContainer.APP\_BINDING\_STATE ⇒ <code>string</code>&nbsp;<a name="ObjectContainer.APP_BINDING_STATE" href="https://github.com/seznam/ima/tree/17.0.0-rc.1/ObjectContainer.js#L66" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a>
+### ObjectContainer.APP\_BINDING\_STATE ⇒ <code>string</code>&nbsp;<a name="ObjectContainer.APP_BINDING_STATE" href="https://github.com/seznam/ima/tree/17.0.0-rc.2/ObjectContainer.js#L66" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a>
 Returns constant for app binding state.
 
 When the object container is in app binding state, it is possible
@@ -480,7 +480,7 @@ method).
 
 * * *
 
-## Entry&nbsp;<a name="Entry" href="https://github.com/seznam/ima/tree/17.0.0-rc.1/ObjectContainer.js#L728" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a>
+## Entry&nbsp;<a name="Entry" href="https://github.com/seznam/ima/tree/17.0.0-rc.2/ObjectContainer.js#L728" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a>
 Object container entry, representing either a class, interface, constant or
 an alias.
 
@@ -512,7 +512,7 @@ Initializes the entry.
 
 * * *
 
-### entry.classConstructor : <code>function</code> \| <code>function</code>&nbsp;<a name="Entry+classConstructor" href="https://github.com/seznam/ima/tree/17.0.0-rc.1/ObjectContainer.js#L735" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a>
+### entry.classConstructor : <code>function</code> \| <code>function</code>&nbsp;<a name="Entry+classConstructor" href="https://github.com/seznam/ima/tree/17.0.0-rc.2/ObjectContainer.js#L735" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a>
 The constructor of the class represented by this entry, or the
 getter of the value of the constant represented by this entry.
 
@@ -520,21 +520,21 @@ getter of the value of the constant represented by this entry.
 
 * * *
 
-### entry.sharedInstance : <code>T</code>&nbsp;<a name="Entry+sharedInstance" href="https://github.com/seznam/ima/tree/17.0.0-rc.1/ObjectContainer.js#L742" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a>
+### entry.sharedInstance : <code>T</code>&nbsp;<a name="Entry+sharedInstance" href="https://github.com/seznam/ima/tree/17.0.0-rc.2/ObjectContainer.js#L742" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a>
 The shared instance of the class represented by this entry.
 
 **Kind**: instance property of [<code>Entry</code>](#Entry)  
 
 * * *
 
-### entry.\_options : <code>Object</code>&nbsp;<a name="Entry+_options" href="https://github.com/seznam/ima/tree/17.0.0-rc.1/ObjectContainer.js#L749" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a>
+### entry.\_options : <code>Object</code>&nbsp;<a name="Entry+_options" href="https://github.com/seznam/ima/tree/17.0.0-rc.2/ObjectContainer.js#L749" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a>
 The Entry options.
 
 **Kind**: instance property of [<code>Entry</code>](#Entry)  
 
 * * *
 
-### entry.\_referrer : <code>string</code>&nbsp;<a name="Entry+_referrer" href="https://github.com/seznam/ima/tree/17.0.0-rc.1/ObjectContainer.js#L759" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a>
+### entry.\_referrer : <code>string</code>&nbsp;<a name="Entry+_referrer" href="https://github.com/seznam/ima/tree/17.0.0-rc.2/ObjectContainer.js#L759" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a>
 Reference to part of application that created
 this entry.
 
@@ -542,7 +542,7 @@ this entry.
 
 * * *
 
-### entry.\_dependencies : <code>Array.&lt;\*&gt;</code>&nbsp;<a name="Entry+_dependencies" href="https://github.com/seznam/ima/tree/17.0.0-rc.1/ObjectContainer.js#L767" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a>
+### entry.\_dependencies : <code>Array.&lt;\*&gt;</code>&nbsp;<a name="Entry+_dependencies" href="https://github.com/seznam/ima/tree/17.0.0-rc.2/ObjectContainer.js#L767" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a>
 Dependencies of the class constructor of the class represented by
 this entry.
 
@@ -550,7 +550,7 @@ this entry.
 
 * * *
 
-### entry.\_overrideCounter : <code>number</code>&nbsp;<a name="Entry+_overrideCounter" href="https://github.com/seznam/ima/tree/17.0.0-rc.1/ObjectContainer.js#L774" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a>
+### entry.\_overrideCounter : <code>number</code>&nbsp;<a name="Entry+_overrideCounter" href="https://github.com/seznam/ima/tree/17.0.0-rc.2/ObjectContainer.js#L774" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a>
 The override counter
 
 **Kind**: instance property of [<code>Entry</code>](#Entry)  
