@@ -1,5 +1,5 @@
 {
-  "name": "IMA.js-skeleton",
+  "name": "@ima/skeleton",
   "version": "0.16.0",
   "description": "Isomorphic javascript application",
   "main": "build/server.js",

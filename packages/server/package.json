@@ -1,17 +1,15 @@
 {
-  "name": "ima-server",
+  "name": "@ima/server",
   "version": "0.16.3",
   "description": "Default dev server for IMA.js applications.",
   "main": "index.js",
   "scripts": {
-    "lint": "node_modules/.bin/eslint -c ./.eslintrc.js --fix './**/*.js' --ignore-path ./.prettierignore",
-    "preversion": "npm test && npm run lint",
-    "postversion": "git commit -am $npm_package_version && git tag $npm_package_version && git push && git push --tags && npm publish",
-    "test": "jest"
+    "preversion": "npm test",
+    "test": "jest -c jest.conf.js"
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/seznam/IMA.js-server.git"
+    "url": "https://github.com/seznam/ima.git"
   },
   "keywords": [
     "gulp",
@@ -21,23 +19,15 @@
   "author": "Seznam.cz, a.s.",
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/seznam/IMA.js-server/issues"
+    "url": "https://github.com/seznam/ima/issues"
   },
   "publishConfig": {
     "registry": "http://registry.npmjs.org/"
   },
-  "homepage": "https://github.com/seznam/IMA.js-server",
+  "homepage": "https://github.com/seznam/ima",
   "devDependencies": {
     "express": "^4.16.4",
-    "ima-helpers": "^0.16.0",
-    "jest": "^24.1.0",
-    "babel-eslint": "^10.0.1",
-    "eslint": "^5.14.1",
-    "eslint-config-last": "^0.0.5",
-    "eslint-plugin-jasmine": "^2.9.3",
-    "eslint-config-prettier": "^4.0.0",
-    "eslint-plugin-prettier": "^3.0.1",
-    "prettier": "^1.16.4"
+    "ima-helpers": "^0.16.0"
   },
   "dependencies": {
     "async-each": "1.0.1",

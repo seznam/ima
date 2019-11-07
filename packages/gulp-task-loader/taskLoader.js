@@ -10,6 +10,7 @@ const path = require('path');
  * @param {Object<string, *>} gulpConfig Configuration of the gulp tasks.
  */
 module.exports = (directories, gulpConfig) => {
+  // eslint-disable-next-line no-console
   console.info('Loading gulp tasks...');
   let tasks = {};
 

@@ -1,0 +1,26 @@
+language: node_js
+node_js:
+  - "10"
+
+install:
+  - npm install
+  - npx lerna bootstrap
+
+jobs:
+  include:
+    - name: "Unit Tests"
+      script: npm test
+    - name: "Lint"
+      script: npm run lint
+    - name: "Docs"
+      script: npm run doc
+    - name: "Benchmark Test"
+      script: npm run benchmark
+    - name: "Audit"
+      script: npm audit || echo \"audit found some vulnerabilities.\"
+    - if: tag =~ ^v # Run only for tags
+      stage: "deploy"
+      before:
+        - echo "//registry.npmjs.org/:_authToken=\${NPM_TOKEN}" >> $HOME/.npmrc 2> /dev/null
+      script: "npm run release:publish"
+      skip_cleanup: true
