@@ -3,7 +3,7 @@ category: "page/renderer"
 title: "PageRendererFactory"
 ---
 
-## PageRendererFactory&nbsp;<a name="PageRendererFactory" href="https://github.com/seznam/ima/tree/17.0.0-rc.0/page/renderer/PageRendererFactory.js#L14" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a>
+## PageRendererFactory&nbsp;<a name="PageRendererFactory" href="https://github.com/seznam/ima/tree/17.0.0-rc.1/page/renderer/PageRendererFactory.js#L14" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a>
 Factory for page render.
 
 **Kind**: global class  
@@ -34,14 +34,14 @@ Initializes the factory used by the page renderer.
 
 * * *
 
-### pageRendererFactory.\_componentUtils : <code>ComponentUtils</code>&nbsp;<a name="PageRendererFactory+_componentUtils" href="https://github.com/seznam/ima/tree/17.0.0-rc.0/page/renderer/PageRendererFactory.js#L20" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a>
+### pageRendererFactory.\_componentUtils : <code>ComponentUtils</code>&nbsp;<a name="PageRendererFactory+_componentUtils" href="https://github.com/seznam/ima/tree/17.0.0-rc.1/page/renderer/PageRendererFactory.js#L20" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a>
 The registry of component utilities.
 
 **Kind**: instance property of [<code>PageRendererFactory</code>](#PageRendererFactory)  
 
 * * *
 
-### pageRendererFactory.\_React : <code>React</code>&nbsp;<a name="PageRendererFactory+_React" href="https://github.com/seznam/ima/tree/17.0.0-rc.0/page/renderer/PageRendererFactory.js#L28" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a>
+### pageRendererFactory.\_React : <code>React</code>&nbsp;<a name="PageRendererFactory+_React" href="https://github.com/seznam/ima/tree/17.0.0-rc.1/page/renderer/PageRendererFactory.js#L28" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a>
 Rect framework instance, used to render the page.
 
 **Kind**: instance property of [<code>PageRendererFactory</code>](#PageRendererFactory)  
@@ -49,14 +49,14 @@ Rect framework instance, used to render the page.
 
 * * *
 
-### pageRendererFactory.getUtils()&nbsp;<a name="PageRendererFactory+getUtils" href="https://github.com/seznam/ima/tree/17.0.0-rc.0/page/renderer/PageRendererFactory.js#L34" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a>
+### pageRendererFactory.getUtils()&nbsp;<a name="PageRendererFactory+getUtils" href="https://github.com/seznam/ima/tree/17.0.0-rc.1/page/renderer/PageRendererFactory.js#L34" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a>
 Return object of services which are defined for alias $Utils.
 
 **Kind**: instance method of [<code>PageRendererFactory</code>](#PageRendererFactory)  
 
 * * *
 
-### pageRendererFactory.getDocumentView(documentView) ⇒ <code>function</code>&nbsp;<a name="PageRendererFactory+getDocumentView" href="https://github.com/seznam/ima/tree/17.0.0-rc.0/page/renderer/PageRendererFactory.js#L49" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a>
+### pageRendererFactory.getDocumentView(documentView) ⇒ <code>function</code>&nbsp;<a name="PageRendererFactory+getDocumentView" href="https://github.com/seznam/ima/tree/17.0.0-rc.1/page/renderer/PageRendererFactory.js#L49" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a>
 Returns the class constructor of the specified document view component.
 Document view may be specified as a namespace path or as a class
 constructor.
@@ -72,7 +72,7 @@ constructor.
 
 * * *
 
-### pageRendererFactory.getManagedRootView(managedRootView) ⇒ <code>function</code>&nbsp;<a name="PageRendererFactory+getManagedRootView" href="https://github.com/seznam/ima/tree/17.0.0-rc.0/page/renderer/PageRendererFactory.js#L77" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a>
+### pageRendererFactory.getManagedRootView(managedRootView) ⇒ <code>function</code>&nbsp;<a name="PageRendererFactory+getManagedRootView" href="https://github.com/seznam/ima/tree/17.0.0-rc.1/page/renderer/PageRendererFactory.js#L77" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a>
 Returns the class constructor of the specified managed root view
 component. Managed root view may be specified as a namespace
 path or as a class constructor.
@@ -88,7 +88,7 @@ path or as a class constructor.
 
 * * *
 
-### pageRendererFactory.\_resolveClassConstructor(view) ⇒ <code>function</code>&nbsp;<a name="PageRendererFactory+_resolveClassConstructor" href="https://github.com/seznam/ima/tree/17.0.0-rc.0/page/renderer/PageRendererFactory.js#L106" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a>
+### pageRendererFactory.\_resolveClassConstructor(view) ⇒ <code>function</code>&nbsp;<a name="PageRendererFactory+_resolveClassConstructor" href="https://github.com/seznam/ima/tree/17.0.0-rc.1/page/renderer/PageRendererFactory.js#L106" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a>
 Returns the class constructor of the specified view component.
 View may be specified as a namespace path or as a class
 constructor.
@@ -104,7 +104,7 @@ constructor.
 
 * * *
 
-### pageRendererFactory.wrapView(view, props) ⇒ <code>React.Element</code>&nbsp;<a name="PageRendererFactory+wrapView" href="https://github.com/seznam/ima/tree/17.0.0-rc.0/page/renderer/PageRendererFactory.js#L133" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a>
+### pageRendererFactory.wrapView(view, props) ⇒ <code>React.Element</code>&nbsp;<a name="PageRendererFactory+wrapView" href="https://github.com/seznam/ima/tree/17.0.0-rc.1/page/renderer/PageRendererFactory.js#L133" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a>
 Wraps the provided view into the view adapter so it can access the state
 passed from controller through the <code>props</code> property instead of the
 <code>state</code> property.
@@ -122,7 +122,7 @@ passed from controller through the <code>props</code> property instead of the
 
 * * *
 
-### pageRendererFactory.createReactElementFactory(view) ⇒ <code>function</code>&nbsp;<a name="PageRendererFactory+createReactElementFactory" href="https://github.com/seznam/ima/tree/17.0.0-rc.0/page/renderer/PageRendererFactory.js#L151" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a>
+### pageRendererFactory.createReactElementFactory(view) ⇒ <code>function</code>&nbsp;<a name="PageRendererFactory+createReactElementFactory" href="https://github.com/seznam/ima/tree/17.0.0-rc.1/page/renderer/PageRendererFactory.js#L151" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a>
 Return a function that produces ReactElements of a given type.
 Like React.createElement.
 
