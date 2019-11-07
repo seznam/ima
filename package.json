@@ -38,7 +38,7 @@
     "benchmark": "utils/benchmark/benchmark.sh",
     "doc": "gulp doc",
     "test": "lerna run test",
-    "release": "lerna version --no-push",
+    "release": "lerna version",
     "release:next": "npm run release -- prerelease",
     "release:next:init": "npm run release -- premajor --force-publish",
     "release:graduate": "npm run release -- --conventional-graduate",
@@ -47,7 +47,8 @@
     "lint": "npm run lint:cmd -- './**/*.{js,jsx}'",
     "lint:fix": "npm run lint -- --fix",
     "precommit": "lint-staged",
-    "commit": "git-cz"
+    "commit": "git-cz",
+    "version": "npm run doc && git add docs"
   },
   "author": "Miroslav Jancarik <miroslav.jancarik@firma.seznam.cz>",
   "license": "MIT",
@@ -61,8 +62,7 @@
   "lint-staged": {
     "linters": {
       "**/*.{js,jsx}": [
-        "npm run lint:cmd",
-        "git add"
+        "npm run lint:cmd"
       ]
     },
     "ignore": [
