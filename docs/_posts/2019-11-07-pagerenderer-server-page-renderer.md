@@ -3,7 +3,7 @@ category: "page/renderer"
 title: "ServerPageRenderer"
 ---
 
-## ima ⇐ <code>AbstractPageRenderer</code>&nbsp;<a name="module_ima" href="https://github.com/seznam/ima/tree/17.0.0-rc.2/page/renderer/ServerPageRenderer.js#L22" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a>
+## ima ⇐ <code>AbstractPageRenderer</code>&nbsp;<a name="module_ima" href="https://github.com/seznam/ima/tree/17.0.0-rc.3/page/renderer/ServerPageRenderer.js#L22" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a>
 Server-side page renderer. The renderer renders the page into the HTML
 markup and sends it to the client.
 
@@ -27,7 +27,7 @@ markup and sends it to the client.
 
 * * *
 
-### ima~ServerPageRenderer&nbsp;<a name="module_ima..ServerPageRenderer" href="https://github.com/seznam/ima/tree/17.0.0-rc.2/page/renderer/ServerPageRenderer.js#L50" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a>
+### ima~ServerPageRenderer&nbsp;<a name="module_ima..ServerPageRenderer" href="https://github.com/seznam/ima/tree/17.0.0-rc.3/page/renderer/ServerPageRenderer.js#L50" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a>
 **Kind**: inner class of [<code>ima</code>](#module_ima)  
 
 * [~ServerPageRenderer](#module_ima..ServerPageRenderer)
@@ -59,7 +59,7 @@ Initializes the server-side page renderer.
 
 * * *
 
-#### serverPageRenderer.\_response : <code>Response</code>&nbsp;<a name="module_ima..ServerPageRenderer+_response" href="https://github.com/seznam/ima/tree/17.0.0-rc.2/page/renderer/ServerPageRenderer.js#L67" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a>
+#### serverPageRenderer.\_response : <code>Response</code>&nbsp;<a name="module_ima..ServerPageRenderer+_response" href="https://github.com/seznam/ima/tree/17.0.0-rc.3/page/renderer/ServerPageRenderer.js#L67" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a>
 Utility for sending the page markup to the client as a response to
 the current HTTP request.
 
@@ -67,7 +67,7 @@ the current HTTP request.
 
 * * *
 
-#### serverPageRenderer.\_cache : <code>Cache</code>&nbsp;<a name="module_ima..ServerPageRenderer+_cache" href="https://github.com/seznam/ima/tree/17.0.0-rc.2/page/renderer/ServerPageRenderer.js#L77" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a>
+#### serverPageRenderer.\_cache : <code>Cache</code>&nbsp;<a name="module_ima..ServerPageRenderer+_cache" href="https://github.com/seznam/ima/tree/17.0.0-rc.3/page/renderer/ServerPageRenderer.js#L77" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a>
 The resource cache, caching the results of all HTTP requests made by
 the services using by the rendered page. The state of the cache will
 then be serialized and sent to the client to re-initialize the page
@@ -77,7 +77,7 @@ at the client side.
 
 * * *
 
-#### serverPageRenderer.\_getRevivalSettings() ⇒ <code>string</code>&nbsp;<a name="module_ima..ServerPageRenderer+_getRevivalSettings" href="https://github.com/seznam/ima/tree/17.0.0-rc.2/page/renderer/ServerPageRenderer.js#L122" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a>
+#### serverPageRenderer.\_getRevivalSettings() ⇒ <code>string</code>&nbsp;<a name="module_ima..ServerPageRenderer+_getRevivalSettings" href="https://github.com/seznam/ima/tree/17.0.0-rc.3/page/renderer/ServerPageRenderer.js#L122" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a>
 The javascript code will include a settings the "revival" data for the
 application at the client-side.
 
@@ -87,7 +87,7 @@ application at the client-side.
 
 * * *
 
-#### serverPageRenderer.\_wrapEachKeyToPromise([dataMap]) ⇒ <code>Object.&lt;string, Promise&gt;</code>&nbsp;<a name="module_ima..ServerPageRenderer+_wrapEachKeyToPromise" href="https://github.com/seznam/ima/tree/17.0.0-rc.2/page/renderer/ServerPageRenderer.js#L156" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a>
+#### serverPageRenderer.\_wrapEachKeyToPromise([dataMap]) ⇒ <code>Object.&lt;string, Promise&gt;</code>&nbsp;<a name="module_ima..ServerPageRenderer+_wrapEachKeyToPromise" href="https://github.com/seznam/ima/tree/17.0.0-rc.3/page/renderer/ServerPageRenderer.js#L156" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a>
 Creates a copy of the provided data map object that has the values of
 its fields wrapped into Promises.
 
@@ -105,7 +105,7 @@ without wrapping then into another Promise.
 
 * * *
 
-#### serverPageRenderer.\_renderPage(controller, view, pageState, routeOptions) ⇒ <code>Object</code>&nbsp;<a name="module_ima..ServerPageRenderer+_renderPage" href="https://github.com/seznam/ima/tree/17.0.0-rc.2/page/renderer/ServerPageRenderer.js#L182" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a>
+#### serverPageRenderer.\_renderPage(controller, view, pageState, routeOptions) ⇒ <code>Object</code>&nbsp;<a name="module_ima..ServerPageRenderer+_renderPage" href="https://github.com/seznam/ima/tree/17.0.0-rc.3/page/renderer/ServerPageRenderer.js#L182" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a>
 Render page after all promises from loaded resources is resolved.
 
 **Kind**: instance method of [<code>ServerPageRenderer</code>](#module_ima..ServerPageRenderer)  
@@ -120,7 +120,7 @@ Render page after all promises from loaded resources is resolved.
 
 * * *
 
-#### serverPageRenderer.\_renderPageContentToString(controller, view, routeOptions) ⇒ <code>string</code>&nbsp;<a name="module_ima..ServerPageRenderer+_renderPageContentToString" href="https://github.com/seznam/ima/tree/17.0.0-rc.2/page/renderer/ServerPageRenderer.js#L204" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a>
+#### serverPageRenderer.\_renderPageContentToString(controller, view, routeOptions) ⇒ <code>string</code>&nbsp;<a name="module_ima..ServerPageRenderer+_renderPageContentToString" href="https://github.com/seznam/ima/tree/17.0.0-rc.3/page/renderer/ServerPageRenderer.js#L204" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a>
 Render page content to a string containing HTML markup.
 
 **Kind**: instance method of [<code>ServerPageRenderer</code>](#module_ima..ServerPageRenderer)  
@@ -134,17 +134,17 @@ Render page content to a string containing HTML markup.
 
 * * *
 
-### *ima~mount()*&nbsp;<a name="module_ima..mount" href="https://github.com/seznam/ima/tree/17.0.0-rc.2/page/renderer/ServerPageRenderer.js#L80" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a>
+### *ima~mount()*&nbsp;<a name="module_ima..mount" href="https://github.com/seznam/ima/tree/17.0.0-rc.3/page/renderer/ServerPageRenderer.js#L80" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a>
 **Kind**: inner abstract method of [<code>ima</code>](#module_ima)  
 
 * * *
 
-### ima~update()&nbsp;<a name="module_ima..update" href="https://github.com/seznam/ima/tree/17.0.0-rc.2/page/renderer/ServerPageRenderer.js#L97" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a>
+### ima~update()&nbsp;<a name="module_ima..update" href="https://github.com/seznam/ima/tree/17.0.0-rc.3/page/renderer/ServerPageRenderer.js#L97" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a>
 **Kind**: inner method of [<code>ima</code>](#module_ima)  
 
 * * *
 
-### ima~unmount()&nbsp;<a name="module_ima..unmount" href="https://github.com/seznam/ima/tree/17.0.0-rc.2/page/renderer/ServerPageRenderer.js#L107" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a>
+### ima~unmount()&nbsp;<a name="module_ima..unmount" href="https://github.com/seznam/ima/tree/17.0.0-rc.3/page/renderer/ServerPageRenderer.js#L107" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a>
 **Kind**: inner method of [<code>ima</code>](#module_ima)  
 
 * * *
