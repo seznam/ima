@@ -12,7 +12,8 @@
     "url": "https://github.com/seznam/ima.git"
   },
   "publishConfig": {
-    "registry": "http://registry.npmjs.org/"
+    "registry": "http://registry.npmjs.org/",
+    "access": "public"
   },
   "keywords": [
     "gulp",

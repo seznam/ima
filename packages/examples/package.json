@@ -21,7 +21,8 @@
     "url": "https://github.com/seznam/ima/issues"
   },
   "publishConfig": {
-    "registry": "http://registry.npmjs.org/"
+    "registry": "http://registry.npmjs.org/",
+    "access": "public"
   },
   "homepage": "https://github.com/seznam/ima",
   "engines": {
