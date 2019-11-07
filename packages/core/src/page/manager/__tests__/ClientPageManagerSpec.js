@@ -1,12 +1,12 @@
-import Controller from 'controller/Controller';
-import EventBus from 'event/EventBus';
-import Extension from 'extension/Extension';
-import PageHandler from 'page/handler/PageHandler';
-import PageHandlerRegistry from 'page/handler/PageHandlerRegistry';
-import ClientPageManager from 'page/manager/ClientPageManager';
-import PageRenderer from 'page/renderer/PageRenderer';
-import PageStateManager from 'page/state/PageStateManager';
-import Window from 'window/Window';
+import Controller from 'src/controller/Controller';
+import EventBus from 'src/event/EventBus';
+import Extension from 'src/extension/Extension';
+import PageHandler from 'src/page/handler/PageHandler';
+import PageHandlerRegistry from 'src/page/handler/PageHandlerRegistry';
+import ClientPageManager from '../ClientPageManager';
+import PageRenderer from 'src/page/renderer/PageRenderer';
+import PageStateManager from 'src/page/state/PageStateManager';
+import Window from 'src/window/Window';
 import { toMockedInstance } from 'to-mock';
 
 describe('ima.page.manager.ClientPageManager', () => {

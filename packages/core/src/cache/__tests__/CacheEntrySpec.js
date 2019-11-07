@@ -1,4 +1,4 @@
-import CacheEntry from 'cache/CacheEntry';
+import CacheEntry from '../CacheEntry';
 
 describe('ima.cache.CacheEntry', () => {
   let cacheEntry = null;

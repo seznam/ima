@@ -1,11 +1,11 @@
-import Controller from 'controller/Controller';
-import Extension from 'extension/Extension';
-import PageHandler from 'page/handler/PageHandler';
-import PageHandlerRegistry from 'page/handler/PageHandlerRegistry';
-import AbstractPageManager from 'page/manager/AbstractPageManager';
-import PageRenderer from 'page/renderer/PageRenderer';
-import PageStateManager from 'page/state/PageStateManager';
-import RouteFactory from 'router/RouteFactory';
+import Controller from 'src/controller/Controller';
+import Extension from 'src/extension/Extension';
+import PageHandler from 'src/page/handler/PageHandler';
+import PageHandlerRegistry from 'src/page/handler/PageHandlerRegistry';
+import AbstractPageManager from '../AbstractPageManager';
+import PageRenderer from 'src/page/renderer/PageRenderer';
+import PageStateManager from 'src/page/state/PageStateManager';
+import RouteFactory from 'src/router/RouteFactory';
 import { toMockedInstance } from 'to-mock';
 
 describe('ima.page.manager.AbstractPageManager', () => {

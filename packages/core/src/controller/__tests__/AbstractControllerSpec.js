@@ -1,6 +1,6 @@
 import toMock from 'to-mock';
-import AbstractController from 'controller/AbstractController';
-import PageStateManager from 'page/state/PageStateManager';
+import AbstractController from '../AbstractController';
+import PageStateManager from 'src/page/state/PageStateManager';
 
 describe('ima.controller.AbstractController', () => {
   let MockedPageStateManager = toMock(PageStateManager);

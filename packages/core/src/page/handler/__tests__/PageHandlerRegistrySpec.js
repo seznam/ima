@@ -1,6 +1,6 @@
-import PageHandler from 'page/handler/PageHandler';
-import PageHandlerRegistry from 'page/handler/PageHandlerRegistry';
-import SerialBatch from 'execution/SerialBatch';
+import PageHandler from '../PageHandler';
+import PageHandlerRegistry from '../PageHandlerRegistry';
+import SerialBatch from 'src/execution/SerialBatch';
 import { toMockedInstance } from 'to-mock';
 
 describe('ima.page.handler.PageHandlerRegistry', () => {

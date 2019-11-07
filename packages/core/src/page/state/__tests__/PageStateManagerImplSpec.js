@@ -1,5 +1,5 @@
-import PageStateManager from 'page/state/PageStateManagerImpl';
-import Dispatcher from 'event/Dispatcher';
+import PageStateManager from '../PageStateManagerImpl';
+import Dispatcher from 'src/event/Dispatcher';
 import Events from '../Events';
 import { toMockedInstance } from 'to-mock';
 

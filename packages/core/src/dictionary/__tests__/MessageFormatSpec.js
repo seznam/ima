@@ -1,4 +1,4 @@
-import MessageFormatDictionary from 'dictionary/MessageFormatDictionary';
+import MessageFormatDictionary from '../MessageFormatDictionary';
 
 describe('ima.dictionary.MessageFormatDictionary', () => {
   let dictionary = null;

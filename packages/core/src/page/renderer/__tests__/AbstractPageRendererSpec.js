@@ -1,12 +1,12 @@
 import Helper from 'ima-helpers';
 import ReactDOM from 'react-dom';
-import Controller from 'controller/Controller';
-import AbstractDocumentView from 'page/AbstractDocumentView';
-import AbstractPageRenderer from 'page/renderer/AbstractPageRenderer';
-import BlankManagedRootView from 'page/renderer/BlankManagedRootView';
-import RendererFactory from 'page/renderer/PageRendererFactory';
-import ViewAdapter from 'page/renderer/ViewAdapter';
-import Dispatcher from 'event/Dispatcher';
+import Controller from 'src/controller/Controller';
+import AbstractDocumentView from 'src/page/AbstractDocumentView';
+import AbstractPageRenderer from '../AbstractPageRenderer';
+import BlankManagedRootView from '../BlankManagedRootView';
+import RendererFactory from '../PageRendererFactory';
+import ViewAdapter from '../ViewAdapter';
+import Dispatcher from 'src/event/Dispatcher';
 import {
   toMockedInstance,
   setGlobalMockMethod,

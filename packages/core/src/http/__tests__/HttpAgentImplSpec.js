@@ -1,10 +1,10 @@
 import toMock from 'to-mock';
 
-import Cache from 'cache/Cache';
-import GenericError from 'error/GenericError';
-import HttpAgentImpl from 'http/HttpAgentImpl';
-import HttpAgentProxy from 'http/HttpProxy';
-import CookieStorage from 'storage/CookieStorage';
+import Cache from 'src/cache/Cache';
+import GenericError from 'src/error/GenericError';
+import HttpAgentImpl from '../HttpAgentImpl';
+import HttpAgentProxy from '../HttpProxy';
+import CookieStorage from 'src/storage/CookieStorage';
 
 describe('ima.http.HttpAgentImpl', () => {
   let MockedCache = toMock(Cache);

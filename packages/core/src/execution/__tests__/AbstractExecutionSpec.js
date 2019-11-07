@@ -1,4 +1,4 @@
-import AbstractExecution from 'execution/AbstractExecution';
+import AbstractExecution from '../AbstractExecution';
 
 describe('ima.execution.AbstractExecution', () => {
   let execution = null;

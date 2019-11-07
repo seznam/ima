@@ -1,6 +1,6 @@
-import Bootstrap from 'Bootstrap';
-import ObjectContainer from 'ObjectContainer';
-import namespace from 'namespace';
+import Bootstrap from '../Bootstrap';
+import ObjectContainer from '../ObjectContainer';
+import namespace from '../namespace';
 
 describe('Bootstrap', () => {
   let bootstrap = null;

@@ -1,4 +1,4 @@
-import Route from 'router/Route';
+import Route from '../Route';
 
 describe('ima.router.Route', function() {
   let route = null;

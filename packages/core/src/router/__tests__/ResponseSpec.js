@@ -1,4 +1,4 @@
-import Response from 'router/Response';
+import Response from '../Response';
 
 describe('ima.router.Response', () => {
   var response = null;

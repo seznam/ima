@@ -1,9 +1,9 @@
-import HttpProxy from 'http/HttpProxy';
-import StatusCode from 'http/StatusCode';
-import UrlTransformer from 'http/UrlTransformer';
+import HttpProxy from '../HttpProxy';
+import StatusCode from '../StatusCode';
+import UrlTransformer from '../UrlTransformer';
 import { toMockedInstance } from 'to-mock';
-import Window from 'window/Window';
-import GenericError from '../../error/GenericError';
+import Window from 'src/window/Window';
+import GenericError from 'src/error/GenericError';
 
 describe('ima.http.HttpProxy', () => {
   const API_URL = 'http://localhost:3001/api/';

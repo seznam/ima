@@ -24,7 +24,7 @@ npm config set "//$NPM_LOCAL_REGISTRY_URL_NO_PROTOCOL/:_authToken" "0"
 cd "$CORE_DIR" # dist should be already generated from lerna bootstrap
 sed -i "s#\"version\":\s\".*\"#\"version\": \"$PACKAGE_VERSION\"#" package.json
 sed -i "s#https://registry.npmjs.org/#${NPM_LOCAL_REGISTRY_URL}#" package.json
-npm publish dist
+npm publish
 
 # Setup IMA.js-skeleton
 cd "$SKELETON_DIR"

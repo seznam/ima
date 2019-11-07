@@ -1,5 +1,5 @@
-import ObjectContainer from 'ObjectContainer';
-import ns from 'namespace';
+import ObjectContainer from '../ObjectContainer';
+import ns from '../namespace';
 
 describe('ima.ObjectContainer', () => {
   let oc = null;

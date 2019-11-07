@@ -1,11 +1,11 @@
 import Helper from 'ima-helpers';
-import Cache from 'cache/Cache';
-import Controller from 'controller/Controller';
-import GenericError from 'error/GenericError';
-import ServerPageRenderer from 'page/renderer/ServerPageRenderer';
-import RendererFactory from 'page/renderer/PageRendererFactory';
-import Response from 'router/Response';
-import Dispatcher from 'event/Dispatcher';
+import Cache from 'src/cache/Cache';
+import Controller from 'src/controller/Controller';
+import GenericError from 'src/error/GenericError';
+import ServerPageRenderer from '../ServerPageRenderer';
+import RendererFactory from '../PageRendererFactory';
+import Response from 'src/router/Response';
+import Dispatcher from 'src/event/Dispatcher';
 import {
   toMockedInstance,
   setGlobalMockMethod,

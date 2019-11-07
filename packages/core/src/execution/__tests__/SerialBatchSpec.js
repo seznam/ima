@@ -1,4 +1,4 @@
-import SerialBatch from 'execution/SerialBatch';
+import SerialBatch from '../SerialBatch';
 
 describe('ima.execution.SerialBatch', () => {
   let serialBatch = null;

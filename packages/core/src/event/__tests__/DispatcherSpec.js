@@ -1,4 +1,4 @@
-import Dispatcher from 'event/DispatcherImpl';
+import Dispatcher from '../DispatcherImpl';
 
 describe('ima.event.DispatcherImpl', () => {
   let handlers = {

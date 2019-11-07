@@ -1,5 +1,5 @@
-import SessionStorage from 'storage/SessionStorage';
-import Window from 'window/Window';
+import SessionStorage from '../SessionStorage';
+import Window from 'src/window/Window';
 
 describe('ima.storage.SessionStorage', () => {
   let session;

@@ -1,7 +1,7 @@
-import Request from 'router/Request';
-import Response from 'router/Response';
-import ServerWindow from 'window/ServerWindow';
-import CookieStorage from 'storage/CookieStorage';
+import Request from 'src/router/Request';
+import Response from 'src/router/Response';
+import ServerWindow from 'src/window/ServerWindow';
+import CookieStorage from '../CookieStorage';
 
 describe('ima.storage.CookieStorage', () => {
   let cookieString =

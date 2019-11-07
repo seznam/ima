@@ -1,4 +1,4 @@
-import MapStorage from 'storage/MapStorage';
+import MapStorage from '../MapStorage';
 
 describe('ima.storage.Map', () => {
   let map;

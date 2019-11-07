@@ -1,5 +1,5 @@
-import PageStateManager from 'page/state/PageStateManagerImpl';
-import PageStateManagerDecorator from 'page/state/PageStateManagerDecorator';
+import PageStateManager from '../PageStateManagerImpl';
+import PageStateManagerDecorator from '../PageStateManagerDecorator';
 
 describe('ima.page.state.PageStateManagerDecorator', () => {
   let pageStateManager = null;

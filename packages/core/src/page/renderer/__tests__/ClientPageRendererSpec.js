@@ -1,9 +1,9 @@
 import Helper from 'ima-helpers';
-import Controller from 'controller/Controller';
-import ClientPageRenderer from 'page/renderer/ClientPageRenderer';
-import RendererFactory from 'page/renderer/PageRendererFactory';
-import Window from 'window/Window';
-import Dispatcher from 'event/Dispatcher';
+import Controller from 'src/controller/Controller';
+import ClientPageRenderer from '../ClientPageRenderer';
+import RendererFactory from '../PageRendererFactory';
+import Window from 'src/window/Window';
+import Dispatcher from 'src/event/Dispatcher';
 import {
   toMockedInstance,
   setGlobalMockMethod,

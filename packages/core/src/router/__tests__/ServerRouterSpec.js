@@ -1,9 +1,9 @@
-import Dispatcher from 'event/Dispatcher';
-import PageManager from 'page/manager/PageManager';
-import Request from 'router/Request';
-import Response from 'router/Response';
-import RouteFactory from 'router/RouteFactory';
-import ServerRouter from 'router/ServerRouter';
+import Dispatcher from 'src/event/Dispatcher';
+import PageManager from 'src/page/manager/PageManager';
+import Request from '../Request';
+import Response from '../Response';
+import RouteFactory from '../RouteFactory';
+import ServerRouter from '../ServerRouter';
 
 describe('ima.router.ServerRouter', () => {
   var router = null;

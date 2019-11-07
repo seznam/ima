@@ -1,7 +1,7 @@
 import { toMockedInstance } from 'to-mock';
 
-import ObjectContainer from 'ObjectContainer';
-import ComponentUtils from 'page/renderer/ComponentUtils';
+import ObjectContainer from 'src/ObjectContainer';
+import ComponentUtils from '../ComponentUtils';
 
 class SomeMockHelper {}
 

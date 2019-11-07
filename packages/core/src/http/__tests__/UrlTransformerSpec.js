@@ -1,4 +1,4 @@
-import UrlTransformer from 'http/UrlTransformer';
+import UrlTransformer from '../UrlTransformer';
 
 describe('ima.http.UrlTransformer', () => {
   var transformer = null;

@@ -1,6 +1,6 @@
-import PageNavigationHandler from 'page/handler/PageNavigationHandler';
-import Window from 'window/Window';
-import ActionTypes from 'router/ActionTypes';
+import PageNavigationHandler from '../PageNavigationHandler';
+import Window from 'src/window/Window';
+import ActionTypes from 'src/router/ActionTypes';
 
 jest.useFakeTimers();
 

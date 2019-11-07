@@ -1,9 +1,9 @@
-import Dispatcher from 'event/Dispatcher';
-import PageManager from 'page/manager/PageManager';
-import ActionTypes from 'router/ActionTypes';
-import ClientRouter from 'router/ClientRouter';
-import RouteFactory from 'router/RouteFactory';
-import Window from 'window/Window';
+import Dispatcher from 'src/event/Dispatcher';
+import PageManager from 'src/page/manager/PageManager';
+import ActionTypes from '../ActionTypes';
+import ClientRouter from '../ClientRouter';
+import RouteFactory from '../RouteFactory';
+import Window from 'src/window/Window';
 
 describe('ima.router.ClientRouter', () => {
   let router = null;
