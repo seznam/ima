@@ -2,16 +2,16 @@
   "name": "@ima/core",
   "version": "0.16.11",
   "description": "IMA.js framework for isomorphic javascript application",
-  "main": "ima.server.cjs.js",
-  "module": "ima.server.esm.js",
+  "main": "dist/ima.server.cjs.js",
+  "module": "dist/ima.server.esm.js",
   "scripts": {
     "test": "npm run test:jest && npm run test:es && npm run test:size",
     "test:jest": "jest --no-watchman -c jest.conf.js",
     "test:es": "es-check es5 './polyfill/*.js'",
     "test:size": "size-limit",
     "preversion": "npm test",
-    "clean": "gulp clean",
-    "build": "gulp build && rollup --config",
+    "clean": "rm -rf dist",
+    "build": "rollup --config",
     "prepare": "npm run build"
   },
   "keywords": [
@@ -43,8 +43,7 @@
     "url": "https://github.com/seznam/ima/issues"
   },
   "publishConfig": {
-    "registry": "https://registry.npmjs.org/",
-    "dir": "dist"
+    "registry": "https://registry.npmjs.org/"
   },
   "license": "MIT",
   "devDependencies": {
@@ -53,7 +52,6 @@
     "@size-limit/preset-big-lib": "^2.1.5",
     "enzyme": "^3.8.0",
     "es-check": "^5.0.0",
-    "husky": "^3.0.5",
     "jscodeshift": "^0.6.4",
     "react": "16.9.0",
     "react-dom": "16.9.0",
