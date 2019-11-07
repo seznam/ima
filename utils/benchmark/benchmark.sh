@@ -21,10 +21,10 @@ NPM_LOCAL_REGISTRY_PID=$!
 npm config set "//$NPM_LOCAL_REGISTRY_URL_NO_PROTOCOL/:_authToken" "0"
 
 # Release ima-core
-cd "$CORE_DIR/dist" # dist should be already generated from lerna bootstrap
+cd "$CORE_DIR" # dist should be already generated from lerna bootstrap
 sed -i "s#\"version\":\s\".*\"#\"version\": \"$PACKAGE_VERSION\"#" package.json
 sed -i "s#https://registry.npmjs.org/#${NPM_LOCAL_REGISTRY_URL}#" package.json
-npm publish
+npm publish dist
 
 # Setup IMA.js-skeleton
 cd "$SKELETON_DIR"
