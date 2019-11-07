@@ -20,7 +20,7 @@ jobs:
       script: npm audit || echo \"audit found some vulnerabilities.\"
     - if: tag =~ ^v # Run only for tags
       stage: "deploy"
-      before:
+      script:
         - echo "//registry.npmjs.org/:_authToken=\${NPM_TOKEN}" >> $HOME/.npmrc 2> /dev/null
-      script: "npm run release:publish"
+        - npm run release:publish
       skip_cleanup: true
