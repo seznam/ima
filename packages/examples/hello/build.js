@@ -17,7 +17,7 @@ let languages = {
 };
 
 let vendors = {
-  common: ['ima'],
+  common: ['@ima/ima'],
 
   server: [],
 

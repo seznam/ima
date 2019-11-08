@@ -9,7 +9,7 @@ import PageStateManager from 'src/page/state/PageStateManager';
 import Window from 'src/window/Window';
 import { toMockedInstance } from 'to-mock';
 
-describe('ima.page.manager.ClientPageManager', () => {
+describe('ima.core.page.manager.ClientPageManager', () => {
   let pageFactory = {
     createController: Controller => new Controller(),
     decorateController: controller => controller,

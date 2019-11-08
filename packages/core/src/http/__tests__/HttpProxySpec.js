@@ -5,7 +5,7 @@ import { toMockedInstance } from 'to-mock';
 import Window from 'src/window/Window';
 import GenericError from 'src/error/GenericError';
 
-describe('ima.http.HttpProxy', () => {
+describe('ima.core.http.HttpProxy', () => {
   const API_URL = 'http://localhost:3001/api/';
   const OPTIONS = {
     ttl: 3600000,

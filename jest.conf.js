@@ -3,5 +3,5 @@ module.exports = {
   verbose: true,
   testEnvironment: 'node',
   modulePaths: ['<rootDir>/'],
-  testRegex: '(/__tests__/.*|(\\.|/)(Spec))\\.jsx?$'
+  testRegex: '(/__tests__/).*Spec\\.jsx?$'
 };

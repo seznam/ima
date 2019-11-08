@@ -1,5 +1,5 @@
+import { AbstractComponent } from '@ima/core';
 import React from 'react';
-import AbstractComponent from 'ima/page/AbstractComponent';
 
 export default class Item extends AbstractComponent {
   constructor(props) {

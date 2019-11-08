@@ -5,7 +5,7 @@
   "main": "index.js",
   "scripts": {
     "preversion": "npm test",
-    "test": "jest -c jest.conf.js"
+    "test": "../../node_modules/.bin/jest -c jest.conf.js"
   },
   "repository": {
     "type": "git",
@@ -28,7 +28,7 @@
   "homepage": "https://github.com/seznam/ima",
   "devDependencies": {
     "express": "^4.16.4",
-    "ima-helpers": "^0.16.0"
+    "@ima/helpers": "17.0.0-rc.3"
   },
   "dependencies": {
     "async-each": "1.0.1",
@@ -38,7 +38,7 @@
     "winston": "3.2.1"
   },
   "peerDependencies": {
-    "ima-helpers": "0.16.x"
+    "@ima/helpers": "17.x"
   },
   "engines": {
     "node": ">=6",

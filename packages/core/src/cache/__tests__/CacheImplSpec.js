@@ -1,9 +1,9 @@
-import Helper from 'ima-helpers';
+import Helper from '@ima/helpers';
 import CacheFactory from '../CacheFactory';
 import Cache from '../CacheImpl';
 import MapStorage from 'src/storage/MapStorage';
 
-describe('ima.cache.CacheImpl', () => {
+describe('ima.core.cache.CacheImpl', () => {
   let cache = null;
   let cacheStorage = null;
   let cacheFactory = null;

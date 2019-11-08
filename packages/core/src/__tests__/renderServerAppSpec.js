@@ -1,10 +1,23 @@
 import React from 'react';
-import $Helper from 'ima-helpers';
+import $Helper from '@ima/helpers';
 import ControllerInterface from '../controller/Controller';
 import ServerPageRenderer from '../page/renderer/ServerPageRenderer';
 import Response from '../router/Response';
 import * as ima from '../main';
 import vendorLinker from '../vendorLinker';
+
+jest.mock('path', () => {
+  const original = jest.requireActual('path');
+  const resolve = (...args) => {
+    if (args[1] === undefined && args[0] === '@ima/core') {
+      return original.join(process.cwd(), 'index.js');
+    }
+
+    return original.resolve(...args);
+  };
+
+  return Object.assign({}, original, { resolve });
+});
 
 describe('Render server application', () => {
   let router = null;
@@ -55,7 +68,7 @@ describe('Render server application', () => {
   beforeAll(done => {
     vendorLinker.set('react', React);
     vendorLinker.set('react-dom', ReactDOM);
-    vendorLinker.set('ima-helpers', $Helper);
+    vendorLinker.set('@ima/helpers', $Helper);
 
     let app = ima.createImaApp();
     let bootConfig = ima.getClientBootConfig(

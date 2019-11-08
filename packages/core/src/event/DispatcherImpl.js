@@ -86,7 +86,7 @@ export default class DispatcherImpl extends Dispatcher {
     if ($Debug) {
       if (!scopes.has(scope)) {
         console.warn(
-          'ima.event.DispatcherImpl.unlisten(): the provided ' +
+          'ima.core.event.DispatcherImpl.unlisten(): the provided ' +
             `listener '${listener}' is not registered for the ` +
             `specified event '${event}' and scope '${scope}'. Check ` +
             `your workflow.`,

@@ -1,4 +1,4 @@
-import AbstractIMAController from 'ima/controller/AbstractController';
+import { AbstractIMAController } from '@ima/core';
 
 /**
  * Base controller for app.

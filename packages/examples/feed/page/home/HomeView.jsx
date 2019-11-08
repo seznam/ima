@@ -1,5 +1,4 @@
-import AbstractComponent from 'ima/page/AbstractComponent';
-import PropTypes from 'prop-types';
+import { PageContext, AbstractComponent } from '@ima/core';
 import React from 'react';
 import Feed from 'app/component/feed/Feed';
 import Filter from 'app/component/filter/Filter';
@@ -10,10 +9,8 @@ import TextInput from 'app/component/textInput/TextInput';
  * HomePage view.
  */
 export default class HomeView extends AbstractComponent {
-  static get contextTypes() {
-    return {
-      $Utils: PropTypes.object
-    };
+  static get contextType() {
+    return PageContext;
   }
 
   render() {

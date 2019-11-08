@@ -4,7 +4,7 @@ import ActionTypes from 'src/router/ActionTypes';
 
 jest.useFakeTimers();
 
-describe('ima.page.handler.PageNavigationHandler', () => {
+describe('ima.core.page.handler.PageNavigationHandler', () => {
   let handler;
   let window;
 

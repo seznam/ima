@@ -8,7 +8,7 @@ import PageStateManager from 'src/page/state/PageStateManager';
 import RouteFactory from 'src/router/RouteFactory';
 import { toMockedInstance } from 'to-mock';
 
-describe('ima.page.manager.AbstractPageManager', () => {
+describe('ima.core.page.manager.AbstractPageManager', () => {
   let controllerState = {
     controller: 'controller',
     share: 'controller'

@@ -1,4 +1,4 @@
-import AbstractDocumentView from 'ima/page/AbstractDocumentView';
+import { AbstractDocumentView } from '@ima/core';
 import React from 'react';
 
 /**

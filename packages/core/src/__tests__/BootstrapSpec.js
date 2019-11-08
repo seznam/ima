@@ -131,7 +131,7 @@ describe('Bootstrap', () => {
           $Env: 'prod',
           __meta__: {}
         },
-        'ima'
+        'ima.core'
       );
     });
 

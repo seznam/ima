@@ -1,15 +1,12 @@
-import AbstractComponent from 'ima/page/AbstractComponent';
-import PropTypes from 'prop-types';
+import { PageContext, AbstractComponent } from '@ima/core';
 import React from 'react';
 
 /**
  * Not found page.
  */
 export default class NotFoundView extends AbstractComponent {
-  static get contextTypes() {
-    return {
-      $Utils: PropTypes.object
-    };
+  static get contextType() {
+    return PageContext;
   }
 
   render() {

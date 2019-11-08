@@ -1,5 +1,4 @@
-import Router from 'ima/router/Router';
-import Window from 'ima/window/Window';
+import { Router, Window } from '@ima/core';
 
 export default (ns, oc, config) => {
   let window = oc.get(Window);

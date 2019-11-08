@@ -7,7 +7,7 @@ import RouteEvents from '../Events';
 import RouteFactory from '../RouteFactory';
 import RouteNames from '../RouteNames';
 
-describe('ima.router.AbstractRouter', () => {
+describe('ima.core.router.AbstractRouter', () => {
   let router = null;
   let pageManager = null;
   let routeFactory = null;

@@ -13,7 +13,7 @@ The configuration can be set in gulp config:
 
 ```
 // gulpConfig.js in project
-let defaultConfig = require('ima-gulp-tasks/gulpConfig');
+let defaultConfig = require('@ima/gulp-tasks/gulpConfig');
 
 defaultConfig.notifyServer.enable = true; /* this is only one required option to enable this feature. Disabled by default */
 /* Default settings: */

@@ -1,6 +1,6 @@
 const del = require('del');
 const fs = require('fs');
-const templateProcessor = require('ima-server/lib/templateProcessor');
+const templateProcessor = require('@ima/server/lib/templateProcessor');
 
 exports.__requiresConfig = true;
 

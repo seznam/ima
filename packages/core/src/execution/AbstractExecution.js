@@ -54,7 +54,7 @@ export default class AbstractExecution extends Execution {
 
     if ($Debug) {
       console.warn(
-        'ima.execution.AbstractExecution: Given job is not a callable ' +
+        'ima.core.execution.AbstractExecution: Given job is not a callable ' +
           'function therefore it will be excluded from execution.',
         {
           job

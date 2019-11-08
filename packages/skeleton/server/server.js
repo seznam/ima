@@ -1,7 +1,7 @@
 'use strict';
 
-require('ima/polyfill/imaLoader.js');
-require('ima/polyfill/imaRunner.js');
+require('@ima/core/polyfill/imaLoader.js');
+require('@ima/core/polyfill/imaRunner.js');
 
 // Node
 let cluster = require('cluster');
@@ -10,7 +10,7 @@ let os = require('os');
 global.appRoot = path.resolve(__dirname);
 
 // IMA server
-let imaServer = require('ima-server');
+let imaServer = require('@ima/server');
 
 let clientApp = imaServer.clientApp;
 let urlParser = imaServer.urlParser;

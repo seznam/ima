@@ -1,6 +1,6 @@
 import Response from '../Response';
 
-describe('ima.router.Response', () => {
+describe('ima.core.router.Response', () => {
   var response = null;
 
   beforeEach(() => {

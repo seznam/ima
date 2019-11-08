@@ -1,7 +1,4 @@
-import AbstractController from 'ima/controller/AbstractController';
-//import Dictionary from 'ima/dictionary/Dictionary';
-//import MetaManager from 'ima/meta/MetaManager';
-//import Router from 'ima/router/Router';
+import { AbstractController } from '@ima/core';
 
 /**
  * Basic page controller.

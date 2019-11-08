@@ -1,9 +1,9 @@
-import $Helper from 'ima-helpers';
+import $Helper from '@ima/helpers';
 import ns from './namespace';
 import ObjectContainer from './ObjectContainer';
 import Router from './router/Router';
 
-ns.namespace('ima');
+ns.namespace('ima.core');
 
 /**
  * Environment name value in the production environment.
@@ -177,4 +177,4 @@ export default class Bootstrap {
   }
 }
 
-ns.ima.Bootstrap = Bootstrap;
+ns.ima.core.Bootstrap = Bootstrap;

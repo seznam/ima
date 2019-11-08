@@ -1,6 +1,6 @@
 import ns from './namespace';
 
-ns.namespace('ima');
+ns.namespace('ima.core');
 
 /**
  * The Object Container is an enhanced dependency injector with support for
@@ -47,7 +47,7 @@ export default class ObjectContainer {
    * @return {string} The IMA binding state.
    */
   static get IMA_BINDING_STATE() {
-    return 'ima';
+    return 'ima.core';
   }
 
   /**
@@ -299,7 +299,7 @@ export default class ObjectContainer {
         this._bindingState === ObjectContainer.PLUGIN_BINDING_STATE
       ) {
         throw new Error(
-          'ima.ObjectContainer:provide The ' +
+          'ima.core.ObjectContainer:provide The ' +
             'implementation of the provided interface ' +
             `(${interfaceConstructor.name}) has already been ` +
             `configured and cannot be overridden.`
@@ -310,7 +310,7 @@ export default class ObjectContainer {
       let prototype = implementationConstructor.prototype;
       if (!(prototype instanceof interfaceConstructor)) {
         throw new Error(
-          'ima.ObjectContainer:provide The specified ' +
+          'ima.core.ObjectContainer:provide The specified ' +
             `class (${implementationConstructor.name}) does not ` +
             `implement the ${interfaceConstructor.name} ` +
             `interface.`

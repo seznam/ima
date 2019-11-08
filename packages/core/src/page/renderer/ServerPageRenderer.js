@@ -12,7 +12,7 @@ if (typeof window === 'undefined' || window === null) {
   let nodePath = 'path';
   let fs = require(nodeFs);
   let path = require(nodePath);
-  let folder = path.dirname(path.resolve('ima'));
+  let folder = path.dirname(path.resolve('@ima/core'));
 
   imaLoader = fs.readFileSync(`${folder}/polyfill/imaLoader.js`, 'utf8');
   imaRunner = fs.readFileSync(`${folder}/polyfill/imaRunner.js`, 'utf8');

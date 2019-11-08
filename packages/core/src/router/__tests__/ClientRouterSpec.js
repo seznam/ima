@@ -5,7 +5,7 @@ import ClientRouter from '../ClientRouter';
 import RouteFactory from '../RouteFactory';
 import Window from 'src/window/Window';
 
-describe('ima.router.ClientRouter', () => {
+describe('ima.core.router.ClientRouter', () => {
   let router = null;
   let pageRenderer = null;
   let routeFactory = null;
