@@ -22,7 +22,7 @@
   },
   "homepage": "https://github.com/seznam/ima#readme",
   "publishConfig": {
-    "registry": "http://registry.npmjs.org/",
+    "registry": "https://registry.npmjs.org/",
     "access": "public"
   },
   "dependencies": {
