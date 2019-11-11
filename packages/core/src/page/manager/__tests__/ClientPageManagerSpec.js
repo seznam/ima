@@ -208,7 +208,7 @@ describe('ima.core.page.manager.ClientPageManager', () => {
           done();
         })
         .catch(error => {
-          console.error('ima.page.manager.Client: CATCH ERROR: ', error);
+          console.error('ima.core.page.manager.Client: CATCH ERROR: ', error);
           done(error);
         });
     });

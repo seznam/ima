@@ -14,7 +14,7 @@
     console.log('Resource ' + data.resourceURL + ' has just been replaced.'); //eslint-disable-line no-console
 
     if (/static\/js\//.test(data.resourceURL)) {
-      $IMA.$DevTool.clearAppSource();
+      // $IMA.$DevTool.clearAppSource();
 
       (0, eval)(data.contents);
 

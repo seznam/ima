@@ -1,4 +1,4 @@
-import { AbstractIMAController } from '@ima/core';
+import { AbstractController as AbstractIMAController } from '@ima/core';
 
 /**
  * Base controller, providing elementary configuration of the meta manager.

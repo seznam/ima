@@ -33,7 +33,7 @@ export default class AbstractExecution extends Execution {
    */
   execute() {
     throw new GenericError(
-      'The ima.execution.AbstractExecution.execute method is abstract ' +
+      'The ima.core.execution.AbstractExecution.execute method is abstract ' +
         'and must be overridden'
     );
   }

@@ -26,9 +26,9 @@ if (typeof window === 'undefined' || window === null) {
  * @class ServerPageRenderer
  * @extends AbstractPageRenderer
  * @implements PageRenderer
- * @namespace ima.page.renderer
+ * @namespace ima.core.page.renderer
  * @module ima
- * @submodule ima.page
+ * @submodule ima.core.page
  */
 export default class ServerPageRenderer extends AbstractPageRenderer {
   //#if _SERVER

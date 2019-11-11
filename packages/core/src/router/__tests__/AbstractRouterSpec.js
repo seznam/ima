@@ -84,7 +84,7 @@ describe('ima.core.router.AbstractRouter', () => {
       }).toThrow();
     });
 
-    it('should create new ima.Route', () => {
+    it('should create new ima.core.Route', () => {
       spyOn(routeFactory, 'createRoute').and.callThrough();
 
       router.add('routeName', '/newRoutePath', Controller, View, options);
@@ -256,7 +256,7 @@ describe('ima.core.router.AbstractRouter', () => {
           done();
         })
         .catch(error => {
-          console.error('ima.router.AbstractRouter.handleError', error);
+          console.error('ima.core.router.AbstractRouter.handleError', error);
           done();
         });
     });
@@ -317,7 +317,7 @@ describe('ima.core.router.AbstractRouter', () => {
           done();
         })
         .catch(error => {
-          console.error('ima.router.AbstractRouter.handleNotFound', error);
+          console.error('ima.core.router.AbstractRouter.handleNotFound', error);
           done();
         });
     });
@@ -423,7 +423,7 @@ describe('ima.core.router.AbstractRouter', () => {
       });
     });
 
-    it('should fire ns.ima.EVENTS.BEFORE_HANDLE_ROUTE', () => {
+    it('should fire ns.ima.core.EVENTS.BEFORE_HANDLE_ROUTE', () => {
       let response = { content: null, status: 200 };
       let params = {};
       let data = {
@@ -447,7 +447,7 @@ describe('ima.core.router.AbstractRouter', () => {
       );
     });
 
-    it('should fire ns.ima.EVENTS.AFTER_HANDLE_ROUTE', done => {
+    it('should fire ns.ima.core.EVENTS.AFTER_HANDLE_ROUTE', done => {
       let response = { content: null, status: 200 };
       let params = {};
 
@@ -477,7 +477,7 @@ describe('ima.core.router.AbstractRouter', () => {
       });
     });
 
-    it('should fire ns.ima.EVENTS.AFTER_HANDLE_ROUTE with error', done => {
+    it('should fire ns.ima.core.EVENTS.AFTER_HANDLE_ROUTE with error', done => {
       let response = { content: null, status: 200 };
       let params = { error: new Error('test') };
 

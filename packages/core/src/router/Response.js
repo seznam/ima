@@ -82,7 +82,7 @@ export default class Response {
    *          encode: function(string): string=,
    *          decode: function(string): string
    *        }=} cookieTransformFunction
-   * @return {ima.router.Response} This response.
+   * @return {ima.core.router.Response} This response.
    */
   init(response, cookieTransformFunction = {}) {
     this._cookieTransformFunction = Object.assign(

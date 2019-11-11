@@ -70,7 +70,7 @@ export default class ObjectContainer {
   /**
    * Initializes the object container.
    *
-   * @param {ima.Namespace} namespace The namespace container, used to
+   * @param {ima.core.Namespace} namespace The namespace container, used to
    *        access classes and values using their fully qualified names.
    */
   constructor(namespace) {
@@ -78,7 +78,7 @@ export default class ObjectContainer {
      * The namespace container, used to access classes and values using
      * their fully qualified names.
      *
-     * @type {ima.Namespace}
+     * @type {ima.core.Namespace}
      */
     this._namespace = namespace;
 
@@ -134,7 +134,7 @@ export default class ObjectContainer {
     if ($Debug) {
       if (this._bindingState === ObjectContainer.PLUGIN_BINDING_STATE) {
         throw new Error(
-          `ima.ObjectContainer:bind Object container ` +
+          `ima.core.ObjectContainer:bind Object container ` +
             `is locked. You do not have the permission to ` +
             `create a new alias named ${name}.`
         );
@@ -142,7 +142,7 @@ export default class ObjectContainer {
 
       if (typeof classConstructor !== 'function') {
         throw new Error(
-          `ima.ObjectContainer:bind The second ` +
+          `ima.core.ObjectContainer:bind The second ` +
             `argument has to be a class constructor function, ` +
             `but ${classConstructor} was provided. Fix alias ` +
             `${name} for your bind.js file.`
@@ -190,7 +190,7 @@ export default class ObjectContainer {
     if ($Debug) {
       if (this._entries.has(name) || !!this._getEntryFromConstant(name)) {
         throw new Error(
-          `ima.ObjectContainer:constant The ${name} ` +
+          `ima.core.ObjectContainer:constant The ${name} ` +
             `constant has already been declared and cannot be ` +
             `redefined.`
         );
@@ -198,7 +198,7 @@ export default class ObjectContainer {
 
       if (this._bindingState === ObjectContainer.PLUGIN_BINDING_STATE) {
         throw new Error(
-          `ima.ObjectContainer:constant The ${name} ` +
+          `ima.core.ObjectContainer:constant The ${name} ` +
             `constant can't be declared in plugin. ` +
             `The constant must be define in app/config/bind.js file.`
         );
@@ -232,7 +232,7 @@ export default class ObjectContainer {
     if ($Debug) {
       if (typeof classConstructor !== 'function') {
         throw new Error(
-          `ima.ObjectContainer:inject The first ` +
+          `ima.core.ObjectContainer:inject The first ` +
             `argument has to be a class constructor function, ` +
             `but ${classConstructor} was provided. Fix your ` +
             `bind.js file.`
@@ -244,7 +244,7 @@ export default class ObjectContainer {
         this._bindingState === ObjectContainer.PLUGIN_BINDING_STATE
       ) {
         throw new Error(
-          `ima.ObjectContainer:inject The ` +
+          `ima.core.ObjectContainer:inject The ` +
             `${classConstructor.name} has already had its ` +
             `default dependencies configured, and the object ` +
             `container is currently locked, therefore the ` +
@@ -441,7 +441,7 @@ export default class ObjectContainer {
   setBindingState(bindingState, bindingPluginName = null) {
     if (this._bindingState === ObjectContainer.APP_BINDING_STATE) {
       throw new Error(
-        `ima.ObjectContainer:setBindingState The setBindingState() ` +
+        `ima.core.ObjectContainer:setBindingState The setBindingState() ` +
           `method  has to be called only by the bootstrap script. Other ` +
           `calls are not allowed.`
       );
@@ -486,7 +486,7 @@ export default class ObjectContainer {
     if ($Debug) {
       if (!entry) {
         throw new Error(
-          `ima.ObjectContainer:_getEntry There is no constant, ` +
+          `ima.core.ObjectContainer:_getEntry There is no constant, ` +
             `alias, registered class, registered interface with ` +
             `configured implementation or namespace entry ` +
             `identified as ${name}. Check your bind.js file for ` +
@@ -705,7 +705,7 @@ export default class ObjectContainer {
   }
 }
 
-ns.ima.ObjectContainer = ObjectContainer;
+ns.ima.core.ObjectContainer = ObjectContainer;
 
 /**
  * Object container entry, representing either a class, interface, constant or

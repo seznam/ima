@@ -118,7 +118,7 @@ export default class AbstractRouter extends Router {
   add(name, pathExpression, controller, view, options = undefined) {
     if (this._routes.has(name)) {
       throw new GenericError(
-        `ima.router.AbstractRouter.add: The route with name ${name} ` +
+        `ima.core.router.AbstractRouter.add: The route with name ${name} ` +
           `is already defined`
       );
     }
@@ -198,7 +198,7 @@ export default class AbstractRouter extends Router {
 
     if (!route) {
       throw new GenericError(
-        `ima.router.AbstractRouter.getCurrentRouteInfo: The route ` +
+        `ima.core.router.AbstractRouter.getCurrentRouteInfo: The route ` +
           `for path ${path} is not defined.`
       );
     }
@@ -236,7 +236,7 @@ export default class AbstractRouter extends Router {
 
     if (!route) {
       throw new GenericError(
-        `ima.router.AbstractRouter:link has undefined route with ` +
+        `ima.core.router.AbstractRouter:link has undefined route with ` +
           `name ${routeName}. Add new route with that name.`
       );
     }
@@ -274,7 +274,7 @@ export default class AbstractRouter extends Router {
 
     if (!routeError) {
       let error = new GenericError(
-        `ima.router.AbstractRouter:handleError cannot process the ` +
+        `ima.core.router.AbstractRouter:handleError cannot process the ` +
           `error because no error page route has been configured. Add ` +
           `a new route named '${RouteNames.ERROR}'.`,
         params
@@ -297,7 +297,7 @@ export default class AbstractRouter extends Router {
 
     if (!routeNotFound) {
       let error = new GenericError(
-        `ima.router.AbstractRouter:handleNotFound cannot processes ` +
+        `ima.core.router.AbstractRouter:handleNotFound cannot processes ` +
           `a non-matching route because no not found page route has ` +
           `been configured. Add new route named ` +
           `'${RouteNames.NOT_FOUND}'.`,

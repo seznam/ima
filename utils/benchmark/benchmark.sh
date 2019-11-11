@@ -29,9 +29,9 @@ npm publish
 # Setup IMA.js-skeleton
 cd "$SKELETON_DIR"
 sed -i "s#\"$PACKAGE_NAME\":\s\".*\"#\"$PACKAGE_NAME\": \"$PACKAGE_VERSION\"#" package.json
-npm config set $PACKAGE_NAME:registry=$NPM_LOCAL_REGISTRY_URL
+npm config set @ima:registry=$NPM_LOCAL_REGISTRY_URL
 npm install
-npm config delete $PACKAGE_NAME:registry
+npm config delete @ima:registry
 npm run app:feed
 npm run build
 mv build/ima/config/environment.js build/ima/config/environment.orig.js
