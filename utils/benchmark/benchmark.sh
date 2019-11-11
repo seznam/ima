@@ -10,7 +10,7 @@ NPM_LOCAL_REGISTRY_URL="http://${NPM_LOCAL_REGISTRY_URL_NO_PROTOCOL}/"
 
 ROOT_DIR=`pwd`
 SKELETON_DIR="$ROOT_DIR/packages/skeleton"
-PACKAGES_VERSION=`cat $ROOT_DIR/package.json | grep \"version\" | cut -d':' -f2 | cut -d'"' -f2`-next
+PACKAGE_VERSION=`cat $ROOT_DIR/package.json | grep \"version\" | cut -d':' -f2 | cut -d'"' -f2`-next
 PACKAGES="core server examples gulp-task-loader gulp-tasks"
 
 # Setup local registry
