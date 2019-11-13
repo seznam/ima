@@ -9,7 +9,7 @@ NPM_LOCAL_REGISTRY_URL_NO_PROTOCOL="localhost:4873"
 NPM_LOCAL_REGISTRY_URL="http://${NPM_LOCAL_REGISTRY_URL_NO_PROTOCOL}/"
 
 ROOT_DIR=`pwd`
-CREATE_IMA_APP_DIR="$ROOT_DIR/packages/skeleton"
+CREATE_IMA_APP_DIR="$ROOT_DIR/packages/create-ima-app"
 PACKAGE_VERSION=`node -e "console.log(require('./lerna.json').version)"`-next
 PACKAGES="core server examples gulp-task-loader gulp-tasks"
 
