@@ -9,37 +9,39 @@ const { info, error } = require('../utils/printUtils');
 
 const dir = argv._[0];
 
-inquirer
-  .prompt([
-    {
-      type: 'list',
-      name: 'example',
-      message: 'Choose a template for your new IMA.js application:',
-      choices: [
-        {
-          name: `${chalk.bold.blue(
-            'Empty'
-          )} - The basic Hello World example. Ideal for new projects.`,
-          value: 'hello'
-        },
-        {
-          name: `${chalk.bold.blue(
-            'Todos'
-          )} - Demo example of TodoMVC application.`,
-          value: 'todos'
-        },
-        {
-          name: `${chalk.bold.blue(
-            'Feed'
-          )}  - Demo example of twitter-like application with fake REST API.`,
-          value: 'feed'
-        }
-      ]
-    }
-  ])
-  .then(({ example }) => {
-    createImaApp(dir, example);
-  });
+let exampleResolver = argv.example
+  ? Promise.resolve({ example: argv.example })
+  : inquirer.prompt([
+      {
+        type: 'list',
+        name: 'example',
+        message: 'Choose a template for your new IMA.js application:',
+        choices: [
+          {
+            name: `${chalk.bold.blue(
+              'Empty'
+            )} - The basic Hello World example. Ideal for new projects.`,
+            value: 'hello'
+          },
+          {
+            name: `${chalk.bold.blue(
+              'Todos'
+            )} - Demo example of TodoMVC application.`,
+            value: 'todos'
+          },
+          {
+            name: `${chalk.bold.blue(
+              'Feed'
+            )}  - Demo example of twitter-like application with fake REST API.`,
+            value: 'feed'
+          }
+        ]
+      }
+    ]);
+
+exampleResolver.then(({ example }) => {
+  createImaApp(dir, example);
+});
 
 function createImaApp(dirName, exampleName) {
   info(
@@ -50,6 +52,15 @@ function createImaApp(dirName, exampleName) {
   const projName = dirName.split(path.sep).pop();
   const appRoot = path.resolve(dirName.toString());
   const tplRoot = path.join(__dirname, '../template');
+  const exampleRoot = path.resolve(
+    __dirname,
+    `../node_modules/@ima/examples/${exampleName}`
+  );
+
+  if (!fs.existsSync(exampleRoot)) {
+    error(`Example '${exampleName}' is not defiend.`);
+    process.exit(1);
+  }
 
   if (!fs.existsSync(dirName)) {
     try {
@@ -80,10 +91,6 @@ function createImaApp(dirName, exampleName) {
     info(`Copying ${chalk.cyan(exampleName)} example files...`);
   }
 
-  const exampleRoot = path.resolve(
-    __dirname,
-    `../node_modules/@ima/examples/${exampleName}`
-  );
   fsx.copySync(exampleRoot, path.join(appRoot, 'app'));
 
   // Run npm install
