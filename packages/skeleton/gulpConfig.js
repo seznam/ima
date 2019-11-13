@@ -1,3 +1,3 @@
-let defaultConfig = require('ima-gulp-tasks/gulpConfig');
+let defaultConfig = require('@ima/gulp-tasks/gulpConfig');
 
 module.exports = defaultConfig;

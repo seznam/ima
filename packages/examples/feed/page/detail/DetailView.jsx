@@ -1,6 +1,5 @@
-import PropTypes from 'prop-types';
+import { PageContext, AbstractComponent } from '@ima/core';
 import React from 'react';
-import AbstractComponent from 'ima/page/AbstractComponent';
 import FeedItem from 'app/component/feedItem/FeedItem';
 import Header from 'app/component/header/Header';
 
@@ -8,10 +7,8 @@ import Header from 'app/component/header/Header';
  * DetailPage view.
  */
 export default class DetailView extends AbstractComponent {
-  static get contextTypes() {
-    return {
-      $Utils: PropTypes.object
-    };
+  static get contextType() {
+    return PageContext;
   }
 
   render() {

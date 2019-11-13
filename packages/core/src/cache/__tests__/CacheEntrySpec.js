@@ -1,6 +1,6 @@
 import CacheEntry from '../CacheEntry';
 
-describe('ima.cache.CacheEntry', () => {
+describe('ima.core.cache.CacheEntry', () => {
   let cacheEntry = null;
 
   beforeEach(() => {

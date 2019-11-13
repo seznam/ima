@@ -1,4 +1,4 @@
-import AbstractComponent from 'ima/page/AbstractComponent';
+import { AbstractComponent } from '@ima/core';
 import React from 'react';
 import FeedItem from 'app/component/feedItem/FeedItem';
 

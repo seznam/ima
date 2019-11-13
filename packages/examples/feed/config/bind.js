@@ -1,8 +1,4 @@
-import Cache from 'ima/cache/Cache';
-import Dictionary from 'ima/dictionary/Dictionary';
-import EventBus from 'ima/event/EventBus';
-import Router from 'ima/router/Router';
-import Window from 'ima/window/Window';
+import { Cache, Dictionary, EventBus, Router, Window } from '@ima/core';
 import MockHttpAgent from 'app/mock/MockHttpAgent';
 import CategoryListFactory from 'app/model/categoryList/CategoryListFactory';
 import CategoryListResource from 'app/model/categoryList/CategoryListResource';

@@ -2,7 +2,7 @@ const { defineInlineTest } = require('jscodeshift/src/testUtils');
 const { getOptions } = require('../transformUtils/testUtils');
 const transform = require('../context-api-v17');
 
-describe('ima.utils.transform.context-api-v17', () => {
+describe('ima.core.utils.transform.context-api-v17', () => {
   defineInlineTest(
     transform,
     getOptions(),
@@ -24,6 +24,7 @@ export default class MyComponent extends AbstractComponent {
     getOptions(),
     `
 import Core from '@ima/core';
+import PropTypes from 'prop-types';
 
 export default class MyComponent extends AbstractComponent {
 	static get contextTypes() {
@@ -50,6 +51,7 @@ export default class MyComponent extends AbstractComponent {
     transform,
     getOptions(),
     `
+import PropTypes from 'prop-types';
 export default class MyComponent extends AbstractComponent {
 	static get contextTypes() {
 		return {
@@ -74,6 +76,7 @@ export default class MyComponent extends AbstractComponent {
     transform,
     getOptions(),
     `
+import PropTypes from 'prop-types';
 export default class MyComponent extends AbstractComponent {
 	static get contextTypes() {
 		return {
@@ -92,5 +95,39 @@ export default class MyComponent extends AbstractComponent {
 }
 `,
     'Should replace contextTypes with contextType returning PageContext'
+  );
+
+  defineInlineTest(
+    transform,
+    getOptions(),
+    `
+import PropTypes from 'prop-types';
+export default class MyComponent extends AbstractComponent {
+	static get contextTypes() {
+		return {
+			$Utils: PropTypes.object,
+			urlParams: PropTypes.object
+		};
+	}
+
+	static get method() {
+		return PropTypes.object;
+	}
+}
+`,
+    `
+import { PageContext } from '@ima/core';
+import PropTypes from 'prop-types';
+export default class MyComponent extends AbstractComponent {
+	static get contextType() {
+		return PageContext;
+	}
+
+	static get method() {
+		return PropTypes.object;
+	}
+}
+`,
+    'Should replace contextTypes and keep PropTypes import since it is used elsewhere'
   );
 });

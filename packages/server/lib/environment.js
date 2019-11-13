@@ -1,6 +1,6 @@
 'use strict';
 
-const helpers = require('ima-helpers');
+const helpers = require('@ima/helpers');
 
 const prod = 'prod';
 const dev = 'dev';

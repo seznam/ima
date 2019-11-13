@@ -82,7 +82,7 @@ export default class Response {
    *          encode: function(string): string=,
    *          decode: function(string): string
    *        }=} cookieTransformFunction
-   * @return {ima.router.Response} This response.
+   * @return {ima.core.router.Response} This response.
    */
   init(response, cookieTransformFunction = {}) {
     this._cookieTransformFunction = Object.assign(
@@ -120,7 +120,7 @@ export default class Response {
         params.url = url;
 
         throw new GenericError(
-          'ima.router.Response:redirect The response has already ' +
+          'ima.core.router.Response:redirect The response has already ' +
             'been sent. Check your workflow.',
           params
         );
@@ -154,7 +154,7 @@ export default class Response {
         let params = this.getResponseParams();
 
         throw new GenericError(
-          'ima.router.Response:status The response has already ' +
+          'ima.core.router.Response:status The response has already ' +
             'been sent. Check your workflow.',
           params
         );
@@ -181,7 +181,7 @@ export default class Response {
         params.content = content;
 
         throw new GenericError(
-          'ima.router.Response:send The response has already been ' +
+          'ima.core.router.Response:send The response has already been ' +
             'sent. Check your workflow.',
           params
         );
@@ -209,7 +209,7 @@ export default class Response {
         params.pageState = pageState;
 
         throw new GenericError(
-          'ima.router.Response:setState The response has already ' +
+          'ima.core.router.Response:setState The response has already ' +
             'been sent. Check your workflow.',
           params
         );
@@ -243,7 +243,7 @@ export default class Response {
         params.options = options;
 
         throw new GenericError(
-          'ima.router.Response:setCookie The response has already ' +
+          'ima.core.router.Response:setCookie The response has already ' +
             'been sent. Check your workflow.',
           params
         );

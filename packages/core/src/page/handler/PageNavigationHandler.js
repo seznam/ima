@@ -21,7 +21,7 @@ export default class PageNavigationHandler extends PageManagerHandler {
      * The utility for manipulating the global context and global
      * client-side-specific APIs.
      *
-     * @type {ima.window.Window}
+     * @type {ima.core.window.Window}
      */
     this._window = window;
   }

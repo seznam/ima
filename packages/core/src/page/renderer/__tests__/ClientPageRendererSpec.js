@@ -1,4 +1,4 @@
-import Helper from 'ima-helpers';
+import Helper from '@ima/helpers';
 import Controller from 'src/controller/Controller';
 import ClientPageRenderer from '../ClientPageRenderer';
 import RendererFactory from '../PageRendererFactory';
@@ -14,7 +14,7 @@ import {
 setGlobalMockMethod(jest.fn);
 setGlobalKeepUnmock(objectKeepUnmock);
 
-describe('ima.page.renderer.ClientPageRenderer', function() {
+describe('ima.core.page.renderer.ClientPageRenderer', function() {
   let param1 = 'param1';
   let param2 = 'param2';
   let params = {

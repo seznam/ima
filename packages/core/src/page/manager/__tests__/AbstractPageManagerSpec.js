@@ -8,7 +8,7 @@ import PageStateManager from 'src/page/state/PageStateManager';
 import RouteFactory from 'src/router/RouteFactory';
 import { toMockedInstance } from 'to-mock';
 
-describe('ima.page.manager.AbstractPageManager', () => {
+describe('ima.core.page.manager.AbstractPageManager', () => {
   let controllerState = {
     controller: 'controller',
     share: 'controller'
@@ -133,7 +133,7 @@ describe('ima.page.manager.AbstractPageManager', () => {
           done();
         })
         .catch(error => {
-          console.error('ima.page.manager:manage', error.message);
+          console.error('ima.core.page.manager:manage', error.message);
           done(error);
         });
     });
@@ -173,7 +173,7 @@ describe('ima.page.manager.AbstractPageManager', () => {
           done();
         })
         .catch(error => {
-          console.error('ima.page.manager:manage', error.message);
+          console.error('ima.core.page.manager:manage', error.message);
           done(error);
         });
     });
@@ -334,7 +334,7 @@ describe('ima.page.manager.AbstractPageManager', () => {
           done();
         })
         .catch(error => {
-          console.error('ima.page.manager:_loadPageSource', error.message);
+          console.error('ima.core.page.manager:_loadPageSource', error.message);
           done(error);
         });
     });
@@ -486,7 +486,10 @@ describe('ima.page.manager.AbstractPageManager', () => {
           done();
         })
         .catch(error => {
-          console.error('ima.page.manager:_updatePageSource', error.message);
+          console.error(
+            'ima.core.page.manager:_updatePageSource',
+            error.message
+          );
           done(error);
         });
     });

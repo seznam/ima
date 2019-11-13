@@ -6,7 +6,7 @@ import HttpAgentImpl from '../HttpAgentImpl';
 import HttpAgentProxy from '../HttpProxy';
 import CookieStorage from 'src/storage/CookieStorage';
 
-describe('ima.http.HttpAgentImpl', () => {
+describe('ima.core.http.HttpAgentImpl', () => {
   let MockedCache = toMock(Cache);
   let MockedHttpAgentProxy = toMock(HttpAgentProxy);
   let MockedCookieStorage = toMock(CookieStorage);

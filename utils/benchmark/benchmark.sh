@@ -9,10 +9,9 @@ NPM_LOCAL_REGISTRY_URL_NO_PROTOCOL="localhost:4873"
 NPM_LOCAL_REGISTRY_URL="http://${NPM_LOCAL_REGISTRY_URL_NO_PROTOCOL}/"
 
 ROOT_DIR=`pwd`
-CORE_DIR="$ROOT_DIR/packages/core"
 SKELETON_DIR="$ROOT_DIR/packages/skeleton"
-PACKAGE_VERSION=`cat $CORE_DIR/package.json | grep \"version\" | cut -d':' -f2 | cut -d'"' -f2`-next
-PACKAGE_NAME=`cat $CORE_DIR/package.json | grep \"name\" | head -1 | cut -d':' -f2 | cut -d'"' -f2`
+PACKAGE_VERSION=`node -e "console.log(require('./lerna.json').version)"`-next
+PACKAGES="core server examples gulp-task-loader gulp-tasks"
 
 # Setup local registry
 node_modules/.bin/verdaccio -l "$NPM_LOCAL_REGISTRY_URL_NO_PROTOCOL" -c utils/benchmark/verdaccio_config.yml >/dev/null &
@@ -20,26 +19,35 @@ NPM_LOCAL_REGISTRY_PID=$!
 
 npm config set "//$NPM_LOCAL_REGISTRY_URL_NO_PROTOCOL/:_authToken" "0"
 
-# Release ima-core
-cd "$CORE_DIR"
-sed -i "s#\"version\":\s\".*\"#\"version\": \"$PACKAGE_VERSION\"#" package.json
-sed -i "s#https://registry.npmjs.org/#${NPM_LOCAL_REGISTRY_URL}#" package.json
-npm publish
+# Release ima packages to local registry
+for PACKAGE in $PACKAGES ; do
+    cd "$ROOT_DIR/packages/$PACKAGE"
+    echo "Working on $PACKAGE@$PACKAGE_VERSION"
+    sed -i "s#\"version\":\s\".*\"#\"version\": \"$PACKAGE_VERSION\"#" package.json
+    sed -i "s#https://registry.npmjs.org/#${NPM_LOCAL_REGISTRY_URL}#" package.json
+    npm publish
+done
 
 # Setup IMA.js-skeleton
 cd "$SKELETON_DIR"
-sed -i "s#\"$PACKAGE_NAME\":\s\".*\"#\"$PACKAGE_NAME\": \"$PACKAGE_VERSION\"#" package.json
-npm config set $PACKAGE_NAME:registry=$NPM_LOCAL_REGISTRY_URL
+# Update packages version
+for PACKAGE in $PACKAGES ; do
+    sed -i "s#\"@ima/$PACKAGE\":\s\".*\"#\"@ima/$PACKAGE\": \"$PACKAGE_VERSION\"#" package.json
+done
+# Install @ima scoped packages from local registry
+npm config set @ima:registry=$NPM_LOCAL_REGISTRY_URL
 npm install
-npm config delete $PACKAGE_NAME:registry
+npm config delete @ima:registry
+# Setup app from example app:feed
 npm run app:feed
 npm run build
+# Add customized environment configuration
 mv build/ima/config/environment.js build/ima/config/environment.orig.js
 mv "$ROOT_DIR/utils/benchmark/app/environment.js" build/ima/config/environment.js
 NODE_ENV=prod node build/server.js &
 IMA_SKELETON_SERVER_PID=$!
 
-sleep 5
+sleep 7
 
 # Run test
 cd "$ROOT_DIR"

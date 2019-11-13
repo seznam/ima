@@ -1,8 +1,4 @@
-import Dictionary from 'ima/dictionary/Dictionary';
-import Dispatcher from 'ima/event/Dispatcher';
-import EventBus from 'ima/event/EventBus';
-import Router from 'ima/router/Router';
-import Window from 'ima/window/Window';
+import { Dictionary, Dispatcher, EventBus, Router, Window } from '@ima/core';
 
 //eslint-disable-next-line no-unused-vars
 export default (ns, oc, config) => {

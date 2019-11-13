@@ -53,7 +53,7 @@ In the extension file should be plain `class` extending
 
 ```javascript
 // app/component/gallery/GalleryExtension.js
-import AbstractExtension from 'ima/extension/AbstractExtension';
+import { AbstractExtension } from '@ima/core';
 
 export default class GalleryExtension extends AbstractExtension {
 
@@ -71,7 +71,7 @@ through the same lifecycle as the controller.
 > **Note:** Controller and extension methods are called in a series but the controller methods are called first.
 
 ```javascript
-import AbstractController from 'ima/controller/AbstractController';
+import { AbstractController } from '@ima/core';
 import GalleryExtension from 'app/component/gallery/GalleryExtension';
 
 export default class PostController extends AbstractController {

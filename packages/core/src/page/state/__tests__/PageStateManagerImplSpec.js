@@ -3,7 +3,7 @@ import Dispatcher from 'src/event/Dispatcher';
 import Events from '../Events';
 import { toMockedInstance } from 'to-mock';
 
-describe('ima.page.state.PageStateManagerImpl', () => {
+describe('ima.core.page.state.PageStateManagerImpl', () => {
   let stateManager = null;
   let defaultState = { state: 'state', patch: null };
   let patchState = { patch: 'patch' };

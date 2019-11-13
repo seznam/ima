@@ -2,7 +2,7 @@ import toMock from 'to-mock';
 import EventBus, { IMA_EVENT } from '../EventBusImpl';
 import Window from 'src/window/Window';
 
-describe('ima.event.EventBusImpl', () => {
+describe('ima.core.event.EventBusImpl', () => {
   let listeners = {
     listener1: () => {},
     listener2: () => {}

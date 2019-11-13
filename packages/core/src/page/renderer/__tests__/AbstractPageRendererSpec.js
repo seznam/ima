@@ -1,4 +1,4 @@
-import Helper from 'ima-helpers';
+import Helper from '@ima/helpers';
 import ReactDOM from 'react-dom';
 import Controller from 'src/controller/Controller';
 import AbstractDocumentView from 'src/page/AbstractDocumentView';
@@ -17,7 +17,7 @@ import {
 setGlobalMockMethod(jest.fn);
 setGlobalKeepUnmock(objectKeepUnmock);
 
-describe('ima.page.renderer.AbstractPageRenderer', function() {
+describe('ima.core.page.renderer.AbstractPageRenderer', function() {
   let pageRenderer = null;
   let rendererFactory = null;
   let dispatcher = null;

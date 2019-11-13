@@ -76,7 +76,7 @@ export default class EventBusImpl extends EventBus {
       eventTarget.dispatchEvent(event);
     } else {
       throw new GenericError(
-        `ima.event.EventBusImpl.fire: The EventSource ` +
+        `ima.core.event.EventBusImpl.fire: The EventSource ` +
           `${eventTarget} is not defined or can not dispatch event ` +
           `'${eventName}' (data: ${data}).`,
         { eventTarget, eventName, data, eventInitialization }

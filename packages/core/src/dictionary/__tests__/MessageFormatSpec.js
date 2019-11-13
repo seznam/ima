@@ -1,6 +1,6 @@
 import MessageFormatDictionary from '../MessageFormatDictionary';
 
-describe('ima.dictionary.MessageFormatDictionary', () => {
+describe('ima.core.dictionary.MessageFormatDictionary', () => {
   let dictionary = null;
   const config = {
     $Language: 'cs',

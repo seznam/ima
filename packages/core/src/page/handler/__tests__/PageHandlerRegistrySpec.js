@@ -3,7 +3,7 @@ import PageHandlerRegistry from '../PageHandlerRegistry';
 import SerialBatch from 'src/execution/SerialBatch';
 import { toMockedInstance } from 'to-mock';
 
-describe('ima.page.handler.PageHandlerRegistry', () => {
+describe('ima.core.page.handler.PageHandlerRegistry', () => {
   let registry;
   let pageManagerHandler = toMockedInstance(PageHandler);
 

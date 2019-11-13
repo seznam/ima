@@ -73,7 +73,7 @@ export default class AbstractController extends Controller {
    */
   load() {
     throw new GenericError(
-      'The ima.controller.AbstractController.load method is abstract ' +
+      'The ima.core.controller.AbstractController.load method is abstract ' +
         'and must be overridden'
     );
   }
@@ -125,7 +125,7 @@ export default class AbstractController extends Controller {
    */
   setMetaParams() {
     throw new GenericError(
-      'The ima.controller.AbstractController.setMetaParams method is ' +
+      'The ima.core.controller.AbstractController.setMetaParams method is ' +
         'abstract and must be overridden'
     );
   }

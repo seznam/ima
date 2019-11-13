@@ -1,6 +1,6 @@
 'use strict';
 
-const helper = require('ima-helpers');
+const helper = require('@ima/helpers');
 
 module.exports = processTemplate;
 
