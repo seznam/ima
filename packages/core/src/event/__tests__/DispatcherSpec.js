@@ -1,6 +1,6 @@
 import Dispatcher from '../DispatcherImpl';
 
-describe('ima.event.DispatcherImpl', () => {
+describe('ima.core.event.DispatcherImpl', () => {
   let handlers = {
     handler1: () => {},
     handler2: () => {}

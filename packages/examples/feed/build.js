@@ -20,7 +20,7 @@ module.exports = (() => {
   };
 
   let vendors = {
-    common: ['ima'],
+    common: ['@ima/core'],
 
     server: [],
 

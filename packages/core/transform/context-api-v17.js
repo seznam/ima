@@ -1,4 +1,7 @@
-const { addNamedImports } = require('./transformUtils/imports');
+const {
+  addNamedImports,
+  removeUnusedPackageImports
+} = require('./transformUtils/imports');
 const { getOptions } = require('./transformUtils/testUtils');
 
 module.exports = function(fileInfo, api, options) {
@@ -24,6 +27,8 @@ module.exports = function(fileInfo, api, options) {
 
     // Add Page context named import to a file
     addNamedImports(j, ast, ['PageContext'], '@ima/core');
+    // Remove prop-types import if not used
+    removeUnusedPackageImports(j, ast, 'prop-types');
   }
 
   return ast.toSource(Object.assign({}, getOptions(), options));

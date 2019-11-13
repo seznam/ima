@@ -1,4 +1,4 @@
-import AbstractComponent from 'ima/page/AbstractComponent';
+import { AbstractComponent } from '@ima/core';
 import React from 'react';
 import Date from 'app/component/date/Date';
 import Share from 'app/component/share/Share';

@@ -23,6 +23,6 @@ function appClean() {
 
 function installExample(exampleName) {
   return gulp
-    .src(`./node_modules/ima-examples/${exampleName}/**/*`)
+    .src(`./node_modules/@ima/examples/${exampleName}/**/*`)
     .pipe(gulp.dest('./app'));
 }

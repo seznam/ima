@@ -296,7 +296,7 @@ export default class AbstractPageManager extends PageManager {
    * Set page state manager to extension which has restricted rights to set
    * global state.
    *
-   * @param {ima.extension.Extension} extension
+   * @param {ima.core.extension.Extension} extension
    * @param {Object<string, *>} extensionState
    */
   _setRestrictedPageStateManager(extension, extensionState) {
@@ -317,7 +317,7 @@ export default class AbstractPageManager extends PageManager {
    * For defined extension switches to pageStageManager and clears partial state
    * after extension state is loaded.
    *
-   * @param {ima.extension.Extension} extension
+   * @param {ima.core.extension.Extension} extension
    * @param {Object<string, *>} extensionState
    */
   _switchToPageStateManagerAfterLoaded(extension, extensionState) {

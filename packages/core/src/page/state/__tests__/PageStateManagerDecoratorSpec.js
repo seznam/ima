@@ -1,7 +1,7 @@
 import PageStateManager from '../PageStateManagerImpl';
 import PageStateManagerDecorator from '../PageStateManagerDecorator';
 
-describe('ima.page.state.PageStateManagerDecorator', () => {
+describe('ima.core.page.state.PageStateManagerDecorator', () => {
   let pageStateManager = null;
   let allowedStateKeys = ['allow'];
   let decoratedPageStateManager = null;

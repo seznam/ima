@@ -1,13 +1,10 @@
-import PropTypes from 'prop-types';
+import { PageContext, AbstractComponent } from '@ima/core';
 import React from 'react';
-import AbstractComponent from 'ima/page/AbstractComponent';
 import Item from '../../component/item/Item';
 
 export default class HomeView extends AbstractComponent {
-  static get contextTypes() {
-    return {
-      $Utils: PropTypes.object
-    };
+  static get contextType() {
+    return PageContext;
   }
 
   render() {

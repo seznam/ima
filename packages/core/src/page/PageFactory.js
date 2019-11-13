@@ -49,7 +49,7 @@ export default class PageFactory {
       return classConstructor;
     } else {
       throw new GenericError(
-        `ima.page.Factory:createView hasn't name of view "${view}".`
+        `ima.core.page.Factory:createView hasn't name of view "${view}".`
       );
     }
   }

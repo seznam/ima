@@ -1,8 +1,5 @@
-//import Dictionary from 'ima/dictionary/Dictionary';
-//import MetaManager from 'ima/meta/MetaManager';
-//import Router from 'ima/router/Router';
 import AbstractPageController from 'app/page/AbstractPageController';
-//import GenericError from 'ima/error/GenericError';
+//import { GenericError } from '@ima/core';
 
 export default class HomeController extends AbstractPageController {
   static get $dependencies() {

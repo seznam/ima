@@ -1,4 +1,4 @@
-import RouteNames from 'ima/router/RouteNames';
+import { RouteNames } from '@ima/core';
 import DetailController from 'app/page/detail/DetailController';
 import DetailView from 'app/page/detail/DetailView';
 import ErrorController from 'app/page/error/ErrorController';

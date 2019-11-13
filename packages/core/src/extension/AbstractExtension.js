@@ -71,7 +71,7 @@ export default class AbstractExtension extends Extension {
    */
   load() {
     throw new GenericError(
-      'The ima.extension.AbstractExtension.load method is abstract ' +
+      'The ima.core.extension.AbstractExtension.load method is abstract ' +
         'and must be overridden'
     );
   }

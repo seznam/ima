@@ -364,6 +364,7 @@ export {
   Window,
   ServerWindow,
   ClientWindow,
+  ns,
   getUtils,
   localize,
   link,

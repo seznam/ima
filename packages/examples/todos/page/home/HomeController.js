@@ -1,4 +1,4 @@
-import GenericError from 'ima/error/GenericError';
+import { GenericError } from '@ima/core';
 import ListItemService from '../../model/listItem/ListItemService';
 import AbstractController from '../AbstractController';
 

@@ -1,5 +1,5 @@
+import { AbstractDocumentView } from '@ima/core';
 import React from 'react';
-import AbstractDocumentView from 'ima/page/AbstractDocumentView';
 
 export default class DocumentView extends AbstractDocumentView {
   static get masterElementId() {

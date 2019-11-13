@@ -198,7 +198,7 @@ export default class ClientPageRenderer extends AbstractPageRenderer {
 
     if (!this._viewContainer) {
       const errorMessage =
-        `ima.page.renderer.ClientPageRenderer:_renderToDOM: ` +
+        `ima.core.page.renderer.ClientPageRenderer:_renderToDOM: ` +
         `Element with ID "${masterElementId}" was not found in the DOM. ` +
         `Maybe the DOM is not in the interactive mode yet.`;
 

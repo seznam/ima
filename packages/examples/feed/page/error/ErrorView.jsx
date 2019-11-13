@@ -1,15 +1,11 @@
-import ns from 'ima/namespace';
-import PropTypes from 'prop-types';
+import { PageContext, ns, AbstractComponent } from '@ima/core';
 import React from 'react';
-import AbstractComponent from 'ima/page/AbstractComponent';
 
 ns.namespace('app.page.error');
 
 export default class ErrorView extends AbstractComponent {
-  static get contextTypes() {
-    return {
-      $Utils: PropTypes.object
-    };
+  static get contextType() {
+    return PageContext;
   }
 
   render() {

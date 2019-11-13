@@ -12,7 +12,7 @@
     "url": "https://github.com/seznam/ima.git"
   },
   "publishConfig": {
-    "registry": "http://registry.npmjs.org/",
+    "registry": "https://registry.npmjs.org/",
     "access": "public"
   },
   "keywords": [
