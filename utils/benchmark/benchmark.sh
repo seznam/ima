@@ -9,7 +9,7 @@ NPM_LOCAL_REGISTRY_URL_NO_PROTOCOL="localhost:4873"
 NPM_LOCAL_REGISTRY_URL="http://${NPM_LOCAL_REGISTRY_URL_NO_PROTOCOL}/"
 
 ROOT_DIR=`pwd`
-SKELETON_DIR="$ROOT_DIR/packages/skeleton"
+CREATE_IMA_APP_DIR="$ROOT_DIR/packages/create-ima-app"
 PACKAGE_VERSION=`node -e "console.log(require('./lerna.json').version)"`-next
 PACKAGES="core server examples gulp-task-loader gulp-tasks"
 
@@ -28,18 +28,21 @@ for PACKAGE in $PACKAGES ; do
     npm publish
 done
 
-# Setup IMA.js-skeleton
-cd "$SKELETON_DIR"
-# Update packages version
-for PACKAGE in $PACKAGES ; do
-    sed -i "s#\"@ima/$PACKAGE\":\s\".*\"#\"@ima/$PACKAGE\": \"$PACKAGE_VERSION\"#" package.json
-done
 # Install @ima scoped packages from local registry
 npm config set @ima:registry=$NPM_LOCAL_REGISTRY_URL
-npm install
-npm config delete @ima:registry
-# Setup app from example app:feed
-npm run app:feed
+
+# Update create-ima-app versions
+cd "$CREATE_IMA_APP_DIR"
+for PACKAGE in $PACKAGES ; do
+    sed -i "s#\"@ima/$PACKAGE\":\s\".*\"#\"@ima/$PACKAGE\": \"$PACKAGE_VERSION\"#" package.json template/package.json
+done
+# Link current create-ima-app version to global scope
+npm link
+
+# Setup app from example feed
+cd "$ROOT_DIR"
+npx create-ima-app --example feed ima-app
+cd ima-app
 npm run build
 # Add customized environment configuration
 mv build/ima/config/environment.js build/ima/config/environment.orig.js
@@ -54,5 +57,6 @@ cd "$ROOT_DIR"
 node_modules/.bin/autocannon -c $PARALLEL_TEST_CONNECTIONS --no-progress "$TARGET_WEB_URL"
 
 # Cleanup
+npm config delete @ima:registry
 kill $NPM_LOCAL_REGISTRY_PID
 kill $IMA_SKELETON_SERVER_PID
