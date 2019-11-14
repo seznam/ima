@@ -52,6 +52,8 @@ export default class ViewAdapter extends React.Component {
    */
   componentDidCatch() {}
 
+  static getDerivedStateFromError() {}
+
   /**
    * @inheritdoc
    */
