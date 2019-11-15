@@ -2,7 +2,7 @@
 layout: "doc"
 ---
 
-# Documentation {{ site.github.repository_name }}
+# Api {{ site.github.repository_name }}
 
 <div class="field is-grouped is-grouped-multiline">
 

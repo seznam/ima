@@ -8,11 +8,11 @@
     "title": "SEO"
   },
   {
-    "text": "Real-world heavy-load web services are run on the IMA.js platform. With hundreds of [unit tests](https://github.com/seznam/IMA.js-core){:target=\"_blank\"} covering all of our code, you can rely on IMA.js to be a stable base of your application.",
+    "text": "Real-world heavy-load web services are run on the IMA.js platform. With hundreds of [unit tests](https://github.com/seznam/ima){:target=\"_blank\"} covering all of our code, you can rely on IMA.js to be a stable base of your application.",
     "title": "Benchmarks and Tests"
   },
   {
-    "text": "Use the familiar MVC pattern in combination with React for rendering your UI. See [Hello](https://github.com/seznam/IMA.js-examples/tree/master/hello){:target=\"_blank\"} example.",
+    "text": "Use the familiar MVC pattern in combination with React for rendering your UI. See [Hello](https://github.com/seznam/ima/tree/master/packages/examples/hello){:target=\"_blank\"} example.",
     "title": "Production-ready Full Application Stack"
   },
   {
@@ -20,7 +20,7 @@
     "title": "Routing"
   },
   {
-    "text": "ES2015 (JSX Harmony), Gulp, flo, Live Reaload and other [technologies](#technologies).",
+    "text": "ES2015+ (JSX Harmony), Gulp, Hot Reload and other [technologies](#technologies).",
     "title": "Bleeding Edge Technologies"
   }
 ]

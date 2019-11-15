@@ -1,38 +1,62 @@
 [
   {
-    "img": "/img/references/seznamzpravy.png",
-    "text": "Seznam Zprávy is one of the top Czech news platforms, which delivers compelling, diverse and visually engaging stories in the form of a video.",
+    "img": "/img/references/seznamzpravy.jpg",
+    "text": "Seznam Zprávy is one of the top Czech news platforms, which delivers compelling, diverse and visually engaging stories in the form of a text and a video.",
     "title": "Seznamzpravy.cz",
     "url": "https://www.seznamzpravy.cz"
   },
   {
-    "img": "/img/references/prozeny.png",
+    "img": "/img/references/novinky.jpg",
+    "text": "One of the biggest and most visited news website in the Czech Republic. It offers coverage of the latest news from home and around the world in one place.",
+    "title": "Novinky.cz",
+    "url": "https://www.novinky.cz"
+  },
+  {
+    "img": "/img/references/prozeny.jpg",
     "text": "The biggest online lifestyle magazine for women in the Czech Republic. Current articles about fashion, health and lifestyle, living, family, and a great section of recipes.",
     "title": "Prozeny.cz",
     "url": "https://www.prozeny.cz"
   },
   {
-    "img": "/img/references/hry.png",
-    "text": "The Czech videogame portal where you find your next videogame to play. There are plenty of videogames for different devices, including on-line browser games.",
-    "title": "Hry.cz",
-    "url": "https://www.hry.cz"
+    "img": "/img/references/garaz.jpg",
+    "text": "This car online magazine is a place where you can find everything about cars. From news articles, car tests and reviews to coverage of the most famous car shows.",
+    "title": "Garaz.cz",
+    "url": "https://www.garaz.cz"
   },
   {
-    "img": "/img/references/vychytavky.png",
-    "text": "The news feed of the Seznam.cz company where you can see the new features of all Seznam.cz services.",
-    "title": "Seznam.cz/vychytavky",
-    "url": "https://www.seznam.cz/vychytavky"
+    "img": "/img/references/pocasi.jpg",
+    "text": "The most visited weather forecast website in the czech republic. It provides weather forecasts for up to 6 days ahead with detailed hourly graph.",
+    "title": "Počasí.cz",
+    "url": "https://pocasi.seznam.cz"
   },
   {
-    "img": "/img/references/tv.png",
-    "text": "TV broadcast schedule for at least 14 days ahead, awailable for more than 100 most watched TV stations. Horizontal and vertical layout, notifications and social sharing is available.",
+    "img": "/img/references/tv_seznam.jpg",
+    "text": "TV broadcast schedule for at least 14 days ahead, available for more than 100 most watched TV stations. Horizontal and vertical layout, notifications and social sharing is available.",
     "title": "tv.seznam.cz",
     "url": "https://tv.seznam.cz"
   },
   {
-    "img": "",
-    "text": "",
-    "title": "",
-    "url": ""
+    "img": "/img/references/sbazar.jpg",
+    "text": "Largest online advertisement website in Czech Republic with up to 1 800 000 current ads, where you can quickly and easily set up a free ad for your own things to sell.",
+    "title": "SBazar.cz",
+    "url": "https://www.sbazar.cz/"
+  },
+  {
+    "img": "/img/references/sauto.jpg",
+    "text": "A place to sell or buy a new car. On the SAuto.cz advertisement website you can currently find over 70 000 offers of new and used cars for sale.",
+    "title": "SAuto.cz",
+    "url": "https://www.sauto.cz/"
+  },
+  {
+    "img": "/img/references/hry.jpg",
+    "text": "The Czech video game portal where you find your next video game to play. There are plenty of video games for different devices, including on-line browser games.",
+    "title": "Hry.cz",
+    "url": "https://www.hry.cz"
+  },
+  {
+    "img": "/img/references/seznam_vychytavky.jpg",
+    "text": "The news feed of the Seznam.cz company where you can see the new features of all Seznam.cz services.",
+    "title": "Seznam.cz/vychytavky",
+    "url": "https://www.seznam.cz/vychytavky"
   }
 ]

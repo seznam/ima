@@ -10,11 +10,14 @@
     </div>
     <h1 class="title has-text-centered">IMA.js is a framework for creating isomorphic javascript applications.</h1>
     <p class="has-text-centered">
-      <a href="https://github.com/seznam/IMA.js-skeleton/archive/master.zip" class="button is-primary">
+      <a href="/get-started" class="button is-medium is-primary">
           <span class="icon">
             <i class="fas fa-download"></i>
           </span>
-          <span>Download Latest</span>
+          <span>Get Started</span>
+      </a>
+      <a href="/docs" class="button is-medium is-text">
+          <span>Take a look at the Tutorial</span>
       </a>
     </p>
   </div>
@@ -59,6 +62,16 @@
   </div>
   <div class="columns is-limited-width">
     {% for reference in site.data.references offset:4 limit:2 %}
+      {% include reference.html img=reference.img text=reference.text title=reference.title url=reference.url %}
+    {% endfor %}
+  </div>
+  <div class="columns is-limited-width">
+    {% for reference in site.data.references offset:6 limit:2 %}
+      {% include reference.html img=reference.img text=reference.text title=reference.title url=reference.url %}
+    {% endfor %}
+  </div>
+  <div class="columns is-limited-width">
+    {% for reference in site.data.references offset:8 limit:2 %}
       {% include reference.html img=reference.img text=reference.text title=reference.title url=reference.url %}
     {% endfor %}
   </div>
