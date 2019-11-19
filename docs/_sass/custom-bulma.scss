@@ -9,3 +9,7 @@ $navbar-item-active-color: $red;
 $primary: $red;
 
 @import "bulma";
+
+.hero-body {
+  padding: 2rem 1.5rem;
+}

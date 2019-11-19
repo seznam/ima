@@ -10,13 +10,18 @@
     "url": "get-started"
   },
   {
+    "text": "Tutorial",
+    "title": "Check out our Tutorial to learn more about IMA.js.",
+    "url": "tutorial"
+  },
+  {
     "text": "Docs",
-    "title": "Get the latest release as a ZIP archive.",
+    "title": "Browse through the documentation to learn more.",
     "url": "docs"
   },
   {
     "text": "API",
-    "title": "Browse through the documentation for details on code usage.",
+    "title": "Browse through the API for details on code usage.",
     "url": "api"
   },
   {

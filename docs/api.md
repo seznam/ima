@@ -1,5 +1,5 @@
 ---
-layout: "doc"
+layout: "api"
 ---
 
 # Api {{ site.github.repository_name }}

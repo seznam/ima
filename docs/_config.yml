@@ -1,6 +1,6 @@
 baseurl: "/"
 exclude: ["_partials"]
-permalink: /doc/:categories/:title:output_ext
+permalink: /api/:categories/:title:output_ext
 defaults:
   -
     scope:
@@ -12,5 +12,5 @@ defaults:
       path: ""
       type: "posts"
     values:
-      layout: "doc"
-      menuUrl: "doc"
+      layout: "api"
+      menuUrl: "api"

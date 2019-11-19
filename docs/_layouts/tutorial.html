@@ -1,0 +1,21 @@
+{% include header.html %}
+<div class="container">
+	<div class="is-flex is-documentation">
+		<div>
+			<aside class="doc-aside menu">
+				<p class="menu-label">Tutorial</p>
+				<ul class="menu-list">
+					{% for t in site.data.tutorial %}
+					<li>
+						<a href="{{ t.url | relative_url }}"{% if t.url == page.url %}class="is-active"{% endif %}>{{ t.title }}</a>
+					</li>
+					{% endfor %}
+				</ul>
+			</aside>
+		</div>
+		<div class="content">
+			{{ content }}
+		</div>
+	</div>
+</div>
+{% include footer.html %}

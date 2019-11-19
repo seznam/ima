@@ -1,0 +1,30 @@
+{% include header.html %}
+<div class="container">
+	<div class="is-flex is-documentation">
+		<div>
+			<aside class="doc-aside menu">
+				<p class="menu-label">Documentation</p>
+				<ul class="menu-list">
+					{% for doc in site.data.docs %}
+					<li>
+						<a href="{{ doc.url | relative_url }}"{% if doc.url == page.url %}class="is-active"{% endif %}>{{ doc.title }}</a>
+						{% if doc.submenu %}
+						<ul>
+							{% for subDoc in doc.submenu %}
+							<li>
+								<a href="{{ subDoc.url | relative_url }}">{{ subDoc.title }}</a>
+							</li>
+							{% endfor %}
+						</ul>
+						{% endif %}
+					</li>
+					{% endfor %}
+				</ul>
+			</aside>
+		</div>
+		<div class="content">
+			{{ content }}
+		</div>
+	</div>
+</div>
+{% include footer.html %}
