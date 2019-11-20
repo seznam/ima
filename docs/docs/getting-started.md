@@ -23,9 +23,6 @@ your application to life.
 You can find the core and server library along with many other IMA.js related packages in our monorepo at
 [https://github.com/seznam/ima](https://github.com/seznam/ima).
 
-Before going ahead, you can either continue reading this documentation, which describes many different parts of IMA.js in detail, take a direct look at the
-[API](/api) or start with our [tutorial](tutorial/introduction.html).  
-
 ## Installation
 
 To install and run your new IMA.js application, you can use our **`create-ima-app`** npm package.
@@ -50,6 +47,10 @@ After the installation succeeds, run following commands to start your applicatio
 $ cd my-app
 $ npm run dev
 ``` 
+
+Before going ahead, now that your application is running, you can either continue reading this documentation,
+which describes many different parts of IMA.js in detail, take a direct look at the
+ [API](/api) or [**start with our tutorial**](tutorial/introduction.html).  
 
 ### Available commands
 

@@ -111,3 +111,13 @@
 .menu-label {
   font-weight: bold;
 }
+
+a {
+  text-decoration: underline;
+}
+
+a.button,
+.navbar a,
+.menu-list a {
+  text-decoration: none;
+}
