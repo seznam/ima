@@ -5,28 +5,23 @@
     "url": "/"
   },
   {
-    "text": "Get Started",
-    "title": "Seen enough already? Click here to get started.",
-    "url": "get-started"
-  },
-  {
-    "text": "Tutorial",
-    "title": "Check out our Tutorial to learn more about IMA.js.",
-    "url": "tutorial"
-  },
-  {
     "text": "Docs",
     "title": "Browse through the documentation to learn more.",
-    "url": "docs"
+    "url": "/docs/getting-started.html"
   },
   {
     "text": "API",
     "title": "Browse through the API for details on code usage.",
-    "url": "api"
+    "url": "/api"
+  },
+  {
+    "text": "Tutorial",
+    "title": "Check out our Tutorial to learn more about IMA.js.",
+    "url": "/tutorial/introduction.html"
   },
   {
     "text": "Examples",
     "title": "Check out our demos and learn by example.",
-    "url": "examples"
+    "url": "/examples"
   }
 ]

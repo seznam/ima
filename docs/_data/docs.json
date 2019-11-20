@@ -1,23 +1,23 @@
 [
     {
-        "title": "Installation &amp; Build",
-        "url": "/docs/installation-and-build.html",
+        "title": "Getting started",
+        "url": "/docs/getting-started.html",
         "submenu": [
             {
                 "title": "Overview",
-                "url":"/docs/installation-and-build.html#overview"
+                "url":"/docs/getting-started.html#overview"
             },
             {
                 "title": "Installation",
-                "url": "/docs/installation-and-build.html#installation"
+                "url": "/docs/getting-started.html#installation"
             },
             {
                 "title": "Application structure",
-                "url": "/docs/installation-and-build.html#application-structure"
+                "url": "/docs/getting-started.html#application-structure"
             },
             {
                 "title": "Production use",
-                "url": "/docs/installation-and-build.html#production-use"
+                "url": "/docs/getting-started.html#production-use"
             }
         ]
     },

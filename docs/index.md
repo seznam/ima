@@ -10,13 +10,13 @@
     </div>
     <h1 class="title has-text-centered">IMA.js is a framework for creating isomorphic javascript applications.</h1>
     <p class="has-text-centered">
-      <a href="/get-started" class="button is-medium is-primary">
+      <a href="/docs/getting-started.html" class="button is-medium is-primary">
           <span class="icon">
             <i class="fas fa-download"></i>
           </span>
           <span>Get Started</span>
       </a>
-      <a href="/docs" class="button is-medium is-text">
+      <a href="/tutorial/introduction.html" class="button is-medium is-text">
           <span>Take a look at the Tutorial</span>
       </a>
     </p>
