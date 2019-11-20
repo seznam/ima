@@ -8,8 +8,8 @@
     "lint": "node_modules/.bin/eslint --fix './{app,server}/**/*.{js,jsx}'",
     "dev": "node_modules/.bin/gulp dev",
     "gulp": "node_modules/.bin/gulp",
-    "build": "NODE_ENV=production node_modules/gulp/bin/gulp build",
-    "build:spa": "NODE_ENV=production node_modules/gulp/bin/gulp build:spa",
+    "build": "NODE_ENV=production node_modules/.bin/gulp build",
+    "build:spa": "NODE_ENV=production node_modules/.bin/gulp build:spa",
     "start": "NODE_ENV=production node build/server"
   },
   "keywords": [
