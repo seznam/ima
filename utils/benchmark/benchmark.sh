@@ -32,11 +32,9 @@ done
 npm config set @ima:registry=$NPM_LOCAL_REGISTRY_URL
 
 # Update create-ima-app versions
-cd "$CREATE_IMA_APP_DIR"
-for PACKAGE in $PACKAGES ; do
-    sed -i "s#\"@ima/$PACKAGE\":\s\".*\"#\"@ima/$PACKAGE\": \"$PACKAGE_VERSION\"#" package.json template/package.json
-done
+node utils/version/create-ima-app-versions.js
 # Link current create-ima-app version to global scope
+cd "$CREATE_IMA_APP_DIR"
 npm link
 
 # Setup app from example feed

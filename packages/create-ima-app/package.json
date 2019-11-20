@@ -45,7 +45,6 @@
     "chalk": "^2.4.2",
     "execa": "^2.0.5",
     "fs-extra": "^8.1.0",
-    "@ima/examples": "17.0.0-rc.3",
     "inquirer": "^7.0.0",
     "yargs": "^14.2.0"
   }

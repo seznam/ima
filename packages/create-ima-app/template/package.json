@@ -1,18 +1,15 @@
 {
   "name": "@ima/skeleton",
-  "version": "0.16.0",
+  "version": "0.1.0",
   "description": "Isomorphic javascript application",
   "main": "build/server.js",
   "scripts": {
-    "app:hello": "node_modules/.bin/gulp app:hello",
-    "app:feed": "node_modules/.bin/gulp app:feed",
-    "app:todos": "node_modules/.bin/gulp app:todos",
     "test": "node_modules/.bin/jest --config jest.conf.json",
     "lint": "node_modules/.bin/eslint --fix './{app,server}/**/*.{js,jsx}'",
     "dev": "node_modules/.bin/gulp dev",
     "gulp": "node_modules/.bin/gulp",
-    "build": "NODE_ENV=production node node_modules/gulp/bin/gulp build",
-    "build:spa": "NODE_ENV=production node node_modules/gulp/bin/gulp build:spa",
+    "build": "NODE_ENV=production node_modules/gulp/bin/gulp build",
+    "build:spa": "NODE_ENV=production node_modules/gulp/bin/gulp build:spa",
     "start": "NODE_ENV=production node build/server"
   },
   "keywords": [
@@ -54,7 +51,6 @@
     "eslint-plugin-jest": "22.3.0",
     "eslint-plugin-prettier": "3.1.0",
     "eslint-plugin-react": "7.14.3",
-    "@ima/examples": "17.0.0-rc.3",
     "@ima/gulp-task-loader": "17.0.0-rc.3",
     "@ima/gulp-tasks": "17.0.0-rc.3",
     "jest": "24.9.0",
