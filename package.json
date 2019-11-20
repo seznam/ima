@@ -48,7 +48,6 @@
     "lint:fix": "npm run lint -- --fix",
     "precommit": "lint-staged",
     "commit": "git-cz",
-    "preversion": "node utils/version/create-ima-app-versions.js",
     "version": "npm run doc && node utils/version/create-ima-app-versions.js && git add docs packages/create-ima-app/template/package.json"
   },
   "author": "Miroslav Jancarik <miroslav.jancarik@firma.seznam.cz>",
