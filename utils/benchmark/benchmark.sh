@@ -24,6 +24,7 @@ for PACKAGE in $PACKAGES ; do
     cd "$ROOT_DIR/packages/$PACKAGE"
     echo "Working on $PACKAGE@$PACKAGE_VERSION"
     sed -i "s#\"version\":\s\".*\"#\"version\": \"$PACKAGE_VERSION\"#" package.json
+    sed -i -E "s#\"(@ima/.*)\":\s\".*\"#\"\1\": \"$PACKAGE_VERSION\"#" package.json
     sed -i "s#https://registry.npmjs.org/#${NPM_LOCAL_REGISTRY_URL}#" package.json
     npm publish
 done
