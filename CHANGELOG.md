@@ -3,6 +3,22 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [17.0.0-rc.4](https://github.com/seznam/ima/compare/v17.0.0-rc.3...v17.0.0-rc.4) (2019-11-21)
+
+
+### Bug Fixes
+
+* 🐛 Error page no longer displays white screen ([#4](https://github.com/seznam/ima/issues/4)) ([9345834](https://github.com/seznam/ima/commit/9345834615b154795064117e57c4aa315a752750))
+
+
+### Features
+
+* 🎸 Initialize create-ima-app CLI tool ([#3](https://github.com/seznam/ima/issues/3)) ([8ed5f1c](https://github.com/seznam/ima/commit/8ed5f1c68dd852e4f12960029080edca0d892f3f))
+
+
+
+
+
 # [17.0.0-rc.3](https://github.com/seznam/ima/compare/v17.0.0-rc.2...v17.0.0-rc.3) (2019-11-07)
 
 **Note:** Version bump only for package ima

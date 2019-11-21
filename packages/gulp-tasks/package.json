@@ -1,6 +1,6 @@
 {
   "name": "@ima/gulp-tasks",
-  "version": "17.0.0-rc.3",
+  "version": "17.0.0-rc.4",
   "description": "Default gulp tasks for IMA.js applications.",
   "main": "",
   "scripts": {
@@ -30,7 +30,7 @@
     "@ima/helpers": "^17.0.0"
   },
   "devDependencies": {
-    "@ima/helpers": "17.0.0-rc.3"
+    "@ima/helpers": "^17.0.0-rc.4"
   },
   "dependencies": {
     "@babel/core": "^7.5.5",
