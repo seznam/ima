@@ -11,7 +11,7 @@ NPM_LOCAL_REGISTRY_URL="http://${NPM_LOCAL_REGISTRY_URL_NO_PROTOCOL}/"
 ROOT_DIR=`pwd`
 CREATE_IMA_APP_DIR="$ROOT_DIR/packages/create-ima-app"
 PACKAGE_VERSION=`node -e "console.log(require('./lerna.json').version)"`-next
-PACKAGES="core server gulp-task-loader gulp-tasks"
+PACKAGES="core server gulp-task-loader gulp-tasks helpers"
 
 # Setup local registry
 node_modules/.bin/verdaccio -l "$NPM_LOCAL_REGISTRY_URL_NO_PROTOCOL" -c utils/benchmark/verdaccio_config.yml >/dev/null &
@@ -24,6 +24,7 @@ for PACKAGE in $PACKAGES ; do
     cd "$ROOT_DIR/packages/$PACKAGE"
     echo "Working on $PACKAGE@$PACKAGE_VERSION"
     sed -i "s#\"version\":\s\".*\"#\"version\": \"$PACKAGE_VERSION\"#" package.json
+    sed -i -E "s#\"(@ima/.*)\":\s\".*\"#\"\1\": \"$PACKAGE_VERSION\"#" package.json
     sed -i "s#https://registry.npmjs.org/#${NPM_LOCAL_REGISTRY_URL}#" package.json
     npm publish
 done
