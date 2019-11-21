@@ -28,14 +28,14 @@ no _viewContainer in _renderToDOM method. Event&#39;s data contain
 </dd>
 </dl>
 
-## Events : <code>enum</code>&nbsp;<a name="Events" href="https://github.com/seznam/ima/tree/17.0.0-rc.4/page/renderer/Events.js#L6" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a>
+## Events : <code>enum</code>&nbsp;<a name="Events" href="https://github.com/seznam/ima/tree/17.0.0-rc.5/page/renderer/Events.js#L6" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a>
 Events constants, which is firing to app.
 
 **Kind**: global enum  
 
 * * *
 
-## MOUNTED : <code>string</code>&nbsp;<a name="MOUNTED" href="https://github.com/seznam/ima/tree/17.0.0-rc.4/page/renderer/Events.js#L15" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a>
+## MOUNTED : <code>string</code>&nbsp;<a name="MOUNTED" href="https://github.com/seznam/ima/tree/17.0.0-rc.5/page/renderer/Events.js#L15" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a>
 PageRenderer fire event <code>$IMA.$PageRenderer.mounted</code> after
 current page view is mounted to the DOM. Event's data contain
 <code>{type: string</code>}.
@@ -44,7 +44,7 @@ current page view is mounted to the DOM. Event's data contain
 
 * * *
 
-## UPDATED : <code>string</code>&nbsp;<a name="UPDATED" href="https://github.com/seznam/ima/tree/17.0.0-rc.4/page/renderer/Events.js#L25" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a>
+## UPDATED : <code>string</code>&nbsp;<a name="UPDATED" href="https://github.com/seznam/ima/tree/17.0.0-rc.5/page/renderer/Events.js#L25" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a>
 PageRenderer fire event <code>$IMA.$PageRenderer.updated</code> after
 current state is updated in the DOM. Event's data contain
 <code>{state: Object<string, *></code>}.
@@ -53,7 +53,7 @@ current state is updated in the DOM. Event's data contain
 
 * * *
 
-## UNMOUNTED : <code>string</code>&nbsp;<a name="UNMOUNTED" href="https://github.com/seznam/ima/tree/17.0.0-rc.4/page/renderer/Events.js#L35" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a>
+## UNMOUNTED : <code>string</code>&nbsp;<a name="UNMOUNTED" href="https://github.com/seznam/ima/tree/17.0.0-rc.5/page/renderer/Events.js#L35" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a>
 PageRenderer fire event <code>$IMA.$PageRenderer.unmounted</code> after current view is
 unmounted from the DOM. Event's data contain
 <code>{type: string</code>}.
@@ -62,7 +62,7 @@ unmounted from the DOM. Event's data contain
 
 * * *
 
-## ERROR : <code>string</code>&nbsp;<a name="ERROR" href="https://github.com/seznam/ima/tree/17.0.0-rc.4/page/renderer/Events.js#L45" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a>
+## ERROR : <code>string</code>&nbsp;<a name="ERROR" href="https://github.com/seznam/ima/tree/17.0.0-rc.5/page/renderer/Events.js#L45" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a>
 PageRenderer fire event <code>$IMA.$PageRenderer.error</code> when there is
 no _viewContainer in _renderToDOM method. Event's data contain
 <code>{message: string</code>}.
