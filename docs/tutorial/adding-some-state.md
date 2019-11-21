@@ -5,24 +5,27 @@ layout: "tutorial"
 
 ---
 
-## Adding some state
+In previous section of the tutorial, we prepared basic markup and custom styling
+thanks to the [Bootstrap material design libray](https://fezvrasta.github.io/bootstrap-material-design/).
+In this section, we're going to add some functionality to our application.
+
+## Controller & error handling
 
 Our guestbook may look nice, but it is kind of boring since the posts are static
 and we cannot add new posts. So let's take care of this.
 
 To begin, we'll render posts from data that we'll store as the state of our page
-controller.
+controller. Open the `app/page/home/HomeController.js` file and you'll see a class declaration.
 
-Open the `app/page/home/HomeController.js` file, you'll see a class declaration.
-Notice again that the controller class is registered to the application
-namespace using the `ns.app.page.home.HomeController = HomeController;` line at
-the bottom of the file, but since we are using the ES2015 modules in this
-tutorial instead, replace the contents of the file with an empty controller:
+
+You can notice that by default, our bootstrapped application includes some pre-defined
+methods along with very long JSDoc comments. Feel free to read through these comments
+but to make this tutorial simpler, we're going to replace contents of this file with following code: 
 
 ```javascript
-import AbstractController from 'ima/controller/AbstractController';
+import AbstractController from '@ima/controller/AbstractController';
 
-export default class Controller extends AbstractController {
+export default class HomeController extends AbstractController {
   static get $dependencies() {
     return [];
   }
@@ -40,15 +43,17 @@ export default class Controller extends AbstractController {
     metaManager.setTitle('Guestbook');
   }
 }
-
 ```
 
-Take a look at the `load()` method. The `load()` method is called automatically
-by IMA.js when the controller is being initialized. The `load()` method
-returns a hash object - a plain JavaScript object representing a map of keys
-and values - representing the initial state of the page. The values in the
-returned object may be
-[promises](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Promise).
+The `AbstractController` class defines some methods which are executed
+in different parts of it's lifecycle, you can [read more about this in the documentation](/docs/controller-lifecycle.html) 
+One of the main methods you're going to use frequently is the `load()` method.
+
+The `load()` method is called automatically
+by IMA.js when the controller is being initialized. It returns a hash object - a plain
+JavaScript object representing a map of keys and values - representing the initial 
+state of the page. The values in the returned object may be
+[promises](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Promise) or scalar values.
 The IMA.js will wait for all promises to resolve before rendering the page,
 allowing us to fetch any data we may need from the server.
 
@@ -57,43 +62,47 @@ hash object with promises replaced by the values the promises resolved to.
 
 In case that a promise gets rejected, we may want to display a specific error
 page. It is recommended to reject the load promises using IMA.js'
-`GenericError` (located in the module `ima/error/GenericError`), which
+`GenericError` (located in the module `@ima/error/GenericError`), which
 allows you to specify the HTTP status code representing the error type,
 resulting in the appropriate error page being displayed. An example usage
-within the `load()` method is show below:
+of the `load()` method is show below:
 
 ```javascript
-return {
-	ourPageData: fetchUsefullData(params).catch((error) => {
-		// Note: the fetchUsefullData() should already return a promise
-		// rejected by GenericError in case an error occurs, so we would not
-		// have to do this in our every controller using a function like
-		// this one.
-
-		if (error.name === 'NotFoundError') {
-			throw new GenericError('No such records exist', {
-				cause: error,
-				params: params,
-				status: 404 // The 404 HTTP status stands for "Not Found"
-			});
-		} else {
-			throw new GenericError('Cannot retrieve data', {
-				cause: error,
-				params: params,
-				status: 500 // The 500 HTTP status stands for "Internal Server Error"
-			});
-		}
-	})
-};
+load() {
+  return {
+    ourPageData: fetchUsefullData(params).catch((error) => {
+      // Note: the fetchUsefullData() should already return a promise
+      // rejected by GenericError in case an error occurs, so we would not
+      // have to do this in our every controller using a function like
+      // this one.
+  
+      if (error.name === 'NotFoundError') {
+        throw new GenericError('No such records exist', {
+          cause: error,
+          params: params,
+          status: 404 // The 404 HTTP status stands for "Not Found"
+        });
+      } else {
+        throw new GenericError('Cannot retrieve data', {
+          cause: error,
+          params: params,
+          status: 500 // The 500 HTTP status stands for "Internal Server Error"
+        });
+      }
+    })
+  };
+}
 ```
 
 Now you may be tempted to simply extend the native `Error` class (or one of its
 siblings). The problem with that is that all browsers do not generate stack
 traces for custom errors extending the native ones (unless you are using a
 browser that has already implemented error sub-classing). The `GenericError`
-takes care of this for us with a little JavaScript magic, and also allows you
+takes care of this for us and also allows you
 to create custom error classes by extending the `GenericError` class while still
 having access to stack traces of your errors.
+
+## Fetching posts
 
 But let's refocus on the `load()` method in our controller. For now, we'll
 specify our data statically and take care of fetching the data from the server in
@@ -127,77 +136,75 @@ As you may have noticed, we used JSON-compatible code in case of `posts` - this
 will come in handy later when we'll introduce fetching the data from the
 server and move the structure to an external JSON file.
 
+## Splitting the render method
+
 Let's return to our view in the `app/page/home/HomeView.jsx` file. Replace the
 `render()` method with the following code snippet:
 
-```javascript
+```jsx
 render() {
   return (
     <div className='l-home container'>
-      <h1>Guestbook</h1>
-
-      <div className='posting-form well'>
-        <form action='' method='post'>
-          <fieldset>
-            <legend>Add a post</legend>
-
-            <div className='form-group'>
-              <label htmlFor='postForm-name'>
-                Name:
-              </label>
-              <input
+      <div className='container'>
+        <h1>Guestbook</h1>
+        <div className='posting-form card'>
+          <form action='' method='post'>
+            <h5 className='card-header'>Add a post</h5>
+            <div className='card-body'>
+              <div className='form-group'>
+                <label htmlFor='postForm-name'>Name:</label>
+                <input
                   id='postForm-name'
                   className='form-control'
                   type='text'
                   name='name'
-                  placeholder='Your name'/>
-            </div>
-            <div className='form-group'>
-              <label htmlFor='postForm-content'>
-                Post:
-              </label>
-              <textarea
+                  placeholder='Your name'
+                />
+              </div>
+              <div className='form-group'>
+                <label htmlFor='postForm-content'>Post:</label>
+                <textarea
                   id='postForm-content'
                   className='form-control'
                   name='post'
-                  placeholder='What would you like to tell us?'/>
+                  placeholder='What would you like to tell us?'
+                />
+              </div>
             </div>
-
-            <button type='submit' className='btn btn-primary'>
-              Submit
-              <div className='ripple-wrapper'></div>
-            </button>
-          </fieldset>
-        </form>
-      </div>
-
-      <div className='posts'>
-        <h2>Posts</h2>
-
-        {this._renderPosts()}
+            <div className='card-footer'>
+              <button type='submit' className='btn btn btn-outline-primary'>
+                Submit
+                <div className='ripple-wrapper' />
+              </button>
+            </div>
+          </form>
+        </div>
+        <hr />
+        <div className='posts'>
+          <h2>Posts</h2>
+          {this._renderPosts()}
+        </div>
       </div>
     </div>
   );
 }
 
 _renderPosts() {
-  return this.props.posts.map((post, index) => {
-    return (
-      <div className='post panel panel-default' key={index}>
-        <div className='panel-body'>
-          {post.content}
-        </div>
-        <div className='post-author panel-footer'>
-          {post.author}
-        </div>
+  return this.props.posts.map((post, index) => (
+    <div className='post card card-default' key={index}>
+      <div className='card-body'>
+        {post.content}
       </div>
-    );
-  });
+      <div className='post-author card-footer'>
+        {post.author}
+      </div>
+    </div>
+  ));
 }
 ```
 
 We have replaced the old sequence of
-`<div className='post panel panel-default'>` tags with the
+`<div className='post card card-default'>` tags with the
 `{this._renderPosts()}` expression, which tells React to insert the return
 value of our new `_renderPosts()` method.
 
@@ -227,6 +234,8 @@ Since we do not have the posts stored in an actual database, we're going to
 help ourselves in a different way, but we'll address that later in this
 tutorial.
 
+## Creating new components
+
 Now the view looks better, but it's still not perfect, because the view still
 feels bulky. To fix that, we start by moving the post rendering to a new
 component.
@@ -236,25 +245,24 @@ and `app/component/post/post.less` files.
 
 Put the following code into the `Post.jsx` file:
 
-```javascript
+```jsx
 import React from 'react';
-import AbstractComponent from 'ima/page/AbstractComponent';
+import AbstractComponent from '@ima/page/AbstractComponent';
 
 export default class Post extends AbstractComponent {
   render() {
     return (
-      <div className='post panel panel-default'>
-        <div className='panel-body'>
+      <div className='post card card-default'>
+        <div className='card-body'>
           {this.props.content}
         </div>
-        <div className='post-author panel-footer'>
+        <div className='post-author card-footer'>
           {this.props.author}
         </div>
       </div>
     );
   }
 }
-
 ```
 
 In this component we access the post content and author name in our `render()`
@@ -264,7 +272,7 @@ properties passed to the React component by whatever code is using it.
 To use our new component, we need to update the `_renderPosts()` method in the
 `app/page/home/HomeView.jsx` file to the following code:
 
-```javascript
+```jsx
 return this.props.posts.map((post, index) => {
   return (
     <Post key={index} content={post.content} author={post.author}/>
@@ -279,6 +287,12 @@ beginning of the file:
 import Post from 'app/component/post/Post';
 ```
 
+You can notice that so far we haven't used relative imports when importing
+our custom JS modules from inside of the app directory structure. This is
+because IMA.js adds the `app` directory to the **lookup path**. This means that
+you can refer to any file inside `app` directory through an absolute path,
+which makes most of the imports much cleaner.
+
 To finish the creation of the post component, we need to move the related
 styles from `app/page/home/homeView.less` to `app/component/post/post.less`.
 Move the following code to the `post.less` file:
@@ -289,53 +303,52 @@ Move the following code to the `post.less` file:
   font-style: italic;
   font-size: 85%;
 }
-
 ```
 
 We can further improve our page view structure by refactoring-out the
 "new post" form to a separate component. Create the `app/component/postingForm`
-directory and the `app/component/postingForm/PostingForm.jsx` file. Put the
+directory and the `app/component/postingForm/PostingForm.jsx` file. Then, put the
 following code into the `app/component/postingForm/PostingForm.jsx` file:
 
-```javascript
+```jsx
 import React from 'react';
-import AbstractComponent from 'ima/page/AbstractComponent';
+import AbstractComponent from '@ima/page/AbstractComponent';
 
 export default class PostingForm extends AbstractComponent {
   render() {
     return (
-      <div className='posting-form well'>
+      <div className='posting-form card'>
         <form action='' method='post'>
-          <fieldset>
-            <legend>Add a post</legend>
-
+          <h5 className='card-header'>Add a post</h5>
+      
+          <div className='card-body'>
             <div className='form-group'>
-              <label htmlFor='postForm-name'>
-                Name:
-              </label>
+              <label htmlFor='postForm-name'>Name:</label>
               <input
-                  id='postForm-name'
-                  className='form-control'
-                  type='text'
-                  name='name'
-                  placeholder='Your name'/>
+                id='postForm-name'
+                className='form-control'
+                type='text'
+                name='name'
+                placeholder='Your name'
+              />
             </div>
             <div className='form-group'>
-              <label htmlFor='postForm-content'>
-                Post:
-              </label>
+              <label htmlFor='postForm-content'>Post:</label>
               <textarea
-                  id='postForm-content'
-                  className='form-control'
-                  name='post'
-                  placeholder='What would you like to tell us?'/>
+                id='postForm-content'
+                className='form-control'
+                name='post'
+                placeholder='What would you like to tell us?'
+              />
             </div>
-
-            <button type='submit' className='btn btn-primary'>
+          </div>
+      
+          <div className='card-footer'>
+            <button type='submit' className='btn btn btn-outline-primary'>
               Submit
-              <div className='ripple-wrapper'></div>
+              <div className='ripple-wrapper' />
             </button>
-          </fieldset>
+          </div>
         </form>
       </div>
     );
@@ -349,16 +362,17 @@ put it into a new React component.
 
 Now update the `render()` method in the home controller's view:
 
-```javascript
+```jsx
 return (
   <div className='l-home container'>
     <h1>Guestbook</h1>
 
     <PostingForm/>
 
+    <hr />
+
     <div className='posts'>
       <h2>Posts</h2>
-
       {this._renderPosts()}
     </div>
   </div>
@@ -377,23 +391,23 @@ learn more how the controller and view communicate by passing state, check out
 the following optional section [Notes on communication between controllers and
 views](#notes-on-communication-between-controllers-and-views).
 
-### Notes on communication between controllers and views
+## Notes on communication between controllers and views
 
-There are three ways the controlles and views communicate:
+There are three ways the controllers and views communicate:
 
-- by passing state from the controller to the view &ndash; this is the most
-  common way of passing information
-- by emitting DOM events from the view and listening for them in the controller
-  or parent components (using the `ima/event/EventBus`) &ndash; this is
+1. **By passing state from the controller to the view &ndash;** this is the most
+  common way of passing information.
+2. **By emitting DOM events** from the view and listening for them in the controller
+  or parent components (using the `@ima/event/EventBus`) &ndash; this is
   the most common way of notifying the controller or a parent UI component of
-  the user's actions in the view
-- by emitting "global" events in the controller and / or view and listening for
-  them in the controller and / or view (using the `ima/event/Dispatcher`)
+  the user's actions in the view.
+3. **By emitting "global" events** in the controller and / or view and listening for
+  them in the controller and / or view (using the `@ima/event/Dispatcher`)
   &ndash; this is used only in very specific situations, like when the UI
   needs to be notified about an external event captured by the controller and
   updating the state is not practical.
 
-#### Passing state
+### 1. Passing state
 
 The controller creates the initial state of the page by returning a hash object
 of values and promises from its `load()` method. The IMA.js then waits for all
@@ -417,9 +431,9 @@ available yet. On the other hand, this does require you to add more logic to
 your view, checking whether the data is available or not, and displaying
 loading indicators where the data is not available yet.
 
-#### Emiting events using the EventBus
+### 2. Emiting events using the EventBus
 
-The `ima/event/EventBus` API allows your UI components to emit custom DOM
+The `@ima/event/EventBus` API allows your UI components to emit custom DOM
 events that naturally propagate through the DOM tree representing the tree of
 your UI components.
 
@@ -442,9 +456,9 @@ The first argument passed into the controller's event listener method will be
 the event data, not the event object itself, as manipulating the event object
 once it reaches the controller is pointless.
 
-#### Emitting events using the Dispatcher
+### 3. Emitting events using the Dispatcher
 
-The obvious limitation of the `ima/event/EventBus` API is that it only allows
+The obvious limitation of the `@ima/event/EventBus` API is that it only allows
 to create events that propagate up the tree of the UI components. The common
 way to propagate event in other directions, or to other parts of the UI, or
 from the controller to the UI is using the `app/event/Dispatcher` API.
@@ -461,5 +475,9 @@ specific use-cases, so the Dispatcher logs a warning to the console if there
 are no listeners registered for the fired event in order to notify you of
 possible typos in event names.
 
+As always, you can learn more about `EventBus` and `Dispatcher` [in the documentation](/docs/events.html)
+
+---
+
 That is all for this part of the tutorial, you will find more in the
-[4th part](Tutorial,-part-4).
+[4th part](/tutorial/fetching-the-data-from-the-server.html) of this series.

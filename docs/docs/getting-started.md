@@ -34,10 +34,10 @@ $ npx create-ima-app my-app
 *([npx](https://www.npmjs.com/package/npx) comes with npm 5.2+ and higher, [see instructions for older npm versions](https://github.com/facebook/create-react-app#creating-an-app))*
 
 This will bootstrap your new application and install all dependencies. The provided wizard will
-also let you choose the template you wish to start with. You can go with default blank template or explore
+also let you choose the template you wish to start with. You can go with empty blank template or explore
 one of our [examples](/examples).
 
-- `default` - Hello World [[Source code](https://github.com/seznam/ima/tree/master/packages/examples/hello)]
+- `empty` - Hello World [[Source code](https://github.com/seznam/ima/tree/master/packages/examples/hello)]
 - `feed` - TODO List [[Source code](https://github.com/seznam/ima/tree/master/packages/examples/feed)]
 - `todos` - Twitter-Like Feed [[Source code](https://github.com/seznam/ima/tree/master/packages/examples/todos)]
  
@@ -50,7 +50,7 @@ $ npm run dev
 
 Before going ahead, now that your application is running, you can either continue reading this documentation,
 which describes many different parts of IMA.js in detail, take a direct look at the
- [API](/api) or [**start with our tutorial**](tutorial/introduction.html).  
+ [API](/api) or [**start with our tutorial**](/tutorial/introduction.html).  
 
 ### Available commands
 

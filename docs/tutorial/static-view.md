@@ -5,28 +5,31 @@ layout: "tutorial"
 
 ---
 
-## Static view
+In the first part we went through introduction to IMA.js and initialized our first
+application using `create-ima-app` command. In the second part of the tutorial
+we'll actually do some coding and prepare basic Views for our guest book application.
+
+## View Component
 
 Open up the `app/page/home/HomeView.jsx` file in your code editor. You will see a
 single ES2015 class named `HomeView`, extending the `AbstractComponent` class
 (which in turn extends the
 [`React.Component`](https://facebook.github.io/react/docs/component-api.html)
-class).
+class). You can read more about components and views in the [documentation](/docs/views-and-components.html).
 
-Now let's replace the contents of the file with a blank ES2015-only view:
+Now let's replace the contents of the file with a blank view:
 
-```javascript
+```jsx
 import React from 'react';
-import AbstractComponent from 'ima/page/AbstractComponent';
+import AbstractComponent from '@ima/page/AbstractComponent';
 
 export default class HomeView extends AbstractComponent {
-	render() {
-		return (
-			null
-		);
-	}
+  render() {
+    return (
+      null
+    );
+  }
 }
-
 ```
 
 The `HomeView` class defines the `render()` method. Notice that our current
@@ -51,8 +54,8 @@ not have a UI yet.
 Now that we know our way around our component, let's replace the contents of
 the `render()` method with the following code:
 
-```javascript
-return (
+```jsx
+return ( 
   <div className='l-home container'>
     Hello {'World'}!
   </div>
@@ -71,10 +74,12 @@ The `render()` method must always return a React element (or a similar plain
 object, or `null`), so it can be properly rendered at both the client and
 server. Never attempt to create an actual DOM element in your view - your
 application will most likely break! This is because your code is run at the
-server at first, where no DOM is available, and polyfilling it, while possible,
+server first, where no DOM is available, and polyfilling it, while possible,
 would introduce a large overhead. Additionally, since the UI is rendered using
 React which modifies the DOM at the client side, any changes to the DOM you would
 manage to make would likely be lost with the next update of the page's UI.
+
+### Guestbook form & SMACSS
 
 Let's replace the inside of the `<div className='l-home container'>` element
 with the following code:
@@ -82,73 +87,60 @@ with the following code:
 ```xml
 <h1>Guestbook</h1>
 
-<div className='posting-form well'>
+<div className='posting-form card'>
   <form action='' method='post'>
-    <fieldset>
-      <legend>Add a post</legend>
-
+    <h5 className='card-header'>Add a post</h5>
+    <div className='card-body'>
       <div className='form-group'>
-        <label htmlFor='postForm-name'>
-          Name:
-        </label>
+        <label htmlFor='postForm-name'>Name:</label>
         <input
-            id='postForm-name'
-            className='form-control'
-            type='text'
-            name='name'
-            placeholder='Your name'/>
+          id='postForm-name'
+          className='form-control'
+          type='text'
+          name='name'
+          placeholder='Your name'
+        />
       </div>
       <div className='form-group'>
-        <label htmlFor='postForm-content'>
-          Post:
-        </label>
+        <label htmlFor='postForm-content'>Post:</label>
         <textarea
-            id='postForm-content'
-            className='form-control'
-            name='post'
-            placeholder='What would you like to tell us?'/>
+          id='postForm-content'
+          className='form-control'
+          name='post'
+          placeholder='What would you like to tell us?'
+        />
       </div>
-
-      <button type='submit' className='btn btn-primary'>
+    </div>
+    <div className='card-footer'>
+      <button type='submit' className='btn btn btn-outline-primary'>
         Submit
-        <div className='ripple-wrapper'></div>
+        <div className='ripple-wrapper' />
       </button>
-    </fieldset>
+    </div>
   </form>
 </div>
-
+<hr />
 <div className='posts'>
   <h2>Posts</h2>
-
-  <div className='post panel panel-default'>
-    <div className='panel-body'>
-      I'm lovin' this IMA.js thing!
-    </div>
-    <div className='post-author panel-footer'>
-      John Doe
+  <div className='post card card-default'>
+    <div className='card-body'>I'm lovin' this IMA.js thing!</div>
+    <div className='post-author card-footer'>John Doe</div>
   </div>
-  </div>
-  <div className='post panel panel-default'>
-    <div className='panel-body'>
+  <div className='post card card-default'>
+    <div className='card-body'>
       JavaScript everywhere! It's just JavaScript!
     </div>
-    <div className='post-author panel-footer'>Jan Nowak</div>
+    <div className='post-author card-footer'>Jan Nowak</div>
   </div>
-  <div className='post panel panel-default'>
-    <div className='panel-body'>
+  <div className='post card card-default'>
+    <div className='card-body'>
       Developing applications is fun again! Thanks, IMA.js!
     </div>
-    <div className='post-author panel-footer'>
-      Peter Q.
-    </div>
+    <div className='post-author card-footer'>Peter Q.</div>
   </div>
-  <div className='post panel panel-default'>
-    <div className='panel-body'>
-      How about a coffee?
-    </div>
-    <div className='post-author panel-footer'>
-      Daryll J.
-    </div>
+  <div className='post card card-default'>
+    <div className='card-body'>How about a coffee?</div>
+    <div className='post-author card-footer'>Daryll J.</div>
   </div>
 </div>
 ```
@@ -173,57 +165,72 @@ allow easy inclusion of single page-specific overrides for the UI of your
 components that will not affect the rest of the pages in your application.
 
 In general, it is recommended to organize your CSS code according to the
-[SMACSS](https://smacss.com/) recomendation (Scalable and Modular Architecture
+[SMACSS](http://smacss.com/) recommendation (Scalable and Modular Architecture
 for CSS). Feel free to read through the page if you are not familiar with
 SMACSS yet, it won't take you long.
 
-So let's make our guestbook look a little better. We start by installing
-the Bootstrap CSS library and the Material theme by first creating the
-`.bowerrc` file with the following content in the `IMA.js-skeleton`
-directory:
+### Styling our form
 
-```
-{
-	"directory": "app/assets/static/bower/"
-}
-```
+So let's make our guestbook look a little better. To achieve this, we'll
+use Bootstrap CSS library and the Material Design theme. To make things simple
+we're just going to use CDN hosted CSS and JS files.
+ 
+We strongly suggest that when creating your new application, it would be better manage these
+dependencies, for example through npm or even building your custom version
+that contains only those components that you'll use.
 
-With bower configured, run the following commands:
-
-```
-npm install bower
-./node_modules/bower/bin/bower install bootstrap bootstrap-material-design
-```
-
-Next we need to include a few files in our page. Open the document component
-`app/component/document/DocumentView.jsx` - this is the UI component that renders the
+First we need to include a few files to our page. Open the document component
+`app/component/document/DocumentView.jsx` (*this is the UI component that renders the
 basic structure of the HTML document. You'll find more details about it in the
-[Rendering the whole document](#rendering-the-whole-document) section of this chapter.
-
-Insert the following code before the
-`<link rel="stylesheet" ...` line to include
-the Bootstrap CSS library and the Material design theme:
+[Rendering the whole document](#rendering-the-whole-document) section of this chapter*).
+Insert the following code before the `<link rel="stylesheet" ...` line to include
+the Material Design Bootstrap CSS library:
 
 ```xml
-<link rel='stylesheet' href='/static/bower/bootstrap/dist/css/bootstrap.min.css'/>
-<link rel='stylesheet' href='/static/bower/bootstrap-material-design/dist/css/ripples.min.css'/>
-<link rel='stylesheet' href='/static/bower/bootstrap-material-design/dist/css/bootstrap-material-design.min.css'/>
-<script src='/static/bower/jquery/dist/jquery.min.js'></script>
-<script src='/static/bower/bootstrap/dist/js/bootstrap.min.js'></script>
-<script src='/static/bower/bootstrap-material-design/dist/js/material.min.js'></script>
-<script src='/static/bower/bootstrap-material-design/dist/js/ripples.min.js'></script>
+<link
+  rel="stylesheet"
+  href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700|Material+Icons"
+/>
+<link
+  rel="stylesheet"
+  href="https://unpkg.com/bootstrap-material-design@4.1.1/dist/css/bootstrap-material-design.min.css"
+  integrity="sha384-wXznGJNEXNG1NFsbm0ugrLFMQPWswR3lds2VeinahP8N0zJw9VWSopbjv2x7WCvX"
+  crossOrigin="anonymous"
+/>
+<script
+  src="https://code.jquery.com/jquery-3.2.1.slim.min.js"
+  integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN"
+  crossOrigin="anonymous"
+/>
+<script
+  src="https://unpkg.com/popper.js@1.12.6/dist/umd/popper.js"
+  integrity="sha384-fA23ZRQ3G/J53mElWqVJEGJzU0sTs+SvzG8fXVWP+kJQ1lwFAOkcUOysnlKJC33U"
+  crossOrigin="anonymous"
+/>
+<script
+  src="https://unpkg.com/bootstrap-material-design@4.1.1/dist/js/bootstrap-material-design.js"
+  integrity="sha384-CauSuKpEqAFajSpkdjv3z9t8E7RlpJ1UP0lKM/+NdtSarroVKu069AlsRPKkFBz9"
+  crossOrigin="anonymous"
+/>
+```
+
+Now we need to initialize the material design JS library by adding following code snippet
+into the end of `scriptResources` returned by `getAsyncScripts()` right before closing
+`</script>` tag.
+
+```javascript
+$(document).ready(function() { $('body').bootstrapMaterialDesign(); });
 ```
 
 That's a lot of stuff, but it will save us a lot of effort with styling our UI.
 
-So let's write some CSS to make our guestbook look event better. Open the
+So let's write some CSS to make our guestbook look even better. Open the
 `app/assets/less/settings.less` file and add the following code to set up our
 layout configuration:
 
 ```less
 @post-author-alignment: right;
 @background-image: 'http://i.imgur.com/vzMkcoz.png';
-
 ```
 
 The credit for the image we'll use as our page background goes to
@@ -231,7 +238,7 @@ The credit for the image we'll use as our page background goes to
 the image is provided under the
 [Creative Commons Attribution 4.0 International License](http://creativecommons.org/licenses/by/4.0/).
 
-Next open the `app/assets/less/base.less` file and add the following code:
+Next open the `app/assets/less/base.less` file and replace the default body styles with the following code:
 
 ```less
 body {
@@ -241,6 +248,9 @@ body {
   background-size: cover;
 }
 
+form {
+  margin-bottom: 0;
+}
 ```
 
 Now let's open the the `app/page/home/homeView.less` file and replace the
@@ -254,13 +264,17 @@ contents with the following code:
     font-size: 85%;
   }
 }
-
 ```
 
-Go ahead and check the result in the browser. It sure does look a little
+Go ahead and check the results in the browser. It sure does look a little
 better (you may have to reload the page, or event restart the dev server
-by hitting Ctrl+C and then re-running the `npm run dev` command if your
-browser cannot access the newly installed bower resources).
+by hitting `Ctrl+C` and then re-running the `npm run dev` command if your
+browser cannot access the newly installed resources). In the end of this section
+you should see something like this when you refresh your page.
+
+<a href="http://es6-features.org/" title="JS ECMAScript6" target="_blank">
+  <img src="{{ '/img/tutorial/homeview.png?v=' | append: site.github.build_revision | relative_url }}" alt="HomeView"/>
+</a>
 
 ### Rendering the whole document
 
@@ -276,10 +290,13 @@ rendering the basic structure of the HTML document like the `<html>` and
 `<body>` elements.
 
 Finally, the document component must render three `<div>` elements, `#page`,
-`#revivalSettings` and `#scripts`. The first one will contain the current view.
-The second one will contain scripts used to initialize the environment for your
-application at the client side, while the third one will contain the JavaScript
-logic of your application. The order is important as this will allow your users
+`#revivalSettings` and `#scripts`.
+ 
+ - `#page` - is a place where current view is rendered.
+ - `#revivalSettings` - contains scripts used to initialize the environment for your application at the client side.
+ - `#scripts` - contains JavaScript logic of your application. 
+ 
+The order is important as this will allow your users
 to see the whole of the page content before the application is fully loaded in
 the browser (remember, the content is first rendered at the server side).
 
@@ -291,8 +308,11 @@ concern yourself with this very much.
 Note that the document component is only used at the server-side, as the
 application only updates the contents of the `#page` element at the
 client-side (and the page title and meta tags through the meta-manager, which
-will not be covered by this tutorial, but you can learn more about it in its
-interface `node_modules/ima/meta/MetaManager.js`).
+will not be covered by this tutorial, but you can learn more about its interface 
+in the API [/api/meta/meta-meta-manager.html](/api/meta/meta-meta-manager.html)).
+
+For more information about `DocumentView` and whole rendering process of IMA.js
+application, [take a look at the documentation](/docs/rendering-process.html).
 
 ### Notes on ES2015 modules and IMA.js namespaces
 
@@ -304,7 +324,7 @@ Previously almost all of the JavaScript files in your IMA.js application include
 a snippet of code like this one near the beginning:
 
 ```javascript
-import ns from 'ima/namespace';
+import ns from '@ima/namespace';
 
 ns.namespace('app.foo.bar');
 ```
@@ -325,5 +345,7 @@ If you're using version 15 and above you can safely remove deprecated namespaces
 and replace them with ES2015 [`import`](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Statements/import)
 and [`export`](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Statements/export).
 
-Anyway, that's it for this part of the tutorial, so head over to the
-[part 3](Tutorial,-part-3) to learn about application state.
+---
+
+That's it for this part of the tutorial, 
+[so head over to the part 3](/tutorial/adding-some-state.html) to learn about application state.

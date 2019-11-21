@@ -4,6 +4,10 @@
 @import "custom-bulma";
 @import "rouge-github";
 
+body {
+  line-height: 1.6;
+}
+
 .is-documentation {
   &>div:first-child {
     flex-shrink: 0;
@@ -16,7 +20,23 @@
 .doc-aside {
   position: sticky;
   top: 20px;
-  width: 320px;
+}
+
+.doc-aside-wrapper {
+  width: 200px;
+
+  @media screen and (min-width: 1024px) {
+    max-width: 960px;
+    width: 240px;
+  }
+  @media screen and (min-width: 1216px) {
+    max-width: 1152px;
+    width: 280px;
+  }
+  @media screen and (min-width: 1408px) {
+    max-width: 1344px;
+    width: 300px;
+  }
 }
 
 #features {
@@ -108,10 +128,6 @@
   padding: 2rem 1.5rem;
 }
 
-.menu-label {
-  font-weight: bold;
-}
-
 a {
   text-decoration: underline;
 }
@@ -120,4 +136,16 @@ a.button,
 .navbar a,
 .menu-list a {
   text-decoration: none;
+}
+
+.content {
+  overflow: hidden;
+}
+
+.menu-list li ul {
+  font-size: 0.9rem;
+}
+
+.menu-list > li > a {
+  font-weight: 700;
 }

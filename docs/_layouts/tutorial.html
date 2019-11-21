@@ -1,13 +1,20 @@
 {% include header.html %}
 <div class="container">
 	<div class="is-flex is-documentation">
-		<div>
+		<div class="doc-aside-wrapper">
 			<aside class="doc-aside menu">
 				<p class="menu-label">Tutorial</p>
 				<ul class="menu-list">
-					{% for t in site.data.tutorial %}
+					{% for tut in site.data.tutorial %}
 					<li>
-						<a href="{{ t.url | relative_url }}"{% if t.url == page.url %}class="is-active"{% endif %}>{{ t.title }}</a>
+						<a href="{{ tut.url | relative_url }}"{% if tut.url == page.url %}class="is-active"{% endif %}>{{ tut.title }}</a>
+						<ul>
+							{% for subTut in tut.submenu %}
+							<li>
+								<a href="{{ subTut.url | relative_url }}">{{ subTut.title }}</a>
+							</li>
+							{% endfor %}
+						</ul>
 					</li>
 					{% endfor %}
 				</ul>

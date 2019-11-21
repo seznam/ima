@@ -1,15 +1,73 @@
 [
     {
         "title": "1. Introduction",
-        "url": "/tutorial/introduction.html"
+        "url": "/tutorial/introduction.html",
+        "submenu": [
+            {
+                "title": "Setup",
+                "url": "/tutorial/introduction.html#setup"
+            },
+            {
+                "title": "Dev server",
+                "url": "/tutorial/introduction.html#dev-server"
+            },
+            {
+                "title": "Directories and files in your application",
+                "url": "/tutorial/introduction.html#directories-and-files-in-your-application"
+            }
+        ]
     },
     {
         "title": "2. Static view",
-        "url": "/tutorial/static-view.html"
+        "url": "/tutorial/static-view.html",
+        "submenu": [
+            {
+                "title": "View Component",
+                "url": "/tutorial/static-view.html#view-component"
+            },
+            {
+                "title": "Guestbook form & SMACSS",
+                "url": "/tutorial/static-view.html#guestbook-form--smacss"
+            },
+            {
+                "title": "Styling our form",
+                "url": "/tutorial/static-view.html#styling-our-form"
+            },
+            {
+                "title": "Rendering the whole document",
+                "url": "/tutorial/static-view.html#rendering-the-whole-document"
+            },
+            {
+                "title": "Notes on ES2015 modules and IMA.js namespaces",
+                "url": "/tutorial/static-view.html#notes-on-es2015-modules-and-imajs-namespaces"
+            }
+        ]
     },
     {
         "title": "3. Adding some state",
-        "url": "/tutorial/adding-some-state.html"
+        "url": "/tutorial/adding-some-state.html",
+        "submenu": [
+            {
+                "title": "Controller & error handling",
+                "url": "/tutorial/adding-some-state.html#controller--error-handling"
+            },
+            {
+                "title": "Fetching posts",
+                "url": "/tutorial/adding-some-state.html#fetching-posts"
+            },
+            {
+                "title": "Splitting the render method",
+                "url": "/tutorial/adding-some-state.html#splitting-the-render-method"
+            },
+            {
+                "title": "Creating new components",
+                "url": "/tutorial/adding-some-state.html#creating-new-components"
+            },
+            {
+                "title": "Notes on communication between controllers and views",
+                "url": "/tutorial/adding-some-state.html#notes-on-communication-between-controllers-and-views"
+            }
+        ]
     },
     {
         "title": "4. Fetching the data",
