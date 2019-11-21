@@ -11,7 +11,7 @@ NPM_LOCAL_REGISTRY_URL="http://${NPM_LOCAL_REGISTRY_URL_NO_PROTOCOL}/"
 ROOT_DIR=`pwd`
 CREATE_IMA_APP_DIR="$ROOT_DIR/packages/create-ima-app"
 PACKAGE_VERSION=`node -e "console.log(require('./lerna.json').version)"`-next
-PACKAGES="core server examples gulp-task-loader gulp-tasks"
+PACKAGES="core server gulp-task-loader gulp-tasks"
 
 # Setup local registry
 node_modules/.bin/verdaccio -l "$NPM_LOCAL_REGISTRY_URL_NO_PROTOCOL" -c utils/benchmark/verdaccio_config.yml >/dev/null &
@@ -32,11 +32,10 @@ done
 npm config set @ima:registry=$NPM_LOCAL_REGISTRY_URL
 
 # Update create-ima-app versions
-cd "$CREATE_IMA_APP_DIR"
-for PACKAGE in $PACKAGES ; do
-    sed -i "s#\"@ima/$PACKAGE\":\s\".*\"#\"@ima/$PACKAGE\": \"$PACKAGE_VERSION\"#" package.json template/package.json
-done
+cd "$ROOT_DIR"
+node utils/version/create-ima-app-versions.js
 # Link current create-ima-app version to global scope
+cd "$CREATE_IMA_APP_DIR"
 npm link
 
 # Setup app from example feed

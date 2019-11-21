@@ -8,5 +8,5 @@
 /packages/*/node_modules
 /packages/skeleton/build
 /packages/skeleton/app
-/packages/examples/todos/assets/bower
-/packages/examples/todos/assets/static/js/todomvc-common-base.js
+/packages/create-ima-app/examples/todos/assets/bower
+/packages/create-ima-app/examples/todos/assets/static/js/todomvc-common-base.js

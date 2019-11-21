@@ -38,9 +38,9 @@
     "benchmark": "utils/benchmark/benchmark.sh",
     "doc": "gulp doc",
     "test": "lerna run test",
-    "release": "lerna version",
+    "release": "lerna version --force-publish create-ima-app",
     "release:next": "npm run release -- prerelease",
-    "release:next:init": "npm run release -- premajor --force-publish",
+    "release:next:init": "lerna version premajor --force-publish",
     "release:graduate": "npm run release -- --conventional-graduate",
     "release:publish": "lerna publish from-git --yes",
     "lint:cmd": "eslint -c ./.eslintrc.js --ignore-path ./.prettierignore",
@@ -48,7 +48,7 @@
     "lint:fix": "npm run lint -- --fix",
     "precommit": "lint-staged",
     "commit": "git-cz",
-    "version": "npm run doc && git add docs"
+    "version": "npm run doc && node utils/version/create-ima-app-versions.js && git add docs packages/create-ima-app/template/package.json"
   },
   "author": "Miroslav Jancarik <miroslav.jancarik@firma.seznam.cz>",
   "license": "MIT",
@@ -77,7 +77,7 @@
   },
   "husky": {
     "hooks": {
-      "commit-msg": "commitlint -E HUSKY_GIT_PARAMS"
+      "commit-msg": "if [[ `git rev-parse --abbrev-ref HEAD` =~ ^(master|next)$ ]] ; then commitlint -E HUSKY_GIT_PARAMS ; fi"
     }
   }
 }

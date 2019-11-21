@@ -52,10 +52,7 @@ function createImaApp(dirName, exampleName) {
   const projName = dirName.split(path.sep).pop();
   const appRoot = path.resolve(dirName.toString());
   const tplRoot = path.join(__dirname, '../template');
-  const exampleRoot = path.resolve(
-    __dirname,
-    `../node_modules/@ima/examples/${exampleName}`
-  );
+  const exampleRoot = path.resolve(__dirname, `../examples/${exampleName}`);
 
   if (!fs.existsSync(exampleRoot)) {
     error(`Example '${exampleName}' is not defiend.`);
