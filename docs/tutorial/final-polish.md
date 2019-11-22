@@ -42,7 +42,7 @@ according to their validity:
       'is-invalid': !this.state.authorValid
     })}
     type='text'
-    name='name'
+    name='author'
     onChange={this._validateAuthor.bind(this)}
     ref={input => (this.authorInput = input)}
     placeholder='Your name'/>
@@ -53,7 +53,7 @@ according to their validity:
       'form-control': true,
       'is-invalid': !this.state.contentValid
     })}
-    name='post'
+    name='content'
     onChange={this._validateContent.bind(this)}
     ref={input => (this.contentInput = input)}
     placeholder='What would you like to tell us?'/>

@@ -5,90 +5,126 @@ layout: "tutorial"
 
 ---
 
-## Writing posts
+In [previous part](/tutorial/fetching-the-data-from-the-server.html) we created our classes and services to handle data fetching from server.
+We also learned something about the vital parts of IMA.js - **object container** and **server-side rendering**.
+In this smaller section of the tutorial, we're going to be processing input from user and 
+sending those data to the server.
+
+## Processing input from user
 
 To write new posts, we need to address several issues:
 
-- notifying the controller that the user submitted the new post
-- pretending to send the post to our server via HTTP (remember, we don't have
-  an actual REST API backend)
-- waiting for our post to be saved
-- showing the updated list of posts
+- **Notifying the controller** that the user submitted the new post.
+- **Sending the post** to our server via HTTP (remember, we don't have
+  an actual REST API backend, so we're going to mock this).
+- **Waiting for our post** to be saved.
+- **Showing the updated** list of posts.
 
 We want the controller to handle submitting posts to the guest book in our
-application instead of the `postingForm` component to maintain a single
-"source of truth" in our application. This should be the case for all
-information that is related to the page as a whole. Local information (for
+application instead of the `postingForm` component to **maintain a single
+"source of truth"** in our application. This should be the case for all
+information that is related to the page as a whole. **Local information** (for
 example starting music playback when the user clicks the play button of some
 player component) may remain stored within the component itself, as it is not
 necessarily important to the overall state of the page.
 
 We'll use another IMA.js service to notify the controller that the user
-submitted a new post - the event bus. In case you did not read the details
-about communication between the controller and the view, the event bus is an
-internal event system, built on top of DOM events, used for communication like
-this.
+submitted a new post - the **EventBus**. In case you did not read [the details
+about communication between the controller and the view](/tutorial/adding-some-state.html#notes-on-communication-between-controllers-and-views)
+, the EventBus is an internal event system, built on top of DOM events, used for communication like this.
+
+### Updating the form
 
 First update the `<form ...` markup in the view of our `PostingForm` component
 (`app/component/postingForm/PostingForm.jsx`) by adding an `onSubmit` event
 listener:
 
-```xml
-<form action='' method='post' onSubmit={this._onSubmit.bind(this)}>
+```jsx
+<form action='' method='post' onSubmit={e => this._onSubmit(e)}>
 ```
 
-Next we need to add references to our form inputs:
+Then we need to hook our inputs to `_onChange()` handler which will set the contents of
+those input to the state of our `PostingForm` component.
 
-```xml
+```jsx
 <input
     id='postForm-name'
     className='form-control'
     type='text'
-    name='name'
-    ref={input => (this.authorInput = input)}
+    name='author'
+    onChange={e => this._onChange(e)}
     placeholder='Your name'/>
 ...
 <textarea
     id='postForm-content'
     className='form-control'
-    name='post'
-    ref={input => (this.contentInput = input}
+    name='content'
+    onChange={e => this._onChange(e)}
     placeholder='What would you like to tell us?'/>
 ```
 
-Now create the `_onSubmit()` method in the component:
+We can't forget to define the default state for these two keys:
 
 ```javascript
-_onSubmit(event) {
-  this.fire('postSubmitted', {
-    author: this.authorInput.value,
-    content: this.contentInput.value
-  });
-
-  this.authorInput.value = '';
-  this.contentInput.value = '';
-
-  event.preventDefault();
+constructor(props) {
+  super(props);
+  
+  this.state = {
+    author: '',
+    content: '',
+  };
 }
 ```
 
-We fire the `postSubmitted` event using the event bus with the form data as
+Now we need to define the `_onChange()` handler. We're going to use the
+`name` attribute of input and textarea fields so both can be handled by defining only one method.
+But feel free to define `onChange` handlers for each input separately, if that suits you better. 
+Our `_onChange()` handler will look like this:
+
+```javascript
+_onSubmit(event) {
+  this.setState({
+    [event.target.name]: event.target.value
+  });
+}
+```
+
+The only thing that remains is to define the `_onSubmit()` in our component:
+
+```javascript
+_onSubmit(event) {
+  event.preventDefault();
+
+  this.fire('postSubmitted', {
+    author: this.state.author,
+    content: this.state.content
+  });
+   
+  // Reset the state after submitting
+  this.setState({
+    author: '',
+    content: '',
+  });
+}
+```
+
+### Firing EventBus events
+
+We can **fire EventBus events** through `this.fire()` method that is available
+to us by extending the `AbstractComponent`. So in this example
+we fire the `postSubmitted` event through EventBus with the form data as
 the event data, clear the form, and finally we prevent the browser from
 submitting the form to the server.
 
-The `ref` property on a native element accepts a callback that allows us to
-assign DOM node reference to a variable or a class property. In this case
-the native element is `<inupt>` and `<textarea>`. When the `ref` attribute
-is applied on a non-native element (component) insted of DOM node reference
-we get instance of the component.
-
-The `fire()` method is a short-hand for `this.utils.$EventBus.fire(this, ...)`
-call, which fires the custom DOM event using the event bus. The `this.utils`
+The `this.fire()` method is a **short-hand** for `this.utils.$EventBus.fire(this, ...)`
+call, which fires the custom DOM event using the EventBus. The `this.utils`
 property is set to the view utils - various objects, data and services that
 are useful for rendering the UI - and is obtained from the React context.
 The value returned by `this.utils` is configurable in the
 `app/config/bind.js` configuration file and is represented by the constant
 `$Utils`.
+
+### Capturing EventBus events
 
 Now we need a way to capture the event in our home page controller, so open up
 the home controller (the `app/page/home/HomeController.js` file) and add the
@@ -102,17 +138,17 @@ onPostSubmitted(eventData) {
 
 The IMA.js will automatically invoke this method when the `postSubmitted` event
 bus event occurs. For details on how this mechanism works, please reffer to the
-**Emiting events using the EventBus** section of the third chapter of this
-tutorial.
+[Emiting events using the EventBus](/tutorial/adding-some-state.html#2-emiting-events-using-the-eventbus) 
+section of the third chapter of this tutorial.
 
 Notice that our `onPostSubmitted()` event listener is a public method. This is
 because it represents the (event) interface for the view components.
 
-Before we will fill our `onPostSubmitted()` event listener with content however,
-we need to update our post model classes first.
+#### Updating our post service classes
 
-Open the post factory class (`app/model/post/PostFactory.js`) and add the
-following method for creating a single post:
+Before we fill our `onPostSubmitted()` event listener with content however,
+we need to update our post model classes first. Open the post factory class (`app/model/post/PostFactory.js`)
+and add the following method for creating a single post:
 
 ```javascript
 createEntity(entityData) {
@@ -159,6 +195,8 @@ not created yet (the post IDs should be generated by our backend) and uses the
 post resource to create the post. The method returns a promise that resolves to
 the post entity representing the created post.
 
+#### Defining the `onPostSubmitted` method
+
 With that in place, we can now fill in the contents of the `onPostSubmitted()`
 event listener in the home page controller (`app/page/home/HomeController.js`):
 
@@ -175,13 +213,14 @@ service and updates the `posts` field in the view's state using the
 state that are present in the provided state object without modifying the rest,
 and notifies the view about the new state so that the view is re-rendered.
 
+### Updating the API
+
 Now that everything is wired up, we can start submitting new posts, right?
 Well, not so fast. Remember, we do not have an actual REST API backend, so the
 HTTP POST request will fail and no new post will be created.
 
 Since we don't want to implement an actual backend, we will work around this
-issue by implementing a [mock](http://en.wikipedia.org/wiki/Mock_object) HTTP
-agent that fetches the posts from the server and then acts as if sending
+issue by implementing a [mock](http://en.wikipedia.org/wiki/Mock_object) **HTTP agent** that fetches the posts from the server and then acts as if sending
 subsequent requests to the server while managing our state (the created posts)
 locally and creating responses on spot without any actual communication with
 the server. This approach is useful for both tests and our simple tutorial.
@@ -193,10 +232,13 @@ To create our HTTP mock create the `app/mock` directory and the
 import HttpAgent from 'ima/http/HttpAgentImpl';
 
 const GET_DELAY = 70; // milliseconds
-
 const POST_DELAY = 90; // milliseconds
 
 export default class MockHttpAgent extends HttpAgent {
+  static get $dependencies() {
+    return ['$HttpAgentProxy', '$Cache', '$CookieStorage', config.$Http];
+  }
+
   constructor(proxy, cache, cookie, config) {
     super(proxy, cache, cookie, config);
 
@@ -252,15 +294,15 @@ Let's take this class apart and take a look at what it does. We extend the
 we need to obtain its dependencies in our constructor
 (`proxy, cache, cookie, config`) and pass them to the super-constructor.
 
-Next we set up the `_posts` field that we'll use to keep track of all posts.
+Next we set up the `_posts` field that we'll use to keep track of all posts and few REST API methods:
 
-The `get()` method checks whether we already have the posts fetched from the
+ - **The `get()` method** checks whether we already have the posts fetched from the
 server, and, if we don't, it uses the super-implementation to fetch them and
 store them in the `_posts` field. If the posts have already been fetched, the
 method returns a promise that resolves to a clone of the posts after the
 configured delay.
 
-The `post()` method checks whether we already have the posts fetched from the
+ - **The `post()` method** checks whether we already have the posts fetched from the
 server, and, if we don't, it fetches them using the `get()` method and then
 calls itself again. If we already have the posts fetched, the method clones the
 data passed to it in parameters, generates an ID, stores the new record as the
@@ -269,34 +311,32 @@ resolves the returned promise after the configured delay to the stored post.
 
 We included the delays in our `get()` and `post()` methods to simulate the
 latency imposed by a real networking. Also notice how we always clone the data
-we receive before storing them internally and return only clones of the our
+we receive before storing them internally and return only clones of our
 internal posts storage. This is to emulate the server behavior reliably, so
 that new posts won't modify previously returned post arrays and later
 modifications of data passed to or received from our mock server won't modify
 the internal state or data returned by other calls to our methods.
 
-To plug our HTTP mock into our application, we need to update the
-`app/config/bind.js` a little more. First import the mock:
+To wire up our HTTP mock into our application, we need to update the dependencies of the `app/model/post/PostResource.js`:
 
 ```javascript
+import PostFactory from './PostFactory';
 import MockHttpAgent from 'app/mock/MockHttpAgent';
-```
 
-Next add the following line at the beginning of the exported `init` callback:
+export default class PostResource {
+  static get $dependencies() {
+    return [MockHttpAgent, PostFactory];
+  }
 
-```javascript
-oc.inject(MockHttpAgent, ['$HttpAgentProxy', '$Cache', '$CookieStorage', config.$Http]);
-```
-
-And update the dependencies of the `PostResource`:
-
-```javascript
-[MockHttpAgent, PostFactory]
+  ...
+}
 ```
 
 Go ahead and check the result in the browser, you will now be able to write new
 posts to our guestbook (which will disappear once you reload the page, since we
 keep the posts only in our HTTP mock).
 
+---
+
 With our guestbook working, we can turn to adding some final polish to our
-application in the [6th part of the tutorial](Tutorial,-part-6).
+application in the [6th and last part of the tutorial](/tutorial/final-polish.html).

@@ -140,12 +140,21 @@ a.button,
 
 .content {
   overflow: hidden;
+  max-width: 680px;
+  width: 100%;
+  margin: 0 auto;
 }
 
-.menu-list li ul {
-  font-size: 0.9rem;
-}
+.menu-list {
+  li ul {
+    font-size: 0.9rem;
+  }
 
-.menu-list > li > a {
-  font-weight: 700;
+  & > li > a {
+    font-weight: 700;
+  }
+
+  a {
+    padding: 0.4em 0.75em;
+  }
 }

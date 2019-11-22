@@ -5,7 +5,7 @@ layout: "tutorial"
 
 ---
 
-In the first part we went through introduction to IMA.js and initialized our first
+In the [first part](/tutorial/introduction.html) we went through introduction to IMA.js and initialized our first
 application using `create-ima-app` command. In the second part of the tutorial
 we'll actually do some coding and prepare basic Views for our guest book application.
 
@@ -97,7 +97,7 @@ with the following code:
           id='postForm-name'
           className='form-control'
           type='text'
-          name='name'
+          name='author'
           placeholder='Your name'
         />
       </div>
@@ -106,7 +106,7 @@ with the following code:
         <textarea
           id='postForm-content'
           className='form-control'
-          name='post'
+          name='content'
           placeholder='What would you like to tell us?'
         />
       </div>
@@ -224,7 +224,9 @@ $(document).ready(function() { $('body').bootstrapMaterialDesign(); });
 
 That's a lot of stuff, but it will save us a lot of effort with styling our UI.
 
-So let's write some CSS to make our guestbook look even better. Open the
+#### Defining custom styles
+
+Let's write some CSS to make our guestbook look even better. Open the
 `app/assets/less/settings.less` file and add the following code to set up our
 layout configuration:
 

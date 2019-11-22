@@ -56,10 +56,6 @@
                 "url": "/tutorial/adding-some-state.html#fetching-posts"
             },
             {
-                "title": "Splitting the render method",
-                "url": "/tutorial/adding-some-state.html#splitting-the-render-method"
-            },
-            {
                 "title": "Creating new components",
                 "url": "/tutorial/adding-some-state.html#creating-new-components"
             },
@@ -71,11 +67,63 @@
     },
     {
         "title": "4. Fetching the data",
-        "url": "/tutorial/fetching-the-data-from-the-server.html"
+        "url": "/tutorial/fetching-the-data-from-the-server.html",
+        "submenu": [
+            {
+                "title": "Mocking REST API",
+                "url": "/tutorial/fetching-the-data-from-the-server.html#mocking-rest-api"
+            },
+            {
+                "title": "Entity Class",
+                "url": "/tutorial/fetching-the-data-from-the-server.html#entity-class"
+            },
+            {
+                "title": "Factory Class",
+                "url": "/tutorial/fetching-the-data-from-the-server.html#factory-class"
+            },
+            {
+                "title": "Resource Class",
+                "url": "/tutorial/fetching-the-data-from-the-server.html#resource-class"
+            },
+            {
+                "title": "Service class",
+                "url": "/tutorial/fetching-the-data-from-the-server.html#service-class"
+            },
+            {
+                "title": "Dependency injection",
+                "url": "/tutorial/fetching-the-data-from-the-server.html#dependency-injection"
+            },
+            {
+                "title": "Server-side rendering",
+                "url": "/tutorial/fetching-the-data-from-the-server.html#server-side-rendering"
+            }
+        ]
     },
     {
         "title": "5. Writing posts",
-        "url": "/tutorial/writing-posts.html"
+        "url": "/tutorial/writing-posts.html",
+        "submenu": [
+            {
+                "title": "Processing input from user",
+                "url": "/tutorial/writing-posts.html#processing-input-from-user"
+            },
+            {
+                "title": "Updating the form",
+                "url": "/tutorial/writing-posts.html#updating-the-form"
+            },
+            {
+                "title": "Firing EventBus events",
+                "url": "/tutorial/writing-posts.html#firing-eventbus-events"
+            },
+            {
+                "title": "Capturing EventBus events",
+                "url": "/tutorial/writing-posts.html#capturing-eventbus-events"
+            },
+            {
+                "title": "Updating the API",
+                "url": "/tutorial/writing-posts.html#updating-the-api"
+            }
+        ]
     },
     {
         "title": "6. Final polish",

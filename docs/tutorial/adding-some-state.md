@@ -5,7 +5,7 @@ layout: "tutorial"
 
 ---
 
-In previous section of the tutorial, we prepared basic markup and custom styling
+In [previous section](/tutorial/static-view.html) of the tutorial, we prepared basic markup and custom styling
 thanks to the [Bootstrap material design libray](https://fezvrasta.github.io/bootstrap-material-design/).
 In this section, we're going to add some functionality to our application.
 
@@ -136,7 +136,7 @@ As you may have noticed, we used JSON-compatible code in case of `posts` - this
 will come in handy later when we'll introduce fetching the data from the
 server and move the structure to an external JSON file.
 
-## Splitting the render method
+#### Splitting the render method
 
 Let's return to our view in the `app/page/home/HomeView.jsx` file. Replace the
 `render()` method with the following code snippet:
@@ -157,7 +157,7 @@ render() {
                   id='postForm-name'
                   className='form-control'
                   type='text'
-                  name='name'
+                  name='author'
                   placeholder='Your name'
                 />
               </div>
@@ -166,7 +166,7 @@ render() {
                 <textarea
                   id='postForm-content'
                   className='form-control'
-                  name='post'
+                  name='content'
                   placeholder='What would you like to tell us?'
                 />
               </div>
@@ -287,7 +287,7 @@ beginning of the file:
 import Post from 'app/component/post/Post';
 ```
 
-You can notice that so far we haven't used relative imports when importing
+You can notice that so far we **haven't used relative imports** when importing
 our custom JS modules from inside of the app directory structure. This is
 because IMA.js adds the `app` directory to the **lookup path**. This means that
 you can refer to any file inside `app` directory through an absolute path,
@@ -328,7 +328,7 @@ export default class PostingForm extends AbstractComponent {
                 id='postForm-name'
                 className='form-control'
                 type='text'
-                name='name'
+                name='author'
                 placeholder='Your name'
               />
             </div>
@@ -337,7 +337,7 @@ export default class PostingForm extends AbstractComponent {
               <textarea
                 id='postForm-content'
                 className='form-control'
-                name='post'
+                name='content'
                 placeholder='What would you like to tell us?'
               />
             </div>
@@ -407,7 +407,7 @@ There are three ways the controllers and views communicate:
   needs to be notified about an external event captured by the controller and
   updating the state is not practical.
 
-### 1. Passing state
+### Passing state
 
 The controller creates the initial state of the page by returning a hash object
 of values and promises from its `load()` method. The IMA.js then waits for all
@@ -431,7 +431,7 @@ available yet. On the other hand, this does require you to add more logic to
 your view, checking whether the data is available or not, and displaying
 loading indicators where the data is not available yet.
 
-### 2. Emiting events using the EventBus
+### Emiting events using the EventBus
 
 The `@ima/event/EventBus` API allows your UI components to emit custom DOM
 events that naturally propagate through the DOM tree representing the tree of
@@ -456,7 +456,7 @@ The first argument passed into the controller's event listener method will be
 the event data, not the event object itself, as manipulating the event object
 once it reaches the controller is pointless.
 
-### 3. Emitting events using the Dispatcher
+### Emitting events using the Dispatcher
 
 The obvious limitation of the `@ima/event/EventBus` API is that it only allows
 to create events that propagate up the tree of the UI components. The common
