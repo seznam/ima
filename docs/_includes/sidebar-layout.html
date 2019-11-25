@@ -1,28 +1,32 @@
 {% include header.html %}
 <div class="container">
     <div class="is-flex is-sidebar">
-        <div class="doc-aside-wrapper">
+        <div class="doc-aside-container">
+            <div class="doc-aside-overflow-grad doc-aside-overflow-grad--top"></div>
             <aside class="doc-aside menu">
-                {% for curMenu in include.menu %}
-                <p class="menu-label">{{ curMenu.title }}</p>
-                <ul class="menu-list">
-                    {% for item in curMenu.menu %}
-                    <li>
-                        <a href="{{ item.url | relative_url }}"{% if item.url == page.url %}class="is-active"{% endif %}>{{ item.title }}</a>
-                        {% if item.submenu  %}
-                        <ul>
-                            {% for subItem in item.submenu %}
-                            <li>
-                                <a href="{{ subItem.url | relative_url }}">{{ subItem.title }}</a>
-                            </li>
-                            {% endfor %}
-                        </ul>
-                        {% endif %}
-                    </li>
+                <div class="doc-aside-wrapper">
+                    {% for curMenu in include.menu %}
+                    <p class="menu-label">{{ curMenu.title }}</p>
+                    <ul class="menu-list">
+                        {% for item in curMenu.menu %}
+                        <li>
+                            <a href="{{ item.url | relative_url }}"{% if item.url == page.url %}class="is-active"{% endif %}>{{ item.title }}</a>
+                            {% if item.submenu  %}
+                            <ul>
+                                {% for subItem in item.submenu %}
+                                <li>
+                                    <a href="{{ subItem.url | relative_url }}">{{ subItem.title }}</a>
+                                </li>
+                                {% endfor %}
+                            </ul>
+                            {% endif %}
+                        </li>
+                        {% endfor %}
+                    </ul>
                     {% endfor %}
-                </ul>
-                {% endfor %}
+                </div>
             </aside>
+            <div class="doc-aside-overflow-grad"></div>
         </div>
         <div class="content">
             {{ content }}

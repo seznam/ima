@@ -10,14 +10,14 @@
     "url": "/docs/getting-started.html"
   },
   {
-    "text": "API",
-    "title": "Browse through the API for details on code usage.",
-    "url": "/api"
-  },
-  {
     "text": "Tutorial",
     "title": "Check out our Tutorial to learn more about IMA.js.",
     "url": "/tutorial/introduction.html"
+  },
+  {
+    "text": "API",
+    "title": "Browse through the API for details on code usage.",
+    "url": "/api"
   },
   {
     "text": "Examples",

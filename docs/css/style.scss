@@ -17,23 +17,51 @@ body {
 
 .doc-aside {
   position: sticky;
-  top: 20px;
-}
+  position: -webkit-sticky;
+  top: 0;
+  overflow-y: auto;
+  height: 100vh;
+  width: 150vw;
+  z-index: 1;
+  margin-top: -20px;
+  padding-top: 20px;
 
-.doc-aside-wrapper {
-  width: 200px;
+  &-container,
+  &-wrapper {
+    width: 200px;
 
-  @media screen and (min-width: 1024px) {
-    max-width: 960px;
-    width: 240px;
+    @media screen and (min-width: 1024px) {
+      max-width: 960px;
+      width: 240px;
+    }
+    @media screen and (min-width: 1216px) {
+      max-width: 1152px;
+      width: 280px;
+    }
+    @media screen and (min-width: 1408px) {
+      max-width: 1344px;
+      width: 300px;
+    }
   }
-  @media screen and (min-width: 1216px) {
-    max-width: 1152px;
-    width: 280px;
+
+  &-wrapper {
+    padding-bottom: 80px;
   }
-  @media screen and (min-width: 1408px) {
-    max-width: 1344px;
+
+  &-overflow-grad {
+    height: 30px;
+    bottom: 0;
+    position: fixed;
     width: 300px;
+    background: linear-gradient(180deg, rgba(255,255,255,0) 0%, rgba(255,255,255,1) 100%);
+    z-index: 2;
+
+    &--top {
+      position: sticky;
+      margin-top: -30px;
+      top: 0;
+      background: linear-gradient(0deg, rgba(255,255,255,0) 0%, rgba(255,255,255,1) 100%);
+    }
   }
 }
 
@@ -146,6 +174,8 @@ a.button,
   max-width: 680px;
   width: 100%;
   margin: 0 auto;
+  position: relative;
+  z-index: 10;
 }
 
 .menu-list {
