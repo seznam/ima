@@ -76,13 +76,16 @@ constructor(props) {
 }
 ```
 
+This adds some internal state to our form component, which we'll maintain
+separately from the main page state maintained by the home page controller.
+
 Now we need to define the `_onChange()` handler. We're going to use the
 `name` attribute of input and textarea fields so both can be handled by defining only one method.
 But feel free to define `onChange` handlers for each input separately, if that suits you better. 
 Our `_onChange()` handler will look like this:
 
 ```javascript
-_onSubmit(event) {
+_onChange(event) {
   this.setState({
     [event.target.name]: event.target.value
   });

@@ -127,6 +127,36 @@
     },
     {
         "title": "6. Final polish",
-        "url": "/tutorial/final-polish.html"
+        "url": "/tutorial/final-polish.html",
+        "submenu": [
+            {
+                "title": "Improving user experience (UX)",
+                "url": "/tutorial/final-polish.html#improving-user-experience-ux"
+            },
+            {
+                "title": "Form validation",
+                "url": "/tutorial/final-polish.html#form-validation"
+            },
+            {
+                "title": "Optimistic posting",
+                "url": "/tutorial/final-polish.html#optimistic-posting"
+            },
+            {
+                "title": "Auto-refresh",
+                "url": "/tutorial/final-polish.html#auto-refresh"
+            },
+            {
+                "title": "Handling race conditions",
+                "url": "/tutorial/final-polish.html#handling-race-conditions"
+            },
+            {
+                "title": "Animations",
+                "url": "/tutorial/final-polish.html#animations"
+            },
+            {
+                "title": "Conclusion",
+                "url": "/tutorial/final-polish.html#conclusion"
+            }
+        ]
     }
 ]

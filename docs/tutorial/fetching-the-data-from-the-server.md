@@ -280,6 +280,8 @@ export default class HomeController extends AbstractController {
   }
 
   constructor() {
+    super();
+
     this._postService = postService;
   }
 

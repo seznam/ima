@@ -8,6 +8,7 @@
 					{% for tut in site.data.tutorial %}
 					<li>
 						<a href="{{ tut.url | relative_url }}"{% if tut.url == page.url %}class="is-active"{% endif %}>{{ tut.title }}</a>
+						{% if tut.submenu  %}
 						<ul>
 							{% for subTut in tut.submenu %}
 							<li>
@@ -15,6 +16,7 @@
 							</li>
 							{% endfor %}
 						</ul>
+						{% endif %}
 					</li>
 					{% endfor %}
 				</ul>

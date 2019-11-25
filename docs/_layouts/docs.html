@@ -8,7 +8,7 @@
 					{% for doc in site.data.docs %}
 					<li>
 						<a href="{{ doc.url | relative_url }}"{% if doc.url == page.url %}class="is-active"{% endif %}>{{ doc.title }}</a>
-						{% if doc.submenu %}
+						{% if doc.submenu and doc.url == page.url %}
 						<ul>
 							{% for subDoc in doc.submenu %}
 							<li>
