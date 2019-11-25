@@ -8,12 +8,10 @@ body {
   line-height: 1.6;
 }
 
-.is-documentation {
+.is-sidebar {
   &>div:first-child {
     flex-shrink: 0;
-    margin-bottom: 1.5rem;
     margin-right: 1rem;
-    padding-right: 0.5rem;
   }
 }
 
@@ -136,6 +134,11 @@ a.button,
 .navbar a,
 .menu-list a {
   text-decoration: none;
+
+  &.is-active {
+    background: none;
+    color: $red;
+  }
 }
 
 .content {

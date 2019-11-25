@@ -1,78 +1,83 @@
 [
     {
-        "title": "Getting started",
-        "url": "/docs/getting-started.html",
-        "submenu": [
+        "title": "documentation",
+        "menu": [
             {
-                "title": "Overview",
-                "url":"/docs/getting-started.html#overview"
+                "title": "Getting started",
+                "url": "/docs/getting-started.html",
+                "submenu": [
+                    {
+                        "title": "Overview",
+                        "url":"/docs/getting-started.html#overview"
+                    },
+                    {
+                        "title": "Installation",
+                        "url": "/docs/getting-started.html#installation"
+                    },
+                    {
+                        "title": "Application structure",
+                        "url": "/docs/getting-started.html#application-structure"
+                    },
+                    {
+                        "title": "Production use",
+                        "url": "/docs/getting-started.html#production-use"
+                    }
+                ]
             },
             {
-                "title": "Installation",
-                "url": "/docs/getting-started.html#installation"
+                "title": "Configuration",
+                "url": "/docs/configuration.html",
+                "submenu": [
+                    {
+                        "title": "Build and environment configuration",
+                        "url":"/docs/configuration.html#build-and-environment-configuration"
+                    },
+                    {
+                        "title": "Application configuration",
+                        "url": "/docs/configuration.html#application-configuration"
+                    }
+                ]
             },
             {
-                "title": "Application structure",
-                "url": "/docs/getting-started.html#application-structure"
+                "title": "Object Container",
+                "url": "/docs/object-container.html"
             },
             {
-                "title": "Production use",
-                "url": "/docs/getting-started.html#production-use"
+                "title": "Routing",
+                "url": "/docs/routing.html"
+            },
+            {
+                "title": "Page Manager",
+                "url": "/docs/page-manager.html"
+            },
+            {
+                "title": "Controller lifecycle",
+                "url": "/docs/controller-lifecycle.html"
+            },
+            {
+                "title": "Extensions",
+                "url": "/docs/extensions.html"
+            },
+            {
+                "title": "Rendering process",
+                "url": "/docs/rendering-process.html"
+            },
+            {
+                "title": "Views &amp; Components",
+                "url": "/docs/views-and-components.html"
+            },
+            {
+                "title": "Events",
+                "url": "/docs/events.html"
+            },
+            {
+                "title": "SEO &amp; MetaManager",
+                "url": "/docs/seo-and-meta-manager.html"
+            },
+            {
+                "title": "Errors",
+                "url": "/docs/errors.html"
             }
         ]
-    },
-    {
-        "title": "Configuration",
-        "url": "/docs/configuration.html",
-        "submenu": [
-            {
-                "title": "Build and environment configuration",
-                "url":"/docs/configuration.html#build-and-environment-configuration"
-            },
-            {
-                "title": "Application configuration",
-                "url": "/docs/configuration.html#application-configuration"
-            }
-        ]
-    },
-    {
-        "title": "Object Container",
-        "url": "/docs/object-container.html"
-    },
-    {
-        "title": "Routing",
-        "url": "/docs/routing.html"
-    },
-    {
-        "title": "Page Manager",
-        "url": "/docs/page-manager.html"
-    },
-    {
-        "title": "Controller lifecycle",
-        "url": "/docs/controller-lifecycle.html"
-    },
-    {
-        "title": "Extensions",
-        "url": "/docs/extensions.html"
-    },
-    {
-        "title": "Rendering process",
-        "url": "/docs/rendering-process.html"
-    },
-    {
-        "title": "Views &amp; Components",
-        "url": "/docs/views-and-components.html"
-    },
-    {
-        "title": "Events",
-        "url": "/docs/events.html"
-    },
-    {
-        "title": "SEO &amp; MetaManager",
-        "url": "/docs/seo-and-meta-manager.html"
-    },
-    {
-        "title": "Errors",
-        "url": "/docs/errors.html"
     }
 ]

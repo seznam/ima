@@ -1,161 +1,166 @@
 [
     {
-        "title": "1. Introduction",
-        "url": "/tutorial/introduction.html",
-        "submenu": [
+        "title": "tutorial",
+        "menu": [
             {
-                "title": "Setup",
-                "url": "/tutorial/introduction.html#setup"
+                "title": "1. Introduction",
+                "url": "/tutorial/introduction.html",
+                "submenu": [
+                    {
+                        "title": "Setup",
+                        "url": "/tutorial/introduction.html#setup"
+                    },
+                    {
+                        "title": "Dev server",
+                        "url": "/tutorial/introduction.html#dev-server"
+                    },
+                    {
+                        "title": "Directories and files in your application",
+                        "url": "/tutorial/introduction.html#directories-and-files-in-your-application"
+                    }
+                ]
             },
             {
-                "title": "Dev server",
-                "url": "/tutorial/introduction.html#dev-server"
+                "title": "2. Static view",
+                "url": "/tutorial/static-view.html",
+                "submenu": [
+                    {
+                        "title": "View Component",
+                        "url": "/tutorial/static-view.html#view-component"
+                    },
+                    {
+                        "title": "Guestbook form & SMACSS",
+                        "url": "/tutorial/static-view.html#guestbook-form--smacss"
+                    },
+                    {
+                        "title": "Styling our form",
+                        "url": "/tutorial/static-view.html#styling-our-form"
+                    },
+                    {
+                        "title": "Rendering the whole document",
+                        "url": "/tutorial/static-view.html#rendering-the-whole-document"
+                    },
+                    {
+                        "title": "Notes on ES2015 modules and IMA.js namespaces",
+                        "url": "/tutorial/static-view.html#notes-on-es2015-modules-and-imajs-namespaces"
+                    }
+                ]
             },
             {
-                "title": "Directories and files in your application",
-                "url": "/tutorial/introduction.html#directories-and-files-in-your-application"
-            }
-        ]
-    },
-    {
-        "title": "2. Static view",
-        "url": "/tutorial/static-view.html",
-        "submenu": [
-            {
-                "title": "View Component",
-                "url": "/tutorial/static-view.html#view-component"
+                "title": "3. Adding some state",
+                "url": "/tutorial/adding-some-state.html",
+                "submenu": [
+                    {
+                        "title": "Controller & error handling",
+                        "url": "/tutorial/adding-some-state.html#controller--error-handling"
+                    },
+                    {
+                        "title": "Fetching posts",
+                        "url": "/tutorial/adding-some-state.html#fetching-posts"
+                    },
+                    {
+                        "title": "Creating new components",
+                        "url": "/tutorial/adding-some-state.html#creating-new-components"
+                    },
+                    {
+                        "title": "Notes on communication between controllers and views",
+                        "url": "/tutorial/adding-some-state.html#notes-on-communication-between-controllers-and-views"
+                    }
+                ]
             },
             {
-                "title": "Guestbook form & SMACSS",
-                "url": "/tutorial/static-view.html#guestbook-form--smacss"
+                "title": "4. Fetching the data",
+                "url": "/tutorial/fetching-the-data-from-the-server.html",
+                "submenu": [
+                    {
+                        "title": "Mocking REST API",
+                        "url": "/tutorial/fetching-the-data-from-the-server.html#mocking-rest-api"
+                    },
+                    {
+                        "title": "Entity Class",
+                        "url": "/tutorial/fetching-the-data-from-the-server.html#entity-class"
+                    },
+                    {
+                        "title": "Factory Class",
+                        "url": "/tutorial/fetching-the-data-from-the-server.html#factory-class"
+                    },
+                    {
+                        "title": "Resource Class",
+                        "url": "/tutorial/fetching-the-data-from-the-server.html#resource-class"
+                    },
+                    {
+                        "title": "Service class",
+                        "url": "/tutorial/fetching-the-data-from-the-server.html#service-class"
+                    },
+                    {
+                        "title": "Dependency injection",
+                        "url": "/tutorial/fetching-the-data-from-the-server.html#dependency-injection"
+                    },
+                    {
+                        "title": "Server-side rendering",
+                        "url": "/tutorial/fetching-the-data-from-the-server.html#server-side-rendering"
+                    }
+                ]
             },
             {
-                "title": "Styling our form",
-                "url": "/tutorial/static-view.html#styling-our-form"
+                "title": "5. Writing posts",
+                "url": "/tutorial/writing-posts.html",
+                "submenu": [
+                    {
+                        "title": "Processing input from user",
+                        "url": "/tutorial/writing-posts.html#processing-input-from-user"
+                    },
+                    {
+                        "title": "Updating the form",
+                        "url": "/tutorial/writing-posts.html#updating-the-form"
+                    },
+                    {
+                        "title": "Firing EventBus events",
+                        "url": "/tutorial/writing-posts.html#firing-eventbus-events"
+                    },
+                    {
+                        "title": "Capturing EventBus events",
+                        "url": "/tutorial/writing-posts.html#capturing-eventbus-events"
+                    },
+                    {
+                        "title": "Updating the API",
+                        "url": "/tutorial/writing-posts.html#updating-the-api"
+                    }
+                ]
             },
             {
-                "title": "Rendering the whole document",
-                "url": "/tutorial/static-view.html#rendering-the-whole-document"
-            },
-            {
-                "title": "Notes on ES2015 modules and IMA.js namespaces",
-                "url": "/tutorial/static-view.html#notes-on-es2015-modules-and-imajs-namespaces"
-            }
-        ]
-    },
-    {
-        "title": "3. Adding some state",
-        "url": "/tutorial/adding-some-state.html",
-        "submenu": [
-            {
-                "title": "Controller & error handling",
-                "url": "/tutorial/adding-some-state.html#controller--error-handling"
-            },
-            {
-                "title": "Fetching posts",
-                "url": "/tutorial/adding-some-state.html#fetching-posts"
-            },
-            {
-                "title": "Creating new components",
-                "url": "/tutorial/adding-some-state.html#creating-new-components"
-            },
-            {
-                "title": "Notes on communication between controllers and views",
-                "url": "/tutorial/adding-some-state.html#notes-on-communication-between-controllers-and-views"
-            }
-        ]
-    },
-    {
-        "title": "4. Fetching the data",
-        "url": "/tutorial/fetching-the-data-from-the-server.html",
-        "submenu": [
-            {
-                "title": "Mocking REST API",
-                "url": "/tutorial/fetching-the-data-from-the-server.html#mocking-rest-api"
-            },
-            {
-                "title": "Entity Class",
-                "url": "/tutorial/fetching-the-data-from-the-server.html#entity-class"
-            },
-            {
-                "title": "Factory Class",
-                "url": "/tutorial/fetching-the-data-from-the-server.html#factory-class"
-            },
-            {
-                "title": "Resource Class",
-                "url": "/tutorial/fetching-the-data-from-the-server.html#resource-class"
-            },
-            {
-                "title": "Service class",
-                "url": "/tutorial/fetching-the-data-from-the-server.html#service-class"
-            },
-            {
-                "title": "Dependency injection",
-                "url": "/tutorial/fetching-the-data-from-the-server.html#dependency-injection"
-            },
-            {
-                "title": "Server-side rendering",
-                "url": "/tutorial/fetching-the-data-from-the-server.html#server-side-rendering"
-            }
-        ]
-    },
-    {
-        "title": "5. Writing posts",
-        "url": "/tutorial/writing-posts.html",
-        "submenu": [
-            {
-                "title": "Processing input from user",
-                "url": "/tutorial/writing-posts.html#processing-input-from-user"
-            },
-            {
-                "title": "Updating the form",
-                "url": "/tutorial/writing-posts.html#updating-the-form"
-            },
-            {
-                "title": "Firing EventBus events",
-                "url": "/tutorial/writing-posts.html#firing-eventbus-events"
-            },
-            {
-                "title": "Capturing EventBus events",
-                "url": "/tutorial/writing-posts.html#capturing-eventbus-events"
-            },
-            {
-                "title": "Updating the API",
-                "url": "/tutorial/writing-posts.html#updating-the-api"
-            }
-        ]
-    },
-    {
-        "title": "6. Final polish",
-        "url": "/tutorial/final-polish.html",
-        "submenu": [
-            {
-                "title": "Improving user experience (UX)",
-                "url": "/tutorial/final-polish.html#improving-user-experience-ux"
-            },
-            {
-                "title": "Form validation",
-                "url": "/tutorial/final-polish.html#form-validation"
-            },
-            {
-                "title": "Optimistic posting",
-                "url": "/tutorial/final-polish.html#optimistic-posting"
-            },
-            {
-                "title": "Auto-refresh",
-                "url": "/tutorial/final-polish.html#auto-refresh"
-            },
-            {
-                "title": "Handling race conditions",
-                "url": "/tutorial/final-polish.html#handling-race-conditions"
-            },
-            {
-                "title": "Animations",
-                "url": "/tutorial/final-polish.html#animations"
-            },
-            {
-                "title": "Conclusion",
-                "url": "/tutorial/final-polish.html#conclusion"
+                "title": "6. Final polish",
+                "url": "/tutorial/final-polish.html",
+                "submenu": [
+                    {
+                        "title": "Improving user experience (UX)",
+                        "url": "/tutorial/final-polish.html#improving-user-experience-ux"
+                    },
+                    {
+                        "title": "Form validation",
+                        "url": "/tutorial/final-polish.html#form-validation"
+                    },
+                    {
+                        "title": "Optimistic posting",
+                        "url": "/tutorial/final-polish.html#optimistic-posting"
+                    },
+                    {
+                        "title": "Auto-refresh",
+                        "url": "/tutorial/final-polish.html#auto-refresh"
+                    },
+                    {
+                        "title": "Handling race conditions",
+                        "url": "/tutorial/final-polish.html#handling-race-conditions"
+                    },
+                    {
+                        "title": "Animations",
+                        "url": "/tutorial/final-polish.html#animations"
+                    },
+                    {
+                        "title": "Conclusion",
+                        "url": "/tutorial/final-polish.html#conclusion"
+                    }
+                ]
             }
         ]
     }
