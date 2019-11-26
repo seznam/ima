@@ -45,6 +45,8 @@ import ServerPageManager from './page/manager/ServerPageManager';
 import AbstractPageRenderer from './page/renderer/AbstractPageRenderer';
 import BlankManagedRootView from './page/renderer/BlankManagedRootView';
 import ClientPageRenderer from './page/renderer/ClientPageRenderer';
+import ComponentUtils from './page/renderer/ComponentUtils';
+import * as RendererEvents from './page/renderer/Events';
 import PageRenderer from './page/renderer/PageRenderer';
 import PageRendererFactory from './page/renderer/PageRendererFactory';
 import ServerPageRenderer from './page/renderer/ServerPageRenderer';
@@ -331,6 +333,8 @@ export {
   AbstractPageRenderer,
   BlankManagedRootView,
   ClientPageRenderer,
+  ComponentUtils,
+  RendererEvents,
   PageRenderer,
   PageRendererFactory,
   ServerPageRenderer,
