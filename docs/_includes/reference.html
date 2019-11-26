@@ -7,7 +7,9 @@
     </div>
     <div class="card-image">
       <figure class="image is-padded-with-shadow is-16by9">
-        <img src="{{ include.img | append: '?v=' | append: site.github.build_revision | relative_url }}" alt="{{ include.title }} Screenhot">
+        <a href="{{ include.url }}" target="_blank">
+          <img src="{{ include.img | append: '?v=' | append: site.github.build_revision | relative_url }}" alt="{{ include.title }} Screenhot">
+        </a>
       </figure>
     </div>
     <div class="card-content">{{ include.text | markdownify }}</div>
