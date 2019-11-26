@@ -127,6 +127,7 @@ describe('Revive client application', () => {
         initSettings: () => {
           return {
             prod: {
+              $Http: {},
               $Page: {
                 $Render: {}
               }

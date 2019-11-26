@@ -161,7 +161,6 @@ export default (ns, oc, config) => {
     $PageStateManager: PageStateManager,
     $Router: Router,
     $Settings: '$Settings',
-    $UIComponentHelper: '$UIComponentHelper',
     $Window: Window
   });
 
