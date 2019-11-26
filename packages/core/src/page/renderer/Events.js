@@ -5,7 +5,7 @@
  */
 const Events = Object.freeze({
   /**
-   * PageRenderer fires this event {@code $IMA.$PageRenderer.mounted} after
+   * PageRenderer fires event {@code $IMA.$PageRenderer.mounted} after
    * current page view is mounted to the DOM. Event's data contain
    * {@code {type: string}}.
    *
@@ -15,7 +15,7 @@ const Events = Object.freeze({
   MOUNTED: '$IMA.$PageRenderer.mounted',
 
   /**
-   * PageRenderer fires this event {@code $IMA.$PageRenderer.updated} after
+   * PageRenderer fires event {@code $IMA.$PageRenderer.updated} after
    * current state is updated in the DOM. Event's data contain
    * {@code {state: Object<string, *>}}.
    *
@@ -25,7 +25,7 @@ const Events = Object.freeze({
   UPDATED: '$IMA.$PageRenderer.updated',
 
   /**
-   * PageRenderer fires this event {@code $IMA.$PageRenderer.unmounted} after current view is
+   * PageRenderer fires event {@code $IMA.$PageRenderer.unmounted} after current view is
    * unmounted from the DOM. Event's data contain
    * {@code {type: string}}.
    *
@@ -35,7 +35,7 @@ const Events = Object.freeze({
   UNMOUNTED: '$IMA.$PageRenderer.unmounted',
 
   /**
-   * PageRenderer fires this event {@code $IMA.$PageRenderer.error} when there is
+   * PageRenderer fires event {@code $IMA.$PageRenderer.error} when there is
    * no _viewContainer in _renderToDOM method. Event's data contain
    * {@code {message: string}}.
    *
