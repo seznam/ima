@@ -20,10 +20,14 @@ class). You can read more about components and views in the [documentation](/doc
 Now let's replace the contents of the file with a blank view:
 
 ```jsx
+import { PageContext, AbstractComponent } from '@ima/core';
 import React from 'react';
-import AbstractComponent from '@ima/page/AbstractComponent';
 
 export default class HomeView extends AbstractComponent {
+  static get contextType() {
+    return PageContext;
+  }
+
   render() {
     return (
       null
@@ -39,13 +43,19 @@ one provided by the `AbstractComponent` class will do in this case.
 The `constructor()` is the class constructor (an object initializer, if you
 will) that sets the component's initial properties (`props`) and context. The
 `props` object represents the properties set on our view component by the
-code using it (the properties are set using the element attributes in JSX,
+code using it (_the properties are set using the element attributes in JSX,
 you can find our more about this
-[here](http://facebook.github.io/react/docs/getting-started.html)). The
+[here](http://facebook.github.io/react/docs/getting-started.html)_). The
 context is an object representing the "globals" for the React components in
 the application. IMA.js uses the context to pass view utils to components,
 you can find out more about it
 [here](https://facebook.github.io/react/docs/context.html).
+
+There's also static getter `contextType()` which returns `PageContext`, that 
+by default provides the component access to global `$Utils` object in the component context.
+This object is very useful as we can bind custom helper methods to it in the 
+`bind.js`file with the help of Object Container. But we'll talk about this a bit more
+[later in this tutorial](/tutorial/fetching-the-data-from-the-server.html#dependency-injection).
 
 The `render()` method creates and returns a React element that represents the
 view in the UI. Our `render()` method returns `null` because our component does
@@ -78,6 +88,12 @@ server first, where no DOM is available, and polyfilling it, while possible,
 would introduce a large overhead. Additionally, since the UI is rendered using
 React which modifies the DOM at the client side, any changes to the DOM you would
 manage to make would likely be lost with the next update of the page's UI.
+
+If everything went well you should see the following page when you refresh your browser:
+
+<div class="image is-padded-with-shadow">
+  <img src="{{ '/img/tutorial/static-view-null.png?v=' | append: site.github.build_revision | relative_url }}" alt="HomeView"/>
+</div>
 
 ### Guestbook form & SMACSS
 
@@ -123,24 +139,24 @@ with the following code:
 <div className='posts'>
   <h2>Posts</h2>
   <div className='post card card-default'>
-    <div className='card-body'>I'm lovin' this IMA.js thing!</div>
-    <div className='post-author card-footer'>John Doe</div>
+    <div className='card-body'>Never mistake motion for action.</div>
+    <div className='post-author card-footer'>Ernest Hemingway</div>
   </div>
   <div className='post card card-default'>
     <div className='card-body'>
-      JavaScript everywhere! It's just JavaScript!
+      Quality means doing it right when no one is looking.
     </div>
-    <div className='post-author card-footer'>Jan Nowak</div>
+    <div className='post-author card-footer'>Henry Ford</div>
   </div>
   <div className='post card card-default'>
     <div className='card-body'>
-      Developing applications is fun again! Thanks, IMA.js!
+      We are what we repeatedly do. Excellence, then, is not an act, but a habit.
     </div>
-    <div className='post-author card-footer'>Peter Q.</div>
+    <div className='post-author card-footer'>Aristotle</div>
   </div>
   <div className='post card card-default'>
-    <div className='card-body'>How about a coffee?</div>
-    <div className='post-author card-footer'>Daryll J.</div>
+    <div className='card-body'>Reality is merely an illusion, albeit a very persistent one.</div>
+    <div className='post-author card-footer'>Albert Einstein</div>
   </div>
 </div>
 ```
@@ -172,8 +188,9 @@ SMACSS yet, it won't take you long.
 ### Styling our form
 
 So let's make our guestbook look a little better. To achieve this, we'll
-use Bootstrap CSS library and the Material Design theme. To make things simple
-we're just going to use CDN hosted CSS and JS files.
+use Bootstrap CSS library. To make things simple
+we're just going to use CDN hosted CSS file (we don't need any to use any JS components from bootstrap in our example
+so that's why we're including only CSS).
  
 We strongly suggest that when creating your new application, it would be better manage these
 dependencies, for example through npm or even building your custom version
@@ -184,45 +201,18 @@ First we need to include a few files to our page. Open the document component
 basic structure of the HTML document. You'll find more details about it in the
 [Rendering the whole document](#rendering-the-whole-document) section of this chapter*).
 Insert the following code before the `<link rel="stylesheet" ...` line to include
-the Material Design Bootstrap CSS library:
+the Bootstrap CSS library:
 
 ```xml
 <link
   rel="stylesheet"
-  href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700|Material+Icons"
-/>
-<link
-  rel="stylesheet"
-  href="https://unpkg.com/bootstrap-material-design@4.1.1/dist/css/bootstrap-material-design.min.css"
-  integrity="sha384-wXznGJNEXNG1NFsbm0ugrLFMQPWswR3lds2VeinahP8N0zJw9VWSopbjv2x7WCvX"
-  crossOrigin="anonymous"
-/>
-<script
-  src="https://code.jquery.com/jquery-3.2.1.slim.min.js"
-  integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN"
-  crossOrigin="anonymous"
-/>
-<script
-  src="https://unpkg.com/popper.js@1.12.6/dist/umd/popper.js"
-  integrity="sha384-fA23ZRQ3G/J53mElWqVJEGJzU0sTs+SvzG8fXVWP+kJQ1lwFAOkcUOysnlKJC33U"
-  crossOrigin="anonymous"
-/>
-<script
-  src="https://unpkg.com/bootstrap-material-design@4.1.1/dist/js/bootstrap-material-design.js"
-  integrity="sha384-CauSuKpEqAFajSpkdjv3z9t8E7RlpJ1UP0lKM/+NdtSarroVKu069AlsRPKkFBz9"
+  href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
+  integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T"
   crossOrigin="anonymous"
 />
 ```
 
-Now we need to initialize the material design JS library by adding following code snippet
-into the end of `scriptResources` returned by `getAsyncScripts()` right before closing
-`</script>` tag.
-
-```javascript
-$(document).ready(function() { $('body').bootstrapMaterialDesign(); });
-```
-
-That's a lot of stuff, but it will save us a lot of effort with styling our UI.
+This will save us a lot of effort with styling our UI.
 
 #### Defining custom styles
 
@@ -232,24 +222,11 @@ layout configuration:
 
 ```less
 @post-author-alignment: right;
-@background-image: 'http://i.imgur.com/vzMkcoz.png';
 ```
 
-The credit for the image we'll use as our page background goes to
-[Midhun Harikumar](https://plus.google.com/photos/+MidhunHarikumar/albums/6121148941176472961),
-the image is provided under the
-[Creative Commons Attribution 4.0 International License](http://creativecommons.org/licenses/by/4.0/).
-
-Next open the `app/assets/less/base.less` file and replace the default body styles with the following code:
+Next open the `app/assets/less/base.less` file and add the following code below the existing one:
 
 ```less
-body {
-  background-image: url(@background-image);
-  background-repeat: no-repeat;
-  background-position: top center;
-  background-size: cover;
-}
-
 form {
   margin-bottom: 0;
 }
@@ -260,11 +237,17 @@ contents with the following code:
 
 ```less
 .l-home {
-  .post-author {
-    text-align: @post-author-alignment;
-    font-style: italic;
-    font-size: 85%;
-  }
+    margin-top: 2rem;
+
+    .post-author {
+        text-align: @post-author-alignment;
+        font-style: italic;
+        font-size: 85%;
+    }
+
+    .card {
+        margin-bottom: 2rem;
+    }
 }
 ```
 
@@ -274,9 +257,9 @@ by hitting `Ctrl+C` and then re-running the `npm run dev` command if your
 browser cannot access the newly installed resources). In the end of this section
 you should see something like this when you refresh your page.
 
-<a href="http://es6-features.org/" title="JS ECMAScript6" target="_blank">
-  <img src="{{ '/img/tutorial/homeview.png?v=' | append: site.github.build_revision | relative_url }}" alt="HomeView"/>
-</a>
+<div class="image is-padded-with-shadow">
+  <img src="{{ '/img/tutorial/static-view-styling-our-form.png?v=' | append: site.github.build_revision | relative_url }}" alt="HomeView"/>
+</div>
 
 ### Rendering the whole document
 
@@ -326,7 +309,7 @@ Previously almost all of the JavaScript files in your IMA.js application include
 a snippet of code like this one near the beginning:
 
 ```javascript
-import ns from '@ima/namespace';
+import ns from 'ima/namespace';
 
 ns.namespace('app.foo.bar');
 ```
@@ -343,7 +326,7 @@ namespace to which the class / constant / value will be bound exists by calling
 `ns.namespace('namespace name goes here')`. The second snippet binds the class,
 constant or value created in the file to the namespace.
 
-If you're using version 15 and above you can safely remove deprecated namespaces
+**If you're using version 15 and above** you can safely remove deprecated namespaces
 and replace them with ES2015 [`import`](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Statements/import)
 and [`export`](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Statements/export).
 

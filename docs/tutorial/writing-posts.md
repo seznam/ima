@@ -40,7 +40,7 @@ First update the `<form ...` markup in the view of our `PostingForm` component
 listener:
 
 ```jsx
-<form action='' method='post' onSubmit={e => this._onSubmit(e)}>
+<form action="" method="post" onSubmit={e => this._onSubmit(e)}>
 ```
 
 Then we need to hook our inputs to `_onChange()` handler which will set the contents of
@@ -48,26 +48,30 @@ those input to the state of our `PostingForm` component.
 
 ```jsx
 <input
-    id='postForm-name'
-    className='form-control'
-    type='text'
-    name='author'
-    onChange={e => this._onChange(e)}
-    placeholder='Your name'/>
+  id="postForm-name"
+  className="form-control"
+  type="text"
+  name="author"
+  value={this.state.author}
+  onChange={e => this._onChange(e)}
+  placeholder="Your name"
+/>
 ...
 <textarea
-    id='postForm-content'
-    className='form-control'
-    name='content'
-    onChange={e => this._onChange(e)}
-    placeholder='What would you like to tell us?'/>
+  id="postForm-content"
+  className="form-control"
+  name="content"
+  value={this.state.content}
+  onChange={e => this._onChange(e)}
+  placeholder="What would you like to tell us?"
+/>
 ```
 
 We can't forget to define the default state for these two keys:
 
 ```javascript
-constructor(props) {
-  super(props);
+constructor(props, context) {
+  super(props, context);
   
   this.state = {
     author: '',
@@ -106,7 +110,7 @@ _onSubmit(event) {
   // Reset the state after submitting
   this.setState({
     author: '',
-    content: '',
+    content: ''
   });
 }
 ```
@@ -204,7 +208,8 @@ With that in place, we can now fill in the contents of the `onPostSubmitted()`
 event listener in the home page controller (`app/page/home/HomeController.js`):
 
 ```javascript
-this._postService.createPost(eventData)
+this._postService
+  .createPost(eventData)
   .then(() => this._postService.getPosts())
   .then(posts => this.setState({ posts }));
 ```
@@ -232,14 +237,14 @@ To create our HTTP mock create the `app/mock` directory and the
 `app/mock/MockHttpAgent.js` file with the following content:
 
 ```javascript
-import HttpAgent from 'ima/http/HttpAgentImpl';
+import { HttpAgentImpl } from '@ima/core';
 
 const GET_DELAY = 70; // milliseconds
 const POST_DELAY = 90; // milliseconds
 
-export default class MockHttpAgent extends HttpAgent {
+export default class MockHttpAgent extends HttpAgentImpl {
   static get $dependencies() {
-    return ['$HttpAgentProxy', '$Cache', '$CookieStorage', config.$Http];
+    return ['$HttpAgentProxy', '$Cache', '$CookieStorage', '$Settings.$Http'];
   }
 
   constructor(proxy, cache, cookie, config) {
@@ -250,7 +255,7 @@ export default class MockHttpAgent extends HttpAgent {
 
   get(url, data, options = {}) {
     if (!this._posts) {
-      return super.get(url, data, options).then((response) => {
+      return super.get(url, data, options).then(response => {
         this._posts = response.body;
 
         return {
@@ -259,7 +264,7 @@ export default class MockHttpAgent extends HttpAgent {
       });
     }
 
-    return new Promise((resolve) => {
+    return new Promise(resolve => {
       setTimeout(() => {
         resolve({
           body: this._posts.map(post => Object.assign({}, post))
@@ -270,12 +275,10 @@ export default class MockHttpAgent extends HttpAgent {
 
   post(url, data, options = {}) {
     if (!this._posts) {
-      return this
-        .get(url, {})
-        .then(() => this.post(url, data));
+      return this.get(url, {}).then(() => this.post(url, data));
     }
 
-    return new Promise((resolve) => {
+    return new Promise(resolve => {
       setTimeout(() => {
         let clone = Object.assign({}, data);
 
@@ -289,7 +292,6 @@ export default class MockHttpAgent extends HttpAgent {
     });
   }
 }
-
 ```
 
 Let's take this class apart and take a look at what it does. We extend the

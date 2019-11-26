@@ -38,29 +38,34 @@ constructor(props, context) {
 ```
 
 Next we need to update our form elements to visually correspond to the validity of the input 
-by updating their CSS classes:
+by updating their CSS classes. To achieve this we're going to use `is-invalid` class which is
+taken from the Bootstrap CSS library we're using and will apply red shadow to the input if it's invalid:
 
 ```jsx
 <input
-    id='postForm-name'
-    className={this.cssClasses({
-      'form-control': true,
-      'is-invalid': !this.state.authorValid
-    })}
-    type='text'
-    name='author'
-    onChange={e => this._onChange(e)}
-    placeholder='Your name'/>
+  id="postForm-name"
+  className={this.cssClasses({
+    'form-control': true,
+    'is-invalid': !this.state.authorValid
+  })}
+  type="text"
+  name="author"
+  value={this.state.author}
+  onChange={e => this._onChange(e)}
+  placeholder="Your name"
+/>
 ...
 <textarea
-    id='postForm-content'
-    className={this.cssClasses({
-      'form-control': true,
-      'is-invalid': !this.state.contentValid
-    })}
-    name='content'
-    onChange={e => this._onChange(e)}
-    placeholder='What would you like to tell us?'/>
+  id="postForm-content"
+  className={this.cssClasses({
+    'form-control': true,
+    'is-invalid': !this.state.contentValid
+  })}
+  name="content"
+  value={this.state.content}
+  onChange={e => this._onChange(e)}
+  placeholder="What would you like to tell us?"
+/>
 ```
 
 **The expression in the `className` attribute will set the CSS class** `is-invalid`
@@ -69,12 +74,19 @@ on the form element depending on the current state of the `authorValid` or
 validation we'll add to our existing `_onChange` method.
 
 For the sake of this tutorial, we're simply going to check if the inputs are empty or not.
-But in a serious application, you should probably implement more sofisticated validation method.
-Our updated `_onChange` handler with the validation will look like this:
+But in a serious application, you should probably implement more sophisticated validation method.
+
+We're going to validate each input in the `_onChange` handler while also checking the validation
+in the `_onSubmit` method, to cover a case, where user doesn't change any input and submits the form
+immediately. This would result in false validation, since the initial state for our validation keys is `true`.
+
+First we're going to implement our validation method, which checks if given input is valid and sets
+the result of validation to corresponding state key while also returning the result of validation, which
+we'll use later in `_onSubmit` method:
 
 ```javascript
-_onChange({ target: { name, value }}) {
-  const validStateKey = `${name}Valid`;
+_validate(inputName, value) {
+  const validStateKey = `${inputName}Valid`;
   let isValid = !!value;
 
   if (this.state[validStateKey] !== isValid) {
@@ -83,25 +95,22 @@ _onChange({ target: { name, value }}) {
     });
   }
 
-  this.setState({
-    [name]: value,
-  });
+  return isValid;
 }
-```
+``` 
 
 Through the use of **ES2015 dynamic properties**, we're able to handle validation for
 both inputs in one method.
 
-Next we'll add some styles so that we'll be able to see whether the form input
-is marked as invalid or not. Create the
-`app/component/postingForm/postingForm.less` file and add the following styles:
+Now that we have our validation method, we can hook it up to the `_onChange` handler.
+The updated handler with the validation will look like this:
 
-```less
-.posting-form {
-  .is-invalid,
-  .is-invalid:focus {
-    box-shadow: 0 0 5px red;
-  }
+```javascript
+_onChange({ target: { name, value }}) {
+  this._validate(name, value);
+  this.setState({
+    [name]: value
+  });
 }
 ```
 
@@ -111,28 +120,38 @@ inputs are invalid. To do that, update the `onSubmit(event)` method's content:
 ```javascript
 _onSubmit(event) {
   event.preventDefault();
-
-  // Check for validation
-  const { authorValid, contentValid } = this.state;
-  if (!authorValid || !contentValid) {
+  
+  // Validate on submit to also cover the initial submission
+  const { author, content } = this.state;
+  if (
+    !this._validate('author', author) ||
+    !this._validate('content', content)
+  ) {
     return;
   }
-
+  
   this.fire('postSubmitted', {
     author: this.state.author,
     content: this.state.content
   });
-   
+  
   // Reset the state after submitting
   this.setState({
     author: '',
-    content: '',
+    content: ''
   });
 }
 ```
 
-With this, the form validation is complete, so let's make the posting
-experience a little bit better.
+With this, the form validation is complete. Feel free to check this in your own application 
+and you should see red input fields if the inputs are empty, while the submit button should prevent
+you from submitting an empty content.
+
+<div class="image is-padded-with-shadow">
+  <img src="{{ '/img/tutorial/final-polish-form-validation.png?v=' | append: site.github.build_revision | relative_url }}" alt="HomeView"/>
+</div>
+
+So now let's make the posting experience a little bit better.
 
 ### Optimistic posting
 
@@ -168,7 +187,7 @@ Next we need to update the `getEntityList()` method in the **post resource** cla
 return this._http
   .get('http://localhost:3001/static/api/posts.json', {})
   .then(response => {
-    response.body.forEach(post => post.isSaved = true);
+    response.body.forEach(post => (post.isSaved = true));
     return response.body;
   })
   .then(postsData => this._factory.createList(postsData));
@@ -208,7 +227,7 @@ PostFactory instance to our constructor as a second argument. so modify the depe
 page controller** (`app/page/home/HomeController.js`) to the following:
 
 ```javascript
-import PostService from 'app/model/post/PostFactory';
+import PostFactory from 'app/model/post/PostFactory';
 ...
 static get $dependencies() {
   return [PostService, PostFactory];
@@ -222,20 +241,27 @@ we need to "patch" our controller's state to in the `onPostSubmitted()` event
 listener after submitting the new post to update our UI:
 
 ```javascript
-let pendingPost = this._postFactory.createEntity(Object.assign({
-  id: null,
-  isSaved: false
-}, eventData));
+let pendingPost = this._postFactory.createEntity(
+  Object.assign(
+    {
+      id: null,
+      isSaved: false
+    },
+    eventData
+  )
+);
 
 let state = this.getState();
 let pendingPosts = state.pendingPosts.slice();
 pendingPosts.unshift(pendingPost);
+
 this.setState({
   pendingPosts
 });
 
-this._postService.createPost(eventData)
-  .then((savedPost) => {
+this._postService
+  .createPost(eventData)
+  .then(savedPost => {
     // update the state in place
     pendingPost.isSaved = true;
     pendingPost.id = savedPost.id;
@@ -248,7 +274,7 @@ this._postService.createPost(eventData)
 
     return this._postService.getPosts();
   })
-  .then((posts) => {
+  .then(posts => {
     let state = this.getState();
 
     this.setState({
@@ -275,7 +301,7 @@ Once the updated list of posts is retrieved from the server, we remove the
 pending post from the `pendingPosts` array (since it is saved at the server
 now, it is among the posts fetched from the server) and update the state.
 
-### Updating HomeView component
+### Updating view components
 
 Now that our state contains both the pending and saved posts, we can move to
 the view. Open the controller's view (`app/page/home/HomeView.jsx`) and update
@@ -284,13 +310,14 @@ the `_renderPosts()` method:
 ```jsx
 let allPosts = this.props.pendingPosts.concat(this.props.posts);
 
-return allPosts.map((post) => {
+return allPosts.map(post => {
   return (
     <Post
-        key={post.id}
-        content={post.content}
-        author={post.author}
-        isSaved={post.isSaved} />
+      key={post.id}
+      content={post.content}
+      author={post.author}
+      isSaved={post.isSaved}
+    />
   );
 });
 ```
@@ -304,19 +331,18 @@ So let's turn our attention to the post component
 snippet:
 
 ```jsx
+const { content, author, isSaved } = this.props;
+
 return (
-  <div className={this.cssClasses({
-    'post': true,
-    'panel': true,
-    'panel-default': true,
-    'post-pending': !this.props.isSaved
-  })}>
-    <div className='panel-body'>
-      {this.props.content}
-    </div>
-    <div className='post-author panel-footer'>
-      {this.props.author}
-    </div>
+  <div
+    className={this.cssClasses({
+      post: true,
+      card: true,
+      'card-default': true,
+      'post-pending': !isSaved
+    })}>
+    <div className="card-body">{content}</div>
+    <div className="post-author card-footer">{author}</div>
   </div>
 );
 ```
@@ -328,7 +354,7 @@ Open the post's style file (`app/component/post/post.less`) and add the
 following the content:
 
 ```less
-.post-pending .panel-body {
+.post-pending .card-body {
   background: #e9e9e9;
 }
 ```
@@ -351,10 +377,15 @@ this._lastPendingPostId = 0;
 `let pendingPost = ...` with the following:
 
 ```javascript
-let pendingPost = this._postFactory.createEntity(Object.assign({
-  id: `pending-${this._lastPendingPostId++}`,
-  isSaved: false
-}, eventData));
+let pendingPost = this._postFactory.createEntity(
+  Object.assign(
+    {
+      id: `pending-${this._lastPendingPostId++}`,
+      isSaved: false
+    },
+    eventData
+  )
+);
 ```
 
 This will ensure that all our pending posts will have unique IDs, which will be
@@ -399,10 +430,7 @@ the activate method will look like this:
 
 ```javascript
 activate() {
-  this._refreshIntervalId = setInterval(
-    () => this._refresh(),
-    REFRESH_DELAY
-  );
+  this._refreshIntervalId = setInterval(() => this._refresh(), REFRESH_DELAY);
 }
 ```
 
@@ -420,11 +448,9 @@ And, finally, we can implement our `_refresh()` method:
 
 ```javascript
 _refresh() {
-  this
-    ._postService.getPosts()
-    .then((posts) => {
-      this.setState({ posts });
-    });
+  this._postService.getPosts().then(posts => {
+    this.setState({ posts });
+  });
 }
 ```
 
@@ -472,8 +498,16 @@ const WORDS = [
 ];
 
 export default class TextGenerator {
-  generateSentence(minWords = 3, maxWords = 12, minSubSentences = 1,
-      maxSubSentences = 4) {
+  static get $dependencies() {
+    return [];
+  }
+
+  generateSentence(
+    minWords = 3,
+    maxWords = 12,
+    minSubSentences = 1,
+    maxSubSentences = 4
+  ) {
     let subSentencesCount = this._random(minSubSentences, maxSubSentences);
     let subSentences = [];
 
@@ -489,8 +523,7 @@ export default class TextGenerator {
     }
 
     let rawSentence = subSentences.join(', ') + '.';
-    return rawSentence.substring(0, 1).toUpperCase() +
-        rawSentence.substring(1);
+    return rawSentence.substring(0, 1).toUpperCase() + rawSentence.substring(1);
   }
 
   generateParagraph(minSentences = 1, maxSentences = 5) {
@@ -508,7 +541,6 @@ export default class TextGenerator {
     return Math.floor(Math.random() * (max - min + 1)) + min;
   }
 }
-
 ```
 
 This is a very simple [lorem ipsum](http://en.wikipedia.org/wiki/Lorem_ipsum)
@@ -526,6 +558,10 @@ const CHAINS = [
 ];
 
 export default class NameGenerator {
+  static get $dependencies() {
+    return [];
+  }
+
   generateName() {
     let chainCount = this._random(2, 5);
     let parts = [];
@@ -541,7 +577,6 @@ export default class NameGenerator {
     return Math.floor(Math.random() * (max - min + 1)) + min;
   }
 }
-
 ```
 
 This script generates random names using short chains of letters the
@@ -558,9 +593,9 @@ import TextGenerator from 'app/mock/TextGenerator';
 import NameGenerator from 'app/mock/NameGenerator';
 
 export default class PostGenerator {
-    static get $dependencies() {
-      return [TextGenerator, NameGenerator];
-    }
+  static get $dependencies() {
+    return [TextGenerator, NameGenerator];
+  }
 
   constructor(textGenerator, nameGenerator) {
     this._textGenerator = textGenerator;
@@ -574,7 +609,6 @@ export default class PostGenerator {
     };
   }
 }
-
 ```
 
 This script uses our text and name generators to generate post data similar to
@@ -600,7 +634,14 @@ import PostGenerator from 'app/mock/PostGenerator';
 ...
 
 static get $dependencies() {
-  return ['$HttpAgentProxy', '$Cache', '$CookieStorage', config.$Http, '$Window', PostGenerator];
+  return [
+    '$HttpAgentProxy',
+    '$Cache',
+    '$CookieStorage',
+    '$Settings.$Http',
+    '$Window',
+    PostGenerator
+  ];
 }
 
 constructor(proxy, cache, cookie, config, window, postGenerator) {
@@ -627,14 +668,12 @@ Now we need to integrate our new post generator logic:
 
 ```javascript
 _generateRandomPost() {
-  this
-    .post('', this._postGenerator.generatePost())
-    .then(() => {
-      setTimeout(
-        this._generateRandomPost.bind(this),
-        this._random(AUTO_POST_DELAY_MIN, AUTO_POST_DELAY_MAX)
-      );
-    });
+  this.post('', this._postGenerator.generatePost()).then(() => {
+    setTimeout(
+      this._generateRandomPost.bind(this),
+      this._random(AUTO_POST_DELAY_MIN, AUTO_POST_DELAY_MAX)
+    );
+  });
 }
 
 _random(min, max) {
@@ -675,9 +714,10 @@ the `onPostSubmitted()` method by replacing the
 code:
 
 ```javascript
-this._postService.createPost(eventData)
+this._postService
+  .createPost(eventData)
   .then(() => this._postService.getPosts())
-  .then((posts) => {
+  .then(posts => {
     let state = this.getState();
 
     this.setState({
@@ -705,23 +745,23 @@ file and update its contents as follows:
   "posts": [
     {
       "id": 4,
-      "content": "I'm lovin' this IMA.js thing!",
-      "author": "John Doe"
+      "content": "Never mistake motion for action.",
+      "author": "Ernest Hemingway"
     },
     {
       "id": 3,
-      "content": "JavaScript everywhere! It's just JavaScript!",
-      "author": "Jan Nowak"
+      "content": "Quality means doing it right when no one is looking.",
+      "author": "Henry Ford"
     },
     {
       "id": 2,
-      "content": "Developing applications is fun again! Thanks, IMA.js!",
-      "author": "Peter Q."
+      "content": "We are what we repeatedly do. Excellence, then, is not an act, but a habit.",
+      "author": "Aristotle"
     },
     {
       "id": 1,
-      "content": "How about a coffee?",
-      "author": "Daryll J."
+      "content": "Reality is merely an illusion, albeit a very persistent one.",
+      "author": "Albert Einstein"
     }
   ]
 }
@@ -773,7 +813,7 @@ Next update the `getEntityList()` method of the post resource
 return this._http
   .get('http://localhost:3001/static/api/posts.json', {})
   .then(response => {
-    response.body.posts.forEach(post => post.isSaved = true);
+    response.body.posts.forEach(post => (post.isSaved = true));
 
     let posts = this._factory.createList(response.body.posts);
     posts.generated = response.body.generated;
@@ -794,16 +834,14 @@ Finally, we just need to check in our home page controller
 stale. Update the `_refresh()` method:
 
 ```javascript
-this
-  ._postService.getPosts()
-  .then((posts) => {
-    let state = this.getState();
-    if (posts.generated < state.posts.generated) {
-      return;
-    }
+this._postService.getPosts().then(posts => {
+  let state = this.getState();
+  if (posts.generated < state.posts.generated) {
+    return;
+  }
 
-    this.setState({ posts });
-  });
+  this.setState({ posts });
+});
 ```
 
 ...and update the body of the last `then` callback in the `onPostSubmitted()`
@@ -833,7 +871,7 @@ We can further improve the UX using animations. Modify the
 end of the file:
 
 ```less
-.post .panel-body {
+.post .card-body {
   transition: 0.3s background;
 }
 ```
@@ -863,10 +901,15 @@ this._localPostIds = new Map();
 Next update the `onPostSubmitted()` method:
 
 ```javascript
-let pendingPost = this._postFactory.createEntity(Object.assign({
-  id: `local-${++this._lastLocalPostId}`,
-  isSaved: false
-}, eventData));
+let pendingPost = this._postFactory.createEntity(
+  Object.assign(
+    {
+      id: `local-${++this._lastLocalPostId}`,
+      isSaved: false
+    },
+    eventData
+  )
+);
 
 let state = this.getState();
 let pendingPosts = state.pendingPosts.slice();
@@ -875,19 +918,20 @@ this.setState({
   pendingPosts
 });
 
-this._postService.createPost(eventData)
-  .then((createdPost) => {
+this._postService
+  .createPost(eventData)
+  .then(createdPost => {
     this._localPostIds.set(createdPost.id, pendingPost.id);
-    return this._postService.getPosts()
+    return this._postService.getPosts();
   })
-  .then((posts) => {
+  .then(posts => {
     let state = this.getState();
 
     if (posts.generated < state.posts.generated) {
       posts = state.posts;
     }
 
-    posts.forEach((post) => {
+    posts.forEach(post => {
       if (this._localPostIds.has(post.id)) {
         post.id = this._localPostIds.get(post.id);
       }
@@ -903,22 +947,20 @@ this._postService.createPost(eventData)
 Finally, update the `_refresh()` method:
 
 ```javascript
-this
-  ._postService.getPosts()
-  .then((posts) => {
-    let state = this.getState();
-    if (posts.generated < state.posts.generated) {
-      return;
+this._postService.getPosts().then(posts => {
+  let state = this.getState();
+  if (posts.generated < state.posts.generated) {
+    return;
+  }
+
+  posts.forEach(post => {
+    if (this._localPostIds.has(post.id)) {
+      post.id = this._localPostIds.get(post.id);
     }
-
-    posts.forEach((post) => {
-      if (this._localPostIds.has(post.id)) {
-        post.id = this._localPostIds.get(post.id);
-      }
-    });
-
-    this.setState({ posts });
   });
+
+  this.setState({ posts });
+});
 ```
 
 The posts created by the user viewing the page will now maintain their IDs and
@@ -952,13 +994,13 @@ snippet of code to the end of the `app/component/post/post.less` file:
 To put some final touches on the posts we'll add a **progress indicator** to the
 pending posts. Add the following snippet to the post component's view
 (`app/component/post/Post.jsx`) at the end of the
-`<div className='post-author panel-footer'>` element's content:
+`<div className='post-author card-footer'>` element's content:
 
 ```xml
 <div className="spinner">
-  <div className="bounce1"></div>
-  <div className="bounce2"></div>
-  <div className="bounce3"></div>
+  <div className="bounce1" />
+  <div className="bounce2" />
+  <div className="bounce3" />
 </div>
 ```
 
@@ -975,7 +1017,7 @@ obtained from [https://tobiasahlin.com/spinkit/](https://tobiasahlin.com/spinkit
 ```less
 .spinner {
   position: absolute;
-  top: 0.5em;
+  top: 1em;
   width: 70px;
   text-align: center;
   opacity: 0;
@@ -1021,7 +1063,12 @@ And finally add the following snippet at the end of the file:
 ```
 
 **Try writing new posts!** The pending posts will have a progress indicator in the
-lower left corner.
+lower left corner. If you followed the tutorial from start,
+the final application should look something like the picture below.
+
+<div class="image is-padded-with-shadow">
+  <img src="{{ '/img/tutorial/final-polish-final.png?v=' | append: site.github.build_revision | relative_url }}" alt="HomeView"/>
+</div>
 
 ## Conclusion
 

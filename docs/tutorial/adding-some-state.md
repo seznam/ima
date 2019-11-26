@@ -6,7 +6,7 @@ layout: "tutorial"
 ---
 
 In [previous section](/tutorial/static-view.html) of the tutorial, we prepared basic markup and custom styling
-thanks to the [Bootstrap material design libray](https://fezvrasta.github.io/bootstrap-material-design/).
+thanks to the [Bootstrap CSS library](https://getbootstrap.com/).
 In this section, we're going to add some functionality to our application.
 
 ## Controller & error handling
@@ -23,7 +23,7 @@ methods along with very long JSDoc comments. Feel free to read through these com
 but to make this tutorial simpler, we're going to replace contents of this file with following code: 
 
 ```javascript
-import AbstractController from '@ima/controller/AbstractController';
+import { AbstractController } from '@ima/core';
 
 export default class HomeController extends AbstractController {
   static get $dependencies() {
@@ -35,8 +35,7 @@ export default class HomeController extends AbstractController {
   }
 
   load() {
-    return {
-    };
+    return {};
   }
 
   setMetaParams(loadedResources, metaManager, router, dictionary, settings) {
@@ -113,20 +112,20 @@ the following code:
 return {
   posts: [
     {
-      "content": "I'm lovin' this IMA.js thing!",
-      "author": "John Doe"
+      content: "Never mistake motion for action.",
+      author: 'Ernest Hemingway'
     },
     {
-      "content": "JavaScript everywhere! It's just JavaScript!",
-      "author": "Jan Nowak"
+      content: "Quality means doing it right when no one is looking.",
+      author: 'Henry Ford'
     },
     {
-      "content": "Developing applications is fun again! Thanks, IMA.js!",
-      "author": "Peter Q."
+      content: 'We are what we repeatedly do. Excellence, then, is not an act, but a habit.',
+      author: 'Aristotle'
     },
     {
-      "content": "How about a coffee?",
-      "author": "Daryll J."
+      content: 'Reality is merely an illusion, albeit a very persistent one.',
+      author: 'Albert Einstein'
     }
   ]
 };
@@ -144,60 +143,56 @@ Let's return to our view in the `app/page/home/HomeView.jsx` file. Replace the
 ```jsx
 render() {
   return (
-    <div className='l-home container'>
-      <div className='container'>
-        <h1>Guestbook</h1>
-        <div className='posting-form card'>
-          <form action='' method='post'>
-            <h5 className='card-header'>Add a post</h5>
-            <div className='card-body'>
-              <div className='form-group'>
-                <label htmlFor='postForm-name'>Name:</label>
-                <input
-                  id='postForm-name'
-                  className='form-control'
-                  type='text'
-                  name='author'
-                  placeholder='Your name'
-                />
-              </div>
-              <div className='form-group'>
-                <label htmlFor='postForm-content'>Post:</label>
-                <textarea
-                  id='postForm-content'
-                  className='form-control'
-                  name='content'
-                  placeholder='What would you like to tell us?'
-                />
-              </div>
+    <div className="l-home container">
+      <h1>Guestbook</h1>
+      <div className="posting-form card">
+        <form action="" method="post">
+          <h5 className="card-header">Add a post</h5>
+          <div className="card-body">
+            <div className="form-group">
+              <label htmlFor="postForm-name">Name:</label>
+              <input
+                id="postForm-name"
+                className="form-control"
+                type="text"
+                name="author"
+                placeholder="Your name"
+              />
             </div>
-            <div className='card-footer'>
-              <button type='submit' className='btn btn btn-outline-primary'>
-                Submit
-                <div className='ripple-wrapper' />
-              </button>
+            <div className="form-group">
+              <label htmlFor="postForm-content">Post:</label>
+              <textarea
+                id="postForm-content"
+                className="form-control"
+                name="content"
+                placeholder="What would you like to tell us?"
+              />
             </div>
-          </form>
-        </div>
-        <hr />
-        <div className='posts'>
-          <h2>Posts</h2>
-          {this._renderPosts()}
-        </div>
+          </div>
+          <div className="card-footer">
+            <button type="submit" className="btn btn btn-outline-primary">
+              Submit
+              <div className="ripple-wrapper" />
+            </button>
+          </div>
+        </form>
+      </div>
+      <hr />
+      <div className="posts">
+        <h2>Posts</h2>
+        {this._renderPosts()}
       </div>
     </div>
   );
 }
 
 _renderPosts() {
-  return this.props.posts.map((post, index) => (
-    <div className='post card card-default' key={index}>
-      <div className='card-body'>
-        {post.content}
-      </div>
-      <div className='post-author card-footer'>
-        {post.author}
-      </div>
+  const { posts } = this.props;
+
+  return posts.map((post, index) => (
+    <div className="post card card-default" key={index}>
+      <div className="card-body">{post.content}</div>
+      <div className="post-author card-footer">{post.author}</div>
     </div>
   ));
 }
@@ -246,19 +241,17 @@ and `app/component/post/post.less` files.
 Put the following code into the `Post.jsx` file:
 
 ```jsx
+import { AbstractComponent } from '@ima/core';
 import React from 'react';
-import AbstractComponent from '@ima/page/AbstractComponent';
 
 export default class Post extends AbstractComponent {
   render() {
+    const { content, author } = this.props;
+
     return (
-      <div className='post card card-default'>
-        <div className='card-body'>
-          {this.props.content}
-        </div>
-        <div className='post-author card-footer'>
-          {this.props.author}
-        </div>
+      <div className="post card card-default">
+        <div className="card-body">{content}</div>
+        <div className="post-author card-footer">{author}</div>
       </div>
     );
   }
@@ -274,9 +267,7 @@ To use our new component, we need to update the `_renderPosts()` method in the
 
 ```jsx
 return this.props.posts.map((post, index) => {
-  return (
-    <Post key={index} content={post.content} author={post.author}/>
-  );
+  return <Post key={index} content={post.content} author={post.author} />;
 });
 ```
 
@@ -311,42 +302,40 @@ directory and the `app/component/postingForm/PostingForm.jsx` file. Then, put th
 following code into the `app/component/postingForm/PostingForm.jsx` file:
 
 ```jsx
+import { AbstractComponent } from '@ima/core';
 import React from 'react';
-import AbstractComponent from '@ima/page/AbstractComponent';
 
 export default class PostingForm extends AbstractComponent {
   render() {
     return (
-      <div className='posting-form card'>
-        <form action='' method='post'>
-          <h5 className='card-header'>Add a post</h5>
-      
-          <div className='card-body'>
-            <div className='form-group'>
-              <label htmlFor='postForm-name'>Name:</label>
+      <div className="posting-form card">
+        <form action="" method="post">
+          <h5 className="card-header">Add a post</h5>
+          <div className="card-body">
+            <div className="form-group">
+              <label htmlFor="postForm-name">Name:</label>
               <input
-                id='postForm-name'
-                className='form-control'
-                type='text'
-                name='author'
-                placeholder='Your name'
+                id="postForm-name"
+                className="form-control"
+                type="text"
+                name="author"
+                placeholder="Your name"
               />
             </div>
-            <div className='form-group'>
-              <label htmlFor='postForm-content'>Post:</label>
+            <div className="form-group">
+              <label htmlFor="postForm-content">Post:</label>
               <textarea
-                id='postForm-content'
-                className='form-control'
-                name='content'
-                placeholder='What would you like to tell us?'
+                id="postForm-content"
+                className="form-control"
+                name="content"
+                placeholder="What would you like to tell us?"
               />
             </div>
           </div>
-      
-          <div className='card-footer'>
-            <button type='submit' className='btn btn btn-outline-primary'>
+          <div className="card-footer">
+            <button type="submit" className="btn btn btn-outline-primary">
               Submit
-              <div className='ripple-wrapper' />
+              <div className="ripple-wrapper" />
             </button>
           </div>
         </form>
@@ -354,7 +343,6 @@ export default class PostingForm extends AbstractComponent {
     );
   }
 }
-
 ```
 
 Nothing new here, we just extracted the code from home controller's view and
@@ -364,14 +352,13 @@ Now update the `render()` method in the home controller's view:
 
 ```jsx
 return (
-  <div className='l-home container'>
+  <div className="l-home container">
     <h1>Guestbook</h1>
-
-    <PostingForm/>
+    <PostingForm />
 
     <hr />
 
-    <div className='posts'>
+    <div className="posts">
       <h2>Posts</h2>
       {this._renderPosts()}
     </div>
@@ -385,7 +372,11 @@ To finish up, import the posting form component:
 import PostingForm from 'app/component/postingForm/PostingForm';
 ```
 
-Now that our view looks much better, we can look into fetching the guestbook
+So far we've been **only refactoring our code and moving few bits around** to make it cleaner.
+When you refresh the page, you should see the same page as you ended up with after the end of
+the previous tutorial.
+
+Now that our code looks much cleaner, we can look into fetching the guestbook
 posts from the server. However, if you'd like to linger a little longer and
 learn more how the controller and view communicate by passing state, check out
 the following optional section [Notes on communication between controllers and
@@ -398,11 +389,11 @@ There are three ways the controllers and views communicate:
 1. **By passing state from the controller to the view &ndash;** this is the most
   common way of passing information.
 2. **By emitting DOM events** from the view and listening for them in the controller
-  or parent components (using the `@ima/event/EventBus`) &ndash; this is
+  or parent components (using the `EventBus`) &ndash; this is
   the most common way of notifying the controller or a parent UI component of
   the user's actions in the view.
 3. **By emitting "global" events** in the controller and / or view and listening for
-  them in the controller and / or view (using the `@ima/event/Dispatcher`)
+  them in the controller and / or view (using the `Dispatcher`)
   &ndash; this is used only in very specific situations, like when the UI
   needs to be notified about an external event captured by the controller and
   updating the state is not practical.
@@ -433,7 +424,7 @@ loading indicators where the data is not available yet.
 
 ### Emiting events using the EventBus
 
-The `@ima/event/EventBus` API allows your UI components to emit custom DOM
+The `EventBus` API allows your UI components to emit custom DOM
 events that naturally propagate through the DOM tree representing the tree of
 your UI components.
 
@@ -458,10 +449,10 @@ once it reaches the controller is pointless.
 
 ### Emitting events using the Dispatcher
 
-The obvious limitation of the `@ima/event/EventBus` API is that it only allows
+The obvious limitation of the `EventBus` API is that it only allows
 to create events that propagate up the tree of the UI components. The common
 way to propagate event in other directions, or to other parts of the UI, or
-from the controller to the UI is using the `app/event/Dispatcher` API.
+from the controller to the UI is using the `Dispatcher` API.
 
 The Dispatcher allows any UI component and controller to register and
 deregister event listeners for arbitrarily named events and fire these events

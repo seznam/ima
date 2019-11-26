@@ -36,23 +36,27 @@ current version is recommended) and a Git client installed on your computer.
 First we need to bootstrap our new IMA.js application, thanks to `create-ima-app` 
 npm package, which is available since IMA.js v17, this process is fairly simple. 
 
-To initialize new project run following command and choose empty template:
+To initialize new project run following command and choose **empty template**:
 ```console
 $ npx create-ima-app imajs-tutorial
 ```
 This will bootstrap the IMA.js directory structure and install all dependencies. To
 learn more information about `create-ima-app` package, take a look at the github repository
-[create-ima-app](https://github.com/seznam/ima/tree/master/packages/create-ima-app) 
+[create-ima-app](https://github.com/seznam/ima/tree/master/packages/create-ima-app).
 
 To finish our setup, we will start a development server that will allow us to
-see our application in action. To do that, run following command:
+see our application in action. To do that, run following commands **from inside the `imajs-tutorial` directory**:
 
 ```console
 $ npm run dev
 ```
 
 As you can already see from the command line, if everything went well, you can view the basic "hello world"
-application be opening [`http://localhost:3001/`](http://localhost:3001/) in your browser.
+application by opening [`http://localhost:3001/`](http://localhost:3001/) in your browser.
+
+<div class="image is-padded-with-shadow">
+  <img src="{{ '/img/tutorial/introduction-run-dev.jpg?v=' | append: site.github.build_revision | relative_url }}" alt="HomeView"/>
+</div>
 
 ### Dev server
 By running `npm run dev` you start your application in development mode with a dev server.
@@ -66,7 +70,7 @@ your browser, check whether the dev server did not crash or freeze (or didn't
 pick up some new files). Should that happen, you can kill the server by
 pressing `Ctrl+C` and restart it by running `npm run dev`. If you see an
 error after you restarted the dev server, check your source code. The error
-should hint you what to look for and where to find the source of the trouble.
+should hint what to look for and where to find the source of the trouble.
 
 Additionally, if you want to, you may install the
 [React DevTools](https://chrome.google.com/webstore/detail/react-developer-tools/fmkadmapgofadopljbjfkapdkoienihi)
@@ -89,10 +93,12 @@ directory. The `package.json` file provides the `npm`  tool with information
 about the dependencies of our application, `gulpConfig.js` configures our gulp tasks, and, finally,
 the `gulpfile.js` loads the tasks we can run using the `gulp` tool.
 
-You may have also noticed the `doc`, `build` and `server` directories *(some of these folders may not be visible until they are generated in the first call of `npm run dev` or `npm run build`*.
-The `doc` directory contains the documentation for IMA.js APIs and our application
-rendered to HTML, while the `server` contains the application logic of the HTTP
-server serving our application. Finally, the `build` directory is used as an
+You may have also noticed the `doc`, `build` and `server` directories *(some of these folders may not be visible until they are generated in the first call of `npm run dev` or `npm run build`)*.
+ - The `doc` directory contains the documentation for IMA.js APIs and our application
+rendered to HTML.
+ - The `server` contains the application logic of the HTTP
+server serving our application. 
+ - Finally, the `build` directory is used as an
 output directory for the built application and its resources.
 
 For more information see the [Application Structure](/docs/getting-started.html#application-structure)

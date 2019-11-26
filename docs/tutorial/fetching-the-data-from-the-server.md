@@ -16,30 +16,30 @@ guestbook posts - that is beyond this tutorial and IMA.js. To give you the idea
 of fetching data from the server, we'll create a more simple alternative.
 
 We'll start by creating the `app/assets/static/api` directory and the
-`app/assets/static/api/posts.json` file with the following content (copied from
-our home controller and modified):
+`app/assets/static/api/posts.json` file with the following content (**copied from
+our home controller and modified**):
 
 ```json
 [
   {
     "id": 4,
-    "content": "I'm lovin' this IMA.js thing!",
-    "author": "John Doe"
+    "content": "Never mistake motion for action.",
+    "author": "Ernest Hemingway"
   },
   {
     "id": 3,
-    "content": "JavaScript everywhere! It's just JavaScript!",
-    "author": "Jan Nowak"
+    "content": "Quality means doing it right when no one is looking.",
+    "author": "Henry Ford"
   },
   {
     "id": 2,
-    "content": "Developing applications is fun again! Thanks, IMA.js!",
-    "author": "Peter Q."
+    "content": "We are what we repeatedly do. Excellence, then, is not an act, but a habit.",
+    "author": "Aristotle"
   },
   {
     "id": 1,
-    "content": "How about a coffee?",
-    "author": "Daryll J."
+    "content": "Reality is merely an illusion, albeit a very persistent one.",
+    "author": "Albert Einstein"
   }
 ]
 ```
@@ -90,11 +90,14 @@ Create a new `app/model/post/PostFactory.js` file with the following content:
 import PostEntity from './PostEntity';
 
 export default class PostFactory {
+  static get $dependencies() {
+    return [];
+  }
+
   createList(entities) {
     return entities.map(entityData => new PostEntity(entityData));
   }
 }
-
 ```
 
 Our new factory class has just one method named `createList()`. The
@@ -179,7 +182,6 @@ export default class PostService {
     return this._resource.getEntityList();
   }
 }
-
 ```
 
 Now that we have our entity, factory, resource and service, you may be thinking
@@ -222,6 +224,10 @@ export default class PostResource {
 }
 ```
 
+The only condition to have DI working as expected is, that if you want to use any class as a dependency,
+**it has to define static getter** `$dependencies`. Even if it does not have any dependencies and returns 
+empty array. Otherwise OC will not recognize this as valid class to inject and it won't work.
+
 ### Object container & `bind.js`
 
 Object container offers more functionality than just defining DI in the `$dependencies` method.
@@ -241,7 +247,7 @@ and create new instances on demand.
 The object container allows us to:
 
 - **Specify the dependencies** of a class using the `inject()` method or by 
-  overriding the `$dependencies()$` static getter on the class itself (the
+  overriding the `$dependencies()` static getter on the class itself (the
   dependencies will be passed in the constructor).
 - **Create string aliases** for our classes using the `bind()` method (like the
   `$Http` alias we used to retrieve the HTTP agent provided by IMA.js).
@@ -271,7 +277,7 @@ Next we modify the dependencies of the `app/page/home/HomeController.js` by addi
 as follows:
 
 ```javascript
-import AbstractController from '@ima/controller/AbstractController';
+import { AbstractController } from '@ima/core';
 import PostService from 'app/model/post/PostService';
 
 export default class HomeController extends AbstractController {
@@ -279,7 +285,7 @@ export default class HomeController extends AbstractController {
     return [PostService];
   }
 
-  constructor() {
+  constructor(postService) {
     super();
 
     this._postService = postService;
@@ -304,10 +310,8 @@ Finally, we can make use of our new post entities in the home controller's view
 like this:
 
 ```jsx
-return this.props.posts.map((post) => {
-  return (
-    <Post key={post.id} content={post.content} author={post.author} />
-  );
+return this.props.posts.map(post => {
+  return <Post key={post.id} content={post.content} author={post.author} />;
 });
 ```
 

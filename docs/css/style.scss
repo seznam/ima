@@ -1,6 +1,18 @@
 ---
 ---
 
+.image {
+  &.is-padded-with-shadow {
+    padding: 20px;
+
+    img {
+      box-shadow: 0 0.5em 1em -0.125em rgba(10, 10, 10, 0.12), 0 0 0 1px rgba(10, 10, 10, 0.05);
+      border-radius: 3px;
+    }
+  }
+}
+
+
 @import "custom-bulma";
 @import "rouge-github";
 
@@ -178,9 +190,14 @@ a.button,
   z-index: 10;
 }
 
+.menu {
+  font-size: 0.95rem;
+}
+
 .menu-list {
   li ul {
     font-size: 0.9rem;
+    margin: 0.5em 1rem;
   }
 
   & > li > a {
@@ -188,6 +205,6 @@ a.button,
   }
 
   a {
-    padding: 0.4em 0.75em;
+    padding: 0.3em 0.5em;
   }
 }
