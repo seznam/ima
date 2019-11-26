@@ -151,6 +151,20 @@ export default (ns, oc, config) => {
   oc.inject(ComponentUtils, [oc]);
   oc.bind('$ComponentUtils', ComponentUtils);
 
+  oc.get(ComponentUtils).register({
+    $CssClasses: '$CssClasses',
+    $Dictionary: Dictionary,
+    $Dispatcher: Dispatcher,
+    $EventBus: EventBus,
+    $Helper: '$Helper',
+    $Http: HttpAgent,
+    $PageStateManager: PageStateManager,
+    $Router: Router,
+    $Settings: '$Settings',
+    $UIComponentHelper: '$UIComponentHelper',
+    $Window: Window
+  });
+
   oc.inject(PageRendererFactory, [ComponentUtils, '$React']);
   oc.bind('$PageRendererFactory', PageRendererFactory);
 
