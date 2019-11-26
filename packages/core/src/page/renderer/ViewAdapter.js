@@ -38,9 +38,7 @@ export default class ViewAdapter extends React.Component {
      *
      * @type {function}
      */
-    this._getContextValue = memoizeOne($Utils => {
-      return { $Utils };
-    });
+    this._getContextValue = memoizeOne(props => this.getContextValue(props));
   }
 
   /**
@@ -54,13 +52,17 @@ export default class ViewAdapter extends React.Component {
 
   static getDerivedStateFromError() {}
 
+  getContextValue(props) {
+    return { $Utils: props.$Utils };
+  }
+
   /**
    * @inheritdoc
    */
   render() {
     return React.createElement(
       Context.Provider,
-      { value: this._getContextValue(this.props.$Utils) },
+      { value: this._getContextValue(this.props) },
       React.createElement(this._view, this.state)
     );
   }
