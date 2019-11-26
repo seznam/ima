@@ -40,23 +40,113 @@
             },
             {
                 "title": "Object Container",
-                "url": "/docs/object-container.html"
+                "url": "/docs/object-container.html",
+                "submenu": [
+                    {
+                        "title": "Manually registering dependencies",
+                        "url": "/docs/object-container.html#manually-registering-dependencies"
+                    },
+                    {
+                        "title": "Obtaining dependencies",
+                        "url": "/docs/object-container.html#obtaining-dependencies"
+                    },
+                    {
+                        "title": "Other methods",
+                        "url": "/docs/object-container.html#other-methods"
+                    }
+                ]
             },
             {
                 "title": "Routing",
-                "url": "/docs/routing.html"
+                "url": "/docs/routing.html",
+                "submenu": [
+                    {
+                        "title": "Setting up Router",
+                        "url": "/docs/routing.html#setting-up-router"
+                    },
+                    {
+                        "title": "Linking to routes",
+                        "url": "/docs/routing.html#linking-to-routes"
+                    }
+                ]
             },
             {
                 "title": "Page Manager",
-                "url": "/docs/page-manager.html"
+                "url": "/docs/page-manager.html",
+                "submenu": [
+                    {
+                        "title": "Managing process",
+                        "url": "/docs/page-manager.html#managing-process"
+                    },
+                    {
+                        "title": "Intervene into the process",
+                        "url": "/docs/page-manager.html#intervene-into-the-process"
+                    },
+                    {
+                        "title": "PageManagerHandlers",
+                        "url": "/docs/page-manager.html#pagemanagerhandlers"
+                    },
+                    {
+                        "title": "Registering PageManagerHandlers",
+                        "url": "/docs/page-manager.html#registering-pagemanagerhandlers"
+                    },
+                    {
+                        "title": "PageNavigationHandler",
+                        "url": "/docs/page-manager.html#pagenavigationhandler"
+                    }
+                ]
             },
             {
                 "title": "Controller lifecycle",
-                "url": "/docs/controller-lifecycle.html"
+                "url": "/docs/controller-lifecycle.html",
+                "submenu": [
+                    {
+                        "title": "init()",
+                        "url": "/docs/controller-lifecycle.html#init-serverclient"
+                    },
+                    {
+                        "title": "load()",
+                        "url": "/docs/controller-lifecycle.html#load-serverclient"
+                    },
+                    {
+                        "title": "setMetaParams()",
+                        "url": "/docs/controller-lifecycle.html#setmetaparams-serverclient"
+                    },
+                    {
+                        "title": "activate()",
+                        "url": "/docs/controller-lifecycle.html#activate-client"
+                    },
+                    {
+                        "title": "update()",
+                        "url": "/docs/controller-lifecycle.html#update-client"
+                    },
+                    {
+                        "title": "deactivate()",
+                        "url": "/docs/controller-lifecycle.html#deactivate-client"
+                    },
+                    {
+                        "title": "destroy()",
+                        "url": "/docs/controller-lifecycle.html#destroy-client"
+                    }
+                ]
             },
             {
                 "title": "Extensions",
-                "url": "/docs/extensions.html"
+                "url": "/docs/extensions.html",
+                "submenu": [
+                    {
+                        "title": "Why use extensions",
+                        "url": "/docs/extensions.html#why-use-extensions"
+                    },
+                    {
+                        "title": "How to use extensions",
+                        "url": "/docs/extensions.html#how-to-use-extensions"
+                    },
+                    {
+                        "title": "Passing partial state from controllers",
+                        "url": "/docs/extensions.html#passing-partial-state-from-controllers"
+                    }
+                ]
             },
             {
                 "title": "Rendering process",

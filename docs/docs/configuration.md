@@ -6,6 +6,9 @@ layout: "docs"
 
 ---
 
+IMA.js offers many ways to configure and customize your application to your needs.
+Here's a list describing all possible configuration files and what they do.
+
 ## Build and environment configuration
 - `gulpConfig.js` contains configuration for the gulp tasks we use to build and
   run your application.

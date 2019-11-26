@@ -24,61 +24,61 @@ Example:
 
 ```javascript
 shim: {
-    js: {
-      name: 'shim.js',
-      src: ['./node_modules/ima/polyfill/collectionEnumeration.js'],
-      dest: {
-        client: './build/static/js/'
-      }
-    },
-    es: {
-      name: 'shim.es.js',
-      src: [],
-      dest: {
-        client: './build/static/js/',
-        server: './build/ima/'
-      }
+  js: {
+    name: 'shim.js',
+    src: ['./node_modules/ima/polyfill/collectionEnumeration.js'],
+    dest: {
+    client: './build/static/js/'
     }
+  },
+  es: {
+    name: 'shim.es.js',
+    src: [],
+    dest: {
+    client: './build/static/js/',
+    server: './build/ima/'
+    }
+  }
   
 
 polyfill: {
-    js: {
-      name: 'polyfill.js',
-      src: [
-        './node_modules/babel-polyfill/dist/polyfill.min.js',
-        './node_modules/custom-event-polyfill/custom-event-polyfill.js'
-      ],
-      dest: {
-        client: './build/static/js/'
-      }
-    },
-    es: {
-      name: 'polyfill.es.js',
-      src: ['./node_modules/custom-event-polyfill/custom-event-polyfill.js'],
-      dest: {
-        client: './build/static/js/'
-      }
-    },
-    fetch: {
-      name: 'fetch-polyfill.js',
-      src: [
-        './node_modules/core-js/client/shim.min.js',
-        './node_modules/whatwg-fetch/fetch.js'
-      ],
-      dest: {
-        client: './build/static/js/'
-      }
-    },
-    ima: {
-      name: 'ima-polyfill.js',
-      src: [
-        './node_modules/ima/polyfill/imaLoader.js',
-        './node_modules/ima/polyfill/imaRunner.js'
-      ],
-      dest: {
-        client: './build/static/js/'
-      }
+  js: {
+    name: 'polyfill.js',
+    src: [
+    './node_modules/babel-polyfill/dist/polyfill.min.js',
+    './node_modules/custom-event-polyfill/custom-event-polyfill.js'
+    ],
+    dest: {
+    client: './build/static/js/'
     }
+  },
+  es: {
+    name: 'polyfill.es.js',
+    src: ['./node_modules/custom-event-polyfill/custom-event-polyfill.js'],
+    dest: {
+    client: './build/static/js/'
+    }
+  },
+  fetch: {
+    name: 'fetch-polyfill.js',
+    src: [
+    './node_modules/core-js/client/shim.min.js',
+    './node_modules/whatwg-fetch/fetch.js'
+    ],
+    dest: {
+    client: './build/static/js/'
+    }
+  },
+  ima: {
+    name: 'ima-polyfill.js',
+    src: [
+    './node_modules/ima/polyfill/imaLoader.js',
+    './node_modules/ima/polyfill/imaRunner.js'
+    ],
+    dest: {
+    client: './build/static/js/'
+    }
+  }
   }
 
 ```
@@ -87,10 +87,10 @@ In build.js add new property 'es' to bundle object:
 
 ```javascript
 es: [
-	'./build/static/js/polyfill.es.js',
-	'./build/static/js/shim.es.js',
-	'./build/static/js/vendor.client.es.js',
-	'./build/static/js/app.client.es.js'
+  './build/static/js/polyfill.es.js',
+  './build/static/js/shim.es.js',
+  './build/static/js/vendor.client.es.js',
+  './build/static/js/app.client.es.js'
 ]
 ```
 
@@ -98,8 +98,8 @@ Add to your settings.js **prod**.$Page.$Render new property esScripts like this:
 
 ```javascript
 esScripts: [
-	'/static/js/locale/' + config.$Language + '.js' + versionStamp,
-	'/static/js/app.bundle.es.min.js' + versionStamp
+  '/static/js/locale/' + config.$Language + '.js' + versionStamp,
+  '/static/js/app.bundle.es.min.js' + versionStamp
 ]
 ```
 
@@ -107,12 +107,12 @@ Add to your settings.js **dev**.$Page.$Render new property esScripts like this:
 
 ```javascript
 esScripts: [
-	'/static/js/polyfill.es.js' + versionStamp,
-	'/static/js/shim.es.js' + versionStamp,
-	'/static/js/vendor.client.es.js' + versionStamp,
-	`/static/js/locale/${config.$Language}.js${versionStamp}`,
-	'/static/js/app.client.es.js' + versionStamp,
-	'/static/js/hot.reload.js' + versionStamp
+  '/static/js/polyfill.es.js' + versionStamp,
+  '/static/js/shim.es.js' + versionStamp,
+  '/static/js/vendor.client.es.js' + versionStamp,
+  `/static/js/locale/${config.$Language}.js${versionStamp}`,
+  '/static/js/app.client.es.js' + versionStamp,
+  '/static/js/hot.reload.js' + versionStamp
 ]
 ```
 
@@ -163,46 +163,46 @@ In DocumentView.jsx we united sync and async scripts.
 
 ```javascript
 getAsyncScripts() {
-	let scriptResources = `<script>
-	function checkAsyncAwait () {
-		try {
-			new Function('(async () => ({}))()');
-			return true;
-		} catch (e) {
-			return false;
-		}
-	}
-	$IMA.Runner = $IMA.Runner || {};
-	if (Object.values && checkAsyncAwait()) {
-		$IMA.Runner.scripts = [
-			${this.utils.$Settings.$Page.$Render.esScripts
-	.map(script => `'${script}'`)
-	.join()}
-			];
-	} else {
-		$IMA.Runner.scripts = [
-			${this.utils.$Settings.$Page.$Render.scripts
-	.map(script => `'${script}'`)
-	.join()}
-			];
-	}
+  let scriptResources = `<script>
+  function checkAsyncAwait () {
+    try {
+      new Function('(async () => ({}))()');
+      return true;
+    } catch (e) {
+      return false;
+    }
+  }
+  $IMA.Runner = $IMA.Runner || {};
+  if (Object.values && checkAsyncAwait()) {
+    $IMA.Runner.scripts = [
+      ${this.utils.$Settings.$Page.$Render.esScripts
+  .map(script => `'${script}'`)
+  .join()}
+      ];
+  } else {
+    $IMA.Runner.scripts = [
+      ${this.utils.$Settings.$Page.$Render.scripts
+  .map(script => `'${script}'`)
+  .join()}
+      ];
+  }
 
-	if (!window.fetch) {
-		$IMA.Runner.scripts.unshift('${this.utils.$Settings.$Static
-	.js}/fetch-polyfill.js');
-	}
+  if (!window.fetch) {
+    $IMA.Runner.scripts.unshift('${this.utils.$Settings.$Static
+  .js}/fetch-polyfill.js');
+  }
 
-	$IMA.Runner.scripts.forEach(function(source) {
-		var script = document.createElement('script');
-		script.async = $IMA.$Env !== 'dev';
-		script.onload = $IMA.Runner.load;
-		script.src = source;
+  $IMA.Runner.scripts.forEach(function(source) {
+    var script = document.createElement('script');
+    script.async = $IMA.$Env !== 'dev';
+    script.onload = $IMA.Runner.load;
+    script.src = source;
 
-		document.getElementById('scripts').appendChild(script);
-	});
-	</script>`;
+    document.getElementById('scripts').appendChild(script);
+  });
+  </script>`;
 
-	return scriptResources;
+  return scriptResources;
 }
 ```
 
@@ -210,16 +210,20 @@ replace
 
 ```jsx
 {this.utils.$Settings.$Env === 'dev' ?
-	<div id='scripts'>{this.getSyncScripts()}</div>
+  <div id='scripts'>{this.getSyncScripts()}</div>
 :
-	<div id='scripts' dangerouslySetInnerHTML={{ __html: this.getAsyncScripts() }}/>
+  <div id='scripts' dangerouslySetInnerHTML={
+    { __html: this.getAsyncScripts() }
+  }/>
 }
 ```
 
 with
 
 ```jsx
-<div id='scripts' dangerouslySetInnerHTML={{ __html: this.getAsyncScripts() }}/>
+<div id='scripts' dangerouslySetInnerHTML={
+  { __html: this.getAsyncScripts() }
+}/>
 ```
 
 

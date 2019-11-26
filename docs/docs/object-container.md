@@ -6,22 +6,7 @@ layout: "docs"
 
 ---
 
-- [Manually registering dependencies](#manually-registering-dependencies)
-    1. [`bind()`](#1-bind)
-    2. [`constant()`](#2-constant)
-    3. [`inject()`](#3-inject)
-    4. [`provide()`](#4-provide)
-- [Obtaining dependencies](#obtaining-dependencies)
-    1. [Dependency Injection](#1-dependency-injection)
-    2. [`get()`](#2-get)
-    3. [`create()`](#3-create)
-- [Other methods](#other-methods)
-    - [`has()`](#has)
-    - [`getConstructorOf()`](#getconstructorof)
-
-----
-
-The Object Container (OC) is an enhanced dependency injector with support 
+The **Object Container (OC)** is an enhanced dependency injector with support 
 for aliases and constants. It is sophisticated and registers everything it comes across but only if it actually matters. For example it registers only **Controllers** and **Views** that you use in `app/config/routes.js`. 
 
 By registering controllers and views the OC can simply follow your dependency tree and register everything you might possibly need. Below is a diagram of simple dependency tree.
@@ -31,19 +16,19 @@ app/config/routes.js
 ├─ OrderController
 |   ├─ OrderService / OrderEntity
 |   |   └─ RestClient
-|   |       ├─ $HttpAgent
-|   |       ├─ $Cache
-|   |       └─ LinkGenerator
-|   |           └─ $Router
+|   |     ├─ $HttpAgent
+|   |     ├─ $Cache
+|   |     └─ LinkGenerator
+|   |       └─ $Router
 |   └─ UserService / UserEntity
-|       └─ RestClient
-|           ├─ $HttpAgent
-|           ├─ $Cache
-|           └─ LinkGenerator
-|               └─ $Router
+|     └─ RestClient
+|       ├─ $HttpAgent
+|       ├─ $Cache
+|       └─ LinkGenerator
+|         └─ $Router
 └─ UserController
-    ├─ ...
-    └─ ...
+  ├─ ...
+  └─ ...
 ```
 
 ## Manually registering dependencies
@@ -54,9 +39,8 @@ This file contains a function that receives the namespace register
 
 ```javascript
 // app/config/bind.js
-
 export let init = (ns, oc, config) => {
-    // Register stuff here
+  // Register stuff here
 }
 ```
 
@@ -88,17 +72,16 @@ import { UserAgent } from '@ima/plugin-useragent';
 import { CustomRouter } from 'app/your-custom-overrides/Router';
 
 export let init = (ns, oc, config) => {
+  // Simple alias
+  oc.bind('UserAgent', UserAgent);
 
-    // Simple alias
-    oc.bind('UserAgent', UserAgent);
+  // Alias with dependencies
+  // Override of the IMA.js router implementation
+  oc.bind('$Router', CustomRouter, [
+      '$PageManager', '$RouteFactory', '$Dispatcher', Window
+  ]);
 
-    // Alias with dependencies
-    // Override of the IMA.js router implementation
-    oc.bind('$Router', CustomRouter, [
-            '$PageManager', '$RouteFactory', '$Dispatcher', Window
-    ]);
-
-    // ...
+  // ...
 }
 ```
 
@@ -119,7 +102,7 @@ or constant names. Once the constant is defined it cannot be redefined.
 // (for example in IMA.js RestAPI client)
 
 export let init = (ns, oc, config) => {
-    oc.constant('REST_API_ROOT_URL', config.api.url);
+  oc.constant('REST_API_ROOT_URL', config.api.url);
 }
 ```
 
@@ -146,9 +129,9 @@ import SimpleRestClient from 'app/rest-client-impl/SimpleRestClient';
 import LinkGenerator from 'app/rest-client-impl/LinkGenerator';
 
 export let init = (ns, oc, config) => {
-    oc.inject(SimpleRestClient, [
-        HttpAgent, Cache, 'REST_API_ROOT_URL', LinkGenerator
-    ]);
+  oc.inject(SimpleRestClient, [
+    HttpAgent, Cache, 'REST_API_ROOT_URL', LinkGenerator
+  ]);
 }
 ```
 
@@ -172,24 +155,26 @@ import { AbstractRestClient } from 'ima-plugin-rest-client';
 import SimpleRestClient from 'app/rest-client-impl/SimpleRestClient';
 
 export let init = (ns, oc, config) => {
-    oc.provide(AbstractRestClient, SimpleRestClient);
+  oc.provide(AbstractRestClient, SimpleRestClient);
 
-    // We didn't specify any dependencies on purpose 
-    // they were set in the previous example.
-    // Otherwise it would be like this:
+  // We didn't specify any dependencies on purpose 
+  // they were set in the previous example.
+  // Otherwise it would be like this:
 
-    oc.provide(
-        AbstractRestClient, 
-        SimpleRestClient,
-        [
-            HttpAgent, Cache, 'REST_API_ROOT_URL', LinkGenerator
-        ]
-    );
+  oc.provide(
+    AbstractRestClient, 
+    SimpleRestClient,
+    [
+      HttpAgent, Cache, 'REST_API_ROOT_URL', LinkGenerator
+    ]
+  );
 }
 ```
 
 
 ## Obtaining dependencies
+
+In IMA.js application you can obtain dependencies using many different methods, where each one can be useful in different situation and environment.
 
 ### 1. Dependency Injection
 
@@ -201,35 +186,35 @@ Apart from defining dependencies manually in `app/config/bind.js` can every clas
 // OrderController is discovered by the OC
 // because it's registered in app/config/routes.js
 
-import AbstractController from 'ima/controller/AbstractController';
+import { AbstractController } from '@ima/core';
 import OrderService from 'app/model/order/OrderService.js';
 import UserService from 'app/model/user/UserService.js';
 
 export default class OrderController extends AbstractController {
 
-    static get $dependencies() {
-        return [
-            OrderService,
-            UserService,
-            '$Router'
-        ];
-    }
+  static get $dependencies() {
+    return [
+      OrderService,
+      UserService,
+      '$Router'
+    ];
+  }
 
-    // ...
+  // ...
 ```
 
 Once you've defined the dependencies the constructor of the class will receiver their instances.
 
 ```javascript
-    constructor(orderService, userService, $router) {
-        super();
+  constructor(orderService, userService, $router) {
+    super();
 
-        this._orderService = orderService;
-        this._userService = userService;
-        this._$router = $router;
-    }
+    this._orderService = orderService;
+    this._userService = userService;
+    this._$router = $router;
+  }
 
-    // ...
+  // ...
 ```
 
 ### 2. `get()`
@@ -257,17 +242,16 @@ factory function has been registered with the object container if no
 custom dependencies are provided.
 
 ```javascript
-import Cache from 'ima/cache/Cache';
-import HttpAgent from 'ima/http/HttpAgent';
+import { Cache, HttpAgent } from '@ima/core';
 import SimpleRestClient from 'app/rest-client-impl/SimpleRestClient';
 import LinkGenerator from 'app/rest-client-impl/LinkGenerator';
 
 oc.create('UserAgent');
 oc.create(
-    SimpleRestClient, 
-    [
-        HttpAgent, Cache, 'REST_API_ROOT_URL', LinkGenerator
-    ]
+  SimpleRestClient, 
+  [
+    HttpAgent, Cache, 'REST_API_ROOT_URL', LinkGenerator
+  ]
 );
 ```
 
@@ -276,17 +260,13 @@ useful inside the `app/config/bind.js` and `app/config/routes.js`
 
 ## Other methods
 
-### `has()`
-
-Returns `true` if the specified object, class or resource isregistered 
+- `has()` returns `true` if the specified object, class or resource is registered 
 within the OC.
 
 ```javascript
 if (oc.has('UserAgent') && oc.get('UserAgent').isMobile()) {
-    // Register conditional stuff here...
+  // Register conditional stuff here...
 }
 ```
 
-### `getConstructorOf()`
-
-Returns the class constructor function of the specified class or alias.
+- `getConstructorOf()` returns the class constructor function of the specified class or alias.

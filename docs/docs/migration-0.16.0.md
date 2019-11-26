@@ -38,10 +38,10 @@ Upgrading from version 15 should be pretty straightforward and your application 
 ```diff
 /* app/environment.js */
 {
-    ...
--   blackList: ['Googlebot', 'SeznamBot'],
-+   blackList: userAgent => (new RegExp('Googlebot|SeznamBot', 'g')).test(userAgent),
-    ...
+  ...
+- blackList: ['Googlebot', 'SeznamBot'],
++ blackList: userAgent => (new RegExp('Googlebot|SeznamBot', 'g')).test(userAgent),
+  ...
 }
 ```
 
@@ -50,9 +50,9 @@ Upgrading from version 15 should be pretty straightforward and your application 
 ```javascript
 /* ima/Router/ClientRouter.js */
 route(
-    path,
-    options = {},
-    { event = null, type = ActionTypes.REDIRECT, url = null } = {}
+  path,
+  options = {},
+  { event = null, type = ActionTypes.REDIRECT, url = null } = {}
 )
 ```
 
@@ -63,10 +63,10 @@ route(
 ```diff
 /* jest.conf.json */
 "setupFiles": [
-    "ima/test.js",
-    "ima/polyfill/imaLoader.js",
-    "ima/polyfill/imaRunner.js",
-+   "<rootDir>/jest.setup.js"
+  "ima/test.js",
+  "ima/polyfill/imaLoader.js",
+  "ima/polyfill/imaRunner.js",
++ "<rootDir>/jest.setup.js"
 ],
 + snapshotSerializers": ["enzyme-to-json/serializer"]
 ```

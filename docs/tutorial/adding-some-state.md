@@ -278,7 +278,7 @@ beginning of the file:
 import Post from 'app/component/post/Post';
 ```
 
-You can notice that so far we **haven't used relative imports** when importing
+> **Note**: You can notice that so far we **haven't used relative imports** when importing
 our custom JS modules from inside of the app directory structure. This is
 because IMA.js adds the `app` directory to the **lookup path**. This means that
 you can refer to any file inside `app` directory through an absolute path,
