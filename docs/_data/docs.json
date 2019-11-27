@@ -3,6 +3,10 @@
         "title": "documentation",
         "menu": [
             {
+                "title": "Table of contents",
+                "url": "/docs.html"
+            },
+            {
                 "title": "Getting started",
                 "url": "/docs/getting-started.html",
                 "submenu": [
@@ -175,6 +179,24 @@
                 ]
             },
             {
+                "title": "Page State & Controller",
+                "url": "/docs/page-state.html",
+                "submenu": [
+                    {
+                        "title": "Get & Set",
+                        "url": "/docs/page-state.html#get-set"
+                    },
+                    {
+                        "title": "Initial page state",
+                        "url": "/docs/page-state.html#initial-page-state"
+                    },
+                    {
+                        "title": "Partial state",
+                        "url": "/docs/page-state.html#partial-state"
+                    }
+                ]
+            },
+            {
                 "title": "Controller lifecycle",
                 "url": "/docs/controller-lifecycle.html",
                 "submenu": [
@@ -280,23 +302,27 @@
                 "submenu": [
                     {
                         "title": "EventBus",
-                        "url": "/docs/events.html#eventbus"
-                    },
-                    {
-                        "title": "Firing EventBus events",
-                        "url": "/docs/events.html#firing-eventbus-events"
-                    },
-                    {
-                        "title": "Listening to EventBus events",
-                        "url": "/docs/events.html#listening-to-eventbus-events"
+                        "url": "/docs/events.html#eventbus",
+                        "submenu": [
+                            {
+                                "title": "Firing EventBus events",
+                                "url": "/docs/events.html#firing-eventbus-events"
+                            },
+                            {
+                                "title": "Listening to EventBus events",
+                                "url": "/docs/events.html#listening-to-eventbus-events"
+                            }
+                        ]
                     },
                     {
                         "title": "Dispatcher",
-                        "url": "/docs/events.html#dispatcher"
-                    },
-                    {
-                        "title": "Firing and listening to Dispatcher events",
-                        "url": "/docs/events.html#firing-and-listening-to-dispatcher-events"
+                        "url": "/docs/events.html#dispatcher",
+                        "submenu": [
+                            {
+                                "title": "Firing and listening to Dispatcher events",
+                                "url": "/docs/events.html#firing-and-listening-to-dispatcher-events"
+                            }
+                        ]
                     },
                     {
                         "title": "Built-in events",
@@ -320,23 +346,25 @@
                 "submenu": [
                     {
                         "title": "Setting and obtaining information from the MetaManager",
-                        "url": "/docs/seo-and-meta-manager.html#setting-and-obtaining-information-from-the-metamanager"
-                    },
-                    {
-                        "title": "Managing document title",
-                        "url": "/docs/seo-and-meta-manager.html#managing-document-title---settitle-gettitle"
-                    },
-                    {
-                        "title": "Configuring meta tags",
-                        "url": "/docs/seo-and-meta-manager.html#configuring-meta-tags---setmetaname-getmetaname-getmetanames"
-                    },
-                    {
-                        "title": "Configuring meta properties",
-                        "url": "/docs/seo-and-meta-manager.html#configuring-meta-properties---setmetaproperty-getmetaproperty-setmetaproperties"
-                    },
-                    {
-                        "title": "Configuring links",
-                        "url": "/docs/seo-and-meta-manager.html#configuring-links---setlink-getlink-getlinks"
+                        "url": "/docs/seo-and-meta-manager.html#setting-and-obtaining-information-from-the-metamanager",
+                        "submenu": [
+                            {
+                                "title": "Managing document title",
+                                "url": "/docs/seo-and-meta-manager.html#managing-document-title---settitle-gettitle"
+                            },
+                            {
+                                "title": "Configuring meta tags",
+                                "url": "/docs/seo-and-meta-manager.html#configuring-meta-tags---setmetaname-getmetaname-getmetanames"
+                            },
+                            {
+                                "title": "Configuring meta properties",
+                                "url": "/docs/seo-and-meta-manager.html#configuring-meta-properties---setmetaproperty-getmetaproperty-setmetaproperties"
+                            },
+                            {
+                                "title": "Configuring links",
+                                "url": "/docs/seo-and-meta-manager.html#configuring-links---setlink-getlink-getlinks"
+                            }
+                        ]
                     },
                     {
                         "title": "Automatically displaying all information",
