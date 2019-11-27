@@ -1,9 +1,6 @@
 ---
 layout: "tutorial"
 ---
-# 5. Writing posts
-
----
 
 In [previous part](/tutorial/fetching-the-data-from-the-server.html) we created our classes and services to handle data fetching from server.
 We also learned something about the vital parts of IMA.js - **object container** and **server-side rendering**.

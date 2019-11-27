@@ -9,6 +9,9 @@
                     <p class="menu-label">{{ curMenu.title }}</p>
                     <ul class="menu-list">
                         {% for item in curMenu.menu %}
+                        {% if item.url == page.url %}
+                            {% assign activeItem = item %}
+                        {% endif %}
                         <li>
                             <a href="{{ item.url | relative_url }}"{% if item.url == page.url %}class="is-active"{% endif %}>{{ item.title }}</a>
                             {% if item.submenu and item.url == page.url %}
@@ -36,6 +39,13 @@
             <div class="doc-aside-overflow-grad"></div>
         </div>
         <div class="content">
+            <h1>
+                {{ activeItem.title }}
+                <a class="doc-edit-btn" target="_blank" href="https://github.com/seznam/ima/blob/ima-doc-update/docs{{ activeItem.url | replace: ".html", ".md" }}">
+                    <span class="fa fa-edit"></span>
+                </a>
+            </h1>
+            <hr>
             {{ content }}
         </div>
     </div>

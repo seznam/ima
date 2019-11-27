@@ -2,10 +2,6 @@
 layout: "docs"
 ---
 
-# Extensions
-
----
-
 Extensions provide means of extending the page controllers with additional
 managed state and logic. 
 

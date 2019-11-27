@@ -2,10 +2,6 @@
 layout: "docs"
 ---
 
-# Dictionary (i18n & l10n)
-
----
-
 Dictionary in IMA.js app serves many purposes. Simplest of them is keeping text strings out of component markup. More advanced one would be internationalisation and in-text replacements.
 
 ## Configuration

@@ -2,10 +2,6 @@
 layout: "docs"
 ---
 
-# Upgrading to 0.14.0
-
----
-
 In order to upgrade your project to use IMA.js 0.14.0, please follow these steps:
 - Update your `gulpfile.js` to require the default configuration from the `ima-gulp-tasks` package v gulpfile.js requirovat gulpConfig.js z ima-gulp-tasks (see the [example configuration](https://github.com/seznam/IMA.js-skeleton/blob/master/gulpConfig.js)).
 - If you are using custom `build` and `dev` tasks, remove the `Es6toEs5:ima` task from those.

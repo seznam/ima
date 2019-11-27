@@ -1,9 +1,6 @@
 ---
 layout: "tutorial"
 ---
-# 3. Adding some state
-
----
 
 In [previous section](/tutorial/static-view.html) of the tutorial, we prepared basic markup and custom styling
 thanks to the [Bootstrap CSS library](https://getbootstrap.com/).

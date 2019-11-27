@@ -2,10 +2,6 @@
 layout: "docs"
 ---
 
-# SEO & MetaManager
-
----
-
 If you've read the [Controller lifecycle](Controller-lifecycle) page you've 
 probably come along the [`setMetaParams`](/docs/controller-lifecycle.html#setmetaparams-serverclient)
 method. This method is dedicated to set meta information for a specific

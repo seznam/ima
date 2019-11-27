@@ -2,10 +2,6 @@
 layout: "docs"
 ---
 
-# Views & components
-
----
-
 As you may have noticed when a [route is registered](Routing#3-controller-and-view),
 a constructor of **Controller** and **View** is given as a 3rd and 4th argument.
 Controller takes care of loading and managing the data while View is a

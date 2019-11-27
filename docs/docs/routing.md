@@ -2,10 +2,6 @@
 layout: "docs"
 ---
 
-# Routing
-
----
-
 Routing is an essential part of every application that displays multiple pages. It allows to develop each part of an application separately and add new parts instantly. As it happens to be in MVC frameworks, each route targets specific controller which takes control over what happens next after a route is matched.
 
 <div class="image is-padded-with-shadow">

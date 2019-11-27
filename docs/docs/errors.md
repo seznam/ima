@@ -2,10 +2,6 @@
 layout: "docs"
 ---
 
-# Errors
-
----
-
 IMA.js implements a custom error class that poses a structure for http errors.
 
 To create such error you need to import **GenericError** from `ima/error/GenericError` and instantiate it.

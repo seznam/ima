@@ -2,10 +2,6 @@
 layout: "docs"
 ---
 
-# EventBus, Dispatcher & Events
-
----
-
 Major part of development in JavaScript relies on **events**. It's easy solution to
 notify distant instances or React elements scattered across the DOM tree.
 

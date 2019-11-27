@@ -2,10 +2,6 @@
 layout: "docs"
 ---
 
-# Object Container
-
----
-
 The **Object Container (OC)** is an enhanced dependency injector with support 
 for aliases and constants. It is sophisticated and registers everything it comes across but only if it actually matters. For example it registers only **Controllers** and **Views** that you use in `app/config/routes.js`. 
 

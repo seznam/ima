@@ -1,9 +1,6 @@
 ---
 layout: "tutorial"
 ---
-# 4. Fetching the data from the server
-
----
 
 In [last part](/tutorial/adding-some-state.html) of this series we tidied up our HomeView component and split our render method
 into much smaller and manageable components thanks to react. In this part we're going to 

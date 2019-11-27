@@ -1,9 +1,6 @@
 ---
 layout: "tutorial"
 ---
-# 1. Introduction
-
----
 
 In this tutorial we will build our first IMA.js web application - a simple
 guest book which will list the posts left by other visitors and allow us to

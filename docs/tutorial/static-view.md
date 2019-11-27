@@ -1,9 +1,6 @@
 ---
 layout: "tutorial"
 ---
-# 2. Static view
-
----
 
 In the [first part](/tutorial/introduction.html) we went through introduction to IMA.js and initialized our first
 application using `create-ima-app` command. In the second part of the tutorial

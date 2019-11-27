@@ -2,10 +2,6 @@
 layout: "docs"
 ---
 
-# Upgrading to 0.15.0
-
----
-
 In order to upgrade to IMA.js 0.15.0, start ba adding these new dependencies to package.json:
 
 ```json

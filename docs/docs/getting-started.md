@@ -2,10 +2,6 @@
 layout: "docs"
 ---
 
-# Getting started
-
----
-
 The **IMA.js** is an application development stack for developing isomorphic applications written in pure JavaScript and React.
 It helps you develop fully isomorphic JavaScript applications that behave consistently in many different environments with ease
 using the provided tools and several [plugins](https://github.com/seznam/IMA.js-plugins) we already have available. 

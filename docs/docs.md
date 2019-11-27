@@ -2,10 +2,6 @@
 layout: "docs"
 ---
 
-# Documentation
-
----
-
 <div class="logo">
   <figure class="image is-padded">
     <img src="{{ '/img/imajs-logo.png?v=' | append: site.github.build_revision | relative_url }}" alt="IMA.js logo">

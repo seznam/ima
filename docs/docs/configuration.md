@@ -2,10 +2,6 @@
 layout: "docs"
 ---
 
-# Configuration
-
----
-
 IMA.js offers many ways to configure and customize your application to your needs.
 Here's a list describing all possible configuration files and what they do.
 

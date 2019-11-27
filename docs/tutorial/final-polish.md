@@ -1,9 +1,6 @@
 ---
 layout: "tutorial"
 ---
-# 6. Final polish
-
----
 
 In the [5th part of the tutorial](/tutorial/writing-posts.html) we updated our application to be able to process
 input from user, learned something about ways different components can communicate with each other in IMA.js application
