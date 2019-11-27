@@ -1,4 +1,4 @@
-import { Cache, Dictionary, EventBus, Router, Window } from '@ima/core';
+import { Cache } from '@ima/core';
 import MockHttpAgent from 'app/mock/MockHttpAgent';
 import CategoryListFactory from 'app/model/categoryList/CategoryListFactory';
 import CategoryListResource from 'app/model/categoryList/CategoryListResource';
@@ -26,13 +26,5 @@ export default (ns, oc, config) => {
   oc.inject(FeedResource, ['$Http', 'ITEMS_API_URL', FeedFactory, Cache]);
   oc.inject(ItemResource, ['$Http', 'ITEMS_API_URL', ItemFactory, Cache]);
 
-  // Component utils
-  oc.constant('$Utils', {
-    $Router: oc.get(Router),
-    $Dictionary: oc.get(Dictionary),
-    $EventBus: oc.get(EventBus),
-    $Settings: oc.get('$Settings'),
-    $Window: oc.get(Window),
-    $CssClasses: oc.get('$CssClasses')
-  });
+  // You can set own Component utils here
 };
