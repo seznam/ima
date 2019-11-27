@@ -1,4 +1,4 @@
-import { IMAError } from '@ima/core';
+import { GenericError as IMAError } from '@ima/core';
 import AbstractService from 'app/model/AbstractService';
 import CategoryListResource from 'app/model/categoryList/CategoryListResource';
 

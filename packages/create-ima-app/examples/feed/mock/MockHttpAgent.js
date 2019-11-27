@@ -1,4 +1,4 @@
-import { IMAError, HttpAgent } from '@ima/core';
+import { GenericError as IMAError, HttpAgent } from '@ima/core';
 
 /**
  * Fake data for demo example.
