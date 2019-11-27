@@ -262,12 +262,10 @@ export default class HttpAgentImpl extends HttpAgent {
   _request(method, url, data, options) {
     let cacheKey = this.getCacheKey(method, url, data);
 
-    let cachePromise = this._proxy
-      .request(method, url, data, options)
-      .then(
-        response => this._proxyResolved(response),
-        error => this._proxyRejected(error)
-      );
+    let cachePromise = this._proxy.request(method, url, data, options).then(
+      response => this._proxyResolved(response),
+      error => this._proxyRejected(error)
+    );
 
     this._internalCacheOfPromises.set(cacheKey, cachePromise);
 

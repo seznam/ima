@@ -33,6 +33,7 @@ describe('UrlParser', () => {
   const parseUrl = UrlParser(ENVIRONMENT);
 
   function getMethod(requestGetBook, key) {
+    // eslint-disable-next-line no-prototype-builtins
     return requestGetBook.hasOwnProperty(key) ? requestGetBook[key] : '';
   }
 
