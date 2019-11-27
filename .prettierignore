@@ -6,7 +6,5 @@
 /packages/*/docs
 /packages/*/doc
 /packages/*/node_modules
-/packages/skeleton/build
-/packages/skeleton/app
 /packages/create-ima-app/examples/todos/assets/bower
 /packages/create-ima-app/examples/todos/assets/static/js/todomvc-common-base.js
