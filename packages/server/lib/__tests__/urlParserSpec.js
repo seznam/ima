@@ -204,7 +204,7 @@ describe('UrlParser', () => {
         try {
           parseUrl(usedReq, usedRes, next);
         } catch (exception) {
-          expect(exception.name).toEqual('TypeError [ERR_INVALID_URL]');
+          expect(exception.name).toMatch(/^TypeError/);
         }
 
         const result = usedRes.locals;
