@@ -1,4 +1,4 @@
-import { GenericError as IMAError, HttpAgent } from '@ima/core';
+import { GenericError, HttpAgent } from '@ima/core';
 
 /**
  * Fake data for demo example.
@@ -110,7 +110,7 @@ export default class MockHttpAgent extends HttpAgent {
             return Promise.resolve({ body: singleItem[0] });
           }
           return Promise.reject(
-            new IMAError('Bad request', {
+            new GenericError('Bad request', {
               status: 404,
               url: apiUrl,
               fullUrl: url
@@ -132,7 +132,7 @@ export default class MockHttpAgent extends HttpAgent {
         });
       default:
         return Promise.reject(
-          new IMAError('Bad request', {
+          new GenericError('Bad request', {
             status: 404,
             url: apiUrl,
             fullUrl: url
@@ -159,7 +159,7 @@ export default class MockHttpAgent extends HttpAgent {
         return Promise.resolve({ body: data });
       default:
         return Promise.reject(
-          new IMAError('Bad request', {
+          new GenericError('Bad request', {
             status: 500,
             url: apiUrl,
             fullUrl: url
