@@ -145,7 +145,7 @@ onPostSubmitted(eventData) {
 
 The IMA.js will automatically invoke this method when the `postSubmitted` event
 bus event occurs. For details on how this mechanism works, please reffer to the
-[Emiting events using the EventBus](/tutorial/adding-some-state.html#2-emiting-events-using-the-eventbus) 
+[Emitting events using the EventBus](/tutorial/adding-some-state.html#2-Emitting-events-using-the-eventbus) 
 section of the third chapter of this tutorial.
 
 Notice that our `onPostSubmitted()` event listener is a public method. This is

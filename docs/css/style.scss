@@ -188,6 +188,10 @@ a.button,
   margin: 0 auto;
   position: relative;
   z-index: 10;
+
+  h3 code {
+    font-size: 1rem;
+  }
 }
 
 .menu {
@@ -201,10 +205,15 @@ a.button,
   }
 
   & > li > a {
-    font-weight: 700;
+    font-weight: 600;
   }
 
   a {
     padding: 0.3em 0.5em;
   }
 }
+
+.menu-label:not(:first-child) {
+  margin-top: 2em;
+}
+

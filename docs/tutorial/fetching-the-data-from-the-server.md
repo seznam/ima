@@ -319,7 +319,7 @@ Notice how we use the `post.id` as the react element key here. Now go ahead,
 refresh the page and you'll see the posts still there, 
 but this time fetched from the server! Or are they?
 
-### Server-side rendering
+## Server-side rendering
 
 If you open your browsers's developer tools, you may notice that the network log does
 not show any request to `http://localhost:3001/static/api/posts.json`.

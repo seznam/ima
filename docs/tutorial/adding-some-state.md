@@ -135,7 +135,7 @@ As you may have noticed, we used JSON-compatible code in case of `posts` - this
 will come in handy later when we'll introduce fetching the data from the
 server and move the structure to an external JSON file.
 
-#### Splitting the render method
+### Splitting the render method
 
 Let's return to our view in the `app/page/home/HomeView.jsx` file. Replace the
 `render()` method with the following code snippet:
@@ -422,7 +422,7 @@ available yet. On the other hand, this does require you to add more logic to
 your view, checking whether the data is available or not, and displaying
 loading indicators where the data is not available yet.
 
-### Emiting events using the EventBus
+### Emitting events using the EventBus
 
 The `EventBus` API allows your UI components to emit custom DOM
 events that naturally propagate through the DOM tree representing the tree of
