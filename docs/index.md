@@ -41,9 +41,33 @@
       <i class="fas fa-caret-down has-text-primary"></i>
     </span>
   </h3>
-  <ul class="has-text-centered">
+  <ul class="inline-features has-text-centered">
     {% for feature in site.data.features-more %}
       {% include feature-more.html text=feature.text %}
+    {% endfor %}
+  </ul>
+</div>
+{% include separator.html icon="fa-plug" %}
+<h2 class="title has-text-centered">Plugins</h2>
+<div id="plugins">
+  <div class="column is-limited-width">
+      <h3 class="title is-4">Full plugin support</h3>
+      <p>
+        IMA.js comes with full support for plugins that can be created very easily through very simple interface. We maintain
+        a list of <a href="https://github.com/seznam/IMA.js-plugins" target="_blank">several plugins</a> that are thoroughly tested and used every day
+        on many of our websites here at <a href="https://www.seznam.cz" target="_blank">Seznam.cz</a> along with huge list of other plugins we use internally.
+      </p>
+  </div>
+  <br>
+  <h3 class="title has-text-centered is-size-4">
+    <span>...notable mentions</span>
+    <span class="icon">
+      <i class="fas fa-caret-down has-text-primary"></i>
+    </span>
+  </h3>
+  <ul class="inline-features has-text-centered">
+    {% for plugin in site.data.notable-plugins %}
+      {% include notable-plugin.html text=plugin.text %}
     {% endfor %}
   </ul>
 </div>

@@ -33,9 +33,9 @@ This will bootstrap your new application and install all dependencies. The provi
 also let you choose the template you wish to start with. You can go with empty blank template or explore
 one of our [examples](/examples).
 
-- `empty` - Hello World [[Source code](https://github.com/seznam/ima/tree/master/packages/examples/hello)]
-- `feed` - TODO List [[Source code](https://github.com/seznam/ima/tree/master/packages/examples/feed)]
-- `todos` - Twitter-Like Feed [[Source code](https://github.com/seznam/ima/tree/master/packages/examples/todos)]
+- `empty` - Hello World [[Source code](https://github.com/seznam/ima/tree/master/packages/create-ima-app/examples/hello)]
+- `feed` - TODO List [[Source code](https://github.com/seznam/ima/tree/master/packages/create-ima-app/examples/feed)]
+- `todos` - Twitter-Like Feed [[Source code](https://github.com/seznam/ima/tree/master/packages/create-ima-app/examples/todos)]
  
 After the installation succeeds, run following commands to start your application:
 

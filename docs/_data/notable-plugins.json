@@ -1,0 +1,26 @@
+[
+  {
+    "text": "[Analytics plugin](https://github.com/seznam/IMA.js-plugins/tree/master/packages/plugin-analytic){:target=\"_blank\"}, that provides interface to custom analytics, along with [FB pixel](https://github.com/seznam/IMA.js-plugins/tree/master/packages/plugin-analytic-fb-pixel){:target=\"_blank\"} and [Google Analytics](https://github.com/seznam/IMA.js-plugins/tree/master/packages/plugin-analytic-google){:target=\"_blank\"} plugins.",
+    "title": "Analytics plugin"
+  },
+  {
+    "text": "[Generic REST API client](https://github.com/seznam/IMA.js-plugins/blob/master/packages/plugin-rest-client){:target=\"_blank\"} plugin for the IMA application framework",
+    "title": "REST API client"
+  },
+  {
+    "text": "[Plugin Logger](https://github.com/seznam/IMA.js-plugins/tree/master/packages/plugin-logger){:target=\"_blank\"}, a logging tool for IMA.js framework.",
+    "title": "Logger"
+  },
+  {
+    "text": "Plugin to [simplify loading 3rd party scripts](https://github.com/seznam/IMA.js-plugins/tree/master/packages/plugin-script-loader){:target=\"_blank\"} for the IMA.js application",
+    "title": "Script loader"
+  },
+  {
+    "text": "Reselect-style [page state selector](https://github.com/seznam/IMA.js-plugins/tree/master/packages/plugin-select){:target=\"_blank\"} plugin for IMA.js components.",
+    "title": "Plugin Select"
+  },
+  {
+    "text": "And [many more...](/docs/available-plugins.html)",
+    "title": "more"
+  }
+]
