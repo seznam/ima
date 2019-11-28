@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [17.0.0-rc.7](https://github.com/seznam/ima/compare/v17.0.0-rc.6...v17.0.0-rc.7) (2019-11-28)
+
+
+### Features
+
+* 🎸 Split server and client bundle in vendors ([cda9a55](https://github.com/seznam/ima/commit/cda9a55eb5873919b63fd3bae860e083f00ec81b))
+
+
+
+
+
 # [17.0.0-rc.6](https://github.com/seznam/ima/compare/v17.0.0-rc.5...v17.0.0-rc.6) (2019-11-26)
 
 **Note:** Version bump only for package create-ima-app

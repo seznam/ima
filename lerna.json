@@ -11,5 +11,5 @@
   "packages": [
     "packages/!(skeleton)"
   ],
-  "version": "17.0.0-rc.6"
+  "version": "17.0.0-rc.7"
 }
