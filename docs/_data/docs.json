@@ -396,8 +396,24 @@
         "title": "Plugins",
         "menu": [
             {
-                "title": "Creating custom plugin",
-                "url": "/docs/creating-custom-plugin.html"
+                "title": "Plugin Interface",
+                "url": "/docs/plugin-interface.html",
+                "submenu": [
+                    {
+                        "title": "Interface functions",
+                        "url": "/docs/plugin-interface.html#interface-functions",
+                        "submenu": [
+                            {
+                                "title": "Updating build.js",
+                                "url": "/docs/plugin-interface.html#updating-build-js"
+                            }
+                        ]
+                    },
+                    {
+                        "title": "Conclusion",
+                        "url": "/docs/plugin-interface.html#conclusion"
+                    }
+                ]
             },
             {
                 "title": "List of available plugins",

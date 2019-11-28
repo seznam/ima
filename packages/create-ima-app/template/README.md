@@ -19,11 +19,11 @@ In order to **not** reinvent the wheel on every project and to address all of th
 ## Documentation
 
 We have prepared a complex tutorial for you:
-[Your first IMA.js application](https://github.com/seznam/IMA.js-skeleton/wiki/Tutorial,-part-1).
+[Your first IMA.js application](https://imajs.io/tutorial/introduction.html).
 This tutorial covers the basics of creating isomorphic web applications using
 IMA.js, but you will encounter some more advanced concepts in there as well.
 
-For a more in-depth information about the IMA.js see a [full documentation](https://github.com/seznam/IMA.js-skeleton/wiki/Documentation).
+For a more in-depth information about the IMA.js see a [full documentation](https://imajs.io/docs/).
 
 ## Main IMA.js parts
 - [IMA core](https://github.com/seznam/IMA.js-core) - it contains base classes and common classes for every days work which allow you server side rendering and hydrating application in browser.
