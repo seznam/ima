@@ -17,6 +17,7 @@ const BASE_DIR = process.cwd() + path.sep;
 const getFilePath = (baseDir, filePath) => {
   const dir = baseDir.replace(BASE_DIR, '').replace(/\\/g, '/');
 
+  // eslint-disable-next-line no-prototype-builtins
   const dirReplaceRules = mockRules.hasOwnProperty(dir) ? mockRules[dir] : [];
 
   const replaceRule = dirReplaceRules.find(rule => {

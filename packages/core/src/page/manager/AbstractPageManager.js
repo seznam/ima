@@ -735,7 +735,7 @@ export default class AbstractPageManager extends PageManager {
    * @param {{ type: string, event: Event}}
    * @returns {Promise<any>}
    */
-  _runPostManageHandlers(previousManagedPage, action) {
+  async _runPostManageHandlers(previousManagedPage, action) {
     return this._pageHandlerRegistry.handlePostManagedState(
       this._managedPage.controller
         ? this._stripManagedPageValueForPublic(this._managedPage)

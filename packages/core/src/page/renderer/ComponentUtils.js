@@ -39,11 +39,14 @@ export default class ComponentUtils {
    * Registers single utility class or multiple classes in alias->class mapping.
    *
    * @param {string|Object<string, function(new: T, ...*)|function(...*): T>} name
-   * @param {function(new: T, ...*)|function(...*): T} componentUtilityClass
+   * @param {function(new: T, ...*)|function(...*): T|String} componentUtilityClass
    * @param {?string} referrer
    */
   register(name, componentUtilityClass, referrer = null) {
-    if (typeof componentUtilityClass === 'function') {
+    if (
+      typeof componentUtilityClass === 'function' ||
+      typeof componentUtilityClass === 'string'
+    ) {
       const alias = String(name);
       this._utilityClasses[alias] = componentUtilityClass;
 
@@ -107,7 +110,7 @@ export default class ComponentUtils {
   /**
    * @template T
    * @param {string} alias
-   * @param {function(new: T, ...*)|function(...*): T} utilityClass
+   * @param {function(new: T, ...*)|function(...*): T|String} utilityClass
    * @return {T}
    */
   _createUtilityInstance(alias, utilityClass) {
