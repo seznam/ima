@@ -17,11 +17,11 @@ let languages = {
 };
 
 let vendors = {
-  common: ['@ima/core'],
+  common: [],
 
-  server: [],
+  server: [{ '@ima/core': '@ima/core/dist/ima.server.cjs.js' }],
 
-  client: [],
+  client: [{ '@ima/core': '@ima/core/dist/ima.client.cjs.js' }],
 
   test: []
 };

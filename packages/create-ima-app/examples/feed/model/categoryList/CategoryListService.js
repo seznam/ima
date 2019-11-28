@@ -1,4 +1,4 @@
-import { IMAError } from '@ima/core';
+import { GenericError } from '@ima/core';
 import AbstractService from 'app/model/AbstractService';
 import CategoryListResource from 'app/model/categoryList/CategoryListResource';
 
@@ -37,7 +37,7 @@ export default class CategoryListService extends AbstractService {
         }
       }
 
-      throw new IMAError('Category not found.', { status: 404 });
+      throw new GenericError('Category not found.', { status: 404 });
     });
   }
 
