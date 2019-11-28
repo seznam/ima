@@ -2,21 +2,22 @@
 layout: "docs"
 ---
 
-The IMA.js plugins is multi-package repository containing most commonly used plugins on IMA.js application development stack.
+We've already described a way to [create your own IMA.js plugins](/docs/creating-custom-plugin.html)
+through very simple interface. Now we would like to talk about [IMA.js-plugins](https://github.com/seznam/IMA.js-plugins)
+monorepo that already **contains variety of plugins** that covers many of the common use cases.
 
-- [**plugin-analytic**](https://github.com/seznam/IMA.js-plugins/tree/master/packages/plugin-analytic)
-- [**plugin-analytic-fb-pixel**](https://github.com/seznam/IMA.js-plugins/tree/master/packages/plugin-analytic-fb-pixel)
-- [**plugin-analytic-google**](https://github.com/seznam/IMA.js-plugins/tree/master/packages/plugin-analytic-google)
-- [**plugin-less-constants**](https://github.com/seznam/IMA.js-plugins/tree/master/packages/plugin-less-constants)
-- [**plugin-logger**](https://github.com/seznam/IMA.js-plugins/tree/master/packages/plugin-logger)
-- [**plugin-resource-loader**](https://github.com/seznam/IMA.js-plugins/tree/master/packages/plugin-resource-loader)
-- [**plugin-rest-client**](https://github.com/seznam/IMA.js-plugins/tree/master/packages/plugin-rest-client)
-- [**plugin-script-loader**](https://github.com/seznam/IMA.js-plugins/tree/master/packages/plugin-script-loader)
-- [**plugin-select**](https://github.com/seznam/IMA.js-plugins/tree/master/packages/plugin-select)
-- [**plugin-self-xss**](https://github.com/seznam/IMA.js-plugins/tree/master/packages/plugin-self-xss)
-- [**plugin-shared-cache**](https://github.com/seznam/IMA.js-plugins/tree/master/packages/plugin-shared-cache)
-- [**plugin-style-loader**](https://github.com/seznam/IMA.js-plugins/tree/master/packages/plugin-style-loader)
-- [**plugin-useragent**](https://github.com/seznam/IMA.js-plugins/tree/master/packages/plugin-useragent)
-- [**plugin-xhr**](https://github.com/seznam/IMA.js-plugins/tree/master/packages/plugin-xhr)
-- [**plugin-local-storage**](https://github.com/seznam/IMA.js-plugins/tree/master/packages/plugin-local-storage)
-- [**plugin-testing-integration**](https://github.com/seznam/IMA.js-plugins/tree/master/packages/plugin-testing-integration)
+Each plugin in this repository is thoroughly tested and maintained, so it always works
+with the most up to date IMA.js version. We, here at [Seznam.cz](https://www.seznam.cz/)
+use it daily in production on many of our projects, so don't worry about using them safely in the production
+environment. 
+
+Without further ado, let's quickly describe in this compact list 
+**what each plugin does and when you would want to use them**:
+
+## IMA.js-plugins
+
+<ul>
+  {% for plugin in site.data.plugins %}
+    {% include plugin-item.html name=plugin.name url=plugin.url description=plugin.description %}
+  {% endfor %}
+</ul>
