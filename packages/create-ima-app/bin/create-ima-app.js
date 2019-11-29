@@ -8,8 +8,8 @@ const argv = require('yargs').argv;
 const { checkNodeVersion } = require('../utils/utils');
 const { error } = require('../utils/printUtils');
 
-const MIN_NODE_VERSION = 8;
-const MAX_NODE_VERSION = 10;
+const MIN_NODE_VERSION = 10;
+const MAX_NODE_VERSION = 12;
 
 if (argv._.length === 0) {
   // eslint-disable-next-line no-console
