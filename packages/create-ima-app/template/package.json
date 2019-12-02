@@ -19,7 +19,7 @@
   "license": "MIT",
   "devDependencies": {
     "@ima/gulp-task-loader": "17.0.0-rc.5",
-    "@ima/gulp-tasks": "17.0.0-rc.7",
+    "@ima/gulp-tasks": "17.0.0-rc.8",
     "babel-eslint": "10.0.3",
     "enzyme": "3.10.0",
     "enzyme-adapter-react-16": "1.14.0",
@@ -34,7 +34,7 @@
     "prettier": "1.18.2"
   },
   "dependencies": {
-    "@ima/core": "17.0.0-rc.7",
+    "@ima/core": "17.0.0-rc.8",
     "@ima/plugin-hot-reload": "0.1.0",
     "@ima/plugin-websocket": "0.1.0",
     "@ima/server": "17.0.0-rc.7",

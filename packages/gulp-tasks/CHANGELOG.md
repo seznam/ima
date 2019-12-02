@@ -3,6 +3,23 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [17.0.0-rc.8](https://github.com/seznam/ima/compare/v17.0.0-rc.7...v17.0.0-rc.8) (2019-12-02)
+
+
+### Bug Fixes
+
+* 🐛 Implement new hot-reload plugin for all examples ([cc5d7bf](https://github.com/seznam/ima/commit/cc5d7bfbc231e4e87199da55fe1c5a3bfe95c1bf))
+* 🐛 plugin-websocket server import ([0cca73f](https://github.com/seznam/ima/commit/0cca73fc2bcc60dabc03e89abc3177a6f22e97c2))
+
+
+### Features
+
+* 🎸 added creating websocket server for hot reloading ([abbfd5c](https://github.com/seznam/ima/commit/abbfd5cd1da0884540af8eea9168030d9c835116))
+
+
+
+
+
 # [17.0.0-rc.7](https://github.com/seznam/ima/compare/v17.0.0-rc.6...v17.0.0-rc.7) (2019-11-28)
 
 
