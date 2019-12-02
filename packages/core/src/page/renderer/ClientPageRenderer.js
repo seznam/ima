@@ -59,7 +59,9 @@ export default class ClientPageRenderer extends AbstractPageRenderer {
     let loadedPromises = separatedData.promises;
 
     if (!this._firstTime) {
-      controller.setState(defaultPageState);
+      controller.setState(
+        this._patchStateToClearPreviousState(defaultPageState)
+      );
       await this._renderToDOM(controller, view, routeOptions);
       this._patchPromisesToState(controller, loadedPromises);
     }
@@ -156,6 +158,24 @@ export default class ClientPageRenderer extends AbstractPageRenderer {
         })
         .catch(error => this._handleError(error));
     }
+  }
+
+  /**
+   *
+   *
+   * @param {Object<string, *>} state
+   * @returns {Object<string, *>}
+   */
+  _patchStateToClearPreviousState(state) {
+    if (!this._reactiveView || !this._reactiveView.state) {
+      return state;
+    }
+
+    Object.keys(this._reactiveView.state).forEach(key => {
+      state[key] = state[key] !== undefined ? state[key] : undefined;
+    });
+
+    return state;
   }
 
   /**
