@@ -661,13 +661,11 @@ export default class AbstractPageManager extends PageManager {
     let managedOptions = this._managedPage.options;
 
     if (
-      managedOptions &&
-      managedOptions.documentView === options.documentView &&
-      managedOptions.managedRootView === options.managedRootView &&
-      managedOptions.viewAdapter === options.viewAdapter
+      !managedOptions ||
+      managedOptions.documentView !== options.documentView ||
+      managedOptions.managedRootView !== options.managedRootView ||
+      managedOptions.viewAdapter !== options.viewAdapter
     ) {
-      this._pageRenderer.clearState();
-    } else {
       this._pageRenderer.unmount();
     }
   }
