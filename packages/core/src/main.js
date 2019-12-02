@@ -208,48 +208,6 @@ function routeClientApp(app) {
     });
 }
 
-function hotReloadClientApp(initialAppConfigFunctions) {
-  if (!$Debug) {
-    return;
-  }
-
-  let app = createImaApp();
-  let bootConfig = getClientBootConfig(initialAppConfigFunctions);
-  app = bootClientApp(app, bootConfig);
-
-  let router = app.oc.get('$Router');
-  let pageManager = app.oc.get('$PageManager');
-  let currentRouteInfo = router.getCurrentRouteInfo();
-  let currentRoute = currentRouteInfo.route;
-  let currentRouteOptions = Object.assign({}, currentRoute.getOptions(), {
-    onlyUpdate: false,
-    autoScroll: false,
-    allowSPA: false
-  });
-
-  router.listen();
-
-  try {
-    return pageManager
-      .manage(currentRoute, currentRouteOptions, currentRouteInfo.params)
-      .catch(error => {
-        return router.handleError({ error });
-      })
-      .catch(error => {
-        if (typeof $IMA.fatalErrorHandler === 'function') {
-          $IMA.fatalErrorHandler(error);
-        } else {
-          console.warn(
-            'Define the config.$IMA.fatalErrorHandler function ' +
-              'in services.js.'
-          );
-        }
-      });
-  } catch (error) {
-    return router.handleError({ error });
-  }
-}
-
 function reviveClientApp(initialAppConfigFunctions) {
   let root = _getRoot();
 
@@ -292,7 +250,6 @@ export {
   getClientBootConfig,
   bootClientApp,
   routeClientApp,
-  hotReloadClientApp,
   reviveClientApp,
   onLoad,
   Cache,

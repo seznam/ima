@@ -167,12 +167,31 @@ export default class Router {
    * Note that the router will not prevent forms from being submitted to the
    * server.
    *
-   * The effects of this method cannot be reverted. This method has no effect
-   * at the server side.
+   * The effects of this method can be reverted with {@code unlisten}. This
+   * method has no effect at the server side.
    *
    * @return {Router} This router.
    */
   listen() {}
+
+  /**
+   * Unregisters event listeners at the client side window object allowing the
+   * router to capture user's history (history pop state - going "back") and
+   * page (clicking links) navigation.
+   *
+   * The router will stop processing the navigation internally, handling the
+   * user's navigation to display the page related to the URL resulting from
+   * the user's action.
+   *
+   * Note that the router will not prevent forms from being submitted to the
+   * server.
+   *
+   * The effects of this method can be reverted wtih {@code unlisten}. This method has no effect
+   * at the server side.
+   *
+   * @return {Router} This router.
+   */
+  unlisten() {}
 
   /**
    * Redirects the client to the specified location.

@@ -51,6 +51,14 @@ describe('ima.core.router.ClientRouter', () => {
     expect(window.bindEventListener.calls.count()).toEqual(2);
   });
 
+  it('should remove listener to popState event, click event', () => {
+    spyOn(window, 'unbindEventListener').and.stub();
+
+    router.unlisten();
+
+    expect(window.unbindEventListener.calls.count()).toEqual(2);
+  });
+
   describe('redirect method', () => {
     it('redirect to a new page', () => {
       let path = '/somePath';

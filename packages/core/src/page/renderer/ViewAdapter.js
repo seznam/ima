@@ -7,6 +7,16 @@ import Context from '../Context';
  * page view component through its properties.
  */
 export default class ViewAdapter extends React.Component {
+  static getDerivedStateFromProps(nextProps, prevState) {
+    if (nextProps.state !== prevState.state) {
+      return nextProps.state;
+    }
+
+    return null;
+  }
+
+  static getDerivedStateFromError() {}
+
   /**
    * Initializes the adapter component.
    *
@@ -49,8 +59,6 @@ export default class ViewAdapter extends React.Component {
    * @inheritdoc
    */
   componentDidCatch() {}
-
-  static getDerivedStateFromError() {}
 
   getContextValue(props) {
     return { $Utils: props.$Utils };
