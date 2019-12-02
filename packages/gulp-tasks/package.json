@@ -27,10 +27,12 @@
   },
   "homepage": "https://github.com/seznam/ima",
   "peerDependencies": {
-    "@ima/helpers": "^17.0.0"
+    "@ima/helpers": "^17.x",
+    "@ima/plugin-websocket": "^0.x"
   },
   "devDependencies": {
-    "@ima/helpers": "^17.0.0-rc.5"
+    "@ima/helpers": "^17.0.0-rc.5",
+    "@ima/plugin-websocket": "^0.1.0"
   },
   "dependencies": {
     "@babel/core": "^7.5.5",
@@ -43,7 +45,6 @@
     "@babel/polyfill": "^7.4.4",
     "@babel/preset-env": "^7.5.5",
     "@babel/preset-react": "^7.0.0",
-    "@ima/plugin-websocket": "^0.1.0",
     "ansi-colors": "^3.2.3",
     "autoprefixer": "^9.6.1",
     "babel-plugin-react-prop-types-remover": "^1.0.1",

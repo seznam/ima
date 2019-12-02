@@ -46,6 +46,15 @@ module.exports = (() => {
     css: ['./build/static/css/app.css']
   };
 
+  if (
+    process.env.NODE_ENV === 'dev' ||
+    process.env.NODE_ENV === 'development' ||
+    process.env.NODE_ENV === undefined
+  ) {
+    vendors.common.push('@ima/plugin-websocket');
+    vendors.common.push('@ima/plugin-hot-reload');
+  }
+
   return {
     js,
     mainjs,

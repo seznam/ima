@@ -1,5 +1,5 @@
 const gls = require('gulp-live-server');
-const { createServer } = require('@ima/plugin-websocket/lib');
+const { createServer } = require('@ima/plugin-websocket/server');
 
 const sharedState = require('../gulpState.js');
 
