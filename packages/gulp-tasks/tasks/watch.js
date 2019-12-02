@@ -13,7 +13,7 @@ const exec = promisify(require('child_process').exec);
 
 const sharedState = require('../gulpState.js');
 
-const { createClient } = require('@ima/plugin-websocket/lib');
+const { createClient } = require('@ima/plugin-websocket/server');
 
 const dgram = require('dgram');
 const notifyServer = dgram.createSocket('udp4');
