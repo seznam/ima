@@ -24,7 +24,11 @@ for PACKAGE in $PACKAGES ; do
     cd "$ROOT_DIR/packages/$PACKAGE"
     echo "Working on $PACKAGE@$PACKAGE_VERSION"
     sed -i "s#\"version\":\s\".*\"#\"version\": \"$PACKAGE_VERSION\"#" package.json
-    sed -i -E "s#\"(@ima/.*)\":\s\".*\"#\"\1\": \"$PACKAGE_VERSION\"#" package.json
+
+    for PACKAGE_UPDATE in $PACKAGES ; do
+        sed -i "s#\"$PACKAGE_UPDATE\":\s\".*\"#\"$PACKAGE_UPDATE\": \"$PACKAGE_VERSION\"#" package.json
+    done
+
     sed -i "s#https://registry.npmjs.org/#${NPM_LOCAL_REGISTRY_URL}#" package.json
     npm publish
 done

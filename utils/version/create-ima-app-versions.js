@@ -33,9 +33,12 @@ function resolvePackageVersions(dependencies) {
         dependency.split('@ima/')[1],
         'package.json'
       );
-      let { version } = require(dependencyPackageJson);
 
-      dependencies[dependency] = version;
+      if (fs.existsSync(dependencyPackageJson)) {
+        let { version } = require(dependencyPackageJson);
+
+        dependencies[dependency] = version;
+      }
     }
   });
 
