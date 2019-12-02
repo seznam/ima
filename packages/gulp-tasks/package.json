@@ -43,6 +43,7 @@
     "@babel/polyfill": "^7.4.4",
     "@babel/preset-env": "^7.5.5",
     "@babel/preset-react": "^7.0.0",
+    "@ima/plugin-websocket": "^0.1.0",
     "ansi-colors": "^3.2.3",
     "autoprefixer": "^9.6.1",
     "babel-plugin-react-prop-types-remover": "^1.0.1",

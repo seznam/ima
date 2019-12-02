@@ -1,10 +1,10 @@
 const gulp = require('gulp');
 const cache = require('gulp-cached');
-const flo = require('fb-flo');
 const color = require('ansi-colors');
 const log = require('fancy-log');
 const remember = require('gulp-remember');
 const watch = require('gulp-watch');
+const chokidar = require('chokidar');
 const path = require('path');
 const fs = require('fs');
 const net = require('net');
@@ -12,6 +12,8 @@ const { promisify } = require('util');
 const exec = promisify(require('child_process').exec);
 
 const sharedState = require('../gulpState.js');
+
+const { createClient } = require('@ima/plugin-websocket/lib');
 
 const dgram = require('dgram');
 const notifyServer = dgram.createSocket('udp4');
@@ -21,17 +23,23 @@ let notifyServerJobQueue = [];
 exports.__requiresConfig = true;
 
 exports.default = gulpConfig => {
-  const { files, occupiedPorts, notifyServer: notifyServerConfig } = gulpConfig;
+  const {
+    files,
+    occupiedPorts,
+    notifyServer: notifyServerConfig,
+    hotReloadConfig
+  } = gulpConfig;
 
   function watchTask() {
+    const socket = createClient(hotReloadConfig.socket);
     let hotReloadedCacheKeys = [];
 
-    runOnChange(files.app.watch, 'app:build');
-    runOnChange(files.vendor.watch, 'vendor:build');
-    runOnChange(files.less.watch, 'less:build');
-    runOnChange(files.server.watch, 'server:build');
-    runOnChange(files.locale.watch, 'locale:build');
-    runOnChange('./app/assets/static/**/*', 'copy:appStatic');
+    runGulpTaskOnChange(files.app.watch, 'app:build');
+    runGulpTaskOnChange(files.vendor.watch, 'vendor:build');
+    runGulpTaskOnChange(files.less.watch, 'less:build');
+    runGulpTaskOnChange(files.server.watch, 'server:build');
+    runGulpTaskOnChange(files.locale.watch, 'locale:build');
+    runGulpTaskOnChange('./app/assets/static/**/*', 'copy:appStatic');
 
     if (notifyServerConfig.enable) {
       notifyServer.bind({
@@ -79,6 +87,45 @@ exports.default = gulpConfig => {
       });
     }
 
+    chokidar
+      .watch(hotReloadConfig.watch, hotReloadConfig.options)
+      .on('change', filePath => {
+        log(
+          `Reloading 'public/${color.cyan(filePath)}' with ` + 'websocket...'
+        );
+
+        let hotReloadedContents = '';
+
+        if (path.parse(filePath).ext === '.css') {
+          hotReloadedContents = fs.readFileSync(filePath).toString();
+        } else {
+          hotReloadedContents = hotReloadedCacheKeys
+            .map(cacheKey => {
+              let file = remember.cacheFor('Es6ToEs5:server:app')[cacheKey];
+              if (!file) {
+                return '';
+              }
+
+              return file.contents
+                .toString()
+                .replace(/System.import/g, '$IMA.Loader.import')
+                .replace(/System.register/g, '$IMA.Loader.replaceModule');
+            })
+            .join('');
+          hotReloadedCacheKeys = [];
+        }
+
+        const message = {
+          sentinel: '@ima/gulp-tasks/watch/hot-reload',
+          payload: {
+            filename: path.normalize(filePath).replace(/\\/g, '/'),
+            contents: hotReloadedContents
+          }
+        };
+
+        socket.send(JSON.stringify(message));
+      });
+
     gulp
       .watch([
         './ima/**/*.js',
@@ -102,46 +149,10 @@ exports.default = gulpConfig => {
           }
         }
       });
+  }
 
-    flo(
-      './build/static/',
-      {
-        port: occupiedPorts['fb-flo'],
-        host: 'localhost',
-        glob: ['**/*.css', '**/*.js']
-      },
-      (filepath, callback) => {
-        log(`Reloading 'public/${color.cyan(filepath)}' with ` + 'flo...');
-
-        let hotReloadedContents = '';
-
-        if (path.parse(filepath).ext === '.css') {
-          hotReloadedContents = fs.readFileSync('./build/static/' + filepath);
-        } else {
-          hotReloadedContents = hotReloadedCacheKeys.map(cacheKey => {
-            let file = remember.cacheFor('Es6ToEs5:server:app')[cacheKey];
-            if (!file) {
-              return '';
-            }
-
-            return file.contents
-              .toString()
-              .replace(/System.import/g, '$IMA.Loader.import')
-              .replace(/System.register/g, '$IMA.Loader.replaceModule');
-          });
-          hotReloadedCacheKeys = [];
-        }
-
-        callback({
-          resourceURL: 'static/' + filepath,
-          contents: hotReloadedContents
-        });
-      }
-    );
-
-    function runOnChange(files, task) {
-      watch(files, () => gulp.series(task)());
-    }
+  function runGulpTaskOnChange(files, task) {
+    watch(files, () => gulp.series(task)());
   }
 
   function checkAndReleasePorts() {

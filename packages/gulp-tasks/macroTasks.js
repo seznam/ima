@@ -7,7 +7,7 @@ const DEFAULT_DEV_SUBTASKS = [
   ['copy:appStatic', 'copy:environment', 'shim', 'polyfill'],
   ['Es6ToEs5:app', 'Es6ToEs5:server', 'Es6ToEs5:vendor'],
   ['less', 'doc', 'locale', 'Es6ToEs5:vendor:client'],
-  'server',
+  ['server', 'server:websocket'],
   ['watch']
 ];
 
