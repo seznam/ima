@@ -11,7 +11,7 @@ import Window from '../window/Window';
  * @const
  * @type {Date}
  */
-const MAX_EXPIRE_DATE = new Date('Sat Sep 13 275760 00:00:00 GMT+0000 (UTC)');
+const MAX_EXPIRE_DATE = new Date('Fri, 31 Dec 9999 23:59:59 UTC');
 
 /**
  * Separator used to separate cookie declarations in the {@code Cookie} HTTP
