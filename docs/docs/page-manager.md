@@ -5,7 +5,7 @@ layout: "docs"
 Page Manager is an essential part of IMA.js. It's something like a puppeteer that manipulates with pages and views. Once a router matches URL to one of route's path the page manager takes care of the rest.
 
 <div class="image is-padded-with-shadow">
-  <img src="{{ '/img/docs/diagram-page-manager.png?v=' | append: site.github.build_revision | relative_url }}" alt="HomeView"/>
+  <img src="{{ '/img/docs/diagram-page-manager.png?v=' | append: site.github.build_revision | relative_url }}" />
 </div>
 
 ## Managing process

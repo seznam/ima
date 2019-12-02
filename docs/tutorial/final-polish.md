@@ -145,7 +145,7 @@ and you should see red input fields if the inputs are empty, while the submit bu
 you from submitting an empty content.
 
 <div class="image is-padded-with-shadow">
-  <img src="{{ '/img/tutorial/final-polish-form-validation.png?v=' | append: site.github.build_revision | relative_url }}" alt="HomeView"/>
+  <img src="{{ '/img/tutorial/final-polish-form-validation.png?v=' | append: site.github.build_revision | relative_url }}" />
 </div>
 
 So now let's make the posting experience a little bit better.
@@ -1064,7 +1064,7 @@ lower left corner. If you followed the tutorial from start,
 the final application should look something like the picture below.
 
 <div class="image is-padded-with-shadow">
-  <img src="{{ '/img/tutorial/final-polish-final.png?v=' | append: site.github.build_revision | relative_url }}" alt="HomeView"/>
+  <img src="{{ '/img/tutorial/final-polish-final.png?v=' | append: site.github.build_revision | relative_url }}" />
 </div>
 
 ## Conclusion

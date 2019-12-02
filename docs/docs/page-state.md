@@ -5,7 +5,7 @@ layout: "docs"
 Core of each application is the data the app is working with. The data needs to be managed in some manner and user needs to be able to manipulate with the data during application run. IMA.js adopted a React style of state management.
 
 <div class="image is-padded-with-shadow">
-  <img src="{{ '/img/docs/diagram-page-state.png?v=' | append: site.github.build_revision | relative_url }}" alt="HomeView"/>
+  <img src="{{ '/img/docs/diagram-page-state.png?v=' | append: site.github.build_revision | relative_url }}" />
 </div>
 
 A **PageStateManager** class is used for managing **page state** and is in tight cooperation with **PageManager**.

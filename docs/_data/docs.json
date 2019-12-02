@@ -422,6 +422,104 @@
         ]
     },
     {
+        "title": "Devtools",
+        "menu": [
+            {
+                "title": "Introduction",
+                "url": "/docs/devtools-introduction.html",
+                "submenu": [
+                    {
+                        "title": "Panel",
+                        "url": "/docs/devtools-introduction.html#how-it-works",
+                        "submenu": [
+                            {
+                                "title": "Devtools script",
+                                "url": "/docs/devtools-introduction.html#devtools-script"
+                            }
+                        ]
+                    }
+                ]
+            },
+            {
+                "title": "User Interface",
+                "url": "/docs/devtools-ui.html",
+                "submenu": [
+                    {
+                        "title": "Panel",
+                        "url": "/docs/devtools-ui.html#panel",
+                        "submenu": [
+                            {
+                                "title": "Search bar",
+                                "url": "/docs/devtools-ui.html#search-bar"
+                            },
+                            {
+                                "title": "Messages view",
+                                "url": "/docs/devtools-ui.html#messages-view"
+                            },
+                            {
+                                "title": "Data view",
+                                "url": "/docs/devtools-ui.html#data-view"
+                            }
+                        ]
+                    },
+                    {
+                        "title": "Popup",
+                        "url": "/docs/devtools-ui.html#popup"
+                    },
+                    {
+                        "title": "Options",
+                        "url": "/docs/devtools-ui.html#options"
+                    }
+                ]
+            },
+            {
+                "title": "Options",
+                "url": "/docs/devtools-options.html",
+                "submenu": [
+                    {
+                        "title": "Quick UI overview",
+                        "url": "/docs/devtools-options.html#quick-ui-overview"
+                    },
+                    {
+                        "title": "Presets modal window",
+                        "url": "/docs/devtools-options.html#presets-modal-window"
+                    },
+                    {
+                        "title": "Hooks",
+                        "url": "/docs/devtools-options.html#hooks",
+                        "submenu": [
+
+                            {
+                                "title": "Available API",
+                                "url": "/docs/devtools-options.html#available-api"
+                            },
+                            {
+                                "title": "aop",
+                                "url": "/docs/devtools-options.html#1-aoptarget-pattern"
+                            },
+                            {
+                                "title": "createHook",
+                                "url": "/docs/devtools-options.html#2-createhookname-regular-callback"
+                            },
+                            {
+                                "title": "emit",
+                                "url": "/docs/devtools-options.html#3-emitidentifier-meta-options-overrides--"
+                            },
+                            {
+                                "title": "Message colors",
+                                "url": "/docs/devtools-options.html#message-colors"
+                            }
+                        ]
+                    },
+                    {
+                        "title": "Conclusion",
+                        "url": "/docs/devtools-options.html#conclusion"
+                    }
+                ]
+            }
+        ]
+    },
+    {
         "title": "migration",
         "menu": [
             {

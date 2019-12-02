@@ -52,7 +52,7 @@ As you can already see from the command line, if everything went well, you can v
 application by opening [`http://localhost:3001/`](http://localhost:3001/) in your browser.
 
 <div class="image is-padded-with-shadow">
-  <img src="{{ '/img/tutorial/introduction-run-dev.jpg?v=' | append: site.github.build_revision | relative_url }}" alt="HomeView"/>
+  <img src="{{ '/img/tutorial/introduction-run-dev.jpg?v=' | append: site.github.build_revision | relative_url }}" />
 </div>
 
 ### Dev server

@@ -89,7 +89,7 @@ manage to make would likely be lost with the next update of the page's UI.
 If everything went well you should see the following page when you refresh your browser:
 
 <div class="image is-padded-with-shadow">
-  <img src="{{ '/img/tutorial/static-view-null.png?v=' | append: site.github.build_revision | relative_url }}" alt="HomeView"/>
+  <img src="{{ '/img/tutorial/static-view-null.png?v=' | append: site.github.build_revision | relative_url }}" />
 </div>
 
 ### Guestbook form & SMACSS
@@ -255,7 +255,7 @@ browser cannot access the newly installed resources). In the end of this section
 you should see something like this when you refresh your page.
 
 <div class="image is-padded-with-shadow">
-  <img src="{{ '/img/tutorial/static-view-styling-our-form.png?v=' | append: site.github.build_revision | relative_url }}" alt="HomeView"/>
+  <img src="{{ '/img/tutorial/static-view-styling-our-form.png?v=' | append: site.github.build_revision | relative_url }}" />
 </div>
 
 ### Rendering the whole document

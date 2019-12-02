@@ -13,7 +13,7 @@ restricted to the state fields which the extension explicitly specifies
 using its `getAllowedStateKeys()` method.
 
 <div class="image is-padded-with-shadow">
-  <img src="{{ '/img/docs/diagram-extensions.png?v=' | append: site.github.build_revision | relative_url }}" alt="HomeView"/>
+  <img src="{{ '/img/docs/diagram-extensions.png?v=' | append: site.github.build_revision | relative_url }}" />
 </div>
 
 ## Why use extensions

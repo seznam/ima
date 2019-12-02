@@ -8,7 +8,7 @@ Controller takes care of loading and managing the data while View is a
 presentation for the data loaded by the Controller.
 
 <div class="image is-padded-with-shadow">
-  <img src="{{ '/img/docs/diagram-view.png?v=' | append: site.github.build_revision | relative_url }}" alt="HomeView"/>
+  <img src="{{ '/img/docs/diagram-view.png?v=' | append: site.github.build_revision | relative_url }}" />
 </div>
 
 ## Organizing Views and Components

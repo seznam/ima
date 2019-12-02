@@ -7,7 +7,7 @@ advantage of. First thing IMA.js will want to render is a **DocumentView**
 followed by **ViewAdapter** and **ManagedRootView**.
 
 <div class="image is-padded-with-shadow">
-  <img src="{{ '/img/docs/diagram-extensions.png?v=' | append: site.github.build_revision | relative_url }}" alt="HomeView"/>
+  <img src="{{ '/img/docs/diagram-extensions.png?v=' | append: site.github.build_revision | relative_url }}" />
 </div>
 
 ## DocumentView
