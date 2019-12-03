@@ -50,6 +50,7 @@ import * as RendererEvents from './page/renderer/Events';
 import PageRenderer from './page/renderer/PageRenderer';
 import PageRendererFactory from './page/renderer/PageRendererFactory';
 import ServerPageRenderer from './page/renderer/ServerPageRenderer';
+import RendererTypes from './page/renderer/Types';
 import ViewAdapter from './page/renderer/ViewAdapter';
 import * as StateEvents from './page/state/Events';
 import PageStateManager from './page/state/PageStateManager';
@@ -292,6 +293,7 @@ export {
   ClientPageRenderer,
   ComponentUtils,
   RendererEvents,
+  RendererTypes,
   PageRenderer,
   PageRendererFactory,
   ServerPageRenderer,
