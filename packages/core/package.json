@@ -1,6 +1,6 @@
 {
   "name": "@ima/core",
-  "version": "17.0.0-rc.8",
+  "version": "17.0.0-rc.9",
   "description": "IMA.js framework for isomorphic javascript application",
   "browser": "client.cjs.js",
   "main": "server.cjs.js",

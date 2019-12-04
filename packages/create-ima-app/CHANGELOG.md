@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [17.0.0-rc.9](https://github.com/seznam/ima/compare/v17.0.0-rc.8...v17.0.0-rc.9) (2019-12-04)
+
+
+### Features
+
+* 🎸 Dependencies update ([8ca12f3](https://github.com/seznam/ima/commit/8ca12f3e1c5f63c733e39aaf63d1fcf6ada967ba))
+
+
+
+
+
 # [17.0.0-rc.8](https://github.com/seznam/ima/compare/v17.0.0-rc.7...v17.0.0-rc.8) (2019-12-02)
 
 
