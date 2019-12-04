@@ -28,8 +28,9 @@ export default class MyComponent extends AbstractComponent {
     getOptions(),
     `
 import Foo from 'bar';
-import AbstractComponent from 'ima/page/AbstractComponent';
+import IMAComponent from 'ima/page/AbstractComponent';
 import { defaultCssClasses } from 'ima/page/componentHelpers';
+import * as ima from 'ima';
 
 export default class MyComponent extends AbstractComponent {
 	render() {}
@@ -38,6 +39,7 @@ export default class MyComponent extends AbstractComponent {
     `
 import { AbstractComponent, defaultCssClasses } from '@ima/core';
 import Foo from 'bar';
+import * as ima from '@ima/core';
 
 export default class MyComponent extends AbstractComponent {
 	render() {}
