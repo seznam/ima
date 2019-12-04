@@ -109,11 +109,11 @@ the following code:
 return {
   posts: [
     {
-      content: "Never mistake motion for action.",
+      content: 'Never mistake motion for action.',
       author: 'Ernest Hemingway'
     },
     {
-      content: "Quality means doing it right when no one is looking.",
+      content: 'Quality means doing it right when no one is looking.',
       author: 'Henry Ford'
     },
     {
@@ -285,7 +285,7 @@ To finish the creation of the post component, we need to move the related
 styles from `app/page/home/homeView.less` to `app/component/post/post.less`.
 Move the following code to the `post.less` file:
 
-```less
+```scss
 .post-author {
   text-align: @post-author-alignment;
   font-style: italic;
@@ -465,7 +465,7 @@ possible typos in event names.
 
 As always, you can learn more about `EventBus` and `Dispatcher` [in the documentation](/docs/events)
 
----
+<hr class="bottom-doc-separator">
 
 That is all for this part of the tutorial, you will find more in the
 [4th part](/tutorial/fetching-the-data-from-the-server) of this series.

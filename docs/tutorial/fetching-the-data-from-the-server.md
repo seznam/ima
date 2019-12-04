@@ -332,7 +332,7 @@ the client-side, so the request to
 `http://localhost:3001/static/api/posts.json` we do in our post resource will
 be resolved from the cache, leading to no additional HTTP request being made.
 
----
+<hr class="bottom-doc-separator">
 
 Now that we are fetching posts from the server and fully understand how that
 works, let's dive into writing new posts to our guestbook in the

@@ -12,6 +12,17 @@
                         {% for item in curMenu.menu %}
                         {% if item.url == pageUrl %}
                             {% assign activeItem = item %}
+
+                            {% assign prevIndex = forloop.index0 | minus: 1 %}
+                            {% assign nextIndex = forloop.index0 | plus: 1 %}
+
+
+                            {% if prevIndex >= 0 %}
+                                {% assign previousItem = curMenu.menu[prevIndex] %}
+                            {% else %}
+                                {% assign previousItem = false %}
+                            {% endif %}
+                            {% assign nextItem = curMenu.menu[nextIndex] %}
                         {% endif %}
                         <li>
                             <a href="{{ item.url | relative_url }}"{% if item.url == pageUrl %}class="is-active"{% endif %}>{{ item.title }}</a>
@@ -48,6 +59,21 @@
             </h1>
             <hr>
             {{ content }}
+            {% if include.bottomNavigation %}
+            <hr class="bottom-doc-separator">
+            <div class="columns">
+                {% if previousItem %}
+                <div class="column">
+                    <a href="{{ previousItem.url }}">&#8592; {{ previousItem.title }}</a>
+                </div>
+                {% endif %}
+                {% if nextItem %}
+                <div class="column has-text-right">
+                    <a href="{{ nextItem.url }}">{{ nextItem.title }} &#8594;</a>
+                </div>
+                {% endif %}
+            </div>
+            {% endif %}
         </div>
     </div>
 </div>

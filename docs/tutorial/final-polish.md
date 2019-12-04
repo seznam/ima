@@ -350,7 +350,7 @@ post's root element if the post is not saved yet.
 Open the post's style file (`app/component/post/post.less`) and add the
 following the content:
 
-```less
+```scss
 .post-pending .card-body {
   background: #e9e9e9;
 }
@@ -867,7 +867,7 @@ We can further improve the UX using animations. Modify the
 `app/component/post/post.less` file by adding the following declaration at the
 end of the file:
 
-```less
+```scss
 .post .card-body {
   transition: 0.3s background;
 }
@@ -969,7 +969,7 @@ backend.
 Let's add some animation to the newly added posts as well. Add the following
 snippet of code to the end of the `app/component/post/post.less` file:
 
-```less
+```scss
 .post {
   overflow: hidden;
   animation: new-post 0.3s;
@@ -1004,21 +1004,21 @@ pending posts. Add the following snippet to the post component's view
 Then add the following declaration to the post componet's
 `app/componet/post/post.less` file to the `.post-author` rule:
 
-```less
+```scss
 position: relative;
 ```
 
 After that add the following snippet into the `.post-author` rule (code snippet
 obtained from [https://tobiasahlin.com/spinkit/](https://tobiasahlin.com/spinkit/) and subsequently modified):
 
-```less
+```scss
 .spinner {
   position: absolute;
   top: 1em;
   width: 70px;
   text-align: center;
   opacity: 0;
-  transition: 0.3 opacity;
+  transition: 0.3s opacity;
 
   & > div {
     width: 16px;
@@ -1053,7 +1053,7 @@ obtained from [https://tobiasahlin.com/spinkit/](https://tobiasahlin.com/spinkit
 
 And finally add the following snippet at the end of the file:
 
-```less
+```scss
 .post-pending .post-author .spinner {
   opacity: 1;
 }

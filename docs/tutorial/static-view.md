@@ -217,13 +217,13 @@ Let's write some CSS to make our guestbook look even better. Open the
 `app/assets/less/settings.less` file and add the following code to set up our
 layout configuration:
 
-```less
+```scss
 @post-author-alignment: right;
 ```
 
 Next open the `app/assets/less/base.less` file and add the following code below the existing one:
 
-```less
+```scss
 form {
   margin-bottom: 0;
 }
@@ -232,7 +232,7 @@ form {
 Now let's open the the `app/page/home/homeView.less` file and replace the
 contents with the following code:
 
-```less
+```scss
 .l-home {
     margin-top: 2rem;
 
@@ -327,7 +327,7 @@ constant or value created in the file to the namespace.
 and replace them with ES2015 [`import`](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Statements/import)
 and [`export`](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Statements/export).
 
----
+<hr class="bottom-doc-separator">
 
 That's it for this part of the tutorial, 
 [so head over to the part 3](/tutorial/adding-some-state) to learn about application state.

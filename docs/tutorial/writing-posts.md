@@ -338,7 +338,7 @@ Go ahead and check the result in the browser, you will now be able to write new
 posts to our guestbook (which will disappear once you reload the page, since we
 keep the posts only in our HTTP mock).
 
----
+<hr class="bottom-doc-separator">
 
 With our guestbook working, we can turn to adding some final polish to our
 application in the [6th and last part of the tutorial](/tutorial/final-polish).
