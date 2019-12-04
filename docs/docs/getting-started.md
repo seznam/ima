@@ -46,7 +46,7 @@ $ npm run dev
 
 Before going ahead, now that your application is running, you can either continue reading this documentation,
 which describes many different parts of IMA.js in detail, take a direct look at the
- [API](/api) or [**start with our tutorial**](/tutorial/introduction.html).  
+ [API](/api) or [**start with our tutorial**](/tutorial/introduction).  
 
 ### Available commands
 
@@ -110,16 +110,14 @@ So let's take a closer look at the **contents of the application**:
     - `less` - Less CSS files defining common rules, overrides, macros, mixins
       and the basic UI layout.
     - `static` - any files that do not need preprocessing (3rd party JS files,
-      images, ...)
+      images, ...).
+      - `html` - this folder contains **two main files**:
+        - `spa.html` - this is a template for SPA applications.
+        - `error.html` - an error page showed in production.
   - `component` - our React components for use in the view. Components are 
-  covered in [part 3 of our tutorial](/tutorial/adding-some-state.html).
+  covered in [part 3 of our tutorial](/tutorial/adding-some-state).
   - `config`, `environment.js` - configuration files. For more information see
-    [Configuration](/docs/configuration.html) page.
-  - `locale` - localization files, providing localized phrases used in our
-    application. This directory contains sub-directories for specific languages,
-    each named after the
-    [ISO 639-1](http://en.wikipedia.org/wiki/List_of_ISO_639-1_codes)
-    two-character language code for the given language.
+    [Configuration](/docs/configuration) page.
   - `page` - controllers, main views and page-specific Less CSS files for pages
     in our application. Usage of these is configured via routing.
     - `error` - the page shown when the application encounters an error that
@@ -128,7 +126,7 @@ So let's take a closer look at the **contents of the application**:
     - `notFound` - the page shown when the user navigates to a page that is not
       defined in our application.
 
-The `assets`, `config` and `locale` directories are **expected** by the IMA.js
+The `assets` and `config` directories are **expected** by the IMA.js
 application stack, the remaining directories can be renamed or moved and you
 are free to organize your files in any way you like (but you will have to
 update the configuration accordingly).

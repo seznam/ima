@@ -1,8 +1,8 @@
 ---
 layout: "docs"
 ---
-The IMA.js devtools consist of 3 main windows - [Panel](/docs/devtools-ui.html#panel), [Popup](/docs/devtools-ui.html#popup)
-and [Options](/docs/devtools-options.html). Each has some specific usage and
+The IMA.js devtools consist of 3 main windows - [Panel](/docs/devtools-ui#panel), [Popup](/docs/devtools-ui#popup)
+and [Options](/docs/devtools-options). Each has some specific usage and
 we're going to take a look at the first two in following sections.
 
 ## Panel
@@ -15,7 +15,7 @@ and clicking on **IMA.js tab** on any IMA.js application website.
   <img src="{{ '/img/docs/devtools-ui.png?v=' | append: site.github.build_revision | relative_url }}" />
 </div>
 
-This tab shows you all **events** (that you defined in the [options](/docs/devtools-options.html), which we'll talk about later) 
+This tab shows you all **events** (that you defined in the [options](/docs/devtools-options), which we'll talk about later) 
 and **method calls** in your application since it's initialization. But there are few other components in this window,
 that offers some additional functionality, so let's take a closer look at each of those.
 
@@ -45,7 +45,7 @@ defined to **arrow up** and **arrow down**, so you can use these too.
 
 The third one **clears the currently searched text** and
 last one opens a menu, where additional two buttons let's you either **clear whole state** (e.g. all messages are deleted)
-or access additional [options](/docs/devtools-options.html).
+or access additional [options](/docs/devtools-options).
 
 <div class="image is-padded-with-shadow">
   <img src="{{ '/img/docs/devtools-ui-search-action-btns.png?v=' | append: site.github.build_revision | relative_url }}" />
@@ -58,7 +58,7 @@ or access additional [options](/docs/devtools-options.html).
 </div>
 
 This is probably the main part of whole devtools. Here you can see all events and methods
-(that have registered hooks in the [options](/docs/devtools-options.html)) and time they were called
+(that have registered hooks in the [options](/docs/devtools-options)) and time they were called
 relative to the first event received.
 
 The first label in each row corresponds to the `class` that was an origin of `method call`, that is displayed
@@ -117,4 +117,4 @@ This popup can have **3 states**:
 
 This is a separate page, where you can configure the script that is injected into the page
 and customize it to your needs. As this is rather more complicated we're going to take
-a deeper look into it in the [next section](/docs/devtools-options.html).
+a deeper look into it in the [next section](/docs/devtools-options).

@@ -8,7 +8,7 @@
         <img src="{{ '/img/imajs-logo.png?v=' | append: site.github.build_revision | relative_url }}" alt="IMA.js logo">
       </figure>
     </div>
-    <h1 class="title has-text-centered">IMA.js is a framework for creating isomorphic javascript applications.</h1>
+    <h1 class="title has-text-centered">A Javascript framework for creating isomorphic applications.</h1>
     <p class="has-text-centered">
       <a href="/docs/getting-started.html" class="button is-medium is-primary">
           <span class="icon">

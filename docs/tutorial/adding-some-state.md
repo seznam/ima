@@ -2,7 +2,7 @@
 layout: "tutorial"
 ---
 
-In [previous section](/tutorial/static-view.html) of the tutorial, we prepared basic markup and custom styling
+In [previous section](/tutorial/static-view) of the tutorial, we prepared basic markup and custom styling
 thanks to the [Bootstrap CSS library](https://getbootstrap.com/).
 In this section, we're going to add some functionality to our application.
 
@@ -42,7 +42,7 @@ export default class HomeController extends AbstractController {
 ```
 
 The `AbstractController` class defines some methods which are executed
-in different parts of it's lifecycle, you can [read more about this in the documentation](/docs/controller-lifecycle.html) 
+in different parts of it's lifecycle, you can [read more about this in the documentation](/docs/controller-lifecycle) 
 One of the main methods you're going to use frequently is the `load()` method.
 
 The `load()` method is called automatically
@@ -463,9 +463,9 @@ specific use-cases, so the Dispatcher logs a warning to the console if there
 are no listeners registered for the fired event in order to notify you of
 possible typos in event names.
 
-As always, you can learn more about `EventBus` and `Dispatcher` [in the documentation](/docs/events.html)
+As always, you can learn more about `EventBus` and `Dispatcher` [in the documentation](/docs/events)
 
 ---
 
 That is all for this part of the tutorial, you will find more in the
-[4th part](/tutorial/fetching-the-data-from-the-server.html) of this series.
+[4th part](/tutorial/fetching-the-data-from-the-server) of this series.

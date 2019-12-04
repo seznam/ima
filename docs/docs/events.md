@@ -114,8 +114,8 @@ to create events that propagate up the tree of the UI components. The common
 way to propagate event in other directions, or to other parts of the UI, or
 from the controller to the UI is using the `app/event/Dispatcher` API.
 
-**Accessing Dispatcher in Controllers** is easy with [Dependency Injection](Object-Container#1-dependency-injection).
-**To access Dispatcher from Views and Components** you should register it in [ComponentUtils](/docs/views-and-components.html#utilities-shared-across-views-and-components).
+**Accessing Dispatcher in Controllers** is easy with [Dependency Injection](/docs/object-container#1-dependency-injection).
+**To access Dispatcher from Views and Components** you should register it in [ComponentUtils](/docs/views-and-components#utilities-shared-across-views-and-components).
 
 ```javascript
 // app/config/bind.js
@@ -170,7 +170,7 @@ onLightboxShow(data) {
 will still receive the `showLightbox` event when it's fired.
 
 > **Note:** A great place to
-mount components like Lightbox is [ManagedRootView](Rendering-process#managedrootview).
+mount components like Lightbox is [ManagedRootView](/docs/rendering-process#managedrootview).
 
 Note that events distributed using the Dispatcher are useful only in very
 specific use-cases, so the Dispatcher logs a warning to the console if there

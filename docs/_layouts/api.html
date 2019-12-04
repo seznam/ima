@@ -36,7 +36,7 @@
 							{% for post in sorted_posts %}
 							{% if post.url %}
 							<li>
-								<a href="{{ post.url | relative_url }}" {% if post.url== page.url %}class="is-active" {%
+								<a href="{{ post.url | relative_url | remove: '.html' }}" {% if post.url== page.url %}class="is-active" {%
 								   endif %}>{{ post.title }}</a>
 							</li>
 							{% endif %}

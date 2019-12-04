@@ -227,8 +227,8 @@ with
 
 In `app/assets/static/html/spa.html` add ima-polyfill.
 
-- [https://github.com/seznam/ima/tree/ima-doc-update/packages/create-ima-app/examples/hello/assets/static/html/spa.html#L42](https://github.com/seznam/ima/tree/ima-doc-update/packages/create-ima-app/examples/hello/assets/static/html/spa.html#L42)
-- [https://github.com/seznam/ima/tree/ima-doc-update/packages/create-ima-app/examples/hello/assets/static/html/spa.html#L47](https://github.com/seznam/ima/tree/ima-doc-update/packages/create-ima-app/examples/hello/assets/static/html/spa.html#L47)
+- [https://github.com/seznam/ima/tree/master/packages/create-ima-app/examples/hello/assets/static/html/spa.html#L42](https://github.com/seznam/ima/tree/master/packages/create-ima-app/examples/hello/assets/static/html/spa.html#L42)
+- [https://github.com/seznam/ima/tree/master/packages/create-ima-app/examples/hello/assets/static/html/spa.html#L47](https://github.com/seznam/ima/tree/master/packages/create-ima-app/examples/hello/assets/static/html/spa.html#L47)
 
 ## Removed namespaces
 

@@ -2,7 +2,7 @@
 layout: "tutorial"
 ---
 
-In [last part](/tutorial/adding-some-state.html) of this series we tidied up our HomeView component and split our render method
+In [last part](/tutorial/adding-some-state) of this series we tidied up our HomeView component and split our render method
 into much smaller and manageable components thanks to react. In this part we're going to 
 mock the data fetching from server and learn more about IMA.js object container. 
 
@@ -198,7 +198,7 @@ classed we used some weird static getter called `$dependencies`, that's how IMA.
 in dependency injection works.
 
 IMA.js uses internally the Object Container class to handle all dependencies, you can
-[read more about it in the documentation](/docs/object-container.html) but the basic usage is fairly easy.
+[read more about it in the documentation](/docs/object-container) but the basic usage is fairly easy.
 Every class that wants to use DI has to define static getter which returns an array of instances 
 we want to inject to the constructor in the same order as defined in the array itself. Real
 world example would then look something like this:
@@ -256,8 +256,8 @@ The object container allows us to:
 
 **We can only access the object container in this configuration file**. After that
 it works behind the scenes, providing dependencies and managing our shared
-instances as needed. You can find out more about its [API](/api/general/object-container.html) by studying the
-[documentation](/docs/object-container.html) or the [source code](https://github.com/seznam/ima/blob/master/packages/core/src/ObjectContainer.js).
+instances as needed. You can find out more about its [API](/api/general/object-container) by studying the
+[documentation](/docs/object-container) or the [source code](https://github.com/seznam/ima/blob/master/packages/core/src/ObjectContainer.js).
 
 ### Using PostServices in HomeController
 
@@ -336,4 +336,4 @@ be resolved from the cache, leading to no additional HTTP request being made.
 
 Now that we are fetching posts from the server and fully understand how that
 works, let's dive into writing new posts to our guestbook in the
-[5th part of this tutorial](/tutorial/writing-posts.html).
+[5th part of this tutorial](/tutorial/writing-posts).

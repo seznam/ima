@@ -6,7 +6,7 @@ layout: "docs"
   <img src="{{ '/img/docs/devtools-options.png?v=' | append: site.github.build_revision | relative_url }}" />
 </div>
 
-As we've already talked about in [the introduction section](/docs/devtools-introduction.html), the devtools
+As we've already talked about in [the introduction section](/docs/devtools-introduction), the devtools
 use special devtools script which defines which parts of IMA.js application should send messages about
 their activity to the IMA.js devtool panel. This code can be easily customized through the extension's options page.
 
@@ -18,7 +18,7 @@ and choosing the "Options" button.
 
 Main concept of the options is that you can create multiple **presets**, where each preset contains a set of **hooks** -
 these are snippets of JavaScript code, that define which parts of IMA.js app should be wrapped in previously mentioned 
-[proxies](/docs/devtools-introduction.html#devtools-script).
+[proxies](/docs/devtools-introduction#devtools-script).
 
 > **Note:** Don't forget to always save your changes after doing any changes, otherwise the changes won't propagate.
 

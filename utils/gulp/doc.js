@@ -169,7 +169,7 @@ function generate(done) {
           lunrDocuments.push({
             name,
             text: Array.from(textValues.values()).filter(value => !!value),
-            url: `${urlPrefix}/${filename}.html#${hash}`
+            url: `${urlPrefix}/${filename}#${hash}`
           });
 
           return item;

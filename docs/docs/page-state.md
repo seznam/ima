@@ -26,7 +26,7 @@ onVisibilityToggle() {
 ```
 
 ## Initial page state
-First additions to page state are set when `load` method of a Controller and Extensions returns an object of resources. These resources may be plain data or (un)resolved promises. Promises are handled differently on server vs. client. This behaviour is described in Controller's [`load` method documentation](/docs/controller-lifecycle.html#load-serverclient). 
+First additions to page state are set when `load` method of a Controller and Extensions returns an object of resources. These resources may be plain data or (un)resolved promises. Promises are handled differently on server vs. client. This behaviour is described in Controller's [`load` method documentation](/docs/controller-lifecycle#load-serverclient). 
 
 ## Partial state
 Since Extensions also have a word in loading resources it may be necessary to share resources between Controller and Extensions. Here comes partial state into play. It allows you to call `getState` method in `load` method of an Extension. Received state consists of states collected from loaded Controller and Extensions loaded prior to the current Extension. Extensions are loaded in the same order as they were registered in a Controller.

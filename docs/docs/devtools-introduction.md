@@ -34,7 +34,7 @@ the detection script does three more things:
 1. It creates a special `$IMA.devtool.postMessage` function on `window`, which the devtool script uses to communicate
 with chrome IMA.js devtool panel through `window.postMessage`.
 2. Additionally, it modifies `$IMA.Runner`, which let's us register new `preRun` commands that are executed before
-the original runners. This is used for the actual [devtools script](/docs/devtools-introduction.html#devtools-script).
+the original runners. This is used for the actual [devtools script](/docs/devtools-introduction#devtools-script).
 3. The background script, upon receiving the `ALIVE` messages, creates initializes bi-directional communication bridge
 between **content script** (where we listen on messages sent through `$IMA.devtool.postMessage` function) and IMA.js
 devtool panel.
@@ -48,6 +48,6 @@ The devtools script uses [to-aop](https://www.npmjs.com/package/to-aop) npm pack
 wrap IMA.js app method calls in Proxy-like objects, which then before execution, send an information about it's
 call, arguments and payload to the devtools panel. The panel then batch-processes these messages and displays them. 
 
-It can be customized through extension's [options](/docs/devtools-options.html), where you can define what exactly
+It can be customized through extension's [options](/docs/devtools-options), where you can define what exactly
 should be wrapped using proxies and how it should be pre-processed before sending it to the user. In the
-[next section](/docs/devtools-ui.html) we're going to talk about the devtools UI and it's components. 
+[next section](/docs/devtools-ui) we're going to talk about the devtools UI and it's components. 

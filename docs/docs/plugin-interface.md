@@ -27,7 +27,7 @@ then **merged with your application settings** a possible conflicts are overridd
 This allows you to **define defaults for your plugin**, which can be easily overridden in your application.
 
 Putting it all together, your main file in your npm package could look something like this (borrowing contents `main.js`
-from our [ima-plugin-useragent](https://github.com/seznam/IMA.js-plugins/blob/ca0c3e53cb6a9f06b8888ebb69879086e724907d/packages/plugin-useragent/README.md):
+from our [ima-plugin-useragent](https://github.com/seznam/IMA.js-plugins/blob/master/packages/plugin-useragent/README.md):
 
 ```javascript
 import UserAgent from './AbstractUserAgent.js';
@@ -90,6 +90,6 @@ var vendors = {
 ## Conclusion
 
 As you can see that creating IMA.js plugin is very easy. You can always check our 
-[IMA.js-plugins](https://github.com/seznam/IMA.js-plugins/tree/ca0c3e53cb6a9f06b8888ebb69879086e724907d),
-which we describe more in detail [here](/docs/available-plugins.html), monorepo to take a look at many other already
+[IMA.js-plugins](https://github.com/seznam/IMA.js-plugins/tree/master),
+which we describe more in detail [here](/docs/available-plugins), monorepo to take a look at many other already
 existing plugins and how they're implemented.

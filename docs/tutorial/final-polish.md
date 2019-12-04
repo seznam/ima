@@ -2,7 +2,7 @@
 layout: "tutorial"
 ---
 
-In the [5th part of the tutorial](/tutorial/writing-posts.html) we updated our application to be able to process
+In the [5th part of the tutorial](/tutorial/writing-posts) we updated our application to be able to process
 input from user, learned something about ways different components can communicate with each other in IMA.js application
 and updated our guestbook API. 
 
@@ -361,7 +361,7 @@ However, should you try to quickly add several posts, you may notice a weird
 behavior - there is only a single pending post shown, the last one. This is
 caused by the fact that all our pending posts have their IDs set to `null`, so
 React considers them to be the same post ([remember how we use the post ID to
-identify the post in the DOM?](/tutorial/fetching-the-data-from-the-server.html#using-postservices-in-homecontroller)).
+identify the post in the DOM?](/tutorial/fetching-the-data-from-the-server#using-postservices-in-homecontroller)).
 
 To fix that we introduce a new field to our home page controller
 (`app/page/home/HomeController.js`) in the constructor:
@@ -422,7 +422,7 @@ const REFRESH_DELAY = 2000; // milliseconds
 To initialize our refresh cycle, we'll use one of the **lifecycle methods** that
 each IMA.js Controller has, an `activate()` method. To learn more about the
 lifecycle of Controller and it's methods, 
-[take a look at the documentation](/docs/controller-lifecycle.html). In our case
+[take a look at the documentation](/docs/controller-lifecycle). In our case
 the activate method will look like this:
 
 ```javascript
@@ -1072,7 +1072,7 @@ the final application should look something like the picture below.
 If all went well, you are currently in front of a finished application. I hope
 you liked the journey and are happy with what you've learned here.
 
-From now I suggest to take a look at our [documentation](/docs/getting-started.html) which goes into greater
+From now I suggest to take a look at our [documentation](/docs/getting-started) which goes into greater
 detail in describing each component of IMA.js development stack or take a direct look at the [API](/api/).
 
 If you see any improvements that could be made to this tutorial, or have found

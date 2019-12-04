@@ -98,10 +98,10 @@ server serving our application.
  - Finally, the `build` directory is used as an
 output directory for the built application and its resources.
 
-For more information see the [Application Structure](/docs/getting-started.html#application-structure)
+For more information see the [Application Structure](/docs/getting-started#application-structure)
 section in the documentation.
 
 ---
 
 So now that you know your way around the directory structure, let's do some
-coding in the [part 2 of this tutorial](/tutorial/static-view.html).
+coding in the [part 2 of this tutorial](/tutorial/static-view).

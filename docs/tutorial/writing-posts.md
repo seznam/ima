@@ -2,7 +2,7 @@
 layout: "tutorial"
 ---
 
-In [previous part](/tutorial/fetching-the-data-from-the-server.html) we created our classes and services to handle data fetching from server.
+In [previous part](/tutorial/fetching-the-data-from-the-server) we created our classes and services to handle data fetching from server.
 We also learned something about the vital parts of IMA.js - **object container** and **server-side rendering**.
 In this smaller section of the tutorial, we're going to be processing input from user and 
 sending those data to the server.
@@ -27,7 +27,7 @@ necessarily important to the overall state of the page.
 
 We'll use another IMA.js service to notify the controller that the user
 submitted a new post - the **EventBus**. In case you did not read [the details
-about communication between the controller and the view](/tutorial/adding-some-state.html#notes-on-communication-between-controllers-and-views)
+about communication between the controller and the view](/tutorial/adding-some-state#notes-on-communication-between-controllers-and-views)
 , the EventBus is an internal event system, built on top of DOM events, used for communication like this.
 
 ### Updating the form
@@ -142,7 +142,7 @@ onPostSubmitted(eventData) {
 
 The IMA.js will automatically invoke this method when the `postSubmitted` event
 bus event occurs. For details on how this mechanism works, please reffer to the
-[Emitting events using the EventBus](/tutorial/adding-some-state.html#2-Emitting-events-using-the-eventbus) 
+[Emitting events using the EventBus](/tutorial/adding-some-state#2-Emitting-events-using-the-eventbus) 
 section of the third chapter of this tutorial.
 
 Notice that our `onPostSubmitted()` event listener is a public method. This is
@@ -341,4 +341,4 @@ keep the posts only in our HTTP mock).
 ---
 
 With our guestbook working, we can turn to adding some final polish to our
-application in the [6th and last part of the tutorial](/tutorial/final-polish.html).
+application in the [6th and last part of the tutorial](/tutorial/final-polish).

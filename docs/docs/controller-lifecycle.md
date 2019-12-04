@@ -84,7 +84,7 @@ loaded resources from the [`load()`](#load-serverclient) method and the view has
 
 `setMetaParams()` method receives following arguments:
 - **loadedResources** - A plain object representing a map of resource names to resources loaded by the [`load()`](#load-serverclient) method. This is the same object as the one passed to the `setState()` method.
-- **metaManager** - Meta attributes manager instance to configure (See [SEO & MetaManager](/docs/seo-and-meta-manager.html) page).
+- **metaManager** - Meta attributes manager instance to configure (See [SEO & MetaManager](/docs/seo-and-meta-manager) page).
 - **router** - The current application router.
 - **dictionary** - The current localization dictionary
 - **settings** - The application settings for the current application environment.

@@ -82,4 +82,4 @@ enzyme.configure({ adapter: new Adapter() });
 
 
 ## New Features
-- Most notable new feature is the introduction of **PageManagerHandlers** which adds the possibility to customize actions like saving and restoring scroll positions, setting browser's address bar URL etc. For more information visit the [wiki page](https://github.com/seznam/IMA.js-skeleton/wiki/Page-Manager#intervene-into-the-process).
+- Most notable new feature is the introduction of **PageManagerHandlers** which adds the possibility to customize actions like saving and restoring scroll positions, setting browser's address bar URL etc. For more information visit the [documentation](/docs/page-manager#intervene-into-the-process).

@@ -2,13 +2,13 @@
 layout: "docs"
 ---
 
-If you've read the [Controller lifecycle](Controller-lifecycle) page you've 
-probably come along the [`setMetaParams`](/docs/controller-lifecycle.html#setmetaparams-serverclient)
+If you've read the [Controller lifecycle](/docs/controller-lifecycle) page you've 
+probably come along the [`setMetaParams`](/docs/controller-lifecycle#setmetaparams-serverclient)
 method. This method is dedicated to set meta information for a specific
 page and you are provided with everything you need *(current state, MetaManager, 
 router, dictionary and settings)*.
 
-**MetaManager** is then used in [DocumentView](Rendering-process#documentview) to
+**MetaManager** is then used in [DocumentView](/docs/rendering-process#documentview) to
 set `<title/>`, `<meta/>` and `<link/>` tags.
 
 ## Setting and obtaining information from the MetaManager

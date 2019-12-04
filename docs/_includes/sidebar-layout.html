@@ -1,4 +1,5 @@
 {% include header.html %}
+{% assign pageUrl = page.url | remove: ".html" %}
 <div class="container">
     <div class="is-flex is-sidebar">
         <div class="doc-aside-container">
@@ -9,12 +10,12 @@
                     <p class="menu-label">{{ curMenu.title }}</p>
                     <ul class="menu-list">
                         {% for item in curMenu.menu %}
-                        {% if item.url == page.url %}
+                        {% if item.url == pageUrl %}
                             {% assign activeItem = item %}
                         {% endif %}
                         <li>
-                            <a href="{{ item.url | relative_url }}"{% if item.url == page.url %}class="is-active"{% endif %}>{{ item.title }}</a>
-                            {% if item.submenu and item.url == page.url %}
+                            <a href="{{ item.url | relative_url }}"{% if item.url == pageUrl %}class="is-active"{% endif %}>{{ item.title }}</a>
+                            {% if item.submenu and item.url == pageUrl %}
                             <ul>
                                 {% for subItem in item.submenu %}
                                 <li>
@@ -41,7 +42,7 @@
         <div class="content">
             <h1>
                 {{ activeItem.title }}
-                <a class="doc-edit-btn" target="_blank" href="https://github.com/seznam/ima/blob/ima-doc-update/docs{{ activeItem.url | replace: ".html", ".md" }}">
+                <a class="doc-edit-btn" target="_blank" href="https://github.com/seznam/ima/blob/master/docs{{ activeItem.url | append: ".md" }}">
                     <span class="fa fa-edit"></span>
                 </a>
             </h1>

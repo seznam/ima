@@ -54,7 +54,7 @@ app/
 In the extension file should be plain `class` extending 
 `ima/extension/AbstractExtension` with the same methods as you'd use in the controller. In addition you should implement `getAllowedStateKeys()` method which returns array of keys the extension is allowed to change in controller's state.
 
-> **Note:** List and description of controller methods can be seen in [Controller lifecycle](Controller-lifecycle).
+> **Note:** List and description of controller methods can be seen in [Controller lifecycle](/docs/controller-lifecycle).
 
 ```javascript
 // app/component/gallery/GalleryExtension.js
@@ -70,7 +70,7 @@ export default class GalleryExtension extends AbstractExtension {
 
 All extensions to be used on a page must be added to the current controller
 via `addExtension()` method before the controller is initialized (Good 
-place for that is the [`init()`](Controller-lifecycle#init--serverclient) method). After that, the extensions will go 
+place for that is the [`init()`](/docs/controller-lifecycle#init-serverclient) method). After that, the extensions will go 
 through the same lifecycle as the controller.
 
 ```javascript

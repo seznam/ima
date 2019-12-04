@@ -4,337 +4,337 @@
         "menu": [
             {
                 "title": "Table of contents",
-                "url": "/docs.html"
+                "url": "/docs"
             },
             {
                 "title": "Getting started",
-                "url": "/docs/getting-started.html",
+                "url": "/docs/getting-started",
                 "submenu": [
                     {
                         "title": "Overview",
-                        "url":"/docs/getting-started.html#overview"
+                        "url":"/docs/getting-started#overview"
                     },
                     {
                         "title": "Installation",
-                        "url": "/docs/getting-started.html#installation",
+                        "url": "/docs/getting-started#installation",
                         "submenu": [
                             {
                                 "title": "Available commands",
-                                "url": "/docs/getting-started.html#available-commands"
+                                "url": "/docs/getting-started#available-commands"
                             },
                             {
                                 "title": "Why should I use create-ima-app command?",
-                                "url": "/docs/getting-started.html#why-should-i-use-create-ima-app-command"
+                                "url": "/docs/getting-started#why-should-i-use-create-ima-app-command"
                             }
                         ]
                     },
                     {
                         "title": "Application structure",
-                        "url": "/docs/getting-started.html#application-structure"
+                        "url": "/docs/getting-started#application-structure"
                     },
                     {
                         "title": "Production use",
-                        "url": "/docs/getting-started.html#production-use"
+                        "url": "/docs/getting-started#production-use"
                     }
                 ]
             },
             {
                 "title": "Configuration",
-                "url": "/docs/configuration.html",
+                "url": "/docs/configuration",
                 "submenu": [
                     {
                         "title": "Build and environment configuration",
-                        "url":"/docs/configuration.html#build-and-environment-configuration"
+                        "url":"/docs/configuration#build-and-environment-configuration"
                     },
                     {
                         "title": "Application configuration",
-                        "url": "/docs/configuration.html#application-configuration"
+                        "url": "/docs/configuration#application-configuration"
                     }
                 ]
             },
             {
                 "title": "Object Container",
-                "url": "/docs/object-container.html",
+                "url": "/docs/object-container",
                 "submenu": [
                     {
                         "title": "Manually registering dependencies",
-                        "url": "/docs/object-container.html#manually-registering-dependencies",
+                        "url": "/docs/object-container#manually-registering-dependencies",
                         "submenu": [
                             {
                                 "title": "bind()",
-                                "url": "/docs/object-container.html#1-bind"
+                                "url": "/docs/object-container#1-bind"
                             },
                             {
                                 "title": "constant()",
-                                "url": "/docs/object-container.html#2-constant"
+                                "url": "/docs/object-container#2-constant"
                             },
                             {
                                 "title": "inject()",
-                                "url": "/docs/object-container.html#3-inject"
+                                "url": "/docs/object-container#3-inject"
                             },
                             {
                                 "title": "provide()",
-                                "url": "/docs/object-container.html#4-provide"
+                                "url": "/docs/object-container#4-provide"
                             }
                         ]
                     },
                     {
                         "title": "Obtaining dependencies",
-                        "url": "/docs/object-container.html#obtaining-dependencies",
+                        "url": "/docs/object-container#obtaining-dependencies",
                         "submenu": [
                             {
                                 "title": "Dependency Injection",
-                                "url": "/docs/object-container.html#1-dependency-injection"
+                                "url": "/docs/object-container#1-dependency-injection"
                             },
                             {
                                 "title": "get()",
-                                "url": "/docs/object-container.html#2-get"
+                                "url": "/docs/object-container#2-get"
                             },
                             {
                                 "title": "create()",
-                                "url": "/docs/object-container.html#3-create"
+                                "url": "/docs/object-container#3-create"
                             }
                         ]
                     },
                     {
                         "title": "Other methods",
-                        "url": "/docs/object-container.html#other-methods"
+                        "url": "/docs/object-container#other-methods"
                     }
                 ]
             },
             {
                 "title": "Routing",
-                "url": "/docs/routing.html",
+                "url": "/docs/routing",
                 "submenu": [
                     {
                         "title": "Setting up Router",
-                        "url": "/docs/routing.html#setting-up-router",
+                        "url": "/docs/routing#setting-up-router",
                         "submenu": [
                             {
                                 "title": "Route name",
-                                "url": "/docs/routing.html#1-route-name"
+                                "url": "/docs/routing#1-route-name"
                             },
                             {
                                 "title": "Route path and parameters",
-                                "url": "/docs/routing.html#2-route-path-and-parameters"
+                                "url": "/docs/routing#2-route-path-and-parameters"
                             },
                             {
                                 "title": "Controller and View",
-                                "url": "/docs/routing.html#3-controller-and-view"
+                                "url": "/docs/routing#3-controller-and-view"
                             },
                             {
                                 "title": "Options",
-                                "url": "/docs/routing.html#4-options"
+                                "url": "/docs/routing#4-options"
                             }
                         ]
                     },
                     {
                         "title": "Linking to routes",
-                        "url": "/docs/routing.html#linking-to-routes"
+                        "url": "/docs/routing#linking-to-routes"
                     }
                 ]
             },
             {
                 "title": "Page Manager",
-                "url": "/docs/page-manager.html",
+                "url": "/docs/page-manager",
                 "submenu": [
                     {
                         "title": "Managing process",
-                        "url": "/docs/page-manager.html#managing-process"
+                        "url": "/docs/page-manager#managing-process"
                     },
                     {
                         "title": "Intervene into the process",
-                        "url": "/docs/page-manager.html#intervene-into-the-process"
+                        "url": "/docs/page-manager#intervene-into-the-process"
                     },
                     {
                         "title": "PageManagerHandlers",
-                        "url": "/docs/page-manager.html#pagemanagerhandlers",
+                        "url": "/docs/page-manager#pagemanagerhandlers",
                         "submenu": [
                             {
                                 "title": "init()",
-                                "url": "/docs/page-manager.html#1-init-method"
+                                "url": "/docs/page-manager#1-init-method"
                             },
                             {
                                 "title": "handlePreManagedState()",
-                                "url": "/docs/page-manager.html#2-handlepremanagedstate-method"
+                                "url": "/docs/page-manager#2-handlepremanagedstate-method"
                             },
                             {
                                 "title": "handlePostManagedState()",
-                                "url": "/docs/page-manager.html#3-handlepostmanagedstate-method"
+                                "url": "/docs/page-manager#3-handlepostmanagedstate-method"
                             },
                             {
                                 "title": "destroy()",
-                                "url": "/docs/page-manager.html#4-destroy-method"
+                                "url": "/docs/page-manager#4-destroy-method"
                             }
                         ]
                     },
                     {
                         "title": "Registering PageManagerHandlers",
-                        "url": "/docs/page-manager.html#registering-pagemanagerhandlers"
+                        "url": "/docs/page-manager#registering-pagemanagerhandlers"
                     },
                     {
                         "title": "PageNavigationHandler",
-                        "url": "/docs/page-manager.html#pagenavigationhandler"
+                        "url": "/docs/page-manager#pagenavigationhandler"
                     }
                 ]
             },
             {
                 "title": "Page State & Controller",
-                "url": "/docs/page-state.html",
+                "url": "/docs/page-state",
                 "submenu": [
                     {
                         "title": "Get & Set",
-                        "url": "/docs/page-state.html#get-set"
+                        "url": "/docs/page-state#get-set"
                     },
                     {
                         "title": "Initial page state",
-                        "url": "/docs/page-state.html#initial-page-state"
+                        "url": "/docs/page-state#initial-page-state"
                     },
                     {
                         "title": "Partial state",
-                        "url": "/docs/page-state.html#partial-state"
+                        "url": "/docs/page-state#partial-state"
                     }
                 ]
             },
             {
                 "title": "Controller lifecycle",
-                "url": "/docs/controller-lifecycle.html",
+                "url": "/docs/controller-lifecycle",
                 "submenu": [
                     {
                         "title": "init()",
-                        "url": "/docs/controller-lifecycle.html#init-serverclient"
+                        "url": "/docs/controller-lifecycle#init-serverclient"
                     },
                     {
                         "title": "load()",
-                        "url": "/docs/controller-lifecycle.html#load-serverclient"
+                        "url": "/docs/controller-lifecycle#load-serverclient"
                     },
                     {
                         "title": "setMetaParams()",
-                        "url": "/docs/controller-lifecycle.html#setmetaparams-serverclient"
+                        "url": "/docs/controller-lifecycle#setmetaparams-serverclient"
                     },
                     {
                         "title": "activate()",
-                        "url": "/docs/controller-lifecycle.html#activate-client"
+                        "url": "/docs/controller-lifecycle#activate-client"
                     },
                     {
                         "title": "update()",
-                        "url": "/docs/controller-lifecycle.html#update-client"
+                        "url": "/docs/controller-lifecycle#update-client"
                     },
                     {
                         "title": "deactivate()",
-                        "url": "/docs/controller-lifecycle.html#deactivate-client"
+                        "url": "/docs/controller-lifecycle#deactivate-client"
                     },
                     {
                         "title": "destroy()",
-                        "url": "/docs/controller-lifecycle.html#destroy-client"
+                        "url": "/docs/controller-lifecycle#destroy-client"
                     }
                 ]
             },
             {
                 "title": "Extensions",
-                "url": "/docs/extensions.html",
+                "url": "/docs/extensions",
                 "submenu": [
                     {
                         "title": "Why use extensions",
-                        "url": "/docs/extensions.html#why-use-extensions"
+                        "url": "/docs/extensions#why-use-extensions"
                     },
                     {
                         "title": "How to use extensions",
-                        "url": "/docs/extensions.html#how-to-use-extensions"
+                        "url": "/docs/extensions#how-to-use-extensions"
                     },
                     {
                         "title": "Passing partial state from controllers",
-                        "url": "/docs/extensions.html#passing-partial-state-from-controllers"
+                        "url": "/docs/extensions#passing-partial-state-from-controllers"
                     }
                 ]
             },
             {
                 "title": "Rendering process",
-                "url": "/docs/rendering-process.html",
+                "url": "/docs/rendering-process",
                 "submenu": [
                     {
                         "title": "DocumentView",
-                        "url": "/docs/rendering-process.html#documentview"
+                        "url": "/docs/rendering-process#documentview"
                     },
                     {
                         "title": "ViewAdapter",
-                        "url": "/docs/rendering-process.html#viewadapter"
+                        "url": "/docs/rendering-process#viewadapter"
                     },
                     {
                         "title": "React Context",
-                        "url": "/docs/rendering-process.html#react-context"
+                        "url": "/docs/rendering-process#react-context"
                     },
                     {
                         "title": "ManagedRootView",
-                        "url": "/docs/rendering-process.html#managedrootview"
+                        "url": "/docs/rendering-process#managedrootview"
                     }
                 ]
             },
             {
                 "title": "Views & Components",
-                "url": "/docs/views-and-components.html",
+                "url": "/docs/views-and-components",
                 "submenu": [
                     {
                         "title": "Organizing Views and Components",
-                        "url": "/docs/views-and-components.html#organizing-views-and-components"
+                        "url": "/docs/views-and-components#organizing-views-and-components"
                     },
                     {
                         "title": "Rendering Views",
-                        "url": "/docs/views-and-components.html#rendering-views"
+                        "url": "/docs/views-and-components#rendering-views"
                     },
                     {
                         "title": "Route parameters in View",
-                        "url": "/docs/views-and-components.html#route-parameters-in-view"
+                        "url": "/docs/views-and-components#route-parameters-in-view"
                     },
                     {
                         "title": "Communication between Views and Controllers",
-                        "url": "/docs/views-and-components.html#communication-between-views-and-controllers"
+                        "url": "/docs/views-and-components#communication-between-views-and-controllers"
                     },
                     {
                         "title": "Utilities shared across Views and Components",
-                        "url": "/docs/views-and-components.html#utilities-shared-across-views-and-components"
+                        "url": "/docs/views-and-components#utilities-shared-across-views-and-components"
                     }
                 ]
             },
             {
                 "title": "EventBus, Dispatcher & Events",
-                "url": "/docs/events.html",
+                "url": "/docs/events",
                 "submenu": [
                     {
                         "title": "EventBus",
-                        "url": "/docs/events.html#eventbus",
+                        "url": "/docs/events#eventbus",
                         "submenu": [
                             {
                                 "title": "Firing EventBus events",
-                                "url": "/docs/events.html#firing-eventbus-events"
+                                "url": "/docs/events#firing-eventbus-events"
                             },
                             {
                                 "title": "Listening to EventBus events",
-                                "url": "/docs/events.html#listening-to-eventbus-events"
+                                "url": "/docs/events#listening-to-eventbus-events"
                             }
                         ]
                     },
                     {
                         "title": "Dispatcher",
-                        "url": "/docs/events.html#dispatcher",
+                        "url": "/docs/events#dispatcher",
                         "submenu": [
                             {
                                 "title": "Firing and listening to Dispatcher events",
-                                "url": "/docs/events.html#firing-and-listening-to-dispatcher-events"
+                                "url": "/docs/events#firing-and-listening-to-dispatcher-events"
                             }
                         ]
                     },
                     {
                         "title": "Built-in events",
-                        "url": "/docs/events.html#built-in-events",
+                        "url": "/docs/events#built-in-events",
                         "submenu": [
                             {
                                 "title": "RouterEvents",
-                                "url": "/docs/events.html#routereventsbefore_handle_route"
+                                "url": "/docs/events#routereventsbefore_handle_route"
                             },
                             {
                                 "title": "StateEvents",
-                                "url": "/docs/events.html#stateeventsbefore_change_state"
+                                "url": "/docs/events#stateeventsbefore_change_state"
                             }
                         ]
                     }
@@ -342,53 +342,53 @@
             },
             {
                 "title": "SEO & MetaManager",
-                "url": "/docs/seo-and-meta-manager.html",
+                "url": "/docs/seo-and-meta-manager",
                 "submenu": [
                     {
                         "title": "Setting and obtaining information from the MetaManager",
-                        "url": "/docs/seo-and-meta-manager.html#setting-and-obtaining-information-from-the-metamanager",
+                        "url": "/docs/seo-and-meta-manager#setting-and-obtaining-information-from-the-metamanager",
                         "submenu": [
                             {
                                 "title": "Managing document title",
-                                "url": "/docs/seo-and-meta-manager.html#managing-document-title---settitle-gettitle"
+                                "url": "/docs/seo-and-meta-manager#managing-document-title---settitle-gettitle"
                             },
                             {
                                 "title": "Configuring meta tags",
-                                "url": "/docs/seo-and-meta-manager.html#configuring-meta-tags---setmetaname-getmetaname-getmetanames"
+                                "url": "/docs/seo-and-meta-manager#configuring-meta-tags---setmetaname-getmetaname-getmetanames"
                             },
                             {
                                 "title": "Configuring meta properties",
-                                "url": "/docs/seo-and-meta-manager.html#configuring-meta-properties---setmetaproperty-getmetaproperty-setmetaproperties"
+                                "url": "/docs/seo-and-meta-manager#configuring-meta-properties---setmetaproperty-getmetaproperty-setmetaproperties"
                             },
                             {
                                 "title": "Configuring links",
-                                "url": "/docs/seo-and-meta-manager.html#configuring-links---setlink-getlink-getlinks"
+                                "url": "/docs/seo-and-meta-manager#configuring-links---setlink-getlink-getlinks"
                             }
                         ]
                     },
                     {
                         "title": "Automatically displaying all information",
-                        "url": "/docs/seo-and-meta-manager.html#automatically-displaying-all-information"
+                        "url": "/docs/seo-and-meta-manager#automatically-displaying-all-information"
                     }
                 ]
             },
             {
                 "title": "Dictionary (i18n & l10n)",
-                "url": "/docs/dictionary.html",
+                "url": "/docs/dictionary",
                 "submenu": [
                     {
                         "title": "Configuration",
-                        "url": "/docs/dictionary.html#configuration"
+                        "url": "/docs/dictionary#configuration"
                     },
                     {
                         "title": "Usage",
-                        "url": "/docs/dictionary.html#usage"
+                        "url": "/docs/dictionary#usage"
                     }
                 ]
             },
             {
                 "title": "Errors",
-                "url": "/docs/errors.html"
+                "url": "/docs/errors"
             }
         ]
     },
@@ -397,27 +397,27 @@
         "menu": [
             {
                 "title": "Plugin Interface",
-                "url": "/docs/plugin-interface.html",
+                "url": "/docs/plugin-interface",
                 "submenu": [
                     {
                         "title": "Interface functions",
-                        "url": "/docs/plugin-interface.html#interface-functions",
+                        "url": "/docs/plugin-interface#interface-functions",
                         "submenu": [
                             {
                                 "title": "Updating build.js",
-                                "url": "/docs/plugin-interface.html#updating-build-js"
+                                "url": "/docs/plugin-interface#updating-build-js"
                             }
                         ]
                     },
                     {
                         "title": "Conclusion",
-                        "url": "/docs/plugin-interface.html#conclusion"
+                        "url": "/docs/plugin-interface#conclusion"
                     }
                 ]
             },
             {
                 "title": "List of available plugins",
-                "url": "/docs/available-plugins.html"
+                "url": "/docs/available-plugins"
             }
         ]
     },
@@ -426,15 +426,15 @@
         "menu": [
             {
                 "title": "Introduction",
-                "url": "/docs/devtools-introduction.html",
+                "url": "/docs/devtools-introduction",
                 "submenu": [
                     {
                         "title": "Panel",
-                        "url": "/docs/devtools-introduction.html#how-it-works",
+                        "url": "/docs/devtools-introduction#how-it-works",
                         "submenu": [
                             {
                                 "title": "Devtools script",
-                                "url": "/docs/devtools-introduction.html#devtools-script"
+                                "url": "/docs/devtools-introduction#devtools-script"
                             }
                         ]
                     }
@@ -442,78 +442,78 @@
             },
             {
                 "title": "User Interface",
-                "url": "/docs/devtools-ui.html",
+                "url": "/docs/devtools-ui",
                 "submenu": [
                     {
                         "title": "Panel",
-                        "url": "/docs/devtools-ui.html#panel",
+                        "url": "/docs/devtools-ui#panel",
                         "submenu": [
                             {
                                 "title": "Search bar",
-                                "url": "/docs/devtools-ui.html#search-bar"
+                                "url": "/docs/devtools-ui#search-bar"
                             },
                             {
                                 "title": "Messages view",
-                                "url": "/docs/devtools-ui.html#messages-view"
+                                "url": "/docs/devtools-ui#messages-view"
                             },
                             {
                                 "title": "Data view",
-                                "url": "/docs/devtools-ui.html#data-view"
+                                "url": "/docs/devtools-ui#data-view"
                             }
                         ]
                     },
                     {
                         "title": "Popup",
-                        "url": "/docs/devtools-ui.html#popup"
+                        "url": "/docs/devtools-ui#popup"
                     },
                     {
                         "title": "Options",
-                        "url": "/docs/devtools-ui.html#options"
+                        "url": "/docs/devtools-ui#options"
                     }
                 ]
             },
             {
                 "title": "Options",
-                "url": "/docs/devtools-options.html",
+                "url": "/docs/devtools-options",
                 "submenu": [
                     {
                         "title": "Quick UI overview",
-                        "url": "/docs/devtools-options.html#quick-ui-overview"
+                        "url": "/docs/devtools-options#quick-ui-overview"
                     },
                     {
                         "title": "Presets modal window",
-                        "url": "/docs/devtools-options.html#presets-modal-window"
+                        "url": "/docs/devtools-options#presets-modal-window"
                     },
                     {
                         "title": "Hooks",
-                        "url": "/docs/devtools-options.html#hooks",
+                        "url": "/docs/devtools-options#hooks",
                         "submenu": [
 
                             {
                                 "title": "Available API",
-                                "url": "/docs/devtools-options.html#available-api"
+                                "url": "/docs/devtools-options#available-api"
                             },
                             {
                                 "title": "aop",
-                                "url": "/docs/devtools-options.html#1-aoptarget-pattern"
+                                "url": "/docs/devtools-options#1-aoptarget-pattern"
                             },
                             {
                                 "title": "createHook",
-                                "url": "/docs/devtools-options.html#2-createhookname-regular-callback"
+                                "url": "/docs/devtools-options#2-createhookname-regular-callback"
                             },
                             {
                                 "title": "emit",
-                                "url": "/docs/devtools-options.html#3-emitidentifier-meta-options-overrides--"
+                                "url": "/docs/devtools-options#3-emitidentifier-meta-options-overrides--"
                             },
                             {
                                 "title": "Message colors",
-                                "url": "/docs/devtools-options.html#message-colors"
+                                "url": "/docs/devtools-options#message-colors"
                             }
                         ]
                     },
                     {
                         "title": "Conclusion",
-                        "url": "/docs/devtools-options.html#conclusion"
+                        "url": "/docs/devtools-options#conclusion"
                     }
                 ]
             }
@@ -524,61 +524,61 @@
         "menu": [
             {
                 "title": "Upgrading to 0.14.0",
-                "url": "/docs/migration-0.14.0.html"
+                "url": "/docs/migration-0.14.0"
             },
             {
                 "title": "Upgrading to 0.15.0",
-                "url": "/docs/migration-0.15.0.html",
+                "url": "/docs/migration-0.15.0",
                 "submenu": [
                     {
                         "title": "Build",
-                        "url": "/docs/migration-0.15.0.html#build"
+                        "url": "/docs/migration-0.15.0#build"
                     },
                     {
                         "title": "Jest replaces karma",
-                        "url": "/docs/migration-0.15.0.html#karma-removed-instead-of-that-added-jest"
+                        "url": "/docs/migration-0.15.0#karma-removed-instead-of-that-added-jest"
                     },
                     {
                         "title": "Server",
-                        "url": "/docs/migration-0.15.0.html#server"
+                        "url": "/docs/migration-0.15.0#server"
                     },
                     {
                         "title": "DocumentView",
-                        "url": "/docs/migration-0.15.0.html#documentview"
+                        "url": "/docs/migration-0.15.0#documentview"
                     },
                     {
                         "title": "SPA",
-                        "url": "/docs/migration-0.15.0.html#spa"
+                        "url": "/docs/migration-0.15.0#spa"
                     },
                     {
                         "title": "Removed namespaces",
-                        "url": "/docs/migration-0.15.0.html#removed-namespaces"
+                        "url": "/docs/migration-0.15.0#removed-namespaces"
                     },
                     {
                         "title": "Others",
-                        "url": "/docs/migration-0.15.0.html#others"
+                        "url": "/docs/migration-0.15.0#others"
                     }
                 ]
             },
             {
                 "title": "Upgrading to 0.16.0",
-                "url": "/docs/migration-0.16.0.html",
+                "url": "/docs/migration-0.16.0",
                 "submenu": [
                     {
                         "title": "Changes in dependencies",
-                        "url": "/docs/migration-0.16.0.html#changes-in-dependencies"
+                        "url": "/docs/migration-0.16.0#changes-in-dependencies"
                     },
                     {
                         "title": "Migration guide",
-                        "url": "/docs/migration-0.16.0.html#migration-guide"
+                        "url": "/docs/migration-0.16.0#migration-guide"
                     },
                     {
                         "title": "Other changes",
-                        "url": "/docs/migration-0.16.0.html#other-changes"
+                        "url": "/docs/migration-0.16.0#other-changes"
                     },
                     {
                         "title": "New Features",
-                        "url": "/docs/migration-0.16.0.html#new-features"
+                        "url": "/docs/migration-0.16.0#new-features"
                     }
                 ]
             }

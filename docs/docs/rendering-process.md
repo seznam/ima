@@ -7,7 +7,7 @@ advantage of. First thing IMA.js will want to render is a **DocumentView**
 followed by **ViewAdapter** and **ManagedRootView**.
 
 <div class="image is-padded-with-shadow">
-  <img src="{{ '/img/docs/diagram-extensions.png?v=' | append: site.github.build_revision | relative_url }}" />
+  <img src="{{ '/img/docs/diagram-rendering.png?v=' | append: site.github.build_revision | relative_url }}" />
 </div>
 
 ## DocumentView
@@ -43,14 +43,14 @@ export default (ns, oc, config) => {
 
 This configuration affects all pages across the
 application. To change DocumentView for an individual route use option 
-`documentView` when registering the route (See [Route options](Routing#4-options)
+`documentView` when registering the route (See [Route options](/docs/routing#4-options)
 for more information). This feature is extremely useful when creating pages 
 that are embedded in an iframe.
 
 If you take a closer look at the contents of the DocumentView you'll see it 
 consists of 3 main HTML elements (`div#page`, `script#revivalSettings` and 
 `script#scripts`). For documentation about the MetaManager and how it's used in 
-the `<meta/>` tags see the [SEO & MetaManager](SEO-&-MetaManager) page.
+the `<meta/>` tags see the [SEO & MetaManager](/docs/seo-and-meta-manager) page.
 
 1. **div#page** - This is the actual point where your application **will mount** with the help of 
 **ViewAdapter**. The whole component tree (starting with the ViewAdapter) is 
@@ -65,7 +65,7 @@ server. The state is embedded into the script tag via the same workaround as
 the component tree.
 
 3. **script#scripts** - This `<script/>` tags takes care of loading all the bundles you've defined in 
-[`app/build.js`](Configuration#build-and-environment-configuration). It also 
+[`app/build.js`](/docs/configuration#build-and-environment-configuration). It also 
 tests if a client browser is capable of running ES6 version of the bundle. For
 more details check the `this.getAsyncScripts()` method.
 
@@ -76,8 +76,7 @@ for the current controller's **View**. The ViewAdapter receives 2 props:
 `state` object which holds the current page state and `view` component that 
 should be rendered with the `state` as input props.
 
-This component is also a great place for creating the React context. Either the 
-old way by using the `getChildContext()` method or the new way by utilizing a 
+This component is also a great place for creating the React context by utilizing a 
 `Provider` from `React.createContext()`.
 
 If you want to customize the ViewAdapter you should extend the base 
@@ -87,7 +86,7 @@ ViewAdapter from `ima/page/renderer/ViewAdapter` and call superior
 **Custom ViewAdapter** can be applied the same way as DocumentView:
 
 1. In `app/config/setting.js`
-2. On a specific route by specifying it in the [route options](Routing#4-options).
+2. On a specific route by specifying it in the [route options](/docs/routing#4-options).
 
 ```javascript
 // app/config/settings.js
@@ -163,10 +162,10 @@ export default class MapManagedRootView extends BlankManagedRootView {
 ```
 
 Then the `MapManagedRootView` can be used in `app/config/setting.js` 
-(property `managedRootView`) or in [route options](Routing#4-options) the same 
+(property `managedRootView`) or in [route options](/docs/routing#4-options) the same 
 way as **DocumentView** or **ViewAdapter**.
 
 As you may have notices `MapManagedRootView` extends `BlankManagedRootView` which is also the default **ManagedRootView** when you don't specify your own. `render()` method of **BlankManagedRootView** simply renders View for current route with props containing current page state. 
 
 Now when you know how a big part of the rendering process goes it's time to
-have a look subsequent [View and Component](Views-&-Components) rendering.
+have a look subsequent [View and Component](/docs/views-and-components) rendering.

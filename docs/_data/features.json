@@ -4,7 +4,7 @@
     "title": "Fully Isomorphic"
   },
   {
-    "text": "Page metadata are centrally managed, allowing easier [management](/docs/seo-and-meta-manager.html) of all your keywords and og meta-tags.",
+    "text": "Page metadata are centrally managed, allowing easier [management](/docs/seo-and-meta-manager) of all your keywords and og meta-tags.",
     "title": "SEO"
   },
   {
@@ -16,7 +16,7 @@
     "title": "Production-ready Full Application Stack"
   },
   {
-    "text": "IMA.js comes with a built-in [router](/docs/routing.html) for processing GET and POST HTTP requests.",
+    "text": "IMA.js comes with a built-in [router](/docs/routing) for processing GET and POST HTTP requests.",
     "title": "Routing"
   },
   {
