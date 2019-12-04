@@ -222,6 +222,16 @@ export default class AbstractRouter extends Router {
    * @inheritdoc
    * @abstract
    */
+  unlisten() {
+    throw new GenericError(
+      'The unlisten() method is abstract and must be overridden.'
+    );
+  }
+
+  /**
+   * @inheritdoc
+   * @abstract
+   */
   redirect() {
     throw new GenericError(
       'The redirect() method is abstract and must be overridden.'

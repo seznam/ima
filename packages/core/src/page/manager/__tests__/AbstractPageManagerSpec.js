@@ -694,17 +694,6 @@ describe('ima.core.page.manager.AbstractPageManager', () => {
   });
 
   describe('_clearComponentState method', () => {
-    it('should call page renderer clearState method if route options documentView and managedRootView are same with last one renderred', () => {
-      spyOn(pageRenderer, 'clearState').and.stub();
-
-      pageManager._clearComponentState({
-        documentView: null,
-        managedRootView: null
-      });
-
-      expect(pageRenderer.clearState).toHaveBeenCalled();
-    });
-
     it('should call page renderer unmount method if route options documentView and managedRootView are not same with last one renderred', () => {
       spyOn(pageRenderer, 'unmount').and.stub();
 

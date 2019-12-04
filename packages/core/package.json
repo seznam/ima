@@ -1,9 +1,10 @@
 {
   "name": "@ima/core",
-  "version": "17.0.0-rc.6",
+  "version": "17.0.0-rc.8",
   "description": "IMA.js framework for isomorphic javascript application",
-  "main": "index.cjs.js",
-  "module": "index.esm.js",
+  "browser": "client.cjs.js",
+  "main": "server.cjs.js",
+  "module": "server.esm.js",
   "scripts": {
     "test": "npm run test:jest && npm run test:es && npm run test:size",
     "test:jest": "../../node_modules/.bin/jest --no-watchman -c jest.conf.js",

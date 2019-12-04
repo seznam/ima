@@ -5,6 +5,7 @@ const path = require('path');
 const chalk = require('chalk');
 const inquirer = require('inquirer');
 const argv = require('yargs').argv;
+const commandExistsSync = require('command-exists').sync;
 const { info, error } = require('../utils/printUtils');
 
 const dir = argv._[0];
@@ -106,8 +107,10 @@ function createImaApp(dirName, exampleName) {
   });
 
   // Init git repo
-  info('Initializing git repository...', true);
-  execa.sync('git', ['init'], { cwd: appRoot });
+  if (commandExistsSync('git')) {
+    info('Initializing git repository...', true);
+    execa.sync('git', ['init'], { cwd: appRoot });
+  }
 
   // Show final info
   info(`${chalk.bold('Success!')} Created ${chalk.cyan(

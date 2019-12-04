@@ -115,6 +115,34 @@ describe('ima.core.page.renderer.ClientPageRenderer', function() {
         });
     });
 
+    it('should overwrite previous state values with undefined', done => {
+      spyOn(controller, 'setState');
+      spyOn(pageRenderer, '_patchStateToClearPreviousState').and.callThrough();
+      spyOn(pageRenderer, '_patchPromisesToState').and.stub();
+
+      pageRenderer._firstTime = false;
+      pageRenderer._reactiveView = {
+        state: { prevParam1: 'param1', param1: '1param' }
+      };
+
+      pageRenderer
+        .mount(controller, view, params, routeOptions)
+        .then(function() {
+          expect(
+            pageRenderer._patchStateToClearPreviousState
+          ).toHaveBeenCalled();
+          expect(controller.setState).toHaveBeenCalledWith({
+            param1: 'param1',
+            prevParam1: undefined
+          });
+          done();
+        })
+        .catch(function(error) {
+          console.error(error);
+          done(error);
+        });
+    });
+
     it('should set page meta params', function(done) {
       spyOn(controller, 'setMetaParams');
       spyOn(controller, 'getState').and.returnValue(pageState);
@@ -299,6 +327,25 @@ describe('ima.core.page.renderer.ClientPageRenderer', function() {
         htmlNode,
         expect.any(Function)
       );
+    });
+  });
+
+  describe('_patchStateToClearPreviousState() method', () => {
+    beforeEach(() => {
+      pageRenderer._reactiveView = {
+        state: { prevParam1: 'param1', param1: '1param' }
+      };
+    });
+
+    it('should set every property from previous state to undefined if not present in new state.', () => {
+      const patchedState = pageRenderer._patchStateToClearPreviousState(
+        pageState
+      );
+
+      expect(patchedState).toEqual({
+        ...pageState,
+        prevParam1: undefined
+      });
     });
   });
 });

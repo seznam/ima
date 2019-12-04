@@ -373,11 +373,23 @@ const defaultNotifyServer = {
   }
 };
 
+exports.webSocketServerConfig = {
+  port: 5888
+};
+
+exports.hotReloadConfig = {
+  watch: ['./build/static/css/*.css', './build/static/js/*.js'],
+  options: {
+    persistent: true
+  },
+  socket: {}
+};
+
 exports.occupiedPorts = {
   server: environment.$Server.port,
   notifyServer: defaultNotifyServer.port,
   livereload: exports.liveServer.port || 35729,
-  'fb-flo': 5888
+  webSocketServer: exports.webSocketServerConfig.port
 };
 
 exports.notifyServer = defaultNotifyServer;
