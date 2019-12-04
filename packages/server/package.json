@@ -28,12 +28,12 @@
   "homepage": "https://github.com/seznam/ima",
   "devDependencies": {
     "@ima/helpers": "^17.0.0-rc.5",
-    "express": "^4.16.4"
+    "express": "^4.17.1"
   },
   "dependencies": {
-    "async-each": "1.0.1",
+    "async-each": "1.0.3",
     "error-to-json": "1.1.0",
-    "highlight.js": "9.13.1",
+    "highlight.js": "9.16.2",
     "stack-trace": "0.0.10",
     "winston": "3.2.1"
   },
