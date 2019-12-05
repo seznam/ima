@@ -4,17 +4,20 @@
 <div id="imajs">
   <div class="is-flex is-flex-column is-limited-width">
     <div class="logo">
-      <figure class="image is-3by1">
+      <figure class="image">
         <img src="{{ '/img/imajs-logo.png?v=' | append: site.github.build_revision | relative_url }}" alt="IMA.js logo">
       </figure>
     </div>
-    <h1 class="title has-text-centered">IMA.js is a framework for creating isomorphic javascript applications.</h1>
+    <h1 class="title has-text-centered">A Javascript framework for creating isomorphic applications.</h1>
     <p class="has-text-centered">
-      <a href="https://github.com/seznam/IMA.js-skeleton/archive/master.zip" class="button is-primary">
+      <a href="/docs/getting-started" class="button is-medium is-primary">
           <span class="icon">
             <i class="fas fa-download"></i>
           </span>
-          <span>Download Latest</span>
+          <span>Get Started</span>
+      </a>
+      <a href="/tutorial/introduction" class="button is-medium is-text">
+          <span>Take a look at the Tutorial</span>
       </a>
     </p>
   </div>
@@ -38,9 +41,33 @@
       <i class="fas fa-caret-down has-text-primary"></i>
     </span>
   </h3>
-  <ul class="has-text-centered">
+  <ul class="inline-features has-text-centered">
     {% for feature in site.data.features-more %}
       {% include feature-more.html text=feature.text %}
+    {% endfor %}
+  </ul>
+</div>
+{% include separator.html icon="fa-plug" %}
+<h2 class="title has-text-centered">Plugins</h2>
+<div id="plugins">
+  <div class="column is-limited-width">
+      <h3 class="title is-4">Full plugin support</h3>
+      <p>
+        IMA.js comes with full support for plugins that can be created very easily through very simple interface. We maintain
+        a list of <a href="https://github.com/seznam/IMA.js-plugins" target="_blank">several plugins</a> that are thoroughly tested and used every day
+        on many of our websites here at <a href="https://www.seznam.cz" target="_blank">Seznam.cz</a> along with huge list of other plugins we use internally.
+      </p>
+  </div>
+  <br>
+  <h3 class="title has-text-centered is-size-4">
+    <span>...notable mentions</span>
+    <span class="icon">
+      <i class="fas fa-caret-down has-text-primary"></i>
+    </span>
+  </h3>
+  <ul class="inline-features has-text-centered">
+    {% for plugin in site.data.notable-plugins %}
+      {% include notable-plugin.html text=plugin.text %}
     {% endfor %}
   </ul>
 </div>
@@ -59,6 +86,16 @@
   </div>
   <div class="columns is-limited-width">
     {% for reference in site.data.references offset:4 limit:2 %}
+      {% include reference.html img=reference.img text=reference.text title=reference.title url=reference.url %}
+    {% endfor %}
+  </div>
+  <div class="columns is-limited-width">
+    {% for reference in site.data.references offset:6 limit:2 %}
+      {% include reference.html img=reference.img text=reference.text title=reference.title url=reference.url %}
+    {% endfor %}
+  </div>
+  <div class="columns is-limited-width">
+    {% for reference in site.data.references offset:8 limit:2 %}
       {% include reference.html img=reference.img text=reference.text title=reference.title url=reference.url %}
     {% endfor %}
   </div>

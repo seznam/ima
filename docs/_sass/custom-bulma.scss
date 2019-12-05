@@ -1,11 +1,19 @@
 @charset "utf-8";
 
 $red: #de0304;
+$dark: #202020;
 
+$body-color: $dark;
 $footer-background-color: hsl(0, 0%, 100%);
 $link: $red;
-$menu-item-active-background-color: $red;
 $navbar-item-active-color: $red;
 $primary: $red;
+
+$menu-item-active-background-color: $red;
+$menu-label-color: #606060 !default
+$menu-label-letter-spacing: 0.05em;
+
+$content-heading-weight: 700;
+$fullhd-enabled: false;
 
 @import "bulma";

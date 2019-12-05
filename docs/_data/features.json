@@ -4,23 +4,23 @@
     "title": "Fully Isomorphic"
   },
   {
-    "text": "Page metadata are centrally managed, allowing easier [management](doc/meta/meta-meta-manager-impl.html) of all your keywords and og meta-tags.",
+    "text": "Page metadata are centrally managed, allowing easier [management](/docs/seo-and-meta-manager) of all your keywords and og meta-tags.",
     "title": "SEO"
   },
   {
-    "text": "Real-world heavy-load web services are run on the IMA.js platform. With hundreds of [unit tests](https://github.com/seznam/IMA.js-core){:target=\"_blank\"} covering all of our code, you can rely on IMA.js to be a stable base of your application.",
+    "text": "Real-world heavy-load web services are run on the IMA.js platform. With hundreds of [unit tests](https://github.com/seznam/ima){:target=\"_blank\"} covering all of our code, you can rely on IMA.js to be a stable base of your application.",
     "title": "Benchmarks and Tests"
   },
   {
-    "text": "Use the familiar MVC pattern in combination with React for rendering your UI. See [Hello](https://github.com/seznam/IMA.js-examples/tree/master/hello){:target=\"_blank\"} example.",
+    "text": "Use the familiar MVC pattern in combination with React for rendering your UI. See [Hello](https://github.com/seznam/ima/tree/master/packages/create-ima-app/examples/hello){:target=\"_blank\"} example.",
     "title": "Production-ready Full Application Stack"
   },
   {
-    "text": "IMA.js comes with a built-in [router](doc/router/router-abstract-router.html) for processing GET and POST HTTP requests.",
+    "text": "IMA.js comes with a built-in [router](/docs/routing) for processing GET and POST HTTP requests.",
     "title": "Routing"
   },
   {
-    "text": "ES2015 (JSX Harmony), Gulp, flo, Live Reaload and other [technologies](#technologies).",
+    "text": "ES2015+ (JSX Harmony), Gulp, Hot Reload and other [technologies](#technologies).",
     "title": "Bleeding Edge Technologies"
   }
 ]

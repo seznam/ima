@@ -1,0 +1,282 @@
+[
+    {
+        "title": "tutorial",
+        "menu": [
+            {
+                "title": "1. Introduction",
+                "url": "/tutorial/introduction",
+                "submenu": [
+                    {
+                        "title": "Setup",
+                        "url": "/tutorial/introduction#setup"
+                    },
+                    {
+                        "title": "Dev server",
+                        "url": "/tutorial/introduction#dev-server",
+                        "submenu": [
+                            {
+                                "title": "ENOSPC error",
+                                "url": "/tutorial/introduction#enospc-error"
+                            }
+                        ]
+                    },
+                    {
+                        "title": "Directories and files in your application",
+                        "url": "/tutorial/introduction#directories-and-files-in-your-application"
+                    }
+                ]
+            },
+            {
+                "title": "2. Static view",
+                "url": "/tutorial/static-view",
+                "submenu": [
+                    {
+                        "title": "View Component",
+                        "url": "/tutorial/static-view#view-component"
+                    },
+                    {
+                        "title": "Guestbook form & SMACSS",
+                        "url": "/tutorial/static-view#guestbook-form--smacss"
+                    },
+                    {
+                        "title": "Styling our form",
+                        "url": "/tutorial/static-view#styling-our-form",
+                        "submenu": [
+                            {
+                                "title": "Defining custom styles",
+                                "url": "/tutorial/static-view#defining-custom-styles"
+                            }
+                        ]
+                    },
+                    {
+                        "title": "Rendering the whole document",
+                        "url": "/tutorial/static-view#rendering-the-whole-document"
+                    },
+                    {
+                        "title": "Notes on ES2015 modules and IMA.js namespaces",
+                        "url": "/tutorial/static-view#notes-on-es2015-modules-and-imajs-namespaces"
+                    }
+                ]
+            },
+            {
+                "title": "3. Adding some state",
+                "url": "/tutorial/adding-some-state",
+                "submenu": [
+                    {
+                        "title": "Controller & error handling",
+                        "url": "/tutorial/adding-some-state#controller--error-handling"
+                    },
+                    {
+                        "title": "Fetching posts",
+                        "url": "/tutorial/adding-some-state#fetching-posts",
+                        "submenu": [
+                            {
+                                "title": "Splitting the render method",
+                                "url": "/tutorial/adding-some-state#splitting-the-render-method"
+                            }
+                        ]
+                    },
+                    {
+                        "title": "Creating new components",
+                        "url": "/tutorial/adding-some-state#creating-new-components"
+                    },
+                    {
+                        "title": "Notes on communication between controllers and views",
+                        "url": "/tutorial/adding-some-state#notes-on-communication-between-controllers-and-views",
+                        "submenu": [
+                            {
+                                "title": "Passing state",
+                                "url": "/tutorial/adding-some-state#passing-state"
+                            },
+                            {
+                                "title": "Emitting events using the EventBus",
+                                "url": "/tutorial/adding-some-state#emitting-events-using-the-eventbus"
+                            },
+                            {
+                                "title": "Emitting events using the Dispatcher",
+                                "url": "/tutorial/adding-some-state#emitting-events-using-the-dispatcher"
+                            }
+                        ]
+                    }
+                ]
+            },
+            {
+                "title": "4. Fetching the data",
+                "url": "/tutorial/fetching-the-data-from-the-server",
+                "submenu": [
+                    {
+                        "title": "Mocking REST API",
+                        "url": "/tutorial/fetching-the-data-from-the-server#mocking-rest-api",
+                        "submenu": [
+                            {
+                                "title": "Entity Class",
+                                "url": "/tutorial/fetching-the-data-from-the-server#entity-class"
+                            },
+                            {
+                                "title": "Factory Class",
+                                "url": "/tutorial/fetching-the-data-from-the-server#factory-class"
+                            },
+                            {
+                                "title": "Resource Class",
+                                "url": "/tutorial/fetching-the-data-from-the-server#resource-class"
+                            },
+                            {
+                                "title": "Service class",
+                                "url": "/tutorial/fetching-the-data-from-the-server#service-class"
+                            }
+                        ]
+                    },
+                    {
+                        "title": "Dependency injection",
+                        "url": "/tutorial/fetching-the-data-from-the-server#dependency-injection",
+                        "submenu": [
+                            {
+                                "title": "Object container & bind.js",
+                                "url": "/tutorial/fetching-the-data-from-the-server#object-container--bindjs"
+                            },
+                            {
+                                "title": "Using PostServices in HomeController",
+                                "url": "/tutorial/fetching-the-data-from-the-server#using-postservices-in-homecontroller"
+                            }
+                        ]
+                    },
+                    {
+                        "title": "Server-side rendering",
+                        "url": "/tutorial/fetching-the-data-from-the-server#server-side-rendering"
+                    }
+                ]
+            },
+            {
+                "title": "5. Writing posts",
+                "url": "/tutorial/writing-posts",
+                "submenu": [
+                    {
+                        "title": "Processing input from user",
+                        "url": "/tutorial/writing-posts#processing-input-from-user"
+                    },
+                    {
+                        "title": "Updating the form",
+                        "url": "/tutorial/writing-posts#updating-the-form"
+                    },
+                    {
+                        "title": "Firing EventBus events",
+                        "url": "/tutorial/writing-posts#firing-eventbus-events"
+                    },
+                    {
+                        "title": "Capturing EventBus events",
+                        "url": "/tutorial/writing-posts#capturing-eventbus-events",
+                        "submenu": [
+                            {
+                                "title": "Updating our post service classes",
+                                "url": "/tutorial/writing-posts#updating-our-post-service-classes"
+                            },
+                            {
+                                "title": "Defining the onPostSubmitted method",
+                                "url": "/tutorial/writing-posts#defining-the-onpostsubmitted-method"
+                            }
+                        ]
+                    },
+                    {
+                        "title": "Updating the API",
+                        "url": "/tutorial/writing-posts#updating-the-api"
+                    }
+                ],
+            },
+            {
+                "title": "6. Final polish",
+                "url": "/tutorial/final-polish",
+                "submenu": [
+                    {
+                        "title": "Improving user experience (UX)",
+                        "url": "/tutorial/final-polish#improving-user-experience-ux"
+                    },
+                    {
+                        "title": "Form validation",
+                        "url": "/tutorial/final-polish#form-validation"
+                    },
+                    {
+                        "title": "Optimistic posting",
+                        "url": "/tutorial/final-polish#optimistic-posting",
+                        "submenu": [
+                            {
+                                "title": "Updating the service classes & home controller",
+                                "url": "/tutorial/final-polish#updating-the-service-classes--home-controller"
+                            },
+                            {
+                                "title": "Displaying pending posts",
+                                "url": "/tutorial/final-polish#displaying-pending-posts"
+                            },
+                            {
+                                "title": "Recap",
+                                "url": "/tutorial/final-polish#recap"
+                            },
+                            {
+                                "title": "Updating view components",
+                                "url": "/tutorial/final-polish#updating-view-components"
+                            }
+                        ]
+                    },
+                    {
+                        "title": "Auto-refresh",
+                        "url": "/tutorial/final-polish#auto-refresh",
+                        "submenu": [
+
+                            {
+                                "title": "REST API pooling",
+                                "url": "/tutorial/final-polish#rest-api-pooling"
+                            },
+                            {
+                                "title": "Random generators",
+                                "url": "/tutorial/final-polish#random-generators"
+                            },
+                            {
+                                "title": "Random name generator",
+                                "url": "/tutorial/final-polish#random-name-generator"
+                            },
+                            {
+                                "title": "Random post generator",
+                                "url": "/tutorial/final-polish#random-post-generator"
+                            },
+                            {
+                                "title": "Updating the MockHttpAgent",
+                                "url": "/tutorial/final-polish#updating-the-mockhttpagent"
+                            }
+                        ]
+                    },
+                    {
+                        "title": "Handling race conditions",
+                        "url": "/tutorial/final-polish#handling-race-conditions",
+                        "submenu": [
+                            {
+                                "title": "Pending posts race condition",
+                                "url": "/tutorial/final-polish#pending-posts-race-condition"
+                            },
+                            {
+                                "title": "Posts refresh race condition",
+                                "url": "/tutorial/final-polish#posts-refresh-race-condition"
+                            }
+                        ]
+                    },
+                    {
+                        "title": "Animations",
+                        "url": "/tutorial/final-polish#animations",
+                        "submenu": [
+                            {
+                                "title": "Retaining original post ID",
+                                "url": "/tutorial/final-polish#retaining-original-post-id"
+                            },
+                            {
+                                "title": "Animating new posts",
+                                "url": "/tutorial/final-polish#animating-new-posts"
+                            }
+                        ]
+                    },
+                    {
+                        "title": "Conclusion",
+                        "url": "/tutorial/final-polish#conclusion"
+                    }
+                ]
+            }
+        ]
+    }
+]

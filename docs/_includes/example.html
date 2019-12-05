@@ -4,7 +4,7 @@
       <p class="card-header-title is-centered">{{ include.title }}</p>
     </div>
     <div class="card-image">
-      <figure class="image is-5by3">
+      <figure class="image is-padded-with-shadow is-5by3">
         <img src="{{ include.img | append: '?v=' | append: site.github.build_revision | relative_url }}" alt="{{ include.title }} Screenhot">
       </figure>
     </div>
