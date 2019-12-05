@@ -52,7 +52,7 @@ module.exports = function(fileInfo, api, options) {
             if (!EXCEPTIONS.includes(path.value.source.value)) {
               if (!MAP.allAs) {
                 console.error(
-                  `All keys from file '${path.value.source.value}' are no longer exported. You have to access them directly, or import them from '@ima/core'. Be aware, that the desired keys may no longer exist and you may need to find their replacement. Check '${fileInfo.path}' and fix the error manually.`
+                  `All keys from file '${path.value.source.value}' are no longer exported. You have to access specific keys directly, or import whole '@ima/core'. Be aware, that the desired keys may no longer exist and you may need to find their replacement. Check '${fileInfo.path}' and fix the error manually.`
                 );
                 path.canBeDeleted = false;
                 return;

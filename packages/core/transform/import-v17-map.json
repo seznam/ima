@@ -7,6 +7,14 @@
         "keys": [],
         "defaultKey": "ns"
     },
+    "ima/ObjectContainer": {
+        "keys": [],
+        "defaultKey": "ObjectContainer"
+    },
+    "ima/Bootstrap": {
+        "keys": [],
+        "defaultKey": "Bootstrap"
+    },
     "ima/cache/Cache": {
         "keys": [],
         "defaultKey": "Cache"
@@ -165,7 +173,7 @@
     },
     "ima/page/renderer/Events": {
         "keys": [],
-        "allAs": "RendererEvents"
+        "defaultKey": "RendererEvents"
     },
     "ima/page/renderer/PageRenderer": {
         "keys": [],
@@ -189,7 +197,7 @@
     },
     "ima/page/state/Events": {
         "keys": [],
-        "allAs": "StateEvents"
+        "defaultKey": "StateEvents"
     },
     "ima/page/state/PageStateManager": {
         "keys": [],
@@ -249,7 +257,7 @@
     },
     "ima/router/Events": {
         "keys": [],
-        "allAs": "RouterEvents"
+        "defaultKey": "RouterEvents"
     },
     "ima/router/Request": {
         "keys": [],
@@ -283,13 +291,17 @@
         "keys": [],
         "defaultKey": "CookieStorage"
     },
-    "ima/storage/SessionStorage": {
+    "ima/storage/MapStorage": {
         "keys": [],
-        "defaultKey": "SessionStorage"
+        "defaultKey": "MapStorage"
     },
     "ima/storage/SessionMapStorage": {
         "keys": [],
         "defaultKey": "SessionMapStorage"
+    },
+    "ima/storage/SessionStorage": {
+        "keys": [],
+        "defaultKey": "SessionStorage"
     },
     "ima/storage/Storage": {
         "keys": [],
