@@ -8,6 +8,10 @@
     "build": "webpack --config webpack.prod.js",
     "dev": "webpack --watch --progress --config webpack.dev.js"
   },
+  "publishConfig": {
+    "registry": "https://registry.npmjs.org/",
+    "access": "public"
+  },
   "author": "Miroslav Jancarik <miroslav.jancarik@firma.seznam.cz>",
   "contributors": [
     {

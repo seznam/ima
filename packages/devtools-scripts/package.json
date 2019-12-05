@@ -11,6 +11,10 @@
     "build": "npm run build:script && npm run build:string",
     "watch": "NODE_ENV=es rollup -c -w -o es/main.js"
   },
+  "publishConfig": {
+    "registry": "https://registry.npmjs.org/",
+    "access": "public"
+  },
   "author": "Miroslav Jancarik <miroslav.jancarik@firma.seznam.cz>",
   "contributors": [
     {
