@@ -15,8 +15,6 @@ export default class ViewAdapter extends React.Component {
     return null;
   }
 
-  static getDerivedStateFromError() {}
-
   /**
    * Initializes the adapter component.
    *
@@ -50,15 +48,6 @@ export default class ViewAdapter extends React.Component {
      */
     this._getContextValue = memoizeOne(props => this.getContextValue(props));
   }
-
-  /**
-   * Fixes an issue where when there's an error in React component,
-   * the defined ErrorPage may not get re-rendered and white
-   * blank page appears instead.
-   *
-   * @inheritdoc
-   */
-  componentDidCatch() {}
 
   getContextValue(props) {
     return { $Utils: props.$Utils };

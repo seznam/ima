@@ -1,6 +1,6 @@
 {
   "name": "create-ima-app",
-  "version": "17.0.0-rc.8",
+  "version": "17.0.0-rc.9",
   "description": "Create a IMA.js App easily.",
   "bin": {
     "create-ima-app": "./bin/create-ima-app.js"
@@ -42,11 +42,11 @@
   },
   "license": "MIT",
   "dependencies": {
-    "chalk": "^2.4.2",
+    "chalk": "^3.0.0",
     "command-exists": "^1.2.8",
-    "execa": "^2.0.5",
+    "execa": "^3.4.0",
     "fs-extra": "^8.1.0",
     "inquirer": "^7.0.0",
-    "yargs": "^14.2.0"
+    "yargs": "^15.0.2"
   }
 }
