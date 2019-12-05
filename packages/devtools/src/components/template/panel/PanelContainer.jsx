@@ -1,0 +1,18 @@
+import { connect } from 'react-redux';
+import { actions } from 'slices/entries';
+import Panel from './Panel';
+
+const mapStateToProps = state => ({
+  isLoading: state.entries.isLoading,
+  status: state.entries.status
+});
+
+export default connect(mapStateToProps, {
+  alive: actions.alive,
+  dead: actions.dead,
+  reload: actions.reload,
+  clearEntries: actions.clearEntries,
+  addEntries: actions.addEntries,
+  selectNext: actions.selectNext,
+  selectPrevious: actions.selectPrevious
+})(Panel);

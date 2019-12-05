@@ -1,0 +1,38 @@
+.wrapper {
+  display: flex;
+
+  width: 100%;
+  height: 90vh;
+
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+.loaderIcon {
+  position: relative;
+
+  border-radius: 50%;
+
+  border-top: 4px solid var(--color-primary);
+  border-right: 4px solid transparent;
+
+  width: 60px;
+  height: 60px;
+
+  animation: rotation 0.8s linear infinite;
+}
+
+.title {
+  margin-top: 20px;
+}
+
+@keyframes rotation {
+  from {
+    transform: rotate(0deg);
+  }
+
+  to {
+    transform: rotate(360deg);
+  }
+}

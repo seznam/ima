@@ -1,0 +1,32 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Loader atom defaultProps should match snapshot 1`] = `
+Object {
+  "title": null,
+}
+`;
+
+exports[`Loader atom should match snapshot 1`] = `
+<div
+  className="wrapper"
+>
+  <div
+    className="loaderIcon"
+  />
+</div>
+`;
+
+exports[`Loader atom should render title if provided 1`] = `
+<div
+  className="wrapper"
+>
+  <div
+    className="loaderIcon"
+  />
+  <p
+    className="title"
+  >
+    Loading...
+  </p>
+</div>
+`;

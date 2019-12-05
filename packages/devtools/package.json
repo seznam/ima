@@ -1,0 +1,63 @@
+{
+  "name": "@ima/devtools",
+  "version": "0.1.0",
+  "description": "",
+  "main": "dist/main.js",
+  "scripts": {
+    "test": "../../node_modules/.bin/jest --no-watchman -c jest.conf.js",
+    "build": "webpack --config webpack.prod.js",
+    "dev": "webpack --watch --progress --config webpack.dev.js"
+  },
+  "author": "Miroslav Jancarik <miroslav.jancarik@firma.seznam.cz>",
+  "contributors": [
+    {
+      "name": "Jan Simecek",
+      "email": "jan.simecek@firma.seznam.cz"
+    }
+  ],
+  "devDependencies": {
+    "@babel/core": "^7.6.2",
+    "@babel/plugin-external-helpers": "^7.2.0",
+    "@babel/preset-env": "^7.6.2",
+    "@babel/preset-react": "^7.0.0",
+    "autoprefixer": "^9.6.4",
+    "babel-loader": "^8.0.6",
+    "clean-webpack-plugin": "^3.0.0",
+    "copy-webpack-plugin": "^5.0.4",
+    "css-loader": "^3.2.0",
+    "cssnano": "^4.1.10",
+    "enzyme": "^3.10.0",
+    "enzyme-adapter-react-16": "^1.14.0",
+    "enzyme-to-json": "^3.4.2",
+    "file-loader": "^4.2.0",
+    "identity-obj-proxy": "^3.0.0",
+    "less": "^3.10.3",
+    "less-loader": "^5.0.0",
+    "mini-css-extract-plugin": "^0.8.0",
+    "postcss-loader": "^3.0.0",
+    "terser-webpack-plugin": "^2.1.2",
+    "webpack": "^4.41.0",
+    "webpack-cli": "^3.3.9",
+    "webpack-merge": "^4.2.2"
+  },
+  "license": "ISC",
+  "dependencies": {
+    "@ima/devtools-scripts": "1.0.0",
+    "@reach/menu-button": "^0.5.0",
+    "@reach/tooltip": "^0.5.0",
+    "classnames": "^2.2.6",
+    "easy-uid": "^1.0.1",
+    "lodash.debounce": "^4.0.8",
+    "nanoreset": "^4.0.0",
+    "prismjs": "^1.17.1",
+    "prop-types": "^15.7.2",
+    "react": "^16.10.2",
+    "react-dom": "^16.10.2",
+    "react-json-view": "^1.19.1",
+    "react-redux": "^7.1.1",
+    "react-simple-code-editor": "^0.10.0",
+    "react-tabs": "^3.0.0",
+    "redux": "^4.0.4",
+    "redux-starter-kit": "^0.7.0"
+  }
+}

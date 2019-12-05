@@ -12,6 +12,8 @@ jobs:
       script: npm test
     - name: "Lint"
       script: npm run lint
+    - name: "Stylelint"
+      script: npm run stylelint
     - name: "Docs"
       script: npm run doc
     - name: "Benchmark Test"

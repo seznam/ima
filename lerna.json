@@ -9,7 +9,9 @@
     }
   },
   "packages": [
-    "packages/!(skeleton)"
+    "packages/!(skeleton)",
+    "packages/!(devtools)",
+    "packages/!(devtools-scripts)"
   ],
   "version": "17.0.0-rc.9"
 }

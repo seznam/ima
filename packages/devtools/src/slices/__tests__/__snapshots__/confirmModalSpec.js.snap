@@ -1,0 +1,10 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`confirmModalInitialState should match snapshot 1`] = `
+Object {
+  "accept": null,
+  "body": "",
+  "cancel": null,
+  "opened": false,
+}
+`;
