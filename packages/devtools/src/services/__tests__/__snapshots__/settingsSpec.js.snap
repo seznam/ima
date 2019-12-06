@@ -8,8 +8,8 @@ Object {
       "editable": false,
       "hooks": Object {
         "k2rtjo03-b4d8f22f-1e84-4d7a-aba3-b4ee9ee601a4": Object {
-          "code": "let ImaControllerInterface = importIMAClass('ima/controller/Controller');
-let ImaExtensionInterface = importIMAClass('ima/extension/Extension');
+          "code": "let ImaControllerInterface = importIMAClass('@ima/core', 'Controller');
+let ImaExtensionInterface = importIMAClass('@ima/core', 'Extension');
 
 Object.keys($IMA.Loader.modules)
   .filter(namespace => namespace !== 'app/main')
@@ -54,7 +54,7 @@ Object.keys($IMA.Loader.modules)
           "opened": false,
         },
         "k2rtk252-929a2561-677e-43e7-851d-167faeda16d2": Object {
-          "code": "let Dispatcher = importIMAClass('ima/event/DispatcherImpl');
+          "code": "let Dispatcher = importIMAClass('@ima/core', 'DispatcherImpl');
 
 aop(
   Dispatcher,
@@ -93,7 +93,7 @@ aop(
           "opened": false,
         },
         "k2rtk5c4-f5d98f8c-d694-4831-a348-d3ea36127d8d": Object {
-          "code": "let EventBus = importIMAClass('ima/event/EventBusImpl');
+          "code": "let EventBus = importIMAClass('@ima/core', 'EventBusImpl');
 
 aop(
   EventBus,
@@ -134,7 +134,7 @@ aop(
           "opened": false,
         },
         "k2rtkaij-0e302928-c1c1-4710-b202-a9b6aac66507": Object {
-          "code": "let ClientPageManager = importIMAClass('ima/page/manager/ClientPageManager');
+          "code": "let ClientPageManager = importIMAClass('@ima/core', 'ClientPageManager');
 
 aop(
   ClientPageManager,
@@ -155,7 +155,7 @@ aop(
           "opened": false,
         },
         "k2rtkf8v-a8f1654e-bfcf-404f-916d-073d48f3f151": Object {
-          "code": "let PageHandlerRegistry = importIMAClass('ima/page/handler/PageHandlerRegistry');
+          "code": "let PageHandlerRegistry = importIMAClass('@ima/core', 'PageHandlerRegistry');
 
 aop(
   PageHandlerRegistry,
@@ -178,7 +178,7 @@ aop(
           "opened": false,
         },
         "k2rtkjn3-b070cb12-3411-4e15-98af-6fc390e21741": Object {
-          "code": "let PageNavigationHandler = importIMAClass('ima/page/handler/PageNavigationHandler');
+          "code": "let PageNavigationHandler = importIMAClass('@ima/core', 'PageNavigationHandler');
 
 aop(
   PageNavigationHandler,
@@ -201,7 +201,7 @@ aop(
           "opened": false,
         },
         "k2rtkoem-95fc6f66-59c2-4b33-a7ad-a6efef2ebef2": Object {
-          "code": "let Http = importIMAClass('ima/http/HttpAgentImpl');
+          "code": "let Http = importIMAClass('@ima/core', 'HttpAgentImpl');
 
 aop(
   Http,
