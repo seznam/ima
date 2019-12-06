@@ -581,6 +581,40 @@
                         "url": "/docs/migration-0.16.0#new-features"
                     }
                 ]
+            },
+            {
+                "title": "Upgrading to 17.0.0",
+                "url": "/docs/migration-17.0.0",
+                "submenu": [
+                    {
+                        "title": "Imports",
+                        "url": "/docs/migration-17.0.0#imports"
+                    },
+                    {
+                        "title": "Context API",
+                        "url": "/docs/migration-17.0.0#context-api"
+                    },
+                    {
+                        "title": "Utils Registration",
+                        "url": "/docs/migration-17.0.0#utils-registration"
+                    },
+                    {
+                        "title": "IMA.js bundle for client/server",
+                        "url": "/docs/migration-17.0.0#imajs-bundle-for-clientserver"
+                    },
+                    {
+                        "title": "Language Key in Config",
+                        "url": "/docs/migration-17.0.0#language-key-in-config"
+                    },
+                    {
+                        "title": "Hot Reload",
+                        "url": "/docs/migration-17.0.0#hot-reload"
+                    },
+                    {
+                        "title": "IMA.js Plugins",
+                        "url": "/docs/migration-17.0.0#ima-js-plugins"
+                    }
+                ]
             }
         ]
     }
