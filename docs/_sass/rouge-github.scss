@@ -23,9 +23,9 @@ pre code {
 	background: none;
 	font-size: 13px;
 	white-space: pre;
-	white-space: pre-wrap;
 	word-break: break-all;
 	word-wrap: break-word;
+	overflow: auto;
 }
 
 .highlight     {
