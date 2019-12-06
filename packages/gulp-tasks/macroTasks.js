@@ -6,7 +6,7 @@ const DEFAULT_DEV_SUBTASKS = [
   'watch:releasePorts',
   ['copy:appStatic', 'copy:environment', 'shim', 'polyfill'],
   ['Es6ToEs5:app', 'Es6ToEs5:server', 'Es6ToEs5:vendor'],
-  ['less', 'doc', 'locale', 'Es6ToEs5:vendor:client'],
+  ['less', 'locale', 'Es6ToEs5:vendor:client'],
   ['server', 'server:websocket'],
   ['watch']
 ];
@@ -27,7 +27,7 @@ const DEFAULT_BUILD_SUBTASKS = [
 const DEFAULT_SPA_SUBTASKS = [
   ['copy:appStatic', 'shim', 'polyfill'],
   ['Es6ToEs5:app', 'Es6ToEs5:vendor'],
-  ['less', 'doc', 'locale', 'Es6ToEs5:vendor:client'],
+  ['less', 'locale', 'Es6ToEs5:vendor:client'],
   ['bundle:js:app', 'bundle:es:app', 'bundle:css', 'spa:compile'],
   'spa:clean'
 ];
