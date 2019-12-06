@@ -1,4 +1,4 @@
-import { createSlice } from 'redux-starter-kit';
+import { createSlice } from '@reduxjs/toolkit';
 import uid from 'easy-uid';
 
 export const alertsInitialState = {
@@ -6,7 +6,7 @@ export const alertsInitialState = {
 };
 
 const alerts = createSlice({
-  slice: 'alerts',
+  name: 'alerts',
   initialState: alertsInitialState,
   reducers: {
     showAlert(state, { payload }) {

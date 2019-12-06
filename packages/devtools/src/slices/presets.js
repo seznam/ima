@@ -1,4 +1,4 @@
-import { createSelector, createSlice } from 'redux-starter-kit';
+import { createSelector, createSlice } from '@reduxjs/toolkit';
 import uid from 'easy-uid';
 
 export const presetsInitialState = {
@@ -11,7 +11,7 @@ const getCurrentPreset = state => {
 };
 
 const presets = createSlice({
-  slice: 'presets',
+  name: 'presets',
   initialState: presetsInitialState,
   reducers: {
     // Presets actions

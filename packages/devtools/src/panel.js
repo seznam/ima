@@ -1,7 +1,7 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import { Provider } from 'react-redux';
-import { combineReducers } from 'redux-starter-kit';
+import { combineReducers } from '@reduxjs/toolkit';
 import { createStore } from 'redux';
 
 import { reducer } from 'slices/entries';

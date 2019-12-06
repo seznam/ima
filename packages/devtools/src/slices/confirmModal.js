@@ -1,4 +1,4 @@
-import { createSlice } from 'redux-starter-kit';
+import { createSlice } from '@reduxjs/toolkit';
 
 export const confirmModalInitialState = {
   body: '',
@@ -8,7 +8,7 @@ export const confirmModalInitialState = {
 };
 
 const confirmModal = createSlice({
-  slice: 'confirmModal',
+  name: 'confirmModal',
   initialState: confirmModalInitialState,
   reducers: {
     showConfirmModal(state, { payload: { body, accept, cancel } }) {

@@ -1,6 +1,6 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import { configureStore, getDefaultMiddleware } from 'redux-starter-kit';
+import { configureStore, getDefaultMiddleware } from '@reduxjs/toolkit';
 import { reducer as confirmModalReducer } from 'slices/confirmModal';
 import { reducer as presetsReducer } from 'slices/presets';
 import { reducer as alertsReducer } from 'slices/alerts';

@@ -1,4 +1,4 @@
-import { createSelector, createSlice } from 'redux-starter-kit';
+import { createSelector, createSlice } from '@reduxjs/toolkit';
 
 export const entriesInitialState = {
   entryIdsByQuery: [],
@@ -83,7 +83,7 @@ const updateEntryIdsByQuery = state => {
 };
 
 const entries = createSlice({
-  slice: 'entries',
+  name: 'entries',
   initialState: entriesInitialState,
   reducers: {
     addEntries(state, action) {

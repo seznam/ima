@@ -23,10 +23,10 @@
     }
   ],
   "devDependencies": {
-    "@babel/cli": "^7.6.2",
-    "@babel/core": "^7.6.2",
-    "@babel/plugin-transform-template-literals": "^7.4.4",
-    "rollup": "^1.22.0",
+    "@babel/cli": "^7.7.4",
+    "@babel/core": "^7.7.4",
+    "@babel/plugin-transform-template-literals": "^7.7.4",
+    "rollup": "^1.27.8",
     "rollup-plugin-commonjs": "^10.1.0",
     "rollup-plugin-node-resolve": "^5.2.0",
     "rollup-plugin-uglify": "^6.0.3"
