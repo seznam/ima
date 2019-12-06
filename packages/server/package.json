@@ -1,6 +1,6 @@
 {
   "name": "@ima/server",
-  "version": "17.0.0-rc.9",
+  "version": "17.0.0",
   "description": "Default dev server for IMA.js applications.",
   "main": "index.js",
   "scripts": {
@@ -27,7 +27,7 @@
   },
   "homepage": "https://github.com/seznam/ima",
   "devDependencies": {
-    "@ima/helpers": "^17.0.0-rc.5",
+    "@ima/helpers": "^17.0.0",
     "express": "^4.17.1"
   },
   "dependencies": {

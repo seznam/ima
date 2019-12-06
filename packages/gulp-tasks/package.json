@@ -1,6 +1,6 @@
 {
   "name": "@ima/gulp-tasks",
-  "version": "17.0.0-rc.9",
+  "version": "17.0.0",
   "description": "Default gulp tasks for IMA.js applications.",
   "main": "",
   "scripts": {
@@ -31,7 +31,7 @@
     "@ima/plugin-websocket": "^0.x"
   },
   "devDependencies": {
-    "@ima/helpers": "^17.0.0-rc.5",
+    "@ima/helpers": "^17.0.0",
     "@ima/plugin-websocket": "^0.1.0"
   },
   "dependencies": {
