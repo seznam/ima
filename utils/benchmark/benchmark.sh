@@ -26,7 +26,7 @@ for PACKAGE in $PACKAGES ; do
     sed -i "s#\"version\":\s\".*\"#\"version\": \"$PACKAGE_VERSION\"#" package.json
 
     for PACKAGE_UPDATE in $PACKAGES ; do
-        sed -i "s#\"$PACKAGE_UPDATE\":\s\".*\"#\"$PACKAGE_UPDATE\": \"$PACKAGE_VERSION\"#" package.json
+        sed -i "s#\"@ima/$PACKAGE_UPDATE\":\s\".*\"#\"@ima/$PACKAGE_UPDATE\": \"$PACKAGE_VERSION\"#" package.json
     done
 
     sed -i "s#https://registry.npmjs.org/#${NPM_LOCAL_REGISTRY_URL}#" package.json
