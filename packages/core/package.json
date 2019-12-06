@@ -81,11 +81,11 @@
   },
   "size-limit": [
     {
-      "limit": "1 s",
+      "limit": "1500 ms",
       "path": "dist/ima.client.cjs.js"
     },
     {
-      "limit": "1 s",
+      "limit": "1500 ms",
       "path": "dist/ima.client.esm.js"
     }
   ]
