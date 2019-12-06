@@ -2,6 +2,19 @@ import { aop, createHook, hookName, createCallTrap } from 'to-aop';
 import uid from 'easy-uid';
 import DevToolManager from './DevToolManager';
 
+const ImaMainModules = [
+  'onLoad',
+  'getInitialImaConfigFunctions',
+  'getNamespace',
+  'getInitialPluginConfig',
+  'createImaApp',
+  'getClientBootConfig',
+  'bootClientApp',
+  'routeClientApp',
+  'hotReloadClientApp',
+  'reviveClientApp'
+];
+
 // eslint-disable-next-line no-unused-vars
 function createDevtool(registerHook) {
   $IMA.devtool = $IMA.devtool || {};
@@ -182,21 +195,21 @@ function createDevtool(registerHook) {
       }
     );
 
-    // TODO CHANGE FOR IMA@17
-    let imaMain = importIMAClass('ima/main');
+    let imaCore = importIMAClass('@ima/core');
+    ImaMainModules.forEach(moduleName => {
+      const key = `__${moduleName}__`;
 
-    Object.keys(imaMain).forEach(property => {
-      const key = `__${property}__`;
-      Object.defineProperty(imaMain, key, {
-        value: imaMain[property],
+      Object.defineProperty(imaCore, key, {
+        value: imaCore[moduleName],
         enumerable: false,
         configurable: false,
         writable: false
       });
-      imaMain[key] = imaMain[property];
-      imaMain[property] = createCallTrap({
-        target: imaMain,
-        object: imaMain,
+
+      imaCore[key] = imaCore[moduleName];
+      imaCore[moduleName] = createCallTrap({
+        target: imaCore,
+        object: imaCore,
         property: key,
         pattern: revivePattern
       });
