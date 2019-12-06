@@ -3,7 +3,7 @@ category: "page/renderer"
 title: "ViewAdapter"
 ---
 
-## ViewAdapter&nbsp;<a name="ViewAdapter" href="https://github.com/seznam/ima/tree/17.0.0/page/renderer/ViewAdapter.js#L27" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a>
+## ViewAdapter&nbsp;<a name="ViewAdapter" href="https://github.com/seznam/ima/tree/17.0.1/page/renderer/ViewAdapter.js#L27" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a>
 An adapter component providing the current page controller's state to the
 page view component through its properties.
 
@@ -30,28 +30,28 @@ Initializes the adapter component.
 
 * * *
 
-### viewAdapter.state : <code>Object.&lt;string, \*&gt;</code>&nbsp;<a name="ViewAdapter+state" href="https://github.com/seznam/ima/tree/17.0.0/page/renderer/ViewAdapter.js#L35" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a>
+### viewAdapter.state : <code>Object.&lt;string, \*&gt;</code>&nbsp;<a name="ViewAdapter+state" href="https://github.com/seznam/ima/tree/17.0.1/page/renderer/ViewAdapter.js#L35" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a>
 The current page state as provided by the controller.
 
 **Kind**: instance property of [<code>ViewAdapter</code>](#ViewAdapter)  
 
 * * *
 
-### viewAdapter.\_view : <code>function</code>&nbsp;<a name="ViewAdapter+_view" href="https://github.com/seznam/ima/tree/17.0.0/page/renderer/ViewAdapter.js#L42" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a>
+### viewAdapter.\_view : <code>function</code>&nbsp;<a name="ViewAdapter+_view" href="https://github.com/seznam/ima/tree/17.0.1/page/renderer/ViewAdapter.js#L42" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a>
 The actual page view to render.
 
 **Kind**: instance property of [<code>ViewAdapter</code>](#ViewAdapter)  
 
 * * *
 
-### viewAdapter.\_getContextValue : <code>function</code>&nbsp;<a name="ViewAdapter+_getContextValue" href="https://github.com/seznam/ima/tree/17.0.0/page/renderer/ViewAdapter.js#L49" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a>
+### viewAdapter.\_getContextValue : <code>function</code>&nbsp;<a name="ViewAdapter+_getContextValue" href="https://github.com/seznam/ima/tree/17.0.1/page/renderer/ViewAdapter.js#L49" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a>
 The memoized context value.
 
 **Kind**: instance property of [<code>ViewAdapter</code>](#ViewAdapter)  
 
 * * *
 
-### viewAdapter.render()&nbsp;<a name="ViewAdapter+render" href="https://github.com/seznam/ima/tree/17.0.0/page/renderer/ViewAdapter.js#L59" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a>
+### viewAdapter.render()&nbsp;<a name="ViewAdapter+render" href="https://github.com/seznam/ima/tree/17.0.1/page/renderer/ViewAdapter.js#L59" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a>
 **Kind**: instance method of [<code>ViewAdapter</code>](#ViewAdapter)  
 
 * * *

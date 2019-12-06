@@ -22,7 +22,7 @@ title: "AbstractPageManager"
 </dd>
 </dl>
 
-## AbstractPageManager&nbsp;<a name="AbstractPageManager" href="https://github.com/seznam/ima/tree/17.0.0/page/manager/AbstractPageManager.js#L58" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a>
+## AbstractPageManager&nbsp;<a name="AbstractPageManager" href="https://github.com/seznam/ima/tree/17.0.1/page/manager/AbstractPageManager.js#L58" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a>
 Page manager for controller.
 
 **Kind**: global class  
@@ -86,7 +86,7 @@ Initializes the page manager.
 
 * * *
 
-### abstractPageManager.\_pageFactory : <code>PageFactory</code>&nbsp;<a name="AbstractPageManager+_pageFactory" href="https://github.com/seznam/ima/tree/17.0.0/page/manager/AbstractPageManager.js#L74" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a>
+### abstractPageManager.\_pageFactory : <code>PageFactory</code>&nbsp;<a name="AbstractPageManager+_pageFactory" href="https://github.com/seznam/ima/tree/17.0.1/page/manager/AbstractPageManager.js#L74" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a>
 Factory used by the page manager to create instances of the
 controller for the current route, and decorate the controllers and
 page state managers.
@@ -96,7 +96,7 @@ page state managers.
 
 * * *
 
-### abstractPageManager.\_pageRenderer : <code>PageRenderer</code>&nbsp;<a name="AbstractPageManager+_pageRenderer" href="https://github.com/seznam/ima/tree/17.0.0/page/manager/AbstractPageManager.js#L82" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a>
+### abstractPageManager.\_pageRenderer : <code>PageRenderer</code>&nbsp;<a name="AbstractPageManager+_pageRenderer" href="https://github.com/seznam/ima/tree/17.0.1/page/manager/AbstractPageManager.js#L82" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a>
 The current renderer of the page.
 
 **Kind**: instance property of [<code>AbstractPageManager</code>](#AbstractPageManager)  
@@ -104,7 +104,7 @@ The current renderer of the page.
 
 * * *
 
-### abstractPageManager.\_pageStateManager : <code>PageStateManager</code>&nbsp;<a name="AbstractPageManager+_pageStateManager" href="https://github.com/seznam/ima/tree/17.0.0/page/manager/AbstractPageManager.js#L90" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a>
+### abstractPageManager.\_pageStateManager : <code>PageStateManager</code>&nbsp;<a name="AbstractPageManager+_pageStateManager" href="https://github.com/seznam/ima/tree/17.0.1/page/manager/AbstractPageManager.js#L90" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a>
 The current page state manager.
 
 **Kind**: instance property of [<code>AbstractPageManager</code>](#AbstractPageManager)  
@@ -112,7 +112,7 @@ The current page state manager.
 
 * * *
 
-### abstractPageManager.\_pageHandlerRegistry : <code>PageHandlerRegistry</code>&nbsp;<a name="AbstractPageManager+_pageHandlerRegistry" href="https://github.com/seznam/ima/tree/17.0.0/page/manager/AbstractPageManager.js#L98" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a>
+### abstractPageManager.\_pageHandlerRegistry : <code>PageHandlerRegistry</code>&nbsp;<a name="AbstractPageManager+_pageHandlerRegistry" href="https://github.com/seznam/ima/tree/17.0.1/page/manager/AbstractPageManager.js#L98" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a>
 A registry that holds a list of pre-manage and post-manage handlers.
 
 **Kind**: instance property of [<code>AbstractPageManager</code>](#AbstractPageManager)  
@@ -120,7 +120,7 @@ A registry that holds a list of pre-manage and post-manage handlers.
 
 * * *
 
-### abstractPageManager.\_managedPage : [<code>ManagedPage</code>](#ManagedPage)&nbsp;<a name="AbstractPageManager+_managedPage" href="https://github.com/seznam/ima/tree/17.0.0/page/manager/AbstractPageManager.js#L106" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a>
+### abstractPageManager.\_managedPage : [<code>ManagedPage</code>](#ManagedPage)&nbsp;<a name="AbstractPageManager+_managedPage" href="https://github.com/seznam/ima/tree/17.0.1/page/manager/AbstractPageManager.js#L106" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a>
 Details of the currently managed page.
 
 **Kind**: instance property of [<code>AbstractPageManager</code>](#AbstractPageManager)  
@@ -128,7 +128,7 @@ Details of the currently managed page.
 
 * * *
 
-### abstractPageManager.\_previousManagedPage : [<code>ManagedPage</code>](#ManagedPage)&nbsp;<a name="AbstractPageManager+_previousManagedPage" href="https://github.com/seznam/ima/tree/17.0.0/page/manager/AbstractPageManager.js#L115" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a>
+### abstractPageManager.\_previousManagedPage : [<code>ManagedPage</code>](#ManagedPage)&nbsp;<a name="AbstractPageManager+_previousManagedPage" href="https://github.com/seznam/ima/tree/17.0.1/page/manager/AbstractPageManager.js#L115" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a>
 Snapshot of the previously managed page before it was replaced with
 a new one
 
@@ -137,22 +137,22 @@ a new one
 
 * * *
 
-### abstractPageManager.init()&nbsp;<a name="AbstractPageManager+init" href="https://github.com/seznam/ima/tree/17.0.0/page/manager/AbstractPageManager.js#L121" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a>
+### abstractPageManager.init()&nbsp;<a name="AbstractPageManager+init" href="https://github.com/seznam/ima/tree/17.0.1/page/manager/AbstractPageManager.js#L121" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a>
 **Kind**: instance method of [<code>AbstractPageManager</code>](#AbstractPageManager)  
 
 * * *
 
-### abstractPageManager.manage()&nbsp;<a name="AbstractPageManager+manage" href="https://github.com/seznam/ima/tree/17.0.0/page/manager/AbstractPageManager.js#L132" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a>
+### abstractPageManager.manage()&nbsp;<a name="AbstractPageManager+manage" href="https://github.com/seznam/ima/tree/17.0.1/page/manager/AbstractPageManager.js#L132" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a>
 **Kind**: instance method of [<code>AbstractPageManager</code>](#AbstractPageManager)  
 
 * * *
 
-### abstractPageManager.destroy()&nbsp;<a name="AbstractPageManager+destroy" href="https://github.com/seznam/ima/tree/17.0.0/page/manager/AbstractPageManager.js#L191" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a>
+### abstractPageManager.destroy()&nbsp;<a name="AbstractPageManager+destroy" href="https://github.com/seznam/ima/tree/17.0.1/page/manager/AbstractPageManager.js#L191" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a>
 **Kind**: instance method of [<code>AbstractPageManager</code>](#AbstractPageManager)  
 
 * * *
 
-### abstractPageManager.\_constructManagedPageValue(controller, view, route, options, params, controllerInstance, decoratedController, viewInstance) ⇒ [<code>ManagedPage</code>](#ManagedPage)&nbsp;<a name="AbstractPageManager+_constructManagedPageValue" href="https://github.com/seznam/ima/tree/17.0.0/page/manager/AbstractPageManager.js#L215" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a>
+### abstractPageManager.\_constructManagedPageValue(controller, view, route, options, params, controllerInstance, decoratedController, viewInstance) ⇒ [<code>ManagedPage</code>](#ManagedPage)&nbsp;<a name="AbstractPageManager+_constructManagedPageValue" href="https://github.com/seznam/ima/tree/17.0.1/page/manager/AbstractPageManager.js#L215" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a>
 **Kind**: instance method of [<code>AbstractPageManager</code>](#AbstractPageManager)  
 **Access**: protected  
 
@@ -170,7 +170,7 @@ a new one
 
 * * *
 
-### abstractPageManager.\_storeManagedPageSnapshot() ⇒ [<code>ManagedPage</code>](#ManagedPage)&nbsp;<a name="AbstractPageManager+_storeManagedPageSnapshot" href="https://github.com/seznam/ima/tree/17.0.0/page/manager/AbstractPageManager.js#L249" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a>
+### abstractPageManager.\_storeManagedPageSnapshot() ⇒ [<code>ManagedPage</code>](#ManagedPage)&nbsp;<a name="AbstractPageManager+_storeManagedPageSnapshot" href="https://github.com/seznam/ima/tree/17.0.1/page/manager/AbstractPageManager.js#L249" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a>
 Creates a cloned version of currently managed page and stores it in
 a helper property.
 Snapshot is used in manager handlers to easily determine differences
@@ -181,7 +181,7 @@ between the current and the previous state.
 
 * * *
 
-### abstractPageManager.\_clearManagedPageValue()&nbsp;<a name="AbstractPageManager+_clearManagedPageValue" href="https://github.com/seznam/ima/tree/17.0.0/page/manager/AbstractPageManager.js#L260" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a>
+### abstractPageManager.\_clearManagedPageValue()&nbsp;<a name="AbstractPageManager+_clearManagedPageValue" href="https://github.com/seznam/ima/tree/17.0.1/page/manager/AbstractPageManager.js#L260" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a>
 Clear value from managed page.
 
 **Kind**: instance method of [<code>AbstractPageManager</code>](#AbstractPageManager)  
@@ -189,7 +189,7 @@ Clear value from managed page.
 
 * * *
 
-### abstractPageManager.\_stripManagedPageValueForPublic(value) ⇒ <code>Object</code>&nbsp;<a name="AbstractPageManager+_stripManagedPageValueForPublic" href="https://github.com/seznam/ima/tree/17.0.0/page/manager/AbstractPageManager.js#L289" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a>
+### abstractPageManager.\_stripManagedPageValueForPublic(value) ⇒ <code>Object</code>&nbsp;<a name="AbstractPageManager+_stripManagedPageValueForPublic" href="https://github.com/seznam/ima/tree/17.0.1/page/manager/AbstractPageManager.js#L289" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a>
 Removes properties we do not want to propagate outside of the page manager
 
 **Kind**: instance method of [<code>AbstractPageManager</code>](#AbstractPageManager)  
@@ -202,7 +202,7 @@ Removes properties we do not want to propagate outside of the page manager
 
 * * *
 
-### abstractPageManager.\_setRestrictedPageStateManager(extension, extensionState)&nbsp;<a name="AbstractPageManager+_setRestrictedPageStateManager" href="https://github.com/seznam/ima/tree/17.0.0/page/manager/AbstractPageManager.js#L302" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a>
+### abstractPageManager.\_setRestrictedPageStateManager(extension, extensionState)&nbsp;<a name="AbstractPageManager+_setRestrictedPageStateManager" href="https://github.com/seznam/ima/tree/17.0.1/page/manager/AbstractPageManager.js#L302" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a>
 Set page state manager to extension which has restricted rights to set
 global state.
 
@@ -216,7 +216,7 @@ global state.
 
 * * *
 
-### abstractPageManager.\_switchToPageStateManagerAfterLoaded(extension, extensionState)&nbsp;<a name="AbstractPageManager+_switchToPageStateManagerAfterLoaded" href="https://github.com/seznam/ima/tree/17.0.0/page/manager/AbstractPageManager.js#L323" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a>
+### abstractPageManager.\_switchToPageStateManagerAfterLoaded(extension, extensionState)&nbsp;<a name="AbstractPageManager+_switchToPageStateManagerAfterLoaded" href="https://github.com/seznam/ima/tree/17.0.1/page/manager/AbstractPageManager.js#L323" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a>
 For defined extension switches to pageStageManager and clears partial state
 after extension state is loaded.
 
@@ -230,7 +230,7 @@ after extension state is loaded.
 
 * * *
 
-### abstractPageManager.\_initPageSource() ⇒ <code>Promise.&lt;undefined&gt;</code>&nbsp;<a name="AbstractPageManager+_initPageSource" href="https://github.com/seznam/ima/tree/17.0.0/page/manager/AbstractPageManager.js#L341" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a>
+### abstractPageManager.\_initPageSource() ⇒ <code>Promise.&lt;undefined&gt;</code>&nbsp;<a name="AbstractPageManager+_initPageSource" href="https://github.com/seznam/ima/tree/17.0.1/page/manager/AbstractPageManager.js#L341" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a>
 Initialize page source so call init method on controller and his
 extensions.
 
@@ -239,7 +239,7 @@ extensions.
 
 * * *
 
-### abstractPageManager.\_initController() ⇒ <code>Promise.&lt;undefined&gt;</code>&nbsp;<a name="AbstractPageManager+_initController" href="https://github.com/seznam/ima/tree/17.0.0/page/manager/AbstractPageManager.js#L352" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a>
+### abstractPageManager.\_initController() ⇒ <code>Promise.&lt;undefined&gt;</code>&nbsp;<a name="AbstractPageManager+_initController" href="https://github.com/seznam/ima/tree/17.0.1/page/manager/AbstractPageManager.js#L352" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a>
 Initializes managed instance of controller with the provided parameters.
 
 **Kind**: instance method of [<code>AbstractPageManager</code>](#AbstractPageManager)  
@@ -247,7 +247,7 @@ Initializes managed instance of controller with the provided parameters.
 
 * * *
 
-### abstractPageManager.\_initExtensions() ⇒ <code>Promise.&lt;undefined&gt;</code>&nbsp;<a name="AbstractPageManager+_initExtensions" href="https://github.com/seznam/ima/tree/17.0.0/page/manager/AbstractPageManager.js#L366" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a>
+### abstractPageManager.\_initExtensions() ⇒ <code>Promise.&lt;undefined&gt;</code>&nbsp;<a name="AbstractPageManager+_initExtensions" href="https://github.com/seznam/ima/tree/17.0.1/page/manager/AbstractPageManager.js#L366" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a>
 Initialize extensions for managed instance of controller with the
 provided parameters.
 
@@ -256,7 +256,7 @@ provided parameters.
 
 * * *
 
-### abstractPageManager.\_switchToPageStateManager()&nbsp;<a name="AbstractPageManager+_switchToPageStateManager" href="https://github.com/seznam/ima/tree/17.0.0/page/manager/AbstractPageManager.js#L381" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a>
+### abstractPageManager.\_switchToPageStateManager()&nbsp;<a name="AbstractPageManager+_switchToPageStateManager" href="https://github.com/seznam/ima/tree/17.0.1/page/manager/AbstractPageManager.js#L381" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a>
 Iterates over extensions of current controller and switches each one to
 pageStateManager and clears their partial state.
 
@@ -265,7 +265,7 @@ pageStateManager and clears their partial state.
 
 * * *
 
-### abstractPageManager.\_loadPageSource() ⇒ <code>Object.&lt;string, (Promise.&lt;\*&gt;\|\*)&gt;</code>&nbsp;<a name="AbstractPageManager+_loadPageSource" href="https://github.com/seznam/ima/tree/17.0.0/page/manager/AbstractPageManager.js#L397" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a>
+### abstractPageManager.\_loadPageSource() ⇒ <code>Object.&lt;string, (Promise.&lt;\*&gt;\|\*)&gt;</code>&nbsp;<a name="AbstractPageManager+_loadPageSource" href="https://github.com/seznam/ima/tree/17.0.1/page/manager/AbstractPageManager.js#L397" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a>
 Load page source so call load method on controller and his extensions.
 Merge loaded state and render it.
 
@@ -274,7 +274,7 @@ Merge loaded state and render it.
 
 * * *
 
-### abstractPageManager.\_getLoadedControllerState() ⇒ <code>Object.&lt;string, (Promise.&lt;\*&gt;\|\*)&gt;</code>&nbsp;<a name="AbstractPageManager+_getLoadedControllerState" href="https://github.com/seznam/ima/tree/17.0.0/page/manager/AbstractPageManager.js#L420" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a>
+### abstractPageManager.\_getLoadedControllerState() ⇒ <code>Object.&lt;string, (Promise.&lt;\*&gt;\|\*)&gt;</code>&nbsp;<a name="AbstractPageManager+_getLoadedControllerState" href="https://github.com/seznam/ima/tree/17.0.1/page/manager/AbstractPageManager.js#L420" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a>
 Load controller state from managed instance of controller.
 
 **Kind**: instance method of [<code>AbstractPageManager</code>](#AbstractPageManager)  
@@ -282,7 +282,7 @@ Load controller state from managed instance of controller.
 
 * * *
 
-### abstractPageManager.\_getLoadedExtensionsState(controllerState) ⇒ <code>Object.&lt;string, (Promise.&lt;\*&gt;\|\*)&gt;</code>&nbsp;<a name="AbstractPageManager+_getLoadedExtensionsState" href="https://github.com/seznam/ima/tree/17.0.0/page/manager/AbstractPageManager.js#L436" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a>
+### abstractPageManager.\_getLoadedExtensionsState(controllerState) ⇒ <code>Object.&lt;string, (Promise.&lt;\*&gt;\|\*)&gt;</code>&nbsp;<a name="AbstractPageManager+_getLoadedExtensionsState" href="https://github.com/seznam/ima/tree/17.0.1/page/manager/AbstractPageManager.js#L436" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a>
 Load extensions state from managed instance of controller.
 
 **Kind**: instance method of [<code>AbstractPageManager</code>](#AbstractPageManager)  
@@ -295,7 +295,7 @@ Load extensions state from managed instance of controller.
 
 * * *
 
-### abstractPageManager.\_activatePageSource() ⇒ <code>Promise.&lt;undefined&gt;</code>&nbsp;<a name="AbstractPageManager+_activatePageSource" href="https://github.com/seznam/ima/tree/17.0.0/page/manager/AbstractPageManager.js#L461" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a>
+### abstractPageManager.\_activatePageSource() ⇒ <code>Promise.&lt;undefined&gt;</code>&nbsp;<a name="AbstractPageManager+_activatePageSource" href="https://github.com/seznam/ima/tree/17.0.1/page/manager/AbstractPageManager.js#L461" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a>
 Activate page source so call activate method on controller and his
 extensions.
 
@@ -304,7 +304,7 @@ extensions.
 
 * * *
 
-### abstractPageManager.\_activateController() ⇒ <code>Promise.&lt;undefined&gt;</code>&nbsp;<a name="AbstractPageManager+_activateController" href="https://github.com/seznam/ima/tree/17.0.0/page/manager/AbstractPageManager.js#L478" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a>
+### abstractPageManager.\_activateController() ⇒ <code>Promise.&lt;undefined&gt;</code>&nbsp;<a name="AbstractPageManager+_activateController" href="https://github.com/seznam/ima/tree/17.0.1/page/manager/AbstractPageManager.js#L478" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a>
 Activate managed instance of controller.
 
 **Kind**: instance method of [<code>AbstractPageManager</code>](#AbstractPageManager)  
@@ -312,7 +312,7 @@ Activate managed instance of controller.
 
 * * *
 
-### abstractPageManager.\_activateExtensions() ⇒ <code>Promise.&lt;undefined&gt;</code>&nbsp;<a name="AbstractPageManager+_activateExtensions" href="https://github.com/seznam/ima/tree/17.0.0/page/manager/AbstractPageManager.js#L490" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a>
+### abstractPageManager.\_activateExtensions() ⇒ <code>Promise.&lt;undefined&gt;</code>&nbsp;<a name="AbstractPageManager+_activateExtensions" href="https://github.com/seznam/ima/tree/17.0.1/page/manager/AbstractPageManager.js#L490" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a>
 Activate extensions for managed instance of controller.
 
 **Kind**: instance method of [<code>AbstractPageManager</code>](#AbstractPageManager)  
@@ -320,7 +320,7 @@ Activate extensions for managed instance of controller.
 
 * * *
 
-### abstractPageManager.\_updatePageSource() ⇒ <code>Promise.&lt;{status: number, content: ?string}&gt;</code>&nbsp;<a name="AbstractPageManager+_updatePageSource" href="https://github.com/seznam/ima/tree/17.0.0/page/manager/AbstractPageManager.js#L505" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a>
+### abstractPageManager.\_updatePageSource() ⇒ <code>Promise.&lt;{status: number, content: ?string}&gt;</code>&nbsp;<a name="AbstractPageManager+_updatePageSource" href="https://github.com/seznam/ima/tree/17.0.1/page/manager/AbstractPageManager.js#L505" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a>
 Update page source so call update method on controller and his
 extensions. Merge updated state and render it.
 
@@ -329,7 +329,7 @@ extensions. Merge updated state and render it.
 
 * * *
 
-### abstractPageManager.\_getUpdatedControllerState() ⇒ <code>Object.&lt;string, (Promise.&lt;\*&gt;\|\*)&gt;</code>&nbsp;<a name="AbstractPageManager+_getUpdatedControllerState" href="https://github.com/seznam/ima/tree/17.0.0/page/manager/AbstractPageManager.js#L530" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a>
+### abstractPageManager.\_getUpdatedControllerState() ⇒ <code>Object.&lt;string, (Promise.&lt;\*&gt;\|\*)&gt;</code>&nbsp;<a name="AbstractPageManager+_getUpdatedControllerState" href="https://github.com/seznam/ima/tree/17.0.1/page/manager/AbstractPageManager.js#L530" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a>
 Return updated controller state for current page controller.
 
 **Kind**: instance method of [<code>AbstractPageManager</code>](#AbstractPageManager)  
@@ -337,7 +337,7 @@ Return updated controller state for current page controller.
 
 * * *
 
-### abstractPageManager.\_getUpdatedExtensionsState(controllerState) ⇒ <code>Object.&lt;string, (Promise\|\*)&gt;</code>&nbsp;<a name="AbstractPageManager+_getUpdatedExtensionsState" href="https://github.com/seznam/ima/tree/17.0.0/page/manager/AbstractPageManager.js#L546" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a>
+### abstractPageManager.\_getUpdatedExtensionsState(controllerState) ⇒ <code>Object.&lt;string, (Promise\|\*)&gt;</code>&nbsp;<a name="AbstractPageManager+_getUpdatedExtensionsState" href="https://github.com/seznam/ima/tree/17.0.1/page/manager/AbstractPageManager.js#L546" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a>
 Return updated extensions state for current page controller.
 
 **Kind**: instance method of [<code>AbstractPageManager</code>](#AbstractPageManager)  
@@ -350,7 +350,7 @@ Return updated extensions state for current page controller.
 
 * * *
 
-### abstractPageManager.\_deactivatePageSource() ⇒ <code>Promise.&lt;undefined&gt;</code>&nbsp;<a name="AbstractPageManager+_deactivatePageSource" href="https://github.com/seznam/ima/tree/17.0.0/page/manager/AbstractPageManager.js#L573" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a>
+### abstractPageManager.\_deactivatePageSource() ⇒ <code>Promise.&lt;undefined&gt;</code>&nbsp;<a name="AbstractPageManager+_deactivatePageSource" href="https://github.com/seznam/ima/tree/17.0.1/page/manager/AbstractPageManager.js#L573" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a>
 Deactivate page source so call deactivate method on controller and his
 extensions.
 
@@ -359,7 +359,7 @@ extensions.
 
 * * *
 
-### abstractPageManager.\_deactivateController() ⇒ <code>Promise.&lt;undefined&gt;</code>&nbsp;<a name="AbstractPageManager+_deactivateController" href="https://github.com/seznam/ima/tree/17.0.0/page/manager/AbstractPageManager.js#L590" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a>
+### abstractPageManager.\_deactivateController() ⇒ <code>Promise.&lt;undefined&gt;</code>&nbsp;<a name="AbstractPageManager+_deactivateController" href="https://github.com/seznam/ima/tree/17.0.1/page/manager/AbstractPageManager.js#L590" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a>
 Deactivate last managed instance of controller only If controller was
 activated.
 
@@ -368,7 +368,7 @@ activated.
 
 * * *
 
-### abstractPageManager.\_deactivateExtensions() ⇒ <code>Promise.&lt;undefined&gt;</code>&nbsp;<a name="AbstractPageManager+_deactivateExtensions" href="https://github.com/seznam/ima/tree/17.0.0/page/manager/AbstractPageManager.js#L603" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a>
+### abstractPageManager.\_deactivateExtensions() ⇒ <code>Promise.&lt;undefined&gt;</code>&nbsp;<a name="AbstractPageManager+_deactivateExtensions" href="https://github.com/seznam/ima/tree/17.0.1/page/manager/AbstractPageManager.js#L603" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a>
 Deactivate extensions for last managed instance of controller only if
 they were activated.
 
@@ -377,7 +377,7 @@ they were activated.
 
 * * *
 
-### abstractPageManager.\_destroyPageSource() ⇒ <code>Promise.&lt;undefined&gt;</code>&nbsp;<a name="AbstractPageManager+_destroyPageSource" href="https://github.com/seznam/ima/tree/17.0.0/page/manager/AbstractPageManager.js#L618" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a>
+### abstractPageManager.\_destroyPageSource() ⇒ <code>Promise.&lt;undefined&gt;</code>&nbsp;<a name="AbstractPageManager+_destroyPageSource" href="https://github.com/seznam/ima/tree/17.0.1/page/manager/AbstractPageManager.js#L618" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a>
 Destroy page source so call destroy method on controller and his
 extensions.
 
@@ -386,7 +386,7 @@ extensions.
 
 * * *
 
-### abstractPageManager.\_destroyController() ⇒ <code>Promise.&lt;undefined&gt;</code>&nbsp;<a name="AbstractPageManager+_destroyController" href="https://github.com/seznam/ima/tree/17.0.0/page/manager/AbstractPageManager.js#L633" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a>
+### abstractPageManager.\_destroyController() ⇒ <code>Promise.&lt;undefined&gt;</code>&nbsp;<a name="AbstractPageManager+_destroyController" href="https://github.com/seznam/ima/tree/17.0.1/page/manager/AbstractPageManager.js#L633" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a>
 Destroy last managed instance of controller.
 
 **Kind**: instance method of [<code>AbstractPageManager</code>](#AbstractPageManager)  
@@ -394,7 +394,7 @@ Destroy last managed instance of controller.
 
 * * *
 
-### abstractPageManager.\_destroyExtensions() ⇒ <code>Promise.&lt;undefined&gt;</code>&nbsp;<a name="AbstractPageManager+_destroyExtensions" href="https://github.com/seznam/ima/tree/17.0.0/page/manager/AbstractPageManager.js#L646" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a>
+### abstractPageManager.\_destroyExtensions() ⇒ <code>Promise.&lt;undefined&gt;</code>&nbsp;<a name="AbstractPageManager+_destroyExtensions" href="https://github.com/seznam/ima/tree/17.0.1/page/manager/AbstractPageManager.js#L646" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a>
 Destroy extensions for last managed instance of controller.
 
 **Kind**: instance method of [<code>AbstractPageManager</code>](#AbstractPageManager)  
@@ -402,7 +402,7 @@ Destroy extensions for last managed instance of controller.
 
 * * *
 
-### abstractPageManager.\_clearComponentState(options)&nbsp;<a name="AbstractPageManager+_clearComponentState" href="https://github.com/seznam/ima/tree/17.0.0/page/manager/AbstractPageManager.js#L660" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a>
+### abstractPageManager.\_clearComponentState(options)&nbsp;<a name="AbstractPageManager+_clearComponentState" href="https://github.com/seznam/ima/tree/17.0.1/page/manager/AbstractPageManager.js#L660" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a>
 The method clear state on current renderred component to DOM.
 
 **Kind**: instance method of [<code>AbstractPageManager</code>](#AbstractPageManager)  
@@ -414,7 +414,7 @@ The method clear state on current renderred component to DOM.
 
 * * *
 
-### abstractPageManager.\_onChangeStateHandler(state)&nbsp;<a name="AbstractPageManager+_onChangeStateHandler" href="https://github.com/seznam/ima/tree/17.0.0/page/manager/AbstractPageManager.js#L678" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a>
+### abstractPageManager.\_onChangeStateHandler(state)&nbsp;<a name="AbstractPageManager+_onChangeStateHandler" href="https://github.com/seznam/ima/tree/17.0.1/page/manager/AbstractPageManager.js#L678" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a>
 On change event handler set state to view.
 
 **Kind**: instance method of [<code>AbstractPageManager</code>](#AbstractPageManager)  
@@ -426,7 +426,7 @@ On change event handler set state to view.
 
 * * *
 
-### abstractPageManager.\_hasOnlyUpdate(controller, view, options) ⇒ <code>boolean</code>&nbsp;<a name="AbstractPageManager+_hasOnlyUpdate" href="https://github.com/seznam/ima/tree/17.0.0/page/manager/AbstractPageManager.js#L695" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a>
+### abstractPageManager.\_hasOnlyUpdate(controller, view, options) ⇒ <code>boolean</code>&nbsp;<a name="AbstractPageManager+_hasOnlyUpdate" href="https://github.com/seznam/ima/tree/17.0.1/page/manager/AbstractPageManager.js#L695" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a>
 Return true if manager has to update last managed controller and view.
 
 **Kind**: instance method of [<code>AbstractPageManager</code>](#AbstractPageManager)  
@@ -441,7 +441,7 @@ Return true if manager has to update last managed controller and view.
 
 * * *
 
-### abstractPageManager.\_runPreManageHandlers(nextManagedPage, action) ⇒ <code>Promise.&lt;any&gt;</code>&nbsp;<a name="AbstractPageManager+_runPreManageHandlers" href="https://github.com/seznam/ima/tree/17.0.0/page/manager/AbstractPageManager.js#L718" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a>
+### abstractPageManager.\_runPreManageHandlers(nextManagedPage, action) ⇒ <code>Promise.&lt;any&gt;</code>&nbsp;<a name="AbstractPageManager+_runPreManageHandlers" href="https://github.com/seznam/ima/tree/17.0.1/page/manager/AbstractPageManager.js#L718" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a>
 **Kind**: instance method of [<code>AbstractPageManager</code>](#AbstractPageManager)  
 **Access**: protected  
 
@@ -453,7 +453,7 @@ Return true if manager has to update last managed controller and view.
 
 * * *
 
-### abstractPageManager.\_runPostManageHandlers(previousManagedPage, action) ⇒ <code>Promise.&lt;any&gt;</code>&nbsp;<a name="AbstractPageManager+_runPostManageHandlers" href="https://github.com/seznam/ima/tree/17.0.0/page/manager/AbstractPageManager.js#L736" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a>
+### abstractPageManager.\_runPostManageHandlers(previousManagedPage, action) ⇒ <code>Promise.&lt;any&gt;</code>&nbsp;<a name="AbstractPageManager+_runPostManageHandlers" href="https://github.com/seznam/ima/tree/17.0.1/page/manager/AbstractPageManager.js#L736" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a>
 **Kind**: instance method of [<code>AbstractPageManager</code>](#AbstractPageManager)  
 **Access**: protected  
 
@@ -465,14 +465,14 @@ Return true if manager has to update last managed controller and view.
 
 * * *
 
-## RouteOptions : <code>Object</code>&nbsp;<a name="RouteOptions" href="https://github.com/seznam/ima/tree/17.0.0/page/manager/AbstractPageManager.js#L3" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a>
+## RouteOptions : <code>Object</code>&nbsp;<a name="RouteOptions" href="https://github.com/seznam/ima/tree/17.0.1/page/manager/AbstractPageManager.js#L3" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a>
 An Object used to configure a route
 
 **Kind**: global typedef  
 
 * * *
 
-## ManagedPage : <code>Object</code>&nbsp;<a name="ManagedPage" href="https://github.com/seznam/ima/tree/17.0.0/page/manager/AbstractPageManager.js#L25" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a>
+## ManagedPage : <code>Object</code>&nbsp;<a name="ManagedPage" href="https://github.com/seznam/ima/tree/17.0.1/page/manager/AbstractPageManager.js#L25" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a>
 An object representing a page that's currently managed by PageManager
 
 **Kind**: global typedef  
