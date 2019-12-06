@@ -128,11 +128,12 @@ function createDevtool(registerHook) {
     });
   }
 
-  function importIMAClass(path) {
+  function importIMAClass(path, module = null) {
     try {
       const file = $IMA.Loader.importSync(path);
+      const key = module ? module : 'default';
 
-      return file.default ? file.default : file;
+      return file[key] ? file[key] : file;
     } catch (_) {
       let ima;
 
@@ -162,9 +163,6 @@ function createDevtool(registerHook) {
       emit
     });
 
-    // TODO CHANGE FOR IMA@17
-    let imaMain = importIMAClass('ima/main');
-
     let revivePattern = createHook(
       hookName.afterMethod,
       'reviveClientApp',
@@ -183,6 +181,9 @@ function createDevtool(registerHook) {
         }
       }
     );
+
+    // TODO CHANGE FOR IMA@17
+    let imaMain = importIMAClass('ima/main');
 
     Object.keys(imaMain).forEach(property => {
       const key = `__${property}__`;
