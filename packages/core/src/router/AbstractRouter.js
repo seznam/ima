@@ -197,10 +197,14 @@ export default class AbstractRouter extends Router {
     let route = this._getRouteByPath(path);
 
     if (!route) {
-      throw new GenericError(
-        `ima.core.router.AbstractRouter.getCurrentRouteInfo: The route ` +
-          `for path ${path} is not defined.`
-      );
+      route = this._routes.get(RouteNames.NOT_FOUND);
+
+      if (!route) {
+        throw new GenericError(
+          `ima.core.router.AbstractRouter.getCurrentRouteInfo: The route ` +
+            `for path ${path} is not defined.`
+        );
+      }
     }
 
     let params = route.extractParameters(path);

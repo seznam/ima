@@ -7,7 +7,7 @@ applications written in pure JavaScript and React.
 
 ## Why we use IMA.js and you should too?
 
-Here at [Seznam.cz](https://www.seznam.cz/vychytavky/), development of a frontend application comes with many checkboxes that need to be ticked off before the project goes public. Mainly because of a diverse audience and a challenging product requirements.
+Here at [Seznam.cz](https://www.seznam.cz), development of a frontend application comes with many checkboxes that need to be ticked off before the project goes public. Mainly because of a diverse audience and a challenging product requirements.
 
 In order to **not** reinvent the wheel on every project and to address all of these problems (checkboxes) we created the IMA.js framework. Here are a few outlines that we're most proud of:
 
@@ -19,11 +19,11 @@ In order to **not** reinvent the wheel on every project and to address all of th
 ## Documentation
 
 We have prepared a complex tutorial for you:
-[Your first IMA.js application](https://github.com/seznam/IMA.js-skeleton/wiki/Tutorial,-part-1).
+[Your first IMA.js application](https://imajs.io/tutorial/introduction.html).
 This tutorial covers the basics of creating isomorphic web applications using
 IMA.js, but you will encounter some more advanced concepts in there as well.
 
-For a more in-depth information about the IMA.js see a [full documentation](https://github.com/seznam/IMA.js-skeleton/wiki/Documentation).
+For a more in-depth information about the IMA.js see a [full documentation](https://imajs.io/docs/).
 
 ## Main IMA.js parts
 - [IMA core](https://github.com/seznam/IMA.js-core) - it contains base classes and common classes for every days work which allow you server side rendering and hydrating application in browser.

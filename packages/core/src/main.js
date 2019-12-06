@@ -46,13 +46,13 @@ import AbstractPageRenderer from './page/renderer/AbstractPageRenderer';
 import BlankManagedRootView from './page/renderer/BlankManagedRootView';
 import ClientPageRenderer from './page/renderer/ClientPageRenderer';
 import ComponentUtils from './page/renderer/ComponentUtils';
-import * as RendererEvents from './page/renderer/Events';
+import RendererEvents from './page/renderer/Events';
 import PageRenderer from './page/renderer/PageRenderer';
 import PageRendererFactory from './page/renderer/PageRendererFactory';
 import ServerPageRenderer from './page/renderer/ServerPageRenderer';
 import RendererTypes from './page/renderer/Types';
 import ViewAdapter from './page/renderer/ViewAdapter';
-import * as StateEvents from './page/state/Events';
+import StateEvents from './page/state/Events';
 import PageStateManager from './page/state/PageStateManager';
 import PageStateManagerDecorator from './page/state/PageStateManagerDecorator';
 import PageStateManagerImpl from './page/state/PageStateManagerImpl';
@@ -74,7 +74,7 @@ import PageFactory from './page/PageFactory';
 import AbstractRouter from './router/AbstractRouter';
 import ActionTypes from './router/ActionTypes';
 import ClientRouter from './router/ClientRouter';
-import * as RouterEvents from './router/Events';
+import RouterEvents from './router/Events';
 import Request from './router/Request';
 import Response from './router/Response';
 import Route from './router/Route';
@@ -83,7 +83,7 @@ import RouteNames from './router/RouteNames';
 import Router from './router/Router';
 import ServerRouter from './router/ServerRouter';
 import CookieStorage from './storage/CookieStorage';
-import MapStorage from './storage/SessionStorage';
+import MapStorage from './storage/MapStorage';
 import SessionMapStorage from './storage/SessionMapStorage';
 import SessionStorage from './storage/SessionStorage';
 import Storage from './storage/Storage';
@@ -253,6 +253,8 @@ export {
   routeClientApp,
   reviveClientApp,
   onLoad,
+  ObjectContainer,
+  Bootstrap,
   Cache,
   CacheEntry,
   CacheFactory,

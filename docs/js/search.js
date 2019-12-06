@@ -3,7 +3,7 @@ layout: null
 ---
 
 const HIDDEN_CLASS = 'is-hidden';
-const PREFIX_URL = '{{ 'doc/' | relative_url }}';
+const PREFIX_URL = '{{ "api/" | relative_url }}';
 
 const lunrDocuments = {{ site.data.lunr | jsonify }};
 const lunrIndex = lunr(function() {

@@ -3,121 +3,28 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
-# [17.0.0-rc.9](https://github.com/seznam/ima/compare/v17.0.0-rc.8...v17.0.0-rc.9) (2019-12-04)
+## [17.0.1](https://github.com/seznam/ima/compare/v17.0.0...v17.0.1) (2019-12-06)
 
+**Note:** Version bump only for package ima
+
+
+
+
+
+# [17.0.0](https://github.com/seznam/ima/compare/v17.0.0-rc.10...v17.0.0) (2019-12-06)
 
 ### Bug Fixes
 
+* 🐛 getCurrentRouteInfo returns not-found instead exception ([88077d4](https://github.com/seznam/ima/commit/88077d44ebc40249e1bd2bdf55fe5a359b4bc3df))
+* 🐛 core exports for all files ([c484f33](https://github.com/seznam/ima/commit/c484f33d17f701ce9e4e8f437b04ba377fcea98f))
+* 🐛 Error in component will no longer cause whitescreen view ([5b5354b](https://github.com/seznam/ima/commit/5b5354bb10dce52aec0b022b75cf800df8e6efc2))
+* 🐛 Many scenarios for jscodeshift import transformers ([ebb04e1](https://github.com/seznam/ima/commit/ebb04e1fe6214afab61b142d8192a6584170ad92))
 * 🐛 Export RendererTypes from core ([2a06da6](https://github.com/seznam/ima/commit/2a06da6aa2ff5154466fd70b589dab9321322ed0))
-
-
-### Features
-
-* 🎸 Dependencies update ([8ca12f3](https://github.com/seznam/ima/commit/8ca12f3e1c5f63c733e39aaf63d1fcf6ada967ba))
-
-
-
-
-
-# [17.0.0-rc.8](https://github.com/seznam/ima/compare/v17.0.0-rc.7...v17.0.0-rc.8) (2019-12-02)
-
-
-### Bug Fixes
-
 * 🐛 Fix cookie expiration date for Edge ([#15](https://github.com/seznam/ima/issues/15)) ([1b536dd](https://github.com/seznam/ima/commit/1b536dd648ec1ffc367b7af17458e6d5152ad305))
 * 🐛 Implement new hot-reload plugin for all examples ([cc5d7bf](https://github.com/seznam/ima/commit/cc5d7bfbc231e4e87199da55fe1c5a3bfe95c1bf))
 * 🐛 plugin-websocket server import ([0cca73f](https://github.com/seznam/ima/commit/0cca73fc2bcc60dabc03e89abc3177a6f22e97c2))
 * 🐛 Use client version of core for browsers ([0e6c808](https://github.com/seznam/ima/commit/0e6c80897cd5af8eebc4a5f696ea0bc40d29acbf))
-
-
-### Features
-
-* 🎸 added creating websocket server for hot reloading ([abbfd5c](https://github.com/seznam/ima/commit/abbfd5cd1da0884540af8eea9168030d9c835116))
-* 🎸 added unlisten method and allow hot reloading ([1b5b465](https://github.com/seznam/ima/commit/1b5b46557d9104dc9525adc51e1159b3181239e6))
-* added dependency check to create-ima-app ([#13](https://github.com/seznam/ima/issues/13)) ([6f485e5](https://github.com/seznam/ima/commit/6f485e59475ab513282cea96b740d0335dc86043))
-
-
-
-
-
-# [17.0.0-rc.7](https://github.com/seznam/ima/compare/v17.0.0-rc.6...v17.0.0-rc.7) (2019-11-28)
-
-
-### Features
-
-* 🎸 Add Node.js v12 support ([#9](https://github.com/seznam/ima/issues/9)) ([77d23f8](https://github.com/seznam/ima/commit/77d23f85975f7efba219399d1c2ebaaef063bb44))
-* 🎸 Split server and client bundle in vendors ([cda9a55](https://github.com/seznam/ima/commit/cda9a55eb5873919b63fd3bae860e083f00ec81b))
-
-
-### Performance Improvements
-
-* ⚡️ Remove unnecessary fibers dependency from gulp-tasks ([dcbfa3c](https://github.com/seznam/ima/commit/dcbfa3c4011bc9ee24e416d6f46560595be21d65))
-
-
-
-
-
-# [17.0.0-rc.6](https://github.com/seznam/ima/compare/v17.0.0-rc.5...v17.0.0-rc.6) (2019-11-26)
-
-**Note:** Version bump only for package ima
-
-
-
-
-
-# [17.0.0-rc.5](https://github.com/seznam/ima/compare/v17.0.0-rc.4...v17.0.0-rc.5) (2019-11-21)
-
-**Note:** Version bump only for package ima
-
-
-
-
-
-# [17.0.0-rc.4](https://github.com/seznam/ima/compare/v17.0.0-rc.3...v17.0.0-rc.4) (2019-11-21)
-
-
-### Bug Fixes
-
 * 🐛 Error page no longer displays white screen ([#4](https://github.com/seznam/ima/issues/4)) ([9345834](https://github.com/seznam/ima/commit/9345834615b154795064117e57c4aa315a752750))
-
-
-### Features
-
-* 🎸 Initialize create-ima-app CLI tool ([#3](https://github.com/seznam/ima/issues/3)) ([8ed5f1c](https://github.com/seznam/ima/commit/8ed5f1c68dd852e4f12960029080edca0d892f3f))
-
-
-
-
-
-# [17.0.0-rc.3](https://github.com/seznam/ima/compare/v17.0.0-rc.2...v17.0.0-rc.3) (2019-11-07)
-
-**Note:** Version bump only for package ima
-
-
-
-
-
-# [17.0.0-rc.2](https://github.com/seznam/ima/compare/v17.0.0-rc.1...v17.0.0-rc.2) (2019-11-07)
-
-**Note:** Version bump only for package ima
-
-
-
-
-
-# [17.0.0-rc.1](https://github.com/seznam/ima/compare/v17.0.0-rc.0...v17.0.0-rc.1) (2019-11-07)
-
-**Note:** Version bump only for package ima
-
-
-
-
-
-# 17.0.0-rc.0 (2019-11-07)
-
-
-### Bug Fixes
-
 * **component-utils:** better check for object type ([4caae44](https://github.com/seznam/ima/commit/4caae44295b883656611c92d4a176d5e3eef7e3b))
 * **component-utils:** pull-request fixes ([1b2c9e9](https://github.com/seznam/ima/commit/1b2c9e94fcef8dcb26d8b77c3d4c85f9bfc7981e))
 * **dictionary:** set current language to dictionary config ([ddb951c](https://github.com/seznam/ima/commit/ddb951cc0cd49ecf851160e7444dd1662390ec32))
@@ -143,6 +50,13 @@ See [Conventional Commits](https://conventionalcommits.org) for commit guideline
 
 ### Features
 
+* 🎸 Dependencies update ([8ca12f3](https://github.com/seznam/ima/commit/8ca12f3e1c5f63c733e39aaf63d1fcf6ada967ba))
+* 🎸 added creating websocket server for hot reloading ([abbfd5c](https://github.com/seznam/ima/commit/abbfd5cd1da0884540af8eea9168030d9c835116))
+* 🎸 added unlisten method and allow hot reloading ([1b5b465](https://github.com/seznam/ima/commit/1b5b46557d9104dc9525adc51e1159b3181239e6))
+* added dependency check to create-ima-app ([#13](https://github.com/seznam/ima/issues/13)) ([6f485e5](https://github.com/seznam/ima/commit/6f485e59475ab513282cea96b740d0335dc86043))
+* 🎸 Add Node.js v12 support ([#9](https://github.com/seznam/ima/issues/9)) ([77d23f8](https://github.com/seznam/ima/commit/77d23f85975f7efba219399d1c2ebaaef063bb44))
+* 🎸 Split server and client bundle in vendors ([cda9a55](https://github.com/seznam/ima/commit/cda9a55eb5873919b63fd3bae860e083f00ec81b))
+* 🎸 Initialize create-ima-app CLI tool ([#3](https://github.com/seznam/ima/issues/3)) ([8ed5f1c](https://github.com/seznam/ima/commit/8ed5f1c68dd852e4f12960029080edca0d892f3f))
 * **cache:** support for Infinite value in cache ttl field ([5402312](https://github.com/seznam/ima/commit/5402312b5edd09f2267765db3c3157abfe7c4da2))
 * **client:** removed server side code from client build ([4cb26e5](https://github.com/seznam/ima/commit/4cb26e52ac1864b3fdff32dd13f833aec3cac0ef))
 * **devtool:** removed Devtool class and $Devtool alias from ima core ([21c2a7e](https://github.com/seznam/ima/commit/21c2a7e3a7db5ce3d5c4741af9a963abb90c7bd6))
@@ -158,6 +72,7 @@ See [Conventional Commits](https://conventionalcommits.org) for commit guideline
 
 ### Performance Improvements
 
+* ⚡️ Remove unnecessary fibers dependency from gulp-tasks ([dcbfa3c](https://github.com/seznam/ima/commit/dcbfa3c4011bc9ee24e416d6f46560595be21d65))
 * **hydrate:** removed junk from hydrating app ([876c098](https://github.com/seznam/ima/commit/876c098abf922cf3566c2564ab7f1f6557926a38))
 
 
@@ -165,3 +80,5 @@ See [Conventional Commits](https://conventionalcommits.org) for commit guideline
 
 * **dictionary:** Rename config attribute from config.language to config.$Language in dictionary.
 It's for keeping code style in configuration objects.
+* getCurrentRouteInfo returns not-found instead exception if not-found
+route is set

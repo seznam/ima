@@ -1,0 +1,331 @@
+{
+    "ima/vendorLinker": {
+        "keys": [],
+        "defaultKey": "vendorLinker"
+    },
+    "ima/namespace": {
+        "keys": [],
+        "defaultKey": "ns"
+    },
+    "ima/ObjectContainer": {
+        "keys": [],
+        "defaultKey": "ObjectContainer"
+    },
+    "ima/Bootstrap": {
+        "keys": [],
+        "defaultKey": "Bootstrap"
+    },
+    "ima/cache/Cache": {
+        "keys": [],
+        "defaultKey": "Cache"
+    },
+    "ima/cache/CacheEntry": {
+        "keys": [],
+        "defaultKey": "CacheEntry"
+    },
+    "ima/cache/CacheFactory": {
+        "keys": [],
+        "defaultKey": "CacheFactory"
+    },
+    "ima/cache/CacheImpl": {
+        "keys": [],
+        "defaultKey": "CacheImpl"
+    },
+    "ima/controller/AbstractController": {
+        "keys": [],
+        "defaultKey": "AbstractController"
+    },
+    "ima/controller/Controller": {
+        "keys": [],
+        "defaultKey": "Controller"
+    },
+    "ima/controller/ControllerDecorator": {
+        "keys": [],
+        "defaultKey": "ControllerDecorator"
+    },
+    "ima/dictionary/Dictionary": {
+        "keys": [],
+        "defaultKey": "Dictionary"
+    },
+    "ima/dictionary/MessageFormatDictionary": {
+        "keys": [],
+        "defaultKey": "MessageFormatDictionary"
+    },
+    "ima/error/Error": {
+        "keys": [],
+        "defaultKey": "Error"
+    },
+    "ima/error/ExtensibleError": {
+        "keys": [],
+        "defaultKey": "ExtensibleError"
+    },
+    "ima/error/GenericError": {
+        "keys": [],
+        "defaultKey": "GenericError"
+    },
+    "ima/event/Dispatcher": {
+        "keys": [],
+        "defaultKey": "Dispatcher"
+    },
+    "ima/event/DispatcherImpl": {
+        "keys": [],
+        "defaultKey": "DispatcherImpl"
+    },
+    "ima/event/EventBus": {
+        "keys": [],
+        "defaultKey": "EventBus"
+    },
+    "ima/event/EventBusImpl": {
+        "keys": [],
+        "defaultKey": "EventBusImpl"
+    },
+    "ima/execution/AbstractExecution": {
+        "keys": [],
+        "defaultKey": "AbstractExecution"
+    },
+    "ima/execution/Execution": {
+        "keys": [],
+        "defaultKey": "Execution"
+    },
+    "ima/execution/SerialBatch": {
+        "keys": [],
+        "defaultKey": "SerialBatch"
+    },
+    "ima/extension/AbstractExtension": {
+        "keys": [],
+        "defaultKey": "AbstractExtension"
+    },
+    "ima/extension/Extension": {
+        "keys": [],
+        "defaultKey": "Extension"
+    },
+    "ima/http/HttpAgent": {
+        "keys": [],
+        "defaultKey": "HttpAgent"
+    },
+    "ima/http/HttpAgentImpl": {
+        "keys": [],
+        "defaultKey": "HttpAgentImpl"
+    },
+    "ima/http/HttpProxy": {
+        "keys": [],
+        "defaultKey": "HttpProxy"
+    },
+    "ima/http/StatusCode": {
+        "keys": [],
+        "defaultKey": "StatusCode"
+    },
+    "ima/http/UrlTransformer": {
+        "keys": [],
+        "defaultKey": "UrlTransformer"
+    },
+    "ima/meta/MetaManager": {
+        "keys": [],
+        "defaultKey": "MetaManager"
+    },
+    "ima/meta/MetaManagerImpl": {
+        "keys": [],
+        "defaultKey": "MetaManagerImpl"
+    },
+    "ima/page/handler/PageHandler": {
+        "keys": [],
+        "defaultKey": "PageHandler"
+    },
+    "ima/page/handler/PageHandlerRegistry": {
+        "keys": [],
+        "defaultKey": "PageHandlerRegistry"
+    },
+    "ima/page/handler/PageNavigationHandler": {
+        "keys": [],
+        "defaultKey": "PageNavigationHandler"
+    },
+    "ima/page/manager/AbstractPageManager": {
+        "keys": [],
+        "defaultKey": "AbstractPageManager"
+    },
+    "ima/page/manager/ClientPageManager": {
+        "keys": [],
+        "defaultKey": "ClientPageManager"
+    },
+    "ima/page/manager/PageManager": {
+        "keys": [],
+        "defaultKey": "PageManager"
+    },
+    "ima/page/manager/ServerPageManager": {
+        "keys": [],
+        "defaultKey": "ServerPageManager"
+    },
+    "ima/page/renderer/AbstractPageRenderer": {
+        "keys": [],
+        "defaultKey": "AbstractPageRenderer"
+    },
+    "ima/page/renderer/BlankManagedRootView": {
+        "keys": [],
+        "defaultKey": "BlankManagedRootView"
+    },
+    "ima/page/renderer/ClientPageRenderer": {
+        "keys": [],
+        "defaultKey": "ClientPageRenderer"
+    },
+    "ima/page/renderer/ComponentUtils": {
+        "keys": [],
+        "defaultKey": "ComponentUtils"
+    },
+    "ima/page/renderer/Events": {
+        "keys": [],
+        "defaultKey": "RendererEvents"
+    },
+    "ima/page/renderer/PageRenderer": {
+        "keys": [],
+        "defaultKey": "PageRenderer"
+    },
+    "ima/page/renderer/PageRendererFactory": {
+        "keys": [],
+        "defaultKey": "PageRendererFactory"
+    },
+    "ima/page/renderer/ServerPageRenderer": {
+        "keys": [],
+        "defaultKey": "ServerPageRenderer"
+    },
+    "ima/page/renderer/Types": {
+        "keys": [],
+        "defaultKey": "RendererTypes"
+    },
+    "ima/page/renderer/ViewAdapter": {
+        "keys": [],
+        "defaultKey": "ViewAdapter"
+    },
+    "ima/page/state/Events": {
+        "keys": [],
+        "defaultKey": "StateEvents"
+    },
+    "ima/page/state/PageStateManager": {
+        "keys": [],
+        "defaultKey": "PageStateManager"
+    },
+    "ima/page/state/PageStateManagerDecorator": {
+        "keys": [],
+        "defaultKey": "PageStateManagerDecorator"
+    },
+    "ima/page/state/PageStateManagerImpl": {
+        "keys": [],
+        "defaultKey": "PageStateManagerImpl"
+    },
+    "ima/page/AbstractComponent": {
+        "keys": [],
+        "defaultKey": "AbstractComponent"
+    },
+    "ima/page/AbstractDocumentView": {
+        "keys": [],
+        "defaultKey": "AbstractDocumentView"
+    },
+    "ima/page/AbstractPureComponent": {
+        "keys": [],
+        "defaultKey": "AbstractPureComponent"
+    },
+    "ima/page/componentHelpers": {
+        "keys": [
+            "getUtils",
+            "localize",
+            "link",
+            "cssClasses",
+            "defaultCssClasses",
+            "fire",
+            "listen",
+            "unlisten"
+        ]
+    },
+    "ima/page/Context": {
+        "keys": [],
+        "defaultKey": "PageContext"
+    },
+    "ima/page/PageFactory": {
+        "keys": [],
+        "defaultKey": "PageFactory"
+    },
+    "ima/router/AbstractRouter": {
+        "keys": [],
+        "defaultKey": "AbstractRouter"
+    },
+    "ima/router/ActionTypes": {
+        "keys": [],
+        "defaultKey": "ActionTypes"
+    },
+    "ima/router/ClientRouter": {
+        "keys": [],
+        "defaultKey": "ClientRouter"
+    },
+    "ima/router/Events": {
+        "keys": [],
+        "defaultKey": "RouterEvents"
+    },
+    "ima/router/Request": {
+        "keys": [],
+        "defaultKey": "Request"
+    },
+    "ima/router/Response": {
+        "keys": [],
+        "defaultKey": "Response"
+    },
+    "ima/router/Route": {
+        "keys": [],
+        "defaultKey": "Route"
+    },
+    "ima/router/RouteFactory": {
+        "keys": [],
+        "defaultKey": "RouteFactory"
+    },
+    "ima/router/RouteNames": {
+        "keys": [],
+        "defaultKey": "RouteNames"
+    },
+    "ima/router/Router": {
+        "keys": [],
+        "defaultKey": "Router"
+    },
+    "ima/router/ServerRouter": {
+        "keys": [],
+        "defaultKey": "ServerRouter"
+    },
+    "ima/storage/CookieStorage": {
+        "keys": [],
+        "defaultKey": "CookieStorage"
+    },
+    "ima/storage/MapStorage": {
+        "keys": [],
+        "defaultKey": "MapStorage"
+    },
+    "ima/storage/SessionMapStorage": {
+        "keys": [],
+        "defaultKey": "SessionMapStorage"
+    },
+    "ima/storage/SessionStorage": {
+        "keys": [],
+        "defaultKey": "SessionStorage"
+    },
+    "ima/storage/Storage": {
+        "keys": [],
+        "defaultKey": "Storage"
+    },
+    "ima/storage/WeakMapStorage": {
+        "keys": [],
+        "defaultKey": "WeakMapStorage"
+    },
+    "ima/window/Window": {
+        "keys": [],
+        "defaultKey": "Window"
+    },
+    "ima/window/ServerWindow": {
+        "keys": [],
+        "defaultKey": "ServerWindow"
+    },
+    "ima/window/ClientWindow": {
+        "keys": [],
+        "defaultKey": "ClientWindow"
+    },
+    "ima/package.json": {
+        "keys": [
+            "version"
+        ]
+    }
+}
