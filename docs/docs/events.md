@@ -34,9 +34,9 @@ onClick(event) {
 
 render() {
   return (
-    <button onClick = { event => this.onClick(event) }>
-      { this.props.children }
-    </button>
+  <button onClick = { event => this.onClick(event) }>
+    { this.props.children }
+  </button>
   );
 }
 ```
@@ -52,36 +52,36 @@ mounted in the DOM tree.
 // app/component/expandable/ExpandableWrapper.jsx
 
 constructor() {
-	this._expandListener = this._expandWrapper.bind(this);
+  this._expandListener = this._expandWrapper.bind(this);
 }
 
 componentDidMount() {
-	this.listen(this, 'expand', this._expandListener);
+  this.listen(this, 'expand', this._expandListener);
 }
 
 componentWillUnmount() {
-	this.unlisten(this, 'expand', this._expandListener);
+  this.unlisten(this, 'expand', this._expandListener);
 }
 
 _expandWrapper(event) {
-	if (event.data.expandableId !== this.expandableId) {
-		return; // this expand event is not meant for us.
-	}
+  if (event.data.expandableId !== this.expandableId) {
+  return; // this expand event is not meant for us.
+  }
 
-	// Do to propagate the event further.
-	event.stopPropagation();
+  // Do to propagate the event further.
+  event.stopPropagation();
 
-	// Do the expand!
+  // Do the expand!
 }
 
 render() {
   return (
-    <div className = 'expandWrapper'>
-      // ... ExpandLink can be nested any level deep. Otherwise we could use simple props callback
-      <ExpandLink expandableId = { this.expandableId }>
-        See more
-      </ExpandLink>
-    </div>
+  <div className = 'expandWrapper'>
+    // ... ExpandLink can be nested any level deep. Otherwise we could use simple props callback
+    <ExpandLink expandableId = { this.expandableId }>
+    See more
+    </ExpandLink>
+  </div>
   );
 }
 ```
@@ -125,7 +125,7 @@ export let init = (ns, oc, config) => {
   const ComponentUtils = oc.get('$ComponentUtils');
 
   ComponentUtils.register({
-    $Dispatcher: Dispatcher
+  $Dispatcher: Dispatcher
   });
 }
 ```
@@ -143,10 +143,10 @@ their propagation.
 // app/component/image/Image.jsx
 
 onImageClick(event) {
-	event.preventDefault();
+  event.preventDefault();
 
-	const { image } = this.props;
-	this.utils.$Dispatcher.fire('showLightbox', { image });
+  const { image } = this.props;
+  this.utils.$Dispatcher.fire('showLightbox', { image });
 }
 ```
 
@@ -154,15 +154,15 @@ onImageClick(event) {
 // app/component/lightbox/Lightbox.jsx
 
 componentDidMount() {
-	this.utils.$Dispatcher.listen('showLightbox', this.onLightboxShow, this);
+  this.utils.$Dispatcher.listen('showLightbox', this.onLightboxShow, this);
 }
 
 componentWillUnmount() {
-	this.utils.$Dispatcher.unlisten('showLightbox', this.onLightboxShow, this);
+  this.utils.$Dispatcher.unlisten('showLightbox', this.onLightboxShow, this);
 }
 
 onLightboxShow(data) {
-	// ...
+  // ...
 }
 ```
 
@@ -188,21 +188,21 @@ This event is fired after the router matches new url to a registered route and
 before the page change starts. The data passed with the event look like this:
 ```javascript
 {
-    // the new Route instance
-    route,
-    // new URL parameters
-    params,
-    // the path portion of the new URL (a route definition is matched against this)
-    path,
-    // route options extended of options provided to the function
-    // that triggered the routing
-    options, 
-    // an action object describing what triggered the routing
-    // if a PopStateEvent triggered the routing the action object will
-    // look like this { type: 'popstate', event: PopStateEvent }
-    // otherwise the event will be MouseEvent (e.g. clicked on a link)
-    // and type will be either 'redirect', 'click' or 'error'.
-    action
+  // the new Route instance
+  route,
+  // new URL parameters
+  params,
+  // the path portion of the new URL (a route definition is matched against this)
+  path,
+  // route options extended of options provided to the function
+  // that triggered the routing
+  options, 
+  // an action object describing what triggered the routing
+  // if a PopStateEvent triggered the routing the action object will
+  // look like this { type: 'popstate', event: PopStateEvent }
+  // otherwise the event will be MouseEvent (e.g. clicked on a link)
+  // and type will be either 'redirect', 'click' or 'error'.
+  action
 }
 ```
 
@@ -221,12 +221,12 @@ following data:
 
 ```javascript
 {
-    // The state object derived from the oldState and patchState
-    newState,
-    // The current state
-    oldState,
-    // The data that were passed to the `setState` method
-    patchState
+  // The state object derived from the oldState and patchState
+  newState,
+  // The current state
+  oldState,
+  // The data that were passed to the `setState` method
+  patchState
 }
 ```
 
