@@ -57,7 +57,7 @@ exports[`DataView molecule should match snapshot 1`] = `
     selectedClassName="react-tabs__tab-panel--selected"
   >
     <JsonView
-      collapse={2}
+      collapse={3}
       src={
         Array [
           1,
@@ -73,7 +73,7 @@ exports[`DataView molecule should match snapshot 1`] = `
     selectedClassName="react-tabs__tab-panel--selected"
   >
     <JsonView
-      collapse={2}
+      collapse={3}
       src={
         Object {
           "id": 0,
