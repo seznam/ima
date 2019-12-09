@@ -3,7 +3,7 @@ layout: "docs"
 ---
 
 In order to upgrade your project to use IMA.js 0.14.0, please follow these steps:
-- Update your `gulpfile.js` to require the default configuration from the `ima-gulp-tasks` package v gulpfile.js requirovat gulpConfig.js z ima-gulp-tasks (see the [example configuration](https://github.com/seznam/IMA.js-skeleton/blob/master/gulpConfig.js)).
+- Update your `gulpfile.js` to require the default configuration from the `ima-gulp-tasks` package in the gulpfile.js (see the [example configuration](https://github.com/seznam/IMA.js-skeleton/blob/master/gulpConfig.js)).
 - If you are using custom `build` and `dev` tasks, remove the `Es6toEs5:ima` task from those.
 - Update your own custom gulp tasks to be compatible with [gulp 4](https://github.com/gulpjs/gulp/tree/4.0)
 - Remove references to the `ima.client.js` file in the `settings.js` file and the `bundle` section in the `build.js` file.

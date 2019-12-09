@@ -61,14 +61,14 @@ export default class DataView extends React.PureComponent {
         </TabList>
         <TabPanel>
           {args ? (
-            <JsonView src={args} collapse={2} />
+            <JsonView src={args} collapse={3} />
           ) : (
             <div className={styles.info}>Event&apos;s args are empty</div>
           )}
         </TabPanel>
         <TabPanel>
           {payload ? (
-            <JsonView src={payload} collapse={2} />
+            <JsonView src={payload} collapse={3} />
           ) : (
             <div className={styles.info}>Event&apos;s payload is empty</div>
           )}

@@ -62,7 +62,7 @@ Here's a list describing all possible configuration files and what they do.
   `dev` and `test` environment configuration automatically inherits values from
   the `prod` environment (except for the `$Language` which has to be configured
   individually). This configuration is well described in the comments so see 
-  [the file](https://github.com/seznam/IMA.js-examples/blob/master/hello/environment.js)
+  [the file](https://github.com/seznam/ima/blob/master/packages/create-ima-app/examples/hello/environment.js)
   for full reference.
 
 ## Application configuration

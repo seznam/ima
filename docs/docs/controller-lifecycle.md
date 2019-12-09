@@ -102,7 +102,7 @@ This method is a good place to register any React and DOM event listeners. The c
 ## `update()` *@client*
 
 Callback for updating the controller after a route update. This method
-is invoked if the current [route has the `onlyUpdate = true` flag set](https://github.com/seznam/IMA.js-skeleton/wiki/Routing#4-options) and the current controller and view match those used by the previously active route, or, the `onlyUpdate` option of the current route is a callback and returned `true`.
+is invoked if the current [route has the `onlyUpdate = true` flag set](/docs/routing#4-options) and the current controller and view match those used by the previously active route, or, the `onlyUpdate` option of the current route is a callback and returned `true`.
 
 The method must return an object with the same semantics as the result
 of the [`load()`](#load-serverclient) method. The controller's state will only be
