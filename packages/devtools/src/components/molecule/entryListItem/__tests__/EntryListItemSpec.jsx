@@ -33,6 +33,13 @@ describe('EntryListItem molecule', () => {
     setSelected: jest.fn()
   };
 
+  global.Date = jest.fn().mockImplementation(() => ({
+    getHours: () => 19,
+    getMinutes: () => 42,
+    getSeconds: () => 4,
+    getMilliseconds: () => 140
+  }));
+
   let wrapper, instance;
 
   beforeEach(() => {
@@ -77,13 +84,6 @@ describe('EntryListItem molecule', () => {
   });
 
   it('should render absolute time if item is first in the entries array (id === 0)', () => {
-    global.Date = jest.fn().mockImplementation(() => ({
-      getHours: () => 19,
-      getMinutes: () => 42,
-      getSeconds: () => 4,
-      getMilliseconds: () => 140
-    }));
-
     expect(instance.props.entry.id).toBe('0');
     expect(wrapper.find('.timeWrapper').text()).toBe('19:42:04.14');
   });

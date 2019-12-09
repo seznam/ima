@@ -26,7 +26,7 @@ exports[`Options template should match snapshot 1`] = `
           Since wrapping all functions in your application would produce too much clutter in the output, we provide default set of hooks which you can customize, turn on/off or completely remove to suit your needs.
            
           <a
-            href="https://imajs.io/docs/devtools-introduction.html"
+            href="https://imajs.io/docs/devtools-introduction"
             target="_blank"
           >
             For more information about devtools, visit imajs.io
@@ -125,7 +125,7 @@ exports[`Options template should match snapshot with modal opened 1`] = `
           Since wrapping all functions in your application would produce too much clutter in the output, we provide default set of hooks which you can customize, turn on/off or completely remove to suit your needs.
            
           <a
-            href="https://imajs.io/docs/devtools-introduction.html"
+            href="https://imajs.io/docs/devtools-introduction"
             target="_blank"
           >
             For more information about devtools, visit imajs.io

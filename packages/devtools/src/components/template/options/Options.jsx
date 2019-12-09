@@ -94,7 +94,7 @@ export default class Options extends React.PureComponent {
             you can customize, turn on/off or completely remove to suit your
             needs.{' '}
             <a
-              href="https://imajs.io/docs/devtools-introduction.html"
+              href="https://imajs.io/docs/devtools-introduction"
               target="_blank">
               For more information about devtools, visit imajs.io
             </a>
