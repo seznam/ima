@@ -1,7 +1,8 @@
 {
   "command": {
     "version": {
-      "message": "chore(release): publish"
+      "message": "chore(release): publish",
+      "ignoreChanges": ["packages/devtools/**"]
     },
     "publish": {
       "conventionalCommits": true,
