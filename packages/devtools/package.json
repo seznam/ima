@@ -1,24 +1,39 @@
 {
   "name": "@ima/devtools",
   "version": "0.1.0",
-  "description": "",
+  "description": "IMA.js debugging panel in the Chrome Developer Tools window.",
   "main": "dist/main.js",
   "scripts": {
     "test": "../../node_modules/.bin/jest --no-watchman -c jest.conf.js",
     "build": "webpack --config webpack.prod.js",
     "dev": "webpack --watch --progress --config webpack.dev.js"
   },
+  "keywords": [
+    "IMA",
+    "IMA.js",
+    "Chrome",
+    "Devtools",
+    "Javascript"
+  ],
+  "author": "Miroslav Jancarik <miroslav.jancarik@firma.seznam.cz>",
+  "contributors": [
+    {
+      "name": "Jan Šimeček",
+      "email": "jan.simecek@firma.seznam.cz"
+    }
+  ],
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/seznam/ima.git"
+  },
+  "bugs": {
+    "url": "https://github.com/seznam/ima/issues"
+  },
   "publishConfig": {
     "registry": "https://registry.npmjs.org/",
     "access": "public"
   },
-  "author": "Miroslav Jancarik <miroslav.jancarik@firma.seznam.cz>",
-  "contributors": [
-    {
-      "name": "Jan Simecek",
-      "email": "jan.simecek@firma.seznam.cz"
-    }
-  ],
+  "license": "ISC",
   "devDependencies": {
     "@babel/core": "^7.7.4",
     "@babel/plugin-external-helpers": "^7.7.4",
@@ -44,7 +59,6 @@
     "webpack-cli": "^3.3.10",
     "webpack-merge": "^4.2.2"
   },
-  "license": "ISC",
   "dependencies": {
     "@ima/devtools-scripts": "1.0.0",
     "@reach/menu-button": "^0.6.2",

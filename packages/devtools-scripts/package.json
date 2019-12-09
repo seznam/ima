@@ -1,7 +1,7 @@
 {
   "name": "@ima/devtools-scripts",
   "version": "1.0.0",
-  "description": "",
+  "description": "IMA.js devtool script used in the @ima/devtools.",
   "main": "es/main.string.js",
   "scripts": {
     "build:commonjs": "NODE_ENV=cjs rollup -c -o lib/main.js",
@@ -11,17 +11,32 @@
     "build": "npm run build:script && npm run build:string",
     "dev": "NODE_ENV=es rollup -c -w -o es/main.js"
   },
+  "keywords": [
+    "IMA",
+    "IMA.js",
+    "Chrome",
+    "Devtools",
+    "Inject Scripts"
+  ],
+  "author": "Miroslav Jancarik <miroslav.jancarik@firma.seznam.cz>",
+  "contributors": [
+    {
+      "name": "Jan Šimeček",
+      "email": "jan.simecek@firma.seznam.cz"
+    }
+  ],
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/seznam/ima.git"
+  },
+  "bugs": {
+    "url": "https://github.com/seznam/ima/issues"
+  },
   "publishConfig": {
     "registry": "https://registry.npmjs.org/",
     "access": "public"
   },
-  "author": "Miroslav Jancarik <miroslav.jancarik@firma.seznam.cz>",
-  "contributors": [
-    {
-      "name": "Jan Simecek",
-      "email": "jan.simecek@firma.seznam.cz"
-    }
-  ],
+  "license": "ISC",
   "devDependencies": {
     "@babel/cli": "^7.7.4",
     "@babel/core": "^7.7.4",
@@ -31,7 +46,6 @@
     "rollup-plugin-node-resolve": "^5.2.0",
     "rollup-plugin-uglify": "^6.0.3"
   },
-  "license": "ISC",
   "dependencies": {
     "easy-uid": "^1.0.1",
     "to-aop": "0.2.1"
