@@ -7,14 +7,6 @@ import Context from '../Context';
  * page view component through its properties.
  */
 export default class ViewAdapter extends React.Component {
-  static getDerivedStateFromProps(nextProps, prevState) {
-    if (nextProps.state !== prevState.state) {
-      return nextProps.state;
-    }
-
-    return null;
-  }
-
   /**
    * Initializes the adapter component.
    *
@@ -46,11 +38,33 @@ export default class ViewAdapter extends React.Component {
      *
      * @type {function}
      */
-    this._getContextValue = memoizeOne(props => this.getContextValue(props));
+    this._getContextValue = memoizeOne((props, state) =>
+      this.getContextValue(props, state)
+    );
+
+    /**
+     * The array of selectors for context values.
+     *
+     * @type {Array[function]}
+     */
+    this.contextSelectors = [props => props.$Utils];
+
+    /**
+     * The function for creating context.
+     *
+     * @type {function}
+     */
+    this.createContext = memoizeOne($Utils => {
+      return { $Utils };
+    });
   }
 
-  getContextValue(props) {
-    return { $Utils: props.$Utils };
+  getContextValue(props, state) {
+    const selectedValues = this.contextSelectors.map(selector =>
+      selector(props, state)
+    );
+
+    return this.createContext(...selectedValues);
   }
 
   /**
@@ -59,7 +73,7 @@ export default class ViewAdapter extends React.Component {
   render() {
     return React.createElement(
       Context.Provider,
-      { value: this._getContextValue(this.props) },
+      { value: this._getContextValue(this.props, this.state) },
       React.createElement(this._view, this.state)
     );
   }

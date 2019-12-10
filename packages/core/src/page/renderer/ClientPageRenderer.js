@@ -60,7 +60,7 @@ export default class ClientPageRenderer extends AbstractPageRenderer {
 
     if (!this._firstTime) {
       controller.setState(
-        this._patchStateToClearPreviousState(defaultPageState)
+        this._patchStateToClearPreviousState(defaultPageState, view)
       );
       await this._renderToDOM(controller, view, routeOptions);
       this._patchPromisesToState(controller, loadedPromises);
@@ -164,9 +164,12 @@ export default class ClientPageRenderer extends AbstractPageRenderer {
    *
    *
    * @param {Object<string, *>} state
+   * @param {React.Component} view
    * @returns {Object<string, *>}
    */
-  _patchStateToClearPreviousState(state) {
+  _patchStateToClearPreviousState(state, view) {
+    state.$pageView = view;
+
     if (!this._reactiveView || !this._reactiveView.state) {
       return state;
     }
