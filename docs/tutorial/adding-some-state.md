@@ -117,11 +117,13 @@ return {
       author: 'Henry Ford'
     },
     {
-      content: 'We are what we repeatedly do. Excellence, then, is not an act, but a habit.',
+      content: 
+        'We are what we repeatedly do. Excellence, then, is not an act, but a habit.',
       author: 'Aristotle'
     },
     {
-      content: 'Reality is merely an illusion, albeit a very persistent one.',
+      content: 
+        'Reality is merely an illusion, albeit a very persistent one.',
       author: 'Albert Einstein'
     }
   ]
@@ -263,7 +265,7 @@ To use our new component, we need to update the `_renderPosts()` method in the
 `app/page/home/HomeView.jsx` file to the following code:
 
 ```jsx
-return this.props.posts.map((post, index) => {
+return posts.map((post, index) => {
   return <Post key={index} content={post.content} author={post.author} />;
 });
 ```
@@ -384,16 +386,16 @@ views](#notes-on-communication-between-controllers-and-views).
 There are three ways the controllers and views communicate:
 
 1. **By passing state from the controller to the view &ndash;** this is the most
-  common way of passing information.
+    common way of passing information.
 2. **By emitting DOM events** from the view and listening for them in the controller
-  or parent components (using the `EventBus`) &ndash; this is
-  the most common way of notifying the controller or a parent UI component of
-  the user's actions in the view.
+    or parent components (using the `EventBus`) &ndash; this is
+    the most common way of notifying the controller or a parent UI component of
+    the user's actions in the view.
 3. **By emitting "global" events** in the controller and / or view and listening for
-  them in the controller and / or view (using the `Dispatcher`)
-  &ndash; this is used only in very specific situations, like when the UI
-  needs to be notified about an external event captured by the controller and
-  updating the state is not practical.
+    them in the controller and / or view (using the `Dispatcher`)
+    &ndash; this is used only in very specific situations, like when the UI
+    needs to be notified about an external event captured by the controller and
+    updating the state is not practical.
 
 ### Passing state
 
