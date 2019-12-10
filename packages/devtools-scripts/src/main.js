@@ -11,7 +11,6 @@ const ImaMainModules = [
   'getClientBootConfig',
   'bootClientApp',
   'routeClientApp',
-  'hotReloadClientApp',
   'reviveClientApp'
 ];
 

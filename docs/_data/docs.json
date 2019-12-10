@@ -506,6 +506,10 @@
                                 "url": "/docs/devtools-options#3-emitidentifier-meta-options-overrides--"
                             },
                             {
+                                "title": "importIMAClass",
+                                "url": "/docs/devtools-options#4-import-ima-class"
+                            },
+                            {
                                 "title": "Message colors",
                                 "url": "/docs/devtools-options#message-colors"
                             }

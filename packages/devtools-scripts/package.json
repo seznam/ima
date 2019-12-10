@@ -43,11 +43,10 @@
     "@babel/plugin-transform-template-literals": "^7.7.4",
     "rollup": "^1.27.8",
     "rollup-plugin-commonjs": "^10.1.0",
-    "rollup-plugin-node-resolve": "^5.2.0",
-    "rollup-plugin-uglify": "^6.0.3"
+    "rollup-plugin-node-resolve": "^5.2.0"
   },
   "dependencies": {
     "easy-uid": "^1.0.1",
-    "to-aop": "0.2.1"
+    "to-aop": "0.3.0"
   }
 }
