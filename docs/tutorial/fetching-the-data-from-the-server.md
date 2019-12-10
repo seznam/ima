@@ -124,8 +124,8 @@ export default class PostResource {
 
   getEntityList() {
     return this._http
-        .get('http://localhost:3001/static/api/posts.json', {})
-        .then(response => this._factory.createList(response.body));
+      .get('http://localhost:3001/static/api/posts.json', {})
+      .then(response => this._factory.createList(response.body));
   }
 }
 ```
@@ -150,9 +150,9 @@ properly in a moment.
 
 ### Service class
 
-You now may be wondering what is the point of the service class. Why, the
-service class is not that useful in our tutorial, but it would be essential in
-a bigger application. The **resource should handle only sending requests and
+You now may be wondering what is the point of the service class. 
+It isn't that useful in our tutorial, but it would be essential in a bigger application.
+The **resource should handle only sending requests and
 processing responses** without any high-level operations. The **service class is
 there to take care of the high-level stuff**. For example, should we have a REST
 API that provides us with paged access to posts and we would want to fetch all
@@ -197,8 +197,8 @@ everything up, well we actually already did that. You may have noticed that in m
 classed we used some weird static getter called `$dependencies`, that's how IMA.js built 
 in dependency injection works.
 
-IMA.js uses internally the Object Container class to handle all dependencies, you can
-[read more about it in the documentation](/docs/object-container) but the basic usage is fairly easy.
+IMA.js uses internally the Object Container class to handle all dependencies (you can
+[read more about it in the documentation](/docs/object-container)), but the basic usage is fairly easy.
 Every class that wants to use DI has to define static getter which returns an array of instances 
 we want to inject to the constructor in the same order as defined in the array itself. Real
 world example would then look something like this:
