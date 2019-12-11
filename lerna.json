@@ -1,8 +1,7 @@
 {
   "command": {
     "version": {
-      "message": "chore(release): publish",
-      "ignoreChanges": ["packages/devtools/**"]
+      "message": "chore(release): publish"
     },
     "publish": {
       "conventionalCommits": true,
@@ -10,7 +9,7 @@
     }
   },
   "packages": [
-    "packages/!(skeleton)"
+    "packages/!(devtools)"
   ],
   "version": "17.0.1"
 }
