@@ -60,6 +60,7 @@ export default (ns, oc, config) => {
   //*************END VENDORS*****************
 
   //*************START CONSTANTS*****************
+  oc.constant('$oc', oc);
   oc.constant('$Settings', config);
   oc.constant('$Env', config.$Env);
   oc.constant('$Protocol', config.$Protocol);
