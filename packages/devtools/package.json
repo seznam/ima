@@ -49,6 +49,7 @@
     "enzyme-adapter-react-16": "^1.15.1",
     "enzyme-to-json": "^3.4.3",
     "file-loader": "^5.0.2",
+    "generate-asset-webpack-plugin": "^0.3.0",
     "identity-obj-proxy": "^3.0.0",
     "less": "^3.10.3",
     "less-loader": "^5.0.0",

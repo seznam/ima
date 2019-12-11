@@ -42,7 +42,7 @@
   "scripts": {
     "benchmark": "utils/benchmark/benchmark.sh",
     "doc": "gulp doc",
-    "test": "lerna run test",
+    "test": "lerna run test && npm run --prefix ./packages/devtools test",
     "release": "lerna version --force-publish create-ima-app",
     "release:next": "npm run release -- prerelease",
     "release:next:init": "lerna version premajor --force-publish",

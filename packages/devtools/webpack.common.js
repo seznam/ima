@@ -1,9 +1,20 @@
 const path = require('path');
 const CopyPlugin = require('copy-webpack-plugin');
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
+const GenerateAssetPlugin = require('generate-asset-webpack-plugin');
+
+const pkg = require('./package');
+const manifest = require('./manifest');
 
 const srcDir = path.resolve(__dirname, 'src');
 const distDir = path.resolve(__dirname, 'dist');
+
+function buildManifest(compiler, cb) {
+  const { version } = pkg;
+  manifest.version = version;
+
+  return cb(null, JSON.stringify(manifest, null, '  '));
+}
 
 module.exports = {
   entry: {
@@ -77,13 +88,13 @@ module.exports = {
     ]
   },
   plugins: [
+    new GenerateAssetPlugin({
+      filename: `manifest.json`,
+      fn: buildManifest
+    }),
     new CopyPlugin([
       {
         from: `${srcDir}/public`,
-        to: distDir
-      },
-      {
-        from: `${srcDir}/manifest.json`,
         to: distDir
       }
     ]),

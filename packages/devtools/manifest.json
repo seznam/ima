@@ -1,6 +1,5 @@
 {
   "name": "IMA.js Developer Tools",
-  "version": "0.1",
   "description": "Adds IMA.js debugging panel to the Chrome Developer Tools window.",
   "devtools_page": "html/devtools.html",
   "permissions": [
