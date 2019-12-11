@@ -7,6 +7,17 @@ import Context from '../Context';
  * page view component through its properties.
  */
 export default class ViewAdapter extends React.Component {
+  static getDerivedStateFromProps(props, state) {
+    if (
+      props.state.$pageView !== state.$pageView &&
+      state.$pageView !== undefined
+    ) {
+      return props.state;
+    } else {
+      return Object.assign({}, state, { $pageView: props.state.$pageView });
+    }
+  }
+
   /**
    * Initializes the adapter component.
    *

@@ -59,9 +59,7 @@ export default class ClientPageRenderer extends AbstractPageRenderer {
     let loadedPromises = separatedData.promises;
 
     if (!this._firstTime) {
-      controller.setState(
-        this._patchStateToClearPreviousState(defaultPageState, view)
-      );
+      this._setStateWithoutRendering(controller, defaultPageState);
       await this._renderToDOM(controller, view, routeOptions);
       this._patchPromisesToState(controller, loadedPromises);
     }
@@ -160,16 +158,30 @@ export default class ClientPageRenderer extends AbstractPageRenderer {
     }
   }
 
+  // TODO IMA@18
+  /**
+   * The method is hacky for IMA@17 and we must rewrite logic for IMA@18.
+   *
+   * @param {Controller} controller
+   * @param {Object<string, *>} defaultPageState
+   */
+  _setStateWithoutRendering(controller, defaultPageState) {
+    const patchState = this._patchStateToClearPreviousState(defaultPageState);
+
+    const reactiveView = this._reactiveView;
+    this._reactiveView = null;
+
+    controller.setState(patchState);
+    this._reactiveView = reactiveView;
+  }
+
   /**
    *
    *
    * @param {Object<string, *>} state
-   * @param {React.Component} view
    * @returns {Object<string, *>}
    */
-  _patchStateToClearPreviousState(state, view) {
-    state.$pageView = view;
-
+  _patchStateToClearPreviousState(state) {
     if (!this._reactiveView || !this._reactiveView.state) {
       return state;
     }
