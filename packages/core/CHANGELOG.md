@@ -3,6 +3,23 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [17.1.0](https://github.com/seznam/ima/compare/v17.0.1...v17.1.0) (2019-12-11)
+
+
+### Bug Fixes
+
+* 🐛 changing views between pages ([0c25ef5](https://github.com/seznam/ima/commit/0c25ef5ad4a8688c8605fd08f5bd32fe8c331764))
+* 🐛 propagation of state and React context ([dc164c3](https://github.com/seznam/ima/commit/dc164c3ed55e786010ac2a82e081ec15efbf1dc1))
+
+
+### Features
+
+* **core:** added Object Container as a constant to Object Container ([6547e3f](https://github.com/seznam/ima/commit/6547e3fcfdc3572b115779f9b1805b2703a44259))
+
+
+
+
+
 ## [17.0.1](https://github.com/seznam/ima/compare/v17.0.0...v17.0.1) (2019-12-06)
 
 **Note:** Version bump only for package @ima/core
