@@ -61,6 +61,9 @@ In the extension file should be plain `class` extending
 import { AbstractExtension } from '@ima/core';
 
 export default class GalleryExtension extends AbstractExtension {
+  static get $dependencies() {
+    return [];
+  }
 
   load() {
     // Where the magic happens...
@@ -79,10 +82,10 @@ import GalleryExtension from 'app/component/gallery/GalleryExtension';
 
 export default class PostController extends AbstractController {
   static get $dependencies() {
-    return [GalleryExtension, // ... ]
+    return [GalleryExtension];
   }
 
-  constructor(galleryExtension, // ...) {
+  constructor(galleryExtension) {
     this._galleryExtension = galleryExtension;
   }
 
