@@ -56,7 +56,7 @@ export default class ViewAdapter extends React.Component {
     /**
      * The array of selectors for context values.
      *
-     * @type {Array[function]}
+     * @type {Array<function>}
      */
     this.contextSelectors = [props => props.$Utils];
 
