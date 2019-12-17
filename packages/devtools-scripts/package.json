@@ -47,6 +47,6 @@
   },
   "dependencies": {
     "easy-uid": "^1.0.1",
-    "to-aop": "0.3.0"
+    "to-aop": "0.3.1"
   }
 }

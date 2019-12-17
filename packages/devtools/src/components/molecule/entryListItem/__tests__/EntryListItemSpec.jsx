@@ -136,13 +136,6 @@ describe('EntryListItem molecule', () => {
 
   describe('_getTime', () => {
     it('should return padded formatted time string', () => {
-      global.Date = jest.fn().mockImplementation(() => ({
-        getHours: () => 19,
-        getMinutes: () => 42,
-        getSeconds: () => 4,
-        getMilliseconds: () => 140
-      }));
-
       expect(instance._getTime(1124214124142)).toBe('19:42:04.14');
     });
   });
