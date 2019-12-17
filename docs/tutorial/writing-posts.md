@@ -72,7 +72,7 @@ constructor(props, context) {
   
   this.state = {
     author: '',
-    content: '',
+    content: ''
   };
 }
 ```
