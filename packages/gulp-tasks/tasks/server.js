@@ -58,7 +58,12 @@ exports.default = gulpConfig => {
   function webSocketTask(done) {
     webSocketServer = createServer(gulpConfig.webSocketServerConfig);
 
-    webSocketServer.on('connection', () => {
+    webSocketServer.on('listening', () => {
+      done();
+    });
+
+    webSocketServer.on('error', error => {
+      console.error(error);
       done();
     });
   }
