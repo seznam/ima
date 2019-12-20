@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [17.1.1](https://github.com/seznam/ima/compare/v17.1.0...v17.1.1) (2019-12-20)
+
+
+### Bug Fixes
+
+* 🐛 web socket task is done after listening event is emitted ([74fa23d](https://github.com/seznam/ima/commit/74fa23d33a87411a3fabc0d95a23cf66d285fbb3))
+
+
+
+
+
 # [17.1.0](https://github.com/seznam/ima/compare/v17.0.1...v17.1.0) (2019-12-11)
 
 
