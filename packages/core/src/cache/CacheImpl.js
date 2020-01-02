@@ -161,7 +161,7 @@ export default class CacheImpl extends Cache {
         if ($Debug) {
           if (!this._canSerializeValue(serializeEntry.value)) {
             throw new Error(
-              `ima.cache.CacheImpl:serialize An ` +
+              `ima.core.cache.CacheImpl:serialize An ` +
                 `attempt to serialize ` +
                 `${serializeEntry.value.toString()}, stored ` +
                 `using the key ${key}, was made, but the value ` +

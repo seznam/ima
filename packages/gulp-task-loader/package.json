@@ -1,6 +1,6 @@
 {
   "name": "@ima/gulp-task-loader",
-  "version": "17.0.0-rc.3",
+  "version": "17.0.1",
   "description": "Automatic gulp task loader for IMA.js applications.",
   "main": "taskLoader.js",
   "scripts": {
@@ -12,7 +12,7 @@
     "url": "https://github.com/seznam/ima.git"
   },
   "publishConfig": {
-    "registry": "http://registry.npmjs.org/",
+    "registry": "https://registry.npmjs.org/",
     "access": "public"
   },
   "keywords": [

@@ -1,0 +1,82 @@
+[
+    {
+        "name": "plugin-analytic",
+        "url": "https://github.com/seznam/IMA.js-plugins/tree/master/packages/plugin-analytic",
+        "description": "This is the abstract analytic plugin for the IMA.js application, it provides an interface to which other analytics plugin can easily hook into."
+    },
+    {
+        "name": "plugin-analytic-fb-pixel",
+        "url": "https://github.com/seznam/IMA.js-plugins/tree/master/packages/plugin-analytic-fb-pixel",
+        "description": "Facebook Pixel analytic plugin, implementing the **plugin-analytic** interface."
+    },
+    {
+        "name": "plugin-analytic-google",
+        "url": "https://github.com/seznam/IMA.js-plugins/tree/master/packages/plugin-analytic-google",
+        "description": "Google Analytics plugin, implementing the **plugin-analytic** interface."
+    },
+    {
+        "name": "plugin-less-constants",
+        "url": "https://github.com/seznam/IMA.js-plugins/tree/master/packages/plugin-less-constants",
+        "description": "Very useful IMA.js plugin for **sharing constants between JavaScript and LESS code**. Allows us to manage all constants in a separate `*.js` files which are then compiled into corresponding `*.less` file that can be used in our styles "
+    },
+    {
+        "name": "plugin-logger",
+        "url": "https://github.com/seznam/IMA.js-plugins/tree/master/packages/plugin-logger",
+        "description": "A logging tool for IMA.js framework. It also provides `babel-plugin`, that can strip out all logging messages if desired."
+    },
+    {
+        "name": "plugin-resource-loader",
+        "url": "https://github.com/seznam/IMA.js-plugins/tree/master/packages/plugin-resource-loader",
+        "description": "This is the base plugin for **loading scripts and styles** for the IMA.js application through promisified interface."
+    },
+    {
+        "name": "plugin-rest-client",
+        "url": "https://github.com/seznam/IMA.js-plugins/tree/master/packages/plugin-rest-client",
+        "description": "Generic **REST API** client plugin for the IMA application framework."
+    },
+    {
+        "name": "plugin-script-loader",
+        "url": "https://github.com/seznam/IMA.js-plugins/tree/master/packages/plugin-script-loader",
+        "description": "A plugin for loading 3rd party scripts for the IMA.js application."
+    },
+    {
+        "name": "plugin-select",
+        "url": "https://github.com/seznam/IMA.js-plugins/tree/master/packages/plugin-select",
+        "description": "The plugin **selects extra props from page state to your component**. It uses HOC at the background. It can be very useful for example some analytical data. It has a similar interface to react-redux connect HOC component."
+    },
+    {
+        "name": "plugin-self-xss",
+        "url": "https://github.com/seznam/IMA.js-plugins/tree/master/packages/plugin-self-xss",
+        "description": "This plugin is trying to mitigate Self-XSS security attack by sending simple message into console."
+    },
+    {
+        "name": "plugin-shared-cache",
+        "url": "https://github.com/seznam/IMA.js-plugins/tree/master/packages/plugin-shared-cache",
+        "description": "A utility for **creating caches** that are shared between requests by all IMA.js application instances within the same node.js process."
+    },
+    {
+        "name": "plugin-style-loader",
+        "url": "https://github.com/seznam/IMA.js-plugins/tree/master/packages/plugin-style-loader",
+        "description": "A plugin for **loading 3rd party styles** for the IMA.js application."
+    },
+    {
+        "name": "plugin-useragent",
+        "url": "https://github.com/seznam/IMA.js-plugins/tree/master/packages/plugin-useragent",
+        "description": "A plugin for **parsing** client's **user agent**."
+    },
+    {
+        "name": "plugin-xhr",
+        "url": "https://github.com/seznam/IMA.js-plugins/tree/master/packages/plugin-xhr",
+        "description": "Helper plugin **simplifying the usage of the XMLHttpRequest API**. This plugin is meant to be used only at the client side and only where the fetch API is insufficient at the moment."
+    },
+    {
+        "name": "plugin-local-storage",
+        "url": "https://github.com/seznam/IMA.js-plugins/tree/master/packages/plugin-local-storage",
+        "description": "A plugin providing **simplified access to browser's local storage**, through extending the IMA.js Storage interface."
+    },
+    {
+        "name": "plugin-testing-integration",
+        "url": "https://github.com/seznam/IMA.js-plugins/tree/master/packages/plugin-testing-integration",
+        "description": "A plugin for **integration testing** of any IMA.js based application."
+    }
+]

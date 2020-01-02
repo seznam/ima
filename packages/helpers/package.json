@@ -1,11 +1,11 @@
 {
   "name": "@ima/helpers",
-  "version": "17.0.0-rc.3",
+  "version": "17.0.1",
   "description": "Various helpers for the IMA.js framework.",
   "main": "index.js",
   "scripts": {
     "preversion": "npm test",
-    "test": "jest -c jest.conf.js"
+    "test": "../../node_modules/.bin/jest -c jest.conf.js"
   },
   "repository": {
     "type": "git",
@@ -22,7 +22,7 @@
   },
   "homepage": "https://github.com/seznam/ima#readme",
   "publishConfig": {
-    "registry": "http://registry.npmjs.org/",
+    "registry": "https://registry.npmjs.org/",
     "access": "public"
   },
   "dependencies": {

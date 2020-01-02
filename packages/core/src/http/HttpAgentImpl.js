@@ -262,12 +262,10 @@ export default class HttpAgentImpl extends HttpAgent {
   _request(method, url, data, options) {
     let cacheKey = this.getCacheKey(method, url, data);
 
-    let cachePromise = this._proxy
-      .request(method, url, data, options)
-      .then(
-        response => this._proxyResolved(response),
-        error => this._proxyRejected(error)
-      );
+    let cachePromise = this._proxy.request(method, url, data, options).then(
+      response => this._proxyResolved(response),
+      error => this._proxyRejected(error)
+    );
 
     this._internalCacheOfPromises.set(cacheKey, cachePromise);
 
@@ -348,7 +346,7 @@ export default class HttpAgentImpl extends HttpAgent {
       this._internalCacheOfPromises.delete(cacheKey);
 
       let errorName = errorParams.errorName;
-      let errorMessage = `${errorName}: ima.http.Agent:_proxyRejected: ${error.message}`;
+      let errorMessage = `${errorName}: ima.core.http.Agent:_proxyRejected: ${error.message}`;
       let agentError = new GenericError(errorMessage, errorParams);
       return Promise.reject(agentError);
     }

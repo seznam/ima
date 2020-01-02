@@ -30,8 +30,8 @@ function generateConfig(environemnt) {
         namedExports: true // Default: true
       }),
       replace({
-        "path.dirname(path.resolve('ima'))":
-          "path.dirname(require.resolve('ima'))",
+        "path.dirname(path.resolve('@ima/core'))":
+          "path.dirname(require.resolve('@ima/core'))",
         delimiters: ['', '']
       }),
       jscc({

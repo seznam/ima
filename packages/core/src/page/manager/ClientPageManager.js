@@ -51,7 +51,7 @@ export default class ClientPageManager extends AbstractPageManager {
      * The utility for manipulating the global context and global
      * client-side-specific APIs.
      *
-     * @type {ima.window.Window}
+     * @type {ima.core.window.Window}
      */
     this._window = window;
 
@@ -59,7 +59,7 @@ export default class ClientPageManager extends AbstractPageManager {
      * The event bus for dispatching and listening for custom IMA events
      * propagated through the DOM.
      *
-     * @type {ima.event.EventBus}
+     * @type {ima.core.event.EventBus}
      */
     this._eventBus = eventBus;
 

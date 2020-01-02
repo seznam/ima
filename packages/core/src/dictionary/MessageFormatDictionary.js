@@ -94,7 +94,7 @@ export default class MessageFormatDictionary extends Dictionary {
 
     if (!scope) {
       throw new GenericError(
-        `ima.dictionary.MessageFormatDictionary.get: The ` +
+        `ima.core.dictionary.MessageFormatDictionary.get: The ` +
           `localization phrase '${key}' does not exists`,
         { key, parameters }
       );

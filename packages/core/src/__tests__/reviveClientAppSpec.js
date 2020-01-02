@@ -1,10 +1,23 @@
 import React from 'react';
 import jsdom from 'jsdom';
-import $Helper from 'ima-helpers';
+import $Helper from '@ima/helpers';
 import ControllerInterface from '../controller/Controller';
 import AbstractDocumentView from '../page/AbstractDocumentView';
 import * as ima from '../main';
 import vendorLinker from '../vendorLinker';
+
+jest.mock('path', () => {
+  const original = jest.requireActual('path');
+  const resolve = (...args) => {
+    if (args[1] === undefined && args[0] === '@ima/core') {
+      return original.join(process.cwd(), 'index.js');
+    }
+
+    return original.resolve(...args);
+  };
+
+  return Object.assign({}, original, { resolve });
+});
 
 const MASTER_ELEMENT_ID = 'some-id';
 
@@ -98,7 +111,7 @@ describe('Revive client application', () => {
 
     vendorLinker.set('react', React);
     vendorLinker.set('react-dom', ReactDOM);
-    vendorLinker.set('ima-helpers', $Helper);
+    vendorLinker.set('@ima/helpers', $Helper);
 
     spyOn(ReactDOM, 'render');
 
@@ -114,6 +127,7 @@ describe('Revive client application', () => {
         initSettings: () => {
           return {
             prod: {
+              $Http: {},
               $Page: {
                 $Render: {}
               }

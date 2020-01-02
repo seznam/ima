@@ -5,7 +5,7 @@ import ClientRouter from '../ClientRouter';
 import RouteFactory from '../RouteFactory';
 import Window from 'src/window/Window';
 
-describe('ima.router.ClientRouter', () => {
+describe('ima.core.router.ClientRouter', () => {
   let router = null;
   let pageRenderer = null;
   let routeFactory = null;
@@ -49,6 +49,14 @@ describe('ima.router.ClientRouter', () => {
     router.listen();
 
     expect(window.bindEventListener.calls.count()).toEqual(2);
+  });
+
+  it('should remove listener to popState event, click event', () => {
+    spyOn(window, 'unbindEventListener').and.stub();
+
+    router.unlisten();
+
+    expect(window.unbindEventListener.calls.count()).toEqual(2);
   });
 
   describe('redirect method', () => {

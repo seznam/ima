@@ -17,9 +17,9 @@ export class Namespace {
    *
    * @private
    * @example
-   *        import ns from 'ima/namespace/ns.js';
-   *        ns.namespace('ima');
-   *        ns.has('ima');
+   *        import { ns } from '@ima/core';
+   *        ns.namespace('ima.core');
+   *        ns.has('ima.core');
    */
   constructor() {}
 

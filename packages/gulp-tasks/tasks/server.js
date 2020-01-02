@@ -1,4 +1,5 @@
 const gls = require('gulp-live-server');
+const { createServer } = require('@ima/plugin-websocket/server');
 
 const sharedState = require('../gulpState.js');
 
@@ -6,6 +7,7 @@ exports.__requiresConfig = true;
 
 exports.default = gulpConfig => {
   let server = null;
+  let webSocketServer = null;
   let runningServers = 0;
 
   function isServerRunning() {
@@ -53,8 +55,22 @@ exports.default = gulpConfig => {
     done();
   }
 
+  function webSocketTask(done) {
+    webSocketServer = createServer(gulpConfig.webSocketServerConfig);
+
+    webSocketServer.on('listening', () => {
+      done();
+    });
+
+    webSocketServer.on('error', error => {
+      console.error(error);
+      done();
+    });
+  }
+
   return {
     server: serverTask,
+    'server:websocket': webSocketTask,
     'server:restart': serverRestart,
     'server:reload': serverReload,
     'server:hotreload': serverHotreload

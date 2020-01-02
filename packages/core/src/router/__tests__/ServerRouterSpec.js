@@ -5,7 +5,7 @@ import Response from '../Response';
 import RouteFactory from '../RouteFactory';
 import ServerRouter from '../ServerRouter';
 
-describe('ima.router.ServerRouter', () => {
+describe('ima.core.router.ServerRouter', () => {
   var router = null;
   var pageRenderer = null;
   var routeFactory = null;

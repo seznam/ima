@@ -1,4 +1,4 @@
-import Helper from 'ima-helpers';
+import Helper from '@ima/helpers';
 import Cache from 'src/cache/Cache';
 import Controller from 'src/controller/Controller';
 import GenericError from 'src/error/GenericError';
@@ -13,10 +13,23 @@ import {
   objectKeepUnmock
 } from 'to-mock';
 
+jest.mock('path', () => {
+  const original = jest.requireActual('path');
+  const resolve = (...args) => {
+    if (args[1] === undefined && args[0] === '@ima/core') {
+      return original.join(process.cwd(), 'index.js');
+    }
+
+    return original.resolve(...args);
+  };
+
+  return Object.assign({}, original, { resolve });
+});
+
 setGlobalMockMethod(jest.fn);
 setGlobalKeepUnmock(objectKeepUnmock);
 
-describe('ima.page.renderer.ServerPageRenderer', () => {
+describe('ima.core.page.renderer.ServerPageRenderer', () => {
   let param1 = 'param1';
   let param2 = 'param2';
   let params = {

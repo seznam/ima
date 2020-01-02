@@ -45,11 +45,14 @@ import ServerPageManager from './page/manager/ServerPageManager';
 import AbstractPageRenderer from './page/renderer/AbstractPageRenderer';
 import BlankManagedRootView from './page/renderer/BlankManagedRootView';
 import ClientPageRenderer from './page/renderer/ClientPageRenderer';
+import ComponentUtils from './page/renderer/ComponentUtils';
+import RendererEvents from './page/renderer/Events';
 import PageRenderer from './page/renderer/PageRenderer';
 import PageRendererFactory from './page/renderer/PageRendererFactory';
 import ServerPageRenderer from './page/renderer/ServerPageRenderer';
+import RendererTypes from './page/renderer/Types';
 import ViewAdapter from './page/renderer/ViewAdapter';
-import * as StateEvents from './page/state/Events';
+import StateEvents from './page/state/Events';
 import PageStateManager from './page/state/PageStateManager';
 import PageStateManagerDecorator from './page/state/PageStateManagerDecorator';
 import PageStateManagerImpl from './page/state/PageStateManagerImpl';
@@ -71,7 +74,7 @@ import PageFactory from './page/PageFactory';
 import AbstractRouter from './router/AbstractRouter';
 import ActionTypes from './router/ActionTypes';
 import ClientRouter from './router/ClientRouter';
-import * as RouterEvents from './router/Events';
+import RouterEvents from './router/Events';
 import Request from './router/Request';
 import Response from './router/Response';
 import Route from './router/Route';
@@ -80,7 +83,7 @@ import RouteNames from './router/RouteNames';
 import Router from './router/Router';
 import ServerRouter from './router/ServerRouter';
 import CookieStorage from './storage/CookieStorage';
-import MapStorage from './storage/SessionStorage';
+import MapStorage from './storage/MapStorage';
 import SessionMapStorage from './storage/SessionMapStorage';
 import SessionStorage from './storage/SessionStorage';
 import Storage from './storage/Storage';
@@ -206,48 +209,6 @@ function routeClientApp(app) {
     });
 }
 
-function hotReloadClientApp(initialAppConfigFunctions) {
-  if (!$Debug) {
-    return;
-  }
-
-  let app = createImaApp();
-  let bootConfig = getClientBootConfig(initialAppConfigFunctions);
-  app = bootClientApp(app, bootConfig);
-
-  let router = app.oc.get('$Router');
-  let pageManager = app.oc.get('$PageManager');
-  let currentRouteInfo = router.getCurrentRouteInfo();
-  let currentRoute = currentRouteInfo.route;
-  let currentRouteOptions = Object.assign({}, currentRoute.getOptions(), {
-    onlyUpdate: false,
-    autoScroll: false,
-    allowSPA: false
-  });
-
-  router.listen();
-
-  try {
-    return pageManager
-      .manage(currentRoute, currentRouteOptions, currentRouteInfo.params)
-      .catch(error => {
-        return router.handleError({ error });
-      })
-      .catch(error => {
-        if (typeof $IMA.fatalErrorHandler === 'function') {
-          $IMA.fatalErrorHandler(error);
-        } else {
-          console.warn(
-            'Define the config.$IMA.fatalErrorHandler function ' +
-              'in services.js.'
-          );
-        }
-      });
-  } catch (error) {
-    return router.handleError({ error });
-  }
-}
-
 function reviveClientApp(initialAppConfigFunctions) {
   let root = _getRoot();
 
@@ -290,9 +251,10 @@ export {
   getClientBootConfig,
   bootClientApp,
   routeClientApp,
-  hotReloadClientApp,
   reviveClientApp,
   onLoad,
+  ObjectContainer,
+  Bootstrap,
   Cache,
   CacheEntry,
   CacheFactory,
@@ -331,6 +293,9 @@ export {
   AbstractPageRenderer,
   BlankManagedRootView,
   ClientPageRenderer,
+  ComponentUtils,
+  RendererEvents,
+  RendererTypes,
   PageRenderer,
   PageRendererFactory,
   ServerPageRenderer,
@@ -364,6 +329,7 @@ export {
   Window,
   ServerWindow,
   ClientWindow,
+  ns,
   getUtils,
   localize,
   link,

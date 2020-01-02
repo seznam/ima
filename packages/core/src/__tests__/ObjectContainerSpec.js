@@ -1,7 +1,7 @@
 import ObjectContainer from '../ObjectContainer';
 import ns from '../namespace';
 
-describe('ima.ObjectContainer', () => {
+describe('ima.core.ObjectContainer', () => {
   let oc = null;
 
   function classConstructorWithDependencies(dependency) {

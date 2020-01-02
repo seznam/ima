@@ -1,6 +1,6 @@
 import SerialBatch from '../SerialBatch';
 
-describe('ima.execution.SerialBatch', () => {
+describe('ima.core.execution.SerialBatch', () => {
   let serialBatch = null;
 
   const asyncFunction = argument => {

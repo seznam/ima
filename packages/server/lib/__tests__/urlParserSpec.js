@@ -33,6 +33,7 @@ describe('UrlParser', () => {
   const parseUrl = UrlParser(ENVIRONMENT);
 
   function getMethod(requestGetBook, key) {
+    // eslint-disable-next-line no-prototype-builtins
     return requestGetBook.hasOwnProperty(key) ? requestGetBook[key] : '';
   }
 
@@ -203,7 +204,7 @@ describe('UrlParser', () => {
         try {
           parseUrl(usedReq, usedRes, next);
         } catch (exception) {
-          expect(exception.name).toEqual('TypeError [ERR_INVALID_URL]');
+          expect(exception.name).toMatch(/^TypeError/);
         }
 
         const result = usedRes.locals;

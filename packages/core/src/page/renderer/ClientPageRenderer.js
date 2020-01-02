@@ -59,7 +59,7 @@ export default class ClientPageRenderer extends AbstractPageRenderer {
     let loadedPromises = separatedData.promises;
 
     if (!this._firstTime) {
-      controller.setState(defaultPageState);
+      this._setStateWithoutRendering(controller, defaultPageState);
       await this._renderToDOM(controller, view, routeOptions);
       this._patchPromisesToState(controller, loadedPromises);
     }
@@ -158,6 +158,41 @@ export default class ClientPageRenderer extends AbstractPageRenderer {
     }
   }
 
+  // TODO IMA@18
+  /**
+   * The method is hacky for IMA@17 and we must rewrite logic for IMA@18.
+   *
+   * @param {Controller} controller
+   * @param {Object<string, *>} defaultPageState
+   */
+  _setStateWithoutRendering(controller, defaultPageState) {
+    const patchState = this._patchStateToClearPreviousState(defaultPageState);
+
+    const reactiveView = this._reactiveView;
+    this._reactiveView = null;
+
+    controller.setState(patchState);
+    this._reactiveView = reactiveView;
+  }
+
+  /**
+   *
+   *
+   * @param {Object<string, *>} state
+   * @returns {Object<string, *>}
+   */
+  _patchStateToClearPreviousState(state) {
+    if (!this._reactiveView || !this._reactiveView.state) {
+      return state;
+    }
+
+    Object.keys(this._reactiveView.state).forEach(key => {
+      state[key] = state[key] !== undefined ? state[key] : undefined;
+    });
+
+    return state;
+  }
+
   /**
    * Renders the current route to DOM.
    *
@@ -198,7 +233,7 @@ export default class ClientPageRenderer extends AbstractPageRenderer {
 
     if (!this._viewContainer) {
       const errorMessage =
-        `ima.page.renderer.ClientPageRenderer:_renderToDOM: ` +
+        `ima.core.page.renderer.ClientPageRenderer:_renderToDOM: ` +
         `Element with ID "${masterElementId}" was not found in the DOM. ` +
         `Maybe the DOM is not in the interactive mode yet.`;
 

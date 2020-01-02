@@ -9,40 +9,40 @@
     <link rel="stylesheet" href="{{ '/css/style.css?v=' | append: site.github.build_revision | relative_url }}">
   </head>
   <body>
-    <div id="hero is-fullheight">
+    <div>
       <div class="hero-head">
           <nav class="navbar">
-            <div class="navbar-brand">
-              <a class="navbar-item" href="{{ '/' | relative_url }}">
-                <img src="{{ '/img/imajs-logo-small.png?v=' | append: site.github.build_revision | relative_url }}" alt="IMA.js logo">
-              </a>
-              <a role="button" class="navbar-burger" data-target="menu" aria-label="menu" aria-expanded="false">
-                <span aria-hidden="true"></span>
-                <span aria-hidden="true"></span>
-                <span aria-hidden="true"></span>
-              </a>
-            </div>
-            <div id="menu" class="navbar-menu">
-              <div class="navbar-start">
-                {% for item in site.data.menu %}
-                  {% include navbar-item.html text=item.text title=item.title url=item.url %}
-                {% endfor %}
+            <div class="container">
+              <div class="navbar-brand">
+                <a class="navbar-item" href="{{ '/' | relative_url }}">
+                  <img src="{{ '/img/imajs-logo-small.png?v=' | append: site.github.build_revision | relative_url }}" alt="IMA.js logo">
+                </a>
+                <a role="button" class="navbar-burger" data-target="menu" aria-label="menu" aria-expanded="false">
+                  <span aria-hidden="true"></span>
+                  <span aria-hidden="true"></span>
+                  <span aria-hidden="true"></span>
+                </a>
               </div>
-              <div class="navbar-end">
-                <span class="navbar-item">
-                  <a class="button is-primary is-inverted" href="https://stackoverflow.com/questions/tagged/ima.js" target="_blank">
-                    <span class="icon">
-                      <i class="fab fa-stack-overflow fa-lg"></i>
-                    </span>
-                  </a>
-                </span>
-                <span class="navbar-item">
-                  <a class="button is-primary is-inverted" href="https://github.com/seznam/IMA.js-core" target="_blank">
-                    <span class="icon">
-                      <i class="fab fa-github fa-lg"></i>
-                    </span>
-                  </a>
-                </span>
+              <div class="navbar-menu">
+                <div class="navbar-start">
+                  {% for item in site.data.menu %}
+                    {% include navbar-item.html text=item.text title=item.title url=item.url %}
+                  {% endfor %}
+                </div>
+                <div class="navbar-end">
+                  <span class="navbar-item">
+                    <a class="button is-primary is-light" href="https://github.com/seznam/ima/releases" target="_blank">
+                      v{{ site.data.common.version }}
+                    </a>
+                  </span>
+                  <span class="navbar-item">
+                    <a href="https://github.com/seznam/ima" target="_blank">
+                      <span class="icon">
+                        <i class="fab fa-github fa-lg"></i>
+                      </span>
+                    </a>
+                  </span>
+                </div>
               </div>
             </div>
           </nav>

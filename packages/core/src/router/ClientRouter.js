@@ -67,6 +67,20 @@ export default class ClientRouter extends AbstractRouter {
      * @type {Window}
      */
     this._window = window;
+
+    /**
+     * Helper function with right context for binding listener to DOM.
+     *
+     * @type {function}
+     */
+    this._boundedHandleClick = event => this._handleClick(event);
+
+    /**
+     * Helper function with right context for binding listener to DOM.
+     *
+     * @type {function}
+     */
+    this._boundedHandlePopState = event => this._handlePopState(event);
   }
 
   /**
@@ -99,24 +113,38 @@ export default class ClientRouter extends AbstractRouter {
   listen() {
     let nativeWindow = this._window.getWindow();
 
-    let eventName = Events.POP_STATE;
-    this._window.bindEventListener(nativeWindow, eventName, event => {
-      if (event.state && !event.defaultPrevented) {
-        this.route(
-          this.getPath(),
-          {},
-          {
-            type: ActionTypes.POP_STATE,
-            event,
-            url: this.getUrl()
-          }
-        );
-      }
-    });
+    this._window.bindEventListener(
+      nativeWindow,
+      Events.POP_STATE,
+      this._boundedHandlePopState
+    );
 
-    this._window.bindEventListener(nativeWindow, Events.CLICK, event => {
-      this._handleClick(event);
-    });
+    this._window.bindEventListener(
+      nativeWindow,
+      Events.CLICK,
+      this._boundedHandleClick
+    );
+
+    return this;
+  }
+
+  /**
+   * @inheritdoc
+   */
+  unlisten() {
+    let nativeWindow = this._window.getWindow();
+
+    this._window.unbindEventListener(
+      nativeWindow,
+      Events.POP_STATE,
+      this._boundedHandlePopState
+    );
+
+    this._window.unbindEventListener(
+      nativeWindow,
+      Events.CLICK,
+      this._boundedHandleClick
+    );
 
     return this;
   }
@@ -213,6 +241,29 @@ export default class ClientRouter extends AbstractRouter {
           'You must implement $IMA.fatalErrorHandler in ' + 'services.js'
         );
       }
+    }
+  }
+
+  /**
+   * Handles a popstate event. The method is performed when the active history
+   * entry changes.
+   *
+   * The navigation will be handled by the router if the event state is defined
+   * and event is not {@code defaultPrevented}.
+   *
+   * @param {PopStateEvent} event The popstate event.
+   */
+  _handlePopState(event) {
+    if (event.state && !event.defaultPrevented) {
+      this.route(
+        this.getPath(),
+        {},
+        {
+          type: ActionTypes.POP_STATE,
+          event,
+          url: this.getUrl()
+        }
+      );
     }
   }
 

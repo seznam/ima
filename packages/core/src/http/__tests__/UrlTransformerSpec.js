@@ -1,6 +1,6 @@
 import UrlTransformer from '../UrlTransformer';
 
-describe('ima.http.UrlTransformer', () => {
+describe('ima.core.http.UrlTransformer', () => {
   var transformer = null;
 
   beforeEach(() => {

@@ -1,6 +1,6 @@
 import Route from '../Route';
 
-describe('ima.router.Route', function() {
+describe('ima.core.router.Route', function() {
   let route = null;
   const name = 'home';
   const controller = function() {};

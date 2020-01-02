@@ -1,6 +1,6 @@
 import AbstractExecution from '../AbstractExecution';
 
-describe('ima.execution.AbstractExecution', () => {
+describe('ima.core.execution.AbstractExecution', () => {
   let execution = null;
 
   const asyncFunction = argument => {

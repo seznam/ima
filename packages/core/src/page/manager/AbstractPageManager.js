@@ -296,7 +296,7 @@ export default class AbstractPageManager extends PageManager {
    * Set page state manager to extension which has restricted rights to set
    * global state.
    *
-   * @param {ima.extension.Extension} extension
+   * @param {ima.core.extension.Extension} extension
    * @param {Object<string, *>} extensionState
    */
   _setRestrictedPageStateManager(extension, extensionState) {
@@ -317,7 +317,7 @@ export default class AbstractPageManager extends PageManager {
    * For defined extension switches to pageStageManager and clears partial state
    * after extension state is loaded.
    *
-   * @param {ima.extension.Extension} extension
+   * @param {ima.core.extension.Extension} extension
    * @param {Object<string, *>} extensionState
    */
   _switchToPageStateManagerAfterLoaded(extension, extensionState) {
@@ -661,13 +661,11 @@ export default class AbstractPageManager extends PageManager {
     let managedOptions = this._managedPage.options;
 
     if (
-      managedOptions &&
-      managedOptions.documentView === options.documentView &&
-      managedOptions.managedRootView === options.managedRootView &&
-      managedOptions.viewAdapter === options.viewAdapter
+      !managedOptions ||
+      managedOptions.documentView !== options.documentView ||
+      managedOptions.managedRootView !== options.managedRootView ||
+      managedOptions.viewAdapter !== options.viewAdapter
     ) {
-      this._pageRenderer.clearState();
-    } else {
       this._pageRenderer.unmount();
     }
   }
@@ -735,7 +733,7 @@ export default class AbstractPageManager extends PageManager {
    * @param {{ type: string, event: Event}}
    * @returns {Promise<any>}
    */
-  _runPostManageHandlers(previousManagedPage, action) {
+  async _runPostManageHandlers(previousManagedPage, action) {
     return this._pageHandlerRegistry.handlePostManagedState(
       this._managedPage.controller
         ? this._stripManagedPageValueForPublic(this._managedPage)

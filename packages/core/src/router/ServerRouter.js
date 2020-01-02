@@ -60,6 +60,13 @@ export default class ServerRouter extends AbstractRouter {
   /**
    * @inheritdoc
    */
+  unlisten() {
+    return this;
+  }
+
+  /**
+   * @inheritdoc
+   */
   redirect(url = '/', options = {}) {
     this._response.redirect(url, options.httpStatus || 302);
   }

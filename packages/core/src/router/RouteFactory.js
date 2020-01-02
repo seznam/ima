@@ -9,7 +9,7 @@ export default class RouteFactory {
   }
 
   /**
-   * Create new instance of ima.router.Route.
+   * Create new instance of ima.core.router.Route.
    *
    * @param {string} name The unique name of this route, identifying it among
    *        the rest of the routes in the application.

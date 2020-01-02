@@ -1,5 +1,5 @@
 const autoprefixer = require('autoprefixer');
-const coreDependencies = require('ima/build.js');
+const coreDependencies = require('@ima/core/build.js');
 const path = require('path');
 const fs = require('fs');
 
@@ -8,7 +8,7 @@ const macroTasks = require('./macroTasks.js');
 
 function getModuleChildPath(parentModule, childModule) {
   const paths = [
-    `./node_modules/ima-gulp-tasks/${parentModule}/node_modules/${childModule}`,
+    `./node_modules/@ima/gulp-tasks/${parentModule}/node_modules/${childModule}`,
     `./node_modules/${parentModule}/node_modules/${childModule}`,
     `./node_modules/${childModule}`
   ];
@@ -31,7 +31,7 @@ try {
     process.env.NODE_ENV === 'development' || process.env.NODE_ENV === undefined
       ? 'dev'
       : process.env.NODE_ENV;
-  environment = require('ima-helpers').resolveEnvironmentSetting(
+  environment = require('@ima/helpers').resolveEnvironmentSetting(
     environmentConfig,
     nodeEnv
   );
@@ -288,7 +288,7 @@ exports.files = {
   shim: {
     js: {
       name: 'shim.js',
-      src: ['./node_modules/ima/polyfill/collectionEnumeration.js'],
+      src: ['./node_modules/@ima/core/polyfill/collectionEnumeration.js'],
       dest: {
         client: './build/static/js/'
       }
@@ -334,8 +334,8 @@ exports.files = {
     ima: {
       name: 'ima-polyfill.js',
       src: [
-        './node_modules/ima/polyfill/imaLoader.js',
-        './node_modules/ima/polyfill/imaRunner.js'
+        './node_modules/@ima/core/polyfill/imaLoader.js',
+        './node_modules/@ima/core/polyfill/imaRunner.js'
       ],
       dest: {
         client: './build/static/js/'
@@ -373,11 +373,23 @@ const defaultNotifyServer = {
   }
 };
 
+exports.webSocketServerConfig = {
+  port: 5888
+};
+
+exports.hotReloadConfig = {
+  watch: ['./build/static/css/*.css', './build/static/js/*.js'],
+  options: {
+    persistent: true
+  },
+  socket: {}
+};
+
 exports.occupiedPorts = {
   server: environment.$Server.port,
   notifyServer: defaultNotifyServer.port,
   livereload: exports.liveServer.port || 35729,
-  'fb-flo': 5888
+  webSocketServer: exports.webSocketServerConfig.port
 };
 
 exports.notifyServer = defaultNotifyServer;

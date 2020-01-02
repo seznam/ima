@@ -1,4 +1,4 @@
-import Helper from 'ima-helpers';
+import Helper from '@ima/helpers';
 import Controller from 'src/controller/Controller';
 import ClientPageRenderer from '../ClientPageRenderer';
 import RendererFactory from '../PageRendererFactory';
@@ -14,7 +14,7 @@ import {
 setGlobalMockMethod(jest.fn);
 setGlobalKeepUnmock(objectKeepUnmock);
 
-describe('ima.page.renderer.ClientPageRenderer', function() {
+describe('ima.core.page.renderer.ClientPageRenderer', function() {
   let param1 = 'param1';
   let param2 = 'param2';
   let params = {
@@ -107,6 +107,34 @@ describe('ima.page.renderer.ClientPageRenderer', function() {
               param2: params.param2
             }
           );
+          done();
+        })
+        .catch(function(error) {
+          console.error(error);
+          done(error);
+        });
+    });
+
+    it('should overwrite previous state values with undefined', done => {
+      spyOn(controller, 'setState');
+      spyOn(pageRenderer, '_patchStateToClearPreviousState').and.callThrough();
+      spyOn(pageRenderer, '_patchPromisesToState').and.stub();
+
+      pageRenderer._firstTime = false;
+      pageRenderer._reactiveView = {
+        state: { prevParam1: 'param1', param1: '1param' }
+      };
+
+      pageRenderer
+        .mount(controller, view, params, routeOptions)
+        .then(function() {
+          expect(
+            pageRenderer._patchStateToClearPreviousState
+          ).toHaveBeenCalled();
+          expect(controller.setState).toHaveBeenCalledWith({
+            param1: 'param1',
+            prevParam1: undefined
+          });
           done();
         })
         .catch(function(error) {
@@ -299,6 +327,25 @@ describe('ima.page.renderer.ClientPageRenderer', function() {
         htmlNode,
         expect.any(Function)
       );
+    });
+  });
+
+  describe('_patchStateToClearPreviousState() method', () => {
+    beforeEach(() => {
+      pageRenderer._reactiveView = {
+        state: { prevParam1: 'param1', param1: '1param' }
+      };
+    });
+
+    it('should set every property from previous state to undefined if not present in new state.', () => {
+      const patchedState = pageRenderer._patchStateToClearPreviousState(
+        pageState
+      );
+
+      expect(patchedState).toEqual({
+        ...pageState,
+        prevParam1: undefined
+      });
     });
   });
 });

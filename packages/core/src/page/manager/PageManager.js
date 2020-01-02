@@ -22,7 +22,7 @@ export default class PageManager {
    *          onlyUpdate: (
    *            boolean|
    *            function(
-   *              (string|function(new: ima.controller.Controller, ...*)),
+   *              (string|function(new: ima.core.controller.Controller, ...*)),
    *              function(
    *                new: React.Component,
    *                Object<string, *>,

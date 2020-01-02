@@ -17,11 +17,11 @@ export default class BlankManagedRootView extends React.Component {
    * @inheritdoc
    */
   render() {
-    let pageView = this.props.$pageView;
-    if (!pageView) {
+    let { $pageView, ...restProps } = this.props;
+    if (!$pageView) {
       return null;
     }
 
-    return React.createElement(pageView, this.props);
+    return React.createElement($pageView, restProps);
   }
 }

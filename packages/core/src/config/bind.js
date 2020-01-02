@@ -51,7 +51,7 @@ import Window from '../window/Window';
 
 export default (ns, oc, config) => {
   //**************START VENDORS**************
-  oc.constant('$Helper', vendorLinker.get('ima-helpers', true));
+  oc.constant('$Helper', vendorLinker.get('@ima/helpers', true));
 
   //React
   oc.constant('$React', vendorLinker.get('react', true));
@@ -60,6 +60,7 @@ export default (ns, oc, config) => {
   //*************END VENDORS*****************
 
   //*************START CONSTANTS*****************
+  oc.constant('$oc', oc);
   oc.constant('$Settings', config);
   oc.constant('$Env', config.$Env);
   oc.constant('$Protocol', config.$Protocol);
@@ -150,6 +151,19 @@ export default (ns, oc, config) => {
 
   oc.inject(ComponentUtils, [oc]);
   oc.bind('$ComponentUtils', ComponentUtils);
+
+  oc.get(ComponentUtils).register({
+    $CssClasses: '$CssClasses',
+    $Dictionary: Dictionary,
+    $Dispatcher: Dispatcher,
+    $EventBus: EventBus,
+    $Helper: '$Helper',
+    $Http: HttpAgent,
+    $PageStateManager: PageStateManager,
+    $Router: Router,
+    $Settings: '$Settings',
+    $Window: Window
+  });
 
   oc.inject(PageRendererFactory, [ComponentUtils, '$React']);
   oc.bind('$PageRendererFactory', PageRendererFactory);

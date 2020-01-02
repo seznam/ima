@@ -1,6 +1,9 @@
-{% assign compareUrl = include.url | prepend: '/' | append: '.html' %}
+{% assign includeUrlParts = include.url | remove: ".html" | split: "/" %}
+{% assign includeUrl = includeUrlParts[1] | prepend: "/" %}
+{% assign pageUrlParts = page.url | remove: ".html" | split: "/" %}
+{% assign pageUrl = pageUrlParts[1] | prepend: "/" %}
 <a
-  class="navbar-item{% if compareUrl == page.url or include.url == page.url or include.url == page.menuUrl %} is-active{% endif %}"
+  class="navbar-item{% if pageUrl == includeUrl %} is-active{% endif %}"
   href="{{ include.url | relative_url }}"
   {% if include.title and include.title != empty %}
   title="{{ include.title }}"

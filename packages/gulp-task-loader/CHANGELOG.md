@@ -3,6 +3,38 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [17.0.1](https://github.com/seznam/ima/compare/v17.0.0...v17.0.1) (2019-12-06)
+
+**Note:** Version bump only for package @ima/gulp-task-loader
+
+
+
+
+
+# [17.0.0](https://github.com/seznam/ima/compare/v17.0.0-rc.10...v17.0.0) (2019-12-06)
+
+**Note:** Version bump only for package @ima/gulp-task-loader
+
+
+
+
+
+# [17.0.0-rc.5](https://github.com/seznam/ima/compare/v17.0.0-rc.4...v17.0.0-rc.5) (2019-11-21)
+
+**Note:** Version bump only for package @ima/gulp-task-loader
+
+
+
+
+
+# [17.0.0-rc.4](https://github.com/seznam/ima/compare/v17.0.0-rc.3...v17.0.0-rc.4) (2019-11-21)
+
+**Note:** Version bump only for package @ima/gulp-task-loader
+
+
+
+
+
 # [17.0.0-rc.3](https://github.com/seznam/ima/compare/v17.0.0-rc.2...v17.0.0-rc.3) (2019-11-07)
 
 **Note:** Version bump only for package @ima/gulp-task-loader

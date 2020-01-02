@@ -55,7 +55,7 @@ export default class PageRendererFactory {
       if (!(componentPrototype instanceof AbstractDocumentView)) {
         throw new Error(
           'The document view component must extend ' +
-            'ima/page/AbstractDocumentView class'
+            '@ima/core AbstractDocumentView class'
         );
       }
     }

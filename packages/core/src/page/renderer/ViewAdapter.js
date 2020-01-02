@@ -7,6 +7,17 @@ import Context from '../Context';
  * page view component through its properties.
  */
 export default class ViewAdapter extends React.Component {
+  static getDerivedStateFromProps(props, state) {
+    if (
+      props.state.$pageView !== state.$pageView &&
+      state.$pageView !== undefined
+    ) {
+      return props.state;
+    } else {
+      return Object.assign({}, state, { $pageView: props.state.$pageView });
+    }
+  }
+
   /**
    * Initializes the adapter component.
    *
@@ -38,19 +49,34 @@ export default class ViewAdapter extends React.Component {
      *
      * @type {function}
      */
-    this._getContextValue = memoizeOne($Utils => {
+    this._getContextValue = memoizeOne((props, state) =>
+      this.getContextValue(props, state)
+    );
+
+    /**
+     * The array of selectors for context values.
+     *
+     * @type {Array<function>}
+     */
+    this.contextSelectors = [props => props.$Utils];
+
+    /**
+     * The function for creating context.
+     *
+     * @type {function}
+     */
+    this.createContext = memoizeOne($Utils => {
       return { $Utils };
     });
   }
 
-  /**
-   * Fixes an issue where when there's an error in React component,
-   * the defined ErrorPage may not get re-rendered and white
-   * blank page appears instead.
-   *
-   * @inheritdoc
-   */
-  componentDidCatch() {}
+  getContextValue(props, state) {
+    const selectedValues = this.contextSelectors.map(selector =>
+      selector(props, state)
+    );
+
+    return this.createContext(...selectedValues);
+  }
 
   /**
    * @inheritdoc
@@ -58,7 +84,7 @@ export default class ViewAdapter extends React.Component {
   render() {
     return React.createElement(
       Context.Provider,
-      { value: this._getContextValue(this.props.$Utils) },
+      { value: this._getContextValue(this.props, this.state) },
       React.createElement(this._view, this.state)
     );
   }
