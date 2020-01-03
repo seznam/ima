@@ -26,9 +26,7 @@ export default class HomeView extends AbstractComponent {
   }
 
   render() {
-    return (
-      null
-    );
+    return null;
   }
 }
 ```
@@ -48,9 +46,9 @@ the application. IMA.js uses the context to pass view utils to components,
 you can find out more about it
 [here](https://facebook.github.io/react/docs/context.html).
 
-There's also static getter `contextType()` which returns `PageContext`, that 
+There's also static getter `contextType()` which returns `PageContext`, that
 by default provides the component access to global `$Utils` object in the component context.
-This object is very useful as we can bind custom helper methods to it in the 
+This object is very useful as we can bind custom helper methods to it in the
 `bind.js`file with the help of Object Container. But we'll talk about this a bit more
 [later in this tutorial](/tutorial/fetching-the-data-from-the-server#dependency-injection).
 
@@ -62,11 +60,7 @@ Now that we know our way around our component, let's replace the contents of
 the `render()` method with the following code:
 
 ```jsx
-return ( 
-  <div className='l-home container'>
-    Hello {'World'}!
-  </div>
-);
+return return <div className="l-home container">Hello {'World'}!</div>;
 ```
 
 The "HTML" code you see is actually an XML markup with JavaScript expressions
@@ -94,73 +88,79 @@ If everything went well you should see the following page when you refresh your 
 
 ### Guestbook form & SMACSS
 
-Let's replace the inside of the `<div className='l-home container'>` element
-with the following code:
+Let's modify the return value of the `render` method to look like this:
 
-```xml
-<h1>Guestbook</h1>
+```jsx
+return (
+      <div className="l-home container">
+        <h1>Guestbook</h1>
 
-<div className='posting-form card'>
-  <form action='' method='post'>
-    <h5 className='card-header'>Add a post</h5>
-    <div className='card-body'>
-      <div className='form-group'>
-        <label htmlFor='postForm-name'>Name:</label>
-        <input
-          id='postForm-name'
-          className='form-control'
-          type='text'
-          name='author'
-          placeholder='Your name'
-        />
+        <div className="posting-form card">
+          <form action="" method="post">
+            <h5 className="card-header">Add a post</h5>
+            <div className="card-body">
+              <div className="form-group">
+                <label htmlFor="postForm-name">Name:</label>
+                <input
+                  id="postForm-name"
+                  className="form-control"
+                  type="text"
+                  name="author"
+                  placeholder="Your name"
+                />
+              </div>
+              <div className="form-group">
+                <label htmlFor="postForm-content">Post:</label>
+                <textarea
+                  id="postForm-content"
+                  className="form-control"
+                  name="content"
+                  placeholder="What would you like to tell us?"
+                />
+              </div>
+            </div>
+            <div className="card-footer">
+              <button type="submit" className="btn btn btn-outline-primary">
+                Submit
+                <div className="ripple-wrapper" />
+              </button>
+            </div>
+          </form>
+        </div>
+        <hr />
+        <div className="posts">
+          <h2>Posts</h2>
+          <div className="post card card-default">
+            <div className="card-body">Never mistake motion for action.</div>
+            <div className="post-author card-footer">Ernest Hemingway</div>
+          </div>
+          <div className="post card card-default">
+            <div className="card-body">
+              Quality means doing it right when no one is looking.
+            </div>
+            <div className="post-author card-footer">Henry Ford</div>
+          </div>
+          <div className="post card card-default">
+            <div className="card-body">
+              We are what we repeatedly do. Excellence, then, is not an act, but
+              a habit.
+            </div>
+            <div className="post-author card-footer">Aristotle</div>
+          </div>
+          <div className="post card card-default">
+            <div className="card-body">
+              Reality is merely an illusion, albeit a very persistent one.
+            </div>
+            <div className="post-author card-footer">Albert Einstein</div>
+          </div>
+        </div>
       </div>
-      <div className='form-group'>
-        <label htmlFor='postForm-content'>Post:</label>
-        <textarea
-          id='postForm-content'
-          className='form-control'
-          name='content'
-          placeholder='What would you like to tell us?'
-        />
-      </div>
-    </div>
-    <div className='card-footer'>
-      <button type='submit' className='btn btn btn-outline-primary'>
-        Submit
-        <div className='ripple-wrapper' />
-      </button>
-    </div>
-  </form>
-</div>
-<hr />
-<div className='posts'>
-  <h2>Posts</h2>
-  <div className='post card card-default'>
-    <div className='card-body'>Never mistake motion for action.</div>
-    <div className='post-author card-footer'>Ernest Hemingway</div>
-  </div>
-  <div className='post card card-default'>
-    <div className='card-body'>
-      Quality means doing it right when no one is looking.
-    </div>
-    <div className='post-author card-footer'>Henry Ford</div>
-  </div>
-  <div className='post card card-default'>
-    <div className='card-body'>
-      We are what we repeatedly do. Excellence, then, is not an act, but a habit.
-    </div>
-    <div className='post-author card-footer'>Aristotle</div>
-  </div>
-  <div className='post card card-default'>
-    <div className='card-body'>Reality is merely an illusion, albeit a very persistent one.</div>
-    <div className='post-author card-footer'>Albert Einstein</div>
-  </div>
-</div>
+    );
 ```
 
 Whoa, that's a lot of code! But don't worry, it's just a form we'll use to
 write new posts and some example posts. Notice the CSS class we put on the root
-element though (`l-home`). It is considered a good practice to add such a CSS
+element though, `l-home`. It is considered a good practice to add such a CSS
 class on the root element of every React component and/or controller view. The
 CSS class name should be the slugified version of the React component's /
 controller's name, for example `MyAwesomeComponent` would become
@@ -185,18 +185,15 @@ SMACSS yet, it won't take you long.
 ### Styling our form
 
 So let's make our guestbook look a little better. To achieve this, we'll
-use Bootstrap CSS library. To make things simple
-we're just going to use CDN hosted CSS file (we don't need any to use any JS components from bootstrap in our example
-so that's why we're including only CSS).
- 
-We strongly suggest that when creating your new application, it would be better manage these
-dependencies, for example through npm or even building your custom version
-that contains only those components that you'll use.
+use the Bootstrap library. To make things simple,
+we will just use the CDN-hosted CSS file, since we don't need any of Bootstrap's JS components in our example anyway.
+
+In a real application, we strongly recommend you manage these dependencies yourself (for example through npm packages),
+and consider using a custom build that includes only the necessary CSS/JS.
+*this is*
 
 First we need to include a few files to our page. Open the document component
-`app/component/document/DocumentView.jsx` (*this is the UI component that renders the
-basic structure of the HTML document. You'll find more details about it in the
-[Rendering the whole document](#rendering-the-whole-document) section of this chapter*).
+`app/component/document/DocumentView.jsx` (this is the UI component that renders the basic structure of the HTML document. You'll find more details about it in the [Rendering the whole document](#rendering-the-whole-document) section of this chapter).
 Insert the following code before the `<link rel="stylesheet" ...` line to include
 the Bootstrap CSS library:
 
@@ -214,7 +211,7 @@ This will save us a lot of effort with styling our UI.
 #### Defining custom styles
 
 Let's write some CSS to make our guestbook look even better. Open the
-`app/assets/less/settings.less` file and add the following code to set up our
+`app/assets/less/setting.less` file and add the following code to set up our
 layout configuration:
 
 ```scss
@@ -271,14 +268,14 @@ special component - the document component
 rendering the basic structure of the HTML document like the `<html>` and
 `<body>` elements.
 
-Finally, the document component must render three `<div>` elements, `#page`,
-`#revivalSettings` and `#scripts`.
- 
+Finally, the document component must render three elements, `<div id="page">`,
+`<script id="revivalSettings">` and `<script id="scripts">`.
+
  - `#page` - is a place where current view is rendered.
- - `#revivalSettings` - contains scripts used to initialize the environment for your application at the client side.
- - `#scripts` - contains JavaScript logic of your application. 
- 
-The order is important as this will allow your users
+ - `#revivalSettings` - contains JavaScript code used to initialize the environment for your application at the client side.
+ - `#scripts` - contains the JavaScript logic of your application.
+
+The order is important as this will allow your users 
 to see the whole of the page content before the application is fully loaded in
 the browser (remember, the content is first rendered at the server side).
 
@@ -290,7 +287,7 @@ concern yourself with this very much.
 Note that the document component is only used at the server-side, as the
 application only updates the contents of the `#page` element at the
 client-side (and the page title and meta tags through the meta-manager, which
-will not be covered by this tutorial, but you can learn more about its interface 
+will not be covered by this tutorial, but you can learn more about its interface
 in the API [/api/meta/meta-meta-manager](/api/meta/meta-meta-manager)).
 
 For more information about `DocumentView` and whole rendering process of IMA.js
@@ -300,7 +297,7 @@ application, [take a look at the documentation](/docs/rendering-process).
 
 Starting with version 15 of IMA.js namespaces were deprecated in favor of ES2015
 modules. Mainly because ES modules are now more widespread and have better support
-in many IDEs thus don't pose such problem when it comes to refactoring.
+in many IDEs thus don't pose such a problem when it comes to refactoring.
 
 Previously almost all of the JavaScript files in your IMA.js application included
 a snippet of code like this one near the beginning:
@@ -329,5 +326,5 @@ and [`export`](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference
 
 <hr class="bottom-doc-separator">
 
-That's it for this part of the tutorial, 
+That's it for this part of the tutorial,
 [so head over to the part 3](/tutorial/adding-some-state) to learn about application state.
