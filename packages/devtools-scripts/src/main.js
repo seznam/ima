@@ -144,28 +144,17 @@ function createDevtool(registerHook) {
     try {
       const file = $IMA.Loader.importSync(path);
       const key = module ? module : 'default';
-
       return file[key] ? file[key] : file;
-    } catch (_) {
-      let ima;
-
-      // for older IMA app which haven't got some classes
-      try {
-        ima = $IMA.Loader.importSync('ima');
-      } catch (_) {
-        return {};
-      }
-
-      if (path === 'ima/main') {
-        return ima;
-      }
-
-      let parts = path.split('/');
-      return ima[parts[parts.length - 1]] || {};
+    } catch (e) {
+      console.error('[IMA Devtools]', e.message);
     }
   }
 
   $IMA.Runner.registerPreRunCommand(function() {
+    if (!window.__IMA_DEVTOOLS_INIT) {
+      return;
+    }
+
     registerHook({
       importIMAClass,
       aop,
@@ -215,3 +204,17 @@ function createDevtool(registerHook) {
     });
   });
 }
+
+// IMA v17 check
+$IMA.Runner.registerPreRunCommand(function() {
+  try {
+    window.__IMA_DEVTOOLS_INIT = true;
+    $IMA.Loader.importSync('@ima/core');
+  } catch (_) {
+    $IMA.devtool.postMessage(
+      { message: 'Current IMA.js version is not supported' },
+      'ima:devtool:unsupported'
+    );
+    window.__IMA_DEVTOOLS_INIT = false;
+  }
+});

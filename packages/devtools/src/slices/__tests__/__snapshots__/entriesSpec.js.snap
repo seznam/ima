@@ -10,6 +10,7 @@ exports[`entriesInitialState should match snapshot 1`] = `
 Object {
   "entries": Object {},
   "entryIdsByQuery": Array [],
+  "error": "",
   "hasNext": false,
   "hasPrevious": false,
   "isLoading": true,

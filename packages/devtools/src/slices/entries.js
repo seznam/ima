@@ -5,6 +5,7 @@ export const entriesInitialState = {
   entries: {},
   searchQuery: '',
   status: 'Connecting...',
+  error: '',
   hasNext: false,
   hasPrevious: false,
   zeroTime: null,
@@ -129,12 +130,18 @@ const entries = createSlice({
       state.zeroTime = null;
       state.zeroId = null;
       state.selectedId = null;
+      state.error = '';
     },
     alive(state) {
       state.status = 'Loading messages...';
     },
     dead(state) {
       state.status = 'This website does not use IMA.js';
+      state.isLoading = false;
+    },
+    unsupported(state) {
+      state.error =
+        'The devtools only support applications runnning IMA.js v17 or higher.';
       state.isLoading = false;
     },
     reload(state) {

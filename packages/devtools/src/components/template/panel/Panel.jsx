@@ -1,4 +1,4 @@
-import './panel.less';
+import styles from './panel.less';
 import React from 'react';
 import PropTypes from 'prop-types';
 import debounce from 'lodash.debounce';
@@ -25,6 +25,7 @@ export default class Panel extends React.PureComponent {
       alive: PropTypes.func,
       dead: PropTypes.func,
       reload: PropTypes.func,
+      unsupported: PropTypes.func,
       clearEntries: PropTypes.func,
       addEntries: PropTypes.func,
       selectNext: PropTypes.func,
@@ -68,10 +69,12 @@ export default class Panel extends React.PureComponent {
   }
 
   render() {
-    const { isLoading, status } = this.props;
+    const { isLoading, status, error } = this.props;
 
     if (isLoading) {
       return <Loader title={status} />;
+    } else if (error) {
+      return <h4 className={styles.error}>{error}</h4>;
     }
 
     return <SplitPane />;
@@ -93,19 +96,31 @@ export default class Panel extends React.PureComponent {
   }
 
   onMessage(msg) {
-    const { alive, clearEntries, reload, dead } = this.props;
+    const { alive, clearEntries, reload, dead, unsupported } = this.props;
 
-    if (msg.action === Actions.ALIVE) {
-      alive();
-    } else if (msg.action === Actions.RELOADING) {
-      reload();
-      clearEntries();
-    } else if (msg.action === Actions.DEAD) {
-      dead();
-      clearEntries();
-    } else if (msg.action === Actions.MESSAGE) {
-      this.cachedEntries.push(msg);
-      this._batchAddEntries();
+    switch (msg.action) {
+      case Actions.ALIVE:
+        alive();
+        break;
+
+      case Actions.RELOADING:
+        reload();
+        clearEntries();
+        break;
+
+      case Actions.UNSUPPORTED:
+        unsupported();
+        break;
+
+      case Actions.DEAD:
+        dead();
+        clearEntries();
+        break;
+
+      case Actions.MESSAGE:
+        this.cachedEntries.push(msg);
+        this._batchAddEntries();
+        break;
     }
   }
 }

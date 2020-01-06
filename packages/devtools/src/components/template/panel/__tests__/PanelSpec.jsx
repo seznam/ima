@@ -8,6 +8,7 @@ describe('Panel template', () => {
   const props = {
     alive: jest.fn(),
     dead: jest.fn(),
+    unsupported: jest.fn(),
     reload: jest.fn(),
     clearEntries: jest.fn(),
     selectNext: jest.fn(),
@@ -50,6 +51,17 @@ describe('Panel template', () => {
 
     expect(wrapper).toMatchSnapshot();
     expect(wrapper.find('Loader').length).toBe(1);
+  });
+
+  it('should match snapshot with error message', () => {
+    wrapper.setProps({
+      isLoading: false,
+      error:
+        'The devtools only support applications runnning IMA.js v17 or higher.'
+    });
+
+    expect(wrapper).toMatchSnapshot();
+    expect(wrapper.find('h4').length).toBe(1);
   });
 
   it('should match snapshot with SplitPane', () => {
@@ -136,6 +148,12 @@ describe('Panel template', () => {
 
       expect(instance.props.reload.mock.calls.length).toBe(1);
       expect(instance.props.clearEntries.mock.calls.length).toBe(1);
+    });
+
+    it('should call unsupported on unsupported action', () => {
+      instance.onMessage({ action: Actions.UNSUPPORTED });
+
+      expect(instance.props.unsupported.mock.calls.length).toBe(1);
     });
 
     it('should call dead and clear entries on dead action', () => {

@@ -5,6 +5,7 @@ const Actions = Object.freeze({
   SETTINGS: 'ima:devtool:settings',
   RELOADING: 'ima:devtool:reloading',
   DETECTING: 'ima:devtool:detecting',
+  UNSUPPORTED: 'ima:devtool:unsupported',
   MESSAGE: 'ima:devtool:message'
 });
 

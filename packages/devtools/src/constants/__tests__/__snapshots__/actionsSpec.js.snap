@@ -9,5 +9,6 @@ Object {
   "POPUP": "ima:devtool:popup",
   "RELOADING": "ima:devtool:reloading",
   "SETTINGS": "ima:devtool:settings",
+  "UNSUPPORTED": "ima:devtool:unsupported",
 }
 `;

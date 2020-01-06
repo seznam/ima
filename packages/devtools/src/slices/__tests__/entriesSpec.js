@@ -26,6 +26,7 @@ describe('reducer', () => {
       },
       searchQuery: '',
       status: '',
+      error: '',
       hasNext: true,
       hasPrevious: false,
       zeroTime: '0',
@@ -90,6 +91,17 @@ describe('reducer', () => {
     expect(reducer(curState, { type: 'entries/dead' })).toEqual({
       ...curState,
       status: 'This website does not use IMA.js',
+      isLoading: false
+    });
+  });
+
+  it('should set error message on unsupported and reset loader', () => {
+    curState.isLoading = true;
+
+    expect(reducer(curState, { type: 'entries/unsupported' })).toEqual({
+      ...curState,
+      error:
+        'The devtools only support applications runnning IMA.js v17 or higher.',
       isLoading: false
     });
   });
@@ -234,6 +246,12 @@ describe('actions', () => {
   it('should create action to set state dead', () => {
     expect(actions.dead()).toEqual({
       type: 'entries/dead'
+    });
+  });
+
+  it('should create action to set state unsupported', () => {
+    expect(actions.unsupported()).toEqual({
+      type: 'entries/unsupported'
     });
   });
 

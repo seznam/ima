@@ -8,10 +8,10 @@ export default function() {
 
 		window.$IMA = window.$IMA || {};
 		window.$IMA.devtool = window.$IMA.devtool || {};
-		window.$IMA.devtool.postMessage = payload => {
+		window.$IMA.devtool.postMessage = (payload, action = null) => {
 			window.postMessage(
 				Object.assign(
-					{ sentinel: '${SENTINEL_TO_EXTENSION}', action: '${Actions.MESSAGE}' },
+					{ sentinel: '${SENTINEL_TO_EXTENSION}', action: action ? action : '${Actions.MESSAGE}' },
 					{ payload: payload }
 				),
 				'*'
