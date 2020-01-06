@@ -1,6 +1,6 @@
 {
   "name": "@ima/core",
-  "version": "17.1.0",
+  "version": "17.2.0",
   "description": "IMA.js framework for isomorphic javascript application",
   "browser": "client.cjs.js",
   "main": "server.cjs.js",
@@ -81,12 +81,14 @@
   },
   "size-limit": [
     {
-      "limit": "1500 ms",
-      "path": "dist/ima.client.cjs.js"
+      "limit": "30 KB",
+      "path": "dist/ima.client.cjs.js",
+      "running": false
     },
     {
-      "limit": "1500 ms",
-      "path": "dist/ima.client.esm.js"
+      "limit": "30 KB",
+      "path": "dist/ima.client.esm.js",
+      "running": false
     }
   ]
 }

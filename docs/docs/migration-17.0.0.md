@@ -13,6 +13,7 @@ All of this can be done automatically for a whole project using following jscode
 ```bash
 npx jscodeshift -t node_modules/@ima/core/transform/import-v17.js --extensions jsx,js --ignore-config=.gitignore ./
 ```
+Also replace pathes which contain `ima` to `@ima/core` in `package.json` (setupFiles in jest) and `server.js`. 
 
 Following packages have been renamed.
 ```

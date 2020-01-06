@@ -105,7 +105,7 @@ module.exports = (environment, logger, languageLoader, appFactory) => {
   }
 
   function _initApp(req, res, appMain) {
-    let bootConfig = _getBootConfig(req, res);
+    let bootConfig = getBootConfig(req, res);
     let app = instanceRecycler.getInstance();
 
     Object.assign(
@@ -144,7 +144,7 @@ module.exports = (environment, logger, languageLoader, appFactory) => {
   }
 
   function showStaticSPAPage(req, res) {
-    let bootConfig = _getBootConfig(req, res);
+    let bootConfig = getBootConfig(req, res);
     let status = 200;
     let cachedContent = spaCache.get(req);
 
@@ -211,7 +211,7 @@ module.exports = (environment, logger, languageLoader, appFactory) => {
     );
   }
 
-  function _getBootConfig(req, res) {
+  function getBootConfig(req, res) {
     let language = res.locals.language;
     let languagePartPath = res.locals.languagePartPath;
     let host = res.locals.host;
@@ -465,6 +465,7 @@ module.exports = (environment, logger, languageLoader, appFactory) => {
   }
 
   return {
+    getBootConfig,
     errorHandler,
     requestHandler,
     showStaticErrorPage,

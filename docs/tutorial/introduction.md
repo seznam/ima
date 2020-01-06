@@ -30,19 +30,18 @@ current version is recommended) and a Git client installed on your computer.
 
 ### Setup
 
-First we need to bootstrap our new IMA.js application, thanks to `create-ima-app` 
-npm package, which is available since IMA.js v17, this process is fairly simple. 
+First we need to bootstrap our new IMA.js application. Thanks to `create-ima-app`
+npm package, available since IMA.js v17, this process is fairly simple.
 
-To initialize new project run following command and choose **empty template**:
+To initialize new project, run following command and choose the "Empty" (Hello World) template:
 ```console
 $ npx create-ima-app imajs-tutorial
 ```
 This will bootstrap the IMA.js directory structure and install all dependencies. To
-learn more information about `create-ima-app` package, take a look at the github repository
-[create-ima-app](https://github.com/seznam/ima/tree/master/packages/create-ima-app).
+learn more information about `create-ima-app` package, take a look at its [github repository](https://github.com/seznam/ima/tree/master/packages/create-ima-app).
 
 To finish our setup, we will start a development server that will allow us to
-see our application in action. To do that, run following commands **from inside the `imajs-tutorial` directory**:
+see our application in action. To do that, cd *into the imajs-tutorial directory* and run following command:
 
 ```console
 $ npm run dev
@@ -70,12 +69,12 @@ error after you restarted the dev server, check your source code. The error
 should hint what to look for and where to find the source of the trouble.
 
 Additionally, if you want to, you may install the
-[React DevTools](https://chrome.google.com/webstore/detail/react-developer-tools/fmkadmapgofadopljbjfkapdkoienihi)
-to inspect your view with ease.
+React DevTools ([Chrome](https://chrome.google.com/webstore/detail/react-developer-tools/fmkadmapgofadopljbjfkapdkoienihi), [Firefox](https://addons.mozilla.org/en-US/firefox/addon/react-devtools/))
+to inspect your view in the browser dev tools.
 
 #### ENOSPC error
 Finally, you may encounter the `ENOSPC` error when working with a large project
-using a *nix OS. This can be fixed using the following code snippet ran from a
+using a \*nix OS. This can be fixed using the following code snippet ran from a
 terminal
 ([source of the snippet here](http://stackoverflow.com/questions/16748737/grunt-watch-error-waiting-fatal-error-watch-enospc)):
 
@@ -87,14 +86,14 @@ echo fs.inotify.max_user_watches=524288 | sudo tee -a /etc/sysctl.conf && sudo s
 
 All files that are specific to our application are located in the `app`,
 directory. The `package.json` file provides the `npm`  tool with information
-about the dependencies of our application, `gulpConfig.js` configures our gulp tasks, and, finally,
+about the dependencies of our application, `gulpConfig.js` configures our gulp tasks (such as LESS file processing), and, finally,
 the `gulpfile.js` loads the tasks we can run using the `gulp` tool.
 
 You may have also noticed the `doc`, `build` and `server` directories *(some of these folders may not be visible until they are generated in the first call of `npm run dev` or `npm run build`)*.
  - The `doc` directory contains the documentation for IMA.js APIs and our application
 rendered to HTML.
  - The `server` contains the application logic of the HTTP
-server serving our application. 
+server serving our application.
  - Finally, the `build` directory is used as an
 output directory for the built application and its resources.
 
