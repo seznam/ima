@@ -73,10 +73,10 @@ npx jscodeshift -t node_modules/@ima/core/transform/context-api-v17.js --extensi
 ```
 
 ## Utils Registration
-There is a new way of defining component utils. You can no longer define `oc.constant('$Utils', {...})` in `app/conf/bind.js`, you have to use `oc.get(ComponentUtils).register({...})` instead. Also, following component utils are predefined by default, so you don't have to define them yourself.
+There is a new way of defining component utils. You can no longer define `oc.constant('$Utils', {...})` in `app/conf/bind.js`, you have to use `oc.get('$ComponentUtils').register({...})` instead. Also, following component utils are predefined by default, so you don't have to define them yourself.
 
 ```js
-oc.get(ComponentUtils).register({
+oc.get('$ComponentUtils').register({
   $CssClasses: '$CssClasses',
   $Dictionary: Dictionary,
   $Dispatcher: Dispatcher,
@@ -101,7 +101,7 @@ oc.constant('$Utils', {
 ```
 And must be replaced with following.
 ```js
-oc.get(ComponentUtils).register({
+oc.get('$ComponentUtils').register({
   $MyCustomHelper: MyCustomHelper,
   ...
 });
