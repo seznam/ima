@@ -1,4 +1,5 @@
 ---
+title: "Examples"
 ---
 
 {% include separator.html icon="fa-code" %}

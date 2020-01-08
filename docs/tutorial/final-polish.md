@@ -1,4 +1,5 @@
 ---
+title: "Tutorial - 6. Final polish"
 layout: "tutorial"
 ---
 

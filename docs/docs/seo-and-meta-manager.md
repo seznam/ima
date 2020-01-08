@@ -1,5 +1,6 @@
 ---
 layout: "docs"
+title: "Docs - SEO & MetaManager"
 ---
 
 If you've read the [Controller lifecycle](/docs/controller-lifecycle) page you've 

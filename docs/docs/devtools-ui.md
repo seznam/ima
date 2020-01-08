@@ -1,5 +1,6 @@
 ---
 layout: "docs"
+title: "Docs - Devtools user interface"
 ---
 The IMA.js devtools consist of 3 main windows - [Panel](/docs/devtools-ui#panel), [Popup](/docs/devtools-ui#popup)
 and [Options](/docs/devtools-options). Each has some specific usage and

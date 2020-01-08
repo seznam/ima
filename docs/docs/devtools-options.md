@@ -1,5 +1,6 @@
 ---
 layout: "docs"
+title: "Docs - Devtools options"
 ---
 
 <div class="image is-padded-with-shadow">

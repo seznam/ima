@@ -1,5 +1,6 @@
 ---
 layout: "docs"
+title: "Docs - Page manager"
 ---
 
 Page Manager is an essential part of IMA.js. It's something like a puppeteer that manipulates with pages and views. Once a router matches URL to one of route's path the page manager takes care of the rest.

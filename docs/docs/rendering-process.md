@@ -1,5 +1,6 @@
 ---
 layout: "docs"
+title: "Docs - Rendering process"
 ---
 
 The rendering process goes through many points you can customize or take 

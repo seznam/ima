@@ -1,5 +1,6 @@
 ---
 layout: "docs"
+title: "Docs - Object container"
 ---
 
 The **Object Container (OC)** is an enhanced dependency injector with support 

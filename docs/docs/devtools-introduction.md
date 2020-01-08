@@ -1,5 +1,6 @@
 ---
 layout: "docs"
+title: "Docs - Devtools introduction"
 ---
 
 With the introduction of IMA.js v17 we've implemented custom devtools that are available as a 

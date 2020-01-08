@@ -1,4 +1,5 @@
 ---
+title: "Tutorial - 2. Static view"
 layout: "tutorial"
 ---
 
