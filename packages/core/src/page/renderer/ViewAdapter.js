@@ -8,14 +8,16 @@ import Context from '../Context';
  */
 export default class ViewAdapter extends React.Component {
   static getDerivedStateFromProps(props, state) {
-    if (
-      props.state.$pageView !== state.$pageView &&
-      state.$pageView !== undefined
-    ) {
-      return props.state;
-    } else {
-      return Object.assign({}, state, { $pageView: props.state.$pageView });
+    //we want use props.state only when props changed
+    //temp indicator notUsePropsState is set by AbstractPageRenderer
+    if (state.notUsePropsState) {
+      return Object.assign({}, state, {
+        $pageView: props.state.$pageView,
+        notUsePropsState: undefined
+      });
     }
+
+    return props.state;
   }
 
   /**
