@@ -3,7 +3,7 @@ title: "API"
 layout: "api"
 ---
 
-# Api @ima/core
+# API @ima/core
 
 <div class="field is-grouped is-grouped-multiline">
 

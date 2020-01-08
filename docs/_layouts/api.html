@@ -37,7 +37,7 @@
 							{% if post.url %}
 							<li>
 								<a href="{{ post.url | relative_url | remove: '.html' }}" {% if post.url== page.url %}class="is-active" {%
-								   endif %}>{{ post.title }}</a>
+								   endif %}>{{ post.menuTitle }}</a>
 							</li>
 							{% endif %}
 							{% endfor %}
