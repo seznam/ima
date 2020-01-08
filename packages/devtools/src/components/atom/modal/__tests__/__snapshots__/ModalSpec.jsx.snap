@@ -1,0 +1,40 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Modal atom should match snapshot when closed 1`] = `""`;
+
+exports[`Modal atom should match snapshot when opened 1`] = `
+<Portal
+  containerInfo={
+    <body
+      style="overflow: hidden !important; position: relative !important;"
+    />
+  }
+>
+  <div
+    className="wrapper"
+  >
+    <div
+      className="overlay"
+      onClick={[MockFunction]}
+    />
+    <div
+      className="modal"
+    >
+      <div
+        className="header"
+      >
+        <h4 />
+        <button
+          className="closeIcon"
+          onClick={[MockFunction]}
+        >
+          <Icon
+            name="close"
+          />
+        </button>
+      </div>
+      MODAL_CONTENT
+    </div>
+  </div>
+</Portal>
+`;

@@ -1,0 +1,236 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`defaultSettings should match snapshot 1`] = `
+Object {
+  "enabled": true,
+  "presets": Object {
+    "default-k2rtjo03-b4d8f22f-1e84-4d7a-aba3-bsdf9ee601a4": Object {
+      "editable": false,
+      "hooks": Object {
+        "k2rtjo03-b4d8f22f-1e84-4d7a-aba3-b4ee9ee601a4": Object {
+          "code": "let ImaControllerInterface = importIMAClass('@ima/core', 'Controller');
+let ImaExtensionInterface = importIMAClass('@ima/core', 'Extension');
+
+Object.keys($IMA.Loader.modules)
+  .filter(namespace => namespace !== 'app/main')
+  .forEach(namespace => {
+    let Constructor = $IMA.Loader.importSync(namespace);
+    let prototype =
+      Constructor && Constructor.default
+        ? Constructor.default.prototype
+        : undefined;
+
+    if (
+      prototype instanceof ImaControllerInterface ||
+      prototype instanceof ImaExtensionInterface
+    ) {
+      aop(
+        Constructor.default,
+        createHook(
+          hookName.afterMethod,
+          /^(init|load|update|destroy|activate|deactivate|setState|getState|(on.*))$/,
+          meta => {
+            if (
+              !(
+                meta.context &&
+                meta.context instanceof Constructor.default
+              )
+            ) {
+              return;
+            }
+
+            emit(namespace, meta, {
+              color: prototype instanceof ImaControllerInterface ? 'green' : 'teal'
+            });
+          }
+        )
+      );
+    }
+  });",
+          "description": "Captures calls to the (init|load|update|destroy|activate|deactivate|setState|getState|(on.*)) methods in the app Controllers and Extensions.",
+          "enabled": true,
+          "id": "k2rtjo03-b4d8f22f-1e84-4d7a-aba3-b4ee9ee601a4",
+          "name": "Controller and Extension",
+          "opened": false,
+        },
+        "k2rtk252-929a2561-677e-43e7-851d-167faeda16d2": Object {
+          "code": "let Dispatcher = importIMAClass('@ima/core', 'DispatcherImpl');
+
+aop(
+  Dispatcher,
+  createHook(hookName.afterMethod, 'fire', meta => {
+    if (!(meta.context && meta.context instanceof Dispatcher)) {
+      return;
+    }
+
+    let identifier = 'Dispatcher';
+    emit(
+      identifier,
+      meta,
+      {
+        color: 'red'
+      },
+      {
+        label:
+          meta.args && meta.args[0]
+            ? ''
+              .concat(identifier, ':')
+              .concat(meta.property, ':')
+              .concat(meta.args[0])
+            : undefined,
+        state: {
+          args: JSON.parse(JSON.stringify(meta.args)),
+          payload: {}
+        }
+      }
+    );
+  })
+);",
+          "description": "Captures all events send through the Dispatcher.",
+          "enabled": true,
+          "id": "k2rtk252-929a2561-677e-43e7-851d-167faeda16d2",
+          "name": "Dispatcher",
+          "opened": false,
+        },
+        "k2rtk5c4-f5d98f8c-d694-4831-a348-d3ea36127d8d": Object {
+          "code": "let EventBus = importIMAClass('@ima/core', 'EventBusImpl');
+
+aop(
+  EventBus,
+  createHook(hookName.afterMethod, /^(fire)$/, meta => {
+    if (!(meta.context && meta.context instanceof EventBus)) {
+      return;
+    }
+
+    let identifier = 'EventBus';
+    let args = meta.args.slice();
+    args[0] = Array.from(meta.args[0].classList || {}).join(' ');
+    emit(
+      identifier,
+      meta,
+      {
+        color: 'yellow'
+      },
+      {
+        label:
+          meta.args && meta.args[1]
+            ? ''
+              .concat(identifier, ':')
+              .concat(meta.property, ':')
+              .concat(meta.args[1])
+            : undefined,
+        state: {
+          args: JSON.parse(JSON.stringify(args)),
+          payload: {}
+        }
+      }
+    );
+  })
+);",
+          "description": "Captures all events fired through the EventBus.",
+          "enabled": true,
+          "id": "k2rtk5c4-f5d98f8c-d694-4831-a348-d3ea36127d8d",
+          "name": "EventBus",
+          "opened": false,
+        },
+        "k2rtkaij-0e302928-c1c1-4710-b202-a9b6aac66507": Object {
+          "code": "let ClientPageManager = importIMAClass('@ima/core', 'ClientPageManager');
+
+aop(
+  ClientPageManager,
+  createHook(hookName.afterMethod, /^(init|manage|destroy)$/, meta => {
+    if (!(meta.context && meta.context instanceof ClientPageManager)) {
+      return;
+    }
+
+    emit('ClientPageManager', meta, {
+      color: 'blue'
+    });
+  })
+);",
+          "description": "Captures calls to the (init|manage|destroy) methods in the ClientPageManager.",
+          "enabled": true,
+          "id": "k2rtkaij-0e302928-c1c1-4710-b202-a9b6aac66507",
+          "name": "ClientPageManager",
+          "opened": false,
+        },
+        "k2rtkf8v-a8f1654e-bfcf-404f-916d-073d48f3f151": Object {
+          "code": "let PageHandlerRegistry = importIMAClass('@ima/core', 'PageHandlerRegistry');
+
+aop(
+  PageHandlerRegistry,
+  createHook(hookName.afterMethod, /.*/, meta => {
+    if (
+      !(meta.context && meta.context instanceof PageHandlerRegistry)
+    ) {
+      return;
+    }
+
+    emit('PageHandlerRegistry', meta, {
+      color: 'violet'
+    });
+  })
+);",
+          "description": "Captures method calls in the PageHandlerRegistry.",
+          "enabled": true,
+          "id": "k2rtkf8v-a8f1654e-bfcf-404f-916d-073d48f3f151",
+          "name": "PageHandlerRegistry",
+          "opened": false,
+        },
+        "k2rtkjn3-b070cb12-3411-4e15-98af-6fc390e21741": Object {
+          "code": "let PageNavigationHandler = importIMAClass('@ima/core', 'PageNavigationHandler');
+
+aop(
+  PageNavigationHandler,
+  createHook(hookName.afterMethod, /.*/, meta => {
+    if (
+      !(meta.context && meta.context instanceof PageNavigationHandler)
+    ) {
+      return;
+    }
+
+    emit('PageNavigationHandler', meta, {
+      color: 'violet'
+    });
+  })
+);",
+          "description": "Captures method calls in the PageNavigationHandler.",
+          "enabled": true,
+          "id": "k2rtkjn3-b070cb12-3411-4e15-98af-6fc390e21741",
+          "name": "PageNavigationHandler",
+          "opened": false,
+        },
+        "k2rtkoem-95fc6f66-59c2-4b33-a7ad-a6efef2ebef2": Object {
+          "code": "let Http = importIMAClass('@ima/core', 'HttpAgentImpl');
+
+aop(
+  Http,
+  createHook(
+    hookName.afterMethod,
+    /^(get|post|put|delete|patch)$/,
+    meta => {
+      if (!(meta.context && meta.context instanceof Http)) {
+        return;
+      }
+
+      emit('Http', meta, {
+        color: 'indigo'
+      });
+    }
+  )
+);",
+          "description": "Captures (get|post|put|delete|patch) method calls in the HttpAgent.",
+          "enabled": true,
+          "id": "k2rtkoem-95fc6f66-59c2-4b33-a7ad-a6efef2ebef2",
+          "name": "HttpAgent",
+          "opened": false,
+        },
+      },
+      "id": "default-k2rtjo03-b4d8f22f-1e84-4d7a-aba3-bsdf9ee601a4",
+      "name": "Default",
+      "selected": true,
+    },
+  },
+  "selectedPresetId": "default-k2rtjo03-b4d8f22f-1e84-4d7a-aba3-bsdf9ee601a4",
+}
+`;

@@ -1,0 +1,19 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Panel template defaultProps should match snapshot 1`] = `undefined`;
+
+exports[`Panel template should match snapshot with SplitPane 1`] = `<SplitPane />`;
+
+exports[`Panel template should match snapshot with error message 1`] = `
+<h4
+  className="error"
+>
+  The devtools only support applications runnning IMA.js v17 or higher.
+</h4>
+`;
+
+exports[`Panel template should match snapshot with loader 1`] = `
+<Loader
+  title={null}
+/>
+`;

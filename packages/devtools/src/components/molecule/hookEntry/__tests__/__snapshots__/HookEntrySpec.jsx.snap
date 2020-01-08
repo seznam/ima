@@ -1,0 +1,232 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`HookEntry molecule should match snapshot 1`] = `
+<div
+  className="container"
+>
+  <div
+    className="infoWrapper"
+    onClick={[Function]}
+  >
+    <div
+      className="hookInfo"
+    >
+      <h4>
+        name
+      </h4>
+      <p />
+    </div>
+    <div
+      className="actions"
+    >
+      <Tooltip
+        label="Disable hook"
+      >
+        <span>
+          <IconButton
+            className=""
+            color="success"
+            name="enable"
+            onClick={[Function]}
+          />
+        </span>
+      </Tooltip>
+      <Tooltip
+        label="Delete hook"
+      >
+        <span>
+          <IconButton
+            className=""
+            name="trash"
+            onClick={[Function]}
+          />
+        </span>
+      </Tooltip>
+    </div>
+  </div>
+  <div
+    className="formWrapper"
+  >
+    <input
+      className="input"
+      disabled={false}
+      name="name__0"
+      onChange={[Function]}
+      placeholder="Name"
+      type="text"
+      value="name"
+    />
+    <input
+      className="input"
+      disabled={false}
+      name="description__0"
+      onChange={[Function]}
+      placeholder="Description"
+      type="text"
+    />
+    <Editor
+      className="input codeInput"
+      disabled={false}
+      highlight={[Function]}
+      ignoreTabKey={false}
+      insertSpaces={true}
+      name="code__0"
+      onValueChange={[Function]}
+      padding={10}
+      placeholder="// code"
+      style={
+        Object {
+          "overflow": "auto",
+        }
+      }
+      tabSize={2}
+    />
+  </div>
+</div>
+`;
+
+exports[`HookEntry molecule should match snapshot when not in editable state 1`] = `
+<div
+  className="container"
+>
+  <div
+    className="infoWrapper"
+    onClick={[Function]}
+  >
+    <div
+      className="hookInfo"
+    >
+      <h4>
+        name
+      </h4>
+      <p />
+    </div>
+    <div
+      className="actions"
+    />
+  </div>
+  <div
+    className="formWrapper"
+  >
+    <input
+      className="input"
+      disabled={true}
+      name="name__0"
+      onChange={[Function]}
+      placeholder="Name"
+      type="text"
+      value="name"
+    />
+    <input
+      className="input"
+      disabled={true}
+      name="description__0"
+      onChange={[Function]}
+      placeholder="Description"
+      type="text"
+    />
+    <Editor
+      className="input codeInput"
+      disabled={true}
+      highlight={[Function]}
+      ignoreTabKey={false}
+      insertSpaces={true}
+      name="code__0"
+      onValueChange={[Function]}
+      padding={10}
+      placeholder="// code"
+      style={
+        Object {
+          "overflow": "auto",
+        }
+      }
+      tabSize={2}
+    />
+  </div>
+</div>
+`;
+
+exports[`HookEntry molecule should match snapshot when opened 1`] = `
+<div
+  className="container container--opened"
+>
+  <div
+    className="infoWrapper"
+    onClick={[Function]}
+  >
+    <div
+      className="hookInfo"
+    >
+      <h4>
+        name
+      </h4>
+      <p />
+    </div>
+    <div
+      className="actions"
+    >
+      <Tooltip
+        label="Disable hook"
+      >
+        <span>
+          <IconButton
+            className=""
+            color="success"
+            name="enable"
+            onClick={[Function]}
+          />
+        </span>
+      </Tooltip>
+      <Tooltip
+        label="Delete hook"
+      >
+        <span>
+          <IconButton
+            className=""
+            name="trash"
+            onClick={[Function]}
+          />
+        </span>
+      </Tooltip>
+    </div>
+  </div>
+  <div
+    className="formWrapper formWrapper--opened"
+  >
+    <input
+      className="input"
+      disabled={false}
+      name="name__0"
+      onChange={[Function]}
+      placeholder="Name"
+      type="text"
+      value="name"
+    />
+    <input
+      className="input"
+      disabled={false}
+      name="description__0"
+      onChange={[Function]}
+      placeholder="Description"
+      type="text"
+    />
+    <Editor
+      className="input codeInput"
+      disabled={false}
+      highlight={[Function]}
+      ignoreTabKey={false}
+      insertSpaces={true}
+      name="code__0"
+      onValueChange={[Function]}
+      padding={10}
+      placeholder="// code"
+      style={
+        Object {
+          "overflow": "auto",
+        }
+      }
+      tabSize={2}
+    />
+  </div>
+</div>
+`;

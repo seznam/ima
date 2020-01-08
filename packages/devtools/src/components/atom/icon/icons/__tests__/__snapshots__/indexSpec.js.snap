@@ -1,0 +1,18 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`icons should match snapshot 1`] = `
+Object {
+  "arrowDown": [Function],
+  "arrowUp": [Function],
+  "check": [Function],
+  "close": [Function],
+  "cog": [Function],
+  "copy": [Function],
+  "edit": [Function],
+  "enable": [Function],
+  "more": [Function],
+  "reset": [Function],
+  "search": [Function],
+  "trash": [Function],
+}
+`;

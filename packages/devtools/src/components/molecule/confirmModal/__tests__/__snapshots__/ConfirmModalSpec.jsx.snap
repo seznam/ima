@@ -1,0 +1,31 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`ConfirmModal molecule should match snapshot 1`] = `
+<Modal
+  className="modal"
+  onClose={[Function]}
+  opened={true}
+  title="Confirm"
+>
+  <div
+    className="body"
+  />
+  <ModalFooter
+    className="footer"
+  >
+    <Button
+      className=""
+      color="primary"
+      onClick={[Function]}
+    >
+      Confirm
+    </Button>
+    <Button
+      className=""
+      onClick={[Function]}
+    >
+      Cancel
+    </Button>
+  </ModalFooter>
+</Modal>
+`;

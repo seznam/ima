@@ -1,0 +1,115 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`DataView molecule defaultProps should match snapshot 1`] = `
+Object {
+  "entry": null,
+}
+`;
+
+exports[`DataView molecule should match snapshot 1`] = `
+<Tabs
+  defaultFocus={false}
+  defaultIndex={null}
+  forceRenderTabPanel={false}
+  onSelect={[Function]}
+  selectedIndex={0}
+>
+  <TabList
+    className="react-tabs__tab-list"
+  >
+    <Tab
+      className="react-tabs__tab"
+      disabledClassName="react-tabs__tab--disabled"
+      focus={false}
+      id={null}
+      panelId={null}
+      selected={false}
+      selectedClassName="react-tabs__tab--selected"
+    >
+      Args
+    </Tab>
+    <Tab
+      className="react-tabs__tab"
+      disabledClassName="react-tabs__tab--disabled"
+      focus={false}
+      id={null}
+      panelId={null}
+      selected={false}
+      selectedClassName="react-tabs__tab--selected"
+    >
+      Payload
+    </Tab>
+    <Tab
+      className="react-tabs__tab"
+      disabledClassName="react-tabs__tab--disabled"
+      focus={false}
+      id={null}
+      panelId={null}
+      selected={false}
+      selectedClassName="react-tabs__tab--selected"
+    >
+      Events
+    </Tab>
+  </TabList>
+  <TabPanel
+    className="react-tabs__tab-panel"
+    forceRender={false}
+    selectedClassName="react-tabs__tab-panel--selected"
+  >
+    <JsonView
+      collapse={3}
+      src={
+        Array [
+          1,
+          2,
+        ]
+      }
+      style={Object {}}
+    />
+  </TabPanel>
+  <TabPanel
+    className="react-tabs__tab-panel"
+    forceRender={false}
+    selectedClassName="react-tabs__tab-panel--selected"
+  >
+    <JsonView
+      collapse={3}
+      src={
+        Object {
+          "id": 0,
+        }
+      }
+      style={Object {}}
+    />
+  </TabPanel>
+  <TabPanel
+    className="react-tabs__tab-panel"
+    forceRender={false}
+    selectedClassName="react-tabs__tab-panel--selected"
+  >
+    <JsonView
+      collapse={4}
+      src={
+        Object {
+          "payload": Object {
+            "color": "color",
+            "label": "label",
+            "state": Object {
+              "args": Array [
+                1,
+                2,
+              ],
+              "payload": Object {
+                "id": 0,
+              },
+            },
+            "time": 1124214124142,
+            "type": "type",
+          },
+        }
+      }
+      style={Object {}}
+    />
+  </TabPanel>
+</Tabs>
+`;

@@ -1,0 +1,730 @@
+import TabConnection, { CACHE_SIZE } from '../TabConnection';
+import Actions from 'constants/actions';
+import State from 'constants/state';
+import * as utils from 'services/utils';
+
+describe('TabConnection', () => {
+  let instance = null;
+  const tabId = 123;
+  const mockPort = name => ({
+    name,
+    postMessage: jest.fn(),
+    disconnect: jest.fn(),
+    onMessage: {
+      addListener: jest.fn(),
+      removeListener: jest.fn(),
+      hasListeners: jest.fn()
+    },
+    onDisconnect: {
+      addListener: jest.fn(),
+      removeListener: jest.fn(),
+      hasListeners: jest.fn()
+    }
+  });
+
+  utils.setIcon = jest.fn();
+
+  describe('constructor', () => {
+    it('should initialize defaults', () => {
+      instance = new TabConnection(tabId);
+
+      expect(instance.tabId).toBe(tabId);
+      expect(instance.cache).toEqual([]);
+      expect(instance.state).toBe(State.RELOAD);
+      expect(instance.appData).toBe(null);
+      expect(instance.domain).toBe(null);
+      expect(instance._emptyListener).toBe(null);
+      expect(instance._settingsListener).toBe(null);
+    });
+  });
+
+  describe('addPort', () => {
+    beforeEach(() => {
+      instance = new TabConnection(tabId);
+      instance._onDisconnect = jest.fn();
+      instance._reviveDevtools = jest.fn();
+      instance._notifyPopup = jest.fn();
+      instance._createPipe = jest
+        .fn()
+        .mockImplementation(() => (instance.ports.pipeCreated = true));
+    });
+
+    it('should save reference to added port', () => {
+      let portDevtools = mockPort('devtools');
+      let portContentScript = mockPort('contentScript');
+      let portPanel = mockPort('panel');
+      let portPopup = mockPort('popup');
+
+      instance.addPort('devtools', portDevtools);
+      instance.addPort('contentScript', portContentScript);
+      instance.addPort('panel', portPanel);
+      instance.addPort('popup', portPopup);
+
+      expect(instance.ports.devtools).toBe(portDevtools);
+      expect(instance.ports.contentScript).toBe(portContentScript);
+      expect(instance.ports.panel).toBe(portPanel);
+      expect(instance.ports.popup).toBe(portPopup);
+    });
+
+    it('should revive devtools when adding devtools port', () => {
+      let port = mockPort('devtools');
+      instance.addPort('devtools', port);
+
+      expect(instance._reviveDevtools.mock.calls.length).toBe(1);
+    });
+
+    it('should assign correct listeners to content script', () => {
+      let port = mockPort('contentScript');
+      instance.addPort('contentScript', port);
+
+      expect(
+        instance.ports.contentScript.onMessage.addListener.mock.calls.length
+      ).toBe(2);
+      expect(
+        instance.ports.contentScript.onMessage.addListener.mock.calls[0][0]
+      ).toBe(instance._aliveCallback);
+      expect(
+        instance.ports.contentScript.onMessage.addListener.mock.calls[1][0]
+      ).toBe(instance._cacheMessagesCallback);
+
+      expect(
+        instance.ports.contentScript.onDisconnect.addListener.mock.calls.length
+      ).toBe(1);
+    });
+
+    it('should remove additional callbacks in contentScript onDisconnect', () => {
+      let disconnectListener;
+      let port = mockPort('contentScript');
+      port.onDisconnect.addListener = jest.fn().mockImplementation(listener => {
+        disconnectListener = listener;
+      });
+
+      instance.addPort('contentScript', port);
+
+      expect(
+        instance.ports.contentScript.onDisconnect.addListener.mock.calls.length
+      ).toBe(1);
+
+      disconnectListener();
+
+      expect(instance._onDisconnect.mock.calls.length).toBe(1);
+      expect(instance._onDisconnect.mock.calls[0][0]).toBe('contentScript');
+      expect(instance._onDisconnect.mock.calls[0][1]).toBe(
+        instance._aliveCallback
+      );
+      expect(instance._onDisconnect.mock.calls[0][2]).toBe(
+        instance._cacheMessagesCallback
+      );
+    });
+
+    it('should assign listeners and notify popup', () => {
+      let port = mockPort('popup');
+      instance.addPort('popup', port);
+
+      expect(instance._notifyPopup.mock.calls.length).toBe(1);
+
+      expect(instance.ports.popup.onMessage.addListener.mock.calls.length).toBe(
+        1
+      );
+      expect(instance.ports.popup.onMessage.addListener.mock.calls[0][0]).toBe(
+        instance._settingsCallback
+      );
+
+      expect(
+        instance.ports.popup.onDisconnect.addListener.mock.calls.length
+      ).toBe(1);
+    });
+
+    it('should remove additional callbacks in popup onDisconnect', () => {
+      let disconnectListener;
+      let port = mockPort('popup');
+      port.onDisconnect.addListener = jest.fn().mockImplementation(listener => {
+        disconnectListener = listener;
+      });
+
+      instance.addPort('popup', port);
+
+      expect(
+        instance.ports.popup.onDisconnect.addListener.mock.calls.length
+      ).toBe(1);
+
+      disconnectListener();
+
+      expect(instance._onDisconnect.mock.calls.length).toBe(1);
+      expect(instance._onDisconnect.mock.calls[0][0]).toBe('popup');
+      expect(instance._onDisconnect.mock.calls[0][1]).toBe(
+        instance._settingsCallback
+      );
+    });
+
+    it('should create pipe between panel and content script', () => {
+      expect(instance.ports.pipeCreated).toBe(false);
+
+      instance.addPort('contentScript', mockPort('contentScript'));
+      instance.addPort('panel', mockPort('panel'));
+
+      expect(instance.ports.pipeCreated).toBe(true);
+      expect(instance._createPipe.mock.calls.length).toBe(1);
+    });
+
+    it("should not create pipe if it's already created", () => {
+      let portContentScript = mockPort('contentScript');
+      let portPanel = mockPort('panel');
+
+      expect(instance.ports.pipeCreated).toBe(false);
+      instance.addPort('contentScript', portContentScript);
+      instance.addPort('panel', portPanel);
+
+      expect(instance.ports.pipeCreated).toBe(true);
+      expect(instance._createPipe.mock.calls.length).toBe(1);
+      expect(instance._createPipe.mock.calls.length).toBe(1);
+
+      instance.addPort('panel', portPanel);
+      expect(instance._createPipe.mock.calls.length).toBe(1);
+      expect(instance.ports.pipeCreated).toBe(true);
+    });
+  });
+
+  describe('notify', () => {
+    beforeEach(() => {
+      instance = new TabConnection(tabId);
+    });
+
+    it('should notify only those ports that have any onMessage listener registered', () => {
+      instance.ports.panel = mockPort('panel');
+      instance.ports.popup = mockPort('popup');
+      instance.ports.panel.onMessage.hasListeners = jest
+        .fn()
+        .mockImplementation(() => true);
+      instance.ports.popup.onMessage.hasListeners = jest
+        .fn()
+        .mockImplementation(() => false);
+
+      instance.notify('message');
+
+      expect(
+        instance.ports.panel.onMessage.hasListeners.mock.calls.length
+      ).toBe(1);
+      expect(instance.ports.panel.postMessage.mock.calls.length).toBe(1);
+      expect(instance.ports.panel.postMessage.mock.calls[0][0]).toBe('message');
+
+      expect(
+        instance.ports.popup.onMessage.hasListeners.mock.calls.length
+      ).toBe(1);
+      expect(instance.ports.popup.postMessage.mock.calls.length).toBe(0);
+    });
+  });
+
+  describe('disconnect', () => {
+    beforeEach(() => {
+      instance = new TabConnection(tabId);
+    });
+
+    it('should disconnect all registered ports', () => {
+      instance.ports.panel = mockPort('panel');
+      instance.ports.popup = mockPort('popup');
+
+      instance.disconnect();
+
+      expect(instance.ports.panel.disconnect.mock.calls.length).toBe(1);
+      expect(instance.ports.popup.disconnect.mock.calls.length).toBe(1);
+    });
+  });
+
+  describe('disconnect', () => {
+    beforeEach(() => {
+      instance = new TabConnection(tabId);
+    });
+
+    it('should set new domain if available', () => {
+      instance.domain = 'old.com';
+      instance.reload('new.com');
+
+      expect(instance.domain).toBe('new.com');
+
+      instance.domain = 'old.com';
+      instance.reload();
+
+      expect(instance.domain).toBe('old.com');
+    });
+
+    it('should clear cache', () => {
+      instance.cache = [1, 2, 3];
+
+      instance.reload('domain');
+
+      expect(instance.cache.length).toBe(0);
+    });
+
+    it('should call notify with reloading action', () => {
+      instance.notify = jest.fn();
+
+      instance.reload('domain');
+
+      expect(instance.notify.mock.calls.length).toBe(1);
+      expect(instance.notify.mock.calls[0][0]).toEqual({
+        action: Actions.RELOADING
+      });
+    });
+  });
+
+  describe('addOnEmptyListener', () => {
+    beforeEach(() => {
+      instance = new TabConnection(tabId);
+    });
+
+    it('should assign callback to _emptyListener property', () => {
+      const callback = () => {};
+
+      expect(instance._emptyListener).toBe(null);
+      instance.addOnEmptyListener(callback);
+      expect(instance._emptyListener).toBe(callback);
+    });
+  });
+
+  describe('addOnSettingsListener', () => {
+    beforeEach(() => {
+      instance = new TabConnection(tabId);
+    });
+
+    it('should assign callback to settingsListener property', () => {
+      const callback = () => {};
+
+      expect(instance._settingsListener).toBe(null);
+      instance.addOnSettingsListener(callback);
+      expect(instance._settingsListener).toBe(callback);
+    });
+  });
+
+  describe('isEmpty', () => {
+    beforeEach(() => {
+      instance = new TabConnection(tabId);
+    });
+
+    it('should true if all ports are empty', () => {
+      expect(instance.isEmpty()).toBe(true);
+    });
+
+    it('should false if at least one port is not empty', () => {
+      instance.ports.popup = mockPort('popup');
+
+      expect(instance.isEmpty()).toBe(false);
+    });
+  });
+
+  describe('resendCache', () => {
+    beforeEach(() => {
+      instance = new TabConnection(tabId);
+      instance.ports.panel = mockPort('panel');
+    });
+
+    it('should not do anything if cache is empty', () => {
+      instance.resendCache();
+
+      expect(instance.cache.length).toBe(0);
+      expect(instance.ports.panel.postMessage.mock.calls.length).toBe(0);
+    });
+
+    it('should resend cache content to panel', () => {
+      let receivedCache = [];
+      instance.cache = [1, 2, 3, 4];
+      instance.ports.panel.postMessage = jest
+        .fn()
+        .mockImplementation(value => receivedCache.push(value));
+
+      instance.resendCache();
+
+      expect(instance.cache.length).toBe(4);
+      expect(instance.ports.panel.postMessage.mock.calls.length).toBe(4);
+      expect(receivedCache).toEqual(instance.cache);
+    });
+  });
+
+  describe('_notifyPopup', () => {
+    it('should send message to popup with current state and app data', () => {
+      instance = new TabConnection(tabId);
+      instance.ports.popup = mockPort('popup');
+      instance.appData = { version: 1 };
+
+      instance._notifyPopup();
+
+      expect(instance.ports.popup.postMessage.mock.calls.length).toBe(1);
+      expect(instance.ports.popup.postMessage.mock.calls[0][0]).toEqual({
+        action: Actions.POPUP,
+        payload: { state: instance.state, appData: instance.appData }
+      });
+    });
+  });
+
+  describe('_reviveDevtools', () => {
+    it('should not do anything if state is not alive', () => {
+      instance = new TabConnection(tabId);
+      instance.ports.devtools = mockPort('devtools');
+      instance.state = State.DEAD;
+
+      instance._reviveDevtools();
+
+      expect(instance.ports.devtools.postMessage.mock.calls.length).toBe(0);
+    });
+
+    it('should post message to devtools and disconnect the port', () => {
+      let postMessageCall;
+      let disconnectCalled;
+
+      instance = new TabConnection(tabId);
+      instance.state = State.ALIVE;
+      instance.ports.devtools = mockPort('devtools');
+      instance.ports.devtools.postMessage = value => {
+        postMessageCall = value;
+      };
+      instance.ports.devtools.disconnect = () => {
+        disconnectCalled = true;
+      };
+
+      instance._reviveDevtools();
+
+      expect(postMessageCall).toEqual({
+        action: Actions.ALIVE
+      });
+      expect(disconnectCalled).toBe(true);
+      expect(instance.ports.devtools).toBe(null);
+    });
+  });
+
+  describe('_createPipe', () => {
+    let resendContentScript, resendPanel, shutdownContentScript, shutdownPanel;
+
+    beforeEach(() => {
+      instance = new TabConnection(tabId);
+      instance._onDisconnect = jest.fn();
+      instance.resendCache = jest.fn();
+      instance.ports.contentScript = mockPort('contentScript');
+      instance.ports.panel = mockPort('panel');
+
+      // Catch created listeners
+      instance.ports.contentScript.onMessage.addListener = jest
+        .fn()
+        .mockImplementation(listener => {
+          resendContentScript = listener;
+        });
+      instance.ports.panel.onMessage.addListener = jest
+        .fn()
+        .mockImplementation(listener => {
+          resendPanel = listener;
+        });
+      instance.ports.contentScript.onDisconnect.addListener = jest
+        .fn()
+        .mockImplementation(listener => {
+          shutdownContentScript = listener;
+        });
+      instance.ports.panel.onDisconnect.addListener = jest
+        .fn()
+        .mockImplementation(listener => {
+          shutdownPanel = listener;
+        });
+    });
+
+    it('should assign onMessage listeners', () => {
+      instance._createPipe();
+
+      expect(
+        instance.ports.contentScript.onMessage.addListener.mock.calls.length
+      ).toBe(1);
+      expect(instance.ports.panel.onMessage.addListener.mock.calls.length).toBe(
+        1
+      );
+    });
+
+    it('should assign onDisconnect listeners', () => {
+      instance._createPipe();
+
+      expect(
+        instance.ports.contentScript.onDisconnect.addListener.mock.calls.length
+      ).toBe(1);
+      expect(
+        instance.ports.panel.onDisconnect.addListener.mock.calls.length
+      ).toBe(1);
+    });
+
+    it('should send cache and set pipeCreated', () => {
+      expect(instance.ports.pipeCreated).toBe(false);
+      instance._createPipe();
+
+      expect(instance.resendCache.mock.calls.length).toBe(1);
+      expect(instance.ports.pipeCreated).toBe(true);
+    });
+
+    it('should call _onDisconnect and reset pipe on disconnect', () => {
+      instance._createPipe();
+      shutdownContentScript();
+
+      expect(instance._onDisconnect.mock.calls.length).toBe(1);
+      expect(instance._onDisconnect.mock.calls[0][0]).toBe('contentScript');
+      expect(instance._onDisconnect.mock.calls[0][1]).toBe(resendContentScript);
+
+      shutdownPanel();
+
+      expect(instance._onDisconnect.mock.calls.length).toBe(2);
+      expect(instance._onDisconnect.mock.calls[1][0]).toBe('panel');
+      expect(instance._onDisconnect.mock.calls[1][1]).toBe(resendPanel);
+    });
+
+    it('should resend message from panel to content script', () => {
+      instance._createPipe();
+      resendPanel('test message');
+
+      expect(instance.ports.contentScript.postMessage.mock.calls.length).toBe(
+        1
+      );
+      expect(instance.ports.contentScript.postMessage.mock.calls[0][0]).toBe(
+        'test message'
+      );
+    });
+
+    it('should resend message from content script to panel', () => {
+      instance._createPipe();
+      resendContentScript('test message');
+
+      expect(instance.ports.panel.postMessage.mock.calls.length).toBe(1);
+      expect(instance.ports.panel.postMessage.mock.calls[0][0]).toBe(
+        'test message'
+      );
+    });
+  });
+
+  describe('_onDisconnect', () => {
+    beforeEach(() => {
+      instance = new TabConnection(tabId);
+      instance.ports.popup = mockPort('popup');
+      instance.ports.popup.onMessage.hasListeners = jest
+        .fn()
+        .mockImplementation(() => true);
+    });
+
+    it('should return if port with given name is empty', () => {
+      expect(instance._onDisconnect('devtools')).toBe(undefined);
+    });
+
+    it('should remove optional listeners', () => {
+      instance._onDisconnect('popup', () => {});
+
+      expect(
+        instance.ports.popup.onMessage.removeListener.mock.calls.length
+      ).toBe(1);
+    });
+
+    it('should not disconnect port if it still has some listeners remaining', () => {
+      instance._onDisconnect('popup');
+
+      expect(instance.ports.popup).not.toBe(null);
+      expect(
+        instance.ports.popup.onMessage.hasListeners.mock.calls.length
+      ).toBe(1);
+    });
+
+    it('should disconnect port if it has no remaining listeners registered', () => {
+      let disconnectCalled, hasListenersCalled;
+      instance.ports.popup.onMessage.hasListeners = () => {
+        hasListenersCalled = true;
+      };
+      instance.ports.popup.disconnect = () => {
+        disconnectCalled = true;
+      };
+
+      instance._onDisconnect('popup');
+
+      expect(hasListenersCalled).toBe(true);
+      expect(disconnectCalled).toBe(true);
+      expect(instance.ports.popup).toBe(null);
+    });
+
+    it('should clear cache if no other ports are opened', () => {
+      instance.cache = [1, 2, 3, 4];
+      instance.ports.popup.onMessage.hasListeners = () => false;
+      instance.isEmpty = jest.fn().mockImplementation(() => true);
+
+      expect(instance.cache.length).toBe(4);
+      instance._onDisconnect('popup');
+
+      expect(instance.ports.popup).toBe(null);
+      expect(instance.isEmpty.mock.calls.length).toBe(1);
+      expect(instance.cache.length).toBe(0);
+    });
+
+    it('should execute empty listener with tabId if no other ports are opened', () => {
+      instance.ports.popup.onMessage.hasListeners = () => false;
+      instance.isEmpty = jest.fn().mockImplementation(() => true);
+      instance._emptyListener = jest.fn();
+
+      instance._onDisconnect('popup');
+
+      expect(instance.ports.popup).toBe(null);
+      expect(instance.isEmpty.mock.calls.length).toBe(1);
+      expect(instance._emptyListener.mock.calls.length).toBe(1);
+      expect(instance._emptyListener.mock.calls[0][0]).toBe(instance.tabId);
+    });
+  });
+
+  describe('_settingsCallback', () => {
+    beforeEach(() => {
+      instance._settingsListener = jest.fn();
+    });
+
+    it('should not do anything if action is not settings action', () => {
+      instance._settingsCallback({
+        action: Actions.POPUP,
+        payload: { enabled: true }
+      });
+
+      expect(instance._settingsListener.mock.calls.length).toBe(0);
+    });
+
+    it('should call settings listener with enabled value', () => {
+      instance._settingsCallback({
+        action: Actions.SETTINGS,
+        payload: { enabled: true }
+      });
+
+      expect(instance._settingsListener.mock.calls.length).toBe(1);
+      expect(instance._settingsListener.mock.calls[0][0]).toBe(true);
+    });
+  });
+
+  describe('_aliveCallback', () => {
+    beforeEach(() => {
+      instance = new TabConnection(tabId);
+      instance._reviveDevtools = jest.fn();
+      instance._notifyPopup = jest.fn();
+      instance.ports.popup = mockPort('popup');
+      instance.ports.devtools = mockPort('devtools');
+      instance.ports.contentScript = mockPort('contentScript');
+      utils.setIcon.mockReset();
+    });
+
+    it('should save state on action detecting', () => {
+      expect(instance.state).toBe(State.RELOAD);
+
+      instance._aliveCallback({
+        action: Actions.DETECTING,
+        payload: { version: 0 }
+      });
+
+      expect(instance.state).toBe(State.DETECTING);
+    });
+
+    it('should save state on action dead', () => {
+      expect(instance.state).toBe(State.RELOAD);
+
+      instance._aliveCallback({
+        action: Actions.DEAD,
+        payload: { version: 0 }
+      });
+
+      expect(instance.state).toBe(State.DEAD);
+    });
+
+    it('should save state on action alive and set payload to appData', () => {
+      expect(instance.state).toBe(State.RELOAD);
+
+      instance._aliveCallback({
+        action: Actions.ALIVE,
+        payload: { version: 0 }
+      });
+
+      expect(instance.state).toBe(State.ALIVE);
+      expect(instance.appData).toEqual({ version: 0 });
+    });
+
+    it('should set alive icon on current tab on alive', () => {
+      instance._aliveCallback({
+        action: Actions.ALIVE,
+        payload: { version: 0 }
+      });
+
+      expect(utils.setIcon.mock.calls.length).toBe(1);
+      expect(utils.setIcon.mock.calls[0][0]).toBe(State.ALIVE);
+      expect(utils.setIcon.mock.calls[0][1]).toBe(instance.tabId);
+    });
+
+    it("should revive devtools if it's registered", () => {
+      instance._aliveCallback({
+        action: Actions.ALIVE,
+        payload: { version: 0 }
+      });
+
+      expect(instance._reviveDevtools.mock.calls.length).toBe(1);
+    });
+
+    it("should revive not devtools if it's not registered", () => {
+      instance.ports.devtools = null;
+      instance._aliveCallback({
+        action: Actions.ALIVE,
+        payload: { version: 0 }
+      });
+
+      expect(instance._reviveDevtools.mock.calls.length).toBe(0);
+    });
+
+    it("should not notify popup if it's not registered", () => {
+      instance.ports.popup = null;
+      instance._aliveCallback({
+        action: Actions.ALIVE,
+        payload: { version: 0 }
+      });
+
+      expect(instance._notifyPopup.mock.calls.length).toBe(0);
+    });
+
+    it("should notify popup if it's is registered", () => {
+      instance._aliveCallback({
+        action: Actions.ALIVE,
+        payload: { version: 0 }
+      });
+
+      expect(instance._notifyPopup.mock.calls.length).toBe(1);
+    });
+
+    it('should remove _aliveCallback on content script on alive and dead states', () => {
+      instance._aliveCallback({ action: Actions.ALIVE });
+      expect(
+        instance.ports.contentScript.onMessage.removeListener.mock.calls.length
+      ).toBe(1);
+
+      instance._aliveCallback({ action: Actions.ALIVE });
+      expect(
+        instance.ports.contentScript.onMessage.removeListener.mock.calls.length
+      ).toBe(2);
+
+      instance._aliveCallback({ action: Actions.DETECTING });
+      expect(
+        instance.ports.contentScript.onMessage.removeListener.mock.calls.length
+      ).toBe(2);
+
+      instance.state = State.RELOAD;
+      instance._aliveCallback({ action: Actions.SETTINGS });
+      expect(
+        instance.ports.contentScript.onMessage.removeListener.mock.calls.length
+      ).toBe(2);
+    });
+  });
+
+  describe('_cacheMessagesCallback', () => {
+    beforeEach(() => {
+      instance = new TabConnection(tabId);
+    });
+
+    it('should add message to cache', () => {
+      instance._cacheMessagesCallback(1);
+
+      expect(instance.cache).toEqual([1]);
+    });
+
+    it('should not exceed max cache size', () => {
+      for (let i = 0; i < CACHE_SIZE + 100; i++) {
+        instance._cacheMessagesCallback(1);
+      }
+
+      expect(instance.cache.length).toBe(CACHE_SIZE);
+    });
+  });
+});

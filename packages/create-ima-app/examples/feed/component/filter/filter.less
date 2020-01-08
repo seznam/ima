@@ -1,62 +1,68 @@
 .filter {
-    .grid(max-width; 66);
-    .grid(max-height; 5);
-    overflow: hidden;
-    margin: 0 auto;
-    transition: 0.3s;
+  .grid(max-width; 66);
+  .grid(max-height; 5);
+  margin: 0 auto;
 
-    border-top: 1px solid #f2f2f2;
-    border-bottom: 1px solid #f2f2f2;
+  border-top: 1px solid #f2f2f2;
+  border-bottom: 1px solid #f2f2f2;
+  overflow: hidden;
 
-    .top {
-        .grid(line-height; 5);
-        text-align: center;
+  transition: 0.3s;
 
-        .toggle {
-            .grid(padding-right; 3);
-            color: #cc0000;
-            cursor: pointer;
-            background: url('@{images}/filter/expand.png') right center no-repeat;
-        }
+  .top {
+    .grid(line-height; 5);
+    text-align: center;
+
+    .toggle {
+      .grid(padding-right; 3);
+      color: #c00;
+
+      background: url("@{images}/filter/expand.png") right center no-repeat;
+
+      cursor: pointer;
     }
-    
+  }
+
+  .categories {
+    .clearfix();
+    .grid(padding; 2 0);
+
+    a {
+      display: block;
+
+      float: left;
+
+      width: 33.333%;
+      .grid(line-height; 3);
+    }
+
+    .all {
+      width: 100%;
+
+      font-weight: bold;
+    }
+  }
+
+  &.expanded {
+    .grid(max-height; 45);
+
+    .top .toggle {
+      background-image: url("@{images}/filter/collapse.png");
+    }
+  }
+
+  @media (max-width: 480px) {
     .categories {
-        .clearfix();
-        .grid(padding; 2 0);
 
-        a {
-            display: block;
-            width: 33.333%;
-            float: left;
-            .grid(line-height; 3);
-        }
+      .grid(padding; 2 3);
 
-        .all {
-            width: 100%;
-            font-weight: bold;
-        }
+      .all {
+        width: 50%;
+      }
+
+      a {
+        width: 50%;
+      }
     }
-
-    &.expanded {
-        .grid(max-height; 45);
-
-        .top .toggle {
-            background-image: url('@{images}/filter/collapse.png');
-        }
-    }
-
-    @media (max-width: 480px) {
-        .categories {
-
-            .grid(padding; 2 3);
-
-            .all {
-                width: 50%;
-            }
-
-            a {
-                width: 50%;
-            }
-        }
-    }
+  }
 }

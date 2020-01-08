@@ -36,67 +36,64 @@
 @base-font-size: 16px;
 
 .rem(@property; @size-px-list; ) {
-    @{property}: @size-px-list; //fallback
-    ._pxToRelativeUnit(@property; @size-px-list; @base-font-size; rem);
+  @{property}: @size-px-list; //fallback
+  ._pxToRelativeUnit(@property; @size-px-list; @base-font-size; rem);
 }
 
 .em(@property; @size-px-list; @font-size-px: @base-font-size) {
-    ._pxToRelativeUnit(@property; @size-px-list; @font-size-px; em);
+  ._pxToRelativeUnit(@property; @size-px-list; @font-size-px; em);
 }
 
 // 4 rozmery
 ._pxToRelativeUnit(@property; @size-px-list; @ratio; @unit)
-when ( isnumber(extract(@size-px-list, 4)) )
-{
-    @val1: extract(@size-px-list, 1);
-    @val2: extract(@size-px-list, 2);
-    @val3: extract(@size-px-list, 3);
-    @val4: extract(@size-px-list, 4);
+when ( isnumber(extract(@size-px-list, 4)) ) {
+  @val1: extract(@size-px-list, 1);
+  @val2: extract(@size-px-list, 2);
+  @val3: extract(@size-px-list, 3);
+  @val4: extract(@size-px-list, 4);
 
-    @em1: unit(@val1 / @ratio, @unit);
-    @em2: unit(@val2 / @ratio, @unit);
-    @em3: unit(@val3 / @ratio, @unit);
-    @em4: unit(@val4 / @ratio, @unit);
+  @em1: unit(@val1 / @ratio, @unit);
+  @em2: unit(@val2 / @ratio, @unit);
+  @em3: unit(@val3 / @ratio, @unit);
+  @em4: unit(@val4 / @ratio, @unit);
 
-    @{property}: @em1 @em2 @em3 @em4;
+  @{property}: @em1 @em2 @em3 @em4;
 }
 // 3 rozmery
 ._pxToRelativeUnit(@property; @size-px-list; @ratio; @unit)
-when ( isnumber(extract(@size-px-list, 3)) ) and not ( isnumber(extract(@size-px-list, 4)) )
-{
-    @val1: extract(@size-px-list, 1);
-    @val2: extract(@size-px-list, 2);
-    @val3: extract(@size-px-list, 3);
+when ( isnumber(extract(@size-px-list, 3)) ) and not ( isnumber(extract(@size-px-list, 4)) ) {
+  @val1: extract(@size-px-list, 1);
+  @val2: extract(@size-px-list, 2);
+  @val3: extract(@size-px-list, 3);
 
-    @em1: unit(@val1 / @ratio, @unit);
-    @em2: unit(@val2 / @ratio, @unit);
-    @em3: unit(@val3 / @ratio, @unit);
+  @em1: unit(@val1 / @ratio, @unit);
+  @em2: unit(@val2 / @ratio, @unit);
+  @em3: unit(@val3 / @ratio, @unit);
 
-    @{property}: @em1 @em2 @em3;
+  @{property}: @em1 @em2 @em3;
 }
 // 2 rozmery
 ._pxToRelativeUnit(@property; @size-px-list; @ratio; @unit)
-when ( isnumber(extract(@size-px-list, 2)) ) and not ( isnumber(extract(@size-px-list, 3)) )
-{
-    @val1: extract(@size-px-list, 1);
-    @val2: extract(@size-px-list, 2);
+when ( isnumber(extract(@size-px-list, 2)) ) and not ( isnumber(extract(@size-px-list, 3)) ) {
+  @val1: extract(@size-px-list, 1);
+  @val2: extract(@size-px-list, 2);
 
-    @em1: unit(@val1 / @ratio, @unit);
-    @em2: unit(@val2 / @ratio, @unit);
+  @em1: unit(@val1 / @ratio, @unit);
+  @em2: unit(@val2 / @ratio, @unit);
 
-    @{property}: @em1 @em2;
+  @{property}: @em1 @em2;
 }
 // 1 rozmer
 ._pxToRelativeUnit(@property; @size-px-list; @ratio; @unit)
-when ( isnumber(extract(@size-px-list, 1)) ) and not ( isnumber(extract(@size-px-list, 2)) )
-{
-    @val1: extract(@size-px-list, 1);
+when ( isnumber(extract(@size-px-list, 1)) ) and not ( isnumber(extract(@size-px-list, 2)) ) {
+  @val1: extract(@size-px-list, 1);
 
-    @em1: unit(@val1 / @ratio, @unit);
+  @em1: unit(@val1 / @ratio, @unit);
 
-    @{property}: @em1;
+  @{property}: @em1;
 }
-/*-----------------konec .em()-----------------*/
+
+/* -----------------konec .em()----------------- */
 
 /**
 * Prepocita velikost zadanou v px na em, vysledek ulozi do promenne @em-size.
@@ -123,7 +120,7 @@ when ( isnumber(extract(@size-px-list, 1)) ) and not ( isnumber(extract(@size-px
 * }
 */
 .em-size(@size-px; @font-size-px: @hp-base-font-size-px) {
-    @em-size: unit(@size-px / @font-size-px, em);
+  @em-size: unit(@size-px / @font-size-px, em);
 }
 
 /**
@@ -141,37 +138,34 @@ when ( isnumber(extract(@size-px-list, 1)) ) and not ( isnumber(extract(@size-px
 
 // translate3D
 .em-translate3D(@size-px-list; @font-size-px: @hp-base-font-size-px)
-when ( isnumber(extract(@size-px-list, 3)) ) and not ( isnumber(extract(@size-px-list, 4)) )
-{
-    @val1: extract(@size-px-list, 1);
-    @val2: extract(@size-px-list, 2);
-    @val3: extract(@size-px-list, 3);
+when ( isnumber(extract(@size-px-list, 3)) ) and not ( isnumber(extract(@size-px-list, 4)) ) {
+  @val1: extract(@size-px-list, 1);
+  @val2: extract(@size-px-list, 2);
+  @val3: extract(@size-px-list, 3);
 
-    @em1: unit(@val1 / @font-size-px, em);
-    @em2: unit(@val2 / @font-size-px, em);
-    @em3: unit(@val3 / @font-size-px, em);
+  @em1: unit(@val1 / @font-size-px, em);
+  @em2: unit(@val2 / @font-size-px, em);
+  @em3: unit(@val3 / @font-size-px, em);
 
-    .transform(~"translate3d(@{em1}, @{em2}, @{em3})");
+  .transform(~"translate3d(@{em1}, @{em2}, @{em3})");
 }
 // translate2D
 .em-translate2D(@size-px-list; @font-size-px: @hp-base-font-size-px)
-when ( isnumber(extract(@size-px-list, 2)) ) and not ( isnumber(extract(@size-px-list, 3)) )
-{
-    @val1: extract(@size-px-list, 1);
-    @val2: extract(@size-px-list, 2);
+when ( isnumber(extract(@size-px-list, 2)) ) and not ( isnumber(extract(@size-px-list, 3)) ) {
+  @val1: extract(@size-px-list, 1);
+  @val2: extract(@size-px-list, 2);
 
-    @em1: unit(@val1 / @font-size-px, em);
-    @em2: unit(@val2 / @font-size-px, em);
+  @em1: unit(@val1 / @font-size-px, em);
+  @em2: unit(@val2 / @font-size-px, em);
 
-    .transform(~"translate(@{em1}, @{em2})");
+  .transform(~"translate(@{em1}, @{em2})");
 }
 // transform
 .em-transform(@property; @size-px-list; @font-size-px: @hp-base-font-size-px)
-when ( isnumber(extract(@size-px-list, 1)) ) and not ( isnumber(extract(@size-px-list, 2)) )
-{
-    @val1: extract(@size-px-list, 1);
+when ( isnumber(extract(@size-px-list, 1)) ) and not ( isnumber(extract(@size-px-list, 2)) ) {
+  @val1: extract(@size-px-list, 1);
 
-    @em1: unit(@val1 / @font-size-px, em);
+  @em1: unit(@val1 / @font-size-px, em);
 
-    .transform(~"@{property}(@{em1})");
+  .transform(~"@{property}(@{em1})");
 }

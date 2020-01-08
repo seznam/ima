@@ -97,16 +97,25 @@ const hookName = Object.freeze({
 
 #### 3. `emit(identifier, meta, options, overrides = {})`
 
-Helper method that sends passed in data to the devtools panel, while doing some pre-processing so the data
+Helper function that sends passed in data to the devtools panel, while doing some pre-processing so the data
 can be displayed properly. It is used **at the end of `createHook` callback function**.
 
 - `identifier` **{string}** - name identifying sent message displayed in devtool panel. 
   By default it corresponds to the name of the wrapped class, but it can be overridden in the `options`.
 - `meta` **{object}** - metadata describing received event. They're automatically created as a callback parameter
-  in the `createHook` method.
+  in the `createHook` function.
 - `options` **{object}** - additional options passed into the event payload. Currently only `{ color: 'color' }` is supported 
   (for available colors, see below).
 - `overrides`  **{object}** - optional object with overrides, that is merged with the `meta` sent in second argument.
+
+#### 4. `importIMAClass(path, module);`
+
+Utility function, used to import modules from `$IMA.Loader.modules`, that can be used in creating your own
+custom hooks.
+
+- `path` **{string}** - corresponds to absolute path to application's class from the `/app` directory. Or a package name
+in case of npm package.
+- `module` **{?string}** - used for named exports, can be left blank in case of default exports.
 
 ### Message colors
 

@@ -1,0 +1,32 @@
+<!doctype html>
+<html lang="en">
+<head>
+	<link rel="stylesheet" href="../css/popup.css">
+	<title>IMA Devtools Popup</title>
+</head>
+<body>
+<div class="popup">
+	<div class="popup__header">
+		<span class="popup__header-title">
+			Enable
+		</span>
+		<label class="switch">
+			<input disabled name="enable-switch" type="checkbox">
+			<span class="switcher"></span>
+		</label>
+	</div>
+	<div class="popup__body">
+		<p id="alert-alive" style="display: none;">This site is <strong>using</strong> <span class="ima-js">IMA.js</span></p>
+		<p id="alert-dead" style="display: none;">This site is <strong>not using</strong> <span class="ima-js">IMA.js</span></p>
+		<p id="alert-detecting" style="display: block;">Detecting presence of <span class="ima-js">IMA.js...</span></p>
+		<p id="alert-reload" style="display: none;">Reload the page to take effect.</p>
+		<ul id="info-list" class="list" style="display: none;">
+			<li>Env: <code id="info-list-env"></code></li>
+			<li>Version: <code id="info-list-version"></code></li>
+			<li>Language: <code id="info-list-language"></code></li>
+		</ul>
+	</div>
+	<script src="../js/popup.js"></script>
+</div>
+</body>
+</html>

@@ -50,6 +50,7 @@ module.exports = {
     '$IMA': true,
     'using': true,
     'extend': true,
+    'chrome': true,
     'FB': true
   }
 };

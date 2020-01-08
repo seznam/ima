@@ -1,0 +1,53 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`PresetEntry molecule should match snapshot 1`] = `
+<div
+  className="wrapper"
+  onClick={[Function]}
+>
+  <strong>
+    Default
+  </strong>
+  <div
+    className="actions"
+  >
+    <Tooltip
+      label="Duplicate preset"
+    >
+      <span>
+        <IconButton
+          className=""
+          name="copy"
+          onClick={[Function]}
+        />
+      </span>
+    </Tooltip>
+  </div>
+</div>
+`;
+
+exports[`PresetEntry molecule should match snapshot when editable 1`] = `
+<div
+  className="wrapper"
+  onClick={[Function]}
+>
+  <strong>
+    Default
+  </strong>
+  <div
+    className="actions"
+  >
+    <Tooltip
+      label="Duplicate preset"
+    >
+      <span>
+        <IconButton
+          className=""
+          name="copy"
+          onClick={[Function]}
+        />
+      </span>
+    </Tooltip>
+  </div>
+</div>
+`;

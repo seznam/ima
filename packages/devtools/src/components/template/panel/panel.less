@@ -1,0 +1,37 @@
+@import "~nanoreset";
+@import "../../../assets/less/config.less";
+@import "../../../assets/less/tooltip";
+
+:global {
+  html,
+  body {
+    margin: 0;
+    padding: 0;
+    overflow: hidden;
+  }
+
+  * {
+    box-sizing: border-box;
+    -webkit-font-smoothing: var(--font-smoothing);
+  }
+
+  body,
+  input {
+    font: 14px/1.4 var(--font-family-sans);
+    color: var(--color-text-primary);
+  }
+}
+
+.error {
+  display: flex;
+
+  margin: 0 auto;
+  margin-top: 20px;
+  height: 90vh;
+
+  justify-content: center;
+  align-items: center;
+
+  font-size: 24px;
+  font-weight: bold;
+}
