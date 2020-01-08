@@ -1,5 +1,6 @@
 ---
 layout: "docs"
+title: "Docs - Extensions"
 ---
 
 Extensions provide means of extending the page controllers with additional

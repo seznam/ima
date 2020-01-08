@@ -1,5 +1,6 @@
 ---
 layout: "docs"
+title: "Docs - List of available plugins"
 ---
 
 We've already described a way to [create your own IMA.js plugins](/docs/creating-custom-plugin)

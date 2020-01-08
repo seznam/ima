@@ -1,0 +1,54 @@
+{
+  "name": "@ima/devtools-scripts",
+  "version": "17.3.0",
+  "description": "IMA.js devtool script used in the @ima/devtools.",
+  "main": "es/main.string.js",
+  "scripts": {
+    "preversion": "npm test",
+    "test": "echo \"Error: no test specified\" && exit 0",
+    "build:commonjs": "NODE_ENV=cjs rollup -c -o lib/main.js",
+    "build:es": "NODE_ENV=es rollup -c -o es/main.js",
+    "build:string": "babel --plugins @babel/plugin-transform-template-literals ./es/main.js | (echo '// DO NOT MODIFY FILE, FILE IS AUTO GENERATED FROM OTHER REPOSITORIES \nexport default function(hooks) { return `' && cat && echo 'createDevtool(({ importIMAClass, aop, createHook, hookName, createCallTrap, emit }) => { ${Object.values(hooks).filter(hook => hook.enabled).map(hook => hook.code).join(\"\\\\n\\\\n\")} });' && echo '`; }') > ./es/main.string.js",
+    "build:script": "npm run build:commonjs && npm run build:es",
+    "build": "npm run build:script && npm run build:string",
+    "dev": "NODE_ENV=es rollup -c -w -o es/main.js"
+  },
+  "keywords": [
+    "IMA",
+    "IMA.js",
+    "Chrome",
+    "Devtools",
+    "Inject Scripts"
+  ],
+  "author": "Miroslav Jancarik <miroslav.jancarik@firma.seznam.cz>",
+  "contributors": [
+    {
+      "name": "Jan Šimeček",
+      "email": "jan.simecek@firma.seznam.cz"
+    }
+  ],
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/seznam/ima.git"
+  },
+  "bugs": {
+    "url": "https://github.com/seznam/ima/issues"
+  },
+  "publishConfig": {
+    "registry": "https://registry.npmjs.org/",
+    "access": "public"
+  },
+  "license": "ISC",
+  "devDependencies": {
+    "@babel/cli": "^7.7.4",
+    "@babel/core": "^7.7.4",
+    "@babel/plugin-transform-template-literals": "^7.7.4",
+    "rollup": "^1.27.8",
+    "rollup-plugin-commonjs": "^10.1.0",
+    "rollup-plugin-node-resolve": "^5.2.0"
+  },
+  "dependencies": {
+    "easy-uid": "^1.0.1",
+    "to-aop": "0.3.1"
+  }
+}

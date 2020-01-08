@@ -117,6 +117,22 @@ describe('ima.core.router.ClientRouter', () => {
       expect(router._isSameDomain(url)).toEqual(true);
     });
 
+    it('should be retrun false for strange domain with query for same domain', () => {
+      let path = '/somePath';
+      let url =
+        protocol +
+        '//' +
+        'www.strangeDomain.com' +
+        path +
+        '?redirect=' +
+        protocol +
+        '//' +
+        host +
+        path;
+
+      expect(router._isSameDomain(url)).toEqual(false);
+    });
+
     it('should be retrun false for strange domain', () => {
       let path = '/somePath';
       let url = protocol + '//' + 'www.strangeDomain.com' + path;

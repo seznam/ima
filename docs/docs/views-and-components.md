@@ -1,5 +1,6 @@
 ---
 layout: "docs"
+title: "Docs - View & Components"
 ---
 
 As you may have noticed when a [route is registered](/docs/routing#3-controller-and-view),

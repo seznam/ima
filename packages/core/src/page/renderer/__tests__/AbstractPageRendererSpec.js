@@ -83,14 +83,18 @@ describe('ima.core.page.renderer.AbstractPageRenderer', function() {
 
   describe('setState method', function() {
     it('should be set new state to reactive component view', function() {
-      let state = { state: 'state' };
+      const state = { state: 'state' };
+      //we expect that pageRenderer add temp indicator for viewAdapter method getDerivedStateFromProps
+      const stateWithIndicator = Object.assign({}, state, {
+        notUsePropsState: true
+      });
 
       spyOn(reactiveComponentView, 'setState').and.stub();
 
       pageRenderer.setState(state);
 
       expect(reactiveComponentView.setState).toHaveBeenCalledWith(
-        state,
+        stateWithIndicator,
         expect.any(Function)
       );
     });

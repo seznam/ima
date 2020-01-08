@@ -1,5 +1,6 @@
 ---
 layout: "docs"
+title: "Docs - Configuration"
 ---
 
 IMA.js offers many ways to configure and customize your application to your needs.

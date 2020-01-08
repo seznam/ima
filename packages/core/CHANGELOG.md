@@ -3,6 +3,19 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [17.3.0](https://github.com/seznam/ima/compare/v17.2.0...v17.3.0) (2020-01-08)
+
+
+### Bug Fixes
+
+* 🐛 clientrouter ([c08c41a](https://github.com/seznam/ima/commit/c08c41a103e3be7820c48a4cadbcba9ab4191b73)), closes [#30](https://github.com/seznam/ima/issues/30)
+* 🐛 Crashing MS Edge (using spread operator inside object) ([d126644](https://github.com/seznam/ima/commit/d126644a5312beee9512fcaf5bddd0cba0b4ab89))
+* 🐛 viewAdapter set state from props ([70d77e2](https://github.com/seznam/ima/commit/70d77e26d795283f8225275e1027172dea8aa172))
+
+
+
+
+
 # [17.2.0](https://github.com/seznam/ima/compare/v17.1.1...v17.2.0) (2020-01-06)
 
 

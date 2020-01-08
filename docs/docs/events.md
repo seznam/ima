@@ -1,5 +1,6 @@
 ---
 layout: "docs"
+title: "Docs - EventBus, Dispatcher & Events"
 ---
 
 Major part of development in JavaScript relies on **events**. It's easy solution to

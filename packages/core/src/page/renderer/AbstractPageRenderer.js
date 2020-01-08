@@ -126,7 +126,11 @@ export default class AbstractPageRenderer extends PageRenderer {
    */
   setState(state = {}) {
     if (this._reactiveView) {
-      this._reactiveView.setState(state, () => {
+      // add temp indicator (in viewAdapter method getDerivedStateFromProps is unset) for indicate whether not to use state in props
+      const stateWithIndicator = Object.assign({}, state, {
+        notUsePropsState: true
+      });
+      this._reactiveView.setState(stateWithIndicator, () => {
         this._dispatcher.fire(Events.UPDATED, { state }, true);
       });
     }

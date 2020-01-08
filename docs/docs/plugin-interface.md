@@ -1,5 +1,6 @@
 ---
 layout: "docs"
+title: "Docs - Plugin interface"
 ---
 
 IMA.js development stack offers **built-in support for plugins**. Writing plugins for IMA.js is really

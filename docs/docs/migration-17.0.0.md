@@ -1,5 +1,6 @@
 ---
 layout: "docs"
+title: "Docs - Upgrading to 17.0.0"
 ---
 
 IMA.js brings few major breaking changes, notably in the renaming of all packages. We've tried to make this process as easy as possible
