@@ -375,6 +375,6 @@ export default class ClientRouter extends AbstractRouter {
    *         provided URL are the same as the current.
    */
   _isSameDomain(url = '') {
-    return !!url.match(this.getBaseUrl());
+    return new RegExp('^' + this.getBaseUrl()).test(url);
   }
 }
