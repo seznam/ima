@@ -1,5 +1,6 @@
 ---
 layout: "docs"
+title: "Docs - Upgrading to 0.16.0"
 ---
 
 Upgrading from version 15 should be pretty straightforward and your application should work with no to minimal changes required.

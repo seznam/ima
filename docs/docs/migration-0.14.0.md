@@ -1,5 +1,6 @@
 ---
 layout: "docs"
+title: "Docs - Upgrading to 0.14.0"
 ---
 
 In order to upgrade your project to use IMA.js 0.14.0, please follow these steps:

@@ -1,4 +1,5 @@
 ---
+title: "A Javascript framework for creating isomorphic applications"
 ---
 
 <div id="imajs">

@@ -1,5 +1,6 @@
 ---
 layout: "docs"
+title: "Docs - Controller lifecycle"
 ---
 
 IMA.js **AbstractController** provides a few methods you can implement in order to catch various lifecycle events and react to them. Each method description has *@server* or *@client* notation next to them symbolizing where the method is executed.
