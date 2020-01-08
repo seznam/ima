@@ -1,8 +1,9 @@
 ---
+title: "API"
 layout: "api"
 ---
 
-# Api {{ site.github.repository_name }}
+# Api @ima/core
 
 <div class="field is-grouped is-grouped-multiline">
 

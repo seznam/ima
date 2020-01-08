@@ -1,5 +1,6 @@
 ---
 layout: "docs"
+title: "Docs - Errors"
 ---
 
 IMA.js implements a custom error class that poses a structure for http errors.

@@ -1,4 +1,6 @@
 baseurl: "/"
+title: "IMA.js"
+description: "The IMA.js is an application development stack for developing isomorphic applications written in pure JavaScript and React."
 exclude: ["_partials"]
 permalink: /api/:categories/:title:output_ext
 defaults:

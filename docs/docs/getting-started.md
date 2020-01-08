@@ -1,5 +1,6 @@
 ---
 layout: "docs"
+title: "Docs - Getting started"
 ---
 
 The **IMA.js** is an application development stack for developing isomorphic applications written in pure JavaScript and React.

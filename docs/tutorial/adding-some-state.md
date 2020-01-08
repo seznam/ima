@@ -1,4 +1,5 @@
 ---
+title: "Tutorial - 3. Adding some state"
 layout: "tutorial"
 ---
 
