@@ -1,6 +1,7 @@
 ---
 category: "page"
-title: "Docs - AbstractPureComponent"
+title: "API - AbstractPureComponent"
+menuTitle: "AbstractPureComponent"
 ---
 
 ## *AbstractPureComponent*&nbsp;<a name="AbstractPureComponent" href="https://github.com/seznam/ima/tree/17.3.0/page/AbstractPureComponent.js#L29" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a>

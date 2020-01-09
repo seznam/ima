@@ -1,6 +1,7 @@
 ---
 category: "http"
-title: "Docs - HttpProxy"
+title: "API - HttpProxy"
+menuTitle: "HttpProxy"
 ---
 
 ## HttpProxy&nbsp;<a name="HttpProxy" href="https://github.com/seznam/ima/tree/17.3.0/http/HttpProxy.js#L49" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a>

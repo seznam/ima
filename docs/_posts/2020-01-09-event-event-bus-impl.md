@@ -1,6 +1,7 @@
 ---
 category: "event"
-title: "Docs - EventBusImpl"
+title: "API - EventBusImpl"
+menuTitle: "EventBusImpl"
 ---
 
 ## Classes

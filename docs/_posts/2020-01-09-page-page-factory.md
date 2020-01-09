@@ -1,6 +1,7 @@
 ---
 category: "page"
-title: "Docs - PageFactory"
+title: "API - PageFactory"
+menuTitle: "PageFactory"
 ---
 
 ## PageFactory&nbsp;<a name="PageFactory" href="https://github.com/seznam/ima/tree/17.3.0/page/PageFactory.js#L12" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a>

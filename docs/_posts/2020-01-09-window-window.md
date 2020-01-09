@@ -1,6 +1,7 @@
 ---
 category: "window"
-title: "Docs - Window"
+title: "API - Window"
+menuTitle: "Window"
 ---
 
 ## Window&nbsp;<a name="Window" href="https://github.com/seznam/ima/tree/17.3.0/window/Window.js#L8" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a>

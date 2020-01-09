@@ -1,6 +1,7 @@
 ---
 category: "router"
-title: "Docs - Route"
+title: "API - Route"
+menuTitle: "Route"
 ---
 
 ## Classes

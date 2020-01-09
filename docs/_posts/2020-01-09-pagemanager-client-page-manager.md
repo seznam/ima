@@ -1,6 +1,7 @@
 ---
 category: "page/manager"
-title: "Docs - ClientPageManager"
+title: "API - ClientPageManager"
+menuTitle: "ClientPageManager"
 ---
 
 ## ClientPageManager&nbsp;<a name="ClientPageManager" href="https://github.com/seznam/ima/tree/17.3.0/page/manager/ClientPageManager.js#L40" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a>

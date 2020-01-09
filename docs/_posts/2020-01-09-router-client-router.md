@@ -1,6 +1,7 @@
 ---
 category: "router"
-title: "Docs - ClientRouter"
+title: "API - ClientRouter"
+menuTitle: "ClientRouter"
 ---
 
 ## Classes

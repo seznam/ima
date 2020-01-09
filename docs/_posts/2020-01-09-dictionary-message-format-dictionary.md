@@ -1,6 +1,7 @@
 ---
 category: "dictionary"
-title: "Docs - MessageFormatDictionary"
+title: "API - MessageFormatDictionary"
+menuTitle: "MessageFormatDictionary"
 ---
 
 ## MessageFormatDictionary ⇐ <code>Dictionary</code>&nbsp;<a name="MessageFormatDictionary" href="https://github.com/seznam/ima/tree/17.3.0/dictionary/MessageFormatDictionary.js#L21" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a>

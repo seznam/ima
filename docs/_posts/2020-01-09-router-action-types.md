@@ -1,6 +1,7 @@
 ---
 category: "router"
-title: "Docs - ActionTypes"
+title: "API - ActionTypes"
+menuTitle: "ActionTypes"
 ---
 
 ## Constants

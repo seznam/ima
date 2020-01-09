@@ -1,6 +1,7 @@
 ---
 category: "storage"
-title: "Docs - WeakMapStorage"
+title: "API - WeakMapStorage"
+menuTitle: "WeakMapStorage"
 ---
 
 ## Classes

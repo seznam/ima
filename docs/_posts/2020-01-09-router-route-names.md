@@ -1,6 +1,7 @@
 ---
 category: "router"
-title: "Docs - RouteNames"
+title: "API - RouteNames"
+menuTitle: "RouteNames"
 ---
 
 ## Constants

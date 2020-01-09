@@ -1,6 +1,7 @@
 ---
 category: "page/renderer"
-title: "Docs - PageRendererFactory"
+title: "API - PageRendererFactory"
+menuTitle: "PageRendererFactory"
 ---
 
 ## PageRendererFactory&nbsp;<a name="PageRendererFactory" href="https://github.com/seznam/ima/tree/17.3.0/page/renderer/PageRendererFactory.js#L14" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a>

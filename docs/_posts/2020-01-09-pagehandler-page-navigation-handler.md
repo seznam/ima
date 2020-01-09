@@ -1,6 +1,7 @@
 ---
 category: "page/handler"
-title: "Docs - PageNavigationHandler"
+title: "API - PageNavigationHandler"
+menuTitle: "PageNavigationHandler"
 ---
 
 ## PageNavigationHandler&nbsp;<a name="PageNavigationHandler" href="https://github.com/seznam/ima/tree/17.3.0/page/handler/PageNavigationHandler.js#L17" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a>

@@ -1,6 +1,7 @@
 ---
 category: "dictionary"
-title: "Docs - Dictionary"
+title: "API - Dictionary"
+menuTitle: "Dictionary"
 ---
 
 ## Dictionary&nbsp;<a name="Dictionary" href="https://github.com/seznam/ima/tree/17.3.0/dictionary/Dictionary.js#L8" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a>

@@ -1,6 +1,7 @@
 ---
 category: "router"
-title: "Docs - ServerRouter"
+title: "API - ServerRouter"
+menuTitle: "ServerRouter"
 ---
 
 ## ServerRouter&nbsp;<a name="ServerRouter" href="https://github.com/seznam/ima/tree/17.3.0/router/ServerRouter.js#L28" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a>

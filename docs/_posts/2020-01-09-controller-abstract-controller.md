@@ -1,6 +1,7 @@
 ---
 category: "controller"
-title: "Docs - AbstractController"
+title: "API - AbstractController"
+menuTitle: "AbstractController"
 ---
 
 ## *AbstractController ⇐ <code>Controller</code>*&nbsp;<a name="AbstractController" href="https://github.com/seznam/ima/tree/17.3.0/controller/AbstractController.js#L15" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a>

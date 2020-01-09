@@ -1,6 +1,7 @@
 ---
 category: "storage"
-title: "Docs - CookieStorage"
+title: "API - CookieStorage"
+menuTitle: "CookieStorage"
 ---
 
 ## Classes

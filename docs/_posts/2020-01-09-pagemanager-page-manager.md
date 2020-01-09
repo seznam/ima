@@ -1,6 +1,7 @@
 ---
 category: "page/manager"
-title: "Docs - PageManager"
+title: "API - PageManager"
+menuTitle: "PageManager"
 ---
 
 ## PageManager&nbsp;<a name="PageManager" href="https://github.com/seznam/ima/tree/17.3.0/page/manager/PageManager.js#L5" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a>

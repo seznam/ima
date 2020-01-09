@@ -1,6 +1,7 @@
 ---
 category: "http"
-title: "Docs - StatusCode"
+title: "API - StatusCode"
+menuTitle: "StatusCode"
 ---
 
 ## Members

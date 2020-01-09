@@ -1,6 +1,7 @@
 ---
 category: "extension"
-title: "Docs - Extension"
+title: "API - Extension"
+menuTitle: "Extension"
 ---
 
 ## Extension&nbsp;<a name="Extension" href="https://github.com/seznam/ima/tree/17.3.0/extension/Extension.js#L18" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a>

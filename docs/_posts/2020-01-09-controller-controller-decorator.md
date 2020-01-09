@@ -1,6 +1,7 @@
 ---
 category: "controller"
-title: "Docs - ControllerDecorator"
+title: "API - ControllerDecorator"
+menuTitle: "ControllerDecorator"
 ---
 
 ## ControllerDecorator ⇐ <code>Controller</code>&nbsp;<a name="ControllerDecorator" href="https://github.com/seznam/ima/tree/17.3.0/controller/ControllerDecorator.js#L21" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a>

@@ -1,6 +1,7 @@
 ---
 category: "http"
-title: "Docs - UrlTransformer"
+title: "API - UrlTransformer"
+menuTitle: "UrlTransformer"
 ---
 
 ## UrlTransformer&nbsp;<a name="UrlTransformer" href="https://github.com/seznam/ima/tree/17.3.0/http/UrlTransformer.js#L12" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a>

@@ -1,6 +1,7 @@
 ---
 category: "storage"
-title: "Docs - SessionStorage"
+title: "API - SessionStorage"
+menuTitle: "SessionStorage"
 ---
 
 ## Classes

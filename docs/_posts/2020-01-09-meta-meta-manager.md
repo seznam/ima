@@ -1,6 +1,7 @@
 ---
 category: "meta"
-title: "Docs - MetaManager"
+title: "API - MetaManager"
+menuTitle: "MetaManager"
 ---
 
 ## MetaManager&nbsp;<a name="MetaManager" href="https://github.com/seznam/ima/tree/17.3.0/meta/MetaManager.js#L19" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a>

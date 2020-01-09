@@ -1,6 +1,7 @@
 ---
 category: "cache"
-title: "Docs - CacheEntry"
+title: "API - CacheEntry"
+menuTitle: "CacheEntry"
 ---
 
 ## CacheEntry&nbsp;<a name="CacheEntry" href="https://github.com/seznam/ima/tree/17.3.0/cache/CacheEntry.js#L12" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a>

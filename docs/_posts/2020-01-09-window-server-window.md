@@ -1,6 +1,7 @@
 ---
 category: "window"
-title: "Docs - ServerWindow"
+title: "API - ServerWindow"
+menuTitle: "ServerWindow"
 ---
 
 ## ServerWindow&nbsp;<a name="ServerWindow" href="https://github.com/seznam/ima/tree/17.3.0/window/ServerWindow.js#L8" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a>

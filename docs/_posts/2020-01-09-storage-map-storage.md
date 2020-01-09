@@ -1,6 +1,7 @@
 ---
 category: "storage"
-title: "Docs - MapStorage"
+title: "API - MapStorage"
+menuTitle: "MapStorage"
 ---
 
 ## MapStorage&nbsp;<a name="MapStorage" href="https://github.com/seznam/ima/tree/17.3.0/storage/MapStorage.js#L15" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a>

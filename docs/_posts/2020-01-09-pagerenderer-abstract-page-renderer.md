@@ -1,6 +1,7 @@
 ---
 category: "page/renderer"
-title: "Docs - AbstractPageRenderer"
+title: "API - AbstractPageRenderer"
+menuTitle: "AbstractPageRenderer"
 ---
 
 ## AbstractPageRenderer&nbsp;<a name="AbstractPageRenderer" href="https://github.com/seznam/ima/tree/17.3.0/page/renderer/AbstractPageRenderer.js#L23" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a>

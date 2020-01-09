@@ -1,6 +1,7 @@
 ---
 category: "general"
-title: "Docs - Bootstrap"
+title: "API - Bootstrap"
+menuTitle: "Bootstrap"
 ---
 
 ## Classes

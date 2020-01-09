@@ -1,6 +1,7 @@
 ---
 category: "execution"
-title: "Docs - SerialBatch"
+title: "API - SerialBatch"
+menuTitle: "SerialBatch"
 ---
 
 ## SerialBatch ⇐ <code>AbstractExecution</code>&nbsp;<a name="SerialBatch" href="https://github.com/seznam/ima/tree/17.3.0/execution/SerialBatch.js#L8" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a>

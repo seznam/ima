@@ -1,6 +1,7 @@
 ---
 category: "page"
-title: "Docs - componentHelpers"
+title: "API - componentHelpers"
+menuTitle: "componentHelpers"
 ---
 
 ## Functions

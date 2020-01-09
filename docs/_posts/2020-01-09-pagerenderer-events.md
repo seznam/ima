@@ -1,6 +1,7 @@
 ---
 category: "page/renderer"
-title: "Docs - Events"
+title: "API - Events"
+menuTitle: "Events"
 ---
 
 ## Constants

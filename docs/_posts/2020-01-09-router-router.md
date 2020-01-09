@@ -1,6 +1,7 @@
 ---
 category: "router"
-title: "Docs - Router"
+title: "API - Router"
+menuTitle: "Router"
 ---
 
 ## Router&nbsp;<a name="Router" href="https://github.com/seznam/ima/tree/17.3.0/router/Router.js#L7" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a>
