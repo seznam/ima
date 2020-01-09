@@ -4,7 +4,7 @@ title: "API - ClientPageManager"
 menuTitle: "ClientPageManager"
 ---
 
-## ClientPageManager&nbsp;<a name="ClientPageManager" href="https://github.com/seznam/ima/tree/17.3.0/page/manager/ClientPageManager.js#L40" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a>
+## ClientPageManager&nbsp;<a name="ClientPageManager" href="https://github.com/seznam/ima/tree/17.4.0/page/manager/ClientPageManager.js#L40" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a>
 Page manager for controller on the client side.
 
 **Kind**: global class  
@@ -41,7 +41,7 @@ Initializes the client-side page manager.
 
 * * *
 
-### clientPageManager.\_window : <code>ima.core.window.Window</code>&nbsp;<a name="ClientPageManager+_window" href="https://github.com/seznam/ima/tree/17.3.0/page/manager/ClientPageManager.js#L56" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a>
+### clientPageManager.\_window : <code>ima.core.window.Window</code>&nbsp;<a name="ClientPageManager+_window" href="https://github.com/seznam/ima/tree/17.4.0/page/manager/ClientPageManager.js#L56" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a>
 The utility for manipulating the global context and global
 client-side-specific APIs.
 
@@ -49,7 +49,7 @@ client-side-specific APIs.
 
 * * *
 
-### clientPageManager.\_eventBus : <code>ima.core.event.EventBus</code>&nbsp;<a name="ClientPageManager+_eventBus" href="https://github.com/seznam/ima/tree/17.3.0/page/manager/ClientPageManager.js#L64" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a>
+### clientPageManager.\_eventBus : <code>ima.core.event.EventBus</code>&nbsp;<a name="ClientPageManager+_eventBus" href="https://github.com/seznam/ima/tree/17.4.0/page/manager/ClientPageManager.js#L64" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a>
 The event bus for dispatching and listening for custom IMA events
 propagated through the DOM.
 
@@ -57,7 +57,7 @@ propagated through the DOM.
 
 * * *
 
-### clientPageManager.\_boundOnCustomEventHandler() : <code>function</code>&nbsp;<a name="ClientPageManager+_boundOnCustomEventHandler" href="https://github.com/seznam/ima/tree/17.3.0/page/manager/ClientPageManager.js#L72" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a>
+### clientPageManager.\_boundOnCustomEventHandler() : <code>function</code>&nbsp;<a name="ClientPageManager+_boundOnCustomEventHandler" href="https://github.com/seznam/ima/tree/17.4.0/page/manager/ClientPageManager.js#L72" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a>
 Event listener for the custom DOM events used by the event bus,
 bound to this instance.
 
@@ -65,22 +65,22 @@ bound to this instance.
 
 * * *
 
-### clientPageManager.init()&nbsp;<a name="ClientPageManager+init" href="https://github.com/seznam/ima/tree/17.3.0/page/manager/ClientPageManager.js#L80" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a>
+### clientPageManager.init()&nbsp;<a name="ClientPageManager+init" href="https://github.com/seznam/ima/tree/17.4.0/page/manager/ClientPageManager.js#L80" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a>
 **Kind**: instance method of [<code>ClientPageManager</code>](#ClientPageManager)  
 
 * * *
 
-### clientPageManager.manage()&nbsp;<a name="ClientPageManager+manage" href="https://github.com/seznam/ima/tree/17.3.0/page/manager/ClientPageManager.js#L91" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a>
+### clientPageManager.manage()&nbsp;<a name="ClientPageManager+manage" href="https://github.com/seznam/ima/tree/17.4.0/page/manager/ClientPageManager.js#L91" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a>
 **Kind**: instance method of [<code>ClientPageManager</code>](#ClientPageManager)  
 
 * * *
 
-### clientPageManager.destroy()&nbsp;<a name="ClientPageManager+destroy" href="https://github.com/seznam/ima/tree/17.3.0/page/manager/ClientPageManager.js#L101" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a>
+### clientPageManager.destroy()&nbsp;<a name="ClientPageManager+destroy" href="https://github.com/seznam/ima/tree/17.4.0/page/manager/ClientPageManager.js#L101" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a>
 **Kind**: instance method of [<code>ClientPageManager</code>](#ClientPageManager)  
 
 * * *
 
-### clientPageManager.\_onCustomEventHandler(event)&nbsp;<a name="ClientPageManager+_onCustomEventHandler" href="https://github.com/seznam/ima/tree/17.3.0/page/manager/ClientPageManager.js#L126" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a>
+### clientPageManager.\_onCustomEventHandler(event)&nbsp;<a name="ClientPageManager+_onCustomEventHandler" href="https://github.com/seznam/ima/tree/17.4.0/page/manager/ClientPageManager.js#L126" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a>
 Custom DOM event handler.
 
 The handler invokes the event listener in the active controller, if such
@@ -103,7 +103,7 @@ argument.
 
 * * *
 
-### clientPageManager.\_parseCustomEvent(event) ⇒ <code>Object</code>&nbsp;<a name="ClientPageManager+_parseCustomEvent" href="https://github.com/seznam/ima/tree/17.3.0/page/manager/ClientPageManager.js#L163" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a>
+### clientPageManager.\_parseCustomEvent(event) ⇒ <code>Object</code>&nbsp;<a name="ClientPageManager+_parseCustomEvent" href="https://github.com/seznam/ima/tree/17.4.0/page/manager/ClientPageManager.js#L163" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a>
 Extracts the details of the provided event bus custom DOM event, along
 with the expected name of the current controller's method for
 intercepting the event.
@@ -119,7 +119,7 @@ intercepting the event.
 
 * * *
 
-### clientPageManager.\_handleEventWithController(method, data) ⇒ <code>boolean</code>&nbsp;<a name="ClientPageManager+_handleEventWithController" href="https://github.com/seznam/ima/tree/17.3.0/page/manager/ClientPageManager.js#L184" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a>
+### clientPageManager.\_handleEventWithController(method, data) ⇒ <code>boolean</code>&nbsp;<a name="ClientPageManager+_handleEventWithController" href="https://github.com/seznam/ima/tree/17.4.0/page/manager/ClientPageManager.js#L184" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a>
 Attempts to handle the currently processed event bus custom DOM event
 using the current controller. The method returns <code>true</code> if the
 event is handled by the controller.
@@ -137,7 +137,7 @@ event is handled by the controller.
 
 * * *
 
-### clientPageManager.\_handleEventWithExtensions(method, data) ⇒ <code>boolean</code>&nbsp;<a name="ClientPageManager+_handleEventWithExtensions" href="https://github.com/seznam/ima/tree/17.3.0/page/manager/ClientPageManager.js#L209" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a>
+### clientPageManager.\_handleEventWithExtensions(method, data) ⇒ <code>boolean</code>&nbsp;<a name="ClientPageManager+_handleEventWithExtensions" href="https://github.com/seznam/ima/tree/17.4.0/page/manager/ClientPageManager.js#L209" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a>
 Attempts to handle the currently processed event bus custom DOM event
 using the registered extensions of the current controller. The method
 returns <code>true</code> if the event is handled by the controller.

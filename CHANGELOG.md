@@ -3,6 +3,22 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [17.4.0](https://github.com/seznam/ima/compare/v17.3.0...v17.4.0) (2020-01-09)
+
+
+### Features
+
+* 🎸 Added devtools presets for ima17 ([d546293](https://github.com/seznam/ima/commit/d546293653975b4c76eff47fd397913aa28c35c5))
+* 🎸 added IMA17 check to devtool hooks ([41b247d](https://github.com/seznam/ima/commit/41b247dbdb1b28e6220025a44189fbfa6611981c))
+* 🎸 updated dependencies, fixed repository in package-lock ([c01ac9f](https://github.com/seznam/ima/commit/c01ac9f612e398b18ddb3f2088070651932b54ad))
+* 🎸 updated dependency to @ima/devtools-scripts-17.3.0 ([6223de4](https://github.com/seznam/ima/commit/6223de44699182f48390516bff578165f56b705e))
+* 🎸 updated devtools manager code to ima17 ([44355ba](https://github.com/seznam/ima/commit/44355baad190875404b3c078bbd68c50411a8c49))
+* added ima-devtools, ima-devtools-scripts ([7a7c475](https://github.com/seznam/ima/commit/7a7c475f5a81e215a36b5fd976049c99fa860c41))
+
+
+
+
+
 # [17.3.0](https://github.com/seznam/ima/compare/v17.2.0...v17.3.0) (2020-01-08)
 
 
