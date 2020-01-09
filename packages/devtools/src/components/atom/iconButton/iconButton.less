@@ -1,0 +1,52 @@
+.iconBtn {
+  border: none;
+
+  padding: 8px 12px;
+
+  color: var(--color-button);
+
+  background: none;
+
+  transition: color 0.1s linear;
+  cursor: pointer;
+  outline: none;
+
+  &:hover {
+    color: var(--color-button-hover);
+  }
+
+  &:active {
+    color: var(--color-button-active);
+  }
+
+  svg {
+    width: 20px;
+    height: 20px;
+  }
+
+  &-- {
+    &danger {
+      color: var(--oc-red-6);
+
+      &:hover {
+        color: var(--oc-red-5);
+      }
+
+      &:active {
+        color: var(--oc-red-7);
+      }
+    }
+
+    &success {
+      color: var(--oc-green-6);
+
+      &:hover {
+        color: var(--oc-green-5);
+      }
+
+      &:active {
+        color: var(--oc-green-7);
+      }
+    }
+  }
+}

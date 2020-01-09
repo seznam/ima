@@ -1,0 +1,116 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Search molecule should match snapshot 1`] = `
+<div
+  className="toolbar"
+>
+  <div
+    className="search"
+  >
+    <span
+      className="icon icon--large icon--disabled"
+    >
+      <Icon
+        name="search"
+      />
+    </span>
+    <input
+      className="searchInput"
+      onChange={[Function]}
+      placeholder="Search (text or /regex/)"
+      type="text"
+      value="search query"
+    />
+    <span
+      className="showing"
+    >
+      showing 
+      /
+       items
+    </span>
+  </div>
+  <span
+    className="separator"
+  />
+  <Tooltip
+    label="Select previous item"
+  >
+    <button
+      className="btn icon"
+      disabled={true}
+    >
+      <Icon
+        name="arrowUp"
+      />
+    </button>
+  </Tooltip>
+  <Tooltip
+    label="Select next item"
+  >
+    <button
+      className="btn icon"
+      disabled={true}
+    >
+      <Icon
+        name="arrowDown"
+      />
+    </button>
+  </Tooltip>
+  <Tooltip
+    label="Clear search"
+  >
+    <button
+      className="btn icon"
+      disabled={false}
+      onClick={[Function]}
+    >
+      <Icon
+        name="close"
+      />
+    </button>
+  </Tooltip>
+  <span
+    className="separator"
+  />
+  <Menu>
+    <Tooltip
+      label="More options"
+    >
+      <MenuButton
+        className="btn icon"
+      >
+        <Icon
+          name="more"
+        />
+      </MenuButton>
+    </Tooltip>
+    <MenuList>
+      <MenuItem
+        onSelect={[MockFunction]}
+      >
+        <span
+          className="menu-item__label"
+        >
+          Clear entries
+        </span>
+        <Icon
+          name="reset"
+        />
+      </MenuItem>
+      <hr />
+      <MenuItem
+        onSelect={[Function]}
+      >
+        <span
+          className="menu-item__label"
+        >
+          Settings
+        </span>
+        <Icon
+          name="cog"
+        />
+      </MenuItem>
+    </MenuList>
+  </Menu>
+</div>
+`;

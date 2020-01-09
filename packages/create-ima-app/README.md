@@ -8,11 +8,11 @@ Create IMA.js applications easily with simple command.
 #### Documentation
 
 We have prepared a complex tutorial for you:
-[Your first IMA.js application](https://imajs.io/tutorial/introduction.html).
+[Your first IMA.js application](https://imajs.io/tutorial/introduction).
 This tutorial covers the basics of creating isomorphic web applications using
 IMA.js, but you will encounter some more advanced concepts in there as well.
 
-For a more in-depth information about the IMA.js see a [full documentation](https://imajs.io/docs/) and more on [imajs.io](https://imajs.io/docs/).
+For a more in-depth information about the IMA.js see a [full documentation](https://imajs.io/docs) and more on [imajs.io](https://imajs.io/docs).
 
 ## Quickstart
 ```shell

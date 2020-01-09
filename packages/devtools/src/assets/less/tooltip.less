@@ -1,0 +1,23 @@
+:global {
+  // @reach/tooltip
+  :root {
+    --reach-tooltip: 1;
+  }
+
+  [data-reach-tooltip] {
+    position: absolute;
+    z-index: var(--z-index-tooltip);
+
+    margin-top: -6px;
+    border-radius: 4px;
+    padding: 3px 8px;
+
+    font-size: 12px;
+    color: var(--color-white);
+    white-space: nowrap;
+
+    background: var(--oc-gray-9);
+
+    pointer-events: none;
+  }
+}

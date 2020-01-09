@@ -1,0 +1,112 @@
+@import "../../../assets/less/animations";
+
+.wrapper {
+  position: absolute;
+  left: 0;
+  top: 0;
+
+  width: 100%;
+  height: 100%;
+}
+
+.overlay {
+  display: flex;
+
+  position: fixed;
+  left: 0;
+  top: 0;
+
+  width: 100%;
+  height: 100%;
+
+  justify-content: center;
+  align-items: flex-start;
+
+  background: rgba(0, 0, 0, 0.25);
+
+  cursor: pointer;
+
+  composes: animFadeIn from "../../../assets/less/animations.less";
+
+  &--closing {
+    composes: animFadeOut from "../../../assets/less/animations.less";
+  }
+}
+
+.modal {
+  margin: 150px auto 0;
+  padding: 20px;
+
+  background: var(--color-white);
+
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.15);
+
+  composes: animSlideIn from "../../../assets/less/animations.less";
+
+  &--closing {
+    composes: animSlideOut from "../../../assets/less/animations.less";
+  }
+}
+
+.header {
+  display: flex;
+
+  border-bottom: 1px solid var(--color-border);
+
+  padding-bottom: 10px;
+
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+
+  h4 {
+    font-size: 18px;
+    font-weight: 600;
+  }
+}
+
+.footer {
+  display: flex;
+
+  border-top: 1px solid var(--color-border);
+  padding-top: 20px;
+
+  flex-direction: row;
+  align-items: center;
+
+  button {
+    margin-left: 10px;
+  }
+}
+
+.closeIcon {
+  margin: 0;
+
+  padding: 5px;
+  height: auto;
+
+  line-height: 0;
+
+  background: none;
+
+  &:focus {
+    outline: none;
+  }
+
+  &:hover {
+    color: var(--color-button-hover);
+  }
+
+  &:active {
+    color: var(--color-button-active);
+  }
+
+  svg {
+    width: 22px;
+    height: auto;
+  }
+}
+
+.body {
+  margin: 20px 0;
+}

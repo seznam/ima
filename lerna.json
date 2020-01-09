@@ -9,7 +9,7 @@
     }
   },
   "packages": [
-    "packages/!(skeleton)"
+    "packages/!(devtools)"
   ],
   "version": "17.3.0"
 }

@@ -8,8 +8,8 @@
 * ---------------
 */
 .font-size(@rem: 1) {
-    font-size: @font-size * @rem * 1px;
-    font-size: @rem * 1rem;
+  font-size: @font-size * @rem * 1px;
+  font-size: @rem * 1rem;
 }
 
 /**
@@ -18,26 +18,29 @@
 * ----------------
 */
 .screen-reader {
-    position: absolute;
-    left: -5000px;
-    top: -5000px;
-    width: 1px;
-    height: 1px;
-    overflow: hidden;
+  position: absolute;
+  left: -5000px;
+  top: -5000px;
+
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
 }
 
 /* The micro clearfix http://nicolasgallagher.com/micro-clearfix-hack */
-.clearfix(){
-    *zoom:1;
+.clearfix() {
+  *zoom: 1;
 
-    &:before,
-    &:after{
-        content:"";
-        display:table;
-    }
-    &:after{
-        clear:both;
-    }
+  &::before,
+  &::after {
+    display: table;
+
+    content: "";
+  }
+
+  &::after {
+    clear: both;
+  }
 }
 
 /**
@@ -46,61 +49,132 @@
 * ---------------------
 */
 
-html, body, div, span, applet, object, iframe,
-h1, h2, h3, h4, h5, h6, p, blockquote, pre,
-a, abbr, acronym, address, big, cite, code,
-del, dfn, em, img, ins, kbd, q, s, samp,
-small, strike, strong, sub, sup, tt, var,
-b, u, i, center,
-dl, dt, dd, ol, ul, li,
-fieldset, form, label, legend,
-table, caption, tbody, tfoot, thead, tr, th, td,
-article, aside, canvas, details, embed,
-figure, figcaption, footer, header, hgroup,
-menu, nav, output, ruby, section, summary,
-time, mark, audio, video {
-    font: inherit;
+html,
+body,
+div,
+span,
+applet,
+object,
+iframe,
+h1,
+h2,
+h3,
+h4,
+h5,
+h6,
+p,
+blockquote,
+pre,
+a,
+abbr,
+acronym,
+address,
+big,
+cite,
+code,
+del,
+dfn,
+em,
+img,
+ins,
+kbd,
+q,
+s,
+samp,
+small,
+strike,
+strong,
+sub,
+sup,
+tt,
+var,
+b,
+u,
+i,
+center,
+dl,
+dt,
+dd,
+ol,
+ul,
+li,
+fieldset,
+form,
+label,
+legend,
+table,
+caption,
+tbody,
+tfoot,
+thead,
+tr,
+th,
+td,
+article,
+aside,
+canvas,
+details,
+embed,
+figure,
+figcaption,
+footer,
+header,
+hgroup,
+menu,
+nav,
+output,
+ruby,
+section,
+summary,
+time,
+mark,
+audio,
+video {
+  font: inherit;
 }
 
 html {
-    font-size: @font-size * 1px;
-    font-family: @font-family;
+  font-family: @font-family;
+  font-size: @font-size * 1px;
 }
 
 body {
-    background: @color-background;
-    color: @color-text;
+  color: @color-text;
+
+  background: @color-background;
 }
 
 a {
-    color: @color-red;
-    text-decoration: none;
+  color: @color-red;
+  text-decoration: none;
 }
 
 h1 {
-    color: @color-text;
+  color: @color-text;
 }
 
 h2 {
-    .font-size(1.8);
-    color: @color-text;
-    margin-bottom: 10px;
+  .font-size(1.8);
+  margin-bottom: 10px;
+
+  color: @color-text;
 }
 
 h3 {
-    .font-size(1.6);
-    color: @color-text;
-    margin-bottom: 4px;
+  .font-size(1.6);
+  margin-bottom: 4px;
+
+  color: @color-text;
 }
 
 ul {
-    list-style-type: none;
+  list-style-type: none;
 }
 
 label {
-    .font-size(1.3);
+  .font-size(1.3);
 }
 
 strong {
-    font-weight: bold;
+  font-weight: bold;
 }

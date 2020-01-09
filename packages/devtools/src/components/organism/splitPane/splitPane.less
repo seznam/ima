@@ -1,0 +1,47 @@
+.outerContainer {
+  display: flex;
+
+  height: 100vh;
+
+  flex-direction: column;
+}
+
+.container {
+  display: flex;
+
+  height: calc(100% - var(--toolbar-height));
+
+  flex-direction: row;
+  align-items: stretch;
+
+  background: var(--color-white);
+}
+
+.leftPane,
+.rightPane {
+  &::-webkit-scrollbar {
+    width: 6px;
+    height: 6px;
+  }
+
+  &::-webkit-scrollbar-thumb {
+    border-radius: 20px;
+
+    background: var(--oc-gray-5);
+  }
+
+  &::-webkit-scrollbar-track {
+    background: var(--oc-gray-2);
+  }
+}
+
+.leftPane {
+  border-right: 1px solid var(--color-border);
+  flex-basis: 50%;
+  overflow-y: auto;
+}
+
+.rightPane {
+  flex-basis: 50%;
+  overflow-y: auto;
+}
