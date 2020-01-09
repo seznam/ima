@@ -1,6 +1,7 @@
 ---
 category: "page/renderer"
-title: "Docs - ComponentUtils"
+title: "API - ComponentUtils"
+menuTitle: "ComponentUtils"
 ---
 
 ## ComponentUtils&nbsp;<a name="ComponentUtils" href="https://github.com/seznam/ima/tree/17.3.0/page/renderer/ComponentUtils.js#L8" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a>

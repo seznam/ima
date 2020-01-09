@@ -1,6 +1,7 @@
 ---
 category: "event"
-title: "Docs - DispatcherImpl"
+title: "API - DispatcherImpl"
+menuTitle: "DispatcherImpl"
 ---
 
 ## Classes

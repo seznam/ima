@@ -1,6 +1,7 @@
 ---
 category: "page/state"
-title: "Docs - PageStateManager"
+title: "API - PageStateManager"
+menuTitle: "PageStateManager"
 ---
 
 ## PageStateManager&nbsp;<a name="PageStateManager" href="https://github.com/seznam/ima/tree/17.3.0/page/state/PageStateManager.js#L4" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a>

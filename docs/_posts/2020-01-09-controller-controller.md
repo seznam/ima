@@ -1,6 +1,7 @@
 ---
 category: "controller"
-title: "Docs - Controller"
+title: "API - Controller"
+menuTitle: "Controller"
 ---
 
 ## Controller&nbsp;<a name="Controller" href="https://github.com/seznam/ima/tree/17.3.0/controller/Controller.js#L9" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a>

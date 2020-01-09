@@ -1,6 +1,7 @@
 ---
 category: "router"
-title: "Docs - Response"
+title: "API - Response"
+menuTitle: "Response"
 ---
 
 ## Response&nbsp;<a name="Response" href="https://github.com/seznam/ima/tree/17.3.0/router/Response.js#L17" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a>

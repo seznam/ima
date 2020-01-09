@@ -1,6 +1,7 @@
 ---
 category: "cache"
-title: "Docs - CacheFactory"
+title: "API - CacheFactory"
+menuTitle: "CacheFactory"
 ---
 
 ## CacheFactory&nbsp;<a name="CacheFactory" href="https://github.com/seznam/ima/tree/17.3.0/cache/CacheFactory.js#L6" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a>

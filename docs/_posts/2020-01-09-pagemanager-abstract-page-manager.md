@@ -1,6 +1,7 @@
 ---
 category: "page/manager"
-title: "Docs - AbstractPageManager"
+title: "API - AbstractPageManager"
+menuTitle: "AbstractPageManager"
 ---
 
 ## Classes

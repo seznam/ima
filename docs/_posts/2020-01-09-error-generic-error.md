@@ -1,6 +1,7 @@
 ---
 category: "error"
-title: "Docs - GenericError"
+title: "API - GenericError"
+menuTitle: "GenericError"
 ---
 
 ## GenericError ⇐ <code>Error</code>&nbsp;<a name="GenericError" href="https://github.com/seznam/ima/tree/17.3.0/error/GenericError.js#L24" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a>

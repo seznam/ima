@@ -1,6 +1,7 @@
 ---
 category: "router"
-title: "Docs - Request"
+title: "API - Request"
+menuTitle: "Request"
 ---
 
 ## Request&nbsp;<a name="Request" href="https://github.com/seznam/ima/tree/17.3.0/router/Request.js#L15" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a>

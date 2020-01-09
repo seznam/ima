@@ -1,6 +1,7 @@
 ---
 category: "page/state"
-title: "Docs - Events"
+title: "API - Events"
+menuTitle: "Events"
 ---
 
 ## Constants

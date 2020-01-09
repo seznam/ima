@@ -1,6 +1,7 @@
 ---
 category: "page"
-title: "Docs - AbstractDocumentView"
+title: "API - AbstractDocumentView"
+menuTitle: "AbstractDocumentView"
 ---
 
 ## *AbstractDocumentView*&nbsp;<a name="AbstractDocumentView" href="https://github.com/seznam/ima/tree/17.3.0/page/AbstractDocumentView.js#L25" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a>

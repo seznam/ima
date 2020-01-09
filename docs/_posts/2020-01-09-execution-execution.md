@@ -1,6 +1,7 @@
 ---
 category: "execution"
-title: "Docs - Execution"
+title: "API - Execution"
+menuTitle: "Execution"
 ---
 
 ## Execution&nbsp;<a name="Execution" href="https://github.com/seznam/ima/tree/17.3.0/execution/Execution.js#L18" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a>

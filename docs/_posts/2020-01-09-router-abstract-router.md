@@ -1,6 +1,7 @@
 ---
 category: "router"
-title: "Docs - AbstractRouter"
+title: "API - AbstractRouter"
+menuTitle: "AbstractRouter"
 ---
 
 ## *AbstractRouter*&nbsp;<a name="AbstractRouter" href="https://github.com/seznam/ima/tree/17.3.0/router/AbstractRouter.js#L41" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a>

@@ -1,6 +1,7 @@
 ---
 category: "page/renderer"
-title: "Docs - Types"
+title: "API - Types"
+menuTitle: "Types"
 ---
 
 ## Constants

@@ -1,6 +1,7 @@
 ---
 category: "cache"
-title: "Docs - CacheImpl"
+title: "API - CacheImpl"
+menuTitle: "CacheImpl"
 ---
 
 ## CacheImpl ⇐ <code>Cache</code>&nbsp;<a name="CacheImpl" href="https://github.com/seznam/ima/tree/17.3.0/cache/CacheImpl.js#L27" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a>

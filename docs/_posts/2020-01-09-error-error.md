@@ -1,6 +1,7 @@
 ---
 category: "error"
-title: "Docs - Error"
+title: "API - Error"
+menuTitle: "Error"
 ---
 
 ## Error ⇐ <code>ExtensibleError</code>&nbsp;<a name="Error" href="https://github.com/seznam/ima/tree/17.3.0/error/Error.js#L15" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a>

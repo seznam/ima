@@ -1,6 +1,7 @@
 ---
 category: "window"
-title: "Docs - ClientWindow"
+title: "API - ClientWindow"
+menuTitle: "ClientWindow"
 ---
 
 ## ClientWindow&nbsp;<a name="ClientWindow" href="https://github.com/seznam/ima/tree/17.3.0/window/ClientWindow.js#L8" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a>
