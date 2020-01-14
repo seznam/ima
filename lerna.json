@@ -9,7 +9,8 @@
     }
   },
   "packages": [
-    "packages/!(devtools)"
+    "packages/!(devtools)",
+    "packages/devtools-scripts"
   ],
   "version": "17.4.0"
 }

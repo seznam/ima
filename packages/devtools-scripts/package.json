@@ -11,7 +11,8 @@
     "build:string": "babel --plugins @babel/plugin-transform-template-literals ./es/main.js | (echo '// DO NOT MODIFY FILE, FILE IS AUTO GENERATED FROM OTHER REPOSITORIES \nexport default function(hooks) { return `' && cat && echo 'createDevtool(({ importIMAClass, aop, createHook, hookName, createCallTrap, emit }) => { ${Object.values(hooks).filter(hook => hook.enabled).map(hook => hook.code).join(\"\\\\n\\\\n\")} });' && echo '`; }') > ./es/main.string.js",
     "build:script": "npm run build:commonjs && npm run build:es",
     "build": "npm run build:script && npm run build:string",
-    "dev": "NODE_ENV=es rollup -c -w -o es/main.js"
+    "dev": "NODE_ENV=es rollup -c -w -o es/main.js",
+    "prepare": "npm run build"
   },
   "keywords": [
     "IMA",
