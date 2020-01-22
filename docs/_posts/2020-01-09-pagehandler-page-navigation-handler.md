@@ -4,7 +4,7 @@ title: "API - PageNavigationHandler"
 menuTitle: "PageNavigationHandler"
 ---
 
-## PageNavigationHandler&nbsp;<a name="PageNavigationHandler" href="https://github.com/seznam/ima/tree/17.4.0/page/handler/PageNavigationHandler.js#L17" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a>
+## PageNavigationHandler&nbsp;<a name="PageNavigationHandler" href="https://github.com/seznam/ima/tree/v17.4.0/packages/core/src/page/handler/PageNavigationHandler.js#L17" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a>
 **Kind**: global class  
 
 * [PageNavigationHandler](#PageNavigationHandler)
@@ -29,7 +29,7 @@ menuTitle: "PageNavigationHandler"
 
 * * *
 
-### pageNavigationHandler.\_window : <code>ima.core.window.Window</code>&nbsp;<a name="PageNavigationHandler+_window" href="https://github.com/seznam/ima/tree/17.4.0/page/handler/PageNavigationHandler.js#L26" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a>
+### pageNavigationHandler.\_window : <code>ima.core.window.Window</code>&nbsp;<a name="PageNavigationHandler+_window" href="https://github.com/seznam/ima/tree/v17.4.0/packages/core/src/page/handler/PageNavigationHandler.js#L26" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a>
 The utility for manipulating the global context and global
 client-side-specific APIs.
 
@@ -37,22 +37,22 @@ client-side-specific APIs.
 
 * * *
 
-### pageNavigationHandler.init()&nbsp;<a name="PageNavigationHandler+init" href="https://github.com/seznam/ima/tree/17.4.0/page/handler/PageNavigationHandler.js#L32" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a>
+### pageNavigationHandler.init()&nbsp;<a name="PageNavigationHandler+init" href="https://github.com/seznam/ima/tree/v17.4.0/packages/core/src/page/handler/PageNavigationHandler.js#L32" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a>
 **Kind**: instance method of [<code>PageNavigationHandler</code>](#PageNavigationHandler)  
 
 * * *
 
-### pageNavigationHandler.handlePreManagedState()&nbsp;<a name="PageNavigationHandler+handlePreManagedState" href="https://github.com/seznam/ima/tree/17.4.0/page/handler/PageNavigationHandler.js#L44" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a>
+### pageNavigationHandler.handlePreManagedState()&nbsp;<a name="PageNavigationHandler+handlePreManagedState" href="https://github.com/seznam/ima/tree/v17.4.0/packages/core/src/page/handler/PageNavigationHandler.js#L44" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a>
 **Kind**: instance method of [<code>PageNavigationHandler</code>](#PageNavigationHandler)  
 
 * * *
 
-### pageNavigationHandler.handlePostManagedState()&nbsp;<a name="PageNavigationHandler+handlePostManagedState" href="https://github.com/seznam/ima/tree/17.4.0/page/handler/PageNavigationHandler.js#L67" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a>
+### pageNavigationHandler.handlePostManagedState()&nbsp;<a name="PageNavigationHandler+handlePostManagedState" href="https://github.com/seznam/ima/tree/v17.4.0/packages/core/src/page/handler/PageNavigationHandler.js#L67" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a>
 **Kind**: instance method of [<code>PageNavigationHandler</code>](#PageNavigationHandler)  
 
 * * *
 
-### pageNavigationHandler.\_saveScrollHistory()&nbsp;<a name="PageNavigationHandler+_saveScrollHistory" href="https://github.com/seznam/ima/tree/17.4.0/page/handler/PageNavigationHandler.js#L84" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a>
+### pageNavigationHandler.\_saveScrollHistory()&nbsp;<a name="PageNavigationHandler+_saveScrollHistory" href="https://github.com/seznam/ima/tree/v17.4.0/packages/core/src/page/handler/PageNavigationHandler.js#L84" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a>
 Save user's scroll state to history.
 
 Replace scroll values in current state for actual scroll values in
@@ -62,7 +62,7 @@ document.
 
 * * *
 
-### pageNavigationHandler.\_scrollTo(scroll)&nbsp;<a name="PageNavigationHandler+_scrollTo" href="https://github.com/seznam/ima/tree/17.4.0/page/handler/PageNavigationHandler.js#L105" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a>
+### pageNavigationHandler.\_scrollTo(scroll)&nbsp;<a name="PageNavigationHandler+_scrollTo" href="https://github.com/seznam/ima/tree/v17.4.0/packages/core/src/page/handler/PageNavigationHandler.js#L105" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a>
 Scrolls to give coordinates on a page.
 
 **Kind**: instance method of [<code>PageNavigationHandler</code>](#PageNavigationHandler)  
@@ -76,7 +76,7 @@ Scrolls to give coordinates on a page.
 
 * * *
 
-### pageNavigationHandler.\_setAddressBar(url)&nbsp;<a name="PageNavigationHandler+_setAddressBar" href="https://github.com/seznam/ima/tree/17.4.0/page/handler/PageNavigationHandler.js#L121" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a>
+### pageNavigationHandler.\_setAddressBar(url)&nbsp;<a name="PageNavigationHandler+_setAddressBar" href="https://github.com/seznam/ima/tree/v17.4.0/packages/core/src/page/handler/PageNavigationHandler.js#L121" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a>
 Sets the provided URL to the browser's address bar by pushing a new
 state to the history.
 
