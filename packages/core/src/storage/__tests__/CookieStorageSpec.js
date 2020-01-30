@@ -13,7 +13,7 @@ describe('ima.storage.CookieStorage', () => {
   let setCookieStringWithDomain =
     'cok3=hello3; Path=/; Domain=localhost:3001; Expires=Fri, 31 Dec 9999 23:59:59 GMT';
   let setCookieStringWithComplex =
-    'cok3="hello3"; Domain=localhost:3001; Expires=Fri, 31 Dec 9999 23:59:59 GMT; HttpOnly; Secure; Path=/';
+    'cok3="hello3"; Domain=localhost:3001; Expires=Fri, 31 Dec 9999 23:59:59 GMT; HttpOnly; Secure; Path=/; SameSite=Lax';
   let setCookieStringWithMaxAge =
     'cok3="hello3"; Domain=localhost:3001; Expires=Fri, 31 Dec 9999 23:59:59 GMT; Max-Age=5; HttpOnly; Secure; Path=/';
   let cookiesStringForCookieHeader = 'cok1=hello; cok2=hello2';
@@ -171,7 +171,8 @@ describe('ima.storage.CookieStorage', () => {
         httpOnly: true,
         secure: true,
         path: '/',
-        domain: 'localhost:3001'
+        domain: 'localhost:3001',
+        sameSite: 'Lax'
       });
     });
 

@@ -87,7 +87,8 @@ export default class CookieStorage extends MapStorage {
       maxAge: null,
       secure: false,
       httpOnly: false,
-      domain: ''
+      domain: '',
+      sameSite: 'Lax'
     };
 
     /**
@@ -337,7 +338,9 @@ export default class CookieStorage extends MapStorage {
    *          domain: string=,
    *          expires: Date=,
    *          maxAge: Number=,
-   *          secure: boolean=
+   *          secure: boolean=,
+   *          httpOnly: boolean=,
+   *          sameSite: string=
    *        }} options Cookie attributes. Only the attributes listed in the
    *        type annotation of this field are supported. For documentation
    *        and full list of cookie attributes see
@@ -357,6 +360,7 @@ export default class CookieStorage extends MapStorage {
     cookieString += options.maxAge ? ';Max-Age=' + options.maxAge : '';
     cookieString += options.httpOnly ? ';HttpOnly' : '';
     cookieString += options.secure ? ';Secure' : '';
+    cookieString += options.sameSite ? ';SameSite=' + options.sameSite : '';
 
     return cookieString;
   }
