@@ -391,7 +391,9 @@ export default class Route {
   _substituteRequiredParamInPath(path, paramName, paramValue) {
     return path.replace(
       new RegExp(`${PARAMS_START_PATTERN}:${paramName}(${PARAMS_END_PATTERN})`),
-      paramValue ? '$1' + encodeURIComponent(paramValue) + '$2' : ''
+      paramValue !== 'undefined'
+        ? '$1' + encodeURIComponent(paramValue) + '$2'
+        : '/'
     );
   }
 
@@ -407,7 +409,9 @@ export default class Route {
     const paramRegexp = `${PARAMS_START_PATTERN}:\\?${paramName}(${PARAMS_END_PATTERN})`;
     return path.replace(
       new RegExp(paramRegexp),
-      paramValue ? '$1' + encodeURIComponent(paramValue) + '$2' : '/'
+      paramValue !== undefined
+        ? '$1' + encodeURIComponent(paramValue) + '$2'
+        : '/'
     );
   }
 
