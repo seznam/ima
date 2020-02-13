@@ -148,7 +148,7 @@ function getClientBootConfig(initialAppConfigFunctions) {
       request: null,
       $IMA: $IMA,
       dictionary: {
-        language: $IMA.$Language,
+        $Language: $IMA.$Language,
         dictionary: $IMA.i18n
       },
       router: {
