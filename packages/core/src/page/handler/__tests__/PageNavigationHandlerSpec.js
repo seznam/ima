@@ -43,6 +43,20 @@ describe('ima.core.page.handler.PageNavigationHandler', () => {
       expect(pushStateMock).toHaveBeenCalled();
     });
 
+    it('should call just window.replaceState method for redirect action type', () => {
+      const replaceStateMock = spyOn(window, 'replaceState');
+      const pushStateMock = spyOn(window, 'pushState').and.stub();
+      const nextManagedPage = { options: { autoScroll: false } };
+
+      handler.handlePreManagedState({}, nextManagedPage, {
+        url: 'http://localhost/final_url',
+        type: ActionTypes.REDIRECT
+      });
+
+      expect(replaceStateMock).toHaveBeenCalled();
+      expect(pushStateMock).not.toHaveBeenCalled();
+    });
+
     it('should not call window.pushState after loading page because url is set alright from browser', () => {
       const replaceStateMock = spyOn(window, 'replaceState');
       const pushStateMock = spyOn(window, 'pushState').and.stub();

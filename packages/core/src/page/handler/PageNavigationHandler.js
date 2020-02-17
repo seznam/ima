@@ -52,8 +52,12 @@ export default class PageNavigationHandler extends PageManagerHandler {
       action.type !== ActionTypes.POP_STATE &&
       action.type !== ActionTypes.ERROR
     ) {
-      this._saveScrollHistory();
-      this._setAddressBar(action.url);
+      const isRedirection = action.type === ActionTypes.REDIRECT;
+
+      if (!isRedirection) {
+        this._saveScrollHistory();
+      }
+      this._setAddressBar(action.url, isRedirection);
     }
 
     if (autoScroll) {
@@ -109,22 +113,27 @@ export default class PageNavigationHandler extends PageManagerHandler {
   }
 
   /**
-   * Sets the provided URL to the browser's address bar by pushing a new
+   * Sets the provided URL to the browser's address bar by pushing or replacing a new
    * state to the history.
    *
-   * The state object pushed to the history will be an object with the
+   * The state object pushed to or replaced in the history will be an object with the
    * following structure: {@code {url: string}}. The {@code url} field will
    * be set to the provided URL.
    *
    * @param {string} url The URL.
+   * @param {boolean} isRedirection If replaceState should be used instead of pushState.
    */
-  _setAddressBar(url) {
+  _setAddressBar(url, isRedirection) {
     let scroll = {
       x: 0,
       y: 0
     };
     let state = { url, scroll };
 
-    this._window.pushState(state, null, url);
+    if (isRedirection) {
+      this._window.replaceState(state, null, url);
+    } else {
+      this._window.pushState(state, null, url);
+    }
   }
 }
