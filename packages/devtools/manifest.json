@@ -4,9 +4,6 @@
   "devtools_page": "html/devtools.html",
   "permissions": [
     "<all_urls>",
-    "activeTab",
-    "cookies",
-    "declarativeContent",
     "webNavigation",
     "storage",
     "tabs"
