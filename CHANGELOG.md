@@ -3,6 +3,28 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [17.5.0](https://github.com/seznam/ima/compare/v17.4.0...v17.5.0) (2020-03-02)
+
+
+### Bug Fixes
+
+* 🐛 dictionary config key $Language ([04de865](https://github.com/seznam/ima/commit/04de8659e46fa7cfdae1330b22837a613193c573)), closes [#38](https://github.com/seznam/ima/issues/38)
+* 🐛 props passing in Viewadapter constructor ([ae78f36](https://github.com/seznam/ima/commit/ae78f364b86bc2651110dd04421ebbeb1dafd7e7)), closes [#39](https://github.com/seznam/ima/issues/39)
+* 🐛 Removed unused permissions from devtools manifest.json ([5555e03](https://github.com/seznam/ima/commit/5555e03b32acd261bb056b959aa1098fe6cc5f12))
+* 🐛 Updated to-aop to version 0.3.3, fixed tests in devtools ([bf9bfca](https://github.com/seznam/ima/commit/bf9bfcada83ef8cf027275dfdb279c6973bc4331))
+* use replaceState for redirects instead of pushState ([a455621](https://github.com/seznam/ima/commit/a4556218527519dcbea1b33989252d45dbf00c9e))
+
+
+### Features
+
+* 🎸 added overload server detection ([9cfac61](https://github.com/seznam/ima/commit/9cfac61c40c3df06ee6bb9145fd4eb7be1fc8a93))
+* 🎸 added overloadConcurrency property ([8c9cc5d](https://github.com/seznam/ima/commit/8c9cc5dca74faf942d6ac1768adbfb3f8b8d9c9e))
+* 🎸 cookie ([64f190a](https://github.com/seznam/ima/commit/64f190a3944acca03569980332f1a6e7d07bf96c))
+
+
+
+
+
 # [17.4.0](https://github.com/seznam/ima/compare/v17.3.0...v17.4.0) (2020-01-09)
 
 

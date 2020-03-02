@@ -3,6 +3,24 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [17.5.0](https://github.com/seznam/ima/compare/v17.4.0...v17.5.0) (2020-03-02)
+
+
+### Bug Fixes
+
+* 🐛 dictionary config key $Language ([04de865](https://github.com/seznam/ima/commit/04de8659e46fa7cfdae1330b22837a613193c573)), closes [#38](https://github.com/seznam/ima/issues/38)
+* 🐛 props passing in Viewadapter constructor ([ae78f36](https://github.com/seznam/ima/commit/ae78f364b86bc2651110dd04421ebbeb1dafd7e7)), closes [#39](https://github.com/seznam/ima/issues/39)
+* use replaceState for redirects instead of pushState ([a455621](https://github.com/seznam/ima/commit/a4556218527519dcbea1b33989252d45dbf00c9e))
+
+
+### Features
+
+* 🎸 cookie ([64f190a](https://github.com/seznam/ima/commit/64f190a3944acca03569980332f1a6e7d07bf96c))
+
+
+
+
+
 # [17.4.0](https://github.com/seznam/ima/compare/v17.3.0...v17.4.0) (2020-01-09)
 
 **Note:** Version bump only for package @ima/core
