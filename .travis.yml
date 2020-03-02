@@ -29,5 +29,5 @@ jobs:
     - if: tag =~ ^devtools-v # Run only for tags starting with devtools-v
       stage: "deploy"
       script:
-        - CLIENT_ID=\${CHROME_CLIENT_ID} CLIENT_SECRET=\${CHROME_CLIENT_SECRET} REFRESH_TOKEN=\${CHROME_REFRESH_TOKEN} npm run release:devtools
+        - CLIENT_ID=\${CHROME_CLIENT_ID} CLIENT_SECRET=\${CHROME_CLIENT_SECRET} REFRESH_TOKEN=\${CHROME_REFRESH_TOKEN} EXTENSION_ID=\${CHROME_EXTENSION_ID} npm run release:devtools
       skip_cleanup: true

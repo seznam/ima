@@ -5,8 +5,8 @@
   "main": "dist/main.js",
   "scripts": {
     "preversion": "npm test && npm run build",
-    "publish-webstore": "npm install && npm run build && npm test && npm upload",
-    "upload": "webstore publish --extension-id jckgkffefmgcnbaimdmeoelgpjefpljh",
+    "publish-webstore": "npm install && npm run build && npm test && npm run upload",
+    "upload": "webstore upload --source ./dist/ima.devtools.zip --auto-publish",
     "test": "../../node_modules/.bin/jest --no-watchman -c jest.conf.js",
     "build": "webpack --config webpack.prod.js",
     "dev": "webpack --watch --progress --config webpack.dev.js"
