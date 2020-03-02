@@ -4,6 +4,9 @@
   "description": "IMA.js debugging panel in the Chrome Developer Tools window.",
   "main": "dist/main.js",
   "scripts": {
+    "preversion": "npm test && npm run build",
+    "publish-webstore": "npm install && npm run build && npm test && npm upload",
+    "upload": "webstore publish --extension-id jckgkffefmgcnbaimdmeoelgpjefpljh",
     "test": "../../node_modules/.bin/jest --no-watchman -c jest.conf.js",
     "build": "webpack --config webpack.prod.js",
     "dev": "webpack --watch --progress --config webpack.dev.js"
@@ -41,6 +44,7 @@
     "@babel/preset-react": "^7.7.4",
     "autoprefixer": "^9.7.3",
     "babel-loader": "^8.0.6",
+    "chrome-webstore-upload-cli": "^1.2.0",
     "clean-webpack-plugin": "^3.0.0",
     "copy-webpack-plugin": "^5.0.5",
     "css-loader": "^3.2.1",
@@ -58,10 +62,11 @@
     "terser-webpack-plugin": "^2.2.1",
     "webpack": "^4.41.2",
     "webpack-cli": "^3.3.10",
-    "webpack-merge": "^4.2.2"
+    "webpack-merge": "^4.2.2",
+    "zip-webpack-plugin": "^3.0.0"
   },
   "dependencies": {
-    "@ima/devtools-scripts": "17.3.0",
+    "@ima/devtools-scripts": "^17.3.0",
     "@reach/menu-button": "^0.6.2",
     "@reach/tooltip": "^0.6.2",
     "@reduxjs/toolkit": "^1.1.0",
