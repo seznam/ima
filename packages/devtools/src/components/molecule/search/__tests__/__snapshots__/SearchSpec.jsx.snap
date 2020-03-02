@@ -72,6 +72,21 @@ exports[`Search molecule should match snapshot 1`] = `
   <span
     className="separator"
   />
+  <Tooltip
+    label="Clear entries"
+  >
+    <button
+      className="btn icon"
+      onClick={[MockFunction]}
+    >
+      <Icon
+        name="reset"
+      />
+    </button>
+  </Tooltip>
+  <span
+    className="separator"
+  />
   <Menu>
     <Tooltip
       label="More options"
@@ -85,19 +100,6 @@ exports[`Search molecule should match snapshot 1`] = `
       </MenuButton>
     </Tooltip>
     <MenuList>
-      <MenuItem
-        onSelect={[MockFunction]}
-      >
-        <span
-          className="menu-item__label"
-        >
-          Clear entries
-        </span>
-        <Icon
-          name="reset"
-        />
-      </MenuItem>
-      <hr />
       <MenuItem
         onSelect={[Function]}
       >
