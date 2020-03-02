@@ -44,6 +44,10 @@ module.exports = (() => {
       return this._concurrentRequests > this._maxInstanceCount;
     }
 
+    getConcurrentRequests() {
+      return this._concurrentRequests;
+    }
+
     getInstance() {
       this._concurrentRequests++;
 
