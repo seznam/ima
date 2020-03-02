@@ -132,7 +132,7 @@ Config key `language` (mostly used in `app/config/*.js` boot methods) has been r
 
 ## Hot Reload
 
-Hot Reload has been rewritten and published as ima plugin. Old hot reloading will no longer work. You should delete `app/assets/js/hot.reload.js` from your project, then install the plugin via `npm install --save @ima/plugin-websocket @ima/plugin-hot-reload` and add following lines to your `app/build.js`.
+Hot Reload has been rewritten and published as ima plugin. Old hot reloading will no longer work. You should delete `app/assets/js/hot.reload.js` from your project, then install the plugin via `npm install --save-dev @ima/plugin-websocket @ima/plugin-hot-reload` and add following lines to your `app/build.js`.
 
 ```js
 // You can add this somewhere below the vendors variable initialization
