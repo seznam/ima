@@ -35,6 +35,9 @@ module.exports = (() => {
         concurrency: 100, // The number of application instances (not
         // threads) used to handle concurrent
         // connections within a single thread
+        overloadConcurrency: 100, // When the number of concurrent
+        // connection exceeds the overloadConcurrency, the
+        // server response with 503 status code.
         clusters: null, // Define the number of server processes you
         // want to start. Use null for the current
         // number of available CPU cores.
@@ -45,10 +48,7 @@ module.exports = (() => {
           // mode (without server-side rendering)
           blackList: userAgent =>
             new RegExp('Googlebot|SeznamBot', 'g').test(userAgent) // These user agents
-          // will always be
-          // served a
-          // server-rendered
-          // page
+          // will always be served a server-rendered page
         },
         cache: {
           // boolean, or function(Express.Request): boolean
