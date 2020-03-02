@@ -15,8 +15,8 @@ which can help you debug how each component behaves in your application.
 The extension **requires no additional installation or dependencies** in your IMA.js application. It will
 work with any IMA.js application from v17 and above. 
 
-As of now it's only available to [**download**]() for **Chrome** in the [**Chrome web store**]().
-~~~~
+As of now it's only available to [**download**](https://chrome.google.com/webstore/detail/imajs-developer-tools/jckgkffefmgcnbaimdmeoelgpjefpljh) for **Chrome** in the [**Chrome web store**](https://chrome.google.com/webstore/detail/imajs-developer-tools/jckgkffefmgcnbaimdmeoelgpjefpljh).
+
 ## How it works?
 
 <div class="image is-padded-with-shadow">
