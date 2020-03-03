@@ -61,7 +61,7 @@
     "webpack-merge": "^4.2.2"
   },
   "dependencies": {
-    "@ima/devtools-scripts": "17.3.0",
+    "@ima/devtools-scripts": "17.5.0",
     "@reach/menu-button": "^0.6.2",
     "@reach/tooltip": "^0.6.2",
     "@reduxjs/toolkit": "^1.1.0",
