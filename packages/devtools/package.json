@@ -1,6 +1,6 @@
 {
   "name": "@ima/devtools",
-  "version": "0.1.0",
+  "version": "0.1.2",
   "description": "IMA.js debugging panel in the Chrome Developer Tools window.",
   "main": "dist/main.js",
   "scripts": {
