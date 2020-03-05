@@ -122,7 +122,7 @@ export default class ClientWindow extends Window {
    * @inheritdoc
    */
   getPath() {
-    return window.location.pathname + window.location.search;
+    return window.location.pathname + window.location.search + window.location.hash;
   }
 
   /**

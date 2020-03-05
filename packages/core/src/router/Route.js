@@ -252,9 +252,10 @@ export default class Route {
    *         representing this route with its parameters replaced by the
    *         provided parameter values.
    */
-  toPath(params = {}) {
+  toPath(params = {}, hashParams = {}) {
     let path = this._pathExpression;
     let query = [];
+    const hash = [];
 
     for (let paramName of Object.keys(params)) {
       if (this._isRequiredParamInPath(path, paramName)) {
@@ -276,7 +277,14 @@ export default class Route {
     }
     path = this._cleanUnusedOptionalParams(path);
 
+	  for (let paramName of Object.keys(hashParams)) {
+		  const pair = [paramName, hashParams[paramName]];
+		  hash.push(pair.map(encodeURIComponent).join('='));
+	  }
+
     path = query.length ? path + '?' + query.join('&') : path;
+	path = hash.length ? path + '#' + hash.join('&') : path;
+
     path = this._getTrimmedPath(path);
     return path;
   }
@@ -790,11 +798,15 @@ export default class Route {
    */
   _getQuery(path) {
     let query = {};
+    //todo index ? or #
     let queryStart = path.indexOf('?');
-    let hasQuery = queryStart > -1 && queryStart !== path.length - 1;
+    let hashStart = path.indexOf('#');
+    const paramsStart = queryStart > hashStart ? queryStart : hashStart;
+
+    let hasQuery = paramsStart > -1 && paramsStart !== path.length - 1;
 
     if (hasQuery) {
-      let pairs = path.substring(queryStart + 1).split(/[&;]/);
+      let pairs = path.substring(paramsStart + 1).split(/[&;]/);
 
       for (let parameterPair of pairs) {
         let pair = parameterPair.split('=');
