@@ -556,7 +556,7 @@ export default class Route {
         separator = hasSlash ? '/?' : '';
       }
 
-      let regExpr = separator + `([^/?]+)?(?=/|$)?`;
+      let regExpr = separator + `([^/?#]+)?(?=/|$)?`;
 
       if (idx === lastIdx) {
         regExpr += ')?';
@@ -699,7 +699,7 @@ export default class Route {
 
     // add query parameters matcher
     let pairPattern = '[^=&;]*(?:=[^&;]*)?';
-    pattern += `(?:\\?(?:${pairPattern})(?:[&;]${pairPattern})*)?$`;
+    pattern += `(?:[#?](?:${pairPattern})(?:[&;]${pairPattern})*)?$`;
 
     return new RegExp(pattern);
   }
@@ -798,10 +798,9 @@ export default class Route {
    */
   _getQuery(path) {
     let query = {};
-    //todo index ? or #
     let queryStart = path.indexOf('?');
     let hashStart = path.indexOf('#');
-    const paramsStart = queryStart > hashStart ? queryStart : hashStart;
+    const paramsStart = hashStart !== -1 && queryStart > hashStart ? queryStart : hashStart;
 
     let hasQuery = paramsStart > -1 && paramsStart !== path.length - 1;
 
