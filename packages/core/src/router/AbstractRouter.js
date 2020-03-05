@@ -193,7 +193,6 @@ export default class AbstractRouter extends Router {
    * @inheritdoc
    */
   getCurrentRouteInfo() {
-  	//let hash ?
     let path = this.getPath();
     let route = this._getRouteByPath(path);
 

@@ -277,13 +277,13 @@ export default class Route {
     }
     path = this._cleanUnusedOptionalParams(path);
 
-	  for (let paramName of Object.keys(hashParams)) {
-		  const pair = [paramName, hashParams[paramName]];
-		  hash.push(pair.map(encodeURIComponent).join('='));
-	  }
+    for (let paramName of Object.keys(hashParams)) {
+      const pair = [paramName, hashParams[paramName]];
+      hash.push(pair.map(encodeURIComponent).join('='));
+    }
 
     path = query.length ? path + '?' + query.join('&') : path;
-	path = hash.length ? path + '#' + hash.join('&') : path;
+    path = hash.length ? path + '#' + hash.join('&') : path;
 
     path = this._getTrimmedPath(path);
     return path;
@@ -592,7 +592,7 @@ export default class Route {
 
     path = requiredSubparamsLast.reduce((pattern, rawParamExpr) => {
       const paramExpr = rawParamExpr.substr(1);
-      const regExpr = '([^/?]+)';
+      const regExpr = '([^/?#]+)';
 
       return pattern.replace(paramExpr, regExpr);
     }, path);
@@ -624,7 +624,7 @@ export default class Route {
 
     path = optionalSubparamsLast.reduce((pattern, rawParamExpr) => {
       const paramExpr = rawParamExpr.substr(1);
-      const regExpr = '([^/?]+)?';
+      const regExpr = '([^/?#]+)?';
 
       return pattern.replace(paramExpr, regExpr);
     }, path);
@@ -678,7 +678,7 @@ export default class Route {
     // convert required parameters to capture sequences
     let pattern = requiredMatches.reduce((pattern, rawParamExpr) => {
       const paramExpr = ':' + this._getClearParamName(rawParamExpr);
-      const regExpr = '([^/?]+)';
+      const regExpr = '([^/?#]+)';
 
       return pattern.replace(paramExpr, regExpr);
     }, clearedPathExpr);
@@ -800,7 +800,8 @@ export default class Route {
     let query = {};
     let queryStart = path.indexOf('?');
     let hashStart = path.indexOf('#');
-    const paramsStart = hashStart !== -1 && queryStart > hashStart ? queryStart : hashStart;
+    const paramsStart =
+      hashStart !== -1 && queryStart > hashStart ? queryStart : hashStart;
 
     let hasQuery = paramsStart > -1 && paramsStart !== path.length - 1;
 
