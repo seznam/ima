@@ -801,7 +801,7 @@ export default class Route {
     let queryStart = path.indexOf('?');
     let hashStart = path.indexOf('#');
     const paramsStart =
-      (hashStart !== -1 && queryStart > hashStart) || queryStart === -1
+      queryStart === -1 || (hashStart !== -1 && queryStart > hashStart)
         ? hashStart
         : queryStart;
 
