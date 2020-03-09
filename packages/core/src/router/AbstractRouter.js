@@ -245,7 +245,7 @@ export default class AbstractRouter extends Router {
   /**
    * @inheritdoc
    */
-  link(routeName, urlParams, hashParams) {
+  link(routeName, queryParams, hashParams) {
     let route = this._routes.get(routeName);
 
     if (!route) {
@@ -255,7 +255,7 @@ export default class AbstractRouter extends Router {
       );
     }
 
-    return this.getBaseUrl() + route.toPath(urlParams, hashParams);
+    return this.getBaseUrl() + route.toPath(queryParams, hashParams);
   }
 
   /**

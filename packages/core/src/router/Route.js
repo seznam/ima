@@ -252,26 +252,26 @@ export default class Route {
    *         representing this route with its parameters replaced by the
    *         provided parameter values.
    */
-  toPath(params = {}, hashParams = {}) {
+  toPath(queryParams = {}, hashParams = {}) {
     let path = this._pathExpression;
     let query = [];
     const hash = [];
 
-    for (let paramName of Object.keys(params)) {
+    for (let paramName of Object.keys(queryParams)) {
       if (this._isRequiredParamInPath(path, paramName)) {
         path = this._substituteRequiredParamInPath(
           path,
           paramName,
-          params[paramName]
+          queryParams[paramName]
         );
       } else if (this._isOptionalParamInPath(path, paramName)) {
         path = this._substituteOptionalParamInPath(
           path,
           paramName,
-          params[paramName]
+          queryParams[paramName]
         );
       } else {
-        const pair = [paramName, params[paramName]];
+        const pair = [paramName, queryParams[paramName]];
         query.push(pair.map(encodeURIComponent).join('='));
       }
     }
@@ -699,7 +699,7 @@ export default class Route {
 
     // add query parameters matcher
     let pairPattern = '[^=&;]*(?:=[^&;]*)?';
-    pattern += `(?:[#?](?:${pairPattern})(?:[&;]${pairPattern})*)?$`;
+    pattern += `(?:[?#](?:${pairPattern})(?:[&;]${pairPattern})*)?$`;
 
     return new RegExp(pattern);
   }
