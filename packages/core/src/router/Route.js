@@ -699,7 +699,7 @@ export default class Route {
 
     // add query parameters matcher
     let pairPattern = '[^=&;]*(?:=[^&;]*)?';
-    pattern += `(?:[?#](?:${pairPattern})(?:[&;]${pairPattern})*)?$`;
+    pattern += `(?:\\[?#](?:${pairPattern})(?:[&;]${pairPattern})*)?$`;
 
     return new RegExp(pattern);
   }
@@ -801,7 +801,7 @@ export default class Route {
     let queryStart = path.indexOf('?');
     let hashStart = path.indexOf('#');
     const paramsStart =
-      (hashStart !== -1 && queryStart > hashStart) || queryStart === -1
+      queryStart === -1 || (hashStart !== -1 && queryStart > hashStart)
         ? hashStart
         : queryStart;
 
