@@ -801,12 +801,14 @@ export default class Route {
     let queryStart = path.indexOf('?');
     let hashStart = path.indexOf('#');
     const paramsStart =
-      hashStart !== -1 && queryStart > hashStart ? queryStart : hashStart;
+      (hashStart !== -1 && queryStart > hashStart) || queryStart === -1
+        ? hashStart
+        : queryStart;
 
     let hasQuery = paramsStart > -1 && paramsStart !== path.length - 1;
 
     if (hasQuery) {
-      let pairs = path.substring(paramsStart + 1).split(/[&;]/);
+      let pairs = path.substring(paramsStart + 1).split(/[&#;]/);
 
       for (let parameterPair of pairs) {
         let pair = parameterPair.split('=');

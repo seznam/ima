@@ -761,7 +761,75 @@ describe('ima.core.router.Route', function() {
             query: 'param3'
           }
         },
-
+        {
+          pathExpression: '/home/:userId/something/:somethingId',
+          path: '/home/param1/something/param2#hash=param3',
+          params: {
+            userId: 'param1',
+            somethingId: 'param2',
+            hash: 'param3'
+          }
+        },
+        {
+          pathExpression: '/home/:userId/something/:somethingId',
+          path: '/home/param1/something/param2?query=param3#hash=param4',
+          params: {
+            userId: 'param1',
+            somethingId: 'param2',
+            query: 'param3',
+            hash: 'param4'
+          }
+        },
+        {
+          pathExpression: '/home/:userId/something/:somethingId',
+          path:
+            '/home/param1/something/param2?query1=param3&query2=param4#hash=param5',
+          params: {
+            userId: 'param1',
+            somethingId: 'param2',
+            query1: 'param3',
+            query2: 'param4',
+            hash: 'param5'
+          }
+        },
+        {
+          pathExpression: '/home/:userId/something/:somethingId',
+          path:
+            '/home/param1/something/param2?query1=param3#hash1=param4&hash2=param5',
+          params: {
+            userId: 'param1',
+            somethingId: 'param2',
+            query1: 'param3',
+            hash1: 'param4',
+            hash2: 'param5'
+          }
+        },
+        {
+          pathExpression: '/home/:userId/something/:somethingId',
+          path:
+            '/home/param1/something/param2?query1=param3&query2=param4#hash1=param5&hash2=param6',
+          params: {
+            userId: 'param1',
+            somethingId: 'param2',
+            query1: 'param3',
+            query2: 'param4',
+            hash1: 'param5',
+            hash2: 'param6'
+          }
+        },
+        {
+          pathExpression: '/home/:userId/something/:somethingId',
+          path:
+            '/home/param1/something/param2?query1=param3&query2=param4#hash1=param5#hash2=param6',
+          params: {
+            userId: 'param1',
+            somethingId: 'param2',
+            query1: 'param3',
+            query2: 'param4',
+            hash1: 'param5',
+            hash2: 'param6'
+          }
+        },
         {
           pathExpression: '/:?userId',
           path: '/user12',
@@ -1438,13 +1506,13 @@ describe('ima.core.router.Route', function() {
           path: '/:?someId',
           clearPathExpr: ':?someId',
           optionalParams: [':?someId'],
-          result: '(?:([^/?]+)?(?=/|$)?)?'
+          result: '(?:([^/?#]+)?(?=/|$)?)?'
         },
         {
           path: '/something/:?someId',
           clearPathExpr: 'something/:?someId',
           optionalParams: [':?someId'],
-          result: 'something/(?:([^/?]+)?(?=/|$)?)?'
+          result: 'something/(?:([^/?#]+)?(?=/|$)?)?'
         }
       ],
       function(value) {
@@ -1469,12 +1537,12 @@ describe('ima.core.router.Route', function() {
         {
           path: '/:someId-:someName',
           clearPathExpr: ':someId-:someName',
-          result: `${notLastRegEx}-([^/?]+)`
+          result: `${notLastRegEx}-([^/?#]+)`
         },
         {
           path: '/something/:someId-:someName',
           clearPathExpr: 'something/:someId-:someName',
-          result: `something/${notLastRegEx}-([^/?]+)`
+          result: `something/${notLastRegEx}-([^/?#]+)`
         }
       ],
       function(value) {
@@ -1505,14 +1573,14 @@ describe('ima.core.router.Route', function() {
           clearPathExpr: ':?someId-:?someName',
           optionalSubparamsOthers: [':?someId'],
           optionalSubparamsLast: [':?someName'],
-          result: `${notLastOptRegEx}-:([^/?]+)?`
+          result: `${notLastOptRegEx}-:([^/?#]+)?`
         },
         {
           path: '/something/:?someId-:?someName',
           clearPathExpr: 'something/:?someId-:?someName',
           optionalSubparamsOthers: [':?someId'],
           optionalSubparamsLast: [':?someName'],
-          result: `something/${notLastOptRegEx}-:([^/?]+)?`
+          result: `something/${notLastOptRegEx}-:([^/?#]+)?`
         }
       ],
       function(value) {
