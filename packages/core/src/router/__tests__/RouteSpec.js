@@ -1679,5 +1679,18 @@ describe('ima.core.router.Route', function() {
         stuff: 'value'
       });
     });
+
+    it('should handle query with hash parameters', function() {
+      expect(
+        route.matches('/abc/def#stuff=value&second=override')
+      ).toBeTruthy();
+      expect(
+        route.extractParameters('/abc/def#stuff=value&second=override')
+      ).toEqual({
+        first: 'abc',
+        second: 'override',
+        stuff: 'value'
+      });
+    });
   });
 });
