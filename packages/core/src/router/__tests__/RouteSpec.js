@@ -1692,5 +1692,21 @@ describe('ima.core.router.Route', function() {
         stuff: 'value'
       });
     });
+
+    it('should handle query with query and hash parameters', function() {
+      expect(
+        route.matches('/abc/def?second=paramValue#stuff=value&third=override')
+      ).toBeTruthy();
+      expect(
+        route.extractParameters(
+          '/abc/def?second=paramValue#stuff=value&third=override'
+        )
+      ).toEqual({
+        first: 'abc',
+        second: 'paramValue',
+        third: 'override',
+        stuff: 'value'
+      });
+    });
   });
 });
