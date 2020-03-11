@@ -252,39 +252,31 @@ export default class Route {
    *         representing this route with its parameters replaced by the
    *         provided parameter values.
    */
-  toPath(queryParams = {}, hashParams = {}) {
+  toPath(params = {}) {
     let path = this._pathExpression;
     let query = [];
-    const hash = [];
 
-    for (let paramName of Object.keys(queryParams)) {
+    for (let paramName of Object.keys(params)) {
       if (this._isRequiredParamInPath(path, paramName)) {
         path = this._substituteRequiredParamInPath(
           path,
           paramName,
-          queryParams[paramName]
+          params[paramName]
         );
       } else if (this._isOptionalParamInPath(path, paramName)) {
         path = this._substituteOptionalParamInPath(
           path,
           paramName,
-          queryParams[paramName]
+          params[paramName]
         );
       } else {
-        const pair = [paramName, queryParams[paramName]];
+        const pair = [paramName, params[paramName]];
         query.push(pair.map(encodeURIComponent).join('='));
       }
     }
     path = this._cleanUnusedOptionalParams(path);
 
-    for (let paramName of Object.keys(hashParams)) {
-      const pair = [paramName, hashParams[paramName]];
-      hash.push(pair.map(encodeURIComponent).join('='));
-    }
-
     path = query.length ? path + '?' + query.join('&') : path;
-    path = hash.length ? path + '#' + hash.join('&') : path;
-
     path = this._getTrimmedPath(path);
     return path;
   }
@@ -556,7 +548,7 @@ export default class Route {
         separator = hasSlash ? '/?' : '';
       }
 
-      let regExpr = separator + `([^/?#]+)?(?=/|$)?`;
+      let regExpr = separator + `([^/?]+)?(?=/|$)?`;
 
       if (idx === lastIdx) {
         regExpr += ')?';
@@ -592,7 +584,7 @@ export default class Route {
 
     path = requiredSubparamsLast.reduce((pattern, rawParamExpr) => {
       const paramExpr = rawParamExpr.substr(1);
-      const regExpr = '([^/?#]+)';
+      const regExpr = '([^/?]+)';
 
       return pattern.replace(paramExpr, regExpr);
     }, path);
@@ -624,7 +616,7 @@ export default class Route {
 
     path = optionalSubparamsLast.reduce((pattern, rawParamExpr) => {
       const paramExpr = rawParamExpr.substr(1);
-      const regExpr = '([^/?#]+)?';
+      const regExpr = '([^/?]+)?';
 
       return pattern.replace(paramExpr, regExpr);
     }, path);
@@ -678,7 +670,7 @@ export default class Route {
     // convert required parameters to capture sequences
     let pattern = requiredMatches.reduce((pattern, rawParamExpr) => {
       const paramExpr = ':' + this._getClearParamName(rawParamExpr);
-      const regExpr = '([^/?#]+)';
+      const regExpr = '([^/?]+)';
 
       return pattern.replace(paramExpr, regExpr);
     }, clearedPathExpr);
@@ -699,7 +691,7 @@ export default class Route {
 
     // add query parameters matcher
     let pairPattern = '[^=&;]*(?:=[^&;]*)?';
-    pattern += `(?:[\\?\\#](?:${pairPattern})(?:[&;]${pairPattern})*)?$`;
+    pattern += `(?:\\?(?:${pairPattern})(?:[&;]${pairPattern})*)?$`;
 
     return new RegExp(pattern);
   }
@@ -799,16 +791,10 @@ export default class Route {
   _getQuery(path) {
     let query = {};
     let queryStart = path.indexOf('?');
-    let hashStart = path.indexOf('#');
-    const paramsStart =
-      queryStart === -1 || (hashStart !== -1 && queryStart > hashStart)
-        ? hashStart
-        : queryStart;
-
-    let hasQuery = paramsStart > -1 && paramsStart !== path.length - 1;
+    let hasQuery = queryStart > -1 && queryStart !== path.length - 1;
 
     if (hasQuery) {
-      let pairs = path.substring(paramsStart + 1).split(/[&#;]/);
+      let pairs = path.substring(queryStart + 1).split(/[&;]/);
 
       for (let parameterPair of pairs) {
         let pair = parameterPair.split('=');
