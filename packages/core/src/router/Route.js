@@ -670,7 +670,7 @@ export default class Route {
     // convert required parameters to capture sequences
     let pattern = requiredMatches.reduce((pattern, rawParamExpr) => {
       const paramExpr = ':' + this._getClearParamName(rawParamExpr);
-      const regExpr = '([^/?]+)';
+      const regExpr = '([^/?#]+)';
 
       return pattern.replace(paramExpr, regExpr);
     }, clearedPathExpr);
@@ -691,7 +691,7 @@ export default class Route {
 
     // add query parameters matcher
     let pairPattern = '[^=&;]*(?:=[^&;]*)?';
-    pattern += `(?:\\?(?:${pairPattern})(?:[&;]${pairPattern})*)?$`;
+    pattern += `(?:[\\?\\#](?:${pairPattern})(?:[&;]${pairPattern})*)?$`;
 
     return new RegExp(pattern);
   }
