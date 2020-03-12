@@ -124,6 +124,21 @@ describe('ima.core.router.Route', function() {
           params: { action: 'view', route: 'users' },
           result: '/users/view'
         },
+        {
+          pathExpression: '/:?route/:?action/:?sort/:?page',
+          params: { action: 0, route: 'users', sort: false, page: 'page' },
+          result: '/users/0/false/page'
+        },
+        {
+          pathExpression: '/:?route/:?action/:?sort/:?page',
+          params: {
+            action: undefined,
+            route: 'users',
+            sort: false,
+            page: 'page'
+          },
+          result: '/users/false/page'
+        },
 
         {
           pathExpression: '/home/:userId/something/:somethingId/:?optional',
