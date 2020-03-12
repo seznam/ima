@@ -4,7 +4,8 @@
   "description": "IMA.js debugging panel in the Chrome Developer Tools window.",
   "main": "dist/main.js",
   "scripts": {
-    "preversion": "npm test && npm run build",
+    "preversion": "npm test",
+    "postversion": "VERSION=\"$(npx -c 'echo \"$npm_package_version\"')\" && git tag devtools-v$VERSION && git push --follow-tags",
     "publish-webstore": "npm install && npm run build && npm test && npm run upload",
     "upload": "webstore upload --source ./dist/ima.devtools.zip --auto-publish",
     "test": "../../node_modules/.bin/jest --no-watchman -c jest.conf.js",
