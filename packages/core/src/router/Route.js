@@ -798,6 +798,15 @@ export default class Route {
 
       for (let parameterPair of pairs) {
         let pair = parameterPair.split('=');
+
+        if (pair.length > 1) {
+          const hashIndex = pair[1].indexOf('#');
+
+          if (hashIndex !== -1) {
+            pair[1] = pair[1].slice(0, hashIndex);
+          }
+        }
+
         query[decodeURIComponent(pair[0])] =
           pair.length > 1 ? decodeURIComponent(pair[1]) : true;
       }
