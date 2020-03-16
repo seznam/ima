@@ -49,6 +49,7 @@
     "release:next:init": "lerna version premajor --force-publish",
     "release:graduate": "npm run release -- --conventional-graduate",
     "release:publish": "lerna publish from-git --yes",
+    "release:devtools": "npm run publish-webstore --prefix ./packages/devtools",
     "lint:cmd": "eslint -c ./.eslintrc.js --ignore-path ./.prettierignore",
     "lint": "npm run lint:cmd -- './**/*.{js,jsx}'",
     "lint:fix": "npm run lint -- --fix",
