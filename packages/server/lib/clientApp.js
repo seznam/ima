@@ -156,7 +156,8 @@ module.exports = (environment, logger, languageLoader, appFactory) => {
         content: cachedContent,
         pageState: {},
         status,
-        SPA: true
+        SPA: true,
+        error: null
       });
     }
 
@@ -186,18 +187,43 @@ module.exports = (environment, logger, languageLoader, appFactory) => {
     });
   }
 
+  function _overloadHandler(req, res) {
+    const status = 503;
+    const requests = instanceRecycler.getConcurrentRequests() + 2;
+
+    res.status(status).send();
+
+    return Promise.resolve({
+      content: '',
+      status,
+      SPA: false,
+      error: new Error(
+        `The server is overloaded with ${requests} concurrency requests.`
+      ),
+      pageState: {}
+    });
+  }
+
+  function _isServerOverloaded() {
+    return (
+      environment.$Server.overloadConcurrency !== undefined &&
+      instanceRecycler.getConcurrentRequests() + 1 >
+        environment.$Server.overloadConcurrency
+    );
+  }
+
   function _hasToServeSPA(req, app) {
-    let userAgent = req.headers['user-agent'] || '';
-    let spaConfig = environment.$Server.serveSPA;
-    let isAllowedServeSPA = spaConfig.allow;
-    let isServerBusy = instanceRecycler.hasReachedMaxConcurrentRequests();
-    let isAllowedUserAgent = !(
+    const userAgent = req.headers['user-agent'] || '';
+    const spaConfig = environment.$Server.serveSPA;
+    const isAllowedServeSPA = spaConfig.allow;
+    const isServerBusy = instanceRecycler.hasReachedMaxConcurrentRequests();
+    const isAllowedUserAgent = !(
       spaConfig.blackList &&
       typeof spaConfig.blackList === 'function' &&
       spaConfig.blackList(userAgent)
     );
     let canBeRouteServeAsSPA = true;
-    let routeInfo = _getRouteInfo(app);
+    const routeInfo = _getRouteInfo(app);
 
     if (routeInfo && routeInfo.route.getOptions().allowSPA === false) {
       canBeRouteServeAsSPA = false;
@@ -458,6 +484,11 @@ module.exports = (environment, logger, languageLoader, appFactory) => {
       if (_hasToServeSPA(req, app)) {
         instanceRecycler.clearInstance(app);
         return showStaticSPAPage(req, res);
+      }
+
+      if (_isServerOverloaded()) {
+        instanceRecycler.clearInstance(app);
+        return _overloadHandler(req, res);
       }
 
       return _generateResponse(req, res, app);

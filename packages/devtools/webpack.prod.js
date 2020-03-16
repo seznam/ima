@@ -2,6 +2,7 @@ const merge = require('webpack-merge');
 const common = require('./webpack.common');
 const { CleanWebpackPlugin } = require('clean-webpack-plugin');
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
+const ZipPlugin = require('zip-webpack-plugin');
 
 module.exports = merge.smartStrategy({ 'module.rules.use': 'prepend' })(
   common,
@@ -22,6 +23,11 @@ module.exports = merge.smartStrategy({ 'module.rules.use': 'prepend' })(
     optimization: {
       minimize: true
     },
-    plugins: [new CleanWebpackPlugin()]
+    plugins: [
+      new CleanWebpackPlugin(),
+      new ZipPlugin({
+        filename: `ima.devtools.zip`
+      })
+    ]
   }
 );

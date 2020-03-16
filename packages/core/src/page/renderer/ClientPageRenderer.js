@@ -118,10 +118,10 @@ export default class ClientPageRenderer extends AbstractPageRenderer {
    */
   unmount() {
     if (this._reactiveView) {
-      this._ReactDOM.unmountComponentAtNode(this._viewContainer, () => {
+      if (this._ReactDOM.unmountComponentAtNode(this._viewContainer)) {
+        this._reactiveView = null;
         this._dispatcher.fire(Events.UNMOUNTED, { type: Types.UNMOUNT }, true);
-      });
-      this._reactiveView = null;
+      }
     }
   }
 

@@ -1,6 +1,6 @@
 {
   "name": "@ima/devtools-scripts",
-  "version": "17.3.0",
+  "version": "17.5.0",
   "description": "IMA.js devtool script used in the @ima/devtools.",
   "main": "es/main.string.js",
   "scripts": {
@@ -50,6 +50,6 @@
   },
   "dependencies": {
     "easy-uid": "^1.0.1",
-    "to-aop": "0.3.1"
+    "to-aop": "0.3.3"
   }
 }

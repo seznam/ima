@@ -30,7 +30,7 @@ export default class ViewAdapter extends React.Component {
    *        and the initial page state to pass to the view.
    */
   constructor(props) {
-    super(props.props);
+    super(props);
 
     /**
      * The current page state as provided by the controller.

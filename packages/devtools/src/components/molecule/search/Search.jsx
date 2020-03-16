@@ -59,6 +59,8 @@ export default class Search extends React.PureComponent {
         <span className={styles.separator} />
         {this._renderActionButtons()}
         <span className={styles.separator} />
+        {this._renderClearButton()}
+        <span className={styles.separator} />
         {this._renderMenu()}
       </div>
     );
@@ -128,9 +130,19 @@ export default class Search extends React.PureComponent {
     );
   }
 
-  _renderMenu() {
+  _renderClearButton() {
     const { clearEntries } = this.props;
 
+    return (
+      <Tooltip label="Clear entries">
+        <button onClick={clearEntries} className={cn(styles.btn, styles.icon)}>
+          <Icon name="reset" />
+        </button>
+      </Tooltip>
+    );
+  }
+
+  _renderMenu() {
     return (
       <Menu>
         <Tooltip label="More options">
@@ -139,11 +151,6 @@ export default class Search extends React.PureComponent {
           </MenuButton>
         </Tooltip>
         <MenuList>
-          <MenuItem onSelect={clearEntries}>
-            <span className="menu-item__label">Clear entries</span>
-            <Icon name="reset" />
-          </MenuItem>
-          <hr />
           <MenuItem onSelect={() => chrome.runtime.openOptionsPage()}>
             <span className="menu-item__label">Settings</span>
             <Icon name="cog" />

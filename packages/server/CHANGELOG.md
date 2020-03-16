@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [17.5.0](https://github.com/seznam/ima/compare/v17.4.0...v17.5.0) (2020-03-02)
+
+
+### Features
+
+* 🎸 added overload server detection ([9cfac61](https://github.com/seznam/ima/commit/9cfac61c40c3df06ee6bb9145fd4eb7be1fc8a93))
+
+
+
+
+
 # [17.4.0](https://github.com/seznam/ima/compare/v17.3.0...v17.4.0) (2020-01-09)
 
 **Note:** Version bump only for package @ima/server
