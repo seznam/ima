@@ -1611,5 +1611,39 @@ describe('ima.core.router.Route', function() {
         stuff: 'value'
       });
     });
+
+    it('should ignore hash parameters when getting url parameters', function() {
+      expect(route.matches('/abc/def#hashParam=value')).toBeTruthy();
+      expect(route.extractParameters('/abc/def#hashParam=value')).toEqual({
+        first: 'abc',
+        second: 'def'
+      });
+    });
+
+    it('should ignore hash parameters when getting query parameters', function() {
+      expect(
+        route.matches('/abc/def?stuff=value#hashParam=value')
+      ).toBeTruthy();
+      expect(
+        route.extractParameters('/abc/def?stuff=value#hashParam=value')
+      ).toEqual({
+        first: 'abc',
+        second: 'def',
+        stuff: 'value'
+      });
+    });
+
+    it('should ignore hash parameters when getting empty query parameters', function() {
+      expect(
+        route.matches('/abc/def?stuff=value#hashParam=value')
+      ).toBeTruthy();
+      expect(
+        route.extractParameters('/abc/def?stuff=#hashParam=value')
+      ).toEqual({
+        first: 'abc',
+        second: 'def',
+        stuff: ''
+      });
+    });
   });
 });
