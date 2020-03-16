@@ -358,7 +358,8 @@ exports.files = {
       src: appDependencies.bundle.css,
       dest: './build/static/css/'
     },
-    postCssPlugins: []
+    postCssPlugins: [],
+    cssnanoSettings: {}
   }
 };
 

@@ -1,7 +1,7 @@
 const gulp = require('gulp');
 const concat = require('gulp-concat');
 const del = require('del');
-const nano = require('gulp-cssnano');
+const cssnano = require('cssnano');
 const plumber = require('gulp-plumber');
 const postCss = require('gulp-postcss');
 const uglifyEs = require('gulp-uglify-es').default;
@@ -11,6 +11,10 @@ exports.__requiresConfig = true;
 exports.default = gulpConfig => {
   let files = gulpConfig.files;
   let uglifyCompression = gulpConfig.uglifyCompression;
+  let postCssPlugins = [
+    cssnano(gulpConfig.files.bundle.cssnanoSettings),
+    ...gulpConfig.files.bundle.postCssPlugins
+  ];
 
   function bundleJsApp() {
     if (!gulpConfig.legacyCompactMode) {
@@ -52,8 +56,7 @@ exports.default = gulpConfig => {
       .src(files.bundle.css.src)
       .pipe(plumber())
       .pipe(concat(files.bundle.css.name))
-      .pipe(nano())
-      .pipe(postCss(gulpConfig.files.bundle.postCssPlugins))
+      .pipe(postCss(postCssPlugins))
       .pipe(plumber.stop())
       .pipe(gulp.dest(files.bundle.css.dest));
   }
