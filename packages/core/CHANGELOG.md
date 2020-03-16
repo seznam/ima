@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [17.5.1](https://github.com/seznam/ima/compare/v17.5.0...v17.5.1) (2020-03-16)
+
+
+### Bug Fixes
+
+* 🐛 $IMA.$PageRenderer.unmounted call on page unmount ([544aacd](https://github.com/seznam/ima/commit/544aacd09ae88074e169979dd4030206b8ada973)), closes [#50](https://github.com/seznam/ima/issues/50)
+
+
+
+
+
 # [17.5.0](https://github.com/seznam/ima/compare/v17.4.0...v17.5.0) (2020-03-02)
 
 
