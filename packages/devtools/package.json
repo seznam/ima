@@ -5,6 +5,9 @@
   "main": "dist/main.js",
   "scripts": {
     "preversion": "npm test",
+    "npm version:patch": "npm --no-git-tag-version version patch -m 'chore(release-devtools): publish'",
+    "npm version:minor": "npm --no-git-tag-version version minor -m 'chore(release-devtools): publish'",
+    "npm version:major": "npm --no-git-tag-version version major -m 'chore(release-devtools): publish'",
     "postversion": "VERSION=\"$(npx -c 'echo \"$npm_package_version\"')\" && git tag devtools-v$VERSION && git push --follow-tags",
     "publish-webstore": "npm install && npm run build && npm test && npm run upload",
     "upload": "webstore upload --source ./dist/ima.devtools.zip --auto-publish",
