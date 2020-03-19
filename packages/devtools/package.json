@@ -9,7 +9,7 @@
     "version:minor": "npm --no-git-tag-version version minor",
     "version:major": "npm --no-git-tag-version version major",
     "postversion": "VERSION=\"$(npx -c 'echo \"$npm_package_version\"')\" && git add package.json package-lock.json && git commit -m 'chore(release-devtools): publish' && git tag -a -m 'devtools-v$VERSION' devtools-v$VERSION && git push --follow-tags",
-    "publish-webstore": "npm install && npm run build && npm test && npm run upload",
+    "publish-webstore": "npm run build && npm run upload",
     "upload": "webstore upload --source ./dist/ima.devtools.zip --auto-publish",
     "test": "../../node_modules/.bin/jest --no-watchman -c jest.conf.js",
     "build": "webpack --config webpack.prod.js",
