@@ -11,10 +11,6 @@ exports.__requiresConfig = true;
 exports.default = gulpConfig => {
   let files = gulpConfig.files;
   let uglifyCompression = gulpConfig.uglifyCompression;
-  let postCssPlugins = [
-    cssnano(gulpConfig.files.bundle.cssnanoSettings),
-    ...gulpConfig.files.bundle.postCssPlugins
-  ];
 
   function bundleJsApp() {
     if (!gulpConfig.legacyCompactMode) {
@@ -52,6 +48,11 @@ exports.default = gulpConfig => {
   }
 
   function bundleCss() {
+    let postCssPlugins = [
+      cssnano(files.bundle.cssnanoSettings),
+      ...files.bundle.postCssPlugins
+    ];
+
     return gulp
       .src(files.bundle.css.src)
       .pipe(plumber())
