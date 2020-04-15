@@ -178,8 +178,9 @@ export default class ClientRouter extends AbstractRouter {
     const action = {
       event,
       type,
-      url: url || this.getUrl()
+      url: url || this.getBaseUrl() + path
     };
+
     return super
       .route(path, options, action)
       .catch(error => {
