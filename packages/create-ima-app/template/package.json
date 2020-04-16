@@ -34,7 +34,7 @@
     "prettier": "1.19.1"
   },
   "dependencies": {
-    "@ima/core": "17.5.1",
+    "@ima/core": "17.5.3",
     "@ima/plugin-hot-reload": "0.1.0",
     "@ima/plugin-websocket": "0.1.1",
     "@ima/server": "17.5.0",

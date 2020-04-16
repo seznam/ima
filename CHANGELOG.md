@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [17.5.3](https://github.com/seznam/ima/compare/v17.5.2...v17.5.3) (2020-04-16)
+
+
+### Bug Fixes
+
+* 🐛 navigation via router.route() route info propagation ([e584e84](https://github.com/seznam/ima/commit/e584e84e1c57a9293c3a02294be31467c868b001))
+
+
+
+
+
 ## [17.5.2](https://github.com/seznam/ima/compare/v17.5.1...v17.5.2) (2020-03-19)
 
 **Note:** Version bump only for package ima
