@@ -2,7 +2,6 @@ import BlankManagedRootView from './BlankManagedRootView';
 import PageRenderer from './PageRenderer';
 import ViewAdapter from './ViewAdapter';
 import Events from './Events';
-import Types from './Types';
 import GenericError from '../../error/GenericError';
 
 /**
@@ -95,30 +94,6 @@ export default class AbstractPageRenderer extends PageRenderer {
     throw new GenericError(
       'The unmount() method is abstract and must be overridden.'
     );
-  }
-
-  /**
-   * @inheritdoc
-   */
-  clearState() {
-    if (this._reactiveView && this._reactiveView.state) {
-      let emptyState = Object.keys(this._reactiveView.state).reduce(
-        (state, key) => {
-          state[key] = undefined;
-
-          return state;
-        },
-        {}
-      );
-
-      this._reactiveView.setState(emptyState, () => {
-        this._dispatcher.fire(
-          Events.UNMOUNTED,
-          { type: Types.CLEAR_STATE },
-          true
-        );
-      });
-    }
   }
 
   /**
