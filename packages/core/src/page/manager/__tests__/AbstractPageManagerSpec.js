@@ -481,7 +481,9 @@ describe('ima.core.page.manager.AbstractPageManager', () => {
         .then(() => {
           expect(pageRenderer.update).toHaveBeenCalledWith(
             decoratedController,
-            pageState
+            viewInstance,
+            pageState,
+            options
           );
           done();
         })
