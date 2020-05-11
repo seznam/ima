@@ -90,7 +90,7 @@ export default class ClientPageRenderer extends AbstractPageRenderer {
   /**
    * @inheritdoc
    */
-  update(controller, resourcesUpdate) {
+  update(controller, view, resourcesUpdate) {
     let separatedData = this._separatePromisesAndValues(resourcesUpdate);
     let defaultPageState = separatedData.values;
     let updatedPromises = separatedData.promises;
