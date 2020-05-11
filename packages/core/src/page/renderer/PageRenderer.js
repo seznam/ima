@@ -101,13 +101,4 @@ export default class PageRenderer {
    *        rendered view.
    */
   setState() {}
-
-  /**
-   * Clears the state to the currently rendered view.
-   *
-   * This method has no effect at the server-side.
-   *
-   * @deprecated
-   */
-  clearState() {}
 }
