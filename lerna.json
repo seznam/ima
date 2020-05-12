@@ -12,5 +12,5 @@
     "packages/!(devtools)",
     "packages/devtools-scripts"
   ],
-  "version": "17.5.3"
+  "version": "17.6.0"
 }
