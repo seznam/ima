@@ -18,7 +18,7 @@
   ],
   "license": "MIT",
   "devDependencies": {
-    "@ima/gulp-task-loader": "17.4.0",
+    "@ima/gulp-task-loader": "17.7.0",
     "@ima/gulp-tasks": "17.6.0",
     "babel-eslint": "10.0.3",
     "enzyme": "3.10.0",
@@ -37,7 +37,7 @@
     "@ima/core": "17.6.0",
     "@ima/plugin-hot-reload": "0.1.0",
     "@ima/plugin-websocket": "0.1.1",
-    "@ima/server": "17.6.0",
+    "@ima/server": "17.7.0",
     "body-parser": "1.19.0",
     "compression": "1.7.4",
     "cookie-parser": "1.4.4",
