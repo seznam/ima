@@ -4,14 +4,14 @@ title: "API - CacheFactory"
 menuTitle: "CacheFactory"
 ---
 
-## CacheFactory&nbsp;<a name="CacheFactory" href="https://github.com/seznam/ima/tree/17.7.0/cache/CacheFactory.js#L6" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a>
+## CacheFactory&nbsp;<a name="CacheFactory" href="https://github.com/seznam/ima/tree/17.7.1/cache/CacheFactory.js#L6" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a>
 Factory for creating instances of [CacheEntry](CacheEntry).
 
 **Kind**: global class  
 
 * * *
 
-### cacheFactory.createCacheEntry(value, [ttl]) ⇒ <code>CacheEntry</code>&nbsp;<a name="CacheFactory+createCacheEntry" href="https://github.com/seznam/ima/tree/17.7.0/cache/CacheFactory.js#L19" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a>
+### cacheFactory.createCacheEntry(value, [ttl]) ⇒ <code>CacheEntry</code>&nbsp;<a name="CacheFactory+createCacheEntry" href="https://github.com/seznam/ima/tree/17.7.1/cache/CacheFactory.js#L19" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a>
 Create a new instance of [CacheEntry](CacheEntry) with value and ttl.
 
 **Kind**: instance method of [<code>CacheFactory</code>](#CacheFactory)  
