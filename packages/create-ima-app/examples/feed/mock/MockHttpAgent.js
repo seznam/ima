@@ -103,7 +103,7 @@ export default class MockHttpAgent extends HttpAgent {
 
         if (data.id) {
           let id = Number(data.id);
-          let singleItem = this.items.filter((item) => {
+          let singleItem = this.items.filter(item => {
             return item._id === id;
           });
           if (singleItem[0]) {
@@ -119,7 +119,7 @@ export default class MockHttpAgent extends HttpAgent {
         }
 
         if (data.category) {
-          items = this.items.filter((item) => {
+          items = this.items.filter(item => {
             return item.category === data.category;
           });
         }

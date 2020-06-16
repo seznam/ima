@@ -9,7 +9,7 @@ const builderBabelHelpers = require('@babel/core/lib/tools/build-external-helper
 
 exports.__requiresConfig = true;
 
-exports.default = (gulpConfig) => {
+exports.default = gulpConfig => {
   let files = gulpConfig.files;
 
   function shimJs() {
@@ -51,7 +51,7 @@ exports.default = (gulpConfig) => {
   }
 
   function shim(done) {
-    return gulp.series(gulp.parallel(shimJs, shimEs), (subDone) => {
+    return gulp.series(gulp.parallel(shimJs, shimEs), subDone => {
       subDone();
       done();
     })();
@@ -60,7 +60,7 @@ exports.default = (gulpConfig) => {
   function polyfill(done) {
     return gulp.series(
       gulp.parallel(
-        ...Object.values(files.polyfill).map((polyfill) => () => {
+        ...Object.values(files.polyfill).map(polyfill => () => {
           if (polyfill.src.length === 0) {
             const content = '(function(){})();';
 
@@ -78,7 +78,7 @@ exports.default = (gulpConfig) => {
             .pipe(gulp.dest(polyfill.dest.client));
         })
       ),
-      (subDone) => {
+      subDone => {
         subDone();
         done();
       }

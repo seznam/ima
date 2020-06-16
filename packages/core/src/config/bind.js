@@ -90,8 +90,8 @@ export default (ns, oc, config) => {
 
   //Storage
   oc.constant('$CookieTransformFunction', {
-    encode: (s) => s,
-    decode: (s) => s
+    encode: s => s,
+    decode: s => s
   });
   oc.bind('$CookieStorage', CookieStorage);
   if (oc.get(Window).hasSessionStorage()) {

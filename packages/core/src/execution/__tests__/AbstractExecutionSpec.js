@@ -3,11 +3,11 @@ import AbstractExecution from '../AbstractExecution';
 describe('ima.core.execution.AbstractExecution', () => {
   let execution = null;
 
-  const asyncFunction = (argument) => {
-    return new Promise((resolve) => setTimeout(() => resolve(argument), 200));
+  const asyncFunction = argument => {
+    return new Promise(resolve => setTimeout(() => resolve(argument), 200));
   };
 
-  const syncFunction = (argument) => {
+  const syncFunction = argument => {
     return argument;
   };
 

@@ -39,7 +39,7 @@ export class VendorLinker {
       this._plugins.push({ name: moduleName, module: moduleValues });
     }
 
-    $IMA.Loader.register(moduleName, [], (exports) => ({
+    $IMA.Loader.register(moduleName, [], exports => ({
       setters: [],
       execute: () => {
         // commonjs module compatibility

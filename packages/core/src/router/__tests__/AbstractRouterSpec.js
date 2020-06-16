@@ -198,14 +198,14 @@ describe('ima.core.router.AbstractRouter', () => {
       expect(router._handle).toHaveBeenCalledWith(route, {}, options, action);
     });
 
-    it('should handle "not-found" route', (done) => {
+    it('should handle "not-found" route', done => {
       spyOn(router, '_getRouteByPath').and.returnValue(null);
 
-      spyOn(router, 'handleNotFound').and.callFake((params) => {
+      spyOn(router, 'handleNotFound').and.callFake(params => {
         return Promise.resolve(params);
       });
 
-      router.route(path).then((params) => {
+      router.route(path).then(params => {
         expect(params.error instanceof GenericError).toBe(true);
         done();
       });
@@ -230,7 +230,7 @@ describe('ima.core.router.AbstractRouter', () => {
       route = null;
     });
 
-    it('should handle "error" route', (done) => {
+    it('should handle "error" route', done => {
       let params = { error: new Error('test') };
 
       spyOn(router._routes, 'get').and.returnValue(route);
@@ -245,7 +245,7 @@ describe('ima.core.router.AbstractRouter', () => {
 
       router
         .handleError(params, options)
-        .then((response) => {
+        .then(response => {
           expect(router._handle).toHaveBeenCalledWith(
             route,
             params,
@@ -255,18 +255,18 @@ describe('ima.core.router.AbstractRouter', () => {
           expect(response.error).toEqual(params.error);
           done();
         })
-        .catch((error) => {
+        .catch(error => {
           console.error('ima.core.router.AbstractRouter.handleError', error);
           done();
         });
     });
 
-    it('should reject promise with error for undefined "error" route', (done) => {
+    it('should reject promise with error for undefined "error" route', done => {
       let params = { error: new Error('test') };
 
       spyOn(router._routes, 'get').and.returnValue(null);
 
-      router.handleError(params).catch((reason) => {
+      router.handleError(params).catch(reason => {
         expect(reason instanceof GenericError).toBe(true);
         done();
       });
@@ -291,7 +291,7 @@ describe('ima.core.router.AbstractRouter', () => {
       route = null;
     });
 
-    it('should handle "notFound" route', (done) => {
+    it('should handle "notFound" route', done => {
       let params = { error: new GenericError() };
 
       spyOn(router._routes, 'get').and.returnValue(route);
@@ -306,7 +306,7 @@ describe('ima.core.router.AbstractRouter', () => {
 
       router
         .handleNotFound(params, options)
-        .then((response) => {
+        .then(response => {
           expect(router._handle).toHaveBeenCalledWith(
             route,
             params,
@@ -316,18 +316,18 @@ describe('ima.core.router.AbstractRouter', () => {
           expect(response.error instanceof GenericError).toEqual(true);
           done();
         })
-        .catch((error) => {
+        .catch(error => {
           console.error('ima.core.router.AbstractRouter.handleNotFound', error);
           done();
         });
     });
 
-    it('should reject promise with error for undefined "error" route', (done) => {
+    it('should reject promise with error for undefined "error" route', done => {
       let params = { error: new Error() };
 
       spyOn(router._routes, 'get').and.returnValue(null);
 
-      router.handleNotFound(params).catch((reason) => {
+      router.handleNotFound(params).catch(reason => {
         expect(reason instanceof GenericError).toBe(true);
         done();
       });
@@ -405,7 +405,7 @@ describe('ima.core.router.AbstractRouter', () => {
       route = null;
     });
 
-    it('should call paga manager', (done) => {
+    it('should call paga manager', done => {
       router.getPath.and.returnValue(routePath);
       spyOn(pageManager, 'manage').and.returnValue(
         Promise.resolve({ content: null, status: 200 })
@@ -447,7 +447,7 @@ describe('ima.core.router.AbstractRouter', () => {
       );
     });
 
-    it('should fire ns.ima.core.EVENTS.AFTER_HANDLE_ROUTE', (done) => {
+    it('should fire ns.ima.core.EVENTS.AFTER_HANDLE_ROUTE', done => {
       let response = { content: null, status: 200 };
       let params = {};
 
@@ -477,7 +477,7 @@ describe('ima.core.router.AbstractRouter', () => {
       });
     });
 
-    it('should fire ns.ima.core.EVENTS.AFTER_HANDLE_ROUTE with error', (done) => {
+    it('should fire ns.ima.core.EVENTS.AFTER_HANDLE_ROUTE with error', done => {
       let response = { content: null, status: 200 };
       let params = { error: new Error('test') };
 
@@ -507,7 +507,7 @@ describe('ima.core.router.AbstractRouter', () => {
       });
     });
 
-    it('should return response', (done) => {
+    it('should return response', done => {
       let response = { content: null, status: 200 };
       let params = {};
 
@@ -516,13 +516,13 @@ describe('ima.core.router.AbstractRouter', () => {
         Promise.resolve(Object.assign({}, response))
       );
 
-      router._handle(route, params, options).then((handleResponse) => {
+      router._handle(route, params, options).then(handleResponse => {
         expect(handleResponse).toEqual(response);
         done();
       });
     });
 
-    it('should return response with handled error', (done) => {
+    it('should return response with handled error', done => {
       let response = { content: null, status: 500 };
       let params = { error: new Error('test') };
 
@@ -532,7 +532,7 @@ describe('ima.core.router.AbstractRouter', () => {
         Promise.resolve(Object.assign({}, response))
       );
 
-      router._handle(route, params, options).then((handleResponse) => {
+      router._handle(route, params, options).then(handleResponse => {
         expect(handleResponse).toEqual(Object.assign({}, response, params));
         done();
       });

@@ -33,7 +33,7 @@ describe('ima.core.http.HttpAgentImpl', () => {
           'Accept-Language': 'en'
         },
         cache: true,
-        postProcessor: (agentResponse) => agentResponse
+        postProcessor: agentResponse => agentResponse
       },
       cacheOptions: {
         prefix: 'http.'
@@ -72,13 +72,13 @@ describe('ima.core.http.HttpAgentImpl', () => {
     };
   });
 
-  using(['get', 'post', 'put', 'patch', 'delete'], (method) => {
+  using(['get', 'post', 'put', 'patch', 'delete'], method => {
     describe(method + ' method', () => {
       beforeEach(() => {
         data.params.method = method;
       });
 
-      it('should be return resolved promise with data', (done) => {
+      it('should be return resolved promise with data', done => {
         spyOn(proxy, 'request').and.callFake(() => {
           return Promise.resolve(data);
         });
@@ -86,7 +86,7 @@ describe('ima.core.http.HttpAgentImpl', () => {
         spyOn(proxy, 'haveToSetCookiesManually').and.returnValue(false);
 
         http[method](data.params.url, data.params.data, data.params.options)
-          .then((response) => {
+          .then(response => {
             let agentResponse = {
               status: data.status,
               params: data.params,
@@ -99,13 +99,13 @@ describe('ima.core.http.HttpAgentImpl', () => {
             expect(response).toEqual(agentResponse);
             done();
           })
-          .catch((e) => {
+          .catch(e => {
             console.error(e.message, e.stack);
             done(e);
           });
       });
 
-      it('should be rejected with error', (done) => {
+      it('should be rejected with error', done => {
         spyOn(proxy, 'request').and.callFake(() => {
           return Promise.reject(new GenericError('', data.params));
         });
@@ -116,7 +116,7 @@ describe('ima.core.http.HttpAgentImpl', () => {
           data.params.options
         ).then(
           () => {},
-          (error) => {
+          error => {
             expect(error instanceof GenericError).toBe(true);
             expect(proxy.request.calls.count()).toEqual(2);
             done();
@@ -124,7 +124,7 @@ describe('ima.core.http.HttpAgentImpl', () => {
         );
       });
 
-      it('should be set cookie to response', (done) => {
+      it('should be set cookie to response', done => {
         spyOn(proxy, 'request').and.callFake(() => {
           return Promise.resolve(data);
         });
@@ -141,7 +141,7 @@ describe('ima.core.http.HttpAgentImpl', () => {
         });
       });
 
-      it('should call postProcessor function', (done) => {
+      it('should call postProcessor function', done => {
         spyOn(proxy, 'request').and.callFake(() => {
           return Promise.resolve(data);
         });
@@ -157,7 +157,7 @@ describe('ima.core.http.HttpAgentImpl', () => {
         });
       });
 
-      it('should not set Cookie header only for request with withCredentials option set to false', (done) => {
+      it('should not set Cookie header only for request with withCredentials option set to false', done => {
         spyOn(proxy, 'request').and.callFake(() => {
           return Promise.resolve(data);
         });

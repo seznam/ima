@@ -24,7 +24,7 @@ export default class CategoryListService extends AbstractService {
    * @return {Promise<?CategoryEntity>}
    */
   getCategoryByUrl(urlName) {
-    return this._resource.getEntity().then((categoryListEntity) => {
+    return this._resource.getEntity().then(categoryListEntity => {
       if (!urlName) {
         return null;
       }

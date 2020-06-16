@@ -19,7 +19,7 @@ describe('ima.core.http.HttpProxy', () => {
   };
 
   const mockedUrlTransformer = toMockedInstance(UrlTransformer, {
-    transform: (url) => url
+    transform: url => url
   });
   const mockedWindowHelper = toMockedInstance(Window);
 
@@ -50,9 +50,9 @@ describe('ima.core.http.HttpProxy', () => {
     });
   });
 
-  ['get', 'head', 'post', 'put', 'delete', 'patch'].forEach((method) => {
+  ['get', 'head', 'post', 'put', 'delete', 'patch'].forEach(method => {
     describe(`method ${method}`, () => {
-      it('should return promise with response body', async (done) => {
+      it('should return promise with response body', async done => {
         try {
           await proxy.request(method, API_URL, DATA, OPTIONS);
           done();
@@ -61,7 +61,7 @@ describe('ima.core.http.HttpProxy', () => {
         }
       });
 
-      it('should return a "body" field in error object, when promise is rejected', async (done) => {
+      it('should return a "body" field in error object, when promise is rejected', async done => {
         fetchResult = Promise.reject(
           new GenericError('The HTTP request timed out', {
             status: StatusCode.TIMEOUT
@@ -77,7 +77,7 @@ describe('ima.core.http.HttpProxy', () => {
         }
       });
 
-      it('should reject promise for Timeout error', async (done) => {
+      it('should reject promise for Timeout error', async done => {
         fetchResult = Promise.reject(
           new GenericError('The HTTP request timed out', {
             status: StatusCode.TIMEOUT
@@ -93,7 +93,7 @@ describe('ima.core.http.HttpProxy', () => {
         }
       });
 
-      it('should be timeouted for longer request then options.timeout', async (done) => {
+      it('should be timeouted for longer request then options.timeout', async done => {
         jest.useFakeTimers();
 
         proxy._getFetchApi.and.callFake(() => {
@@ -109,7 +109,7 @@ describe('ima.core.http.HttpProxy', () => {
         }
       });
 
-      it('should reject promise for Forbidden', async (done) => {
+      it('should reject promise for Forbidden', async done => {
         Object.assign(response, {
           ok: false,
           status: StatusCode.FORBIDDEN
@@ -124,7 +124,7 @@ describe('ima.core.http.HttpProxy', () => {
         }
       });
 
-      it('should reject promise for Not found', async (done) => {
+      it('should reject promise for Not found', async done => {
         Object.assign(response, {
           ok: false,
           status: StatusCode.NOT_FOUND
@@ -139,7 +139,7 @@ describe('ima.core.http.HttpProxy', () => {
         }
       });
 
-      it('should reject promise for Internal Server Error', async (done) => {
+      it('should reject promise for Internal Server Error', async done => {
         Object.assign(response, {
           ok: false,
           status: StatusCode.SERVER_ERROR
@@ -154,7 +154,7 @@ describe('ima.core.http.HttpProxy', () => {
         }
       });
 
-      it('should reject promise for UNKNOWN', async (done) => {
+      it('should reject promise for UNKNOWN', async done => {
         Object.assign(response, {
           ok: false,
           status: null

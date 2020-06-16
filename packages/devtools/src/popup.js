@@ -87,7 +87,7 @@ function sendEnabled(port, enabled) {
   });
 
   // Init default state
-  getSettings('enabled').then((enabled) => {
+  getSettings('enabled').then(enabled => {
     enableSwitch.checked = enabled;
     sendEnabled(port, enabled);
 

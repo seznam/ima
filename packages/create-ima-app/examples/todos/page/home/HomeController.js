@@ -34,7 +34,7 @@ export default class HomeController extends AbstractController {
     return {
       items: items,
       filter: filter,
-      toggleAllChecked: items.every((item) => item.completed)
+      toggleAllChecked: items.every(item => item.completed)
     };
   }
 
@@ -124,7 +124,7 @@ export default class HomeController extends AbstractController {
 
     this.setState({
       items: items,
-      toggleAllChecked: items.every((item) => item.completed)
+      toggleAllChecked: items.every(item => item.completed)
     });
   }
 

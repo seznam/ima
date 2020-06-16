@@ -15,7 +15,7 @@ export default class TweetButton extends AbstractComponent {
     return (
       <a
         href={this.composeUrl()}
-        onClick={(event) => this.onShare(event)}
+        onClick={event => this.onShare(event)}
         className="tweet-button"
         target="_blank"
         rel="noopener noreferrer">
@@ -70,7 +70,7 @@ export default class TweetButton extends AbstractComponent {
       scrollbars: 1
     };
 
-    let optionsString = Object.keys(options).map((optionName) => {
+    let optionsString = Object.keys(options).map(optionName => {
       return [optionName, options[optionName]]
         .map(encodeURIComponent)
         .join('=');
@@ -104,7 +104,7 @@ export default class TweetButton extends AbstractComponent {
     };
 
     let queryString = Object.keys(query)
-      .map((parameterName) => {
+      .map(parameterName => {
         return [parameterName, query[parameterName]]
           .map(encodeURIComponent)
           .join('=');

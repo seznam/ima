@@ -58,7 +58,7 @@ module.exports = (environment, logger, languageLoader, appFactory) => {
           let start = Math.max(stackFrame.lineNumber - 11, 0);
           let lines = content.value
             .split('\n')
-            .map((line) => `<span class="line">${line}</span>`);
+            .map(line => `<span class="line">${line}</span>`);
           // end a few lines after the error or the last line of the file
           let end = Math.min(stackFrame.lineNumber + 10, lines.length);
           let snippet = lines.slice(start, end);
@@ -86,7 +86,7 @@ module.exports = (environment, logger, languageLoader, appFactory) => {
           callstack = [];
         }
 
-        callstack = callstack.filter((item) => !!item);
+        callstack = callstack.filter(item => !!item);
 
         res.status(500);
 
@@ -166,10 +166,10 @@ module.exports = (environment, logger, languageLoader, appFactory) => {
       fs.readFile(filePath, 'utf-8', (error, content) => {
         if (error) {
           return showStaticErrorPage(error, req, res).then(
-            (response) => {
+            response => {
               resolve(response);
             },
-            (error) => {
+            error => {
               reject(error);
             }
           );
@@ -288,12 +288,12 @@ module.exports = (environment, logger, languageLoader, appFactory) => {
       promise = app.oc
         .get('$Router')
         .handleError({ error })
-        .then((response) => {
+        .then(response => {
           instanceRecycler.clearInstance(app);
 
           return response;
         })
-        .catch((fatalError) => {
+        .catch(fatalError => {
           instanceRecycler.clearInstance(app);
 
           return showStaticErrorPage(fatalError, req, res);
@@ -314,12 +314,12 @@ module.exports = (environment, logger, languageLoader, appFactory) => {
       promise = app.oc
         .get('$Router')
         .handleNotFound({ error })
-        .then((response) => {
+        .then(response => {
           instanceRecycler.clearInstance(app);
 
           return response;
         })
-        .catch((error) => {
+        .catch(error => {
           return _applyError(error, req, res, app);
         });
     } catch (e) {
@@ -351,7 +351,7 @@ module.exports = (environment, logger, languageLoader, appFactory) => {
   }
 
   function _importAppMain() {
-    return $IMA.Loader.import('app/main').then((appMain) => {
+    return $IMA.Loader.import('app/main').then(appMain => {
       if (!instanceRecycler.isInitialized()) {
         instanceRecycler.init(
           appMain.ima.createImaApp,
@@ -382,13 +382,13 @@ module.exports = (environment, logger, languageLoader, appFactory) => {
       let appPromise = Promise.resolve(app);
 
       if (!app) {
-        appPromise = _importAppMain().then((appMain) => {
+        appPromise = _importAppMain().then(appMain => {
           return _initApp(req, res, appMain);
         });
       }
 
       returnPromise = appPromise
-        .then((app) => {
+        .then(app => {
           let router = app.oc.get('$Router');
           app.oc.get('$Cache').clear();
 
@@ -400,8 +400,8 @@ module.exports = (environment, logger, languageLoader, appFactory) => {
             return _applyError(error, req, res, app);
           }
         })
-        .catch((e) => {
-          appPromise.then((app) => {
+        .catch(e => {
+          appPromise.then(app => {
             instanceRecycler.clearInstance(app);
           });
 
@@ -445,12 +445,12 @@ module.exports = (environment, logger, languageLoader, appFactory) => {
     try {
       returnPromise = router
         .route(router.getPath())
-        .then((response) => {
+        .then(response => {
           instanceRecycler.clearInstance(app);
 
           return response;
         })
-        .catch((error) => {
+        .catch(error => {
           return errorHandler(error, req, res, app);
         });
     } catch (e) {
@@ -464,7 +464,7 @@ module.exports = (environment, logger, languageLoader, appFactory) => {
     if (environment.$Env === 'dev') {
       instanceRecycler.clear();
 
-      Object.keys($IMA.Loader.modules).forEach((modulePath) => {
+      Object.keys($IMA.Loader.modules).forEach(modulePath => {
         let module = global.$IMA.Loader.modules[modulePath];
 
         global.$IMA.Loader.modules[modulePath] = Object.assign({}, module, {
@@ -477,7 +477,7 @@ module.exports = (environment, logger, languageLoader, appFactory) => {
       appFactory();
     }
 
-    return _importAppMain().then((appMain) => {
+    return _importAppMain().then(appMain => {
       let app = _initApp(req, res, appMain);
       _addImaToResponse(req, res, app);
 

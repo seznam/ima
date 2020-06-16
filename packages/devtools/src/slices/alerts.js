@@ -31,7 +31,7 @@ const alerts = createSlice({
   }
 });
 
-alerts.actions.showAlertWithTimeout = (alert, timeout) => async (dispatch) => {
+alerts.actions.showAlertWithTimeout = (alert, timeout) => async dispatch => {
   const id = uid();
   alert.id = id;
 

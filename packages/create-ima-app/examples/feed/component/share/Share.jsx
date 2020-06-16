@@ -21,7 +21,7 @@ export default class Share extends AbstractComponent {
         <a
           href={postLink}
           className="toggle"
-          onClick={(event) => this.onToggle(event)}>
+          onClick={event => this.onToggle(event)}>
           {label}
         </a>
         <div className="sharing-wrapper">
@@ -33,13 +33,13 @@ export default class Share extends AbstractComponent {
                 type="text"
                 value={postLink}
                 readOnly={true}
-                ref={(input) => (this.input = input)}
-                onClick={(event) => this.selectShareLink(event)}
+                ref={input => (this.input = input)}
+                onClick={event => this.selectShareLink(event)}
               />
 
               <a
                 href={postLink}
-                onClick={(event) => this.onShareOnFacebook(event)}
+                onClick={event => this.onShareOnFacebook(event)}
                 className="facebook">
                 <img
                   src={
@@ -106,7 +106,7 @@ export default class Share extends AbstractComponent {
       body: this.getPlainTextItemContent(item)
     };
     let queryString = Object.keys(query)
-      .map((parameterName) => {
+      .map(parameterName => {
         let parts = [parameterName, query[parameterName]];
         return parts.map(encodeURIComponent).join('=');
       })

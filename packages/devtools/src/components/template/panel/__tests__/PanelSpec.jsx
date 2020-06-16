@@ -26,13 +26,13 @@ describe('Panel template', () => {
     onDisconnect: {
       addListener: jest
         .fn()
-        .mockImplementation((callback) => (disconnectCallback = callback))
+        .mockImplementation(callback => (disconnectCallback = callback))
     }
   });
 
   global.chrome = {
     runtime: {
-      connect: jest.fn().mockImplementation((details) => createPort(details))
+      connect: jest.fn().mockImplementation(details => createPort(details))
     }
   };
 

@@ -22,12 +22,12 @@ export default class Item extends AbstractComponent {
             className="toggle"
             type="checkbox"
             checked={this.props.item.completed}
-            onChange={(e) => this.onCompletionToggled(e)}
+            onChange={e => this.onCompletionToggled(e)}
           />
-          <label onDoubleClick={(e) => this.onStartEdit(e)}>
+          <label onDoubleClick={e => this.onStartEdit(e)}>
             {this.props.item.title}
           </label>
-          <button className="destroy" onClick={(e) => this.onDelete(e)} />
+          <button className="destroy" onClick={e => this.onDelete(e)} />
         </div>
         {this._generateEditUI()}
       </li>
@@ -83,7 +83,7 @@ export default class Item extends AbstractComponent {
     return (
       <input
         className="edit"
-        ref={(edit) => (this.edit = edit)}
+        ref={edit => (this.edit = edit)}
         defaultValue={this.props.item.title}
         onBlur={this.onFinishEditing.bind(this)}
       />

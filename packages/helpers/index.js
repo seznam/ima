@@ -90,9 +90,9 @@ function resolveEnvironmentSetting(
 
 function allPromiseHash(hash) {
   let keys = Object.keys(hash);
-  let loadPromises = keys.map((key) => Promise.resolve(hash[key]));
+  let loadPromises = keys.map(key => Promise.resolve(hash[key]));
 
-  return Promise.all(loadPromises).then((resolvedValues) => {
+  return Promise.all(loadPromises).then(resolvedValues => {
     let result = {};
 
     for (let key of keys) {

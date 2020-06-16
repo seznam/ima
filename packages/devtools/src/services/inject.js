@@ -51,7 +51,7 @@ export function injectFile(
       resolve();
     };
 
-    element.onerror = (error) => {
+    element.onerror = error => {
       element.remove();
       reject(error);
     };

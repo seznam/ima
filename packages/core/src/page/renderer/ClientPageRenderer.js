@@ -66,7 +66,7 @@ export default class ClientPageRenderer extends AbstractPageRenderer {
 
     return this._Helper
       .allPromiseHash(loadedPromises)
-      .then(async (fetchedResources) => {
+      .then(async fetchedResources => {
         let pageState = Object.assign({}, defaultPageState, fetchedResources);
 
         if (this._firstTime) {
@@ -84,7 +84,7 @@ export default class ClientPageRenderer extends AbstractPageRenderer {
           pageState
         };
       })
-      .catch((error) => this._handleError(error));
+      .catch(error => this._handleError(error));
   }
 
   /**
@@ -100,7 +100,7 @@ export default class ClientPageRenderer extends AbstractPageRenderer {
 
     return this._Helper
       .allPromiseHash(updatedPromises)
-      .then((fetchedResources) => {
+      .then(fetchedResources => {
         controller.setMetaParams(controller.getState());
         this._updateMetaAttributes(controller.getMetaManager());
 
@@ -110,7 +110,7 @@ export default class ClientPageRenderer extends AbstractPageRenderer {
           pageState: Object.assign({}, defaultPageState, fetchedResources)
         };
       })
-      .catch((error) => this._handleError(error));
+      .catch(error => this._handleError(error));
   }
 
   /**
@@ -149,12 +149,12 @@ export default class ClientPageRenderer extends AbstractPageRenderer {
   _patchPromisesToState(controller, patchedPromises) {
     for (let resourceName of Object.keys(patchedPromises)) {
       patchedPromises[resourceName]
-        .then((resource) => {
+        .then(resource => {
           controller.setState({
             [resourceName]: resource
           });
         })
-        .catch((error) => this._handleError(error));
+        .catch(error => this._handleError(error));
     }
   }
 
@@ -186,7 +186,7 @@ export default class ClientPageRenderer extends AbstractPageRenderer {
       return state;
     }
 
-    Object.keys(this._reactiveView.state).forEach((key) => {
+    Object.keys(this._reactiveView.state).forEach(key => {
       state[key] = state[key] !== undefined ? state[key] : undefined;
     });
 
@@ -247,7 +247,7 @@ export default class ClientPageRenderer extends AbstractPageRenderer {
     }
 
     if (this._viewContainer.children.length) {
-      return new Promise((resolve) => setTimeout(resolve, 1000 / 240)).then(
+      return new Promise(resolve => setTimeout(resolve, 1000 / 240)).then(
         () => {
           this._reactiveView = this._ReactDOM.hydrate(
             reactElementView,

@@ -141,7 +141,7 @@ describe('imaLoader', () => {
 
     await imaLoader
       .initAllModules()
-      .catch((e) =>
+      .catch(e =>
         expect(e.message).toMatch(
           `The module ${moduleName} throw error during initialization. Cannot read property 'execute' of undefined`
         )

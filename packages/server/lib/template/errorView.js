@@ -200,7 +200,7 @@ module.exports = (error, callStack) => {
   if (error && error.getParams) {
     encodedParams = String(JSON.stringify(error.getParams())).replace(
       /[\u00A0-\u9999<>&]/gim,
-      (char) => `&#${char.charCodeAt(0)};`
+      char => `&#${char.charCodeAt(0)};`
     );
   }
 
@@ -208,7 +208,7 @@ module.exports = (error, callStack) => {
   responseBody += `<ul>`;
   responseBody += callStack
     .map(
-      (item) =>
+      item =>
         `<li>at <span class='functionName'>${
           item.functionName || 'anonymous'
         }</span> ${item.fileName}:${item.lineNumber}:${item.columnNumber}

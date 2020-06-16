@@ -23,13 +23,13 @@ let vendorEsBundle = null;
 
 exports.__requiresConfig = true;
 
-exports.default = (gulpConfig) => {
+exports.default = gulpConfig => {
   let files = gulpConfig.files;
   let babelConfig = gulpConfig.babelConfig;
 
   function Es6ToEs5App() {
     function insertSystemImports() {
-      return tap((file) => {
+      return tap(file => {
         file.contents = Buffer.concat([
           file.contents,
           new Buffer(
@@ -44,7 +44,7 @@ exports.default = (gulpConfig) => {
     }
 
     function replaceToIMALoader() {
-      return tap((file) => {
+      return tap(file => {
         let content = file.contents.toString();
 
         if (content) {
@@ -57,7 +57,7 @@ exports.default = (gulpConfig) => {
     }
 
     function excludeServerSideFile() {
-      return tap((file) => {
+      return tap(file => {
         let content = file.contents.toString();
 
         if (content) {
@@ -183,7 +183,7 @@ exports.default = (gulpConfig) => {
     fs.writeFile(
       files.vendor.dest.tmp + files.vendor.name.server,
       serverModuleLinker,
-      (error) => {
+      error => {
         if (error) {
           return done(error);
         }
@@ -191,7 +191,7 @@ exports.default = (gulpConfig) => {
         fs.writeFile(
           files.vendor.dest.tmp + files.vendor.src.client,
           clientModuleLinker,
-          (error) => {
+          error => {
             if (error || !files.vendor.src.test) {
               return done(error);
             }
@@ -199,7 +199,7 @@ exports.default = (gulpConfig) => {
             fs.writeFile(
               files.vendor.dest.tmp + files.vendor.src.test,
               testModuleLinker,
-              (error) => {
+              error => {
                 done(error);
               }
             );
@@ -249,13 +249,10 @@ exports.default = (gulpConfig) => {
   }
 
   function Es6ToEs5VendorClient(done) {
-    return gulp.series(
-      gulp.parallel(vendorClient, esVendorClient),
-      (subDone) => {
-        subDone();
-        done();
-      }
-    )();
+    return gulp.series(gulp.parallel(vendorClient, esVendorClient), subDone => {
+      subDone();
+      done();
+    })();
   }
 
   function applyToBrowserifyBundle(method, config, bundle) {
@@ -375,7 +372,7 @@ exports.default = (gulpConfig) => {
    * @return {Stream<File>} Stream processor for files.
    */
   function resolveNewPath(newBase) {
-    return mapSync((file) => {
+    return mapSync(file => {
       file.cwd += newBase;
       file.base = file.cwd;
       return file;

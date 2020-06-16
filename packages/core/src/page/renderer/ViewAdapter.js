@@ -60,20 +60,20 @@ export default class ViewAdapter extends React.Component {
      *
      * @type {Array<function>}
      */
-    this.contextSelectors = [(props) => props.$Utils];
+    this.contextSelectors = [props => props.$Utils];
 
     /**
      * The function for creating context.
      *
      * @type {function}
      */
-    this.createContext = memoizeOne(($Utils) => {
+    this.createContext = memoizeOne($Utils => {
       return { $Utils };
     });
   }
 
   getContextValue(props, state) {
-    const selectedValues = this.contextSelectors.map((selector) =>
+    const selectedValues = this.contextSelectors.map(selector =>
       selector(props, state)
     );
 

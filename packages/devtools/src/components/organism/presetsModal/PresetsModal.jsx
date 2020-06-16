@@ -42,7 +42,7 @@ export default class PresetsModal extends React.PureComponent {
 
     return (
       <div className={styles.body}>
-        {Object.keys(presets).map((id) => {
+        {Object.keys(presets).map(id => {
           return (
             <PresetEntry onClick={() => this.onSelect(id)} key={id} id={id} />
           );
@@ -56,11 +56,11 @@ export default class PresetsModal extends React.PureComponent {
 
     return (
       <ModalFooter className={styles.footer}>
-        <Button onClick={(e) => this.onSaveChanges(e)} color="success">
+        <Button onClick={e => this.onSaveChanges(e)} color="success">
           Save Preset Changes
         </Button>
         <div>
-          <Button onClick={(e) => this.onCreatePreset(e)} color="primary">
+          <Button onClick={e => this.onCreatePreset(e)} color="primary">
             Create Preset
           </Button>
           <Button onClick={onClose}>Close</Button>

@@ -2,7 +2,7 @@ import { connect } from 'react-redux';
 import { actions } from 'slices/entries';
 import Panel from './Panel';
 
-const mapStateToProps = (state) => ({
+const mapStateToProps = state => ({
   isLoading: state.entries.isLoading,
   error: state.entries.error,
   status: state.entries.status

@@ -34,7 +34,7 @@ export default class PresetEntry extends React.PureComponent {
     const { editable } = this.state;
 
     return (
-      <div onClick={(e) => this.onClick(e)} className={styles.wrapper}>
+      <div onClick={e => this.onClick(e)} className={styles.wrapper}>
         {editable && presetEditable ? this._renderForm() : this._renderPreset()}
       </div>
     );
@@ -49,19 +49,19 @@ export default class PresetEntry extends React.PureComponent {
         <div className={styles.actions}>
           <Tooltip label="Duplicate preset">
             <span>
-              <IconButton onClick={(e) => this.onCopy(e)} name="copy" />
+              <IconButton onClick={e => this.onCopy(e)} name="copy" />
             </span>
           </Tooltip>
           {editable && (
             <>
               <Tooltip label="Edit preset">
                 <span>
-                  <IconButton onClick={(e) => this.onEdit(e)} name="edit" />
+                  <IconButton onClick={e => this.onEdit(e)} name="edit" />
                 </span>
               </Tooltip>
               <Tooltip label="Delete preset">
                 <span>
-                  <IconButton onClick={(e) => this.onDelete(e)} name="trash" />
+                  <IconButton onClick={e => this.onDelete(e)} name="trash" />
                 </span>
               </Tooltip>
             </>
@@ -76,12 +76,12 @@ export default class PresetEntry extends React.PureComponent {
 
     return (
       <>
-        <input onChange={(e) => this.onChange(e)} value={name} type="text" />
+        <input onChange={e => this.onChange(e)} value={name} type="text" />
         <div className={styles.actions}>
           <Tooltip label="Confirm changes">
             <span>
               <IconButton
-                onClick={(e) => this.onConfirm(e)}
+                onClick={e => this.onConfirm(e)}
                 color="success"
                 name="check"
               />
@@ -90,7 +90,7 @@ export default class PresetEntry extends React.PureComponent {
           <Tooltip label="Discard changes">
             <span>
               <IconButton
-                onClick={(e) => this.onDiscard(e)}
+                onClick={e => this.onDiscard(e)}
                 color="danger"
                 name="close"
               />

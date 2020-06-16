@@ -14,7 +14,7 @@ export default class SerialBatch extends AbstractExecution {
 
     return this._jobs.reduce(
       (lastStage, currentStage) =>
-        lastStage.then((results) =>
+        lastStage.then(results =>
           this._executeJob(currentStage, args).then(
             Array.prototype.concat.bind(results)
           )

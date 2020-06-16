@@ -35,7 +35,7 @@ export default class Resource {
       return this._items;
     }
 
-    return this._items.filter((item) => item.completed === completed);
+    return this._items.filter(item => item.completed === completed);
   }
 
   add(data) {

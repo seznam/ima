@@ -3,11 +3,11 @@ import SerialBatch from '../SerialBatch';
 describe('ima.core.execution.SerialBatch', () => {
   let serialBatch = null;
 
-  const asyncFunction = (argument) => {
-    return new Promise((resolve) => setTimeout(() => resolve(argument), 200));
+  const asyncFunction = argument => {
+    return new Promise(resolve => setTimeout(() => resolve(argument), 200));
   };
 
-  const syncFunction = (argument) => {
+  const syncFunction = argument => {
     return argument;
   };
 
@@ -20,7 +20,7 @@ describe('ima.core.execution.SerialBatch', () => {
       expect.assertions(1);
       const argument = 'fluid';
 
-      return serialBatch.execute(argument).then((result) => {
+      return serialBatch.execute(argument).then(result => {
         expect(result).toEqual([argument, argument]);
       });
     });
@@ -28,7 +28,7 @@ describe('ima.core.execution.SerialBatch', () => {
     it('should pass argument to each job without mutation', () => {
       expect.assertions(1);
 
-      const mutatingFunction = (argument) => {
+      const mutatingFunction = argument => {
         argument.newProp = 'value';
         return Promise.resolve(argument);
       };
@@ -37,7 +37,7 @@ describe('ima.core.execution.SerialBatch', () => {
 
       serialBatch.append(mutatingFunction);
 
-      return serialBatch.execute(argument).then((result) => {
+      return serialBatch.execute(argument).then(result => {
         expect(result).toEqual([argument, argument, argument]);
       });
     });
@@ -66,7 +66,7 @@ describe('ima.core.execution.SerialBatch', () => {
 
       serialBatch.append(rejectingFunction);
 
-      return serialBatch.execute().catch((error) => {
+      return serialBatch.execute().catch(error => {
         expect(error).toBe(error);
       });
     });

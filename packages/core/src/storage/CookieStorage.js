@@ -100,8 +100,8 @@ export default class CookieStorage extends MapStorage {
      *       }}
      */
     this._transformFunction = {
-      encode: (value) => value,
-      decode: (value) => value
+      encode: value => value,
+      decode: value => value
     };
   }
 

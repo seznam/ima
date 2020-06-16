@@ -198,7 +198,7 @@ function routeClientApp(app) {
   return router
     .listen()
     .route(router.getPath())
-    .catch((error) => {
+    .catch(error => {
       if (typeof $IMA.fatalErrorHandler === 'function') {
         $IMA.fatalErrorHandler(error);
       } else {
@@ -220,7 +220,7 @@ function reviveClientApp(initialAppConfigFunctions) {
   let bootConfig = getClientBootConfig(initialAppConfigFunctions);
   app = bootClientApp(app, bootConfig);
 
-  return routeClientApp(app).then((pageInfo) => {
+  return routeClientApp(app).then(pageInfo => {
     return Object.assign({}, pageInfo || {}, { app, bootConfig });
   });
 }
@@ -233,10 +233,10 @@ function onLoad() {
   }
 
   if (document.readyState !== 'loading') {
-    return new Promise((resolve) => setTimeout(resolve, 1000 / 240));
+    return new Promise(resolve => setTimeout(resolve, 1000 / 240));
   }
 
-  return new Promise((resolve) => {
+  return new Promise(resolve => {
     document.addEventListener('DOMContentLoaded', () => resolve(), {
       once: true
     });

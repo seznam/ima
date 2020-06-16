@@ -67,8 +67,8 @@ export default class Response {
      * @type {{encode: function, decode: function}}
      */
     this._cookieTransformFunction = {
-      encode: (value) => value,
-      decode: (value) => value
+      encode: value => value,
+      decode: value => value
     };
   }
 

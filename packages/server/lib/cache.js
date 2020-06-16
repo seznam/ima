@@ -212,5 +212,5 @@ function defaultKeyGenerator(request) {
   return protocol + ':' + host + url;
 }
 
-module.exports = (environment) => new Cache(environment.$Server.cache);
+module.exports = environment => new Cache(environment.$Server.cache);
 module.exports.Cache = Cache;

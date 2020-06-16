@@ -180,7 +180,7 @@ export default class TabConnection {
    */
   resendCache() {
     if (this.cache.length > 0) {
-      this.cache.forEach((msg) => {
+      this.cache.forEach(msg => {
         this.ports.panel.postMessage(msg);
       });
     }
@@ -222,13 +222,13 @@ export default class TabConnection {
    * @private
    */
   _createPipe() {
-    const resendContentScript = (msg) => {
+    const resendContentScript = msg => {
       if (this.ports.panel !== null) {
         this.ports.panel.postMessage(msg);
       }
     };
 
-    const resendPanel = (msg) => {
+    const resendPanel = msg => {
       this.ports.contentScript.postMessage(msg);
     };
 
@@ -269,7 +269,7 @@ export default class TabConnection {
     }
 
     // Assign additional listeners to remove
-    listeners.forEach((listener) =>
+    listeners.forEach(listener =>
       this.ports[name].onMessage.removeListener(listener)
     );
 

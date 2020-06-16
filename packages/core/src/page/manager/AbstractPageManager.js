@@ -120,7 +120,7 @@ export default class AbstractPageManager extends PageManager {
    */
   init() {
     this._clearManagedPageValue();
-    this._pageStateManager.onChange = (newState) => {
+    this._pageStateManager.onChange = newState => {
       this._onChangeStateHandler(newState);
     };
     this._pageHandlerRegistry.init();

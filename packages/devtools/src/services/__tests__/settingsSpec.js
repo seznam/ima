@@ -6,7 +6,7 @@ beforeEach(() => {
   global.chrome = {
     storage: {
       local: {
-        set: jest.fn().mockImplementation((value) => {
+        set: jest.fn().mockImplementation(value => {
           return (settingsStorage = {
             ...settingsStorage,
             ...value

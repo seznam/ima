@@ -36,7 +36,7 @@ export default class Alerts extends React.PureComponent {
     return (
       <div className={styles.container}>
         {Object.values(alerts)
-          .map((alert) => {
+          .map(alert => {
             const { id, content, hidden, ...rest } = alert;
 
             return (

@@ -111,13 +111,13 @@ describe('helper', () => {
   });
 
   describe('allPromiseHash', () => {
-    it('should create a promise wrapping a "hash" object of promises', (done) => {
+    it('should create a promise wrapping a "hash" object of promises', done => {
       let source = {
         a: 1,
         b: Promise.resolve(2),
-        c: new Promise((resolve) => setTimeout(() => resolve(3), 10))
+        c: new Promise(resolve => setTimeout(() => resolve(3), 10))
       };
-      helpers.allPromiseHash(source).then((results) => {
+      helpers.allPromiseHash(source).then(results => {
         expect(results).toEqual({
           a: 1,
           b: 2,

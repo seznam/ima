@@ -6,7 +6,7 @@ import * as utils from 'services/utils';
 describe('TabConnection', () => {
   let instance = null;
   const tabId = 123;
-  const mockPort = (name) => ({
+  const mockPort = name => ({
     name,
     postMessage: jest.fn(),
     disconnect: jest.fn(),
@@ -95,11 +95,9 @@ describe('TabConnection', () => {
     it('should remove additional callbacks in contentScript onDisconnect', () => {
       let disconnectListener;
       let port = mockPort('contentScript');
-      port.onDisconnect.addListener = jest
-        .fn()
-        .mockImplementation((listener) => {
-          disconnectListener = listener;
-        });
+      port.onDisconnect.addListener = jest.fn().mockImplementation(listener => {
+        disconnectListener = listener;
+      });
 
       instance.addPort('contentScript', port);
 
@@ -140,11 +138,9 @@ describe('TabConnection', () => {
     it('should remove additional callbacks in popup onDisconnect', () => {
       let disconnectListener;
       let port = mockPort('popup');
-      port.onDisconnect.addListener = jest
-        .fn()
-        .mockImplementation((listener) => {
-          disconnectListener = listener;
-        });
+      port.onDisconnect.addListener = jest.fn().mockImplementation(listener => {
+        disconnectListener = listener;
+      });
 
       instance.addPort('popup', port);
 
@@ -334,7 +330,7 @@ describe('TabConnection', () => {
       instance.cache = [1, 2, 3, 4];
       instance.ports.panel.postMessage = jest
         .fn()
-        .mockImplementation((value) => receivedCache.push(value));
+        .mockImplementation(value => receivedCache.push(value));
 
       instance.resendCache();
 
@@ -378,7 +374,7 @@ describe('TabConnection', () => {
       instance = new TabConnection(tabId);
       instance.state = State.ALIVE;
       instance.ports.devtools = mockPort('devtools');
-      instance.ports.devtools.postMessage = (value) => {
+      instance.ports.devtools.postMessage = value => {
         postMessageCall = value;
       };
       instance.ports.devtools.disconnect = () => {
@@ -408,22 +404,22 @@ describe('TabConnection', () => {
       // Catch created listeners
       instance.ports.contentScript.onMessage.addListener = jest
         .fn()
-        .mockImplementation((listener) => {
+        .mockImplementation(listener => {
           resendContentScript = listener;
         });
       instance.ports.panel.onMessage.addListener = jest
         .fn()
-        .mockImplementation((listener) => {
+        .mockImplementation(listener => {
           resendPanel = listener;
         });
       instance.ports.contentScript.onDisconnect.addListener = jest
         .fn()
-        .mockImplementation((listener) => {
+        .mockImplementation(listener => {
           shutdownContentScript = listener;
         });
       instance.ports.panel.onDisconnect.addListener = jest
         .fn()
-        .mockImplementation((listener) => {
+        .mockImplementation(listener => {
           shutdownPanel = listener;
         });
     });

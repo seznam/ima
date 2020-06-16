@@ -88,7 +88,7 @@ describe('ima.core.router.ClientRouter', () => {
   });
 
   describe('route method', () => {
-    it('should call handleError for throwing error in super.router', (done) => {
+    it('should call handleError for throwing error in super.router', done => {
       spyOn(router, 'handleError').and.returnValue(Promise.resolve());
 
       router.route('/something').then(() => {
@@ -99,7 +99,7 @@ describe('ima.core.router.ClientRouter', () => {
   });
 
   describe('handleNotFound method', () => {
-    it('should be call router.handleError function for throwing error', (done) => {
+    it('should be call router.handleError function for throwing error', done => {
       spyOn(router, 'handleError').and.returnValue(Promise.resolve('ok'));
 
       router.handleNotFound({ path: '/path' }).then(() => {
@@ -160,7 +160,7 @@ describe('ima.core.router.ClientRouter', () => {
           result: false
         }
       ],
-      (value) => {
+      value => {
         it(
           'should be for ' +
             value.targetUrl +

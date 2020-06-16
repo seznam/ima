@@ -23,10 +23,10 @@ describe('ima.core.page.manager.AbstractPageManager', () => {
   let pageState = Object.assign({}, extensionsState, controllerState);
 
   let pageFactory = {
-    createController: (Controller) => new Controller(),
-    decorateController: (controller) => controller,
-    decoratePageStateManager: (pageStateManger) => pageStateManger,
-    createView: (view) => view
+    createController: Controller => new Controller(),
+    decorateController: controller => controller,
+    decoratePageStateManager: pageStateManger => pageStateManger,
+    createView: view => view
   };
   let pageRenderer = null;
   let pageStateManager = null;
@@ -111,7 +111,7 @@ describe('ima.core.page.manager.AbstractPageManager', () => {
   });
 
   describe('manage method', () => {
-    it('should only update last managed controller and view', (done) => {
+    it('should only update last managed controller and view', done => {
       spyOn(pageManager, '_hasOnlyUpdate').and.returnValue(true);
       spyOn(pageManager, '_runPreManageHandlers').and.returnValue(
         Promise.resolve()
@@ -132,13 +132,13 @@ describe('ima.core.page.manager.AbstractPageManager', () => {
           expect(pageManager._runPostManageHandlers).toHaveBeenCalled();
           done();
         })
-        .catch((error) => {
+        .catch(error => {
           console.error('ima.core.page.manager:manage', error.message);
           done(error);
         });
     });
 
-    it('should mount new controller and view', (done) => {
+    it('should mount new controller and view', done => {
       spyOn(pageManager, '_hasOnlyUpdate').and.returnValue(false);
       spyOn(pageManager, '_runPreManageHandlers').and.returnValue(
         Promise.resolve()
@@ -172,7 +172,7 @@ describe('ima.core.page.manager.AbstractPageManager', () => {
           expect(pageManager._runPostManageHandlers).toHaveBeenCalled();
           done();
         })
-        .catch((error) => {
+        .catch(error => {
           console.error('ima.core.page.manager:manage', error.message);
           done(error);
         });
@@ -321,7 +321,7 @@ describe('ima.core.page.manager.AbstractPageManager', () => {
       spyOn(pageRenderer, 'mount').and.returnValue(Promise.resolve());
     });
 
-    it('should be merge state from controller and extensions to loaded page state', (done) => {
+    it('should be merge state from controller and extensions to loaded page state', done => {
       pageManager
         ._loadPageSource()
         .then(() => {
@@ -333,7 +333,7 @@ describe('ima.core.page.manager.AbstractPageManager', () => {
           );
           done();
         })
-        .catch((error) => {
+        .catch(error => {
           console.error('ima.core.page.manager:_loadPageSource', error.message);
           done(error);
         });
@@ -475,7 +475,7 @@ describe('ima.core.page.manager.AbstractPageManager', () => {
       spyOn(pageRenderer, 'update').and.returnValue(Promise.resolve());
     });
 
-    it('should be merge state from controller and extensions to updated page state', (done) => {
+    it('should be merge state from controller and extensions to updated page state', done => {
       pageManager
         ._updatePageSource()
         .then(() => {
@@ -485,7 +485,7 @@ describe('ima.core.page.manager.AbstractPageManager', () => {
           );
           done();
         })
-        .catch((error) => {
+        .catch(error => {
           console.error(
             'ima.core.page.manager:_updatePageSource',
             error.message

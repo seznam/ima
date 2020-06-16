@@ -43,7 +43,7 @@ module.exports = (() => {
           // connection exceeds the concurrency, the
           // server will serve the application in SPA
           // mode (without server-side rendering)
-          blackList: (userAgent) =>
+          blackList: userAgent =>
             new RegExp('Googlebot|SeznamBot', 'g').test(userAgent) // These user agents
           // will always be
           // served a
@@ -84,7 +84,7 @@ module.exports = (() => {
           https: true,
           limit: '100mb',
           timeout: 10000, // milliseconds
-          proxyReqPathResolver: (request) => `/api/v1${request.url}`
+          proxyReqPathResolver: request => `/api/v1${request.url}`
         }
       }
     },
@@ -96,7 +96,7 @@ module.exports = (() => {
       $Proxy: {
         server: 'example.test',
         options: {
-          proxyReqPathResolver: (request) => `/api${request.url}`
+          proxyReqPathResolver: request => `/api${request.url}`
         }
       }
     },
@@ -112,7 +112,7 @@ module.exports = (() => {
       $Proxy: {
         server: 'localhost:3001',
         options: {
-          proxyReqPathResolver: (request) => `/api${request.url}`
+          proxyReqPathResolver: request => `/api${request.url}`
         }
       }
     }

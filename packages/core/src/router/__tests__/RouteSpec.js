@@ -844,7 +844,7 @@ describe('ima.core.router.Route', function () {
           const routeParams = localRoute.extractParameters(value.path);
           const keys = Object.keys(value.params);
 
-          keys.forEach((key) => {
+          keys.forEach(key => {
             expect(routeParams[key]).toEqual(value.params[key]);
           });
         });

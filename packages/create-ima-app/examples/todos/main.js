@@ -16,7 +16,7 @@ if (!$IMA.Test) {
         ima.reviveClientApp(getInitialAppConfigFunctions());
       }
     })
-    .catch((error) => {
+    .catch(error => {
       if (error) {
         console.error(error);
       }

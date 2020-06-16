@@ -31,7 +31,7 @@ export default class DevManager {
    */
   init() {
     let window = this._window.getWindow();
-    this._window.bindEventListener(window, 'keydown', (e) => {
+    this._window.bindEventListener(window, 'keydown', e => {
       if (e.altKey && e.keyCode === 83) {
         // Alt + S
         console.log('%cApp state:', 'color: blue'); //eslint-disable-line no-console

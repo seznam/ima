@@ -115,7 +115,7 @@ describe('ima.core.page.renderer.ClientPageRenderer', function () {
         });
     });
 
-    it('should overwrite previous state values with undefined', (done) => {
+    it('should overwrite previous state values with undefined', done => {
       spyOn(controller, 'setState');
       spyOn(pageRenderer, '_patchStateToClearPreviousState').and.callThrough();
       spyOn(pageRenderer, '_patchPromisesToState').and.stub();

@@ -7,8 +7,8 @@ describe('ima.storage.SessionStorage', () => {
   let sessionStorage = {
     _storage: new Map(),
     setItem: (key, value) => sessionStorage._storage.set(key, value),
-    getItem: (key) => sessionStorage._storage.get(key),
-    removeItem: (key) => sessionStorage._storage.delete(key),
+    getItem: key => sessionStorage._storage.get(key),
+    removeItem: key => sessionStorage._storage.delete(key),
     clear: () => sessionStorage._storage.clear()
   };
 

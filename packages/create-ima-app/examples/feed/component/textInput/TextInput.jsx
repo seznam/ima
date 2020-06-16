@@ -25,14 +25,12 @@ export default class TextInput extends AbstractComponent {
       <div className="text-input">
         <input
           type="text"
-          ref={(input) => (this.input = input)}
+          ref={input => (this.input = input)}
           className="form-text-input"
           placeholder={placeholder}
-          onKeyPress={(event) => this.sendTextByKeys(event)}
+          onKeyPress={event => this.sendTextByKeys(event)}
         />
-        <button
-          className="form-button"
-          onClick={(event) => this.sendText(event)}>
+        <button className="form-button" onClick={event => this.sendText(event)}>
           {sendText}
         </button>
         <div className="form-categories">{radioCategories}</div>
@@ -54,7 +52,7 @@ export default class TextInput extends AbstractComponent {
             type="radio"
             name="radio-categories"
             defaultValue={category.getId()}
-            onChange={(event) => this.setCheckedCategory(event)}
+            onChange={event => this.setCheckedCategory(event)}
             defaultChecked={index === 0}
           />
           <label htmlFor={'radio' + category.getId()}>
