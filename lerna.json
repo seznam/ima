@@ -12,5 +12,9 @@
     "packages/!(devtools)",
     "packages/devtools-scripts"
   ],
+  "ignoreChanges": [
+    "**/__tests__/**",
+    "**/*.md"
+  ],
   "version": "17.7.1"
 }
