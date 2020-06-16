@@ -8,17 +8,19 @@ const sourcemaps = require('gulp-sourcemaps');
 
 exports.__requiresConfig = true;
 
-exports.default = gulpConfig => {
+exports.default = (gulpConfig) => {
   let files = gulpConfig.files;
 
   function less() {
     function fixPipe(stream) {
       let origPipe = stream.pipe;
-      stream.pipe = function(dest) {
-        arguments[0] = dest.on('error', error => {
+      stream.pipe = function (dest) {
+        arguments[0] = dest.on('error', (error) => {
           let nextStreams = dest._nextStreams;
           if (nextStreams) {
-            nextStreams.forEach(nextStream => nextStream.emit('error', error));
+            nextStreams.forEach((nextStream) =>
+              nextStream.emit('error', error)
+            );
           } else if (dest.listeners('error').length === 1) {
             throw error;
           }

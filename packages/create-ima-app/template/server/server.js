@@ -45,11 +45,11 @@ function errorToString(error) {
   return errorString;
 }
 
-process.on('uncaughtException', error => {
+process.on('uncaughtException', (error) => {
   logger.error(`Uncaught Exception:\n${errorToString(error)}`);
 });
 
-process.on('unhandledRejection', error => {
+process.on('unhandledRejection', (error) => {
   logger.error(`Unhandled promise rejection:\n${errorToString(error)}`);
 });
 
@@ -74,7 +74,7 @@ function renderApp(req, res, next) {
   clientApp
     .requestHandler(req, res)
     .then(
-      response => {
+      (response) => {
         // logger.info('Request handled successfully', { response: { status: number, content: string, SPA: boolean=, error: Error= } });
 
         if (response.error) {
@@ -92,12 +92,12 @@ function renderApp(req, res, next) {
           cache.set(req, response.content);
         }
       },
-      error => {
+      (error) => {
         // logger.error('REJECT', { error });
         next(error);
       }
     )
-    .catch(error => {
+    .catch((error) => {
       logger.error('Cache error', { error: errorToJSON(error) });
       next(error);
     });
@@ -165,7 +165,7 @@ if (environment.$Env === 'dev' || environment.$Server.clusters === 1) {
     }
 
     // Listen for dying workers
-    cluster.on('exit', worker => {
+    cluster.on('exit', (worker) => {
       logger.warn(`Worker ${worker.id} died :(`);
       cluster.fork();
     });

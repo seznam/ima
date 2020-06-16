@@ -10,6 +10,6 @@ export default class Factory {
   }
 
   createEntityList(data) {
-    return data.map(entityData => this.createEntity(entityData));
+    return data.map((entityData) => this.createEntity(entityData));
   }
 }

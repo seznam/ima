@@ -3,7 +3,7 @@ import { actions as presetsActions } from 'slices/presets';
 import { actions as alertsActions } from 'slices/alerts';
 import PresetsModal from './PresetsModal';
 
-const mapStateToProps = state => ({
+const mapStateToProps = (state) => ({
   presets: state.presets.presets,
   selectedPresetId: state.presets.selectedPresetId
 });

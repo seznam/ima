@@ -57,8 +57,8 @@ function loadTasks(directory, gulpConfig) {
 
   let allTasks = {};
   directoryFiles
-    .filter(file => file.match(/[.]js$/i))
-    .forEach(file => {
+    .filter((file) => file.match(/[.]js$/i))
+    .forEach((file) => {
       let modulePath = path.resolve(directory + path.sep + file);
       let tasks = require(modulePath);
 

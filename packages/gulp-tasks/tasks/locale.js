@@ -6,7 +6,7 @@ const rename = require('gulp-rename');
 
 exports.__requiresConfig = true;
 
-exports.default = gulpConfig => {
+exports.default = (gulpConfig) => {
   let files = gulpConfig.files;
 
   function locale() {
@@ -15,7 +15,7 @@ exports.default = gulpConfig => {
         .src(selector)
         .pipe(plumber())
         .pipe(
-          rename(path => {
+          rename((path) => {
             path.basename = path.basename.replace(
               new RegExp(language.toUpperCase(), 'g'),
               ''
@@ -35,7 +35,7 @@ exports.default = gulpConfig => {
         .pipe(gulp.dest(files.locale.dest.server));
     }
 
-    let locales = Object.keys(files.locale.src).map(language => {
+    let locales = Object.keys(files.locale.src).map((language) => {
       let selector = files.locale.src[language];
 
       return parseLocale(language, selector);

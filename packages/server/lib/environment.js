@@ -14,7 +14,7 @@ if (env === 'production') {
   env = prod;
 }
 
-module.exports = environment => {
+module.exports = (environment) => {
   let currentEnvironment = environment[env];
   let $Language = Object.assign({}, currentEnvironment.$Language);
 

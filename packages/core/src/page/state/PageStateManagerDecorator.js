@@ -43,7 +43,7 @@ export default class PageStateManagerDecorator extends PageStateManager {
   setState(statePatch) {
     if ($Debug) {
       let patchKeys = Object.keys(statePatch);
-      let deniedKeys = patchKeys.filter(patchKey => {
+      let deniedKeys = patchKeys.filter((patchKey) => {
         return this._allowedStateKeys.indexOf(patchKey) === -1;
       });
 

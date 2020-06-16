@@ -5,7 +5,7 @@ const sharedState = require('../gulpState.js');
 
 exports.__requiresConfig = true;
 
-exports.default = gulpConfig => {
+exports.default = (gulpConfig) => {
   let server = null;
   let webSocketServer = null;
   let runningServers = 0;
@@ -62,7 +62,7 @@ exports.default = gulpConfig => {
       done();
     });
 
-    webSocketServer.on('error', error => {
+    webSocketServer.on('error', (error) => {
       console.error(error);
       done();
     });

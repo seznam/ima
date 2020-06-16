@@ -24,14 +24,14 @@ export default class ConfirmModal extends React.PureComponent {
       <Modal
         title="Confirm"
         className={styles.modal}
-        onClose={e => this.onCancel(e)}
+        onClose={(e) => this.onCancel(e)}
         opened={opened}>
         <div className={styles.body}>{body}</div>
         <ModalFooter className={styles.footer}>
-          <Button onClick={e => this.onConfirm(e)} color="primary">
+          <Button onClick={(e) => this.onConfirm(e)} color="primary">
             Confirm
           </Button>
-          <Button onClick={e => this.onCancel(e)}>Cancel</Button>
+          <Button onClick={(e) => this.onCancel(e)}>Cancel</Button>
         </ModalFooter>
       </Modal>
     );

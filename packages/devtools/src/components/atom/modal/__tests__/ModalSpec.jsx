@@ -23,7 +23,7 @@ describe('Modal atom', () => {
       }
     };
 
-    global.setTimeout = jest.fn().mockImplementation(cb => cb());
+    global.setTimeout = jest.fn().mockImplementation((cb) => cb());
   });
 
   it('should match snapshot when closed', () => {

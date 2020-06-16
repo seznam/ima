@@ -3,7 +3,7 @@ const eslint = require('gulp-eslint');
 
 exports.__requiresConfig = true;
 
-exports.default = gulpConfig => {
+exports.default = (gulpConfig) => {
   let files = gulpConfig.files;
 
   function lint() {

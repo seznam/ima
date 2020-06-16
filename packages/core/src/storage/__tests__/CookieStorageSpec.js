@@ -23,10 +23,10 @@ describe('ima.storage.CookieStorage', () => {
   let cookie = null;
   let win = null;
   let transformFunction = {
-    encode: function(s) {
+    encode: function (s) {
       return s;
     },
-    decode: function(s) {
+    decode: function (s) {
       return s;
     }
   };
@@ -203,7 +203,7 @@ describe('ima.storage.CookieStorage', () => {
         'Fri, 31 Dec 2000 23:59:59 GMT',
         new Date('Fri, 31 Dec 2000 23:59:59 GMT')
       ],
-      value => {
+      (value) => {
         it('for value ' + value, () => {
           expect(cookie._getExpirationAsDate(value) instanceof Date).toEqual(
             true
@@ -229,7 +229,7 @@ describe('ima.storage.CookieStorage', () => {
         { value: '7|AABBCCD=== ', sanitizedValue: '7|AABBCCD===' },
         { value: undefined + '', sanitizedValue: 'undefined' }
       ],
-      item => {
+      (item) => {
         it(
           'should return ' + item.sanitizedValue + 'for value ' + item.value,
           () => {

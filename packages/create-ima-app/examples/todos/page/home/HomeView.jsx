@@ -16,7 +16,7 @@ export default class HomeView extends AbstractComponent {
             <input
               className="new-todo"
               placeholder={this.localize('home.new item placeholder')}
-              ref={newItemInput => (this.newItemInput = newItemInput)}
+              ref={(newItemInput) => (this.newItemInput = newItemInput)}
               onBlur={this.onItemAdded.bind(this)}
               onKeyUp={this.onKeyUp.bind(this)}
             />
@@ -26,7 +26,7 @@ export default class HomeView extends AbstractComponent {
               id="toggle-all"
               className="toggle-all"
               type="checkbox"
-              ref={toggleAll => (this.toggleAll = toggleAll)}
+              ref={(toggleAll) => (this.toggleAll = toggleAll)}
               onChange={this.onToggleAll.bind(this)}
               checked={this.props.toggleAllChecked}
             />
@@ -34,7 +34,7 @@ export default class HomeView extends AbstractComponent {
               {this.localize('home.toggle all label')}
             </label>
             <ul className="todo-list">
-              {this.props.items.map(item => (
+              {this.props.items.map((item) => (
                 <Item item={item} key={item.id} $Utils={this.utils} />
               ))}
             </ul>
@@ -42,10 +42,10 @@ export default class HomeView extends AbstractComponent {
           <footer className="footer">
             <span className="todo-count">
               <strong>
-                {this.props.items.filter(item => !item.completed).length}
+                {this.props.items.filter((item) => !item.completed).length}
               </strong>
               {this.localize('home.count', {
-                COUNT: this.props.items.filter(item => !item.completed).length
+                COUNT: this.props.items.filter((item) => !item.completed).length
               })}
             </span>
             <ul className="filters">
@@ -81,7 +81,7 @@ export default class HomeView extends AbstractComponent {
               onClick={this.onDeleteCompleted.bind(this)}
               className={this.cssClasses({
                 'clear-completed': true,
-                hidden: this.props.items.every(item => !item.completed)
+                hidden: this.props.items.every((item) => !item.completed)
               })}>
               {this.localize('home.clear completed')}
             </button>

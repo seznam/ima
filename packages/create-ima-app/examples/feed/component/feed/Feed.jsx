@@ -21,7 +21,7 @@ export default class Feed extends AbstractComponent {
 
     let items = feedEntity.getItems();
     let feedItems = items
-      .map(item => {
+      .map((item) => {
         let category = categories.getCategoryById(item.getCategoryId());
 
         return (

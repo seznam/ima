@@ -86,7 +86,7 @@ describe('Revive client application', () => {
     }
   }
 
-  beforeAll(done => {
+  beforeAll((done) => {
     let doc = Reflect.construct(jsdom.JSDOM, [
       `<!DOCTYPE html><html><head></head><body><div id="${MASTER_ELEMENT_ID}"></div></body></html>`
     ]);
@@ -118,7 +118,7 @@ describe('Revive client application', () => {
     done();
   });
 
-  it('revive client app', done => {
+  it('revive client app', (done) => {
     let bootConfig = Object.assign(
       {
         initServicesApp: () => {},
@@ -152,14 +152,14 @@ describe('Revive client application', () => {
 
     ima
       .reviveClientApp(bootConfig)
-      .then(response => {
+      .then((response) => {
         expect(response.status).toEqual(200);
         expect(response.pageState).toEqual({ hello: 'Hello' });
         expect(response.content).toEqual(null);
         expect(ReactDOM.render).toHaveBeenCalled();
         done();
       })
-      .catch(error => {
+      .catch((error) => {
         done(error);
       });
   });

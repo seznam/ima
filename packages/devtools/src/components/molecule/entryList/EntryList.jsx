@@ -22,7 +22,7 @@ export default class EntryList extends React.PureComponent {
       <div className={style.container}>
         <table className={style.table}>
           <tbody>
-            {entryIds.map(id => {
+            {entryIds.map((id) => {
               return <EntryListItem id={id} key={id} />;
             })}
           </tbody>

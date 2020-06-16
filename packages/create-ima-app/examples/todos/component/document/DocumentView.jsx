@@ -72,13 +72,13 @@ export default class DocumentView extends AbstractDocumentView {
 		    if (Object.values && checkAsyncAwait()) {
 		        $IMA.Runner.scripts = [
 		            ${this.utils.$Settings.$Page.$Render.esScripts
-                  .map(script => `'${script}'`)
+                  .map((script) => `'${script}'`)
                   .join()}
 	            ];
 		    } else {
 		        $IMA.Runner.scripts = [
 		            ${this.utils.$Settings.$Page.$Render.scripts
-                  .map(script => `'${script}'`)
+                  .map((script) => `'${script}'`)
                   .join()}
 	            ];
 		    }

@@ -26,7 +26,7 @@ fs.writeFileSync(
 );
 
 function resolvePackageVersions(dependencies) {
-  Object.keys(dependencies).forEach(dependency => {
+  Object.keys(dependencies).forEach((dependency) => {
     if (dependency.startsWith('@ima/')) {
       let dependencyPackageJson = path.resolve(
         PACKAGES_DIR,

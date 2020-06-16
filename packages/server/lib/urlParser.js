@@ -7,7 +7,7 @@ let applicationFolder = path.resolve('.');
 
 const BUILD_JS_PATH = path.resolve(applicationFolder, './app/build.js');
 
-module.exports = environment => {
+module.exports = (environment) => {
   function _getHost(req) {
     let forwardedHost = req.get('X-Forwarded-Host');
     let host = req.get('host');

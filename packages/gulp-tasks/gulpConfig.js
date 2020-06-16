@@ -73,7 +73,7 @@ try {
     }
   };
 }
-sharedTasksState.watchMode = process.argv.some(arg => /^dev$/.test(arg));
+sharedTasksState.watchMode = process.argv.some((arg) => /^dev$/.test(arg));
 const isProduction = ['production', 'prod', 'test'].includes(
   process.env.NODE_ENV
 );
@@ -184,7 +184,7 @@ if (isProduction) {
 
 if (
   ['dev', undefined].includes(process.env.NODE_ENV) &&
-  (process.argv.some(arg => /^--legacy-compat-mode$/.test(arg)) ||
+  (process.argv.some((arg) => /^--legacy-compat-mode$/.test(arg)) ||
     Object.keys(process.env).includes('npm_config_legacy_compat_mode'))
 ) {
   legacyCompactMode = true;

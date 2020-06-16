@@ -3,7 +3,7 @@ import { actions as presetsActions, selectors } from 'slices/presets';
 import { connect } from 'react-redux';
 import Options from './Options';
 
-const mapStateToProps = state => ({
+const mapStateToProps = (state) => ({
   hookIds: selectors.getHookIds(state),
   selectedPresetId: state.presets.selectedPresetId,
   presets: state.presets.presets

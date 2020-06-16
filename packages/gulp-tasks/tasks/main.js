@@ -3,7 +3,7 @@ const macroTasks = require('../macroTasks.js');
 
 exports.__requiresConfig = true;
 
-exports.default = gulpConfig => {
+exports.default = (gulpConfig) => {
   let tasks = gulpConfig.tasks || {};
 
   let devTasks = tasks.dev || macroTasks.DEFAULT_DEV_SUBTASKS;
@@ -35,7 +35,7 @@ exports.default = gulpConfig => {
   };
 
   function prepareTasks(groupedTasks) {
-    return groupedTasks.map(tasks =>
+    return groupedTasks.map((tasks) =>
       tasks instanceof Array ? gulp.parallel(...tasks) : tasks
     );
   }

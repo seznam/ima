@@ -263,8 +263,8 @@ export default class HttpAgentImpl extends HttpAgent {
     let cacheKey = this.getCacheKey(method, url, data);
 
     let cachePromise = this._proxy.request(method, url, data, options).then(
-      response => this._proxyResolved(response),
-      error => this._proxyRejected(error)
+      (response) => this._proxyResolved(response),
+      (error) => this._proxyRejected(error)
     );
 
     this._internalCacheOfPromises.set(cacheKey, cachePromise);
@@ -419,7 +419,7 @@ export default class HttpAgentImpl extends HttpAgent {
         if (!Array.isArray(receivedCookies)) {
           receivedCookies = [receivedCookies];
         }
-        receivedCookies.forEach(cookieHeader => {
+        receivedCookies.forEach((cookieHeader) => {
           this._cookie.parseFromSetCookieHeader(cookieHeader);
         });
       }

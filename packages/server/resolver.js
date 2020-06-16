@@ -20,7 +20,7 @@ const getFilePath = (baseDir, filePath) => {
   // eslint-disable-next-line no-prototype-builtins
   const dirReplaceRules = mockRules.hasOwnProperty(dir) ? mockRules[dir] : [];
 
-  const replaceRule = dirReplaceRules.find(rule => {
+  const replaceRule = dirReplaceRules.find((rule) => {
     return filePath === Object.keys(rule)[0];
   });
 

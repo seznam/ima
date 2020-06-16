@@ -22,7 +22,7 @@ let notifyServerJobQueue = [];
 
 exports.__requiresConfig = true;
 
-exports.default = gulpConfig => {
+exports.default = (gulpConfig) => {
   const {
     files,
     occupiedPorts,
@@ -56,9 +56,9 @@ exports.default = gulpConfig => {
         );
       });
 
-      notifyServer.on('message', message => {
+      notifyServer.on('message', (message) => {
         const changedSubject = message.toString();
-        Object.keys(notifyServerConfig.messageJobs).map(testRegexp => {
+        Object.keys(notifyServerConfig.messageJobs).map((testRegexp) => {
           const test = new RegExp(testRegexp, 'i');
           if (test.test(changedSubject)) {
             clearTimeout(notifyServerMessageTimeout);
@@ -69,7 +69,7 @@ exports.default = gulpConfig => {
               notifyServerConfig.messageJobs[testRegexp]
             );
             notifyServerJobQueue = notifyServerJobQueue.concat(
-              notifyServerConfig.messageJobs[testRegexp].filter(job => {
+              notifyServerConfig.messageJobs[testRegexp].filter((job) => {
                 return !notifyServerJobQueue.includes(job);
               })
             );
@@ -89,7 +89,7 @@ exports.default = gulpConfig => {
 
     chokidar
       .watch(hotReloadConfig.watch, hotReloadConfig.options)
-      .on('change', filePath => {
+      .on('change', (filePath) => {
         log(
           `Reloading 'public/${color.cyan(filePath)}' with ` + 'websocket...'
         );
@@ -100,7 +100,7 @@ exports.default = gulpConfig => {
           hotReloadedContents = fs.readFileSync(filePath).toString();
         } else {
           hotReloadedContents = hotReloadedCacheKeys
-            .map(cacheKey => {
+            .map((cacheKey) => {
               let file = remember.cacheFor('Es6ToEs5:server:app')[cacheKey];
               if (!file) {
                 return '';
@@ -161,11 +161,11 @@ exports.default = gulpConfig => {
     log(`Releasing ports occupied by ${occupants.join(', ')}`);
 
     return Promise.all(
-      occupants.map(occupant => {
+      occupants.map((occupant) => {
         const port = occupiedPorts[occupant];
 
         return isPortOccupied(port)
-          .then(occupied => {
+          .then((occupied) => {
             if (!occupied) {
               return;
             }
@@ -179,7 +179,7 @@ exports.default = gulpConfig => {
 
             return exec(command).catch(() => null);
           })
-          .catch(error => {
+          .catch((error) => {
             log(error);
             throw Error(`Unable to determine if port ${port} is occupied.`);
           });
@@ -191,7 +191,7 @@ exports.default = gulpConfig => {
     return new Promise((resolve, reject) => {
       const tester = net.createServer();
 
-      tester.once('error', error => {
+      tester.once('error', (error) => {
         if (error.code !== 'EADDRINUSE') {
           return reject(error);
         }

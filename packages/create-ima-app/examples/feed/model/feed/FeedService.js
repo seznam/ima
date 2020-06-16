@@ -47,7 +47,7 @@ export default class FeedService extends AbstractService {
   load(currentCategory = null) {
     return this._categoryListService
       .getCategoryByUrl(currentCategory)
-      .then(categoryEntity => {
+      .then((categoryEntity) => {
         return this._resource.getEntity(categoryEntity);
       });
   }

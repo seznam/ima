@@ -6,7 +6,7 @@ export const presetsInitialState = {
   presets: {}
 };
 
-const getCurrentPreset = state => {
+const getCurrentPreset = (state) => {
   return state.presets[state.selectedPresetId];
 };
 
@@ -17,7 +17,7 @@ const presets = createSlice({
     // Presets actions
     setPresets(state, { payload: { presets, selectedPresetId } }) {
       // Reset selected flag
-      Object.values(presets).forEach(preset => {
+      Object.values(presets).forEach((preset) => {
         preset.selected = preset.id === selectedPresetId;
       });
 
@@ -54,7 +54,9 @@ const presets = createSlice({
       state.presets[dupePreset.id] = dupePreset;
     },
     selectPreset(state, { payload: id }) {
-      const selectedPreset = Object.values(state.presets).find(p => p.selected);
+      const selectedPreset = Object.values(state.presets).find(
+        (p) => p.selected
+      );
 
       if (selectedPreset) {
         selectedPreset.selected = false;
@@ -97,15 +99,15 @@ const presets = createSlice({
 
 const selectors = {
   getHookIds: createSelector(
-    state => state.presets.selectedPresetId,
-    state => state.presets.presets,
+    (state) => state.presets.selectedPresetId,
+    (state) => state.presets.presets,
     (selectedPresetId, presets) => {
       return selectedPresetId && Object.keys(presets[selectedPresetId].hooks);
     }
   ),
   getActiveHooks: createSelector(
-    state => state.presets.selectedPresetId,
-    state => state.presets.presets,
+    (state) => state.presets.selectedPresetId,
+    (state) => state.presets.presets,
     (selectedPresetId, presets) => {
       return selectedPresetId && presets[selectedPresetId].hooks;
     }

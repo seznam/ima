@@ -66,10 +66,10 @@ export default class AbstractResource {
     }
 
     return this._http.get(url, data, options).then(
-      result => {
+      (result) => {
         return this._entityFactory.createEntity(result.body);
       },
-      error => {
+      (error) => {
         throw error;
       }
     );
@@ -88,10 +88,10 @@ export default class AbstractResource {
     options = this._getOptions(options);
 
     return this._http.post(url, data, options).then(
-      result => {
+      (result) => {
         return this._entityFactory.createEntity(result.body);
       },
-      error => {
+      (error) => {
         throw error;
       }
     );

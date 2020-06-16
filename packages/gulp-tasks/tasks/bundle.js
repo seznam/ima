@@ -8,7 +8,7 @@ const uglifyEs = require('gulp-uglify-es').default;
 
 exports.__requiresConfig = true;
 
-exports.default = gulpConfig => {
+exports.default = (gulpConfig) => {
   let files = gulpConfig.files;
   let uglifyCompression = gulpConfig.uglifyCompression;
 

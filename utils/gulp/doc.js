@@ -36,7 +36,7 @@ const documentationPreprocessors = [
 ];
 let config;
 
-module.exports = gulpConfig => {
+module.exports = (gulpConfig) => {
   config = gulpConfig;
 
   return gulp.series(
@@ -59,7 +59,7 @@ function preprocess() {
   return gulp
     .src(config.files.js)
     .pipe(
-      change(content => {
+      change((content) => {
         let oldContent = null;
 
         while (content !== oldContent) {
@@ -73,7 +73,7 @@ function preprocess() {
         return content;
       })
     )
-    .pipe(rename(file => (file.extname = '.js')))
+    .pipe(rename((file) => (file.extname = '.js')))
     .pipe(gulp.dest(dir.docSrc));
 }
 
@@ -109,7 +109,7 @@ function generate(done) {
           .replace(/([a-zA-Z])(?=[A-Z])/g, '$1-')
           .toLowerCase();
 
-        templateData = templateData.map(item => {
+        templateData = templateData.map((item) => {
           if (item.meta) {
             const { filename = '', lineno = 0, path = '' } = item.meta;
 
@@ -164,11 +164,11 @@ function generate(done) {
             name
           ]);
           if (item.augments) {
-            item.augments.forEach(augment => textValues.add(augment));
+            item.augments.forEach((augment) => textValues.add(augment));
           }
           lunrDocuments.push({
             name,
-            text: Array.from(textValues.values()).filter(value => !!value),
+            text: Array.from(textValues.values()).filter((value) => !!value),
             url: `${urlPrefix}/${filename}#${hash}`
           });
 

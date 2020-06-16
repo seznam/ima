@@ -14,7 +14,7 @@ export const entriesInitialState = {
   isLoading: true
 };
 
-const updateHasPreviousNext = state => {
+const updateHasPreviousNext = (state) => {
   state.hasNext =
     state.entryIdsByQuery.indexOf(state.selectedId) <
     state.entryIdsByQuery.length - 1;
@@ -37,7 +37,7 @@ const updateSelected = (state, newId) => {
   }
 };
 
-const updateEntryIdsByQuery = state => {
+const updateEntryIdsByQuery = (state) => {
   if (state.searchQuery) {
     // Build regexp from search query
     const parts = state.searchQuery.split('/');
@@ -94,7 +94,7 @@ const entries = createSlice({
         state.zeroId === null &&
         state.selectedId === null;
 
-      entries.forEach(msg => {
+      entries.forEach((msg) => {
         const { time, id } = msg.payload;
 
         if (isFirst) {
@@ -177,8 +177,8 @@ const entries = createSlice({
 
 const selectors = {
   getEntriesLength: createSelector(
-    state => state.entries.entries,
-    entries => entries && Object.keys(entries).length
+    (state) => state.entries.entries,
+    (entries) => entries && Object.keys(entries).length
   )
 };
 

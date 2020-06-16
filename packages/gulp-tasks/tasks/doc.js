@@ -6,7 +6,7 @@ const rename = require('gulp-rename');
 
 exports.__requiresConfig = true;
 
-exports.default = gulpConfig => {
+exports.default = (gulpConfig) => {
   let files = gulpConfig.files;
   let documentationPreprocessors;
 
@@ -43,7 +43,7 @@ exports.default = gulpConfig => {
     return gulp
       .src(files.app.src)
       .pipe(
-        tap(file => {
+        tap((file) => {
           let content = file.contents.toString();
           let oldContent = null;
 
@@ -60,7 +60,7 @@ exports.default = gulpConfig => {
           }
         })
       )
-      .pipe(rename(file => (file.extname = '.js')))
+      .pipe(rename((file) => (file.extname = '.js')))
       .pipe(gulp.dest('./doc-src'));
   }
 

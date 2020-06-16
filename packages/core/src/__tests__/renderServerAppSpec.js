@@ -65,7 +65,7 @@ describe('Render server application', () => {
     }
   }
 
-  beforeAll(done => {
+  beforeAll((done) => {
     vendorLinker.set('react', React);
     vendorLinker.set('react-dom', ReactDOM);
     vendorLinker.set('@ima/helpers', $Helper);
@@ -108,7 +108,7 @@ describe('Render server application', () => {
     done();
   });
 
-  it('should response with status code 200, content null and pageState', done => {
+  it('should response with status code 200, content null and pageState', (done) => {
     spyOn(
       ServerPageRenderer.prototype,
       '_renderPageContentToString'
@@ -116,13 +116,13 @@ describe('Render server application', () => {
 
     router
       .route('/reviveClientApp')
-      .then(response => {
+      .then((response) => {
         expect(response.status).toEqual(200);
         expect(response.content).toEqual('html');
         expect(response.pageState).toEqual({ hello: 'Hello' });
         done();
       })
-      .catch(error => {
+      .catch((error) => {
         done(error);
       });
   });

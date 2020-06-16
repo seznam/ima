@@ -33,6 +33,6 @@ export default class CategoryListEntity extends AbstractEntity {
    * @return {CategoryEntity}
    */
   getCategoryById(id) {
-    return this._categories.filter(category => category.getId() === id)[0];
+    return this._categories.filter((category) => category.getId() === id)[0];
   }
 }

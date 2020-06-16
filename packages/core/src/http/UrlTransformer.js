@@ -60,6 +60,6 @@ export default class UrlTransformer {
 
     let reg = new RegExp(rulesKey.join('|'), 'g');
 
-    return str.replace(reg, ruleKey => this._rules[ruleKey]);
+    return str.replace(reg, (ruleKey) => this._rules[ruleKey]);
   }
 }

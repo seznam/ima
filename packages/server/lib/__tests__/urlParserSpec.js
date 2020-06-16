@@ -76,7 +76,7 @@ describe('UrlParser', () => {
 
     parseUrl(usedReq, usedRes, next);
 
-    expectedKeys.forEach(key => {
+    expectedKeys.forEach((key) => {
       it(`should create key '${key}' in results object`, () => {
         expect(typeof usedRes.locals[key]).toEqual('string');
       });

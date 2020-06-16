@@ -91,10 +91,10 @@ describe('ima.core.page.renderer.ServerPageRenderer', () => {
   });
 
   describe('update method', () => {
-    it('should reject promise with error', done => {
+    it('should reject promise with error', (done) => {
       spyOn(pageRenderer, 'mount').and.stub();
 
-      pageRenderer.update(controller, params).catch(error => {
+      pageRenderer.update(controller, params).catch((error) => {
         expect(error instanceof GenericError).toEqual(true);
         done();
       });
@@ -107,7 +107,7 @@ describe('ima.core.page.renderer.ServerPageRenderer', () => {
       param2: Promise.resolve('param2')
     };
 
-    it('should return already sent data to the client', done => {
+    it('should return already sent data to the client', (done) => {
       let responseParams = {
         content: '',
         status: 200,
@@ -119,13 +119,13 @@ describe('ima.core.page.renderer.ServerPageRenderer', () => {
 
       pageRenderer
         .mount(controller, view, loadedPageState, routeOptions)
-        .then(page => {
+        .then((page) => {
           expect(page).toEqual(responseParams);
           done();
         });
     });
 
-    it('should call _renderPage method', done => {
+    it('should call _renderPage method', (done) => {
       spyOn(pageRenderer, '_renderPage').and.stub();
 
       pageRenderer

@@ -56,15 +56,15 @@ export default class Options extends React.PureComponent {
     return (
       <div className={styles.container}>
         <PresetsModal
-          onClose={e => this.onModalClose(e)}
+          onClose={(e) => this.onModalClose(e)}
           opened={modalOpened}
         />
 
-        <form onSubmit={e => this.onSubmit(e)} className={styles.form}>
+        <form onSubmit={(e) => this.onSubmit(e)} className={styles.form}>
           {this._renderHeader()}
           <div className={styles.hooksWrapper}>
             {hookIds &&
-              hookIds.map(id => {
+              hookIds.map((id) => {
                 return (
                   <HookEntry editable={this.isEditable} id={id} key={id} />
                 );
@@ -104,7 +104,7 @@ export default class Options extends React.PureComponent {
 
         <div className={styles.actionsWrapper}>
           {this.isEditable && (
-            <Button onClick={e => this.onAdd(e)} color="primary">
+            <Button onClick={(e) => this.onAdd(e)} color="primary">
               Add Hook
             </Button>
           )}
@@ -113,7 +113,7 @@ export default class Options extends React.PureComponent {
               <span className={styles.presetsLabel}>Current preset:</span>{' '}
               {selectedPresetId && presets[selectedPresetId].name}
             </p>
-            <Button onClick={e => this.onLoadPreset(e)}>
+            <Button onClick={(e) => this.onLoadPreset(e)}>
               Load or Create Preset
             </Button>
           </div>

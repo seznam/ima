@@ -89,7 +89,10 @@ export default (ns, oc, config) => {
   oc.bind('$Dictionary', Dictionary);
 
   //Storage
-  oc.constant('$CookieTransformFunction', { encode: s => s, decode: s => s });
+  oc.constant('$CookieTransformFunction', {
+    encode: (s) => s,
+    decode: (s) => s
+  });
   oc.bind('$CookieStorage', CookieStorage);
   if (oc.get(Window).hasSessionStorage()) {
     oc.bind('$SessionStorage', SessionStorage);
@@ -138,7 +141,7 @@ export default (ns, oc, config) => {
   oc.bind('$PageStateManagerDecorator', PageStateManagerDecorator);
 
   // UI components
-  oc.bind('$CssClasses', function() {
+  oc.bind('$CssClasses', function () {
     return cssClassNameProcessor;
   });
 

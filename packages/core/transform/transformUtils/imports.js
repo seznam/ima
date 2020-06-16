@@ -34,7 +34,7 @@ function addNamedImports(j, ast, names, pkg) {
   if (existingImport.size()) {
     const specifiersRoot = existingImport.get('specifiers', 0);
 
-    names.map(name => {
+    names.map((name) => {
       // Check for duplicates
       const isDupe = existingImport
         .find(j.ImportSpecifier, {
@@ -54,7 +54,7 @@ function addNamedImports(j, ast, names, pkg) {
       .get('body', 0)
       .insertBefore(
         j.importDeclaration(
-          names.map(name => {
+          names.map((name) => {
             return j.importSpecifier(j.identifier(name));
           }),
           j.literal(pkg)
@@ -79,13 +79,13 @@ function addNamedImports(j, ast, names, pkg) {
  */
 function removeUnusedPackageImports(j, ast, pkg) {
   findImport(j, ast, pkg)
-    .filter(path => {
+    .filter((path) => {
       return (
         path.value.specifiers
-          .map(spec => {
+          .map((spec) => {
             return ast
               .find(j.Identifier, { name: spec.local.name })
-              .filter(identifier => identifier.parentPath.value !== spec)
+              .filter((identifier) => identifier.parentPath.value !== spec)
               .size();
           })
           .reduce((a, b) => a + b, 0) === 0

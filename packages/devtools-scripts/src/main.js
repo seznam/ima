@@ -85,12 +85,12 @@ function createDevtool(registerHook) {
     };
     const stateKeys = ['args', 'payload'];
     let pendingPromises = stateKeys
-      .map(key => Object.keys(promise[key]).length)
+      .map((key) => Object.keys(promise[key]).length)
       .reduce((sum, value) => sum + value, 0);
 
-    stateKeys.map(key => {
-      Object.keys(promise[key]).map(property => {
-        promise[key][property].then(value => {
+    stateKeys.map((key) => {
+      Object.keys(promise[key]).map((property) => {
+        promise[key][property].then((value) => {
           pendingPromises--;
           state[key][property] = value;
 
@@ -111,7 +111,7 @@ function createDevtool(registerHook) {
     if (state.payload instanceof Promise) {
       pendingPromises += 1;
 
-      state.payload.then(value => {
+      state.payload.then((value) => {
         pendingPromises--;
         state.payload = value;
 
@@ -150,7 +150,7 @@ function createDevtool(registerHook) {
     }
   }
 
-  $IMA.Runner.registerPreRunCommand(function() {
+  $IMA.Runner.registerPreRunCommand(function () {
     if (!window.__IMA_DEVTOOLS_INIT) {
       return;
     }
@@ -167,9 +167,9 @@ function createDevtool(registerHook) {
     let revivePattern = createHook(
       hookName.afterMethod,
       'reviveClientApp',
-      meta => {
+      (meta) => {
         if (meta.payload && typeof meta.payload.then === 'function') {
-          meta.payload.then(page => {
+          meta.payload.then((page) => {
             if (page.app) {
               const oc = page.app.oc;
               $IMA.devtool.oc = oc;
@@ -184,7 +184,7 @@ function createDevtool(registerHook) {
     );
 
     let imaCore = importIMAClass('@ima/core');
-    ImaMainModules.forEach(moduleName => {
+    ImaMainModules.forEach((moduleName) => {
       const key = `__${moduleName}__`;
 
       Object.defineProperty(imaCore, key, {
@@ -206,7 +206,7 @@ function createDevtool(registerHook) {
 }
 
 // IMA v17 check
-$IMA.Runner.registerPreRunCommand(function() {
+$IMA.Runner.registerPreRunCommand(function () {
   try {
     window.__IMA_DEVTOOLS_INIT = true;
     $IMA.Loader.importSync('@ima/core');

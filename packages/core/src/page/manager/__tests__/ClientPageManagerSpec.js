@@ -11,10 +11,10 @@ import { toMockedInstance } from 'to-mock';
 
 describe('ima.core.page.manager.ClientPageManager', () => {
   let pageFactory = {
-    createController: Controller => new Controller(),
-    decorateController: controller => controller,
-    decoratePageStateManager: pageStateManger => pageStateManger,
-    createView: view => view
+    createController: (Controller) => new Controller(),
+    decorateController: (controller) => controller,
+    decoratePageStateManager: (pageStateManger) => pageStateManger,
+    createView: (view) => view
   };
   let pageRenderer = null;
   let pageStateManager = null;
@@ -195,7 +195,7 @@ describe('ima.core.page.manager.ClientPageManager', () => {
   });
 
   describe('manage method', () => {
-    it('should activate page source after loading all resources', done => {
+    it('should activate page source after loading all resources', (done) => {
       spyOn(pageManager, '_activatePageSource').and.stub();
       spyOn(pageManager.__proto__.__proto__, 'manage').and.returnValue(
         Promise.resolve({})
@@ -207,7 +207,7 @@ describe('ima.core.page.manager.ClientPageManager', () => {
           expect(pageManager._activatePageSource).toHaveBeenCalled();
           done();
         })
-        .catch(error => {
+        .catch((error) => {
           console.error('ima.core.page.manager.Client: CATCH ERROR: ', error);
           done(error);
         });

@@ -6,7 +6,7 @@ import {
 } from '../utils';
 
 describe('setIcon', () => {
-  const getPath = type => {
+  const getPath = (type) => {
     return {
       '16': `images/icon-${type}-16.png`,
       '32': `images/icon-${type}-32.png`,

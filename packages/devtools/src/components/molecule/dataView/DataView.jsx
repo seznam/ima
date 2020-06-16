@@ -53,7 +53,7 @@ export default class DataView extends React.PureComponent {
     return (
       <Tabs
         selectedIndex={tabIndex}
-        onSelect={tabIndex => this.setState({ tabIndex })}>
+        onSelect={(tabIndex) => this.setState({ tabIndex })}>
         <TabList>
           <Tab>Args</Tab>
           <Tab>Payload</Tab>
@@ -104,7 +104,7 @@ export default class DataView extends React.PureComponent {
     const { messages } = this.props.entry;
     const { state } = messages[Math.max(messages.length - 1, 0)].payload;
 
-    return ['args', 'payload'].map(key => {
+    return ['args', 'payload'].map((key) => {
       return state &&
         state[key] &&
         ((Array.isArray(state[key]) && state[key].length > 0) ||

@@ -2,7 +2,7 @@ import { connect } from 'react-redux';
 import { actions } from 'slices/confirmModal';
 import ConfirmModal from './ConfirmModal';
 
-const mapStateToProps = state => {
+const mapStateToProps = (state) => {
   return {
     body: state.confirmModal.body,
     opened: state.confirmModal.opened,

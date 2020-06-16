@@ -69,7 +69,7 @@ export default class ClientPageManager extends AbstractPageManager {
      *
      * @type {function(this: ClientPageManager, Event)}
      */
-    this._boundOnCustomEventHandler = event => {
+    this._boundOnCustomEventHandler = (event) => {
       this._onCustomEventHandler(event);
     };
   }

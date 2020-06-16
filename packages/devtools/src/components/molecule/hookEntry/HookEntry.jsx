@@ -61,7 +61,7 @@ export default class HookEntry extends React.PureComponent {
     const { name, description } = this.state;
 
     return (
-      <div onClick={e => this.onOpen(e)} className={styles.infoWrapper}>
+      <div onClick={(e) => this.onOpen(e)} className={styles.infoWrapper}>
         <div className={styles.hookInfo}>
           <h4>{name}</h4>
           <p>{description}</p>
@@ -74,13 +74,13 @@ export default class HookEntry extends React.PureComponent {
                   <IconButton
                     name="enable"
                     color={enabled ? 'success' : 'danger'}
-                    onClick={e => this.onEnable(e)}
+                    onClick={(e) => this.onEnable(e)}
                   />
                 </span>
               </Tooltip>
               <Tooltip label="Delete hook">
                 <span>
-                  <IconButton name="trash" onClick={e => this.onDelete(e)} />
+                  <IconButton name="trash" onClick={(e) => this.onDelete(e)} />
                 </span>
               </Tooltip>
             </>
@@ -101,7 +101,7 @@ export default class HookEntry extends React.PureComponent {
           [styles['formWrapper--opened']]: opened
         })}>
         <input
-          onChange={e => this.onChange(e)}
+          onChange={(e) => this.onChange(e)}
           disabled={!editable}
           name={`name__${id}`}
           value={name}
@@ -110,7 +110,7 @@ export default class HookEntry extends React.PureComponent {
           placeholder="Name"
         />
         <input
-          onChange={e => this.onChange(e)}
+          onChange={(e) => this.onChange(e)}
           disabled={!editable}
           name={`description__${id}`}
           value={description}
@@ -124,8 +124,8 @@ export default class HookEntry extends React.PureComponent {
           className={cn(styles.input, styles.codeInput)}
           placeholder="// code"
           value={code}
-          onValueChange={code => this.setState({ code })}
-          highlight={code => highlight(code, languages.js)}
+          onValueChange={(code) => this.setState({ code })}
+          highlight={(code) => highlight(code, languages.js)}
           padding={10}
           style={{
             overflow: 'auto'

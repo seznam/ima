@@ -1,7 +1,7 @@
 let babel = require('@babel/core');
 
 module.exports = {
-  process: function(src, filename) {
+  process: function (src, filename) {
     if (filename.endsWith('.js') || filename.endsWith('.jsx')) {
       return babel.transform(src, {
         filename,

@@ -114,7 +114,7 @@ export default class HttpProxy {
         ),
         this._composeRequestInit(method, data, options)
       )
-        .then(response => {
+        .then((response) => {
           if (requestTimeoutId) {
             clearTimeout(requestTimeoutId);
           }
@@ -124,16 +124,16 @@ export default class HttpProxy {
           if (response.status === HttpStatusCode.NO_CONTENT) {
             return Promise.resolve([response, null]);
           } else if (contentType && contentType.includes('application/json')) {
-            return response.json().then(body => [response, body]);
+            return response.json().then((body) => [response, body]);
           } else {
-            return response.text().then(body => [response, body]);
+            return response.text().then((body) => [response, body]);
           }
         })
         .then(([response, responseBody]) =>
           this._processResponse(requestParams, response, responseBody)
         )
         .then(resolve, reject);
-    }).catch(fetchError => {
+    }).catch((fetchError) => {
       throw this._processError(fetchError, requestParams);
     });
   }
@@ -527,7 +527,7 @@ export default class HttpProxy {
    */
   _convertObjectToQueryString(object) {
     return Object.keys(object)
-      .map(key => [key, object[key]].map(encodeURIComponent).join('='))
+      .map((key) => [key, object[key]].map(encodeURIComponent).join('='))
       .join('&');
   }
 
@@ -546,7 +546,9 @@ export default class HttpProxy {
       return object;
     }
     const formDataObject = new FormData();
-    Object.keys(object).forEach(key => formDataObject.append(key, object[key]));
+    Object.keys(object).forEach((key) =>
+      formDataObject.append(key, object[key])
+    );
 
     return formDataObject;
   }

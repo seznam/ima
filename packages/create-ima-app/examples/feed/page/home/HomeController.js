@@ -96,7 +96,7 @@ export default class HomeController extends AbstractController {
    * @param {Object} data
    */
   onAddItemToFeed(data) {
-    this._itemResource.createEntity(data).then(item => {
+    this._itemResource.createEntity(data).then((item) => {
       let state = this.getState();
       this._feedService.addItemToFeed(state.feed, item);
       this.setState(state);

@@ -83,7 +83,7 @@ export default class Search extends React.PureComponent {
         <input
           type="text"
           value={query}
-          onChange={e => this.onChange(e)}
+          onChange={(e) => this.onChange(e)}
           className={cn(styles.searchInput, {
             [styles['searchInput--invalid']]: invalid
           })}
@@ -121,7 +121,7 @@ export default class Search extends React.PureComponent {
         <Tooltip label="Clear search">
           <button
             disabled={query.length <= 0}
-            onClick={e => this.onClear(e)}
+            onClick={(e) => this.onClear(e)}
             className={cn(styles.btn, styles.icon)}>
             <Icon name="close" />
           </button>

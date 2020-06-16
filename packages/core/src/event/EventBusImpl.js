@@ -94,7 +94,7 @@ export default class EventBusImpl extends EventBus {
       this._allListenersTargets.set(eventTarget, new WeakMap());
     }
 
-    var nativeListener = event => {
+    var nativeListener = (event) => {
       if (event.type === IMA_EVENT && event.detail && event.detail.eventName) {
         listener(event);
       }
@@ -130,7 +130,7 @@ export default class EventBusImpl extends EventBus {
     }
 
     var eventNameToNativeListener = targetToEventName.get(eventTarget);
-    var nativeListener = event => {
+    var nativeListener = (event) => {
       if (
         event.type === IMA_EVENT &&
         event.detail &&

@@ -518,7 +518,7 @@ export default class Route {
    */
   _checkParametersOrder(clearedPathExpr) {
     const mainParamsMatches = clearedPathExpr.match(PARAMS_MAIN_REGEXP) || [];
-    const allMainParamsCleared = mainParamsMatches.map(paramExpr =>
+    const allMainParamsCleared = mainParamsMatches.map((paramExpr) =>
       this._getClearParamName(paramExpr)
     );
 
@@ -649,11 +649,11 @@ export default class Route {
       ...optionalSubparamsLast
     ];
 
-    const optionalSubparamsCleanNames = optionalSubparams.map(paramExpr => {
+    const optionalSubparamsCleanNames = optionalSubparams.map((paramExpr) => {
       return this._getClearParamName(paramExpr);
     });
 
-    const optionalParams = optionalMatches.filter(paramExpr => {
+    const optionalParams = optionalMatches.filter((paramExpr) => {
       const param = this._getClearParamName(paramExpr);
 
       return !optionalSubparamsCleanNames.includes(param);
@@ -835,7 +835,7 @@ export default class Route {
   _getParameterNames(pathExpression) {
     let rawNames = pathExpression.match(PARAMS_REGEXP_UNIVERSAL) || [];
 
-    return rawNames.map(rawParameterName => {
+    return rawNames.map((rawParameterName) => {
       return rawParameterName.substring(1).replace('?', '');
     });
   }

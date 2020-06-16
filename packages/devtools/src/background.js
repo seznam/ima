@@ -34,7 +34,7 @@ function onSettingsListener(isEnabled) {
 /**
  * Listen on port connections, sort them and register them into connections container object.
  */
-chrome.runtime.onConnect.addListener(port => {
+chrome.runtime.onConnect.addListener((port) => {
   let name = '';
   let tabId = -1;
 
@@ -46,7 +46,7 @@ chrome.runtime.onConnect.addListener(port => {
    * are connected so users don't have to close/open devtools panel if they enable extension
    * and reload the page.
    */
-  PORT_NAMES.forEach(portType => {
+  PORT_NAMES.forEach((portType) => {
     if (!enabled && (portType === 'panel' || portType === 'contentScript')) {
       return;
     }
@@ -108,7 +108,7 @@ chrome.webNavigation.onBeforeNavigate.addListener(({ tabId, url, frameId }) => {
 /**
  * Disconnect and remove all opened connections on tab close.
  */
-chrome.tabs.onRemoved.addListener(tabId => {
+chrome.tabs.onRemoved.addListener((tabId) => {
   if (connections[tabId]) {
     connections[tabId].disconnect();
     delete connections[tabId];
@@ -119,13 +119,13 @@ chrome.tabs.onRemoved.addListener(tabId => {
  * Save initial domain on tab loading. Changes are then tracked in chrome.webNavigation.onCommitted
  * and if the domain changes, event to reload devtools state is sent to panel.
  */
-chrome.tabs.onUpdated.addListener(function(tabId, { status }) {
+chrome.tabs.onUpdated.addListener(function (tabId, { status }) {
   if (
     status === 'loading' &&
     connections[tabId] &&
     !connections[tabId].domain
   ) {
-    chrome.tabs.query({ active: true, currentWindow: true }, tabs => {
+    chrome.tabs.query({ active: true, currentWindow: true }, (tabs) => {
       connections[tabId].domain = extractDomainFromUrl(tabs[0].url);
     });
   }

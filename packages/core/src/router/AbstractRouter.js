@@ -411,7 +411,7 @@ export default class AbstractRouter extends Router {
 
     return this._pageManager
       .manage(route, options, params, action)
-      .then(response => {
+      .then((response) => {
         response = response || {};
 
         if (params.error && params.error instanceof Error) {

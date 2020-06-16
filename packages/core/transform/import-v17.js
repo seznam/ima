@@ -2,19 +2,19 @@ const { getOptions } = require('./transformUtils/testUtils');
 const IMPORT_MAP = require('./import-v17-map.json');
 const EXCEPTIONS = ['ima/main'];
 
-module.exports = function(fileInfo, api, options) {
+module.exports = function (fileInfo, api, options) {
   const jscodeshift = api.jscodeshift;
   const ast = jscodeshift(fileInfo.source);
   const regexIma = /^ima\//;
   const importDeclarations = ast
     .find(jscodeshift.ImportDeclaration)
-    .filter(node => {
+    .filter((node) => {
       return regexIma.test(node.value.source.value);
     });
 
   if (importDeclarations.size() !== 0) {
     const specifiers = [];
-    importDeclarations.forEach(path => {
+    importDeclarations.forEach((path) => {
       const MAP = IMPORT_MAP[path.value.source.value];
       path.canBeDeleted = true;
       if (!MAP && !EXCEPTIONS.includes(path.value.source.value)) {
@@ -24,7 +24,7 @@ module.exports = function(fileInfo, api, options) {
         path.canBeDeleted = false;
         return;
       }
-      path.value.specifiers.forEach(spec => {
+      path.value.specifiers.forEach((spec) => {
         switch (spec.type) {
           case 'ImportDefaultSpecifier':
             if (!MAP.defaultKey) {
@@ -84,7 +84,7 @@ module.exports = function(fileInfo, api, options) {
         jscodeshift.literal('@ima/core')
       );
 
-      importDeclarations.filter(path => path.canBeDeleted).remove();
+      importDeclarations.filter((path) => path.canBeDeleted).remove();
 
       ast.get().node.program.body.unshift(newImport);
     }

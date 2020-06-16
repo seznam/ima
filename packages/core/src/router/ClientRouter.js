@@ -73,14 +73,14 @@ export default class ClientRouter extends AbstractRouter {
      *
      * @type {function}
      */
-    this._boundedHandleClick = event => this._handleClick(event);
+    this._boundedHandleClick = (event) => this._handleClick(event);
 
     /**
      * Helper function with right context for binding listener to DOM.
      *
      * @type {function}
      */
-    this._boundedHandlePopState = event => this._handlePopState(event);
+    this._boundedHandlePopState = (event) => this._handlePopState(event);
   }
 
   /**
@@ -183,10 +183,10 @@ export default class ClientRouter extends AbstractRouter {
 
     return super
       .route(path, options, action)
-      .catch(error => {
+      .catch((error) => {
         return this.handleError({ error });
       })
-      .catch(error => {
+      .catch((error) => {
         this._handleFatalError(error);
       });
   }
@@ -213,7 +213,7 @@ export default class ClientRouter extends AbstractRouter {
       });
     }
 
-    return super.handleError(params, options).catch(error => {
+    return super.handleError(params, options).catch((error) => {
       this._handleFatalError(error);
     });
   }
@@ -222,7 +222,7 @@ export default class ClientRouter extends AbstractRouter {
    * @inheritdoc
    */
   handleNotFound(params, options = {}) {
-    return super.handleNotFound(params, options).catch(error => {
+    return super.handleNotFound(params, options).catch((error) => {
       return this.handleError({ error });
     });
   }

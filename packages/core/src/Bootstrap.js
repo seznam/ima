@@ -77,8 +77,8 @@ export default class Bootstrap {
     ]);
 
     plugins
-      .filter(plugin => typeof plugin.module.initSettings === 'function')
-      .forEach(plugin => {
+      .filter((plugin) => typeof plugin.module.initSettings === 'function')
+      .forEach((plugin) => {
         let allPluginSettings = plugin.module.initSettings(
           ns,
           this._oc,
@@ -135,8 +135,8 @@ export default class Bootstrap {
     );
 
     this._config.plugins
-      .filter(plugin => typeof plugin.module.initBind === 'function')
-      .forEach(plugin => {
+      .filter((plugin) => typeof plugin.module.initBind === 'function')
+      .forEach((plugin) => {
         this._oc.setBindingState(
           ObjectContainer.PLUGIN_BINDING_STATE,
           plugin.name
@@ -168,8 +168,8 @@ export default class Bootstrap {
     this._config.initServicesIma(ns, this._oc, this._config.services);
 
     this._config.plugins
-      .filter(plugin => typeof plugin.module.initServices === 'function')
-      .forEach(plugin => {
+      .filter((plugin) => typeof plugin.module.initServices === 'function')
+      .forEach((plugin) => {
         plugin.module.initServices(ns, this._oc, this._config.services);
       });
 

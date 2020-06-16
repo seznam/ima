@@ -5,13 +5,13 @@ const { printf, combine } = format;
 
 function formatMetaSimple(meta) {
   let keys = Object.keys(meta).filter(
-    key => ['level', 'timestamp', 'message'].indexOf(key) === -1
+    (key) => ['level', 'timestamp', 'message'].indexOf(key) === -1
   );
   if (!meta || !keys.length) {
     return '';
   }
 
-  let lines = keys.map(key => {
+  let lines = keys.map((key) => {
     let value = meta[key];
     if (value instanceof Error) {
       return key + ': ' + indentLines(value.stack, '   ', true);
@@ -43,7 +43,7 @@ function indentLines(string, spaces, skipFirstLine) {
 
 function formatMetaJSON(meta) {
   let keys = Object.keys(meta).filter(
-    key => ['level', 'timestamp', 'message'].indexOf(key) === -1
+    (key) => ['level', 'timestamp', 'message'].indexOf(key) === -1
   );
   if (!meta || !keys.length) {
     return '';
@@ -67,7 +67,7 @@ function formatError(error) {
   let stack = error.stack
     .split('\n')
     .slice(1)
-    .map(line => {
+    .map((line) => {
       let parts = line.match(matcher);
       if (!parts) {
         return line;
@@ -94,7 +94,7 @@ function formatError(error) {
   return description;
 }
 
-module.exports = environment => {
+module.exports = (environment) => {
   let FORMATTING = environment.$Server.logger.formatting;
 
   if (['simple', 'JSON'].indexOf(FORMATTING) === -1) {
@@ -106,7 +106,7 @@ module.exports = environment => {
 
   let logger = createLogger({
     format: combine(
-      format(info => {
+      format((info) => {
         let now = new Date();
         let date =
           now.getFullYear() +
@@ -132,7 +132,7 @@ module.exports = environment => {
           return asString.length > 1 ? asString : '0' + asString;
         }
       })(),
-      printf(info => {
+      printf((info) => {
         return (
           info.timestamp +
           ' [' +

@@ -18,8 +18,8 @@ export function setSettings(settings) {
  * @returns {Promise<object>}
  */
 export function getSettings(key = null) {
-  return new Promise(resolve => {
-    chrome.storage.local.get(key, result => {
+  return new Promise((resolve) => {
+    chrome.storage.local.get(key, (result) => {
       if (key) {
         resolve(result[key] !== undefined ? result[key] : defaultSettings[key]);
       } else {

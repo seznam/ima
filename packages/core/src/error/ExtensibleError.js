@@ -92,7 +92,7 @@ ExtensibleError.prototype.constructor = ExtensibleError;
 Object.defineProperty(ExtensibleError.prototype, 'stack', {
   configurable: true,
   enumerable: false,
-  get: function() {
+  get: function () {
     if (this._stack) {
       return this._stack;
     }

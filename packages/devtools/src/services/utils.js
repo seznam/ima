@@ -47,11 +47,11 @@ export function toggleClass(element, active, className = 'active') {
  * @returns {Promise<{tabId: number}>} Tab details object.
  */
 export function getCurrentTab() {
-  return new Promise(resolve => {
+  return new Promise((resolve) => {
     if (chrome.devtools && chrome.devtools.inspectedWindow) {
       resolve(chrome.devtools.inspectedWindow);
     } else {
-      chrome.tabs.query({ active: true, currentWindow: true }, tabs => {
+      chrome.tabs.query({ active: true, currentWindow: true }, (tabs) => {
         resolve(tabs[0]);
       });
     }

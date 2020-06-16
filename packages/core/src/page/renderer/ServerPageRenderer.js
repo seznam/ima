@@ -89,7 +89,7 @@ export default class ServerPageRenderer extends AbstractPageRenderer {
 
     return this._Helper
       .allPromiseHash(pageResources)
-      .then(pageState =>
+      .then((pageState) =>
         this._renderPage(controller, view, pageState, routeOptions)
       );
   }

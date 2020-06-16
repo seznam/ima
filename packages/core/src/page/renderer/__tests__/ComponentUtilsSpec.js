@@ -41,7 +41,7 @@ describe('ComponentUtils', () => {
 
   describe('getUtils() method.', () => {
     beforeEach(() => {
-      spyOn(oc, 'get').and.callFake(entity =>
+      spyOn(oc, 'get').and.callFake((entity) =>
         typeof entity === 'function' ? new entity() : entity
       );
 
@@ -52,7 +52,7 @@ describe('ComponentUtils', () => {
     });
 
     it('should return $Utils constant from OC if created.', () => {
-      spyOn(oc, 'has').and.callFake(entity => entity === '$Utils');
+      spyOn(oc, 'has').and.callFake((entity) => entity === '$Utils');
 
       componentUtils.getUtils();
 
