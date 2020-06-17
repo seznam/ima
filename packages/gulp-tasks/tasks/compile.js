@@ -211,9 +211,9 @@ exports.default = gulpConfig => {
     function getModuleLinkerContent(modules) {
       let vendors = getVendors(modules);
 
-      let linkingFileHeader = `let vendorLinker = require('${vendors[
-        '@ima/core'
-      ] || '@ima/core'}').vendorLinker;\n`;
+      let linkingFileHeader = `let vendorLinker = require('${
+        vendors['@ima/core'] || '@ima/core'
+      }').vendorLinker;\n`;
       let linkingFileFooter = `module.exports = vendorLinker;\n`;
 
       return (
@@ -323,7 +323,7 @@ exports.default = gulpConfig => {
 
     return vendorEsBundle
       .bundle()
-      .on('error', function(err) {
+      .on('error', function (err) {
         throw new PluginError('Es6ToEs5:vendor:client', err, {
           showStack: true
         });

@@ -209,10 +209,9 @@ module.exports = (error, callStack) => {
   responseBody += callStack
     .map(
       item =>
-        `<li>at <span class='functionName'>${item.functionName ||
-          'anonymous'}</span> ${item.fileName}:${item.lineNumber}:${
-          item.columnNumber
-        }
+        `<li>at <span class='functionName'>${
+          item.functionName || 'anonymous'
+        }</span> ${item.fileName}:${item.lineNumber}:${item.columnNumber}
 		<style> pre#${item.id}{counter-increment:lines ${item.startLine};}</style>
 		<pre id='${item.id}'><code class='hljs lang-js'>${item.content}</code></pre>
 		</li>`

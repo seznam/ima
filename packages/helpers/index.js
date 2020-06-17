@@ -35,7 +35,7 @@ function assignRecursively(target, ...sources) {
 }
 
 function assignRecursivelyWithTracking(referrer) {
-  return function(target, ...sources) {
+  return function (target, ...sources) {
     let fieldsList = [];
 
     for (const source of sources) {

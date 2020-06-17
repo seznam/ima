@@ -4,7 +4,7 @@ const {
 } = require('./transformUtils/imports');
 const { getOptions } = require('./transformUtils/testUtils');
 
-module.exports = function(fileInfo, api, options) {
+module.exports = function (fileInfo, api, options) {
   const { jscodeshift: j } = api;
   const ast = j(fileInfo.source);
 

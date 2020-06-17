@@ -6,7 +6,9 @@ module.exports = {
       'error', {
         singleQuote: true,
         semi: true,
-        jsxBracketSameLine: true
+        jsxBracketSameLine: true,
+        trailingComma: 'none',
+        arrowParens: 'avoid'
       }
     ],
 

@@ -9,10 +9,10 @@ describe('InstranceRecycler', () => {
 
   describe('init method', () => {
     it('should throw error for more times initialization', () => {
-      instanceRecycler.init(function() {}, 5);
+      instanceRecycler.init(function () {}, 5);
 
       expect(() => {
-        instanceRecycler.init(function() {}, 5);
+        instanceRecycler.init(function () {}, 5);
       }).toThrow();
     });
   });

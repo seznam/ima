@@ -1,7 +1,7 @@
 import Actions from 'constants/actions';
 import { SENTINEL_TO_EXTENSION } from 'services/stream';
 
-export default function() {
+export default function () {
   return `(() => {
 		// Notify extension that ima detection script have been injected
 		window.postMessage({ sentinel: '${SENTINEL_TO_EXTENSION}', action: '${Actions.DETECTING}' }, '*');

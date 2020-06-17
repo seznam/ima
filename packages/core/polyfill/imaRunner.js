@@ -1,9 +1,9 @@
-(function(root) {
+(function (root) {
   root.$IMA = root.$IMA || {};
   root.$IMA.Runner = root.$IMA.Runner || {
     scripts: [],
     loadedScripts: [],
-    load: function(script) {
+    load: function (script) {
       var runner = root.$IMA.Runner;
       runner.loadedScripts.push(script.src);
       if (runner.scripts.length === runner.loadedScripts.length) {
@@ -13,12 +13,12 @@
         runner.run();
       }
     },
-    run: function() {
+    run: function () {
       root.$IMA.Loader.initAllModules()
-        .then(function() {
+        .then(function () {
           return root.$IMA.Loader.import('app/main');
         })
-        .catch(function(error) {
+        .catch(function (error) {
           var runner = root.$IMA.Runner;
           if (typeof runner.onError === 'function') {
             root.$IMA.Runner.onError(error);

@@ -5,13 +5,13 @@ root.$IMA.$Debug = true;
 root.$Debug = true;
 
 root.$IMA.Loader = root.$IMA.Loader || {
-  register: function() {},
-  replaceModule: function() {},
-  import: function() {
+  register: function () {},
+  replaceModule: function () {},
+  import: function () {
     return Promise.resolve();
   },
-  importSync: function() {},
-  initAllModules: function() {
+  importSync: function () {},
+  initAllModules: function () {
     return Promise.resolve();
   }
 };

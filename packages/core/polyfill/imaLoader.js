@@ -1,4 +1,4 @@
-(function() {
+(function () {
   var root;
   if (typeof window !== 'undefined' && window !== null) {
     root = window;
@@ -11,7 +11,7 @@
 
   root.$IMA.Loader = {
     modules: modules,
-    register: function(moduleName, dependencies, moduleFactory) {
+    register: function (moduleName, dependencies, moduleFactory) {
       this.modules[moduleName] = {
         dependencies: dependencies,
         dependencyOf: [],
@@ -19,7 +19,7 @@
         instance: null
       };
     },
-    replaceModule: function(moduleName, dependencies, moduleFactory) {
+    replaceModule: function (moduleName, dependencies, moduleFactory) {
       var moduleDescriptor = this.modules[moduleName];
       if (!moduleDescriptor) {
         throw new Error(
@@ -27,9 +27,9 @@
         );
       }
 
-      Object.keys(this.modules).forEach(function(modulePath) {
+      Object.keys(this.modules).forEach(function (modulePath) {
         var module = root.$IMA.Loader.modules[modulePath];
-        module.dependencies.forEach(function(dependency) {
+        module.dependencies.forEach(function (dependency) {
           if (resolveModuleName(modulePath, dependency) === moduleName) {
             module.instance = null;
           }
@@ -43,10 +43,10 @@
 
       return resolveModule(moduleName);
     },
-    import: function(moduleName) {
+    import: function (moduleName) {
       return Promise.resolve(this.importSync(moduleName));
     },
-    importSync: function(moduleName) {
+    importSync: function (moduleName) {
       if (!this.modules[moduleName]) {
         throw new Error(
           '$IMA.Loader.importSync: Module name ' +
@@ -57,9 +57,9 @@
 
       return resolveModule(moduleName);
     },
-    initAllModules: function() {
+    initAllModules: function () {
       try {
-        Object.keys(modules).forEach(function(moduleName) {
+        Object.keys(modules).forEach(function (moduleName) {
           resolveModule(moduleName);
         });
       } catch (e) {
@@ -96,7 +96,7 @@
     var moduleInitializer = module.factory(function _export(key, value) {
       // when exporting only functions, all of them are packed as object and sent as a key
       if (typeof key === 'object') {
-        Object.keys(key).forEach(function(innerKey) {
+        Object.keys(key).forEach(function (innerKey) {
           moduleInstance[innerKey] = key[innerKey];
         });
       } else {
@@ -104,13 +104,13 @@
       }
       // The exported values have been updated, notify the modules that
       // depend on this one - this is required for circular dependencies.
-      module.dependencyOf.forEach(function(dependencySetter) {
+      module.dependencyOf.forEach(function (dependencySetter) {
         dependencySetter(moduleInstance);
       });
     });
     module.instance = moduleInstance; // allow lazy circular dependencies
 
-    module.dependencies.forEach(function(dependencyName, index) {
+    module.dependencies.forEach(function (dependencyName, index) {
       var resolvedName = resolveModuleName(moduleName, dependencyName);
       var setter = moduleInitializer.setters[index];
       var dependency = resolveModule(resolvedName, moduleName, setter);

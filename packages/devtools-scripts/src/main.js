@@ -150,7 +150,7 @@ function createDevtool(registerHook) {
     }
   }
 
-  $IMA.Runner.registerPreRunCommand(function() {
+  $IMA.Runner.registerPreRunCommand(function () {
     if (!window.__IMA_DEVTOOLS_INIT) {
       return;
     }
@@ -206,7 +206,7 @@ function createDevtool(registerHook) {
 }
 
 // IMA v17 check
-$IMA.Runner.registerPreRunCommand(function() {
+$IMA.Runner.registerPreRunCommand(function () {
   try {
     window.__IMA_DEVTOOLS_INIT = true;
     $IMA.Loader.importSync('@ima/core');
