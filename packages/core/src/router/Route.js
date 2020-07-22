@@ -755,7 +755,11 @@ export default class Route {
   _decodeURIParameter(parameterValue) {
     let decodedValue;
     if (parameterValue) {
-      decodedValue = decodeURIComponent(parameterValue);
+      try {
+        decodedValue = decodeURIComponent(parameterValue);
+      } catch (_) {
+        return '';
+      }
     }
     return decodedValue;
   }
@@ -807,8 +811,10 @@ export default class Route {
           }
         }
 
-        query[decodeURIComponent(pair[0])] =
-          pair.length > 1 ? decodeURIComponent(pair[1]) : true;
+        console.log(pair);
+
+        query[this._decodeURIParameter(pair[0])] =
+          pair.length > 1 ? this._decodeURIParameter(pair[1]) || '' : true;
       }
     }
 
