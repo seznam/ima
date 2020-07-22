@@ -811,8 +811,6 @@ export default class Route {
           }
         }
 
-        console.log(pair);
-
         query[this._decodeURIParameter(pair[0])] =
           pair.length > 1 ? this._decodeURIParameter(pair[1]) || '' : true;
       }
