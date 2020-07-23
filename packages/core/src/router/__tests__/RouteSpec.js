@@ -1653,9 +1653,7 @@ describe('ima.core.router.Route', function () {
     });
 
     it('should return empty string for query that cant be parsed', function () {
-      expect(
-        route._decodeURIParameter('p%F8%EDrodn%ED')
-      ).toEqual('');
+      expect(route._decodeURIParameter('p%F8%EDrodn%ED')).toEqual('');
     });
   });
 });
