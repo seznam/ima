@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [17.7.2](https://github.com/seznam/ima/compare/v17.7.1...v17.7.2) (2020-07-24)
+
+
+### Bug Fixes
+
+* query params parse ([#73](https://github.com/seznam/ima/issues/73)) ([4f63eb3](https://github.com/seznam/ima/commit/4f63eb3c7ba2025e0f5bf5ac87b41a883386214c))
+
+
+
+
+
 ## [17.7.1](https://github.com/seznam/ima/compare/v17.7.0...v17.7.1) (2020-05-28)
 
 **Note:** Version bump only for package ima
