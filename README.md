@@ -42,7 +42,7 @@ Initialize application skeleton with single command
 
 ```bash
 npx create-ima-app
-// or if you are using yarn
+# or if you are using yarn
 yarn create ima-app
 ```
 
@@ -51,7 +51,7 @@ and start the development!
 ```bash
 cd create-ima-app
 npm run dev
-// or if you are using yarn
+# or if you are using yarn
 yarn dev
 ```
 
