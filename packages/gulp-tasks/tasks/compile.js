@@ -14,7 +14,7 @@ const source = require('vinyl-source-stream');
 const sourcemaps = require('gulp-sourcemaps');
 const through2 = require('through2');
 const PluginError = require('plugin-error');
-const uglifyEs = require('gulp-uglify-es').default;
+const terser = require('gulp-terser');
 const buffer = require('vinyl-buffer');
 const clientify = require('ima-clientify').clientify;
 
@@ -211,9 +211,9 @@ exports.default = gulpConfig => {
     function getModuleLinkerContent(modules) {
       let vendors = getVendors(modules);
 
-      let linkingFileHeader = `let vendorLinker = require('${
-        vendors['@ima/core'] || '@ima/core'
-      }').vendorLinker;\n`;
+      let linkingFileHeader = `let vendorLinker = require('${vendors[
+        '@ima/core'
+      ] || '@ima/core'}').vendorLinker;\n`;
       let linkingFileFooter = `module.exports = vendorLinker;\n`;
 
       return (
@@ -294,8 +294,8 @@ exports.default = gulpConfig => {
       .pipe(buffer())
       .pipe(
         !gulpConfig.$Debug
-          ? uglifyEs({
-              compress: Object.assign({}, gulpConfig.uglifyCompression, {
+          ? terser({
+              compress: Object.assign({}, gulpConfig.terserConfig.compress, {
                 ecma: 5
               })
             })
@@ -323,7 +323,7 @@ exports.default = gulpConfig => {
 
     return vendorEsBundle
       .bundle()
-      .on('error', function (err) {
+      .on('error', function(err) {
         throw new PluginError('Es6ToEs5:vendor:client', err, {
           showStack: true
         });
@@ -332,7 +332,7 @@ exports.default = gulpConfig => {
       .pipe(buffer())
       .pipe(
         !gulpConfig.$Debug
-          ? uglifyEs({ compress: gulpConfig.uglifyCompression })
+          ? terser({ compress: gulpConfig.terserConfig.compress })
           : through2.obj()
       )
       .pipe(gulp.dest(files.vendor.dest.client));
