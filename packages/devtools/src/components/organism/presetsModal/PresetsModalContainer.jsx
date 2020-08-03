@@ -8,8 +8,11 @@ const mapStateToProps = state => ({
   selectedPresetId: state.presets.selectedPresetId
 });
 
-export default connect(mapStateToProps, {
-  addPreset: presetsActions.addPreset,
-  selectPreset: presetsActions.selectPreset,
-  alertSuccess: alertsActions.success
-})(PresetsModal);
+export default connect(
+  mapStateToProps,
+  {
+    addPreset: presetsActions.addPreset,
+    selectPreset: presetsActions.selectPreset,
+    alertSuccess: alertsActions.success
+  }
+)(PresetsModal);

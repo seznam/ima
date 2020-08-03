@@ -1,4 +1,4 @@
-(function () {
+(function() {
   console.log('HOT RELOADING'); //eslint-disable-line no-console
 
   if (!('WebSocket' in window)) {
@@ -9,7 +9,7 @@
   var hostname = window.location.hostname || 'localhost';
   var myWebSocket = new WebSocket('ws://' + hostname + ':5888');
 
-  myWebSocket.onmessage = function (ev) {
+  myWebSocket.onmessage = function(ev) {
     var data = JSON.parse(ev.data);
     console.log('Resource ' + data.resourceURL + ' has just been replaced.'); //eslint-disable-line no-console
 
@@ -21,15 +21,15 @@
       $IMA.HotReload = true;
 
       $IMA.Loader.initAllModules()
-        .then(function () {
-          return $IMA.Loader.import('app/main').then(function (appMain) {
+        .then(function() {
+          return $IMA.Loader.import('app/main').then(function(appMain) {
             appMain.ima.hotReloadClientApp(
               appMain.getInitialAppConfigFunctions()
             );
             $IMA.HotReload = false;
           });
         })
-        .catch(function (error) {
+        .catch(function(error) {
           console.error(error);
         });
     }

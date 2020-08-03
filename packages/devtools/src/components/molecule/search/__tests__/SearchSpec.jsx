@@ -49,7 +49,10 @@ describe('Search molecule', () => {
     instance.onClear = jest.fn();
     instance.forceUpdate();
 
-    wrapper.find('button').at(2).simulate('click');
+    wrapper
+      .find('button')
+      .at(2)
+      .simulate('click');
 
     expect(instance.onClear.mock.calls.length).toBe(1);
 

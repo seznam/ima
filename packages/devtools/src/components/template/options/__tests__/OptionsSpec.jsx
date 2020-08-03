@@ -136,7 +136,7 @@ describe('Options template', () => {
   describe('onSubmit', () => {
     beforeEach(() => {
       settings.setSettings = jest.fn();
-      global.FormData = function () {
+      global.FormData = function() {
         return {
           entries: jest.fn().mockImplementation(() => {
             return [['name__0', 'newName']];

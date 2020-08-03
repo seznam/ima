@@ -32,7 +32,10 @@ describe('ConfirmModal molecule', () => {
 
   it('should call onConfirm  after clicking confirm btn', () => {
     instance.onConfirm = jest.fn();
-    wrapper.find('Button').at(0).simulate('click', event);
+    wrapper
+      .find('Button')
+      .at(0)
+      .simulate('click', event);
 
     expect(instance.onConfirm.mock.calls.length).toBe(1);
     expect(instance.onConfirm.mock.calls[0][0]).toBe(event);
@@ -40,7 +43,10 @@ describe('ConfirmModal molecule', () => {
 
   it('should call onCancel after clicking cancel btn', () => {
     instance.onCancel = jest.fn();
-    wrapper.find('Button').at(1).simulate('click', event);
+    wrapper
+      .find('Button')
+      .at(1)
+      .simulate('click', event);
 
     expect(instance.onCancel.mock.calls.length).toBe(1);
     expect(instance.onCancel.mock.calls[0][0]).toBe(event);

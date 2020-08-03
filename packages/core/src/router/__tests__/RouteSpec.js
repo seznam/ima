@@ -1,10 +1,10 @@
 import Route from '../Route';
 
-describe('ima.core.router.Route', function () {
+describe('ima.core.router.Route', function() {
   let route = null;
   const name = 'home';
-  const controller = function () {};
-  const view = function () {};
+  const controller = function() {};
+  const view = function() {};
   const pathExpression = '/home/:userId/something/:somethingId/:?optional';
   const options = {
     onlyUpdate: false,
@@ -15,11 +15,11 @@ describe('ima.core.router.Route', function () {
     viewAdapter: null
   };
 
-  beforeEach(function () {
+  beforeEach(function() {
     route = new Route(name, pathExpression, controller, view, options);
   });
 
-  describe('should create right path -', function () {
+  describe('should create right path -', function() {
     using(
       [
         {
@@ -211,7 +211,7 @@ describe('ima.core.router.Route', function () {
           result: '/home/1/something/2'
         }
       ],
-      function (value) {
+      function(value) {
         const localRoute = new Route(
           name,
           value.pathExpression,
@@ -224,18 +224,18 @@ describe('ima.core.router.Route', function () {
             value.pathExpression +
             ' and params ' +
             JSON.stringify(value.params),
-          function () {
+          function() {
             expect(localRoute.toPath(value.params)).toEqual(value.result);
           }
         );
       }
     );
 
-    it('for empty variables will be return defined path', function () {
+    it('for empty variables will be return defined path', function() {
       expect(route.toPath()).toEqual('/home/:userId/something/:somethingId');
     });
 
-    it('encode path params', function () {
+    it('encode path params', function() {
       const localRoute = new Route(
         name,
         '/home/:encodeString',
@@ -289,7 +289,7 @@ describe('ima.core.router.Route', function () {
           result: '/en/home/1/something/2/today'
         }
       ],
-      function (value) {
+      function(value) {
         const localRoute = new Route(
           name,
           value.pathExpression,
@@ -304,7 +304,7 @@ describe('ima.core.router.Route', function () {
             value.pathExpression +
             ' and params ' +
             JSON.stringify(params),
-          function () {
+          function() {
             expect(localRoute.toPath(params)).toEqual(result);
           }
         );
@@ -336,7 +336,7 @@ describe('ima.core.router.Route', function () {
           result: '/en/cs'
         }
       ],
-      function (value) {
+      function(value) {
         const localRoute = new Route(
           name,
           value.pathExpression,
@@ -351,14 +351,14 @@ describe('ima.core.router.Route', function () {
             value.pathExpression +
             ' and params ' +
             JSON.stringify(params),
-          function () {
+          function() {
             expect(localRoute.toPath(params)).toEqual(result);
           }
         );
       }
     );
 
-    it('for path and query variables', function () {
+    it('for path and query variables', function() {
       var value = {
         userId: 'hello',
         somethingId: 'job',
@@ -377,19 +377,19 @@ describe('ima.core.router.Route', function () {
     });
   });
 
-  it('should return route name', function () {
+  it('should return route name', function() {
     expect(route.getName()).toEqual(name);
   });
 
-  it('should return route path', function () {
+  it('should return route path', function() {
     expect(route.getPathExpression()).toEqual(pathExpression);
   });
 
-  it('should return route options', function () {
+  it('should return route options', function() {
     expect(route.getOptions()).toEqual(options);
   });
 
-  describe('should get params from path', function () {
+  describe('should get params from path', function() {
     const multipleParamsExpr =
       '/offer/:group/:catId-:catName/:?productId/:?promo';
 
@@ -833,8 +833,8 @@ describe('ima.core.router.Route', function () {
           params: {}
         }
       ],
-      function (value) {
-        it(value.pathExpression, function () {
+      function(value) {
+        it(value.pathExpression, function() {
           const localRoute = new Route(
             'unknown',
             value.pathExpression,
@@ -852,7 +852,7 @@ describe('ima.core.router.Route', function () {
     );
   });
 
-  describe('should return true for matched route regular', function () {
+  describe('should return true for matched route regular', function() {
     using(
       [
         { path: '/home/1/something/2', result: true },
@@ -871,11 +871,11 @@ describe('ima.core.router.Route', function () {
           result: true
         }
       ],
-      function (value) {
+      function(value) {
         const { path, result } = value;
         it(
           path + ' for ' + pathExpression + ` [${result.toString()}]`,
-          function () {
+          function() {
             expect(route.matches(path)).toEqual(result);
           }
         );
@@ -1201,7 +1201,7 @@ describe('ima.core.router.Route', function () {
           result: false
         }
       ],
-      function (value) {
+      function(value) {
         const localRoute = new Route(
           name,
           value.pathExpression,
@@ -1213,7 +1213,7 @@ describe('ima.core.router.Route', function () {
 
         it(
           path + ' for ' + value.pathExpression + ` [${result.toString()}]`,
-          function () {
+          function() {
             expect(localRoute.matches(path)).toEqual(result);
           }
         );
@@ -1221,7 +1221,7 @@ describe('ima.core.router.Route', function () {
     );
   });
 
-  describe('should return true for matched route and false for unmatched route', function () {
+  describe('should return true for matched route and false for unmatched route', function() {
     using(
       [
         { pathExpression: '/', path: '/', result: true },
@@ -1367,7 +1367,7 @@ describe('ima.core.router.Route', function () {
           result: false
         }
       ],
-      function (value) {
+      function(value) {
         const { path, result } = value;
         it(
           'for pathExpression ' +
@@ -1375,7 +1375,7 @@ describe('ima.core.router.Route', function () {
             ' and path ' +
             path +
             ` [${result.toString()}]`,
-          function () {
+          function() {
             var routeLocal = new Route(
               'unknown',
               value.pathExpression,
@@ -1389,7 +1389,7 @@ describe('ima.core.router.Route', function () {
     );
   });
 
-  describe('should pass helper methods used in _compileToRegExp()', function () {
+  describe('should pass helper methods used in _compileToRegExp()', function() {
     using(
       [
         {
@@ -1419,9 +1419,9 @@ describe('ima.core.router.Route', function () {
           result: false
         }
       ],
-      function (value) {
+      function(value) {
         const { path, clearPathExpr, result } = value;
-        it(`should check parametres order for '${path}' [${result.toString()}]`, function () {
+        it(`should check parametres order for '${path}' [${result.toString()}]`, function() {
           const localRoute = new Route('unknown', path, 'unknown');
 
           const isCorrectParamOrder = localRoute._checkParametersOrder(
@@ -1447,9 +1447,9 @@ describe('ima.core.router.Route', function () {
           result: 'something/(?:([^/?]+)?(?=/|$)?)?'
         }
       ],
-      function (value) {
+      function(value) {
         const { path, clearPathExpr, optionalParams, result } = value;
-        it(`should replace optional parametres in ${path}`, function () {
+        it(`should replace optional parametres in ${path}`, function() {
           const localRoute = new Route('unknown', path, 'unknown');
 
           const pattern = localRoute._replaceOptionalParametersInPath(
@@ -1477,9 +1477,9 @@ describe('ima.core.router.Route', function () {
           result: `something/${notLastRegEx}-([^/?]+)`
         }
       ],
-      function (value) {
+      function(value) {
         const { path, clearPathExpr, result } = value;
-        it(`should replace required subparametres in ${path}`, function () {
+        it(`should replace required subparametres in ${path}`, function() {
           const localRoute = new Route('unknown', path, 'unknown');
 
           const pattern = localRoute._replaceRequiredSubParametersInPath(
@@ -1515,7 +1515,7 @@ describe('ima.core.router.Route', function () {
           result: `something/${notLastOptRegEx}-:([^/?]+)?`
         }
       ],
-      function (value) {
+      function(value) {
         const {
           path,
           clearPathExpr,
@@ -1523,7 +1523,7 @@ describe('ima.core.router.Route', function () {
           optionalSubparamsLast,
           result
         } = value;
-        it(`should replace optional parametres in ${path} to ${result}`, function () {
+        it(`should replace optional parametres in ${path} to ${result}`, function() {
           const localRoute = new Route('unknown', path, 'unknown');
 
           const pattern = localRoute._replaceOptionalSubParametersInPath(
@@ -1537,14 +1537,14 @@ describe('ima.core.router.Route', function () {
     );
   });
 
-  describe('query string parser', function () {
+  describe('query string parser', function() {
     let route = null;
 
-    beforeEach(function () {
+    beforeEach(function() {
       route = new Route('foo', '/:first/:second', 'foo', 'bar');
     });
 
-    it('should allow query to override path parameters', function () {
+    it('should allow query to override path parameters', function() {
       expect(
         route.extractParameters('/abc/def?stuff=value&second=override')
       ).toEqual({
@@ -1554,7 +1554,7 @@ describe('ima.core.router.Route', function () {
       });
     });
 
-    it('should handle query with parameter value', function () {
+    it('should handle query with parameter value', function() {
       expect(route.matches('/abc/def?foo=bar')).toBeTruthy();
       expect(route.matches('/abc?foo=bar')).toBeFalsy();
       expect(route.extractParameters('/abc/def?foo=bar')).toEqual({
@@ -1564,7 +1564,7 @@ describe('ima.core.router.Route', function () {
       });
     });
 
-    it('should handle query without parameter value', function () {
+    it('should handle query without parameter value', function() {
       expect(route.matches('/abc/def?foo')).toBeTruthy();
       expect(route.extractParameters('/abc/def?foo')).toEqual({
         first: 'abc',
@@ -1581,7 +1581,7 @@ describe('ima.core.router.Route', function () {
       });
     });
 
-    it('should handle all query parameter pair separators', function () {
+    it('should handle all query parameter pair separators', function() {
       expect(
         route.matches('/abc/def?foo=xy&bar=zz;giz=mo;stuff;geez&huff')
       ).toBeTruthy();
@@ -1599,7 +1599,7 @@ describe('ima.core.router.Route', function () {
       });
     });
 
-    it('should handle query with multiple parameters', function () {
+    it('should handle query with multiple parameters', function() {
       expect(
         route.matches('/abc/def?stuff=value&second=override')
       ).toBeTruthy();
@@ -1612,7 +1612,7 @@ describe('ima.core.router.Route', function () {
       });
     });
 
-    it('should ignore hash parameters when getting url parameters', function () {
+    it('should ignore hash parameters when getting url parameters', function() {
       expect(route.matches('/abc/def#hashParam=value')).toBeTruthy();
       expect(route.extractParameters('/abc/def#hashParam=value')).toEqual({
         first: 'abc',
@@ -1620,7 +1620,7 @@ describe('ima.core.router.Route', function () {
       });
     });
 
-    it('should ignore hash parameters when getting query parameters', function () {
+    it('should ignore hash parameters when getting query parameters', function() {
       expect(
         route.matches('/abc/def?stuff=value#hashParam=value')
       ).toBeTruthy();
@@ -1633,7 +1633,7 @@ describe('ima.core.router.Route', function () {
       });
     });
 
-    it('should ignore hash parameters when getting empty query parameters', function () {
+    it('should ignore hash parameters when getting empty query parameters', function() {
       expect(
         route.matches('/abc/def?stuff=value#hashParam=value')
       ).toBeTruthy();
@@ -1646,13 +1646,13 @@ describe('ima.core.router.Route', function () {
       });
     });
 
-    it('should parse query', function () {
+    it('should parse query', function() {
       expect(
         route._decodeURIParameter(encodeURIComponent('á/b?č#d:ě%25'))
       ).toEqual('á/b?č#d:ě%25');
     });
 
-    it('should return empty string for query that cant be parsed', function () {
+    it('should return empty string for query that cant be parsed', function() {
       expect(route._decodeURIParameter('p%F8%EDrodn%ED')).toEqual('');
     });
   });

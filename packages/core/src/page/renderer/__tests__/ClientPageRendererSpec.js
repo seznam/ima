@@ -14,7 +14,7 @@ import {
 setGlobalMockMethod(jest.fn);
 setGlobalKeepUnmock(objectKeepUnmock);
 
-describe('ima.core.page.renderer.ClientPageRenderer', function () {
+describe('ima.core.page.renderer.ClientPageRenderer', function() {
   let param1 = 'param1';
   let param2 = 'param2';
   let params = {
@@ -27,16 +27,16 @@ describe('ima.core.page.renderer.ClientPageRenderer', function () {
   };
 
   let controller = new Controller();
-  controller.getMetaManager = function () {};
-  let view = function () {};
+  controller.getMetaManager = function() {};
+  let view = function() {};
 
   let win = null;
   let dispatcher = null;
   let rendererFactory = null;
   let pageRenderer = null;
   let ReactDOM = {
-    unmountComponentAtNode: function () {},
-    render: function () {}
+    unmountComponentAtNode: function() {},
+    render: function() {}
   };
   let settings = {
     $Page: {
@@ -53,7 +53,7 @@ describe('ima.core.page.renderer.ClientPageRenderer', function () {
     documentView: null
   };
 
-  beforeEach(function () {
+  beforeEach(function() {
     rendererFactory = toMockedInstance(RendererFactory);
     win = toMockedInstance(Window);
     dispatcher = toMockedInstance(Dispatcher);
@@ -68,8 +68,8 @@ describe('ima.core.page.renderer.ClientPageRenderer', function () {
     );
   });
 
-  describe('mount method', function () {
-    beforeEach(function () {
+  describe('mount method', function() {
+    beforeEach(function() {
       spyOn(pageRenderer, '_separatePromisesAndValues').and.returnValue({
         values: { param1: params.param1 },
         promises: { param2: params.param2 }
@@ -79,28 +79,28 @@ describe('ima.core.page.renderer.ClientPageRenderer', function () {
       spyOn(pageRenderer, '_renderToDOM');
     });
 
-    it('should set default page state values', function (done) {
+    it('should set default page state values', function(done) {
       spyOn(controller, 'setState');
 
       pageRenderer
         .mount(controller, view, params, routeOptions)
-        .then(function () {
+        .then(function() {
           expect(controller.setState).toHaveBeenCalledWith(pageState);
           done();
         })
-        .catch(function (error) {
+        .catch(function(error) {
           console.error(error);
           done(error);
         });
     });
 
-    it('should patch promises to state', function (done) {
+    it('should patch promises to state', function(done) {
       spyOn(pageRenderer, '_patchPromisesToState');
       pageRenderer._firstTime = false;
 
       pageRenderer
         .mount(controller, view, params, routeOptions)
-        .then(function () {
+        .then(function() {
           expect(pageRenderer._patchPromisesToState).toHaveBeenCalledWith(
             controller,
             {
@@ -109,7 +109,7 @@ describe('ima.core.page.renderer.ClientPageRenderer', function () {
           );
           done();
         })
-        .catch(function (error) {
+        .catch(function(error) {
           console.error(error);
           done(error);
         });
@@ -127,7 +127,7 @@ describe('ima.core.page.renderer.ClientPageRenderer', function () {
 
       pageRenderer
         .mount(controller, view, params, routeOptions)
-        .then(function () {
+        .then(function() {
           expect(
             pageRenderer._patchStateToClearPreviousState
           ).toHaveBeenCalled();
@@ -137,47 +137,47 @@ describe('ima.core.page.renderer.ClientPageRenderer', function () {
           });
           done();
         })
-        .catch(function (error) {
+        .catch(function(error) {
           console.error(error);
           done(error);
         });
     });
 
-    it('should set page meta params', function (done) {
+    it('should set page meta params', function(done) {
       spyOn(controller, 'setMetaParams');
       spyOn(controller, 'getState').and.returnValue(pageState);
 
       pageRenderer
         .mount(controller, view, params, routeOptions)
-        .then(function () {
+        .then(function() {
           expect(controller.setMetaParams).toHaveBeenCalledWith(pageState);
           done();
         })
-        .catch(function (error) {
+        .catch(function(error) {
           console.error(error);
           done(error);
         });
     });
 
-    it('should update page meta attributes', function (done) {
+    it('should update page meta attributes', function(done) {
       pageRenderer
         .mount(controller, view, params, routeOptions)
-        .then(function () {
+        .then(function() {
           expect(pageRenderer._updateMetaAttributes).toHaveBeenCalled();
           done();
         })
-        .catch(function (error) {
+        .catch(function(error) {
           console.error(error);
           done(error);
         });
     });
 
-    it('should return resolved promise with object of property content, status and pageState', function (done) {
+    it('should return resolved promise with object of property content, status and pageState', function(done) {
       spyOn(controller, 'getHttpStatus').and.returnValue(200);
 
       pageRenderer
         .mount(controller, view, params, routeOptions)
-        .then(function (response) {
+        .then(function(response) {
           expect(response).toEqual({
             status: 200,
             content: null,
@@ -185,15 +185,15 @@ describe('ima.core.page.renderer.ClientPageRenderer', function () {
           });
           done();
         })
-        .catch(function (error) {
+        .catch(function(error) {
           console.error(error);
           done(error);
         });
     });
   });
 
-  describe('update method', function () {
-    beforeEach(function () {
+  describe('update method', function() {
+    beforeEach(function() {
       spyOn(pageRenderer, '_separatePromisesAndValues').and.returnValue({
         values: { param1: params.param1 },
         promises: { param2: params.param2 }
@@ -202,29 +202,29 @@ describe('ima.core.page.renderer.ClientPageRenderer', function () {
       spyOn(pageRenderer, '_updateMetaAttributes');
     });
 
-    it('should set default page state values', function (done) {
+    it('should set default page state values', function(done) {
       spyOn(controller, 'setState');
 
       pageRenderer
         .update(controller, params)
-        .then(function () {
+        .then(function() {
           expect(controller.setState).toHaveBeenCalledWith({
             param1: params.param1
           });
           done();
         })
-        .catch(function (error) {
+        .catch(function(error) {
           console.error(error);
           done(error);
         });
     });
 
-    it('should patch promises to state', function (done) {
+    it('should patch promises to state', function(done) {
       spyOn(pageRenderer, '_patchPromisesToState');
 
       pageRenderer
         .update(controller, params)
-        .then(function () {
+        .then(function() {
           expect(pageRenderer._patchPromisesToState).toHaveBeenCalledWith(
             controller,
             {
@@ -233,47 +233,47 @@ describe('ima.core.page.renderer.ClientPageRenderer', function () {
           );
           done();
         })
-        .catch(function (error) {
+        .catch(function(error) {
           console.error(error);
           done(error);
         });
     });
 
-    it('should set page meta params', function (done) {
+    it('should set page meta params', function(done) {
       spyOn(controller, 'setMetaParams');
       spyOn(controller, 'getState').and.returnValue(params);
 
       pageRenderer
         .update(controller, params)
-        .then(function () {
+        .then(function() {
           expect(controller.setMetaParams).toHaveBeenCalledWith(params);
           done();
         })
-        .catch(function (error) {
+        .catch(function(error) {
           console.error(error);
           done(error);
         });
     });
 
-    it('should update page meta attributes', function (done) {
+    it('should update page meta attributes', function(done) {
       pageRenderer
         .update(controller, params)
-        .then(function () {
+        .then(function() {
           expect(pageRenderer._updateMetaAttributes).toHaveBeenCalled();
           done();
         })
-        .catch(function (error) {
+        .catch(function(error) {
           console.error(error);
           done(error);
         });
     });
 
-    it('should return resolved promise with object of property content, status and pageState', function (done) {
+    it('should return resolved promise with object of property content, status and pageState', function(done) {
       spyOn(controller, 'getHttpStatus').and.returnValue(200);
 
       pageRenderer
         .update(controller, params)
-        .then(function (response) {
+        .then(function(response) {
           expect(response).toEqual({
             status: 200,
             content: null,
@@ -281,14 +281,14 @@ describe('ima.core.page.renderer.ClientPageRenderer', function () {
           });
           done();
         })
-        .catch(function (error) {
+        .catch(function(error) {
           console.error(error);
           done(error);
         });
     });
   });
 
-  describe('_renderToDOM method', function () {
+  describe('_renderToDOM method', function() {
     let wrapedPageViewElement = {
       wrapElementView: 'wrapedPageViewElement'
     };
@@ -302,7 +302,7 @@ describe('ima.core.page.renderer.ClientPageRenderer', function () {
       }
     };
 
-    beforeEach(function () {
+    beforeEach(function() {
       spyOn(ReactDOM, 'render').and.stub();
       spyOn(pageRenderer, '_getWrappedPageView').and.returnValue(
         wrapedPageViewElement
@@ -313,7 +313,7 @@ describe('ima.core.page.renderer.ClientPageRenderer', function () {
       pageRenderer._renderToDOM(controller, view, routeOptions);
     });
 
-    it('should wrap page view', function () {
+    it('should wrap page view', function() {
       expect(pageRenderer._getWrappedPageView).toHaveBeenCalledWith(
         controller,
         view,
@@ -321,7 +321,7 @@ describe('ima.core.page.renderer.ClientPageRenderer', function () {
       );
     });
 
-    it('should render react component to defined element', function () {
+    it('should render react component to defined element', function() {
       expect(ReactDOM.render).toHaveBeenCalledWith(
         wrapedPageViewElement,
         htmlNode,

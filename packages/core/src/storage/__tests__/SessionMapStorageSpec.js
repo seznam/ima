@@ -53,7 +53,11 @@ describe('ima.storage.SessionMapStorage', () => {
   });
 
   it('should clear all items', () => {
-    sessionMap.set('item1', 1).set('item2', 'test').set('item3', false).clear();
+    sessionMap
+      .set('item1', 1)
+      .set('item2', 'test')
+      .set('item3', false)
+      .clear();
 
     expect(sessionMap.has('item1')).toBeFalsy();
     expect(sessionMap.has('item2')).toBeFalsy();
@@ -74,7 +78,10 @@ describe('ima.storage.SessionMapStorage', () => {
   });
 
   it('should return keys', () => {
-    sessionMap.set('item1', 1).set('item2', 'test').set('item3', false);
+    sessionMap
+      .set('item1', 1)
+      .set('item2', 'test')
+      .set('item3', false);
 
     let index = 0;
     let iterator = sessionMap.keys();

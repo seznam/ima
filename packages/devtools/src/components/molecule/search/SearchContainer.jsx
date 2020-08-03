@@ -10,9 +10,12 @@ const mapStateToProps = state => ({
   hasPrevious: state.entries.hasPrevious
 });
 
-export default connect(mapStateToProps, {
-  clearEntries: actions.clearEntries,
-  setSearchQuery: actions.setSearchQuery,
-  selectNext: actions.selectNext,
-  selectPrevious: actions.selectPrevious
-})(Search);
+export default connect(
+  mapStateToProps,
+  {
+    clearEntries: actions.clearEntries,
+    setSearchQuery: actions.setSearchQuery,
+    selectNext: actions.selectNext,
+    selectPrevious: actions.selectPrevious
+  }
+)(Search);

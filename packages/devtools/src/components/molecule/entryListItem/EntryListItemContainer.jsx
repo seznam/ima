@@ -8,6 +8,7 @@ const mapStateToProps = (state, { id }) => ({
   zeroTime: state.entries.zeroTime
 });
 
-export default connect(mapStateToProps, { setSelected: actions.setSelected })(
-  EntryListItem
-);
+export default connect(
+  mapStateToProps,
+  { setSelected: actions.setSelected }
+)(EntryListItem);

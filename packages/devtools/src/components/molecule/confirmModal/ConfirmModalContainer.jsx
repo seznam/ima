@@ -11,6 +11,9 @@ const mapStateToProps = state => {
   };
 };
 
-export default connect(mapStateToProps, {
-  hideConfirmModal: actions.hideConfirmModal
-})(ConfirmModal);
+export default connect(
+  mapStateToProps,
+  {
+    hideConfirmModal: actions.hideConfirmModal
+  }
+)(ConfirmModal);

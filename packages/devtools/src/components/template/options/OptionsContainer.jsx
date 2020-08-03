@@ -9,8 +9,11 @@ const mapStateToProps = state => ({
   presets: state.presets.presets
 });
 
-export default connect(mapStateToProps, {
-  setPresets: presetsActions.setPresets,
-  addHook: presetsActions.addHook,
-  alertSuccess: alertsActions.success
-})(Options);
+export default connect(
+  mapStateToProps,
+  {
+    setPresets: presetsActions.setPresets,
+    addHook: presetsActions.addHook,
+    alertSuccess: alertsActions.success
+  }
+)(Options);

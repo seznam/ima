@@ -11,7 +11,12 @@ const confirmModal = createSlice({
   name: 'confirmModal',
   initialState: confirmModalInitialState,
   reducers: {
-    showConfirmModal(state, { payload: { body, accept, cancel } }) {
+    showConfirmModal(
+      state,
+      {
+        payload: { body, accept, cancel }
+      }
+    ) {
       state.opened = true;
       state.body = body || confirmModalInitialState.body;
       state.accept = accept || confirmModalInitialState.accept;

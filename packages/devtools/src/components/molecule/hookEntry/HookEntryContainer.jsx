@@ -8,10 +8,13 @@ const mapStateToProps = (state, { id }) => ({
   hook: selectors.getActiveHooks(state)[id]
 });
 
-export default connect(mapStateToProps, {
-  toggleHook: presetsActions.toggleHook,
-  deleteHook: presetsActions.deleteHook,
-  openHook: presetsActions.openHook,
-  alertSuccess: alertsActions.success,
-  showConfirmModal: confirmModalActions.showConfirmModal
-})(HookEntry);
+export default connect(
+  mapStateToProps,
+  {
+    toggleHook: presetsActions.toggleHook,
+    deleteHook: presetsActions.deleteHook,
+    openHook: presetsActions.openHook,
+    alertSuccess: alertsActions.success,
+    showConfirmModal: confirmModalActions.showConfirmModal
+  }
+)(HookEntry);

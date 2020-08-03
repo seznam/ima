@@ -119,7 +119,7 @@ chrome.tabs.onRemoved.addListener(tabId => {
  * Save initial domain on tab loading. Changes are then tracked in chrome.webNavigation.onCommitted
  * and if the domain changes, event to reload devtools state is sent to panel.
  */
-chrome.tabs.onUpdated.addListener(function (tabId, { status }) {
+chrome.tabs.onUpdated.addListener(function(tabId, { status }) {
   if (
     status === 'loading' &&
     connections[tabId] &&

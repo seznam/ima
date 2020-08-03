@@ -15,7 +15,12 @@ const presets = createSlice({
   initialState: presetsInitialState,
   reducers: {
     // Presets actions
-    setPresets(state, { payload: { presets, selectedPresetId } }) {
+    setPresets(
+      state,
+      {
+        payload: { presets, selectedPresetId }
+      }
+    ) {
       // Reset selected flag
       Object.values(presets).forEach(preset => {
         preset.selected = preset.id === selectedPresetId;
@@ -27,7 +32,12 @@ const presets = createSlice({
     addPreset(state, { payload }) {
       state.presets[payload.id] = payload;
     },
-    renamePreset(state, { payload: { id, name } }) {
+    renamePreset(
+      state,
+      {
+        payload: { id, name }
+      }
+    ) {
       state.presets[id].name = name;
     },
     deletePreset(state, { payload: id }) {

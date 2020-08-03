@@ -8,13 +8,16 @@ const mapStateToProps = state => ({
   status: state.entries.status
 });
 
-export default connect(mapStateToProps, {
-  alive: actions.alive,
-  dead: actions.dead,
-  reload: actions.reload,
-  unsupported: actions.unsupported,
-  clearEntries: actions.clearEntries,
-  addEntries: actions.addEntries,
-  selectNext: actions.selectNext,
-  selectPrevious: actions.selectPrevious
-})(Panel);
+export default connect(
+  mapStateToProps,
+  {
+    alive: actions.alive,
+    dead: actions.dead,
+    reload: actions.reload,
+    unsupported: actions.unsupported,
+    clearEntries: actions.clearEntries,
+    addEntries: actions.addEntries,
+    selectNext: actions.selectNext,
+    selectPrevious: actions.selectPrevious
+  }
+)(Panel);

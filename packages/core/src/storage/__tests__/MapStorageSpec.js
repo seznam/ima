@@ -40,7 +40,11 @@ describe('ima.storage.Map', () => {
   });
 
   it('should clear all items', () => {
-    map.set('item1', 1).set('item2', 'test').set('item3', false).clear();
+    map
+      .set('item1', 1)
+      .set('item2', 'test')
+      .set('item3', false)
+      .clear();
 
     expect(map.has('item1')).toBeFalsy();
     expect(map.has('item2')).toBeFalsy();
@@ -61,7 +65,10 @@ describe('ima.storage.Map', () => {
   });
 
   it('should return keys', () => {
-    map.set('item1', 1).set('item2', 'test').set('item3', false);
+    map
+      .set('item1', 1)
+      .set('item2', 'test')
+      .set('item3', false);
 
     let index = 0;
     let iterator = map.keys();

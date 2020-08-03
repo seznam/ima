@@ -6,6 +6,9 @@ const mapStateToProps = state => ({
   alerts: state.alerts.alerts
 });
 
-export default connect(mapStateToProps, {
-  removeAlert: alertsActions.removeAlert
-})(Alerts);
+export default connect(
+  mapStateToProps,
+  {
+    removeAlert: alertsActions.removeAlert
+  }
+)(Alerts);

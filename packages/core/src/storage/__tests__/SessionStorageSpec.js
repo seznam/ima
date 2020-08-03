@@ -53,7 +53,11 @@ describe('ima.storage.SessionStorage', () => {
   });
 
   it('should clear all items', () => {
-    session.set('item1', 1).set('item2', 'test').set('item3', false).clear();
+    session
+      .set('item1', 1)
+      .set('item2', 'test')
+      .set('item3', false)
+      .clear();
 
     expect(session.has('item1')).toBeFalsy();
     expect(session.has('item2')).toBeFalsy();
