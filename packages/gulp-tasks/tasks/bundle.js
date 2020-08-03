@@ -4,13 +4,13 @@ const del = require('del');
 const cssnano = require('cssnano');
 const plumber = require('gulp-plumber');
 const postCss = require('gulp-postcss');
-const uglifyEs = require('gulp-uglify-es').default;
+const terser = require('gulp-terser');
 
 exports.__requiresConfig = true;
 
 exports.default = gulpConfig => {
   let files = gulpConfig.files;
-  let uglifyCompression = gulpConfig.uglifyCompression;
+  let terserConfig = gulpConfig.terserConfig;
 
   function bundleJsApp() {
     if (!gulpConfig.legacyCompactMode) {
@@ -22,9 +22,9 @@ exports.default = gulpConfig => {
       .pipe(plumber())
       .pipe(concat(files.bundle.js.name))
       .pipe(
-        uglifyEs({
-          mangle: true,
-          compress: Object.assign({}, uglifyCompression, { ecma: 5 })
+        terser({
+          ...terserConfig,
+          compress: Object.assign({}, terserConfig.compress, { ecma: 5 })
         })
       )
       .pipe(plumber.stop())
@@ -36,7 +36,7 @@ exports.default = gulpConfig => {
       .src(files.bundle.es.src)
       .pipe(plumber())
       .pipe(concat(files.bundle.es.name))
-      .pipe(uglifyEs({ mangle: true, compress: uglifyCompression }))
+      .pipe(terser(terserConfig))
       .pipe(plumber.stop())
       .pipe(gulp.dest(files.bundle.es.dest));
   }

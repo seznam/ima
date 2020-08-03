@@ -72,7 +72,7 @@
     "gulp-save": "^1.3.0",
     "gulp-sourcemaps": "^2.6.5",
     "gulp-tap": "^2.0.0",
-    "gulp-uglify-es": "^2.0.0",
+    "gulp-terser": "^1.3.0",
     "gulp-watch": "^5.0.1",
     "ima-clientify": "^0.1.2",
     "loose-envify": "^1.4.0",

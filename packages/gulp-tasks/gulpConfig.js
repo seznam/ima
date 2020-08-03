@@ -194,12 +194,15 @@ exports.legacyCompactMode = legacyCompactMode;
 exports.babelConfig = babelConfig;
 exports.$Debug = $Debug;
 
-exports.uglifyCompression = {
-  global_defs: {
-    $Debug: $Debug
-  },
-  ecma: 7,
-  dead_code: true
+exports.terserConfig = {
+  mangle: true,
+  compress: {
+    global_defs: {
+      $Debug: $Debug
+    },
+    ecma: 7,
+    dead_code: true
+  }
 };
 
 exports.liveServer = {
