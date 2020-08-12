@@ -81,12 +81,24 @@ export class Namespace {
   }
 
   /**
-   * Return value for the specified namespace path point.
+   * Return value for the specified namespace path point or undefined if path is not type of string
    *
-   * @param {string} path The namespace path to test.
-   * @return {*} The value at the specified path in the namespace.
+   * @param {string} path The namespace path to get.
+   * @return {*} The value at the specified path in the namespace or undefined for any non-string path
    */
   get(path) {
+    if (!path || typeof path !== 'string') {
+      if ($Debug) {
+        console.error(
+          'namespace.get: path is not type of string: ',
+          typeof path,
+          path
+        );
+      }
+
+      return undefined;
+    }
+
     let self = this;
     let levels = path.split('.');
 
