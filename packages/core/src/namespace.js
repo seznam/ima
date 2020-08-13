@@ -54,10 +54,14 @@ export class Namespace {
 			namespaceWarningEmitted = true;
 		}*/
 
-    let self = this;
-    let levels = path.split('.');
+    const levels = this._resolvePathLevels(path);
+    if (!levels) {
+      return levels;
+    }
 
-    for (let levelName of levels) {
+    let self = this;
+
+    for (const levelName of levels) {
       if (!Object.prototype.hasOwnProperty.call(self, levelName)) {
         self[levelName] = {};
       }
@@ -87,20 +91,12 @@ export class Namespace {
    * @return {*} The value at the specified path in the namespace or undefined for any non-string path
    */
   get(path) {
-    if (!path || typeof path !== 'string') {
-      if ($Debug) {
-        console.error(
-          'namespace.get: path is not type of string: ',
-          typeof path,
-          path
-        );
-      }
-
-      return undefined;
+    const levels = this._resolvePathLevels(path);
+    if (!levels) {
+      return levels;
     }
 
     let self = this;
-    let levels = path.split('.');
 
     for (let level of levels) {
       if (!self[level]) {
@@ -120,11 +116,37 @@ export class Namespace {
    * @param {*} value
    */
   set(path, value) {
-    let levels = path.split('.');
+    const levels = this._resolvePathLevels(path);
+    if (!levels) {
+      return levels;
+    }
+
     const lastKey = levels.pop();
-    let namespace = this.namespace(levels.join('.'));
+    const namespace = this.namespace(levels.join('.'));
 
     namespace[lastKey] = value;
+  }
+
+  /**
+   * Resolve path levels from string
+   *
+   * @param {string} path The namespace path.
+   * @param {*} array of levels or undefined for not valid path
+   */
+  _resolvePathLevels(path) {
+    if (!path || typeof path !== 'string') {
+      if ($Debug) {
+        console.error(
+          'namespace.get: path is not type of string: ',
+          typeof path,
+          path
+        );
+      }
+
+      return undefined;
+    }
+
+    return path.split('.');
   }
 }
 
