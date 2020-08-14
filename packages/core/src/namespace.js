@@ -54,10 +54,10 @@ export class Namespace {
 			namespaceWarningEmitted = true;
 		}*/
 
+    const levels = this._resolvePathLevels(path);
     let self = this;
-    let levels = path.split('.');
 
-    for (let levelName of levels) {
+    for (const levelName of levels) {
       if (!Object.prototype.hasOwnProperty.call(self, levelName)) {
         self[levelName] = {};
       }
@@ -77,18 +77,26 @@ export class Namespace {
    *         at the specified path.
    */
   has(path) {
-    return typeof this.get(path) !== 'undefined';
+    let hasPath;
+    try {
+      hasPath = this.get(path) !== undefined;
+    } catch (e) {
+      hasPath = false;
+    }
+
+    return hasPath;
   }
 
   /**
-   * Return value for the specified namespace path point.
+   * Return value for the specified namespace path point or undefined if path is not type of string
    *
-   * @param {string} path The namespace path to test.
-   * @return {*} The value at the specified path in the namespace.
+   * @param {string} path The namespace path to get.
+   * @return {*} The value at the specified path in the namespace or undefined for any non-string path
    */
   get(path) {
+    const levels = this._resolvePathLevels(path);
+
     let self = this;
-    let levels = path.split('.');
 
     for (let level of levels) {
       if (!self[level]) {
@@ -108,11 +116,26 @@ export class Namespace {
    * @param {*} value
    */
   set(path, value) {
-    let levels = path.split('.');
+    const levels = this._resolvePathLevels(path);
+
     const lastKey = levels.pop();
-    let namespace = this.namespace(levels.join('.'));
+    const namespace = this.namespace(levels.join('.'));
 
     namespace[lastKey] = value;
+  }
+
+  /**
+   * Resolve path levels from string
+   *
+   * @param {string} path The namespace path.
+   * @param {*} array of levels or undefined for not valid path
+   */
+  _resolvePathLevels(path) {
+    if (!path || typeof path !== 'string') {
+      throw Error('namespace.get: path is not type of string');
+    }
+
+    return path.split('.');
   }
 }
 
