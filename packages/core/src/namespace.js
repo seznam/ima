@@ -55,10 +55,6 @@ export class Namespace {
 		}*/
 
     const levels = this._resolvePathLevels(path);
-    if (!levels) {
-      return levels;
-    }
-
     let self = this;
 
     for (const levelName of levels) {
@@ -99,9 +95,6 @@ export class Namespace {
    */
   get(path) {
     const levels = this._resolvePathLevels(path);
-    if (!levels) {
-      return levels;
-    }
 
     let self = this;
 
@@ -124,9 +117,6 @@ export class Namespace {
    */
   set(path, value) {
     const levels = this._resolvePathLevels(path);
-    if (!levels) {
-      return levels;
-    }
 
     const lastKey = levels.pop();
     const namespace = this.namespace(levels.join('.'));
@@ -142,14 +132,6 @@ export class Namespace {
    */
   _resolvePathLevels(path) {
     if (!path || typeof path !== 'string') {
-      if ($Debug) {
-        console.error(
-          'namespace.get: path is not type of string: ',
-          typeof path,
-          path
-        );
-      }
-
       throw Error('namespace.get: path is not type of string');
     }
 
