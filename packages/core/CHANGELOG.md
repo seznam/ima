@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [17.7.3](https://github.com/seznam/ima/compare/v17.7.2...v17.7.3) (2020-08-14)
+
+
+### Bug Fixes
+
+* 🐛 namespace.get now checks path type before split ([#78](https://github.com/seznam/ima/issues/78)) ([4e66644](https://github.com/seznam/ima/commit/4e666442c3e72ec04e30bc98e9f65f4225a97843))
+
+
+
+
+
 ## [17.7.2](https://github.com/seznam/ima/compare/v17.7.1...v17.7.2) (2020-07-24)
 
 
