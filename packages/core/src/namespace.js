@@ -81,7 +81,14 @@ export class Namespace {
    *         at the specified path.
    */
   has(path) {
-    return typeof this.get(path) !== 'undefined';
+    let hasPath;
+    try {
+      hasPath = this.get(path) !== undefined;
+    } catch (e) {
+      hasPath = false;
+    }
+
+    return hasPath;
   }
 
   /**
@@ -143,7 +150,7 @@ export class Namespace {
         );
       }
 
-      return undefined;
+      throw Error('namespace.get: path is not type of string');
     }
 
     return path.split('.');

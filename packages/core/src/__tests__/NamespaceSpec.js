@@ -28,24 +28,38 @@ describe('Namespace', () => {
     expect(ns.a.b.c.ClassConstructor).toEqual(ClassConstructor);
   });
 
-  it('Should return undefined when creating namespace with wrong path format', () => {
-    expect(ns.namespace(false)).toEqual(undefined);
-    expect(ns.namespace(1)).toEqual(undefined);
-    expect(ns.namespace(null)).toEqual(undefined);
-    expect(ns.namespace(undefined)).toEqual(undefined);
+  it('Should throw error when creating namespace with wrong path format', () => {
+    expect(() => ns.namespace(false)).toThrow();
+    expect(() => ns.namespace(1)).toThrow();
+    expect(() => ns.namespace(null)).toThrow();
+    expect(() => ns.namespace(undefined)).toThrow();
   });
 
-  it('Should return undefined when getting wrong path format namespace value', () => {
-    expect(ns.get(false)).toEqual(undefined);
-    expect(ns.get(1)).toEqual(undefined);
-    expect(ns.get(null)).toEqual(undefined);
-    expect(ns.get(undefined)).toEqual(undefined);
+  it('Should throw error when getting wrong path format namespace value', () => {
+    expect(() => ns.get(false)).toThrow();
+    expect(() => ns.get(1)).toThrow();
+    expect(() => ns.get(null)).toThrow();
+    expect(() => ns.get(undefined)).toThrow();
   });
 
-  it('Should return undefined when setting wrong path format', () => {
-    expect(ns.set(false)).toEqual(undefined);
-    expect(ns.set(1)).toEqual(undefined);
-    expect(ns.set(null)).toEqual(undefined);
-    expect(ns.set(undefined)).toEqual(undefined);
+  it('Should throw error when setting wrong path format', () => {
+    expect(() => ns.set(false)).toThrow();
+    expect(() => ns.set(1)).toThrow();
+    expect(() => ns.set(null)).toThrow();
+    expect(() => ns.set(undefined)).toThrow();
+  });
+
+  it('Should return false when calling has wrong path format', () => {
+    expect(() => ns.has(false)).not.toThrow();
+    expect(ns.has(false)).toBeFalsy();
+
+    expect(() => ns.has(1)).not.toThrow();
+    expect(ns.has(1)).toBeFalsy();
+
+    expect(() => ns.has(null)).not.toThrow();
+    expect(ns.has(null)).toBeFalsy();
+
+    expect(() => ns.has(undefined)).not.toThrow();
+    expect(ns.has(undefined)).toBeFalsy();
   });
 });
