@@ -111,7 +111,7 @@ export default class AbstractPureComponent extends React.PureComponent {
    * @param {string} eventName The name of the event.
    * @param {*=} data Data to send within the event.
    */
-  fire(eventName, data = null) {
+  fire(eventName, data = undefined) {
     helpers.fire(this, eventName, data);
   }
 
