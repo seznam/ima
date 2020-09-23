@@ -87,9 +87,9 @@ function generate(done) {
       `${dir.docPartials}main.hbs`
     ]
   };
-  const gitUrl = `${packageData.repository.url.slice(0, -4)}/tree/${
+  const gitUrl = `${packageData.repository.url.slice(0, -4)}/blob/v${
     lernaData.version
-  }`;
+  }/packages/core/src`;
   const lunrDocuments = [];
 
   fs.ensureDirSync(dir.docPosts);
