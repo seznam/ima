@@ -3,6 +3,19 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [17.7.4](https://github.com/seznam/ima/compare/v17.7.3...v17.7.4) (2020-11-18)
+
+
+### Bug Fixes
+
+* 🐛 component fire method send data undefined by default ([#80](https://github.com/seznam/ima/issues/80)) ([75dd8d7](https://github.com/seznam/ima/commit/75dd8d717335d1d3ec6abd1fd88ed52101e99596))
+* 🐛 error when target attribute is set on _self value ([#83](https://github.com/seznam/ima/issues/83)) ([dc29c93](https://github.com/seznam/ima/commit/dc29c933af486cdee28104b570ac43c3ff527e0f))
+* 🐛 error when target attribute is set on _self value ([#85](https://github.com/seznam/ima/issues/85)) ([cae2526](https://github.com/seznam/ima/commit/cae2526eb1efed00edc5ee327f7ea2c18e445d79))
+
+
+
+
+
 ## [17.7.3](https://github.com/seznam/ima/compare/v17.7.2...v17.7.3) (2020-08-14)
 
 
