@@ -70,7 +70,7 @@
     "zip-webpack-plugin": "^3.0.0"
   },
   "dependencies": {
-    "@ima/devtools-scripts": "17.5.0",
+    "@ima/devtools-scripts": "^17.7.3",
     "@reach/menu-button": "^0.6.2",
     "@reach/tooltip": "^0.6.2",
     "@reduxjs/toolkit": "^1.1.0",
