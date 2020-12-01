@@ -50,6 +50,23 @@ export default class DevManager {
         console.log($IMA.$Version); //eslint-disable-line no-console
       }
     });
+
+    // Print welcome message
+    // eslint-disable-next-line no-console
+    console.log(
+      '%cIMA.js Devtools are initialized, you can use following keyboard shortcuts:%c' +
+        '\\n%cAlt + S%c - App state' +
+        '\\n%cAlt + C%c - Cache keys' +
+        '\\n%cAlt + V%c - $IMA.$Version',
+      'margin-top: 6px; background: #f03e3e; color: white; padding: 4px 8px; font-weight: bold;',
+      'font-weight: bold;',
+      'padding: 2px 4px; color: #c92a2a; background: #ffe3e3; border-radius: 3px; border: 1px solid #ffa8a8; margin: 10px 2px 2px 10px;',
+      'font-weight: bold;',
+      'padding: 2px 4px; color: #c92a2a; background: #ffe3e3; border-radius: 3px; border: 1px solid #ffa8a8; margin: 2px 2px 2px 10px;',
+      'font-weight: bold;',
+      'padding: 2px 4px; color: #c92a2a; background: #ffe3e3; border-radius: 3px; border: 1px solid #ffa8a8; margin: 2px 2px 2px 10px;',
+      'font-weight: bold; margin-bottom: 10px;'
+    );
   }
 
   /**

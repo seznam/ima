@@ -183,7 +183,7 @@ function createDevtool(registerHook) {
       }
     );
 
-    let imaCore = importIMAClass('@ima/core');
+    let imaCore = importIMAClass('@ima/core', true);
     ImaMainModules.forEach(moduleName => {
       const key = `__${moduleName}__`;
 
