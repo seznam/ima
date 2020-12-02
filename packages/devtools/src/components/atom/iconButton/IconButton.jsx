@@ -1,7 +1,7 @@
 import styles from './iconButton.less';
 import React from 'react';
 import PropTypes from 'prop-types';
-import cn from 'classnames';
+import cn from 'clsx';
 
 import Icon from 'components/atom/icon/Icon';
 

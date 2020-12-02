@@ -1,7 +1,7 @@
 const path = require('path');
 const CopyPlugin = require('copy-webpack-plugin');
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
-const GenerateAssetPlugin = require('generate-asset-webpack-plugin');
+const generate = require('generate-file-webpack-plugin');
 
 const pkg = require('./package');
 const manifest = require('./manifest');
@@ -9,14 +9,18 @@ const manifest = require('./manifest');
 const srcDir = path.resolve(__dirname, 'src');
 const distDir = path.resolve(__dirname, 'dist');
 
-function buildManifest(compiler, cb) {
+const PRODUCTION =
+  process.env.NODE_ENV && process.env.NODE_ENV === 'production';
+
+function buildManifest() {
   const { version } = pkg;
   manifest.version = version;
 
-  return cb(null, JSON.stringify(manifest, null, '  '));
+  return JSON.stringify(manifest, null, '  ');
 }
 
 module.exports = {
+  mode: PRODUCTION ? 'production' : 'development',
   entry: {
     options: `${srcDir}/options.js`,
     popup: `${srcDir}/popup.js`,
@@ -36,13 +40,6 @@ module.exports = {
   watchOptions: {
     ignored: /node_modules/
   },
-  optimization: {
-    splitChunks: {
-      chunks: 'initial',
-      minSize: 30000,
-      automaticNameDelimiter: '.'
-    }
-  },
   module: {
     rules: [
       {
@@ -55,6 +52,10 @@ module.exports = {
       {
         test: /\.(le|c)ss$/,
         use: [
+          {
+            loader: MiniCssExtractPlugin.loader,
+            options: {}
+          },
           {
             loader: 'css-loader',
             options: {
@@ -88,18 +89,15 @@ module.exports = {
     ]
   },
   plugins: [
-    new GenerateAssetPlugin({
-      filename: `manifest.json`,
-      fn: buildManifest
+    generate({
+      file: 'manifest.json',
+      content: buildManifest()
     }),
-    new CopyPlugin([
-      {
-        from: `${srcDir}/public`,
-        to: distDir
-      }
-    ]),
+    new CopyPlugin({
+      patterns: [{ from: `${srcDir}/public`, to: distDir }]
+    }),
     new MiniCssExtractPlugin({
-      filename: `css/[name].css`
+      filename: 'css/[name].css'
     })
   ],
   stats: {
