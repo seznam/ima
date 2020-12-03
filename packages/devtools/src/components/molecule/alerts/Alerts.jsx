@@ -2,7 +2,7 @@ import styles from './alerts.less';
 import ReactDOM from 'react-dom';
 import React from 'react';
 import PropTypes from 'prop-types';
-import cn from 'classnames';
+import cn from 'clsx';
 
 import Alert from 'components/atom/alert/Alert';
 

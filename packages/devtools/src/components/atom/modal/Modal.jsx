@@ -2,7 +2,7 @@ import styles from './modal.less';
 import ReactDOM from 'react-dom';
 import React from 'react';
 import PropTypes from 'prop-types';
-import cn from 'classnames';
+import cn from 'clsx';
 
 import Icon from 'components/atom/icon/Icon';
 
