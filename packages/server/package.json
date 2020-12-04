@@ -33,7 +33,7 @@
   "dependencies": {
     "async-each": "1.0.3",
     "error-to-json": "1.1.0",
-    "highlight.js": "9.16.2",
+    "highlight.js": "10.4.1",
     "stack-trace": "0.0.10",
     "winston": "3.2.1"
   },
