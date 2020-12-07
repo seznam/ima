@@ -27,7 +27,7 @@ header or the return value of the <code>document.cookie</code> property.</p>
 </dd>
 </dl>
 
-## CookieStorage&nbsp;<a name="CookieStorage" href="https://github.com/seznam/ima/blob/v17.7.5/packages/core/src/storage/CookieStorage.js#L47" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a>
+## CookieStorage&nbsp;<a name="CookieStorage" href="https://github.com/seznam/ima/blob/v17.7.6/packages/core/src/storage/CookieStorage.js#L47" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a>
 Storage of cookies, mirroring the cookies to the current request / response
 at the server side and the <code>document.cookie</code> property at the client
 side. The storage caches the cookies internally.
@@ -82,7 +82,7 @@ cookie.set('cookie', 'value', { expires: 10 }); // cookie expires
 
 * * *
 
-### cookieStorage.\_window : <code>Window</code>&nbsp;<a name="CookieStorage+_window" href="https://github.com/seznam/ima/blob/v17.7.5/packages/core/src/storage/CookieStorage.js#L56" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a>
+### cookieStorage.\_window : <code>Window</code>&nbsp;<a name="CookieStorage+_window" href="https://github.com/seznam/ima/blob/v17.7.6/packages/core/src/storage/CookieStorage.js#L56" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a>
 The window utility used to determine whether the IMA is being run
 at the client or at the server.
 
@@ -90,35 +90,35 @@ at the client or at the server.
 
 * * *
 
-### cookieStorage.\_request : <code>Request</code>&nbsp;<a name="CookieStorage+_request" href="https://github.com/seznam/ima/blob/v17.7.5/packages/core/src/storage/CookieStorage.js#L63" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a>
+### cookieStorage.\_request : <code>Request</code>&nbsp;<a name="CookieStorage+_request" href="https://github.com/seznam/ima/blob/v17.7.6/packages/core/src/storage/CookieStorage.js#L63" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a>
 The current HTTP request. This field is used at the server side.
 
 **Kind**: instance property of [<code>CookieStorage</code>](#CookieStorage)  
 
 * * *
 
-### cookieStorage.\_response : <code>Response</code>&nbsp;<a name="CookieStorage+_response" href="https://github.com/seznam/ima/blob/v17.7.5/packages/core/src/storage/CookieStorage.js#L70" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a>
+### cookieStorage.\_response : <code>Response</code>&nbsp;<a name="CookieStorage+_response" href="https://github.com/seznam/ima/blob/v17.7.6/packages/core/src/storage/CookieStorage.js#L70" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a>
 The current HTTP response. This field is used at the server side.
 
 **Kind**: instance property of [<code>CookieStorage</code>](#CookieStorage)  
 
 * * *
 
-### cookieStorage.\_options : <code>Object</code>&nbsp;<a name="CookieStorage+_options" href="https://github.com/seznam/ima/blob/v17.7.5/packages/core/src/storage/CookieStorage.js#L84" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a>
+### cookieStorage.\_options : <code>Object</code>&nbsp;<a name="CookieStorage+_options" href="https://github.com/seznam/ima/blob/v17.7.6/packages/core/src/storage/CookieStorage.js#L84" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a>
 The overriding cookie attribute values.
 
 **Kind**: instance property of [<code>CookieStorage</code>](#CookieStorage)  
 
 * * *
 
-### cookieStorage.\_transformFunction : <code>Object</code>&nbsp;<a name="CookieStorage+_transformFunction" href="https://github.com/seznam/ima/blob/v17.7.5/packages/core/src/storage/CookieStorage.js#L102" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a>
+### cookieStorage.\_transformFunction : <code>Object</code>&nbsp;<a name="CookieStorage+_transformFunction" href="https://github.com/seznam/ima/blob/v17.7.6/packages/core/src/storage/CookieStorage.js#L102" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a>
 Transform encode and decode functions for cookie value.
 
 **Kind**: instance property of [<code>CookieStorage</code>](#CookieStorage)  
 
 * * *
 
-### cookieStorage.init(options, transformFunction)&nbsp;<a name="CookieStorage+init" href="https://github.com/seznam/ima/blob/v17.7.5/packages/core/src/storage/CookieStorage.js#L123" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a>
+### cookieStorage.init(options, transformFunction)&nbsp;<a name="CookieStorage+init" href="https://github.com/seznam/ima/blob/v17.7.6/packages/core/src/storage/CookieStorage.js#L123" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a>
 **Kind**: instance method of [<code>CookieStorage</code>](#CookieStorage)  
 
 | Param | Type |
@@ -129,17 +129,17 @@ Transform encode and decode functions for cookie value.
 
 * * *
 
-### cookieStorage.has()&nbsp;<a name="CookieStorage+has" href="https://github.com/seznam/ima/blob/v17.7.5/packages/core/src/storage/CookieStorage.js#L137" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a>
+### cookieStorage.has()&nbsp;<a name="CookieStorage+has" href="https://github.com/seznam/ima/blob/v17.7.6/packages/core/src/storage/CookieStorage.js#L137" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a>
 **Kind**: instance method of [<code>CookieStorage</code>](#CookieStorage)  
 
 * * *
 
-### cookieStorage.get()&nbsp;<a name="CookieStorage+get" href="https://github.com/seznam/ima/blob/v17.7.5/packages/core/src/storage/CookieStorage.js#L144" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a>
+### cookieStorage.get()&nbsp;<a name="CookieStorage+get" href="https://github.com/seznam/ima/blob/v17.7.6/packages/core/src/storage/CookieStorage.js#L144" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a>
 **Kind**: instance method of [<code>CookieStorage</code>](#CookieStorage)  
 
 * * *
 
-### cookieStorage.set(name, value, [options])&nbsp;<a name="CookieStorage+set" href="https://github.com/seznam/ima/blob/v17.7.5/packages/core/src/storage/CookieStorage.js#L171" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a>
+### cookieStorage.set(name, value, [options])&nbsp;<a name="CookieStorage+set" href="https://github.com/seznam/ima/blob/v17.7.6/packages/core/src/storage/CookieStorage.js#L171" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a>
 **Kind**: instance method of [<code>CookieStorage</code>](#CookieStorage)  
 
 | Param | Type | Description |
@@ -151,7 +151,7 @@ Transform encode and decode functions for cookie value.
 
 * * *
 
-### cookieStorage.delete(name, [options]) ⇒ <code>Storage</code>&nbsp;<a name="CookieStorage+delete" href="https://github.com/seznam/ima/blob/v17.7.5/packages/core/src/storage/CookieStorage.js#L209" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a>
+### cookieStorage.delete(name, [options]) ⇒ <code>Storage</code>&nbsp;<a name="CookieStorage+delete" href="https://github.com/seznam/ima/blob/v17.7.6/packages/core/src/storage/CookieStorage.js#L209" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a>
 Deletes the cookie identified by the specified name.
 
 **Kind**: instance method of [<code>CookieStorage</code>](#CookieStorage)  
@@ -165,22 +165,22 @@ Deletes the cookie identified by the specified name.
 
 * * *
 
-### cookieStorage.clear()&nbsp;<a name="CookieStorage+clear" href="https://github.com/seznam/ima/blob/v17.7.5/packages/core/src/storage/CookieStorage.js#L221" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a>
+### cookieStorage.clear()&nbsp;<a name="CookieStorage+clear" href="https://github.com/seznam/ima/blob/v17.7.6/packages/core/src/storage/CookieStorage.js#L221" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a>
 **Kind**: instance method of [<code>CookieStorage</code>](#CookieStorage)  
 
 * * *
 
-### cookieStorage.keys()&nbsp;<a name="CookieStorage+keys" href="https://github.com/seznam/ima/blob/v17.7.5/packages/core/src/storage/CookieStorage.js#L232" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a>
+### cookieStorage.keys()&nbsp;<a name="CookieStorage+keys" href="https://github.com/seznam/ima/blob/v17.7.6/packages/core/src/storage/CookieStorage.js#L232" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a>
 **Kind**: instance method of [<code>CookieStorage</code>](#CookieStorage)  
 
 * * *
 
-### cookieStorage.size()&nbsp;<a name="CookieStorage+size" href="https://github.com/seznam/ima/blob/v17.7.5/packages/core/src/storage/CookieStorage.js#L239" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a>
+### cookieStorage.size()&nbsp;<a name="CookieStorage+size" href="https://github.com/seznam/ima/blob/v17.7.6/packages/core/src/storage/CookieStorage.js#L239" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a>
 **Kind**: instance method of [<code>CookieStorage</code>](#CookieStorage)  
 
 * * *
 
-### cookieStorage.getCookiesStringForCookieHeader() ⇒ <code>string</code>&nbsp;<a name="CookieStorage+getCookiesStringForCookieHeader" href="https://github.com/seznam/ima/blob/v17.7.5/packages/core/src/storage/CookieStorage.js#L250" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a>
+### cookieStorage.getCookiesStringForCookieHeader() ⇒ <code>string</code>&nbsp;<a name="CookieStorage+getCookiesStringForCookieHeader" href="https://github.com/seznam/ima/blob/v17.7.6/packages/core/src/storage/CookieStorage.js#L250" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a>
 Returns all cookies in this storage serialized to a string compatible
 with the <code>Cookie</code> HTTP header.
 
@@ -190,7 +190,7 @@ with the <code>Cookie</code> HTTP header.
 
 * * *
 
-### cookieStorage.parseFromSetCookieHeader(setCookieHeader)&nbsp;<a name="CookieStorage+parseFromSetCookieHeader" href="https://github.com/seznam/ima/blob/v17.7.5/packages/core/src/storage/CookieStorage.js#L274" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a>
+### cookieStorage.parseFromSetCookieHeader(setCookieHeader)&nbsp;<a name="CookieStorage+parseFromSetCookieHeader" href="https://github.com/seznam/ima/blob/v17.7.6/packages/core/src/storage/CookieStorage.js#L274" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a>
 Parses cookies from the provided <code>Set-Cookie</code> HTTP header value.
 
 The parsed cookies will be set to the internal storage, and the current
@@ -206,7 +206,7 @@ side, or the browser (via the <code>document.cookie</code> property).
 
 * * *
 
-### cookieStorage.\_parse()&nbsp;<a name="CookieStorage+_parse" href="https://github.com/seznam/ima/blob/v17.7.5/packages/core/src/storage/CookieStorage.js#L290" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a>
+### cookieStorage.\_parse()&nbsp;<a name="CookieStorage+_parse" href="https://github.com/seznam/ima/blob/v17.7.6/packages/core/src/storage/CookieStorage.js#L290" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a>
 Parses cookies from a cookie string and sets the parsed cookies to the
 internal storage.
 
@@ -218,7 +218,7 @@ property at the client side.
 
 * * *
 
-### cookieStorage.\_firstLetterToLowerCase(word) ⇒ <code>string</code>&nbsp;<a name="CookieStorage+_firstLetterToLowerCase" href="https://github.com/seznam/ima/blob/v17.7.5/packages/core/src/storage/CookieStorage.js#L321" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a>
+### cookieStorage.\_firstLetterToLowerCase(word) ⇒ <code>string</code>&nbsp;<a name="CookieStorage+_firstLetterToLowerCase" href="https://github.com/seznam/ima/blob/v17.7.6/packages/core/src/storage/CookieStorage.js#L321" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a>
 Creates a copy of the provided word (or text) that has its first
 character converted to lower case.
 
@@ -233,7 +233,7 @@ character converted to lower case.
 
 * * *
 
-### cookieStorage.\_generateCookieString(name, value, options) ⇒ <code>string</code>&nbsp;<a name="CookieStorage+_generateCookieString" href="https://github.com/seznam/ima/blob/v17.7.5/packages/core/src/storage/CookieStorage.js#L352" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a>
+### cookieStorage.\_generateCookieString(name, value, options) ⇒ <code>string</code>&nbsp;<a name="CookieStorage+_generateCookieString" href="https://github.com/seznam/ima/blob/v17.7.6/packages/core/src/storage/CookieStorage.js#L352" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a>
 Generates a string representing the specified cookied, usable either
 with the <code>document.cookie</code> property or the <code>Set-Cookie</code> HTTP
 header.
@@ -255,7 +255,7 @@ syntax.)
 
 * * *
 
-### cookieStorage.\_getExpirationAsDate(expiration) ⇒ <code>Date</code>&nbsp;<a name="CookieStorage+_getExpirationAsDate" href="https://github.com/seznam/ima/blob/v17.7.5/packages/core/src/storage/CookieStorage.js#L376" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a>
+### cookieStorage.\_getExpirationAsDate(expiration) ⇒ <code>Date</code>&nbsp;<a name="CookieStorage+_getExpirationAsDate" href="https://github.com/seznam/ima/blob/v17.7.6/packages/core/src/storage/CookieStorage.js#L376" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a>
 Converts the provided cookie expiration to a <code>Date</code> instance.
 
 **Kind**: instance method of [<code>CookieStorage</code>](#CookieStorage)  
@@ -268,7 +268,7 @@ Converts the provided cookie expiration to a <code>Date</code> instance.
 
 * * *
 
-### cookieStorage.\_extractCookie(cookieString) ⇒ <code>Object</code>&nbsp;<a name="CookieStorage+_extractCookie" href="https://github.com/seznam/ima/blob/v17.7.5/packages/core/src/storage/CookieStorage.js#L401" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a>
+### cookieStorage.\_extractCookie(cookieString) ⇒ <code>Object</code>&nbsp;<a name="CookieStorage+_extractCookie" href="https://github.com/seznam/ima/blob/v17.7.6/packages/core/src/storage/CookieStorage.js#L401" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a>
 Extract cookie name, value and options from cookie string.
 
 **Kind**: instance method of [<code>CookieStorage</code>](#CookieStorage)  
@@ -280,7 +280,7 @@ Extract cookie name, value and options from cookie string.
 
 * * *
 
-### cookieStorage.\_extractNameAndValue(pair, pairIndex) ⇒ <code>Array.&lt;?(boolean\|string\|Date)&gt;</code>&nbsp;<a name="CookieStorage+_extractNameAndValue" href="https://github.com/seznam/ima/blob/v17.7.5/packages/core/src/storage/CookieStorage.js#L433" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a>
+### cookieStorage.\_extractNameAndValue(pair, pairIndex) ⇒ <code>Array.&lt;?(boolean\|string\|Date)&gt;</code>&nbsp;<a name="CookieStorage+_extractNameAndValue" href="https://github.com/seznam/ima/blob/v17.7.6/packages/core/src/storage/CookieStorage.js#L433" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a>
 Extract name and value for defined pair and pair index.
 
 **Kind**: instance method of [<code>CookieStorage</code>](#CookieStorage)  
@@ -293,7 +293,7 @@ Extract name and value for defined pair and pair index.
 
 * * *
 
-### cookieStorage.\_sanitizeCookieValue(value) ⇒ <code>string</code>&nbsp;<a name="CookieStorage+_sanitizeCookieValue" href="https://github.com/seznam/ima/blob/v17.7.5/packages/core/src/storage/CookieStorage.js#L482" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a>
+### cookieStorage.\_sanitizeCookieValue(value) ⇒ <code>string</code>&nbsp;<a name="CookieStorage+_sanitizeCookieValue" href="https://github.com/seznam/ima/blob/v17.7.6/packages/core/src/storage/CookieStorage.js#L482" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a>
 Sanitize cookie value by rules in
 (@see http://tools.ietf.org/html/rfc6265#section-4r.1.1). Erase all
 invalid characters from cookie value.
@@ -308,7 +308,7 @@ invalid characters from cookie value.
 
 * * *
 
-### cookieStorage.\_recomputeCookieMaxAgeAndExpires(options)&nbsp;<a name="CookieStorage+_recomputeCookieMaxAgeAndExpires" href="https://github.com/seznam/ima/blob/v17.7.5/packages/core/src/storage/CookieStorage.js#L526" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a>
+### cookieStorage.\_recomputeCookieMaxAgeAndExpires(options)&nbsp;<a name="CookieStorage+_recomputeCookieMaxAgeAndExpires" href="https://github.com/seznam/ima/blob/v17.7.6/packages/core/src/storage/CookieStorage.js#L526" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a>
 Recomputes cookie's attributes maxAge and expires between each other.
 
 **Kind**: instance method of [<code>CookieStorage</code>](#CookieStorage)  
@@ -320,7 +320,7 @@ Recomputes cookie's attributes maxAge and expires between each other.
 
 * * *
 
-## MAX\_EXPIRE\_DATE : <code>Date</code>&nbsp;<a name="MAX_EXPIRE_DATE" href="https://github.com/seznam/ima/blob/v17.7.5/packages/core/src/storage/CookieStorage.js#L14" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a>
+## MAX\_EXPIRE\_DATE : <code>Date</code>&nbsp;<a name="MAX_EXPIRE_DATE" href="https://github.com/seznam/ima/blob/v17.7.6/packages/core/src/storage/CookieStorage.js#L14" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a>
 Implementation note: This is the largest possible safe value that has been
 tested, used to represent "infinity".
 
@@ -328,7 +328,7 @@ tested, used to represent "infinity".
 
 * * *
 
-## COOKIE\_SEPARATOR : <code>string</code>&nbsp;<a name="COOKIE_SEPARATOR" href="https://github.com/seznam/ima/blob/v17.7.5/packages/core/src/storage/CookieStorage.js#L23" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a>
+## COOKIE\_SEPARATOR : <code>string</code>&nbsp;<a name="COOKIE_SEPARATOR" href="https://github.com/seznam/ima/blob/v17.7.6/packages/core/src/storage/CookieStorage.js#L23" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a>
 Separator used to separate cookie declarations in the <code>Cookie</code> HTTP
 header or the return value of the <code>document.cookie</code> property.
 

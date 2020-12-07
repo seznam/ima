@@ -4,7 +4,7 @@ title: "API - ViewAdapter"
 menuTitle: "ViewAdapter"
 ---
 
-## ViewAdapter&nbsp;<a name="ViewAdapter" href="https://github.com/seznam/ima/blob/v17.7.5/packages/core/src/page/renderer/ViewAdapter.js#L32" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a>
+## ViewAdapter&nbsp;<a name="ViewAdapter" href="https://github.com/seznam/ima/blob/v17.7.6/packages/core/src/page/renderer/ViewAdapter.js#L32" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a>
 An adapter component providing the current page controller's state to the
 page view component through its properties.
 
@@ -33,42 +33,42 @@ Initializes the adapter component.
 
 * * *
 
-### viewAdapter.state : <code>Object.&lt;string, \*&gt;</code>&nbsp;<a name="ViewAdapter+state" href="https://github.com/seznam/ima/blob/v17.7.5/packages/core/src/page/renderer/ViewAdapter.js#L40" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a>
+### viewAdapter.state : <code>Object.&lt;string, \*&gt;</code>&nbsp;<a name="ViewAdapter+state" href="https://github.com/seznam/ima/blob/v17.7.6/packages/core/src/page/renderer/ViewAdapter.js#L40" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a>
 The current page state as provided by the controller.
 
 **Kind**: instance property of [<code>ViewAdapter</code>](#ViewAdapter)  
 
 * * *
 
-### viewAdapter.\_view : <code>function</code>&nbsp;<a name="ViewAdapter+_view" href="https://github.com/seznam/ima/blob/v17.7.5/packages/core/src/page/renderer/ViewAdapter.js#L47" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a>
+### viewAdapter.\_view : <code>function</code>&nbsp;<a name="ViewAdapter+_view" href="https://github.com/seznam/ima/blob/v17.7.6/packages/core/src/page/renderer/ViewAdapter.js#L47" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a>
 The actual page view to render.
 
 **Kind**: instance property of [<code>ViewAdapter</code>](#ViewAdapter)  
 
 * * *
 
-### viewAdapter.\_getContextValue : <code>function</code>&nbsp;<a name="ViewAdapter+_getContextValue" href="https://github.com/seznam/ima/blob/v17.7.5/packages/core/src/page/renderer/ViewAdapter.js#L54" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a>
+### viewAdapter.\_getContextValue : <code>function</code>&nbsp;<a name="ViewAdapter+_getContextValue" href="https://github.com/seznam/ima/blob/v17.7.6/packages/core/src/page/renderer/ViewAdapter.js#L54" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a>
 The memoized context value.
 
 **Kind**: instance property of [<code>ViewAdapter</code>](#ViewAdapter)  
 
 * * *
 
-### viewAdapter.contextSelectors : <code>Array.&lt;function()&gt;</code>&nbsp;<a name="ViewAdapter+contextSelectors" href="https://github.com/seznam/ima/blob/v17.7.5/packages/core/src/page/renderer/ViewAdapter.js#L63" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a>
+### viewAdapter.contextSelectors : <code>Array.&lt;function()&gt;</code>&nbsp;<a name="ViewAdapter+contextSelectors" href="https://github.com/seznam/ima/blob/v17.7.6/packages/core/src/page/renderer/ViewAdapter.js#L63" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a>
 The array of selectors for context values.
 
 **Kind**: instance property of [<code>ViewAdapter</code>](#ViewAdapter)  
 
 * * *
 
-### viewAdapter.createContext : <code>function</code>&nbsp;<a name="ViewAdapter+createContext" href="https://github.com/seznam/ima/blob/v17.7.5/packages/core/src/page/renderer/ViewAdapter.js#L70" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a>
+### viewAdapter.createContext : <code>function</code>&nbsp;<a name="ViewAdapter+createContext" href="https://github.com/seznam/ima/blob/v17.7.6/packages/core/src/page/renderer/ViewAdapter.js#L70" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a>
 The function for creating context.
 
 **Kind**: instance property of [<code>ViewAdapter</code>](#ViewAdapter)  
 
 * * *
 
-### viewAdapter.render()&nbsp;<a name="ViewAdapter+render" href="https://github.com/seznam/ima/blob/v17.7.5/packages/core/src/page/renderer/ViewAdapter.js#L86" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a>
+### viewAdapter.render()&nbsp;<a name="ViewAdapter+render" href="https://github.com/seznam/ima/blob/v17.7.6/packages/core/src/page/renderer/ViewAdapter.js#L86" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a>
 **Kind**: instance method of [<code>ViewAdapter</code>](#ViewAdapter)  
 
 * * *
