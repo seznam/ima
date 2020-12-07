@@ -1,6 +1,6 @@
 {
   "name": "@ima/helpers",
-  "version": "17.7.3",
+  "version": "17.7.5",
   "description": "Various helpers for the IMA.js framework.",
   "main": "index.js",
   "scripts": {
