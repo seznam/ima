@@ -5,7 +5,7 @@ import Alerts from '../Alerts';
 describe('Alerts molecule', () => {
   const props = {
     alerts: {
-      '0': {
+      0: {
         id: '0',
         hidden: false,
         title: 'title',
