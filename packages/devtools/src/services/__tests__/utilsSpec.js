@@ -8,10 +8,10 @@ import {
 describe('setIcon', () => {
   const getPath = type => {
     return {
-      '16': `images/icon-${type}-16.png`,
-      '32': `images/icon-${type}-32.png`,
-      '48': `images/icon-${type}-48.png`,
-      '128': `images/icon-${type}-128.png`
+      16: `images/icon-${type}-16.png`,
+      32: `images/icon-${type}-32.png`,
+      48: `images/icon-${type}-48.png`,
+      128: `images/icon-${type}-128.png`
     };
   };
 

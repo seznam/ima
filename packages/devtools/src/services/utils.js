@@ -11,10 +11,10 @@ export function setIcon(type, tabId = null) {
 
   const details = {
     path: {
-      '16': `images/icon-${type}-16.png`,
-      '32': `images/icon-${type}-32.png`,
-      '48': `images/icon-${type}-48.png`,
-      '128': `images/icon-${type}-128.png`
+      16: `images/icon-${type}-16.png`,
+      32: `images/icon-${type}-32.png`,
+      48: `images/icon-${type}-48.png`,
+      128: `images/icon-${type}-128.png`
     }
   };
 

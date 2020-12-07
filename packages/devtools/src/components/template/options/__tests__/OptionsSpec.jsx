@@ -15,7 +15,7 @@ describe('Options template', () => {
 
   const props = {
     presets: {
-      '0': {
+      0: {
         id: '0',
         name: 'name',
         editable: true,
@@ -56,7 +56,7 @@ describe('Options template', () => {
       wrapper.setProps({
         presets: {
           ...props.presets,
-          '0': {
+          0: {
             ...props.presets['0'],
             editable: false
           }
@@ -154,10 +154,10 @@ describe('Options template', () => {
       expect(settings.setSettings.mock.calls[0][0]).toEqual({
         presets: {
           ...props.presets,
-          '0': {
+          0: {
             ...props.presets['0'],
             hooks: {
-              '0': {
+              0: {
                 name: 'newName'
               }
             }

@@ -12,7 +12,7 @@ describe('reducer', () => {
   beforeEach(() => {
     curState = {
       alerts: {
-        '0': {
+        0: {
           id: '0',
           hidden: false,
           title: 'title',
@@ -42,7 +42,7 @@ describe('reducer', () => {
       ...curState,
       alerts: {
         ...curState.alerts,
-        '1': {
+        1: {
           id: '1',
           hidden: false,
           title: 'title',
@@ -74,7 +74,7 @@ describe('reducer', () => {
     ).toEqual({
       ...curState,
       alerts: {
-        '0': {
+        0: {
           ...curState.alerts['0'],
           hidden: true
         }
