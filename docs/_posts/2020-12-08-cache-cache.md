@@ -4,7 +4,7 @@ title: "API - Cache"
 menuTitle: "Cache"
 ---
 
-## Cache&nbsp;<a name="Cache" href="https://github.com/seznam/ima/blob/v17.7.8/packages/core/src/cache/Cache.js#L9" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a>
+## Cache&nbsp;<a name="Cache" href="https://github.com/seznam/ima/blob/v17.7.9/packages/core/src/cache/Cache.js#L9" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a>
 **Kind**: global interface  
 
 * [Cache](#Cache)
@@ -21,14 +21,14 @@ menuTitle: "Cache"
 
 * * *
 
-### cache.clear()&nbsp;<a name="Cache+clear" href="https://github.com/seznam/ima/blob/v17.7.8/packages/core/src/cache/Cache.js#L13" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a>
+### cache.clear()&nbsp;<a name="Cache+clear" href="https://github.com/seznam/ima/blob/v17.7.9/packages/core/src/cache/Cache.js#L13" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a>
 Clears the cache by deleting all entries.
 
 **Kind**: instance method of [<code>Cache</code>](#Cache)  
 
 * * *
 
-### cache.has(key) ⇒ <code>boolean</code>&nbsp;<a name="Cache+has" href="https://github.com/seznam/ima/blob/v17.7.8/packages/core/src/cache/Cache.js#L25" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a>
+### cache.has(key) ⇒ <code>boolean</code>&nbsp;<a name="Cache+has" href="https://github.com/seznam/ima/blob/v17.7.9/packages/core/src/cache/Cache.js#L25" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a>
 Tests whether the cache contains a fresh entry for the specified key. A
 cache entry is fresh if the has not expired its TTL (time to live).
 
@@ -45,7 +45,7 @@ The method always returns `false` if the cache is currently disabled.
 
 * * *
 
-### cache.get(key) ⇒ <code>\*</code>&nbsp;<a name="Cache+get" href="https://github.com/seznam/ima/blob/v17.7.8/packages/core/src/cache/Cache.js#L37" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a>
+### cache.get(key) ⇒ <code>\*</code>&nbsp;<a name="Cache+get" href="https://github.com/seznam/ima/blob/v17.7.9/packages/core/src/cache/Cache.js#L37" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a>
 Returns the value of the entry identified by the specified key.
 
 The method returns `null` if the specified entry does not exist, has
@@ -62,7 +62,7 @@ already expired, or the cache is currently disabled.
 
 * * *
 
-### cache.set(key, value, [ttl])&nbsp;<a name="Cache+set" href="https://github.com/seznam/ima/blob/v17.7.8/packages/core/src/cache/Cache.js#L51" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a>
+### cache.set(key, value, [ttl])&nbsp;<a name="Cache+set" href="https://github.com/seznam/ima/blob/v17.7.9/packages/core/src/cache/Cache.js#L51" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a>
 Sets the cache entry identified by the specified key to the provided
 value. The entry is created if it does not exist yet.
 
@@ -79,7 +79,7 @@ The method has no effect if the cache is currently disabled.
 
 * * *
 
-### cache.delete(key)&nbsp;<a name="Cache+delete" href="https://github.com/seznam/ima/blob/v17.7.8/packages/core/src/cache/Cache.js#L59" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a>
+### cache.delete(key)&nbsp;<a name="Cache+delete" href="https://github.com/seznam/ima/blob/v17.7.9/packages/core/src/cache/Cache.js#L59" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a>
 Deletes the specified cache entry. The method has no effect if the entry
 does not exist.
 
@@ -92,7 +92,7 @@ does not exist.
 
 * * *
 
-### cache.disable()&nbsp;<a name="Cache+disable" href="https://github.com/seznam/ima/blob/v17.7.8/packages/core/src/cache/Cache.js#L71" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a>
+### cache.disable()&nbsp;<a name="Cache+disable" href="https://github.com/seznam/ima/blob/v17.7.9/packages/core/src/cache/Cache.js#L71" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a>
 Disables the cache, preventing the retrieval of any cached entries and
 reporting all cache entries as non-existing. Disabling the cache does
 not however prevent modifying the existing or creating new cache
@@ -106,7 +106,7 @@ The method has no effect if the cache is already disabled.
 
 * * *
 
-### cache.enable()&nbsp;<a name="Cache+enable" href="https://github.com/seznam/ima/blob/v17.7.8/packages/core/src/cache/Cache.js#L78" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a>
+### cache.enable()&nbsp;<a name="Cache+enable" href="https://github.com/seznam/ima/blob/v17.7.9/packages/core/src/cache/Cache.js#L78" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a>
 Enables the cache, allowing the retrieval of cache entries.
 
 The method has no effect if the cache is already enabled.
@@ -115,7 +115,7 @@ The method has no effect if the cache is already enabled.
 
 * * *
 
-### cache.serialize() ⇒ <code>string</code>&nbsp;<a name="Cache+serialize" href="https://github.com/seznam/ima/blob/v17.7.8/packages/core/src/cache/Cache.js#L88" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a>
+### cache.serialize() ⇒ <code>string</code>&nbsp;<a name="Cache+serialize" href="https://github.com/seznam/ima/blob/v17.7.9/packages/core/src/cache/Cache.js#L88" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a>
 Exports the state of this cache to an HTML-safe JSON string. The data
 obtained by parsing the result of this method are compatible with the
 [deserialize](#Cache+deserialize) method.
@@ -126,7 +126,7 @@ obtained by parsing the result of this method are compatible with the
 
 * * *
 
-### cache.deserialize(serializedData)&nbsp;<a name="Cache+deserialize" href="https://github.com/seznam/ima/blob/v17.7.8/packages/core/src/cache/Cache.js#L100" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a>
+### cache.deserialize(serializedData)&nbsp;<a name="Cache+deserialize" href="https://github.com/seznam/ima/blob/v17.7.9/packages/core/src/cache/Cache.js#L100" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a>
 Loads the provided serialized cache data into this cache. Entries
 present in this cache but not specified in the provided data will remain
 in this cache intact.

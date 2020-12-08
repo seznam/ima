@@ -4,7 +4,7 @@ title: "API - ClientPageRenderer"
 menuTitle: "ClientPageRenderer"
 ---
 
-## ClientPageRenderer&nbsp;<a name="ClientPageRenderer" href="https://github.com/seznam/ima/blob/v17.7.8/packages/core/src/page/renderer/ClientPageRenderer.js#L26" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a>
+## ClientPageRenderer&nbsp;<a name="ClientPageRenderer" href="https://github.com/seznam/ima/blob/v17.7.9/packages/core/src/page/renderer/ClientPageRenderer.js#L26" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a>
 Client-side page renderer. The renderer attempts to reuse the markup sent by
 server if possible.
 
@@ -48,14 +48,14 @@ Initializes the client-side page renderer.
 
 * * *
 
-### clientPageRenderer.\_firstTime : <code>boolean</code>&nbsp;<a name="ClientPageRenderer+_firstTime" href="https://github.com/seznam/ima/blob/v17.7.8/packages/core/src/page/renderer/ClientPageRenderer.js#L34" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a>
+### clientPageRenderer.\_firstTime : <code>boolean</code>&nbsp;<a name="ClientPageRenderer+_firstTime" href="https://github.com/seznam/ima/blob/v17.7.9/packages/core/src/page/renderer/ClientPageRenderer.js#L34" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a>
 Flag signalling that the page is being rendered for the first time.
 
 **Kind**: instance property of [<code>ClientPageRenderer</code>](#ClientPageRenderer)  
 
 * * *
 
-### clientPageRenderer.\_window : <code>Window</code>&nbsp;<a name="ClientPageRenderer+_window" href="https://github.com/seznam/ima/blob/v17.7.8/packages/core/src/page/renderer/ClientPageRenderer.js#L42" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a>
+### clientPageRenderer.\_window : <code>Window</code>&nbsp;<a name="ClientPageRenderer+_window" href="https://github.com/seznam/ima/blob/v17.7.9/packages/core/src/page/renderer/ClientPageRenderer.js#L42" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a>
 Helper for manipulating the global object (<code>window</code>)
 regardless of the client/server-side environment.
 
@@ -63,7 +63,7 @@ regardless of the client/server-side environment.
 
 * * *
 
-### clientPageRenderer.\_viewContainer : <code>HTMLElement</code>&nbsp;<a name="ClientPageRenderer+_viewContainer" href="https://github.com/seznam/ima/blob/v17.7.8/packages/core/src/page/renderer/ClientPageRenderer.js#L50" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a>
+### clientPageRenderer.\_viewContainer : <code>HTMLElement</code>&nbsp;<a name="ClientPageRenderer+_viewContainer" href="https://github.com/seznam/ima/blob/v17.7.9/packages/core/src/page/renderer/ClientPageRenderer.js#L50" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a>
 The HTML element containing the current application view for the
 current route.
 
@@ -71,22 +71,22 @@ current route.
 
 * * *
 
-### clientPageRenderer.mount()&nbsp;<a name="ClientPageRenderer+mount" href="https://github.com/seznam/ima/blob/v17.7.8/packages/core/src/page/renderer/ClientPageRenderer.js#L56" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a>
+### clientPageRenderer.mount()&nbsp;<a name="ClientPageRenderer+mount" href="https://github.com/seznam/ima/blob/v17.7.9/packages/core/src/page/renderer/ClientPageRenderer.js#L56" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a>
 **Kind**: instance method of [<code>ClientPageRenderer</code>](#ClientPageRenderer)  
 
 * * *
 
-### clientPageRenderer.update()&nbsp;<a name="ClientPageRenderer+update" href="https://github.com/seznam/ima/blob/v17.7.8/packages/core/src/page/renderer/ClientPageRenderer.js#L93" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a>
+### clientPageRenderer.update()&nbsp;<a name="ClientPageRenderer+update" href="https://github.com/seznam/ima/blob/v17.7.9/packages/core/src/page/renderer/ClientPageRenderer.js#L93" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a>
 **Kind**: instance method of [<code>ClientPageRenderer</code>](#ClientPageRenderer)  
 
 * * *
 
-### clientPageRenderer.unmount()&nbsp;<a name="ClientPageRenderer+unmount" href="https://github.com/seznam/ima/blob/v17.7.8/packages/core/src/page/renderer/ClientPageRenderer.js#L119" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a>
+### clientPageRenderer.unmount()&nbsp;<a name="ClientPageRenderer+unmount" href="https://github.com/seznam/ima/blob/v17.7.9/packages/core/src/page/renderer/ClientPageRenderer.js#L119" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a>
 **Kind**: instance method of [<code>ClientPageRenderer</code>](#ClientPageRenderer)  
 
 * * *
 
-### clientPageRenderer.\_handleError(error)&nbsp;<a name="ClientPageRenderer+_handleError" href="https://github.com/seznam/ima/blob/v17.7.8/packages/core/src/page/renderer/ClientPageRenderer.js#L135" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a>
+### clientPageRenderer.\_handleError(error)&nbsp;<a name="ClientPageRenderer+_handleError" href="https://github.com/seznam/ima/blob/v17.7.9/packages/core/src/page/renderer/ClientPageRenderer.js#L135" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a>
 Show error to console in $Debug mode and re-throw that error
 for other error handler.
 
@@ -103,7 +103,7 @@ for other error handler.
 
 * * *
 
-### clientPageRenderer.\_patchPromisesToState(controller, patchedPromises)&nbsp;<a name="ClientPageRenderer+_patchPromisesToState" href="https://github.com/seznam/ima/blob/v17.7.8/packages/core/src/page/renderer/ClientPageRenderer.js#L149" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a>
+### clientPageRenderer.\_patchPromisesToState(controller, patchedPromises)&nbsp;<a name="ClientPageRenderer+_patchPromisesToState" href="https://github.com/seznam/ima/blob/v17.7.9/packages/core/src/page/renderer/ClientPageRenderer.js#L149" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a>
 Patch promise values to controller state.
 
 **Kind**: instance method of [<code>ClientPageRenderer</code>](#ClientPageRenderer)  
@@ -116,7 +116,7 @@ Patch promise values to controller state.
 
 * * *
 
-### clientPageRenderer.\_setStateWithoutRendering(controller, defaultPageState)&nbsp;<a name="ClientPageRenderer+_setStateWithoutRendering" href="https://github.com/seznam/ima/blob/v17.7.8/packages/core/src/page/renderer/ClientPageRenderer.js#L168" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a>
+### clientPageRenderer.\_setStateWithoutRendering(controller, defaultPageState)&nbsp;<a name="ClientPageRenderer+_setStateWithoutRendering" href="https://github.com/seznam/ima/blob/v17.7.9/packages/core/src/page/renderer/ClientPageRenderer.js#L168" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a>
 The method is hacky for IMA@17 and we must rewrite logic for IMA@18.
 
 **Kind**: instance method of [<code>ClientPageRenderer</code>](#ClientPageRenderer)  
@@ -129,7 +129,7 @@ The method is hacky for IMA@17 and we must rewrite logic for IMA@18.
 
 * * *
 
-### clientPageRenderer.\_patchStateToClearPreviousState(state) ⇒ <code>Object.&lt;string, \*&gt;</code>&nbsp;<a name="ClientPageRenderer+_patchStateToClearPreviousState" href="https://github.com/seznam/ima/blob/v17.7.8/packages/core/src/page/renderer/ClientPageRenderer.js#L184" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a>
+### clientPageRenderer.\_patchStateToClearPreviousState(state) ⇒ <code>Object.&lt;string, \*&gt;</code>&nbsp;<a name="ClientPageRenderer+_patchStateToClearPreviousState" href="https://github.com/seznam/ima/blob/v17.7.9/packages/core/src/page/renderer/ClientPageRenderer.js#L184" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a>
 **Kind**: instance method of [<code>ClientPageRenderer</code>](#ClientPageRenderer)  
 
 | Param | Type |
@@ -139,7 +139,7 @@ The method is hacky for IMA@17 and we must rewrite logic for IMA@18.
 
 * * *
 
-### clientPageRenderer.\_renderToDOM(controller, view, routeOptions) ⇒ <code>Promise.&lt;undefined&gt;</code>&nbsp;<a name="ClientPageRenderer+_renderToDOM" href="https://github.com/seznam/ima/blob/v17.7.8/packages/core/src/page/renderer/ClientPageRenderer.js#L223" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a>
+### clientPageRenderer.\_renderToDOM(controller, view, routeOptions) ⇒ <code>Promise.&lt;undefined&gt;</code>&nbsp;<a name="ClientPageRenderer+_renderToDOM" href="https://github.com/seznam/ima/blob/v17.7.9/packages/core/src/page/renderer/ClientPageRenderer.js#L223" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a>
 Renders the current route to DOM.
 
 **Kind**: instance method of [<code>ClientPageRenderer</code>](#ClientPageRenderer)  
@@ -153,7 +153,7 @@ Renders the current route to DOM.
 
 * * *
 
-### clientPageRenderer.\_separatePromisesAndValues(dataMap) ⇒ <code>Object</code>&nbsp;<a name="ClientPageRenderer+_separatePromisesAndValues" href="https://github.com/seznam/ima/blob/v17.7.8/packages/core/src/page/renderer/ClientPageRenderer.js#L288" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a>
+### clientPageRenderer.\_separatePromisesAndValues(dataMap) ⇒ <code>Object</code>&nbsp;<a name="ClientPageRenderer+_separatePromisesAndValues" href="https://github.com/seznam/ima/blob/v17.7.9/packages/core/src/page/renderer/ClientPageRenderer.js#L288" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a>
 Separate promises and values from provided data map. Values will be use
 for default page state. Promises will be patched to state after their
 resolve.
@@ -168,7 +168,7 @@ resolve.
 
 * * *
 
-### clientPageRenderer.\_updateMetaAttributes(metaManager)&nbsp;<a name="ClientPageRenderer+_updateMetaAttributes" href="https://github.com/seznam/ima/blob/v17.7.8/packages/core/src/page/renderer/ClientPageRenderer.js#L311" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a>
+### clientPageRenderer.\_updateMetaAttributes(metaManager)&nbsp;<a name="ClientPageRenderer+_updateMetaAttributes" href="https://github.com/seznam/ima/blob/v17.7.9/packages/core/src/page/renderer/ClientPageRenderer.js#L311" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a>
 Updates the title and the contents of the meta elements used for SEO.
 
 **Kind**: instance method of [<code>ClientPageRenderer</code>](#ClientPageRenderer)  
@@ -180,7 +180,7 @@ Updates the title and the contents of the meta elements used for SEO.
 
 * * *
 
-### clientPageRenderer.\_updateMetaNameAttributes(metaManager)&nbsp;<a name="ClientPageRenderer+_updateMetaNameAttributes" href="https://github.com/seznam/ima/blob/v17.7.8/packages/core/src/page/renderer/ClientPageRenderer.js#L325" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a>
+### clientPageRenderer.\_updateMetaNameAttributes(metaManager)&nbsp;<a name="ClientPageRenderer+_updateMetaNameAttributes" href="https://github.com/seznam/ima/blob/v17.7.9/packages/core/src/page/renderer/ClientPageRenderer.js#L325" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a>
 Updates the contents of the generic meta elements used for SEO.
 
 **Kind**: instance method of [<code>ClientPageRenderer</code>](#ClientPageRenderer)  
@@ -192,7 +192,7 @@ Updates the contents of the generic meta elements used for SEO.
 
 * * *
 
-### clientPageRenderer.\_updateMetaPropertyAttributes(metaManager)&nbsp;<a name="ClientPageRenderer+_updateMetaPropertyAttributes" href="https://github.com/seznam/ima/blob/v17.7.8/packages/core/src/page/renderer/ClientPageRenderer.js#L344" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a>
+### clientPageRenderer.\_updateMetaPropertyAttributes(metaManager)&nbsp;<a name="ClientPageRenderer+_updateMetaPropertyAttributes" href="https://github.com/seznam/ima/blob/v17.7.9/packages/core/src/page/renderer/ClientPageRenderer.js#L344" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a>
 Updates the contents of the specialized meta elements used for SEO.
 
 **Kind**: instance method of [<code>ClientPageRenderer</code>](#ClientPageRenderer)  
@@ -204,7 +204,7 @@ Updates the contents of the specialized meta elements used for SEO.
 
 * * *
 
-### clientPageRenderer.\_updateMetaLinkAttributes(metaManager)&nbsp;<a name="ClientPageRenderer+_updateMetaLinkAttributes" href="https://github.com/seznam/ima/blob/v17.7.8/packages/core/src/page/renderer/ClientPageRenderer.js#L363" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a>
+### clientPageRenderer.\_updateMetaLinkAttributes(metaManager)&nbsp;<a name="ClientPageRenderer+_updateMetaLinkAttributes" href="https://github.com/seznam/ima/blob/v17.7.9/packages/core/src/page/renderer/ClientPageRenderer.js#L363" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a>
 Updates the href of the specialized link elements used for SEO.
 
 **Kind**: instance method of [<code>ClientPageRenderer</code>](#ClientPageRenderer)  

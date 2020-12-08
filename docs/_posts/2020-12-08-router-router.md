@@ -4,7 +4,7 @@ title: "API - Router"
 menuTitle: "Router"
 ---
 
-## Router&nbsp;<a name="Router" href="https://github.com/seznam/ima/blob/v17.7.8/packages/core/src/router/Router.js#L7" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a>
+## Router&nbsp;<a name="Router" href="https://github.com/seznam/ima/blob/v17.7.9/packages/core/src/router/Router.js#L7" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a>
 **Kind**: global interface  
 
 * [Router](#Router)
@@ -31,7 +31,7 @@ menuTitle: "Router"
 
 * * *
 
-### router.init(config)&nbsp;<a name="Router+init" href="https://github.com/seznam/ima/blob/v17.7.8/packages/core/src/router/Router.js#L29" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a>
+### router.init(config)&nbsp;<a name="Router+init" href="https://github.com/seznam/ima/blob/v17.7.9/packages/core/src/router/Router.js#L29" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a>
 Initializes the router with the provided configuration.
 
 **Kind**: instance method of [<code>Router</code>](#Router)  
@@ -43,7 +43,7 @@ Initializes the router with the provided configuration.
 
 * * *
 
-### router.add(name, pathExpression, controller, view, [options]) ⇒ [<code>Router</code>](#Router)&nbsp;<a name="Router+add" href="https://github.com/seznam/ima/blob/v17.7.8/packages/core/src/router/Router.js#L88" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a>
+### router.add(name, pathExpression, controller, view, [options]) ⇒ [<code>Router</code>](#Router)&nbsp;<a name="Router+add" href="https://github.com/seznam/ima/blob/v17.7.9/packages/core/src/router/Router.js#L88" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a>
 Adds a new route to router.
 
 **Kind**: instance method of [<code>Router</code>](#Router)  
@@ -64,7 +64,7 @@ Adds a new route to router.
 
 * * *
 
-### router.remove(name) ⇒ [<code>Router</code>](#Router)&nbsp;<a name="Router+remove" href="https://github.com/seznam/ima/blob/v17.7.8/packages/core/src/router/Router.js#L97" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a>
+### router.remove(name) ⇒ [<code>Router</code>](#Router)&nbsp;<a name="Router+remove" href="https://github.com/seznam/ima/blob/v17.7.9/packages/core/src/router/Router.js#L97" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a>
 Removes the specified route from the router's known routes.
 
 **Kind**: instance method of [<code>Router</code>](#Router)  
@@ -77,7 +77,7 @@ Removes the specified route from the router's known routes.
 
 * * *
 
-### router.getPath() ⇒ <code>string</code>&nbsp;<a name="Router+getPath" href="https://github.com/seznam/ima/blob/v17.7.8/packages/core/src/router/Router.js#L105" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a>
+### router.getPath() ⇒ <code>string</code>&nbsp;<a name="Router+getPath" href="https://github.com/seznam/ima/blob/v17.7.9/packages/core/src/router/Router.js#L105" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a>
 Returns the current path part of the current URL, including the query
 string (if any).
 
@@ -86,7 +86,7 @@ string (if any).
 
 * * *
 
-### router.getUrl() ⇒ <code>string</code>&nbsp;<a name="Router+getUrl" href="https://github.com/seznam/ima/blob/v17.7.8/packages/core/src/router/Router.js#L112" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a>
+### router.getUrl() ⇒ <code>string</code>&nbsp;<a name="Router+getUrl" href="https://github.com/seznam/ima/blob/v17.7.9/packages/core/src/router/Router.js#L112" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a>
 Returns the current absolute URL (including protocol, host, query, etc).
 
 **Kind**: instance method of [<code>Router</code>](#Router)  
@@ -94,7 +94,7 @@ Returns the current absolute URL (including protocol, host, query, etc).
 
 * * *
 
-### router.getBaseUrl() ⇒ <code>string</code>&nbsp;<a name="Router+getBaseUrl" href="https://github.com/seznam/ima/blob/v17.7.8/packages/core/src/router/Router.js#L120" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a>
+### router.getBaseUrl() ⇒ <code>string</code>&nbsp;<a name="Router+getBaseUrl" href="https://github.com/seznam/ima/blob/v17.7.9/packages/core/src/router/Router.js#L120" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a>
 Returns the application's absolute base URL, pointing to the public root
 of the application.
 
@@ -103,7 +103,7 @@ of the application.
 
 * * *
 
-### router.getDomain() ⇒ <code>string</code>&nbsp;<a name="Router+getDomain" href="https://github.com/seznam/ima/blob/v17.7.8/packages/core/src/router/Router.js#L128" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a>
+### router.getDomain() ⇒ <code>string</code>&nbsp;<a name="Router+getDomain" href="https://github.com/seznam/ima/blob/v17.7.9/packages/core/src/router/Router.js#L128" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a>
 Returns the application's domain in the following form
 <code>`${protocol</code>//${host}`}.
 
@@ -112,7 +112,7 @@ Returns the application's domain in the following form
 
 * * *
 
-### router.getHost() ⇒ <code>string</code>&nbsp;<a name="Router+getHost" href="https://github.com/seznam/ima/blob/v17.7.8/packages/core/src/router/Router.js#L135" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a>
+### router.getHost() ⇒ <code>string</code>&nbsp;<a name="Router+getHost" href="https://github.com/seznam/ima/blob/v17.7.9/packages/core/src/router/Router.js#L135" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a>
 Returns application's host (domain and, if necessary, the port number).
 
 **Kind**: instance method of [<code>Router</code>](#Router)  
@@ -120,7 +120,7 @@ Returns application's host (domain and, if necessary, the port number).
 
 * * *
 
-### router.getProtocol() ⇒ <code>string</code>&nbsp;<a name="Router+getProtocol" href="https://github.com/seznam/ima/blob/v17.7.8/packages/core/src/router/Router.js#L144" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a>
+### router.getProtocol() ⇒ <code>string</code>&nbsp;<a name="Router+getProtocol" href="https://github.com/seznam/ima/blob/v17.7.9/packages/core/src/router/Router.js#L144" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a>
 Returns the current protocol used to access the application, terminated
 by a colon (for example <code>https:</code>).
 
@@ -130,7 +130,7 @@ by a colon (for example <code>https:</code>).
 
 * * *
 
-### router.getCurrentRouteInfo() ⇒ <code>Object</code>&nbsp;<a name="Router+getCurrentRouteInfo" href="https://github.com/seznam/ima/blob/v17.7.8/packages/core/src/router/Router.js#L156" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a>
+### router.getCurrentRouteInfo() ⇒ <code>Object</code>&nbsp;<a name="Router+getCurrentRouteInfo" href="https://github.com/seznam/ima/blob/v17.7.9/packages/core/src/router/Router.js#L156" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a>
 Returns the information about the currently active route.
 
 **Kind**: instance method of [<code>Router</code>](#Router)  
@@ -142,7 +142,7 @@ Returns the information about the currently active route.
 
 * * *
 
-### router.listen() ⇒ [<code>Router</code>](#Router)&nbsp;<a name="Router+listen" href="https://github.com/seznam/ima/blob/v17.7.8/packages/core/src/router/Router.js#L175" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a>
+### router.listen() ⇒ [<code>Router</code>](#Router)&nbsp;<a name="Router+listen" href="https://github.com/seznam/ima/blob/v17.7.9/packages/core/src/router/Router.js#L175" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a>
 Registers event listeners at the client side window object allowing the
 router to capture user's history (history pop state - going "back") and
 page (clicking links) navigation.
@@ -162,7 +162,7 @@ method has no effect at the server side.
 
 * * *
 
-### router.unlisten() ⇒ [<code>Router</code>](#Router)&nbsp;<a name="Router+unlisten" href="https://github.com/seznam/ima/blob/v17.7.8/packages/core/src/router/Router.js#L194" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a>
+### router.unlisten() ⇒ [<code>Router</code>](#Router)&nbsp;<a name="Router+unlisten" href="https://github.com/seznam/ima/blob/v17.7.9/packages/core/src/router/Router.js#L194" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a>
 Unregisters event listeners at the client side window object allowing the
 router to capture user's history (history pop state - going "back") and
 page (clicking links) navigation.
@@ -182,7 +182,7 @@ at the server side.
 
 * * *
 
-### router.redirect(url, [options], [action])&nbsp;<a name="Router+redirect" href="https://github.com/seznam/ima/blob/v17.7.8/packages/core/src/router/Router.js#L235" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a>
+### router.redirect(url, [options], [action])&nbsp;<a name="Router+redirect" href="https://github.com/seznam/ima/blob/v17.7.9/packages/core/src/router/Router.js#L235" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a>
 Redirects the client to the specified location.
 
 At the server side the method results in responding to the client with a
@@ -208,7 +208,7 @@ points to the same domain and protocol.
 
 * * *
 
-### router.link(routeName, params) ⇒ <code>string</code>&nbsp;<a name="Router+link" href="https://github.com/seznam/ima/blob/v17.7.8/packages/core/src/router/Router.js#L249" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a>
+### router.link(routeName, params) ⇒ <code>string</code>&nbsp;<a name="Router+link" href="https://github.com/seznam/ima/blob/v17.7.9/packages/core/src/router/Router.js#L249" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a>
 Generates an absolute URL (including protocol, domain, etc) for the
 specified route by substituting the route's parameter placeholders with
 the provided parameter values.
@@ -224,7 +224,7 @@ the provided parameter values.
 
 * * *
 
-### router.route(path, [options], [action]) ⇒ <code>Promise.&lt;Object.&lt;string, \*&gt;&gt;</code>&nbsp;<a name="Router+route" href="https://github.com/seznam/ima/blob/v17.7.8/packages/core/src/router/Router.js#L282" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a>
+### router.route(path, [options], [action]) ⇒ <code>Promise.&lt;Object.&lt;string, \*&gt;&gt;</code>&nbsp;<a name="Router+route" href="https://github.com/seznam/ima/blob/v17.7.9/packages/core/src/router/Router.js#L282" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a>
 Routes the application to the route matching the providing path, renders
 the route page and sends the result to the client.
 
@@ -242,7 +242,7 @@ the route page and sends the result to the client.
 
 * * *
 
-### router.handleError(params, [options]) ⇒ <code>Promise.&lt;Object.&lt;string, \*&gt;&gt;</code>&nbsp;<a name="Router+handleError" href="https://github.com/seznam/ima/blob/v17.7.8/packages/core/src/router/Router.js#L313" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a>
+### router.handleError(params, [options]) ⇒ <code>Promise.&lt;Object.&lt;string, \*&gt;&gt;</code>&nbsp;<a name="Router+handleError" href="https://github.com/seznam/ima/blob/v17.7.9/packages/core/src/router/Router.js#L313" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a>
 Handles an internal server error by responding with the appropriate
 "internal server error" error page.
 
@@ -259,7 +259,7 @@ Handles an internal server error by responding with the appropriate
 
 * * *
 
-### router.handleNotFound(params, [options]) ⇒ <code>Promise.&lt;Object.&lt;string, \*&gt;&gt;</code>&nbsp;<a name="Router+handleNotFound" href="https://github.com/seznam/ima/blob/v17.7.8/packages/core/src/router/Router.js#L344" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a>
+### router.handleNotFound(params, [options]) ⇒ <code>Promise.&lt;Object.&lt;string, \*&gt;&gt;</code>&nbsp;<a name="Router+handleNotFound" href="https://github.com/seznam/ima/blob/v17.7.9/packages/core/src/router/Router.js#L344" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a>
 Handles a "not found" error by responding with the appropriate "not
 found" error page.
 
@@ -276,7 +276,7 @@ found" error page.
 
 * * *
 
-### router.isClientError(reason) ⇒ <code>boolean</code>&nbsp;<a name="Router+isClientError" href="https://github.com/seznam/ima/blob/v17.7.8/packages/core/src/router/Router.js#L355" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a>
+### router.isClientError(reason) ⇒ <code>boolean</code>&nbsp;<a name="Router+isClientError" href="https://github.com/seznam/ima/blob/v17.7.9/packages/core/src/router/Router.js#L355" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a>
 Tests, if possible, whether the specified error was caused by the
 client's action (for example wrong URL or request encoding) or by a
 failure at the server side.
@@ -292,7 +292,7 @@ failure at the server side.
 
 * * *
 
-### router.isRedirection(reason) ⇒ <code>boolean</code>&nbsp;<a name="Router+isRedirection" href="https://github.com/seznam/ima/blob/v17.7.8/packages/core/src/router/Router.js#L364" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a>
+### router.isRedirection(reason) ⇒ <code>boolean</code>&nbsp;<a name="Router+isRedirection" href="https://github.com/seznam/ima/blob/v17.7.9/packages/core/src/router/Router.js#L364" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a>
 Tests, if possible, whether the specified error lead to redirection.
 
 **Kind**: instance method of [<code>Router</code>](#Router)  

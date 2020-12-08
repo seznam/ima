@@ -3,6 +3,14 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [17.7.9](https://github.com/seznam/ima/compare/v17.7.8...v17.7.9) (2020-12-08)
+
+**Note:** Version bump only for package @ima/devtools-scripts
+
+
+
+
+
 ## [17.7.8](https://github.com/seznam/ima/compare/v17.7.7...v17.7.8) (2020-12-08)
 
 **Note:** Version bump only for package @ima/devtools-scripts

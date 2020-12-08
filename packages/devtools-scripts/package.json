@@ -1,6 +1,6 @@
 {
   "name": "@ima/devtools-scripts",
-  "version": "17.7.8",
+  "version": "17.7.9",
   "description": "IMA.js devtool script used in the @ima/devtools.",
   "main": "es/main.string.js",
   "scripts": {
