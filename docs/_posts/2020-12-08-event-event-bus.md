@@ -4,7 +4,7 @@ title: "API - EventBus"
 menuTitle: "EventBus"
 ---
 
-## EventBus&nbsp;<a name="EventBus" href="https://github.com/seznam/ima/blob/v17.7.7/packages/core/src/event/EventBus.js#L16" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a>
+## EventBus&nbsp;<a name="EventBus" href="https://github.com/seznam/ima/blob/v17.7.8/packages/core/src/event/EventBus.js#L16" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a>
 **Kind**: global interface  
 
 * [EventBus](#EventBus)
@@ -17,7 +17,7 @@ menuTitle: "EventBus"
 
 * * *
 
-### eventBus.fire(eventTarget, eventName, data, [options]) ⇒ [<code>EventBus</code>](#EventBus)&nbsp;<a name="EventBus+fire" href="https://github.com/seznam/ima/blob/v17.7.7/packages/core/src/event/EventBus.js#L44" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a>
+### eventBus.fire(eventTarget, eventName, data, [options]) ⇒ [<code>EventBus</code>](#EventBus)&nbsp;<a name="EventBus+fire" href="https://github.com/seznam/ima/blob/v17.7.8/packages/core/src/event/EventBus.js#L44" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a>
 Fires a new custom event of the specified name, carrying the provided
 data.
 
@@ -49,7 +49,7 @@ default values used in the native custom events
 
 * * *
 
-### eventBus.listenAll(eventTarget, listener) ⇒ [<code>EventBus</code>](#EventBus)&nbsp;<a name="EventBus+listenAll" href="https://github.com/seznam/ima/blob/v17.7.7/packages/core/src/event/EventBus.js#L63" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a>
+### eventBus.listenAll(eventTarget, listener) ⇒ [<code>EventBus</code>](#EventBus)&nbsp;<a name="EventBus+listenAll" href="https://github.com/seznam/ima/blob/v17.7.8/packages/core/src/event/EventBus.js#L63" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a>
 Registers the provided event listener to be executed when any custom
 event is fired using the same implementation of the event bus and passes
 through the specified event target.
@@ -71,7 +71,7 @@ and should not be relied upon.
 
 * * *
 
-### eventBus.listen(eventTarget, eventName, listener) ⇒ [<code>EventBus</code>](#EventBus)&nbsp;<a name="EventBus+listen" href="https://github.com/seznam/ima/blob/v17.7.7/packages/core/src/event/EventBus.js#L83" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a>
+### eventBus.listen(eventTarget, eventName, listener) ⇒ [<code>EventBus</code>](#EventBus)&nbsp;<a name="EventBus+listen" href="https://github.com/seznam/ima/blob/v17.7.8/packages/core/src/event/EventBus.js#L83" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a>
 Registers the provided event listener to be executed when the specific
 custom event is fired by the same implementation of the event bus and
 passes through the specified event target.
@@ -94,7 +94,7 @@ and should not be relied upon.
 
 * * *
 
-### eventBus.unlistenAll(eventTarget, listener) ⇒ [<code>EventBus</code>](#EventBus)&nbsp;<a name="EventBus+unlistenAll" href="https://github.com/seznam/ima/blob/v17.7.7/packages/core/src/event/EventBus.js#L99" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a>
+### eventBus.unlistenAll(eventTarget, listener) ⇒ [<code>EventBus</code>](#EventBus)&nbsp;<a name="EventBus+unlistenAll" href="https://github.com/seznam/ima/blob/v17.7.8/packages/core/src/event/EventBus.js#L99" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a>
 Removes the provided event listener from the set of event listeners
 executed when the any custom event fired by the same implementation
 passes through the specified event target.
@@ -113,7 +113,7 @@ specified event target.
 
 * * *
 
-### eventBus.unlisten(eventTarget, eventName, listener) ⇒ [<code>EventBus</code>](#EventBus)&nbsp;<a name="EventBus+unlisten" href="https://github.com/seznam/ima/blob/v17.7.7/packages/core/src/event/EventBus.js#L116" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a>
+### eventBus.unlisten(eventTarget, eventName, listener) ⇒ [<code>EventBus</code>](#EventBus)&nbsp;<a name="EventBus+unlisten" href="https://github.com/seznam/ima/blob/v17.7.8/packages/core/src/event/EventBus.js#L116" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a>
 Removes the provided event listener from the set of event listeners
 executed when the specified custom event fired by the same
 implementation passes through the specified event target.

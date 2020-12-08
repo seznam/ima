@@ -44,7 +44,7 @@ of the specified name at the specified event target.</p>
 </dd>
 </dl>
 
-## getUtils(props, context) ⇒ <code>Object.&lt;string, \*&gt;</code>&nbsp;<a name="getUtils" href="https://github.com/seznam/ima/blob/v17.7.7/packages/core/src/page/componentHelpers.js#L15" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a>
+## getUtils(props, context) ⇒ <code>Object.&lt;string, \*&gt;</code>&nbsp;<a name="getUtils" href="https://github.com/seznam/ima/blob/v17.7.8/packages/core/src/page/componentHelpers.js#L15" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a>
 Retrieves the view utilities from the component's current context or
 properties (preferring the context).
 
@@ -64,7 +64,7 @@ properties (preferring the context).
 
 * * *
 
-## localize(component, key, [params]) ⇒ <code>string</code>&nbsp;<a name="localize" href="https://github.com/seznam/ima/blob/v17.7.7/packages/core/src/page/componentHelpers.js#L40" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a>
+## localize(component, key, [params]) ⇒ <code>string</code>&nbsp;<a name="localize" href="https://github.com/seznam/ima/blob/v17.7.8/packages/core/src/page/componentHelpers.js#L40" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a>
 Returns the localized phrase identified by the specified key. The
 placeholders in the localization phrase will be replaced by the provided
 values.
@@ -81,7 +81,7 @@ values.
 
 * * *
 
-## link(component, name, [params]) ⇒ <code>string</code>&nbsp;<a name="link" href="https://github.com/seznam/ima/blob/v17.7.7/packages/core/src/page/componentHelpers.js#L57" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a>
+## link(component, name, [params]) ⇒ <code>string</code>&nbsp;<a name="link" href="https://github.com/seznam/ima/blob/v17.7.8/packages/core/src/page/componentHelpers.js#L57" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a>
 Generates an absolute URL using the provided route name (see the
 <code>app/config/routes.js</code> file). The provided parameters will
 replace the placeholders in the route pattern, while the extraneous
@@ -99,7 +99,7 @@ parameters will be appended to the generated URL's query string.
 
 * * *
 
-## cssClasses(component, classRules, includeComponentClassName) ⇒ <code>string</code>&nbsp;<a name="cssClasses" href="https://github.com/seznam/ima/blob/v17.7.7/packages/core/src/page/componentHelpers.js#L82" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a>
+## cssClasses(component, classRules, includeComponentClassName) ⇒ <code>string</code>&nbsp;<a name="cssClasses" href="https://github.com/seznam/ima/blob/v17.7.8/packages/core/src/page/componentHelpers.js#L82" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a>
 Generate a string of CSS classes from the properties of the passed-in
 object that resolve to <code>true</code>.
 
@@ -127,7 +127,7 @@ this.cssClasses({
 
 * * *
 
-## defaultCssClasses(classRules, component) ⇒ <code>string</code>&nbsp;<a name="defaultCssClasses" href="https://github.com/seznam/ima/blob/v17.7.7/packages/core/src/page/componentHelpers.js#L103" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a>
+## defaultCssClasses(classRules, component) ⇒ <code>string</code>&nbsp;<a name="defaultCssClasses" href="https://github.com/seznam/ima/blob/v17.7.8/packages/core/src/page/componentHelpers.js#L103" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a>
 Generate a string of CSS classes from the properties of the passed-in
 object that resolve to <code>true</code>.
 
@@ -143,7 +143,7 @@ object that resolve to <code>true</code>.
 
 * * *
 
-## fire(component, eventName, [data])&nbsp;<a name="fire" href="https://github.com/seznam/ima/blob/v17.7.7/packages/core/src/page/componentHelpers.js#L125" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a>
+## fire(component, eventName, [data])&nbsp;<a name="fire" href="https://github.com/seznam/ima/blob/v17.7.8/packages/core/src/page/componentHelpers.js#L125" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a>
 Creates and sends a new IMA.js DOM custom event from the provided component.
 
 **Kind**: global function  
@@ -157,7 +157,7 @@ Creates and sends a new IMA.js DOM custom event from the provided component.
 
 * * *
 
-## listen(component, eventTarget, eventName, listener)&nbsp;<a name="listen" href="https://github.com/seznam/ima/blob/v17.7.7/packages/core/src/page/componentHelpers.js#L145" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a>
+## listen(component, eventTarget, eventName, listener)&nbsp;<a name="listen" href="https://github.com/seznam/ima/blob/v17.7.8/packages/core/src/page/componentHelpers.js#L145" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a>
 Registers the provided event listener for execution whenever an IMA.js
 DOM custom event of the specified name occurs at the specified event
 target.
@@ -174,7 +174,7 @@ target.
 
 * * *
 
-## unlisten(component, eventTarget, eventName, listener)&nbsp;<a name="unlisten" href="https://github.com/seznam/ima/blob/v17.7.7/packages/core/src/page/componentHelpers.js#L165" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a>
+## unlisten(component, eventTarget, eventName, listener)&nbsp;<a name="unlisten" href="https://github.com/seznam/ima/blob/v17.7.8/packages/core/src/page/componentHelpers.js#L165" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a>
 Deregisters the provided event listener for an IMA.js DOM custom event
 of the specified name at the specified event target.
 

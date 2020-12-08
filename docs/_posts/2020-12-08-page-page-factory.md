@@ -4,7 +4,7 @@ title: "API - PageFactory"
 menuTitle: "PageFactory"
 ---
 
-## PageFactory&nbsp;<a name="PageFactory" href="https://github.com/seznam/ima/blob/v17.7.7/packages/core/src/page/PageFactory.js#L12" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a>
+## PageFactory&nbsp;<a name="PageFactory" href="https://github.com/seznam/ima/blob/v17.7.8/packages/core/src/page/PageFactory.js#L12" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a>
 Factory for page.
 
 **Kind**: global class  
@@ -31,14 +31,14 @@ Factory used by page management classes.
 
 * * *
 
-### pageFactory.\_oc : <code>ObjectContainer</code>&nbsp;<a name="PageFactory+_oc" href="https://github.com/seznam/ima/blob/v17.7.7/packages/core/src/page/PageFactory.js#L18" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a>
+### pageFactory.\_oc : <code>ObjectContainer</code>&nbsp;<a name="PageFactory+_oc" href="https://github.com/seznam/ima/blob/v17.7.8/packages/core/src/page/PageFactory.js#L18" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a>
 The current application object container.
 
 **Kind**: instance property of [<code>PageFactory</code>](#PageFactory)  
 
 * * *
 
-### pageFactory.createController(controller) ⇒ <code>Controller</code>&nbsp;<a name="PageFactory+createController" href="https://github.com/seznam/ima/blob/v17.7.7/packages/core/src/page/PageFactory.js#L27" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a>
+### pageFactory.createController(controller) ⇒ <code>Controller</code>&nbsp;<a name="PageFactory+createController" href="https://github.com/seznam/ima/blob/v17.7.8/packages/core/src/page/PageFactory.js#L27" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a>
 Create new instance of {@linkcode Controller}.
 
 **Kind**: instance method of [<code>PageFactory</code>](#PageFactory)  
@@ -50,7 +50,7 @@ Create new instance of {@linkcode Controller}.
 
 * * *
 
-### pageFactory.createView(view) ⇒ <code>function</code>&nbsp;<a name="PageFactory+createView" href="https://github.com/seznam/ima/blob/v17.7.7/packages/core/src/page/PageFactory.js#L42" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a>
+### pageFactory.createView(view) ⇒ <code>function</code>&nbsp;<a name="PageFactory+createView" href="https://github.com/seznam/ima/blob/v17.7.8/packages/core/src/page/PageFactory.js#L42" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a>
 Retrieves the specified react component class.
 
 **Kind**: instance method of [<code>PageFactory</code>](#PageFactory)  
@@ -64,7 +64,7 @@ Retrieves the specified react component class.
 
 * * *
 
-### pageFactory.decorateController(controller) ⇒ <code>Controller</code>&nbsp;<a name="PageFactory+decorateController" href="https://github.com/seznam/ima/blob/v17.7.7/packages/core/src/page/PageFactory.js#L63" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a>
+### pageFactory.decorateController(controller) ⇒ <code>Controller</code>&nbsp;<a name="PageFactory+decorateController" href="https://github.com/seznam/ima/blob/v17.7.8/packages/core/src/page/PageFactory.js#L63" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a>
 Returns decorated controller for ease setting seo params in controller.
 
 **Kind**: instance method of [<code>PageFactory</code>](#PageFactory)  
@@ -76,7 +76,7 @@ Returns decorated controller for ease setting seo params in controller.
 
 * * *
 
-### pageFactory.decoratePageStateManager(pageStateManager, allowedStateKeys) ⇒ <code>PageStateManager</code>&nbsp;<a name="PageFactory+decoratePageStateManager" href="https://github.com/seznam/ima/blob/v17.7.7/packages/core/src/page/PageFactory.js#L87" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a>
+### pageFactory.decoratePageStateManager(pageStateManager, allowedStateKeys) ⇒ <code>PageStateManager</code>&nbsp;<a name="PageFactory+decoratePageStateManager" href="https://github.com/seznam/ima/blob/v17.7.8/packages/core/src/page/PageFactory.js#L87" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a>
 Returns decorated page state manager for extension.
 
 **Kind**: instance method of [<code>PageFactory</code>](#PageFactory)  

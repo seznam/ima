@@ -4,7 +4,7 @@ title: "API - ServerRouter"
 menuTitle: "ServerRouter"
 ---
 
-## ServerRouter&nbsp;<a name="ServerRouter" href="https://github.com/seznam/ima/blob/v17.7.7/packages/core/src/router/ServerRouter.js#L28" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a>
+## ServerRouter&nbsp;<a name="ServerRouter" href="https://github.com/seznam/ima/blob/v17.7.8/packages/core/src/router/ServerRouter.js#L28" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a>
 The server-side implementation of the <code>Router</code> interface.
 
 **Kind**: global class  
@@ -36,36 +36,36 @@ Initializes the router.
 
 * * *
 
-### serverRouter.\_request : <code>Request</code>&nbsp;<a name="ServerRouter+_request" href="https://github.com/seznam/ima/blob/v17.7.7/packages/core/src/router/ServerRouter.js#L36" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a>
+### serverRouter.\_request : <code>Request</code>&nbsp;<a name="ServerRouter+_request" href="https://github.com/seznam/ima/blob/v17.7.8/packages/core/src/router/ServerRouter.js#L36" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a>
 The current HTTP request.
 
 **Kind**: instance property of [<code>ServerRouter</code>](#ServerRouter)  
 
 * * *
 
-### serverRouter.\_response : <code>Response</code>&nbsp;<a name="ServerRouter+_response" href="https://github.com/seznam/ima/blob/v17.7.7/packages/core/src/router/ServerRouter.js#L43" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a>
+### serverRouter.\_response : <code>Response</code>&nbsp;<a name="ServerRouter+_response" href="https://github.com/seznam/ima/blob/v17.7.8/packages/core/src/router/ServerRouter.js#L43" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a>
 The current HTTP response.
 
 **Kind**: instance property of [<code>ServerRouter</code>](#ServerRouter)  
 
 * * *
 
-### serverRouter.getPath()&nbsp;<a name="ServerRouter+getPath" href="https://github.com/seznam/ima/blob/v17.7.7/packages/core/src/router/ServerRouter.js#L49" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a>
+### serverRouter.getPath()&nbsp;<a name="ServerRouter+getPath" href="https://github.com/seznam/ima/blob/v17.7.8/packages/core/src/router/ServerRouter.js#L49" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a>
 **Kind**: instance method of [<code>ServerRouter</code>](#ServerRouter)  
 
 * * *
 
-### serverRouter.listen()&nbsp;<a name="ServerRouter+listen" href="https://github.com/seznam/ima/blob/v17.7.7/packages/core/src/router/ServerRouter.js#L56" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a>
+### serverRouter.listen()&nbsp;<a name="ServerRouter+listen" href="https://github.com/seznam/ima/blob/v17.7.8/packages/core/src/router/ServerRouter.js#L56" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a>
 **Kind**: instance method of [<code>ServerRouter</code>](#ServerRouter)  
 
 * * *
 
-### serverRouter.unlisten()&nbsp;<a name="ServerRouter+unlisten" href="https://github.com/seznam/ima/blob/v17.7.7/packages/core/src/router/ServerRouter.js#L63" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a>
+### serverRouter.unlisten()&nbsp;<a name="ServerRouter+unlisten" href="https://github.com/seznam/ima/blob/v17.7.8/packages/core/src/router/ServerRouter.js#L63" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a>
 **Kind**: instance method of [<code>ServerRouter</code>](#ServerRouter)  
 
 * * *
 
-### serverRouter.redirect()&nbsp;<a name="ServerRouter+redirect" href="https://github.com/seznam/ima/blob/v17.7.7/packages/core/src/router/ServerRouter.js#L70" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a>
+### serverRouter.redirect()&nbsp;<a name="ServerRouter+redirect" href="https://github.com/seznam/ima/blob/v17.7.8/packages/core/src/router/ServerRouter.js#L70" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a>
 **Kind**: instance method of [<code>ServerRouter</code>](#ServerRouter)  
 
 * * *
