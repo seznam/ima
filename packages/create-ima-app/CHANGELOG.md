@@ -3,6 +3,14 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [17.7.7](https://github.com/seznam/ima/compare/v17.7.6...v17.7.7) (2020-12-08)
+
+**Note:** Version bump only for package create-ima-app
+
+
+
+
+
 ## [17.7.6](https://github.com/seznam/ima/compare/v17.7.5...v17.7.6) (2020-12-07)
 
 **Note:** Version bump only for package create-ima-app
