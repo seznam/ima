@@ -801,7 +801,12 @@ export default class Route {
       let pairs = path.substring(queryStart + 1).split(/[&;]/);
 
       for (let parameterPair of pairs) {
-        let pair = parameterPair.split('=');
+        let delimiterIndex = parameterPair.split('=');
+
+        const pair = [
+          parameterPair.slice(0, delimiterIndex),
+          parameterPair.slice(delimiterIndex + 1)
+        ];
 
         if (pair.length > 1) {
           const hashIndex = pair[1].indexOf('#');
