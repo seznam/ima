@@ -801,12 +801,16 @@ export default class Route {
       let pairs = path.substring(queryStart + 1).split(/[&;]/);
 
       for (let parameterPair of pairs) {
-        let delimiterIndex = parameterPair.split('=');
+        let delimiterIndex = parameterPair.indexOf('=');
 
-        const pair = [
-          parameterPair.slice(0, delimiterIndex),
-          parameterPair.slice(delimiterIndex + 1)
-        ];
+        const pair = [];
+
+        if (delimiterIndex !== -1) {
+          pair.push(parameterPair.slice(0, delimiterIndex));
+          pair.push(parameterPair.slice(delimiterIndex + 1)); //+ 1 to exclude equal sign
+        } else {
+          pair.push(parameterPair);
+        }
 
         if (pair.length > 1) {
           const hashIndex = pair[1].indexOf('#');
