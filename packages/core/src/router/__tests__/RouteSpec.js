@@ -1646,6 +1646,25 @@ describe('ima.core.router.Route', function () {
       });
     });
 
+    it('should handle query with equal sign in parameter value', function () {
+      expect(
+        route.matches(
+          '/abc/def?stuff=value&other=value=with=equal=signs==&thirdParam'
+        )
+      ).toBeTruthy();
+      expect(
+        route.extractParameters(
+          '/abc/def?stuff=value&other=value=with=equal=signs==&thirdParam'
+        )
+      ).toEqual({
+        first: 'abc',
+        second: 'def',
+        stuff: 'value',
+        other: 'value=with=equal=signs==',
+        thirdParam: true
+      });
+    });
+
     it('should parse query', function () {
       expect(
         route._decodeURIParameter(encodeURIComponent('á/b?č#d:ě%25'))
