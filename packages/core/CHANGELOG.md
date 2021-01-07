@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [17.7.10](https://github.com/seznam/ima/compare/v17.7.9...v17.7.10) (2021-01-07)
+
+
+### Bug Fixes
+
+* 🐛 handling equal sign in url parameter value ([#97](https://github.com/seznam/ima/issues/97)) ([fc9e762](https://github.com/seznam/ima/commit/fc9e7624a03044edd97954395836da4b04046a65))
+
+
+
+
+
 ## [17.7.9](https://github.com/seznam/ima/compare/v17.7.8...v17.7.9) (2020-12-08)
 
 **Note:** Version bump only for package @ima/core
