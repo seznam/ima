@@ -16,7 +16,7 @@ export default class PageManager {
    * UI (at the client-side) or to the response to send to the client (at the
    * server-side).
    *
-   * @param {Route} route A route instance that holds information about the
+   * @param {AbstractRoute} route A route instance that holds information about the
    *        page we should manage.
    * @param {{
    *          onlyUpdate: (

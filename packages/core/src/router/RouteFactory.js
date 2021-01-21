@@ -1,4 +1,5 @@
-import Route from './Route';
+import DynamicRoute from './DynamicRoute';
+import StaticRoute from './StaticRoute';
 
 /**
  * Utility factory used by router to create routes.
@@ -9,14 +10,16 @@ export default class RouteFactory {
   }
 
   /**
-   * Create new instance of ima.core.router.Route.
+   * Create new instance of ima.core.router.AbstractRoute.
    *
    * @param {string} name The unique name of this route, identifying it among
    *        the rest of the routes in the application.
-   * @param {string} pathExpression A path expression specifying the URL path
-   *        part matching this route (must not contain a query string),
-   *        optionally containing named parameter placeholders specified as
-   *        {@code :parameterName}.
+   * @param {string|Route~PathExpression} pathExpression A path expression
+   *        specifying either the URL path part matching this route (must not\
+   *        contain a query string) with optionally containing named parameter
+   *        placeholders specified as {@code :parameterName}. Or object defining
+   *        matcher in form of regular expression and toPath and extractParameters
+   *        function overrides.
    * @param {string} controller The full name of Object Container alias
    *        identifying the controller associated with this route.
    * @param {string} view The full name or Object Container alias identifying
@@ -37,9 +40,13 @@ export default class RouteFactory {
    *          allowSPA: boolean=,
    *          documentView: ?AbstractDocumentView=
    *        }} options The route additional options.
-   * @return {Route} The constructed route.
+   * @return {AbstractRoute} The constructed route.
    */
   createRoute(name, pathExpression, controller, view, options) {
-    return new Route(name, pathExpression, controller, view, options);
+    if (typeof pathExpression === 'string') {
+      return new StaticRoute(name, pathExpression, controller, view, options);
+    } else {
+      return new DynamicRoute(name, pathExpression, controller, view, options);
+    }
   }
 }
