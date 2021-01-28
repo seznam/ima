@@ -1,5 +1,5 @@
 import PageStateManager from '../PageStateManagerImpl';
-import Dispatcher from 'src/event/Dispatcher';
+import Dispatcher from '../../../event/Dispatcher';
 import Events from '../Events';
 import { toMockedInstance } from 'to-mock';
 
@@ -112,7 +112,6 @@ describe('ima.core.page.state.PageStateManagerImpl', () => {
     it('should patch state with all the queued patches in order they were queued', () => {
       const finalState = Object.assign(
         {},
-        defaultState,
         queuedPatchState1,
         queuedPatchState2
       );

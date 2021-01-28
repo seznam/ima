@@ -125,8 +125,8 @@ export default class PageStateManagerImpl extends PageStateManager {
     }
 
     const finalPatch = this._statePatchQueue.reduce(
-      (state, patch) => Object.assign({}, state, patch),
-      this.getState()
+      (state, patch) => Object.assign(state, patch),
+      {}
     );
 
     this._ongoingTransaction = false;
