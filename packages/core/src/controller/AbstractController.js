@@ -108,6 +108,33 @@ export default class AbstractController extends Controller {
   /**
    * @inheritdoc
    */
+  beginStateTransaction() {
+    if (this._pageStateManager) {
+      this._pageStateManager.beginTransaction();
+    }
+  }
+
+  /**
+   * @inheritdoc
+   */
+  commitStateTransaction() {
+    if (this._pageStateManager) {
+      this._pageStateManager.commitTransaction();
+    }
+  }
+
+  /**
+   * @inheritdoc
+   */
+  cancelStateTransaction() {
+    if (this._pageStateManager) {
+      this._pageStateManager.cancelTransaction();
+    }
+  }
+
+  /**
+   * @inheritdoc
+   */
   addExtension(extension) {
     this._extensions.push(extension);
   }
