@@ -104,8 +104,9 @@ export default class PageStateManagerImpl extends PageStateManager {
     if ($Debug && this._ongoingTransaction) {
       console.warn(
         'ima.core.page.state.PageStateManagerImpl.beginTransaction():' +
-          'Another state transaction is already in progress. ' +
-          'Uncommited state changes will be lost. Check you workflow.'
+          'Another state transaction is already in progress. Check you workflow.' +
+          'These uncommited state changes will be lost:',
+        this._statePatchQueue
       );
     }
 
