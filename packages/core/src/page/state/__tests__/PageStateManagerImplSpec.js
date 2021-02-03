@@ -140,4 +140,17 @@ describe('ima.core.page.state.PageStateManagerImpl', () => {
       expect(stateManager._statePatchQueue).toHaveLength(0);
     });
   });
+
+  describe('getTransactionStatePatches method', () => {
+    it('should return queueing state patches off the main state from the begin of transaction.', () => {
+      stateManager.beginTransaction();
+      stateManager.setState(queuedPatchState1);
+      stateManager.setState(queuedPatchState2);
+
+      expect(stateManager.getTransactionStatePatches()).toEqual([
+        queuedPatchState1,
+        queuedPatchState2
+      ]);
+    });
+  });
 });

@@ -100,6 +100,13 @@ export default class PageStateManagerImpl extends PageStateManager {
   /**
    * @inheritdoc
    */
+  getTransactionStatePatches() {
+    return this._statePatchQueue;
+  }
+
+  /**
+   * @inheritdoc
+   */
   beginTransaction() {
     if ($Debug && this._ongoingTransaction) {
       console.warn(
@@ -111,7 +118,7 @@ export default class PageStateManagerImpl extends PageStateManager {
     }
 
     this._ongoingTransaction = true;
-    this._statesQueue = [];
+    this._statePatchQueue = [];
   }
 
   /**
@@ -125,7 +132,13 @@ export default class PageStateManagerImpl extends PageStateManager {
       );
     }
 
-    const finalPatch = Object.assign.apply({}, this._statePatchQueue);
+    if (this._statePatchQueue.length === 0) {
+      this._ongoingTransaction = false;
+
+      return;
+    }
+
+    const finalPatch = Object.assign({}, ...this._statePatchQueue);
 
     this._ongoingTransaction = false;
     this._statePatchQueue = [];

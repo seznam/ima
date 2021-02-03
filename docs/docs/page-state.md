@@ -80,6 +80,8 @@ Transaction is initiated with `beginStateTransaction()` in Controller/Extension.
 every setState call is queued and doesn't change the state or re-render anything. If there
 is another transaction initiated before you commit you'll lost your patches.
 
+If you want to see what changes are in queue from the begin of transaction call `getTransactionStatePatches()` method.
+
 To finish the transaction you have to call `commitStateTransaction()` method. It will squash
 all the patches made during the transaction into a one and apply it to the original state.
 Therefore your application will re-render only once and you'll also receive [state events](/docs/events#stateeventsbefore_change_state) only once.

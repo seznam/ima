@@ -34,6 +34,13 @@ export default class PageStateManager {
   getAllStates() {}
 
   /**
+   * Returns queueing state patches off the main state from the begin of transaction.
+   *
+   * @return {Object<string, *>[]} State patches from the begin of transaction.
+   */
+  getTransactionStatePatches() {}
+
+  /**
    * Starts queueing state patches off the main state. While the transaction
    * is active every {@method setState} call has no effect on the current state.
    *

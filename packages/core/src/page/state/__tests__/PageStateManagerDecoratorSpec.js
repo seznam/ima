@@ -47,6 +47,16 @@ describe('ima.core.page.state.PageStateManagerDecorator', () => {
       }).toThrow();
     });
 
+    it('should throw GenericError for at least one deny key in transaction mode', () => {
+      decoratedPageStateManager.beginTransaction();
+
+      expect(() => {
+        decoratedPageStateManager.setState({ deny: 1 });
+      }).toThrow();
+
+      decoratedPageStateManager.cancelTransaction();
+    });
+
     it('should setState for all allowed keys', () => {
       let patchState = {
         allow: 0
@@ -57,6 +67,18 @@ describe('ima.core.page.state.PageStateManagerDecorator', () => {
       decoratedPageStateManager.setState(patchState);
 
       expect(pageStateManager.setState).toHaveBeenCalledWith(patchState);
+    });
+
+    it('should commit transaction for all allowed keys', () => {
+      let patchState = {
+        allow: 0
+      };
+
+      decoratedPageStateManager.beginTransaction();
+      decoratedPageStateManager.setState(patchState);
+      decoratedPageStateManager.commitTransaction();
+
+      expect(pageStateManager.getState()).toEqual(patchState);
     });
   });
 });
