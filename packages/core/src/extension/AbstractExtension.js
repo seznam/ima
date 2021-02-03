@@ -106,6 +106,33 @@ export default class AbstractExtension extends Extension {
   /**
    * @inheritdoc
    */
+  beginStateTransaction() {
+    if (this._pageStateManager) {
+      this._pageStateManager.beginTransaction();
+    }
+  }
+
+  /**
+   * @inheritdoc
+   */
+  commitStateTransaction() {
+    if (this._pageStateManager) {
+      this._pageStateManager.commitTransaction();
+    }
+  }
+
+  /**
+   * @inheritdoc
+   */
+  cancelStateTransaction() {
+    if (this._pageStateManager) {
+      this._pageStateManager.cancelTransaction();
+    }
+  }
+
+  /**
+   * @inheritdoc
+   */
   setPartialState(partialStatePatch) {
     const newPartialState = Object.assign(
       {},

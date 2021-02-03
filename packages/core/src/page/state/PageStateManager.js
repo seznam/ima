@@ -32,4 +32,24 @@ export default class PageStateManager {
    * @return {Object<string, *>[]} The recorded history of page states.
    */
   getAllStates() {}
+
+  /**
+   * Starts queueing state patches off the main state. While the transaction
+   * is active every {@method setState} call has no effect on the current state.
+   *
+   * Note that call to {@method getState} after the transaction has begun will
+   * return state as it was before the transaction.
+   */
+  beginTransaction() {}
+
+  /**
+   * Applies queued state patches to the main state. All patches are squashed
+   * and applied with one {@method setState} call.
+   */
+  commitTransaction() {}
+
+  /**
+   * Cancels ongoing transaction. Uncommited state changes are lost.
+   */
+  cancelTransaction() {}
 }
