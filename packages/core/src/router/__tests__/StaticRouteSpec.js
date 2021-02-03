@@ -32,7 +32,6 @@ describe('ima.core.router.StaticRoute', function () {
           params: { userId: 1, somethingId: 2 },
           result: '/home/1/something/2'
         },
-
         {
           pathExpression: '/list/:route/:action/:sort/:page',
           params: {
@@ -113,7 +112,6 @@ describe('ima.core.router.StaticRoute', function () {
           params: { someId: 11, locality: 'cz', price: 'all-prices' },
           result: '/11--/cz/all-prices'
         },
-
         {
           pathExpression: '/:?route/:?action/:?sort/:?page',
           params: { route: 'users', action: 'view' },
@@ -192,7 +190,6 @@ describe('ima.core.router.StaticRoute', function () {
           },
           result: '/cars/125569-6992/skoda-rapid'
         },
-
         {
           pathExpression: ':param/home/:userId/something/:?somethingId/',
           params: { param: 'cool', userId: 1, somethingId: 2 },
@@ -375,18 +372,6 @@ describe('ima.core.router.StaticRoute', function () {
           encodeURIComponent(value.query2)
       );
     });
-  });
-
-  it('should return route name', function () {
-    expect(route.getName()).toEqual(name);
-  });
-
-  it('should return route path', function () {
-    expect(route.getPathExpression()).toEqual(pathExpression);
-  });
-
-  it('should return route options', function () {
-    expect(route.getOptions()).toEqual(options);
   });
 
   describe('should get params from path', function () {

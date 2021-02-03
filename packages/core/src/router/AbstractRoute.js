@@ -16,21 +16,28 @@ export const LOOSE_SLASHES_REGEXP = /^\/|\/$/g;
 export default class AbstractRoute {
   /**
    * Converts array of pairs (tuples) into valid URI query component.
+   * Filters out invalid inputs (undefined, null, object, array, non-pair).
    *
    * @example
    * let pairs = [['a', true], ['hello world', 123]];
    * pairsToQuery(pairs); // => "?a=true&hello%20world=123"
    *
-   * @param {[[string|number, any]]} pairs
+   * @param {[[string|number, any]]} [pairs=[]]
    * @return {string} Valid URI query component or empty string if
    *         there are no valid pairs provided.
    */
-  static pairsToQuery(pairs) {
-    if (!pairs) {
+  static pairsToQuery(pairs = []) {
+    if (!pairs || !pairs.length) {
       return '';
     }
 
     const query = pairs
+      .filter(
+        pair =>
+          Array.isArray(pair) &&
+          pair.length === 2 &&
+          pair.every(v => ['boolean', 'string', 'number'].includes(typeof v))
+      )
       .map(pair => pair.map(encodeURIComponent).join('='))
       .join('&');
 

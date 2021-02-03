@@ -53,7 +53,7 @@ export default class DynamicRoute extends AbstractRoute {
      */
     this._matcher = matcher;
 
-    if (!toPath || !typeof toPath !== 'function') {
+    if (!toPath || typeof toPath !== 'function') {
       throw new GenericError(
         `The pathExpression.toPath is not a function, '${typeof toPath}' was given.`
       );
@@ -66,7 +66,7 @@ export default class DynamicRoute extends AbstractRoute {
      */
     this._toPath = toPath;
 
-    if (!extractParameters || !typeof extractParameters !== 'function') {
+    if (!extractParameters || typeof extractParameters !== 'function') {
       throw new GenericError(
         `The pathExpression.extractParameters is not a function, '${typeof extractParameters}' was given.`
       );

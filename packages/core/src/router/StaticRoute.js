@@ -172,7 +172,7 @@ export default class StaticRoute extends AbstractRoute {
       }
     }
 
-    path += this._cleanUnusedOptionalParams(path);
+    path = this._cleanUnusedOptionalParams(path);
     path += AbstractRoute.pairsToQuery(queryPairs);
 
     return this._getTrimmedPath(path);
