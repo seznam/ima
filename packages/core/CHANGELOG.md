@@ -3,6 +3,18 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [17.8.0](https://github.com/seznam/ima/compare/v17.7.10...v17.8.0) (2021-02-03)
+
+
+### Features
+
+* 🎸 added getTransactionStatePatches method ([5082fc1](https://github.com/seznam/ima/commit/5082fc11e03dd36abbe5793f8bbd7c2c72c3131e))
+* 🎸 state transactions ([#99](https://github.com/seznam/ima/issues/99)) ([ad6237e](https://github.com/seznam/ima/commit/ad6237eabeed5b58da6e67032fc6effb33f16053))
+
+
+
+
+
 ## [17.7.10](https://github.com/seznam/ima/compare/v17.7.9...v17.7.10) (2021-01-07)
 
 
