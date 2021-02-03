@@ -157,6 +157,7 @@ function createDevtool(registerHook) {
 
     registerHook({
       importIMAClass,
+      clone,
       aop,
       createHook,
       hookName,
