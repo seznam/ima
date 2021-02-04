@@ -565,24 +565,6 @@ export default class StaticRoute extends AbstractRoute {
   }
 
   /**
-   * Decoding parameters.
-   *
-   * @param {string} parameterValue
-   * @return {string} decodedValue
-   */
-  _decodeURIParameter(parameterValue) {
-    let decodedValue;
-    if (parameterValue) {
-      try {
-        decodedValue = decodeURIComponent(parameterValue);
-      } catch (_) {
-        return '';
-      }
-    }
-    return decodedValue;
-  }
-
-  /**
    * Returns optional param name without "?"
    *
    * @param {string} paramName Full param name with "?"

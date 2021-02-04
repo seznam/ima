@@ -310,6 +310,24 @@ export default class AbstractRoute {
   }
 
   /**
+   * Decoding parameters.
+   *
+   * @param {string} parameterValue
+   * @return {string} decodedValue
+   */
+  _decodeURIParameter(parameterValue) {
+    let decodedValue;
+    if (parameterValue) {
+      try {
+        decodedValue = decodeURIComponent(parameterValue);
+      } catch (_) {
+        return '';
+      }
+    }
+    return decodedValue;
+  }
+
+  /**
    * Trims the trailing forward slash from the provided URL path.
    *
    * @param {string} path The path to trim.

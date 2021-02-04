@@ -1649,15 +1649,5 @@ describe('ima.core.router.StaticRoute', function () {
         thirdParam: true
       });
     });
-
-    it('should parse query', function () {
-      expect(
-        route._decodeURIParameter(encodeURIComponent('á/b?č#d:ě%25'))
-      ).toEqual('á/b?č#d:ě%25');
-    });
-
-    it('should return empty string for query that cant be parsed', function () {
-      expect(route._decodeURIParameter('p%F8%EDrodn%ED')).toEqual('');
-    });
   });
 });

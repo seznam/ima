@@ -43,10 +43,8 @@ export default class RouteFactory {
    * @return {AbstractRoute} The constructed route.
    */
   createRoute(name, pathExpression, controller, view, options) {
-    if (typeof pathExpression === 'string') {
-      return new StaticRoute(name, pathExpression, controller, view, options);
-    } else {
-      return new DynamicRoute(name, pathExpression, controller, view, options);
-    }
+    return typeof pathExpression === 'string'
+      ? new StaticRoute(name, pathExpression, controller, view, options)
+      : new DynamicRoute(name, pathExpression, controller, view, options);
   }
 }

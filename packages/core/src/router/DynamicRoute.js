@@ -103,7 +103,7 @@ export default class DynamicRoute extends AbstractRoute {
    */
   extractParameters(path) {
     let trimmedPath = this._getTrimmedPath(path);
-    let parameters = this._extractParameters(trimmedPath);
+    let parameters = this._extractParameters(trimmedPath.split('?').shift());
     let query = this._getQuery(trimmedPath);
 
     return Object.assign({}, parameters, query);
