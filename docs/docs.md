@@ -69,6 +69,7 @@ to the routes you'll register.
 #### Jump to:
 - [Setting up Router](/docs/routing#setting-up-router)
 - [Linking to routes](/docs/routing#linking-to-routes)
+- [Dynamic routes](/docs/routing#dynamic-routes)
 
 ## [Page Manager](/docs/page-manager)
 
@@ -80,6 +81,7 @@ Page Manager is an essential part of IMA.js. It's something like a puppeteer tha
     - [PageManagerHandlers](/docs/page-manager#pagemanagerhandlers)
 - [Registering PageManagerHandlers](/docs/page-manager#registering-pagemanagerhandlers)
 - [PageNavigationHandler](/docs/page-manager#pagenavigationhandler)
+- [State transactions](/docs/page-manager#state-transactions)
 
 ## [Page State & Controller](/docs/page-state)
 
