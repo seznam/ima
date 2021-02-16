@@ -532,10 +532,16 @@ describe('ima.core.page.manager.AbstractPageManager', () => {
       spyOn(extensionInstance, 'setPartialState').and.stub();
       spyOn(extensionInstance, 'switchToPartialState').and.stub();
       spyOn(extensionInstance, 'update').and.returnValue(extensionState);
+      spyOn(pageStateManager, 'getState').and.returnValue({ foo: 'bar' });
 
-      await pageManager._getUpdatedExtensionsState();
+      await pageManager._getUpdatedExtensionsState({ foobar: 'bazfoo' });
 
-      expect(extensionInstance.setPartialState).toHaveBeenCalled();
+      expect(extensionInstance.setPartialState).toHaveBeenCalledWith(
+        expect.objectContaining({
+          foo: 'bar',
+          foobar: 'bazfoo'
+        })
+      );
       expect(extensionInstance.switchToPartialState).toHaveBeenCalled();
     });
 

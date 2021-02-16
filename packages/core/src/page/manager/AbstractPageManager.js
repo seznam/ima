@@ -545,19 +545,29 @@ export default class AbstractPageManager extends PageManager {
    */
   async _getUpdatedExtensionsState(controllerState) {
     const controller = this._managedPage.controllerInstance;
-    let extensionsState = Object.assign({}, controllerState);
+    const extensionsState = Object.assign({}, controllerState);
+    const extensionsPartialState = Object.assign(
+      {},
+      this._pageStateManager.getState(),
+      controllerState
+    );
 
     for (let extension of controller.getExtensions()) {
       const lastRouteParams = extension.getRouteParams();
       extension.setRouteParams(this._managedPage.params);
-      extension.setPartialState(extensionsState);
+      extension.setPartialState(extensionsPartialState);
       extension.switchToPartialState();
-      const extensionState = await extension.update(lastRouteParams);
 
-      this._switchToPageStateManagerAfterLoaded(extension, extensionState);
-      this._setRestrictedPageStateManager(extension, extensionState);
+      const extensionReturnedState = await extension.update(lastRouteParams);
 
-      Object.assign(extensionsState, extensionState);
+      this._switchToPageStateManagerAfterLoaded(
+        extension,
+        extensionReturnedState
+      );
+      this._setRestrictedPageStateManager(extension, extensionReturnedState);
+
+      Object.assign(extensionsState, extensionReturnedState);
+      Object.assign(extensionsPartialState, extensionReturnedState);
     }
 
     return extensionsState;
