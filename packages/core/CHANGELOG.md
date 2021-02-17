@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [17.8.1](https://github.com/seznam/ima/compare/v17.8.0...v17.8.1) (2021-02-17)
+
+
+### Bug Fixes
+
+* 🐛 extension update method receives full state ([#102](https://github.com/seznam/ima/issues/102)) ([5c163e7](https://github.com/seznam/ima/commit/5c163e7268a46bcc7087313c58cca7097e6768c7)), closes [#101](https://github.com/seznam/ima/issues/101)
+
+
+
+
+
 # [17.8.0](https://github.com/seznam/ima/compare/v17.7.10...v17.8.0) (2021-02-03)
 
 
