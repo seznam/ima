@@ -80,4 +80,35 @@ describe('ima.core.router.AbstractRoute', function () {
       expect(AbstractRoute.pairsToQuery(pairs)).toEqual(result);
     });
   });
+
+  describe('paramsToQuery() static method', () => {
+    it.each([
+      [
+        {
+          1: true,
+          hello: 'world'
+        },
+        '?1=true&hello=world'
+      ],
+      [
+        {
+          test: () => {},
+          key: null,
+          str: 123
+        },
+        '?str=123'
+      ],
+      [
+        {
+          2: undefined,
+          p: null,
+          'š+': -1
+        },
+        '?%C5%A1%2B=-1'
+      ],
+      [[[]], '']
+    ])('should parse %j into "%s"', (pairs, result) => {
+      expect(AbstractRoute.paramsToQuery(pairs)).toEqual(result);
+    });
+  });
 });

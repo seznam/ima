@@ -45,6 +45,26 @@ export default class AbstractRoute {
   }
 
   /**
+   * Converts object of key/value pairs to URI query,
+   * which can be appended to url.
+   *
+   * @param {Object<string, any>} params Key/value pairs.
+   */
+  static paramsToQuery(params = {}) {
+    if (
+      !params ||
+      typeof params !== 'object' ||
+      Object.keys(params).length === 0
+    ) {
+      return '';
+    }
+
+    return AbstractRoute.pairsToQuery(
+      Object.keys(params).map(param => [param, params[param]])
+    );
+  }
+
+  /**
    * Initializes the route.
    *
    * @param {string} name The unique name of this route, identifying it among

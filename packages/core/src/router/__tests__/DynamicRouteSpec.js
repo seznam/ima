@@ -18,23 +18,15 @@ describe('ima.core.router.DynamicRoute', function () {
   const matcher = /^\/([\w-]+)?\/?([\w-]+)?\/article\/(\w+-\d+)$/i;
   const toPath = params => {
     const { section, subsection, slug, ...restParams } = params;
-    let queryPairs = [];
 
     if (!slug || !section) {
       return 'invalid-route';
     }
 
-    if (restParams) {
-      queryPairs = Object.keys(restParams).map(param => [
-        param,
-        restParams[param]
-      ]);
-    }
-
     return (
       [section, subsection, 'article', slug]
         .filter(v => !['object', 'undefined'].includes(typeof v))
-        .join('/') + AbstractRoute.pairsToQuery(queryPairs)
+        .join('/') + AbstractRoute.paramsToQuery(restParams)
     );
   };
   const extractParameters = path => {
