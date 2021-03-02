@@ -1,4 +1,5 @@
 import Route from './Route';
+import RouterMiddleware from './RouterMiddleware';
 
 /**
  * Utility factory used by router to create routes.
@@ -37,9 +38,19 @@ export default class RouteFactory {
    *          allowSPA: boolean=,
    *          documentView: ?AbstractDocumentView=
    *        }} options The route additional options.
+   * @param {[function(Object<string, string>, function())]} middlewares
+   *        Route specific middlewares which are run after extracting parameters
+   *        before route handling.
    * @return {Route} The constructed route.
    */
-  createRoute(name, pathExpression, controller, view, options) {
-    return new Route(name, pathExpression, controller, view, options);
+  createRoute(name, pathExpression, controller, view, options, middlewares) {
+    return new Route(
+      name,
+      pathExpression,
+      controller,
+      view,
+      options,
+      middlewares.map(middleware => new RouterMiddleware(middleware))
+    );
   }
 }

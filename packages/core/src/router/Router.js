@@ -82,10 +82,27 @@ export default class Router {
    *        if the server is overloaded. This is useful for routes that use
    *        different document views (specified by the {@code documentView}
    *        option), for example for rendering the content of iframes.
+   * @param {[function(Object<string, string>, function())]} middlewares
+   *        Route specific middlewares which are run after extracting parameters
+   *        before route handling.
    * @return {Router} This router.
    * @throws {ImaError} Thrown if a route with the same name already exists.
    */
   add() {}
+
+  /**
+   * Adds a new middleware to router.
+   *
+   * @param {string} name The unique name of this middleware, identifying it among
+   *        the rest of the middlewares in the application.
+   * @param {function(Object<string, string>, function())} middleware Middleware
+   *        function accepting routeParams as a first argument, which can be mutated
+   *        and {@code skip} callback allowing it skip all additional following
+   *        middlewares.
+   * @return {Router} This router.
+   * @throws {ImaError} Thrown if a middleware with the same name already exists.
+   */
+  use() {}
 
   /**
    * Removes the specified route from the router's known routes.

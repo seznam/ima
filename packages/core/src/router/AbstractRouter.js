@@ -3,6 +3,7 @@ import Events from './Events';
 import Router from './Router';
 import RouteNames from './RouteNames';
 import GenericError from '../error/GenericError';
+import RouterMiddleware from './RouterMiddleware';
 
 /**
  * The basic implementation of the {@codelink Router} interface, providing the
@@ -94,11 +95,17 @@ export default class AbstractRouter extends Router {
     this._languagePartPath = '';
 
     /**
-     * Storage of all known routes. The key are the route names.
+     * Storage of all known routes and middlewares. The key are their names.
      *
      * @type {Map<string, Route>}
      */
-    this._routes = new Map();
+    this._routeHandlers = new Map();
+
+    /**
+     * Middleware ID counter which is used to auto-generate middleware names
+     * when adding them to routeHandles map.
+     */
+    this._currentMiddlewareId = 0;
   }
 
   /**
@@ -115,8 +122,15 @@ export default class AbstractRouter extends Router {
   /**
    * @inheritdoc
    */
-  add(name, pathExpression, controller, view, options = undefined) {
-    if (this._routes.has(name)) {
+  add(
+    name,
+    pathExpression,
+    controller,
+    view,
+    options = undefined,
+    middleware = []
+  ) {
+    if (this._routeHandlers.has(name)) {
       throw new GenericError(
         `ima.core.router.AbstractRouter.add: The route with name ${name} ` +
           `is already defined`
@@ -129,9 +143,17 @@ export default class AbstractRouter extends Router {
       pathExpression,
       controller,
       view,
-      options
+      options,
+      middleware
     );
-    this._routes.set(name, route);
+    this._routeHandlers.set(name, route);
+
+    return this;
+  }
+
+  use(middleware) {
+    const middlewareName = `middleware-${this._currentMiddlewareId++}`;
+    this._routeHandlers.set(middlewareName, new RouterMiddleware(middleware));
 
     return this;
   }
@@ -140,7 +162,7 @@ export default class AbstractRouter extends Router {
    * @inheritdoc
    */
   remove(name) {
-    this._routes.delete(name);
+    this._routeHandlers.delete(name);
 
     return this;
   }
@@ -194,10 +216,10 @@ export default class AbstractRouter extends Router {
    */
   getCurrentRouteInfo() {
     let path = this.getPath();
-    let route = this._getRouteByPath(path);
+    let { route } = this._getRouteHandlersByPath(path);
 
     if (!route) {
-      route = this._routes.get(RouteNames.NOT_FOUND);
+      route = this._routeHandlers.get(RouteNames.NOT_FOUND);
 
       if (!route) {
         throw new GenericError(
@@ -246,7 +268,7 @@ export default class AbstractRouter extends Router {
    * @inheritdoc
    */
   link(routeName, params) {
-    let route = this._routes.get(routeName);
+    let route = this._routeHandlers.get(routeName);
 
     if (!route) {
       throw new GenericError(
@@ -261,12 +283,18 @@ export default class AbstractRouter extends Router {
   /**
    * @inheritdoc
    */
-  route(path, options = {}, action) {
+  async route(path, options = {}, action) {
     this._currentlyRoutedPath = path;
-    let routeForPath = this._getRouteByPath(path);
     let params = {};
+    let {
+      route,
+      middlewares: routerMiddlewares
+    } = this._getRouteHandlersByPath(path);
 
-    if (!routeForPath) {
+    // Run global router middlewares
+    await this._runMiddlewares(routerMiddlewares, params);
+
+    if (!route) {
       params.error = new GenericError(
         `Route for path '${path}' is not configured.`,
         { status: 404 }
@@ -275,16 +303,19 @@ export default class AbstractRouter extends Router {
       return this.handleNotFound(params);
     }
 
-    params = routeForPath.extractParameters(path);
+    params = Object.assign(params, route.extractParameters(path));
 
-    return this._handle(routeForPath, params, options, action);
+    // Run route specific middlewares
+    await this._runMiddlewares(route.getMiddlewares(), params);
+
+    return this._handle(route, params, options, action);
   }
 
   /**
    * @inheritdoc
    */
   handleError(params, options = {}) {
-    let routeError = this._routes.get(RouteNames.ERROR);
+    let routeError = this._routeHandlers.get(RouteNames.ERROR);
 
     if (!routeError) {
       let error = new GenericError(
@@ -307,7 +338,7 @@ export default class AbstractRouter extends Router {
    * @inheritdoc
    */
   handleNotFound(params, options = {}) {
-    let routeNotFound = this._routes.get(RouteNames.NOT_FOUND);
+    let routeNotFound = this._routeHandlers.get(RouteNames.NOT_FOUND);
 
     if (!routeNotFound) {
       let error = new GenericError(
@@ -427,21 +458,33 @@ export default class AbstractRouter extends Router {
   }
 
   /**
-   * Returns the route matching the provided URL path part. The path may
-   * contain a query.
+   * Returns the route matching the provided URL path part (the path may
+   * contain a query) and all middlewares preceding this route definition.
    *
    * @param {string} path The URL path.
-   * @return {?Route} The route matching the path, or {@code null} if no such
-   *         route exists.
+   * @return {{route: ?Route, middlewares: [RouterMiddleware]}} The route
+   *         matching the path and middlewares preceding it or {@code {}}
+   *         (empty object) if no such route exists.
    */
-  _getRouteByPath(path) {
-    for (let route of this._routes.values()) {
-      if (route.matches(path)) {
-        return route;
+  _getRouteHandlersByPath(path) {
+    let middlewares = [];
+
+    for (let routeHandler of this._routeHandlers.values()) {
+      if (routeHandler instanceof RouterMiddleware) {
+        middlewares.push(routeHandler);
+
+        continue;
+      }
+
+      if (routeHandler.matches(path)) {
+        return {
+          route: routeHandler,
+          middlewares
+        };
       }
     }
 
-    return null;
+    return {};
   }
 
   /**
@@ -452,5 +495,30 @@ export default class AbstractRouter extends Router {
    */
   _getCurrentlyRoutedPath() {
     return this._currentlyRoutedPath;
+  }
+
+  /**
+   * Runs provided middlewares in sequence.
+   *
+   * @param {Promise<RouterMiddleware>} middlewares Array of middlewares.
+   * @param {Object<string, string>} params Router params that can be
+   *        mutated by middlewares.
+   */
+  async _runMiddlewares(middlewares, params) {
+    if (!Array.isArray(middlewares)) {
+      return;
+    }
+
+    for (const middleware of middlewares) {
+      let skip = false;
+
+      await middleware.run(params, () => {
+        skip = true;
+      });
+
+      if (skip) {
+        return;
+      }
+    }
   }
 }
