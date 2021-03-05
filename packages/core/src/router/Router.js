@@ -93,12 +93,10 @@ export default class Router {
   /**
    * Adds a new middleware to router.
    *
-   * @param {string} name The unique name of this middleware, identifying it among
-   *        the rest of the middlewares in the application.
    * @param {function(Object<string, string>, function())} middleware Middleware
    *        function accepting routeParams as a first argument, which can be mutated
-   *        and {@code skip} callback allowing it skip all additional following
-   *        middlewares.
+   *        and {@code locals} object as second argument. This can be used to pass data
+   *        between middlewares.
    * @return {Router} This router.
    * @throws {ImaError} Thrown if a middleware with the same name already exists.
    */

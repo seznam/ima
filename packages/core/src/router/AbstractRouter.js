@@ -102,8 +102,8 @@ export default class AbstractRouter extends Router {
     this._routeHandlers = new Map();
 
     /**
-     * Middleware ID counter which is used to auto-generate middleware names
-     * when adding them to routeHandles map.
+     * Middleware ID counter which is used to auto-generate unique middleware
+     * names when adding them to routeHandlers map.
      */
     this._currentMiddlewareId = 0;
   }
@@ -146,11 +146,15 @@ export default class AbstractRouter extends Router {
       options,
       middleware
     );
+
     this._routeHandlers.set(name, route);
 
     return this;
   }
 
+  /**
+   * @inheritdoc
+   */
   use(middleware) {
     const middlewareName = `middleware-${this._currentMiddlewareId++}`;
     this._routeHandlers.set(middlewareName, new RouterMiddleware(middleware));
@@ -286,13 +290,14 @@ export default class AbstractRouter extends Router {
   async route(path, options = {}, action) {
     this._currentlyRoutedPath = path;
     let params = {};
+    let locals = {};
     let {
       route,
       middlewares: routerMiddlewares
     } = this._getRouteHandlersByPath(path);
 
     // Run global router middlewares
-    await this._runMiddlewares(routerMiddlewares, params);
+    await this._runMiddlewares(routerMiddlewares, params, locals);
 
     if (!route) {
       params.error = new GenericError(
@@ -306,7 +311,7 @@ export default class AbstractRouter extends Router {
     params = Object.assign(params, route.extractParameters(path));
 
     // Run route specific middlewares
-    await this._runMiddlewares(route.getMiddlewares(), params);
+    await this._runMiddlewares(route.getMiddlewares(), params, locals);
 
     return this._handle(route, params, options, action);
   }
@@ -503,22 +508,15 @@ export default class AbstractRouter extends Router {
    * @param {Promise<RouterMiddleware>} middlewares Array of middlewares.
    * @param {Object<string, string>} params Router params that can be
    *        mutated by middlewares.
+   * @param {object} locals Locals object used to pass data between middlewares.
    */
-  async _runMiddlewares(middlewares, params) {
+  async _runMiddlewares(middlewares, params, locals) {
     if (!Array.isArray(middlewares)) {
       return;
     }
 
     for (const middleware of middlewares) {
-      let skip = false;
-
-      await middleware.run(params, () => {
-        skip = true;
-      });
-
-      if (skip) {
-        return;
-      }
+      await middleware.run(params, locals);
     }
   }
 }

@@ -142,7 +142,7 @@ export default class Route {
    *          managedRootView: ?function(new: React.Component)=,
    *          viewAdapter: ?function(new: React.Component)=
    *        }} options The route additional options.
-   * @param {[function(Object<string, string>, function())]} middlewares
+   * @param {[RouterMiddleware]} middlewares
    *        Route specific middlewares which are run after extracting parameters
    *        before route handling.
    *
@@ -216,7 +216,7 @@ export default class Route {
     /**
      * Route specific middlewares.
      *
-     * @type {[function(Object<string, string>, function())]}
+     * @type {[RouterMiddleware]}
      */
     this._middlewares = middlewares;
 
@@ -352,7 +352,7 @@ export default class Route {
   /**
    * Return route specific middlewares
    *
-   * @return {[function(Object<string, string>, function())]}
+   * @return {[RouterMiddleware]}
    */
   getMiddlewares() {
     return this._middlewares;
