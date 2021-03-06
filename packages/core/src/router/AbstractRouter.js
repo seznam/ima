@@ -106,6 +106,12 @@ export default class AbstractRouter extends Router {
      * names when adding them to routeHandlers map.
      */
     this._currentMiddlewareId = 0;
+
+    /**
+     * Helper variable used to cache passed data between middlewares. It is
+     * cleared before each new routing.
+     */
+    this._middlewareLocals = {};
   }
 
   /**
@@ -289,15 +295,16 @@ export default class AbstractRouter extends Router {
    */
   async route(path, options = {}, action) {
     this._currentlyRoutedPath = path;
+    this._middlewareLocals = {};
+
     let params = {};
-    let locals = {};
     let {
       route,
       middlewares: routerMiddlewares
     } = this._getRouteHandlersByPath(path);
 
     // Run global router middlewares
-    await this._runMiddlewares(routerMiddlewares, params, locals);
+    await this._runMiddlewares(routerMiddlewares, params);
 
     if (!route) {
       params.error = new GenericError(
@@ -311,7 +318,7 @@ export default class AbstractRouter extends Router {
     params = Object.assign(params, route.extractParameters(path));
 
     // Run route specific middlewares
-    await this._runMiddlewares(route.getMiddlewares(), params, locals);
+    await this._runMiddlewares(route.getMiddlewares(), params);
 
     return this._handle(route, params, options, action);
   }
@@ -319,7 +326,7 @@ export default class AbstractRouter extends Router {
   /**
    * @inheritdoc
    */
-  handleError(params, options = {}) {
+  async handleError(params, options = {}) {
     let routeError = this._routeHandlers.get(RouteNames.ERROR);
 
     if (!routeError) {
@@ -333,6 +340,9 @@ export default class AbstractRouter extends Router {
       return Promise.reject(error);
     }
 
+    // Run route specific middlewares
+    await this._runMiddlewares(routeError.getMiddlewares(), params);
+
     return this._handle(routeError, params, options, {
       url: this.getUrl(),
       type: ActionTypes.ERROR
@@ -342,7 +352,7 @@ export default class AbstractRouter extends Router {
   /**
    * @inheritdoc
    */
-  handleNotFound(params, options = {}) {
+  async handleNotFound(params, options = {}) {
     let routeNotFound = this._routeHandlers.get(RouteNames.NOT_FOUND);
 
     if (!routeNotFound) {
@@ -356,6 +366,9 @@ export default class AbstractRouter extends Router {
 
       return Promise.reject(error);
     }
+
+    // Run route specific middlewares
+    await this._runMiddlewares(routeNotFound.getMiddlewares(), params);
 
     return this._handle(routeNotFound, params, options, {
       url: this.getUrl(),
@@ -489,7 +502,7 @@ export default class AbstractRouter extends Router {
       }
     }
 
-    return {};
+    return { middlewares };
   }
 
   /**
@@ -508,15 +521,14 @@ export default class AbstractRouter extends Router {
    * @param {Promise<RouterMiddleware>} middlewares Array of middlewares.
    * @param {Object<string, string>} params Router params that can be
    *        mutated by middlewares.
-   * @param {object} locals Locals object used to pass data between middlewares.
    */
-  async _runMiddlewares(middlewares, params, locals) {
+  async _runMiddlewares(middlewares, params) {
     if (!Array.isArray(middlewares)) {
       return;
     }
 
     for (const middleware of middlewares) {
-      await middleware.run(params, locals);
+      await middleware.run(params, this._middlewareLocals);
     }
   }
 }
