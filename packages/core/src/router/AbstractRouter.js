@@ -162,8 +162,10 @@ export default class AbstractRouter extends Router {
    * @inheritdoc
    */
   use(middleware) {
-    const middlewareName = `middleware-${this._currentMiddlewareId++}`;
-    this._routeHandlers.set(middlewareName, new RouterMiddleware(middleware));
+    this._routeHandlers.set(
+      `middleware-${this._currentMiddlewareId++}`,
+      new RouterMiddleware(middleware)
+    );
 
     return this;
   }
@@ -298,13 +300,10 @@ export default class AbstractRouter extends Router {
     this._middlewareLocals = {};
 
     let params = {};
-    let {
-      route,
-      middlewares: routerMiddlewares
-    } = this._getRouteHandlersByPath(path);
+    let { route, middlewares } = this._getRouteHandlersByPath(path);
 
     // Run global router middlewares
-    await this._runMiddlewares(routerMiddlewares, params);
+    await this._runMiddlewares(middlewares, params);
 
     if (!route) {
       params.error = new GenericError(

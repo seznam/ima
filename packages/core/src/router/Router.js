@@ -15,7 +15,7 @@ export default class Router {
    *          $Host: string
    *        }} config Router configuration.
    *        The {@code $Protocol} field must be the current protocol used to
-   *        access the application, terminated by a collon (for example
+   *        access the application, terminated by a colon (for example
    *        {@code https:}).
    *        The {@code $Root} field must specify the URL path pointing to the
    *        application's root.
@@ -82,7 +82,7 @@ export default class Router {
    *        if the server is overloaded. This is useful for routes that use
    *        different document views (specified by the {@code documentView}
    *        option), for example for rendering the content of iframes.
-   * @param {[function(Object<string, string>, function())]} middlewares
+   * @param {[function(Object<string, string>, function)]} middlewares
    *        Route specific middlewares which are run after extracting parameters
    *        before route handling.
    * @return {Router} This router.
@@ -93,7 +93,7 @@ export default class Router {
   /**
    * Adds a new middleware to router.
    *
-   * @param {function(Object<string, string>, function())} middleware Middleware
+   * @param {function(Object<string, string>, function)} middleware Middleware
    *        function accepting routeParams as a first argument, which can be mutated
    *        and {@code locals} object as second argument. This can be used to pass data
    *        between middlewares.
@@ -201,7 +201,7 @@ export default class Router {
    * Note that the router will not prevent forms from being submitted to the
    * server.
    *
-   * The effects of this method can be reverted wtih {@code unlisten}. This method has no effect
+   * The effects of this method can be reverted with {@code unlisten}. This method has no effect
    * at the server side.
    *
    * @return {Router} This router.

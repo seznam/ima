@@ -1,3 +1,6 @@
+import GenericError from '../error/GenericError';
+import RouterMiddleware from './RouterMiddleware';
+
 /**
  * Regular expression matching all control characters used in regular
  * expressions. The regular expression is used to match these characters in
@@ -142,10 +145,9 @@ export default class Route {
    *          managedRootView: ?function(new: React.Component)=,
    *          viewAdapter: ?function(new: React.Component)=
    *        }} options The route additional options.
-   * @param {[RouterMiddleware]} middlewares
+   * @param {[function(Object<string, string>, function)]} middlewares
    *        Route specific middlewares which are run after extracting parameters
    *        before route handling.
-   *
    */
   constructor(name, pathExpression, controller, view, options, middlewares) {
     /**
@@ -213,12 +215,20 @@ export default class Route {
       options
     );
 
+    if (middlewares && !Array.isArray(middlewares)) {
+      throw new GenericError(
+        `The middlewares are not an array, '${typeof middlewares}' was given.`
+      );
+    }
+
     /**
      * Route specific middlewares.
      *
      * @type {[RouterMiddleware]}
      */
-    this._middlewares = middlewares;
+    this._middlewares = (middlewares || []).map(
+      middleware => new RouterMiddleware(middleware)
+    );
 
     /**
      * The path expression with the trailing slashes trimmed.

@@ -7,7 +7,7 @@ export default class RouterMiddleware {
   /**
    * Initializes the middleware
    *
-   * @param {function(Object<string, string>, function())} middleware Middleware
+   * @param {function(Object<string, string>, function)} middleware Middleware
    *        function accepting routeParams as a first argument, which can be mutated
    *        and {@code locals} object as second argument. This can be used to pass data
    *        between middlewares.
@@ -15,7 +15,7 @@ export default class RouterMiddleware {
   constructor(middleware) {
     if (typeof middleware !== 'function') {
       throw new GenericError(
-        `The middleware must be a function, '${typeof pathExpression}' was given.`
+        `The middleware must be a function, '${typeof middleware}' was given.`
       );
     }
 
@@ -24,7 +24,7 @@ export default class RouterMiddleware {
      * mutated and {@code locals} object as second argument. This can be used to pass data
      * between middlewares.
      *
-     * @type {function(Object<string, string>, function())}
+     * @type {function(Object<string, string>, function)}
      */
     this._middleware = middleware;
   }
