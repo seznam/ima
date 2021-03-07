@@ -133,6 +133,10 @@
                         "url": "/docs/routing#linking-to-routes"
                     },
                     {
+                        "title": "Dynamic routes",
+                        "url": "/docs/routing#dynamic-routes"
+                    },
+                    {
                         "title": "Using middlewares",
                         "url": "/docs/routing#using-middlewares"
                     }
@@ -197,6 +201,10 @@
                     {
                         "title": "Partial state",
                         "url": "/docs/page-state#partial-state"
+                    },
+                    {
+                        "title": "State transactions",
+                        "url": "/docs/page-state#state-transactions"
                     }
                 ]
             },

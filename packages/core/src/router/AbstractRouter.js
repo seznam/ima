@@ -97,7 +97,7 @@ export default class AbstractRouter extends Router {
     /**
      * Storage of all known routes and middlewares. The key are their names.
      *
-     * @type {Map<string, Route>}
+     * @type {Map<string, AbstractRoute>}
      */
     this._routeHandlers = new Map();
 
@@ -416,7 +416,7 @@ export default class AbstractRouter extends Router {
    * The result is then sent to the client if used at the server side, or
    * displayed if used as the client side.
    *
-   * @param {Route} route The route that should have its
+   * @param {AbstractRoute} route The route that should have its
    *        associated controller rendered via the associated view.
    * @param {Object<string, (Error|string)>} params Parameters extracted from
    *        the URL path and query.
@@ -479,7 +479,7 @@ export default class AbstractRouter extends Router {
    * contain a query) and all middlewares preceding this route definition.
    *
    * @param {string} path The URL path.
-   * @return {{route: ?Route, middlewares: [RouterMiddleware]}} The route
+   * @return {{route: ?AbstractRoute, middlewares: [RouterMiddleware]}} The route
    *         matching the path and middlewares preceding it or {@code {}}
    *         (empty object) if no such route exists.
    */

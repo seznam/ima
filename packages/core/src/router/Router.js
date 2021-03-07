@@ -162,7 +162,7 @@ export default class Router {
    * Returns the information about the currently active route.
    *
    * @return {{
-   *           route: Route,
+   *           route: AbstractRoute,
    *           params: Object<string, string>,
    *           path: string
    *         }} The information about the current route.

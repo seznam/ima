@@ -1,6 +1,6 @@
-import Route from '../Route';
+import StaticRoute from '../StaticRoute';
 
-describe('ima.core.router.Route', function () {
+describe('ima.core.router.StaticRoute', function () {
   let route = null;
   const name = 'home';
   const controller = function () {};
@@ -16,7 +16,7 @@ describe('ima.core.router.Route', function () {
   };
 
   beforeEach(function () {
-    route = new Route(name, pathExpression, controller, view, options);
+    route = new StaticRoute(name, pathExpression, controller, view, options);
   });
 
   describe('should create right path -', function () {
@@ -32,7 +32,6 @@ describe('ima.core.router.Route', function () {
           params: { userId: 1, somethingId: 2 },
           result: '/home/1/something/2'
         },
-
         {
           pathExpression: '/list/:route/:action/:sort/:page',
           params: {
@@ -113,7 +112,6 @@ describe('ima.core.router.Route', function () {
           params: { someId: 11, locality: 'cz', price: 'all-prices' },
           result: '/11--/cz/all-prices'
         },
-
         {
           pathExpression: '/:?route/:?action/:?sort/:?page',
           params: { route: 'users', action: 'view' },
@@ -192,7 +190,6 @@ describe('ima.core.router.Route', function () {
           },
           result: '/cars/125569-6992/skoda-rapid'
         },
-
         {
           pathExpression: ':param/home/:userId/something/:?somethingId/',
           params: { param: 'cool', userId: 1, somethingId: 2 },
@@ -212,7 +209,7 @@ describe('ima.core.router.Route', function () {
         }
       ],
       function (value) {
-        const localRoute = new Route(
+        const localStaticRoute = new StaticRoute(
           name,
           value.pathExpression,
           controller,
@@ -225,7 +222,7 @@ describe('ima.core.router.Route', function () {
             ' and params ' +
             JSON.stringify(value.params),
           function () {
-            expect(localRoute.toPath(value.params)).toEqual(value.result);
+            expect(localStaticRoute.toPath(value.params)).toEqual(value.result);
           }
         );
       }
@@ -236,14 +233,14 @@ describe('ima.core.router.Route', function () {
     });
 
     it('encode path params', function () {
-      const localRoute = new Route(
+      const localStaticRoute = new StaticRoute(
         name,
         '/home/:encodeString',
         controller,
         view,
         options
       );
-      expect(localRoute.toPath({ encodeString: 'á/b?č#d:ě%25' })).toEqual(
+      expect(localStaticRoute.toPath({ encodeString: 'á/b?č#d:ě%25' })).toEqual(
         '/home/%C3%A1%2Fb%3F%C4%8D%23d%3A%C4%9B%2525'
       );
     });
@@ -290,7 +287,7 @@ describe('ima.core.router.Route', function () {
         }
       ],
       function (value) {
-        const localRoute = new Route(
+        const localStaticRoute = new StaticRoute(
           name,
           value.pathExpression,
           controller,
@@ -305,7 +302,7 @@ describe('ima.core.router.Route', function () {
             ' and params ' +
             JSON.stringify(params),
           function () {
-            expect(localRoute.toPath(params)).toEqual(result);
+            expect(localStaticRoute.toPath(params)).toEqual(result);
           }
         );
       }
@@ -337,7 +334,7 @@ describe('ima.core.router.Route', function () {
         }
       ],
       function (value) {
-        const localRoute = new Route(
+        const localStaticRoute = new StaticRoute(
           name,
           value.pathExpression,
           controller,
@@ -352,7 +349,7 @@ describe('ima.core.router.Route', function () {
             ' and params ' +
             JSON.stringify(params),
           function () {
-            expect(localRoute.toPath(params)).toEqual(result);
+            expect(localStaticRoute.toPath(params)).toEqual(result);
           }
         );
       }
@@ -375,18 +372,6 @@ describe('ima.core.router.Route', function () {
           encodeURIComponent(value.query2)
       );
     });
-  });
-
-  it('should return route name', function () {
-    expect(route.getName()).toEqual(name);
-  });
-
-  it('should return route path', function () {
-    expect(route.getPathExpression()).toEqual(pathExpression);
-  });
-
-  it('should return route options', function () {
-    expect(route.getOptions()).toEqual(options);
   });
 
   describe('should get params from path', function () {
@@ -835,13 +820,13 @@ describe('ima.core.router.Route', function () {
       ],
       function (value) {
         it(value.pathExpression, function () {
-          const localRoute = new Route(
+          const localStaticRoute = new StaticRoute(
             'unknown',
             value.pathExpression,
             'unknown'
           );
 
-          const routeParams = localRoute.extractParameters(value.path);
+          const routeParams = localStaticRoute.extractParameters(value.path);
           const keys = Object.keys(value.params);
 
           keys.forEach(key => {
@@ -1202,7 +1187,7 @@ describe('ima.core.router.Route', function () {
         }
       ],
       function (value) {
-        const localRoute = new Route(
+        const localStaticRoute = new StaticRoute(
           name,
           value.pathExpression,
           controller,
@@ -1214,7 +1199,7 @@ describe('ima.core.router.Route', function () {
         it(
           path + ' for ' + value.pathExpression + ` [${result.toString()}]`,
           function () {
-            expect(localRoute.matches(path)).toEqual(result);
+            expect(localStaticRoute.matches(path)).toEqual(result);
           }
         );
       }
@@ -1376,7 +1361,7 @@ describe('ima.core.router.Route', function () {
             path +
             ` [${result.toString()}]`,
           function () {
-            var routeLocal = new Route(
+            var routeLocal = new StaticRoute(
               'unknown',
               value.pathExpression,
               'unknown'
@@ -1422,9 +1407,9 @@ describe('ima.core.router.Route', function () {
       function (value) {
         const { path, clearPathExpr, result } = value;
         it(`should check parametres order for '${path}' [${result.toString()}]`, function () {
-          const localRoute = new Route('unknown', path, 'unknown');
+          const localStaticRoute = new StaticRoute('unknown', path, 'unknown');
 
-          const isCorrectParamOrder = localRoute._checkParametersOrder(
+          const isCorrectParamOrder = localStaticRoute._checkParametersOrder(
             clearPathExpr
           );
           expect(isCorrectParamOrder).toEqual(result);
@@ -1450,9 +1435,9 @@ describe('ima.core.router.Route', function () {
       function (value) {
         const { path, clearPathExpr, optionalParams, result } = value;
         it(`should replace optional parametres in ${path}`, function () {
-          const localRoute = new Route('unknown', path, 'unknown');
+          const localStaticRoute = new StaticRoute('unknown', path, 'unknown');
 
-          const pattern = localRoute._replaceOptionalParametersInPath(
+          const pattern = localStaticRoute._replaceOptionalParametersInPath(
             clearPathExpr,
             optionalParams
           );
@@ -1480,9 +1465,9 @@ describe('ima.core.router.Route', function () {
       function (value) {
         const { path, clearPathExpr, result } = value;
         it(`should replace required subparametres in ${path}`, function () {
-          const localRoute = new Route('unknown', path, 'unknown');
+          const localStaticRoute = new StaticRoute('unknown', path, 'unknown');
 
-          const pattern = localRoute._replaceRequiredSubParametersInPath(
+          const pattern = localStaticRoute._replaceRequiredSubParametersInPath(
             clearPathExpr,
             clearPathExpr
           );
@@ -1524,9 +1509,9 @@ describe('ima.core.router.Route', function () {
           result
         } = value;
         it(`should replace optional parametres in ${path} to ${result}`, function () {
-          const localRoute = new Route('unknown', path, 'unknown');
+          const localStaticRoute = new StaticRoute('unknown', path, 'unknown');
 
-          const pattern = localRoute._replaceOptionalSubParametersInPath(
+          const pattern = localStaticRoute._replaceOptionalSubParametersInPath(
             clearPathExpr,
             optionalSubparamsOthers,
             optionalSubparamsLast
@@ -1541,7 +1526,7 @@ describe('ima.core.router.Route', function () {
     let route = null;
 
     beforeEach(function () {
-      route = new Route('foo', '/:first/:second', 'foo', 'bar');
+      route = new StaticRoute('foo', '/:first/:second', 'foo', 'bar');
     });
 
     it('should allow query to override path parameters', function () {
@@ -1663,16 +1648,6 @@ describe('ima.core.router.Route', function () {
         other: 'value=with=equal=signs==',
         thirdParam: true
       });
-    });
-
-    it('should parse query', function () {
-      expect(
-        route._decodeURIParameter(encodeURIComponent('á/b?č#d:ě%25'))
-      ).toEqual('á/b?č#d:ě%25');
-    });
-
-    it('should return empty string for query that cant be parsed', function () {
-      expect(route._decodeURIParameter('p%F8%EDrodn%ED')).toEqual('');
     });
   });
 });

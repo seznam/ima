@@ -69,6 +69,7 @@ to the routes you'll register.
 #### Jump to:
 - [Setting up Router](/docs/routing#setting-up-router)
 - [Linking to routes](/docs/routing#linking-to-routes)
+- [Dynamic routes](/docs/routing#dynamic-routes)
 - [Using middlewares](/docs/routing#using-middlewares)
 
 ## [Page Manager](/docs/page-manager)
@@ -81,6 +82,7 @@ Page Manager is an essential part of IMA.js. It's something like a puppeteer tha
     - [PageManagerHandlers](/docs/page-manager#pagemanagerhandlers)
 - [Registering PageManagerHandlers](/docs/page-manager#registering-pagemanagerhandlers)
 - [PageNavigationHandler](/docs/page-manager#pagenavigationhandler)
+- [State transactions](/docs/page-manager#state-transactions)
 
 ## [Page State & Controller](/docs/page-state)
 
@@ -132,7 +134,7 @@ Learning the rendering process is a prerequisite before reading the
   - [React Context](/docs/rendering-process#react-context)
 - [ManagedRootView](/docs/rendering-process#managedrootview)
 
-## [View & Components](/docs/views-and-components)
+## [View & Components](/docs/views-and-components)
 
 Overview how the rendering process continues down to the smallest part of your
 application. Learn what happens with the View when route changes and how to
