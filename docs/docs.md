@@ -69,6 +69,7 @@ to the routes you'll register.
 #### Jump to:
 - [Setting up Router](/docs/routing#setting-up-router)
 - [Linking to routes](/docs/routing#linking-to-routes)
+- [Using middlewares](/docs/routing#using-middlewares)
 
 ## [Page Manager](/docs/page-manager)
 

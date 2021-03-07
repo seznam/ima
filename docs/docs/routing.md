@@ -104,7 +104,7 @@ Creating links is done via the `link()` method on Router. Inside the **Views** a
 
 ```jsx
 render() {
-  const { user, order } = this.props;
+  const { user, order } = this.props;
 
   const orderLink = this.link('order-detail', {
     userId: user.id,
@@ -147,3 +147,43 @@ load() {
   return { detailLink };
 }
 ```
+
+## Using middlewares
+
+When setting up your routes in `app/config/routes.js` you can also use **router** and **route** middlewares. Middlewares are simple functions that run before/after extraction of route parameters and receive `params` and `locals` variables as their arguments. `params` specifically allows you to modify route params while `locals` is used to pass data between middlewares.
+
+> **Note:** Since you have access to the object container (`oc`), you can basically do anything you want in the middlewares. You can easily define authentication middlewares or other restricted-access middlewares since throwing error from the middlewares works as expected.
+
+Middlewares can be defined globally using the `use` method, or as the last argument in the `add` method, which accepts array of middleware functions:
+
+```javascript
+import { RouteNames } from '@ima/core';
+import HomeController from 'app/page/home/HomeController';
+import HomeView from 'app/page/home/HomeView';
+
+export let init = (ns, oc, config) => {
+  const router = oc.get('$Router');
+
+  router
+    .use(async (params, locals) => {
+      console.log('Global middleware');
+    });
+    .add('home', '/', HomeController, HomeView, {}, [
+      async (params, locals) => {
+        locals.homeMiddleware = 0;
+      },
+      async (params, locals) => {
+        locals.homeMiddleware++;
+      }
+    ])
+    .add(RouteNames.ERROR, '/error', ErrorController, ErrorView)
+    .add(RouteNames.NOT_FOUND, '/not-found', NotFoundController, NotFoundView);
+}
+```
+
+Middleware functions are resolved **from top to the bottom** sequentially. In case of the code above, when routing to `home` route, following things would have happened:
+
+ 1. Global middleware is executed.
+ 2. Params extraction from current path happens based on the matched route.
+ 3. Local route middlewares are executed (with newly extracted route params).
+ 4. Router continues with route handling as before.

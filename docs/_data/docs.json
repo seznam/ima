@@ -131,6 +131,10 @@
                     {
                         "title": "Linking to routes",
                         "url": "/docs/routing#linking-to-routes"
+                    },
+                    {
+                        "title": "Using middlewares",
+                        "url": "/docs/routing#using-middlewares"
                     }
                 ]
             },
