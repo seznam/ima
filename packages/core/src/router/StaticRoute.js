@@ -114,8 +114,8 @@ export default class StaticRoute extends AbstractRoute {
    *        optionally containing named parameter placeholders specified as
    *        {@code :parameterName}.
    */
-  constructor(name, pathExpression, controller, view, options, middlewares) {
-    super(name, pathExpression, controller, view, options, middlewares);
+  constructor(name, pathExpression, controller, view, options) {
+    super(name, pathExpression, controller, view, options);
 
     /**
      * The path expression with the trailing slashes trimmed.

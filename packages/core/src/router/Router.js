@@ -63,7 +63,8 @@ export default class Router {
    *          allowSPA: boolean=,
    *          documentView: ?function(new: AbstractDocumentView)=,
    *          managedRootView: ?function(new: React.Component)=,
-   *          viewAdapter: ?function(new: React.Component)=
+   *          viewAdapter: ?function(new: React.Component)=,
+   *          middlewares: ?[function(Object<string, string>, function)]=
    *        }=} options
    *        Additional route options, specified how the navigation to the
    *        route will be handled.
@@ -82,6 +83,8 @@ export default class Router {
    *        if the server is overloaded. This is useful for routes that use
    *        different document views (specified by the {@code documentView}
    *        option), for example for rendering the content of iframes.
+   *        The route specific {@code middlewares} which are run after
+   *        extracting parameters before route handling.
    * @param {[function(Object<string, string>, function)]} middlewares
    *        Route specific middlewares which are run after extracting parameters
    *        before route handling.

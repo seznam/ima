@@ -128,14 +128,7 @@ export default class AbstractRouter extends Router {
   /**
    * @inheritdoc
    */
-  add(
-    name,
-    pathExpression,
-    controller,
-    view,
-    options = undefined,
-    middleware = []
-  ) {
+  add(name, pathExpression, controller, view, options = undefined) {
     if (this._routeHandlers.has(name)) {
       throw new GenericError(
         `ima.core.router.AbstractRouter.add: The route with name ${name} ` +
@@ -149,8 +142,7 @@ export default class AbstractRouter extends Router {
       pathExpression,
       controller,
       view,
-      options,
-      middleware
+      options
     );
 
     this._routeHandlers.set(name, route);
@@ -317,7 +309,7 @@ export default class AbstractRouter extends Router {
     params = Object.assign(params, route.extractParameters(path));
 
     // Run route specific middlewares
-    await this._runMiddlewares(route.getMiddlewares(), params);
+    await this._runMiddlewares(route.getOptions().middlewares, params);
 
     return this._handle(route, params, options, action);
   }
@@ -340,7 +332,7 @@ export default class AbstractRouter extends Router {
     }
 
     // Run route specific middlewares
-    await this._runMiddlewares(routeError.getMiddlewares(), params);
+    await this._runMiddlewares(routeError.getOptions().middlewares, params);
 
     return this._handle(routeError, params, options, {
       url: this.getUrl(),
@@ -367,7 +359,7 @@ export default class AbstractRouter extends Router {
     }
 
     // Run route specific middlewares
-    await this._runMiddlewares(routeNotFound.getMiddlewares(), params);
+    await this._runMiddlewares(routeNotFound.getOptions().middlewares, params);
 
     return this._handle(routeNotFound, params, options, {
       url: this.getUrl(),
@@ -436,7 +428,8 @@ export default class AbstractRouter extends Router {
    *          allowSPA: boolean=,
    *          documentView: ?AbstractDocumentView=,
    *          managedRootView: ?function(new: React.Component)=,
-   *          viewAdapter: ?function(new: React.Component)=
+   *          viewAdapter: ?function(new: React.Component)=,
+   *          middlewares: ?[function(Object<string, string>, function)]=
    *        }} options The options overrides route options defined in the
    *        {@code routes.js} configuration file.
    * @param {{ type: string, event: Event, url: string }} [action] An action
@@ -517,7 +510,7 @@ export default class AbstractRouter extends Router {
   /**
    * Runs provided middlewares in sequence.
    *
-   * @param {Promise<RouterMiddleware>} middlewares Array of middlewares.
+   * @param {[Promise<RouterMiddleware>]} middlewares Array of middlewares.
    * @param {Object<string, string>} params Router params that can be
    *        mutated by middlewares.
    */

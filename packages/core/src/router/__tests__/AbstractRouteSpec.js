@@ -12,7 +12,8 @@ describe('ima.core.router.AbstractRoute', function () {
     allowSPA: true,
     documentView: null,
     managedRootView: null,
-    viewAdapter: null
+    viewAdapter: null,
+    middlewares: []
   };
 
   beforeEach(function () {

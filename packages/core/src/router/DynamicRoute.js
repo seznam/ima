@@ -31,8 +31,8 @@ export default class DynamicRoute extends AbstractRoute {
    * @param {Route~PathExpression} pathExpression Path expression used in route matching,
    *        to generate valid path with provided params and parsing params from current path.
    */
-  constructor(name, pathExpression, controller, view, options, middlewares) {
-    super(name, pathExpression, controller, view, options, middlewares);
+  constructor(name, pathExpression, controller, view, options) {
+    super(name, pathExpression, controller, view, options);
 
     if (!pathExpression || typeof pathExpression !== 'object') {
       throw new GenericError(

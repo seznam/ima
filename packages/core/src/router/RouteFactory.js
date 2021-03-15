@@ -38,17 +38,17 @@ export default class RouteFactory {
    *          )=,
    *          autoScroll: boolean=,
    *          allowSPA: boolean=,
-   *          documentView: ?AbstractDocumentView=
+   *          documentView: ?AbstractDocumentView=,
+   *          managedRootView: ?function(new: React.Component)=,
+   *          viewAdapter: ?function(new: React.Component)=,
+   *          middlewares: ?[function(Object<string, string>, function)]=
    *        }} options The route additional options.
-   * @param {[function(Object<string, string>, function)]} middlewares
-   *        Route specific middlewares which are run after extracting parameters
-   *        before route handling.
    * @return {AbstractRoute} The constructed route.
    */
-  createRoute(name, pathExpression, controller, view, options, middlewares) {
+  createRoute(name, pathExpression, controller, view, options) {
     return Reflect.construct(
       typeof pathExpression === 'string' ? StaticRoute : DynamicRoute,
-      [name, pathExpression, controller, view, options, middlewares]
+      [name, pathExpression, controller, view, options]
     );
   }
 }

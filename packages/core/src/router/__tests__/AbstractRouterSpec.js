@@ -25,7 +25,8 @@ describe('ima.core.router.AbstractRouter', () => {
     allowSPA: true,
     documentView: null,
     managedRootView: null,
-    viewAdapter: null
+    viewAdapter: null,
+    middlewares: []
   };
   let globalMiddleware = jest.fn();
   let homeRouteMiddleware = jest.fn();
@@ -51,7 +52,9 @@ describe('ima.core.router.AbstractRouter', () => {
     router.init(config);
 
     router.use(globalMiddleware);
-    router.add('home', '/', Controller, View, options, [homeRouteMiddleware]);
+    router.add('home', '/', Controller, View, {
+      middlewares: [homeRouteMiddleware]
+    });
     router.add('contact', '/contact', Controller, View, options);
   });
 
@@ -103,8 +106,7 @@ describe('ima.core.router.AbstractRouter', () => {
         '/newRoutePath',
         Controller,
         View,
-        options,
-        []
+        options
       );
     });
   });
@@ -194,14 +196,9 @@ describe('ima.core.router.AbstractRouter', () => {
     let routeMiddleware = jest.fn();
 
     beforeEach(() => {
-      route = routeFactory.createRoute(
-        routeName,
-        path,
-        Controller,
-        View,
-        options,
-        [routeMiddleware]
-      );
+      route = routeFactory.createRoute(routeName, path, Controller, View, {
+        middlewares: [routeMiddleware]
+      });
       action.route = route;
     });
 

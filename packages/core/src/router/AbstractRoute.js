@@ -92,13 +92,11 @@ export default class AbstractRoute {
    *          allowSPA: boolean=,
    *          documentView: ?AbstractDocumentView=,
    *          managedRootView: ?function(new: React.Component)=,
-   *          viewAdapter: ?function(new: React.Component)=
+   *          viewAdapter: ?function(new: React.Component)=,
+   *          middlewares: ?[function(Object<string, string>, function)]=
    *        }} options The route additional options.
-   * @param {[function(Object<string, string>, function)]} middlewares
-   *        Route specific middlewares which are run after extracting parameters
-   *        before route handling.
    */
-  constructor(name, pathExpression, controller, view, options, middlewares) {
+  constructor(name, pathExpression, controller, view, options) {
     /**
      * The unique name of this route, identifying it among the rest of the
      * routes in the application.
@@ -160,23 +158,14 @@ export default class AbstractRoute {
         allowSPA: true,
         documentView: null,
         managedRootView: null,
-        viewAdapter: null
+        viewAdapter: null,
+        middlewares: []
       },
       options
     );
 
-    if (middlewares && !Array.isArray(middlewares)) {
-      throw new GenericError(
-        `The middlewares are not an array, '${typeof middlewares}' was given.`
-      );
-    }
-
-    /**
-     * Route specific middlewares.
-     *
-     * @type {[RouterMiddleware]}
-     */
-    this._middlewares = (middlewares || []).map(
+    // Initialize router middlewares
+    this._options.middlewares = this._options.middlewares.map(
       middleware => new RouterMiddleware(middleware)
     );
   }
@@ -246,15 +235,6 @@ export default class AbstractRoute {
    */
   getPathExpression() {
     return this._pathExpression;
-  }
-
-  /**
-   * Return route specific middlewares
-   *
-   * @return {[RouterMiddleware]}
-   */
-  getMiddlewares() {
-    return this._middlewares;
   }
 
   /**
