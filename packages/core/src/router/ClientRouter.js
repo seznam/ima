@@ -155,13 +155,14 @@ export default class ClientRouter extends AbstractRouter {
   redirect(
     url = '',
     options = {},
-    { type = ActionTypes.REDIRECT, event } = {}
+    { type = ActionTypes.REDIRECT, event } = {},
+    locals = {}
   ) {
     if (this._isSameDomain(url)) {
       let path = url.replace(this.getDomain(), '');
       path = this._extractRoutePath(path);
 
-      this.route(path, options, { type, event, url });
+      this.route(path, options, { type, event, url }, locals);
     } else {
       this._window.redirect(url);
     }
@@ -173,7 +174,8 @@ export default class ClientRouter extends AbstractRouter {
   route(
     path,
     options = {},
-    { event = null, type = ActionTypes.REDIRECT, url = null } = {}
+    { event = null, type = ActionTypes.REDIRECT, url = null } = {},
+    locals = {}
   ) {
     const action = {
       event,
@@ -182,9 +184,9 @@ export default class ClientRouter extends AbstractRouter {
     };
 
     return super
-      .route(path, options, action)
+      .route(path, options, action, locals)
       .catch(error => {
-        return this.handleError({ error });
+        return this.handleError({ error }, {}, locals);
       })
       .catch(error => {
         this._handleFatalError(error);
@@ -194,13 +196,13 @@ export default class ClientRouter extends AbstractRouter {
   /**
    * @inheritdoc
    */
-  handleError(params, options = {}) {
+  handleError(params, options = {}, locals = {}) {
     if ($Debug) {
       console.error(params.error);
     }
 
     if (this.isClientError(params.error)) {
-      return this.handleNotFound(params, options);
+      return this.handleNotFound(params, {}, locals);
     }
 
     if (this.isRedirection(params.error)) {
@@ -213,7 +215,7 @@ export default class ClientRouter extends AbstractRouter {
       });
     }
 
-    return super.handleError(params, options).catch(error => {
+    return super.handleError(params, options, locals).catch(error => {
       this._handleFatalError(error);
     });
   }
@@ -221,9 +223,9 @@ export default class ClientRouter extends AbstractRouter {
   /**
    * @inheritdoc
    */
-  handleNotFound(params, options = {}) {
-    return super.handleNotFound(params, options).catch(error => {
-      return this.handleError({ error });
+  handleNotFound(params, options = {}, locals = {}) {
+    return super.handleNotFound(params, options, locals).catch(error => {
+      return this.handleError({ error }, {}, locals);
     });
   }
 

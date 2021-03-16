@@ -106,12 +106,6 @@ export default class AbstractRouter extends Router {
      * names when adding them to routeHandlers map.
      */
     this._currentMiddlewareId = 0;
-
-    /**
-     * Helper variable used to cache passed data between middlewares. It is
-     * cleared before each new routing.
-     */
-    this._middlewareLocals = {};
   }
 
   /**
@@ -287,15 +281,11 @@ export default class AbstractRouter extends Router {
   /**
    * @inheritdoc
    */
-  async route(path, options = {}, action) {
+  async route(path, options = {}, action = {}, locals = {}) {
     this._currentlyRoutedPath = path;
-    this._middlewareLocals = {};
 
     let params = {};
     let { route, middlewares } = this._getRouteHandlersByPath(path);
-
-    // Run global router middlewares
-    await this._runMiddlewares(middlewares, params);
 
     if (!route) {
       params.error = new GenericError(
@@ -303,13 +293,12 @@ export default class AbstractRouter extends Router {
         { status: 404 }
       );
 
-      return this.handleNotFound(params);
+      return this.handleNotFound(params, {}, locals);
     }
 
+    await this._runMiddlewares(middlewares, params, locals);
     params = Object.assign(params, route.extractParameters(path));
-
-    // Run route specific middlewares
-    await this._runMiddlewares(route.getOptions().middlewares, params);
+    await this._runMiddlewares(route.getOptions().middlewares, params, locals);
 
     return this._handle(route, params, options, action);
   }
@@ -317,7 +306,7 @@ export default class AbstractRouter extends Router {
   /**
    * @inheritdoc
    */
-  async handleError(params, options = {}) {
+  async handleError(params, options = {}, locals = {}) {
     let routeError = this._routeHandlers.get(RouteNames.ERROR);
 
     if (!routeError) {
@@ -331,8 +320,14 @@ export default class AbstractRouter extends Router {
       return Promise.reject(error);
     }
 
-    // Run route specific middlewares
-    await this._runMiddlewares(routeError.getOptions().middlewares, params);
+    await this._runMiddlewares(
+      [
+        ...this._getMiddlewaresForRoute(RouteNames.ERROR),
+        ...routeError.getOptions().middlewares
+      ],
+      params,
+      locals
+    );
 
     return this._handle(routeError, params, options, {
       url: this.getUrl(),
@@ -343,7 +338,7 @@ export default class AbstractRouter extends Router {
   /**
    * @inheritdoc
    */
-  async handleNotFound(params, options = {}) {
+  async handleNotFound(params, options = {}, locals = {}) {
     let routeNotFound = this._routeHandlers.get(RouteNames.NOT_FOUND);
 
     if (!routeNotFound) {
@@ -358,8 +353,14 @@ export default class AbstractRouter extends Router {
       return Promise.reject(error);
     }
 
-    // Run route specific middlewares
-    await this._runMiddlewares(routeNotFound.getOptions().middlewares, params);
+    await this._runMiddlewares(
+      [
+        ...this._getMiddlewaresForRoute(RouteNames.NOT_FOUND),
+        ...routeNotFound.getOptions().middlewares
+      ],
+      params,
+      locals
+    );
 
     return this._handle(routeNotFound, params, options, {
       url: this.getUrl(),
@@ -498,6 +499,30 @@ export default class AbstractRouter extends Router {
   }
 
   /**
+   * Returns middlewares preceding given route name.
+   *
+   * @param {string} routeName
+   * @returns {[RouterMiddleware]=}
+   */
+  _getMiddlewaresForRoute(routeName) {
+    let middlewares = [];
+
+    for (let routeHandler of this._routeHandlers.values()) {
+      if (routeHandler instanceof RouterMiddleware) {
+        middlewares.push(routeHandler);
+
+        continue;
+      }
+
+      if (routeHandler.getName() === routeName) {
+        return middlewares;
+      }
+    }
+
+    return middlewares;
+  }
+
+  /**
    * Returns path that is stored in private property when a {@code route}
    * method is called.
    *
@@ -513,14 +538,16 @@ export default class AbstractRouter extends Router {
    * @param {[Promise<RouterMiddleware>]} middlewares Array of middlewares.
    * @param {Object<string, string>} params Router params that can be
    *        mutated by middlewares.
+   * @param {object} locals The locals param is used to pass local data
+   *        between middlewares.
    */
-  async _runMiddlewares(middlewares, params) {
+  async _runMiddlewares(middlewares, params, locals) {
     if (!Array.isArray(middlewares)) {
       return;
     }
 
     for (const middleware of middlewares) {
-      await middleware.run(params, this._middlewareLocals);
+      await middleware.run(params, locals);
     }
   }
 }
