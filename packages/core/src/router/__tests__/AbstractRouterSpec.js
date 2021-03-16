@@ -206,22 +206,6 @@ describe('ima.core.router.AbstractRouter', () => {
       route = null;
     });
 
-    it('should reset _middlewareLocals', async () => {
-      router._middlewareLocals = { middleware: 'locals' };
-      spyOn(router, '_runMiddlewares').and.stub();
-      spyOn(router, '_handle').and.stub();
-      spyOn(router, '_getRouteHandlersByPath').and.returnValue({
-        route,
-        middlewares: []
-      });
-
-      spyOn(route, 'extractParameters').and.callThrough();
-
-      expect(router._middlewareLocals).toEqual({ middleware: 'locals' });
-      await router.route(path, options, action);
-      expect(router._middlewareLocals).toEqual({});
-    });
-
     it('should handle valid route path', async () => {
       spyOn(router, '_getRouteHandlersByPath').and.returnValue({
         route,
@@ -259,11 +243,13 @@ describe('ima.core.router.AbstractRouter', () => {
       expect(router._runMiddlewares).toHaveBeenNthCalledWith(
         1,
         middlewaresMock,
+        {},
         {}
       );
       expect(router._runMiddlewares).toHaveBeenNthCalledWith(
         2,
         [new RouterMiddleware(routeMiddleware)],
+        {},
         {}
       );
     });
@@ -293,8 +279,10 @@ describe('ima.core.router.AbstractRouter', () => {
         path,
         Controller,
         View,
-        options,
-        [routeMiddleware]
+        {
+          ...options,
+          middlewares: [routeMiddleware]
+        }
       );
     });
 
@@ -327,8 +315,12 @@ describe('ima.core.router.AbstractRouter', () => {
           );
           expect(response.error).toEqual(params.error);
           expect(router._runMiddlewares).toHaveBeenCalledWith(
-            [new RouterMiddleware(routeMiddleware)],
-            params
+            [
+              new RouterMiddleware(globalMiddleware),
+              new RouterMiddleware(routeMiddleware)
+            ],
+            params,
+            {}
           );
           done();
         })
@@ -361,8 +353,10 @@ describe('ima.core.router.AbstractRouter', () => {
         path,
         Controller,
         View,
-        options,
-        [routeMiddleware]
+        {
+          ...options,
+          middlewares: [routeMiddleware]
+        }
       );
     });
 
@@ -395,8 +389,12 @@ describe('ima.core.router.AbstractRouter', () => {
           );
           expect(response.error instanceof GenericError).toEqual(true);
           expect(router._runMiddlewares).toHaveBeenCalledWith(
-            [new RouterMiddleware(routeMiddleware)],
-            params
+            [
+              new RouterMiddleware(globalMiddleware),
+              new RouterMiddleware(routeMiddleware)
+            ],
+            params,
+            {}
           );
           done();
         })
@@ -699,6 +697,52 @@ describe('ima.core.router.AbstractRouter', () => {
     });
   });
 
+  describe('_getMiddlewaresForRoute method', () => {
+    let endMiddleware = jest.fn();
+    let afterHomeMiddleware = jest.fn();
+    let middlewareRouter;
+
+    beforeEach(() => {
+      middlewareRouter = new AbstractRouter(
+        pageManager,
+        routeFactory,
+        dispatcher
+      );
+
+      spyOn(middlewareRouter, 'getPath').and.returnValue(currentRoutePath);
+      middlewareRouter.init(config);
+
+      middlewareRouter
+        .use(globalMiddleware)
+        .add('home', '/', Controller, View, options, [homeRouteMiddleware])
+        .use(afterHomeMiddleware)
+        .add('contact', '/contact', Controller, View, options)
+        .use(endMiddleware)
+        .add(RouteNames.ERROR, '/error', Controller, View);
+    });
+
+    it('should return correct set of middlewares', () => {
+      expect(middlewareRouter._routeHandlers.size).toBe(6);
+
+      expect(middlewareRouter._getMiddlewaresForRoute('home')).toEqual([
+        new RouterMiddleware(globalMiddleware)
+      ]);
+
+      expect(middlewareRouter._getMiddlewaresForRoute('contact')).toEqual([
+        new RouterMiddleware(globalMiddleware),
+        new RouterMiddleware(afterHomeMiddleware)
+      ]);
+
+      expect(
+        middlewareRouter._getMiddlewaresForRoute(RouteNames.ERROR)
+      ).toEqual([
+        new RouterMiddleware(globalMiddleware),
+        new RouterMiddleware(afterHomeMiddleware),
+        new RouterMiddleware(endMiddleware)
+      ]);
+    });
+  });
+
   describe('_runMiddlewares method', () => {
     it('should not break when middlewares are not a valid array', async () => {
       expect(await router._runMiddlewares([])).toBe(undefined);
@@ -709,7 +753,6 @@ describe('ima.core.router.AbstractRouter', () => {
 
     it('should run middlewares in sequence', async () => {
       let middlewareLocals = { middleware: 'locals' };
-      router._middlewareLocals = middlewareLocals;
 
       let results = [];
       let m1 = new RouterMiddleware(
@@ -731,22 +774,13 @@ describe('ima.core.router.AbstractRouter', () => {
         })
       );
 
-      await router._runMiddlewares([m1, m2, m3], 'params');
+      await router._runMiddlewares([m1, m2, m3], 'params', middlewareLocals);
 
-      expect(m1._middleware).toHaveBeenCalledWith(
-        'params',
-        router._middlewareLocals
-      );
-      expect(m2._middleware).toHaveBeenCalledWith(
-        'params',
-        router._middlewareLocals
-      );
-      expect(m3._middleware).toHaveBeenCalledWith(
-        'params',
-        router._middlewareLocals
-      );
+      expect(m1._middleware).toHaveBeenCalledWith('params', middlewareLocals);
+      expect(m2._middleware).toHaveBeenCalledWith('params', middlewareLocals);
+      expect(m3._middleware).toHaveBeenCalledWith('params', middlewareLocals);
       expect(results).toEqual(['m1', 'm2', 'm3']);
-      expect(router._middlewareLocals).toEqual({
+      expect(middlewareLocals).toEqual({
         middleware: 'locals',
         m1: true,
         m2: true,

@@ -69,11 +69,16 @@ describe('ima.core.router.ClientRouter', () => {
 
       router.redirect(url, options);
 
-      expect(router.route).toHaveBeenCalledWith(path, options, {
-        type: ActionTypes.REDIRECT,
-        event: undefined,
-        url: 'http://locahlost:3002/somePath'
-      });
+      expect(router.route).toHaveBeenCalledWith(
+        path,
+        options,
+        {
+          type: ActionTypes.REDIRECT,
+          event: undefined,
+          url: 'http://locahlost:3002/somePath'
+        },
+        {}
+      );
     });
 
     it('return null for non exist route', () => {
