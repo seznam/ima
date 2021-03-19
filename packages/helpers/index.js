@@ -12,7 +12,11 @@ function assign(target, source, parentField = null) {
 
     if (value instanceof Array) {
       target[field] = value.slice();
-    } else if (value instanceof Object && !(value instanceof Function)) {
+    } else if (
+      value instanceof Object &&
+      !(value instanceof Function) &&
+      !(value instanceof RegExp)
+    ) {
       if (!(target[field] instanceof Object)) {
         target[field] = {};
       }
