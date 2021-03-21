@@ -22,7 +22,8 @@ export default class AbstractRoute {
    * let pairs = [['a', true], ['hello world', 123]];
    * pairsToQuery(pairs); // => "?a=true&hello%20world=123"
    *
-   * @param {[[string|number, any]]} [pairs=[]]
+   * @param {Array} [pairs=[]] Array of arrays where the first element must be
+   *         string|number and the second element can be any
    * @return {string} Valid URI query component or empty string if
    *         there are no valid pairs provided.
    */
