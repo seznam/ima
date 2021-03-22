@@ -296,6 +296,7 @@ export default class AbstractRouter extends Router {
       return this.handleNotFound(params, {}, locals);
     }
 
+    locals.route = route;
     await this._runMiddlewares(middlewares, params, locals);
     params = Object.assign(params, route.extractParameters(path));
     await this._runMiddlewares(route.getOptions().middlewares, params, locals);
@@ -320,6 +321,7 @@ export default class AbstractRouter extends Router {
       return Promise.reject(error);
     }
 
+    locals.route = routeError;
     await this._runMiddlewares(
       [
         ...this._getMiddlewaresForRoute(RouteNames.ERROR),
@@ -353,6 +355,7 @@ export default class AbstractRouter extends Router {
       return Promise.reject(error);
     }
 
+    locals.route = routeNotFound;
     await this._runMiddlewares(
       [
         ...this._getMiddlewaresForRoute(RouteNames.NOT_FOUND),

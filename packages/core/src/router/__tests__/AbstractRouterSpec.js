@@ -244,13 +244,13 @@ describe('ima.core.router.AbstractRouter', () => {
         1,
         middlewaresMock,
         {},
-        {}
+        { route }
       );
       expect(router._runMiddlewares).toHaveBeenNthCalledWith(
         2,
         [new RouterMiddleware(routeMiddleware)],
         {},
-        {}
+        { route }
       );
     });
 
@@ -320,7 +320,7 @@ describe('ima.core.router.AbstractRouter', () => {
               new RouterMiddleware(routeMiddleware)
             ],
             params,
-            {}
+            { route }
           );
           done();
         })
@@ -394,7 +394,7 @@ describe('ima.core.router.AbstractRouter', () => {
               new RouterMiddleware(routeMiddleware)
             ],
             params,
-            {}
+            { route }
           );
           done();
         })
