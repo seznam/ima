@@ -87,7 +87,7 @@ The last parameter are options for the route.
 }
 ```
 
-- `onlyUpdate` **{boolean\|Function}** - When only the parameters of the current route change an [`update` method](/docs/controller-lifecycle#update-client) of the active controller will be invoked instead of re-instantiating the controller and view. The `update` method receives `prevParams` object containing - as the name suggests - previous route parameters. If you provide function to the `onlyUpdate` option; it receives 2 arguments (instances of previous **controller** and **view**) and it should return **boolean**. 
+- `onlyUpdate` **{boolean\|Function}** - When only the parameters of the current route change an [`update` method](/docs/controller-lifecycle#update-client) of the active controller will be invoked instead of re-instantiating the controller and view. The `update` method receives `prevParams` object containing - as the name suggests - previous route parameters. If you provide function to the `onlyUpdate` option; it receives 2 arguments (instances of previous **controller** and **view**) and it should return **boolean**.
 - `autoScroll` **{boolean}** - Flag that signals whether the page should be scrolled to the top when the navigation occurs.
 - `allowSPA` **{boolean}** - This flag can be used to make the route be always served from the server and never using the SPA even if the server is overloaded. This is useful for routes that use different document views (specified by the `documentView` option), for example for rendering the content of iframes.
 - `documentView` **{?AbstractDocumentView}**.
@@ -96,7 +96,7 @@ The last parameter are options for the route.
 
 ## Linking to routes
 
-Creating links is done via the `link()` method on Router. Inside the **Views** and **Components** you can use helper function `this.link()` inherited from `ima/page/AbstractComponent` or `ima/page/AbstractPureComponent`. 
+Creating links is done via the `link()` method on Router. Inside the **Views** and **Components** you can use helper function `this.link()` inherited from `ima/page/AbstractComponent` or `ima/page/AbstractPureComponent`.
 
 > **Note:** Under the hood, `this.link()` is only alias for `this.utils.$Router.link`, where  `this.utils` is taken from `this.context.$Utils`.
 >
@@ -115,7 +115,7 @@ render() {
 }
 ```
 
-Linking in **Controllers** requires a few more steps but still is manageable. First you import **Router** via dependencies. 
+Linking in **Controllers** requires a few more steps but still is manageable. First you import **Router** via dependencies.
 
 > **Note:** For more info about Dependency Injection see [Object Container](/docs/object-container).
 
@@ -174,7 +174,7 @@ router.add('post', {
   },
   toPath: params => {
     const { category, subcategory, itemId } = params;
-    
+
     return [category, subcategory, itemId].filter(i => !!i).join('/');
   }
 }, UserController, UserView);
@@ -188,7 +188,10 @@ router.add('post', {
 
 ## Using middlewares
 
-When setting up your routes in `app/config/routes.js` you can also use **router** and **route** middlewares. Middlewares are simple functions that run before/after extraction of route parameters and receive `params` and `locals` variables as their arguments. `params` specifically allows you to modify route params while `locals` is used to pass data between middlewares. Additionally `locals` always contain `route` object, which is equal to currently matched route.
+When setting up your routes in `app/config/routes.js` you can also use **router** and **route** middlewares. Middlewares are simple functions that run before/after extraction of route parameters and receive `params` and `locals` variables as their arguments. `params` specifically allows you to modify route params while `locals` is used to pass data between middlewares. Additionally `locals` always contain following keys:
+
+ - `locals.route` - Object, which is equal to currently matched route.
+ - `locals.action` - An action object describing what triggered this routing.
 
 > **Note:** Since you have access to the object container (`oc`), you can basically do anything you want in the middlewares. You can easily define authentication middlewares or other restricted-access middlewares since throwing error from the middlewares works as expected.
 
@@ -229,5 +232,5 @@ Middleware functions are resolved **from top to bottom sequentially**. In case o
  3. **Local route** middlewares are executed (with newly extracted route params).
 
 > **Note:** In case of an **error** or not **found page**, the execution order is still **the same**, meaning the global and route middlewares are executed as with any other route.
-> 
+>
 > There's only one exception, since the `locals` object is reset to an empty object before route handling, if an error occurs during route handling and execution is internally passed to error handling (displaying error page), the locals object may retain values that were there for the previous route matching. However the `locals.route` object will still be up to date and equal to currently routed route (error in this case).

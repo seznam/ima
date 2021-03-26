@@ -296,7 +296,9 @@ export default class AbstractRouter extends Router {
       return this.handleNotFound(params, {}, locals);
     }
 
+    locals.action = action;
     locals.route = route;
+
     await this._runMiddlewares(middlewares, params, locals);
     params = Object.assign(params, route.extractParameters(path));
     await this._runMiddlewares(route.getOptions().middlewares, params, locals);
@@ -321,7 +323,14 @@ export default class AbstractRouter extends Router {
       return Promise.reject(error);
     }
 
+    const action = {
+      url: this.getUrl(),
+      type: ActionTypes.ERROR
+    };
+
+    locals.action = action;
     locals.route = routeError;
+
     await this._runMiddlewares(
       [
         ...this._getMiddlewaresForRoute(RouteNames.ERROR),
@@ -331,10 +340,7 @@ export default class AbstractRouter extends Router {
       locals
     );
 
-    return this._handle(routeError, params, options, {
-      url: this.getUrl(),
-      type: ActionTypes.ERROR
-    });
+    return this._handle(routeError, params, options, action);
   }
 
   /**
@@ -355,7 +361,14 @@ export default class AbstractRouter extends Router {
       return Promise.reject(error);
     }
 
+    const action = {
+      url: this.getUrl(),
+      type: ActionTypes.ERROR
+    };
+
+    locals.action = action;
     locals.route = routeNotFound;
+
     await this._runMiddlewares(
       [
         ...this._getMiddlewaresForRoute(RouteNames.NOT_FOUND),
@@ -365,10 +378,7 @@ export default class AbstractRouter extends Router {
       locals
     );
 
-    return this._handle(routeNotFound, params, options, {
-      url: this.getUrl(),
-      type: ActionTypes.ERROR
-    });
+    return this._handle(routeNotFound, params, options, action);
   }
 
   /**

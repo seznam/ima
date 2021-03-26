@@ -244,13 +244,13 @@ describe('ima.core.router.AbstractRouter', () => {
         1,
         middlewaresMock,
         {},
-        { route }
+        { route, action }
       );
       expect(router._runMiddlewares).toHaveBeenNthCalledWith(
         2,
         [new RouterMiddleware(routeMiddleware)],
         {},
-        { route }
+        { route, action }
       );
     });
 
