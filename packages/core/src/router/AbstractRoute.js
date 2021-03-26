@@ -23,7 +23,7 @@ export default class AbstractRoute {
    * let pairs = [['a', true], ['hello world', 123]];
    * pairsToQuery(pairs); // => "?a=true&hello%20world=123"
    *
-   * @param {[[string|number, any]]} [pairs=[]]
+   * @param {Array<string|number, any>} [pairs=[]]
    * @return {string} Valid URI query component or empty string if
    *         there are no valid pairs provided.
    */
@@ -93,7 +93,7 @@ export default class AbstractRoute {
    *          documentView: ?AbstractDocumentView=,
    *          managedRootView: ?function(new: React.Component)=,
    *          viewAdapter: ?function(new: React.Component)=,
-   *          middlewares: ?[function(Object<string, string>, function)]=
+   *          middlewares: ?Array<Promise<function(Object<string, string>, function)>>=
    *        }} options The route additional options.
    */
   constructor(name, pathExpression, controller, view, options) {

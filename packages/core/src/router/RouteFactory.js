@@ -41,7 +41,7 @@ export default class RouteFactory {
    *          documentView: ?AbstractDocumentView=,
    *          managedRootView: ?function(new: React.Component)=,
    *          viewAdapter: ?function(new: React.Component)=,
-   *          middlewares: ?[function(Object<string, string>, function)]=
+   *          middlewares: ?Array<Promise<function(Object<string, string>, function)>>=
    *        }} options The route additional options.
    * @return {AbstractRoute} The constructed route.
    */

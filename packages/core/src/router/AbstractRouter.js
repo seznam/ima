@@ -443,7 +443,7 @@ export default class AbstractRouter extends Router {
    *          documentView: ?AbstractDocumentView=,
    *          managedRootView: ?function(new: React.Component)=,
    *          viewAdapter: ?function(new: React.Component)=,
-   *          middlewares: ?[function(Object<string, string>, function)]=
+   *          middlewares: ?Array<Promise<function(Object<string, string>, function)>>=
    *        }} options The options overrides route options defined in the
    *        {@code routes.js} configuration file.
    * @param {{ type: string, event: Event, url: string }} [action] An action
@@ -486,7 +486,7 @@ export default class AbstractRouter extends Router {
    * contain a query) and all middlewares preceding this route definition.
    *
    * @param {string} path The URL path.
-   * @return {{route: ?AbstractRoute, middlewares: [RouterMiddleware]}} The route
+   * @return {{route: ?AbstractRoute, middlewares: Array<Promise<RouterMiddleware>>} The route
    *         matching the path and middlewares preceding it or {@code {}}
    *         (empty object) if no such route exists.
    */
@@ -515,7 +515,7 @@ export default class AbstractRouter extends Router {
    * Returns middlewares preceding given route name.
    *
    * @param {string} routeName
-   * @returns {[RouterMiddleware]=}
+   * @returns {Array<RouterMiddleware>=}
    */
   _getMiddlewaresForRoute(routeName) {
     let middlewares = [];
@@ -548,7 +548,7 @@ export default class AbstractRouter extends Router {
   /**
    * Runs provided middlewares in sequence.
    *
-   * @param {[Promise<RouterMiddleware>]} middlewares Array of middlewares.
+   * @param {Array<Promise<RouterMiddleware>>} middlewares Array of middlewares.
    * @param {Object<string, string>} params Router params that can be
    *        mutated by middlewares.
    * @param {object} locals The locals param is used to pass local data

@@ -53,6 +53,7 @@
     "lint:cmd": "eslint -c ./.eslintrc.js --ignore-path ./.prettierignore",
     "lint": "npm run lint:cmd -- './**/*.{js,jsx}'",
     "lint:fix": "npm run lint -- --fix",
+    "stylelint": "stylelint './**/*.less'",
     "stylelint:fix": "npm run stylelint -- --fix",
     "precommit": "lint-staged",
     "commit": "git-cz",
