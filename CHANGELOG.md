@@ -3,6 +3,22 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [17.9.0](https://github.com/seznam/ima/compare/v17.8.1...v17.9.0) (2021-03-21)
+
+
+### Bug Fixes
+
+* 🐛 assign() lefts RegExp objects intact ([3a0d52e](https://github.com/seznam/ima/commit/3a0d52e731733df07dc5bfa58db3ed087a1c4869))
+
+
+### Features
+
+* 🎸 Static and Dynamic Routes ([#98](https://github.com/seznam/ima/issues/98)) ([920b8a7](https://github.com/seznam/ima/commit/920b8a72ded69cacfa2c480020ef710bbb9ccc6a))
+
+
+
+
+
 ## [17.8.1](https://github.com/seznam/ima/compare/v17.8.0...v17.8.1) (2021-02-17)
 
 
