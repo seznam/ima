@@ -43,7 +43,7 @@ common or default functionality for parts of the API.
     * *[.isRedirection()](#AbstractRouter+isRedirection)*
     * *[._extractRoutePath(path)](#AbstractRouter+_extractRoutePath) ⇒ <code>string</code>*
     * *[._handle(route, params, options, [action])](#AbstractRouter+_handle) ⇒ <code>Promise.&lt;Object.&lt;string, \*&gt;&gt;</code>*
-    * *[._getRouteHandlersByPath(path)](#AbstractRouter+_getRouteHandlersByPath) ⇒*
+    * *[._getRouteHandlersByPath(path)](#AbstractRouter+_getRouteHandlersByPath) ⇒ <code>Object</code>*
     * *[._getMiddlewaresForRoute(routeName)](#AbstractRouter+_getMiddlewaresForRoute) ⇒ <code>Array.&lt;RouterMiddleware&gt;</code>*
     * *[._getCurrentlyRoutedPath()](#AbstractRouter+_getCurrentlyRoutedPath) ⇒ <code>string</code>*
     * *[._runMiddlewares(middlewares, params, locals)](#AbstractRouter+_runMiddlewares)*
@@ -293,12 +293,12 @@ displayed if used as the client side.
 
 * * *
 
-### *abstractRouter.\_getRouteHandlersByPath(path) ⇒*&nbsp;<a name="AbstractRouter+_getRouteHandlersByPath" href="https://github.com/seznam/ima/blob/v17.10.0/packages/core/src/router/AbstractRouter.js#L493" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a>
+### *abstractRouter.\_getRouteHandlersByPath(path) ⇒ <code>Object</code>*&nbsp;<a name="AbstractRouter+_getRouteHandlersByPath" href="https://github.com/seznam/ima/blob/v17.10.0/packages/core/src/router/AbstractRouter.js#L493" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a>
 Returns the route matching the provided URL path part (the path may
 contain a query) and all middlewares preceding this route definition.
 
 **Kind**: instance method of [<code>AbstractRouter</code>](#AbstractRouter)  
-**Returns**: {{route: ?AbstractRoute, middlewares: Array<Promise<RouterMiddleware>>} The route
+**Returns**: <code>Object</code> - The route
         matching the path and middlewares preceding it or <code>{</code>}
         (empty object) if no such route exists.  
 
