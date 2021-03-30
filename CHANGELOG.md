@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [17.10.0](https://github.com/seznam/ima/compare/v17.9.0...v17.10.0) (2021-03-30)
+
+
+### Features
+
+* 🎸 Added support for router middlewares ([#103](https://github.com/seznam/ima/issues/103)) ([d8c6d84](https://github.com/seznam/ima/commit/d8c6d845109ceba3665c0e612f5f277037a9485c))
+
+
+
+
+
 # [17.9.0](https://github.com/seznam/ima/compare/v17.8.1...v17.9.0) (2021-03-21)
 
 
