@@ -6,6 +6,7 @@ import ActionTypes from '../ActionTypes';
 import RouteEvents from '../Events';
 import RouteFactory from '../RouteFactory';
 import RouteNames from '../RouteNames';
+import RouterMiddleware from '../RouterMiddleware';
 
 describe('ima.core.router.AbstractRouter', () => {
   let router = null;
@@ -24,8 +25,11 @@ describe('ima.core.router.AbstractRouter', () => {
     allowSPA: true,
     documentView: null,
     managedRootView: null,
-    viewAdapter: null
+    viewAdapter: null,
+    middlewares: []
   };
+  let globalMiddleware = jest.fn();
+  let homeRouteMiddleware = jest.fn();
   let action = {
     type: ActionTypes.REDIRECT
   };
@@ -47,18 +51,25 @@ describe('ima.core.router.AbstractRouter', () => {
 
     router.init(config);
 
-    router.add('home', '/', Controller, View, options);
+    router.use(globalMiddleware);
+    router.add('home', '/', Controller, View, {
+      middlewares: [homeRouteMiddleware]
+    });
     router.add('contact', '/contact', Controller, View, options);
   });
 
-  it('should have 2 routes in Array', () => {
-    expect(router._routes.size).toEqual(2);
+  afterEach(() => {
+    jest.clearAllMocks();
+  });
+
+  it('should have 2 routes in Array and 1 global middleware', () => {
+    expect(router._routeHandlers.size).toEqual(3);
   });
 
   it('should remove path from router', () => {
     router.remove('home');
 
-    expect(router._routes.size).toEqual(1);
+    expect(router._routeHandlers.size).toEqual(2);
   });
 
   it('should return absolute current url', () => {
@@ -71,10 +82,11 @@ describe('ima.core.router.AbstractRouter', () => {
     expect(router.getBaseUrl()).toEqual('http://www.domain.com/root');
   });
 
-  it('should return route for defined path', () => {
-    let route = router._getRouteByPath('/');
+  it('should return route and middlewares in line for defined path', () => {
+    let { route, middlewares } = router._getRouteHandlersByPath('/');
 
     expect(route.getName()).toEqual('home');
+    expect(middlewares).toHaveLength(1);
   });
 
   describe('add method', () => {
@@ -95,6 +107,19 @@ describe('ima.core.router.AbstractRouter', () => {
         Controller,
         View,
         options
+      );
+    });
+  });
+
+  describe('use method', () => {
+    it('should add new ima.core.router.RouterMiddleware', () => {
+      spyOn(router._routeHandlers, 'set').and.callThrough();
+
+      router.use(globalMiddleware);
+
+      expect(router._routeHandlers.set).toHaveBeenCalledWith(
+        'middleware-1',
+        new RouterMiddleware(globalMiddleware)
       );
     });
   });
@@ -129,7 +154,7 @@ describe('ima.core.router.AbstractRouter', () => {
 
     it('should return current route information', () => {
       router.getPath.and.returnValue(path);
-      spyOn(router, '_getRouteByPath').and.returnValue(route);
+      spyOn(router, '_getRouteHandlersByPath').and.returnValue({ route });
       spyOn(route, 'extractParameters').and.returnValue(params);
 
       expect(router.getCurrentRouteInfo()).toEqual({ route, params, path });
@@ -156,7 +181,7 @@ describe('ima.core.router.AbstractRouter', () => {
     });
 
     it('should throw Error for not valid route with params', () => {
-      spyOn(router._routes, 'has').and.returnValue(false);
+      spyOn(router._routeHandlers, 'has').and.returnValue(false);
 
       expect(() => {
         router.link('xxx', {});
@@ -168,15 +193,12 @@ describe('ima.core.router.AbstractRouter', () => {
     let routeName = 'link';
     let path = '/link';
     let route = null;
+    let routeMiddleware = jest.fn();
 
     beforeEach(() => {
-      route = routeFactory.createRoute(
-        routeName,
-        path,
-        Controller,
-        View,
-        options
-      );
+      route = routeFactory.createRoute(routeName, path, Controller, View, {
+        middlewares: [routeMiddleware]
+      });
       action.route = route;
     });
 
@@ -184,22 +206,56 @@ describe('ima.core.router.AbstractRouter', () => {
       route = null;
     });
 
-    it('should handle valid route path', () => {
-      spyOn(router, '_getRouteByPath').and.returnValue(route);
+    it('should handle valid route path', async () => {
+      spyOn(router, '_getRouteHandlersByPath').and.returnValue({
+        route,
+        middlewares: []
+      });
 
       spyOn(router, '_handle').and.stub();
 
       spyOn(route, 'extractParameters').and.callThrough();
 
-      router.route(path, options, action);
+      await router.route(path, options, action);
 
       expect(route.extractParameters).toHaveBeenCalled();
       expect(router._currentlyRoutedPath).toBe(path);
       expect(router._handle).toHaveBeenCalledWith(route, {}, options, action);
     });
 
+    it('should handle valid route path with middlewares', async () => {
+      let middlewaresMock = [new RouterMiddleware(globalMiddleware)];
+      spyOn(router, '_getRouteHandlersByPath').and.returnValue({
+        route,
+        middlewares: middlewaresMock
+      });
+
+      spyOn(router, '_handle').and.stub();
+      spyOn(router, '_runMiddlewares').and.callThrough();
+
+      spyOn(route, 'extractParameters').and.callThrough();
+
+      await router.route(path, options, action);
+
+      expect(route.extractParameters).toHaveBeenCalled();
+      expect(router._currentlyRoutedPath).toBe(path);
+      expect(router._handle).toHaveBeenCalledWith(route, {}, options, action);
+      expect(router._runMiddlewares).toHaveBeenNthCalledWith(
+        1,
+        middlewaresMock,
+        {},
+        { route, action }
+      );
+      expect(router._runMiddlewares).toHaveBeenNthCalledWith(
+        2,
+        [new RouterMiddleware(routeMiddleware)],
+        {},
+        { route, action }
+      );
+    });
+
     it('should handle "not-found" route', done => {
-      spyOn(router, '_getRouteByPath').and.returnValue(null);
+      spyOn(router, '_getRouteHandlersByPath').and.returnValue({});
 
       spyOn(router, 'handleNotFound').and.callFake(params => {
         return Promise.resolve(params);
@@ -215,6 +271,7 @@ describe('ima.core.router.AbstractRouter', () => {
   describe('handleError method', () => {
     let path = '/error';
     let route = null;
+    let routeMiddleware = jest.fn();
 
     beforeEach(() => {
       route = routeFactory.createRoute(
@@ -222,7 +279,10 @@ describe('ima.core.router.AbstractRouter', () => {
         path,
         Controller,
         View,
-        options
+        {
+          ...options,
+          middlewares: [routeMiddleware]
+        }
       );
     });
 
@@ -233,7 +293,8 @@ describe('ima.core.router.AbstractRouter', () => {
     it('should handle "error" route', done => {
       let params = { error: new Error('test') };
 
-      spyOn(router._routes, 'get').and.returnValue(route);
+      spyOn(router._routeHandlers, 'get').and.returnValue(route);
+      spyOn(router, '_runMiddlewares').and.callThrough();
 
       spyOn(router, '_handle').and.returnValue(
         Promise.resolve({
@@ -253,6 +314,14 @@ describe('ima.core.router.AbstractRouter', () => {
             errorAction
           );
           expect(response.error).toEqual(params.error);
+          expect(router._runMiddlewares).toHaveBeenCalledWith(
+            [
+              new RouterMiddleware(globalMiddleware),
+              new RouterMiddleware(routeMiddleware)
+            ],
+            params,
+            { route }
+          );
           done();
         })
         .catch(error => {
@@ -264,7 +333,7 @@ describe('ima.core.router.AbstractRouter', () => {
     it('should reject promise with error for undefined "error" route', done => {
       let params = { error: new Error('test') };
 
-      spyOn(router._routes, 'get').and.returnValue(null);
+      spyOn(router._routeHandlers, 'get').and.returnValue(null);
 
       router.handleError(params).catch(reason => {
         expect(reason instanceof GenericError).toBe(true);
@@ -276,6 +345,7 @@ describe('ima.core.router.AbstractRouter', () => {
   describe('handleNotFound method', () => {
     let path = '/not-found';
     let route = null;
+    let routeMiddleware = jest.fn();
 
     beforeEach(() => {
       route = routeFactory.createRoute(
@@ -283,7 +353,10 @@ describe('ima.core.router.AbstractRouter', () => {
         path,
         Controller,
         View,
-        options
+        {
+          ...options,
+          middlewares: [routeMiddleware]
+        }
       );
     });
 
@@ -294,7 +367,8 @@ describe('ima.core.router.AbstractRouter', () => {
     it('should handle "notFound" route', done => {
       let params = { error: new GenericError() };
 
-      spyOn(router._routes, 'get').and.returnValue(route);
+      spyOn(router._routeHandlers, 'get').and.returnValue(route);
+      spyOn(router, '_runMiddlewares').and.callThrough();
 
       spyOn(router, '_handle').and.returnValue(
         Promise.resolve({
@@ -314,6 +388,14 @@ describe('ima.core.router.AbstractRouter', () => {
             errorAction
           );
           expect(response.error instanceof GenericError).toEqual(true);
+          expect(router._runMiddlewares).toHaveBeenCalledWith(
+            [
+              new RouterMiddleware(globalMiddleware),
+              new RouterMiddleware(routeMiddleware)
+            ],
+            params,
+            { route }
+          );
           done();
         })
         .catch(error => {
@@ -325,7 +407,7 @@ describe('ima.core.router.AbstractRouter', () => {
     it('should reject promise with error for undefined "error" route', done => {
       let params = { error: new Error() };
 
-      spyOn(router._routes, 'get').and.returnValue(null);
+      spyOn(router._routeHandlers, 'get').and.returnValue(null);
 
       router.handleNotFound(params).catch(reason => {
         expect(reason instanceof GenericError).toBe(true);
@@ -360,22 +442,22 @@ describe('ima.core.router.AbstractRouter', () => {
 
   describe('isRedirection method', () => {
     it('should return true for redirection, which return status 3**', () => {
-      let isRedireciton = router.isRedirection(
+      let isRedirection = router.isRedirection(
         new GenericError('Redirection', {
           status: 300,
           url: 'http://www.example.com/redirect'
         })
       );
 
-      expect(isRedireciton).toEqual(true);
+      expect(isRedirection).toEqual(true);
     });
 
     it('should return true for client error, which return status 4**', () => {
-      let isRedireciton = router.isRedirection(
+      let isRedirection = router.isRedirection(
         new GenericError('Client error', { status: 400 })
       );
 
-      expect(isRedireciton).toEqual(false);
+      expect(isRedirection).toEqual(false);
     });
 
     it('should return false for any error', () => {
@@ -396,7 +478,8 @@ describe('ima.core.router.AbstractRouter', () => {
         routePath,
         Controller,
         View,
-        options
+        options,
+        []
       );
       spyOn(router, '_getCurrentlyRoutedPath').and.returnValue(routePath);
     });
@@ -405,7 +488,7 @@ describe('ima.core.router.AbstractRouter', () => {
       route = null;
     });
 
-    it('should call paga manager', done => {
+    it('should call page manager', done => {
       router.getPath.and.returnValue(routePath);
       spyOn(pageManager, 'manage').and.returnValue(
         Promise.resolve({ content: null, status: 200 })
@@ -572,6 +655,137 @@ describe('ima.core.router.AbstractRouter', () => {
       router.init({});
 
       expect(router._extractRoutePath(path)).toEqual(path);
+    });
+  });
+
+  describe('_getRouteHandlersByPath method', () => {
+    let endMiddleware = jest.fn();
+    let afterHomeMiddleware = jest.fn();
+    let middlewareRouter;
+
+    beforeEach(() => {
+      middlewareRouter = new AbstractRouter(
+        pageManager,
+        routeFactory,
+        dispatcher
+      );
+
+      spyOn(middlewareRouter, 'getPath').and.returnValue(currentRoutePath);
+      middlewareRouter.init(config);
+
+      middlewareRouter
+        .use(globalMiddleware)
+        .add('home', '/', Controller, View, options, [homeRouteMiddleware])
+        .use(afterHomeMiddleware)
+        .add('contact', '/contact', Controller, View, options)
+        .use(endMiddleware);
+    });
+
+    it('should return correct set of middlewares', () => {
+      expect(middlewareRouter._routeHandlers.size).toBe(5);
+
+      expect(
+        middlewareRouter._getRouteHandlersByPath('/').middlewares
+      ).toEqual([new RouterMiddleware(globalMiddleware)]);
+
+      expect(
+        middlewareRouter._getRouteHandlersByPath('/contact').middlewares
+      ).toEqual([
+        new RouterMiddleware(globalMiddleware),
+        new RouterMiddleware(afterHomeMiddleware)
+      ]);
+    });
+  });
+
+  describe('_getMiddlewaresForRoute method', () => {
+    let endMiddleware = jest.fn();
+    let afterHomeMiddleware = jest.fn();
+    let middlewareRouter;
+
+    beforeEach(() => {
+      middlewareRouter = new AbstractRouter(
+        pageManager,
+        routeFactory,
+        dispatcher
+      );
+
+      spyOn(middlewareRouter, 'getPath').and.returnValue(currentRoutePath);
+      middlewareRouter.init(config);
+
+      middlewareRouter
+        .use(globalMiddleware)
+        .add('home', '/', Controller, View, options, [homeRouteMiddleware])
+        .use(afterHomeMiddleware)
+        .add('contact', '/contact', Controller, View, options)
+        .use(endMiddleware)
+        .add(RouteNames.ERROR, '/error', Controller, View);
+    });
+
+    it('should return correct set of middlewares', () => {
+      expect(middlewareRouter._routeHandlers.size).toBe(6);
+
+      expect(middlewareRouter._getMiddlewaresForRoute('home')).toEqual([
+        new RouterMiddleware(globalMiddleware)
+      ]);
+
+      expect(middlewareRouter._getMiddlewaresForRoute('contact')).toEqual([
+        new RouterMiddleware(globalMiddleware),
+        new RouterMiddleware(afterHomeMiddleware)
+      ]);
+
+      expect(
+        middlewareRouter._getMiddlewaresForRoute(RouteNames.ERROR)
+      ).toEqual([
+        new RouterMiddleware(globalMiddleware),
+        new RouterMiddleware(afterHomeMiddleware),
+        new RouterMiddleware(endMiddleware)
+      ]);
+    });
+  });
+
+  describe('_runMiddlewares method', () => {
+    it('should not break when middlewares are not a valid array', async () => {
+      expect(await router._runMiddlewares([])).toBe(undefined);
+      expect(await router._runMiddlewares()).toBe(undefined);
+      expect(await router._runMiddlewares(null)).toBe(undefined);
+      expect(await router._runMiddlewares({})).toBe(undefined);
+    });
+
+    it('should run middlewares in sequence', async () => {
+      let middlewareLocals = { middleware: 'locals' };
+
+      let results = [];
+      let m1 = new RouterMiddleware(
+        jest.fn((params, locals) => {
+          results.push('m1');
+          locals.m1 = true;
+        })
+      );
+      let m2 = new RouterMiddleware(
+        jest.fn((params, locals) => {
+          results.push('m2');
+          locals.m2 = true;
+        })
+      );
+      let m3 = new RouterMiddleware(
+        jest.fn((params, locals) => {
+          results.push('m3');
+          locals.m3 = true;
+        })
+      );
+
+      await router._runMiddlewares([m1, m2, m3], 'params', middlewareLocals);
+
+      expect(m1._middleware).toHaveBeenCalledWith('params', middlewareLocals);
+      expect(m2._middleware).toHaveBeenCalledWith('params', middlewareLocals);
+      expect(m3._middleware).toHaveBeenCalledWith('params', middlewareLocals);
+      expect(results).toEqual(['m1', 'm2', 'm3']);
+      expect(middlewareLocals).toEqual({
+        middleware: 'locals',
+        m1: true,
+        m2: true,
+        m3: true
+      });
     });
   });
 });

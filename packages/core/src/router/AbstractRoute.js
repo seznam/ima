@@ -1,4 +1,5 @@
 import GenericError from '../error/GenericError';
+import RouterMiddleware from './RouterMiddleware';
 
 /**
  * Regular expression used to match and remove the starting and trailing
@@ -22,8 +23,8 @@ export default class AbstractRoute {
    * let pairs = [['a', true], ['hello world', 123]];
    * pairsToQuery(pairs); // => "?a=true&hello%20world=123"
    *
-   * @param {Array} [pairs=[]] Array of arrays where the first element must be
-   *         string|number and the second element can be any
+   * @param {Array<string|number, any>} [pairs=[]] Array of arrays where the first
+   *         element must be string|number and the second element can be any.
    * @return {string} Valid URI query component or empty string if
    *         there are no valid pairs provided.
    */
@@ -92,7 +93,8 @@ export default class AbstractRoute {
    *          allowSPA: boolean=,
    *          documentView: ?AbstractDocumentView=,
    *          managedRootView: ?function(new: React.Component)=,
-   *          viewAdapter: ?function(new: React.Component)=
+   *          viewAdapter: ?function(new: React.Component)=,
+   *          middlewares: ?Array<Promise<function(Object<string, string>, function)>>=
    *        }} options The route additional options.
    */
   constructor(name, pathExpression, controller, view, options) {
@@ -157,9 +159,15 @@ export default class AbstractRoute {
         allowSPA: true,
         documentView: null,
         managedRootView: null,
-        viewAdapter: null
+        viewAdapter: null,
+        middlewares: []
       },
       options
+    );
+
+    // Initialize router middlewares
+    this._options.middlewares = this._options.middlewares.map(
+      middleware => new RouterMiddleware(middleware)
     );
   }
 

@@ -135,6 +135,10 @@
                     {
                         "title": "Dynamic routes",
                         "url": "/docs/routing#dynamic-routes"
+                    },
+                    {
+                        "title": "Using middlewares",
+                        "url": "/docs/routing#using-middlewares"
                     }
                 ]
             },

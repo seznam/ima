@@ -85,7 +85,8 @@ describe('ima.core.page.manager.AbstractPageManager', () => {
       routePath,
       Controller,
       View,
-      options
+      options,
+      []
     );
 
     pageManager._managedPage = pageManager._constructManagedPageValue(
