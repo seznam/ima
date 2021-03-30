@@ -486,7 +486,7 @@ export default class AbstractRouter extends Router {
    * contain a query) and all middlewares preceding this route definition.
    *
    * @param {string} path The URL path.
-   * @return {{route: ?AbstractRoute, middlewares: Array<Promise<RouterMiddleware>>} The route
+   * @return {{route: ?AbstractRoute, middlewares: Array<Promise<RouterMiddleware>>}} The route
    *         matching the path and middlewares preceding it or {@code {}}
    *         (empty object) if no such route exists.
    */
