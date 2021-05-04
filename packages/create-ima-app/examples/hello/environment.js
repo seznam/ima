@@ -82,7 +82,6 @@ module.exports = (() => {
         options: {
           // options to pass to the express-http-proxy
           https: true,
-          limit: '100mb',
           timeout: 10000, // milliseconds
           proxyReqPathResolver: request => `/api/v1${request.url}`
         }
