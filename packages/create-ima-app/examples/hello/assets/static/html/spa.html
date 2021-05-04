@@ -14,45 +14,27 @@
     <meta property="og:image" content=""/>
 
     <meta name="viewport" content="width=device-width, initial-scale=1"/>
-    <link rel="stylesheet" href="/static/css/app{ifEnv !'dev'}.bundle.min{/ifEnv}.css?version={$Version}"/>
     <title></title>
 </head>
 <body>
-    <div id="page">
-    </div>
-    <div id="revivalSettings">
-        <script type="application/javascript">
-        window.$Debug = {$Debug};
+<div id="page">
+</div>
+<div id="revivalSettings">
+    <script type="application/javascript">
+        window.$Debug = <%= $Debug %>;
         window.$IMA = window.$IMA || {};
         window.$IMA.Cache = {};
-        window.$IMA.$App = {$App|json};
-        window.$IMA.$Language = "{$Language}";
-        window.$IMA.$Version = "{$Version}";
-        window.$IMA.$Env = "{$Env}";
-        window.$IMA.$Debug = {$Debug};
-        window.$IMA.$Protocol = "{$Protocol}";
-        window.$IMA.$Host = "{$Host}";
+        window.$IMA.$App = <%= $App %>;
+        window.$IMA.$Language = "<%= $Language %>";
+        window.$IMA.$Version = Date.now().toString(36);
+        window.$IMA.$Env = "<%= $Env %>";
+        window.$IMA.$Debug = window.$Debug;
+        window.$IMA.$Protocol = location.protocol;
+        window.$IMA.$Host = location.host;
         window.$IMA.$Path = location.pathname;
-        window.$IMA.$Root = "{$Root}";
-        window.$IMA.$LanguagePartPath = "{$LanguagePartPath}";
-        </script>
-    </div>
-    <div id="scripts">
-        {ifEnv !'dev'}
-            <script type="application/javascript" src="/static/js/fetch-polyfill.js?version={$Version}"></script>
-            <script type="application/javascript" src="/static/js/ima-polyfill.js?version={$Version}"></script>
-            <script type="application/javascript" src="/static/js/locale/{$Language}.js?version={$Version}"></script>
-            <script type="application/javascript" src="/static/js/app.bundle.min.js?version={$Version}"></script>
-            <script type="application/javascript">window.$IMA.Runner.run();</script>
-        {else}
-            <script type="application/javascript" src="/static/js/ima-polyfill.js?version={$Version}"></script>
-            <script type="application/javascript" src="/static/js/polyfill.js?version={$Version}"></script>
-            <script type="application/javascript" src="/static/js/shim.js?version={$Version}"></script>
-            <script type="application/javascript" src="/static/js/vendor.client.js?version={$Version}"></script>
-            <script type="application/javascript" src="/static/js/locale/{$Language}.js?version={$Version}"></script>
-            <script type="application/javascript" src="/static/js/app.client.js?version={$Version}"></script>
-            <script type="application/javascript">window.$IMA.Runner.run();</script>
-        {/ifEnv}
-    </div>
+        window.$IMA.$Root = "";
+        window.$IMA.$LanguagePartPath = "";
+    </script>
+</div>
 </body>
 </html>
