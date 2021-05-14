@@ -62,7 +62,11 @@ export default class ClientPageRenderer extends AbstractPageRenderer {
       this._setStateWithoutRendering(controller, defaultPageState);
       await this._renderToDOM(controller, view, routeOptions);
 
-      if (this._settings.$Page.$Render.batchResolve) {
+      if (
+        this._settings.$Page &&
+        this._settings.$Page.$Render &&
+        this._settings.$Page.$Render.batchResolve
+      ) {
         this._patchPromisesToStateExperimental(controller, loadedPromises);
       } else {
         this._patchPromisesToState(controller, loadedPromises);

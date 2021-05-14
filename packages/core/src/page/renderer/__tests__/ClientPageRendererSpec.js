@@ -118,6 +118,7 @@ describe('ima.core.page.renderer.ClientPageRenderer', function () {
     it('should batch resolved promises to state ', function (done) {
       spyOn(pageRenderer, '_patchPromisesToStateExperimental');
       pageRenderer._firstTime = false;
+      pageRenderer._settings = { ...pageRenderer._settings };
       pageRenderer._settings.$Page.$Render.batchResolve = true;
 
       pageRenderer
