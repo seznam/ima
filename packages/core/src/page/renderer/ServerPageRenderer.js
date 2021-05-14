@@ -210,9 +210,8 @@ export default class ServerPageRenderer extends AbstractPageRenderer {
     let pageMarkup = this._ReactDOM.renderToString(reactElementView);
 
     let documentView = this._getDocumentView(routeOptions);
-    let documentViewFactory = this._factory.createReactElementFactory(
-      documentView
-    );
+    let documentViewFactory =
+      this._factory.createReactElementFactory(documentView);
     let appMarkup = this._ReactDOM.renderToStaticMarkup(
       documentViewFactory({
         page: pageMarkup,

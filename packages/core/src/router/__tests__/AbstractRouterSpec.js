@@ -320,13 +320,13 @@ describe('ima.core.router.AbstractRouter', () => {
               new RouterMiddleware(routeMiddleware)
             ],
             params,
-            { route }
+            { route, action: errorAction }
           );
           done();
         })
         .catch(error => {
           console.error('ima.core.router.AbstractRouter.handleError', error);
-          done();
+          done(error);
         });
     });
 
@@ -394,13 +394,13 @@ describe('ima.core.router.AbstractRouter', () => {
               new RouterMiddleware(routeMiddleware)
             ],
             params,
-            { route }
+            { route, action: errorAction }
           );
           done();
         })
         .catch(error => {
           console.error('ima.core.router.AbstractRouter.handleNotFound', error);
-          done();
+          done(error);
         });
     });
 
@@ -684,9 +684,9 @@ describe('ima.core.router.AbstractRouter', () => {
     it('should return correct set of middlewares', () => {
       expect(middlewareRouter._routeHandlers.size).toBe(5);
 
-      expect(
-        middlewareRouter._getRouteHandlersByPath('/').middlewares
-      ).toEqual([new RouterMiddleware(globalMiddleware)]);
+      expect(middlewareRouter._getRouteHandlersByPath('/').middlewares).toEqual(
+        [new RouterMiddleware(globalMiddleware)]
+      );
 
       expect(
         middlewareRouter._getRouteHandlersByPath('/contact').middlewares

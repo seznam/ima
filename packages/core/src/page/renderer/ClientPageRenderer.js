@@ -63,6 +63,7 @@ export default class ClientPageRenderer extends AbstractPageRenderer {
       await this._renderToDOM(controller, view, routeOptions);
 
       if (
+        this._settings &&
         this._settings.$Page &&
         this._settings.$Page.$Render &&
         this._settings.$Page.$Render.batchResolve

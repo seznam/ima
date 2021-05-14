@@ -81,12 +81,12 @@
   },
   "size-limit": [
     {
-      "limit": "30 KB",
+      "limit": "31 KB",
       "path": "dist/ima.client.cjs.js",
       "running": false
     },
     {
-      "limit": "30 KB",
+      "limit": "31 KB",
       "path": "dist/ima.client.esm.js",
       "running": false
     }

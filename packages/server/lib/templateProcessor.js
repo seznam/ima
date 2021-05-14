@@ -4,8 +4,10 @@ const helper = require('@ima/helpers');
 
 module.exports = processTemplate;
 
-const SIMPLE_ENV_CONDITION_MATCHER = /[{]ifEnv\s+([^}]+)[}]([^{]*)[{]\/ifEnv[}]/;
-const IF_ELSE_ENV_CONDITION_MATCHER = /[{]ifEnv\s+([^}]+)[}]([^{]*)[{]else[}]([^{]*)[{]\/ifEnv[}]/;
+const SIMPLE_ENV_CONDITION_MATCHER =
+  /[{]ifEnv\s+([^}]+)[}]([^{]*)[{]\/ifEnv[}]/;
+const IF_ELSE_ENV_CONDITION_MATCHER =
+  /[{]ifEnv\s+([^}]+)[}]([^{]*)[{]else[}]([^{]*)[{]\/ifEnv[}]/;
 
 /**
  * Processes the provided template, replacing variable placeholders with the
