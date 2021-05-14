@@ -61,7 +61,12 @@ export default class ClientPageRenderer extends AbstractPageRenderer {
     if (!this._firstTime) {
       this._setStateWithoutRendering(controller, defaultPageState);
       await this._renderToDOM(controller, view, routeOptions);
-      this._patchPromisesToState(controller, loadedPromises);
+
+      if (this._settings.$Page.$Render.batchResolve) {
+        this._patchPromisesToStateExperimental(controller, loadedPromises);
+      } else {
+        this._patchPromisesToState(controller, loadedPromises);
+      }
     }
 
     return this._Helper
@@ -160,6 +165,46 @@ export default class ClientPageRenderer extends AbstractPageRenderer {
 
   // TODO IMA@18
   /**
+   * Rewrite experimental features to StateManager
+   *
+   * @param {ControllerDecorator} controller
+   * @param {Object<string, Promise<*>>} patchedPromises
+   */
+  _patchPromisesToStateExperimental(controller, patchedPromises) {
+    const stateKeys = Object.keys(patchedPromises);
+    let resolvedState = {};
+    let stateCounter = 0;
+
+    // TODO IMA@18 requestIdleCallbacks
+    const timer = setInterval(() => {
+      if (Object.keys(resolvedState).length === 0) {
+        return;
+      }
+
+      controller.setState(resolvedState);
+      resolvedState = {};
+
+      if (stateCounter === stateKeys.length) {
+        clearInterval(timer);
+      }
+    }, this._settings.$Page.$Render.batchTime || 30);
+
+    for (let resourceName of stateKeys) {
+      patchedPromises[resourceName]
+        .then(resource => {
+          resolvedState[resourceName] = resource;
+          stateCounter++;
+        })
+        .catch(error => {
+          clearInterval(timer);
+
+          return this._handleError(error);
+        });
+    }
+  }
+
+  // TODO IMA@18
+  /**
    * The method is hacky for IMA@17 and we must rewrite logic for IMA@18.
    *
    * @param {Controller} controller
@@ -247,21 +292,19 @@ export default class ClientPageRenderer extends AbstractPageRenderer {
     }
 
     if (this._viewContainer.children.length) {
-      return new Promise(resolve => setTimeout(resolve, 1000 / 240)).then(
-        () => {
-          this._reactiveView = this._ReactDOM.hydrate(
-            reactElementView,
-            this._viewContainer,
-            () => {
-              this._dispatcher.fire(
-                Events.MOUNTED,
-                { type: Types.HYDRATE },
-                true
-              );
-            }
-          );
-        }
-      );
+      return new Promise(resolve => setTimeout(resolve, 1000 / 60)).then(() => {
+        this._reactiveView = this._ReactDOM.hydrate(
+          reactElementView,
+          this._viewContainer,
+          () => {
+            this._dispatcher.fire(
+              Events.MOUNTED,
+              { type: Types.HYDRATE },
+              true
+            );
+          }
+        );
+      });
     } else {
       this._reactiveView = this._ReactDOM.render(
         reactElementView,

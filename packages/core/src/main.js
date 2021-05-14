@@ -235,7 +235,7 @@ function onLoad() {
   }
 
   if (document.readyState !== 'loading') {
-    return new Promise(resolve => setTimeout(resolve, 1000 / 240));
+    return new Promise(resolve => setTimeout(resolve, 1000 / 60));
   }
 
   return new Promise(resolve => {

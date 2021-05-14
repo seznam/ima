@@ -115,6 +115,27 @@ describe('ima.core.page.renderer.ClientPageRenderer', function () {
         });
     });
 
+    it('should batch resolved promises to state ', function (done) {
+      spyOn(pageRenderer, '_patchPromisesToStateExperimental');
+      pageRenderer._firstTime = false;
+      pageRenderer._settings.$Page.$Render.batchResolve = true;
+
+      pageRenderer
+        .mount(controller, view, params, routeOptions)
+        .then(function () {
+          expect(
+            pageRenderer._patchPromisesToStateExperimental
+          ).toHaveBeenCalledWith(controller, {
+            param2: params.param2
+          });
+          done();
+        })
+        .catch(function (error) {
+          console.error(error);
+          done(error);
+        });
+    });
+
     it('should overwrite previous state values with undefined', done => {
       spyOn(controller, 'setState');
       spyOn(pageRenderer, '_patchStateToClearPreviousState').and.callThrough();
