@@ -3,6 +3,132 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [17.10.0](https://github.com/seznam/ima/compare/v17.9.0...v17.10.0) (2021-03-30)
+
+**Note:** Version bump only for package create-ima-app
+
+
+
+
+
+# [17.9.0](https://github.com/seznam/ima/compare/v17.8.1...v17.9.0) (2021-03-21)
+
+**Note:** Version bump only for package create-ima-app
+
+
+
+
+
+## [17.8.1](https://github.com/seznam/ima/compare/v17.8.0...v17.8.1) (2021-02-17)
+
+**Note:** Version bump only for package create-ima-app
+
+
+
+
+
+# [17.8.0](https://github.com/seznam/ima/compare/v17.7.10...v17.8.0) (2021-02-03)
+
+
+### Features
+
+* 🎸 added getTransactionStatePatches method ([5082fc1](https://github.com/seznam/ima/commit/5082fc11e03dd36abbe5793f8bbd7c2c72c3131e))
+
+
+
+
+
+## [17.7.10](https://github.com/seznam/ima/compare/v17.7.9...v17.7.10) (2021-01-07)
+
+**Note:** Version bump only for package create-ima-app
+
+
+
+
+
+## [17.7.9](https://github.com/seznam/ima/compare/v17.7.8...v17.7.9) (2020-12-08)
+
+**Note:** Version bump only for package create-ima-app
+
+
+
+
+
+## [17.7.8](https://github.com/seznam/ima/compare/v17.7.7...v17.7.8) (2020-12-08)
+
+**Note:** Version bump only for package create-ima-app
+
+
+
+
+
+## [17.7.7](https://github.com/seznam/ima/compare/v17.7.6...v17.7.7) (2020-12-08)
+
+**Note:** Version bump only for package create-ima-app
+
+
+
+
+
+## [17.7.6](https://github.com/seznam/ima/compare/v17.7.5...v17.7.6) (2020-12-07)
+
+**Note:** Version bump only for package create-ima-app
+
+
+
+
+
+## [17.7.5](https://github.com/seznam/ima/compare/v17.7.4...v17.7.5) (2020-12-07)
+
+**Note:** Version bump only for package create-ima-app
+
+
+
+
+
+## [17.7.4](https://github.com/seznam/ima/compare/v17.7.3...v17.7.4) (2020-11-18)
+
+**Note:** Version bump only for package create-ima-app
+
+
+
+
+
+## [17.7.3](https://github.com/seznam/ima/compare/v17.7.2...v17.7.3) (2020-08-14)
+
+**Note:** Version bump only for package create-ima-app
+
+
+
+
+
+## [17.7.2](https://github.com/seznam/ima/compare/v17.7.1...v17.7.2) (2020-07-24)
+
+**Note:** Version bump only for package create-ima-app
+
+
+
+
+
+## [17.7.1](https://github.com/seznam/ima/compare/v17.7.0...v17.7.1) (2020-05-28)
+
+**Note:** Version bump only for package create-ima-app
+
+
+
+
+
+# [17.6.0](https://github.com/seznam/ima/compare/v17.5.3...v17.6.0) (2020-05-12)
+
+
+### Features
+
+* 🎸 Add Node 14 support ([75b9d8f](https://github.com/seznam/ima/commit/75b9d8f4adcc9b11fea5ebc3861ee6cea422e182))
+
+
+
+
+
 ## [17.5.3](https://github.com/seznam/ima/compare/v17.5.2...v17.5.3) (2020-04-16)
 
 **Note:** Version bump only for package create-ima-app

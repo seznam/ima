@@ -3,6 +3,76 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [17.9.0](https://github.com/seznam/ima/compare/v17.8.1...v17.9.0) (2021-03-21)
+
+**Note:** Version bump only for package @ima/server
+
+
+
+
+
+# [17.8.0](https://github.com/seznam/ima/compare/v17.7.10...v17.8.0) (2021-02-03)
+
+**Note:** Version bump only for package @ima/server
+
+
+
+
+
+## [17.7.9](https://github.com/seznam/ima/compare/v17.7.8...v17.7.9) (2020-12-08)
+
+**Note:** Version bump only for package @ima/server
+
+
+
+
+
+## [17.7.5](https://github.com/seznam/ima/compare/v17.7.4...v17.7.5) (2020-12-07)
+
+**Note:** Version bump only for package @ima/server
+
+
+
+
+
+## [17.7.3](https://github.com/seznam/ima/compare/v17.7.2...v17.7.3) (2020-08-14)
+
+**Note:** Version bump only for package @ima/server
+
+
+
+
+
+## [17.7.2](https://github.com/seznam/ima/compare/v17.7.1...v17.7.2) (2020-07-24)
+
+**Note:** Version bump only for package @ima/server
+
+
+
+
+
+# [17.7.0](https://github.com/seznam/ima/compare/v17.6.0...v17.7.0) (2020-05-28)
+
+
+### Bug Fixes
+
+* 🐛 Fix warning when using npm 6+ ([09b315a](https://github.com/seznam/ima/commit/09b315addf3ec6db8b8ff59b34c92aa017a0e562))
+
+
+
+
+
+# [17.6.0](https://github.com/seznam/ima/compare/v17.5.3...v17.6.0) (2020-05-12)
+
+
+### Features
+
+* 🎸 Add Node 14 support ([75b9d8f](https://github.com/seznam/ima/commit/75b9d8f4adcc9b11fea5ebc3861ee6cea422e182))
+
+
+
+
+
 # [17.5.0](https://github.com/seznam/ima/compare/v17.4.0...v17.5.0) (2020-03-02)
 
 

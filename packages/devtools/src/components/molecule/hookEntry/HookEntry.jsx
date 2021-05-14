@@ -1,7 +1,7 @@
 import styles from './hookEntry.less';
 import React from 'react';
 import PropTypes from 'prop-types';
-import cn from 'classnames';
+import cn from 'clsx';
 import Tooltip from '@reach/tooltip';
 import Editor from 'react-simple-code-editor';
 import { highlight, languages } from 'prismjs/components/prism-core';

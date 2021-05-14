@@ -15,7 +15,7 @@ export default class Router {
    *          $Host: string
    *        }} config Router configuration.
    *        The {@code $Protocol} field must be the current protocol used to
-   *        access the application, terminated by a collon (for example
+   *        access the application, terminated by a colon (for example
    *        {@code https:}).
    *        The {@code $Root} field must specify the URL path pointing to the
    *        application's root.
@@ -63,7 +63,8 @@ export default class Router {
    *          allowSPA: boolean=,
    *          documentView: ?function(new: AbstractDocumentView)=,
    *          managedRootView: ?function(new: React.Component)=,
-   *          viewAdapter: ?function(new: React.Component)=
+   *          viewAdapter: ?function(new: React.Component)=,
+   *          middlewares: ?Array<Promise<function(Object<string, string>, function)>>=
    *        }=} options
    *        Additional route options, specified how the navigation to the
    *        route will be handled.
@@ -82,10 +83,24 @@ export default class Router {
    *        if the server is overloaded. This is useful for routes that use
    *        different document views (specified by the {@code documentView}
    *        option), for example for rendering the content of iframes.
+   *        The route specific {@code middlewares} which are run after
+   *        extracting parameters before route handling.
    * @return {Router} This router.
    * @throws {ImaError} Thrown if a route with the same name already exists.
    */
   add() {}
+
+  /**
+   * Adds a new middleware to router.
+   *
+   * @param {function(Object<string, string>, function)} middleware Middleware
+   *        function accepting routeParams as a first argument, which can be mutated
+   *        and {@code locals} object as second argument. This can be used to pass data
+   *        between middlewares.
+   * @return {Router} This router.
+   * @throws {ImaError} Thrown if a middleware with the same name already exists.
+   */
+  use() {}
 
   /**
    * Removes the specified route from the router's known routes.
@@ -147,7 +162,7 @@ export default class Router {
    * Returns the information about the currently active route.
    *
    * @return {{
-   *           route: Route,
+   *           route: AbstractRoute,
    *           params: Object<string, string>,
    *           path: string
    *         }} The information about the current route.
@@ -186,7 +201,7 @@ export default class Router {
    * Note that the router will not prevent forms from being submitted to the
    * server.
    *
-   * The effects of this method can be reverted wtih {@code unlisten}. This method has no effect
+   * The effects of this method can be reverted with {@code unlisten}. This method has no effect
    * at the server side.
    *
    * @return {Router} This router.
@@ -231,6 +246,8 @@ export default class Router {
    *        the {@code routes.js} configuration file.
    * @param {{ type: string, payload: Object|Event }} [action] An action object
    *        describing what triggered this routing.
+   * @param {object} [locals={}] The locals param is used to pass local data
+   *        between middlewares.
    */
   redirect() {}
 
@@ -273,8 +290,10 @@ export default class Router {
    *          viewAdapter: ?function(new: React.Component)=
    *        }} [options={}] The options overrides route options defined in
    *        the {@code routes.js} configuration file.
-   * @param {{ type: string, event: Event|null, url: string|null }} [action] An action object
-   *        describing what triggered this routing.
+   * @param {{ type: string, event: Event|null, url: string|null }} [action]
+   *        An action object describing what triggered this routing.
+   * @param {object} [locals={}] The locals param is used to pass local data
+   *        between middlewares.
    * @return {Promise<Object<string, *>>} A promise resolved
    *         when the error has been handled and the response has been sent
    *         to the client, or displayed if used at the client side.
@@ -306,6 +325,8 @@ export default class Router {
    *          viewAdapter: ?function(new: React.Component)=
    *        }} [options={}] The options overrides route options defined in
    *        the {@code routes.js} configuration file.
+   * @param {object} [locals={}] The locals param is used to pass local data
+   *        between middlewares.
    * @return {Promise<Object<string, *>>} A promise resolved when the error
    *         has been handled and the response has been sent to the client,
    *         or displayed if used at the client side.
@@ -337,6 +358,8 @@ export default class Router {
    *          viewAdapter: ?function(new: React.Component)
    *        }} [options={}] The options overrides route options defined in
    *        the {@code routes.js} configuration file.
+   * @param {object} [locals={}] The locals param is used to pass local data
+   *        between middlewares.
    * @return {Promise<Object<string, *>>} A promise resolved
    *         when the error has been handled and the response has been sent
    *         to the client, or displayed if used at the client side.

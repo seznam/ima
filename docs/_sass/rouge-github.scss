@@ -10,7 +10,7 @@ $color08: #008080;
 
 // Inline code snippets
 code {
-	font-family: 'Menlo', 'Source Code Pro', serif;
+	font-family: 'Menlo', 'Source Code Pro', monospace;
 	letter-spacing: -0.01em;
 	font-size: 0.8em;
 	background: #f2f2f2;
@@ -34,7 +34,7 @@ pre code {
 	line-height: 20px;
 	padding: 0;
 	margin: 0;
-	font-family: 'Menlo', 'Source Code Pro', serif;
+	font-family: 'Menlo', 'Source Code Pro', monospace;
 	letter-spacing: -0.01em;
 
 	pre code {

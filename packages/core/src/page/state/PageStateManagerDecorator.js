@@ -72,4 +72,32 @@ export default class PageStateManagerDecorator extends PageStateManager {
   getAllStates() {
     return this._pageStateManager.getAllStates();
   }
+
+  /**
+   * @inheritdoc
+   */
+  getTransactionStatePatches() {
+    return this._pageStateManager.getTransactionStatePatches();
+  }
+
+  /**
+   * @inheritdoc
+   */
+  beginTransaction() {
+    return this._pageStateManager.beginTransaction();
+  }
+
+  /**
+   * @inheritdoc
+   */
+  commitTransaction() {
+    return this._pageStateManager.commitTransaction();
+  }
+
+  /**
+   * @inheritdoc
+   */
+  cancelTransaction() {
+    return this._pageStateManager.cancelTransaction();
+  }
 }

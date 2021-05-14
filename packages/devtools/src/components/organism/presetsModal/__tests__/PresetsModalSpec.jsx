@@ -15,7 +15,7 @@ describe('PresetsModal organism', () => {
 
   const props = {
     presets: {
-      '0': {
+      0: {
         id: '0',
         name: 'name',
         editable: true,

@@ -2,7 +2,7 @@ const { getOptions } = require('./transformUtils/testUtils');
 const IMPORT_MAP = require('./import-v17-map.json');
 const EXCEPTIONS = ['ima/main'];
 
-module.exports = function(fileInfo, api, options) {
+module.exports = function (fileInfo, api, options) {
   const jscodeshift = api.jscodeshift;
   const ast = jscodeshift(fileInfo.source);
   const regexIma = /^ima\//;

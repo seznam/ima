@@ -150,13 +150,14 @@ function createDevtool(registerHook) {
     }
   }
 
-  $IMA.Runner.registerPreRunCommand(function() {
+  $IMA.Runner.registerPreRunCommand(function () {
     if (!window.__IMA_DEVTOOLS_INIT) {
       return;
     }
 
     registerHook({
       importIMAClass,
+      clone,
       aop,
       createHook,
       hookName,
@@ -183,7 +184,7 @@ function createDevtool(registerHook) {
       }
     );
 
-    let imaCore = importIMAClass('@ima/core');
+    let imaCore = importIMAClass('@ima/core', true);
     ImaMainModules.forEach(moduleName => {
       const key = `__${moduleName}__`;
 
@@ -206,7 +207,7 @@ function createDevtool(registerHook) {
 }
 
 // IMA v17 check
-$IMA.Runner.registerPreRunCommand(function() {
+$IMA.Runner.registerPreRunCommand(function () {
   try {
     window.__IMA_DEVTOOLS_INIT = true;
     $IMA.Loader.importSync('@ima/core');

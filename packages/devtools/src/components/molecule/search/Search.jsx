@@ -2,7 +2,7 @@ import styles from './search.less';
 import React from 'react';
 import PropTypes from 'prop-types';
 import debounce from 'lodash.debounce';
-import cn from 'classnames';
+import cn from 'clsx';
 import Tooltip from '@reach/tooltip';
 import { Menu, MenuList, MenuButton, MenuItem } from '@reach/menu-button';
 

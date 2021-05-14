@@ -16,7 +16,7 @@ describe('reducer', () => {
     curState = {
       selectedPresetId: '0',
       presets: {
-        '0': {
+        0: {
           id: '0',
           name: 'name',
           hooks: {},
@@ -36,7 +36,7 @@ describe('reducer', () => {
         type: 'presets/setPresets',
         payload: {
           presets: {
-            '1': {
+            1: {
               id: '1',
               name: 'name',
               hooks: {},
@@ -48,7 +48,7 @@ describe('reducer', () => {
       })
     ).toEqual({
       presets: {
-        '1': {
+        1: {
           id: '1',
           name: 'name',
           hooks: {},
@@ -72,7 +72,7 @@ describe('reducer', () => {
       ...curState,
       presets: {
         ...curState.presets,
-        '1': {
+        1: {
           id: '1',
           name: 'name'
         }
@@ -92,7 +92,7 @@ describe('reducer', () => {
     ).toEqual({
       ...curState,
       presets: {
-        '0': {
+        0: {
           ...curState.presets['0'],
           name: 'newName'
         }
@@ -128,7 +128,7 @@ describe('reducer', () => {
     ).toEqual({
       selectedPresetId: '1',
       presets: {
-        '1': {
+        1: {
           id: '1',
           name: 'Name#1',
           selected: true
@@ -149,7 +149,7 @@ describe('reducer', () => {
       ...curState,
       presets: {
         ...curState.presets,
-        '1': {
+        1: {
           id: '1',
           name: 'Copy of name - 1',
           selected: false,
@@ -170,7 +170,7 @@ describe('reducer', () => {
       ...curState,
       presets: {
         ...curState.presets,
-        '0': {
+        0: {
           ...curState.presets['0'],
           selected: true
         }
@@ -196,11 +196,11 @@ describe('reducer', () => {
       ...curState,
       presets: {
         ...curState.presets,
-        '0': {
+        0: {
           ...curState.presets['0'],
           selected: true
         },
-        '1': {
+        1: {
           id: '1',
           name: 'Name#1',
           selected: false
@@ -223,10 +223,10 @@ describe('reducer', () => {
       ...curState,
       presets: {
         ...curState.presets,
-        '0': {
+        0: {
           ...curState.presets['0'],
           hooks: {
-            '0': {
+            0: {
               id: '0',
               name: 'hookName'
             }
@@ -238,7 +238,7 @@ describe('reducer', () => {
 
   it('should toggle hook in currently selected preset', () => {
     curState.presets['0'].hooks = {
-      '0': {
+      0: {
         enabled: false
       }
     };
@@ -252,10 +252,10 @@ describe('reducer', () => {
       ...curState,
       presets: {
         ...curState.presets,
-        '0': {
+        0: {
           ...curState.presets['0'],
           hooks: {
-            '0': {
+            0: {
               enabled: true
             }
           }
@@ -266,7 +266,7 @@ describe('reducer', () => {
 
   it('should delete hook in currently selected preset', () => {
     curState.presets['0'].hooks = {
-      '0': {
+      0: {
         enabled: false
       }
     };
@@ -280,7 +280,7 @@ describe('reducer', () => {
       ...curState,
       presets: {
         ...curState.presets,
-        '0': {
+        0: {
           ...curState.presets['0'],
           hooks: {}
         }
@@ -290,7 +290,7 @@ describe('reducer', () => {
 
   it('should open hook in currently selected preset', () => {
     curState.presets['0'].hooks = {
-      '0': {
+      0: {
         opened: false
       }
     };
@@ -304,10 +304,10 @@ describe('reducer', () => {
       ...curState,
       presets: {
         ...curState.presets,
-        '0': {
+        0: {
           ...curState.presets['0'],
           hooks: {
-            '0': {
+            0: {
               opened: true
             }
           }
@@ -318,10 +318,10 @@ describe('reducer', () => {
 
   it('should open hook in currently selected preset and close others', () => {
     curState.presets['0'].hooks = {
-      '0': {
+      0: {
         opened: false
       },
-      '1': {
+      1: {
         opened: true
       }
     };
@@ -335,13 +335,13 @@ describe('reducer', () => {
       ...curState,
       presets: {
         ...curState.presets,
-        '0': {
+        0: {
           ...curState.presets['0'],
           hooks: {
-            '0': {
+            0: {
               opened: true
             },
-            '1': {
+            1: {
               opened: false
             }
           }
@@ -463,10 +463,10 @@ describe('selectors', () => {
   describe('getHookIds selector', () => {
     it('should return hook keys from currently selected preset', () => {
       const result = selectors.getHookIds.resultFunc('0', {
-        '0': {
+        0: {
           hooks: {
-            '0': {},
-            '1': {}
+            0: {},
+            1: {}
           }
         }
       });
@@ -484,17 +484,17 @@ describe('selectors', () => {
   describe('getActiveHooks selector', () => {
     it('should return hooks from currently selected preset', () => {
       const result = selectors.getActiveHooks.resultFunc('0', {
-        '0': {
+        0: {
           hooks: {
-            '0': {},
-            '1': {}
+            0: {},
+            1: {}
           }
         }
       });
 
       expect(result).toEqual({
-        '0': {},
-        '1': {}
+        0: {},
+        1: {}
       });
     });
 

@@ -23,10 +23,10 @@ describe('ima.storage.CookieStorage', () => {
   let cookie = null;
   let win = null;
   let transformFunction = {
-    encode: function(s) {
+    encode: function (s) {
       return s;
     },
-    decode: function(s) {
+    decode: function (s) {
       return s;
     }
   };

@@ -4,7 +4,7 @@ exports[`JsonView atom should match snapshot 1`] = `
 <div
   className="jsonView"
 >
-  <t
+  <n
     collapseStringsAfterLength={false}
     collapsed={2}
     defaultValue={null}
@@ -19,6 +19,7 @@ exports[`JsonView atom should match snapshot 1`] = `
     onDelete={false}
     onEdit={false}
     onSelect={false}
+    quotesOnKeys={true}
     shouldCollapse={false}
     sortKeys={false}
     src={

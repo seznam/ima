@@ -154,6 +154,26 @@ export default class Controller {
   getState() {}
 
   /**
+   * Starts queueing state patches off the controller state. While the transaction
+   * is active every {@method setState} call has no effect on the current state.
+   *
+   * Note that call to {@method getState} after the transaction has begun will
+   * return state as it was before the transaction.
+   */
+  beginStateTransaction() {}
+
+  /**
+   * Applies queued state patches to the controller state. All patches are squashed
+   * and applied with one {@method setState} call.
+   */
+  commitStateTransaction() {}
+
+  /**
+   * Cancels ongoing state transaction. Uncommited state changes are lost.
+   */
+  cancelStateTransaction() {}
+
+  /**
    * Adds the provided extension to this controller. All extensions should be
    * added to the controller before the {@link Controller#init} method is
    * invoked.

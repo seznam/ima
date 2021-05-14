@@ -26,6 +26,11 @@ export default class PageStateManagerImpl extends PageStateManager {
     this._states = [];
 
     /**
+     * @type {Object<string, *>[]}
+     */
+    this._statePatchQueue = [];
+
+    /**
      * @type {number}
      */
     this._cursor = -1;
@@ -39,6 +44,11 @@ export default class PageStateManagerImpl extends PageStateManager {
      * @type {Dispatcher}
      */
     this._dispatcher = dispatcher;
+
+    /**
+     * @type {boolean}
+     */
+    this._ongoingTransaction = false;
   }
 
   /**
@@ -53,6 +63,10 @@ export default class PageStateManagerImpl extends PageStateManager {
    * @inheritdoc
    */
   setState(patchState) {
+    if (this._ongoingTransaction) {
+      return this._statePatchQueue.push(patchState);
+    }
+
     const oldState = this.getState();
     const newState = Object.assign({}, this.getState(), patchState);
 
@@ -81,6 +95,63 @@ export default class PageStateManagerImpl extends PageStateManager {
    */
   getAllStates() {
     return this._states;
+  }
+
+  /**
+   * @inheritdoc
+   */
+  getTransactionStatePatches() {
+    return this._statePatchQueue;
+  }
+
+  /**
+   * @inheritdoc
+   */
+  beginTransaction() {
+    if ($Debug && this._ongoingTransaction) {
+      console.warn(
+        'ima.core.page.state.PageStateManagerImpl.beginTransaction():' +
+          'Another state transaction is already in progress. Check you workflow.' +
+          'These uncommited state changes will be lost:',
+        this._statePatchQueue
+      );
+    }
+
+    this._ongoingTransaction = true;
+    this._statePatchQueue = [];
+  }
+
+  /**
+   * @inheritdoc
+   */
+  commitTransaction() {
+    if ($Debug && !this._ongoingTransaction) {
+      console.warn(
+        'ima.core.page.state.PageStateManagerImpl.commitTransaction():' +
+          'No transaction is in progress. Check you workflow.'
+      );
+    }
+
+    if (this._statePatchQueue.length === 0) {
+      this._ongoingTransaction = false;
+
+      return;
+    }
+
+    const finalPatch = Object.assign({}, ...this._statePatchQueue);
+
+    this._ongoingTransaction = false;
+    this._statePatchQueue = [];
+
+    this.setState(finalPatch);
+  }
+
+  /**
+   * @inheritdoc
+   */
+  cancelTransaction() {
+    this._ongoingTransaction = false;
+    this._statePatchQueue = [];
   }
 
   /**

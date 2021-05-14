@@ -1,56 +1,64 @@
 module.exports = {
-  'extends': ['eslint:recommended', 'plugin:react/recommended', 'prettier', 'prettier/react'],
-  'parser': 'babel-eslint',
-  'rules': {
+  root: true,
+  extends: [
+    'eslint:recommended',
+    'plugin:react/recommended',
+    'prettier',
+    'prettier/react'
+  ],
+  parser: 'babel-eslint',
+  rules: {
     'prettier/prettier': [
-      'error', {
+      'error',
+      {
         singleQuote: true,
         semi: true,
-        jsxBracketSameLine: true
+        jsxBracketSameLine: true,
+        trailingComma: 'none',
+        arrowParens: 'avoid'
       }
     ],
 
-    'no-console': ['error', {
-      allow: ['warn', 'error']
-    }],
+    'no-console': [
+      'error',
+      {
+        allow: ['warn', 'error']
+      }
+    ],
 
     'react/prop-types': 0,
     'react/wrap-multilines': 0,
-    'react/no-deprecated': 0
+    'react/no-deprecated': 0,
+    'no-import-assign': 0
   },
-  'plugins': [
-    'prettier',
-    'jest',
-    'react',
-    'jasmine'
-  ],
-  'settings': {
-    'ecmascript': 2015,
-    'jsx': true,
-    'react': {
-      'version': '16'
+  plugins: ['prettier', 'jest', 'react', 'jasmine'],
+  settings: {
+    ecmascript: 2015,
+    jsx: true,
+    react: {
+      version: '16'
     }
   },
-  'parserOptions': {
-    'sourceType': 'module',
-    'ecmaVersion': 6,
-    'ecmaFeatures': {
-      'jsx': true
+  parserOptions: {
+    sourceType: 'module',
+    ecmaVersion: 6,
+    ecmaFeatures: {
+      jsx: true
     }
   },
-  'env': {
-    'browser': true,
-    'node': true,
-    'es6': true,
-    'jasmine': true,
+  env: {
+    browser: true,
+    node: true,
+    es6: true,
+    jasmine: true,
     'jest/globals': true
   },
-  'globals': {
-    '$Debug': true,
-    '$IMA': true,
-    'using': true,
-    'extend': true,
-    'chrome': true,
-    'FB': true
+  globals: {
+    $Debug: true,
+    $IMA: true,
+    using: true,
+    extend: true,
+    chrome: true,
+    FB: true
   }
 };

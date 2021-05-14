@@ -79,7 +79,7 @@ aop(
               .concat(meta.args[0])
             : undefined,
         state: {
-          args: JSON.parse(JSON.stringify(meta.args)),
+          args: clone(meta.args),
           payload: {}
         }
       }
@@ -120,7 +120,7 @@ aop(
               .concat(meta.args[1])
             : undefined,
         state: {
-          args: JSON.parse(JSON.stringify(args)),
+          args: clone(args),
           payload: {}
         }
       }

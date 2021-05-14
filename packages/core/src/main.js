@@ -77,7 +77,9 @@ import ClientRouter from './router/ClientRouter';
 import RouterEvents from './router/Events';
 import Request from './router/Request';
 import Response from './router/Response';
-import Route from './router/Route';
+import AbstractRoute from './router/AbstractRoute';
+import StaticRoute from './router/StaticRoute';
+import DynamicRoute from './router/DynamicRoute';
 import RouteFactory from './router/RouteFactory';
 import RouteNames from './router/RouteNames';
 import Router from './router/Router';
@@ -233,7 +235,7 @@ function onLoad() {
   }
 
   if (document.readyState !== 'loading') {
-    return new Promise(resolve => setTimeout(resolve, 1000 / 240));
+    return new Promise(resolve => setTimeout(resolve, 1000 / 60));
   }
 
   return new Promise(resolve => {
@@ -310,12 +312,15 @@ export {
   PageContext,
   PageFactory,
   AbstractRouter,
+  AbstractRoute,
+  StaticRoute,
+  DynamicRoute,
   ActionTypes,
   ClientRouter,
   StateEvents,
   Request,
   Response,
-  Route,
+  StaticRoute as Route,
   RouteFactory,
   RouteNames,
   Router,

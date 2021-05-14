@@ -1,6 +1,6 @@
 {
   "name": "@ima/devtools-scripts",
-  "version": "17.5.0",
+  "version": "17.8.0",
   "description": "IMA.js devtool script used in the @ima/devtools.",
   "main": "es/main.string.js",
   "scripts": {
@@ -41,15 +41,15 @@
   },
   "license": "ISC",
   "devDependencies": {
-    "@babel/cli": "^7.7.4",
-    "@babel/core": "^7.7.4",
-    "@babel/plugin-transform-template-literals": "^7.7.4",
-    "rollup": "^1.27.8",
-    "rollup-plugin-commonjs": "^10.1.0",
-    "rollup-plugin-node-resolve": "^5.2.0"
+    "@babel/cli": "7.12.10",
+    "@babel/core": "7.12.10",
+    "@babel/plugin-transform-template-literals": "7.12.1",
+    "rollup": "2.38.1",
+    "rollup-plugin-commonjs": "10.1.0",
+    "rollup-plugin-node-resolve": "5.2.0"
   },
   "dependencies": {
-    "easy-uid": "^1.0.1",
-    "to-aop": "0.3.3"
+    "easy-uid": "1.0.2",
+    "to-aop": "0.5.1"
   }
 }

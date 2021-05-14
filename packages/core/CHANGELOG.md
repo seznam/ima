@@ -3,6 +3,124 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [17.10.0](https://github.com/seznam/ima/compare/v17.9.0...v17.10.0) (2021-03-30)
+
+
+### Features
+
+* 🎸 Added support for router middlewares ([#103](https://github.com/seznam/ima/issues/103)) ([d8c6d84](https://github.com/seznam/ima/commit/d8c6d845109ceba3665c0e612f5f277037a9485c))
+
+
+
+
+
+# [17.9.0](https://github.com/seznam/ima/compare/v17.8.1...v17.9.0) (2021-03-21)
+
+
+### Features
+
+* 🎸 Static and Dynamic Routes ([#98](https://github.com/seznam/ima/issues/98)) ([920b8a7](https://github.com/seznam/ima/commit/920b8a72ded69cacfa2c480020ef710bbb9ccc6a))
+
+
+
+
+
+## [17.8.1](https://github.com/seznam/ima/compare/v17.8.0...v17.8.1) (2021-02-17)
+
+
+### Bug Fixes
+
+* 🐛 extension update method receives full state ([#102](https://github.com/seznam/ima/issues/102)) ([5c163e7](https://github.com/seznam/ima/commit/5c163e7268a46bcc7087313c58cca7097e6768c7)), closes [#101](https://github.com/seznam/ima/issues/101)
+
+
+
+
+
+# [17.8.0](https://github.com/seznam/ima/compare/v17.7.10...v17.8.0) (2021-02-03)
+
+
+### Features
+
+* 🎸 added getTransactionStatePatches method ([5082fc1](https://github.com/seznam/ima/commit/5082fc11e03dd36abbe5793f8bbd7c2c72c3131e))
+* 🎸 state transactions ([#99](https://github.com/seznam/ima/issues/99)) ([ad6237e](https://github.com/seznam/ima/commit/ad6237eabeed5b58da6e67032fc6effb33f16053))
+
+
+
+
+
+## [17.7.10](https://github.com/seznam/ima/compare/v17.7.9...v17.7.10) (2021-01-07)
+
+
+### Bug Fixes
+
+* 🐛 handling equal sign in url parameter value ([#97](https://github.com/seznam/ima/issues/97)) ([fc9e762](https://github.com/seznam/ima/commit/fc9e7624a03044edd97954395836da4b04046a65))
+
+
+
+
+
+## [17.7.9](https://github.com/seznam/ima/compare/v17.7.8...v17.7.9) (2020-12-08)
+
+**Note:** Version bump only for package @ima/core
+
+
+
+
+
+## [17.7.5](https://github.com/seznam/ima/compare/v17.7.4...v17.7.5) (2020-12-07)
+
+**Note:** Version bump only for package @ima/core
+
+
+
+
+
+## [17.7.4](https://github.com/seznam/ima/compare/v17.7.3...v17.7.4) (2020-11-18)
+
+
+### Bug Fixes
+
+* 🐛 component fire method send data undefined by default ([#80](https://github.com/seznam/ima/issues/80)) ([75dd8d7](https://github.com/seznam/ima/commit/75dd8d717335d1d3ec6abd1fd88ed52101e99596))
+* 🐛 error when target attribute is set on _self value ([#83](https://github.com/seznam/ima/issues/83)) ([dc29c93](https://github.com/seznam/ima/commit/dc29c933af486cdee28104b570ac43c3ff527e0f))
+* 🐛 error when target attribute is set on _self value ([#85](https://github.com/seznam/ima/issues/85)) ([cae2526](https://github.com/seznam/ima/commit/cae2526eb1efed00edc5ee327f7ea2c18e445d79))
+
+
+
+
+
+## [17.7.3](https://github.com/seznam/ima/compare/v17.7.2...v17.7.3) (2020-08-14)
+
+
+### Bug Fixes
+
+* 🐛 namespace.get now checks path type before split ([#78](https://github.com/seznam/ima/issues/78)) ([4e66644](https://github.com/seznam/ima/commit/4e666442c3e72ec04e30bc98e9f65f4225a97843))
+
+
+
+
+
+## [17.7.2](https://github.com/seznam/ima/compare/v17.7.1...v17.7.2) (2020-07-24)
+
+
+### Bug Fixes
+
+* query params parse ([#73](https://github.com/seznam/ima/issues/73)) ([4f63eb3](https://github.com/seznam/ima/commit/4f63eb3c7ba2025e0f5bf5ac87b41a883386214c))
+
+
+
+
+
+# [17.6.0](https://github.com/seznam/ima/compare/v17.5.3...v17.6.0) (2020-05-12)
+
+
+### Features
+
+* 🎸 Add Node 14 support ([75b9d8f](https://github.com/seznam/ima/commit/75b9d8f4adcc9b11fea5ebc3861ee6cea422e182))
+
+
+
+
+
 ## [17.5.3](https://github.com/seznam/ima/compare/v17.5.2...v17.5.3) (2020-04-16)
 
 

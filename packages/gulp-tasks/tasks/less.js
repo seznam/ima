@@ -14,7 +14,7 @@ exports.default = gulpConfig => {
   function less() {
     function fixPipe(stream) {
       let origPipe = stream.pipe;
-      stream.pipe = function(dest) {
+      stream.pipe = function (dest) {
         arguments[0] = dest.on('error', error => {
           let nextStreams = dest._nextStreams;
           if (nextStreams) {

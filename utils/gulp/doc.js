@@ -22,11 +22,13 @@ const dir = {
 };
 const documentationPreprocessors = [
   {
-    pattern: /\/[*][*]((?:a|[^a])*?)@(type|param|return)\s*[{]([^}]*?)([a-zA-Z0-9_., *<>|]+)\[\]([^}]*)[}]((a|[^a])*)[*]\//g,
+    pattern:
+      /\/[*][*]((?:a|[^a])*?)@(type|param|return)\s*[{]([^}]*?)([a-zA-Z0-9_., *<>|]+)\[\]([^}]*)[}]((a|[^a])*)[*]\//g,
     replace: '/**$1@$2 {$3Array<$4>$5}$6*/'
   },
   {
-    pattern: /\/[*][*]((?:a|[^a])*?)[{]@code(?:link)? ([^}]*)[}]((a|[^a])*)[*]\//g,
+    pattern:
+      /\/[*][*]((?:a|[^a])*?)[{]@code(?:link)? ([^}]*)[}]((a|[^a])*)[*]\//g,
     replace: '/**$1<code>$2</code>$3*/'
   },
   {
@@ -87,9 +89,9 @@ function generate(done) {
       `${dir.docPartials}main.hbs`
     ]
   };
-  const gitUrl = `${packageData.repository.url.slice(0, -4)}/tree/${
+  const gitUrl = `${packageData.repository.url.slice(0, -4)}/blob/v${
     lernaData.version
-  }`;
+  }/packages/core/src`;
   const lunrDocuments = [];
 
   fs.ensureDirSync(dir.docPosts);

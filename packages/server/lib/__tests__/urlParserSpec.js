@@ -527,8 +527,7 @@ describe('UrlParser', () => {
         originalUrl:
           '/21-desks/subcategory/all-rices?utm_source=sbazar&utm_medium=email&utm_campaign=email-reply-confirm&utm_content=seller-link-box',
         expected: {
-          path:
-            '/21-desks/subcategory/all-rices?utm_source=sbazar&utm_medium=email&utm_campaign=email-reply-confirm&utm_content=seller-link-box'
+          path: '/21-desks/subcategory/all-rices?utm_source=sbazar&utm_medium=email&utm_campaign=email-reply-confirm&utm_content=seller-link-box'
         }
       },
       // Note: Problematic URLs (having '//')
@@ -542,16 +541,14 @@ describe('UrlParser', () => {
         originalUrl:
           '/img//big/90/3916290_1.jpg?redirect=http://favorite.baradios.cz/radios/g90/listen',
         expected: {
-          path:
-            '/img//big/90/3916290_1.jpg?redirect=http://favorite.baradios.cz/radios/g90/listen'
+          path: '/img//big/90/3916290_1.jpg?redirect=http://favorite.baradios.cz/radios/g90/listen'
         }
       },
       {
         originalUrl:
           '//img//big/80/3916290_1.jpg?redirect=http://favorite.baradios.cz/radios/g80/listen',
         expected: {
-          path:
-            '//img//big/80/3916290_1.jpg?redirect=http://favorite.baradios.cz/radios/g80/listen'
+          path: '//img//big/80/3916290_1.jpg?redirect=http://favorite.baradios.cz/radios/g80/listen'
         }
       }
     ];

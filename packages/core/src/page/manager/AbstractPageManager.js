@@ -148,9 +148,8 @@ export default class AbstractPageManager extends PageManager {
     // Construct new managedPage value
     const pageFactory = this._pageFactory;
     const controllerInstance = pageFactory.createController(controller);
-    const decoratedController = pageFactory.decorateController(
-      controllerInstance
-    );
+    const decoratedController =
+      pageFactory.decorateController(controllerInstance);
     const viewInstance = pageFactory.createView(view);
     const newManagedPage = this._constructManagedPageValue(
       controller,
@@ -204,7 +203,7 @@ export default class AbstractPageManager extends PageManager {
    * @protected
    * @param {(string|function)} controller
    * @param {(string|function)} view
-   * @param {Route} route
+   * @param {AbstractRoute} route
    * @param {RouteOptions} options
    * @param {Object<string, string>} params The route parameters.
    * @param {AbstractController} controllerInstance
@@ -281,7 +280,7 @@ export default class AbstractPageManager extends PageManager {
    * @returns {{
    *            controller: ?(string|function(new: Controller)),
    *            view: ?React.Component,
-   *            route: Route,
+   *            route: AbstractRoute,
    *            options: ?RouteOptions,
    *            params: ?Object<string, string>
    *          }}
@@ -547,19 +546,29 @@ export default class AbstractPageManager extends PageManager {
    */
   async _getUpdatedExtensionsState(controllerState) {
     const controller = this._managedPage.controllerInstance;
-    let extensionsState = Object.assign({}, controllerState);
+    const extensionsState = Object.assign({}, controllerState);
+    const extensionsPartialState = Object.assign(
+      {},
+      this._pageStateManager.getState(),
+      controllerState
+    );
 
     for (let extension of controller.getExtensions()) {
       const lastRouteParams = extension.getRouteParams();
       extension.setRouteParams(this._managedPage.params);
-      extension.setPartialState(extensionsState);
+      extension.setPartialState(extensionsPartialState);
       extension.switchToPartialState();
-      const extensionState = await extension.update(lastRouteParams);
 
-      this._switchToPageStateManagerAfterLoaded(extension, extensionState);
-      this._setRestrictedPageStateManager(extension, extensionState);
+      const extensionReturnedState = await extension.update(lastRouteParams);
 
-      Object.assign(extensionsState, extensionState);
+      this._switchToPageStateManagerAfterLoaded(
+        extension,
+        extensionReturnedState
+      );
+      this._setRestrictedPageStateManager(extension, extensionReturnedState);
+
+      Object.assign(extensionsState, extensionReturnedState);
+      Object.assign(extensionsPartialState, extensionReturnedState);
     }
 
     return extensionsState;

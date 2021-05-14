@@ -27,14 +27,14 @@ onVisibilityToggle() {
 ```
 
 ## Initial page state
-First additions to page state are set when `load` method of a Controller and Extensions returns an object of resources. These resources may be plain data or (un)resolved promises. Promises are handled differently on server vs. client. This behaviour is described in Controller's [`load` method documentation](/docs/controller-lifecycle#load-serverclient). 
+First additions to page state are set when `load` method of a Controller and Extensions returns an object of resources. These resources may be plain data or (un)resolved promises. Promises are handled differently on server vs. client. This behaviour is described in Controller's [`load` method documentation](/docs/controller-lifecycle#load-serverclient).
 
 ## Partial state
 Since Extensions also have a word in loading resources it may be necessary to share resources between Controller and Extensions. Here comes partial state into play. It allows you to call `getState` method in `load` method of an Extension. Received state consists of states collected from loaded Controller and Extensions loaded prior to the current Extension. Extensions are loaded in the same order as they were registered in a Controller.
 
 > **Note**: Promises in received state may not be resolved. Therefore you need to chain promises or use `async/await`.
 
-> **Note**: If you'll use `async/await` execution will not be parallel relative to other promises. 
+> **Note**: If you'll use `async/await` execution will not be parallel relative to other promises.
 
 ```javascript
 // app/page/home/HomeController.js
@@ -69,6 +69,55 @@ export default class PollExtension extends AbstractExtension {
   }
 }
 ```
+
+## State transactions
+
+State transactions, similarly to SQL transactions, provide a way to queue state patches and then commit them as a one to the original state.
+
+They're here for use cases where you'd in you workflow call `setState` method multiple times or you'd have to collect state patches in a separate variable (this is hard to do across multiple methods).
+
+Transaction is initiated with `beginStateTransaction()` in Controller/Extension. After that
+every setState call is queued and doesn't change the state or re-render anything. If there
+is another transaction initiated before you commit you'll lost your patches.
+
+If you want to see what changes are in queue from the begin of transaction call `getTransactionStatePatches()` method.
+
+To finish the transaction you have to call `commitStateTransaction()` method. It will squash
+all the patches made during the transaction into a one and apply it to the original state.
+Therefore your application will re-render only once and you'll also receive [state events](/docs/events#stateeventsbefore_change_state) only once.
+
+Another way to finish the transaction is to cancel it via `cancelStateTransaction()` method.
+
+> **Note**: Call to `getState` method after the transaction has begun will return state as it was before the transaction eg. the returned state doesn't include changes from the transaction period until the transaction is commited.
+
+```javascript
+async onFormSubmit({ content, deleteRevisions = false }) {
+  const { article } = this.getState();
+
+  this.beginStateTransaction();
+
+  const result = await this._http.put(/* ... */);
+
+  if (deleteRevisions) {
+    await this.deleteArtiacleRevisions();
+  }
+
+  this.setState({ article: Object.assign({}, article, { content }) });
+  this.commitStateTransaction();
+}
+
+async deleteArtiacleRevisions() {
+  const { article, revisions } = this.getState();
+
+  await this._http.delete(/* ... */);
+
+  this.setState({ revisions: [] });
+}
+```
+
+In the example above, after the form is submitted with `deleteRevisions = true`:
+ - Two `setState` calls are made
+ - Only one render is triggered after the `commitStateTransaction` call
 
 
 
