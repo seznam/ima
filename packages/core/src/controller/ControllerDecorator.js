@@ -124,7 +124,7 @@ export default class ControllerDecorator extends Controller {
    * @inheritdoc
    */
   beginStateTransaction() {
-    this.controller.beginStateTransaction();
+    this._controller.beginStateTransaction();
   }
 
   /**
