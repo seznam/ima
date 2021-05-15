@@ -61,17 +61,7 @@ export default class ClientPageRenderer extends AbstractPageRenderer {
     if (!this._firstTime) {
       this._setStateWithoutRendering(controller, defaultPageState);
       await this._renderToDOM(controller, view, routeOptions);
-
-      if (
-        this._settings &&
-        this._settings.$Page &&
-        this._settings.$Page.$Render &&
-        this._settings.$Page.$Render.batchResolve
-      ) {
-        this._patchPromisesToStateExperimental(controller, loadedPromises);
-      } else {
-        this._patchPromisesToState(controller, loadedPromises);
-      }
+      this._patchPromisesToState(controller, loadedPromises);
     }
 
     return this._Helper
@@ -166,46 +156,41 @@ export default class ClientPageRenderer extends AbstractPageRenderer {
         })
         .catch(error => this._handleError(error));
     }
+
+    this._startBatchTransactions(controller, patchedPromises);
   }
 
-  // TODO IMA@18
   /**
-   * Rewrite experimental features to StateManager
+   * Batch patch promise values to controller state.
    *
    * @param {ControllerDecorator} controller
    * @param {Object<string, Promise<*>>} patchedPromises
    */
-  _patchPromisesToStateExperimental(controller, patchedPromises) {
-    const stateKeys = Object.keys(patchedPromises);
-    let resolvedState = {};
-    let stateCounter = 0;
+  _startBatchTransactions(controller, patchedPromises) {
+    let hasResourcesLoaded = false;
+    const options = {
+      timeout: 100
+    };
+    const handler = () => {
+      controller.commitStateTransaction();
 
-    // TODO IMA@18 requestIdleCallbacks
-    const timer = setInterval(() => {
-      if (Object.keys(resolvedState).length === 0) {
-        return;
+      if (!hasResourcesLoaded) {
+        controller.beginStateTransaction();
+        this._window.getWindow().requestIdleCallback(handler, options);
       }
+    };
 
-      controller.setState(resolvedState);
-      resolvedState = {};
+    controller.beginStateTransaction();
+    this._window.getWindow().requestIdleCallback(handler, options);
 
-      if (stateCounter === stateKeys.length) {
-        clearInterval(timer);
-      }
-    }, this._settings.$Page.$Render.batchTime || 30);
-
-    for (let resourceName of stateKeys) {
-      patchedPromises[resourceName]
-        .then(resource => {
-          resolvedState[resourceName] = resource;
-          stateCounter++;
-        })
-        .catch(error => {
-          clearInterval(timer);
-
-          return this._handleError(error);
-        });
-    }
+    this._Helper
+      .allPromiseHash(patchedPromises)
+      .then(() => {
+        hasResourcesLoaded = true;
+      })
+      .catch(() => {
+        hasResourcesLoaded = true;
+      });
   }
 
   // TODO IMA@18

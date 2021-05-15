@@ -26,10 +26,9 @@ describe('ima.core.page.renderer.ClientPageRenderer', function () {
     param2: param2
   };
 
-  let controller = new Controller();
-  controller.getMetaManager = function () {};
   let view = function () {};
 
+  let controller = null;
   let win = null;
   let dispatcher = null;
   let rendererFactory = null;
@@ -54,8 +53,19 @@ describe('ima.core.page.renderer.ClientPageRenderer', function () {
   };
 
   beforeEach(function () {
+    controller = toMockedInstance(Controller, {
+      getMetaManager() {
+        return () => {};
+      }
+    });
     rendererFactory = toMockedInstance(RendererFactory);
-    win = toMockedInstance(Window);
+    win = toMockedInstance(Window, {
+      getWindow() {
+        return {
+          requestIdleCallback: callback => setTimeout(callback, 0)
+        };
+      }
+    });
     dispatcher = toMockedInstance(Dispatcher);
 
     pageRenderer = new ClientPageRenderer(
@@ -115,20 +125,33 @@ describe('ima.core.page.renderer.ClientPageRenderer', function () {
         });
     });
 
-    it('should batch resolved promises to state ', function (done) {
-      spyOn(pageRenderer, '_patchPromisesToStateExperimental');
+    it('should batch page state with state transaction', function (done) {
+      jest.useFakeTimers();
       pageRenderer._firstTime = false;
-      pageRenderer._settings = { ...pageRenderer._settings };
-      pageRenderer._settings.$Page.$Render.batchResolve = true;
 
       pageRenderer
         .mount(controller, view, params, routeOptions)
         .then(function () {
-          expect(
-            pageRenderer._patchPromisesToStateExperimental
-          ).toHaveBeenCalledWith(controller, {
-            param2: params.param2
-          });
+          jest.runAllTimers();
+
+          expect(controller.beginStateTransaction.mock.calls.length).toEqual(1);
+          expect(controller.commitStateTransaction.mock.calls.length).toEqual(
+            1
+          );
+          expect(controller.setState.mock.calls).toMatchInlineSnapshot(`
+            Array [
+              Array [
+                Object {
+                  "param1": "param1",
+                },
+              ],
+              Array [
+                Object {
+                  "param2": "param2",
+                },
+              ],
+            ]
+          `);
           done();
         })
         .catch(function (error) {
@@ -233,6 +256,41 @@ describe('ima.core.page.renderer.ClientPageRenderer', function () {
           expect(controller.setState).toHaveBeenCalledWith({
             param1: params.param1
           });
+          done();
+        })
+        .catch(function (error) {
+          console.error(error);
+          done(error);
+        });
+    });
+
+    it('should batch page state with state transaction', function (done) {
+      jest.useFakeTimers();
+      pageRenderer._firstTime = false;
+
+      pageRenderer
+        .update(controller, view, params, routeOptions)
+        .then(function () {
+          jest.runAllTimers();
+
+          expect(controller.beginStateTransaction.mock.calls.length).toEqual(1);
+          expect(controller.commitStateTransaction.mock.calls.length).toEqual(
+            1
+          );
+          expect(controller.setState.mock.calls).toMatchInlineSnapshot(`
+            Array [
+              Array [
+                Object {
+                  "param1": "param1",
+                },
+              ],
+              Array [
+                Object {
+                  "param2": "param2",
+                },
+              ],
+            ]
+          `);
           done();
         })
         .catch(function (error) {
