@@ -171,17 +171,20 @@ export default class ClientPageRenderer extends AbstractPageRenderer {
     const options = {
       timeout: 100
     };
+    const requestIdleCallback = this._window.getWindow().requestIdleCallback
+      ? this._window.getWindow().requestIdleCallback
+      : callback => setTimeout(callback, 0);
     const handler = () => {
       controller.commitStateTransaction();
 
       if (!hasResourcesLoaded) {
         controller.beginStateTransaction();
-        this._window.getWindow().requestIdleCallback(handler, options);
+        requestIdleCallback(handler, options);
       }
     };
 
     controller.beginStateTransaction();
-    this._window.getWindow().requestIdleCallback(handler, options);
+    requestIdleCallback(handler, options);
 
     this._Helper
       .allPromiseHash(patchedPromises)
