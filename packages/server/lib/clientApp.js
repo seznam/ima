@@ -367,7 +367,7 @@ module.exports = (environment, logger, languageLoader, appFactory) => {
     let returnPromise;
 
     if (environment.$Debug) {
-      if (app) {
+      if (app && typeof app !== 'function') {
         instanceRecycler.clearInstance(app);
       }
 
