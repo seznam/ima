@@ -1,0 +1,35 @@
+{
+  "name": "@ima/cli",
+  "version": "17.10.0",
+  "description": "IMA.js CLI tool to build, develop and work with IMA.js applications.",
+  "keywords": [
+    "IMA",
+    "IMA.js",
+    "Isomorphic",
+    "Javascript"
+  ],
+  "bin": {
+    "ima": "./bin/ima.js"
+  },
+  "author": "Miroslav Jancarik <miroslav.jancarik@firma.seznam.cz>",
+  "contributors": [],
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/seznam/ima.git"
+  },
+  "bugs": {
+    "url": "https://github.com/seznam/ima/issues"
+  },
+  "publishConfig": {
+    "registry": "https://registry.npmjs.org/",
+    "access": "public"
+  },
+  "license": "MIT",
+  "devDependencies": {
+    "chalk": "^4.1.1",
+    "yargs": "^17.0.1"
+  },
+  "dependencies": {
+    "webpack": "^5.38.1"
+  }
+}
