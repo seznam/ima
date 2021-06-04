@@ -30,6 +30,11 @@
     "yargs": "^17.0.1"
   },
   "dependencies": {
-    "webpack": "^5.38.1"
+    "copy-webpack-plugin": "^9.0.0",
+    "html-webpack-plugin": "^5.3.1",
+    "webpack": "^5.38.1",
+    "webpack-dev-middleware": "^5.0.0",
+    "webpack-hot-middleware": "^2.25.0",
+    "webpack-node-externals": "^3.0.0"
   }
 }

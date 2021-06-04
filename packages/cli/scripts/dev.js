@@ -1,34 +1,24 @@
 const path = require('path');
+const childProcess = require('child_process');
 const webpack = require('webpack');
 
+const { statsFormattedOutput } = require('../build/output');
+const serverConfig = require('../build/webpack/config/server');
+const clientConfig = require('../build/webpack/config/client');
+
 async function dev(args) {
-  const compiler = webpack({
-    mode: 'production',
-    entry: path.resolve(args.cwd, 'test/index.js')
-  });
+  let serverStarted = false;
+  const compiler = webpack([serverConfig(args), clientConfig(args)]);
 
-  compiler.watch({}, (err, stats) => {
-    if (!err) {
-      const out = stats.toString({
-        assets: true,
-        cached: false,
-        children: false,
-        chunks: false,
-        chunkModules: false,
-        colors: true,
-        hash: true,
-        modules: false,
-        reasons: false,
-        source: false,
-        timings: true,
-        version: true
-      });
+  compiler.watch({}, statsFormattedOutput);
 
-      console.log(out);
-    } else {
-      console.error(err);
+  // This is total mess, only for current testing
+  setTimeout(() => {
+    if (!serverStarted) {
+      childProcess.fork(path.resolve(args.cwd, './build/server'));
+      serverStarted = true;
     }
-  });
+  }, 5000);
 }
 
 const devCommand = {

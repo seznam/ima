@@ -1,34 +1,13 @@
-const path = require('path');
 const webpack = require('webpack');
 
+const { statsFormattedOutput } = require('../build/output');
+const serverConfig = require('../build/webpack/config/server');
+const clientConfig = require('../build/webpack/config/client');
+
 async function build(args) {
-  const compiler = webpack({
-    mode: 'production',
-    entry: path.resolve(args.cwd, 'test/index.js')
-  });
+  const compiler = webpack([serverConfig(args), clientConfig(args)]);
 
-  compiler.run((err, stats) => {
-    if (!err) {
-      const out = stats.toString({
-        assets: true,
-        cached: false,
-        children: false,
-        chunks: false,
-        chunkModules: false,
-        colors: true,
-        hash: true,
-        modules: false,
-        reasons: false,
-        source: false,
-        timings: true,
-        version: true
-      });
-
-      console.log(out);
-    } else {
-      console.error(err);
-    }
-  });
+  compiler.run(statsFormattedOutput);
 }
 
 const buildCommand = {
