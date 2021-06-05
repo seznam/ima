@@ -22,7 +22,7 @@ export default class HomeView extends AbstractComponent {
             alt="IMA.js logo"
           />
           <h1>
-            {`${this.localize('home.hello')}, ${this.props.message} `}
+            {`Zdarec, ${this.props.message} `}
             <a
               href="//imajs.io"
               title={this.props.name}

@@ -17,7 +17,7 @@ hljs.configure({
 });
 
 module.exports = (environment, logger, languageLoader, appFactory) => {
-  appFactory();
+  const app = appFactory();
 
   const spaCache = new Cache(
     Object.assign({}, environment.$Server.cache, {
@@ -351,16 +351,21 @@ module.exports = (environment, logger, languageLoader, appFactory) => {
   }
 
   function _importAppMain() {
-    return $IMA.Loader.import('app/main').then(appMain => {
-      if (!instanceRecycler.isInitialized()) {
-        instanceRecycler.init(
-          appMain.ima.createImaApp,
-          environment.$Server.concurrency
-        );
-      }
+    let mainJs = app;
+    if (environment.$Env === 'dev') {
+      instanceRecycler.clear();
 
-      return appMain;
-    });
+      mainJs = appFactory();
+    }
+
+    if (!instanceRecycler.isInitialized()) {
+      instanceRecycler.init(
+        mainJs.ima.createImaApp,
+        environment.$Server.concurrency
+      );
+    }
+
+    return Promise.resolve(mainJs);
   }
 
   function errorHandler(error, req, res, app) {
@@ -461,22 +466,6 @@ module.exports = (environment, logger, languageLoader, appFactory) => {
   }
 
   function requestHandler(req, res) {
-    if (environment.$Env === 'dev') {
-      instanceRecycler.clear();
-
-      Object.keys($IMA.Loader.modules).forEach(modulePath => {
-        let module = global.$IMA.Loader.modules[modulePath];
-
-        global.$IMA.Loader.modules[modulePath] = Object.assign({}, module, {
-          instance: null,
-          dependencyOf: [],
-          dependencies: module.dependencies.slice()
-        });
-      });
-
-      appFactory();
-    }
-
     return _importAppMain().then(appMain => {
       let app = _initApp(req, res, appMain);
       _addImaToResponse(req, res, app);

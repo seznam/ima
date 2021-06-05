@@ -1,8 +1,5 @@
 'use strict';
 
-require('@ima/core/polyfill/imaLoader.js');
-require('@ima/core/polyfill/imaRunner.js');
-
 // Node
 let cluster = require('cluster');
 let path = require('path');
@@ -22,7 +19,7 @@ let cache = imaServer.cache;
 let favicon = require('serve-favicon');
 let bodyParser = require('body-parser');
 let multer = require('multer')({
-  dest: path.resolve(__dirname) + '/static/uploads/'
+  dest: path.resolve(path.join(__dirname, '/static/uploads/'))
 });
 let cookieParser = require('cookie-parser');
 let methodOverride = require('method-override');
@@ -117,13 +114,32 @@ function runNodeApp() {
 
   app.set('trust proxy', true);
 
+  if (environment.$Env === 'dev') {
+    const webpackConfig = require('../webpack.client.dev.config.js');
+    const compiler = require('webpack')(webpackConfig);
+
+    app
+      .use(
+        require('webpack-dev-middleware')(compiler, {
+          index: false,
+          publicPath: webpackConfig.output.publicPath
+        })
+      )
+      .use(
+        require('webpack-hot-middleware')(compiler, {
+          path: '/__webpack_hmr',
+          heartbeat: 10 * 1000
+        })
+      );
+  }
+
   app
     .use(helmet())
     .use(compression())
-    .use(favicon(path.resolve(__dirname) + '/static/img/favicon.ico'))
+    .use(favicon(path.resolve(path.join(__dirname, 'static/img/favicon.ico'))))
     .use(
       environment.$Server.staticFolder,
-      express.static(path.join(__dirname, 'static'))
+      express.static(path.resolve(path.join(__dirname, 'static')))
     )
     .use(bodyParser.json()) // for parsing application/json
     .use(bodyParser.urlencoded({ extended: true })) // for parsing application/x-www-form-urlencoded

@@ -12,22 +12,20 @@ let environment = require('./lib/environment.js')(environmentConfig);
 global.$Debug = environment.$Debug;
 global.$IMA = global.$IMA || {};
 
-require(path.resolve(applicationFolder, './build/ima/shim.es.js'));
-require(path.resolve(applicationFolder, './build/ima/vendor.server.js'));
+// require(path.resolve(applicationFolder, './build/ima/shim.es.js'));
+// require(path.resolve(applicationFolder, './build/ima/vendor.server.js'));
 
 function appFactory() {
   delete require.cache[
     path.resolve(applicationFolder, './build/ima/app.server.js')
   ];
 
-  require(path.resolve(applicationFolder, './build/ima/app.server.js'))();
+  return require(path.resolve(applicationFolder, './build/ima/app.server.js'));
 }
 
+// eslint-disable-next-line no-unused-vars
 function languageLoader(language) {
-  return require(path.resolve(
-    applicationFolder,
-    `./build/ima/locale/${language}.js`
-  ));
+  return () => {};
 }
 
 let logger = require('./lib/logger.js')(environment);

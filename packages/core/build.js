@@ -1,5 +1,5 @@
 const js = [
-  './node_modules/@ima/core/**/!(vendorLinker|gulpfile|build|test|*Spec).{js,jsx}',
+  './node_modules/@ima/core/**/!(gulpfile|build|test|*Spec).{js,jsx}',
   '!./node_modules/@ima/core/polyfill/*.js'
 ];
 

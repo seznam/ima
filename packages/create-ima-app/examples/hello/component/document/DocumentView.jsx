@@ -10,9 +10,9 @@ export default class DocumentView extends AbstractDocumentView {
   }
 
   render() {
-    let appCssFile =
-      this.utils.$Settings.$Env !== 'dev' ? 'app.bundle.min.css' : 'app.css';
-    appCssFile += `?version=${this.utils.$Settings.$Version}`;
+    // let appCssFile =
+    //   this.utils.$Settings.$Env !== 'dev' ? 'app.bundle.min.css' : 'app.css';
+    // appCssFile += `?version=${this.utils.$Settings.$Version}`;
     let jsBaseUrl =
       this.utils.$Router.getBaseUrl() + this.utils.$Settings.$Static.js;
 
@@ -53,15 +53,15 @@ export default class DocumentView extends AbstractDocumentView {
           />
 
           <meta name="viewport" content="width=device-width, initial-scale=1" />
-          <link
-            rel="stylesheet"
-            href={
-              this.utils.$Router.getBaseUrl() +
-              this.utils.$Settings.$Static.css +
-              '/' +
-              appCssFile
-            }
-          />
+          {/*<link*/}
+          {/*  rel="stylesheet"*/}
+          {/*  href={*/}
+          {/*    this.utils.$Router.getBaseUrl() +*/}
+          {/*    this.utils.$Settings.$Static.css +*/}
+          {/*    '/' +*/}
+          {/*    appCssFile*/}
+          {/*  }*/}
+          {/*/>*/}
           <title>{this.props.metaManager.getTitle()}</title>
         </head>
         <body>
@@ -82,10 +82,11 @@ export default class DocumentView extends AbstractDocumentView {
 					`
             }}
           />
-          <div
-            id="scripts"
-            dangerouslySetInnerHTML={{ __html: this.getAsyncScripts() }}
-          />
+          <script src="/static/js/main.js"></script>
+          {/*<div*/}
+          {/*  id="scripts"*/}
+          {/*  dangerouslySetInnerHTML={{ __html: this.getAsyncScripts() }}*/}
+          {/*/>*/}
         </body>
       </html>
     );

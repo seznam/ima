@@ -34,7 +34,7 @@ module.exports = environment => {
       rootExpression.replace('/', '/');
 
     if (languageParam) {
-      let build = require(BUILD_JS_PATH);
+      let build = require(BUILD_JS_PATH) || {};
 
       const langCodes = Object.keys(build.languages);
       let languagesExpr = langCodes.join('|');
