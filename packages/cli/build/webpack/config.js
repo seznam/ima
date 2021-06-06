@@ -3,6 +3,7 @@ const webpack = require('webpack');
 
 const CopyPlugin = require('copy-webpack-plugin');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
+// const RunImaServerPlugin = require('./plugins/RunImaServerPlugin');
 
 function resolveEnvironment(rootDir) {
   const envSource = require(path.resolve(rootDir, './app/environment.js'));
@@ -14,12 +15,22 @@ function resolveEnvironment(rootDir) {
   return envConfig;
 }
 
-module.exports = async ({ rootDir, isProduction, isServer, publicPath }) => {
+module.exports = async ({
+  rootDir,
+  isProduction,
+  isServer,
+  isWatch,
+  publicPath
+}) => {
   const imaEnvironment = resolveEnvironment(rootDir);
   const entries = {
     server: [path.resolve(rootDir, './app/main.js')],
     client: [
-      `webpack-hot-middleware/client?path=//localhost:${imaEnvironment.$Server.port}/__webpack_hmr&timeout=20000&reload=true`,
+      ...(isWatch
+        ? [
+            `webpack-hot-middleware/client?path=//localhost:${imaEnvironment.$Server.port}/__webpack_hmr&timeout=20000&reload=true`
+          ]
+        : []),
       path.resolve(rootDir, './app/main.js')
     ]
   };
@@ -93,6 +104,7 @@ module.exports = async ({ rootDir, isProduction, isServer, publicPath }) => {
             }
           }),
           new webpack.HotModuleReplacementPlugin()
+          // ...(isWatch ? [new RunImaServerPlugin({ rootDir })] : [])
         ],
     ...(isServer
       ? {

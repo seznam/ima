@@ -3,8 +3,8 @@ const childProcess = require('child_process');
 
 const { handlerFactory, builderFactory } = require('../build/utils');
 
-async function start(args) {
-  childProcess.fork(path.resolve(args.cwd, './build/server'));
+async function start({ rootDir }) {
+  childProcess.fork(path.resolve(rootDir, './build/server'));
 }
 
 const startCommand = {
