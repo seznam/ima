@@ -3,7 +3,7 @@ const webpack = require('webpack');
 
 const CopyPlugin = require('copy-webpack-plugin');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
-// const RunImaServerPlugin = require('./plugins/RunImaServerPlugin');
+const RunImaServerPlugin = require('./plugins/RunImaServerPlugin');
 
 function resolveEnvironment(rootDir) {
   const envSource = require(path.resolve(rootDir, './app/environment.js'));
@@ -103,8 +103,8 @@ module.exports = async ({
               $Language: Object.values(imaEnvironment.$Language)[0]
             }
           }),
-          new webpack.HotModuleReplacementPlugin()
-          // ...(isWatch ? [new RunImaServerPlugin({ rootDir })] : [])
+          new webpack.HotModuleReplacementPlugin(),
+          ...(isWatch && !isServer ? [new RunImaServerPlugin({ rootDir })] : [])
         ],
     ...(isServer
       ? {
