@@ -8,7 +8,7 @@ class RunImaServerPlugin {
   }
 
   apply(compiler) {
-    compiler.hooks.afterEmit.tapAsync(
+    compiler.hooks.done.tapAsync(
       'RunImaServerPlugin',
       (compilation, callback) => {
         if (!this._serverStart && this._options.rootDir) {
