@@ -3,6 +3,7 @@ const webpack = require('webpack');
 
 const CopyPlugin = require('copy-webpack-plugin');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
+const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 const RunImaServerPlugin = require('./plugins/RunImaServerPlugin');
 
 function resolveEnvironment(rootDir) {
@@ -28,7 +29,7 @@ module.exports = async ({
     client: [
       ...(isWatch
         ? [
-            `webpack-hot-middleware/client?path=//localhost:${imaEnvironment.$Server.port}/__webpack_hmr&timeout=20000&reload=true`
+            `webpack-hot-middleware/client?name=client&path=//localhost:${imaEnvironment.$Server.port}/__webpack_hmr&timeout=20000&reload=true`
           ]
         : []),
       path.resolve(rootDir, './app/main.js')
@@ -44,6 +45,7 @@ module.exports = async ({
       publicPath,
       filename: 'ima/app.server.js',
       path: path.resolve(rootDir, './build'),
+      clean: isProduction,
       ...(isServer ? { libraryTarget: 'commonjs2' } : undefined)
     },
     module: {
@@ -67,6 +69,29 @@ module.exports = async ({
               options: {}
             }
           ]
+        },
+        {
+          test: /\.less$/,
+          sideEffects: true,
+          exclude: /node_modules/,
+          use: isServer
+            ? 'null-loader'
+            : [
+                {
+                  loader: MiniCssExtractPlugin.loader
+                },
+                {
+                  loader: 'css-loader'
+                },
+                {
+                  loader: 'less-loader',
+                  options: {
+                    lessOptions: {
+                      strictMath: true
+                    }
+                  }
+                }
+              ]
         }
       ]
     },
@@ -90,6 +115,9 @@ module.exports = async ({
           })
         ]
       : [
+          new MiniCssExtractPlugin({
+            filename: './static/css/app.css'
+          }),
           new HtmlWebpackPlugin({
             template: path.resolve(
               rootDir,
@@ -104,7 +132,7 @@ module.exports = async ({
             }
           }),
           new webpack.HotModuleReplacementPlugin(),
-          ...(isWatch && !isServer ? [new RunImaServerPlugin({ rootDir })] : [])
+          ...(isWatch ? [new RunImaServerPlugin({ rootDir })] : [])
         ],
     ...(isServer
       ? {

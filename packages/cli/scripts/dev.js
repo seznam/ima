@@ -12,11 +12,13 @@ async function dev(args) {
     await webpackConfig({
       ...args,
       isServer: true,
+      isProduction: false,
       isWatch: true
     }),
     await webpackConfig({
       ...args,
       isServer: false,
+      isProduction: false,
       isWatch: true
     })
   ];

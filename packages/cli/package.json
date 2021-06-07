@@ -11,6 +11,7 @@
   "bin": {
     "ima": "./bin/ima.js"
   },
+  "main": "./index.js",
   "author": "Miroslav Jancarik <miroslav.jancarik@firma.seznam.cz>",
   "contributors": [],
   "repository": {
@@ -25,16 +26,21 @@
     "access": "public"
   },
   "license": "MIT",
-  "devDependencies": {
-    "chalk": "^4.1.1",
-    "yargs": "^17.0.1"
-  },
   "dependencies": {
+    "@babel/preset-react": "^7.13.13",
+    "babel-loader": "^8.2.2",
     "copy-webpack-plugin": "^9.0.0",
+    "chalk": "^4.1.1",
+    "css-loader": "^5.2.6",
     "html-webpack-plugin": "^5.3.1",
+    "less": "^4.1.1",
+    "less-loader": "^9.0.0",
+    "mini-css-extract-plugin": "^1.6.0",
+    "null-loader": "^4.0.1",
     "webpack": "^5.38.1",
     "webpack-dev-middleware": "^5.0.0",
     "webpack-hot-middleware": "^2.25.0",
-    "webpack-node-externals": "^3.0.0"
+    "webpack-node-externals": "^3.0.0",
+    "yargs": "^17.0.1"
   }
 }
