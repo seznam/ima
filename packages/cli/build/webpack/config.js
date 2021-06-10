@@ -29,7 +29,7 @@ module.exports = async ({
     client: [
       ...(isWatch
         ? [
-            `webpack-hot-middleware/client?name=client&path=//localhost:${imaEnvironment.$Server.port}/__webpack_hmr&timeout=20000&reload=true`
+            `webpack-hot-middleware/client?name=client&path=//localhost:${imaEnvironment.$Server.port}/__webpack_hmr&timeout=20000&reload=true&overlay=true`
           ]
         : []),
       path.resolve(rootDir, './app/main.js')
@@ -98,7 +98,7 @@ module.exports = async ({
     resolve: {
       extensions: ['.js', '.jsx'],
       alias: {
-        ['app']: path.resolve(rootDir, '/app'),
+        ['app']: path.resolve(rootDir, './app'),
         '@ima/core': `@ima/core/dist/ima.${
           isServer ? 'server' : 'client'
         }.cjs.js`
@@ -131,7 +131,7 @@ module.exports = async ({
               $Language: Object.values(imaEnvironment.$Language)[0]
             }
           }),
-          new webpack.HotModuleReplacementPlugin(),
+          ...(isWatch ? [new webpack.HotModuleReplacementPlugin()] : []),
           ...(isWatch ? [new RunImaServerPlugin({ rootDir })] : [])
         ],
     ...(isServer
