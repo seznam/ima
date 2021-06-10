@@ -114,24 +114,37 @@ function runNodeApp() {
 
   app.set('trust proxy', true);
 
-  if (environment.$Env === 'dev') {
-    const webpackConfig = require('../webpack.client.dev.config.js');
-    const compiler = require('webpack')(webpackConfig);
+  // if (environment.$Env === 'dev') {
+  //   // TODO FIXME
+  //   const { getWebpackConfig } = require('@ima/cli');
+  //   const devMiddleware = require('webpack-dev-middleware');
+  //   const hotMiddleware = require('webpack-hot-middleware');
 
-    app
-      .use(
-        require('webpack-dev-middleware')(compiler, {
-          index: false,
-          publicPath: webpackConfig.output.publicPath
-        })
-      )
-      .use(
-        require('webpack-hot-middleware')(compiler, {
-          path: '/__webpack_hmr',
-          heartbeat: 10 * 1000
-        })
-      );
-  }
+  //   const config = getWebpackConfig({
+  //     rootDir: path.resolve(__dirname, '../'),
+  //     publicPath: '/',
+  //     isServer: true,
+  //     isProduction: false,
+  //     isWatch: true,
+  //   });
+
+  //   const webpack = require('webpack');
+  //   const compiler = webpack(config);
+
+  //   app
+  //     .use(
+  //       devMiddleware(compiler, {
+  //         index: false,
+  //         publicPath: '/',
+  //       })
+  //     )
+  //     .use(
+  //       hotMiddleware(compiler, {
+  //         path: '/__webpack_hmr',
+  //         heartbeat: 10 * 1000,
+  //       })
+  //     );
+  // }
 
   app
     .use(helmet())

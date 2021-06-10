@@ -1,5 +1,5 @@
 const path = require('path');
-const webpack = require('webpack');
+// const webpack = require('webpack');
 
 const CopyPlugin = require('copy-webpack-plugin');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
@@ -16,22 +16,22 @@ function resolveEnvironment(rootDir) {
   return envConfig;
 }
 
-module.exports = async ({
+async function getWebpackConfig({
   rootDir,
   isProduction,
   isServer,
   isWatch,
   publicPath
-}) => {
+}) {
   const imaEnvironment = resolveEnvironment(rootDir);
   const entries = {
     server: [path.resolve(rootDir, './app/main.js')],
     client: [
-      ...(isWatch
-        ? [
-            `webpack-hot-middleware/client?name=client&path=//localhost:${imaEnvironment.$Server.port}/__webpack_hmr&timeout=20000&reload=true&overlay=true`
-          ]
-        : []),
+      // ...(isWatch
+      //   ? [
+      //       `webpack-hot-middleware/client?path=//localhost:${imaEnvironment.$Server.port}/__webpack_hmr&timeout=20000&reload=true&overlay=true`
+      //     ]
+      //   : []),
       path.resolve(rootDir, './app/main.js')
     ]
   };
@@ -131,7 +131,7 @@ module.exports = async ({
               $Language: Object.values(imaEnvironment.$Language)[0]
             }
           }),
-          ...(isWatch ? [new webpack.HotModuleReplacementPlugin()] : []),
+          // ...(isWatch ? [new webpack.HotModuleReplacementPlugin()] : []),
           ...(isWatch ? [new RunImaServerPlugin({ rootDir })] : [])
         ],
     ...(isServer
@@ -150,4 +150,8 @@ module.exports = async ({
         }
       : undefined)
   };
+}
+
+module.exports = {
+  getWebpackConfig
 };

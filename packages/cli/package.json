@@ -11,7 +11,7 @@
   "bin": {
     "ima": "./bin/ima.js"
   },
-  "main": "./index.js",
+  "main": "./main.js",
   "author": "Miroslav Jancarik <miroslav.jancarik@firma.seznam.cz>",
   "contributors": [],
   "repository": {

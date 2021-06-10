@@ -1,21 +1,21 @@
 const webpack = require('webpack');
 
-const webpackConfig = require('../build/webpack/config');
 const {
   statsFormattedOutput,
   handlerFactory,
   builderFactory
 } = require('../build/utils');
+const { getWebpackConfig } = require('../build/webpack/config');
 
 async function dev(args) {
   const config = [
-    await webpackConfig({
+    await getWebpackConfig({
       ...args,
       isServer: true,
       isProduction: false,
       isWatch: true
     }),
-    await webpackConfig({
+    await getWebpackConfig({
       ...args,
       isServer: false,
       isProduction: false,
