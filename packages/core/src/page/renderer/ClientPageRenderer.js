@@ -179,7 +179,9 @@ export default class ClientPageRenderer extends AbstractPageRenderer {
 
       if (!hasResourcesLoaded) {
         controller.beginStateTransaction();
-        requestIdleCallback(handler, options);
+        setTimeout(() => {
+          requestIdleCallback(handler, options);
+        }, 1000 / 60);
       }
     };
 
