@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [17.11.0](https://github.com/seznam/ima/compare/v17.10.0...v17.11.0) (2021-06-12)
+
+
+### Bug Fixes
+
+* remove proxy limit in production ([81c6084](https://github.com/seznam/ima/commit/81c6084aaf80587fe0f1e007de485b980cde643f))
+
+
+
+
+
 # [17.10.0](https://github.com/seznam/ima/compare/v17.9.0...v17.10.0) (2021-03-30)
 
 **Note:** Version bump only for package create-ima-app
