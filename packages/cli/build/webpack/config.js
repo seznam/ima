@@ -23,6 +23,8 @@ async function getWebpackConfig({
   isWatch,
   publicPath
 }) {
+  // TODO should support all available PostCSS configuration files/options (package.json, .postcssrc.json, etc.)
+  const customPostCssConfig = null;
   const imaEnvironment = resolveEnvironment(rootDir);
   const entries = {
     server: [path.resolve(rootDir, './app/main.js')],
@@ -82,6 +84,30 @@ async function getWebpackConfig({
                 },
                 {
                   loader: 'css-loader'
+                },
+                {
+                  loader: 'postcss-loader',
+                  options: {
+                    postcssOptions: customPostCssConfig
+                      ? customPostCssConfig
+                      : {
+                          plugins: [
+                            'postcss-flexbugs-fixes',
+                            [
+                              'postcss-preset-env',
+                              {
+                                autoprefixer: {
+                                  flexbox: 'no-2009'
+                                },
+                                stage: 3,
+                                features: {
+                                  'custom-properties': false
+                                }
+                              }
+                            ]
+                          ]
+                        }
+                  }
                 },
                 {
                   loader: 'less-loader',

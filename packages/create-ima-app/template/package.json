@@ -15,6 +15,7 @@
     "JavaScript"
   ],
   "license": "MIT",
+  "browserslist": "last 2 Chrome versions",
   "devDependencies": {
     "@ima/cli": "17.10.0",
     "babel-eslint": "10.0.3",
