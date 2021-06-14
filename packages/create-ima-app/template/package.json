@@ -17,7 +17,6 @@
   "license": "MIT",
   "browserslist": "last 2 Chrome versions",
   "devDependencies": {
-    "@ima/cli": "17.10.0",
     "babel-eslint": "10.0.3",
     "enzyme": "3.10.0",
     "enzyme-adapter-react-16": "1.15.1",

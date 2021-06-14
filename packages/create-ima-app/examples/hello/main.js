@@ -1,3 +1,8 @@
+import './assets/less/app.less';
+import './assets/less/setting.less';
+import './assets/less/base.less';
+import './assets/less/layout.less';
+
 import * as ima from '@ima/core';
 import initBindApp from 'app/config/bind';
 import initRoutes from 'app/config/routes';
