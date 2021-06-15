@@ -26,26 +26,22 @@ async function getWebpackConfig({
   // TODO should support all available PostCSS configuration files/options (package.json, .postcssrc.json, etc.)
   const customPostCssConfig = null;
   const imaEnvironment = resolveEnvironment(rootDir);
-  const entries = {
-    server: [path.resolve(rootDir, './app/main.js')],
-    client: [
-      // ...(isWatch
-      //   ? [
-      //       `webpack-hot-middleware/client?path=//localhost:${imaEnvironment.$Server.port}/__webpack_hmr&timeout=20000&reload=true&overlay=true`
-      //     ]
-      //   : []),
-      path.resolve(rootDir, './app/main.js')
-    ]
-  };
 
   return {
     name: isServer ? 'server' : 'client',
     mode: isProduction ? 'production' : 'development',
     ...(isServer ? undefined : { target: 'web' }),
-    entry: isServer ? entries.server : entries.client,
+    entry: [
+      // ...(isWatch && !isServer
+      //   ? [
+      //       `webpack-hot-middleware/client?path=//localhost:${imaEnvironment.$Server.port}/__webpack_hmr&timeout=20000&reload=true&overlay=true`
+      //     ]
+      //   : []),
+      path.resolve(rootDir, './app/main.js')
+    ],
     output: {
       publicPath,
-      filename: 'ima/app.server.js',
+      filename: isServer ? 'ima/app.server.js' : 'static/js/main.js',
       path: path.resolve(rootDir, './build'),
       clean: isProduction,
       ...(isServer ? { libraryTarget: 'commonjs2' } : undefined)
