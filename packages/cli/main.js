@@ -1,5 +1,5 @@
-const webpackConfig = require('./webpack/config');
+const createWebpackConfig = require('./lib/cliUtils');
 
 module.exports = {
-  webpackConfig
+  createWebpackConfig
 };

@@ -6,7 +6,7 @@ const HtmlWebpackPlugin = require('html-webpack-plugin');
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 
 const RunImaServerPlugin = require('./plugins/RunImaServerPlugin');
-const { requireConfig, resolveEnvironment } = require('./lib/utils');
+const { requireConfig, resolveEnvironment } = require('./lib/configUtils');
 
 module.exports = async args => {
   const { rootDir, isProduction, isServer, isWatch, publicPath } = args;

@@ -1,6 +1,10 @@
 const path = require('path');
+const fs = require('fs');
 
-const webpackConfig = require('../../webpack/config');
+const webpackConfig = require('../webpack/config');
+const { error, info } = require('./printUtils');
+
+const IMA_TMP_DIR = '.ima';
 
 function statsFormattedOutput(err, stats) {
   if (!err) {
@@ -19,9 +23,9 @@ function statsFormattedOutput(err, stats) {
       version: true
     });
 
-    console.log(out);
+    info(out);
   } else {
-    console.error(err);
+    error(err);
   }
 }
 
@@ -53,14 +57,32 @@ function builderFactory(cliOptions = {}) {
   };
 }
 
-async function createWebpackConfig(args) {
+async function createWebpackConfig(args = {}, loadArgsFromTmpFile = false) {
+  let loadedArgs = args;
+
+  try {
+    const imaTmpDirPath = path.resolve(args.rootDir, IMA_TMP_DIR);
+    const imaArgsFile = path.join(imaTmpDirPath, 'args.json');
+
+    if (loadArgsFromTmpFile) {
+      loadedArgs = JSON.parse(fs.readFileSync(imaArgsFile));
+    } else {
+      fs.rmSync(imaTmpDirPath, { recursive: true, force: true });
+      fs.mkdirSync(imaTmpDirPath);
+      fs.writeFileSync(imaArgsFile, JSON.stringify(args));
+    }
+  } catch (err) {
+    error('Error occurred while creating webpack config.');
+    error(err);
+  }
+
   return [
     await webpackConfig({
-      ...args,
+      ...loadedArgs,
       isServer: true
     }),
     await webpackConfig({
-      ...args,
+      ...loadedArgs,
       isServer: false
     })
   ];

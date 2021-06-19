@@ -1,6 +1,8 @@
 const path = require('path');
 const fs = require('fs');
 
+const { error } = require('../../lib/printUtils');
+
 function resolveEnvironment(rootDir) {
   const envSource = require(path.resolve(rootDir, './app/environment.js'));
   const envConfig = require(path.resolve(
@@ -52,9 +54,9 @@ function requireConfig({
     } else {
       return packageJson[packageJsonKey];
     }
-  } catch (error) {
-    console.error(`Error occurred while loading ${configPath} file.`);
-    console.error(error);
+  } catch (err) {
+    error(`Error occurred while loading ${configPath} file`);
+    error(err);
 
     return defaultConfig;
   }

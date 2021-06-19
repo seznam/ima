@@ -5,7 +5,7 @@ const {
   handlerFactory,
   builderFactory,
   createWebpackConfig
-} = require('./lib/cliUtils');
+} = require('../lib/cliUtils');
 
 async function build(args) {
   const config = await createWebpackConfig(args);
