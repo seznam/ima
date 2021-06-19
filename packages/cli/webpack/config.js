@@ -6,25 +6,10 @@ const HtmlWebpackPlugin = require('html-webpack-plugin');
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 
 const RunImaServerPlugin = require('./plugins/RunImaServerPlugin');
-const { requireConfig } = require('../utils');
+const { requireConfig, resolveEnvironment } = require('./lib/utils');
 
-function resolveEnvironment(rootDir) {
-  const envSource = require(path.resolve(rootDir, './app/environment.js'));
-  const envConfig = require(path.resolve(
-    rootDir,
-    './node_modules/@ima/server/lib/environment.js'
-  ))(envSource);
-
-  return envConfig;
-}
-
-async function getWebpackConfig({
-  rootDir,
-  isProduction,
-  isServer,
-  isWatch,
-  publicPath
-}) {
+module.exports = async args => {
+  const { rootDir, isProduction, isServer, isWatch, publicPath } = args;
   const packageJson = require(path.resolve(rootDir, './package.json'));
   const imaEnvironment = resolveEnvironment(rootDir);
 
@@ -199,8 +184,4 @@ async function getWebpackConfig({
         }
       : undefined)
   };
-}
-
-module.exports = {
-  getWebpackConfig
 };

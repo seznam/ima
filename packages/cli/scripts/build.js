@@ -3,23 +3,14 @@ const webpack = require('webpack');
 const {
   statsFormattedOutput,
   handlerFactory,
-  builderFactory
-} = require('../build/utils');
-const { getWebpackConfig } = require('../build/webpack/config');
+  builderFactory,
+  createWebpackConfig
+} = require('./lib/cliUtils');
 
 async function build(args) {
-  const config = [
-    await getWebpackConfig({
-      ...args,
-      isServer: true
-    }),
-    await getWebpackConfig({
-      ...args,
-      isServer: false
-    })
-  ];
-
+  const config = await createWebpackConfig(args);
   const compiler = webpack(config);
+
   compiler.run(statsFormattedOutput);
 }
 

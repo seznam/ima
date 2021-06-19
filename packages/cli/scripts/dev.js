@@ -3,25 +3,16 @@ const webpack = require('webpack');
 const {
   statsFormattedOutput,
   handlerFactory,
-  builderFactory
-} = require('../build/utils');
-const { getWebpackConfig } = require('../build/webpack/config');
+  builderFactory,
+  createWebpackConfig
+} = require('./lib/cliUtils');
 
 async function dev(args) {
-  const config = [
-    await getWebpackConfig({
-      ...args,
-      isServer: true,
-      isProduction: false,
-      isWatch: true
-    }),
-    await getWebpackConfig({
-      ...args,
-      isServer: false,
-      isProduction: false,
-      isWatch: true
-    })
-  ];
+  const config = await createWebpackConfig({
+    ...args,
+    isProduction: false,
+    isWatch: true
+  });
 
   const compiler = webpack(config);
   compiler.watch({}, statsFormattedOutput);
