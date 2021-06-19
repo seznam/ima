@@ -4,7 +4,9 @@ const path = require('path');
 const CopyPlugin = require('copy-webpack-plugin');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
+
 const RunImaServerPlugin = require('./plugins/RunImaServerPlugin');
+const { requireConfig } = require('../utils');
 
 function resolveEnvironment(rootDir) {
   const envSource = require(path.resolve(rootDir, './app/environment.js'));
@@ -23,8 +25,7 @@ async function getWebpackConfig({
   isWatch,
   publicPath
 }) {
-  // TODO should support all available PostCSS configuration files/options (package.json, .postcssrc.json, etc.)
-  const customPostCssConfig = null;
+  const packageJson = require(path.resolve(rootDir, './package.json'));
   const imaEnvironment = resolveEnvironment(rootDir);
 
   return {
@@ -53,10 +54,24 @@ async function getWebpackConfig({
           exclude: /node_modules/,
           use: {
             loader: 'babel-loader',
-            options: {
-              presets: ['@babel/preset-react'],
-              plugins: []
-            }
+            options: requireConfig({
+              rootDir,
+              packageJson,
+              packageJsonKey: 'babel',
+              fileNames: [
+                'babel.config.js',
+                'babel.config.cjs',
+                'babel.config.json',
+                '.babelrc.js',
+                '.babelrc.cjs',
+                '.babelrc.json',
+                '.babelrc'
+              ],
+              defaultConfig: {
+                presets: ['@babel/preset-react'],
+                plugins: []
+              }
+            })
           }
         },
         {
@@ -84,25 +99,37 @@ async function getWebpackConfig({
                 {
                   loader: 'postcss-loader',
                   options: {
-                    postcssOptions: customPostCssConfig
-                      ? customPostCssConfig
-                      : {
-                          plugins: [
-                            'postcss-flexbugs-fixes',
-                            [
-                              'postcss-preset-env',
-                              {
-                                autoprefixer: {
-                                  flexbox: 'no-2009'
-                                },
-                                stage: 3,
-                                features: {
-                                  'custom-properties': false
-                                }
+                    postcssOptions: requireConfig({
+                      rootDir,
+                      packageJson,
+                      packageJsonKey: 'postcss',
+                      fileNames: [
+                        'postcss.config.js',
+                        'postcss.config.cjs',
+                        'postcss.config.json',
+                        '.postcssrc.js',
+                        '.postcssrc.cjs',
+                        '.postcssrc.json',
+                        '.postcssrc'
+                      ],
+                      defaultConfig: {
+                        plugins: [
+                          'postcss-flexbugs-fixes',
+                          [
+                            'postcss-preset-env',
+                            {
+                              autoprefixer: {
+                                flexbox: 'no-2009'
+                              },
+                              stage: 3,
+                              features: {
+                                'custom-properties': false
                               }
-                            ]
+                            }
                           ]
-                        }
+                        ]
+                      }
+                    })
                   }
                 },
                 {
