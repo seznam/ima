@@ -62,7 +62,21 @@ function requireConfig({
   }
 }
 
+function additionalDataFactory(contentFunctions) {
+  return content =>
+    contentFunctions
+      .map(fn => {
+        if (typeof fn !== 'function') {
+          return;
+        }
+
+        return fn(content);
+      })
+      .join('');
+}
+
 module.exports = {
   resolveEnvironment,
-  requireConfig
+  requireConfig,
+  additionalDataFactory
 };

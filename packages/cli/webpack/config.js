@@ -6,7 +6,11 @@ const HtmlWebpackPlugin = require('html-webpack-plugin');
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 
 const RunImaServerPlugin = require('./plugins/RunImaServerPlugin');
-const { requireConfig, resolveEnvironment } = require('./lib/configUtils');
+const {
+  requireConfig,
+  resolveEnvironment,
+  additionalDataFactory
+} = require('./lib/configUtils');
 
 module.exports = async args => {
   const { rootDir, isProduction, isServer, isWatch } = args;
@@ -31,6 +35,7 @@ module.exports = async args => {
       path: path.resolve(rootDir, './build'),
       ...(isServer ? { libraryTarget: 'commonjs2' } : undefined)
     },
+    devtool: isProduction ? 'source-map' : 'cheap-module-source-map',
     module: {
       rules: [
         {
@@ -80,7 +85,6 @@ module.exports = async args => {
                 {
                   loader: 'css-loader',
                   options: {
-                    sourceMap: true,
                     importLoaders: 2,
                     modules: {
                       auto: true,
@@ -130,8 +134,12 @@ module.exports = async args => {
                   loader: 'less-loader',
                   options: {
                     lessOptions: {
-                      strictMath: true
-                    }
+                      strictMath: true,
+                      paths: [path.resolve(rootDir, './app/assets/less')]
+                    },
+                    additionalData: additionalDataFactory([
+                      content => `@import "globals.less";\n\n${content}`
+                    ])
                   }
                 }
               ]

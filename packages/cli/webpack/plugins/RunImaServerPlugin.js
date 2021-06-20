@@ -16,10 +16,12 @@ class RunImaServerPlugin {
             path.resolve(this._options.rootDir, './build/server')
           );
 
+          // TODO -> use on('spawn'), but it doesn't seems to work right now
           if (this._options.open) {
             this._openBrowser(`http://localhost:${this._options.port || 3001}`);
-            this._serverStart = true;
           }
+
+          this._serverStart = true;
         }
 
         callback();
