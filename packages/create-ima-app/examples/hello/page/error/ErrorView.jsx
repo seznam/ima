@@ -1,6 +1,7 @@
-import './errorView.less';
 import { PageContext, AbstractComponent } from '@ima/core';
 import React from 'react';
+
+import './errorView.less';
 
 /**
  * Error page.

@@ -1,6 +1,7 @@
-import './documentView.less';
 import { AbstractDocumentView } from '@ima/core';
 import React from 'react';
+
+import './documentView.less';
 
 /**
  * Master Layout.
