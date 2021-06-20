@@ -1,5 +1,5 @@
 const path = require('path');
-// const webpack = require('webpack');
+const webpack = require('webpack');
 
 const CopyPlugin = require('copy-webpack-plugin');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
@@ -18,18 +18,17 @@ module.exports = async args => {
     mode: isProduction ? 'production' : 'development',
     ...(isServer ? undefined : { target: 'web' }),
     entry: [
-      // ...(isWatch && !isServer
-      //   ? [
-      //       `webpack-hot-middleware/client?path=//localhost:${imaEnvironment.$Server.port}/__webpack_hmr&timeout=20000&reload=true&overlay=true`
-      //     ]
-      //   : []),
+      ...(isWatch && !isServer
+        ? [
+            `webpack-hot-middleware/client?path=//localhost:${imaEnvironment.$Server.port}/__webpack_hmr&timeout=20000&reload=true&overlay=true`
+          ]
+        : []),
       path.resolve(rootDir, './app/main.js')
     ],
     output: {
       publicPath,
       filename: isServer ? 'ima/app.server.js' : 'static/js/main.js',
       path: path.resolve(rootDir, './build'),
-      clean: isProduction,
       ...(isServer ? { libraryTarget: 'commonjs2' } : undefined)
     },
     module: {
@@ -79,7 +78,17 @@ module.exports = async args => {
                   loader: MiniCssExtractPlugin.loader
                 },
                 {
-                  loader: 'css-loader'
+                  loader: 'css-loader',
+                  options: {
+                    sourceMap: true,
+                    importLoaders: 2,
+                    modules: {
+                      auto: true,
+                      localIdentName: isProduction
+                        ? '[hash:base64]'
+                        : '[path][name]__[local]--[hash:base64:5]'
+                    }
+                  }
                 },
                 {
                   loader: 'postcss-loader',
@@ -165,7 +174,7 @@ module.exports = async args => {
               $Language: Object.values(imaEnvironment.$Language)[0]
             }
           }),
-          // ...(isWatch ? [new webpack.HotModuleReplacementPlugin()] : []),
+          ...(isWatch ? [new webpack.HotModuleReplacementPlugin()] : []),
           ...(isWatch ? [new RunImaServerPlugin({ rootDir })] : [])
         ],
     ...(isServer

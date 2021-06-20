@@ -108,43 +108,42 @@ function staticErrorPage(err, req, res) {
   clientApp.showStaticErrorPage(err, req, res);
 }
 
-function runNodeApp() {
+async function runNodeApp() {
   let express = require('express');
   let app = express();
 
   app.set('trust proxy', true);
 
-  // if (environment.$Env === 'dev') {
-  //   // TODO FIXME
-  //   const { getWebpackConfig } = require('@ima/cli');
-  //   const devMiddleware = require('webpack-dev-middleware');
-  //   const hotMiddleware = require('webpack-hot-middleware');
+  if (environment.$Env === 'dev') {
+    const webpack = require('webpack');
+    const devMiddleware = require('webpack-dev-middleware');
+    const hotMiddleware = require('webpack-hot-middleware');
+    const { createWebpackConfig } = require('@ima/cli');
 
-  //   const config = getWebpackConfig({
-  //     rootDir: path.resolve(__dirname, '../'),
-  //     publicPath: '/',
-  //     isServer: true,
-  //     isProduction: false,
-  //     isWatch: true,
-  //   });
+    const compiler = webpack(
+      (
+        await createWebpackConfig(
+          { rootDir: path.resolve(__dirname, '../') },
+          ['client'],
+          true
+        )
+      ).pop()
+    );
 
-  //   const webpack = require('webpack');
-  //   const compiler = webpack(config);
-
-  //   app
-  //     .use(
-  //       devMiddleware(compiler, {
-  //         index: false,
-  //         publicPath: '/',
-  //       })
-  //     )
-  //     .use(
-  //       hotMiddleware(compiler, {
-  //         path: '/__webpack_hmr',
-  //         heartbeat: 10 * 1000,
-  //       })
-  //     );
-  // }
+    app
+      .use(
+        devMiddleware(compiler, {
+          index: false,
+          publicPath: '/'
+        })
+      )
+      .use(
+        hotMiddleware(compiler, {
+          path: '/__webpack_hmr',
+          heartbeat: 10 * 1000
+        })
+      );
+  }
 
   app
     .use(helmet())

@@ -57,7 +57,11 @@ function builderFactory(cliOptions = {}) {
   };
 }
 
-async function createWebpackConfig(args = {}, loadArgsFromTmpFile = false) {
+async function createWebpackConfig(
+  args = {},
+  configurations = ['server', 'client'],
+  loadArgsFromTmpFile = false
+) {
   let loadedArgs = args;
 
   try {
@@ -76,16 +80,27 @@ async function createWebpackConfig(args = {}, loadArgsFromTmpFile = false) {
     error(err);
   }
 
-  return [
-    await webpackConfig({
-      ...loadedArgs,
-      isServer: true
-    }),
-    await webpackConfig({
-      ...loadedArgs,
-      isServer: false
-    })
-  ];
+  const finalConfiguration = [];
+
+  if (~configurations.indexOf('server')) {
+    finalConfiguration.push(
+      await webpackConfig({
+        ...loadedArgs,
+        isServer: true
+      })
+    );
+  }
+
+  if (~configurations.indexOf('client')) {
+    finalConfiguration.push(
+      await webpackConfig({
+        ...loadedArgs,
+        isServer: false
+      })
+    );
+  }
+
+  return finalConfiguration;
 }
 
 module.exports = {
