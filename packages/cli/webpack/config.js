@@ -155,7 +155,8 @@ module.exports = async args => {
               { from: 'app/environment.js', to: 'ima/config/environment.js' },
               'server/server.js'
             ]
-          })
+          }),
+          ...(isWatch ? [new RunImaServerPlugin({ rootDir })] : [])
         ]
       : [
           new MiniCssExtractPlugin({
@@ -174,8 +175,7 @@ module.exports = async args => {
               $Language: Object.values(imaEnvironment.$Language)[0]
             }
           }),
-          ...(isWatch ? [new webpack.HotModuleReplacementPlugin()] : []),
-          ...(isWatch ? [new RunImaServerPlugin({ rootDir })] : [])
+          ...(isWatch ? [new webpack.HotModuleReplacementPlugin()] : [])
         ],
     ...(isServer
       ? {
@@ -186,10 +186,7 @@ module.exports = async args => {
       : undefined),
     ...(isServer
       ? {
-          node: {
-            __dirname: false,
-            __filename: false
-          }
+          node: false
         }
       : undefined)
   };
