@@ -40,10 +40,10 @@ function handlerFactory(handlerFn) {
       : path.resolve(process.cwd(), dir);
 
     return await handlerFn({
+      ...yargs,
       rootDir: dir ? absoluteDir : process.cwd(),
       isProduction,
-      isLegacyMode: !!yargs.legacyCompatMode,
-      publicPath: yargs.publicPath ? yargs.publicPath : '/'
+      command
     });
   };
 }

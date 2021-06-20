@@ -9,7 +9,7 @@ const RunImaServerPlugin = require('./plugins/RunImaServerPlugin');
 const { requireConfig, resolveEnvironment } = require('./lib/configUtils');
 
 module.exports = async args => {
-  const { rootDir, isProduction, isServer, isWatch, publicPath } = args;
+  const { rootDir, isProduction, isServer, isWatch } = args;
   const packageJson = require(path.resolve(rootDir, './package.json'));
   const imaEnvironment = resolveEnvironment(rootDir);
 
@@ -26,7 +26,7 @@ module.exports = async args => {
       path.resolve(rootDir, './app/main.js')
     ],
     output: {
-      publicPath,
+      publicPath: args.publicPath,
       filename: isServer ? 'ima/app.server.js' : 'static/js/main.js',
       path: path.resolve(rootDir, './build'),
       ...(isServer ? { libraryTarget: 'commonjs2' } : undefined)
@@ -156,7 +156,15 @@ module.exports = async args => {
               'server/server.js'
             ]
           }),
-          ...(isWatch ? [new RunImaServerPlugin({ rootDir })] : [])
+          ...(isWatch
+            ? [
+                new RunImaServerPlugin({
+                  rootDir,
+                  open: args.open,
+                  port: imaEnvironment.$Server.port
+                })
+              ]
+            : [])
         ]
       : [
           new MiniCssExtractPlugin({

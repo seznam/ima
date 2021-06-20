@@ -22,8 +22,11 @@ const devCommand = {
   command: 'dev',
   desc: 'Run application in development watch mode',
   builder: builderFactory({
-    'legacy-compat-mode': {
-      desc: 'Runs application in ES5 compatible format'
+    open: {
+      alias: 'o',
+      desc: 'Opens browser window after server has been started',
+      type: 'boolean',
+      default: true
     }
   }),
   handler: handlerFactory(dev)
