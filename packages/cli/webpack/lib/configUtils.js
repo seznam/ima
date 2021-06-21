@@ -33,7 +33,7 @@ function requireConfig({
     fileNames
       .map(fileName => ({
         fileName,
-        fullPath: path.resolve(rootDir, fileName)
+        fullPath: path.join(rootDir, fileName)
       }))
       .find(({ fullPath }) => fs.existsSync(fullPath)) || {};
 

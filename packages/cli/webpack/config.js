@@ -27,12 +27,12 @@ module.exports = async args => {
             `webpack-hot-middleware/client?path=//localhost:${imaEnvironment.$Server.port}/__webpack_hmr&timeout=20000&reload=true&overlay=true`
           ]
         : []),
-      path.resolve(rootDir, './app/main.js')
+      path.join(rootDir, 'app/main.js')
     ],
     output: {
       publicPath: args.publicPath,
       filename: isServer ? 'ima/app.server.js' : 'static/js/main.js',
-      path: path.resolve(rootDir, './build'),
+      path: path.join(rootDir, 'build'),
       ...(isServer ? { libraryTarget: 'commonjs2' } : undefined)
     },
     devtool: isProduction ? 'source-map' : 'cheap-module-source-map',
@@ -135,7 +135,7 @@ module.exports = async args => {
                   options: {
                     lessOptions: {
                       strictMath: true,
-                      paths: [path.resolve(rootDir, './app/assets/less')]
+                      paths: [path.join(rootDir, 'app/assets/less')]
                     },
                     additionalData: additionalDataFactory([
                       content => `@import "globals.less";\n\n${content}`
@@ -152,7 +152,7 @@ module.exports = async args => {
     resolve: {
       extensions: ['.js', '.jsx'],
       alias: {
-        ['app']: path.resolve(rootDir, './app'),
+        ['app']: path.join(rootDir, 'app'),
         '@ima/core': `@ima/core/dist/ima.${
           isServer ? 'server' : 'client'
         }.cjs.js`
@@ -182,10 +182,7 @@ module.exports = async args => {
             filename: './static/css/app.css'
           }),
           new HtmlWebpackPlugin({
-            template: path.resolve(
-              rootDir,
-              './app/assets/static/html/spa.html'
-            ),
+            template: path.join(rootDir, 'app/assets/static/html/spa.html'),
             filename: 'index.html',
             templateParameters: {
               $Debug: imaEnvironment.$Debug,
