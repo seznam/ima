@@ -141,6 +141,9 @@ module.exports = async args => {
                       content => `@import "globals.less";\n\n${content}`
                     ])
                   }
+                },
+                {
+                  loader: 'glob-import-loader'
                 }
               ]
         }

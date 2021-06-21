@@ -45,5 +45,8 @@
     "webpack-dev-middleware": "^5.0.0",
     "webpack-hot-middleware": "^2.25.0",
     "yargs": "^17.0.1"
+  },
+  "devDependencies": {
+    "glob-import-loader": "^1.1.4"
   }
 }
