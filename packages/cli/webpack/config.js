@@ -67,7 +67,7 @@ module.exports = async args => {
           test: /\.(js|jsx)$/,
           use: [
             {
-              loader: path.resolve(__dirname, './loaders/pluginLoader.js'),
+              loader: 'plugin-loader',
               options: {}
             }
           ]
@@ -82,6 +82,12 @@ module.exports = async args => {
                 {
                   loader: MiniCssExtractPlugin.loader
                 },
+                // {
+                //   loader: 'amp-loader'
+                // },
+                // {
+                //   loader: 'extract-loader'
+                // },
                 {
                   loader: 'css-loader',
                   options: {
@@ -157,6 +163,9 @@ module.exports = async args => {
           isServer ? 'server' : 'client'
         }.cjs.js`
       }
+    },
+    resolveLoader: {
+      modules: [path.resolve(__dirname, 'loaders'), 'node_modules']
     },
     plugins: isServer
       ? [
