@@ -4,12 +4,14 @@ const webpack = require('webpack');
 const CopyPlugin = require('copy-webpack-plugin');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
+const RemoveEmptyScriptsPlugin = require('webpack-remove-empty-scripts');
 
 const RunImaServerPlugin = require('./plugins/RunImaServerPlugin');
 const {
   requireConfig,
   resolveEnvironment,
-  additionalDataFactory
+  additionalDataFactory,
+  generateEntryPoints
 } = require('./lib/configUtils');
 
 module.exports = async args => {
@@ -21,17 +23,33 @@ module.exports = async args => {
     name: isServer ? 'server' : 'client',
     mode: isProduction ? 'production' : 'development',
     ...(isServer ? undefined : { target: 'web' }),
-    entry: [
-      ...(isWatch && !isServer
-        ? [
-            `webpack-hot-middleware/client?path=//localhost:${imaEnvironment.$Server.port}/__webpack_hmr&timeout=20000&reload=true&overlay=true`
-          ]
-        : []),
-      path.join(rootDir, 'app/main.js')
-    ],
+    entry: {
+      ...(!isServer && args.amp
+        ? await generateEntryPoints(rootDir, ['./app/**/*.less'])
+        : undefined),
+      ...(isServer ? { server: path.join(rootDir, 'app/main.js') } : undefined),
+      ...(!isServer
+        ? {
+            client: [
+              path.join(rootDir, 'app/main.js'),
+              ...(isWatch
+                ? [
+                    `webpack-hot-middleware/client?path=//localhost:${imaEnvironment.$Server.port}/__webpack_hmr&timeout=20000&reload=true&overlay=true`
+                  ]
+                : [])
+            ]
+          }
+        : undefined)
+    },
     output: {
       publicPath: args.publicPath,
-      filename: isServer ? 'ima/app.server.js' : 'static/js/main.js',
+      filename: ({ chunk }) => {
+        if (chunk.name === 'server') {
+          return 'ima/app.server.js';
+        }
+
+        return `static/js/${chunk.name === 'client' ? 'main' : '[name]'}.js`;
+      },
       path: path.join(rootDir, 'build'),
       ...(isServer ? { libraryTarget: 'commonjs2' } : undefined)
     },
@@ -82,12 +100,6 @@ module.exports = async args => {
                 {
                   loader: MiniCssExtractPlugin.loader
                 },
-                // {
-                //   loader: 'amp-loader'
-                // },
-                // {
-                //   loader: 'extract-loader'
-                // },
                 {
                   loader: 'css-loader',
                   options: {
@@ -187,8 +199,10 @@ module.exports = async args => {
             : [])
         ]
       : [
+          new RemoveEmptyScriptsPlugin(),
           new MiniCssExtractPlugin({
-            filename: './static/css/app.css'
+            filename: ({ chunk }) =>
+              `static/css/${chunk.name === 'client' ? 'app' : '[name]'}.css`
           }),
           new HtmlWebpackPlugin({
             template: path.join(rootDir, 'app/assets/static/html/spa.html'),

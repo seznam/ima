@@ -1,3 +1,5 @@
+const fs = require('fs');
+const path = require('path');
 const webpack = require('webpack');
 
 const {
@@ -8,6 +10,10 @@ const {
 } = require('../lib/cliUtils');
 
 async function build(args) {
+  // Clean build directory
+  fs.rmSync(path.join(args.rootDir, 'build'), { recursive: true });
+
+  // Build ima app
   const config = await createWebpackConfig(args);
   const compiler = webpack(config);
 
@@ -17,7 +23,13 @@ async function build(args) {
 const buildCommand = {
   command: 'build',
   desc: 'Build an application for production',
-  builder: builderFactory(),
+  builder: builderFactory({
+    amp: {
+      desc: 'Builds separate CSS files for use in AMP mode',
+      type: 'boolean',
+      default: false
+    }
+  }),
   handler: handlerFactory(build)
 };
 

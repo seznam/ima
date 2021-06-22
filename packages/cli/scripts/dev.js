@@ -27,6 +27,11 @@ const devCommand = {
       desc: 'Opens browser window after server has been started',
       type: 'boolean',
       default: true
+    },
+    amp: {
+      desc: 'Builds separate CSS files for use in AMP mode',
+      type: 'boolean',
+      default: false
     }
   }),
   handler: handlerFactory(dev)

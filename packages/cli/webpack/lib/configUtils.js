@@ -1,5 +1,6 @@
 const path = require('path');
 const fs = require('fs');
+const fg = require('fast-glob');
 
 const { error } = require('../../lib/printUtils');
 
@@ -75,8 +76,26 @@ function additionalDataFactory(contentFunctions) {
       .join('');
 }
 
+async function generateEntryPoints(rootDir, paths = [], outputPrefix = '') {
+  const resolvedPaths = await fg(
+    ...paths.map(globPath => path.join(rootDir, globPath))
+  );
+
+  return resolvedPaths.reduce((acc, cur) => {
+    let entryPoint = path.join(outputPrefix, cur.replace(`${rootDir}/`, ''));
+
+    const extensionIndex = entryPoint.lastIndexOf('.');
+    entryPoint = entryPoint.substring(0, extensionIndex);
+
+    acc[entryPoint] = cur;
+
+    return acc;
+  }, {});
+}
+
 module.exports = {
   resolveEnvironment,
   requireConfig,
-  additionalDataFactory
+  additionalDataFactory,
+  generateEntryPoints
 };
