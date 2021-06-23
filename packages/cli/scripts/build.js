@@ -11,7 +11,10 @@ const {
 
 async function build(args) {
   // Clean build directory
-  fs.rmSync(path.join(args.rootDir, 'build'), { recursive: true });
+  const buildDir = path.join(args.rootDir, 'build');
+  if (fs.existsSync(buildDir)) {
+    fs.rmSync(buildDir, { recursive: true });
+  }
 
   // Build ima app
   const config = await createWebpackConfig(args);

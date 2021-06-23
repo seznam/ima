@@ -78,7 +78,7 @@ function additionalDataFactory(contentFunctions) {
 
 async function generateEntryPoints(rootDir, paths = [], outputPrefix = '') {
   const resolvedPaths = await fg(
-    ...paths.map(globPath => path.join(rootDir, globPath))
+    paths.map(globPath => path.join(rootDir, globPath))
   );
 
   return resolvedPaths.reduce((acc, cur) => {
@@ -93,7 +93,20 @@ async function generateEntryPoints(rootDir, paths = [], outputPrefix = '') {
   }, {});
 }
 
+function wif(condition, value, defaultValue = null) {
+  if (condition) {
+    return value;
+  }
+
+  if (defaultValue !== null) {
+    return defaultValue;
+  }
+
+  return Array.isArray(value) ? [] : {};
+}
+
 module.exports = {
+  wif,
   resolveEnvironment,
   requireConfig,
   additionalDataFactory,

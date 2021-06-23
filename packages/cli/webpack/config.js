@@ -1,18 +1,22 @@
 const path = require('path');
 const webpack = require('webpack');
+const postcss = require('postcss');
 
 const CopyPlugin = require('copy-webpack-plugin');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 const RemoveEmptyScriptsPlugin = require('webpack-remove-empty-scripts');
+const PostCssPipelineWebpackPlugin = require('postcss-pipeline-webpack-plugin');
 
 const RunImaServerPlugin = require('./plugins/RunImaServerPlugin');
 const {
   requireConfig,
   resolveEnvironment,
   additionalDataFactory,
-  generateEntryPoints
+  generateEntryPoints,
+  wif
 } = require('./lib/configUtils');
+const postCssScrambler = require('./postCssScrambler');
 
 module.exports = async args => {
   const { rootDir, isProduction, isServer, isWatch } = args;
@@ -22,24 +26,24 @@ module.exports = async args => {
   return {
     name: isServer ? 'server' : 'client',
     mode: isProduction ? 'production' : 'development',
-    ...(isServer ? undefined : { target: 'web' }),
+    ...wif(!isServer, { target: 'web' }),
     entry: {
-      ...(!isServer && args.amp
-        ? await generateEntryPoints(rootDir, ['./app/**/*.less'])
-        : undefined),
-      ...(isServer ? { server: path.join(rootDir, 'app/main.js') } : undefined),
-      ...(!isServer
-        ? {
-            client: [
-              path.join(rootDir, 'app/main.js'),
-              ...(isWatch
-                ? [
-                    `webpack-hot-middleware/client?path=//localhost:${imaEnvironment.$Server.port}/__webpack_hmr&timeout=20000&reload=true&overlay=true`
-                  ]
-                : [])
-            ]
-          }
-        : undefined)
+      ...wif(
+        !isServer && args.amp,
+        await generateEntryPoints(rootDir, [
+          './app/component/**/*.less',
+          './app/page/**/*.less'
+        ])
+      ),
+      ...wif(isServer, { server: path.join(rootDir, 'app/main.js') }),
+      ...wif(!isServer, {
+        client: [
+          path.join(rootDir, 'app/main.js'),
+          ...wif(isWatch, [
+            `webpack-hot-middleware/client?path=//localhost:${imaEnvironment.$Server.port}/__webpack_hmr&timeout=20000&reload=true&overlay=true`
+          ])
+        ]
+      })
     },
     output: {
       publicPath: args.publicPath,
@@ -51,7 +55,7 @@ module.exports = async args => {
         return `static/js/${chunk.name === 'client' ? 'main' : '[name]'}.js`;
       },
       path: path.join(rootDir, 'build'),
-      ...(isServer ? { libraryTarget: 'commonjs2' } : undefined)
+      ...wif(isServer, { libraryTarget: 'commonjs2' })
     },
     devtool: isProduction ? 'source-map' : 'cheap-module-source-map',
     module: {
@@ -188,15 +192,13 @@ module.exports = async args => {
               'server/server.js'
             ]
           }),
-          ...(isWatch
-            ? [
-                new RunImaServerPlugin({
-                  rootDir,
-                  open: args.open,
-                  port: imaEnvironment.$Server.port
-                })
-              ]
-            : [])
+          ...wif(isWatch, [
+            new RunImaServerPlugin({
+              rootDir,
+              open: args.open,
+              port: imaEnvironment.$Server.port
+            })
+          ])
         ]
       : [
           new RemoveEmptyScriptsPlugin(),
@@ -204,6 +206,32 @@ module.exports = async args => {
             filename: ({ chunk }) =>
               `static/css/${chunk.name === 'client' ? 'app' : '[name]'}.css`
           }),
+          // This pipeline should run only for main app css file
+          new PostCssPipelineWebpackPlugin({
+            predicate: name => /static\/css\/app.css$/.test(name),
+            suffix: 'srambled',
+            processor: postcss([
+              postCssScrambler({
+                generateHashTable: true,
+                hashTable: path.join(rootDir, 'build/static/hashtable.json')
+              })
+            ])
+          }),
+          // This should run only for amp entry points
+          ...wif(args.amp, [
+            new PostCssPipelineWebpackPlugin({
+              predicate: name =>
+                !/static\/css\/app.css$/.test(name) &&
+                !/srambled.css$/.test(name),
+              suffix: 'srambled',
+              processor: postcss([
+                postCssScrambler({
+                  generateHashTable: false,
+                  hashTable: path.join(rootDir, 'build/static/hashtable.json')
+                })
+              ])
+            })
+          ]),
           new HtmlWebpackPlugin({
             template: path.join(rootDir, 'app/assets/static/html/spa.html'),
             filename: 'index.html',
@@ -214,19 +242,15 @@ module.exports = async args => {
               $Language: Object.values(imaEnvironment.$Language)[0]
             }
           }),
-          ...(isWatch ? [new webpack.HotModuleReplacementPlugin()] : [])
+          ...wif(isWatch, [new webpack.HotModuleReplacementPlugin()])
         ],
-    ...(isServer
-      ? {
-          externalsPresets: {
-            node: true
-          }
-        }
-      : undefined),
-    ...(isServer
-      ? {
-          node: false
-        }
-      : undefined)
+    ...wif(isServer, {
+      externalsPresets: {
+        node: true
+      }
+    }),
+    ...wif(isServer, {
+      node: false
+    })
   };
 };
