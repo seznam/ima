@@ -7,6 +7,7 @@ const {
   handlerFactory,
   createWebpackConfig
 } = require('../lib/cliUtils');
+const sharedArgs = require('./lib/sharedArgs');
 
 async function build({ options, imaConf }) {
   // Clean build directory
@@ -26,10 +27,10 @@ const buildCommand = {
   command: 'build',
   desc: 'Build an application for production',
   builder: {
-    amp: {
-      desc: 'Builds separate CSS files for use in AMP mode',
-      type: 'boolean',
-      default: false
+    ...sharedArgs,
+    compress: {
+      desc: 'Compresses resulted assets for use in content-encoding serving',
+      type: 'boolean'
     }
   },
   handler: handlerFactory(build)

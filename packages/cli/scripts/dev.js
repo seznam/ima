@@ -5,6 +5,7 @@ const {
   handlerFactory,
   createWebpackConfig
 } = require('../lib/cliUtils');
+const sharedArgs = require('./lib/sharedArgs');
 
 async function dev({ options, imaConf }) {
   const config = await createWebpackConfig({
@@ -24,16 +25,12 @@ const devCommand = {
   command: 'dev',
   desc: 'Run application in development watch mode',
   builder: {
+    ...sharedArgs,
     open: {
       alias: 'o',
       desc: 'Opens browser window after server has been started',
       type: 'boolean',
       default: true
-    },
-    amp: {
-      desc: 'Builds separate CSS files for use in AMP mode',
-      type: 'boolean',
-      default: false
     }
   },
   handler: handlerFactory(dev)

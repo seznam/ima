@@ -7,6 +7,9 @@ const HtmlWebpackPlugin = require('html-webpack-plugin');
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 const RemoveEmptyScriptsPlugin = require('webpack-remove-empty-scripts');
 const PostCssPipelineWebpackPlugin = require('postcss-pipeline-webpack-plugin');
+const CssMinimizerPlugin = require('css-minimizer-webpack-plugin');
+const TerserPlugin = require('terser-webpack-plugin');
+const CompressionPlugin = require('compression-webpack-plugin');
 
 const RunImaServerPlugin = require('./plugins/RunImaServerPlugin');
 const {
@@ -18,7 +21,7 @@ const {
 } = require('./lib/configUtils');
 const postCssScrambler = require('./postCssScrambler');
 
-module.exports = async options => {
+module.exports = async (options, imaConf) => {
   const { rootDir, isProduction, isServer, isWatch } = options;
   const packageJson = require(path.resolve(rootDir, './package.json'));
   const imaEnvironment = resolveEnvironment(rootDir);
@@ -29,11 +32,8 @@ module.exports = async options => {
     ...wif(!isServer, { target: 'web' }),
     entry: {
       ...wif(
-        !isServer && options.amp,
-        await generateEntryPoints(rootDir, [
-          './app/component/**/*.less',
-          './app/page/**/*.less'
-        ])
+        !isServer && options.amp && imaConf?.amp?.styleEntryPoints?.length > 0,
+        await generateEntryPoints(rootDir, imaConf?.amp?.styleEntryPoints)
       ),
       ...wif(isServer, { server: path.join(rootDir, 'app/main.js') }),
       ...wif(!isServer, {
@@ -58,6 +58,10 @@ module.exports = async options => {
       ...wif(isServer, { libraryTarget: 'commonjs2' })
     },
     devtool: isProduction ? 'source-map' : 'cheap-module-source-map',
+    optimization: {
+      minimize: isProduction && !isServer,
+      minimizer: [new TerserPlugin(), new CssMinimizerPlugin()]
+    },
     module: {
       rules: [
         {
@@ -206,29 +210,39 @@ module.exports = async options => {
             filename: ({ chunk }) =>
               `static/css/${chunk.name === 'client' ? 'app' : '[name]'}.css`
           }),
-          // This pipeline should run only for main app css file
-          new PostCssPipelineWebpackPlugin({
-            predicate: name => /static\/css\/app.css$/.test(name),
-            suffix: 'srambled',
-            processor: postcss([
-              postCssScrambler({
-                generateHashTable: true,
-                hashTable: path.join(rootDir, 'build/static/hashtable.json')
-              })
-            ])
-          }),
-          // This should run only for amp entry points
+          ...wif(options.scrambleCss, [
+            // This pipeline should run only for main app css file
+            new PostCssPipelineWebpackPlugin({
+              predicate: name => /static\/css\/app.css$/.test(name),
+              suffix: 'srambled',
+              processor: postcss([
+                postCssScrambler({
+                  generateHashTable: true,
+                  uniqueIdentifier: `${packageJson.name}:${packageJson.version}`,
+                  hashTable: path.join(rootDir, 'build/static/hashtable.json')
+                })
+              ])
+            })
+          ]),
           ...wif(options.amp, [
+            // This should run only for amp entry points
             new PostCssPipelineWebpackPlugin({
               predicate: name =>
                 !/static\/css\/app.css$/.test(name) &&
                 !/srambled.css$/.test(name),
               suffix: 'srambled',
               processor: postcss([
-                postCssScrambler({
-                  generateHashTable: false,
-                  hashTable: path.join(rootDir, 'build/static/hashtable.json')
-                })
+                ...wif(options.scrambleCss, [
+                  postCssScrambler({
+                    generateHashTable: false,
+                    hashTable: path.join(rootDir, 'build/static/hashtable.json')
+                  })
+                ]),
+                ...wif(
+                  imaConf?.amp?.postCssPlugins.length > 0,
+                  imaConf?.amp?.postCssPlugins,
+                  []
+                )
               ])
             })
           ]),
@@ -242,6 +256,7 @@ module.exports = async options => {
               $Language: Object.values(imaEnvironment.$Language)[0]
             }
           }),
+          ...wif(isProduction && options.compress, [new CompressionPlugin()]),
           ...wif(isWatch, [new webpack.HotModuleReplacementPlugin()])
         ],
     ...wif(isServer, {
