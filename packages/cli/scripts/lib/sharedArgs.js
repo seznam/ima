@@ -6,5 +6,9 @@ module.exports = {
   scrambleCss: {
     desc: 'Scrambles class names and generates hashtable',
     type: 'boolean'
+  },
+  publicPath: {
+    desc: 'Webpack public path to specify base for all assets in the app',
+    type: 'string'
   }
 };

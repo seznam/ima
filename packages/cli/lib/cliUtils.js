@@ -1,8 +1,10 @@
 const path = require('path');
+const deepmerge = require('deepmerge');
 const fs = require('fs');
 
 const webpackConfig = require('../webpack/config');
 const { error, info } = require('./printUtils');
+const defaultImaConf = require('./default.ima.conf');
 
 const IMA_TMP_DIR = '.ima';
 const IMA_CONF_FILENAME = 'ima.conf.js';
@@ -32,12 +34,14 @@ function statsFormattedOutput(err, stats) {
 
 function loadImaConf(rootDir) {
   if (!rootDir) {
-    return {};
+    return defaultImaConf;
   }
 
   const imaConfPath = path.join(rootDir, IMA_CONF_FILENAME);
 
-  return fs.existsSync(imaConfPath) ? require(imaConfPath) : {};
+  return fs.existsSync(imaConfPath)
+    ? deepmerge(defaultImaConf, require(imaConfPath))
+    : {};
 }
 
 function handlerFactory(handlerFn) {
