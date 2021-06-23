@@ -18,8 +18,8 @@ const {
 } = require('./lib/configUtils');
 const postCssScrambler = require('./postCssScrambler');
 
-module.exports = async args => {
-  const { rootDir, isProduction, isServer, isWatch } = args;
+module.exports = async options => {
+  const { rootDir, isProduction, isServer, isWatch } = options;
   const packageJson = require(path.resolve(rootDir, './package.json'));
   const imaEnvironment = resolveEnvironment(rootDir);
 
@@ -29,7 +29,7 @@ module.exports = async args => {
     ...wif(!isServer, { target: 'web' }),
     entry: {
       ...wif(
-        !isServer && args.amp,
+        !isServer && options.amp,
         await generateEntryPoints(rootDir, [
           './app/component/**/*.less',
           './app/page/**/*.less'
@@ -46,7 +46,7 @@ module.exports = async args => {
       })
     },
     output: {
-      publicPath: args.publicPath,
+      publicPath: options.publicPath,
       filename: ({ chunk }) => {
         if (chunk.name === 'server') {
           return 'ima/app.server.js';
@@ -195,7 +195,7 @@ module.exports = async args => {
           ...wif(isWatch, [
             new RunImaServerPlugin({
               rootDir,
-              open: args.open,
+              open: options.open,
               port: imaEnvironment.$Server.port
             })
           ])
@@ -218,7 +218,7 @@ module.exports = async args => {
             ])
           }),
           // This should run only for amp entry points
-          ...wif(args.amp, [
+          ...wif(options.amp, [
             new PostCssPipelineWebpackPlugin({
               predicate: name =>
                 !/static\/css\/app.css$/.test(name) &&

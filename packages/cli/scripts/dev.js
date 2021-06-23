@@ -3,15 +3,17 @@ const webpack = require('webpack');
 const {
   statsFormattedOutput,
   handlerFactory,
-  builderFactory,
   createWebpackConfig
 } = require('../lib/cliUtils');
 
-async function dev(args) {
+async function dev({ options, imaConf }) {
   const config = await createWebpackConfig({
-    ...args,
-    isProduction: false,
-    isWatch: true
+    options: {
+      ...options,
+      isProduction: false,
+      isWatch: true
+    },
+    imaConf
   });
 
   const compiler = webpack(config);
@@ -21,7 +23,7 @@ async function dev(args) {
 const devCommand = {
   command: 'dev',
   desc: 'Run application in development watch mode',
-  builder: builderFactory({
+  builder: {
     open: {
       alias: 'o',
       desc: 'Opens browser window after server has been started',
@@ -33,7 +35,7 @@ const devCommand = {
       type: 'boolean',
       default: false
     }
-  }),
+  },
   handler: handlerFactory(dev)
 };
 

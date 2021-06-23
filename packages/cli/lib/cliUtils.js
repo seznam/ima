@@ -5,6 +5,7 @@ const webpackConfig = require('../webpack/config');
 const { error, info } = require('./printUtils');
 
 const IMA_TMP_DIR = '.ima';
+const IMA_CONF_FILENAME = 'ima.conf.js';
 
 function statsFormattedOutput(err, stats) {
   if (!err) {
@@ -29,83 +30,101 @@ function statsFormattedOutput(err, stats) {
   }
 }
 
+function loadImaConf(rootDir) {
+  if (!rootDir) {
+    return {};
+  }
+
+  const imaConfPath = path.join(rootDir, IMA_CONF_FILENAME);
+
+  return fs.existsSync(imaConfPath) ? require(imaConfPath) : {};
+}
+
 function handlerFactory(handlerFn) {
   return async yargs => {
     // eslint-disable-next-line no-unused-vars
     const [command, dir = ''] = yargs._ || [];
-
     const isProduction = process.env.NODE_ENV === 'production';
-    const absoluteDir = path.isAbsolute(dir)
-      ? dir
-      : path.resolve(process.cwd(), dir);
+    const rootDir = dir
+      ? path.isAbsolute(dir)
+        ? dir
+        : path.resolve(process.cwd(), dir)
+      : process.cwd();
+
+    const { options, ...imaConf } = loadImaConf(rootDir);
 
     return await handlerFn({
-      ...yargs,
-      rootDir: dir ? absoluteDir : process.cwd(),
-      isProduction,
-      command
+      options: {
+        ...options,
+        ...yargs,
+        rootDir,
+        isProduction,
+        command
+      },
+      imaConf
     });
   };
 }
 
-function builderFactory(cliOptions = {}) {
-  return {
-    'public-path': {
-      desc: 'Define public path for application assets'
-    },
-    ...cliOptions
-  };
-}
-
 async function createWebpackConfig(
-  args = {},
+  { options = {}, imaConf = {} } = {},
   configurations = ['server', 'client'],
-  loadArgsFromTmpFile = false
+  loadOptionsFromTmpFile = false
 ) {
-  let loadedArgs = args;
+  let loadedOptions = options;
+  let loadedImaConf = imaConf;
 
   try {
-    const imaTmpDirPath = path.resolve(args.rootDir, IMA_TMP_DIR);
-    const imaArgsFile = path.join(imaTmpDirPath, 'args.json');
+    const imaTmpDirPath = path.resolve(options.rootDir, IMA_TMP_DIR);
+    const imaTmpOptionsFile = path.join(imaTmpDirPath, 'options.json');
 
-    if (loadArgsFromTmpFile) {
-      loadedArgs = JSON.parse(fs.readFileSync(imaArgsFile));
+    if (loadOptionsFromTmpFile) {
+      loadedOptions = JSON.parse(fs.readFileSync(imaTmpOptionsFile));
+      loadedImaConf = loadImaConf(loadedOptions);
     } else {
       fs.rmSync(imaTmpDirPath, { recursive: true, force: true });
       fs.mkdirSync(imaTmpDirPath);
-      fs.writeFileSync(imaArgsFile, JSON.stringify(args));
+      fs.writeFileSync(imaTmpOptionsFile, JSON.stringify(options));
     }
   } catch (err) {
     error('Error occurred while creating webpack config.');
     error(err);
   }
 
-  const finalConfiguration = [];
+  const finalConfigurationOptions = [];
 
   if (~configurations.indexOf('server')) {
-    finalConfiguration.push(
-      await webpackConfig({
-        ...loadedArgs,
-        isServer: true
-      })
-    );
+    finalConfigurationOptions.push({
+      ...loadedOptions,
+      isServer: true
+    });
   }
 
   if (~configurations.indexOf('client')) {
-    finalConfiguration.push(
-      await webpackConfig({
-        ...loadedArgs,
-        isServer: false
-      })
-    );
+    finalConfigurationOptions.push({
+      ...loadedOptions,
+      isServer: false
+    });
   }
 
-  return finalConfiguration;
+  return Promise.all(
+    finalConfigurationOptions.map(async options => {
+      if (typeof loadedImaConf?.webpack === 'function') {
+        return await loadedImaConf?.webpack(
+          await webpackConfig(options, loadedImaConf),
+          options,
+          loadedImaConf
+        );
+      } else {
+        return await webpackConfig(options, loadedImaConf);
+      }
+    })
+  );
 }
 
 module.exports = {
   createWebpackConfig,
   statsFormattedOutput,
   handlerFactory,
-  builderFactory
+  loadImaConf
 };

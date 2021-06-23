@@ -1,16 +1,16 @@
 const path = require('path');
 const childProcess = require('child_process');
 
-const { handlerFactory, builderFactory } = require('../lib/cliUtils');
+const { handlerFactory } = require('../lib/cliUtils');
 
-async function start({ rootDir }) {
-  childProcess.fork(path.resolve(rootDir, './build/server'));
+async function start({ options }) {
+  childProcess.fork(path.resolve(options.rootDir, './build/server'));
 }
 
 const startCommand = {
   command: 'start',
   desc: 'Run application in production',
-  builder: builderFactory(),
+  builder: {},
   handler: handlerFactory(start)
 };
 
