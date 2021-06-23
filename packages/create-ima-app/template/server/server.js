@@ -121,13 +121,13 @@ async function runNodeApp() {
     const { createWebpackConfig } = require('@ima/cli');
 
     const compiler = webpack(
-      (
-        await createWebpackConfig(
-          { rootDir: path.resolve(__dirname, '../') },
-          ['client'],
-          true
-        )
-      ).pop()
+      await createWebpackConfig(
+        {
+          options: { rootDir: path.resolve(__dirname, '../') }
+        },
+        ['client'],
+        true
+      )
     );
 
     app

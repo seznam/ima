@@ -68,7 +68,7 @@ function handlerFactory(handlerFn) {
 
 async function createWebpackConfig(
   { options = {}, imaConf = {} } = {},
-  configurations = ['server', 'client'],
+  configurations = ['client', 'server'],
   loadOptionsFromTmpFile = false
 ) {
   let loadedOptions = options;
@@ -80,7 +80,7 @@ async function createWebpackConfig(
 
     if (loadOptionsFromTmpFile) {
       loadedOptions = JSON.parse(fs.readFileSync(imaTmpOptionsFile));
-      loadedImaConf = loadImaConf(loadedOptions);
+      loadedImaConf = loadImaConf(loadedOptions.rootDir);
     } else {
       fs.rmSync(imaTmpDirPath, { recursive: true, force: true });
       fs.mkdirSync(imaTmpDirPath);
@@ -93,17 +93,17 @@ async function createWebpackConfig(
 
   const finalConfigurationOptions = [];
 
-  if (~configurations.indexOf('server')) {
-    finalConfigurationOptions.push({
-      ...loadedOptions,
-      isServer: true
-    });
-  }
-
   if (~configurations.indexOf('client')) {
     finalConfigurationOptions.push({
       ...loadedOptions,
       isServer: false
+    });
+  }
+
+  if (~configurations.indexOf('server')) {
+    finalConfigurationOptions.push({
+      ...loadedOptions,
+      isServer: true
     });
   }
 
