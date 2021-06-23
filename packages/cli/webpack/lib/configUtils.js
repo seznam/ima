@@ -64,16 +64,21 @@ function requireConfig({
 }
 
 function additionalDataFactory(contentFunctions) {
-  return content =>
-    contentFunctions
-      .map(fn => {
-        if (typeof fn !== 'function') {
-          return;
-        }
+  const prefixes = [];
+  const postfixes = [];
 
-        return fn(content);
-      })
-      .join('');
+  const prefix = content => prefixes.push(content);
+  const postfix = content => postfixes.push(content);
+
+  contentFunctions.forEach(fn => {
+    if (typeof fn !== 'function') {
+      return;
+    }
+
+    return fn(prefix, postfix);
+  });
+
+  return content => [...prefixes, content, ...postfixes].join('\n\n');
 }
 
 async function generateEntryPoints(rootDir, paths = [], outputPrefix = '') {

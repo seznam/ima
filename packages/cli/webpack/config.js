@@ -160,11 +160,16 @@ module.exports = async (options, imaConf) => {
                   loader: 'less-loader',
                   options: {
                     lessOptions: {
-                      strictMath: true,
-                      paths: [path.join(rootDir, 'app/assets/less')]
+                      strictMath: true
                     },
                     additionalData: additionalDataFactory([
-                      content => `@import "globals.less";\n\n${content}`
+                      prefix =>
+                        prefix(
+                          `@import "${path.join(
+                            rootDir,
+                            'app/assets/less/globals.less'
+                          )}";`
+                        )
                     ])
                   }
                 },
