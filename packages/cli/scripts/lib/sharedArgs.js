@@ -1,4 +1,12 @@
+const { VerboseOptions } = require('./constants');
+
 module.exports = {
+  verbose: {
+    alias: 'v',
+    desc: 'Choose between different number of logging options',
+    type: 'string',
+    choices: Object.values(VerboseOptions)
+  },
   amp: {
     desc: 'Builds separate CSS files for use in AMP mode',
     type: 'boolean'

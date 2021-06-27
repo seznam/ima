@@ -1,24 +1,23 @@
-const webpack = require('webpack');
-
-const {
-  statsFormattedOutput,
-  handlerFactory,
-  createWebpackConfig
-} = require('../lib/cliUtils');
+const { handlerFactory, createWebpackConfig } = require('../lib/cliUtils');
+const { watchCompiler, handleCompilationError } = require('../lib/compiler');
 const sharedArgs = require('./lib/sharedArgs');
 
 async function dev({ options, imaConf }) {
-  const config = await createWebpackConfig({
-    options: {
-      ...options,
-      isProduction: false,
-      isWatch: true
-    },
-    imaConf
-  });
+  try {
+    const config = await createWebpackConfig({
+      options: {
+        ...options,
+        isProduction: false,
+        isWatch: true
+      },
+      imaConf
+    });
 
-  const compiler = webpack(config);
-  compiler.watch({}, statsFormattedOutput);
+    await watchCompiler(config, options.verbose);
+  } catch (err) {
+    console.log(err);
+    handleCompilationError(err);
+  }
 }
 
 const devCommand = {

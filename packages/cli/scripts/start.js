@@ -4,7 +4,9 @@ const childProcess = require('child_process');
 const { handlerFactory } = require('../lib/cliUtils');
 
 async function start({ options }) {
-  childProcess.fork(path.resolve(options.rootDir, './build/server'));
+  childProcess.fork(path.join(options.rootDir, 'build/server'), {
+    stdio: 'inherit'
+  });
 }
 
 const startCommand = {

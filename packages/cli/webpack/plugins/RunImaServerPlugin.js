@@ -12,7 +12,9 @@ class RunImaServerPlugin {
       'RunImaServerPlugin',
       (compilation, callback) => {
         if (!this._serverStart && this._options.rootDir) {
-          childProcess.fork(path.join(this._options.rootDir, 'build/server'));
+          childProcess.fork(path.join(this._options.rootDir, 'build/server'), {
+            stdio: 'inherit'
+          });
 
           // TODO -> use on('spawn'), but it doesn't seems to work right now
           if (this._options.open) {

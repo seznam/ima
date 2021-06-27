@@ -3,34 +3,11 @@ const deepmerge = require('deepmerge');
 const fs = require('fs');
 
 const webpackConfig = require('../webpack/config');
-const { error, info } = require('./printUtils');
-const defaultImaConf = require('./default.ima.conf');
+const { error } = require('./printUtils');
+const defaultImaConf = require('../scripts/lib/default.ima.conf');
 
 const IMA_TMP_DIR = '.ima';
 const IMA_CONF_FILENAME = 'ima.conf.js';
-
-function statsFormattedOutput(err, stats) {
-  if (!err) {
-    const out = stats.toString({
-      assets: true,
-      cached: false,
-      children: false,
-      chunks: false,
-      chunkModules: false,
-      colors: true,
-      hash: true,
-      modules: false,
-      reasons: false,
-      source: false,
-      timings: true,
-      version: true
-    });
-
-    info(out);
-  } else {
-    error(err);
-  }
-}
 
 function loadImaConf(rootDir) {
   if (!rootDir) {
@@ -128,7 +105,6 @@ async function createWebpackConfig(
 
 module.exports = {
   createWebpackConfig,
-  statsFormattedOutput,
   handlerFactory,
   loadImaConf
 };

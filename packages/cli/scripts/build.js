@@ -1,12 +1,8 @@
 const fs = require('fs');
 const path = require('path');
-const webpack = require('webpack');
 
-const {
-  statsFormattedOutput,
-  handlerFactory,
-  createWebpackConfig
-} = require('../lib/cliUtils');
+const { handlerFactory, createWebpackConfig } = require('../lib/cliUtils');
+const { runCompiler, handleCompilationError } = require('../lib/compiler');
 const sharedArgs = require('./lib/sharedArgs');
 
 async function build({ options, imaConf }) {
@@ -16,11 +12,12 @@ async function build({ options, imaConf }) {
     fs.rmSync(buildDir, { recursive: true });
   }
 
-  // Build ima app
-  const config = await createWebpackConfig({ options, imaConf });
-  const compiler = webpack(config);
-
-  compiler.run(statsFormattedOutput);
+  try {
+    const config = await createWebpackConfig({ options, imaConf });
+    await runCompiler(config, options.verbose);
+  } catch (err) {
+    handleCompilationError(err);
+  }
 }
 
 const buildCommand = {

@@ -15,8 +15,14 @@ function error(content, newLine = false) {
   console.log(`${chalk.bold.red('error:')} ${content}`);
 }
 
+function warn(content, newLine = false) {
+  newLine && console.log('');
+  console.log(`${chalk.bold.yellow('warn:')} ${content}`);
+}
+
 module.exports = {
   info,
   success,
-  error
+  error,
+  warn
 };
