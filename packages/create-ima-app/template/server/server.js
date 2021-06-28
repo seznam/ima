@@ -116,10 +116,12 @@ async function runNodeApp() {
 
   if (environment.$Env === 'dev') {
     const webpack = require('webpack');
+    const chalk = require('chalk');
     const devMiddleware = require('webpack-dev-middleware');
     const hotMiddleware = require('webpack-hot-middleware');
     const { createWebpackConfig } = require('@ima/cli');
 
+    // TODO Extract options separately and use them in hmr and dev middleware
     const compiler = webpack(
       await createWebpackConfig(
         {
@@ -134,11 +136,16 @@ async function runNodeApp() {
       .use(
         devMiddleware(compiler, {
           index: false,
-          publicPath: '/'
+          publicPath: '/',
+          stats: 'none'
         })
       )
       .use(
         hotMiddleware(compiler, {
+          log: data => {
+            // eslint-disable-next-line no-console
+            console.log(`${chalk.bold.magenta('hmr:')} ${data}`);
+          },
           path: '/__webpack_hmr',
           heartbeat: 10 * 1000
         })

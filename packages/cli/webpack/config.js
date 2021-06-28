@@ -18,7 +18,7 @@ const {
   additionalDataFactory,
   generateEntryPoints,
   wif
-} = require('./lib/configUtils');
+} = require('./utils');
 const postCssScrambler = require('./postCssScrambler');
 
 module.exports = async (options, imaConf) => {

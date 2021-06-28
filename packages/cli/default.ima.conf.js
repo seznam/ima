@@ -4,6 +4,7 @@ const { VerboseOptions } = require('./constants');
 module.exports = {
   // Webpack callback function can be used to completely customize default webpack config before it's run
   // webpack: (config, options, imaConf) => {},
+
   // Most of the options can be overridden using CLI args (which take precedence)
   options: {
     rootDir: '', // IMA App root directory,
@@ -15,6 +16,7 @@ module.exports = {
     compress: true, // Enable assets compression in production build
     amp: false // Enables AMP css assets generation
   },
+
   // Settings related to AMP-specific css files generation
   amp: {
     styleEntryPoints: ['./app/component/**/*.less', './app/page/**/*.less'], // AMP styles entry points (array of globs)

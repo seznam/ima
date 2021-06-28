@@ -1,8 +1,8 @@
 const chalk = require('chalk');
 const webpack = require('webpack');
 
-const { VerboseOptions } = require('../scripts/lib/constants');
-const { error, warn, info, success } = require('./printUtils');
+const { VerboseOptions } = require('../constants');
+const { error, warn, info } = require('./print');
 
 async function closeCompiler(compiler) {
   return new Promise((resolve, reject) =>
@@ -52,10 +52,10 @@ function handleStats(stats, verbose) {
     ({ name }) => ~['client', 'server'].indexOf(name)
   );
 
-  success(
-    `Compilation successful using webpack version ${chalk.bold.white(
-      (client || server).version
-    )}`
+  info(
+    `Compilation was ${chalk.bold.green(
+      'successful'
+    )} using webpack version: ${chalk.bold.magenta((client || server).version)}`
   );
   server &&
     info(
@@ -82,9 +82,9 @@ function handleStats(stats, verbose) {
     Object.keys(child.namedChunkGroups).forEach(chunkKey => {
       child.namedChunkGroups[chunkKey].assets.forEach(({ name, size }) => {
         console.log(
-          ` ├ ${name}  ${
-            chalk.green((size / 1024).toFixed(1).toLocaleString()) + ' kiB'
-          }`
+          ` ├ ${name}  ${chalk.green(
+            (size / 1024).toFixed(1).toLocaleString() + ' kiB'
+          )}`
         );
       });
     });

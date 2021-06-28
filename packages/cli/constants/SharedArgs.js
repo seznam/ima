@@ -1,6 +1,6 @@
-const { VerboseOptions } = require('./constants');
+const VerboseOptions = require('./VerboseOptions');
 
-module.exports = {
+module.exports = Object.freeze({
   verbose: {
     alias: 'v',
     desc: 'Choose between different number of logging options',
@@ -19,4 +19,4 @@ module.exports = {
     desc: 'Webpack public path to specify base for all assets in the app',
     type: 'string'
   }
-};
+});

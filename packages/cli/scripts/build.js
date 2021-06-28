@@ -3,7 +3,8 @@ const path = require('path');
 
 const { handlerFactory, createWebpackConfig } = require('../lib/cliUtils');
 const { runCompiler, handleCompilationError } = require('../lib/compiler');
-const sharedArgs = require('./lib/sharedArgs');
+const { info } = require('../lib/print');
+const { SharedArgs } = require('../constants');
 
 async function build({ options, imaConf }) {
   // Clean build directory
@@ -13,7 +14,10 @@ async function build({ options, imaConf }) {
   }
 
   try {
+    info('Parsing webpack configuration file...');
     const config = await createWebpackConfig({ options, imaConf });
+
+    info('Starting webpack compiler...');
     await runCompiler(config, options.verbose);
   } catch (err) {
     handleCompilationError(err);
@@ -24,7 +28,7 @@ const buildCommand = {
   command: 'build',
   desc: 'Build an application for production',
   builder: {
-    ...sharedArgs,
+    ...SharedArgs,
     compress: {
       desc: 'Compresses resulted assets for use in content-encoding serving',
       type: 'boolean'

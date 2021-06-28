@@ -2,7 +2,7 @@ const path = require('path');
 const fs = require('fs');
 const fg = require('fast-glob');
 
-const { error } = require('../../lib/printUtils');
+const { error } = require('../lib/print');
 
 function resolveEnvironment(rootDir) {
   const envSource = require(path.resolve(rootDir, './app/environment.js'));

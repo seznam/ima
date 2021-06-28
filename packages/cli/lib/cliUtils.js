@@ -3,8 +3,8 @@ const deepmerge = require('deepmerge');
 const fs = require('fs');
 
 const webpackConfig = require('../webpack/config');
-const { error } = require('./printUtils');
-const defaultImaConf = require('../scripts/lib/default.ima.conf');
+const { error } = require('./print');
+const defaultImaConf = require('../default.ima.conf');
 
 const IMA_TMP_DIR = '.ima';
 const IMA_CONF_FILENAME = 'ima.conf.js';
