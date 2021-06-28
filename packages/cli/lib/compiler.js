@@ -48,9 +48,6 @@ function handleStats(stats, verbose) {
   // Output
   const server = children.find(({ name }) => name === 'server');
   const client = children.find(({ name }) => name === 'client');
-  const others = children.filter(
-    ({ name }) => ~['client', 'server'].indexOf(name)
-  );
 
   info(
     `Compilation was ${chalk.bold.green(
@@ -69,10 +66,9 @@ function handleStats(stats, verbose) {
         client.time.toLocaleString() + ' ms'
       )}`
     );
-  // TODO handle others
-  others && info(`others compiled too...`);
+
   info(
-    `Following chunks were saved to ${chalk.green(
+    `Following chunks were generated in ${chalk.green(
       (client || server).outputPath
     )}:`
   );
