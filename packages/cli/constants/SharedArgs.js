@@ -5,7 +5,8 @@ module.exports = Object.freeze({
     alias: 'v',
     desc: 'Choose between different number of logging options',
     type: 'string',
-    choices: Object.values(VerboseOptions)
+    choices: Object.values(VerboseOptions),
+    default: VerboseOptions.DEFAULT
   },
   amp: {
     desc: 'Builds separate CSS files for use in AMP mode',

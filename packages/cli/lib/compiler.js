@@ -97,7 +97,7 @@ function handleStats(stats, verbose) {
   });
 }
 
-async function runCompiler(config, verbose = VerboseOptions.DEFAULT) {
+async function runCompiler(config, args) {
   return new Promise((resolve, reject) => {
     const compiler = webpack(config);
     compiler.run((error, stats) =>
@@ -106,18 +106,14 @@ async function runCompiler(config, verbose = VerboseOptions.DEFAULT) {
           reject(error);
         }
 
-        handleStats(stats, verbose);
+        handleStats(stats, args?.verbose ?? VerboseOptions.DEFAULT);
         resolve(stats);
       })
     );
   });
 }
 
-async function watchCompiler(
-  config,
-  verbose = VerboseOptions.DEFAULT,
-  watchOptions = {}
-) {
+async function watchCompiler(config, args, watchOptions = {}) {
   let firstRun = true;
 
   return new Promise((resolve, reject) => {
@@ -129,7 +125,7 @@ async function watchCompiler(
 
       if (firstRun) {
         firstRun = false;
-        handleStats(stats, verbose);
+        handleStats(stats, args?.verbose ?? VerboseOptions.DEFAULT);
       }
 
       resolve(stats);

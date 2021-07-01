@@ -34,7 +34,6 @@
     "copy-webpack-plugin": "^9.0.0",
     "css-loader": "^5.2.6",
     "css-minimizer-webpack-plugin": "^3.0.1",
-    "deepmerge": "^4.2.2",
     "fast-glob": "^3.2.5",
     "glob-import-loader": "^1.1.4",
     "html-webpack-plugin": "^5.3.1",

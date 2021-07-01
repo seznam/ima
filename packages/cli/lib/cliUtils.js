@@ -1,24 +1,19 @@
 const path = require('path');
-const deepmerge = require('deepmerge');
 const fs = require('fs');
 
-const webpackConfig = require('../webpack/config');
 const { error } = require('./print');
-const defaultImaConf = require('../default.ima.conf');
+const webpackConfig = require('../webpack/config');
 
-const IMA_TMP_DIR = '.ima';
 const IMA_CONF_FILENAME = 'ima.conf.js';
 
 function loadImaConf(rootDir) {
   if (!rootDir) {
-    return defaultImaConf;
+    return {};
   }
 
   const imaConfPath = path.join(rootDir, IMA_CONF_FILENAME);
 
-  return fs.existsSync(imaConfPath)
-    ? deepmerge(defaultImaConf, require(imaConfPath))
-    : {};
+  return fs.existsSync(imaConfPath) ? require(imaConfPath) : {};
 }
 
 function handlerFactory(handlerFn) {
@@ -32,72 +27,68 @@ function handlerFactory(handlerFn) {
         : path.resolve(process.cwd(), dir)
       : process.cwd();
 
-    const { options, ...imaConf } = loadImaConf(rootDir);
-
     return await handlerFn({
-      options: {
-        ...options,
-        ...yargs,
-        rootDir,
-        isProduction,
-        command
-      },
-      imaConf
+      ...yargs,
+      rootDir,
+      isProduction,
+      command
     });
   };
 }
 
 async function createWebpackConfig(
-  { options = {}, imaConf = {} } = {},
   configurations = ['client', 'server'],
-  loadOptionsFromTmpFile = false
+  configArgs = null
 ) {
-  let loadedOptions = options;
-  let loadedImaConf = imaConf;
-
-  try {
-    const imaTmpDirPath = path.resolve(options.rootDir, IMA_TMP_DIR);
-    const imaTmpOptionsFile = path.join(imaTmpDirPath, 'options.json');
-
-    if (loadOptionsFromTmpFile) {
-      loadedOptions = JSON.parse(fs.readFileSync(imaTmpOptionsFile));
-      loadedImaConf = loadImaConf(loadedOptions.rootDir);
-    } else {
-      fs.rmSync(imaTmpDirPath, { recursive: true, force: true });
-      fs.mkdirSync(imaTmpDirPath);
-      fs.writeFileSync(imaTmpOptionsFile, JSON.stringify(options));
+  if (!configArgs) {
+    // Load config args from env variable
+    try {
+      configArgs = JSON.parse(process.env.IMA_CLI_WEBPACK_CONFIG_ARGS);
+    } catch (err) {
+      error('Error occurred while parsing env webpack config.');
+      error(err);
     }
-  } catch (err) {
-    error('Error occurred while creating webpack config.');
-    error(err);
+  } else {
+    // Cache config args to env variable
+    process.env.IMA_CLI_WEBPACK_CONFIG_ARGS = JSON.stringify(configArgs);
   }
 
-  const finalConfigurationOptions = [];
+  if (!configArgs) {
+    error(
+      'Unable to load config args used to create initialize webpack config.'
+    );
+
+    return null;
+  }
+
+  // Load imaConf
+  const imaConf = loadImaConf(configArgs.rootDir);
+  const finalConfigArgs = [];
 
   if (~configurations.indexOf('client')) {
-    finalConfigurationOptions.push({
-      ...loadedOptions,
+    finalConfigArgs.push({
+      ...configArgs,
       isServer: false
     });
   }
 
   if (~configurations.indexOf('server')) {
-    finalConfigurationOptions.push({
-      ...loadedOptions,
+    finalConfigArgs.push({
+      ...configArgs,
       isServer: true
     });
   }
 
   return Promise.all(
-    finalConfigurationOptions.map(async options => {
-      if (typeof loadedImaConf?.webpack === 'function') {
-        return await loadedImaConf?.webpack(
-          await webpackConfig(options, loadedImaConf),
-          options,
-          loadedImaConf
+    finalConfigArgs.map(async args => {
+      if (typeof imaConf?.webpack === 'function') {
+        return await imaConf?.webpack(
+          await webpackConfig(args, imaConf),
+          args,
+          imaConf
         );
       } else {
-        return await webpackConfig(options, loadedImaConf);
+        return await webpackConfig(args, imaConf);
       }
     })
   );

@@ -1,4 +1,5 @@
 const path = require('path');
+const fs = require('fs');
 const webpack = require('webpack');
 const postcss = require('postcss');
 
@@ -21,10 +22,20 @@ const {
 } = require('./utils');
 const postCssScrambler = require('./postCssScrambler');
 
-module.exports = async (options, imaConf) => {
-  const { rootDir, isProduction, isServer, isWatch } = options;
+module.exports = async (args, imaConf) => {
+  const { rootDir, isProduction, isServer, isWatch } = args;
   const packageJson = require(path.resolve(rootDir, './package.json'));
   const imaEnvironment = resolveEnvironment(rootDir);
+  const outputDir = path.join(rootDir, 'build');
+
+  // Options that can be overridden using CLI args
+  const ampEnabled = args.amp ?? imaConf?.amp?.enabled;
+  const publicPath = args.amp ?? imaConf?.publicPath;
+
+  // Clean build directory
+  if (args.clean && fs.existsSync(outputDir)) {
+    fs.rmSync(outputDir, { recursive: true });
+  }
 
   return {
     name: isServer ? 'server' : 'client',
@@ -32,7 +43,7 @@ module.exports = async (options, imaConf) => {
     ...wif(!isServer, { target: 'web' }),
     entry: {
       ...wif(
-        !isServer && options.amp && imaConf?.amp?.styleEntryPoints?.length > 0,
+        !isServer && ampEnabled && imaConf?.amp?.styleEntryPoints?.length > 0,
         await generateEntryPoints(rootDir, imaConf?.amp?.styleEntryPoints)
       ),
       ...wif(isServer, { server: path.join(rootDir, 'app/main.js') }),
@@ -46,7 +57,7 @@ module.exports = async (options, imaConf) => {
       })
     },
     output: {
-      publicPath: options.publicPath,
+      ...wif(publicPath, { publicPath }),
       filename: ({ chunk }) => {
         if (chunk.name === 'server') {
           return 'ima/app.server.js';
@@ -54,7 +65,7 @@ module.exports = async (options, imaConf) => {
 
         return `static/js/${chunk.name === 'client' ? 'main' : '[name]'}.js`;
       },
-      path: path.join(rootDir, 'build'),
+      path: outputDir,
       ...wif(isServer, { libraryTarget: 'commonjs2' })
     },
     devtool: isProduction ? 'source-map' : 'cheap-module-source-map',
@@ -204,7 +215,8 @@ module.exports = async (options, imaConf) => {
           ...wif(isWatch, [
             new RunImaServerPlugin({
               rootDir,
-              open: options.open,
+              open: args.open,
+              verbose: args.verbose,
               port: imaEnvironment.$Server.port
             })
           ])
@@ -215,7 +227,7 @@ module.exports = async (options, imaConf) => {
             filename: ({ chunk }) =>
               `static/css/${chunk.name === 'client' ? 'app' : '[name]'}.css`
           }),
-          ...wif(options.scrambleCss, [
+          ...wif(args.scrambleCss ?? imaConf.scrambleCss, [
             // This pipeline should run only for main app css file
             new PostCssPipelineWebpackPlugin({
               predicate: name => /static\/css\/app.css$/.test(name),
@@ -229,7 +241,7 @@ module.exports = async (options, imaConf) => {
               ])
             })
           ]),
-          ...wif(options.amp, [
+          ...wif(ampEnabled, [
             // This should run only for amp entry points
             new PostCssPipelineWebpackPlugin({
               predicate: name =>
@@ -237,7 +249,7 @@ module.exports = async (options, imaConf) => {
                 !/srambled.css$/.test(name),
               suffix: 'srambled',
               processor: postcss([
-                ...wif(options.scrambleCss, [
+                ...wif(args.scrambleCss ?? imaConf.scrambleCss, [
                   postCssScrambler({
                     generateHashTable: false,
                     hashTable: path.join(rootDir, 'build/static/hashtable.json')
@@ -261,7 +273,7 @@ module.exports = async (options, imaConf) => {
               $Language: Object.values(imaEnvironment.$Language)[0]
             }
           }),
-          ...wif(isProduction && options.compress, [new CompressionPlugin()]),
+          ...wif(imaConf.compress, [new CompressionPlugin()]),
           ...wif(isWatch, [new webpack.HotModuleReplacementPlugin()])
         ],
     ...wif(isServer, {

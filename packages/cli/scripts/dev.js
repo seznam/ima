@@ -3,20 +3,17 @@ const { watchCompiler, handleCompilationError } = require('../lib/compiler');
 const { info } = require('../lib/print');
 const { SharedArgs } = require('../constants');
 
-async function dev({ options, imaConf }) {
+async function dev(args) {
   try {
     info('Parsing webpack configuration file...');
-    const config = await createWebpackConfig({
-      options: {
-        ...options,
-        isProduction: false,
-        isWatch: true
-      },
-      imaConf
+    const config = await createWebpackConfig(['client', 'server'], {
+      ...args,
+      isProduction: false,
+      isWatch: true
     });
 
     info('Starting webpack compiler...');
-    await watchCompiler(config, options.verbose);
+    await watchCompiler(config, args);
   } catch (err) {
     console.log(err);
     handleCompilationError(err);

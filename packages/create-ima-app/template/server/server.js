@@ -121,31 +121,27 @@ async function runNodeApp() {
     const hotMiddleware = require('webpack-hot-middleware');
     const { createWebpackConfig } = require('@ima/cli');
 
-    // TODO Extract options separately and use them in hmr and dev middleware
-    const compiler = webpack(
-      await createWebpackConfig(
-        {
-          options: { rootDir: path.resolve(__dirname, '../') }
-        },
-        ['client'],
-        true
-      )
-    );
+    const compiler = webpack(await createWebpackConfig(['client']));
+    const isRawVerbose = process.argv.includes('--verbose=raw');
 
     app
       .use(
         devMiddleware(compiler, {
           index: false,
           publicPath: '/',
-          stats: 'none'
+          ...(!isRawVerbose ? { stats: 'none' } : undefined)
         })
       )
       .use(
         hotMiddleware(compiler, {
-          log: data => {
-            // eslint-disable-next-line no-console
-            console.log(`${chalk.bold.magenta('hmr:')} ${data}`);
-          },
+          ...(!isRawVerbose
+            ? {
+                log: data => {
+                  // eslint-disable-next-line no-console
+                  console.log(`${chalk.bold.magenta('hmr:')} ${data}`);
+                }
+              }
+            : undefined),
           path: '/__webpack_hmr',
           heartbeat: 10 * 1000
         })
