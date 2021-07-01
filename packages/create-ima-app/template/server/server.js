@@ -108,25 +108,40 @@ function staticErrorPage(err, req, res) {
   clientApp.showStaticErrorPage(err, req, res);
 }
 
-function runNodeApp() {
+async function runNodeApp() {
   let express = require('express');
   let app = express();
 
   app.set('trust proxy', true);
 
   if (environment.$Env === 'dev') {
-    const webpackConfig = require('../webpack.client.dev.config.js');
-    const compiler = require('webpack')(webpackConfig);
+    const webpack = require('webpack');
+    const chalk = require('chalk');
+    const devMiddleware = require('webpack-dev-middleware');
+    const hotMiddleware = require('webpack-hot-middleware');
+    const { createWebpackConfig } = require('@ima/cli');
+
+    const compiler = webpack(await createWebpackConfig(['client']));
+    const isRawVerbose = process.argv.includes('--verbose=raw');
 
     app
       .use(
-        require('webpack-dev-middleware')(compiler, {
+        devMiddleware(compiler, {
           index: false,
-          publicPath: webpackConfig.output.publicPath
+          publicPath: '/',
+          ...(!isRawVerbose ? { stats: 'none' } : undefined)
         })
       )
       .use(
-        require('webpack-hot-middleware')(compiler, {
+        hotMiddleware(compiler, {
+          ...(!isRawVerbose
+            ? {
+                log: data => {
+                  // eslint-disable-next-line no-console
+                  console.log(`${chalk.bold.magenta('hmr:')} ${data}`);
+                }
+              }
+            : undefined),
           path: '/__webpack_hmr',
           heartbeat: 10 * 1000
         })

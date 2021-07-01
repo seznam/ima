@@ -1,6 +1,8 @@
 import { PageContext, AbstractComponent } from '@ima/core';
 import React from 'react';
 
+import './notFoundView.less';
+
 /**
  * Not found page.
  */

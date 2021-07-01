@@ -60,5 +60,13 @@ module.exports = {
     extend: true,
     chrome: true,
     FB: true
-  }
+  },
+  overrides: [
+    {
+      files: ['packages/cli/**', 'packages/create-ima-app/**'],
+      rules: {
+        'no-console': 'off'
+      }
+    }
+  ]
 };
