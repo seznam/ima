@@ -3,6 +3,23 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [17.11.0](https://github.com/seznam/ima/compare/v17.10.0...v17.11.0) (2021-06-12)
+
+
+### Features
+
+* 🎸 add experimental batch resolving promises ([c3704f0](https://github.com/seznam/ima/commit/c3704f06e768ca40b63bc9aa831aef747717e1dc))
+* 🎸 GenericError can modify action and options params ([305436b](https://github.com/seznam/ima/commit/305436bb8b91d251e1eb9fc6859b226ece23d3f3))
+
+
+### Performance Improvements
+
+* ⚡️ batch mode keep one free frame between commits ([fa57f8c](https://github.com/seznam/ima/commit/fa57f8c13f28989a71ac7cfc98c107569d80fbbb))
+
+
+
+
+
 # [17.10.0](https://github.com/seznam/ima/compare/v17.9.0...v17.10.0) (2021-03-30)
 
 
