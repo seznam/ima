@@ -271,6 +271,7 @@ describe('ima.core.router.AbstractRouter', () => {
   describe('handleError method', () => {
     let path = '/error';
     let route = null;
+    let originalRoute = null;
     let routeMiddleware = jest.fn();
 
     beforeEach(() => {
@@ -284,6 +285,15 @@ describe('ima.core.router.AbstractRouter', () => {
           middlewares: [routeMiddleware]
         }
       );
+
+      originalRoute = routeFactory.createRoute(
+        'user',
+        '/user/:userId',
+        Controller,
+        View
+      );
+
+      router._currentlyRoutedPath = '/user/2345';
     });
 
     afterEach(() => {
@@ -294,6 +304,9 @@ describe('ima.core.router.AbstractRouter', () => {
       let params = { error: new Error('test') };
 
       spyOn(router._routeHandlers, 'get').and.returnValue(route);
+      spyOn(router, '_getRouteHandlersByPath').and.returnValue({
+        route: originalRoute
+      });
       spyOn(router, '_runMiddlewares').and.callThrough();
 
       spyOn(router, '_handle').and.returnValue(
@@ -309,7 +322,10 @@ describe('ima.core.router.AbstractRouter', () => {
         .then(response => {
           expect(router._handle).toHaveBeenCalledWith(
             route,
-            params,
+            expect.objectContaining({
+              ...params,
+              userId: '2345'
+            }),
             options,
             errorAction
           );
@@ -319,7 +335,10 @@ describe('ima.core.router.AbstractRouter', () => {
               new RouterMiddleware(globalMiddleware),
               new RouterMiddleware(routeMiddleware)
             ],
-            params,
+            expect.objectContaining({
+              ...params,
+              userId: '2345'
+            }),
             { route, action: errorAction }
           );
           done();
@@ -345,6 +364,7 @@ describe('ima.core.router.AbstractRouter', () => {
   describe('handleNotFound method', () => {
     let path = '/not-found';
     let route = null;
+    let originalRoute = null;
     let routeMiddleware = jest.fn();
 
     beforeEach(() => {
@@ -358,6 +378,15 @@ describe('ima.core.router.AbstractRouter', () => {
           middlewares: [routeMiddleware]
         }
       );
+
+      originalRoute = routeFactory.createRoute(
+        'user',
+        '/user/:userId',
+        Controller,
+        View
+      );
+
+      router._currentlyRoutedPath = '/user/2345';
     });
 
     afterEach(() => {
@@ -368,6 +397,9 @@ describe('ima.core.router.AbstractRouter', () => {
       let params = { error: new GenericError() };
 
       spyOn(router._routeHandlers, 'get').and.returnValue(route);
+      spyOn(router, '_getRouteHandlersByPath').and.returnValue({
+        route: originalRoute
+      });
       spyOn(router, '_runMiddlewares').and.callThrough();
 
       spyOn(router, '_handle').and.returnValue(
@@ -383,7 +415,10 @@ describe('ima.core.router.AbstractRouter', () => {
         .then(response => {
           expect(router._handle).toHaveBeenCalledWith(
             route,
-            params,
+            expect.objectContaining({
+              ...params,
+              userId: '2345'
+            }),
             options,
             errorAction
           );
@@ -393,7 +428,10 @@ describe('ima.core.router.AbstractRouter', () => {
               new RouterMiddleware(globalMiddleware),
               new RouterMiddleware(routeMiddleware)
             ],
-            params,
+            expect.objectContaining({
+              ...params,
+              userId: '2345'
+            }),
             { route, action: errorAction }
           );
           done();
@@ -684,9 +722,9 @@ describe('ima.core.router.AbstractRouter', () => {
     it('should return correct set of middlewares', () => {
       expect(middlewareRouter._routeHandlers.size).toBe(5);
 
-      expect(middlewareRouter._getRouteHandlersByPath('/').middlewares).toEqual(
-        [new RouterMiddleware(globalMiddleware)]
-      );
+      expect(
+        middlewareRouter._getRouteHandlersByPath('/').middlewares
+      ).toEqual([new RouterMiddleware(globalMiddleware)]);
 
       expect(
         middlewareRouter._getRouteHandlersByPath('/contact').middlewares
