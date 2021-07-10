@@ -10,7 +10,7 @@ let os = require('os');
 global.appRoot = path.resolve(__dirname);
 
 // IMA server
-let imaServer = require('@ima/server');
+let imaServer = require('@ima/server')();
 
 let clientApp = imaServer.clientApp;
 let urlParser = imaServer.urlParser;
