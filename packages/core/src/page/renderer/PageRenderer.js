@@ -42,7 +42,6 @@ export default class PageRenderer {
    *            ): boolean
    *          ),
    *          autoScroll: boolean,
-   *          allowSPA: boolean,
    *          documentView: ?function(new: Component),
    *          managedRootView: ?function(new: Component)=
    *        }} routeOptions The current route options.
@@ -89,7 +88,6 @@ export default class PageRenderer {
    *            ): boolean
    *          ),
    *          autoScroll: boolean,
-   *          allowSPA: boolean,
    *          documentView: ?function(new: Component),
    *          managedRootView: ?function(new: Component)=
    *        }} routeOptions The current route options.

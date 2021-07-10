@@ -48,7 +48,6 @@ describe('ima.core.page.renderer.ClientPageRenderer', function () {
   let routeOptions = {
     onlyUpdate: false,
     autoScroll: false,
-    allowSPA: false,
     documentView: null
   };
 

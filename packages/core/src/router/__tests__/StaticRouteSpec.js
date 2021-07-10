@@ -9,7 +9,6 @@ describe('ima.core.router.StaticRoute', function () {
   const options = {
     onlyUpdate: false,
     autoScroll: true,
-    allowSPA: true,
     documentView: null,
     managedRootView: null,
     viewAdapter: null

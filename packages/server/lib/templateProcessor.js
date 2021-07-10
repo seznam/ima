@@ -1,4 +1,5 @@
 'use strict';
+// TODO IMA@18 remove after migration to ejs template
 
 const helper = require('@ima/helpers');
 

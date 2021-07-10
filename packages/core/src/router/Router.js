@@ -60,7 +60,6 @@ export default class Router {
    *            ): boolean
    *          )=,
    *          autoScroll: boolean=,
-   *          allowSPA: boolean=,
    *          documentView: ?function(new: AbstractDocumentView)=,
    *          managedRootView: ?function(new: React.Component)=,
    *          viewAdapter: ?function(new: React.Component)=,
@@ -78,11 +77,6 @@ export default class Router {
    *        The {@code autoScroll} flag signals whether the page should be
    *        scrolled to the top when the navigation takes place. This flag is
    *        enabled by default.
-   *        The {@code allowSPA} flag can be used to make the route
-   *        always served from the server and never using the SPA page even
-   *        if the server is overloaded. This is useful for routes that use
-   *        different document views (specified by the {@code documentView}
-   *        option), for example for rendering the content of iframes.
    *        The route specific {@code middlewares} which are run after
    *        extracting parameters before route handling.
    * @return {Router} This router.
@@ -238,7 +232,6 @@ export default class Router {
    *            ): boolean
    *          )=,
    *          autoScroll: boolean=,
-   *          allowSPA: boolean=,
    *          documentView: ?AbstractDocumentView=,
    *          managedRootView: ?function(new: React.Component)=,
    *          viewAdapter: ?function(new: React.Component)=
@@ -284,7 +277,6 @@ export default class Router {
    *            ): boolean
    *          )=,
    *          autoScroll: boolean=,
-   *          allowSPA: boolean=,
    *          documentView: ?AbstractDocumentView=,
    *          managedRootView: ?function(new: React.Component)=,
    *          viewAdapter: ?function(new: React.Component)=
@@ -352,7 +344,6 @@ export default class Router {
    *            ): boolean
    *          )=,
    *          autoScroll: boolean=,
-   *          allowSPA: boolean=,
    *          documentView: ?AbstractDocumentView=,
    *          managedRootView: ?function(new: React.Component),
    *          viewAdapter: ?function(new: React.Component)

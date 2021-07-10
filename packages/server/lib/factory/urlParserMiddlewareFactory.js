@@ -1,13 +1,15 @@
 'use strict';
-// TODO IMA@18 remove
+
 const { URL } = require('url');
 
 let path = require('path');
-let applicationFolder = path.resolve('.');
 
-const BUILD_JS_PATH = path.resolve(applicationFolder, './app/build.js');
+module.exports = function urlParserMiddlewareFactory({
+  environment,
+  applicationFolder
+}) {
+  const BUILD_JS_PATH = path.resolve(applicationFolder, './app/build.js');
 
-module.exports = environment => {
   function _getHost(req) {
     let forwardedHost = req.get('X-Forwarded-Host');
     let host = req.get('host');

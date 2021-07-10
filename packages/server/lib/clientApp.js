@@ -1,22 +1,28 @@
 'use strict';
 
 const fs = require('fs');
-const stackTrace = require('stack-trace');
-const asyncEach = require('async-each');
-const hljs = require('highlight.js');
-const sep = require('path').sep;
-const errorView = require('./template/errorView.js');
 const instanceRecycler = require('./instanceRecycler.js');
 const templateProcessor = require('./templateProcessor.js');
 const errorToJSON = require('error-to-json');
 const Cache = require('./cache.js').Cache;
 
-hljs.configure({
-  tabReplace: '  ',
-  lineNodes: true
-});
+// TODO IMA@18 rewrite to ejs
+const filePath = './build/static/html/spa.html';
+let SPAContent;
+let SPAError;
+try {
+  SPAContent = fs.readFileSync(filePath, 'utf-8');
+} catch (error) {
+  SPAError = error;
+}
 
-module.exports = (environment, logger, languageLoader, appFactory) => {
+module.exports = ({
+  environment,
+  logger,
+  devErrorPage,
+  languageLoader,
+  appFactory
+}) => {
   appFactory();
 
   const spaCache = new Cache(
@@ -24,85 +30,6 @@ module.exports = (environment, logger, languageLoader, appFactory) => {
       cacheKeyGenerator: null
     })
   );
-
-  function _displayDetails(err, req, res) {
-    let callstack = stackTrace.parse(err);
-    let fileIndex = 1;
-
-    logger.error('The application crashed due to an uncaught exception', {
-      error: errorToJSON(err)
-    });
-
-    asyncEach(
-      callstack,
-      (stackFrame, cb) => {
-        // exclude core node modules and node modules
-        if (
-          !stackFrame.fileName ||
-          !stackFrame.fileName.includes(sep) ||
-          /node_modules/.test(stackFrame.fileName) ||
-          /internal/.test(stackFrame.fileName)
-        ) {
-          return cb();
-        }
-
-        fs.readFile(stackFrame.fileName, 'utf-8', (err, content) => {
-          if (err) {
-            return cb(err);
-          }
-
-          content = hljs.highlight('javascript', content);
-
-          // start a few lines before the error or at the beginning of
-          // the file
-          let start = Math.max(stackFrame.lineNumber - 11, 0);
-          let lines = content.value
-            .split('\n')
-            .map(line => `<span class="line">${line}</span>`);
-          // end a few lines after the error or the last line of the file
-          let end = Math.min(stackFrame.lineNumber + 10, lines.length);
-          let snippet = lines.slice(start, end);
-          // array starts at 0 but lines numbers begin with 1, so we have
-          // to subtract 1 to get the error line position in the array
-          let errLine = stackFrame.lineNumber - start - 1;
-
-          snippet[errLine] = snippet[errLine].replace(
-            '<span class="line">',
-            '<span class="line error-line">'
-          );
-
-          stackFrame.content = snippet.join('\n');
-          stackFrame.errLine = errLine;
-          stackFrame.startLine = start;
-          stackFrame.id = 'file-' + fileIndex;
-
-          fileIndex++;
-
-          cb(null, stackFrame);
-        });
-      },
-      (error, callstack) => {
-        if (!Array.isArray(callstack)) {
-          callstack = [];
-        }
-
-        callstack = callstack.filter(item => !!item);
-
-        res.status(500);
-
-        // if something bad happened while processing the stacktrace make
-        // sure to return something useful
-        if (error) {
-          logger.error('Failed to display error page', {
-            error: errorToJSON(error)
-          });
-          res.send(err.stack);
-        } else {
-          res.send(errorView(err, callstack));
-        }
-      }
-    );
-  }
 
   function _initApp(req, res, appMain) {
     let bootConfig = getBootConfig(req, res);
@@ -162,28 +89,24 @@ module.exports = (environment, logger, languageLoader, appFactory) => {
     }
 
     return new Promise((resolve, reject) => {
-      const filePath = './build/static/html/spa.html';
-      fs.readFile(filePath, 'utf-8', (error, content) => {
-        if (error) {
-          return showStaticErrorPage(error, req, res).then(
-            response => {
-              resolve(response);
-            },
-            error => {
-              reject(error);
-            }
-          );
-        }
+      if (SPAError) {
+        return showStaticErrorPage(SPAError, req, res).then(
+          response => {
+            resolve(response);
+          },
+          error => {
+            reject(error);
+          }
+        );
+      }
 
-        content = templateProcessor(content, bootConfig.settings);
+      let content = templateProcessor(SPAContent, bootConfig.settings);
+      spaCache.set(req, content);
 
-        spaCache.set(req, content);
+      res.status(status);
+      res.send(content);
 
-        res.status(status);
-        res.send(content);
-
-        resolve({ content, status, SPA: true, error: null, pageState: {} });
-      });
+      resolve({ content, status, SPA: true, error: null, pageState: {} });
     });
   }
 
@@ -212,7 +135,7 @@ module.exports = (environment, logger, languageLoader, appFactory) => {
     );
   }
 
-  function _hasToServeSPA(req, app) {
+  function _hasToServeSPA(req) {
     const userAgent = req.headers['user-agent'] || '';
     const spaConfig = environment.$Server.serveSPA;
     const isAllowedServeSPA = spaConfig.allow;
@@ -222,19 +145,8 @@ module.exports = (environment, logger, languageLoader, appFactory) => {
       typeof spaConfig.blackList === 'function' &&
       spaConfig.blackList(userAgent)
     );
-    let canBeRouteServeAsSPA = true;
-    const routeInfo = _getRouteInfo(app);
 
-    if (routeInfo && routeInfo.route.getOptions().allowSPA === false) {
-      canBeRouteServeAsSPA = false;
-    }
-
-    return (
-      isAllowedServeSPA &&
-      isServerBusy &&
-      isAllowedUserAgent &&
-      canBeRouteServeAsSPA
-    );
+    return isAllowedServeSPA && isServerBusy && isAllowedUserAgent;
   }
 
   function getBootConfig(req, res) {
@@ -377,7 +289,7 @@ module.exports = (environment, logger, languageLoader, appFactory) => {
         status: 500,
         error: error
       });
-      _displayDetails(error, req, res);
+      devErrorPage(error, req, res);
     } else {
       let appPromise = Promise.resolve(app);
 
@@ -429,10 +341,13 @@ module.exports = (environment, logger, languageLoader, appFactory) => {
 
   function _addImaToResponse(req, res, app) {
     let routeName = 'other';
-    let routeInfo = _getRouteInfo(app);
 
-    if (routeInfo) {
-      routeName = routeInfo.route.getName();
+    if (app) {
+      let routeInfo = _getRouteInfo(app);
+
+      if (routeInfo) {
+        routeName = routeInfo.route.getName();
+      }
     }
 
     res.$IMA = res.$IMA || { routeName };
@@ -478,13 +393,13 @@ module.exports = (environment, logger, languageLoader, appFactory) => {
     }
 
     return _importAppMain().then(appMain => {
-      let app = _initApp(req, res, appMain);
-      _addImaToResponse(req, res, app);
-
-      if (_hasToServeSPA(req, app)) {
-        instanceRecycler.clearInstance(app);
+      if (_hasToServeSPA(req)) {
+        _addImaToResponse(req, res);
         return showStaticSPAPage(req, res);
       }
+
+      let app = _initApp(req, res, appMain);
+      _addImaToResponse(req, res, app);
 
       if (_isServerOverloaded()) {
         instanceRecycler.clearInstance(app);

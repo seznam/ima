@@ -1,6 +1,6 @@
 'use strict';
 
-const CacheFactory = require('../lib/cache.js');
+const CacheFactory = require('../cache.js');
 
 describe('Cache', () => {
   describe('set method', () => {
@@ -11,13 +11,15 @@ describe('Cache', () => {
 
     beforeEach(() => {
       cache = CacheFactory({
-        $Server: {
-          cache: {
-            enabled: true,
-            cacheKeyGenerator: null,
-            entryTtl: 60 * 60 * 1000, // milliseconds
-            unusedEntryTtl: 15 * 60 * 1000,
-            maxEntries: 1 // milliseconds
+        environment: {
+          $Server: {
+            cache: {
+              enabled: true,
+              cacheKeyGenerator: null,
+              entryTtl: 60 * 60 * 1000, // milliseconds
+              unusedEntryTtl: 15 * 60 * 1000,
+              maxEntries: 1 // milliseconds
+            }
           }
         }
       });
@@ -32,6 +34,12 @@ describe('Cache', () => {
     it('should be not set page to cache for exceed maximum entries limit', () => {
       expect(cache.set({}, page)).toEqual(true);
       expect(cache.set({}, page)).toEqual(false);
+    });
+
+    it('should get page from cache', () => {
+      expect(cache.set({}, page)).toEqual(true);
+
+      expect(cache.get({})).toEqual(page);
     });
   });
 });

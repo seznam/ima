@@ -63,14 +63,19 @@ class Cache {
    * @return {?string} The cached rendered page content, or {@code null}.
    */
   get(request) {
-    this._runGarbageCollector();
-
     let key = this._keyGenerator(request);
-    if (this._cache.has(key)) {
-      return this._cache.get(key).value;
+
+    if (!this._cache.has(key)) {
+      return null;
     }
 
-    return null;
+    let entry = this._cache.get(key);
+
+    if (entry.shouldBeDiscarded) {
+      return null;
+    }
+
+    return entry.value;
   }
 
   /**
@@ -212,5 +217,5 @@ function defaultKeyGenerator(request) {
   return protocol + ':' + host + url;
 }
 
-module.exports = environment => new Cache(environment.$Server.cache);
+module.exports = ({ environment }) => new Cache(environment.$Server.cache);
 module.exports.Cache = Cache;

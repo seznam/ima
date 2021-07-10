@@ -1,3 +1,5 @@
+// TODO IMA@18 remove and use Observer on 'request' and 'response' hook
+
 module.exports = (() => {
   'use strict';
 

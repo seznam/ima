@@ -33,7 +33,6 @@ describe('ima.core.page.manager.ClientPageManager', () => {
   let options = {
     onlyUpdate: false,
     autoScroll: true,
-    allowSPA: true,
     documentView: null
   };
   let params = {

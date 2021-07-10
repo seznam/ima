@@ -3,17 +3,10 @@
 let path = require('path');
 let applicationFolder = path.resolve('.');
 
-let environmentConfig = require(path.resolve(
-  applicationFolder,
-  './build/ima/config/environment.js'
-));
-let environment = require('./lib/environment.js')(environmentConfig);
-
-global.$Debug = environment.$Debug;
-global.$IMA = global.$IMA || {};
-
+// TODO IMA@18 delete
 require(path.resolve(applicationFolder, './build/ima/shim.es.js'));
 require(path.resolve(applicationFolder, './build/ima/vendor.server.js'));
+// TODO IMA@18 delete
 
 function appFactory() {
   delete require.cache[
@@ -30,20 +23,36 @@ function languageLoader(language) {
   ));
 }
 
-let logger = require('./lib/logger.js')(environment);
-let urlParser = require('./lib/urlParser.js')(environment);
-let clientApp = require('./lib/clientApp.js')(
-  environment,
-  logger,
-  languageLoader,
-  appFactory
-);
-let cache = require('./lib/cache.js')(environment);
+module.exports = function createIMAServer({ environment, logger } = {}) {
+  environment =
+    environment ||
+    require('./lib/factory/environmentFactory.js')({ applicationFolder });
 
-module.exports = {
-  environment,
-  clientApp,
-  urlParser,
-  logger,
-  cache
+  global.$Debug = environment.$Debug;
+  global.$IMA = global.$IMA || {};
+
+  logger = logger || require('./lib/factory/loggerFactory.js')({ environment });
+  const devErrorPage = require('./lib/factory/devErrorPageFactory.js')({
+    logger
+  });
+  const urlParser = require('./lib/factory/urlParserMiddlewareFactory.js')({
+    environment,
+    applicationFolder
+  });
+  const clientApp = require('./lib/clientApp.js')({
+    environment,
+    logger,
+    devErrorPage,
+    languageLoader,
+    appFactory
+  });
+  const cache = require('./lib/cache.js')({ environment });
+
+  return {
+    environment,
+    clientApp,
+    urlParser,
+    logger,
+    cache
+  };
 };

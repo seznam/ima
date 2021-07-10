@@ -94,7 +94,7 @@ function formatError(error) {
   return description;
 }
 
-module.exports = environment => {
+module.exports = function loggerFactory({ environment }) {
   let FORMATTING = environment.$Server.logger.formatting;
 
   if (['simple', 'JSON'].indexOf(FORMATTING) === -1) {

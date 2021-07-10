@@ -43,7 +43,6 @@ describe('ima.core.page.manager.AbstractPageManager', () => {
   let options = {
     onlyUpdate: false,
     autoScroll: true,
-    allowSPA: true,
     documentView: null,
     managedRootView: null
   };

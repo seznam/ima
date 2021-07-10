@@ -45,7 +45,6 @@ describe('ima.core.page.renderer.AbstractPageRenderer', function () {
   let routeOptions = {
     onlyUpdate: false,
     autoScroll: false,
-    allowSPA: false,
     documentView: null
   };
 
