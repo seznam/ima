@@ -31,7 +31,7 @@ describe('ima.core.router.ServerRouter', () => {
   });
 
   it('should be return actual path', () => {
-    spyOn(request, 'getPath').and.returnValue('');
+    jest.spyOn(request, 'getPath').mockReturnValue('');
 
     router.getPath();
 
@@ -42,7 +42,7 @@ describe('ima.core.router.ServerRouter', () => {
     var url = domain + '/redirectUrl';
     var options = { httpStatus: 303 };
 
-    spyOn(response, 'redirect').and.stub();
+    jest.spyOn(response, 'redirect').mockImplementation();
 
     router.redirect(url, options);
 

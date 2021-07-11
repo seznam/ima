@@ -4,6 +4,7 @@ import ClientPageRenderer from '../ClientPageRenderer';
 import RendererFactory from '../PageRendererFactory';
 import Window from 'src/window/Window';
 import Dispatcher from 'src/event/Dispatcher';
+import MetaManager from 'src/meta/MetaManager';
 import {
   toMockedInstance,
   setGlobalMockMethod,
@@ -54,7 +55,7 @@ describe('ima.core.page.renderer.ClientPageRenderer', function () {
   beforeEach(function () {
     controller = toMockedInstance(Controller, {
       getMetaManager() {
-        return () => {};
+        return toMockedInstance(MetaManager);
       }
     });
     rendererFactory = toMockedInstance(RendererFactory);
@@ -79,17 +80,17 @@ describe('ima.core.page.renderer.ClientPageRenderer', function () {
 
   describe('mount method', function () {
     beforeEach(function () {
-      spyOn(pageRenderer, '_separatePromisesAndValues').and.returnValue({
+      jest.spyOn(pageRenderer, '_separatePromisesAndValues').mockReturnValue({
         values: { param1: params.param1 },
         promises: { param2: params.param2 }
       });
 
-      spyOn(pageRenderer, '_updateMetaAttributes');
-      spyOn(pageRenderer, '_renderToDOM');
+      jest.spyOn(pageRenderer, '_updateMetaAttributes').mockImplementation();
+      jest.spyOn(pageRenderer, '_renderToDOM').mockImplementation();
     });
 
     it('should set default page state values', function (done) {
-      spyOn(controller, 'setState');
+      jest.spyOn(controller, 'setState').mockImplementation();
 
       pageRenderer
         .mount(controller, view, params, routeOptions)
@@ -104,7 +105,7 @@ describe('ima.core.page.renderer.ClientPageRenderer', function () {
     });
 
     it('should patch promises to state', function (done) {
-      spyOn(pageRenderer, '_patchPromisesToState');
+      jest.spyOn(pageRenderer, '_patchPromisesToState').mockImplementation();
       pageRenderer._firstTime = false;
 
       pageRenderer
@@ -160,9 +161,9 @@ describe('ima.core.page.renderer.ClientPageRenderer', function () {
     });
 
     it('should overwrite previous state values with undefined', done => {
-      spyOn(controller, 'setState');
-      spyOn(pageRenderer, '_patchStateToClearPreviousState').and.callThrough();
-      spyOn(pageRenderer, '_patchPromisesToState').and.stub();
+      jest.spyOn(controller, 'setState').mockImplementation();
+      jest.spyOn(pageRenderer, '_patchStateToClearPreviousState');
+      jest.spyOn(pageRenderer, '_patchPromisesToState').mockImplementation();
 
       pageRenderer._firstTime = false;
       pageRenderer._reactiveView = {
@@ -188,8 +189,8 @@ describe('ima.core.page.renderer.ClientPageRenderer', function () {
     });
 
     it('should set page meta params', function (done) {
-      spyOn(controller, 'setMetaParams');
-      spyOn(controller, 'getState').and.returnValue(pageState);
+      jest.spyOn(controller, 'setMetaParams').mockImplementation();
+      jest.spyOn(controller, 'getState').mockReturnValue(pageState);
 
       pageRenderer
         .mount(controller, view, params, routeOptions)
@@ -217,7 +218,7 @@ describe('ima.core.page.renderer.ClientPageRenderer', function () {
     });
 
     it('should return resolved promise with object of property content, status and pageState', function (done) {
-      spyOn(controller, 'getHttpStatus').and.returnValue(200);
+      jest.spyOn(controller, 'getHttpStatus').mockReturnValue(200);
 
       pageRenderer
         .mount(controller, view, params, routeOptions)
@@ -238,16 +239,16 @@ describe('ima.core.page.renderer.ClientPageRenderer', function () {
 
   describe('update method', function () {
     beforeEach(function () {
-      spyOn(pageRenderer, '_separatePromisesAndValues').and.returnValue({
+      jest.spyOn(pageRenderer, '_separatePromisesAndValues').mockReturnValue({
         values: { param1: params.param1 },
         promises: { param2: params.param2 }
       });
 
-      spyOn(pageRenderer, '_updateMetaAttributes');
+      jest.spyOn(pageRenderer, '_updateMetaAttributes').mockImplementation();
     });
 
     it('should set default page state values', function (done) {
-      spyOn(controller, 'setState');
+      jest.spyOn(controller, 'setState').mockImplementation();
 
       pageRenderer
         .update(controller, params)
@@ -299,7 +300,7 @@ describe('ima.core.page.renderer.ClientPageRenderer', function () {
     });
 
     it('should patch promises to state', function (done) {
-      spyOn(pageRenderer, '_patchPromisesToState');
+      jest.spyOn(pageRenderer, '_patchPromisesToState').mockImplementation();
 
       pageRenderer
         .update(controller, params)
@@ -319,8 +320,8 @@ describe('ima.core.page.renderer.ClientPageRenderer', function () {
     });
 
     it('should set page meta params', function (done) {
-      spyOn(controller, 'setMetaParams');
-      spyOn(controller, 'getState').and.returnValue(params);
+      jest.spyOn(controller, 'setMetaParams').mockImplementation();
+      jest.spyOn(controller, 'getState').mockReturnValue(params);
 
       pageRenderer
         .update(controller, params)
@@ -348,7 +349,7 @@ describe('ima.core.page.renderer.ClientPageRenderer', function () {
     });
 
     it('should return resolved promise with object of property content, status and pageState', function (done) {
-      spyOn(controller, 'getHttpStatus').and.returnValue(200);
+      jest.spyOn(controller, 'getHttpStatus').mockReturnValue(200);
 
       pageRenderer
         .update(controller, params)
@@ -382,12 +383,14 @@ describe('ima.core.page.renderer.ClientPageRenderer', function () {
     };
 
     beforeEach(function () {
-      spyOn(ReactDOM, 'render').and.stub();
-      spyOn(pageRenderer, '_getWrappedPageView').and.returnValue(
-        wrapedPageViewElement
-      );
-      spyOn(pageRenderer, '_getDocumentView').and.returnValue(documentView);
-      spyOn(win, 'getElementById').and.returnValue(htmlNode);
+      jest.spyOn(ReactDOM, 'render').mockImplementation();
+      jest
+        .spyOn(pageRenderer, '_getWrappedPageView')
+        .mockReturnValue(wrapedPageViewElement);
+      jest
+        .spyOn(pageRenderer, '_getDocumentView')
+        .mockReturnValue(documentView);
+      jest.spyOn(win, 'getElementById').mockReturnValue(htmlNode);
 
       pageRenderer._renderToDOM(controller, view, routeOptions);
     });

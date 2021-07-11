@@ -19,7 +19,7 @@ describe('ima.core.page.state.PageStateManagerDecorator', () => {
   });
 
   it('should call method clear', () => {
-    spyOn(pageStateManager, 'clear').and.stub();
+    jest.spyOn(pageStateManager, 'clear').mockImplementation();
 
     decoratedPageStateManager.clear();
 
@@ -27,7 +27,7 @@ describe('ima.core.page.state.PageStateManagerDecorator', () => {
   });
 
   it('should return current page state', () => {
-    spyOn(pageStateManager, 'getState').and.returnValue(state);
+    jest.spyOn(pageStateManager, 'getState').mockReturnValue(state);
 
     decoratedPageStateManager.getState();
 
@@ -35,7 +35,7 @@ describe('ima.core.page.state.PageStateManagerDecorator', () => {
   });
 
   it('should return all history of states', () => {
-    spyOn(pageStateManager, 'getAllStates').and.returnValue([state]);
+    jest.spyOn(pageStateManager, 'getAllStates').mockReturnValue([state]);
 
     expect(decoratedPageStateManager.getAllStates()).toEqual([state]);
   });
@@ -62,7 +62,7 @@ describe('ima.core.page.state.PageStateManagerDecorator', () => {
         allow: 0
       };
 
-      spyOn(pageStateManager, 'setState').and.stub();
+      jest.spyOn(pageStateManager, 'setState').mockImplementation();
 
       decoratedPageStateManager.setState(patchState);
 

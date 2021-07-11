@@ -79,11 +79,11 @@ describe('ima.core.http.HttpAgentImpl', () => {
       });
 
       it('should be return resolved promise with data', done => {
-        spyOn(proxy, 'request').and.callFake(() => {
+        jest.spyOn(proxy, 'request').mockImplementation(() => {
           return Promise.resolve(data);
         });
 
-        spyOn(proxy, 'haveToSetCookiesManually').and.returnValue(false);
+        jest.spyOn(proxy, 'haveToSetCookiesManually').mockReturnValue(false);
 
         http[method](data.params.url, data.params.data, data.params.options)
           .then(response => {
@@ -106,7 +106,7 @@ describe('ima.core.http.HttpAgentImpl', () => {
       });
 
       it('should be rejected with error', done => {
-        spyOn(proxy, 'request').and.callFake(() => {
+        jest.spyOn(proxy, 'request').mockImplementation(() => {
           return Promise.reject(new GenericError('', data.params));
         });
 
@@ -118,34 +118,34 @@ describe('ima.core.http.HttpAgentImpl', () => {
           () => {},
           error => {
             expect(error instanceof GenericError).toBe(true);
-            expect(proxy.request.calls.count()).toEqual(2);
+            expect(proxy.request.mock.calls.length).toEqual(2);
             done();
           }
         );
       });
 
       it('should be set cookie to response', done => {
-        spyOn(proxy, 'request').and.callFake(() => {
+        jest.spyOn(proxy, 'request').mockImplementation(() => {
           return Promise.resolve(data);
         });
-        spyOn(proxy, 'haveToSetCookiesManually').and.returnValue(true);
-        spyOn(cookie, 'parseFromSetCookieHeader');
+        jest.spyOn(proxy, 'haveToSetCookiesManually').mockReturnValue(true);
+        jest.spyOn(cookie, 'parseFromSetCookieHeader');
 
         http[method](
           data.params.url,
           data.params.data,
           data.params.options
         ).then(() => {
-          expect(cookie.parseFromSetCookieHeader.calls.count()).toEqual(2);
+          expect(cookie.parseFromSetCookieHeader.mock.calls.length).toEqual(2);
           done();
         });
       });
 
       it('should call postProcessor function', done => {
-        spyOn(proxy, 'request').and.callFake(() => {
+        jest.spyOn(proxy, 'request').mockImplementation(() => {
           return Promise.resolve(data);
         });
-        spyOn(data.params.options, 'postProcessor').and.callThrough();
+        jest.spyOn(data.params.options, 'postProcessor');
 
         http[method](
           data.params.url,
@@ -158,10 +158,10 @@ describe('ima.core.http.HttpAgentImpl', () => {
       });
 
       it('should not set Cookie header only for request with withCredentials option set to false', done => {
-        spyOn(proxy, 'request').and.callFake(() => {
+        jest.spyOn(proxy, 'request').mockImplementation(() => {
           return Promise.resolve(data);
         });
-        spyOn(cookie, 'getCookiesStringForCookieHeader').and.callThrough();
+        jest.spyOn(cookie, 'getCookiesStringForCookieHeader');
 
         http[method](
           data.params.url,

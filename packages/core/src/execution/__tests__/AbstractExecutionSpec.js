@@ -31,7 +31,7 @@ describe('ima.core.execution.AbstractExecution', () => {
 
   describe('_validateJob() method', () => {
     it("should validate a job before it's appended", () => {
-      const jobValidationSpy = spyOn(execution, '_validateJob');
+      const jobValidationSpy = jest.spyOn(execution, '_validateJob');
 
       execution.append(asyncFunction);
 

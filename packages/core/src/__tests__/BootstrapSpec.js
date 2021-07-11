@@ -37,13 +37,13 @@ describe('Bootstrap', () => {
 
   describe('run method', () => {
     beforeEach(() => {
-      spyOn(bootstrap, '_initSettings').and.stub();
+      jest.spyOn(bootstrap, '_initSettings').mockImplementation();
 
-      spyOn(bootstrap, '_bindDependencies').and.stub();
+      jest.spyOn(bootstrap, '_bindDependencies').mockImplementation();
 
-      spyOn(bootstrap, '_initServices').and.stub();
+      jest.spyOn(bootstrap, '_initServices').mockImplementation();
 
-      spyOn(bootstrap, '_initRoutes').and.stub();
+      jest.spyOn(bootstrap, '_initRoutes').mockImplementation();
 
       bootstrap.run(bootConfig);
     });
@@ -67,11 +67,11 @@ describe('Bootstrap', () => {
 
   describe('_initSettings method', () => {
     beforeEach(() => {
-      spyOn(bootstrap, '_getEnvironmentSetting').and.returnValue({});
+      jest.spyOn(bootstrap, '_getEnvironmentSetting').mockReturnValue({});
     });
 
     it('it should call initSettings method for app', () => {
-      spyOn(bootConfig, 'initSettings').and.callThrough();
+      jest.spyOn(bootConfig, 'initSettings');
 
       bootstrap._initSettings();
 
@@ -79,7 +79,7 @@ describe('Bootstrap', () => {
     });
 
     it('it should call initSettings method for plugin', () => {
-      spyOn(plugin, 'initSettings').and.callThrough();
+      jest.spyOn(plugin, 'initSettings');
 
       bootstrap._initSettings();
 
@@ -89,7 +89,7 @@ describe('Bootstrap', () => {
 
   describe('_bindDependencies method', () => {
     it('should set ima binding state to object container', () => {
-      spyOn(objectContainer, 'setBindingState').and.callThrough();
+      jest.spyOn(objectContainer, 'setBindingState');
 
       bootstrap._bindDependencies();
 
@@ -99,7 +99,7 @@ describe('Bootstrap', () => {
     });
 
     it('should set plugin binding state to object container', () => {
-      spyOn(objectContainer, 'setBindingState').and.callThrough();
+      jest.spyOn(objectContainer, 'setBindingState');
 
       bootstrap._bindDependencies();
 
@@ -110,7 +110,7 @@ describe('Bootstrap', () => {
     });
 
     it('should set app binding state to object container', () => {
-      spyOn(objectContainer, 'setBindingState').and.callThrough();
+      jest.spyOn(objectContainer, 'setBindingState');
 
       bootstrap._bindDependencies();
 
@@ -120,7 +120,7 @@ describe('Bootstrap', () => {
     });
 
     it('should bind ima', () => {
-      spyOn(bootConfig, 'initBindIma');
+      jest.spyOn(bootConfig, 'initBindIma');
 
       bootstrap._bindDependencies();
 
@@ -136,7 +136,7 @@ describe('Bootstrap', () => {
     });
 
     it('should bind ima plugin', () => {
-      spyOn(plugin, 'initBind');
+      jest.spyOn(plugin, 'initBind');
 
       bootstrap._bindDependencies();
 
@@ -152,7 +152,7 @@ describe('Bootstrap', () => {
     });
 
     it('should bind app', () => {
-      spyOn(bootConfig, 'initBindApp');
+      jest.spyOn(bootConfig, 'initBindApp');
 
       bootstrap._bindDependencies();
 
@@ -172,8 +172,8 @@ describe('Bootstrap', () => {
     it('should initalize app route', () => {
       let router = {};
 
-      spyOn(bootConfig, 'initRoutes');
-      spyOn(objectContainer, 'get').and.returnValue(router);
+      jest.spyOn(bootConfig, 'initRoutes');
+      jest.spyOn(objectContainer, 'get').mockReturnValue(router);
 
       bootstrap._initRoutes();
 

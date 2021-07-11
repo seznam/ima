@@ -703,7 +703,7 @@ export default class AbstractPageManager extends PageManager {
    * @return {boolean}
    */
   _hasOnlyUpdate(controller, view, options) {
-    if (options.onlyUpdate instanceof Function) {
+    if (typeof options.onlyUpdate === 'function') {
       return options.onlyUpdate(
         this._managedPage.controller,
         this._managedPage.view

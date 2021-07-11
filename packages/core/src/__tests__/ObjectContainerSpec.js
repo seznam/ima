@@ -43,8 +43,7 @@ describe('ima.core.ObjectContainer', () => {
   });
 
   it('should be clear entries', () => {
-    spyOn(oc._entries, 'clear').and.stub();
-
+    jest.spyOn(oc._entries, 'clear');
     oc.clear();
 
     expect(oc._entries.clear).toHaveBeenCalled();
@@ -80,7 +79,7 @@ describe('ima.core.ObjectContainer', () => {
     });
 
     it('should be set constant value', () => {
-      spyOn(oc, '_createEntry').and.callThrough();
+      jest.spyOn(oc, '_createEntry');
 
       oc.constant(constantName, constantValue);
 
@@ -112,7 +111,7 @@ describe('ima.core.ObjectContainer', () => {
     });
 
     it('should be create new instance of entry and set it to entries', () => {
-      spyOn(oc, '_createEntry').and.callThrough();
+      jest.spyOn(oc, '_createEntry');
 
       oc.inject(classConstructor, dependencies);
 
@@ -130,7 +129,7 @@ describe('ima.core.ObjectContainer', () => {
     });
 
     it('should set instance of entry from aliases to the entries', () => {
-      spyOn(oc, '_createEntry').and.callThrough();
+      jest.spyOn(oc, '_createEntry');
 
       oc.bind(alias, classConstructor, dependencies);
       oc.inject(classConstructor, dependencies);
@@ -142,7 +141,7 @@ describe('ima.core.ObjectContainer', () => {
         dependencies
       );
       expect(oc._entries.size).toEqual(2);
-      expect(oc._createEntry.calls.count()).toEqual(1);
+      expect(oc._createEntry.mock.calls.length).toEqual(1);
       expect(oc._entries.get(classConstructor)).toEqual(oc._entries.get(alias));
     });
 
@@ -176,7 +175,7 @@ describe('ima.core.ObjectContainer', () => {
     });
 
     it('should be create new entry for defined dependencies', () => {
-      spyOn(oc, '_createEntry').and.callThrough();
+      jest.spyOn(oc, '_createEntry');
 
       oc.bind(alias, classConstructor, dependencies);
 
@@ -189,22 +188,22 @@ describe('ima.core.ObjectContainer', () => {
     it('should be use entry from entries which was defined by inject method', () => {
       oc.inject(classConstructor, dependencies);
 
-      spyOn(oc, '_createEntry').and.callThrough();
+      jest.spyOn(oc, '_createEntry');
 
       oc.bind(alias, classConstructor);
 
-      expect(oc._createEntry.calls.count()).toEqual(0);
+      expect(oc._createEntry.mock.calls.length).toEqual(0);
       expect(oc._entries.get(alias)).toEqual(oc._entries.get(classConstructor));
     });
 
     it('should be use entry from entries which was defined by provide method', () => {
       oc.provide(classParent, classConstructor, dependencies);
 
-      spyOn(oc, '_createEntry').and.callThrough();
+      jest.spyOn(oc, '_createEntry');
 
       oc.bind(alias, classParent);
 
-      expect(oc._createEntry.calls.count()).toEqual(0);
+      expect(oc._createEntry.mock.calls.length).toEqual(0);
       expect(oc._entries.get(alias)).toEqual(oc._entries.get(classParent));
     });
 
@@ -213,7 +212,7 @@ describe('ima.core.ObjectContainer', () => {
       oc.bind(alias, classParent);
       let aliasEntry = oc._entries.get(alias);
 
-      spyOn(oc, '_updateEntryValues').and.callThrough();
+      jest.spyOn(oc, '_updateEntryValues');
 
       oc.bind(
         alias,
@@ -238,11 +237,11 @@ describe('ima.core.ObjectContainer', () => {
       oc.inject(classConstructor, dependencies);
       oc.bind(alias, classConstructor);
 
-      spyOn(oc, '_createEntry').and.callThrough();
+      jest.spyOn(oc, '_createEntry');
 
       oc.bind(alias2, classConstructor, []);
 
-      expect(oc._createEntry.calls.count()).toEqual(1);
+      expect(oc._createEntry.mock.calls.length).toEqual(1);
       expect(oc._entries.get(alias2)).not.toEqual(
         oc._entries.get(classConstructor)
       );
@@ -271,11 +270,11 @@ describe('ima.core.ObjectContainer', () => {
     });
 
     it('should be create new Entry and set it to entries', () => {
-      spyOn(oc, '_createEntry').and.callThrough();
+      jest.spyOn(oc, '_createEntry');
 
       oc.provide(classParent, classConstructor, dependencies);
 
-      expect(oc._createEntry.calls.count()).toEqual(1);
+      expect(oc._createEntry.mock.calls.length).toEqual(1);
       expect(oc._entries.size).toEqual(2);
     });
   });
@@ -316,16 +315,16 @@ describe('ima.core.ObjectContainer', () => {
     it('should return shared instance', () => {
       entry.sharedInstance = false;
 
-      spyOn(oc, '_getEntry').and.returnValue(entry);
-      spyOn(oc, '_createInstanceFromEntry').and.stub();
+      jest.spyOn(oc, '_getEntry').mockReturnValue(entry);
+      jest.spyOn(oc, '_createInstanceFromEntry').mockImplementation();
 
       expect(oc.get('entry')).toEqual(entry.sharedInstance);
-      expect(oc._createInstanceFromEntry.calls.count()).toEqual(0);
+      expect(oc._createInstanceFromEntry.mock.calls.length).toEqual(0);
     });
 
     it('should create new instance', () => {
-      spyOn(oc, '_getEntry').and.returnValue(entry);
-      spyOn(oc, '_createInstanceFromEntry').and.stub();
+      jest.spyOn(oc, '_getEntry').mockReturnValue(entry);
+      jest.spyOn(oc, '_createInstanceFromEntry').mockImplementation();
 
       oc.get('entry');
 
@@ -443,7 +442,7 @@ describe('ima.core.ObjectContainer', () => {
     it('should be create new entry if namespace return function with zero dependencies and their dependencies is not injected', () => {
       namespace.ObjectContainer = classDependency;
 
-      spyOn(oc, '_createEntry').and.callThrough();
+      jest.spyOn(oc, '_createEntry');
 
       let entry = oc._getEntryFromNamespace(namespacePathOC);
 
@@ -455,7 +454,7 @@ describe('ima.core.ObjectContainer', () => {
       let constant = { a: 1 };
       namespace.ObjectContainer = constant;
 
-      spyOn(oc, '_createEntry').and.callThrough();
+      jest.spyOn(oc, '_createEntry');
 
       let entry = oc._getEntryFromNamespace(namespacePathOC);
 
@@ -477,7 +476,7 @@ describe('ima.core.ObjectContainer', () => {
     });
 
     it('should set class to entries if class has defined $dependencies', () => {
-      spyOn(oc, '_createEntry').and.callThrough();
+      jest.spyOn(oc, '_createEntry');
 
       oc._getEntryFromClassConstructor(classConstructorWithDependencies);
 

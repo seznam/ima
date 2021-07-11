@@ -23,7 +23,7 @@ describe('ima.core.controller.AbstractController', () => {
   it('should be set state to PageStateManager', () => {
     let state = { state: 'state' };
 
-    spyOn(pageStateManager, 'setState').and.stub();
+    jest.spyOn(pageStateManager, 'setState').mockImplementation();
 
     controller.setState(state);
 
@@ -32,7 +32,7 @@ describe('ima.core.controller.AbstractController', () => {
 
   describe('getState method', () => {
     it('should be get state from PageStateManager for setted stateManager', () => {
-      spyOn(pageStateManager, 'getState').and.stub();
+      jest.spyOn(pageStateManager, 'getState').mockImplementation();
 
       controller.getState();
 

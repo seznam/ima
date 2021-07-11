@@ -1,11 +1,6 @@
 module.exports = {
   root: true,
-  extends: [
-    'eslint:recommended',
-    'plugin:react/recommended',
-    'prettier',
-    'prettier/react'
-  ],
+  extends: ['eslint:recommended', 'plugin:react/recommended', 'prettier'],
   parser: 'babel-eslint',
   rules: {
     'prettier/prettier': [

@@ -6,6 +6,8 @@ import Window from 'src/window/Window';
 import GenericError from 'src/error/GenericError';
 
 describe('ima.core.http.HttpProxy', () => {
+  jest.useFakeTimers();
+
   const API_URL = 'http://localhost:3001/api/';
   const OPTIONS = {
     ttl: 3600000,
@@ -43,7 +45,7 @@ describe('ima.core.http.HttpProxy', () => {
       body: { data: 'some data' }
     };
     fetchResult = Promise.resolve(response);
-    spyOn(proxy, '_getFetchApi').and.callFake(() => (_, init) => {
+    jest.spyOn(proxy, '_getFetchApi').mockImplementation(() => (_, init) => {
       requestInit = init;
 
       return fetchResult;
@@ -52,16 +54,11 @@ describe('ima.core.http.HttpProxy', () => {
 
   ['get', 'head', 'post', 'put', 'delete', 'patch'].forEach(method => {
     describe(`method ${method}`, () => {
-      it('should return promise with response body', async done => {
-        try {
-          await proxy.request(method, API_URL, DATA, OPTIONS);
-          done();
-        } catch (error) {
-          done.fail(error);
-        }
+      it('should return promise with response body', async () => {
+        await proxy.request(method, API_URL, DATA, OPTIONS);
       });
 
-      it('should return a "body" field in error object, when promise is rejected', async done => {
+      it('should return a "body" field in error object, when promise is rejected', async () => {
         fetchResult = Promise.reject(
           new GenericError('The HTTP request timed out', {
             status: StatusCode.TIMEOUT
@@ -70,14 +67,13 @@ describe('ima.core.http.HttpProxy', () => {
 
         try {
           await proxy.request(method, API_URL, DATA, OPTIONS);
-          done.fail();
+          expect(false).toBeTruthy();
         } catch (error) {
           expect(error.getParams().body).toBeDefined();
-          done();
         }
       });
 
-      it('should reject promise for Timeout error', async done => {
+      it('should reject promise for Timeout error', async () => {
         fetchResult = Promise.reject(
           new GenericError('The HTTP request timed out', {
             status: StatusCode.TIMEOUT
@@ -86,30 +82,26 @@ describe('ima.core.http.HttpProxy', () => {
 
         try {
           await proxy.request(method, API_URL, DATA, OPTIONS);
-          done.fail();
+          expect(false).toBeTruthy();
         } catch (error) {
           expect(error.getParams().status).toEqual(StatusCode.TIMEOUT);
-          done();
         }
       });
 
-      it('should be timeouted for longer request then options.timeout', async done => {
-        jest.useFakeTimers();
-
-        proxy._getFetchApi.and.callFake(() => {
+      it('should be timeouted for longer request then options.timeout', async () => {
+        proxy._getFetchApi.mockImplementation(() => {
           jest.runOnlyPendingTimers();
         });
 
         try {
           await proxy.request(method, API_URL, DATA, OPTIONS);
-          done.fail();
+          expect(false).toBeTruthy();
         } catch (error) {
           expect(error.getParams().status).toEqual(StatusCode.TIMEOUT);
-          done();
         }
       });
 
-      it('should reject promise for Forbidden', async done => {
+      it('should reject promise for Forbidden', async () => {
         Object.assign(response, {
           ok: false,
           status: StatusCode.FORBIDDEN
@@ -117,14 +109,13 @@ describe('ima.core.http.HttpProxy', () => {
 
         try {
           await proxy.request(method, API_URL, DATA, OPTIONS);
-          done.fail();
+          expect(false).toBeTruthy();
         } catch (error) {
           expect(error.getParams().status).toEqual(StatusCode.FORBIDDEN);
-          done();
         }
       });
 
-      it('should reject promise for Not found', async done => {
+      it('should reject promise for Not found', async () => {
         Object.assign(response, {
           ok: false,
           status: StatusCode.NOT_FOUND
@@ -132,14 +123,13 @@ describe('ima.core.http.HttpProxy', () => {
 
         try {
           await proxy.request(method, API_URL, DATA, OPTIONS);
-          done.fail();
+          expect(false).toBeTruthy();
         } catch (error) {
           expect(error.getParams().status).toEqual(StatusCode.NOT_FOUND);
-          done();
         }
       });
 
-      it('should reject promise for Internal Server Error', async done => {
+      it('should reject promise for Internal Server Error', async () => {
         Object.assign(response, {
           ok: false,
           status: StatusCode.SERVER_ERROR
@@ -147,14 +137,13 @@ describe('ima.core.http.HttpProxy', () => {
 
         try {
           await proxy.request(method, API_URL, DATA, OPTIONS);
-          done.fail();
+          expect(false).toBeTruthy();
         } catch (error) {
           expect(error.getParams().status).toEqual(StatusCode.SERVER_ERROR);
-          done();
         }
       });
 
-      it('should reject promise for UNKNOWN', async done => {
+      it('should reject promise for UNKNOWN', async () => {
         Object.assign(response, {
           ok: false,
           status: null
@@ -162,10 +151,9 @@ describe('ima.core.http.HttpProxy', () => {
 
         try {
           await proxy.request(method, API_URL, DATA, OPTIONS);
-          done.fail();
+          expect(false).toBeTruthy();
         } catch (error) {
           expect(error.getParams().status).toEqual(StatusCode.SERVER_ERROR);
-          done();
         }
       });
 

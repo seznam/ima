@@ -112,7 +112,7 @@ describe('Revive client application', () => {
     vendorLinker.set('react-dom', ReactDOM);
     vendorLinker.set('@ima/helpers', $Helper);
 
-    spyOn(ReactDOM, 'render');
+    jest.spyOn(ReactDOM, 'render');
 
     done();
   });

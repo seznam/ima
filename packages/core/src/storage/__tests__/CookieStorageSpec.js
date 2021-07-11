@@ -40,9 +40,9 @@ describe('ima.storage.CookieStorage', () => {
     request.init({});
     response.init({}, transformFunction);
 
-    spyOn(request, 'getCookieHeader').and.returnValue(cookieString);
+    jest.spyOn(request, 'getCookieHeader').mockReturnValue(cookieString);
 
-    spyOn(response, 'setCookie').and.stub();
+    jest.spyOn(response, 'setCookie').mockImplementation();
 
     cookie.init({ secure: false }, transformFunction);
   });
@@ -87,22 +87,22 @@ describe('ima.storage.CookieStorage', () => {
   it('should be delete all cookies', () => {
     cookie.clear();
 
-    expect(response.setCookie.calls.count()).toEqual(2);
+    expect(response.setCookie.mock.calls.length).toEqual(2);
     expect(cookie._storage.size).toEqual(0);
   });
 
   it('should be get cookies string', () => {
-    spyOn(cookie._transformFunction, 'encode').and.callThrough();
+    jest.spyOn(cookie._transformFunction, 'encode');
 
     expect(cookie.getCookiesStringForCookieHeader()).toEqual(
       cookiesStringForCookieHeader
     );
-    expect(cookie._transformFunction.encode.calls.count()).toEqual(2);
+    expect(cookie._transformFunction.encode.mock.calls.length).toEqual(2);
   });
 
   describe('set method', () => {
     it('should set cookie as expired for undefined value', () => {
-      spyOn(cookie, '_getExpirationAsDate').and.stub();
+      jest.spyOn(cookie, '_getExpirationAsDate').mockImplementation();
 
       cookie.set('cok2');
 
@@ -110,7 +110,7 @@ describe('ima.storage.CookieStorage', () => {
     });
 
     it('should prefer maxAge before expires', () => {
-      spyOn(cookie, '_getExpirationAsDate').and.stub();
+      jest.spyOn(cookie, '_getExpirationAsDate').mockImplementation();
 
       cookie.set('cok2', 'val2', { expires: new Date(), maxAge: 5 });
 
@@ -118,7 +118,7 @@ describe('ima.storage.CookieStorage', () => {
     });
 
     it('should set session cookie', () => {
-      spyOn(cookie, '_getExpirationAsDate').and.stub();
+      jest.spyOn(cookie, '_getExpirationAsDate').mockImplementation();
 
       cookie.set('cok2', 'val2');
 
@@ -128,7 +128,7 @@ describe('ima.storage.CookieStorage', () => {
 
   describe('parseFromSetCookieHeader method', () => {
     it('should parse cookie from Set-Cookie header string', () => {
-      spyOn(cookie, 'set');
+      jest.spyOn(cookie, 'set');
 
       cookie.parseFromSetCookieHeader(setCookieString);
 
@@ -139,7 +139,7 @@ describe('ima.storage.CookieStorage', () => {
     });
 
     it('should parse cookie from Set-Cookie header string for cookie name with first letter uppercase', () => {
-      spyOn(cookie, 'set');
+      jest.spyOn(cookie, 'set');
 
       cookie.parseFromSetCookieHeader(setCookieStringWithFirstLetterUppercase);
 
@@ -150,7 +150,7 @@ describe('ima.storage.CookieStorage', () => {
     });
 
     it('should parse cookie from Set-Cookie header string with defined domain', () => {
-      spyOn(cookie, 'set');
+      jest.spyOn(cookie, 'set');
 
       cookie.parseFromSetCookieHeader(setCookieStringWithDomain);
 
@@ -162,7 +162,7 @@ describe('ima.storage.CookieStorage', () => {
     });
 
     it('should parse cookie from Set-Cookie header string with complex options', () => {
-      spyOn(cookie, 'set');
+      jest.spyOn(cookie, 'set');
 
       cookie.parseFromSetCookieHeader(setCookieStringWithComplex);
 
@@ -177,7 +177,7 @@ describe('ima.storage.CookieStorage', () => {
     });
 
     it('should parse cookie from Set-Cookie header string with Max-Age option', () => {
-      spyOn(cookie, 'set');
+      jest.spyOn(cookie, 'set');
 
       cookie.parseFromSetCookieHeader(setCookieStringWithMaxAge);
 
@@ -248,7 +248,7 @@ describe('ima.storage.CookieStorage', () => {
 
       cookie._recomputeCookieMaxAgeAndExpires(options);
 
-      expect(options.expires).toEqual(jasmine.any(Date));
+      expect(options.expires).toEqual(expect.any(Date));
     });
 
     it('should compute maxAge as number', () => {
@@ -256,7 +256,7 @@ describe('ima.storage.CookieStorage', () => {
 
       cookie._recomputeCookieMaxAgeAndExpires(options);
 
-      expect(options.maxAge).toEqual(jasmine.any(Number));
+      expect(options.maxAge).toEqual(expect.any(Number));
     });
 
     it('should compute maxAge as number and expires as date', () => {
@@ -264,8 +264,8 @@ describe('ima.storage.CookieStorage', () => {
 
       cookie._recomputeCookieMaxAgeAndExpires(options);
 
-      expect(options.maxAge).toEqual(jasmine.any(Number));
-      expect(options.expires).toEqual(jasmine.any(Date));
+      expect(options.maxAge).toEqual(expect.any(Number));
+      expect(options.expires).toEqual(expect.any(Date));
     });
   });
 });

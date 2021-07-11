@@ -41,9 +41,11 @@ describe('ComponentUtils', () => {
 
   describe('getUtils() method.', () => {
     beforeEach(() => {
-      spyOn(oc, 'get').and.callFake(entity =>
-        typeof entity === 'function' ? new entity() : entity
-      );
+      jest
+        .spyOn(oc, 'get')
+        .mockImplementation(entity =>
+          typeof entity === 'function' ? new entity() : entity
+        );
 
       componentUtils.register({
         SomeMockHelper,
@@ -51,8 +53,12 @@ describe('ComponentUtils', () => {
       });
     });
 
+    afterEach(() => {
+      jest.resetAllMocks();
+    });
+
     it('should return $Utils constant from OC if created.', () => {
-      spyOn(oc, 'has').and.callFake(entity => entity === '$Utils');
+      jest.spyOn(oc, 'has').mockImplementation(entity => entity === '$Utils');
 
       componentUtils.getUtils();
 
@@ -69,7 +75,7 @@ describe('ComponentUtils', () => {
 
     it('should not create instances again.', () => {
       const utils = (componentUtils._utilities = {});
-      spyOn(componentUtils, '_createUtilityInstance').and.stub();
+      jest.spyOn(componentUtils, '_createUtilityInstance').mockImplementation();
 
       expect(componentUtils.getUtils()).toBe(utils);
       expect(componentUtils._createUtilityInstance).not.toHaveBeenCalled();

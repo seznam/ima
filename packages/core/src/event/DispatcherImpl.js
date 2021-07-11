@@ -57,7 +57,7 @@ export default class DispatcherImpl extends Dispatcher {
    */
   listen(event, listener, scope = null) {
     if ($Debug) {
-      if (!(listener instanceof Function)) {
+      if (typeof listener !== 'function') {
         throw new GenericError(
           `The listener must be a function, ${listener} provided.`
         );

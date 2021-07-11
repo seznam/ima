@@ -78,16 +78,16 @@ describe('ima.core.page.manager.ClientPageManager', () => {
       viewInstance
     );
 
-    spyOn(controllerInstance, 'getExtensions').and.returnValue([
-      extensionInstance
-    ]);
+    jest
+      .spyOn(controllerInstance, 'getExtensions')
+      .mockReturnValue([extensionInstance]);
   });
 
   it('should be listening for all custom events', () => {
     let window = {};
 
-    spyOn(eventBusInterface, 'listenAll').and.stub();
-    spyOn(windowInterface, 'getWindow').and.returnValue(window);
+    jest.spyOn(eventBusInterface, 'listenAll').mockImplementation();
+    jest.spyOn(windowInterface, 'getWindow').mockReturnValue(window);
 
     pageManager.init();
 
@@ -108,8 +108,8 @@ describe('ima.core.page.manager.ClientPageManager', () => {
   it('should unlisten for all custom events', async () => {
     let window = {};
 
-    spyOn(eventBusInterface, 'unlistenAll').and.stub();
-    spyOn(windowInterface, 'getWindow').and.returnValue(window);
+    jest.spyOn(eventBusInterface, 'unlistenAll').mockImplementation();
+    jest.spyOn(windowInterface, 'getWindow').mockReturnValue(window);
 
     await pageManager.destroy();
 
@@ -127,11 +127,15 @@ describe('ima.core.page.manager.ClientPageManager', () => {
     };
 
     beforeEach(() => {
-      spyOn(pageManager, '_parseCustomEvent').and.returnValue(
-        parsedCustomEvent
-      );
+      jest
+        .spyOn(pageManager, '_parseCustomEvent')
+        .mockReturnValue(parsedCustomEvent);
 
-      spyOn(console, 'warn').and.stub();
+      jest.spyOn(console, 'warn').mockImplementation();
+    });
+
+    afterEach(() => {
+      jest.resetAllMocks();
     });
 
     it('should do nothing if active controller is null', () => {
@@ -143,9 +147,13 @@ describe('ima.core.page.manager.ClientPageManager', () => {
     });
 
     it('should handle event only with controller', () => {
-      spyOn(pageManager, '_handleEventWithController').and.returnValue(true);
+      jest
+        .spyOn(pageManager, '_handleEventWithController')
+        .mockReturnValue(true);
 
-      spyOn(pageManager, '_handleEventWithExtensions').and.stub();
+      jest
+        .spyOn(pageManager, '_handleEventWithExtensions')
+        .mockImplementation();
 
       pageManager._onCustomEventHandler(event);
 
@@ -161,9 +169,13 @@ describe('ima.core.page.manager.ClientPageManager', () => {
     });
 
     it('should handle event with some extension', () => {
-      spyOn(pageManager, '_handleEventWithController').and.returnValue(false);
+      jest
+        .spyOn(pageManager, '_handleEventWithController')
+        .mockReturnValue(false);
 
-      spyOn(pageManager, '_handleEventWithExtensions').and.returnValue(true);
+      jest
+        .spyOn(pageManager, '_handleEventWithExtensions')
+        .mockReturnValue(true);
 
       pageManager._onCustomEventHandler(event);
 
@@ -195,10 +207,10 @@ describe('ima.core.page.manager.ClientPageManager', () => {
 
   describe('manage method', () => {
     it('should activate page source after loading all resources', done => {
-      spyOn(pageManager, '_activatePageSource').and.stub();
-      spyOn(pageManager.__proto__.__proto__, 'manage').and.returnValue(
-        Promise.resolve({})
-      );
+      jest.spyOn(pageManager, '_activatePageSource').mockImplementation();
+      jest
+        .spyOn(pageManager.__proto__.__proto__, 'manage')
+        .mockReturnValue(Promise.resolve({}));
 
       pageManager
         .manage(null, null, {}, {})
@@ -225,7 +237,9 @@ describe('ima.core.page.manager.ClientPageManager', () => {
         onMethod: () => {}
       };
 
-      spyOn(pageManager._managedPage.controllerInstance, 'onMethod').and.stub();
+      jest
+        .spyOn(pageManager._managedPage.controllerInstance, 'onMethod')
+        .mockImplementation();
 
       expect(pageManager._handleEventWithController('onMethod', data)).toEqual(
         true
@@ -253,7 +267,7 @@ describe('ima.core.page.manager.ClientPageManager', () => {
         }
       };
 
-      spyOn(dumpExtensionInstance, 'onMethod').and.stub();
+      jest.spyOn(dumpExtensionInstance, 'onMethod').mockImplementation();
 
       expect(pageManager._handleEventWithExtensions('onMethod', data)).toEqual(
         true

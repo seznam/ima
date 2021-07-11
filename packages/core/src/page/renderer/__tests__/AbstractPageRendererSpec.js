@@ -88,7 +88,7 @@ describe('ima.core.page.renderer.AbstractPageRenderer', function () {
         notUsePropsState: true
       });
 
-      spyOn(reactiveComponentView, 'setState').and.stub();
+      jest.spyOn(reactiveComponentView, 'setState').mockImplementation();
 
       pageRenderer.setState(state);
 
@@ -103,7 +103,7 @@ describe('ima.core.page.renderer.AbstractPageRenderer', function () {
     it('should be set $Utils to props', function () {
       let utils = { router: 'router' };
 
-      spyOn(rendererFactory, 'getUtils').and.returnValue(utils);
+      jest.spyOn(rendererFactory, 'getUtils').mockReturnValue(utils);
 
       expect(pageRenderer._generateViewProps(view)).toEqual({
         $Utils: utils,
@@ -124,12 +124,14 @@ describe('ima.core.page.renderer.AbstractPageRenderer', function () {
     let managedRootView = function () {};
 
     beforeEach(function () {
-      spyOn(pageRenderer, '_generateViewProps').and.returnValue(props);
-      spyOn(controller, 'getState').and.returnValue(state);
-      spyOn(rendererFactory, 'wrapView').and.returnValue(wrapedPageViewElement);
-      spyOn(rendererFactory, 'getManagedRootView').and.returnValue(
-        managedRootView
-      );
+      jest.spyOn(pageRenderer, '_generateViewProps').mockReturnValue(props);
+      jest.spyOn(controller, 'getState').mockReturnValue(state);
+      jest
+        .spyOn(rendererFactory, 'wrapView')
+        .mockReturnValue(wrapedPageViewElement);
+      jest
+        .spyOn(rendererFactory, 'getManagedRootView')
+        .mockReturnValue(managedRootView);
     });
 
     it('should generate view props from controller state', function () {
@@ -165,7 +167,7 @@ describe('ima.core.page.renderer.AbstractPageRenderer', function () {
 
   describe('_getDocumentView method', function () {
     beforeEach(function () {
-      spyOn(rendererFactory, 'getDocumentView').and.stub();
+      jest.spyOn(rendererFactory, 'getDocumentView').mockImplementation();
     });
 
     it('should return default document view which is set in settings.$Page.$Render.documentView', function () {

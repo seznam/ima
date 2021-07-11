@@ -16,6 +16,10 @@ describe('ima.core.event.DispatcherImpl', () => {
     dispatcher = new Dispatcher();
   });
 
+  afterEach(() => {
+    jest.resetAllMocks();
+  });
+
   describe('listen method', () => {
     it('should add handler for event', () => {
       dispatcher.listen(event, handlers.handler1);
@@ -95,7 +99,7 @@ describe('ima.core.event.DispatcherImpl', () => {
     });
 
     it('should show warning for undefined event', () => {
-      spyOn(console, 'warn').and.stub();
+      jest.spyOn(console, 'warn').mockImplementation();
 
       dispatcher.unlisten(event, handlers.handler1);
 
@@ -103,7 +107,7 @@ describe('ima.core.event.DispatcherImpl', () => {
     });
 
     it('should show warning for undefined handler for event', () => {
-      spyOn(console, 'warn').and.stub();
+      jest.spyOn(console, 'warn').mockImplementation();
 
       dispatcher.listen(event, handlers.handler1);
       dispatcher.unlisten(event, handlers.handler2);
@@ -114,8 +118,8 @@ describe('ima.core.event.DispatcherImpl', () => {
 
   describe('fire method', () => {
     it('should fire event for handlers', () => {
-      spyOn(handlers, 'handler1');
-      spyOn(handlers, 'handler2');
+      jest.spyOn(handlers, 'handler1');
+      jest.spyOn(handlers, 'handler2');
 
       dispatcher.listen(event, handlers.handler1);
       dispatcher.listen(event, handlers.handler2);
@@ -127,7 +131,7 @@ describe('ima.core.event.DispatcherImpl', () => {
     });
 
     it('should show warning for none listeners', () => {
-      spyOn(console, 'warn').and.stub();
+      jest.spyOn(console, 'warn').mockImplementation();
 
       dispatcher.fire(event, data);
 
@@ -135,7 +139,7 @@ describe('ima.core.event.DispatcherImpl', () => {
     });
 
     it('should not show warning for $IMA internal event', () => {
-      spyOn(console, 'warn').and.stub();
+      jest.spyOn(console, 'warn').mockImplementation();
 
       dispatcher.fire(event, data, true);
 

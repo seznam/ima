@@ -8,8 +8,8 @@ describe('ima.core.page.handler.PageHandlerRegistry', () => {
   let pageManagerHandler = toMockedInstance(PageHandler);
 
   beforeEach(() => {
-    spyOn(pageManagerHandler, 'handlePreManagedState');
-    spyOn(pageManagerHandler, 'handlePostManagedState');
+    jest.spyOn(pageManagerHandler, 'handlePreManagedState');
+    jest.spyOn(pageManagerHandler, 'handlePostManagedState');
     registry = new PageHandlerRegistry(pageManagerHandler);
     registry.init();
   });

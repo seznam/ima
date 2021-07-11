@@ -102,16 +102,15 @@ describe('Render server application', () => {
     );
     ima.bootClientApp(app, bootConfig);
 
-    spyOn(ReactDOM, 'render');
+    jest.spyOn(ReactDOM, 'render');
 
     done();
   });
 
   it('should response with status code 200, content null and pageState', done => {
-    spyOn(
-      ServerPageRenderer.prototype,
-      '_renderPageContentToString'
-    ).and.returnValue('html');
+    jest
+      .spyOn(ServerPageRenderer.prototype, '_renderPageContentToString')
+      .mockReturnValue('html');
 
     router
       .route('/reviveClientApp')
