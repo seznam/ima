@@ -722,9 +722,9 @@ describe('ima.core.router.AbstractRouter', () => {
     it('should return correct set of middlewares', () => {
       expect(middlewareRouter._routeHandlers.size).toBe(5);
 
-      expect(
-        middlewareRouter._getRouteHandlersByPath('/').middlewares
-      ).toEqual([new RouterMiddleware(globalMiddleware)]);
+      expect(middlewareRouter._getRouteHandlersByPath('/').middlewares).toEqual(
+        [new RouterMiddleware(globalMiddleware)]
+      );
 
       expect(
         middlewareRouter._getRouteHandlersByPath('/contact').middlewares
