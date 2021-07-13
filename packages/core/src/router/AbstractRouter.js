@@ -323,10 +323,7 @@ export default class AbstractRouter extends Router {
       return Promise.reject(error);
     }
 
-    const originalPath = this._getCurrentlyRoutedPath();
-    const { route } = this._getRouteHandlersByPath(originalPath);
-
-    params = Object.assign({}, route.extractParameters(originalPath), params);
+    params = this._addParamsFromOriginalRoute(params);
 
     const action = {
       url: this.getUrl(),
@@ -366,10 +363,7 @@ export default class AbstractRouter extends Router {
       return Promise.reject(error);
     }
 
-    const originalPath = this._getCurrentlyRoutedPath();
-    const { route } = this._getRouteHandlersByPath(originalPath);
-
-    params = Object.assign({}, route.extractParameters(originalPath), params);
+    params = this._addParamsFromOriginalRoute(params);
 
     const action = {
       url: this.getUrl(),
@@ -572,5 +566,25 @@ export default class AbstractRouter extends Router {
     for (const middleware of middlewares) {
       await middleware.run(params, locals);
     }
+  }
+
+  /**
+   * Obtains original route that was handled before not-found / error route
+   * and assigns its params to current params
+   *
+   * @param {Object<string, string>} params Route params for not-found or
+   *        error page
+   * @returns {Object<string, string>} Provided params merged with params
+   *        from original route
+   */
+  _addParamsFromOriginalRoute(params) {
+    const originalPath = this._getCurrentlyRoutedPath();
+    const { route } = this._getRouteHandlersByPath(originalPath);
+
+    if (!route) {
+      return params;
+    }
+
+    return Object.assign({}, route.extractParameters(originalPath), params);
   }
 }
