@@ -124,7 +124,7 @@ export default class StaticRoute extends AbstractRoute {
      *
      * @type {string}
      */
-    this._trimmedPathExpression = this._getTrimmedPath(pathExpression);
+    this._trimmedPathExpression = AbstractRoute.getTrimmedPath(pathExpression);
 
     /**
      * The names of the parameters in this route.
@@ -177,14 +177,14 @@ export default class StaticRoute extends AbstractRoute {
     path = this._cleanUnusedOptionalParams(path);
     path += AbstractRoute.pairsToQuery(queryPairs);
 
-    return this._getTrimmedPath(path);
+    return AbstractRoute.getTrimmedPath(path);
   }
 
   /**
    * @inheritdoc
    */
   matches(path) {
-    let trimmedPath = this._getTrimmedPath(path);
+    let trimmedPath = AbstractRoute.getTrimmedPath(path);
 
     return this._matcher.test(trimmedPath);
   }
@@ -193,9 +193,9 @@ export default class StaticRoute extends AbstractRoute {
    * @inheritdoc
    */
   extractParameters(path) {
-    let trimmedPath = this._getTrimmedPath(path);
+    let trimmedPath = AbstractRoute.getTrimmedPath(path);
     let parameters = this._getParameters(trimmedPath);
-    let query = this._getQuery(trimmedPath);
+    let query = AbstractRoute.getQuery(trimmedPath);
 
     return Object.assign({}, parameters, query);
   }
@@ -557,7 +557,7 @@ export default class StaticRoute extends AbstractRoute {
       const currentCoreName = matchesName ? matchesName[0] : '';
 
       if (currentCoreName) {
-        const value = this._decodeURIParameter(rawValue);
+        const value = AbstractRoute.decodeURIParameter(rawValue);
         parameters[currentCoreName] = value;
       }
     }
