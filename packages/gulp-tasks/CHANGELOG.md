@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [17.11.1](https://github.com/seznam/ima/compare/v17.11.0...v17.11.1) (2021-07-13)
+
+
+### Bug Fixes
+
+* 🐛 passing original params to not-found and error route ([#122](https://github.com/seznam/ima/issues/122)) ([131fb7f](https://github.com/seznam/ima/commit/131fb7fdb4d239c1efe49b9254ca1585e1b90315))
+
+
+
+
+
 # [17.11.0](https://github.com/seznam/ima/compare/v17.10.0...v17.11.0) (2021-06-12)
 
 **Note:** Version bump only for package @ima/gulp-tasks
