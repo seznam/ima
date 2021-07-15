@@ -16,6 +16,8 @@ export const LOOSE_SLASHES_REGEXP = /^\/|\/$/g;
  */
 export default class AbstractRoute {
   /**
+   * TODO IMA@18 remove static method
+   *
    * Converts array of pairs (tuples) into valid URI query component.
    * Filters out invalid inputs (undefined, null, object, array, non-pair).
    *
@@ -47,6 +49,8 @@ export default class AbstractRoute {
   }
 
   /**
+   * TODO IMA@18 remove static method
+   *
    * Converts object of key/value pairs to URI query,
    * which can be appended to url.
    *
@@ -67,6 +71,8 @@ export default class AbstractRoute {
   }
 
   /**
+   * TODO IMA@18 remove static method
+   *
    * Extracts and decodes the query parameters from the provided URL path and
    * query.
    *
@@ -112,6 +118,8 @@ export default class AbstractRoute {
   }
 
   /**
+   * TODO IMA@18 remove static method
+   *
    * Decoding parameters.
    *
    * @param {string} parameterValue
@@ -130,6 +138,8 @@ export default class AbstractRoute {
   }
 
   /**
+   * TODO IMA@18 remove static method
+   *
    * Trims the trailing forward slash from the provided URL path.
    *
    * @param {string} path The path to trim.
