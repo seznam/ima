@@ -16,6 +16,8 @@ export const LOOSE_SLASHES_REGEXP = /^\/|\/$/g;
  */
 export default class AbstractRoute {
   /**
+   * TODO IMA@18 remove static method
+   *
    * Converts array of pairs (tuples) into valid URI query component.
    * Filters out invalid inputs (undefined, null, object, array, non-pair).
    *
@@ -47,6 +49,8 @@ export default class AbstractRoute {
   }
 
   /**
+   * TODO IMA@18 remove static method
+   *
    * Converts object of key/value pairs to URI query,
    * which can be appended to url.
    *
@@ -64,6 +68,85 @@ export default class AbstractRoute {
     return AbstractRoute.pairsToQuery(
       Object.keys(params).map(param => [param, params[param]])
     );
+  }
+
+  /**
+   * TODO IMA@18 remove static method
+   *
+   * Extracts and decodes the query parameters from the provided URL path and
+   * query.
+   *
+   * @param {string} path The URL path, including the optional query string
+   *        (if any).
+   * @return {Object<string, ?string>} Parsed query parameters.
+   */
+  static getQuery(path) {
+    const query = {};
+    const queryStart = path.indexOf('?');
+
+    if (queryStart > -1 && queryStart !== path.length - 1) {
+      const pairs = path.substring(queryStart + 1).split(/[&;]/);
+
+      for (const parameterPair of pairs) {
+        const delimiterIndex = parameterPair.indexOf('=');
+
+        const pair = [];
+
+        if (delimiterIndex !== -1) {
+          pair.push(parameterPair.slice(0, delimiterIndex));
+          pair.push(parameterPair.slice(delimiterIndex + 1)); //+ 1 to exclude equal sign
+        } else {
+          pair.push(parameterPair);
+        }
+
+        if (pair.length > 1) {
+          const hashIndex = pair[1].indexOf('#');
+
+          if (hashIndex !== -1) {
+            pair[1] = pair[1].slice(0, hashIndex);
+          }
+        }
+
+        query[AbstractRoute.decodeURIParameter(pair[0])] =
+          pair.length > 1
+            ? AbstractRoute.decodeURIParameter(pair[1]) || ''
+            : true;
+      }
+    }
+
+    return query;
+  }
+
+  /**
+   * TODO IMA@18 remove static method
+   *
+   * Decoding parameters.
+   *
+   * @param {string} parameterValue
+   * @return {string} decodedValue
+   */
+  static decodeURIParameter(parameterValue) {
+    let decodedValue;
+    if (parameterValue) {
+      try {
+        decodedValue = decodeURIComponent(parameterValue);
+      } catch (_) {
+        return '';
+      }
+    }
+    return decodedValue;
+  }
+
+  /**
+   * TODO IMA@18 remove static method
+   *
+   * Trims the trailing forward slash from the provided URL path.
+   *
+   * @param {string} path The path to trim.
+   * @return {string} Trimmed path.
+   */
+  static getTrimmedPath(path) {
+    return `/${path.replace(LOOSE_SLASHES_REGEXP, '')}`;
   }
 
   /**
@@ -292,77 +375,5 @@ export default class AbstractRoute {
       'The ima.core.router.AbstractRoute.extractParameters method is abstract ' +
         'and must be overridden'
     );
-  }
-
-  /**
-   * Extracts and decodes the query parameters from the provided URL path and
-   * query.
-   *
-   * @param {string} path The URL path, including the optional query string
-   *        (if any).
-   * @return {Object<string, ?string>} Parsed query parameters.
-   */
-  _getQuery(path) {
-    let query = {};
-    let queryStart = path.indexOf('?');
-    let hasQuery = queryStart > -1 && queryStart !== path.length - 1;
-
-    if (hasQuery) {
-      let pairs = path.substring(queryStart + 1).split(/[&;]/);
-
-      for (let parameterPair of pairs) {
-        const delimiterIndex = parameterPair.indexOf('=');
-
-        const pair = [];
-
-        if (delimiterIndex !== -1) {
-          pair.push(parameterPair.slice(0, delimiterIndex));
-          pair.push(parameterPair.slice(delimiterIndex + 1)); //+ 1 to exclude equal sign
-        } else {
-          pair.push(parameterPair);
-        }
-
-        if (pair.length > 1) {
-          const hashIndex = pair[1].indexOf('#');
-
-          if (hashIndex !== -1) {
-            pair[1] = pair[1].slice(0, hashIndex);
-          }
-        }
-
-        query[this._decodeURIParameter(pair[0])] =
-          pair.length > 1 ? this._decodeURIParameter(pair[1]) || '' : true;
-      }
-    }
-
-    return query;
-  }
-
-  /**
-   * Decoding parameters.
-   *
-   * @param {string} parameterValue
-   * @return {string} decodedValue
-   */
-  _decodeURIParameter(parameterValue) {
-    let decodedValue;
-    if (parameterValue) {
-      try {
-        decodedValue = decodeURIComponent(parameterValue);
-      } catch (_) {
-        return '';
-      }
-    }
-    return decodedValue;
-  }
-
-  /**
-   * Trims the trailing forward slash from the provided URL path.
-   *
-   * @param {string} path The path to trim.
-   * @return {string} Trimmed path.
-   */
-  _getTrimmedPath(path) {
-    return `/${path.replace(LOOSE_SLASHES_REGEXP, '')}`;
   }
 }

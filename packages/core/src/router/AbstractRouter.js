@@ -1,3 +1,4 @@
+import AbstractRoute from './AbstractRoute';
 import ActionTypes from './ActionTypes';
 import Events from './Events';
 import Router from './Router';
@@ -582,7 +583,12 @@ export default class AbstractRouter extends Router {
     const { route } = this._getRouteHandlersByPath(originalPath);
 
     if (!route) {
-      return params;
+      // try to at least extract query string params from path
+      const queryParams = AbstractRoute.getQuery(
+        AbstractRoute.getTrimmedPath(originalPath)
+      );
+
+      return Object.assign({}, queryParams, params);
     }
 
     return Object.assign({}, route.extractParameters(originalPath), params);
