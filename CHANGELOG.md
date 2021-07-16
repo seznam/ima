@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [17.11.2](https://github.com/seznam/ima/compare/v17.11.1...v17.11.2) (2021-07-16)
+
+
+### Bug Fixes
+
+* 🐛 passing at least query params to error route ([#126](https://github.com/seznam/ima/issues/126)) ([6b1224e](https://github.com/seznam/ima/commit/6b1224edd28d4ff8e853d46e46ac2b9b4160da2e))
+
+
+
+
+
 ## [17.11.1](https://github.com/seznam/ima/compare/v17.11.0...v17.11.1) (2021-07-13)
 
 
