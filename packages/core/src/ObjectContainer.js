@@ -132,7 +132,11 @@ export default class ObjectContainer {
    */
   bind(name, classConstructor, dependencies) {
     if ($Debug) {
-      if (this._bindingState === ObjectContainer.PLUGIN_BINDING_STATE) {
+      if (
+        this._bindingState === ObjectContainer.PLUGIN_BINDING_STATE &&
+        typeof name === 'string' &&
+        name[0] !== '$'
+      ) {
         throw new Error(
           `ima.core.ObjectContainer:bind Object container ` +
             `is locked. You do not have the permission to ` +

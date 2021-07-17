@@ -24,14 +24,7 @@ const Types = Object.freeze({
    * @const
    * @type {string}
    */
-  UNMOUNT: '$IMA.$PageRenderer.type.unmount',
-  /**
-   * The CLEAR_STATE type is set if unmounting only clear component state.
-   *
-   * @const
-   * @type {string}
-   */
-  CLEAR_STATE: '$IMA.$PageRenderer.type.clearState'
+  UNMOUNT: '$IMA.$PageRenderer.type.unmount'
 });
 
 export default Types;

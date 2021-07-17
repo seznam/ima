@@ -23,7 +23,7 @@ export default class PageRenderer {
    * invoked at the client.
    *
    * @param {Controller} controller The current page controller.
-   * @param {React.Component} view The page's view.
+   * @param {Component} view The page's view.
    * @param {Object<string, (*|Promise<*>)>} pageResources The resources for
    *        the view loaded by the controller.
    * @param {{
@@ -34,7 +34,7 @@ export default class PageRenderer {
    *              (
    *                string|
    *                function(
-   *                  new: React.Component,
+   *                  new: Component,
    *                  Object<string, *>,
    *                  ?Object<string, *>
    *                )
@@ -43,8 +43,8 @@ export default class PageRenderer {
    *          ),
    *          autoScroll: boolean,
    *          allowSPA: boolean,
-   *          documentView: ?function(new: AbstractDocumentView),
-   *          managedRootView: ?function(new: React.Component)=
+   *          documentView: ?function(new: Component),
+   *          managedRootView: ?function(new: Component)=
    *        }} routeOptions The current route options.
    * @return {Promise<{
    *           status: number,
@@ -69,9 +69,30 @@ export default class PageRenderer {
    * resolved.
    *
    * @param {Controller} controller The current page controller.
+   * @param {React.Component} view The page's view.
    * @param {Object<string, (*|Promise<*>)>} resourcesUpdate The resources
    *        that represent the update the of current state according to the
    *        current route and its parameters.
+   * @param {{
+   *          onlyUpdate: (
+   *            boolean|
+   *            function(
+   *              (string|function(new: Controller, ...*)),
+   *              (
+   *                string|
+   *                function(
+   *                  new: Component,
+   *                  Object<string, *>,
+   *                  ?Object<string, *>
+   *                )
+   *              )
+   *            ): boolean
+   *          ),
+   *          autoScroll: boolean,
+   *          allowSPA: boolean,
+   *          documentView: ?function(new: Component),
+   *          managedRootView: ?function(new: Component)=
+   *        }} routeOptions The current route options.
    * @return {Promise<{
    *           status: number,
    *           content: ?string,
@@ -101,13 +122,4 @@ export default class PageRenderer {
    *        rendered view.
    */
   setState() {}
-
-  /**
-   * Clears the state to the currently rendered view.
-   *
-   * This method has no effect at the server-side.
-   *
-   * @deprecated
-   */
-  clearState() {}
 }
