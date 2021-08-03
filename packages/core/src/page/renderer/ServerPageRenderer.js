@@ -3,22 +3,6 @@ import GenericError from '../../error/GenericError';
 
 // @server-side class ServerPageRenderer extends __VARIABLE__ {__CLEAR__}\nexports.default = ServerPageRenderer;
 
-let imaLoader = '';
-let imaRunner = '';
-
-//#if _SERVER
-if (typeof window === 'undefined' || window === null) {
-  let nodeFs = 'fs';
-  let nodePath = 'path';
-  let fs = require(nodeFs);
-  let path = require(nodePath);
-  let folder = path.dirname(path.resolve('@ima/core'));
-
-  imaLoader = fs.readFileSync(`${folder}/polyfill/imaLoader.js`, 'utf8');
-  imaRunner = fs.readFileSync(`${folder}/polyfill/imaRunner.js`, 'utf8');
-}
-//#endif
-
 /**
  * Server-side page renderer. The renderer renders the page into the HTML
  * markup and sends it to the client.
@@ -136,8 +120,6 @@ export default class ServerPageRenderer extends AbstractPageRenderer {
 				$IMA.$Root = "${this._settings.$Root}";
 				$IMA.$LanguagePartPath = "${this._settings.$LanguagePartPath}";
 			})(typeof window !== 'undefined' && window !== null ? window : global);
-			${imaRunner}
-			${imaLoader}
 			`;
   }
 
