@@ -6,7 +6,7 @@ const webpackConfig = require('../webpack/config');
 
 const IMA_CONF_FILENAME = 'ima.conf.js';
 
-function loadImaConf(rootDir) {
+async function loadImaConf(rootDir) {
   if (!rootDir) {
     return {};
   }
@@ -62,7 +62,7 @@ async function createWebpackConfig(
   }
 
   // Load imaConf
-  const imaConf = loadImaConf(configArgs.rootDir);
+  const imaConf = await loadImaConf(configArgs.rootDir);
   const finalConfigArgs = [];
 
   if (~configurations.indexOf('client')) {

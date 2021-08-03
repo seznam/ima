@@ -15,7 +15,6 @@ async function dev(args) {
     info('Starting webpack compiler...');
     await watchCompiler(config, args);
   } catch (err) {
-    console.log(err);
     handleCompilationError(err);
   }
 }
