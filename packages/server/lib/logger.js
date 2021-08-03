@@ -1,5 +1,6 @@
 'use strict';
 
+const chalk = require('chalk');
 const { createLogger, format, transports } = require('winston');
 const { printf, combine } = format;
 
@@ -104,6 +105,22 @@ module.exports = environment => {
     );
   }
 
+  let colorizeLevel = level => {
+    switch (level) {
+      case 'info':
+        return chalk.cyan.bold(`${level}: `);
+      case 'error':
+        return chalk.red.bold(`${level}: `);
+      case 'warn':
+        return chalk.yellow.bold(`${level}: `);
+      case 'debug':
+        return chalk.green.bold(`${level}: `);
+
+      default:
+        return chalk.bold(`${level}: `);
+    }
+  };
+
   let logger = createLogger({
     format: combine(
       format(info => {
@@ -133,14 +150,9 @@ module.exports = environment => {
         }
       })(),
       printf(info => {
-        return (
-          info.timestamp +
-          ' [' +
-          info.level.toUpperCase() +
-          '] ' +
-          (info.message || '') +
-          formatMeta(info)
-        );
+        return `${colorizeLevel(info.level)}${chalk.magenta(
+          `[${info.timestamp}]`
+        )} ${info.message || ''} ${formatMeta(info)}`;
       })
     ),
     transports: [new transports.Console()]
