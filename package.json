@@ -1,6 +1,9 @@
 {
   "name": "ima",
   "description": "IMA.js framework for isomorphic javascript application",
+  "workspaces": [
+    "./packages/*" 
+  ],
   "devDependencies": {
     "@commitlint/cli": "8.3.5",
     "@commitlint/config-conventional": "8.3.4",
@@ -23,7 +26,7 @@
     "gulp-change": "1.0.2",
     "gulp-rename": "2.0.0",
     "husky": "4.2.3",
-    "jest": "25.1.0",
+    "jest": "26.6.1",
     "jsdoc-to-markdown": "5.0.3",
     "jsdom": "16.4.0",
     "lerna": "3.20.2",
@@ -40,7 +43,7 @@
     "verdaccio": "4.5.1"
   },
   "scripts": {
-    "postinstall": "npm install --prefix ./packages/devtools && lerna bootstrap",
+    "postinstall": "npm install --prefix ./packages/devtools",
     "benchmark": "utils/benchmark/benchmark.sh",
     "doc": "gulp doc",
     "test": "lerna run test && npm run --prefix ./packages/devtools test",
@@ -83,6 +86,5 @@
   },
   "engines": {
     "node": ">=14"
-  },
-  "dependencies": {}
+  }
 }

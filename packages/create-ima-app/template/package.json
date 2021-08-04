@@ -31,11 +31,11 @@
     "prettier": "2.2.1"
   },
   "dependencies": {
-    "@ima/core": "17.10.0",
-    "@ima/server": "17.9.0",
+    "@ima/core": "17.11.2",
+    "@ima/server": "17.11.2",
     "body-parser": "1.19.0",
     "compression": "1.7.4",
-    "cookie-parser": "1.4.4",
+    "cookie-parser": "1.4.5",
     "express": "4.17.1",
     "express-http-proxy": "1.6.0",
     "helmet": "3.21.2",

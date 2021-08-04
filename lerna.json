@@ -10,7 +10,8 @@
   },
   "packages": [
     "packages/!(devtools)",
-    "packages/devtools-scripts"
+    "packages/devtools-scripts",
+    "packages/cli"
   ],
   "ignoreChanges": [
     "**/__tests__/**",

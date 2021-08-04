@@ -35,7 +35,7 @@
     "@babel/core": "^7.15.5",
     "@babel/preset-env": "^7.15.4",
     "@babel/preset-react": "^7.14.5",
-    "@pmmmwh/react-refresh-webpack-plugin": "^0.4.3",
+    "@pmmmwh/react-refresh-webpack-plugin": "^0.5.1",
     "babel-loader": "^8.2.2",
     "better-opn": "^3.0.0",
     "chalk": "^4.1.2",
@@ -78,5 +78,8 @@
     "@typescript-eslint/eslint-plugin": "^4.31.0",
     "@typescript-eslint/parser": "^4.31.0",
     "typescript": "^4.4.2"
+  },
+  "peerDependencies": {
+    "@ima/helpers": ">= 17.9.0"
   }
 }
