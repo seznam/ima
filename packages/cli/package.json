@@ -1,0 +1,55 @@
+{
+  "name": "@ima/cli",
+  "version": "17.10.0",
+  "description": "IMA.js CLI tool to build, develop and work with IMA.js applications.",
+  "keywords": [
+    "IMA",
+    "IMA.js",
+    "Isomorphic",
+    "Javascript"
+  ],
+  "bin": {
+    "ima": "./bin/ima.js"
+  },
+  "main": "./main.js",
+  "author": "Miroslav Jancarik <miroslav.jancarik@firma.seznam.cz>",
+  "contributors": [],
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/seznam/ima.git"
+  },
+  "bugs": {
+    "url": "https://github.com/seznam/ima/issues"
+  },
+  "publishConfig": {
+    "registry": "https://registry.npmjs.org/",
+    "access": "public"
+  },
+  "license": "MIT",
+  "dependencies": {
+    "@babel/preset-react": "^7.13.13",
+    "babel-loader": "^8.2.2",
+    "chalk": "^4.1.1",
+    "compression-webpack-plugin": "^8.0.0",
+    "copy-webpack-plugin": "^9.0.0",
+    "css-loader": "^5.2.6",
+    "css-minimizer-webpack-plugin": "^3.0.1",
+    "fast-glob": "^3.2.5",
+    "glob-import-loader": "^1.1.4",
+    "html-webpack-plugin": "^5.3.1",
+    "less": "^4.1.1",
+    "less-loader": "^9.0.0",
+    "mini-css-extract-plugin": "^1.6.0",
+    "null-loader": "^4.0.1",
+    "postcss": "^8.3.4",
+    "postcss-flexbugs-fixes": "^5.0.2",
+    "postcss-loader": "^6.1.0",
+    "postcss-pipeline-webpack-plugin": "^6.0.0",
+    "postcss-preset-env": "^6.7.0",
+    "webpack": "^5.38.1",
+    "webpack-dev-middleware": "^5.0.0",
+    "webpack-hot-middleware": "^2.25.0",
+    "webpack-remove-empty-scripts": "^0.7.1",
+    "yargs": "^17.0.1"
+  }
+}
