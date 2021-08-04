@@ -4,7 +4,37 @@ import Options from '../Options';
 import * as settings from 'services/settings';
 
 jest.mock('easy-uid');
+
+jest.mock('services/settings', () => ({
+  getSettings: jest.fn().mockImplementation(() => ({
+    presets: 'settingsPresets',
+    selectedPresetId: '0'
+  })),
+  setSettings: jest.fn()
+}));
+
 import uid from 'easy-uid';
+
+let settingsStorage = {};
+
+global.chrome = {
+  storage: {
+    local: {
+      set: jest.fn().mockImplementation(value => {
+        return (settingsStorage = {
+          ...settingsStorage,
+          ...value
+        });
+      }),
+      get: jest.fn().mockImplementation((key, callback) => {
+        callback(settingsStorage);
+      })
+    }
+  },
+  runtime: {
+    lastError: 'runtime error'
+  }
+};
 
 describe('Options template', () => {
   let wrapper, instance;
@@ -32,7 +62,10 @@ describe('Options template', () => {
   beforeEach(() => {
     wrapper = shallow(<Options {...props} />);
     instance = wrapper.instance();
-    event.preventDefault.mockClear();
+  });
+
+  afterEach(() => {
+    jest.clearAllMocks();
   });
 
   it('should match snapshot', () => {
@@ -77,13 +110,6 @@ describe('Options template', () => {
 
   describe('componentDidMount', () => {
     it('should fetch and set settings on mount', async () => {
-      settings.getSettings = jest.fn().mockImplementation(() => ({
-        presets: 'settingsPresets',
-        selectedPresetId: '0'
-      }));
-
-      await instance.componentDidMount();
-
       expect(settings.getSettings.mock.calls.length).toBe(1);
       expect(instance.props.setPresets.mock.calls.length).toBe(1);
       expect(instance.props.setPresets.mock.calls[0][0]).toEqual({
@@ -135,7 +161,6 @@ describe('Options template', () => {
 
   describe('onSubmit', () => {
     beforeEach(() => {
-      settings.setSettings = jest.fn();
       global.FormData = function () {
         return {
           entries: jest.fn().mockImplementation(() => {

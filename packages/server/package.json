@@ -42,7 +42,7 @@
   },
   "engines": {
     "node": ">=6",
-    "npm": ">=4 <7"
+    "npm": ">=4 <8"
   },
   "jest": {
     "bail": false,

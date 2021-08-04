@@ -9,7 +9,7 @@ const { checkNodeVersion } = require('../utils/utils');
 const { error } = require('../utils/printUtils');
 
 const MIN_NODE_VERSION = 10;
-const MAX_NODE_VERSION = 14;
+const MAX_NODE_VERSION = 16;
 
 if (argv._.length === 0) {
   // eslint-disable-next-line no-console
