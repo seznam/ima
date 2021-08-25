@@ -11,6 +11,7 @@ const PostCssPipelineWebpackPlugin = require('postcss-pipeline-webpack-plugin');
 const CssMinimizerPlugin = require('css-minimizer-webpack-plugin');
 const TerserPlugin = require('terser-webpack-plugin');
 const CompressionPlugin = require('compression-webpack-plugin');
+// const ReactRefreshWebpackPlugin = require('@pmmmwh/react-refresh-webpack-plugin');
 
 const RunImaServerPlugin = require('./plugins/RunImaServerPlugin');
 const {
@@ -49,10 +50,10 @@ module.exports = async (args, imaConf) => {
       ...wif(isServer, { server: path.join(rootDir, 'app/main.js') }),
       ...wif(!isServer, {
         client: [
-          path.join(rootDir, 'app/main.js'),
           ...wif(isWatch, [
-            `webpack-hot-middleware/client?path=//localhost:${imaEnvironment.$Server.port}/__webpack_hmr&timeout=20000&reload=true&overlay=true`
-          ])
+            `webpack-hot-middleware/client?path=//localhost:${imaEnvironment.$Server.port}/__webpack_hmr&timeout=20000&reload=true&overlay=true&overlayWarnings=true`
+          ]),
+          path.join(rootDir, 'app/main.js')
         ]
       })
     },
@@ -68,7 +69,7 @@ module.exports = async (args, imaConf) => {
       path: outputDir,
       ...wif(isServer, { libraryTarget: 'commonjs2' })
     },
-    devtool: isProduction ? 'source-map' : 'cheap-module-source-map',
+    devtool: isProduction ? 'source-map' : 'eval-source-map',
     optimization: {
       minimize: isProduction && !isServer,
       minimizer: [new TerserPlugin(), new CssMinimizerPlugin()]
@@ -76,36 +77,44 @@ module.exports = async (args, imaConf) => {
     module: {
       rules: [
         {
-          test: /\.(js|jsx)$/,
+          test: /\.[jt]sx?$/,
           exclude: /node_modules/,
-          use: {
-            loader: 'babel-loader',
-            options: requireConfig({
-              rootDir,
-              packageJson,
-              packageJsonKey: 'babel',
-              fileNames: [
-                'babel.config.js',
-                'babel.config.cjs',
-                'babel.config.json',
-                '.babelrc.js',
-                '.babelrc.cjs',
-                '.babelrc.json',
-                '.babelrc'
-              ],
-              defaultConfig: {
-                presets: ['@babel/preset-react'],
-                plugins: []
-              }
-            })
-          }
-        },
-        {
-          test: /\.(js|jsx)$/,
           use: [
+            // {
+            //   loader: 'plugin-loader',
+            //   options: {}
+            // },
             {
-              loader: 'plugin-loader',
-              options: {}
+              loader: 'babel-loader',
+              options: requireConfig({
+                rootDir,
+                packageJson,
+                packageJsonKey: 'babel',
+                fileNames: [
+                  'babel.config.js',
+                  'babel.config.cjs',
+                  'babel.config.json',
+                  '.babelrc.js',
+                  '.babelrc.cjs',
+                  '.babelrc.json',
+                  '.babelrc'
+                ],
+                defaultConfig: {
+                  presets: [
+                    '@babel/preset-env',
+                    [
+                      '@babel/preset-react',
+                      {
+                        development: !isProduction,
+                        runtime: 'classic'
+                        // runtime: 'automatic'
+                      }
+                    ]
+                  ],
+                  // plugins: isProduction ? [] : ['react-refresh/babel']
+                  plugins: []
+                }
+              })
             }
           ]
         },
@@ -274,7 +283,14 @@ module.exports = async (args, imaConf) => {
             }
           }),
           ...wif(imaConf.compress, [new CompressionPlugin()]),
-          ...wif(isWatch, [new webpack.HotModuleReplacementPlugin()])
+          ...wif(isWatch, [
+            new webpack.HotModuleReplacementPlugin()
+            // new ReactRefreshWebpackPlugin({
+            //   overlay: {
+            //     sockIntegration: 'whm'
+            //   }
+            // })
+          ])
         ],
     ...wif(isServer, {
       externalsPresets: {

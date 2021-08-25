@@ -27,7 +27,10 @@
   },
   "license": "MIT",
   "dependencies": {
+    "@babel/core": "^7.15.0",
+    "@babel/preset-env": "^7.15.0",
     "@babel/preset-react": "^7.13.13",
+    "@pmmmwh/react-refresh-webpack-plugin": "^0.4.3",
     "babel-loader": "^8.2.2",
     "chalk": "^4.1.1",
     "compression-webpack-plugin": "^8.0.0",
@@ -46,6 +49,7 @@
     "postcss-loader": "^6.1.0",
     "postcss-pipeline-webpack-plugin": "^6.0.0",
     "postcss-preset-env": "^6.7.0",
+    "react-refresh": "^0.10.0",
     "webpack": "^5.38.1",
     "webpack-dev-middleware": "^5.0.0",
     "webpack-hot-middleware": "^2.25.0",
