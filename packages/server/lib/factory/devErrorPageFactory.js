@@ -1,97 +1,101 @@
 const fs = require('fs');
-const sep = require('path').sep;
+const path = require('path');
+const sep = path.sep;
 
+const ejs = require('ejs');
 const stackTrace = require('stack-trace');
-const asyncEach = require('async-each');
 const hljs = require('highlight.js');
 const errorToJSON = require('error-to-json');
-
-const errorView = require('../template/errorView.js');
 
 hljs.configure({
   tabReplace: '  ',
   lineNodes: true
 });
 
-// TODO IMA@18 refactor to ejs template
 module.exports = function devErrorPageFactory({ logger }) {
-  function devErrorPage(err, req, res) {
-    let callstack = stackTrace.parse(err);
+  const template = ejs.compile(
+    fs.readFileSync(
+      path.join(__dirname, '../template/devErrorPage.ejs'),
+      'utf8'
+    )
+  );
+
+  function devErrorPage({ error, req, res }) {
+    let callstack = stackTrace.parse(error);
     let fileIndex = 1;
 
     logger.error('The application crashed due to an uncaught exception', {
-      error: errorToJSON(err)
+      error: errorToJSON(error)
     });
 
-    asyncEach(
-      callstack,
-      (stackFrame, cb) => {
-        // exclude core node modules and node modules
-        if (
-          !stackFrame.fileName ||
-          !stackFrame.fileName.includes(sep) ||
-          /node_modules/.test(stackFrame.fileName) ||
-          /internal/.test(stackFrame.fileName)
-        ) {
-          return cb();
-        }
-
-        fs.readFile(stackFrame.fileName, 'utf-8', (err, content) => {
-          if (err) {
-            return cb(err);
+    return Promise.all(
+      callstack.map(stackFrame => {
+        return new Promise((resolve, reject) => {
+          // exclude core node modules and node modules
+          if (
+            !stackFrame.fileName ||
+            !stackFrame.fileName.includes(sep) ||
+            /node_modules/.test(stackFrame.fileName) ||
+            /internal/.test(stackFrame.fileName)
+          ) {
+            return resolve();
           }
 
-          content = hljs.highlight('javascript', content);
+          fs.readFile(stackFrame.fileName, 'utf-8', (err, content) => {
+            if (err) {
+              return reject(err);
+            }
 
-          // start a few lines before the error or at the beginning of
-          // the file
-          let start = Math.max(stackFrame.lineNumber - 11, 0);
-          let lines = content.value
-            .split('\n')
-            .map(line => `<span class="line">${line}</span>`);
-          // end a few lines after the error or the last line of the file
-          let end = Math.min(stackFrame.lineNumber + 10, lines.length);
-          let snippet = lines.slice(start, end);
-          // array starts at 0 but lines numbers begin with 1, so we have
-          // to subtract 1 to get the error line position in the array
-          let errLine = stackFrame.lineNumber - start - 1;
+            content = hljs.highlight('javascript', content);
 
-          snippet[errLine] = snippet[errLine].replace(
-            '<span class="line">',
-            '<span class="line error-line">'
-          );
+            // start a few lines before the error or at the beginning of
+            // the file
+            let start = Math.max(stackFrame.lineNumber - 11, 0);
+            let lines = content.value.split('\n');
+            let end = Math.min(stackFrame.lineNumber + 10, lines.length);
+            lines = lines.slice(start, end);
+            // array starts at 0 but lines numbers begin with 1, so we have
+            // to subtract 1 to get the error line position in the array
+            let errorLine = stackFrame.lineNumber - start - 1;
 
-          stackFrame.content = snippet.join('\n');
-          stackFrame.errLine = errLine;
-          stackFrame.startLine = start;
-          stackFrame.id = 'file-' + fileIndex;
+            stackFrame.lines = lines;
+            stackFrame.errorLine = errorLine;
+            stackFrame.startLine = start;
+            stackFrame.endLine = end;
+            stackFrame.id = 'file-' + fileIndex;
 
-          fileIndex++;
+            fileIndex++;
 
-          cb(null, stackFrame);
+            resolve(stackFrame);
+          });
         });
-      },
-      (error, callstack) => {
-        if (!Array.isArray(callstack)) {
-          callstack = [];
-        }
-
+      })
+    )
+      .then(callstack => {
         callstack = callstack.filter(item => !!item);
 
         res.status(500);
 
-        // if something bad happened while processing the stacktrace make
-        // sure to return something useful
-        if (error) {
-          logger.error('Failed to display error page', {
-            error: errorToJSON(error)
-          });
-          res.send(err.stack);
-        } else {
-          res.send(errorView(err, callstack));
-        }
-      }
-    );
+        res.send(
+          template({
+            callstack,
+            error,
+            req,
+            res
+          })
+        );
+
+        return { error };
+      })
+      .catch(error => {
+        res.status(500);
+        logger.error('Failed to display error page', {
+          error: errorToJSON(error)
+        });
+        res.send(error.stack);
+
+        return { error };
+      });
   }
 
   return devErrorPage;
