@@ -19,7 +19,7 @@
   "license": "MIT",
   "devDependencies": {
     "@ima/gulp-task-loader": "17.8.0",
-    "@ima/gulp-tasks": "17.11.2",
+    "@ima/gulp-tasks": "17.11.3",
     "babel-eslint": "10.0.3",
     "enzyme": "3.10.0",
     "enzyme-adapter-react-16": "1.15.1",
