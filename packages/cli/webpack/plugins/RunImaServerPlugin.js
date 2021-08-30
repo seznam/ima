@@ -1,5 +1,6 @@
 const path = require('path');
 const childProcess = require('child_process');
+const open = require('better-opn');
 
 class RunImaServerPlugin {
   constructor(options = {}) {
@@ -22,7 +23,15 @@ class RunImaServerPlugin {
 
           // TODO -> use on('spawn'), but it doesn't seems to work right now
           if (this._options.open) {
-            this._openBrowser(`http://localhost:${this._options.port || 3001}`);
+            try {
+              open(`http://localhost:${this._options.port || 3001}`);
+            } catch (error) {
+              console.error(
+                `Could not open http://localhost:${
+                  this._options.port || 3001
+                } inside a browser.`
+              );
+            }
           }
 
           this._serverStart = true;
@@ -31,28 +40,6 @@ class RunImaServerPlugin {
         callback();
       }
     );
-  }
-
-  _openBrowser(url) {
-    const [command, args = []] = this._browserCommand();
-
-    childProcess.execFile(command, [...args, encodeURI(url)]);
-  }
-
-  _browserCommand() {
-    const { platform } = process;
-
-    switch (platform) {
-      case 'android':
-      case 'linux':
-        return ['xdg-open'];
-      case 'darwin':
-        return ['open'];
-      case 'win32':
-        return ['cmd', ['/c', 'start']];
-      default:
-        throw new Error(`Platform ${platform} isn't supported.`);
-    }
   }
 }
 
