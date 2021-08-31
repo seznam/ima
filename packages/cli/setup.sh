@@ -1,6 +1,7 @@
 #!/usr/bin/env bash
 
 CLI_DIR=$PWD
+CREATE_IMA_APP_BIN=$PWD/../create-ima-app/bin/create-ima-app.js
 APP_DIR=$1
 
 # package cli
@@ -12,8 +13,12 @@ echo "  Linking cli to $APP_DIR..."
 echo "  CLI_DIR: $CLI_DIR"
 echo "  APP_DIR: $APP_DIR"
 echo "  PKG_FILE: $PKG_FILE"
+echo "  CREATE_IMA_APP_BIN: $CREATE_IMA_APP_BIN"
 echo "===--------------------------==="
 echo ""
+
+# create hello app
+$CREATE_IMA_APP_BIN $APP_DIR --example=hello
 
 # prepare dependencies
 npm link
