@@ -4,16 +4,16 @@ const fs = require('fs');
 const { error } = require('./print');
 const webpackConfig = require('../webpack/config');
 
-const IMA_CONF_FILENAME = 'ima.conf.js';
+const IMA_CONF_FILENAME = 'ima.config.js';
 
-async function loadImaConf(rootDir) {
+async function loadImaConfig(rootDir) {
   if (!rootDir) {
     return {};
   }
 
-  const imaConfPath = path.join(rootDir, IMA_CONF_FILENAME);
+  const imaConfigPath = path.join(rootDir, IMA_CONF_FILENAME);
 
-  return fs.existsSync(imaConfPath) ? require(imaConfPath) : {};
+  return fs.existsSync(imaConfigPath) ? require(imaConfigPath) : {};
 }
 
 function handlerFactory(handlerFn) {
@@ -61,8 +61,8 @@ async function createWebpackConfig(
     return null;
   }
 
-  // Load imaConf
-  const imaConf = await loadImaConf(configArgs.rootDir);
+  // Load imaConfig
+  const imaConfig = await loadImaConfig(configArgs.rootDir);
   const finalConfigArgs = [];
 
   if (~configurations.indexOf('client')) {
@@ -81,14 +81,14 @@ async function createWebpackConfig(
 
   return Promise.all(
     finalConfigArgs.map(async args => {
-      if (typeof imaConf?.webpack === 'function') {
-        return await imaConf?.webpack(
-          await webpackConfig(args, imaConf),
+      if (typeof imaConfig?.webpack === 'function') {
+        return await imaConfig?.webpack(
+          await webpackConfig(args, imaConfig),
           args,
-          imaConf
+          imaConfig
         );
       } else {
-        return await webpackConfig(args, imaConf);
+        return await webpackConfig(args, imaConfig);
       }
     })
   );
@@ -97,5 +97,5 @@ async function createWebpackConfig(
 module.exports = {
   createWebpackConfig,
   handlerFactory,
-  loadImaConf
+  loadImaConfig
 };

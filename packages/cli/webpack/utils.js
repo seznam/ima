@@ -98,16 +98,18 @@ async function generateEntryPoints(rootDir, paths = [], outputPrefix = '') {
   }, {});
 }
 
-function wif(condition, value, defaultValue = null) {
-  if (condition) {
-    return value;
-  }
+function wif(condition) {
+  return (value, defaultValue = null) => {
+    if (condition) {
+      return value;
+    }
 
-  if (defaultValue !== null) {
-    return defaultValue;
-  }
+    if (defaultValue !== null) {
+      return defaultValue;
+    }
 
-  return Array.isArray(value) ? [] : {};
+    return Array.isArray(value) ? [] : {};
+  };
 }
 
 module.exports = {

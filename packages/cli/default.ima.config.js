@@ -3,9 +3,9 @@
  *
  * This file is used just as a reference for all possible options that can be defined
  * or expanded. By default any app should be able to be built, run and watched without
- * any additional CLI args or custom ima.conf.js created.
+ * any additional CLI args or custom ima.config.js created.
  *
- * ima.conf.js should contain mostly options that require additional complex configuration
+ * ima.config.js should contain mostly options that require additional complex configuration
  * or are out of scope of default build configuration. If there are any options that are mostly
  * run in production (e.g. scrambleCss) but you want to have an option to run it in dev mode too,
  * consider creating optional CLI arg for this option which should always take precedence
@@ -19,9 +19,9 @@ module.exports = {
    * - `config` - Contains generated config by ima CLI, which can be further customized.
    * - `args` - CLI args, with additional options -> `rootDir`, `isProduction`, `isServer`, `isWatch`
    *            that help identify the current state webpack trying to run this config.
-   * - `imaConf` - Contains additional local ima.conf.js file contents ({} if there's no file created).
+   * - `imaConfig` - Contains additional local ima.config.js file contents ({} if there's no file created).
    */
-  // webpack: (config, args, imaConf) => {},
+  // webpack: (config, args, imaConfig) => {},
 
   // Most of the options can be overridden using CLI args (which take precedence)
   publicPath: '', // Webpack assets public path
@@ -31,7 +31,7 @@ module.exports = {
   // Settings related to AMP-specific css files generation
   amp: {
     enabled: true, // Enables AMP css assets generation
-    styleEntryPoints: ['./app/component/**/*.less', './app/page/**/*.less'], // AMP styles entry points (array of globs)
+    entry: ['./app/component/**/*.less', './app/page/**/*.less'], // AMP styles entry points (array of globs)
     postCssPlugins: [] // Array of custom postcss plugins applied only to AMP entry points
   }
 };
