@@ -1,6 +1,7 @@
 const path = require('path');
 const fs = require('fs');
 const fg = require('fast-glob');
+const { createHash } = require('crypto');
 
 const { error } = require('../lib/print');
 
@@ -112,10 +113,18 @@ function wif(condition) {
   };
 }
 
+function createCacheKey(...params) {
+  const hash = createHash('md5');
+  hash.update(params.map(JSON.stringify).join(''));
+
+  return hash.digest('hex');
+}
+
 module.exports = {
   wif,
   resolveEnvironment,
   requireConfig,
   additionalDataFactory,
-  generateEntryPoints
+  generateEntryPoints,
+  createCacheKey
 };

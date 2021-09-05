@@ -20,7 +20,8 @@ const {
   resolveEnvironment,
   additionalDataFactory,
   generateEntryPoints,
-  wif
+  wif,
+  createCacheKey
 } = require('./utils');
 const postCssScrambler = require('./postCssScrambler');
 
@@ -71,7 +72,15 @@ module.exports = async (args, imaConfig) => {
       publicPath: imaConfig?.publicPath ?? '',
       ...wif(isServer)({ library: { type: 'commonjs2' } })
     },
-    // cache: {}, // TOOD compare filesystem/memory cache performance
+    cache: {
+      type: 'filesystem',
+      version: createCacheKey(args, imaConfig),
+      cacheDirectory: path.join(rootDir, './.ima/cache'),
+      store: 'pack',
+      buildDependencies: {
+        config: [__filename]
+      }
+    },
     optimization: {
       minimize: isProduction && !isServer,
       minimizer: [new TerserPlugin(), new CssMinimizerPlugin()]
@@ -183,12 +192,15 @@ module.exports = async (args, imaConfig) => {
                           {
                             development: !isProduction,
                             runtime: 'classic'
-                            // runtime: 'automatic'
+                            // runtime: 'automatic' // TODO
                           }
                         ]
                       ],
                       // plugins: isProduction ? [] : ['react-refresh/babel']
-                      plugins: []
+                      plugins: [],
+                      cacheDirectory: true,
+                      cacheCompression: false,
+                      compact: isProduction
                     }
                   })
                 }
