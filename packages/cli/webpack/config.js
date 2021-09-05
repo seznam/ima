@@ -12,7 +12,7 @@ const PostCssPipelineWebpackPlugin = require('postcss-pipeline-webpack-plugin');
 const CssMinimizerPlugin = require('css-minimizer-webpack-plugin');
 const TerserPlugin = require('terser-webpack-plugin');
 const CompressionPlugin = require('compression-webpack-plugin');
-// const ReactRefreshWebpackPlugin = require('@pmmmwh/react-refresh-webpack-plugin');
+const ReactRefreshWebpackPlugin = require('@pmmmwh/react-refresh-webpack-plugin');
 
 const RunImaServerPlugin = require('./plugins/RunImaServerPlugin');
 const {
@@ -104,7 +104,7 @@ module.exports = async (args, imaConfig) => {
         {
           enforce: 'pre',
           test: /\.(js|mjs|jsx|ts|tsx|cjs|css)$/,
-          use: 'source-map-loader'
+          use: require.resolve('source-map-loader')
         },
         {
           /**
@@ -159,7 +159,7 @@ module.exports = async (args, imaConfig) => {
                   type: 'asset/resource'
                 }
               ],
-              use: 'svgo-loader'
+              use: require.resolve('svgo-loader')
             },
             {
               test: /\.(js|mjs|jsx|ts|tsx|cjs)$/,
@@ -170,7 +170,7 @@ module.exports = async (args, imaConfig) => {
                 //   options: {}
                 // },
                 {
-                  loader: 'babel-loader',
+                  loader: require.resolve('babel-loader'),
                   options: requireConfig({
                     rootDir,
                     packageJson,
@@ -186,18 +186,20 @@ module.exports = async (args, imaConfig) => {
                     ],
                     defaultConfig: {
                       presets: [
-                        '@babel/preset-env',
+                        require.resolve('@babel/preset-env'),
                         [
-                          '@babel/preset-react',
+                          require.resolve('@babel/preset-react'),
                           {
                             development: !isProduction,
                             runtime: 'classic'
-                            // runtime: 'automatic' // TODO
+                            // runtime: 'automatic' // TODO Prepare ima to be able to handle automatic runtime
                           }
                         ]
                       ],
-                      // plugins: isProduction ? [] : ['react-refresh/babel']
-                      plugins: [],
+                      plugins:
+                        isWatch && !isServer
+                          ? [require.resolve('react-refresh/babel')]
+                          : [],
                       cacheDirectory: true,
                       cacheCompression: false,
                       compact: isProduction
@@ -211,13 +213,13 @@ module.exports = async (args, imaConfig) => {
               sideEffects: true,
               exclude: /node_modules/,
               use: isServer
-                ? 'null-loader'
+                ? require.resolve('null-loader')
                 : [
                     {
                       loader: MiniCssExtractPlugin.loader
                     },
                     {
-                      loader: 'css-loader',
+                      loader: require.resolve('css-loader'),
                       options: {
                         importLoaders: 2,
                         modules: {
@@ -229,7 +231,7 @@ module.exports = async (args, imaConfig) => {
                       }
                     },
                     {
-                      loader: 'postcss-loader',
+                      loader: require.resolve('postcss-loader'),
                       options: {
                         postcssOptions: requireConfig({
                           rootDir,
@@ -265,7 +267,7 @@ module.exports = async (args, imaConfig) => {
                       }
                     },
                     {
-                      loader: 'less-loader',
+                      loader: require.resolve('less-loader'),
                       options: {
                         lessOptions: {
                           strictMath: true
@@ -282,7 +284,7 @@ module.exports = async (args, imaConfig) => {
                       }
                     },
                     {
-                      loader: 'glob-import-loader'
+                      loader: require.resolve('glob-import-loader')
                     }
                   ]
             },
@@ -321,10 +323,8 @@ module.exports = async (args, imaConfig) => {
           new RemoveEmptyScriptsPlugin(),
           new MiniCssExtractPlugin({
             filename: ({ chunk }) =>
-              `static/css/${
-                chunk.name === 'client' ? 'app' : '[name]'
-              }.[contenthash:8].css`,
-            chunkFilename: 'static/css/[name].[contenthash:8].chunk.css'
+              `static/css/${chunk.name === 'client' ? 'app' : '[name]'}.css`,
+            chunkFilename: 'static/css/[name].chunk.css'
           }),
           ...wif(args.scrambleCss ?? imaConfig?.scrambleCss)([
             // This pipeline should run only for main app css file
@@ -373,12 +373,13 @@ module.exports = async (args, imaConfig) => {
           }),
           ...wif(imaConfig?.compress)([new CompressionPlugin()]),
           ...wif(isWatch)([
-            new webpack.HotModuleReplacementPlugin()
-            // new ReactRefreshWebpackPlugin({
-            //   overlay: {
-            //     sockIntegration: 'whm'
-            //   }
-            // })
+            new webpack.HotModuleReplacementPlugin(),
+            new ReactRefreshWebpackPlugin({
+              // overlay: false
+              overlay: {
+                sockIntegration: 'whm'
+              }
+            })
           ])
         ],
     ...wif(isServer)({

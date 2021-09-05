@@ -1,3 +1,4 @@
+/* eslint-disable no-unused-vars */
 /**
  * -------------------------------------=== NOTICE ===--------------------------------------------
  *
@@ -21,7 +22,7 @@ module.exports = {
    *            that help identify the current state webpack trying to run this config.
    * - `imaConfig` - Contains additional local ima.config.js file contents ({} if there's no file created).
    */
-  // webpack: (config, args, imaConfig) => {},
+  webpack: (config, args, imaConfig) => {},
 
   // Most of the options can be overridden using CLI args (which take precedence)
   publicPath: '', // Webpack assets public path
