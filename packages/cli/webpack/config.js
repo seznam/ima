@@ -321,7 +321,10 @@ module.exports = async (args, imaConfig) => {
           new RemoveEmptyScriptsPlugin(),
           new MiniCssExtractPlugin({
             filename: ({ chunk }) =>
-              `static/css/${chunk.name === 'client' ? 'app' : '[name]'}.css`
+              `static/css/${
+                chunk.name === 'client' ? 'app' : '[name]'
+              }.[contenthash:8].css`,
+            chunkFilename: 'static/css/[name].[contenthash:8].chunk.css'
           }),
           ...wif(args.scrambleCss ?? imaConfig?.scrambleCss)([
             // This pipeline should run only for main app css file
