@@ -27,6 +27,8 @@ module.exports = {
   publicPath: '', // Webpack assets public path
   compress: process.env.NODE_ENV === 'production', // Enable gzip compression for assets
   scrambleCss: process.env.NODE_ENV === 'production', // Enables CSS scrambling (for AMP too)
+  imageInlineSizeLimit: 8192, // Threshold to inline image resources as base64 automatically
+  webpackAliases: {}, // Optional custom webpack aliases
 
   // Settings related to AMP-specific css files generation
   amp: {

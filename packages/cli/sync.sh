@@ -9,21 +9,14 @@ echo "  Copying @ima/server, @ima/cli & @ima/core to app directory..."
 echo "===-----------------------------------------------------------==="
 echo ""
 
-echo 'Unlinking @ima/cli'
-cd $APP_DIR
-npm unlink @ima/cli
-
 echo 'Syncing @ima/core...'
-cd $APP_DIR/node_modules/@ima/core
-ls -1 | grep -v 'node_modules' | xargs rm -rf
+rm -rf $APP_DIR/node_modules/@ima/core
 rsync -aq --progress $CLI_DIR/../core $APP_DIR/node_modules/@ima --exclude node_modules
 
 echo 'Syncing @ima/server...'
-cd $APP_DIR/node_modules/@ima/server
-ls -1 | grep -v 'node_modules' | xargs rm -rf
+rm -rf $APP_DIR/node_modules/@ima/server
 rsync -aq --progress $CLI_DIR/../server $APP_DIR/node_modules/@ima --exclude node_modules
 
 echo 'Syncing @ima/cli...'
-cd $APP_DIR/node_modules/@ima/cli
-ls -1 | grep -v 'node_modules' | xargs rm -rf
+rm -rf $APP_DIR/node_modules/@ima/cli
 rsync -aq --progress $CLI_DIR $APP_DIR/node_modules/@ima --exclude node_modules
