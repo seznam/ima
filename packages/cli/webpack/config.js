@@ -2,6 +2,7 @@ const path = require('path');
 const fs = require('fs');
 const webpack = require('webpack');
 const postcss = require('postcss');
+const miniSVGDataURI = require('mini-svg-data-uri');
 
 const CopyPlugin = require('copy-webpack-plugin');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
@@ -93,8 +94,7 @@ module.exports = async (args, imaConfig) => {
         // Handle node_modules packages that contain sourcemaps
         {
           enforce: 'pre',
-          exclude: /@babel(?:\/|\\{1,2})runtime/,
-          test: /\.(js|mjs|jsx|ts|tsx|css)$/,
+          test: /\.(js|mjs|jsx|ts|tsx|cjs|css)$/,
           use: 'source-map-loader'
         },
         {
@@ -130,8 +130,30 @@ module.exports = async (args, imaConfig) => {
                 }
               ]
             },
+            /**
+             * Uses svgo to optimize loaded svg files. Inline and external logic
+             * using the queryParam in import path applies here the same as with
+             * the image assets. Inline SVGs are converted to more efficient data URI.
+             * Defaults to external
+             */
             {
-              test: /\.[jt]sx?$/,
+              test: /\.svg$/,
+              oneOf: [
+                {
+                  resourceQuery: /inline/, // foo.svg?inline
+                  type: 'asset/inline',
+                  generator: {
+                    dataUrl: content => miniSVGDataURI(content.toString())
+                  }
+                },
+                {
+                  type: 'asset/resource'
+                }
+              ],
+              use: 'svgo-loader'
+            },
+            {
+              test: /\.(js|mjs|jsx|ts|tsx|cjs)$/,
               exclude: /node_modules/,
               use: [
                 // {
@@ -253,7 +275,12 @@ module.exports = async (args, imaConfig) => {
                   ]
             },
             {
-              exclude: [/^$/, /\.(js|mjs|jsx|ts|tsx)$/, /\.html$/, /\.json$/],
+              exclude: [
+                /^$/,
+                /\.(js|mjs|jsx|ts|tsx|cjs)$/,
+                /\.html$/,
+                /\.json$/
+              ],
               type: 'asset/resource'
             }
           ]
@@ -343,9 +370,6 @@ module.exports = async (args, imaConfig) => {
       externalsPresets: {
         node: true
       }
-    }),
-    ...wif(isServer)({
-      node: false
     })
   };
 };
