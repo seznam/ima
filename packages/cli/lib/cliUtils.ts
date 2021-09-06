@@ -1,12 +1,21 @@
-const path = require('path');
-const fs = require('fs');
+import path from 'path';
+import fs from 'fs';
 
-const { error } = require('./print');
-const webpackConfig = require('../webpack/config');
+import { error } from './print';
+import webpackConfig from '../webpack/config';
+import { HandlerFunction, ImaConfig } from '../types';
+import { Arguments } from 'yargs';
 
 const IMA_CONF_FILENAME = 'ima.config.js';
 
-async function loadImaConfig(rootDir) {
+/**
+ * Loads ima.config.js from rootDir base path. If no custom
+ * configuration was found it returns empty object.
+ *
+ * @param {string} rootDir Base app directory.
+ * @returns {Promise<ImaConfig | {}>} Ima config or empty object.
+ */
+async function loadImaConfig(rootDir: string): Promise<ImaConfig | {}> {
   if (!rootDir) {
     return {};
   }
@@ -16,9 +25,11 @@ async function loadImaConfig(rootDir) {
   return fs.existsSync(imaConfigPath) ? require(imaConfigPath) : {};
 }
 
-function handlerFactory(handlerFn) {
-  return async yargs => {
-    // eslint-disable-next-line no-unused-vars
+/**
+ * Initializes cli script handler function, with parsed argument and defaults.
+ */
+function handlerFactory<T>(handlerFn): Promise<() => HandlerFunction<T>> {
+  return async (yargs: Arguments) => {
     const [command, dir = ''] = yargs._ || [];
     const isProduction = process.env.NODE_ENV === 'production';
     const rootDir = dir
@@ -94,8 +105,4 @@ async function createWebpackConfig(
   );
 }
 
-module.exports = {
-  createWebpackConfig,
-  handlerFactory,
-  loadImaConfig
-};
+export { handlerFactory, createWebpackConfig, loadImaConfig };

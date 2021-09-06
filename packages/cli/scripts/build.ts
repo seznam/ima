@@ -1,9 +1,10 @@
-const { handlerFactory, createWebpackConfig } = require('../lib/cliUtils');
-const { runCompiler, handleCompilationError } = require('../lib/compiler');
-const { info } = require('../lib/print');
-const { SharedArgs } = require('../constants');
+import { runCompiler, handleCompilationError } from '../lib/compiler';
+import { info } from '../lib/print';
+import SharedArgs from '../lib/SharedArgs';
+import { CommandModule } from 'yargs';
+import { BuildCliArgs } from '../types';
 
-async function build(args) {
+async function build(args: BuildCliArgs) {
   try {
     info('Parsing webpack configuration file...');
     const config = await createWebpackConfig(['client', 'server'], args);
@@ -15,9 +16,9 @@ async function build(args) {
   }
 }
 
-const buildCommand = {
+const buildCommand: CommandModule = {
   command: 'build',
-  desc: 'Build an application for production',
+  describe: 'Build an application for production',
   builder: {
     ...SharedArgs,
     clean: {
@@ -29,4 +30,4 @@ const buildCommand = {
   handler: handlerFactory(build)
 };
 
-module.exports = buildCommand;
+export default buildCommand;

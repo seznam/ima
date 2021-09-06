@@ -1,8 +1,9 @@
 #!/usr/bin/env node
 
-const path = require('path');
+import path from 'path';
+import yargs from 'yargs';
 
-require('yargs')
+yargs
   .scriptName('ima')
   .usage('Usage: $0 <command>')
   .commandDir(path.resolve(__dirname, '../scripts'))

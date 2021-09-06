@@ -1,16 +1,22 @@
-const chalk = require('chalk');
-const webpack = require('webpack');
+import chalk from 'chalk';
+import webpack, { Configuration, WebpackError } from 'webpack';
+import { Compiler, Stats } from 'webpack';
 
-const { VerboseOptions } = require('../constants');
-const { error, warn, info } = require('./print');
+import { CliArgs, VerboseOptions } from '../types';
+import { error, warn, info } from './print';
 
-async function closeCompiler(compiler) {
+async function closeCompiler(compiler: Compiler): Promise<Error | void> {
   return new Promise((resolve, reject) =>
     compiler.close(closeError => (closeError ? reject(closeError) : resolve()))
   );
 }
 
-function handleStats(stats, verbose) {
+function handleStats(stats: Stats | undefined, verbose: VerboseOptions): void {
+  if (!stats) {
+    error('Unknown error, stats are empty');
+    return;
+  }
+
   const statsOptions = {
     assets: true,
     cached: false,
@@ -46,44 +52,53 @@ function handleStats(stats, verbose) {
   }
 
   // Output
-  const server = children.find(({ name }) => name === 'server');
-  const client = children.find(({ name }) => name === 'client');
+  const server = children?.find(({ name }) => name === 'server');
+  const client = children?.find(({ name }) => name === 'client');
 
   info(
     `Compilation was ${chalk.bold.green(
       'successful'
-    )} using webpack version: ${chalk.bold.magenta((client || server).version)}`
+    )} using webpack version: ${chalk.bold.magenta(
+      (client || server)?.version
+    )}`
   );
+
   server &&
     info(
       `[${server.name}] Compiled in ${chalk.green(
-        server.time.toLocaleString() + ' ms'
+        server.time?.toLocaleString() + ' ms'
       )}`
     );
+
   client &&
     info(
       `[${client.name}] Compiled in ${chalk.green(
-        client.time.toLocaleString() + ' ms'
+        client.time?.toLocaleString() + ' ms'
       )}`
     );
 
   info(
     `Following chunks were generated in ${chalk.green(
-      (client || server).outputPath
+      (client || server)?.outputPath
     )}:`
   );
 
   // Print chunk file size info
-  children.forEach(child => {
-    Object.keys(child.namedChunkGroups).forEach(chunkKey => {
-      child.namedChunkGroups[chunkKey].assets.forEach(({ name, size }) => {
-        console.log(
-          ` ├ ${name}  ${chalk.green(
-            (size / 1024).toFixed(1).toLocaleString() + ' kiB'
-          )}`
+  children?.forEach(child => {
+    if (child?.namedChunkGroups) {
+      Object.keys(child.namedChunkGroups).forEach(chunkKey => {
+        child?.namedChunkGroups?.[chunkKey]?.assets?.forEach(
+          ({ name, size }) => {
+            console.log(
+              ` ├ ${name}  ${
+                size &&
+                chalk.green((size / 1024).toFixed(1).toLocaleString() + ' kiB')
+              }`
+            );
+          }
         );
       });
-    });
+    }
   });
 
   // Warnings
@@ -97,7 +112,10 @@ function handleStats(stats, verbose) {
   });
 }
 
-async function runCompiler(config, args) {
+async function runCompiler(
+  config: Configuration,
+  args: CliArgs
+): Promise<Error | Stats | undefined> {
   return new Promise((resolve, reject) => {
     const compiler = webpack(config);
     compiler.run((error, stats) =>
@@ -113,7 +131,11 @@ async function runCompiler(config, args) {
   });
 }
 
-async function watchCompiler(config, args, watchOptions = {}) {
+async function watchCompiler(
+  config: Configuration,
+  args: CliArgs,
+  watchOptions = {}
+): Promise<Error | Stats | undefined> {
   let firstRun = true;
 
   return new Promise((resolve, reject) => {
@@ -133,15 +155,10 @@ async function watchCompiler(config, args, watchOptions = {}) {
   });
 }
 
-function handleCompilationError(err) {
+function handleCompilationError(err: WebpackError): void {
   error('Unexpected error occurred');
-  err && error(err.stack || err);
+  err?.stack && error(err.stack);
   err?.details && error(err.details);
 }
 
-module.exports = {
-  closeCompiler,
-  runCompiler,
-  watchCompiler,
-  handleCompilationError
-};
+export { closeCompiler, runCompiler, watchCompiler, handleCompilationError };

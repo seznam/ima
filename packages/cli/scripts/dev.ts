@@ -1,9 +1,9 @@
 const { handlerFactory, createWebpackConfig } = require('../lib/cliUtils');
 const { watchCompiler, handleCompilationError } = require('../lib/compiler');
 const { info } = require('../lib/print');
-const { SharedArgs } = require('../constants');
+const { SharedArgs } = require('./lib/SharedArgs');
 
-async function dev(args) {
+async function dev(args: DevCliArgs) {
   try {
     info('Parsing webpack configuration file...');
     const config = await createWebpackConfig(['client', 'server'], {

@@ -1,6 +1,6 @@
-const VerboseOptions = require('./VerboseOptions');
+import { VerboseOptions } from '../types';
 
-module.exports = Object.freeze({
+const SharedArgs = {
   verbose: {
     alias: 'v',
     desc: 'Choose between different number of logging options',
@@ -20,4 +20,6 @@ module.exports = Object.freeze({
     desc: 'Webpack public path to specify base for all assets in the app',
     type: 'string'
   }
-});
+};
+
+export default SharedArgs;
