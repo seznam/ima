@@ -1,4 +1,4 @@
-module.exports = function (source) {
+function pluginLoader(source) {
   return source.includes('$registerImaPlugin')
     ? source.concat(
         `if (typeof exports.$registerImaPlugin === 'function') {
@@ -11,4 +11,6 @@ pluginNs.has('vendor.plugins') ? pluginNs.namespace('vendor.plugins').push(plugi
 }`
       )
     : source;
-};
+}
+
+module.exports = pluginLoader;
