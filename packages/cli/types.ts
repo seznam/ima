@@ -1,12 +1,27 @@
 import { Configuration, ResolveOptions } from 'webpack';
 
+/**
+ * Inject expected ENV values into nodeJS process.env object.
+ */
+declare global {
+  namespace NodeJS {
+    interface ProcessEnv {
+      IMA_CLI_WEBPACK_CONFIG_ARGS: string;
+    }
+  }
+}
+
+/**
+ * Cli verbose parametr possible options.
+ */
 export enum VerboseOptions {
   DEFAULT = 'default',
   RAW = 'raw'
 }
 
 /**
- * Base args available in every ima script
+ * Base args available in every ima script. Following 3 arguments
+ * are available and mandatory in every ima cli script.
  */
 export type BaseArgs = {
   rootDir: string;
@@ -15,7 +30,7 @@ export type BaseArgs = {
 };
 
 /**
- * start (ima start) script args
+ * Start (ima start) script args
  */
 export type StartArgs = BaseArgs;
 
@@ -30,19 +45,23 @@ export type DevBuildArgs = BaseArgs & {
 };
 
 /**
- * dev (ima dev) script args
+ * Dev (ima dev) script args
  */
 export type DevArgs = DevBuildArgs & {
   open?: boolean;
 };
 
 /**
- * build (ima build) script args
+ * Build (ima build) script args
  */
 export type BuildArgs = DevBuildArgs & {
   clean?: boolean;
 };
 
+/**
+ * Arguments passed across ima cli and into webpack config
+ * function generator.
+ */
 export type Args = BuildArgs &
   DevArgs & {
     isWatch?: boolean;
@@ -51,9 +70,11 @@ export type Args = BuildArgs &
 
 export type HandlerFunction<T extends BaseArgs> = (args: T) => void;
 export type ConfigurationTypes = ('client' | 'server')[];
+export const IMA_CONF_FILENAME = 'ima.config.js';
 
 /**
  * Ima config options. Some of these options can be overridden using Args, which takes precedence.
+ * These are parsed from optional ima.config.js that can be defined in the root of the IMA.js project.
  */
 export type ImaConfig = {
   /**
@@ -63,7 +84,7 @@ export type ImaConfig = {
    *                             that help identify the current state webpack trying to run this config.
    * @param {ImaConfig}    imaConfig additional local ima.config.js file contents ({} if there's no file created).
    */
-  webpack?: (config: Configuration, args: Args, imaConfig: ImaConfig) => {};
+  webpack?: (config: Configuration, args: Args, imaConfig: ImaConfig) => void;
 
   /**
    * Webpack assets public path
@@ -88,7 +109,7 @@ export type ImaConfig = {
   /**
    * Optional custom webpack aliases
    */
-  webpackAliases?: Pick<ResolveOptions, 'alias'>;
+  webpackAliases?: ResolveOptions['alias'];
 
   /**
    * Settings related to AMP-specific css files generation

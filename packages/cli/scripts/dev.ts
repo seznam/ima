@@ -1,13 +1,10 @@
 import { CommandModule } from 'yargs';
 
 import { DevArgs, HandlerFunction } from '../types';
-import {
-  handlerFactory,
-  createWebpackConfig,
-  SharedArgs
-} from '../lib/cliUtils';
-import { watchCompiler, handleCompilationError } from '../lib/compiler';
+import { handlerFactory, createWebpackConfig } from '../lib/cliUtils';
+import { watchCompiler, handleError } from '../lib/compiler';
 import { info } from '../lib/print';
+import SharedArgs from '../lib/SharedArgs';
 
 const dev: HandlerFunction<DevArgs> = async args => {
   try {
@@ -21,7 +18,7 @@ const dev: HandlerFunction<DevArgs> = async args => {
     info('Starting webpack compiler...');
     await watchCompiler(config, args);
   } catch (err) {
-    handleCompilationError(err);
+    handleError(err);
   }
 };
 

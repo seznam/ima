@@ -1,31 +1,24 @@
-const path = require('path');
-const fs = require('fs');
-const webpack = require('webpack');
-const postcss = require('postcss');
-const miniSVGDataURI = require('mini-svg-data-uri');
+import path from 'path';
+import fs from 'fs';
+import webpack from 'webpack';
+import postcss from 'postcss';
+import miniSVGDataURI from 'mini-svg-data-uri';
 
-const CopyPlugin = require('copy-webpack-plugin');
-const HtmlWebpackPlugin = require('html-webpack-plugin');
-const MiniCssExtractPlugin = require('mini-css-extract-plugin');
-const RemoveEmptyScriptsPlugin = require('webpack-remove-empty-scripts');
-const PostCssPipelineWebpackPlugin = require('postcss-pipeline-webpack-plugin');
-const CssMinimizerPlugin = require('css-minimizer-webpack-plugin');
-const TerserPlugin = require('terser-webpack-plugin');
-const CompressionPlugin = require('compression-webpack-plugin');
-const ReactRefreshWebpackPlugin = require('@pmmmwh/react-refresh-webpack-plugin');
+import CopyPlugin from 'copy-webpack-plugin';
+import HtmlWebpackPlugin from 'html-webpack-plugin';
+import MiniCssExtractPlugin from 'mini-css-extract-plugin';
+import RemoveEmptyScriptsPlugin from 'webpack-remove-empty-scripts';
+import PostCssPipelineWebpackPlugin from 'postcss-pipeline-webpack-plugin';
+import CssMinimizerPlugin from 'css-minimizer-webpack-plugin';
+import TerserPlugin from 'terser-webpack-plugin';
+import CompressionPlugin from 'compression-webpack-plugin';
+import ReactRefreshWebpackPlugin from '@pmmmwh/react-refresh-webpack-plugin';
 
-const RunImaServerPlugin = require('./plugins/RunImaServerPlugin');
-const {
-  requireConfig,
-  resolveEnvironment,
-  additionalDataFactory,
-  generateEntryPoints,
-  wif,
-  createCacheKey
-} = require('./utils');
-const postCssScrambler = require('./postCssScrambler');
+import RunImaServerPlugin from './plugins/RunImaServerPlugin';
+import { requireConfig, resolveEnvironment, additionalDataFactory, generateEntryPoints, wif, createCacheKey } from './utils';
+import postCssScrambler from './postCssScrambler';
 
-module.exports = async (args, imaConfig) => {
+export default async (args, imaConfig) => {
   const { rootDir, isProduction, isServer, isWatch } = args;
   const packageJson = require(path.resolve(rootDir, './package.json'));
   const imaEnvironment = resolveEnvironment(rootDir);

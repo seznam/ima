@@ -8,6 +8,7 @@ module.exports = {
   extends: [...config.extends, 'plugin:@typescript-eslint/recommended'],
   rules: {
     ...config.rules,
-    'no-console': 'off'
+    'no-console': 'off',
+    '@typescript-eslint/no-namespace': ['error', { allowDeclarations: true }]
   }
 };

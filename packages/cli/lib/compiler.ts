@@ -9,19 +9,36 @@ import webpack, {
 import { Args, VerboseOptions } from '../types';
 import { error, warn, info } from './print';
 
-async function closeCompiler(compiler: MultiCompiler): Promise<Error | void> {
-  return new Promise((resolve, reject) =>
-    compiler.close(closeError => (closeError ? reject(closeError) : resolve()))
-  );
+/**
+ * Handles script running and webpack compilation error logging.
+ *
+ * @param {WebpackError | unknown} err
+ * @returns {void}
+ */
+function handleError(err: WebpackError | unknown): void {
+  if (err instanceof Error) {
+    err?.stack && error(err.stack);
+  } else if (err instanceof WebpackError) {
+    err?.stack && error(err.stack);
+    err?.details && error(err.details);
+  } else {
+    error('Unexpected error occurred');
+  }
 }
 
+/**
+ * Handles stats logging during webpack build and watch tasks.
+ *
+ * @param {MultiStats|undefined} stats Webpack stats object.
+ * @param {VerboseOptions} verbose Optional level of verbosity.
+ * @returns {void}
+ */
 function handleStats(
   stats: MultiStats | undefined,
-  verbose: VerboseOptions
+  verbose: VerboseOptions = VerboseOptions.DEFAULT
 ): void {
   if (!stats) {
-    error('Unknown error, stats are empty');
-    return;
+    return error('Unknown error, stats are empty');
   }
 
   const statsOptions = {
@@ -46,7 +63,7 @@ function handleStats(
 
   const { children, errors = [], warnings = [] } = stats.toJson(statsOptions);
 
-  // Errors
+  // Print errors
   if (stats.hasErrors()) {
     return errors.forEach(({ compilerPath, message, details }) => {
       error(
@@ -57,6 +74,16 @@ function handleStats(
       );
     });
   }
+
+  // Print warnings
+  warnings.forEach(({ compilerPath, message, details }) => {
+    warn(
+      `[${compilerPath}]\n${message} ${
+        verbose && details ? '\n' + details : ''
+      }`,
+      true
+    );
+  });
 
   // Output
   const server = children?.find(({ name }) => name === 'server');
@@ -107,18 +134,27 @@ function handleStats(
       });
     }
   });
-
-  // Warnings
-  warnings.forEach(({ compilerPath, message, details }) => {
-    warn(
-      `[${compilerPath}]\n${message} ${
-        verbose && details ? '\n' + details : ''
-      }`,
-      true
-    );
-  });
 }
 
+/**
+ * Promise based helper to close running webpack compiler.
+ *
+ * @param {MultiCompiler} compiler Compiler instance to close
+ * @returns {Promise<Error | void>} Any unexpected rejection error or nothing.
+ */
+async function closeCompiler(compiler: MultiCompiler): Promise<Error | void> {
+  return new Promise((resolve, reject) =>
+    compiler.close(closeError => (closeError ? reject(closeError) : resolve()))
+  );
+}
+
+/**
+ * Runs webpack compiler with given configuration.
+ *
+ * @param {Configuration[]} config Webpack configurations.
+ * @param {Args} args Cli and build args.
+ * @returns {Promise<Error | MultiStats | undefined>} Stats or error.
+ */
 async function runCompiler(
   config: Configuration[],
   args: Args
@@ -138,10 +174,19 @@ async function runCompiler(
   });
 }
 
+/**
+ * Runs webpack compiler with given configuration.
+ *
+ * @param {Configuration[]} config Webpack configurations.
+ * @param {Args} args Cli and build args.
+ * @param {Configuration['watchOptions']={}} watchOptions
+ *        Additional watch options.
+ * @returns {Promise<Error | MultiStats | undefined>} Stats or error.
+ */
 async function watchCompiler(
   config: Configuration[],
   args: Args,
-  watchOptions = {}
+  watchOptions: Configuration['watchOptions'] = {}
 ): Promise<Error | MultiStats | undefined> {
   let firstRun = true;
 
@@ -162,17 +207,4 @@ async function watchCompiler(
   });
 }
 
-function handleCompilationError(err: WebpackError | unknown): void {
-  error('Unexpected error occurred');
-
-  if (err instanceof Error) {
-    err?.stack && error(err.stack);
-  }
-
-  if (err instanceof WebpackError) {
-    err?.stack && error(err.stack);
-    err?.details && error(err.details);
-  }
-}
-
-export { closeCompiler, runCompiler, watchCompiler, handleCompilationError };
+export { closeCompiler, runCompiler, watchCompiler, handleError };

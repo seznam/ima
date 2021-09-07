@@ -1,7 +1,7 @@
 import fs from 'fs';
 import path from 'path';
 import { Configuration } from 'webpack';
-import { Arguments, CommandBuilder } from 'yargs';
+import { Arguments } from 'yargs';
 
 import {
   Args,
@@ -9,34 +9,10 @@ import {
   ConfigurationTypes,
   HandlerFunction,
   ImaConfig,
-  VerboseOptions
+  IMA_CONF_FILENAME
 } from '../types';
 import webpackConfig from '../webpack/config';
 import { error } from './print';
-
-const IMA_CONF_FILENAME = 'ima.config.js';
-
-const SharedArgs: CommandBuilder = {
-  verbose: {
-    alias: 'v',
-    desc: 'Choose between different number of logging options',
-    type: 'string',
-    choices: Object.values(VerboseOptions),
-    default: VerboseOptions.DEFAULT
-  },
-  amp: {
-    desc: 'Builds separate CSS files for use in AMP mode',
-    type: 'boolean'
-  },
-  scrambleCss: {
-    desc: 'Scrambles class names and generates hashtable',
-    type: 'boolean'
-  },
-  publicPath: {
-    desc: 'Webpack public path to specify base for all assets in the app',
-    type: 'string'
-  }
-};
 
 /**
  * Loads ima.config.js from rootDir base path. If no custom
@@ -45,7 +21,9 @@ const SharedArgs: CommandBuilder = {
  * @param {string} rootDir Base app directory.
  * @returns {Promise<ImaConfig | {}>} Ima config or empty object.
  */
-async function loadImaConfig(rootDir: string): Promise<ImaConfig | {}> {
+async function loadImaConfig(
+  rootDir: string
+): Promise<ImaConfig | Record<string, unknown>> {
   if (!rootDir) {
     return {};
   }
@@ -56,6 +34,63 @@ async function loadImaConfig(rootDir: string): Promise<ImaConfig | {}> {
 }
 
 /**
+ * Creates webpack configurations for received configuration types, while
+ * using provided parsed CLI arguments adn build, with optional ima.config.js
+ * configuration file.
+ *
+ * @param {ConfigurationTypes} configurations Configuration types.
+ * @param {Args} configArgs Parsed CLI and build arguments.
+ * @returns {Promise<Configuration[]>}
+ */
+async function createWebpackConfig(
+  configurations: ConfigurationTypes = ['client', 'server'],
+  configArgs: Args
+): Promise<Configuration[]> {
+  if (!configArgs && process.env.IMA_CLI_WEBPACK_CON) {
+    try {
+      // Load config args from env variable
+      configArgs = JSON.parse(process.env.IMA_CLI_WEBPACK_CONFIG_ARGS);
+    } catch (err) {
+      error('Error occurred while parsing env webpack config args.');
+      throw err;
+    }
+  } else {
+    // Cache config args to env variable
+    process.env.IMA_CLI_WEBPACK_CONFIG_ARGS = JSON.stringify(configArgs);
+  }
+
+  // We are unable to continue without valid configArgs
+  if (!configArgs) {
+    throw new Error(
+      'Unable to load config args used to initialize a webpack config.'
+    );
+  }
+
+  // Load optional ima.config.js
+  const imaConfig = await loadImaConfig(configArgs.rootDir);
+
+  // Adjust config args for client and server configurations
+  const finalConfigArgs: Args[] = configurations.map(currentConfiguration => ({
+    ...configArgs,
+    isServer: currentConfiguration === 'server'
+  }));
+
+  return Promise.all(
+    finalConfigArgs.map(async args =>
+      typeof imaConfig?.webpack === 'function'
+        ? imaConfig?.webpack(
+            await webpackConfig(args, imaConfig),
+            args,
+            imaConfig
+          )
+        : webpackConfig(args, imaConfig)
+    )
+  );
+}
+
+/**
+ * TODO
+ * FIXME
  * Initializes cli script handler function, with parsed argument and defaults.
  */
 function handlerFactory<T extends BaseArgs>(handlerFn: HandlerFunction<T>) {
@@ -78,60 +113,4 @@ function handlerFactory<T extends BaseArgs>(handlerFn: HandlerFunction<T>) {
   };
 }
 
-async function createWebpackConfig(
-  configurations: ConfigurationTypes = ['client', 'server'],
-  configArgs: Args
-): Promise<Configuration[]> {
-  if (!configArgs) {
-    // Load config args from env variable
-    try {
-      configArgs = JSON.parse(process.env.IMA_CLI_WEBPACK_CONFIG_ARGS);
-    } catch (err) {
-      error('Error occurred while parsing env webpack config.');
-      throw err;
-    }
-  } else {
-    // Cache config args to env variable
-    process.env.IMA_CLI_WEBPACK_CONFIG_ARGS = JSON.stringify(configArgs);
-  }
-
-  if (!configArgs) {
-    throw new Error(
-      'Unable to load config args used to create initialize webpack config.'
-    );
-  }
-
-  // Load imaConfig
-  const imaConfig = await loadImaConfig(configArgs.rootDir);
-  const finalConfigArgs = [];
-
-  if (~configurations.indexOf('client')) {
-    finalConfigArgs.push({
-      ...configArgs,
-      isServer: false
-    });
-  }
-
-  if (~configurations.indexOf('server')) {
-    finalConfigArgs.push({
-      ...configArgs,
-      isServer: true
-    });
-  }
-
-  return Promise.all(
-    finalConfigArgs.map(async args => {
-      if (typeof imaConfig?.webpack === 'function') {
-        return await imaConfig?.webpack(
-          await webpackConfig(args, imaConfig),
-          args,
-          imaConfig
-        );
-      } else {
-        return await webpackConfig(args, imaConfig);
-      }
-    })
-  );
-}
-
-export { SharedArgs, handlerFactory, createWebpackConfig, loadImaConfig };
+export { handlerFactory, createWebpackConfig, loadImaConfig };

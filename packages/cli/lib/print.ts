@@ -1,9 +1,16 @@
 import chalk from 'chalk';
 
-function printFnFactory(name: string, chalkFn: chalk.Chalk) {
+/**
+ * Print utility functions generator
+ *
+ * @param {string} prefix Logged prefix text.
+ * @param {chalk.Chalk} chalkFn Styling chalk function.
+ * @returns {(message: string, newLine: false) => void} Log function.
+ */
+function printFnFactory(prefix: string, chalkFn: chalk.Chalk) {
   return (message: string, newLine = false) => {
     newLine && console.log('');
-    console.log(`${chalkFn(`${name}:`)} ${message}`);
+    console.log(`${chalkFn(`${prefix}:`)} ${message}`);
   };
 }
 
