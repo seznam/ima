@@ -1,17 +1,24 @@
 import chalk from 'chalk';
-import webpack, { Configuration, WebpackError } from 'webpack';
-import { Compiler, Stats } from 'webpack';
+import webpack, {
+  WebpackError,
+  Configuration,
+  MultiCompiler,
+  MultiStats
+} from 'webpack';
 
-import { CliArgs, VerboseOptions } from '../types';
+import { Args, VerboseOptions } from '../types';
 import { error, warn, info } from './print';
 
-async function closeCompiler(compiler: Compiler): Promise<Error | void> {
+async function closeCompiler(compiler: MultiCompiler): Promise<Error | void> {
   return new Promise((resolve, reject) =>
     compiler.close(closeError => (closeError ? reject(closeError) : resolve()))
   );
 }
 
-function handleStats(stats: Stats | undefined, verbose: VerboseOptions): void {
+function handleStats(
+  stats: MultiStats | undefined,
+  verbose: VerboseOptions
+): void {
   if (!stats) {
     error('Unknown error, stats are empty');
     return;
@@ -113,9 +120,9 @@ function handleStats(stats: Stats | undefined, verbose: VerboseOptions): void {
 }
 
 async function runCompiler(
-  config: Configuration,
-  args: CliArgs
-): Promise<Error | Stats | undefined> {
+  config: Configuration[],
+  args: Args
+): Promise<Error | MultiStats | undefined> {
   return new Promise((resolve, reject) => {
     const compiler = webpack(config);
     compiler.run((error, stats) =>
@@ -132,10 +139,10 @@ async function runCompiler(
 }
 
 async function watchCompiler(
-  config: Configuration,
-  args: CliArgs,
+  config: Configuration[],
+  args: Args,
   watchOptions = {}
-): Promise<Error | Stats | undefined> {
+): Promise<Error | MultiStats | undefined> {
   let firstRun = true;
 
   return new Promise((resolve, reject) => {
@@ -155,10 +162,17 @@ async function watchCompiler(
   });
 }
 
-function handleCompilationError(err: WebpackError): void {
+function handleCompilationError(err: WebpackError | unknown): void {
   error('Unexpected error occurred');
-  err?.stack && error(err.stack);
-  err?.details && error(err.details);
+
+  if (err instanceof Error) {
+    err?.stack && error(err.stack);
+  }
+
+  if (err instanceof WebpackError) {
+    err?.stack && error(err.stack);
+    err?.details && error(err.details);
+  }
 }
 
 export { closeCompiler, runCompiler, watchCompiler, handleCompilationError };

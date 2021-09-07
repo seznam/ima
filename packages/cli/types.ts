@@ -5,98 +5,108 @@ export enum VerboseOptions {
   RAW = 'raw'
 }
 
-export type HandlerArgs<T> = T & {
+/**
+ * Base args available in every ima script
+ */
+export type BaseArgs = {
   rootDir: string;
   isProduction: boolean;
   command: string;
 };
 
-export type HandlerFunction<T> = (args: HandlerArgs<T>) => void;
-
-// TODO refactor cli args dole
+/**
+ * start (ima start) script args
+ */
+export type StartArgs = BaseArgs;
 
 /**
- * Shared CLI args available in build and dev scripts
+ * Shared dev and build script args
  */
-export type SharedCliArgs = {
-  rootDir: string;
-  verbose: VerboseOptions;
-  scrambleCss: boolean;
-  publicPath: string;
-  amp: boolean;
+export type DevBuildArgs = BaseArgs & {
+  verbose?: VerboseOptions;
+  scrambleCss?: boolean;
+  publicPath?: string;
+  amp?: boolean;
 };
 
 /**
- * dev (ima dev) script CLI args
+ * dev (ima dev) script args
  */
-export type DevCliArgs = SharedCliArgs & {
-  open: boolean;
+export type DevArgs = DevBuildArgs & {
+  open?: boolean;
 };
 
 /**
- * build (ima build) script CLI args
+ * build (ima build) script args
  */
-export type BuildCliArgs = SharedCliArgs & {
-  clean: boolean;
+export type BuildArgs = DevBuildArgs & {
+  clean?: boolean;
 };
 
-export type CliArgs = BuildCliArgs | DevCliArgs;
+export type Args = BuildArgs &
+  DevArgs & {
+    isWatch?: boolean;
+    isServer?: boolean;
+  };
+
+export type HandlerFunction<T extends BaseArgs> = (args: T) => void;
+export type ConfigurationTypes = ('client' | 'server')[];
 
 /**
- * Ima config options. Some of these options can be overridden using CLIArgs, which takes precedence.
+ * Ima config options. Some of these options can be overridden using Args, which takes precedence.
  */
 export type ImaConfig = {
   /**
    * Webpack callback function can be used to completely customize default webpack config before it's run:
    * @param {Configuration} config generated config by ima CLI, which can be further customized.
-   * @param {CliArgs} args CLI args, with additional options -> `rootDir`, `isProduction`, `isServer`, `isWatch"
-   *                       that help identify the current state webpack trying to run this config.
-   * @param {ImaConfig} imaConfig additional local ima.config.js file contents ({} if there's no file created).
+   * @param {Args}          args CLI args, with additional options -> `rootDir`, `isProduction`, `isServer`, `isWatch"
+   *                             that help identify the current state webpack trying to run this config.
+   * @param {ImaConfig}    imaConfig additional local ima.config.js file contents ({} if there's no file created).
    */
-  webpack: (config: Configuration, args: CliArgs, imaConfig: ImaConfig) => {};
+  webpack?: (config: Configuration, args: Args, imaConfig: ImaConfig) => {};
 
   /**
    * Webpack assets public path
    */
-  publicPath: string;
+  publicPath?: string;
 
   /**
    * Enable gzip compression for assets [default=process.env.NODE_ENV==='production']
    */
-  compress: boolean;
+  compress?: boolean;
 
   /**
    * Enables CSS scrambling (for AMP too) [default=process.env.NODE_ENV==='production']
    */
-  scrambleCss: boolean;
+  scrambleCss?: boolean;
 
   /**
    * Threshold to inline image resources as base64 automatically [default=8192]
    */
-  imageInlineSizeLimit: number;
+  imageInlineSizeLimit?: number;
 
   /**
    * Optional custom webpack aliases
    */
-  webpackAliases: Pick<ResolveOptions, 'alias'>;
+  webpackAliases?: Pick<ResolveOptions, 'alias'>;
 
   /**
    * Settings related to AMP-specific css files generation
    */
-  amp: {
+  amp?: {
     /**
      * Enables AMP css assets generation
      */
-    enabled: number;
+    enabled?: number;
 
     /**
      * AMP styles entry points (array of globs)
      */
-    entry: [string];
+    entry?: string[];
 
     /**
      * Array of custom postcss plugins applied only to AMP entry points
      */
-    postCssPlugins: [any];
+    postCssPlugins?: [];
   };
 };

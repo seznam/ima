@@ -1,9 +1,15 @@
-const { handlerFactory, createWebpackConfig } = require('../lib/cliUtils');
-const { watchCompiler, handleCompilationError } = require('../lib/compiler');
-const { info } = require('../lib/print');
-const { SharedArgs } = require('./lib/SharedArgs');
+import { CommandModule } from 'yargs';
 
-async function dev(args: DevCliArgs) {
+import { DevArgs, HandlerFunction } from '../types';
+import {
+  handlerFactory,
+  createWebpackConfig,
+  SharedArgs
+} from '../lib/cliUtils';
+import { watchCompiler, handleCompilationError } from '../lib/compiler';
+import { info } from '../lib/print';
+
+const dev: HandlerFunction<DevArgs> = async args => {
   try {
     info('Parsing webpack configuration file...');
     const config = await createWebpackConfig(['client', 'server'], {
@@ -17,11 +23,11 @@ async function dev(args: DevCliArgs) {
   } catch (err) {
     handleCompilationError(err);
   }
-}
+};
 
-const devCommand = {
+const devCommand: CommandModule = {
   command: 'dev',
-  desc: 'Run application in development watch mode',
+  describe: 'Run application in development watch mode',
   builder: {
     ...SharedArgs,
     open: {
@@ -34,4 +40,4 @@ const devCommand = {
   handler: handlerFactory(dev)
 };
 
-module.exports = devCommand;
+export default devCommand;

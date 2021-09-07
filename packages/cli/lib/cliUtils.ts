@@ -1,12 +1,42 @@
-import path from 'path';
 import fs from 'fs';
+import path from 'path';
+import { Configuration } from 'webpack';
+import { Arguments, CommandBuilder } from 'yargs';
 
-import { error } from './print';
+import {
+  Args,
+  BaseArgs,
+  ConfigurationTypes,
+  HandlerFunction,
+  ImaConfig,
+  VerboseOptions
+} from '../types';
 import webpackConfig from '../webpack/config';
-import { HandlerFunction, ImaConfig } from '../types';
-import { Arguments } from 'yargs';
+import { error } from './print';
 
 const IMA_CONF_FILENAME = 'ima.config.js';
+
+const SharedArgs: CommandBuilder = {
+  verbose: {
+    alias: 'v',
+    desc: 'Choose between different number of logging options',
+    type: 'string',
+    choices: Object.values(VerboseOptions),
+    default: VerboseOptions.DEFAULT
+  },
+  amp: {
+    desc: 'Builds separate CSS files for use in AMP mode',
+    type: 'boolean'
+  },
+  scrambleCss: {
+    desc: 'Scrambles class names and generates hashtable',
+    type: 'boolean'
+  },
+  publicPath: {
+    desc: 'Webpack public path to specify base for all assets in the app',
+    type: 'string'
+  }
+};
 
 /**
  * Loads ima.config.js from rootDir base path. If no custom
@@ -28,36 +58,37 @@ async function loadImaConfig(rootDir: string): Promise<ImaConfig | {}> {
 /**
  * Initializes cli script handler function, with parsed argument and defaults.
  */
-function handlerFactory<T>(handlerFn): Promise<() => HandlerFunction<T>> {
+function handlerFactory<T extends BaseArgs>(handlerFn: HandlerFunction<T>) {
   return async (yargs: Arguments) => {
     const [command, dir = ''] = yargs._ || [];
     const isProduction = process.env.NODE_ENV === 'production';
-    const rootDir = dir
-      ? path.isAbsolute(dir)
-        ? dir
-        : path.resolve(process.cwd(), dir)
+
+    const dirStr = dir.toString();
+    const rootDir = dirStr
+      ? path.isAbsolute(dirStr)
+        ? dirStr
+        : path.resolve(process.cwd(), dirStr)
       : process.cwd();
 
     return await handlerFn({
-      ...yargs,
       rootDir,
       isProduction,
-      command
-    });
+      command: command.toString()
+    } as T); // FIXME
   };
 }
 
 async function createWebpackConfig(
-  configurations = ['client', 'server'],
-  configArgs = null
-) {
+  configurations: ConfigurationTypes = ['client', 'server'],
+  configArgs: Args
+): Promise<Configuration[]> {
   if (!configArgs) {
     // Load config args from env variable
     try {
       configArgs = JSON.parse(process.env.IMA_CLI_WEBPACK_CONFIG_ARGS);
     } catch (err) {
       error('Error occurred while parsing env webpack config.');
-      error(err);
+      throw err;
     }
   } else {
     // Cache config args to env variable
@@ -65,11 +96,9 @@ async function createWebpackConfig(
   }
 
   if (!configArgs) {
-    error(
+    throw new Error(
       'Unable to load config args used to create initialize webpack config.'
     );
-
-    return null;
   }
 
   // Load imaConfig
@@ -105,4 +134,4 @@ async function createWebpackConfig(
   );
 }
 
-export { handlerFactory, createWebpackConfig, loadImaConfig };
+export { SharedArgs, handlerFactory, createWebpackConfig, loadImaConfig };
