@@ -68,7 +68,7 @@ export type Args = BuildArgs &
     isServer?: boolean;
   };
 
-export type HandlerFunction<T extends BaseArgs> = (args: T) => void;
+export type HandlerFn<T extends BaseArgs> = (args: T) => Promise<void>;
 export type ConfigurationTypes = ('client' | 'server')[];
 export const IMA_CONF_FILENAME = 'ima.config.js';
 
@@ -130,4 +130,44 @@ export type ImaConfig = {
      */
     postCssPlugins?: [];
   };
+};
+
+export type WifValue = unknown[] | Record<string, unknown>;
+export type AdditionalDataFn = (content: string) => string;
+export type AdditionalDataFactoryFn = (content: string) => void;
+export type AdditionalDataContentFn = (
+  prefix: AdditionalDataFactoryFn,
+  postfix: AdditionalDataFactoryFn
+) => void;
+
+/**
+ * IMA.js loaded environment
+ */
+export type ImaEnvironment = {
+  /**
+   * Server config
+   */
+  $Server: {
+    port: number;
+  };
+
+  /**
+   * Debug flag
+   */
+  $Debug: boolean;
+
+  /**
+   * Possible environments
+   */
+  $Env: 'production' | 'dev' | 'test' | 'regression';
+
+  /**
+   * App data
+   */
+  $App: unknown;
+
+  /**
+   * Array of defined languages
+   */
+  $Language: string[];
 };

@@ -1,6 +1,6 @@
 import path from 'path';
 import fs from 'fs';
-import webpack from 'webpack';
+import webpack, { Configuration } from 'webpack';
 import postcss from 'postcss';
 import miniSVGDataURI from 'mini-svg-data-uri';
 
@@ -14,11 +14,22 @@ import TerserPlugin from 'terser-webpack-plugin';
 import CompressionPlugin from 'compression-webpack-plugin';
 import ReactRefreshWebpackPlugin from '@pmmmwh/react-refresh-webpack-plugin';
 
+import { Args, ImaConfig } from '../types';
 import RunImaServerPlugin from './plugins/RunImaServerPlugin';
-import { requireConfig, resolveEnvironment, additionalDataFactory, generateEntryPoints, wif, createCacheKey } from './utils';
+import {
+  requireConfig,
+  resolveEnvironment,
+  additionalDataFactory,
+  generateEntryPoints,
+  wif,
+  createCacheKey
+} from './utils';
 import postCssScrambler from './postCssScrambler';
 
-export default async (args, imaConfig) => {
+export default async (
+  args: Args,
+  imaConfig: ImaConfig
+): Promise<Configuration> => {
   const { rootDir, isProduction, isServer, isWatch } = args;
   const packageJson = require(path.resolve(rootDir, './package.json'));
   const imaEnvironment = resolveEnvironment(rootDir);
@@ -56,11 +67,11 @@ export default async (args, imaConfig) => {
       pathinfo: !isProduction,
       assetModuleFilename: 'static/media/[name].[hash][ext]',
       filename: ({ chunk }) => {
-        if (chunk.name === 'server') {
+        if (chunk?.name === 'server') {
           return 'ima/app.server.js';
         }
 
-        return `static/js/${chunk.name === 'client' ? 'main' : '[name]'}.js`;
+        return `static/js/${chunk?.name === 'client' ? 'main' : '[name]'}.js`;
       },
       publicPath: imaConfig?.publicPath ?? '',
       ...wif(isServer)({ library: { type: 'commonjs2' } })
@@ -145,7 +156,8 @@ export default async (args, imaConfig) => {
                   resourceQuery: /inline/, // foo.svg?inline
                   type: 'asset/inline',
                   generator: {
-                    dataUrl: content => miniSVGDataURI(content.toString())
+                    dataUrl: (content: string | Buffer) =>
+                      miniSVGDataURI(content.toString())
                   }
                 },
                 {
@@ -347,7 +359,7 @@ export default async (args, imaConfig) => {
                     hashTable: path.join(rootDir, 'build/static/hashtable.json')
                   })
                 ]),
-                ...wif(imaConfig?.amp?.postCssPlugins.length > 0)(
+                ...wif(imaConfig?.amp?.postCssPlugins?.length)(
                   imaConfig?.amp?.postCssPlugins,
                   []
                 )

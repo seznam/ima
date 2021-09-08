@@ -3,9 +3,9 @@ import childProcess from 'child_process';
 import { CommandModule } from 'yargs';
 
 import { handlerFactory } from '../lib/cliUtils';
-import { HandlerFunction, StartArgs } from '../types';
+import { HandlerFn, StartArgs } from '../types';
 
-const start: HandlerFunction<StartArgs> = async args => {
+const start: HandlerFn<StartArgs> = async args => {
   childProcess.fork(path.join(args.rootDir, 'build/server'), {
     stdio: 'inherit'
   });

@@ -7,7 +7,7 @@ import {
   Args,
   BaseArgs,
   ConfigurationTypes,
-  HandlerFunction,
+  HandlerFn,
   ImaConfig,
   IMA_CONF_FILENAME
 } from '../types';
@@ -89,12 +89,15 @@ async function createWebpackConfig(
 }
 
 /**
- * TODO
- * FIXME
- * Initializes cli script handler function, with parsed argument and defaults.
+ * Initializes cli script handler function, which takes cli arguments,
+ * parses them and defines defaults. Should be used to initialize any
+ * cli command script, since it takes care of parsing mandatory arguments.
+ *
+ * @param {HandlerFn<T>} handlerFn Cli script command handler.
+ * @returns {void}
  */
-function handlerFactory<T extends BaseArgs>(handlerFn: HandlerFunction<T>) {
-  return async (yargs: Arguments) => {
+function handlerFactory<T extends BaseArgs>(handlerFn: HandlerFn<T>) {
+  return async (yargs: Arguments): Promise<void> => {
     const [command, dir = ''] = yargs._ || [];
     const isProduction = process.env.NODE_ENV === 'production';
 
@@ -109,7 +112,7 @@ function handlerFactory<T extends BaseArgs>(handlerFn: HandlerFunction<T>) {
       rootDir,
       isProduction,
       command: command.toString()
-    } as T); // FIXME
+    } as T);
   };
 }
 

@@ -1,12 +1,12 @@
 import { CommandModule } from 'yargs';
 
-import { BuildArgs, HandlerFunction } from '../types';
+import { BuildArgs, HandlerFn } from '../types';
 import { createWebpackConfig, handlerFactory } from '../lib/cliUtils';
 import { runCompiler, handleError } from '../lib/compiler';
 import { info } from '../lib/print';
 import SharedArgs from '../lib/SharedArgs';
 
-const build: HandlerFunction<BuildArgs> = async args => {
+const build: HandlerFn<BuildArgs> = async args => {
   try {
     info('Parsing webpack configuration file...');
     const config = await createWebpackConfig(['client', 'server'], args);
