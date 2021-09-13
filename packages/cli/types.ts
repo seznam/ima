@@ -132,7 +132,6 @@ export type ImaConfig = {
   };
 };
 
-export type WifValue = unknown[] | Record<string, unknown>;
 export type AdditionalDataFn = (content: string) => string;
 export type AdditionalDataFactoryFn = (content: string) => void;
 export type AdditionalDataContentFn = (

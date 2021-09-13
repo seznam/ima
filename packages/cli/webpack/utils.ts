@@ -10,8 +10,7 @@ import {
   AdditionalDataFn,
   Args,
   ImaConfig,
-  ImaEnvironment,
-  WifValue
+  ImaEnvironment
 } from '../types';
 
 /**
@@ -163,31 +162,6 @@ async function generateEntryPoints(
 }
 
 /**
- * Utility function for conditional config generation.
- * It returns callback function where you can pass value, which
- * is returned if the condition is valid. Otherwise it returns
- * defaults for the given data type.
- *
- * @param {boolean|null|undefined} condition Condition to validate
- * @returns {[]|{}} Value or default value based on the condition result.
- */
-function wif(
-  condition: boolean | null | undefined
-): (value: WifValue, defaultValue: WifValue | null) => WifValue {
-  return (value, defaultValue = null) => {
-    if (condition) {
-      return value;
-    }
-
-    if (defaultValue !== null) {
-      return defaultValue;
-    }
-
-    return Array.isArray(value) ? [] : {};
-  };
-}
-
-/**
  * Creates hash representing current webpack environment.
  * Mainly used for filesystem caching.
  *
@@ -208,7 +182,6 @@ function createCacheKey(args: Args, imaConfig: ImaConfig): string {
 }
 
 export {
-  wif,
   resolveEnvironment,
   requireConfig,
   additionalDataFactory,

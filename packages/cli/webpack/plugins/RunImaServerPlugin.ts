@@ -26,7 +26,7 @@ class RunImaServerPlugin {
   apply(compiler: Compiler): void {
     compiler.hooks.done.tapAsync(
       'RunImaServerPlugin',
-      (compilation, callback) => {
+      (_compilation, callback) => {
         if (!this.serverStart && this.options.rootDir) {
           childProcess.fork(
             path.join(this.options.rootDir, 'build/server'),

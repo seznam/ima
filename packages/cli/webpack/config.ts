@@ -21,7 +21,6 @@ import {
   resolveEnvironment,
   additionalDataFactory,
   generateEntryPoints,
-  wif,
   createCacheKey
 } from './utils';
 import postCssScrambler from './postCssScrambler';
@@ -31,6 +30,8 @@ export default async (
   imaConfig: ImaConfig
 ): Promise<Configuration> => {
   const { rootDir, isProduction, isServer, isWatch } = args;
+  // TODO
+  // eslint-disable-next-line @typescript-eslint/no-var-requires
   const packageJson = require(path.resolve(rootDir, './package.json'));
   const imaEnvironment = resolveEnvironment(rootDir);
   const outputDir = path.join(rootDir, 'build');
@@ -48,19 +49,23 @@ export default async (
     devtool: isProduction ? 'source-map' : 'eval-source-map',
     bail: isProduction,
     entry: {
-      ...wif(isServer)({ server: path.join(rootDir, 'app/main.js') }),
-      ...wif(!isServer)({
-        client: [
-          ...wif(isWatch)([
-            `webpack-hot-middleware/client?path=//localhost:${imaEnvironment.$Server.port}/__webpack_hmr&timeout=20000&reload=true&overlay=true&overlayWarnings=true`
-          ]),
-          path.join(rootDir, 'app/main.js')
-        ]
-      }),
+      ...(isServer
+        ? { server: path.join(rootDir, 'app/main.js') }
+        : {
+            client: [
+              ...(isWatch
+                ? `webpack-hot-middleware/client?path=//localhost:${imaEnvironment.$Server.port}/__webpack_hmr&timeout=20000&reload=true&overlay=true&overlayWarnings=true`
+                : []),
+              path.join(rootDir, 'app/main.js')
+            ]
+          }),
       // AMP specific entry points
-      ...wif(!isServer && ampEnabled && imaConfig?.amp?.entry?.length > 0)(
-        await generateEntryPoints(rootDir, imaConfig?.amp?.entry)
-      )
+      ...(!isServer &&
+        ampEnabled &&
+        imaConfig?.amp?.entry &&
+        imaConfig.amp.entry?.length > 0 && {
+          ...(await generateEntryPoints(rootDir, imaConfig?.amp?.entry))
+        })
     },
     output: {
       path: outputDir,
@@ -74,7 +79,7 @@ export default async (
         return `static/js/${chunk?.name === 'client' ? 'main' : '[name]'}.js`;
       },
       publicPath: imaConfig?.publicPath ?? '',
-      ...wif(isServer)({ library: { type: 'commonjs2' } })
+      ...(isServer && { library: { type: 'commonjs2' } })
     },
     cache: {
       type: 'filesystem',
@@ -213,6 +218,13 @@ export default async (
                 }
               ]
             },
+            /**
+             * Less loader configuration, which adds support for glob imports in the
+             * less files, postcss, and css imports support. Additionally
+             * app/assets/less/globals.less is always prepended to every less file
+             * computed. This allows you to define globals (variables) which don't
+             * have to be imported in every LESS file manually.
+             */
             {
               test: /\.less$/,
               sideEffects: true,
@@ -293,6 +305,10 @@ export default async (
                     }
                   ]
             },
+            /**
+             * Fallback loader for all modules, that don't match any
+             * of the above defined rules.
+             */
             {
               exclude: [
                 /^$/,
@@ -307,7 +323,9 @@ export default async (
       ]
     },
     plugins: isServer
-      ? [
+      ? // Server-specific plugins
+        [
+          // Copies essential assets to static directory
           new CopyPlugin({
             patterns: [
               { from: 'app/assets/static', to: 'static' },
@@ -315,57 +333,74 @@ export default async (
               'server/server.js'
             ]
           }),
-          ...wif(isWatch)([
+
+          // Opens web browser after running dev script
+          isWatch &&
             new RunImaServerPlugin({
               rootDir,
               open: args.open,
               verbose: args.verbose,
               port: imaEnvironment.$Server.port
             })
-          ])
-        ]
-      : [
+        ].filter(Boolean)
+      : // Client-specific plugins
+        [
+          // Removes generated empty script caused by non-js entry points
           new RemoveEmptyScriptsPlugin(),
+
+          // Handles LESS/CSS extraction out of JS to separate css file
           new MiniCssExtractPlugin({
             filename: ({ chunk }) =>
-              `static/css/${chunk.name === 'client' ? 'app' : '[name]'}.css`,
+              `static/css/${chunk?.name === 'client' ? 'app' : '[name]'}.css`,
             chunkFilename: 'static/css/[name].chunk.css'
           }),
-          ...wif(args.scrambleCss ?? imaConfig?.scrambleCss)([
-            // This pipeline should run only for main app css file
+
+          // This pipeline should run only for main app css file
+          (args.scrambleCss ?? imaConfig?.scrambleCss) &&
             new PostCssPipelineWebpackPlugin({
-              predicate: name => /static\/css\/app.css$/.test(name),
+              predicate: (name: string) => /static\/css\/app.css$/.test(name),
               suffix: 'srambled',
               processor: postcss([
+                // Run CSS scrambler, this needs to run on generated assets
                 postCssScrambler({
                   generateHashTable: true,
                   uniqueIdentifier: `${packageJson.name}:${packageJson.version}`,
                   hashTable: path.join(rootDir, 'build/static/hashtable.json')
                 })
               ])
-            })
-          ]),
-          ...wif(ampEnabled)([
-            // This should run only for amp entry points
+            }),
+
+          // This should run only for amp entry points
+          ampEnabled &&
             new PostCssPipelineWebpackPlugin({
-              predicate: name =>
+              predicate: (name: string) =>
                 !/static\/css\/app.css$/.test(name) &&
                 !/srambled.css$/.test(name),
               suffix: 'srambled',
-              processor: postcss([
-                ...wif(args.scrambleCss ?? imaConfig?.scrambleCss)([
-                  postCssScrambler({
-                    generateHashTable: false,
-                    hashTable: path.join(rootDir, 'build/static/hashtable.json')
-                  })
-                ]),
-                ...wif(imaConfig?.amp?.postCssPlugins?.length)(
-                  imaConfig?.amp?.postCssPlugins,
-                  []
-                )
-              ])
-            })
-          ]),
+              processor: postcss(
+                [
+                  // Run CSS scrambler on AMP sources, if enabled
+                  ...(args.scrambleCss ?? imaConfig?.scrambleCss
+                    ? [
+                        postCssScrambler({
+                          generateHashTable: false,
+                          hashTable: path.join(
+                            rootDir,
+                            'build/static/hashtable.json'
+                          )
+                        })
+                      ]
+                    : []),
+
+                  // Custom AMP postCss plugins
+                  ...(imaConfig?.amp?.postCssPlugins?.length
+                    ? imaConfig?.amp?.postCssPlugins
+                    : [])
+                ].filter(Boolean)
+              )
+            }),
+
+          // Handles generation of spa.html public file
           new HtmlWebpackPlugin({
             template: path.join(rootDir, 'app/assets/static/html/spa.html'),
             filename: 'index.html',
@@ -376,21 +411,24 @@ export default async (
               $Language: Object.values(imaEnvironment.$Language)[0]
             }
           }),
-          ...wif(imaConfig?.compress)([new CompressionPlugin()]),
-          ...wif(isWatch)([
-            new webpack.HotModuleReplacementPlugin(),
+
+          // Enables gzip compression for assets
+          imaConfig?.compress && new CompressionPlugin(),
+
+          // Following plugins enable react refresh and hmr in watch mode
+          isWatch && new webpack.HotModuleReplacementPlugin(),
+          isWatch &&
             new ReactRefreshWebpackPlugin({
               // overlay: false
               overlay: {
                 sockIntegration: 'whm'
               }
             })
-          ])
-        ],
-    ...wif(isServer)({
-      externalsPresets: {
-        node: true
-      }
-    })
+        ].filter(Boolean),
+
+    // Enable node preset for externals on server
+    externalsPresets: {
+      node: isServer
+    }
   };
 };
