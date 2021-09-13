@@ -22,7 +22,7 @@
     "type": "git",
     "url": "https://github.com/seznam/ima.git"
   },
-  "types": "./types.d.ts",
+  "types": "./dist/types/types.d.ts",
   "bugs": {
     "url": "https://github.com/seznam/ima/issues"
   },
@@ -68,7 +68,7 @@
     "yargs": "^17.1.1"
   },
   "devDependencies": {
-    "@types.d.tsmpression-webpack-plugin": "^6.0.6",
+    "@types/compression-webpack-plugin": "^6.0.6",
     "@types/copy-webpack-plugin": "^8.0.1",
     "@types/css-minimizer-webpack-plugin": "^3.0.2",
     "@types/mini-css-extract-plugin": "^2.2.0",
