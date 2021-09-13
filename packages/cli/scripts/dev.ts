@@ -1,4 +1,4 @@
-import { CommandModule } from 'yargs';
+import { CommandBuilder } from 'yargs';
 
 import { DevArgs, HandlerFn } from '../types';
 import { handlerFactory, createWebpackConfig } from '../lib/cliUtils';
@@ -22,19 +22,15 @@ const dev: HandlerFn<DevArgs> = async args => {
   }
 };
 
-const devCommand: CommandModule = {
-  command: 'dev',
-  describe: 'Run application in development watch mode',
-  builder: {
-    ...SharedArgs,
-    open: {
-      alias: 'o',
-      desc: 'Opens browser window after server has been started',
-      type: 'boolean',
-      default: true
-    }
-  },
-  handler: handlerFactory(dev)
+export const command = 'dev';
+export const describe = 'Run application in development watch mode';
+export const handler = handlerFactory(dev);
+export const builder: CommandBuilder = {
+  ...SharedArgs,
+  open: {
+    alias: 'o',
+    desc: 'Opens browser window after server has been started',
+    type: 'boolean',
+    default: true
+  }
 };
-
-export default devCommand;

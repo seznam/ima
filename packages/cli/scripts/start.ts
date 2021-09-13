@@ -1,6 +1,5 @@
 import path from 'path';
 import childProcess from 'child_process';
-import { CommandModule } from 'yargs';
 
 import { handlerFactory } from '../lib/cliUtils';
 import { HandlerFn, StartArgs } from '../types';
@@ -11,11 +10,6 @@ const start: HandlerFn<StartArgs> = async args => {
   });
 };
 
-const startCommand: CommandModule = {
-  command: 'start',
-  describe: 'Run application in production',
-  builder: {},
-  handler: handlerFactory(start)
-};
-
-export default startCommand;
+export const command = 'start';
+export const describe = 'Run application in production';
+export const handler = handlerFactory(start);

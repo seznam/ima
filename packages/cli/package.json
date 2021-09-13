@@ -11,9 +11,10 @@
   "bin": {
     "ima": "./dist/bin/ima.js"
   },
-  "main": "./main.js",
+  "main": "./dist/main.js",
   "scripts": {
-    "build": "tsc"
+    "build": "tsc",
+    "dev": "tsc --watch"
   },
   "author": "Miroslav Jancarik <miroslav.jancarik@firma.seznam.cz>",
   "contributors": [],

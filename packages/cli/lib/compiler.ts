@@ -65,9 +65,10 @@ function handleStats(
 
   // Print errors
   if (stats.hasErrors()) {
+    error('Errors');
     return errors.forEach(({ compilerPath, message, details }) => {
       error(
-        `[${compilerPath}] - ${message} ${
+        `[${compilerPath}]\n${message} ${
           verbose && details ? '\n' + details : ''
         }`,
         true
@@ -76,14 +77,16 @@ function handleStats(
   }
 
   // Print warnings
-  warnings.forEach(({ compilerPath, message, details }) => {
-    warn(
-      `[${compilerPath}]\n${message} ${
-        verbose && details ? '\n' + details : ''
-      }`,
-      true
-    );
-  });
+  if (stats.hasWarnings()) {
+    warnings.forEach(({ compilerPath, message, details }) => {
+      warn(
+        `[${compilerPath}]\n${message} ${
+          verbose && details ? '\n' + details : ''
+        }`,
+        true
+      );
+    });
+  }
 
   // Output
   const server = children?.find(({ name }) => name === 'server');
@@ -94,7 +97,8 @@ function handleStats(
       'successful'
     )} using webpack version: ${chalk.bold.magenta(
       (client || server)?.version
-    )}`
+    )}`,
+    stats.hasWarnings() || stats.hasErrors()
   );
 
   server &&

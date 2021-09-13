@@ -46,7 +46,7 @@ async function createWebpackConfig(
   configurations: ConfigurationTypes = ['client', 'server'],
   configArgs: Args
 ): Promise<Configuration[]> {
-  if (!configArgs && process.env.IMA_CLI_WEBPACK_CON) {
+  if (!configArgs && process.env.IMA_CLI_WEBPACK_CONFIG_ARGS) {
     try {
       // Load config args from env variable
       configArgs = JSON.parse(process.env.IMA_CLI_WEBPACK_CONFIG_ARGS);

@@ -9,6 +9,10 @@ echo "  Copying @ima/server, @ima/cli & @ima/core to app directory..."
 echo "===-----------------------------------------------------------==="
 echo ""
 
+echo 'build @ima/cli'
+cd $CLI_DIR
+npm run build
+
 echo 'Syncing @ima/core...'
 rm -rf $APP_DIR/node_modules/@ima/core
 rsync -aq --progress $CLI_DIR/../core $APP_DIR/node_modules/@ima --exclude node_modules

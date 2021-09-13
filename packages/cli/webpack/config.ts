@@ -53,12 +53,13 @@ export default async (
         ? { server: path.join(rootDir, 'app/main.js') }
         : {
             client: [
-              ...(isWatch
+              isWatch
                 ? `webpack-hot-middleware/client?path=//localhost:${imaEnvironment.$Server.port}/__webpack_hmr&timeout=20000&reload=true&overlay=true&overlayWarnings=true`
-                : []),
+                : '',
               path.join(rootDir, 'app/main.js')
-            ]
+            ].filter(Boolean)
           }),
+
       // AMP specific entry points
       ...(!isServer &&
         ampEnabled &&

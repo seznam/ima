@@ -1,4 +1,4 @@
-import { CommandModule } from 'yargs';
+import { CommandBuilder } from 'yargs';
 
 import { BuildArgs, HandlerFn } from '../types';
 import { createWebpackConfig, handlerFactory } from '../lib/cliUtils';
@@ -18,18 +18,14 @@ const build: HandlerFn<BuildArgs> = async args => {
   }
 };
 
-const buildCommand: CommandModule = {
-  command: 'build',
-  describe: 'Build an application for production',
-  builder: {
-    ...SharedArgs,
-    clean: {
-      desc: 'Clean build folder before building the application',
-      type: 'boolean',
-      default: true
-    }
-  },
-  handler: handlerFactory(build)
+export const command = 'build';
+export const describe = 'Build an application for production';
+export const handler = handlerFactory(build);
+export const builder: CommandBuilder = {
+  ...SharedArgs,
+  clean: {
+    desc: 'Clean build folder before building the application',
+    type: 'boolean',
+    default: true
+  }
 };
-
-export default buildCommand;
