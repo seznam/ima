@@ -20,15 +20,16 @@ import {
  * @returns {ImaEnvironment} Loaded environment
  */
 function resolveEnvironment(rootDir: Args['rootDir']): ImaEnvironment {
-  // eslint-disable-next-line @typescript-eslint/no-var-requires
-  const envSource = require(path.resolve(rootDir, './app/environment.js'));
-  // eslint-disable-next-line @typescript-eslint/no-var-requires
-  const envConfig = require(path.resolve(
+  const envSourcePath = path.resolve(rootDir, './app/environment.js');
+  const envConfigPath = path.resolve(
     rootDir,
     './node_modules/@ima/server/lib/environment.js'
-  ))(envSource) as ImaEnvironment;
+  );
 
-  return envConfig;
+  const envSource = envSourcePath && require(envSourcePath);
+  const envConfig = envConfigPath && require(envConfigPath);
+
+  return (envSource && envConfig ? envConfig(envSource) : {}) as ImaEnvironment;
 }
 
 /**

@@ -1,5 +1,5 @@
-const { createWebpackConfig } = require('./lib/cliUtils');
-const { VerboseOptions } = require('./types');
+import { createWebpackConfig } from './lib/cliUtils';
+import { VerboseOptions } from './types';
 
 module.exports = {
   createWebpackConfig,

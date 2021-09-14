@@ -31,9 +31,8 @@ export default async (
   imaConfig: ImaConfig
 ): Promise<Configuration> => {
   const { rootDir, isProduction, isServer, isWatch } = args;
-  // TODO
-  // eslint-disable-next-line @typescript-eslint/no-var-requires
-  const packageJson = require(path.resolve(rootDir, './package.json'));
+  const packageJsonPath = path.resolve(rootDir, './package.json');
+  const packageJson = packageJsonPath ? require(packageJsonPath) : {};
   const imaEnvironment = resolveEnvironment(rootDir);
   const outputDir = path.join(rootDir, 'build');
   const ampEnabled = args.amp ?? imaConfig?.amp?.enabled;
