@@ -7,6 +7,7 @@ import {
   Args,
   BaseArgs,
   ConfigurationTypes,
+  ESVersions,
   HandlerFn,
   ImaConfig,
   IMA_CONF_FILENAME
@@ -19,11 +20,9 @@ import { error } from './print';
  * configuration was found it returns empty object.
  *
  * @param {string} rootDir Base app directory.
- * @returns {Promise<ImaConfig | {}>} Ima config or empty object.
+ * @returns {Promise<ImaConfig>} Ima config or empty object.
  */
-async function loadImaConfig(
-  rootDir: string
-): Promise<ImaConfig | Record<string, unknown>> {
+async function loadImaConfig(rootDir: string): Promise<ImaConfig> {
   if (!rootDir) {
     return {};
   }
@@ -39,41 +38,90 @@ async function loadImaConfig(
  * configuration file.
  *
  * @param {ConfigurationTypes} configurations Configuration types.
- * @param {Args} configArgs Parsed CLI and build arguments.
+ * @param {Args} args Parsed CLI and build arguments.
  * @returns {Promise<Configuration[]>}
  */
 async function createWebpackConfig(
   configurations: ConfigurationTypes = ['client', 'server'],
-  configArgs: Args
+  args: Args
 ): Promise<Configuration[]> {
-  if (!configArgs && process.env.IMA_CLI_WEBPACK_CONFIG_ARGS) {
+  // No need to continue without any configuration
+  if (!configurations.length) {
+    throw new Error(
+      'The configurations array is empty, at least one configuration needs to be defined.'
+    );
+  }
+
+  if (!args && process.env.IMA_CLI_WEBPACK_CONFIG_ARGS) {
     try {
       // Load config args from env variable
-      configArgs = JSON.parse(process.env.IMA_CLI_WEBPACK_CONFIG_ARGS);
+      args = JSON.parse(process.env.IMA_CLI_WEBPACK_CONFIG_ARGS);
     } catch (err) {
       error('Error occurred while parsing env webpack config args.');
       throw err;
     }
   } else {
     // Cache config args to env variable
-    process.env.IMA_CLI_WEBPACK_CONFIG_ARGS = JSON.stringify(configArgs);
+    process.env.IMA_CLI_WEBPACK_CONFIG_ARGS = JSON.stringify(args);
   }
 
   // We are unable to continue without valid configArgs
-  if (!configArgs) {
+  if (!args) {
     throw new Error(
       'Unable to load config args used to initialize a webpack config.'
     );
   }
 
   // Load optional ima.config.js
-  const imaConfig = await loadImaConfig(configArgs.rootDir);
+  const imaConfig = await loadImaConfig(args.rootDir);
+  const finalConfigArgs: Args[] = [];
 
-  // Adjust config args for client and server configurations
-  const finalConfigArgs: Args[] = configurations.map(currentConfiguration => ({
-    ...configArgs,
-    isServer: currentConfiguration === 'server'
-  }));
+  // Push server configuration if available
+  if (configurations.includes('server')) {
+    finalConfigArgs.push({
+      isServer: true,
+      name: 'server',
+      ...args
+    });
+  }
+
+  // Push client configurations if available
+  if (configurations.includes('client')) {
+    const latestEsVersion = findLatestEsVersion(
+      imaConfig?.esVersions,
+      ESVersions.es11
+    );
+
+    // Push default client configuration
+    finalConfigArgs.push({
+      isServer: false,
+      name: 'client',
+      ecma: {
+        isMain: true,
+        suffix: '',
+        version: latestEsVersion
+      },
+      ...args
+    });
+
+    if (!args?.isWatch) {
+      // Push other defined ES client configurations if defined
+      imaConfig?.esVersions
+        ?.filter(esVersion => esVersion !== latestEsVersion)
+        .forEach(esVersion => {
+          finalConfigArgs.push({
+            isServer: false,
+            name: `client-${esVersion}`,
+            ecma: {
+              isMain: false,
+              suffix: `.${esVersion}`,
+              version: esVersion
+            },
+            ...args
+          });
+        });
+    }
+  }
 
   return Promise.all(
     finalConfigArgs.map(async args =>
@@ -108,12 +156,88 @@ function handlerFactory<T extends BaseArgs>(handlerFn: HandlerFn<T>) {
         : path.resolve(process.cwd(), dirStr)
       : process.cwd();
 
-    return await handlerFn({
+    return await handlerFn(({
+      ...yargs,
       rootDir,
       isProduction,
       command: command.toString()
-    } as T);
+    } as unknown) as T);
   };
 }
 
-export { handlerFactory, createWebpackConfig, loadImaConfig };
+/**
+ * Resolves esVersion to browserslist targets object, that can be
+ * passed into babel/preset-env.
+ *
+ * @param {ESVersions} esVersion ESVersion to parse.
+ * @returns {object} Targets object.
+ */
+function resolveEsVersionTargets(
+  esVersion?: ESVersions
+): Record<string, number> {
+  switch (esVersion) {
+    case ESVersions.es5:
+      return { ie: 11 };
+
+    case ESVersions.ES2015:
+    case ESVersions.es6:
+      return { edge: 15 };
+
+    case ESVersions.ES2016:
+    case ESVersions.es7:
+      return { node: 8 };
+
+    case ESVersions.ES2017:
+    case ESVersions.es8:
+      return { node: 10 };
+
+    case ESVersions.ES2018:
+    case ESVersions.es9:
+    case ESVersions.ES2019:
+    case ESVersions.es10:
+      return { node: 12 };
+
+    case ESVersions.ES2020:
+    case ESVersions.es11:
+      return { node: 14 };
+
+    case ESVersions.ES2021:
+    case ESVersions.es12:
+      return { node: 15 };
+
+    default:
+      return { ie: 11 };
+  }
+}
+
+/**
+ * Returns latest (newest) es version from provided array.
+ *
+ * @param {ESVersions[]} esVersions? ESVersions array.
+ * @param {ESVersions} [defEsVersion='es11'] Default ES version,
+ *        which is returned if no match was found.
+ * @returns {ESVersions}
+ */
+function findLatestEsVersion(
+  esVersions?: ESVersions[],
+  defEsVersion = ESVersions.es11
+): ESVersions {
+  let latestEsVersion: ESVersions = defEsVersion;
+
+  if (esVersions?.length) {
+    Object.values(ESVersions).forEach(esVersion => {
+      if (esVersions.includes(esVersion)) {
+        latestEsVersion = esVersion;
+      }
+    });
+  }
+
+  return latestEsVersion;
+}
+
+export {
+  handlerFactory,
+  createWebpackConfig,
+  loadImaConfig,
+  resolveEsVersionTargets
+};

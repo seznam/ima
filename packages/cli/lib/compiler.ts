@@ -89,48 +89,32 @@ function handleStats(
   }
 
   // Output
-  const server = children?.find(({ name }) => name === 'server');
-  const client = children?.find(({ name }) => name === 'client');
+  children?.forEach((child, index) => {
+    if (index === 0) {
+      info(
+        `Compilation was ${chalk.bold.green(
+          'successful'
+        )} using webpack version: ${chalk.bold.magenta(child.version)}`,
+        stats.hasWarnings() || stats.hasErrors()
+      );
 
-  info(
-    `Compilation was ${chalk.bold.green(
-      'successful'
-    )} using webpack version: ${chalk.bold.magenta(
-      (client || server)?.version
-    )}`,
-    stats.hasWarnings() || stats.hasErrors()
-  );
+      info(`Output folder ${chalk.magenta(child.outputPath)}`);
+    }
 
-  server &&
     info(
-      `[${server.name}] Compiled in ${chalk.green(
-        server.time?.toLocaleString() + ' ms'
+      `[${child.name}] Compiled in ${chalk.green(
+        child.time?.toLocaleString() + ' ms'
       )}`
     );
 
-  client &&
-    info(
-      `[${client.name}] Compiled in ${chalk.green(
-        client.time?.toLocaleString() + ' ms'
-      )}`
-    );
-
-  info(
-    `Following chunks were generated in ${chalk.green(
-      (client || server)?.outputPath
-    )}:`
-  );
-
-  // Print chunk file size info
-  children?.forEach(child => {
     if (child?.namedChunkGroups) {
       Object.keys(child.namedChunkGroups).forEach(chunkKey => {
         child?.namedChunkGroups?.[chunkKey]?.assets?.forEach(
           ({ name, size }) => {
             console.log(
-              ` ├ ${name}  ${
+              ` ${chalk.gray('├')} ${name} ${
                 size &&
-                chalk.green((size / 1024).toFixed(1).toLocaleString() + ' kiB')
+                chalk.cyan((size / 1024).toFixed(1).toLocaleString() + ' kiB')
               }`
             );
           }

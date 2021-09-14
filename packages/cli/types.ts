@@ -20,13 +20,34 @@ export enum VerboseOptions {
 }
 
 /**
+ * ESVersions that can be chosen to generate a client bundle into.
+ */
+export enum ESVersions {
+  'es5' = 'es5',
+  'ES2015' = 'es6',
+  'es6' = 'es6',
+  'ES2016' = 'es7',
+  'es7' = 'es7',
+  'ES2017' = 'es8',
+  'es8' = 'es8',
+  'ES2018' = 'es9',
+  'es9' = 'es9',
+  'ES2019' = 'es10',
+  'es10' = 'es10',
+  'ES2020' = 'es11',
+  'es11' = 'es11',
+  'ES2021' = 'es12',
+  'es12' = 'es12'
+}
+
+/**
  * Base args available in every ima script. Following 3 arguments
  * are available and mandatory in every ima cli script.
  */
 export type BaseArgs = {
   rootDir: string;
   isProduction: boolean;
-  command: string;
+  command: 'start' | 'build' | 'dev';
 };
 
 /**
@@ -64,8 +85,14 @@ export type BuildArgs = DevBuildArgs & {
  */
 export type Args = BuildArgs &
   DevArgs & {
+    name?: string;
     isWatch?: boolean;
     isServer?: boolean;
+    ecma?: {
+      isMain?: boolean;
+      suffix?: string;
+      version?: ESVersions;
+    };
   };
 
 export type HandlerFn<T extends BaseArgs> = (args: T) => Promise<void>;
@@ -84,7 +111,16 @@ export type ImaConfig = {
    *                             that help identify the current state webpack trying to run this config.
    * @param {ImaConfig}    imaConfig additional local ima.config.js file contents ({} if there's no file created).
    */
-  webpack?: (config: Configuration, args: Args, imaConfig: ImaConfig) => void;
+  webpack?: (
+    config: Configuration,
+    args: Args,
+    imaConfig: ImaConfig
+  ) => Configuration;
+
+  /**
+   * Define array of ES versions to build client.js into.
+   */
+  esVersions?: ESVersions[];
 
   /**
    * Webpack assets public path

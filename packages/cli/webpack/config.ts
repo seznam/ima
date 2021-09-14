@@ -24,6 +24,7 @@ import {
   createCacheKey
 } from './utils';
 import postCssScrambler from './postCssScrambler';
+import { resolveEsVersionTargets } from '../lib/cliUtils';
 
 export default async (
   args: Args,
@@ -44,8 +45,8 @@ export default async (
 
   return {
     target: 'web',
+    name: args?.name,
     mode: isProduction ? 'production' : 'development',
-    name: isServer ? 'server' : 'client',
     devtool: isProduction ? 'source-map' : 'eval-source-map',
     bail: isProduction,
     entry: {
@@ -77,7 +78,9 @@ export default async (
           return 'ima/app.server.js';
         }
 
-        return `static/js/${chunk?.name === 'client' ? 'main' : '[name]'}.js`;
+        return `static/js/${chunk?.name === 'client' ? 'main' : '[name]'}${
+          args?.ecma?.suffix
+        }.js`;
       },
       publicPath: imaConfig?.publicPath ?? '',
       ...(isServer && { library: { type: 'commonjs2' } })
@@ -197,7 +200,14 @@ export default async (
                     ],
                     defaultConfig: {
                       presets: [
-                        require.resolve('@babel/preset-env'),
+                        [
+                          require.resolve('@babel/preset-env'),
+                          {
+                            targets: resolveEsVersionTargets(
+                              args?.ecma?.version
+                            )
+                          }
+                        ],
                         [
                           require.resolve('@babel/preset-react'),
                           {
@@ -230,81 +240,83 @@ export default async (
               test: /\.less$/,
               sideEffects: true,
               exclude: /node_modules/,
-              use: isServer
-                ? require.resolve('null-loader')
-                : [
-                    {
-                      loader: MiniCssExtractPlugin.loader
-                    },
-                    {
-                      loader: require.resolve('css-loader'),
-                      options: {
-                        importLoaders: 2,
-                        modules: {
-                          auto: true,
-                          localIdentName: isProduction
-                            ? '[hash:base64]'
-                            : '[path][name]__[local]--[hash:base64:5]'
-                        }
-                      }
-                    },
-                    {
-                      loader: require.resolve('postcss-loader'),
-                      options: {
-                        postcssOptions: requireConfig({
-                          rootDir,
-                          packageJson,
-                          packageJsonKey: 'postcss',
-                          fileNames: [
-                            'postcss.config.js',
-                            'postcss.config.cjs',
-                            'postcss.config.json',
-                            '.postcssrc.js',
-                            '.postcssrc.cjs',
-                            '.postcssrc.json',
-                            '.postcssrc'
-                          ],
-                          defaultConfig: {
-                            plugins: [
-                              'postcss-flexbugs-fixes',
-                              [
-                                'postcss-preset-env',
-                                {
-                                  autoprefixer: {
-                                    flexbox: 'no-2009'
-                                  },
-                                  stage: 3,
-                                  features: {
-                                    'custom-properties': false
-                                  }
-                                }
-                              ]
-                            ]
+              use:
+                isServer || !args?.ecma?.isMain
+                  ? require.resolve('null-loader')
+                  : [
+                      {
+                        loader: MiniCssExtractPlugin.loader
+                      },
+                      {
+                        loader: require.resolve('css-loader'),
+                        options: {
+                          importLoaders: 2,
+                          modules: {
+                            // TODO validate modules using multiple babel versions
+                            auto: true,
+                            localIdentName: isProduction
+                              ? '[hash:base64]'
+                              : '[path][name]__[local]--[hash:base64:5]'
                           }
-                        })
+                        }
+                      },
+                      {
+                        loader: require.resolve('postcss-loader'),
+                        options: {
+                          postcssOptions: requireConfig({
+                            rootDir,
+                            packageJson,
+                            packageJsonKey: 'postcss',
+                            fileNames: [
+                              'postcss.config.js',
+                              'postcss.config.cjs',
+                              'postcss.config.json',
+                              '.postcssrc.js',
+                              '.postcssrc.cjs',
+                              '.postcssrc.json',
+                              '.postcssrc'
+                            ],
+                            defaultConfig: {
+                              plugins: [
+                                'postcss-flexbugs-fixes',
+                                [
+                                  'postcss-preset-env',
+                                  {
+                                    autoprefixer: {
+                                      flexbox: 'no-2009'
+                                    },
+                                    stage: 3,
+                                    features: {
+                                      'custom-properties': false
+                                    }
+                                  }
+                                ]
+                              ]
+                            }
+                          })
+                        }
+                      },
+                      {
+                        loader: require.resolve('less-loader'),
+                        options: {
+                          lessOptions: {
+                            strictMath: true
+                          },
+                          additionalData: additionalDataFactory([
+                            prefix =>
+                              prefix(
+                                `@import "${path.join(
+                                  rootDir,
+                                  'app/assets/less/globals.less'
+                                )}";`
+                              )
+                          ])
+                        }
+                      },
+                      {
+                        loader: require.resolve('glob-import-loader')
                       }
-                    },
-                    {
-                      loader: require.resolve('less-loader'),
-                      options: {
-                        lessOptions: {
-                          strictMath: true
-                        },
-                        additionalData: additionalDataFactory([
-                          prefix =>
-                            prefix(
-                              `@import "${path.join(
-                                rootDir,
-                                'app/assets/less/globals.less'
-                              )}";`
-                            )
-                        ])
-                      }
-                    },
-                    {
-                      loader: require.resolve('glob-import-loader')
-                    }
-                  ]
+                    ]
             },
             /**
              * Fallback loader for all modules, that don't match any
@@ -414,7 +426,16 @@ export default async (
           }),
 
           // Enables gzip compression for assets
-          imaConfig?.compress && new CompressionPlugin(),
+          imaConfig?.compress &&
+            new CompressionPlugin({
+              algorithm: 'gzip',
+              test: /\.(js|css|)$/,
+              compressionOptions: {
+                level: 9
+              },
+              threshold: 0,
+              minRatio: 0.95
+            }),
 
           // Following plugins enable react refresh and hmr in watch mode
           isWatch && new webpack.HotModuleReplacementPlugin(),
