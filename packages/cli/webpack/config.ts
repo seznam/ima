@@ -14,7 +14,7 @@ import TerserPlugin from 'terser-webpack-plugin';
 import CompressionPlugin from 'compression-webpack-plugin';
 import ReactRefreshWebpackPlugin from '@pmmmwh/react-refresh-webpack-plugin';
 
-import { Args, ImaConfig } from '../types';
+import { ConfigurationArgs, ImaConfig } from '../types';
 import RunImaServerPlugin from './plugins/RunImaServerPlugin';
 import {
   requireConfig,
@@ -27,7 +27,7 @@ import postCssScrambler from './postCssScrambler';
 import { resolveEsVersionTargets } from '../lib/cliUtils';
 
 export default async (
-  args: Args,
+  args: ConfigurationArgs,
   imaConfig: ImaConfig
 ): Promise<Configuration> => {
   const { rootDir, isProduction, isServer, isWatch } = args;
@@ -35,16 +35,16 @@ export default async (
   const packageJson = packageJsonPath ? require(packageJsonPath) : {};
   const imaEnvironment = resolveEnvironment(rootDir);
   const outputDir = path.join(rootDir, 'build');
-  const ampEnabled = args.amp ?? imaConfig?.amp?.enabled;
+  const ampEnabled = args?.amp ?? imaConfig?.amp?.enabled;
 
   // Clean build directory
-  if (args.clean && fs.existsSync(outputDir)) {
+  if (args?.clean && fs.existsSync(outputDir)) {
     fs.rmSync(outputDir, { recursive: true });
   }
 
   return {
     target: 'web',
-    name: args?.name,
+    name: args.name,
     mode: isProduction ? 'production' : 'development',
     devtool: isProduction ? 'source-map' : 'eval-source-map',
     bail: isProduction,
@@ -350,8 +350,8 @@ export default async (
           isWatch &&
             new RunImaServerPlugin({
               rootDir,
-              open: args.open,
-              verbose: args.verbose,
+              open: args?.open,
+              verbose: args?.verbose,
               port: imaEnvironment.$Server.port
             })
         ].filter(Boolean)
@@ -368,7 +368,7 @@ export default async (
           }),
 
           // This pipeline should run only for main app css file
-          (args.scrambleCss ?? imaConfig?.scrambleCss) &&
+          (args?.scrambleCss ?? imaConfig?.scrambleCss) &&
             new PostCssPipelineWebpackPlugin({
               predicate: (name: string) => /static\/css\/app.css$/.test(name),
               suffix: 'srambled',
@@ -392,7 +392,7 @@ export default async (
               processor: postcss(
                 [
                   // Run CSS scrambler on AMP sources, if enabled
-                  ...(args.scrambleCss ?? imaConfig?.scrambleCss
+                  ...(args?.scrambleCss ?? imaConfig?.scrambleCss
                     ? [
                         postCssScrambler({
                           generateHashTable: false,

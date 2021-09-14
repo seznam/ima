@@ -85,15 +85,21 @@ export type BuildArgs = DevBuildArgs & {
  */
 export type Args = BuildArgs &
   DevArgs & {
-    name?: string;
     isWatch?: boolean;
-    isServer?: boolean;
-    ecma?: {
-      isMain?: boolean;
-      suffix?: string;
-      version?: ESVersions;
-    };
   };
+
+/**
+ * Configuration arguments passed into webpack configuration.
+ */
+export type ConfigurationArgs = Args & {
+  name: string;
+  isServer: boolean;
+  ecma?: {
+    isMain: boolean;
+    version: ESVersions;
+    suffix?: string;
+  };
+};
 
 export type HandlerFn<T extends BaseArgs> = (args: T) => Promise<void>;
 export type ConfigurationTypes = ('client' | 'server')[];
@@ -107,13 +113,13 @@ export type ImaConfig = {
   /**
    * Webpack callback function can be used to completely customize default webpack config before it's run:
    * @param {Configuration} config generated config by ima CLI, which can be further customized.
-   * @param {Args}          args CLI args, with additional options -> `rootDir`, `isProduction`, `isServer`, `isWatch"
-   *                             that help identify the current state webpack trying to run this config.
-   * @param {ImaConfig}    imaConfig additional local ima.config.js file contents ({} if there's no file created).
+   * @param {ConfigurationArgs} args CLI args, with additional options -> `rootDir`, `isProduction`, `isServer`, `isWatch"
+   *                                 that help identify the current state webpack trying to run this config.
+   * @param {ImaConfig} imaConfig additional local ima.config.js file contents ({} if there's no file created).
    */
   webpack?: (
     config: Configuration,
-    args: Args,
+    args: ConfigurationArgs,
     imaConfig: ImaConfig
   ) => Configuration;
 

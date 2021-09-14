@@ -6,6 +6,7 @@ import { Arguments } from 'yargs';
 import {
   Args,
   BaseArgs,
+  ConfigurationArgs,
   ConfigurationTypes,
   ESVersions,
   HandlerFn,
@@ -55,7 +56,7 @@ async function createWebpackConfig(
   if (!args && process.env.IMA_CLI_WEBPACK_CONFIG_ARGS) {
     try {
       // Load config args from env variable
-      args = JSON.parse(process.env.IMA_CLI_WEBPACK_CONFIG_ARGS);
+      args = JSON.parse(process.env.IMA_CLI_WEBPACK_CONFIG_ARGS) as Args;
     } catch (err) {
       error('Error occurred while parsing env webpack config args.');
       throw err;
@@ -74,7 +75,7 @@ async function createWebpackConfig(
 
   // Load optional ima.config.js
   const imaConfig = await loadImaConfig(args.rootDir);
-  const finalConfigArgs: Args[] = [];
+  const finalConfigArgs: ConfigurationArgs[] = [];
 
   // Push server configuration if available
   if (configurations.includes('server')) {
@@ -98,7 +99,6 @@ async function createWebpackConfig(
       name: 'client',
       ecma: {
         isMain: true,
-        suffix: '',
         version: latestEsVersion
       },
       ...args
