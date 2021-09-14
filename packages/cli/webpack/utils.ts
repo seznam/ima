@@ -9,6 +9,7 @@ import {
   AdditionalDataFactoryFn,
   AdditionalDataFn,
   Args,
+  ConfigurationArgs,
   ImaConfig,
   ImaEnvironment
 } from '../types';
@@ -166,14 +167,17 @@ async function generateEntryPoints(
  * Creates hash representing current webpack environment.
  * Mainly used for filesystem caching.
  *
- * @param {Args} args Current CLI and build args.
+ * @param {ConfigurationArgs} configArgs Current CLI and build args.
  * @param {ImaConfig} imaConfig Current ima configuration.
  * @returns {string}
  */
-function createCacheKey(args: Args, imaConfig: ImaConfig): string {
+function createCacheKey(
+  configArgs: ConfigurationArgs,
+  imaConfig: ImaConfig
+): string {
   const hash = createHash('md5');
   hash.update(
-    [args, imaConfig]
+    [configArgs, imaConfig]
       .filter(Object.keys)
       .map(value => JSON.stringify(value))
       .join('')

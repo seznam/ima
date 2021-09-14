@@ -14,7 +14,7 @@ import TerserPlugin from 'terser-webpack-plugin';
 import CompressionPlugin from 'compression-webpack-plugin';
 import ReactRefreshWebpackPlugin from '@pmmmwh/react-refresh-webpack-plugin';
 
-import { ConfigurationArgs, ImaConfig } from '../types';
+import { ConfigurationArgs, ImaConfig, IMA_CONF_FILENAME } from '../types';
 import RunImaServerPlugin from './plugins/RunImaServerPlugin';
 import {
   requireConfig,
@@ -27,24 +27,24 @@ import postCssScrambler from './postCssScrambler';
 import { resolveEsVersionTargets } from '../lib/cliUtils';
 
 export default async (
-  args: ConfigurationArgs,
+  configArgs: ConfigurationArgs,
   imaConfig: ImaConfig
 ): Promise<Configuration> => {
-  const { rootDir, isProduction, isServer, isWatch } = args;
+  const { rootDir, isProduction, isServer, isWatch } = configArgs;
   const packageJsonPath = path.resolve(rootDir, './package.json');
   const packageJson = packageJsonPath ? require(packageJsonPath) : {};
   const imaEnvironment = resolveEnvironment(rootDir);
   const outputDir = path.join(rootDir, 'build');
-  const ampEnabled = args?.amp ?? imaConfig?.amp?.enabled;
+  const ampEnabled = configArgs?.amp ?? imaConfig?.amp?.enabled;
 
   // Clean build directory
-  if (args?.clean && fs.existsSync(outputDir)) {
+  if (configArgs?.clean && fs.existsSync(outputDir)) {
     fs.rmSync(outputDir, { recursive: true });
   }
 
   return {
     target: 'web',
-    name: args.name,
+    name: configArgs.name,
     mode: isProduction ? 'production' : 'development',
     devtool: isProduction ? 'source-map' : 'eval-source-map',
     bail: isProduction,
@@ -78,7 +78,7 @@ export default async (
         }
 
         return `static/js/${chunk?.name === 'client' ? 'main' : '[name]'}${
-          args?.ecma?.suffix
+          configArgs?.ecma?.suffix ?? ''
         }.js`;
       },
       publicPath: imaConfig?.publicPath ?? '',
@@ -86,11 +86,15 @@ export default async (
     },
     cache: {
       type: 'filesystem',
-      version: createCacheKey(args, imaConfig),
+      version: createCacheKey(configArgs, imaConfig),
       cacheDirectory: path.join(rootDir, './.ima/cache'),
       store: 'pack',
       buildDependencies: {
-        config: [__filename]
+        defaultWebpack: ['webpack/lib/'],
+        config: [__filename],
+        ima: [path.join(rootDir, IMA_CONF_FILENAME)].filter(f =>
+          fs.existsSync(f)
+        )
       }
     },
     optimization: {
@@ -203,7 +207,7 @@ export default async (
                           require.resolve('@babel/preset-env'),
                           {
                             targets: resolveEsVersionTargets(
-                              args?.ecma?.version
+                              configArgs?.ecma?.version
                             )
                           }
                         ],
@@ -240,7 +244,7 @@ export default async (
               sideEffects: true,
               exclude: /node_modules/,
               use:
-                isServer || !args?.ecma?.isMain
+                isServer || !configArgs?.ecma?.isMain
                   ? require.resolve('null-loader')
                   : [
                       {
@@ -350,8 +354,8 @@ export default async (
           isWatch &&
             new RunImaServerPlugin({
               rootDir,
-              open: args?.open,
-              verbose: args?.verbose,
+              open: configArgs?.open,
+              verbose: configArgs?.verbose,
               port: imaEnvironment.$Server.port
             })
         ].filter(Boolean)
@@ -368,7 +372,7 @@ export default async (
           }),
 
           // This pipeline should run only for main app css file
-          (args?.scrambleCss ?? imaConfig?.scrambleCss) &&
+          (configArgs?.scrambleCss ?? imaConfig?.scrambleCss) &&
             new PostCssPipelineWebpackPlugin({
               predicate: (name: string) => /static\/css\/app.css$/.test(name),
               suffix: 'srambled',
@@ -392,7 +396,7 @@ export default async (
               processor: postcss(
                 [
                   // Run CSS scrambler on AMP sources, if enabled
-                  ...(args?.scrambleCss ?? imaConfig?.scrambleCss
+                  ...(configArgs?.scrambleCss ?? imaConfig?.scrambleCss
                     ? [
                         postCssScrambler({
                           generateHashTable: false,
