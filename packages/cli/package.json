@@ -9,15 +9,20 @@
     "Javascript"
   ],
   "bin": {
-    "ima": "./bin/ima.js"
+    "ima": "./dist/bin/ima.js"
   },
-  "main": "./main.js",
+  "main": "./dist/main.js",
+  "scripts": {
+    "build": "tsc",
+    "dev": "tsc --watch"
+  },
   "author": "Miroslav Jancarik <miroslav.jancarik@firma.seznam.cz>",
   "contributors": [],
   "repository": {
     "type": "git",
     "url": "https://github.com/seznam/ima.git"
   },
+  "types": "./dist/types/types.d.ts",
   "bugs": {
     "url": "https://github.com/seznam/ima/issues"
   },
@@ -61,5 +66,17 @@
     "webpack-hot-middleware": "^2.25.0",
     "webpack-remove-empty-scripts": "^0.7.1",
     "yargs": "^17.1.1"
+  },
+  "devDependencies": {
+    "@types/compression-webpack-plugin": "^6.0.6",
+    "@types/copy-webpack-plugin": "^8.0.1",
+    "@types/css-minimizer-webpack-plugin": "^3.0.2",
+    "@types/mini-css-extract-plugin": "^2.2.0",
+    "@types/node": "^16.7.10",
+    "@types/terser-webpack-plugin": "^5.2.0",
+    "@types/yargs": "^17.0.2",
+    "@typescript-eslint/eslint-plugin": "^4.31.0",
+    "@typescript-eslint/parser": "^4.31.0",
+    "typescript": "^4.4.2"
   }
 }

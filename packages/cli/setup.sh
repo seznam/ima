@@ -17,6 +17,10 @@ echo "  CREATE_IMA_APP_BIN: $CREATE_IMA_APP_BIN"
 echo "===--------------------------==="
 echo ""
 
+echo 'build @ima/cli'
+cd $CLI_DIR
+npm run build
+
 # create hello app
 $CREATE_IMA_APP_BIN $APP_DIR --example=hello
 

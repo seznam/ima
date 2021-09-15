@@ -1,6 +1,8 @@
-const VerboseOptions = require('./VerboseOptions');
+import { CommandBuilder } from 'yargs';
 
-module.exports = Object.freeze({
+import { VerboseOptions } from '../types';
+
+const SharedArgs: CommandBuilder = {
   verbose: {
     alias: 'v',
     desc: 'Choose between different number of logging options',
@@ -20,4 +22,6 @@ module.exports = Object.freeze({
     desc: 'Webpack public path to specify base for all assets in the app',
     type: 'string'
   }
-});
+};
+
+export default SharedArgs;
