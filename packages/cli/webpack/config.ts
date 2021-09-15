@@ -30,7 +30,7 @@ export default async (
   configArgs: ConfigurationArgs,
   imaConfig: ImaConfig
 ): Promise<Configuration> => {
-  const { rootDir, isProduction, isServer, isWatch } = configArgs;
+  const { rootDir, isProduction, isServer, isWatch, ecma } = configArgs;
   const packageJsonPath = path.resolve(rootDir, './package.json');
   const packageJson = packageJsonPath ? require(packageJsonPath) : {};
   const imaEnvironment = resolveEnvironment(rootDir);
@@ -78,7 +78,7 @@ export default async (
         }
 
         return `static/js/${chunk?.name === 'client' ? 'main' : '[name]'}${
-          configArgs?.ecma?.suffix ?? ''
+          ecma?.suffix ?? ''
         }.js`;
       },
       publicPath: imaConfig?.publicPath ?? '',
@@ -206,9 +206,7 @@ export default async (
                         [
                           require.resolve('@babel/preset-env'),
                           {
-                            targets: resolveEsVersionTargets(
-                              configArgs?.ecma?.version
-                            )
+                            targets: resolveEsVersionTargets(ecma?.version)
                           }
                         ],
                         [
@@ -244,7 +242,7 @@ export default async (
               sideEffects: true,
               exclude: /node_modules/,
               use:
-                isServer || !configArgs?.ecma?.isMain
+                isServer || !ecma?.isMain
                   ? require.resolve('null-loader')
                   : [
                       {

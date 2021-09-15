@@ -149,6 +149,7 @@ async function runCompiler(
 ): Promise<Error | MultiStats | undefined> {
   return new Promise((resolve, reject) => {
     const compiler = webpack(config);
+
     compiler.run((error, stats) =>
       closeCompiler(compiler).then(() => {
         if (error) {
@@ -180,6 +181,7 @@ async function watchCompiler(
 
   return new Promise((resolve, reject) => {
     const compiler = webpack(config);
+
     compiler.watch(watchOptions, (error, stats) => {
       if (error) {
         reject(error);
