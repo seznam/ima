@@ -1,7 +1,7 @@
 import path from 'path';
 import childProcess from 'child_process';
 
-import { handlerFactory } from '../lib/cliUtils';
+import { handlerFactory } from '../lib/cli';
 import { HandlerFn, StartArgs } from '../types';
 
 const start: HandlerFn<StartArgs> = async args => {

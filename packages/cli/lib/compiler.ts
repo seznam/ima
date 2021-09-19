@@ -7,7 +7,7 @@ import webpack, {
 } from 'webpack';
 
 import { Args, VerboseOptions } from '../types';
-import { error, warn, info } from './print';
+import { error, warn, info } from './cli';
 
 /**
  * Handles script running and webpack compilation error logging.

@@ -1,7 +1,4 @@
-import { createWebpackConfig } from './lib/cliUtils';
 import { VerboseOptions } from './types';
+import { createWebpackConfig } from './webpack/utils';
 
-module.exports = {
-  createWebpackConfig,
-  VerboseOptions
-};
+export { createWebpackConfig, VerboseOptions };

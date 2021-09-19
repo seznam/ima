@@ -1,9 +1,9 @@
 import { CommandBuilder } from 'yargs';
 
 import { BuildArgs, HandlerFn } from '../types';
-import { createWebpackConfig, handlerFactory } from '../lib/cliUtils';
+import { info, handlerFactory } from '../lib/cli';
 import { runCompiler, handleError } from '../lib/compiler';
-import { info } from '../lib/print';
+import { createWebpackConfig } from '../webpack/utils';
 import SharedArgs from '../lib/SharedArgs';
 
 const build: HandlerFn<BuildArgs> = async args => {

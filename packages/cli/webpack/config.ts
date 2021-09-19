@@ -20,11 +20,12 @@ import {
   requireConfig,
   resolveEnvironment,
   additionalDataFactory,
-  generateEntryPoints,
-  createCacheKey
+  createCacheKey,
+  resolveEsVersionTargets,
+  IMA_CONF_FILENAME
 } from './utils';
 import postCssScrambler from './postCssScrambler';
-import { IMA_CONF_FILENAME, resolveEsVersionTargets } from '../lib/cliUtils';
+import { generateEntryPoints } from './postCssScrambler/postCssScramblerUtils';
 
 /**
  * Creates Webpack configuration object based on input ConfigurationContext
