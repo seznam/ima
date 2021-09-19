@@ -92,7 +92,7 @@ export default async (
           ecma?.suffix ?? ''
         }.js`;
       },
-      publicPath: imaConfig.publicPath,
+      publicPath: ctx?.publicPath ?? imaConfig.publicPath,
       ...(isServer && { library: { type: 'commonjs2' } })
     },
     cache: {
