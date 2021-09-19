@@ -14,7 +14,7 @@ import TerserPlugin from 'terser-webpack-plugin';
 import CompressionPlugin from 'compression-webpack-plugin';
 import ReactRefreshWebpackPlugin from '@pmmmwh/react-refresh-webpack-plugin';
 
-import { ConfigurationArgs, ImaConfig, IMA_CONF_FILENAME } from '../types';
+import { ConfigurationContext, ImaConfig, IMA_CONF_FILENAME } from '../types';
 import RunImaServerPlugin from './plugins/RunImaServerPlugin';
 import {
   requireConfig,
@@ -26,27 +26,37 @@ import {
 import postCssScrambler from './postCssScrambler';
 import { resolveEsVersionTargets } from '../lib/cliUtils';
 
-// Todo change configArgs to ctx (context) -> better name
+/**
+ * Creates Webpack configuration object based on input ConfigurationContext
+ * and ImaConfig objects.
+ *
+ * @returns {Promise<Configuration>} Webpack configuration object.
+ */
 export default async (
-  configArgs: ConfigurationArgs,
+  ctx: ConfigurationContext,
   imaConfig: ImaConfig
 ): Promise<Configuration> => {
-  const { rootDir, isProduction, isServer, isWatch, ecma } = configArgs;
+  const { rootDir, isProduction, isServer, isWatch, ecma, name } = ctx;
   const packageJsonPath = path.resolve(rootDir, './package.json');
   const packageJson = packageJsonPath ? require(packageJsonPath) : {};
   const imaEnvironment = resolveEnvironment(rootDir);
   const outputDir = path.join(rootDir, 'build');
-  const ampEnabled = configArgs?.amp ?? imaConfig?.amp?.enabled;
+
+  const scrambleCssEnabled = ctx.scrambleCss ?? imaConfig?.scrambleCss;
+  const ampEnabled =
+    (ctx.amp ?? imaConfig?.amp?.enabled) &&
+    imaConfig?.amp?.entry &&
+    imaConfig.amp.entry?.length > 0;
 
   // Clean build directory
-  if (configArgs?.clean && fs.existsSync(outputDir)) {
+  if (ctx?.clean && fs.existsSync(outputDir)) {
     fs.rmSync(outputDir, { recursive: true });
   }
 
   return {
     // TODO adapt targets to esVersions configurations
+    name,
     target: 'web',
-    name: configArgs.name,
     mode: isProduction ? 'production' : 'development',
     devtool: false,
     bail: isProduction,
@@ -64,9 +74,7 @@ export default async (
 
       // AMP specific entry points
       ...(!isServer &&
-        ampEnabled &&
-        imaConfig?.amp?.entry &&
-        imaConfig.amp.entry?.length > 0 && {
+        ampEnabled && {
           ...(await generateEntryPoints(rootDir, imaConfig?.amp?.entry))
         })
     },
@@ -88,7 +96,7 @@ export default async (
     },
     cache: {
       type: 'filesystem',
-      version: createCacheKey(configArgs, imaConfig),
+      version: createCacheKey(ctx, imaConfig),
       cacheDirectory: path.join(rootDir, './.ima/cache'),
       store: 'pack',
       buildDependencies: {
@@ -372,8 +380,8 @@ export default async (
             isWatch &&
               new RunImaServerPlugin({
                 rootDir,
-                open: configArgs?.open,
-                verbose: configArgs?.verbose,
+                open: ctx?.open,
+                verbose: ctx?.verbose,
                 port: imaEnvironment.$Server.port
               })
           ]
@@ -390,7 +398,7 @@ export default async (
             }),
 
             // This pipeline should run only for main app css file
-            (configArgs?.scrambleCss ?? imaConfig?.scrambleCss) &&
+            scrambleCssEnabled &&
               new PostCssPipelineWebpackPlugin({
                 predicate: (name: string) => /static\/css\/app.css$/.test(name),
                 suffix: 'srambled',
@@ -414,7 +422,7 @@ export default async (
                 processor: postcss(
                   [
                     // Run CSS scrambler on AMP sources, if enabled
-                    ...(configArgs?.scrambleCss ?? imaConfig?.scrambleCss
+                    ...(scrambleCssEnabled
                       ? [
                           postCssScrambler({
                             generateHashTable: false,

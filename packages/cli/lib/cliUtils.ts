@@ -6,7 +6,7 @@ import { Arguments } from 'yargs';
 import {
   Args,
   BaseArgs,
-  ConfigurationArgs,
+  ConfigurationContext,
   ConfigurationTypes,
   ESVersions,
   HandlerFn,
@@ -75,11 +75,11 @@ async function createWebpackConfig(
 
   // Load optional ima.config.js
   const imaConfig = await loadImaConfig(args.rootDir);
-  const finalConfigArgs: ConfigurationArgs[] = [];
+  const finalConfigContexts: ConfigurationContext[] = [];
 
   // Push server configuration if available
   if (configurations.includes('server')) {
-    finalConfigArgs.push({
+    finalConfigContexts.push({
       isServer: true,
       name: 'server',
       ...args
@@ -94,7 +94,7 @@ async function createWebpackConfig(
     );
 
     // Push default client configuration
-    finalConfigArgs.push({
+    finalConfigContexts.push({
       isServer: false,
       name: 'client',
       ecma: {
@@ -109,7 +109,7 @@ async function createWebpackConfig(
       imaConfig?.esVersions
         ?.filter(esVersion => esVersion !== latestEsVersion)
         .forEach(esVersion => {
-          finalConfigArgs.push({
+          finalConfigContexts.push({
             isServer: false,
             name: `client-${esVersion}`,
             ecma: {
@@ -124,14 +124,14 @@ async function createWebpackConfig(
   }
 
   return Promise.all(
-    finalConfigArgs.map(async args =>
+    finalConfigContexts.map(async ctx =>
       typeof imaConfig?.webpack === 'function'
         ? imaConfig?.webpack(
-            await webpackConfig(args, imaConfig),
-            args,
+            await webpackConfig(ctx, imaConfig),
+            ctx,
             imaConfig
           )
-        : webpackConfig(args, imaConfig)
+        : webpackConfig(ctx, imaConfig)
     )
   );
 }

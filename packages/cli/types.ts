@@ -89,9 +89,9 @@ export type Args = BuildArgs &
   };
 
 /**
- * Configuration arguments passed into webpack configuration.
+ * CLI arguments merged with current configuration arguments.
  */
-export type ConfigurationArgs = Args & {
+export type ConfigurationContext = Args & {
   name: string;
   isServer: boolean;
   ecma?: {
@@ -113,13 +113,12 @@ export type ImaConfig = {
   /**
    * Webpack callback function can be used to completely customize default webpack config before it's run:
    * @param {Configuration} config generated config by ima CLI, which can be further customized.
-   * @param {ConfigurationArgs} args CLI args, with additional options -> `rootDir`, `isProduction`, `isServer`, `isWatch"
-   *                                 that help identify the current state webpack trying to run this config.
+   * @param {ConfigurationContext} ctx CLI arguments merged with current configuration arguments.
    * @param {ImaConfig} imaConfig additional local ima.config.js file contents ({} if there's no file created).
    */
   webpack?: (
     config: Configuration,
-    args: ConfigurationArgs,
+    ctx: ConfigurationContext,
     imaConfig: ImaConfig
   ) => Configuration;
 
