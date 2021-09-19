@@ -1,6 +1,6 @@
 import path from 'path';
 import fs from 'fs';
-import webpack, { Configuration } from 'webpack';
+import webpack, { Configuration, RuleSetRule } from 'webpack';
 import postcss from 'postcss';
 import miniSVGDataURI from 'mini-svg-data-uri';
 
@@ -26,6 +26,7 @@ import {
 import postCssScrambler from './postCssScrambler';
 import { resolveEsVersionTargets } from '../lib/cliUtils';
 
+// Todo change configArgs to ctx (context) -> better name
 export default async (
   configArgs: ConfigurationArgs,
   imaConfig: ImaConfig
@@ -43,10 +44,11 @@ export default async (
   }
 
   return {
+    // TODO adapt targets to esVersions configurations
     target: 'web',
     name: configArgs.name,
     mode: isProduction ? 'production' : 'development',
-    devtool: isProduction ? 'source-map' : 'eval-source-map',
+    devtool: false,
     bail: isProduction,
     entry: {
       ...(isServer
@@ -91,8 +93,7 @@ export default async (
       store: 'pack',
       buildDependencies: {
         defaultWebpack: ['webpack/lib/'],
-        config: [__filename],
-        ima: [path.join(rootDir, IMA_CONF_FILENAME)].filter(f =>
+        config: [path.join(rootDir, IMA_CONF_FILENAME)].filter(f =>
           fs.existsSync(f)
         )
       }
@@ -117,7 +118,7 @@ export default async (
     module: {
       rules: [
         // Handle node_modules packages that contain sourcemaps
-        {
+        !isProduction && {
           enforce: 'pre',
           test: /\.(js|mjs|jsx|ts|tsx|cjs|css)$/,
           use: require.resolve('source-map-loader')
@@ -224,7 +225,9 @@ export default async (
                           : [],
                       cacheDirectory: true,
                       cacheCompression: false,
-                      compact: isProduction
+                      compact: isProduction,
+                      sourceMaps: !isProduction,
+                      inputSourceMap: !isProduction
                     }
                   })
                 }
@@ -241,83 +244,88 @@ export default async (
               test: /\.less$/,
               sideEffects: true,
               exclude: /node_modules/,
-              use:
-                isServer || !ecma?.isMain
-                  ? require.resolve('null-loader')
-                  : [
-                      {
-                        loader: MiniCssExtractPlugin.loader
-                      },
-                      {
-                        loader: require.resolve('css-loader'),
-                        options: {
-                          importLoaders: 2,
-                          modules: {
-                            // TODO validate modules using multiple babel versions
-                            auto: true,
-                            localIdentName: isProduction
-                              ? '[hash:base64]'
-                              : '[path][name]__[local]--[hash:base64:5]'
-                          }
+              use: [
+                !isServer &&
+                  ecma?.isMain && {
+                    loader: MiniCssExtractPlugin.loader
+                  },
+                {
+                  loader: require.resolve('css-loader'),
+                  options: {
+                    importLoaders: isServer || !ecma?.isMain ? 1 : 2,
+                    modules: {
+                      auto: true,
+                      exportOnlyLocals: isServer || !ecma?.isMain,
+                      localIdentName: isProduction
+                        ? '[hash:base64]'
+                        : '[path][name]__[local]--[hash:base64:5]'
+                    },
+                    sourceMap: !isProduction
+                  }
+                },
+                !isServer &&
+                  ecma?.isMain && {
+                    loader: require.resolve('postcss-loader'),
+                    options: {
+                      postcssOptions: requireConfig({
+                        rootDir,
+                        packageJson,
+                        packageJsonKey: 'postcss',
+                        fileNames: [
+                          'postcss.config.js',
+                          'postcss.config.cjs',
+                          'postcss.config.json',
+                          '.postcssrc.js',
+                          '.postcssrc.cjs',
+                          '.postcssrc.json',
+                          '.postcssrc'
+                        ],
+                        defaultConfig: {
+                          plugins: [
+                            'postcss-flexbugs-fixes',
+                            [
+                              'postcss-preset-env',
+                              {
+                                autoprefixer: {
+                                  flexbox: 'no-2009'
+                                },
+                                stage: 3,
+                                features: {
+                                  'custom-properties': false
+                                }
+                              }
+                            ]
+                          ]
                         }
-                      },
-                      {
-                        loader: require.resolve('postcss-loader'),
-                        options: {
-                          postcssOptions: requireConfig({
+                      }),
+                      sourceMap: !isProduction
+                    }
+                  },
+                {
+                  loader: require.resolve('less-loader'),
+                  options: {
+                    lessOptions: {
+                      strictMath: true
+                    },
+                    additionalData: additionalDataFactory([
+                      prefix =>
+                        prefix(
+                          `@import "${path.join(
                             rootDir,
-                            packageJson,
-                            packageJsonKey: 'postcss',
-                            fileNames: [
-                              'postcss.config.js',
-                              'postcss.config.cjs',
-                              'postcss.config.json',
-                              '.postcssrc.js',
-                              '.postcssrc.cjs',
-                              '.postcssrc.json',
-                              '.postcssrc'
-                            ],
-                            defaultConfig: {
-                              plugins: [
-                                'postcss-flexbugs-fixes',
-                                [
-                                  'postcss-preset-env',
-                                  {
-                                    autoprefixer: {
-                                      flexbox: 'no-2009'
-                                    },
-                                    stage: 3,
-                                    features: {
-                                      'custom-properties': false
-                                    }
-                                  }
-                                ]
-                              ]
-                            }
-                          })
-                        }
-                      },
-                      {
-                        loader: require.resolve('less-loader'),
-                        options: {
-                          lessOptions: {
-                            strictMath: true
-                          },
-                          additionalData: additionalDataFactory([
-                            prefix =>
-                              prefix(
-                                `@import "${path.join(
-                                  rootDir,
-                                  'app/assets/less/globals.less'
-                                )}";`
-                              )
-                          ])
-                        }
-                      },
-                      {
-                        loader: require.resolve('glob-import-loader')
-                      }
-                    ]
+                            'app/assets/less/globals.less'
+                          )}";`
+                        )
+                    ]),
+                    sourceMap: !isProduction
+                  }
+                },
+                {
+                  loader: require.resolve('glob-import-loader'),
+                  options: {
+                    sourceMap: !isProduction
+                  }
+                }
+              ].filter(Boolean)
             },
             /**
              * Fallback loader for all modules, that don't match any
@@ -334,120 +342,133 @@ export default async (
             }
           ]
         }
-      ]
+      ].filter(Boolean) as RuleSetRule[]
     },
-    plugins: isServer
-      ? // Server-specific plugins
-        [
-          // Copies essential assets to static directory
-          new CopyPlugin({
-            patterns: [
-              { from: 'app/assets/static', to: 'static' },
-              { from: 'app/environment.js', to: 'ima/config/environment.js' },
-              'server/server.js'
-            ]
-          }),
+    plugins: [
+      // General plugins
+      !isProduction &&
+        new webpack.SourceMapDevToolPlugin({
+          test: /\.(le|c)ss$/
+        }),
+      !isProduction &&
+        new webpack.EvalSourceMapDevToolPlugin({
+          test: /\.[jt]sx?$/
+        }),
 
-          // Opens web browser after running dev script
-          isWatch &&
-            new RunImaServerPlugin({
-              rootDir,
-              open: configArgs?.open,
-              verbose: configArgs?.verbose,
-              port: imaEnvironment.$Server.port
-            })
-        ].filter(Boolean)
-      : // Client-specific plugins
-        [
-          // Removes generated empty script caused by non-js entry points
-          new RemoveEmptyScriptsPlugin(),
-
-          // Handles LESS/CSS extraction out of JS to separate css file
-          new MiniCssExtractPlugin({
-            filename: ({ chunk }) =>
-              `static/css/${chunk?.name === 'client' ? 'app' : '[name]'}.css`,
-            chunkFilename: 'static/css/[name].chunk.css'
-          }),
-
-          // This pipeline should run only for main app css file
-          (configArgs?.scrambleCss ?? imaConfig?.scrambleCss) &&
-            new PostCssPipelineWebpackPlugin({
-              predicate: (name: string) => /static\/css\/app.css$/.test(name),
-              suffix: 'srambled',
-              processor: postcss([
-                // Run CSS scrambler, this needs to run on generated assets
-                postCssScrambler({
-                  generateHashTable: true,
-                  uniqueIdentifier: `${packageJson.name}:${packageJson.version}`,
-                  hashTable: path.join(rootDir, 'build/static/hashtable.json')
-                })
-              ])
+      // Server/client specific plugins are defined below
+      ...(isServer
+        ? // Server-specific plugins
+          [
+            // Copies essential assets to static directory
+            new CopyPlugin({
+              patterns: [
+                { from: 'app/assets/static', to: 'static' },
+                { from: 'app/environment.js', to: 'ima/config/environment.js' },
+                'server/server.js'
+              ]
             }),
 
-          // This should run only for amp entry points
-          ampEnabled &&
-            new PostCssPipelineWebpackPlugin({
-              predicate: (name: string) =>
-                !/static\/css\/app.css$/.test(name) &&
-                !/srambled.css$/.test(name),
-              suffix: 'srambled',
-              processor: postcss(
-                [
-                  // Run CSS scrambler on AMP sources, if enabled
-                  ...(configArgs?.scrambleCss ?? imaConfig?.scrambleCss
-                    ? [
-                        postCssScrambler({
-                          generateHashTable: false,
-                          hashTable: path.join(
-                            rootDir,
-                            'build/static/hashtable.json'
-                          )
-                        })
-                      ]
-                    : []),
+            // Opens web browser after running dev script
+            isWatch &&
+              new RunImaServerPlugin({
+                rootDir,
+                open: configArgs?.open,
+                verbose: configArgs?.verbose,
+                port: imaEnvironment.$Server.port
+              })
+          ]
+        : // Client-specific plugins
+          [
+            // Removes generated empty script caused by non-js entry points
+            new RemoveEmptyScriptsPlugin(),
 
-                  // Custom AMP postCss plugins
-                  ...(imaConfig?.amp?.postCssPlugins?.length
-                    ? imaConfig?.amp?.postCssPlugins
-                    : [])
-                ].filter(Boolean)
-              )
+            // Handles LESS/CSS extraction out of JS to separate css file
+            new MiniCssExtractPlugin({
+              filename: ({ chunk }) =>
+                `static/css/${chunk?.name === 'client' ? 'app' : '[name]'}.css`,
+              chunkFilename: 'static/css/[name].chunk.css'
             }),
 
-          // Handles generation of spa.html public file
-          new HtmlWebpackPlugin({
-            template: path.join(rootDir, 'app/assets/static/html/spa.html'),
-            filename: 'index.html',
-            templateParameters: {
-              $Debug: imaEnvironment.$Debug,
-              $Env: imaEnvironment.$Env,
-              $App: JSON.stringify(imaEnvironment.$App || {}),
-              $Language: Object.values(imaEnvironment.$Language)[0]
-            }
-          }),
+            // This pipeline should run only for main app css file
+            (configArgs?.scrambleCss ?? imaConfig?.scrambleCss) &&
+              new PostCssPipelineWebpackPlugin({
+                predicate: (name: string) => /static\/css\/app.css$/.test(name),
+                suffix: 'srambled',
+                processor: postcss([
+                  // Run CSS scrambler, this needs to run on generated assets
+                  postCssScrambler({
+                    generateHashTable: true,
+                    uniqueIdentifier: `${packageJson.name}:${packageJson.version}`,
+                    hashTable: path.join(rootDir, 'build/static/hashtable.json')
+                  })
+                ])
+              }),
 
-          // Enables gzip compression for assets
-          imaConfig?.compress &&
-            new CompressionPlugin({
-              algorithm: 'gzip',
-              test: /\.(js|css|)$/,
-              compressionOptions: {
-                level: 9
-              },
-              threshold: 0,
-              minRatio: 0.95
-            }),
+            // This should run only for amp entry points
+            ampEnabled &&
+              new PostCssPipelineWebpackPlugin({
+                predicate: (name: string) =>
+                  !/static\/css\/app.css$/.test(name) &&
+                  !/srambled.css$/.test(name),
+                suffix: 'srambled',
+                processor: postcss(
+                  [
+                    // Run CSS scrambler on AMP sources, if enabled
+                    ...(configArgs?.scrambleCss ?? imaConfig?.scrambleCss
+                      ? [
+                          postCssScrambler({
+                            generateHashTable: false,
+                            hashTable: path.join(
+                              rootDir,
+                              'build/static/hashtable.json'
+                            )
+                          })
+                        ]
+                      : []),
 
-          // Following plugins enable react refresh and hmr in watch mode
-          isWatch && new webpack.HotModuleReplacementPlugin(),
-          isWatch &&
-            new ReactRefreshWebpackPlugin({
-              // overlay: false
-              overlay: {
-                sockIntegration: 'whm'
+                    // Custom AMP postCss plugins
+                    ...(imaConfig?.amp?.postCssPlugins?.length
+                      ? imaConfig?.amp?.postCssPlugins
+                      : [])
+                  ].filter(Boolean)
+                )
+              }),
+
+            // Handles generation of spa.html public file
+            new HtmlWebpackPlugin({
+              template: path.join(rootDir, 'app/assets/static/html/spa.html'),
+              filename: 'index.html',
+              templateParameters: {
+                $Debug: imaEnvironment.$Debug,
+                $Env: imaEnvironment.$Env,
+                $App: JSON.stringify(imaEnvironment.$App || {}),
+                $Language: Object.values(imaEnvironment.$Language)[0]
               }
-            })
-        ].filter(Boolean),
+            }),
+
+            // Enables gzip compression for assets
+            // TODO use webpack contrib plugin and add array for possible algorithms to ima.config
+            imaConfig?.compress &&
+              new CompressionPlugin({
+                algorithm: 'gzip',
+                test: /\.(js|css|)$/,
+                compressionOptions: {
+                  level: 9
+                },
+                threshold: 0,
+                minRatio: 0.95
+              }),
+
+            // Following plugins enable react refresh and hmr in watch mode
+            isWatch && new webpack.HotModuleReplacementPlugin(),
+            isWatch &&
+              new ReactRefreshWebpackPlugin({
+                overlay: {
+                  sockIntegration: 'whm'
+                }
+              })
+          ].filter(Boolean))
+    ],
 
     // Enable node preset for externals on server
     externalsPresets: {
