@@ -10,27 +10,38 @@ import {
   ConfigurationTypes,
   ESVersions,
   HandlerFn,
-  ImaConfig,
-  IMA_CONF_FILENAME
+  ImaConfig
 } from '../types';
 import webpackConfig from '../webpack/config';
 import { error } from './print';
 
+const IMA_CONF_FILENAME = 'ima.config.js';
+
 /**
- * Loads ima.config.js from rootDir base path. If no custom
- * configuration was found it returns empty object.
+ * Loads ima.config.js from rootDir base path with defaults.
  *
- * @param {string} rootDir Base app directory.
+ * @param {Args} args CLI args.
  * @returns {Promise<ImaConfig>} Ima config or empty object.
  */
-async function loadImaConfig(rootDir: string): Promise<ImaConfig> {
-  if (!rootDir) {
-    return {};
+async function loadImaConfig(args: Args): Promise<ImaConfig> {
+  const defaultImaConfig: ImaConfig = {
+    publicPath: '',
+    esVersions: [ESVersions.es5, ESVersions.es11],
+    compression: ['brotliCompress', 'gzip'],
+    scrambleCss: args.isProduction,
+    imageInlineSizeLimit: 8192
+  };
+
+  if (!args.rootDir) {
+    return defaultImaConfig;
   }
 
-  const imaConfigPath = path.join(rootDir, IMA_CONF_FILENAME);
+  const imaConfigPath = path.join(args.rootDir, IMA_CONF_FILENAME);
 
-  return fs.existsSync(imaConfigPath) ? require(imaConfigPath) : {};
+  return {
+    ...defaultImaConfig,
+    ...(fs.existsSync(imaConfigPath) ? require(imaConfigPath) : {})
+  };
 }
 
 /**
@@ -73,8 +84,8 @@ async function createWebpackConfig(
     );
   }
 
-  // Load optional ima.config.js
-  const imaConfig = await loadImaConfig(args.rootDir);
+  // Load ima.config.js with defaults and init configuration contexts.
+  const imaConfig = await loadImaConfig(args);
   const finalConfigContexts: ConfigurationContext[] = [];
 
   // Push server configuration if available
@@ -82,16 +93,17 @@ async function createWebpackConfig(
     finalConfigContexts.push({
       isServer: true,
       name: 'server',
+      ecma: {
+        isMain: true,
+        version: ESVersions.es11
+      },
       ...args
     });
   }
 
   // Push client configurations if available
   if (configurations.includes('client')) {
-    const latestEsVersion = findLatestEsVersion(
-      imaConfig?.esVersions,
-      ESVersions.es11
-    );
+    const latestEsVersion = findLatestEsVersion(imaConfig.esVersions);
 
     // Push default client configuration
     finalConfigContexts.push({
@@ -213,13 +225,13 @@ function resolveEsVersionTargets(
 /**
  * Returns latest (newest) es version from provided array.
  *
- * @param {ESVersions[]} esVersions? ESVersions array.
+ * @param {ESVersions[]} esVersions ESVersions array.
  * @param {ESVersions} [defEsVersion='es11'] Default ES version,
  *        which is returned if no match was found.
  * @returns {ESVersions}
  */
 function findLatestEsVersion(
-  esVersions?: ESVersions[],
+  esVersions: ESVersions[],
   defEsVersion = ESVersions.es11
 ): ESVersions {
   let latestEsVersion: ESVersions = defEsVersion;
@@ -239,5 +251,6 @@ export {
   handlerFactory,
   createWebpackConfig,
   loadImaConfig,
-  resolveEsVersionTargets
+  resolveEsVersionTargets,
+  IMA_CONF_FILENAME
 };

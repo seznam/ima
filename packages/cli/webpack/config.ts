@@ -14,7 +14,7 @@ import TerserPlugin from 'terser-webpack-plugin';
 import CompressionPlugin from 'compression-webpack-plugin';
 import ReactRefreshWebpackPlugin from '@pmmmwh/react-refresh-webpack-plugin';
 
-import { ConfigurationContext, ImaConfig, IMA_CONF_FILENAME } from '../types';
+import { ConfigurationContext, ImaConfig } from '../types';
 import RunImaServerPlugin from './plugins/RunImaServerPlugin';
 import {
   requireConfig,
@@ -24,7 +24,7 @@ import {
   createCacheKey
 } from './utils';
 import postCssScrambler from './postCssScrambler';
-import { resolveEsVersionTargets } from '../lib/cliUtils';
+import { IMA_CONF_FILENAME, resolveEsVersionTargets } from '../lib/cliUtils';
 
 /**
  * Creates Webpack configuration object based on input ConfigurationContext
@@ -42,7 +42,7 @@ export default async (
   const imaEnvironment = resolveEnvironment(rootDir);
   const outputDir = path.join(rootDir, 'build');
 
-  const scrambleCssEnabled = ctx.scrambleCss ?? imaConfig?.scrambleCss;
+  const scrambleCssEnabled = ctx.scrambleCss ?? imaConfig.scrambleCss;
   const ampEnabled =
     (ctx.amp ?? imaConfig?.amp?.enabled) &&
     imaConfig?.amp?.entry &&
@@ -91,7 +91,7 @@ export default async (
           ecma?.suffix ?? ''
         }.js`;
       },
-      publicPath: imaConfig?.publicPath ?? '',
+      publicPath: imaConfig.publicPath,
       ...(isServer && { library: { type: 'commonjs2' } })
     },
     cache: {
@@ -158,7 +158,7 @@ export default async (
                   type: 'asset',
                   parser: {
                     dataUrlCondition: {
-                      maxSize: imaConfig?.imageInlineSizeLimit ?? 8192
+                      maxSize: imaConfig.imageInlineSizeLimit
                     }
                   }
                 }
@@ -241,6 +241,7 @@ export default async (
                 }
               ]
             },
+            // TODO add support for CSS files import
             /**
              * Less loader configuration, which adds support for glob imports in the
              * less files, postcss, and css imports support. Additionally
@@ -454,18 +455,24 @@ export default async (
               }
             }),
 
-            // Enables gzip compression for assets
-            // TODO use webpack contrib plugin and add array for possible algorithms to ima.config
-            imaConfig?.compress &&
-              new CompressionPlugin({
-                algorithm: 'gzip',
-                test: /\.(js|css|)$/,
-                compressionOptions: {
-                  level: 9
-                },
-                threshold: 0,
-                minRatio: 0.95
-              }),
+            // Enables compression for assets in production build
+            ...(isProduction
+              ? imaConfig.compression.map(
+                  algorithm =>
+                    new CompressionPlugin({
+                      algorithm,
+                      filename: `[path][base].${
+                        algorithm === 'brotliCompress' ? 'br' : 'gz'
+                      }`,
+                      test: /\.(js|css|html|svg)$/,
+                      compressionOptions: {
+                        level: 9
+                      },
+                      threshold: 0,
+                      minRatio: 0.95
+                    })
+                )
+              : []),
 
             // Following plugins enable react refresh and hmr in watch mode
             isWatch && new webpack.HotModuleReplacementPlugin(),
@@ -475,8 +482,8 @@ export default async (
                   sockIntegration: 'whm'
                 }
               })
-          ].filter(Boolean))
-    ],
+          ])
+    ].filter(Boolean),
 
     // Enable node preset for externals on server
     externalsPresets: {

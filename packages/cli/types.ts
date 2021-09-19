@@ -1,3 +1,4 @@
+import CompressionPlugin from 'compression-webpack-plugin';
 import { Configuration, ResolveOptions } from 'webpack';
 
 /**
@@ -103,7 +104,6 @@ export type ConfigurationContext = Args & {
 
 export type HandlerFn<T extends BaseArgs> = (args: T) => Promise<void>;
 export type ConfigurationTypes = ('client' | 'server')[];
-export const IMA_CONF_FILENAME = 'ima.config.js';
 
 /**
  * Ima config options. Some of these options can be overridden using Args, which takes precedence.
@@ -123,29 +123,32 @@ export type ImaConfig = {
   ) => Configuration;
 
   /**
+   * Webpack assets public path [default='']
+   */
+  publicPath: string;
+
+  /**
    * Define array of ES versions to build client.js into.
    */
-  esVersions?: ESVersions[];
+  esVersions: ESVersions[];
 
   /**
-   * Webpack assets public path
+   * Array of compression algorithms used for assets in production build. [default=['brotliCompress', 'gzip']]
    */
-  publicPath?: string;
-
-  /**
-   * Enable gzip compression for assets [default=process.env.NODE_ENV==='production']
-   */
-  compress?: boolean;
+  compression: Extract<
+    CompressionPlugin.ZlibAlgorithm,
+    'gzip' | 'brotliCompress'
+  >[];
 
   /**
    * Enables CSS scrambling (for AMP too) [default=process.env.NODE_ENV==='production']
    */
-  scrambleCss?: boolean;
+  scrambleCss: boolean;
 
   /**
    * Threshold to inline image resources as base64 automatically [default=8192]
    */
-  imageInlineSizeLimit?: number;
+  imageInlineSizeLimit: number;
 
   /**
    * Optional custom webpack aliases
