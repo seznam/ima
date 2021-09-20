@@ -232,6 +232,7 @@ export default async (
                         isWatch && !isServer
                           ? [require.resolve('react-refresh/babel')]
                           : [],
+                      cacheIdentifier: createCacheKey(ctx, imaConfig),
                       cacheDirectory: true,
                       cacheCompression: false,
                       compact: isProduction,
