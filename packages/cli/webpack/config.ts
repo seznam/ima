@@ -97,6 +97,7 @@ export default async (
     },
     cache: {
       type: 'filesystem',
+      name: isServer ? 'server' : ecma?.version,
       version: createCacheKey(ctx, imaConfig),
       cacheDirectory: path.join(rootDir, './.ima/cache'),
       store: 'pack',
