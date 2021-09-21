@@ -1,6 +1,6 @@
 import path from 'path';
 import fs from 'fs';
-import webpack, { Configuration, RuleSetRule } from 'webpack';
+import webpack, { Configuration, RuleSetRule, RuleSetUseItem } from 'webpack';
 import postcss from 'postcss';
 import miniSVGDataURI from 'mini-svg-data-uri';
 
@@ -53,6 +53,107 @@ export default async (
   if (ctx?.clean && fs.existsSync(outputDir)) {
     fs.rmSync(outputDir, { recursive: true });
   }
+
+  /**
+   * Style loaders helper function used to define
+   * common style loader functions, that is later used
+   * to handle css and less source files.
+   */
+  const getStyleLoaders = ({
+    useLessLoader = false
+  }: {
+    useLessLoader?: boolean;
+  } = {}): RuleSetUseItem[] => {
+    let importLoaders = isServer || !ecma?.isMain ? 0 : 1;
+
+    // Increase number of import loaders for less loader
+    if (useLessLoader) {
+      importLoaders += 1;
+    }
+
+    return [
+      !isServer &&
+        ecma?.isMain && {
+          loader: MiniCssExtractPlugin.loader
+        },
+      {
+        loader: require.resolve('css-loader'),
+        options: {
+          importLoaders,
+          modules: {
+            auto: true,
+            exportOnlyLocals: isServer || !ecma?.isMain,
+            localIdentName: isProduction
+              ? '[hash:base64]'
+              : '[path][name]__[local]--[hash:base64:5]'
+          },
+          sourceMap: !isProduction
+        }
+      },
+      !isServer &&
+        ecma?.isMain && {
+          loader: require.resolve('postcss-loader'),
+          options: {
+            postcssOptions: requireConfig({
+              rootDir,
+              packageJson,
+              packageJsonKey: 'postcss',
+              fileNames: [
+                'postcss.config.js',
+                'postcss.config.cjs',
+                'postcss.config.json',
+                '.postcssrc.js',
+                '.postcssrc.cjs',
+                '.postcssrc.json',
+                '.postcssrc'
+              ],
+              defaultConfig: {
+                plugins: [
+                  'postcss-flexbugs-fixes',
+                  [
+                    'postcss-preset-env',
+                    {
+                      autoprefixer: {
+                        flexbox: 'no-2009'
+                      },
+                      stage: 3,
+                      features: {
+                        'custom-properties': false
+                      }
+                    }
+                  ]
+                ]
+              }
+            }),
+            sourceMap: !isProduction
+          }
+        },
+      useLessLoader && {
+        loader: require.resolve('less-loader'),
+        options: {
+          lessOptions: {
+            strictMath: true
+          },
+          additionalData: additionalDataFactory([
+            prefix =>
+              prefix(
+                `@import "${path.join(
+                  rootDir,
+                  'app/assets/less/globals.less'
+                )}";`
+              )
+          ]),
+          sourceMap: !isProduction
+        }
+      },
+      {
+        loader: require.resolve('glob-import-loader'),
+        options: {
+          sourceMap: !isProduction
+        }
+      }
+    ].filter(Boolean) as RuleSetUseItem[];
+  };
 
   return {
     // TODO adapt targets to esVersions configurations
@@ -244,7 +345,6 @@ export default async (
                 }
               ]
             },
-            // TODO add support for CSS files import
             /**
              * Less loader configuration, which adds support for glob imports in the
              * less files, postcss, and css imports support. Additionally
@@ -256,88 +356,16 @@ export default async (
               test: /\.less$/,
               sideEffects: true,
               exclude: /node_modules/,
-              use: [
-                !isServer &&
-                  ecma?.isMain && {
-                    loader: MiniCssExtractPlugin.loader
-                  },
-                {
-                  loader: require.resolve('css-loader'),
-                  options: {
-                    importLoaders: isServer || !ecma?.isMain ? 1 : 2,
-                    modules: {
-                      auto: true,
-                      exportOnlyLocals: isServer || !ecma?.isMain,
-                      localIdentName: isProduction
-                        ? '[hash:base64]'
-                        : '[path][name]__[local]--[hash:base64:5]'
-                    },
-                    sourceMap: !isProduction
-                  }
-                },
-                !isServer &&
-                  ecma?.isMain && {
-                    loader: require.resolve('postcss-loader'),
-                    options: {
-                      postcssOptions: requireConfig({
-                        rootDir,
-                        packageJson,
-                        packageJsonKey: 'postcss',
-                        fileNames: [
-                          'postcss.config.js',
-                          'postcss.config.cjs',
-                          'postcss.config.json',
-                          '.postcssrc.js',
-                          '.postcssrc.cjs',
-                          '.postcssrc.json',
-                          '.postcssrc'
-                        ],
-                        defaultConfig: {
-                          plugins: [
-                            'postcss-flexbugs-fixes',
-                            [
-                              'postcss-preset-env',
-                              {
-                                autoprefixer: {
-                                  flexbox: 'no-2009'
-                                },
-                                stage: 3,
-                                features: {
-                                  'custom-properties': false
-                                }
-                              }
-                            ]
-                          ]
-                        }
-                      }),
-                      sourceMap: !isProduction
-                    }
-                  },
-                {
-                  loader: require.resolve('less-loader'),
-                  options: {
-                    lessOptions: {
-                      strictMath: true
-                    },
-                    additionalData: additionalDataFactory([
-                      prefix =>
-                        prefix(
-                          `@import "${path.join(
-                            rootDir,
-                            'app/assets/less/globals.less'
-                          )}";`
-                        )
-                    ]),
-                    sourceMap: !isProduction
-                  }
-                },
-                {
-                  loader: require.resolve('glob-import-loader'),
-                  options: {
-                    sourceMap: !isProduction
-                  }
-                }
-              ].filter(Boolean)
+              use: getStyleLoaders({ useLessLoader: true })
+            },
+            /**
+             * CSS loader configuration, has the same capabilities as the less loader.
+             */
+            {
+              test: /\.css$/,
+              sideEffects: true,
+              exclude: /node_modules/,
+              use: getStyleLoaders()
             },
             /**
              * Fallback loader for all modules, that don't match any
