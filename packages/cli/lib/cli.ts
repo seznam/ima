@@ -4,6 +4,8 @@ import chalk from 'chalk';
 
 import { BaseArgs, HandlerFn } from '../types';
 
+const IMA_CLI_RUN_SERVER_MESSAGE = 'ima-cli-run-server-message';
+
 /**
  * Initializes cli script handler function, which takes cli arguments,
  * parses them and defines defaults. Should be used to initialize any
@@ -53,4 +55,12 @@ const error = printFnFactory('error', chalk.red.bold);
 const warn = printFnFactory('warn', chalk.yellow.bold);
 const update = printFnFactory('update', chalk.magenta.bold);
 
-export { handlerFactory, info, success, error, warn, update };
+export {
+  IMA_CLI_RUN_SERVER_MESSAGE,
+  handlerFactory,
+  info,
+  success,
+  error,
+  warn,
+  update
+};

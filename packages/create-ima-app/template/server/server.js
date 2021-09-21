@@ -174,6 +174,12 @@ async function runNodeApp() {
     .use(errorHandler)
     .use(staticErrorPage)
     .listen(environment.$Server.port, () => {
+      // Inform cli that web server has started
+      if (environment.$Env === 'dev') {
+        const { IMA_CLI_RUN_SERVER_MESSAGE } = require('@ima/cli');
+        process.send(IMA_CLI_RUN_SERVER_MESSAGE);
+      }
+
       return logger.info(
         'Point your browser at http://localhost:' + environment.$Server.port
       );

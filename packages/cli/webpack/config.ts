@@ -15,7 +15,6 @@ import CompressionPlugin from 'compression-webpack-plugin';
 import ReactRefreshWebpackPlugin from '@pmmmwh/react-refresh-webpack-plugin';
 
 import { ConfigurationContext, ImaConfig } from '../types';
-import RunImaServerPlugin from './plugins/RunImaServerPlugin';
 import {
   requireConfig,
   resolveEnvironment,
@@ -156,7 +155,7 @@ export default async (
   };
 
   return {
-    // TODO adapt targets to esVersions configurations
+    // TODO adapt target to esVersions configurations
     name,
     target: 'web',
     mode: isProduction ? 'production' : 'development',
@@ -406,16 +405,7 @@ export default async (
                 { from: 'app/environment.js', to: 'ima/config/environment.js' },
                 'server/server.js'
               ]
-            }),
-
-            // Opens web browser after running dev script
-            isWatch &&
-              new RunImaServerPlugin({
-                rootDir,
-                open: ctx?.open,
-                verbose: ctx?.verbose,
-                port: imaEnvironment.$Server.port
-              })
+            })
           ]
         : // Client-specific plugins
           [
