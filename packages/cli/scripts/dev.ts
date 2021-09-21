@@ -1,6 +1,6 @@
 import { CommandBuilder } from 'yargs';
 
-import { DevArgs, HandlerFn } from '../types';
+import { DevArgs, ESVersions, HandlerFn } from '../types';
 import { handlerFactory, info } from '../lib/cli';
 import { watchCompiler, handleError } from '../lib/compiler';
 import { createWebpackConfig } from '../webpack/utils';
@@ -32,5 +32,11 @@ export const builder: CommandBuilder = {
     desc: 'Opens browser window after server has been started',
     type: 'boolean',
     default: true
+  },
+  esVersion: {
+    alias: 'e',
+    desc: 'Override default es version used in watch mode',
+    type: 'string',
+    choices: Object.keys(ESVersions)
   }
 };

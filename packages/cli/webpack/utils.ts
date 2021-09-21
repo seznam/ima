@@ -247,7 +247,8 @@ async function createWebpackConfig(
 
   // Push client configurations if available
   if (configurations.includes('client')) {
-    const latestEsVersion = findLatestEsVersion(imaConfig.esVersions);
+    const latestEsVersion =
+      args.esVersion ?? findLatestEsVersion(imaConfig.esVersions);
 
     // Push default client configuration
     finalConfigContexts.push({
@@ -260,6 +261,7 @@ async function createWebpackConfig(
       ...args
     });
 
+    // Build other es versions only when not in watch mode
     if (!args?.isWatch) {
       // Push other defined ES client configurations if defined
       imaConfig?.esVersions

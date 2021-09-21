@@ -71,6 +71,7 @@ export type DevBuildArgs = BaseArgs & {
  */
 export type DevArgs = DevBuildArgs & {
   open?: boolean;
+  esVersion?: ESVersions;
 };
 
 /**
