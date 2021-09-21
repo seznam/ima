@@ -9,6 +9,13 @@ import { watchCompiler, handleError } from '../lib/compiler';
 import { createWebpackConfig, resolveEnvironment } from '../webpack/utils';
 import SharedArgs from '../lib/SharedArgs';
 
+/**
+ * Builds ima application with provided config in watch mode
+ * while also starting the webserver itself.
+ *
+ * @param {DevArgs} args
+ * @returns {Promise<void>}
+ */
 const dev: HandlerFn<DevArgs> = async args => {
   try {
     info('Parsing webpack configuration file...');

@@ -6,6 +6,12 @@ import { runCompiler, handleError } from '../lib/compiler';
 import { createWebpackConfig } from '../webpack/utils';
 import SharedArgs from '../lib/SharedArgs';
 
+/**
+ * Builds ima application with provided config.
+ *
+ * @param {BuildArgs} args
+ * @returns {Promise<void>}
+ */
 const build: HandlerFn<BuildArgs> = async args => {
   try {
     info('Parsing webpack configuration file...');
