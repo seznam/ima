@@ -38,11 +38,11 @@
     "winston": "3.2.1"
   },
   "peerDependencies": {
-    "@ima/helpers": "17.x"
+    "@ima/helpers": ">= 17.9.0"
   },
   "engines": {
     "node": ">=6",
-    "npm": ">=4 <7"
+    "npm": ">=6 <8"
   },
   "jest": {
     "bail": false,

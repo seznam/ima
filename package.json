@@ -40,7 +40,7 @@
     "verdaccio": "4.5.1"
   },
   "scripts": {
-    "postinstall": "npm install --prefix ./packages/devtools && lerna bootstrap",
+    "postinstall": "npm install --prefix ./packages/devtools",
     "benchmark": "utils/benchmark/benchmark.sh",
     "doc": "gulp doc",
     "test": "lerna run test && npm run --prefix ./packages/devtools test",
@@ -84,5 +84,8 @@
   "engines": {
     "node": ">=14"
   },
-  "dependencies": {}
+  "dependencies": {},
+  "workspaces": [
+    "./packages/*" 
+  ]
 }

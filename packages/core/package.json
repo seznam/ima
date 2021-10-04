@@ -55,8 +55,8 @@
     "enzyme": "^3.10.0",
     "es-check": "^5.1.0",
     "jscodeshift": "^0.6.4",
-    "react": "16.9.0",
-    "react-dom": "16.9.0",
+    "react": "16.14.0",
+    "react-dom": "16.14.0",
     "rollup": "^1.27.8",
     "rollup-plugin-jscc": "^1.0.0",
     "rollup-plugin-json": "^4.0.0",
@@ -69,8 +69,8 @@
     "node-fetch": "^2.6.0"
   },
   "peerDependencies": {
-    "react": "16.x",
-    "react-dom": "16.x"
+    "react": ">= 16.14.0",
+    "react-dom": "16.14.0"
   },
   "browserify": {
     "transform": [
