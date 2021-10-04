@@ -1,8 +1,5 @@
 'use strict';
 
-require('@ima/core/polyfill/imaLoader.js');
-require('@ima/core/polyfill/imaRunner.js');
-
 // Node
 let cluster = require('cluster');
 let path = require('path');
@@ -22,7 +19,7 @@ let cache = imaServer.cache;
 let favicon = require('serve-favicon');
 let bodyParser = require('body-parser');
 let multer = require('multer')({
-  dest: path.resolve(__dirname) + '/static/uploads/'
+  dest: path.resolve(path.join(__dirname, '/static/uploads/'))
 });
 let cookieParser = require('cookie-parser');
 let methodOverride = require('method-override');
@@ -111,19 +108,53 @@ function staticErrorPage(err, req, res) {
   clientApp.showStaticErrorPage(err, req, res);
 }
 
-function runNodeApp() {
+async function runNodeApp() {
   let express = require('express');
   let app = express();
 
   app.set('trust proxy', true);
 
+  if (environment.$Env === 'dev') {
+    const webpack = require('webpack');
+    const chalk = require('chalk');
+    const devMiddleware = require('webpack-dev-middleware');
+    const hotMiddleware = require('webpack-hot-middleware');
+    const { createWebpackConfig } = require('@ima/cli');
+
+    const compiler = webpack(await createWebpackConfig(['client']));
+    const isRawVerbose = process.argv.includes('--verbose=raw');
+
+    app
+      .use(
+        devMiddleware(compiler, {
+          index: false,
+          publicPath: '/',
+          ...(!isRawVerbose ? { stats: 'none' } : undefined)
+        })
+      )
+      .use(
+        hotMiddleware(compiler, {
+          ...(!isRawVerbose
+            ? {
+                log: data => {
+                  // eslint-disable-next-line no-console
+                  console.log(`${chalk.bold.magenta('hmr:')} ${data}`);
+                }
+              }
+            : undefined),
+          path: '/__webpack_hmr',
+          heartbeat: 10 * 1000
+        })
+      );
+  }
+
   app
     .use(helmet())
     .use(compression())
-    .use(favicon(path.resolve(__dirname) + '/static/img/favicon.ico'))
+    .use(favicon(path.resolve(path.join(__dirname, 'static/img/favicon.ico'))))
     .use(
       environment.$Server.staticFolder,
-      express.static(path.join(__dirname, 'static'))
+      express.static(path.resolve(path.join(__dirname, 'static')))
     )
     .use(bodyParser.json()) // for parsing application/json
     .use(bodyParser.urlencoded({ extended: true })) // for parsing application/x-www-form-urlencoded
@@ -143,6 +174,12 @@ function runNodeApp() {
     .use(errorHandler)
     .use(staticErrorPage)
     .listen(environment.$Server.port, () => {
+      // Inform cli that web server has started
+      if (environment.$Env === 'dev') {
+        const { IMA_CLI_RUN_SERVER_MESSAGE } = require('@ima/cli');
+        process.send(IMA_CLI_RUN_SERVER_MESSAGE);
+      }
+
       return logger.info(
         'Point your browser at http://localhost:' + environment.$Server.port
       );

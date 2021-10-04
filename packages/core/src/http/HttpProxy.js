@@ -369,11 +369,9 @@ export default class HttpProxy {
    *         implementation of the Fetch API to use.
    */
   _getFetchApi() {
-    const fetch = 'node-fetch';
-
     return this._window.isClient()
       ? this._window.getWindow().fetch
-      : require(fetch);
+      : require('node-fetch');
   }
 
   /**

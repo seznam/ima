@@ -1,6 +1,8 @@
 import { AbstractDocumentView } from '@ima/core';
 import React from 'react';
 
+import './documentView.less';
+
 /**
  * Master Layout.
  */
@@ -82,10 +84,11 @@ export default class DocumentView extends AbstractDocumentView {
 					`
             }}
           />
-          <div
-            id="scripts"
-            dangerouslySetInnerHTML={{ __html: this.getAsyncScripts() }}
-          />
+          <script src="/static/js/main.js"></script>
+          {/*<div*/}
+          {/*  id="scripts"*/}
+          {/*  dangerouslySetInnerHTML={{ __html: this.getAsyncScripts() }}*/}
+          {/*/>*/}
         </body>
       </html>
     );

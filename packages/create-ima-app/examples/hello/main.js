@@ -1,3 +1,5 @@
+import './assets/less/app.less';
+
 import * as ima from '@ima/core';
 import initBindApp from 'app/config/bind';
 import initRoutes from 'app/config/routes';
@@ -12,15 +14,21 @@ if (!$IMA.Test) {
   ima
     .onLoad()
     .then(() => {
-      if (!$IMA.HotReload) {
-        ima.reviveClientApp(getInitialAppConfigFunctions());
+      if (module.hot && $IMA.$Dispatcher) {
+        $IMA.$Dispatcher.fire('destroyIma');
       }
+
+      ima.reviveClientApp(getInitialAppConfigFunctions());
     })
     .catch(error => {
       if (error) {
         console.error(error);
       }
     });
+}
+
+if (module.hot) {
+  module.hot.accept();
 }
 
 export { getInitialAppConfigFunctions, ima };

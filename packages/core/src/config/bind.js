@@ -1,4 +1,7 @@
-import vendorLinker from '../vendorLinker';
+import $Helper from '@ima/helpers';
+import React from 'react';
+import ReactDOM from 'react-dom';
+import ReactDOMServer from 'react-dom/server';
 import Cache from '../cache/Cache';
 import CacheFactory from '../cache/CacheFactory';
 import CacheImpl from '../cache/CacheImpl';
@@ -51,12 +54,12 @@ import Window from '../window/Window';
 
 export default (ns, oc, config) => {
   //**************START VENDORS**************
-  oc.constant('$Helper', vendorLinker.get('@ima/helpers', true));
+  oc.constant('$Helper', $Helper);
 
   //React
-  oc.constant('$React', vendorLinker.get('react', true));
-  oc.constant('$ReactDOM', vendorLinker.get('react-dom', true));
-  oc.constant('$ReactDOMServer', vendorLinker.get('react-dom/server.js', true));
+  oc.constant('$React', React);
+  oc.constant('$ReactDOM', ReactDOM);
+  oc.constant('$ReactDOMServer', ReactDOMServer);
   //*************END VENDORS*****************
 
   //*************START CONSTANTS*****************
