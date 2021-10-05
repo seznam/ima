@@ -23,7 +23,7 @@
     "gulp-change": "1.0.2",
     "gulp-rename": "2.0.0",
     "husky": "4.2.3",
-    "jest": "25.1.0",
+    "jest": "26.6.3",
     "jsdoc-to-markdown": "5.0.3",
     "jsdom": "16.4.0",
     "lerna": "3.20.2",
@@ -40,7 +40,7 @@
     "verdaccio": "4.5.1"
   },
   "scripts": {
-    "postinstall": "npm install --prefix ./packages/devtools && lerna bootstrap",
+    "postinstall": "npm install --prefix ./packages/devtools && npm install --prefix ./packages/cli && if ! $CI; then lerna run prepare; fi",
     "benchmark": "utils/benchmark/benchmark.sh",
     "doc": "gulp doc",
     "test": "lerna run test && npm run --prefix ./packages/devtools test",
@@ -84,5 +84,8 @@
   "engines": {
     "node": ">=14"
   },
-  "dependencies": {}
+  "workspaces": [
+    "packages/!(devtools|cli)",
+    "packages/devtools-scripts"
+  ]
 }
