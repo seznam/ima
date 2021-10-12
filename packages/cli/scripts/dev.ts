@@ -8,6 +8,7 @@ import { handlerFactory, IMA_CLI_RUN_SERVER_MESSAGE, info } from '../lib/cli';
 import { watchCompiler, handleError } from '../lib/compiler';
 import { createWebpackConfig, resolveEnvironment } from '../webpack/utils';
 import SharedArgs from '../lib/SharedArgs';
+import chalk from 'chalk';
 
 /**
  * Builds ima application with provided config in watch mode
@@ -25,7 +26,14 @@ const dev: HandlerFn<DevArgs> = async args => {
       isWatch: true
     });
 
-    info('Starting webpack compiler...');
+    info(
+      `Starting webpack compiler${
+        args.legacy
+          ? chalk.bold.redBright(' in legacy (es-5 compatible) mode')
+          : ''
+      }...`
+    );
+
     await watchCompiler(config, args);
 
     // Start ima server

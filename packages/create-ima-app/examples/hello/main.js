@@ -1,4 +1,4 @@
-import './assets/less/app.less';
+import './less/app.less';
 
 import * as ima from '@ima/core';
 import initBindApp from 'app/config/bind';

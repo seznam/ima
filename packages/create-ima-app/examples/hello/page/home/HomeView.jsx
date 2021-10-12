@@ -1,11 +1,9 @@
 import { PageContext, AbstractComponent } from '@ima/core';
 import React from 'react';
 
+import IMAjsLogoImg from './imajs-logo.png';
 import './homeView.less';
 
-/**
- * Home page.
- */
 export default class HomeView extends AbstractComponent {
   static get contextType() {
     return PageContext;
@@ -15,16 +13,9 @@ export default class HomeView extends AbstractComponent {
     return (
       <div className="l-homepage">
         <div className="content">
-          <img
-            src={
-              this.utils.$Router.getBaseUrl() +
-              this.utils.$Settings.$Static.image +
-              '/imajs-logo.png'
-            }
-            alt="IMA.js logo"
-          />
+          <img src={IMAjsLogoImg} alt="IMA.js logo" />
           <h1>
-            {`Zdarec, ${this.props.message} `}
+            {`Hello, ${this.props.message} `}
             <a
               href="//imajs.io"
               title={this.props.name}

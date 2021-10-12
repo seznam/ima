@@ -1,4 +1,4 @@
-import DocumentView from 'app/component/document/DocumentView';
+import DocumentView from 'app/document/DocumentView';
 
 export default (ns, oc, config) => {
   let versionStamp = `?version=${config.$Version}`;

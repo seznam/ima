@@ -3,9 +3,6 @@ import React from 'react';
 
 import './notFoundView.less';
 
-/**
- * Not found page.
- */
 export default class NotFoundView extends AbstractComponent {
   static get contextType() {
     return PageContext;

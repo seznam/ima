@@ -151,7 +151,9 @@ async function runNodeApp() {
   app
     .use(helmet())
     .use(compression())
-    .use(favicon(path.resolve(path.join(__dirname, 'static/img/favicon.ico'))))
+    .use(
+      favicon(path.resolve(path.join(__dirname, 'static/public/favicon.ico')))
+    )
     .use(
       environment.$Server.staticFolder,
       express.static(path.resolve(path.join(__dirname, 'static')))

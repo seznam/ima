@@ -1,6 +1,8 @@
 import AbstractPageController from 'app/page/AbstractPageController';
 //import { GenericError } from '@ima/core';
 
+import IMAjsShareImg from './imajs-share.png';
+
 export default class HomeController extends AbstractPageController {
   static get $dependencies() {
     return [];
@@ -50,7 +52,7 @@ export default class HomeController extends AbstractPageController {
    * controller has been provided with the rendered view.
    *
    * @override
-   * @param {Object<string, *>} loadedResources Map of resource names to
+   * @param {Object<string, *>} _loadedResources Map of resource names to
    *        resources loaded by the {@codelink load} method. This is the same
    *        object as the one passed to the {@codelink setState} method when
    *        the Promises returned by the {@codelink load} method were resolved.
@@ -60,15 +62,14 @@ export default class HomeController extends AbstractPageController {
    * @param {Object<string, *>} settings The application settings for the
    *        current application environment.
    */
-  setMetaParams(loadedResources, metaManager, router, dictionary, settings) {
+  // eslint-disable-next-line no-unused-vars
+  setMetaParams(_loadedResources, metaManager, router, dictionary, settings) {
     let title = 'Isomorphic applications hello world - IMA.js';
     let description =
       'IMA.js is isomorphic javascript applications ' +
       'framework. The basic Hello World example. Just the running ' +
       'IMA.js with the only one page. This example is ideal base ' +
       'for new project.';
-    let domain = router.getDomain();
-    let image = domain + settings.$Static.image + '/imajs-share.png';
 
     let url = router.getUrl();
 
@@ -83,13 +84,13 @@ export default class HomeController extends AbstractPageController {
     metaManager.setMetaName('twitter:title', title);
     metaManager.setMetaName('twitter:description', description);
     metaManager.setMetaName('twitter:card', 'summary');
-    metaManager.setMetaName('twitter:image', image);
+    metaManager.setMetaName('twitter:image', IMAjsShareImg);
     metaManager.setMetaName('twitter:url', url);
 
     metaManager.setMetaProperty('og:title', title);
     metaManager.setMetaProperty('og:description', description);
     metaManager.setMetaProperty('og:type', 'website');
-    metaManager.setMetaProperty('og:image', image);
+    metaManager.setMetaProperty('og:image', IMAjsShareImg);
     metaManager.setMetaProperty('og:url', url);
   }
 }

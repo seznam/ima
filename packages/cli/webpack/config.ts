@@ -136,7 +136,7 @@ export default async (
               prefix(
                 `@import "${path.join(
                   rootDir,
-                  'app/assets/less/globals.less'
+                  'app/less/globals.less'
                 )}";`
               )
           ]),
@@ -205,7 +205,6 @@ export default async (
     cache: {
       type: 'filesystem',
       version: createCacheKey(ctx, imaConfig),
-      cacheDirectory: path.join(rootDir, './.ima/cache'),
       store: 'pack',
       buildDependencies: {
         defaultWebpack: ['webpack/lib/'],
@@ -299,6 +298,7 @@ export default async (
               test: /\.(js|mjs|jsx|ts|tsx|cjs)$/,
               exclude: /node_modules/,
               use: [
+                // TODO
                 // {
                 //   loader: 'plugin-loader',
                 //   options: {}
@@ -360,7 +360,7 @@ export default async (
             /**
              * Less loader configuration, which adds support for glob imports in the
              * less files, postcss, and css imports support. Additionally
-             * app/assets/less/globals.less is always prepended to every less file
+             * app/less/globals.less is always prepended to every less file
              * computed. This allows you to define globals (variables) which don't
              * have to be imported in every LESS file manually.
              */
@@ -414,7 +414,7 @@ export default async (
             // Copies essential assets to static directory
             new CopyPlugin({
               patterns: [
-                { from: 'app/assets/static', to: 'static' },
+                { from: 'app/public', to: 'static/public' },
                 { from: 'app/environment.js', to: 'ima/config/environment.js' },
                 'server/server.js'
               ]
@@ -479,7 +479,7 @@ export default async (
 
             // Handles generation of spa.html public file
             new HtmlWebpackPlugin({
-              template: path.join(rootDir, 'app/assets/static/html/spa.html'),
+              template: path.join(rootDir, 'app/public/spa.html'),
               filename: 'index.html',
               templateParameters: {
                 $Debug: imaEnvironment.$Debug,
