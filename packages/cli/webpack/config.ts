@@ -20,7 +20,6 @@ import {
   resolveEnvironment,
   additionalDataFactory,
   createCacheKey,
-  resolveEsVersionTargets,
   IMA_CONF_FILENAME
 } from './utils';
 import postCssScrambler from './postCssScrambler';
@@ -36,7 +35,7 @@ export default async (
   ctx: ConfigurationContext,
   imaConfig: ImaConfig
 ): Promise<Configuration> => {
-  const { rootDir, isProduction, isServer, isWatch, ecma, name } = ctx;
+  const { rootDir, isProduction, isServer, isWatch, isEsVersion, name } = ctx;
   const packageJsonPath = path.resolve(rootDir, './package.json');
   const packageJson = packageJsonPath ? require(packageJsonPath) : {};
   const imaEnvironment = resolveEnvironment(rootDir);
@@ -63,7 +62,8 @@ export default async (
   }: {
     useLessLoader?: boolean;
   } = {}): RuleSetUseItem[] => {
-    let importLoaders = isServer || !ecma?.isMain ? 0 : 1;
+    const onlyDefinitions = isServer || (!isEsVersion && !ctx.legacy);
+    let importLoaders = onlyDefinitions ? 0 : 1;
 
     // Increase number of import loaders for less loader
     if (useLessLoader) {
@@ -71,17 +71,16 @@ export default async (
     }
 
     return [
-      !isServer &&
-        ecma?.isMain && {
-          loader: MiniCssExtractPlugin.loader
-        },
+      !onlyDefinitions && {
+        loader: MiniCssExtractPlugin.loader
+      },
       {
         loader: require.resolve('css-loader'),
         options: {
           importLoaders,
           modules: {
             auto: true,
-            exportOnlyLocals: isServer || !ecma?.isMain,
+            exportOnlyLocals: onlyDefinitions,
             localIdentName: isProduction
               ? '[hash:base64]'
               : '[path][name]__[local]--[hash:base64:5]'
@@ -89,44 +88,43 @@ export default async (
           sourceMap: !isProduction
         }
       },
-      !isServer &&
-        ecma?.isMain && {
-          loader: require.resolve('postcss-loader'),
-          options: {
-            postcssOptions: requireConfig({
-              rootDir,
-              packageJson,
-              packageJsonKey: 'postcss',
-              fileNames: [
-                'postcss.config.js',
-                'postcss.config.cjs',
-                'postcss.config.json',
-                '.postcssrc.js',
-                '.postcssrc.cjs',
-                '.postcssrc.json',
-                '.postcssrc'
-              ],
-              defaultConfig: {
-                plugins: [
-                  'postcss-flexbugs-fixes',
-                  [
-                    'postcss-preset-env',
-                    {
-                      autoprefixer: {
-                        flexbox: 'no-2009'
-                      },
-                      stage: 3,
-                      features: {
-                        'custom-properties': false
-                      }
+      !onlyDefinitions && {
+        loader: require.resolve('postcss-loader'),
+        options: {
+          postcssOptions: requireConfig({
+            rootDir,
+            packageJson,
+            packageJsonKey: 'postcss',
+            fileNames: [
+              'postcss.config.js',
+              'postcss.config.cjs',
+              'postcss.config.json',
+              '.postcssrc.js',
+              '.postcssrc.cjs',
+              '.postcssrc.json',
+              '.postcssrc'
+            ],
+            defaultConfig: {
+              plugins: [
+                'postcss-flexbugs-fixes',
+                [
+                  'postcss-preset-env',
+                  {
+                    autoprefixer: {
+                      flexbox: 'no-2009'
+                    },
+                    stage: 3,
+                    features: {
+                      'custom-properties': false
                     }
-                  ]
+                  }
                 ]
-              }
-            }),
-            sourceMap: !isProduction
-          }
-        },
+              ]
+            }
+          }),
+          sourceMap: !isProduction
+        }
+      },
       useLessLoader && {
         loader: require.resolve('less-loader'),
         options: {
@@ -157,7 +155,7 @@ export default async (
   return {
     // TODO adapt target to esVersions configurations
     name,
-    target: 'web',
+    target: isServer ? 'node' : 'web',
     mode: isProduction ? 'production' : 'development',
     devtool: false,
     bail: isProduction,
@@ -189,15 +187,23 @@ export default async (
         }
 
         return `static/js/${chunk?.name === 'client' ? 'main' : '[name]'}${
-          ecma?.suffix ?? ''
+          isEsVersion ? '.es' : ''
         }.js`;
       },
       publicPath: ctx?.publicPath ?? imaConfig.publicPath,
+      environment: {
+        arrowFunction: isEsVersion || isServer,
+        bigIntLiteral: false,
+        const: isEsVersion || isServer,
+        destructuring: isEsVersion || isServer,
+        dynamicImport: false,
+        forOf: isEsVersion || isServer,
+        module: isEsVersion
+      },
       ...(isServer && { library: { type: 'commonjs2' } })
     },
     cache: {
       type: 'filesystem',
-      name: isServer ? 'server' : ecma?.version,
       version: createCacheKey(ctx, imaConfig),
       cacheDirectory: path.join(rootDir, './.ima/cache'),
       store: 'pack',
@@ -210,7 +216,7 @@ export default async (
     },
     optimization: {
       minimize: isProduction && !isServer,
-      minimizer: [new TerserPlugin(), new CssMinimizerPlugin()]
+      minimizer: [new TerserPlugin(), new CssMinimizerPlugin()] // TODO explore minimizer options
     },
     resolve: {
       extensions: ['.js', '.jsx'],
@@ -317,7 +323,14 @@ export default async (
                         [
                           require.resolve('@babel/preset-env'),
                           {
-                            targets: resolveEsVersionTargets(ecma?.version)
+                            ...(isEsVersion
+                              ? {
+                                  targets: {
+                                    node: '14'
+                                  }
+                                }
+                              : {}),
+                            modules: 'auto'
                           }
                         ],
                         [

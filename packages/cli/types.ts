@@ -21,27 +21,6 @@ export enum VerboseOptions {
 }
 
 /**
- * ESVersions that can be chosen to generate a client bundle into.
- */
-export enum ESVersions {
-  'es5' = 'es5',
-  'ES2015' = 'es6',
-  'es6' = 'es6',
-  'ES2016' = 'es7',
-  'es7' = 'es7',
-  'ES2017' = 'es8',
-  'es8' = 'es8',
-  'ES2018' = 'es9',
-  'es9' = 'es9',
-  'ES2019' = 'es10',
-  'es10' = 'es10',
-  'ES2020' = 'es11',
-  'es11' = 'es11',
-  'ES2021' = 'es12',
-  'es12' = 'es12'
-}
-
-/**
  * Base args available in every ima script. Following 3 arguments
  * are available and mandatory in every ima cli script.
  */
@@ -71,7 +50,7 @@ export type DevBuildArgs = BaseArgs & {
  */
 export type DevArgs = DevBuildArgs & {
   open?: boolean;
-  esVersion?: ESVersions;
+  legacy?: boolean;
 };
 
 /**
@@ -96,11 +75,7 @@ export type Args = BuildArgs &
 export type ConfigurationContext = Args & {
   name: string;
   isServer: boolean;
-  ecma?: {
-    isMain: boolean;
-    version: ESVersions;
-    suffix?: string;
-  };
+  isEsVersion?: boolean;
 };
 
 export type HandlerFn<T extends BaseArgs> = (args: T) => Promise<void>;
@@ -127,11 +102,6 @@ export type ImaConfig = {
    * Webpack assets public path [default='']
    */
   publicPath: string;
-
-  /**
-   * Define array of ES versions to build client.js into.
-   */
-  esVersions: ESVersions[];
 
   /**
    * Array of compression algorithms used for assets in production build. [default=['brotliCompress', 'gzip']]

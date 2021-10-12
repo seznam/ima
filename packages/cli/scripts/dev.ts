@@ -3,7 +3,7 @@ import open from 'better-opn';
 import childProcess from 'child_process';
 import { CommandBuilder } from 'yargs';
 
-import { DevArgs, ESVersions, HandlerFn } from '../types';
+import { DevArgs, HandlerFn } from '../types';
 import { handlerFactory, IMA_CLI_RUN_SERVER_MESSAGE, info } from '../lib/cli';
 import { watchCompiler, handleError } from '../lib/compiler';
 import { createWebpackConfig, resolveEnvironment } from '../webpack/utils';
@@ -69,10 +69,10 @@ export const builder: CommandBuilder = {
     type: 'boolean',
     default: true
   },
-  esVersion: {
-    alias: 'e',
-    desc: 'Override default es version used in watch mode',
-    type: 'string',
-    choices: Object.keys(ESVersions)
+  legacy: {
+    alias: 'l',
+    desc: 'Runs application in legacy (es5-compatible) mode',
+    type: 'boolean',
+    default: false
   }
 };

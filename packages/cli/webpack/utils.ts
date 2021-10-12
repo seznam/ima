@@ -13,7 +13,6 @@ import {
   ConfigurationContext,
   ImaEnvironment,
   ConfigurationTypes,
-  ESVersions,
   ImaConfig
 } from '../types';
 
@@ -170,7 +169,6 @@ const IMA_CONF_FILENAME = 'ima.config.js';
 async function loadImaConfig(args: Args): Promise<ImaConfig> {
   const defaultImaConfig: ImaConfig = {
     publicPath: '',
-    esVersions: [ESVersions.es5, ESVersions.es11],
     compression: ['brotliCompress', 'gzip'],
     scrambleCss: args.isProduction,
     imageInlineSizeLimit: 8192
@@ -235,49 +233,30 @@ async function createWebpackConfig(
   // Push server configuration if available
   if (configurations.includes('server')) {
     finalConfigContexts.push({
-      isServer: true,
       name: 'server',
-      ecma: {
-        isMain: true,
-        version: ESVersions.es11
-      },
+      isServer: true,
       ...args
     });
   }
 
-  // Push client configurations if available
+  // Push client configurations if available (es and legacy versions)
   if (configurations.includes('client')) {
-    const latestEsVersion =
-      args.esVersion ?? findLatestEsVersion(imaConfig.esVersions);
+    if (!args?.isWatch || args.legacy) {
+      finalConfigContexts.push({
+        name: 'client',
+        isServer: false,
+        isEsVersion: false,
+        ...args
+      });
+    }
 
-    // Push default client configuration
-    finalConfigContexts.push({
-      isServer: false,
-      name: 'client',
-      ecma: {
-        isMain: true,
-        version: latestEsVersion
-      },
-      ...args
-    });
-
-    // Build other es versions only when not in watch mode
-    if (!args?.isWatch) {
-      // Push other defined ES client configurations if defined
-      imaConfig?.esVersions
-        ?.filter(esVersion => esVersion !== latestEsVersion)
-        .forEach(esVersion => {
-          finalConfigContexts.push({
-            isServer: false,
-            name: `client-${esVersion}`,
-            ecma: {
-              isMain: false,
-              suffix: `.${esVersion}`,
-              version: esVersion
-            },
-            ...args
-          });
-        });
+    if (!(args?.isWatch && args.legacy)) {
+      finalConfigContexts.push({
+        name: 'client-es',
+        isServer: false,
+        isEsVersion: true,
+        ...args
+      });
     }
   }
 
@@ -294,76 +273,6 @@ async function createWebpackConfig(
   );
 }
 
-/**
- * Resolves esVersion to browserslist targets object, that can be
- * passed into babel/preset-env.
- *
- * @param {ESVersions} esVersion ESVersion to parse.
- * @returns {object} Targets object.
- */
-function resolveEsVersionTargets(
-  esVersion?: ESVersions
-): Record<string, number> {
-  switch (esVersion) {
-    case ESVersions.es5:
-      return { ie: 11 };
-
-    case ESVersions.ES2015:
-    case ESVersions.es6:
-      return { edge: 15 };
-
-    case ESVersions.ES2016:
-    case ESVersions.es7:
-      return { node: 8 };
-
-    case ESVersions.ES2017:
-    case ESVersions.es8:
-      return { node: 10 };
-
-    case ESVersions.ES2018:
-    case ESVersions.es9:
-    case ESVersions.ES2019:
-    case ESVersions.es10:
-      return { node: 12 };
-
-    case ESVersions.ES2020:
-    case ESVersions.es11:
-      return { node: 14 };
-
-    case ESVersions.ES2021:
-    case ESVersions.es12:
-      return { node: 15 };
-
-    default:
-      return { ie: 11 };
-  }
-}
-
-/**
- * Returns latest (newest) es version from provided array.
- *
- * @param {ESVersions[]} esVersions ESVersions array.
- * @param {ESVersions} [defEsVersion='es11'] Default ES version,
- *        which is returned if no match was found.
- * @returns {ESVersions}
- */
-function findLatestEsVersion(
-  esVersions: ESVersions[],
-  defEsVersion = ESVersions.es11
-): ESVersions {
-  let latestEsVersion: ESVersions = defEsVersion;
-
-  if (esVersions?.length) {
-    Object.values(ESVersions).forEach(esVersion => {
-      if (esVersions.includes(esVersion)) {
-        latestEsVersion = esVersion;
-      }
-    });
-  }
-
-  return latestEsVersion;
-}
-
 export {
   resolveEnvironment,
   requireConfig,
@@ -371,6 +280,5 @@ export {
   createCacheKey,
   createWebpackConfig,
   loadImaConfig,
-  resolveEsVersionTargets,
   IMA_CONF_FILENAME
 };
