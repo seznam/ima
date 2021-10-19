@@ -333,9 +333,10 @@ module.exports = (environment, logger, languageLoader, appFactory) => {
     let promise;
 
     try {
-      app.oc
-        .get('$Router')
-        .redirect(error.getParams().url, { httpStatus: error.getHttpStatus() });
+      app.oc.get('$Router').redirect(error.getParams().url, {
+        httpStatus: error.getHttpStatus(),
+        headers: error.getParams().headers
+      });
       instanceRecycler.clearInstance(app);
       promise = Promise.resolve({
         content: null,

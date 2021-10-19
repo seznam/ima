@@ -113,7 +113,8 @@ export default class Response {
    *        client.
    * @return {Response} This response.
    */
-  redirect(url, status = 302) {
+  redirect(url, status = 302, headers = {}) {
+    // TODO IMA@18 refactor to use an `options` object for `status` and `headers`, same as $Router
     if ($Debug) {
       if (this._isSent === true) {
         let params = this.getResponseParams();
@@ -130,6 +131,7 @@ export default class Response {
     this._isSent = true;
     this._status = status;
     this._setCookieHeaders();
+    this._response.set(headers);
     this._response.redirect(status, url);
 
     return this;
