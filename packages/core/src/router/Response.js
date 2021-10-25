@@ -111,6 +111,7 @@ export default class Response {
    * @param {string} url The URL to which the client should be redirected.
    * @param {number=} [status=302] The HTTP status code to send to the
    *        client.
+   * @param {Object.<string, string>} [headers={}] Custom headers to be used on the response.
    * @return {Response} This response.
    */
   redirect(url, status = 302, headers = {}) {
