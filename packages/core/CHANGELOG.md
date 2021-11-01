@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [17.12.0](https://github.com/seznam/ima/compare/v17.11.3...v17.12.0) (2021-11-01)
+
+
+### Features
+
+* 🎸 Enable setting headers for redirects ([#141](https://github.com/seznam/ima/issues/141)) ([da0cb80](https://github.com/seznam/ima/commit/da0cb80d8719cd6b8811ceb62f7eb1e526e49193))
+
+
+
+
+
 ## [17.11.2](https://github.com/seznam/ima/compare/v17.11.1...v17.11.2) (2021-07-16)
 
 

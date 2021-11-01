@@ -1,6 +1,6 @@
 {
   "name": "@ima/server",
-  "version": "17.11.2",
+  "version": "17.12.0",
   "description": "Default dev server for IMA.js applications.",
   "main": "index.js",
   "scripts": {
