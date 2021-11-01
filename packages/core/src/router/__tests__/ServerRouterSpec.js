@@ -40,12 +40,17 @@ describe('ima.core.router.ServerRouter', () => {
 
   it('should be redirect to url', () => {
     var url = domain + '/redirectUrl';
-    var options = { httpStatus: 303 };
+    var options = {
+      httpStatus: 303,
+      headers: { 'Custom-header': 'Some custom value' }
+    };
 
     spyOn(response, 'redirect').and.stub();
 
     router.redirect(url, options);
 
-    expect(response.redirect).toHaveBeenCalledWith(url, 303);
+    expect(response.redirect).toHaveBeenCalledWith(url, 303, {
+      'Custom-header': 'Some custom value'
+    });
   });
 });
