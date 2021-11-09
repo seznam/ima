@@ -65,28 +65,6 @@ describe('Bootstrap', () => {
     });
   });
 
-  describe('_initSettings method', () => {
-    beforeEach(() => {
-      spyOn(bootstrap, '_getEnvironmentSetting').and.returnValue({});
-    });
-
-    it('it should call initSettings method for app', () => {
-      spyOn(bootConfig, 'initSettings').and.callThrough();
-
-      bootstrap._initSettings();
-
-      expect(bootConfig.initSettings).toHaveBeenCalled();
-    });
-
-    it('it should call initSettings method for plugin', () => {
-      spyOn(plugin, 'initSettings').and.callThrough();
-
-      bootstrap._initSettings();
-
-      expect(plugin.initSettings).toHaveBeenCalled();
-    });
-  });
-
   describe('_bindDependencies method', () => {
     it('should set ima binding state to object container', () => {
       spyOn(objectContainer, 'setBindingState').and.callThrough();

@@ -6,14 +6,6 @@ import Router from './router/Router';
 ns.namespace('ima.core');
 
 /**
- * Environment name value in the production environment.
- *
- * @const
- * @type {string}
- */
-const PRODUCTION_ENVIRONMENT = 'prod';
-
-/**
  * Application bootstrap used to initialize the environment and the application
  * itself.
  */
@@ -38,6 +30,8 @@ export default class Bootstrap {
      * @type {Object<string, *>}
      */
     this._config = {};
+
+    this._isBootstrapped = false;
   }
 
   /**
@@ -60,6 +54,16 @@ export default class Bootstrap {
     this._bindDependencies();
     this._initServices();
     this._initRoutes();
+
+    this._isBootstrapped = true;
+  }
+
+  getConfig() {
+    return this._config;
+  }
+
+  isBootstrapped() {
+    return this._isBootstrapped;
   }
 
   /**
@@ -100,25 +104,6 @@ export default class Bootstrap {
       currentApplicationSettings,
       this._config.settings
     );
-  }
-
-  /**
-   * Returns setting for current environment where base values are from production
-   * environment and other environments override base values.
-   *
-   * @return {Object<string, *>}
-   */
-  _getEnvironmentSetting(allSettings) {
-    let environment = this._config.settings.$Env;
-    let environmentSetting = allSettings[environment] || {};
-
-    if (environment !== PRODUCTION_ENVIRONMENT) {
-      let productionSettings = allSettings[PRODUCTION_ENVIRONMENT];
-      $Helper.assignRecursively(productionSettings, environmentSetting);
-      environmentSetting = productionSettings;
-    }
-
-    return environmentSetting;
   }
 
   /**

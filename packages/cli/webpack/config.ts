@@ -134,10 +134,7 @@ export default async (
           additionalData: additionalDataFactory([
             prefix =>
               prefix(
-                `@import "${path.join(
-                  rootDir,
-                  'app/less/globals.less'
-                )}";`
+                `@import "${path.join(rootDir, 'app/less/globals.less')}";`
               )
           ]),
           sourceMap: !isProduction
@@ -296,19 +293,25 @@ export default async (
             },
             {
               test: /\.(js|mjs|jsx|ts|tsx|cjs)$/,
-              exclude: /node_modules/,
+              // exclude: /node_modules/,
+              exclude: (resource: string) => {
+                // TODO thing of better system to allow to pass plugins into babel pipeline
+                return (
+                  resource.includes('node_modules') &&
+                  !resource.includes('@ima/plugin')
+                );
+              },
               use: [
-                // TODO
-                // {
-                //   loader: 'plugin-loader',
-                //   options: {}
-                // },
+                {
+                  loader: 'ima-plugin-loader'
+                },
                 {
                   loader: require.resolve('babel-loader'),
                   options: requireConfig({
                     rootDir,
                     packageJson,
                     packageJsonKey: 'babel',
+                    // TODO resolve es and non-es babel configurations
                     fileNames: [
                       'babel.config.js',
                       'babel.config.cjs',

@@ -14,6 +14,8 @@ cd $CLI_DIR
 npm run build
 
 echo 'Syncing @ima/core...'
+cd $CLI_DIR/../core
+npm run build
 rm -rf $APP_DIR/node_modules/@ima/core
 rsync -aq --progress $CLI_DIR/../core $APP_DIR/node_modules/@ima --exclude node_modules
 

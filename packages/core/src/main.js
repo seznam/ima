@@ -2,6 +2,7 @@ import React from 'react';
 import ns from './namespace';
 import ObjectContainer from './ObjectContainer';
 import Bootstrap from './Bootstrap';
+import pluginLoader from './pluginLoader';
 
 import initBindIma from './config/bind';
 import initServicesIma from './config/services';
@@ -119,6 +120,7 @@ function _isClient() {
 function createImaApp() {
   let oc = new ObjectContainer(ns);
   let bootstrap = new Bootstrap(oc);
+  pluginLoader.init(oc, bootstrap);
 
   return { oc, bootstrap };
 }
@@ -337,6 +339,7 @@ export {
   ServerWindow,
   ClientWindow,
   ns,
+  pluginLoader,
   getUtils,
   localize,
   link,

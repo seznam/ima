@@ -25,7 +25,7 @@ itself.</p>
 Application bootstrap used to initialize the environment and the application
 itself.
 
-**Kind**: global class  
+**Kind**: global class
 
 * [Bootstrap](#Bootstrap)
     * [new Bootstrap(oc)](#new_Bootstrap_new)
@@ -33,7 +33,7 @@ itself.
     * [._config](#Bootstrap+_config) : <code>Object.&lt;string, \*&gt;</code>
     * [.run(config)](#Bootstrap+run)
     * [._initSettings()](#Bootstrap+_initSettings)
-    * [._getEnvironmentSetting()](#Bootstrap+_getEnvironmentSetting) ⇒ <code>Object.&lt;string, \*&gt;</code>
+    * [.getEnvironmentSetting()](#Bootstrap+getEnvironmentSetting) ⇒ <code>Object.&lt;string, \*&gt;</code>
     * [._bindDependencies()](#Bootstrap+_bindDependencies)
     * [._initRoutes()](#Bootstrap+_initRoutes)
     * [._initServices()](#Bootstrap+_initServices)
@@ -55,14 +55,14 @@ Initializes the bootstrap.
 ### bootstrap.\_oc : <code>ObjectContainer</code>&nbsp;<a name="Bootstrap+_oc" href="https://github.com/seznam/ima/blob/v17.10.0/packages/core/src/Bootstrap.js#L33" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a>
 The object container used to manage dependencies.
 
-**Kind**: instance property of [<code>Bootstrap</code>](#Bootstrap)  
+**Kind**: instance property of [<code>Bootstrap</code>](#Bootstrap)
 
 * * *
 
 ### bootstrap.\_config : <code>Object.&lt;string, \*&gt;</code>&nbsp;<a name="Bootstrap+_config" href="https://github.com/seznam/ima/blob/v17.10.0/packages/core/src/Bootstrap.js#L40" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a>
 Application configuration.
 
-**Kind**: instance property of [<code>Bootstrap</code>](#Bootstrap)  
+**Kind**: instance property of [<code>Bootstrap</code>](#Bootstrap)
 
 * * *
 
@@ -76,7 +76,7 @@ order:
 - UI components
 - routing
 
-**Kind**: instance method of [<code>Bootstrap</code>](#Bootstrap)  
+**Kind**: instance method of [<code>Bootstrap</code>](#Bootstrap)
 
 | Param | Type | Description |
 | --- | --- | --- |
@@ -92,15 +92,15 @@ all environments and then pics the settings for the current environment.
 The method also handles using the values in the production environment
 as default values for configuration items in other environments.
 
-**Kind**: instance method of [<code>Bootstrap</code>](#Bootstrap)  
+**Kind**: instance method of [<code>Bootstrap</code>](#Bootstrap)
 
 * * *
 
-### bootstrap.\_getEnvironmentSetting() ⇒ <code>Object.&lt;string, \*&gt;</code>&nbsp;<a name="Bootstrap+_getEnvironmentSetting" href="https://github.com/seznam/ima/blob/v17.10.0/packages/core/src/Bootstrap.js#L111" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a>
+### bootstrap.\getEnvironmentSetting() ⇒ <code>Object.&lt;string, \*&gt;</code>&nbsp;<a name="Bootstrap+getEnvironmentSetting" href="https://github.com/seznam/ima/blob/v17.10.0/packages/core/src/Bootstrap.js#L111" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a>
 Returns setting for current environment where base values are from production
 environment and other environments override base values.
 
-**Kind**: instance method of [<code>Bootstrap</code>](#Bootstrap)  
+**Kind**: instance method of [<code>Bootstrap</code>](#Bootstrap)
 
 * * *
 
@@ -108,28 +108,27 @@ environment and other environments override base values.
 Binds the constants, service providers and class dependencies to the
 object container.
 
-**Kind**: instance method of [<code>Bootstrap</code>](#Bootstrap)  
+**Kind**: instance method of [<code>Bootstrap</code>](#Bootstrap)
 
 * * *
 
 ### bootstrap.\_initRoutes()&nbsp;<a name="Bootstrap+_initRoutes" href="https://github.com/seznam/ima/blob/v17.10.0/packages/core/src/Bootstrap.js#L159" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a>
 Initializes the routes.
 
-**Kind**: instance method of [<code>Bootstrap</code>](#Bootstrap)  
+**Kind**: instance method of [<code>Bootstrap</code>](#Bootstrap)
 
 * * *
 
 ### bootstrap.\_initServices()&nbsp;<a name="Bootstrap+_initServices" href="https://github.com/seznam/ima/blob/v17.10.0/packages/core/src/Bootstrap.js#L167" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a>
 Initializes the basic application services.
 
-**Kind**: instance method of [<code>Bootstrap</code>](#Bootstrap)  
+**Kind**: instance method of [<code>Bootstrap</code>](#Bootstrap)
 
 * * *
 
 ## PRODUCTION\_ENVIRONMENT : <code>string</code>&nbsp;<a name="PRODUCTION_ENVIRONMENT" href="https://github.com/seznam/ima/blob/v17.10.0/packages/core/src/Bootstrap.js#L14" target="_blank"><span class="icon"><i class="fas fa-external-link-alt fa-xs"></i></span></a>
 Environment name value in the production environment.
 
-**Kind**: global constant  
+**Kind**: global constant
 
 * * *
-
