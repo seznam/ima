@@ -215,7 +215,17 @@ export default async (
     },
     optimization: {
       minimize: isProduction && !isServer,
-      minimizer: [new TerserPlugin(), new CssMinimizerPlugin()] // TODO explore minimizer options
+      minimizer: [
+        new TerserPlugin({
+          minify: TerserPlugin.esbuildMinify
+        }),
+        new CssMinimizerPlugin({
+          // FIXME esbuildMinify is not yet in CssMinimizerPlugin definitions
+          // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+          // @ts-ignore esbuildMinify
+          minify: CssMinimizerPlugin.esbuildMinify
+        })
+      ]
     },
     resolve: {
       extensions: ['.js', '.jsx'],
