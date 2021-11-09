@@ -8,6 +8,7 @@ import CopyPlugin from 'copy-webpack-plugin';
 import HtmlWebpackPlugin from 'html-webpack-plugin';
 import MiniCssExtractPlugin from 'mini-css-extract-plugin';
 import RemoveEmptyScriptsPlugin from 'webpack-remove-empty-scripts';
+import { WebpackManifestPlugin } from 'webpack-manifest-plugin';
 import PostCssPipelineWebpackPlugin from 'postcss-pipeline-webpack-plugin';
 import CssMinimizerPlugin from 'css-minimizer-webpack-plugin';
 import TerserPlugin from 'terser-webpack-plugin';
@@ -41,6 +42,7 @@ export default async (
   const imaEnvironment = resolveEnvironment(rootDir);
   const outputDir = path.join(rootDir, 'build');
 
+  const publicPath = ctx?.publicPath ?? imaConfig.publicPath;
   const scrambleCssEnabled = ctx.scrambleCss ?? imaConfig.scrambleCss;
   const ampEnabled =
     (ctx.amp ?? imaConfig?.amp?.enabled) &&
@@ -62,7 +64,7 @@ export default async (
   }: {
     useLessLoader?: boolean;
   } = {}): RuleSetUseItem[] => {
-    const onlyDefinitions = isServer || (!isEsVersion && !ctx.legacy);
+    const onlyDefinitions = isServer || !isEsVersion;
     let importLoaders = onlyDefinitions ? 0 : 1;
 
     // Increase number of import loaders for less loader
@@ -150,7 +152,9 @@ export default async (
   };
 
   return {
-    // TODO adapt target to esVersions configurations
+    // TODO change naming pattern -> index.es5.js postfix for legacy and index.js for es latest version?
+    // TODO load assets in settings.js through manifest (this eliminates need for version query postfixes)
+    // TODO fix hot reload in es5 version (probably needs polyfill)
     name,
     target: isServer ? 'node' : 'web',
     mode: isProduction ? 'production' : 'development',
@@ -160,12 +164,11 @@ export default async (
       ...(isServer
         ? { server: path.join(rootDir, 'app/main.js') }
         : {
-            client: [
-              isWatch
-                ? `webpack-hot-middleware/client?path=//localhost:${imaEnvironment.$Server.port}/__webpack_hmr&timeout=20000&reload=true&overlay=true&overlayWarnings=true`
-                : '',
+            [name]: [
+              isWatch &&
+                `webpack-hot-middleware/client?name=${name}&path=//localhost:${imaEnvironment.$Server.port}/__webpack_hmr&timeout=20000&reload=true&overlay=true&overlayWarnings=true`,
               path.join(rootDir, 'app/main.js')
-            ].filter(Boolean)
+            ].filter(Boolean) as string[]
           }),
 
       // AMP specific entry points
@@ -183,11 +186,11 @@ export default async (
           return 'ima/app.server.js';
         }
 
-        return `static/js/${chunk?.name === 'client' ? 'main' : '[name]'}${
-          isEsVersion ? '.es' : ''
-        }.js`;
+        return `static/js/${
+          !isServer && chunk?.name === name ? 'app.client' : '[name]'
+        }${isEsVersion ? '.es' : ''}.js`;
       },
-      publicPath: ctx?.publicPath ?? imaConfig.publicPath,
+      publicPath,
       environment: {
         arrowFunction: isEsVersion || isServer,
         bigIntLiteral: false,
@@ -425,13 +428,18 @@ export default async (
           ]
         : // Client-specific plugins
           [
+            // Generate Source files manifest.json
+            new WebpackManifestPlugin({ publicPath }),
+
             // Removes generated empty script caused by non-js entry points
             new RemoveEmptyScriptsPlugin(),
 
             // Handles LESS/CSS extraction out of JS to separate css file
             new MiniCssExtractPlugin({
               filename: ({ chunk }) =>
-                `static/css/${chunk?.name === 'client' ? 'app' : '[name]'}.css`,
+                `static/css/${
+                  !isServer && chunk?.name === name ? 'app' : '[name]'
+                }.css`,
               chunkFilename: 'static/css/[name].chunk.css'
             }),
 

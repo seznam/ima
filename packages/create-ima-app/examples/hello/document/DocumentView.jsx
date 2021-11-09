@@ -15,8 +15,6 @@ export default class DocumentView extends AbstractDocumentView {
     let appCssFile =
       this.utils.$Settings.$Env !== 'dev' ? 'app.bundle.min.css' : 'app.css';
     appCssFile += `?version=${this.utils.$Settings.$Version}`;
-    let jsBaseUrl =
-      this.utils.$Router.getBaseUrl() + this.utils.$Settings.$Static.js;
 
     return (
       <html>
@@ -75,20 +73,10 @@ export default class DocumentView extends AbstractDocumentView {
             id="revivalSettings"
             dangerouslySetInnerHTML={{ __html: this.props.revivalSettings }}
           />
-          <script
-            dangerouslySetInnerHTML={{
-              __html: `
-						if (!window.fetch) {
-							document.write('<script src="${jsBaseUrl}/fetch-polyfill.js"></' + 'script>')
-						}
-					`
-            }}
+          <div
+            id="scripts"
+            dangerouslySetInnerHTML={{ __html: this.getAsyncScripts() }}
           />
-          <script src="/static/js/main.js"></script>
-          {/*<div*/}
-          {/*  id="scripts"*/}
-          {/*  dangerouslySetInnerHTML={{ __html: this.getAsyncScripts() }}*/}
-          {/*/>*/}
         </body>
       </html>
     );

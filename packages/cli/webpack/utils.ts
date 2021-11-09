@@ -250,14 +250,12 @@ async function createWebpackConfig(
       });
     }
 
-    if (!(args?.isWatch && args.legacy)) {
-      finalConfigContexts.push({
-        name: 'client-es',
-        isServer: false,
-        isEsVersion: true,
-        ...args
-      });
-    }
+    finalConfigContexts.push({
+      name: 'client-es',
+      isServer: false,
+      isEsVersion: true,
+      ...args
+    });
   }
 
   return Promise.all(
