@@ -183,7 +183,7 @@ async function runNodeApp() {
       }
 
       return logger.info(
-        'Point your browser at http://localhost:' + environment.$Server.port
+        'The app is running at http://localhost:' + environment.$Server.port
       );
     });
 }

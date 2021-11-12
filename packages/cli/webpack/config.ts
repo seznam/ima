@@ -152,6 +152,8 @@ export default async (
   };
 
   return {
+    // TODO Reload browser page after server-restart in dev mode (works when open is enabled)
+    // TODO revisit SPA template generation and passing of all env variables
     // TODO change naming pattern -> index.es5.js postfix for legacy and index.js for es latest version?
     // TODO load assets in settings.js through manifest (this eliminates need for version query postfixes)
     // TODO fix hot reload in es5 version (probably needs polyfill)
@@ -162,11 +164,13 @@ export default async (
     bail: isProduction,
     entry: {
       ...(isServer
-        ? { server: path.join(rootDir, 'app/main.js') }
+        ? {
+            server: [path.join(rootDir, 'app/main.js')]
+          }
         : {
             [name]: [
               isWatch &&
-                `webpack-hot-middleware/client?name=${name}&path=//localhost:${imaEnvironment.$Server.port}/__webpack_hmr&timeout=20000&reload=true&overlay=true&overlayWarnings=true`,
+                `webpack-hot-middleware/client?name=${name}&path=//localhost:${imaEnvironment.$Server.port}/__webpack_hmr&timeout=2000&reload=true&overlay=true&overlayWarnings=true`,
               path.join(rootDir, 'app/main.js')
             ].filter(Boolean) as string[]
           }),
@@ -306,18 +310,8 @@ export default async (
             },
             {
               test: /\.(js|mjs|jsx|ts|tsx|cjs)$/,
-              // exclude: /node_modules/,
-              exclude: (resource: string) => {
-                // TODO thing of better system to allow to pass plugins into babel pipeline
-                return (
-                  resource.includes('node_modules') &&
-                  !resource.includes('@ima/plugin')
-                );
-              },
+              exclude: /node_modules/,
               use: [
-                {
-                  loader: 'ima-plugin-loader'
-                },
                 {
                   loader: require.resolve('babel-loader'),
                   options: requireConfig({
@@ -435,7 +429,7 @@ export default async (
                 'server/server.js'
               ]
             })
-          ]
+          ].filter(Boolean)
         : // Client-specific plugins
           [
             // Generate Source files manifest.json

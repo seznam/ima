@@ -1,6 +1,7 @@
 import path from 'path';
 import open from 'better-opn';
-import childProcess from 'child_process';
+import chalk from 'chalk';
+import nodemon from 'nodemon';
 import { CommandBuilder } from 'yargs';
 
 import { DevArgs, HandlerFn } from '../types';
@@ -8,7 +9,6 @@ import { handlerFactory, IMA_CLI_RUN_SERVER_MESSAGE, info } from '../lib/cli';
 import { watchCompiler, handleError } from '../lib/compiler';
 import { createWebpackConfig, resolveEnvironment } from '../webpack/utils';
 import SharedArgs from '../lib/SharedArgs';
-import chalk from 'chalk';
 
 /**
  * Builds ima application with provided config in watch mode
@@ -34,33 +34,48 @@ const dev: HandlerFn<DevArgs> = async args => {
       }...`
     );
 
-    await watchCompiler(config, args);
+    const compiler = await watchCompiler(config, args);
 
-    // Start ima server
-    info('Starting webserver...');
-    const webServer = childProcess.fork(
-      path.join(args.rootDir, 'build/server'),
-      [`--verbose=${args.verbose}`],
-      {
-        stdio: 'inherit'
-      }
-    );
+    // Start ima server with nodemon
+    nodemon({
+      script: path.join(args.rootDir, 'build/server'),
+      watch: [`!${path.join(args.rootDir, 'build/server')}`],
+      args: [`--verbose=${args.verbose}`],
+      cwd: args.rootDir
+    });
 
-    // Open browser at localhost
-    webServer.on('message', message => {
-      if (message === IMA_CLI_RUN_SERVER_MESSAGE && args.open) {
-        const imaEnvironment = resolveEnvironment(args.rootDir);
-        const port = imaEnvironment?.$Server?.port ?? 3001;
+    // Trigger nodemon reload only when new assets are emitted
+    compiler.hooks.done.tap('testPlugin', stats => {
+      const emittedAssets = stats
+        .toJson()
+        .children?.find(({ name }) => name === 'server')
+        ?.assets?.filter(
+          ({ emitted, name }) => emitted && !name.includes('app.server.js')
+        );
 
-        try {
-          open(`http://localhost:${port}`);
-        } catch (error) {
-          console.error(
-            `Could not open http://localhost:${port} inside a browser.`
-          );
-        }
+      if (emittedAssets?.length) {
+        info('Rebooting server due to configuration changes...');
+        nodemon.restart();
       }
     });
+
+    // Open browser at localhost
+    if (args.open) {
+      nodemon.on('message', message => {
+        if (message === IMA_CLI_RUN_SERVER_MESSAGE) {
+          const imaEnvironment = resolveEnvironment(args.rootDir);
+          const port = imaEnvironment?.$Server?.port ?? 3001;
+
+          try {
+            open(`http://localhost:${port}`);
+          } catch (error) {
+            console.error(
+              `Could not open http://localhost:${port} inside a browser.`
+            );
+          }
+        }
+      });
+    }
   } catch (err) {
     handleError(err);
   }

@@ -170,13 +170,13 @@ async function runCompiler(
  * @param {Args} args Cli and build args.
  * @param {Configuration['watchOptions']={}} watchOptions
  *        Additional watch options.
- * @returns {Promise<Error | MultiStats | undefined>} Stats or error.
+ * @returns {Promise<MultiCompiler>} compiler instance.
  */
 async function watchCompiler(
   config: Configuration[],
   args: Args,
   watchOptions: Configuration['watchOptions'] = {}
-): Promise<Error | MultiStats | undefined> {
+): Promise<MultiCompiler> {
   let firstRun = true;
 
   return new Promise((resolve, reject) => {
@@ -184,7 +184,7 @@ async function watchCompiler(
 
     compiler.watch(watchOptions, (error, stats) => {
       if (error) {
-        reject(error);
+        reject(compiler);
       }
 
       if (firstRun) {
@@ -192,7 +192,7 @@ async function watchCompiler(
         handleStats(stats, args?.verbose ?? VerboseOptions.DEFAULT);
       }
 
-      resolve(stats);
+      resolve(compiler);
     });
   });
 }
