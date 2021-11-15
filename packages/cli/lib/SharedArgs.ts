@@ -11,7 +11,7 @@ const SharedArgs: CommandBuilder = {
     default: VerboseOptions.DEFAULT
   },
   amp: {
-    alias: 'm',
+    alias: 'a',
     desc: 'Builds separate CSS files for use in AMP mode',
     type: 'boolean'
   },

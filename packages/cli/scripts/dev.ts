@@ -18,6 +18,11 @@ import SharedArgs from '../lib/SharedArgs';
  * @returns {Promise<void>}
  */
 const dev: HandlerFn<DevArgs> = async args => {
+  // Set force SPA flag so server can react accordingly
+  if (args.forceSPA) {
+    process.env.IMA_CLI_FORCE_SPA = 'true';
+  }
+
   try {
     info('Parsing webpack configuration file...');
     const config = await createWebpackConfig(['client', 'server'], {
@@ -95,6 +100,12 @@ export const builder: CommandBuilder = {
   legacy: {
     alias: 'l',
     desc: 'Runs application in legacy (es5-compatible) mode',
+    type: 'boolean',
+    default: false
+  },
+  forceSPA: {
+    alias: 'm',
+    desc: 'Forces application to run in SPA mode',
     type: 'boolean',
     default: false
   }

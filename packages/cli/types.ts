@@ -7,7 +7,8 @@ import { Configuration, ResolveOptions } from 'webpack';
 declare global {
   namespace NodeJS {
     interface ProcessEnv {
-      IMA_CLI_WEBPACK_CONFIG_ARGS: string;
+      IMA_CLI_WEBPACK_CONFIG_ARGS: string | undefined;
+      IMA_CLI_FORCE_SPA: string | undefined;
     }
   }
 }
@@ -51,6 +52,7 @@ export type DevBuildArgs = BaseArgs & {
 export type DevArgs = DevBuildArgs & {
   open?: boolean;
   legacy?: boolean;
+  forceSPA?: boolean;
 };
 
 /**

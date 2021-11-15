@@ -218,6 +218,11 @@ module.exports = (environment, logger, languageLoader, appFactory) => {
   }
 
   function _hasToServeSPA(req, app) {
+    // Force SPA if enabled through cli option
+    if (environment.$Env === 'dev' && process.env.IMA_CLI_FORCE_SPA) {
+      return true;
+    }
+
     const userAgent = req.headers['user-agent'] || '';
     const spaConfig = environment.$Server.serveSPA;
     const isAllowedServeSPA = spaConfig.allow;
