@@ -106,7 +106,7 @@ function getNamespace() {
 }
 
 function getInitialPluginConfig() {
-  return { plugins: ns.get('vendor.plugins') || [] };
+  return { plugins: pluginLoader.getPlugins() };
 }
 
 function _getRoot() {
@@ -120,7 +120,7 @@ function _isClient() {
 function createImaApp() {
   let oc = new ObjectContainer(ns);
   let bootstrap = new Bootstrap(oc);
-  pluginLoader.init(oc, bootstrap);
+  pluginLoader.init(bootstrap);
 
   return { oc, bootstrap };
 }
@@ -230,10 +230,6 @@ function reviveClientApp(initialAppConfigFunctions) {
 }
 
 function onLoad() {
-  (ns.get('vendor.plugins') || []).forEach(plugin =>
-    plugin.module.$registerImaPlugin(ns)
-  );
-
   if (!_isClient()) {
     return Promise.reject(null);
   }

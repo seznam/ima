@@ -1,80 +1,82 @@
 import ns from './namespace';
 
+/**
+ * Plugin loader utility used to register external IMA.js plugins. This
+ * adds ability for external packages to automatically hook into several
+ * IMA.js application parts and automatically bootstrap certain settings.
+ */
 class PluginLoader {
-  init(oc, bootstrap) {
-    this._oc = oc;
+  /**
+   * Initializes the plugin loader.
+   *
+   * This is private constructor and should not be used outside of this file.
+   * You should use the exported instance to register ima.js plugins.
+   *
+   * @example
+   * import { pluginLoader } from '@ima/core';
+   *
+   * @private
+   */
+  constructor() {
+    this._plugins = [];
+  }
+
+  /**
+   * Initializes the plugin loader with bootstrap instance. Which is later used
+   * to handle dynamically loaded IMA.js plugins.
+   *
+   * @param {ima.core.Bootstrap} bootstrap App bootstrap instance.
+   */
+  init(bootstrap) {
     this._bootstrap = bootstrap;
   }
 
-  register(module, modulePath) {
-    if (typeof module.$registerImaPlugin !== 'function') {
+  /**
+   * Registers plugin into IMA.js bootstrap sequence.
+   *
+   * @example
+   * pluginLoader.register('@ima/plugin-logger', ns => {
+   *   ns.set('ima.plugin.logger', logger);
+   *
+   *   return {
+   *     initSettings,
+   *     initServices,
+   *     initBind,
+   *   };
+   * });
+   *
+   * @param {string} name Plugin name.
+   * @param {function} registerFn Plugin initialization function.
+   */
+  register(name, registerFn) {
+    if (typeof name !== 'string') {
       throw new Error(
-        'ima.core.pluginLoader:load module.$registerImaPlugin is not a function.'
+        `ima.core.pluginLoader:register moduleName is not a string, '${typeof name}' was given.`
       );
     }
 
-    // Add plugin to namespace
-    const pluginNs = { module, name: modulePath };
+    if (typeof registerFn !== 'function') {
+      throw new Error(
+        `ima.core.pluginLoader:register registerFn is not a function, '${typeof registerFn}' was given.`
+      );
+    }
 
-    ns.has('vendor.plugins')
-      ? ns.namespace('vendor.plugins').push(pluginNs)
-      : ns.set('vendor.plugins', [pluginNs]);
+    const module = registerFn(ns) || {};
+    this._plugins.push({ name, module });
 
-    // Plugin is loaded dynamically, we need to handle the initialization
-    if (this._bootstrap && this._bootstrap.isBootstrapped()) {
-      this._initSettings(module, modulePath);
-      this._bindDependencies(module, modulePath);
-      this._initServices(module);
+    // Bootstrap plugin if imported dynamically
+    if (this._bootstrap) {
+      this._bootstrap.initPlugin(name, module);
     }
   }
 
-  _initSettings(module, modulePath) {
-    if (typeof module.initSettings !== 'function') {
-      return;
-    }
-
-    const $Helper = this._oc.get('$Helper');
-    const allPluginSettings = module.initSettings(
-      ns,
-      this._oc,
-      this._bootstrap.getConfig().settings,
-      true
-    );
-
-    $Helper.assignRecursivelyWithTracking(modulePath)(
-      this._bootstrap.getConfig().bind,
-      $Helper.resolveEnvironmentSetting(
-        allPluginSettings,
-        this._bootstrap.getConfig().settings.$Env
-      )
-    );
-  }
-
-  _bindDependencies(module, modulePath) {
-    if (typeof module.initBind !== 'function') {
-      return;
-    }
-
-    module.initBind(
-      ns,
-      this._oc,
-      this._bootstrap.getConfig().bind,
-      modulePath,
-      true
-    );
-  }
-
-  _initServices(module) {
-    if (typeof module.initServices !== 'function') {
-      return;
-    }
-
-    module.initServices(
-      ns,
-      this._oc,
-      this._bootstrap.getConfig().services,
-      true
-    );
+  /**
+   * Returns array of registered IMA.js plugins.
+   *
+   * @returns {Array} Array of IMA.js plugins.
+   */
+  getPlugins() {
+    return this._plugins;
   }
 }
 

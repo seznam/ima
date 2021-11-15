@@ -672,7 +672,7 @@ export default class ObjectContainer {
   /**
    * Retrieves the class denoted by the provided class constructor.
    *
-   * The method then checks whether there are defined {@code $dependecies}
+   * The method then checks whether there are defined {@code $dependencies}
    * property for class. Then the class is registered to this object
    * container.
    *
