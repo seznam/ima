@@ -1,13 +1,13 @@
 'use strict';
 
 const fs = require('fs');
+const ejs = require('ejs');
 const stackTrace = require('stack-trace');
 const asyncEach = require('async-each');
 const hljs = require('highlight.js');
 const sep = require('path').sep;
 const errorView = require('./template/errorView.js');
 const instanceRecycler = require('./instanceRecycler.js');
-const templateProcessor = require('./templateProcessor.js');
 const errorToJSON = require('error-to-json');
 const Cache = require('./cache.js').Cache;
 
@@ -18,6 +18,11 @@ hljs.configure({
 
 module.exports = (environment, logger, languageLoader, appFactory) => {
   const app = appFactory();
+
+  const spaTemplate = ejs.compile(
+    fs.readFileSync('./build/static/public/spa.html', 'utf8'),
+    { cache: true, filename: 'spa.html' }
+  );
 
   const spaCache = new Cache(
     Object.assign({}, environment.$Server.cache, {
@@ -126,7 +131,7 @@ module.exports = (environment, logger, languageLoader, appFactory) => {
     );
 
     return new Promise((resolve, reject) => {
-      const filePath = './build/static/html/error.html';
+      const filePath = './build/static/public/error.html';
       fs.readFile(filePath, 'utf-8', (error, content) => {
         let status = 500;
         res.status(status);
@@ -162,28 +167,28 @@ module.exports = (environment, logger, languageLoader, appFactory) => {
     }
 
     return new Promise((resolve, reject) => {
-      const filePath = './build/static/html/spa.html';
-      fs.readFile(filePath, 'utf-8', (error, content) => {
-        if (error) {
-          return showStaticErrorPage(error, req, res).then(
-            response => {
-              resolve(response);
-            },
-            error => {
-              reject(error);
-            }
-          );
-        }
+      if (!spaTemplate) {
+        return showStaticErrorPage(
+          new Error('Unable to render SPA template'),
+          req,
+          res
+        ).then(
+          response => {
+            resolve(response);
+          },
+          error => {
+            reject(error);
+          }
+        );
+      }
 
-        content = templateProcessor(content, bootConfig.settings);
+      const content = spaTemplate(bootConfig.settings);
+      spaCache.set(req, content);
 
-        spaCache.set(req, content);
+      res.status(status);
+      res.send(content);
 
-        res.status(status);
-        res.send(content);
-
-        resolve({ content, status, SPA: true, error: null, pageState: {} });
-      });
+      resolve({ content, status, SPA: true, error: null, pageState: {} });
     });
   }
 

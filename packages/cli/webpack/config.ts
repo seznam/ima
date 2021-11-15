@@ -499,6 +499,7 @@ export default async (
               templateParameters: {
                 $Debug: imaEnvironment.$Debug,
                 $Env: imaEnvironment.$Env,
+                $Version: imaEnvironment.$Version,
                 $App: JSON.stringify(imaEnvironment.$App || {}),
                 $Language: Object.values(imaEnvironment.$Language)[0]
               }

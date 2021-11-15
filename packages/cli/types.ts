@@ -173,7 +173,12 @@ export type ImaEnvironment = {
   /**
    * Possible environments
    */
-  $Env: 'production' | 'dev' | 'test' | 'regression';
+  $Env: 'prod' | 'dev' | 'test' | 'regression';
+
+  /**
+   * App version
+   */
+  $Version: string;
 
   /**
    * App data
