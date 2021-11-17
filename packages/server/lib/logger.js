@@ -1,6 +1,6 @@
 'use strict';
 
-const chalk = require('chalk');
+const pc = require('picocolors');
 const { createLogger, format, transports } = require('winston');
 const { printf, combine } = format;
 
@@ -108,16 +108,16 @@ module.exports = environment => {
   let colorizeLevel = level => {
     switch (level) {
       case 'info':
-        return chalk.cyan.bold(`${level}: `);
+        return pc.cyan(`${level}: `);
       case 'error':
-        return chalk.red.bold(`${level}: `);
+        return pc.red(`${level}: `);
       case 'warn':
-        return chalk.yellow.bold(`${level}: `);
+        return pc.yellow(`${level}: `);
       case 'debug':
-        return chalk.green.bold(`${level}: `);
+        return pc.green(`${level}: `);
 
       default:
-        return chalk.bold(`${level}: `);
+        return pc.gray(`${level}: `);
     }
   };
 
@@ -150,7 +150,7 @@ module.exports = environment => {
         }
       })(),
       printf(info => {
-        return `${colorizeLevel(info.level)}${chalk.magenta(
+        return `${colorizeLevel(info.level)}${pc.magenta(
           `[${info.timestamp}]`
         )} ${info.message || ''} ${formatMeta(info)}`;
       })

@@ -1,6 +1,6 @@
 import path from 'path';
 import { Arguments } from 'yargs';
-import chalk from 'chalk';
+import pc from 'picocolors';
 
 import { BaseArgs, HandlerFn } from '../types';
 
@@ -39,21 +39,26 @@ function handlerFactory<T extends BaseArgs>(handlerFn: HandlerFn<T>) {
  * Print utility functions generator
  *
  * @param {string} prefix Logged prefix text.
- * @param {chalk.Chalk} chalkFn Styling chalk function.
+ * @param {picocolors} picoColorsFn Styling function.
  * @returns {(message: string, newLine: false) => void} Log function.
  */
-function printFnFactory(prefix: string, chalkFn: chalk.Chalk) {
+function printFnFactory(
+  prefix: string,
+  picoColorsFn: {
+    (input: string | number | null | undefined): string;
+  }
+) {
   return (message: string, newLine = false) => {
     newLine && console.log('');
-    console.log(`${chalkFn(`${prefix}:`)} ${message}`);
+    console.log(`${picoColorsFn(`${prefix}:`)} ${message}`);
   };
 }
 
-const info = printFnFactory('info', chalk.cyan.bold);
-const success = printFnFactory('success', chalk.green.bold);
-const error = printFnFactory('error', chalk.red.bold);
-const warn = printFnFactory('warn', chalk.yellow.bold);
-const update = printFnFactory('update', chalk.magenta.bold);
+const info = printFnFactory('info', pc.cyan);
+const success = printFnFactory('success', pc.green);
+const error = printFnFactory('error', pc.red);
+const warn = printFnFactory('warn', pc.yellow);
+const update = printFnFactory('update', pc.magenta);
 
 export {
   IMA_CLI_RUN_SERVER_MESSAGE,

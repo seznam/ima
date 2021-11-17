@@ -1,7 +1,7 @@
 #!/usr/bin/env node
 import path from 'path';
 import yargs from 'yargs';
-import chalk from 'chalk';
+import pc from 'picocolors';
 
 yargs
   .scriptName('ima')
@@ -10,20 +10,20 @@ yargs
   .demandCommand(1, 'You need to run at least one command to move on')
   .help()
   .updateStrings({
-    'Examples:': chalk.cyan('Examples:'),
-    'Options:': chalk.cyan('Options:'),
-    'Commands:': chalk.cyan('Commands:')
+    'Examples:': pc.cyan('Examples:'),
+    'Options:': pc.cyan('Options:'),
+    'Commands:': pc.cyan('Commands:')
   })
   .updateLocale({
-    choices: chalk.gray('choices'),
-    count: chalk.gray('count'),
-    boolean: chalk.gray('boolean'),
-    number: chalk.gray('number'),
-    string: chalk.gray('string'),
-    aliases: chalk.gray('aliases'),
-    'generated-value': chalk.gray('generated-value'),
-    default: chalk.magenta('default'),
-    required: chalk.yellow('required')
+    choices: pc.gray('choices'),
+    count: pc.gray('count'),
+    boolean: pc.gray('boolean'),
+    number: pc.gray('number'),
+    string: pc.gray('string'),
+    aliases: pc.gray('aliases'),
+    'generated-value': pc.gray('generated-value'),
+    default: pc.magenta('default'),
+    required: pc.yellow('required')
   })
   .wrap(null).argv;
 

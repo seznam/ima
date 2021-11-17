@@ -1,6 +1,6 @@
 import path from 'path';
 import open from 'better-opn';
-import chalk from 'chalk';
+import pc from 'picocolors';
 import nodemon from 'nodemon';
 import { CommandBuilder } from 'yargs';
 
@@ -33,9 +33,7 @@ const dev: HandlerFn<DevArgs> = async args => {
 
     info(
       `Starting webpack compiler${
-        args.legacy
-          ? chalk.bold.redBright(' in legacy (es-5 compatible) mode')
-          : ''
+        args.legacy ? pc.red(' in legacy (es-5 compatible) mode') : ''
       }...`
     );
 

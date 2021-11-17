@@ -1,4 +1,4 @@
-import chalk from 'chalk';
+import pc from 'picocolors';
 import webpack, {
   WebpackError,
   Configuration,
@@ -92,17 +92,17 @@ function handleStats(
   children?.forEach((child, index) => {
     if (index === 0) {
       info(
-        `Compilation was ${chalk.bold.green(
+        `Compilation was ${pc.green(
           'successful'
-        )} using webpack version: ${chalk.bold.magenta(child.version)}`,
+        )} using webpack version: ${pc.magenta(child.version)}`,
         stats.hasWarnings() || stats.hasErrors()
       );
 
-      info(`Output folder ${chalk.magenta(child.outputPath)}`);
+      info(`Output folder ${pc.magenta(child.outputPath)}`);
     }
 
     info(
-      `[${child.name}] Compiled in ${chalk.green(
+      `[${child.name}] Compiled in ${pc.green(
         child.time?.toLocaleString() + ' ms'
       )}`
     );
@@ -112,9 +112,9 @@ function handleStats(
         child?.namedChunkGroups?.[chunkKey]?.assets?.forEach(
           ({ name, size }) => {
             console.log(
-              ` ${chalk.gray('├')} ${name} ${
+              ` ${pc.gray('├')} ${name} ${
                 size &&
-                chalk.cyan((size / 1024).toFixed(1).toLocaleString() + ' kiB')
+                pc.cyan((size / 1024).toFixed(1).toLocaleString() + ' kiB')
               }`
             );
           }

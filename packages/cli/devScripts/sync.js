@@ -9,7 +9,7 @@
 /* eslint-disable @typescript-eslint/no-var-requires */
 /* eslint-disable @typescript-eslint/ban-ts-comment */
 // @ts-ignore
-const chalk = require('chalk');
+const pc = require('picocolors');
 const chokidar = require('chokidar');
 const child = require('child_process');
 const fs = require('fs');
@@ -38,17 +38,16 @@ function createWatcher(baseDir, paths) {
 
     const callback = err => {
       if (err) {
-        console.log(
-          `${chalk.magenta(`[${pkgName}]`)} ${chalk.red('error')} ${err}`
-        );
+        console.log(`${pc.magenta(`[${pkgName}]`)} ${pc.red('error')} ${err}`);
       } else {
         console.log(
-          `${chalk.magenta(`[${pkgName}]`)} ${chalk[
+          new Date().toLocaleString(),
+          `${pc.magenta(`[${pkgName}]`)} ${pc[
             actionName === 'copy' ? 'green' : 'yellow'
           ](actionName === 'copy' ? 'copied' : 'unlinked')} /${path.relative(
             destFolder,
             dest
-          )} ${chalk.gray(`[${Date.now() - startTime}ms]`)}`
+          )} ${pc.gray(`[${Date.now() - startTime}ms]`)}`
         );
       }
     };

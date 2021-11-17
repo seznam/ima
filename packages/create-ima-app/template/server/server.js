@@ -115,8 +115,8 @@ async function runNodeApp() {
   app.set('trust proxy', true);
 
   if (environment.$Env === 'dev') {
+    const pc = require('picocolors');
     const webpack = require('webpack');
-    const chalk = require('chalk');
     const devMiddleware = require('webpack-dev-middleware');
     const hotMiddleware = require('webpack-hot-middleware');
     const { createWebpackConfig } = require('@ima/cli');
@@ -138,7 +138,7 @@ async function runNodeApp() {
             ? {
                 log: data => {
                   // eslint-disable-next-line no-console
-                  console.log(`${chalk.bold.magenta('hmr:')} ${data}`);
+                  console.log(`${pc.magenta('hmr:')} ${data}`);
                 }
               }
             : undefined),
