@@ -9,8 +9,7 @@ import {
   handlerFactory,
   IMA_CLI_RUN_SERVER_MESSAGE,
   info,
-  error,
-  warn
+  error
 } from '../lib/cli';
 import { watchCompiler, handleError } from '../lib/compiler';
 import { createWebpackConfig, resolveEnvironment } from '../webpack/utils';

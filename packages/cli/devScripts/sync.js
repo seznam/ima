@@ -21,19 +21,26 @@ if (process.argv.length < 2 || !process.argv[2]) {
   );
 }
 
-function createWatcher(baseDir, paths) {
-  const destFolder = path.resolve(process.argv[2], 'node_modules/@ima');
-  const pkgName = `@ima/${path.resolve(baseDir).split(path.sep).pop()}`;
-
+function createWatcher(baseDir, paths, destFolder, options = {}) {
+  const pkgName = baseDir.match(/ima\/packages\/(\w+)/i)[1];
   const watcher = chokidar.watch(path.join(baseDir, paths), {
     persistent: true,
-    ignored: ['**/node_modules/**', '**/__tests__/**', '**/__mocks__/**'],
-    cwd: path.resolve(baseDir, '..')
+    cwd: baseDir,
+    ignored: ['**/__tests__/**', '**/__mocks__/**', ...(options?.ignored ?? [])]
   });
+
+  const timeNow = () => {
+    let d = new Date(),
+      h = (d.getHours() < 10 ? '0' : '') + d.getHours(),
+      m = (d.getMinutes() < 10 ? '0' : '') + d.getMinutes(),
+      s = (d.getSeconds() < 10 ? '0' : '') + d.getSeconds();
+
+    return `${h}:${m}:${s}`;
+  };
 
   const actionCreator = actionName => filePath => {
     const startTime = Date.now();
-    const src = path.resolve(baseDir, '..', filePath);
+    const src = path.resolve(baseDir, filePath);
     const dest = path.resolve(destFolder, filePath);
 
     const callback = err => {
@@ -41,11 +48,10 @@ function createWatcher(baseDir, paths) {
         console.log(`${pc.magenta(`[${pkgName}]`)} ${pc.red('error')} ${err}`);
       } else {
         console.log(
-          new Date().toLocaleString(),
-          `${pc.magenta(`[${pkgName}]`)} ${pc[
+          `${pc.gray(timeNow())} - ${pc.magenta(`[${pkgName}]`)} ${pc[
             actionName === 'copy' ? 'green' : 'yellow'
           ](actionName === 'copy' ? 'copied' : 'unlinked')} /${path.relative(
-            destFolder,
+            path.join(destFolder, '..'),
             dest
           )} ${pc.gray(`[${Date.now() - startTime}ms]`)}`
         );
@@ -60,6 +66,8 @@ function createWatcher(baseDir, paths) {
           destDir = destDir.join(path.sep);
 
           fs.mkdirSync(destDir, { recursive: true });
+        } else if (options?.skipExisting) {
+          return;
         }
 
         return fs.copyFile(src, dest, callback);
@@ -79,10 +87,25 @@ function createWatcher(baseDir, paths) {
  * Create watchers and init build tools
  */
 
+const destFolder = path.resolve(process.argv[2], 'node_modules');
+const destImaFolder = path.join(destFolder, '@ima');
+
 // @ima/cli
 const cliDir = path.resolve(__dirname, '../');
 
-createWatcher(cliDir, '/dist/**/*.(js|cjs|mjs)');
+createWatcher(path.join(cliDir, 'node_modules'), '**/*', destFolder, {
+  skipExisting: true
+});
+
+createWatcher(
+  cliDir,
+  '/dist/**/*.(js|cjs|mjs)',
+  path.join(destImaFolder, 'cli'),
+  {
+    ignored: ['**/node_modules/**']
+  }
+);
+
 child.spawn('npm', ['run', 'dev'], {
   stdio: 'ignore',
   cwd: cliDir
@@ -91,11 +114,27 @@ child.spawn('npm', ['run', 'dev'], {
 // @ima/core
 const coreDir = path.resolve(__dirname, '../../core');
 
-createWatcher(coreDir, '/**/*.(js|cjs|mjs)');
+createWatcher(coreDir, '/**/*.(js|cjs|mjs)', path.join(destImaFolder, 'core'), {
+  ignored: ['**/node_modules/**']
+});
+
 child.spawn('npm', ['run', 'build', '--', '--watch'], {
   stdio: 'ignore',
   cwd: coreDir
 });
 
 // @ima/server
-createWatcher(path.resolve(__dirname, '../../server/'), '/**/*.(js|cjs|mjs)');
+const serverDir = path.resolve(__dirname, '../../server');
+
+createWatcher(path.join(serverDir, 'node_modules'), '**/*', destFolder, {
+  skipExisting: true
+});
+
+createWatcher(
+  serverDir,
+  '/**/*.(js|cjs|mjs)',
+  path.join(destImaFolder, 'server'),
+  {
+    ignored: ['**/node_modules/**']
+  }
+);

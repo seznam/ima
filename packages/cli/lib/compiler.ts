@@ -5,6 +5,8 @@ import webpack, {
   MultiCompiler,
   MultiStats
 } from 'webpack';
+import prettyMs from 'pretty-ms';
+import prettyBytes from 'pretty-bytes';
 
 import { Args, VerboseOptions } from '../types';
 import { error, warn, info } from './cli';
@@ -101,21 +103,14 @@ function handleStats(
       info(`Output folder ${pc.magenta(child.outputPath)}`);
     }
 
-    info(
-      `[${child.name}] Compiled in ${pc.green(
-        child.time?.toLocaleString() + ' ms'
-      )}`
-    );
+    info(`[${child.name}] Compiled in ${pc.green(prettyMs(child.time ?? 0))}`);
 
     if (child?.namedChunkGroups) {
       Object.keys(child.namedChunkGroups).forEach(chunkKey => {
         child?.namedChunkGroups?.[chunkKey]?.assets?.forEach(
           ({ name, size }) => {
             console.log(
-              ` ${pc.gray('├')} ${name} ${
-                size &&
-                pc.yellow((size / 1024).toFixed(1).toLocaleString() + ' kiB')
-              }`
+              ` ${pc.gray('├')} ${name} ${size && pc.yellow(prettyBytes(size))}`
             );
           }
         );

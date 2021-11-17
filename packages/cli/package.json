@@ -16,7 +16,7 @@
     "build": "tsc",
     "dev": "tsc --watch",
     "dev:sync": "./devScripts/sync.js",
-    "dev:setup": "./devScripts/setup.sh"
+    "dev:init": "./devScripts/init.sh"
   },
   "author": "Miroslav Jancarik <miroslav.jancarik@firma.seznam.cz>",
   "contributors": [],
@@ -61,6 +61,8 @@
     "postcss-loader": "^6.2.0",
     "postcss-pipeline-webpack-plugin": "^6.0.0",
     "postcss-preset-env": "^6.7.0",
+    "pretty-bytes": "^5.6.0",
+    "pretty-ms": "^7.0.1",
     "react-refresh": "^0.11.0",
     "source-map-loader": "^3.0.0",
     "svgo-loader": "^3.0.0",
