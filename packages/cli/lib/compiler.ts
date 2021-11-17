@@ -114,7 +114,7 @@ function handleStats(
             console.log(
               ` ${pc.gray('├')} ${name} ${
                 size &&
-                pc.cyan((size / 1024).toFixed(1).toLocaleString() + ' kiB')
+                pc.yellow((size / 1024).toFixed(1).toLocaleString() + ' kiB')
               }`
             );
           }

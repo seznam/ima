@@ -64,7 +64,14 @@ export default async (
   }: {
     useLessLoader?: boolean;
   } = {}): RuleSetUseItem[] => {
-    const onlyDefinitions = isServer || !isEsVersion;
+    /**
+     * When using build script and dev mode (not legacy, or forceSPA which uses es5),
+     * the CSS files are only generated once for es version pass. For other compilers
+     * only definitions are generated in order to fully support css.modules but
+     * improve a compiling speed a little bit.
+     */
+    const onlyDefinitions =
+      isServer || (!isEsVersion && ctx.command === 'build');
     let importLoaders = onlyDefinitions ? 0 : 1;
 
     // Increase number of import loaders for less loader
@@ -153,9 +160,6 @@ export default async (
 
   return {
     // TODO Reload browser page after server-restart in dev mode (works when open is enabled)
-    // TODO revisit SPA template generation and passing of all env variables
-    // TODO change naming pattern -> index.es5.js postfix for legacy and index.js for es latest version?
-    // TODO load assets in settings.js through manifest (this eliminates need for version query postfixes)
     // TODO fix hot reload in es5 version (probably needs polyfill)
     name,
     target: isServer ? 'node' : 'web',

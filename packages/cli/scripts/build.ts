@@ -14,10 +14,10 @@ import SharedArgs from '../lib/SharedArgs';
  */
 const build: HandlerFn<BuildArgs> = async args => {
   try {
-    info('Parsing webpack configuration file...');
+    info('Parsing webpack configuration file');
     const config = await createWebpackConfig(['client', 'server'], args);
 
-    info('Starting webpack compiler...');
+    info('Starting webpack compiler');
     await runCompiler(config, args);
   } catch (err) {
     handleError(err);

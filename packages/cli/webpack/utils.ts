@@ -250,12 +250,15 @@ async function createWebpackConfig(
       });
     }
 
-    finalConfigContexts.push({
-      name: 'client-es',
-      isServer: false,
-      isEsVersion: true,
-      ...args
-    });
+    // SPA mode only supports es5 versions
+    if (!args.forceSPA) {
+      finalConfigContexts.push({
+        name: 'client-es',
+        isServer: false,
+        isEsVersion: true,
+        ...args
+      });
+    }
   }
 
   return Promise.all(
