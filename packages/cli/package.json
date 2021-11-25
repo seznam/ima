@@ -15,8 +15,7 @@
   "scripts": {
     "build": "tsc",
     "dev": "tsc --watch",
-    "dev:sync": "./devScripts/sync.js",
-    "dev:init": "./devScripts/init.sh"
+    "dev:app": "./tools/devApp.js"
   },
   "author": "Miroslav Jancarik <miroslav.jancarik@firma.seznam.cz>",
   "contributors": [],
