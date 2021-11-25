@@ -5,7 +5,7 @@ let applicationFolder = path.resolve('.');
 
 let environmentConfig = require(path.resolve(
   applicationFolder,
-  './build/ima/config/environment.js'
+  './server/config/environment.js'
 ));
 let environment = require('./lib/environment.js')(environmentConfig);
 

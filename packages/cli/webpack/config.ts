@@ -160,7 +160,7 @@ export default async (
 
   return {
     // TODO Reload browser page after server-restart in dev mode (works when open is enabled)
-    // TODO fix hot reload in es5 version (probably needs polyfill)
+    // TODO fix hot reload in es5 version (probably needs polyfill) in IE
     name,
     target: isServer ? 'node' : 'web',
     mode: isProduction ? 'production' : 'development',
@@ -429,7 +429,6 @@ export default async (
             new CopyPlugin({
               patterns: [
                 { from: 'app/public', to: 'static/public' },
-                { from: 'app/environment.js', to: 'ima/config/environment.js' },
                 'server/server.js'
               ]
             })

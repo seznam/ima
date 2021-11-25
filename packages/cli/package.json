@@ -73,6 +73,7 @@
     "yargs": "^17.2.1"
   },
   "devDependencies": {
+    "@ima/server": "*",
     "@types/compression-webpack-plugin": "^9.0.0",
     "@types/copy-webpack-plugin": "^8.0.1",
     "@types/css-minimizer-webpack-plugin": "^3.0.2",
@@ -85,5 +86,8 @@
     "@typescript-eslint/parser": "^5.3.1",
     "chokidar": "^3.5.2",
     "typescript": "^4.4.4"
+  },
+  "peerDependencies": {
+    "@ima/server": "*"
   }
 }

@@ -16,23 +16,19 @@ import {
   ImaConfig
 } from '../types';
 
+import envResolver from '@ima/server/lib/environment.js';
+
 /**
- * Loads application IMA.js environment from app/environment.js
+ * Loads application IMA.js environment from server/config/environment.js
  *
  * @param {Args['rootDir']} rootDir Application root directory
  * @returns {ImaEnvironment} Loaded environment
  */
 function resolveEnvironment(rootDir: Args['rootDir']): ImaEnvironment {
-  const envSourcePath = path.resolve(rootDir, './app/environment.js');
-  const envConfigPath = path.resolve(
-    rootDir,
-    './node_modules/@ima/server/lib/environment.js'
-  );
-
+  const envSourcePath = path.resolve(rootDir, './server/config/environment.js');
   const envSource = envSourcePath && require(envSourcePath);
-  const envConfig = envConfigPath && require(envConfigPath);
 
-  return (envSource && envConfig ? envConfig(envSource) : {}) as ImaEnvironment;
+  return (envSource && envResolver(envSource)) || {};
 }
 
 /**

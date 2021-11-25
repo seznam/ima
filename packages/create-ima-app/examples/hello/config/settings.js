@@ -30,7 +30,6 @@ export default (ns, oc, config) => {
       },
       $Page: {
         $Render: {
-          // TODO load from manifest
           scripts: [
             `/static/js/locale/${config.$Language}.js${versionStamp}`,
             '/static/js/app.bundle.min.js' + versionStamp
@@ -65,7 +64,6 @@ export default (ns, oc, config) => {
       },
       $Page: {
         $Render: {
-          // TODO load from manifest
           scripts: [
             '/static/js/polyfill.js' + versionStamp,
             '/static/js/shim.js' + versionStamp,
