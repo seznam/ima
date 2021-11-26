@@ -327,7 +327,9 @@ export default class AbstractPageManager extends PageManager {
         extension.switchToStateManager();
         extension.clearPartialState();
       })
-      .catch(() => {});
+      .catch(() => {
+        extension.clearPartialState();
+      });
   }
 
   /**
