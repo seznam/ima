@@ -1,7 +1,7 @@
 import { CommandBuilder } from 'yargs';
 
 import { BuildArgs, HandlerFn } from '../types';
-import { info, handlerFactory } from '../lib/cli';
+import { info, handlerFactory, resolveCliPluginArgs } from '../lib/cli';
 import { runCompiler, handleError } from '../lib/compiler';
 import { createWebpackConfig } from '../webpack/utils';
 import SharedArgs from '../lib/SharedArgs';
@@ -24,7 +24,8 @@ const build: HandlerFn<BuildArgs> = async args => {
   }
 };
 
-export const command = 'build';
+const CMD = 'build';
+export const command = `${CMD} [rootDir]`;
 export const describe = 'Build an application for production';
 export const handler = handlerFactory(build);
 export const builder: CommandBuilder = {
@@ -33,5 +34,6 @@ export const builder: CommandBuilder = {
     desc: 'Clean build folder before building the application',
     type: 'boolean',
     default: true
-  }
+  },
+  ...resolveCliPluginArgs(CMD)
 };

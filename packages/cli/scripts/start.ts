@@ -1,8 +1,9 @@
 import path from 'path';
 import childProcess from 'child_process';
 
-import { handlerFactory } from '../lib/cli';
+import { handlerFactory, resolveCliPluginArgs } from '../lib/cli';
 import { HandlerFn, StartArgs } from '../types';
+import { CommandBuilder } from 'yargs';
 
 /**
  * Starts ima application server.
@@ -16,6 +17,10 @@ const start: HandlerFn<StartArgs> = async args => {
   });
 };
 
-export const command = 'start';
+const CMD = 'start';
+export const command = `${CMD} [rootDir]`;
 export const describe = 'Run application in production';
 export const handler = handlerFactory(start);
+export const builder: CommandBuilder = {
+  ...resolveCliPluginArgs(CMD)
+};

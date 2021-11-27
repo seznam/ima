@@ -157,12 +157,24 @@ function createCacheKey(
 const IMA_CONF_FILENAME = 'ima.config.js';
 
 /**
- * Loads ima.config.js from rootDir base path with defaults.
+ * Requires imaConfig from given root directory (default to cwd).
+ *
+ * @param {string} rootDir App root directory.
+ * @returns {ImaConfig | null} Config or null in case the config file doesn't exits.
+ */
+function requireImaConfig(rootDir = process.cwd()): ImaConfig | null {
+  const imaConfigPath = path.join(rootDir, IMA_CONF_FILENAME);
+
+  return fs.existsSync(imaConfigPath) ? require(imaConfigPath) : null;
+}
+
+/**
+ * Resolves ima.config.js from rootDir base path with defaults.
  *
  * @param {Args} args CLI args.
  * @returns {Promise<ImaConfig>} Ima config or empty object.
  */
-async function loadImaConfig(args: Args): Promise<ImaConfig> {
+async function resolveImaConfig(args: Args): Promise<ImaConfig> {
   const defaultImaConfig: ImaConfig = {
     publicPath: '',
     compression: ['brotliCompress', 'gzip'],
@@ -174,18 +186,16 @@ async function loadImaConfig(args: Args): Promise<ImaConfig> {
     return defaultImaConfig;
   }
 
-  const imaConfigPath = path.join(args.rootDir, IMA_CONF_FILENAME);
-
   return {
     ...defaultImaConfig,
-    ...(fs.existsSync(imaConfigPath) ? require(imaConfigPath) : {})
+    ...requireImaConfig(args.rootDir)
   };
 }
 
 /**
- * Creates webpack configurations for received configuration types, while
- * using provided parsed CLI arguments adn build, with optional ima.config.js
- * configuration file.
+ * Creates webpack configurations for defined types using provided args.
+ * Additionally it applies all existing configuration overrides from cli plugins
+ * and app overrides in this order cli -> plugins -> app.
  *
  * @param {ConfigurationTypes} configurations Configuration types.
  * @param {Args} args Parsed CLI and build arguments.
@@ -223,7 +233,7 @@ async function createWebpackConfig(
   }
 
   // Load ima.config.js with defaults and init configuration contexts.
-  const imaConfig = await loadImaConfig(args);
+  const imaConfig = await resolveImaConfig(args);
   const finalConfigContexts: ConfigurationContext[] = [];
 
   // Push server configuration if available
@@ -258,15 +268,29 @@ async function createWebpackConfig(
   }
 
   return Promise.all(
-    finalConfigContexts.map(async ctx =>
-      typeof imaConfig?.webpack === 'function'
-        ? imaConfig?.webpack(
-            await webpackConfig(ctx, imaConfig),
-            ctx,
-            imaConfig
-          )
-        : webpackConfig(ctx, imaConfig)
-    )
+    finalConfigContexts.map(async ctx => {
+      let config = await webpackConfig(ctx, imaConfig);
+
+      if (Array.isArray(imaConfig?.plugins)) {
+        for (const plugin of imaConfig?.plugins) {
+          try {
+            config = await plugin?.webpack(config, ctx, imaConfig);
+          } catch (_error) {
+            error(
+              `There was an error while running webpack config for '${plugin.name}' plugin.`
+            );
+            console.error(_error);
+            process.exit(1);
+          }
+        }
+      }
+
+      if (typeof imaConfig?.webpack === 'function') {
+        config = await imaConfig?.webpack(config, ctx, imaConfig);
+      }
+
+      return config;
+    })
   );
 }
 
@@ -276,6 +300,7 @@ export {
   additionalDataFactory,
   createCacheKey,
   createWebpackConfig,
-  loadImaConfig,
+  requireImaConfig,
+  resolveImaConfig,
   IMA_CONF_FILENAME
 };

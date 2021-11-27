@@ -1,5 +1,6 @@
 import CompressionPlugin from 'compression-webpack-plugin';
 import { Configuration, ResolveOptions } from 'webpack';
+import { CommandBuilder } from 'yargs';
 
 /**
  * Inject expected ENV values into nodeJS process.env object.
@@ -22,14 +23,19 @@ export enum VerboseOptions {
 }
 
 /**
+ * Available ima cli commands string identifiers.
+ */
+export type ImaCliCommand = 'start' | 'build' | 'dev';
+
+/**
  * Base args available in every ima script. Following 3 arguments
  * are available and mandatory in every ima cli script.
  */
-export type BaseArgs = {
+export interface BaseArgs {
   rootDir: string;
   isProduction: boolean;
-  command: 'start' | 'build' | 'dev';
-};
+  command: ImaCliCommand;
+}
 
 /**
  * Start (ima start) script args
@@ -39,49 +45,78 @@ export type StartArgs = BaseArgs;
 /**
  * Shared dev and build script args
  */
-export type DevBuildArgs = BaseArgs & {
+export interface DevBuildArgs extends BaseArgs {
   verbose?: VerboseOptions;
   scrambleCss?: boolean;
   publicPath?: string;
   amp?: boolean;
-};
+}
 
 /**
  * Dev (ima dev) script args
  */
-export type DevArgs = DevBuildArgs & {
+export interface DevArgs extends DevBuildArgs {
   open?: boolean;
   legacy?: boolean;
   forceSPA?: boolean;
-};
+}
 
 /**
  * Build (ima build) script args
  */
-export type BuildArgs = DevBuildArgs & {
+export interface BuildArgs extends DevBuildArgs {
   clean?: boolean;
-};
+}
 
 /**
  * Arguments passed across ima cli and into webpack config
  * function generator.
  */
-export type Args = BuildArgs &
-  DevArgs & {
-    isWatch?: boolean;
-  };
+export interface Args extends BuildArgs, DevArgs {
+  isWatch?: boolean;
+}
 
 /**
  * CLI arguments merged with current configuration arguments.
  */
-export type ConfigurationContext = Args & {
+export interface ConfigurationContext extends Args {
   name: string;
   isServer: boolean;
   isEsVersion?: boolean;
-};
+}
 
 export type HandlerFn<T extends BaseArgs> = (args: T) => Promise<void>;
 export type ConfigurationTypes = ('client' | 'server')[];
+
+/**
+ * Webpack callback function used to customize webpack config before it's run.
+ *
+ * @param {Configuration} config generated config by ima CLI, which can be further customized.
+ * @param {ConfigurationContext} ctx CLI arguments merged with current configuration arguments.
+ * @param {ImaConfig} imaConfig additional local ima.config.js file contents ({} if there's no file created).
+ */
+export type ImaConfigWebpack = (
+  config: Configuration,
+  ctx: ConfigurationContext,
+  imaConfig: ImaConfig
+) => Promise<Configuration>;
+
+export interface ImaCliPlugin {
+  /**
+   * Plugin name, used mainly for better debugging messages.
+   */
+  name: string;
+
+  /**
+   * Optional additional CLI arguments to extend the set of existing ones.
+   */
+  cliArgs?: Partial<Record<ImaCliCommand, CommandBuilder>>;
+
+  /**
+   * Webpack callback function used by plugins to customize/extend ima webpack config before it's run.
+   */
+  webpack: ImaConfigWebpack;
+}
 
 /**
  * Ima config options. Some of these options can be overridden using Args, which takes precedence.
@@ -89,16 +124,15 @@ export type ConfigurationTypes = ('client' | 'server')[];
  */
 export type ImaConfig = {
   /**
-   * Webpack callback function can be used to completely customize default webpack config before it's run:
-   * @param {Configuration} config generated config by ima CLI, which can be further customized.
-   * @param {ConfigurationContext} ctx CLI arguments merged with current configuration arguments.
-   * @param {ImaConfig} imaConfig additional local ima.config.js file contents ({} if there's no file created).
+   * Webpack callback function can be used to completely customize default webpack config before it's run.
    */
-  webpack?: (
-    config: Configuration,
-    ctx: ConfigurationContext,
-    imaConfig: ImaConfig
-  ) => Configuration;
+  webpack?: ImaConfigWebpack;
+
+  /**
+   * Optional IMA cli plugins that can be used to easily extend
+   * webpack config and cli with additional features.
+   */
+  plugins?: ImaCliPlugin[];
 
   /**
    * Webpack assets public path [default='']
@@ -159,7 +193,7 @@ export type AdditionalDataContentFn = (
 /**
  * IMA.js loaded environment
  */
-export type ImaEnvironment = {
+export interface ImaEnvironment {
   /**
    * Server config
    */
@@ -191,4 +225,4 @@ export type ImaEnvironment = {
    * Array of defined languages
    */
   $Language: string[];
-};
+}

@@ -9,7 +9,8 @@ import {
   handlerFactory,
   IMA_CLI_RUN_SERVER_MESSAGE,
   info,
-  error
+  error,
+  resolveCliPluginArgs
 } from '../lib/cli';
 import { watchCompiler, handleError } from '../lib/compiler';
 import { createWebpackConfig, resolveEnvironment } from '../webpack/utils';
@@ -96,7 +97,8 @@ const dev: HandlerFn<DevArgs> = async args => {
   }
 };
 
-export const command = 'dev';
+const CMD = 'dev';
+export const command = `${CMD} [rootDir]`;
 export const describe = 'Run application in development watch mode';
 export const handler = handlerFactory(dev);
 export const builder: CommandBuilder = {
@@ -118,5 +120,6 @@ export const builder: CommandBuilder = {
     desc: 'Forces application to run in SPA mode',
     type: 'boolean',
     default: false
-  }
+  },
+  ...resolveCliPluginArgs(CMD)
 };
