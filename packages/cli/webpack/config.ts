@@ -4,10 +4,8 @@ import webpack, { Configuration, RuleSetRule, RuleSetUseItem } from 'webpack';
 import miniSVGDataURI from 'mini-svg-data-uri';
 
 import CopyPlugin from 'copy-webpack-plugin';
-import HtmlWebpackPlugin from 'html-webpack-plugin';
 import MiniCssExtractPlugin from 'mini-css-extract-plugin';
 import RemoveEmptyScriptsPlugin from 'webpack-remove-empty-scripts';
-import { WebpackManifestPlugin } from 'webpack-manifest-plugin';
 import CssMinimizerPlugin from 'css-minimizer-webpack-plugin';
 import TerserPlugin from 'terser-webpack-plugin';
 import CompressionPlugin from 'compression-webpack-plugin';
@@ -421,9 +419,6 @@ export default async (
           ].filter(Boolean)
         : // Client-specific plugins
           [
-            // Generate Source files manifest.json
-            new WebpackManifestPlugin({ publicPath }),
-
             // Removes generated empty script caused by non-js entry points
             new RemoveEmptyScriptsPlugin(),
 
@@ -434,19 +429,6 @@ export default async (
                   !isServer && chunk?.name === name ? 'app' : '[name]'
                 }.css`,
               chunkFilename: 'static/css/[name].chunk.css'
-            }),
-
-            // Handles generation of spa.html public file
-            new HtmlWebpackPlugin({
-              template: path.join(rootDir, 'app/public/spa.html'),
-              filename: 'index.html',
-              templateParameters: {
-                $Debug: imaEnvironment.$Debug,
-                $Env: imaEnvironment.$Env,
-                $Version: imaEnvironment.$Version,
-                $App: JSON.stringify(imaEnvironment.$App || {}),
-                $Language: Object.values(imaEnvironment.$Language)[0]
-              }
             }),
 
             // Enables compression for assets in production build
