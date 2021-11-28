@@ -178,7 +178,6 @@ async function resolveImaConfig(args: Args): Promise<ImaConfig> {
   const defaultImaConfig: ImaConfig = {
     publicPath: '',
     compression: ['brotliCompress', 'gzip'],
-    scrambleCss: args.isProduction,
     imageInlineSizeLimit: 8192
   };
 

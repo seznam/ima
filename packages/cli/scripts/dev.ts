@@ -104,19 +104,16 @@ export const handler = handlerFactory(dev);
 export const builder: CommandBuilder = {
   ...SharedArgs,
   open: {
-    alias: 'o',
     desc: 'Opens browser window after server has been started',
     type: 'boolean',
     default: true
   },
   legacy: {
-    alias: 'l',
     desc: 'Runs application in legacy (es5-compatible) mode',
     type: 'boolean',
     default: false
   },
   forceSPA: {
-    alias: 'm',
     desc: 'Forces application to run in SPA mode',
     type: 'boolean',
     default: false

@@ -1,7 +1,6 @@
 import path from 'path';
 import fs from 'fs';
 import webpack, { Configuration, RuleSetRule, RuleSetUseItem } from 'webpack';
-import postcss from 'postcss';
 import miniSVGDataURI from 'mini-svg-data-uri';
 
 import CopyPlugin from 'copy-webpack-plugin';
@@ -9,7 +8,6 @@ import HtmlWebpackPlugin from 'html-webpack-plugin';
 import MiniCssExtractPlugin from 'mini-css-extract-plugin';
 import RemoveEmptyScriptsPlugin from 'webpack-remove-empty-scripts';
 import { WebpackManifestPlugin } from 'webpack-manifest-plugin';
-import PostCssPipelineWebpackPlugin from 'postcss-pipeline-webpack-plugin';
 import CssMinimizerPlugin from 'css-minimizer-webpack-plugin';
 import TerserPlugin from 'terser-webpack-plugin';
 import CompressionPlugin from 'compression-webpack-plugin';
@@ -23,8 +21,6 @@ import {
   createCacheKey,
   IMA_CONF_FILENAME
 } from './utils';
-import postCssScrambler from './postCssScrambler';
-import { generateEntryPoints } from './postCssScrambler/postCssScramblerUtils';
 
 /**
  * Creates Webpack configuration object based on input ConfigurationContext
@@ -37,17 +33,12 @@ export default async (
   imaConfig: ImaConfig
 ): Promise<Configuration> => {
   const { rootDir, isProduction, isServer, isWatch, isEsVersion, name } = ctx;
+
   const packageJsonPath = path.resolve(rootDir, './package.json');
   const packageJson = packageJsonPath ? require(packageJsonPath) : {};
   const imaEnvironment = resolveEnvironment(rootDir);
   const outputDir = path.join(rootDir, 'build');
-
   const publicPath = ctx?.publicPath ?? imaConfig.publicPath;
-  const scrambleCssEnabled = ctx.scrambleCss ?? imaConfig.scrambleCss;
-  const ampEnabled =
-    (ctx.amp ?? imaConfig?.amp?.enabled) &&
-    imaConfig?.amp?.entry &&
-    imaConfig.amp.entry?.length > 0;
 
   // Clean build directory
   if (ctx?.clean && fs.existsSync(outputDir)) {
@@ -161,6 +152,7 @@ export default async (
   return {
     // TODO Reload browser page after server-restart in dev mode (works when open is enabled)
     // TODO fix hot reload in es5 version (probably needs polyfill) in IE
+    // TODO add proper timing for elapsed time
     name,
     target: isServer ? 'node' : 'web',
     mode: isProduction ? 'production' : 'development',
@@ -177,13 +169,7 @@ export default async (
                 `webpack-hot-middleware/client?name=${name}&path=//localhost:${imaEnvironment.$Server.port}/__webpack_hmr&timeout=2000&reload=true&overlay=true&overlayWarnings=true`,
               path.join(rootDir, 'app/main.js')
             ].filter(Boolean) as string[]
-          }),
-
-      // AMP specific entry points
-      ...(!isServer &&
-        ampEnabled && {
-          ...(await generateEntryPoints(rootDir, imaConfig?.amp?.entry))
-        })
+          })
     },
     output: {
       path: outputDir,
@@ -449,51 +435,6 @@ export default async (
                 }.css`,
               chunkFilename: 'static/css/[name].chunk.css'
             }),
-
-            // This pipeline should run only for main app css file
-            scrambleCssEnabled &&
-              new PostCssPipelineWebpackPlugin({
-                predicate: (name: string) => /static\/css\/app.css$/.test(name),
-                suffix: 'srambled',
-                processor: postcss([
-                  // Run CSS scrambler, this needs to run on generated assets
-                  postCssScrambler({
-                    generateHashTable: true,
-                    uniqueIdentifier: `${packageJson.name}:${packageJson.version}`,
-                    hashTable: path.join(rootDir, 'build/static/hashtable.json')
-                  })
-                ])
-              }),
-
-            // This should run only for amp entry points
-            ampEnabled &&
-              new PostCssPipelineWebpackPlugin({
-                predicate: (name: string) =>
-                  !/static\/css\/app.css$/.test(name) &&
-                  !/srambled.css$/.test(name),
-                suffix: 'srambled',
-                processor: postcss(
-                  [
-                    // Run CSS scrambler on AMP sources, if enabled
-                    ...(scrambleCssEnabled
-                      ? [
-                          postCssScrambler({
-                            generateHashTable: false,
-                            hashTable: path.join(
-                              rootDir,
-                              'build/static/hashtable.json'
-                            )
-                          })
-                        ]
-                      : []),
-
-                    // Custom AMP postCss plugins
-                    ...(imaConfig?.amp?.postCssPlugins?.length
-                      ? imaConfig?.amp?.postCssPlugins
-                      : [])
-                  ].filter(Boolean)
-                )
-              }),
 
             // Handles generation of spa.html public file
             new HtmlWebpackPlugin({

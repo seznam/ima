@@ -47,9 +47,7 @@ export type StartArgs = BaseArgs;
  */
 export interface DevBuildArgs extends BaseArgs {
   verbose?: VerboseOptions;
-  scrambleCss?: boolean;
   publicPath?: string;
-  amp?: boolean;
 }
 
 /**
@@ -101,6 +99,10 @@ export type ImaConfigWebpack = (
   imaConfig: ImaConfig
 ) => Promise<Configuration>;
 
+/**
+ * Interface for ima/cli plugins that can be defined in plugins field in ima.conf.js. These can be used
+ * to extend functionality of default CLI with custom cli arguments and webpack config overrides.
+ */
 export interface ImaCliPlugin {
   /**
    * Plugin name, used mainly for better debugging messages.
@@ -117,6 +119,13 @@ export interface ImaCliPlugin {
    */
   webpack: ImaConfigWebpack;
 }
+
+/**
+ * Factory function, used for external CLI plugins development.
+ */
+export type ImaCliPluginFactory<O = Record<string, unknown>> = (
+  options?: O
+) => ImaCliPlugin;
 
 /**
  * Ima config options. Some of these options can be overridden using Args, which takes precedence.
@@ -148,11 +157,6 @@ export type ImaConfig = {
   >[];
 
   /**
-   * Enables CSS scrambling (for AMP too) [default=process.env.NODE_ENV==='production']
-   */
-  scrambleCss: boolean;
-
-  /**
    * Threshold to inline image resources as base64 automatically [default=8192]
    */
   imageInlineSizeLimit: number;
@@ -161,26 +165,6 @@ export type ImaConfig = {
    * Optional custom webpack aliases
    */
   webpackAliases?: ResolveOptions['alias'];
-
-  /**
-   * Settings related to AMP-specific css files generation
-   */
-  amp?: {
-    /**
-     * Enables AMP css assets generation
-     */
-    enabled?: number;
-
-    /**
-     * AMP styles entry points (array of globs)
-     */
-    entry?: string[];
-
-    /**
-     * Array of custom postcss plugins applied only to AMP entry points
-     */
-    postCssPlugins?: [];
-  };
 };
 
 export type AdditionalDataFn = (content: string) => string;

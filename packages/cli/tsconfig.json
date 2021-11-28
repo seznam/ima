@@ -32,6 +32,6 @@
     "types",
     "webpack",
     "./main.ts",
-    "./types.ts",
+    "./types.ts", "plugins/scramble-css/postCssScrambler",
   ]
 }
