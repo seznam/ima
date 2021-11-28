@@ -2,6 +2,7 @@ import path from 'path';
 import open from 'better-opn';
 import pc from 'picocolors';
 import nodemon from 'nodemon';
+import prettyMs from 'pretty-ms';
 import { CommandBuilder } from 'yargs';
 
 import { DevArgs, HandlerFn } from '../types';
@@ -31,7 +32,9 @@ const dev: HandlerFn<DevArgs> = async args => {
   }
 
   try {
-    info('Parsing webpack configuration file');
+    const startTime = Date.now();
+
+    info('Parsing webpack configuration file...');
     const config = await createWebpackConfig(['client', 'server'], {
       ...args,
       isProduction: false,
@@ -39,17 +42,18 @@ const dev: HandlerFn<DevArgs> = async args => {
     });
 
     info(
-      `Starting webpack compiler ${
+      `Starting webpack compiler${
         args.legacy
-          ? pc.black(pc.bgCyan('in legacy (es5 compatible) mode'))
+          ? pc.black(pc.bgCyan(' in legacy (es5 compatible) mode'))
           : ''
-      }`
+      }...`
     );
 
     const compiler = await watchCompiler(config, args);
+    info(`Total compile time: ${pc.green(prettyMs(Date.now() - startTime))}`);
 
     if (args.forceSPA) {
-      info(`Starting application in ${pc.black(pc.bgCyan('SPA mode'))}`);
+      info(`Starting application in ${pc.black(pc.bgCyan('SPA mode'))}...`);
     }
 
     // Start ima server with nodemon
@@ -70,7 +74,7 @@ const dev: HandlerFn<DevArgs> = async args => {
         );
 
       if (emittedAssets?.length) {
-        info('Rebooting server due to configuration changes');
+        info('Rebooting server due to configuration changes...');
         nodemon.restart();
       }
     });

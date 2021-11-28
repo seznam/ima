@@ -1,4 +1,6 @@
 import { CommandBuilder } from 'yargs';
+import prettyMs from 'pretty-ms';
+import pc from 'picocolors';
 
 import { BuildArgs, HandlerFn } from '../types';
 import { info, handlerFactory, resolveCliPluginArgs } from '../lib/cli';
@@ -14,11 +16,15 @@ import SharedArgs from '../lib/SharedArgs';
  */
 const build: HandlerFn<BuildArgs> = async args => {
   try {
-    info('Parsing webpack configuration file');
+    const startTime = Date.now();
+
+    info('Parsing webpack configuration file...');
     const config = await createWebpackConfig(['client', 'server'], args);
 
-    info('Starting webpack compiler');
+    info('Starting webpack compiler...');
     await runCompiler(config, args);
+
+    info(`Total compile time: ${pc.green(prettyMs(Date.now() - startTime))}`);
   } catch (err) {
     handleError(err);
   }
