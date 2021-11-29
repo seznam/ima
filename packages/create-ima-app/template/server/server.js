@@ -115,48 +115,26 @@ async function runNodeApp() {
   app.set('trust proxy', true);
 
   if (environment.$Env === 'dev') {
-    const pc = require('picocolors');
-    const webpack = require('webpack');
-    const devMiddleware = require('webpack-dev-middleware');
-    const hotMiddleware = require('webpack-hot-middleware');
-    const { createWebpackConfig } = require('@ima/cli');
-
-    const compiler = webpack(await createWebpackConfig(['client']));
-    const isRawVerbose = process.argv.includes('--verbose=raw');
-
-    app
-      .use(
-        devMiddleware(compiler, {
-          index: false,
-          publicPath: '/',
-          ...(!isRawVerbose ? { stats: 'none' } : undefined)
-        })
-      )
-      .use(
-        hotMiddleware(compiler, {
-          ...(!isRawVerbose
-            ? {
-                log: data => {
-                  // eslint-disable-next-line no-console
-                  console.log(`${pc.magenta('hmr:')} ${data}`);
-                }
-              }
-            : undefined),
-          path: '/__webpack_hmr',
-          heartbeat: 10 * 1000
-        })
-      );
+    try {
+      const { createDevServer } = require('@ima/cli');
+      await createDevServer(app);
+    } catch (error) {
+      console.error('Unable to create dev server.');
+      console.error(error);
+    }
   }
 
   app
     .use(helmet())
     .use(compression())
     .use(
-      favicon(path.resolve(path.join(__dirname, 'static/public/favicon.ico')))
+      favicon(
+        path.resolve(path.join(__dirname, '../build/static/public/favicon.ico'))
+      )
     )
     .use(
       environment.$Server.staticFolder,
-      express.static(path.resolve(path.join(__dirname, 'static')))
+      express.static(path.resolve(path.join(__dirname, '../build/static')))
     )
     .use(bodyParser.json()) // for parsing application/json
     .use(bodyParser.urlencoded({ extended: true })) // for parsing application/x-www-form-urlencoded
@@ -176,12 +154,6 @@ async function runNodeApp() {
     .use(errorHandler)
     .use(staticErrorPage)
     .listen(environment.$Server.port, () => {
-      // Inform cli that web server has started
-      if (environment.$Env === 'dev') {
-        const { IMA_CLI_RUN_SERVER_MESSAGE } = require('@ima/cli');
-        process.send(IMA_CLI_RUN_SERVER_MESSAGE);
-      }
-
       return logger.info(
         'The app is running at http://localhost:' + environment.$Server.port
       );

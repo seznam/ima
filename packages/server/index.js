@@ -17,10 +17,13 @@ global.$IMA = global.$IMA || {};
 
 function appFactory() {
   delete require.cache[
-    path.resolve(applicationFolder, './build/ima/app.server.js')
+    path.resolve(applicationFolder, './build/server/app.server.js')
   ];
 
-  return require(path.resolve(applicationFolder, './build/ima/app.server.js'));
+  return require(path.resolve(
+    applicationFolder,
+    './build/server/app.server.js'
+  ));
 }
 
 // eslint-disable-next-line no-unused-vars

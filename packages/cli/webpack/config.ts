@@ -154,7 +154,7 @@ export default async (
     name,
     target: isServer ? 'node' : 'web',
     mode: isProduction ? 'production' : 'development',
-    devtool: false,
+    devtool: 'cheap-module-source-map',
     bail: isProduction,
     entry: {
       ...(isServer
@@ -175,7 +175,7 @@ export default async (
       assetModuleFilename: 'static/media/[name].[hash][ext]',
       filename: ({ chunk }) => {
         if (chunk?.name === 'server') {
-          return 'ima/app.server.js';
+          return 'server/app.server.js';
         }
 
         return `static/js/${
@@ -395,15 +395,15 @@ export default async (
       ].filter(Boolean) as RuleSetRule[]
     },
     plugins: [
-      // General plugins
-      !isProduction &&
-        new webpack.SourceMapDevToolPlugin({
-          test: /\.(le|c)ss$/
-        }),
-      !isProduction &&
-        new webpack.EvalSourceMapDevToolPlugin({
-          test: /\.[jt]sx?$/
-        }),
+      // // General plugins
+      // !isProduction &&
+      //   new webpack.SourceMapDevToolPlugin({
+      //     test: /\.(le|c)ss$/
+      //   }),
+      // !isProduction &&
+      //   new webpack.EvalSourceMapDevToolPlugin({
+      //     test: /\.[jt]sx?$/
+      //   }),
 
       // Server/client specific plugins are defined below
       ...(isServer
@@ -411,10 +411,7 @@ export default async (
           [
             // Copies essential assets to static directory
             new CopyPlugin({
-              patterns: [
-                { from: 'app/public', to: 'static/public' },
-                'server/server.js'
-              ]
+              patterns: [{ from: 'app/public', to: 'static/public' }]
             })
           ].filter(Boolean)
         : // Client-specific plugins

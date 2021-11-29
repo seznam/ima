@@ -12,7 +12,7 @@ import { CommandBuilder } from 'yargs';
  * @returns {void}
  */
 const start: HandlerFn<StartArgs> = async args => {
-  childProcess.fork(path.join(args.rootDir, 'build/server'), {
+  childProcess.fork(path.join(args.rootDir, 'server/server.js'), {
     stdio: 'inherit'
   });
 };

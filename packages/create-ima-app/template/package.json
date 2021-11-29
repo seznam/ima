@@ -1,7 +1,7 @@
 {
   "name": "@ima/skeleton",
   "version": "0.1.0",
-  "main": "build/server.js",
+  "main": "server/server.js",
   "scripts": {
     "test": "node_modules/.bin/jest --config jest.conf.json",
     "lint": "node_modules/.bin/eslint --fix './{app,server}/**/*.{js,jsx}'",

@@ -58,8 +58,8 @@ const dev: HandlerFn<DevArgs> = async args => {
 
     // Start ima server with nodemon
     nodemon({
-      script: path.join(args.rootDir, 'build/server'),
-      watch: [`!${path.join(args.rootDir, 'build/server')}`],
+      script: path.join(args.rootDir, 'server/server.js'),
+      watch: [`${path.join(args.rootDir, 'server')}`],
       args: [`--verbose=${args.verbose}`],
       cwd: args.rootDir
     });
