@@ -417,7 +417,7 @@ describe('ima.core.page.manager.AbstractPageManager', () => {
       ).toHaveBeenCalled();
     });
 
-    it('should clear partial state if resource are not loaded successfully', async () => {
+    it('should clear partial state if resource is not loaded successfully', async () => {
       spyOn(extensionInstance, 'load').and.returnValue(
         Promise.resolve([Promise.reject()])
       );
