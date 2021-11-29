@@ -416,6 +416,18 @@ describe('ima.core.page.manager.AbstractPageManager', () => {
         pageManager._switchToPageStateManagerAfterLoaded
       ).toHaveBeenCalled();
     });
+
+    it('should clear partial state if resource are not loaded successfully', async () => {
+      spyOn(extensionInstance, 'load').and.returnValue(
+        Promise.resolve([Promise.reject()])
+      );
+      spyOn(extensionInstance, 'clearPartialState').and.stub();
+
+      await pageManager._getLoadedExtensionsState(controllerState);
+      await new Promise(resolve => setTimeout(resolve, 0));
+
+      expect(extensionInstance.clearPartialState).toHaveBeenCalled();
+    });
   });
 
   describe('_activatePageSource method', () => {
