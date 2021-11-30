@@ -202,7 +202,7 @@ async function resolveImaConfig(args: Args): Promise<ImaConfig> {
  */
 async function createWebpackConfig(
   configurations: ConfigurationTypes = ['client', 'server'],
-  args: Args
+  args?: Args
 ): Promise<Configuration[]> {
   // No need to continue without any configuration
   if (!configurations.length) {
