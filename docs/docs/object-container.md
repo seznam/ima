@@ -41,6 +41,8 @@ export let init = (ns, oc, config) => {
 }
 ```
 
+OC handles *instances* of registered dependencies. When registering a class, be aware that its static methods and properties won't be available through OC.
+
 Below is list of methods that the OC provides to register your dependencies.
 
 > **Note:** Every method returns the OC itself so you can chain them together.
