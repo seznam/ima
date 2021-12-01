@@ -1,5 +1,4 @@
 import { SourceMapConsumer, BasicSourceMapConsumer } from 'source-map';
-import fetch from 'node-fetch';
 import SourceMap from './SourceMap';
 
 function extractSourceMapUrl(
@@ -58,8 +57,13 @@ async function getSourceMap(
     );
   } else {
     const index = fileUri.lastIndexOf('/');
-    const url = fileUri.substring(0, index + 1) + sm;
-    const obj = await fetch(url).then(res => res.json());
+    const fileName = fileUri.substring(0, index + 1) + sm;
+    console.log(fileName);
+    const obj = await fetch(
+      `http://localhost:3001/__get-internal-source?fileName=${encodeURIComponent(
+        fileName
+      )}`
+    ).then(res => res.json());
 
     // TODO
     return new SourceMap(

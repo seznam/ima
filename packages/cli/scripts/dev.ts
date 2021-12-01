@@ -44,7 +44,7 @@ const dev: HandlerFn<DevArgs> = async args => {
     info(
       `Starting webpack compiler${
         args.legacy
-          ? pc.black(pc.bgCyan(' in legacy (es5 compatible) mode'))
+          ? ` ${pc.black(pc.bgCyan('in legacy (es5 compatible) mode'))}`
           : ''
       }...`
     );

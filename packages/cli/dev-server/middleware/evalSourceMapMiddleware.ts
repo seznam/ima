@@ -1,3 +1,4 @@
+import fs from 'fs';
 import { Request, Response, NextFunction } from 'express';
 import { Compilation, sources } from 'webpack';
 
@@ -24,34 +25,45 @@ function getSourceByModuleId(
 function evalSourceMapMiddleware() {
   return (req: Request, res: Response, next: NextFunction) => {
     if (req.url.startsWith('/__get-internal-source')) {
-      const fileName = req.query.fileName;
-      const compilation =
-        res?.locals?.webpack?.devMiddleware?.stats?.stats[0]?.compilation;
+      const fileName = req.query.fileName?.toString();
 
-      if (!fileName || !compilation) {
-        // TODO really next? what happens when file is invalid
-        return next();
+      /**
+       * Parse webpack internal modules (HMR)
+       */
+      if (fileName?.startsWith('webpack-internal://')) {
+        const compilation =
+          res?.locals?.webpack?.devMiddleware?.stats?.stats[0]?.compilation;
+
+        if (!fileName || !compilation) {
+          // TODO really next? what happens when file is invalid
+          return next();
+        }
+
+        const moduleId = fileName
+          .toString()
+          .match(/webpack-internal:\/\/\/(.+)/)?.[1];
+
+        if (!moduleId) {
+          return next();
+        }
+
+        const source = getSourceByModuleId(compilation, moduleId);
+
+        if (!source) {
+          return next();
+        }
+
+        const sourceMapURL = `//# sourceMappingURL=${base64SourceMap(source)}`;
+        const sourceURL = `//# sourceURL=webpack-internal:///${moduleId}`;
+        res.end(`${source.source()}\n${sourceMapURL}\n${sourceURL}`);
+      } else if (fileName && fs.existsSync(fileName)) {
+        /**
+         * Parse other files
+         */
+        res.end(fs.readFileSync(fileName, 'utf-8'));
       }
-
-      const moduleId = fileName
-        .toString()
-        .match(/webpack-internal:\/\/\/(.+)/)?.[1];
-
-      if (!moduleId) {
-        return next();
-      }
-
-      const source = getSourceByModuleId(compilation, moduleId);
-
-      if (!source) {
-        return next();
-      }
-
-      const sourceMapURL = `//# sourceMappingURL=${base64SourceMap(source)}`;
-      const sourceURL = `//# sourceURL=webpack-internal:///${module.id}`;
-      res.end(`${source.source()}\n${sourceMapURL}\n${sourceURL}`);
     } else {
-      return next();
+      next();
     }
   };
 }
