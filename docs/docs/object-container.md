@@ -4,7 +4,7 @@ title: "Docs - Object container"
 ---
 
 The **Object Container (OC)** is an enhanced dependency injector with support 
-for aliases and constants. It is sophisticated and registers everything it comes across but only if it actually matters. For example it registers only **Controllers** and **Views** that you use in `app/config/routes.js`. 
+for aliases and constants. It is sophisticated and registers everything it comes across but only if it actually matters. For example it registers only **Controllers** and **Views** that you use in `app/config/routes.js`, or [all classes with declared dependencies](https://imajs.io/docs/plugin-interface#automatic-registration-with-object-container) exported by plugins. 
 
 By registering controllers and views the OC can simply follow your dependency tree and register everything you might possibly need. Below is a diagram of simple dependency tree.
 
