@@ -22,6 +22,7 @@ async function createDevServer(app: Express) {
       process.send?.(IMA_CLI_RUN_SERVER_MESSAGE);
     });
   };
+  path.resolve(path.join(__dirname, '../../../../'));
 
   // Define dev middlewares
   app
@@ -49,9 +50,9 @@ async function createDevServer(app: Express) {
     )
     .use(evalSourceMapMiddleware())
     .use(
-      '/__dev-static',
+      '/__error-overlay-static',
       express.static(
-        path.resolve(path.join(__dirname, '../../error-overlay/build/'))
+        path.resolve(path.join(__dirname, '../../error-overlay/dist/'))
       )
     );
   // .use(async (req, res, next) => {

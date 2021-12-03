@@ -1,4 +1,5 @@
 import fs from 'fs';
+import path from 'path';
 import { Request, Response, NextFunction } from 'express';
 import { Compilation, sources } from 'webpack';
 
@@ -25,21 +26,21 @@ function getSourceByModuleId(
 function evalSourceMapMiddleware() {
   return (req: Request, res: Response, next: NextFunction) => {
     if (req.url.startsWith('/__get-internal-source')) {
-      const fileName = req.query.fileName?.toString();
+      let fileUri = req.query.fileName?.toString().replace('webpack://', '');
 
       /**
        * Parse webpack internal modules (HMR)
        */
-      if (fileName?.startsWith('webpack-internal://')) {
+      if (fileUri?.startsWith('webpack-internal:///')) {
         const compilation =
           res?.locals?.webpack?.devMiddleware?.stats?.stats[0]?.compilation;
 
-        if (!fileName || !compilation) {
+        if (!fileUri || !compilation) {
           // TODO really next? what happens when file is invalid
           return next();
         }
 
-        const moduleId = fileName
+        const moduleId = fileUri
           .toString()
           .match(/webpack-internal:\/\/\/(.+)/)?.[1];
 
@@ -55,16 +56,29 @@ function evalSourceMapMiddleware() {
 
         const sourceMapURL = `//# sourceMappingURL=${base64SourceMap(source)}`;
         const sourceURL = `//# sourceURL=webpack-internal:///${moduleId}`;
-        res.end(`${source.source()}\n${sourceMapURL}\n${sourceURL}`);
-      } else if (fileName && fs.existsSync(fileName)) {
-        /**
-         * Parse other files
-         */
-        res.end(fs.readFileSync(fileName, 'utf-8'));
+        return res.end(`${source.source()}\n${sourceMapURL}\n${sourceURL}`);
+      } else {
+        // Handle files with absolute/relative urls
+        if (!fileUri) {
+          // TODO error?
+          return next();
+        }
+
+        fileUri = path.isAbsolute(fileUri)
+          ? fileUri
+          : path.resolve('../', fileUri);
+
+        if (!fs.existsSync(fileUri)) {
+          return next();
+        }
+
+        // TODO async?
+        const fileSource = fs.readFileSync(fileUri, 'utf-8');
+        return res.end(fileSource);
       }
-    } else {
-      next();
     }
+
+    return next();
   };
 }
 

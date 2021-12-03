@@ -1,6 +1,11 @@
 import { SourceMapConsumer, BasicSourceMapConsumer } from 'source-map';
 import SourceMap from './SourceMap';
 
+// @ts-ignore
+SourceMapConsumer.initialize({
+  'lib/mappings.wasm': 'https://unpkg.com/source-map@0.7.3/lib/mappings.wasm'
+});
+
 function extractSourceMapUrl(
   fileUri: string,
   fileContents: string
@@ -35,7 +40,6 @@ async function getSourceMap(
   fileContents: string
 ): Promise<SourceMap> {
   let sm = await extractSourceMapUrl(fileUri, fileContents);
-  console.log(sm);
 
   if (sm.indexOf('data:') === 0) {
     const base64 = /^data:application\/json;([\w=:"-]+;)*base64,/;
@@ -58,11 +62,13 @@ async function getSourceMap(
   } else {
     const index = fileUri.lastIndexOf('/');
     const fileName = fileUri.substring(0, index + 1) + sm;
-    console.log(fileName);
     const obj = await fetch(
-      `http://localhost:3001/__get-internal-source?fileName=${encodeURIComponent(
-        fileName
-      )}`
+      `/__get-internal-source?fileName=${encodeURIComponent(fileName)}`,
+      {
+        headers: {
+          'Content-Type': 'application/json'
+        }
+      }
     ).then(res => res.json());
 
     // TODO

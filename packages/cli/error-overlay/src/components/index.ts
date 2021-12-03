@@ -1,2 +1,2 @@
 export * from './header/Header';
-export * from './codeBlock/CodeBlock';
+export * from './stackFrame/StackFrame';
