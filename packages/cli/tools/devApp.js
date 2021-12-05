@@ -168,7 +168,7 @@ function main() {
 
   // Start watchers to sync src and node_modules from packages
   // @ima/cli
-  createWatcher('cli', cliDir, '/**/*.(js|cjs|mjs|json|ejs)', destCli);
+  createWatcher('cli', cliDir, '/**/*.(js|cjs|mjs|json|ejs|map)', destCli);
 
   // Spawn ts compiler in watch mode
   child.spawn('npm', ['run', 'dev'], {
@@ -177,7 +177,7 @@ function main() {
   });
 
   // @ima/core
-  createWatcher('core', coreDir, '/**/*.(js|cjs|mjs|json|ejs)', destCore);
+  createWatcher('core', coreDir, '/**/*.(js|cjs|mjs|json|ejs|map)', destCore);
 
   // Spawn rollup in watch mode
   child.spawn('npm', ['run', 'build', '--', '--watch'], {
@@ -186,7 +186,12 @@ function main() {
   });
 
   // @ima/server
-  createWatcher('server', serverDir, '/**/*.(js|cjs|mjs|json|ejs)', destServer);
+  createWatcher(
+    'server',
+    serverDir,
+    '/**/*.(js|cjs|mjs|json|ejs|map)',
+    destServer
+  );
 }
 
 main();

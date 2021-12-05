@@ -37,6 +37,9 @@ module.exports = {
     fallback: {
       fs: false,
       path: false
+    },
+    alias: {
+      '#': path.resolve(rootDir, './src/')
     }
   },
   plugins: [

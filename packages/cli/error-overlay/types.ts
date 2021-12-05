@@ -11,13 +11,11 @@ declare global {
 export interface StackFrameObj {
   columnNumber: number;
   content: string;
-  errLine: number;
   fileName: string;
   functionName: string;
   id: string;
   lineNumber: number;
   methodName: string;
-  native: boolean;
   startLine: number;
   typeName: string;
 }

@@ -1,24 +1,22 @@
 import { FunctionComponent } from 'react';
-import { StackFrame as StackFrameLib } from '../../lib/StackFrame';
+import { StackFrame } from '#/entities';
 
-type StackFrameProps = {
-  frame: StackFrameLib;
+type FrameProps = {
+  frame: StackFrame;
 };
 
-// FIXME rename
-export const StackFrame: FunctionComponent<StackFrameProps> = ({ frame }) => {
+export const Frame: FunctionComponent<FrameProps> = ({ frame }) => {
   return (
     <div className="bg-gray-200 rounded-md mb-4">
       <header className="border-b border-gray-300 p-3 text-sm">
         <div className="font-700">{frame.functionName}</div>
         <div className="text-gray-600">
-          {frame.getPrettyFileUri()} {frame.originalLineNumber}:
-          {frame.originalColumnNumber}
+          {frame.getPrettyOriginalFileUri()}:{frame.originalLineNumber}
         </div>
       </header>
       <div className="p-3 text-xs font-mono overflow-y-auto">
         <pre>
-          {frame.originalSourceFragment?.lines.map(line => (
+          {frame.originalSourceFragment?.map(line => (
             <div
               key={line.line}
               className={`flex ${line.highlight ? 'bg-red-200' : ''}`}>

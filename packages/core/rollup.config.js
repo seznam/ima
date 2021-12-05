@@ -4,7 +4,7 @@ import jscc from 'rollup-plugin-jscc';
 
 const { vendors } = require('./build');
 
-function generateConfig(environemnt) {
+function generateConfig(environment) {
   return {
     external: vendors.common,
     input: 'src/main.js',
@@ -13,14 +13,16 @@ function generateConfig(environemnt) {
     },
     output: [
       {
-        file: `./dist/ima.${environemnt}.cjs.js`,
+        file: `./dist/ima.${environment}.cjs.js`,
         format: 'cjs',
-        exports: 'named'
+        exports: 'named',
+        sourcemap: true
       },
       {
-        file: `./dist/ima.${environemnt}.esm.js`,
+        file: `./dist/ima.${environment}.esm.js`,
         format: 'esm',
-        exports: 'named'
+        exports: 'named',
+        sourcemap: true
       }
     ],
     plugins: [
@@ -35,7 +37,7 @@ function generateConfig(environemnt) {
         delimiters: ['', '']
       }),
       jscc({
-        values: { _SERVER: environemnt === 'server' }
+        values: { _SERVER: environment === 'server' }
       })
     ]
   };
