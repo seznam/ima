@@ -12,7 +12,7 @@ interface SourceStorageEntry {
  * which simplifies the usage and management of fetching file sources manually.
  */
 class SourceStorage {
-  private sourceStorage = new Map<string, Promise<SourceStorageEntry | null>>();
+  private _sourceStorage = new Map<string, Promise<SourceStorageEntry | null>>();
 
   /**
    * Fetch file contents and it's source map. This function aggregates multiple requests
@@ -28,8 +28,8 @@ class SourceStorage {
     fileUri: string,
     hasSourceMap = true
   ): Promise<SourceStorageEntry | null> {
-    if (!this.sourceStorage.has(fileUri)) {
-      this.sourceStorage.set(
+    if (!this._sourceStorage.has(fileUri)) {
+      this._sourceStorage.set(
         fileUri,
         this._fetchFileContents(fileUri).then(async fileContents => {
           if (!fileContents) {
@@ -46,7 +46,7 @@ class SourceStorage {
       );
     }
 
-    return this.sourceStorage.get(fileUri) ?? null;
+    return this._sourceStorage.get(fileUri) ?? null;
   }
 
   /**

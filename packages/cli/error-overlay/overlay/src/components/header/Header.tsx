@@ -2,18 +2,13 @@ import { FunctionComponent } from 'react';
 import { Button } from '#/components';
 import { useFramesStore } from '#/stores/framesStore';
 
-type HeaderProps = {
-  name: string;
-  message: string;
-};
-
-const Header: FunctionComponent<HeaderProps> = ({ name, message }) => {
+const Header: FunctionComponent = () => {
   const { state, dispatch } = useFramesStore();
 
   return (
     <div className="flex flex-row justify-between items-center my-3">
       <h1 className="font-mono text-2xl tracking-tighter text-red-500">
-        <span className="font-semibold">{name}:</span> {message}
+        <span className="font-semibold">{state.name}:</span> {state.message}
       </h1>
       <Button
         onClick={() =>
@@ -21,7 +16,7 @@ const Header: FunctionComponent<HeaderProps> = ({ name, message }) => {
             type: state.showOriginal ? 'viewCompiled' : 'viewOriginal'
           })
         }>
-        {state.showOriginal ? <>View compiled</> : <>View original</>}
+        View {state.showOriginal ? 'compiled' : 'original'}
       </Button>
     </div>
   );

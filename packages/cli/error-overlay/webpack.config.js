@@ -1,51 +1,78 @@
 /* eslint-disable @typescript-eslint/no-var-requires */
-const HtmlWebpackPlugin = require('html-webpack-plugin');
 const path = require('path');
+const HtmlWebpackPlugin = require('html-webpack-plugin');
+const { merge } = require('webpack-merge');
 
 const rootDir = path.resolve(__dirname);
+const overlayRootDir = path.resolve(__dirname, './overlay');
+const clientRootDir = path.resolve(__dirname, './client');
 
-module.exports = {
-  entry: './index.tsx',
+const baseConfig = {
   output: {
     path: path.join(rootDir, './dist'),
-    filename: 'bundle.js'
+    filename: '[name].js'
   },
-  devtool: 'eval-source-map',
-  devServer: {
-    static: {
-      directory: path.join(rootDir, 'public')
-    },
-    compress: true,
-    hot: true,
-    port: 4000
-  },
-  module: {
-    rules: [
-      {
-        test: /\.tsx?$/,
-        use: 'ts-loader',
-        exclude: /node_modules/
-      },
-      {
-        test: /\.css$/i,
-        use: ['style-loader', 'css-loader', 'postcss-loader']
-      }
-    ]
-  },
+  devtool: 'eval-cheap-source-map',
   resolve: {
-    extensions: ['.tsx', '.ts', '.js', '.jsx'],
-    fallback: {
-      fs: false,
-      path: false
-    },
-    alias: {
-      '#': path.resolve(rootDir, './src/')
-    }
-  },
-  plugins: [
-    new HtmlWebpackPlugin({
-      inject: 'body',
-      template: path.join(rootDir, './public/index.html')
-    })
-  ]
+    extensions: ['.tsx', '.ts', '.js', '.jsx']
+  }
 };
+
+module.exports = [
+  merge(baseConfig, {
+    entry: { overlay: './overlay/index.tsx' },
+    module: {
+      rules: [
+        {
+          test: /\.tsx?$/,
+          use: 'ts-loader',
+          exclude: /node_modules/
+        },
+        {
+          test: /\.css$/i,
+          use: ['style-loader', 'css-loader', 'postcss-loader']
+        }
+      ]
+    },
+    resolve: {
+      fallback: {
+        fs: false,
+        path: false
+      },
+      alias: {
+        '#': path.resolve(overlayRootDir, './src/')
+      }
+    },
+    plugins: [
+      new HtmlWebpackPlugin({
+        inject: 'body',
+        template: path.join(overlayRootDir, './public/index.html')
+      })
+    ]
+  }),
+  merge(baseConfig, {
+    entry: { client: './client/index.ts' },
+    target: 'node',
+    output: {
+      library: { type: 'commonjs2' }
+    },
+    module: {
+      rules: [
+        {
+          test: /\.tsx?$/,
+          use: 'ts-loader',
+          exclude: /node_modules/
+        },
+        {
+          test: /\.html$/i,
+          use: 'raw-loader'
+        }
+      ]
+    },
+    resolve: {
+      alias: {
+        '#': path.resolve(clientRootDir, './src/')
+      }
+    }
+  })
+];

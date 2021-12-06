@@ -2,24 +2,30 @@ import { FramesAction } from '#/actions';
 import { FrameWrapper } from 'types';
 
 interface FramesState {
+  name: string;
+  message: string;
   collapsedFramesCount: number;
   showOriginal: boolean;
   frames: FrameWrapper[];
 }
 
 const framesInitialState: FramesState = {
+  name: '',
+  message: '',
   collapsedFramesCount: 2,
   showOriginal: true,
   frames: []
 };
 
-function getCollapsedFrames(frames: FrameWrapper[]): { frames: FrameWrapper[], collapsedFramesCount: number; } {
+function getCollapsedFrames(
+  frames: FrameWrapper[]
+): { frames: FrameWrapper[]; collapsedFramesCount: number } {
   let collapsedFramesCount = 0;
 
   frames.forEach((frame, index) => {
     frame.isVisible = !frame.frame.isCollapsible() || index === 0;
     collapsedFramesCount += frame.isVisible ? 0 : 1;
-  })
+  });
 
   return {
     frames,
@@ -29,6 +35,16 @@ function getCollapsedFrames(frames: FrameWrapper[]): { frames: FrameWrapper[], c
 
 function framesReducer(state: FramesState, action: FramesAction): FramesState {
   switch (action.type) {
+    case 'setError': {
+      const { name, message } = action.payload;
+
+      return {
+        ...state,
+        name,
+        message
+      };
+    }
+
     case 'setFrames': {
       const wrappedFrames = action.payload.frames.map(frame => ({
         frame,
@@ -36,7 +52,9 @@ function framesReducer(state: FramesState, action: FramesAction): FramesState {
         isVisible: true
       }));
 
-      let { frames, collapsedFramesCount } = getCollapsedFrames(wrappedFrames);
+      const { frames, collapsedFramesCount } = getCollapsedFrames(
+        wrappedFrames
+      );
 
       return {
         ...state,
@@ -87,14 +105,13 @@ function framesReducer(state: FramesState, action: FramesAction): FramesState {
     }
 
     case 'collapseFrames': {
-      let { frames, collapsedFramesCount } = getCollapsedFrames(state.frames);
+      const { frames, collapsedFramesCount } = getCollapsedFrames(state.frames);
       return {
         ...state,
         frames,
         collapsedFramesCount
       };
     }
-
 
     default:
       return state;

@@ -1,34 +1,18 @@
-import { StackFrame } from '#/entities/StackFrame';
-
 declare global {
-  interface Window {
-    __ima_server_error: {
-      name: string;
-      message: string;
-      callStack: StackFrameObj[];
-    };
+  interface WindowEventMap {
+    [OverlayEventName.Ready]: CustomEvent;
+    [ClientEventName.RuntimeErrors]: CustomEvent<{ error: Error }>;
+    [ClientEventName.CompileErrors]: CustomEvent<{ error: string }>;
+    [ClientEventName.ClearErrors]: CustomEvent;
   }
 }
 
-export interface StackFrameObj {
-  columnNumber: number;
-  content: string;
-  fileName: string;
-  functionName: string;
-  id: string;
-  lineNumber: number;
-  methodName: string;
-  startLine: number;
-  typeName: string;
+export enum OverlayEventName {
+  Ready = 'ima.error.overlay.overlay:ready'
 }
 
-export type IconProps = {
-  className?: string;
-  style?: Record<string, unknown>;
-};
-
-export type FrameWrapper = {
-  frame: StackFrame;
-  isVisible: boolean;
-  showOriginal: boolean;
-};
+export enum ClientEventName {
+  RuntimeErrors = 'ima.error.overlay.client:runtime.error',
+  CompileErrors = 'ima.error.overlay.client:compile.error',
+  ClearErrors = 'ima.error.overlay.client:clear.errors'
+}

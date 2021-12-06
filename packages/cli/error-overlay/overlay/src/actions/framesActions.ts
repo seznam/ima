@@ -1,7 +1,10 @@
 import { StackFrame } from '#/entities';
-import { FrameWrapper } from 'types';
 
 type FramesAction =
+  | {
+      type: 'setError';
+      payload: { name: string; message: string };
+    }
   | {
       type: 'setFrames';
       payload: { frames: StackFrame[] };

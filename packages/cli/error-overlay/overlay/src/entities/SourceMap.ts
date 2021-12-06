@@ -9,10 +9,10 @@ import {
  * Wrapper around {@link https://www.npmjs.com/package/source-map} with unified interface.
  */
 class SourceMap {
-  private sourceMap: BasicSourceMapConsumer;
+  private _sourceMap: BasicSourceMapConsumer;
 
   constructor(sourceMap: BasicSourceMapConsumer) {
-    this.sourceMap = sourceMap;
+    this._sourceMap = sourceMap;
   }
 
   /**
@@ -26,7 +26,7 @@ class SourceMap {
     line: number,
     column: number
   ): Partial<NullableMappedPosition> {
-    return this.sourceMap.originalPositionFor({
+    return this._sourceMap.originalPositionFor({
       line,
       column
     });
@@ -45,7 +45,7 @@ class SourceMap {
     line: number,
     column: number
   ): NullablePosition {
-    return this.sourceMap.generatedPositionFor({
+    return this._sourceMap.generatedPositionFor({
       source,
       line,
       column
@@ -59,7 +59,7 @@ class SourceMap {
    * @returns {string | null}
    */
   getSource(sourceName: string): string | null {
-    return this.sourceMap.sourceContentFor(sourceName);
+    return this._sourceMap.sourceContentFor(sourceName);
   }
 
   /**
@@ -68,7 +68,7 @@ class SourceMap {
    * @returns {string[]}
    */
   getSources(): string[] {
-    return this.sourceMap.sources;
+    return this._sourceMap.sources;
   }
 }
 

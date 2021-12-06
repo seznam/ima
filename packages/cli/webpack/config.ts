@@ -452,6 +452,7 @@ export default async (
             isWatch &&
               new ReactRefreshWebpackPlugin({
                 overlay: {
+                  module: '@ima/cli/error-overlay/dist/client.js',
                   sockIntegration: 'whm'
                 }
               })

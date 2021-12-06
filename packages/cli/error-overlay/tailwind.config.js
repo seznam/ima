@@ -1,11 +1,11 @@
 module.exports = {
   mode: 'jit',
   purge: [
-    './src/**/*.html',
-    './src/**/*.js',
-    './src/**/*.jsx',
-    './src/**/*.ts',
-    './src/**/*.tsx'
+    './overlay/src/**/*.html',
+    './overlay/src/**/*.js',
+    './overlay/src/**/*.jsx',
+    './overlay/src/**/*.ts',
+    './overlay/src/**/*.tsx'
   ],
   darkMode: false, // or 'media' or 'class'
   variants: {

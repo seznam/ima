@@ -1,0 +1,26 @@
+{
+  "compilerOptions": {
+    "allowJs": true,
+    "baseUrl": "./",
+    "esModuleInterop": true,
+    "jsx": "react-jsx",
+    "lib": [
+      "DOM",
+      "DOM.Iterable",
+      "ESNext"
+    ],
+    "module": "CommonJS",
+    "moduleResolution": "node",
+    "typeRoots": ["../types", "../node_modules/@types"],
+    "noImplicitAny": true,
+    "outDir": "./dist",
+    "paths": {
+      "#/*": [
+        "./src/*"
+      ]
+    },
+    "strict": true,
+    "target": "ES2021"
+  },
+  "include": [ "../types", "src", "types.ts"]
+}
