@@ -18,6 +18,7 @@ async function mapStackFramesToOriginal(
       // Get file source
       const fileSource = await sourceStorage.get(frame.fileName);
 
+
       // Create parsed stack frame
       const stackFrame = new StackFrame({
         id: frame.id,

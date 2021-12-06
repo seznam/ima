@@ -1,46 +1,59 @@
 import 'tailwindcss/tailwind.css';
-import { FunctionComponent, useEffect, useState } from 'react';
-import { ChevronIcon, Frame, Header } from '#/components';
+import { Fragment, FunctionComponent, useEffect } from 'react';
+import { Button, ChevronIcon, Frame, Header } from '#/components';
 import { mapStackFramesToOriginal } from '#/utils';
-import { StackFrame } from '#/entities';
+import { useFramesStore } from './stores/framesStore';
 
 /**
  * TODO
- *  - Handle cases with different kinds of source maps (don't parse and return original)
  *  - Create bundle with source-map wasm included
+ *  - Save viewCompiled toggle to cookies
  *  - make context lines editable
  *  - support for build errors
+ *  - performance optimizations
  */
-export const App: FunctionComponent = () => {
+const App: FunctionComponent = () => {
+  const { state, dispatch } = useFramesStore();
   const { name, message, callStack } = window.__ima_server_error;
-  const [stackFrames, setStackFrames] = useState<StackFrame[]>([]);
 
   useEffect(() => {
     const initStackFrames = async () => {
-      setStackFrames(await mapStackFramesToOriginal(callStack));
+      dispatch({
+        type: 'setFrames',
+        payload: {
+          frames: await mapStackFramesToOriginal(callStack)
+        }
+      });
     };
 
     initStackFrames();
   }, []);
 
   return (
-    <div className="container mx-auto py-4">
+    <div className="container p-4 mx-auto">
       <Header name={name} message={message} />
-      {stackFrames?.map((stackFrame, i) => (
-        <>
-          <Frame key={stackFrame.id} frame={stackFrame} />
-          {i === 1 && (
-            <div className="mt-8 mb-6 flex items-center justify-center">
-              <button className="p-2 flex items-center rounded transition-all duration-100 ease-in-out font-mono text-xs border-2 border-gray-600 text-gray-600 hover:border-blue-500 hover:text-blue-500 active:scale-95 active:text-blue-600">
-                <ChevronIcon className="w-4 h-4 mr-1" />
+      {state.frames?.map(({ frame, isVisible, showOriginal }, i) => (
+        <Fragment key={frame.id}>
+          <Frame
+            frame={frame}
+            isVisible={isVisible}
+            showOriginal={showOriginal}
+          />
+          {i === 1 && state.collapsedFramesCount !== 0 && (
+            <div
+              className="flex justify-center items-center mt-8 mb-6">
+              <Button bordered onClick={() => dispatch({ type: 'showFrames' })}>
+                <ChevronIcon className="mr-1 w-4 h-4" />
                 <span>
-                  Show <span className="font-black">7</span> collapsed frames
+                  Show {state.collapsedFramesCount} collapsed frames
                 </span>
-              </button>
+              </Button>
             </div>
           )}
-        </>
+        </Fragment>
       ))}
     </div>
   );
 };
+
+export { App };

@@ -1,3 +1,5 @@
+import { StackFrame } from '#/entities/StackFrame';
+
 declare global {
   interface Window {
     __ima_server_error: {
@@ -20,6 +22,13 @@ export interface StackFrameObj {
   typeName: string;
 }
 
-export interface IconProps {
+export type IconProps = {
   className?: string;
-}
+  style?: Record<string, unknown>;
+};
+
+export type FrameWrapper = {
+  frame: StackFrame;
+  isVisible: boolean;
+  showOriginal: boolean;
+};

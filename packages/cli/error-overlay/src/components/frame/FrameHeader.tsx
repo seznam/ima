@@ -1,30 +1,51 @@
 import { FunctionComponent } from 'react';
-import { EditIcon, OpenEyeIcon } from '#/components';
-import { FrameHeaderButton } from './FrameHeaderButton';
+import { Button, ClosedEyeIcon, EditIcon, OpenEyeIcon } from '#/components';
+import { useFramesStore } from '#/stores/framesStore';
+import { StackFrame } from '#/entities/StackFrame';
 
-interface FrameHeaderProps {
-  title: string;
-  subtitle: string;
-}
+type FrameHeaderProps = {
+  showOriginal: boolean;
+  frame: StackFrame;
+};
 
-export const FrameHeader: FunctionComponent<FrameHeaderProps> = ({
-  title,
-  subtitle
+const FrameHeader: FunctionComponent<FrameHeaderProps> = ({
+  showOriginal,
+  frame
 }) => {
+  const { dispatch } = useFramesStore();
+  const fileUri = showOriginal
+    ? `${frame.getPrettyOriginalFileUri()}:${frame.originalLineNumber}`
+    : `${frame.fileName}:${frame.lineNumber}:${frame.columnNumber}`;
+
   return (
-    <header className="flex flex-column justify-between items-center flex-grow p-3">
+    <header className="flex flex-grow justify-between items-center p-3">
       <div>
-        <h3 className="font-semibold font-mono leading-6 text-sm">{title}</h3>
-        <h4 className="text-gray-600 font-mono text-xs">{subtitle}</h4>
+        <h3 className="font-mono text-sm font-semibold leading-6">
+          {frame.getFunctionName()}
+        </h3>
+        <h4 className="font-mono text-xs text-gray-600">{fileUri}</h4>
       </div>
-      <div>
-        <FrameHeaderButton>
-          <OpenEyeIcon className="w-5 h-5" />
-        </FrameHeaderButton>
-        <FrameHeaderButton>
+      <div className="flex opacity-100 group-hover:opacity-100 transition-all duration-100 ease-in-out">
+        <Button
+          onClick={() =>
+            dispatch({
+              type: showOriginal ? 'viewCompiled' : 'viewOriginal',
+              payload: { id: frame.id }
+            })
+          }>
+          {showOriginal ? (
+            <OpenEyeIcon className="w-5 h-5 text-green-500" />
+          ) : (
+            <ClosedEyeIcon className="w-5 h-5 text-red-500" />
+          )}
+        </Button>
+
+        <Button>
           <EditIcon className="w-5 h-5" />
-        </FrameHeaderButton>
+        </Button>
       </div>
     </header>
   );
 };
+
+export { FrameHeader };

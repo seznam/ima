@@ -1,7 +1,7 @@
 import { SourceMap } from '#/entities';
 import { getSourceMap } from '#/utils';
 
-export interface SourceStorageEntry {
+interface SourceStorageEntry {
   fileContents: string | null;
   sourceMap: SourceMap | null;
 }
@@ -107,4 +107,4 @@ class SourceStorage {
 }
 
 const sourceStorage = new SourceStorage();
-export { sourceStorage };
+export { sourceStorage, SourceStorageEntry };

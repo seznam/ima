@@ -1,7 +1,7 @@
 import { FunctionComponent } from 'react';
 import { IconProps } from 'types';
 
-export const ChevronIcon: FunctionComponent<IconProps> = props => {
+const ChevronIcon: FunctionComponent<IconProps> = props => {
   return (
     <svg
       xmlns="http://www.w3.org/2000/svg"
@@ -14,3 +14,5 @@ export const ChevronIcon: FunctionComponent<IconProps> = props => {
     </svg>
   );
 };
+
+export { ChevronIcon };

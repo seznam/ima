@@ -1,7 +1,7 @@
 import { FunctionComponent } from 'react';
 import { IconProps } from 'types';
 
-export const OpenEyeIcon: FunctionComponent<IconProps> = props => {
+const OpenEyeIcon: FunctionComponent<IconProps> = props => {
   return (
     <svg
       xmlns="http://www.w3.org/2000/svg"
@@ -17,3 +17,5 @@ export const OpenEyeIcon: FunctionComponent<IconProps> = props => {
     </svg>
   );
 };
+
+export { OpenEyeIcon };

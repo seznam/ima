@@ -1,3 +1,4 @@
+export * from './button/Button';
 export * from './header/Header';
 export * from './frame/Frame';
 export * from './icons/chevronIcon';

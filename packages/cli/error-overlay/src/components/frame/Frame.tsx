@@ -1,31 +1,36 @@
 import { FunctionComponent } from 'react';
 import hljs from 'highlight.js/lib/core';
 import hljsJS from 'highlight.js/lib/languages/javascript';
-import { StackFrame } from '#/entities';
 import { ChevronIcon } from '#/components';
 import { FrameHeader } from './FrameHeader';
+import { FrameWrapper } from 'types';
 
 import 'highlight.js/styles/github-dark-dimmed.css';
 
 hljs.registerLanguage('javascript', hljsJS);
 
-interface FrameProps {
-  frame: StackFrame;
-}
+type FrameProps = FrameWrapper;
 
-export const Frame: FunctionComponent<FrameProps> = ({ frame }) => {
+const Frame: FunctionComponent<FrameProps> = ({
+  frame,
+  isVisible,
+  showOriginal
+}) => {
+  if (!isVisible) {
+    return null;
+  }
+
   return (
-    <div className="mb-4">
-      <FrameHeader
-        title={frame.getFunctionName()}
-        subtitle={`${frame.getPrettyOriginalFileUri()}:${
-          frame.originalLineNumber
-        }`}
-      />
+    <div className="group mb-4">
+      <FrameHeader showOriginal={showOriginal} frame={frame} />
 
-      <div className="language-javascript hljs p-3 leading-5 text-xs font-mono bg-gray-100 overflow-y-auto rounded">
+      <div className="overflow-y-auto p-3 font-mono text-xs leading-5 bg-gray-100 rounded language-javascript hljs">
         <pre>
-          {frame.originalSourceFragment?.map(line => (
+          {(
+            (showOriginal
+              ? frame.originalSourceFragment
+              : frame.sourceFragment)
+          )?.map(line => (
             <div
               key={line.line}
               className={`flex items-center ${
@@ -33,10 +38,15 @@ export const Frame: FunctionComponent<FrameProps> = ({ frame }) => {
               }`}>
               {line.highlight && (
                 <span className="text-red-500">
-                  <ChevronIcon className="w-4 h-4" />
+                  <ChevronIcon
+                    className="w-4 h-4"
+                    style={{
+                      marginLeft: '-1px'
+                    }}
+                  />
                 </span>
               )}
-              <span className="border-r pr-2 border-gray-500">
+              <span className="pr-2 border-r border-gray-500">
                 {line.highlight ? line.line : `  ${line.line}`}
               </span>
               <div
@@ -53,3 +63,5 @@ export const Frame: FunctionComponent<FrameProps> = ({ frame }) => {
     </div>
   );
 };
+
+export { Frame };

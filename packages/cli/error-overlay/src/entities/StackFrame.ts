@@ -1,4 +1,4 @@
-export interface SourceFragmentLine {
+interface SourceFragmentLine {
   line: string;
   source: string;
   highlight: boolean;
@@ -116,6 +116,16 @@ class StackFrame {
   }
 
   /**
+   * Returns true for files which can be collapsed in initial report.
+   * These usually includes errors from non-important node_modules.
+   *
+   * @returns {boolean}
+   */
+  isCollapsible(): boolean {
+    return !!this.originalFileName?.includes('node_modules');
+  }
+
+  /**
    * Returns the name of stack frame function.
    *
    * @returns {string} Name of the function (anonymous) if unavailable.
@@ -143,4 +153,4 @@ class StackFrame {
   }
 }
 
-export { StackFrame };
+export { StackFrame, SourceFragmentLine };

@@ -1,3 +1,4 @@
+import { FramesStoreProvider } from '#/stores/framesStore';
 import { render } from 'react-dom';
 import { SourceMapConsumer } from 'source-map';
 import { App } from './src/App';
@@ -9,4 +10,9 @@ SourceMapConsumer.initialize({
   'lib/mappings.wasm': 'https://unpkg.com/source-map@0.7.3/lib/mappings.wasm'
 });
 
-render(<App />, document.getElementById('root'));
+render(
+  <FramesStoreProvider>
+    <App />
+  </FramesStoreProvider>,
+  document.getElementById('root')
+);
