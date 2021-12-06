@@ -19,3 +19,7 @@ export interface StackFrameObj {
   startLine: number;
   typeName: string;
 }
+
+export interface IconProps {
+  className?: string;
+}

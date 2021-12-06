@@ -1,5 +1,5 @@
 export interface SourceFragmentLine {
-  line: number;
+  line: string;
   source: string;
   highlight: boolean;
 }
@@ -53,11 +53,17 @@ class StackFrame {
      */
     for (let i = startLine; i < endLine; i++) {
       fragmentLines.push({
-        line: i + 1,
+        line: (i + 1).toString(),
         source: lines[i],
         highlight: i === line - 1
       });
     }
+
+    // Adjust line paddings
+    const endLineWidth = fragmentLines[fragmentLines.length - 1].line.length;
+    fragmentLines.forEach(fragmentLine => {
+      fragmentLine.line = fragmentLine.line.padStart(endLineWidth, ' ');
+    });
 
     return fragmentLines;
   }
@@ -132,7 +138,7 @@ class StackFrame {
     const indexOfFirstSlash = strippedUri?.indexOf('/');
 
     return indexOfFirstSlash
-      ? `.${strippedUri?.substring(indexOfFirstSlash)}`
+      ? `${strippedUri?.substring(indexOfFirstSlash + 1)}`
       : strippedUri;
   }
 }

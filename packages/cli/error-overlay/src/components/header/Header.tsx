@@ -7,9 +7,10 @@ interface HeaderProps {
 
 export const Header: FunctionComponent<HeaderProps> = ({ name, message }) => {
   return (
-    <div className="mb-4">
-      <h1 className="text-red-500 font-mono font-bold text-2xl">{name}</h1>
-      <h4 className="text-red-500 font-mono text-xl">{message}</h4>
+    <div className="my-3">
+      <h1 className="text-red-500 tracking-tight text-3xl">
+        <span className="font-semibold">{name}:</span> {message}
+      </h1>
     </div>
   );
 };

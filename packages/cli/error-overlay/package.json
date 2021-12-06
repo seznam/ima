@@ -12,12 +12,14 @@
   "author": "Jan Šimeček",
   "license": "MIT",
   "dependencies": {
+    "hljs": "^6.2.3",
     "react": "^17.0.2",
     "react-dom": "^17.0.2",
     "source-map": "^0.7.3",
     "stack-trace": "^1.0.0-pre1"
   },
   "devDependencies": {
+    "@types/highlight.js": "^10.1.0",
     "@types/react": "^17.0.37",
     "@types/react-dom": "^17.0.11",
     "@types/stack-trace": "0.0.29",
