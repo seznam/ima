@@ -462,6 +462,11 @@ export default async (
     // Enable node preset for externals on server
     externalsPresets: {
       node: isServer
+    },
+
+    experiments: {
+      lazyCompilation: true,
+      cacheUnaffected: true
     }
   };
 };

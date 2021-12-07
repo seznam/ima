@@ -55,11 +55,15 @@ function useConnectOverlay() {
     const compileErrorListener = (
       event: WindowEventMap[ClientEventName.CompileErrors]
     ) => {
-      console.log(event.detail.error);
+      console.log('compileErrorListener', event.detail.error);
     };
 
-    const clearErrorsListener = () => {
-      console.log('clearErrorsListener');
+    const clearRuntimeErrorListener = () => {
+      console.log('clearRuntimeErrorListener');
+    };
+
+    const clearCompileErrorListener = () => {
+      console.log('clearCompileErrorListener');
     };
 
     // Register listeners to custom events
@@ -71,7 +75,14 @@ function useConnectOverlay() {
       ClientEventName.CompileErrors,
       compileErrorListener
     );
-    window.addEventListener(ClientEventName.ClearErrors, clearErrorsListener);
+    window.addEventListener(
+      ClientEventName.ClearRuntimeErrors,
+      clearRuntimeErrorListener
+    );
+    window.addEventListener(
+      ClientEventName.ClearCompileErrors,
+      clearCompileErrorListener
+    );
 
     // Dispatch ready event
     window.parent.dispatchEvent(new CustomEvent(OverlayEventName.Ready));
@@ -87,8 +98,12 @@ function useConnectOverlay() {
         compileErrorListener
       );
       window.removeEventListener(
-        ClientEventName.ClearErrors,
-        clearErrorsListener
+        ClientEventName.ClearRuntimeErrors,
+        clearRuntimeErrorListener
+      );
+      window.removeEventListener(
+        ClientEventName.ClearCompileErrors,
+        clearCompileErrorListener
       );
     };
   }, []);

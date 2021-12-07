@@ -18,19 +18,30 @@ function init() {
  * @param {Error} error
  */
 function handleRuntimeError(error: Error): void {
+  if (!error) {
+    return;
+  }
+
   init();
 
-  overlayBridge.sendRuntimeError(error);
-
-  console.log('handleRuntimeError');
+  overlayBridge.runtimeError(error);
+  console.count('handleRuntimeError');
 }
 
 /**
  * Invoked when a module is RE-INIT via "Fast Refresh".
  */
 function clearRuntimeErrors(): void {
-  overlayBridge.clearErrors();
-  console.log('clearRuntimeErrors');
+  overlayBridge.clearRuntimeErrors();
+  console.count('clearRuntimeErrors');
+
+  if (module.hot) {
+    module.hot.addStatusHandler(status => {
+      if (status === 'apply') {
+        window.location.reload();
+      }
+    });
+  }
 }
 
 /**
@@ -40,9 +51,13 @@ function clearRuntimeErrors(): void {
  * @param {string} webpackErrorMessage
  */
 function showCompileError(webpackErrorMessage: string): void {
+  if (!webpackErrorMessage) {
+    return;
+  }
+
   init();
 
-  overlayBridge.sendCompileError(webpackErrorMessage);
+  overlayBridge.compileError(webpackErrorMessage);
   console.log('showCompileError', webpackErrorMessage);
 }
 
@@ -50,8 +65,16 @@ function showCompileError(webpackErrorMessage: string): void {
  * Invoked when a new Webpack compilation is started (i.e. HMR rebuild).
  */
 function clearCompileError(): void {
-  overlayBridge.clearErrors();
-  console.log('clearCompileError');
+  overlayBridge.clearCompileErrors();
+  console.count('clearCompileError');
+
+  if (module.hot) {
+    module.hot.addStatusHandler(status => {
+      if (status === 'apply') {
+        window.location.reload();
+      }
+    });
+  }
 }
 
 export {

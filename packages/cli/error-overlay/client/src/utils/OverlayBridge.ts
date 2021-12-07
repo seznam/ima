@@ -8,11 +8,11 @@ class OverlayBridge {
 
   private _readyHandler(): void {
     this._isReady = true;
-    this._eventsQueue.forEach(customEvent => {
-      this._dispatchEvent(customEvent);
-    });
+    let customEvent;
 
-    this._eventsQueue = [];
+    while ((customEvent = this._eventsQueue.pop())) {
+      this._dispatchEvent(customEvent);
+    }
   }
 
   private _dispatchEvent(customEvent: CustomEvent) {
@@ -32,12 +32,7 @@ class OverlayBridge {
     );
   }
 
-  clearErrors(): void {
-    console.count('clearErrors');
-    this._dispatchEvent(new CustomEvent(ClientEventName.ClearErrors));
-  }
-
-  sendCompileError(error: string): void {
+  compileError(error: string): void {
     console.count('sendCompileError');
     this._dispatchEvent(
       new CustomEvent<{ error: string }>(ClientEventName.CompileErrors, {
@@ -46,13 +41,27 @@ class OverlayBridge {
     );
   }
 
-  sendRuntimeError(error: Error): void {
+  clearCompileErrors(): void {
+    // Send only when ready without using events queue
+    if (this._isReady) {
+      this._dispatchEvent(new CustomEvent(ClientEventName.ClearCompileErrors));
+    }
+  }
+
+  runtimeError(error: Error): void {
     console.count('sendRuntimeError');
     this._dispatchEvent(
       new CustomEvent<{ error: Error }>(ClientEventName.RuntimeErrors, {
         detail: { error }
       })
     );
+  }
+
+  clearRuntimeErrors(): void {
+    // Send only when ready without using events queue
+    if (this._isReady) {
+      this._dispatchEvent(new CustomEvent(ClientEventName.ClearRuntimeErrors));
+    }
   }
 }
 

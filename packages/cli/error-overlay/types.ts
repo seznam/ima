@@ -3,7 +3,8 @@ declare global {
     [OverlayEventName.Ready]: CustomEvent;
     [ClientEventName.RuntimeErrors]: CustomEvent<{ error: Error }>;
     [ClientEventName.CompileErrors]: CustomEvent<{ error: string }>;
-    [ClientEventName.ClearErrors]: CustomEvent;
+    [ClientEventName.ClearRuntimeErrors]: CustomEvent;
+    [ClientEventName.ClearCompileErrors]: CustomEvent;
   }
 }
 
@@ -14,5 +15,6 @@ export enum OverlayEventName {
 export enum ClientEventName {
   RuntimeErrors = 'ima.error.overlay.client:runtime.error',
   CompileErrors = 'ima.error.overlay.client:compile.error',
-  ClearErrors = 'ima.error.overlay.client:clear.errors'
+  ClearRuntimeErrors = 'ima.error.overlay.client:clear.runtime.errors',
+  ClearCompileErrors = 'ima.error.overlay.client:clear.compile.errors'
 }
