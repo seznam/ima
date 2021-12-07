@@ -419,12 +419,16 @@ describe('ima.core.page.manager.AbstractPageManager', () => {
   });
 
   describe('_switchToPageStateManagerAfterLoaded method', () => {
-    it('should switch to state manager and clear partial state if resources are loaded successfully', async () => {
-      let resolver = null;
-      let deferredPromise = new Promise(resolve => {
+    let deferredPromise = null;
+    let resolver = null;
+
+    beforeEach(() => {
+      deferredPromise = new Promise(resolve => {
         resolver = resolve;
       });
+    });
 
+    it('should switch to state manager and clear partial state if resources are loaded successfully', async () => {
       spyOn(extensionInstance, 'switchToStateManager').and.stub();
       spyOn(extensionInstance, 'clearPartialState').and.callFake(() => {
         resolver();
@@ -440,11 +444,6 @@ describe('ima.core.page.manager.AbstractPageManager', () => {
     });
 
     it('should clear partial state if resource is not loaded successfully', async () => {
-      let resolver = null;
-      let deferredPromise = new Promise(resolve => {
-        resolver = resolve;
-      });
-
       spyOn(extensionInstance, 'clearPartialState').and.callFake(() => {
         resolver();
       });
