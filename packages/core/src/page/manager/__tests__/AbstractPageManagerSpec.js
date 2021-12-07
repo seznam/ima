@@ -416,15 +416,43 @@ describe('ima.core.page.manager.AbstractPageManager', () => {
         pageManager._switchToPageStateManagerAfterLoaded
       ).toHaveBeenCalled();
     });
+  });
+
+  describe('_switchToPageStateManagerAfterLoaded method', () => {
+    it('should switch to state manager and clear partial state if resources are loaded successfully', async () => {
+      let resolver = null;
+      let deferredPromise = new Promise(resolve => {
+        resolver = resolve;
+      });
+
+      spyOn(extensionInstance, 'switchToStateManager').and.stub();
+      spyOn(extensionInstance, 'clearPartialState').and.callFake(() => {
+        resolver();
+      });
+
+      pageManager._switchToPageStateManagerAfterLoaded(extensionInstance, {
+        extension: Promise.resolve()
+      });
+      await deferredPromise;
+
+      expect(extensionInstance.switchToStateManager).toHaveBeenCalled();
+      expect(extensionInstance.clearPartialState).toHaveBeenCalled();
+    });
 
     it('should clear partial state if resource is not loaded successfully', async () => {
-      spyOn(extensionInstance, 'load').and.returnValue(
-        Promise.resolve([Promise.reject()])
-      );
-      spyOn(extensionInstance, 'clearPartialState').and.stub();
+      let resolver = null;
+      let deferredPromise = new Promise(resolve => {
+        resolver = resolve;
+      });
 
-      await pageManager._getLoadedExtensionsState(controllerState);
-      await new Promise(resolve => setTimeout(resolve, 0));
+      spyOn(extensionInstance, 'clearPartialState').and.callFake(() => {
+        resolver();
+      });
+
+      pageManager._switchToPageStateManagerAfterLoaded(extensionInstance, {
+        extension: Promise.reject()
+      });
+      await deferredPromise;
 
       expect(extensionInstance.clearPartialState).toHaveBeenCalled();
     });
