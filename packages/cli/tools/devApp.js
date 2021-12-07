@@ -117,6 +117,7 @@ function main() {
   const cliDir = path.resolve(__dirname, '..');
   const coreDir = path.resolve(__dirname, '../../core');
   const serverDir = path.resolve(__dirname, '../../server');
+  const errorOverlayDir = path.resolve(__dirname, '../../error-overlay');
 
   // Init app
   if (!fs.existsSync(destFolder)) {
@@ -132,6 +133,8 @@ function main() {
     shell('npm run build', cliDir);
     shell('npm pack', coreDir);
     shell('npm run build', coreDir);
+    shell('npm pack', errorOverlayDir);
+    shell('npm run build', errorOverlayDir);
     shell('npm pack', serverDir);
 
     const cliPack = path.resolve(
@@ -142,6 +145,12 @@ function main() {
       coreDir,
       `ima-core-${require(path.join(coreDir, 'package.json')).version}.tgz`
     );
+    const errorOverlayPack = path.resolve(
+      errorOverlayDir,
+      `ima-error-overlay-${
+        require(path.join(errorOverlayDir, 'package.json')).version
+      }.tgz`
+    );
     const serverPack = path.resolve(
       serverDir,
       `ima-server-${require(path.join(serverDir, 'package.json')).version}.tgz`
@@ -150,11 +159,13 @@ function main() {
     // Install packages
     shell(`npm install ${cliPack}`, destFolder);
     shell(`npm install ${corePack}`, destFolder);
+    shell(`npm install ${errorOverlayPack}`, destFolder);
     shell(`npm install ${serverPack}`, destFolder);
 
     // Clean pack files
     fs.rmSync(cliPack);
     fs.rmSync(corePack);
+    fs.rmSync(errorOverlayPack);
     fs.rmSync(serverPack);
   } else {
     console.log(
@@ -165,10 +176,16 @@ function main() {
   const destCore = path.join(destNodeModules, '@ima/core');
   const destCli = path.join(destNodeModules, '@ima/cli');
   const destServer = path.join(destNodeModules, '@ima/server');
+  const destErrorOverlay = path.join(destNodeModules, '@ima/error-overlay');
 
   // Start watchers to sync src and node_modules from packages
   // @ima/cli
-  createWatcher('cli', cliDir, '/**/*.(js|cjs|mjs|json|ejs|map)', destCli);
+  createWatcher(
+    'cli',
+    cliDir,
+    '/dist/**/*.(js|cjs|mjs|json|ejs|map|css)',
+    destCli
+  );
 
   // Spawn ts compiler in watch mode
   child.spawn('npm', ['run', 'dev'], {
@@ -177,7 +194,12 @@ function main() {
   });
 
   // @ima/core
-  createWatcher('core', coreDir, '/**/*.(js|cjs|mjs|json|ejs|map)', destCore);
+  createWatcher(
+    'core',
+    coreDir,
+    '/dist/**/*.(js|cjs|mjs|json|ejs|map|css)',
+    destCore
+  );
 
   // Spawn rollup in watch mode
   child.spawn('npm', ['run', 'build', '--', '--watch'], {
@@ -185,11 +207,25 @@ function main() {
     cwd: coreDir
   });
 
+  // @ima/error-overlay
+  createWatcher(
+    'errorOverlay',
+    errorOverlayDir,
+    '/dist/**/*.(js|cjs|mjs|json|ejs|map|css)',
+    destErrorOverlay
+  );
+
+  // Spawn ts compiler in watch mode
+  child.spawn('npm', ['run', 'dev'], {
+    stdio: 'ignore',
+    cwd: errorOverlayDir
+  });
+
   // @ima/server
   createWatcher(
     'server',
     serverDir,
-    '/**/*.(js|cjs|mjs|json|ejs|map)',
+    '/**/*.(js|cjs|mjs|json|ejs|map|css)',
     destServer
   );
 }

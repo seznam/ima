@@ -17,8 +17,10 @@ async function createDevServer(app: Express) {
     const server = http.createServer(this);
 
     // Inform cli that web server has started
-    // eslint-disable-next-line prefer-spread
+    /* eslint-disable */
+    // @ts-expect-error
     return server.listen.apply(server, arguments).on('listening', () => {
+      /* eslint-enable */
       process.send?.(IMA_CLI_RUN_SERVER_MESSAGE);
     });
   };
@@ -52,32 +54,9 @@ async function createDevServer(app: Express) {
     .use(
       '/__error-overlay-static',
       express.static(
-        path.resolve(path.join(__dirname, '../../error-overlay/dist/'))
+        path.resolve(path.join(__dirname, '../../../error-overlay/dist/'))
       )
     );
-  // .use(async (req, res, next) => {
-  //   const fileName = '/Users/jsimck/Desktop/wima/build/server/app.server.js';
-  //   // const fileName = 'webpack-internal:///./app/page/home/HomeController.js';
-  //   const fetchUrl = `http://localhost:3001/__get-internal-source?fileName=${encodeURIComponent(
-  //     fileName
-  //   )}`;
-
-  //   try {
-  //     const fileSource = await fetch(fetchUrl).then(r => r.text());
-  //     const map = await getSourceMap(fileName, fileSource);
-  //     console.log(map);
-  //     const test = map.getOriginalPosition(20, 5);
-  //     console.log(test);
-  //     res.json({
-  //       original: map.getOriginalPosition(20, 5),
-  //       map: map
-  //     });
-  //     res.end();
-  //   } catch (e) {
-  //     console.log(e);
-  //     res.end();
-  //   }
-  // });
 }
 
 export { createDevServer };
