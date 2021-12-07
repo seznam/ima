@@ -29,6 +29,8 @@ module.exports = {
     'react/prop-types': 0,
     'react/wrap-multilines': 0,
     'react/no-deprecated': 0,
+    'react/jsx-uses-react': 0,
+    'react/react-in-jsx-scope': 0,
     'no-import-assign': 0
   },
   plugins: ['prettier', 'jest', 'react', 'jasmine'],

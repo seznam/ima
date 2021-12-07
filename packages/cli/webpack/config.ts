@@ -199,8 +199,13 @@ export default async (
       version: createCacheKey(ctx, imaConfig),
       store: 'pack',
       buildDependencies: {
-        defaultWebpack: ['webpack/lib/'],
-        config: [path.join(rootDir, IMA_CONF_FILENAME)].filter(f =>
+        cliDeps: [
+          __filename,
+          require.resolve('@ima/error-overlay/dist/client.js'),
+          require.resolve('@ima/error-overlay/dist/overlay.js'),
+          require.resolve('@ima/error-overlay/dist/overlay.css')
+        ],
+        imaConfig: [path.join(rootDir, IMA_CONF_FILENAME)].filter(f =>
           fs.existsSync(f)
         )
       }
@@ -335,8 +340,7 @@ export default async (
                           require.resolve('@babel/preset-react'),
                           {
                             development: !isProduction,
-                            runtime: 'classic'
-                            // runtime: 'automatic' // TODO Prepare ima to be able to handle automatic runtime
+                            runtime: 'automatic'
                           }
                         ]
                       ],
@@ -462,10 +466,6 @@ export default async (
     // Enable node preset for externals on server
     externalsPresets: {
       node: isServer
-    },
-
-    experiments: {
-      cacheUnaffected: true
     }
   };
 };

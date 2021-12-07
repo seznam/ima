@@ -12,7 +12,7 @@ import { useFramesStore } from '#/stores';
  *  - make context lines editable
  *  - support for build errors
  *  - performance optimizations
- *  -
+ *  - source map parsing performance optimization "with"
  */
 const App: FunctionComponent = () => {
   useConnectOverlay();

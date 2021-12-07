@@ -1,6 +1,7 @@
 import { createOverlayIframe, overlayBridge } from '#/utils';
 
 let iframe: HTMLIFrameElement | null = null;
+let errorCount = 0;
 
 function init() {
   if (iframe) {
@@ -23,6 +24,7 @@ function handleRuntimeError(error: Error): void {
 
   init();
 
+  errorCount++;
   overlayBridge.runtimeError(error);
   // eslint-disable-next-line no-console
   console.count('handleRuntimeError');
@@ -35,14 +37,6 @@ function clearRuntimeErrors(): void {
   overlayBridge.clearRuntimeErrors();
   // eslint-disable-next-line no-console
   console.count('clearRuntimeErrors');
-
-  if (module.hot) {
-    module.hot.addStatusHandler(status => {
-      if (status === 'apply') {
-        window.location.reload();
-      }
-    });
-  }
 }
 
 /**
@@ -58,6 +52,7 @@ function showCompileError(webpackErrorMessage: string): void {
 
   init();
 
+  errorCount++;
   overlayBridge.compileError(webpackErrorMessage);
   // eslint-disable-next-line no-console
   console.log('showCompileError', webpackErrorMessage);
@@ -71,13 +66,10 @@ function clearCompileError(): void {
   // eslint-disable-next-line no-console
   console.count('clearCompileError');
 
-  if (module.hot) {
-    module.hot.addStatusHandler(status => {
-      if (status === 'apply') {
-        window.location.reload();
-      }
-    });
-  }
+  // if (errorCount > 0) {
+  //   window.location.reload();
+  //   errorCount = 0;
+  // }
 }
 
 export {
