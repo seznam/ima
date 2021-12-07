@@ -1,4 +1,5 @@
-import { StackFrameObj } from '../../types';
+import uid from 'easy-uid';
+import { ParsedStack } from '../../types';
 import { StackFrame, sourceStorage } from '#/entities';
 
 /**
@@ -7,62 +8,65 @@ import { StackFrame, sourceStorage } from '#/entities';
  * source code fragments around errored lines in the original source
  * code files.
  *
- * @param {StackFrameObj[]} frames Parsed stack frames.
+ * @param {ParsedStack[]} frames Parsed stack frames.
  * @returns {Promise<StackFrame[]>} Array of mapped StackFrame entity instances.
  */
 async function mapStackFramesToOriginal(
-  frames: StackFrameObj[]
+  frames: ParsedStack[]
 ): Promise<StackFrame[]> {
   const mappedFrames: StackFrame[] = await Promise.all(
-    frames.map(async frame => {
-      // Get file source
-      const fileSource = await sourceStorage.get(frame.fileName);
+    frames
+      .filter(frame => !!frame.fileUri)
+      .map(async frame => {
+        // Get file source
+        const fileSource = await sourceStorage.get(frame.fileUri as string);
 
+        // Create parsed stack frame
+        const stackFrame = new StackFrame({
+          id: uid(),
+          fileName: frame.fileUri as string,
+          functionName: frame.functionName,
+          sourceFragment:
+            (frame.lineNumber &&
+              fileSource?.fileContents &&
+              StackFrame.createSourceFragment(
+                frame.lineNumber,
+                fileSource?.fileContents
+              )) ||
+            null,
+          lineNumber: frame.lineNumber,
+          columnNumber: frame.columnNumber
+        });
 
-      // Create parsed stack frame
-      const stackFrame = new StackFrame({
-        id: frame.id,
-        fileName: frame.fileName,
-        functionName: frame.functionName,
-        methodName: frame.methodName,
-        typeName: frame.typeName,
-        sourceFragment:
-          (frame.lineNumber &&
-            fileSource?.fileContents &&
-            StackFrame.createSourceFragment(
+        // Generate original source code references if source map exists
+        if (
+          fileSource &&
+          fileSource.sourceMap &&
+          frame.lineNumber &&
+          frame.columnNumber
+        ) {
+          const { column, line, source: sourceFileUri } =
+            fileSource.sourceMap.getOriginalPosition(
               frame.lineNumber,
-              fileSource?.fileContents
-            )) ||
-          null,
-        startLine: frame.startLine,
-        lineNumber: frame.lineNumber,
-        columnNumber: frame.columnNumber
-      });
+              frame.columnNumber
+            ) || {};
 
-      // Generate original source code references if source map exists
-      if (fileSource && fileSource.sourceMap) {
-        const { column, line, source: sourceFileUri } =
-          fileSource.sourceMap.getOriginalPosition(
-            frame.lineNumber,
-            frame.columnNumber
-          ) || {};
+          const originalSource =
+            sourceFileUri && fileSource.sourceMap.getSource(sourceFileUri);
 
-        const originalSource =
-          sourceFileUri && fileSource.sourceMap.getSource(sourceFileUri);
-
-        stackFrame.originalFileName = sourceFileUri;
-        stackFrame.originalLineNumber = line;
-        stackFrame.originalColumnNumber = column;
-        stackFrame.originalSourceFragment =
-          (line &&
-            originalSource &&
-            StackFrame.createSourceFragment(line, originalSource)) ||
+          stackFrame.originalFileName = sourceFileUri;
+          stackFrame.originalLineNumber = line;
+          stackFrame.originalColumnNumber = column;
+          stackFrame.originalSourceFragment =
+            (line &&
+              originalSource &&
+              StackFrame.createSourceFragment(line, originalSource)) ||
+            null;
           null;
-        null;
-      }
+        }
 
-      return stackFrame;
-    })
+        return stackFrame;
+      })
   );
 
   return mappedFrames;

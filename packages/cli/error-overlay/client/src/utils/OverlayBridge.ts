@@ -1,9 +1,4 @@
-import {
-  OverlayEventName,
-  ClientEventName,
-  RuntimeErrorEvent,
-  CompileErrorEvent
-} from '../../../types';
+import { OverlayEventName, ClientEventName } from '../../../types';
 
 class OverlayBridge {
   iframe?: HTMLIFrameElement;

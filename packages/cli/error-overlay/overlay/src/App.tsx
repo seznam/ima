@@ -11,6 +11,7 @@ import { useConnectOverlay } from '#/hooks';
  *  - make context lines editable
  *  - support for build errors
  *  - performance optimizations
+ *  -
  */
 const App: FunctionComponent = () => {
   useConnectOverlay();

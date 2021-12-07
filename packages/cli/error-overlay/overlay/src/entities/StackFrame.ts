@@ -12,14 +12,11 @@ class StackFrame {
   id: string;
 
   fileName: string;
-  functionName: string;
-  methodName: string;
-  typeName: string;
+  functionName: string | null;
   sourceFragment: SourceFragmentLine[] | null;
 
-  startLine: number;
-  lineNumber: number;
-  columnNumber: number;
+  lineNumber?: number;
+  columnNumber?: number;
 
   originalFileName?: string | null;
   originalLineNumber?: number | null;
@@ -72,10 +69,7 @@ class StackFrame {
     id,
     fileName,
     functionName,
-    methodName,
-    typeName,
     sourceFragment,
-    startLine,
     lineNumber,
     columnNumber,
     originalFileName,
@@ -85,13 +79,10 @@ class StackFrame {
   }: {
     id: string;
     fileName: string;
-    functionName: string;
-    methodName: string;
-    typeName: string;
+    functionName: string | null;
     sourceFragment: SourceFragmentLine[] | null;
-    startLine: number;
-    lineNumber: number;
-    columnNumber: number;
+    lineNumber?: number;
+    columnNumber?: number;
     originalFileName?: string | null;
     originalLineNumber?: number | null;
     originalColumnNumber?: number | null;
@@ -101,11 +92,8 @@ class StackFrame {
 
     this.fileName = fileName;
     this.functionName = functionName;
-    this.methodName = methodName;
-    this.typeName = typeName;
     this.sourceFragment = sourceFragment;
 
-    this.startLine = startLine;
     this.lineNumber = lineNumber;
     this.columnNumber = columnNumber;
 

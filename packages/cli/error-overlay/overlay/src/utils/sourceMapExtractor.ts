@@ -70,7 +70,7 @@ async function getSourceMap(
       fileUri.substring(0, lastSlashIndex + 1) + sourceMappingUrl;
 
     rawSourceMap = await fetch(
-      sourceStorage.getInternalSourceApiUrl(fileName)
+      sourceStorage.getFileSourceUrl(fileName)
     ).then(res => res.json());
   }
 

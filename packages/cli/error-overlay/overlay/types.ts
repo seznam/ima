@@ -5,22 +5,17 @@ declare global {
     __ima_server_error: {
       name: string;
       message: string;
-      callStack: StackFrameObj[];
+      stack: string;
     };
   }
 }
 
-export interface StackFrameObj {
-  columnNumber: number;
-  content: string;
-  fileName: string;
-  functionName: string;
-  id: string;
-  lineNumber: number;
-  methodName: string;
-  startLine: number;
-  typeName: string;
-}
+export type ParsedStack = {
+  functionName: string | null;
+  fileUri?: string;
+  lineNumber?: number;
+  columnNumber?: number;
+};
 
 export type IconProps = {
   className?: string;

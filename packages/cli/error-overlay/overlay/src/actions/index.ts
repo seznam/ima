@@ -1,1 +1,1 @@
-export * from './framesActions';
+export * from './framesAction';

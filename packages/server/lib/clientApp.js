@@ -114,7 +114,7 @@ module.exports = (environment, logger, languageLoader, appFactory) => {
               serverError: {
                 name: err.name,
                 message: err.message,
-                callStack: callstack
+                stack: err.stack.toString()
               }
             })
           );

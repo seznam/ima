@@ -1,11 +1,11 @@
 import { useFramesStore } from '#/stores/framesStore';
-import { mapStackFramesToOriginal } from '#/utils/stackFrameMapper';
+import { mapStackFramesToOriginal, parseError } from '#/utils';
 import { useEffect } from 'react';
 import { ClientEventName, OverlayEventName } from '../../../types';
 
 function useConnectOverlay() {
   const { dispatch } = useFramesStore();
-  const { name, message, callStack } = window.__ima_server_error || {};
+  const { name, message, stack } = window.__ima_server_error || {};
 
   // Init SSR Errors
   useEffect(() => {
@@ -14,7 +14,7 @@ function useConnectOverlay() {
       payload: { name, message }
     });
 
-    if (!callStack) {
+    if (!stack) {
       return;
     }
 
@@ -22,7 +22,7 @@ function useConnectOverlay() {
       dispatch({
         type: 'setFrames',
         payload: {
-          frames: await mapStackFramesToOriginal(callStack)
+          frames: await mapStackFramesToOriginal(parseError(stack))
         }
       });
     };
@@ -32,7 +32,7 @@ function useConnectOverlay() {
 
   // Connect error overlay to client interop
   useEffect(() => {
-    const runtimeErrorListener = (
+    const runtimeErrorListener = async (
       event: WindowEventMap[ClientEventName.RuntimeErrors]
     ) => {
       // Define event listeners
@@ -41,6 +41,13 @@ function useConnectOverlay() {
         payload: {
           name: event.detail.error.name,
           message: event.detail.error.message
+        }
+      });
+
+      dispatch({
+        type: 'setFrames',
+        payload: {
+          frames: await mapStackFramesToOriginal(parseError(event.detail.error))
         }
       });
     };

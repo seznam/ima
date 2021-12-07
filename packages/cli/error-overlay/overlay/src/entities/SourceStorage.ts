@@ -12,7 +12,10 @@ interface SourceStorageEntry {
  * which simplifies the usage and management of fetching file sources manually.
  */
 class SourceStorage {
-  private _sourceStorage = new Map<string, Promise<SourceStorageEntry | null>>();
+  private _sourceStorage = new Map<
+    string,
+    Promise<SourceStorageEntry | null>
+  >();
 
   /**
    * Fetch file contents and it's source map. This function aggregates multiple requests
@@ -51,11 +54,15 @@ class SourceStorage {
 
   /**
    * Returns URL to internal source dev API route with properly encoded
-   * fileName query param.
+   * fileName query param or to the actual static file, if the uri is not relative.
    *
    * @returns {string}
    */
-  getInternalSourceApiUrl(fileUri: string) {
+  getFileSourceUrl(fileUri: string) {
+    if (fileUri.startsWith('http')) {
+      return fileUri;
+    }
+
     return `/__get-internal-source?fileName=${encodeURIComponent(fileUri)}`;
   }
 
@@ -69,7 +76,7 @@ class SourceStorage {
     let fileContents = null;
 
     try {
-      const response = await fetch(this.getInternalSourceApiUrl(fileUri));
+      const response = await fetch(this.getFileSourceUrl(fileUri));
 
       if (!response.ok) {
         return fileContents;
