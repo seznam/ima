@@ -3,6 +3,18 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [17.12.1](https://github.com/seznam/ima/compare/v17.12.0...v17.12.1) (2021-12-09)
+
+
+### Bug Fixes
+
+* 🐛 Clear partialState when promise was rejected ([509daaa](https://github.com/seznam/ima/commit/509daaaee5b9c98b8abbb0099e6f50cd1b1517d2))
+* 🐛 HttpProxy no longer sends empty Content-Type headers ([49489b0](https://github.com/seznam/ima/commit/49489b0d26dec404ecc7351f7e0ec00a1d190fd3))
+
+
+
+
+
 # [17.12.0](https://github.com/seznam/ima/compare/v17.11.3...v17.12.0) (2021-11-01)
 
 
