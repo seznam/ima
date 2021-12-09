@@ -274,4 +274,52 @@ describe('ima.core.http.HttpProxy', () => {
       expect(typeof convertedObject).toEqual('object');
     });
   });
+
+  describe('_getContentType', () => {
+    it('should return custom Content-Type header', () => {
+      expect(
+        proxy._getContentType(
+          'GET',
+          {},
+          { headers: { 'Content-Type': 'application/xml' } }
+        )
+      ).toBe('application/xml');
+    });
+
+    it('should return null for invalid custom content types ', () => {
+      expect(
+        proxy._getContentType('GET', null, {
+          headers: { 'Content-Type': null }
+        })
+      ).toBeNull();
+    });
+
+    it('should return null for requests with no body', () => {
+      spyOn(proxy, '_shouldRequestHaveBody').and.returnValue(false);
+
+      expect(proxy._getContentType('GET', null, { headers: {} })).toBeNull();
+    });
+  });
+
+  describe('_shouldRequestHaveBody', () => {
+    it.each([
+      [false, 'get'],
+      [false, 'HEAD'],
+      [true, 'PoSt'],
+      [true, 'POST'],
+      [true, 'OpTIONS'],
+      [true, 'PUT']
+    ])('should return %s for "%s" method', (expected, input) => {
+      expect(proxy._shouldRequestHaveBody(input)).toBe(expected);
+    });
+
+    it('should return false for invalid data', () => {
+      expect(proxy._shouldRequestHaveBody('', null)).toBeFalsy();
+      expect(proxy._shouldRequestHaveBody('', undefined)).toBeFalsy();
+    });
+
+    it('should return true for valid data', () => {
+      expect(proxy._shouldRequestHaveBody('', { data: 'foo' })).toBeTruthy();
+    });
+  });
 });
