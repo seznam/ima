@@ -411,11 +411,11 @@ export default class HttpProxy {
    * @return {RequestInit} A `RequestInit` object of the Fetch API.
    */
   _composeRequestInit(method, data, options) {
-    options.headers['Content-Type'] = this._getContentType(
-      method,
-      data,
-      options
-    );
+    const contentType = this._getContentType(method, data, options);
+
+    if (contentType) {
+      options.headers['Content-Type'] = contentType;
+    }
 
     for (let [headerName, headerValue] of this._defaultHeaders) {
       options.headers[headerName] = headerValue;
@@ -445,10 +445,14 @@ export default class HttpProxy {
    *        be send with a request.
    * @param {HttpAgent~RequestOptions} options Options provided by the HTTP
    *        agent.
-   * @return {string} A `Content-Type` header value.
+   * @return {string|null} A `Content-Type` header value, null for requests
+   *        with no body.
    */
   _getContentType(method, data, options) {
-    if (options.headers['Content-Type']) {
+    if (
+      options.headers['Content-Type'] &&
+      typeof options.headers['Content-Type'] === 'string'
+    ) {
       return options.headers['Content-Type'];
     }
 
@@ -456,7 +460,7 @@ export default class HttpProxy {
       return 'application/json';
     }
 
-    return '';
+    return null;
   }
 
   /**
@@ -472,13 +476,13 @@ export default class HttpProxy {
   _composeRequestUrl(url, data) {
     const transformedUrl = this._transformer.transform(url);
     const queryString = this._convertObjectToQueryString(data || {});
-    const delimeter = queryString
+    const delimiter = queryString
       ? transformedUrl.includes('?')
         ? '&'
         : '?'
       : '';
 
-    return `${transformedUrl}${delimeter}${queryString}`;
+    return `${transformedUrl}${delimiter}${queryString}`;
   }
 
   /**
@@ -491,7 +495,7 @@ export default class HttpProxy {
    * @return {boolean} `true` if a request has a body, otherwise `false`.
    */
   _shouldRequestHaveBody(method, data) {
-    return ['get', 'head'].indexOf(method.toLowerCase()) === -1 && data;
+    return method && data && !['get', 'head'].includes(method.toLowerCase());
   }
 
   /**
