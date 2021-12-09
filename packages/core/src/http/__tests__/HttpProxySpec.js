@@ -302,24 +302,18 @@ describe('ima.core.http.HttpProxy', () => {
   });
 
   describe('_shouldRequestHaveBody', () => {
-    it.each([
-      [false, 'get'],
-      [false, 'HEAD'],
-      [true, 'PoSt'],
-      [true, 'POST'],
-      [true, 'OpTIONS'],
-      [true, 'PUT']
-    ])('should return %s for "%s" method', (expected, input) => {
-      expect(proxy._shouldRequestHaveBody(input)).toBe(expected);
-    });
-
-    it('should return false for invalid data', () => {
+    it('should return false for invalid data or unsupported methods', () => {
       expect(proxy._shouldRequestHaveBody('', null)).toBeFalsy();
       expect(proxy._shouldRequestHaveBody('', undefined)).toBeFalsy();
+      expect(proxy._shouldRequestHaveBody('GET', { data: 'foo' })).toBeFalsy();
+      expect(proxy._shouldRequestHaveBody('HEAD')).toBeFalsy();
     });
 
-    it('should return true for valid data', () => {
-      expect(proxy._shouldRequestHaveBody('', { data: 'foo' })).toBeTruthy();
+    it('should return true for valid data and supported methods', () => {
+      expect(
+        proxy._shouldRequestHaveBody('POST', { data: 'foo' })
+      ).toBeTruthy();
+      expect(proxy._shouldRequestHaveBody('PUT', { bar: 'foo' })).toBeTruthy();
     });
   });
 });
