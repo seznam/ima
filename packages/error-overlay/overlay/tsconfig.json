@@ -14,7 +14,11 @@
     "noImplicitAny": true,
     "outDir": "./dist",
     "strict": true,
+    "skipLibCheck": true,
     "target": "ES2021",
+    "declaration": true,
+    "declarationDir": "./dist/types",
+    "rootDir": "../",
     "baseUrl": ".",
     "paths": {
       "#/*": ["src/*"],

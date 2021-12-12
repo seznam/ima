@@ -3,7 +3,7 @@ import {
   clearRuntimeErrors,
   showCompileError,
   clearCompileError
-} from './src/fastRefreshClient';
+} from './src/client';
 
 export {
   handleRuntimeError,

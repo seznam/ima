@@ -9,7 +9,7 @@ import RemoveEmptyScriptsPlugin from 'webpack-remove-empty-scripts';
 import CssMinimizerPlugin from 'css-minimizer-webpack-plugin';
 import TerserPlugin from 'terser-webpack-plugin';
 import CompressionPlugin from 'compression-webpack-plugin';
-import ReactRefreshWebpackPlugin from '@pmmmwh/react-refresh-webpack-plugin';
+// import ReactRefreshWebpackPlugin from '@pmmmwh/react-refresh-webpack-plugin';
 
 import { ConfigurationContext, ImaConfig } from '../types';
 import {
@@ -165,6 +165,7 @@ export default async (
             [name]: [
               isWatch &&
                 `webpack-hot-middleware/client?name=${name}&path=//localhost:${imaEnvironment.$Server.port}/__webpack_hmr&timeout=2000&reload=true&overlay=true&overlayWarnings=true`,
+              require.resolve('@ima/error-overlay/dist/imaHmrClient.js'),
               path.join(rootDir, 'app/main.js')
             ].filter(Boolean) as string[]
           })
@@ -202,6 +203,7 @@ export default async (
         cliDeps: [
           __filename,
           require.resolve('@ima/error-overlay/dist/client.js'),
+          require.resolve('@ima/error-overlay/dist/imaClient.js'),
           require.resolve('@ima/error-overlay/dist/overlay.js'),
           require.resolve('@ima/error-overlay/dist/overlay.css')
         ],
@@ -452,14 +454,14 @@ export default async (
               : []),
 
             // Following plugins enable react refresh and hmr in watch mode
-            isWatch && new webpack.HotModuleReplacementPlugin(),
-            isWatch &&
-              new ReactRefreshWebpackPlugin({
-                overlay: {
-                  module: '@ima/error-overlay/dist/client.js',
-                  sockIntegration: 'whm'
-                }
-              })
+            isWatch && new webpack.HotModuleReplacementPlugin()
+            // isWatch &&
+            //   new ReactRefreshWebpackPlugin({
+            //     overlay: {
+            //       // module: '@ima/error-overlay/dist/fastRefreshClient.js',
+            //       sockIntegration: 'whm'
+            //     }
+            //   })
           ])
     ].filter(Boolean),
 

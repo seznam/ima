@@ -1,4 +1,5 @@
 import { StackFrame } from '#/entities';
+
 declare module 'easy-uid' {
   export default function (): string;
 }

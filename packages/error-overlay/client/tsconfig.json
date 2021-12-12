@@ -13,6 +13,9 @@
     "esModuleInterop": true,
     "noImplicitAny": true,
     "skipLibCheck": true,
+    "declaration": true,
+    "declarationDir": "./dist/types",
+    "rootDir": "../",
     "outDir": "./dist",
     "strict": true,
     "baseUrl": ".",
@@ -20,5 +23,5 @@
       "#/*": ["src/*"],
     },
   },
-  "include": ["../types/", "../types", "./src", "./types", "./index"]
+  "include": ["../types/", "../types", "./types.ts", "./src", "./imaHmrClient", "./fastRefreshClient"]
 }

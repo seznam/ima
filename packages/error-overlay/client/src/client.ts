@@ -1,16 +1,4 @@
-import { createOverlayIframe, overlayBridge } from '#/utils';
-
-let iframe: HTMLIFrameElement | null = null;
-let errorCount = 0;
-
-function init() {
-  if (iframe) {
-    return;
-  }
-
-  iframe = createOverlayIframe();
-  overlayBridge.init(iframe);
-}
+import { overlayBridge } from '#/utils';
 
 /**
  * Invoked when a RUNTIME error is CAUGHT (e.g. during module init or execution).
@@ -22,12 +10,8 @@ function handleRuntimeError(error: Error): void {
     return;
   }
 
-  init();
-
-  errorCount++;
+  overlayBridge.init();
   overlayBridge.runtimeError(error);
-  // eslint-disable-next-line no-console
-  console.count('handleRuntimeError');
 }
 
 /**
@@ -35,8 +19,7 @@ function handleRuntimeError(error: Error): void {
  */
 function clearRuntimeErrors(): void {
   overlayBridge.clearRuntimeErrors();
-  // eslint-disable-next-line no-console
-  console.count('clearRuntimeErrors');
+  overlayBridge.destroy();
 }
 
 /**
@@ -50,12 +33,8 @@ function showCompileError(webpackErrorMessage: string): void {
     return;
   }
 
-  init();
-
-  errorCount++;
+  overlayBridge.init();
   overlayBridge.compileError(webpackErrorMessage);
-  // eslint-disable-next-line no-console
-  console.log('showCompileError', webpackErrorMessage);
 }
 
 /**
@@ -63,13 +42,7 @@ function showCompileError(webpackErrorMessage: string): void {
  */
 function clearCompileError(): void {
   overlayBridge.clearCompileErrors();
-  // eslint-disable-next-line no-console
-  console.count('clearCompileError');
-
-  // if (errorCount > 0) {
-  //   window.location.reload();
-  //   errorCount = 0;
-  // }
+  overlayBridge.destroy();
 }
 
 export {

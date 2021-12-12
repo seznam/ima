@@ -71,7 +71,23 @@ module.exports = [
     ]
   }),
   merge(baseConfig, {
-    entry: { client: './client/index.ts' },
+    entry: { imaHmrClient: './client/imaHmrClient.ts' },
+    module: {
+      rules: [
+        {
+          test: /\.html$/i,
+          use: 'raw-loader'
+        }
+      ]
+    },
+    resolve: {
+      alias: {
+        '#': path.resolve(clientRootDir, './src/')
+      }
+    }
+  }),
+  merge(baseConfig, {
+    entry: { fastRefreshClient: './client/fastRefreshClient.ts' },
     target: 'node',
     output: {
       library: { type: 'commonjs2' }

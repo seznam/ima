@@ -1,15 +1,14 @@
-import { useEffect } from 'react';
+import { useCallback, useEffect } from 'react';
 
 import { useFramesStore } from '#/stores';
 import { mapStackFramesToOriginal, parseError } from '#/utils';
 
 import { ClientEventName, OverlayEventName } from '../../../types';
 
-function useConnectOverlay() {
+function useConnectSSRErrorOverlay(): void {
   const { dispatch } = useFramesStore();
   const { name, message, stack } = window.__ima_server_error || {};
 
-  // Init SSR Errors
   useEffect(() => {
     dispatch({
       type: 'setError',
@@ -31,12 +30,13 @@ function useConnectOverlay() {
 
     initStackFrames();
   }, []);
+}
 
-  // Connect error overlay to client interop
-  useEffect(() => {
-    const runtimeErrorListener = async (
-      event: WindowEventMap[ClientEventName.RuntimeErrors]
-    ) => {
+function useConnectClientErrorOverlay(): void {
+  const { dispatch } = useFramesStore();
+
+  const runtimeErrorListener = useCallback(
+    (event: WindowEventMap[ClientEventName.RuntimeErrors]) => {
       // Define event listeners
       dispatch({
         type: 'setError',
@@ -46,31 +46,33 @@ function useConnectOverlay() {
         }
       });
 
-      dispatch({
-        type: 'setFrames',
-        payload: {
-          frames: await mapStackFramesToOriginal(parseError(event.detail.error))
-        }
+      mapStackFramesToOriginal(parseError(event.detail.error)).then(frames => {
+        dispatch({ type: 'setFrames', payload: { frames: frames } });
       });
-    };
+    },
+    []
+  );
 
-    const compileErrorListener = (
-      event: WindowEventMap[ClientEventName.CompileErrors]
-    ) => {
+  const compileErrorListener = useCallback(
+    (event: WindowEventMap[ClientEventName.CompileErrors]) => {
       // eslint-disable-next-line no-console
       console.log('compileErrorListener', event.detail.error);
-    };
+    },
+    []
+  );
 
-    const clearRuntimeErrorListener = () => {
-      // eslint-disable-next-line no-console
-      console.log('clearRuntimeErrorListener');
-    };
+  const clearRuntimeErrorListener = useCallback(() => {
+    // eslint-disable-next-line no-console
+    console.log('clearRuntimeErrorListener');
+  }, []);
 
-    const clearCompileErrorListener = () => {
-      // eslint-disable-next-line no-console
-      console.log('clearCompileErrorListener');
-    };
+  const clearCompileErrorListener = useCallback(() => {
+    // eslint-disable-next-line no-console
+    console.log('clearCompileErrorListener');
+  }, []);
 
+  // Connect error overlay to client interop
+  useEffect(() => {
     // Register listeners to custom events
     window.addEventListener(
       ClientEventName.RuntimeErrors,
@@ -92,8 +94,8 @@ function useConnectOverlay() {
     // Dispatch ready event
     window.parent.dispatchEvent(new CustomEvent(OverlayEventName.Ready));
 
+    // Cleanup
     return () => {
-      // Cleanup
       window.removeEventListener(
         ClientEventName.RuntimeErrors,
         runtimeErrorListener
@@ -112,6 +114,14 @@ function useConnectOverlay() {
       );
     };
   }, []);
+}
+
+/**
+ * Connects overlay to SSR and client-side error handlers.
+ */
+function useConnectOverlay(): void {
+  useConnectSSRErrorOverlay();
+  useConnectClientErrorOverlay();
 }
 
 export { useConnectOverlay };
