@@ -183,7 +183,7 @@ function main() {
   createWatcher(
     'cli',
     cliDir,
-    '/dist/**/*.(js|cjs|mjs|json|ejs|map|css)',
+    '/dist/**/*.(js|cjs|mjs|json|ejs|map|wasm|css)',
     destCli
   );
 
@@ -197,7 +197,7 @@ function main() {
   createWatcher(
     'core',
     coreDir,
-    '/dist/**/*.(js|cjs|mjs|json|ejs|map|css)',
+    '/dist/**/*.(js|cjs|mjs|json|ejs|map|wasm|css)',
     destCore
   );
 
@@ -211,7 +211,7 @@ function main() {
   createWatcher(
     'errorOverlay',
     errorOverlayDir,
-    '/dist/**/*.(js|cjs|mjs|json|ejs|map|css)',
+    '/dist/**/*.(js|cjs|mjs|json|ejs|map|wasm|css)',
     destErrorOverlay
   );
 
@@ -225,7 +225,7 @@ function main() {
   createWatcher(
     'server',
     serverDir,
-    '/**/*.(js|cjs|mjs|json|ejs|map|css)',
+    '/**/*.(js|cjs|mjs|json|ejs|map|wasm|css)',
     destServer
   );
 }

@@ -17,6 +17,10 @@ module.exports = {
     'react/jsx-uses-react': 'off',
     'react/react-in-jsx-scope': 'off',
     '@typescript-eslint/ban-ts-ignore': 'off',
+    '@typescript-eslint/ban-ts-comment': [
+      'error',
+      { 'ts-expect-error': 'allow-with-description' }
+    ],
     '@typescript-eslint/no-namespace': ['error', { allowDeclarations: true }],
     'tailwindcss/no-custom-classname': [
       'error',

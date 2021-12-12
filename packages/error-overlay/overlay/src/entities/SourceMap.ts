@@ -1,8 +1,14 @@
 import {
   NullablePosition,
   NullableMappedPosition,
-  BasicSourceMapConsumer
+  BasicSourceMapConsumer,
+  SourceMapConsumer
 } from 'source-map';
+
+// @ts-expect-error: Not available in typings
+SourceMapConsumer.initialize({
+  'lib/mappings.wasm': '/__error-overlay-static/mappings.wasm'
+});
 
 /**
  * Original {@link https://github.com/facebook/create-react-app/blob/main/packages/react-dev-utils/evalSourceMapMiddleware.js}.

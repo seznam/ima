@@ -1,6 +1,7 @@
 /* eslint-disable @typescript-eslint/no-var-requires */
 const path = require('path');
 
+const CopyPlugin = require('copy-webpack-plugin');
 const CssMinimizerPlugin = require('css-minimizer-webpack-plugin');
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 const { merge } = require('webpack-merge');
@@ -67,6 +68,11 @@ module.exports = [
     plugins: [
       new MiniCssExtractPlugin({
         filename: '[name].css'
+      }),
+      new CopyPlugin({
+        patterns: [
+          { from: path.resolve('node_modules/source-map/lib/mappings.wasm') }
+        ]
       })
     ]
   }),
