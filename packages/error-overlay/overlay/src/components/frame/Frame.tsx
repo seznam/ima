@@ -1,9 +1,10 @@
 import hljs from 'highlight.js/lib/core';
 import hljsJS from 'highlight.js/lib/languages/javascript';
-import { FunctionComponent } from 'react';
+import { FunctionComponent, memo } from 'react';
 import { FrameWrapper } from 'types';
 
 import { ChevronIcon } from '#/components';
+import { ErrorWrapper } from '#/reducers';
 
 import { FrameHeader } from './FrameHeader';
 
@@ -11,26 +12,28 @@ import 'highlight.js/styles/github-dark-dimmed.css';
 
 hljs.registerLanguage('javascript', hljsJS);
 
-type FrameProps = FrameWrapper;
+type FrameProps = {
+  errorId: ErrorWrapper['id'];
+  frameWrapper: FrameWrapper;
+};
 
-const Frame: FunctionComponent<FrameProps> = ({
-  frame,
-  isVisible,
-  showOriginal
+const FrameBase: FunctionComponent<FrameProps> = ({
+  frameWrapper,
+  errorId
 }) => {
-  if (!isVisible) {
+  if (!frameWrapper) {
     return null;
   }
 
   return (
     <div className="group mb-4">
-      <FrameHeader showOriginal={showOriginal} frame={frame} />
+      <FrameHeader frameWrapper={frameWrapper} errorId={errorId} />
 
       <div className="overflow-y-auto p-3 font-mono text-xs leading-5 bg-gray-100 rounded language-javascript hljs">
         <pre>
-          {(showOriginal
-            ? frame.originalSourceFragment
-            : frame.sourceFragment
+          {(frameWrapper.showOriginal
+            ? frameWrapper.frame.originalSourceFragment
+            : frameWrapper.frame.sourceFragment
           )?.map(line => (
             <div
               key={line.line}
@@ -65,4 +68,5 @@ const Frame: FunctionComponent<FrameProps> = ({
   );
 };
 
-export { Frame };
+const Frame = memo(FrameBase);
+export { Frame, FrameBase };

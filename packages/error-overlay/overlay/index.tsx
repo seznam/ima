@@ -1,11 +1,11 @@
 import { render } from 'react-dom';
 
 import { App } from '#/App';
-import { FramesStoreProvider } from '#/stores';
+import { ErrorsStoreProvider } from '#/stores';
 
 render(
-  <FramesStoreProvider>
+  <ErrorsStoreProvider>
     <App />
-  </FramesStoreProvider>,
+  </ErrorsStoreProvider>,
   document.getElementById('root')
 );

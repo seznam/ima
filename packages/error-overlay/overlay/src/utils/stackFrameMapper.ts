@@ -1,8 +1,8 @@
-import uid from 'easy-uid';
-
 import { StackFrame, sourceStorage } from '#/entities';
 
 import { ParsedStack } from '../../types';
+
+const IgnoredFunctionNames = ['processTicksAndRejections'];
 
 /**
  * Maps parsed stacked frames into their original code positions
@@ -18,14 +18,26 @@ async function mapStackFramesToOriginal(
 ): Promise<StackFrame[]> {
   const mappedFrames: StackFrame[] = await Promise.all(
     frames
-      .filter(frame => !!frame.fileUri)
+      .filter(frame => {
+        if (!frame.fileUri) {
+          return false;
+        }
+
+        if (
+          frame?.functionName &&
+          IgnoredFunctionNames.includes(frame.functionName)
+        ) {
+          return false;
+        }
+
+        return true;
+      })
       .map(async frame => {
         // Get file source
         const fileSource = await sourceStorage.get(frame.fileUri as string);
 
         // Create parsed stack frame
         const stackFrame = new StackFrame({
-          id: uid(),
           fileName: frame.fileUri as string,
           functionName: frame.functionName,
           sourceFragment:

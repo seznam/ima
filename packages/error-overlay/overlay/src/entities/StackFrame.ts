@@ -9,8 +9,6 @@ interface SourceFragmentLine {
  * with optional original source fileName, line, column and source if available.
  */
 class StackFrame {
-  id: string;
-
   fileName: string;
   functionName: string | null;
   sourceFragment: SourceFragmentLine[] | null;
@@ -66,7 +64,6 @@ class StackFrame {
   }
 
   constructor({
-    id,
     fileName,
     functionName,
     sourceFragment,
@@ -77,7 +74,6 @@ class StackFrame {
     originalColumnNumber,
     originalSourceFragment
   }: {
-    id: string;
     fileName: string;
     functionName: string | null;
     sourceFragment: SourceFragmentLine[] | null;
@@ -88,8 +84,6 @@ class StackFrame {
     originalColumnNumber?: number | null;
     originalSourceFragment?: SourceFragmentLine[] | null;
   }) {
-    this.id = id;
-
     this.fileName = fileName;
     this.functionName = functionName;
     this.sourceFragment = sourceFragment;

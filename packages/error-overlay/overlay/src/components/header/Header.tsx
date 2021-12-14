@@ -1,28 +1,37 @@
-import { FunctionComponent } from 'react';
+import { FunctionComponent, memo } from 'react';
 
 import { Button } from '#/components';
-import { useFramesStore } from '#/stores';
+import { ErrorWrapper } from '#/reducers/errorsReducer';
+import { useErrorsDispatcher } from '#/stores';
 
-const Header: FunctionComponent = () => {
-  const { state, dispatch } = useFramesStore();
+type HeaderProps = {
+  error?: ErrorWrapper;
+  showOriginal: boolean;
+};
 
+const HeaderBase: FunctionComponent<HeaderProps> = ({
+  error,
+  showOriginal
+}) => {
+  const dispatch = useErrorsDispatcher();
   return (
     <div className="flex flex-row justify-between items-center">
       <h1 className="my-4 font-mono text-2xl tracking-tighter text-red-500">
-        <span className="font-semibold">{state.name}:</span> {state.message}
+        <span className="font-semibold">{error.name}:</span> {error.message}
       </h1>
-      {state.frames.length > 0 && (
+      {Object.keys(error.frames).length > 0 && (
         <Button
           onClick={() =>
             dispatch({
-              type: state.showOriginal ? 'viewCompiled' : 'viewOriginal'
+              type: showOriginal ? 'viewCompiled' : 'viewOriginal'
             })
           }>
-          View {state.showOriginal ? 'compiled' : 'original'}
+          View {showOriginal ? 'compiled' : 'original'}
         </Button>
       )}
     </div>
   );
 };
 
-export { Header };
+const Header = memo(HeaderBase);
+export { Header, HeaderBase };

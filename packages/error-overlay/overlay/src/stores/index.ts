@@ -1,1 +1,1 @@
-export * from './framesStore';
+export * from './errorsStore';

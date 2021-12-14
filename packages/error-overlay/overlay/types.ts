@@ -14,6 +14,8 @@ declare global {
   }
 }
 
+export type ErrorType = 'compiler' | 'runtime';
+
 export type ParsedStack = {
   functionName: string | null;
   fileUri?: string;
@@ -27,7 +29,7 @@ export type IconProps = {
 };
 
 export type FrameWrapper = {
+  id: string;
   frame: StackFrame;
-  isVisible: boolean;
   showOriginal: boolean;
 };

@@ -1,28 +1,26 @@
 import { useCallback, useEffect } from 'react';
 
-import { useFramesStore } from '#/stores';
+import { useErrorsDispatcher } from '#/stores';
 import { mapStackFramesToOriginal, parseError } from '#/utils';
 
 import { ClientEventName, OverlayEventName } from '../../../types';
 
 function useConnectSSRErrorOverlay(): void {
-  const { dispatch } = useFramesStore();
+  const dispatch = useErrorsDispatcher();
   const { name, message, stack } = window.__ima_server_error || {};
 
   useEffect(() => {
-    dispatch({
-      type: 'setError',
-      payload: { name, message }
-    });
-
     if (!stack) {
       return;
     }
 
     const initStackFrames = async () => {
       dispatch({
-        type: 'setFrames',
+        type: 'addError',
         payload: {
+          name,
+          message,
+          type: 'compiler',
           frames: await mapStackFramesToOriginal(parseError(stack))
         }
       });
@@ -33,21 +31,20 @@ function useConnectSSRErrorOverlay(): void {
 }
 
 function useConnectClientErrorOverlay(): void {
-  const { dispatch } = useFramesStore();
+  const dispatch = useErrorsDispatcher();
 
   const runtimeErrorListener = useCallback(
     (event: WindowEventMap[ClientEventName.RuntimeErrors]) => {
-      // Define event listeners
-      dispatch({
-        type: 'setError',
-        payload: {
-          name: event.detail.error.name,
-          message: event.detail.error.message
-        }
-      });
-
       mapStackFramesToOriginal(parseError(event.detail.error)).then(frames => {
-        dispatch({ type: 'setFrames', payload: { frames: frames } });
+        dispatch({
+          type: 'addError',
+          payload: {
+            name: event.detail.error.name,
+            message: event.detail.error.message,
+            type: 'runtime',
+            frames
+          }
+        });
       });
     },
     []

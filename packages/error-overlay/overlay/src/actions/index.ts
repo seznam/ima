@@ -1,1 +1,1 @@
-export * from './framesAction';
+export * from './errorsAction';

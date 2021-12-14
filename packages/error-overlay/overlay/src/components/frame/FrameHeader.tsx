@@ -1,20 +1,22 @@
 import { FunctionComponent } from 'react';
+import { FrameWrapper } from 'types';
 
 import { Button, ClosedEyeIcon, EditIcon, OpenEyeIcon } from '#/components';
-import { StackFrame } from '#/entities';
-import { useFramesStore } from '#/stores';
+import { ErrorWrapper } from '#/reducers/errorsReducer';
+import { useErrorsDispatcher } from '#/stores';
 
 type FrameHeaderProps = {
-  showOriginal: boolean;
-  frame: StackFrame;
+  errorId: ErrorWrapper['id'];
+  frameWrapper: FrameWrapper;
 };
 
 const FrameHeader: FunctionComponent<FrameHeaderProps> = ({
-  showOriginal,
-  frame
+  frameWrapper,
+  errorId
 }) => {
-  const { dispatch } = useFramesStore();
-  const fileUri = showOriginal
+  const dispatch = useErrorsDispatcher();
+  const { frame } = frameWrapper;
+  const fileUri = frameWrapper.showOriginal
     ? `${frame.getPrettyOriginalFileUri()}:${frame.originalLineNumber}`
     : `${frame.fileName}:${frame.lineNumber}:${frame.columnNumber}`;
 
@@ -30,20 +32,20 @@ const FrameHeader: FunctionComponent<FrameHeaderProps> = ({
         <Button
           onClick={() =>
             dispatch({
-              type: showOriginal ? 'viewCompiled' : 'viewOriginal',
-              payload: { id: frame.id }
+              type: frameWrapper.showOriginal ? 'viewCompiled' : 'viewOriginal',
+              payload: { errorId, frameId: frameWrapper.id }
             })
           }>
-          {showOriginal ? (
+          {frameWrapper.showOriginal ? (
             <OpenEyeIcon className="w-5 h-5 text-green-500" />
           ) : (
             <ClosedEyeIcon className="w-5 h-5 text-red-500" />
           )}
         </Button>
 
-        <Button>
+        {/* <Button>
           <EditIcon className="w-5 h-5" />
-        </Button>
+        </Button> */}
       </div>
     </header>
   );

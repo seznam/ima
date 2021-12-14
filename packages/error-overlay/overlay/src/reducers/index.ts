@@ -1,1 +1,1 @@
-export * from './framesReducer';
+export * from './errorsReducer';
