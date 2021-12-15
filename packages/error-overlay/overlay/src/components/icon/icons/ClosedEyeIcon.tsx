@@ -1,7 +1,8 @@
-import { FunctionComponent } from 'react';
-import { IconProps } from 'types';
+import React, { FunctionComponent } from 'react';
 
-const ClosedEyeIcon: FunctionComponent<IconProps> = props => {
+const ClosedEyeIcon: FunctionComponent<
+  React.SVGProps<SVGSVGElement>
+> = props => {
   return (
     <svg
       xmlns="http://www.w3.org/2000/svg"
@@ -18,4 +19,4 @@ const ClosedEyeIcon: FunctionComponent<IconProps> = props => {
   );
 };
 
-export { ClosedEyeIcon };
+export default ClosedEyeIcon;

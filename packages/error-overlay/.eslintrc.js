@@ -25,7 +25,7 @@ module.exports = {
     'tailwindcss/no-custom-classname': [
       'error',
       {
-        whitelist: ['hljs', 'language\\-javascript']
+        whitelist: ['^.*\\/\\d+$', 'hover\\:bg\\-slate\\-600']
       }
     ],
     'import/no-unresolved': 'off',

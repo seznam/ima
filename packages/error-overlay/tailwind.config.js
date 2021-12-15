@@ -1,16 +1,11 @@
 module.exports = {
-  mode: 'jit',
-  purge: [
+  content: [
     './overlay/src/**/*.html',
     './overlay/src/**/*.js',
     './overlay/src/**/*.jsx',
     './overlay/src/**/*.ts',
     './overlay/src/**/*.tsx'
   ],
-  darkMode: false, // or 'media' or 'class'
-  variants: {
-    extend: {}
-  },
   theme: {
     container: {
       screens: {

@@ -1,7 +1,6 @@
 import { FunctionComponent } from 'react';
-import { IconProps } from 'types';
 
-const EditIcon: FunctionComponent<IconProps> = props => {
+const EditIcon: FunctionComponent<React.SVGProps<SVGSVGElement>> = props => {
   return (
     <svg
       fill="none"
@@ -17,4 +16,4 @@ const EditIcon: FunctionComponent<IconProps> = props => {
   );
 };
 
-export { EditIcon };
+export default EditIcon;

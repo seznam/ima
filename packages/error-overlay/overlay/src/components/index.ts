@@ -1,7 +1,5 @@
-export * from './button/Button';
-export * from './header/Header';
-export * from './frame/Frame';
-export * from './icons/chevronIcon';
-export * from './icons/closedEyeIcon';
-export * from './icons/openEyeIcon';
-export * from './icons/editIcon';
+export { default as Button } from './button/Button';
+export { default as Hero } from './hero/Hero';
+export { default as Header } from './header/Header';
+export { default as Frame } from './frame/Frame';
+export { default as Icon } from './icon/Icon';

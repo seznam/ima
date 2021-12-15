@@ -23,11 +23,6 @@ export type ParsedStack = {
   columnNumber?: number;
 };
 
-export type IconProps = {
-  className?: string;
-  style?: Record<string, unknown>;
-};
-
 export type FrameWrapper = {
   id: string;
   frame: StackFrame;

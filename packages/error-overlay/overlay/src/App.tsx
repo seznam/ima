@@ -1,17 +1,15 @@
 import 'tailwindcss/tailwind.css';
 import { Fragment, FunctionComponent, useMemo, useState } from 'react';
 
-import { Button, ChevronIcon, Frame, Header } from '#/components';
+import { Frame, Header, Hero, Icon, Button } from '#/components';
 import { useConnectOverlay } from '#/hooks';
 import { useErrorsStore } from '#/stores';
 
 /**
  * TODO
- *  - Create bundle with source-map wasm included
  *  - Save viewCompiled toggle to cookies
  *  - make context lines editable
  *  - support for build errors
- *  - performance optimizations
  *  - source map parsing performance optimization "with"
  */
 const App: FunctionComponent = () => {
@@ -50,17 +48,24 @@ const App: FunctionComponent = () => {
   }
 
   return (
-    <div className="min-w-full min-h-screen bg-white">
+    <div className="min-w-full min-h-screen font-mono bg-white text-slate-900">
       <div className="container p-4 mx-auto">
-        <Header error={currentError} showOriginal={showOriginal} />
+        <Header />
+        <Hero error={currentError} showOriginal={showOriginal} />
         {visibleFrames.map((frameWrapper, index) => (
           <Fragment key={frameWrapper.id}>
             <Frame frameWrapper={frameWrapper} errorId={currentError?.id} />
             {index === 0 && collapsedFramesCount > 1 && (
-              <div className="flex justify-center items-center mt-8 mb-6">
-                <Button bordered onClick={() => setCollapsed(false)}>
-                  <ChevronIcon className="mr-1 w-4 h-4" />
-                  <span>Show {collapsedFramesCount} collapsed frames</span>
+              <div className="flex justify-center items-center mt-8 mb-8">
+                <Button
+                  className="inline-flex items-center"
+                  onClick={() => setCollapsed(false)}>
+                  <Icon icon="chevron" size="sm" className="mr-1" />
+                  <span>
+                    Show{' '}
+                    <span className="underline">{collapsedFramesCount}</span>{' '}
+                    collapsed frames
+                  </span>
                 </Button>
               </div>
             )}

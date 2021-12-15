@@ -20,7 +20,7 @@ function useConnectSSRErrorOverlay(): void {
         payload: {
           name,
           message,
-          type: 'compiler',
+          type: 'runtime',
           frames: await mapStackFramesToOriginal(parseError(stack))
         }
       });
