@@ -1,3 +1,4 @@
+import clsx from 'clsx';
 import PrismJS from 'prismjs';
 import { FunctionComponent, memo } from 'react';
 
@@ -13,6 +14,7 @@ import './prismjs.css';
 export type FrameProps = {
   errorId: ErrorWrapper['id'];
   frameWrapper: FrameWrapper;
+  className?: string;
 };
 
 function getPrismLanguage(
@@ -30,7 +32,11 @@ function getPrismLanguage(
   return { grammar: PrismJS.languages[language], language };
 }
 
-const Frame: FunctionComponent<FrameProps> = ({ frameWrapper, errorId }) => {
+const Frame: FunctionComponent<FrameProps> = ({
+  frameWrapper,
+  errorId,
+  className
+}) => {
   const { frame } = frameWrapper;
   const sourceFragment = frameWrapper.showOriginal
     ? frame.originalSourceFragment
@@ -43,7 +49,11 @@ const Frame: FunctionComponent<FrameProps> = ({ frameWrapper, errorId }) => {
   );
 
   return (
-    <div className="overflow-hidden mb-4 rounded-md shadow-lg text-slate-50 bg-slate-700 shadow-slate-700/50">
+    <div
+      className={clsx(
+        'overflow-hidden mb-4 rounded-md shadow-lg text-slate-50 bg-slate-700 shadow-slate-700/50',
+        className
+      )}>
       <FrameHeader
         frameWrapper={frameWrapper}
         hasFragment={hasFragment}

@@ -24,15 +24,6 @@ function useConnectSSRErrorOverlay(): void {
           frames: await mapStackFramesToOriginal(parseError(stack))
         }
       });
-      dispatch({
-        type: 'add',
-        payload: {
-          name: 'Error',
-          message: 'Unexpected symbol "xcvyxcvy"',
-          type: 'compiler',
-          frames: await mapStackFramesToOriginal(parseError(stack))
-        }
-      });
     };
 
     initStackFrames();

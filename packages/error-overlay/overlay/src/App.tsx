@@ -39,13 +39,19 @@ const App: FunctionComponent = () => {
   const collapseFramesCount = Object.keys(currentError.frames).length - 1;
 
   return (
-    <div className="min-w-full min-h-screen font-mono bg-white text-slate-900">
+    <div className="min-w-full min-h-screen font-mono bg-white animate-fade-in-down origin-top text-slate-900">
       <div className="container p-4 mx-auto">
         <Header error={currentError} />
         <Hero error={currentError} />
         {visibleFrames.map((frameWrapper, index) => (
           <Fragment key={frameWrapper.id}>
-            <Frame frameWrapper={frameWrapper} errorId={currentError?.id} />
+            <Frame
+              frameWrapper={frameWrapper}
+              errorId={currentError?.id}
+              className={clsx({
+                'animate-fade-in-down origin-top': index > 0
+              })}
+            />
             {index === 0 && (
               <div className="flex justify-center items-center mt-8 mb-8">
                 <Button
@@ -68,7 +74,7 @@ const App: FunctionComponent = () => {
                   <span>
                     Toggle{' '}
                     <span className="underline">{collapseFramesCount}</span>{' '}
-                    collapsed frames
+                    hidden frames
                   </span>
                 </Button>
               </div>
