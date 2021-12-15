@@ -1,9 +1,10 @@
 import 'tailwindcss/tailwind.css';
-import { Fragment, FunctionComponent, useMemo, useState } from 'react';
+import clsx from 'clsx';
+import { Fragment, FunctionComponent, useMemo } from 'react';
 
 import { Frame, Header, Hero, Icon, Button } from '#/components';
 import { useConnectOverlay } from '#/hooks';
-import { useErrorsStore } from '#/stores';
+import { useErrorsStore, useErrorsDispatcher } from '#/stores';
 
 /**
  * TODO
@@ -14,56 +15,59 @@ import { useErrorsStore } from '#/stores';
  */
 const App: FunctionComponent = () => {
   useConnectOverlay();
-  const showOriginal = useErrorsStore(c => c.state.showOriginal);
+  const dispatch = useErrorsDispatcher();
   const currentError = useErrorsStore(c =>
     c.state.currentErrorId ? c.state.errors[c.state.currentErrorId] : null
   );
 
-  const [areCollapsed, setCollapsed] = useState(true);
   const visibleFrames = useMemo(() => {
     if (!currentError) {
       return [];
     }
 
-    if (!areCollapsed) {
+    if (!currentError.isCollapsed) {
       return Object.values(currentError.frames);
     }
 
-    return Object.values(currentError.frames).filter(
-      (frameWrapper, index) =>
-        index === 0 || !frameWrapper.frame.isCollapsible()
-    );
-  }, [areCollapsed, currentError]);
-
-  const collapsedFramesCount = useMemo(
-    () =>
-      currentError?.frames && visibleFrames
-        ? Object.keys(currentError.frames).length - visibleFrames.length
-        : 0,
-    [currentError, visibleFrames]
-  );
+    return [Object.values(currentError.frames)[0]];
+  }, [currentError]);
 
   if (!currentError) {
     return null;
   }
 
+  const collapseFramesCount = Object.keys(currentError.frames).length - 1;
+
   return (
     <div className="min-w-full min-h-screen font-mono bg-white text-slate-900">
       <div className="container p-4 mx-auto">
-        <Header />
-        <Hero error={currentError} showOriginal={showOriginal} />
+        <Header error={currentError} />
+        <Hero error={currentError} />
         {visibleFrames.map((frameWrapper, index) => (
           <Fragment key={frameWrapper.id}>
             <Frame frameWrapper={frameWrapper} errorId={currentError?.id} />
-            {index === 0 && collapsedFramesCount > 1 && (
+            {index === 0 && (
               <div className="flex justify-center items-center mt-8 mb-8">
                 <Button
                   className="inline-flex items-center"
-                  onClick={() => setCollapsed(false)}>
-                  <Icon icon="chevron" size="sm" className="mr-1" />
+                  onClick={() =>
+                    dispatch({
+                      type: currentError.isCollapsed ? 'expand' : 'collapse',
+                      payload: {
+                        errorId: currentError.id
+                      }
+                    })
+                  }>
+                  <Icon
+                    icon="chevron"
+                    size="sm"
+                    className={clsx('mr-2 transition-transform', {
+                      'rotate-90': !currentError.isCollapsed
+                    })}
+                  />
                   <span>
-                    Show{' '}
-                    <span className="underline">{collapsedFramesCount}</span>{' '}
+                    Toggle{' '}
+                    <span className="underline">{collapseFramesCount}</span>{' '}
                     collapsed frames
                   </span>
                 </Button>

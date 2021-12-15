@@ -16,11 +16,20 @@ function useConnectSSRErrorOverlay(): void {
 
     const initStackFrames = async () => {
       dispatch({
-        type: 'addError',
+        type: 'add',
         payload: {
           name,
           message,
           type: 'runtime',
+          frames: await mapStackFramesToOriginal(parseError(stack))
+        }
+      });
+      dispatch({
+        type: 'add',
+        payload: {
+          name: 'Error',
+          message: 'Unexpected symbol "xcvyxcvy"',
+          type: 'compiler',
           frames: await mapStackFramesToOriginal(parseError(stack))
         }
       });
@@ -37,7 +46,7 @@ function useConnectClientErrorOverlay(): void {
     (event: WindowEventMap[ClientEventName.RuntimeErrors]) => {
       mapStackFramesToOriginal(parseError(event.detail.error)).then(frames => {
         dispatch({
-          type: 'addError',
+          type: 'add',
           payload: {
             name: event.detail.error.name,
             message: event.detail.error.message,

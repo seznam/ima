@@ -23,7 +23,7 @@
 
 .token.boolean,
 .token.number {
-  color: theme("colors.violet.400");
+  color: theme("colors.indigo.300");
 }
 
 .token.selector,
@@ -48,11 +48,11 @@
 .token.attr-value,
 .token.function,
 .token.class-name {
-  color: theme("colors.cyan.300");
+  color: theme("colors.purple.400");
 }
 
 .token.keyword {
-  color: theme("colors.sky.300");
+  color: theme("colors.cyan.300");
 }
 
 .token.regex,

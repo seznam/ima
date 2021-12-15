@@ -32,7 +32,7 @@ async function mapStackFramesToOriginal(
 
         return true;
       })
-      .map(async frame => {
+      .map(async (frame, index) => {
         // Get file source
         const fileSource = await sourceStorage.get(frame.fileUri as string);
 
@@ -45,7 +45,8 @@ async function mapStackFramesToOriginal(
               fileSource?.fileContents &&
               StackFrame.createSourceFragment(
                 frame.lineNumber,
-                fileSource?.fileContents
+                fileSource?.fileContents,
+                index === 0 ? 8 : 4
               )) ||
             null,
           lineNumber: frame.lineNumber,
@@ -74,7 +75,11 @@ async function mapStackFramesToOriginal(
           stackFrame.originalSourceFragment =
             (line &&
               originalSource &&
-              StackFrame.createSourceFragment(line, originalSource)) ||
+              StackFrame.createSourceFragment(
+                line,
+                originalSource,
+                index === 0 ? 8 : 4
+              )) ||
             null;
           null;
         }

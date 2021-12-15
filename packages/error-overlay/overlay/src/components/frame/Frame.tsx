@@ -1,8 +1,8 @@
 import PrismJS from 'prismjs';
-import { FunctionComponent, memo, useCallback, useState } from 'react';
-import { FrameWrapper } from 'types';
+import { FunctionComponent, memo } from 'react';
 
-import { ErrorWrapper } from '#/reducers';
+import { Icon } from '#/components';
+import { ErrorWrapper, FrameWrapper } from '#/reducers';
 
 import FrameHeader from './FrameHeader';
 
@@ -38,14 +38,6 @@ const Frame: FunctionComponent<FrameProps> = ({ frameWrapper, errorId }) => {
   const hasFragment =
     Array.isArray(sourceFragment) && sourceFragment.length > 0;
 
-  const [isFragmentVisible, setIsFragmentVisible] = useState<boolean>(
-    hasFragment
-  );
-
-  const handleHeaderClick = useCallback(() => {
-    setIsFragmentVisible(visible => !visible);
-  }, []);
-
   const { grammar, language } = getPrismLanguage(
     frame.originalFileName || frame.fileName
   );
@@ -53,40 +45,53 @@ const Frame: FunctionComponent<FrameProps> = ({ frameWrapper, errorId }) => {
   return (
     <div className="overflow-hidden mb-4 rounded-md shadow-lg text-slate-50 bg-slate-700 shadow-slate-700/50">
       <FrameHeader
-        onHeaderClick={handleHeaderClick}
         frameWrapper={frameWrapper}
-        isFragmentVisible={isFragmentVisible}
         hasFragment={hasFragment}
         errorId={errorId}
       />
 
-      {isFragmentVisible && (
+      {!frameWrapper.isCollapsed && (
         <div className="overflow-y-auto py-3 text-sm leading-6 rounded-b-xl text-slate-50 bg-slate-700">
-          <pre>
-            <code>
-              {(frameWrapper.showOriginal
-                ? frame.originalSourceFragment
-                : frame.sourceFragment
-              )?.map(line => (
-                <div
-                  key={line.line}
-                  className={`flex items-center border-l-4 ${
-                    line.highlight
-                      ? 'bg-rose-500/20 border-rose-500'
-                      : 'border-transparent'
-                  }`}>
-                  <div className="pr-3 pl-3 mr-3 border-r-2 text-slate-400 border-slate-600/75">
-                    {line.line}
-                  </div>
+          {hasFragment ? (
+            <pre>
+              <code>
+                {(frameWrapper.showOriginal
+                  ? frame.originalSourceFragment
+                  : frame.sourceFragment
+                )?.map(line => (
                   <div
-                    dangerouslySetInnerHTML={{
-                      __html: PrismJS.highlight(line.source, grammar, language)
-                    }}
-                  />
-                </div>
-              ))}
-            </code>
-          </pre>
+                    key={line.line}
+                    className={`flex items-center border-l-4 ${
+                      line.highlight
+                        ? 'bg-rose-500/20 border-rose-500'
+                        : 'border-transparent'
+                    }`}>
+                    <div className="pr-3 pl-3 mr-3 border-r-2 text-slate-400 border-slate-600/75">
+                      {line.line}
+                    </div>
+                    <div
+                      dangerouslySetInnerHTML={{
+                        __html: PrismJS.highlight(
+                          line.source,
+                          grammar,
+                          language
+                        )
+                      }}
+                    />
+                  </div>
+                ))}
+              </code>
+            </pre>
+          ) : (
+            <div className="flex justify-center items-center py-2">
+              <div className="flex items-center">
+                <Icon icon="alert" size="xs" className="mr-2 text-rose-400" />{' '}
+                <span className="text-xs text-slate-400">
+                  Original source fragment is not available
+                </span>
+              </div>
+            </div>
+          )}
         </div>
       )}
     </div>

@@ -1,35 +1,45 @@
 import uid from 'easy-uid';
-import { ErrorType, FrameWrapper } from 'types';
+import { ErrorType } from 'types';
 
 import { ErrorsAction } from '#/actions';
+import { sourceStorage, StackFrame } from '#/entities';
+
+export type FrameWrapper = {
+  id: string;
+  frame: StackFrame;
+  showOriginal: boolean;
+  isCollapsed: boolean;
+};
 
 export interface ErrorWrapper {
   id: string;
   name: string;
   message: string;
   type: ErrorType;
+  showOriginal: boolean;
+  isCollapsed: boolean;
   frames: {
     [key: string]: FrameWrapper;
   };
 }
 
 export interface ErrorsState {
-  showOriginal: boolean;
   currentErrorId: ErrorWrapper['id'] | null;
   errors: {
     [key: string]: ErrorWrapper;
   };
+  errorIds: string[];
 }
 
 const errorsInitialState: ErrorsState = {
-  showOriginal: true,
   currentErrorId: null,
-  errors: {}
+  errors: {},
+  errorIds: []
 };
 
 function errorsReducer(state: ErrorsState, action: ErrorsAction): ErrorsState {
   switch (action.type) {
-    case 'addError': {
+    case 'add': {
       const { name, message, type, frames } = action.payload;
       const errorId = uid();
 
@@ -43,13 +53,18 @@ function errorsReducer(state: ErrorsState, action: ErrorsAction): ErrorsState {
             name,
             message,
             type,
+            showOriginal: true,
+            isCollapsed: true,
             frames: frames.reduce<ErrorWrapper['frames']>(
               (accFrames, curFrame) => {
                 const id = uid();
                 accFrames[id] = {
                   id,
                   frame: curFrame,
-                  showOriginal: state.showOriginal
+                  showOriginal: true,
+                  isCollapsed:
+                    !curFrame.originalSourceFragment ||
+                    curFrame.originalSourceFragment.length === 0
                 };
 
                 return accFrames;
@@ -57,14 +72,24 @@ function errorsReducer(state: ErrorsState, action: ErrorsAction): ErrorsState {
               {}
             )
           }
-        }
+        },
+        errorIds: [...state.errorIds, errorId]
       };
     }
 
+    case 'collapse':
+    case 'expand':
     case 'viewCompiled':
     case 'viewOriginal': {
       const { errorId, frameId } = action.payload || {};
+      const isCollapseAction = ['collapse', 'expand'].includes(action.type);
+      const isViewAction = ['viewCompiled', 'viewOriginal'].includes(
+        action.type
+      );
+
+      const isCollapsedResult = action.type === 'collapse';
       const showOriginalResult = action.type === 'viewOriginal';
+      const currentError = state.errors[errorId];
 
       // Update specific frame
       if (errorId && frameId) {
@@ -78,7 +103,12 @@ function errorsReducer(state: ErrorsState, action: ErrorsAction): ErrorsState {
                 ...state.errors[errorId].frames,
                 [frameId]: {
                   ...state.errors[errorId].frames[frameId],
-                  showOriginal: showOriginalResult
+                  showOriginal: isViewAction
+                    ? showOriginalResult
+                    : state.errors[errorId].frames[frameId].showOriginal,
+                  isCollapsed: isCollapseAction
+                    ? isCollapsedResult
+                    : state.errors[errorId].frames[frameId].isCollapsed
                 }
               }
             }
@@ -88,8 +118,10 @@ function errorsReducer(state: ErrorsState, action: ErrorsAction): ErrorsState {
 
       // Return state if there is no change
       if (
-        (action.type === 'viewOriginal' && state.showOriginal) ||
-        (action.type === 'viewCompiled' && !state.showOriginal)
+        (action.type === 'viewOriginal' && currentError.showOriginal) ||
+        (action.type === 'viewCompiled' && !currentError.showOriginal) ||
+        (action.type === 'expand' && !currentError.isCollapsed) ||
+        (action.type === 'collapse' && currentError.isCollapsed)
       ) {
         return state;
       }
@@ -97,30 +129,65 @@ function errorsReducer(state: ErrorsState, action: ErrorsAction): ErrorsState {
       // Reset all frames and update global state
       return {
         ...state,
-        showOriginal: showOriginalResult,
-        errors: Object.values(state.errors).reduce<ErrorsState['errors']>(
-          (accErrors, curError) => {
-            const updatedFrames = Object.values(curError.frames).reduce<
+        errors: {
+          ...state.errors,
+          [errorId]: {
+            ...currentError,
+            showOriginal: isViewAction
+              ? showOriginalResult
+              : state.errors[errorId].showOriginal,
+            isCollapsed: isCollapseAction
+              ? isCollapsedResult
+              : state.errors[errorId].isCollapsed,
+            frames: Object.values(currentError.frames).reduce<
               ErrorWrapper['frames']
             >((accFrames, curFrame) => {
               accFrames[curFrame.id] = {
                 ...curFrame,
-                showOriginal: showOriginalResult
+                showOriginal: isViewAction
+                  ? showOriginalResult
+                  : state.errors[errorId].frames[curFrame.id].showOriginal
               };
 
               return accFrames;
-            }, {});
+            }, {})
+          }
+        }
+      };
+    }
 
-            // Update Error
-            accErrors[curError.id] = {
-              ...curError,
-              frames: updatedFrames
-            };
+    case 'next': {
+      if (!state.currentErrorId) {
+        return state;
+      }
 
-            return accErrors;
-          },
-          {}
-        )
+      return {
+        ...state,
+        currentErrorId:
+          state.errorIds[
+            (state.errorIds.indexOf(state.currentErrorId) + 1) %
+              state.errorIds.length
+          ]
+      };
+    }
+
+    case 'previous': {
+      if (!state.currentErrorId) {
+        return state;
+      }
+
+      const newIndex = state.errorIds.indexOf(state.currentErrorId) - 1;
+
+      if (newIndex < 0) {
+        return {
+          ...state,
+          currentErrorId: state.errorIds[state.errorIds.length - 1]
+        };
+      }
+
+      return {
+        ...state,
+        currentErrorId: state.errorIds[newIndex]
       };
     }
 

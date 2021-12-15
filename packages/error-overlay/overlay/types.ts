@@ -22,9 +22,3 @@ export type ParsedStack = {
   lineNumber?: number;
   columnNumber?: number;
 };
-
-export type FrameWrapper = {
-  id: string;
-  frame: StackFrame;
-  showOriginal: boolean;
-};

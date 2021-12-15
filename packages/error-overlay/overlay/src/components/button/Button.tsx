@@ -3,7 +3,7 @@ import { FunctionComponent } from 'react';
 
 export type ButtonProps = {
   btn?: 'primary' | 'secondary';
-  color?: 'orange' | 'gray' | 'green' | 'light';
+  color?: 'gray' | 'green' | 'light';
   size?: 'sm' | 'xs';
   linkStyle?: boolean;
   bordered?: boolean;
@@ -50,12 +50,7 @@ const Button: FunctionComponent<
           [bordered
             ? 'border-emerald-500 hover:border-emerald-600 hover:bg-emerald-50'
             : 'border-emerald-100 bg-emerald-100 hover:border-emerald-200 hover:bg-emerald-200']:
-            !linkStyle && color === 'green',
-          'text-orange-600 hover:text-orange-700': color === 'orange',
-          [bordered
-            ? 'border-orange-500 hover:border-orange-600 hover:bg-orange-50'
-            : 'border-orange-100 bg-orange-100 hover:border-orange-200 hover:bg-orange-200']:
-            !linkStyle && color === 'orange'
+            !linkStyle && color === 'green'
         },
         className
       )}

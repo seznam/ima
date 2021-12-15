@@ -1,25 +1,20 @@
 import clsx from 'clsx';
 import { FunctionComponent } from 'react';
-import { FrameWrapper } from 'types';
 
 import { Button, Icon } from '#/components';
-import { ErrorWrapper } from '#/reducers/errorsReducer';
+import { ErrorWrapper, FrameWrapper } from '#/reducers/errorsReducer';
 import { useErrorsDispatcher } from '#/stores';
 
 export type FrameHeaderProps = {
   errorId: ErrorWrapper['id'];
   frameWrapper: FrameWrapper;
-  onHeaderClick: React.MouseEventHandler<HTMLButtonElement>;
-  isFragmentVisible: boolean;
   hasFragment: boolean;
 };
 
 const FrameHeader: FunctionComponent<FrameHeaderProps> = ({
   frameWrapper,
   errorId,
-  onHeaderClick,
-  hasFragment,
-  isFragmentVisible
+  hasFragment
 }) => {
   const dispatch = useErrorsDispatcher();
   const { frame } = frameWrapper;
@@ -31,16 +26,21 @@ const FrameHeader: FunctionComponent<FrameHeaderProps> = ({
     <div
       className={clsx(
         'flex relative justify-between items-center shadow-lg border-slate-600 shadow-slate-800/25',
-        { 'border-b': isFragmentVisible }
+        { 'border-b': !frameWrapper.isCollapsed }
       )}>
       <button
-        onClick={onHeaderClick}
-        className="flex justify-start items-center py-2 px-4 rounded-tl-md border-r border-b-2 transition-all hover:bg-slate-600 border-r-slate-600 border-b-cyan-500">
+        onClick={() =>
+          dispatch({
+            type: frameWrapper.isCollapsed ? 'expand' : 'collapse',
+            payload: { errorId, frameId: frameWrapper.id }
+          })
+        }
+        className="flex justify-start items-center py-2 px-4 rounded-tl-md border-r border-b-2 transition-all hover:bg-slate-600 active:bg-slate-500 border-r-slate-600 border-b-cyan-500">
         <div className="mr-4 text-slate-400/50">
           <Icon
             icon="chevron"
             className={clsx('transition-transform', {
-              'rotate-90': isFragmentVisible
+              'rotate-90': !frameWrapper.isCollapsed
             })}
           />
         </div>

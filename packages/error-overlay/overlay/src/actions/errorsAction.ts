@@ -1,11 +1,11 @@
-import { ErrorType, FrameWrapper } from 'types';
+import { ErrorType } from 'types';
 
 import { StackFrame } from '#/entities';
-import { ErrorWrapper } from '#/reducers/errorsReducer';
+import { ErrorWrapper, FrameWrapper } from '#/reducers/errorsReducer';
 
 type ErrorsAction =
   | {
-      type: 'addError';
+      type: 'add';
       payload: {
         name: string;
         message: string;
@@ -15,11 +15,25 @@ type ErrorsAction =
     }
   | {
       type: 'viewOriginal';
-      payload?: { errorId: ErrorWrapper['id']; frameId: FrameWrapper['id'] };
+      payload: { errorId: ErrorWrapper['id']; frameId?: FrameWrapper['id'] };
     }
   | {
       type: 'viewCompiled';
-      payload?: { errorId: ErrorWrapper['id']; frameId: FrameWrapper['id'] };
+      payload: { errorId: ErrorWrapper['id']; frameId?: FrameWrapper['id'] };
+    }
+  | {
+      type: 'expand';
+      payload: { errorId: ErrorWrapper['id']; frameId?: FrameWrapper['id'] };
+    }
+  | {
+      type: 'collapse';
+      payload: { errorId: ErrorWrapper['id']; frameId?: FrameWrapper['id'] };
+    }
+  | {
+      type: 'previous';
+    }
+  | {
+      type: 'next';
     };
 
 export { ErrorsAction };
