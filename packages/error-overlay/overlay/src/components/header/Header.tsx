@@ -1,8 +1,11 @@
 import { FunctionComponent, memo } from 'react';
 
 import { Button, Icon } from '#/components';
+import { useBridgeInterface } from '#/hooks';
 
 const Header: FunctionComponent = () => {
+  const { closeOverlay, isSSRError } = useBridgeInterface();
+
   return (
     <div className="flex justify-between items-center my-3">
       <div className="flex items-center">
@@ -17,9 +20,11 @@ const Header: FunctionComponent = () => {
           <span className="font-bold">2</span> errors are visible on the page
         </span>
       </div>
-      <Button linkStyle>
-        <Icon icon="cross" size="lg" className="text-slate-700" />
-      </Button>
+      {!isSSRError && (
+        <Button onClick={closeOverlay} linkStyle>
+          <Icon icon="cross" size="lg" className="text-slate-700" />
+        </Button>
+      )}
     </div>
   );
 };

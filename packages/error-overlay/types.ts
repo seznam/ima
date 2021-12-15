@@ -1,6 +1,7 @@
 declare global {
   interface WindowEventMap {
     [OverlayEventName.Ready]: CustomEvent;
+    [OverlayEventName.Close]: CustomEvent;
     [ClientEventName.RuntimeErrors]: CustomEvent<{ error: Error }>;
     [ClientEventName.CompileErrors]: CustomEvent<{ error: string }>;
     [ClientEventName.ClearRuntimeErrors]: CustomEvent;
@@ -9,7 +10,8 @@ declare global {
 }
 
 export enum OverlayEventName {
-  Ready = 'ima.error.overlay.overlay:ready'
+  Ready = 'ima.error.overlay.overlay:ready',
+  Close = 'ima.error.overlay.overlay:close'
 }
 
 export enum ClientEventName {

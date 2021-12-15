@@ -29,6 +29,10 @@ class OverlayBridge {
     // Add ready handler to initialize overlay connection
     this._readyHandler = this._readyHandler.bind(this);
     window.addEventListener(OverlayEventName.Ready, this._readyHandler);
+
+    // Close iframe handler
+    this._closeHandler = this._closeHandler.bind(this);
+    window.addEventListener(OverlayEventName.Close, this._closeHandler);
   }
 
   compileError(error: string): void {
@@ -76,6 +80,7 @@ class OverlayBridge {
 
     // Remove ready event listeners
     window.removeEventListener(OverlayEventName.Ready, this._readyHandler);
+    window.removeEventListener(OverlayEventName.Close, this._closeHandler);
 
     // Remove iframe and readiness flag
     this._isReady = false;
@@ -89,6 +94,10 @@ class OverlayBridge {
     while ((customEvent = this._eventsQueue.pop())) {
       this._dispatchEvent(customEvent);
     }
+  }
+
+  private _closeHandler(): void {
+    this.destroy();
   }
 
   private _dispatchEvent(customEvent: CustomEvent) {

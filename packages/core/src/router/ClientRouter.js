@@ -213,7 +213,7 @@ export default class ClientRouter extends AbstractRouter {
 
     // FIXME (try to find better solution)
     if (typeof window !== 'undefined' && window.__ima_hmr) {
-      return window.__ima_hmr.handleRuntimeError(params.error);
+      window.__ima_hmr.handleRuntimeError(params.error);
     }
 
     if (this.isClientError(params.error)) {
