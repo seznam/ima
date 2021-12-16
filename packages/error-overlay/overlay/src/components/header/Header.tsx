@@ -16,7 +16,7 @@ const Header: FunctionComponent<HeaderProps> = ({ error }) => {
 
   return (
     <div className="flex justify-between items-center my-3">
-      {error && errorIds.length > 0 && (
+      {error && errorIds.length > 1 ? (
         <div className="flex items-center">
           <Button
             size="xs"
@@ -36,6 +36,8 @@ const Header: FunctionComponent<HeaderProps> = ({ error }) => {
             visible on the page
           </span>
         </div>
+      ) : (
+        <div />
       )}
       {!isSSRError && (
         <Button onClick={closeOverlay} linkStyle>

@@ -130,7 +130,7 @@ class StackFrame {
     const indexOfFirstSlash = strippedUri?.indexOf('/');
 
     return indexOfFirstSlash
-      ? `${strippedUri?.substring(indexOfFirstSlash + 1)}`
+      ? `./${strippedUri?.substring(indexOfFirstSlash + 1)}`
       : strippedUri;
   }
 }

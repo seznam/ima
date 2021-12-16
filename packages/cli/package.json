@@ -78,6 +78,7 @@
     "@types/mini-css-extract-plugin": "^2.4.0",
     "@types/node": "^16.11.7",
     "@types/nodemon": "^1.19.1",
+    "@types/shell-quote": "^1.7.1",
     "@types/terser-webpack-plugin": "^5.2.0",
     "@types/webpack-dev-middleware": "^5.0.2",
     "@types/webpack-hot-middleware": "^2.25.5",

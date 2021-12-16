@@ -23,19 +23,22 @@ const Button: FunctionComponent<
   bordered = false,
   linkStyle = false,
   type = 'button',
+  disabled,
   ...restProps
 }) => {
   return (
     <button
       type={type}
+      disabled={disabled}
       className={clsx(
         'tracking-tighter border-2 transition-all',
         {
           'p-2 text-xs': size === 'xs',
           'py-2 px-3 text-sm': size === 'sm',
           'border-transparent': linkStyle,
-          'active:scale-90': linkStyle || size === 'xs',
-          'active:scale-95': !linkStyle,
+          'active:scale-90': !disabled && (linkStyle || size === 'xs'),
+          'active:scale-95': !disabled && !linkStyle,
+          'cursor-not-allowed opacity-40': disabled,
           'text-slate-600 hover:text-slate-800': color === 'gray',
           [bordered
             ? 'border-slate-500 hover:border-slate-700 hover:bg-slate-100'

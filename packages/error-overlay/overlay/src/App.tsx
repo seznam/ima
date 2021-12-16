@@ -3,19 +3,19 @@ import clsx from 'clsx';
 import { Fragment, FunctionComponent, useMemo } from 'react';
 
 import { Frame, Header, Hero, Icon, Button } from '#/components';
-import { useConnectOverlay } from '#/hooks';
+import { useConnectOverlay, useBridgeInterface } from '#/hooks';
 import { useErrorsStore, useErrorsDispatcher } from '#/stores';
 
 /**
  * TODO
- *  - Save viewCompiled toggle to cookies
  *  - make context lines editable
  *  - support for build errors
- *  - source map parsing performance optimization "with"
+ *  - source map parsing performance optimization "with" -> probably will not work but make sure to destroy source maps (which is currently not happening)
  */
 const App: FunctionComponent = () => {
   useConnectOverlay();
   const dispatch = useErrorsDispatcher();
+  const { isSSRError } = useBridgeInterface();
   const currentError = useErrorsStore(c =>
     c.state.currentErrorId ? c.state.errors[c.state.currentErrorId] : null
   );
@@ -39,7 +39,13 @@ const App: FunctionComponent = () => {
   const collapseFramesCount = Object.keys(currentError.frames).length - 1;
 
   return (
-    <div className="min-w-full min-h-screen font-mono bg-white animate-fade-in-down origin-top text-slate-900">
+    <div
+      className={clsx(
+        'min-w-full min-h-screen font-mono bg-white origin-top text-slate-900',
+        {
+          'animate-fade-in-down': !isSSRError
+        }
+      )}>
       <div className="container p-4 mx-auto">
         <Header error={currentError} />
         <Hero error={currentError} />

@@ -2,6 +2,7 @@ import clsx from 'clsx';
 import { FunctionComponent } from 'react';
 
 import { Button, Icon } from '#/components';
+import { useOpenEditor } from '#/hooks';
 import { ErrorWrapper, FrameWrapper } from '#/reducers/errorsReducer';
 import { useErrorsDispatcher } from '#/stores';
 
@@ -17,6 +18,7 @@ const FrameHeader: FunctionComponent<FrameHeaderProps> = ({
   hasFragment
 }) => {
   const dispatch = useErrorsDispatcher();
+  const { openEditor, isLoading } = useOpenEditor();
   const { frame } = frameWrapper;
   const fileUri = frameWrapper.showOriginal
     ? `${frame.getPrettyOriginalFileUri()}:${frame.originalLineNumber}`
@@ -73,8 +75,13 @@ const FrameHeader: FunctionComponent<FrameHeaderProps> = ({
           )}
         </Button>
 
-        <Button size="xs" linkStyle color="light">
-          <Icon icon="edit" />
+        <Button
+          onClick={() => openEditor(frameWrapper)}
+          disabled={!hasFragment || isLoading}
+          size="xs"
+          linkStyle
+          color="light">
+          <Icon className={clsx({ 'animate-bounce': isLoading })} icon="edit" />
         </Button>
       </div>
     </div>

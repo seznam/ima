@@ -3,7 +3,8 @@ import path from 'path';
 import webpack from 'webpack';
 import devMiddleware from 'webpack-dev-middleware';
 import hotMiddleware from 'webpack-hot-middleware';
-import { evalSourceMapMiddleware } from './middleware/evalSourceMapMiddleware';
+import { openEditorMiddleware } from './openEditorMiddleware';
+import { evalSourceMapMiddleware } from './evalSourceMapMiddleware';
 import { createWebpackConfig } from '../webpack/utils';
 import { IMA_CLI_RUN_SERVER_MESSAGE, update } from '../lib/cli';
 import express, { Express } from 'express';
@@ -50,7 +51,8 @@ async function createDevServer(app: Express) {
         heartbeat: 10 * 1000
       })
     )
-    .use(evalSourceMapMiddleware())
+    .use('/__get-internal-source', evalSourceMapMiddleware())
+    .use('/__open-editor', openEditorMiddleware())
     .use(
       '/__error-overlay-static',
       express.static(
