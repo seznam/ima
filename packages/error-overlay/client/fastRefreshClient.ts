@@ -1,13 +1,13 @@
 import {
   handleRuntimeError,
   clearRuntimeErrors,
-  showCompileError,
+  showCompileErrors,
   clearCompileError
 } from './src/client';
 
 export {
   handleRuntimeError,
   clearRuntimeErrors,
-  showCompileError,
+  showCompileErrors,
   clearCompileError
 };

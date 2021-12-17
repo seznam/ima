@@ -2,7 +2,7 @@ import uid from 'easy-uid';
 import { ErrorType } from 'types';
 
 import { ErrorsAction } from '#/actions';
-import { sourceStorage, StackFrame } from '#/entities';
+import { StackFrame } from '#/entities';
 
 export type FrameWrapper = {
   id: string;
@@ -42,6 +42,18 @@ function errorsReducer(state: ErrorsState, action: ErrorsAction): ErrorsState {
     case 'add': {
       const { name, message, type, frames } = action.payload;
       const errorId = uid();
+
+      // Check for duplicates
+      const isDuplicate = Object.values(state.errors).findIndex(
+        error =>
+          error.name === name &&
+          error.message === message &&
+          error.type === type
+      );
+
+      if (isDuplicate !== -1) {
+        return state;
+      }
 
       return {
         ...state,

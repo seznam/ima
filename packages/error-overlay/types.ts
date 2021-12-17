@@ -1,9 +1,11 @@
+import { StatsError } from 'webpack';
+
 declare global {
   interface WindowEventMap {
     [OverlayEventName.Ready]: CustomEvent;
     [OverlayEventName.Close]: CustomEvent;
     [ClientEventName.RuntimeErrors]: CustomEvent<{ error: Error }>;
-    [ClientEventName.CompileErrors]: CustomEvent<{ error: string }>;
+    [ClientEventName.CompileErrors]: CustomEvent<{ errors: StatsError[] }>;
     [ClientEventName.ClearRuntimeErrors]: CustomEvent;
     [ClientEventName.ClearCompileErrors]: CustomEvent;
   }

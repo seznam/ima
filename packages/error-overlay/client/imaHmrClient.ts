@@ -2,13 +2,13 @@
 import {
   handleRuntimeError,
   clearRuntimeErrors,
-  showCompileError,
+  showCompileErrors,
   clearCompileError
 } from './src/client';
 
 window.__ima_hmr = {
   handleRuntimeError,
   clearRuntimeErrors,
-  showCompileError,
+  showCompileErrors,
   clearCompileError
 };

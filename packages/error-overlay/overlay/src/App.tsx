@@ -58,7 +58,7 @@ const App: FunctionComponent = () => {
                 'animate-fade-in-down origin-top': index > 0
               })}
             />
-            {index === 0 && (
+            {index === 0 && collapseFramesCount > 0 && (
               <div className="flex justify-center items-center mt-8 mb-8">
                 <Button
                   className="inline-flex items-center"

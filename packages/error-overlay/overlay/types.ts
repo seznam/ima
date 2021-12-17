@@ -1,5 +1,3 @@
-import { StackFrame } from '#/entities';
-
 declare module 'easy-uid' {
   export default function (): string;
 }
@@ -14,10 +12,16 @@ declare global {
   }
 }
 
-export type ErrorType = 'compiler' | 'runtime';
+export type ErrorType = 'compile' | 'runtime';
+
+export type ParsedErrorLocation = {
+  fileUri: string;
+  lineNumber: number;
+  columnNumber: number;
+};
 
 export type ParsedStack = {
-  functionName: string | null;
+  functionName?: string | null;
   fileUri?: string;
   lineNumber?: number;
   columnNumber?: number;

@@ -2,7 +2,7 @@ import http from 'http';
 import path from 'path';
 import webpack from 'webpack';
 import devMiddleware from 'webpack-dev-middleware';
-import hotMiddleware from 'webpack-hot-middleware';
+import hotMiddleware from '@gatsbyjs/webpack-hot-middleware';
 import { openEditorMiddleware } from './openEditorMiddleware';
 import { evalSourceMapMiddleware } from './evalSourceMapMiddleware';
 import { createWebpackConfig } from '../webpack/utils';

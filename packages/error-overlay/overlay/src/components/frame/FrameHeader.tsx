@@ -4,7 +4,7 @@ import { FunctionComponent } from 'react';
 import { Button, Icon } from '#/components';
 import { useOpenEditor } from '#/hooks';
 import { ErrorWrapper, FrameWrapper } from '#/reducers/errorsReducer';
-import { useErrorsDispatcher } from '#/stores';
+import { useErrorsDispatcher, useErrorsStore } from '#/stores';
 
 export type FrameHeaderProps = {
   errorId: ErrorWrapper['id'];
@@ -18,6 +18,7 @@ const FrameHeader: FunctionComponent<FrameHeaderProps> = ({
   hasFragment
 }) => {
   const dispatch = useErrorsDispatcher();
+  const errorType = useErrorsStore(context => context.currentError?.type);
   const { openEditor, isLoading } = useOpenEditor();
   const { frame } = frameWrapper;
   const fileUri = frameWrapper.showOriginal
@@ -58,22 +59,26 @@ const FrameHeader: FunctionComponent<FrameHeaderProps> = ({
       </button>
 
       <div className="flex px-4">
-        <Button
-          linkStyle
-          size="xs"
-          color={frameWrapper.showOriginal ? 'green' : 'light'}
-          onClick={() =>
-            dispatch({
-              type: frameWrapper.showOriginal ? 'viewCompiled' : 'viewOriginal',
-              payload: { errorId, frameId: frameWrapper.id }
-            })
-          }>
-          {frameWrapper.showOriginal ? (
-            <Icon icon="openEye" />
-          ) : (
-            <Icon icon="closedEye" />
-          )}
-        </Button>
+        {errorType !== 'compile' && (
+          <Button
+            linkStyle
+            size="xs"
+            color={frameWrapper.showOriginal ? 'green' : 'light'}
+            onClick={() =>
+              dispatch({
+                type: frameWrapper.showOriginal
+                  ? 'viewCompiled'
+                  : 'viewOriginal',
+                payload: { errorId, frameId: frameWrapper.id }
+              })
+            }>
+            {frameWrapper.showOriginal ? (
+              <Icon icon="openEye" />
+            ) : (
+              <Icon icon="closedEye" />
+            )}
+          </Button>
+        )}
 
         <Button
           onClick={() => openEditor(frameWrapper)}

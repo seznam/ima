@@ -1,4 +1,6 @@
-import { overlayBridge } from '#/utils';
+import { StatsError } from 'webpack';
+
+import { overlayBridge, hmrEventSource } from '#/utils';
 
 /**
  * Invoked when a RUNTIME error is CAUGHT (e.g. during module init or execution).
@@ -28,13 +30,13 @@ function clearRuntimeErrors(): void {
  *
  * @param {string} webpackErrorMessage
  */
-function showCompileError(webpackErrorMessage: string): void {
-  if (!webpackErrorMessage) {
+function showCompileErrors(errors: StatsError[]): void {
+  if (!Array.isArray(errors) || errors.length === 0) {
     return;
   }
 
   overlayBridge.init();
-  overlayBridge.compileError(webpackErrorMessage);
+  overlayBridge.compileError(errors);
 }
 
 /**
@@ -45,9 +47,16 @@ function clearCompileError(): void {
   overlayBridge.destroy();
 }
 
+// Connect client to HMR Event source
+hmrEventSource.addListener(data => {
+  if (Array.isArray(data?.errors) && data?.errors?.length > 0) {
+    showCompileErrors(data.errors);
+  }
+});
+
 export {
   handleRuntimeError,
   clearRuntimeErrors,
-  showCompileError,
+  showCompileErrors,
   clearCompileError
 };

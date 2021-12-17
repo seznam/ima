@@ -61,9 +61,7 @@ function evalSourceMapMiddleware() {
         return res.status(500).end();
       }
 
-      fileUri = path.isAbsolute(fileUri)
-        ? fileUri
-        : path.resolve('../', fileUri);
+      fileUri = path.isAbsolute(fileUri) ? fileUri : path.resolve(fileUri);
 
       if (!fs.existsSync(fileUri)) {
         return res.status(500).end();

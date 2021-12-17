@@ -9,9 +9,9 @@ interface SourceFragmentLine {
  * with optional original source fileName, line, column and source if available.
  */
 class StackFrame {
-  fileName: string;
-  functionName: string | null;
-  sourceFragment: SourceFragmentLine[] | null;
+  fileName?: string;
+  functionName?: string | null;
+  sourceFragment?: SourceFragmentLine[] | null;
 
   lineNumber?: number;
   columnNumber?: number;
@@ -74,9 +74,9 @@ class StackFrame {
     originalColumnNumber,
     originalSourceFragment
   }: {
-    fileName: string;
-    functionName: string | null;
-    sourceFragment: SourceFragmentLine[] | null;
+    fileName?: string;
+    functionName?: string | null;
+    sourceFragment?: SourceFragmentLine[] | null;
     lineNumber?: number;
     columnNumber?: number;
     originalFileName?: string | null;

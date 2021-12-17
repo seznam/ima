@@ -1,3 +1,5 @@
+import { StatsError } from 'webpack';
+
 import { OverlayEventName, ClientEventName } from '../../../types';
 import overlayIndexHtml from './overlayIndex.html';
 
@@ -35,14 +37,14 @@ class OverlayBridge {
     window.addEventListener(OverlayEventName.Close, this._closeHandler);
   }
 
-  compileError(error: string): void {
-    if (!error) {
+  compileError(errors: StatsError[]): void {
+    if (!errors) {
       return;
     }
 
     this._dispatchEvent(
-      new CustomEvent<{ error: string }>(ClientEventName.CompileErrors, {
-        detail: { error }
+      new CustomEvent<{ errors: StatsError[] }>(ClientEventName.CompileErrors, {
+        detail: { errors }
       })
     );
   }

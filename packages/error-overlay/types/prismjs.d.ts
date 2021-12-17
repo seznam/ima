@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 declare module 'prismjs' {
-  export type Language = 'javascript' | 'jsx';
+  export type Language = string;
   export type Grammar = unknown;
 
   export const languages: Record<PrismJS.Language, PrismJS.Grammar>;

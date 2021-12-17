@@ -164,7 +164,7 @@ export default async (
         : {
             [name]: [
               isWatch &&
-                `webpack-hot-middleware/client?name=${name}&path=//localhost:${imaEnvironment.$Server.port}/__webpack_hmr&timeout=2000&reload=true&overlay=true&overlayWarnings=true`,
+                `@gatsbyjs/webpack-hot-middleware/client?name=${name}&path=//localhost:${imaEnvironment.$Server.port}/__webpack_hmr&timeout=2000&reload=true&overlay=false&overlayWarnings=false`,
               require.resolve('@ima/error-overlay/dist/imaHmrClient.js'),
               path.join(rootDir, 'app/main.js')
             ].filter(Boolean) as string[]

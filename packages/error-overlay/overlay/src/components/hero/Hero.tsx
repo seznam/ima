@@ -20,7 +20,7 @@ const Hero: FunctionComponent<HeroProps> = ({ error }) => {
       <div>
         <h1
           className={clsx('inline py-1 px-2 text-xs font-bold rounded-md', {
-            ['text-yellow-700 bg-yellow-100']: error?.type === 'compiler',
+            ['text-yellow-700 bg-yellow-100']: error?.type === 'compile',
             ['text-rose-700 bg-rose-100']: error?.type === 'runtime'
           })}>
           {errorType}
@@ -29,7 +29,8 @@ const Hero: FunctionComponent<HeroProps> = ({ error }) => {
           {error.name}: {error.message}
         </h2>
       </div>
-      {Object.keys(error.frames).length > 0 && (
+      {/* Compile errors have only original sources */}
+      {error.type !== 'compile' && Object.keys(error.frames).length > 0 && (
         <Button
           color={error.showOriginal ? 'gray' : 'green'}
           className="inline-flex items-center"

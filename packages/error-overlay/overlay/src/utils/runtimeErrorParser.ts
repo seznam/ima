@@ -100,7 +100,7 @@ function parseStack(stack: string[]): ParsedStack[] {
  * @param {Error | string | string[]} error Error, trace or similar object.
  * @returns {ParsedStack[]}
  */
-function parseError(error: Error | string | string[]): ParsedStack[] {
+function parseRuntimeError(error: Error | string | string[]): ParsedStack[] {
   if (error == null) {
     throw new Error('You cannot pass a null object.');
   }
@@ -120,4 +120,4 @@ function parseError(error: Error | string | string[]): ParsedStack[] {
   throw new Error('The error you provided does not contain a stack trace.');
 }
 
-export { parseError };
+export { parseRuntimeError };

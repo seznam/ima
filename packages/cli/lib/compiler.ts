@@ -3,7 +3,9 @@ import webpack, {
   WebpackError,
   Configuration,
   MultiCompiler,
-  MultiStats
+  MultiStats,
+  Stats,
+  StatsError
 } from 'webpack';
 import prettyMs from 'pretty-ms';
 import prettyBytes from 'pretty-bytes';
@@ -35,6 +37,7 @@ function handleError(err: WebpackError | unknown): void {
  * @param {VerboseOptions} verbose Optional level of verbosity.
  * @returns {void}
  */
+// TODO print only warnings count -> print warnings with additional cli arg
 function handleStats(
   stats: MultiStats | undefined,
   verbose: VerboseOptions = VerboseOptions.DEFAULT

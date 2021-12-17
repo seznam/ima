@@ -91,4 +91,55 @@ async function mapStackFramesToOriginal(
   return mappedFrames;
 }
 
-export { mapStackFramesToOriginal };
+/**
+ * Maps error location frames into their original code. Unlike
+ * mapStackFramesToOriginal function, this function doesn't work
+ * with source maps, but rather assumes that provided frames
+ * already point to the original file location.
+ *
+ * This also means that resulted StackFrames contain only original
+ * source fragments.
+ *
+ * @param {ParsedStack[]} frames Parsed stack frames (with original file locations).
+ * @returns {Promise<StackFrame[]>} Array of mapped StackFrame entity instances.
+ */
+async function mapCompileStackFrames(
+  frames: ParsedStack[]
+): Promise<StackFrame[]> {
+  const mappedFrames: StackFrame[] = await Promise.all(
+    frames
+      .filter(frame => {
+        if (!frame.fileUri) {
+          return false;
+        }
+
+        return true;
+      })
+      .map(async (frame, index) => {
+        // Get file source
+        const fileSource = await sourceStorage.get(frame.fileUri as string);
+
+        // Create parsed stack frame
+        const stackFrame = new StackFrame({
+          originalFileName: frame.fileUri as string,
+          originalSourceFragment:
+            (frame.lineNumber &&
+              fileSource?.fileContents &&
+              StackFrame.createSourceFragment(
+                frame.lineNumber,
+                fileSource?.fileContents,
+                index === 0 ? 8 : 4
+              )) ||
+            null,
+          originalLineNumber: frame.lineNumber,
+          originalColumnNumber: frame.columnNumber
+        });
+
+        return stackFrame;
+      })
+  );
+
+  return mappedFrames;
+}
+
+export { mapStackFramesToOriginal, mapCompileStackFrames };
