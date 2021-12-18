@@ -21,15 +21,14 @@ export type FrameProps = {
 };
 
 function getPrismLanguage(
-  fileUri: string
+  fileUri: string | undefined
 ): {
   grammar: PrismJS.Grammar;
   language: PrismJS.Language;
 } {
   let language: PrismJS.Language = 'javascript';
-  const fileType = fileUri.split('.').pop();
 
-  switch (fileType) {
+  switch (fileUri?.split('.').pop()) {
     case 'jsx':
     case 'tsx':
       language = 'jsx';

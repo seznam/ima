@@ -10,6 +10,10 @@ import { useErrorsStore, useErrorsDispatcher } from '#/stores';
  * TODO
  *  - make context lines editable
  *  - support for build errors
+ *  - add word highlight
+ *  - mobile view
+ *  - pass pwd/cwd using client.js and resolve absolute paths accordingly
+ *  - some compile errors are not parsing properly lines (module errors)
  *  - source map parsing performance optimization "with" -> probably will not work but make sure to destroy source maps (which is currently not happening)
  */
 const App: FunctionComponent = () => {

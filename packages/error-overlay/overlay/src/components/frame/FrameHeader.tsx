@@ -21,9 +21,14 @@ const FrameHeader: FunctionComponent<FrameHeaderProps> = ({
   const errorType = useErrorsStore(context => context.currentError?.type);
   const { openEditor, isLoading } = useOpenEditor();
   const { frame } = frameWrapper;
-  const fileUri = frameWrapper.showOriginal
-    ? `${frame.getPrettyOriginalFileUri()}:${frame.originalLineNumber}`
-    : `${frame.fileName}:${frame.lineNumber}:${frame.columnNumber}`;
+  const fileUriParts =
+    frameWrapper.showOriginal || errorType === 'compile'
+      ? [
+          frame.getPrettyOriginalFileUri(),
+          frame.originalLineNumber,
+          frame.originalColumnNumber
+        ]
+      : [frame.fileName, frame.lineNumber, frame.columnNumber];
 
   return (
     <div
@@ -52,9 +57,13 @@ const FrameHeader: FunctionComponent<FrameHeaderProps> = ({
             {!hasFragment && (
               <Icon icon="alert" size="xs" className="mr-1 text-rose-400" />
             )}
-            {frame.getFunctionName()}
+            {errorType === 'compile'
+              ? frame.getPrettyFileName()
+              : frame.getFunctionName()}
           </div>
-          <div className="text-xs text-slate-400">{fileUri}</div>
+          <div className="text-xs text-slate-400">
+            {fileUriParts.filter(Boolean).join(':')}
+          </div>
         </div>
       </button>
 

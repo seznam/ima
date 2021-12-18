@@ -26,3 +26,8 @@ export type ParsedStack = {
   lineNumber?: number;
   columnNumber?: number;
 };
+
+export type ParsedCompileStack = ParsedStack & {
+  name: string;
+  message: string;
+};

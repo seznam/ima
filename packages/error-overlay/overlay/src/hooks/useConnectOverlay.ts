@@ -31,17 +31,6 @@ function useConnectSSRErrorOverlay(): void {
       });
     };
 
-    // console.log(window.__ima_server_compile_error);
-
-    // console.log(
-    //   parseCompileError(
-    //     [
-    //       window.__ima_server_compile_error.moduleName,
-    //       window.__ima_server_compile_error.message
-    //     ].join('\n')
-    //   )
-    // );
-
     initStackFrames();
   }, []);
 }
@@ -72,14 +61,20 @@ function useConnectClientErrorOverlay(): void {
     (event: WindowEventMap[ClientEventName.CompileErrors]) => {
       event.detail.errors.forEach(error => {
         console.error(error);
-        console.error(parseCompileError(error));
 
-        mapCompileStackFrames(parseCompileError(error)).then(frames => {
+        const parsedError = parseCompileError(error);
+
+        if (!parsedError) {
+          return;
+        }
+
+        const { name, message, ...parsedStack } = parsedError;
+        mapCompileStackFrames([parsedStack]).then(frames => {
           dispatch({
             type: 'add',
             payload: {
-              name: 'Error name',
-              message: error.message,
+              name: name,
+              message: message,
               type: 'compile',
               frames
             }

@@ -98,22 +98,23 @@ class StackFrame {
   }
 
   /**
-   * Returns true for files which can be collapsed in initial report.
-   * These usually includes errors from non-important node_modules.
-   *
-   * @returns {boolean}
-   */
-  isCollapsible(): boolean {
-    return !!this.originalFileName?.includes('node_modules');
-  }
-
-  /**
    * Returns the name of stack frame function.
    *
    * @returns {string} Name of the function (anonymous) if unavailable.
    */
   getFunctionName(): string {
     return this.functionName || '(anonymous function)';
+  }
+
+  /**
+   * Returns the file name at originalFileName path
+   *
+   * @returns {string} Name of the file (after last slash).
+   */
+  getPrettyFileName(): string {
+    return (
+      this.originalFileName?.split('/').pop() ?? '(unable to parse filename)'
+    );
   }
 
   /**
