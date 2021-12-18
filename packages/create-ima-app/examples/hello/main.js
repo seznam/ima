@@ -14,10 +14,6 @@ if (!$IMA.Test) {
   ima
     .onLoad()
     .then(() => {
-      if (module.hot && $IMA.$Dispatcher) {
-        $IMA.$Dispatcher.fire('destroyIma');
-      }
-
       ima.reviveClientApp(getInitialAppConfigFunctions());
     })
     .catch(error => {
@@ -27,8 +23,11 @@ if (!$IMA.Test) {
     });
 }
 
-if (module.hot) {
-  module.hot.accept();
+if (module.hot && module.hot.accept) {
+  module.hot.accept((_, { module }) => {
+    // Try to accept module again
+    module.hot.accept();
+  });
 }
 
 export { getInitialAppConfigFunctions, ima };

@@ -57,9 +57,8 @@ function errorsReducer(state: ErrorsState, action: ErrorsAction): ErrorsState {
 
       return {
         ...state,
-        currentErrorId: !state.currentErrorId ? errorId : state.currentErrorId,
+        currentErrorId: errorId,
         errors: {
-          ...state.errors,
           [errorId]: {
             id: errorId,
             name,
@@ -83,9 +82,10 @@ function errorsReducer(state: ErrorsState, action: ErrorsAction): ErrorsState {
               },
               {}
             )
-          }
+          },
+          ...state.errors
         },
-        errorIds: [...state.errorIds, errorId]
+        errorIds: [errorId, ...state.errorIds]
       };
     }
 

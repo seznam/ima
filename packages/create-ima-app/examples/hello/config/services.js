@@ -15,12 +15,4 @@ export default (ns, oc, config) => {
       config.$IMA.fatalErrorHandler(fatalError);
     });
   });
-
-  oc.get('$Dispatcher').listen('destroyIma', () => {
-    oc.get('$Router').unlisten();
-    oc.get('$EventBus').unlistenAll();
-    oc.get('$PageManager').destroy();
-    oc.get('$PageRenderer').unmount();
-    oc.get('$Dispatcher').clear();
-  });
 };
