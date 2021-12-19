@@ -76,6 +76,13 @@ class SourceMap {
   getSources(): string[] {
     return this._sourceMap.sources;
   }
+
+  /**
+   * Destroy loaded source map to free up allocated memory by wasm module.
+   */
+  destroy(): void {
+    this._sourceMap.destroy();
+  }
 }
 
 export { SourceMap };

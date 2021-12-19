@@ -89,6 +89,9 @@ async function mapStackFramesToOriginal(
       })
   );
 
+  // Cleanup wasm allocated sourcemaps
+  sourceStorage.cleanup();
+
   return mappedFrames;
 }
 
@@ -140,6 +143,9 @@ async function mapCompileStackFrames(
         return stackFrame;
       })
   );
+
+  // Cleanup wasm allocated sourcemaps
+  sourceStorage.cleanup();
 
   return mappedFrames;
 }

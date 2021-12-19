@@ -67,6 +67,23 @@ class SourceStorage {
   }
 
   /**
+   * Empties loaded sources and destroys allocated source maps.
+   */
+  async cleanup(): Promise<void> {
+    for (const source of this._sourceStorage.values()) {
+      const loadedSource = await source;
+
+      if (!loadedSource || !loadedSource.sourceMap) {
+        return;
+      }
+
+      loadedSource.sourceMap?.destroy();
+    }
+
+    this._sourceStorage.clear();
+  }
+
+  /**
    * Fetch file contents from dev server API.
    *
    * @param {string} fileUri The uri of the source file.

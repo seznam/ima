@@ -6,13 +6,6 @@ import { Frame, Header, Hero, Icon, Button } from '#/components';
 import { useConnectOverlay, useBridgeInterface } from '#/hooks';
 import { useErrorsStore, useErrorsDispatcher } from '#/stores';
 
-/**
- * TODO
- *  - make context lines editable
- *  - pass pwd/cwd using client.js and resolve absolute paths accordingly
- *  - some compile errors are not parsing properly lines (module errors)
- *  - source map parsing performance optimization "with" -> probably will not work but make sure to destroy source maps (which is currently not happening)
- */
 const App: FunctionComponent = () => {
   useConnectOverlay();
   const dispatch = useErrorsDispatcher();
@@ -47,7 +40,7 @@ const App: FunctionComponent = () => {
           'animate-fade-in-down': !isSSRError
         }
       )}>
-      <div className="container p-4 mx-auto max-width[1024px]">
+      <div className="p-4 mx-auto max-w-screen-lg">
         <Header error={currentError} />
         <Hero error={currentError} />
         {visibleFrames.map((frameWrapper, index) => (

@@ -61,6 +61,7 @@ function formatMessage(
   message: string,
   type?: keyof typeof LineNumberRegExps
 ): [name: string, message: string] {
+
   if (message && message.indexOf('Module not found: ') === 0) {
     message = message
       .replace('Error: ', '')
@@ -157,6 +158,9 @@ function parseCompileError(error: StatsError): ParsedCompileStack | null {
           : errorLine,
         lineRE as keyof typeof LineNumberRegExps
       );
+
+      console.log(lines);
+
 
       return { name, message, fileUri, lineNumber, columnNumber };
     }

@@ -43,7 +43,7 @@ const FrameHeader: FunctionComponent<FrameHeaderProps> = ({
             payload: { errorId, frameId: frameWrapper.id }
           })
         }
-        className="flex overflow-y-auto justify-start items-center py-1 px-3 md:px-4 rounded-tl-md border-r border-b-2 transition-all hover:bg-slate-600 active:bg-slate-500 border-r-slate-600 border-b-cyan-500">
+        className="flex overflow-y-auto justify-start items-center py-1 md:py-2 px-3 md:px-4 rounded-tl-md border-r border-b-2 transition-all hover:bg-slate-600 active:bg-slate-500 border-r-slate-600 border-b-cyan-500">
         <div className="mr-3 md:mr-4 text-slate-400/50">
           <Icon
             icon="chevron"
