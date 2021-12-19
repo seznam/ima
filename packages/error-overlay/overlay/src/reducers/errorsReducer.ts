@@ -89,6 +89,40 @@ function errorsReducer(state: ErrorsState, action: ErrorsAction): ErrorsState {
       };
     }
 
+    case 'clear': {
+      const { type } = action?.payload || {};
+
+      if (!type) {
+        return errorsInitialState;
+      }
+
+      const filteredErrors = Object.values(state.errors).reduce<{
+        [key: string]: ErrorWrapper;
+      }>((acc, cur) => {
+        if (cur.type === type) {
+          return acc;
+        }
+
+        acc[cur.id] = cur;
+
+        return acc;
+      }, {});
+
+      const filteredErrorIds = Object.keys(filteredErrors);
+
+      if (action?.payload?.emptyCallback && filteredErrorIds.length === 0) {
+        action.payload.emptyCallback();
+      }
+
+      return {
+        ...state,
+        errors: filteredErrors,
+        errorIds: filteredErrorIds,
+        currentErrorId:
+          filteredErrorIds.length !== 0 ? filteredErrorIds[0] : null
+      };
+    }
+
     case 'collapse':
     case 'expand':
     case 'viewCompiled':

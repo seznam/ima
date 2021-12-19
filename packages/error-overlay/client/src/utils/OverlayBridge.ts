@@ -137,5 +137,14 @@ class OverlayBridge {
   }
 }
 
-const overlayBridge = new OverlayBridge();
-export { overlayBridge };
+// Ensure there's only one instance
+function getOverlayBridge(): OverlayBridge {
+  if (!window.__ima_hmr?.overlayBridge) {
+    window.__ima_hmr = window.__ima_hmr || {};
+    window.__ima_hmr.overlayBridge = new OverlayBridge();
+  }
+
+  return window.__ima_hmr.overlayBridge;
+}
+
+export { OverlayBridge, getOverlayBridge };

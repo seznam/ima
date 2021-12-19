@@ -1,6 +1,6 @@
 import { SourceMapConsumer } from 'source-map';
 
-import { SourceMap, sourceStorage } from '#/entities';
+import { SourceMap, SourceStorage } from '#/entities';
 
 /**
  * Extracts sourceMappingURL from the provided file contents.
@@ -45,7 +45,8 @@ async function extractSourceMappingUrl(
  */
 async function getSourceMap(
   fileUri: string,
-  fileContents: string
+  fileContents: string,
+  sourceStorage: SourceStorage
 ): Promise<SourceMap> {
   let rawSourceMap;
   const sourceMappingUrl = await extractSourceMappingUrl(fileUri, fileContents);
@@ -79,4 +80,4 @@ async function getSourceMap(
   return new SourceMap(await new SourceMapConsumer(rawSourceMap));
 }
 
-export { extractSourceMappingUrl as extractSourceMapUrl, getSourceMap };
+export { extractSourceMappingUrl, getSourceMap };

@@ -183,18 +183,12 @@ export default class ClientRouter extends AbstractRouter {
       url: url || this.getBaseUrl() + path
     };
 
-    // FIXME (try to find better solution)
-    let isFulfilled = true;
-
     return super
       .route(path, options, action, locals)
-      .catch(error => {
-        isFulfilled = false;
-        return this.handleError({ error }, {}, locals);
-      })
+      .catch(error => this.handleError({ error }, {}, locals))
       .then(() => {
         // FIXME (try to find better solution)
-        if (isFulfilled) {
+        if (typeof window !== 'undefined' && window.__ima_hmr) {
           window.__ima_hmr.clearRuntimeErrors();
         }
       })
@@ -214,6 +208,7 @@ export default class ClientRouter extends AbstractRouter {
     // FIXME (try to find better solution)
     if (typeof window !== 'undefined' && window.__ima_hmr) {
       window.__ima_hmr.handleRuntimeError(params.error);
+      return;
     }
 
     if (this.isClientError(params.error)) {

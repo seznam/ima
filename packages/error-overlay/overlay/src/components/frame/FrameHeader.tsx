@@ -21,14 +21,14 @@ const FrameHeader: FunctionComponent<FrameHeaderProps> = ({
   const errorType = useErrorsStore(context => context.currentError?.type);
   const { openEditor, isLoading } = useOpenEditor();
   const { frame } = frameWrapper;
-  const fileUriParts =
-    frameWrapper.showOriginal || errorType === 'compile'
-      ? [
-          frame.getPrettyOriginalFileUri(),
-          frame.originalLineNumber,
-          frame.originalColumnNumber
-        ]
-      : [frame.fileName, frame.lineNumber, frame.columnNumber];
+  const fileUriParts = (frameWrapper.showOriginal || errorType === 'compile'
+    ? [
+        frame.getPrettyOriginalFileUri(),
+        frame.originalLineNumber,
+        frame.originalColumnNumber
+      ]
+    : [frame.fileName, frame.lineNumber, frame.columnNumber]
+  ).filter(Boolean);
 
   return (
     <div
@@ -43,8 +43,8 @@ const FrameHeader: FunctionComponent<FrameHeaderProps> = ({
             payload: { errorId, frameId: frameWrapper.id }
           })
         }
-        className="flex justify-start items-center py-2 px-4 rounded-tl-md border-r border-b-2 transition-all hover:bg-slate-600 active:bg-slate-500 border-r-slate-600 border-b-cyan-500">
-        <div className="mr-4 text-slate-400/50">
+        className="flex overflow-y-auto justify-start items-center py-1 px-3 md:px-4 rounded-tl-md border-r border-b-2 transition-all hover:bg-slate-600 active:bg-slate-500 border-r-slate-600 border-b-cyan-500">
+        <div className="mr-3 md:mr-4 text-slate-400/50">
           <Icon
             icon="chevron"
             className={clsx('transition-transform', {
@@ -52,8 +52,10 @@ const FrameHeader: FunctionComponent<FrameHeaderProps> = ({
             })}
           />
         </div>
-        <div style={{ height: '40px' }} className="text-left grow-0">
-          <div className="flex items-center text-sm leading-6">
+        <div
+          style={{ height: '40px' }}
+          className="flex flex-col justify-center items-start text-left grow-0">
+          <div className="flex items-center text-xs md:text-sm leading-5 md:leading-6 whitespace-nowrap">
             {!hasFragment && (
               <Icon icon="alert" size="xs" className="mr-1 text-rose-400" />
             )}
@@ -61,15 +63,18 @@ const FrameHeader: FunctionComponent<FrameHeaderProps> = ({
               ? frame.getPrettyFileName()
               : frame.getFunctionName()}
           </div>
-          <div className="text-xs text-slate-400">
-            {fileUriParts.filter(Boolean).join(':')}
-          </div>
+          {fileUriParts.length > 0 && (
+            <div className="md:text-xs whitespace-nowrap text-[0.65rem] text-slate-400">
+              {fileUriParts.join(':')}
+            </div>
+          )}
         </div>
       </button>
 
-      <div className="flex px-4">
+      <div className="flex px-2 md:px-4">
         {errorType !== 'compile' && (
           <Button
+            className="p-1 md:p-2"
             linkStyle
             size="xs"
             color={frameWrapper.showOriginal ? 'green' : 'light'}
@@ -90,6 +95,7 @@ const FrameHeader: FunctionComponent<FrameHeaderProps> = ({
         )}
 
         <Button
+          className="p-1 md:p-2"
           onClick={() => openEditor(frameWrapper)}
           disabled={!hasFragment || isLoading}
           size="xs"

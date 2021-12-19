@@ -1,4 +1,4 @@
-import { StackFrame, sourceStorage } from '#/entities';
+import { StackFrame, SourceStorage } from '#/entities';
 
 import { ParsedStack } from '../../types';
 
@@ -16,6 +16,7 @@ const IgnoredFunctionNames = ['processTicksAndRejections'];
 async function mapStackFramesToOriginal(
   frames: ParsedStack[]
 ): Promise<StackFrame[]> {
+  const sourceStorage = new SourceStorage();
   const mappedFrames: StackFrame[] = await Promise.all(
     frames
       .filter(frame => {
@@ -106,6 +107,7 @@ async function mapStackFramesToOriginal(
 async function mapCompileStackFrames(
   frames: ParsedStack[]
 ): Promise<StackFrame[]> {
+  const sourceStorage = new SourceStorage();
   const mappedFrames: StackFrame[] = await Promise.all(
     frames
       .filter(frame => {

@@ -44,5 +44,14 @@ class HMREventSource {
   }
 }
 
-const hmrEventSource = new HMREventSource();
-export { hmrEventSource };
+// Ensure there's only one instance
+function getEventSource(): HMREventSource {
+  if (!window.__ima_hmr?.hmrEventSource) {
+    window.__ima_hmr = window.__ima_hmr || {};
+    window.__ima_hmr.hmrEventSource = new HMREventSource();
+  }
+
+  return window.__ima_hmr.hmrEventSource;
+}
+
+export { HMREventSource, getEventSource };

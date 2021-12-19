@@ -1,4 +1,4 @@
-import CompressionPlugin from 'compression-webpack-plugin';
+import CompressionPlugin, { ZlibOptions } from 'compression-webpack-plugin';
 import { Configuration, ResolveOptions } from 'webpack';
 import { CommandBuilder } from 'yargs';
 
@@ -151,10 +151,7 @@ export type ImaConfig = {
   /**
    * Array of compression algorithms used for assets in production build. [default=['brotliCompress', 'gzip']]
    */
-  compression: Extract<
-    CompressionPlugin.ZlibAlgorithm,
-    'gzip' | 'brotliCompress'
-  >[];
+  compression: (CompressionPlugin.AlgorithmFunction<ZlibOptions> | 'gzip' | 'brotliCompress')[];
 
   /**
    * Threshold to inline image resources as base64 automatically [default=8192]

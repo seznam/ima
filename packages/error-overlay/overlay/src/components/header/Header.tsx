@@ -14,6 +14,10 @@ const Header: FunctionComponent<HeaderProps> = ({ error }) => {
   const dispatch = useErrorsDispatcher();
   const errorIds = useErrorsStore(context => context.state.errorIds);
 
+  if (isSSRError) {
+    return null;
+  }
+
   return (
     <div className="flex justify-between items-center my-3">
       {error && errorIds.length > 1 ? (
@@ -30,7 +34,7 @@ const Header: FunctionComponent<HeaderProps> = ({ error }) => {
             className="mr-3">
             <Icon icon="chevron" size="xs" />
           </Button>
-          <span className="text-sm text-slate-700">
+          <span className="text-xs md:text-sm text-slate-700">
             <span className="font-bold">{errorIds.indexOf(error.id) + 1}</span>{' '}
             of <span className="font-bold">{errorIds.length}</span> errors are
             visible on the page
@@ -39,11 +43,9 @@ const Header: FunctionComponent<HeaderProps> = ({ error }) => {
       ) : (
         <div />
       )}
-      {!isSSRError && (
-        <Button onClick={closeOverlay} linkStyle>
-          <Icon icon="cross" size="lg" className="text-slate-700" />
-        </Button>
-      )}
+      <Button onClick={closeOverlay} linkStyle>
+        <Icon icon="cross" size="lg" className="text-slate-700" />
+      </Button>
     </div>
   );
 };

@@ -86,13 +86,27 @@ function useConnectClientErrorOverlay(): void {
   );
 
   const clearRuntimeErrorListener = useCallback(() => {
-    // eslint-disable-next-line no-console
-    console.log('clearRuntimeErrorListener');
+    dispatch({
+      type: 'clear',
+      payload: {
+        type: 'runtime',
+        emptyCallback: () => {
+          window.parent.dispatchEvent(new CustomEvent(OverlayEventName.Close));
+        }
+      }
+    });
   }, []);
 
   const clearCompileErrorListener = useCallback(() => {
-    // eslint-disable-next-line no-console
-    console.log('clearCompileErrorListener');
+    dispatch({
+      type: 'clear',
+      payload: {
+        type: 'compile',
+        emptyCallback: () => {
+          window.parent.dispatchEvent(new CustomEvent(OverlayEventName.Close));
+        }
+      }
+    });
   }, []);
 
   // Connect error overlay to client interop

@@ -9,7 +9,7 @@ import RemoveEmptyScriptsPlugin from 'webpack-remove-empty-scripts';
 import CssMinimizerPlugin from 'css-minimizer-webpack-plugin';
 import TerserPlugin from 'terser-webpack-plugin';
 import CompressionPlugin from 'compression-webpack-plugin';
-// import ReactRefreshWebpackPlugin from '@pmmmwh/react-refresh-webpack-plugin';
+import ReactRefreshWebpackPlugin from '@pmmmwh/react-refresh-webpack-plugin';
 
 import { ConfigurationContext, ImaConfig } from '../types';
 import {
@@ -454,14 +454,14 @@ export default async (
               : []),
 
             // Following plugins enable react refresh and hmr in watch mode
-            isWatch && new webpack.HotModuleReplacementPlugin()
-            // isWatch &&
-            //   new ReactRefreshWebpackPlugin({
-            //     overlay: {
-            //       // module: '@ima/error-overlay/dist/fastRefreshClient.js',
-            //       sockIntegration: 'whm'
-            //     }
-            //   })
+            isWatch && new webpack.HotModuleReplacementPlugin(),
+            isWatch &&
+              new ReactRefreshWebpackPlugin({
+                overlay: {
+                  module: '@ima/error-overlay/dist/fastRefreshClient.js',
+                  sockIntegration: 'whm'
+                }
+              })
           ])
     ].filter(Boolean),
 

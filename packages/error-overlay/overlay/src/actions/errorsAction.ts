@@ -14,6 +14,13 @@ type ErrorsAction =
       };
     }
   | {
+      type: 'clear';
+      payload?: {
+        type: ErrorType;
+        emptyCallback?: () => void; // FIXME not really great solution, but works for now
+      };
+    }
+  | {
       type: 'viewOriginal';
       payload: { errorId: ErrorWrapper['id']; frameId?: FrameWrapper['id'] };
     }

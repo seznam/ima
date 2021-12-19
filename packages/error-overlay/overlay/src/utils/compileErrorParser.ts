@@ -64,7 +64,7 @@ function formatMessage(
   if (message && message.indexOf('Module not found: ') === 0) {
     message = message
       .replace('Error: ', '')
-      .replace("Module not found: Can't resolve", 'Cannot find file:');
+      .replace("Module not found: Can't resolve", "Can't resolve:");
   }
 
   if (type === 'babel') {
@@ -137,8 +137,13 @@ function parseCompileError(error: StatsError): ParsedCompileStack | null {
     );
 
     if (match) {
+      lineNumber = parseInt(match[1], 10);
+
       // We append '@import globals.less' in every less file, so we need to subtract these lines from result
-      lineNumber = parseInt(match[1], 10) + (lineRE === 'less' ? -2 : 0);
+      if (fileUri.endsWith('less')) {
+        lineNumber -= 2;
+      }
+
       // Column starts with 0, so add 1
       columnNumber = parseInt(match[2], 10) + 1 || 1;
 

@@ -83,7 +83,7 @@ const Frame: FunctionComponent<FrameProps> = ({
       />
 
       {!frameWrapper.isCollapsed && (
-        <div className="overflow-y-auto py-3 text-sm leading-6 rounded-b-xl text-slate-50 bg-slate-700">
+        <div className="overflow-y-auto py-3 text-xs md:text-sm leading-5 md:leading-6 rounded-b-xl text-slate-50 bg-slate-700">
           {hasFragment ? (
             <pre>
               <code>
@@ -98,7 +98,7 @@ const Frame: FunctionComponent<FrameProps> = ({
                         ? 'bg-rose-500/20 border-rose-500'
                         : 'border-transparent'
                     }`}>
-                    <div className="pr-3 pl-3 mr-3 border-r-2 text-slate-400 border-slate-600/75">
+                    <div className="pr-2 md:pr-3 pl-2 md:pl-3 mr-2 md:mr-3 border-r-2 text-slate-400 border-slate-600/75">
                       {line.line}
                     </div>
                     <div

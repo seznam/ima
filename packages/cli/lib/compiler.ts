@@ -3,9 +3,7 @@ import webpack, {
   WebpackError,
   Configuration,
   MultiCompiler,
-  MultiStats,
-  Stats,
-  StatsError
+  MultiStats
 } from 'webpack';
 import prettyMs from 'pretty-ms';
 import prettyBytes from 'pretty-bytes';

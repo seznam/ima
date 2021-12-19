@@ -22,12 +22,7 @@ module.exports = {
       { 'ts-expect-error': 'allow-with-description' }
     ],
     '@typescript-eslint/no-namespace': ['error', { allowDeclarations: true }],
-    'tailwindcss/no-custom-classname': [
-      'error',
-      {
-        whitelist: ['^.*\\/\\d+$', 'hover\\:bg\\-slate\\-600']
-      }
-    ],
+    'tailwindcss/no-custom-classname': 'off',
     'import/no-unresolved': 'off',
     'import/order': [
       'error',

@@ -1,11 +1,16 @@
+import { DebouncedFunc } from 'lodash';
 import { StatsError } from 'webpack';
+
+import { HMREventSource, OverlayBridge } from '#/utils';
 
 declare global {
   interface Window {
     __ima_hmr: {
-      handleRuntimeError(error: Error): void;
+      hmrEventSource?: HMREventSource;
+      overlayBridge?: OverlayBridge;
+      handleRuntimeError: DebouncedFunc<(error: Error) => void>;
       clearRuntimeErrors(): void;
-      showCompileErrors(errors: StatsError[]): void;
+      showCompileErrors?(errors: StatsError[]): void;
       clearCompileError(): void;
     };
   }

@@ -104,14 +104,13 @@ class SourceStorage {
     let sourceMap = null;
 
     try {
-      sourceMap = await getSourceMap(fileUri, fileContents);
+      sourceMap = await getSourceMap(fileUri, fileContents, this);
     } catch (error) {
-      console.warn(`Unable to get source map for ${fileUri}.`, error);
+      console.warn(error);
     }
 
     return sourceMap;
   }
 }
 
-const sourceStorage = new SourceStorage();
-export { sourceStorage, SourceStorageEntry };
+export { SourceStorage, SourceStorageEntry };

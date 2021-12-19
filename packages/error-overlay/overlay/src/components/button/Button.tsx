@@ -33,8 +33,8 @@ const Button: FunctionComponent<
       className={clsx(
         'tracking-tighter border-2 transition-all',
         {
-          'p-2 text-xs': size === 'xs',
-          'py-2 px-3 text-sm': size === 'sm',
+          'p-2 text-[0.6rem] md:text-xs': size === 'xs',
+          'py-2 px-3 text-xs md:text-sm': size === 'sm',
           'border-transparent': linkStyle,
           'active:scale-90': !disabled && (linkStyle || size === 'xs'),
           'active:scale-95': !disabled && !linkStyle,

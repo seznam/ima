@@ -1,14 +1,23 @@
-/* eslint-disable @typescript-eslint/ban-ts-comment */
+import debounce from 'lodash.debounce';
+
 import {
   handleRuntimeError,
   clearRuntimeErrors,
-  showCompileErrors,
   clearCompileError
 } from './src/client';
 
+// Prevents rapid executions from fast refresh
+const debouncedHandleRuntimeError = debounce(
+  (error: Error) => handleRuntimeError(error),
+  100,
+  {
+    leading: true,
+    trailing: false
+  }
+);
+
 window.__ima_hmr = {
-  handleRuntimeError,
+  handleRuntimeError: debouncedHandleRuntimeError,
   clearRuntimeErrors,
-  showCompileErrors,
   clearCompileError
 };
