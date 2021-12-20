@@ -9,13 +9,77 @@ import { DevArgs, HandlerFn } from '../types';
 import {
   handlerFactory,
   IMA_CLI_RUN_SERVER_MESSAGE,
-  info,
-  error,
   resolveCliPluginArgs
 } from '../lib/cli';
+import logger from '../lib/logger';
 import { watchCompiler, handleError } from '../lib/compiler';
 import { createWebpackConfig, resolveEnvironment } from '../webpack/utils';
 import SharedArgs from '../lib/SharedArgs';
+import webpack, { MultiCompiler } from 'webpack';
+
+let serverHasStarted = false;
+
+/**
+ * Creates nodemon dev plugin to watch server-side changes
+ * which triggers automatic server restarts.
+ */
+function initNodemon(compiler: MultiCompiler, args: DevArgs) {
+  compiler.hooks.done.tap('RebootImaServerPlugin', stats => {
+    if (stats.hasErrors()) {
+      return;
+    }
+
+    // Start server with nodemon
+    if (!serverHasStarted) {
+      nodemon({
+        script: path.join(args.rootDir, 'server/server.js'),
+        watch: [`${path.join(args.rootDir, 'server')}`],
+        args: [`--verbose=${args.verbose}`],
+        cwd: args.rootDir
+      });
+
+      nodemon.on('start', () => {
+        logger.info('Starting application server...');
+      });
+
+      if (args.open) {
+        nodemon.on('message', message => {
+          if (message === IMA_CLI_RUN_SERVER_MESSAGE) {
+            const imaEnvironment = resolveEnvironment(args.rootDir);
+            const port = imaEnvironment?.$Server?.port ?? 3001;
+
+            try {
+              open(`http://localhost:${port}`);
+            } catch (error) {
+              logger.error(
+                `Could not open http://localhost:${port} inside a browser, ${error}`
+              );
+            }
+          }
+        });
+      }
+
+      serverHasStarted = true;
+    }
+
+    // Restart server when necessary (server-side changes)
+    const emittedAssets = stats
+      .toJson({
+        all: false,
+        assets: true,
+        errors: true
+      })
+      .children?.find(({ name }) => name === 'server')
+      ?.assets?.filter(
+        ({ emitted, name }) => emitted && !name.includes('app.server.js')
+      );
+
+    if (emittedAssets?.length) {
+      logger.info('Rebooting server due to configuration changes...');
+      nodemon.restart();
+    }
+  });
+}
 
 /**
  * Builds ima application with provided config in watch mode
@@ -34,14 +98,14 @@ const dev: HandlerFn<DevArgs> = async args => {
   try {
     const startTime = Date.now();
 
-    info('Parsing webpack configuration file...');
+    logger.info('Parsing webpack configuration file...');
     const config = await createWebpackConfig(['client', 'server'], {
       ...args,
       isProduction: false,
       isWatch: true
     });
 
-    info(
+    logger.info(
       `Starting webpack compiler${
         args.legacy
           ? ` ${pc.black(pc.bgCyan('in legacy (es5 compatible) mode'))}`
@@ -49,55 +113,23 @@ const dev: HandlerFn<DevArgs> = async args => {
       }...`
     );
 
-    const compiler = await watchCompiler(config, args);
-    info(`Total compile time: ${pc.green(prettyMs(Date.now() - startTime))}`);
+    const compiler = webpack(config);
+
+    // Init nodemon and start compiler
+    initNodemon(compiler, args);
+    await watchCompiler(compiler, args);
+
+    logger.info(
+      `Total compile time: ${pc.green(prettyMs(Date.now() - startTime))}`
+    );
 
     if (args.forceSPA) {
-      info(`Starting application in ${pc.black(pc.bgCyan('SPA mode'))}...`);
+      logger.info(
+        `Starting application in ${pc.black(pc.bgCyan('SPA mode'))}...`
+      );
     }
-
-    // Start ima server with nodemon
-    nodemon({
-      script: path.join(args.rootDir, 'server/server.js'),
-      watch: [`${path.join(args.rootDir, 'server')}`],
-      args: [`--verbose=${args.verbose}`],
-      cwd: args.rootDir
-    });
-
-    // Trigger nodemon reload only when new assets are emitted
-    compiler.hooks.done.tap('RebootImaServerPlugin', stats => {
-      const emittedAssets = stats
-        .toJson()
-        .children?.find(({ name }) => name === 'server')
-        ?.assets?.filter(
-          ({ emitted, name }) => emitted && !name.includes('app.server.js')
-        );
-
-      if (emittedAssets?.length) {
-        info('Rebooting server due to configuration changes...');
-        nodemon.restart();
-      }
-    });
-
-    // Open browser at localhost
-    if (args.open) {
-      nodemon.on('message', message => {
-        if (message === IMA_CLI_RUN_SERVER_MESSAGE) {
-          const imaEnvironment = resolveEnvironment(args.rootDir);
-          const port = imaEnvironment?.$Server?.port ?? 3001;
-
-          try {
-            open(`http://localhost:${port}`);
-          } catch (err) {
-            error(
-              `Could not open http://localhost:${port} inside a browser, ${err}`
-            );
-          }
-        }
-      });
-    }
-  } catch (err) {
-    handleError(err);
+  } catch (error) {
+    handleError(error);
   }
 };
 

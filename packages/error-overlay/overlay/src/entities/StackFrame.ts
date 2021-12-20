@@ -36,7 +36,7 @@ class StackFrame {
     line: number,
     source: string,
     contextLines = 4
-  ): SourceFragmentLine[] | null {
+  ): SourceFragmentLine[] {
     const lines = source.split('\n');
     const startLine = Math.max(0, line - contextLines - 1);
     const endLine = Math.min(lines.length, line + contextLines);

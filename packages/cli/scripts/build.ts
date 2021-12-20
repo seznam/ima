@@ -3,10 +3,12 @@ import prettyMs from 'pretty-ms';
 import pc from 'picocolors';
 
 import { BuildArgs, HandlerFn } from '../types';
-import { info, handlerFactory, resolveCliPluginArgs } from '../lib/cli';
+import { handlerFactory, resolveCliPluginArgs } from '../lib/cli';
+import logger from '../lib/logger';
 import { runCompiler, handleError } from '../lib/compiler';
 import { createWebpackConfig } from '../webpack/utils';
 import SharedArgs from '../lib/SharedArgs';
+import webpack from 'webpack';
 
 /**
  * Builds ima application with provided config.
@@ -18,13 +20,17 @@ const build: HandlerFn<BuildArgs> = async args => {
   try {
     const startTime = Date.now();
 
-    info('Parsing webpack configuration file...');
+    logger.info('Parsing webpack configuration file...');
     const config = await createWebpackConfig(['client', 'server'], args);
 
-    info('Starting webpack compiler...');
-    await runCompiler(config, args);
+    logger.info('Starting webpack compiler...');
 
-    info(`Total compile time: ${pc.green(prettyMs(Date.now() - startTime))}`);
+    const compiler = webpack(config);
+    await runCompiler(compiler, args);
+
+    logger.info(
+      `Total compile time: ${pc.green(prettyMs(Date.now() - startTime))}`
+    );
   } catch (err) {
     handleError(err);
   }

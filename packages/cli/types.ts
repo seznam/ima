@@ -48,6 +48,7 @@ export type StartArgs = BaseArgs;
 export interface DevBuildArgs extends BaseArgs {
   verbose?: VerboseOptions;
   publicPath?: string;
+  ignoreWarnings?: boolean;
 }
 
 /**
@@ -151,7 +152,11 @@ export type ImaConfig = {
   /**
    * Array of compression algorithms used for assets in production build. [default=['brotliCompress', 'gzip']]
    */
-  compression: (CompressionPlugin.AlgorithmFunction<ZlibOptions> | 'gzip' | 'brotliCompress')[];
+  compression: (
+    | CompressionPlugin.AlgorithmFunction<ZlibOptions>
+    | 'gzip'
+    | 'brotliCompress'
+  )[];
 
   /**
    * Threshold to inline image resources as base64 automatically [default=8192]

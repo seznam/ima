@@ -1,5 +1,5 @@
 import clsx from 'clsx';
-import PrismJS from 'prismjs';
+import prismjs from 'prismjs';
 import { FunctionComponent, memo } from 'react';
 
 import { Icon } from '#/components';
@@ -23,10 +23,10 @@ export type FrameProps = {
 function getPrismLanguage(
   fileUri: string | undefined
 ): {
-  grammar: PrismJS.Grammar;
-  language: PrismJS.Language;
+  grammar: prismjs.Grammar;
+  language: string;
 } {
-  let language: PrismJS.Language = 'javascript';
+  let language = 'javascript';
 
   switch (fileUri?.split('.').pop()) {
     case 'jsx':
@@ -51,7 +51,7 @@ function getPrismLanguage(
       break;
   }
 
-  return { grammar: PrismJS.languages[language], language };
+  return { grammar: prismjs.languages[language], language };
 }
 
 const Frame: FunctionComponent<FrameProps> = ({
@@ -103,7 +103,7 @@ const Frame: FunctionComponent<FrameProps> = ({
                     </div>
                     <div
                       dangerouslySetInnerHTML={{
-                        __html: PrismJS.highlight(
+                        __html: prismjs.highlight(
                           line.source,
                           grammar,
                           language

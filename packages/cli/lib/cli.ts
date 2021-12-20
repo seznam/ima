@@ -1,7 +1,6 @@
 import path from 'path';
 import fs from 'fs';
 import { Arguments, CommandBuilder } from 'yargs';
-import pc from 'picocolors';
 
 import { BaseArgs, HandlerFn, ImaCliCommand } from '../types';
 import { requireImaConfig } from '../webpack/utils';
@@ -94,38 +93,4 @@ function resolveCliPluginArgs(command: ImaCliCommand): CommandBuilder {
     }, {});
 }
 
-/**
- * Print utility functions generator
- *
- * @param {string} prefix Logged prefix text.
- * @param {picocolors} picoColorsFn Styling function.
- * @returns {(message: string, newLine: false) => void} Log function.
- */
-function printFnFactory(
-  prefix: string,
-  picoColorsFn: {
-    (input: string | number | null | undefined): string;
-  }
-) {
-  return (message: string, newLine = false) => {
-    newLine && console.log('');
-    console.log(`${picoColorsFn(`${prefix}:`)} ${message}`);
-  };
-}
-
-const info = printFnFactory('info', pc.cyan);
-const success = printFnFactory('success', pc.green);
-const error = printFnFactory('error', pc.red);
-const warn = printFnFactory('warn', pc.yellow);
-const update = printFnFactory('update', pc.magenta);
-
-export {
-  IMA_CLI_RUN_SERVER_MESSAGE,
-  handlerFactory,
-  resolveCliPluginArgs,
-  info,
-  success,
-  error,
-  warn,
-  update
-};
+export { IMA_CLI_RUN_SERVER_MESSAGE, handlerFactory, resolveCliPluginArgs };

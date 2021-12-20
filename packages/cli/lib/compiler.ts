@@ -1,5 +1,5 @@
 import pc from 'picocolors';
-import webpack, {
+import {
   WebpackError,
   Configuration,
   MultiCompiler,
@@ -9,22 +9,29 @@ import prettyMs from 'pretty-ms';
 import prettyBytes from 'pretty-bytes';
 
 import { Args, VerboseOptions } from '../types';
-import { error, warn, info } from './cli';
+import {
+  formatWebpackErrors,
+  formatWebpackWarnings
+} from './formatWebpackStats';
+import logger from './logger';
+
+let isFirstRun = true;
+const warningsCache = new Set<string>();
 
 /**
- * Handles script running and webpack compilation error logging.
+ * Handles webpack compile errors.
  *
  * @param {WebpackError | unknown} err
  * @returns {void}
  */
 function handleError(err: WebpackError | unknown): void {
   if (err instanceof Error) {
-    err?.stack && error(err.stack);
+    err?.stack && logger.error(err.stack);
   } else if (err instanceof WebpackError) {
-    err?.stack && error(err.stack);
-    err?.details && error(err.details);
+    err?.stack && logger.error(err.stack);
+    err?.details && logger.error(err.details);
   } else {
-    error('Unexpected error occurred');
+    logger.error('Unexpected error occurred');
   }
 }
 
@@ -32,92 +39,100 @@ function handleError(err: WebpackError | unknown): void {
  * Handles stats logging during webpack build and watch tasks.
  *
  * @param {MultiStats|undefined} stats Webpack stats object.
- * @param {VerboseOptions} verbose Optional level of verbosity.
+ * @param {Args} args Cli and build args.
  * @returns {void}
  */
-// TODO print only warnings count -> print warnings with additional cli arg
-function handleStats(
-  stats: MultiStats | undefined,
-  verbose: VerboseOptions = VerboseOptions.DEFAULT
-): void {
+function handleStats(stats: MultiStats | undefined, args: Args): void {
   if (!stats) {
-    return error('Unknown error, stats are empty');
+    return logger.error('Unknown error, stats are empty');
   }
-
-  const statsOptions = {
-    assets: true,
-    cached: false,
-    children: false,
-    chunks: false,
-    chunkModules: false,
-    colors: true,
-    hash: true,
-    modules: false,
-    reasons: false,
-    source: false,
-    timings: true,
-    version: true
-  };
 
   // Print raw webpack log
-  if (verbose === VerboseOptions.RAW) {
-    return console.log(stats.toString(statsOptions));
+  if (args?.verbose === VerboseOptions.RAW) {
+    return console.log(
+      stats.toString({
+        assets: true,
+        cached: false,
+        children: false,
+        chunks: false,
+        chunkModules: false,
+        colors: true,
+        hash: true,
+        modules: false,
+        reasons: false,
+        source: false,
+        timings: true,
+        version: true
+      })
+    );
   }
 
-  const { children, errors = [], warnings = [] } = stats.toJson(statsOptions);
+  const { children, errors, warnings } = stats.toJson({
+    all: false,
+    assets: true,
+    timings: true,
+    version: true,
+    errors: true,
+    warnings: true,
+    outputPath: true,
+    chunkGroups: true
+  });
 
-  // Print errors
-  if (stats.hasErrors()) {
-    error('Errors');
-    return errors.forEach(({ compilerPath, message, details }) => {
-      error(
-        `[${compilerPath}]\n${message} ${
-          verbose && details ? '\n' + details : ''
-        }`,
-        true
-      );
-    });
+  // Print errors and warnings
+  if (!args.ignoreWarnings) {
+    const newWarnings = [];
+
+    // Cache unique warnings
+    if (warnings) {
+      for (const warning of warnings) {
+        if (!warningsCache.has(warning.message)) {
+          warningsCache.add(warning.message);
+          newWarnings.push(warning);
+        }
+      }
+    }
+
+    formatWebpackWarnings(newWarnings, args.rootDir);
   }
 
-  // Print warnings
-  if (stats.hasWarnings()) {
-    warnings.forEach(({ compilerPath, message, details }) => {
-      warn(
-        `[${compilerPath}]\n${message} ${
-          verbose && details ? '\n' + details : ''
-        }`,
-        true
-      );
-    });
-  }
+  formatWebpackErrors(errors);
 
   // Output
-  children?.forEach((child, index) => {
-    if (index === 0) {
-      info(
-        `Compilation was ${pc.green(
-          'successful'
-        )} using webpack version: ${pc.magenta(child.version)}`,
-        stats.hasWarnings() || stats.hasErrors()
+  if (isFirstRun) {
+    children?.forEach((child, index) => {
+      if (index === 0) {
+        logger.info(
+          `Compilation was ${pc.green(
+            'successful'
+          )} using webpack version: ${pc.magenta(child.version)}`
+        );
+
+        logger.info(`Output folder ${pc.magenta(child.outputPath)}`);
+      }
+
+      logger.info(
+        `${pc.underline(child.name)} Compiled in ${pc.green(
+          prettyMs(child.time ?? 0)
+        )}`
       );
 
-      info(`Output folder ${pc.magenta(child.outputPath)}`);
-    }
+      if (child?.namedChunkGroups) {
+        Object.keys(child.namedChunkGroups).forEach(chunkKey => {
+          child?.namedChunkGroups?.[chunkKey]?.assets?.forEach(
+            ({ name, size }) => {
+              console.log(
+                ` ${pc.gray('├')} ${name} ${
+                  size && pc.yellow(prettyBytes(size))
+                }`
+              );
+            }
+          );
+        });
+      }
+    });
 
-    info(`[${child.name}] Compiled in ${pc.green(prettyMs(child.time ?? 0))}`);
-
-    if (child?.namedChunkGroups) {
-      Object.keys(child.namedChunkGroups).forEach(chunkKey => {
-        child?.namedChunkGroups?.[chunkKey]?.assets?.forEach(
-          ({ name, size }) => {
-            console.log(
-              ` ${pc.gray('├')} ${name} ${size && pc.yellow(prettyBytes(size))}`
-            );
-          }
-        );
-      });
-    }
-  });
+    isFirstRun = false;
+  }
 }
 
 /**
@@ -135,25 +150,23 @@ async function closeCompiler(compiler: MultiCompiler): Promise<Error | void> {
 /**
  * Runs webpack compiler with given configuration.
  *
- * @param {Configuration[]} config Webpack configurations.
+ * @param {MultiCompiler} compiler Webpack compiler instance
  * @param {Args} args Cli and build args.
  * @returns {Promise<Error | MultiStats | undefined>} Stats or error.
  */
 async function runCompiler(
-  config: Configuration[],
+  compiler: MultiCompiler,
   args: Args
-): Promise<Error | MultiStats | undefined> {
+): Promise<MultiCompiler> {
   return new Promise((resolve, reject) => {
-    const compiler = webpack(config);
-
     compiler.run((error, stats) =>
       closeCompiler(compiler).then(() => {
         if (error) {
-          reject(error);
+          reject(compiler);
         }
 
-        handleStats(stats, args?.verbose ?? VerboseOptions.DEFAULT);
-        resolve(stats);
+        handleStats(stats, args);
+        resolve(compiler);
       })
     );
   });
@@ -162,32 +175,24 @@ async function runCompiler(
 /**
  * Runs webpack compiler with given configuration.
  *
- * @param {Configuration[]} config Webpack configurations.
+ * @param {MultiCompiler} compiler Webpack compiler instance
  * @param {Args} args Cli and build args.
  * @param {Configuration['watchOptions']={}} watchOptions
  *        Additional watch options.
  * @returns {Promise<MultiCompiler>} compiler instance.
  */
 async function watchCompiler(
-  config: Configuration[],
+  compiler: MultiCompiler,
   args: Args,
   watchOptions: Configuration['watchOptions'] = {}
 ): Promise<MultiCompiler> {
-  let firstRun = true;
-
-  return new Promise((resolve, reject) => {
-    const compiler = webpack(config);
-
+  return new Promise<MultiCompiler>((resolve, reject) => {
     compiler.watch(watchOptions, (error, stats) => {
       if (error) {
         reject(compiler);
       }
 
-      if (firstRun) {
-        firstRun = false;
-        handleStats(stats, args?.verbose ?? VerboseOptions.DEFAULT);
-      }
-
+      handleStats(stats, args);
       resolve(compiler);
     });
   });

@@ -151,6 +151,7 @@ export default async (
     // TODO Reload browser page after server-restart in dev mode (works when open is enabled)
     // TODO fix hot reload in es5 version (probably needs polyfill) in IE
     // TODO add proper timing for elapsed time
+    // TODO ditch raw output in favor of simple verbose arg
     name,
     target: isServer ? 'node' : 'web',
     mode: isProduction ? 'production' : 'development',
@@ -164,7 +165,7 @@ export default async (
         : {
             [name]: [
               isWatch &&
-                `@gatsbyjs/webpack-hot-middleware/client?name=${name}&path=//localhost:${imaEnvironment.$Server.port}/__webpack_hmr&timeout=2000&reload=true&overlay=false&overlayWarnings=false&noInfo=true&quiet=true`,
+                `@gatsbyjs/webpack-hot-middleware/client?name=${name}&path=//localhost:${imaEnvironment.$Server.port}/__webpack_hmr&timeout=15000&reload=true&overlay=false&overlayWarnings=false&noInfo=true&quiet=true`,
               require.resolve('@ima/error-overlay/dist/imaHmrClient.js'),
               path.join(rootDir, 'app/main.js')
             ].filter(Boolean) as string[]

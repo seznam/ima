@@ -12,6 +12,10 @@ const SharedArgs: CommandBuilder = {
   publicPath: {
     desc: 'Webpack public path to specify base for all assets in the app',
     type: 'string'
+  },
+  ignoreWarnings: {
+    desc: 'Webpack will no longer print warnings during compilation',
+    type: 'boolean'
   }
 };
 

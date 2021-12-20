@@ -1,6 +1,61 @@
 import { ansiToText } from 'anser';
-import { ParsedCompileStack } from 'types';
 import { StatsError } from 'webpack';
+
+export interface ParsedCompileError {
+  name: string;
+  message: string;
+  fileUri?: string;
+  lineNumber?: number;
+  columnNumber?: number;
+}
+
+export interface SourceFragmentLine {
+  line: string;
+  source: string;
+  highlight: boolean;
+}
+
+/**
+ * Create fragment of code lines around input line (above and below), created
+ * created from provided source code.
+ *
+ * @param {number} line Source code line number, around which
+ *        you want to created source fragment.
+ * @param {string} source Source file's source code.
+ * @param {number} [contextLines=4] Number of lines to generate,
+ *        below and after watched line.
+ * @returns {SourceFragmentLine[]} Array of source code lines.
+ */
+function createSourceFragment(
+  line: number,
+  source: string,
+  contextLines = 4
+): SourceFragmentLine[] {
+  const lines = source.split('\n');
+  const startLine = Math.max(0, line - contextLines - 1);
+  const endLine = Math.min(lines.length, line + contextLines);
+  const fragmentLines: SourceFragmentLine[] = [];
+
+  /**
+   * Lines are numbered from 1 up, but indexes are from 0 up,
+   * so we need to adjust line number and highlighted line accordingly.
+   */
+  for (let i = startLine; i < endLine; i++) {
+    fragmentLines.push({
+      line: (i + 1).toString(),
+      source: lines[i],
+      highlight: i === line - 1
+    });
+  }
+
+  // Adjust line paddings
+  const endLineWidth = fragmentLines[fragmentLines.length - 1].line.length;
+  fragmentLines.forEach(fragmentLine => {
+    fragmentLine.line = fragmentLine.line.padStart(endLineWidth, ' ');
+  });
+
+  return fragmentLines;
+}
 
 const LineNumberRegExps = Object.freeze({
   /**
@@ -83,6 +138,7 @@ function formatMessage(
 
   if (type === 'css') {
     // Remove affected file path and error location
+    // @ts-expect-error Unused variable is expected
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
     const [errorLocation, filePath, ...restMessage] = message.split(' ');
     message = ['SyntaxError:', ...restMessage].join(' ');
@@ -90,7 +146,7 @@ function formatMessage(
 
   const [name, ...restMessage] = message.split(':');
 
-  return [name, restMessage.join(':')];
+  return [name, restMessage.join(':').trim()];
 }
 
 /**
@@ -99,7 +155,7 @@ function formatMessage(
  * or by parsing the error message, which is inspired by create-react-app solution
  * https://github.com/facebook/create-react-app/blob/main/packages/react-error-overlay/src/utils/parseCompileError.js.
  */
-function parseCompileError(error: StatsError): ParsedCompileStack | null {
+function parseCompileError(error: StatsError): ParsedCompileError | null {
   const fileUri = sanitizeModuleName(error.moduleName);
 
   // We can't reliably parse error message without known moduleName (fileUri)
@@ -124,8 +180,9 @@ function parseCompileError(error: StatsError): ParsedCompileStack | null {
 
   const errorLineIndex = lines.findIndex(line => line.includes(fileUriNeedle));
 
+  // Return original message since there's nothing more we can do
   if (errorLineIndex === -1) {
-    return null;
+    return { name: 'Unknown error', message: error.message };
   }
 
   const errorLine = ansiToText(lines[errorLineIndex]);
@@ -161,7 +218,8 @@ function parseCompileError(error: StatsError): ParsedCompileStack | null {
     }
   }
 
-  return null;
+  // In case everything fails, return original message
+  return { name: 'Unknown error', message: error.message };
 }
 
-export { parseCompileError, formatMessage };
+export { parseCompileError, createSourceFragment };
