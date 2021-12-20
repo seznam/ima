@@ -81,7 +81,6 @@ const LineNumberRegExps = Object.freeze({
 });
 
 /**
- * // TODO maybe not necessary? since there should always be error at the latest loader
  * Remove loaders from module name.
  */
 function sanitizeModuleName(moduleName: string | undefined): null | string {
@@ -138,7 +137,6 @@ function formatMessage(
 
   if (type === 'css') {
     // Remove affected file path and error location
-    // @ts-expect-error Unused variable is expected
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
     const [errorLocation, filePath, ...restMessage] = message.split(' ');
     message = ['SyntaxError:', ...restMessage].join(' ');

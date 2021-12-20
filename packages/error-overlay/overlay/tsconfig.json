@@ -10,19 +10,18 @@
     ],
     "module": "CommonJS",
     "moduleResolution": "node",
-    "typeRoots": ["../types", "../node_modules/@types"],
     "noImplicitAny": true,
     "outDir": "./dist",
     "strict": true,
     "skipLibCheck": true,
     "target": "ES2021",
     "declaration": true,
-    "declarationDir": "./dist/types",
     "rootDir": "../",
     "baseUrl": ".",
     "paths": {
       "#/*": ["src/*"],
     },
   },
-  "include": ["../types/", "../types", "./src", "./types", "./index"]
+  "include": ["./**/*", "../types", "../types/"],
+  "exclude": ["node_modules", "dist"]
 }

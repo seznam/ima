@@ -1,4 +1,4 @@
-import CompressionPlugin, { ZlibOptions } from 'compression-webpack-plugin';
+import { AlgorithmFunction, ZlibOptions } from 'compression-webpack-plugin';
 import { Configuration, ResolveOptions } from 'webpack';
 import { CommandBuilder } from 'yargs';
 
@@ -12,14 +12,6 @@ declare global {
       IMA_CLI_FORCE_SPA: string | undefined;
     }
   }
-}
-
-/**
- * Cli verbose parametr possible options.
- */
-export enum VerboseOptions {
-  DEFAULT = 'default',
-  RAW = 'raw'
 }
 
 /**
@@ -46,7 +38,7 @@ export type StartArgs = BaseArgs;
  * Shared dev and build script args
  */
 export interface DevBuildArgs extends BaseArgs {
-  verbose?: VerboseOptions;
+  verbose?: boolean;
   publicPath?: string;
   ignoreWarnings?: boolean;
 }
@@ -71,14 +63,14 @@ export interface BuildArgs extends DevBuildArgs {
  * Arguments passed across ima cli and into webpack config
  * function generator.
  */
-export interface Args extends BuildArgs, DevArgs {
+export interface CliArgs extends BuildArgs, DevArgs {
   isWatch?: boolean;
 }
 
 /**
  * CLI arguments merged with current configuration arguments.
  */
-export interface ConfigurationContext extends Args {
+export interface ConfigurationContext extends CliArgs {
   name: string;
   isServer: boolean;
   isEsVersion?: boolean;
@@ -152,11 +144,7 @@ export type ImaConfig = {
   /**
    * Array of compression algorithms used for assets in production build. [default=['brotliCompress', 'gzip']]
    */
-  compression: (
-    | CompressionPlugin.AlgorithmFunction<ZlibOptions>
-    | 'gzip'
-    | 'brotliCompress'
-  )[];
+  compression: (AlgorithmFunction<ZlibOptions> | 'gzip' | 'brotliCompress')[];
 
   /**
    * Threshold to inline image resources as base64 automatically [default=8192]
@@ -195,7 +183,7 @@ export interface ImaEnvironment {
   /**
    * Possible environments
    */
-  $Env: 'prod' | 'dev' | 'test' | 'regression';
+  $Env: string;
 
   /**
    * App version

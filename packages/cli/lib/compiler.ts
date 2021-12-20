@@ -8,7 +8,7 @@ import {
 import prettyMs from 'pretty-ms';
 import prettyBytes from 'pretty-bytes';
 
-import { Args, VerboseOptions } from '../types';
+import { CliArgs } from '../types';
 import {
   formatWebpackErrors,
   formatWebpackWarnings
@@ -39,16 +39,16 @@ function handleError(err: WebpackError | unknown): void {
  * Handles stats logging during webpack build and watch tasks.
  *
  * @param {MultiStats|undefined} stats Webpack stats object.
- * @param {Args} args Cli and build args.
+ * @param {CliArgs} args Cli and build args.
  * @returns {void}
  */
-function handleStats(stats: MultiStats | undefined, args: Args): void {
+function handleStats(stats: MultiStats | undefined, args: CliArgs): void {
   if (!stats) {
     return logger.error('Unknown error, stats are empty');
   }
 
   // Print raw webpack log
-  if (args?.verbose === VerboseOptions.RAW) {
+  if (args?.verbose) {
     return console.log(
       stats.toString({
         assets: true,
@@ -151,12 +151,12 @@ async function closeCompiler(compiler: MultiCompiler): Promise<Error | void> {
  * Runs webpack compiler with given configuration.
  *
  * @param {MultiCompiler} compiler Webpack compiler instance
- * @param {Args} args Cli and build args.
+ * @param {CliArgs} args Cli and build args.
  * @returns {Promise<Error | MultiStats | undefined>} Stats or error.
  */
 async function runCompiler(
   compiler: MultiCompiler,
-  args: Args
+  args: CliArgs
 ): Promise<MultiCompiler> {
   return new Promise((resolve, reject) => {
     compiler.run((error, stats) =>
@@ -176,14 +176,14 @@ async function runCompiler(
  * Runs webpack compiler with given configuration.
  *
  * @param {MultiCompiler} compiler Webpack compiler instance
- * @param {Args} args Cli and build args.
+ * @param {CliArgs} args Cli and build args.
  * @param {Configuration['watchOptions']={}} watchOptions
  *        Additional watch options.
  * @returns {Promise<MultiCompiler>} compiler instance.
  */
 async function watchCompiler(
   compiler: MultiCompiler,
-  args: Args,
+  args: CliArgs,
   watchOptions: Configuration['watchOptions'] = {}
 ): Promise<MultiCompiler> {
   return new Promise<MultiCompiler>((resolve, reject) => {

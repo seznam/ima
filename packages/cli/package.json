@@ -12,6 +12,7 @@
     "ima": "./dist/bin/ima.js"
   },
   "main": "./dist/main.js",
+  "types": "./dist/main/main.d.ts",
   "scripts": {
     "build": "tsc",
     "dev": "tsc --watch",
@@ -23,7 +24,6 @@
     "type": "git",
     "url": "https://github.com/seznam/ima.git"
   },
-  "types": "./dist/types/types.d.ts",
   "bugs": {
     "url": "https://github.com/seznam/ima/issues"
   },

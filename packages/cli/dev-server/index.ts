@@ -14,7 +14,7 @@ import prettyMs from 'pretty-ms';
 
 async function createDevServer(app: Express) {
   const compiler = webpack(await createWebpackConfig(['client']));
-  const isRawVerbose = process.argv.includes('--verbose=raw');
+  const isVerbose = process.argv.includes('--verbose');
 
   // Override listen so we can react when server is ready
   app.listen = function () {
@@ -36,13 +36,13 @@ async function createDevServer(app: Express) {
       devMiddleware(compiler, {
         index: false,
         publicPath: '/',
-        ...(!isRawVerbose ? { stats: 'none' } : undefined),
+        ...(!isVerbose ? { stats: 'none' } : undefined),
         serverSideRender: true
       })
     )
     .use(
       hotMiddleware(compiler, {
-        ...(!isRawVerbose
+        ...(!isVerbose
           ? {
               log: data => {
                 const match = data.match(

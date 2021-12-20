@@ -1,19 +1,16 @@
-import { VerboseOptions } from './types';
-import { createWebpackConfig } from './webpack/utils';
-import {
+export {
   createSourceFragment,
   parseCompileError
 } from './lib/compileErrorParser';
-import { createDevServer } from './dev-server';
-import ScrambleCssPlugin from './plugins/scramble-css';
-import AmpPlugin from './plugins/amp';
+export { createDevServer } from './dev-server';
+export { default as ScrambleCssPlugin } from './plugins/scramble-css';
+export { default as AmpPlugin } from './plugins/amp';
 
 export {
-  createWebpackConfig,
-  createDevServer,
-  createSourceFragment,
-  parseCompileError,
-  VerboseOptions,
-  ScrambleCssPlugin,
-  AmpPlugin
-};
+  ImaCliPlugin,
+  ImaCliPluginFactory,
+  ImaConfig,
+  ImaConfigWebpack,
+  ImaEnvironment,
+  ImaCliCommand
+} from './types';

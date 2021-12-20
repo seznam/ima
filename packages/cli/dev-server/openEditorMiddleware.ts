@@ -12,20 +12,20 @@ import {
   Win32Editors
 } from './utils/commonEditors';
 import { Deferred } from './utils/Deferred';
-import { error, info } from '../lib/cli';
+import logger from '../lib/logger';
 
 function printInstructions(fileName: string, errorMessage: string | null) {
-  error('Could not open ' + path.basename(fileName) + ' in the editor.');
+  logger.error('Could not open ' + path.basename(fileName) + ' in the editor.');
 
   if (errorMessage) {
     if (errorMessage[errorMessage.length - 1] !== '.') {
       errorMessage += '.';
     }
 
-    error('The editor process exited with an error: ' + errorMessage);
+    logger.error('The editor process exited with an error: ' + errorMessage);
   }
 
-  info(
+  logger.info(
     'To set up the editor integration, add something like ' +
       pc.cyan('IMA_EDITOR=code') +
       ' to the ' +
@@ -173,8 +173,8 @@ async function launchEditor(
     process.platform === 'win32' &&
     !WINDOWS_FILE_NAME_WHITELIST.test(fileName.trim())
   ) {
-    error('Could not open ' + path.basename(fileName) + ' in the editor.');
-    error(
+    logger.error('Could not open ' + path.basename(fileName) + ' in the editor.');
+    logger.error(
       'When running on Windows, file names are checked against a whitelist ' +
         'to protect against remote code execution attacks. File names may ' +
         'consist only of alphanumeric characters (all languages), periods, ' +

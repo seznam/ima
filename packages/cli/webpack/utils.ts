@@ -4,12 +4,11 @@ import { createHash } from 'crypto';
 import { Configuration } from 'webpack';
 
 import webpackConfig from './config';
-import { error } from '../lib/cli';
 import {
   AdditionalDataContentFn,
   AdditionalDataFactoryFn,
   AdditionalDataFn,
-  Args,
+  CliArgs,
   ConfigurationContext,
   ImaEnvironment,
   ConfigurationTypes,
@@ -17,14 +16,15 @@ import {
 } from '../types';
 
 import envResolver from '@ima/server/lib/environment.js';
+import logger from '../lib/logger';
 
 /**
  * Loads application IMA.js environment from server/config/environment.js
  *
- * @param {Args['rootDir']} rootDir Application root directory
+ * @param {CliArgs['rootDir']} rootDir Application root directory
  * @returns {ImaEnvironment} Loaded environment
  */
-function resolveEnvironment(rootDir: Args['rootDir']): ImaEnvironment {
+function resolveEnvironment(rootDir: CliArgs['rootDir']): ImaEnvironment {
   const envSourcePath = path.resolve(rootDir, './server/config/environment.js');
   const envSource = envSourcePath && require(envSourcePath);
 
@@ -52,7 +52,7 @@ function requireConfig({
   packageJsonKey = '',
   defaultConfig = {}
 }: {
-  rootDir: Args['rootDir'];
+  rootDir: CliArgs['rootDir'];
   fileNames: string[];
   packageJson: Record<string, Record<string, unknown>> | null;
   packageJsonKey: string;
@@ -93,11 +93,11 @@ function requireConfig({
       return (packageJson && packageJson[packageJsonKey]) || defaultConfig;
     }
   } catch (err) {
-    error(`Error occurred while loading ${configPath} file`);
+    logger.error(`Error occurred while loading ${configPath} file`);
 
     if (err instanceof Error) {
-      error(err.message);
-      err.stack && error(err.stack);
+      logger.error(err.message);
+      err.stack && logger.error(err.stack);
     }
 
     return defaultConfig;
@@ -171,10 +171,10 @@ function requireImaConfig(rootDir = process.cwd()): ImaConfig | null {
 /**
  * Resolves ima.config.js from rootDir base path with defaults.
  *
- * @param {Args} args CLI args.
+ * @param {CliArgs} args CLI args.
  * @returns {Promise<ImaConfig>} Ima config or empty object.
  */
-async function resolveImaConfig(args: Args): Promise<ImaConfig> {
+async function resolveImaConfig(args: CliArgs): Promise<ImaConfig> {
   const defaultImaConfig: ImaConfig = {
     publicPath: '',
     compression: ['brotliCompress', 'gzip'],
@@ -197,12 +197,12 @@ async function resolveImaConfig(args: Args): Promise<ImaConfig> {
  * and app overrides in this order cli -> plugins -> app.
  *
  * @param {ConfigurationTypes} configurations Configuration types.
- * @param {Args} args Parsed CLI and build arguments.
+ * @param {CliArgs} args Parsed CLI and build arguments.
  * @returns {Promise<Configuration[]>}
  */
 async function createWebpackConfig(
   configurations: ConfigurationTypes = ['client', 'server'],
-  args?: Args
+  args?: CliArgs
 ): Promise<Configuration[]> {
   // No need to continue without any configuration
   if (!configurations.length) {
@@ -214,9 +214,9 @@ async function createWebpackConfig(
   if (!args && process.env.IMA_CLI_WEBPACK_CONFIG_ARGS) {
     try {
       // Load config args from env variable
-      args = JSON.parse(process.env.IMA_CLI_WEBPACK_CONFIG_ARGS) as Args;
+      args = JSON.parse(process.env.IMA_CLI_WEBPACK_CONFIG_ARGS) as CliArgs;
     } catch (err) {
-      error('Error occurred while parsing env webpack config args.');
+      logger.error('Error occurred while parsing env webpack config args.');
       throw err;
     }
   } else {
@@ -274,11 +274,11 @@ async function createWebpackConfig(
         for (const plugin of imaConfig?.plugins) {
           try {
             config = await plugin?.webpack(config, ctx, imaConfig);
-          } catch (_error) {
-            error(
-              `There was an error while running webpack config for '${plugin.name}' plugin.`
+          } catch (error) {
+            logger.error(
+              `There was an logger.error while running webpack config for '${plugin.name}' plugin.`
             );
-            console.error(_error);
+            console.error(error);
             process.exit(1);
           }
         }

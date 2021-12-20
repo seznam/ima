@@ -5,7 +5,6 @@
     "module": "CommonJS",
     "rootDir": "./",
     "declaration": true,
-    "declarationDir": "./dist/types",
     "moduleResolution": "node",
     "typeRoots": ["./types", "./node_modules/@types"],
     "resolveJsonModule": true,
@@ -19,19 +18,16 @@
     "strictNullChecks": true,
     "strictFunctionTypes": true,
     "noImplicitThis": true,
-    "noUnusedLocals": true,
-    "noUnusedParameters": true,
     "noImplicitReturns": true,
     "noFallthroughCasesInSwitch": true,
     "skipLibCheck": true
   },
   "include": [
-    "bin",
-    "lib",
-    "scripts",
-    "types",
-    "webpack",
-    "./main.ts",
-    "./types.ts", "plugins/scramble-css/postCssScrambler",
+    "./**/*"
+  ],
+  "exclude": [
+    "node_modules",
+    "tools",
+    "dist"
   ]
 }

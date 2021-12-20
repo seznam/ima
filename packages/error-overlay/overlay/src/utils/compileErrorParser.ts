@@ -26,7 +26,6 @@ const LineNumberRegExps = Object.freeze({
 });
 
 /**
- * // TODO maybe not necessary? since there should always be error at the latest loader
  * Remove loaders from module name.
  */
 function sanitizeModuleName(moduleName: string | undefined): null | string {

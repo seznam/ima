@@ -6,7 +6,6 @@ import PostCssPipelineWebpackPlugin from 'postcss-pipeline-webpack-plugin';
 import postCssScrambler from './postCssScrambler';
 import { ImaCliPluginFactory, ConfigurationContext } from '../../types';
 
-// TODO not good?
 export interface ScrambleCssPluginConfigurationContext
   extends ConfigurationContext {
   scrambleCss?: boolean;

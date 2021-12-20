@@ -1,13 +1,10 @@
 import { CommandBuilder } from 'yargs';
 
-import { VerboseOptions } from '../types';
-
 const SharedArgs: CommandBuilder = {
   verbose: {
-    desc: 'Choose between different number of logging options',
-    type: 'string',
-    choices: Object.values(VerboseOptions),
-    default: VerboseOptions.DEFAULT
+    desc: 'Use default webpack CLI output instead of custom one',
+    type: 'boolean',
+    default: false
   },
   publicPath: {
     desc: 'Webpack public path to specify base for all assets in the app',

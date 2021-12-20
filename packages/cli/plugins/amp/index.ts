@@ -4,10 +4,13 @@ import fg from 'fast-glob';
 import postcss from 'postcss';
 import PostCssPipelineWebpackPlugin from 'postcss-pipeline-webpack-plugin';
 
-import { ImaCliPluginFactory, ConfigurationContext, Args } from '../../types';
+import {
+  ImaCliPluginFactory,
+  ConfigurationContext,
+  CliArgs
+} from '../../types';
 import { EntryObject } from 'webpack';
 
-// TODO not good?
 export interface AmpPluginConfigurationContext extends ConfigurationContext {
   amp?: boolean;
 }
@@ -22,14 +25,14 @@ export interface AmpPluginOptions {
 /**
  * Generate entry points for provided glob paths.
  *
- * @param {Args['rootDir']} rootDir App root directory.
+ * @param {CliArgs['rootDir']} rootDir App root directory.
  * @param {string[]=[]} paths Globs of less/css files.
  * @param {string} [prefix=''] Output filename prefix.
  * @returns {Promise<Record<string, string>>} Array of entry
  *          points file paths.
  */
 async function generateEntryPoints(
-  rootDir: Args['rootDir'],
+  rootDir: CliArgs['rootDir'],
   paths: string[] = [],
   prefix = ''
 ): Promise<Record<string, string>> {
