@@ -116,7 +116,7 @@ async function runNodeApp() {
 
   if (environment.$Env === 'dev') {
     try {
-      const { createDevServer } = require('@ima/cli');
+      const { createDevServer } = require('@ima/cli/dist/dev-server');
       await createDevServer(app);
     } catch (error) {
       console.error('Unable to create dev server.');

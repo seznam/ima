@@ -19,7 +19,7 @@
   "author": "Jan Šimeček",
   "license": "MIT",
   "devDependencies": {
-    "@ima/cli": "^17.10.0",
+    "@ima/cli": "*",
     "@types/lodash.debounce": "^4.0.6",
     "@types/prismjs": "^1.16.6",
     "@types/react": "^17.0.37",

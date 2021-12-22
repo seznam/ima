@@ -1,11 +1,11 @@
+import { parseCompileError } from '@ima/cli';
 import { useCallback, useEffect } from 'react';
 
 import { useErrorsDispatcher } from '#/stores';
 import {
   mapStackFramesToOriginal,
   mapCompileStackFrames,
-  parseRuntimeError,
-  parseCompileError
+  parseRuntimeError
 } from '#/utils';
 
 import { ClientEventName, OverlayEventName } from '../../../types';
