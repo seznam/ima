@@ -1,0 +1,24 @@
+{
+  "compilerOptions": {
+    "target": "es2016",
+    "lib": [],
+    "module": "commonjs",
+    "typeRoots": [
+      "typings",
+      "node_modules/@types"
+    ],
+    "declaration": true,
+    "noEmitOnError": true,
+    "allowJs": true,
+    "esModuleInterop": true,
+    "forceConsistentCasingInFileNames": true,
+    "strict": true,
+    "noUnusedLocals": false,
+    "skipLibCheck": true,
+    "jsx": "react",
+  },
+  "exclude": [
+    "node_modules",
+    "dist"
+  ]
+}
