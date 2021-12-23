@@ -1,8 +1,8 @@
 import uid from 'easy-uid';
-import { ErrorType } from 'types';
 
 import { ErrorsAction } from '#/actions';
 import { StackFrame } from '#/entities';
+import { ErrorType } from '#/types';
 
 export type FrameWrapper = {
   id: string;

@@ -1,10 +1,10 @@
 module.exports = {
   content: [
-    './overlay/src/**/*.html',
-    './overlay/src/**/*.js',
-    './overlay/src/**/*.jsx',
-    './overlay/src/**/*.ts',
-    './overlay/src/**/*.tsx'
+    './src/**/*.html',
+    './src/**/*.js',
+    './src/**/*.jsx',
+    './src/**/*.ts',
+    './src/**/*.tsx'
   ],
   theme: {
     container: {

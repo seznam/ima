@@ -1,4 +1,4 @@
-import { ParsedStack } from 'types';
+import { ParsedStack } from '#/types';
 
 const reExtractLocations = /\(?(.+?)(?::(\d+))?(?::(\d+))?\)?$/;
 const reValidFrameChrome = /^\s*(at|in)\s.+(:\d+)/;

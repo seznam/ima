@@ -1,6 +1,5 @@
 import { StackFrame, SourceStorage } from '#/entities';
-
-import { ParsedStack } from '../../types';
+import { ParsedStack } from '#/types';
 
 const IgnoredFunctionNames = ['processTicksAndRejections'];
 

@@ -123,7 +123,7 @@ class StackFrame {
    * @returns {string|undefined}
    */
   getPrettyOriginalFileUri(): string | undefined {
-    const strippedUri = this.originalFileName?.replaceAll(
+    const strippedUri = this.originalFileName?.replace(
       /^(webpack:\/\/|webpack-internal:\/\/\/)/gi,
       ''
     );

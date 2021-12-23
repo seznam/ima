@@ -11,8 +11,8 @@
   "bin": {
     "ima": "./dist/bin/ima.js"
   },
-  "main": "./dist/main.js",
-  "types": "./dist/main.d.ts",
+  "main": "./dist/index.js",
+  "types": "./dist/index.d.ts",
   "scripts": {
     "build": "tsc",
     "dev": "tsc --watch",
@@ -84,8 +84,5 @@
     "@typescript-eslint/parser": "^5.7.0",
     "chokidar": "^3.5.2",
     "typescript": "^4.5.4"
-  },
-  "peerDependencies": {
-    "@ima/server": "*"
   }
 }

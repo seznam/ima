@@ -4,7 +4,7 @@ import {
   handleRuntimeError,
   clearRuntimeErrors,
   clearCompileError
-} from './src/client';
+} from '#/utils';
 
 // Prevents rapid executions from fast refresh
 const debouncedHandleRuntimeError = debounce(

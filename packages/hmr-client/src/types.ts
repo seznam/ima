@@ -14,6 +14,15 @@ declare global {
       clearCompileError(): void;
     };
   }
+
+  interface WindowEventMap {
+    [OverlayEventName.Ready]: CustomEvent;
+    [OverlayEventName.Close]: CustomEvent;
+    [ClientEventName.RuntimeErrors]: CustomEvent<{ error: Error }>;
+    [ClientEventName.CompileErrors]: CustomEvent<{ errors: StatsError[] }>;
+    [ClientEventName.ClearRuntimeErrors]: CustomEvent;
+    [ClientEventName.ClearCompileErrors]: CustomEvent;
+  }
 }
 
 export interface HMRReport {
@@ -31,4 +40,16 @@ export interface HMRMessageData {
   errors?: StatsError[];
   warnings?: StatsError[];
   modules?: Record<string, string>;
+}
+
+export enum OverlayEventName {
+  Ready = 'ima.error.overlay.overlay:ready',
+  Close = 'ima.error.overlay.overlay:close'
+}
+
+export enum ClientEventName {
+  RuntimeErrors = 'ima.error.overlay.client:runtime.error',
+  CompileErrors = 'ima.error.overlay.client:compile.error',
+  ClearRuntimeErrors = 'ima.error.overlay.client:clear.runtime.errors',
+  ClearCompileErrors = 'ima.error.overlay.client:clear.compile.errors'
 }

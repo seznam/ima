@@ -22,3 +22,28 @@ export enum ClientEventName {
   ClearRuntimeErrors = 'ima.error.overlay.client:clear.runtime.errors',
   ClearCompileErrors = 'ima.error.overlay.client:clear.compile.errors'
 }
+
+declare global {
+  interface Window {
+    __ima_server_error: {
+      name: string;
+      message: string;
+      stack: string;
+    };
+  }
+}
+
+export type ErrorType = 'compile' | 'runtime';
+
+export type ParsedErrorLocation = {
+  fileUri: string;
+  lineNumber: number;
+  columnNumber: number;
+};
+
+export type ParsedStack = {
+  functionName?: string | null;
+  fileUri?: string;
+  lineNumber?: number;
+  columnNumber?: number;
+};

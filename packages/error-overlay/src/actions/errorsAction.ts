@@ -1,7 +1,6 @@
-import { ErrorType } from 'types';
-
 import { StackFrame } from '#/entities';
 import { ErrorWrapper, FrameWrapper } from '#/reducers/errorsReducer';
+import { ErrorType } from '#/types';
 
 type ErrorsAction =
   | {

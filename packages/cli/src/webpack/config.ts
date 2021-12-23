@@ -166,7 +166,7 @@ export default async (
             [name]: [
               isWatch &&
                 `@gatsbyjs/webpack-hot-middleware/client?name=${name}&path=//localhost:${imaEnvironment.$Server.port}/__webpack_hmr&timeout=15000&reload=true&overlay=false&overlayWarnings=false&noInfo=true&quiet=true`,
-              require.resolve('@ima/error-overlay/dist/imaHmrClient.js'),
+              require.resolve('@ima/hmr-client/dist/imaHmrClient.js'),
               path.join(rootDir, 'app/main.js')
             ].filter(Boolean) as string[]
           })
@@ -201,13 +201,7 @@ export default async (
       version: createCacheKey(ctx, imaConfig),
       store: 'pack',
       buildDependencies: {
-        cliDeps: [
-          __filename,
-          require.resolve('@ima/error-overlay/dist/client.js'),
-          require.resolve('@ima/error-overlay/dist/imaClient.js'),
-          require.resolve('@ima/error-overlay/dist/overlay.js'),
-          require.resolve('@ima/error-overlay/dist/overlay.css')
-        ],
+        cliDeps: [__filename],
         imaConfig: [path.join(rootDir, IMA_CONF_FILENAME)].filter(f =>
           fs.existsSync(f)
         )
@@ -459,7 +453,7 @@ export default async (
             isWatch &&
               new ReactRefreshWebpackPlugin({
                 overlay: {
-                  module: '@ima/error-overlay/dist/fastRefreshClient.js',
+                  module: '@ima/hmr-client/dist/fastRefreshClient.js',
                   sockIntegration: 'whm'
                 }
               })

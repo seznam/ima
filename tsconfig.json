@@ -15,7 +15,7 @@
     "strict": true,
     "noUnusedLocals": false,
     "skipLibCheck": true,
-    "jsx": "react",
+    "jsx": "react-jsx",
   },
   "exclude": [
     "node_modules",

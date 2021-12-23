@@ -1,6 +1,6 @@
 import { useCallback } from 'react';
 
-import { OverlayEventName } from '../../../types';
+import { OverlayEventName } from '#/types';
 
 function useBridgeInterface(): {
   closeOverlay(): void;

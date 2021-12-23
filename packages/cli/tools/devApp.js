@@ -118,6 +118,7 @@ function main() {
   const coreDir = path.resolve(__dirname, '../../core');
   const serverDir = path.resolve(__dirname, '../../server');
   const errorOverlayDir = path.resolve(__dirname, '../../error-overlay');
+  const hmrClientDir = path.resolve(__dirname, '../../hmr-client');
 
   // Init app
   if (!fs.existsSync(destFolder)) {
@@ -135,6 +136,8 @@ function main() {
     shell('npm run build', coreDir);
     shell('npm pack', errorOverlayDir);
     shell('npm run build', errorOverlayDir);
+    shell('npm pack', hmrClientDir);
+    shell('npm run build', hmrClientDir);
     shell('npm pack', serverDir);
 
     const cliPack = path.resolve(
@@ -151,6 +154,12 @@ function main() {
         require(path.join(errorOverlayDir, 'package.json')).version
       }.tgz`
     );
+    const hmrClientPack = path.resolve(
+      hmrClientDir,
+      `ima-hmr-client-${
+        require(path.join(hmrClientDir, 'package.json')).version
+      }.tgz`
+    );
     const serverPack = path.resolve(
       serverDir,
       `ima-server-${require(path.join(serverDir, 'package.json')).version}.tgz`
@@ -161,12 +170,14 @@ function main() {
     shell(`npm install ${corePack}`, destFolder);
     shell(`npm install ${errorOverlayPack}`, destFolder);
     shell(`npm install ${serverPack}`, destFolder);
+    shell(`npm install ${hmrClientPack}`, destFolder);
 
     // Clean pack files
     fs.rmSync(cliPack);
     fs.rmSync(corePack);
     fs.rmSync(errorOverlayPack);
     fs.rmSync(serverPack);
+    fs.rmSync(hmrClientPack);
   } else {
     console.log(
       'The app destination folder already exists, skipping initialization...'
@@ -177,6 +188,7 @@ function main() {
   const destCli = path.join(destNodeModules, '@ima/cli');
   const destServer = path.join(destNodeModules, '@ima/server');
   const destErrorOverlay = path.join(destNodeModules, '@ima/error-overlay');
+  const destHmrClient = path.join(destNodeModules, '@ima/hmr-client');
 
   // Start watchers to sync src and node_modules from packages
   // @ima/cli
@@ -219,6 +231,20 @@ function main() {
   child.spawn('npm', ['run', 'dev'], {
     stdio: 'ignore',
     cwd: errorOverlayDir
+  });
+
+  // @ima/error-overlay
+  createWatcher(
+    'hmrClient',
+    hmrClientDir,
+    '/dist/**/*.(js|cjs|mjs|json|ejs|map|wasm|css)',
+    destHmrClient
+  );
+
+  // Spawn ts compiler in watch mode
+  child.spawn('npm', ['run', 'dev'], {
+    stdio: 'ignore',
+    cwd: hmrClientDir
   });
 
   // @ima/server

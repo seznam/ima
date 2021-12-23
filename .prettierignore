@@ -10,3 +10,4 @@
 /packages/devtools-scripts/lib
 /packages/create-ima-app/examples/todos/assets/bower
 /packages/create-ima-app/examples/todos/assets/static/js/todomvc-common-base.js
+**/*.d.ts

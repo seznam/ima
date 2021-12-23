@@ -1,6 +1,7 @@
 import { StatsError } from 'webpack';
 
-import { OverlayEventName, ClientEventName } from '../../../types';
+import { OverlayEventName, ClientEventName } from '#/types';
+
 import overlayIndexHtml from './overlayIndex.html';
 
 const OVERLAY_IFRAME_ID = 'ima-error-overlay';
