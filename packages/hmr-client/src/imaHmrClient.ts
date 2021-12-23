@@ -4,7 +4,7 @@ import {
   handleRuntimeError,
   clearRuntimeErrors,
   clearCompileError
-} from '#/utils';
+} from '#/lib/hmrClient';
 
 // Prevents rapid executions from fast refresh
 const debouncedHandleRuntimeError = debounce(

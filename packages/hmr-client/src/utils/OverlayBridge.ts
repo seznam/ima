@@ -2,9 +2,10 @@ import { StatsError } from 'webpack';
 
 import { OverlayEventName, ClientEventName } from '#/types';
 
-import overlayIndexHtml from './overlayIndex.html';
+import overlayIndexHtml from '../public/overlayIndex.html';
 
-const OVERLAY_IFRAME_ID = 'ima-error-overlay';
+const OVERLAY_IFRAME_ID =
+  'ima-error-overlay-bf121178-c2b6-556d-a702-b7d2987bbf51';
 
 class OverlayBridge {
   private _isReady = false;
@@ -126,7 +127,7 @@ class OverlayBridge {
     iframe.style.position = 'fixed';
     iframe.style.top = '0';
     iframe.style.width = '100vw';
-    iframe.style.zIndex = '2147483647';
+    iframe.style.zIndex = '2147483646';
 
     // Insert into body
     document.body.appendChild(iframe);
