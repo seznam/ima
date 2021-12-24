@@ -1,11 +1,6 @@
 import { StatsError } from 'webpack';
 
-import {
-  getOverlayBridge,
-  getEventSource,
-  createHmrIndicator,
-  destroyHmrIndicator
-} from '#/utils';
+import { getOverlayBridge, getEventSource, HMRIndicator } from '#/utils';
 
 const overlayBridge = getOverlayBridge();
 
@@ -52,6 +47,8 @@ function clearCompileError(): void {
   overlayBridge.clearCompileErrors();
 }
 
+const hmrIndicator = new HMRIndicator();
+
 // Connect client to HMR Event source
 getEventSource().addListener(data => {
   // Compile error handler
@@ -65,15 +62,15 @@ getEventSource().addListener(data => {
 
   // Show loading indicator
   if (data.action === 'building') {
-    createHmrIndicator('loading');
+    hmrIndicator.create('loading');
   } else {
-    destroyHmrIndicator();
+    hmrIndicator.destroy();
   }
 });
 
 getEventSource().addErrorListener(() => {
   // Show invalid indicator to indicate lost connection
-  createHmrIndicator('invalid');
+  hmrIndicator.create('invalid');
 });
 
 export {
