@@ -25,6 +25,22 @@
   }
 }
 
+@keyframes ima-hmr-indicator__hourglass-a5d222fc45fc {
+  0% {
+    transform: rotate(0);
+    animation-timing-function: cubic-bezier(0.55, 0.055, 0.675, 0.19);
+  }
+
+  50% {
+    transform: rotate(540deg);
+    animation-timing-function: cubic-bezier(0.215, 0.61, 0.355, 1);
+  }
+
+  100% {
+    transform: rotate(1080deg);
+  }
+}
+
 @keyframes ima-hmr-indicator__fade-in-down-a5d222fc45fc {
   0% {
     transform: translateY(0) scale(0.9);
@@ -40,26 +56,26 @@
 .ima-hmr-indicator__wrapper-a5d222fc45fc {
   display: inline-flex;
 
-  border-radius: 6px;
-  padding: 10px;
+  border-radius: 4px;
+  padding: 8px;
 
   justify-content: center;
   align-content: center;
 
   background: white;
 
-  box-shadow: 0 10px 15px -3px rgb(100 116 139 / 0.3), 0 4px 6px -4px rgb(100 116 139 / 0.3);
+  box-shadow: 0 5px 10px -3px rgb(100 116 139 / 40%), 0 3px 4px -4px rgb(100 116 139 / 40%);
 
   animation: ima-hmr-indicator__fade-in-down-a5d222fc45fc 0.2s ease-in;
 }
 
 .ima-hmr-indicator__icon-a5d222fc45fc {
-  width: 20px;
-  height: 20px;
+  width: 16px;
+  height: 16px;
 }
 
 .ima-hmr-indicator-a5d222fc45fc--loading .ima-hmr-indicator__icon-a5d222fc45fc {
-  animation: ima-hmr-indicator__beat-a5d222fc45fc 1.2s infinite cubic-bezier(0.215, 0.61, 0.355, 1);
+  animation: ima-hmr-indicator__hourglass-a5d222fc45fc 1.8s infinite cubic-bezier(0.215, 0.61, 0.355, 1);
 }
 
 .ima-hmr-indicator-a5d222fc45fc--invalid .ima-hmr-indicator__icon-a5d222fc45fc {
