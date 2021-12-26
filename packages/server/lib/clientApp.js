@@ -1,12 +1,12 @@
 'use strict';
 
+const path = require('path');
 const fs = require('fs');
 const ejs = require('ejs');
 const stackTrace = require('stack-trace');
 const asyncEach = require('async-each');
 const hljs = require('highlight.js');
 const sep = require('path').sep;
-const errorView = require('./template/errorView.js');
 const instanceRecycler = require('./instanceRecycler.js');
 const errorToJSON = require('error-to-json');
 const Cache = require('./cache.js').Cache;
@@ -24,13 +24,18 @@ module.exports = (environment, logger, languageLoader, appFactory) => {
     { cache: true, filename: 'spa.html' }
   );
 
+  const errorTemplate = ejs.compile(
+    fs.readFileSync(path.resolve(__dirname, './error-view/index.ejs'), 'utf8'),
+    { cache: true, filename: 'error.html' }
+  );
+
   const spaCache = new Cache(
     Object.assign({}, environment.$Server.cache, {
       cacheKeyGenerator: null
     })
   );
 
-  function _displayDetails(err, req, res) {
+  async function _displayDetails(err, req, res) {
     let callstack = stackTrace.parse(err);
     let fileIndex = 1;
 
@@ -86,7 +91,7 @@ module.exports = (environment, logger, languageLoader, appFactory) => {
           cb(null, stackFrame);
         });
       },
-      (error, callstack) => {
+      async (error, callstack) => {
         if (!Array.isArray(callstack)) {
           callstack = [];
         }
@@ -103,7 +108,16 @@ module.exports = (environment, logger, languageLoader, appFactory) => {
           });
           res.send(err.stack);
         } else {
-          res.send(errorView(err, callstack));
+          res.send(
+            // TODO handle build errors
+            errorTemplate({
+              serverError: {
+                name: err.name,
+                message: err.message,
+                stack: err.stack.toString()
+              }
+            })
+          );
         }
       }
     );

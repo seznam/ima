@@ -185,8 +185,12 @@ export default class ClientRouter extends AbstractRouter {
 
     return super
       .route(path, options, action, locals)
-      .catch(error => {
-        return this.handleError({ error }, {}, locals);
+      .catch(error => this.handleError({ error }, {}, locals))
+      .then(() => {
+        // FIXME (try to find better solution)
+        if (typeof window !== 'undefined' && window.__ima_hmr) {
+          window.__ima_hmr.clearRuntimeErrors();
+        }
       })
       .catch(error => {
         this._handleFatalError(error);
@@ -199,6 +203,12 @@ export default class ClientRouter extends AbstractRouter {
   handleError(params, options = {}, locals = {}) {
     if ($Debug) {
       console.error(params.error);
+    }
+
+    // FIXME (try to find better solution)
+    if (typeof window !== 'undefined' && window.__ima_hmr) {
+      window.__ima_hmr.handleRuntimeError(params.error);
+      return;
     }
 
     if (this.isClientError(params.error)) {

@@ -1,5 +1,4 @@
 import { PageContext, AbstractComponent } from '@ima/core';
-import React from 'react';
 
 import IMAjsLogoImg from './imajs-logo.png';
 import './homeView.less';

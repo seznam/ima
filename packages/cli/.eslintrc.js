@@ -9,6 +9,7 @@ module.exports = {
   rules: {
     ...config.rules,
     'no-console': 'off',
+    '@typescript-eslint/ban-ts-ignore': 'off',
     '@typescript-eslint/no-namespace': ['error', { allowDeclarations: true }]
   }
 };
