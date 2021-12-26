@@ -1,22 +1,10 @@
-import pc from 'picocolors';
-import {
-  WebpackError,
-  Configuration,
-  MultiCompiler,
-  MultiStats
-} from 'webpack';
-import prettyMs from 'pretty-ms';
-import prettyBytes from 'pretty-bytes';
+import chalk from 'chalk';
+import { WebpackError, Configuration, MultiCompiler } from 'webpack';
 
 import { CliArgs } from '../types';
-import {
-  formatWebpackErrors,
-  formatWebpackWarnings
-} from './formatWebpackStats';
 import logger from './logger';
-
-let isFirstRun = true;
-const warningsCache = new Set<string>();
+import { time } from './time';
+import { formatStats } from './formatStats';
 
 /**
  * Handles webpack compile errors.
@@ -32,106 +20,6 @@ function handleError(err: WebpackError | unknown): void {
     err?.details && logger.error(err.details);
   } else {
     logger.error('Unexpected error occurred');
-  }
-}
-
-/**
- * Handles stats logging during webpack build and watch tasks.
- *
- * @param {MultiStats|undefined} stats Webpack stats object.
- * @param {CliArgs} args Cli and build args.
- * @returns {void}
- */
-function handleStats(stats: MultiStats | undefined, args: CliArgs): void {
-  if (!stats) {
-    return logger.error('Unknown error, stats are empty');
-  }
-
-  // Print raw webpack log
-  if (args?.verbose) {
-    return console.log(
-      stats.toString({
-        assets: true,
-        cached: false,
-        children: false,
-        chunks: false,
-        chunkModules: false,
-        colors: true,
-        hash: true,
-        modules: false,
-        reasons: false,
-        source: false,
-        timings: true,
-        version: true
-      })
-    );
-  }
-
-  const { children, errors, warnings } = stats.toJson({
-    all: false,
-    assets: true,
-    timings: true,
-    version: true,
-    errors: true,
-    warnings: true,
-    outputPath: true,
-    chunkGroups: true
-  });
-
-  // Print errors and warnings
-  if (!args.ignoreWarnings) {
-    const newWarnings = [];
-
-    // Cache unique warnings
-    if (warnings) {
-      for (const warning of warnings) {
-        if (!warningsCache.has(warning.message)) {
-          warningsCache.add(warning.message);
-          newWarnings.push(warning);
-        }
-      }
-    }
-
-    formatWebpackWarnings(newWarnings, args.rootDir);
-  }
-
-  formatWebpackErrors(errors);
-
-  // Output
-  if (isFirstRun) {
-    children?.forEach((child, index) => {
-      if (index === 0) {
-        logger.info(
-          `Compilation was ${pc.green(
-            'successful'
-          )} using webpack version: ${pc.magenta(child.version)}`
-        );
-
-        logger.info(`Output folder ${pc.magenta(child.outputPath)}`);
-      }
-
-      logger.info(
-        `${pc.underline(child.name)} Compiled in ${pc.green(
-          prettyMs(child.time ?? 0)
-        )}`
-      );
-
-      if (child?.namedChunkGroups) {
-        Object.keys(child.namedChunkGroups).forEach(chunkKey => {
-          child?.namedChunkGroups?.[chunkKey]?.assets?.forEach(
-            ({ name, size }) => {
-              console.log(
-                ` ${pc.gray('├')} ${name} ${
-                  size && pc.yellow(prettyBytes(size))
-                }`
-              );
-            }
-          );
-        });
-      }
-    });
-
-    isFirstRun = false;
   }
 }
 
@@ -158,14 +46,20 @@ async function runCompiler(
   compiler: MultiCompiler,
   args: CliArgs
 ): Promise<MultiCompiler> {
+  const elapsed = time();
+  logger.info('Running webpack compiler...', false);
+
   return new Promise((resolve, reject) => {
     compiler.run((error, stats) =>
       closeCompiler(compiler).then(() => {
+        // Print elapsed time
+        elapsed && logger.write(chalk.gray(` [${elapsed()}]`));
+
         if (error) {
           reject(compiler);
         }
 
-        handleStats(stats, args);
+        formatStats(stats, args);
         resolve(compiler);
       })
     );
@@ -186,13 +80,31 @@ async function watchCompiler(
   args: CliArgs,
   watchOptions: Configuration['watchOptions'] = {}
 ): Promise<MultiCompiler> {
+  const elapsed = time();
+  let firstRun = true;
+
+  logger.info(
+    `Running webpack watch compiler${
+      args.legacy
+        ? ` ${chalk.black.bgCyan('in legacy (es5 compatible) mode')}`
+        : ''
+    }...`,
+    false
+  );
+
   return new Promise<MultiCompiler>((resolve, reject) => {
     compiler.watch(watchOptions, (error, stats) => {
+      if (firstRun) {
+        // Print elapsed time
+        elapsed && logger.write(chalk.gray(` [${elapsed()}]`));
+        firstRun = false;
+      }
+
       if (error) {
         reject(compiler);
       }
 
-      handleStats(stats, args);
+      formatStats(stats, args);
       resolve(compiler);
     });
   });

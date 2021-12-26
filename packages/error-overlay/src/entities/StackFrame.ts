@@ -130,6 +130,7 @@ class StackFrame {
 
     const indexOfFirstSlash = strippedUri?.indexOf('/');
 
+    // Print path relative from project dir
     return indexOfFirstSlash
       ? `./${strippedUri?.substring(indexOfFirstSlash + 1)}`
       : strippedUri;

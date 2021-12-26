@@ -9,7 +9,7 @@
 /* eslint-disable @typescript-eslint/no-var-requires */
 /* eslint-disable @typescript-eslint/ban-ts-comment */
 // @ts-ignore
-const pc = require('picocolors');
+const chalk = require('chalk');
 const chokidar = require('chokidar');
 const child = require('child_process');
 const fs = require('fs');
@@ -17,7 +17,7 @@ const path = require('path');
 const yargs = require('yargs');
 
 function shell(cmd, cwd = process.cwd()) {
-  console.log(pc.cyan('Running:'), cmd);
+  console.log(chalk.bold.cyan('Running:'), cmd);
   child.execSync(cmd, { stdio: 'inherit', cwd });
 }
 
@@ -51,15 +51,17 @@ function createWatcher(name, baseDir, paths, destFolder, options = {}) {
 
       const callback = err => {
         if (err) {
-          console.log(`${pc.magenta(`[${name}]`)} ${pc.red('error')} ${err}`);
+          console.log(
+            `${chalk.magenta(`[${name}]`)} ${chalk.red('error')} ${err}`
+          );
         } else {
           console.log(
-            `${pc.gray(timeNow())} - ${pc.magenta(`[${name}]`)} ${pc[
+            `${chalk.gray(timeNow())} - ${chalk.magenta(`[${name}]`)} ${chalk[
               actionName === 'copy' ? 'green' : 'yellow'
             ](actionName === 'copy' ? 'copied' : 'unlinked')} /${path.relative(
               path.join(destFolder, '..'),
               dest
-            )} ${pc.gray(`[${Date.now() - startTime}ms]`)}`
+            )} ${chalk.gray(`[${Date.now() - startTime}ms]`)}`
           );
         }
       };

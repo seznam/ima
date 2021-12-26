@@ -1,28 +1,33 @@
-import pc from 'picocolors';
+import chalk from 'chalk';
 
 /**
  * Print utility functions generator
  *
  * @param {string} prefix Logged prefix text.
- * @param {picocolors} picoColorsFn Styling function.
+ * @param {chalk} chalkFn Styling function.
  * @returns {(message: string, newLine: false) => void} Log function.
  */
 function printFnFactory(
-  prefix: string,
-  picoColorsFn: {
+  prefix?: string,
+  chalkFn?: {
     (input: string | number | null | undefined): string;
   }
 ) {
-  return (message: string, newLine = false) => {
-    newLine && console.log('');
-    console.log(`${picoColorsFn(`${prefix}:`)} ${message}`);
+  return (message: string, newLine = true) => {
+    if (chalkFn && prefix) {
+      process.stdout.write(`${chalkFn(`${prefix}:`)} `);
+    }
+
+    process.stdout.write(message);
+    newLine && process.stdout.write('\n');
   };
 }
 
 export default {
-  info: printFnFactory('info', pc.cyan),
-  success: printFnFactory('success', pc.green),
-  error: printFnFactory('error', pc.red),
-  warn: printFnFactory('warn', pc.yellow),
-  hmr: printFnFactory('hmr', pc.magenta)
+  write: printFnFactory(),
+  info: printFnFactory('info', chalk.bold.cyan),
+  success: printFnFactory('success', chalk.bold.green),
+  error: printFnFactory('error', chalk.bold.red),
+  warn: printFnFactory('warn', chalk.bold.yellow),
+  hmr: printFnFactory('hmr', chalk.bold.magenta)
 };

@@ -1,8 +1,7 @@
 import path from 'path';
 import open from 'better-opn';
-import pc from 'picocolors';
+import chalk from 'chalk';
 import nodemon from 'nodemon';
-import prettyMs from 'pretty-ms';
 import { CommandBuilder } from 'yargs';
 
 import { DevArgs, HandlerFn } from '../types';
@@ -96,22 +95,11 @@ const dev: HandlerFn<DevArgs> = async args => {
   }
 
   try {
-    const startTime = Date.now();
-
-    logger.info('Parsing webpack configuration file...');
     const config = await createWebpackConfig(['client', 'server'], {
       ...args,
       isProduction: false,
       isWatch: true
     });
-
-    logger.info(
-      `Starting webpack compiler${
-        args.legacy
-          ? ` ${pc.black(pc.bgCyan('in legacy (es5 compatible) mode'))}`
-          : ''
-      }...`
-    );
 
     const compiler = webpack(config);
 
@@ -119,13 +107,9 @@ const dev: HandlerFn<DevArgs> = async args => {
     initNodemon(compiler, args);
     await watchCompiler(compiler, args);
 
-    logger.info(
-      `Total compile time: ${pc.green(prettyMs(Date.now() - startTime))}`
-    );
-
     if (args.forceSPA) {
       logger.info(
-        `Starting application in ${pc.black(pc.bgCyan('SPA mode'))}...`
+        `Starting application in ${chalk.black.bgCyan('SPA mode')}...`
       );
     }
   } catch (error) {

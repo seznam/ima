@@ -9,7 +9,7 @@ import { createWebpackConfig } from '../webpack/utils';
 import { IMA_CLI_RUN_SERVER_MESSAGE } from '../lib/cli';
 import logger from '../lib/logger';
 import express, { Express } from 'express';
-import pc from 'picocolors';
+import chalk from 'chalk';
 import prettyMs from 'pretty-ms';
 
 async function createDevServer(app: Express) {
@@ -54,9 +54,9 @@ async function createDevServer(app: Express) {
                   const [message, bundle, hash, time] = match;
 
                   logger.hmr(
-                    `${pc.underline(bundle)} ${pc.gray(
-                      hash
-                    )} built in ${pc.green(prettyMs(parseInt(time, 10)))}`
+                    `Built ${chalk.bold(bundle)} ${chalk.gray(
+                      '[' + prettyMs(parseInt(time, 10)) + ']'
+                    )}`
                   );
                 } else {
                   logger.hmr('Building...');

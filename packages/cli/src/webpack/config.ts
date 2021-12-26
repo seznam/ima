@@ -151,11 +151,10 @@ export default async (
     // TODO Reload browser page after server-restart in dev mode (works when open is enabled)
     // TODO fix hot reload in es5 version (probably needs polyfill) in IE
     // TODO add proper timing for elapsed time
-    // TODO ditch raw output in favor of simple verbose arg
     name,
     target: isServer ? 'node' : 'web',
     mode: isProduction ? 'production' : 'development',
-    devtool: 'cheap-module-source-map',
+    devtool: isProduction ? false : 'cheap-module-source-map',
     bail: isProduction,
     entry: {
       ...(isServer
@@ -396,16 +395,6 @@ export default async (
       ].filter(Boolean) as RuleSetRule[]
     },
     plugins: [
-      // // General plugins
-      // !isProduction &&
-      //   new webpack.SourceMapDevToolPlugin({
-      //     test: /\.(le|c)ss$/
-      //   }),
-      // !isProduction &&
-      //   new webpack.EvalSourceMapDevToolPlugin({
-      //     test: /\.[jt]sx?$/
-      //   }),
-
       // Server/client specific plugins are defined below
       ...(isServer
         ? // Server-specific plugins

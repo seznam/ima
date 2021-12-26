@@ -2,8 +2,8 @@ import { Request, Response } from 'express';
 import fs from 'fs';
 import path from 'path';
 import child_process, { ChildProcess } from 'child_process';
+import chalk from 'chalk';
 import os from 'os';
-import pc from 'picocolors';
 
 import {
   DarwinEditors,
@@ -26,12 +26,9 @@ function printInstructions(fileName: string, errorMessage: string | null) {
   }
 
   logger.info(
-    'To set up the editor integration, add something like ' +
-      pc.cyan('IMA_EDITOR=code') +
-      ' to the ' +
-      pc.green('.env.local') +
-      ' file in your project folder ' +
-      'and restart the development server.'
+    `To set up the editor integration, add ${chalk.cyan(
+      'IMA_EDITOR=code'
+    )} to your environment and restart the development server.`
   );
 }
 
@@ -173,7 +170,9 @@ async function launchEditor(
     process.platform === 'win32' &&
     !WINDOWS_FILE_NAME_WHITELIST.test(fileName.trim())
   ) {
-    logger.error('Could not open ' + path.basename(fileName) + ' in the editor.');
+    logger.error(
+      'Could not open ' + path.basename(fileName) + ' in the editor.'
+    );
     logger.error(
       'When running on Windows, file names are checked against a whitelist ' +
         'to protect against remote code execution attacks. File names may ' +

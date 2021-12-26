@@ -2,6 +2,7 @@ import fs from 'fs';
 import path from 'path';
 import { createHash } from 'crypto';
 import { Configuration } from 'webpack';
+import chalk from 'chalk';
 
 import webpackConfig from './config';
 import {
@@ -17,6 +18,7 @@ import {
 
 import envResolver from '@ima/server/lib/environment.js';
 import logger from '../lib/logger';
+import { time } from '../lib/time';
 
 /**
  * Loads application IMA.js environment from server/config/environment.js
@@ -204,6 +206,8 @@ async function createWebpackConfig(
   configurations: ConfigurationTypes = ['client', 'server'],
   args?: CliArgs
 ): Promise<Configuration[]> {
+  let elapsed: ReturnType<typeof time> | null = null;
+
   // No need to continue without any configuration
   if (!configurations.length) {
     throw new Error(
@@ -220,6 +224,10 @@ async function createWebpackConfig(
       throw err;
     }
   } else {
+    // Used explicitly, print message
+    elapsed = time();
+    logger.info('Parsing webpack configuration file...', false);
+
     // Cache config args to env variable
     process.env.IMA_CLI_WEBPACK_CONFIG_ARGS = JSON.stringify(args);
   }
@@ -290,7 +298,12 @@ async function createWebpackConfig(
 
       return config;
     })
-  );
+  ).then(config => {
+    // Print elapsed time
+    elapsed && logger.write(chalk.gray(` [${elapsed()}]`));
+
+    return config;
+  });
 }
 
 export {
