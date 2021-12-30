@@ -1,5 +1,5 @@
 import { AlgorithmFunction, ZlibOptions } from 'compression-webpack-plugin';
-import { Configuration, ResolveOptions } from 'webpack';
+import { Configuration, MultiCompiler, ResolveOptions } from 'webpack';
 import { CommandBuilder } from 'yargs';
 
 /**
@@ -111,6 +111,27 @@ export interface ImaCliPlugin {
    * Webpack callback function used by plugins to customize/extend ima webpack config before it's run.
    */
   webpack: ImaConfigWebpack;
+
+  /**
+   * Optional done callback which is run after first successful compilation.
+   * It is run after information about the built are printed to the console by the CLI.
+   */
+  onDone?: (params: {
+    firstRun?: boolean;
+    args: CliArgs;
+    imaConfig: ImaConfig;
+    compiler: MultiCompiler;
+  }) => void;
+
+  /**
+   * Optional error callback which is called if webpack run/watch commands fail.
+   */
+  onError?: (params: {
+    error: Error;
+    args: CliArgs;
+    imaConfig: ImaConfig;
+    compiler: MultiCompiler;
+  }) => void;
 }
 
 /**

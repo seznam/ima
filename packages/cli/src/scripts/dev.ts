@@ -95,17 +95,20 @@ const dev: HandlerFn<DevArgs> = async args => {
   }
 
   try {
-    const config = await createWebpackConfig(['client', 'server'], {
-      ...args,
-      isProduction: false,
-      isWatch: true
-    });
+    const { config, imaConfig } = await createWebpackConfig(
+      ['client', 'server'],
+      {
+        ...args,
+        isProduction: false,
+        isWatch: true
+      }
+    );
 
     const compiler = webpack(config);
 
     // Init nodemon and start compiler
     initNodemon(compiler, args);
-    await watchCompiler(compiler, args);
+    await watchCompiler(compiler, args, imaConfig);
 
     if (args.forceSPA) {
       logger.info(

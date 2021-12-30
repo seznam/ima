@@ -22,6 +22,7 @@ export interface AmpPluginOptions {
   outputDir?: string;
 }
 
+// TODO extract to separate npm package
 /**
  * Generate entry points for provided glob paths.
  *

@@ -13,7 +13,8 @@ import chalk from 'chalk';
 import prettyMs from 'pretty-ms';
 
 async function createDevServer(app: Express) {
-  const compiler = webpack(await createWebpackConfig(['client']));
+  const { config } = await createWebpackConfig(['client']);
+  const compiler = webpack(config);
   const isVerbose = process.argv.includes('--verbose');
 
   // Override listen so we can react when server is ready

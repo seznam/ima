@@ -5,6 +5,7 @@ import { CliArgs } from '../types';
 import logger from './logger';
 import { time } from './time';
 import { formatStats } from './formatStats';
+import { ImaConfig } from '..';
 
 /**
  * Handles webpack compile errors.
@@ -40,11 +41,13 @@ async function closeCompiler(compiler: MultiCompiler): Promise<Error | void> {
  *
  * @param {MultiCompiler} compiler Webpack compiler instance
  * @param {CliArgs} args Cli and build args.
+ * @param {ImaConfig} imaConfig loaded ima.config.js.
  * @returns {Promise<Error | MultiStats | undefined>} Stats or error.
  */
 async function runCompiler(
   compiler: MultiCompiler,
-  args: CliArgs
+  args: CliArgs,
+  imaConfig: ImaConfig
 ): Promise<MultiCompiler> {
   const elapsed = time();
   logger.info('Running webpack compiler...', false);
@@ -56,11 +59,27 @@ async function runCompiler(
         elapsed && logger.write(chalk.gray(` [${elapsed()}]`));
 
         if (error) {
-          reject(compiler);
+          // Call error callback
+          imaConfig?.plugins?.forEach(plugin =>
+            plugin?.onError?.({ error, args, imaConfig, compiler })
+          );
+
+          return reject(compiler);
         }
 
+        // Format stats after plugin done callback
         formatStats(stats, args);
-        resolve(compiler);
+
+        // Call onDone callback
+        imaConfig?.plugins?.forEach(plugin =>
+          plugin?.onDone?.({
+            args,
+            imaConfig,
+            compiler
+          })
+        );
+
+        return resolve(compiler);
       })
     );
   });
@@ -71,6 +90,7 @@ async function runCompiler(
  *
  * @param {MultiCompiler} compiler Webpack compiler instance
  * @param {CliArgs} args Cli and build args.
+ * @param {ImaConfig} imaConfig loaded ima.config.js.
  * @param {Configuration['watchOptions']={}} watchOptions
  *        Additional watch options.
  * @returns {Promise<MultiCompiler>} compiler instance.
@@ -78,6 +98,7 @@ async function runCompiler(
 async function watchCompiler(
   compiler: MultiCompiler,
   args: CliArgs,
+  imaConfig: ImaConfig,
   watchOptions: Configuration['watchOptions'] = {}
 ): Promise<MultiCompiler> {
   const elapsed = time();
@@ -101,11 +122,23 @@ async function watchCompiler(
       }
 
       if (error) {
-        reject(compiler);
+        // Call error callback
+        imaConfig?.plugins?.forEach(plugin =>
+          plugin?.onError?.({ error, args, imaConfig, compiler })
+        );
+
+        return reject(compiler);
       }
 
+      // Format stats after plugin done callback
       formatStats(stats, args);
-      resolve(compiler);
+
+      // Call onDone callback
+      imaConfig?.plugins?.forEach(plugin =>
+        plugin?.onDone?.({ firstRun, args, imaConfig, compiler })
+      );
+
+      return resolve(compiler);
     });
   });
 }

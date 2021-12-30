@@ -15,8 +15,12 @@ import webpack from 'webpack';
  */
 const build: HandlerFn<BuildArgs> = async args => {
   try {
-    const config = await createWebpackConfig(['client', 'server'], args);
-    await runCompiler(webpack(config), args);
+    const { config, imaConfig } = await createWebpackConfig(
+      ['client', 'server'],
+      args
+    );
+
+    await runCompiler(webpack(config), args, imaConfig);
   } catch (err) {
     handleError(err);
   }

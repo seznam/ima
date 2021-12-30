@@ -1,4 +1,4 @@
-import { parseCompileError } from '@ima/cli';
+import { parseCompileError } from '@ima/cli/dist/lib/compileErrorParser';
 import { useCallback, useEffect } from 'react';
 
 import { useErrorsDispatcher } from '#/stores';

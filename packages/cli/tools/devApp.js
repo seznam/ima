@@ -197,7 +197,7 @@ function main() {
   createWatcher(
     'cli',
     cliDir,
-    '/dist/**/*.(js|cjs|mjs|json|ejs|map|wasm|css)',
+    '/dist/**/*.(js|cjs|mjs|json|ejs|map|wasm|d.ts|css)',
     destCli
   );
 
@@ -211,7 +211,7 @@ function main() {
   createWatcher(
     'core',
     coreDir,
-    '/dist/**/*.(js|cjs|mjs|json|ejs|map|wasm|css)',
+    '/dist/**/*.(js|cjs|mjs|json|ejs|map|wasm|d.ts|css)',
     destCore
   );
 
@@ -225,7 +225,7 @@ function main() {
   createWatcher(
     'errorOverlay',
     errorOverlayDir,
-    '/dist/**/*.(js|cjs|mjs|json|ejs|map|wasm|css)',
+    '/dist/**/*.(js|cjs|mjs|json|ejs|map|wasm|d.ts|css)',
     destErrorOverlay
   );
 
@@ -239,7 +239,7 @@ function main() {
   createWatcher(
     'hmrClient',
     hmrClientDir,
-    '/dist/**/*.(js|cjs|mjs|json|ejs|map|wasm|css)',
+    '/dist/**/*.(js|cjs|mjs|json|ejs|map|wasm|d.ts|css)',
     destHmrClient
   );
 
@@ -253,7 +253,7 @@ function main() {
   createWatcher(
     'server',
     serverDir,
-    '/**/*.(js|cjs|mjs|json|ejs|map|wasm|css)',
+    '/**/*.(js|cjs|mjs|json|ejs|map|wasm|d.ts|css)',
     destServer
   );
 }

@@ -19,6 +19,7 @@ export interface ScrambleCssPluginOptions {
   uniqueIdentifier?: string;
 }
 
+// TODO extract to separate npm package
 /**
  * Plugin additional CLI args, scrambleCss option can be used to explicitly enable/disable
  * scrambling for certain use cases.

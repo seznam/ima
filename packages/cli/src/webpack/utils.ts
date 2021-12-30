@@ -200,12 +200,12 @@ async function resolveImaConfig(args: CliArgs): Promise<ImaConfig> {
  *
  * @param {ConfigurationTypes} configurations Configuration types.
  * @param {CliArgs} args Parsed CLI and build arguments.
- * @returns {Promise<Configuration[]>}
+ * @returns {Promise<{config: Configuration[], imaConfig: ImaConfig>}
  */
 async function createWebpackConfig(
   configurations: ConfigurationTypes = ['client', 'server'],
   args?: CliArgs
-): Promise<Configuration[]> {
+): Promise<{ config: Configuration[]; imaConfig: ImaConfig }> {
   let elapsed: ReturnType<typeof time> | null = null;
 
   // No need to continue without any configuration
@@ -302,7 +302,7 @@ async function createWebpackConfig(
     // Print elapsed time
     elapsed && logger.write(chalk.gray(` [${elapsed()}]`));
 
-    return config;
+    return { config, imaConfig };
   });
 }
 
