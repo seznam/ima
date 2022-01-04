@@ -32,10 +32,5 @@ export const describe = 'Build an application for production';
 export const handler = handlerFactory(build);
 export const builder: CommandBuilder = {
   ...SharedArgs,
-  clean: {
-    desc: 'Clean build folder before building the application',
-    type: 'boolean',
-    default: true
-  },
   ...resolveCliPluginArgs(CMD)
 };

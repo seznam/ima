@@ -1,5 +1,6 @@
 import path from 'path';
 import fs from 'fs';
+import findCacheDir from 'find-cache-dir';
 import webpack, { Configuration, RuleSetRule, RuleSetUseItem } from 'webpack';
 import miniSVGDataURI from 'mini-svg-data-uri';
 
@@ -43,14 +44,11 @@ export default async (
 ): Promise<Configuration> => {
   const { rootDir, isProduction, isServer, isWatch, isEsVersion, name } = ctx;
 
+  // We use source maps always in development for better stack trace orientation.
+  const useSourceMaps = imaConfig.useSourceMaps || !isProduction;
   const imaEnvironment = resolveEnvironment(rootDir);
   const outputDir = path.join(rootDir, 'build');
   const publicPath = ctx?.publicPath ?? imaConfig.publicPath;
-
-  // Clean build directory
-  if (ctx?.clean && fs.existsSync(outputDir)) {
-    fs.rmSync(outputDir, { recursive: true });
-  }
 
   /**
    * Style loaders helper function used to define
@@ -92,7 +90,7 @@ export default async (
               ? '[hash:base64]'
               : '[path][name]__[local]--[hash:base64:5]'
           },
-          sourceMap: !isProduction
+          sourceMap: useSourceMaps
         }
       },
       !onlyDefinitions && {
@@ -121,7 +119,7 @@ export default async (
             }
           }),
           implementation: require('postcss'),
-          sourceMap: !isProduction
+          sourceMap: useSourceMaps
         }
       },
       useLessLoader && {
@@ -136,13 +134,13 @@ export default async (
                 `@import "${path.join(rootDir, 'app/less/globals.less')}";`
               )
           ]),
-          sourceMap: !isProduction
+          sourceMap: useSourceMaps
         }
       },
       {
         loader: require.resolve('glob-import-loader'),
         options: {
-          sourceMap: !isProduction
+          sourceMap: useSourceMaps
         }
       }
     ].filter(Boolean) as RuleSetUseItem[];
@@ -153,7 +151,11 @@ export default async (
     name,
     target: isServer ? 'node' : 'web',
     mode: isProduction ? 'production' : 'development',
-    devtool: isProduction ? false : 'cheap-module-source-map',
+    devtool: isProduction
+      ? imaConfig.useSourceMaps
+        ? 'source-map'
+        : false
+      : 'cheap-module-source-map',
     bail: isProduction,
     entry: {
       ...(isServer
@@ -236,7 +238,7 @@ export default async (
     module: {
       rules: [
         // Handle node_modules packages that contain sourcemaps
-        !isProduction && {
+        useSourceMaps && {
           enforce: 'pre',
           exclude: /@babel(?:\/|\\{1,2})runtime/,
           test: /\.(js|mjs|jsx|ts|tsx|cjs|css)$/,
@@ -333,12 +335,21 @@ export default async (
                         isWatch && !isServer
                           ? [require.resolve('react-refresh/babel')]
                           : [],
-                      cacheIdentifier: createCacheKey(ctx, imaConfig),
-                      cacheDirectory: true,
+                      /**
+                       * Disable config and babel rc files since we handle those
+                       * manually in the requireBabelConfig function.
+                       */
+                      babelrc: false,
+                      configFile: false,
+                      // Enable cache for better performance
+                      cacheDirectory:
+                        findCacheDir({
+                          name: `babel-loader-ima-${name}-cache`
+                        }) ?? true,
                       cacheCompression: false,
                       compact: isProduction,
-                      sourceMaps: !isProduction,
-                      inputSourceMap: !isProduction
+                      sourceMaps: useSourceMaps,
+                      inputSourceMap: useSourceMaps
                     }
                   })
                 }

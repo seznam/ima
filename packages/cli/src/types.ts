@@ -47,6 +47,7 @@ export interface DevBuildArgs extends BaseArgs {
  * Dev (ima dev) script args
  */
 export interface DevArgs extends DevBuildArgs {
+  clean?: boolean;
   open?: boolean;
   legacy?: boolean;
   forceSPA?: boolean;
@@ -55,9 +56,7 @@ export interface DevArgs extends DevBuildArgs {
 /**
  * Build (ima build) script args
  */
-export interface BuildArgs extends DevBuildArgs {
-  clean?: boolean;
-}
+export type BuildArgs = DevBuildArgs;
 
 /**
  * Arguments passed across ima cli and into webpack config
@@ -122,16 +121,6 @@ export interface ImaCliPlugin {
     imaConfig: ImaConfig;
     compiler: MultiCompiler;
   }) => void;
-
-  /**
-   * Optional error callback which is called if webpack run/watch commands fail.
-   */
-  onError?: (params: {
-    error: Error;
-    args: CliArgs;
-    imaConfig: ImaConfig;
-    compiler: MultiCompiler;
-  }) => void;
 }
 
 /**
@@ -161,6 +150,12 @@ export type ImaConfig = {
    * Webpack assets public path [default='']
    */
   publicPath: string;
+
+  /**
+   * Set to true to generate source maps in production builds
+   * (dev/watch build always generate source maps to work properly with error overlay).
+   */
+  useSourceMaps?: boolean;
 
   /**
    * Array of compression algorithms used for assets in production build. [default=['brotliCompress', 'gzip']]

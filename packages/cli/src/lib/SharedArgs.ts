@@ -1,10 +1,13 @@
 import { CommandBuilder } from 'yargs';
 
 const SharedArgs: CommandBuilder = {
+  clean: {
+    desc: 'Clean build folder before building the application',
+    type: 'boolean'
+  },
   verbose: {
     desc: 'Use default webpack CLI output instead of custom one',
-    type: 'boolean',
-    default: false
+    type: 'boolean'
   },
   publicPath: {
     desc: 'Webpack public path to specify base for all assets in the app',
