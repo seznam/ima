@@ -1,5 +1,7 @@
 import { AbstractController } from '@ima/core';
 
+import IMAjsShareImg from 'app/public/imajs-share.png';
+
 /**
  * Basic page controller.
  */
@@ -13,14 +15,14 @@ export default class AbstractPageController extends AbstractController {
    * @param {Dictionary} dictionary
    * @param {Object<string, *>} settings
    */
-  setMetaParams(loadedResources, metaManager, router, dictionary, settings) {
+  setMetaParams(loadedResources, metaManager, router) {
     let title = 'IMA.js';
     let description;
     description = 'IMA.js is isomorphic javascript application framework.';
-    let domain = router.getDomain();
-    let image = `${domain}${settings.$Static.image}/imajs-share.png`;
 
     let url = router.getUrl();
+    let domain = router.getDomain();
+    let image = `${domain}/${IMAjsShareImg}`;
 
     metaManager.setTitle(title);
 

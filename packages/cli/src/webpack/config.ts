@@ -195,6 +195,8 @@ export default async (
         forOf: isEsVersion || isServer,
         module: isEsVersion
       },
+      hotUpdateChunkFilename: 'hot/[id].[fullhash].hot-update.js',
+      hotUpdateMainFilename: 'hot/[runtime].[fullhash].hot-update.json',
       ...(isServer && { library: { type: 'commonjs2' } })
     },
     cache: {
@@ -215,9 +217,7 @@ export default async (
           minify: TerserPlugin.esbuildMinify
         }),
         new CssMinimizerPlugin({
-          // FIXME esbuildMinify is not yet in CssMinimizerPlugin definitions
           // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-          // @ts-ignore esbuildMinify
           minify: CssMinimizerPlugin.esbuildMinify
         })
       ]

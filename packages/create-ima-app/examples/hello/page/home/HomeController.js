@@ -1,7 +1,7 @@
 import AbstractPageController from 'app/page/AbstractPageController';
 //import { GenericError } from '@ima/core';
 
-import IMAjsShareImg from './imajs-share.png';
+import IMAjsShareImg from 'app/public/imajs-share.png';
 
 export default class HomeController extends AbstractPageController {
   static get $dependencies() {
@@ -72,6 +72,8 @@ export default class HomeController extends AbstractPageController {
       'for new project.';
 
     let url = router.getUrl();
+    let domain = router.getDomain();
+    let image = `${domain}/${IMAjsShareImg}`;
 
     metaManager.setTitle(title);
 
@@ -84,13 +86,13 @@ export default class HomeController extends AbstractPageController {
     metaManager.setMetaName('twitter:title', title);
     metaManager.setMetaName('twitter:description', description);
     metaManager.setMetaName('twitter:card', 'summary');
-    metaManager.setMetaName('twitter:image', IMAjsShareImg);
+    metaManager.setMetaName('twitter:image', image);
     metaManager.setMetaName('twitter:url', url);
 
     metaManager.setMetaProperty('og:title', title);
     metaManager.setMetaProperty('og:description', description);
     metaManager.setMetaProperty('og:type', 'website');
-    metaManager.setMetaProperty('og:image', IMAjsShareImg);
+    metaManager.setMetaProperty('og:image', image);
     metaManager.setMetaProperty('og:url', url);
   }
 }

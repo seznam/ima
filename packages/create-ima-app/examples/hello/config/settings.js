@@ -42,7 +42,7 @@ export default (ns, oc, config) => {
         }
       },
       $Static: {
-        image: '/static/img',
+        media: '/static/media',
         css: '/static/css',
         js: '/static/js'
       }
@@ -66,14 +66,12 @@ export default (ns, oc, config) => {
         $Render: {
           scripts: [
             // '/static/js/polyfill.js' + versionStamp,
-            // '/static/js/shim.js' + versionStamp,
             // '/static/js/vendor.client.js' + versionStamp,
             // `/static/js/locale/${config.$Language}.js${versionStamp}`,
             '/static/js/app.client.js' + versionStamp
           ],
           esScripts: [
             // '/static/js/polyfill.es.js' + versionStamp,
-            // '/static/js/shim.es.js' + versionStamp,
             // '/static/js/vendor.client.es.js' + versionStamp,
             // `/static/js/locale/${config.$Language}.js${versionStamp}`,
             '/static/js/app.client.es.js' + versionStamp
