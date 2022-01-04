@@ -17,8 +17,19 @@ import {
   resolveEnvironment,
   additionalDataFactory,
   createCacheKey,
-  IMA_CONF_FILENAME
+  IMA_CONF_FILENAME,
+  requireBabelConfig
 } from './utils';
+
+const POSTCSS_CONF_FILENAMES = [
+  'postcss.config.js',
+  'postcss.config.cjs',
+  'postcss.config.json',
+  '.postcssrc.js',
+  '.postcssrc.cjs',
+  '.postcssrc.json',
+  '.postcssrc'
+];
 
 /**
  * Creates Webpack configuration object based on input ConfigurationContext
@@ -32,8 +43,6 @@ export default async (
 ): Promise<Configuration> => {
   const { rootDir, isProduction, isServer, isWatch, isEsVersion, name } = ctx;
 
-  const packageJsonPath = path.resolve(rootDir, './package.json');
-  const packageJson = packageJsonPath ? require(packageJsonPath) : {};
   const imaEnvironment = resolveEnvironment(rootDir);
   const outputDir = path.join(rootDir, 'build');
   const publicPath = ctx?.publicPath ?? imaConfig.publicPath;
@@ -90,18 +99,9 @@ export default async (
         loader: require.resolve('postcss-loader'),
         options: {
           postcssOptions: requireConfig({
-            rootDir,
-            packageJson,
+            ctx,
             packageJsonKey: 'postcss',
-            fileNames: [
-              'postcss.config.js',
-              'postcss.config.cjs',
-              'postcss.config.json',
-              '.postcssrc.js',
-              '.postcssrc.cjs',
-              '.postcssrc.json',
-              '.postcssrc'
-            ],
+            fileNames: POSTCSS_CONF_FILENAMES,
             defaultConfig: {
               plugins: [
                 'postcss-flexbugs-fixes',
@@ -120,6 +120,7 @@ export default async (
               ]
             }
           }),
+          implementation: require('postcss'),
           sourceMap: !isProduction
         }
       },
@@ -148,9 +149,7 @@ export default async (
   };
 
   return {
-    // TODO Reload browser page after server-restart in dev mode (works when open is enabled)
     // TODO fix hot reload in es5 version (probably needs polyfill) in IE
-    // TODO add proper timing for elapsed time
     name,
     target: isServer ? 'node' : 'web',
     mode: isProduction ? 'production' : 'development',
@@ -164,6 +163,7 @@ export default async (
         : {
             [name]: [
               isWatch &&
+                // We have to use @gatsbyjs version, since the original package containing webpack 5 fix is not yet released
                 `@gatsbyjs/webpack-hot-middleware/client?name=${name}&path=//localhost:${imaEnvironment.$Server.port}/__webpack_hmr&timeout=15000&reload=true&overlay=false&overlayWarnings=false&noInfo=true&quiet=true`,
               require.resolve('@ima/hmr-client/dist/imaHmrClient.js'),
               path.join(rootDir, 'app/main.js')
@@ -238,6 +238,7 @@ export default async (
         // Handle node_modules packages that contain sourcemaps
         !isProduction && {
           enforce: 'pre',
+          exclude: /@babel(?:\/|\\{1,2})runtime/,
           test: /\.(js|mjs|jsx|ts|tsx|cjs|css)$/,
           use: require.resolve('source-map-loader')
         },
@@ -303,26 +304,14 @@ export default async (
               use: [
                 {
                   loader: require.resolve('babel-loader'),
-                  options: requireConfig({
-                    rootDir,
-                    packageJson,
-                    packageJsonKey: 'babel',
-                    // TODO resolve es and non-es babel configurations
-                    fileNames: [
-                      'babel.config.js',
-                      'babel.config.cjs',
-                      'babel.config.json',
-                      '.babelrc.js',
-                      '.babelrc.cjs',
-                      '.babelrc.json',
-                      '.babelrc'
-                    ],
+                  options: requireBabelConfig({
+                    ctx,
                     defaultConfig: {
                       presets: [
                         [
                           require.resolve('@babel/preset-env'),
                           {
-                            ...(isEsVersion
+                            ...(isEsVersion || isServer
                               ? {
                                   targets: {
                                     node: '14'

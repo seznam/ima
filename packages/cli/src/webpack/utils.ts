@@ -20,6 +20,26 @@ import envResolver from '@ima/server/lib/environment.js';
 import logger from '../lib/logger';
 import { time } from '../lib/time';
 
+const BABEL_CONF_FILENAMES = [
+  'babel.config.js',
+  'babel.config.cjs',
+  'babel.config.json',
+  '.babelrc.js',
+  '.babelrc.cjs',
+  '.babelrc.json',
+  '.babelrc'
+];
+
+const BABEL_CONF_ES_FILENAMES = [
+  'babel.config.es.js',
+  'babel.config.es.cjs',
+  'babel.config.es.json',
+  '.babelrc.es.js',
+  '.babelrc.es.cjs',
+  '.babelrc.es.json',
+  '.babelrc.es'
+];
+
 /**
  * Loads application IMA.js environment from server/config/environment.js
  *
@@ -39,7 +59,7 @@ function resolveEnvironment(rootDir: CliArgs['rootDir']): ImaEnvironment {
  * file locations or directly fromm package.json.
  *
  * @param {object} params
- * @param {string} params.rootDir App root directory.
+ * @param {ConfigurationContext} params.ctx current config context.
  * @param {string[]} params.fileNames Options of configuration file names.
  * @param {Record<string, unknown> | null} params.packageJson package.json
  * @param {string} params.packageJsonKey Key identifying config in package.json
@@ -48,24 +68,17 @@ function resolveEnvironment(rootDir: CliArgs['rootDir']): ImaEnvironment {
  * @returns {Record<string, unknown>} Loaded configuration object.
  */
 function requireConfig({
-  rootDir,
+  ctx,
   fileNames,
-  packageJson = null,
   packageJsonKey = '',
   defaultConfig = {}
 }: {
-  rootDir: CliArgs['rootDir'];
+  ctx: ConfigurationContext;
   fileNames: string[];
-  packageJson: Record<string, Record<string, unknown>> | null;
   packageJsonKey: string;
   defaultConfig: Record<string, unknown>;
 }): Record<string, unknown> {
-  if (
-    !rootDir ||
-    !Array.isArray(fileNames) ||
-    fileNames.length === 0 ||
-    !fs.existsSync(rootDir)
-  ) {
+  if (!Array.isArray(fileNames) || fileNames.length === 0) {
     return defaultConfig;
   }
 
@@ -73,9 +86,12 @@ function requireConfig({
     fileNames
       .map(fileName => ({
         fileName,
-        fullPath: path.join(rootDir, fileName)
+        fullPath: path.join(ctx.rootDir, fileName)
       }))
       .find(({ fullPath }) => fs.existsSync(fullPath)) || {};
+
+  const packageJsonPath = path.resolve(ctx.rootDir, './package.json');
+  const packageJson = packageJsonPath ? require(packageJsonPath) : {};
 
   if (
     !configPath &&
@@ -104,6 +120,49 @@ function requireConfig({
 
     return defaultConfig;
   }
+}
+
+/**
+ * Utility to load custom (with default fallback) config for es and non-es versions.
+ *
+ * @param {object} params
+ * @param {ConfigurationContext} params.ctx current config context.
+ * @param {Record<string, unknown>} params.defaultConfig Default config
+ *        which is used if no configuration is found.
+ * @returns {Record<string, unknown>} Loaded configuration object.
+ */
+function requireBabelConfig({
+  ctx,
+  defaultConfig = {}
+}: {
+  ctx: ConfigurationContext;
+  defaultConfig: Record<string, unknown>;
+}): Record<string, unknown> {
+  const { isEsVersion, isServer } = ctx;
+  const useEsConfig = isEsVersion || isServer;
+
+  const config = requireConfig({
+    ctx,
+    fileNames: useEsConfig ? BABEL_CONF_ES_FILENAMES : BABEL_CONF_FILENAMES,
+    packageJsonKey: useEsConfig ? 'babel.es' : 'babel',
+    defaultConfig
+  });
+
+  if (config === defaultConfig) {
+    return config;
+  }
+
+  /**
+   * In case of babel config, we merge few keys, that are loader specific,
+   *  into the custom config from the default one.
+   */
+  const { presets = [], plugins = [] } = config;
+
+  return {
+    defaultConfig,
+    presets,
+    plugins
+  };
 }
 
 /**
@@ -309,6 +368,7 @@ async function createWebpackConfig(
 export {
   resolveEnvironment,
   requireConfig,
+  requireBabelConfig,
   additionalDataFactory,
   createCacheKey,
   createWebpackConfig,
