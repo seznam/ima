@@ -12,7 +12,7 @@ import logger from '../../lib/logger';
 
 export interface AnalyzePluginConfigurationContext
   extends ConfigurationContext {
-  analyze?: 'server' | 'client' | 'client-es';
+  analyze?: ConfigurationContext['name'];
   analyzeBaseline?: boolean;
 }
 
@@ -31,7 +31,7 @@ const analyzePluginBuildCliArgs: CommandBuilder = {
   analyze: {
     desc: 'Runs multiple webpack bundle analyzer plugins on given entry',
     type: 'string',
-    choices: ['server', 'client', 'client-es']
+    choices: ['server', 'client', 'client.es']
   },
   analyzeBaseline: {
     desc: 'Generates baseline for webpack bundle stats comparison',
@@ -65,7 +65,7 @@ const AnalyzePlugin: ImaCliPluginFactory<AnalyzePluginOptions> = options => ({
 
     if (
       (analyze === 'server' && isServer) ||
-      (analyze === 'client-es' && isEsVersion) ||
+      (analyze === 'client.es' && isEsVersion) ||
       (analyze === 'client' && !isEsVersion && !isServer)
     ) {
       config.plugins?.push(
@@ -89,8 +89,8 @@ const AnalyzePlugin: ImaCliPluginFactory<AnalyzePluginOptions> = options => ({
     return config;
   },
   onDone: ({ firstRun, args }) => {
-    // Print only for first run
-    if (firstRun === false) {
+    // @ts-expect-error to be fixed (args contain analyze but its not properly typed)
+    if (firstRun === false || !args.analyze) {
       return;
     }
 
@@ -107,7 +107,9 @@ const AnalyzePlugin: ImaCliPluginFactory<AnalyzePluginOptions> = options => ({
       return;
     }
 
-    logger.plugin('Analyze plugin generated following reports:');
+    logger.plugin(
+      `${chalk.bold.bgBlue.black('Analyze plugin')} generated following report:`
+    );
 
     if (reportExists || statsExists) {
       logger.write(chalk.bold.underline('\nWebpack Bundle Analyzer:'));
@@ -119,6 +121,36 @@ const AnalyzePlugin: ImaCliPluginFactory<AnalyzePluginOptions> = options => ({
     if (bundleStatsExists) {
       logger.write(chalk.bold.underline('\nWebpack Bundle Stats:'));
       logger.write(`${chalk.gray('└')} report - ${bundleStatsPath}`);
+    }
+
+    // Write info about stats.json usage
+    if (statsExists) {
+      logger.write(
+        chalk.bold(
+          `\nThe generated ${chalk.green(
+            'stats.js'
+          )} file can be used in the following online analyzers:`
+        )
+      );
+      logger.write(
+        `${chalk.gray(
+          '├'
+        )} https://alexkuz.github.io/webpack-chart/ ${chalk.gray(
+          '- interactive pie chart'
+        )}`
+      );
+      logger.write(
+        `${chalk.gray(
+          '├'
+        )} https://chrisbateman.github.io/webpack-visualizer/ ${chalk.gray(
+          '- visualize and analyze bundle'
+        )}`
+      );
+      logger.write(
+        `${chalk.gray('└')} https://webpack.jakoblind.no/optimize/ ${chalk.gray(
+          '- analyze and optimize bundle'
+        )}`
+      );
     }
 
     if (options?.open !== false) {

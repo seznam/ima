@@ -15,7 +15,6 @@ import prettyMs from 'pretty-ms';
 async function createDevServer(app: Express) {
   const { config } = await createWebpackConfig(['client']);
   const compiler = webpack(config);
-  const isVerbose = process.argv.includes('--verbose');
 
   // Override listen so we can react when server is ready
   app.listen = function () {
@@ -29,7 +28,9 @@ async function createDevServer(app: Express) {
       process.send?.(IMA_CLI_RUN_SERVER_MESSAGE);
     });
   };
-  path.resolve(path.join(__dirname, '../../../../'));
+
+  let isBuilding = false;
+  const isVerbose = process.argv.some(arg => arg.includes('--verbose=true'));
 
   // Define dev middlewares
   app
@@ -54,13 +55,17 @@ async function createDevServer(app: Express) {
                   // eslint-disable-next-line @typescript-eslint/no-unused-vars
                   const [message, bundle, hash, time] = match;
 
+                  // Used to prevent multiple building messages after each other
+                  isBuilding = false;
+
                   logger.hmr(
                     `Built ${chalk.bold(bundle)} ${chalk.gray(
                       '[' + prettyMs(parseInt(time, 10)) + ']'
                     )}`
                   );
-                } else {
+                } else if (!isBuilding) {
                   logger.hmr('Building...');
+                  isBuilding = true;
                 }
               }
             }

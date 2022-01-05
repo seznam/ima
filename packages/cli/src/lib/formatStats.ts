@@ -170,6 +170,7 @@ function formatStats(stats: MultiStats | undefined, args: CliArgs): void {
         children: false,
         chunks: false,
         chunkModules: false,
+        warnings: !args.ignoreWarnings,
         colors: true,
         hash: true,
         modules: false,

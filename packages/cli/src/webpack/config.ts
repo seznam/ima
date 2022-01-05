@@ -51,6 +51,15 @@ export default async (
   const publicPath = ctx?.publicPath ?? imaConfig.publicPath;
 
   /**
+   * When using build script and dev mode (not legacy, or forceSPA which uses es5),
+   * the CSS files are only generated once for es version pass. For other compilers
+   * only definitions are generated in order to fully support css.modules but
+   * improve a compiling speed a little bit.
+   */
+  const onlyCssDefinitions =
+    isServer || (!isEsVersion && ctx.command === 'build');
+
+  /**
    * Style loaders helper function used to define
    * common style loader functions, that is later used
    * to handle css and less source files.
@@ -60,15 +69,7 @@ export default async (
   }: {
     useLessLoader?: boolean;
   } = {}): RuleSetUseItem[] => {
-    /**
-     * When using build script and dev mode (not legacy, or forceSPA which uses es5),
-     * the CSS files are only generated once for es version pass. For other compilers
-     * only definitions are generated in order to fully support css.modules but
-     * improve a compiling speed a little bit.
-     */
-    const onlyDefinitions =
-      isServer || (!isEsVersion && ctx.command === 'build');
-    let importLoaders = onlyDefinitions ? 0 : 1;
+    let importLoaders = onlyCssDefinitions ? 0 : 1;
 
     // Increase number of import loaders for less loader
     if (useLessLoader) {
@@ -76,7 +77,7 @@ export default async (
     }
 
     return [
-      !onlyDefinitions && {
+      !onlyCssDefinitions && {
         loader: MiniCssExtractPlugin.loader
       },
       {
@@ -85,7 +86,7 @@ export default async (
           importLoaders,
           modules: {
             auto: true,
-            exportOnlyLocals: onlyDefinitions,
+            exportOnlyLocals: onlyCssDefinitions,
             localIdentName: isProduction
               ? '[hash:base64]'
               : '[path][name]__[local]--[hash:base64:5]'
@@ -93,7 +94,7 @@ export default async (
           sourceMap: useSourceMaps
         }
       },
-      !onlyDefinitions && {
+      !onlyCssDefinitions && {
         loader: require.resolve('postcss-loader'),
         options: {
           postcssOptions: requireConfig({
@@ -177,13 +178,21 @@ export default async (
       pathinfo: !isProduction,
       assetModuleFilename: 'static/media/[name].[hash][ext]',
       filename: ({ chunk }) => {
-        if (chunk?.name === 'server') {
-          return 'server/app.server.js';
+        // Put server-side JS into server directory
+        if (isServer) {
+          return `server/${chunk?.name === name ? 'app.server' : '[name]'}.js`;
         }
 
-        return `static/js/${
-          !isServer && chunk?.name === name ? 'app.client' : '[name]'
-        }${isEsVersion ? '.es' : ''}.js`;
+        // Separate client chunks into es and non-es folders
+        const baseFolder = `static/${isEsVersion ? 'js.es' : 'js'}`;
+
+        if (isProduction) {
+          return `${baseFolder}/app.bundle.js`;
+        }
+
+        return `${baseFolder}/${
+          chunk?.name === name ? 'app.client' : '[name]'
+        }.js`;
       },
       publicPath,
       environment: {
@@ -195,6 +204,10 @@ export default async (
         forOf: isEsVersion || isServer,
         module: isEsVersion
       },
+      /**
+       * We put hot updates into it's own folder
+       * otherwise it clutters the built folder.
+       */
       hotUpdateChunkFilename: 'hot/[id].[fullhash].hot-update.js',
       hotUpdateMainFilename: 'hot/[runtime].[fullhash].hot-update.json',
       ...(isServer && { library: { type: 'commonjs2' } })
@@ -220,7 +233,24 @@ export default async (
           // eslint-disable-next-line @typescript-eslint/ban-ts-comment
           minify: CssMinimizerPlugin.esbuildMinify
         })
-      ]
+      ],
+      // Split chunks in dev for better performance and caching
+      ...(!isProduction
+        ? {
+            moduleIds: 'deterministic',
+            chunkIds: 'deterministic',
+            runtimeChunk: 'single', // Separate common runtime for better caching
+            splitChunks: {
+              cacheGroups: {
+                vendor: {
+                  test: /[\\/]node_modules[\\/]/,
+                  name: 'vendors',
+                  chunks: 'all'
+                }
+              }
+            }
+          }
+        : {})
     },
     resolve: {
       extensions: ['.js', '.jsx'],
@@ -409,14 +439,16 @@ export default async (
             // Removes generated empty script caused by non-js entry points
             new RemoveEmptyScriptsPlugin(),
 
-            // Handles LESS/CSS extraction out of JS to separate css file
-            new MiniCssExtractPlugin({
-              filename: ({ chunk }) =>
-                `static/css/${
-                  !isServer && chunk?.name === name ? 'app' : '[name]'
-                }.css`,
-              chunkFilename: 'static/css/[name].chunk.css'
-            }),
+            /**
+             * Handles LESS/CSS extraction out of JS to separate css file.
+             * We use MiniCssExtractPlugin.loader only in es bundle.
+             */
+            !onlyCssDefinitions &&
+              new MiniCssExtractPlugin({
+                filename: ({ chunk }) =>
+                  `static/css/${chunk?.name === name ? 'app' : '[name]'}.css`,
+                chunkFilename: 'static/css/[name].chunk.css' // FIXME ?
+              }),
 
             // Enables compression for assets in production build
             ...(isProduction

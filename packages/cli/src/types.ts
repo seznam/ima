@@ -70,7 +70,7 @@ export interface CliArgs extends BuildArgs, DevArgs {
  * CLI arguments merged with current configuration arguments.
  */
 export interface ConfigurationContext extends CliArgs {
-  name: string;
+  name: 'server' | 'client' | 'client.es';
   isServer: boolean;
   isEsVersion?: boolean;
 }

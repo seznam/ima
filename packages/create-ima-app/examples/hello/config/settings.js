@@ -30,21 +30,20 @@ export default (ns, oc, config) => {
       },
       $Page: {
         $Render: {
+          styles: [`/static/css/app.css${versionStamp}`],
           scripts: [
-            `/static/js/locale/${config.$Language}.js${versionStamp}`,
-            '/static/js/app.bundle.min.js' + versionStamp
+            // `/static/js/locale/${config.$Language}.js${versionStamp}`,
+            `/static/js/app.bundle.min.js${versionStamp}`
           ],
           esScripts: [
-            '/static/js/locale/' + config.$Language + '.js' + versionStamp,
-            '/static/js/app.bundle.es.min.js' + versionStamp
+            // '/static/js/locale/' + config.$Language + '.js' + versionStamp,
+            `/static/js.es/app.bundle.min.js${versionStamp}`
           ],
+          polyfill: {
+            fetch: '/static/js/polyfill-fetch.js'
+          },
           documentView: DocumentView
         }
-      },
-      $Static: {
-        media: '/static/media',
-        css: '/static/css',
-        js: '/static/js'
       }
     },
 
@@ -66,15 +65,17 @@ export default (ns, oc, config) => {
         $Render: {
           scripts: [
             // '/static/js/polyfill.js' + versionStamp,
-            // '/static/js/vendor.client.js' + versionStamp,
             // `/static/js/locale/${config.$Language}.js${versionStamp}`,
-            '/static/js/app.client.js' + versionStamp
+            `/static/js/runtime.js${versionStamp}`,
+            `/static/js/vendors.js${versionStamp}`,
+            `/static/js/app.client.js${versionStamp}`
           ],
           esScripts: [
-            // '/static/js/polyfill.es.js' + versionStamp,
-            // '/static/js/vendor.client.es.js' + versionStamp,
+            // '/static/js.es/polyfill.js' + versionStamp,
             // `/static/js/locale/${config.$Language}.js${versionStamp}`,
-            '/static/js/app.client.es.js' + versionStamp
+            `/static/js.es/runtime.js${versionStamp}`,
+            `/static/js.es/vendors.js${versionStamp}`,
+            `/static/js.es/app.client.js${versionStamp}`
           ]
         }
       }

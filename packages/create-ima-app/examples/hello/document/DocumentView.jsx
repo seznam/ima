@@ -11,10 +11,6 @@ export default class DocumentView extends AbstractDocumentView {
   }
 
   render() {
-    let appCssFile =
-      this.utils.$Settings.$Env !== 'dev' ? 'app.bundle.min.css' : 'app.css';
-    appCssFile += `?version=${this.utils.$Settings.$Version}`;
-
     return (
       <html>
         <head>
@@ -52,15 +48,11 @@ export default class DocumentView extends AbstractDocumentView {
           />
 
           <meta name="viewport" content="width=device-width, initial-scale=1" />
-          <link
-            rel="stylesheet"
-            href={
-              this.utils.$Router.getBaseUrl() +
-              this.utils.$Settings.$Static.css +
-              '/' +
-              appCssFile
-            }
-          />
+
+          {this.utils.$Settings.$Page.$Render.styles.map(style => (
+            <link key={style} rel="stylesheet" href={style} />
+          ))}
+
           <title>{this.props.metaManager.getTitle()}</title>
         </head>
         <body>
@@ -107,8 +99,8 @@ export default class DocumentView extends AbstractDocumentView {
 		    }
 		    if (!window.fetch) {
 		        $IMA.Runner.scripts.unshift('${
-              this.utils.$Settings.$Static.js
-            }/fetch-polyfill.js');
+              this.utils.$Settings.$Page.$Render.polyfill.fetch
+            }');
 		    }
 		    $IMA.Runner.scripts.forEach(function(source) {
 		        var script = document.createElement('script');

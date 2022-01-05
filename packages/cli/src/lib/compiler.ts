@@ -93,7 +93,6 @@ function handleCompiler({
   if (firstRun) {
     // Print elapsed time for first run
     elapsed && logger.write(chalk.gray(` [${elapsed()}]`));
-    firstRun = false;
   }
 
   // Reject with compiler
