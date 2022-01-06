@@ -4,6 +4,7 @@ import findCacheDir from 'find-cache-dir';
 import webpack, { Configuration, RuleSetRule, RuleSetUseItem } from 'webpack';
 import miniSVGDataURI from 'mini-svg-data-uri';
 
+import { CleanWebpackPlugin } from 'clean-webpack-plugin';
 import CopyPlugin from 'copy-webpack-plugin';
 import MiniCssExtractPlugin from 'mini-css-extract-plugin';
 import RemoveEmptyScriptsPlugin from 'webpack-remove-empty-scripts';
@@ -350,7 +351,7 @@ export default async (
                                     node: '14'
                                   }
                                 }
-                              : {}),
+                              : {}), // FIXME es5 target
                             modules: 'auto'
                           }
                         ],
@@ -430,6 +431,7 @@ export default async (
       ...(isServer
         ? // Server-specific plugins
           [
+            new CleanWebpackPlugin(),
             // Copies essential assets to static directory
             new CopyPlugin({
               patterns: [{ from: 'app/public', to: 'static/public' }]
