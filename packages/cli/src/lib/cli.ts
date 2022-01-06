@@ -93,4 +93,38 @@ function resolveCliPluginArgs(command: ImaCliCommand): CommandBuilder {
     }, {});
 }
 
-export { IMA_CLI_RUN_SERVER_MESSAGE, handlerFactory, resolveCliPluginArgs };
+/**
+ * Initializes shared args with their default values based
+ * current CLI command.
+ *
+ * @param {ImaCliCommand} command Current CLI command identifier.
+ * @returns {CommandBuilder} Object with shared args.
+ */
+function sharedArgsFactory(command: ImaCliCommand): CommandBuilder {
+  return {
+    clean: {
+      desc: 'Clean build folder before building the application',
+      type: 'boolean',
+      default: command === 'build'
+    },
+    verbose: {
+      desc: 'Use default webpack CLI output instead of custom one',
+      type: 'boolean'
+    },
+    publicPath: {
+      desc: 'Webpack public path to specify base for all assets in the app',
+      type: 'string'
+    },
+    ignoreWarnings: {
+      desc: 'Webpack will no longer print warnings during compilation',
+      type: 'boolean'
+    }
+  };
+}
+
+export {
+  IMA_CLI_RUN_SERVER_MESSAGE,
+  handlerFactory,
+  resolveCliPluginArgs,
+  sharedArgsFactory
+};

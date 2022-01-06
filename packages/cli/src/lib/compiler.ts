@@ -48,7 +48,7 @@ async function closeCompiler(compiler: MultiCompiler): Promise<Error | void> {
  * true for production environments.
  */
 function cleanOutputDir(args: CliArgs): void {
-  if (!(args.clean ?? (args.isProduction && args.command === 'build'))) {
+  if (!args.clean) {
     return;
   }
 

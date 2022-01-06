@@ -188,7 +188,7 @@ export default async (
         const baseFolder = `static/${isEsVersion ? 'js.es' : 'js'}`;
 
         if (isProduction) {
-          return `${baseFolder}/app.bundle.js`;
+          return `${baseFolder}/app.bundle.min.js`;
         }
 
         return `${baseFolder}/${
@@ -431,7 +431,7 @@ export default async (
       ...(isServer
         ? // Server-specific plugins
           [
-            new CleanWebpackPlugin(),
+            !ctx.clean && new CleanWebpackPlugin(),
             // Copies essential assets to static directory
             new CopyPlugin({
               patterns: [{ from: 'app/public', to: 'static/public' }]
@@ -449,8 +449,12 @@ export default async (
             !onlyCssDefinitions &&
               new MiniCssExtractPlugin({
                 filename: ({ chunk }) =>
-                  `static/css/${chunk?.name === name ? 'app' : '[name]'}.css`,
-                chunkFilename: 'static/css/chunk-[id].css'
+                  `static/css/${chunk?.name === name ? 'app' : '[name]'}${
+                    isProduction ? '.min' : ''
+                  }.css`,
+                chunkFilename: `static/css/chunk-[id]${
+                  isProduction ? '.min' : ''
+                }.css`
               }),
 
             // Enables compression for assets in production build
@@ -487,6 +491,9 @@ export default async (
     // Enable node preset for externals on server
     externalsPresets: {
       node: isServer
-    }
+    },
+
+    // Turn webpack performance reports off since we print reports ourselves
+    performance: false
   };
 };

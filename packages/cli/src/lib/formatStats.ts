@@ -1,4 +1,5 @@
 import fs from 'fs';
+import path from 'path';
 import chalk from 'chalk';
 import { MultiStats, StatsAsset, StatsError } from 'webpack';
 import { highlight, fromJson } from 'cli-highlight';
@@ -8,6 +9,9 @@ import prettyBytes from 'pretty-bytes';
 import { createSourceFragment, parseCompileError } from './compileErrorParser';
 import logger from './logger';
 import { CliArgs } from '../types';
+
+let isFirstRun = true;
+const warningsCache = new Set<string>();
 
 /**
  * Prints formatted webpack errors (stripped from duplicates) into console.
@@ -131,23 +135,64 @@ function formatWebpackWarnings(
 }
 
 /**
+ * Extracts asset paths from it's name (containing basePath)
+ * and output directory.
+ */
+function extractAssetPaths(
+  name: string,
+  outDir: string
+): { fileName: string; fullPath: string; basePath: string } {
+  const fullPath = path.join(outDir, name);
+  const lastSlashIndex = fullPath.lastIndexOf('/');
+  const fileName = fullPath.substring(lastSlashIndex + 1);
+  const basePath = fullPath
+    .substring(0, lastSlashIndex + 1)
+    .replace(outDir, '');
+
+  return {
+    fileName,
+    fullPath,
+    basePath
+  };
+}
+
+/**
  * Print formatted info about given asset
  */
-function printAssetInfo(asset: StatsAsset, isLastItem = false): void {
+function printAssetInfo(
+  asset: StatsAsset,
+  outDir: string,
+  isLastItem = false
+): void {
   let result = '';
 
   if (!asset.name) {
     return;
   }
 
-  result += ` ${chalk.gray(isLastItem ? '└' : '├')} ${asset.name}`;
-  result += ` ${chalk.yellow(prettyBytes(asset.size))}`;
+  const assetPaths = extractAssetPaths(asset.name, outDir);
+
+  // Print output
+  result += chalk.gray(isLastItem ? ' └ ' : ' ├ ');
+  result += chalk.gray(assetPaths.basePath);
+  result += chalk.bold.cyan(assetPaths.fileName);
+  result += ` ${chalk.green.bold(prettyBytes(asset.size))}`;
+
+  // Prints brotli and gzip sizes
+  Object.values(asset?.info?.related ?? {})
+    .map(assetName => extractAssetPaths(assetName.toString(), outDir))
+    .filter(({ fullPath }) => fs.existsSync(fullPath))
+    .forEach(({ fileName, fullPath }) => {
+      result += '\n';
+      result += chalk.gray(isLastItem ? '      ' : ' |    ');
+      result += fileName;
+      result += chalk.yellow(
+        ` ${prettyBytes(fs.statSync(path.join(fullPath)).size)}`
+      );
+    });
 
   logger.write(result);
 }
-
-let isFirstRun = true;
-const warningsCache = new Set<string>();
 
 /**
  * Handles stats logging during webpack build and watch tasks.
@@ -182,7 +227,7 @@ function formatStats(stats: MultiStats | undefined, args: CliArgs): void {
     );
   }
 
-  const { children, errors, warnings } = stats.toJson({
+  const jsonStats = stats.toJson({
     all: false,
     assets: true,
     timings: true,
@@ -198,8 +243,8 @@ function formatStats(stats: MultiStats | undefined, args: CliArgs): void {
     const newWarnings = [];
 
     // Cache unique warnings
-    if (warnings) {
-      for (const warning of warnings) {
+    if (Array.isArray(jsonStats.warnings)) {
+      for (const warning of jsonStats.warnings) {
         if (!warningsCache.has(warning.message)) {
           warningsCache.add(warning.message);
           newWarnings.push(warning);
@@ -211,34 +256,58 @@ function formatStats(stats: MultiStats | undefined, args: CliArgs): void {
   }
 
   // Print errors
-  formatWebpackErrors(errors);
+  formatWebpackErrors(jsonStats.errors);
 
   // First run assets info output
-  if (isFirstRun && children?.length) {
+  if (isFirstRun && jsonStats.children?.length) {
+    let totalCount = 0;
+    const outDir = jsonStats.children[0].outputPath ?? '';
+
     logger.info(
       `Compilation was ${chalk.green(
         'successful'
-      )} using webpack version: ${chalk.magenta(children[0].version)}`
+      )} using webpack version: ${chalk.magenta(jsonStats.children[0].version)}`
     );
-    logger.info(
-      `Output folder ${chalk.magenta(children[0].outputPath)}, produced:\n`
-    );
+    logger.info(`Output folder ${chalk.magenta(outDir)}, produced:\n`);
 
-    children?.forEach(child => {
+    jsonStats.children?.forEach(child => {
       logger.write(
         `${chalk.underline.bold(child.name)} ${chalk.gray(
           '[' + prettyMs(child.time ?? 0) + ']'
         )}`
       );
 
-      child.assets
-        ?.sort((a, b) => a?.name.localeCompare(b?.name))
-        .forEach((asset, index) => {
-          printAssetInfo(asset, index === (child.assets?.length as number) - 1);
-        });
+      // Count total number of generated assets
+      totalCount += child.assets?.length ?? 0;
+
+      const filteredAssets = child.assets
+        ?.filter(asset => /\.(css|js)$/i.test(asset.name))
+        ?.sort((a, b) => a?.name.localeCompare(b?.name));
+      const filteredAssetsLen = filteredAssets?.length ?? 0;
+
+      filteredAssets?.forEach((asset, index) => {
+        // Count also related (plugin generated) files
+        totalCount += Object.keys(asset?.info?.related ?? {}).length;
+
+        printAssetInfo(asset, outDir, index === filteredAssetsLen - 1);
+      });
 
       logger.write('');
     });
+
+    // Print more information for build task
+    if (args.command === 'build') {
+      logger.write(
+        `This ^ report covers only ${chalk.bold('.js')} and ${chalk.bold(
+          '.css'
+        )} files, there were`
+      );
+      logger.write(
+        `total of ${chalk.green.bold(
+          totalCount
+        )} assets generated inside the output folder.\n`
+      );
+    }
 
     isFirstRun = false;
   }

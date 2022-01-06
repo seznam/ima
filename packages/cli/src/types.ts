@@ -38,6 +38,7 @@ export type StartArgs = BaseArgs;
  * Shared dev and build script args
  */
 export interface DevBuildArgs extends BaseArgs {
+  clean: boolean;
   verbose?: boolean;
   publicPath?: string;
   ignoreWarnings?: boolean;
@@ -47,7 +48,6 @@ export interface DevBuildArgs extends BaseArgs {
  * Dev (ima dev) script args
  */
 export interface DevArgs extends DevBuildArgs {
-  clean?: boolean;
   open?: boolean;
   legacy?: boolean;
   forceSPA?: boolean;

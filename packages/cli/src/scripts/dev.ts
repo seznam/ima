@@ -8,12 +8,12 @@ import { DevArgs, HandlerFn } from '../types';
 import {
   handlerFactory,
   IMA_CLI_RUN_SERVER_MESSAGE,
-  resolveCliPluginArgs
+  resolveCliPluginArgs,
+  sharedArgsFactory
 } from '../lib/cli';
 import logger from '../lib/logger';
 import { watchCompiler, handleError } from '../lib/compiler';
 import { createWebpackConfig, resolveEnvironment } from '../webpack/utils';
-import SharedArgs from '../lib/SharedArgs';
 import webpack, { MultiCompiler } from 'webpack';
 
 let serverHasStarted = false;
@@ -125,7 +125,12 @@ export const command = `${CMD} [rootDir]`;
 export const describe = 'Run application in development watch mode';
 export const handler = handlerFactory(dev);
 export const builder: CommandBuilder = {
-  ...SharedArgs,
+  ...sharedArgsFactory(CMD),
+  clean: {
+    desc: 'Clean build folder before building the application',
+    type: 'boolean',
+    default: false
+  },
   open: {
     desc: 'Opens browser window after server has been started',
     type: 'boolean',
