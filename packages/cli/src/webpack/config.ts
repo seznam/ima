@@ -218,6 +218,7 @@ export default async (
       store: 'pack',
       buildDependencies: {
         cliDeps: [__filename],
+        defaultWebpack: ['webpack/lib/'],
         imaConfig: [path.join(rootDir, IMA_CONF_FILENAME)].filter(f =>
           fs.existsSync(f)
         )
@@ -447,7 +448,7 @@ export default async (
               new MiniCssExtractPlugin({
                 filename: ({ chunk }) =>
                   `static/css/${chunk?.name === name ? 'app' : '[name]'}.css`,
-                chunkFilename: 'static/css/[name].chunk.css' // FIXME ?
+                chunkFilename: 'static/css/chunk-[id].css'
               }),
 
             // Enables compression for assets in production build
