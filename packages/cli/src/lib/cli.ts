@@ -2,7 +2,7 @@ import path from 'path';
 import fs from 'fs';
 import { Arguments, CommandBuilder } from 'yargs';
 
-import { BaseArgs, HandlerFn, ImaCliCommand } from '../types';
+import { CliArgs, HandlerFn, ImaCliCommand } from '../types';
 import { requireImaConfig } from '../webpack/utils';
 
 const IMA_CLI_RUN_SERVER_MESSAGE = 'ima-cli-run-server-message';
@@ -36,10 +36,10 @@ function resolveRootDir(dir?: string | null | undefined): string {
  * parses them and defines defaults. Should be used to initialize any
  * cli command script, since it takes care of parsing mandatory arguments.
  *
- * @param {HandlerFn<T>} handlerFn Cli script command handler.
+ * @param {HandlerFn} handlerFn Cli script command handler.
  * @returns {void}
  */
-function handlerFactory<T extends BaseArgs>(handlerFn: HandlerFn<T>) {
+function handlerFactory(handlerFn: HandlerFn) {
   return async (yargs: Arguments): Promise<void> => {
     const [command, dir = ''] = yargs._ || [];
     const isProduction = process.env.NODE_ENV === 'production';
@@ -49,7 +49,7 @@ function handlerFactory<T extends BaseArgs>(handlerFn: HandlerFn<T>) {
       isProduction,
       rootDir: resolveRootDir(dir.toString()),
       command: command.toString()
-    } as unknown) as T);
+    } as unknown) as CliArgs);
   };
 }
 

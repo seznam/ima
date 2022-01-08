@@ -1,6 +1,6 @@
 import { CommandBuilder } from 'yargs';
 
-import { BuildArgs, HandlerFn } from '../types';
+import { HandlerFn } from '../types';
 import {
   handlerFactory,
   resolveCliPluginArgs,
@@ -13,10 +13,10 @@ import webpack from 'webpack';
 /**
  * Builds ima application with provided config.
  *
- * @param {BuildArgs} args
+ * @param {CliArgs} args
  * @returns {Promise<void>}
  */
-const build: HandlerFn<BuildArgs> = async args => {
+const build: HandlerFn = async args => {
   try {
     const { config, imaConfig } = await createWebpackConfig(
       ['client', 'server'],

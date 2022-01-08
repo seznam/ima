@@ -4,7 +4,7 @@ import chalk from 'chalk';
 import nodemon from 'nodemon';
 import { CommandBuilder } from 'yargs';
 
-import { DevArgs, HandlerFn } from '../types';
+import { CliArgs, HandlerFn } from '../types';
 import {
   handlerFactory,
   IMA_CLI_RUN_SERVER_MESSAGE,
@@ -22,7 +22,7 @@ let serverHasStarted = false;
  * Creates nodemon dev plugin to watch server-side changes
  * which triggers automatic server restarts.
  */
-function initNodemon(compiler: MultiCompiler, args: DevArgs) {
+function initNodemon(compiler: MultiCompiler, args: CliArgs) {
   compiler.hooks.done.tap('RebootImaServerPlugin', stats => {
     if (stats.hasErrors()) {
       return;
@@ -84,10 +84,10 @@ function initNodemon(compiler: MultiCompiler, args: DevArgs) {
  * Builds ima application with provided config in watch mode
  * while also starting the webserver itself.
  *
- * @param {DevArgs} args
+ * @param {CliArgs} args
  * @returns {Promise<void>}
  */
-const dev: HandlerFn<DevArgs> = async args => {
+const dev: HandlerFn = async args => {
   // Set force SPA flag so server can react accordingly
   if (args.forceSPA) {
     args.legacy = true; // SPA only supports es5 versions
@@ -99,9 +99,9 @@ const dev: HandlerFn<DevArgs> = async args => {
       ['client', 'server'],
       {
         ...args,
-        isProduction: false,
-        isWatch: true
-      }
+        isProduction: false
+      },
+      true
     );
 
     const compiler = webpack(config);

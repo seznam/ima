@@ -9,11 +9,11 @@ import {
   AdditionalDataContentFn,
   AdditionalDataFactoryFn,
   AdditionalDataFn,
-  CliArgs,
   ConfigurationContext,
   ImaEnvironment,
   ConfigurationTypes,
-  ImaConfig
+  ImaConfig,
+  CliArgs
 } from '../types';
 
 import envResolver from '@ima/server/lib/environment.js';
@@ -263,7 +263,8 @@ async function resolveImaConfig(args: CliArgs): Promise<ImaConfig> {
  */
 async function createWebpackConfig(
   configurations: ConfigurationTypes = ['client', 'server'],
-  args?: CliArgs
+  args?: CliArgs,
+  isWatch = false
 ): Promise<{ config: Configuration[]; imaConfig: ImaConfig }> {
   let elapsed: ReturnType<typeof time> | null = null;
 
@@ -307,17 +308,19 @@ async function createWebpackConfig(
     finalConfigContexts.push({
       name: 'server',
       isServer: true,
+      isWatch,
       ...args
     });
   }
 
   // Push client configurations if available (es and legacy versions)
   if (configurations.includes('client')) {
-    if (!args?.isWatch || args.legacy) {
+    if (isWatch || args.legacy) {
       finalConfigContexts.push({
         name: 'client',
         isServer: false,
         isEsVersion: false,
+        isWatch,
         ...args
       });
     }
@@ -328,6 +331,7 @@ async function createWebpackConfig(
         name: 'client.es',
         isServer: false,
         isEsVersion: true,
+        isWatch,
         ...args
       });
     }

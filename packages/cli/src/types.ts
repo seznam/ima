@@ -20,45 +20,20 @@ declare global {
 export type ImaCliCommand = 'start' | 'build' | 'dev';
 
 /**
- * Base args available in every ima script. Following 3 arguments
- * are available and mandatory in every ima cli script.
+ * Arguments passed across ima cli and into webpack config
+ * function generator.
  */
-export interface BaseArgs {
+export interface CliArgs {
   rootDir: string;
   isProduction: boolean;
   command: ImaCliCommand;
-}
-
-/**
- * Shared dev and build script args
- */
-export interface DevBuildArgs extends BaseArgs {
   clean: boolean;
   verbose?: boolean;
   publicPath?: string;
   ignoreWarnings?: boolean;
-}
-
-/**
- * Dev (ima dev) script args
- */
-export interface DevArgs extends DevBuildArgs {
   open?: boolean;
   legacy?: boolean;
   forceSPA?: boolean;
-}
-
-/**
- * Build (ima build) script args
- */
-export type BuildArgs = DevBuildArgs;
-
-/**
- * Arguments passed across ima cli and into webpack config
- * function generator.
- */
-export interface CliArgs extends BuildArgs, DevArgs {
-  isWatch?: boolean;
 }
 
 /**
@@ -67,10 +42,11 @@ export interface CliArgs extends BuildArgs, DevArgs {
 export interface ConfigurationContext extends CliArgs {
   name: 'server' | 'client' | 'client.es';
   isServer: boolean;
+  isWatch: boolean;
   isEsVersion?: boolean;
 }
 
-export type HandlerFn<T extends BaseArgs> = (args: T) => Promise<void>;
+export type HandlerFn = (args: CliArgs) => Promise<void>;
 export type ConfigurationTypes = ('client' | 'server')[];
 
 /**
