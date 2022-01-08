@@ -19,7 +19,8 @@ import {
   additionalDataFactory,
   createCacheKey,
   IMA_CONF_FILENAME,
-  requireBabelConfig
+  requireBabelConfig,
+  createPolyfillEntry
 } from './utils';
 
 const POSTCSS_CONF_FILENAMES = [
@@ -169,7 +170,8 @@ export default async (
                 `@gatsbyjs/webpack-hot-middleware/client?name=${name}&path=//localhost:${imaEnvironment.$Server.port}/__webpack_hmr&timeout=15000&reload=true&overlay=false&overlayWarnings=false&noInfo=true&quiet=true`,
               require.resolve('@ima/hmr-client/dist/imaHmrClient.js'),
               path.join(rootDir, 'app/main.js')
-            ].filter(Boolean) as string[]
+            ].filter(Boolean) as string[],
+            ...createPolyfillEntry(ctx)
           })
     },
     output: {
@@ -184,14 +186,15 @@ export default async (
 
         // Separate client chunks into es and non-es folders
         const baseFolder = `static/${isEsVersion ? 'js.es' : 'js'}`;
+        const fileNameParts = [
+          chunk?.name === name && !isProduction && 'app.client',
+          chunk?.name === name && isProduction && 'app.bundle',
+          chunk?.name !== name && '[name]',
+          isProduction && 'min',
+          'js'
+        ].filter(Boolean);
 
-        if (isProduction) {
-          return `${baseFolder}/app.bundle.min.js`;
-        }
-
-        return `${baseFolder}/${
-          chunk?.name === name ? 'app.client' : '[name]'
-        }.js`;
+        return `${baseFolder}/${fileNameParts.join('.')}`;
       },
       publicPath,
       environment: {
@@ -332,7 +335,11 @@ export default async (
             },
             {
               test: /\.(js|mjs|jsx|ts|tsx|cjs)$/,
-              exclude: /node_modules/,
+              exclude: (modulePath: string) =>
+                /node_modules/.test(modulePath) &&
+                !/node_modules\/(abort-controller|event-target-shim)/.test(
+                  modulePath
+                ),
               use: [
                 {
                   loader: require.resolve('babel-loader'),

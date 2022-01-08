@@ -166,6 +166,28 @@ function requireBabelConfig({
 }
 
 /**
+ * Returns polyfill entry point for current es version if the file exists.
+ * The function looks for app/polyfill.js and app/polyfill.es.js files.
+ *
+ * @param {ConfigurationContext} ctx Current configuration context.
+ * @returns {Record<string, string>} Entry object or empty object.
+ */
+function createPolyfillEntry(
+  ctx: ConfigurationContext
+): Record<string, string> {
+  const { isEsVersion, rootDir } = ctx;
+
+  const fileName = `polyfill${isEsVersion ? '.es' : ''}.js`;
+  const polyfillPath = path.join(rootDir, 'app', fileName);
+
+  if (!fs.existsSync(polyfillPath)) {
+    return {};
+  }
+
+  return { [`polyfill${isEsVersion ? '.es' : ''}`]: `app/${fileName}` };
+}
+
+/**
  * Less-loader additional data factory function. Utility to
  * easily prepped/append custom content into the less-loader.
  *
@@ -375,5 +397,6 @@ export {
   createWebpackConfig,
   requireImaConfig,
   resolveImaConfig,
+  createPolyfillEntry,
   IMA_CONF_FILENAME
 };
