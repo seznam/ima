@@ -17,7 +17,7 @@ declare global {
 /**
  * Available ima cli commands string identifiers.
  */
-export type ImaCliCommand = 'start' | 'build' | 'dev';
+export type ImaCliCommand = 'build' | 'dev';
 
 /**
  * Arguments passed across ima cli and into webpack config
@@ -42,64 +42,48 @@ export interface CliArgs {
 export interface ConfigurationContext extends CliArgs {
   name: 'server' | 'client' | 'client.es';
   isServer: boolean;
-  isWatch: boolean;
   isEsVersion?: boolean;
 }
 
 export type HandlerFn = (args: CliArgs) => Promise<void>;
 export type ConfigurationTypes = ('client' | 'server')[];
-
-/**
- * Webpack callback function used to customize webpack config before it's run.
- *
- * @param {Configuration} config generated config by ima CLI, which can be further customized.
- * @param {ConfigurationContext} ctx CLI arguments merged with current configuration arguments.
- * @param {ImaConfig} imaConfig additional local ima.config.js file contents ({} if there's no file created).
- */
-export type ImaConfigWebpack = (
-  config: Configuration,
-  ctx: ConfigurationContext,
-  imaConfig: ImaConfig
-) => Promise<Configuration>;
+export type ImaCliPluginCallbackArgs = {
+  isFirstRun?: boolean;
+  args: CliArgs;
+  imaConfig: ImaConfig;
+  compiler: MultiCompiler;
+};
 
 /**
  * Interface for ima/cli plugins that can be defined in plugins field in ima.conf.js. These can be used
  * to extend functionality of default CLI with custom cli arguments and webpack config overrides.
  */
-export interface ImaCliPlugin {
+export interface ImaCliPlugin<C = ConfigurationContext> {
   /**
    * Plugin name, used mainly for better debugging messages.
    */
-  name: string;
+  readonly name: string;
 
   /**
    * Optional additional CLI arguments to extend the set of existing ones.
    */
-  cliArgs?: Partial<Record<ImaCliCommand, CommandBuilder>>;
+  readonly cliArgs?: Partial<Record<ImaCliCommand, CommandBuilder>>;
 
   /**
    * Webpack callback function used by plugins to customize/extend ima webpack config before it's run.
    */
-  webpack: ImaConfigWebpack;
+  webpack(
+    config: Configuration,
+    ctx: C,
+    imaConfig: ImaConfig
+  ): Promise<Configuration>;
 
   /**
    * Optional done callback which is run after first successful compilation.
    * It is run after information about the built are printed to the console by the CLI.
    */
-  onDone?: (params: {
-    isFirstRun?: boolean;
-    args: CliArgs;
-    imaConfig: ImaConfig;
-    compiler: MultiCompiler;
-  }) => void;
+  onDone?(params: ImaCliPluginCallbackArgs): void;
 }
-
-/**
- * Factory function, used for external CLI plugins development.
- */
-export type ImaCliPluginFactory<O = Record<string, unknown>> = (
-  options?: O
-) => ImaCliPlugin;
 
 /**
  * Ima config options. Some of these options can be overridden using Args, which takes precedence.
@@ -109,7 +93,11 @@ export type ImaConfig = {
   /**
    * Webpack callback function can be used to completely customize default webpack config before it's run.
    */
-  webpack?: ImaConfigWebpack;
+  webpack?: (
+    config: Configuration,
+    ctx: ConfigurationContext,
+    imaConfig: ImaConfig
+  ) => Promise<Configuration>;
 
   /**
    * Optional IMA cli plugins that can be used to easily extend

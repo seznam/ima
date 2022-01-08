@@ -1,13 +1,18 @@
 import fs from 'fs';
-import open from 'better-opn';
 import path from 'path';
+import open from 'better-opn';
 import chalk from 'chalk';
 import { BundleStatsWebpackPlugin } from 'bundle-stats-webpack-plugin';
-import { WebpackPluginInstance } from 'webpack';
+import { Configuration, WebpackPluginInstance } from 'webpack';
 import { BundleAnalyzerPlugin } from 'webpack-bundle-analyzer';
 import { CommandBuilder } from 'yargs';
 
-import { ConfigurationContext, ImaCliPluginFactory } from '../../types';
+import {
+  ConfigurationContext,
+  ImaCliPluginCallbackArgs,
+  ImaCliCommand,
+  ImaCliPlugin
+} from '../../types';
 import logger from '../../lib/logger';
 
 export interface AnalyzePluginConfigurationContext
@@ -23,41 +28,43 @@ export interface AnalyzePluginOptions {
   bundleAnalyzerOptions?: BundleAnalyzerPlugin.Options;
 }
 
-// TODO extract to separate npm package
-/**
- * Enable analyze plugin using 'analyze' cli argument in build command.
- */
-const analyzePluginBuildCliArgs: CommandBuilder = {
-  analyze: {
-    desc: 'Runs multiple webpack bundle analyzer plugins on given entry',
-    type: 'string',
-    choices: ['server', 'client', 'client.es']
-  },
-  analyzeBaseline: {
-    desc: 'Generates baseline for webpack bundle stats comparison',
-    type: 'boolean'
-  }
-};
-
 /**
  * Appends webpack bundle analyzer plugin to the build command config.
- *
- * @param {AnalyzePluginOptions} options.
- * @returns {ImaCliPlugin} Cli plugin definition.
  */
-const AnalyzePlugin: ImaCliPluginFactory<AnalyzePluginOptions> = options => ({
-  name: 'analyze-plugin',
-  cliArgs: {
-    build: analyzePluginBuildCliArgs
-  },
-  webpack: async (config, ctx: AnalyzePluginConfigurationContext) => {
+export default class AnalyzePlugin
+  implements ImaCliPlugin<AnalyzePluginConfigurationContext> {
+  private _options: AnalyzePluginOptions;
+
+  readonly name = 'analyze-plugin';
+  readonly cliArgs: Partial<Record<ImaCliCommand, CommandBuilder>> = {
+    build: {
+      analyze: {
+        desc: 'Runs multiple webpack bundle analyzer plugins on given entry',
+        type: 'string',
+        choices: ['server', 'client', 'client.es']
+      },
+      analyzeBaseline: {
+        desc: 'Generates baseline for webpack bundle stats comparison',
+        type: 'boolean'
+      }
+    }
+  };
+
+  constructor(options: AnalyzePluginOptions) {
+    this._options = options;
+  }
+
+  async webpack(
+    config: Configuration,
+    ctx: AnalyzePluginConfigurationContext
+  ): Promise<Configuration> {
     const { analyze, isServer, isEsVersion } = ctx;
 
     if (!analyze) {
       return config;
     }
 
-    const isCompare = options?.compare === true;
+    const isCompare = this._options?.compare === true;
     const isBaseline =
       ctx?.analyzeBaseline === true ||
       (isCompare &&
@@ -74,21 +81,22 @@ const AnalyzePlugin: ImaCliPluginFactory<AnalyzePluginOptions> = options => ({
           silent: true,
           compare: isCompare,
           baseline: isBaseline,
-          ...(options?.bundleStatsOptions ?? {})
+          ...(this._options?.bundleStatsOptions ?? {})
         }) as WebpackPluginInstance,
         new BundleAnalyzerPlugin({
           analyzerMode: 'static',
           generateStatsFile: true,
           logLevel: 'silent',
           openAnalyzer: false,
-          ...(options?.bundleAnalyzerOptions ?? {})
+          ...(this._options?.bundleAnalyzerOptions ?? {})
         })
       );
     }
 
     return config;
-  },
-  onDone: ({ isFirstRun, args }) => {
+  }
+
+  onDone({ isFirstRun, args }: ImaCliPluginCallbackArgs): void {
     // @ts-expect-error to be fixed (args contain analyze but its not properly typed)
     if (isFirstRun === false || !args.analyze) {
       return;
@@ -107,8 +115,9 @@ const AnalyzePlugin: ImaCliPluginFactory<AnalyzePluginOptions> = options => ({
       return;
     }
 
+    logger.write('');
     logger.plugin(
-      `${chalk.bold.bgBlue.black('Analyze plugin')} generated following report:`
+      `${chalk.bold.bgBlue.white('Analyze plugin')} generated following report:`
     );
 
     if (reportExists || statsExists) {
@@ -153,11 +162,9 @@ const AnalyzePlugin: ImaCliPluginFactory<AnalyzePluginOptions> = options => ({
       );
     }
 
-    if (options?.open !== false) {
+    if (this._options?.open !== false) {
       reportExists && open(`file://${reportPath}`);
       bundleStatsExists && open(`file://${bundleStatsPath}`);
     }
   }
-});
-
-export default AnalyzePlugin;
+}

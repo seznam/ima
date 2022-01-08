@@ -263,8 +263,7 @@ async function resolveImaConfig(args: CliArgs): Promise<ImaConfig> {
  */
 async function createWebpackConfig(
   configurations: ConfigurationTypes = ['client', 'server'],
-  args?: CliArgs,
-  isWatch = false
+  args?: CliArgs
 ): Promise<{ config: Configuration[]; imaConfig: ImaConfig }> {
   let elapsed: ReturnType<typeof time> | null = null;
 
@@ -308,19 +307,18 @@ async function createWebpackConfig(
     finalConfigContexts.push({
       name: 'server',
       isServer: true,
-      isWatch,
       ...args
     });
   }
 
   // Push client configurations if available (es and legacy versions)
   if (configurations.includes('client')) {
-    if (isWatch || args.legacy) {
+    // Build es5 in build and legacy contexts
+    if (args.command === 'build' || args.legacy) {
       finalConfigContexts.push({
         name: 'client',
         isServer: false,
         isEsVersion: false,
-        isWatch,
         ...args
       });
     }
@@ -331,7 +329,6 @@ async function createWebpackConfig(
         name: 'client.es',
         isServer: false,
         isEsVersion: true,
-        isWatch,
         ...args
       });
     }

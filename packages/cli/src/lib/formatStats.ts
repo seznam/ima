@@ -215,7 +215,7 @@ function printAssetInfo(
     .filter(({ fullPath }) => fs.existsSync(fullPath))
     .forEach(({ fileName, fullPath }) => {
       result += '\n';
-      result += chalk.gray(isLastItem ? '      ' : ' |    ');
+      result += chalk.gray(isLastItem ? '     ' : ' |   ');
       result += fileName;
       result += chalk.yellow(
         ` ${prettyBytes(fs.statSync(path.join(fullPath)).size)}`

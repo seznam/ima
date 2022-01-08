@@ -42,9 +42,10 @@ export default async (
   ctx: ConfigurationContext,
   imaConfig: ImaConfig
 ): Promise<Configuration> => {
-  const { rootDir, isProduction, isServer, isWatch, isEsVersion, name } = ctx;
+  const { rootDir, isProduction, isServer, isEsVersion, name } = ctx;
 
   // We use source maps always in development for better stack trace orientation.
+  const isWatch = ctx.command === 'dev';
   const useSourceMaps = imaConfig.useSourceMaps || !isProduction;
   const imaEnvironment = resolveEnvironment(rootDir);
   const outputDir = path.join(rootDir, 'build');

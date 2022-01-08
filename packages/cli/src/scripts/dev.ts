@@ -100,8 +100,7 @@ const dev: HandlerFn = async args => {
       {
         ...args,
         isProduction: false
-      },
-      true
+      }
     );
 
     const compiler = webpack(config);

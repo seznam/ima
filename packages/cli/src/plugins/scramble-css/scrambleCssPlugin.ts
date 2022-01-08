@@ -4,7 +4,8 @@ import postcss from 'postcss';
 import PostCssPipelineWebpackPlugin from 'postcss-pipeline-webpack-plugin';
 
 import postCssScrambler from './postCssScrambler';
-import { ImaCliPluginFactory, ConfigurationContext } from '../../types';
+import { ImaCliPlugin, ConfigurationContext } from '../../types';
+import { Configuration } from 'webpack';
 
 export interface ScrambleCssPluginConfigurationContext
   extends ConfigurationContext {
@@ -19,7 +20,6 @@ export interface ScrambleCssPluginOptions {
   uniqueIdentifier?: string;
 }
 
-// TODO extract to separate npm package
 /**
  * Plugin additional CLI args, scrambleCss option can be used to explicitly enable/disable
  * scrambling for certain use cases.
@@ -34,31 +34,40 @@ const scrambleCssPluginSharedCliArgs: CommandBuilder = {
 /**
  * Minifies component classnames and generates hashtable of transformed classnames
  * which can be later used for backwards translation.
- *
- * @param {ScrambleCssPluginOptions} Plugin build options.
- * @returns {ImaCliPlugin} Cli plugin definition.
  */
-const ScrambleCssPlugin: ImaCliPluginFactory<ScrambleCssPluginOptions> = options => ({
-  name: 'scramble-css-plugin',
-  cliArgs: {
+export default class ScrambleCssPlugin
+  implements ImaCliPlugin<ScrambleCssPluginConfigurationContext> {
+  private _options: ScrambleCssPluginOptions;
+
+  name = 'scramble-css-plugin';
+  cliArgs = {
     build: scrambleCssPluginSharedCliArgs,
     dev: scrambleCssPluginSharedCliArgs
-  },
-  webpack: async (config, ctx: ScrambleCssPluginConfigurationContext) => {
+  };
+
+  constructor(options: ScrambleCssPluginOptions) {
+    this._options = options;
+  }
+
+  async webpack(
+    config: Configuration,
+    ctx: ScrambleCssPluginConfigurationContext
+  ): Promise<Configuration> {
     const { rootDir, isServer } = ctx;
     const packageJsonPath = path.resolve(rootDir, './package.json');
     const packageJson = packageJsonPath ? require(packageJsonPath) : {};
 
     // Defaults
-    const suffix = options?.suffix ?? 'srambled';
+    const suffix = this._options?.suffix ?? 'srambled';
     const uniqueIdentifier =
-      options?.uniqueIdentifier ?? `${packageJson.name}:${packageJson.version}`;
+      this._options?.uniqueIdentifier ??
+      `${packageJson.name}:${packageJson.version}`;
     const hashTable =
-      options?.hashTableLocation ??
+      this._options?.hashTableLocation ??
       path.join(rootDir, 'build/static/hashtable.json');
 
     // Run CSS scrambler, this needs to run on generated assets
-    if (!isServer && (ctx.scrambleCss ?? options?.enabled)) {
+    if (!isServer && (ctx.scrambleCss ?? this._options?.enabled)) {
       // Scramble only app css and generate hashtable
       config.plugins?.push(
         new PostCssPipelineWebpackPlugin({
@@ -66,7 +75,7 @@ const ScrambleCssPlugin: ImaCliPluginFactory<ScrambleCssPluginOptions> = options
           predicate: (name: string) => /static\/css\/app.css$/.test(name),
           processor: postcss([
             postCssScrambler({
-              generateHashTable: options?.generateHashTable ?? true,
+              generateHashTable: this._options?.generateHashTable ?? true,
               uniqueIdentifier,
               hashTable
             })
@@ -92,6 +101,4 @@ const ScrambleCssPlugin: ImaCliPluginFactory<ScrambleCssPluginOptions> = options
 
     return config;
   }
-});
-
-export default ScrambleCssPlugin;
+}

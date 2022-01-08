@@ -4,12 +4,9 @@ import fg from 'fast-glob';
 import postcss from 'postcss';
 import PostCssPipelineWebpackPlugin from 'postcss-pipeline-webpack-plugin';
 
-import {
-  ImaCliPluginFactory,
-  ConfigurationContext,
-  CliArgs
-} from '../../types';
-import { EntryObject } from 'webpack';
+import { ConfigurationContext, CliArgs } from '../../types';
+import { Configuration, EntryObject } from 'webpack';
+import { ImaCliCommand, ImaCliPlugin } from '../..';
 
 export interface AmpPluginConfigurationContext extends ConfigurationContext {
   amp?: boolean;
@@ -22,7 +19,6 @@ export interface AmpPluginOptions {
   outputDir?: string;
 }
 
-// TODO extract to separate npm package
 /**
  * Generate entry points for provided glob paths.
  *
@@ -67,21 +63,32 @@ const ampPluginSharedCliArgs: CommandBuilder = {
 /**
  * Generates css file per component, so it can be later used to dynamically
  * construct minimal css file need to render the page (used specifically for AMP).
- *
- * @param {AmpPluginOptions} Plugin build options.
- * @returns {ImaCliPlugin} Cli plugin definition.
  */
-const AmpPlugin: ImaCliPluginFactory<AmpPluginOptions> = options => ({
-  name: 'amp-plugin',
-  cliArgs: {
+export default class AmpPlugin
+  implements ImaCliPlugin<AmpPluginConfigurationContext> {
+  private _options: AmpPluginOptions;
+
+  readonly name = 'amp-plugin';
+  readonly cliArgs: Partial<Record<ImaCliCommand, CommandBuilder>> = {
     build: ampPluginSharedCliArgs,
     dev: ampPluginSharedCliArgs
-  },
-  webpack: async (config, ctx: AmpPluginConfigurationContext) => {
+  };
+
+  constructor(options: AmpPluginOptions) {
+    this._options = options;
+  }
+
+  async webpack(
+    config: Configuration,
+    ctx: AmpPluginConfigurationContext
+  ): Promise<Configuration> {
     const { rootDir, isServer } = ctx;
 
-    if (!isServer && (ctx.amp ?? options?.enabled)) {
-      if (!Array.isArray(options?.entry) || options?.entry.length === 0) {
+    if (!isServer && (ctx.amp ?? this._options?.enabled)) {
+      if (
+        !Array.isArray(this._options?.entry) ||
+        this._options?.entry.length === 0
+      ) {
         throw new Error(
           `amp-plugin: 'entry' field in amp-plugin is either empty or undefined, it ` +
             `must be an array of glob paths in order to correctly generate amp css files.`
@@ -93,22 +100,22 @@ const AmpPlugin: ImaCliPluginFactory<AmpPluginOptions> = options => ({
         ...(config.entry as EntryObject),
         ...(await generateEntryPoints(
           rootDir,
-          options?.entry,
-          options?.outputDir
+          this._options?.entry,
+          this._options?.outputDir
         ))
       };
 
       // Custom AMP postcss
       if (
-        Array.isArray(options?.postCssPlugins) &&
-        options?.postCssPlugins.length !== 0
+        Array.isArray(this._options?.postCssPlugins) &&
+        this._options?.postCssPlugins.length !== 0
       ) {
         config.plugins?.push(
           new PostCssPipelineWebpackPlugin({
             predicate: (name: string) =>
               !/static\/css\/app.css$/.test(name) &&
               !/srambled.css$/.test(name),
-            processor: postcss(options?.postCssPlugins)
+            processor: postcss(this._options?.postCssPlugins)
           })
         );
       }
@@ -116,6 +123,4 @@ const AmpPlugin: ImaCliPluginFactory<AmpPluginOptions> = options => ({
 
     return config;
   }
-});
-
-export default AmpPlugin;
+}

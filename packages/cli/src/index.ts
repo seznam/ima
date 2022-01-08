@@ -24,9 +24,10 @@ export {
 
 export {
   ImaCliPlugin,
-  ImaCliPluginFactory,
+  ImaCliPluginCallbackArgs,
   ImaConfig,
-  ImaConfigWebpack,
   ImaEnvironment,
-  ImaCliCommand
+  ImaCliCommand,
+  CliArgs,
+  ConfigurationContext
 } from './types';
