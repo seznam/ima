@@ -150,9 +150,9 @@ module.exports = environment => {
         }
       })(),
       printf(info => {
-        return `${colorizeLevel(info.level)}${pc.magenta(
-          `[${info.timestamp}]`
-        )} ${info.message || ''} ${formatMeta(info)}`;
+        return `${colorizeLevel(info.level)}${pc.gray(`[${info.timestamp}]`)} ${
+          info.message || ''
+        } ${formatMeta(info)}`;
       })
     ),
     transports: [new transports.Console()]

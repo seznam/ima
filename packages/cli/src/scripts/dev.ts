@@ -16,6 +16,7 @@ import { watchCompiler, handleError } from '../lib/compiler';
 import { createWebpackConfig, resolveEnvironment } from '../webpack/utils';
 import webpack, { MultiCompiler } from 'webpack';
 
+let nodemonInitialized = false;
 let serverHasStarted = false;
 
 /**
@@ -29,7 +30,7 @@ function initNodemon(compiler: MultiCompiler, args: CliArgs) {
     }
 
     // Start server with nodemon
-    if (!serverHasStarted) {
+    if (!nodemonInitialized) {
       nodemon({
         script: path.join(args.rootDir, 'server/server.js'),
         watch: [`${path.join(args.rootDir, 'server')}`],
@@ -38,7 +39,11 @@ function initNodemon(compiler: MultiCompiler, args: CliArgs) {
       });
 
       nodemon.on('start', () => {
-        logger.info('Starting application server...');
+        logger.info(
+          `${
+            serverHasStarted ? 'Restarting' : 'Starting'
+          } application server...`
+        );
       });
 
       if (args.open) {
@@ -46,6 +51,7 @@ function initNodemon(compiler: MultiCompiler, args: CliArgs) {
           if (message === IMA_CLI_RUN_SERVER_MESSAGE) {
             const imaEnvironment = resolveEnvironment(args.rootDir);
             const port = imaEnvironment?.$Server?.port ?? 3001;
+            serverHasStarted = true;
 
             try {
               open(`http://localhost:${port}`);
@@ -54,11 +60,13 @@ function initNodemon(compiler: MultiCompiler, args: CliArgs) {
                 `Could not open http://localhost:${port} inside a browser, ${error}`
               );
             }
+
+            nodemon.removeAllListeners('message');
           }
         });
       }
 
-      serverHasStarted = true;
+      nodemonInitialized = true;
     }
 
     // Restart server when necessary (server-side changes)

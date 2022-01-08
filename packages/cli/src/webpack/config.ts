@@ -11,6 +11,7 @@ import CssMinimizerPlugin from 'css-minimizer-webpack-plugin';
 import TerserPlugin from 'terser-webpack-plugin';
 import CompressionPlugin from 'compression-webpack-plugin';
 import ReactRefreshWebpackPlugin from '@pmmmwh/react-refresh-webpack-plugin';
+import { WebpackManifestPlugin } from 'webpack-manifest-plugin';
 
 import { ConfigurationContext, ImaConfig } from '../types';
 import {
@@ -443,6 +444,11 @@ export default async (
           ].filter(Boolean)
         : // Client-specific plugins
           [
+            // Generate manifest for client static
+            new WebpackManifestPlugin({
+              fileName: `${isEsVersion ? 'js.es' : 'js'}/manifest.json`
+            }),
+
             // Removes generated empty script caused by non-js entry points
             new RemoveEmptyScriptsPlugin(),
 

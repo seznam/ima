@@ -376,9 +376,9 @@ module.exports = (environment, logger, languageLoader, appFactory) => {
 
   function _importAppMain() {
     let mainJs = app;
+
     if (environment.$Env === 'dev') {
       instanceRecycler.clear();
-
       mainJs = appFactory();
     }
 
@@ -490,6 +490,11 @@ module.exports = (environment, logger, languageLoader, appFactory) => {
   }
 
   function requestHandler(req, res) {
+    if (environment.$Env === 'dev') {
+      instanceRecycler.clear();
+      appFactory();
+    }
+
     return _importAppMain().then(appMain => {
       let app = _initApp(req, res, appMain);
       _addImaToResponse(req, res, app);

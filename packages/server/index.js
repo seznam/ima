@@ -9,16 +9,27 @@ let environmentConfig = require(path.resolve(
 ));
 let environment = require('./lib/environment.js')(environmentConfig);
 
+if (environment.$Env === 'dev') {
+  require(path.resolve(applicationFolder, './build/server/runtime.js'));
+  require(path.resolve(applicationFolder, './build/server/vendors.js'));
+}
+
 global.$Debug = environment.$Debug;
 global.$IMA = global.$IMA || {};
-
-// require(path.resolve(applicationFolder, './build/ima/shim.es.js'));
-// require(path.resolve(applicationFolder, './build/ima/vendor.server.js'));
 
 function appFactory() {
   delete require.cache[
     path.resolve(applicationFolder, './build/server/app.server.js')
   ];
+
+  // Require new server-side bundle on dev reload
+  if (environment.$Env === 'dev') {
+    delete require.cache[
+      path.resolve(applicationFolder, './build/server/runtime.js')
+    ];
+
+    require(path.resolve(applicationFolder, './build/server/runtime.js'));
+  }
 
   return require(path.resolve(
     applicationFolder,
