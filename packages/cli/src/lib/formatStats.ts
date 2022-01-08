@@ -1,7 +1,7 @@
 import fs from 'fs';
 import path from 'path';
 import chalk from 'chalk';
-import { MultiStats, StatsAsset, StatsError } from 'webpack';
+import { MultiStats, StatsAsset } from 'webpack';
 import { highlight, fromJson } from 'cli-highlight';
 import prettyMs from 'pretty-ms';
 import prettyBytes from 'pretty-bytes';
@@ -10,14 +10,27 @@ import { createSourceFragment, parseCompileError } from './compileErrorParser';
 import logger from './logger';
 import { CliArgs } from '../types';
 
-let isFirstRun = true;
 const warningsCache = new Set<string>();
 
 /**
  * Prints formatted webpack errors (stripped from duplicates) into console.
  */
-function formatWebpackErrors(errors: StatsError[] | undefined): void {
-  if (!errors) {
+function formatWebpackErrors(
+  stats: MultiStats | undefined,
+  args: CliArgs
+): void {
+  if (!stats?.hasErrors()) {
+    return;
+  }
+
+  // Raw verbose
+  if (args.verbose) {
+    return logger.write(stats.toString({ all: false, warnings: true }));
+  }
+
+  const { errors } = stats.toJson({ all: false, errors: true });
+
+  if (!Array.isArray(errors)) {
     return;
   }
 
@@ -67,39 +80,41 @@ function formatWebpackErrors(errors: StatsError[] | undefined): void {
 
     // Print error
     logger.error(`at ${chalk.cyan(parsedError.fileUri)}`);
-    console.log(
+    logger.write(
       `${chalk.underline(parsedError.name + ':')} ${parsedError.message}\n`
     );
 
     // Print source fragment
     fileLines.forEach(line => {
-      console.log(
-        chalk.gray(`${line.highlight ? chalk.red('>') : ' '}  ${line.line} | `),
-        highlight(line.source, {
-          language: parsedError.fileUri?.split('.').pop() ?? 'javascript',
-          ignoreIllegals: true,
-          theme: fromJson({
-            keyword: 'cyan',
-            class: 'yellow',
-            built_in: 'yellow',
-            function: 'magenta',
-            string: 'green',
-            tag: 'gray',
-            attr: 'cyan',
-            doctag: 'gray',
-            comment: 'gray',
-            deletion: ['red', 'strikethrough'],
-            regexp: 'yellow',
-            literal: 'magenta',
-            number: 'magenta',
-            attribute: 'red'
+      logger.write(
+        chalk.gray(
+          `${line.highlight ? chalk.red('>') : ' '}  ${line.line} | `
+        ) +
+          highlight(line.source, {
+            language: parsedError.fileUri?.split('.').pop() ?? 'javascript',
+            ignoreIllegals: true,
+            theme: fromJson({
+              keyword: 'cyan',
+              class: 'yellow',
+              built_in: 'yellow',
+              function: 'magenta',
+              string: 'green',
+              tag: 'gray',
+              attr: 'cyan',
+              doctag: 'gray',
+              comment: 'gray',
+              deletion: ['red', 'strikethrough'],
+              regexp: 'yellow',
+              literal: 'magenta',
+              number: 'magenta',
+              attribute: 'red'
+            })
           })
-        })
       );
     });
 
     // Empty newline
-    console.log('');
+    logger.write('');
   });
 }
 
@@ -107,31 +122,47 @@ function formatWebpackErrors(errors: StatsError[] | undefined): void {
  * Prints cleaned up webpack warnings.
  */
 function formatWebpackWarnings(
-  warnings: StatsError[] | undefined,
-  rootDir: string
+  stats: MultiStats | undefined,
+  args: CliArgs
 ): void {
-  if (!Array.isArray(warnings) || !warnings.length) {
+  if (args.ignoreWarnings) {
     return;
   }
 
-  warnings.forEach(warning => {
-    let message = warning.message;
+  if (!stats?.hasWarnings()) {
+    return;
+  }
 
-    // Shorten absolute paths to relative
-    message = message.replace(new RegExp(rootDir, 'gim'), '.');
+  // Raw verbose
+  if (args.verbose) {
+    return logger.write(stats.toString({ all: false, warnings: true }));
+  }
 
-    // Cleanup webpack headers
-    const lines = message
-      .split('\n')
-      .filter(line => !line.includes('Module Warning (from'));
+  const { warnings } = stats.toJson({ all: false, warnings: true });
+  const newWarnings = [];
 
-    // Print warning
+  // Cache unique warnings
+  if (Array.isArray(warnings)) {
+    for (const warning of warnings) {
+      if (!warningsCache.has(warning.message)) {
+        warningsCache.add(warning.message);
+        newWarnings.push(warning);
+      }
+    }
+  }
+
+  if (newWarnings.length === 0) {
+    return;
+  }
+
+  // Minimal (default) verbose
+  newWarnings?.forEach(warning => {
+    logger.warn(`at ${chalk.cyan(warning.moduleName)}`);
+    const lines = warning.message.split('\n');
+    logger.write(chalk.underline(lines.shift()));
+    logger.write(lines.join('\n'));
     logger.write('');
-    logger.warn(lines.join('\n').trimEnd());
   });
-
-  // Empty newline
-  console.log('');
 }
 
 /**
@@ -208,21 +239,10 @@ function formatStats(stats: MultiStats | undefined, args: CliArgs): void {
 
   // Print raw webpack log
   if (args?.verbose) {
-    return console.log(
+    return logger.write(
       stats.toString({
-        assets: true,
-        cached: false,
-        children: false,
-        chunks: false,
-        chunkModules: false,
         warnings: !args.ignoreWarnings,
-        colors: true,
-        hash: true,
-        modules: false,
-        reasons: false,
-        source: false,
-        timings: true,
-        version: true
+        colors: true
       })
     );
   }
@@ -232,84 +252,64 @@ function formatStats(stats: MultiStats | undefined, args: CliArgs): void {
     assets: true,
     timings: true,
     version: true,
-    errors: true,
-    warnings: true,
     outputPath: true,
     chunkGroups: true
   });
 
-  // Print warnings
-  if (!args.ignoreWarnings) {
-    const newWarnings = [];
-
-    // Cache unique warnings
-    if (Array.isArray(jsonStats.warnings)) {
-      for (const warning of jsonStats.warnings) {
-        if (!warningsCache.has(warning.message)) {
-          warningsCache.add(warning.message);
-          newWarnings.push(warning);
-        }
-      }
-    }
-
-    formatWebpackWarnings(newWarnings, args.rootDir);
+  if (!Array.isArray(jsonStats.children) || jsonStats.children?.length === 0) {
+    return;
   }
 
-  // Print errors
-  formatWebpackErrors(jsonStats.errors);
+  // Minimal (default) output
+  let totalCount = 0;
+  const outDir = jsonStats.children[0].outputPath ?? '';
 
-  // First run assets info output
-  if (isFirstRun && jsonStats.children?.length) {
-    let totalCount = 0;
-    const outDir = jsonStats.children[0].outputPath ?? '';
+  logger.info(
+    `Compilation was ${chalk.green(
+      'successful'
+    )} using webpack version: ${chalk.magenta(jsonStats.children[0].version)}`
+  );
+  logger.info(`Output folder ${chalk.magenta(outDir)}, produced:\n`);
 
-    logger.info(
-      `Compilation was ${chalk.green(
-        'successful'
-      )} using webpack version: ${chalk.magenta(jsonStats.children[0].version)}`
+  // Print info about emitted assets
+  jsonStats.children?.forEach(child => {
+    logger.write(
+      `${chalk.underline.bold(child.name)} ${chalk.gray(
+        '[' + prettyMs(child.time ?? 0) + ']'
+      )}`
     );
-    logger.info(`Output folder ${chalk.magenta(outDir)}, produced:\n`);
 
-    jsonStats.children?.forEach(child => {
-      logger.write(
-        `${chalk.underline.bold(child.name)} ${chalk.gray(
-          '[' + prettyMs(child.time ?? 0) + ']'
-        )}`
-      );
+    // Count total number of generated assets
+    totalCount += child.assets?.length ?? 0;
 
-      // Count total number of generated assets
-      totalCount += child.assets?.length ?? 0;
+    const filteredAssets = child.assets
+      ?.filter(asset => /\.(css|js)$/i.test(asset.name))
+      .filter(asset => !asset.name.endsWith('hot-update.js'))
+      .sort((a, b) => a?.name.localeCompare(b?.name));
+    const filteredAssetsLen = filteredAssets?.length ?? 0;
 
-      const filteredAssets = child.assets
-        ?.filter(asset => /\.(css|js)$/i.test(asset.name))
-        ?.sort((a, b) => a?.name.localeCompare(b?.name));
-      const filteredAssetsLen = filteredAssets?.length ?? 0;
+    filteredAssets?.forEach((asset, index) => {
+      // Count also related (plugin generated) files
+      totalCount += Object.keys(asset?.info?.related ?? {}).length;
 
-      filteredAssets?.forEach((asset, index) => {
-        // Count also related (plugin generated) files
-        totalCount += Object.keys(asset?.info?.related ?? {}).length;
-
-        printAssetInfo(asset, outDir, index === filteredAssetsLen - 1);
-      });
-
-      logger.write('');
+      printAssetInfo(asset, outDir, index === filteredAssetsLen - 1);
     });
 
-    // Print more information for build task
-    if (args.command === 'build') {
-      logger.write(
-        `This ^ report covers only ${chalk.bold('.js')} and ${chalk.bold(
-          '.css'
-        )} files, there were`
-      );
-      logger.write(
-        `total of ${chalk.green.bold(
-          totalCount
-        )} assets generated inside the output folder.\n`
-      );
-    }
+    logger.write('');
+  });
 
-    isFirstRun = false;
+  // Print more information for build task
+  if (args.command === 'build') {
+    logger.write(
+      `This ^ report covers only ${chalk.bold('.js')} and ${chalk.bold(
+        '.css'
+      )} files, there were`
+    );
+    logger.write(
+      `total of ${chalk.green.bold(
+        totalCount
+      )} assets generated inside the output folder.`
+    );
   }
 }
 

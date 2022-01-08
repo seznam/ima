@@ -116,7 +116,7 @@ export interface ImaCliPlugin {
    * It is run after information about the built are printed to the console by the CLI.
    */
   onDone?: (params: {
-    firstRun?: boolean;
+    isFirstRun?: boolean;
     args: CliArgs;
     imaConfig: ImaConfig;
     compiler: MultiCompiler;

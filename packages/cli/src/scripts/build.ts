@@ -26,6 +26,7 @@ const build: HandlerFn<BuildArgs> = async args => {
     await runCompiler(webpack(config), args, imaConfig);
   } catch (err) {
     handleError(err);
+    process.exit(1);
   }
 };
 

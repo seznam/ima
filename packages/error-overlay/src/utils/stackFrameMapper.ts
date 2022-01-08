@@ -81,7 +81,6 @@ async function mapStackFramesToOriginal(
                 index === 0 ? 8 : 4
               )) ||
             null;
-          null;
         }
 
         return stackFrame;
@@ -123,8 +122,42 @@ async function mapCompileStackFrames(
         // Get file source
         const fileSource = await sourceStorage.get(frame.fileUri as string);
 
-        // Create parsed stack frame
-        const stackFrame = new StackFrame({
+        // Generate original source code references if source map exists
+        if (
+          fileSource &&
+          fileSource.sourceMap &&
+          frame.lineNumber &&
+          frame.columnNumber
+        ) {
+          const { column, line, source: sourceFileUri } =
+            fileSource.sourceMap.getOriginalPosition(
+              frame.lineNumber,
+              frame.columnNumber
+            ) || {};
+
+          if (column) {
+            const originalSource =
+              sourceFileUri && fileSource.sourceMap.getSource(sourceFileUri);
+
+            return new StackFrame({
+              originalFileName: sourceFileUri,
+              originalLineNumber: line,
+              originalColumnNumber: column,
+              originalSourceFragment:
+                (line &&
+                  originalSource &&
+                  StackFrame.createSourceFragment(
+                    line,
+                    originalSource,
+                    index === 0 ? 8 : 4
+                  )) ||
+                null
+            });
+          }
+        }
+
+        // Fallback to original fragment if source maps are not available
+        return new StackFrame({
           originalFileName: frame.fileUri as string,
           originalSourceFragment:
             (frame.lineNumber &&
@@ -138,8 +171,6 @@ async function mapCompileStackFrames(
           originalLineNumber: frame.lineNumber,
           originalColumnNumber: frame.columnNumber
         });
-
-        return stackFrame;
       })
   );
 

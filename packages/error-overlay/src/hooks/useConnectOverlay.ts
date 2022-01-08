@@ -36,6 +36,7 @@ function useConnectSSRErrorOverlay(): void {
 
 function useConnectClientErrorOverlay(): void {
   const dispatch = useErrorsDispatcher();
+  let isRuntimeCompileError = false; // If set to true we do site reload after errors are fixed
 
   const runtimeErrorListener = useCallback(
     (event: WindowEventMap[ClientEventName.RuntimeErrors]) => {
@@ -59,7 +60,9 @@ function useConnectClientErrorOverlay(): void {
   const compileErrorListener = useCallback(
     (event: WindowEventMap[ClientEventName.CompileErrors]) => {
       event.detail.errors.forEach(error => {
-        console.error(error);
+        if (!error?.moduleName) {
+          isRuntimeCompileError = true;
+        }
 
         const parsedError = parseCompileError(error);
 
@@ -102,7 +105,14 @@ function useConnectClientErrorOverlay(): void {
       payload: {
         type: 'compile',
         emptyCallback: () => {
-          window.parent.dispatchEvent(new CustomEvent(OverlayEventName.Close));
+          // Do full page reload in case of a runtime compile error
+          if (isRuntimeCompileError) {
+            window.parent.document.location.reload();
+          } else {
+            window.parent.dispatchEvent(
+              new CustomEvent(OverlayEventName.Close)
+            );
+          }
         }
       }
     });

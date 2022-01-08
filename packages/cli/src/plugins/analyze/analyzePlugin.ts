@@ -88,9 +88,9 @@ const AnalyzePlugin: ImaCliPluginFactory<AnalyzePluginOptions> = options => ({
 
     return config;
   },
-  onDone: ({ firstRun, args }) => {
+  onDone: ({ isFirstRun, args }) => {
     // @ts-expect-error to be fixed (args contain analyze but its not properly typed)
-    if (firstRun === false || !args.analyze) {
+    if (isFirstRun === false || !args.analyze) {
       return;
     }
 

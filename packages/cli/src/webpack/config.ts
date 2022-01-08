@@ -4,7 +4,6 @@ import findCacheDir from 'find-cache-dir';
 import webpack, { Configuration, RuleSetRule, RuleSetUseItem } from 'webpack';
 import miniSVGDataURI from 'mini-svg-data-uri';
 
-import { CleanWebpackPlugin } from 'clean-webpack-plugin';
 import CopyPlugin from 'copy-webpack-plugin';
 import MiniCssExtractPlugin from 'mini-css-extract-plugin';
 import RemoveEmptyScriptsPlugin from 'webpack-remove-empty-scripts';
@@ -149,7 +148,6 @@ export default async (
   };
 
   return {
-    // TODO fix hot reload in es5 version (probably needs polyfill) in IE
     name,
     target: isServer ? 'node' : 'web',
     mode: isProduction ? 'production' : 'development',
@@ -158,7 +156,6 @@ export default async (
         ? 'source-map'
         : false
       : 'cheap-module-source-map',
-    bail: isProduction,
     entry: {
       ...(isServer
         ? {
@@ -351,7 +348,7 @@ export default async (
                                     node: '14'
                                   }
                                 }
-                              : {}), // FIXME es5 target
+                              : {}),
                             modules: 'auto'
                           }
                         ],
@@ -431,7 +428,6 @@ export default async (
       ...(isServer
         ? // Server-specific plugins
           [
-            !ctx.clean && new CleanWebpackPlugin(),
             // Copies essential assets to static directory
             new CopyPlugin({
               patterns: [{ from: 'app/public', to: 'static/public' }]

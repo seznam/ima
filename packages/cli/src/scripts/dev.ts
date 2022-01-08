@@ -117,6 +117,7 @@ const dev: HandlerFn<DevArgs> = async args => {
     }
   } catch (error) {
     handleError(error);
+    process.exit(1);
   }
 };
 

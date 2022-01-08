@@ -10,7 +10,7 @@ declare global {
       overlayBridge?: OverlayBridge;
       handleRuntimeError: DebouncedFunc<(error: Error) => void>;
       clearRuntimeErrors(): void;
-      showCompileErrors?(errors: StatsError[]): void;
+      showCompileErrors(errors: StatsError[]): void;
       clearCompileError(): void;
     };
   }

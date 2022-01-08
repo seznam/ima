@@ -15,6 +15,9 @@ export interface SourceFragmentLine {
   highlight: boolean;
 }
 
+const filePathRegex = /\.?(\/[^/\n :,]+)+/;
+const runtimeAssetPathRegex = /\((.*:(\d+):(\d+))\)/i;
+
 /**
  * Create fragment of code lines around input line (above and below), created
  * created from provided source code.
@@ -154,14 +157,52 @@ function formatMessage(
  * https://github.com/facebook/create-react-app/blob/main/packages/react-error-overlay/src/utils/parseCompileError.js.
  */
 function parseCompileError(error: StatsError): ParsedCompileError | null {
-  const fileUri = sanitizeModuleName(error.moduleName);
+  let fileUri = '';
+  let lineNumber = 0;
+  let columnNumber = 0;
 
-  // We can't reliably parse error message without known moduleName (fileUri)
-  if (!fileUri) {
-    return null;
+  if (error?.moduleName) {
+    const sanitizedFileUri = sanitizeModuleName(error.moduleName);
+
+    // We can't reliably parse error message without known moduleName (fileUri)
+    if (!sanitizedFileUri) {
+      return null;
+    }
+
+    fileUri = sanitizedFileUri;
+
+    // Try to get error location
+    [lineNumber = 0, columnNumber = 0] = parseErrorLoc(error.loc);
+  } else if (error.stack) {
+    // Parse error locations from stack
+    const lines = error.stack.split('\n');
+
+    // Skip first line containing error name
+    for (let i = 1; i < lines.length; i++) {
+      const line = ansiToText(lines[i]).trim();
+
+      if (line.includes('Module build failed')) {
+        continue;
+      }
+      // Try to match webpack compiler error
+      let match = line.match(runtimeAssetPathRegex);
+
+      if (!fileUri && match) {
+        fileUri = match[1].split('?').shift() ?? '';
+        lineNumber = parseInt(match[2]);
+        columnNumber = parseInt(match[3]);
+        break;
+      }
+
+      // Try to match webpack 3rd party loaders compiler error
+      match = line.match(filePathRegex);
+
+      if (!fileUri && match) {
+        fileUri = match[0];
+        break;
+      }
+    }
   }
-
-  let [lineNumber = 0, columnNumber = 0] = parseErrorLoc(error.loc);
 
   // Return error location if already known from error object
   if (fileUri && lineNumber) {
