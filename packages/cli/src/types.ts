@@ -30,11 +30,6 @@ export interface BaseArgs {
 }
 
 /**
- * Start (ima start) script args
- */
-export type StartArgs = BaseArgs;
-
-/**
  * Shared dev and build script args
  */
 export interface DevBuildArgs extends BaseArgs {
