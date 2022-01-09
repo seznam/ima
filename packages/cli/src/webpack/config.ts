@@ -446,7 +446,8 @@ export default async (
           [
             // Generate manifest for client static
             new WebpackManifestPlugin({
-              fileName: `${isEsVersion ? 'js.es' : 'js'}/manifest.json`
+              fileName: `static/${isEsVersion ? 'js.es' : 'js'}/manifest.json`,
+              filter: file => /\.(js|css)$/.test(file.name)
             }),
 
             // Removes generated empty script caused by non-js entry points

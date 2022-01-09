@@ -80,9 +80,7 @@ function initNodemon(compiler: MultiCompiler, args: CliArgs) {
         ({ emitted, name }) => emitted && !name.includes('app.server.js')
       );
 
-    if (emittedAssets?.length) {
-      console.log('stats', stats.hasErrors());
-
+    if (emittedAssets?.length && serverHasStarted) {
       logger.info('Rebooting server due to configuration changes...');
       nodemon.restart();
     }
