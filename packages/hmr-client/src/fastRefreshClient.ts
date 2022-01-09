@@ -2,16 +2,28 @@ import { StatsError } from 'webpack';
 
 // Connect to already existing ima hmr client API
 const clearRuntimeErrors = () => {
+  if (!window?.__ima_hmr) {
+    return;
+  }
+
   window.__ima_hmr.clearRuntimeErrors();
 };
 
 const clearCompileError = () => {
+  if (!window?.__ima_hmr) {
+    return;
+  }
+
   window.__ima_hmr.clearCompileError();
 };
 
 const handleRuntimeError = (error: Error) => {
   // Ignore HMR apply errors
   if (error.stack?.includes('Object.hotApply')) {
+    return;
+  }
+
+  if (!window?.__ima_hmr) {
     return;
   }
 

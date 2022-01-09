@@ -109,7 +109,6 @@ module.exports = (environment, logger, languageLoader, appFactory) => {
           res.send(err.stack);
         } else {
           res.send(
-            // TODO handle build errors
             errorTemplate({
               serverError: {
                 name: err.name,

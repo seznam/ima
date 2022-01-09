@@ -50,6 +50,7 @@ export default async (
   const isWatch = ctx.command === 'dev';
   const useSourceMaps = imaConfig.useSourceMaps || !isProduction;
   const imaEnvironment = resolveEnvironment(rootDir);
+  const isDebug = imaEnvironment.$Debug;
   const outputDir = path.join(rootDir, 'build');
   const publicPath = ctx?.publicPath ?? imaConfig.publicPath;
 
@@ -169,7 +170,8 @@ export default async (
               isWatch &&
                 // We have to use @gatsbyjs version, since the original package containing webpack 5 fix is not yet released
                 `@gatsbyjs/webpack-hot-middleware/client?name=${name}&path=//localhost:${imaEnvironment.$Server.port}/__webpack_hmr&timeout=15000&reload=true&overlay=false&overlayWarnings=false&noInfo=true&quiet=true`,
-              require.resolve('@ima/hmr-client/dist/imaHmrClient.js'),
+              isDebug &&
+                require.resolve('@ima/hmr-client/dist/imaHmrClient.js'),
               path.join(rootDir, 'app/main.js')
             ].filter(Boolean) as string[],
             ...createPolyfillEntry(ctx)

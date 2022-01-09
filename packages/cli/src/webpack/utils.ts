@@ -184,7 +184,7 @@ function createPolyfillEntry(
     return {};
   }
 
-  return { [`polyfill${isEsVersion ? '.es' : ''}`]: `app/${fileName}` };
+  return { polyfill: `app/${fileName}` };
 }
 
 /**
