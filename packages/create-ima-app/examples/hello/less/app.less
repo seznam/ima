@@ -2,13 +2,59 @@
 * Base styles – mixins, global rules and common modules rules.
 */
 
+* {
+  box-sizing: border-box;
+}
+
 html,
 body,
 #page {
   height: 100%;
+
+  font-family: ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, "Noto Sans", sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
+
+  color: @color-gray;
 }
 
 body {
   margin: 0;
   padding: 0;
+}
+
+a {
+  border-bottom: 1px solid @color-red;
+
+  font-weight: 700;
+  color: @color-gray;
+  text-decoration: none;
+
+  cursor: pointer;
+
+  &:hover {
+    border-width: 2px;
+
+    opacity: 0.65;
+  }
+
+  &:active {
+    color: @color-gray;
+
+    opacity: 1;
+  }
+}
+
+p {
+  font-size: 16px;
+  line-height: 1.5;
+}
+
+code {
+  border-radius: 5px;
+  padding: 4px;
+
+  background-color: #f3f4f6;
+}
+
+strong {
+  font-weight: 700;
 }

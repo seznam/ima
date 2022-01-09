@@ -1,6 +1,6 @@
-import AbstractPageController from 'app/page/AbstractPageController';
 //import { GenericError } from '@ima/core';
 
+import AbstractPageController from 'app/page/AbstractPageController';
 import IMAjsShareImg from 'app/public/imajs-share.png';
 
 export default class HomeController extends AbstractPageController {
@@ -40,8 +40,8 @@ export default class HomeController extends AbstractPageController {
     return {
       //error: Promise.reject(new GenericError('Try error page.')),
       //redirect: Promise.reject(new GenericError('Redirect from home page to error page for $Debug = false.', {status: 303, url: 'http://localhost:3001/not-found'})),
-      message: `I am`,
-      name: `IMA.js`
+      message: `Welcome to`,
+      appName: `IMA.js`
     };
   }
 
