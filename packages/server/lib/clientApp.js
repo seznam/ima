@@ -377,11 +377,13 @@ module.exports = (environment, logger, languageLoader, appFactory) => {
     let mainJs = app;
 
     if (environment.$Env === 'dev') {
-      instanceRecycler.clear();
       let updatedMainJs = appFactory();
 
       if (updatedMainJs) {
+        instanceRecycler.clear();
         mainJs = updatedMainJs;
+      } else {
+        Promise.reject();
       }
     }
 

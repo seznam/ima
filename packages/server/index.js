@@ -9,8 +9,10 @@ let environmentConfig = require(path.resolve(
 ));
 let environment = require('./lib/environment.js')(environmentConfig);
 
-require(path.resolve(applicationFolder, './build/server/runtime.js'));
-require(path.resolve(applicationFolder, './build/server/vendors.js'));
+if (environment.$Env === 'dev') {
+  require(path.resolve(applicationFolder, './build/server/runtime.js'));
+  require(path.resolve(applicationFolder, './build/server/vendors.js'));
+}
 
 global.$Debug = environment.$Debug;
 global.$IMA = global.$IMA || {};
@@ -21,8 +23,8 @@ function appFactory() {
   ];
 
   // Require new server-side bundle on dev reload
-  try {
-    if (environment.$Env === 'dev') {
+  if (environment.$Env === 'dev') {
+    try {
       delete require.cache[
         path.resolve(applicationFolder, './build/server/runtime.js')
       ];
@@ -33,10 +35,16 @@ function appFactory() {
         applicationFolder,
         './build/server/app.server.js'
       ));
+    } catch (_) {
+      // fail silently for potential compile errors which are handled in error overlay
+      return null;
     }
-  } catch (error) {
-    // fail silently for potential compile errors which are handled separately
   }
+
+  return require(path.resolve(
+    applicationFolder,
+    './build/server/app.server.js'
+  ));
 }
 
 // eslint-disable-next-line no-unused-vars
