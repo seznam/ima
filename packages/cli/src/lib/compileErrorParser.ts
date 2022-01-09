@@ -147,6 +147,10 @@ function formatMessage(
 
   const [name, ...restMessage] = message.split(':');
 
+  if (restMessage.length === 0) {
+    return ['Error', name];
+  }
+
   return [name, restMessage.join(':').trim()];
 }
 

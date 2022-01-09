@@ -379,7 +379,11 @@ module.exports = (environment, logger, languageLoader, appFactory) => {
 
     if (environment.$Env === 'dev') {
       instanceRecycler.clear();
-      mainJs = appFactory();
+      let updatedMainJs = appFactory();
+
+      if (updatedMainJs) {
+        mainJs = updatedMainJs;
+      }
     }
 
     if (!instanceRecycler.isInitialized()) {

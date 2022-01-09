@@ -46,12 +46,13 @@ function initNodemon(compiler: MultiCompiler, args: CliArgs) {
         );
       });
 
-      if (args.open) {
-        nodemon.on('message', message => {
-          if (message === IMA_CLI_RUN_SERVER_MESSAGE) {
+      nodemon.once('message', message => {
+        if (message === IMA_CLI_RUN_SERVER_MESSAGE) {
+          serverHasStarted = true;
+
+          if (args.open) {
             const imaEnvironment = resolveEnvironment(args.rootDir);
             const port = imaEnvironment?.$Server?.port ?? 3001;
-            serverHasStarted = true;
 
             try {
               open(`http://localhost:${port}`);
@@ -60,11 +61,9 @@ function initNodemon(compiler: MultiCompiler, args: CliArgs) {
                 `Could not open http://localhost:${port} inside a browser, ${error}`
               );
             }
-
-            nodemon.removeAllListeners('message');
           }
-        });
-      }
+        }
+      });
 
       nodemonInitialized = true;
     }
@@ -82,6 +81,8 @@ function initNodemon(compiler: MultiCompiler, args: CliArgs) {
       );
 
     if (emittedAssets?.length) {
+      console.log('stats', stats.hasErrors());
+
       logger.info('Rebooting server due to configuration changes...');
       nodemon.restart();
     }
