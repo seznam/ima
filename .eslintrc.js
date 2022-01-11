@@ -3,7 +3,8 @@ module.exports = {
   extends: [
     'eslint:recommended',
     'plugin:react/recommended',
-    'plugin:jest/all',
+    'plugin:jest/recommended',
+    'plugin:jest/style',
     'plugin:prettier/recommended'
   ],
   rules: {
@@ -30,13 +31,7 @@ module.exports = {
     ],
 
     // Jest plugin overrides
-    'jest/no-hooks': 'off',
-    'jest/require-hook': 'off',
-    'jest/prefer-expect-assertions': 'off',
-    'jest/require-to-throw-message': 'off',
-    'jest/prefer-called-with': 'off',
     'jest/valid-title': 'off',
-    'jest/prefer-spy-on': 'off',
     'jest/no-done-callback': 'warn',
     'jest/no-disabled-tests': 'warn',
     'jest/no-conditional-expect': 'warn',
@@ -51,7 +46,7 @@ module.exports = {
     'jest/no-jasmine-globals': 'off',
 
     // React plugin overrides
-    'react/prop-types': 0
+    'react/prop-types': 'off'
   },
   settings: {
     react: {
