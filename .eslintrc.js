@@ -51,11 +51,7 @@ module.exports = {
     'jest/no-jasmine-globals': 'off',
 
     // React plugin overrides
-    'react/prop-types': 0,
-    'react/wrap-multilines': 0,
-    'react/no-deprecated': 0,
-    'react/jsx-uses-react': 0,
-    'react/react-in-jsx-scope': 0
+    'react/prop-types': 0
   },
   settings: {
     react: {
