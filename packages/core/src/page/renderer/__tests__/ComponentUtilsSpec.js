@@ -20,7 +20,7 @@ describe('componentUtils', () => {
     it('should register utility class', () => {
       componentUtils.register('SomeHelper', SomeMockHelper);
 
-      expect(componentUtils._utilityClasses['SomeHelper']).not.toBeUndefined();
+      expect(componentUtils._utilityClasses['SomeHelper']).toBeDefined();
       expect(componentUtils._utilityClasses['SomeHelper']).toStrictEqual(
         SomeMockHelper
       );

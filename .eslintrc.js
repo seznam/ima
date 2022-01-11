@@ -31,6 +31,7 @@ module.exports = {
 
     // Jest plugin overrides
     'jest/no-hooks': 'off',
+    'jest/require-hook': 'off',
     'jest/prefer-expect-assertions': 'off',
     'jest/require-to-throw-message': 'off',
     'jest/prefer-called-with': 'off',
@@ -38,7 +39,9 @@ module.exports = {
     'jest/prefer-spy-on': 'off',
     'jest/no-done-callback': 'warn',
     'jest/no-disabled-tests': 'warn',
-    'jest/lowercase-name': [
+    'jest/no-conditional-expect': 'warn',
+    'jest/prefer-expect-resolves': 'warn',
+    'jest/prefer-lowercase-title': [
       'warn',
       {
         ignore: ['describe']

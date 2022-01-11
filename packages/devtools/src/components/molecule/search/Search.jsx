@@ -193,6 +193,7 @@ export default class Search extends React.PureComponent {
         }
 
         // Test if regexp is correct
+        // eslint-disable-next-line no-constant-condition
         if (new RegExp(query)) {
           return query;
         }

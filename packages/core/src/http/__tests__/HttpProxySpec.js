@@ -55,9 +55,9 @@ describe('ima.core.http.HttpProxy', () => {
     describe(`method ${method}`, () => {
       it('should return promise with response body', async done => {
         try {
-          expect(
-            await proxy.request(method, API_URL, DATA, OPTIONS)
-          ).toBeDefined();
+          await expect(
+            proxy.request(method, API_URL, DATA, OPTIONS)
+          ).resolves.toBeDefined();
           done();
         } catch (error) {
           done.fail(error);
@@ -187,7 +187,7 @@ describe('ima.core.http.HttpProxy', () => {
 
         // eslint-disable-next-line jest/no-if
         if (['get', 'head'].includes(method) === true) {
-          expect(requestInit.body).not.toBeDefined();
+          expect(requestInit.body).toBeUndefined();
         } else {
           expect(requestInit.body).toBeDefined();
         }

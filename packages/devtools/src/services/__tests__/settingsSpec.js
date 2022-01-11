@@ -44,20 +44,20 @@ describe('getSettings', () => {
   });
 
   it('should return default settings when nothing is set', async () => {
-    expect(await getSettings('enabled')).toBe(true);
-    expect(await getSettings('hooks')).toBe(defaultSettings.hooks);
+    await expect(getSettings('enabled')).resolves.toBe(true);
+    await expect(getSettings('hooks')).resolves.toBe(defaultSettings.hooks);
   });
 
   it('should resolve with value when key provided', async () => {
     setSettings({ enabled: true });
 
-    expect(await getSettings('enabled')).toBe(true);
+    await expect(getSettings('enabled')).resolves.toBe(true);
   });
 
   it('should return whole storage.local if key not provided', async () => {
     setSettings({ enabled: true });
 
-    expect(await getSettings()).toStrictEqual(
+    await expect(getSettings()).resolves.toStrictEqual(
       Object.assign({}, defaultSettings, {
         enabled: true
       })
