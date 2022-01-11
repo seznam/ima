@@ -122,7 +122,7 @@ describe('ima.core.page.renderer.AbstractPageRenderer', function () {
 
       spyOn(rendererFactory, 'getUtils').and.returnValue(utils);
 
-      expect(pageRenderer._generateViewProps(view)).toEqual({
+      expect(pageRenderer._generateViewProps(view)).toStrictEqual({
         $Utils: utils,
         view: view,
         state: {}

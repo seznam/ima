@@ -178,7 +178,7 @@ describe('ima.core.page.renderer.ClientPageRenderer', function () {
       pageRenderer
         .mount(controller, view, params, routeOptions)
         .then(function (response) {
-          expect(response).toEqual({
+          expect(response).toStrictEqual({
             status: 200,
             content: null,
             pageState: pageState
@@ -274,7 +274,7 @@ describe('ima.core.page.renderer.ClientPageRenderer', function () {
       pageRenderer
         .update(controller, params)
         .then(function (response) {
-          expect(response).toEqual({
+          expect(response).toStrictEqual({
             status: 200,
             content: null,
             pageState: pageState
@@ -341,7 +341,7 @@ describe('ima.core.page.renderer.ClientPageRenderer', function () {
       const patchedState =
         pageRenderer._patchStateToClearPreviousState(pageState);
 
-      expect(patchedState).toEqual({
+      expect(patchedState).toStrictEqual({
         ...pageState,
         prevParam1: undefined
       });

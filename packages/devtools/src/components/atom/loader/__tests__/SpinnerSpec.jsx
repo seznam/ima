@@ -2,7 +2,7 @@ import React from 'react';
 import { shallow } from 'enzyme';
 import Loader from '../Loader';
 
-describe('loader atom', () => {
+describe('Loader atom', () => {
   let wrapper = shallow(<Loader />);
 
   it('should match snapshot', () => {

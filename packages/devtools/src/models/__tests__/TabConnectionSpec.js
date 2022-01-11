@@ -3,7 +3,7 @@ import Actions from 'constants/actions';
 import State from 'constants/state';
 import * as utils from 'services/utils';
 
-describe('tabConnection', () => {
+describe('TabConnection', () => {
   let instance = null;
   const tabId = 123;
   const mockPort = name => ({
@@ -29,7 +29,7 @@ describe('tabConnection', () => {
       instance = new TabConnection(tabId);
 
       expect(instance.tabId).toBe(tabId);
-      expect(instance.cache).toEqual([]);
+      expect(instance.cache).toStrictEqual([]);
       expect(instance.state).toBe(State.RELOAD);
       expect(instance.appData).toBeNull();
       expect(instance.domain).toBeNull();
@@ -265,7 +265,7 @@ describe('tabConnection', () => {
       instance.reload('domain');
 
       expect(instance.notify.mock.calls).toHaveLength(1);
-      expect(instance.notify.mock.calls[0][0]).toEqual({
+      expect(instance.notify.mock.calls[0][0]).toStrictEqual({
         action: Actions.RELOADING
       });
     });
@@ -340,7 +340,7 @@ describe('tabConnection', () => {
 
       expect(instance.cache).toHaveLength(4);
       expect(instance.ports.panel.postMessage.mock.calls).toHaveLength(4);
-      expect(receivedCache).toEqual(instance.cache);
+      expect(receivedCache).toStrictEqual(instance.cache);
     });
   });
 
@@ -353,7 +353,7 @@ describe('tabConnection', () => {
       instance._notifyPopup();
 
       expect(instance.ports.popup.postMessage.mock.calls).toHaveLength(1);
-      expect(instance.ports.popup.postMessage.mock.calls[0][0]).toEqual({
+      expect(instance.ports.popup.postMessage.mock.calls[0][0]).toStrictEqual({
         action: Actions.POPUP,
         payload: { state: instance.state, appData: instance.appData }
       });
@@ -387,7 +387,7 @@ describe('tabConnection', () => {
 
       instance._reviveDevtools();
 
-      expect(postMessageCall).toEqual({
+      expect(postMessageCall).toStrictEqual({
         action: Actions.ALIVE
       });
       expect(disconnectCalled).toBe(true);
@@ -569,8 +569,8 @@ describe('tabConnection', () => {
         .spyOn(instance, 'isEmpty')
         .mockImplementation()
         .mockImplementation(() => true);
-      jest.spyOn(instance, '_emptyListener').mockImplementation();
 
+      instance._emptyListener = jest.fn();
       instance._onDisconnect('popup');
 
       expect(instance.ports.popup).toBeNull();
@@ -582,7 +582,7 @@ describe('tabConnection', () => {
 
   describe('_settingsCallback', () => {
     beforeEach(() => {
-      jest.spyOn(instance, '_settingsListener').mockImplementation();
+      instance._settingsListener = jest.fn();
     });
 
     it('should not do anything if action is not settings action', () => {
@@ -647,7 +647,7 @@ describe('tabConnection', () => {
       });
 
       expect(instance.state).toBe(State.ALIVE);
-      expect(instance.appData).toEqual({ version: 0 });
+      expect(instance.appData).toStrictEqual({ version: 0 });
     });
 
     it('should set alive icon on current tab on alive', () => {
@@ -731,7 +731,7 @@ describe('tabConnection', () => {
     it('should add message to cache', () => {
       instance._cacheMessagesCallback(1);
 
-      expect(instance.cache).toEqual([1]);
+      expect(instance.cache).toStrictEqual([1]);
     });
 
     it('should not exceed max cache size', () => {

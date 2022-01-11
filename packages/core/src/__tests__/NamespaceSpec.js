@@ -11,21 +11,21 @@ describe('namespace', () => {
   });
 
   it('should create defined namespace', () => {
-    expect(ns.a.b.c.ClassConstructor).toEqual({});
+    expect(ns.a.b.c.ClassConstructor).toStrictEqual({});
   });
 
   it('should return stored value in namespace', () => {
-    expect(ns.get(path)).toEqual({});
+    expect(ns.get(path)).toStrictEqual({});
   });
 
   it('should return true if namespace exists', () => {
-    expect(ns.has(path)).toEqual(true);
+    expect(ns.has(path)).toBeTruthy();
   });
 
   it('should set value for defined namespace', () => {
     ns.set(path, ClassConstructor);
 
-    expect(ns.a.b.c.ClassConstructor).toEqual(ClassConstructor);
+    expect(ns.a.b.c.ClassConstructor).toStrictEqual(ClassConstructor);
   });
 
   it('should throw error when creating namespace with wrong path format', () => {

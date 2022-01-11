@@ -99,7 +99,7 @@ describe('ima.core.page.manager.ClientPageManager', () => {
   });
 
   it('should return parsed custom event', () => {
-    expect(pageManager._parseCustomEvent(event)).toEqual({
+    expect(pageManager._parseCustomEvent(event)).toStrictEqual({
       method: 'onMethod',
       eventName: 'method',
       data: data
@@ -120,7 +120,7 @@ describe('ima.core.page.manager.ClientPageManager', () => {
     );
   });
 
-  describe('_onCustomEventHanler method', () => {
+  describe('_onCustomEventHandler method', () => {
     let parsedCustomEvent = {
       method: 'onMethod',
       data: {},
@@ -208,9 +208,9 @@ describe('ima.core.page.manager.ClientPageManager', () => {
 
   describe('_handleEventWithController method', () => {
     it('should return false for undefined method on controller', () => {
-      expect(pageManager._handleEventWithController('onMethod', {})).toEqual(
-        false
-      );
+      expect(
+        pageManager._handleEventWithController('onMethod', {})
+      ).toBeFalsy();
     });
 
     it('should call method on controller and return true', () => {
@@ -220,9 +220,9 @@ describe('ima.core.page.manager.ClientPageManager', () => {
 
       spyOn(pageManager._managedPage.controllerInstance, 'onMethod').and.stub();
 
-      expect(pageManager._handleEventWithController('onMethod', data)).toEqual(
-        true
-      );
+      expect(
+        pageManager._handleEventWithController('onMethod', data)
+      ).toBeTruthy();
       expect(
         pageManager._managedPage.controllerInstance.onMethod
       ).toHaveBeenCalledWith(data);
@@ -231,9 +231,9 @@ describe('ima.core.page.manager.ClientPageManager', () => {
 
   describe('_handleEventWithExtensions method', () => {
     it('should return false for undefined method on extensions', () => {
-      expect(pageManager._handleEventWithExtensions('onMethod', {})).toEqual(
-        false
-      );
+      expect(
+        pageManager._handleEventWithExtensions('onMethod', {})
+      ).toBeFalsy();
     });
 
     it('should call method on someone extension and return true', () => {
@@ -248,9 +248,9 @@ describe('ima.core.page.manager.ClientPageManager', () => {
 
       spyOn(dumpExtensionInstance, 'onMethod').and.stub();
 
-      expect(pageManager._handleEventWithExtensions('onMethod', data)).toEqual(
-        true
-      );
+      expect(
+        pageManager._handleEventWithExtensions('onMethod', data)
+      ).toBeTruthy();
       expect(dumpExtensionInstance.onMethod).toHaveBeenCalledWith(data);
     });
   });

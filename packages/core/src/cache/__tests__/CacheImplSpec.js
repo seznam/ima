@@ -53,9 +53,9 @@ describe('ima.core.cache.CacheImpl', () => {
 
       let cacheObject = cache.get('object');
 
-      expect(cacheObject.object.number).toEqual(1);
-      expect(cacheObject.object.array[3]).toEqual([4, 5]);
-      expect(cacheObject.object.array[4].number).toEqual(1);
+      expect(cacheObject.object.number).toBe(1);
+      expect(cacheObject.object.array[3]).toStrictEqual([4, 5]);
+      expect(cacheObject.object.array[4].number).toBe(1);
     });
 
     it('should returns deep clone', () => {
@@ -79,7 +79,7 @@ describe('ima.core.cache.CacheImpl', () => {
       cloneObject.object.array[3] = 4;
       cloneObject.object.array[4].number = 2;
 
-      expect(cache.get('object')).toEqual(object);
+      expect(cache.get('object')).toStrictEqual(object);
     });
 
     it('should return same value for instance of Promise', () => {
@@ -89,7 +89,7 @@ describe('ima.core.cache.CacheImpl', () => {
       cache.set('promise', promise);
 
       expect(Helper.clone).not.toHaveBeenCalled();
-      expect(cache.get('promise')).toEqual(promise);
+      expect(cache.get('promise')).toStrictEqual(promise);
     });
   });
 
@@ -100,7 +100,7 @@ describe('ima.core.cache.CacheImpl', () => {
   });
 
   it('should return cached value for exist key', () => {
-    expect(cache.get('aaa')).toEqual(123);
+    expect(cache.get('aaa')).toBe(123);
   });
 
   it('should return null for not exist key', () => {
@@ -135,7 +135,7 @@ describe('ima.core.cache.CacheImpl', () => {
     });
     const serialization = cache.serialize();
 
-    expect(serialization).toEqual(
+    expect(serialization).toBe(
       JSON.stringify({
         aaa: {
           value: 123,
@@ -150,7 +150,7 @@ describe('ima.core.cache.CacheImpl', () => {
     cache.set('key', 'value', Infinity);
     const serialization = cache.serialize();
 
-    expect(serialization).toEqual(
+    expect(serialization).toBe(
       JSON.stringify({
         key: {
           value: 'value',
@@ -165,7 +165,7 @@ describe('ima.core.cache.CacheImpl', () => {
     cache.set('key', 'value', 60000);
     const serialization = cache.serialize();
 
-    expect(serialization).toEqual(
+    expect(serialization).toBe(
       JSON.stringify({
         key: {
           value: 'value',
@@ -185,7 +185,7 @@ describe('ima.core.cache.CacheImpl', () => {
     cache.clear();
     cache.deserialize(serialization);
 
-    expect(cache._cache.get('key')._ttl).toEqual(Infinity);
+    expect(cache._cache.get('key')._ttl).toBe(Infinity);
   });
 
   it('should throw error for serialize if value is instance of Promise', () => {

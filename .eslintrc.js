@@ -32,12 +32,18 @@ module.exports = {
     // Jest plugin overrides
     'jest/no-hooks': 'off',
     'jest/prefer-expect-assertions': 'off',
-    'jest/prefer-strict-equal': 'off', // warn
-    'jest/require-to-throw-message': 'off', // warn
-    'jest/no-done-callback': 'off', // warn
+    'jest/require-to-throw-message': 'off',
     'jest/prefer-called-with': 'off',
-    'jest/no-disabled-tests': 'warn',
     'jest/valid-title': 'off',
+    'jest/prefer-spy-on': 'off',
+    'jest/no-done-callback': 'warn',
+    'jest/no-disabled-tests': 'warn',
+    'jest/lowercase-name': [
+      'warn',
+      {
+        ignore: ['describe']
+      }
+    ],
     // Remove when migrated to jest >=27
     'jest/no-jasmine-globals': 'off',
 

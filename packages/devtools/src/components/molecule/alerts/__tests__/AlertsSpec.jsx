@@ -2,7 +2,7 @@ import React from 'react';
 import { shallow } from 'enzyme';
 import Alerts from '../Alerts';
 
-describe('alerts molecule', () => {
+describe('Alerts molecule', () => {
   const props = {
     alerts: {
       0: {

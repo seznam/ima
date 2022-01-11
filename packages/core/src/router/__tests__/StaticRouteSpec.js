@@ -222,14 +222,14 @@ describe('ima.core.router.StaticRoute', function () {
             ' and params ' +
             JSON.stringify(value.params),
           function () {
-            expect(localStaticRoute.toPath(value.params)).toEqual(value.result);
+            expect(localStaticRoute.toPath(value.params)).toBe(value.result);
           }
         );
       }
     );
 
     it('for empty variables will be return defined path', function () {
-      expect(route.toPath()).toEqual('/home/:userId/something/:somethingId');
+      expect(route.toPath()).toBe('/home/:userId/something/:somethingId');
     });
 
     it('encode path params', function () {
@@ -240,7 +240,7 @@ describe('ima.core.router.StaticRoute', function () {
         view,
         options
       );
-      expect(localStaticRoute.toPath({ encodeString: 'á/b?č#d:ě%25' })).toEqual(
+      expect(localStaticRoute.toPath({ encodeString: 'á/b?č#d:ě%25' })).toBe(
         '/home/%C3%A1%2Fb%3F%C4%8D%23d%3A%C4%9B%2525'
       );
     });
@@ -302,7 +302,7 @@ describe('ima.core.router.StaticRoute', function () {
             ' and params ' +
             JSON.stringify(params),
           function () {
-            expect(localStaticRoute.toPath(params)).toEqual(result);
+            expect(localStaticRoute.toPath(params)).toBe(result);
           }
         );
       }
@@ -349,7 +349,7 @@ describe('ima.core.router.StaticRoute', function () {
             ' and params ' +
             JSON.stringify(params),
           function () {
-            expect(localStaticRoute.toPath(params)).toEqual(result);
+            expect(localStaticRoute.toPath(params)).toBe(result);
           }
         );
       }
@@ -363,7 +363,7 @@ describe('ima.core.router.StaticRoute', function () {
         query2: 'text for you'
       };
 
-      expect(route.toPath(value)).toEqual(
+      expect(route.toPath(value)).toBe(
         '/home/' +
           value.userId +
           '/something/' +
@@ -830,7 +830,7 @@ describe('ima.core.router.StaticRoute', function () {
           const keys = Object.keys(value.params);
 
           keys.forEach(key => {
-            expect(routeParams[key]).toEqual(value.params[key]);
+            expect(routeParams[key]).toBe(value.params[key]);
           });
         });
       }
@@ -861,7 +861,7 @@ describe('ima.core.router.StaticRoute', function () {
         it(
           path + ' for ' + pathExpression + ` [${result.toString()}]`,
           function () {
-            expect(route.matches(path)).toEqual(result);
+            expect(route.matches(path)).toBe(result);
           }
         );
       }
@@ -1192,7 +1192,7 @@ describe('ima.core.router.StaticRoute', function () {
         it(
           path + ' for ' + value.pathExpression + ` [${result.toString()}]`,
           function () {
-            expect(localStaticRoute.matches(path)).toEqual(result);
+            expect(localStaticRoute.matches(path)).toBe(result);
           }
         );
       }
@@ -1360,7 +1360,7 @@ describe('ima.core.router.StaticRoute', function () {
               'unknown'
             );
 
-            expect(routeLocal.matches(path)).toEqual(result);
+            expect(routeLocal.matches(path)).toBe(result);
           }
         );
       }
@@ -1404,7 +1404,7 @@ describe('ima.core.router.StaticRoute', function () {
 
           const isCorrectParamOrder =
             localStaticRoute._checkParametersOrder(clearPathExpr);
-          expect(isCorrectParamOrder).toEqual(result);
+          expect(isCorrectParamOrder).toBe(result);
         });
       }
     );
@@ -1433,7 +1433,7 @@ describe('ima.core.router.StaticRoute', function () {
             clearPathExpr,
             optionalParams
           );
-          expect(pattern).toEqual(result);
+          expect(pattern).toBe(result);
         });
       }
     );
@@ -1463,7 +1463,7 @@ describe('ima.core.router.StaticRoute', function () {
             clearPathExpr,
             clearPathExpr
           );
-          expect(pattern).toEqual(result);
+          expect(pattern).toBe(result);
         });
       }
     );
@@ -1508,7 +1508,7 @@ describe('ima.core.router.StaticRoute', function () {
             optionalSubparamsOthers,
             optionalSubparamsLast
           );
-          expect(pattern).toEqual(result);
+          expect(pattern).toBe(result);
         });
       }
     );
@@ -1524,7 +1524,7 @@ describe('ima.core.router.StaticRoute', function () {
     it('should allow query to override path parameters', function () {
       expect(
         route.extractParameters('/abc/def?stuff=value&second=override')
-      ).toEqual({
+      ).toStrictEqual({
         first: 'abc',
         second: 'override',
         stuff: 'value'
@@ -1534,7 +1534,7 @@ describe('ima.core.router.StaticRoute', function () {
     it('should handle query with parameter value', function () {
       expect(route.matches('/abc/def?foo=bar')).toBeTruthy();
       expect(route.matches('/abc?foo=bar')).toBeFalsy();
-      expect(route.extractParameters('/abc/def?foo=bar')).toEqual({
+      expect(route.extractParameters('/abc/def?foo=bar')).toStrictEqual({
         first: 'abc',
         second: 'def',
         foo: 'bar'
@@ -1543,14 +1543,14 @@ describe('ima.core.router.StaticRoute', function () {
 
     it('should handle query without parameter value', function () {
       expect(route.matches('/abc/def?foo')).toBeTruthy();
-      expect(route.extractParameters('/abc/def?foo')).toEqual({
+      expect(route.extractParameters('/abc/def?foo')).toStrictEqual({
         first: 'abc',
         second: 'def',
         foo: true
       });
 
       expect(route.matches('/abc/def?foo&bar')).toBeTruthy();
-      expect(route.extractParameters('/abc/def?foo&bar&second')).toEqual({
+      expect(route.extractParameters('/abc/def?foo&bar&second')).toStrictEqual({
         first: 'abc',
         second: true,
         foo: true,
@@ -1564,7 +1564,7 @@ describe('ima.core.router.StaticRoute', function () {
       ).toBeTruthy();
       expect(
         route.extractParameters('/abc/def?foo=xy&bar=zz;giz=mo;stuff;geez&huff')
-      ).toEqual({
+      ).toStrictEqual({
         first: 'abc',
         second: 'def',
         foo: 'xy',
@@ -1582,7 +1582,7 @@ describe('ima.core.router.StaticRoute', function () {
       ).toBeTruthy();
       expect(
         route.extractParameters('/abc/def?stuff=value&second=override')
-      ).toEqual({
+      ).toStrictEqual({
         first: 'abc',
         second: 'override',
         stuff: 'value'
@@ -1591,10 +1591,12 @@ describe('ima.core.router.StaticRoute', function () {
 
     it('should ignore hash parameters when getting url parameters', function () {
       expect(route.matches('/abc/def#hashParam=value')).toBeTruthy();
-      expect(route.extractParameters('/abc/def#hashParam=value')).toEqual({
-        first: 'abc',
-        second: 'def'
-      });
+      expect(route.extractParameters('/abc/def#hashParam=value')).toStrictEqual(
+        {
+          first: 'abc',
+          second: 'def'
+        }
+      );
     });
 
     it('should ignore hash parameters when getting query parameters', function () {
@@ -1603,7 +1605,7 @@ describe('ima.core.router.StaticRoute', function () {
       ).toBeTruthy();
       expect(
         route.extractParameters('/abc/def?stuff=value#hashParam=value')
-      ).toEqual({
+      ).toStrictEqual({
         first: 'abc',
         second: 'def',
         stuff: 'value'
@@ -1616,7 +1618,7 @@ describe('ima.core.router.StaticRoute', function () {
       ).toBeTruthy();
       expect(
         route.extractParameters('/abc/def?stuff=#hashParam=value')
-      ).toEqual({
+      ).toStrictEqual({
         first: 'abc',
         second: 'def',
         stuff: ''
@@ -1633,7 +1635,7 @@ describe('ima.core.router.StaticRoute', function () {
         route.extractParameters(
           '/abc/def?stuff=value&other=value=with=equal=signs==&thirdParam'
         )
-      ).toEqual({
+      ).toStrictEqual({
         first: 'abc',
         second: 'def',
         stuff: 'value',

@@ -4,7 +4,7 @@ import * as utils from 'services/utils';
 import Actions from 'constants/actions';
 import Panel from '../Panel';
 
-describe('panel template', () => {
+describe('Panel template', () => {
   const props = {
     alive: jest.fn(),
     dead: jest.fn(),
@@ -23,6 +23,7 @@ describe('panel template', () => {
       addListener: jest.fn(),
       removeListener: jest.fn()
     },
+    disconnect: jest.fn(),
     onDisconnect: {
       addListener: jest
         .fn()
@@ -170,7 +171,7 @@ describe('panel template', () => {
       instance.onMessage({ action: Actions.MESSAGE });
 
       expect(instance.cachedEntries.push.mock.calls).toHaveLength(1);
-      expect(instance.cachedEntries.push.mock.calls[0][0]).toEqual({
+      expect(instance.cachedEntries.push.mock.calls[0][0]).toStrictEqual({
         action: Actions.MESSAGE
       });
       expect(instance._batchAddEntries.mock.calls).toHaveLength(1);

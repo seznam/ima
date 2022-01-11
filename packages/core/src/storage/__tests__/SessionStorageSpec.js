@@ -29,21 +29,21 @@ describe('ima.storage.SessionStorage', () => {
 
   it('should set and get items', () => {
     session.set('item1', 1);
-    expect(session.get('item1')).toEqual(1);
+    expect(session.get('item1')).toBe(1);
 
     session.set('item2', 'test');
-    expect(session.get('item2')).toEqual('test');
+    expect(session.get('item2')).toBe('test');
 
     session.set('item3', false);
-    expect(session.get('item3')).toEqual(false);
+    expect(session.get('item3')).toBeFalsy();
 
     let obj = { testedProp: 'testedValue' };
     session.set('item4', obj);
-    expect(session.get('item4')).toEqual(obj);
+    expect(session.get('item4')).toStrictEqual(obj);
 
     let arr = [0, 'val', true, {}];
     session.set('item5', arr);
-    expect(session.get('item5')).toEqual(arr);
+    expect(session.get('item5')).toStrictEqual(arr);
   });
 
   it('should should have (not) an item', () => {

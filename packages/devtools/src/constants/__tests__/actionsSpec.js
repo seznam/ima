@@ -1,6 +1,6 @@
 import Actions from '../actions';
 
-describe('actions constant', () => {
+describe('Actions constant', () => {
   it('should match snapshot', () => {
     expect(Actions).toMatchSnapshot();
   });

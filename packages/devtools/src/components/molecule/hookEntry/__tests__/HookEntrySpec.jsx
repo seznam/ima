@@ -2,7 +2,7 @@ import React from 'react';
 import { shallow } from 'enzyme';
 import HookEntry from '../HookEntry';
 
-describe('hookEntry molecule', () => {
+describe('HookEntry molecule', () => {
   let wrapper, instance;
 
   const event = {
@@ -63,7 +63,7 @@ describe('hookEntry molecule', () => {
       });
 
       expect(instance.setState.mock.calls).toHaveLength(1);
-      expect(instance.setState.mock.calls[0][0]).toEqual({
+      expect(instance.setState.mock.calls[0][0]).toStrictEqual({
         name: 'newName'
       });
     });
@@ -84,7 +84,7 @@ describe('hookEntry molecule', () => {
       expect(instance.props.showConfirmModal.mock.calls).toHaveLength(1);
       expect(
         Object.keys(instance.props.showConfirmModal.mock.calls[0][0])
-      ).toEqual(['body', 'accept']);
+      ).toStrictEqual(['body', 'accept']);
     });
   });
 

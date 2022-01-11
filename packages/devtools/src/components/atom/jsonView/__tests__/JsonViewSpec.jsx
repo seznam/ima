@@ -2,13 +2,13 @@ import React from 'react';
 import { shallow } from 'enzyme';
 import JsonView, { THEME } from '../JsonView';
 
-describe('jsonView.THEME', () => {
+describe('JsonView.THEME', () => {
   it('should match snapshot', () => {
     expect(THEME).toMatchSnapshot();
   });
 });
 
-describe('jsonView atom', () => {
+describe('JsonView atom', () => {
   let wrapper = shallow(<JsonView src={{ json: 'data' }} />);
 
   it('should match snapshot', () => {

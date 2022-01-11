@@ -2,7 +2,7 @@ import React from 'react';
 import { shallow } from 'enzyme';
 import SplitPane from '../SplitPane';
 
-describe('splitPane molecule', () => {
+describe('SplitPane molecule', () => {
   let wrapper;
 
   beforeEach(() => {

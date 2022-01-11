@@ -26,12 +26,12 @@ describe('cache', () => {
     });
 
     it('should be set page to cache', () => {
-      expect(cache.set({}, page)).toEqual(true);
+      expect(cache.set({}, page)).toBeTruthy();
     });
 
     it('should be not set page to cache for exceed maximum entries limit', () => {
-      expect(cache.set({}, page)).toEqual(true);
-      expect(cache.set({}, page)).toEqual(false);
+      expect(cache.set({}, page)).toBeTruthy();
+      expect(cache.set({}, page)).toBeFalsy();
     });
   });
 });

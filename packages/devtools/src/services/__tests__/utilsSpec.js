@@ -29,7 +29,7 @@ describe('setIcon', () => {
     setIcon('alive');
 
     expect(chrome.browserAction.setIcon.mock.calls).toHaveLength(1);
-    expect(chrome.browserAction.setIcon.mock.calls[0][0]).toEqual({
+    expect(chrome.browserAction.setIcon.mock.calls[0][0]).toStrictEqual({
       path: getPath('alive')
     });
   });
@@ -38,7 +38,7 @@ describe('setIcon', () => {
     setIcon('alive', 340);
 
     expect(chrome.browserAction.setIcon.mock.calls).toHaveLength(1);
-    expect(chrome.browserAction.setIcon.mock.calls[0][0]).toEqual({
+    expect(chrome.browserAction.setIcon.mock.calls[0][0]).toStrictEqual({
       path: getPath('alive'),
       tabId: 340
     });
@@ -119,7 +119,7 @@ describe('getCurrentTab', () => {
 
     expect(result).toBe(30);
     expect(chrome.tabs.query.mock.calls).toHaveLength(1);
-    expect(chrome.tabs.query.mock.calls[0][0]).toEqual({
+    expect(chrome.tabs.query.mock.calls[0][0]).toStrictEqual({
       active: true,
       currentWindow: true
     });

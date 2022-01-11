@@ -6,7 +6,7 @@ import PresetsModal from '../PresetsModal';
 jest.mock('easy-uid');
 import uid from 'easy-uid';
 
-describe('presetsModal organism', () => {
+describe('PresetsModal organism', () => {
   let wrapper, instance;
 
   const event = {
@@ -63,7 +63,7 @@ describe('presetsModal organism', () => {
       instance.onSaveChanges(event);
 
       expect(settings.setSettings.mock.calls).toHaveLength(1);
-      expect(settings.setSettings.mock.calls[0][0]).toEqual({
+      expect(settings.setSettings.mock.calls[0][0]).toStrictEqual({
         presets: props.presets,
         selectedPresetId: props.selectedPresetId
       });
@@ -90,7 +90,7 @@ describe('presetsModal organism', () => {
     it('should create blank preset object with generated ID', () => {
       uid.mockReturnValue('2fghzj-123456');
 
-      expect(instance._createPreset()).toEqual({
+      expect(instance._createPreset()).toStrictEqual({
         id: '2fghzj-123456',
         name: 'Preset - 2fghzj',
         editable: true,

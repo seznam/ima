@@ -2,7 +2,7 @@ import React from 'react';
 import { shallow } from 'enzyme';
 import PresetEntry from '../PresetEntry';
 
-describe('presetEntry molecule', () => {
+describe('PresetEntry molecule', () => {
   let wrapper, instance;
 
   const event = {
@@ -65,7 +65,7 @@ describe('presetEntry molecule', () => {
       });
 
       expect(instance.setState.mock.calls).toHaveLength(1);
-      expect(instance.setState.mock.calls[0][0]).toEqual({
+      expect(instance.setState.mock.calls[0][0]).toStrictEqual({
         name: 'newName'
       });
     });
@@ -109,13 +109,13 @@ describe('presetEntry molecule', () => {
       expect(event.stopPropagation.mock.calls).toHaveLength(1);
 
       expect(instance.props.renamePreset.mock.calls).toHaveLength(1);
-      expect(instance.props.renamePreset.mock.calls[0][0]).toEqual({
+      expect(instance.props.renamePreset.mock.calls[0][0]).toStrictEqual({
         id: '0',
         name: 'newName'
       });
 
       expect(instance.setState.mock.calls).toHaveLength(1);
-      expect(instance.setState.mock.calls[0][0]).toEqual({
+      expect(instance.setState.mock.calls[0][0]).toStrictEqual({
         editable: false
       });
     });
@@ -142,7 +142,7 @@ describe('presetEntry molecule', () => {
       expect(event.stopPropagation.mock.calls).toHaveLength(1);
 
       expect(instance.setState.mock.calls).toHaveLength(1);
-      expect(instance.setState.mock.calls[0][0]).toEqual({
+      expect(instance.setState.mock.calls[0][0]).toStrictEqual({
         editable: true
       });
     });
@@ -163,7 +163,7 @@ describe('presetEntry molecule', () => {
       expect(instance.props.showConfirmModal.mock.calls).toHaveLength(1);
       expect(
         Object.keys(instance.props.showConfirmModal.mock.calls[0][0])
-      ).toEqual(['body', 'accept']);
+      ).toStrictEqual(['body', 'accept']);
     });
   });
 
@@ -177,7 +177,7 @@ describe('presetEntry molecule', () => {
       expect(event.stopPropagation.mock.calls).toHaveLength(1);
 
       expect(instance.setState.mock.calls).toHaveLength(1);
-      expect(instance.setState.mock.calls[0][0]).toEqual({
+      expect(instance.setState.mock.calls[0][0]).toStrictEqual({
         name: props.preset.name,
         editable: false
       });

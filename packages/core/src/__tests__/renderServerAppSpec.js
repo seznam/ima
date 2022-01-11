@@ -117,9 +117,9 @@ describe('render server application', () => {
     router
       .route('/reviveClientApp')
       .then(response => {
-        expect(response.status).toEqual(200);
-        expect(response.content).toEqual('html');
-        expect(response.pageState).toEqual({ hello: 'Hello' });
+        expect(response.status).toBe(200);
+        expect(response.content).toBe('html');
+        expect(response.pageState).toStrictEqual({ hello: 'Hello' });
         done();
       })
       .catch(error => {

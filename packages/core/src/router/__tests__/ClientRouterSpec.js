@@ -48,7 +48,7 @@ describe('ima.core.router.ClientRouter', () => {
 
     router.listen();
 
-    expect(window.bindEventListener.calls.count()).toEqual(2);
+    expect(window.bindEventListener.calls.count()).toBe(2);
   });
 
   it('should remove listener to popState event, click event', () => {
@@ -56,7 +56,7 @@ describe('ima.core.router.ClientRouter', () => {
 
     router.unlisten();
 
-    expect(window.unbindEventListener.calls.count()).toEqual(2);
+    expect(window.unbindEventListener.calls.count()).toBe(2);
   });
 
   describe('redirect method', () => {
@@ -119,7 +119,7 @@ describe('ima.core.router.ClientRouter', () => {
       let path = '/somePath';
       let url = protocol + '//' + host + path;
 
-      expect(router._isSameDomain(url)).toEqual(true);
+      expect(router._isSameDomain(url)).toBeTruthy();
     });
 
     it('should be retrun false for strange domain with query for same domain', () => {
@@ -135,14 +135,14 @@ describe('ima.core.router.ClientRouter', () => {
         host +
         path;
 
-      expect(router._isSameDomain(url)).toEqual(false);
+      expect(router._isSameDomain(url)).toBeFalsy();
     });
 
     it('should be retrun false for strange domain', () => {
       let path = '/somePath';
       let url = protocol + '//' + 'www.strangeDomain.com' + path;
 
-      expect(router._isSameDomain(url)).toEqual(false);
+      expect(router._isSameDomain(url)).toBeFalsy();
     });
   });
 
@@ -176,7 +176,9 @@ describe('ima.core.router.ClientRouter', () => {
           () => {
             spyOn(window, 'getUrl').and.returnValue(value.baseUrl);
 
-            expect(router._isHashLink(value.targetUrl)).toEqual(value.result);
+            expect(router._isHashLink(value.targetUrl)).toStrictEqual(
+              value.result
+            );
           }
         );
       }

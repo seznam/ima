@@ -36,7 +36,7 @@ describe('reducer', () => {
   });
 
   it('should return the initial state', () => {
-    expect(reducer(undefined, {})).toEqual(entriesInitialState);
+    expect(reducer(undefined, {})).toStrictEqual(entriesInitialState);
   });
 
   it('should add entries to state, reset loader and status, assign them new id, selected flag and update zero time for first item', () => {
@@ -45,7 +45,7 @@ describe('reducer', () => {
         type: 'entries/addEntries',
         payload: [{ payload: { id: '0', label: 'msg2', time: 1100 } }]
       })
-    ).toEqual({
+    ).toStrictEqual({
       ...entriesInitialState,
       entryIdsByQuery: ['0'],
       entries: {
@@ -64,7 +64,7 @@ describe('reducer', () => {
   });
 
   it('should reset some values on clearing entries', () => {
-    expect(reducer(curState, { type: 'entries/clearEntries' })).toEqual({
+    expect(reducer(curState, { type: 'entries/clearEntries' })).toStrictEqual({
       ...curState,
       entryIdsByQuery: [],
       entries: {},
@@ -79,7 +79,7 @@ describe('reducer', () => {
   it('should set status message on alive', () => {
     curState.isLoading = true;
 
-    expect(reducer(curState, { type: 'entries/alive' })).toEqual({
+    expect(reducer(curState, { type: 'entries/alive' })).toStrictEqual({
       ...curState,
       status: 'Loading messages...'
     });
@@ -88,7 +88,7 @@ describe('reducer', () => {
   it('should set status message on dead and reset loader', () => {
     curState.isLoading = true;
 
-    expect(reducer(curState, { type: 'entries/dead' })).toEqual({
+    expect(reducer(curState, { type: 'entries/dead' })).toStrictEqual({
       ...curState,
       status: 'This website does not use IMA.js',
       isLoading: false
@@ -98,7 +98,7 @@ describe('reducer', () => {
   it('should set error message on unsupported and reset loader', () => {
     curState.isLoading = true;
 
-    expect(reducer(curState, { type: 'entries/unsupported' })).toEqual({
+    expect(reducer(curState, { type: 'entries/unsupported' })).toStrictEqual({
       ...curState,
       error:
         'The devtools only support applications runnning IMA.js v17 or higher.',
@@ -107,7 +107,7 @@ describe('reducer', () => {
   });
 
   it('should set status message on reload and turn on loader', () => {
-    expect(reducer(curState, { type: 'entries/reload' })).toEqual({
+    expect(reducer(curState, { type: 'entries/reload' })).toStrictEqual({
       ...curState,
       status: 'Reloading application...',
       isLoading: true
@@ -120,7 +120,7 @@ describe('reducer', () => {
         type: 'entries/setSearchQuery',
         payload: 'msg0'
       })
-    ).toEqual({
+    ).toStrictEqual({
       ...curState,
       entryIdsByQuery: ['0'],
       searchQuery: 'msg0',
@@ -132,7 +132,7 @@ describe('reducer', () => {
   it('should update selected entry and hasNext/hasPrevious flags', () => {
     expect(
       reducer(curState, { type: 'entries/setSelected', payload: '1' })
-    ).toEqual({
+    ).toStrictEqual({
       ...curState,
       entries: {
         0: {
@@ -153,7 +153,7 @@ describe('reducer', () => {
   });
 
   it('should select next item in current filter and update hasNext/hasPrevious flags', () => {
-    expect(reducer(curState, { type: 'entries/selectNext' })).toEqual({
+    expect(reducer(curState, { type: 'entries/selectNext' })).toStrictEqual({
       ...curState,
       entries: {
         0: {
@@ -180,7 +180,9 @@ describe('reducer', () => {
     curState.hasNext = false;
     curState.hasPrevious = true;
 
-    expect(reducer(curState, { type: 'entries/selectNext' })).toEqual(curState);
+    expect(reducer(curState, { type: 'entries/selectNext' })).toStrictEqual(
+      curState
+    );
   });
 
   it('should select previous item in current filter and update hasNext/hasPrevious flags', () => {
@@ -190,28 +192,30 @@ describe('reducer', () => {
     curState.hasNext = false;
     curState.hasPrevious = true;
 
-    expect(reducer(curState, { type: 'entries/selectPrevious' })).toEqual({
-      ...curState,
-      entries: {
-        0: {
-          id: '0',
-          selected: true,
-          messages: [{ payload: { label: 'msg0' } }]
+    expect(reducer(curState, { type: 'entries/selectPrevious' })).toStrictEqual(
+      {
+        ...curState,
+        entries: {
+          0: {
+            id: '0',
+            selected: true,
+            messages: [{ payload: { label: 'msg0' } }]
+          },
+          1: {
+            id: '1',
+            selected: false,
+            messages: [{ payload: { label: 'msg1' } }]
+          }
         },
-        1: {
-          id: '1',
-          selected: false,
-          messages: [{ payload: { label: 'msg1' } }]
-        }
-      },
-      selectedId: '0',
-      hasNext: true,
-      hasPrevious: false
-    });
+        selectedId: '0',
+        hasNext: true,
+        hasPrevious: false
+      }
+    );
   });
 
   it('should not do anything if there are no previous items', () => {
-    expect(reducer(curState, { type: 'entries/selectPrevious' })).toEqual(
+    expect(reducer(curState, { type: 'entries/selectPrevious' })).toStrictEqual(
       curState
     );
   });
@@ -225,65 +229,72 @@ describe('actions', () => {
   it('should create action to add entries', () => {
     const entries = [{ payload: { label: 'msg' } }];
 
-    expect(actions.addEntries(entries)).toEqual({
+    expect(actions.addEntries(entries)).toStrictEqual({
       payload: [{ payload: { label: 'msg' } }],
       type: 'entries/addEntries'
     });
   });
 
   it('should create action to clear entries', () => {
-    expect(actions.clearEntries()).toEqual({
-      type: 'entries/clearEntries'
+    expect(actions.clearEntries()).toStrictEqual({
+      type: 'entries/clearEntries',
+      payload: undefined
     });
   });
 
   it('should create action to set state alive', () => {
-    expect(actions.alive()).toEqual({
-      type: 'entries/alive'
+    expect(actions.alive()).toStrictEqual({
+      type: 'entries/alive',
+      payload: undefined
     });
   });
 
   it('should create action to set state dead', () => {
-    expect(actions.dead()).toEqual({
-      type: 'entries/dead'
+    expect(actions.dead()).toStrictEqual({
+      type: 'entries/dead',
+      payload: undefined
     });
   });
 
   it('should create action to set state unsupported', () => {
-    expect(actions.unsupported()).toEqual({
-      type: 'entries/unsupported'
+    expect(actions.unsupported()).toStrictEqual({
+      type: 'entries/unsupported',
+      payload: undefined
     });
   });
 
   it('should create action to set state reload', () => {
-    expect(actions.reload()).toEqual({
-      type: 'entries/reload'
+    expect(actions.reload()).toStrictEqual({
+      type: 'entries/reload',
+      payload: undefined
     });
   });
 
   it('should create action to set search query', () => {
-    expect(actions.setSearchQuery('query')).toEqual({
+    expect(actions.setSearchQuery('query')).toStrictEqual({
       type: 'entries/setSearchQuery',
       payload: 'query'
     });
   });
 
   it('should create action to set selected', () => {
-    expect(actions.setSelected(123)).toEqual({
+    expect(actions.setSelected(123)).toStrictEqual({
       type: 'entries/setSelected',
       payload: 123
     });
   });
 
   it('should create action to select next', () => {
-    expect(actions.selectNext()).toEqual({
-      type: 'entries/selectNext'
+    expect(actions.selectNext()).toStrictEqual({
+      type: 'entries/selectNext',
+      payload: undefined
     });
   });
 
   it('should create action to select previous', () => {
-    expect(actions.selectPrevious()).toEqual({
-      type: 'entries/selectPrevious'
+    expect(actions.selectPrevious()).toStrictEqual({
+      type: 'entries/selectPrevious',
+      payload: undefined
     });
   });
 });

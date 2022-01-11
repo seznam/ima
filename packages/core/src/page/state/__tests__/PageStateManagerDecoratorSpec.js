@@ -31,13 +31,13 @@ describe('ima.core.page.state.PageStateManagerDecorator', () => {
 
     decoratedPageStateManager.getState();
 
-    expect(decoratedPageStateManager.getState()).toEqual(state);
+    expect(decoratedPageStateManager.getState()).toStrictEqual(state);
   });
 
   it('should return all history of states', () => {
     spyOn(pageStateManager, 'getAllStates').and.returnValue([state]);
 
-    expect(decoratedPageStateManager.getAllStates()).toEqual([state]);
+    expect(decoratedPageStateManager.getAllStates()).toStrictEqual([state]);
   });
 
   describe('setState method', () => {
@@ -78,7 +78,7 @@ describe('ima.core.page.state.PageStateManagerDecorator', () => {
       decoratedPageStateManager.setState(patchState);
       decoratedPageStateManager.commitTransaction();
 
-      expect(pageStateManager.getState()).toEqual(patchState);
+      expect(pageStateManager.getState()).toStrictEqual(patchState);
     });
   });
 });

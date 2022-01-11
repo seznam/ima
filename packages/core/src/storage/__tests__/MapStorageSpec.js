@@ -16,21 +16,21 @@ describe('ima.storage.Map', () => {
 
   it('should set and get items', () => {
     map.set('item1', 1);
-    expect(map.get('item1')).toEqual(1);
+    expect(map.get('item1')).toBe(1);
 
     map.set('item2', 'test');
-    expect(map.get('item2')).toEqual('test');
+    expect(map.get('item2')).toBe('test');
 
     map.set('item3', false);
-    expect(map.get('item3')).toEqual(false);
+    expect(map.get('item3')).toBeFalsy();
 
     let obj = { testedProp: 'testedValue' };
     map.set('item4', obj);
-    expect(map.get('item4')).toEqual(obj);
+    expect(map.get('item4')).toStrictEqual(obj);
 
     let arr = [0, 'val', true, {}];
     map.set('item5', arr);
-    expect(map.get('item5')).toEqual(arr);
+    expect(map.get('item5')).toStrictEqual(arr);
   });
 
   it('should should have (not) an item', () => {
@@ -71,15 +71,15 @@ describe('ima.storage.Map', () => {
       switch (index++) {
         case 0:
           // eslint-disable-next-line jest/no-conditional-expect
-          expect(item.value).toEqual('item1');
+          expect(item.value).toBe('item1');
           break;
         case 1:
           // eslint-disable-next-line jest/no-conditional-expect
-          expect(item.value).toEqual('item2');
+          expect(item.value).toBe('item2');
           break;
         default:
           // eslint-disable-next-line jest/no-conditional-expect
-          expect(item.value).toEqual('item3');
+          expect(item.value).toBe('item3');
           break;
       }
       item = iterator.next();

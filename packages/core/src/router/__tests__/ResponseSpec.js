@@ -10,8 +10,8 @@ describe('ima.core.router.Response', () => {
   it('should convert cookie maxAge to ms for Express', () => {
     let options = { maxAge: 1 };
     let expressOptions = response._prepareCookieOptionsForExpress(options);
-    expect(options.maxAge).toEqual(1);
-    expect(expressOptions.maxAge).toEqual(1000);
+    expect(options.maxAge).toBe(1);
+    expect(expressOptions.maxAge).toBe(1000);
   });
 
   it('should remove cookie maxAge: null for Express', () => {

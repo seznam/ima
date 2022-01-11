@@ -9,7 +9,7 @@ describe('createEntry', () => {
 
   it('should return passed data if input is JSON serializable', () => {
     const result = createEntry(data);
-    expect(result).toEqual(data);
+    expect(result).toStrictEqual(data);
   });
 
   it('should return error message if the input is not JSON serializable', () => {
@@ -17,7 +17,7 @@ describe('createEntry', () => {
     const result = createEntry(data);
 
     // Stringify here is used to catch the error correctly
-    expect(JSON.stringify(result)).toEqual(
+    expect(JSON.stringify(result)).toBe(
       JSON.stringify({
         sentinel: data.sentinel,
         action: 'error',

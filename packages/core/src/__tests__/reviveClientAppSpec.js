@@ -153,8 +153,8 @@ describe('revive client application', () => {
     ima
       .reviveClientApp(bootConfig)
       .then(response => {
-        expect(response.status).toEqual(200);
-        expect(response.pageState).toEqual({ hello: 'Hello' });
+        expect(response.status).toBe(200);
+        expect(response.pageState).toStrictEqual({ hello: 'Hello' });
         expect(response.content).toBeNull();
         expect(ReactDOM.render).toHaveBeenCalled();
         done();

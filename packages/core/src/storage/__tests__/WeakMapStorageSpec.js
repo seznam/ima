@@ -22,7 +22,7 @@ describe('ima.storage.WeakMapStorage', () => {
   });
 
   it('should allow retrieving existing entries', () => {
-    expect(map.get('a')).toEqual({ num: 1 });
+    expect(map.get('a')).toStrictEqual({ num: 1 });
   });
 
   it('should return undefined for non-existing entries', () => {
@@ -32,13 +32,13 @@ describe('ima.storage.WeakMapStorage', () => {
   it('should allow storing new values', () => {
     map.set('foo', { string: 'bar' });
 
-    expect(map.get('foo')).toEqual({ string: 'bar' });
+    expect(map.get('foo')).toStrictEqual({ string: 'bar' });
   });
 
   it('should allow over-writing existing values', () => {
     map.set('a', { num2: 42 });
 
-    expect(map.get('a')).toEqual({ num2: 42 });
+    expect(map.get('a')).toStrictEqual({ num2: 42 });
   });
 
   it('should allow deleting existing values', () => {

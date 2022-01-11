@@ -57,7 +57,7 @@ describe('getSettings', () => {
   it('should return whole storage.local if key not provided', async () => {
     setSettings({ enabled: true });
 
-    expect(await getSettings()).toEqual(
+    expect(await getSettings()).toStrictEqual(
       Object.assign({}, defaultSettings, {
         enabled: true
       })
@@ -70,10 +70,10 @@ describe('setSettings', () => {
     setSettings({ enabled: true });
 
     expect(chrome.storage.local.set.mock.calls).toHaveLength(1);
-    expect(chrome.storage.local.set.mock.calls[0][0]).toEqual({
+    expect(chrome.storage.local.set.mock.calls[0][0]).toStrictEqual({
       enabled: true
     });
 
-    expect(settingsStorage).toEqual({ enabled: true });
+    expect(settingsStorage).toStrictEqual({ enabled: true });
   });
 });

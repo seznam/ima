@@ -96,7 +96,7 @@ describe('ima.core.http.HttpAgentImpl', () => {
               cached: false
             };
 
-            expect(response).toEqual(agentResponse);
+            expect(response).toStrictEqual(agentResponse);
             done();
           })
           .catch(e => {
@@ -118,7 +118,7 @@ describe('ima.core.http.HttpAgentImpl', () => {
           () => {},
           error => {
             expect(error instanceof GenericError).toBe(true);
-            expect(proxy.request.calls.count()).toEqual(2);
+            expect(proxy.request.calls.count()).toBe(2);
             done();
           }
         );
@@ -136,7 +136,7 @@ describe('ima.core.http.HttpAgentImpl', () => {
           data.params.data,
           data.params.options
         ).then(() => {
-          expect(cookie.parseFromSetCookieHeader.calls.count()).toEqual(2);
+          expect(cookie.parseFromSetCookieHeader.calls.count()).toBe(2);
           done();
         });
       });

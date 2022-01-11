@@ -10,7 +10,7 @@ describe('helper', () => {
         { b: { c: 5 } },
         { b: { d: [5] } }
       );
-      expect(target).toEqual({ a: 3, b: { c: 5, d: [5] }, d: 4 });
+      expect(target).toStrictEqual({ a: 3, b: { c: 5, d: [5] }, d: 4 });
     });
   });
 
@@ -25,7 +25,7 @@ describe('helper', () => {
         { c: { e: [5] } }
       );
 
-      expect(target).toEqual({
+      expect(target).toStrictEqual({
         a: 1,
         b: 3,
         c: { d: 5, e: [5] },
@@ -43,7 +43,7 @@ describe('helper', () => {
 
       helpers.assignRecursivelyWithTracking('ref-2')(target, { c: { e: 6 } });
 
-      expect(target).toEqual({
+      expect(target).toStrictEqual({
         a: 1,
         b: 3,
         c: { d: 5, e: 6 },
@@ -92,21 +92,21 @@ describe('helper', () => {
     it('should return production setting', () => {
       let currentSetting = helpers.resolveEnvironmentSetting(settings, 'prod');
 
-      expect(currentSetting.string).toEqual(settings.prod.string);
-      expect(currentSetting.deep.number).toEqual(settings.prod.deep.number);
+      expect(currentSetting.string).toBe(settings.prod.string);
+      expect(currentSetting.deep.number).toBe(settings.prod.deep.number);
     });
 
     it('should return development setting', () => {
       let currentSetting = helpers.resolveEnvironmentSetting(settings, 'dev');
 
-      expect(currentSetting.string).toEqual(settings.prod.string);
-      expect(currentSetting.deep.number).toEqual(settings.dev.deep.number);
+      expect(currentSetting.string).toBe(settings.prod.string);
+      expect(currentSetting.deep.number).toBe(settings.dev.deep.number);
     });
 
     it('should return empty setting', () => {
       let currentSetting = helpers.resolveEnvironmentSetting();
 
-      expect(currentSetting).toEqual({});
+      expect(currentSetting).toStrictEqual({});
     });
   });
 
@@ -118,7 +118,7 @@ describe('helper', () => {
         c: new Promise(resolve => setTimeout(() => resolve(3), 10))
       };
       helpers.allPromiseHash(source).then(results => {
-        expect(results).toEqual({
+        expect(results).toStrictEqual({
           a: 1,
           b: 2,
           c: 3
@@ -147,7 +147,7 @@ describe('helper', () => {
 
       expect(helpers.clone(source)).not.toBe(source);
       expect(helpers.clone(source).a).not.toBe(source.a);
-      expect(helpers.clone(source)).toEqual(source);
+      expect(helpers.clone(source)).toStrictEqual(source);
     });
   });
 });

@@ -2,7 +2,7 @@ import React from 'react';
 import { shallow } from 'enzyme';
 import EntryListItem from '../EntryListItem';
 
-describe('entryListItem molecule', () => {
+describe('EntryListItem molecule', () => {
   const props = {
     entry: {
       id: '0',
@@ -114,23 +114,23 @@ describe('entryListItem molecule', () => {
 
     expect(instance.props.entry.id).toBe('1253');
     expect(instance.props.setSelected.mock.calls).toHaveLength(1);
-    expect(instance.props.setSelected.mock.calls[0][0]).toEqual('1253');
+    expect(instance.props.setSelected.mock.calls[0][0]).toBe('1253');
   });
 
   describe('_parseLabel', () => {
     it('should return label split into short label and event', () => {
-      expect(instance._parseLabel('label:type:event')).toEqual({
+      expect(instance._parseLabel('label:type:event')).toStrictEqual({
         shortLabel: 'label',
         event: 'event'
       });
     });
 
     it('should return just label if event is not part of the original string', () => {
-      expect(instance._parseLabel('label:type')).toEqual({
+      expect(instance._parseLabel('label:type')).toStrictEqual({
         shortLabel: 'label',
         event: ''
       });
-      expect(instance._parseLabel('label')).toEqual({
+      expect(instance._parseLabel('label')).toStrictEqual({
         shortLabel: 'label',
         event: ''
       });

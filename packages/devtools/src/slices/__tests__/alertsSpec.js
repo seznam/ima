@@ -24,7 +24,7 @@ describe('reducer', () => {
   });
 
   it('should return the initial state', () => {
-    expect(reducer(undefined, {})).toEqual(alertsInitialState);
+    expect(reducer(undefined, {})).toStrictEqual(alertsInitialState);
   });
 
   it('should add alert to state', () => {
@@ -38,7 +38,7 @@ describe('reducer', () => {
           type: 'type'
         }
       })
-    ).toEqual({
+    ).toStrictEqual({
       ...curState,
       alerts: {
         ...curState.alerts,
@@ -59,7 +59,7 @@ describe('reducer', () => {
         type: 'alerts/removeAlert',
         payload: '0'
       })
-    ).toEqual({
+    ).toStrictEqual({
       ...curState,
       alerts: {}
     });
@@ -71,7 +71,7 @@ describe('reducer', () => {
         type: 'alerts/hideAlert',
         payload: '0'
       })
-    ).toEqual({
+    ).toStrictEqual({
       ...curState,
       alerts: {
         0: {
@@ -92,7 +92,7 @@ describe('actions', () => {
       type: 'type'
     };
 
-    expect(actions.showAlert(data)).toEqual({
+    expect(actions.showAlert(data)).toStrictEqual({
       type: 'alerts/showAlert',
       payload: {
         id: '0',
@@ -104,14 +104,14 @@ describe('actions', () => {
   });
 
   it('should create action to remove alert', () => {
-    expect(actions.removeAlert('0')).toEqual({
+    expect(actions.removeAlert('0')).toStrictEqual({
       type: 'alerts/removeAlert',
       payload: '0'
     });
   });
 
   it('should create action to hide alert', () => {
-    expect(actions.hideAlert('0')).toEqual({
+    expect(actions.hideAlert('0')).toStrictEqual({
       type: 'alerts/hideAlert',
       payload: '0'
     });

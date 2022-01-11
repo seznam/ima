@@ -78,7 +78,7 @@ describe('urlParser', () => {
 
     expectedKeys.forEach(key => {
       it(`should create key '${key}' in results object`, () => {
-        expect(typeof usedRes.locals[key]).toEqual('string');
+        expect(typeof usedRes.locals[key]).toBe('string');
       });
     });
 
@@ -148,7 +148,7 @@ describe('urlParser', () => {
         parseUrl(usedReq, usedRes, next);
 
         const result = usedRes.locals;
-        expect(result.host).toEqual(expected);
+        expect(result.host).toBe(expected);
       });
     });
   });
@@ -210,7 +210,7 @@ describe('urlParser', () => {
         }
 
         const result = usedRes.locals;
-        expect(result).toEqual({});
+        expect(result).toStrictEqual({});
       });
     });
   });
@@ -273,7 +273,7 @@ describe('urlParser', () => {
         const result = usedRes.locals;
 
         parseUrl(usedReq, usedRes, next);
-        expect(result.protocol).toEqual(expected);
+        expect(result.protocol).toBe(expected);
       });
     });
 
@@ -331,7 +331,7 @@ describe('urlParser', () => {
 
         const result = usedRes.locals;
 
-        expect(result.protocol).toEqual(expected);
+        expect(result.protocol).toBe(expected);
       });
     });
   });
@@ -466,7 +466,7 @@ describe('urlParser', () => {
 
           expect(redirectMock.calls).toHaveLength(1);
           expect(redirectMock.calls[0][0]).toBe(redirectTo);
-          expect(result).toEqual({});
+          expect(result).toStrictEqual({});
           expect(next.mock.calls).toHaveLength(0);
         });
       } else {
@@ -474,9 +474,9 @@ describe('urlParser', () => {
           parseUrl(usedReq, usedRes, next);
           const result = usedRes.locals;
 
-          expect(result.root).toEqual(expected.root);
-          expect(result.language).toEqual(expected.language);
-          expect(result.languagePartPath).toEqual(expected.languagePartPath);
+          expect(result.root).toBe(expected.root);
+          expect(result.language).toBe(expected.language);
+          expect(result.languagePartPath).toBe(expected.languagePartPath);
         });
       }
     });
@@ -567,9 +567,9 @@ describe('urlParser', () => {
 
         const result = usedRes.locals;
 
-        expect(result.path).toEqual(expected.path);
-        expect(result.root).toEqual('');
-        expect(result.host).toEqual(HOST2);
+        expect(result.path).toBe(expected.path);
+        expect(result.root).toBe('');
+        expect(result.host).toBe(HOST2);
       });
     });
   });

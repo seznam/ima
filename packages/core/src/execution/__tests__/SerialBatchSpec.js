@@ -21,7 +21,7 @@ describe('ima.core.execution.SerialBatch', () => {
       const argument = 'fluid';
 
       await serialBatch.execute(argument).then(result => {
-        expect(result).toEqual([argument, argument]);
+        expect(result).toStrictEqual([argument, argument]);
       });
     });
 
@@ -38,7 +38,7 @@ describe('ima.core.execution.SerialBatch', () => {
       serialBatch.append(mutatingFunction);
 
       await serialBatch.execute(argument).then(result => {
-        expect(result).toEqual([argument, argument, argument]);
+        expect(result).toStrictEqual([argument, argument, argument]);
       });
     });
 

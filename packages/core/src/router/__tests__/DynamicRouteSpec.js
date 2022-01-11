@@ -95,7 +95,7 @@ describe('ima.core.router.DynamicRoute', function () {
     ])(
       'should create correct path "%s" from params: "%j"',
       (result, params) => {
-        expect(route.toPath(params)).toEqual(result);
+        expect(route.toPath(params)).toStrictEqual(result);
       }
     );
   });
@@ -121,13 +121,14 @@ describe('ima.core.router.DynamicRoute', function () {
       [
         {
           section: 'sport',
-          slug: 'article-145'
+          slug: 'article-145',
+          subsection: undefined
         },
         '/sport/article/article-145/'
       ],
       [{}, '/article/article-145']
     ])(`should return "%j" after parsing "%s" path`, (result, path) => {
-      expect(route.extractParameters(path)).toEqual(result);
+      expect(route.extractParameters(path)).toStrictEqual(result);
     });
   });
 

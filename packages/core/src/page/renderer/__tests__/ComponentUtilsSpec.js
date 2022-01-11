@@ -21,7 +21,7 @@ describe('componentUtils', () => {
       componentUtils.register('SomeHelper', SomeMockHelper);
 
       expect(componentUtils._utilityClasses['SomeHelper']).not.toBeUndefined();
-      expect(componentUtils._utilityClasses['SomeHelper']).toEqual(
+      expect(componentUtils._utilityClasses['SomeHelper']).toStrictEqual(
         SomeMockHelper
       );
     });
@@ -32,10 +32,12 @@ describe('componentUtils', () => {
         SomeHelper
       });
 
-      expect(componentUtils._utilityClasses['MockHelper']).toEqual(
+      expect(componentUtils._utilityClasses['MockHelper']).toStrictEqual(
         SomeMockHelper
       );
-      expect(componentUtils._utilityClasses['SomeHelper']).toEqual(SomeHelper);
+      expect(componentUtils._utilityClasses['SomeHelper']).toStrictEqual(
+        SomeHelper
+      );
     });
   });
 

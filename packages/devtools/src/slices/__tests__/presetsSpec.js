@@ -27,7 +27,7 @@ describe('reducer', () => {
   });
 
   it('should return the initial state', () => {
-    expect(reducer(undefined, {})).toEqual(presetsInitialState);
+    expect(reducer(undefined, {})).toStrictEqual(presetsInitialState);
   });
 
   it('should set presets to state', () => {
@@ -46,7 +46,7 @@ describe('reducer', () => {
           selectedPresetId: '1'
         }
       })
-    ).toEqual({
+    ).toStrictEqual({
       presets: {
         1: {
           id: '1',
@@ -68,7 +68,7 @@ describe('reducer', () => {
           name: 'name'
         }
       })
-    ).toEqual({
+    ).toStrictEqual({
       ...curState,
       presets: {
         ...curState.presets,
@@ -89,7 +89,7 @@ describe('reducer', () => {
           name: 'newName'
         }
       })
-    ).toEqual({
+    ).toStrictEqual({
       ...curState,
       presets: {
         0: {
@@ -108,7 +108,7 @@ describe('reducer', () => {
         type: 'presets/deletePreset',
         payload: '0'
       })
-    ).toEqual({
+    ).toStrictEqual({
       ...curState,
       presets: {}
     });
@@ -125,7 +125,7 @@ describe('reducer', () => {
         type: 'presets/deletePreset',
         payload: '0'
       })
-    ).toEqual({
+    ).toStrictEqual({
       selectedPresetId: '1',
       presets: {
         1: {
@@ -145,7 +145,7 @@ describe('reducer', () => {
         type: 'presets/copyPreset',
         payload: '0'
       })
-    ).toEqual({
+    ).toStrictEqual({
       ...curState,
       presets: {
         ...curState.presets,
@@ -166,7 +166,7 @@ describe('reducer', () => {
         type: 'presets/selectPreset',
         payload: '0'
       })
-    ).toEqual({
+    ).toStrictEqual({
       ...curState,
       presets: {
         ...curState.presets,
@@ -192,7 +192,7 @@ describe('reducer', () => {
         type: 'presets/selectPreset',
         payload: '0'
       })
-    ).toEqual({
+    ).toStrictEqual({
       ...curState,
       presets: {
         ...curState.presets,
@@ -219,7 +219,7 @@ describe('reducer', () => {
           name: 'hookName'
         }
       })
-    ).toEqual({
+    ).toStrictEqual({
       ...curState,
       presets: {
         ...curState.presets,
@@ -248,7 +248,7 @@ describe('reducer', () => {
         type: 'presets/toggleHook',
         payload: '0'
       })
-    ).toEqual({
+    ).toStrictEqual({
       ...curState,
       presets: {
         ...curState.presets,
@@ -276,7 +276,7 @@ describe('reducer', () => {
         type: 'presets/deleteHook',
         payload: '0'
       })
-    ).toEqual({
+    ).toStrictEqual({
       ...curState,
       presets: {
         ...curState.presets,
@@ -300,7 +300,7 @@ describe('reducer', () => {
         type: 'presets/openHook',
         payload: '0'
       })
-    ).toEqual({
+    ).toStrictEqual({
       ...curState,
       presets: {
         ...curState.presets,
@@ -331,7 +331,7 @@ describe('reducer', () => {
         type: 'presets/openHook',
         payload: '0'
       })
-    ).toEqual({
+    ).toStrictEqual({
       ...curState,
       presets: {
         ...curState.presets,
@@ -358,7 +358,7 @@ describe('actions', () => {
         presets: 'myPresets',
         selectedPresetId: '0'
       })
-    ).toEqual({
+    ).toStrictEqual({
       type: 'presets/setPresets',
       payload: {
         presets: 'myPresets',
@@ -373,7 +373,7 @@ describe('actions', () => {
         id: '0',
         name: 'preset'
       })
-    ).toEqual({
+    ).toStrictEqual({
       type: 'presets/addPreset',
       payload: {
         id: '0',
@@ -388,7 +388,7 @@ describe('actions', () => {
         id: '0',
         name: 'newPresetName'
       })
-    ).toEqual({
+    ).toStrictEqual({
       type: 'presets/renamePreset',
       payload: {
         id: '0',
@@ -398,21 +398,21 @@ describe('actions', () => {
   });
 
   it('should create action to delete preset', () => {
-    expect(actions.deletePreset('0')).toEqual({
+    expect(actions.deletePreset('0')).toStrictEqual({
       type: 'presets/deletePreset',
       payload: '0'
     });
   });
 
   it('should create action to copy preset', () => {
-    expect(actions.copyPreset('0')).toEqual({
+    expect(actions.copyPreset('0')).toStrictEqual({
       type: 'presets/copyPreset',
       payload: '0'
     });
   });
 
   it('should create action to select preset', () => {
-    expect(actions.selectPreset('0')).toEqual({
+    expect(actions.selectPreset('0')).toStrictEqual({
       type: 'presets/selectPreset',
       payload: '0'
     });
@@ -424,7 +424,7 @@ describe('actions', () => {
         id: '0',
         name: 'hookName'
       })
-    ).toEqual({
+    ).toStrictEqual({
       type: 'presets/addHook',
       payload: {
         id: '0',
@@ -434,21 +434,21 @@ describe('actions', () => {
   });
 
   it('should create action to toggle hook', () => {
-    expect(actions.toggleHook('0')).toEqual({
+    expect(actions.toggleHook('0')).toStrictEqual({
       type: 'presets/toggleHook',
       payload: '0'
     });
   });
 
   it('should create action to delete hook', () => {
-    expect(actions.deleteHook('0')).toEqual({
+    expect(actions.deleteHook('0')).toStrictEqual({
       type: 'presets/deleteHook',
       payload: '0'
     });
   });
 
   it('should create action to open hook', () => {
-    expect(actions.openHook('0')).toEqual({
+    expect(actions.openHook('0')).toStrictEqual({
       type: 'presets/openHook',
       payload: '0'
     });
@@ -471,7 +471,7 @@ describe('selectors', () => {
         }
       });
 
-      expect(result).toEqual(['0', '1']);
+      expect(result).toStrictEqual(['0', '1']);
     });
 
     it('should return null for empty state', () => {
@@ -492,7 +492,7 @@ describe('selectors', () => {
         }
       });
 
-      expect(result).toEqual({
+      expect(result).toStrictEqual({
         0: {},
         1: {}
       });

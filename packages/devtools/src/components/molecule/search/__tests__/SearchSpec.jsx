@@ -2,7 +2,7 @@ import React from 'react';
 import { shallow } from 'enzyme';
 import Search from '../Search';
 
-describe('search molecule', () => {
+describe('Search molecule', () => {
   const props = {
     onSelect: jest.fn(),
     clearEntries: jest.fn(),
@@ -38,7 +38,7 @@ describe('search molecule', () => {
       .simulate('change', { target: { value: 'test' } });
 
     expect(instance.onChange.mock.calls).toHaveLength(1);
-    expect(instance.onChange.mock.calls[0][0]).toEqual({
+    expect(instance.onChange.mock.calls[0][0]).toStrictEqual({
       target: { value: 'test' }
     });
 
@@ -65,10 +65,12 @@ describe('search molecule', () => {
       });
 
       expect(instance.setState.mock.calls).toHaveLength(1);
-      expect(instance.setState.mock.calls[0][0]).toEqual({
+      expect(instance.setState.mock.calls[0][0]).toStrictEqual({
         query: 'test'
       });
-      expect(instance.setState.mock.calls[0][1]).toEqual(instance._setQuery);
+      expect(instance.setState.mock.calls[0][1]).toStrictEqual(
+        instance._setQuery
+      );
     });
   });
 
@@ -82,10 +84,10 @@ describe('search molecule', () => {
       });
 
       expect(instance.props.setSearchQuery.mock.calls).toHaveLength(1);
-      expect(instance.props.setSearchQuery.mock.calls[0][0]).toEqual('');
+      expect(instance.props.setSearchQuery.mock.calls[0][0]).toBe('');
 
       expect(instance.setState.mock.calls).toHaveLength(1);
-      expect(instance.setState.mock.calls[0][0]).toEqual({
+      expect(instance.setState.mock.calls[0][0]).toStrictEqual({
         query: ''
       });
     });

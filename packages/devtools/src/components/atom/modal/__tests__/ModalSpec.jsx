@@ -2,7 +2,7 @@ import React from 'react';
 import { shallow } from 'enzyme';
 import Modal, { BODY_STYLES, HIDE_ANIMATION_DURATION } from '../Modal';
 
-describe('modal atom', () => {
+describe('Modal atom', () => {
   let wrapper, instance;
   const props = {
     opened: false,
@@ -73,7 +73,9 @@ describe('modal atom', () => {
       instance.onKeyDown({ keyCode: 27 });
 
       expect(instance.props.onClose.mock.calls).toHaveLength(1);
-      expect(instance.props.onClose.mock.calls[0][0]).toEqual({ keyCode: 27 });
+      expect(instance.props.onClose.mock.calls[0][0]).toStrictEqual({
+        keyCode: 27
+      });
       instance.props.onClose.mockClear();
     });
 
@@ -150,8 +152,12 @@ describe('modal atom', () => {
       expect(setTimeout.mock.calls[0][1]).toBe(HIDE_ANIMATION_DURATION);
 
       expect(instance.setState.mock.calls).toHaveLength(2);
-      expect(instance.setState.mock.calls[0][0]).toEqual({ closing: true });
-      expect(instance.setState.mock.calls[1][0]).toEqual({ closing: false });
+      expect(instance.setState.mock.calls[0][0]).toStrictEqual({
+        closing: true
+      });
+      expect(instance.setState.mock.calls[1][0]).toStrictEqual({
+        closing: false
+      });
     });
   });
 });

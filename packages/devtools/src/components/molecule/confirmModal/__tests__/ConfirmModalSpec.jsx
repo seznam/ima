@@ -2,7 +2,7 @@ import React from 'react';
 import { shallow } from 'enzyme';
 import ConfirmModal from '../ConfirmModal';
 
-describe('confirmModal molecule', () => {
+describe('ConfirmModal molecule', () => {
   let wrapper, instance;
 
   const event = {

@@ -87,7 +87,7 @@ describe('ima.core.page.renderer.ServerPageRenderer', () => {
     pageRenderer._wrapEachKeyToPromise(params);
 
     expect(Promise.resolve).toHaveBeenCalledWith(param1);
-    expect(Promise.resolve.calls.count()).toEqual(1);
+    expect(Promise.resolve.calls.count()).toBe(1);
   });
 
   describe('update method', () => {
@@ -95,7 +95,7 @@ describe('ima.core.page.renderer.ServerPageRenderer', () => {
       spyOn(pageRenderer, 'mount').and.stub();
 
       pageRenderer.update(controller, params).catch(error => {
-        expect(error instanceof GenericError).toEqual(true);
+        expect(error instanceof GenericError).toBeTruthy();
         done();
       });
     });
@@ -120,7 +120,7 @@ describe('ima.core.page.renderer.ServerPageRenderer', () => {
       pageRenderer
         .mount(controller, view, loadedPageState, routeOptions)
         .then(page => {
-          expect(page).toEqual(responseParams);
+          expect(page).toStrictEqual(responseParams);
           done();
         });
     });
@@ -154,7 +154,7 @@ describe('ima.core.page.renderer.ServerPageRenderer', () => {
 
       expect(
         pageRenderer._renderPage(controller, view, fetchedResource)
-      ).toEqual(responseParams);
+      ).toStrictEqual(responseParams);
     });
 
     describe('render new page', () => {
@@ -200,7 +200,7 @@ describe('ima.core.page.renderer.ServerPageRenderer', () => {
       });
 
       it('should return response params', () => {
-        expect(pageRenderResponse).toEqual(responseParams);
+        expect(pageRenderResponse).toStrictEqual(responseParams);
       });
     });
   });
@@ -274,7 +274,7 @@ describe('ima.core.page.renderer.ServerPageRenderer', () => {
     });
 
     it('should return page content', () => {
-      expect(pageContent).toEqual('<!doctype html>\n' + appMarkup);
+      expect(pageContent).toBe('<!doctype html>\n' + appMarkup);
     });
   });
 });

@@ -1,6 +1,6 @@
 import State from '../state';
 
-describe('state constant', () => {
+describe('State constant', () => {
   it('should match snapshot', () => {
     expect(State).toMatchSnapshot();
   });

@@ -91,7 +91,7 @@ describe('ima.core.http.HttpProxy', () => {
           await proxy.request(method, API_URL, DATA, OPTIONS);
           done.fail();
         } catch (error) {
-          expect(error.getParams().status).toEqual(StatusCode.TIMEOUT);
+          expect(error.getParams().status).toBe(StatusCode.TIMEOUT);
           done();
         }
       });
@@ -107,7 +107,7 @@ describe('ima.core.http.HttpProxy', () => {
           await proxy.request(method, API_URL, DATA, OPTIONS);
           done.fail();
         } catch (error) {
-          expect(error.getParams().status).toEqual(StatusCode.TIMEOUT);
+          expect(error.getParams().status).toBe(StatusCode.TIMEOUT);
           done();
         }
       });
@@ -122,7 +122,7 @@ describe('ima.core.http.HttpProxy', () => {
           await proxy.request(method, API_URL, DATA, OPTIONS);
           done.fail();
         } catch (error) {
-          expect(error.getParams().status).toEqual(StatusCode.FORBIDDEN);
+          expect(error.getParams().status).toBe(StatusCode.FORBIDDEN);
           done();
         }
       });
@@ -137,7 +137,7 @@ describe('ima.core.http.HttpProxy', () => {
           await proxy.request(method, API_URL, DATA, OPTIONS);
           done.fail();
         } catch (error) {
-          expect(error.getParams().status).toEqual(StatusCode.NOT_FOUND);
+          expect(error.getParams().status).toBe(StatusCode.NOT_FOUND);
           done();
         }
       });
@@ -152,7 +152,7 @@ describe('ima.core.http.HttpProxy', () => {
           await proxy.request(method, API_URL, DATA, OPTIONS);
           done.fail();
         } catch (error) {
-          expect(error.getParams().status).toEqual(StatusCode.SERVER_ERROR);
+          expect(error.getParams().status).toBe(StatusCode.SERVER_ERROR);
           done();
         }
       });
@@ -167,7 +167,7 @@ describe('ima.core.http.HttpProxy', () => {
           await proxy.request(method, API_URL, DATA, OPTIONS);
           done.fail();
         } catch (error) {
-          expect(error.getParams().status).toEqual(StatusCode.SERVER_ERROR);
+          expect(error.getParams().status).toBe(StatusCode.SERVER_ERROR);
           done();
         }
       });
@@ -212,7 +212,7 @@ describe('ima.core.http.HttpProxy', () => {
           await proxy.request(method, API_URL, data, options);
 
           expect(requestInit.body).toBeDefined();
-          expect(typeof requestInit.body).toEqual('string');
+          expect(typeof requestInit.body).toBe('string');
         });
 
         it(`should convert body to FormData/Object if header 'Content-Type' is set to 'multipart/form-data'`, async () => {
@@ -226,7 +226,7 @@ describe('ima.core.http.HttpProxy', () => {
           await proxy.request(method, API_URL, data, options);
 
           expect(requestInit.body).toBeDefined();
-          expect(typeof requestInit.body).toEqual('object');
+          expect(typeof requestInit.body).toBe('object');
         });
       }
 
@@ -243,8 +243,8 @@ describe('ima.core.http.HttpProxy', () => {
       const testObject = { testKey: 'testValue', testKey2: 'testValue2' };
       const queryString = proxy._convertObjectToQueryString(testObject);
 
-      expect(typeof queryString).toEqual('string');
-      expect(queryString).toEqual('testKey=testValue&testKey2=testValue2');
+      expect(typeof queryString).toBe('string');
+      expect(queryString).toBe('testKey=testValue&testKey2=testValue2');
     });
 
     it('should properly escape special characters', () => {
@@ -253,19 +253,19 @@ describe('ima.core.http.HttpProxy', () => {
         testKey2: 'test#test$test^test{test}'
       };
       const queryString = proxy._convertObjectToQueryString(testObject);
-      expect(typeof queryString).toEqual('string');
+      expect(typeof queryString).toBe('string');
 
       // testKey
-      expect(queryString.substr(12, 3)).toEqual('%20');
-      expect(queryString.substr(19, 3)).toEqual('%2F');
-      expect(queryString.substr(26, 3)).toEqual('%7C');
-      expect(queryString.substr(33, 3)).toEqual('%3F');
+      expect(queryString.substr(12, 3)).toBe('%20');
+      expect(queryString.substr(19, 3)).toBe('%2F');
+      expect(queryString.substr(26, 3)).toBe('%7C');
+      expect(queryString.substr(33, 3)).toBe('%3F');
 
       // testKey2
-      expect(queryString.substr(54, 3)).toEqual('%23');
-      expect(queryString.substr(61, 3)).toEqual('%24');
-      expect(queryString.substr(68, 3)).toEqual('%5E');
-      expect(queryString.substr(75, 3)).toEqual('%7B');
+      expect(queryString.substr(54, 3)).toBe('%23');
+      expect(queryString.substr(61, 3)).toBe('%24');
+      expect(queryString.substr(68, 3)).toBe('%5E');
+      expect(queryString.substr(75, 3)).toBe('%7B');
     });
   });
 
@@ -275,7 +275,7 @@ describe('ima.core.http.HttpProxy', () => {
       const convertedObject = proxy._convertObjectToFormData(testObject);
 
       expect(convertedObject).toBeDefined();
-      expect(typeof convertedObject).toEqual('object');
+      expect(typeof convertedObject).toBe('object');
     });
   });
 

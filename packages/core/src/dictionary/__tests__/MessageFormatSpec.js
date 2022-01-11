@@ -23,15 +23,13 @@ describe('ima.core.dictionary.MessageFormatDictionary', () => {
   });
 
   it('should be return current language', () => {
-    expect(dictionary.getLanguage()).toEqual(config.$Language);
+    expect(dictionary.getLanguage()).toBe(config.$Language);
   });
 
   describe('get method', () => {
     it('should be return translated text', () => {
-      expect(dictionary.get('home.title')).toEqual(
-        config.dictionary.home.title()
-      );
-      expect(dictionary.get('home.message')).toEqual(
+      expect(dictionary.get('home.title')).toBe(config.dictionary.home.title());
+      expect(dictionary.get('home.message')).toBe(
         config.dictionary.home.message()
       );
     });

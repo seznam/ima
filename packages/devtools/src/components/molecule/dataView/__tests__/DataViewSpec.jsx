@@ -3,7 +3,7 @@ import { shallow } from 'enzyme';
 import DataView, { TAB_SIZE } from '../DataView';
 import JsonView from 'components/atom/jsonView/JsonView';
 
-describe('dataView molecule', () => {
+describe('DataView molecule', () => {
   let wrapper, instance;
   const props = {
     entry: {
@@ -131,7 +131,7 @@ describe('dataView molecule', () => {
       instance.onKeyDown({ keyCode: 37 });
 
       expect(instance.setState.mock.calls).toHaveLength(1);
-      expect(instance.setState.mock.calls[0][0]).toEqual({ tabIndex: 0 });
+      expect(instance.setState.mock.calls[0][0]).toStrictEqual({ tabIndex: 0 });
     });
 
     it('should select next tab to the right if right arrow was clicked', () => {
@@ -139,7 +139,7 @@ describe('dataView molecule', () => {
       instance.onKeyDown({ keyCode: 39 });
 
       expect(instance.setState.mock.calls).toHaveLength(1);
-      expect(instance.setState.mock.calls[0][0]).toEqual({ tabIndex: 2 });
+      expect(instance.setState.mock.calls[0][0]).toStrictEqual({ tabIndex: 2 });
     });
 
     it('should not do anything if leftmost tab is already selected on left arrow click', () => {
@@ -185,8 +185,8 @@ describe('dataView molecule', () => {
 
       let [args, payload] = instance._getState();
 
-      expect(args).toEqual([1]);
-      expect(payload).toEqual({
+      expect(args).toStrictEqual([1]);
+      expect(payload).toStrictEqual({
         id: 2
       });
     });

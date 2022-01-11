@@ -6,7 +6,7 @@ import * as settings from 'services/settings';
 jest.mock('easy-uid');
 import uid from 'easy-uid';
 
-describe('options template', () => {
+describe('Options template', () => {
   let wrapper, instance;
 
   const event = {
@@ -89,7 +89,7 @@ describe('options template', () => {
 
       expect(settings.getSettings.mock.calls).toHaveLength(1);
       expect(instance.props.setPresets.mock.calls).toHaveLength(1);
-      expect(instance.props.setPresets.mock.calls[0][0]).toEqual({
+      expect(instance.props.setPresets.mock.calls[0][0]).toStrictEqual({
         presets: 'settingsPresets',
         selectedPresetId: '0'
       });
@@ -120,7 +120,7 @@ describe('options template', () => {
 
       expect(event.preventDefault.mock.calls).toHaveLength(1);
       expect(instance.setState.mock.calls).toHaveLength(1);
-      expect(instance.setState.mock.calls[0][0]).toEqual({
+      expect(instance.setState.mock.calls[0][0]).toStrictEqual({
         modalOpened: true
       });
     });
@@ -133,7 +133,7 @@ describe('options template', () => {
       instance.onModalClose();
 
       expect(instance.setState.mock.calls).toHaveLength(1);
-      expect(instance.setState.mock.calls[0][0]).toEqual({
+      expect(instance.setState.mock.calls[0][0]).toStrictEqual({
         modalOpened: false
       });
     });
@@ -157,7 +157,7 @@ describe('options template', () => {
       instance.onSubmit(event);
 
       expect(settings.setSettings.mock.calls).toHaveLength(1);
-      expect(settings.setSettings.mock.calls[0][0]).toEqual({
+      expect(settings.setSettings.mock.calls[0][0]).toStrictEqual({
         presets: {
           ...props.presets,
           0: {
@@ -188,7 +188,7 @@ describe('options template', () => {
     it('should create blank hook object with generated ID', () => {
       uid.mockReturnValue('2fghzj-123456');
 
-      expect(instance._createHook()).toEqual({
+      expect(instance._createHook()).toStrictEqual({
         id: '2fghzj-123456',
         enabled: false,
         opened: false,

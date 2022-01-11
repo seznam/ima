@@ -128,7 +128,7 @@ describe('ima.core.page.manager.AbstractPageManager', () => {
         .manage(route, options, params)
         .then(() => {
           expect(pageManager._runPreManageHandlers).toHaveBeenCalled();
-          expect(pageManager._managedPage.params).toEqual(params);
+          expect(pageManager._managedPage.params).toStrictEqual(params);
           expect(pageManager._updatePageSource).toHaveBeenCalled();
           expect(pageManager._runPostManageHandlers).toHaveBeenCalled();
           done();
@@ -400,7 +400,7 @@ describe('ima.core.page.manager.AbstractPageManager', () => {
 
       let result = await pageManager._getLoadedExtensionsState(controllerState);
 
-      expect(result).toEqual({
+      expect(result).toStrictEqual({
         controller: 'controller',
         share: 'controller',
         extension: 'extension'
@@ -469,7 +469,7 @@ describe('ima.core.page.manager.AbstractPageManager', () => {
 
       expect(pageManager._activateController).toHaveBeenCalled();
       expect(pageManager._activateExtensions).toHaveBeenCalled();
-      expect(pageManager._managedPage.state.activated).toEqual(true);
+      expect(pageManager._managedPage.state.activated).toBeTruthy();
     });
 
     it('should not call method activate more times', async () => {
@@ -594,7 +594,7 @@ describe('ima.core.page.manager.AbstractPageManager', () => {
         controllerState
       );
 
-      expect(result).toEqual({
+      expect(result).toStrictEqual({
         controller: 'controller',
         share: 'controller',
         extension: 'extension'
@@ -714,32 +714,32 @@ describe('ima.core.page.manager.AbstractPageManager', () => {
 
       spyOn(newOptions, 'onlyUpdate').and.callThrough();
 
-      expect(pageManager._hasOnlyUpdate(Controller, View, newOptions)).toEqual(
-        true
-      );
+      expect(
+        pageManager._hasOnlyUpdate(Controller, View, newOptions)
+      ).toBeTruthy();
       expect(newOptions.onlyUpdate).toHaveBeenCalledWith(Controller, View);
     });
 
     it('should return true for option onlyUpdate set to true and for same controller and view', () => {
       let newOptions = Object.assign({}, options, { onlyUpdate: true });
 
-      expect(pageManager._hasOnlyUpdate(Controller, View, newOptions)).toEqual(
-        true
-      );
+      expect(
+        pageManager._hasOnlyUpdate(Controller, View, newOptions)
+      ).toBeTruthy();
     });
 
     it('should return false for option onlyUpdate set to true and for different controller and view', () => {
       let newOptions = Object.assign({}, options, { onlyUpdate: true });
       pageManager._managedPage.controller = null;
 
-      expect(pageManager._hasOnlyUpdate(Controller, View, newOptions)).toEqual(
-        false
-      );
+      expect(
+        pageManager._hasOnlyUpdate(Controller, View, newOptions)
+      ).toBeFalsy();
     });
   });
 
   describe('_clearComponentState method', () => {
-    it('should call page renderer unmount method if route options documentView and managedRootView are not same with last one renderred', () => {
+    it('should call page renderer unmount method if route options documentView and managedRootView are not same with last one rendered', () => {
       spyOn(pageRenderer, 'unmount').and.stub();
 
       pageManager._clearComponentState({});
