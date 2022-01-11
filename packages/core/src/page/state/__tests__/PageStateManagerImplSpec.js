@@ -20,7 +20,7 @@ describe('ima.core.page.state.PageStateManagerImpl', () => {
   it('should clear history', () => {
     stateManager.clear();
 
-    expect(stateManager._states.length).toEqual(0);
+    expect(stateManager._states).toHaveLength(0);
     expect(stateManager._cursor).toEqual(-1);
   });
 

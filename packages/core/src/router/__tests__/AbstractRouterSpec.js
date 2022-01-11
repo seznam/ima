@@ -783,10 +783,10 @@ describe('ima.core.router.AbstractRouter', () => {
 
   describe('_runMiddlewares method', () => {
     it('should not break when middlewares are not a valid array', async () => {
-      expect(await router._runMiddlewares([])).toBe(undefined);
-      expect(await router._runMiddlewares()).toBe(undefined);
-      expect(await router._runMiddlewares(null)).toBe(undefined);
-      expect(await router._runMiddlewares({})).toBe(undefined);
+      expect(await router._runMiddlewares([])).toBeUndefined();
+      expect(await router._runMiddlewares()).toBeUndefined();
+      expect(await router._runMiddlewares(null)).toBeUndefined();
+      expect(await router._runMiddlewares({})).toBeUndefined();
     });
 
     it('should run middlewares in sequence', async () => {

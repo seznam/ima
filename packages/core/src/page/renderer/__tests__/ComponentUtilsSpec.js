@@ -7,7 +7,7 @@ class SomeMockHelper {}
 
 class SomeHelper {}
 
-describe('ComponentUtils', () => {
+describe('componentUtils', () => {
   let componentUtils = null;
 
   const oc = toMockedInstance(ObjectContainer);

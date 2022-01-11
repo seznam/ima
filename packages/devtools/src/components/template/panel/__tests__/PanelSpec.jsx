@@ -4,7 +4,7 @@ import * as utils from 'services/utils';
 import Actions from 'constants/actions';
 import Panel from '../Panel';
 
-describe('Panel template', () => {
+describe('panel template', () => {
   const props = {
     alive: jest.fn(),
     dead: jest.fn(),
@@ -36,21 +36,21 @@ describe('Panel template', () => {
     }
   };
 
-  utils.getCurrentTab = jest.fn().mockResolvedValue({
+  jest.spyOn(utils, 'getCurrentTab').mockImplementation().mockResolvedValue({
     tabId: 123
   });
 
   beforeEach(() => {
     wrapper = shallow(<Panel {...props} />);
     instance = wrapper.instance();
-    instance.setState = jest.fn();
+    jest.spyOn(instance, 'setState').mockImplementation();
   });
 
   it('should match snapshot with loader', () => {
     wrapper.setProps({ isLoading: true });
 
     expect(wrapper).toMatchSnapshot();
-    expect(wrapper.find('Loader').length).toBe(1);
+    expect(wrapper.find('Loader')).toHaveLength(1);
   });
 
   it('should match snapshot with error message', () => {
@@ -61,14 +61,14 @@ describe('Panel template', () => {
     });
 
     expect(wrapper).toMatchSnapshot();
-    expect(wrapper.find('h4').length).toBe(1);
+    expect(wrapper.find('h4')).toHaveLength(1);
   });
 
   it('should match snapshot with SplitPane', () => {
     wrapper.setProps({ isLoading: false });
 
     expect(wrapper).toMatchSnapshot();
-    expect(wrapper.find('SplitPane').length).toBe(1);
+    expect(wrapper.find('SplitPane')).toHaveLength(1);
   });
 
   describe('defaultProps', () => {
@@ -86,16 +86,16 @@ describe('Panel template', () => {
         name: 'panel:123'
       });
 
-      expect(instance.port.onMessage.addListener.mock.calls.length).toBe(1);
+      expect(instance.port.onMessage.addListener.mock.calls).toHaveLength(1);
       expect(instance.port.onMessage.addListener.mock.calls[0][0]).toBe(
         instance.onMessage
       );
 
-      expect(instance.port.onDisconnect.addListener.mock.calls.length).toBe(1);
+      expect(instance.port.onDisconnect.addListener.mock.calls).toHaveLength(1);
 
       disconnectCallback();
 
-      expect(instance.port.onMessage.removeListener.mock.calls.length).toBe(1);
+      expect(instance.port.onMessage.removeListener.mock.calls).toHaveLength(1);
       expect(instance.port.onMessage.removeListener.mock.calls[0][0]).toBe(
         instance.onMessage
       );
@@ -104,13 +104,13 @@ describe('Panel template', () => {
 
   describe('componentWillUnmount', () => {
     it('should disconnect port and remove listeners', () => {
-      window.removeEventListener = jest.fn();
-      instance.port.disconnect = jest.fn();
+      jest.spyOn(window, 'removeEventListener').mockImplementation();
+      jest.spyOn(instance.port, 'disconnect').mockImplementation();
 
       instance.componentWillUnmount();
 
-      expect(instance.port.disconnect.mock.calls.length).toBe(1);
-      expect(window.removeEventListener.mock.calls.length).toBe(1);
+      expect(instance.port.disconnect.mock.calls).toHaveLength(1);
+      expect(window.removeEventListener.mock.calls).toHaveLength(1);
       expect(window.removeEventListener.mock.calls[0][0]).toBe('keydown');
       expect(window.removeEventListener.mock.calls[0][1]).toBe(
         instance.onKeyDown
@@ -122,13 +122,13 @@ describe('Panel template', () => {
     it('should call selectPrevious on keyUp', () => {
       instance.onKeyDown({ keyCode: 38 });
 
-      expect(instance.props.selectPrevious.mock.calls.length).toBe(1);
+      expect(instance.props.selectPrevious.mock.calls).toHaveLength(1);
     });
 
     it('should call selectNext on keyDown', () => {
       instance.onKeyDown({ keyCode: 40 });
 
-      expect(instance.props.selectNext.mock.calls.length).toBe(1);
+      expect(instance.props.selectNext.mock.calls).toHaveLength(1);
     });
   });
 
@@ -140,40 +140,40 @@ describe('Panel template', () => {
     it('should call alive on alive action', () => {
       instance.onMessage({ action: Actions.ALIVE });
 
-      expect(instance.props.alive.mock.calls.length).toBe(1);
+      expect(instance.props.alive.mock.calls).toHaveLength(1);
     });
 
     it('should call reload and clear entries on reloading action', () => {
       instance.onMessage({ action: Actions.RELOADING });
 
-      expect(instance.props.reload.mock.calls.length).toBe(1);
-      expect(instance.props.clearEntries.mock.calls.length).toBe(1);
+      expect(instance.props.reload.mock.calls).toHaveLength(1);
+      expect(instance.props.clearEntries.mock.calls).toHaveLength(1);
     });
 
     it('should call unsupported on unsupported action', () => {
       instance.onMessage({ action: Actions.UNSUPPORTED });
 
-      expect(instance.props.unsupported.mock.calls.length).toBe(1);
+      expect(instance.props.unsupported.mock.calls).toHaveLength(1);
     });
 
     it('should call dead and clear entries on dead action', () => {
       instance.onMessage({ action: Actions.DEAD });
 
-      expect(instance.props.dead.mock.calls.length).toBe(1);
-      expect(instance.props.clearEntries.mock.calls.length).toBe(1);
+      expect(instance.props.dead.mock.calls).toHaveLength(1);
+      expect(instance.props.clearEntries.mock.calls).toHaveLength(1);
     });
 
     it('should cache and add message on message action', () => {
-      instance.cachedEntries.push = jest.fn();
-      instance._batchAddEntries = jest.fn();
+      jest.spyOn(instance.cachedEntries, 'push').mockImplementation();
+      jest.spyOn(instance, '_batchAddEntries').mockImplementation();
 
       instance.onMessage({ action: Actions.MESSAGE });
 
-      expect(instance.cachedEntries.push.mock.calls.length).toBe(1);
+      expect(instance.cachedEntries.push.mock.calls).toHaveLength(1);
       expect(instance.cachedEntries.push.mock.calls[0][0]).toEqual({
         action: Actions.MESSAGE
       });
-      expect(instance._batchAddEntries.mock.calls.length).toBe(1);
+      expect(instance._batchAddEntries.mock.calls).toHaveLength(1);
     });
   });
 });

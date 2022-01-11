@@ -15,9 +15,9 @@ export default class ErrorView extends AbstractComponent {
     let stack = error.stack || '';
 
     return (
-      <div className="l-error">
+      <div className='l-error'>
         <h1>500 &ndash; Error</h1>
-        <div className="message">{message}</div>
+        <div className='message'>{message}</div>
         <pre>{stack}</pre>
       </div>
     );

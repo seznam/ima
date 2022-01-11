@@ -1,3 +1,4 @@
+/* eslint-disable jest/no-conditional-expect */
 import HttpProxy from '../HttpProxy';
 import StatusCode from '../StatusCode';
 import UrlTransformer from '../UrlTransformer';
@@ -54,7 +55,9 @@ describe('ima.core.http.HttpProxy', () => {
     describe(`method ${method}`, () => {
       it('should return promise with response body', async done => {
         try {
-          await proxy.request(method, API_URL, DATA, OPTIONS);
+          expect(
+            await proxy.request(method, API_URL, DATA, OPTIONS)
+          ).toBeDefined();
           done();
         } catch (error) {
           done.fail(error);
@@ -182,6 +185,7 @@ describe('ima.core.http.HttpProxy', () => {
       it('should not set any body to a GET/HEAD request', async () => {
         await proxy.request(method, API_URL, DATA, OPTIONS);
 
+        // eslint-disable-next-line jest/no-if
         if (['get', 'head'].includes(method) === true) {
           expect(requestInit.body).not.toBeDefined();
         } else {
@@ -286,7 +290,7 @@ describe('ima.core.http.HttpProxy', () => {
       ).toBe('application/xml');
     });
 
-    it('should return null for invalid custom content types ', () => {
+    it('should return null for invalid custom content types', () => {
       expect(
         proxy._getContentType('GET', null, {
           headers: { 'Content-Type': null }

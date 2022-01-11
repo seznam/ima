@@ -53,7 +53,8 @@ export default class DataView extends React.PureComponent {
     return (
       <Tabs
         selectedIndex={tabIndex}
-        onSelect={tabIndex => this.setState({ tabIndex })}>
+        onSelect={tabIndex => this.setState({ tabIndex })}
+      >
         <TabList>
           <Tab>Args</Tab>
           <Tab>Payload</Tab>

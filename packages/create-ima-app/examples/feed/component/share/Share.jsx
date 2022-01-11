@@ -20,17 +20,18 @@ export default class Share extends AbstractComponent {
       <div className={'share' + active}>
         <a
           href={postLink}
-          className="toggle"
-          onClick={event => this.onToggle(event)}>
+          className='toggle'
+          onClick={event => this.onToggle(event)}
+        >
           {label}
         </a>
-        <div className="sharing-wrapper">
-          <div className="sharing-container">
-            <div className="arrow" />
-            <div className="arrow-overlay" />
-            <div className="sharing-options">
+        <div className='sharing-wrapper'>
+          <div className='sharing-container'>
+            <div className='arrow' />
+            <div className='arrow-overlay' />
+            <div className='sharing-options'>
               <input
-                type="text"
+                type='text'
                 value={postLink}
                 readOnly={true}
                 ref={input => (this.input = input)}
@@ -40,33 +41,34 @@ export default class Share extends AbstractComponent {
               <a
                 href={postLink}
                 onClick={event => this.onShareOnFacebook(event)}
-                className="facebook">
+                className='facebook'
+              >
                 <img
                   src={
                     this.utils.$Router.getBaseUrl() +
                     this.utils.$Settings.$Static.image +
                     '/share/facebook.png'
                   }
-                  alt="Facebook"
+                  alt='Facebook'
                 />
                 Facebook
               </a>
 
               <TweetButton
-                label="Twitter"
+                label='Twitter'
                 url={postLink}
                 text={this.getPlainTextItemContent(item)}
                 hashTags={category.getHashTag()}
               />
 
-              <a href={this.getMailShareLink(item)} className="email">
+              <a href={this.getMailShareLink(item)} className='email'>
                 <img
                   src={
                     this.utils.$Router.getBaseUrl() +
                     this.utils.$Settings.$Static.image +
                     '/share/email.png'
                   }
-                  alt="Email"
+                  alt='Email'
                 />
                 Email
               </a>

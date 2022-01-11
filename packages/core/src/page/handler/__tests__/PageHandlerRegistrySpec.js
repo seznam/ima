@@ -26,16 +26,16 @@ describe('ima.core.page.handler.PageHandlerRegistry', () => {
   });
 
   describe('handlePreManagedState() method', () => {
-    it('should call subsequent pre-manage handlers', () => {
-      return registry.handlePreManagedState(null, null, null).then(() => {
+    it('should call subsequent pre-manage handlers', async () => {
+      await registry.handlePreManagedState(null, null, null).then(() => {
         expect(pageManagerHandler.handlePreManagedState).toHaveBeenCalled();
       });
     });
   });
 
   describe('handlePostManagedState() method', () => {
-    it('should call subsequent post-manage handlers', () => {
-      return registry.handlePostManagedState(null, null, null).then(() => {
+    it('should call subsequent post-manage handlers', async () => {
+      await registry.handlePostManagedState(null, null, null).then(() => {
         expect(pageManagerHandler.handlePostManagedState).toHaveBeenCalled();
       });
     });

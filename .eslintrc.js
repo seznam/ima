@@ -3,22 +3,12 @@ module.exports = {
   extends: [
     'eslint:recommended',
     'plugin:react/recommended',
-    'prettier',
-    'prettier/react'
+    'plugin:jest/all',
+    'plugin:prettier/recommended'
   ],
-  parser: 'babel-eslint',
   rules: {
-    'prettier/prettier': [
-      'error',
-      {
-        singleQuote: true,
-        semi: true,
-        jsxBracketSameLine: true,
-        trailingComma: 'none',
-        arrowParens: 'avoid'
-      }
-    ],
-
+    // Eslint overrides
+    'no-import-assign': 0,
     'no-console': [
       'error',
       {
@@ -26,39 +16,80 @@ module.exports = {
       }
     ],
 
+    // Prettier
+    'prettier/prettier': [
+      'error',
+      {
+        singleQuote: true,
+        semi: true,
+        trailingComma: 'none',
+        jsxSingleQuote: true,
+        bracketSameLine: false,
+        arrowParens: 'avoid'
+      }
+    ],
+
+    // Jest plugin overrides
+    'jest/no-hooks': 'off',
+    'jest/prefer-expect-assertions': 'off',
+    'jest/prefer-strict-equal': 'off', // warn
+    'jest/require-to-throw-message': 'off', // warn
+    'jest/no-done-callback': 'off', // warn
+    'jest/prefer-called-with': 'off',
+    'jest/no-disabled-tests': 'warn',
+    'jest/valid-title': 'off',
+    // Remove when migrated to jest >=27
+    'jest/no-jasmine-globals': 'off',
+
+    // React plugin overrides
     'react/prop-types': 0,
     'react/wrap-multilines': 0,
     'react/no-deprecated': 0,
-    'no-import-assign': 0
+    'react/jsx-uses-react': 0,
+    'react/react-in-jsx-scope': 0
   },
-  plugins: ['prettier', 'jest', 'react', 'jasmine'],
   settings: {
-    ecmascript: 2015,
-    jsx: true,
     react: {
       version: '16'
     }
   },
+  parser: '@babel/eslint-parser',
   parserOptions: {
     sourceType: 'module',
     ecmaVersion: 6,
-    ecmaFeatures: {
-      jsx: true
+    requireConfigFile: false,
+    babelOptions: {
+      presets: ['@babel/preset-react']
     }
   },
   env: {
     browser: true,
     node: true,
-    es6: true,
-    jasmine: true,
-    'jest/globals': true
+    es6: true
   },
   globals: {
     $Debug: true,
     $IMA: true,
     using: true,
     extend: true,
-    chrome: true,
-    FB: true
-  }
+    spyOn: true
+  },
+  overrides: [
+    {
+      files: ['packages/cli/**', 'packages/create-ima-app/**'],
+      rules: {
+        'no-console': 'off'
+      }
+    },
+    {
+      files: ['packages/devtools/**', 'packages/create-ima-app/**'],
+      rules: {
+        'no-unused-vars': 'off'
+      },
+      globals: {
+        chrome: true,
+        FB: true
+      }
+    }
+  ]
 };

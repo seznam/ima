@@ -248,7 +248,7 @@ describe('ima.storage.CookieStorage', () => {
 
       cookie._recomputeCookieMaxAgeAndExpires(options);
 
-      expect(options.expires).toEqual(jasmine.any(Date));
+      expect(options.expires).toEqual(expect.any(Date));
     });
 
     it('should compute maxAge as number', () => {
@@ -256,7 +256,7 @@ describe('ima.storage.CookieStorage', () => {
 
       cookie._recomputeCookieMaxAgeAndExpires(options);
 
-      expect(options.maxAge).toEqual(jasmine.any(Number));
+      expect(options.maxAge).toEqual(expect.any(Number));
     });
 
     it('should compute maxAge as number and expires as date', () => {
@@ -264,8 +264,8 @@ describe('ima.storage.CookieStorage', () => {
 
       cookie._recomputeCookieMaxAgeAndExpires(options);
 
-      expect(options.maxAge).toEqual(jasmine.any(Number));
-      expect(options.expires).toEqual(jasmine.any(Date));
+      expect(options.maxAge).toEqual(expect.any(Number));
+      expect(options.expires).toEqual(expect.any(Date));
     });
   });
 });

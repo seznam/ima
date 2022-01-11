@@ -48,7 +48,8 @@ export default class HookEntry extends React.PureComponent {
       <div
         className={cn(styles.container, {
           [styles['container--opened']]: opened
-        })}>
+        })}
+      >
         {this._renderEntry()}
         {this._renderForm()}
       </div>
@@ -72,15 +73,15 @@ export default class HookEntry extends React.PureComponent {
               <Tooltip label={enabled ? 'Disable hook' : 'Enable hook'}>
                 <span>
                   <IconButton
-                    name="enable"
+                    name='enable'
                     color={enabled ? 'success' : 'danger'}
                     onClick={e => this.onEnable(e)}
                   />
                 </span>
               </Tooltip>
-              <Tooltip label="Delete hook">
+              <Tooltip label='Delete hook'>
                 <span>
-                  <IconButton name="trash" onClick={e => this.onDelete(e)} />
+                  <IconButton name='trash' onClick={e => this.onDelete(e)} />
                 </span>
               </Tooltip>
             </>
@@ -99,15 +100,16 @@ export default class HookEntry extends React.PureComponent {
       <div
         className={cn(styles.formWrapper, {
           [styles['formWrapper--opened']]: opened
-        })}>
+        })}
+      >
         <input
           onChange={e => this.onChange(e)}
           disabled={!editable}
           name={`name__${id}`}
           value={name}
           className={styles.input}
-          type="text"
-          placeholder="Name"
+          type='text'
+          placeholder='Name'
         />
         <input
           onChange={e => this.onChange(e)}
@@ -115,14 +117,14 @@ export default class HookEntry extends React.PureComponent {
           name={`description__${id}`}
           value={description}
           className={styles.input}
-          type="text"
-          placeholder="Description"
+          type='text'
+          placeholder='Description'
         />
         <Editor
           name={`code__${id}`}
           disabled={!editable}
           className={cn(styles.input, styles.codeInput)}
-          placeholder="// code"
+          placeholder='// code'
           value={code}
           onValueChange={code => this.setState({ code })}
           highlight={code => highlight(code, languages.js)}

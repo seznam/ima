@@ -70,12 +70,15 @@ describe('ima.storage.Map', () => {
     do {
       switch (index++) {
         case 0:
+          // eslint-disable-next-line jest/no-conditional-expect
           expect(item.value).toEqual('item1');
           break;
         case 1:
+          // eslint-disable-next-line jest/no-conditional-expect
           expect(item.value).toEqual('item2');
           break;
         default:
+          // eslint-disable-next-line jest/no-conditional-expect
           expect(item.value).toEqual('item3');
           break;
       }

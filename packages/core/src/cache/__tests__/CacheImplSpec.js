@@ -104,7 +104,7 @@ describe('ima.core.cache.CacheImpl', () => {
   });
 
   it('should return null for not exist key', () => {
-    expect(cache.get('bbb')).toEqual(null);
+    expect(cache.get('bbb')).toBeNull();
   });
 
   it('should cleared cache', () => {

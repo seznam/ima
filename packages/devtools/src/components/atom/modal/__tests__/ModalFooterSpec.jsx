@@ -2,7 +2,7 @@ import React from 'react';
 import { shallow } from 'enzyme';
 import ModalFooter from '../ModalFooter';
 
-describe('ModalFooter atom', () => {
+describe('modalFooter atom', () => {
   let wrapper = shallow(<ModalFooter>Footer</ModalFooter>);
 
   it('should match snapshot', () => {

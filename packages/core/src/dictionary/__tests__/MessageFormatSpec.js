@@ -18,8 +18,8 @@ describe('ima.core.dictionary.MessageFormatDictionary', () => {
   });
 
   it('should be initialization', () => {
-    expect(dictionary.language).not.toBe(null);
-    expect(dictionary.dictionary).not.toBe(null);
+    expect(dictionary.language).not.toBeNull();
+    expect(dictionary.dictionary).not.toBeNull();
   });
 
   it('should be return current language', () => {

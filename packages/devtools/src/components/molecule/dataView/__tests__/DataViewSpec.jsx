@@ -3,7 +3,7 @@ import { shallow } from 'enzyme';
 import DataView, { TAB_SIZE } from '../DataView';
 import JsonView from 'components/atom/jsonView/JsonView';
 
-describe('DataView molecule', () => {
+describe('dataView molecule', () => {
   let wrapper, instance;
   const props = {
     entry: {
@@ -40,11 +40,11 @@ describe('DataView molecule', () => {
   it('should return null if entry is not provided', () => {
     wrapper.setProps({ entry: null });
 
-    expect(wrapper.type()).toBe(null);
+    expect(wrapper.type()).toBeNull();
   });
 
   it('should render 3 json views', () => {
-    expect(wrapper.find(JsonView).length).toBe(3);
+    expect(wrapper.find(JsonView)).toHaveLength(3);
   });
 
   describe('messages', () => {
@@ -89,11 +89,11 @@ describe('DataView molecule', () => {
 
   describe('componentDidMount', () => {
     it('should add keyDown window listeners', () => {
-      window.addEventListener = jest.fn();
+      jest.spyOn(window, 'addEventListener').mockImplementation();
 
       instance.componentDidMount();
 
-      expect(window.addEventListener.mock.calls.length).toBe(1);
+      expect(window.addEventListener.mock.calls).toHaveLength(1);
       expect(window.addEventListener.mock.calls[0][0]).toBe('keydown');
       expect(window.addEventListener.mock.calls[0][1]).toBe(instance.onKeyDown);
     });
@@ -101,11 +101,11 @@ describe('DataView molecule', () => {
 
   describe('componentWillUnmount', () => {
     it('should remove existing keyDown window listeners', () => {
-      window.removeEventListener = jest.fn();
+      jest.spyOn(window, 'removeEventListener').mockImplementation();
 
       instance.componentWillUnmount();
 
-      expect(window.removeEventListener.mock.calls.length).toBe(1);
+      expect(window.removeEventListener.mock.calls).toHaveLength(1);
       expect(window.removeEventListener.mock.calls[0][0]).toBe('keydown');
       expect(window.removeEventListener.mock.calls[0][1]).toBe(
         instance.onKeyDown
@@ -115,7 +115,7 @@ describe('DataView molecule', () => {
 
   describe('onKeyDown', () => {
     beforeEach(() => {
-      instance.setState = jest.fn();
+      jest.spyOn(instance, 'setState').mockImplementation();
     });
 
     it('should not do anything if neither left or right arrow were clicked', () => {
@@ -123,21 +123,22 @@ describe('DataView molecule', () => {
       instance.onKeyDown({ keyCode: 29 });
       instance.onKeyDown({ keyCode: 192 });
 
-      expect(instance.setState.mock.calls.length).toBe(0);
+      expect(instance.setState.mock.calls).toHaveLength(0);
     });
 
     it('should select next tab to the left if left arrow was clicked', () => {
       wrapper.setState({ tabIndex: 1 });
       instance.onKeyDown({ keyCode: 37 });
 
-      expect(instance.setState.mock.calls.length).toBe(1);
+      expect(instance.setState.mock.calls).toHaveLength(1);
       expect(instance.setState.mock.calls[0][0]).toEqual({ tabIndex: 0 });
     });
-    it('should select next tab to the left if left arrow was clicked', () => {
+
+    it('should select next tab to the right if right arrow was clicked', () => {
       wrapper.setState({ tabIndex: 1 });
       instance.onKeyDown({ keyCode: 39 });
 
-      expect(instance.setState.mock.calls.length).toBe(1);
+      expect(instance.setState.mock.calls).toHaveLength(1);
       expect(instance.setState.mock.calls[0][0]).toEqual({ tabIndex: 2 });
     });
 
@@ -145,14 +146,14 @@ describe('DataView molecule', () => {
       wrapper.setState({ tabIndex: 0 });
       instance.onKeyDown({ keyCode: 37 });
 
-      expect(instance.setState.mock.calls.length).toBe(0);
+      expect(instance.setState.mock.calls).toHaveLength(0);
     });
 
     it('should not do anything if rightmost tab is already selected on right arrow click', () => {
       wrapper.setState({ tabIndex: TAB_SIZE });
       instance.onKeyDown({ keyCode: 39 });
 
-      expect(instance.setState.mock.calls.length).toBe(0);
+      expect(instance.setState.mock.calls).toHaveLength(0);
     });
   });
 

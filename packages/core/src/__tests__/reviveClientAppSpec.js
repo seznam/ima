@@ -21,7 +21,7 @@ jest.mock('path', () => {
 
 const MASTER_ELEMENT_ID = 'some-id';
 
-describe('Revive client application', () => {
+describe('revive client application', () => {
   let router = null;
   let ReactDOM = {
     render() {
@@ -155,7 +155,7 @@ describe('Revive client application', () => {
       .then(response => {
         expect(response.status).toEqual(200);
         expect(response.pageState).toEqual({ hello: 'Hello' });
-        expect(response.content).toEqual(null);
+        expect(response.content).toBeNull();
         expect(ReactDOM.render).toHaveBeenCalled();
         done();
       })

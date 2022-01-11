@@ -2,7 +2,7 @@ import Bootstrap from '../Bootstrap';
 import ObjectContainer from '../ObjectContainer';
 import namespace from '../namespace';
 
-describe('Bootstrap', () => {
+describe('bootstrap', () => {
   let bootstrap = null;
   let objectContainer = null;
   let environments = {
@@ -70,7 +70,7 @@ describe('Bootstrap', () => {
       spyOn(bootstrap, '_getEnvironmentSetting').and.returnValue({});
     });
 
-    it('it should call initSettings method for app', () => {
+    it('should call initSettings method for app', () => {
       spyOn(bootConfig, 'initSettings').and.callThrough();
 
       bootstrap._initSettings();
@@ -78,7 +78,7 @@ describe('Bootstrap', () => {
       expect(bootConfig.initSettings).toHaveBeenCalled();
     });
 
-    it('it should call initSettings method for plugin', () => {
+    it('should call initSettings method for plugin', () => {
       spyOn(plugin, 'initSettings').and.callThrough();
 
       bootstrap._initSettings();

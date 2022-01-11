@@ -28,7 +28,8 @@ export default class Button extends React.PureComponent {
           { [styles[`btn--${color}`]]: color },
           className
         )}
-        {...rest}>
+        {...rest}
+      >
         {children}
       </button>
     );

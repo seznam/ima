@@ -2,7 +2,7 @@ import React from 'react';
 import { shallow } from 'enzyme';
 import EntryListItem from '../EntryListItem';
 
-describe('EntryListItem molecule', () => {
+describe('entryListItem molecule', () => {
   const props = {
     entry: {
       id: '0',
@@ -33,12 +33,15 @@ describe('EntryListItem molecule', () => {
     setSelected: jest.fn()
   };
 
-  global.Date = jest.fn().mockImplementation(() => ({
-    getHours: () => 19,
-    getMinutes: () => 42,
-    getSeconds: () => 4,
-    getMilliseconds: () => 140
-  }));
+  jest
+    .spyOn(global, 'Date')
+    .mockImplementation()
+    .mockImplementation(() => ({
+      getHours: () => 19,
+      getMinutes: () => 42,
+      getSeconds: () => 4,
+      getMilliseconds: () => 140
+    }));
 
   let wrapper, instance;
 
@@ -80,7 +83,7 @@ describe('EntryListItem molecule', () => {
     });
 
     expect(instance.props.entry.selected).toBe(true);
-    expect(wrapper.find('.wrapper--selected').length).toBe(1);
+    expect(wrapper.find('.wrapper--selected')).toHaveLength(1);
   });
 
   it('should render absolute time if item is first in the entries array (id === 0)', () => {
@@ -110,7 +113,7 @@ describe('EntryListItem molecule', () => {
     wrapper.first().simulate('click');
 
     expect(instance.props.entry.id).toBe('1253');
-    expect(instance.props.setSelected.mock.calls.length).toBe(1);
+    expect(instance.props.setSelected.mock.calls).toHaveLength(1);
     expect(instance.props.setSelected.mock.calls[0][0]).toEqual('1253');
   });
 

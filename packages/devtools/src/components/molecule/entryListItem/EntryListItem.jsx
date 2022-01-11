@@ -33,7 +33,8 @@ export default class EntryListItem extends React.PureComponent {
         onClick={this.onSelect}
         className={cn(styles.wrapper, styles[`wrapper--${color}`], {
           [styles['wrapper--selected']]: selected
-        })}>
+        })}
+      >
         <td className={styles.label}>
           {shortLabel}
           {event && <span className={styles.event}> [{event}]</span>}
@@ -45,7 +46,8 @@ export default class EntryListItem extends React.PureComponent {
               <span
                 className={cn(styles.promiseStatus, {
                   [styles['promiseStatus--pending']]: promises === 'pending'
-                })}>
+                })}
+              >
                 {promises}
                 {this._getPromiseTimeDiff()}
               </span>

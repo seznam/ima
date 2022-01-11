@@ -108,7 +108,7 @@ describe('ima.core.page.manager.AbstractPageManager', () => {
   it('should be observe state manager', () => {
     pageManager.init();
 
-    expect(pageStateManager.onChange).not.toEqual(null);
+    expect(pageStateManager.onChange).not.toBeNull();
   });
 
   describe('manage method', () => {

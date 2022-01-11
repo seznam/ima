@@ -84,7 +84,7 @@ describe('ima.core.page.handler.PageNavigationHandler', () => {
       expect(pushStateMock).not.toHaveBeenCalled();
     });
 
-    it('Window.scrollTo method should not be called if routers autoScroll option was set to false.', () => {
+    it('window.scrollTo method should not be called if routers autoScroll option was set to false.', () => {
       spyOn(window, 'scrollTo').and.stub();
       const nextManagedPage = { options: { autoScroll: false } };
 
@@ -94,7 +94,7 @@ describe('ima.core.page.handler.PageNavigationHandler', () => {
       expect(window.scrollTo).not.toHaveBeenCalled();
     });
 
-    it('Window should be scrolled to the top if routers autoScroll option was set to true.', () => {
+    it('window should be scrolled to the top if routers autoScroll option was set to true.', () => {
       spyOn(window, 'scrollTo').and.stub();
       const nextManagedPage = { options: { autoScroll: true } };
 

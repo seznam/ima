@@ -30,7 +30,8 @@ export default class IconButton extends React.PureComponent {
           { [styles[`iconBtn--${color}`]]: color },
           className
         )}`}
-        {...rest}>
+        {...rest}
+      >
         <Icon name={name} />
       </button>
     );

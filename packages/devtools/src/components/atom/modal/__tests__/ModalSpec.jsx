@@ -2,7 +2,7 @@ import React from 'react';
 import { shallow } from 'enzyme';
 import Modal, { BODY_STYLES, HIDE_ANIMATION_DURATION } from '../Modal';
 
-describe('Modal atom', () => {
+describe('modal atom', () => {
   let wrapper, instance;
   const props = {
     opened: false,
@@ -23,7 +23,10 @@ describe('Modal atom', () => {
       }
     };
 
-    global.setTimeout = jest.fn().mockImplementation(cb => cb());
+    jest
+      .spyOn(global, 'setTimeout')
+      .mockImplementation()
+      .mockImplementation(cb => cb());
   });
 
   it('should match snapshot when closed', () => {
@@ -39,14 +42,14 @@ describe('Modal atom', () => {
     wrapper.setProps({ opened: true });
     wrapper.find('div.overlay').simulate('click');
 
-    expect(instance.props.onClose.mock.calls.length).toBe(1);
+    expect(instance.props.onClose.mock.calls).toHaveLength(1);
   });
 
   it('should call props.onClose when clicking on close btn', () => {
     wrapper.setProps({ opened: true });
     wrapper.find('button.closeIcon').simulate('click');
 
-    expect(instance.props.onClose.mock.calls.length).toBe(1);
+    expect(instance.props.onClose.mock.calls).toHaveLength(1);
   });
 
   describe('_removeBodyStyles', () => {
@@ -69,7 +72,7 @@ describe('Modal atom', () => {
     it('should call onClose when ESC key is pressed', () => {
       instance.onKeyDown({ keyCode: 27 });
 
-      expect(instance.props.onClose.mock.calls.length).toBe(1);
+      expect(instance.props.onClose.mock.calls).toHaveLength(1);
       expect(instance.props.onClose.mock.calls[0][0]).toEqual({ keyCode: 27 });
       instance.props.onClose.mockClear();
     });
@@ -79,18 +82,18 @@ describe('Modal atom', () => {
       instance.onKeyDown({ keyCode: 90 });
       instance.onKeyDown({ keyCode: 22 });
 
-      expect(instance.props.onClose.mock.calls.length).toBe(0);
+      expect(instance.props.onClose.mock.calls).toHaveLength(0);
       instance.props.onClose.mockClear();
     });
   });
 
   describe('componentDidMount', () => {
     it('should set keyDown window listeners', () => {
-      window.addEventListener = jest.fn();
+      jest.spyOn(window, 'addEventListener').mockImplementation();
 
       instance.componentDidMount();
 
-      expect(window.addEventListener.mock.calls.length).toBe(1);
+      expect(window.addEventListener.mock.calls).toHaveLength(1);
       expect(window.addEventListener.mock.calls[0][0]).toBe('keydown');
       expect(window.addEventListener.mock.calls[0][1]).toBe(instance.onKeyDown);
     });
@@ -98,11 +101,11 @@ describe('Modal atom', () => {
 
   describe('componentWillUnmount', () => {
     it('should remove existing keyDown window listeners', () => {
-      window.removeEventListener = jest.fn();
+      jest.spyOn(window, 'removeEventListener').mockImplementation();
 
       instance.componentWillUnmount();
 
-      expect(window.removeEventListener.mock.calls.length).toBe(1);
+      expect(window.removeEventListener.mock.calls).toHaveLength(1);
       expect(window.removeEventListener.mock.calls[0][0]).toBe('keydown');
       expect(window.removeEventListener.mock.calls[0][1]).toBe(
         instance.onKeyDown
@@ -116,37 +119,37 @@ describe('Modal atom', () => {
       wrapper.setProps({ opened: false });
       instance = wrapper.instance();
 
-      instance._addBodyStyles = jest.fn();
-      instance._removeBodyStyles = jest.fn();
+      jest.spyOn(instance, '_addBodyStyles').mockImplementation();
+      jest.spyOn(instance, '_removeBodyStyles').mockImplementation();
 
-      expect(instance._addBodyStyles.mock.calls.length).toBe(0);
-      expect(instance._removeBodyStyles.mock.calls.length).toBe(0);
+      expect(instance._addBodyStyles.mock.calls).toHaveLength(0);
+      expect(instance._removeBodyStyles.mock.calls).toHaveLength(0);
     });
 
     it('should add body styles if modal window has been opened', () => {
       wrapper = shallow(<Modal opened={false} />);
       instance = wrapper.instance();
-      instance._addBodyStyles = jest.fn();
+      jest.spyOn(instance, '_addBodyStyles').mockImplementation();
 
       wrapper.setProps({ opened: true });
 
-      expect(instance._addBodyStyles.mock.calls.length).toBe(1);
+      expect(instance._addBodyStyles.mock.calls).toHaveLength(1);
     });
 
     it('should remove body styles if modal window has been closed and handle animation', () => {
       wrapper = shallow(<Modal opened={true} />);
       instance = wrapper.instance();
-      instance._removeBodyStyles = jest.fn();
-      instance.setState = jest.fn();
+      jest.spyOn(instance, '_removeBodyStyles').mockImplementation();
+      jest.spyOn(instance, 'setState').mockImplementation();
 
       wrapper.setProps({ opened: false });
 
-      expect(instance._removeBodyStyles.mock.calls.length).toBe(1);
+      expect(instance._removeBodyStyles.mock.calls).toHaveLength(1);
 
-      expect(setTimeout.mock.calls.length).toBe(1);
+      expect(setTimeout.mock.calls).toHaveLength(1);
       expect(setTimeout.mock.calls[0][1]).toBe(HIDE_ANIMATION_DURATION);
 
-      expect(instance.setState.mock.calls.length).toBe(2);
+      expect(instance.setState.mock.calls).toHaveLength(2);
       expect(instance.setState.mock.calls[0][0]).toEqual({ closing: true });
       expect(instance.setState.mock.calls[1][0]).toEqual({ closing: false });
     });

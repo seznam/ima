@@ -84,7 +84,7 @@ const service = new ReportService();
     /**
      * @todo Update removeUnusedPackageImports method to support this behavior
      */
-    xit('should remove only unused imports if multiple imports from single package are used', () => {
+    it.skip('should remove only unused imports if multiple imports from single package are used', () => {
       ast = j(`
 import Sample, { UsedModule, UnusedModule } from 'sample-package';
 

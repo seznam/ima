@@ -14,6 +14,6 @@ export default class Date extends AbstractComponent {
       YEAR: date.getFullYear()
     });
 
-    return <div className="date">{formattedDate}</div>;
+    return <div className='date'>{formattedDate}</div>;
   }
 }

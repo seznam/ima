@@ -6,7 +6,7 @@ import * as settings from 'services/settings';
 jest.mock('easy-uid');
 import uid from 'easy-uid';
 
-describe('Options template', () => {
+describe('options template', () => {
   let wrapper, instance;
 
   const event = {
@@ -77,15 +77,18 @@ describe('Options template', () => {
 
   describe('componentDidMount', () => {
     it('should fetch and set settings on mount', async () => {
-      settings.getSettings = jest.fn().mockImplementation(() => ({
-        presets: 'settingsPresets',
-        selectedPresetId: '0'
-      }));
+      jest
+        .spyOn(settings, 'getSettings')
+        .mockImplementation()
+        .mockImplementation(() => ({
+          presets: 'settingsPresets',
+          selectedPresetId: '0'
+        }));
 
       await instance.componentDidMount();
 
-      expect(settings.getSettings.mock.calls.length).toBe(1);
-      expect(instance.props.setPresets.mock.calls.length).toBe(1);
+      expect(settings.getSettings.mock.calls).toHaveLength(1);
+      expect(instance.props.setPresets.mock.calls).toHaveLength(1);
       expect(instance.props.setPresets.mock.calls[0][0]).toEqual({
         presets: 'settingsPresets',
         selectedPresetId: '0'
@@ -95,25 +98,28 @@ describe('Options template', () => {
 
   describe('onAdd', () => {
     it('should call props.addHook with generated hook', () => {
-      instance._createHook = jest.fn().mockReturnValue('newHook');
+      jest
+        .spyOn(instance, '_createHook')
+        .mockImplementation()
+        .mockReturnValue('newHook');
 
       instance.onAdd(event);
 
-      expect(event.preventDefault.mock.calls.length).toBe(1);
-      expect(instance.props.addHook.mock.calls.length).toBe(1);
+      expect(event.preventDefault.mock.calls).toHaveLength(1);
+      expect(instance.props.addHook.mock.calls).toHaveLength(1);
       expect(instance.props.addHook.mock.calls[0][0]).toBe('newHook');
-      expect(instance._createHook.mock.calls.length).toBe(1);
+      expect(instance._createHook.mock.calls).toHaveLength(1);
     });
   });
 
   describe('onLoadPreset', () => {
     it('should open presets modal window', () => {
-      instance.setState = jest.fn();
+      jest.spyOn(instance, 'setState').mockImplementation();
 
       instance.onLoadPreset(event);
 
-      expect(event.preventDefault.mock.calls.length).toBe(1);
-      expect(instance.setState.mock.calls.length).toBe(1);
+      expect(event.preventDefault.mock.calls).toHaveLength(1);
+      expect(instance.setState.mock.calls).toHaveLength(1);
       expect(instance.setState.mock.calls[0][0]).toEqual({
         modalOpened: true
       });
@@ -122,11 +128,11 @@ describe('Options template', () => {
 
   describe('onModalClose', () => {
     it('should closeModalWindow', () => {
-      instance.setState = jest.fn();
+      jest.spyOn(instance, 'setState').mockImplementation();
 
       instance.onModalClose();
 
-      expect(instance.setState.mock.calls.length).toBe(1);
+      expect(instance.setState.mock.calls).toHaveLength(1);
       expect(instance.setState.mock.calls[0][0]).toEqual({
         modalOpened: false
       });
@@ -135,7 +141,7 @@ describe('Options template', () => {
 
   describe('onSubmit', () => {
     beforeEach(() => {
-      settings.setSettings = jest.fn();
+      jest.spyOn(settings, 'setSettings').mockImplementation();
       global.FormData = function () {
         return {
           entries: jest.fn().mockImplementation(() => {
@@ -150,7 +156,7 @@ describe('Options template', () => {
     it('should call set settings with new extracted data', () => {
       instance.onSubmit(event);
 
-      expect(settings.setSettings.mock.calls.length).toBe(1);
+      expect(settings.setSettings.mock.calls).toHaveLength(1);
       expect(settings.setSettings.mock.calls[0][0]).toEqual({
         presets: {
           ...props.presets,
@@ -170,8 +176,8 @@ describe('Options template', () => {
     it('should show success alert', () => {
       instance.onSubmit(event);
 
-      expect(event.preventDefault.mock.calls.length).toBe(1);
-      expect(instance.props.alertSuccess.mock.calls.length).toBe(1);
+      expect(event.preventDefault.mock.calls).toHaveLength(1);
+      expect(instance.props.alertSuccess.mock.calls).toHaveLength(1);
       expect(instance.props.alertSuccess.mock.calls[0][0]).toBe(
         'Changes were saved.'
       );

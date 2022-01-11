@@ -94,8 +94,9 @@ export default class Options extends React.PureComponent {
             you can customize, turn on/off or completely remove to suit your
             needs.{' '}
             <a
-              href="https://imajs.io/docs/devtools-introduction"
-              target="_blank">
+              href='https://imajs.io/docs/devtools-introduction'
+              target='_blank'
+            >
               For more information about devtools, visit imajs.io
             </a>
             .
@@ -104,7 +105,7 @@ export default class Options extends React.PureComponent {
 
         <div className={styles.actionsWrapper}>
           {this.isEditable && (
-            <Button onClick={e => this.onAdd(e)} color="primary">
+            <Button onClick={e => this.onAdd(e)} color='primary'>
               Add Hook
             </Button>
           )}
@@ -131,7 +132,7 @@ export default class Options extends React.PureComponent {
             &#x27;Load or Create Preset&#x27; button.
           </p>
         )}
-        <Button className={styles.saveBtn} color="success" type="submit">
+        <Button className={styles.saveBtn} color='success' type='submit'>
           Save Changes
         </Button>
       </div>

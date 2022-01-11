@@ -19,7 +19,7 @@ jest.mock('path', () => {
   return Object.assign({}, original, { resolve });
 });
 
-describe('Render server application', () => {
+describe('render server application', () => {
   let router = null;
   let ReactDOM = {
     render() {

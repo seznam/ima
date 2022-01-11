@@ -2,13 +2,13 @@ import React from 'react';
 import { shallow } from 'enzyme';
 import JsonView, { THEME } from '../JsonView';
 
-describe('JsonView.THEME', () => {
+describe('jsonView.THEME', () => {
   it('should match snapshot', () => {
     expect(THEME).toMatchSnapshot();
   });
 });
 
-describe('JsonView atom', () => {
+describe('jsonView atom', () => {
   let wrapper = shallow(<JsonView src={{ json: 'data' }} />);
 
   it('should match snapshot', () => {
@@ -18,6 +18,6 @@ describe('JsonView atom', () => {
 
   it('should render null if src is not provided', () => {
     wrapper.setProps({ src: null });
-    expect(wrapper.type()).toEqual(null);
+    expect(wrapper.type()).toBeNull();
   });
 });

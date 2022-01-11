@@ -418,7 +418,7 @@ describe('ima.core.ObjectContainer', () => {
 
       let entry = oc._getEntryFromConstant(() => {});
 
-      expect(entry).toEqual(null);
+      expect(entry).toBeNull();
     });
   });
 
@@ -469,11 +469,11 @@ describe('ima.core.ObjectContainer', () => {
     });
 
     it('should return null if classConstructor is not a function', () => {
-      expect(oc._getEntryFromClassConstructor()).toEqual(null);
+      expect(oc._getEntryFromClassConstructor()).toBeNull();
     });
 
     it('should return null for not defined $dependencies property', () => {
-      expect(oc._getEntryFromClassConstructor(classConstructor)).toEqual(null);
+      expect(oc._getEntryFromClassConstructor(classConstructor)).toBeNull();
     });
 
     it('should set class to entries if class has defined $dependencies', () => {

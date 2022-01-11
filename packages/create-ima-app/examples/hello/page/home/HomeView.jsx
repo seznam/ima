@@ -11,23 +11,24 @@ export default class HomeView extends AbstractComponent {
 
   render() {
     return (
-      <div className="l-homepage">
-        <div className="content">
+      <div className='l-homepage'>
+        <div className='content'>
           <img
             src={
               this.utils.$Router.getBaseUrl() +
               this.utils.$Settings.$Static.image +
               '/imajs-logo.png'
             }
-            alt="IMA.js logo"
+            alt='IMA.js logo'
           />
           <h1>
             {`${this.localize('home.hello')}, ${this.props.message} `}
             <a
-              href="//imajs.io"
+              href='//imajs.io'
               title={this.props.name}
-              target="_blank"
-              rel="noopener noreferrer">
+              target='_blank'
+              rel='noopener noreferrer'
+            >
               {this.props.name}
             </a>
             !

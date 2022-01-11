@@ -2,7 +2,7 @@
 
 const CacheFactory = require('../lib/cache.js');
 
-describe('Cache', () => {
+describe('cache', () => {
   describe('set method', () => {
     let cache = null;
     let page = {

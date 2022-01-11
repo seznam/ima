@@ -30,7 +30,8 @@ export default class PresetsModal extends React.PureComponent {
         onClose={onClose}
         title={'Presets'}
         className={styles.modal}
-        opened={opened}>
+        opened={opened}
+      >
         {this._renderModalBody()}
         {this._renderModalFooter()}
       </Modal>
@@ -56,11 +57,11 @@ export default class PresetsModal extends React.PureComponent {
 
     return (
       <ModalFooter className={styles.footer}>
-        <Button onClick={e => this.onSaveChanges(e)} color="success">
+        <Button onClick={e => this.onSaveChanges(e)} color='success'>
           Save Preset Changes
         </Button>
         <div>
-          <Button onClick={e => this.onCreatePreset(e)} color="primary">
+          <Button onClick={e => this.onCreatePreset(e)} color='primary'>
             Create Preset
           </Button>
           <Button onClick={onClose}>Close</Button>

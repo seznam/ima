@@ -14,13 +14,13 @@ describe('ima.core.http.UrlTransformer', () => {
   it('should add next rule', () => {
     transformer.addRule('aaa', 'bbb');
 
-    expect(Object.keys(transformer._rules).length).toEqual(3);
+    expect(Object.keys(transformer._rules)).toHaveLength(3);
   });
 
   it('should clear rules', () => {
     transformer.clear();
 
-    expect(Object.keys(transformer._rules).length).toEqual(0);
+    expect(Object.keys(transformer._rules)).toHaveLength(0);
   });
 
   it('should apply one rule', () => {

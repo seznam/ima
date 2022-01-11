@@ -18,7 +18,7 @@ describe('ima.core.router.Response', () => {
     // Because Express converts null to 0, which is not intended.
     let options = { maxAge: null };
     let expressOptions = response._prepareCookieOptionsForExpress(options);
-    expect(options.maxAge).toEqual(null);
+    expect(options.maxAge).toBeNull();
     expect(expressOptions.maxAge).toBeUndefined();
   });
 

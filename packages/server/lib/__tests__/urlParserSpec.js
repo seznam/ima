@@ -29,7 +29,7 @@ const REQUEST_GET_BOOK = Object.freeze({
   host: HOST
 });
 
-describe('UrlParser', () => {
+describe('urlParser', () => {
   const parseUrl = UrlParser(ENVIRONMENT);
 
   function getMethod(requestGetBook, key) {
@@ -55,7 +55,7 @@ describe('UrlParser', () => {
     RES.redirect.mockReset();
   });
 
-  describe("Method's behaviour", () => {
+  describe("method's behaviour", () => {
     afterAll(() => {
       next.mockReset();
     });
@@ -83,12 +83,12 @@ describe('UrlParser', () => {
     });
 
     it("should call 'next' callback", () => {
-      expect(next.mock.calls.length).toBe(1);
+      expect(next.mock.calls).toHaveLength(1);
       expect(next.mock.calls[0][0]).toBe();
     });
   });
 
-  describe('Host Detection', () => {
+  describe('host Detection', () => {
     afterAll(() => {
       defaultRes.locals = {};
     });
@@ -133,6 +133,7 @@ describe('UrlParser', () => {
           host: host || ''
         };
 
+        // eslint-disable-next-line jest/no-if
         if (header) {
           const [headerKey, headerValue] = Object.entries(header)[0];
           getCodeBook[headerKey] = headerValue;
@@ -152,7 +153,7 @@ describe('UrlParser', () => {
     });
   });
 
-  describe('Invalid URLs', () => {
+  describe('invalid URLs', () => {
     let usedRes = {};
 
     beforeEach(() => {
@@ -204,6 +205,7 @@ describe('UrlParser', () => {
         try {
           parseUrl(usedReq, usedRes, next);
         } catch (exception) {
+          // eslint-disable-next-line jest/no-conditional-expect
           expect(exception.name).toMatch(/^TypeError/);
         }
 
@@ -213,7 +215,7 @@ describe('UrlParser', () => {
     });
   });
 
-  describe('Protocol Detection', () => {
+  describe('protocol Detection', () => {
     let usedRes = {};
 
     beforeEach(() => {
@@ -316,6 +318,7 @@ describe('UrlParser', () => {
           host: HOST2
         };
 
+        // eslint-disable-next-line jest/no-if
         if (headerKey) {
           getCodeBook[headerKey] = header[headerKey];
         }
@@ -333,7 +336,7 @@ describe('UrlParser', () => {
     });
   });
 
-  describe('Language Detection', () => {
+  describe('language Detection', () => {
     let usedRes = {};
 
     beforeEach(() => {
@@ -461,10 +464,10 @@ describe('UrlParser', () => {
           const result = usedRes.locals;
           const redirectMock = usedRes.redirect.mock;
 
-          expect(redirectMock.calls.length).toBe(1);
+          expect(redirectMock.calls).toHaveLength(1);
           expect(redirectMock.calls[0][0]).toBe(redirectTo);
           expect(result).toEqual({});
-          expect(next.mock.calls.length).toBe(0);
+          expect(next.mock.calls).toHaveLength(0);
         });
       } else {
         it(`should detect language for URL ${fullUrl}`, () => {
@@ -479,7 +482,7 @@ describe('UrlParser', () => {
     });
   });
 
-  describe('Parsing URL', () => {
+  describe('parsing URL', () => {
     let usedRes = {};
 
     beforeEach(() => {

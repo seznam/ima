@@ -477,7 +477,7 @@ describe('selectors', () => {
     it('should return null for empty state', () => {
       const result = selectors.getHookIds.resultFunc(null, {});
 
-      expect(result).toBe(null);
+      expect(result).toBeNull();
     });
   });
 
@@ -501,7 +501,7 @@ describe('selectors', () => {
     it('should return null for empty state', () => {
       const result = selectors.getActiveHooks.resultFunc(null, {});
 
-      expect(result).toBe(null);
+      expect(result).toBeNull();
     });
   });
 });

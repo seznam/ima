@@ -101,7 +101,8 @@ export default class Modal extends React.PureComponent {
             },
             className
           )}
-          {...rest}>
+          {...rest}
+        >
           {this._renderModalHeader()}
           {children}
         </div>
@@ -116,7 +117,7 @@ export default class Modal extends React.PureComponent {
       <div className={styles.header}>
         <h4>{title}</h4>
         <button onClick={onClose} className={styles.closeIcon}>
-          <Icon name="close" />
+          <Icon name='close' />
         </button>
       </div>
     );

@@ -46,7 +46,8 @@ export default class Alerts extends React.PureComponent {
                   [styles['alert--hidden']]: hidden
                 })}
                 key={id}
-                {...rest}>
+                {...rest}
+              >
                 {content}
               </Alert>
             );

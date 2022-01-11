@@ -16,9 +16,10 @@ export default class TweetButton extends AbstractComponent {
       <a
         href={this.composeUrl()}
         onClick={event => this.onShare(event)}
-        className="tweet-button"
-        target="_blank"
-        rel="noopener noreferrer">
+        className='tweet-button'
+        target='_blank'
+        rel='noopener noreferrer'
+      >
         <img
           src={
             this.utils.$Router.getBaseUrl() +

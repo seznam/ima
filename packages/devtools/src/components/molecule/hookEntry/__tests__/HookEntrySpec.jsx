@@ -2,7 +2,7 @@ import React from 'react';
 import { shallow } from 'enzyme';
 import HookEntry from '../HookEntry';
 
-describe('HookEntry molecule', () => {
+describe('hookEntry molecule', () => {
   let wrapper, instance;
 
   const event = {
@@ -54,7 +54,7 @@ describe('HookEntry molecule', () => {
 
   describe('onChange', () => {
     it('should extract name form input and set value to state', () => {
-      instance.setState = jest.fn();
+      jest.spyOn(instance, 'setState').mockImplementation();
       instance.onChange({
         target: {
           name: 'name__0',
@@ -62,7 +62,7 @@ describe('HookEntry molecule', () => {
         }
       });
 
-      expect(instance.setState.mock.calls.length).toBe(1);
+      expect(instance.setState.mock.calls).toHaveLength(1);
       expect(instance.setState.mock.calls[0][0]).toEqual({
         name: 'newName'
       });
@@ -73,15 +73,15 @@ describe('HookEntry molecule', () => {
     it('should prevent default and stop propagation', () => {
       instance.onDelete(event);
 
-      expect(event.preventDefault.mock.calls.length).toBe(1);
-      expect(event.stopPropagation.mock.calls.length).toBe(1);
+      expect(event.preventDefault.mock.calls).toHaveLength(1);
+      expect(event.stopPropagation.mock.calls).toHaveLength(1);
       instance.props.showConfirmModal.mockClear();
     });
 
     it('should show confirm modal', () => {
       instance.onDelete(event);
 
-      expect(instance.props.showConfirmModal.mock.calls.length).toBe(1);
+      expect(instance.props.showConfirmModal.mock.calls).toHaveLength(1);
       expect(
         Object.keys(instance.props.showConfirmModal.mock.calls[0][0])
       ).toEqual(['body', 'accept']);
@@ -92,11 +92,11 @@ describe('HookEntry molecule', () => {
     it('should call props.toggleHook with id and show alert', () => {
       instance.onEnable(event);
 
-      expect(event.preventDefault.mock.calls.length).toBe(1);
-      expect(event.stopPropagation.mock.calls.length).toBe(1);
-      expect(instance.props.toggleHook.mock.calls.length).toBe(1);
+      expect(event.preventDefault.mock.calls).toHaveLength(1);
+      expect(event.stopPropagation.mock.calls).toHaveLength(1);
+      expect(instance.props.toggleHook.mock.calls).toHaveLength(1);
 
-      expect(instance.props.alertSuccess.mock.calls.length).toBe(1);
+      expect(instance.props.alertSuccess.mock.calls).toHaveLength(1);
       expect(instance.props.alertSuccess.mock.calls[0][0]).toBe(
         `'name' hook was disabled.`
       );
@@ -107,8 +107,8 @@ describe('HookEntry molecule', () => {
     it('should call props.openHook with hook ID', () => {
       instance.onOpen(event);
 
-      expect(event.preventDefault.mock.calls.length).toBe(1);
-      expect(instance.props.openHook.mock.calls.length).toBe(1);
+      expect(event.preventDefault.mock.calls).toHaveLength(1);
+      expect(instance.props.openHook.mock.calls).toHaveLength(1);
       expect(instance.props.openHook.mock.calls[0][0]).toBe('0');
     });
   });

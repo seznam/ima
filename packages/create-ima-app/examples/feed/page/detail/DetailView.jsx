@@ -18,13 +18,13 @@ export default class DetailView extends AbstractComponent {
     let moreItemsButton = this.getMoreItemButton();
 
     return (
-      <div className="l-detailpage">
+      <div className='l-detailpage'>
         <Header $Utils={this.utils} />
-        <div className="detail">
+        <div className='detail'>
           {item}
           {moreItemsButton}
         </div>
-        <div id="right_column" />
+        <div id='right_column' />
       </div>
     );
   }
@@ -51,7 +51,7 @@ export default class DetailView extends AbstractComponent {
     let link = this.localize('detail.moreItemsButtonLink');
 
     return (
-      <a href={link} id="more-items-button" className="more-items button">
+      <a href={link} id='more-items-button' className='more-items button'>
         {buttonTitle}
       </a>
     );
