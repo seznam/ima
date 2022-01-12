@@ -10,6 +10,17 @@ export default class ClientWindow extends Window {
     return [];
   }
 
+  constructor() {
+    super();
+
+    /**
+     * Map of event targets to a map of array of objects that describes each individual event listener.
+     *
+     * @type {Map<*, Array.<Object>>}
+     */
+    this._eventTargets = new Map();
+  }
+
   /**
    * @inheritdoc
    */
@@ -202,18 +213,56 @@ export default class ClientWindow extends Window {
   /**
    * @inheritdoc
    */
-  bindEventListener(eventTarget, event, listener, useCapture = false) {
-    if (eventTarget.addEventListener) {
-      eventTarget.addEventListener(event, listener, useCapture);
+  bindEventListener(eventTarget, event, listener, useCapture = false, scope = null) {
+    if (!eventTarget.addEventListener) {
+      return;
     }
+
+    if (!this._eventTargets.has(eventTarget)) {
+      this._createNewEventTarget(eventTarget);
+    }
+
+    const listeners = this._eventTargets.get(eventTarget);
+    const usedListener = scope ? listener.bind(scope) : listener;
+
+    listeners.push({
+      event,
+      listener,
+      useCapture,
+      scope,
+      usedListener
+    });
+
+    eventTarget.addEventListener(event, usedListener, useCapture);
   }
 
   /**
    * @inheritdoc
    */
-  unbindEventListener(eventTarget, event, listener, useCapture = false) {
-    if (eventTarget.removeEventListener) {
-      eventTarget.removeEventListener(event, listener, useCapture);
+  unbindEventListener(eventTarget, event, listener, useCapture = false, scope = null) {
+    if (!eventTarget.removeEventListener) {
+      return;
     }
+
+    const listeners = this._eventTargets.get(eventTarget) || [];
+
+    for (let index = 0; index < listeners.length; index++) {
+      const listenerRecord = listeners[index];
+
+      if (
+        listenerRecord.event === event &&
+        listenerRecord.listener === listener &&
+        listenerRecord.useCapture === useCapture &&
+        listenerRecord.scope === scope
+      ) {
+        eventTarget.removeEventListener(event, listenerRecord.usedListener, useCapture);
+        listeners.splice(index, 1);
+        return;
+      }
+    }
+  }
+
+  _createNewEventTarget(eventTarget) {
+    this._eventTargets.set(eventTarget, []);
   }
 }

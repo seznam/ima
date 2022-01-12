@@ -227,6 +227,8 @@ export default class Window {
    *        dispatched to any EventTarget beneath it in the DOM tree. Events
    *        which are bubbling upward through the tree will not trigger a
    *        listener designated to use capture.
+   * @param {?Object=} scope The object to which the {@code this} keyword
+   *        will be bound in the event listener.
    */
   bindEventListener() {}
 
@@ -242,6 +244,8 @@ export default class Window {
    * @param {function(Event)} listener The event listener.
    * @param {boolean=} [useCapture=false] The {@code useCapture} flag value
    *        that was used when the listener was registered.
+   * @param {?Object=} scope The object to which the {@code this} keyword
+   *        will be bound in the event listener.
    */
   unbindEventListener() {}
 }
