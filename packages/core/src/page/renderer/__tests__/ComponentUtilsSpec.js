@@ -29,7 +29,7 @@ describe('componentUtils', () => {
     it('should register multiple classes given in form of an Object.', () => {
       componentUtils.register({
         MockHelper: SomeMockHelper,
-        SomeHelper
+        SomeHelper,
       });
 
       expect(componentUtils._utilityClasses['MockHelper']).toStrictEqual(
@@ -49,7 +49,7 @@ describe('componentUtils', () => {
 
       componentUtils.register({
         SomeMockHelper,
-        SomeHelper
+        SomeHelper,
       });
     });
 

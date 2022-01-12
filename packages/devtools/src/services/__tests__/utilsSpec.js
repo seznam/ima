@@ -2,7 +2,7 @@ import {
   extractDomainFromUrl,
   getCurrentTab,
   setIcon,
-  toggleClass
+  toggleClass,
 } from '../utils';
 
 describe('setIcon', () => {
@@ -11,14 +11,14 @@ describe('setIcon', () => {
       16: `images/icon-${type}-16.png`,
       32: `images/icon-${type}-32.png`,
       48: `images/icon-${type}-48.png`,
-      128: `images/icon-${type}-128.png`
+      128: `images/icon-${type}-128.png`,
     };
   };
 
   global.chrome = {
     browserAction: {
-      setIcon: jest.fn()
-    }
+      setIcon: jest.fn(),
+    },
   };
 
   beforeEach(() => {
@@ -30,7 +30,7 @@ describe('setIcon', () => {
 
     expect(chrome.browserAction.setIcon.mock.calls).toHaveLength(1);
     expect(chrome.browserAction.setIcon.mock.calls[0][0]).toStrictEqual({
-      path: getPath('alive')
+      path: getPath('alive'),
     });
   });
 
@@ -40,7 +40,7 @@ describe('setIcon', () => {
     expect(chrome.browserAction.setIcon.mock.calls).toHaveLength(1);
     expect(chrome.browserAction.setIcon.mock.calls[0][0]).toStrictEqual({
       path: getPath('alive'),
-      tabId: 340
+      tabId: 340,
     });
   });
 
@@ -60,8 +60,8 @@ describe('toggleClass', () => {
   const element = {
     classList: {
       add: jest.fn(),
-      remove: jest.fn()
-    }
+      remove: jest.fn(),
+    },
   };
 
   beforeEach(() => {
@@ -98,8 +98,8 @@ describe('getCurrentTab', () => {
   it('should get tabId from inspected window if devtools object is available', async () => {
     global.chrome = {
       devtools: {
-        inspectedWindow: 20
-      }
+        inspectedWindow: 20,
+      },
     };
 
     const result = await getCurrentTab();
@@ -111,8 +111,8 @@ describe('getCurrentTab', () => {
       tabs: {
         query: jest
           .fn()
-          .mockImplementation((details, callback) => callback([30]))
-      }
+          .mockImplementation((details, callback) => callback([30])),
+      },
     };
 
     const result = await getCurrentTab();
@@ -121,7 +121,7 @@ describe('getCurrentTab', () => {
     expect(chrome.tabs.query.mock.calls).toHaveLength(1);
     expect(chrome.tabs.query.mock.calls[0][0]).toStrictEqual({
       active: true,
-      currentWindow: true
+      currentWindow: true,
     });
   });
 });

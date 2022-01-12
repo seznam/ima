@@ -5,7 +5,7 @@ describe('ima.storage.WeakMapStorage', () => {
 
   beforeEach(() => {
     map = new WeakMapStorage({
-      entryTtl: 100
+      entryTtl: 100,
     });
     Date.now = () => 1000;
     map.set('a', { num: 1 });

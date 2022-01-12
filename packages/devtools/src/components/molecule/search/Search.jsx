@@ -28,7 +28,7 @@ export default class Search extends React.PureComponent {
       clearEntries: PropTypes.func,
       setSearchQuery: PropTypes.func,
       selectNext: PropTypes.func,
-      selectPrevious: PropTypes.func
+      selectPrevious: PropTypes.func,
     };
   }
 
@@ -48,7 +48,7 @@ export default class Search extends React.PureComponent {
 
     this.state = {
       query: props.searchQuery,
-      invalid: false
+      invalid: false,
     };
   }
 
@@ -86,7 +86,7 @@ export default class Search extends React.PureComponent {
           value={query}
           onChange={e => this.onChange(e)}
           className={cn(styles.searchInput, {
-            [styles['searchInput--invalid']]: invalid
+            [styles['searchInput--invalid']]: invalid,
           })}
           placeholder='Search (text or /regex/)'
         />
@@ -167,7 +167,7 @@ export default class Search extends React.PureComponent {
   onChange({ target: { value } }) {
     this.setState(
       {
-        query: value
+        query: value,
       },
       this._setQuery
     );
@@ -178,7 +178,7 @@ export default class Search extends React.PureComponent {
 
     this.props.setSearchQuery('');
     this.setState({
-      query: ''
+      query: '',
     });
   }
 

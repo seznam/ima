@@ -16,13 +16,13 @@ describe('reducer', () => {
         0: {
           id: '0',
           selected: false,
-          messages: [{ payload: { label: 'msg0' } }]
+          messages: [{ payload: { label: 'msg0' } }],
         },
         1: {
           id: '1',
           selected: true,
-          messages: [{ payload: { label: 'msg1' } }]
-        }
+          messages: [{ payload: { label: 'msg1' } }],
+        },
       },
       searchQuery: '',
       status: '',
@@ -31,7 +31,7 @@ describe('reducer', () => {
       hasPrevious: false,
       zeroTime: '0',
       selectedId: '0',
-      isLoading: false
+      isLoading: false,
     };
   });
 
@@ -43,7 +43,7 @@ describe('reducer', () => {
     expect(
       reducer(entriesInitialState, {
         type: 'entries/addEntries',
-        payload: [{ payload: { id: '0', label: 'msg2', time: 1100 } }]
+        payload: [{ payload: { id: '0', label: 'msg2', time: 1100 } }],
       })
     ).toStrictEqual({
       ...entriesInitialState,
@@ -52,14 +52,14 @@ describe('reducer', () => {
         0: {
           id: '0',
           selected: true,
-          messages: [{ payload: { id: '0', label: 'msg2', time: 1100 } }]
-        }
+          messages: [{ payload: { id: '0', label: 'msg2', time: 1100 } }],
+        },
       },
       selectedId: '0',
       zeroId: '0',
       zeroTime: 1100,
       status: '',
-      isLoading: false
+      isLoading: false,
     });
   });
 
@@ -72,7 +72,7 @@ describe('reducer', () => {
       hasPrevious: false,
       zeroTime: null,
       zeroId: null,
-      selectedId: null
+      selectedId: null,
     });
   });
 
@@ -81,7 +81,7 @@ describe('reducer', () => {
 
     expect(reducer(curState, { type: 'entries/alive' })).toStrictEqual({
       ...curState,
-      status: 'Loading messages...'
+      status: 'Loading messages...',
     });
   });
 
@@ -91,7 +91,7 @@ describe('reducer', () => {
     expect(reducer(curState, { type: 'entries/dead' })).toStrictEqual({
       ...curState,
       status: 'This website does not use IMA.js',
-      isLoading: false
+      isLoading: false,
     });
   });
 
@@ -102,7 +102,7 @@ describe('reducer', () => {
       ...curState,
       error:
         'The devtools only support applications runnning IMA.js v17 or higher.',
-      isLoading: false
+      isLoading: false,
     });
   });
 
@@ -110,7 +110,7 @@ describe('reducer', () => {
     expect(reducer(curState, { type: 'entries/reload' })).toStrictEqual({
       ...curState,
       status: 'Reloading application...',
-      isLoading: true
+      isLoading: true,
     });
   });
 
@@ -118,14 +118,14 @@ describe('reducer', () => {
     expect(
       reducer(curState, {
         type: 'entries/setSearchQuery',
-        payload: 'msg0'
+        payload: 'msg0',
       })
     ).toStrictEqual({
       ...curState,
       entryIdsByQuery: ['0'],
       searchQuery: 'msg0',
       hasNext: false,
-      hasPrevious: false
+      hasPrevious: false,
     });
   });
 
@@ -138,17 +138,17 @@ describe('reducer', () => {
         0: {
           id: '0',
           selected: false,
-          messages: [{ payload: { label: 'msg0' } }]
+          messages: [{ payload: { label: 'msg0' } }],
         },
         1: {
           id: '1',
           selected: true,
-          messages: [{ payload: { label: 'msg1' } }]
-        }
+          messages: [{ payload: { label: 'msg1' } }],
+        },
       },
       selectedId: '1',
       hasNext: false,
-      hasPrevious: true
+      hasPrevious: true,
     });
   });
 
@@ -159,17 +159,17 @@ describe('reducer', () => {
         0: {
           id: '0',
           selected: false,
-          messages: [{ payload: { label: 'msg0' } }]
+          messages: [{ payload: { label: 'msg0' } }],
         },
         1: {
           id: '1',
           selected: true,
-          messages: [{ payload: { label: 'msg1' } }]
-        }
+          messages: [{ payload: { label: 'msg1' } }],
+        },
       },
       selectedId: '1',
       hasNext: false,
-      hasPrevious: true
+      hasPrevious: true,
     });
   });
 
@@ -199,17 +199,17 @@ describe('reducer', () => {
           0: {
             id: '0',
             selected: true,
-            messages: [{ payload: { label: 'msg0' } }]
+            messages: [{ payload: { label: 'msg0' } }],
           },
           1: {
             id: '1',
             selected: false,
-            messages: [{ payload: { label: 'msg1' } }]
-          }
+            messages: [{ payload: { label: 'msg1' } }],
+          },
         },
         selectedId: '0',
         hasNext: true,
-        hasPrevious: false
+        hasPrevious: false,
       }
     );
   });
@@ -231,70 +231,70 @@ describe('actions', () => {
 
     expect(actions.addEntries(entries)).toStrictEqual({
       payload: [{ payload: { label: 'msg' } }],
-      type: 'entries/addEntries'
+      type: 'entries/addEntries',
     });
   });
 
   it('should create action to clear entries', () => {
     expect(actions.clearEntries()).toStrictEqual({
       type: 'entries/clearEntries',
-      payload: undefined
+      payload: undefined,
     });
   });
 
   it('should create action to set state alive', () => {
     expect(actions.alive()).toStrictEqual({
       type: 'entries/alive',
-      payload: undefined
+      payload: undefined,
     });
   });
 
   it('should create action to set state dead', () => {
     expect(actions.dead()).toStrictEqual({
       type: 'entries/dead',
-      payload: undefined
+      payload: undefined,
     });
   });
 
   it('should create action to set state unsupported', () => {
     expect(actions.unsupported()).toStrictEqual({
       type: 'entries/unsupported',
-      payload: undefined
+      payload: undefined,
     });
   });
 
   it('should create action to set state reload', () => {
     expect(actions.reload()).toStrictEqual({
       type: 'entries/reload',
-      payload: undefined
+      payload: undefined,
     });
   });
 
   it('should create action to set search query', () => {
     expect(actions.setSearchQuery('query')).toStrictEqual({
       type: 'entries/setSearchQuery',
-      payload: 'query'
+      payload: 'query',
     });
   });
 
   it('should create action to set selected', () => {
     expect(actions.setSelected(123)).toStrictEqual({
       type: 'entries/setSelected',
-      payload: 123
+      payload: 123,
     });
   });
 
   it('should create action to select next', () => {
     expect(actions.selectNext()).toStrictEqual({
       type: 'entries/selectNext',
-      payload: undefined
+      payload: undefined,
     });
   });
 
   it('should create action to select previous', () => {
     expect(actions.selectPrevious()).toStrictEqual({
       type: 'entries/selectPrevious',
-      payload: undefined
+      payload: undefined,
     });
   });
 });
@@ -316,7 +316,7 @@ describe('selectors', () => {
     it('should return entries length', () => {
       const result = selectors.getEntriesLength.resultFunc({
         0: 'entry0',
-        1: 'entry0'
+        1: 'entry0',
       });
 
       expect(result).toBe(2);

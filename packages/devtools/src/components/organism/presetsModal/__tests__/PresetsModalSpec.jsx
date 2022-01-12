@@ -10,7 +10,7 @@ describe('PresetsModal organism', () => {
   let wrapper, instance;
 
   const event = {
-    preventDefault: jest.fn()
+    preventDefault: jest.fn(),
   };
 
   const props = {
@@ -19,15 +19,15 @@ describe('PresetsModal organism', () => {
         id: '0',
         name: 'name',
         editable: true,
-        selected: false
-      }
+        selected: false,
+      },
     },
     selectedPresetId: '0',
     addPreset: jest.fn(),
     selectPreset: jest.fn(),
     alertSuccess: jest.fn(),
     onClose: jest.fn(),
-    opened: true
+    opened: true,
   };
 
   beforeEach(() => {
@@ -65,7 +65,7 @@ describe('PresetsModal organism', () => {
       expect(settings.setSettings.mock.calls).toHaveLength(1);
       expect(settings.setSettings.mock.calls[0][0]).toStrictEqual({
         presets: props.presets,
-        selectedPresetId: props.selectedPresetId
+        selectedPresetId: props.selectedPresetId,
       });
 
       expect(event.preventDefault.mock.calls).toHaveLength(1);
@@ -95,7 +95,7 @@ describe('PresetsModal organism', () => {
         name: 'Preset - 2fghzj',
         editable: true,
         selected: false,
-        hooks: {}
+        hooks: {},
       });
     });
   });

@@ -13,14 +13,14 @@ describe('ima.core.http.HttpProxy', () => {
     timeout: 2000,
     repeatRequest: 1,
     headers: {},
-    withCredentials: true
+    withCredentials: true,
   };
   const DATA = {
-    something: 'query'
+    something: 'query',
   };
 
   const mockedUrlTransformer = toMockedInstance(UrlTransformer, {
-    transform: url => url
+    transform: url => url,
   });
   const mockedWindowHelper = toMockedInstance(Window);
 
@@ -41,7 +41,7 @@ describe('ima.core.http.HttpProxy', () => {
       text() {
         return Promise.resolve(this.body);
       },
-      body: { data: 'some data' }
+      body: { data: 'some data' },
     };
     fetchResult = Promise.resolve(response);
     spyOn(proxy, '_getFetchApi').and.callFake(() => (_, init) => {
@@ -67,7 +67,7 @@ describe('ima.core.http.HttpProxy', () => {
       it('should return a "body" field in error object, when promise is rejected', async done => {
         fetchResult = Promise.reject(
           new GenericError('The HTTP request timed out', {
-            status: StatusCode.TIMEOUT
+            status: StatusCode.TIMEOUT,
           })
         );
 
@@ -83,7 +83,7 @@ describe('ima.core.http.HttpProxy', () => {
       it('should reject promise for Timeout error', async done => {
         fetchResult = Promise.reject(
           new GenericError('The HTTP request timed out', {
-            status: StatusCode.TIMEOUT
+            status: StatusCode.TIMEOUT,
           })
         );
 
@@ -115,7 +115,7 @@ describe('ima.core.http.HttpProxy', () => {
       it('should reject promise for Forbidden', async done => {
         Object.assign(response, {
           ok: false,
-          status: StatusCode.FORBIDDEN
+          status: StatusCode.FORBIDDEN,
         });
 
         try {
@@ -130,7 +130,7 @@ describe('ima.core.http.HttpProxy', () => {
       it('should reject promise for Not found', async done => {
         Object.assign(response, {
           ok: false,
-          status: StatusCode.NOT_FOUND
+          status: StatusCode.NOT_FOUND,
         });
 
         try {
@@ -145,7 +145,7 @@ describe('ima.core.http.HttpProxy', () => {
       it('should reject promise for Internal Server Error', async done => {
         Object.assign(response, {
           ok: false,
-          status: StatusCode.SERVER_ERROR
+          status: StatusCode.SERVER_ERROR,
         });
 
         try {
@@ -160,7 +160,7 @@ describe('ima.core.http.HttpProxy', () => {
       it('should reject promise for UNKNOWN', async done => {
         Object.assign(response, {
           ok: false,
-          status: null
+          status: null,
         });
 
         try {
@@ -204,8 +204,8 @@ describe('ima.core.http.HttpProxy', () => {
         it(`should convert body to query string if header 'Content-Type' is set to 'application/x-www-form-urlencoded'`, async () => {
           const options = Object.assign({}, OPTIONS, {
             headers: {
-              'Content-Type': 'application/x-www-form-urlencoded'
-            }
+              'Content-Type': 'application/x-www-form-urlencoded',
+            },
           });
 
           const data = { testKey: 'testValue', testKey2: 'testValue2' };
@@ -218,8 +218,8 @@ describe('ima.core.http.HttpProxy', () => {
         it(`should convert body to FormData/Object if header 'Content-Type' is set to 'multipart/form-data'`, async () => {
           const options = Object.assign({}, OPTIONS, {
             headers: {
-              'Content-Type': 'multipart/form-data'
-            }
+              'Content-Type': 'multipart/form-data',
+            },
           });
 
           const data = { testKey: 'testValue', testKey2: 'testValue2' };
@@ -250,7 +250,7 @@ describe('ima.core.http.HttpProxy', () => {
     it('should properly escape special characters', () => {
       const testObject = {
         testKey: 'test test/test|test?test',
-        testKey2: 'test#test$test^test{test}'
+        testKey2: 'test#test$test^test{test}',
       };
       const queryString = proxy._convertObjectToQueryString(testObject);
       expect(typeof queryString).toBe('string');
@@ -293,7 +293,7 @@ describe('ima.core.http.HttpProxy', () => {
     it('should return null for invalid custom content types', () => {
       expect(
         proxy._getContentType('GET', null, {
-          headers: { 'Content-Type': null }
+          headers: { 'Content-Type': null },
         })
       ).toBeNull();
     });

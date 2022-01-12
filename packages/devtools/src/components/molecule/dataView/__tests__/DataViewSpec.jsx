@@ -19,13 +19,13 @@ describe('DataView molecule', () => {
             state: {
               args: [1, 2],
               payload: {
-                id: 0
-              }
-            }
-          }
-        }
-      ]
-    }
+                id: 0,
+              },
+            },
+          },
+        },
+      ],
+    },
   };
 
   beforeEach(() => {
@@ -68,13 +68,13 @@ describe('DataView molecule', () => {
                 state: {
                   args: [1],
                   payload: {
-                    id: 2
-                  }
-                }
-              }
-            }
-          ]
-        }
+                    id: 2,
+                  },
+                },
+              },
+            },
+          ],
+        },
       });
 
       expect(Array.isArray(instance.messages)).toBe(true);
@@ -174,20 +174,20 @@ describe('DataView molecule', () => {
                 state: {
                   args: [1],
                   payload: {
-                    id: 2
-                  }
-                }
-              }
-            }
-          ]
-        }
+                    id: 2,
+                  },
+                },
+              },
+            },
+          ],
+        },
       });
 
       let [args, payload] = instance._getState();
 
       expect(args).toStrictEqual([1]);
       expect(payload).toStrictEqual({
-        id: 2
+        id: 2,
       });
     });
   });

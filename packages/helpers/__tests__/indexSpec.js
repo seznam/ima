@@ -29,7 +29,7 @@ describe('helper', () => {
         a: 1,
         b: 3,
         c: { d: 5, e: [5] },
-        __meta__: { b: 'ref-1', c: 'ref-1', 'c.d': 'ref-1', 'c.e': 'ref-1' }
+        __meta__: { b: 'ref-1', c: 'ref-1', 'c.d': 'ref-1', 'c.e': 'ref-1' },
       });
     });
 
@@ -38,7 +38,7 @@ describe('helper', () => {
         a: 1,
         b: 3,
         c: { d: 5, e: [5] },
-        __meta__: { b: 'ref-1', c: 'ref-1', 'c.d': 'ref-1', 'c.e': 'ref-1' }
+        __meta__: { b: 'ref-1', c: 'ref-1', 'c.d': 'ref-1', 'c.e': 'ref-1' },
       };
 
       helpers.assignRecursivelyWithTracking('ref-2')(target, { c: { e: 6 } });
@@ -47,7 +47,7 @@ describe('helper', () => {
         a: 1,
         b: 3,
         c: { d: 5, e: 6 },
-        __meta__: { b: 'ref-1', c: 'ref-2', 'c.d': 'ref-1', 'c.e': 'ref-2' }
+        __meta__: { b: 'ref-1', c: 'ref-2', 'c.d': 'ref-1', 'c.e': 'ref-2' },
       });
     });
   });
@@ -60,10 +60,10 @@ describe('helper', () => {
         a: {
           b: [
             {
-              c: 1
-            }
-          ]
-        }
+              c: 1,
+            },
+          ],
+        },
       };
       helpers.deepFreeze(data);
 
@@ -79,14 +79,14 @@ describe('helper', () => {
       prod: {
         string: 'something',
         deep: {
-          number: 1
-        }
+          number: 1,
+        },
       },
       dev: {
         deep: {
-          number: 2
-        }
-      }
+          number: 2,
+        },
+      },
     };
 
     it('should return production setting', () => {
@@ -115,13 +115,13 @@ describe('helper', () => {
       let source = {
         a: 1,
         b: Promise.resolve(2),
-        c: new Promise(resolve => setTimeout(() => resolve(3), 10))
+        c: new Promise(resolve => setTimeout(() => resolve(3), 10)),
       };
       helpers.allPromiseHash(source).then(results => {
         expect(results).toStrictEqual({
           a: 1,
           b: 2,
-          c: 3
+          c: 3,
         });
         done();
       });
@@ -141,8 +141,8 @@ describe('helper', () => {
     it('should clone data', () => {
       let source = {
         a: {
-          b: 1
-        }
+          b: 1,
+        },
       };
 
       expect(helpers.clone(source)).not.toBe(source);

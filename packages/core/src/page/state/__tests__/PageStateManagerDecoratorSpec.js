@@ -7,7 +7,7 @@ describe('ima.core.page.state.PageStateManagerDecorator', () => {
   let decoratedPageStateManager = null;
   let state = {
     allow: 1,
-    deny: 0
+    deny: 0,
   };
 
   beforeEach(() => {
@@ -59,7 +59,7 @@ describe('ima.core.page.state.PageStateManagerDecorator', () => {
 
     it('should setState for all allowed keys', () => {
       let patchState = {
-        allow: 0
+        allow: 0,
       };
 
       spyOn(pageStateManager, 'setState').and.stub();
@@ -71,7 +71,7 @@ describe('ima.core.page.state.PageStateManagerDecorator', () => {
 
     it('should commit transaction for all allowed keys', () => {
       let patchState = {
-        allow: 0
+        allow: 0,
       };
 
       decoratedPageStateManager.beginTransaction();

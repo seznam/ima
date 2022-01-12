@@ -6,7 +6,7 @@ export default class Item extends AbstractComponent {
     super(props);
 
     this.state = {
-      editing: false
+      editing: false,
     };
   }
 
@@ -15,7 +15,7 @@ export default class Item extends AbstractComponent {
       <li
         className={this.cssClasses({
           completed: this.props.item.completed,
-          editing: this.state.editing
+          editing: this.state.editing,
         })}
       >
         <div className='view'>
@@ -45,19 +45,19 @@ export default class Item extends AbstractComponent {
 
   onDelete() {
     this.fire('itemDeleted', {
-      item: this.props.item
+      item: this.props.item,
     });
   }
 
   onCompletionToggled() {
     this.fire('itemCompletionToggled', {
-      item: this.props.item
+      item: this.props.item,
     });
   }
 
   onStartEdit() {
     this.setState({
-      editing: true
+      editing: true,
     });
   }
 
@@ -67,12 +67,12 @@ export default class Item extends AbstractComponent {
     if (newTitle !== this.props.item.title) {
       this.fire('itemEdited', {
         item: this.props.item,
-        newTitle: newTitle
+        newTitle: newTitle,
       });
     }
 
     this.setState({
-      editing: false
+      editing: false,
     });
   }
 

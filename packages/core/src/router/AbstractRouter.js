@@ -328,7 +328,7 @@ export default class AbstractRouter extends Router {
 
     const action = {
       url: this.getUrl(),
-      type: ActionTypes.ERROR
+      type: ActionTypes.ERROR,
     };
 
     locals.action = action;
@@ -337,7 +337,7 @@ export default class AbstractRouter extends Router {
     await this._runMiddlewares(
       [
         ...this._getMiddlewaresForRoute(RouteNames.ERROR),
-        ...errorRoute.getOptions().middlewares
+        ...errorRoute.getOptions().middlewares,
       ],
       params,
       locals
@@ -368,7 +368,7 @@ export default class AbstractRouter extends Router {
 
     const action = {
       url: this.getUrl(),
-      type: ActionTypes.ERROR
+      type: ActionTypes.ERROR,
     };
 
     locals.action = action;
@@ -377,7 +377,7 @@ export default class AbstractRouter extends Router {
     await this._runMiddlewares(
       [
         ...this._getMiddlewaresForRoute(RouteNames.NOT_FOUND),
-        ...notFoundRoute.getOptions().middlewares
+        ...notFoundRoute.getOptions().middlewares,
       ],
       params,
       locals
@@ -464,7 +464,7 @@ export default class AbstractRouter extends Router {
       params,
       path: this._getCurrentlyRoutedPath(),
       options,
-      action
+      action,
     };
 
     this._dispatcher.fire(Events.BEFORE_HANDLE_ROUTE, eventData, true);
@@ -508,7 +508,7 @@ export default class AbstractRouter extends Router {
       if (routeHandler.matches(path)) {
         return {
           route: routeHandler,
-          middlewares
+          middlewares,
         };
       }
     }

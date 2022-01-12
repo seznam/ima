@@ -10,7 +10,7 @@ import {
   toMockedInstance,
   setGlobalMockMethod,
   setGlobalKeepUnmock,
-  objectKeepUnmock
+  objectKeepUnmock,
 } from 'to-mock';
 
 jest.mock('path', () => {
@@ -34,7 +34,7 @@ describe('ima.core.page.renderer.ServerPageRenderer', () => {
   let param2 = 'param2';
   let params = {
     param1: param1,
-    param2: Promise.resolve(param2)
+    param2: Promise.resolve(param2),
   };
 
   let controller = new Controller();
@@ -48,21 +48,21 @@ describe('ima.core.page.renderer.ServerPageRenderer', () => {
   let dispatcher = null;
   let ReactDOMServer = {
     renderToString: () => {},
-    renderToStaticMarkup: () => {}
+    renderToStaticMarkup: () => {},
   };
   let settings = {
     $Page: {
       $Render: {
         scripts: [],
-        documentView: 'app.component.document.DocumentView'
-      }
-    }
+        documentView: 'app.component.document.DocumentView',
+      },
+    },
   };
   let routeOptions = {
     onlyUpdate: false,
     autoScroll: false,
     allowSPA: false,
-    documentView: null
+    documentView: null,
   };
 
   beforeEach(() => {
@@ -104,14 +104,14 @@ describe('ima.core.page.renderer.ServerPageRenderer', () => {
   describe('mount method', () => {
     let loadedPageState = {
       param1: 'param1',
-      param2: Promise.resolve('param2')
+      param2: Promise.resolve('param2'),
     };
 
     it('should return already sent data to the client', done => {
       let responseParams = {
         content: '',
         status: 200,
-        pageState: loadedPageState
+        pageState: loadedPageState,
       };
 
       spyOn(response, 'isResponseSent').and.returnValue(true);
@@ -139,14 +139,14 @@ describe('ima.core.page.renderer.ServerPageRenderer', () => {
 
   describe('_renderPage method', () => {
     let fetchedResource = {
-      resource: 'json'
+      resource: 'json',
     };
 
     it('should return already sent data to client', () => {
       let responseParams = {
         content: '',
         status: 200,
-        pageState: fetchedResource
+        pageState: fetchedResource,
       };
 
       spyOn(response, 'isResponseSent').and.returnValue(true);
@@ -208,7 +208,7 @@ describe('ima.core.page.renderer.ServerPageRenderer', () => {
   describe('_renderPageContentToString method', () => {
     let utils = { $Utils: 'utils' };
     let wrapedPageViewElement = {
-      wrapElementView: 'wrapedPageViewElement'
+      wrapElementView: 'wrapedPageViewElement',
     };
     let pageMarkup = '<body></body>';
     let documentView = () => {};

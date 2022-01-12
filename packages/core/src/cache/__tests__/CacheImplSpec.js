@@ -13,7 +13,7 @@ describe('ima.core.cache.CacheImpl', () => {
     cacheFactory = new CacheFactory();
     cache = new Cache(cacheStorage, cacheFactory, Helper, {
       enabled: true,
-      ttl: 1000
+      ttl: 1000,
     });
     Date.now = () => 1000;
     cache.set('aaa', 123);
@@ -41,8 +41,8 @@ describe('ima.core.cache.CacheImpl', () => {
           number: 1,
           boolean: true,
           string: 'text',
-          array: [1, 2, 3, [4, 5], { number: 1 }]
-        }
+          array: [1, 2, 3, [4, 5], { number: 1 }],
+        },
       };
 
       cache.set('object', object);
@@ -68,8 +68,8 @@ describe('ima.core.cache.CacheImpl', () => {
           number: 1,
           boolean: true,
           string: 'text',
-          array: [1, 2, 3, [4, 5], { number: 1 }]
-        }
+          array: [1, 2, 3, [4, 5], { number: 1 }],
+        },
       };
 
       cache.set('object', object);
@@ -131,7 +131,7 @@ describe('ima.core.cache.CacheImpl', () => {
     spyOn(cacheFactory, 'createCacheEntry').and.returnValue({ foo: 'bar' });
 
     cache.set('myKey', {
-      foo: 'bar'
+      foo: 'bar',
     });
     const serialization = cache.serialize();
 
@@ -139,8 +139,8 @@ describe('ima.core.cache.CacheImpl', () => {
       JSON.stringify({
         aaa: {
           value: 123,
-          ttl: 1000
-        }
+          ttl: 1000,
+        },
       })
     );
   });
@@ -154,8 +154,8 @@ describe('ima.core.cache.CacheImpl', () => {
       JSON.stringify({
         key: {
           value: 'value',
-          ttl: 'Infinity'
-        }
+          ttl: 'Infinity',
+        },
       })
     );
   });
@@ -169,8 +169,8 @@ describe('ima.core.cache.CacheImpl', () => {
       JSON.stringify({
         key: {
           value: 'value',
-          ttl: 60000
-        }
+          ttl: 60000,
+        },
       })
     );
   });
@@ -179,8 +179,8 @@ describe('ima.core.cache.CacheImpl', () => {
     const serialization = {
       key: {
         value: 'value',
-        ttl: 'Infinity'
-      }
+        ttl: 'Infinity',
+      },
     };
     cache.clear();
     cache.deserialize(serialization);
@@ -218,7 +218,7 @@ describe('ima.core.cache.CacheImpl', () => {
 
     it('should return false for object with bad type of keys', () => {
       let object = {
-        date: new Date()
+        date: new Date(),
       };
 
       expect(cache._canSerializeValue(object)).toBe(false);
@@ -231,8 +231,8 @@ describe('ima.core.cache.CacheImpl', () => {
         boolean: true,
         array: [1, 2, 3, { string: 'string' }],
         object: {
-          number: 1
-        }
+          number: 1,
+        },
       };
 
       expect(cache._canSerializeValue(object)).toBe(true);

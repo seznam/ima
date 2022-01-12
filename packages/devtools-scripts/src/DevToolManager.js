@@ -6,7 +6,7 @@ export default class DevManager {
       '$Window',
       '$Dispatcher',
       '$EventBus',
-      '$SessionMapStorage'
+      '$SessionMapStorage',
     ];
   }
 

@@ -9,7 +9,7 @@ describe('ima.storage.SessionStorage', () => {
     setItem: (key, value) => sessionStorage._storage.set(key, value),
     getItem: key => sessionStorage._storage.get(key),
     removeItem: key => sessionStorage._storage.delete(key),
-    clear: () => sessionStorage._storage.clear()
+    clear: () => sessionStorage._storage.clear(),
   };
 
   beforeEach(() => {

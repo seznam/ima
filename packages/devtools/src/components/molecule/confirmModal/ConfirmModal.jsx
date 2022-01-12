@@ -13,7 +13,7 @@ export default class ConfirmModal extends React.PureComponent {
       opened: PropTypes.bool,
       accept: PropTypes.func,
       cancel: PropTypes.func,
-      hideConfirmModal: PropTypes.func
+      hideConfirmModal: PropTypes.func,
     };
   }
 

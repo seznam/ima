@@ -5,7 +5,7 @@ export default PropTypes.shape({
   selected: PropTypes.bool,
   messages: PropTypes.arrayOf(
     PropTypes.shape({
-      payload: PropTypes.object
+      payload: PropTypes.object,
     })
-  )
+  ),
 });

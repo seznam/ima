@@ -16,7 +16,7 @@ export default class PresetEntry extends React.PureComponent {
       copyPreset: PropTypes.func,
       deletePreset: PropTypes.func,
       alertSuccess: PropTypes.func,
-      showConfirmModal: PropTypes.func
+      showConfirmModal: PropTypes.func,
     };
   }
 
@@ -25,7 +25,7 @@ export default class PresetEntry extends React.PureComponent {
 
     this.state = {
       editable: false,
-      name: props.preset.name
+      name: props.preset.name,
     };
   }
 
@@ -103,7 +103,7 @@ export default class PresetEntry extends React.PureComponent {
 
   onChange({ target: { value } }) {
     this.setState({
-      name: value
+      name: value,
     });
   }
 
@@ -130,7 +130,7 @@ export default class PresetEntry extends React.PureComponent {
 
     renamePreset({ id, name });
     this.setState({
-      editable: false
+      editable: false,
     });
   }
 
@@ -148,7 +148,7 @@ export default class PresetEntry extends React.PureComponent {
     e.stopPropagation();
 
     this.setState({
-      editable: true
+      editable: true,
     });
   }
 
@@ -169,7 +169,7 @@ export default class PresetEntry extends React.PureComponent {
       accept: () => {
         deletePreset(id);
         alertSuccess(`Preset '${name}' was deleted.`);
-      }
+      },
     });
   }
 
@@ -181,7 +181,7 @@ export default class PresetEntry extends React.PureComponent {
 
     this.setState({
       name,
-      editable: false
+      editable: false,
     });
   }
 }

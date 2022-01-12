@@ -7,7 +7,7 @@ describe('Search molecule', () => {
     onSelect: jest.fn(),
     clearEntries: jest.fn(),
     setSearchQuery: jest.fn(),
-    searchQuery: 'search query'
+    searchQuery: 'search query',
   };
 
   let wrapper, instance;
@@ -39,7 +39,7 @@ describe('Search molecule', () => {
 
     expect(instance.onChange.mock.calls).toHaveLength(1);
     expect(instance.onChange.mock.calls[0][0]).toStrictEqual({
-      target: { value: 'test' }
+      target: { value: 'test' },
     });
 
     instance.setState.mockReset();
@@ -60,13 +60,13 @@ describe('Search molecule', () => {
     it('should update state search query', () => {
       instance.onChange({
         target: {
-          value: 'test'
-        }
+          value: 'test',
+        },
       });
 
       expect(instance.setState.mock.calls).toHaveLength(1);
       expect(instance.setState.mock.calls[0][0]).toStrictEqual({
-        query: 'test'
+        query: 'test',
       });
       expect(instance.setState.mock.calls[0][1]).toStrictEqual(
         instance._setQuery
@@ -80,7 +80,7 @@ describe('Search molecule', () => {
       expect(instance.state.query).toBe('search query');
 
       instance.onClear({
-        preventDefault: jest.fn()
+        preventDefault: jest.fn(),
       });
 
       expect(instance.props.setSearchQuery.mock.calls).toHaveLength(1);
@@ -88,7 +88,7 @@ describe('Search molecule', () => {
 
       expect(instance.setState.mock.calls).toHaveLength(1);
       expect(instance.setState.mock.calls[0][0]).toStrictEqual({
-        query: ''
+        query: '',
       });
     });
   });

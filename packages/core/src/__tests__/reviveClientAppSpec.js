@@ -26,21 +26,21 @@ describe('revive client application', () => {
   let ReactDOM = {
     render() {
       return {
-        setState: () => {}
+        setState: () => {},
       };
     },
     hydrate() {
       return {
-        setState: () => {}
+        setState: () => {},
       };
-    }
+    },
   };
 
   let routerConfig = {
     $Protocol: 'http:',
     $Root: '',
     $LanguagePartPath: '',
-    $Host: 'www.domain.com'
+    $Host: 'www.domain.com',
   };
 
   function View() {
@@ -71,7 +71,7 @@ describe('revive client application', () => {
     onlyUpdate: false,
     autoScroll: true,
     allowSPA: true,
-    documentView: DocumentView
+    documentView: DocumentView,
   };
 
   function propagateToGlobal(win) {
@@ -88,14 +88,14 @@ describe('revive client application', () => {
 
   beforeAll(done => {
     let doc = Reflect.construct(jsdom.JSDOM, [
-      `<!DOCTYPE html><html><head></head><body><div id="${MASTER_ELEMENT_ID}"></div></body></html>`
+      `<!DOCTYPE html><html><head></head><body><div id="${MASTER_ELEMENT_ID}"></div></body></html>`,
     ]);
 
     propagateToGlobal(doc.window);
 
     global.$IMA = Object.assign({}, global.$IMA || {}, routerConfig, {
       $Env: 'prod',
-      $Version: 1
+      $Version: 1,
     });
 
     global.document = doc.window.document;
@@ -103,7 +103,7 @@ describe('revive client application', () => {
     global.window.$IMA = global.$IMA;
     global.window.$Debug = global.$Debug;
     doc.reconfigure({
-      url: `${routerConfig.$Protocol}//${routerConfig.$Host}`
+      url: `${routerConfig.$Protocol}//${routerConfig.$Host}`,
     });
 
     //mock
@@ -129,11 +129,11 @@ describe('revive client application', () => {
             prod: {
               $Http: {},
               $Page: {
-                $Render: {}
-              }
-            }
+                $Render: {},
+              },
+            },
           };
-        }
+        },
       },
       {
         initBindApp: (ns, oc) => {
@@ -146,7 +146,7 @@ describe('revive client application', () => {
           if (!oc.has('$Utils')) {
             oc.constant('$Utils', {});
           }
-        }
+        },
       }
     );
 

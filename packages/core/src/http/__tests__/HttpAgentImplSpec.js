@@ -30,14 +30,14 @@ describe('ima.core.http.HttpAgentImpl', () => {
         ttl: 0,
         headers: {
           Accept: 'application/json',
-          'Accept-Language': 'en'
+          'Accept-Language': 'en',
         },
         cache: true,
-        postProcessor: agentResponse => agentResponse
+        postProcessor: agentResponse => agentResponse,
       },
       cacheOptions: {
-        prefix: 'http.'
-      }
+        prefix: 'http.',
+      },
     };
     http = new HttpAgentImpl(proxy, cache, cookie, httpConfig);
 
@@ -49,7 +49,7 @@ describe('ima.core.http.HttpAgentImpl', () => {
       cache: true,
       withCredentials: true,
       postProcessor: httpConfig.defaultRequestOptions.postProcessor,
-      language: httpConfig.defaultRequestOptions.language
+      language: httpConfig.defaultRequestOptions.language,
     };
 
     data = {
@@ -58,17 +58,17 @@ describe('ima.core.http.HttpAgentImpl', () => {
       params: {
         url: 'url',
         data: {},
-        options: options
+        options: options,
       },
       headers: {
-        'set-cookie': 'cookie1=cookie1, cookie2=cookie2'
+        'set-cookie': 'cookie1=cookie1, cookie2=cookie2',
       },
       headersRaw: {
         raw() {
           return { 'set-cookie': ['cookie1=cookie1', 'cookie2=cookie2'] };
         },
-        'set-cookie': 'cookie1=cookie1, cookie2=cookie2'
-      }
+        'set-cookie': 'cookie1=cookie1, cookie2=cookie2',
+      },
     };
   });
 
@@ -93,7 +93,7 @@ describe('ima.core.http.HttpAgentImpl', () => {
               body: data.body,
               headers: data.headers,
               headersRaw: data.headersRaw,
-              cached: false
+              cached: false,
             };
 
             expect(response).toStrictEqual(agentResponse);

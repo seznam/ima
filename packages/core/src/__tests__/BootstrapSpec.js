@@ -8,16 +8,16 @@ describe('bootstrap', () => {
   let environments = {
     prod: {},
     test: {},
-    dev: {}
+    dev: {},
   };
   let plugin = {
     $registerImaPlugin: () => {},
     initSettings: () => environments,
-    initBind: () => {}
+    initBind: () => {},
   };
   let bootConfig = {
     settings: {
-      $Env: 'prod'
+      $Env: 'prod',
     },
     plugins: [{ name: 'test-plugin', module: plugin }],
     initSettings: () => environments,
@@ -25,7 +25,7 @@ describe('bootstrap', () => {
     initBindApp: () => {},
     initRoutes: () => {},
     bind: {},
-    routes: {}
+    routes: {},
   };
 
   beforeEach(() => {
@@ -129,7 +129,7 @@ describe('bootstrap', () => {
         objectContainer,
         {
           $Env: 'prod',
-          __meta__: {}
+          __meta__: {},
         },
         'ima.core'
       );
@@ -145,7 +145,7 @@ describe('bootstrap', () => {
         objectContainer,
         {
           $Env: 'prod',
-          __meta__: {}
+          __meta__: {},
         },
         'test-plugin'
       );
@@ -161,7 +161,7 @@ describe('bootstrap', () => {
         objectContainer,
         {
           $Env: 'prod',
-          __meta__: {}
+          __meta__: {},
         },
         'app'
       );

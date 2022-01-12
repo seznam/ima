@@ -7,7 +7,7 @@ describe('HookEntry molecule', () => {
 
   const event = {
     preventDefault: jest.fn(),
-    stopPropagation: jest.fn()
+    stopPropagation: jest.fn(),
   };
 
   const props = {
@@ -16,14 +16,14 @@ describe('HookEntry molecule', () => {
       id: '0',
       name: 'name',
       enabled: true,
-      opened: false
+      opened: false,
     },
     toggleHook: jest.fn(),
     deleteHook: jest.fn(),
     alertSuccess: jest.fn(),
     openHook: jest.fn(),
     showConfirmModal: jest.fn(),
-    editable: true
+    editable: true,
   };
 
   beforeEach(() => {
@@ -46,8 +46,8 @@ describe('HookEntry molecule', () => {
     wrapper.setProps({
       hook: {
         ...props.hook,
-        opened: true
-      }
+        opened: true,
+      },
     });
     expect(wrapper).toMatchSnapshot();
   });
@@ -58,13 +58,13 @@ describe('HookEntry molecule', () => {
       instance.onChange({
         target: {
           name: 'name__0',
-          value: 'newName'
-        }
+          value: 'newName',
+        },
       });
 
       expect(instance.setState.mock.calls).toHaveLength(1);
       expect(instance.setState.mock.calls[0][0]).toStrictEqual({
-        name: 'newName'
+        name: 'newName',
       });
     });
   });

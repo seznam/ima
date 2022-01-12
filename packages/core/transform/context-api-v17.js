@@ -1,6 +1,6 @@
 const {
   addNamedImports,
-  removeUnusedPackageImports
+  removeUnusedPackageImports,
 } = require('./transformUtils/imports');
 const { getOptions } = require('./transformUtils/testUtils');
 
@@ -10,8 +10,8 @@ module.exports = function (fileInfo, api, options) {
 
   const contextTypes = ast.find(j.MethodDefinition, {
     key: {
-      name: 'contextTypes'
-    }
+      name: 'contextTypes',
+    },
   });
 
   if (contextTypes.size()) {

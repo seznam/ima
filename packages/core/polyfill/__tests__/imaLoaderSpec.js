@@ -6,21 +6,21 @@ describe('imaLoader', () => {
   const mockDependencies = ['foo'];
   const mockFactory = () => ({
     setters: [() => {}],
-    execute: () => {}
+    execute: () => {},
   });
 
   const mockModule = {
     dependencies: mockDependencies,
     dependencyOf: [],
     factory: mockFactory,
-    instance: null
+    instance: null,
   };
 
   const instancedMockModule = {
     dependencies: mockDependencies,
     dependencyOf: [],
     factory: mockFactory,
-    instance: {}
+    instance: {},
   };
 
   beforeEach(() => {
@@ -42,7 +42,7 @@ describe('imaLoader', () => {
       dependencies: [],
       dependencyOf: [],
       factory: null,
-      instance: null
+      instance: null,
     };
     imaLoader.register(moduleName, mockModule.dependencies, mockModule.factory);
     imaLoader.register(

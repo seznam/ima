@@ -75,7 +75,7 @@ describe('ima.core.router.ClientRouter', () => {
         {
           type: ActionTypes.REDIRECT,
           event: undefined,
-          url: 'http://locahlost:3002/somePath'
+          url: 'http://locahlost:3002/somePath',
         },
         {}
       );
@@ -152,18 +152,18 @@ describe('ima.core.router.ClientRouter', () => {
         {
           targetUrl: 'http://localhost/aaa#hash',
           baseUrl: 'http://localhost/aaa',
-          result: true
+          result: true,
         },
         {
           targetUrl: 'http://localhost/bbb#hash',
           baseUrl: 'http://localhost/aaa',
-          result: false
+          result: false,
         },
         {
           targetUrl: 'http://localhost/aaa',
           baseUrl: 'http://localhost/aaa',
-          result: false
-        }
+          result: false,
+        },
       ],
       value => {
         it(

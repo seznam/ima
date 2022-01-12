@@ -19,6 +19,6 @@ exports.default = gulpConfig => {
 
   return {
     'copy:appStatic': copyAppStatic,
-    'copy:environment': copyEnvironment
+    'copy:environment': copyEnvironment,
   };
 };

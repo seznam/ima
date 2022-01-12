@@ -7,7 +7,7 @@ describe('PresetEntry molecule', () => {
 
   const event = {
     preventDefault: jest.fn(),
-    stopPropagation: jest.fn()
+    stopPropagation: jest.fn(),
   };
 
   const props = {
@@ -17,14 +17,14 @@ describe('PresetEntry molecule', () => {
       name: 'Default',
       editable: false,
       selected: true,
-      hooks: {}
+      hooks: {},
     },
     onClick: jest.fn(),
     renamePreset: jest.fn(),
     copyPreset: jest.fn(),
     deletePreset: jest.fn(),
     alertSuccess: jest.fn(),
-    showConfirmModal: jest.fn()
+    showConfirmModal: jest.fn(),
   };
 
   beforeEach(() => {
@@ -41,7 +41,7 @@ describe('PresetEntry molecule', () => {
 
   it('should match snapshot when editable', () => {
     wrapper.setState({
-      editable: true
+      editable: true,
     });
 
     expect(wrapper).toMatchSnapshot();
@@ -60,13 +60,13 @@ describe('PresetEntry molecule', () => {
 
       instance.onChange({
         target: {
-          value: 'newName'
-        }
+          value: 'newName',
+        },
       });
 
       expect(instance.setState.mock.calls).toHaveLength(1);
       expect(instance.setState.mock.calls[0][0]).toStrictEqual({
-        name: 'newName'
+        name: 'newName',
       });
     });
   });
@@ -74,7 +74,7 @@ describe('PresetEntry molecule', () => {
   describe('onClick', () => {
     it("should call onClick from props if it's not in editable state", () => {
       wrapper.setState({
-        editable: false
+        editable: false,
       });
 
       instance.onClick(event);
@@ -87,7 +87,7 @@ describe('PresetEntry molecule', () => {
 
     it('should do nothing if the item is currently being edited', () => {
       wrapper.setState({
-        editable: true
+        editable: true,
       });
 
       instance.onClick(event);
@@ -111,12 +111,12 @@ describe('PresetEntry molecule', () => {
       expect(instance.props.renamePreset.mock.calls).toHaveLength(1);
       expect(instance.props.renamePreset.mock.calls[0][0]).toStrictEqual({
         id: '0',
-        name: 'newName'
+        name: 'newName',
       });
 
       expect(instance.setState.mock.calls).toHaveLength(1);
       expect(instance.setState.mock.calls[0][0]).toStrictEqual({
-        editable: false
+        editable: false,
       });
     });
   });
@@ -143,7 +143,7 @@ describe('PresetEntry molecule', () => {
 
       expect(instance.setState.mock.calls).toHaveLength(1);
       expect(instance.setState.mock.calls[0][0]).toStrictEqual({
-        editable: true
+        editable: true,
       });
     });
   });
@@ -179,7 +179,7 @@ describe('PresetEntry molecule', () => {
       expect(instance.setState.mock.calls).toHaveLength(1);
       expect(instance.setState.mock.calls[0][0]).toStrictEqual({
         name: props.preset.name,
-        editable: false
+        editable: false,
       });
     });
   });

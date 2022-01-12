@@ -9,7 +9,7 @@ export default class TextInput extends AbstractComponent {
     super(props, context);
 
     this.state = {
-      checkedCategory: this.getDefaultCategory(props)
+      checkedCategory: this.getDefaultCategory(props),
     };
   }
 
@@ -74,7 +74,7 @@ export default class TextInput extends AbstractComponent {
 
     this.fire('addItemToFeed', {
       content: text,
-      category: category ? Number(category.getId()) : null
+      category: category ? Number(category.getId()) : null,
     });
   }
 

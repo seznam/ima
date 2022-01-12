@@ -68,7 +68,7 @@ export default class Response {
      */
     this._cookieTransformFunction = {
       encode: value => value,
-      decode: value => value
+      decode: value => value,
     };
   }
 
@@ -261,7 +261,7 @@ export default class Response {
 
     this._internalCookieStorage.set(name, {
       value,
-      options: advancedOptions
+      options: advancedOptions,
     });
 
     return this;
@@ -277,7 +277,7 @@ export default class Response {
     return {
       status: this._status,
       content: this._content,
-      pageState: this._pageState
+      pageState: this._pageState,
     };
   }
 

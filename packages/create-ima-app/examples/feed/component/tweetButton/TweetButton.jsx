@@ -3,7 +3,7 @@ import React from 'react';
 
 const POPUP_SIZE = Object.freeze({
   width: 550,
-  height: 443
+  height: 443,
 });
 
 /**
@@ -68,7 +68,7 @@ export default class TweetButton extends AbstractComponent {
       dependent: 1,
       dialog: 1,
       resizable: 1,
-      scrollbars: 1
+      scrollbars: 1,
     };
 
     let optionsString = Object.keys(options).map(optionName => {
@@ -101,7 +101,7 @@ export default class TweetButton extends AbstractComponent {
     let query = {
       url: this.props.url,
       text: this.props.text,
-      hashtags: this.props.hashTags.replace('#', '')
+      hashtags: this.props.hashTags.replace('#', ''),
     };
 
     let queryString = Object.keys(query)

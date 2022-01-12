@@ -7,9 +7,9 @@ describe('ima.core.dictionary.MessageFormatDictionary', () => {
     dictionary: {
       home: {
         title: () => 'title',
-        message: () => 'message'
-      }
-    }
+        message: () => 'message',
+      },
+    },
   };
   beforeEach(() => {
     dictionary = new MessageFormatDictionary();

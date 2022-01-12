@@ -6,7 +6,7 @@ describe('ConfirmModal molecule', () => {
   let wrapper, instance;
 
   const event = {
-    preventDefault: jest.fn()
+    preventDefault: jest.fn(),
   };
 
   const props = {
@@ -14,7 +14,7 @@ describe('ConfirmModal molecule', () => {
     opened: true,
     accept: jest.fn(),
     cancel: jest.fn(),
-    hideConfirmModal: jest.fn()
+    hideConfirmModal: jest.fn(),
   };
 
   beforeEach(() => {

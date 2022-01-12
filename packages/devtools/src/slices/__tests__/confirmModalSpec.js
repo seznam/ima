@@ -14,7 +14,7 @@ describe('reducer', () => {
       body: '',
       opened: false,
       accept: null,
-      cancel: null
+      cancel: null,
     };
   });
 
@@ -27,7 +27,7 @@ describe('reducer', () => {
       reducer(curState, { type: 'confirmModal/hideConfirmModal' })
     ).toStrictEqual({
       ...curState,
-      opened: false
+      opened: false,
     });
   });
 
@@ -38,14 +38,14 @@ describe('reducer', () => {
         payload: {
           body: 'body',
           accept: 'accept',
-          cancel: 'cancel'
-        }
+          cancel: 'cancel',
+        },
       })
     ).toStrictEqual({
       opened: true,
       body: 'body',
       accept: 'accept',
-      cancel: 'cancel'
+      cancel: 'cancel',
     });
   });
 
@@ -53,13 +53,13 @@ describe('reducer', () => {
     expect(
       reducer(curState, {
         type: 'confirmModal/showConfirmModal',
-        payload: {}
+        payload: {},
       })
     ).toStrictEqual({
       opened: true,
       body: confirmModalInitialState.body,
       accept: confirmModalInitialState.accept,
-      cancel: confirmModalInitialState.cancel
+      cancel: confirmModalInitialState.cancel,
     });
   });
 });
@@ -68,7 +68,7 @@ describe('actions', () => {
   it('should create action to hide confirm modal', () => {
     expect(actions.hideConfirmModal()).toStrictEqual({
       type: 'confirmModal/hideConfirmModal',
-      payload: undefined
+      payload: undefined,
     });
   });
 
@@ -77,7 +77,7 @@ describe('actions', () => {
 
     expect(actions.showConfirmModal(data)).toStrictEqual({
       type: 'confirmModal/showConfirmModal',
-      payload: {}
+      payload: {},
     });
   });
 });

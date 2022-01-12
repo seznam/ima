@@ -13,7 +13,7 @@ describe('ima.core.router.AbstractRoute', function () {
     documentView: null,
     managedRootView: null,
     viewAdapter: null,
-    middlewares: []
+    middlewares: [],
   };
 
   beforeEach(function () {
@@ -55,28 +55,28 @@ describe('ima.core.router.AbstractRoute', function () {
       [
         [
           [1, true],
-          ['hello', 'world']
+          ['hello', 'world'],
         ],
-        '?1=true&hello=world'
+        '?1=true&hello=world',
       ],
       [
         [
           [{}, []],
           ['test', () => {}],
           [null, 'world'],
-          ['str', 123]
+          ['str', 123],
         ],
-        '?str=123'
+        '?str=123',
       ],
       [
         [
           [2, undefined],
           ['p', null],
-          ['š+', -1]
+          ['š+', -1],
         ],
-        '?%C5%A1%2B=-1'
+        '?%C5%A1%2B=-1',
       ],
-      [[[]], '']
+      [[[]], ''],
     ])('should parse query pairs %j into "%s"', (pairs, result) => {
       expect(AbstractRoute.pairsToQuery(pairs)).toBe(result);
     });
@@ -87,27 +87,27 @@ describe('ima.core.router.AbstractRoute', function () {
       [
         {
           1: true,
-          hello: 'world'
+          hello: 'world',
         },
-        '?1=true&hello=world'
+        '?1=true&hello=world',
       ],
       [
         {
           test: () => {},
           key: null,
-          str: 123
+          str: 123,
         },
-        '?str=123'
+        '?str=123',
       ],
       [
         {
           2: undefined,
           p: null,
-          'š+': -1
+          'š+': -1,
         },
-        '?%C5%A1%2B=-1'
+        '?%C5%A1%2B=-1',
       ],
-      [[[]], '']
+      [[[]], ''],
     ])('should parse %j into "%s"', (pairs, result) => {
       expect(AbstractRoute.paramsToQuery(pairs)).toBe(result);
     });

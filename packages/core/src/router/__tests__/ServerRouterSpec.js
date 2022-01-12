@@ -42,7 +42,7 @@ describe('ima.core.router.ServerRouter', () => {
     var url = domain + '/redirectUrl';
     var options = {
       httpStatus: 303,
-      headers: { 'Custom-header': 'Some custom value' }
+      headers: { 'Custom-header': 'Some custom value' },
     };
 
     spyOn(response, 'redirect').and.stub();
@@ -50,7 +50,7 @@ describe('ima.core.router.ServerRouter', () => {
     router.redirect(url, options);
 
     expect(response.redirect).toHaveBeenCalledWith(url, 303, {
-      'Custom-header': 'Some custom value'
+      'Custom-header': 'Some custom value',
     });
   });
 });

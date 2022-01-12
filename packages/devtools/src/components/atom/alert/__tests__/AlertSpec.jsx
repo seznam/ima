@@ -18,7 +18,7 @@ describe('Alert atom', () => {
   it.each([
     ['success', 'Success!'],
     ['danger', 'Danger!'],
-    ['warning', 'Warning!']
+    ['warning', 'Warning!'],
   ])('should render type %s with %s title', (type, title) => {
     wrapper.setProps({ type: type, title: null });
     const strongTag = wrapper.find('strong');

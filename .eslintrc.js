@@ -5,7 +5,7 @@ module.exports = {
     'plugin:react/recommended',
     'plugin:jest/recommended',
     'plugin:jest/style',
-    'plugin:prettier/recommended'
+    'plugin:prettier/recommended',
   ],
   rules: {
     // Eslint overrides
@@ -13,8 +13,8 @@ module.exports = {
     'no-console': [
       'error',
       {
-        allow: ['warn', 'error']
-      }
+        allow: ['warn', 'error'],
+      },
     ],
 
     // Prettier
@@ -23,11 +23,11 @@ module.exports = {
       {
         singleQuote: true,
         semi: true,
-        trailingComma: 'none',
+        trailingComma: 'es5',
         jsxSingleQuote: true,
         bracketSameLine: false,
-        arrowParens: 'avoid'
-      }
+        arrowParens: 'avoid',
+      },
     ],
 
     // Jest plugin overrides
@@ -39,19 +39,19 @@ module.exports = {
     'jest/prefer-lowercase-title': [
       'warn',
       {
-        ignore: ['describe']
-      }
+        ignore: ['describe'],
+      },
     ],
     // Remove when migrated to jest >=27
     'jest/no-jasmine-globals': 'off',
 
     // React plugin overrides
-    'react/prop-types': 'off'
+    'react/prop-types': 'off',
   },
   settings: {
     react: {
-      version: '16'
-    }
+      version: '16',
+    },
   },
   parser: '@babel/eslint-parser',
   parserOptions: {
@@ -59,37 +59,37 @@ module.exports = {
     ecmaVersion: 6,
     requireConfigFile: false,
     babelOptions: {
-      presets: ['@babel/preset-react']
-    }
+      presets: ['@babel/preset-react'],
+    },
   },
   env: {
     browser: true,
     node: true,
-    es6: true
+    es6: true,
   },
   globals: {
     $Debug: true,
     $IMA: true,
     using: true,
     extend: true,
-    spyOn: true
+    spyOn: true,
   },
   overrides: [
     {
       files: ['packages/cli/**', 'packages/create-ima-app/**'],
       rules: {
-        'no-console': 'off'
-      }
+        'no-console': 'off',
+      },
     },
     {
       files: ['packages/devtools/**', 'packages/create-ima-app/**'],
       rules: {
-        'no-unused-vars': 'off'
+        'no-unused-vars': 'off',
       },
       globals: {
         chrome: true,
-        FB: true
-      }
-    }
-  ]
+        FB: true,
+      },
+    },
+  ],
 };

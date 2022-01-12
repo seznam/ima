@@ -77,14 +77,14 @@ function formatError(error) {
         function: parts[1],
         file: parts[2],
         row: parseInt(parts[3], 10) || parts[3],
-        column: parseInt(parts[4], 10) || parts[4]
+        column: parseInt(parts[4], 10) || parts[4],
       };
     });
 
   let description = {
     type: error.name,
     message: error.message,
-    stack
+    stack,
   };
 
   if (error._params) {
@@ -143,7 +143,7 @@ module.exports = environment => {
         );
       })
     ),
-    transports: [new transports.Console()]
+    transports: [new transports.Console()],
   });
 
   function formatMeta(meta) {

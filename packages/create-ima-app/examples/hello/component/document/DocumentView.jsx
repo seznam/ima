@@ -79,7 +79,7 @@ export default class DocumentView extends AbstractDocumentView {
 						if (!window.fetch) {
 							document.write('<script src="${jsBaseUrl}/fetch-polyfill.js"></' + 'script>')
 						}
-					`
+					`,
             }}
           />
           <div

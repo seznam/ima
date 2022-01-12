@@ -4,7 +4,7 @@ import EntryList from '../EntryList';
 
 describe('EntryList molecule', () => {
   const props = {
-    entryIds: ['1', '2', '3', '4']
+    entryIds: ['1', '2', '3', '4'],
   };
 
   let wrapper;

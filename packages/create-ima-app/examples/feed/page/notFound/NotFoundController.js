@@ -18,7 +18,7 @@ export default class NotFoundController extends AbstractController {
    */
   load() {
     return {
-      status: this.status
+      status: this.status,
     };
   }
 }

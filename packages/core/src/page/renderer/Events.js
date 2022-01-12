@@ -42,7 +42,7 @@ const Events = Object.freeze({
    * @const
    * @type {string}
    */
-  ERROR: '$IMA.$PageRenderer.error'
+  ERROR: '$IMA.$PageRenderer.error',
 });
 
 export default Events;

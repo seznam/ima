@@ -27,17 +27,17 @@ describe('ima.core.router.Response', () => {
       response._response = {
         cookie: jest.fn(),
         redirect: jest.fn(),
-        set: jest.fn()
+        set: jest.fn(),
       };
       response._internalCookieStorage = new Map([
         ['key1', 'value1'],
         ['key2', 'value2'],
-        ['key3', 'value3']
+        ['key3', 'value3'],
       ]);
 
       const url = 'some/url/or/other';
       const headers = {
-        'Custom-header': 'Some value'
+        'Custom-header': 'Some value',
       };
 
       response.redirect(url, 303, headers);

@@ -1,7 +1,7 @@
 import AbstractPureComponent from './AbstractPureComponent';
 
 const PRIVATE = {
-  masterElementId: Symbol('masterElementId')
+  masterElementId: Symbol('masterElementId'),
 };
 
 if (typeof $Debug !== 'undefined' && $Debug) {

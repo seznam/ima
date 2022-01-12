@@ -17,7 +17,7 @@ export default class Options extends React.PureComponent {
       presets: PropTypes.object,
       setPresets: PropTypes.func,
       addHook: PropTypes.func,
-      alertSuccess: PropTypes.func
+      alertSuccess: PropTypes.func,
     };
   }
 
@@ -25,7 +25,7 @@ export default class Options extends React.PureComponent {
     super(props);
 
     this.state = {
-      modalOpened: false
+      modalOpened: false,
     };
   }
 
@@ -45,7 +45,7 @@ export default class Options extends React.PureComponent {
 
     setPresets({
       presets,
-      selectedPresetId
+      selectedPresetId,
     });
   }
 
@@ -150,13 +150,13 @@ export default class Options extends React.PureComponent {
     e.preventDefault();
 
     this.setState({
-      modalOpened: true
+      modalOpened: true,
     });
   }
 
   onModalClose() {
     this.setState({
-      modalOpened: false
+      modalOpened: false,
     });
   }
 
@@ -185,7 +185,7 @@ export default class Options extends React.PureComponent {
       groupedData[id] = {
         ...hooks[id],
         ...groupedData[id],
-        opened: false
+        opened: false,
       };
     }
 
@@ -193,13 +193,13 @@ export default class Options extends React.PureComponent {
     const newPresets = { ...presets };
     newPresets[selectedPresetId] = {
       ...newPresets[selectedPresetId],
-      ...{ hooks: groupedData }
+      ...{ hooks: groupedData },
     };
 
     // Save settings to storage
     setSettings({
       presets: newPresets,
-      selectedPresetId
+      selectedPresetId,
     });
 
     alertSuccess('Changes were saved.');
@@ -215,7 +215,7 @@ export default class Options extends React.PureComponent {
       opened: false,
       name: `Hook - ${displayId}`,
       description: `Description for hook - ${displayId}`,
-      code: ''
+      code: '',
     };
   }
 }

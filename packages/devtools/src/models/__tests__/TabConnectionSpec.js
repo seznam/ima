@@ -13,13 +13,13 @@ describe('TabConnection', () => {
     onMessage: {
       addListener: jest.fn(),
       removeListener: jest.fn(),
-      hasListeners: jest.fn()
+      hasListeners: jest.fn(),
     },
     onDisconnect: {
       addListener: jest.fn(),
       removeListener: jest.fn(),
-      hasListeners: jest.fn()
-    }
+      hasListeners: jest.fn(),
+    },
   });
 
   jest.spyOn(utils, 'setIcon').mockImplementation();
@@ -266,7 +266,7 @@ describe('TabConnection', () => {
 
       expect(instance.notify.mock.calls).toHaveLength(1);
       expect(instance.notify.mock.calls[0][0]).toStrictEqual({
-        action: Actions.RELOADING
+        action: Actions.RELOADING,
       });
     });
   });
@@ -355,7 +355,7 @@ describe('TabConnection', () => {
       expect(instance.ports.popup.postMessage.mock.calls).toHaveLength(1);
       expect(instance.ports.popup.postMessage.mock.calls[0][0]).toStrictEqual({
         action: Actions.POPUP,
-        payload: { state: instance.state, appData: instance.appData }
+        payload: { state: instance.state, appData: instance.appData },
       });
     });
   });
@@ -388,7 +388,7 @@ describe('TabConnection', () => {
       instance._reviveDevtools();
 
       expect(postMessageCall).toStrictEqual({
-        action: Actions.ALIVE
+        action: Actions.ALIVE,
       });
       expect(disconnectCalled).toBe(true);
       expect(instance.ports.devtools).toBeNull();
@@ -588,7 +588,7 @@ describe('TabConnection', () => {
     it('should not do anything if action is not settings action', () => {
       instance._settingsCallback({
         action: Actions.POPUP,
-        payload: { enabled: true }
+        payload: { enabled: true },
       });
 
       expect(instance._settingsListener.mock.calls).toHaveLength(0);
@@ -597,7 +597,7 @@ describe('TabConnection', () => {
     it('should call settings listener with enabled value', () => {
       instance._settingsCallback({
         action: Actions.SETTINGS,
-        payload: { enabled: true }
+        payload: { enabled: true },
       });
 
       expect(instance._settingsListener.mock.calls).toHaveLength(1);
@@ -621,7 +621,7 @@ describe('TabConnection', () => {
 
       instance._aliveCallback({
         action: Actions.DETECTING,
-        payload: { version: 0 }
+        payload: { version: 0 },
       });
 
       expect(instance.state).toBe(State.DETECTING);
@@ -632,7 +632,7 @@ describe('TabConnection', () => {
 
       instance._aliveCallback({
         action: Actions.DEAD,
-        payload: { version: 0 }
+        payload: { version: 0 },
       });
 
       expect(instance.state).toBe(State.DEAD);
@@ -643,7 +643,7 @@ describe('TabConnection', () => {
 
       instance._aliveCallback({
         action: Actions.ALIVE,
-        payload: { version: 0 }
+        payload: { version: 0 },
       });
 
       expect(instance.state).toBe(State.ALIVE);
@@ -653,7 +653,7 @@ describe('TabConnection', () => {
     it('should set alive icon on current tab on alive', () => {
       instance._aliveCallback({
         action: Actions.ALIVE,
-        payload: { version: 0 }
+        payload: { version: 0 },
       });
 
       expect(utils.setIcon.mock.calls).toHaveLength(1);
@@ -664,7 +664,7 @@ describe('TabConnection', () => {
     it("should revive devtools if it's registered", () => {
       instance._aliveCallback({
         action: Actions.ALIVE,
-        payload: { version: 0 }
+        payload: { version: 0 },
       });
 
       expect(instance._reviveDevtools.mock.calls).toHaveLength(1);
@@ -674,7 +674,7 @@ describe('TabConnection', () => {
       instance.ports.devtools = null;
       instance._aliveCallback({
         action: Actions.ALIVE,
-        payload: { version: 0 }
+        payload: { version: 0 },
       });
 
       expect(instance._reviveDevtools.mock.calls).toHaveLength(0);
@@ -684,7 +684,7 @@ describe('TabConnection', () => {
       instance.ports.popup = null;
       instance._aliveCallback({
         action: Actions.ALIVE,
-        payload: { version: 0 }
+        payload: { version: 0 },
       });
 
       expect(instance._notifyPopup.mock.calls).toHaveLength(0);
@@ -693,7 +693,7 @@ describe('TabConnection', () => {
     it("should notify popup if it's is registered", () => {
       instance._aliveCallback({
         action: Actions.ALIVE,
-        payload: { version: 0 }
+        payload: { version: 0 },
       });
 
       expect(instance._notifyPopup.mock.calls).toHaveLength(1);

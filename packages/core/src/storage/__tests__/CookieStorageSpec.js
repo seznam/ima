@@ -28,7 +28,7 @@ describe('ima.storage.CookieStorage', () => {
     },
     decode: function (s) {
       return s;
-    }
+    },
   };
 
   beforeEach(() => {
@@ -134,7 +134,7 @@ describe('ima.storage.CookieStorage', () => {
 
       expect(cookie.set).toHaveBeenCalledWith('cok3', 'hello3', {
         expires: new Date('Fri, 31 Dec 9999 23:59:59 UTC'),
-        path: '/'
+        path: '/',
       });
     });
 
@@ -145,7 +145,7 @@ describe('ima.storage.CookieStorage', () => {
 
       expect(cookie.set).toHaveBeenCalledWith('Cok3', 'hello3', {
         expires: new Date('Fri, 31 Dec 9999 23:59:59 UTC'),
-        path: '/'
+        path: '/',
       });
     });
 
@@ -157,7 +157,7 @@ describe('ima.storage.CookieStorage', () => {
       expect(cookie.set).toHaveBeenCalledWith('cok3', 'hello3', {
         expires: new Date('Fri, 31 Dec 9999 23:59:59 UTC'),
         path: '/',
-        domain: 'localhost:3001'
+        domain: 'localhost:3001',
       });
     });
 
@@ -172,7 +172,7 @@ describe('ima.storage.CookieStorage', () => {
         secure: true,
         path: '/',
         domain: 'localhost:3001',
-        sameSite: 'Lax'
+        sameSite: 'Lax',
       });
     });
 
@@ -187,7 +187,7 @@ describe('ima.storage.CookieStorage', () => {
         httpOnly: true,
         secure: true,
         path: '/',
-        domain: 'localhost:3001'
+        domain: 'localhost:3001',
       });
     });
   });
@@ -201,7 +201,7 @@ describe('ima.storage.CookieStorage', () => {
         Infinity,
         null,
         'Fri, 31 Dec 2000 23:59:59 GMT',
-        new Date('Fri, 31 Dec 2000 23:59:59 GMT')
+        new Date('Fri, 31 Dec 2000 23:59:59 GMT'),
       ],
       value => {
         it('for value ' + value, () => {
@@ -227,7 +227,7 @@ describe('ima.storage.CookieStorage', () => {
         { value: '1', sanitizedValue: '1' },
         { value: '7|AABBCCD===', sanitizedValue: '7|AABBCCD===' },
         { value: '7|AABBCCD=== ', sanitizedValue: '7|AABBCCD===' },
-        { value: undefined + '', sanitizedValue: 'undefined' }
+        { value: undefined + '', sanitizedValue: 'undefined' },
       ],
       item => {
         it(

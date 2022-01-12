@@ -3,12 +3,12 @@ import Dispatcher from '../DispatcherImpl';
 describe('ima.core.event.DispatcherImpl', () => {
   let handlers = {
     handler1: () => {},
-    handler2: () => {}
+    handler2: () => {},
   };
 
   let event = 'event';
   let data = {
-    data: 'data'
+    data: 'data',
   };
 
   let dispatcher = null;

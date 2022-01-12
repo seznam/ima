@@ -24,7 +24,7 @@ exports.default = gulpConfig => {
       .pipe(
         uglifyEs({
           mangle: true,
-          compress: Object.assign({}, uglifyCompression, { ecma: 5 })
+          compress: Object.assign({}, uglifyCompression, { ecma: 5 }),
         })
       )
       .pipe(plumber.stop())
@@ -50,7 +50,7 @@ exports.default = gulpConfig => {
   function bundleCss() {
     let postCssPlugins = [
       cssnano(files.bundle.cssnanoSettings),
-      ...files.bundle.postCssPlugins
+      ...files.bundle.postCssPlugins,
     ];
 
     return gulp
@@ -73,6 +73,6 @@ exports.default = gulpConfig => {
     'bundle:es:app': bundleEsApp,
     'bundle:js:server': bundleJsServer,
     'bundle:css': bundleCss,
-    'bundle:clean': bundleClean
+    'bundle:clean': bundleClean,
   };
 };

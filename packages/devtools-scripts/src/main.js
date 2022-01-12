@@ -11,7 +11,7 @@ const ImaMainModules = [
   'getClientBootConfig',
   'bootClientApp',
   'routeClientApp',
-  'reviveClientApp'
+  'reviveClientApp',
 ];
 
 // eslint-disable-next-line no-unused-vars
@@ -64,7 +64,7 @@ function createDevtool(registerHook) {
 
     return {
       args: meta.args,
-      payload: meta.payload
+      payload: meta.payload,
     };
   }
 
@@ -81,7 +81,7 @@ function createDevtool(registerHook) {
 
     const promise = {
       args: argsPromise,
-      payload: payloadPromise
+      payload: payloadPromise,
     };
     const stateKeys = ['args', 'payload'];
     let pendingPromises = stateKeys
@@ -102,7 +102,7 @@ function createDevtool(registerHook) {
             time: new Date().getTime(),
             state: clone(state, 2),
             color: options.color,
-            promises: pendingPromises > 0 ? 'pending' : 'resolved'
+            promises: pendingPromises > 0 ? 'pending' : 'resolved',
           });
         });
       });
@@ -123,7 +123,7 @@ function createDevtool(registerHook) {
           time: new Date().getTime(),
           state: clone(state, 2),
           color: options.color,
-          promises: pendingPromises > 0 ? 'pending' : 'resolved'
+          promises: pendingPromises > 0 ? 'pending' : 'resolved',
         });
       });
     }
@@ -136,7 +136,7 @@ function createDevtool(registerHook) {
       time: new Date().getTime(),
       state: clone(state, 2),
       color: options.color,
-      promises: pendingPromises > 0 ? 'pending' : null
+      promises: pendingPromises > 0 ? 'pending' : null,
     });
   }
 
@@ -162,7 +162,7 @@ function createDevtool(registerHook) {
       createHook,
       hookName,
       createCallTrap,
-      emit
+      emit,
     });
 
     let revivePattern = createHook(
@@ -192,7 +192,7 @@ function createDevtool(registerHook) {
         value: imaCore[moduleName],
         enumerable: false,
         configurable: false,
-        writable: false
+        writable: false,
       });
 
       imaCore[key] = imaCore[moduleName];
@@ -200,7 +200,7 @@ function createDevtool(registerHook) {
         target: imaCore,
         object: imaCore,
         property: key,
-        pattern: revivePattern
+        pattern: revivePattern,
       });
     });
   });

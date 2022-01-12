@@ -27,7 +27,7 @@ describe('ima.core.ObjectContainer', () => {
   let constantCompositionName = 'constantObject.path.to.property';
   let constantObjectProperty = 'property';
   let constantObjectValue = {
-    path: { to: { property: constantObjectProperty } }
+    path: { to: { property: constantObjectProperty } },
   };
 
   let namespacePathUnit = 'test.unit';
@@ -313,7 +313,7 @@ describe('ima.core.ObjectContainer', () => {
       entry = {
         sharedInstance: null,
         classConstructor: classConstructor,
-        dependencies: dependencies
+        dependencies: dependencies,
       };
     });
 

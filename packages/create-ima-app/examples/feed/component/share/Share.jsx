@@ -90,7 +90,7 @@ export default class Share extends AbstractComponent {
     FB.ui(
       {
         method: 'share',
-        href: event.target.href
+        href: event.target.href,
       },
       () => {}
     );
@@ -103,9 +103,9 @@ export default class Share extends AbstractComponent {
       : this.localize('home.defaultPortal');
     let query = {
       subject: this.localize('home.shareMailSubject', {
-        PORTAL: categoryName
+        PORTAL: categoryName,
       }),
-      body: this.getPlainTextItemContent(item)
+      body: this.getPlainTextItemContent(item),
     };
     let queryString = Object.keys(query)
       .map(parameterName => {
@@ -129,7 +129,7 @@ export default class Share extends AbstractComponent {
     if (item && category) {
       let localLink = this.link('post', {
         category: category.getUrlName(),
-        itemId: item.getId()
+        itemId: item.getId(),
       });
 
       return localLink;
@@ -143,7 +143,7 @@ export default class Share extends AbstractComponent {
     event.stopPropagation();
 
     this.fire('shareToggle', {
-      item: this.props.item
+      item: this.props.item,
     });
   }
 

@@ -11,14 +11,14 @@ import { toMockedInstance } from 'to-mock';
 describe('ima.core.page.manager.AbstractPageManager', () => {
   let controllerState = {
     controller: 'controller',
-    share: 'controller'
+    share: 'controller',
   };
   let extensionsState = {
     extension: 'extension',
-    share: 'extension'
+    share: 'extension',
   };
   let extensionState = {
-    extension: 'extension'
+    extension: 'extension',
   };
   let pageState = Object.assign({}, extensionsState, controllerState);
 
@@ -26,7 +26,7 @@ describe('ima.core.page.manager.AbstractPageManager', () => {
     createController: Controller => new Controller(),
     decorateController: controller => controller,
     decoratePageStateManager: pageStateManger => pageStateManger,
-    createView: view => view
+    createView: view => view,
   };
   let pageRenderer = null;
   let pageStateManager = null;
@@ -45,11 +45,11 @@ describe('ima.core.page.manager.AbstractPageManager', () => {
     autoScroll: true,
     allowSPA: true,
     documentView: null,
-    managedRootView: null
+    managedRootView: null,
   };
   let params = {
     param1: 'param1',
-    param2: 2
+    param2: 2,
   };
 
   let controllerInstance = pageFactory.createController(Controller);
@@ -58,7 +58,7 @@ describe('ima.core.page.manager.AbstractPageManager', () => {
   let extensionInstance = toMockedInstance(Extension, {
     load() {
       return extensionState;
-    }
+    },
   });
 
   let pageManagerHandler = toMockedInstance(PageHandler);
@@ -77,7 +77,7 @@ describe('ima.core.page.manager.AbstractPageManager', () => {
     );
 
     spyOn(controllerInstance, 'getExtensions').and.returnValue([
-      extensionInstance
+      extensionInstance,
     ]);
 
     route = routeFactory.createRoute(
@@ -394,7 +394,7 @@ describe('ima.core.page.manager.AbstractPageManager', () => {
 
     it('should return extensions state together with active controller state', async () => {
       spyOn(extensionInstance, 'load').and.returnValue({
-        extension: 'extension'
+        extension: 'extension',
       });
       spyOn(pageManager, '_setRestrictedPageStateManager').and.stub();
 
@@ -403,7 +403,7 @@ describe('ima.core.page.manager.AbstractPageManager', () => {
       expect(result).toStrictEqual({
         controller: 'controller',
         share: 'controller',
-        extension: 'extension'
+        extension: 'extension',
       });
     });
 
@@ -435,7 +435,7 @@ describe('ima.core.page.manager.AbstractPageManager', () => {
       });
 
       pageManager._switchToPageStateManagerAfterLoaded(extensionInstance, {
-        extension: Promise.resolve()
+        extension: Promise.resolve(),
       });
       await deferredPromise;
 
@@ -449,7 +449,7 @@ describe('ima.core.page.manager.AbstractPageManager', () => {
       });
 
       pageManager._switchToPageStateManagerAfterLoaded(extensionInstance, {
-        extension: Promise.reject()
+        extension: Promise.reject(),
       });
       await deferredPromise;
 
@@ -578,7 +578,7 @@ describe('ima.core.page.manager.AbstractPageManager', () => {
       expect(extensionInstance.setPartialState).toHaveBeenCalledWith(
         expect.objectContaining({
           foo: 'bar',
-          foobar: 'bazfoo'
+          foobar: 'bazfoo',
         })
       );
       expect(extensionInstance.switchToPartialState).toHaveBeenCalled();
@@ -586,7 +586,7 @@ describe('ima.core.page.manager.AbstractPageManager', () => {
 
     it('should return extensions state together with active controller state', async () => {
       spyOn(extensionInstance, 'update').and.returnValue({
-        extension: 'extension'
+        extension: 'extension',
       });
       spyOn(pageManager, '_setRestrictedPageStateManager').and.stub();
 
@@ -597,7 +597,7 @@ describe('ima.core.page.manager.AbstractPageManager', () => {
       expect(result).toStrictEqual({
         controller: 'controller',
         share: 'controller',
-        extension: 'extension'
+        extension: 'extension',
       });
     });
 
@@ -709,7 +709,7 @@ describe('ima.core.page.manager.AbstractPageManager', () => {
   describe('_hasOnlyUpdate method', () => {
     it('should return value from onlyUpdate function', () => {
       let newOptions = Object.assign({}, options, {
-        onlyUpdate: () => true
+        onlyUpdate: () => true,
       });
 
       spyOn(newOptions, 'onlyUpdate').and.callThrough();

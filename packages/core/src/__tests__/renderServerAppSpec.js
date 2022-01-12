@@ -24,27 +24,27 @@ describe('render server application', () => {
   let ReactDOM = {
     render() {
       return {
-        setState: () => {}
+        setState: () => {},
       };
-    }
+    },
   };
   let expressReponse = {
     send() {},
-    status() {}
+    status() {},
   };
 
   let routerConfig = {
     $Protocol: 'http:',
     $Root: '',
     $LanguagePartPath: '',
-    $Host: 'www.domain.com'
+    $Host: 'www.domain.com',
   };
 
   let options = {
     onlyUpdate: false,
     autoScroll: true,
     allowSPA: true,
-    documentView: null
+    documentView: null,
   };
 
   function View() {
@@ -78,7 +78,7 @@ describe('render server application', () => {
             oc.get(Response).init(expressReponse);
           },
           initBindApp: () => {},
-          initRoutes: () => {}
+          initRoutes: () => {},
         },
         {
           initBindApp: (ns, oc) => {
@@ -97,7 +97,7 @@ describe('render server application', () => {
             if (!oc.has('$Utils')) {
               oc.constant('$Utils', {});
             }
-          }
+          },
         }
       )
     );

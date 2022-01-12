@@ -7,13 +7,13 @@ export default class ModalFooter extends React.PureComponent {
   static get propTypes() {
     return {
       children: PropTypes.any,
-      className: PropTypes.string
+      className: PropTypes.string,
     };
   }
 
   static get defaultProps() {
     return {
-      className: ''
+      className: '',
     };
   }
 

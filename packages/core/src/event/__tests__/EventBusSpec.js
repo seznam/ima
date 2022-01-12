@@ -5,18 +5,18 @@ import Window from 'src/window/Window';
 describe('ima.core.event.EventBusImpl', () => {
   let listeners = {
     listener1: () => {},
-    listener2: () => {}
+    listener2: () => {},
   };
 
   let eventSource = {
-    dispatchEvent: () => {}
+    dispatchEvent: () => {},
   };
   let notEventSource = {};
   let eventTarget = {};
   let event = 'event';
   //let IMA_EVENT = '$IMA.CustomEvent';
   let data = {
-    data: 'data'
+    data: 'data',
   };
 
   let MockedWindow = toMock(Window);

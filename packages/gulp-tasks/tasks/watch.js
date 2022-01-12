@@ -27,7 +27,7 @@ exports.default = gulpConfig => {
     files,
     occupiedPorts,
     notifyServer: notifyServerConfig,
-    hotReloadConfig
+    hotReloadConfig,
   } = gulpConfig;
 
   function watchTask() {
@@ -45,7 +45,7 @@ exports.default = gulpConfig => {
       notifyServer.bind({
         address: notifyServerConfig.server,
         port: notifyServerConfig.port,
-        exclusive: true
+        exclusive: true,
       });
 
       notifyServer.on('listening', () => {
@@ -119,8 +119,8 @@ exports.default = gulpConfig => {
           sentinel: '@ima/gulp-tasks/watch/hot-reload',
           payload: {
             filename: path.normalize(filePath).replace(/\\/g, '/'),
-            contents: hotReloadedContents
-          }
+            contents: hotReloadedContents,
+          },
         };
 
         socket.send(JSON.stringify(message));
@@ -130,7 +130,7 @@ exports.default = gulpConfig => {
       .watch([
         './ima/**/*.js',
         './app/**/*.{js,jsx}',
-        './build/static/js/locale/*.js'
+        './build/static/js/locale/*.js',
       ])
       .on('all', (event, filePath) => {
         sharedState.watchEvent = { path: filePath };
@@ -208,6 +208,6 @@ exports.default = gulpConfig => {
 
   return {
     watch: watchTask,
-    'watch:releasePorts': checkAndReleasePorts
+    'watch:releasePorts': checkAndReleasePorts,
   };
 };

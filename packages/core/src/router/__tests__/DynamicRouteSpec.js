@@ -12,7 +12,7 @@ describe('ima.core.router.DynamicRoute', function () {
     allowSPA: true,
     documentView: null,
     managedRootView: null,
-    viewAdapter: null
+    viewAdapter: null,
   };
 
   const matcher = /^\/([\w-]+)?\/?([\w-]+)?\/article\/(\w+-\d+)$/i;
@@ -39,7 +39,7 @@ describe('ima.core.router.DynamicRoute', function () {
     return {
       section: parsedPath[1],
       subsection: parsedPath[2],
-      slug: parsedPath[3]
+      slug: parsedPath[3],
     };
   };
 
@@ -49,7 +49,7 @@ describe('ima.core.router.DynamicRoute', function () {
       {
         matcher,
         toPath,
-        extractParameters
+        extractParameters,
       },
       controller,
       view,
@@ -64,22 +64,22 @@ describe('ima.core.router.DynamicRoute', function () {
         {
           section: 'section',
           subsection: 'subsection',
-          slug: 'article-1234'
-        }
+          slug: 'article-1234',
+        },
       ],
       [
         '/sport/article/article-145',
         {
           section: 'sport',
-          slug: 'article-145'
-        }
+          slug: 'article-145',
+        },
       ],
       [
         '/invalid-route',
         {
           section: 'sport',
-          subsection: 'hockey'
-        }
+          subsection: 'hockey',
+        },
       ],
       [
         '/politics/article/article-145?additional=params&should=be&parsedAS=0&queryParams=true',
@@ -89,9 +89,9 @@ describe('ima.core.router.DynamicRoute', function () {
           additional: 'params',
           should: 'be',
           parsedAS: 0,
-          queryParams: true
-        }
-      ]
+          queryParams: true,
+        },
+      ],
     ])(
       'should create correct path "%s" from params: "%j"',
       (result, params) => {
@@ -106,27 +106,27 @@ describe('ima.core.router.DynamicRoute', function () {
         {
           section: 'section',
           subsection: 'subsection',
-          slug: 'article-1234'
+          slug: 'article-1234',
         },
-        '/section/subsection/article/article-1234'
+        '/section/subsection/article/article-1234',
       ],
       [
         {
           section: 'politics',
           subsection: 'elections',
-          slug: 'slug-009242'
+          slug: 'slug-009242',
         },
-        '/politics/elections/article/slug-009242/'
+        '/politics/elections/article/slug-009242/',
       ],
       [
         {
           section: 'sport',
           slug: 'article-145',
-          subsection: undefined
+          subsection: undefined,
         },
-        '/sport/article/article-145/'
+        '/sport/article/article-145/',
       ],
-      [{}, '/article/article-145']
+      [{}, '/article/article-145'],
     ])(`should return "%j" after parsing "%s" path`, (result, path) => {
       expect(route.extractParameters(path)).toStrictEqual(result);
     });
@@ -141,7 +141,7 @@ describe('ima.core.router.DynamicRoute', function () {
       [false, ''],
       [false, '/different/route/post/slug-125125'],
       [false, '///sport/article/article-145'],
-      [false, '/invalid-route']
+      [false, '/invalid-route'],
     ])(`should result in "%s" for matching "%s" path`, (result, path) => {
       expect(route.matches(path)).toBe(result);
     });

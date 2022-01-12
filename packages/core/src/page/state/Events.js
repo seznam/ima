@@ -22,7 +22,7 @@ const Events = Object.freeze({
    * @const
    * @type {string}
    */
-  AFTER_CHANGE_STATE: '$IMA.$PageStateManager.afterChangeState'
+  AFTER_CHANGE_STATE: '$IMA.$PageStateManager.afterChangeState',
 });
 
 export default Events;

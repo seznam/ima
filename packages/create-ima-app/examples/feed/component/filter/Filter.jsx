@@ -9,7 +9,7 @@ export default class Filter extends AbstractComponent {
     super(props, context);
 
     this.state = {
-      expanded: false
+      expanded: false,
     };
   }
 
@@ -63,7 +63,7 @@ export default class Filter extends AbstractComponent {
 
     return categories.getCategories().map((category, index) => {
       let link = this.link('category', {
-        category: category.getUrlName()
+        category: category.getUrlName(),
       });
 
       return (
@@ -76,7 +76,7 @@ export default class Filter extends AbstractComponent {
 
   onToggle() {
     this.setState({
-      expanded: !this.state.expanded
+      expanded: !this.state.expanded,
     });
   }
 }

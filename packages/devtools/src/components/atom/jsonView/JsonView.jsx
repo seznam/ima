@@ -19,12 +19,12 @@ export const THEME = Object.freeze({
   base0C: 'var(--oc-indigo-5)',
   base0D: 'var(--oc-gray-6)',
   base0E: 'var(--oc-teal-6)',
-  base0F: 'var(--oc-blue-5)'
+  base0F: 'var(--oc-blue-5)',
 });
 
 export const STYLE_OVERRIDES = {
   fontFamily: 'var(--font-family-monospace)',
-  fontSize: '11px'
+  fontSize: '11px',
 };
 
 export default class JsonView extends React.PureComponent {
@@ -32,7 +32,7 @@ export default class JsonView extends React.PureComponent {
     return {
       src: PropTypes.oneOfType([PropTypes.object, PropTypes.array]),
       collapse: PropTypes.number,
-      style: PropTypes.object
+      style: PropTypes.object,
     };
   }
 
@@ -40,7 +40,7 @@ export default class JsonView extends React.PureComponent {
     return {
       src: null,
       collapse: 2,
-      style: {}
+      style: {},
     };
   }
 
@@ -61,7 +61,7 @@ export default class JsonView extends React.PureComponent {
           src={src}
           style={{
             ...STYLE_OVERRIDES,
-            style
+            style,
           }}
           theme={THEME}
         />

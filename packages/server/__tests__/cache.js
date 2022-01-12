@@ -6,7 +6,7 @@ describe('cache', () => {
   describe('set method', () => {
     let cache = null;
     let page = {
-      content: 'some html'
+      content: 'some html',
     };
 
     beforeEach(() => {
@@ -17,9 +17,9 @@ describe('cache', () => {
             cacheKeyGenerator: null,
             entryTtl: 60 * 60 * 1000, // milliseconds
             unusedEntryTtl: 15 * 60 * 1000,
-            maxEntries: 1 // milliseconds
-          }
-        }
+            maxEntries: 1, // milliseconds
+          },
+        },
       });
 
       spyOn(cache, '_keyGenerator').and.returnValue('key');

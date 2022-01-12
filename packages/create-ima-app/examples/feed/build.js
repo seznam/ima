@@ -12,11 +12,11 @@ module.exports = (() => {
     './app/assets/less/base.less',
     './app/assets/less/layout.less',
     './app/component/**/*.less',
-    './app/page/**/*.less'
+    './app/page/**/*.less',
   ];
 
   let languages = {
-    en: ['./app/**/*EN.json']
+    en: ['./app/**/*EN.json'],
   };
 
   let vendors = {
@@ -26,7 +26,7 @@ module.exports = (() => {
 
     client: [{ '@ima/core': '@ima/core/dist/ima.client.cjs.js' }],
 
-    test: []
+    test: [],
   };
 
   let bundle = {
@@ -35,15 +35,15 @@ module.exports = (() => {
       './build/static/js/shim.js',
       './build/static/js/vendor.client.js',
       './build/static/js/app.client.js',
-      './build/static/js/facebook.js'
+      './build/static/js/facebook.js',
     ],
     es: [
       './build/static/js/polyfill.es.js',
       './build/static/js/shim.es.js',
       './build/static/js/vendor.client.es.js',
-      './build/static/js/app.client.es.js'
+      './build/static/js/app.client.es.js',
     ],
-    css: ['./build/static/css/app.css']
+    css: ['./build/static/css/app.css'],
   };
 
   if (
@@ -61,6 +61,6 @@ module.exports = (() => {
     vendors,
     less,
     languages,
-    bundle
+    bundle,
   };
 })();

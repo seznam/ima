@@ -11,7 +11,7 @@ describe('ima.core.page.handler.PageNavigationHandler', () => {
   beforeEach(() => {
     window = new Window();
     spyOn(window, 'getWindow').and.returnValue({
-      history: { scrollRestoration: 'auto' }
+      history: { scrollRestoration: 'auto' },
     });
 
     handler = new PageNavigationHandler(window);
@@ -36,7 +36,7 @@ describe('ima.core.page.handler.PageNavigationHandler', () => {
       const nextManagedPage = { options: { autoScroll: true } };
 
       handler.handlePreManagedState({}, nextManagedPage, {
-        url: 'http://localhost/'
+        url: 'http://localhost/',
       });
 
       expect(replaceStateMock).toHaveBeenCalled();
@@ -50,7 +50,7 @@ describe('ima.core.page.handler.PageNavigationHandler', () => {
 
       handler.handlePreManagedState({}, nextManagedPage, {
         url: 'http://localhost/final_url',
-        type: ActionTypes.REDIRECT
+        type: ActionTypes.REDIRECT,
       });
 
       expect(replaceStateMock).toHaveBeenCalled();
@@ -63,7 +63,7 @@ describe('ima.core.page.handler.PageNavigationHandler', () => {
       const nextManagedPage = { options: { autoScroll: true } };
 
       handler.handlePreManagedState(null, nextManagedPage, {
-        url: 'http://localhost/'
+        url: 'http://localhost/',
       });
 
       expect(replaceStateMock).not.toHaveBeenCalled();
@@ -77,7 +77,7 @@ describe('ima.core.page.handler.PageNavigationHandler', () => {
 
       handler.handlePreManagedState(null, nextManagedPage, {
         url: 'http://localhost/',
-        action: ActionTypes.POP_STATE
+        action: ActionTypes.POP_STATE,
       });
 
       expect(replaceStateMock).not.toHaveBeenCalled();
@@ -113,7 +113,7 @@ describe('ima.core.page.handler.PageNavigationHandler', () => {
       const scroll = { x: 0, y: 340 };
 
       handler.handlePostManagedState(managedPage, null, {
-        event: { state: { scroll } }
+        event: { state: { scroll } },
       });
 
       jest.runAllTimers();
@@ -138,7 +138,7 @@ describe('ima.core.page.handler.PageNavigationHandler', () => {
       const scroll = { x: 0, y: 340 };
 
       handler.handlePostManagedState(managedPage, null, {
-        event: { state: { scroll } }
+        event: { state: { scroll } },
       });
 
       jest.runAllTimers();

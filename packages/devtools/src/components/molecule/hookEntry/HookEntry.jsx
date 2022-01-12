@@ -21,13 +21,13 @@ export default class HookEntry extends React.PureComponent {
       alertSuccess: PropTypes.func,
       openHook: PropTypes.func,
       showConfirmModal: PropTypes.func,
-      editable: PropTypes.bool
+      editable: PropTypes.bool,
     };
   }
 
   static defaultProps() {
     return {
-      editable: false
+      editable: false,
     };
   }
 
@@ -37,7 +37,7 @@ export default class HookEntry extends React.PureComponent {
     this.state = {
       name: props.hook.name,
       description: props.hook.description,
-      code: props.hook.code
+      code: props.hook.code,
     };
   }
 
@@ -47,7 +47,7 @@ export default class HookEntry extends React.PureComponent {
     return (
       <div
         className={cn(styles.container, {
-          [styles['container--opened']]: opened
+          [styles['container--opened']]: opened,
         })}
       >
         {this._renderEntry()}
@@ -99,7 +99,7 @@ export default class HookEntry extends React.PureComponent {
     return (
       <div
         className={cn(styles.formWrapper, {
-          [styles['formWrapper--opened']]: opened
+          [styles['formWrapper--opened']]: opened,
         })}
       >
         <input
@@ -130,7 +130,7 @@ export default class HookEntry extends React.PureComponent {
           highlight={code => highlight(code, languages.js)}
           padding={10}
           style={{
-            overflow: 'auto'
+            overflow: 'auto',
           }}
         />
       </div>
@@ -139,7 +139,7 @@ export default class HookEntry extends React.PureComponent {
 
   onChange({ target: { value, name } }) {
     this.setState({
-      [name.split('__')[0]]: value
+      [name.split('__')[0]]: value,
     });
   }
 
@@ -159,7 +159,7 @@ export default class HookEntry extends React.PureComponent {
       accept: () => {
         deleteHook(hook.id);
         alertSuccess(`'${hook.name}' hook was deleted.`);
-      }
+      },
     });
   }
 

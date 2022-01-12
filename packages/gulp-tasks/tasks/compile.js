@@ -38,7 +38,7 @@ exports.default = gulpConfig => {
               'Promise.all([$IMA.Loader.import("app/main")])\n' +
               '.catch(function (error) { \n' +
               'console.error(error); \n });'
-          )
+          ),
         ]);
       });
     }
@@ -84,7 +84,7 @@ exports.default = gulpConfig => {
           babelrc: false,
           moduleIds: true,
           presets: babelConfig.esApp.presets,
-          plugins: babelConfig.esApp.plugins
+          plugins: babelConfig.esApp.plugins,
         });
       } else {
         return through2.obj();
@@ -102,7 +102,7 @@ exports.default = gulpConfig => {
           babelrc: false,
           moduleIds: true,
           presets: babelConfig.serverApp.presets,
-          plugins: babelConfig.serverApp.plugins
+          plugins: babelConfig.serverApp.plugins,
         })
       )
       .pipe(remember('Es6ToEs5:server:app'))
@@ -126,7 +126,7 @@ exports.default = gulpConfig => {
             babelrc: false,
             moduleIds: true,
             presets: babelConfig.app ? babelConfig.app.presets : [],
-            plugins: babelConfig.app ? babelConfig.app.plugins : []
+            plugins: babelConfig.app ? babelConfig.app.plugins : [],
           })
         )
       )
@@ -150,7 +150,7 @@ exports.default = gulpConfig => {
         babel({
           babelrc: false,
           presets: babelConfig.server.presets,
-          plugins: babelConfig.server.plugins
+          plugins: babelConfig.server.plugins,
         })
       )
       .pipe(plumber.stop())
@@ -296,8 +296,8 @@ exports.default = gulpConfig => {
         !gulpConfig.$Debug
           ? uglifyEs({
               compress: Object.assign({}, gulpConfig.uglifyCompression, {
-                ecma: 5
-              })
+                ecma: 5,
+              }),
             })
           : through2.obj()
       )
@@ -325,7 +325,7 @@ exports.default = gulpConfig => {
       .bundle()
       .on('error', function (err) {
         throw new PluginError('Es6ToEs5:vendor:client', err, {
-          showStack: true
+          showStack: true,
         });
       })
       .pipe(source(files.vendor.name.esClient))
@@ -384,6 +384,6 @@ exports.default = gulpConfig => {
     'Es6ToEs5:server': Es6ToEs5Server,
     'Es6ToEs5:vendor': Es6ToEs5Vendor,
     'Es6ToEs5:vendor:client': Es6ToEs5VendorClient,
-    'Es6ToEs5:vendor:clean': Es6ToEs5VendorClean
+    'Es6ToEs5:vendor:clean': Es6ToEs5VendorClean,
   };
 };

@@ -149,7 +149,7 @@ describe('ima.core.page.state.PageStateManagerImpl', () => {
 
       expect(stateManager.getTransactionStatePatches()).toStrictEqual([
         queuedPatchState1,
-        queuedPatchState2
+        queuedPatchState2,
       ]);
     });
   });

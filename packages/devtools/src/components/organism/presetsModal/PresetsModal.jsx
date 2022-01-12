@@ -18,7 +18,7 @@ export default class PresetsModal extends React.PureComponent {
       addPreset: PropTypes.func,
       selectPreset: PropTypes.func,
       alertSuccess: PropTypes.func,
-      onClose: PropTypes.func.isRequired
+      onClose: PropTypes.func.isRequired,
     };
   }
 
@@ -83,7 +83,7 @@ export default class PresetsModal extends React.PureComponent {
 
     setSettings({
       presets,
-      selectedPresetId
+      selectedPresetId,
     });
 
     alertSuccess('Changes made to the presets were saved.');
@@ -104,7 +104,7 @@ export default class PresetsModal extends React.PureComponent {
       name: `Preset - ${id.substring(0, 6)}`,
       editable: true,
       selected: false,
-      hooks: {}
+      hooks: {},
     };
   }
 }

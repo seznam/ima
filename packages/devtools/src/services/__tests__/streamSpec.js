@@ -4,7 +4,7 @@ describe('createEntry', () => {
   const data = {
     action: 'action',
     sentinel: 'dev:to:web',
-    payload: { now: new Date().getMilliseconds() }
+    payload: { now: new Date().getMilliseconds() },
   };
 
   it('should return passed data if input is JSON serializable', () => {
@@ -22,7 +22,7 @@ describe('createEntry', () => {
         sentinel: data.sentinel,
         action: 'error',
         payload: {},
-        error: '[SyntaxError: Unexpected token b in JSON at position 7]'
+        error: '[SyntaxError: Unexpected token b in JSON at position 7]',
       })
     );
   });

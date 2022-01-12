@@ -25,6 +25,6 @@
           }
           console.error(error);
         });
-    }
+    },
   };
 })(typeof window !== 'undefined' && window !== null ? window : global);

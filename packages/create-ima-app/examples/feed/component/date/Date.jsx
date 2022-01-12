@@ -11,7 +11,7 @@ export default class Date extends AbstractComponent {
     let formattedDate = this.utils.$Dictionary.get('home.dateFormat', {
       DATE: date.getDate(),
       MONTH: date.getMonth() + 1,
-      YEAR: date.getFullYear()
+      YEAR: date.getFullYear(),
     });
 
     return <div className='date'>{formattedDate}</div>;

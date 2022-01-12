@@ -92,7 +92,7 @@ export default class ClientPageRenderer extends AbstractPageRenderer {
         return {
           content: null,
           status: controller.getHttpStatus(),
-          pageState
+          pageState,
         };
       })
       .catch(error => this._handleError(error));
@@ -128,7 +128,7 @@ export default class ClientPageRenderer extends AbstractPageRenderer {
         return {
           content: null,
           status: controller.getHttpStatus(),
-          pageState: Object.assign({}, defaultPageState, fetchedResources)
+          pageState: Object.assign({}, defaultPageState, fetchedResources),
         };
       })
       .catch(error => this._handleError(error));
@@ -172,7 +172,7 @@ export default class ClientPageRenderer extends AbstractPageRenderer {
       patchedPromises[resourceName]
         .then(resource => {
           controller.setState({
-            [resourceName]: resource
+            [resourceName]: resource,
           });
         })
         .catch(error => this._handleError(error));
@@ -188,7 +188,7 @@ export default class ClientPageRenderer extends AbstractPageRenderer {
   _startBatchTransactions(controller, patchedPromises) {
     let hasResourcesLoaded = false;
     const options = {
-      timeout: 100
+      timeout: 100,
     };
     const requestIdleCallback = this._window.getWindow().requestIdleCallback
       ? this._window.getWindow().requestIdleCallback

@@ -45,7 +45,7 @@ export default class HomeView extends AbstractComponent {
                 {this.props.items.filter(item => !item.completed).length}
               </strong>
               {this.localize('home.count', {
-                COUNT: this.props.items.filter(item => !item.completed).length
+                COUNT: this.props.items.filter(item => !item.completed).length,
               })}
             </span>
             <ul className='filters'>
@@ -53,7 +53,7 @@ export default class HomeView extends AbstractComponent {
                 <a
                   href={this.link('home', {})}
                   className={this.cssClasses({
-                    selected: this.props.filter === null
+                    selected: this.props.filter === null,
                   })}
                 >
                   {this.localize('home.filters: all')}
@@ -63,7 +63,7 @@ export default class HomeView extends AbstractComponent {
                 <a
                   href={this.link('filtered', { filter: 'active' })}
                   className={this.cssClasses({
-                    selected: this.props.filter === false
+                    selected: this.props.filter === false,
                   })}
                 >
                   {this.localize('home.filters: active')}
@@ -73,7 +73,7 @@ export default class HomeView extends AbstractComponent {
                 <a
                   href={this.link('filtered', { filter: 'completed' })}
                   className={this.cssClasses({
-                    selected: this.props.filter === true
+                    selected: this.props.filter === true,
                   })}
                 >
                   {this.localize('home.filters: completed')}
@@ -84,7 +84,7 @@ export default class HomeView extends AbstractComponent {
               onClick={this.onDeleteCompleted.bind(this)}
               className={this.cssClasses({
                 'clear-completed': true,
-                hidden: this.props.items.every(item => !item.completed)
+                hidden: this.props.items.every(item => !item.completed),
               })}
             >
               {this.localize('home.clear completed')}
@@ -115,7 +115,7 @@ export default class HomeView extends AbstractComponent {
   onItemAdded() {
     if (this.newItemInput.value) {
       this.fire('itemCreated', {
-        title: this.newItemInput.value
+        title: this.newItemInput.value,
       });
       this.newItemInput.value = '';
     }
@@ -123,7 +123,7 @@ export default class HomeView extends AbstractComponent {
 
   onToggleAll() {
     this.fire('toggleAll', {
-      completed: this.toggleAll.checked
+      completed: this.toggleAll.checked,
     });
   }
 

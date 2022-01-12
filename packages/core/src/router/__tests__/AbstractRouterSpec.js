@@ -17,7 +17,7 @@ describe('ima.core.router.AbstractRouter', () => {
     $Protocol: 'http:',
     $Root: '/root',
     $LanguagePartPath: '',
-    $Host: 'www.domain.com'
+    $Host: 'www.domain.com',
   };
   let options = {
     onlyUpdate: false,
@@ -26,16 +26,16 @@ describe('ima.core.router.AbstractRouter', () => {
     documentView: null,
     managedRootView: null,
     viewAdapter: null,
-    middlewares: []
+    middlewares: [],
   };
   let globalMiddleware = jest.fn();
   let homeRouteMiddleware = jest.fn();
   let action = {
-    type: ActionTypes.REDIRECT
+    type: ActionTypes.REDIRECT,
   };
   let errorAction = {
     type: ActionTypes.ERROR,
-    url: 'http://www.domain.com/root/currentRoutePath'
+    url: 'http://www.domain.com/root/currentRoutePath',
   };
   let currentRoutePath = '/currentRoutePath';
   let Controller = function Controller() {};
@@ -53,7 +53,7 @@ describe('ima.core.router.AbstractRouter', () => {
 
     router.use(globalMiddleware);
     router.add('home', '/', Controller, View, {
-      middlewares: [homeRouteMiddleware]
+      middlewares: [homeRouteMiddleware],
     });
     router.add('contact', '/contact', Controller, View, options);
   });
@@ -158,7 +158,7 @@ describe('ima.core.router.AbstractRouter', () => {
       expect(router.getCurrentRouteInfo()).toStrictEqual({
         route,
         params,
-        path
+        path,
       });
     });
   });
@@ -199,7 +199,7 @@ describe('ima.core.router.AbstractRouter', () => {
 
     beforeEach(() => {
       route = routeFactory.createRoute(routeName, path, Controller, View, {
-        middlewares: [routeMiddleware]
+        middlewares: [routeMiddleware],
       });
       action.route = route;
     });
@@ -211,7 +211,7 @@ describe('ima.core.router.AbstractRouter', () => {
     it('should handle valid route path', async () => {
       spyOn(router, '_getRouteHandlersByPath').and.returnValue({
         route,
-        middlewares: []
+        middlewares: [],
       });
 
       spyOn(router, '_handle').and.stub();
@@ -229,7 +229,7 @@ describe('ima.core.router.AbstractRouter', () => {
       let middlewaresMock = [new RouterMiddleware(globalMiddleware)];
       spyOn(router, '_getRouteHandlersByPath').and.returnValue({
         route,
-        middlewares: middlewaresMock
+        middlewares: middlewaresMock,
       });
 
       spyOn(router, '_handle').and.stub();
@@ -284,7 +284,7 @@ describe('ima.core.router.AbstractRouter', () => {
         View,
         {
           ...options,
-          middlewares: [routeMiddleware]
+          middlewares: [routeMiddleware],
         }
       );
 
@@ -307,7 +307,7 @@ describe('ima.core.router.AbstractRouter', () => {
 
       spyOn(router._routeHandlers, 'get').and.returnValue(route);
       spyOn(router, '_getRouteHandlersByPath').and.returnValue({
-        route: originalRoute
+        route: originalRoute,
       });
       spyOn(router, '_runMiddlewares').and.callThrough();
 
@@ -315,7 +315,7 @@ describe('ima.core.router.AbstractRouter', () => {
         Promise.resolve({
           content: '',
           status: 200,
-          error: params.error
+          error: params.error,
         })
       );
 
@@ -326,7 +326,7 @@ describe('ima.core.router.AbstractRouter', () => {
             route,
             expect.objectContaining({
               ...params,
-              userId: '2345'
+              userId: '2345',
             }),
             options,
             errorAction
@@ -335,11 +335,11 @@ describe('ima.core.router.AbstractRouter', () => {
           expect(router._runMiddlewares).toHaveBeenCalledWith(
             [
               new RouterMiddleware(globalMiddleware),
-              new RouterMiddleware(routeMiddleware)
+              new RouterMiddleware(routeMiddleware),
             ],
             expect.objectContaining({
               ...params,
-              userId: '2345'
+              userId: '2345',
             }),
             { route, action: errorAction }
           );
@@ -377,7 +377,7 @@ describe('ima.core.router.AbstractRouter', () => {
         View,
         {
           ...options,
-          middlewares: [routeMiddleware]
+          middlewares: [routeMiddleware],
         }
       );
 
@@ -400,7 +400,7 @@ describe('ima.core.router.AbstractRouter', () => {
 
       spyOn(router._routeHandlers, 'get').and.returnValue(route);
       spyOn(router, '_getRouteHandlersByPath').and.returnValue({
-        route: originalRoute
+        route: originalRoute,
       });
       spyOn(router, '_runMiddlewares').and.callThrough();
 
@@ -408,7 +408,7 @@ describe('ima.core.router.AbstractRouter', () => {
         Promise.resolve({
           content: '',
           status: 200,
-          error: params.error
+          error: params.error,
         })
       );
 
@@ -419,7 +419,7 @@ describe('ima.core.router.AbstractRouter', () => {
             route,
             expect.objectContaining({
               ...params,
-              userId: '2345'
+              userId: '2345',
             }),
             options,
             errorAction
@@ -428,11 +428,11 @@ describe('ima.core.router.AbstractRouter', () => {
           expect(router._runMiddlewares).toHaveBeenCalledWith(
             [
               new RouterMiddleware(globalMiddleware),
-              new RouterMiddleware(routeMiddleware)
+              new RouterMiddleware(routeMiddleware),
             ],
             expect.objectContaining({
               ...params,
-              userId: '2345'
+              userId: '2345',
             }),
             { route, action: errorAction }
           );
@@ -485,7 +485,7 @@ describe('ima.core.router.AbstractRouter', () => {
       let isRedirection = router.isRedirection(
         new GenericError('Redirection', {
           status: 300,
-          url: 'http://www.example.com/redirect'
+          url: 'http://www.example.com/redirect',
         })
       );
 
@@ -554,7 +554,7 @@ describe('ima.core.router.AbstractRouter', () => {
         params: params,
         path: routePath,
         options: options,
-        action: {}
+        action: {},
       };
 
       router.getPath.and.returnValue(routePath);
@@ -587,7 +587,7 @@ describe('ima.core.router.AbstractRouter', () => {
           path: routePath,
           response: response,
           options: options,
-          action: {}
+          action: {},
         };
 
         expect(dispatcher.fire).toHaveBeenCalledWith(
@@ -617,7 +617,7 @@ describe('ima.core.router.AbstractRouter', () => {
           path: routePath,
           response: Object.assign({}, response, params),
           options: options,
-          action: {}
+          action: {},
         };
 
         expect(dispatcher.fire).toHaveBeenCalledWith(
@@ -734,7 +734,7 @@ describe('ima.core.router.AbstractRouter', () => {
         middlewareRouter._getRouteHandlersByPath('/contact').middlewares
       ).toStrictEqual([
         new RouterMiddleware(globalMiddleware),
-        new RouterMiddleware(afterHomeMiddleware)
+        new RouterMiddleware(afterHomeMiddleware),
       ]);
     });
   });
@@ -767,13 +767,13 @@ describe('ima.core.router.AbstractRouter', () => {
       expect(middlewareRouter._routeHandlers.size).toBe(6);
 
       expect(middlewareRouter._getMiddlewaresForRoute('home')).toStrictEqual([
-        new RouterMiddleware(globalMiddleware)
+        new RouterMiddleware(globalMiddleware),
       ]);
 
       expect(middlewareRouter._getMiddlewaresForRoute('contact')).toStrictEqual(
         [
           new RouterMiddleware(globalMiddleware),
-          new RouterMiddleware(afterHomeMiddleware)
+          new RouterMiddleware(afterHomeMiddleware),
         ]
       );
 
@@ -782,7 +782,7 @@ describe('ima.core.router.AbstractRouter', () => {
       ).toStrictEqual([
         new RouterMiddleware(globalMiddleware),
         new RouterMiddleware(afterHomeMiddleware),
-        new RouterMiddleware(endMiddleware)
+        new RouterMiddleware(endMiddleware),
       ]);
     });
   });
@@ -828,7 +828,7 @@ describe('ima.core.router.AbstractRouter', () => {
         middleware: 'locals',
         m1: true,
         m2: true,
-        m3: true
+        m3: true,
       });
     });
   });

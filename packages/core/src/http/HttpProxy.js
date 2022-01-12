@@ -100,7 +100,7 @@ export default class HttpProxy {
         requestTimeoutId = setTimeout(() => {
           reject(
             new GenericError('The HTTP request timed out', {
-              status: HttpStatusCode.TIMEOUT
+              status: HttpStatusCode.TIMEOUT,
             })
           );
         }, options.timeout);
@@ -251,12 +251,12 @@ export default class HttpProxy {
         params: requestParams,
         headers: this._headersToPlainObject(response.headers),
         headersRaw: response.headers,
-        cached: false
+        cached: false,
       };
     } else {
       throw new GenericError('The request failed', {
         status: response.status,
-        body: responseBody
+        body: responseBody,
       });
     }
   }
@@ -395,7 +395,7 @@ export default class HttpProxy {
       url,
       transformedUrl: this._transformer.transform(url),
       data,
-      options
+      options,
     };
   }
 
@@ -425,7 +425,7 @@ export default class HttpProxy {
       method: method.toUpperCase(),
       headers: options.headers,
       credentials: options.withCredentials ? 'include' : 'same-origin',
-      redirect: 'follow'
+      redirect: 'follow',
     };
 
     if (this._shouldRequestHaveBody(method, data)) {

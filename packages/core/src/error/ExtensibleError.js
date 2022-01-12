@@ -121,5 +121,5 @@ Object.defineProperty(ExtensibleError.prototype, 'stack', {
     }
 
     return this._stack;
-  }
+  },
 });

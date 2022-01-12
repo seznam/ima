@@ -7,7 +7,7 @@ describe('Modal atom', () => {
   const props = {
     opened: false,
     title: '',
-    onClose: jest.fn()
+    onClose: jest.fn(),
   };
 
   beforeEach(() => {
@@ -18,9 +18,9 @@ describe('Modal atom', () => {
     global.document = {
       body: {
         style: {
-          cssText: null
-        }
-      }
+          cssText: null,
+        },
+      },
     };
 
     jest
@@ -74,7 +74,7 @@ describe('Modal atom', () => {
 
       expect(instance.props.onClose.mock.calls).toHaveLength(1);
       expect(instance.props.onClose.mock.calls[0][0]).toStrictEqual({
-        keyCode: 27
+        keyCode: 27,
       });
       instance.props.onClose.mockClear();
     });
@@ -153,10 +153,10 @@ describe('Modal atom', () => {
 
       expect(instance.setState.mock.calls).toHaveLength(2);
       expect(instance.setState.mock.calls[0][0]).toStrictEqual({
-        closing: true
+        closing: true,
       });
       expect(instance.setState.mock.calls[1][0]).toStrictEqual({
-        closing: false
+        closing: false,
       });
     });
   });

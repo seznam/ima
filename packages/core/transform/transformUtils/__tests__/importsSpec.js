@@ -3,7 +3,7 @@ const { source } = require('../testUtils');
 const {
   addNamedImports,
   removeUnusedPackageImports,
-  findImport
+  findImport,
 } = require('../imports');
 
 describe('ima.core.utils.transform.transformUtils.imports', () => {

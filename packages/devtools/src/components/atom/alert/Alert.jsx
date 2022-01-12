@@ -9,7 +9,7 @@ export default class Alert extends React.PureComponent {
       type: PropTypes.oneOf(['default', 'danger', 'success', 'warning']),
       title: PropTypes.string,
       className: PropTypes.string,
-      children: PropTypes.any
+      children: PropTypes.any,
     };
   }
 
@@ -17,7 +17,7 @@ export default class Alert extends React.PureComponent {
     return {
       className: '',
       type: 'default',
-      title: ''
+      title: '',
     };
   }
 

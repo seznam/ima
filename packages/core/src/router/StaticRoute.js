@@ -78,7 +78,7 @@ const PARAMS_MAIN_REGEXP =
  */
 const SUBPARAMS_REQUIRED_REGEXP = {
   LAST: /([_-]{1})((\w-)?:[a-z0-9]+)(?=\\\/|$)/gi,
-  OTHERS: /(:[a-z0-9]+)(?=[_-]{1})/gi
+  OTHERS: /(:[a-z0-9]+)(?=[_-]{1})/gi,
 };
 
 /**
@@ -89,7 +89,7 @@ const SUBPARAMS_REQUIRED_REGEXP = {
  */
 const SUBPARAMS_OPT_REGEXP = {
   LAST: /([_-]{1}(\w-)?:\\\?[a-z0-9]+)(?=\\\/|$)/gi,
-  OTHERS: /(:\\\?[a-z0-9]+)(?=[_-]{1}(\w-)?)/gi
+  OTHERS: /(:\\\?[a-z0-9]+)(?=[_-]{1}(\w-)?)/gi,
 };
 
 /**
@@ -465,7 +465,7 @@ export default class StaticRoute extends AbstractRoute {
       clearedPathExpr.match(SUBPARAMS_OPT_REGEXP.OTHERS) || [];
     const optionalSubparams = [
       ...optionalSubparamsOthers,
-      ...optionalSubparamsLast
+      ...optionalSubparamsLast,
     ];
 
     const optionalSubparamsCleanNames = optionalSubparams.map(paramExpr => {

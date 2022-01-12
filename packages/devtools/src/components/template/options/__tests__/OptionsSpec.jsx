@@ -10,7 +10,7 @@ describe('Options template', () => {
   let wrapper, instance;
 
   const event = {
-    preventDefault: jest.fn()
+    preventDefault: jest.fn(),
   };
 
   const props = {
@@ -19,14 +19,14 @@ describe('Options template', () => {
         id: '0',
         name: 'name',
         editable: true,
-        selected: false
-      }
+        selected: false,
+      },
     },
     setPresets: jest.fn(),
     addHook: jest.fn(),
     alertSuccess: jest.fn(),
     selectedPresetId: '0',
-    hookIds: ['1', '2', '3']
+    hookIds: ['1', '2', '3'],
   };
 
   beforeEach(() => {
@@ -41,7 +41,7 @@ describe('Options template', () => {
 
   it('should match snapshot with modal opened', () => {
     wrapper.setState({
-      modalOpened: true
+      modalOpened: true,
     });
 
     expect(wrapper).toMatchSnapshot();
@@ -58,9 +58,9 @@ describe('Options template', () => {
           ...props.presets,
           0: {
             ...props.presets['0'],
-            editable: false
-          }
-        }
+            editable: false,
+          },
+        },
       });
 
       expect(instance.isEditable).toBe(false);
@@ -68,7 +68,7 @@ describe('Options template', () => {
 
     it("should return false if selected preset doesn't exist", () => {
       wrapper.setProps({
-        selectedPresetId: null
+        selectedPresetId: null,
       });
 
       expect(instance.isEditable).toBe(false);
@@ -82,7 +82,7 @@ describe('Options template', () => {
         .mockImplementation()
         .mockImplementation(() => ({
           presets: 'settingsPresets',
-          selectedPresetId: '0'
+          selectedPresetId: '0',
         }));
 
       await instance.componentDidMount();
@@ -91,7 +91,7 @@ describe('Options template', () => {
       expect(instance.props.setPresets.mock.calls).toHaveLength(1);
       expect(instance.props.setPresets.mock.calls[0][0]).toStrictEqual({
         presets: 'settingsPresets',
-        selectedPresetId: '0'
+        selectedPresetId: '0',
       });
     });
   });
@@ -121,7 +121,7 @@ describe('Options template', () => {
       expect(event.preventDefault.mock.calls).toHaveLength(1);
       expect(instance.setState.mock.calls).toHaveLength(1);
       expect(instance.setState.mock.calls[0][0]).toStrictEqual({
-        modalOpened: true
+        modalOpened: true,
       });
     });
   });
@@ -134,7 +134,7 @@ describe('Options template', () => {
 
       expect(instance.setState.mock.calls).toHaveLength(1);
       expect(instance.setState.mock.calls[0][0]).toStrictEqual({
-        modalOpened: false
+        modalOpened: false,
       });
     });
   });
@@ -146,7 +146,7 @@ describe('Options template', () => {
         return {
           entries: jest.fn().mockImplementation(() => {
             return [['name__0', 'newName']];
-          })
+          }),
         };
       };
 
@@ -164,12 +164,12 @@ describe('Options template', () => {
             ...props.presets['0'],
             hooks: {
               0: {
-                name: 'newName'
-              }
-            }
-          }
+                name: 'newName',
+              },
+            },
+          },
         },
-        selectedPresetId: props.selectedPresetId
+        selectedPresetId: props.selectedPresetId,
       });
     });
 
@@ -194,7 +194,7 @@ describe('Options template', () => {
         opened: false,
         name: 'Hook - 2fghzj',
         description: 'Description for hook - 2fghzj',
-        code: ''
+        code: '',
       });
     });
   });

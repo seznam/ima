@@ -23,5 +23,5 @@ export default Object.freeze({
   trash: TrashIcon,
   edit: EditIcon,
   check: CheckIcon,
-  copy: CopyIcon
+  copy: CopyIcon,
 });

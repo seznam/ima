@@ -10,10 +10,10 @@ describe('Alerts molecule', () => {
         hidden: false,
         title: 'title',
         content: 'content',
-        type: 'default'
-      }
+        type: 'default',
+      },
     },
-    removeAlert: jest.fn()
+    removeAlert: jest.fn(),
   };
 
   let wrapper = shallow(<Alerts {...props} />);

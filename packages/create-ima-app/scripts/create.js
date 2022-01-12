@@ -22,22 +22,22 @@ let exampleResolver = argv.example
             name: `${chalk.bold.blue(
               'Empty'
             )} - The basic Hello World example. Ideal for new projects.`,
-            value: 'hello'
+            value: 'hello',
           },
           {
             name: `${chalk.bold.blue(
               'Todos'
             )} - Demo example of TodoMVC application.`,
-            value: 'todos'
+            value: 'todos',
           },
           {
             name: `${chalk.bold.blue(
               'Feed'
             )}  - Demo example of twitter-like application with fake REST API.`,
-            value: 'feed'
-          }
-        ]
-      }
+            value: 'feed',
+          },
+        ],
+      },
     ]);
 
 exampleResolver.then(({ example }) => {
@@ -103,7 +103,7 @@ function createImaApp(dirName, exampleName) {
   const npm = process.platform === 'win32' ? 'npm.cmd' : 'npm';
   execa.sync(npm, ['install'], {
     stdio: 'inherit',
-    cwd: appRoot
+    cwd: appRoot,
   });
 
   // Init git repo

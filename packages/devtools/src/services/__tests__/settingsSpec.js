@@ -11,17 +11,17 @@ beforeEach(() => {
         set: jest.fn().mockImplementation(value => {
           return (settingsStorage = {
             ...settingsStorage,
-            ...value
+            ...value,
           });
         }),
         get: jest.fn().mockImplementation((key, callback) => {
           callback(settingsStorage);
-        })
-      }
+        }),
+      },
     },
     runtime: {
-      lastError: 'runtime error'
-    }
+      lastError: 'runtime error',
+    },
   };
 });
 
@@ -59,7 +59,7 @@ describe('getSettings', () => {
 
     await expect(getSettings()).resolves.toStrictEqual(
       Object.assign({}, defaultSettings, {
-        enabled: true
+        enabled: true,
       })
     );
   });
@@ -71,7 +71,7 @@ describe('setSettings', () => {
 
     expect(chrome.storage.local.set.mock.calls).toHaveLength(1);
     expect(chrome.storage.local.set.mock.calls[0][0]).toStrictEqual({
-      enabled: true
+      enabled: true,
     });
 
     expect(settingsStorage).toStrictEqual({ enabled: true });

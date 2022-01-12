@@ -12,7 +12,7 @@ describe('Panel template', () => {
     reload: jest.fn(),
     clearEntries: jest.fn(),
     selectNext: jest.fn(),
-    selectPrevious: jest.fn()
+    selectPrevious: jest.fn(),
   };
 
   let wrapper, instance, disconnectCallback;
@@ -21,24 +21,24 @@ describe('Panel template', () => {
     name,
     onMessage: {
       addListener: jest.fn(),
-      removeListener: jest.fn()
+      removeListener: jest.fn(),
     },
     disconnect: jest.fn(),
     onDisconnect: {
       addListener: jest
         .fn()
-        .mockImplementation(callback => (disconnectCallback = callback))
-    }
+        .mockImplementation(callback => (disconnectCallback = callback)),
+    },
   });
 
   global.chrome = {
     runtime: {
-      connect: jest.fn().mockImplementation(details => createPort(details))
-    }
+      connect: jest.fn().mockImplementation(details => createPort(details)),
+    },
   };
 
   jest.spyOn(utils, 'getCurrentTab').mockImplementation().mockResolvedValue({
-    tabId: 123
+    tabId: 123,
   });
 
   beforeEach(() => {
@@ -58,7 +58,7 @@ describe('Panel template', () => {
     wrapper.setProps({
       isLoading: false,
       error:
-        'The devtools only support applications runnning IMA.js v17 or higher.'
+        'The devtools only support applications runnning IMA.js v17 or higher.',
     });
 
     expect(wrapper).toMatchSnapshot();
@@ -84,7 +84,7 @@ describe('Panel template', () => {
 
       expect(chrome.runtime.connect).toHaveBeenCalled();
       expect(chrome.runtime.connect).toHaveBeenCalledWith({
-        name: 'panel:123'
+        name: 'panel:123',
       });
 
       expect(instance.port.onMessage.addListener.mock.calls).toHaveLength(1);
@@ -172,7 +172,7 @@ describe('Panel template', () => {
 
       expect(instance.cachedEntries.push.mock.calls).toHaveLength(1);
       expect(instance.cachedEntries.push.mock.calls[0][0]).toStrictEqual({
-        action: Actions.MESSAGE
+        action: Actions.MESSAGE,
       });
       expect(instance._batchAddEntries.mock.calls).toHaveLength(1);
     });

@@ -13,54 +13,54 @@ export default (ns, oc, config) => {
           headers: {
             // Set default request headers
             Accept: 'application/json',
-            'Accept-Language': config.$Language
+            'Accept-Language': config.$Language,
           },
           fetchOptions: {
-            mode: 'cors'
+            mode: 'cors',
           },
-          cache: true
+          cache: true,
         },
         cacheOptions: {
-          prefix: 'http.' // Cache key prefix for response bodies (already parsed as JSON) of completed HTTP requests.
-        }
+          prefix: 'http.', // Cache key prefix for response bodies (already parsed as JSON) of completed HTTP requests.
+        },
       },
       $Cache: {
         enabled: true,
-        ttl: 60000
+        ttl: 60000,
       },
       $Page: {
         $Render: {
           scripts: [
             `/static/js/locale/${config.$Language}.js${versionStamp}`,
-            '/static/js/app.bundle.min.js' + versionStamp
+            '/static/js/app.bundle.min.js' + versionStamp,
           ],
           esScripts: [
             '/static/js/locale/' + config.$Language + '.js' + versionStamp,
-            '/static/js/app.bundle.es.min.js' + versionStamp
+            '/static/js/app.bundle.es.min.js' + versionStamp,
           ],
-          documentView: DocumentView
-        }
+          documentView: DocumentView,
+        },
       },
       $Static: {
         image: '/static/img',
         css: '/static/css',
-        js: '/static/js'
-      }
+        js: '/static/js',
+      },
     },
 
     test: {
       $Http: {
         defaultRequestOptions: {
-          timeout: 5000
-        }
-      }
+          timeout: 5000,
+        },
+      },
     },
 
     dev: {
       $Http: {
         defaultRequestOptions: {
-          timeout: 2000
-        }
+          timeout: 2000,
+        },
       },
       $Page: {
         $Render: {
@@ -70,7 +70,7 @@ export default (ns, oc, config) => {
             '/static/js/vendor.client.js' + versionStamp,
             `/static/js/locale/${config.$Language}.js${versionStamp}`,
             '/static/js/app.client.js' + versionStamp,
-            '/static/js/hot.reload.js' + versionStamp
+            '/static/js/hot.reload.js' + versionStamp,
           ],
           esScripts: [
             '/static/js/polyfill.es.js' + versionStamp,
@@ -78,10 +78,10 @@ export default (ns, oc, config) => {
             '/static/js/vendor.client.es.js' + versionStamp,
             `/static/js/locale/${config.$Language}.js${versionStamp}`,
             '/static/js/app.client.es.js' + versionStamp,
-            '/static/js/hot.reload.js' + versionStamp
-          ]
-        }
-      }
-    }
+            '/static/js/hot.reload.js' + versionStamp,
+          ],
+        },
+      },
+    },
   };
 };

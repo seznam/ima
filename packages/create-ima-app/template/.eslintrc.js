@@ -3,7 +3,7 @@ module.exports = {
   extends: [
     'eslint:recommended',
     'plugin:react/recommended',
-    'plugin:prettier/recommended'
+    'plugin:prettier/recommended',
   ],
   rules: {
     // Eslint overrides
@@ -11,8 +11,8 @@ module.exports = {
     'no-console': [
       'error',
       {
-        allow: ['warn', 'error']
-      }
+        allow: ['warn', 'error'],
+      },
     ],
 
     // Prettier
@@ -24,8 +24,8 @@ module.exports = {
         trailingComma: 'none',
         jsxSingleQuote: true,
         bracketSameLine: false,
-        arrowParens: 'avoid'
-      }
+        arrowParens: 'avoid',
+      },
     ],
 
     // React plugin overrides
@@ -33,12 +33,12 @@ module.exports = {
     'react/wrap-multilines': 0,
     'react/no-deprecated': 0,
     'react/jsx-uses-react': 0,
-    'react/react-in-jsx-scope': 0
+    'react/react-in-jsx-scope': 0,
   },
   settings: {
     react: {
-      version: '16'
-    }
+      version: '16',
+    },
   },
   parser: '@babel/eslint-parser',
   parserOptions: {
@@ -46,19 +46,19 @@ module.exports = {
     ecmaVersion: 6,
     requireConfigFile: false,
     babelOptions: {
-      presets: ['@babel/preset-react']
-    }
+      presets: ['@babel/preset-react'],
+    },
   },
   env: {
     browser: true,
     node: true,
-    es6: true
+    es6: true,
   },
   globals: {
     $Debug: true,
     $IMA: true,
     using: true,
     extend: true,
-    spyOn: true
-  }
+    spyOn: true,
+  },
 };

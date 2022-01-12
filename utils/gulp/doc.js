@@ -18,23 +18,23 @@ const dir = {
   docSass: `${__dirname}/../../docs/_sass/`,
   docSrc: `${__dirname}/../../${DOC_SRC}/`,
   nodeModules: `${__dirname}/../../node_modules/`,
-  parent: `${__dirname}/../../`
+  parent: `${__dirname}/../../`,
 };
 const documentationPreprocessors = [
   {
     pattern:
       /\/[*][*]((?:a|[^a])*?)@(type|param|return)\s*[{]([^}]*?)([a-zA-Z0-9_., *<>|]+)\[\]([^}]*)[}]((a|[^a])*)[*]\//g,
-    replace: '/**$1@$2 {$3Array<$4>$5}$6*/'
+    replace: '/**$1@$2 {$3Array<$4>$5}$6*/',
   },
   {
     pattern:
       /\/[*][*]((?:a|[^a])*?)[{]@code(?:link)? ([^}]*)[}]((a|[^a])*)[*]\//g,
-    replace: '/**$1<code>$2</code>$3*/'
+    replace: '/**$1<code>$2</code>$3*/',
   },
   {
     pattern: /^\s*export\s+default\s+/gm,
-    replace: ''
-  }
+    replace: '',
+  },
 ];
 let config;
 
@@ -86,8 +86,8 @@ function generate(done) {
     partial: [
       `${dir.docPartials}docs.hbs`,
       `${dir.docPartials}header.hbs`,
-      `${dir.docPartials}main.hbs`
-    ]
+      `${dir.docPartials}main.hbs`,
+    ],
   };
   const gitUrl = `${packageData.repository.url.slice(0, -4)}/blob/v${
     lernaData.version
@@ -98,7 +98,7 @@ function generate(done) {
 
   gulp
     .src([`${dir.docSrc}**/*.{js,jsx}`], {
-      read: false
+      read: false,
     })
     .pipe(
       map((file, callback) => {
@@ -163,7 +163,7 @@ function generate(done) {
             item.imaMenuCategory,
             item.memberof,
             item.name,
-            name
+            name,
           ]);
           if (item.augments) {
             item.augments.forEach(augment => textValues.add(augment));
@@ -171,7 +171,7 @@ function generate(done) {
           lunrDocuments.push({
             name,
             text: Array.from(textValues.values()).filter(value => !!value),
-            url: `${urlPrefix}/${filename}#${hash}`
+            url: `${urlPrefix}/${filename}#${hash}`,
           });
 
           return item;
