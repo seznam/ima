@@ -75,9 +75,8 @@ export default class PageRendererFactory {
    *         root view component.
    */
   getManagedRootView(managedRootView) {
-    let managedRootViewComponent = this._resolveClassConstructor(
-      managedRootView
-    );
+    let managedRootViewComponent =
+      this._resolveClassConstructor(managedRootView);
 
     if ($Debug) {
       let componentPrototype = managedRootViewComponent.prototype;

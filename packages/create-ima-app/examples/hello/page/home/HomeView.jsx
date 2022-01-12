@@ -1,48 +1,48 @@
-import Card from 'app/component/card/Card';
+import { useSettings } from '@ima/react-hooks';
 
+import Card from 'app/component/card/Card';
 import './homeView.less';
 
 export default function HomeView(props) {
+  const links = useSettings('links');
+
   return (
-    <div className="l-homepage">
+    <div className="page-home">
       <div className="content">
         <h1>
-          Welcome to{' '}
+          {props.message}{' '}
           <a
             href="https://imajs.io"
-            title={props.appName}
+            title={props.name}
             rel="noopener noreferrer">
-            {props.appName}
+            {props.name}
           </a>
           !
         </h1>
 
         <p className="hero">
           Get started by editing <code>app/home/HomeView.jsx</code> or pick one
-          of the following topics!
+          of the following topics:
         </p>
 
         <div className="cards">
-          <Card title="Documentation" href="https://imajs.io/docs">
+          <Card title="Documentation" href={links.documentation}>
             In the documentation you’ll find an{' '}
-            <a href="https://imajs.io/tutorial/introduction">in depth look</a>{' '}
-            to every part of the IMA.js framework.
+            <a href={links.documentation}>in depth look</a> to every part of the
+            IMA.js framework.
           </Card>
-          <Card title="Tutorial" href="https://imajs.io/tutorial/introduction">
-            In the tutorial you’ll build a simple guest book application with.
-            It’s always a{' '}
-            <a href="https://imajs.io/docs">good place to start</a>.
+          <Card title="Tutorial" href={links.tutorial}>
+            The tutorial, which is always{' '}
+            <a href={links.tutorial}>good place to start</a>, takes you through
+            the build process of a simple guest book application.
           </Card>
-          <Card title="Plugins" href="https://github.com/seznam/IMA.js-plugins">
+          <Card title="Plugins" href={links.plugins}>
             IMA.js comes with full support for plugins, feel free to export{' '}
-            <a href="https://github.com/seznam/IMA.js-plugins">
-              existing library
-            </a>{' '}
-            we maintain.
+            <a href={links.plugins}>existing library</a> we maintain.
           </Card>
-          <Card title="API" href="https://imajs.io/api">
+          <Card title="API" href={links.api}>
             This section provides direct look at the{' '}
-            <a href="https://imajs.io/api">framework’s API</a>.
+            <a href={links.api}>framework’s API</a>.
           </Card>
         </div>
       </div>

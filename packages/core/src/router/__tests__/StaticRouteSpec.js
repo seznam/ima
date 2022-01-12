@@ -983,8 +983,7 @@ describe('ima.core.router.StaticRoute', function () {
         },
         {
           pathExpression: '/promo/:promoId',
-          path:
-            '/promo/2-mattresses?utm_source=seznam&utm_medium=link&utm_campaign=email-reply-confirm&utm_content=seller-link-box',
+          path: '/promo/2-mattresses?utm_source=seznam&utm_medium=link&utm_campaign=email-reply-confirm&utm_content=seller-link-box',
           result: true
         },
         {
@@ -1034,8 +1033,7 @@ describe('ima.core.router.StaticRoute', function () {
         {
           pathExpression:
             '/something/:catId_:catName_:parentCatId/:?detailId-:?color_:?size',
-          path:
-            '/something/5812_medium-mattresses_5687/5687710-white-black_210-65',
+          path: '/something/5812_medium-mattresses_5687/5687710-white-black_210-65',
           result: true
         },
         {
@@ -1150,33 +1148,28 @@ describe('ima.core.router.StaticRoute', function () {
         },
         {
           pathExpression: '/:shopSeo/:?sort/:?page',
-          path:
-            '/shopper?utm_source=sbazar&utm_medium=email&utm_campaign=email-reply-confirm&utm_content=seller-link-box',
+          path: '/shopper?utm_source=sbazar&utm_medium=email&utm_campaign=email-reply-confirm&utm_content=seller-link-box',
           result: true
         },
         {
           pathExpression: '/:categoryId-:categoryName',
-          path:
-            '/shopper?utm_source=sbazar&utm_medium=email&utm_campaign=email-reply-confirm&utm_content=seller-link-box',
+          path: '/shopper?utm_source=sbazar&utm_medium=email&utm_campaign=email-reply-confirm&utm_content=seller-link-box',
           result: false
         },
         {
           pathExpression: '/:categoryId-:categoryName',
-          path:
-            '/125-children-up-to-10?utm_source=sbazar&utm_medium=email&utm_campaign=email-reply-confirm&utm_content=seller-link-box',
+          path: '/125-children-up-to-10?utm_source=sbazar&utm_medium=email&utm_campaign=email-reply-confirm&utm_content=seller-link-box',
           result: true
         },
         {
           pathExpression: '/:categoryId-:?categoryName',
-          path:
-            '/shopper?utm_source=sbazar&utm_medium=email&utm_campaign=email-reply-confirm&utm_content=seller-link-box',
+          path: '/shopper?utm_source=sbazar&utm_medium=email&utm_campaign=email-reply-confirm&utm_content=seller-link-box',
           result: false
         },
         {
           pathExpression:
             '/:categoryId-:?categoryName/:?locality/:?price/:?sort/:?page',
-          path:
-            '/shopper?utm_source=sbazar&utm_medium=email&utm_campaign=email-reply-confirm&utm_content=seller-link-box',
+          path: '/shopper?utm_source=sbazar&utm_medium=email&utm_campaign=email-reply-confirm&utm_content=seller-link-box',
           result: false
         },
         {
@@ -1409,9 +1402,8 @@ describe('ima.core.router.StaticRoute', function () {
         it(`should check parametres order for '${path}' [${result.toString()}]`, function () {
           const localStaticRoute = new StaticRoute('unknown', path, 'unknown');
 
-          const isCorrectParamOrder = localStaticRoute._checkParametersOrder(
-            clearPathExpr
-          );
+          const isCorrectParamOrder =
+            localStaticRoute._checkParametersOrder(clearPathExpr);
           expect(isCorrectParamOrder).toEqual(result);
         });
       }

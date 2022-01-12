@@ -148,9 +148,8 @@ export default class AbstractPageManager extends PageManager {
     // Construct new managedPage value
     const pageFactory = this._pageFactory;
     const controllerInstance = pageFactory.createController(controller);
-    const decoratedController = pageFactory.decorateController(
-      controllerInstance
-    );
+    const decoratedController =
+      pageFactory.decorateController(controllerInstance);
     const viewInstance = pageFactory.createView(view);
     const newManagedPage = this._constructManagedPageValue(
       controller,

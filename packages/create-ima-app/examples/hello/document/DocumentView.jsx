@@ -1,10 +1,5 @@
 import { AbstractDocumentView } from '@ima/core';
 
-import './documentView.less';
-
-/**
- * Master Layout.
- */
 export default class DocumentView extends AbstractDocumentView {
   static get masterElementId() {
     return 'page';
@@ -16,6 +11,9 @@ export default class DocumentView extends AbstractDocumentView {
         <head>
           <meta charSet="utf-8" />
           <meta httpEquiv="X-UA-Compatible" content="IE=edge" />
+          <meta
+            name="viewport"
+            content="width=device-width, initial-scale=1"></meta>
 
           <meta
             name="description"

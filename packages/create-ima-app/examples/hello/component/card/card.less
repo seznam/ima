@@ -1,22 +1,30 @@
 .card {
   display: flex;
 
-  margin: 20px;
+  width: 100%;
 
-  border: 2px solid #e5e7eb;
+  border: 2px solid;
+  border-color: transparent;
 
-  padding: 25px;
+  padding: 1.5rem;
 
-  width: 340px;
 
   flex-direction: column;
 
   text-align: left;
 
+  @media only screen and (min-width: 680px) {
+    margin: 1.25rem;
+
+    border-color: @color-light;
+
+    width: 320px;
+  }
+
   &-title {
-    margin-bottom: 1em;
+    margin-bottom: 1rem;
     border-bottom-width: 2px;
-    padding-bottom: 10px;
+    padding-bottom: 0.75rem;
 
     color: @color-red;
 
@@ -32,6 +40,6 @@
   p {
     margin: 0;
 
-    font-size: 17px;
+    font-size: 1.1rem;
   }
 }

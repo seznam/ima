@@ -1,5 +1,3 @@
-'use strict';
-
 const clone = require('clone');
 
 function assign(target, source, parentField = null, ignoreMeta = true) {

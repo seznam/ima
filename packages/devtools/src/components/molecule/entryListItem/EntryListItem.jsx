@@ -24,9 +24,8 @@ export default class EntryListItem extends React.PureComponent {
   render() {
     const { zeroTime, zeroId } = this.props;
     const { selected, id, messages } = this.props.entry;
-    const { color, label, type, time, promises } = messages[
-      Math.max(messages.length - 1, 0)
-    ].payload;
+    const { color, label, type, time, promises } =
+      messages[Math.max(messages.length - 1, 0)].payload;
     const { shortLabel, event } = this._parseLabel(label);
 
     return (

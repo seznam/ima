@@ -44,6 +44,12 @@ export default (ns, oc, config) => {
           },
           documentView: DocumentView
         }
+      },
+      links: {
+        documentation: 'https://imajs.io/docs',
+        tutorial: 'https://imajs.io/tutorial/introduction',
+        plugins: 'https://github.com/seznam/IMA.js-plugins',
+        api: 'https://imajs.io/api'
       }
     },
 

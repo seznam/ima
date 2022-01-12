@@ -41,7 +41,7 @@ export default class HomeController extends AbstractPageController {
       //error: Promise.reject(new GenericError('Try error page.')),
       //redirect: Promise.reject(new GenericError('Redirect from home page to error page for $Debug = false.', {status: 303, url: 'http://localhost:3001/not-found'})),
       message: `Welcome to`,
-      appName: `IMA.js`
+      name: `IMA.js`
     };
   }
 

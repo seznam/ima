@@ -1,8 +1,8 @@
 import './card.less';
 
-export default function Card({ children, title, className = '', href }) {
+export default function Card({ children, title, href }) {
   return (
-    <div className={`${className} card`}>
+    <div className="card">
       <a className="card-title" href={href}>
         <h3>{title} &raquo;</h3>
       </a>

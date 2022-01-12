@@ -70,8 +70,8 @@ const presets = createSlice({
       getCurrentPreset(state).hooks[payload.id] = payload;
     },
     toggleHook(state, { payload: id }) {
-      getCurrentPreset(state).hooks[id].enabled = !getCurrentPreset(state)
-        .hooks[id].enabled;
+      getCurrentPreset(state).hooks[id].enabled =
+        !getCurrentPreset(state).hooks[id].enabled;
     },
     deleteHook(state, { payload: id }) {
       delete getCurrentPreset(state).hooks[id];

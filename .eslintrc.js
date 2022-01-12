@@ -69,6 +69,13 @@ module.exports = {
       rules: {
         'no-console': 'off'
       }
+    },
+    {
+      files: ['packages/devtools/**', 'packages/create-ima-app/**'],
+      rules: {
+        // temporary fix until new code style updates are in master
+        'no-unused-vars': 'off'
+      }
     }
   ]
 };
