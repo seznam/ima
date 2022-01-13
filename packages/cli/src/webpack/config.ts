@@ -524,6 +524,11 @@ export default async (
     },
 
     // Turn webpack performance reports off since we print reports ourselves
-    performance: false
+    performance: false,
+
+    // Disable infrastructure logging in normal mode
+    infrastructureLogging: {
+      level: ctx.verbose ? 'info' : 'none'
+    }
   };
 };
