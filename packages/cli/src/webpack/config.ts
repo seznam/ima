@@ -320,20 +320,49 @@ export default async (
              */
             {
               test: /\.svg$/,
-              oneOf: [
+              rules: [
                 {
-                  resourceQuery: /inline/, // foo.svg?inline
-                  type: 'asset/inline',
-                  generator: {
-                    dataUrl: (content: string | Buffer) =>
-                      miniSVGDataURI(content.toString())
-                  }
+                  oneOf: [
+                    {
+                      resourceQuery: /inline/, // foo.svg?inline
+                      type: 'asset/inline',
+                      generator: {
+                        dataUrl: (content: string | Buffer) =>
+                          miniSVGDataURI(content.toString())
+                      }
+                    },
+                    {
+                      type: 'asset/resource'
+                    }
+                  ]
                 },
                 {
-                  type: 'asset/resource'
+                  loader: require.resolve('svgo-loader'),
+                  options: {
+                    js2svg: {
+                      indent: 2,
+                      pretty: !isProduction
+                    }
+                  }
                 }
-              ],
-              use: require.resolve('svgo-loader')
+              ]
+            },
+            /**
+             * Raw loaders, by default it loads file source into the bundle,
+             * optionally by postfixing the import with '?external' we can
+             * force it to return path to the source.
+             */
+            {
+              test: [/\.csv$/, /\.txt$/, /\.html/],
+              oneOf: [
+                {
+                  resourceQuery: /external/, // foo.png?external
+                  type: 'asset/resource'
+                },
+                {
+                  type: 'asset/source'
+                }
+              ]
             },
             {
               test: /\.(js|mjs|jsx|ts|tsx|cjs)$/,
@@ -421,12 +450,7 @@ export default async (
              * of the above defined rules.
              */
             {
-              exclude: [
-                /^$/,
-                /\.(js|mjs|jsx|ts|tsx|cjs)$/,
-                /\.html$/,
-                /\.json$/
-              ],
+              exclude: [/^$/, /\.(js|mjs|jsx|ts|tsx|cjs)$/, /\.json$/],
               type: 'asset/resource'
             }
           ]
