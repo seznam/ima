@@ -30,7 +30,7 @@ export default (ns, oc, config) => {
       },
       $Page: {
         $Render: {
-          styles: [`/static/css/app.css${versionStamp}`],
+          styles: [`/static/css/app.min.css${versionStamp}`],
           scripts: [
             // `/static/js/locale/${config.$Language}.js${versionStamp}`,
             `/static/js/app.bundle.min.js${versionStamp}`
@@ -69,6 +69,7 @@ export default (ns, oc, config) => {
       },
       $Page: {
         $Render: {
+          styles: [`/static/css/app.css${versionStamp}`],
           scripts: [
             // `/static/js/polyfill.js${versionStamp}`,
             // `/static/js/locale/${config.$Language}.js${versionStamp}`,

@@ -41,5 +41,10 @@ export const builder: CommandBuilder = {
     type: 'boolean',
     default: true
   },
+  profile: {
+    desc: 'Turn on profiling support in production',
+    type: 'boolean',
+    default: false
+  },
   ...resolveCliPluginArgs(CMD)
 };

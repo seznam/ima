@@ -34,6 +34,7 @@ export interface CliArgs {
   open?: boolean;
   legacy?: boolean;
   forceSPA?: boolean;
+  profile?: boolean;
 }
 
 /**

@@ -232,12 +232,16 @@ export default async (
       minimize: isProduction && !isServer,
       minimizer: [
         new TerserPlugin({
-          minify: TerserPlugin.esbuildMinify
+          terserOptions: {
+            mangle: {
+              safari10: true
+            },
+            // Added for profiling in devtools
+            keep_classnames: ctx.profile,
+            keep_fnames: ctx.profile
+          }
         }),
-        new CssMinimizerPlugin({
-          // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-          minify: CssMinimizerPlugin.esbuildMinify
-        })
+        new CssMinimizerPlugin()
       ],
       // Split chunks in dev for better performance and caching
       ...(!isProduction
@@ -264,7 +268,12 @@ export default async (
         '@ima/core': `@ima/core/dist/ima.${
           isServer ? 'server' : 'client'
         }.cjs.js`,
-        ...(imaConfig?.webpackAliases ?? {})
+        ...(imaConfig?.webpackAliases ?? {}),
+        // Enable better profiling in react devtools
+        ...(ctx.profile && {
+          'react-dom$': 'react-dom/profiling',
+          'scheduler/tracing': 'scheduler/tracing-profiling'
+        })
       }
     },
     resolveLoader: {

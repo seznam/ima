@@ -82,10 +82,7 @@ const dev: HandlerFn = async args => {
   try {
     const { config, imaConfig } = await createWebpackConfig(
       ['client', 'server'],
-      {
-        ...args,
-        isProduction: false
-      }
+      args
     );
 
     const compiler = webpack(config);

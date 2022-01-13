@@ -7,8 +7,8 @@ import { ErrorWrapper, FrameWrapper } from '#/reducers';
 
 import FrameHeader from './FrameHeader';
 
+import 'prismjs/components/prism-markup';
 import 'prismjs/components/prism-jsx';
-import 'prismjs/components/prism-html';
 import 'prismjs/components/prism-javascript';
 import 'prismjs/components/prism-less';
 import 'prismjs/components/prism-css';
@@ -25,7 +25,7 @@ function getPrismLanguage(fileUri: string | undefined): {
   grammar: prismjs.Grammar;
   language: string;
 } {
-  let language = 'javascript';
+  let language = 'markup';
 
   switch (fileUri?.split('.').pop()) {
     case 'jsx':
