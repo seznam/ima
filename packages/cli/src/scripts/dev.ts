@@ -14,77 +14,55 @@ import {
 import logger from '../lib/logger';
 import { watchCompiler, handleError } from '../lib/compiler';
 import { createWebpackConfig, resolveEnvironment } from '../webpack/utils';
-import webpack, { MultiCompiler } from 'webpack';
+import webpack from 'webpack';
 
 let nodemonInitialized = false;
 let serverHasStarted = false;
 
 /**
- * Creates nodemon dev plugin to watch server-side changes
- * which triggers automatic server restarts.
+ * Starts ima server with nodemon to watch for server-side changes
+ * (all changes in server/ folder), to automatically restart application.
  */
-function initNodemon(compiler: MultiCompiler, args: CliArgs) {
-  compiler.hooks.done.tap('RebootImaServerPlugin', stats => {
-    if (stats.hasErrors()) {
-      return;
-    }
+function startNodemon(args: CliArgs) {
+  if (!nodemonInitialized) {
+    nodemon({
+      script: path.join(args.rootDir, 'server/server.js'),
+      watch: [`${path.join(args.rootDir, 'server')}`],
+      args: [`--verbose=${args.verbose}`],
+      cwd: args.rootDir
+    });
 
-    // Start server with nodemon
-    if (!nodemonInitialized) {
-      nodemon({
-        script: path.join(args.rootDir, 'server/server.js'),
-        watch: [`${path.join(args.rootDir, 'server')}`],
-        args: [`--verbose=${args.verbose}`],
-        cwd: args.rootDir
-      });
+    nodemon.on('start', () => {
+      logger.info(
+        `${serverHasStarted ? 'Restarting' : 'Starting'} application server${
+          !serverHasStarted && args.forceSPA
+            ? ` in ${chalk.black.bgCyan('SPA mode')}`
+            : ''
+        }...`
+      );
+    });
 
-      nodemon.on('start', () => {
-        logger.info(
-          `${
-            serverHasStarted ? 'Restarting' : 'Starting'
-          } application server...`
-        );
-      });
+    nodemon.once('message', message => {
+      if (message === IMA_CLI_RUN_SERVER_MESSAGE) {
+        serverHasStarted = true;
 
-      nodemon.once('message', message => {
-        if (message === IMA_CLI_RUN_SERVER_MESSAGE) {
-          serverHasStarted = true;
+        if (args.open) {
+          const imaEnvironment = resolveEnvironment(args.rootDir);
+          const port = imaEnvironment?.$Server?.port ?? 3001;
 
-          if (args.open) {
-            const imaEnvironment = resolveEnvironment(args.rootDir);
-            const port = imaEnvironment?.$Server?.port ?? 3001;
-
-            try {
-              open(`http://localhost:${port}`);
-            } catch (error) {
-              logger.error(
-                `Could not open http://localhost:${port} inside a browser, ${error}`
-              );
-            }
+          try {
+            open(`http://localhost:${port}`);
+          } catch (error) {
+            logger.error(
+              `Could not open http://localhost:${port} inside a browser, ${error}`
+            );
           }
         }
-      });
+      }
+    });
 
-      nodemonInitialized = true;
-    }
-
-    // Restart server when necessary (server-side changes)
-    const emittedAssets = stats
-      .toJson({
-        all: false,
-        assets: true,
-        errors: true
-      })
-      .children?.find(({ name }) => name === 'server')
-      ?.assets?.filter(
-        ({ emitted, name }) => emitted && !name.includes('app.server.js')
-      );
-
-    if (emittedAssets?.length && serverHasStarted) {
-      logger.info('Rebooting server due to configuration changes...');
-      nodemon.restart();
-    }
-  });
+    nodemonInitialized = true;
+  }
 }
 
 /**
@@ -112,15 +90,11 @@ const dev: HandlerFn = async args => {
 
     const compiler = webpack(config);
 
-    // Init nodemon and start compiler
-    initNodemon(compiler, args);
+    // Start watch compiler
     await watchCompiler(compiler, args, imaConfig);
 
-    if (args.forceSPA) {
-      logger.info(
-        `Starting application in ${chalk.black.bgCyan('SPA mode')}...`
-      );
-    }
+    // Start nodemon and application server
+    startNodemon(args);
   } catch (error) {
     handleError(error);
     process.exit(1);
