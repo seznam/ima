@@ -68,7 +68,7 @@ export default class AmpPlugin
   implements ImaCliPlugin<AmpPluginConfigurationContext> {
   private _options: AmpPluginOptions;
 
-  readonly name = 'amp-plugin';
+  readonly name = 'AmpPlugin';
   readonly cliArgs: Partial<Record<ImaCliCommand, CommandBuilder>> = {
     build: ampPluginSharedCliArgs,
     dev: ampPluginSharedCliArgs

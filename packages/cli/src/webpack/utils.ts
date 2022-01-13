@@ -287,6 +287,7 @@ async function createWebpackConfig(
   configurations: ConfigurationTypes = ['client', 'server'],
   args?: CliArgs
 ): Promise<{ config: Configuration[]; imaConfig: ImaConfig }> {
+  const isFirstPass = !args && process.env.IMA_CLI_WEBPACK_CONFIG_ARGS;
   let elapsed: ReturnType<typeof time> | null = null;
 
   // No need to continue without any configuration
@@ -356,6 +357,9 @@ async function createWebpackConfig(
     }
   }
 
+  // Track loaded plugins
+  const loadedPlugins = new Set<string>();
+
   return Promise.all(
     finalConfigContexts.map(async ctx => {
       let config = await webpackConfig(ctx, imaConfig);
@@ -364,6 +368,7 @@ async function createWebpackConfig(
         for (const plugin of imaConfig?.plugins) {
           try {
             config = await plugin?.webpack(config, ctx, imaConfig);
+            loadedPlugins.add(plugin.name);
           } catch (error) {
             logger.error(
               `There was an logger.error while running webpack config for '${plugin.name}' plugin.`
@@ -383,6 +388,18 @@ async function createWebpackConfig(
   ).then(config => {
     // Print elapsed time
     elapsed && logger.write(chalk.gray(` [${elapsed()}]`));
+
+    // Print loaded plugins info
+    if (!isFirstPass && loadedPlugins.size > 0) {
+      const pluginNames: string[] = [];
+      logger.info(`Loaded plugin${loadedPlugins.size > 1 ? 's' : ''}: `, false);
+
+      for (const pluginName of loadedPlugins.values()) {
+        pluginNames.push(chalk.blue(pluginName));
+      }
+
+      logger.write(pluginNames.join(', '));
+    }
 
     return { config, imaConfig };
   });
