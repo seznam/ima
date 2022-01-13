@@ -3,6 +3,7 @@ import fs from 'fs';
 import findCacheDir from 'find-cache-dir';
 import webpack, { Configuration, RuleSetRule, RuleSetUseItem } from 'webpack';
 import miniSVGDataURI from 'mini-svg-data-uri';
+import MessageFormat from 'messageformat';
 
 import CopyPlugin from 'copy-webpack-plugin';
 import MiniCssExtractPlugin from 'mini-css-extract-plugin';
@@ -51,6 +52,7 @@ export default async (
   const useSourceMaps = imaConfig.useSourceMaps || !isProduction;
   const imaEnvironment = resolveEnvironment(rootDir);
   const isDebug = imaEnvironment.$Debug;
+  const locale = 'en';
   const outputDir = path.join(rootDir, 'build');
   const publicPath = ctx?.publicPath ?? imaConfig.publicPath;
 
@@ -441,7 +443,33 @@ export default async (
           [
             // Copies essential assets to static directory
             new CopyPlugin({
-              patterns: [{ from: 'app/public', to: 'static/public' }]
+              patterns: [
+                { from: 'app/public', to: 'static/public' },
+                {
+                  from: 'app/**/*' + locale.toUpperCase() + '.json',
+                  to: 'static/js/locale/' + locale + '.js',
+                  transformAll(assets) {
+                    const mf = new MessageFormat(locale);
+
+                    const result = assets.reduce((accumulator, asset) => {
+                      const fileContent = JSON.parse(asset.data.toString());
+                      const scopeFromFilename = (
+                        asset.sourceFilename.split('/').pop() || 'none'
+                      ).replace(locale.toUpperCase() + '.json', '');
+
+                      return Object.assign(accumulator, {
+                        [scopeFromFilename]: fileContent
+                      });
+                    }, {});
+
+                    return `(function () {var $IMA = {}; if ((typeof window !== "undefined") && (window !== null)) { window.$IMA = window.$IMA || {}; $IMA = window.$IMA; }
+                                        ${mf
+                                          .compile(result)
+                                          .toString('$IMA.i18n')}
+                                          ;if (typeof module !== "undefined" && module.exports) {module.exports = $IMA.i18n;} })();`;
+                  }
+                }
+              ]
             })
           ].filter(Boolean)
         : // Client-specific plugins

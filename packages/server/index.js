@@ -47,9 +47,11 @@ function appFactory() {
   ));
 }
 
-// eslint-disable-next-line no-unused-vars
 function languageLoader(language) {
-  return () => {};
+  return require(path.resolve(
+    applicationFolder,
+    `./build/static/js/locale/${language}.js`
+  ));
 }
 
 let logger = require('./lib/logger.js')(environment);
