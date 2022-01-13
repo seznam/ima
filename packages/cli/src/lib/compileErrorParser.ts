@@ -165,7 +165,7 @@ function parseCompileError(error: StatsError): ParsedCompileError | null {
   let lineNumber = 0;
   let columnNumber = 0;
 
-  if (error?.moduleName) {
+  if (error.moduleName && error.loc) {
     const sanitizedFileUri = sanitizeModuleName(error.moduleName);
 
     // We can't reliably parse error message without known moduleName (fileUri)
@@ -177,9 +177,9 @@ function parseCompileError(error: StatsError): ParsedCompileError | null {
 
     // Try to get error location
     [lineNumber = 0, columnNumber = 0] = parseErrorLoc(error.loc);
-  } else if (error.stack) {
+  } else if (error.stack || error.message) {
     // Parse error locations from stack
-    const lines = error.stack.split('\n');
+    const lines = (error.stack || error.message).split('\n');
 
     // Skip first line containing error name
     for (let i = 1; i < lines.length; i++) {
