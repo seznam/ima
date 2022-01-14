@@ -12,14 +12,10 @@ const express = require('express');
 const favicon = require('serve-favicon');
 const bodyParser = require('body-parser');
 const cookieParser = require('cookie-parser');
-const methodOverride = require('method-override');
 const compression = require('compression');
 const helmet = require('helmet');
 const errorToJSON = require('error-to-json');
 const proxy = require('express-http-proxy');
-const multer = require('multer')({
-  dest: path.resolve(path.join(__dirname, '/static/uploads/'))
-});
 
 function errorToString(error) {
   const jsonError = errorToJSON(error);
@@ -130,13 +126,7 @@ async function createApp() {
     )
     .use(bodyParser.json()) // for parsing application/json
     .use(bodyParser.urlencoded({ extended: true })) // for parsing application/x-www-form-urlencoded
-    .use(
-      multer.fields([
-        /*{ name: '<file input name>', maxCount: 1 }, ...*/
-      ])
-    ) // for parsing multipart/form-data
     .use(cookieParser())
-    .use(methodOverride())
     .use(
       environment.$Proxy.path + '/',
       proxy(environment.$Proxy.server, environment.$Proxy.options || {})

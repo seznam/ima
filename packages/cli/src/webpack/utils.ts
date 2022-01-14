@@ -264,10 +264,6 @@ async function resolveImaConfig(args: CliArgs): Promise<ImaConfig> {
     imageInlineSizeLimit: 8192
   };
 
-  if (!args.rootDir) {
-    return defaultImaConfig;
-  }
-
   return {
     ...defaultImaConfig,
     ...requireImaConfig(args.rootDir)

@@ -53,14 +53,6 @@ export default (ns, oc, config) => {
       }
     },
 
-    test: {
-      $Http: {
-        defaultRequestOptions: {
-          timeout: 5000
-        }
-      }
-    },
-
     dev: {
       $Http: {
         defaultRequestOptions: {

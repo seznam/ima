@@ -262,7 +262,7 @@ export default async (
         : {})
     },
     resolve: {
-      extensions: ['.js', '.jsx'],
+      extensions: ['.mjs', '.js', '.jsx', '.json'],
       alias: {
         app: path.join(rootDir, 'app'),
         '@ima/core': `@ima/core/dist/ima.${
