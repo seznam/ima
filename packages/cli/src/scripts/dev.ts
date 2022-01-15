@@ -73,6 +73,9 @@ function startNodemon(args: CliArgs) {
  * @returns {Promise<void>}
  */
 const dev: HandlerFn = async args => {
+  // Force NODE_ENV as development
+  process.env.NODE_ENV = 'development';
+
   // Set force SPA flag so server can react accordingly
   if (args.forceSPA) {
     args.legacy = true; // SPA only supports es5 versions

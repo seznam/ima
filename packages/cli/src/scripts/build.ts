@@ -17,6 +17,9 @@ import webpack from 'webpack';
  * @returns {Promise<void>}
  */
 const build: HandlerFn = async args => {
+  // Set NODE_ENV to production if not defined
+  process.env.NODE_ENV = process.env.NODE_ENV ?? 'production';
+
   try {
     const { config, imaConfig } = await createWebpackConfig(
       ['client', 'server'],

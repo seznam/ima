@@ -43,11 +43,11 @@ export default async (
   ctx: ConfigurationContext,
   imaConfig: ImaConfig
 ): Promise<Configuration> => {
-  const { rootDir, isProduction, isServer, isEsVersion, name } = ctx;
+  const { rootDir, isServer, isEsVersion, name } = ctx;
 
   // We use source maps always in development for better stack trace orientation.
-  const isWatch = ctx.command === 'dev';
-  const useSourceMaps = imaConfig.useSourceMaps || !isProduction;
+  const isDev = ctx.command === 'dev';
+  const useSourceMaps = imaConfig.useSourceMaps || isDev;
   const imaEnvironment = resolveEnvironment(rootDir);
   const isDebug = imaEnvironment.$Debug;
   const outputDir = path.join(rootDir, 'build');
@@ -90,9 +90,9 @@ export default async (
           modules: {
             auto: true,
             exportOnlyLocals: onlyCssDefinitions,
-            localIdentName: isProduction
-              ? '[hash:base64]'
-              : '[path][name]__[local]--[hash:base64:5]'
+            localIdentName: isDev
+              ? '[path][name]__[local]--[hash:base64:5]'
+              : '[hash:base64]'
           },
           sourceMap: useSourceMaps
         }
@@ -153,12 +153,12 @@ export default async (
   return {
     name,
     target: isServer ? 'node' : 'web',
-    mode: isProduction ? 'production' : 'development',
-    devtool: isProduction
-      ? imaConfig.useSourceMaps
-        ? 'source-map'
-        : false
-      : 'cheap-module-source-map',
+    mode: isDev ? 'development' : 'production',
+    devtool: isDev
+      ? 'cheap-module-source-map'
+      : useSourceMaps
+      ? 'source-map'
+      : false,
     entry: {
       ...(isServer
         ? {
@@ -166,10 +166,11 @@ export default async (
           }
         : {
             [name]: [
-              isWatch &&
+              isDev &&
                 // We have to use @gatsbyjs version, since the original package containing webpack 5 fix is not yet released
                 `@gatsbyjs/webpack-hot-middleware/client?name=${name}&path=//localhost:${imaEnvironment.$Server.port}/__webpack_hmr&timeout=15000&reload=true&overlay=false&overlayWarnings=false&noInfo=true&quiet=true`,
-              isDebug &&
+              isDev &&
+                isDebug &&
                 require.resolve('@ima/hmr-client/dist/imaHmrClient.js'),
               path.join(rootDir, 'app/main.js')
             ].filter(Boolean) as string[],
@@ -178,7 +179,7 @@ export default async (
     },
     output: {
       path: outputDir,
-      pathinfo: !isProduction,
+      pathinfo: isDev,
       assetModuleFilename: 'static/media/[name].[hash][ext]',
       filename: ({ chunk }) => {
         // Put server-side JS into server directory
@@ -189,10 +190,10 @@ export default async (
         // Separate client chunks into es and non-es folders
         const baseFolder = `static/${isEsVersion ? 'js.es' : 'js'}`;
         const fileNameParts = [
-          chunk?.name === name && !isProduction && 'app.client',
-          chunk?.name === name && isProduction && 'app.bundle',
+          chunk?.name === name && isDev && 'app.client',
+          chunk?.name === name && !isDev && 'app.bundle',
           chunk?.name !== name && '[name]',
-          isProduction && 'min',
+          !isDev && 'min',
           'js'
         ].filter(Boolean);
 
@@ -229,7 +230,7 @@ export default async (
       }
     },
     optimization: {
-      minimize: isProduction && !isServer,
+      minimize: !isDev && !isServer,
       minimizer: [
         new TerserPlugin({
           terserOptions: {
@@ -243,8 +244,8 @@ export default async (
         }),
         new CssMinimizerPlugin()
       ],
-      // Split chunks in dev for better performance and caching
-      ...(!isProduction
+      // Split chunks in dev for better caching
+      ...(isDev
         ? {
             moduleIds: 'deterministic',
             chunkIds: 'deterministic',
@@ -350,7 +351,7 @@ export default async (
                   options: {
                     js2svg: {
                       indent: 2,
-                      pretty: !isProduction
+                      pretty: isDev
                     }
                   }
                 }
@@ -403,13 +404,13 @@ export default async (
                         [
                           require.resolve('@babel/preset-react'),
                           {
-                            development: !isProduction,
+                            development: isDev,
                             runtime: 'automatic'
                           }
                         ]
                       ],
                       plugins:
-                        isWatch && !isServer
+                        isDev && !isServer
                           ? [require.resolve('react-refresh/babel')]
                           : [],
                       /**
@@ -424,7 +425,7 @@ export default async (
                           name: `babel-loader-ima-${name}-cache`
                         }) ?? true,
                       cacheCompression: false,
-                      compact: isProduction,
+                      compact: !isDev,
                       sourceMaps: useSourceMaps,
                       inputSourceMap: useSourceMaps
                     }
@@ -489,15 +490,15 @@ export default async (
               new MiniCssExtractPlugin({
                 filename: ({ chunk }) =>
                   `static/css/${chunk?.name === name ? 'app' : '[name]'}${
-                    isProduction ? '.min' : ''
+                    !isDev ? '.min' : ''
                   }.css`,
                 chunkFilename: `static/css/chunk-[id]${
-                  isProduction ? '.min' : ''
+                  !isDev ? '.min' : ''
                 }.css`
               }),
 
             // Enables compression for assets in production build
-            ...(isProduction
+            ...(!isDev
               ? imaConfig.compression.map(
                   algorithm =>
                     new CompressionPlugin({
@@ -516,8 +517,8 @@ export default async (
               : []),
 
             // Following plugins enable react refresh and hmr in watch mode
-            isWatch && new webpack.HotModuleReplacementPlugin(),
-            isWatch &&
+            isDev && new webpack.HotModuleReplacementPlugin(),
+            isDev &&
               new ReactRefreshWebpackPlugin({
                 overlay: {
                   module: '@ima/hmr-client/dist/fastRefreshClient.js',

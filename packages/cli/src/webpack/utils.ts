@@ -304,7 +304,10 @@ async function createWebpackConfig(
   } else {
     // Used explicitly, print message
     elapsed = time();
-    logger.info('Parsing webpack configuration file...', false);
+    logger.info(
+      `Parsing config files for ${chalk.magenta(process.env.NODE_ENV)}...`,
+      false
+    );
 
     // Cache config args to env variable
     process.env.IMA_CLI_WEBPACK_CONFIG_ARGS = JSON.stringify(args);

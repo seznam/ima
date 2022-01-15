@@ -42,11 +42,9 @@ function resolveRootDir(dir?: string | null | undefined): string {
 function handlerFactory(handlerFn: HandlerFn) {
   return async (yargs: Arguments): Promise<void> => {
     const [command, dir = ''] = yargs._ || [];
-    const isProduction = process.env.NODE_ENV === 'production';
 
     return await handlerFn(({
       ...yargs,
-      isProduction,
       rootDir: resolveRootDir(dir.toString()),
       command: command.toString()
     } as unknown) as CliArgs);

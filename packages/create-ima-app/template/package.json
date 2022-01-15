@@ -6,7 +6,7 @@
     "test": "node_modules/.bin/jest --config jest.conf.json",
     "lint": "node_modules/.bin/eslint --fix './{app,server}/**/*.{js,jsx}'",
     "dev": "ima dev",
-    "build": "NODE_ENV=production ima build",
+    "build": "ima build",
     "start": "NODE_ENV=production node server/server.js"
   },
   "keywords": [
