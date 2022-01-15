@@ -25,7 +25,7 @@ function getPrismLanguage(fileUri: string | undefined): {
   grammar: prismjs.Grammar;
   language: string;
 } {
-  let language = 'markup';
+  let language = 'javascript';
 
   switch (fileUri?.split('.').pop()) {
     case 'jsx':
@@ -47,6 +47,16 @@ function getPrismLanguage(fileUri: string | undefined): {
 
     case 'less':
       language = 'less';
+      break;
+
+    case 'html':
+    case 'xml':
+    case 'svg':
+    case 'mathml':
+    case 'ssml':
+    case 'rss':
+    case 'atom':
+      language = 'markup';
       break;
   }
 

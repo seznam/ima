@@ -1,35 +1,9 @@
-import path from 'path';
-import fs from 'fs';
 import { Arguments, CommandBuilder } from 'yargs';
 
 import { CliArgs, HandlerFn, ImaCliCommand } from '../types';
 import { requireImaConfig } from '../webpack/utils';
 
 const IMA_CLI_RUN_SERVER_MESSAGE = 'ima-cli-run-server-message';
-
-/**
- * Resolves input dir path to absolute existing directory.
- * Falls back to cwd inc ase the parameter is null or empty string.
- *
- * @param {string | null | undefined} Optional custom working dir path.
- * @returns {string} CLI rootDir.
- */
-function resolveRootDir(dir?: string | null | undefined): string {
-  if (!dir) {
-    return process.cwd();
-  }
-
-  const rootDir = path.isAbsolute(dir) ? dir : path.resolve(process.cwd(), dir);
-
-  if (!fs.existsSync(rootDir)) {
-    throw new Error(
-      `Provided root directory doesn't exist: ${rootDir}.` +
-        'Make sure to point the @ima/cli to the root directory of existing IMA.js application.'
-    );
-  }
-
-  return rootDir;
-}
 
 /**
  * Initializes cli script handler function, which takes cli arguments,
@@ -41,13 +15,13 @@ function resolveRootDir(dir?: string | null | undefined): string {
  */
 function handlerFactory(handlerFn: HandlerFn) {
   return async (yargs: Arguments): Promise<void> => {
-    const [command, dir = ''] = yargs._ || [];
+    const [command] = yargs._ || [];
 
-    return await handlerFn(({
+    return await handlerFn({
       ...yargs,
-      rootDir: resolveRootDir(dir.toString()),
+      rootDir: process.cwd(),
       command: command.toString()
-    } as unknown) as CliArgs);
+    } as unknown as CliArgs);
   };
 }
 
@@ -59,17 +33,7 @@ function handlerFactory(handlerFn: HandlerFn) {
  * @returns {CommandBuilder} Yargs commands object.
  */
 function resolveCliPluginArgs(command: ImaCliCommand): CommandBuilder {
-  // Crude way of filtering root dir
-  let rootDir = null;
-  if (process.argv.length > 3) {
-    rootDir = process.argv
-      .slice(3)
-      .filter(arg => !arg.startsWith('-') && !arg.startsWith('--'))
-      .pop()
-      ?.toString();
-  }
-
-  const imaConfig = requireImaConfig(resolveRootDir(rootDir));
+  const imaConfig = requireImaConfig();
 
   if (!imaConfig || !Array.isArray(imaConfig?.plugins)) {
     return {};

@@ -1,3 +1,4 @@
+import chalk from 'chalk';
 import { CommandBuilder } from 'yargs';
 
 import { HandlerFn } from '../types';
@@ -34,7 +35,7 @@ const build: HandlerFn = async args => {
 };
 
 const CMD = 'build';
-export const command = `${CMD} [rootDir]`;
+export const command = CMD;
 export const describe = 'Build an application for production';
 export const handler = handlerFactory(build);
 export const builder: CommandBuilder = {

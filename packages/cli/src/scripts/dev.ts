@@ -102,7 +102,7 @@ const dev: HandlerFn = async args => {
 };
 
 const CMD = 'dev';
-export const command = `${CMD} [rootDir]`;
+export const command = CMD;
 export const describe = 'Run application in development watch mode';
 export const handler = handlerFactory(dev);
 export const builder: CommandBuilder = {

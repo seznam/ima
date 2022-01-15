@@ -4,7 +4,7 @@ import yargs from 'yargs';
 import chalk from 'chalk';
 
 yargs
-  .scriptName('ima')
+  .scriptName(chalk.green.bold('ima'))
   .usage('Usage: $0 <command>')
   .commandDir(path.resolve(__dirname, '../scripts'))
   .demandCommand(1, 'You need to run at least one command to move on')

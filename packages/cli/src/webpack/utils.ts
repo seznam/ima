@@ -20,6 +20,16 @@ import envResolver from '@ima/server/lib/environment.js';
 import logger from '../lib/logger';
 import { time } from '../lib/time';
 
+const POSTCSS_CONF_FILENAMES = [
+  'postcss.config.js',
+  'postcss.config.cjs',
+  'postcss.config.json',
+  '.postcssrc.js',
+  '.postcssrc.cjs',
+  '.postcssrc.json',
+  '.postcssrc'
+];
+
 const BABEL_CONF_FILENAMES = [
   'babel.config.js',
   'babel.config.cjs',
@@ -123,49 +133,6 @@ function requireConfig({
 }
 
 /**
- * Utility to load custom (with default fallback) config for es and non-es versions.
- *
- * @param {object} params
- * @param {ConfigurationContext} params.ctx current config context.
- * @param {Record<string, unknown>} params.defaultConfig Default config
- *        which is used if no configuration is found.
- * @returns {Record<string, unknown>} Loaded configuration object.
- */
-function requireBabelConfig({
-  ctx,
-  defaultConfig = {}
-}: {
-  ctx: ConfigurationContext;
-  defaultConfig: Record<string, unknown>;
-}): Record<string, unknown> {
-  const { isEsVersion, isServer } = ctx;
-  const useEsConfig = isEsVersion || isServer;
-
-  const config = requireConfig({
-    ctx,
-    fileNames: useEsConfig ? BABEL_CONF_ES_FILENAMES : BABEL_CONF_FILENAMES,
-    packageJsonKey: useEsConfig ? 'babel.es' : 'babel',
-    defaultConfig
-  });
-
-  if (config === defaultConfig) {
-    return config;
-  }
-
-  /**
-   * In case of babel config, we merge few keys, that are loader specific,
-   *  into the custom config from the default one.
-   */
-  const { presets = [], plugins = [] } = config;
-
-  return {
-    defaultConfig,
-    presets,
-    plugins
-  };
-}
-
-/**
  * Returns polyfill entry point for current es version if the file exists.
  * The function looks for app/polyfill.js and app/polyfill.es.js files.
  *
@@ -242,7 +209,7 @@ const IMA_CONF_FILENAME = 'ima.config.js';
 /**
  * Requires imaConfig from given root directory (default to cwd).
  *
- * @param {string} rootDir App root directory.
+ * @param {string} [rootDir=process.cwd()] App root directory.
  * @returns {ImaConfig | null} Config or null in case the config file doesn't exits.
  */
 function requireImaConfig(rootDir = process.cwd()): ImaConfig | null {
@@ -407,12 +374,14 @@ async function createWebpackConfig(
 export {
   resolveEnvironment,
   requireConfig,
-  requireBabelConfig,
   additionalDataFactory,
   createCacheKey,
   createWebpackConfig,
   requireImaConfig,
   resolveImaConfig,
   createPolyfillEntry,
-  IMA_CONF_FILENAME
+  IMA_CONF_FILENAME,
+  BABEL_CONF_ES_FILENAMES,
+  BABEL_CONF_FILENAMES,
+  POSTCSS_CONF_FILENAMES
 };

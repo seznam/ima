@@ -19,19 +19,11 @@ import {
   additionalDataFactory,
   createCacheKey,
   IMA_CONF_FILENAME,
-  requireBabelConfig,
-  createPolyfillEntry
+  createPolyfillEntry,
+  POSTCSS_CONF_FILENAMES,
+  BABEL_CONF_ES_FILENAMES,
+  BABEL_CONF_FILENAMES
 } from './utils';
-
-const POSTCSS_CONF_FILENAMES = [
-  'postcss.config.js',
-  'postcss.config.cjs',
-  'postcss.config.json',
-  '.postcssrc.js',
-  '.postcssrc.cjs',
-  '.postcssrc.json',
-  '.postcssrc'
-];
 
 /**
  * Creates Webpack configuration object based on input ConfigurationContext
@@ -100,28 +92,32 @@ export default async (
       !onlyCssDefinitions && {
         loader: require.resolve('postcss-loader'),
         options: {
-          postcssOptions: requireConfig({
-            ctx,
-            packageJsonKey: 'postcss',
-            fileNames: POSTCSS_CONF_FILENAMES,
-            defaultConfig: {
-              plugins: [
-                'postcss-flexbugs-fixes',
-                [
-                  'postcss-preset-env',
-                  {
-                    autoprefixer: {
-                      flexbox: 'no-2009'
-                    },
-                    stage: 3,
-                    features: {
-                      'custom-properties': false
+          postcssOptions: {
+            config: false,
+            // Require custom config (with defaults)
+            ...requireConfig({
+              ctx,
+              packageJsonKey: 'postcss',
+              fileNames: POSTCSS_CONF_FILENAMES,
+              defaultConfig: {
+                plugins: [
+                  'postcss-flexbugs-fixes',
+                  [
+                    'postcss-preset-env',
+                    {
+                      autoprefixer: {
+                        flexbox: 'no-2009'
+                      },
+                      stage: 3,
+                      features: {
+                        'custom-properties': false
+                      }
                     }
-                  }
+                  ]
                 ]
-              ]
-            }
-          }),
+              }
+            })
+          },
           implementation: require('postcss'),
           sourceMap: useSourceMaps
         }
@@ -269,12 +265,12 @@ export default async (
         '@ima/core': `@ima/core/dist/ima.${
           isServer ? 'server' : 'client'
         }.cjs.js`,
-        ...(imaConfig?.webpackAliases ?? {}),
         // Enable better profiling in react devtools
         ...(ctx.profile && {
           'react-dom$': 'react-dom/profiling',
           'scheduler/tracing': 'scheduler/tracing-profiling'
-        })
+        }),
+        ...(imaConfig?.webpackAliases ?? {}),
       }
     },
     resolveLoader: {
@@ -384,52 +380,73 @@ export default async (
               use: [
                 {
                   loader: require.resolve('babel-loader'),
-                  options: requireBabelConfig({
-                    ctx,
-                    defaultConfig: {
-                      presets: [
-                        [
-                          require.resolve('@babel/preset-env'),
-                          {
-                            ...(isEsVersion || isServer
-                              ? {
-                                  targets: {
-                                    node: '14'
+                  options: {
+                    // Disable config files since we handle the loading manually
+                    babelrc: false,
+                    configFile: false,
+                    // Enable cache for better performance
+                    cacheDirectory:
+                      findCacheDir({
+                        name: `babel-loader-ima-${name}-cache`
+                      }) ?? true,
+                    cacheCompression: false,
+                    compact: !isDev,
+                    sourceMaps: useSourceMaps,
+                    inputSourceMap: useSourceMaps,
+                    // Require custom config (with defaults)
+                    ...requireConfig({
+                      ctx,
+                      fileNames: isEsVersion || isServer ? BABEL_CONF_ES_FILENAMES : BABEL_CONF_FILENAMES,
+                      packageJsonKey: isEsVersion || isServer ? 'babel.es' : 'babel',
+                      defaultConfig: {
+                        presets: [
+                          [
+                            require.resolve('@babel/preset-env'),
+                            {
+                              ...(isEsVersion || isServer
+                                ? {
+                                    targets: {
+                                      node: '14'
+                                    }
                                   }
-                                }
-                              : {}),
-                            modules: 'auto'
-                          }
+                                : {
+                                    targets: {
+                                      edge: '17',
+                                      firefox: '60',
+                                      chrome: '67',
+                                      safari: '11.1',
+                                      ie: '11'
+                                    }
+                                  }),
+                              bugfixes: true,
+                              modules: 'auto',
+                              useBuiltIns: 'usage',
+                              corejs: { version: '3.20', proposals: true }
+                            }
+                          ],
+                          [
+                            require.resolve('@babel/preset-react'),
+                            {
+                              development: isDev,
+                              runtime: 'automatic'
+                            }
+                          ]
                         ],
-                        [
-                          require.resolve('@babel/preset-react'),
-                          {
-                            development: isDev,
-                            runtime: 'automatic'
-                          }
-                        ]
-                      ],
-                      plugins:
-                        isDev && !isServer
-                          ? [require.resolve('react-refresh/babel')]
-                          : [],
-                      /**
-                       * Disable config and babel rc files since we handle those
-                       * manually in the requireBabelConfig function.
-                       */
-                      babelrc: false,
-                      configFile: false,
-                      // Enable cache for better performance
-                      cacheDirectory:
-                        findCacheDir({
-                          name: `babel-loader-ima-${name}-cache`
-                        }) ?? true,
-                      cacheCompression: false,
-                      compact: !isDev,
-                      sourceMaps: useSourceMaps,
-                      inputSourceMap: useSourceMaps
-                    }
-                  })
+                        plugins:
+                          isDev && !isServer
+                            ? [
+                                require.resolve('react-refresh/babel'),
+                                [
+                                  require.resolve('@babel/plugin-transform-runtime'),
+                                  {
+                                    regenerator: true
+                                 }
+                                ]
+                              ]
+                            : [],
+                      }
+                    })
+                  }
                 }
               ]
             },
