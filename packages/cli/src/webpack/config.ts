@@ -149,7 +149,11 @@ export default async (
 
   return {
     name,
-    target: isServer ? 'node' : 'web',
+    target: isServer
+      ? 'node14'
+      : isEsVersion
+      ? ['web', 'es11']
+      : ['web', 'es5'],
     mode: isDev ? 'development' : 'production',
     devtool: isDev
       ? 'cheap-module-source-map'
@@ -197,15 +201,6 @@ export default async (
         return `${baseFolder}/${fileNameParts.join('.')}`;
       },
       publicPath,
-      environment: {
-        arrowFunction: isEsVersion || isServer,
-        bigIntLiteral: false,
-        const: isEsVersion || isServer,
-        destructuring: isEsVersion || isServer,
-        dynamicImport: false,
-        forOf: isEsVersion || isServer,
-        module: isEsVersion
-      },
       /**
        * We put hot updates into it's own folder
        * otherwise it clutters the built folder.
@@ -293,7 +288,7 @@ export default async (
          */
         useSourceMaps && {
           enforce: 'pre',
-          include: appDir,
+          exclude: /@babel(?:\/|\\{1,2})runtime/,
           test: /\.(js|mjs|jsx|ts|tsx|cjs|css)$/,
           use: require.resolve('source-map-loader')
         },
