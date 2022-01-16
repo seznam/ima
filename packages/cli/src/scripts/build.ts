@@ -1,4 +1,3 @@
-import chalk from 'chalk';
 import { CommandBuilder } from 'yargs';
 
 import { HandlerFn } from '../types';

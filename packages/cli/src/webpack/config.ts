@@ -37,13 +37,14 @@ export default async (
 ): Promise<Configuration> => {
   const { rootDir, isServer, isEsVersion, name } = ctx;
 
-  // We use source maps always in development for better stack trace orientation.
+  // Define helper variables derived from context
   const isDev = ctx.command === 'dev';
   const useSourceMaps = imaConfig.useSourceMaps || isDev;
   const imaEnvironment = resolveEnvironment(rootDir);
   const isDebug = imaEnvironment.$Debug;
   const outputDir = path.join(rootDir, 'build');
   const publicPath = ctx?.publicPath ?? imaConfig.publicPath;
+  const appDir = path.join(rootDir, 'app');
 
   /**
    * When using build script and dev mode (not legacy, or forceSPA which uses es5),
@@ -270,7 +271,7 @@ export default async (
           'react-dom$': 'react-dom/profiling',
           'scheduler/tracing': 'scheduler/tracing-profiling'
         }),
-        ...(imaConfig?.webpackAliases ?? {}),
+        ...(imaConfig?.webpackAliases ?? {})
       }
     },
     resolveLoader: {
@@ -278,10 +279,21 @@ export default async (
     },
     module: {
       rules: [
-        // Handle node_modules packages that contain sourcemaps
+        /**
+         * Resolve `*.mjs` files without the need of an extension.
+         */
+        {
+          test: /\.m?js$/,
+          resolve: {
+            fullySpecified: false
+          }
+        },
+        /**
+         * Extract source maps for node_module packages.
+         */
         useSourceMaps && {
           enforce: 'pre',
-          exclude: /@babel(?:\/|\\{1,2})runtime/,
+          include: appDir,
           test: /\.(js|mjs|jsx|ts|tsx|cjs|css)$/,
           use: require.resolve('source-map-loader')
         },
@@ -372,12 +384,8 @@ export default async (
             },
             {
               test: /\.(js|mjs|jsx|ts|tsx|cjs)$/,
-              exclude: (modulePath: string) =>
-                /node_modules/.test(modulePath) &&
-                !/node_modules\/(abort-controller|event-target-shim)/.test(
-                  modulePath
-                ),
-              use: [
+              include: appDir,
+              rules: [
                 {
                   loader: require.resolve('babel-loader'),
                   options: {
@@ -396,8 +404,12 @@ export default async (
                     // Require custom config (with defaults)
                     ...requireConfig({
                       ctx,
-                      fileNames: isEsVersion || isServer ? BABEL_CONF_ES_FILENAMES : BABEL_CONF_FILENAMES,
-                      packageJsonKey: isEsVersion || isServer ? 'babel.es' : 'babel',
+                      fileNames:
+                        isEsVersion || isServer
+                          ? BABEL_CONF_ES_FILENAMES
+                          : BABEL_CONF_FILENAMES,
+                      packageJsonKey:
+                        isEsVersion || isServer ? 'babel.es' : 'babel',
                       defaultConfig: {
                         presets: [
                           [
@@ -437,13 +449,15 @@ export default async (
                             ? [
                                 require.resolve('react-refresh/babel'),
                                 [
-                                  require.resolve('@babel/plugin-transform-runtime'),
+                                  require.resolve(
+                                    '@babel/plugin-transform-runtime'
+                                  ),
                                   {
                                     regenerator: true
-                                 }
+                                  }
                                 ]
                               ]
-                            : [],
+                            : []
                       }
                     })
                   }
@@ -460,7 +474,6 @@ export default async (
             {
               test: /\.less$/,
               sideEffects: true,
-              exclude: /node_modules/,
               use: getStyleLoaders({ useLessLoader: true })
             },
             /**
@@ -469,7 +482,6 @@ export default async (
             {
               test: /\.css$/,
               sideEffects: true,
-              exclude: /node_modules/,
               use: getStyleLoaders()
             },
             /**
