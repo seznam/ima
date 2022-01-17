@@ -7,6 +7,7 @@ const rootDir = path.resolve(__dirname);
 const isProduction = process.env.NODE_ENV === 'production';
 
 const baseConfig: Configuration = {
+  target: ['web', 'es5'],
   output: {
     path: path.join(rootDir, './dist'),
     filename: '[name].js'
@@ -45,9 +46,20 @@ module.exports = [
   }),
   merge<Configuration>(baseConfig, {
     entry: { fastRefreshClient: './src/fastRefreshClient.ts' },
-    target: 'node',
+    target: 'node14',
     output: {
-      library: { type: 'commonjs2' }
+      library: { type: 'commonjs2' },
+      environment: {
+        arrowFunction: false,
+        bigIntLiteral: false,
+        const: false,
+        destructuring: false,
+        dynamicImport: false,
+        forOf: false,
+        module: false,
+        optionalChaining: false,
+        templateLiteral: false,
+      },
     },
     module: {
       rules: [

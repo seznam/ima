@@ -9,8 +9,10 @@ const rootDir = path.resolve(__dirname);
 const isProduction = process.env.NODE_ENV === 'production';
 
 module.exports = {
+  target: ['web', 'es5'],
   entry: { overlay: './src/index.tsx' },
   output: {
+    clean: true,
     path: path.join(rootDir, './dist'),
     filename: '[name].js'
   },
@@ -38,7 +40,7 @@ module.exports = {
     ]
   },
   optimization: {
-    minimize: isProduction,
+    minimize: false,
     minimizer: ['...', new CssMinimizerPlugin()]
   },
   resolve: {

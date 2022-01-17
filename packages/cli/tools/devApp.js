@@ -1,4 +1,5 @@
 #!/usr/bin/env node
+/* eslint-disable no-unused-vars */
 
 /**
  * Utility script to sync multiple ima packages into test application
@@ -13,6 +14,7 @@ const chalk = require('chalk');
 const chokidar = require('chokidar');
 const child = require('child_process');
 const fs = require('fs');
+const fsExtra = require('fs-extra');
 const path = require('path');
 const yargs = require('yargs');
 
@@ -105,24 +107,8 @@ function createWatcher(name, baseDir, paths, destFolder, options = {}) {
   }
 }
 
-function main() {
-  yargs.boolean('force').argv;
-
-  if (yargs.argv._.length === 0) {
-    throw new Error(
-      'Path to a destination app not provided in the first argument.'
-    );
-  }
-
-  const destFolder = path.resolve(yargs.argv._[0]);
-  const destNodeModules = path.join(destFolder, 'node_modules');
-  const cliDir = path.resolve(__dirname, '..');
-  const coreDir = path.resolve(__dirname, '../../core');
-  const serverDir = path.resolve(__dirname, '../../server');
-  const errorOverlayDir = path.resolve(__dirname, '../../error-overlay');
-  const hmrClientDir = path.resolve(__dirname, '../../hmr-client');
-
-  // Init app
+// Builds and packs each npm packages and installs it into the app directory
+function initApp(destFolder, pkgDirs) {
   if (!fs.existsSync(destFolder)) {
     shell(
       `${path.resolve(
@@ -131,131 +117,137 @@ function main() {
       )} ${destFolder} --example=hello`
     );
 
-    // Build, pack and install current dependencies
-    shell('npm pack', cliDir);
-    shell('npm run build', cliDir);
-    shell('npm pack', coreDir);
-    shell('npm run build', coreDir);
-    shell('npm pack', errorOverlayDir);
-    shell('npm run build', errorOverlayDir);
-    shell('npm pack', hmrClientDir);
-    shell('npm run build', hmrClientDir);
-    shell('npm pack', serverDir);
+    // Build, pack and install as current dependencies
+    pkgDirs.forEach(pkgDir => {
+      const pkgJson = require(path.join(pkgDir, 'package.json'));
 
-    const cliPack = path.resolve(
-      cliDir,
-      `ima-cli-${require(path.join(cliDir, 'package.json')).version}.tgz`
-    );
-    const corePack = path.resolve(
-      coreDir,
-      `ima-core-${require(path.join(coreDir, 'package.json')).version}.tgz`
-    );
-    const errorOverlayPack = path.resolve(
-      errorOverlayDir,
-      `ima-error-overlay-${
-        require(path.join(errorOverlayDir, 'package.json')).version
-      }.tgz`
-    );
-    const hmrClientPack = path.resolve(
-      hmrClientDir,
-      `ima-hmr-client-${
-        require(path.join(hmrClientDir, 'package.json')).version
-      }.tgz`
-    );
-    const serverPack = path.resolve(
-      serverDir,
-      `ima-server-${require(path.join(serverDir, 'package.json')).version}.tgz`
-    );
+      pkgJson.scripts.build && shell('npm run build', pkgDir);
+      shell('npm pack', pkgDir);
 
-    // Install packages
-    shell(`npm install ${cliPack}`, destFolder);
-    shell(`npm install ${corePack}`, destFolder);
-    shell(`npm install ${errorOverlayPack}`, destFolder);
-    shell(`npm install ${serverPack}`, destFolder);
-    shell(`npm install ${hmrClientPack}`, destFolder);
+      const [prefix, name] = pkgJson.name.split('/');
+      const packFileName = `ima-${name}-${pkgJson.version}.tgz`;
+      const packFilePath = path.join(pkgDir, packFileName);
 
-    // Clean pack files
-    fs.rmSync(cliPack);
-    fs.rmSync(corePack);
-    fs.rmSync(errorOverlayPack);
-    fs.rmSync(serverPack);
-    fs.rmSync(hmrClientPack);
+      shell(`npm install ${packFilePath}`, destFolder);
+      fs.rmSync(packFilePath);
+    });
   } else {
     console.log(
       'The app destination folder already exists, skipping initialization...'
     );
   }
+}
 
-  const destCore = path.join(destNodeModules, '@ima/core');
-  const destCli = path.join(destNodeModules, '@ima/cli');
-  const destServer = path.join(destNodeModules, '@ima/server');
-  const destErrorOverlay = path.join(destNodeModules, '@ima/error-overlay');
-  const destHmrClient = path.join(destNodeModules, '@ima/hmr-client');
+// Builds and copies current pacakges into the destination
+function watchChanges(destFolder, pkgDirs) {
+  const destNodeModules = path.join(destFolder, 'node_modules');
 
-  // Start watchers to sync src and node_modules from packages
-  // @ima/cli
-  createWatcher(
-    'cli',
-    cliDir,
-    '/dist/**/*.(js|cjs|mjs|json|ejs|map|wasm|d.ts|css)',
-    destCli
-  );
+  pkgDirs.forEach(pkgDir => {
+    const pkgJson = require(path.join(pkgDir, 'package.json'));
+    const destPkgDir = path.join(destNodeModules, pkgJson.name);
+    const [prefix, name] = pkgJson.name.split('/');
 
-  // Spawn ts compiler in watch mode
-  child.spawn('npm', ['run', 'dev'], {
-    stdio: 'ignore',
-    cwd: cliDir
+    // Spawn watch
+    if (pkgJson.scripts.dev) {
+      child.spawn('npm', ['run', 'dev'], {
+        stdio: 'ignore',
+        cwd: pkgDir
+      });
+    } else if (pkgJson.scripts.build) {
+      child.spawn('npm', ['run', 'build', '--', '--watch'], {
+        stdio: 'ignore',
+        cwd: pkgDir
+      });
+    }
+
+    // Create file watcher
+    createWatcher(
+      name,
+      pkgDir,
+      pkgJson.name === '@ima/server'
+        ? '/**/*.(js|cjs|mjs|json|ejs|map|wasm|d.ts|css)'
+        : '/dist/**/*.(js|cjs|mjs|json|ejs|map|wasm|d.ts|css)',
+      destPkgDir
+    );
   });
+}
 
-  // @ima/core
-  createWatcher(
-    'core',
-    coreDir,
-    '/dist/**/*.(js|cjs|mjs|json|ejs|map|wasm|d.ts|css)',
-    destCore
-  );
+// Builds and copies current pacakges into the destination
+function copyChanges(destFolder, pkgDirs) {
+  const destNodeModules = path.join(destFolder, 'node_modules');
 
-  // Spawn rollup in watch mode
-  child.spawn('npm', ['run', 'build', '--', '--watch'], {
-    stdio: 'ignore',
-    cwd: coreDir
+  pkgDirs.forEach(pkgDir => {
+    const pkgJson = require(path.join(pkgDir, 'package.json'));
+    const destPkgDir = path.join(destNodeModules, pkgJson.name);
+
+    if (pkgJson.name === '@ima/server') {
+      fs.rmSync(destPkgDir, {
+        force: true,
+        recursive: true
+      });
+
+      // Copy new dist
+      fsExtra.copySync(pkgDir, destPkgDir);
+    } else {
+      // Build
+      pkgJson.scripts.build && shell('npm run build', pkgDir);
+
+      // Remove old dist
+      fs.rmSync(path.join(destPkgDir, 'dist'), {
+        force: true,
+        recursive: true
+      });
+
+      // Copy new dist
+      fsExtra.copySync(
+        path.join(pkgDir, 'dist'),
+        path.join(destPkgDir, 'dist')
+      );
+    }
   });
+}
 
-  // @ima/error-overlay
-  createWatcher(
-    'errorOverlay',
-    errorOverlayDir,
-    '/dist/**/*.(js|cjs|mjs|json|ejs|map|wasm|d.ts|css)',
-    destErrorOverlay
-  );
+function main() {
+  yargs.array('watch').argv;
+  yargs.array('build').argv;
+  const parsedArgs = yargs.argv;
 
-  // Spawn ts compiler in watch mode
-  child.spawn('npm', ['run', 'dev'], {
-    stdio: 'ignore',
-    cwd: errorOverlayDir
-  });
+  if (parsedArgs._.length === 0) {
+    throw new Error(
+      'Path to a destination app not provided in the first argument.'
+    );
+  }
 
-  // @ima/error-overlay
-  createWatcher(
-    'hmrClient',
-    hmrClientDir,
-    '/dist/**/*.(js|cjs|mjs|json|ejs|map|wasm|d.ts|css)',
-    destHmrClient
-  );
+  const destFolder = path.resolve(parsedArgs._[0]);
+  const pkgDirs = [
+    path.resolve(__dirname, '..'),
+    path.resolve(__dirname, '../../core'),
+    path.resolve(__dirname, '../../server'),
+    path.resolve(__dirname, '../../error-overlay'),
+    path.resolve(__dirname, '../../hmr-client'),
+    path.resolve(__dirname, '../../helpers')
+  ];
 
-  // Spawn ts compiler in watch mode
-  child.spawn('npm', ['run', 'dev'], {
-    stdio: 'ignore',
-    cwd: hmrClientDir
-  });
+  // Init app
+  initApp(destFolder, pkgDirs);
 
-  // @ima/server
-  createWatcher(
-    'server',
-    serverDir,
-    '/**/*.(js|cjs|mjs|json|ejs|map|wasm|d.ts|css)',
-    destServer
-  );
+  const pkgFilter = (paths, needles) => {
+    if (!needles.length) {
+      return paths;
+    }
+
+    return paths.filter(path => needles.some(needle => path.includes(needle)));
+  };
+
+  // Copy and watch changes
+  if (Array.isArray(parsedArgs.watch)) {
+    watchChanges(destFolder, pkgFilter(pkgDirs, parsedArgs.watch));
+  }
+
+  // Build and copy changes only
+  if (Array.isArray(parsedArgs.build)) {
+    copyChanges(destFolder, pkgFilter(pkgDirs, parsedArgs.build));
+  }
 }
 
 main();

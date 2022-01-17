@@ -262,7 +262,7 @@ export default async (
         //   isServer ? 'server' : 'client'
         // }.cjs.js`,
         ...(isServer && { '@ima/core': '@ima/core/dist/ima.server.cjs' }),
-        ...(isEsVersion && { '@ima/core': '@ima/core/dist/ima.client.mjs' }),
+        ...(isEsVersion && { '@ima/core': '@ima/core/dist/ima.client.cjs' }),
         ...(!isEsVersion &&
           !isServer && {
             '@ima/core': '@ima/core/dist/ima.client.es5.js'
@@ -286,15 +286,6 @@ export default async (
     },
     module: {
       rules: [
-        /**
-         * Resolve `*.mjs` files without the need of an extension.
-         */
-        {
-          test: /\.m?js$/,
-          resolve: {
-            fullySpecified: false
-          }
-        },
         /**
          * Extract source maps for node_module packages.
          */
@@ -467,6 +458,15 @@ export default async (
                             : []
                       }
                     })
+                  }
+                },
+                /**
+                 * Resolve `*.mjs` files without the need of an extension.
+                 */
+                {
+                  test: /\.m?js$/,
+                  resolve: {
+                    fullySpecified: false
                   }
                 }
               ]
