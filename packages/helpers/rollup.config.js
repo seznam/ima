@@ -1,12 +1,8 @@
 import json from '@rollup/plugin-json';
-import jscc from 'rollup-plugin-jscc';
 import { getBabelOutputPlugin } from '@rollup/plugin-babel';
 
-import { vendors } from './build';
-
-function createRollupConfig(environment) {
+function createRollupConfig() {
   const config = {
-    external: vendors.common,
     input: 'src/main.js',
     treeshake: {
       moduleSideEffects: 'no-external'
@@ -16,9 +12,6 @@ function createRollupConfig(environment) {
         preferConst: true,
         compact: true,
         namedExports: true
-      }),
-      jscc({
-        values: { _SERVER: environment === 'server' }
       })
     ]
   };
@@ -26,27 +19,27 @@ function createRollupConfig(environment) {
   return config;
 }
 
-function createRollupESConfig(environment) {
-  let config = createRollupConfig(environment);
+function createRollupESConfig() {
+  let config = createRollupConfig();
 
   config.output = [
     {
       dir: './dist',
-      entryFileNames: `ima.${environment}.cjs`,
+      entryFileNames: '[name].cjs',
       format: 'cjs',
       exports: 'named',
       sourcemap: true
     },
     {
       dir: './dist',
-      entryFileNames: `ima.${environment}.js`,
+      entryFileNames: '[name].js',
       format: 'cjs',
       exports: 'named',
       sourcemap: true
     },
     {
       dir: './dist',
-      entryFileNames: `ima.${environment}.mjs`,
+      entryFileNames: '[name].mjs',
       format: 'esm',
       exports: 'named',
       sourcemap: true
@@ -56,13 +49,13 @@ function createRollupESConfig(environment) {
   return config;
 }
 
-function createRollupES5Config(environment) {
-  let config = createRollupConfig(environment);
+function createRollupES5Config() {
+  let config = createRollupConfig();
 
   config.output = [
     {
       dir: './dist',
-      entryFileNames: `ima.${environment}.es5.js`,
+      entryFileNames: '[name].es5.js',
       format: 'cjs',
       exports: 'named',
       sourcemap: true,
@@ -88,8 +81,4 @@ function createRollupES5Config(environment) {
   return config;
 }
 
-export default [
-  createRollupESConfig('server'),
-  createRollupESConfig('client'),
-  createRollupES5Config('client')
-];
+export default [createRollupESConfig(), createRollupES5Config()];

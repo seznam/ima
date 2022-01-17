@@ -258,9 +258,21 @@ export default async (
       extensions: ['.mjs', '.js', '.jsx', '.json'],
       alias: {
         app: path.join(rootDir, 'app'),
-        '@ima/core': `@ima/core/dist/ima.${
-          isServer ? 'server' : 'client'
-        }.cjs.js`,
+        // '@ima/core': `@ima/core/dist/ima.${
+        //   isServer ? 'server' : 'client'
+        // }.cjs.js`,
+        ...(isServer && { '@ima/core': '@ima/core/dist/ima.server.cjs' }),
+        ...(isEsVersion && { '@ima/core': '@ima/core/dist/ima.client.mjs' }),
+        ...(!isEsVersion &&
+          !isServer && {
+            '@ima/core': '@ima/core/dist/ima.client.es5.js'
+          }),
+        ...(isServer && { '@ima/helpers': '@ima/helpers/dist/main.cjs' }),
+        ...(isEsVersion && { '@ima/helpers': '@ima/helpers/dist/main.mjs' }),
+        ...(!isEsVersion &&
+          !isServer && {
+            '@ima/helpers': '@ima/helpers/dist/main.es5.js'
+          }),
         // Enable better profiling in react devtools
         ...(ctx.profile && {
           'react-dom$': 'react-dom/profiling',

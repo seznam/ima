@@ -6,14 +6,11 @@ const js = [
 const vendors = {
   common: ['@ima/helpers', 'classnames', 'react', 'react-dom', 'memoize-one'],
 
-  server: ['react-dom/server.js'],
+  server: ['react-dom/server'],
 
   client: [],
 
   test: ['@ima/core/test.js', 'react-test-renderer', 'enzyme']
 };
 
-module.exports = {
-  js,
-  vendors
-};
+export { js, vendors };
