@@ -130,6 +130,11 @@ export type ImaConfig = {
    * Optional custom webpack aliases
    */
   webpackAliases?: ResolveOptions['alias'];
+
+  /**
+   * Supported languages with glob pathes of the files with translations
+   */
+  languages: Record<string, string[]>;
 };
 
 export type AdditionalDataFn = (content: string) => string;

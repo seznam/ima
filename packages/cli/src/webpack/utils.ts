@@ -3,6 +3,8 @@ import path from 'path';
 import { createHash } from 'crypto';
 import { Configuration } from 'webpack';
 import chalk from 'chalk';
+import MessageFormat from 'messageformat';
+import { ObjectPattern } from 'copy-webpack-plugin';
 
 import webpackConfig from './config';
 import {
@@ -188,6 +190,50 @@ function createPolyfillEntry(
 }
 
 /**
+ * Returns records for CopyPlugin to extract locales to one file by locale
+ *
+ * @param {ImaConfig} imaConfig Current ima configuration.
+ * @returns {ObjectPattern[]} ObjectPattern array for copy plugin
+ */
+function extractLanguges(imaConfig: ImaConfig): ObjectPattern[] {
+  const resultCopyRecords: ObjectPattern[] = [];
+  const tempLocales: Record<string, any> = {};
+
+  Object.entries(imaConfig.languages).forEach(([locale, languageGlobs]) => {
+    tempLocales[locale] = {};
+    const mf = new MessageFormat(locale);
+
+    languageGlobs.forEach(languageGlob =>
+      resultCopyRecords.push({
+        from: languageGlob,
+        to: 'static/js/locale/' + locale + '.js',
+        force: true,
+        transformAll: (assets: any[]) => {
+          tempLocales[locale] = assets.reduce((accumulator, asset) => {
+            const fileContent = JSON.parse(asset.data.toString());
+            const scopeFromFilename = (
+              asset.sourceFilename.split('/').pop() || 'none'
+            ).replace(locale.toUpperCase() + '.json', '');
+
+            return Object.assign(accumulator, {
+              [scopeFromFilename]: fileContent
+            });
+          }, tempLocales[locale]);
+
+          return `(function () {var $IMA = {}; if ((typeof window !== "undefined") && (window !== null)) { window.$IMA = window.$IMA || {}; $IMA = window.$IMA; }
+                                        ${mf
+                                          .compile(tempLocales[locale])
+                                          .toString('$IMA.i18n')}
+                                          ;if (typeof module !== "undefined" && module.exports) {module.exports = $IMA.i18n;} })();`;
+        }
+      })
+    );
+  });
+
+  return resultCopyRecords;
+}
+
+/**
  * Less-loader additional data factory function. Utility to
  * easily prepped/append custom content into the less-loader.
  *
@@ -261,6 +307,10 @@ async function resolveImaConfig(args: CliArgs): Promise<ImaConfig> {
   const defaultImaConfig: ImaConfig = {
     publicPath: '',
     compression: ['brotliCompress', 'gzip'],
+    languages: {
+      cs: ['./app/**/*CS.json'],
+      en: ['./app/**/*EN.json']
+    },
     imageInlineSizeLimit: 8192
   };
 
@@ -397,6 +447,7 @@ export {
   createWebpackConfig,
   requireImaConfig,
   resolveImaConfig,
+  extractLanguges,
   createPolyfillEntry,
   IMA_CONF_FILENAME
 };
