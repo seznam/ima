@@ -34,9 +34,10 @@
   "license": "MIT",
   "dependencies": {
     "@babel/core": "^7.16.7",
-    "@babel/plugin-transform-runtime": "^7.16.8",
+    "@babel/plugin-transform-runtime": "^7.16.10",
     "@babel/preset-env": "^7.16.8",
     "@babel/preset-react": "^7.16.7",
+    "@babel/runtime": "^7.16.7",
     "@gatsbyjs/webpack-hot-middleware": "^2.25.2",
     "@pmmmwh/react-refresh-webpack-plugin": "^0.5.4",
     "anser": "^2.1.0",

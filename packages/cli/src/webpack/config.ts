@@ -167,10 +167,12 @@ export default async (
           }
         : {
             [name]: [
-              isDev &&
+              isEsVersion &&
+                isDev &&
                 // We have to use @gatsbyjs version, since the original package containing webpack 5 fix is not yet released
                 `@gatsbyjs/webpack-hot-middleware/client?name=${name}&path=//localhost:${imaEnvironment.$Server.port}/__webpack_hmr&timeout=15000&reload=true&overlay=false&overlayWarnings=false&noInfo=true&quiet=true`,
-              isDev &&
+              isEsVersion &&
+                isDev &&
                 isDebug &&
                 require.resolve('@ima/hmr-client/dist/imaHmrClient.js'),
               path.join(rootDir, 'app/main.js')
@@ -239,8 +241,8 @@ export default async (
       // Split chunks in dev for better caching
       ...(isDev
         ? {
-            moduleIds: 'deterministic',
-            chunkIds: 'deterministic',
+            moduleIds: 'named',
+            chunkIds: 'named',
             runtimeChunk: 'single', // Separate common runtime for better caching
             splitChunks: {
               cacheGroups: {
@@ -274,15 +276,6 @@ export default async (
     },
     module: {
       rules: [
-        /**
-         * Resolve `*.mjs` files without the need of an extension.
-         */
-        {
-          test: /\.m?js$/,
-          resolve: {
-            fullySpecified: false
-          }
-        },
         /**
          * Extract source maps for node_module packages.
          */
@@ -378,94 +371,108 @@ export default async (
               ]
             },
             {
-              test: /\.(js|mjs|jsx|ts|tsx|cjs)$/,
+              test: /\.(js|mjs|jsx|cjs)$/,
               include: appDir,
-              rules: [
-                {
-                  loader: require.resolve('babel-loader'),
-                  options: {
-                    // Disable config files since we handle the loading manually
-                    babelrc: false,
-                    configFile: false,
-                    // Enable cache for better performance
-                    cacheDirectory:
-                      findCacheDir({
-                        name: `babel-loader-ima-${name}-cache`
-                      }) ?? true,
-                    cacheCompression: false,
-                    compact: !isDev,
-                    sourceMaps: useSourceMaps,
-                    inputSourceMap: useSourceMaps,
-                    // Require custom config (with defaults)
-                    ...requireConfig({
-                      ctx,
-                      fileNames:
-                        isEsVersion || isServer
-                          ? BABEL_CONF_ES_FILENAMES
-                          : BABEL_CONF_FILENAMES,
-                      packageJsonKey:
-                        isEsVersion || isServer ? 'babel.es' : 'babel',
-                      defaultConfig: {
-                        presets: [
-                          [
-                            require.resolve('@babel/preset-env'),
-                            {
-                              ...(isEsVersion || isServer
-                                ? {
-                                    targets: {
-                                      node: '14'
-                                    }
-                                  }
-                                : {
-                                    targets: {
-                                      edge: '17',
-                                      firefox: '60',
-                                      chrome: '67',
-                                      safari: '11.1',
-                                      ie: '11'
-                                    }
-                                  }),
-                              bugfixes: true,
-                              modules: 'auto',
-                              useBuiltIns: 'usage',
-                              corejs: { version: '3.20', proposals: true }
-                            }
-                          ],
-                          [
-                            require.resolve('@babel/preset-react'),
-                            {
-                              development: isDev,
-                              runtime: 'automatic'
-                            }
-                          ]
-                        ],
-                        plugins:
-                          isDev && !isServer
-                            ? [
-                                require.resolve('react-refresh/babel'),
-                                [
-                                  require.resolve(
-                                    '@babel/plugin-transform-runtime'
-                                  ),
-                                  {
-                                    regenerator: true
-                                  }
-                                ]
-                              ]
-                            : []
-                      }
-                    })
+              loader: require.resolve('babel-loader'),
+              options: {
+                // Disable config files since we handle the loading manually
+                babelrc: false,
+                configFile: false,
+                // Enable cache for better performance
+                cacheDirectory:
+                  findCacheDir({
+                    name: `babel-loader-ima-${name}-app-cache`
+                  }) ?? true,
+                cacheCompression: false,
+                compact: !isDev,
+                // Require custom config (with defaults)
+                ...requireConfig({
+                  ctx,
+                  fileNames:
+                    isEsVersion || isServer
+                      ? BABEL_CONF_ES_FILENAMES
+                      : BABEL_CONF_FILENAMES,
+                  packageJsonKey:
+                    isEsVersion || isServer ? 'babel.es' : 'babel',
+                  defaultConfig: {
+                    presets: [
+                      [
+                        require.resolve('@babel/preset-react'),
+                        {
+                          development: isDev,
+                          runtime: 'automatic'
+                        }
+                      ],
+                      [
+                        require.resolve('@babel/preset-env'),
+                        {
+                          targets:
+                            isEsVersion || isServer
+                              ? { node: '14' }
+                              : 'defaults',
+                          bugfixes: true,
+                          modules: false,
+                          useBuiltIns: 'usage',
+                          corejs: { version: '3.20', proposals: true },
+                          exclude: ['transform-typeof-symbol']
+                        }
+                      ]
+                    ],
+                    plugins:
+                      isDev && !isServer
+                        ? [require.resolve('react-refresh/babel')]
+                        : []
                   }
-                }
-              ]
+                }),
+                sourceMaps: useSourceMaps,
+                inputSourceMap: useSourceMaps
+              }
             },
             /**
-             * Less loader configuration, which adds support for glob imports in the
-             * less files, postcss, and css imports support. Additionally
-             * app/less/globals.less is always prepended to every less file
-             * computed. This allows you to define globals (variables) which don't
-             * have to be imported in every LESS file manually.
+             * Process js of app directory with general babel config
              */
+            {
+              test: /\.(js|mjs)$/,
+              exclude: /@babel(?:\/|\\{1,2})runtime/,
+              loader: require.resolve('babel-loader'),
+              options: {
+                sourceType: 'unambiguous',
+                babelrc: false,
+                configFile: false,
+                // Enable cache for better performance
+                cacheDirectory:
+                  findCacheDir({
+                    name: `babel-loader-ima-${name}-cache`
+                  }) ?? true,
+                cacheCompression: false,
+                compact: !isDev,
+                presets: [
+                  [
+                    require.resolve('@babel/preset-env'),
+                    {
+                      targets:
+                        isEsVersion || isServer ? { node: '14' } : 'defaults',
+                      modules: false,
+                      useBuiltIns: 'entry',
+                      corejs: { version: '3.20' },
+                      exclude: ['transform-typeof-symbol']
+                    }
+                  ]
+                ],
+                plugins: [
+                  [
+                    require.resolve('@babel/plugin-transform-runtime'),
+                    {
+                      corejs: false,
+                      helpers: true,
+                      regenerator: true
+                    }
+                  ]
+                ],
+                sourceMaps: useSourceMaps,
+                inputSourceMap: useSourceMaps
+              }
+            },
             {
               test: /\.less$/,
               sideEffects: true,
