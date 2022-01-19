@@ -281,8 +281,7 @@ export default async (
          */
         useSourceMaps && {
           enforce: 'pre',
-          exclude: /@babel(?:\/|\\{1,2})runtime/,
-          test: /\.(js|mjs|jsx|ts|tsx|cjs|css)$/,
+          test: /\.(js|mjs|jsx|ts|tsx|cjs|css|less)$/,
           use: require.resolve('source-map-loader')
         },
         {
@@ -373,6 +372,7 @@ export default async (
             {
               test: /\.(js|mjs|jsx|cjs)$/,
               include: appDir,
+              exclude: /node_modules/,
               loader: require.resolve('babel-loader'),
               options: {
                 // Disable config files since we handle the loading manually
@@ -432,8 +432,8 @@ export default async (
              * Process js of app directory with general babel config
              */
             {
-              test: /\.(js|mjs)$/,
-              exclude: /@babel(?:\/|\\{1,2})runtime/,
+              test: /\.(js|mjs|cjs)$/,
+              exclude: /\bcore-js\b/, // Ignore core-js to prevent circular parsing
               loader: require.resolve('babel-loader'),
               options: {
                 sourceType: 'unambiguous',
@@ -452,20 +452,11 @@ export default async (
                     {
                       targets:
                         isEsVersion || isServer ? { node: '14' } : 'defaults',
+                      bugfixes: true,
                       modules: false,
-                      useBuiltIns: 'entry',
+                      useBuiltIns: 'usage',
                       corejs: { version: '3.20' },
                       exclude: ['transform-typeof-symbol']
-                    }
-                  ]
-                ],
-                plugins: [
-                  [
-                    require.resolve('@babel/plugin-transform-runtime'),
-                    {
-                      corejs: false,
-                      helpers: true,
-                      regenerator: true
                     }
                   ]
                 ],
@@ -488,7 +479,7 @@ export default async (
             },
             /**
              * Fallback loader for all modules, that don't match any
-             * of the above defined rules.
+             * of the above defined rules. This should be defined last.
              */
             {
               exclude: [/^$/, /\.(js|mjs|jsx|ts|tsx|cjs)$/, /\.json$/],

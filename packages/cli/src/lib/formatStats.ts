@@ -69,7 +69,10 @@ function formatWebpackErrors(
   // Print filtered errors
   filteredParsedErrors.forEach(parsedError => {
     // Print message right away, if we don't manage to parse it
-    if (!parsedError.fileUri || !parsedError.lineNumber) {
+    if (
+      !parsedError.lineNumber ||
+      !(parsedError.fileUri && fs.existsSync(parsedError.fileUri))
+    ) {
       return logger.error(
         `${chalk.underline(parsedError.name + ':')} ${parsedError.message}\n`
       );

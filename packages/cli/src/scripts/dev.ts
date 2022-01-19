@@ -42,6 +42,11 @@ function startNodemon(args: CliArgs) {
       );
     });
 
+    nodemon.on('crash', error => {
+      logger.error('Application watcher unexpectedly crashed.');
+      logger.error(error);
+    });
+
     nodemon.once('message', message => {
       if (message === IMA_CLI_RUN_SERVER_MESSAGE) {
         serverHasStarted = true;
