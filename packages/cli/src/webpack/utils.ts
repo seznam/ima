@@ -313,7 +313,7 @@ async function createWebpackConfig(
     }
 
     // SPA mode only supports es5 versions
-    if (!args.forceSPA) {
+    if (!args.forceSPA && !args.forceSPAWithHMR) {
       finalConfigContexts.push({
         name: 'client.es',
         isServer: false,

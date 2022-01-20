@@ -33,6 +33,7 @@ export interface CliArgs {
   open?: boolean;
   legacy?: boolean;
   forceSPA?: boolean;
+  forceSPAWithHMR?: boolean;
   profile?: boolean;
 }
 

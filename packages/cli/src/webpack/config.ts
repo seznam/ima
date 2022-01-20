@@ -45,15 +45,17 @@ export default async (
   const outputDir = path.join(rootDir, 'build');
   const publicPath = ctx?.publicPath ?? imaConfig.publicPath;
   const appDir = path.join(rootDir, 'app');
+  const useHMR = !isServer && isDev && (isEsVersion || ctx.forceSPAWithHMR);
 
   /**
-   * When using build script and dev mode (not legacy, or forceSPA which uses es5),
+   * When using build script and dev mode (not forceSPA with HMR which uses es5),
    * the CSS files are only generated once for es version pass. For other compilers
    * only definitions are generated in order to fully support css.modules but
    * improve a compiling speed a little bit.
    */
   const onlyCssDefinitions =
-    isServer || (!isEsVersion && ctx.command === 'build');
+    isServer ||
+    (!isServer && !isEsVersion && !ctx.forceSPAWithHMR && !ctx.forceSPA);
 
   /**
    * Style loaders helper function used to define
@@ -167,12 +169,10 @@ export default async (
           }
         : {
             [name]: [
-              isEsVersion &&
-                isDev &&
-                // We have to use @gatsbyjs version, since the original package containing webpack 5 fix is not yet released
+              // We have to use @gatsbyjs version, since the original package containing webpack 5 fix is not yet released
+              useHMR &&
                 `@gatsbyjs/webpack-hot-middleware/client?name=${name}&path=//localhost:${imaEnvironment.$Server.port}/__webpack_hmr&timeout=15000&reload=true&overlay=false&overlayWarnings=false&noInfo=true&quiet=true`,
-              isEsVersion &&
-                isDev &&
+              useHMR &&
                 isDebug &&
                 require.resolve('@ima/hmr-client/dist/imaHmrClient.js'),
               path.join(rootDir, 'app/main.js')
@@ -395,6 +395,8 @@ export default async (
                   packageJsonKey:
                     isEsVersion || isServer ? 'babel.es' : 'babel',
                   defaultConfig: {
+                    targets:
+                      isEsVersion || isServer ? { node: '14' } : 'defaults',
                     presets: [
                       [
                         require.resolve('@babel/preset-react'),
@@ -406,10 +408,6 @@ export default async (
                       [
                         require.resolve('@babel/preset-env'),
                         {
-                          targets:
-                            isEsVersion || isServer
-                              ? { node: '14' }
-                              : 'defaults',
                           bugfixes: true,
                           modules: false,
                           useBuiltIns: 'usage',
@@ -418,10 +416,9 @@ export default async (
                         }
                       ]
                     ],
-                    plugins:
-                      isDev && !isServer
-                        ? [require.resolve('react-refresh/babel')]
-                        : []
+                    plugins: useHMR
+                      ? [require.resolve('react-refresh/babel')]
+                      : []
                   }
                 }),
                 sourceMaps: useSourceMaps,
@@ -446,12 +443,11 @@ export default async (
                   }) ?? true,
                 cacheCompression: false,
                 compact: !isDev,
+                targets: isEsVersion || isServer ? { node: '14' } : 'defaults',
                 presets: [
                   [
                     require.resolve('@babel/preset-env'),
                     {
-                      targets:
-                        isEsVersion || isServer ? { node: '14' } : 'defaults',
                       bugfixes: true,
                       modules: false,
                       useBuiltIns: 'usage',
@@ -539,8 +535,8 @@ export default async (
               : []),
 
             // Following plugins enable react refresh and hmr in watch mode
-            isDev && new webpack.HotModuleReplacementPlugin(),
-            isDev &&
+            useHMR && new webpack.HotModuleReplacementPlugin(),
+            useHMR &&
               new ReactRefreshWebpackPlugin({
                 overlay: {
                   module: '@ima/hmr-client/dist/fastRefreshClient.js',
