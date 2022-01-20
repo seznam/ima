@@ -75,6 +75,7 @@ const LineNumberRegExps = Object.freeze({
    * https://github.com/babel/babylon/blob/v7.0.0-beta.22/src/parser/location.js#L19
    */
   babel: /^.*\((\d+):(\d+)\)$/,
+  babelParser: /^(.*)(\((\d+):(\d+)\))$/, // Also extracts the syntax error msg
 
   /**
    * less-loader errors
@@ -179,31 +180,75 @@ function parseCompileError(error: StatsError): ParsedCompileError | null {
     [lineNumber = 0, columnNumber = 0] = parseErrorLoc(error.loc);
   } else if (error.stack || error.message) {
     // Parse error locations from stack
+    let name, message;
     const lines = (error.stack || error.message).split('\n');
+    const isBabelParserError = error.message?.includes('@babel/parser');
 
     // Skip first line containing error name
     for (let i = 1; i < lines.length; i++) {
       const line = ansiToText(lines[i]).trim();
 
-      if (line.includes('Module build failed')) {
+      // Skip non-informative stack lines
+      if (
+        line.includes('Module build failed') ||
+        line.includes('@babel/parser')
+      ) {
         continue;
       }
-      // Try to match webpack compiler error
-      let match = line.match(runtimeAssetPathRegex);
 
-      if (!fileUri && match) {
-        fileUri = match[1].split('?').shift() ?? '';
-        lineNumber = parseInt(match[2]);
-        columnNumber = parseInt(match[3]);
-        break;
-      }
+      // Special handling for babel parser errors
+      if (isBabelParserError) {
+        /**
+         * When error comes from stats, we know the module uri,
+         * otherwise we need to try to find it in the stack trace.
+         */
+        fileUri = error.moduleName ?? '';
 
-      // Try to match webpack 3rd party loaders compiler error
-      match = line.match(filePathRegex);
+        // Try to find lineNumber
+        if (!lineNumber) {
+          const match = line.match(LineNumberRegExps.babelParser);
 
-      if (!fileUri && match) {
-        fileUri = match[0];
-        break;
+          if (match) {
+            const [errorName, ...restMessage] = match[1].split(':');
+
+            name = errorName;
+            message = restMessage.join(':');
+            lineNumber = parseInt(match[3]);
+            columnNumber = parseInt(match[4]);
+          }
+        }
+
+        // Look for app file uris
+        if (!fileUri && line.includes('/app')) {
+          const match = line.match(filePathRegex);
+
+          if (match) {
+            fileUri = match[0];
+          }
+        }
+
+        // Return formatted error
+        if (fileUri && lineNumber && name && message) {
+          return { name, message, fileUri, lineNumber, columnNumber };
+        }
+      } else {
+        // Try to parse other errors by finding app urls in the stack trace
+        let match = line.match(runtimeAssetPathRegex);
+
+        if (!fileUri && match) {
+          fileUri = match[1].split('?').shift() ?? '';
+          lineNumber = parseInt(match[2]);
+          columnNumber = parseInt(match[3]);
+          break;
+        }
+
+        // Try to match webpack 3rd party loaders compiler error
+        match = line.match(filePathRegex);
+
+        if (!fileUri && match) {
+          fileUri = match[0];
+          break;
+        }
       }
     }
   }

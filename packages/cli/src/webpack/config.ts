@@ -369,6 +369,41 @@ export default async (
                 }
               ]
             },
+            /**
+             * Process js of app directory with general babel config
+             */
+            {
+              test: /\.(js|mjs|cjs)$/,
+              exclude: [/\bcore-js\b/, /\bwebpack\/buildin\b/],
+              loader: require.resolve('babel-loader'),
+              options: {
+                sourceType: 'unambiguous',
+                babelrc: false,
+                configFile: false,
+                // Enable cache for better performance
+                cacheDirectory:
+                  findCacheDir({
+                    name: `babel-loader-ima-${name}-cache`
+                  }) ?? true,
+                cacheCompression: false,
+                compact: !isDev,
+                targets: isEsVersion || isServer ? { node: '14' } : 'defaults',
+                presets: [
+                  [
+                    require.resolve('@babel/preset-env'),
+                    {
+                      bugfixes: true,
+                      modules: false,
+                      useBuiltIns: 'usage',
+                      corejs: { version: '3.20' },
+                      exclude: ['transform-typeof-symbol']
+                    }
+                  ]
+                ],
+                sourceMaps: useSourceMaps,
+                inputSourceMap: useSourceMaps
+              }
+            },
             {
               test: /\.(js|mjs|jsx|cjs)$/,
               include: appDir,
@@ -421,41 +456,6 @@ export default async (
                       : []
                   }
                 }),
-                sourceMaps: useSourceMaps,
-                inputSourceMap: useSourceMaps
-              }
-            },
-            /**
-             * Process js of app directory with general babel config
-             */
-            {
-              test: /\.(js|mjs|cjs)$/,
-              exclude: /\bcore-js\b/, // Ignore core-js to prevent circular parsing
-              loader: require.resolve('babel-loader'),
-              options: {
-                sourceType: 'unambiguous',
-                babelrc: false,
-                configFile: false,
-                // Enable cache for better performance
-                cacheDirectory:
-                  findCacheDir({
-                    name: `babel-loader-ima-${name}-cache`
-                  }) ?? true,
-                cacheCompression: false,
-                compact: !isDev,
-                targets: isEsVersion || isServer ? { node: '14' } : 'defaults',
-                presets: [
-                  [
-                    require.resolve('@babel/preset-env'),
-                    {
-                      bugfixes: true,
-                      modules: false,
-                      useBuiltIns: 'usage',
-                      corejs: { version: '3.20' },
-                      exclude: ['transform-typeof-symbol']
-                    }
-                  ]
-                ],
                 sourceMaps: useSourceMaps,
                 inputSourceMap: useSourceMaps
               }
