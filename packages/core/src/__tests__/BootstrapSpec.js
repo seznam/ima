@@ -2,22 +2,22 @@ import Bootstrap from '../Bootstrap';
 import ObjectContainer from '../ObjectContainer';
 import namespace from '../namespace';
 
-describe('Bootstrap', () => {
+describe('bootstrap', () => {
   let bootstrap = null;
   let objectContainer = null;
   let environments = {
     prod: {},
     test: {},
-    dev: {}
+    dev: {},
   };
   let plugin = {
     $registerImaPlugin: () => {},
     initSettings: () => environments,
-    initBind: () => {}
+    initBind: () => {},
   };
   let bootConfig = {
     settings: {
-      $Env: 'prod'
+      $Env: 'prod',
     },
     plugins: [{ name: 'test-plugin', module: plugin }],
     initSettings: () => environments,
@@ -25,7 +25,7 @@ describe('Bootstrap', () => {
     initBindApp: () => {},
     initRoutes: () => {},
     bind: {},
-    routes: {}
+    routes: {},
   };
 
   beforeEach(() => {
@@ -70,7 +70,7 @@ describe('Bootstrap', () => {
       spyOn(bootstrap, '_getEnvironmentSetting').and.returnValue({});
     });
 
-    it('it should call initSettings method for app', () => {
+    it('should call initSettings method for app', () => {
       spyOn(bootConfig, 'initSettings').and.callThrough();
 
       bootstrap._initSettings();
@@ -78,7 +78,7 @@ describe('Bootstrap', () => {
       expect(bootConfig.initSettings).toHaveBeenCalled();
     });
 
-    it('it should call initSettings method for plugin', () => {
+    it('should call initSettings method for plugin', () => {
       spyOn(plugin, 'initSettings').and.callThrough();
 
       bootstrap._initSettings();
@@ -129,7 +129,7 @@ describe('Bootstrap', () => {
         objectContainer,
         {
           $Env: 'prod',
-          __meta__: {}
+          __meta__: {},
         },
         'ima.core'
       );
@@ -145,7 +145,7 @@ describe('Bootstrap', () => {
         objectContainer,
         {
           $Env: 'prod',
-          __meta__: {}
+          __meta__: {},
         },
         'test-plugin'
       );
@@ -161,7 +161,7 @@ describe('Bootstrap', () => {
         objectContainer,
         {
           $Env: 'prod',
-          __meta__: {}
+          __meta__: {},
         },
         'app'
       );

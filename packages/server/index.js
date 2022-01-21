@@ -45,5 +45,5 @@ module.exports = {
   clientApp,
   urlParser,
   logger,
-  cache
+  cache,
 };

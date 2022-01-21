@@ -57,7 +57,7 @@ export default class AbstractExecution extends Execution {
         'ima.core.execution.AbstractExecution: Given job is not a callable ' +
           'function therefore it will be excluded from execution.',
         {
-          job
+          job,
         }
       );
     }

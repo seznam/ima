@@ -10,7 +10,7 @@ describe('helper', () => {
         { b: { c: 5 } },
         { b: { d: [5] } }
       );
-      expect(target).toEqual({ a: 3, b: { c: 5, d: [5] }, d: 4 });
+      expect(target).toStrictEqual({ a: 3, b: { c: 5, d: [5] }, d: 4 });
     });
   });
 
@@ -25,11 +25,11 @@ describe('helper', () => {
         { c: { e: [5] } }
       );
 
-      expect(target).toEqual({
+      expect(target).toStrictEqual({
         a: 1,
         b: 3,
         c: { d: 5, e: [5] },
-        __meta__: { b: 'ref-1', c: 'ref-1', 'c.d': 'ref-1', 'c.e': 'ref-1' }
+        __meta__: { b: 'ref-1', c: 'ref-1', 'c.d': 'ref-1', 'c.e': 'ref-1' },
       });
     });
 
@@ -38,16 +38,16 @@ describe('helper', () => {
         a: 1,
         b: 3,
         c: { d: 5, e: [5] },
-        __meta__: { b: 'ref-1', c: 'ref-1', 'c.d': 'ref-1', 'c.e': 'ref-1' }
+        __meta__: { b: 'ref-1', c: 'ref-1', 'c.d': 'ref-1', 'c.e': 'ref-1' },
       };
 
       helpers.assignRecursivelyWithTracking('ref-2')(target, { c: { e: 6 } });
 
-      expect(target).toEqual({
+      expect(target).toStrictEqual({
         a: 1,
         b: 3,
         c: { d: 5, e: 6 },
-        __meta__: { b: 'ref-1', c: 'ref-2', 'c.d': 'ref-1', 'c.e': 'ref-2' }
+        __meta__: { b: 'ref-1', c: 'ref-2', 'c.d': 'ref-1', 'c.e': 'ref-2' },
       });
     });
   });
@@ -60,10 +60,10 @@ describe('helper', () => {
         a: {
           b: [
             {
-              c: 1
-            }
-          ]
-        }
+              c: 1,
+            },
+          ],
+        },
       };
       helpers.deepFreeze(data);
 
@@ -79,34 +79,34 @@ describe('helper', () => {
       prod: {
         string: 'something',
         deep: {
-          number: 1
-        }
+          number: 1,
+        },
       },
       dev: {
         deep: {
-          number: 2
-        }
-      }
+          number: 2,
+        },
+      },
     };
 
     it('should return production setting', () => {
       let currentSetting = helpers.resolveEnvironmentSetting(settings, 'prod');
 
-      expect(currentSetting.string).toEqual(settings.prod.string);
-      expect(currentSetting.deep.number).toEqual(settings.prod.deep.number);
+      expect(currentSetting.string).toBe(settings.prod.string);
+      expect(currentSetting.deep.number).toBe(settings.prod.deep.number);
     });
 
     it('should return development setting', () => {
       let currentSetting = helpers.resolveEnvironmentSetting(settings, 'dev');
 
-      expect(currentSetting.string).toEqual(settings.prod.string);
-      expect(currentSetting.deep.number).toEqual(settings.dev.deep.number);
+      expect(currentSetting.string).toBe(settings.prod.string);
+      expect(currentSetting.deep.number).toBe(settings.dev.deep.number);
     });
 
     it('should return empty setting', () => {
       let currentSetting = helpers.resolveEnvironmentSetting();
 
-      expect(currentSetting).toEqual({});
+      expect(currentSetting).toStrictEqual({});
     });
   });
 
@@ -115,13 +115,13 @@ describe('helper', () => {
       let source = {
         a: 1,
         b: Promise.resolve(2),
-        c: new Promise(resolve => setTimeout(() => resolve(3), 10))
+        c: new Promise(resolve => setTimeout(() => resolve(3), 10)),
       };
       helpers.allPromiseHash(source).then(results => {
-        expect(results).toEqual({
+        expect(results).toStrictEqual({
           a: 1,
           b: 2,
-          c: 3
+          c: 3,
         });
         done();
       });
@@ -141,13 +141,13 @@ describe('helper', () => {
     it('should clone data', () => {
       let source = {
         a: {
-          b: 1
-        }
+          b: 1,
+        },
       };
 
       expect(helpers.clone(source)).not.toBe(source);
       expect(helpers.clone(source).a).not.toBe(source.a);
-      expect(helpers.clone(source)).toEqual(source);
+      expect(helpers.clone(source)).toStrictEqual(source);
     });
   });
 });

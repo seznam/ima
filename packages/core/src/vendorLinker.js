@@ -48,7 +48,7 @@ export class VendorLinker {
         for (let key of Object.keys(moduleValues)) {
           exports(key, moduleValues[key]);
         }
-      }
+      },
     }));
   }
 

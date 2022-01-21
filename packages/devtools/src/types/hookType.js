@@ -6,5 +6,5 @@ export default PropTypes.shape({
   description: PropTypes.string,
   code: PropTypes.string,
   enabled: PropTypes.bool,
-  opened: PropTypes.bool
+  opened: PropTypes.bool,
 });

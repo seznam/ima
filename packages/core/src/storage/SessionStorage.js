@@ -64,7 +64,7 @@ export default class SessionStorage extends Storage {
         key,
         JSON.stringify({
           created: Date.now(),
-          value
+          value,
         })
       );
     } catch (error) {
@@ -120,7 +120,7 @@ export default class SessionStorage extends Storage {
   _deleteOldestEntry() {
     let oldestEntry = {
       key: null,
-      created: Date.now() + 1
+      created: Date.now() + 1,
     };
 
     for (let key of this.keys()) {
@@ -128,7 +128,7 @@ export default class SessionStorage extends Storage {
       if (value.created < oldestEntry.created) {
         oldestEntry = {
           key,
-          created: value.created
+          created: value.created,
         };
       }
     }
@@ -179,7 +179,7 @@ class StorageIterator {
     if (this._currentKeyIndex >= this._storage.length) {
       return {
         done: true,
-        value: undefined
+        value: undefined,
       };
     }
 
@@ -188,7 +188,7 @@ class StorageIterator {
 
     return {
       done: false,
-      value: key
+      value: key,
     };
   }
 

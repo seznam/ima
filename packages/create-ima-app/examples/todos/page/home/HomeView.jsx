@@ -9,52 +9,53 @@ export default class HomeView extends AbstractComponent {
 
   render() {
     return (
-      <div className="l-home">
-        <section className="todoapp">
-          <header id="header">
+      <div className='l-home'>
+        <section className='todoapp'>
+          <header id='header'>
             <h1>{this.localize('home.title')}</h1>
             <input
-              className="new-todo"
+              className='new-todo'
               placeholder={this.localize('home.new item placeholder')}
               ref={newItemInput => (this.newItemInput = newItemInput)}
               onBlur={this.onItemAdded.bind(this)}
               onKeyUp={this.onKeyUp.bind(this)}
             />
           </header>
-          <section className="main">
+          <section className='main'>
             <input
-              id="toggle-all"
-              className="toggle-all"
-              type="checkbox"
+              id='toggle-all'
+              className='toggle-all'
+              type='checkbox'
               ref={toggleAll => (this.toggleAll = toggleAll)}
               onChange={this.onToggleAll.bind(this)}
               checked={this.props.toggleAllChecked}
             />
-            <label htmlFor="toggle-all">
+            <label htmlFor='toggle-all'>
               {this.localize('home.toggle all label')}
             </label>
-            <ul className="todo-list">
+            <ul className='todo-list'>
               {this.props.items.map(item => (
                 <Item item={item} key={item.id} $Utils={this.utils} />
               ))}
             </ul>
           </section>
-          <footer className="footer">
-            <span className="todo-count">
+          <footer className='footer'>
+            <span className='todo-count'>
               <strong>
                 {this.props.items.filter(item => !item.completed).length}
               </strong>
               {this.localize('home.count', {
-                COUNT: this.props.items.filter(item => !item.completed).length
+                COUNT: this.props.items.filter(item => !item.completed).length,
               })}
             </span>
-            <ul className="filters">
+            <ul className='filters'>
               <li>
                 <a
                   href={this.link('home', {})}
                   className={this.cssClasses({
-                    selected: this.props.filter === null
-                  })}>
+                    selected: this.props.filter === null,
+                  })}
+                >
                   {this.localize('home.filters: all')}
                 </a>
               </li>
@@ -62,8 +63,9 @@ export default class HomeView extends AbstractComponent {
                 <a
                   href={this.link('filtered', { filter: 'active' })}
                   className={this.cssClasses({
-                    selected: this.props.filter === false
-                  })}>
+                    selected: this.props.filter === false,
+                  })}
+                >
                   {this.localize('home.filters: active')}
                 </a>
               </li>
@@ -71,8 +73,9 @@ export default class HomeView extends AbstractComponent {
                 <a
                   href={this.link('filtered', { filter: 'completed' })}
                   className={this.cssClasses({
-                    selected: this.props.filter === true
-                  })}>
+                    selected: this.props.filter === true,
+                  })}
+                >
                   {this.localize('home.filters: completed')}
                 </a>
               </li>
@@ -81,17 +84,18 @@ export default class HomeView extends AbstractComponent {
               onClick={this.onDeleteCompleted.bind(this)}
               className={this.cssClasses({
                 'clear-completed': true,
-                hidden: this.props.items.every(item => !item.completed)
-              })}>
+                hidden: this.props.items.every(item => !item.completed),
+              })}
+            >
               {this.localize('home.clear completed')}
             </button>
           </footer>
         </section>
-        <footer className="info">
+        <footer className='info'>
           <p>{this.localize('home.info: edit')}</p>
           <p>{this.localize('home.info: created by')}</p>
           <p>
-            Part of <a href="http://todomvc.com">TodoMVC</a>
+            Part of <a href='http://todomvc.com'>TodoMVC</a>
           </p>
         </footer>
       </div>
@@ -111,7 +115,7 @@ export default class HomeView extends AbstractComponent {
   onItemAdded() {
     if (this.newItemInput.value) {
       this.fire('itemCreated', {
-        title: this.newItemInput.value
+        title: this.newItemInput.value,
       });
       this.newItemInput.value = '';
     }
@@ -119,7 +123,7 @@ export default class HomeView extends AbstractComponent {
 
   onToggleAll() {
     this.fire('toggleAll', {
-      completed: this.toggleAll.checked
+      completed: this.toggleAll.checked,
     });
   }
 

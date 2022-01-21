@@ -17,7 +17,7 @@ describe('ima.core.router.AbstractRouter', () => {
     $Protocol: 'http:',
     $Root: '/root',
     $LanguagePartPath: '',
-    $Host: 'www.domain.com'
+    $Host: 'www.domain.com',
   };
   let options = {
     onlyUpdate: false,
@@ -26,16 +26,16 @@ describe('ima.core.router.AbstractRouter', () => {
     documentView: null,
     managedRootView: null,
     viewAdapter: null,
-    middlewares: []
+    middlewares: [],
   };
   let globalMiddleware = jest.fn();
   let homeRouteMiddleware = jest.fn();
   let action = {
-    type: ActionTypes.REDIRECT
+    type: ActionTypes.REDIRECT,
   };
   let errorAction = {
     type: ActionTypes.ERROR,
-    url: 'http://www.domain.com/root/currentRoutePath'
+    url: 'http://www.domain.com/root/currentRoutePath',
   };
   let currentRoutePath = '/currentRoutePath';
   let Controller = function Controller() {};
@@ -53,7 +53,7 @@ describe('ima.core.router.AbstractRouter', () => {
 
     router.use(globalMiddleware);
     router.add('home', '/', Controller, View, {
-      middlewares: [homeRouteMiddleware]
+      middlewares: [homeRouteMiddleware],
     });
     router.add('contact', '/contact', Controller, View, options);
   });
@@ -63,29 +63,27 @@ describe('ima.core.router.AbstractRouter', () => {
   });
 
   it('should have 2 routes in Array and 1 global middleware', () => {
-    expect(router._routeHandlers.size).toEqual(3);
+    expect(router._routeHandlers.size).toBe(3);
   });
 
   it('should remove path from router', () => {
     router.remove('home');
 
-    expect(router._routeHandlers.size).toEqual(2);
+    expect(router._routeHandlers.size).toBe(2);
   });
 
   it('should return absolute current url', () => {
-    expect(router.getUrl()).toEqual(
-      'http://www.domain.com/root/currentRoutePath'
-    );
+    expect(router.getUrl()).toBe('http://www.domain.com/root/currentRoutePath');
   });
 
   it('should return base url of application', () => {
-    expect(router.getBaseUrl()).toEqual('http://www.domain.com/root');
+    expect(router.getBaseUrl()).toBe('http://www.domain.com/root');
   });
 
   it('should return route and middlewares in line for defined path', () => {
     let { route, middlewares } = router._getRouteHandlersByPath('/');
 
-    expect(route.getName()).toEqual('home');
+    expect(route.getName()).toBe('home');
     expect(middlewares).toHaveLength(1);
   });
 
@@ -157,7 +155,11 @@ describe('ima.core.router.AbstractRouter', () => {
       spyOn(router, '_getRouteHandlersByPath').and.returnValue({ route });
       spyOn(route, 'extractParameters').and.returnValue(params);
 
-      expect(router.getCurrentRouteInfo()).toEqual({ route, params, path });
+      expect(router.getCurrentRouteInfo()).toStrictEqual({
+        route,
+        params,
+        path,
+      });
     });
   });
 
@@ -177,7 +179,7 @@ describe('ima.core.router.AbstractRouter', () => {
     it('should return link for valid route with params', () => {
       spyOn(router, 'getBaseUrl').and.returnValue(baseUrl);
 
-      expect(router.link(routeName, {})).toEqual(baseUrl + path);
+      expect(router.link(routeName, {})).toBe(baseUrl + path);
     });
 
     it('should throw Error for not valid route with params', () => {
@@ -197,7 +199,7 @@ describe('ima.core.router.AbstractRouter', () => {
 
     beforeEach(() => {
       route = routeFactory.createRoute(routeName, path, Controller, View, {
-        middlewares: [routeMiddleware]
+        middlewares: [routeMiddleware],
       });
       action.route = route;
     });
@@ -209,7 +211,7 @@ describe('ima.core.router.AbstractRouter', () => {
     it('should handle valid route path', async () => {
       spyOn(router, '_getRouteHandlersByPath').and.returnValue({
         route,
-        middlewares: []
+        middlewares: [],
       });
 
       spyOn(router, '_handle').and.stub();
@@ -227,7 +229,7 @@ describe('ima.core.router.AbstractRouter', () => {
       let middlewaresMock = [new RouterMiddleware(globalMiddleware)];
       spyOn(router, '_getRouteHandlersByPath').and.returnValue({
         route,
-        middlewares: middlewaresMock
+        middlewares: middlewaresMock,
       });
 
       spyOn(router, '_handle').and.stub();
@@ -282,7 +284,7 @@ describe('ima.core.router.AbstractRouter', () => {
         View,
         {
           ...options,
-          middlewares: [routeMiddleware]
+          middlewares: [routeMiddleware],
         }
       );
 
@@ -305,7 +307,7 @@ describe('ima.core.router.AbstractRouter', () => {
 
       spyOn(router._routeHandlers, 'get').and.returnValue(route);
       spyOn(router, '_getRouteHandlersByPath').and.returnValue({
-        route: originalRoute
+        route: originalRoute,
       });
       spyOn(router, '_runMiddlewares').and.callThrough();
 
@@ -313,7 +315,7 @@ describe('ima.core.router.AbstractRouter', () => {
         Promise.resolve({
           content: '',
           status: 200,
-          error: params.error
+          error: params.error,
         })
       );
 
@@ -324,20 +326,20 @@ describe('ima.core.router.AbstractRouter', () => {
             route,
             expect.objectContaining({
               ...params,
-              userId: '2345'
+              userId: '2345',
             }),
             options,
             errorAction
           );
-          expect(response.error).toEqual(params.error);
+          expect(response.error).toStrictEqual(params.error);
           expect(router._runMiddlewares).toHaveBeenCalledWith(
             [
               new RouterMiddleware(globalMiddleware),
-              new RouterMiddleware(routeMiddleware)
+              new RouterMiddleware(routeMiddleware),
             ],
             expect.objectContaining({
               ...params,
-              userId: '2345'
+              userId: '2345',
             }),
             { route, action: errorAction }
           );
@@ -375,7 +377,7 @@ describe('ima.core.router.AbstractRouter', () => {
         View,
         {
           ...options,
-          middlewares: [routeMiddleware]
+          middlewares: [routeMiddleware],
         }
       );
 
@@ -398,7 +400,7 @@ describe('ima.core.router.AbstractRouter', () => {
 
       spyOn(router._routeHandlers, 'get').and.returnValue(route);
       spyOn(router, '_getRouteHandlersByPath').and.returnValue({
-        route: originalRoute
+        route: originalRoute,
       });
       spyOn(router, '_runMiddlewares').and.callThrough();
 
@@ -406,7 +408,7 @@ describe('ima.core.router.AbstractRouter', () => {
         Promise.resolve({
           content: '',
           status: 200,
-          error: params.error
+          error: params.error,
         })
       );
 
@@ -417,20 +419,20 @@ describe('ima.core.router.AbstractRouter', () => {
             route,
             expect.objectContaining({
               ...params,
-              userId: '2345'
+              userId: '2345',
             }),
             options,
             errorAction
           );
-          expect(response.error instanceof GenericError).toEqual(true);
+          expect(response.error instanceof GenericError).toBeTruthy();
           expect(router._runMiddlewares).toHaveBeenCalledWith(
             [
               new RouterMiddleware(globalMiddleware),
-              new RouterMiddleware(routeMiddleware)
+              new RouterMiddleware(routeMiddleware),
             ],
             expect.objectContaining({
               ...params,
-              userId: '2345'
+              userId: '2345',
             }),
             { route, action: errorAction }
           );
@@ -460,7 +462,7 @@ describe('ima.core.router.AbstractRouter', () => {
         new GenericError('Client error', { status: 404 })
       );
 
-      expect(isClientError).toEqual(true);
+      expect(isClientError).toBeTruthy();
     });
 
     it('should return false for client error, which return status 5**', () => {
@@ -468,13 +470,13 @@ describe('ima.core.router.AbstractRouter', () => {
         new GenericError('Server error', { status: 500 })
       );
 
-      expect(isClientError).toEqual(false);
+      expect(isClientError).toBeFalsy();
     });
 
     it('should return false for any error', () => {
       let isClientError = router.isClientError(new Error('some error'));
 
-      expect(isClientError).toEqual(false);
+      expect(isClientError).toBeFalsy();
     });
   });
 
@@ -483,11 +485,11 @@ describe('ima.core.router.AbstractRouter', () => {
       let isRedirection = router.isRedirection(
         new GenericError('Redirection', {
           status: 300,
-          url: 'http://www.example.com/redirect'
+          url: 'http://www.example.com/redirect',
         })
       );
 
-      expect(isRedirection).toEqual(true);
+      expect(isRedirection).toBeTruthy();
     });
 
     it('should return true for client error, which return status 4**', () => {
@@ -495,13 +497,13 @@ describe('ima.core.router.AbstractRouter', () => {
         new GenericError('Client error', { status: 400 })
       );
 
-      expect(isRedirection).toEqual(false);
+      expect(isRedirection).toBeFalsy();
     });
 
     it('should return false for any error', () => {
       let isClientError = router.isClientError(new Error('some error'));
 
-      expect(isClientError).toEqual(false);
+      expect(isClientError).toBeFalsy();
     });
   });
 
@@ -552,7 +554,7 @@ describe('ima.core.router.AbstractRouter', () => {
         params: params,
         path: routePath,
         options: options,
-        action: {}
+        action: {},
       };
 
       router.getPath.and.returnValue(routePath);
@@ -585,7 +587,7 @@ describe('ima.core.router.AbstractRouter', () => {
           path: routePath,
           response: response,
           options: options,
-          action: {}
+          action: {},
         };
 
         expect(dispatcher.fire).toHaveBeenCalledWith(
@@ -615,7 +617,7 @@ describe('ima.core.router.AbstractRouter', () => {
           path: routePath,
           response: Object.assign({}, response, params),
           options: options,
-          action: {}
+          action: {},
         };
 
         expect(dispatcher.fire).toHaveBeenCalledWith(
@@ -638,7 +640,7 @@ describe('ima.core.router.AbstractRouter', () => {
       );
 
       router._handle(route, params, options).then(handleResponse => {
-        expect(handleResponse).toEqual(response);
+        expect(handleResponse).toStrictEqual(response);
         done();
       });
     });
@@ -654,7 +656,9 @@ describe('ima.core.router.AbstractRouter', () => {
       );
 
       router._handle(route, params, options).then(handleResponse => {
-        expect(handleResponse).toEqual(Object.assign({}, response, params));
+        expect(handleResponse).toStrictEqual(
+          Object.assign({}, response, params)
+        );
         done();
       });
     });
@@ -674,25 +678,25 @@ describe('ima.core.router.AbstractRouter', () => {
     it('should clear root from path', () => {
       router.init({ $Root: '/root' });
 
-      expect(router._extractRoutePath(pathWithRoot)).toEqual(path);
+      expect(router._extractRoutePath(pathWithRoot)).toBe(path);
     });
 
     it('should clear root and language from path', () => {
       router.init({ $Root: '/root', $LanguagePartPath: '/en' });
 
-      expect(router._extractRoutePath(pathWithRootAndLanguage)).toEqual(path);
+      expect(router._extractRoutePath(pathWithRootAndLanguage)).toBe(path);
     });
 
     it('should clear language from path', () => {
       router.init({ $LanguagePartPath: '/en' });
 
-      expect(router._extractRoutePath(pathWithLanguage)).toEqual(path);
+      expect(router._extractRoutePath(pathWithLanguage)).toBe(path);
     });
 
     it('should return path for empty root and undefined language in path', () => {
       router.init({});
 
-      expect(router._extractRoutePath(path)).toEqual(path);
+      expect(router._extractRoutePath(path)).toBe(path);
     });
   });
 
@@ -722,15 +726,15 @@ describe('ima.core.router.AbstractRouter', () => {
     it('should return correct set of middlewares', () => {
       expect(middlewareRouter._routeHandlers.size).toBe(5);
 
-      expect(middlewareRouter._getRouteHandlersByPath('/').middlewares).toEqual(
-        [new RouterMiddleware(globalMiddleware)]
-      );
+      expect(
+        middlewareRouter._getRouteHandlersByPath('/').middlewares
+      ).toStrictEqual([new RouterMiddleware(globalMiddleware)]);
 
       expect(
         middlewareRouter._getRouteHandlersByPath('/contact').middlewares
-      ).toEqual([
+      ).toStrictEqual([
         new RouterMiddleware(globalMiddleware),
-        new RouterMiddleware(afterHomeMiddleware)
+        new RouterMiddleware(afterHomeMiddleware),
       ]);
     });
   });
@@ -762,31 +766,33 @@ describe('ima.core.router.AbstractRouter', () => {
     it('should return correct set of middlewares', () => {
       expect(middlewareRouter._routeHandlers.size).toBe(6);
 
-      expect(middlewareRouter._getMiddlewaresForRoute('home')).toEqual([
-        new RouterMiddleware(globalMiddleware)
+      expect(middlewareRouter._getMiddlewaresForRoute('home')).toStrictEqual([
+        new RouterMiddleware(globalMiddleware),
       ]);
 
-      expect(middlewareRouter._getMiddlewaresForRoute('contact')).toEqual([
-        new RouterMiddleware(globalMiddleware),
-        new RouterMiddleware(afterHomeMiddleware)
-      ]);
+      expect(middlewareRouter._getMiddlewaresForRoute('contact')).toStrictEqual(
+        [
+          new RouterMiddleware(globalMiddleware),
+          new RouterMiddleware(afterHomeMiddleware),
+        ]
+      );
 
       expect(
         middlewareRouter._getMiddlewaresForRoute(RouteNames.ERROR)
-      ).toEqual([
+      ).toStrictEqual([
         new RouterMiddleware(globalMiddleware),
         new RouterMiddleware(afterHomeMiddleware),
-        new RouterMiddleware(endMiddleware)
+        new RouterMiddleware(endMiddleware),
       ]);
     });
   });
 
   describe('_runMiddlewares method', () => {
     it('should not break when middlewares are not a valid array', async () => {
-      expect(await router._runMiddlewares([])).toBe(undefined);
-      expect(await router._runMiddlewares()).toBe(undefined);
-      expect(await router._runMiddlewares(null)).toBe(undefined);
-      expect(await router._runMiddlewares({})).toBe(undefined);
+      await expect(router._runMiddlewares([])).resolves.toBeUndefined();
+      await expect(router._runMiddlewares()).resolves.toBeUndefined();
+      await expect(router._runMiddlewares(null)).resolves.toBeUndefined();
+      await expect(router._runMiddlewares({})).resolves.toBeUndefined();
     });
 
     it('should run middlewares in sequence', async () => {
@@ -817,12 +823,12 @@ describe('ima.core.router.AbstractRouter', () => {
       expect(m1._middleware).toHaveBeenCalledWith('params', middlewareLocals);
       expect(m2._middleware).toHaveBeenCalledWith('params', middlewareLocals);
       expect(m3._middleware).toHaveBeenCalledWith('params', middlewareLocals);
-      expect(results).toEqual(['m1', 'm2', 'm3']);
-      expect(middlewareLocals).toEqual({
+      expect(results).toStrictEqual(['m1', 'm2', 'm3']);
+      expect(middlewareLocals).toStrictEqual({
         middleware: 'locals',
         m1: true,
         m2: true,
-        m3: true
+        m3: true,
       });
     });
   });

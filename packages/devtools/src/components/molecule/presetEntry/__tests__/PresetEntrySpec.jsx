@@ -7,7 +7,7 @@ describe('PresetEntry molecule', () => {
 
   const event = {
     preventDefault: jest.fn(),
-    stopPropagation: jest.fn()
+    stopPropagation: jest.fn(),
   };
 
   const props = {
@@ -17,14 +17,14 @@ describe('PresetEntry molecule', () => {
       name: 'Default',
       editable: false,
       selected: true,
-      hooks: {}
+      hooks: {},
     },
     onClick: jest.fn(),
     renamePreset: jest.fn(),
     copyPreset: jest.fn(),
     deletePreset: jest.fn(),
     alertSuccess: jest.fn(),
-    showConfirmModal: jest.fn()
+    showConfirmModal: jest.fn(),
   };
 
   beforeEach(() => {
@@ -41,32 +41,32 @@ describe('PresetEntry molecule', () => {
 
   it('should match snapshot when editable', () => {
     wrapper.setState({
-      editable: true
+      editable: true,
     });
 
     expect(wrapper).toMatchSnapshot();
   });
 
   it('should trigger onClick when clicked on entry item', () => {
-    instance.onClick = jest.fn();
+    jest.spyOn(instance, 'onClick').mockImplementation();
     wrapper.first().simulate('click');
 
-    expect(instance.onClick.mock.calls.length).toBe(1);
+    expect(instance.onClick.mock.calls).toHaveLength(1);
   });
 
   describe('onChange', () => {
     it('should set value to state name', () => {
-      instance.setState = jest.fn();
+      jest.spyOn(instance, 'setState').mockImplementation();
 
       instance.onChange({
         target: {
-          value: 'newName'
-        }
+          value: 'newName',
+        },
       });
 
-      expect(instance.setState.mock.calls.length).toBe(1);
-      expect(instance.setState.mock.calls[0][0]).toEqual({
-        name: 'newName'
+      expect(instance.setState.mock.calls).toHaveLength(1);
+      expect(instance.setState.mock.calls[0][0]).toStrictEqual({
+        name: 'newName',
       });
     });
   });
@@ -74,49 +74,49 @@ describe('PresetEntry molecule', () => {
   describe('onClick', () => {
     it("should call onClick from props if it's not in editable state", () => {
       wrapper.setState({
-        editable: false
+        editable: false,
       });
 
       instance.onClick(event);
 
-      expect(event.preventDefault.mock.calls.length).toBe(1);
-      expect(event.stopPropagation.mock.calls.length).toBe(1);
-      expect(instance.props.onClick.mock.calls.length).toBe(1);
+      expect(event.preventDefault.mock.calls).toHaveLength(1);
+      expect(event.stopPropagation.mock.calls).toHaveLength(1);
+      expect(instance.props.onClick.mock.calls).toHaveLength(1);
       instance.props.onClick.mockClear();
     });
 
     it('should do nothing if the item is currently being edited', () => {
       wrapper.setState({
-        editable: true
+        editable: true,
       });
 
       instance.onClick(event);
 
-      expect(event.preventDefault.mock.calls.length).toBe(1);
-      expect(event.stopPropagation.mock.calls.length).toBe(1);
-      expect(instance.props.onClick.mock.calls.length).toBe(0);
+      expect(event.preventDefault.mock.calls).toHaveLength(1);
+      expect(event.stopPropagation.mock.calls).toHaveLength(1);
+      expect(instance.props.onClick.mock.calls).toHaveLength(0);
     });
   });
 
   describe('onConfirm', () => {
     it('should rename preset and set editable to false', () => {
       wrapper.setState({ name: 'newName' });
-      instance.setState = jest.fn();
+      jest.spyOn(instance, 'setState').mockImplementation();
 
       instance.onConfirm(event);
 
-      expect(event.preventDefault.mock.calls.length).toBe(1);
-      expect(event.stopPropagation.mock.calls.length).toBe(1);
+      expect(event.preventDefault.mock.calls).toHaveLength(1);
+      expect(event.stopPropagation.mock.calls).toHaveLength(1);
 
-      expect(instance.props.renamePreset.mock.calls.length).toBe(1);
-      expect(instance.props.renamePreset.mock.calls[0][0]).toEqual({
+      expect(instance.props.renamePreset.mock.calls).toHaveLength(1);
+      expect(instance.props.renamePreset.mock.calls[0][0]).toStrictEqual({
         id: '0',
-        name: 'newName'
+        name: 'newName',
       });
 
-      expect(instance.setState.mock.calls.length).toBe(1);
-      expect(instance.setState.mock.calls[0][0]).toEqual({
-        editable: false
+      expect(instance.setState.mock.calls).toHaveLength(1);
+      expect(instance.setState.mock.calls[0][0]).toStrictEqual({
+        editable: false,
       });
     });
   });
@@ -125,25 +125,25 @@ describe('PresetEntry molecule', () => {
     it('should call copyPreset from props with preset id', () => {
       instance.onCopy(event);
 
-      expect(event.preventDefault.mock.calls.length).toBe(1);
-      expect(event.stopPropagation.mock.calls.length).toBe(1);
+      expect(event.preventDefault.mock.calls).toHaveLength(1);
+      expect(event.stopPropagation.mock.calls).toHaveLength(1);
 
-      expect(instance.props.copyPreset.mock.calls.length).toBe(1);
+      expect(instance.props.copyPreset.mock.calls).toHaveLength(1);
       expect(instance.props.copyPreset.mock.calls[0][0]).toBe(props.id);
     });
   });
 
   describe('onEdit', () => {
     it('should set state editable to true', () => {
-      instance.setState = jest.fn();
+      jest.spyOn(instance, 'setState').mockImplementation();
       instance.onEdit(event);
 
-      expect(event.preventDefault.mock.calls.length).toBe(1);
-      expect(event.stopPropagation.mock.calls.length).toBe(1);
+      expect(event.preventDefault.mock.calls).toHaveLength(1);
+      expect(event.stopPropagation.mock.calls).toHaveLength(1);
 
-      expect(instance.setState.mock.calls.length).toBe(1);
-      expect(instance.setState.mock.calls[0][0]).toEqual({
-        editable: true
+      expect(instance.setState.mock.calls).toHaveLength(1);
+      expect(instance.setState.mock.calls[0][0]).toStrictEqual({
+        editable: true,
       });
     });
   });
@@ -152,34 +152,34 @@ describe('PresetEntry molecule', () => {
     it('should prevent default and stop propagation', () => {
       instance.onDelete(event);
 
-      expect(event.preventDefault.mock.calls.length).toBe(1);
-      expect(event.stopPropagation.mock.calls.length).toBe(1);
+      expect(event.preventDefault.mock.calls).toHaveLength(1);
+      expect(event.stopPropagation.mock.calls).toHaveLength(1);
       instance.props.showConfirmModal.mockClear();
     });
 
     it('should show confirm modal', () => {
       instance.onDelete(event);
 
-      expect(instance.props.showConfirmModal.mock.calls.length).toBe(1);
+      expect(instance.props.showConfirmModal.mock.calls).toHaveLength(1);
       expect(
         Object.keys(instance.props.showConfirmModal.mock.calls[0][0])
-      ).toEqual(['body', 'accept']);
+      ).toStrictEqual(['body', 'accept']);
     });
   });
 
   describe('onDiscard', () => {
     it('should discard the state and set editable to false', () => {
-      instance.setState = jest.fn();
+      jest.spyOn(instance, 'setState').mockImplementation();
 
       instance.onDiscard(event);
 
-      expect(event.preventDefault.mock.calls.length).toBe(1);
-      expect(event.stopPropagation.mock.calls.length).toBe(1);
+      expect(event.preventDefault.mock.calls).toHaveLength(1);
+      expect(event.stopPropagation.mock.calls).toHaveLength(1);
 
-      expect(instance.setState.mock.calls.length).toBe(1);
-      expect(instance.setState.mock.calls[0][0]).toEqual({
+      expect(instance.setState.mock.calls).toHaveLength(1);
+      expect(instance.setState.mock.calls[0][0]).toStrictEqual({
         name: props.preset.name,
-        editable: false
+        editable: false,
       });
     });
   });

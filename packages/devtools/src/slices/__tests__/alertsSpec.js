@@ -17,14 +17,14 @@ describe('reducer', () => {
           hidden: false,
           title: 'title',
           content: 'content',
-          type: 'type'
-        }
-      }
+          type: 'type',
+        },
+      },
     };
   });
 
   it('should return the initial state', () => {
-    expect(reducer(undefined, {})).toEqual(alertsInitialState);
+    expect(reducer(undefined, {})).toStrictEqual(alertsInitialState);
   });
 
   it('should add alert to state', () => {
@@ -35,10 +35,10 @@ describe('reducer', () => {
           id: '1',
           title: 'title',
           content: 'content',
-          type: 'type'
-        }
+          type: 'type',
+        },
       })
-    ).toEqual({
+    ).toStrictEqual({
       ...curState,
       alerts: {
         ...curState.alerts,
@@ -47,9 +47,9 @@ describe('reducer', () => {
           hidden: false,
           title: 'title',
           content: 'content',
-          type: 'type'
-        }
-      }
+          type: 'type',
+        },
+      },
     });
   });
 
@@ -57,11 +57,11 @@ describe('reducer', () => {
     expect(
       reducer(curState, {
         type: 'alerts/removeAlert',
-        payload: '0'
+        payload: '0',
       })
-    ).toEqual({
+    ).toStrictEqual({
       ...curState,
-      alerts: {}
+      alerts: {},
     });
   });
 
@@ -69,16 +69,16 @@ describe('reducer', () => {
     expect(
       reducer(curState, {
         type: 'alerts/hideAlert',
-        payload: '0'
+        payload: '0',
       })
-    ).toEqual({
+    ).toStrictEqual({
       ...curState,
       alerts: {
         0: {
           ...curState.alerts['0'],
-          hidden: true
-        }
-      }
+          hidden: true,
+        },
+      },
     });
   });
 });
@@ -89,31 +89,31 @@ describe('actions', () => {
       id: '0',
       title: 'title',
       content: 'content',
-      type: 'type'
+      type: 'type',
     };
 
-    expect(actions.showAlert(data)).toEqual({
+    expect(actions.showAlert(data)).toStrictEqual({
       type: 'alerts/showAlert',
       payload: {
         id: '0',
         title: 'title',
         content: 'content',
-        type: 'type'
-      }
+        type: 'type',
+      },
     });
   });
 
   it('should create action to remove alert', () => {
-    expect(actions.removeAlert('0')).toEqual({
+    expect(actions.removeAlert('0')).toStrictEqual({
       type: 'alerts/removeAlert',
-      payload: '0'
+      payload: '0',
     });
   });
 
   it('should create action to hide alert', () => {
-    expect(actions.hideAlert('0')).toEqual({
+    expect(actions.hideAlert('0')).toStrictEqual({
       type: 'alerts/hideAlert',
-      payload: '0'
+      payload: '0',
     });
   });
 });

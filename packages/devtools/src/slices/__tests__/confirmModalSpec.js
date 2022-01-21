@@ -14,20 +14,20 @@ describe('reducer', () => {
       body: '',
       opened: false,
       accept: null,
-      cancel: null
+      cancel: null,
     };
   });
 
   it('should return the initial state', () => {
-    expect(reducer(undefined, {})).toEqual(confirmModalInitialState);
+    expect(reducer(undefined, {})).toStrictEqual(confirmModalInitialState);
   });
 
   it('should set opened to false', () => {
     expect(
       reducer(curState, { type: 'confirmModal/hideConfirmModal' })
-    ).toEqual({
+    ).toStrictEqual({
       ...curState,
-      opened: false
+      opened: false,
     });
   });
 
@@ -38,14 +38,14 @@ describe('reducer', () => {
         payload: {
           body: 'body',
           accept: 'accept',
-          cancel: 'cancel'
-        }
+          cancel: 'cancel',
+        },
       })
-    ).toEqual({
+    ).toStrictEqual({
       opened: true,
       body: 'body',
       accept: 'accept',
-      cancel: 'cancel'
+      cancel: 'cancel',
     });
   });
 
@@ -53,30 +53,31 @@ describe('reducer', () => {
     expect(
       reducer(curState, {
         type: 'confirmModal/showConfirmModal',
-        payload: {}
+        payload: {},
       })
-    ).toEqual({
+    ).toStrictEqual({
       opened: true,
       body: confirmModalInitialState.body,
       accept: confirmModalInitialState.accept,
-      cancel: confirmModalInitialState.cancel
+      cancel: confirmModalInitialState.cancel,
     });
   });
 });
 
 describe('actions', () => {
   it('should create action to hide confirm modal', () => {
-    expect(actions.hideConfirmModal()).toEqual({
-      type: 'confirmModal/hideConfirmModal'
+    expect(actions.hideConfirmModal()).toStrictEqual({
+      type: 'confirmModal/hideConfirmModal',
+      payload: undefined,
     });
   });
 
   it('should create action to show confirm modal', () => {
     const data = {};
 
-    expect(actions.showConfirmModal(data)).toEqual({
+    expect(actions.showConfirmModal(data)).toStrictEqual({
       type: 'confirmModal/showConfirmModal',
-      payload: {}
+      payload: {},
     });
   });
 });

@@ -18,6 +18,6 @@ describe('JsonView atom', () => {
 
   it('should render null if src is not provided', () => {
     wrapper.setProps({ src: null });
-    expect(wrapper.type()).toEqual(null);
+    expect(wrapper.type()).toBeNull();
   });
 });

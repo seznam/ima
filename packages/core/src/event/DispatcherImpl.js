@@ -93,7 +93,7 @@ export default class DispatcherImpl extends Dispatcher {
           {
             event: event,
             listener: listener,
-            scope: scope
+            scope: scope,
           }
         );
       }
@@ -123,7 +123,7 @@ export default class DispatcherImpl extends Dispatcher {
         `There are no event listeners registered for the ${event} ` + `event`,
         {
           event: event,
-          data: data
+          data: data,
         }
       );
     }

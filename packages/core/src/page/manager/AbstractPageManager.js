@@ -231,8 +231,8 @@ export default class AbstractPageManager extends PageManager {
       options,
       params,
       state: {
-        activated: false
-      }
+        activated: false,
+      },
     };
   }
 
@@ -267,8 +267,8 @@ export default class AbstractPageManager extends PageManager {
       options: null,
       params: null,
       state: {
-        activated: false
-      }
+        activated: false,
+      },
     };
   }
 

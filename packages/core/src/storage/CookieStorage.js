@@ -88,7 +88,7 @@ export default class CookieStorage extends MapStorage {
       secure: false,
       httpOnly: false,
       domain: '',
-      sameSite: 'Lax'
+      sameSite: 'Lax',
     };
 
     /**
@@ -101,7 +101,7 @@ export default class CookieStorage extends MapStorage {
      */
     this._transformFunction = {
       encode: value => value,
-      decode: value => value
+      decode: value => value,
     };
   }
 
@@ -303,7 +303,7 @@ export default class CookieStorage extends MapStorage {
 
         super.set(cookie.name, {
           value: this._sanitizeCookieValue(cookie.value),
-          options: cookie.options
+          options: cookie.options,
         });
       }
     }
@@ -419,7 +419,7 @@ export default class CookieStorage extends MapStorage {
     return {
       name: cookieName,
       value: cookieValue,
-      options: cookieOptions
+      options: cookieOptions,
     };
   }
 

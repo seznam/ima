@@ -20,12 +20,12 @@ export default class FeedItem extends AbstractComponent {
     return (
       <div className={'feed-item' + singleItemClass}>
         {icon}
-        <div className="content-wrapper">
+        <div className='content-wrapper'>
           <div
-            className="content"
+            className='content'
             dangerouslySetInnerHTML={{ __html: entity.getContent() }}
           />
-          <div className="toolbar">
+          <div className='toolbar'>
             {hashTag}
             <Date date={entity.getPosted()} />
             <Share
@@ -42,7 +42,7 @@ export default class FeedItem extends AbstractComponent {
   getIcon(category) {
     if (category) {
       return (
-        <div className="service-icon">
+        <div className='service-icon'>
           <img
             src={this.utils.$Router.getBaseUrl() + category.getIconUrl()}
             alt={category.getName()}

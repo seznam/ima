@@ -4,9 +4,9 @@
 const languages = {
   cs: ['./app/**/*CS.json'],
   en: ['./app/**/*EN.json'],
-  de: ['./app/**/*DE.json']
+  de: ['./app/**/*DE.json'],
 };
 
 module.exports = {
-  languages
+  languages,
 };

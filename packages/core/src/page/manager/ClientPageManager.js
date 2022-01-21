@@ -18,7 +18,7 @@ export default class ClientPageManager extends AbstractPageManager {
       PageStateManager,
       '$PageHandlerRegistry',
       Window,
-      EventBus
+      EventBus,
     ];
   }
 

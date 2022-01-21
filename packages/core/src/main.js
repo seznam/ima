@@ -67,7 +67,7 @@ import {
   defaultCssClasses,
   fire,
   listen,
-  unlisten
+  unlisten,
 } from './page/componentHelpers';
 import PageContext from './page/Context';
 import PageFactory from './page/PageFactory';
@@ -151,15 +151,15 @@ function getClientBootConfig(initialAppConfigFunctions) {
       $IMA: $IMA,
       dictionary: {
         $Language: $IMA.$Language,
-        dictionary: $IMA.i18n
+        dictionary: $IMA.i18n,
       },
       router: {
         $Protocol: $IMA.$Protocol,
         $Host: $IMA.$Host,
         $Path: $IMA.$Path,
         $Root: $IMA.$Root,
-        $LanguagePartPath: $IMA.$LanguagePartPath
-      }
+        $LanguagePartPath: $IMA.$LanguagePartPath,
+      },
     },
     settings: {
       $Debug: $IMA.$Debug,
@@ -171,8 +171,8 @@ function getClientBootConfig(initialAppConfigFunctions) {
       $Host: $IMA.$Host,
       $Path: $IMA.$Path,
       $Root: $IMA.$Root,
-      $LanguagePartPath: $IMA.$LanguagePartPath
-    }
+      $LanguagePartPath: $IMA.$LanguagePartPath,
+    },
   };
 
   return Object.assign(
@@ -240,7 +240,7 @@ function onLoad() {
 
   return new Promise(resolve => {
     document.addEventListener('DOMContentLoaded', () => resolve(), {
-      once: true
+      once: true,
     });
   });
 }
@@ -344,5 +344,5 @@ export {
   listen,
   unlisten,
   vendorLinker,
-  version
+  version,
 };

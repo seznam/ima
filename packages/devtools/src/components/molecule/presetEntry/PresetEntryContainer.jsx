@@ -5,7 +5,7 @@ import { actions as alertsActions } from 'slices/alerts';
 import PresetEntry from './PresetEntry';
 
 const mapStateToProps = (state, { id }) => ({
-  preset: state.presets.presets[id]
+  preset: state.presets.presets[id],
 });
 
 export default connect(mapStateToProps, {
@@ -13,5 +13,5 @@ export default connect(mapStateToProps, {
   copyPreset: presetsActions.copyPreset,
   deletePreset: presetsActions.deletePreset,
   alertSuccess: alertsActions.success,
-  showConfirmModal: confirmModalActions.showConfirmModal
+  showConfirmModal: confirmModalActions.showConfirmModal,
 })(PresetEntry);

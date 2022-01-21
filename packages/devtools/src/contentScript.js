@@ -2,7 +2,7 @@ import { getSettings } from 'services/settings';
 import {
   createEntry,
   SENTINEL_TO_EXTENSION,
-  SENTINEL_TO_WEB
+  SENTINEL_TO_WEB,
 } from 'services/stream';
 import { InjectType, injectCode } from 'services/inject';
 import Actions from 'constants/actions';
@@ -87,7 +87,7 @@ function onMessageListener(data) {
    * between panel and content script after both are initialized
    */
   port = chrome.runtime.connect({
-    name: 'contentScript'
+    name: 'contentScript',
   });
 
   // Define listener on window and port, so scripts can communicate with extension and web page

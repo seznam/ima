@@ -25,7 +25,7 @@ function createPanel({ action }) {
 (async () => {
   const { tabId } = await getCurrentTab();
   port = chrome.runtime.connect({
-    name: `devtools:${tabId}`
+    name: `devtools:${tabId}`,
   });
 
   // We listen on alive event in order to know, when we want to create devtools panel

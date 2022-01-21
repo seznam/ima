@@ -27,18 +27,18 @@ module.exports = {
     contentScript: `${srcDir}/contentScript.js`,
     background: `${srcDir}/background.js`,
     devtools: `${srcDir}/devtools.js`,
-    panel: `${srcDir}/panel.js`
+    panel: `${srcDir}/panel.js`,
   },
   output: {
     path: distDir,
-    filename: 'js/[name].js'
+    filename: 'js/[name].js',
   },
   resolve: {
     modules: [srcDir, 'node_modules'],
-    extensions: ['.wasm', '.mjs', '.js', '.json', '.jsx']
+    extensions: ['.wasm', '.mjs', '.js', '.json', '.jsx'],
   },
   watchOptions: {
-    ignored: /node_modules/
+    ignored: /node_modules/,
   },
   module: {
     rules: [
@@ -46,32 +46,32 @@ module.exports = {
         test: /\.jsx?$/,
         exclude: /(node_modules)/,
         use: {
-          loader: 'babel-loader'
-        }
+          loader: 'babel-loader',
+        },
       },
       {
         test: /\.(le|c)ss$/,
         use: [
           {
             loader: MiniCssExtractPlugin.loader,
-            options: {}
+            options: {},
           },
           {
             loader: 'css-loader',
             options: {
               importLoaders: 1,
               modules: {
-                localIdentName: `[path][name]__[local]--[hash:base64:5]`
-              }
-            }
+                localIdentName: `[path][name]__[local]--[hash:base64:5]`,
+              },
+            },
           },
           {
-            loader: 'postcss-loader'
+            loader: 'postcss-loader',
           },
           {
-            loader: 'less-loader'
-          }
-        ]
+            loader: 'less-loader',
+          },
+        ],
       },
       {
         test: /\.(png|jpe?g|gif|svg)$/,
@@ -81,26 +81,26 @@ module.exports = {
             options: {
               name: '[name].[ext]',
               outputPath: 'images',
-              publicPath: '../images/'
-            }
-          }
-        ]
-      }
-    ]
+              publicPath: '../images/',
+            },
+          },
+        ],
+      },
+    ],
   },
   plugins: [
     generate({
       file: 'manifest.json',
-      content: buildManifest()
+      content: buildManifest(),
     }),
     new CopyPlugin({
-      patterns: [{ from: `${srcDir}/public`, to: distDir }]
+      patterns: [{ from: `${srcDir}/public`, to: distDir }],
     }),
     new MiniCssExtractPlugin({
-      filename: 'css/[name].css'
-    })
+      filename: 'css/[name].css',
+    }),
   ],
   stats: {
-    children: false
-  }
+    children: false,
+  },
 };

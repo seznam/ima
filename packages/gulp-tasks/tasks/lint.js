@@ -15,6 +15,6 @@ exports.default = gulpConfig => {
   }
 
   return {
-    lint
+    lint,
   };
 };

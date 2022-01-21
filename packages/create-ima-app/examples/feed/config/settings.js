@@ -13,45 +13,45 @@ export default (ns, oc, config) => {
           headers: {
             // Set default request headers
             Accept: 'application/json',
-            'Accept-Language': config.$Language
+            'Accept-Language': config.$Language,
           },
           fetchOptions: {
-            mode: 'cors'
-          }
+            mode: 'cors',
+          },
         },
         cacheOptions: {
-          prefix: 'http.' // Cache key prefix for response bodies (already parsed as JSON) of completed HTTP requests.
-        }
+          prefix: 'http.', // Cache key prefix for response bodies (already parsed as JSON) of completed HTTP requests.
+        },
       },
       $Cache: {
         enabled: true,
-        ttl: 60000
+        ttl: 60000,
       },
       $Page: {
         $Render: {
           scripts: [
             `/static/js/locale/${config.$Language}.js`,
-            '/static/js/app.bundle.min.js'
+            '/static/js/app.bundle.min.js',
           ],
           esScripts: [
             '/static/js/locale/' + config.$Language + '.js' + versionStamp,
-            '/static/js/app.bundle.es.min.js' + versionStamp
+            '/static/js/app.bundle.es.min.js' + versionStamp,
           ],
-          documentView: DocumentView
-        }
+          documentView: DocumentView,
+        },
       },
       $Static: {
         image: '/static/img',
-        css: '/static/css'
+        css: '/static/css',
       },
       Api: {
         baseUrl: config.$Protocol + '//localhost:3001/api',
         items: '/items',
-        categories: '/categories'
+        categories: '/categories',
       },
       Images: {
-        fbShare: '/imajs-share.png'
-      }
+        fbShare: '/imajs-share.png',
+      },
     },
 
     test: {},
@@ -66,7 +66,7 @@ export default (ns, oc, config) => {
             `/static/js/locale/${config.$Language}.js${versionStamp}`,
             '/static/js/app.client.js' + versionStamp,
             '/static/js/facebook.js' + versionStamp,
-            '/static/js/hot.reload.js' + versionStamp
+            '/static/js/hot.reload.js' + versionStamp,
           ],
           esScripts: [
             '/static/js/polyfill.es.js' + versionStamp,
@@ -75,10 +75,10 @@ export default (ns, oc, config) => {
             `/static/js/locale/${config.$Language}.js${versionStamp}`,
             '/static/js/app.client.es.js' + versionStamp,
             '/static/js/facebook.js' + versionStamp,
-            '/static/js/hot.reload.js' + versionStamp
-          ]
-        }
-      }
-    }
+            '/static/js/hot.reload.js' + versionStamp,
+          ],
+        },
+      },
+    },
   };
 };

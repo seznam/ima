@@ -5,13 +5,13 @@ import PropTypes from 'prop-types';
 export default class Loader extends React.PureComponent {
   static get propTypes() {
     return {
-      title: PropTypes.string
+      title: PropTypes.string,
     };
   }
 
   static get defaultProps() {
     return {
-      title: null
+      title: null,
     };
   }
 

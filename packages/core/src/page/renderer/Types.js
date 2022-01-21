@@ -31,7 +31,7 @@ const Types = Object.freeze({
    * @const
    * @type {string}
    */
-  CLEAR_STATE: '$IMA.$PageRenderer.type.clearState'
+  CLEAR_STATE: '$IMA.$PageRenderer.type.clearState',
 });
 
 export default Types;

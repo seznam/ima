@@ -4,7 +4,7 @@
  */
 export const InjectType = Object.freeze({
   SCRIPT: 'script',
-  STYLE: 'style'
+  STYLE: 'style',
 });
 
 /**

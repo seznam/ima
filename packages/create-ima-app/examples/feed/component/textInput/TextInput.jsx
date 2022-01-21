@@ -9,7 +9,7 @@ export default class TextInput extends AbstractComponent {
     super(props, context);
 
     this.state = {
-      checkedCategory: this.getDefaultCategory(props)
+      checkedCategory: this.getDefaultCategory(props),
     };
   }
 
@@ -22,18 +22,18 @@ export default class TextInput extends AbstractComponent {
     );
 
     return (
-      <div className="text-input">
+      <div className='text-input'>
         <input
-          type="text"
+          type='text'
           ref={input => (this.input = input)}
-          className="form-text-input"
+          className='form-text-input'
           placeholder={placeholder}
           onKeyPress={event => this.sendTextByKeys(event)}
         />
-        <button className="form-button" onClick={event => this.sendText(event)}>
+        <button className='form-button' onClick={event => this.sendText(event)}>
           {sendText}
         </button>
-        <div className="form-categories">{radioCategories}</div>
+        <div className='form-categories'>{radioCategories}</div>
       </div>
     );
   }
@@ -46,11 +46,11 @@ export default class TextInput extends AbstractComponent {
     let categories = categoryListEntity.getCategories();
     return categories.map((category, index) => {
       return (
-        <div className="radio-button" key={category.getId()}>
+        <div className='radio-button' key={category.getId()}>
           <input
             id={'radio' + category.getId()}
-            type="radio"
-            name="radio-categories"
+            type='radio'
+            name='radio-categories'
             defaultValue={category.getId()}
             onChange={event => this.setCheckedCategory(event)}
             defaultChecked={index === 0}
@@ -74,7 +74,7 @@ export default class TextInput extends AbstractComponent {
 
     this.fire('addItemToFeed', {
       content: text,
-      category: category ? Number(category.getId()) : null
+      category: category ? Number(category.getId()) : null,
     });
   }
 

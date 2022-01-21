@@ -243,7 +243,7 @@ export default class AbstractRoute {
         documentView: null,
         managedRootView: null,
         viewAdapter: null,
-        middlewares: []
+        middlewares: [],
       },
       options
     );

@@ -87,6 +87,6 @@ exports.default = gulpConfig => {
 
   return {
     polyfill,
-    shim
+    shim,
   };
 };

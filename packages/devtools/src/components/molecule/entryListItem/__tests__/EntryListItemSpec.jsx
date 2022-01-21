@@ -14,8 +14,8 @@ describe('EntryListItem molecule', () => {
             label: 'label',
             type: 'type',
             promises: 'pending',
-            time: 1124214124102
-          }
+            time: 1124214124102,
+          },
         },
         {
           payload: {
@@ -23,22 +23,25 @@ describe('EntryListItem molecule', () => {
             label: 'label',
             type: 'type',
             promises: 'resolved',
-            time: 1124214124142
-          }
-        }
-      ]
+            time: 1124214124142,
+          },
+        },
+      ],
     },
     zeroTime: 1124214100000,
     zeroId: '0',
-    setSelected: jest.fn()
+    setSelected: jest.fn(),
   };
 
-  global.Date = jest.fn().mockImplementation(() => ({
-    getHours: () => 19,
-    getMinutes: () => 42,
-    getSeconds: () => 4,
-    getMilliseconds: () => 140
-  }));
+  jest
+    .spyOn(global, 'Date')
+    .mockImplementation()
+    .mockImplementation(() => ({
+      getHours: () => 19,
+      getMinutes: () => 42,
+      getSeconds: () => 4,
+      getMilliseconds: () => 140,
+    }));
 
   let wrapper, instance;
 
@@ -58,11 +61,11 @@ describe('EntryListItem molecule', () => {
           {
             payload: {
               ...instance.props.entry.messages[0].payload,
-              label: 'label:type:event'
-            }
-          }
-        ]
-      }
+              label: 'label:type:event',
+            },
+          },
+        ],
+      },
     });
 
     expect(instance.props.entry.messages[0].payload.label).toBe(
@@ -75,12 +78,12 @@ describe('EntryListItem molecule', () => {
     wrapper.setProps({
       entry: {
         ...instance.props.entry,
-        selected: true
-      }
+        selected: true,
+      },
     });
 
     expect(instance.props.entry.selected).toBe(true);
-    expect(wrapper.find('.wrapper--selected').length).toBe(1);
+    expect(wrapper.find('.wrapper--selected')).toHaveLength(1);
   });
 
   it('should render absolute time if item is first in the entries array (id === 0)', () => {
@@ -92,8 +95,8 @@ describe('EntryListItem molecule', () => {
     wrapper.setProps({
       entry: {
         ...instance.props.entry,
-        id: '1000'
-      }
+        id: '1000',
+      },
     });
 
     expect(instance.props.entry.id).toBe('1000');
@@ -104,32 +107,32 @@ describe('EntryListItem molecule', () => {
     wrapper.setProps({
       entry: {
         ...instance.props.entry,
-        id: '1253'
-      }
+        id: '1253',
+      },
     });
     wrapper.first().simulate('click');
 
     expect(instance.props.entry.id).toBe('1253');
-    expect(instance.props.setSelected.mock.calls.length).toBe(1);
-    expect(instance.props.setSelected.mock.calls[0][0]).toEqual('1253');
+    expect(instance.props.setSelected.mock.calls).toHaveLength(1);
+    expect(instance.props.setSelected.mock.calls[0][0]).toBe('1253');
   });
 
   describe('_parseLabel', () => {
     it('should return label split into short label and event', () => {
-      expect(instance._parseLabel('label:type:event')).toEqual({
+      expect(instance._parseLabel('label:type:event')).toStrictEqual({
         shortLabel: 'label',
-        event: 'event'
+        event: 'event',
       });
     });
 
     it('should return just label if event is not part of the original string', () => {
-      expect(instance._parseLabel('label:type')).toEqual({
+      expect(instance._parseLabel('label:type')).toStrictEqual({
         shortLabel: 'label',
-        event: ''
+        event: '',
       });
-      expect(instance._parseLabel('label')).toEqual({
+      expect(instance._parseLabel('label')).toStrictEqual({
         shortLabel: 'label',
-        event: ''
+        event: '',
       });
     });
   });
@@ -179,11 +182,11 @@ describe('EntryListItem molecule', () => {
                 color: 'color',
                 label: 'label',
                 type: 'type',
-                time: 1124214124142
-              }
-            }
-          ]
-        }
+                time: 1124214124142,
+              },
+            },
+          ],
+        },
       });
 
       expect(instance._getPromiseTimeDiff()).toBe('');

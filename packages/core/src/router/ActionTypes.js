@@ -27,7 +27,7 @@ const ActionTypes = Object.freeze({
    * @const
    * @type {string}
    */
-  ERROR: 'error'
+  ERROR: 'error',
 });
 
 export default ActionTypes;

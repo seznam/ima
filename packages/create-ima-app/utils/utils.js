@@ -5,5 +5,5 @@ function checkNodeVersion(min, max) {
 }
 
 module.exports = {
-  checkNodeVersion
+  checkNodeVersion,
 };

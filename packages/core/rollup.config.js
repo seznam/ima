@@ -9,35 +9,35 @@ function generateConfig(environemnt) {
     external: vendors.common,
     input: 'src/main.js',
     treeshake: {
-      pureExternalModules: true
+      pureExternalModules: true,
     },
     output: [
       {
         file: `./dist/ima.${environemnt}.cjs.js`,
         format: 'cjs',
-        exports: 'named'
+        exports: 'named',
       },
       {
         file: `./dist/ima.${environemnt}.esm.js`,
         format: 'esm',
-        exports: 'named'
-      }
+        exports: 'named',
+      },
     ],
     plugins: [
       json({
         preferConst: true, // Default: false
         compact: true, // Default: false
-        namedExports: true // Default: true
+        namedExports: true, // Default: true
       }),
       replace({
         "path.dirname(path.resolve('@ima/core'))":
           "path.dirname(require.resolve('@ima/core'))",
-        delimiters: ['', '']
+        delimiters: ['', ''],
       }),
       jscc({
-        values: { _SERVER: environemnt === 'server' }
-      })
-    ]
+        values: { _SERVER: environemnt === 'server' },
+      }),
+    ],
   };
 }
 

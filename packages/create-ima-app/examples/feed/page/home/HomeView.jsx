@@ -15,7 +15,7 @@ export default class HomeView extends AbstractComponent {
 
   render() {
     return (
-      <div className="l-homepage">
+      <div className='l-homepage'>
         <Header />
         <TextInput
           categories={this.props.categories}

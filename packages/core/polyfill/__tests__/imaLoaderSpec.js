@@ -6,21 +6,21 @@ describe('imaLoader', () => {
   const mockDependencies = ['foo'];
   const mockFactory = () => ({
     setters: [() => {}],
-    execute: () => {}
+    execute: () => {},
   });
 
   const mockModule = {
     dependencies: mockDependencies,
     dependencyOf: [],
     factory: mockFactory,
-    instance: null
+    instance: null,
   };
 
   const instancedMockModule = {
     dependencies: mockDependencies,
     dependencyOf: [],
     factory: mockFactory,
-    instance: {}
+    instance: {},
   };
 
   beforeEach(() => {
@@ -33,7 +33,7 @@ describe('imaLoader', () => {
   it('should register modul to imaLoader modules', () => {
     imaLoader.register(moduleName, mockModule.dependencies, mockModule.factory);
 
-    expect(Object.keys(imaLoader.modules).length).toBe(1);
+    expect(Object.keys(imaLoader.modules)).toHaveLength(1);
     expect(imaLoader.modules[moduleName]).toMatchObject(mockModule);
   });
 
@@ -42,7 +42,7 @@ describe('imaLoader', () => {
       dependencies: [],
       dependencyOf: [],
       factory: null,
-      instance: null
+      instance: null,
     };
     imaLoader.register(moduleName, mockModule.dependencies, mockModule.factory);
     imaLoader.register(
@@ -51,7 +51,7 @@ describe('imaLoader', () => {
       replaceMockModule.factory
     );
 
-    expect(Object.keys(imaLoader.modules).length).toBe(1);
+    expect(Object.keys(imaLoader.modules)).toHaveLength(1);
     expect(imaLoader.modules[moduleName]).toMatchObject(replaceMockModule);
   });
 
@@ -67,7 +67,7 @@ describe('imaLoader', () => {
       mockModule.factory
     );
 
-    expect(Object.keys(imaLoader.modules).length).toBe(2);
+    expect(Object.keys(imaLoader.modules)).toHaveLength(2);
   });
 
   it('should replace modul in imaLoader modules', () => {
@@ -79,24 +79,20 @@ describe('imaLoader', () => {
       mockModule.factory
     );
 
-    expect(Object.keys(imaLoader.modules).length).toBe(2);
+    expect(Object.keys(imaLoader.modules)).toHaveLength(2);
     expect(imaLoader.modules[moduleName]).toMatchObject(instancedMockModule);
   });
 
   it('should throw exception if trying to replace not registered module', () => {
     expect.assertions(1);
 
-    try {
+    expect(() => {
       imaLoader.replaceModule(
         moduleName,
         mockModule.dependencies,
         mockModule.factory
       );
-    } catch (e) {
-      expect(e.message).toMatch(
-        'You must register module "moduleName" at first'
-      );
-    }
+    }).toThrow('You must register module "moduleName" at first');
   });
 
   it('should importSync modul', () => {
@@ -104,20 +100,18 @@ describe('imaLoader', () => {
     imaLoader.register(moduleName, mockModule.dependencies, mockModule.factory);
     imaLoader.importSync(moduleName);
 
-    expect(Object.keys(imaLoader.modules).length).toBe(2);
+    expect(Object.keys(imaLoader.modules)).toHaveLength(2);
     expect(imaLoader.modules[moduleName]).toMatchObject(instancedMockModule);
   });
 
   it('should throw exception if trying to importSync not registered module', () => {
     expect.assertions(1);
 
-    try {
+    expect(() => {
       imaLoader.importSync(moduleName);
-    } catch (e) {
-      expect(e.message).toMatch(
-        `$IMA.Loader.importSync: Module name ${moduleName} is not registered. Update your build.js.`
-      );
-    }
+    }).toThrow(
+      `$IMA.Loader.importSync: Module name ${moduleName} is not registered. Update your build.js.`
+    );
   });
 
   it('should initAllModules successfully for empty list', async () => {

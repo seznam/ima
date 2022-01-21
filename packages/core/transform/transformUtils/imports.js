@@ -9,8 +9,8 @@
 function findImport(j, ast, pkg) {
   return ast.find(j.ImportDeclaration, {
     source: {
-      value: pkg
-    }
+      value: pkg,
+    },
   });
 }
 
@@ -39,8 +39,8 @@ function addNamedImports(j, ast, names, pkg) {
       const isDupe = existingImport
         .find(j.ImportSpecifier, {
           imported: {
-            name
-          }
+            name,
+          },
         })
         .size();
 
@@ -97,5 +97,5 @@ function removeUnusedPackageImports(j, ast, pkg) {
 module.exports = {
   findImport,
   addNamedImports,
-  removeUnusedPackageImports
+  removeUnusedPackageImports,
 };

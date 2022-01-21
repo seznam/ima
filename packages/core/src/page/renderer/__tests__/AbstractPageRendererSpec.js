@@ -11,7 +11,7 @@ import {
   toMockedInstance,
   setGlobalMockMethod,
   setGlobalKeepUnmock,
-  objectKeepUnmock
+  objectKeepUnmock,
 } from 'to-mock';
 
 setGlobalMockMethod(jest.fn);
@@ -25,18 +25,18 @@ describe('ima.core.page.renderer.AbstractPageRenderer', function () {
     $Page: {
       $Render: {
         scripts: [],
-        documentView: 'app.component.document.DocumentView'
-      }
-    }
+        documentView: 'app.component.document.DocumentView',
+      },
+    },
   };
 
   let reactiveComponentView = {
     state: {
       key1: 1,
-      key2: 'string'
+      key2: 'string',
     },
     setState: function () {},
-    replaceState: function () {}
+    replaceState: function () {},
   };
 
   let controller = toMockedInstance(Controller);
@@ -46,7 +46,7 @@ describe('ima.core.page.renderer.AbstractPageRenderer', function () {
     onlyUpdate: false,
     autoScroll: false,
     allowSPA: false,
-    documentView: null
+    documentView: null,
   };
 
   beforeEach(function () {
@@ -86,7 +86,7 @@ describe('ima.core.page.renderer.AbstractPageRenderer', function () {
       const state = { state: 'state' };
       //we expect that pageRenderer add temp indicator for viewAdapter method getDerivedStateFromProps
       const stateWithIndicator = Object.assign({}, state, {
-        notUsePropsState: true
+        notUsePropsState: true,
       });
 
       spyOn(reactiveComponentView, 'setState').and.stub();
@@ -109,7 +109,7 @@ describe('ima.core.page.renderer.AbstractPageRenderer', function () {
       expect(reactiveComponentView.setState).toHaveBeenCalledWith(
         {
           key1: undefined,
-          key2: undefined
+          key2: undefined,
         },
         expect.any(Function)
       );
@@ -122,10 +122,10 @@ describe('ima.core.page.renderer.AbstractPageRenderer', function () {
 
       spyOn(rendererFactory, 'getUtils').and.returnValue(utils);
 
-      expect(pageRenderer._generateViewProps(view)).toEqual({
+      expect(pageRenderer._generateViewProps(view)).toStrictEqual({
         $Utils: utils,
         view: view,
-        state: {}
+        state: {},
       });
     });
   });
@@ -136,7 +136,7 @@ describe('ima.core.page.renderer.AbstractPageRenderer', function () {
     let propsView = { view: view };
     let props = Object.assign({}, state, utils, propsView);
     let wrapedPageViewElement = {
-      wrapElementView: 'wrapedPageViewElement'
+      wrapElementView: 'wrapedPageViewElement',
     };
     let managedRootView = function () {};
 
@@ -160,7 +160,7 @@ describe('ima.core.page.renderer.AbstractPageRenderer', function () {
 
     it('should return React Component for managedRootView from route options managedRootView property', function () {
       let routeOptionsWithManagedRouteView = Object.assign({}, routeOptions, {
-        managedRootView: BlankManagedRootView
+        managedRootView: BlankManagedRootView,
       });
       pageRenderer._getWrappedPageView(
         controller,
@@ -195,7 +195,7 @@ describe('ima.core.page.renderer.AbstractPageRenderer', function () {
 
     it('should return document view which is defined in routeOptions.documentView', function () {
       let routeOptionsWithDocumentView = Object.assign({}, routeOptions, {
-        documentView: AbstractDocumentView
+        documentView: AbstractDocumentView,
       });
       pageRenderer._getDocumentView(routeOptionsWithDocumentView);
 

@@ -22,7 +22,7 @@ const RouteNames = Object.freeze({
    * @const
    * @type {string}
    */
-  ERROR: 'error'
+  ERROR: 'error',
 });
 
 export default RouteNames;

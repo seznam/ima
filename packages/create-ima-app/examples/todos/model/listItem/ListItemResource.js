@@ -8,23 +8,23 @@ export default class Resource {
       {
         id: 1,
         title: 'Walk the dog',
-        completed: false
+        completed: false,
       },
       {
         id: 2,
         title: 'Buy milk',
-        completed: true
+        completed: true,
       },
       {
         id: 3,
         title: 'Defeat the Moonmen',
-        completed: false
+        completed: false,
       },
       {
         id: 4,
         title: 'Reverse gravity',
-        completed: false
-      }
+        completed: false,
+      },
     ];
 
     this._lastId = this._items.slice().pop().id;

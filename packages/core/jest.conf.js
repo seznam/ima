@@ -5,6 +5,6 @@ module.exports = {
   setupFiles: [
     './test.js',
     './polyfill/imaLoader.js',
-    './polyfill/imaRunner.js'
-  ]
+    './polyfill/imaRunner.js',
+  ],
 };

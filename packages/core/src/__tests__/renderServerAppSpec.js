@@ -19,32 +19,32 @@ jest.mock('path', () => {
   return Object.assign({}, original, { resolve });
 });
 
-describe('Render server application', () => {
+describe('render server application', () => {
   let router = null;
   let ReactDOM = {
     render() {
       return {
-        setState: () => {}
+        setState: () => {},
       };
-    }
+    },
   };
   let expressReponse = {
     send() {},
-    status() {}
+    status() {},
   };
 
   let routerConfig = {
     $Protocol: 'http:',
     $Root: '',
     $LanguagePartPath: '',
-    $Host: 'www.domain.com'
+    $Host: 'www.domain.com',
   };
 
   let options = {
     onlyUpdate: false,
     autoScroll: true,
     allowSPA: true,
-    documentView: null
+    documentView: null,
   };
 
   function View() {
@@ -78,7 +78,7 @@ describe('Render server application', () => {
             oc.get(Response).init(expressReponse);
           },
           initBindApp: () => {},
-          initRoutes: () => {}
+          initRoutes: () => {},
         },
         {
           initBindApp: (ns, oc) => {
@@ -97,7 +97,7 @@ describe('Render server application', () => {
             if (!oc.has('$Utils')) {
               oc.constant('$Utils', {});
             }
-          }
+          },
         }
       )
     );
@@ -117,9 +117,9 @@ describe('Render server application', () => {
     router
       .route('/reviveClientApp')
       .then(response => {
-        expect(response.status).toEqual(200);
-        expect(response.content).toEqual('html');
-        expect(response.pageState).toEqual({ hello: 'Hello' });
+        expect(response.status).toBe(200);
+        expect(response.content).toBe('html');
+        expect(response.pageState).toStrictEqual({ hello: 'Hello' });
         done();
       })
       .catch(error => {
