@@ -30,7 +30,7 @@ export default (ns, oc, config) => {
       },
       $Page: {
         $Render: {
-          styles: [`/static/css/app.css${versionStamp}`],
+          styles: [`/static/css/app.min.css${versionStamp}`],
           scripts: [
             `/static/js/locale/${config.$Language}.js${versionStamp}`,
             `/static/js/app.bundle.min.js${versionStamp}`
@@ -44,14 +44,12 @@ export default (ns, oc, config) => {
           },
           documentView: DocumentView
         }
-      }
-    },
-
-    test: {
-      $Http: {
-        defaultRequestOptions: {
-          timeout: 5000
-        }
+      },
+      links: {
+        documentation: 'https://imajs.io/docs',
+        tutorial: 'https://imajs.io/tutorial/introduction',
+        plugins: 'https://github.com/seznam/IMA.js-plugins',
+        api: 'https://imajs.io/api'
       }
     },
 
@@ -63,6 +61,7 @@ export default (ns, oc, config) => {
       },
       $Page: {
         $Render: {
+          styles: [`/static/css/app.css${versionStamp}`],
           scripts: [
             // `/static/js/polyfill.js${versionStamp}`,
             `/static/js/locale/${config.$Language}.js${versionStamp}`,

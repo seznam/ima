@@ -22,6 +22,16 @@ import envResolver from '@ima/server/lib/environment.js';
 import logger from '../lib/logger';
 import { time } from '../lib/time';
 
+const POSTCSS_CONF_FILENAMES = [
+  'postcss.config.js',
+  'postcss.config.cjs',
+  'postcss.config.json',
+  '.postcssrc.js',
+  '.postcssrc.cjs',
+  '.postcssrc.json',
+  '.postcssrc'
+];
+
 const BABEL_CONF_FILENAMES = [
   'babel.config.js',
   'babel.config.cjs',
@@ -122,49 +132,6 @@ function requireConfig({
 
     return defaultConfig;
   }
-}
-
-/**
- * Utility to load custom (with default fallback) config for es and non-es versions.
- *
- * @param {object} params
- * @param {ConfigurationContext} params.ctx current config context.
- * @param {Record<string, unknown>} params.defaultConfig Default config
- *        which is used if no configuration is found.
- * @returns {Record<string, unknown>} Loaded configuration object.
- */
-function requireBabelConfig({
-  ctx,
-  defaultConfig = {}
-}: {
-  ctx: ConfigurationContext;
-  defaultConfig: Record<string, unknown>;
-}): Record<string, unknown> {
-  const { isEsVersion, isServer } = ctx;
-  const useEsConfig = isEsVersion || isServer;
-
-  const config = requireConfig({
-    ctx,
-    fileNames: useEsConfig ? BABEL_CONF_ES_FILENAMES : BABEL_CONF_FILENAMES,
-    packageJsonKey: useEsConfig ? 'babel.es' : 'babel',
-    defaultConfig
-  });
-
-  if (config === defaultConfig) {
-    return config;
-  }
-
-  /**
-   * In case of babel config, we merge few keys, that are loader specific,
-   *  into the custom config from the default one.
-   */
-  const { presets = [], plugins = [] } = config;
-
-  return {
-    defaultConfig,
-    presets,
-    plugins
-  };
 }
 
 /**
@@ -288,7 +255,7 @@ const IMA_CONF_FILENAME = 'ima.config.js';
 /**
  * Requires imaConfig from given root directory (default to cwd).
  *
- * @param {string} rootDir App root directory.
+ * @param {string} [rootDir=process.cwd()] App root directory.
  * @returns {ImaConfig | null} Config or null in case the config file doesn't exits.
  */
 function requireImaConfig(rootDir = process.cwd()): ImaConfig | null {
@@ -314,10 +281,6 @@ async function resolveImaConfig(args: CliArgs): Promise<ImaConfig> {
     imageInlineSizeLimit: 8192
   };
 
-  if (!args.rootDir) {
-    return defaultImaConfig;
-  }
-
   return {
     ...defaultImaConfig,
     ...requireImaConfig(args.rootDir)
@@ -337,6 +300,7 @@ async function createWebpackConfig(
   configurations: ConfigurationTypes = ['client', 'server'],
   args?: CliArgs
 ): Promise<{ config: Configuration[]; imaConfig: ImaConfig }> {
+  const isFirstPass = !args && process.env.IMA_CLI_WEBPACK_CONFIG_ARGS;
   let elapsed: ReturnType<typeof time> | null = null;
 
   // No need to continue without any configuration
@@ -357,7 +321,10 @@ async function createWebpackConfig(
   } else {
     // Used explicitly, print message
     elapsed = time();
-    logger.info('Parsing webpack configuration file...', false);
+    logger.info(
+      `Parsing config files for ${chalk.magenta(process.env.NODE_ENV)}...`,
+      false
+    );
 
     // Cache config args to env variable
     process.env.IMA_CLI_WEBPACK_CONFIG_ARGS = JSON.stringify(args);
@@ -406,6 +373,9 @@ async function createWebpackConfig(
     }
   }
 
+  // Track loaded plugins
+  const loadedPlugins = new Set<string>();
+
   return Promise.all(
     finalConfigContexts.map(async ctx => {
       let config = await webpackConfig(ctx, imaConfig);
@@ -414,6 +384,7 @@ async function createWebpackConfig(
         for (const plugin of imaConfig?.plugins) {
           try {
             config = await plugin?.webpack(config, ctx, imaConfig);
+            loadedPlugins.add(plugin.name);
           } catch (error) {
             logger.error(
               `There was an logger.error while running webpack config for '${plugin.name}' plugin.`
@@ -434,6 +405,18 @@ async function createWebpackConfig(
     // Print elapsed time
     elapsed && logger.write(chalk.gray(` [${elapsed()}]`));
 
+    // Print loaded plugins info
+    if (!isFirstPass && loadedPlugins.size > 0) {
+      const pluginNames: string[] = [];
+      logger.info(`Loaded plugin${loadedPlugins.size > 1 ? 's' : ''}: `, false);
+
+      for (const pluginName of loadedPlugins.values()) {
+        pluginNames.push(chalk.blue(pluginName));
+      }
+
+      logger.write(pluginNames.join(', '));
+    }
+
     return { config, imaConfig };
   });
 }
@@ -441,7 +424,6 @@ async function createWebpackConfig(
 export {
   resolveEnvironment,
   requireConfig,
-  requireBabelConfig,
   additionalDataFactory,
   createCacheKey,
   createWebpackConfig,
@@ -449,5 +431,8 @@ export {
   resolveImaConfig,
   extractLanguges,
   createPolyfillEntry,
-  IMA_CONF_FILENAME
+  IMA_CONF_FILENAME,
+  BABEL_CONF_ES_FILENAMES,
+  BABEL_CONF_FILENAMES,
+  POSTCSS_CONF_FILENAMES
 };

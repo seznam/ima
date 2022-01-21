@@ -89,18 +89,6 @@ module.exports = (() => {
       }
     },
 
-    test: {
-      $Language: {
-        '//*:*': 'en'
-      },
-      $Proxy: {
-        server: 'example.test',
-        options: {
-          proxyReqPathResolver: request => `/api${request.url}`
-        }
-      }
-    },
-
     dev: {
       $Debug: true,
       $Language: {

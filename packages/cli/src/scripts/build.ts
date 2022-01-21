@@ -17,6 +17,9 @@ import webpack from 'webpack';
  * @returns {Promise<void>}
  */
 const build: HandlerFn = async args => {
+  // Set NODE_ENV to production if not defined
+  process.env.NODE_ENV = process.env.NODE_ENV ?? 'production';
+
   try {
     const { config, imaConfig } = await createWebpackConfig(
       ['client', 'server'],
@@ -31,7 +34,7 @@ const build: HandlerFn = async args => {
 };
 
 const CMD = 'build';
-export const command = `${CMD} [rootDir]`;
+export const command = CMD;
 export const describe = 'Build an application for production';
 export const handler = handlerFactory(build);
 export const builder: CommandBuilder = {
@@ -40,6 +43,11 @@ export const builder: CommandBuilder = {
     desc: 'Clean build folder before building the application',
     type: 'boolean',
     default: true
+  },
+  profile: {
+    desc: 'Turn on profiling support in production',
+    type: 'boolean',
+    default: false
   },
   ...resolveCliPluginArgs(CMD)
 };

@@ -7,6 +7,7 @@ import { ErrorWrapper, FrameWrapper } from '#/reducers';
 
 import FrameHeader from './FrameHeader';
 
+import 'prismjs/components/prism-markup';
 import 'prismjs/components/prism-jsx';
 import 'prismjs/components/prism-javascript';
 import 'prismjs/components/prism-less';
@@ -20,9 +21,7 @@ export type FrameProps = {
   className?: string;
 };
 
-function getPrismLanguage(
-  fileUri: string | undefined
-): {
+function getPrismLanguage(fileUri: string | undefined): {
   grammar: prismjs.Grammar;
   language: string;
 } {
@@ -48,6 +47,16 @@ function getPrismLanguage(
 
     case 'less':
       language = 'less';
+      break;
+
+    case 'html':
+    case 'xml':
+    case 'svg':
+    case 'mathml':
+    case 'ssml':
+    case 'rss':
+    case 'atom':
+      language = 'markup';
       break;
   }
 
@@ -119,7 +128,7 @@ const Frame: FunctionComponent<FrameProps> = ({
               <div className="flex items-center">
                 <Icon icon="alert" size="xs" className="mr-2 text-rose-400" />{' '}
                 <span className="text-xs text-slate-400">
-                  Original source fragment is not available
+                  Original source fragment is not available.
                 </span>
               </div>
             </div>

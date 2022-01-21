@@ -338,9 +338,8 @@ describe('ima.core.page.renderer.ClientPageRenderer', function () {
     });
 
     it('should set every property from previous state to undefined if not present in new state.', () => {
-      const patchedState = pageRenderer._patchStateToClearPreviousState(
-        pageState
-      );
+      const patchedState =
+        pageRenderer._patchStateToClearPreviousState(pageState);
 
       expect(patchedState).toEqual({
         ...pageState,

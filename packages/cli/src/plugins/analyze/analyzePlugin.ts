@@ -35,7 +35,7 @@ export default class AnalyzePlugin
   implements ImaCliPlugin<AnalyzePluginConfigurationContext> {
   private _options: AnalyzePluginOptions;
 
-  readonly name = 'analyze-plugin';
+  readonly name = 'AnalyzePlugin';
   readonly cliArgs: Partial<Record<ImaCliCommand, CommandBuilder>> = {
     build: {
       analyze: {

@@ -39,7 +39,7 @@ export default class ScrambleCssPlugin
   implements ImaCliPlugin<ScrambleCssPluginConfigurationContext> {
   private _options: ScrambleCssPluginOptions;
 
-  name = 'scramble-css-plugin';
+  name = 'ScrambleCssPlugin';
   cliArgs = {
     build: scrambleCssPluginSharedCliArgs,
     dev: scrambleCssPluginSharedCliArgs

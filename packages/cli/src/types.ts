@@ -25,7 +25,6 @@ export type ImaCliCommand = 'build' | 'dev';
  */
 export interface CliArgs {
   rootDir: string;
-  isProduction: boolean;
   command: ImaCliCommand;
   clean: boolean;
   verbose?: boolean;
@@ -34,6 +33,7 @@ export interface CliArgs {
   open?: boolean;
   legacy?: boolean;
   forceSPA?: boolean;
+  profile?: boolean;
 }
 
 /**

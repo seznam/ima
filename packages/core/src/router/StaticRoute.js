@@ -66,7 +66,8 @@ const PARAMS_NEVER_MATCH_REGEXP = /$a/;
  * @const
  * @type {RegExp}
  */
-const PARAMS_MAIN_REGEXP = /(?:\\\/|^):\\\?([a-z0-9]+)(?=\\\/|$)|(?:^|\\\/):([a-z0-9]+)(?=\\\/|$)/gi;
+const PARAMS_MAIN_REGEXP =
+  /(?:\\\/|^):\\\?([a-z0-9]+)(?=\\\/|$)|(?:^|\\\/):([a-z0-9]+)(?=\\\/|$)/gi;
 
 /**
  * Regular expression used to match the required subparameter names from a path expression.
@@ -97,7 +98,8 @@ const SUBPARAMS_OPT_REGEXP = {
  * @const
  * @type {RegExp}
  */
-const PARAMS_REGEXP_OPT = /(?:^:\\\?([a-z0-9]+)(?=\\\/|$))|(?:(\\\/):\\\?([a-z0-9]+)(?=\\\/|$))/gi; // last part: |(?::\\\?([a-z0-9]+)(?=\\\/|$))
+const PARAMS_REGEXP_OPT =
+  /(?:^:\\\?([a-z0-9]+)(?=\\\/|$))|(?:(\\\/):\\\?([a-z0-9]+)(?=\\\/|$))/gi; // last part: |(?::\\\?([a-z0-9]+)(?=\\\/|$))
 
 /**
  * Utility for representing and manipulating a single static route in the
@@ -340,9 +342,8 @@ export default class StaticRoute extends AbstractRoute {
       this._getClearParamName(paramExpr)
     );
 
-    const isCorrectParamOrder = this._checkOptionalParamsOrder(
-      allMainParamsCleared
-    );
+    const isCorrectParamOrder =
+      this._checkOptionalParamsOrder(allMainParamsCleared);
     return isCorrectParamOrder;
   }
 

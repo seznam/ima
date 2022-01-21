@@ -222,9 +222,8 @@ describe('ima.core.page.manager.AbstractPageManager', () => {
 
   describe('_setRestrictedPageStateManager', () => {
     let allowedStateKeys = ['user'];
-    let allAllowedStateKeys = Object.keys(extensionState).concat(
-      allowedStateKeys
-    );
+    let allAllowedStateKeys =
+      Object.keys(extensionState).concat(allowedStateKeys);
 
     beforeEach(() => {
       spyOn(extensionInstance, 'getAllowedStateKeys').and.returnValue(

@@ -25,7 +25,7 @@ function formatWebpackErrors(
 
   // Raw verbose
   if (args.verbose) {
-    return logger.write(stats.toString({ all: false, warnings: true }));
+    return logger.write(stats.toString({ all: false, errors: true }));
   }
 
   const { errors } = stats.toJson({ all: false, errors: true });
@@ -131,11 +131,6 @@ function formatWebpackWarnings(
 
   if (!stats?.hasWarnings()) {
     return;
-  }
-
-  // Raw verbose
-  if (args.verbose) {
-    return logger.write(stats.toString({ all: false, warnings: true }));
   }
 
   const { warnings } = stats.toJson({ all: false, warnings: true });

@@ -6,7 +6,7 @@
     "test": "node_modules/.bin/jest --config jest.conf.json",
     "lint": "node_modules/.bin/eslint --fix './{app,server}/**/*.{js,jsx}'",
     "dev": "ima dev",
-    "build": "NODE_ENV=production ima build",
+    "build": "ima build",
     "start": "NODE_ENV=production node server/server.js"
   },
   "keywords": [
@@ -32,6 +32,7 @@
   },
   "dependencies": {
     "@ima/core": "17.10.0",
+    "@ima/react-hooks": "1.1.0",
     "@ima/server": "17.9.0",
     "body-parser": "1.19.0",
     "compression": "1.7.4",
@@ -40,8 +41,6 @@
     "express-http-proxy": "1.6.0",
     "helmet": "3.21.2",
     "less": "^4.1.1",
-    "method-override": "3.0.0",
-    "multer": "1.4.2",
     "prop-types": "15.7.2",
     "react": "16.14.0",
     "react-dom": "16.14.0",

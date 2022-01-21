@@ -11,7 +11,6 @@ import CssMinimizerPlugin from 'css-minimizer-webpack-plugin';
 import TerserPlugin from 'terser-webpack-plugin';
 import CompressionPlugin from 'compression-webpack-plugin';
 import ReactRefreshWebpackPlugin from '@pmmmwh/react-refresh-webpack-plugin';
-import { WebpackManifestPlugin } from 'webpack-manifest-plugin';
 
 import { ConfigurationContext, ImaConfig } from '../types';
 import {
@@ -20,20 +19,12 @@ import {
   additionalDataFactory,
   createCacheKey,
   IMA_CONF_FILENAME,
+  createPolyfillEntry,
   extractLanguges,
-  requireBabelConfig,
-  createPolyfillEntry
+  POSTCSS_CONF_FILENAMES,
+  BABEL_CONF_ES_FILENAMES,
+  BABEL_CONF_FILENAMES
 } from './utils';
-
-const POSTCSS_CONF_FILENAMES = [
-  'postcss.config.js',
-  'postcss.config.cjs',
-  'postcss.config.json',
-  '.postcssrc.js',
-  '.postcssrc.cjs',
-  '.postcssrc.json',
-  '.postcssrc'
-];
 
 /**
  * Creates Webpack configuration object based on input ConfigurationContext
@@ -45,15 +36,16 @@ export default async (
   ctx: ConfigurationContext,
   imaConfig: ImaConfig
 ): Promise<Configuration> => {
-  const { rootDir, isProduction, isServer, isEsVersion, name } = ctx;
+  const { rootDir, isServer, isEsVersion, name } = ctx;
 
-  // We use source maps always in development for better stack trace orientation.
-  const isWatch = ctx.command === 'dev';
-  const useSourceMaps = imaConfig.useSourceMaps || !isProduction;
+  // Define helper variables derived from context
+  const isDev = ctx.command === 'dev';
+  const useSourceMaps = imaConfig.useSourceMaps || isDev;
   const imaEnvironment = resolveEnvironment(rootDir);
   const isDebug = imaEnvironment.$Debug;
   const outputDir = path.join(rootDir, 'build');
   const publicPath = ctx?.publicPath ?? imaConfig.publicPath;
+  const appDir = path.join(rootDir, 'app');
 
   /**
    * When using build script and dev mode (not legacy, or forceSPA which uses es5),
@@ -92,9 +84,9 @@ export default async (
           modules: {
             auto: true,
             exportOnlyLocals: onlyCssDefinitions,
-            localIdentName: isProduction
-              ? '[hash:base64]'
-              : '[path][name]__[local]--[hash:base64:5]'
+            localIdentName: isDev
+              ? '[path][name]__[local]--[hash:base64:5]'
+              : '[hash:base64]'
           },
           sourceMap: useSourceMaps
         }
@@ -102,28 +94,32 @@ export default async (
       !onlyCssDefinitions && {
         loader: require.resolve('postcss-loader'),
         options: {
-          postcssOptions: requireConfig({
-            ctx,
-            packageJsonKey: 'postcss',
-            fileNames: POSTCSS_CONF_FILENAMES,
-            defaultConfig: {
-              plugins: [
-                'postcss-flexbugs-fixes',
-                [
-                  'postcss-preset-env',
-                  {
-                    autoprefixer: {
-                      flexbox: 'no-2009'
-                    },
-                    stage: 3,
-                    features: {
-                      'custom-properties': false
+          postcssOptions: {
+            config: false,
+            // Require custom config (with defaults)
+            ...requireConfig({
+              ctx,
+              packageJsonKey: 'postcss',
+              fileNames: POSTCSS_CONF_FILENAMES,
+              defaultConfig: {
+                plugins: [
+                  'postcss-flexbugs-fixes',
+                  [
+                    'postcss-preset-env',
+                    {
+                      autoprefixer: {
+                        flexbox: 'no-2009'
+                      },
+                      stage: 3,
+                      features: {
+                        'custom-properties': false
+                      }
                     }
-                  }
+                  ]
                 ]
-              ]
-            }
-          }),
+              }
+            })
+          },
           implementation: require('postcss'),
           sourceMap: useSourceMaps
         }
@@ -154,13 +150,17 @@ export default async (
 
   return {
     name,
-    target: isServer ? 'node' : 'web',
-    mode: isProduction ? 'production' : 'development',
-    devtool: isProduction
-      ? imaConfig.useSourceMaps
-        ? 'source-map'
-        : false
-      : 'cheap-module-source-map',
+    target: isServer
+      ? 'node14'
+      : isEsVersion
+      ? ['web', 'es11']
+      : ['web', 'es5'],
+    mode: isDev ? 'development' : 'production',
+    devtool: isDev
+      ? 'cheap-module-source-map'
+      : useSourceMaps
+      ? 'source-map'
+      : false,
     entry: {
       ...(isServer
         ? {
@@ -168,10 +168,11 @@ export default async (
           }
         : {
             [name]: [
-              isWatch &&
+              isDev &&
                 // We have to use @gatsbyjs version, since the original package containing webpack 5 fix is not yet released
                 `@gatsbyjs/webpack-hot-middleware/client?name=${name}&path=//localhost:${imaEnvironment.$Server.port}/__webpack_hmr&timeout=15000&reload=true&overlay=false&overlayWarnings=false&noInfo=true&quiet=true`,
-              isDebug &&
+              isDev &&
+                isDebug &&
                 require.resolve('@ima/hmr-client/dist/imaHmrClient.js'),
               path.join(rootDir, 'app/main.js')
             ].filter(Boolean) as string[],
@@ -180,7 +181,7 @@ export default async (
     },
     output: {
       path: outputDir,
-      pathinfo: !isProduction,
+      pathinfo: isDev,
       assetModuleFilename: 'static/media/[name].[hash][ext]',
       filename: ({ chunk }) => {
         // Put server-side JS into server directory
@@ -191,25 +192,16 @@ export default async (
         // Separate client chunks into es and non-es folders
         const baseFolder = `static/${isEsVersion ? 'js.es' : 'js'}`;
         const fileNameParts = [
-          chunk?.name === name && !isProduction && 'app.client',
-          chunk?.name === name && isProduction && 'app.bundle',
+          chunk?.name === name && isDev && 'app.client',
+          chunk?.name === name && !isDev && 'app.bundle',
           chunk?.name !== name && '[name]',
-          isProduction && 'min',
+          !isDev && 'min',
           'js'
         ].filter(Boolean);
 
         return `${baseFolder}/${fileNameParts.join('.')}`;
       },
       publicPath,
-      environment: {
-        arrowFunction: isEsVersion || isServer,
-        bigIntLiteral: false,
-        const: isEsVersion || isServer,
-        destructuring: isEsVersion || isServer,
-        dynamicImport: false,
-        forOf: isEsVersion || isServer,
-        module: isEsVersion
-      },
       /**
        * We put hot updates into it's own folder
        * otherwise it clutters the built folder.
@@ -231,18 +223,22 @@ export default async (
       }
     },
     optimization: {
-      minimize: isProduction && !isServer,
+      minimize: !isDev && !isServer,
       minimizer: [
         new TerserPlugin({
-          minify: TerserPlugin.esbuildMinify
+          terserOptions: {
+            mangle: {
+              safari10: true
+            },
+            // Added for profiling in devtools
+            keep_classnames: ctx.profile,
+            keep_fnames: ctx.profile
+          }
         }),
-        new CssMinimizerPlugin({
-          // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-          minify: CssMinimizerPlugin.esbuildMinify
-        })
+        new CssMinimizerPlugin()
       ],
-      // Split chunks in dev for better performance and caching
-      ...(!isProduction
+      // Split chunks in dev for better caching
+      ...(isDev
         ? {
             moduleIds: 'deterministic',
             chunkIds: 'deterministic',
@@ -260,12 +256,17 @@ export default async (
         : {})
     },
     resolve: {
-      extensions: ['.js', '.jsx'],
+      extensions: ['.mjs', '.js', '.jsx', '.json'],
       alias: {
         app: path.join(rootDir, 'app'),
         '@ima/core': `@ima/core/dist/ima.${
           isServer ? 'server' : 'client'
         }.cjs.js`,
+        // Enable better profiling in react devtools
+        ...(ctx.profile && {
+          'react-dom$': 'react-dom/profiling',
+          'scheduler/tracing': 'scheduler/tracing-profiling'
+        }),
         ...(imaConfig?.webpackAliases ?? {})
       }
     },
@@ -274,7 +275,18 @@ export default async (
     },
     module: {
       rules: [
-        // Handle node_modules packages that contain sourcemaps
+        /**
+         * Resolve `*.mjs` files without the need of an extension.
+         */
+        {
+          test: /\.m?js$/,
+          resolve: {
+            fullySpecified: false
+          }
+        },
+        /**
+         * Extract source maps for node_module packages.
+         */
         useSourceMaps && {
           enforce: 'pre',
           exclude: /@babel(?:\/|\\{1,2})runtime/,
@@ -322,77 +334,129 @@ export default async (
              */
             {
               test: /\.svg$/,
-              oneOf: [
+              rules: [
                 {
-                  resourceQuery: /inline/, // foo.svg?inline
-                  type: 'asset/inline',
-                  generator: {
-                    dataUrl: (content: string | Buffer) =>
-                      miniSVGDataURI(content.toString())
-                  }
+                  oneOf: [
+                    {
+                      resourceQuery: /inline/, // foo.svg?inline
+                      type: 'asset/inline',
+                      generator: {
+                        dataUrl: (content: string | Buffer) =>
+                          miniSVGDataURI(content.toString())
+                      }
+                    },
+                    {
+                      type: 'asset/resource'
+                    }
+                  ]
                 },
                 {
-                  type: 'asset/resource'
+                  loader: require.resolve('svgo-loader'),
+                  options: {
+                    js2svg: {
+                      indent: 2,
+                      pretty: isDev
+                    }
+                  }
                 }
-              ],
-              use: require.resolve('svgo-loader')
+              ]
+            },
+            /**
+             * Raw loaders, by default it loads file source into the bundle,
+             * optionally by postfixing the import with '?external' we can
+             * force it to return path to the source.
+             */
+            {
+              test: [/\.csv$/, /\.txt$/, /\.html/],
+              oneOf: [
+                {
+                  resourceQuery: /external/, // foo.png?external
+                  type: 'asset/resource'
+                },
+                {
+                  type: 'asset/source'
+                }
+              ]
             },
             {
               test: /\.(js|mjs|jsx|ts|tsx|cjs)$/,
-              exclude: (modulePath: string) =>
-                /node_modules/.test(modulePath) &&
-                !/node_modules\/(abort-controller|event-target-shim)/.test(
-                  modulePath
-                ),
-              use: [
+              include: appDir,
+              rules: [
                 {
                   loader: require.resolve('babel-loader'),
-                  options: requireBabelConfig({
-                    ctx,
-                    defaultConfig: {
-                      presets: [
-                        [
-                          require.resolve('@babel/preset-env'),
-                          {
-                            ...(isEsVersion || isServer
-                              ? {
-                                  targets: {
-                                    node: '14'
+                  options: {
+                    // Disable config files since we handle the loading manually
+                    babelrc: false,
+                    configFile: false,
+                    // Enable cache for better performance
+                    cacheDirectory:
+                      findCacheDir({
+                        name: `babel-loader-ima-${name}-cache`
+                      }) ?? true,
+                    cacheCompression: false,
+                    compact: !isDev,
+                    sourceMaps: useSourceMaps,
+                    inputSourceMap: useSourceMaps,
+                    // Require custom config (with defaults)
+                    ...requireConfig({
+                      ctx,
+                      fileNames:
+                        isEsVersion || isServer
+                          ? BABEL_CONF_ES_FILENAMES
+                          : BABEL_CONF_FILENAMES,
+                      packageJsonKey:
+                        isEsVersion || isServer ? 'babel.es' : 'babel',
+                      defaultConfig: {
+                        presets: [
+                          [
+                            require.resolve('@babel/preset-env'),
+                            {
+                              ...(isEsVersion || isServer
+                                ? {
+                                    targets: {
+                                      node: '14'
+                                    }
                                   }
-                                }
-                              : {}),
-                            modules: 'auto'
-                          }
+                                : {
+                                    targets: {
+                                      edge: '17',
+                                      firefox: '60',
+                                      chrome: '67',
+                                      safari: '11.1',
+                                      ie: '11'
+                                    }
+                                  }),
+                              bugfixes: true,
+                              modules: 'auto',
+                              useBuiltIns: 'usage',
+                              corejs: { version: '3.20', proposals: true }
+                            }
+                          ],
+                          [
+                            require.resolve('@babel/preset-react'),
+                            {
+                              development: isDev,
+                              runtime: 'automatic'
+                            }
+                          ]
                         ],
-                        [
-                          require.resolve('@babel/preset-react'),
-                          {
-                            development: !isProduction,
-                            runtime: 'automatic'
-                          }
-                        ]
-                      ],
-                      plugins:
-                        isWatch && !isServer
-                          ? [require.resolve('react-refresh/babel')]
-                          : [],
-                      /**
-                       * Disable config and babel rc files since we handle those
-                       * manually in the requireBabelConfig function.
-                       */
-                      babelrc: false,
-                      configFile: false,
-                      // Enable cache for better performance
-                      cacheDirectory:
-                        findCacheDir({
-                          name: `babel-loader-ima-${name}-cache`
-                        }) ?? true,
-                      cacheCompression: false,
-                      compact: isProduction,
-                      sourceMaps: useSourceMaps,
-                      inputSourceMap: useSourceMaps
-                    }
-                  })
+                        plugins:
+                          isDev && !isServer
+                            ? [
+                                require.resolve('react-refresh/babel'),
+                                [
+                                  require.resolve(
+                                    '@babel/plugin-transform-runtime'
+                                  ),
+                                  {
+                                    regenerator: true
+                                  }
+                                ]
+                              ]
+                            : []
+                      }
+                    })
+                  }
                 }
               ]
             },
@@ -406,7 +470,6 @@ export default async (
             {
               test: /\.less$/,
               sideEffects: true,
-              exclude: /node_modules/,
               use: getStyleLoaders({ useLessLoader: true })
             },
             /**
@@ -415,7 +478,6 @@ export default async (
             {
               test: /\.css$/,
               sideEffects: true,
-              exclude: /node_modules/,
               use: getStyleLoaders()
             },
             /**
@@ -423,12 +485,7 @@ export default async (
              * of the above defined rules.
              */
             {
-              exclude: [
-                /^$/,
-                /\.(js|mjs|jsx|ts|tsx|cjs)$/,
-                /\.html$/,
-                /\.json$/
-              ],
+              exclude: [/^$/, /\.(js|mjs|jsx|ts|tsx|cjs)$/, /\.json$/],
               type: 'asset/resource'
             }
           ]
@@ -450,12 +507,6 @@ export default async (
           ].filter(Boolean)
         : // Client-specific plugins
           [
-            // Generate manifest for client static
-            new WebpackManifestPlugin({
-              fileName: `static/${isEsVersion ? 'js.es' : 'js'}/manifest.json`,
-              filter: file => /\.(js|css)$/.test(file.name)
-            }),
-
             // Removes generated empty script caused by non-js entry points
             new RemoveEmptyScriptsPlugin(),
 
@@ -467,15 +518,15 @@ export default async (
               new MiniCssExtractPlugin({
                 filename: ({ chunk }) =>
                   `static/css/${chunk?.name === name ? 'app' : '[name]'}${
-                    isProduction ? '.min' : ''
+                    !isDev ? '.min' : ''
                   }.css`,
                 chunkFilename: `static/css/chunk-[id]${
-                  isProduction ? '.min' : ''
+                  !isDev ? '.min' : ''
                 }.css`
               }),
 
             // Enables compression for assets in production build
-            ...(isProduction
+            ...(!isDev
               ? imaConfig.compression.map(
                   algorithm =>
                     new CompressionPlugin({
@@ -494,8 +545,8 @@ export default async (
               : []),
 
             // Following plugins enable react refresh and hmr in watch mode
-            isWatch && new webpack.HotModuleReplacementPlugin(),
-            isWatch &&
+            isDev && new webpack.HotModuleReplacementPlugin(),
+            isDev &&
               new ReactRefreshWebpackPlugin({
                 overlay: {
                   module: '@ima/hmr-client/dist/fastRefreshClient.js',
@@ -511,6 +562,11 @@ export default async (
     },
 
     // Turn webpack performance reports off since we print reports ourselves
-    performance: false
+    performance: false,
+
+    // Disable infrastructure logging in normal mode
+    infrastructureLogging: {
+      level: ctx.verbose ? 'info' : 'none'
+    }
   };
 };

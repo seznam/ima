@@ -1,5 +1,3 @@
-'use strict';
-
 const { URL } = require('url');
 
 let path = require('path');

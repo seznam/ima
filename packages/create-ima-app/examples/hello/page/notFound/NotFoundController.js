@@ -11,9 +11,6 @@ export default class NotFoundController extends AbstractPageController {
     this.status = 404;
   }
 
-  /**
-   * @return {{status: number}}
-   */
   load() {
     return {
       status: this.status
