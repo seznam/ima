@@ -1,10 +1,11 @@
-import { useSettings } from '@ima/react-hooks';
+import { useSettings, useLocalize } from '@ima/react-hooks';
 
 import Card from 'app/component/card/Card';
 import './homeView.less';
 
 export default function HomeView(props) {
   const links = useSettings('links');
+  const localize = useLocalize();
 
   return (
     <div className="page-home">
@@ -20,10 +21,9 @@ export default function HomeView(props) {
           !
         </h1>
 
-        <p className="hero">
-          Get started by editing <code>app/home/HomeView.jsx</code> or pick one
-          of the following topics:
-        </p>
+        <p
+          className="hero"
+          dangerouslySetInnerHTML={{ __html: localize('home.intro') }}></p>
 
         <div className="cards">
           <Card title="Documentation" href={links.documentation}>

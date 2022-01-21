@@ -54,6 +54,7 @@
     "glob-import-loader": "^1.2.0",
     "less": "^4.1.2",
     "less-loader": "^10.2.0",
+    "messageformat": "^2.3.0",
     "mini-css-extract-plugin": "^2.5.0",
     "mini-svg-data-uri": "^1.4.3",
     "nodemon": "^2.0.15",
