@@ -20,6 +20,7 @@ import {
   createCacheKey,
   IMA_CONF_FILENAME,
   createPolyfillEntry,
+  extractLanguges,
   POSTCSS_CONF_FILENAMES,
   BABEL_CONF_ES_FILENAMES,
   BABEL_CONF_FILENAMES
@@ -498,7 +499,10 @@ export default async (
           [
             // Copies essential assets to static directory
             new CopyPlugin({
-              patterns: [{ from: 'app/public', to: 'static/public' }]
+              patterns: [
+                { from: 'app/public', to: 'static/public' },
+                ...extractLanguges(imaConfig)
+              ]
             })
           ].filter(Boolean)
         : // Client-specific plugins
