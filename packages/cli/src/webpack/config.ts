@@ -20,7 +20,7 @@ import {
   createCacheKey,
   IMA_CONF_FILENAME,
   createPolyfillEntry,
-  extractLanguges,
+  extractLanguages,
   POSTCSS_CONF_FILENAMES,
   BABEL_CONF_ES_FILENAMES,
   BABEL_CONF_FILENAMES
@@ -504,7 +504,7 @@ export default async (
             new CopyPlugin({
               patterns: [
                 { from: 'app/public', to: 'static/public' },
-                ...extractLanguges(imaConfig)
+                ...extractLanguages(imaConfig)
               ]
             })
           ].filter(Boolean)

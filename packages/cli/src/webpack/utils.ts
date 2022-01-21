@@ -162,7 +162,7 @@ function createPolyfillEntry(
  * @param {ImaConfig} imaConfig Current ima configuration.
  * @returns {ObjectPattern[]} ObjectPattern array for copy plugin
  */
-function extractLanguges(imaConfig: ImaConfig): ObjectPattern[] {
+function extractLanguages(imaConfig: ImaConfig): ObjectPattern[] {
   const resultCopyRecords: ObjectPattern[] = [];
   const tempLocales: Record<string, any> = {};
 
@@ -429,7 +429,7 @@ export {
   createWebpackConfig,
   requireImaConfig,
   resolveImaConfig,
-  extractLanguges,
+  extractLanguages,
   createPolyfillEntry,
   IMA_CONF_FILENAME,
   BABEL_CONF_ES_FILENAMES,
