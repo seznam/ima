@@ -17,10 +17,7 @@ export default function HomeView(props) {
           !
         </h1>
 
-        <p className="hero">
-          Get started by editing <code>app/home/HomeView.jsx</code> or pick one
-          of the following topics!
-        </p>
+        <p className="hero">{this.localize('home.intro')}</p>
 
         <div className="cards">
           <Card title="Documentation" href="https://imajs.io/docs">
