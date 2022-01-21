@@ -1,6 +1,5 @@
 import path from 'path';
 import fs from 'fs';
-import findCacheDir from 'find-cache-dir';
 import webpack, { Configuration, RuleSetRule, RuleSetUseItem } from 'webpack';
 import miniSVGDataURI from 'mini-svg-data-uri';
 
@@ -47,6 +46,21 @@ export default async (
   const publicPath = ctx?.publicPath ?? imaConfig.publicPath;
   const appDir = path.join(rootDir, 'app');
   const useHMR = !isServer && isDev && (isEsVersion || ctx.forceSPAWithHMR);
+
+  // Define browserslist targets for current context
+  let targets: 'defaults' | Record<string, string> = 'defaults';
+  if (isEsVersion) {
+    targets = {
+      chrome: '80',
+      edge: '80',
+      firefox: '80',
+      opera: '67',
+      safari: '14',
+      ios: '14'
+    };
+  } else if (isServer) {
+    targets = { node: '16' };
+  }
 
   /**
    * When using build script and dev mode (not forceSPA with HMR which uses es5),
@@ -214,10 +228,10 @@ export default async (
     },
     cache: {
       type: 'filesystem',
-      version: createCacheKey(ctx, imaConfig),
+      version: createCacheKey(ctx),
       store: 'pack',
       buildDependencies: {
-        cliDeps: [__filename],
+        config: [__filename],
         defaultWebpack: ['webpack/lib/'],
         imaConfig: [path.join(rootDir, IMA_CONF_FILENAME)].filter(f =>
           fs.existsSync(f)
@@ -383,15 +397,10 @@ export default async (
                     sourceType: 'unambiguous',
                     babelrc: false,
                     configFile: false,
-                    // Enable cache for better performance
-                    cacheDirectory:
-                      findCacheDir({
-                        name: `babel-loader-ima-${name}-cache`
-                      }) ?? true,
+                    cacheDirectory: true,
                     cacheCompression: false,
                     compact: !isDev,
-                    targets:
-                      isEsVersion || isServer ? { node: '16' } : 'defaults',
+                    targets,
                     presets: [
                       [
                         require.resolve('@babel/preset-env'),
@@ -423,11 +432,7 @@ export default async (
                 // Disable config files since we handle the loading manually
                 babelrc: false,
                 configFile: false,
-                // Enable cache for better performance
-                cacheDirectory:
-                  findCacheDir({
-                    name: `babel-loader-ima-${name}-app-cache`
-                  }) ?? true,
+                cacheDirectory: true,
                 cacheCompression: false,
                 compact: !isDev,
                 // Require custom config (with defaults)
@@ -440,8 +445,7 @@ export default async (
                   packageJsonKey:
                     isEsVersion || isServer ? 'babel.es' : 'babel',
                   defaultConfig: {
-                    targets:
-                      isEsVersion || isServer ? { node: '16' } : 'defaults',
+                    targets,
                     presets: [
                       [
                         require.resolve('@babel/preset-react'),
@@ -565,11 +569,11 @@ export default async (
     },
 
     // Turn webpack performance reports off since we print reports ourselves
-    performance: false,
+    performance: false
 
     // Disable infrastructure logging in normal mode
-    infrastructureLogging: {
-      level: ctx.verbose ? 'info' : 'none'
-    }
+    // infrastructureLogging: {
+    //   level: ctx.verbose ? 'info' : 'none'
+    // }
   };
 };

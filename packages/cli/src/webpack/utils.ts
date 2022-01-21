@@ -229,20 +229,27 @@ function additionalDataFactory(
 
 /**
  * Creates hash representing current webpack environment.
- * Mainly used for filesystem caching.
  *
  * @param {ConfigurationContext} ctx Current configuration context.
- * @param {ImaConfig} imaConfig Current ima configuration.
  * @returns {string}
  */
-function createCacheKey(
-  ctx: ConfigurationContext,
-  imaConfig: ImaConfig
-): string {
+function createCacheKey(ctx: ConfigurationContext): string {
   const hash = createHash('md5');
+
+  /**
+   * Explicitly use only the context variables which somehow change
+   * how the config is generated (since not all context values
+   * are used in config generation).
+   */
   hash.update(
-    [ctx, imaConfig]
-      .filter(Object.keys)
+    [
+      ctx.command,
+      ctx.forceSPA,
+      ctx.forceSPAWithHMR,
+      ctx.profile,
+      ctx.publicPath,
+      ctx.rootDir
+    ]
       .map(value => JSON.stringify(value))
       .join('')
   );
