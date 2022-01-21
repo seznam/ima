@@ -173,7 +173,7 @@ function extractLanguges(imaConfig: ImaConfig): ObjectPattern[] {
     languageGlobs.forEach(languageGlob =>
       resultCopyRecords.push({
         from: languageGlob,
-        to: 'static/js/locale/' + locale + '.js',
+        to: 'static/locale/' + locale + '.js',
         force: true,
         transformAll: (assets: any[]) => {
           tempLocales[locale] = assets.reduce((accumulator, asset) => {

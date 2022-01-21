@@ -48,7 +48,7 @@ function appFactory() {
 function languageLoader(language) {
   return require(path.resolve(
     applicationFolder,
-    `./build/static/js/locale/${language}.js`
+    `./build/static/locale/${language}.js`
   ));
 }
 
