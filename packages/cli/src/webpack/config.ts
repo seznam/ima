@@ -152,7 +152,7 @@ export default async (
   return {
     name,
     target: isServer
-      ? 'node14'
+      ? 'node16'
       : isEsVersion
       ? ['web', 'es11']
       : ['web', 'es5'],
@@ -374,35 +374,44 @@ export default async (
              */
             {
               test: /\.(js|mjs|cjs)$/,
-              exclude: [/\bcore-js\b/, /\bwebpack\/buildin\b/],
-              loader: require.resolve('babel-loader'),
-              options: {
-                sourceType: 'unambiguous',
-                babelrc: false,
-                configFile: false,
-                // Enable cache for better performance
-                cacheDirectory:
-                  findCacheDir({
-                    name: `babel-loader-ima-${name}-cache`
-                  }) ?? true,
-                cacheCompression: false,
-                compact: !isDev,
-                targets: isEsVersion || isServer ? { node: '14' } : 'defaults',
-                presets: [
-                  [
-                    require.resolve('@babel/preset-env'),
-                    {
-                      bugfixes: true,
-                      modules: false,
-                      useBuiltIns: 'usage',
-                      corejs: { version: '3.20' },
-                      exclude: ['transform-typeof-symbol']
-                    }
-                  ]
-                ],
-                sourceMaps: useSourceMaps,
-                inputSourceMap: useSourceMaps
-              }
+              exclude: [/\bcore-js\b/, /\bwebpack\/buildin\b/, appDir],
+              use: [
+                {
+                  loader: require.resolve('babel-loader'),
+                  options: {
+                    sourceType: 'unambiguous',
+                    babelrc: false,
+                    configFile: false,
+                    // Enable cache for better performance
+                    cacheDirectory:
+                      findCacheDir({
+                        name: `babel-loader-ima-${name}-cache`
+                      }) ?? true,
+                    cacheCompression: false,
+                    compact: !isDev,
+                    targets:
+                      isEsVersion || isServer ? { node: '16' } : 'defaults',
+                    presets: [
+                      [
+                        require.resolve('@babel/preset-env'),
+                        {
+                          bugfixes: true,
+                          modules: false,
+                          useBuiltIns: 'usage',
+                          corejs: { version: '3.20' },
+                          exclude: ['transform-typeof-symbol']
+                        }
+                      ]
+                    ],
+                    sourceMaps: useSourceMaps,
+                    inputSourceMap: useSourceMaps
+                  }
+                },
+                {
+                  // This injects new plugin loader interface into legacy plugins
+                  loader: 'ima-legacy-plugin-loader'
+                }
+              ]
             },
             {
               test: /\.(js|mjs|jsx|cjs)$/,
@@ -431,7 +440,7 @@ export default async (
                     isEsVersion || isServer ? 'babel.es' : 'babel',
                   defaultConfig: {
                     targets:
-                      isEsVersion || isServer ? { node: '14' } : 'defaults',
+                      isEsVersion || isServer ? { node: '16' } : 'defaults',
                     presets: [
                       [
                         require.resolve('@babel/preset-react'),
