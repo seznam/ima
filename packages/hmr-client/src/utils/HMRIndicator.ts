@@ -1,6 +1,6 @@
 import hmrIndicatorHtml from '../public/hmrIndicator.html';
 
-const HMR_INDICATOR_ID = 'ima-hmr-indicator-a5d222fc45fc';
+const HMR_INDICATOR_ID = '__ima-hmr-indicator';
 
 class HMRIndicator {
   private destroyTimeout: number | undefined;

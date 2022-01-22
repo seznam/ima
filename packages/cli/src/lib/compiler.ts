@@ -173,7 +173,7 @@ async function watchCompiler(
       // Don't continue when there are compile errors on first run
       if (firstRun && stats?.hasErrors()) {
         hadFirstRunErrors = true;
-        formatWebpackErrors(stats, args);
+        formatWebpackErrors(firstStats ?? stats, args);
         return;
       }
 

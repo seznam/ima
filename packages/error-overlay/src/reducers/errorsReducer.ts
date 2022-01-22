@@ -44,15 +44,40 @@ function errorsReducer(state: ErrorsState, action: ErrorsAction): ErrorsState {
       const errorId = uid();
 
       // Check for duplicates
-      const isDuplicate = Object.values(state.errors).findIndex(
+      const duplicate = Object.values(state.errors).find(
         error =>
           error.name === name &&
           error.message === message &&
           error.type === type
       );
 
-      if (isDuplicate !== -1) {
-        return state;
+      // Update duplicate with new frames
+      if (duplicate) {
+        return {
+          ...state,
+          errors: {
+            ...state.errors,
+            [duplicate.id]: {
+              ...duplicate,
+              frames: frames.reduce<ErrorWrapper['frames']>(
+                (accFrames, curFrame) => {
+                  const id = uid();
+                  accFrames[id] = {
+                    id,
+                    frame: curFrame,
+                    showOriginal: true,
+                    isCollapsed:
+                      !curFrame.originalSourceFragment ||
+                      curFrame.originalSourceFragment.length === 0
+                  };
+
+                  return accFrames;
+                },
+                {}
+              )
+            }
+          }
+        };
       }
 
       return {

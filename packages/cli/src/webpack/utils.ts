@@ -162,7 +162,7 @@ function createPolyfillEntry(
  * @param {ImaConfig} imaConfig Current ima configuration.
  * @returns {ObjectPattern[]} ObjectPattern array for copy plugin
  */
-function extractLanguges(imaConfig: ImaConfig): ObjectPattern[] {
+function extractLanguages(imaConfig: ImaConfig): ObjectPattern[] {
   const resultCopyRecords: ObjectPattern[] = [];
   const tempLocales: Record<string, any> = {};
 
@@ -229,20 +229,27 @@ function additionalDataFactory(
 
 /**
  * Creates hash representing current webpack environment.
- * Mainly used for filesystem caching.
  *
  * @param {ConfigurationContext} ctx Current configuration context.
- * @param {ImaConfig} imaConfig Current ima configuration.
  * @returns {string}
  */
-function createCacheKey(
-  ctx: ConfigurationContext,
-  imaConfig: ImaConfig
-): string {
+function createCacheKey(ctx: ConfigurationContext): string {
   const hash = createHash('md5');
+
+  /**
+   * Explicitly use only the context variables which somehow change
+   * how the config is generated (since not all context values
+   * are used in config generation).
+   */
   hash.update(
-    [ctx, imaConfig]
-      .filter(Object.keys)
+    [
+      ctx.command,
+      ctx.forceSPA,
+      ctx.forceSPAWithHMR,
+      ctx.profile,
+      ctx.publicPath,
+      ctx.rootDir
+    ]
       .map(value => JSON.stringify(value))
       .join('')
   );
@@ -363,7 +370,7 @@ async function createWebpackConfig(
     }
 
     // SPA mode only supports es5 versions
-    if (!args.forceSPA) {
+    if (!args.forceSPA && !args.forceSPAWithHMR) {
       finalConfigContexts.push({
         name: 'client.es',
         isServer: false,
@@ -429,7 +436,7 @@ export {
   createWebpackConfig,
   requireImaConfig,
   resolveImaConfig,
-  extractLanguges,
+  extractLanguages,
   createPolyfillEntry,
   IMA_CONF_FILENAME,
   BABEL_CONF_ES_FILENAMES,

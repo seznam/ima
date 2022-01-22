@@ -2,6 +2,7 @@
   "name": "ima",
   "description": "IMA.js framework for isomorphic javascript application",
   "devDependencies": {
+    "@ima/cli": "*",
     "@commitlint/cli": "8.3.5",
     "@commitlint/config-conventional": "8.3.4",
     "@fortawesome/fontawesome-free": "5.12.1",

@@ -30,7 +30,6 @@
     "@typescript-eslint/parser": "^5.7.0",
     "eslint-plugin-import": "^2.25.3",
     "lodash.debounce": "^4.0.8",
-    "raw-loader": "^4.0.2",
     "ts-loader": "^9.2.6",
     "ts-node": "^10.4.0",
     "typescript": "^4.5.4",

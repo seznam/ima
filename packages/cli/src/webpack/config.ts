@@ -1,6 +1,5 @@
 import path from 'path';
 import fs from 'fs';
-import findCacheDir from 'find-cache-dir';
 import webpack, { Configuration, RuleSetRule, RuleSetUseItem } from 'webpack';
 import miniSVGDataURI from 'mini-svg-data-uri';
 
@@ -20,7 +19,7 @@ import {
   createCacheKey,
   IMA_CONF_FILENAME,
   createPolyfillEntry,
-  extractLanguges,
+  extractLanguages,
   POSTCSS_CONF_FILENAMES,
   BABEL_CONF_ES_FILENAMES,
   BABEL_CONF_FILENAMES
@@ -46,15 +45,32 @@ export default async (
   const outputDir = path.join(rootDir, 'build');
   const publicPath = ctx?.publicPath ?? imaConfig.publicPath;
   const appDir = path.join(rootDir, 'app');
+  const useHMR = !isServer && isDev && (isEsVersion || ctx.forceSPAWithHMR);
+
+  // Define browserslist targets for current context
+  let targets: 'defaults' | Record<string, string> = 'defaults';
+  if (isEsVersion) {
+    targets = {
+      chrome: '80',
+      edge: '80',
+      firefox: '80',
+      opera: '67',
+      safari: '14',
+      ios: '14'
+    };
+  } else if (isServer) {
+    targets = { node: '16' };
+  }
 
   /**
-   * When using build script and dev mode (not legacy, or forceSPA which uses es5),
+   * When using build script and dev mode (not forceSPA with HMR which uses es5),
    * the CSS files are only generated once for es version pass. For other compilers
    * only definitions are generated in order to fully support css.modules but
    * improve a compiling speed a little bit.
    */
   const onlyCssDefinitions =
-    isServer || (!isEsVersion && ctx.command === 'build');
+    isServer ||
+    (!isServer && !isEsVersion && !ctx.forceSPAWithHMR && !ctx.forceSPA);
 
   /**
    * Style loaders helper function used to define
@@ -151,7 +167,7 @@ export default async (
   return {
     name,
     target: isServer
-      ? 'node14'
+      ? 'node16'
       : isEsVersion
       ? ['web', 'es11']
       : ['web', 'es5'],
@@ -168,10 +184,10 @@ export default async (
           }
         : {
             [name]: [
-              isDev &&
-                // We have to use @gatsbyjs version, since the original package containing webpack 5 fix is not yet released
+              // We have to use @gatsbyjs version, since the original package containing webpack 5 fix is not yet released
+              useHMR &&
                 `@gatsbyjs/webpack-hot-middleware/client?name=${name}&path=//localhost:${imaEnvironment.$Server.port}/__webpack_hmr&timeout=15000&reload=true&overlay=false&overlayWarnings=false&noInfo=true&quiet=true`,
-              isDev &&
+              useHMR &&
                 isDebug &&
                 require.resolve('@ima/hmr-client/dist/imaHmrClient.js'),
               path.join(rootDir, 'app/main.js')
@@ -212,10 +228,10 @@ export default async (
     },
     cache: {
       type: 'filesystem',
-      version: createCacheKey(ctx, imaConfig),
+      version: createCacheKey(ctx),
       store: 'pack',
       buildDependencies: {
-        cliDeps: [__filename],
+        config: [__filename],
         defaultWebpack: ['webpack/lib/'],
         imaConfig: [path.join(rootDir, IMA_CONF_FILENAME)].filter(f =>
           fs.existsSync(f)
@@ -240,8 +256,8 @@ export default async (
       // Split chunks in dev for better caching
       ...(isDev
         ? {
-            moduleIds: 'deterministic',
-            chunkIds: 'deterministic',
+            moduleIds: 'named',
+            chunkIds: 'named',
             runtimeChunk: 'single', // Separate common runtime for better caching
             splitChunks: {
               cacheGroups: {
@@ -276,21 +292,11 @@ export default async (
     module: {
       rules: [
         /**
-         * Resolve `*.mjs` files without the need of an extension.
-         */
-        {
-          test: /\.m?js$/,
-          resolve: {
-            fullySpecified: false
-          }
-        },
-        /**
          * Extract source maps for node_module packages.
          */
         useSourceMaps && {
           enforce: 'pre',
-          exclude: /@babel(?:\/|\\{1,2})runtime/,
-          test: /\.(js|mjs|jsx|ts|tsx|cjs|css)$/,
+          test: /\.(js|mjs|jsx|ts|tsx|cjs|css|less)$/,
           use: require.resolve('source-map-loader')
         },
         {
@@ -378,95 +384,96 @@ export default async (
                 }
               ]
             },
+            /**
+             * Process js of app directory with general babel config
+             */
             {
-              test: /\.(js|mjs|jsx|ts|tsx|cjs)$/,
-              include: appDir,
-              rules: [
+              test: /\.(js|mjs|cjs)$/,
+              exclude: [/\bcore-js\b/, /\bwebpack\/buildin\b/, appDir],
+              use: [
                 {
                   loader: require.resolve('babel-loader'),
                   options: {
-                    // Disable config files since we handle the loading manually
+                    sourceType: 'unambiguous',
                     babelrc: false,
                     configFile: false,
-                    // Enable cache for better performance
-                    cacheDirectory:
-                      findCacheDir({
-                        name: `babel-loader-ima-${name}-cache`
-                      }) ?? true,
+                    cacheDirectory: true,
                     cacheCompression: false,
                     compact: !isDev,
+                    targets,
+                    presets: [
+                      [
+                        require.resolve('@babel/preset-env'),
+                        {
+                          bugfixes: true,
+                          modules: false,
+                          useBuiltIns: 'usage',
+                          corejs: { version: '3.20' },
+                          exclude: ['transform-typeof-symbol']
+                        }
+                      ]
+                    ],
                     sourceMaps: useSourceMaps,
-                    inputSourceMap: useSourceMaps,
-                    // Require custom config (with defaults)
-                    ...requireConfig({
-                      ctx,
-                      fileNames:
-                        isEsVersion || isServer
-                          ? BABEL_CONF_ES_FILENAMES
-                          : BABEL_CONF_FILENAMES,
-                      packageJsonKey:
-                        isEsVersion || isServer ? 'babel.es' : 'babel',
-                      defaultConfig: {
-                        presets: [
-                          [
-                            require.resolve('@babel/preset-env'),
-                            {
-                              ...(isEsVersion || isServer
-                                ? {
-                                    targets: {
-                                      node: '14'
-                                    }
-                                  }
-                                : {
-                                    targets: {
-                                      edge: '17',
-                                      firefox: '60',
-                                      chrome: '67',
-                                      safari: '11.1',
-                                      ie: '11'
-                                    }
-                                  }),
-                              bugfixes: true,
-                              modules: 'auto',
-                              useBuiltIns: 'usage',
-                              corejs: { version: '3.20', proposals: true }
-                            }
-                          ],
-                          [
-                            require.resolve('@babel/preset-react'),
-                            {
-                              development: isDev,
-                              runtime: 'automatic'
-                            }
-                          ]
-                        ],
-                        plugins:
-                          isDev && !isServer
-                            ? [
-                                require.resolve('react-refresh/babel'),
-                                [
-                                  require.resolve(
-                                    '@babel/plugin-transform-runtime'
-                                  ),
-                                  {
-                                    regenerator: true
-                                  }
-                                ]
-                              ]
-                            : []
-                      }
-                    })
+                    inputSourceMap: useSourceMaps
                   }
+                },
+                {
+                  // This injects new plugin loader interface into legacy plugins
+                  loader: 'ima-legacy-plugin-loader'
                 }
               ]
             },
-            /**
-             * Less loader configuration, which adds support for glob imports in the
-             * less files, postcss, and css imports support. Additionally
-             * app/less/globals.less is always prepended to every less file
-             * computed. This allows you to define globals (variables) which don't
-             * have to be imported in every LESS file manually.
-             */
+            {
+              test: /\.(js|mjs|jsx|cjs)$/,
+              include: appDir,
+              exclude: /node_modules/,
+              loader: require.resolve('babel-loader'),
+              options: {
+                // Disable config files since we handle the loading manually
+                babelrc: false,
+                configFile: false,
+                cacheDirectory: true,
+                cacheCompression: false,
+                compact: !isDev,
+                // Require custom config (with defaults)
+                ...requireConfig({
+                  ctx,
+                  fileNames:
+                    isEsVersion || isServer
+                      ? BABEL_CONF_ES_FILENAMES
+                      : BABEL_CONF_FILENAMES,
+                  packageJsonKey:
+                    isEsVersion || isServer ? 'babel.es' : 'babel',
+                  defaultConfig: {
+                    targets,
+                    presets: [
+                      [
+                        require.resolve('@babel/preset-react'),
+                        {
+                          development: isDev,
+                          runtime: 'automatic'
+                        }
+                      ],
+                      [
+                        require.resolve('@babel/preset-env'),
+                        {
+                          bugfixes: true,
+                          modules: false,
+                          useBuiltIns: 'usage',
+                          corejs: { version: '3.20', proposals: true },
+                          exclude: ['transform-typeof-symbol']
+                        }
+                      ]
+                    ],
+                    plugins: useHMR
+                      ? [require.resolve('react-refresh/babel')]
+                      : []
+                  }
+                }),
+                sourceMaps: useSourceMaps,
+                inputSourceMap: useSourceMaps
+              }
+            },
             {
               test: /\.less$/,
               sideEffects: true,
@@ -482,7 +489,7 @@ export default async (
             },
             /**
              * Fallback loader for all modules, that don't match any
-             * of the above defined rules.
+             * of the above defined rules. This should be defined last.
              */
             {
               exclude: [/^$/, /\.(js|mjs|jsx|ts|tsx|cjs)$/, /\.json$/],
@@ -501,7 +508,7 @@ export default async (
             new CopyPlugin({
               patterns: [
                 { from: 'app/public', to: 'static/public' },
-                ...extractLanguges(imaConfig)
+                ...extractLanguages(imaConfig)
               ]
             })
           ].filter(Boolean)
@@ -545,8 +552,8 @@ export default async (
               : []),
 
             // Following plugins enable react refresh and hmr in watch mode
-            isDev && new webpack.HotModuleReplacementPlugin(),
-            isDev &&
+            useHMR && new webpack.HotModuleReplacementPlugin(),
+            useHMR &&
               new ReactRefreshWebpackPlugin({
                 overlay: {
                   module: '@ima/hmr-client/dist/fastRefreshClient.js',
@@ -562,11 +569,11 @@ export default async (
     },
 
     // Turn webpack performance reports off since we print reports ourselves
-    performance: false,
+    performance: false
 
     // Disable infrastructure logging in normal mode
-    infrastructureLogging: {
-      level: ctx.verbose ? 'info' : 'none'
-    }
+    // infrastructureLogging: {
+    //   level: ctx.verbose ? 'info' : 'none'
+    // }
   };
 };

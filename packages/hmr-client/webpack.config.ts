@@ -28,12 +28,13 @@ const baseConfig: Configuration = {
 
 module.exports = [
   merge<Configuration>(baseConfig, {
+    target: ['web', 'es11'],
     entry: { imaHmrClient: './src/imaHmrClient.ts' },
     module: {
       rules: [
         {
-          test: /\.html$/i,
-          use: 'raw-loader'
+          test: /\.html$/,
+          type: 'asset/source'
         }
       ]
     },
@@ -44,18 +45,10 @@ module.exports = [
     }
   }),
   merge<Configuration>(baseConfig, {
+    target: 'node16',
     entry: { fastRefreshClient: './src/fastRefreshClient.ts' },
-    target: 'node',
     output: {
       library: { type: 'commonjs2' }
-    },
-    module: {
-      rules: [
-        {
-          test: /\.html$/i,
-          use: 'raw-loader'
-        }
-      ]
     },
     resolve: {
       alias: {
