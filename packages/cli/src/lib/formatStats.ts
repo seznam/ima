@@ -142,6 +142,11 @@ function formatWebpackWarnings(
   // Cache unique warnings
   if (Array.isArray(warnings)) {
     for (const warning of warnings) {
+      // Ignore source-map-loader warnings
+      if (warning.message.includes('Failed to parse source map')) {
+        continue;
+      }
+
       if (!warningsCache.has(warning.message)) {
         warningsCache.add(warning.message);
         newWarnings.push(warning);

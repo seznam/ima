@@ -256,8 +256,8 @@ export default async (
       // Split chunks in dev for better caching
       ...(isDev
         ? {
-            moduleIds: 'named',
-            chunkIds: 'named',
+            moduleIds: 'deterministic',
+            chunkIds: 'deterministic',
             runtimeChunk: 'single', // Separate common runtime for better caching
             splitChunks: {
               cacheGroups: {
@@ -276,8 +276,8 @@ export default async (
       alias: {
         app: path.join(rootDir, 'app'),
         '@ima/core': `@ima/core/dist/ima.${
-          isServer ? 'server' : 'client'
-        }.cjs.js`,
+          isServer ? 'server.cjs.js' : 'client.esm.js'
+        }`,
         // Enable better profiling in react devtools
         ...(ctx.profile && {
           'react-dom$': 'react-dom/profiling',
@@ -569,11 +569,11 @@ export default async (
     },
 
     // Turn webpack performance reports off since we print reports ourselves
-    performance: false
+    performance: false,
 
     // Disable infrastructure logging in normal mode
-    // infrastructureLogging: {
-    //   level: ctx.verbose ? 'info' : 'none'
-    // }
+    infrastructureLogging: {
+      level: ctx.verbose ? 'info' : 'none'
+    }
   };
 };

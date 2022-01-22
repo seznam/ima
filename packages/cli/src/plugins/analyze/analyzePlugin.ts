@@ -157,7 +157,7 @@ export default class AnalyzePlugin
       );
       logger.write(
         `${chalk.gray('└')} https://webpack.jakoblind.no/optimize/ ${chalk.gray(
-          '- analyze and optimize bundle'
+          '- analyze and optimize bundle\n'
         )}`
       );
     }

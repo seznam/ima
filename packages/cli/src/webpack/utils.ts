@@ -415,7 +415,7 @@ async function createWebpackConfig(
     // Print loaded plugins info
     if (!isFirstPass && loadedPlugins.size > 0) {
       const pluginNames: string[] = [];
-      logger.info(`Loaded plugin${loadedPlugins.size > 1 ? 's' : ''}: `, false);
+      logger.info(`CLI plugins in use: `, false);
 
       for (const pluginName of loadedPlugins.values()) {
         pluginNames.push(chalk.blue(pluginName));
