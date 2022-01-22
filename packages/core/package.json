@@ -66,7 +66,7 @@
     "@ima/helpers": "^17.9.0",
     "classnames": "^2.2.6",
     "memoize-one": "^5.1.1",
-    "node-fetch": "^2.6.0"
+    "node-fetch": "^3.1.1"
   },
   "peerDependencies": {
     "react": "16.x",
