@@ -175,6 +175,7 @@ function extractLanguages(imaConfig: ImaConfig): ObjectPattern[] {
         from: languageGlob,
         to: 'static/locale/' + locale + '.js',
         force: true,
+        noErrorOnMissing: true,
         transformAll: (assets: any[]) => {
           tempLocales[locale] = assets.reduce((accumulator, asset) => {
             const fileContent = JSON.parse(asset.data.toString());
