@@ -1,12 +1,11 @@
-import path from 'path';
+const path = require('path');
 
-import { Configuration } from 'webpack';
-import { merge } from 'webpack-merge';
+const { merge } = require('webpack-merge');
 
 const rootDir = path.resolve(__dirname);
 const isProduction = process.env.NODE_ENV === 'production';
 
-const baseConfig: Configuration = {
+const baseConfig = {
   output: {
     path: path.join(rootDir, './dist'),
     filename: '[name].js',
@@ -27,7 +26,7 @@ const baseConfig: Configuration = {
 };
 
 module.exports = [
-  merge<Configuration>(baseConfig, {
+  merge(baseConfig, {
     target: ['web', 'es11'],
     entry: { imaHmrClient: './src/imaHmrClient.ts' },
     module: {
@@ -44,7 +43,7 @@ module.exports = [
       },
     },
   }),
-  merge<Configuration>(baseConfig, {
+  merge(baseConfig, {
     target: 'node16',
     entry: { fastRefreshClient: './src/fastRefreshClient.ts' },
     output: {
