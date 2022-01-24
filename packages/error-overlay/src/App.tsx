@@ -35,12 +35,13 @@ const App: FunctionComponent = () => {
   return (
     <div
       className={clsx(
-        'min-w-full min-h-screen font-mono bg-white origin-top text-slate-900',
+        'min-w-full min-h-screen font-mono text-slate-900 bg-white origin-top',
         {
-          'animate-fade-in-down': !isSSRError
+          'animate-fade-in-down': !isSSRError,
         }
-      )}>
-      <div className="p-4 mx-auto max-w-screen-lg">
+      )}
+    >
+      <div className='p-4 mx-auto max-w-screen-lg'>
         <Header error={currentError} />
         <Hero error={currentError} />
         {visibleFrames.map((frameWrapper, index) => (
@@ -49,31 +50,32 @@ const App: FunctionComponent = () => {
               frameWrapper={frameWrapper}
               errorId={currentError?.id}
               className={clsx({
-                'animate-fade-in-down origin-top': index > 0
+                'origin-top animate-fade-in-down': index > 0,
               })}
             />
             {index === 0 && collapseFramesCount > 0 && (
-              <div className="flex justify-center items-center my-6 md:my-8">
+              <div className='flex justify-center items-center my-6 md:my-8'>
                 <Button
-                  className="inline-flex items-center"
+                  className='inline-flex items-center'
                   onClick={() =>
                     dispatch({
                       type: currentError.isCollapsed ? 'expand' : 'collapse',
                       payload: {
-                        errorId: currentError.id
-                      }
+                        errorId: currentError.id,
+                      },
                     })
-                  }>
+                  }
+                >
                   <Icon
-                    icon="chevron"
-                    size="sm"
+                    icon='chevron'
+                    size='sm'
                     className={clsx('mr-2 transition-transform', {
-                      'rotate-90': !currentError.isCollapsed
+                      'rotate-90': !currentError.isCollapsed,
                     })}
                   />
                   <span>
                     Toggle{' '}
-                    <span className="underline">{collapseFramesCount}</span>{' '}
+                    <span className='underline'>{collapseFramesCount}</span>{' '}
                     hidden frames
                   </span>
                 </Button>

@@ -16,19 +16,20 @@ const Hero: FunctionComponent<HeroProps> = ({ error }) => {
     : 'Unknown Error';
 
   return (
-    <div className="flex flex-col md:flex-row md:justify-between md:items-center mb-4 md:mb-6">
-      <div className="md:mr-2">
+    <div className='flex flex-col mb-4 md:flex-row md:justify-between md:items-center md:mb-6 custom-classname'>
+      <div className='md:mr-2'>
         <h1
           className={clsx(
-            'inline sm:py-1 px-2 md:text-xs font-bold py-[0.1rem] text-[0.65rem]',
+            'inline py-[0.1rem] px-2 text-[0.65rem] font-bold sm:py-1 md:text-xs',
             {
               ['text-yellow-700 bg-yellow-100']: error?.type === 'compile',
-              ['text-rose-700 bg-rose-100']: error?.type === 'runtime'
+              ['text-rose-700 bg-rose-100']: error?.type === 'runtime',
             }
-          )}>
+          )}
+        >
           {errorType}
         </h1>
-        <h2 className="mt-2 text-base sm:text-xl md:text-2xl tracking-tighter text-rose-600">
+        <h2 className='mt-2 text-base tracking-tighter text-rose-600 sm:text-xl md:text-2xl'>
           {error.name}: {error.message}
         </h2>
       </div>
@@ -36,20 +37,21 @@ const Hero: FunctionComponent<HeroProps> = ({ error }) => {
       {error.type !== 'compile' && Object.keys(error.frames).length > 0 && (
         <Button
           color={error.showOriginal ? 'gray' : 'green'}
-          className="inline-flex items-center self-center mt-3 md:mt-0"
+          className='inline-flex items-center self-center mt-3 md:mt-0'
           onClick={() =>
             dispatch({
               type: error.showOriginal ? 'viewCompiled' : 'viewOriginal',
-              payload: { errorId: error.id }
+              payload: { errorId: error.id },
             })
-          }>
+          }
+        >
           {error.showOriginal ? (
             <>
-              <Icon icon="closedEye" size="sm" className="mr-2" /> View compiled
+              <Icon icon='closedEye' size='sm' className='mr-2' /> View compiled
             </>
           ) : (
             <>
-              <Icon icon="openEye" size="sm" className="mr-2" /> View Original
+              <Icon icon='openEye' size='sm' className='mr-2' /> View Original
             </>
           )}
         </Button>

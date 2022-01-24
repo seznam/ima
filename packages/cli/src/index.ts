@@ -1,6 +1,6 @@
 export {
   createSourceFragment,
-  parseCompileError
+  parseCompileError,
 } from './lib/compileErrorParser';
 
 export { createDevServer } from './dev-server/devServer';
@@ -8,18 +8,18 @@ export { createDevServer } from './dev-server/devServer';
 export {
   AmpPluginConfigurationContext,
   AmpPluginOptions,
-  default as AmpPlugin
+  default as AmpPlugin,
 } from './plugins/amp/ampPlugin';
 
 export {
   ScrambleCssPluginConfigurationContext,
   ScrambleCssPluginOptions,
-  default as ScrambleCssPlugin
+  default as ScrambleCssPlugin,
 } from './plugins/scramble-css/scrambleCssPlugin';
 
 export {
   AnalyzePluginConfigurationContext,
-  default as AnalyzePlugin
+  default as AnalyzePlugin,
 } from './plugins/analyze/analyzePlugin';
 
 export {
@@ -29,5 +29,5 @@ export {
   ImaEnvironment,
   ImaCliCommand,
   CliArgs,
-  ConfigurationContext
+  ConfigurationContext,
 } from './types';

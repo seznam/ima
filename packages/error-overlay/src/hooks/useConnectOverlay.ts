@@ -1,4 +1,5 @@
-import { parseCompileError } from '@ima/cli/dist/lib/compileErrorParser';
+// eslint-disable-next-line import/no-unresolved
+import { parseCompileError } from '@ima/cli/dist/lib/compileErrorParser'; // TODO
 import { useCallback, useEffect } from 'react';
 
 import { useErrorsDispatcher } from '#/stores';
@@ -6,7 +7,7 @@ import { ClientEventName, OverlayEventName } from '#/types';
 import {
   mapStackFramesToOriginal,
   mapCompileStackFrames,
-  parseRuntimeError
+  parseRuntimeError,
 } from '#/utils';
 
 function useConnectSSRErrorOverlay(): void {
@@ -25,8 +26,8 @@ function useConnectSSRErrorOverlay(): void {
           name,
           message,
           type: 'runtime',
-          frames: await mapStackFramesToOriginal(parseRuntimeError(stack))
-        }
+          frames: await mapStackFramesToOriginal(parseRuntimeError(stack)),
+        },
       });
     };
 
@@ -48,8 +49,8 @@ function useConnectClientErrorOverlay(): void {
               name: event.detail.error.name,
               message: event.detail.error.message,
               type: 'runtime',
-              frames
-            }
+              frames,
+            },
           });
         }
       );
@@ -78,8 +79,8 @@ function useConnectClientErrorOverlay(): void {
               name: name,
               message: message,
               type: 'compile',
-              frames
-            }
+              frames,
+            },
           });
         });
       });
@@ -94,8 +95,8 @@ function useConnectClientErrorOverlay(): void {
         type: 'runtime',
         emptyCallback: () => {
           window.parent.dispatchEvent(new CustomEvent(OverlayEventName.Close));
-        }
-      }
+        },
+      },
     });
   }, []);
 
@@ -113,8 +114,8 @@ function useConnectClientErrorOverlay(): void {
               new CustomEvent(OverlayEventName.Close)
             );
           }
-        }
-      }
+        },
+      },
     });
   }, []);
 

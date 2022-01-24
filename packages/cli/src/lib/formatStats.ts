@@ -1,14 +1,15 @@
 import fs from 'fs';
 import path from 'path';
-import chalk from 'chalk';
-import { MultiStats, StatsAsset } from 'webpack';
-import { highlight, fromJson } from 'cli-highlight';
-import prettyMs from 'pretty-ms';
-import prettyBytes from 'pretty-bytes';
 
+import chalk from 'chalk';
+import { highlight, fromJson } from 'cli-highlight';
+import prettyBytes from 'pretty-bytes';
+import prettyMs from 'pretty-ms';
+import { MultiStats, StatsAsset } from 'webpack';
+
+import { CliArgs } from '../types';
 import { createSourceFragment, parseCompileError } from './compileErrorParser';
 import logger from './logger';
-import { CliArgs } from '../types';
 
 const warningsCache = new Set<string>();
 
@@ -110,8 +111,8 @@ function formatWebpackErrors(
               regexp: 'yellow',
               literal: 'magenta',
               number: 'magenta',
-              attribute: 'red'
-            })
+              attribute: 'red',
+            }),
           })
       );
     });
@@ -186,7 +187,7 @@ function extractAssetPaths(
   return {
     fileName,
     fullPath,
-    basePath
+    basePath,
   };
 }
 
@@ -245,7 +246,7 @@ function formatStats(stats: MultiStats | undefined, args: CliArgs): void {
     return logger.write(
       stats.toString({
         warnings: !args.ignoreWarnings,
-        colors: true
+        colors: true,
       })
     );
   }
@@ -256,7 +257,7 @@ function formatStats(stats: MultiStats | undefined, args: CliArgs): void {
     timings: true,
     version: true,
     outputPath: true,
-    chunkGroups: true
+    chunkGroups: true,
   });
 
   if (!Array.isArray(jsonStats.children) || jsonStats.children?.length === 0) {

@@ -1,7 +1,8 @@
 #!/usr/bin/env node
 import path from 'path';
-import yargs from 'yargs';
+
 import chalk from 'chalk';
+import yargs from 'yargs';
 
 yargs
   .scriptName(chalk.green.bold('ima'))
@@ -12,7 +13,7 @@ yargs
   .updateStrings({
     'Examples:': chalk.bold.cyan('Examples:'),
     'Options:': chalk.bold.cyan('Options:'),
-    'Commands:': chalk.bold.cyan('Commands:')
+    'Commands:': chalk.bold.cyan('Commands:'),
   })
   .updateLocale({
     choices: chalk.gray('choices'),
@@ -23,7 +24,7 @@ yargs
     aliases: chalk.gray('aliases'),
     'generated-value': chalk.gray('generated-value'),
     default: chalk.magenta('default'),
-    required: chalk.yellow('required')
+    required: chalk.yellow('required'),
   })
   .wrap(null).argv;
 

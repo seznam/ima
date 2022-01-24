@@ -1,20 +1,21 @@
 import path from 'path';
+
 import open from 'better-opn';
 import chalk from 'chalk';
 import nodemon from 'nodemon';
+import webpack from 'webpack';
 import { CommandBuilder } from 'yargs';
 
-import { CliArgs, HandlerFn } from '../types';
 import {
   handlerFactory,
   IMA_CLI_RUN_SERVER_MESSAGE,
   resolveCliPluginArgs,
-  sharedArgsFactory
+  sharedArgsFactory,
 } from '../lib/cli';
-import logger from '../lib/logger';
 import { watchCompiler, handleError } from '../lib/compiler';
+import logger from '../lib/logger';
+import { CliArgs, HandlerFn } from '../types';
 import { createWebpackConfig, resolveEnvironment } from '../webpack/utils';
-import webpack from 'webpack';
 
 let nodemonInitialized = false;
 let serverHasStarted = false;
@@ -29,7 +30,7 @@ function startNodemon(args: CliArgs) {
       script: path.join(args.rootDir, 'server/server.js'),
       watch: [`${path.join(args.rootDir, 'server')}`],
       args: [`--verbose=${args.verbose}`],
-      cwd: args.rootDir
+      cwd: args.rootDir,
     });
 
     nodemon.on('start', () => {
@@ -117,27 +118,27 @@ export const builder: CommandBuilder = {
   clean: {
     desc: 'Clean build folder before building the application',
     type: 'boolean',
-    default: false
+    default: false,
   },
   open: {
     desc: 'Opens browser window after server has been started',
     type: 'boolean',
-    default: true
+    default: true,
   },
   legacy: {
     desc: 'Runs application in legacy (es5-compatible) mode',
     type: 'boolean',
-    default: false
+    default: false,
   },
   forceSPA: {
     desc: 'Forces application to run in SPA mode',
     type: 'boolean',
-    default: false
+    default: false,
   },
   forceSPAWithHMR: {
     desc: 'Forces application to run in SPA mode with HMR enabled',
     type: 'boolean',
-    default: false
+    default: false,
   },
-  ...resolveCliPluginArgs(CMD)
+  ...resolveCliPluginArgs(CMD),
 };

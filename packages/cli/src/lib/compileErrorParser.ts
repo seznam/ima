@@ -47,7 +47,7 @@ function createSourceFragment(
     fragmentLines.push({
       line: (i + 1).toString(),
       source: lines[i],
-      highlight: i === line - 1
+      highlight: i === line - 1,
     });
   }
 
@@ -81,7 +81,7 @@ const LineNumberRegExps = Object.freeze({
    * less-loader errors
    * https://github.com/webpack-contrib/less-loader/blob/master/src/LessError.js#L11
    */
-  less: /^.*\(line\s(\d+),\scolumn\s(\d+)\)$/
+  less: /^.*\(line\s(\d+),\scolumn\s(\d+)\)$/,
 });
 
 /**

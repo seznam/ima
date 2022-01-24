@@ -39,7 +39,7 @@ function useOpenEditor() {
 
   return {
     openEditor,
-    isLoading
+    isLoading,
   };
 }
 

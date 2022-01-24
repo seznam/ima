@@ -1,12 +1,15 @@
+import { createHash } from 'crypto';
 import fs from 'fs';
 import path from 'path';
-import { createHash } from 'crypto';
-import { Configuration } from 'webpack';
-import chalk from 'chalk';
-import MessageFormat from 'messageformat';
-import { ObjectPattern } from 'copy-webpack-plugin';
 
-import webpackConfig from './config';
+import envResolver from '@ima/server/lib/environment.js';
+import chalk from 'chalk';
+import { ObjectPattern } from 'copy-webpack-plugin';
+import MessageFormat from 'messageformat';
+import { Configuration } from 'webpack';
+
+import logger from '../lib/logger';
+import { time } from '../lib/time';
 import {
   AdditionalDataContentFn,
   AdditionalDataFactoryFn,
@@ -15,12 +18,9 @@ import {
   ImaEnvironment,
   ConfigurationTypes,
   ImaConfig,
-  CliArgs
+  CliArgs,
 } from '../types';
-
-import envResolver from '@ima/server/lib/environment.js';
-import logger from '../lib/logger';
-import { time } from '../lib/time';
+import webpackConfig from './config';
 
 const POSTCSS_CONF_FILENAMES = [
   'postcss.config.js',
@@ -29,7 +29,7 @@ const POSTCSS_CONF_FILENAMES = [
   '.postcssrc.js',
   '.postcssrc.cjs',
   '.postcssrc.json',
-  '.postcssrc'
+  '.postcssrc',
 ];
 
 const BABEL_CONF_FILENAMES = [
@@ -39,7 +39,7 @@ const BABEL_CONF_FILENAMES = [
   '.babelrc.js',
   '.babelrc.cjs',
   '.babelrc.json',
-  '.babelrc'
+  '.babelrc',
 ];
 
 const BABEL_CONF_ES_FILENAMES = [
@@ -49,7 +49,7 @@ const BABEL_CONF_ES_FILENAMES = [
   '.babelrc.es.js',
   '.babelrc.es.cjs',
   '.babelrc.es.json',
-  '.babelrc.es'
+  '.babelrc.es',
 ];
 
 /**
@@ -83,7 +83,7 @@ function requireConfig({
   ctx,
   fileNames,
   packageJsonKey = '',
-  defaultConfig = {}
+  defaultConfig = {},
 }: {
   ctx: ConfigurationContext;
   fileNames: string[];
@@ -98,7 +98,7 @@ function requireConfig({
     fileNames
       .map(fileName => ({
         fileName,
-        fullPath: path.join(ctx.rootDir, fileName)
+        fullPath: path.join(ctx.rootDir, fileName),
       }))
       .find(({ fullPath }) => fs.existsSync(fullPath)) || {};
 
@@ -183,7 +183,7 @@ function extractLanguages(imaConfig: ImaConfig): ObjectPattern[] {
             ).replace(locale.toUpperCase() + '.json', '');
 
             return Object.assign(accumulator, {
-              [scopeFromFilename]: fileContent
+              [scopeFromFilename]: fileContent,
             });
           }, tempLocales[locale]);
 
@@ -192,7 +192,7 @@ function extractLanguages(imaConfig: ImaConfig): ObjectPattern[] {
                                           .compile(tempLocales[locale])
                                           .toString('$IMA.i18n')}
                                           ;if (typeof module !== "undefined" && module.exports) {module.exports = $IMA.i18n;} })();`;
-        }
+        },
       })
     );
   });
@@ -248,7 +248,7 @@ function createCacheKey(ctx: ConfigurationContext): string {
       ctx.forceSPAWithHMR,
       ctx.profile,
       ctx.publicPath,
-      ctx.rootDir
+      ctx.rootDir,
     ]
       .map(value => JSON.stringify(value))
       .join('')
@@ -283,14 +283,14 @@ async function resolveImaConfig(args: CliArgs): Promise<ImaConfig> {
     compression: ['brotliCompress', 'gzip'],
     languages: {
       cs: ['./app/**/*CS.json'],
-      en: ['./app/**/*EN.json']
+      en: ['./app/**/*EN.json'],
     },
-    imageInlineSizeLimit: 8192
+    imageInlineSizeLimit: 8192,
   };
 
   return {
     ...defaultImaConfig,
-    ...requireImaConfig(args.rootDir)
+    ...requireImaConfig(args.rootDir),
   };
 }
 
@@ -353,7 +353,7 @@ async function createWebpackConfig(
     finalConfigContexts.push({
       name: 'server',
       isServer: true,
-      ...args
+      ...args,
     });
   }
 
@@ -365,7 +365,7 @@ async function createWebpackConfig(
         name: 'client',
         isServer: false,
         isEsVersion: false,
-        ...args
+        ...args,
       });
     }
 
@@ -375,7 +375,7 @@ async function createWebpackConfig(
         name: 'client.es',
         isServer: false,
         isEsVersion: true,
-        ...args
+        ...args,
       });
     }
   }
@@ -388,7 +388,7 @@ async function createWebpackConfig(
       let config = await webpackConfig(ctx, imaConfig);
 
       if (Array.isArray(imaConfig?.plugins)) {
-        for (const plugin of imaConfig?.plugins) {
+        for (const plugin of imaConfig.plugins) {
           try {
             config = await plugin?.webpack(config, ctx, imaConfig);
             loadedPlugins.add(plugin.name);
@@ -441,5 +441,5 @@ export {
   IMA_CONF_FILENAME,
   BABEL_CONF_ES_FILENAMES,
   BABEL_CONF_FILENAMES,
-  POSTCSS_CONF_FILENAMES
+  POSTCSS_CONF_FILENAMES,
 };

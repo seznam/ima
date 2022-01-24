@@ -19,24 +19,26 @@ const Header: FunctionComponent<HeaderProps> = ({ error }) => {
   }
 
   return (
-    <div className="flex justify-between items-center my-3">
+    <div className='flex justify-between items-center my-3'>
       {error && errorIds.length > 1 ? (
-        <div className="flex items-center">
+        <div className='flex items-center'>
           <Button
-            size="xs"
+            size='xs'
             onClick={() => dispatch({ type: 'previous' })}
-            className="mr-1">
-            <Icon icon="chevron" size="xs" className="transform -rotate-180" />
+            className='mr-1'
+          >
+            <Icon icon='chevron' size='xs' className='-rotate-180' />
           </Button>
           <Button
-            size="xs"
+            size='xs'
             onClick={() => dispatch({ type: 'next' })}
-            className="mr-3">
-            <Icon icon="chevron" size="xs" />
+            className='mr-3'
+          >
+            <Icon icon='chevron' size='xs' />
           </Button>
-          <span className="text-xs md:text-sm text-slate-700">
-            <span className="font-bold">{errorIds.indexOf(error.id) + 1}</span>{' '}
-            of <span className="font-bold">{errorIds.length}</span> errors are
+          <span className='text-xs text-slate-700 md:text-sm'>
+            <span className='font-bold'>{errorIds.indexOf(error.id) + 1}</span>{' '}
+            of <span className='font-bold'>{errorIds.length}</span> errors are
             visible on the page
           </span>
         </div>
@@ -44,7 +46,7 @@ const Header: FunctionComponent<HeaderProps> = ({ error }) => {
         <div />
       )}
       <Button onClick={closeOverlay} linkStyle>
-        <Icon icon="cross" size="lg" className="text-slate-700" />
+        <Icon icon='cross' size='lg' className='text-slate-700' />
       </Button>
     </div>
   );

@@ -46,7 +46,7 @@ class OverlayBridge {
 
     this._dispatchEvent(
       new CustomEvent<{ errors: StatsError[] }>(ClientEventName.CompileErrors, {
-        detail: { errors }
+        detail: { errors },
       })
     );
   }
@@ -65,7 +65,7 @@ class OverlayBridge {
 
     this._dispatchEvent(
       new CustomEvent<{ error: Error }>(ClientEventName.RuntimeErrors, {
-        detail: { error }
+        detail: { error },
       })
     );
   }

@@ -20,7 +20,7 @@ function handlerFactory(handlerFn: HandlerFn) {
     return await handlerFn({
       ...yargs,
       rootDir: process.cwd(),
-      command: command.toString()
+      command: command.toString(),
     } as unknown as CliArgs);
   };
 }
@@ -47,7 +47,7 @@ function resolveCliPluginArgs(command: ImaCliCommand): CommandBuilder {
       if (cur?.cliArgs && cur.cliArgs[command]) {
         acc = {
           ...acc,
-          ...cur.cliArgs[command]
+          ...cur.cliArgs[command],
         };
       }
 
@@ -67,20 +67,20 @@ function sharedArgsFactory(command: ImaCliCommand): CommandBuilder {
     clean: {
       desc: 'Clean build folder before building the application',
       type: 'boolean',
-      default: command === 'build'
+      default: command === 'build',
     },
     verbose: {
       desc: 'Use default webpack CLI output instead of custom one',
-      type: 'boolean'
+      type: 'boolean',
     },
     publicPath: {
       desc: 'Webpack public path to specify base for all assets in the app',
-      type: 'string'
+      type: 'string',
     },
     ignoreWarnings: {
       desc: 'Webpack will no longer print warnings during compilation',
-      type: 'boolean'
-    }
+      type: 'boolean',
+    },
   };
 }
 
@@ -88,5 +88,5 @@ export {
   IMA_CLI_RUN_SERVER_MESSAGE,
   handlerFactory,
   resolveCliPluginArgs,
-  sharedArgsFactory
+  sharedArgsFactory,
 };

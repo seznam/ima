@@ -16,8 +16,7 @@
   "types": "./dist/types.d.ts",
   "scripts": {
     "dev": "NODE_ENV=development webpack --config webpack.config.ts --watch",
-    "build": "NODE_ENV=production webpack --config webpack.config.ts",
-    "lint": "../../node_modules/.bin/eslint './**/*.{js,ts,tsx,jsx}'"
+    "build": "NODE_ENV=production webpack --config webpack.config.ts"
   },
   "author": "Jan Šimeček",
   "license": "MIT",
@@ -26,9 +25,6 @@
     "@types/node": "^17.0.4",
     "@types/webpack": "^5.28.0",
     "@types/webpack-env": "^1.16.3",
-    "@typescript-eslint/eslint-plugin": "^5.7.0",
-    "@typescript-eslint/parser": "^5.7.0",
-    "eslint-plugin-import": "^2.25.3",
     "lodash.debounce": "^4.0.8",
     "ts-loader": "^9.2.6",
     "ts-node": "^10.4.0",

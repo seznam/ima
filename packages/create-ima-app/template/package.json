@@ -3,8 +3,8 @@
   "version": "0.1.0",
   "main": "server/server.js",
   "scripts": {
-    "test": "node_modules/.bin/jest --config jest.conf.json",
-    "lint": "node_modules/.bin/eslint --fix './{app,server}/**/*.{js,jsx}'",
+    "test": "jest --config jest.conf.json",
+    "lint": "eslint --fix './**/*.{js,jsx}'",
     "dev": "ima dev",
     "build": "ima build",
     "start": "NODE_ENV=production node server/server.js"
@@ -15,7 +15,6 @@
     "JavaScript"
   ],
   "license": "MIT",
-  "browserslist": "last 2 Chrome versions",
   "devDependencies": {
     "@babel/eslint-parser": "^7.16.5",
     "@babel/preset-react": "^7.16.7",

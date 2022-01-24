@@ -43,7 +43,7 @@ class SourceStorage {
             fileContents,
             sourceMap: hasSourceMap
               ? await this._fetchSourceMap(fileUri, fileContents)
-              : null
+              : null,
           };
         })
       );

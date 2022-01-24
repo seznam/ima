@@ -1,14 +1,14 @@
+import webpack from 'webpack';
 import { CommandBuilder } from 'yargs';
 
-import { HandlerFn } from '../types';
 import {
   handlerFactory,
   resolveCliPluginArgs,
-  sharedArgsFactory
+  sharedArgsFactory,
 } from '../lib/cli';
 import { runCompiler, handleError } from '../lib/compiler';
+import { HandlerFn } from '../types';
 import { createWebpackConfig } from '../webpack/utils';
-import webpack from 'webpack';
 
 /**
  * Builds ima application with provided config.
@@ -42,12 +42,12 @@ export const builder: CommandBuilder = {
   clean: {
     desc: 'Clean build folder before building the application',
     type: 'boolean',
-    default: true
+    default: true,
   },
   profile: {
     desc: 'Turn on profiling support in production',
     type: 'boolean',
-    default: false
+    default: false,
   },
-  ...resolveCliPluginArgs(CMD)
+  ...resolveCliPluginArgs(CMD),
 };

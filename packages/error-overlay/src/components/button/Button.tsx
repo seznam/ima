@@ -38,26 +38,27 @@ const Button: FunctionComponent<
           'border-transparent': linkStyle,
           'active:scale-90': !disabled && (linkStyle || size === 'xs'),
           'active:scale-95': !disabled && !linkStyle,
-          'cursor-not-allowed opacity-40': disabled,
+          'opacity-40 cursor-not-allowed': disabled,
           'text-slate-600 hover:text-slate-800': color === 'gray',
           [bordered
-            ? 'border-slate-500 hover:border-slate-700 hover:bg-slate-100'
-            : 'border-slate-200 bg-slate-200 hover:border-slate-300 hover:bg-slate-300']:
+            ? 'hover:bg-slate-100 border-slate-500 hover:border-slate-700'
+            : 'bg-slate-200 hover:bg-slate-300 border-slate-200 hover:border-slate-300']:
             !linkStyle && color === 'gray',
           'text-slate-500 hover:text-slate-300': color === 'light',
           [bordered
-            ? 'border-slate-500 hover:border-slate-700 hover:bg-slate-100'
-            : 'border-slate-200 bg-slate-200 hover:border-slate-300 hover:bg-slate-300']:
+            ? 'hover:bg-slate-100 border-slate-500 hover:border-slate-700'
+            : 'bg-slate-200 hover:bg-slate-300 border-slate-200 hover:border-slate-300']:
             !linkStyle && color === 'gray',
           'text-emerald-600 hover:text-emerald-700': color === 'green',
           [bordered
-            ? 'border-emerald-500 hover:border-emerald-600 hover:bg-emerald-50'
-            : 'border-emerald-100 bg-emerald-100 hover:border-emerald-200 hover:bg-emerald-200']:
-            !linkStyle && color === 'green'
+            ? 'hover:bg-emerald-50 border-emerald-500 hover:border-emerald-600'
+            : 'bg-emerald-100 hover:bg-emerald-200 border-emerald-100 hover:border-emerald-200']:
+            !linkStyle && color === 'green',
         },
         className
       )}
-      {...restProps}>
+      {...restProps}
+    >
       {children}
     </button>
   );

@@ -2,12 +2,12 @@ import {
   NullablePosition,
   NullableMappedPosition,
   BasicSourceMapConsumer,
-  SourceMapConsumer
+  SourceMapConsumer,
 } from 'source-map';
 
 // @ts-expect-error: Not available in typings
 SourceMapConsumer.initialize({
-  'lib/mappings.wasm': '/__error-overlay-static/mappings.wasm'
+  'lib/mappings.wasm': '/__error-overlay-static/mappings.wasm',
 });
 
 /**
@@ -34,7 +34,7 @@ class SourceMap {
   ): Partial<NullableMappedPosition> {
     return this._sourceMap.originalPositionFor({
       line,
-      column
+      column,
     });
   }
 
@@ -54,7 +54,7 @@ class SourceMap {
     return this._sourceMap.generatedPositionFor({
       source,
       line,
-      column
+      column,
     });
   }
 

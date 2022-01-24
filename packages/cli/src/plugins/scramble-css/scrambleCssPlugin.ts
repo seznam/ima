@@ -1,11 +1,12 @@
-import { CommandBuilder } from 'yargs';
 import path from 'path';
+
 import postcss from 'postcss';
 import PostCssPipelineWebpackPlugin from 'postcss-pipeline-webpack-plugin';
-
-import postCssScrambler from './postCssScrambler';
-import { ImaCliPlugin, ConfigurationContext } from '../../types';
 import { Configuration } from 'webpack';
+import { CommandBuilder } from 'yargs';
+
+import { ImaCliPlugin, ConfigurationContext } from '../../types';
+import postCssScrambler from './postCssScrambler';
 
 export interface ScrambleCssPluginConfigurationContext
   extends ConfigurationContext {
@@ -27,8 +28,8 @@ export interface ScrambleCssPluginOptions {
 const scrambleCssPluginSharedCliArgs: CommandBuilder = {
   scrambleCss: {
     desc: 'Scrambles (uglifies) classNames in css files',
-    type: 'boolean'
-  }
+    type: 'boolean',
+  },
 };
 
 /**
@@ -36,13 +37,14 @@ const scrambleCssPluginSharedCliArgs: CommandBuilder = {
  * which can be later used for backwards translation.
  */
 export default class ScrambleCssPlugin
-  implements ImaCliPlugin<ScrambleCssPluginConfigurationContext> {
+  implements ImaCliPlugin<ScrambleCssPluginConfigurationContext>
+{
   private _options: ScrambleCssPluginOptions;
 
   name = 'ScrambleCssPlugin';
   cliArgs = {
     build: scrambleCssPluginSharedCliArgs,
-    dev: scrambleCssPluginSharedCliArgs
+    dev: scrambleCssPluginSharedCliArgs,
   };
 
   constructor(options: ScrambleCssPluginOptions) {
@@ -77,9 +79,9 @@ export default class ScrambleCssPlugin
             postCssScrambler({
               generateHashTable: this._options?.generateHashTable ?? true,
               uniqueIdentifier,
-              hashTable
-            })
-          ])
+              hashTable,
+            }),
+          ]),
         })
       );
 
@@ -92,9 +94,9 @@ export default class ScrambleCssPlugin
           processor: postcss([
             postCssScrambler({
               generateHashTable: false,
-              hashTable
-            })
-          ])
+              hashTable,
+            }),
+          ]),
         })
       );
     }

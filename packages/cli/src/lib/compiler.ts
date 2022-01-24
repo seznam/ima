@@ -1,22 +1,23 @@
-import path from 'path';
 import fs from 'fs';
+import path from 'path';
+
 import chalk from 'chalk';
 import {
   WebpackError,
   Configuration,
   MultiCompiler,
-  MultiStats
+  MultiStats,
 } from 'webpack';
 
+import { ImaConfig } from '..';
 import { CliArgs } from '../types';
-import logger from './logger';
-import { time } from './time';
 import {
   formatStats,
   formatWebpackErrors,
-  formatWebpackWarnings
+  formatWebpackWarnings,
 } from './formatStats';
-import { ImaConfig } from '..';
+import logger from './logger';
+import { time } from './time';
 
 /**
  * Handles webpack compile errors.
@@ -56,7 +57,7 @@ function cleanOutputDir(args: CliArgs): void {
     // Clean at least hot directory silently
     fs.rmSync(path.join(args.rootDir, 'build/hot'), {
       recursive: true,
-      force: true
+      force: true,
     });
 
     return;
@@ -217,5 +218,5 @@ export {
   runCompiler,
   watchCompiler,
   handleError,
-  cleanOutputDir
+  cleanOutputDir,
 };

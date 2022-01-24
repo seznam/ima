@@ -5,6 +5,7 @@ const fs = require('fs');
 const path = require('path');
 
 const selectorParser = require('postcss-selector-parser');
+
 const { numberToCssClass } = require('./numberToCssClass');
 
 function generateIdentifierHash(identifier) {

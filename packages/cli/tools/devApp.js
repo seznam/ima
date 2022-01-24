@@ -10,12 +10,13 @@
 /* eslint-disable @typescript-eslint/no-var-requires */
 /* eslint-disable @typescript-eslint/ban-ts-comment */
 // @ts-ignore
-const chalk = require('chalk');
-const chokidar = require('chokidar');
 const child = require('child_process');
 const fs = require('fs');
-const fsExtra = require('fs-extra');
 const path = require('path');
+
+const chalk = require('chalk');
+const chokidar = require('chokidar');
+const fsExtra = require('fs-extra');
 const yargs = require('yargs');
 
 function shell(cmd, cwd = process.cwd()) {

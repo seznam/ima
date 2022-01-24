@@ -1,5 +1,6 @@
 module.exports = {
   root: true,
+  ignorePatterns: ['node_modules', 'dist'],
   extends: [
     'eslint:recommended',
     'plugin:react/recommended',
@@ -74,18 +75,69 @@ module.exports = {
     spyOn: true,
   },
   overrides: [
+    // TODO Enable repo-wide when merged to master
+    // Import plugin
+    {
+      files: [
+        'packages/cli/**',
+        'packages/hmr-client/**',
+        'packages/error-overlay/**',
+      ],
+      extends: ['plugin:import/recommended'],
+      rules: {
+        'import/order': [
+          'error',
+          {
+            groups: ['builtin', 'external', 'internal'],
+            pathGroups: [
+              {
+                pattern: '{preact|react|svelte}{/**,**}',
+                group: 'external',
+                position: 'before',
+              },
+              {
+                pattern: '#*/**',
+                group: 'internal',
+                position: 'after',
+              },
+              {
+                pattern: '*.{css,less,json,html,txt,csv,png,jpg,svg}',
+                group: 'object',
+                patternOptions: { matchBase: true },
+                position: 'after',
+              },
+            ],
+            pathGroupsExcludedImportTypes: ['#'],
+            'newlines-between': 'always',
+            alphabetize: {
+              order: 'asc',
+              caseInsensitive: true,
+            },
+          },
+        ],
+      },
+    },
     // Typescript support
     {
-      files: ['*.ts', '*.tsx'],
-      parser: '@typescript-eslint/parser',
-      plugins: ['@typescript-eslint'],
+      files: ['**/*.{ts,tsx}'],
+      parserOptions: {
+        tsconfigRootDir: __dirname,
+        project: './tsconfig.json',
+      },
       extends: ['plugin:@typescript-eslint/recommended'],
       rules: {
-        '@typescript-eslint/ban-ts-ignore': 'off',
+        'import/no-unresolved': 'off',
+        '@typescript-eslint/ban-ts-comment': [
+          'error',
+          { 'ts-expect-error': 'allow-with-description' },
+        ],
         '@typescript-eslint/no-namespace': [
           'error',
           { allowDeclarations: true },
         ],
+      },
+      settings: {
+        'import/ignore': [/^#/],
       },
     },
     // Other overrides

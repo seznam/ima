@@ -30,5 +30,5 @@ export default {
   error: printFnFactory('error', chalk.bold.red),
   warn: printFnFactory('warn', chalk.bold.yellow),
   hmr: printFnFactory('hmr', chalk.bold.magenta),
-  plugin: printFnFactory('plugin', chalk.bold.blue)
+  plugin: printFnFactory('plugin', chalk.bold.blue),
 };

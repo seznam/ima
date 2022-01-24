@@ -1,12 +1,13 @@
-import { CommandBuilder } from 'yargs';
 import path from 'path';
+
 import fg from 'fast-glob';
 import postcss from 'postcss';
 import PostCssPipelineWebpackPlugin from 'postcss-pipeline-webpack-plugin';
-
-import { ConfigurationContext, CliArgs } from '../../types';
 import { Configuration, EntryObject } from 'webpack';
+import { CommandBuilder } from 'yargs';
+
 import { ImaCliCommand, ImaCliPlugin } from '../..';
+import { ConfigurationContext, CliArgs } from '../../types';
 
 export interface AmpPluginConfigurationContext extends ConfigurationContext {
   amp?: boolean;
@@ -56,8 +57,8 @@ async function generateEntryPoints(
 const ampPluginSharedCliArgs: CommandBuilder = {
   amp: {
     desc: 'Builds separate CSS files for use in AMP mode',
-    type: 'boolean'
-  }
+    type: 'boolean',
+  },
 };
 
 /**
@@ -65,13 +66,14 @@ const ampPluginSharedCliArgs: CommandBuilder = {
  * construct minimal css file need to render the page (used specifically for AMP).
  */
 export default class AmpPlugin
-  implements ImaCliPlugin<AmpPluginConfigurationContext> {
+  implements ImaCliPlugin<AmpPluginConfigurationContext>
+{
   private _options: AmpPluginOptions;
 
   readonly name = 'AmpPlugin';
   readonly cliArgs: Partial<Record<ImaCliCommand, CommandBuilder>> = {
     build: ampPluginSharedCliArgs,
-    dev: ampPluginSharedCliArgs
+    dev: ampPluginSharedCliArgs,
   };
 
   constructor(options: AmpPluginOptions) {
@@ -102,7 +104,7 @@ export default class AmpPlugin
           rootDir,
           this._options?.entry,
           this._options?.outputDir
-        ))
+        )),
       };
 
       // Custom AMP postcss
@@ -115,7 +117,7 @@ export default class AmpPlugin
             predicate: (name: string) =>
               !/static\/css\/app.css$/.test(name) &&
               !/srambled.css$/.test(name),
-            processor: postcss(this._options?.postCssPlugins)
+            processor: postcss(this._options?.postCssPlugins),
           })
         );
       }

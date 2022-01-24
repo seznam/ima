@@ -7,7 +7,7 @@ import {
   ErrorsState,
   errorsReducer,
   errorsInitialState,
-  ErrorWrapper
+  ErrorWrapper,
 } from '#/reducers';
 
 interface IErrorsContext {
@@ -27,8 +27,9 @@ const ErrorsStoreProvider: FunctionComponent = ({ children }) => {
         dispatch,
         currentError: state.currentErrorId
           ? state.errors[state.currentErrorId]
-          : null
-      }}>
+          : null,
+      }}
+    >
       {children}
     </ErrorsContext.Provider>
   );
@@ -55,5 +56,5 @@ export {
   ErrorsContext,
   ErrorsStoreProvider,
   useErrorsStore,
-  useErrorsDispatcher
+  useErrorsDispatcher,
 };

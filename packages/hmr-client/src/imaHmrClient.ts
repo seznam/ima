@@ -5,7 +5,7 @@ import {
   handleRuntimeError,
   showCompileErrors,
   clearRuntimeErrors,
-  clearCompileError
+  clearCompileError,
 } from '#/lib/hmrClient';
 
 // Prevents rapid executions from fast refresh
@@ -14,7 +14,7 @@ const debouncedHandleRuntimeError = debounce(
   100,
   {
     leading: true,
-    trailing: false
+    trailing: false,
   }
 );
 
@@ -24,7 +24,7 @@ const debouncedShowCompileErrors = debounce(
   100,
   {
     leading: true,
-    trailing: false
+    trailing: false,
   }
 );
 
@@ -32,5 +32,5 @@ window.__ima_hmr = {
   handleRuntimeError: debouncedHandleRuntimeError,
   showCompileErrors: debouncedShowCompileErrors,
   clearRuntimeErrors,
-  clearCompileError
+  clearCompileError,
 };

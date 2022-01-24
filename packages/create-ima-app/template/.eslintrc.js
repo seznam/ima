@@ -1,5 +1,5 @@
 module.exports = {
-  root: true,
+  ignorePatterns: ['node_modules', 'build'],
   extends: [
     'eslint:recommended',
     'plugin:react/recommended',

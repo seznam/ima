@@ -12,7 +12,7 @@ function useBridgeInterface(): {
 
   return {
     closeOverlay,
-    isSSRError: !!window.__ima_server_error
+    isSSRError: !!window.__ima_server_error,
   };
 }
 

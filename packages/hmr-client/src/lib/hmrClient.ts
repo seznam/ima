@@ -77,5 +77,5 @@ export {
   handleRuntimeError,
   clearRuntimeErrors,
   showCompileErrors,
-  clearCompileError
+  clearCompileError,
 };

@@ -11,9 +11,7 @@ const reValidFrameFireFox = /(^|@)\S+:\d+|.+line\s+\d+\s+>\s+(eval|Function).+/;
  * @param {string} token Parsed stack trace line.
  * @returns {object}
  */
-function extractLocation(
-  token: string
-): {
+function extractLocation(token: string): {
   fileUri: string;
   lineNumber: number;
   columnNumber: number;
@@ -24,7 +22,7 @@ function extractLocation(
   return {
     fileUri,
     lineNumber: parseInt(lineNumber),
-    columnNumber: parseInt(columnNumber)
+    columnNumber: parseInt(columnNumber),
   };
 }
 
@@ -67,7 +65,7 @@ function parseStack(stack: string[]): ParsedStack[] {
           functionName: data.join('@') || (isEval ? 'eval' : null),
           fileUri,
           lineNumber,
-          columnNumber
+          columnNumber,
         };
       } else {
         // Strip eval
@@ -88,7 +86,7 @@ function parseStack(stack: string[]): ParsedStack[] {
           functionName: data.join(' ') || null,
           fileUri,
           lineNumber,
-          columnNumber
+          columnNumber,
         };
       }
     });

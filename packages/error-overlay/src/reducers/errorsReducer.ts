@@ -34,7 +34,7 @@ export interface ErrorsState {
 const errorsInitialState: ErrorsState = {
   currentErrorId: null,
   errors: {},
-  errorIds: []
+  errorIds: [],
 };
 
 function errorsReducer(state: ErrorsState, action: ErrorsAction): ErrorsState {
@@ -68,15 +68,15 @@ function errorsReducer(state: ErrorsState, action: ErrorsAction): ErrorsState {
                     showOriginal: true,
                     isCollapsed:
                       !curFrame.originalSourceFragment ||
-                      curFrame.originalSourceFragment.length === 0
+                      curFrame.originalSourceFragment.length === 0,
                   };
 
                   return accFrames;
                 },
                 {}
-              )
-            }
-          }
+              ),
+            },
+          },
         };
       }
 
@@ -100,17 +100,17 @@ function errorsReducer(state: ErrorsState, action: ErrorsAction): ErrorsState {
                   showOriginal: true,
                   isCollapsed:
                     !curFrame.originalSourceFragment ||
-                    curFrame.originalSourceFragment.length === 0
+                    curFrame.originalSourceFragment.length === 0,
                 };
 
                 return accFrames;
               },
               {}
-            )
+            ),
           },
-          ...state.errors
+          ...state.errors,
         },
-        errorIds: [errorId, ...state.errorIds]
+        errorIds: [errorId, ...state.errorIds],
       };
     }
 
@@ -144,7 +144,7 @@ function errorsReducer(state: ErrorsState, action: ErrorsAction): ErrorsState {
         errors: filteredErrors,
         errorIds: filteredErrorIds,
         currentErrorId:
-          filteredErrorIds.length !== 0 ? filteredErrorIds[0] : null
+          filteredErrorIds.length !== 0 ? filteredErrorIds[0] : null,
       };
     }
 
@@ -179,11 +179,11 @@ function errorsReducer(state: ErrorsState, action: ErrorsAction): ErrorsState {
                     : state.errors[errorId].frames[frameId].showOriginal,
                   isCollapsed: isCollapseAction
                     ? isCollapsedResult
-                    : state.errors[errorId].frames[frameId].isCollapsed
-                }
-              }
-            }
-          }
+                    : state.errors[errorId].frames[frameId].isCollapsed,
+                },
+              },
+            },
+          },
         };
       }
 
@@ -217,13 +217,13 @@ function errorsReducer(state: ErrorsState, action: ErrorsAction): ErrorsState {
                 ...curFrame,
                 showOriginal: isViewAction
                   ? showOriginalResult
-                  : state.errors[errorId].frames[curFrame.id].showOriginal
+                  : state.errors[errorId].frames[curFrame.id].showOriginal,
               };
 
               return accFrames;
-            }, {})
-          }
-        }
+            }, {}),
+          },
+        },
       };
     }
 
@@ -238,7 +238,7 @@ function errorsReducer(state: ErrorsState, action: ErrorsAction): ErrorsState {
           state.errorIds[
             (state.errorIds.indexOf(state.currentErrorId) + 1) %
               state.errorIds.length
-          ]
+          ],
       };
     }
 
@@ -252,13 +252,13 @@ function errorsReducer(state: ErrorsState, action: ErrorsAction): ErrorsState {
       if (newIndex < 0) {
         return {
           ...state,
-          currentErrorId: state.errorIds[state.errorIds.length - 1]
+          currentErrorId: state.errorIds[state.errorIds.length - 1],
         };
       }
 
       return {
         ...state,
-        currentErrorId: state.errorIds[newIndex]
+        currentErrorId: state.errorIds[newIndex],
       };
     }
 

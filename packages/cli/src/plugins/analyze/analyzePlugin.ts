@@ -1,19 +1,20 @@
 import fs from 'fs';
 import path from 'path';
+
 import open from 'better-opn';
-import chalk from 'chalk';
 import { BundleStatsWebpackPlugin } from 'bundle-stats-webpack-plugin';
+import chalk from 'chalk';
 import { Configuration, WebpackPluginInstance } from 'webpack';
 import { BundleAnalyzerPlugin } from 'webpack-bundle-analyzer';
 import { CommandBuilder } from 'yargs';
 
+import logger from '../../lib/logger';
 import {
   ConfigurationContext,
   ImaCliPluginCallbackArgs,
   ImaCliCommand,
-  ImaCliPlugin
+  ImaCliPlugin,
 } from '../../types';
-import logger from '../../lib/logger';
 
 export interface AnalyzePluginConfigurationContext
   extends ConfigurationContext {
@@ -32,7 +33,8 @@ export interface AnalyzePluginOptions {
  * Appends webpack bundle analyzer plugin to the build command config.
  */
 export default class AnalyzePlugin
-  implements ImaCliPlugin<AnalyzePluginConfigurationContext> {
+  implements ImaCliPlugin<AnalyzePluginConfigurationContext>
+{
   private _options: AnalyzePluginOptions;
 
   readonly name = 'AnalyzePlugin';
@@ -41,13 +43,13 @@ export default class AnalyzePlugin
       analyze: {
         desc: 'Runs multiple webpack bundle analyzer plugins on given entry',
         type: 'string',
-        choices: ['server', 'client', 'client.es']
+        choices: ['server', 'client', 'client.es'],
       },
       analyzeBaseline: {
         desc: 'Generates baseline for webpack bundle stats comparison',
-        type: 'boolean'
-      }
-    }
+        type: 'boolean',
+      },
+    },
   };
 
   constructor(options: AnalyzePluginOptions) {
@@ -81,14 +83,14 @@ export default class AnalyzePlugin
           silent: true,
           compare: isCompare,
           baseline: isBaseline,
-          ...(this._options?.bundleStatsOptions ?? {})
+          ...(this._options?.bundleStatsOptions ?? {}),
         }) as WebpackPluginInstance,
         new BundleAnalyzerPlugin({
           analyzerMode: 'static',
           generateStatsFile: true,
           logLevel: 'silent',
           openAnalyzer: false,
-          ...(this._options?.bundleAnalyzerOptions ?? {})
+          ...(this._options?.bundleAnalyzerOptions ?? {}),
         })
       );
     }

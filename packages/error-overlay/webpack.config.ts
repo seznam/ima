@@ -13,7 +13,7 @@ module.exports = {
   entry: { overlay: './src/index.tsx' },
   output: {
     path: path.join(rootDir, './dist'),
-    filename: '[name].js'
+    filename: '[name].js',
   },
   devtool: !isProduction ? 'eval-cheap-source-map' : false,
   module: {
@@ -21,7 +21,7 @@ module.exports = {
       {
         test: /\.tsx?$/,
         use: 'ts-loader',
-        exclude: /node_modules/
+        exclude: /node_modules/,
       },
       {
         test: /\.css$/i,
@@ -30,36 +30,36 @@ module.exports = {
           {
             loader: 'css-loader',
             options: {
-              importLoaders: 1
-            }
+              importLoaders: 1,
+            },
           },
-          'postcss-loader'
-        ]
-      }
-    ]
+          'postcss-loader',
+        ],
+      },
+    ],
   },
   optimization: {
     minimize: isProduction,
-    minimizer: ['...', new CssMinimizerPlugin()]
+    minimizer: ['...', new CssMinimizerPlugin()],
   },
   resolve: {
     extensions: ['.tsx', '.ts', '.js', '.jsx'],
     fallback: {
       fs: false,
-      path: false
+      path: false,
     },
     alias: {
-      '#': path.resolve(rootDir, './src/')
-    }
+      '#': path.resolve(rootDir, './src/'),
+    },
   },
   plugins: [
     new MiniCssExtractPlugin({
-      filename: '[name].css'
+      filename: '[name].css',
     }),
     new CopyPlugin({
       patterns: [
-        { from: path.resolve('node_modules/source-map/lib/mappings.wasm') }
-      ]
-    })
-  ]
+        { from: path.resolve('node_modules/source-map/lib/mappings.wasm') },
+      ],
+    }),
+  ],
 };

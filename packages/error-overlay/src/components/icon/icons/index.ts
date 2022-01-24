@@ -24,7 +24,7 @@ const Icons: Record<
   cross: CrossIcon,
   edit: EditIcon,
   openEye: OpenEyeIcon,
-  alert: AlertIcon
+  alert: AlertIcon,
 });
 
 export { Icons };

@@ -1,16 +1,18 @@
 import http from 'http';
 import path from 'path';
+
+import hotMiddleware from '@gatsbyjs/webpack-hot-middleware';
+import chalk from 'chalk';
+import express, { Express } from 'express';
+import prettyMs from 'pretty-ms';
 import webpack from 'webpack';
 import devMiddleware from 'webpack-dev-middleware';
-import hotMiddleware from '@gatsbyjs/webpack-hot-middleware';
-import { openEditorMiddleware } from './openEditorMiddleware';
-import { evalSourceMapMiddleware } from './evalSourceMapMiddleware';
-import { createWebpackConfig } from '../webpack/utils';
+
 import { IMA_CLI_RUN_SERVER_MESSAGE } from '../lib/cli';
 import logger from '../lib/logger';
-import express, { Express } from 'express';
-import chalk from 'chalk';
-import prettyMs from 'pretty-ms';
+import { createWebpackConfig } from '../webpack/utils';
+import { evalSourceMapMiddleware } from './evalSourceMapMiddleware';
+import { openEditorMiddleware } from './openEditorMiddleware';
 
 async function createDevServer(app: Express) {
   const { config } = await createWebpackConfig(['client']);
@@ -39,7 +41,7 @@ async function createDevServer(app: Express) {
         index: false,
         publicPath: '/',
         ...(!isVerbose ? { stats: 'none' } : undefined),
-        serverSideRender: true
+        serverSideRender: true,
       })
     )
     .use(
@@ -67,11 +69,11 @@ async function createDevServer(app: Express) {
                   logger.hmr('Building...');
                   isBuilding = true;
                 }
-              }
+              },
             }
           : undefined),
         path: '/__webpack_hmr',
-        heartbeat: 10 * 1000
+        heartbeat: 10 * 1000,
       })
     )
     .use('/__get-internal-source', evalSourceMapMiddleware())

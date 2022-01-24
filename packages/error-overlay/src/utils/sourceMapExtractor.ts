@@ -71,9 +71,9 @@ async function getSourceMap(
     const fileName =
       fileUri.substring(0, lastSlashIndex + 1) + sourceMappingUrl;
 
-    rawSourceMap = await fetch(
-      sourceStorage.getFileSourceUrl(fileName)
-    ).then(res => res.json());
+    rawSourceMap = await fetch(sourceStorage.getFileSourceUrl(fileName)).then(
+      res => res.json()
+    );
   }
 
   // Parse source maps from raw source map JSON

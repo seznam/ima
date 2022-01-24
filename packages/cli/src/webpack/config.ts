@@ -1,15 +1,15 @@
-import path from 'path';
 import fs from 'fs';
-import webpack, { Configuration, RuleSetRule, RuleSetUseItem } from 'webpack';
-import miniSVGDataURI from 'mini-svg-data-uri';
+import path from 'path';
 
-import CopyPlugin from 'copy-webpack-plugin';
-import MiniCssExtractPlugin from 'mini-css-extract-plugin';
-import RemoveEmptyScriptsPlugin from 'webpack-remove-empty-scripts';
-import CssMinimizerPlugin from 'css-minimizer-webpack-plugin';
-import TerserPlugin from 'terser-webpack-plugin';
-import CompressionPlugin from 'compression-webpack-plugin';
 import ReactRefreshWebpackPlugin from '@pmmmwh/react-refresh-webpack-plugin';
+import CompressionPlugin from 'compression-webpack-plugin';
+import CopyPlugin from 'copy-webpack-plugin';
+import CssMinimizerPlugin from 'css-minimizer-webpack-plugin';
+import MiniCssExtractPlugin from 'mini-css-extract-plugin';
+import miniSVGDataURI from 'mini-svg-data-uri';
+import TerserPlugin from 'terser-webpack-plugin';
+import webpack, { Configuration, RuleSetRule, RuleSetUseItem } from 'webpack';
+import RemoveEmptyScriptsPlugin from 'webpack-remove-empty-scripts';
 
 import { ConfigurationContext, ImaConfig } from '../types';
 import {
@@ -22,7 +22,7 @@ import {
   extractLanguages,
   POSTCSS_CONF_FILENAMES,
   BABEL_CONF_ES_FILENAMES,
-  BABEL_CONF_FILENAMES
+  BABEL_CONF_FILENAMES,
 } from './utils';
 
 /**
@@ -56,7 +56,7 @@ export default async (
       firefox: '80',
       opera: '67',
       safari: '14',
-      ios: '14'
+      ios: '14',
     };
   } else if (isServer) {
     targets = { node: '16' };
@@ -78,7 +78,7 @@ export default async (
    * to handle css and less source files.
    */
   const getStyleLoaders = ({
-    useLessLoader = false
+    useLessLoader = false,
   }: {
     useLessLoader?: boolean;
   } = {}): RuleSetUseItem[] => {
@@ -91,7 +91,7 @@ export default async (
 
     return [
       !onlyCssDefinitions && {
-        loader: MiniCssExtractPlugin.loader
+        loader: MiniCssExtractPlugin.loader,
       },
       {
         loader: require.resolve('css-loader'),
@@ -102,10 +102,10 @@ export default async (
             exportOnlyLocals: onlyCssDefinitions,
             localIdentName: isDev
               ? '[path][name]__[local]--[hash:base64:5]'
-              : '[hash:base64]'
+              : '[hash:base64]',
           },
-          sourceMap: useSourceMaps
-        }
+          sourceMap: useSourceMaps,
+        },
       },
       !onlyCssDefinitions && {
         loader: require.resolve('postcss-loader'),
@@ -124,43 +124,43 @@ export default async (
                     'postcss-preset-env',
                     {
                       autoprefixer: {
-                        flexbox: 'no-2009'
+                        flexbox: 'no-2009',
                       },
                       stage: 3,
                       features: {
-                        'custom-properties': false
-                      }
-                    }
-                  ]
-                ]
-              }
-            })
+                        'custom-properties': false,
+                      },
+                    },
+                  ],
+                ],
+              },
+            }),
           },
           implementation: require('postcss'),
-          sourceMap: useSourceMaps
-        }
+          sourceMap: useSourceMaps,
+        },
       },
       useLessLoader && {
         loader: require.resolve('less-loader'),
         options: {
           lessOptions: {
-            strictMath: true
+            strictMath: true,
           },
           additionalData: additionalDataFactory([
             prefix =>
               prefix(
                 `@import "${path.join(rootDir, 'app/less/globals.less')}";`
-              )
+              ),
           ]),
-          sourceMap: useSourceMaps
-        }
+          sourceMap: useSourceMaps,
+        },
       },
       {
         loader: require.resolve('glob-import-loader'),
         options: {
-          sourceMap: useSourceMaps
-        }
-      }
+          sourceMap: useSourceMaps,
+        },
+      },
     ].filter(Boolean) as RuleSetUseItem[];
   };
 
@@ -180,7 +180,7 @@ export default async (
     entry: {
       ...(isServer
         ? {
-            server: [path.join(rootDir, 'app/main.js')]
+            server: [path.join(rootDir, 'app/main.js')],
           }
         : {
             [name]: [
@@ -190,10 +190,10 @@ export default async (
               useHMR &&
                 isDebug &&
                 require.resolve('@ima/hmr-client/dist/imaHmrClient.js'),
-              path.join(rootDir, 'app/main.js')
+              path.join(rootDir, 'app/main.js'),
             ].filter(Boolean) as string[],
-            ...createPolyfillEntry(ctx)
-          })
+            ...createPolyfillEntry(ctx),
+          }),
     },
     output: {
       path: outputDir,
@@ -212,7 +212,7 @@ export default async (
           chunk?.name === name && !isDev && 'app.bundle',
           chunk?.name !== name && '[name]',
           !isDev && 'min',
-          'js'
+          'js',
         ].filter(Boolean);
 
         return `${baseFolder}/${fileNameParts.join('.')}`;
@@ -224,7 +224,7 @@ export default async (
        */
       hotUpdateChunkFilename: 'hot/[id].[fullhash].hot-update.js',
       hotUpdateMainFilename: 'hot/[runtime].[fullhash].hot-update.json',
-      ...(isServer && { library: { type: 'commonjs2' } })
+      ...(isServer && { library: { type: 'commonjs2' } }),
     },
     cache: {
       type: 'filesystem',
@@ -235,8 +235,8 @@ export default async (
         defaultWebpack: ['webpack/lib/'],
         imaConfig: [path.join(rootDir, IMA_CONF_FILENAME)].filter(f =>
           fs.existsSync(f)
-        )
-      }
+        ),
+      },
     },
     optimization: {
       minimize: !isDev && !isServer,
@@ -244,14 +244,14 @@ export default async (
         new TerserPlugin({
           terserOptions: {
             mangle: {
-              safari10: true
+              safari10: true,
             },
             // Added for profiling in devtools
             keep_classnames: ctx.profile,
-            keep_fnames: ctx.profile
-          }
+            keep_fnames: ctx.profile,
+          },
         }),
-        new CssMinimizerPlugin()
+        new CssMinimizerPlugin(),
       ],
       // Split chunks in dev for better caching
       ...(isDev
@@ -264,12 +264,12 @@ export default async (
                 vendor: {
                   test: /[\\/]node_modules[\\/]/,
                   name: 'vendors',
-                  chunks: 'all'
-                }
-              }
-            }
+                  chunks: 'all',
+                },
+              },
+            },
           }
-        : {})
+        : {}),
     },
     resolve: {
       extensions: ['.mjs', '.js', '.jsx', '.json'],
@@ -281,13 +281,13 @@ export default async (
         // Enable better profiling in react devtools
         ...(ctx.profile && {
           'react-dom$': 'react-dom/profiling',
-          'scheduler/tracing': 'scheduler/tracing-profiling'
+          'scheduler/tracing': 'scheduler/tracing-profiling',
         }),
-        ...(imaConfig?.webpackAliases ?? {})
-      }
+        ...(imaConfig?.webpackAliases ?? {}),
+      },
     },
     resolveLoader: {
-      modules: [path.resolve(__dirname, 'loaders'), 'node_modules']
+      modules: [path.resolve(__dirname, 'loaders'), 'node_modules'],
     },
     module: {
       rules: [
@@ -297,7 +297,7 @@ export default async (
         useSourceMaps && {
           enforce: 'pre',
           test: /\.(js|mjs|jsx|ts|tsx|cjs|css|less)$/,
-          use: require.resolve('source-map-loader')
+          use: require.resolve('source-map-loader'),
         },
         {
           /**
@@ -316,21 +316,21 @@ export default async (
               oneOf: [
                 {
                   resourceQuery: /inline/, // foo.png?inline
-                  type: 'asset/inline'
+                  type: 'asset/inline',
                 },
                 {
                   resourceQuery: /external/, // foo.png?external
-                  type: 'asset/resource'
+                  type: 'asset/resource',
                 },
                 {
                   type: 'asset',
                   parser: {
                     dataUrlCondition: {
-                      maxSize: imaConfig.imageInlineSizeLimit
-                    }
-                  }
-                }
-              ]
+                      maxSize: imaConfig.imageInlineSizeLimit,
+                    },
+                  },
+                },
+              ],
             },
             /**
              * Uses svgo to optimize loaded svg files. Inline and external logic
@@ -348,24 +348,24 @@ export default async (
                       type: 'asset/inline',
                       generator: {
                         dataUrl: (content: string | Buffer) =>
-                          miniSVGDataURI(content.toString())
-                      }
+                          miniSVGDataURI(content.toString()),
+                      },
                     },
                     {
-                      type: 'asset/resource'
-                    }
-                  ]
+                      type: 'asset/resource',
+                    },
+                  ],
                 },
                 {
                   loader: require.resolve('svgo-loader'),
                   options: {
                     js2svg: {
                       indent: 2,
-                      pretty: isDev
-                    }
-                  }
-                }
-              ]
+                      pretty: isDev,
+                    },
+                  },
+                },
+              ],
             },
             /**
              * Raw loaders, by default it loads file source into the bundle,
@@ -377,12 +377,12 @@ export default async (
               oneOf: [
                 {
                   resourceQuery: /external/, // foo.png?external
-                  type: 'asset/resource'
+                  type: 'asset/resource',
                 },
                 {
-                  type: 'asset/source'
-                }
-              ]
+                  type: 'asset/source',
+                },
+              ],
             },
             /**
              * Process js of app directory with general babel config
@@ -409,19 +409,19 @@ export default async (
                           modules: false,
                           useBuiltIns: 'usage',
                           corejs: { version: '3.20' },
-                          exclude: ['transform-typeof-symbol']
-                        }
-                      ]
+                          exclude: ['transform-typeof-symbol'],
+                        },
+                      ],
                     ],
                     sourceMaps: useSourceMaps,
-                    inputSourceMap: useSourceMaps
-                  }
+                    inputSourceMap: useSourceMaps,
+                  },
                 },
                 {
                   // This injects new plugin loader interface into legacy plugins
-                  loader: 'ima-legacy-plugin-loader'
-                }
-              ]
+                  loader: 'ima-legacy-plugin-loader',
+                },
+              ],
             },
             {
               test: /\.(js|mjs|jsx|cjs)$/,
@@ -451,8 +451,8 @@ export default async (
                         require.resolve('@babel/preset-react'),
                         {
                           development: isDev,
-                          runtime: 'automatic'
-                        }
+                          runtime: 'automatic',
+                        },
                       ],
                       [
                         require.resolve('@babel/preset-env'),
@@ -461,23 +461,23 @@ export default async (
                           modules: false,
                           useBuiltIns: 'usage',
                           corejs: { version: '3.20', proposals: true },
-                          exclude: ['transform-typeof-symbol']
-                        }
-                      ]
+                          exclude: ['transform-typeof-symbol'],
+                        },
+                      ],
                     ],
                     plugins: useHMR
                       ? [require.resolve('react-refresh/babel')]
-                      : []
-                  }
+                      : [],
+                  },
                 }),
                 sourceMaps: useSourceMaps,
-                inputSourceMap: useSourceMaps
-              }
+                inputSourceMap: useSourceMaps,
+              },
             },
             {
               test: /\.less$/,
               sideEffects: true,
-              use: getStyleLoaders({ useLessLoader: true })
+              use: getStyleLoaders({ useLessLoader: true }),
             },
             /**
              * CSS loader configuration, has the same capabilities as the less loader.
@@ -485,7 +485,7 @@ export default async (
             {
               test: /\.css$/,
               sideEffects: true,
-              use: getStyleLoaders()
+              use: getStyleLoaders(),
             },
             /**
              * Fallback loader for all modules, that don't match any
@@ -493,11 +493,11 @@ export default async (
              */
             {
               exclude: [/^$/, /\.(js|mjs|jsx|ts|tsx|cjs)$/, /\.json$/],
-              type: 'asset/resource'
-            }
-          ]
-        }
-      ].filter(Boolean) as RuleSetRule[]
+              type: 'asset/resource',
+            },
+          ],
+        },
+      ].filter(Boolean) as RuleSetRule[],
     },
     plugins: [
       // Server/client specific plugins are defined below
@@ -508,9 +508,9 @@ export default async (
             new CopyPlugin({
               patterns: [
                 { from: 'app/public', to: 'static/public' },
-                ...extractLanguages(imaConfig)
-              ]
-            })
+                ...extractLanguages(imaConfig),
+              ],
+            }),
           ].filter(Boolean)
         : // Client-specific plugins
           [
@@ -529,7 +529,7 @@ export default async (
                   }.css`,
                 chunkFilename: `static/css/chunk-[id]${
                   !isDev ? '.min' : ''
-                }.css`
+                }.css`,
               }),
 
             // Enables compression for assets in production build
@@ -543,10 +543,10 @@ export default async (
                       }`,
                       test: /\.(js|css|html|svg)$/,
                       compressionOptions: {
-                        level: 9
+                        level: 9,
                       },
                       threshold: 0,
-                      minRatio: 0.95
+                      minRatio: 0.95,
                     })
                 )
               : []),
@@ -557,15 +557,15 @@ export default async (
               new ReactRefreshWebpackPlugin({
                 overlay: {
                   module: '@ima/hmr-client/dist/fastRefreshClient.js',
-                  sockIntegration: 'whm'
-                }
-              })
-          ])
+                  sockIntegration: 'whm',
+                },
+              }),
+          ]),
     ].filter(Boolean),
 
     // Enable node preset for externals on server
     externalsPresets: {
-      node: isServer
+      node: isServer,
     },
 
     // Turn webpack performance reports off since we print reports ourselves
@@ -573,7 +573,7 @@ export default async (
 
     // Disable infrastructure logging in normal mode
     infrastructureLogging: {
-      level: ctx.verbose ? 'info' : 'none'
-    }
+      level: ctx.verbose ? 'info' : 'none',
+    },
   };
 };

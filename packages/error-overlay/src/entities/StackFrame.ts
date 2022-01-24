@@ -50,7 +50,7 @@ class StackFrame {
       fragmentLines.push({
         line: (i + 1).toString(),
         source: lines[i],
-        highlight: i === line - 1
+        highlight: i === line - 1,
       });
     }
 
@@ -72,7 +72,7 @@ class StackFrame {
     originalFileName,
     originalLineNumber,
     originalColumnNumber,
-    originalSourceFragment
+    originalSourceFragment,
   }: {
     fileName?: string;
     functionName?: string | null;

@@ -66,7 +66,7 @@ function getPrismLanguage(fileUri: string | undefined): {
 const Frame: FunctionComponent<FrameProps> = ({
   frameWrapper,
   errorId,
-  className
+  className,
 }) => {
   const { frame } = frameWrapper;
   const sourceFragment = frameWrapper.showOriginal
@@ -82,9 +82,10 @@ const Frame: FunctionComponent<FrameProps> = ({
   return (
     <div
       className={clsx(
-        'overflow-hidden mb-4 rounded-md shadow-lg text-slate-50 bg-slate-700 shadow-slate-700/50',
+        'overflow-hidden mb-4 text-slate-50 bg-slate-700 rounded-md shadow-lg shadow-slate-700/50',
         className
-      )}>
+      )}
+    >
       <FrameHeader
         frameWrapper={frameWrapper}
         hasFragment={hasFragment}
@@ -92,7 +93,7 @@ const Frame: FunctionComponent<FrameProps> = ({
       />
 
       {!frameWrapper.isCollapsed && (
-        <div className="overflow-y-auto py-3 text-xs md:text-sm leading-5 md:leading-6 rounded-b-xl text-slate-50 bg-slate-700">
+        <div className='overflow-y-auto py-3 text-xs leading-5 text-slate-50 bg-slate-700 rounded-b-xl md:text-sm md:leading-6'>
           {hasFragment ? (
             <pre>
               <code>
@@ -106,8 +107,9 @@ const Frame: FunctionComponent<FrameProps> = ({
                       line.highlight
                         ? 'bg-rose-500/20 border-rose-500'
                         : 'border-transparent'
-                    }`}>
-                    <div className="pr-2 md:pr-3 pl-2 md:pl-3 mr-2 md:mr-3 border-r-2 text-slate-400 border-slate-600/75">
+                    }`}
+                  >
+                    <div className='px-2 mr-2 text-slate-400 border-r-2 border-slate-600/75 md:px-3 md:mr-3'>
                       {line.line}
                     </div>
                     <div
@@ -116,7 +118,7 @@ const Frame: FunctionComponent<FrameProps> = ({
                           line.source,
                           grammar,
                           language
-                        )
+                        ),
                       }}
                     />
                   </div>
@@ -124,10 +126,10 @@ const Frame: FunctionComponent<FrameProps> = ({
               </code>
             </pre>
           ) : (
-            <div className="flex justify-center items-center py-2">
-              <div className="flex items-center">
-                <Icon icon="alert" size="xs" className="mr-2 text-rose-400" />{' '}
-                <span className="text-xs text-slate-400">
+            <div className='flex justify-center items-center py-2'>
+              <div className='flex items-center'>
+                <Icon icon='alert' size='xs' className='mr-2 text-rose-400' />{' '}
+                <span className='text-xs text-slate-400'>
                   Original source fragment is not available.
                 </span>
               </div>

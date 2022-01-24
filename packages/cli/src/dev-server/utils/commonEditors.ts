@@ -16,7 +16,7 @@ enum LinuxEditors {
   'vim' = 'vim',
   'webstorm.sh' = 'webstorm',
   'goland.sh' = 'goland',
-  'rider.sh' = 'rider'
+  'rider.sh' = 'rider',
 }
 
 enum DarwinEditors {
@@ -39,7 +39,7 @@ enum DarwinEditors {
   '/Applications/WebStorm.app/Contents/MacOS/webstorm' = '/Applications/WebStorm.app/Contents/MacOS/webstorm',
   '/Applications/MacVim.app/Contents/MacOS/MacVim' = 'mvim',
   '/Applications/GoLand.app/Contents/MacOS/goland' = '/Applications/GoLand.app/Contents/MacOS/goland',
-  '/Applications/Rider.app/Contents/MacOS/rider' = '/Applications/Rider.app/Contents/MacOS/rider'
+  '/Applications/Rider.app/Contents/MacOS/rider' = '/Applications/Rider.app/Contents/MacOS/rider',
 }
 
 enum Win32Editors {
@@ -65,7 +65,7 @@ enum Win32Editors {
   'goland.exe' = 'goland.exe',
   'goland64.exe' = 'goland64.exe',
   'rider.exe' = 'rider.exe',
-  'rider64.exe' = 'rider64.exe'
+  'rider64.exe' = 'rider64.exe',
 }
 
 /**
@@ -142,5 +142,5 @@ export {
   LinuxEditors,
   Win32Editors,
   DarwinEditors,
-  getEditorArgsForLineNumber
+  getEditorArgsForLineNumber,
 };

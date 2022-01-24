@@ -50,7 +50,7 @@ async function mapStackFramesToOriginal(
               )) ||
             null,
           lineNumber: frame.lineNumber,
-          columnNumber: frame.columnNumber
+          columnNumber: frame.columnNumber,
         });
 
         // Generate original source code references if source map exists
@@ -60,11 +60,14 @@ async function mapStackFramesToOriginal(
           frame.lineNumber &&
           frame.columnNumber
         ) {
-          const { column, line, source: sourceFileUri } =
-            fileSource.sourceMap.getOriginalPosition(
-              frame.lineNumber,
-              frame.columnNumber
-            ) || {};
+          const {
+            column,
+            line,
+            source: sourceFileUri,
+          } = fileSource.sourceMap.getOriginalPosition(
+            frame.lineNumber,
+            frame.columnNumber
+          ) || {};
 
           const originalSource =
             sourceFileUri && fileSource.sourceMap.getSource(sourceFileUri);
@@ -129,11 +132,14 @@ async function mapCompileStackFrames(
           frame.lineNumber &&
           frame.columnNumber
         ) {
-          const { column, line, source: sourceFileUri } =
-            fileSource.sourceMap.getOriginalPosition(
-              frame.lineNumber,
-              frame.columnNumber
-            ) || {};
+          const {
+            column,
+            line,
+            source: sourceFileUri,
+          } = fileSource.sourceMap.getOriginalPosition(
+            frame.lineNumber,
+            frame.columnNumber
+          ) || {};
 
           if (column) {
             const originalSource =
@@ -151,7 +157,7 @@ async function mapCompileStackFrames(
                     originalSource,
                     index === 0 ? 8 : 4
                   )) ||
-                null
+                null,
             });
           }
         }
@@ -169,7 +175,7 @@ async function mapCompileStackFrames(
               )) ||
             null,
           originalLineNumber: frame.lineNumber,
-          originalColumnNumber: frame.columnNumber
+          originalColumnNumber: frame.columnNumber,
         });
       })
   );

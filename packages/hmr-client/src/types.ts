@@ -44,12 +44,12 @@ export interface HMRMessageData {
 
 export enum OverlayEventName {
   Ready = 'ima.error.overlay.overlay:ready',
-  Close = 'ima.error.overlay.overlay:close'
+  Close = 'ima.error.overlay.overlay:close',
 }
 
 export enum ClientEventName {
   RuntimeErrors = 'ima.error.overlay.client:runtime.error',
   CompileErrors = 'ima.error.overlay.client:compile.error',
   ClearRuntimeErrors = 'ima.error.overlay.client:clear.runtime.errors',
-  ClearCompileErrors = 'ima.error.overlay.client:clear.compile.errors'
+  ClearCompileErrors = 'ima.error.overlay.client:clear.compile.errors',
 }

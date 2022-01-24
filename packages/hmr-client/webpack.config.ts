@@ -9,21 +9,21 @@ const isProduction = process.env.NODE_ENV === 'production';
 const baseConfig: Configuration = {
   output: {
     path: path.join(rootDir, './dist'),
-    filename: '[name].js'
+    filename: '[name].js',
   },
   module: {
     rules: [
       {
         test: /\.tsx?$/,
         use: 'ts-loader',
-        exclude: /node_modules/
-      }
-    ]
+        exclude: /node_modules/,
+      },
+    ],
   },
   devtool: !isProduction ? 'eval-cheap-source-map' : false,
   resolve: {
-    extensions: ['.tsx', '.ts', '.js', '.jsx']
-  }
+    extensions: ['.tsx', '.ts', '.js', '.jsx'],
+  },
 };
 
 module.exports = [
@@ -34,26 +34,26 @@ module.exports = [
       rules: [
         {
           test: /\.html$/,
-          type: 'asset/source'
-        }
-      ]
+          type: 'asset/source',
+        },
+      ],
     },
     resolve: {
       alias: {
-        '#': path.resolve(rootDir, './src/')
-      }
-    }
+        '#': path.resolve(rootDir, './src/'),
+      },
+    },
   }),
   merge<Configuration>(baseConfig, {
     target: 'node16',
     entry: { fastRefreshClient: './src/fastRefreshClient.ts' },
     output: {
-      library: { type: 'commonjs2' }
+      library: { type: 'commonjs2' },
     },
     resolve: {
       alias: {
-        '#': path.resolve(rootDir, './src/')
-      }
-    }
-  })
+        '#': path.resolve(rootDir, './src/'),
+      },
+    },
+  }),
 ];
