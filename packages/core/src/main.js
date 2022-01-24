@@ -344,5 +344,5 @@ export {
   fire,
   listen,
   unlisten,
-  version
+  version,
 };

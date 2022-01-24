@@ -33,7 +33,7 @@ module.exports = environment => {
 
     if (languageParam) {
       let imaConfig = require(IMA_CONFIG_JS_PATH) || {
-        languages: { cs: [], en: [] }
+        languages: { cs: [], en: [] },
       };
 
       const langCodes = Object.keys(imaConfig.languages);

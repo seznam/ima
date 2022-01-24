@@ -1,4 +1,5 @@
 import React from 'react';
+// eslint-disable-next-line no-unused-vars
 import ReactDOM from 'react-dom';
 import jsdom from 'jsdom';
 import ControllerInterface from '../controller/Controller';

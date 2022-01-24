@@ -3,13 +3,12 @@ module.exports = {
   extends: [
     'eslint:recommended',
     'plugin:react/recommended',
+    'plugin:react/jsx-runtime',
     'plugin:jest/recommended',
     'plugin:jest/style',
     'plugin:prettier/recommended',
   ],
   rules: {
-    // Eslint overrides
-    'no-import-assign': 0,
     'no-console': [
       'error',
       {
@@ -75,6 +74,21 @@ module.exports = {
     spyOn: true,
   },
   overrides: [
+    // Typescript support
+    {
+      files: ['*.ts', '*.tsx'],
+      parser: '@typescript-eslint/parser',
+      plugins: ['@typescript-eslint'],
+      extends: ['plugin:@typescript-eslint/recommended'],
+      rules: {
+        '@typescript-eslint/ban-ts-ignore': 'off',
+        '@typescript-eslint/no-namespace': [
+          'error',
+          { allowDeclarations: true },
+        ],
+      },
+    },
+    // Other overrides
     {
       files: ['packages/cli/**', 'packages/create-ima-app/**'],
       rules: {

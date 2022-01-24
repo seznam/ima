@@ -47,7 +47,7 @@ function generateHashTable(css, uniqueIdentifier = '') {
   return [
     generateIdentifierHash(uniqueIdentifier),
     [...prefixes],
-    [...mainParts]
+    [...mainParts],
   ];
 }
 
@@ -109,7 +109,7 @@ module.exports = options => {
 
         rule.selector = result;
       });
-    }
+    },
   };
 };
 

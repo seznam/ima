@@ -16,14 +16,14 @@ function generateConfig(environment) {
         file: `./dist/ima.${environment}.cjs.js`,
         format: 'cjs',
         exports: 'named',
-        sourcemap: true
+        sourcemap: true,
       },
       {
         file: `./dist/ima.${environment}.esm.js`,
         format: 'esm',
         exports: 'named',
-        sourcemap: true
-      }
+        sourcemap: true,
+      },
     ],
     plugins: [
       json({
@@ -37,9 +37,9 @@ function generateConfig(environment) {
         delimiters: ['', ''],
       }),
       jscc({
-        values: { _SERVER: environment === 'server' }
-      })
-    ]
+        values: { _SERVER: environment === 'server' },
+      }),
+    ],
   };
 }
 

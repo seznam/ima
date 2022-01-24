@@ -33,24 +33,24 @@ export default (ns, oc, config) => {
           styles: [`/static/css/app.min.css${versionStamp}`],
           scripts: [
             `/static/locale/${config.$Language}.js${versionStamp}`,
-            `/static/js/app.bundle.min.js${versionStamp}`
+            `/static/js/app.bundle.min.js${versionStamp}`,
           ],
           esScripts: [
             `/static/locale/${config.$Language}.js${versionStamp}`,
-            `/static/js.es/app.bundle.min.js${versionStamp}`
+            `/static/js.es/app.bundle.min.js${versionStamp}`,
           ],
           polyfill: {
-            fetch: '/static/js/polyfill-fetch.js'
+            fetch: '/static/js/polyfill-fetch.js',
           },
-          documentView: DocumentView
-        }
+          documentView: DocumentView,
+        },
       },
       links: {
         documentation: 'https://imajs.io/docs',
         tutorial: 'https://imajs.io/tutorial/introduction',
         plugins: 'https://github.com/seznam/IMA.js-plugins',
-        api: 'https://imajs.io/api'
-      }
+        api: 'https://imajs.io/api',
+      },
     },
 
     dev: {
@@ -67,17 +67,17 @@ export default (ns, oc, config) => {
             `/static/locale/${config.$Language}.js${versionStamp}`,
             `/static/js/runtime.js${versionStamp}`,
             `/static/js/vendors.js${versionStamp}`,
-            `/static/js/app.client.js${versionStamp}`
+            `/static/js/app.client.js${versionStamp}`,
           ],
           esScripts: [
             // `/static/js.es/polyfill.js${versionStamp}`,
             `/static/locale/${config.$Language}.js${versionStamp}`,
             `/static/js.es/runtime.js${versionStamp}`,
             `/static/js.es/vendors.js${versionStamp}`,
-            `/static/js.es/app.client.js${versionStamp}`
-          ]
-        }
-      }
-    }
+            `/static/js.es/app.client.js${versionStamp}`,
+          ],
+        },
+      },
+    },
   };
 };

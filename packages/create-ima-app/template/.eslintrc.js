@@ -3,11 +3,10 @@ module.exports = {
   extends: [
     'eslint:recommended',
     'plugin:react/recommended',
+    'plugin:react/jsx-runtime',
     'plugin:prettier/recommended',
   ],
   rules: {
-    // Eslint overrides
-    'no-import-assign': 0,
     'no-console': [
       'error',
       {
@@ -56,5 +55,5 @@ module.exports = {
     using: true,
     extend: true,
     spyOn: true,
-  }
+  },
 };

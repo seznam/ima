@@ -65,7 +65,7 @@ function renderApp(req, res, next) {
 
         if (response.error) {
           logger.error('App error', {
-            error: errorToJSON(response.error)
+            error: errorToJSON(response.error),
           });
         }
 
@@ -141,5 +141,5 @@ async function createApp() {
 
 module.exports = {
   imaServer,
-  createApp
+  createApp,
 };

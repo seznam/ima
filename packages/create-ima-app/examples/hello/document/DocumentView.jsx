@@ -11,7 +11,7 @@ export default class DocumentView extends AbstractDocumentView {
         <head>
           <meta charSet='utf-8' />
           <meta httpEquiv='X-UA-Compatible' content='IE=edge' />
-          <meta name="viewport" content="width=device-width, initial-scale=1" />
+          <meta name='viewport' content='width=device-width, initial-scale=1' />
 
           <meta
             name='description'
@@ -44,7 +44,7 @@ export default class DocumentView extends AbstractDocumentView {
           />
 
           {this.utils.$Settings.$Page.$Render.styles.map(style => (
-            <link key={style} rel="stylesheet" href={style} />
+            <link key={style} rel='stylesheet' href={style} />
           ))}
 
           <title>{this.props.metaManager.getTitle()}</title>

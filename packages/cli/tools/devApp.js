@@ -42,8 +42,8 @@ function createWatcher(name, baseDir, paths, destFolder, options = {}) {
         '**/__mocks__/**',
         '**/.bin/**',
         '**/node_modules/**',
-        ...(options?.ignored ?? [])
-      ]
+        ...(options?.ignored ?? []),
+      ],
     });
 
     const actionCreator = actionName => filePath => {
@@ -151,12 +151,12 @@ function watchChanges(destFolder, pkgDirs) {
     if (pkgJson.scripts.dev) {
       child.spawn('npm', ['run', 'dev'], {
         stdio: 'ignore',
-        cwd: pkgDir
+        cwd: pkgDir,
       });
     } else if (pkgJson.scripts.build) {
       child.spawn('npm', ['run', 'build', '--', '--watch'], {
         stdio: 'ignore',
-        cwd: pkgDir
+        cwd: pkgDir,
       });
     }
 
@@ -183,7 +183,7 @@ function copyChanges(destFolder, pkgDirs) {
     if (pkgJson.name === '@ima/server') {
       fs.rmSync(destPkgDir, {
         force: true,
-        recursive: true
+        recursive: true,
       });
 
       // Copy new dist
@@ -195,7 +195,7 @@ function copyChanges(destFolder, pkgDirs) {
       // Remove old dist
       fs.rmSync(path.join(destPkgDir, 'dist'), {
         force: true,
-        recursive: true
+        recursive: true,
       });
 
       // Copy new dist
@@ -224,7 +224,7 @@ function main() {
     path.resolve(__dirname, '../../core'),
     path.resolve(__dirname, '../../server'),
     path.resolve(__dirname, '../../error-overlay'),
-    path.resolve(__dirname, '../../hmr-client')
+    path.resolve(__dirname, '../../hmr-client'),
   ];
 
   // Init app
