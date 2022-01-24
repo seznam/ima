@@ -69,6 +69,10 @@ function sharedArgsFactory(command: ImaCliCommand): CommandBuilder {
       type: 'boolean',
       default: command === 'build',
     },
+    clearCache: {
+      desc: 'Deletes node_modules/.cache directory to invalidate loaders cache',
+      type: 'boolean',
+    },
     verbose: {
       desc: 'Use default webpack CLI output instead of custom one',
       type: 'boolean',

@@ -27,6 +27,7 @@ export interface CliArgs {
   rootDir: string;
   command: ImaCliCommand;
   clean: boolean;
+  clearCache?: boolean;
   verbose?: boolean;
   publicPath?: string;
   ignoreWarnings?: boolean;

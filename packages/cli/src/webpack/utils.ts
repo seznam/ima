@@ -6,7 +6,8 @@ import envResolver from '@ima/server/lib/environment.js';
 import chalk from 'chalk';
 import { ObjectPattern } from 'copy-webpack-plugin';
 import MessageFormat from 'messageformat';
-import { Configuration } from 'webpack';
+import { root } from 'postcss';
+import { cache, Configuration } from 'webpack';
 
 import logger from '../lib/logger';
 import { time } from '../lib/time';
@@ -308,6 +309,18 @@ async function createWebpackConfig(
   configurations: ConfigurationTypes = ['client', 'server'],
   args?: CliArgs
 ): Promise<{ config: Configuration[]; imaConfig: ImaConfig }> {
+  // Clear cache as a first thing
+  if (args?.clearCache) {
+    const cacheDir = path.join(args.rootDir, '/node_modules/.cache');
+    const elapsedClearCache = time();
+
+    logger.info(`Clearing cache at ${chalk.magenta(cacheDir)}...`, false);
+
+    fs.rmSync(cacheDir, { force: true, recursive: true });
+
+    logger.write(chalk.gray(` [${elapsedClearCache()}]`));
+  }
+
   const isFirstPass = !args && process.env.IMA_CLI_WEBPACK_CONFIG_ARGS;
   let elapsed: ReturnType<typeof time> | null = null;
 
