@@ -1,6 +1,6 @@
 const instanceRecycler = require('../lib/instanceRecycler.js');
 
-describe('InstranceRecycler', () => {
+describe('instranceRecycler', () => {
   beforeEach(() => {
     instanceRecycler.clear();
   });

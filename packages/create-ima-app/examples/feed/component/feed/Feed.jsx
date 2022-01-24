@@ -8,7 +8,7 @@ import FeedItem from 'app/component/feedItem/FeedItem';
 export default class Feed extends AbstractComponent {
   render() {
     return (
-      <div className="feed">{this._renderFeedItems(this.props.entity)}</div>
+      <div className='feed'>{this._renderFeedItems(this.props.entity)}</div>
     );
   }
 

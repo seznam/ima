@@ -29,7 +29,7 @@ export default class Panel extends React.PureComponent {
       clearEntries: PropTypes.func,
       addEntries: PropTypes.func,
       selectNext: PropTypes.func,
-      selectPrevious: PropTypes.func
+      selectPrevious: PropTypes.func,
     };
   }
 
@@ -55,7 +55,7 @@ export default class Panel extends React.PureComponent {
       // Initialize connection with background script
       const { tabId } = await getCurrentTab();
       this.port = chrome.runtime.connect({
-        name: `panel:${tabId.toString()}`
+        name: `panel:${tabId.toString()}`,
       });
 
       // Assign listeners

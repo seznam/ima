@@ -61,7 +61,18 @@ export default class ClientPageRenderer extends AbstractPageRenderer {
     if (!this._firstTime) {
       this._setStateWithoutRendering(controller, defaultPageState);
       await this._renderToDOM(controller, view, routeOptions);
-      this._patchPromisesToState(controller, loadedPromises);
+
+      if (
+        this._settings &&
+        this._settings.$Page &&
+        this._settings.$Page.$Render &&
+        this._settings.$Page.$Render.batchResolve
+      ) {
+        this._patchPromisesToState(controller, loadedPromises);
+        this._startBatchTransactions(controller, loadedPromises);
+      } else {
+        this._patchPromisesToState(controller, loadedPromises);
+      }
     }
 
     return this._Helper
@@ -81,7 +92,7 @@ export default class ClientPageRenderer extends AbstractPageRenderer {
         return {
           content: null,
           status: controller.getHttpStatus(),
-          pageState
+          pageState,
         };
       })
       .catch(error => this._handleError(error));
@@ -96,7 +107,17 @@ export default class ClientPageRenderer extends AbstractPageRenderer {
     let updatedPromises = separatedData.promises;
 
     controller.setState(defaultPageState);
-    this._patchPromisesToState(controller, updatedPromises);
+    if (
+      this._settings &&
+      this._settings.$Page &&
+      this._settings.$Page.$Render &&
+      this._settings.$Page.$Render.batchResolve
+    ) {
+      this._patchPromisesToState(controller, updatedPromises);
+      this._startBatchTransactions(controller, updatedPromises);
+    } else {
+      this._patchPromisesToState(controller, updatedPromises);
+    }
 
     return this._Helper
       .allPromiseHash(updatedPromises)
@@ -107,7 +128,7 @@ export default class ClientPageRenderer extends AbstractPageRenderer {
         return {
           content: null,
           status: controller.getHttpStatus(),
-          pageState: Object.assign({}, defaultPageState, fetchedResources)
+          pageState: Object.assign({}, defaultPageState, fetchedResources),
         };
       })
       .catch(error => this._handleError(error));
@@ -151,11 +172,49 @@ export default class ClientPageRenderer extends AbstractPageRenderer {
       patchedPromises[resourceName]
         .then(resource => {
           controller.setState({
-            [resourceName]: resource
+            [resourceName]: resource,
           });
         })
         .catch(error => this._handleError(error));
     }
+  }
+
+  /**
+   * Batch patch promise values to controller state.
+   *
+   * @param {ControllerDecorator} controller
+   * @param {Object<string, Promise<*>>} patchedPromises
+   */
+  _startBatchTransactions(controller, patchedPromises) {
+    let hasResourcesLoaded = false;
+    const options = {
+      timeout: 100,
+    };
+    const requestIdleCallback = this._window.getWindow().requestIdleCallback
+      ? this._window.getWindow().requestIdleCallback
+      : callback => setTimeout(callback, 0);
+    const handler = () => {
+      controller.commitStateTransaction();
+
+      if (!hasResourcesLoaded) {
+        controller.beginStateTransaction();
+        setTimeout(() => {
+          requestIdleCallback(handler, options);
+        }, 1000 / 60);
+      }
+    };
+
+    controller.beginStateTransaction();
+    requestIdleCallback(handler, options);
+
+    this._Helper
+      .allPromiseHash(patchedPromises)
+      .then(() => {
+        hasResourcesLoaded = true;
+      })
+      .catch(() => {
+        hasResourcesLoaded = true;
+      });
   }
 
   // TODO IMA@18
@@ -247,21 +306,19 @@ export default class ClientPageRenderer extends AbstractPageRenderer {
     }
 
     if (this._viewContainer.children.length) {
-      return new Promise(resolve => setTimeout(resolve, 1000 / 240)).then(
-        () => {
-          this._reactiveView = this._ReactDOM.hydrate(
-            reactElementView,
-            this._viewContainer,
-            () => {
-              this._dispatcher.fire(
-                Events.MOUNTED,
-                { type: Types.HYDRATE },
-                true
-              );
-            }
-          );
-        }
-      );
+      return new Promise(resolve => setTimeout(resolve, 1000 / 60)).then(() => {
+        this._reactiveView = this._ReactDOM.hydrate(
+          reactElementView,
+          this._viewContainer,
+          () => {
+            this._dispatcher.fire(
+              Events.MOUNTED,
+              { type: Types.HYDRATE },
+              true
+            );
+          }
+        );
+      });
     } else {
       this._reactiveView = this._ReactDOM.render(
         reactElementView,

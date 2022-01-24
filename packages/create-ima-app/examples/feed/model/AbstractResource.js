@@ -43,7 +43,7 @@ export default class AbstractResource {
     this._defaultOptions = {
       ttl: 3600000,
       timeout: 2000,
-      repeatRequest: 1
+      repeatRequest: 1,
     };
   }
 

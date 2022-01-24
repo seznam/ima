@@ -206,7 +206,7 @@ export default class ObjectContainer {
     }
 
     let constantEntry = this._createEntry(() => value, [], {
-      writeable: false
+      writeable: false,
     });
     constantEntry.sharedInstance = value;
     this._entries.set(name, constantEntry);
@@ -612,7 +612,7 @@ export default class ObjectContainer {
 
     if (constantValue !== undefined && constantValue !== null) {
       let entry = this._createEntry(() => constantValue, [], {
-        writeable: false
+        writeable: false,
       });
       entry.sharedInstance = constantValue;
 
@@ -747,7 +747,7 @@ class Entry {
      * @type {{ writeable: boolean }}
      */
     this._options = options || {
-      writeable: true
+      writeable: true,
     };
 
     /**

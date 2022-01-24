@@ -11,14 +11,14 @@ import { toMockedInstance } from 'to-mock';
 describe('ima.core.page.manager.AbstractPageManager', () => {
   let controllerState = {
     controller: 'controller',
-    share: 'controller'
+    share: 'controller',
   };
   let extensionsState = {
     extension: 'extension',
-    share: 'extension'
+    share: 'extension',
   };
   let extensionState = {
-    extension: 'extension'
+    extension: 'extension',
   };
   let pageState = Object.assign({}, extensionsState, controllerState);
 
@@ -26,7 +26,7 @@ describe('ima.core.page.manager.AbstractPageManager', () => {
     createController: Controller => new Controller(),
     decorateController: controller => controller,
     decoratePageStateManager: pageStateManger => pageStateManger,
-    createView: view => view
+    createView: view => view,
   };
   let pageRenderer = null;
   let pageStateManager = null;
@@ -45,11 +45,11 @@ describe('ima.core.page.manager.AbstractPageManager', () => {
     autoScroll: true,
     allowSPA: true,
     documentView: null,
-    managedRootView: null
+    managedRootView: null,
   };
   let params = {
     param1: 'param1',
-    param2: 2
+    param2: 2,
   };
 
   let controllerInstance = pageFactory.createController(Controller);
@@ -58,7 +58,7 @@ describe('ima.core.page.manager.AbstractPageManager', () => {
   let extensionInstance = toMockedInstance(Extension, {
     load() {
       return extensionState;
-    }
+    },
   });
 
   let pageManagerHandler = toMockedInstance(PageHandler);
@@ -77,7 +77,7 @@ describe('ima.core.page.manager.AbstractPageManager', () => {
     );
 
     spyOn(controllerInstance, 'getExtensions').and.returnValue([
-      extensionInstance
+      extensionInstance,
     ]);
 
     route = routeFactory.createRoute(
@@ -108,7 +108,7 @@ describe('ima.core.page.manager.AbstractPageManager', () => {
   it('should be observe state manager', () => {
     pageManager.init();
 
-    expect(pageStateManager.onChange).not.toEqual(null);
+    expect(pageStateManager.onChange).not.toBeNull();
   });
 
   describe('manage method', () => {
@@ -128,7 +128,7 @@ describe('ima.core.page.manager.AbstractPageManager', () => {
         .manage(route, options, params)
         .then(() => {
           expect(pageManager._runPreManageHandlers).toHaveBeenCalled();
-          expect(pageManager._managedPage.params).toEqual(params);
+          expect(pageManager._managedPage.params).toStrictEqual(params);
           expect(pageManager._updatePageSource).toHaveBeenCalled();
           expect(pageManager._runPostManageHandlers).toHaveBeenCalled();
           done();
@@ -394,16 +394,16 @@ describe('ima.core.page.manager.AbstractPageManager', () => {
 
     it('should return extensions state together with active controller state', async () => {
       spyOn(extensionInstance, 'load').and.returnValue({
-        extension: 'extension'
+        extension: 'extension',
       });
       spyOn(pageManager, '_setRestrictedPageStateManager').and.stub();
 
       let result = await pageManager._getLoadedExtensionsState(controllerState);
 
-      expect(result).toEqual({
+      expect(result).toStrictEqual({
         controller: 'controller',
         share: 'controller',
-        extension: 'extension'
+        extension: 'extension',
       });
     });
 
@@ -415,6 +415,45 @@ describe('ima.core.page.manager.AbstractPageManager', () => {
       expect(
         pageManager._switchToPageStateManagerAfterLoaded
       ).toHaveBeenCalled();
+    });
+  });
+
+  describe('_switchToPageStateManagerAfterLoaded method', () => {
+    let deferredPromise = null;
+    let resolver = null;
+
+    beforeEach(() => {
+      deferredPromise = new Promise(resolve => {
+        resolver = resolve;
+      });
+    });
+
+    it('should switch to state manager and clear partial state if resources are loaded successfully', async () => {
+      spyOn(extensionInstance, 'switchToStateManager').and.stub();
+      spyOn(extensionInstance, 'clearPartialState').and.callFake(() => {
+        resolver();
+      });
+
+      pageManager._switchToPageStateManagerAfterLoaded(extensionInstance, {
+        extension: Promise.resolve(),
+      });
+      await deferredPromise;
+
+      expect(extensionInstance.switchToStateManager).toHaveBeenCalled();
+      expect(extensionInstance.clearPartialState).toHaveBeenCalled();
+    });
+
+    it('should clear partial state if resource is not loaded successfully', async () => {
+      spyOn(extensionInstance, 'clearPartialState').and.callFake(() => {
+        resolver();
+      });
+
+      pageManager._switchToPageStateManagerAfterLoaded(extensionInstance, {
+        extension: Promise.reject(),
+      });
+      await deferredPromise;
+
+      expect(extensionInstance.clearPartialState).toHaveBeenCalled();
     });
   });
 
@@ -430,7 +469,7 @@ describe('ima.core.page.manager.AbstractPageManager', () => {
 
       expect(pageManager._activateController).toHaveBeenCalled();
       expect(pageManager._activateExtensions).toHaveBeenCalled();
-      expect(pageManager._managedPage.state.activated).toEqual(true);
+      expect(pageManager._managedPage.state.activated).toBeTruthy();
     });
 
     it('should not call method activate more times', async () => {
@@ -539,7 +578,7 @@ describe('ima.core.page.manager.AbstractPageManager', () => {
       expect(extensionInstance.setPartialState).toHaveBeenCalledWith(
         expect.objectContaining({
           foo: 'bar',
-          foobar: 'bazfoo'
+          foobar: 'bazfoo',
         })
       );
       expect(extensionInstance.switchToPartialState).toHaveBeenCalled();
@@ -547,7 +586,7 @@ describe('ima.core.page.manager.AbstractPageManager', () => {
 
     it('should return extensions state together with active controller state', async () => {
       spyOn(extensionInstance, 'update').and.returnValue({
-        extension: 'extension'
+        extension: 'extension',
       });
       spyOn(pageManager, '_setRestrictedPageStateManager').and.stub();
 
@@ -555,10 +594,10 @@ describe('ima.core.page.manager.AbstractPageManager', () => {
         controllerState
       );
 
-      expect(result).toEqual({
+      expect(result).toStrictEqual({
         controller: 'controller',
         share: 'controller',
-        extension: 'extension'
+        extension: 'extension',
       });
     });
 
@@ -670,37 +709,37 @@ describe('ima.core.page.manager.AbstractPageManager', () => {
   describe('_hasOnlyUpdate method', () => {
     it('should return value from onlyUpdate function', () => {
       let newOptions = Object.assign({}, options, {
-        onlyUpdate: () => true
+        onlyUpdate: () => true,
       });
 
       spyOn(newOptions, 'onlyUpdate').and.callThrough();
 
-      expect(pageManager._hasOnlyUpdate(Controller, View, newOptions)).toEqual(
-        true
-      );
+      expect(
+        pageManager._hasOnlyUpdate(Controller, View, newOptions)
+      ).toBeTruthy();
       expect(newOptions.onlyUpdate).toHaveBeenCalledWith(Controller, View);
     });
 
     it('should return true for option onlyUpdate set to true and for same controller and view', () => {
       let newOptions = Object.assign({}, options, { onlyUpdate: true });
 
-      expect(pageManager._hasOnlyUpdate(Controller, View, newOptions)).toEqual(
-        true
-      );
+      expect(
+        pageManager._hasOnlyUpdate(Controller, View, newOptions)
+      ).toBeTruthy();
     });
 
     it('should return false for option onlyUpdate set to true and for different controller and view', () => {
       let newOptions = Object.assign({}, options, { onlyUpdate: true });
       pageManager._managedPage.controller = null;
 
-      expect(pageManager._hasOnlyUpdate(Controller, View, newOptions)).toEqual(
-        false
-      );
+      expect(
+        pageManager._hasOnlyUpdate(Controller, View, newOptions)
+      ).toBeFalsy();
     });
   });
 
   describe('_clearComponentState method', () => {
-    it('should call page renderer unmount method if route options documentView and managedRootView are not same with last one renderred', () => {
+    it('should call page renderer unmount method if route options documentView and managedRootView are not same with last one rendered', () => {
       spyOn(pageRenderer, 'unmount').and.stub();
 
       pageManager._clearComponentState({});

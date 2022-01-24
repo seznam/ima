@@ -10,8 +10,8 @@ export function getOptions() {
     trailingComma: {
       objects: false,
       arrays: false,
-      functions: false
-    }
+      functions: false,
+    },
   };
 }
 
@@ -28,5 +28,5 @@ export function source(ast) {
 
 module.exports = {
   getOptions,
-  source
+  source,
 };

@@ -16,5 +16,5 @@ function error(content, newLine = false) {
 
 module.exports = {
   info,
-  error
+  error,
 };

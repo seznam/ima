@@ -241,7 +241,8 @@ export default class Router {
    *          allowSPA: boolean=,
    *          documentView: ?AbstractDocumentView=,
    *          managedRootView: ?function(new: React.Component)=,
-   *          viewAdapter: ?function(new: React.Component)=
+   *          viewAdapter: ?function(new: React.Component)=,
+   *          headers: Object<string, *>
    *        }} [options={}] The options overrides route options defined in
    *        the {@code routes.js} configuration file.
    * @param {{ type: string, payload: Object|Event }} [action] An action object

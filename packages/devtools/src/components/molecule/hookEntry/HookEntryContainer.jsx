@@ -5,7 +5,7 @@ import { actions as alertsActions } from 'slices/alerts';
 import HookEntry from './HookEntry';
 
 const mapStateToProps = (state, { id }) => ({
-  hook: selectors.getActiveHooks(state)[id]
+  hook: selectors.getActiveHooks(state)[id],
 });
 
 export default connect(mapStateToProps, {
@@ -13,5 +13,5 @@ export default connect(mapStateToProps, {
   deleteHook: presetsActions.deleteHook,
   openHook: presetsActions.openHook,
   alertSuccess: alertsActions.success,
-  showConfirmModal: confirmModalActions.showConfirmModal
+  showConfirmModal: confirmModalActions.showConfirmModal,
 })(HookEntry);

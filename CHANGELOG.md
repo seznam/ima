@@ -3,6 +3,82 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [17.12.1](https://github.com/seznam/ima/compare/v17.12.0...v17.12.1) (2021-12-09)
+
+
+### Bug Fixes
+
+* 🐛 Clear partialState when promise was rejected ([509daaa](https://github.com/seznam/ima/commit/509daaaee5b9c98b8abbb0099e6f50cd1b1517d2))
+* 🐛 HttpProxy no longer sends empty Content-Type headers ([49489b0](https://github.com/seznam/ima/commit/49489b0d26dec404ecc7351f7e0ec00a1d190fd3))
+
+
+
+
+
+# [17.12.0](https://github.com/seznam/ima/compare/v17.11.3...v17.12.0) (2021-11-01)
+
+
+### Features
+
+* 🎸 Enable setting headers for redirects ([#141](https://github.com/seznam/ima/issues/141)) ([da0cb80](https://github.com/seznam/ima/commit/da0cb80d8719cd6b8811ceb62f7eb1e526e49193))
+
+
+
+
+
+## [17.11.3](https://github.com/seznam/ima/compare/v17.11.2...v17.11.3) (2021-08-27)
+
+**Note:** Version bump only for package ima
+
+
+
+
+
+## [17.11.2](https://github.com/seznam/ima/compare/v17.11.1...v17.11.2) (2021-07-16)
+
+
+### Bug Fixes
+
+* 🐛 passing at least query params to error route ([#126](https://github.com/seznam/ima/issues/126)) ([6b1224e](https://github.com/seznam/ima/commit/6b1224edd28d4ff8e853d46e46ac2b9b4160da2e))
+
+
+
+
+
+## [17.11.1](https://github.com/seznam/ima/compare/v17.11.0...v17.11.1) (2021-07-13)
+
+
+### Bug Fixes
+
+* 🐛 passing original params to not-found and error route ([#122](https://github.com/seznam/ima/issues/122)) ([131fb7f](https://github.com/seznam/ima/commit/131fb7fdb4d239c1efe49b9254ca1585e1b90315))
+
+
+
+
+
+# [17.11.0](https://github.com/seznam/ima/compare/v17.10.0...v17.11.0) (2021-06-12)
+
+
+### Bug Fixes
+
+* 🐛 errorHandler middleware where app is next function ([37b5d51](https://github.com/seznam/ima/commit/37b5d5179ee2dea7a73498eb70141bbab43d9053))
+* remove proxy limit in production ([81c6084](https://github.com/seznam/ima/commit/81c6084aaf80587fe0f1e007de485b980cde643f))
+
+
+### Features
+
+* 🎸 add experimental batch resolving promises ([c3704f0](https://github.com/seznam/ima/commit/c3704f06e768ca40b63bc9aa831aef747717e1dc))
+* 🎸 GenericError can modify action and options params ([305436b](https://github.com/seznam/ima/commit/305436bb8b91d251e1eb9fc6859b226ece23d3f3))
+
+
+### Performance Improvements
+
+* ⚡️ batch mode keep one free frame between commits ([fa57f8c](https://github.com/seznam/ima/commit/fa57f8c13f28989a71ac7cfc98c107569d80fbbb))
+
+
+
+
+
 # [17.10.0](https://github.com/seznam/ima/compare/v17.9.0...v17.10.0) (2021-03-30)
 
 

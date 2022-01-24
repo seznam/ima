@@ -12,7 +12,7 @@ const root = document.getElementById('root');
 if (root) {
   const store = createStore(
     combineReducers({
-      entries: reducer
+      entries: reducer,
     })
   );
 

@@ -14,8 +14,8 @@ describe('SplitPane molecule', () => {
   });
 
   it('should render Search, EntryList and DataView components', () => {
-    expect(wrapper.find('Connect(Search)').length).toBe(1);
-    expect(wrapper.find('Connect(EntryList)').length).toBe(1);
-    expect(wrapper.find('Connect(DataView)').length).toBe(1);
+    expect(wrapper.find('Connect(Search)')).toHaveLength(1);
+    expect(wrapper.find('Connect(EntryList)')).toHaveLength(1);
+    expect(wrapper.find('Connect(DataView)')).toHaveLength(1);
   });
 });

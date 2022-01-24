@@ -13,7 +13,7 @@ export default class ViewAdapter extends React.Component {
     if (state.notUsePropsState) {
       return Object.assign({}, state, {
         $pageView: props.state.$pageView,
-        notUsePropsState: undefined
+        notUsePropsState: undefined,
       });
     }
 

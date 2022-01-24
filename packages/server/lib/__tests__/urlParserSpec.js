@@ -19,15 +19,15 @@ const ENVIRONMENT = {
     [`//${HOST}/:language`]: 'it',
     [`//${HOST2}`]: 'cs',
     [`//${HOST3}`]: 'en',
-    '//*:*': 'cs'
-  }
+    '//*:*': 'cs',
+  },
 };
 
 const REQUEST_GET_BOOK = Object.freeze({
-  host: HOST
+  host: HOST,
 });
 
-describe('UrlParser', () => {
+describe('urlParser', () => {
   const parseUrl = UrlParser(ENVIRONMENT);
 
   function getMethod(requestGetBook, key) {
@@ -38,12 +38,12 @@ describe('UrlParser', () => {
   const REQ = Object.freeze({
     originalUrl: '/',
     protocol: 'http',
-    get: getMethod.bind(null, REQUEST_GET_BOOK)
+    get: getMethod.bind(null, REQUEST_GET_BOOK),
   });
 
   const RES = Object.freeze({
     locals: {},
-    redirect: jest.fn()
+    redirect: jest.fn(),
   });
 
   const next = jest.fn();
@@ -53,7 +53,7 @@ describe('UrlParser', () => {
     RES.redirect.mockReset();
   });
 
-  describe("Method's behaviour", () => {
+  describe("method's behaviour", () => {
     afterAll(() => {
       next.mockReset();
     });
@@ -64,29 +64,29 @@ describe('UrlParser', () => {
       'host',
       'path',
       'protocol',
-      'root'
+      'root',
     ];
 
     const usedRes = Object.assign({}, RES);
     const usedReq = Object.assign({}, REQ, {
-      get: getMethod.bind(null, { host: HOST3 })
+      get: getMethod.bind(null, { host: HOST3 }),
     });
 
     parseUrl(usedReq, usedRes, next);
 
     expectedKeys.forEach(key => {
       it(`should create key '${key}' in results object`, () => {
-        expect(typeof usedRes.locals[key]).toEqual('string');
+        expect(typeof usedRes.locals[key]).toBe('string');
       });
     });
 
     it("should call 'next' callback", () => {
-      expect(next.mock.calls.length).toBe(1);
+      expect(next.mock.calls).toHaveLength(1);
       expect(next.mock.calls[0][0]).toBe();
     });
   });
 
-  describe('Host Detection', () => {
+  describe('host Detection', () => {
     afterAll(() => {
       defaultRes.locals = {};
     });
@@ -95,42 +95,43 @@ describe('UrlParser', () => {
       {
         host: 'my-domain-is-here.eu',
         originalUrl: '/',
-        expected: 'my-domain-is-here.eu'
+        expected: 'my-domain-is-here.eu',
       },
       {
         host: HOST,
         originalUrl: '/en',
-        expected: HOST
+        expected: HOST,
       },
       {
         host: HOST2,
         originalUrl: '/advert/adv-456/show',
-        expected: HOST2
+        expected: HOST2,
       },
       {
         header: { 'X-Forwarded-Host': HOST3 },
         originalUrl: '/en/some-article-name/read-me',
-        expected: HOST3
+        expected: HOST3,
       },
       {
         host: HOST2,
         header: { 'X-Forwarded-Host': HOST3 },
         originalUrl: '/en/some-article-name/double-headers',
-        expected: HOST3
+        expected: HOST3,
       },
       {
         host: HOST4,
         originalUrl: '/',
-        expected: HOST4
-      }
+        expected: HOST4,
+      },
     ];
 
     hosts.forEach(({ originalUrl, header, host, expected }) => {
       it(`should get host for ${originalUrl}`, () => {
         const getCodeBook = {
-          host: host || ''
+          host: host || '',
         };
 
+        // eslint-disable-next-line jest/no-if
         if (header) {
           const [headerKey, headerValue] = Object.entries(header)[0];
           getCodeBook[headerKey] = headerValue;
@@ -139,18 +140,18 @@ describe('UrlParser', () => {
         const usedRes = Object.assign({}, RES);
         const usedReq = Object.assign({}, REQ, {
           originalUrl,
-          get: getMethod.bind(null, getCodeBook)
+          get: getMethod.bind(null, getCodeBook),
         });
 
         parseUrl(usedReq, usedRes, next);
 
         const result = usedRes.locals;
-        expect(result.host).toEqual(expected);
+        expect(result.host).toBe(expected);
       });
     });
   });
 
-  describe('Invalid URLs', () => {
+  describe('invalid URLs', () => {
     let usedRes = {};
 
     beforeEach(() => {
@@ -165,28 +166,28 @@ describe('UrlParser', () => {
       {
         protocol: '?',
         host: 'test',
-        originalUrl: ''
+        originalUrl: '',
       },
       {
         protocol: 'http',
         host: '/',
-        originalUrl: ''
+        originalUrl: '',
       },
       {
         protocol: '',
         host: '.',
-        originalUrl: ''
+        originalUrl: '',
       },
       {
         protocol: '',
         host: '',
-        originalUrl: '?qty=50'
+        originalUrl: '?qty=50',
       },
       {
         protocol: 'https',
         host: '',
-        originalUrl: '?utm_name=tolik&utm_campaign=mobile'
-      }
+        originalUrl: '?utm_name=tolik&utm_campaign=mobile',
+      },
     ];
 
     invalidUrls.forEach(({ originalUrl, protocol, host }) => {
@@ -196,22 +197,23 @@ describe('UrlParser', () => {
         const usedReq = Object.assign({}, REQ, {
           originalUrl,
           protocol,
-          get: getMethod.bind(null, { host })
+          get: getMethod.bind(null, { host }),
         });
 
         try {
           parseUrl(usedReq, usedRes, next);
         } catch (exception) {
+          // eslint-disable-next-line jest/no-conditional-expect
           expect(exception.name).toMatch(/^TypeError/);
         }
 
         const result = usedRes.locals;
-        expect(result).toEqual({});
+        expect(result).toStrictEqual({});
       });
     });
   });
 
-  describe('Protocol Detection', () => {
+  describe('protocol Detection', () => {
     let usedRes = {};
 
     beforeEach(() => {
@@ -226,36 +228,36 @@ describe('UrlParser', () => {
       {
         protocol: 'http',
         originalUrl: '/pacholek',
-        expected: 'http:'
+        expected: 'http:',
       },
       {
         protocol: 'https',
         originalUrl: '/http/frankovka.palava.2016',
-        expected: 'https:'
+        expected: 'https:',
       },
       {
         protocol: 'http',
         originalUrl: '/https/mobile+phone+dock+station?search=https',
-        expected: 'http:'
+        expected: 'http:',
       },
       {
         protocol: 'http',
         originalUrl:
           '/https/mobile+phone+dock+station?redirect=https://dreams.co.uk',
-        expected: 'http:'
+        expected: 'http:',
       },
       {
         protocol: 'http',
         originalUrl:
           '//https.com/mobile+phone+dock+station?redirect=https://dreams.co.uk',
-        expected: 'http:'
+        expected: 'http:',
       },
       {
         protocol: 'https',
         originalUrl:
           '//http.com/mobile+phone+dock+station?redirect=http://dreams.org',
-        expected: 'https:'
-      }
+        expected: 'https:',
+      },
     ];
 
     protocols.forEach(({ originalUrl, protocol, expected }) => {
@@ -263,47 +265,47 @@ describe('UrlParser', () => {
         const usedReq = Object.assign({}, REQ, {
           originalUrl,
           protocol,
-          get: getMethod.bind(null, { host: HOST3 })
+          get: getMethod.bind(null, { host: HOST3 }),
         });
 
         const result = usedRes.locals;
 
         parseUrl(usedReq, usedRes, next);
-        expect(result.protocol).toEqual(expected);
+        expect(result.protocol).toBe(expected);
       });
     });
 
     const protocolHeaders = [
       {
         header: { Forwarded: 'for=142.0.5.67;proto=http;by=2a02:598:a::79:53' },
-        expected: 'http:'
+        expected: 'http:',
       },
       {
         header: {
-          Forwarded: 'for=2a02:598:a::79:100;proto=https;by=2a02:598:a::79:53'
+          Forwarded: 'for=2a02:598:a::79:100;proto=https;by=2a02:598:a::79:53',
         },
-        expected: 'https:'
+        expected: 'https:',
       },
       {
         header: { 'Front-End-Https': 'ON' },
-        expected: 'https:'
+        expected: 'https:',
       },
       {
         header: { 'Front-End-Https': 'on' },
-        expected: 'https:'
+        expected: 'https:',
       },
       {
         header: {},
-        expected: 'http:'
+        expected: 'http:',
       },
       {
         header: { 'X-Forwarded-Proto': 'http' },
-        expected: 'http:'
+        expected: 'http:',
       },
       {
         header: { 'X-Forwarded-Proto': 'https' },
-        expected: 'https:'
-      }
+        expected: 'https:',
+      },
     ];
 
     protocolHeaders.forEach(({ header, expected }) => {
@@ -311,27 +313,28 @@ describe('UrlParser', () => {
 
       it(`should read protocol from header key '${headerKey}'`, () => {
         const getCodeBook = {
-          host: HOST2
+          host: HOST2,
         };
 
+        // eslint-disable-next-line jest/no-if
         if (headerKey) {
           getCodeBook[headerKey] = header[headerKey];
         }
 
         const usedReq = Object.assign({}, REQ, {
-          get: getMethod.bind(null, getCodeBook)
+          get: getMethod.bind(null, getCodeBook),
         });
 
         parseUrl(usedReq, usedRes, next);
 
         const result = usedRes.locals;
 
-        expect(result.protocol).toEqual(expected);
+        expect(result.protocol).toBe(expected);
       });
     });
   });
 
-  describe('Language Detection', () => {
+  describe('language Detection', () => {
     let usedRes = {};
 
     beforeEach(() => {
@@ -348,7 +351,7 @@ describe('UrlParser', () => {
       {
         host: HOST,
         originalUrl: '/',
-        expected: { redirectTo: 'http://local.domain.cz/it' }
+        expected: { redirectTo: 'http://local.domain.cz/it' },
       },
       {
         host: HOST2,
@@ -356,8 +359,8 @@ describe('UrlParser', () => {
         expected: {
           language: 'cs',
           root: '',
-          languagePartPath: ''
-        }
+          languagePartPath: '',
+        },
       },
       {
         host: HOST3,
@@ -365,8 +368,8 @@ describe('UrlParser', () => {
         expected: {
           language: 'en',
           root: '',
-          languagePartPath: ''
-        }
+          languagePartPath: '',
+        },
       },
       // Note: HOST4 is not defined in ENVIRONMENT.$Language
       {
@@ -375,8 +378,8 @@ describe('UrlParser', () => {
         expected: {
           language: 'cs',
           root: '',
-          languagePartPath: ''
-        }
+          languagePartPath: '',
+        },
       },
       {
         host: HOST,
@@ -384,18 +387,18 @@ describe('UrlParser', () => {
         expected: {
           language: 'cs',
           root: '/cs',
-          languagePartPath: ''
-        }
+          languagePartPath: '',
+        },
       },
       {
         host: HOST,
         originalUrl: '/ru',
-        expected: { redirectTo: 'http://local.domain.cz/it' }
+        expected: { redirectTo: 'http://local.domain.cz/it' },
       },
       {
         host: HOST,
         originalUrl: '/italian',
-        expected: { redirectTo: 'http://local.domain.cz/it' }
+        expected: { redirectTo: 'http://local.domain.cz/it' },
       },
       {
         host: HOST,
@@ -403,8 +406,8 @@ describe('UrlParser', () => {
         expected: {
           language: 'en',
           root: '/en',
-          languagePartPath: ''
-        }
+          languagePartPath: '',
+        },
       },
       {
         host: HOST,
@@ -412,8 +415,8 @@ describe('UrlParser', () => {
         expected: {
           language: 'de',
           root: '/de',
-          languagePartPath: ''
-        }
+          languagePartPath: '',
+        },
       },
       {
         host: HOST,
@@ -421,8 +424,8 @@ describe('UrlParser', () => {
         expected: {
           language: 'en',
           root: '/en',
-          languagePartPath: ''
-        }
+          languagePartPath: '',
+        },
       },
       {
         host: HOST,
@@ -430,8 +433,8 @@ describe('UrlParser', () => {
         expected: {
           language: 'de',
           root: '/de',
-          languagePartPath: ''
-        }
+          languagePartPath: '',
+        },
       },
       {
         host: HOST,
@@ -439,15 +442,15 @@ describe('UrlParser', () => {
         expected: {
           language: 'cs',
           root: '/cs',
-          languagePartPath: ''
-        }
-      }
+          languagePartPath: '',
+        },
+      },
     ];
 
     languageUrls.forEach(({ originalUrl, expected, host }) => {
       const usedReq = Object.assign({}, REQ, {
         originalUrl,
-        get: getMethod.bind(null, { host })
+        get: getMethod.bind(null, { host }),
       });
 
       const fullUrl = `//${host}${originalUrl}`;
@@ -459,25 +462,25 @@ describe('UrlParser', () => {
           const result = usedRes.locals;
           const redirectMock = usedRes.redirect.mock;
 
-          expect(redirectMock.calls.length).toBe(1);
+          expect(redirectMock.calls).toHaveLength(1);
           expect(redirectMock.calls[0][0]).toBe(redirectTo);
-          expect(result).toEqual({});
-          expect(next.mock.calls.length).toBe(0);
+          expect(result).toStrictEqual({});
+          expect(next.mock.calls).toHaveLength(0);
         });
       } else {
         it(`should detect language for URL ${fullUrl}`, () => {
           parseUrl(usedReq, usedRes, next);
           const result = usedRes.locals;
 
-          expect(result.root).toEqual(expected.root);
-          expect(result.language).toEqual(expected.language);
-          expect(result.languagePartPath).toEqual(expected.languagePartPath);
+          expect(result.root).toBe(expected.root);
+          expect(result.language).toBe(expected.language);
+          expect(result.languagePartPath).toBe(expected.languagePartPath);
         });
       }
     });
   });
 
-  describe('Parsing URL', () => {
+  describe('parsing URL', () => {
     let usedRes = {};
 
     beforeEach(() => {
@@ -488,38 +491,38 @@ describe('UrlParser', () => {
       {
         originalUrl: '/',
         expected: {
-          path: ''
-        }
+          path: '',
+        },
       },
       {
         originalUrl: '/frankovka/detail/26562985-hadry',
         expected: {
-          path: '/frankovka/detail/26562985-hadry'
-        }
+          path: '/frankovka/detail/26562985-hadry',
+        },
       },
       {
         originalUrl: '/zuzza',
         expected: {
-          path: '/zuzza'
-        }
+          path: '/zuzza',
+        },
       },
       {
         originalUrl: '/82-services?utm_name=robot&utm_campaign=follow',
         expected: {
-          path: '/82-services?utm_name=robot&utm_campaign=follow'
-        }
+          path: '/82-services?utm_name=robot&utm_campaign=follow',
+        },
       },
       {
         originalUrl: '/search/cheap+mobile+phone',
         expected: {
-          path: '/search/cheap+mobile+phone'
-        }
+          path: '/search/cheap+mobile+phone',
+        },
       },
       {
         originalUrl: '/27-sport/cela-cr/cena-neomezena/nejnovejsi/11',
         expected: {
-          path: '/27-sport/cela-cr/cena-neomezena/nejnovejsi/11'
-        }
+          path: '/27-sport/cela-cr/cena-neomezena/nejnovejsi/11',
+        },
       },
       {
         originalUrl:
@@ -532,8 +535,8 @@ describe('UrlParser', () => {
       {
         originalUrl: '/img//big/90/3916290_1.jpg',
         expected: {
-          path: '/img//big/90/3916290_1.jpg'
-        }
+          path: '/img//big/90/3916290_1.jpg',
+        },
       },
       {
         originalUrl:
@@ -555,16 +558,16 @@ describe('UrlParser', () => {
       it(`should correct parse URL ${originalUrl}`, () => {
         const usedReq = Object.assign({}, REQ, {
           originalUrl,
-          get: getMethod.bind(null, { host: HOST2 })
+          get: getMethod.bind(null, { host: HOST2 }),
         });
 
         parseUrl(usedReq, usedRes, next);
 
         const result = usedRes.locals;
 
-        expect(result.path).toEqual(expected.path);
-        expect(result.root).toEqual('');
-        expect(result.host).toEqual(HOST2);
+        expect(result.path).toBe(expected.path);
+        expect(result.root).toBe('');
+        expect(result.host).toBe(HOST2);
       });
     });
   });

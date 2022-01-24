@@ -120,5 +120,5 @@ module.exports = {
   allPromiseHash,
   escapeRegExp,
   resolveEnvironmentSetting,
-  clone
+  clone,
 };

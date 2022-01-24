@@ -17,7 +17,7 @@ export function createEntry(data) {
       sentinel: data.sentinel,
       action: 'error',
       payload: {},
-      error
+      error,
     };
   }
 

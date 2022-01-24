@@ -17,14 +17,14 @@ if (root) {
     reducer: {
       confirmModal: confirmModalReducer,
       presets: presetsReducer,
-      alerts: alertsReducer
+      alerts: alertsReducer,
     },
     devTools: false,
     middleware: getDefaultMiddleware({
       thunk: true,
       immutableCheck: false,
-      serializableCheck: false
-    })
+      serializableCheck: false,
+    }),
   });
 
   ReactDOM.render(

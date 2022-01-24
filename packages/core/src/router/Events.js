@@ -31,7 +31,7 @@ const Events = Object.freeze({
    * @const
    * @type {string}
    */
-  AFTER_HANDLE_ROUTE: '$IMA.$Router.afterHandleRoute'
+  AFTER_HANDLE_ROUTE: '$IMA.$Router.afterHandleRoute',
 });
 
 export default Events;

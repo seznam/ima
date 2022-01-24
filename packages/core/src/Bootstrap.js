@@ -77,7 +77,7 @@ export default class Bootstrap {
   _initSettings() {
     let currentApplicationSettings = {};
     let plugins = this._config.plugins.concat([
-      { name: ObjectContainer.APP_BINDING_STATE, module: this._config }
+      { name: ObjectContainer.APP_BINDING_STATE, module: this._config },
     ]);
 
     plugins

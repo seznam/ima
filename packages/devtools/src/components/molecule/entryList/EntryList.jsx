@@ -7,7 +7,7 @@ import EntryListItem from 'components/molecule/entryListItem/EntryListItemContai
 export default class EntryList extends React.PureComponent {
   static get propTypes() {
     return {
-      entryIds: PropTypes.arrayOf(PropTypes.string)
+      entryIds: PropTypes.arrayOf(PropTypes.string),
     };
   }
 

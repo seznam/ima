@@ -12,7 +12,7 @@ export default class TabConnection {
       contentScript: null,
       panel: null,
       popup: null,
-      pipeCreated: false
+      pipeCreated: false,
     };
 
     // Initial state
@@ -196,7 +196,7 @@ export default class TabConnection {
   _notifyPopup() {
     this.ports.popup.postMessage({
       action: Actions.POPUP,
-      payload: { state: this.state, appData: this.appData }
+      payload: { state: this.state, appData: this.appData },
     });
   }
 

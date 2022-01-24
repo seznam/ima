@@ -2,22 +2,22 @@ import Bootstrap from '../Bootstrap';
 import ObjectContainer from '../ObjectContainer';
 import namespace from '../namespace';
 
-describe('Bootstrap', () => {
+describe('bootstrap', () => {
   let bootstrap = null;
   let objectContainer = null;
   let environments = {
     prod: {},
     test: {},
-    dev: {}
+    dev: {},
   };
   let plugin = {
     $registerImaPlugin: () => {},
     initSettings: () => environments,
-    initBind: () => {}
+    initBind: () => {},
   };
   let bootConfig = {
     settings: {
-      $Env: 'prod'
+      $Env: 'prod',
     },
     plugins: [{ name: 'test-plugin', module: plugin }],
     initSettings: () => environments,
@@ -25,7 +25,7 @@ describe('Bootstrap', () => {
     initBindApp: () => {},
     initRoutes: () => {},
     bind: {},
-    routes: {}
+    routes: {},
   };
 
   beforeEach(() => {
@@ -62,6 +62,28 @@ describe('Bootstrap', () => {
 
     it('should initialize routes', () => {
       expect(bootstrap._initRoutes).toHaveBeenCalled();
+    });
+  });
+
+  describe('_initSettings method', () => {
+    beforeEach(() => {
+      spyOn(bootstrap, '_getEnvironmentSetting').and.returnValue({});
+    });
+
+    it('should call initSettings method for app', () => {
+      spyOn(bootConfig, 'initSettings').and.callThrough();
+
+      bootstrap._initSettings();
+
+      expect(bootConfig.initSettings).toHaveBeenCalled();
+    });
+
+    it('should call initSettings method for plugin', () => {
+      spyOn(plugin, 'initSettings').and.callThrough();
+
+      bootstrap._initSettings();
+
+      expect(plugin.initSettings).toHaveBeenCalled();
     });
   });
 
@@ -107,7 +129,7 @@ describe('Bootstrap', () => {
         objectContainer,
         {
           $Env: 'prod',
-          __meta__: {}
+          __meta__: {},
         },
         'ima.core'
       );
@@ -123,7 +145,7 @@ describe('Bootstrap', () => {
         objectContainer,
         {
           $Env: 'prod',
-          __meta__: {}
+          __meta__: {},
         },
         'test-plugin'
       );
@@ -139,7 +161,7 @@ describe('Bootstrap', () => {
         objectContainer,
         {
           $Env: 'prod',
-          __meta__: {}
+          __meta__: {},
         },
         'app'
       );

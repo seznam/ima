@@ -25,7 +25,7 @@ module.exports = (() => {
        *          present in the current URL.
        */
       $Language: {
-        '//*:*': 'en'
+        '//*:*': 'en',
       },
       $Server: {
         port: 3001, // The port at which the server listens for
@@ -47,7 +47,7 @@ module.exports = (() => {
           // server will serve the application in SPA
           // mode (without server-side rendering)
           blackList: userAgent =>
-            new RegExp('Googlebot|SeznamBot', 'g').test(userAgent) // These user agents
+            new RegExp('Googlebot|SeznamBot', 'g').test(userAgent), // These user agents
           // will always be served a server-rendered page
         },
         cache: {
@@ -64,11 +64,11 @@ module.exports = (() => {
           unusedEntryTtl: 15 * 60 * 1000, // milliseconds
 
           // the maximum entries in cache
-          maxEntries: 500
+          maxEntries: 500,
         },
         logger: {
-          formatting: 'simple' // use "simple" or "JSON"
-        }
+          formatting: 'simple', // use "simple" or "JSON"
+        },
       },
       $Proxy: {
         // Configuration of REST API proxy. All requests to the
@@ -82,27 +82,26 @@ module.exports = (() => {
         options: {
           // options to pass to the express-http-proxy
           https: true,
-          limit: '100mb',
           timeout: 10000, // milliseconds
-          proxyReqPathResolver: request => `/api/v1${request.url}`
-        }
-      }
+          proxyReqPathResolver: request => `/api/v1${request.url}`,
+        },
+      },
     },
 
     dev: {
       $Debug: true,
       $Language: {
-        '//*:*': 'en'
+        '//*:*': 'en',
       },
       $Server: {
-        concurrency: 1
+        concurrency: 1,
       },
       $Proxy: {
         server: 'localhost:3001',
         options: {
-          proxyReqPathResolver: request => `/api${request.url}`
-        }
-      }
-    }
+          proxyReqPathResolver: request => `/api${request.url}`,
+        },
+      },
+    },
   };
 })();

@@ -9,7 +9,7 @@ function generateConfig(environment) {
     external: vendors.common,
     input: 'src/main.js',
     treeshake: {
-      pureExternalModules: true
+      pureExternalModules: true,
     },
     output: [
       {
@@ -29,12 +29,12 @@ function generateConfig(environment) {
       json({
         preferConst: true, // Default: false
         compact: true, // Default: false
-        namedExports: true // Default: true
+        namedExports: true, // Default: true
       }),
       replace({
         "path.dirname(path.resolve('@ima/core'))":
           "path.dirname(require.resolve('@ima/core'))",
-        delimiters: ['', '']
+        delimiters: ['', ''],
       }),
       jscc({
         values: { _SERVER: environment === 'server' }

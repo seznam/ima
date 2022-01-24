@@ -5,18 +5,18 @@ import Window from 'src/window/Window';
 describe('ima.core.event.EventBusImpl', () => {
   let listeners = {
     listener1: () => {},
-    listener2: () => {}
+    listener2: () => {},
   };
 
   let eventSource = {
-    dispatchEvent: () => {}
+    dispatchEvent: () => {},
   };
   let notEventSource = {};
   let eventTarget = {};
   let event = 'event';
   //let IMA_EVENT = '$IMA.CustomEvent';
   let data = {
-    data: 'data'
+    data: 'data',
   };
 
   let MockedWindow = toMock(Window);
@@ -35,17 +35,17 @@ describe('ima.core.event.EventBusImpl', () => {
       eventBus.listen(eventTarget, event, listeners.listener1);
       eventBus.listen(eventTarget, event, listeners.listener2);
 
-      expect(windowInterface.bindEventListener.calls.count()).toEqual(2);
-      expect(windowInterface.bindEventListener.calls.argsFor(0)[0]).toEqual(
-        eventTarget
-      );
-      expect(windowInterface.bindEventListener.calls.argsFor(0)[1]).toEqual(
+      expect(windowInterface.bindEventListener.calls.count()).toBe(2);
+      expect(
+        windowInterface.bindEventListener.calls.argsFor(0)[0]
+      ).toStrictEqual(eventTarget);
+      expect(windowInterface.bindEventListener.calls.argsFor(0)[1]).toBe(
         IMA_EVENT
       );
-      expect(windowInterface.bindEventListener.calls.argsFor(1)[0]).toEqual(
-        eventTarget
-      );
-      expect(windowInterface.bindEventListener.calls.argsFor(1)[1]).toEqual(
+      expect(
+        windowInterface.bindEventListener.calls.argsFor(1)[0]
+      ).toStrictEqual(eventTarget);
+      expect(windowInterface.bindEventListener.calls.argsFor(1)[1]).toBe(
         IMA_EVENT
       );
     });
@@ -58,17 +58,17 @@ describe('ima.core.event.EventBusImpl', () => {
       eventBus.listenAll(eventTarget, listeners.listener1);
       eventBus.listenAll(eventTarget, listeners.listener2);
 
-      expect(windowInterface.bindEventListener.calls.count()).toEqual(2);
-      expect(windowInterface.bindEventListener.calls.argsFor(0)[0]).toEqual(
-        eventTarget
-      );
-      expect(windowInterface.bindEventListener.calls.argsFor(0)[1]).toEqual(
+      expect(windowInterface.bindEventListener.calls.count()).toBe(2);
+      expect(
+        windowInterface.bindEventListener.calls.argsFor(0)[0]
+      ).toStrictEqual(eventTarget);
+      expect(windowInterface.bindEventListener.calls.argsFor(0)[1]).toBe(
         IMA_EVENT
       );
-      expect(windowInterface.bindEventListener.calls.argsFor(1)[0]).toEqual(
-        eventTarget
-      );
-      expect(windowInterface.bindEventListener.calls.argsFor(1)[1]).toEqual(
+      expect(
+        windowInterface.bindEventListener.calls.argsFor(1)[0]
+      ).toStrictEqual(eventTarget);
+      expect(windowInterface.bindEventListener.calls.argsFor(1)[1]).toBe(
         IMA_EVENT
       );
     });
@@ -88,20 +88,20 @@ describe('ima.core.event.EventBusImpl', () => {
 
       eventBus.fire(eventSource, event, data);
 
-      expect(eventSource.dispatchEvent.calls.count()).toEqual(1);
+      expect(eventSource.dispatchEvent.calls.count()).toBe(1);
 
       expect(
         eventSource.dispatchEvent.calls.argsFor(0)[0].detail.eventName
-      ).toEqual(event);
-      expect(eventSource.dispatchEvent.calls.argsFor(0)[0].detail.data).toEqual(
-        data
-      );
-      expect(eventSource.dispatchEvent.calls.argsFor(0)[0].bubbles).toEqual(
-        true
-      );
-      expect(eventSource.dispatchEvent.calls.argsFor(0)[0].cancelable).toEqual(
-        true
-      );
+      ).toBe(event);
+      expect(
+        eventSource.dispatchEvent.calls.argsFor(0)[0].detail.data
+      ).toStrictEqual(data);
+      expect(
+        eventSource.dispatchEvent.calls.argsFor(0)[0].bubbles
+      ).toBeTruthy();
+      expect(
+        eventSource.dispatchEvent.calls.argsFor(0)[0].cancelable
+      ).toBeTruthy();
     });
 
     it('should throw error for incorrect eventSource', () => {
@@ -118,11 +118,11 @@ describe('ima.core.event.EventBusImpl', () => {
       eventBus.listen(eventTarget, event, listeners.listener1);
       eventBus.unlisten(eventTarget, event, listeners.listener1);
 
-      expect(windowInterface.unbindEventListener.calls.count()).toEqual(1);
-      expect(windowInterface.unbindEventListener.calls.argsFor(0)[0]).toEqual(
-        eventTarget
-      );
-      expect(windowInterface.unbindEventListener.calls.argsFor(0)[1]).toEqual(
+      expect(windowInterface.unbindEventListener.calls.count()).toBe(1);
+      expect(
+        windowInterface.unbindEventListener.calls.argsFor(0)[0]
+      ).toStrictEqual(eventTarget);
+      expect(windowInterface.unbindEventListener.calls.argsFor(0)[1]).toBe(
         IMA_EVENT
       );
     });
@@ -135,11 +135,11 @@ describe('ima.core.event.EventBusImpl', () => {
       eventBus.listenAll(eventTarget, listeners.listener1);
       eventBus.unlistenAll(eventTarget, listeners.listener1);
 
-      expect(windowInterface.unbindEventListener.calls.count()).toEqual(1);
-      expect(windowInterface.unbindEventListener.calls.argsFor(0)[0]).toEqual(
-        eventTarget
-      );
-      expect(windowInterface.unbindEventListener.calls.argsFor(0)[1]).toEqual(
+      expect(windowInterface.unbindEventListener.calls.count()).toBe(1);
+      expect(
+        windowInterface.unbindEventListener.calls.argsFor(0)[0]
+      ).toStrictEqual(eventTarget);
+      expect(windowInterface.unbindEventListener.calls.argsFor(0)[1]).toBe(
         IMA_EVENT
       );
     });

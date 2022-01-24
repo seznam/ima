@@ -53,8 +53,8 @@ function sendEnabled(port, enabled) {
   port.postMessage({
     action: Actions.SETTINGS,
     payload: {
-      enabled: enabled
-    }
+      enabled: enabled,
+    },
   });
 }
 
@@ -70,7 +70,7 @@ function sendEnabled(port, enabled) {
   // Initialize connection with background script
   const curTab = await getCurrentTab();
   const port = chrome.runtime.connect({
-    name: `popup:${curTab.id}`
+    name: `popup:${curTab.id}`,
   });
 
   // Handle popup state changes

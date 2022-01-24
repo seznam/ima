@@ -7,10 +7,10 @@ const mapStateToProps = state => {
     body: state.confirmModal.body,
     opened: state.confirmModal.opened,
     accept: state.confirmModal.accept,
-    cancel: state.confirmModal.cancel
+    cancel: state.confirmModal.cancel,
   };
 };
 
 export default connect(mapStateToProps, {
-  hideConfirmModal: actions.hideConfirmModal
+  hideConfirmModal: actions.hideConfirmModal,
 })(ConfirmModal);

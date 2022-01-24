@@ -3,7 +3,7 @@
     FB.init({
       appId: '',
       xfbml: true,
-      version: 'v2.2'
+      version: 'v2.2',
     });
   };
 

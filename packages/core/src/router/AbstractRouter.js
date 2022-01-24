@@ -1,3 +1,4 @@
+import AbstractRoute from './AbstractRoute';
 import ActionTypes from './ActionTypes';
 import Events from './Events';
 import Router from './Router';
@@ -310,9 +311,9 @@ export default class AbstractRouter extends Router {
    * @inheritdoc
    */
   async handleError(params, options = {}, locals = {}) {
-    let routeError = this._routeHandlers.get(RouteNames.ERROR);
+    let errorRoute = this._routeHandlers.get(RouteNames.ERROR);
 
-    if (!routeError) {
+    if (!errorRoute) {
       let error = new GenericError(
         `ima.core.router.AbstractRouter:handleError cannot process the ` +
           `error because no error page route has been configured. Add ` +
@@ -323,33 +324,35 @@ export default class AbstractRouter extends Router {
       return Promise.reject(error);
     }
 
+    params = this._addParamsFromOriginalRoute(params);
+
     const action = {
       url: this.getUrl(),
-      type: ActionTypes.ERROR
+      type: ActionTypes.ERROR,
     };
 
     locals.action = action;
-    locals.route = routeError;
+    locals.route = errorRoute;
 
     await this._runMiddlewares(
       [
         ...this._getMiddlewaresForRoute(RouteNames.ERROR),
-        ...routeError.getOptions().middlewares
+        ...errorRoute.getOptions().middlewares,
       ],
       params,
       locals
     );
 
-    return this._handle(routeError, params, options, action);
+    return this._handle(errorRoute, params, options, action);
   }
 
   /**
    * @inheritdoc
    */
   async handleNotFound(params, options = {}, locals = {}) {
-    let routeNotFound = this._routeHandlers.get(RouteNames.NOT_FOUND);
+    let notFoundRoute = this._routeHandlers.get(RouteNames.NOT_FOUND);
 
-    if (!routeNotFound) {
+    if (!notFoundRoute) {
       let error = new GenericError(
         `ima.core.router.AbstractRouter:handleNotFound cannot processes ` +
           `a non-matching route because no not found page route has ` +
@@ -361,24 +364,26 @@ export default class AbstractRouter extends Router {
       return Promise.reject(error);
     }
 
+    params = this._addParamsFromOriginalRoute(params);
+
     const action = {
       url: this.getUrl(),
-      type: ActionTypes.ERROR
+      type: ActionTypes.ERROR,
     };
 
     locals.action = action;
-    locals.route = routeNotFound;
+    locals.route = notFoundRoute;
 
     await this._runMiddlewares(
       [
         ...this._getMiddlewaresForRoute(RouteNames.NOT_FOUND),
-        ...routeNotFound.getOptions().middlewares
+        ...notFoundRoute.getOptions().middlewares,
       ],
       params,
       locals
     );
 
-    return this._handle(routeNotFound, params, options, action);
+    return this._handle(notFoundRoute, params, options, action);
   }
 
   /**
@@ -459,7 +464,7 @@ export default class AbstractRouter extends Router {
       params,
       path: this._getCurrentlyRoutedPath(),
       options,
-      action
+      action,
     };
 
     this._dispatcher.fire(Events.BEFORE_HANDLE_ROUTE, eventData, true);
@@ -503,7 +508,7 @@ export default class AbstractRouter extends Router {
       if (routeHandler.matches(path)) {
         return {
           route: routeHandler,
-          middlewares
+          middlewares,
         };
       }
     }
@@ -562,5 +567,30 @@ export default class AbstractRouter extends Router {
     for (const middleware of middlewares) {
       await middleware.run(params, locals);
     }
+  }
+
+  /**
+   * Obtains original route that was handled before not-found / error route
+   * and assigns its params to current params
+   *
+   * @param {Object<string, string>} params Route params for not-found or
+   *        error page
+   * @returns {Object<string, string>} Provided params merged with params
+   *        from original route
+   */
+  _addParamsFromOriginalRoute(params) {
+    const originalPath = this._getCurrentlyRoutedPath();
+    const { route } = this._getRouteHandlersByPath(originalPath);
+
+    if (!route) {
+      // try to at least extract query string params from path
+      const queryParams = AbstractRoute.getQuery(
+        AbstractRoute.getTrimmedPath(originalPath)
+      );
+
+      return Object.assign({}, queryParams, params);
+    }
+
+    return Object.assign({}, route.extractParameters(originalPath), params);
   }
 }

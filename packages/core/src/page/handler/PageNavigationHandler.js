@@ -43,7 +43,7 @@ export default class PageNavigationHandler extends PageManagerHandler {
    */
   handlePreManagedState(managedPage, nextManagedPage, action) {
     const {
-      options: { autoScroll }
+      options: { autoScroll },
     } = nextManagedPage;
 
     if (
@@ -71,7 +71,7 @@ export default class PageNavigationHandler extends PageManagerHandler {
   handlePostManagedState(managedPage, previousManagedPage, action) {
     const { event } = action;
     const {
-      options: { autoScroll }
+      options: { autoScroll },
     } = managedPage;
 
     if (event && event.state && event.state.scroll && autoScroll) {
@@ -89,7 +89,7 @@ export default class PageNavigationHandler extends PageManagerHandler {
     const url = this._window.getUrl();
     const scroll = {
       x: this._window.getScrollX(),
-      y: this._window.getScrollY()
+      y: this._window.getScrollY(),
     };
     const state = { url, scroll };
 
@@ -126,7 +126,7 @@ export default class PageNavigationHandler extends PageManagerHandler {
   _setAddressBar(url, isRedirection) {
     let scroll = {
       x: 0,
-      y: 0
+      y: 0,
     };
     let state = { url, scroll };
 

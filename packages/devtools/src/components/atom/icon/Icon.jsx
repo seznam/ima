@@ -6,7 +6,7 @@ import Icons from './icons';
 export default class Icon extends React.PureComponent {
   static get propTypes() {
     return {
-      name: PropTypes.string.isRequired
+      name: PropTypes.string.isRequired,
     };
   }
 

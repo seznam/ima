@@ -8,13 +8,13 @@ export default class Button extends React.PureComponent {
     return {
       children: PropTypes.any,
       color: PropTypes.oneOf(['primary', 'success']),
-      className: PropTypes.string
+      className: PropTypes.string,
     };
   }
 
   static get defaultProps() {
     return {
-      className: ''
+      className: '',
     };
   }
 
@@ -28,7 +28,8 @@ export default class Button extends React.PureComponent {
           { [styles[`btn--${color}`]]: color },
           className
         )}
-        {...rest}>
+        {...rest}
+      >
         {children}
       </button>
     );

@@ -9,7 +9,7 @@ import React from 'react';
 export default class BlankManagedRootView extends React.Component {
   static get defaultProps() {
     return {
-      $pageView: null
+      $pageView: null,
     };
   }
 

@@ -199,7 +199,7 @@ export default class ServerPageRenderer extends AbstractPageRenderer {
         page: pageMarkup,
         revivalSettings: this._getRevivalSettings(),
         metaManager: controller.getMetaManager(),
-        $Utils: this._factory.getUtils()
+        $Utils: this._factory.getUtils(),
       })
     );
 

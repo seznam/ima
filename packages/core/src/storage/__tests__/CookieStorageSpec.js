@@ -28,7 +28,7 @@ describe('ima.storage.CookieStorage', () => {
     },
     decode: function (s) {
       return s;
-    }
+    },
   };
 
   beforeEach(() => {
@@ -49,7 +49,7 @@ describe('ima.storage.CookieStorage', () => {
 
   it('should be parse exist cookies', () => {
     expect(request.getCookieHeader).toHaveBeenCalled();
-    expect(cookie._storage.size).toEqual(2);
+    expect(cookie._storage.size).toBe(2);
   });
 
   it('should be has method, which return true for exist cookie other false', () => {
@@ -59,8 +59,8 @@ describe('ima.storage.CookieStorage', () => {
   });
 
   it('should be get value from cookie', () => {
-    expect(cookie.get('cok1')).toEqual('hello');
-    expect(cookie.get('cok2')).toEqual('hello2');
+    expect(cookie.get('cok1')).toBe('hello');
+    expect(cookie.get('cok2')).toBe('hello2');
     expect(cookie.get('cok3')).toBeUndefined();
   });
 
@@ -74,30 +74,30 @@ describe('ima.storage.CookieStorage', () => {
     cookie.delete('cok2');
 
     expect(response.setCookie).toHaveBeenCalled();
-    expect(cookie._storage.size).toEqual(1);
+    expect(cookie._storage.size).toBe(1);
   });
 
   it('should be delete value from cookie with options', () => {
     cookie.delete('cok2', { domain: 'localhost' });
 
     expect(response.setCookie).toHaveBeenCalled();
-    expect(cookie._storage.size).toEqual(1);
+    expect(cookie._storage.size).toBe(1);
   });
 
   it('should be delete all cookies', () => {
     cookie.clear();
 
-    expect(response.setCookie.calls.count()).toEqual(2);
-    expect(cookie._storage.size).toEqual(0);
+    expect(response.setCookie.calls.count()).toBe(2);
+    expect(cookie._storage.size).toBe(0);
   });
 
   it('should be get cookies string', () => {
     spyOn(cookie._transformFunction, 'encode').and.callThrough();
 
-    expect(cookie.getCookiesStringForCookieHeader()).toEqual(
+    expect(cookie.getCookiesStringForCookieHeader()).toBe(
       cookiesStringForCookieHeader
     );
-    expect(cookie._transformFunction.encode.calls.count()).toEqual(2);
+    expect(cookie._transformFunction.encode.calls.count()).toBe(2);
   });
 
   describe('set method', () => {
@@ -134,7 +134,7 @@ describe('ima.storage.CookieStorage', () => {
 
       expect(cookie.set).toHaveBeenCalledWith('cok3', 'hello3', {
         expires: new Date('Fri, 31 Dec 9999 23:59:59 UTC'),
-        path: '/'
+        path: '/',
       });
     });
 
@@ -145,7 +145,7 @@ describe('ima.storage.CookieStorage', () => {
 
       expect(cookie.set).toHaveBeenCalledWith('Cok3', 'hello3', {
         expires: new Date('Fri, 31 Dec 9999 23:59:59 UTC'),
-        path: '/'
+        path: '/',
       });
     });
 
@@ -157,7 +157,7 @@ describe('ima.storage.CookieStorage', () => {
       expect(cookie.set).toHaveBeenCalledWith('cok3', 'hello3', {
         expires: new Date('Fri, 31 Dec 9999 23:59:59 UTC'),
         path: '/',
-        domain: 'localhost:3001'
+        domain: 'localhost:3001',
       });
     });
 
@@ -172,7 +172,7 @@ describe('ima.storage.CookieStorage', () => {
         secure: true,
         path: '/',
         domain: 'localhost:3001',
-        sameSite: 'Lax'
+        sameSite: 'Lax',
       });
     });
 
@@ -187,7 +187,7 @@ describe('ima.storage.CookieStorage', () => {
         httpOnly: true,
         secure: true,
         path: '/',
-        domain: 'localhost:3001'
+        domain: 'localhost:3001',
       });
     });
   });
@@ -201,13 +201,13 @@ describe('ima.storage.CookieStorage', () => {
         Infinity,
         null,
         'Fri, 31 Dec 2000 23:59:59 GMT',
-        new Date('Fri, 31 Dec 2000 23:59:59 GMT')
+        new Date('Fri, 31 Dec 2000 23:59:59 GMT'),
       ],
       value => {
         it('for value ' + value, () => {
-          expect(cookie._getExpirationAsDate(value) instanceof Date).toEqual(
-            true
-          );
+          expect(
+            cookie._getExpirationAsDate(value) instanceof Date
+          ).toBeTruthy();
         });
       }
     );
@@ -227,13 +227,13 @@ describe('ima.storage.CookieStorage', () => {
         { value: '1', sanitizedValue: '1' },
         { value: '7|AABBCCD===', sanitizedValue: '7|AABBCCD===' },
         { value: '7|AABBCCD=== ', sanitizedValue: '7|AABBCCD===' },
-        { value: undefined + '', sanitizedValue: 'undefined' }
+        { value: undefined + '', sanitizedValue: 'undefined' },
       ],
       item => {
         it(
           'should return ' + item.sanitizedValue + 'for value ' + item.value,
           () => {
-            expect(cookie._sanitizeCookieValue(item.value)).toEqual(
+            expect(cookie._sanitizeCookieValue(item.value)).toBe(
               item.sanitizedValue
             );
           }
@@ -248,7 +248,7 @@ describe('ima.storage.CookieStorage', () => {
 
       cookie._recomputeCookieMaxAgeAndExpires(options);
 
-      expect(options.expires).toEqual(jasmine.any(Date));
+      expect(options.expires).toStrictEqual(expect.any(Date));
     });
 
     it('should compute maxAge as number', () => {
@@ -256,7 +256,7 @@ describe('ima.storage.CookieStorage', () => {
 
       cookie._recomputeCookieMaxAgeAndExpires(options);
 
-      expect(options.maxAge).toEqual(jasmine.any(Number));
+      expect(options.maxAge).toStrictEqual(expect.any(Number));
     });
 
     it('should compute maxAge as number and expires as date', () => {
@@ -264,8 +264,8 @@ describe('ima.storage.CookieStorage', () => {
 
       cookie._recomputeCookieMaxAgeAndExpires(options);
 
-      expect(options.maxAge).toEqual(jasmine.any(Number));
-      expect(options.expires).toEqual(jasmine.any(Date));
+      expect(options.maxAge).toStrictEqual(expect.any(Number));
+      expect(options.expires).toStrictEqual(expect.any(Date));
     });
   });
 });

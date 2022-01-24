@@ -94,7 +94,7 @@ export default (ns, oc, config) => {
   //Storage
   oc.constant('$CookieTransformFunction', {
     encode: s => s,
-    decode: s => s
+    decode: s => s,
   });
   oc.bind('$CookieStorage', CookieStorage);
   if (oc.get(Window).hasSessionStorage()) {
@@ -108,8 +108,8 @@ export default (ns, oc, config) => {
       entryTtl: 30 * 60 * 1000,
       maxEntries: 1000,
       gcInterval: 60 * 1000,
-      gcEntryCountTreshold: 16
-    }
+      gcEntryCountTreshold: 16,
+    },
   ]);
   oc.bind('$WeakMapStorage', WeakMapStorage);
   oc.bind('$SessionMapStorage', SessionMapStorage);
@@ -133,7 +133,7 @@ export default (ns, oc, config) => {
     '$CacheStorage',
     CacheFactory,
     '$Helper',
-    config.$Cache
+    config.$Cache,
   ]);
   oc.bind('$Cache', Cache);
 
@@ -168,7 +168,7 @@ export default (ns, oc, config) => {
     $PageStateManager: PageStateManager,
     $Router: Router,
     $Settings: '$Settings',
-    $Window: Window
+    $Window: Window,
   });
 
   oc.inject(PageRendererFactory, [ComponentUtils, '$React']);
@@ -181,7 +181,7 @@ export default (ns, oc, config) => {
       '$ReactDOM',
       '$Dispatcher',
       '$Settings',
-      Window
+      Window,
     ]);
   } else {
     oc.provide(PageRenderer, ServerPageRenderer, [
@@ -191,14 +191,14 @@ export default (ns, oc, config) => {
       '$Dispatcher',
       '$Settings',
       Response,
-      Cache
+      Cache,
     ]);
   }
   oc.bind('$PageRenderer', PageRenderer);
 
   if (oc.get(Window).isClient()) {
     oc.bind('$PageHandlerRegistry', PageHandlerRegistry, [
-      PageNavigationHandler
+      PageNavigationHandler,
     ]);
     oc.provide(PageManager, ClientPageManager);
   } else {
@@ -226,7 +226,7 @@ export default (ns, oc, config) => {
     '$HttpAgentProxy',
     '$Cache',
     CookieStorage,
-    config.$Http
+    config.$Http,
   ]);
   oc.bind('$Http', HttpAgent);
   oc.constant('$HttpStatusCode', HttpStatusCode);

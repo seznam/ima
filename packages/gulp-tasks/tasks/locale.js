@@ -45,6 +45,6 @@ exports.default = gulpConfig => {
   }
 
   return {
-    locale
+    locale,
   };
 };

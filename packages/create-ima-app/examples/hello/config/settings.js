@@ -13,20 +13,20 @@ export default (ns, oc, config) => {
           headers: {
             // Set default request headers
             Accept: 'application/json',
-            'Accept-Language': config.$Language
+            'Accept-Language': config.$Language,
           },
           fetchOptions: {
-            mode: 'cors'
+            mode: 'cors',
           },
-          cache: true // if value exists in cache then returned it else make request to remote server.
+          cache: true, // if value exists in cache then returned it else make request to remote server.
         },
         cacheOptions: {
-          prefix: 'http.' // Cache key prefix for response bodies (already parsed as JSON) of completed HTTP requests.
-        }
+          prefix: 'http.', // Cache key prefix for response bodies (already parsed as JSON) of completed HTTP requests.
+        },
       },
       $Cache: {
         enabled: true, //Turn on/off cache for all application.
-        ttl: 60000 // Default time to live for cached value in ms.
+        ttl: 60000, // Default time to live for cached value in ms.
       },
       $Page: {
         $Render: {
@@ -56,8 +56,8 @@ export default (ns, oc, config) => {
     dev: {
       $Http: {
         defaultRequestOptions: {
-          timeout: 2000
-        }
+          timeout: 2000,
+        },
       },
       $Page: {
         $Render: {

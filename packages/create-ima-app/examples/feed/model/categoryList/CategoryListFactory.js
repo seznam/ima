@@ -32,7 +32,7 @@ export default class CategoryListFactory extends AbstractEntityFactory {
 
     return super.createEntity({
       _id: 'categories',
-      categories: categoryEntityList
+      categories: categoryEntityList,
     });
   }
 }

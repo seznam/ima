@@ -19,7 +19,7 @@ export default class ErrorController extends AbstractController {
   load() {
     return {
       status: this.status,
-      error: this.params.error
+      error: this.params.error,
     };
   }
 }

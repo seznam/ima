@@ -10,7 +10,7 @@ export default class Alerts extends React.PureComponent {
   static get propTypes() {
     return {
       alerts: PropTypes.object,
-      removeAlert: PropTypes.func
+      removeAlert: PropTypes.func,
     };
   }
 
@@ -43,10 +43,11 @@ export default class Alerts extends React.PureComponent {
               <Alert
                 onClick={() => removeAlert(id)}
                 className={cn(styles.alert, {
-                  [styles['alert--hidden']]: hidden
+                  [styles['alert--hidden']]: hidden,
                 })}
                 key={id}
-                {...rest}>
+                {...rest}
+              >
                 {content}
               </Alert>
             );

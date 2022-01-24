@@ -44,7 +44,7 @@ export default class DetailController extends AbstractController {
 
     return {
       item: this._itemService.load(this.params.itemId),
-      category: this._categoryListService.getCategoryByUrl(categoryId)
+      category: this._categoryListService.getCategoryByUrl(categoryId),
     };
   }
 }

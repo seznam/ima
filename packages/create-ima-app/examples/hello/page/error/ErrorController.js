@@ -14,7 +14,7 @@ export default class ErrorController extends AbstractPageController {
   load() {
     return {
       status: this.status,
-      error: this.params.error
+      error: this.params.error,
     };
   }
 }

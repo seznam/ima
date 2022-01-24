@@ -3,7 +3,7 @@ import uid from 'easy-uid';
 
 export const presetsInitialState = {
   selectedPresetId: null,
-  presets: {}
+  presets: {},
 };
 
 const getCurrentPreset = state => {
@@ -91,8 +91,8 @@ const presets = createSlice({
 
         hooks[id].opened = true;
       }
-    }
-  }
+    },
+  },
 });
 
 const selectors = {
@@ -109,7 +109,7 @@ const selectors = {
     (selectedPresetId, presets) => {
       return selectedPresetId && presets[selectedPresetId].hooks;
     }
-  )
+  ),
 };
 
 const { reducer, actions } = presets;

@@ -34,7 +34,7 @@ export default class HomeController extends AbstractController {
     return {
       items: items,
       filter: filter,
-      toggleAllChecked: items.every(item => item.completed)
+      toggleAllChecked: items.every(item => item.completed),
     };
   }
 
@@ -76,7 +76,7 @@ export default class HomeController extends AbstractController {
     this._itemsService.add(data);
 
     this.setState({
-      items: this._itemsService.getAll(this.getState().filter)
+      items: this._itemsService.getAll(this.getState().filter),
     });
   }
 
@@ -90,7 +90,7 @@ export default class HomeController extends AbstractController {
 
     this.setState({
       items: this._itemsService.getAll(state.filter),
-      toggleAllChecked: data.completed
+      toggleAllChecked: data.completed,
     });
   }
 
@@ -103,7 +103,7 @@ export default class HomeController extends AbstractController {
     }
 
     this.setState({
-      items: this._itemsService.getAll(this.getState().filter)
+      items: this._itemsService.getAll(this.getState().filter),
     });
   }
 
@@ -111,7 +111,7 @@ export default class HomeController extends AbstractController {
     this._itemsService.delete(data.item.id);
 
     this.setState({
-      items: this._itemsService.getAll(this.getState().filter)
+      items: this._itemsService.getAll(this.getState().filter),
     });
   }
 
@@ -124,7 +124,7 @@ export default class HomeController extends AbstractController {
 
     this.setState({
       items: items,
-      toggleAllChecked: items.every(item => item.completed)
+      toggleAllChecked: items.every(item => item.completed),
     });
   }
 
@@ -134,7 +134,7 @@ export default class HomeController extends AbstractController {
     this._itemsService.update(item.id, item);
 
     this.setState({
-      items: this._itemsService.getAll(this.getState().filter)
+      items: this._itemsService.getAll(this.getState().filter),
     });
   }
 }

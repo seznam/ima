@@ -10,10 +10,10 @@ const vendors = {
 
   client: [],
 
-  test: ['@ima/core/test.js', 'react-test-renderer', 'enzyme']
+  test: ['@ima/core/test.js', 'react-test-renderer', 'enzyme'],
 };
 
 module.exports = {
   js,
-  vendors
+  vendors,
 };

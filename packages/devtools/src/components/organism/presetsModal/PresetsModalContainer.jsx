@@ -5,11 +5,11 @@ import PresetsModal from './PresetsModal';
 
 const mapStateToProps = state => ({
   presets: state.presets.presets,
-  selectedPresetId: state.presets.selectedPresetId
+  selectedPresetId: state.presets.selectedPresetId,
 });
 
 export default connect(mapStateToProps, {
   addPreset: presetsActions.addPreset,
   selectPreset: presetsActions.selectPreset,
-  alertSuccess: alertsActions.success
+  alertSuccess: alertsActions.success,
 })(PresetsModal);
