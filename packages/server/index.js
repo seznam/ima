@@ -7,49 +7,45 @@ let environmentConfig = require(path.resolve(
 ));
 let environment = require('./lib/environment.js')(environmentConfig);
 
-if (environment.$Env === 'dev') {
-  require(path.resolve(applicationFolder, './build/server/runtime.js'));
-  require(path.resolve(applicationFolder, './build/server/vendors.js'));
-}
-
 global.$Debug = environment.$Debug;
 global.$IMA = global.$IMA || {};
 
-function appFactory() {
-  delete require.cache[
-    path.resolve(applicationFolder, './build/server/app.server.js')
-  ];
+const modulePathCache = new Map();
 
+function requireUncached(module) {
+  if (!modulePathCache.has(module)) {
+    modulePathCache.set(module, path.resolve(module));
+  }
+
+  if (environment.$Env === 'dev') {
+    delete require.cache[require.resolve(modulePathCache.get(module))];
+  }
+
+  return require(modulePathCache.get(module));
+}
+
+if (environment.$Env === 'dev') {
+  requireUncached('./build/server/runtime.js');
+  requireUncached('./build/server/vendors.js');
+}
+
+function appFactory() {
   // Require new server-side bundle on dev reload
   if (environment.$Env === 'dev') {
     try {
-      delete require.cache[
-        path.resolve(applicationFolder, './build/server/runtime.js')
-      ];
-
-      require(path.resolve(applicationFolder, './build/server/runtime.js'));
-
-      return require(path.resolve(
-        applicationFolder,
-        './build/server/app.server.js'
-      ));
+      requireUncached('./build/server/runtime.js');
+      return requireUncached('./build/server/app.server.js');
     } catch (_) {
       // fail silently for potential compile errors which are handled in error overlay
       return null;
     }
   }
 
-  return require(path.resolve(
-    applicationFolder,
-    './build/server/app.server.js'
-  ));
+  return requireUncached('./build/server/app.server.js');
 }
 
 function languageLoader(language) {
-  return require(path.resolve(
-    applicationFolder,
-    `./build/static/locale/${language}.js`
-  ));
+  return requireUncached(`./build/static/locale/${language}.js`);
 }
 
 let logger = require('./lib/logger.js')(environment);
