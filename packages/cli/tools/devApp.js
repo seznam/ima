@@ -151,12 +151,12 @@ function watchChanges(destFolder, pkgDirs) {
     // Spawn watch
     if (pkgJson.scripts.dev) {
       child.spawn('npm', ['run', 'dev'], {
-        stdio: 'ignore',
+        stdio: 'inherit',
         cwd: pkgDir,
       });
     } else if (pkgJson.scripts.build) {
       child.spawn('npm', ['run', 'build', '--', '--watch'], {
-        stdio: 'ignore',
+        stdio: 'inherit',
         cwd: pkgDir,
       });
     }

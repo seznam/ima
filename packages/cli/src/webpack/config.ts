@@ -155,12 +155,6 @@ export default async (
           sourceMap: useSourceMaps,
         },
       },
-      {
-        loader: require.resolve('glob-import-loader'),
-        options: {
-          sourceMap: useSourceMaps,
-        },
-      },
     ].filter(Boolean) as RuleSetUseItem[];
   };
 
@@ -451,7 +445,7 @@ export default async (
                         require.resolve('@babel/preset-react'),
                         {
                           development: isDev,
-                          runtime: imaConfig.jsxEnvironment ?? 'automatic',
+                          runtime: imaConfig.jsxRuntime ?? 'automatic',
                         },
                       ],
                       [

@@ -119,9 +119,9 @@ export type ImaConfig = {
   useSourceMaps?: boolean;
 
   /**
-   * Set custom jsxEnvironment for @babel/preset-react, the default is 'automatic'.
+   * Set custom jsxRuntime for @babel/preset-react, the default is 'automatic'.
    */
-  jsxEnvironment?: 'classic' | 'automatic';
+  jsxRuntime?: 'classic' | 'automatic';
 
   /**
    * Array of compression algorithms used for assets in production build. [default=['brotliCompress', 'gzip']]

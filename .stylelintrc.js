@@ -1,5 +1,5 @@
 module.exports = {
-  customSyntax: "postcss-less",
+  customSyntax: require.resolve("postcss-less"),
   ignoreFiles: ["**/*.js", "**/*.ts", "**/*.jsx", "**/*.tsx", "**/*.json"],
   extends: ["stylelint-config-standard", "stylelint-config-css-modules"],
   plugins: [
