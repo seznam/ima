@@ -43,7 +43,7 @@ export default async (
   const imaEnvironment = resolveEnvironment(rootDir);
   const isDebug = imaEnvironment.$Debug;
   const outputDir = path.join(rootDir, 'build');
-  const publicPath = ctx?.publicPath ?? imaConfig.publicPath;
+  const publicPath = ctx.publicPath ?? imaConfig.publicPath;
   const appDir = path.join(rootDir, 'app');
   const useHMR = !isServer && isDev && (isEsVersion || ctx.forceSPAWithHMR);
 
@@ -283,7 +283,7 @@ export default async (
           'react-dom$': 'react-dom/profiling',
           'scheduler/tracing': 'scheduler/tracing-profiling',
         }),
-        ...(imaConfig?.webpackAliases ?? {}),
+        ...(imaConfig.webpackAliases ?? {}),
       },
     },
     resolveLoader: {
@@ -451,7 +451,7 @@ export default async (
                         require.resolve('@babel/preset-react'),
                         {
                           development: isDev,
-                          runtime: 'automatic',
+                          runtime: imaConfig.jsxEnvironment ?? 'automatic',
                         },
                       ],
                       [
