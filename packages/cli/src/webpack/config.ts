@@ -82,6 +82,16 @@ export default async (
   }: {
     useLessLoader?: boolean;
   } = {}): RuleSetUseItem[] => {
+    /**
+     * Ignore CSS and LESS modules when CSS modules are disabled and we would
+     * need to generate the CSS module definitions. This is not needed for other
+     * CSS files so we can ignore it and improve a performance a little bit.
+     * see https://webpack.js.org/configuration/resolve/#resolvealias for more.
+     */
+    if (onlyCssDefinitions && !imaConfig.enableCssModules) {
+      return [{ loader: 'null-loader' }];
+    }
+
     return [
       !onlyCssDefinitions && {
         loader: MiniCssExtractPlugin.loader,
@@ -260,18 +270,6 @@ export default async (
     resolve: {
       extensions: ['.mjs', '.js', '.jsx', '.json'],
       alias: {
-        /**
-         * Ignore CSS and LESS modules when CSS modules are disabled and we would
-         * need to generate the CSS module definitions. This is not needed for other
-         * CSS files so we can ignore it and improve a performance a little bit.
-         * see https://webpack.js.org/configuration/resolve/#resolvealias for more.
-         */
-        ...(onlyCssDefinitions &&
-          !imaConfig.enableCssModules && {
-            '.less$': false,
-            '.css$': false,
-          }),
-
         // App specific aliases
         app: path.join(rootDir, 'app'),
         '@ima/core': `@ima/core/dist/ima.${

@@ -1,3 +1,4 @@
+import fs from 'fs';
 import path from 'path';
 
 import fg from 'fast-glob';
@@ -9,6 +10,14 @@ export interface ExtendLessLoaderOptions {
 
 const importRE = /^@import\s['"](.*)['"];$/gm;
 
+/**
+ * Normalizes glob paths by preppending app and node_module
+ * expressions with their path prefix. Other paths are left intact.
+ *
+ * @param {string} globPath
+ * @param {string} cwd Current working directory related to globPath.
+ * @returns {string}
+ */
 function normalizeGlobPath(globPath: string, cwd: string) {
   if (globPath.startsWith('.')) {
     return globPath;
@@ -25,6 +34,15 @@ function normalizeGlobPath(globPath: string, cwd: string) {
     : path.join(cwd, 'node_modules', globPath);
 }
 
+/**
+ * This loader extends less functionality in ima.js applications by enabling
+ * glob imports in the @import ""; less expression and preppending import
+ * to global.less file if it exist into every process less file (so globals
+ * are available without additional imports).
+ *
+ * @param {string} source Module source.
+ * @returns {string}
+ */
 const ExtendLessLoader: LoaderDefinitionFunction<ExtendLessLoaderOptions> =
   function (source) {
     this.cacheable(true);
@@ -58,10 +76,14 @@ const ExtendLessLoader: LoaderDefinitionFunction<ExtendLessLoaderOptions> =
         .join('\n');
     };
 
-    return `@import "${globalsPath}";\n\n${source.replace(
-      importRE,
-      expandGlobs
-    )}`;
+    let newSource = source.replace(importRE, expandGlobs);
+
+    // Preppend globals import
+    if (globalsPath && fs.existsSync(globalsPath)) {
+      newSource = `@import "${globalsPath}";\n\n${newSource}`;
+    }
+
+    return newSource;
   };
 
 export default ExtendLessLoader;
