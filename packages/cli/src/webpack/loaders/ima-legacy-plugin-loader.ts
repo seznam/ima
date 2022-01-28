@@ -11,7 +11,7 @@ import { LoaderDefinitionFunction } from 'webpack';
 const ImaLegacyPluginLoader: LoaderDefinitionFunction<null> = function (
   source
 ) {
-  this.cacheable();
+  this.cacheable(true);
   const modulePath = this.resourcePath.replace(this.rootContext, '');
 
   // Skip ima core
