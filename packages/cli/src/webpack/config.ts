@@ -15,7 +15,6 @@ import { ConfigurationContext, ImaConfig } from '../types';
 import {
   requireConfig,
   resolveEnvironment,
-  additionalDataFactory,
   createCacheKey,
   IMA_CONF_FILENAME,
   createPolyfillEntry,
@@ -82,13 +81,6 @@ export default async (
   }: {
     useLessLoader?: boolean;
   } = {}): RuleSetUseItem[] => {
-    let importLoaders = onlyCssDefinitions ? 0 : 1;
-
-    // Increase number of import loaders for less loader
-    if (useLessLoader) {
-      importLoaders += 1;
-    }
-
     return [
       !onlyCssDefinitions && {
         loader: MiniCssExtractPlugin.loader,
@@ -96,7 +88,6 @@ export default async (
       {
         loader: require.resolve('css-loader'),
         options: {
-          importLoaders,
           modules: {
             auto: true,
             exportOnlyLocals: onlyCssDefinitions,
@@ -146,13 +137,13 @@ export default async (
           lessOptions: {
             strictMath: true,
           },
-          additionalData: additionalDataFactory([
-            prefix =>
-              prefix(
-                `@import "${path.join(rootDir, 'app/less/globals.less')}";`
-              ),
-          ]),
           sourceMap: useSourceMaps,
+        },
+      },
+      useLessLoader && {
+        loader: 'extend-less-loader',
+        options: {
+          globalsPath: path.join(rootDir, 'app/less/globals.less'),
         },
       },
     ].filter(Boolean) as RuleSetUseItem[];

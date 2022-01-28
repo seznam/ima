@@ -144,13 +144,6 @@ export type ImaConfig = {
   languages: Record<string, string[]>;
 };
 
-export type AdditionalDataFn = (content: string) => string;
-export type AdditionalDataFactoryFn = (content: string) => void;
-export type AdditionalDataContentFn = (
-  prefix: AdditionalDataFactoryFn,
-  postfix: AdditionalDataFactoryFn
-) => void;
-
 /**
  * IMA.js loaded environment
  */

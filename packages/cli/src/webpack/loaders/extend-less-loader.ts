@@ -1,10 +1,10 @@
 import { LoaderDefinitionFunction } from 'webpack';
 
-export interface ExtendsLessLoaderOptions {
+export interface ExtendLessLoaderOptions {
   globalsPath?: string;
 }
 
-const ExtendsLessLoader: LoaderDefinitionFunction<ExtendsLessLoaderOptions> =
+const ExtendLessLoader: LoaderDefinitionFunction<ExtendLessLoaderOptions> =
   function (source) {
     this.cacheable();
 
@@ -17,4 +17,4 @@ const ExtendsLessLoader: LoaderDefinitionFunction<ExtendsLessLoaderOptions> =
     return `@import "${globalsPath}";\n\n${source}`;
   };
 
-export default ExtendsLessLoader;
+export default ExtendLessLoader;

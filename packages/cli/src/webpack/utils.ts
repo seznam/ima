@@ -6,15 +6,11 @@ import envResolver from '@ima/server/lib/environment.js';
 import chalk from 'chalk';
 import { ObjectPattern } from 'copy-webpack-plugin';
 import MessageFormat from 'messageformat';
-import { root } from 'postcss';
-import { cache, Configuration } from 'webpack';
+import { Configuration } from 'webpack';
 
 import logger from '../lib/logger';
 import { time } from '../lib/time';
 import {
-  AdditionalDataContentFn,
-  AdditionalDataFactoryFn,
-  AdditionalDataFn,
   ConfigurationContext,
   ImaEnvironment,
   ConfigurationTypes,
@@ -200,33 +196,6 @@ function extractLanguages(imaConfig: ImaConfig): ObjectPattern[] {
   });
 
   return resultCopyRecords;
-}
-
-/**
- * Less-loader additional data factory function. Utility to
- * easily prepped/append custom content into the less-loader.
- *
- * @param {AdditionalDataContentFn[]} contentFunctions Data content functions.
- * @returns {AdditionalDataFn} Less-loader compatible additional data fn.
- */
-function additionalDataFactory(
-  contentFunctions: AdditionalDataContentFn[]
-): AdditionalDataFn {
-  const prefixes: string[] = [];
-  const postfixes: string[] = [];
-
-  const prefix: AdditionalDataFactoryFn = content => prefixes.push(content);
-  const postfix: AdditionalDataFactoryFn = content => postfixes.push(content);
-
-  contentFunctions.forEach(fn => {
-    if (typeof fn !== 'function') {
-      return;
-    }
-
-    return fn(prefix, postfix);
-  });
-
-  return content => [...prefixes, content, ...postfixes].join('\n\n');
 }
 
 /**
@@ -445,7 +414,6 @@ async function createWebpackConfig(
 export {
   resolveEnvironment,
   requireConfig,
-  additionalDataFactory,
   createCacheKey,
   createWebpackConfig,
   requireImaConfig,
