@@ -56,7 +56,6 @@
     "mini-css-extract-plugin": "^2.5.0",
     "mini-svg-data-uri": "^1.4.3",
     "nodemon": "^2.0.15",
-    "null-loader": "^4.0.1",
     "postcss": "^8.4.5",
     "postcss-flexbugs-fixes": "^5.0.2",
     "postcss-loader": "^6.2.1",

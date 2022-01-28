@@ -62,10 +62,11 @@ export default async (
   }
 
   /**
-   * When using build script and dev mode (not forceSPA with HMR which uses es5),
-   * the CSS files are only generated once for es version pass. For other compilers
-   * only definitions are generated in order to fully support css.modules but
-   * improve a compiling speed a little bit.
+   * Most of the time we try to built the CSS only in the ES bundle.
+   * However when the CSS modules are enabled (imaConfig.enableCSSModules),
+   * we also need to generate definitions (class names) for other configurations.
+   * This optimization helps with performance a bit since we don't need to generate
+   * CSS files for every configuration but just once and only definitions for others.
    */
   const onlyCssDefinitions =
     isServer ||
@@ -259,15 +260,31 @@ export default async (
     resolve: {
       extensions: ['.mjs', '.js', '.jsx', '.json'],
       alias: {
+        /**
+         * Ignore CSS and LESS modules when CSS modules are disabled and we would
+         * need to generate the CSS module definitions. This is not needed for other
+         * CSS files so we can ignore it and improve a performance a little bit.
+         * see https://webpack.js.org/configuration/resolve/#resolvealias for more.
+         */
+        ...(onlyCssDefinitions &&
+          !imaConfig.enableCssModules && {
+            '.less$': false,
+            '.css$': false,
+          }),
+
+        // App specific aliases
         app: path.join(rootDir, 'app'),
         '@ima/core': `@ima/core/dist/ima.${
           isServer ? 'server.cjs.js' : 'client.esm.js'
         }`,
+
         // Enable better profiling in react devtools
         ...(ctx.profile && {
           'react-dom$': 'react-dom/profiling',
           'scheduler/tracing': 'scheduler/tracing-profiling',
         }),
+
+        // Ima config overrides
         ...(imaConfig.webpackAliases ?? {}),
       },
     },
