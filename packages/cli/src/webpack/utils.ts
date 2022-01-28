@@ -281,7 +281,7 @@ function requireImaConfig(rootDir = process.cwd()): ImaConfig | null {
  */
 async function resolveImaConfig(args: CliArgs): Promise<ImaConfig> {
   const defaultImaConfig: ImaConfig = {
-    publicPath: '',
+    publicPath: '/',
     compression: ['brotliCompress', 'gzip'],
     languages: {
       cs: ['./app/**/*CS.json'],

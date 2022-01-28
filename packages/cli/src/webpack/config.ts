@@ -216,8 +216,8 @@ export default async (
        * We put hot updates into it's own folder
        * otherwise it clutters the built folder.
        */
-      hotUpdateChunkFilename: 'hot/[id].[fullhash].hot-update.js',
-      hotUpdateMainFilename: 'hot/[runtime].[fullhash].hot-update.json',
+      hotUpdateChunkFilename: 'static/hot/[id].[fullhash].hot-update.js',
+      hotUpdateMainFilename: 'static/hot/[runtime].[fullhash].hot-update.json',
       ...(isServer && { library: { type: 'commonjs2' } }),
     },
     cache: {
