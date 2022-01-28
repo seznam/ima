@@ -8,6 +8,8 @@ import Context from './Context';
  * @abstract
  */
 export default class AbstractComponent extends React.Component {
+  _utils: object;
+
   static get contextType() {
     return Context;
   }
@@ -35,7 +37,7 @@ export default class AbstractComponent extends React.Component {
    *
    * @return {Object<string, *>} The utilities for the view components.
    */
-  get utils() {
+  get utils(): object {
     if (!this._utils) {
       this._utils = helpers.getUtils(this.props, this.context);
     }
@@ -53,7 +55,7 @@ export default class AbstractComponent extends React.Component {
    *        the placeholders in the localization phrase.
    * @return {string} Localized phrase.
    */
-  localize(key, params = {}) {
+  localize(key: string, params: object = {}) {
     return helpers.localize(this, key, params);
   }
 
@@ -68,7 +70,7 @@ export default class AbstractComponent extends React.Component {
    *        extraneous parameters to add to the URL as a query string.
    * @return {string} The generated URL.
    */
-  link(name, params = {}) {
+  link(name: string, params: object = {}): string {
     return helpers.link(this, name, params);
   }
 

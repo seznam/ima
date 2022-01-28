@@ -1,6 +1,7 @@
 import json from 'rollup-plugin-json';
 import replace from 'rollup-plugin-replace';
 import jscc from 'rollup-plugin-jscc';
+import typescript from '@rollup/plugin-typescript';
 
 const { vendors } = require('./build');
 
@@ -24,6 +25,7 @@ function generateConfig(environemnt) {
       },
     ],
     plugins: [
+      typescript(),
       json({
         preferConst: true, // Default: false
         compact: true, // Default: false
