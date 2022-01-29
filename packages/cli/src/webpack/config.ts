@@ -8,7 +8,12 @@ import CssMinimizerPlugin from 'css-minimizer-webpack-plugin';
 import MiniCssExtractPlugin from 'mini-css-extract-plugin';
 import miniSVGDataURI from 'mini-svg-data-uri';
 import TerserPlugin from 'terser-webpack-plugin';
-import webpack, { Configuration, RuleSetRule, RuleSetUseItem } from 'webpack';
+import webpack, {
+  Configuration,
+  RuleSetRule,
+  RuleSetUseItem,
+  WebpackPluginInstance,
+} from 'webpack';
 import RemoveEmptyScriptsPlugin from 'webpack-remove-empty-scripts';
 
 import { ConfigurationContext, ImaConfig } from '../types';
@@ -511,7 +516,7 @@ export default async (
                 ...extractLanguages(imaConfig),
               ],
             }),
-          ].filter(Boolean)
+          ]
         : // Client-specific plugins
           [
             // Removes generated empty script caused by non-js entry points
@@ -561,7 +566,7 @@ export default async (
                 },
               }),
           ]),
-    ].filter(Boolean),
+    ].filter(Boolean) as WebpackPluginInstance[],
 
     // Enable node preset for externals on server
     externalsPresets: {
