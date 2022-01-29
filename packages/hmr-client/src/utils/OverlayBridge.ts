@@ -4,8 +4,7 @@ import { OverlayEventName, ClientEventName } from '#/types';
 
 import overlayIndexHtml from '../public/overlayIndex.html';
 
-const OVERLAY_IFRAME_ID =
-  'ima-error-overlay-bf121178-c2b6-556d-a702-b7d2987bbf51';
+const OVERLAY_IFRAME_ID = '__ima-error-overlay-iframe-id';
 
 class OverlayBridge {
   private _isReady = false;
@@ -134,7 +133,13 @@ class OverlayBridge {
 
     // Insert overlay html into iframe contents
     iframe.contentWindow?.document.open();
-    iframe.contentWindow?.document.write(overlayIndexHtml);
+    iframe.contentWindow?.document.write(
+      overlayIndexHtml.replace(
+        /___hmrBaseUrl___/gi,
+        `http://localhost:${window.__ima_hmr.options.port}`
+      )
+    );
+
     iframe.contentWindow?.document.close();
   }
 }
@@ -142,7 +147,6 @@ class OverlayBridge {
 // Ensure there's only one instance
 function getOverlayBridge(): OverlayBridge {
   if (!window.__ima_hmr?.overlayBridge) {
-    window.__ima_hmr = window.__ima_hmr || {};
     window.__ima_hmr.overlayBridge = new OverlayBridge();
   }
 

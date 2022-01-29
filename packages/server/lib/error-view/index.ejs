@@ -4,7 +4,7 @@
   <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, shrink-to-fit=no">
-    <link rel="stylesheet" href="http://localhost:5001/__error-overlay-static/overlay.css">
+    <link rel="stylesheet" href="http://localhost:3101/__error-overlay-static/overlay.css">
     <title>IMA.js - Server Error</title>
   </head>
 
@@ -13,7 +13,7 @@
     <script>
       window.__ima_server_error = <%- JSON.stringify(serverError) %>;
     </script>
-    <script src="http://localhost:5001/__error-overlay-static/overlay.js"></script>
+    <script src="http://localhost:3101/__error-overlay-static/overlay.js"></script>
     <script>
       (() => {
         function debounce(func, timeout) {
@@ -28,7 +28,7 @@
         }
 
         const debouncedReload = debounce(() => window.location.reload(), 100);
-        const evtSource = new EventSource('http://localhost:5001/__webpack_hmr');
+        const evtSource = new EventSource('http://localhost:3101/__webpack_hmr');
 
         evtSource.addEventListener('message', () => {
           if (event.data && typeof event.data === 'string' && event.data.includes('action')) {

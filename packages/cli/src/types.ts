@@ -113,6 +113,11 @@ export type ImaConfig = {
   publicPath: string;
 
   /**
+   * HMR dev server port which handles HMR refreshing [default=3101]
+   */
+  devServerPort: number;
+
+  /**
    * Set to true to generate source maps in production builds
    * (dev/watch build always generate source maps to work properly with error overlay).
    */

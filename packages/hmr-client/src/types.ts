@@ -6,6 +6,7 @@ import { HMREventSource, OverlayBridge } from '#/utils';
 declare global {
   interface Window {
     __ima_hmr: {
+      options: HMROptions;
       hmrEventSource?: HMREventSource;
       overlayBridge?: OverlayBridge;
       handleRuntimeError: DebouncedFunc<(error: Error) => void>;
@@ -23,6 +24,10 @@ declare global {
     [ClientEventName.ClearRuntimeErrors]: CustomEvent;
     [ClientEventName.ClearCompileErrors]: CustomEvent;
   }
+}
+
+export interface HMROptions {
+  port: number;
 }
 
 export interface HMRReport {

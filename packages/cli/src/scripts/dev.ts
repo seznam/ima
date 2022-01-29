@@ -96,7 +96,7 @@ const dev: HandlerFn = async args => {
     await watchCompiler(compiler, args, imaConfig);
 
     // Create dev server for HMR
-    createDevServer(compiler);
+    createDevServer(compiler, imaConfig.devServerPort);
 
     // Start nodemon and application server
     startNodemon(args);

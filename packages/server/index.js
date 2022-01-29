@@ -25,7 +25,6 @@ function requireUncached(module) {
 }
 
 if (environment.$Env === 'dev') {
-  requireUncached('./build/server/runtime.js');
   requireUncached('./build/server/vendors.js');
 }
 
@@ -33,7 +32,7 @@ function appFactory() {
   // Require new server-side bundle on dev reload
   if (environment.$Env === 'dev') {
     try {
-      requireUncached('./build/server/runtime.js');
+      requireUncached('./build/server/vendors.js');
       return requireUncached('./build/server/app.server.js');
     } catch (_) {
       // fail silently for potential compile errors which are handled in error overlay

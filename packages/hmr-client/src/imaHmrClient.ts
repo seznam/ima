@@ -7,6 +7,7 @@ import {
   clearRuntimeErrors,
   clearCompileError,
 } from '#/lib/hmrClient';
+import { HMROptions } from '#/types';
 
 // Prevents rapid executions from fast refresh
 const debouncedHandleRuntimeError = debounce(
@@ -28,9 +29,17 @@ const debouncedShowCompileErrors = debounce(
   }
 );
 
+// Parse hmr options from webpack resource query
+const options = Object.fromEntries(
+  // @ts-expect-error yeah I don't know...
+  new URLSearchParams(__resourceQuery)
+) as HMROptions;
+
+// Save hmr callbacks to window
 window.__ima_hmr = {
-  handleRuntimeError: debouncedHandleRuntimeError,
-  showCompileErrors: debouncedShowCompileErrors,
+  options,
   clearRuntimeErrors,
   clearCompileError,
+  handleRuntimeError: debouncedHandleRuntimeError,
+  showCompileErrors: debouncedShowCompileErrors,
 };

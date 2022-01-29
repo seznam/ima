@@ -243,7 +243,7 @@ function requireImaConfig(rootDir = process.cwd()): ImaConfig | null {
 }
 
 /**
- * Resolves ima.config.js from rootDir base path with defaults.
+ * Resolves ima.config.js from rootDir base path with DEFAULTS.
  *
  * @param {CliArgs} args CLI args.
  * @returns {Promise<ImaConfig>} Ima config or empty object.
@@ -257,6 +257,7 @@ async function resolveImaConfig(args: CliArgs): Promise<ImaConfig> {
       en: ['./app/**/*EN.json'],
     },
     imageInlineSizeLimit: 8192,
+    devServerPort: 3101,
   };
 
   return {

@@ -65,14 +65,12 @@ export default (ns, oc, config) => {
           scripts: [
             // `/static/js/polyfill.js${versionStamp}`,
             `/static/locale/${config.$Language}.js${versionStamp}`,
-            `/static/js/runtime.js${versionStamp}`,
             `/static/js/vendors.js${versionStamp}`,
             `/static/js/app.client.js${versionStamp}`,
           ],
           esScripts: [
             // `/static/js.es/polyfill.js${versionStamp}`,
             `/static/locale/${config.$Language}.js${versionStamp}`,
-            `/static/js.es/runtime.js${versionStamp}`,
             `/static/js.es/vendors.js${versionStamp}`,
             `/static/js.es/app.client.js${versionStamp}`,
           ],

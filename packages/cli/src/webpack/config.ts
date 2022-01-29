@@ -1,5 +1,6 @@
 import fs from 'fs';
 import path from 'path';
+import { URLSearchParams } from 'url';
 
 import ReactRefreshWebpackPlugin from '@pmmmwh/react-refresh-webpack-plugin';
 import CompressionPlugin from 'compression-webpack-plugin';
@@ -187,10 +188,19 @@ export default async (
             [name]: [
               // We have to use @gatsbyjs version, since the original package containing webpack 5 fix is not yet released
               useHMR &&
-                `@gatsbyjs/webpack-hot-middleware/client?name=${name}&path=http://localhost:5001/__webpack_hmr&timeout=15000&reload=true&overlay=false&overlayWarnings=false&noInfo=true&quiet=true`,
+                `@gatsbyjs/webpack-hot-middleware/client?${new URLSearchParams({
+                  name,
+                  path: `http://localhost:${imaConfig.devServerPort}/__webpack_hmr`,
+                  timeout: '15000',
+                  reload: 'true',
+                  overlay: 'false',
+                  overlayWarnings: 'false',
+                  noInfo: 'true',
+                  quiet: 'true',
+                }).toString()}`,
               useHMR &&
                 isDebug &&
-                require.resolve('@ima/hmr-client/dist/imaHmrClient.js'),
+                `@ima/hmr-client/dist/imaHmrClient?port=${imaConfig.devServerPort}`,
               path.join(rootDir, 'app/main.js'),
             ].filter(Boolean) as string[],
             ...createPolyfillEntry(ctx),
@@ -257,9 +267,8 @@ export default async (
       // Split chunks in dev for better caching
       ...(isDev
         ? {
-            moduleIds: 'deterministic',
-            chunkIds: 'deterministic',
-            runtimeChunk: 'single', // Separate common runtime for better caching
+            moduleIds: 'named',
+            chunkIds: 'named',
             splitChunks: {
               cacheGroups: {
                 vendor: {
@@ -280,13 +289,11 @@ export default async (
         '@ima/core': `@ima/core/dist/ima.${
           isServer ? 'server.cjs.js' : 'client.esm.js'
         }`,
-
         // Enable better profiling in react devtools
         ...(ctx.profile && {
           'react-dom$': 'react-dom/profiling',
           'scheduler/tracing': 'scheduler/tracing-profiling',
         }),
-
         // Ima config overrides
         ...(imaConfig.webpackAliases ?? {}),
       },
@@ -561,21 +568,18 @@ export default async (
             useHMR &&
               new ReactRefreshWebpackPlugin({
                 overlay: {
-                  module: '@ima/hmr-client/dist/fastRefreshClient.js',
+                  module: '@ima/hmr-client/dist/fastRefreshClient',
                   sockIntegration: 'whm',
                 },
               }),
           ]),
     ].filter(Boolean) as WebpackPluginInstance[],
-
     // Enable node preset for externals on server
     externalsPresets: {
       node: isServer,
     },
-
     // Turn webpack performance reports off since we print reports ourselves
     performance: false,
-
     // Disable infrastructure logging in normal mode
     infrastructureLogging: {
       level: ctx.verbose ? 'info' : 'none',

@@ -1,6 +1,7 @@
 import { useCallback, useState } from 'react';
 
 import { FrameWrapper } from '#/reducers/errorsReducer';
+import { getDevServerBaseUrl } from '#/utils/devServerUtils';
 
 function useOpenEditor() {
   const [isLoading, setIsLoading] = useState(false);
@@ -33,7 +34,7 @@ function useOpenEditor() {
     }
 
     fetch(
-      `http://localhost:5001/__open-editor?${queryParams.join('&')}`
+      `${getDevServerBaseUrl()}/__open-editor?${queryParams.join('&')}`
     ).finally(() => {
       setIsLoading(false);
     });
