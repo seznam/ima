@@ -32,7 +32,9 @@ function useOpenEditor() {
       queryParams.push(`column=${column}`);
     }
 
-    fetch(`/__open-editor?${queryParams.join('&')}`).finally(() => {
+    fetch(
+      `http://localhost:5001/__open-editor?${queryParams.join('&')}`
+    ).finally(() => {
       setIsLoading(false);
     });
   }, []);

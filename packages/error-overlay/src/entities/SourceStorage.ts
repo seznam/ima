@@ -63,7 +63,7 @@ class SourceStorage {
       return fileUri;
     }
 
-    return `/__get-internal-source?fileName=${encodeURIComponent(fileUri)}`;
+    return `http://localhost:5001/__get-internal-source?fileName=${encodeURIComponent(fileUri)}`;
   }
 
   /**

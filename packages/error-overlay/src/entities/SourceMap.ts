@@ -7,7 +7,8 @@ import {
 
 // @ts-expect-error: Not available in typings
 SourceMapConsumer.initialize({
-  'lib/mappings.wasm': '/__error-overlay-static/mappings.wasm',
+  'lib/mappings.wasm':
+    'http://localhost:5001/__error-overlay-static/mappings.wasm',
 });
 
 /**

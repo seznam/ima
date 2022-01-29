@@ -6,9 +6,9 @@ import nodemon from 'nodemon';
 import webpack from 'webpack';
 import { CommandBuilder } from 'yargs';
 
+import { createDevServer } from '..';
 import {
   handlerFactory,
-  IMA_CLI_RUN_SERVER_MESSAGE,
   resolveCliPluginArgs,
   sharedArgsFactory,
 } from '../lib/cli';
@@ -18,7 +18,7 @@ import { CliArgs, HandlerFn } from '../types';
 import { createWebpackConfig, resolveEnvironment } from '../webpack/utils';
 
 let nodemonInitialized = false;
-let serverHasStarted = false;
+const serverHasStarted = false;
 
 /**
  * Starts ima server with nodemon to watch for server-side changes
@@ -43,30 +43,24 @@ function startNodemon(args: CliArgs) {
             : ''
         }...`
       );
+
+      if (args.open && !serverHasStarted) {
+        const imaEnvironment = resolveEnvironment(args.rootDir);
+        const port = imaEnvironment?.$Server?.port ?? 3001;
+
+        try {
+          open(`http://localhost:${port}`);
+        } catch (error) {
+          logger.error(
+            `Could not open http://localhost:${port} inside a browser, ${error}`
+          );
+        }
+      }
     });
 
     nodemon.on('crash', error => {
       logger.error('Application watcher unexpectedly crashed.');
       logger.error(error);
-    });
-
-    nodemon.once('message', message => {
-      if (message === IMA_CLI_RUN_SERVER_MESSAGE) {
-        serverHasStarted = true;
-
-        if (args.open) {
-          const imaEnvironment = resolveEnvironment(args.rootDir);
-          const port = imaEnvironment?.$Server?.port ?? 3001;
-
-          try {
-            open(`http://localhost:${port}`);
-          } catch (error) {
-            logger.error(
-              `Could not open http://localhost:${port} inside a browser, ${error}`
-            );
-          }
-        }
-      }
     });
 
     nodemonInitialized = true;
@@ -100,6 +94,9 @@ const dev: HandlerFn = async args => {
 
     // Start watch compiler
     await watchCompiler(compiler, args, imaConfig);
+
+    // Create dev server for HMR
+    createDevServer(compiler);
 
     // Start nodemon and application server
     startNodemon(args);

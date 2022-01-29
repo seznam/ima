@@ -18,7 +18,7 @@ class HMREventSource {
     this._messageHandler = this._messageHandler.bind(this);
     this._errorHandler = this._errorHandler.bind(this);
 
-    this._eventSource = new EventSource('/__webpack_hmr');
+    this._eventSource = new EventSource('http://localhost:5001/__webpack_hmr');
     this._eventSource.addEventListener('message', this._messageHandler);
     this._eventSource.addEventListener('error', this._errorHandler);
   }

@@ -187,7 +187,7 @@ export default async (
             [name]: [
               // We have to use @gatsbyjs version, since the original package containing webpack 5 fix is not yet released
               useHMR &&
-                `@gatsbyjs/webpack-hot-middleware/client?name=${name}&path=//localhost:${imaEnvironment.$Server.port}/__webpack_hmr&timeout=15000&reload=true&overlay=false&overlayWarnings=false&noInfo=true&quiet=true`,
+                `@gatsbyjs/webpack-hot-middleware/client?name=${name}&path=http://localhost:5001/__webpack_hmr&timeout=15000&reload=true&overlay=false&overlayWarnings=false&noInfo=true&quiet=true`,
               useHMR &&
                 isDebug &&
                 require.resolve('@ima/hmr-client/dist/imaHmrClient.js'),

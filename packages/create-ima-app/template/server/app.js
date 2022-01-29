@@ -97,49 +97,34 @@ function staticErrorPage(err, req, res) {
   clientApp.showStaticErrorPage(err, req, res);
 }
 
-async function createApp() {
-  const app = express();
+const app = express();
 
-  app.set('trust proxy', true);
-
-  if (environment.$Env === 'dev') {
-    try {
-      const { createDevServer } = require('@ima/cli/dist/dev-server/devServer');
-      await createDevServer(app);
-    } catch (error) {
-      console.error('Unable to create dev server.');
-      console.error(error);
-    }
-  }
-
-  app
-    .use(helmet())
-    .use(compression())
-    .use(
-      favicon(
-        path.resolve(path.join(__dirname, '../build/static/public/favicon.ico'))
-      )
+app
+  .set('trust proxy', true)
+  .use(helmet())
+  .use(compression())
+  .use(
+    favicon(
+      path.resolve(path.join(__dirname, '../build/static/public/favicon.ico'))
     )
-    .use(
-      environment.$Server.staticFolder,
-      express.static(path.resolve(path.join(__dirname, '../build/static')))
-    )
-    .use(bodyParser.json()) // for parsing application/json
-    .use(bodyParser.urlencoded({ extended: true })) // for parsing application/x-www-form-urlencoded
-    .use(cookieParser())
-    .use(
-      environment.$Proxy.path + '/',
-      proxy(environment.$Proxy.server, environment.$Proxy.options || {})
-    )
-    .use(urlParser)
-    .use(renderApp)
-    .use(errorHandler)
-    .use(staticErrorPage);
-
-  return app;
-}
+  )
+  .use(
+    environment.$Server.staticFolder,
+    express.static(path.resolve(path.join(__dirname, '../build/static')))
+  )
+  .use(bodyParser.json()) // for parsing application/json
+  .use(bodyParser.urlencoded({ extended: true })) // for parsing application/x-www-form-urlencoded
+  .use(cookieParser())
+  .use(
+    environment.$Proxy.path + '/',
+    proxy(environment.$Proxy.server, environment.$Proxy.options || {})
+  )
+  .use(urlParser)
+  .use(renderApp)
+  .use(errorHandler)
+  .use(staticErrorPage);
 
 module.exports = {
   imaServer,
-  createApp,
+  app,
 };

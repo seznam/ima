@@ -3,8 +3,6 @@ import { Arguments, CommandBuilder } from 'yargs';
 import { CliArgs, HandlerFn, ImaCliCommand } from '../types';
 import { requireImaConfig } from '../webpack/utils';
 
-const IMA_CLI_RUN_SERVER_MESSAGE = 'ima-cli-run-server-message';
-
 /**
  * Initializes cli script handler function, which takes cli arguments,
  * parses them and defines defaults. Should be used to initialize any
@@ -88,9 +86,4 @@ function sharedArgsFactory(command: ImaCliCommand): CommandBuilder {
   };
 }
 
-export {
-  IMA_CLI_RUN_SERVER_MESSAGE,
-  handlerFactory,
-  resolveCliPluginArgs,
-  sharedArgsFactory,
-};
+export { handlerFactory, resolveCliPluginArgs, sharedArgsFactory };
