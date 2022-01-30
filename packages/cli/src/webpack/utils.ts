@@ -248,7 +248,7 @@ function requireImaConfig(rootDir = process.cwd()): ImaConfig | null {
  * @param {CliArgs} args CLI args.
  * @returns {Promise<ImaConfig>} Ima config or empty object.
  */
-async function resolveImaConfig(args: CliArgs): Promise<ImaConfig> {
+async function resolveImaConfigWithDefaults(args: CliArgs): Promise<ImaConfig> {
   const defaultImaConfig: ImaConfig = {
     publicPath: '/',
     compression: ['brotliCompress', 'gzip'],
@@ -260,10 +260,15 @@ async function resolveImaConfig(args: CliArgs): Promise<ImaConfig> {
     devServerPort: 3101,
   };
 
-  return {
+  const parsedConfig = {
     ...defaultImaConfig,
     ...requireImaConfig(args.rootDir),
   };
+
+  // This env variable is used to properly render server static runtime error view
+  process.env.IMA_CLI_DEV_SERVER_PORT = parsedConfig.devServerPort.toString();
+
+  return parsedConfig;
 }
 
 /**
@@ -277,22 +282,17 @@ async function resolveImaConfig(args: CliArgs): Promise<ImaConfig> {
  */
 async function createWebpackConfig(
   configurations: ConfigurationTypes = ['client', 'server'],
-  args?: CliArgs
+  args: CliArgs
 ): Promise<{ config: Configuration[]; imaConfig: ImaConfig }> {
-  // Clear cache as a first thing
-  if (args?.clearCache) {
+  // Clear cache before doing anything else
+  if (args.clearCache) {
     const cacheDir = path.join(args.rootDir, '/node_modules/.cache');
     const elapsedClearCache = time();
 
     logger.info(`Clearing cache at ${chalk.magenta(cacheDir)}...`, false);
-
     fs.rmSync(cacheDir, { force: true, recursive: true });
-
     logger.write(chalk.gray(` [${elapsedClearCache()}]`));
   }
-
-  const isFirstPass = !args && process.env.IMA_CLI_WEBPACK_CONFIG_ARGS;
-  let elapsed: ReturnType<typeof time> | null = null;
 
   // No need to continue without any configuration
   if (!configurations.length) {
@@ -301,35 +301,15 @@ async function createWebpackConfig(
     );
   }
 
-  if (!args && process.env.IMA_CLI_WEBPACK_CONFIG_ARGS) {
-    try {
-      // Load config args from env variable
-      args = JSON.parse(process.env.IMA_CLI_WEBPACK_CONFIG_ARGS) as CliArgs;
-    } catch (err) {
-      logger.error('Error occurred while parsing env webpack config args.');
-      throw err;
-    }
-  } else {
-    // Used explicitly, print message
-    elapsed = time();
-    logger.info(
-      `Parsing config files for ${chalk.magenta(process.env.NODE_ENV)}...`,
-      false
-    );
-
-    // Cache config args to env variable
-    process.env.IMA_CLI_WEBPACK_CONFIG_ARGS = JSON.stringify(args);
-  }
-
-  // We are unable to continue without valid configArgs
-  if (!args) {
-    throw new Error(
-      'Unable to load config args used to initialize a webpack config.'
-    );
-  }
+  // Resolve imaConfig and create configuration contexts
+  const elapsed = time();
+  logger.info(
+    `Parsing config files for ${chalk.magenta(process.env.NODE_ENV)}...`,
+    false
+  );
 
   // Load ima.config.js with defaults and init configuration contexts.
-  const imaConfig = await resolveImaConfig(args);
+  const imaConfig = await resolveImaConfigWithDefaults(args);
   const finalConfigContexts: ConfigurationContext[] = [];
 
   // Push server configuration if available
@@ -397,7 +377,7 @@ async function createWebpackConfig(
     elapsed && logger.write(chalk.gray(` [${elapsed()}]`));
 
     // Print loaded plugins info
-    if (!isFirstPass && loadedPlugins.size > 0) {
+    if (loadedPlugins.size > 0) {
       const pluginNames: string[] = [];
       logger.info(`CLI plugins in use: `, false);
 
@@ -418,7 +398,7 @@ export {
   createCacheKey,
   createWebpackConfig,
   requireImaConfig,
-  resolveImaConfig,
+  resolveImaConfigWithDefaults,
   extractLanguages,
   createPolyfillEntry,
   IMA_CONF_FILENAME,

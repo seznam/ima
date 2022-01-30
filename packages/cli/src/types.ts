@@ -8,8 +8,8 @@ import { CommandBuilder } from 'yargs';
 declare global {
   namespace NodeJS {
     interface ProcessEnv {
-      IMA_CLI_WEBPACK_CONFIG_ARGS: string | undefined;
-      IMA_CLI_FORCE_SPA: string | undefined;
+      IMA_CLI_FORCE_SPA?: string;
+      IMA_CLI_DEV_SERVER_PORT?: string;
     }
   }
 }

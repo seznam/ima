@@ -17,54 +17,51 @@ import logger from '../lib/logger';
 import { CliArgs, HandlerFn } from '../types';
 import { createWebpackConfig, resolveEnvironment } from '../webpack/utils';
 
-let nodemonInitialized = false;
-const serverHasStarted = false;
-
 /**
  * Starts ima server with nodemon to watch for server-side changes
  * (all changes in server/ folder), to automatically restart application.
  */
 function startNodemon(args: CliArgs) {
-  if (!nodemonInitialized) {
-    nodemon({
-      script: path.join(args.rootDir, 'server/server.js'),
-      watch: [`${path.join(args.rootDir, 'server')}`],
-      args: [`--verbose=${args.verbose}`],
-      cwd: args.rootDir,
-    });
+  let serverHasStarted = false;
 
-    nodemon.on('start', () => {
-      logger.info(
-        `${serverHasStarted ? 'Restarting' : 'Starting'} application server${
-          !serverHasStarted && (args.forceSPA || args.forceSPAWithHMR)
-            ? ` in ${chalk.black.bgCyan(
-                args.forceSPAWithHMR ? 'SPA mode with HMR' : 'SPA mode'
-              )}`
-            : ''
-        }...`
-      );
+  nodemon({
+    script: path.join(args.rootDir, 'server/server.js'),
+    watch: [`${path.join(args.rootDir, 'server')}`],
+    args: [`--verbose=${args.verbose}`],
+    cwd: args.rootDir,
+  });
 
-      if (args.open && !serverHasStarted) {
-        const imaEnvironment = resolveEnvironment(args.rootDir);
-        const port = imaEnvironment?.$Server?.port ?? 3001;
+  nodemon.on('start', () => {
+    logger.info(
+      `${serverHasStarted ? 'Restarting' : 'Starting'} application server${
+        !serverHasStarted && (args.forceSPA || args.forceSPAWithHMR)
+          ? ` in ${chalk.black.bgCyan(
+              args.forceSPAWithHMR ? 'SPA mode with HMR' : 'SPA mode'
+            )}`
+          : ''
+      }...`
+    );
 
-        try {
-          open(`http://localhost:${port}`);
-        } catch (error) {
-          logger.error(
-            `Could not open http://localhost:${port} inside a browser, ${error}`
-          );
-        }
+    if (args.open && !serverHasStarted) {
+      const imaEnvironment = resolveEnvironment(args.rootDir);
+      const port = imaEnvironment?.$Server?.port ?? 3001;
+      serverHasStarted = true;
+
+      try {
+        open(`http://localhost:${port}`);
+      } catch (error) {
+        logger.error(
+          `Could not open http://localhost:${port} inside a browser, ${error}`
+        );
       }
-    });
+    }
+  });
 
-    nodemon.on('crash', error => {
-      logger.error('Application watcher unexpectedly crashed.');
-      logger.error(error);
-    });
-
-    nodemonInitialized = true;
-  }
+  nodemon.on('crash', error => {
+    logger.error('Application watcher unexpectedly crashed.');
+    logger.error(error);
+    process.exit(1);
+  });
 }
 
 /**
