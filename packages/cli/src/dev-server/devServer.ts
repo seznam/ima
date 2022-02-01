@@ -11,7 +11,11 @@ import logger from '../lib/logger';
 import { evalSourceMapMiddleware } from './evalSourceMapMiddleware';
 import { openEditorMiddleware } from './openEditorMiddleware';
 
-async function createDevServer(compiler: MultiCompiler, port: number) {
+async function createDevServer(
+  compiler: MultiCompiler,
+  hostname: string,
+  port: number
+) {
   const app = express();
 
   let isBuilding = false;
@@ -71,7 +75,7 @@ async function createDevServer(compiler: MultiCompiler, port: number) {
         path.resolve(path.join(__dirname, '../../../error-overlay/dist/'))
       )
     )
-    .listen(port);
+    .listen(port, hostname);
 }
 
 export { createDevServer };

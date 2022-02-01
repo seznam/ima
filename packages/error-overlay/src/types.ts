@@ -40,6 +40,8 @@ declare global {
 // TODO merge similar options with hmr-client
 export interface HMROptions {
   port: number;
+  hostname: string;
+  public: string;
 }
 
 export type ErrorType = 'compile' | 'runtime';

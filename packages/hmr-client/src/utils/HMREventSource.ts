@@ -19,7 +19,7 @@ class HMREventSource {
     this._errorHandler = this._errorHandler.bind(this);
 
     this._eventSource = new EventSource(
-      `http://localhost:${window.__ima_hmr.options.port}/__webpack_hmr`
+      `http://${window.parent.__ima_hmr.options.public}/__webpack_hmr`
     );
     this._eventSource.addEventListener('message', this._messageHandler);
     this._eventSource.addEventListener('error', this._errorHandler);

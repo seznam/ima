@@ -136,7 +136,7 @@ class OverlayBridge {
     iframe.contentWindow?.document.write(
       overlayIndexHtml.replace(
         /___hmrBaseUrl___/gi,
-        `http://localhost:${window.__ima_hmr.options.port}`
+        `http://${window.parent.__ima_hmr.options.public}`
       )
     );
 

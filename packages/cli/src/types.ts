@@ -1,5 +1,10 @@
 import { AlgorithmFunction, ZlibOptions } from 'compression-webpack-plugin';
-import { Configuration, MultiCompiler, ResolveOptions } from 'webpack';
+import {
+  Configuration,
+  MultiCompiler,
+  ResolveOptions,
+  WebpackOptionsNormalized,
+} from 'webpack';
 import { CommandBuilder } from 'yargs';
 
 /**
@@ -9,7 +14,7 @@ declare global {
   namespace NodeJS {
     interface ProcessEnv {
       IMA_CLI_FORCE_SPA?: string;
-      IMA_CLI_DEV_SERVER_PORT?: string;
+      IMA_CLI_DEV_SERVER_PUBLIC?: string;
     }
   }
 }
@@ -36,6 +41,9 @@ export interface CliArgs {
   forceSPA?: boolean;
   forceSPAWithHMR?: boolean;
   profile?: boolean;
+  port?: number;
+  hostname?: string;
+  public?: string;
 }
 
 /**
@@ -113,9 +121,19 @@ export type ImaConfig = {
   publicPath: string;
 
   /**
-   * HMR dev server port which handles HMR refreshing [default=3101]
+   * HMR dev server settings.
    */
-  devServerPort: number;
+  devServer?: {
+    port?: number; // [default=3101]
+    hostname?: string; // [default=localhost]
+    public?: string; // public url used to access static files [default=localhost:3101]
+  };
+
+  /**
+   * Custom options passed to webpack watch api interface. For more information see:
+   * https://webpack.js.org/configuration/watch/#watchoptions
+   */
+  watchOptions: WebpackOptionsNormalized['watchOptions'];
 
   /**
    * Set to true to generate source maps in production builds

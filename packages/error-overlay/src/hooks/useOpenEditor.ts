@@ -1,7 +1,7 @@
 import { useCallback, useState } from 'react';
 
 import { FrameWrapper } from '#/reducers/errorsReducer';
-import { getDevServerBaseUrl } from '#/utils/devServerUtils';
+import { getDevServerBaseUrl } from '#/utils';
 
 function useOpenEditor() {
   const [isLoading, setIsLoading] = useState(false);

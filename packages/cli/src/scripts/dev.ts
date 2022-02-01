@@ -15,7 +15,11 @@ import {
 import { watchCompiler, handleError } from '../lib/compiler';
 import logger from '../lib/logger';
 import { CliArgs, HandlerFn } from '../types';
-import { createWebpackConfig, resolveEnvironment } from '../webpack/utils';
+import {
+  createDevServerConfig,
+  createWebpackConfig,
+  resolveEnvironment,
+} from '../webpack/utils';
 
 /**
  * Starts ima server with nodemon to watch for server-side changes
@@ -92,8 +96,15 @@ const dev: HandlerFn = async args => {
     // Start watch compiler
     await watchCompiler(compiler, args, imaConfig);
 
+    /**
+     * Set public env variable which is used to load assets in the SSR error view correctly.
+     * CLI Args should always override the config values.
+     */
+    const devServerConfig = createDevServerConfig({ imaConfig, args });
+    process.env.IMA_CLI_DEV_SERVER_PUBLIC = devServerConfig.public;
+
     // Create dev server for HMR
-    createDevServer(compiler, imaConfig.devServerPort);
+    createDevServer(compiler, devServerConfig.hostname, devServerConfig.port);
 
     // Start nodemon and application server
     startNodemon(args);
@@ -133,6 +144,18 @@ export const builder: CommandBuilder = {
     desc: 'Forces application to run in SPA mode with HMR enabled',
     type: 'boolean',
     default: false,
+  },
+  port: {
+    desc: 'Dev server port (overrides ima.config.js settings)',
+    type: 'number',
+  },
+  hostname: {
+    desc: 'Dev server hostname (overrides ima.config.js settings)',
+    type: 'string',
+  },
+  public: {
+    desc: 'Dev server public (overrides ima.config.js settings)',
+    type: 'string',
   },
   ...resolveCliPluginArgs(CMD),
 };

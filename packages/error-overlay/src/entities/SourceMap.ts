@@ -5,7 +5,7 @@ import {
   SourceMapConsumer,
 } from 'source-map';
 
-import { getDevServerBaseUrl } from '#/utils/devServerUtils';
+import { getDevServerBaseUrl } from '#/utils';
 
 // @ts-expect-error: Not available in typings
 SourceMapConsumer.initialize({

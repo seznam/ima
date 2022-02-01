@@ -28,6 +28,7 @@ import {
   POSTCSS_CONF_FILENAMES,
   BABEL_CONF_ES_FILENAMES,
   BABEL_CONF_FILENAMES,
+  createDevServerConfig,
 } from './utils';
 
 /**
@@ -51,6 +52,7 @@ export default async (
   const publicPath = ctx.publicPath ?? imaConfig.publicPath;
   const appDir = path.join(rootDir, 'app');
   const useHMR = !isServer && isDev && (isEsVersion || ctx.forceSPAWithHMR);
+  const devServerConfig = createDevServerConfig({ imaConfig, ctx });
 
   // Define browserslist targets for current context
   let targets: 'defaults' | Record<string, string> = 'defaults';
@@ -190,7 +192,7 @@ export default async (
               useHMR &&
                 `@gatsbyjs/webpack-hot-middleware/client?${new URLSearchParams({
                   name,
-                  path: `http://localhost:${imaConfig.devServerPort}/__webpack_hmr`,
+                  path: `http://${devServerConfig.public}/__webpack_hmr`,
                   timeout: '15000',
                   reload: 'true',
                   overlay: 'false',
@@ -200,7 +202,11 @@ export default async (
                 }).toString()}`,
               useHMR &&
                 isDebug &&
-                `@ima/hmr-client/dist/imaHmrClient?port=${imaConfig.devServerPort}`,
+                `@ima/hmr-client/dist/imaHmrClient?${new URLSearchParams({
+                  port: devServerConfig.port.toString(),
+                  hostname: devServerConfig.hostname,
+                  public: devServerConfig.public,
+                }).toString()}`,
               path.join(rootDir, 'app/main.js'),
             ].filter(Boolean) as string[],
             ...createPolyfillEntry(ctx),

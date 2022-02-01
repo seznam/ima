@@ -1,6 +1,5 @@
 import { SourceMap } from '#/entities';
-import { getSourceMap } from '#/utils';
-import { getDevServerBaseUrl } from '#/utils/devServerUtils';
+import { getSourceMap, getDevServerBaseUrl } from '#/utils';
 
 interface SourceStorageEntry {
   fileContents: string | null;

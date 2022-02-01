@@ -28,6 +28,8 @@ declare global {
 
 export interface HMROptions {
   port: number;
+  hostname: string;
+  public: string;
 }
 
 export interface HMRReport {

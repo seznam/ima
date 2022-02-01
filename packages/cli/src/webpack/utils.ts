@@ -154,6 +154,38 @@ function createPolyfillEntry(
 }
 
 /**
+ * Creates hmr dev server configuration from provided contexts
+ * and arguments with this priority args -> ctx -> imaConfig -> [defaults].
+ */
+function createDevServerConfig({
+  args,
+  ctx,
+  imaConfig,
+}: {
+  args?: CliArgs;
+  ctx?: ConfigurationContext;
+  imaConfig: ImaConfig;
+}): {
+  port: number;
+  hostname: string;
+  public: string;
+} {
+  const port = args?.port ?? ctx?.port ?? imaConfig?.devServer?.port ?? 3101;
+  const hostname =
+    args?.hostname ??
+    ctx?.hostname ??
+    imaConfig?.devServer?.hostname ??
+    'localhost';
+  const publ = args?.public ?? ctx?.public ?? imaConfig?.devServer?.public;
+
+  return {
+    port,
+    hostname,
+    public: publ ?? `${hostname}:${port}`,
+  };
+}
+
+/**
  * Returns records for CopyPlugin to extract locales to one file by locale
  *
  * @param {ImaConfig} imaConfig Current ima configuration.
@@ -257,25 +289,23 @@ async function resolveImaConfigWithDefaults(args: CliArgs): Promise<ImaConfig> {
       en: ['./app/**/*EN.json'],
     },
     imageInlineSizeLimit: 8192,
-    devServerPort: 3101,
+    watchOptions: {
+      ignored: ['**/.git/**', '**/node_modules/**', '**/build/**'],
+      aggregateTimeout: 5,
+    },
   };
 
-  const parsedConfig = {
+  return {
     ...defaultImaConfig,
     ...requireImaConfig(args.rootDir),
   };
-
-  // This env variable is used to properly render server static runtime error view
-  process.env.IMA_CLI_DEV_SERVER_PORT = parsedConfig.devServerPort.toString();
-
-  return parsedConfig;
 }
 
 /**
  * Creates webpack configurations for defined types using provided args.
  * Additionally it applies all existing configuration overrides from cli plugins
  * and app overrides in this order cli -> plugins -> app.
- *
+ *goo
  * @param {ConfigurationTypes} configurations Configuration types.
  * @param {CliArgs} args Parsed CLI and build arguments.
  * @returns {Promise<{config: Configuration[], imaConfig: ImaConfig>}
@@ -397,6 +427,7 @@ export {
   requireConfig,
   createCacheKey,
   createWebpackConfig,
+  createDevServerConfig,
   requireImaConfig,
   resolveImaConfigWithDefaults,
   extractLanguages,

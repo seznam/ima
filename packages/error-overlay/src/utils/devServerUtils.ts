@@ -1,5 +1,5 @@
 function getDevServerBaseUrl(): string {
-  return `http://localhost:${window.parent.__ima_hmr.options.port}`;
+  return `http://${window.parent.__ima_hmr.options.public}`;
 }
 
 export { getDevServerBaseUrl };
