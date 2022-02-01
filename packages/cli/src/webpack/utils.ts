@@ -252,6 +252,7 @@ function createCacheKey(ctx: ConfigurationContext): string {
       ctx.profile,
       ctx.publicPath,
       ctx.rootDir,
+      ctx.environment,
     ]
       .map(value => JSON.stringify(value))
       .join('')

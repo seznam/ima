@@ -15,10 +15,15 @@ function handlerFactory(handlerFn: HandlerFn) {
   return async (yargs: Arguments): Promise<void> => {
     const [command] = yargs._ || [];
 
+    // Force development env for dev
+    process.env.NODE_ENV =
+      command === 'dev' ? 'development' : process.env.NODE_ENV ?? 'production';
+
     return await handlerFn({
       ...yargs,
       rootDir: process.cwd(),
       command: command.toString(),
+      environment: process.env.NODE_ENV,
     } as unknown as CliArgs);
   };
 }

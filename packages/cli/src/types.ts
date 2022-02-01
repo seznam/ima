@@ -44,6 +44,7 @@ export interface CliArgs {
   port?: number;
   hostname?: string;
   public?: string;
+  environment: 'development' | 'production' | string;
 }
 
 /**

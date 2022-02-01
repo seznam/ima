@@ -4,6 +4,11 @@ import path from 'path';
 import chalk from 'chalk';
 import yargs from 'yargs';
 
+// Normalize NODE_ENV
+if (process.env.NODE_ENV && process.env.NODE_ENV === 'dev') {
+  process.env.NODE_ENV = 'development';
+}
+
 yargs
   .scriptName(chalk.green.bold('ima'))
   .usage('Usage: $0 <command>')
