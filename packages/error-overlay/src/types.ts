@@ -30,7 +30,18 @@ declare global {
       message: string;
       stack: string;
     };
+
+    __ima_hmr: {
+      options: HMROptions;
+    };
   }
+}
+
+// TODO merge similar options with hmr-client
+export interface HMROptions {
+  port: number;
+  hostname: string;
+  public: string;
 }
 
 export type ErrorType = 'compile' | 'runtime';

@@ -24,7 +24,10 @@ module.exports = (environment, logger, languageLoader, appFactory) => {
 
   const errorTemplate = ejs.compile(
     fs.readFileSync(path.resolve(__dirname, './error-view/index.ejs'), 'utf8'),
-    { cache: true, filename: 'error.html' }
+    {
+      cache: true,
+      filename: 'error.html',
+    }
   );
 
   const spaCache = new Cache(
@@ -108,6 +111,7 @@ module.exports = (environment, logger, languageLoader, appFactory) => {
         } else {
           res.send(
             errorTemplate({
+              devServerPublic: process.env.IMA_CLI_DEV_SERVER_PUBLIC,
               serverError: {
                 name: err.name,
                 message: err.message,

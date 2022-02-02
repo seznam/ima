@@ -1,5 +1,6 @@
 import fs from 'fs';
 import path from 'path';
+import { URLSearchParams } from 'url';
 
 import ReactRefreshWebpackPlugin from '@pmmmwh/react-refresh-webpack-plugin';
 import CompressionPlugin from 'compression-webpack-plugin';
@@ -8,7 +9,12 @@ import CssMinimizerPlugin from 'css-minimizer-webpack-plugin';
 import MiniCssExtractPlugin from 'mini-css-extract-plugin';
 import miniSVGDataURI from 'mini-svg-data-uri';
 import TerserPlugin from 'terser-webpack-plugin';
-import webpack, { Configuration, RuleSetRule, RuleSetUseItem } from 'webpack';
+import webpack, {
+  Configuration,
+  RuleSetRule,
+  RuleSetUseItem,
+  WebpackPluginInstance,
+} from 'webpack';
 import RemoveEmptyScriptsPlugin from 'webpack-remove-empty-scripts';
 
 import { ConfigurationContext, ImaConfig } from '../types';
@@ -22,6 +28,7 @@ import {
   POSTCSS_CONF_FILENAMES,
   BABEL_CONF_ES_FILENAMES,
   BABEL_CONF_FILENAMES,
+  createDevServerConfig,
 } from './utils';
 
 /**
@@ -34,17 +41,19 @@ export default async (
   ctx: ConfigurationContext,
   imaConfig: ImaConfig
 ): Promise<Configuration> => {
-  const { rootDir, isServer, isEsVersion, name } = ctx;
+  const { rootDir, isServer, isEsVersion, name, environment } = ctx;
 
   // Define helper variables derived from context
-  const isDev = ctx.command === 'dev';
-  const useSourceMaps = imaConfig.useSourceMaps || isDev;
+  const isDevEnv = environment === 'development';
+  const useSourceMaps = imaConfig.useSourceMaps || isDevEnv;
   const imaEnvironment = resolveEnvironment(rootDir);
   const isDebug = imaEnvironment.$Debug;
   const outputDir = path.join(rootDir, 'build');
   const publicPath = ctx.publicPath ?? imaConfig.publicPath;
   const appDir = path.join(rootDir, 'app');
-  const useHMR = !isServer && isDev && (isEsVersion || ctx.forceSPAWithHMR);
+  const useHMR =
+    ctx.command === 'dev' && !isServer && (isEsVersion || ctx.forceSPAWithHMR);
+  const devServerConfig = createDevServerConfig({ imaConfig, ctx });
 
   // Define browserslist targets for current context
   let targets: 'defaults' | Record<string, string> = 'defaults';
@@ -102,7 +111,7 @@ export default async (
           modules: {
             auto: true,
             exportOnlyLocals: onlyCssDefinitions,
-            localIdentName: isDev
+            localIdentName: isDevEnv
               ? '[path][name]__[local]--[hash:base64:5]'
               : '[hash:base64]',
           },
@@ -167,9 +176,9 @@ export default async (
       : isEsVersion
       ? ['web', 'es11']
       : ['web', 'es5'],
-    mode: isDev ? 'development' : 'production',
-    devtool: isDev
-      ? 'cheap-module-source-map'
+    mode: isDevEnv ? 'development' : 'production',
+    devtool: useHMR
+      ? 'cheap-module-source-map' // Needed for proper source maps parsing in error-overlay
       : useSourceMaps
       ? 'source-map'
       : false,
@@ -182,10 +191,23 @@ export default async (
             [name]: [
               // We have to use @gatsbyjs version, since the original package containing webpack 5 fix is not yet released
               useHMR &&
-                `@gatsbyjs/webpack-hot-middleware/client?name=${name}&path=//localhost:${imaEnvironment.$Server.port}/__webpack_hmr&timeout=15000&reload=true&overlay=false&overlayWarnings=false&noInfo=true&quiet=true`,
+                `@gatsbyjs/webpack-hot-middleware/client?${new URLSearchParams({
+                  name,
+                  path: `http://${devServerConfig.public}/__webpack_hmr`,
+                  timeout: '15000',
+                  reload: 'true',
+                  overlay: 'false',
+                  overlayWarnings: 'false',
+                  noInfo: 'true',
+                  quiet: 'true',
+                }).toString()}`,
               useHMR &&
                 isDebug &&
-                require.resolve('@ima/hmr-client/dist/imaHmrClient.js'),
+                `@ima/hmr-client/dist/imaHmrClient?${new URLSearchParams({
+                  port: devServerConfig.port.toString(),
+                  hostname: devServerConfig.hostname,
+                  public: devServerConfig.public,
+                }).toString()}`,
               path.join(rootDir, 'app/main.js'),
             ].filter(Boolean) as string[],
             ...createPolyfillEntry(ctx),
@@ -193,7 +215,7 @@ export default async (
     },
     output: {
       path: outputDir,
-      pathinfo: isDev,
+      pathinfo: isDevEnv,
       assetModuleFilename: 'static/media/[name].[hash][ext]',
       filename: ({ chunk }) => {
         // Put server-side JS into server directory
@@ -204,10 +226,10 @@ export default async (
         // Separate client chunks into es and non-es folders
         const baseFolder = `static/${isEsVersion ? 'js.es' : 'js'}`;
         const fileNameParts = [
-          chunk?.name === name && isDev && 'app.client',
-          chunk?.name === name && !isDev && 'app.bundle',
+          chunk?.name === name && isDevEnv && 'app.client',
+          chunk?.name === name && !isDevEnv && 'app.bundle',
           chunk?.name !== name && '[name]',
-          !isDev && 'min',
+          !isDevEnv && 'min',
           'js',
         ].filter(Boolean);
 
@@ -235,7 +257,7 @@ export default async (
       },
     },
     optimization: {
-      minimize: !isDev && !isServer,
+      minimize: !isDevEnv && !isServer,
       minimizer: [
         new TerserPlugin({
           terserOptions: {
@@ -250,11 +272,10 @@ export default async (
         new CssMinimizerPlugin(),
       ],
       // Split chunks in dev for better caching
-      ...(isDev
+      ...(isDevEnv
         ? {
-            moduleIds: 'deterministic',
-            chunkIds: 'deterministic',
-            runtimeChunk: 'single', // Separate common runtime for better caching
+            moduleIds: 'named',
+            chunkIds: 'named',
             splitChunks: {
               cacheGroups: {
                 vendor: {
@@ -275,13 +296,11 @@ export default async (
         '@ima/core': `@ima/core/dist/ima.${
           isServer ? 'server.cjs.js' : 'client.esm.js'
         }`,
-
         // Enable better profiling in react devtools
         ...(ctx.profile && {
           'react-dom$': 'react-dom/profiling',
           'scheduler/tracing': 'scheduler/tracing-profiling',
         }),
-
         // Ima config overrides
         ...(imaConfig.webpackAliases ?? {}),
       },
@@ -361,7 +380,7 @@ export default async (
                   options: {
                     js2svg: {
                       indent: 2,
-                      pretty: isDev,
+                      pretty: isDevEnv,
                     },
                   },
                 },
@@ -399,7 +418,7 @@ export default async (
                     configFile: false,
                     cacheDirectory: true,
                     cacheCompression: false,
-                    compact: !isDev,
+                    compact: !isDevEnv,
                     targets,
                     presets: [
                       [
@@ -434,7 +453,7 @@ export default async (
                 configFile: false,
                 cacheDirectory: true,
                 cacheCompression: false,
-                compact: !isDev,
+                compact: !isDevEnv,
                 // Require custom config (with defaults)
                 ...requireConfig({
                   ctx,
@@ -450,7 +469,7 @@ export default async (
                       [
                         require.resolve('@babel/preset-react'),
                         {
-                          development: isDev,
+                          development: isDevEnv,
                           runtime: imaConfig.jsxRuntime ?? 'automatic',
                         },
                       ],
@@ -511,7 +530,7 @@ export default async (
                 ...extractLanguages(imaConfig),
               ],
             }),
-          ].filter(Boolean)
+          ]
         : // Client-specific plugins
           [
             // Removes generated empty script caused by non-js entry points
@@ -525,15 +544,15 @@ export default async (
               new MiniCssExtractPlugin({
                 filename: ({ chunk }) =>
                   `static/css/${chunk?.name === name ? 'app' : '[name]'}${
-                    !isDev ? '.min' : ''
+                    !isDevEnv ? '.min' : ''
                   }.css`,
                 chunkFilename: `static/css/chunk-[id]${
-                  !isDev ? '.min' : ''
+                  !isDevEnv ? '.min' : ''
                 }.css`,
               }),
 
             // Enables compression for assets in production build
-            ...(!isDev
+            ...(!isDevEnv
               ? imaConfig.compression.map(
                   algorithm =>
                     new CompressionPlugin({
@@ -556,21 +575,18 @@ export default async (
             useHMR &&
               new ReactRefreshWebpackPlugin({
                 overlay: {
-                  module: '@ima/hmr-client/dist/fastRefreshClient.js',
+                  module: '@ima/hmr-client/dist/fastRefreshClient',
                   sockIntegration: 'whm',
                 },
               }),
           ]),
-    ].filter(Boolean),
-
+    ].filter(Boolean) as WebpackPluginInstance[],
     // Enable node preset for externals on server
     externalsPresets: {
       node: isServer,
     },
-
     // Turn webpack performance reports off since we print reports ourselves
     performance: false,
-
     // Disable infrastructure logging in normal mode
     infrastructureLogging: {
       level: ctx.verbose ? 'info' : 'none',

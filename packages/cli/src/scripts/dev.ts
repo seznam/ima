@@ -6,71 +6,66 @@ import nodemon from 'nodemon';
 import webpack from 'webpack';
 import { CommandBuilder } from 'yargs';
 
+import { createDevServer } from '..';
 import {
   handlerFactory,
-  IMA_CLI_RUN_SERVER_MESSAGE,
   resolveCliPluginArgs,
   sharedArgsFactory,
 } from '../lib/cli';
 import { watchCompiler, handleError } from '../lib/compiler';
 import logger from '../lib/logger';
 import { CliArgs, HandlerFn } from '../types';
-import { createWebpackConfig, resolveEnvironment } from '../webpack/utils';
-
-let nodemonInitialized = false;
-let serverHasStarted = false;
+import {
+  createDevServerConfig,
+  createWebpackConfig,
+  resolveEnvironment,
+} from '../webpack/utils';
 
 /**
  * Starts ima server with nodemon to watch for server-side changes
  * (all changes in server/ folder), to automatically restart application.
  */
 function startNodemon(args: CliArgs) {
-  if (!nodemonInitialized) {
-    nodemon({
-      script: path.join(args.rootDir, 'server/server.js'),
-      watch: [`${path.join(args.rootDir, 'server')}`],
-      args: [`--verbose=${args.verbose}`],
-      cwd: args.rootDir,
-    });
+  let serverHasStarted = false;
 
-    nodemon.on('start', () => {
-      logger.info(
-        `${serverHasStarted ? 'Restarting' : 'Starting'} application server${
-          !serverHasStarted && (args.forceSPA || args.forceSPAWithHMR)
-            ? ` in ${chalk.black.bgCyan(
-                args.forceSPAWithHMR ? 'SPA mode with HMR' : 'SPA mode'
-              )}`
-            : ''
-        }...`
-      );
-    });
+  nodemon({
+    script: path.join(args.rootDir, 'server/server.js'),
+    watch: [`${path.join(args.rootDir, 'server')}`],
+    args: [`--verbose=${args.verbose}`],
+    cwd: args.rootDir,
+  });
 
-    nodemon.on('crash', error => {
-      logger.error('Application watcher unexpectedly crashed.');
-      logger.error(error);
-    });
+  nodemon.on('start', () => {
+    logger.info(
+      `${serverHasStarted ? 'Restarting' : 'Starting'} application server${
+        !serverHasStarted && (args.forceSPA || args.forceSPAWithHMR)
+          ? ` in ${chalk.black.bgCyan(
+              args.forceSPAWithHMR ? 'SPA mode with HMR' : 'SPA mode'
+            )}`
+          : ''
+      }...`
+    );
 
-    nodemon.once('message', message => {
-      if (message === IMA_CLI_RUN_SERVER_MESSAGE) {
-        serverHasStarted = true;
+    if (args.open && !serverHasStarted) {
+      const imaEnvironment = resolveEnvironment(args.rootDir);
+      const port = imaEnvironment?.$Server?.port ?? 3001;
+      serverHasStarted = true;
 
-        if (args.open) {
-          const imaEnvironment = resolveEnvironment(args.rootDir);
-          const port = imaEnvironment?.$Server?.port ?? 3001;
-
-          try {
-            open(`http://localhost:${port}`);
-          } catch (error) {
-            logger.error(
-              `Could not open http://localhost:${port} inside a browser, ${error}`
-            );
-          }
-        }
+      try {
+        open(`http://localhost:${port}`);
+      } catch (error) {
+        logger.error(
+          `Could not open http://localhost:${port} inside a browser, ${error}`
+        );
       }
-    });
+    }
+  });
 
-    nodemonInitialized = true;
-  }
+  nodemon.on('crash', error => {
+    logger.error('Application watcher unexpectedly crashed.');
+    logger.error(error);
+    process.exit(1);
+  });
 }
 
 /**
@@ -81,9 +76,6 @@ function startNodemon(args: CliArgs) {
  * @returns {Promise<void>}
  */
 const dev: HandlerFn = async args => {
-  // Force NODE_ENV as development
-  process.env.NODE_ENV = 'development';
-
   // Set force SPA flag so server can react accordingly
   if (args.forceSPA || args.forceSPAWithHMR) {
     args.legacy = true; // SPA only supports es5 versions
@@ -100,6 +92,16 @@ const dev: HandlerFn = async args => {
 
     // Start watch compiler
     await watchCompiler(compiler, args, imaConfig);
+
+    /**
+     * Set public env variable which is used to load assets in the SSR error view correctly.
+     * CLI Args should always override the config values.
+     */
+    const devServerConfig = createDevServerConfig({ imaConfig, args });
+    process.env.IMA_CLI_DEV_SERVER_PUBLIC = devServerConfig.public;
+
+    // Create dev server for HMR
+    createDevServer(compiler, devServerConfig.hostname, devServerConfig.port);
 
     // Start nodemon and application server
     startNodemon(args);
@@ -139,6 +141,18 @@ export const builder: CommandBuilder = {
     desc: 'Forces application to run in SPA mode with HMR enabled',
     type: 'boolean',
     default: false,
+  },
+  port: {
+    desc: 'Dev server port (overrides ima.config.js settings)',
+    type: 'number',
+  },
+  hostname: {
+    desc: 'Dev server hostname (overrides ima.config.js settings)',
+    type: 'string',
+  },
+  public: {
+    desc: 'Dev server public (overrides ima.config.js settings)',
+    type: 'string',
   },
   ...resolveCliPluginArgs(CMD),
 };

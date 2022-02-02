@@ -29,6 +29,6 @@ export default {
   success: printFnFactory('success', chalk.bold.green),
   error: printFnFactory('error', chalk.bold.red),
   warn: printFnFactory('warn', chalk.bold.yellow),
-  hmr: printFnFactory('hmr', chalk.bold.magenta),
+  update: printFnFactory('update', chalk.bold.magenta),
   plugin: printFnFactory('plugin', chalk.bold.blue),
 };

@@ -1,7 +1,7 @@
 const cluster = require('cluster');
 const os = require('os');
 
-const { imaServer, createApp } = require('./app');
+const { imaServer, app } = require('./app');
 const { environment, logger } = imaServer;
 
 if (environment.$Env !== 'dev') {
@@ -13,12 +13,10 @@ if (
   environment.$Server.clusters === 1 ||
   !cluster.isMaster
 ) {
-  createApp().then(app => {
-    app.listen(environment.$Server.port, () => {
-      return logger.info(
-        'The app is running at http://localhost:' + environment.$Server.port
-      );
-    });
+  app.listen(environment.$Server.port, () => {
+    return logger.info(
+      'The app is running at http://localhost:' + environment.$Server.port
+    );
   });
 } else {
   let cpuCount = environment.$Server.clusters || os.cpus().length;

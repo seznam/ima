@@ -5,9 +5,11 @@ import {
   SourceMapConsumer,
 } from 'source-map';
 
+import { getDevServerBaseUrl } from '#/utils';
+
 // @ts-expect-error: Not available in typings
 SourceMapConsumer.initialize({
-  'lib/mappings.wasm': '/__error-overlay-static/mappings.wasm',
+  'lib/mappings.wasm': `${getDevServerBaseUrl()}/__error-overlay-static/mappings.wasm`,
 });
 
 /**

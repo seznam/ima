@@ -1,5 +1,5 @@
 import { SourceMap } from '#/entities';
-import { getSourceMap } from '#/utils';
+import { getSourceMap, getDevServerBaseUrl } from '#/utils';
 
 interface SourceStorageEntry {
   fileContents: string | null;
@@ -63,7 +63,9 @@ class SourceStorage {
       return fileUri;
     }
 
-    return `/__get-internal-source?fileName=${encodeURIComponent(fileUri)}`;
+    return `${getDevServerBaseUrl()}/__get-internal-source?fileName=${encodeURIComponent(
+      fileUri
+    )}`;
   }
 
   /**

@@ -12,6 +12,7 @@
     "test:size": "size-limit",
     "preversion": "npm test",
     "clean": "rm -rf dist",
+    "dev": "rollup --config --watch",
     "build": "rollup --config",
     "prepare": "npm run build"
   },

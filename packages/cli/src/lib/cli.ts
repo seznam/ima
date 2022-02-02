@@ -3,8 +3,6 @@ import { Arguments, CommandBuilder } from 'yargs';
 import { CliArgs, HandlerFn, ImaCliCommand } from '../types';
 import { requireImaConfig } from '../webpack/utils';
 
-const IMA_CLI_RUN_SERVER_MESSAGE = 'ima-cli-run-server-message';
-
 /**
  * Initializes cli script handler function, which takes cli arguments,
  * parses them and defines defaults. Should be used to initialize any
@@ -17,10 +15,15 @@ function handlerFactory(handlerFn: HandlerFn) {
   return async (yargs: Arguments): Promise<void> => {
     const [command] = yargs._ || [];
 
+    // Force development env for dev
+    process.env.NODE_ENV =
+      command === 'dev' ? 'development' : process.env.NODE_ENV ?? 'production';
+
     return await handlerFn({
       ...yargs,
       rootDir: process.cwd(),
       command: command.toString(),
+      environment: process.env.NODE_ENV,
     } as unknown as CliArgs);
   };
 }
@@ -88,9 +91,4 @@ function sharedArgsFactory(command: ImaCliCommand): CommandBuilder {
   };
 }
 
-export {
-  IMA_CLI_RUN_SERVER_MESSAGE,
-  handlerFactory,
-  resolveCliPluginArgs,
-  sharedArgsFactory,
-};
+export { handlerFactory, resolveCliPluginArgs, sharedArgsFactory };

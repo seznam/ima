@@ -4,6 +4,19 @@ import path from 'path';
 import chalk from 'chalk';
 import yargs from 'yargs';
 
+// Normalize NODE_ENV
+switch (process.env.NODE_ENV) {
+  case 'prod':
+    process.env.NODE_ENV = 'production';
+    break;
+
+  case 'dev':
+  case undefined:
+    process.env.NODE_ENV = 'development';
+    break;
+}
+
+// Init CLI
 yargs
   .scriptName(chalk.green.bold('ima'))
   .usage('Usage: $0 <command>')

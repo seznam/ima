@@ -140,8 +140,7 @@ async function runCompiler(
 async function watchCompiler(
   compiler: MultiCompiler,
   args: CliArgs,
-  imaConfig: ImaConfig,
-  watchOptions: Configuration['watchOptions'] = {}
+  imaConfig: ImaConfig
 ): Promise<MultiCompiler> {
   let elapsed: ReturnType<typeof time> | null = null;
   let firstStats: MultiStats | undefined | null;
@@ -161,7 +160,7 @@ async function watchCompiler(
   );
 
   return new Promise<MultiCompiler>((resolve, reject) => {
-    compiler.watch(watchOptions, (error, stats) => {
+    compiler.watch(imaConfig.watchOptions, (error, stats) => {
       // Print elapsed time for first run
       if (elapsed) {
         elapsed && logger.write(chalk.gray(` [${elapsed()}]`));
