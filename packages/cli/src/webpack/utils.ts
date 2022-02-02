@@ -292,13 +292,20 @@ async function resolveImaConfigWithDefaults(args: CliArgs): Promise<ImaConfig> {
     imageInlineSizeLimit: 8192,
     watchOptions: {
       ignored: ['**/.git/**', '**/node_modules/**', '**/build/**'],
+      followSymlinks: true,
       aggregateTimeout: 5,
     },
   };
 
+  const imaConfig = requireImaConfig(args.rootDir);
+
   return {
     ...defaultImaConfig,
-    ...requireImaConfig(args.rootDir),
+    ...imaConfig,
+    watchOptions: {
+      ...defaultImaConfig.watchOptions,
+      ...imaConfig?.watchOptions,
+    },
   };
 }
 
