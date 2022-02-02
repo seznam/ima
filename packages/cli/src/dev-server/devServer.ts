@@ -21,43 +21,6 @@ async function createDevServer(
   let isBuilding = false;
   const isVerbose = process.argv.some(arg => arg.includes('--verbose=true'));
 
-  const dev = devMiddleware(compiler, {
-    index: false,
-    publicPath: '/',
-    writeToDisk: true,
-    ...(!isVerbose ? { stats: 'none' } : undefined),
-    serverSideRender: true,
-  });
-
-  const hot = hotMiddleware(compiler, {
-    ...(!isVerbose
-      ? {
-          log: data => {
-            const match = data.match(/^webpack built (.*) (.*) in (\d+)ms$/i);
-
-            if (match) {
-              // eslint-disable-next-line @typescript-eslint/no-unused-vars
-              const [message, bundle, hash, time] = match;
-
-              // Used to prevent multiple building messages after each other
-              isBuilding = false;
-
-              logger.update(
-                `Built ${chalk.bold(bundle)} ${chalk.gray(
-                  '[' + prettyMs(parseInt(time, 10)) + ']'
-                )}`
-              );
-            } else if (!isBuilding) {
-              logger.update('Building...');
-              isBuilding = true;
-            }
-          },
-        }
-      : undefined),
-    path: '/__webpack_hmr',
-    heartbeat: 5000,
-  });
-
   app
     .use((req, res, next) => {
       // Allow cors
@@ -65,8 +28,47 @@ async function createDevServer(
 
       next();
     })
-    .use(dev)
-    .use(hot)
+    .use(
+      devMiddleware(compiler, {
+        index: false,
+        publicPath: '/',
+        writeToDisk: true,
+        ...(!isVerbose ? { stats: 'none' } : undefined),
+        serverSideRender: true,
+      })
+    )
+    .use(
+      hotMiddleware(compiler, {
+        ...(!isVerbose
+          ? {
+              log: data => {
+                const match = data.match(
+                  /^webpack built (.*) (.*) in (\d+)ms$/i
+                );
+
+                if (match) {
+                  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+                  const [message, bundle, hash, time] = match;
+
+                  // Used to prevent multiple building messages after each other
+                  isBuilding = false;
+
+                  logger.update(
+                    `Built ${chalk.bold(bundle)} ${chalk.gray(
+                      '[' + prettyMs(parseInt(time, 10)) + ']'
+                    )}`
+                  );
+                } else if (!isBuilding) {
+                  logger.update('Building...');
+                  isBuilding = true;
+                }
+              },
+            }
+          : undefined),
+        path: '/__webpack_hmr',
+        heartbeat: 5000,
+      })
+    )
     .use('/__get-internal-source', evalSourceMapMiddleware())
     .use('/__open-editor', openEditorMiddleware())
     .use(
