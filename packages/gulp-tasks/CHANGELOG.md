@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [17.12.2](https://github.com/seznam/ima/compare/v17.12.1...v17.12.2) (2022-02-07)
+
+
+### Bug Fixes
+
+* 🐛 freeze @babel/core and @babel/helpers ([4957363](https://github.com/seznam/ima/commit/49573634f7c518a638bbc9888187febc7b785fc5))
+
+
+
+
+
 ## [17.11.3](https://github.com/seznam/ima/compare/v17.11.2...v17.11.3) (2021-08-27)
 
 **Note:** Version bump only for package @ima/gulp-tasks
