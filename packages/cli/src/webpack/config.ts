@@ -19,15 +19,11 @@ import RemoveEmptyScriptsPlugin from 'webpack-remove-empty-scripts';
 
 import { ConfigurationContext, ImaConfig } from '../types';
 import {
-  requireConfig,
   resolveEnvironment,
   createCacheKey,
   IMA_CONF_FILENAME,
   createPolyfillEntry,
   extractLanguages,
-  POSTCSS_CONF_FILENAMES,
-  BABEL_CONF_ES_FILENAMES,
-  BABEL_CONF_FILENAMES,
   createDevServerConfig,
 } from './utils';
 
@@ -86,11 +82,11 @@ export default async (
    * common style loader functions, that is later used
    * to handle css and less source files.
    */
-  const getStyleLoaders = ({
+  const getStyleLoaders = async ({
     useLessLoader = false,
   }: {
     useLessLoader?: boolean;
-  } = {}): RuleSetUseItem[] => {
+  } = {}): Promise<RuleSetUseItem[]> => {
     /**
      * Ignore CSS and LESS modules when CSS modules are disabled and we would
      * need to generate the CSS module definitions. This is not needed for other
@@ -120,36 +116,31 @@ export default async (
       },
       !onlyCssDefinitions && {
         loader: require.resolve('postcss-loader'),
-        options: {
-          postcssOptions: {
-            config: false,
-            // Require custom config (with defaults)
-            ...requireConfig({
-              ctx,
-              packageJsonKey: 'postcss',
-              fileNames: POSTCSS_CONF_FILENAMES,
-              defaultConfig: {
-                plugins: [
-                  'postcss-flexbugs-fixes',
-                  [
-                    'postcss-preset-env',
-                    {
-                      autoprefixer: {
-                        flexbox: 'no-2009',
-                      },
-                      stage: 3,
-                      features: {
-                        'custom-properties': false,
-                      },
+        options: await imaConfig.postcss(
+          {
+            postcssOptions: {
+              config: false,
+              plugins: [
+                'postcss-flexbugs-fixes',
+                [
+                  'postcss-preset-env',
+                  {
+                    autoprefixer: {
+                      flexbox: 'no-2009',
                     },
-                  ],
+                    stage: 3,
+                    features: {
+                      'custom-properties': false,
+                    },
+                  },
                 ],
-              },
-            }),
+              ],
+            },
+            implementation: require('postcss'),
+            sourceMap: useSourceMaps,
           },
-          implementation: require('postcss'),
-          sourceMap: useSourceMaps,
-        },
+          ctx
+        ),
       },
       useLessLoader && {
         loader: require.resolve('less-loader'),
@@ -447,56 +438,46 @@ export default async (
               include: appDir,
               exclude: /node_modules/,
               loader: require.resolve('babel-loader'),
-              options: {
-                // Disable config files since we handle the loading manually
-                babelrc: false,
-                configFile: false,
-                cacheDirectory: true,
-                cacheCompression: false,
-                compact: !isDevEnv,
-                // Require custom config (with defaults)
-                ...requireConfig({
-                  ctx,
-                  fileNames:
-                    isEsVersion || isServer
-                      ? BABEL_CONF_ES_FILENAMES
-                      : BABEL_CONF_FILENAMES,
-                  packageJsonKey:
-                    isEsVersion || isServer ? 'babel.es' : 'babel',
-                  defaultConfig: {
-                    targets,
-                    presets: [
-                      [
-                        require.resolve('@babel/preset-react'),
-                        {
-                          development: isDevEnv,
-                          runtime: imaConfig.jsxRuntime ?? 'automatic',
-                        },
-                      ],
-                      [
-                        require.resolve('@babel/preset-env'),
-                        {
-                          bugfixes: true,
-                          modules: false,
-                          useBuiltIns: 'usage',
-                          corejs: { version: '3.20', proposals: true },
-                          exclude: ['transform-typeof-symbol'],
-                        },
-                      ],
+              options: await imaConfig.babel(
+                {
+                  targets,
+                  babelrc: false,
+                  configFile: false,
+                  cacheDirectory: true,
+                  cacheCompression: false,
+                  compact: !isDevEnv,
+                  presets: [
+                    [
+                      require.resolve('@babel/preset-react'),
+                      {
+                        development: isDevEnv,
+                        runtime: imaConfig.jsxRuntime ?? 'automatic',
+                      },
                     ],
-                    plugins: useHMR
-                      ? [require.resolve('react-refresh/babel')]
-                      : [],
-                  },
-                }),
-                sourceMaps: useSourceMaps,
-                inputSourceMap: useSourceMaps,
-              },
+                    [
+                      require.resolve('@babel/preset-env'),
+                      {
+                        bugfixes: true,
+                        modules: false,
+                        useBuiltIns: 'usage',
+                        corejs: { version: '3.20', proposals: true },
+                        exclude: ['transform-typeof-symbol'],
+                      },
+                    ],
+                  ],
+                  plugins: useHMR
+                    ? [require.resolve('react-refresh/babel')]
+                    : [],
+                  sourceMaps: useSourceMaps,
+                  inputSourceMap: useSourceMaps,
+                },
+                ctx
+              ),
             },
             {
               test: /\.less$/,
               sideEffects: true,
-              use: getStyleLoaders({ useLessLoader: true }),
+              use: await getStyleLoaders({ useLessLoader: true }),
             },
             /**
              * CSS loader configuration, has the same capabilities as the less loader.
@@ -504,7 +485,7 @@ export default async (
             {
               test: /\.css$/,
               sideEffects: true,
-              use: getStyleLoaders(),
+              use: await getStyleLoaders(),
             },
             /**
              * Fallback loader for all modules, that don't match any

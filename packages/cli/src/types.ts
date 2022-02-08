@@ -111,6 +111,24 @@ export type ImaConfig = {
   ) => Promise<Configuration>;
 
   /**
+   * Function which receives babel-loader config and current context, which can be used for
+   * additional customization or returning completely different babel config.
+   */
+  babel: (
+    config: Record<string, unknown>,
+    ctx: ConfigurationContext
+  ) => Promise<Record<string, unknown>>;
+
+  /**
+   * Function which receives postcss-loader config and current context, this can be used
+   * to customize existing default postcss config or completely replace it with a custom one.
+   */
+  postcss: (
+    config: Record<string, unknown>,
+    ctx: ConfigurationContext
+  ) => Promise<Record<string, unknown>>;
+
+  /**
    * Optional IMA cli plugins that can be used to easily extend
    * webpack config and cli with additional features.
    */

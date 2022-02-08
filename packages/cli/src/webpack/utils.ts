@@ -19,36 +19,6 @@ import {
 } from '../types';
 import webpackConfig from './config';
 
-const POSTCSS_CONF_FILENAMES = [
-  'postcss.config.js',
-  'postcss.config.cjs',
-  'postcss.config.json',
-  '.postcssrc.js',
-  '.postcssrc.cjs',
-  '.postcssrc.json',
-  '.postcssrc',
-];
-
-const BABEL_CONF_FILENAMES = [
-  'babel.config.js',
-  'babel.config.cjs',
-  'babel.config.json',
-  '.babelrc.js',
-  '.babelrc.cjs',
-  '.babelrc.json',
-  '.babelrc',
-];
-
-const BABEL_CONF_ES_FILENAMES = [
-  'babel.config.es.js',
-  'babel.config.es.cjs',
-  'babel.config.es.json',
-  '.babelrc.es.js',
-  '.babelrc.es.cjs',
-  '.babelrc.es.json',
-  '.babelrc.es',
-];
-
 /**
  * Loads application IMA.js environment from server/config/environment.js
  *
@@ -60,75 +30,6 @@ function resolveEnvironment(rootDir: CliArgs['rootDir']): ImaEnvironment {
   const envSource = envSourcePath && require(envSourcePath);
 
   return (envSource && envResolver(envSource)) || {};
-}
-
-/**
- * Utility function to load any JS configuration file, used
- * to setup multiple tools (babel, postcss...). From multiple
- * file locations or directly fromm package.json.
- *
- * @param {object} params
- * @param {ConfigurationContext} params.ctx current config context.
- * @param {string[]} params.fileNames Options of configuration file names.
- * @param {Record<string, unknown> | null} params.packageJson package.json
- * @param {string} params.packageJsonKey Key identifying config in package.json
- * @param {Record<string, unknown>} params.defaultConfig Default config
- *        which is used if no configuration is found.
- * @returns {Record<string, unknown>} Loaded configuration object.
- */
-function requireConfig({
-  ctx,
-  fileNames,
-  packageJsonKey = '',
-  defaultConfig = {},
-}: {
-  ctx: ConfigurationContext;
-  fileNames: string[];
-  packageJsonKey: string;
-  defaultConfig: Record<string, unknown>;
-}): Record<string, unknown> {
-  if (!Array.isArray(fileNames) || fileNames.length === 0) {
-    return defaultConfig;
-  }
-
-  const { fullPath: configPath, fileName: configFileName } =
-    fileNames
-      .map(fileName => ({
-        fileName,
-        fullPath: path.join(ctx.rootDir, fileName),
-      }))
-      .find(({ fullPath }) => fs.existsSync(fullPath)) || {};
-
-  const packageJsonPath = path.resolve(ctx.rootDir, './package.json');
-  const packageJson = packageJsonPath ? require(packageJsonPath) : {};
-
-  if (
-    !configPath &&
-    !(packageJson && packageJsonKey && packageJson[packageJsonKey])
-  ) {
-    return defaultConfig;
-  }
-
-  try {
-    if (configPath && configFileName) {
-      const extension = configFileName.split('.').pop();
-
-      return extension && ~['js', 'cjs', 'json'].indexOf(extension)
-        ? require(configPath)
-        : JSON.parse(fs.readFileSync(configPath).toString());
-    } else {
-      return (packageJson && packageJson[packageJsonKey]) || defaultConfig;
-    }
-  } catch (err) {
-    logger.error(`Error occurred while loading ${configPath} file`);
-
-    if (err instanceof Error) {
-      logger.error(err.message);
-      err.stack && logger.error(err.stack);
-    }
-
-    return defaultConfig;
-  }
 }
 
 /**
@@ -295,6 +196,8 @@ async function resolveImaConfigWithDefaults(args: CliArgs): Promise<ImaConfig> {
       followSymlinks: true,
       aggregateTimeout: 5,
     },
+    babel: async config => config,
+    postcss: async config => config,
   };
 
   const imaConfig = requireImaConfig(args.rootDir);
@@ -432,7 +335,6 @@ async function createWebpackConfig(
 
 export {
   resolveEnvironment,
-  requireConfig,
   createCacheKey,
   createWebpackConfig,
   createDevServerConfig,
@@ -441,7 +343,4 @@ export {
   extractLanguages,
   createPolyfillEntry,
   IMA_CONF_FILENAME,
-  BABEL_CONF_ES_FILENAMES,
-  BABEL_CONF_FILENAMES,
-  POSTCSS_CONF_FILENAMES,
 };
