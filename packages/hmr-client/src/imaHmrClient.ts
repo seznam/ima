@@ -30,8 +30,8 @@ const debouncedShowCompileErrors = debounce(
 );
 
 // Parse hmr options from webpack resource query
+// @ts-expect-error yeah I don't know...
 const options = Object.fromEntries(
-  // @ts-expect-error yeah I don't know...
   new URLSearchParams(__resourceQuery)
 ) as HMROptions;
 
