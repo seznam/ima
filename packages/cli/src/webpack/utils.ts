@@ -252,7 +252,7 @@ async function runImaPluginsHook(
     return;
   }
 
-  logger.info(`Running ${hook} on ima plugins...`);
+  logger.info(`Running '${hook}' hook on ima plugins...`);
 
   // Run plugin hook
   for (const plugin of filteredPlugins) {

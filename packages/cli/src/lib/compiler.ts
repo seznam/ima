@@ -192,8 +192,8 @@ async function watchCompiler(
       // Print errors
       formatWebpackErrors(stats, args);
 
-      // Run preProcess hook
-      await runImaPluginsHook(args, imaConfig, 'preProcess', firstRun);
+      // Run postProcess hook
+      await runImaPluginsHook(args, imaConfig, 'postProcess', firstRun);
 
       // Update first run flag
       firstRun = false;

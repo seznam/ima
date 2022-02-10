@@ -14,6 +14,8 @@ export {
 
 export { AnalyzePlugin } from './plugins/analyze/analyzePlugin';
 
+export { LessConstantsPlugin } from './plugins/less-constants/LessConstantsPlugin';
+
 export {
   ImaCliPlugin,
   ImaConfig,

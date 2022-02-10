@@ -95,8 +95,8 @@ const dev: HandlerFn = async args => {
     const devServerConfig = createDevServerConfig({ imaConfig, args });
     process.env.IMA_CLI_DEV_SERVER_PUBLIC = devServerConfig.public;
 
-    // Run postProcess hook on imaPlugins
-    await runImaPluginsHook(args, imaConfig, 'postProcess');
+    // Run preProcess hook on imaPlugins
+    await runImaPluginsHook(args, imaConfig, 'preProcess');
 
     // Generate webpack config
     const config = await createWebpackConfig(args, imaConfig);
