@@ -152,12 +152,12 @@ export default async (
           sourceMap: useSourceMaps,
         },
       },
-      // useLessLoader && {
-      //   loader: 'extend-less-loader',
-      //   options: {
-      //     globalsPath: path.join(rootDir, 'app/less/globals.less'),
-      //   },
-      // },
+      useLessLoader && {
+        loader: 'extend-less-loader',
+        options: {
+          globalsPath: path.join(rootDir, 'app/less/globals.less'),
+        },
+      },
     ].filter(Boolean) as RuleSetUseItem[];
   };
 
