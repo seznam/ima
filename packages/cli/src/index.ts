@@ -5,22 +5,14 @@ export {
 
 export { createDevServer } from './dev-server/devServer';
 
-export {
-  AmpPluginConfigurationContext,
-  AmpPluginOptions,
-  default as AmpPlugin,
-} from './plugins/amp/ampPlugin';
+export { AmpPluginOptions, AmpPlugin } from './plugins/amp/ampPlugin';
 
 export {
-  ScrambleCssPluginConfigurationContext,
   ScrambleCssPluginOptions,
-  default as ScrambleCssPlugin,
+  ScrambleCssPlugin,
 } from './plugins/scramble-css/scrambleCssPlugin';
 
-export {
-  AnalyzePluginConfigurationContext,
-  default as AnalyzePlugin,
-} from './plugins/analyze/analyzePlugin';
+export { AnalyzePlugin } from './plugins/analyze/analyzePlugin';
 
 export {
   ImaCliPlugin,

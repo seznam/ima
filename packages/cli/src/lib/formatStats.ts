@@ -9,7 +9,7 @@ import { MultiStats, StatsAsset } from 'webpack';
 
 import { ImaCliArgs } from '../types';
 import { createSourceFragment, parseCompileError } from './compileErrorParser';
-import logger from './logger';
+import * as logger from './logger';
 
 const warningsCache = new Set<string>();
 

@@ -1,3 +1,5 @@
+// TODO remove plugin specific dependencies form cli package.json
+
 import fs from 'fs';
 import path from 'path';
 
@@ -8,18 +10,21 @@ import { Configuration, WebpackPluginInstance } from 'webpack';
 import { BundleAnalyzerPlugin } from 'webpack-bundle-analyzer';
 import { CommandBuilder } from 'yargs';
 
-import logger from '../../lib/logger';
+import * as logger from '../../lib/logger';
 import {
   ImaConfigurationContext,
-  ImaCliPluginCallbackArgs,
   ImaCliCommand,
   ImaCliPlugin,
+  ImaCliArgs,
+  ImaConfig,
 } from '../../types';
 
-export interface AnalyzePluginConfigurationContext
-  extends ImaConfigurationContext {
-  analyze?: ImaConfigurationContext['name'];
-  analyzeBaseline?: boolean;
+// Extend existing cli args interface with new values
+declare module '../../types' {
+  interface ImaCliArgs {
+    analyze?: ImaConfigurationContext['name'];
+    analyzeBaseline?: boolean;
+  }
 }
 
 export interface AnalyzePluginOptions {
@@ -32,9 +37,7 @@ export interface AnalyzePluginOptions {
 /**
  * Appends webpack bundle analyzer plugin to the build command config.
  */
-export default class AnalyzePlugin
-  implements ImaCliPlugin<AnalyzePluginConfigurationContext>
-{
+class AnalyzePlugin implements ImaCliPlugin {
   private _options: AnalyzePluginOptions;
 
   readonly name = 'AnalyzePlugin';
@@ -58,7 +61,7 @@ export default class AnalyzePlugin
 
   async webpack(
     config: Configuration,
-    ctx: AnalyzePluginConfigurationContext
+    ctx: ImaConfigurationContext
   ): Promise<Configuration> {
     const { analyze, isServer, isEsVersion } = ctx;
 
@@ -98,8 +101,11 @@ export default class AnalyzePlugin
     return config;
   }
 
-  onDone({ isFirstRun, args }: ImaCliPluginCallbackArgs): void {
-    // @ts-expect-error to be fixed (args contain analyze but its not properly typed)
+  async postProcess(
+    args: ImaCliArgs,
+    imaConfig: ImaConfig,
+    isFirstRun: boolean
+  ): Promise<void> {
     if (isFirstRun === false || !args.analyze) {
       return;
     }
@@ -170,3 +176,5 @@ export default class AnalyzePlugin
     }
   }
 }
+
+export { AnalyzePlugin };

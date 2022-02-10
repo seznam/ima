@@ -81,7 +81,7 @@ export interface ImaCliPlugin {
   /**
    * Webpack callback function used by plugins to customize/extend ima webpack config before it's run.
    */
-  webpack(
+  webpack?(
     config: Configuration,
     ctx: ImaConfigurationContext,
     imaConfig: ImaConfig
@@ -94,7 +94,7 @@ export interface ImaCliPlugin {
   postProcess?(
     args: ImaCliArgs,
     imaConfig: ImaConfig,
-    isFirstRun?: boolean
+    isFirstRun: boolean
   ): Promise<void>;
 }
 

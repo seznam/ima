@@ -1,3 +1,5 @@
+// TODO remove plugin specific dependencies form cli package.json
+
 import path from 'path';
 
 import postcss from 'postcss';
@@ -8,9 +10,11 @@ import { CommandBuilder } from 'yargs';
 import { ImaCliPlugin, ImaConfigurationContext } from '../../types';
 import postCssScrambler from './postCssScrambler';
 
-export interface ScrambleCssPluginConfigurationContext
-  extends ImaConfigurationContext {
-  scrambleCss?: boolean;
+// Extend existing cli args interface with new values
+declare module '../../types' {
+  interface ImaCliArgs {
+    scrambleCss?: boolean;
+  }
 }
 
 export interface ScrambleCssPluginOptions {
@@ -36,9 +40,7 @@ const scrambleCssPluginSharedCliArgs: CommandBuilder = {
  * Minifies component classnames and generates hashtable of transformed classnames
  * which can be later used for backwards translation.
  */
-export default class ScrambleCssPlugin
-  implements ImaCliPlugin<ScrambleCssPluginConfigurationContext>
-{
+class ScrambleCssPlugin implements ImaCliPlugin {
   private _options: ScrambleCssPluginOptions;
 
   name = 'ScrambleCssPlugin';
@@ -53,7 +55,7 @@ export default class ScrambleCssPlugin
 
   async webpack(
     config: Configuration,
-    ctx: ScrambleCssPluginConfigurationContext
+    ctx: ImaConfigurationContext
   ): Promise<Configuration> {
     const { rootDir, isServer } = ctx;
     const packageJsonPath = path.resolve(rootDir, './package.json');
@@ -104,3 +106,5 @@ export default class ScrambleCssPlugin
     return config;
   }
 }
+
+export { ScrambleCssPlugin };

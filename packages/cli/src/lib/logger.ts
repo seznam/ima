@@ -23,12 +23,13 @@ function printFnFactory(
   };
 }
 
-export default {
-  write: printFnFactory(),
-  info: printFnFactory('info', chalk.bold.cyan),
-  success: printFnFactory('success', chalk.bold.green),
-  error: printFnFactory('error', chalk.bold.red),
-  warn: printFnFactory('warn', chalk.bold.yellow),
-  update: printFnFactory('update', chalk.bold.magenta),
-  plugin: printFnFactory('plugin', chalk.bold.blue),
-};
+// Define logger factory functions
+const write = printFnFactory();
+const info = printFnFactory('info', chalk.bold.cyan);
+const success = printFnFactory('success', chalk.bold.green);
+const error = printFnFactory('error', chalk.bold.red);
+const warn = printFnFactory('warn', chalk.bold.yellow);
+const update = printFnFactory('update', chalk.bold.magenta);
+const plugin = printFnFactory('plugin', chalk.bold.blue);
+
+export { write, info, success, error, warn, update, plugin };

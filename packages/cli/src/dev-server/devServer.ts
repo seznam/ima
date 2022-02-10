@@ -7,7 +7,7 @@ import prettyMs from 'pretty-ms';
 import { MultiCompiler } from 'webpack';
 import devMiddleware from 'webpack-dev-middleware';
 
-import logger from '../lib/logger';
+import * as logger from '../lib/logger';
 import { evalSourceMapMiddleware } from './evalSourceMapMiddleware';
 import { openEditorMiddleware } from './openEditorMiddleware';
 
@@ -55,7 +55,7 @@ async function createDevServer(
 
                   logger.update(
                     `Built ${chalk.bold(bundle)} ${chalk.gray(
-                      '[' + prettyMs(parseInt(time, 10)) + ']'
+                      `[${prettyMs(parseInt(time, 10))}]`
                     )}`
                   );
                 } else if (!isBuilding) {

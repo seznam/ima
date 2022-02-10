@@ -11,7 +11,7 @@ import {
   formatWebpackErrors,
   formatWebpackWarnings,
 } from './formatStats';
-import logger from './logger';
+import * as logger from './logger';
 import { time } from './time';
 
 /**
@@ -193,7 +193,7 @@ async function watchCompiler(
       formatWebpackErrors(stats, args);
 
       // Run preProcess hook
-      await runImaPluginsHook(args, imaConfig, 'preProcess');
+      await runImaPluginsHook(args, imaConfig, 'preProcess', firstRun);
 
       // Update first run flag
       firstRun = false;

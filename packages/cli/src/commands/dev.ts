@@ -13,7 +13,7 @@ import {
   sharedArgsFactory,
 } from '../lib/cli';
 import { watchCompiler, handleError } from '../lib/compiler';
-import logger from '../lib/logger';
+import * as logger from '../lib/logger';
 import { ImaCliArgs, HandlerFn } from '../types';
 import {
   createDevServerConfig,

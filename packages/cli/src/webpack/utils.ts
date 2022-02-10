@@ -8,7 +8,7 @@ import { ObjectPattern } from 'copy-webpack-plugin';
 import MessageFormat from 'messageformat';
 import { Configuration } from 'webpack';
 
-import logger from '../lib/logger';
+import * as logger from '../lib/logger';
 import { time } from '../lib/time';
 import {
   ImaConfigurationContext,
@@ -102,7 +102,7 @@ function extractLanguages(imaConfig: ImaConfig): ObjectPattern[] {
     languageGlobs.forEach(languageGlob =>
       resultCopyRecords.push({
         from: languageGlob,
-        to: 'static/locale/' + locale + '.js',
+        to: `static/locale/${locale}.js`,
         force: true,
         noErrorOnMissing: true,
         transformAll: (assets: any[]) => {
@@ -110,7 +110,7 @@ function extractLanguages(imaConfig: ImaConfig): ObjectPattern[] {
             const fileContent = JSON.parse(asset.data.toString());
             const scopeFromFilename = (
               asset.sourceFilename.split('/').pop() || 'none'
-            ).replace(locale.toUpperCase() + '.json', '');
+            ).replace(`${locale.toUpperCase()}.json`, '');
 
             return Object.assign(accumulator, {
               [scopeFromFilename]: fileContent,
@@ -236,7 +236,8 @@ function clearCache(rootDir: ImaCliArgs['rootDir']): void {
 async function runImaPluginsHook(
   args: ImaCliArgs,
   imaConfig: ImaConfig,
-  hook: 'preProcess' | 'postProcess'
+  hook: 'preProcess' | 'postProcess',
+  isFirstRun?: boolean
 ): Promise<void> {
   if (!Array.isArray(imaConfig.plugins) || !imaConfig.plugins.length) {
     return;
@@ -255,7 +256,7 @@ async function runImaPluginsHook(
 
   // Run plugin hook
   for (const plugin of filteredPlugins) {
-    await plugin?.[hook]?.(args, imaConfig);
+    await plugin?.[hook]?.(args, imaConfig, !!isFirstRun);
   }
 }
 
@@ -318,10 +319,14 @@ async function createWebpackConfig(
       let config = await webpackConfig(ctx, imaConfig);
 
       // Run webpack function overrides from ima plugins
-      if (Array.isArray(imaConfig?.plugins)) {
+      if (Array.isArray(imaConfig.plugins)) {
         for (const plugin of imaConfig.plugins) {
+          if (typeof plugin?.webpack !== 'function') {
+            continue;
+          }
+
           try {
-            config = await plugin?.webpack(config, ctx, imaConfig);
+            config = await plugin.webpack(config, ctx, imaConfig);
           } catch (error) {
             logger.error(
               `There was an error while running webpack config for '${plugin.name}' plugin.`
@@ -333,8 +338,8 @@ async function createWebpackConfig(
       }
 
       // Run webpack function overrides from imaConfig
-      if (typeof imaConfig?.webpack === 'function') {
-        config = await imaConfig?.webpack(config, ctx, imaConfig);
+      if (typeof imaConfig.webpack === 'function') {
+        config = await imaConfig.webpack(config, ctx, imaConfig);
       }
 
       return config;
