@@ -17,7 +17,7 @@ import webpack, {
 } from 'webpack';
 import RemoveEmptyScriptsPlugin from 'webpack-remove-empty-scripts';
 
-import { ConfigurationContext, ImaConfig } from '../types';
+import { ImaConfigurationContext, ImaConfig } from '../types';
 import {
   resolveEnvironment,
   createCacheKey,
@@ -34,7 +34,7 @@ import {
  * @returns {Promise<Configuration>} Webpack configuration object.
  */
 export default async (
-  ctx: ConfigurationContext,
+  ctx: ImaConfigurationContext,
   imaConfig: ImaConfig
 ): Promise<Configuration> => {
   const { rootDir, isServer, isEsVersion, name, environment } = ctx;

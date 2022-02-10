@@ -6,7 +6,7 @@ import nodemon from 'nodemon';
 import webpack from 'webpack';
 import { CommandBuilder } from 'yargs';
 
-import { createDevServer } from '..';
+import { createDevServer } from '../dev-server/devServer';
 import {
   handlerFactory,
   resolveCliPluginArgs,
@@ -14,18 +14,20 @@ import {
 } from '../lib/cli';
 import { watchCompiler, handleError } from '../lib/compiler';
 import logger from '../lib/logger';
-import { CliArgs, HandlerFn } from '../types';
+import { ImaCliArgs, HandlerFn } from '../types';
 import {
   createDevServerConfig,
   createWebpackConfig,
   resolveEnvironment,
+  resolveImaConfig,
+  runImaPluginsHook,
 } from '../webpack/utils';
 
 /**
  * Starts ima server with nodemon to watch for server-side changes
  * (all changes in server/ folder), to automatically restart application.
  */
-function startNodemon(args: CliArgs) {
+function startNodemon(args: ImaCliArgs) {
   let serverHasStarted = false;
 
   nodemon({
@@ -72,7 +74,7 @@ function startNodemon(args: CliArgs) {
  * Builds ima application with provided config in watch mode
  * while also starting the webserver itself.
  *
- * @param {CliArgs} args
+ * @param {ImaCliArgs} args
  * @returns {Promise<void>}
  */
 const dev: HandlerFn = async args => {
@@ -83,15 +85,8 @@ const dev: HandlerFn = async args => {
   }
 
   try {
-    const { config, imaConfig } = await createWebpackConfig(
-      ['client', 'server'],
-      args
-    );
-
-    const compiler = webpack(config);
-
-    // Start watch compiler
-    await watchCompiler(compiler, args, imaConfig);
+    // Load ima config
+    const imaConfig = await resolveImaConfig(args);
 
     /**
      * Set public env variable which is used to load assets in the SSR error view correctly.
@@ -99,6 +94,16 @@ const dev: HandlerFn = async args => {
      */
     const devServerConfig = createDevServerConfig({ imaConfig, args });
     process.env.IMA_CLI_DEV_SERVER_PUBLIC = devServerConfig.public;
+
+    // Run postProcess hook on imaPlugins
+    await runImaPluginsHook(args, imaConfig, 'postProcess');
+
+    // Generate webpack config
+    const config = await createWebpackConfig(args, imaConfig);
+    const compiler = webpack(config);
+
+    // Start watch compiler
+    await watchCompiler(compiler, args, imaConfig);
 
     // Create dev server for HMR
     createDevServer(compiler, devServerConfig.hostname, devServerConfig.port);

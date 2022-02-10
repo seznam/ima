@@ -5,11 +5,11 @@ import PostCssPipelineWebpackPlugin from 'postcss-pipeline-webpack-plugin';
 import { Configuration } from 'webpack';
 import { CommandBuilder } from 'yargs';
 
-import { ImaCliPlugin, ConfigurationContext } from '../../types';
+import { ImaCliPlugin, ImaConfigurationContext } from '../../types';
 import postCssScrambler from './postCssScrambler';
 
 export interface ScrambleCssPluginConfigurationContext
-  extends ConfigurationContext {
+  extends ImaConfigurationContext {
   scrambleCss?: boolean;
 }
 

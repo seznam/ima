@@ -1,6 +1,6 @@
 import { Arguments, CommandBuilder } from 'yargs';
 
-import { CliArgs, HandlerFn, ImaCliCommand } from '../types';
+import { ImaCliArgs, HandlerFn, ImaCliCommand } from '../types';
 import { requireImaConfig } from '../webpack/utils';
 
 /**
@@ -24,7 +24,7 @@ function handlerFactory(handlerFn: HandlerFn) {
       rootDir: process.cwd(),
       command: command.toString(),
       environment: process.env.NODE_ENV,
-    } as unknown as CliArgs);
+    } as unknown as ImaCliArgs);
   };
 }
 
@@ -48,7 +48,7 @@ function resolveCliPluginArgs(command: ImaCliCommand): CommandBuilder {
     )
     .reduce((acc, cur) => {
       if (cur?.cliArgs && cur.cliArgs[command]) {
-        acc = {
+        return {
           ...acc,
           ...cur.cliArgs[command],
         };

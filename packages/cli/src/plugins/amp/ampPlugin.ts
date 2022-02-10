@@ -6,10 +6,14 @@ import PostCssPipelineWebpackPlugin from 'postcss-pipeline-webpack-plugin';
 import { Configuration, EntryObject } from 'webpack';
 import { CommandBuilder } from 'yargs';
 
-import { ImaCliCommand, ImaCliPlugin } from '../..';
-import { ConfigurationContext, CliArgs } from '../../types';
+import {
+  ImaConfigurationContext,
+  ImaCliArgs,
+  ImaCliCommand,
+  ImaCliPlugin,
+} from '../../types';
 
-export interface AmpPluginConfigurationContext extends ConfigurationContext {
+export interface AmpPluginConfigurationContext extends ImaConfigurationContext {
   amp?: boolean;
 }
 
@@ -23,14 +27,14 @@ export interface AmpPluginOptions {
 /**
  * Generate entry points for provided glob paths.
  *
- * @param {CliArgs['rootDir']} rootDir App root directory.
+ * @param {ImaCliArgs['rootDir']} rootDir App root directory.
  * @param {string[]=[]} paths Globs of less/css files.
  * @param {string} [prefix=''] Output filename prefix.
  * @returns {Promise<Record<string, string>>} Array of entry
  *          points file paths.
  */
 async function generateEntryPoints(
-  rootDir: CliArgs['rootDir'],
+  rootDir: ImaCliArgs['rootDir'],
   paths: string[] = [],
   prefix = ''
 ): Promise<Record<string, string>> {

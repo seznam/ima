@@ -10,15 +10,15 @@ import { CommandBuilder } from 'yargs';
 
 import logger from '../../lib/logger';
 import {
-  ConfigurationContext,
+  ImaConfigurationContext,
   ImaCliPluginCallbackArgs,
   ImaCliCommand,
   ImaCliPlugin,
 } from '../../types';
 
 export interface AnalyzePluginConfigurationContext
-  extends ConfigurationContext {
-  analyze?: ConfigurationContext['name'];
+  extends ImaConfigurationContext {
+  analyze?: ImaConfigurationContext['name'];
   analyzeBaseline?: boolean;
 }
 

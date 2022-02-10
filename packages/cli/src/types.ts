@@ -1,7 +1,6 @@
 import { AlgorithmFunction, ZlibOptions } from 'compression-webpack-plugin';
 import {
   Configuration,
-  MultiCompiler,
   ResolveOptions,
   WebpackOptionsNormalized,
 } from 'webpack';
@@ -28,7 +27,7 @@ export type ImaCliCommand = 'build' | 'dev';
  * Arguments passed across ima cli and into webpack config
  * function generator.
  */
-export interface CliArgs {
+export interface ImaCliArgs {
   rootDir: string;
   command: ImaCliCommand;
   clean: boolean;
@@ -50,26 +49,19 @@ export interface CliArgs {
 /**
  * CLI arguments merged with current configuration arguments.
  */
-export interface ConfigurationContext extends CliArgs {
+export interface ImaConfigurationContext extends ImaCliArgs {
   name: 'server' | 'client' | 'client.es';
   isServer: boolean;
   isEsVersion?: boolean;
 }
 
-export type HandlerFn = (args: CliArgs) => Promise<void>;
-export type ConfigurationTypes = ('client' | 'server')[];
-export type ImaCliPluginCallbackArgs = {
-  isFirstRun?: boolean;
-  args: CliArgs;
-  imaConfig: ImaConfig;
-  compiler: MultiCompiler;
-};
+export type HandlerFn = (args: ImaCliArgs) => Promise<void>;
 
 /**
  * Interface for ima/cli plugins that can be defined in plugins field in ima.conf.js. These can be used
  * to extend functionality of default CLI with custom cli arguments and webpack config overrides.
  */
-export interface ImaCliPlugin<C = ConfigurationContext> {
+export interface ImaCliPlugin {
   /**
    * Plugin name, used mainly for better debugging messages.
    */
@@ -81,19 +73,29 @@ export interface ImaCliPlugin<C = ConfigurationContext> {
   readonly cliArgs?: Partial<Record<ImaCliCommand, CommandBuilder>>;
 
   /**
+   * Optional plugin hook to do some pre processing right after the cli args are processed
+   * and the imaConfig is loaded, before the webpack config creation and compiler run.
+   */
+  preProcess?(args: ImaCliArgs, imaConfig: ImaConfig): Promise<void>;
+
+  /**
    * Webpack callback function used by plugins to customize/extend ima webpack config before it's run.
    */
   webpack(
     config: Configuration,
-    ctx: C,
+    ctx: ImaConfigurationContext,
     imaConfig: ImaConfig
   ): Promise<Configuration>;
 
   /**
-   * Optional done callback which is run after first successful compilation.
-   * It is run after information about the built are printed to the console by the CLI.
+   * Optional plugin hook to do some custom processing after the compilation has finished.
+   * Receives isFirstRun=true for the first call if called inside the watch process.
    */
-  onDone?(params: ImaCliPluginCallbackArgs): void;
+  postProcess?(
+    args: ImaCliArgs,
+    imaConfig: ImaConfig,
+    isFirstRun?: boolean
+  ): Promise<void>;
 }
 
 /**
@@ -106,7 +108,7 @@ export type ImaConfig = {
    */
   webpack?: (
     config: Configuration,
-    ctx: ConfigurationContext,
+    ctx: ImaConfigurationContext,
     imaConfig: ImaConfig
   ) => Promise<Configuration>;
 
@@ -116,7 +118,7 @@ export type ImaConfig = {
    */
   babel: (
     config: Record<string, unknown>,
-    ctx: ConfigurationContext
+    ctx: ImaConfigurationContext
   ) => Promise<Record<string, unknown>>;
 
   /**
@@ -125,7 +127,7 @@ export type ImaConfig = {
    */
   postcss: (
     config: Record<string, unknown>,
-    ctx: ConfigurationContext
+    ctx: ImaConfigurationContext
   ) => Promise<Record<string, unknown>>;
 
   /**
