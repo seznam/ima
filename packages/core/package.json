@@ -66,7 +66,8 @@
     "rollup-plugin-jscc": "^1.0.0",
     "rollup-plugin-json": "^4.0.0",
     "rollup-plugin-replace": "^2.2.0",
-    "typescript": "^4.5.5"
+    "ts-jest": "^25.5.1",
+    "typescript": "^3.9.10"
   },
   "dependencies": {
     "@ima/helpers": "^17.9.0",
