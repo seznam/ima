@@ -168,7 +168,7 @@ export type ImaConfig = {
    * we don't want to use CSS modules this can be omitted and improve the built performance.
    * This is why the CSS modules are opt-in rather than opt-out option.
    */
-  enableCssModules?: boolean;
+  cssModules?: boolean;
 
   /**
    * Set custom jsxRuntime for @babel/preset-react, the default is 'automatic'.

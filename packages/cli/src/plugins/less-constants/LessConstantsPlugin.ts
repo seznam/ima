@@ -7,6 +7,7 @@ import webpack from 'webpack';
 import * as logger from '../../lib/logger';
 import { time } from '../../lib/time';
 import { ImaCliPlugin, ImaCliArgs, ImaConfig } from '../../types';
+import { generateLessVariables } from './generator';
 
 export interface LessConstantsPluginOptions {
   entry: string;
@@ -27,6 +28,10 @@ class LessConstantsPlugin implements ImaCliPlugin {
     this._options = options || {};
   }
 
+  /**
+   * We'll generate less variables files in the preProcess hook, in order
+   * for it to be usable as an import in globals.less file.
+   */
   async preProcess(args: ImaCliArgs, imaConfig: ImaConfig): Promise<void> {
     const elapsed = time();
 
@@ -53,27 +58,18 @@ class LessConstantsPlugin implements ImaCliPlugin {
     }
 
     try {
-      const entryModule = await this._compileEntry(entryPath, args, imaConfig);
-      const lessConstants = Object.keys(entryModule)
-        .map(key => {
-          return this._process(
-            key,
-            entryModule[key] as Record<string, unknown> | string
-          );
-        })
-        .join('');
+      // Generate less variables from entry module
+      const lessConstants = generateLessVariables(
+        await this._compileEntry(entryPath, args, imaConfig)
+      );
 
-      // Write generated less file
+      // Write generated less file to filesystem
       outputPath =
         this._options.output ??
         path.join(args.rootDir, 'build/less-constants/constants.less');
 
       fs.mkdirSync(path.dirname(outputPath), { recursive: true });
-      fs.writeFileSync(
-        outputPath,
-        `// This file was automatically generated using LessConstantsPlugin\n\n${lessConstants}`,
-        'utf-8'
-      );
+      fs.writeFileSync(outputPath, lessConstants, { encoding: 'utf-8' });
     } catch (error) {
       return logger.error(
         `${chalk.underline('LessConstantsPlugin')}: ${
@@ -84,6 +80,7 @@ class LessConstantsPlugin implements ImaCliPlugin {
       );
     }
 
+    // Print output info
     logger.plugin(
       `${chalk.underline('LessConstantsPlugin')}: generated: ${chalk.magenta(
         outputPath.replace(args.rootDir, '.')
@@ -107,9 +104,6 @@ class LessConstantsPlugin implements ImaCliPlugin {
       args.rootDir,
       './node_modules/.cache/ima-cli/less-constants-plugin'
     );
-
-    // Create tmp directory, if it doesn't exist
-    fs.mkdirSync(outputDir, { recursive: true });
 
     // Compile entry point with webpack
     return new Promise((resolve, reject) => {
@@ -156,6 +150,7 @@ class LessConstantsPlugin implements ImaCliPlugin {
             reject(err);
           }
 
+          // Require generated bundle
           resolve(
             import(path.join(outputDir, '/lessConstantsEntry.js')).then(
               module => module.default
@@ -164,53 +159,6 @@ class LessConstantsPlugin implements ImaCliPlugin {
         }
       );
     });
-  }
-
-  private _process(
-    property: string,
-    value: Record<string, unknown> | string,
-    prefix = '@'
-  ): string {
-    const subPrefix = this.getSubPrefix(property, prefix);
-
-    // if (value instanceof Object && value.__lessMap) {
-    //   return `${subPrefix}: {\n${value.toString()}}\n`;
-    // }
-
-    if (value instanceof Object && !value.__propertyDeclaration) {
-      return (
-        Object.keys(value)
-          .map((subProperty: string) =>
-            this._process(
-              subProperty,
-              value[subProperty] as Record<string, unknown> | string,
-              subPrefix
-            )
-          )
-          .join('') + '\n'
-      ); // add extra empty line after a group of properties
-    }
-
-    return `${subPrefix}: ${value.toString()};\n`;
-  }
-
-  private getSubPrefix(property: string, prefix: string): string {
-    return prefix + (prefix.length > 1 ? '-' : '') + this.slugify(property);
-  }
-
-  private slugify(label: string): string {
-    let result = '';
-
-    for (let i = 0; i < label.length; i++) {
-      const char = label.substring(i, i + 1);
-      if (i && !/-|\d/.test(char) && char.toUpperCase() === char) {
-        result += `-${char.toLowerCase()}`;
-      } else {
-        result += char;
-      }
-    }
-
-    return result;
   }
 }
 
