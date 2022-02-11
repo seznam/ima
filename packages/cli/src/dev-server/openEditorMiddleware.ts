@@ -6,7 +6,7 @@ import path from 'path';
 import chalk from 'chalk';
 import { Request, Response } from 'express';
 
-import * as logger from '../lib/logger';
+import { logger } from '../lib/logger';
 import {
   DarwinEditors,
   getEditorArgsForLineNumber as getEditorArgsForLineNumber,

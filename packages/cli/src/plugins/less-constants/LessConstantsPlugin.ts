@@ -5,7 +5,6 @@ import chalk from 'chalk';
 import webpack from 'webpack';
 
 import { createLogger } from '../../lib/logger';
-import { time } from '../../lib/time';
 import { ImaCliPlugin, ImaCliArgs, ImaConfig } from '../../types';
 import { generateLessVariables, UnitValue } from './generator';
 
@@ -35,8 +34,6 @@ class LessConstantsPlugin implements ImaCliPlugin {
    * for it to be usable as an import in globals.less file.
    */
   async preProcess(args: ImaCliArgs, imaConfig: ImaConfig): Promise<void> {
-    const elapsed = time();
-
     if (!this._options.entry) {
       this._logger.error('bailing... entry file was not provided.');
 
@@ -54,6 +51,11 @@ class LessConstantsPlugin implements ImaCliPlugin {
 
       process.exit(1);
     }
+
+    // Print output info
+    this._logger.plugin(`Processing ${chalk.magenta(entry)} file..`, {
+      trackTime: true,
+    });
 
     try {
       // Generate less variables from entry module
@@ -80,8 +82,7 @@ class LessConstantsPlugin implements ImaCliPlugin {
 
     // Print output info
     this._logger.plugin(
-      `generated: ${chalk.magenta(outputPath.replace(args.rootDir, '.'))}`,
-      { elapsed }
+      `generated: ${chalk.magenta(outputPath.replace(args.rootDir, '.'))}`
     );
   }
 

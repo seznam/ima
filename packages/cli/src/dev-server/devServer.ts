@@ -7,7 +7,7 @@ import prettyMs from 'pretty-ms';
 import { MultiCompiler } from 'webpack';
 import devMiddleware from 'webpack-dev-middleware';
 
-import * as logger from '../lib/logger';
+import { logger } from '../lib/logger';
 import { evalSourceMapMiddleware } from './evalSourceMapMiddleware';
 import { openEditorMiddleware } from './openEditorMiddleware';
 

@@ -1,5 +1,5 @@
 import chalk from 'chalk';
-import { WebpackError, MultiCompiler, MultiStats } from 'webpack';
+import { WebpackError, MultiCompiler } from 'webpack';
 
 import { ImaCliArgs, ImaConfig } from '../types';
 import { runImaPluginsHook } from '../webpack/utils';
@@ -8,8 +8,7 @@ import {
   formatWebpackErrors,
   formatWebpackWarnings,
 } from './formatStats';
-import * as logger from './logger';
-import { time } from './time';
+import { logger } from './logger';
 
 /**
  * Handles webpack compile errors.
@@ -53,14 +52,13 @@ async function runCompiler(
   args: ImaCliArgs,
   imaConfig: ImaConfig
 ): Promise<MultiCompiler> {
-  const elapsed = time();
-  logger.info('Running webpack compiler...', false);
+  logger.info('Running webpack compiler...', { trackTime: true });
 
   return new Promise((resolve, reject) => {
     compiler.run((error, stats) =>
       closeCompiler(compiler).then(async () => {
         // Print elapsed time for first run
-        logger.write(chalk.gray(` [${elapsed()}]`));
+        logger.endTracking();
 
         // Reject with compiler when there are any errors
         if (error || stats?.hasErrors()) {
@@ -103,12 +101,8 @@ async function watchCompiler(
   args: ImaCliArgs,
   imaConfig: ImaConfig
 ): Promise<MultiCompiler> {
-  let elapsed: ReturnType<typeof time> | null = null;
-  let firstStats: MultiStats | undefined | null;
   let firstRun = true;
-  let hadFirstRunErrors = false;
-
-  elapsed = time();
+  let hadErrorsOnFirstRun = false;
 
   logger.info(
     `Running webpack watch compiler${
@@ -116,29 +110,23 @@ async function watchCompiler(
         ? ` ${chalk.black.bgCyan('in legacy (es5 compatible) mode')}`
         : ''
     }...`,
-    false
+    { trackTime: true }
   );
 
   return new Promise<MultiCompiler>((resolve, reject) => {
     compiler.watch(imaConfig.watchOptions, async (error, stats) => {
       // Print elapsed time for first run
-      if (elapsed) {
-        elapsed && logger.write(chalk.gray(` [${elapsed()}]`));
-        elapsed = null;
-
-        // Save first stats object for later use in summary
-        firstStats = stats;
-      }
+      logger.endTracking();
 
       // Don't continue when there are compile errors on first run
       if (firstRun && stats?.hasErrors()) {
-        hadFirstRunErrors = true;
-        formatWebpackErrors(firstStats ?? stats, args);
+        hadErrorsOnFirstRun = true;
+        formatWebpackErrors(stats, args);
         return;
       }
 
-      if (hadFirstRunErrors) {
-        hadFirstRunErrors = false;
+      if (hadErrorsOnFirstRun) {
+        hadErrorsOnFirstRun = false;
         logger.info('Continuing with the compilation...');
       }
 
@@ -148,9 +136,8 @@ async function watchCompiler(
       }
 
       // Format stats after plugin done callback
-      if (firstStats) {
-        formatStats(firstStats, args);
-        firstStats = null;
+      if (firstRun) {
+        formatStats(stats, args);
       }
 
       // Print warnings

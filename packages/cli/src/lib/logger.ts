@@ -3,38 +3,6 @@ import chalk from 'chalk';
 import { ImaCliPlugin } from '../types';
 import { time } from './time';
 
-/**
- * Print utility functions generator
- *
- * @param {string} prefix Logged prefix text.
- * @param {chalk} chalkFn Styling function.
- * @returns {(message: string, newLine: false) => void} Log function.
- */
-function printFnFactory(
-  prefix?: string,
-  chalkFn?: {
-    (input: string | number | null | undefined): string;
-  }
-) {
-  return (message: string, newLine = true) => {
-    if (chalkFn && prefix) {
-      process.stdout.write(`${chalkFn(`${prefix}:`)} `);
-    }
-
-    process.stdout.write(message);
-    newLine && process.stdout.write('\n');
-  };
-}
-
-// Define logger factory functions
-const write = printFnFactory();
-const info = printFnFactory('info', chalk.bold.cyan);
-const success = printFnFactory('success', chalk.bold.green);
-const error = printFnFactory('error', chalk.bold.red);
-const warn = printFnFactory('warn', chalk.bold.yellow);
-const update = printFnFactory('update', chalk.bold.magenta);
-const plugin = printFnFactory('plugin', chalk.bold.blue);
-
 export interface LoggerOptions {
   trackTime?: boolean;
   newLine?: boolean;
@@ -54,12 +22,9 @@ class Logger {
     chalkFn: (input: string | number | null | undefined) => string,
     message: string,
     { newLine = true, trackTime = false, elapsed }: LoggerOptions = {}
-  ) {
-    // Write elapsed for previous log
-    if (this._innerElapsed) {
-      process.stdout.write(chalk.gray(` [${this._innerElapsed()}]\n`));
-      this._innerElapsed = undefined;
-    }
+  ): void {
+    // Print elapsed if previously timed
+    this.endTracking();
 
     // Track time
     if (trackTime) {
@@ -80,12 +45,20 @@ class Logger {
 
     // Write elapsed time if provided
     if (elapsed) {
-      process.stdout.write(chalk.gray(` [${elapsed()}]`));
+      this.writeElapsed(elapsed);
     }
 
-    // Write newline
-    if (newLine && !this._innerElapsed) {
+    // Write newline (ignore when some kind of time tracking is enabled)
+    if (newLine && !this._innerElapsed && !elapsed) {
       process.stdout.write('\n');
+    }
+  }
+
+  public endTracking(): void {
+    // Write elapsed for previous log
+    if (this._innerElapsed) {
+      this.writeElapsed(this._innerElapsed);
+      this._innerElapsed = undefined;
     }
   }
 
@@ -116,10 +89,16 @@ class Logger {
   public write(message: string, options?: LoggerOptions) {
     this._log('', chalk.bold.blue, message, options);
   }
+
+  public writeElapsed(elapsed: ReturnType<typeof time>): void {
+    process.stdout.write(chalk.gray(` [${elapsed()}]\n`));
+  }
 }
 
 function createLogger(imaPlugin: ImaCliPlugin): Logger {
   return new Logger(imaPlugin.name);
 }
 
-export { write, info, success, error, warn, update, plugin, createLogger };
+const logger = new Logger();
+
+export { createLogger, logger };

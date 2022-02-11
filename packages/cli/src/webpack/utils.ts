@@ -8,8 +8,7 @@ import { ObjectPattern } from 'copy-webpack-plugin';
 import MessageFormat from 'messageformat';
 import { Configuration } from 'webpack';
 
-import * as logger from '../lib/logger';
-import { time } from '../lib/time';
+import { logger } from '../lib/logger';
 import {
   ImaConfigurationContext,
   ImaEnvironment,
@@ -215,7 +214,7 @@ async function resolveImaConfig(args: ImaCliArgs): Promise<ImaConfig> {
     imaConfigWithDefaults.plugins.length
   ) {
     const pluginNames: string[] = [];
-    logger.info(`Loaded CLI plugins: `, false);
+    logger.info(`Loaded CLI plugins: `, { newLine: false });
 
     for (const plugin of imaConfigWithDefaults.plugins) {
       pluginNames.push(chalk.blue(plugin.name));
@@ -235,16 +234,15 @@ function cleanup(args: ImaCliArgs): void {
   // Clear cache before doing anything else
   if (args.clearCache) {
     const cacheDir = path.join(args.rootDir, '/node_modules/.cache');
-    const elapsedClearCache = time();
 
     logger.info(
       `Clearing cache at ${chalk.magenta(
         cacheDir.replace(args.rootDir, '.')
       )}...`,
-      false
+      { trackTime: true }
     );
     fs.rmSync(cacheDir, { force: true, recursive: true });
-    logger.write(chalk.gray(` [${elapsedClearCache()}]`));
+    logger.endTracking();
   }
 
   // Clear output directory
@@ -261,13 +259,13 @@ function cleanup(args: ImaCliArgs): void {
   const outputDir = path.join(args.rootDir, 'build');
 
   if (!fs.existsSync(outputDir)) {
+    logger.info('The build directory is already empty');
     return;
   }
 
-  const elapsedClean = time();
-  logger.info('Cleaning the build directory...', false);
+  logger.info('Cleaning the build directory...', { trackTime: true });
   fs.rmSync(outputDir, { recursive: true });
-  logger.write(chalk.gray(` [${elapsedClean()}]`));
+  logger.endTracking();
 }
 
 /**
@@ -318,10 +316,9 @@ async function createWebpackConfig(
   imaConfig: ImaConfig
 ): Promise<Configuration[]> {
   // Create configuration contexts
-  const elapsed = time();
   logger.info(
     `Parsing config files for ${chalk.magenta(process.env.NODE_ENV)}...`,
-    false
+    { trackTime: true }
   );
 
   // Create configuration contexts (server is always present)
@@ -385,7 +382,7 @@ async function createWebpackConfig(
     })
   ).then(config => {
     // Print elapsed time
-    elapsed && logger.write(chalk.gray(` [${elapsed()}]`));
+    logger.endTracking();
 
     return config;
   });

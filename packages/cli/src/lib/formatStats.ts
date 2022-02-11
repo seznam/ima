@@ -9,7 +9,7 @@ import { MultiStats, StatsAsset } from 'webpack';
 
 import { ImaCliArgs } from '../types';
 import { createSourceFragment, parseCompileError } from './compileErrorParser';
-import * as logger from './logger';
+import { logger } from './logger';
 
 const warningsCache = new Set<string>();
 
@@ -165,7 +165,6 @@ function formatWebpackWarnings(
     const lines = warning.message.split('\n');
     logger.write(chalk.underline(lines.shift()));
     logger.write(lines.join('\n'));
-    logger.write('');
   });
 }
 
@@ -312,7 +311,7 @@ function formatStats(stats: MultiStats | undefined, args: ImaCliArgs): void {
     logger.write(
       `total of ${chalk.green.bold(
         totalCount
-      )} assets generated inside the output folder.`
+      )} assets generated inside the output folder.\n`
     );
   }
 }
