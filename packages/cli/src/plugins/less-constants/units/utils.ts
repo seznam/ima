@@ -1,6 +1,6 @@
-export interface Unit<T> {
+export interface Unit {
   __propertyDeclaration: boolean;
-  valueOf: () => T;
+  valueOf: () => string;
   toString: () => string;
 }
 
@@ -10,31 +10,11 @@ export interface MapUnit {
   toString: () => string;
 }
 
-function asNumberUnit(
-  unit: string,
-  value: number,
-  template = '${parts}${unit}'
-): Unit<number> {
-  return {
-    __propertyDeclaration: true,
-
-    valueOf() {
-      return value;
-    },
-
-    toString() {
-      return template
-        .replace('${parts}', value.toString())
-        .replace('${unit}', unit);
-    },
-  };
-}
-
 function asUnit(
   unit: string,
   parts: string[] | number[],
   template = '${parts}${unit}'
-): Unit<string> {
+): Unit {
   return {
     __propertyDeclaration: true,
 
@@ -50,4 +30,4 @@ function asUnit(
   };
 }
 
-export { asUnit, asNumberUnit };
+export { asUnit };

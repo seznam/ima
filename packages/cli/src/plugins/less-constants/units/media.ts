@@ -1,14 +1,14 @@
 import { asUnit, Unit } from './utils';
 
-function maxWidthMedia(maxWidth: number): Unit<string> {
+function maxWidthMedia(maxWidth: number): Unit {
   return asUnit('', [maxWidth.toString()], '~"all and (max-width: ${parts})"');
 }
 
-function minWidthMedia(minWidth: number): Unit<string> {
+function minWidthMedia(minWidth: number): Unit {
   return asUnit('', [minWidth.toString()], '~"all and (min-width: ${parts})"');
 }
 
-function minAndMaxWidthMedia(minWidth: number, maxWidth: number): Unit<string> {
+function minAndMaxWidthMedia(minWidth: number, maxWidth: number): Unit {
   return asUnit(
     maxWidth.toString(),
     [minWidth.toString()],
@@ -16,7 +16,7 @@ function minAndMaxWidthMedia(minWidth: number, maxWidth: number): Unit<string> {
   );
 }
 
-function maxHeightMedia(maxHeight: number): Unit<string> {
+function maxHeightMedia(maxHeight: number): Unit {
   return asUnit(
     '',
     [maxHeight.toString()],
@@ -24,7 +24,7 @@ function maxHeightMedia(maxHeight: number): Unit<string> {
   );
 }
 
-function minHeightMedia(minHeight: number): Unit<string> {
+function minHeightMedia(minHeight: number): Unit {
   return asUnit(
     '',
     [minHeight.toString()],

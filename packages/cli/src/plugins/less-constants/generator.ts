@@ -1,13 +1,20 @@
+import { MapUnit, Unit } from './units/utils';
+
+export type UnitValue =
+  | Record<string, unknown>
+  | string
+  | number
+  | boolean
+  | Unit
+  | MapUnit;
+
 /**
  * Generates less variables from given object of values.
  */
-function generateLessVariables(values: Record<string, unknown>): string {
+function generateLessVariables(values: Record<string, UnitValue>): string {
   const lessConstants = Object.keys(values)
     .map(key => {
-      const value = processValue(
-        key,
-        values[key] as Record<string, unknown> | string
-      );
+      const value = processValue(key, values[key]);
 
       return value;
     })
@@ -21,24 +28,24 @@ function generateLessVariables(values: Record<string, unknown>): string {
  */
 function processValue(
   property: string,
-  value: Record<string, unknown> | string,
+  value: Record<string, UnitValue> | UnitValue,
   prefix = '@'
 ): string {
   // Generate label prefix
   const subPrefix = prefix + (prefix.length > 1 ? '-' : '') + slugify(property);
 
   // Process less maps
-  if (value instanceof Object && value.__lessMap) {
+  if (value instanceof Object && (value as MapUnit).__lessMap) {
     return `${subPrefix}: {\n${value.toString()}}\n`;
   }
 
   // Process other property declarations
-  if (value instanceof Object && !value.__propertyDeclaration) {
+  if (value instanceof Object && !(value as Unit).__propertyDeclaration) {
     return Object.keys(value)
       .map((subProperty: string) =>
         processValue(
           subProperty,
-          value[subProperty] as Record<string, unknown> | string,
+          (value as Record<string, UnitValue>)[subProperty],
           subPrefix
         )
       )

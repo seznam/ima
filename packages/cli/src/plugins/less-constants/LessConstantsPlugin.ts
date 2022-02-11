@@ -7,7 +7,7 @@ import webpack from 'webpack';
 import * as logger from '../../lib/logger';
 import { time } from '../../lib/time';
 import { ImaCliPlugin, ImaCliArgs, ImaConfig } from '../../types';
-import { generateLessVariables } from './generator';
+import { generateLessVariables, UnitValue } from './generator';
 
 export interface LessConstantsPluginOptions {
   entry: string;
@@ -99,7 +99,7 @@ class LessConstantsPlugin implements ImaCliPlugin {
     modulePath: string,
     args: ImaCliArgs,
     imaConfig: ImaConfig
-  ): Promise<Record<string, unknown>> {
+  ): Promise<Record<string, UnitValue>> {
     const outputDir = path.join(
       args.rootDir,
       './node_modules/.cache/ima-cli/less-constants-plugin'
