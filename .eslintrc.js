@@ -1,12 +1,14 @@
+const extendDefs = [
+  'eslint:recommended',
+  'plugin:react/recommended',
+  'plugin:jest/recommended',
+  'plugin:jest/style',
+  'plugin:prettier/recommended',
+];
+
 module.exports = {
   root: true,
-  extends: [
-    'eslint:recommended',
-    'plugin:react/recommended',
-    'plugin:jest/recommended',
-    'plugin:jest/style',
-    'plugin:prettier/recommended',
-  ],
+  extends: extendDefs,
   rules: {
     // Eslint overrides
     'no-import-assign': 0,
@@ -90,6 +92,19 @@ module.exports = {
         chrome: true,
         FB: true,
       },
+    },
+    {
+      files: ['packages/core/**/*.ts', 'packages/core/**/*.tsx'],
+      parser: '@typescript-eslint/parser',
+      parserOptions: {
+        project: 'packages/core/tsconfig.json',
+      },
+      plugins: ['@typescript-eslint'],
+      extends: [
+        'eslint:recommended',
+        'plugin:@typescript-eslint/eslint-recommended',
+        'plugin:@typescript-eslint/recommended',
+      ],
     },
   ],
 };
