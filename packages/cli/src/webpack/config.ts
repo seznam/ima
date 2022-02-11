@@ -17,7 +17,7 @@ import webpack, {
 } from 'webpack';
 import RemoveEmptyScriptsPlugin from 'webpack-remove-empty-scripts';
 
-import { ConfigurationContext, ImaConfig } from '../types';
+import { ImaConfigurationContext, ImaConfig } from '../types';
 import {
   resolveEnvironment,
   createCacheKey,
@@ -34,7 +34,7 @@ import {
  * @returns {Promise<Configuration>} Webpack configuration object.
  */
 export default async (
-  ctx: ConfigurationContext,
+  ctx: ImaConfigurationContext,
   imaConfig: ImaConfig
 ): Promise<Configuration> => {
   const { rootDir, isServer, isEsVersion, name, environment } = ctx;
@@ -68,7 +68,7 @@ export default async (
 
   /**
    * Most of the time we try to built the CSS only in the ES bundle.
-   * However when the CSS modules are enabled (imaConfig.enableCSSModules),
+   * However when the CSS modules are enabled (imaConfig.cssModules),
    * we also need to generate definitions (class names) for other configurations.
    * This optimization helps with performance a bit since we don't need to generate
    * CSS files for every configuration but just once and only definitions for others.
@@ -93,10 +93,9 @@ export default async (
      * CSS files so we can ignore it and improve a performance a little bit.
      * see https://webpack.js.org/configuration/resolve/#resolvealias for more.
      */
-    if (onlyCssDefinitions && !imaConfig.enableCssModules) {
+    if (onlyCssDefinitions && !imaConfig.cssModules) {
       return [{ loader: 'null-loader' }];
     }
-    // return [{ loader: 'null-loader' }];
 
     return [
       !onlyCssDefinitions && {

@@ -8,7 +8,12 @@ import {
 } from '../lib/cli';
 import { runCompiler, handleError } from '../lib/compiler';
 import { HandlerFn } from '../types';
-import { createWebpackConfig } from '../webpack/utils';
+import {
+  cleanup,
+  createWebpackConfig,
+  resolveImaConfig,
+  runImaPluginsHook,
+} from '../webpack/utils';
 
 /**
  * Builds ima application with provided config.
@@ -18,12 +23,21 @@ import { createWebpackConfig } from '../webpack/utils';
  */
 const build: HandlerFn = async args => {
   try {
-    const { config, imaConfig } = await createWebpackConfig(
-      ['client', 'server'],
-      args
-    );
+    // Do cleanup
+    cleanup(args);
 
-    await runCompiler(webpack(config), args, imaConfig);
+    // Load ima config
+    const imaConfig = await resolveImaConfig(args);
+
+    // Run preProcess hook on imaPlugins
+    await runImaPluginsHook(args, imaConfig, 'preProcess');
+
+    // Generate webpack config
+    const config = await createWebpackConfig(args, imaConfig);
+    const compiler = webpack(config);
+
+    // Run webpack compiler
+    await runCompiler(compiler, args, imaConfig);
   } catch (err) {
     handleError(err);
     process.exit(1);

@@ -8,24 +8,22 @@ import { ObjectPattern } from 'copy-webpack-plugin';
 import MessageFormat from 'messageformat';
 import { Configuration } from 'webpack';
 
-import logger from '../lib/logger';
-import { time } from '../lib/time';
+import { logger } from '../lib/logger';
 import {
-  ConfigurationContext,
+  ImaConfigurationContext,
   ImaEnvironment,
-  ConfigurationTypes,
   ImaConfig,
-  CliArgs,
+  ImaCliArgs,
 } from '../types';
 import webpackConfig from './config';
 
 /**
  * Loads application IMA.js environment from server/config/environment.js
  *
- * @param {CliArgs['rootDir']} rootDir Application root directory
+ * @param {ImaCliArgs['rootDir']} rootDir Application root directory
  * @returns {ImaEnvironment} Loaded environment
  */
-function resolveEnvironment(rootDir: CliArgs['rootDir']): ImaEnvironment {
+function resolveEnvironment(rootDir: ImaCliArgs['rootDir']): ImaEnvironment {
   const envSourcePath = path.resolve(rootDir, './server/config/environment.js');
   const envSource = envSourcePath && require(envSourcePath);
 
@@ -36,11 +34,11 @@ function resolveEnvironment(rootDir: CliArgs['rootDir']): ImaEnvironment {
  * Returns polyfill entry point for current es version if the file exists.
  * The function looks for app/polyfill.js and app/polyfill.es.js files.
  *
- * @param {ConfigurationContext} ctx Current configuration context.
+ * @param {ImaConfigurationContext} ctx Current configuration context.
  * @returns {Record<string, string>} Entry object or empty object.
  */
 function createPolyfillEntry(
-  ctx: ConfigurationContext
+  ctx: ImaConfigurationContext
 ): Record<string, string> {
   const { isEsVersion, rootDir } = ctx;
 
@@ -63,8 +61,8 @@ function createDevServerConfig({
   ctx,
   imaConfig,
 }: {
-  args?: CliArgs;
-  ctx?: ConfigurationContext;
+  args?: ImaCliArgs;
+  ctx?: ImaConfigurationContext;
   imaConfig: ImaConfig;
 }): {
   port: number;
@@ -103,7 +101,7 @@ function extractLanguages(imaConfig: ImaConfig): ObjectPattern[] {
     languageGlobs.forEach(languageGlob =>
       resultCopyRecords.push({
         from: languageGlob,
-        to: 'static/locale/' + locale + '.js',
+        to: `static/locale/${locale}.js`,
         force: true,
         noErrorOnMissing: true,
         transformAll: (assets: any[]) => {
@@ -111,7 +109,7 @@ function extractLanguages(imaConfig: ImaConfig): ObjectPattern[] {
             const fileContent = JSON.parse(asset.data.toString());
             const scopeFromFilename = (
               asset.sourceFilename.split('/').pop() || 'none'
-            ).replace(locale.toUpperCase() + '.json', '');
+            ).replace(`${locale.toUpperCase()}.json`, '');
 
             return Object.assign(accumulator, {
               [scopeFromFilename]: fileContent,
@@ -134,10 +132,10 @@ function extractLanguages(imaConfig: ImaConfig): ObjectPattern[] {
 /**
  * Creates hash representing current webpack environment.
  *
- * @param {ConfigurationContext} ctx Current configuration context.
+ * @param {ImaConfigurationContext} ctx Current configuration context.
  * @returns {string}
  */
-function createCacheKey(ctx: ConfigurationContext): string {
+function createCacheKey(ctx: ImaConfigurationContext): string {
   const hash = createHash('md5');
 
   /**
@@ -179,10 +177,10 @@ function requireImaConfig(rootDir = process.cwd()): ImaConfig | null {
 /**
  * Resolves ima.config.js from rootDir base path with DEFAULTS.
  *
- * @param {CliArgs} args CLI args.
+ * @param {ImaCliArgs} args CLI args.
  * @returns {Promise<ImaConfig>} Ima config or empty object.
  */
-async function resolveImaConfigWithDefaults(args: CliArgs): Promise<ImaConfig> {
+async function resolveImaConfig(args: ImaCliArgs): Promise<ImaConfig> {
   const defaultImaConfig: ImaConfig = {
     publicPath: '/',
     compression: ['brotliCompress', 'gzip'],
@@ -201,8 +199,7 @@ async function resolveImaConfigWithDefaults(args: CliArgs): Promise<ImaConfig> {
   };
 
   const imaConfig = requireImaConfig(args.rootDir);
-
-  return {
+  const imaConfigWithDefaults = {
     ...defaultImaConfig,
     ...imaConfig,
     watchOptions: {
@@ -210,96 +207,165 @@ async function resolveImaConfigWithDefaults(args: CliArgs): Promise<ImaConfig> {
       ...imaConfig?.watchOptions,
     },
   };
+
+  // Print loaded plugins info
+  if (
+    Array.isArray(imaConfigWithDefaults.plugins) &&
+    imaConfigWithDefaults.plugins.length
+  ) {
+    const pluginNames: string[] = [];
+    logger.info(`Loaded CLI plugins: `, { newLine: false });
+
+    for (const plugin of imaConfigWithDefaults.plugins) {
+      pluginNames.push(chalk.blue(plugin.name));
+    }
+
+    logger.write(pluginNames.join(', '));
+  }
+
+  return imaConfigWithDefaults;
+}
+
+/**
+ * Takes care of cleaning build directory and node_modules/.cache
+ * directory based on current cli arguments.
+ */
+function cleanup(args: ImaCliArgs): void {
+  // Clear cache before doing anything else
+  if (args.clearCache) {
+    const cacheDir = path.join(args.rootDir, '/node_modules/.cache');
+
+    logger.info(
+      `Clearing cache at ${chalk.magenta(
+        cacheDir.replace(args.rootDir, '.')
+      )}...`,
+      { trackTime: true }
+    );
+    fs.rmSync(cacheDir, { force: true, recursive: true });
+    logger.endTracking();
+  }
+
+  // Clear output directory
+  if (!args.clean) {
+    // Clean at least hot directory silently
+    fs.rmSync(path.join(args.rootDir, 'build/hot'), {
+      recursive: true,
+      force: true,
+    });
+
+    return;
+  }
+
+  const outputDir = path.join(args.rootDir, 'build');
+
+  if (!fs.existsSync(outputDir)) {
+    logger.info('The build directory is already empty');
+    return;
+  }
+
+  logger.info('Cleaning the build directory...', { trackTime: true });
+  fs.rmSync(outputDir, { recursive: true });
+  logger.endTracking();
+}
+
+/**
+ * Runs one of optional ima plugin hooks defined on existing plugins.
+ *
+ * @param {ImaCliArgs} args Parsed CLI and build arguments.
+ * @param {ImaConfig} imaConfig Loaded ima config.
+ * @param hook
+ */
+async function runImaPluginsHook(
+  args: ImaCliArgs,
+  imaConfig: ImaConfig,
+  hook: 'preProcess' | 'postProcess',
+  isFirstRun?: boolean
+): Promise<void> {
+  if (!Array.isArray(imaConfig.plugins) || !imaConfig.plugins.length) {
+    return;
+  }
+
+  // Filter plugins with given hook
+  const filteredPlugins = imaConfig.plugins.filter(
+    plugin => typeof plugin[hook] === 'function'
+  );
+
+  if (!filteredPlugins.length) {
+    return;
+  }
+
+  logger.info(`Running ${chalk.magenta(hook)} hook on ima plugins...`);
+
+  // Run plugin hook
+  for (const plugin of filteredPlugins) {
+    await plugin?.[hook]?.(args, imaConfig, !!isFirstRun);
+  }
 }
 
 /**
  * Creates webpack configurations for defined types using provided args.
  * Additionally it applies all existing configuration overrides from cli plugins
  * and app overrides in this order cli -> plugins -> app.
- *goo
- * @param {ConfigurationTypes} configurations Configuration types.
- * @param {CliArgs} args Parsed CLI and build arguments.
- * @returns {Promise<{config: Configuration[], imaConfig: ImaConfig>}
+ *
+ * @param {ImaCliArgs} args Parsed CLI and build arguments.
+ * @param {ImaConfig} imaConfig Loaded ima config.
+ * @returns {Promise<Configuration[]>}
  */
 async function createWebpackConfig(
-  configurations: ConfigurationTypes = ['client', 'server'],
-  args: CliArgs
-): Promise<{ config: Configuration[]; imaConfig: ImaConfig }> {
-  // Clear cache before doing anything else
-  if (args.clearCache) {
-    const cacheDir = path.join(args.rootDir, '/node_modules/.cache');
-    const elapsedClearCache = time();
-
-    logger.info(`Clearing cache at ${chalk.magenta(cacheDir)}...`, false);
-    fs.rmSync(cacheDir, { force: true, recursive: true });
-    logger.write(chalk.gray(` [${elapsedClearCache()}]`));
-  }
-
-  // No need to continue without any configuration
-  if (!configurations.length) {
-    throw new Error(
-      'The configurations array is empty, at least one configuration needs to be defined.'
-    );
-  }
-
-  // Resolve imaConfig and create configuration contexts
-  const elapsed = time();
+  args: ImaCliArgs,
+  imaConfig: ImaConfig
+): Promise<Configuration[]> {
+  // Create configuration contexts
   logger.info(
     `Parsing config files for ${chalk.magenta(process.env.NODE_ENV)}...`,
-    false
+    { trackTime: true }
   );
 
-  // Load ima.config.js with defaults and init configuration contexts.
-  const imaConfig = await resolveImaConfigWithDefaults(args);
-  const finalConfigContexts: ConfigurationContext[] = [];
-
-  // Push server configuration if available
-  if (configurations.includes('server')) {
-    finalConfigContexts.push({
+  // Create configuration contexts (server is always present)
+  const contexts: ImaConfigurationContext[] = [
+    {
       name: 'server',
       isServer: true,
       ...args,
-    });
-  }
-
-  // Push client configurations if available (es and legacy versions)
-  if (configurations.includes('client')) {
-    // Build es5 in build and legacy contexts
-    if (args.command === 'build' || args.legacy) {
-      finalConfigContexts.push({
-        name: 'client',
-        isServer: false,
-        isEsVersion: false,
-        ...args,
-      });
-    }
-
+    },
+    // Process es5 in build and legacy contexts
+    (args.command === 'build' || args.legacy) && {
+      name: 'client',
+      isServer: false,
+      isEsVersion: false,
+      ...args,
+    },
     // SPA mode only supports es5 versions
-    if (!args.forceSPA && !args.forceSPAWithHMR) {
-      finalConfigContexts.push({
+    !args.forceSPA &&
+      !args.forceSPAWithHMR && {
         name: 'client.es',
         isServer: false,
         isEsVersion: true,
         ...args,
-      });
-    }
-  }
+      },
+  ].filter(Boolean) as ImaConfigurationContext[];
 
-  // Track loaded plugins
-  const loadedPlugins = new Set<string>();
-
+  /**
+   * Process configuration contexts with optional webpack function extensions
+   * from ima plugins and imaConfig.
+   */
   return Promise.all(
-    finalConfigContexts.map(async ctx => {
+    contexts.map(async ctx => {
+      // Create webpack config for given configuration context
       let config = await webpackConfig(ctx, imaConfig);
 
-      if (Array.isArray(imaConfig?.plugins)) {
+      // Run webpack function overrides from ima plugins
+      if (Array.isArray(imaConfig.plugins)) {
         for (const plugin of imaConfig.plugins) {
+          if (typeof plugin?.webpack !== 'function') {
+            continue;
+          }
+
           try {
-            config = await plugin?.webpack(config, ctx, imaConfig);
-            loadedPlugins.add(plugin.name);
+            config = await plugin.webpack(config, ctx, imaConfig);
           } catch (error) {
             logger.error(
-              `There was an logger.error while running webpack config for '${plugin.name}' plugin.`
+              `There was an error while running webpack config for '${plugin.name}' plugin.`
             );
             console.error(error);
             process.exit(1);
@@ -307,39 +373,30 @@ async function createWebpackConfig(
         }
       }
 
-      if (typeof imaConfig?.webpack === 'function') {
-        config = await imaConfig?.webpack(config, ctx, imaConfig);
+      // Run webpack function overrides from imaConfig
+      if (typeof imaConfig.webpack === 'function') {
+        config = await imaConfig.webpack(config, ctx, imaConfig);
       }
 
       return config;
     })
   ).then(config => {
     // Print elapsed time
-    elapsed && logger.write(chalk.gray(` [${elapsed()}]`));
+    logger.endTracking();
 
-    // Print loaded plugins info
-    if (loadedPlugins.size > 0) {
-      const pluginNames: string[] = [];
-      logger.info(`CLI plugins in use: `, false);
-
-      for (const pluginName of loadedPlugins.values()) {
-        pluginNames.push(chalk.blue(pluginName));
-      }
-
-      logger.write(pluginNames.join(', '));
-    }
-
-    return { config, imaConfig };
+    return config;
   });
 }
 
 export {
   resolveEnvironment,
+  cleanup,
   createCacheKey,
   createWebpackConfig,
   createDevServerConfig,
   requireImaConfig,
-  resolveImaConfigWithDefaults,
+  resolveImaConfig,
+  runImaPluginsHook,
   extractLanguages,
   createPolyfillEntry,
   IMA_CONF_FILENAME,

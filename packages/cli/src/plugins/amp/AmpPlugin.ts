@@ -1,3 +1,5 @@
+// TODO remove plugin specific dependencies form cli package.json
+
 import path from 'path';
 
 import fg from 'fast-glob';
@@ -6,11 +8,18 @@ import PostCssPipelineWebpackPlugin from 'postcss-pipeline-webpack-plugin';
 import { Configuration, EntryObject } from 'webpack';
 import { CommandBuilder } from 'yargs';
 
-import { ImaCliCommand, ImaCliPlugin } from '../..';
-import { ConfigurationContext, CliArgs } from '../../types';
+import {
+  ImaConfigurationContext,
+  ImaCliArgs,
+  ImaCliCommand,
+  ImaCliPlugin,
+} from '../../types';
 
-export interface AmpPluginConfigurationContext extends ConfigurationContext {
-  amp?: boolean;
+// Extend existing cli args interface with new values
+declare module '../../types' {
+  interface ImaCliArgs {
+    amp?: boolean;
+  }
 }
 
 export interface AmpPluginOptions {
@@ -21,16 +30,27 @@ export interface AmpPluginOptions {
 }
 
 /**
+ * Plugin additional CLI args, amp option can be used to explicitly enable/disable
+ * generation of amp files.
+ */
+const ampPluginSharedCliArgs: CommandBuilder = {
+  amp: {
+    desc: 'Builds separate CSS files for use in AMP mode',
+    type: 'boolean',
+  },
+};
+
+/**
  * Generate entry points for provided glob paths.
  *
- * @param {CliArgs['rootDir']} rootDir App root directory.
+ * @param {ImaCliArgs['rootDir']} rootDir App root directory.
  * @param {string[]=[]} paths Globs of less/css files.
  * @param {string} [prefix=''] Output filename prefix.
  * @returns {Promise<Record<string, string>>} Array of entry
  *          points file paths.
  */
 async function generateEntryPoints(
-  rootDir: CliArgs['rootDir'],
+  rootDir: ImaCliArgs['rootDir'],
   paths: string[] = [],
   prefix = ''
 ): Promise<Record<string, string>> {
@@ -51,23 +71,10 @@ async function generateEntryPoints(
 }
 
 /**
- * Plugin additional CLI args, amp option can be used to explicitly enable/disable
- * generation of amp files.
- */
-const ampPluginSharedCliArgs: CommandBuilder = {
-  amp: {
-    desc: 'Builds separate CSS files for use in AMP mode',
-    type: 'boolean',
-  },
-};
-
-/**
  * Generates css file per component, so it can be later used to dynamically
  * construct minimal css file need to render the page (used specifically for AMP).
  */
-export default class AmpPlugin
-  implements ImaCliPlugin<AmpPluginConfigurationContext>
-{
+class AmpPlugin implements ImaCliPlugin {
   private _options: AmpPluginOptions;
 
   readonly name = 'AmpPlugin';
@@ -82,7 +89,7 @@ export default class AmpPlugin
 
   async webpack(
     config: Configuration,
-    ctx: AmpPluginConfigurationContext
+    ctx: ImaConfigurationContext
   ): Promise<Configuration> {
     const { rootDir, isServer } = ctx;
 
@@ -126,3 +133,5 @@ export default class AmpPlugin
     return config;
   }
 }
+
+export { AmpPlugin };

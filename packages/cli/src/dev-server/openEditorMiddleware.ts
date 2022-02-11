@@ -6,7 +6,7 @@ import path from 'path';
 import chalk from 'chalk';
 import { Request, Response } from 'express';
 
-import logger from '../lib/logger';
+import { logger } from '../lib/logger';
 import {
   DarwinEditors,
   getEditorArgsForLineNumber as getEditorArgsForLineNumber,
@@ -16,14 +16,14 @@ import {
 import { Deferred } from './utils/Deferred';
 
 function printInstructions(fileName: string, errorMessage: string | null) {
-  logger.error('Could not open ' + path.basename(fileName) + ' in the editor.');
+  logger.error(`Could not open ${path.basename(fileName)} in the editor.`);
 
   if (errorMessage) {
-    if (errorMessage[errorMessage.length - 1] !== '.') {
+    if (!errorMessage.endsWith('.')) {
       errorMessage += '.';
     }
 
-    logger.error('The editor process exited with an error: ' + errorMessage);
+    logger.error(`The editor process exited with an error: ${errorMessage}`);
   }
 
   logger.info(
@@ -108,7 +108,9 @@ function guessEditor(): string | null {
   // Used old school env config as last resort
   if (process.env.VISUAL) {
     return process.env.VISUAL;
-  } else if (process.env.EDITOR) {
+  }
+
+  if (process.env.EDITOR) {
     return process.env.EDITOR;
   }
 
@@ -172,9 +174,7 @@ async function launchEditor(
     process.platform === 'win32' &&
     !WINDOWS_FILE_NAME_WHITELIST.test(fileName.trim())
   ) {
-    logger.error(
-      'Could not open ' + path.basename(fileName) + ' in the editor.'
-    );
+    logger.error(`Could not open ${path.basename(fileName)} in the editor.`);
     logger.error(
       'When running on Windows, file names are checked against a whitelist ' +
         'to protect against remote code execution attacks. File names may ' +
@@ -211,7 +211,7 @@ async function launchEditor(
     editorChild = null;
 
     if (errorCode) {
-      printInstructions(fileName, '(code ' + errorCode + ')');
+      printInstructions(fileName, `(code ${errorCode})`);
     }
 
     deferred.resolve(fileName);

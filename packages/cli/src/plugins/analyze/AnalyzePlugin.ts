@@ -1,3 +1,5 @@
+// TODO remove plugin specific dependencies form cli package.json
+
 import fs from 'fs';
 import path from 'path';
 
@@ -8,23 +10,26 @@ import { Configuration, WebpackPluginInstance } from 'webpack';
 import { BundleAnalyzerPlugin } from 'webpack-bundle-analyzer';
 import { CommandBuilder } from 'yargs';
 
-import logger from '../../lib/logger';
+import { createLogger } from '../../lib/logger';
 import {
-  ConfigurationContext,
-  ImaCliPluginCallbackArgs,
+  ImaConfigurationContext,
   ImaCliCommand,
   ImaCliPlugin,
+  ImaCliArgs,
+  ImaConfig,
 } from '../../types';
 
-export interface AnalyzePluginConfigurationContext
-  extends ConfigurationContext {
-  analyze?: ConfigurationContext['name'];
-  analyzeBaseline?: boolean;
+// Extend existing cli args interface with new values
+declare module '../../types' {
+  interface ImaCliArgs {
+    analyze?: ImaConfigurationContext['name'];
+    analyzeBaseline?: boolean;
+  }
 }
 
 export interface AnalyzePluginOptions {
-  open: boolean;
-  compare: boolean;
+  open?: boolean;
+  compare?: boolean;
   bundleStatsOptions?: BundleStatsWebpackPlugin.Options;
   bundleAnalyzerOptions?: BundleAnalyzerPlugin.Options;
 }
@@ -32,10 +37,9 @@ export interface AnalyzePluginOptions {
 /**
  * Appends webpack bundle analyzer plugin to the build command config.
  */
-export default class AnalyzePlugin
-  implements ImaCliPlugin<AnalyzePluginConfigurationContext>
-{
+class AnalyzePlugin implements ImaCliPlugin {
   private _options: AnalyzePluginOptions;
+  private _logger: ReturnType<typeof createLogger>;
 
   readonly name = 'AnalyzePlugin';
   readonly cliArgs: Partial<Record<ImaCliCommand, CommandBuilder>> = {
@@ -54,11 +58,12 @@ export default class AnalyzePlugin
 
   constructor(options: AnalyzePluginOptions) {
     this._options = options;
+    this._logger = createLogger(this);
   }
 
   async webpack(
     config: Configuration,
-    ctx: AnalyzePluginConfigurationContext
+    ctx: ImaConfigurationContext
   ): Promise<Configuration> {
     const { analyze, isServer, isEsVersion } = ctx;
 
@@ -98,9 +103,12 @@ export default class AnalyzePlugin
     return config;
   }
 
-  onDone({ isFirstRun, args }: ImaCliPluginCallbackArgs): void {
-    // @ts-expect-error to be fixed (args contain analyze but its not properly typed)
-    if (isFirstRun === false || !args.analyze) {
+  async postProcess(
+    args: ImaCliArgs,
+    imaConfig: ImaConfig,
+    isFirstRun: boolean
+  ): Promise<void> {
+    if ((args.command === 'dev' && isFirstRun === false) || !args.analyze) {
       return;
     }
 
@@ -117,47 +125,45 @@ export default class AnalyzePlugin
       return;
     }
 
-    logger.write('');
-    logger.plugin(
-      `${chalk.bold.bgBlue.white('Analyze plugin')} generated following report:`
-    );
+    this._logger.plugin('generated following report:');
 
     if (reportExists || statsExists) {
-      logger.write(chalk.bold.underline('\nWebpack Bundle Analyzer:'));
-      reportExists && logger.write(`${chalk.gray('├')} report - ${reportPath}`);
+      this._logger.write(chalk.bold.underline('\nWebpack Bundle Analyzer:'));
+      reportExists &&
+        this._logger.write(`${chalk.gray('├')} report - ${reportPath}`);
       statsExists &&
-        logger.write(`${chalk.gray('└')} webpack stats - ${statsPath}`);
+        this._logger.write(`${chalk.gray('└')} webpack stats - ${statsPath}`);
     }
 
     if (bundleStatsExists) {
-      logger.write(chalk.bold.underline('\nWebpack Bundle Stats:'));
-      logger.write(`${chalk.gray('└')} report - ${bundleStatsPath}`);
+      this._logger.write(chalk.bold.underline('\nWebpack Bundle Stats:'));
+      this._logger.write(`${chalk.gray('└')} report - ${bundleStatsPath}`);
     }
 
     // Write info about stats.json usage
     if (statsExists) {
-      logger.write(
+      this._logger.write(
         chalk.bold(
           `\nThe generated ${chalk.green(
             'stats.js'
           )} file can be used in the following online analyzers:`
         )
       );
-      logger.write(
+      this._logger.write(
         `${chalk.gray(
           '├'
         )} https://alexkuz.github.io/webpack-chart/ ${chalk.gray(
           '- interactive pie chart'
         )}`
       );
-      logger.write(
+      this._logger.write(
         `${chalk.gray(
           '├'
         )} https://chrisbateman.github.io/webpack-visualizer/ ${chalk.gray(
           '- visualize and analyze bundle'
         )}`
       );
-      logger.write(
+      this._logger.write(
         `${chalk.gray('└')} https://webpack.jakoblind.no/optimize/ ${chalk.gray(
           '- analyze and optimize bundle\n'
         )}`
@@ -170,3 +176,5 @@ export default class AnalyzePlugin
     }
   }
 }
+
+export { AnalyzePlugin };

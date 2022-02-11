@@ -1,23 +1,14 @@
-import fs from 'fs';
-import path from 'path';
-
 import chalk from 'chalk';
-import {
-  WebpackError,
-  Configuration,
-  MultiCompiler,
-  MultiStats,
-} from 'webpack';
+import { WebpackError, MultiCompiler } from 'webpack';
 
-import { ImaConfig } from '..';
-import { CliArgs } from '../types';
+import { ImaCliArgs, ImaConfig } from '../types';
+import { runImaPluginsHook } from '../webpack/utils';
 import {
   formatStats,
   formatWebpackErrors,
   formatWebpackWarnings,
 } from './formatStats';
-import logger from './logger';
-import { time } from './time';
+import { logger } from './logger';
 
 /**
  * Handles webpack compile errors.
@@ -49,55 +40,25 @@ async function closeCompiler(compiler: MultiCompiler): Promise<Error | void> {
 }
 
 /**
- * Cleans output (/build) directory if it exits. Defaults to
- * true for production environments.
- */
-function cleanOutputDir(args: CliArgs): void {
-  if (!args.clean) {
-    // Clean at least hot directory silently
-    fs.rmSync(path.join(args.rootDir, 'build/hot'), {
-      recursive: true,
-      force: true,
-    });
-
-    return;
-  }
-
-  const outputDir = path.join(args.rootDir, 'build');
-
-  if (!fs.existsSync(outputDir)) {
-    return;
-  }
-
-  const elapsedClean = time();
-  logger.info('Cleaning the build directory...', false);
-  fs.rmSync(outputDir, { recursive: true });
-  logger.write(chalk.gray(` [${elapsedClean()}]`));
-}
-
-/**
  * Runs webpack compiler with given configuration.
  *
  * @param {MultiCompiler} compiler Webpack compiler instance
- * @param {CliArgs} args Cli and build args.
+ * @param {ImaCliArgs} args Cli and build args.
  * @param {ImaConfig} imaConfig loaded ima.config.js.
  * @returns {Promise<Error | MultiStats | undefined>} Stats or error.
  */
 async function runCompiler(
   compiler: MultiCompiler,
-  args: CliArgs,
+  args: ImaCliArgs,
   imaConfig: ImaConfig
 ): Promise<MultiCompiler> {
-  cleanOutputDir(args);
-
-  const elapsed = time();
-  logger.info('Running webpack compiler...', false);
+  logger.info('Running webpack compiler...', { trackTime: true });
 
   return new Promise((resolve, reject) => {
     compiler.run((error, stats) =>
-      closeCompiler(compiler).then(() => {
+      closeCompiler(compiler).then(async () => {
         // Print elapsed time for first run
-        logger.write(chalk.gray(` [${elapsed()}]`));
+        logger.endTracking();
 
         // Reject with compiler when there are any errors
         if (error || stats?.hasErrors()) {
@@ -116,10 +77,8 @@ async function runCompiler(
         // Print warnings
         formatWebpackWarnings(stats, args);
 
-        // Call onDone callback
-        imaConfig?.plugins?.forEach(plugin =>
-          plugin?.onDone?.({ args, imaConfig, compiler })
-        );
+        // Run postProcess hook
+        await runImaPluginsHook(args, imaConfig, 'postProcess');
 
         return resolve(compiler);
       })
@@ -131,7 +90,7 @@ async function runCompiler(
  * Runs webpack compiler with given configuration.
  *
  * @param {MultiCompiler} compiler Webpack compiler instance
- * @param {CliArgs} args Cli and build args.
+ * @param {ImaCliArgs} args Cli and build args.
  * @param {ImaConfig} imaConfig loaded ima.config.js.
  * @param {Configuration['watchOptions']={}} watchOptions
  *        Additional watch options.
@@ -139,16 +98,11 @@ async function runCompiler(
  */
 async function watchCompiler(
   compiler: MultiCompiler,
-  args: CliArgs,
+  args: ImaCliArgs,
   imaConfig: ImaConfig
 ): Promise<MultiCompiler> {
-  let elapsed: ReturnType<typeof time> | null = null;
-  let firstStats: MultiStats | undefined | null;
   let firstRun = true;
-  let hadFirstRunErrors = false;
-
-  cleanOutputDir(args);
-  elapsed = time();
+  let hadErrorsOnFirstRun = false;
 
   logger.info(
     `Running webpack watch compiler${
@@ -156,29 +110,23 @@ async function watchCompiler(
         ? ` ${chalk.black.bgCyan('in legacy (es5 compatible) mode')}`
         : ''
     }...`,
-    false
+    { trackTime: true }
   );
 
   return new Promise<MultiCompiler>((resolve, reject) => {
-    compiler.watch(imaConfig.watchOptions, (error, stats) => {
+    compiler.watch(imaConfig.watchOptions, async (error, stats) => {
       // Print elapsed time for first run
-      if (elapsed) {
-        elapsed && logger.write(chalk.gray(` [${elapsed()}]`));
-        elapsed = null;
-
-        // Save first stats object for later use in summary
-        firstStats = stats;
-      }
+      logger.endTracking();
 
       // Don't continue when there are compile errors on first run
       if (firstRun && stats?.hasErrors()) {
-        hadFirstRunErrors = true;
-        formatWebpackErrors(firstStats ?? stats, args);
+        hadErrorsOnFirstRun = true;
+        formatWebpackErrors(stats, args);
         return;
       }
 
-      if (hadFirstRunErrors) {
-        hadFirstRunErrors = false;
+      if (hadErrorsOnFirstRun) {
+        hadErrorsOnFirstRun = false;
         logger.info('Continuing with the compilation...');
       }
 
@@ -188,9 +136,8 @@ async function watchCompiler(
       }
 
       // Format stats after plugin done callback
-      if (firstStats) {
-        formatStats(firstStats, args);
-        firstStats = null;
+      if (firstRun) {
+        formatStats(stats, args);
       }
 
       // Print warnings
@@ -199,10 +146,8 @@ async function watchCompiler(
       // Print errors
       formatWebpackErrors(stats, args);
 
-      // Call onDone callback
-      imaConfig?.plugins?.forEach(plugin =>
-        plugin?.onDone?.({ isFirstRun: firstRun, args, imaConfig, compiler })
-      );
+      // Run postProcess hook
+      await runImaPluginsHook(args, imaConfig, 'postProcess', firstRun);
 
       // Update first run flag
       firstRun = false;
@@ -212,10 +157,4 @@ async function watchCompiler(
   });
 }
 
-export {
-  closeCompiler,
-  runCompiler,
-  watchCompiler,
-  handleError,
-  cleanOutputDir,
-};
+export { closeCompiler, runCompiler, watchCompiler, handleError };

@@ -7,9 +7,9 @@ import prettyBytes from 'pretty-bytes';
 import prettyMs from 'pretty-ms';
 import { MultiStats, StatsAsset } from 'webpack';
 
-import { CliArgs } from '../types';
+import { ImaCliArgs } from '../types';
 import { createSourceFragment, parseCompileError } from './compileErrorParser';
-import logger from './logger';
+import { logger } from './logger';
 
 const warningsCache = new Set<string>();
 
@@ -18,7 +18,7 @@ const warningsCache = new Set<string>();
  */
 function formatWebpackErrors(
   stats: MultiStats | undefined,
-  args: CliArgs
+  args: ImaCliArgs
 ): void {
   if (!stats?.hasErrors()) {
     return;
@@ -75,7 +75,7 @@ function formatWebpackErrors(
       !(parsedError.fileUri && fs.existsSync(parsedError.fileUri))
     ) {
       return logger.error(
-        `${chalk.underline(parsedError.name + ':')} ${parsedError.message}\n`
+        `${chalk.underline(`${parsedError.name}:`)} ${parsedError.message}\n`
       );
     }
 
@@ -85,7 +85,7 @@ function formatWebpackErrors(
     // Print error
     logger.error(`at ${chalk.cyan(parsedError.fileUri)}`);
     logger.write(
-      `${chalk.underline(parsedError.name + ':')} ${parsedError.message}\n`
+      `${chalk.underline(`${parsedError.name}:`)} ${parsedError.message}\n`
     );
 
     // Print source fragment
@@ -127,7 +127,7 @@ function formatWebpackErrors(
  */
 function formatWebpackWarnings(
   stats: MultiStats | undefined,
-  args: CliArgs
+  args: ImaCliArgs
 ): void {
   if (args.ignoreWarnings) {
     return;
@@ -165,7 +165,6 @@ function formatWebpackWarnings(
     const lines = warning.message.split('\n');
     logger.write(chalk.underline(lines.shift()));
     logger.write(lines.join('\n'));
-    logger.write('');
   });
 }
 
@@ -233,10 +232,10 @@ function printAssetInfo(
  * Handles stats logging during webpack build and watch tasks.
  *
  * @param {MultiStats|undefined} stats Webpack stats object.
- * @param {CliArgs} args Cli and build args.
+ * @param {ImaCliArgs} args Cli and build args.
  * @returns {void}
  */
-function formatStats(stats: MultiStats | undefined, args: CliArgs): void {
+function formatStats(stats: MultiStats | undefined, args: ImaCliArgs): void {
   if (!stats) {
     return logger.error('Unknown error, stats are empty');
   }
@@ -279,7 +278,7 @@ function formatStats(stats: MultiStats | undefined, args: CliArgs): void {
   jsonStats.children?.forEach(child => {
     logger.write(
       `${chalk.underline.bold(child.name)} ${chalk.gray(
-        '[' + prettyMs(child.time ?? 0) + ']'
+        `[${prettyMs(child.time ?? 0)}]`
       )}`
     );
 
@@ -312,7 +311,7 @@ function formatStats(stats: MultiStats | undefined, args: CliArgs): void {
     logger.write(
       `total of ${chalk.green.bold(
         totalCount
-      )} assets generated inside the output folder.`
+      )} assets generated inside the output folder.\n`
     );
   }
 }
