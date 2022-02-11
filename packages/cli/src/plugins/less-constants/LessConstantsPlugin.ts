@@ -4,7 +4,7 @@ import path from 'path';
 import chalk from 'chalk';
 import webpack from 'webpack';
 
-import * as logger from '../../lib/logger';
+import { createLogger } from '../../lib/logger';
 import { time } from '../../lib/time';
 import { ImaCliPlugin, ImaCliArgs, ImaConfig } from '../../types';
 import { generateLessVariables, UnitValue } from './generator';
@@ -21,11 +21,13 @@ export interface LessConstantsPluginOptions {
  */
 class LessConstantsPlugin implements ImaCliPlugin {
   private _options: LessConstantsPluginOptions;
+  private _logger: ReturnType<typeof createLogger>;
 
   readonly name = 'LessConstantsPlugin';
 
   constructor(options: LessConstantsPluginOptions) {
     this._options = options || {};
+    this._logger = createLogger(this);
   }
 
   /**
@@ -36,11 +38,9 @@ class LessConstantsPlugin implements ImaCliPlugin {
     const elapsed = time();
 
     if (!this._options.entry) {
-      return logger.error(
-        `${chalk.underline(
-          'LessConstantsPlugin'
-        )}: bailing... entry file was not provided.`
-      );
+      this._logger.error('bailing... entry file was not provided.');
+
+      process.exit(1);
     }
 
     let outputPath = '';
@@ -50,11 +50,9 @@ class LessConstantsPlugin implements ImaCliPlugin {
       : path.resolve(args.rootDir, entry);
 
     if (!fs.existsSync(entryPath)) {
-      return logger.error(
-        `${chalk.underline(
-          'LessConstantsPlugin'
-        )}: entry file at path '${entryPath}' doesn't exist.`
-      );
+      this._logger.error(`entry file at path '${entryPath}' doesn't exist.`);
+
+      process.exit(1);
     }
 
     try {
@@ -71,23 +69,20 @@ class LessConstantsPlugin implements ImaCliPlugin {
       fs.mkdirSync(path.dirname(outputPath), { recursive: true });
       fs.writeFileSync(outputPath, lessConstants, { encoding: 'utf-8' });
     } catch (error) {
-      return logger.error(
-        `${chalk.underline('LessConstantsPlugin')}: ${
-          error instanceof Error
-            ? `${error.toString()}\n\n${error.stack}`
-            : 'unknown error'
-        }`
+      this._logger.error(
+        error instanceof Error
+          ? `${error.toString()}\n\n${error.stack}`
+          : 'unknown error'
       );
+
+      process.exit(1);
     }
 
     // Print output info
-    logger.plugin(
-      `${chalk.underline('LessConstantsPlugin')}: generated: ${chalk.magenta(
-        outputPath.replace(args.rootDir, '.')
-      )}`,
-      false
+    this._logger.plugin(
+      `generated: ${chalk.magenta(outputPath.replace(args.rootDir, '.'))}`,
+      { elapsed }
     );
-    logger.write(chalk.gray(` [${elapsed()}]`));
   }
 
   /**

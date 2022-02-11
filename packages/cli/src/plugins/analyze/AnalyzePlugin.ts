@@ -10,7 +10,7 @@ import { Configuration, WebpackPluginInstance } from 'webpack';
 import { BundleAnalyzerPlugin } from 'webpack-bundle-analyzer';
 import { CommandBuilder } from 'yargs';
 
-import * as logger from '../../lib/logger';
+import { createLogger } from '../../lib/logger';
 import {
   ImaConfigurationContext,
   ImaCliCommand,
@@ -28,8 +28,8 @@ declare module '../../types' {
 }
 
 export interface AnalyzePluginOptions {
-  open: boolean;
-  compare: boolean;
+  open?: boolean;
+  compare?: boolean;
   bundleStatsOptions?: BundleStatsWebpackPlugin.Options;
   bundleAnalyzerOptions?: BundleAnalyzerPlugin.Options;
 }
@@ -39,6 +39,7 @@ export interface AnalyzePluginOptions {
  */
 class AnalyzePlugin implements ImaCliPlugin {
   private _options: AnalyzePluginOptions;
+  private _logger: ReturnType<typeof createLogger>;
 
   readonly name = 'AnalyzePlugin';
   readonly cliArgs: Partial<Record<ImaCliCommand, CommandBuilder>> = {
@@ -57,6 +58,7 @@ class AnalyzePlugin implements ImaCliPlugin {
 
   constructor(options: AnalyzePluginOptions) {
     this._options = options;
+    this._logger = createLogger(this);
   }
 
   async webpack(
@@ -106,7 +108,7 @@ class AnalyzePlugin implements ImaCliPlugin {
     imaConfig: ImaConfig,
     isFirstRun: boolean
   ): Promise<void> {
-    if (isFirstRun === false || !args.analyze) {
+    if ((args.command === 'dev' && isFirstRun === false) || !args.analyze) {
       return;
     }
 
@@ -123,47 +125,45 @@ class AnalyzePlugin implements ImaCliPlugin {
       return;
     }
 
-    logger.write('');
-    logger.plugin(
-      `${chalk.bold.bgBlue.white('Analyze plugin')} generated following report:`
-    );
+    this._logger.plugin('generated following report:');
 
     if (reportExists || statsExists) {
-      logger.write(chalk.bold.underline('\nWebpack Bundle Analyzer:'));
-      reportExists && logger.write(`${chalk.gray('├')} report - ${reportPath}`);
+      this._logger.write(chalk.bold.underline('\nWebpack Bundle Analyzer:'));
+      reportExists &&
+        this._logger.write(`${chalk.gray('├')} report - ${reportPath}`);
       statsExists &&
-        logger.write(`${chalk.gray('└')} webpack stats - ${statsPath}`);
+        this._logger.write(`${chalk.gray('└')} webpack stats - ${statsPath}`);
     }
 
     if (bundleStatsExists) {
-      logger.write(chalk.bold.underline('\nWebpack Bundle Stats:'));
-      logger.write(`${chalk.gray('└')} report - ${bundleStatsPath}`);
+      this._logger.write(chalk.bold.underline('\nWebpack Bundle Stats:'));
+      this._logger.write(`${chalk.gray('└')} report - ${bundleStatsPath}`);
     }
 
     // Write info about stats.json usage
     if (statsExists) {
-      logger.write(
+      this._logger.write(
         chalk.bold(
           `\nThe generated ${chalk.green(
             'stats.js'
           )} file can be used in the following online analyzers:`
         )
       );
-      logger.write(
+      this._logger.write(
         `${chalk.gray(
           '├'
         )} https://alexkuz.github.io/webpack-chart/ ${chalk.gray(
           '- interactive pie chart'
         )}`
       );
-      logger.write(
+      this._logger.write(
         `${chalk.gray(
           '├'
         )} https://chrisbateman.github.io/webpack-visualizer/ ${chalk.gray(
           '- visualize and analyze bundle'
         )}`
       );
-      logger.write(
+      this._logger.write(
         `${chalk.gray('└')} https://webpack.jakoblind.no/optimize/ ${chalk.gray(
           '- analyze and optimize bundle\n'
         )}`

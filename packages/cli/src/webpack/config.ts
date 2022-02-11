@@ -93,6 +93,7 @@ export default async (
      * CSS files so we can ignore it and improve a performance a little bit.
      * see https://webpack.js.org/configuration/resolve/#resolvealias for more.
      */
+    return [{ loader: 'null-loader' }];
     if (onlyCssDefinitions && !imaConfig.cssModules) {
       return [{ loader: 'null-loader' }];
     }
