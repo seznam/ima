@@ -278,8 +278,7 @@ function cleanup(args: ImaCliArgs): void {
 async function runImaPluginsHook(
   args: ImaCliArgs,
   imaConfig: ImaConfig,
-  hook: 'preProcess' | 'postProcess',
-  isFirstRun?: boolean
+  hook: 'preProcess' | 'postProcess'
 ): Promise<void> {
   if (!Array.isArray(imaConfig.plugins) || !imaConfig.plugins.length) {
     return;
@@ -298,7 +297,7 @@ async function runImaPluginsHook(
 
   // Run plugin hook
   for (const plugin of filteredPlugins) {
-    await plugin?.[hook]?.(args, imaConfig, !!isFirstRun);
+    await plugin?.[hook]?.(args, imaConfig);
   }
 }
 

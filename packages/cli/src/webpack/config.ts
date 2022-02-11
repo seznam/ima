@@ -111,7 +111,7 @@ export default async (
               ? '[path][name]__[local]--[hash:base64:5]'
               : '[hash:base64]',
           },
-          sourceMap: useSourceMaps,
+          sourceMap: false, // BROKEN ON LATEST VERSIONS
         },
       },
       !onlyCssDefinitions && {

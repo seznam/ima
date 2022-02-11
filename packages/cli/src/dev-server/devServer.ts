@@ -53,13 +53,13 @@ async function createDevServer(
                   // Used to prevent multiple building messages after each other
                   isBuilding = false;
 
-                  logger.update(
+                  logger.sync(
                     `Built ${chalk.bold(bundle)} ${chalk.gray(
                       `[${prettyMs(parseInt(time, 10))}]`
                     )}`
                   );
                 } else if (!isBuilding) {
-                  logger.update('Building...');
+                  logger.sync('Building...');
                   isBuilding = true;
                 }
               },

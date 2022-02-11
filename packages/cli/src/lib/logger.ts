@@ -78,8 +78,8 @@ class Logger {
     this._log('warn', chalk.bold.yellow, message, options);
   }
 
-  public update(message: string, options?: LoggerOptions) {
-    this._log('updt', chalk.bold.magenta, message, options);
+  public sync(message: string, options?: LoggerOptions) {
+    this._log('sync', chalk.bold.magenta, message, options);
   }
 
   public plugin(message: string, options?: LoggerOptions) {

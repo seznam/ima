@@ -89,13 +89,9 @@ export interface ImaCliPlugin {
 
   /**
    * Optional plugin hook to do some custom processing after the compilation has finished.
-   * Receives isFirstRun=true for the first call if called inside the watch process.
+   * Attention! This hook runs only for build command.
    */
-  postProcess?(
-    args: ImaCliArgs,
-    imaConfig: ImaConfig,
-    isFirstRun: boolean
-  ): Promise<void>;
+  postProcess?(args: ImaCliArgs, imaConfig: ImaConfig): Promise<void>;
 }
 
 /**
