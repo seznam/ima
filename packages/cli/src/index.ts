@@ -5,14 +5,14 @@ export {
 
 export { createDevServer } from './dev-server/devServer';
 
-export { AmpPluginOptions, AmpPlugin } from './plugins/amp/ampPlugin';
+export { AmpPluginOptions, AmpPlugin } from './plugins/amp/AmpPlugin';
 
 export {
   ScrambleCssPluginOptions,
   ScrambleCssPlugin,
-} from './plugins/scramble-css/scrambleCssPlugin';
+} from './plugins/scramble-css/ScrambleCssPlugin';
 
-export { AnalyzePlugin } from './plugins/analyze/analyzePlugin';
+export { AnalyzePlugin } from './plugins/analyze/AnalyzePlugin';
 
 export { LessConstantsPlugin } from './plugins/less-constants/LessConstantsPlugin';
 

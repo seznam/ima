@@ -43,8 +43,8 @@ const scrambleCssPluginSharedCliArgs: CommandBuilder = {
 class ScrambleCssPlugin implements ImaCliPlugin {
   private _options: ScrambleCssPluginOptions;
 
-  name = 'ScrambleCssPlugin';
-  cliArgs = {
+  readonly name = 'ScrambleCssPlugin';
+  readonly cliArgs = {
     build: scrambleCssPluginSharedCliArgs,
     dev: scrambleCssPluginSharedCliArgs,
   };

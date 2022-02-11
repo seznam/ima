@@ -14,12 +14,14 @@ export interface LessConstantsPluginOptions {
 }
 
 /**
- * Generates .less file with defined variables created from JS entry point.
+ * Generates .less file with less variables created from JS entry point.
+ * The entry point should be composed of default export of an object
+ * with key values composed of LessConstantsPlugin helper functions.
  */
 class LessConstantsPlugin implements ImaCliPlugin {
   private _options: LessConstantsPluginOptions;
 
-  name = 'LessConstantsPlugin';
+  readonly name = 'LessConstantsPlugin';
 
   constructor(options: LessConstantsPluginOptions) {
     this._options = options || {};
@@ -51,7 +53,7 @@ class LessConstantsPlugin implements ImaCliPlugin {
     }
 
     try {
-      const entryModule = await this._parseEntry(entryPath, args, imaConfig);
+      const entryModule = await this._compileEntry(entryPath, args, imaConfig);
       const lessConstants = Object.keys(entryModule)
         .map(key => {
           return this._process(
@@ -91,20 +93,32 @@ class LessConstantsPlugin implements ImaCliPlugin {
     logger.write(chalk.gray(` [${elapsed()}]`));
   }
 
-  private async _parseEntry(
+  /**
+   * Runs entry file through webpack to bypass esm/cjs compatibility issues
+   * and generate one nodeJS compatible file, which can be imported and further procesed.
+   * Additionally this works with custom defined webpack aliases in ima config.
+   */
+  private async _compileEntry(
     modulePath: string,
     args: ImaCliArgs,
     imaConfig: ImaConfig
   ): Promise<Record<string, unknown>> {
-    const outputDir = path.join(path.join(args.rootDir, 'less-constants'));
+    const outputDir = path.join(
+      args.rootDir,
+      './node_modules/.cache/ima-cli/less-constants-plugin'
+    );
 
+    // Create tmp directory, if it doesn't exist
+    fs.mkdirSync(outputDir, { recursive: true });
+
+    // Compile entry point with webpack
     return new Promise((resolve, reject) => {
       webpack(
         {
           target: 'node16',
           mode: 'none',
           output: {
-            path: path.join(args.rootDir, 'less-constants'),
+            path: outputDir,
             libraryTarget: 'commonjs2',
           },
           entry: { lessConstantsEntry: modulePath },
@@ -117,6 +131,19 @@ class LessConstantsPlugin implements ImaCliPlugin {
           cache: {
             name: 'less-constants-plugin',
             type: 'filesystem',
+          },
+          optimization: {
+            moduleIds: 'named',
+            chunkIds: 'named',
+            splitChunks: {
+              cacheGroups: {
+                vendor: {
+                  test: /[\\/]node_modules[\\/]/,
+                  name: 'vendors',
+                  chunks: 'all',
+                },
+              },
+            },
           },
           plugins: [
             new webpack.DefinePlugin({
