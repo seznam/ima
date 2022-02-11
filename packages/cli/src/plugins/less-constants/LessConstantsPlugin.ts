@@ -83,9 +83,9 @@ class LessConstantsPlugin implements ImaCliPlugin {
     }
 
     logger.plugin(
-      `${chalk.underline(
-        'LessConstantsPlugin'
-      )}: generated: ${outputPath.replace(args.rootDir, '.')}`,
+      `${chalk.underline('LessConstantsPlugin')}: generated: ${chalk.magenta(
+        outputPath.replace(args.rootDir, '.')
+      )}`,
       false
     );
     logger.write(chalk.gray(` [${elapsed()}]`));

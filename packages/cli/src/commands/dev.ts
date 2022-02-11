@@ -16,6 +16,7 @@ import { watchCompiler, handleError } from '../lib/compiler';
 import * as logger from '../lib/logger';
 import { ImaCliArgs, HandlerFn } from '../types';
 import {
+  cleanup,
   createDevServerConfig,
   createWebpackConfig,
   resolveEnvironment,
@@ -85,6 +86,9 @@ const dev: HandlerFn = async args => {
   }
 
   try {
+    // Do cleanup
+    cleanup(args);
+
     // Load ima config
     const imaConfig = await resolveImaConfig(args);
 

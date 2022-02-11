@@ -9,6 +9,7 @@ import {
 import { runCompiler, handleError } from '../lib/compiler';
 import { HandlerFn } from '../types';
 import {
+  cleanup,
   createWebpackConfig,
   resolveImaConfig,
   runImaPluginsHook,
@@ -22,6 +23,9 @@ import {
  */
 const build: HandlerFn = async args => {
   try {
+    // Do cleanup
+    cleanup(args);
+
     // Load ima config
     const imaConfig = await resolveImaConfig(args);
 

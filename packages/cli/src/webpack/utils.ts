@@ -200,8 +200,7 @@ async function resolveImaConfig(args: ImaCliArgs): Promise<ImaConfig> {
   };
 
   const imaConfig = requireImaConfig(args.rootDir);
-
-  return {
+  const imaConfigWithDefaults = {
     ...defaultImaConfig,
     ...imaConfig,
     watchOptions: {
@@ -209,21 +208,66 @@ async function resolveImaConfig(args: ImaCliArgs): Promise<ImaConfig> {
       ...imaConfig?.watchOptions,
     },
   };
+
+  // Print loaded plugins info
+  if (
+    Array.isArray(imaConfigWithDefaults.plugins) &&
+    imaConfigWithDefaults.plugins.length
+  ) {
+    const pluginNames: string[] = [];
+    logger.info(`Loaded CLI plugins: `, false);
+
+    for (const plugin of imaConfigWithDefaults.plugins) {
+      pluginNames.push(chalk.blue(plugin.name));
+    }
+
+    logger.write(pluginNames.join(', '));
+  }
+
+  return imaConfigWithDefaults;
 }
 
 /**
- * Deletes ./node_modules/.cache directory, where webpack, babel and
- * many other packages store cache tmp files.
- *
- * @param {ImaCliArgs['rootDir']} rootDir
+ * Takes care of cleaning build directory and node_modules/.cache
+ * directory based on current cli arguments.
  */
-function clearCache(rootDir: ImaCliArgs['rootDir']): void {
-  const cacheDir = path.join(rootDir, '/node_modules/.cache');
-  const elapsedClearCache = time();
+function cleanup(args: ImaCliArgs): void {
+  // Clear cache before doing anything else
+  if (args.clearCache) {
+    const cacheDir = path.join(args.rootDir, '/node_modules/.cache');
+    const elapsedClearCache = time();
 
-  logger.info(`Clearing cache at ${chalk.magenta(cacheDir)}...`, false);
-  fs.rmSync(cacheDir, { force: true, recursive: true });
-  logger.write(chalk.gray(` [${elapsedClearCache()}]`));
+    logger.info(
+      `Clearing cache at ${chalk.magenta(
+        cacheDir.replace(args.rootDir, '.')
+      )}...`,
+      false
+    );
+    fs.rmSync(cacheDir, { force: true, recursive: true });
+    logger.write(chalk.gray(` [${elapsedClearCache()}]`));
+  }
+
+  // Clear output directory
+  if (!args.clean) {
+    // Clean at least hot directory silently
+    fs.rmSync(path.join(args.rootDir, 'build/hot'), {
+      recursive: true,
+      force: true,
+    });
+
+    return;
+  }
+
+  const outputDir = path.join(args.rootDir, 'build');
+
+  if (!fs.existsSync(outputDir)) {
+    return;
+  }
+
+  const elapsedClean = time();
+  logger.info('Cleaning the build directory...', false);
+  fs.rmSync(outputDir, { recursive: true });
+  logger.write(chalk.gray(` [${elapsedClean()}]`));
 }
 
 /**
@@ -252,7 +296,7 @@ async function runImaPluginsHook(
     return;
   }
 
-  logger.info(`Running '${hook}' hook on ima plugins...`);
+  logger.info(`Running ${chalk.magenta(hook)} hook on ima plugins...`);
 
   // Run plugin hook
   for (const plugin of filteredPlugins) {
@@ -273,11 +317,6 @@ async function createWebpackConfig(
   args: ImaCliArgs,
   imaConfig: ImaConfig
 ): Promise<Configuration[]> {
-  // Clear cache before doing anything else
-  if (args.clearCache) {
-    clearCache(args.rootDir);
-  }
-
   // Create configuration contexts
   const elapsed = time();
   logger.info(
@@ -348,25 +387,13 @@ async function createWebpackConfig(
     // Print elapsed time
     elapsed && logger.write(chalk.gray(` [${elapsed()}]`));
 
-    // Print loaded plugins info
-    if (Array.isArray(imaConfig.plugins) && imaConfig.plugins.length) {
-      const pluginNames: string[] = [];
-      logger.info(`CLI plugins in use: `, false);
-
-      for (const plugin of imaConfig.plugins) {
-        pluginNames.push(chalk.blue(plugin.name));
-      }
-
-      logger.write(pluginNames.join(', '));
-    }
-
     return config;
   });
 }
 
 export {
   resolveEnvironment,
-  clearCache,
+  cleanup,
   createCacheKey,
   createWebpackConfig,
   createDevServerConfig,

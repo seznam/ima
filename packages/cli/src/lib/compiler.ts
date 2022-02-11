@@ -1,6 +1,3 @@
-import fs from 'fs';
-import path from 'path';
-
 import chalk from 'chalk';
 import { WebpackError, MultiCompiler, MultiStats } from 'webpack';
 
@@ -44,33 +41,6 @@ async function closeCompiler(compiler: MultiCompiler): Promise<Error | void> {
 }
 
 /**
- * Cleans output (/build) directory if it exits. Defaults to
- * true for production environments.
- */
-function cleanOutputDir(args: ImaCliArgs): void {
-  if (!args.clean) {
-    // Clean at least hot directory silently
-    fs.rmSync(path.join(args.rootDir, 'build/hot'), {
-      recursive: true,
-      force: true,
-    });
-
-    return;
-  }
-
-  const outputDir = path.join(args.rootDir, 'build');
-
-  if (!fs.existsSync(outputDir)) {
-    return;
-  }
-
-  const elapsedClean = time();
-  logger.info('Cleaning the build directory...', false);
-  fs.rmSync(outputDir, { recursive: true });
-  logger.write(chalk.gray(` [${elapsedClean()}]`));
-}
-
-/**
  * Runs webpack compiler with given configuration.
  *
  * @param {MultiCompiler} compiler Webpack compiler instance
@@ -83,8 +53,6 @@ async function runCompiler(
   args: ImaCliArgs,
   imaConfig: ImaConfig
 ): Promise<MultiCompiler> {
-  cleanOutputDir(args);
-
   const elapsed = time();
   logger.info('Running webpack compiler...', false);
 
@@ -140,7 +108,6 @@ async function watchCompiler(
   let firstRun = true;
   let hadFirstRunErrors = false;
 
-  cleanOutputDir(args);
   elapsed = time();
 
   logger.info(
@@ -203,10 +170,4 @@ async function watchCompiler(
   });
 }
 
-export {
-  closeCompiler,
-  runCompiler,
-  watchCompiler,
-  handleError,
-  cleanOutputDir,
-};
+export { closeCompiler, runCompiler, watchCompiler, handleError };
