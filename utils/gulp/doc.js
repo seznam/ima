@@ -7,6 +7,8 @@ const map = require('map-stream');
 const packageData = require('../../package.json');
 const lernaData = require('../../lerna.json');
 const rename = require('gulp-rename');
+const merge = require('merge-stream');
+const ts = require('gulp-typescript');
 
 const DOC_SRC = 'doc-src';
 
@@ -57,9 +59,15 @@ function clear() {
   return del(dir.docSrc);
 }
 
+function getFiles() {
+  const tsProject = ts.createProject(config.tsProject);
+  const tsFiles = gulp.src(config.files.ts).pipe(tsProject());
+  const jsFiles = gulp.src(config.files.js);
+  return merge(tsFiles, jsFiles);
+}
+
 function preprocess() {
-  return gulp
-    .src(config.files.js)
+  return getFiles()
     .pipe(
       change(content => {
         let oldContent = null;
