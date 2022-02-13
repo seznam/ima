@@ -18,6 +18,7 @@ import webpack, {
 import RemoveEmptyScriptsPlugin from 'webpack-remove-empty-scripts';
 
 import { ImaConfigurationContext, ImaConfig } from '../types';
+import { createProgress } from './plugins/ProgressPlugin';
 import {
   resolveEnvironment,
   createCacheKey,
@@ -500,6 +501,12 @@ export default async (
       ].filter(Boolean) as RuleSetRule[],
     },
     plugins: [
+      /**
+       * Initialize webpack.ProgressPlugin to track and report compilation
+       * progress across all configuration contexts.
+       */
+      createProgress(name),
+
       // Server/client specific plugins are defined below
       ...(isServer
         ? // Server-specific plugins

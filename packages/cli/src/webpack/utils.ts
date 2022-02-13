@@ -192,7 +192,7 @@ async function resolveImaConfig(args: ImaCliArgs): Promise<ImaConfig> {
     watchOptions: {
       ignored: ['**/.git/**', '**/node_modules/**', '**/build/**'],
       followSymlinks: true,
-      aggregateTimeout: 5,
+      aggregateTimeout: 100,
     },
     babel: async config => config,
     postcss: async config => config,

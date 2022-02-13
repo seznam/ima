@@ -104,13 +104,27 @@ const dev: HandlerFn = async args => {
 
     // Generate webpack config
     const config = await createWebpackConfig(args, imaConfig);
-    const compiler = webpack(config);
+
+    logger.info(
+      `Running webpack watch compiler${
+        args.legacy
+          ? ` ${chalk.black.bgCyan('in legacy (es5 compatible) mode')}`
+          : ''
+      }...`
+    );
 
     // Start watch compiler
+    const compiler = webpack(config);
     await watchCompiler(compiler, args, imaConfig);
 
-    // Create dev server for HMR
-    createDevServer(compiler, devServerConfig.hostname, devServerConfig.port);
+    // Create dev server for HMR (only on client bundle)
+    createDevServer(
+      compiler.compilers.find(({ name }) =>
+        args.forceSPAWithHMR ? name === 'client' : name === 'client.es'
+      ),
+      devServerConfig.hostname,
+      devServerConfig.port
+    );
 
     // Start nodemon and application server
     startNodemon(args);

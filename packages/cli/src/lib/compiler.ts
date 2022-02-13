@@ -52,14 +52,9 @@ async function runCompiler(
   args: ImaCliArgs,
   imaConfig: ImaConfig
 ): Promise<MultiCompiler> {
-  logger.info('Running webpack compiler...', { trackTime: true });
-
   return new Promise((resolve, reject) => {
     compiler.run((error, stats) =>
       closeCompiler(compiler).then(async () => {
-        // Print elapsed time for first run
-        logger.endTracking();
-
         // Reject with compiler when there are any errors
         if (error || stats?.hasErrors()) {
           if (stats) {
@@ -104,20 +99,8 @@ async function watchCompiler(
   let firstRun = true;
   let hadErrorsOnFirstRun = false;
 
-  logger.info(
-    `Running webpack watch compiler${
-      args.legacy
-        ? ` ${chalk.black.bgCyan('in legacy (es5 compatible) mode')}`
-        : ''
-    }...`,
-    { trackTime: true }
-  );
-
   return new Promise<MultiCompiler>((resolve, reject) => {
     compiler.watch(imaConfig.watchOptions, async (error, stats) => {
-      // Print elapsed time for first run
-      logger.endTracking();
-
       // Don't continue when there are compile errors on first run
       if (firstRun && stats?.hasErrors()) {
         hadErrorsOnFirstRun = true;

@@ -16,7 +16,7 @@ const Hero: FunctionComponent<HeroProps> = ({ error }) => {
     : 'Unknown Error';
 
   return (
-    <div className='flex flex-col mb-4 md:flex-row md:justify-between md:items-center md:mb-6 custom-classname'>
+    <div className='flex flex-col mb-4 md:flex-row md:justify-between md:items-center md:mb-6'>
       <div className='md:mr-2'>
         <h1
           className={clsx(

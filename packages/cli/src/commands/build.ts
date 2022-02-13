@@ -7,6 +7,7 @@ import {
   sharedArgsFactory,
 } from '../lib/cli';
 import { runCompiler, handleError } from '../lib/compiler';
+import { logger } from '../lib/logger';
 import { HandlerFn } from '../types';
 import {
   cleanup,
@@ -34,9 +35,11 @@ const build: HandlerFn = async args => {
 
     // Generate webpack config
     const config = await createWebpackConfig(args, imaConfig);
-    const compiler = webpack(config);
+
+    logger.info('Running webpack compiler...');
 
     // Run webpack compiler
+    const compiler = webpack(config);
     await runCompiler(compiler, args, imaConfig);
   } catch (err) {
     handleError(err);

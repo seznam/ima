@@ -1,24 +1,23 @@
 import path from 'path';
 
 import hotMiddleware from '@gatsbyjs/webpack-hot-middleware';
-import chalk from 'chalk';
 import express from 'express';
-import prettyMs from 'pretty-ms';
-import { MultiCompiler } from 'webpack';
+import { Compiler } from 'webpack';
 import devMiddleware from 'webpack-dev-middleware';
 
-import { logger } from '../lib/logger';
 import { evalSourceMapMiddleware } from './evalSourceMapMiddleware';
 import { openEditorMiddleware } from './openEditorMiddleware';
 
 async function createDevServer(
-  compiler: MultiCompiler,
+  compiler: Compiler | undefined,
   hostname: string,
   port: number
 ) {
-  const app = express();
+  if (!compiler) {
+    return;
+  }
 
-  let isBuilding = false;
+  const app = express();
   const isVerbose = process.argv.some(arg => arg.includes('--verbose=true'));
 
   app
@@ -33,38 +32,13 @@ async function createDevServer(
         index: false,
         publicPath: '/',
         writeToDisk: true,
-        ...(!isVerbose ? { stats: 'none' } : undefined),
+        ...(isVerbose ? undefined : { stats: 'none' }),
         serverSideRender: true,
       })
     )
     .use(
       hotMiddleware(compiler, {
-        ...(!isVerbose
-          ? {
-              log: data => {
-                const match = data.match(
-                  /^webpack built (.*) (.*) in (\d+)ms$/i
-                );
-
-                if (match) {
-                  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-                  const [message, bundle, hash, time] = match;
-
-                  // Used to prevent multiple building messages after each other
-                  isBuilding = false;
-
-                  logger.sync(
-                    `Built ${chalk.bold(bundle)} ${chalk.gray(
-                      `[${prettyMs(parseInt(time, 10))}]`
-                    )}`
-                  );
-                } else if (!isBuilding) {
-                  logger.sync('Building...');
-                  isBuilding = true;
-                }
-              },
-            }
-          : undefined),
+        ...(isVerbose ? undefined : { quite: true, log: false }),
         path: '/__webpack_hmr',
         heartbeat: 5000,
       })
