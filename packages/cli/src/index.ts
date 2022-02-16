@@ -16,7 +16,7 @@ export { AnalyzePlugin } from './plugins/analyze/AnalyzePlugin';
 
 export { LessConstantsPlugin } from './plugins/less-constants/LessConstantsPlugin';
 
-export { ScrambleCssWebpackPlugin } from './plugins/scramble-css/plugin/ScrambleCssWebpackPlugin';
+export { ScrambleCssMinimizer } from './plugins/scramble-css/plugin/ScrambleCssMinimizer';
 
 export {
   ImaCliPlugin,

@@ -1,14 +1,13 @@
 // TODO remove plugin specific dependencies form cli package.json
 
-import path from 'path';
-
-import postcss from 'postcss';
-import PostCssPipelineWebpackPlugin from 'postcss-pipeline-webpack-plugin';
 import { Configuration } from 'webpack';
 import { CommandBuilder } from 'yargs';
 
 import { ImaCliPlugin, ImaConfigurationContext } from '../../types';
-import postCssScrambler from './postCssScrambler';
+import {
+  ScrambleCssMinimizerOptions,
+  ScrambleCssMinimizer,
+} from './plugin/ScrambleCssMinimizer';
 
 // Extend existing cli args interface with new values
 declare module '../../types' {
@@ -18,10 +17,7 @@ declare module '../../types' {
 }
 
 export interface ScrambleCssPluginOptions {
-  enabled?: boolean;
-  uniqueIdentifier?: string;
-  generateHashTable?: boolean;
-  hashTableOutput?: string;
+  scrambleCssMinimizerOptions?: ScrambleCssMinimizerOptions;
 }
 
 /**
@@ -48,7 +44,7 @@ class ScrambleCssPlugin implements ImaCliPlugin {
     dev: scrambleCssPluginSharedCliArgs,
   };
 
-  constructor(options: Partial<ScrambleCssPluginOptions>) {
+  constructor(options: Partial<ScrambleCssPluginOptions> = {}) {
     this._options = options;
   }
 
@@ -56,40 +52,11 @@ class ScrambleCssPlugin implements ImaCliPlugin {
     config: Configuration,
     ctx: ImaConfigurationContext
   ): Promise<Configuration> {
-    const { rootDir, isServer } = ctx;
-    const hashTable =
-      this._options?.hashTableOutput ??
-      path.join(rootDir, 'build/static/hashtable.json');
-
-    // Run CSS scrambler, this needs to run on generated assets
-    if (!isServer && (ctx.scrambleCss ?? this._options?.enabled)) {
-      // Scramble only app css and generate hashtable
-      config.plugins?.push(
-        new PostCssPipelineWebpackPlugin({
-          predicate: (name: string) => /static\/css\/app.css$/.test(name),
-          processor: postcss([
-            postCssScrambler({
-              generateHashTable: this._options?.generateHashTable ?? true,
-              uniqueIdentifier: this._options.uniqueIdentifier,
-              hashTable,
-            }),
-          ]),
-        })
+    // Add ScrambleCssMinimizer for the correct context
+    if (ctx.isEsVersion && !ctx.forceSPAWithHMR) {
+      config.optimization?.minimizer?.unshift(
+        new ScrambleCssMinimizer(this._options?.scrambleCssMinimizerOptions)
       );
-
-      // Scramble other entry points with already generated hashtable
-      // config.plugins?.push(
-      //   new PostCssPipelineWebpackPlugin({
-      //     predicate: (name: string) =>
-      //       !/static\/css\/app.css$/.test(name) && !/srambled.css$/.test(name),
-      //     processor: postcss([
-      //       postCssScrambler({
-      //         generateHashTable: false,
-      //         hashTable,
-      //       }),
-      //     ]),
-      //   })
-      // );
     }
 
     return config;

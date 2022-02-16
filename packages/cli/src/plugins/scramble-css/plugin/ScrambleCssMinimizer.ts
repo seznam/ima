@@ -12,29 +12,29 @@ import schema from './options.json';
 
 const CSS_RE = /\.css$/;
 
-export interface ScrambleCssWebpackPluginOptions {
+export interface ScrambleCssMinimizerOptions {
   hashTableFilename: string;
   uniqueIdentifier: string;
   mainAssetFilter: (filename: string) => boolean;
 }
 
-export interface ScrambleCssWebpackPluginCacheEntry {
+export interface ScrambleCssMinimizerCacheEntry {
   source: sources.RawSource | sources.SourceMapSource;
   hashTableSource: string | null;
 }
 
 /**
- * ScrambleCssWebpackPlugin plugin runs our own postcss scramble plugin
+ * ScrambleCssMinimizer plugin runs our own postcss scramble plugin
  * on the generated webpack css assets. Handles caching and hash table
  * generation only on the main files while others are simply hashed using
  * existing hash table.
  */
-class ScrambleCssWebpackPlugin {
+class ScrambleCssMinimizer {
   private _pluginName: string;
-  private _options: ScrambleCssWebpackPluginOptions;
+  private _options: ScrambleCssMinimizerOptions;
   private _hashTablePath?: string;
 
-  constructor(options: Partial<ScrambleCssWebpackPluginOptions>) {
+  constructor(options: Partial<ScrambleCssMinimizerOptions> = {}) {
     this._pluginName = this.constructor.name;
 
     // Set defaults
@@ -144,7 +144,7 @@ class ScrambleCssWebpackPlugin {
     const eTag = cache.getLazyHashedEtag(source);
     const cacheItem = cache.getItemCache(filename, eTag);
     const output =
-      (await cacheItem.getPromise()) as ScrambleCssWebpackPluginCacheEntry;
+      (await cacheItem.getPromise()) as ScrambleCssMinimizerCacheEntry;
 
     // Restore data from cache
     if (output) {
@@ -174,7 +174,7 @@ class ScrambleCssWebpackPlugin {
     await cacheItem.storePromise({
       source: newSource,
       hashTableSource: generateHashTable ? await this._loadHashTable() : null,
-    } as ScrambleCssWebpackPluginCacheEntry);
+    } as ScrambleCssMinimizerCacheEntry);
 
     // Update processed assets
     compilation.updateAsset(filename, newSource);
@@ -228,4 +228,4 @@ class ScrambleCssWebpackPlugin {
   }
 }
 
-export { ScrambleCssWebpackPlugin };
+export { ScrambleCssMinimizer };

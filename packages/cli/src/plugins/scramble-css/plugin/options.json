@@ -1,5 +1,5 @@
 {
-  "title": "ScrambleCssWebpackPluginOptions",
+  "title": "ScrambleCssMinimizerOptions",
   "type": "object",
   "additionalProperties": false,
   "properties": {
