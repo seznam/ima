@@ -15,6 +15,7 @@
     "strict": true,
     "noUnusedLocals": false,
     "skipLibCheck": true,
+    "resolveJsonModule": true,
     "jsx": "react-jsx",
   },
   "exclude": [

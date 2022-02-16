@@ -3,6 +3,7 @@ import path from 'path';
 import { URLSearchParams } from 'url';
 
 import ReactRefreshWebpackPlugin from '@pmmmwh/react-refresh-webpack-plugin';
+import chalk from 'chalk';
 import CompressionPlugin from 'compression-webpack-plugin';
 import CopyPlugin from 'copy-webpack-plugin';
 import CssMinimizerPlugin from 'css-minimizer-webpack-plugin';
@@ -503,9 +504,20 @@ export default async (
     plugins: [
       /**
        * Initialize webpack.ProgressPlugin to track and report compilation
-       * progress across all configuration contexts.
+       * progress across all configuration contexts. For verbose mode, we are using
+       * the default implementation.
        */
-      !ctx.verbose && createProgress(name),
+      ctx.verbose
+        ? new webpack.ProgressPlugin({
+            // handler: (percentage, msg, ...args) => {
+            //   console.log(
+            //     chalk.cyan(`${(percentage * 100).toFixed(2)}%`),
+            //     chalk.green.bold(msg),
+            //     ...args
+            //   );
+            // },
+          })
+        : createProgress(name),
 
       // Server/client specific plugins are defined below
       ...(isServer
@@ -534,6 +546,7 @@ export default async (
                   `static/css/${chunk?.name === name ? 'app' : '[name]'}${
                     !isDevEnv ? '.min' : ''
                   }.css`,
+                ignoreOrder: true,
                 chunkFilename: `static/css/chunk-[id]${
                   !isDevEnv ? '.min' : ''
                 }.css`,
