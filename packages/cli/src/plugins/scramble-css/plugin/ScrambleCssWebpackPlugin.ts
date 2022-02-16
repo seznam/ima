@@ -1,3 +1,4 @@
+import fs from 'fs';
 import path from 'path';
 
 import postcss from 'postcss';
@@ -17,9 +18,21 @@ export interface ScrambleCssWebpackPluginOptions {
   mainAssetFilter: (filename: string) => boolean;
 }
 
+export interface ScrambleCssWebpackPluginCacheEntry {
+  source: sources.RawSource | sources.SourceMapSource;
+  hashTableSource: string | null;
+}
+
+/**
+ * ScrambleCssWebpackPlugin plugin runs our own postcss scramble plugin
+ * on the generated webpack css assets. Handles caching and hash table
+ * generation only on the main files while others are simply hashed using
+ * existing hash table.
+ */
 class ScrambleCssWebpackPlugin {
   private _pluginName: string;
   private _options: ScrambleCssWebpackPluginOptions;
+  private _hashTablePath?: string;
 
   constructor(options: Partial<ScrambleCssWebpackPluginOptions>) {
     this._pluginName = this.constructor.name;
@@ -92,54 +105,118 @@ class ScrambleCssWebpackPlugin {
       return;
     }
 
-    // First process main and generate hash table
-    this._process(assets, mainCssAsset, compilation).then(() => {
-      if (Array.isArray(restCssAssets) && restCssAssets.length) {
-        return Promise.all(
-          restCssAssets.map(cssAsset =>
-            this._process(assets, cssAsset, compilation, false)
-          )
-        );
-      }
-    });
-  }
-
-  private async _process(
-    assets: Compilation['assets'],
-    filename: string,
-    compilation: Compilation,
-    generateHashTable = true
-  ): Promise<void> {
     // Resolve absolute path for hash table filename
-    const hashTable = path.isAbsolute(this._options.hashTableFilename)
+    this._hashTablePath = path.isAbsolute(this._options.hashTableFilename)
       ? this._options.hashTableFilename
       : path.join(
           compilation.outputOptions.path ?? process.cwd(),
           this._options.hashTableFilename
         );
 
-    return postcss([
-      postCssScrambler({
-        generateHashTable,
-        hashTable,
-      }),
-    ])
-      .process(assets[filename].source(), {
-        map: assets[filename].map(),
-        from: filename,
-        to: filename,
-      })
-      .then(({ css, map }) => {
-        // Update processed assets
-        compilation.updateAsset(
-          filename,
-          map
-            ? new sources.SourceMapSource(css, filename, map)
-            : new sources.RawSource(css)
+    // First process main and generate hash table
+    this._process(mainCssAsset, compilation).then(() => {
+      if (Array.isArray(restCssAssets) && restCssAssets.length) {
+        return Promise.all(
+          restCssAssets.map(cssAsset =>
+            this._process(cssAsset, compilation, false)
+          )
         );
-      });
+      }
+    });
   }
 
+  /**
+   * Process single css asset, while handling cache management
+   */
+  private async _process(
+    filename: string,
+    compilation: Compilation,
+    generateHashTable = true
+  ): Promise<void> {
+    // Check cache
+    const cache = compilation.getCache(this._pluginName);
+    const { source } = compilation.getAsset(filename) || {};
+
+    if (!source) {
+      return;
+    }
+
+    const eTag = cache.getLazyHashedEtag(source);
+    const cacheItem = cache.getItemCache(filename, eTag);
+    const output =
+      (await cacheItem.getPromise()) as ScrambleCssWebpackPluginCacheEntry;
+
+    // Restore data from cache
+    if (output) {
+      compilation.updateAsset(filename, output.source);
+      this._restoreHashTable(output.hashTableSource);
+      return;
+    }
+
+    // Process css using postcss plugin
+    const { css, map } = await postcss([
+      postCssScrambler({
+        generateHashTable,
+        hashTable: this._hashTablePath,
+      }),
+    ]).process(source.source(), {
+      map: source.map(),
+      from: filename,
+      to: filename,
+    });
+
+    // Create new source
+    const newSource = map
+      ? new sources.SourceMapSource(css, filename, map)
+      : new sources.RawSource(css);
+
+    // Store cache
+    await cacheItem.storePromise({
+      source: newSource,
+      hashTableSource: generateHashTable ? await this._loadHashTable() : null,
+    } as ScrambleCssWebpackPluginCacheEntry);
+
+    // Update processed assets
+    compilation.updateAsset(filename, newSource);
+  }
+
+  /**
+   * Restore hashTable.json file from the target path.
+   */
+  private async _loadHashTable(): Promise<string | null> {
+    if (this._hashTablePath) {
+      return fs.promises.readFile(this._hashTablePath, 'utf8');
+    }
+
+    return null;
+  }
+
+  /**
+   * Restore hashTable.json file to the target directory
+   * from webpack cache.
+   */
+  private async _restoreHashTable(
+    hashTableSource: string | null
+  ): Promise<void> {
+    if (!hashTableSource || !this._hashTablePath) {
+      return;
+    }
+
+    if (!fs.existsSync(this._hashTablePath)) {
+      await fs.promises.mkdir(path.dirname(this._hashTablePath), {
+        recursive: true,
+      });
+    }
+
+    return fs.promises.writeFile(this._hashTablePath, hashTableSource, {
+      encoding: 'utf8',
+    });
+  }
+
+  /**
+   * Filter CSS assets and split them into two groups of main file and
+   * other css files for additional processing using hash tabels.
+   */
   private _filterAssets(assets: string[]): [string, string[]] {
     const cssAssets = assets.filter(asset => CSS_RE.test(asset));
     const [mainAsset] = cssAssets.splice(
