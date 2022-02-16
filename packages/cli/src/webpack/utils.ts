@@ -135,8 +135,25 @@ function extractLanguages(imaConfig: ImaConfig): ObjectPattern[] {
  * @param {ImaConfigurationContext} ctx Current configuration context.
  * @returns {string}
  */
-function createCacheKey(ctx: ImaConfigurationContext): string {
+function createCacheKey(
+  ctx: ImaConfigurationContext,
+  imaConfig: ImaConfig
+): string {
   const hash = createHash('md5');
+
+  // Get Plugins CLI args
+  const pluginsEnv: Record<string, unknown> = {};
+  const pluginsCtxArgs = imaConfig?.plugins
+    ?.map(plugin => Object.keys(plugin?.cliArgs?.[ctx.command] || {}))
+    .flat();
+
+  // Generate additional env cache dependencies from plugin cli args
+  if (pluginsCtxArgs) {
+    for (const pluginArgName of pluginsCtxArgs) {
+      // @ts-expect-error these args are not in interface
+      pluginsEnv[pluginArgName] = ctx[pluginArgName];
+    }
+  }
 
   /**
    * Explicitly use only the context variables which somehow change
@@ -144,17 +161,16 @@ function createCacheKey(ctx: ImaConfigurationContext): string {
    * are used in config generation).
    */
   hash.update(
-    [
-      ctx.command,
-      ctx.forceSPA,
-      ctx.forceSPAWithHMR,
-      ctx.profile,
-      ctx.publicPath,
-      ctx.rootDir,
-      ctx.environment,
-    ]
-      .map(value => JSON.stringify(value))
-      .join('')
+    JSON.stringify({
+      command: ctx.command,
+      forceSPA: ctx.forceSPA,
+      forceSPAWithHMR: ctx.forceSPAWithHMR,
+      profile: ctx.profile,
+      publicPath: ctx.publicPath,
+      rootDir: ctx.rootDir,
+      environment: ctx.environment,
+      ...pluginsEnv,
+    })
   );
 
   return hash.digest('hex');

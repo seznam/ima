@@ -1,5 +1,8 @@
 // TODO remove plugin specific dependencies form cli package.json
 
+import fs from 'fs';
+import path from 'path';
+
 import { Configuration } from 'webpack';
 import { CommandBuilder } from 'yargs';
 
@@ -52,11 +55,70 @@ class ScrambleCssPlugin implements ImaCliPlugin {
     config: Configuration,
     ctx: ImaConfigurationContext
   ): Promise<Configuration> {
-    // Add ScrambleCssMinimizer for the correct context
-    if (ctx.isEsVersion && !ctx.forceSPAWithHMR) {
-      config.optimization?.minimizer?.unshift(
-        new ScrambleCssMinimizer(this._options?.scrambleCssMinimizerOptions)
-      );
+    // Set default hash table filename (path)
+    if (
+      !this._options.scrambleCssMinimizerOptions?.hashTableFilename ||
+      !path.isAbsolute(
+        this._options.scrambleCssMinimizerOptions?.hashTableFilename
+      )
+    ) {
+      const { hashTableFilename } =
+        this._options.scrambleCssMinimizerOptions || {};
+
+      // Set absolute hash table path
+      const hashTablePath =
+        hashTableFilename && path.isAbsolute(hashTableFilename)
+          ? hashTableFilename
+          : path.join(
+              config?.output?.path ?? process.cwd(),
+              hashTableFilename ?? 'static/css/hashTable.json'
+            );
+
+      // Update plugin options
+      this._options = {
+        ...this._options,
+        scrambleCssMinimizerOptions: {
+          ...this._options?.scrambleCssMinimizerOptions,
+          hashTableFilename: hashTablePath,
+        },
+      };
+    }
+
+    // Init minimizer
+    const scrambleCssMinimizer = new ScrambleCssMinimizer(
+      this._options?.scrambleCssMinimizerOptions
+    );
+
+    // TODO known bug, if run in dev mode, the app needs to save CSS
+    // again to trigger re-built and have correct css.
+    /**
+     * Force minimizer in development if CLI argument is present.
+     * This will remove all other minimizers except the CSS scrambler
+     * and force minimization in dev mode.
+     */
+    if (ctx.scrambleCss) {
+      config.optimization = {
+        ...config.optimization,
+        minimize: !ctx.isServer,
+        minimizer: [scrambleCssMinimizer],
+      };
+    } else {
+      /**
+       * Remove existing hashTable.json so the web does not try
+       * to load with scrambled CSS.
+       */
+      if (
+        this._options.scrambleCssMinimizerOptions?.hashTableFilename &&
+        fs.existsSync(
+          this._options.scrambleCssMinimizerOptions?.hashTableFilename
+        )
+      ) {
+        await fs.promises.rm(
+          this._options.scrambleCssMinimizerOptions?.hashTableFilename
+        );
+      }
+      // Add new scrambleCSS minimizer
+      config.optimization?.minimizer?.unshift(scrambleCssMinimizer);
     }
 
     return config;

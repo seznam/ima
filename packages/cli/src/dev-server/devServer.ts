@@ -1,7 +1,7 @@
 import path from 'path';
 
 import hotMiddleware from '@gatsbyjs/webpack-hot-middleware';
-import express from 'express';
+import express, { NextFunction, Request, Response } from 'express';
 import { Compiler } from 'webpack';
 import devMiddleware from 'webpack-dev-middleware';
 
@@ -27,6 +27,14 @@ async function createDevServer(
 
       next();
     })
+    .use('/__get-internal-source', evalSourceMapMiddleware())
+    .use('/__open-editor', openEditorMiddleware())
+    .use(
+      '/__error-overlay-static',
+      express.static(
+        path.resolve(path.join(__dirname, '../../../error-overlay/dist/'))
+      )
+    )
     .use(
       devMiddleware(compiler, {
         index: false,
@@ -43,14 +51,16 @@ async function createDevServer(
         heartbeat: 5000,
       })
     )
-    .use('/__get-internal-source', evalSourceMapMiddleware())
-    .use('/__open-editor', openEditorMiddleware())
-    .use(
-      '/__error-overlay-static',
-      express.static(
-        path.resolve(path.join(__dirname, '../../../error-overlay/dist/'))
-      )
-    )
+    .use((err: Error, req: Request, res: Response, next: NextFunction) => {
+      if (res.headersSent) {
+        return next(err);
+      }
+
+      res.status(500).json({
+        status: 'Something has happened with the ima-dev-server 😢 ',
+        error: err,
+      });
+    })
     .listen(port, hostname);
 }
 

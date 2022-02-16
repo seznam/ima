@@ -7,10 +7,6 @@
       "type": "string",
       "description": "This option determines the location of generated hashTable.json file."
     },
-    "uniqueIdentifier": {
-      "type": "string",
-      "description": "Optional unique identifier appended to every classname."
-    },
     "mainAssetFilter": {
       "instanceof": "Function",
       "description": "Optional asset filter for files which are used for hashTable.json creation."

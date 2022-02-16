@@ -6,16 +6,15 @@ import { validate } from 'schema-utils';
 import { Schema } from 'schema-utils/declarations/validate';
 import { Compilation, Compiler, sources } from 'webpack';
 
-import postCssScrambler from '../postCssScrambler';
+import PostCssScrambler from '../postCssScrambler';
 
 import schema from './options.json';
 
 const CSS_RE = /\.css$/;
 
 export interface ScrambleCssMinimizerOptions {
-  hashTableFilename: string;
-  uniqueIdentifier: string;
-  mainAssetFilter: (filename: string) => boolean;
+  hashTableFilename?: string;
+  mainAssetFilter?: (filename: string) => boolean;
 }
 
 export interface ScrambleCssMinimizerCacheEntry {
@@ -31,17 +30,16 @@ export interface ScrambleCssMinimizerCacheEntry {
  */
 class ScrambleCssMinimizer {
   private _pluginName: string;
-  private _options: ScrambleCssMinimizerOptions;
+  private _options: Required<ScrambleCssMinimizerOptions>;
   private _hashTablePath?: string;
 
-  constructor(options: Partial<ScrambleCssMinimizerOptions> = {}) {
+  constructor(options: ScrambleCssMinimizerOptions = {}) {
     this._pluginName = this.constructor.name;
 
     // Set defaults
     this._options = {
       hashTableFilename:
-        options?.hashTableFilename ?? 'static/css/hashMap.json',
-      uniqueIdentifier: options?.uniqueIdentifier ?? '',
+        options?.hashTableFilename ?? 'static/css/hashTable.json',
       mainAssetFilter:
         options?.mainAssetFilter ??
         // Filter main app.css file
@@ -155,9 +153,9 @@ class ScrambleCssMinimizer {
 
     // Process css using postcss plugin
     const { css, map } = await postcss([
-      postCssScrambler({
+      PostCssScrambler({
         generateHashTable,
-        hashTable: this._hashTablePath,
+        hashTablePath: this._hashTablePath,
       }),
     ]).process(source.source(), {
       map: source.map(),
@@ -176,7 +174,6 @@ class ScrambleCssMinimizer {
       hashTableSource: generateHashTable ? await this._loadHashTable() : null,
     } as ScrambleCssMinimizerCacheEntry);
 
-    // Update processed assets
     compilation.updateAsset(filename, newSource);
   }
 

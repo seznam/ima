@@ -239,7 +239,7 @@ export default async (
     },
     cache: {
       type: 'filesystem',
-      version: createCacheKey(ctx),
+      version: createCacheKey(ctx, imaConfig),
       store: 'pack',
       buildDependencies: {
         config: [__filename],
