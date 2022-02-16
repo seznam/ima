@@ -19,10 +19,9 @@ declare module '../../types' {
 
 export interface ScrambleCssPluginOptions {
   enabled?: boolean;
-  suffix?: string;
-  generateHashTable?: boolean;
-  hashTableLocation?: string;
   uniqueIdentifier?: string;
+  generateHashTable?: boolean;
+  hashTableOutput?: string;
 }
 
 /**
@@ -49,7 +48,7 @@ class ScrambleCssPlugin implements ImaCliPlugin {
     dev: scrambleCssPluginSharedCliArgs,
   };
 
-  constructor(options: ScrambleCssPluginOptions) {
+  constructor(options: Partial<ScrambleCssPluginOptions>) {
     this._options = options;
   }
 
@@ -58,16 +57,8 @@ class ScrambleCssPlugin implements ImaCliPlugin {
     ctx: ImaConfigurationContext
   ): Promise<Configuration> {
     const { rootDir, isServer } = ctx;
-    const packageJsonPath = path.resolve(rootDir, './package.json');
-    const packageJson = packageJsonPath ? require(packageJsonPath) : {};
-
-    // Defaults
-    const suffix = this._options?.suffix ?? 'srambled';
-    const uniqueIdentifier =
-      this._options?.uniqueIdentifier ??
-      `${packageJson.name}:${packageJson.version}`;
     const hashTable =
-      this._options?.hashTableLocation ??
+      this._options?.hashTableOutput ??
       path.join(rootDir, 'build/static/hashtable.json');
 
     // Run CSS scrambler, this needs to run on generated assets
@@ -75,12 +66,11 @@ class ScrambleCssPlugin implements ImaCliPlugin {
       // Scramble only app css and generate hashtable
       config.plugins?.push(
         new PostCssPipelineWebpackPlugin({
-          suffix,
           predicate: (name: string) => /static\/css\/app.css$/.test(name),
           processor: postcss([
             postCssScrambler({
               generateHashTable: this._options?.generateHashTable ?? true,
-              uniqueIdentifier,
+              uniqueIdentifier: this._options.uniqueIdentifier,
               hashTable,
             }),
           ]),
@@ -88,19 +78,18 @@ class ScrambleCssPlugin implements ImaCliPlugin {
       );
 
       // Scramble other entry points with already generated hashtable
-      config.plugins?.push(
-        new PostCssPipelineWebpackPlugin({
-          suffix,
-          predicate: (name: string) =>
-            !/static\/css\/app.css$/.test(name) && !/srambled.css$/.test(name),
-          processor: postcss([
-            postCssScrambler({
-              generateHashTable: false,
-              hashTable,
-            }),
-          ]),
-        })
-      );
+      // config.plugins?.push(
+      //   new PostCssPipelineWebpackPlugin({
+      //     predicate: (name: string) =>
+      //       !/static\/css\/app.css$/.test(name) && !/srambled.css$/.test(name),
+      //     processor: postcss([
+      //       postCssScrambler({
+      //         generateHashTable: false,
+      //         hashTable,
+      //       }),
+      //     ]),
+      //   })
+      // );
     }
 
     return config;

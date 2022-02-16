@@ -505,7 +505,7 @@ export default async (
        * Initialize webpack.ProgressPlugin to track and report compilation
        * progress across all configuration contexts.
        */
-      createProgress(name),
+      !ctx.verbose && createProgress(name),
 
       // Server/client specific plugins are defined below
       ...(isServer
