@@ -341,6 +341,7 @@ async function createWebpackConfig(
     {
       name: 'server',
       isServer: true,
+      processCss: false,
       ...args,
     },
     // Process es5 in build and legacy contexts
@@ -348,6 +349,7 @@ async function createWebpackConfig(
       name: 'client',
       isServer: false,
       isEsVersion: false,
+      processCss: args.forceSPA || args.forceSPAWithHMR,
       ...args,
     },
     // SPA mode only supports es5 versions
@@ -356,6 +358,7 @@ async function createWebpackConfig(
         name: 'client.es',
         isServer: false,
         isEsVersion: true,
+        processCss: true,
         ...args,
       },
   ].filter(Boolean) as ImaConfigurationContext[];

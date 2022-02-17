@@ -25,7 +25,7 @@ export interface ScrambleCssPluginOptions {
 
 /**
  * Plugin additional CLI args, scrambleCss option can be used to explicitly enable/disable
- * scrambling for certain use cases.
+ * scrambling for certain use cases. Enabled by default in production build with other minimizers.
  */
 const scrambleCssPluginSharedCliArgs: CommandBuilder = {
   scrambleCss: {
