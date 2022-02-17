@@ -12,7 +12,7 @@ import {
   ImaCliCommand,
   ImaCliPlugin,
 } from '../../types';
-import { PostCSSPlugin } from '../../webpack/plugins/PostCSSPlugin';
+import { PostCssPlugin } from '../../webpack/plugins/PostCssPlugin';
 
 // Extend existing cli args interface with new values
 declare module '../../types' {
@@ -25,7 +25,7 @@ export interface AmpPluginOptions {
   entry: string[];
   postCssPlugins?: [];
   filter?: (filename: string) => boolean;
-  transformEntry?: (outputPath: string) => string;
+  transform?: (outputPath: string) => string;
 }
 
 /**
@@ -62,7 +62,7 @@ class AmpPlugin implements ImaCliPlugin {
     this._options = {
       filter: () => true,
       postCssPlugins: [],
-      transformEntry: outputPath => {
+      transform: outputPath => {
         if (!outputPath.startsWith('node_modules')) {
           return outputPath;
         }
@@ -129,7 +129,7 @@ class AmpPlugin implements ImaCliPlugin {
     // Custom AMP specific postcss
     if (this._options.postCssPlugins.length > 0) {
       config.plugins?.push(
-        new PostCSSPlugin({
+        new PostCssPlugin({
           plugins: this._options.postCssPlugins,
           // Apply postcss only to newly added entry points
           filter: (name: string) => {
@@ -161,7 +161,7 @@ class AmpPlugin implements ImaCliPlugin {
         entryPoint = entryPoint.substring(0, entryPoint.lastIndexOf('.'));
 
         // Run custom transform function
-        entryPoint = this._options.transformEntry(entryPoint);
+        entryPoint = this._options.transform(entryPoint);
 
         acc[entryPoint] = cur;
 

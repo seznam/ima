@@ -57,7 +57,7 @@ async function createDevServer(
       }
 
       res.status(500).json({
-        status: 'Something has happened with the ima-dev-server 😢 ',
+        status: 'Something has happened with the ima-dev-server 😢',
         error: err,
       });
     })

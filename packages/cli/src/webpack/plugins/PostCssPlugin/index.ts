@@ -7,12 +7,12 @@ import schema from './options.json';
 
 const CSS_RE = /\.css$/;
 
-export interface PostCSSPluginOptions {
+export interface PostCssPluginOptions {
   plugins: [];
   filter?: (name: string) => boolean;
 }
 
-export interface PostCSSPluginCacheEntry {
+export interface PostCssPluginCacheEntry {
   source: sources.RawSource | sources.SourceMapSource;
 }
 
@@ -22,11 +22,11 @@ export interface PostCSSPluginCacheEntry {
  * enables the use of postcss plugins on the whole bundled file.
  * Supports source map proxing and webpack cache.
  */
-class PostCSSPlugin {
+class PostCssPlugin {
   private _pluginName: string;
-  private options: PostCSSPluginOptions;
+  private options: PostCssPluginOptions;
 
-  constructor(options: PostCSSPluginOptions) {
+  constructor(options: PostCssPluginOptions) {
     this._pluginName = this.constructor.name;
 
     // Set defaults
@@ -98,7 +98,7 @@ class PostCSSPlugin {
           const eTag = cache.getLazyHashedEtag(source);
           const cacheItem = cache.getItemCache(name, eTag);
           const output = (await cacheItem.getPromise()) as
-            | PostCSSPluginCacheEntry
+            | PostCssPluginCacheEntry
             | undefined;
 
           return { name, inputSource: source, output, cacheItem };
@@ -138,7 +138,7 @@ class PostCSSPlugin {
           // Store cache
           await cacheItem.storePromise({
             source: output.source,
-          } as PostCSSPluginCacheEntry);
+          } as PostCssPluginCacheEntry);
         }
 
         compilation.updateAsset(name, output.source);
@@ -147,4 +147,4 @@ class PostCSSPlugin {
   }
 }
 
-export { PostCSSPlugin };
+export { PostCssPlugin };

@@ -1,5 +1,5 @@
 {
-  "title": "PostCSSPlugin",
+  "title": "PostCssPlugin",
   "type": "object",
   "additionalProperties": false,
   "properties": {
