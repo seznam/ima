@@ -246,7 +246,7 @@ async function resolveImaConfig(args: ImaCliArgs): Promise<ImaConfig> {
  * Takes care of cleaning build directory and node_modules/.cache
  * directory based on current cli arguments.
  */
-function cleanup(args: ImaCliArgs): void {
+async function cleanup(args: ImaCliArgs): Promise<void> {
   // Clear cache before doing anything else
   if (args.clearCache) {
     const cacheDir = path.join(args.rootDir, '/node_modules/.cache');
@@ -257,14 +257,14 @@ function cleanup(args: ImaCliArgs): void {
       )}...`,
       { trackTime: true }
     );
-    fs.rmSync(cacheDir, { force: true, recursive: true });
+    await fs.promises.rm(cacheDir, { force: true, recursive: true });
     logger.endTracking();
   }
 
   // Clear output directory
   if (!args.clean) {
     // Clean at least hot directory silently
-    fs.rmSync(path.join(args.rootDir, 'build/hot'), {
+    await fs.promises.rm(path.join(args.rootDir, 'build/hot'), {
       recursive: true,
       force: true,
     });
@@ -280,7 +280,7 @@ function cleanup(args: ImaCliArgs): void {
   }
 
   logger.info('Cleaning the build directory...', { trackTime: true });
-  fs.rmSync(outputDir, { recursive: true });
+  await fs.promises.rm(outputDir, { recursive: true });
   logger.endTracking();
 }
 

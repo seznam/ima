@@ -68,8 +68,10 @@ class LessConstantsPlugin implements ImaCliPlugin {
         this._options.output ??
         path.join(args.rootDir, 'build/less-constants/constants.less');
 
-      fs.mkdirSync(path.dirname(outputPath), { recursive: true });
-      fs.writeFileSync(outputPath, lessConstants, { encoding: 'utf8' });
+      await fs.promises.mkdir(path.dirname(outputPath), { recursive: true });
+      await fs.promises.writeFile(outputPath, lessConstants, {
+        encoding: 'utf8',
+      });
     } catch (error) {
       this._logger.error(
         error instanceof Error

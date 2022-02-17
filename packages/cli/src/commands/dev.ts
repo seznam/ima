@@ -87,7 +87,7 @@ const dev: HandlerFn = async args => {
 
   try {
     // Do cleanup
-    cleanup(args);
+    await cleanup(args);
 
     // Load ima config
     const imaConfig = await resolveImaConfig(args);

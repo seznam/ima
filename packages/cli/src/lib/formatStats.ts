@@ -16,10 +16,10 @@ const warningsCache = new Set<string>();
 /**
  * Prints formatted webpack errors (stripped from duplicates) into console.
  */
-function formatWebpackErrors(
+async function formatWebpackErrors(
   stats: MultiStats | undefined,
   args: ImaCliArgs
-): void {
+): Promise<void> {
   if (!stats?.hasErrors()) {
     return;
   }
@@ -68,7 +68,7 @@ function formatWebpackErrors(
   }
 
   // Print filtered errors
-  filteredParsedErrors.forEach(parsedError => {
+  for (const parsedError of filteredParsedErrors) {
     // Print message right away, if we don't manage to parse it
     if (
       !parsedError.lineNumber ||
@@ -79,7 +79,7 @@ function formatWebpackErrors(
       );
     }
 
-    const file = fs.readFileSync(parsedError.fileUri, 'utf8');
+    const file = await fs.promises.readFile(parsedError.fileUri, 'utf8');
     const fileLines = createSourceFragment(parsedError.lineNumber, file, 4);
 
     // Print error
@@ -119,7 +119,7 @@ function formatWebpackErrors(
 
     // Empty newline
     logger.write('');
-  });
+  }
 }
 
 /**

@@ -58,7 +58,7 @@ async function runCompiler(
         // Reject with compiler when there are any errors
         if (error || stats?.hasErrors()) {
           if (stats) {
-            formatWebpackErrors(stats, args);
+            await formatWebpackErrors(stats, args);
           } else if (error) {
             logger.error(error.toString());
           }
@@ -104,7 +104,7 @@ async function watchCompiler(
       // Don't continue when there are compile errors on first run
       if (firstRun && stats?.hasErrors()) {
         hadErrorsOnFirstRun = true;
-        formatWebpackErrors(stats, args);
+        await formatWebpackErrors(stats, args);
         return;
       }
 
@@ -127,7 +127,7 @@ async function watchCompiler(
       formatWebpackWarnings(stats, args);
 
       // Print errors
-      formatWebpackErrors(stats, args);
+      await formatWebpackErrors(stats, args);
 
       // Update first run flag
       firstRun = false;
