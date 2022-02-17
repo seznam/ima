@@ -38,7 +38,7 @@ export default async (
   ctx: ImaConfigurationContext,
   imaConfig: ImaConfig
 ): Promise<Configuration> => {
-  const { rootDir, isServer, isEsVersion, name, environment } = ctx;
+  const { rootDir, isServer, isEsVersion, name, environment, processCss } = ctx;
 
   // Define helper variables derived from context
   const isDevEnv = environment === 'development';
@@ -68,17 +68,6 @@ export default async (
   }
 
   /**
-   * Most of the time we try to built the CSS only in the ES bundle.
-   * However when the CSS modules are enabled (imaConfig.cssModules),
-   * we also need to generate definitions (class names) for other configurations.
-   * This optimization helps with performance a bit since we don't need to generate
-   * CSS files for every configuration but just once and only definitions for others.
-   */
-  const onlyCssDefinitions =
-    isServer ||
-    (!isServer && !isEsVersion && !ctx.forceSPAWithHMR && !ctx.forceSPA);
-
-  /**
    * Style loaders helper function used to define
    * common style loader functions, that is later used
    * to handle css and less source files.
@@ -94,12 +83,12 @@ export default async (
      * CSS files so we can ignore it and improve a performance a little bit.
      * see https://webpack.js.org/configuration/resolve/#resolvealias for more.
      */
-    if (onlyCssDefinitions && !imaConfig.cssModules) {
+    if (!processCss && !imaConfig.cssModules) {
       return [{ loader: 'null-loader' }];
     }
 
     return [
-      !onlyCssDefinitions && {
+      processCss && {
         loader: MiniCssExtractPlugin.loader,
       },
       {
@@ -107,7 +96,7 @@ export default async (
         options: {
           modules: {
             auto: true,
-            exportOnlyLocals: onlyCssDefinitions,
+            exportOnlyLocals: !processCss,
             localIdentName: isDevEnv
               ? '[path][name]__[local]--[hash:base64:5]'
               : '[hash:base64]',
@@ -115,7 +104,7 @@ export default async (
           sourceMap: false, // BROKEN ON LATEST VERSIONS
         },
       },
-      !onlyCssDefinitions && {
+      processCss && {
         loader: require.resolve('postcss-loader'),
         options: await imaConfig.postcss(
           {
@@ -146,9 +135,6 @@ export default async (
       useLessLoader && {
         loader: require.resolve('less-loader'),
         options: {
-          lessOptions: {
-            strictMath: true,
-          },
           sourceMap: useSourceMaps,
         },
       },
@@ -238,7 +224,7 @@ export default async (
     },
     cache: {
       type: 'filesystem',
-      version: createCacheKey(ctx),
+      version: createCacheKey(ctx, imaConfig),
       store: 'pack',
       buildDependencies: {
         config: [__filename],
@@ -271,7 +257,8 @@ export default async (
             splitChunks: {
               cacheGroups: {
                 vendor: {
-                  test: /[\\/]node_modules[\\/]/,
+                  // Split only JS files
+                  test: /[\\/]node_modules[\\/](.*)(js|jsx|ts|tsx)$/,
                   name: 'vendors',
                   chunks: 'all',
                 },
@@ -503,9 +490,13 @@ export default async (
     plugins: [
       /**
        * Initialize webpack.ProgressPlugin to track and report compilation
-       * progress across all configuration contexts.
+       * progress across all configuration contexts. For verbose mode, we are using
+       * the default implementation.
        */
-      createProgress(name),
+      ctx.verbose ? new webpack.ProgressPlugin() : createProgress(name),
+
+      // Removes generated empty script caused by non-js entry points
+      new RemoveEmptyScriptsPlugin(),
 
       // Server/client specific plugins are defined below
       ...(isServer
@@ -521,19 +512,17 @@ export default async (
           ]
         : // Client-specific plugins
           [
-            // Removes generated empty script caused by non-js entry points
-            new RemoveEmptyScriptsPlugin(),
-
             /**
              * Handles LESS/CSS extraction out of JS to separate css file.
              * We use MiniCssExtractPlugin.loader only in es bundle.
              */
-            !onlyCssDefinitions &&
+            processCss &&
               new MiniCssExtractPlugin({
                 filename: ({ chunk }) =>
                   `static/css/${chunk?.name === name ? 'app' : '[name]'}${
                     !isDevEnv ? '.min' : ''
                   }.css`,
+                ignoreOrder: true,
                 chunkFilename: `static/css/chunk-[id]${
                   !isDevEnv ? '.min' : ''
                 }.css`,

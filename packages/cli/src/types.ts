@@ -52,6 +52,7 @@ export interface ImaCliArgs {
 export interface ImaConfigurationContext extends ImaCliArgs {
   name: 'server' | 'client' | 'client.es';
   isServer: boolean;
+  processCss: boolean; // Flag indicating that this context should process CSS assets
   isEsVersion?: boolean;
 }
 

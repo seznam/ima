@@ -1,14 +1,16 @@
 // TODO remove plugin specific dependencies form cli package.json
 
+import fs from 'fs';
 import path from 'path';
 
-import postcss from 'postcss';
-import PostCssPipelineWebpackPlugin from 'postcss-pipeline-webpack-plugin';
 import { Configuration } from 'webpack';
 import { CommandBuilder } from 'yargs';
 
 import { ImaCliPlugin, ImaConfigurationContext } from '../../types';
-import postCssScrambler from './postCssScrambler';
+import {
+  ScrambleCssMinimizerOptions,
+  ScrambleCssMinimizer,
+} from './plugin/ScrambleCssMinimizer';
 
 // Extend existing cli args interface with new values
 declare module '../../types' {
@@ -18,16 +20,12 @@ declare module '../../types' {
 }
 
 export interface ScrambleCssPluginOptions {
-  enabled?: boolean;
-  suffix?: string;
-  generateHashTable?: boolean;
-  hashTableLocation?: string;
-  uniqueIdentifier?: string;
+  scrambleCssMinimizerOptions?: ScrambleCssMinimizerOptions;
 }
 
 /**
  * Plugin additional CLI args, scrambleCss option can be used to explicitly enable/disable
- * scrambling for certain use cases.
+ * scrambling for certain use cases. Enabled by default in production build with other minimizers.
  */
 const scrambleCssPluginSharedCliArgs: CommandBuilder = {
   scrambleCss: {
@@ -49,7 +47,7 @@ class ScrambleCssPlugin implements ImaCliPlugin {
     dev: scrambleCssPluginSharedCliArgs,
   };
 
-  constructor(options: ScrambleCssPluginOptions) {
+  constructor(options: Partial<ScrambleCssPluginOptions> = {}) {
     this._options = options;
   }
 
@@ -57,50 +55,70 @@ class ScrambleCssPlugin implements ImaCliPlugin {
     config: Configuration,
     ctx: ImaConfigurationContext
   ): Promise<Configuration> {
-    const { rootDir, isServer } = ctx;
-    const packageJsonPath = path.resolve(rootDir, './package.json');
-    const packageJson = packageJsonPath ? require(packageJsonPath) : {};
+    // Set default hash table filename (path)
+    if (
+      !this._options.scrambleCssMinimizerOptions?.hashTableFilename ||
+      !path.isAbsolute(
+        this._options.scrambleCssMinimizerOptions?.hashTableFilename
+      )
+    ) {
+      const { hashTableFilename } =
+        this._options.scrambleCssMinimizerOptions || {};
 
-    // Defaults
-    const suffix = this._options?.suffix ?? 'srambled';
-    const uniqueIdentifier =
-      this._options?.uniqueIdentifier ??
-      `${packageJson.name}:${packageJson.version}`;
-    const hashTable =
-      this._options?.hashTableLocation ??
-      path.join(rootDir, 'build/static/hashtable.json');
+      // Set absolute hash table path
+      const hashTablePath =
+        hashTableFilename && path.isAbsolute(hashTableFilename)
+          ? hashTableFilename
+          : path.join(
+              config?.output?.path ?? process.cwd(),
+              hashTableFilename ?? 'static/css/hashTable.json'
+            );
 
-    // Run CSS scrambler, this needs to run on generated assets
-    if (!isServer && (ctx.scrambleCss ?? this._options?.enabled)) {
-      // Scramble only app css and generate hashtable
-      config.plugins?.push(
-        new PostCssPipelineWebpackPlugin({
-          suffix,
-          predicate: (name: string) => /static\/css\/app.css$/.test(name),
-          processor: postcss([
-            postCssScrambler({
-              generateHashTable: this._options?.generateHashTable ?? true,
-              uniqueIdentifier,
-              hashTable,
-            }),
-          ]),
-        })
-      );
+      // Update plugin options
+      this._options = {
+        ...this._options,
+        scrambleCssMinimizerOptions: {
+          ...this._options?.scrambleCssMinimizerOptions,
+          hashTableFilename: hashTablePath,
+        },
+      };
+    }
 
-      // Scramble other entry points with already generated hashtable
-      config.plugins?.push(
-        new PostCssPipelineWebpackPlugin({
-          suffix,
-          predicate: (name: string) =>
-            !/static\/css\/app.css$/.test(name) && !/srambled.css$/.test(name),
-          processor: postcss([
-            postCssScrambler({
-              generateHashTable: false,
-              hashTable,
-            }),
-          ]),
-        })
-      );
+    // Init minimizer
+    const scrambleCssMinimizer = new ScrambleCssMinimizer(
+      this._options?.scrambleCssMinimizerOptions
+    );
+
+    // TODO known bug, if run in dev mode, the app needs to save CSS
+    // again to trigger re-built and have correct css.
+    /**
+     * Force minimizer in development if CLI argument is present.
+     * This will remove all other minimizers except the CSS scrambler
+     * and force minimization in dev mode.
+     */
+    if (ctx.scrambleCss) {
+      config.optimization = {
+        ...config.optimization,
+        minimize: !ctx.isServer,
+        minimizer: [scrambleCssMinimizer],
+      };
+    } else {
+      /**
+       * Remove existing hashTable.json so the web does not try
+       * to load with scrambled CSS.
+       */
+      if (
+        this._options.scrambleCssMinimizerOptions?.hashTableFilename &&
+        fs.existsSync(
+          this._options.scrambleCssMinimizerOptions?.hashTableFilename
+        )
+      ) {
+        await fs.promises.rm(
+          this._options.scrambleCssMinimizerOptions?.hashTableFilename
+        );
+      }
+      // Add new scrambleCSS minimizer
+      config.optimization?.minimizer?.unshift(scrambleCssMinimizer);
     }
 
     return config;

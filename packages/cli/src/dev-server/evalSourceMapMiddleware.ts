@@ -69,7 +69,7 @@ function evalSourceMapMiddleware() {
       }
 
       try {
-        const fileSource = await fs.promises.readFile(fileUri, 'utf-8');
+        const fileSource = await fs.promises.readFile(fileUri, 'utf8');
 
         return res.end(fileSource);
       } catch (error) {
