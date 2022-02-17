@@ -3,8 +3,6 @@
 import path from 'path';
 
 import fg from 'fast-glob';
-import postcss from 'postcss';
-import PostCssPipelineWebpackPlugin from 'postcss-pipeline-webpack-plugin';
 import { Configuration, EntryObject } from 'webpack';
 import { CommandBuilder } from 'yargs';
 
@@ -14,6 +12,7 @@ import {
   ImaCliCommand,
   ImaCliPlugin,
 } from '../../types';
+import { PostCSSPlugin } from '../../webpack/plugins/PostCSSPlugin';
 
 // Extend existing cli args interface with new values
 declare module '../../types' {
@@ -44,6 +43,8 @@ const ampPluginSharedCliArgs: CommandBuilder = {
  * Generates css file per component, so it can be later used to dynamically
  * construct minimal css file need to render the page (used specifically for AMP).
  */
+// TODO RemoveEmptyScripts doesnt work for new entry points since @pmmmwh/react-refresh-webpack-plugin injects
+// custom JS entries and RemoveEmptyScripts now thinks that these empty JS entries are only used in the CSS so it does not remove them
 class AmpPlugin implements ImaCliPlugin {
   private _options: Required<AmpPluginOptions>;
   private _logger: ReturnType<typeof createLogger>;
@@ -128,11 +129,12 @@ class AmpPlugin implements ImaCliPlugin {
     // Custom AMP specific postcss
     if (this._options.postCssPlugins.length > 0) {
       config.plugins?.push(
-        new PostCssPipelineWebpackPlugin({
-          processor: postcss(this._options.postCssPlugins),
+        new PostCSSPlugin({
+          plugins: this._options.postCssPlugins,
           // Apply postcss only to newly added entry points
-          predicate: (name: string) =>
-            ampEntryPaths.some(entryPath => name.includes(entryPath)),
+          filter: (name: string) => {
+            return ampEntryPaths.some(entryPath => name.includes(entryPath));
+          },
         })
       );
     }

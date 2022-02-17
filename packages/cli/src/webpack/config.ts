@@ -135,9 +135,6 @@ export default async (
       useLessLoader && {
         loader: require.resolve('less-loader'),
         options: {
-          lessOptions: {
-            strictMath: true,
-          },
           sourceMap: useSourceMaps,
         },
       },
@@ -260,7 +257,8 @@ export default async (
             splitChunks: {
               cacheGroups: {
                 vendor: {
-                  test: /[\\/]node_modules[\\/]/,
+                  // Split only JS files
+                  test: /[\\/]node_modules[\\/](.*)(js|jsx|ts|tsx)$/,
                   name: 'vendors',
                   chunks: 'all',
                 },
@@ -495,17 +493,10 @@ export default async (
        * progress across all configuration contexts. For verbose mode, we are using
        * the default implementation.
        */
-      ctx.verbose
-        ? new webpack.ProgressPlugin({
-            // handler: (percentage, msg, ...args) => {
-            //   console.log(
-            //     chalk.cyan(`${(percentage * 100).toFixed(2)}%`),
-            //     chalk.green.bold(msg),
-            //     ...args
-            //   );
-            // },
-          })
-        : createProgress(name),
+      ctx.verbose ? new webpack.ProgressPlugin() : createProgress(name),
+
+      // Removes generated empty script caused by non-js entry points
+      new RemoveEmptyScriptsPlugin(),
 
       // Server/client specific plugins are defined below
       ...(isServer
@@ -521,9 +512,6 @@ export default async (
           ]
         : // Client-specific plugins
           [
-            // Removes generated empty script caused by non-js entry points
-            new RemoveEmptyScriptsPlugin(),
-
             /**
              * Handles LESS/CSS extraction out of JS to separate css file.
              * We use MiniCssExtractPlugin.loader only in es bundle.

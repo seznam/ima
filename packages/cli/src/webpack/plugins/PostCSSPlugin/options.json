@@ -1,0 +1,15 @@
+{
+  "title": "PostCSSPlugin",
+  "type": "object",
+  "additionalProperties": false,
+  "properties": {
+    "plugins": {
+      "type": "array",
+      "description": "Array of postcss plugins to process."
+    },
+    "filter": {
+      "instanceof": "Function",
+      "description": "Optional filter function, by default all css assets are processed."
+    }
+  }
+}

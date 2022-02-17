@@ -18,6 +18,8 @@ export { LessConstantsPlugin } from './plugins/less-constants/LessConstantsPlugi
 
 export { ScrambleCssMinimizer } from './plugins/scramble-css/plugin/ScrambleCssMinimizer';
 
+export { PostCSSPlugin } from './webpack/plugins/PostCSSPlugin';
+
 export {
   ImaCliPlugin,
   ImaConfig,
