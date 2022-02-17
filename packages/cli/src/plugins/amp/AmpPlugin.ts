@@ -2,7 +2,7 @@
 
 import path from 'path';
 
-import fg from 'fast-glob';
+import globby from 'globby';
 import { Configuration, EntryObject } from 'webpack';
 import { CommandBuilder } from 'yargs';
 
@@ -148,7 +148,7 @@ class AmpPlugin implements ImaCliPlugin {
   private async _generateEntries(
     rootDir: string
   ): Promise<Record<string, string>> {
-    const resolvedPaths = await fg(
+    const resolvedPaths = await globby(
       this._options?.entry.map(globPath => path.join(rootDir, globPath))
     );
 

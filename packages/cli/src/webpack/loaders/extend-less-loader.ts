@@ -1,7 +1,7 @@
 import fs from 'fs';
 import path from 'path';
 
-import fg from 'fast-glob';
+import globby from 'globby';
 import { LoaderDefinitionFunction } from 'webpack';
 
 export interface ExtendLessLoaderOptions {
@@ -60,7 +60,7 @@ const ExtendLessLoader: LoaderDefinitionFunction<ExtendLessLoaderOptions> =
        */
       const cwd = importPath.startsWith('.') ? this.context : this.rootContext;
       const normalizedImportPath = normalizeGlobPath(importPath, cwd);
-      const result = fg.sync(normalizedImportPath, { cwd, absolute: true });
+      const result = globby.sync(normalizedImportPath, { cwd, absolute: true });
 
       if (result.length === 1 && result[0] === importPath) {
         return match;
