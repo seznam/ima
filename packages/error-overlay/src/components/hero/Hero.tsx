@@ -29,7 +29,7 @@ const Hero: FunctionComponent<HeroProps> = ({ error }) => {
         >
           {errorType}
         </h1>
-        <h2 className='mt-2 text-base tracking-tighter text-rose-600 sm:text-xl md:text-2xl'>
+        <h2 className='mt-2 text-base tracking-tighter text-rose-600 break-all sm:text-xl md:text-2xl'>
           {error.name}: {error.message}
         </h2>
       </div>
@@ -37,7 +37,7 @@ const Hero: FunctionComponent<HeroProps> = ({ error }) => {
       {error.type !== 'compile' && Object.keys(error.frames).length > 0 && (
         <Button
           color={error.showOriginal ? 'gray' : 'green'}
-          className='inline-flex items-center self-center mt-3 md:mt-0'
+          className='inline-flex items-center self-center mt-3 whitespace-nowrap md:mt-0'
           onClick={() =>
             dispatch({
               type: error.showOriginal ? 'viewCompiled' : 'viewOriginal',
