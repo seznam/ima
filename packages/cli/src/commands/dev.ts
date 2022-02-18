@@ -117,16 +117,19 @@ const dev: HandlerFn = async args => {
     const compiler = webpack(config);
 
     // Start watch mode & create dev server for HMR (only on client bundle)
-    await Promise.all([
-      watchCompiler(compiler, args, imaConfig),
-      createDevServer(
-        compiler.compilers.find(({ name }) =>
-          args.forceSPAWithHMR ? name === 'client' : name === 'client.es'
-        ),
-        devServerConfig.hostname,
-        devServerConfig.port
-      ),
-    ]);
+    await Promise.all(
+      [
+        watchCompiler(compiler, args, imaConfig),
+        !args.forceSPA &&
+          createDevServer(
+            compiler.compilers.find(({ name }) =>
+              args.forceSPAWithHMR ? name === 'client' : name === 'client.es'
+            ),
+            devServerConfig.hostname,
+            devServerConfig.port
+          ),
+      ].filter(Boolean)
+    );
 
     // Start nodemon and application server
     startNodemon(args);
