@@ -160,14 +160,6 @@ export type ImaConfig = {
   useSourceMaps?: boolean;
 
   /**
-   * Set true to enable CSS modules. When using CSS modules, we need to built CSS also
-   * in the server webpack config to generate the definitions due to the SSR. When
-   * we don't want to use CSS modules this can be omitted and improve the built performance.
-   * This is why the CSS modules are opt-in rather than opt-out option.
-   */
-  cssModules?: boolean;
-
-  /**
    * Set custom jsxRuntime for @babel/preset-react, the default is 'automatic'.
    */
   jsxRuntime?: 'classic' | 'automatic';

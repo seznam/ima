@@ -6,7 +6,6 @@ import ReactRefreshWebpackPlugin from '@pmmmwh/react-refresh-webpack-plugin';
 import CompressionPlugin from 'compression-webpack-plugin';
 import CopyPlugin from 'copy-webpack-plugin';
 import CssMinimizerPlugin from 'css-minimizer-webpack-plugin';
-import MiniCssExtractPlugin from 'mini-css-extract-plugin';
 import miniSVGDataURI from 'mini-svg-data-uri';
 import TerserPlugin from 'terser-webpack-plugin';
 import webpack, {
@@ -15,7 +14,6 @@ import webpack, {
   RuleSetUseItem,
   WebpackPluginInstance,
 } from 'webpack';
-import RemoveEmptyScriptsPlugin from 'webpack-remove-empty-scripts';
 
 import { ImaConfigurationContext, ImaConfig } from '../types';
 import { createProgress } from './plugins/ProgressPlugin';
@@ -77,33 +75,7 @@ export default async (
   }: {
     useLessLoader?: boolean;
   } = {}): Promise<RuleSetUseItem[]> => {
-    /**
-     * Ignore CSS and LESS modules when CSS modules are disabled and we would
-     * need to generate the CSS module definitions. This is not needed for other
-     * CSS files so we can ignore it and improve a performance a little bit.
-     * see https://webpack.js.org/configuration/resolve/#resolvealias for more.
-     */
-    if (!processCss && !imaConfig.cssModules) {
-      return [{ loader: 'null-loader' }];
-    }
-
     return [
-      processCss && {
-        loader: MiniCssExtractPlugin.loader,
-      },
-      {
-        loader: require.resolve('css-loader'),
-        options: {
-          modules: {
-            auto: true,
-            exportOnlyLocals: !processCss,
-            localIdentName: isDevEnv
-              ? '[path][name]__[local]--[hash:base64:5]'
-              : '[hash:base64]',
-          },
-          sourceMap: false, // BROKEN ON LATEST VERSIONS
-        },
-      },
       processCss && {
         loader: require.resolve('postcss-loader'),
         options: await imaConfig.postcss(
@@ -213,6 +185,11 @@ export default async (
 
         return `${baseFolder}/${fileNameParts.join('.')}`;
       },
+      cssFilename: ({ chunk }) =>
+        `static/css/${chunk?.name === name ? 'app' : '[name]'}${
+          !isDevEnv ? '.min' : ''
+        }.css`,
+      cssChunkFilename: `static/css/[id]${!isDevEnv ? '.min' : ''}.css`,
       publicPath,
       /**
        * We put hot updates into it's own folder
@@ -462,19 +439,26 @@ export default async (
                 ctx
               ),
             },
-            {
-              test: /\.less$/,
-              sideEffects: true,
-              use: await getStyleLoaders({ useLessLoader: true }),
-            },
+
             /**
-             * CSS loader configuration, has the same capabilities as the less loader.
+             * CSS & LESS loaders, both have the exact same capabilities
              */
-            {
-              test: /\.css$/,
-              sideEffects: true,
-              use: await getStyleLoaders(),
-            },
+            ...(processCss
+              ? [
+                  {
+                    test: /\.less$/,
+                    sideEffects: true,
+                    type: 'css',
+                    use: await getStyleLoaders({ useLessLoader: true }),
+                  },
+                  {
+                    test: /\.css$/,
+                    sideEffects: true,
+                    type: 'css',
+                    use: await getStyleLoaders(),
+                  },
+                ]
+              : []),
             /**
              * Fallback loader for all modules, that don't match any
              * of the above defined rules. This should be defined last.
@@ -495,9 +479,6 @@ export default async (
        */
       ctx.verbose ? new webpack.ProgressPlugin() : createProgress(name),
 
-      // Removes generated empty script caused by non-js entry points
-      new RemoveEmptyScriptsPlugin(),
-
       // Server/client specific plugins are defined below
       ...(isServer
         ? // Server-specific plugins
@@ -512,22 +493,6 @@ export default async (
           ]
         : // Client-specific plugins
           [
-            /**
-             * Handles LESS/CSS extraction out of JS to separate css file.
-             * We use MiniCssExtractPlugin.loader only in es bundle.
-             */
-            processCss &&
-              new MiniCssExtractPlugin({
-                filename: ({ chunk }) =>
-                  `static/css/${chunk?.name === name ? 'app' : '[name]'}${
-                    !isDevEnv ? '.min' : ''
-                  }.css`,
-                ignoreOrder: true,
-                chunkFilename: `static/css/chunk-[id]${
-                  !isDevEnv ? '.min' : ''
-                }.css`,
-              }),
-
             // Enables compression for assets in production build
             ...(!isDevEnv
               ? imaConfig.compression.map(
@@ -567,6 +532,11 @@ export default async (
     // Disable infrastructure logging in normal mode
     infrastructureLogging: {
       level: ctx.verbose ? 'info' : 'none',
+    },
+
+    // Enable native css support (this replaces mini-css-extract-plugin and css-loader)
+    experiments: {
+      css: true,
     },
   };
 };
