@@ -13,62 +13,66 @@ async function createDevServer(
   compiler: Compiler | undefined,
   hostname: string,
   port: number
-) {
-  if (!compiler) {
-    return;
-  }
+): Promise<void> {
+  return new Promise((resolve, reject) => {
+    if (!compiler) {
+      return reject();
+    }
 
-  const app = express();
-  const isVerbose = process.argv.some(arg => arg.includes('--verbose=true'));
+    const app = express();
+    const isVerbose = process.argv.some(arg => arg.includes('--verbose=true'));
 
-  app
-    .use((req, res, next) => {
-      // Allow cors
-      res.header('Access-Control-Allow-Origin', '*');
+    app
+      .use((req, res, next) => {
+        // Allow cors
+        res.header('Access-Control-Allow-Origin', '*');
 
-      next();
-    })
-    .use(
-      '/__error-overlay-static',
-      expressStaticGzip(path.dirname(require.resolve('@ima/error-overlay')), {
-        enableBrotli: true,
-        index: false,
-        orderPreference: ['br'],
-        serveStatic: {
-          cacheControl: true,
-          maxAge: '14d',
-        },
+        next();
       })
-    )
-    .use('/__get-internal-source', evalSourceMapMiddleware())
-    .use('/__open-editor', openEditorMiddleware())
-    .use(
-      devMiddleware(compiler, {
-        index: false,
-        publicPath: '/',
-        writeToDisk: true,
-        ...(isVerbose ? undefined : { stats: 'none' }),
-        serverSideRender: true,
-      })
-    )
-    .use(
-      hotMiddleware(compiler, {
-        ...(isVerbose ? undefined : { quite: true, log: false }),
-        path: '/__webpack_hmr',
-        heartbeat: 5000,
-      })
-    )
-    .use((err: Error, req: Request, res: Response, next: NextFunction) => {
-      if (res.headersSent) {
-        return next(err);
-      }
+      .use(
+        '/__error-overlay-static',
+        expressStaticGzip(path.dirname(require.resolve('@ima/error-overlay')), {
+          enableBrotli: true,
+          index: false,
+          orderPreference: ['br'],
+          serveStatic: {
+            cacheControl: true,
+            maxAge: '14d',
+          },
+        })
+      )
+      .use('/__get-internal-source', evalSourceMapMiddleware())
+      .use('/__open-editor', openEditorMiddleware())
+      .use(
+        devMiddleware(compiler, {
+          index: false,
+          publicPath: '/',
+          writeToDisk: true,
+          ...(isVerbose ? undefined : { stats: 'none' }),
+          serverSideRender: true,
+        })
+      )
+      .use(
+        hotMiddleware(compiler, {
+          ...(isVerbose ? undefined : { quite: true, log: false }),
+          path: '/__webpack_hmr',
+          heartbeat: 5000,
+        })
+      )
+      .use((err: Error, req: Request, res: Response, next: NextFunction) => {
+        if (res.headersSent) {
+          return next(err);
+        }
 
-      res.status(500).json({
-        status: 'Something has happened with the ima-dev-server 😢',
-        error: err,
+        res.status(500).json({
+          status: 'Something has happened with the ima-dev-server 😢',
+          error: err,
+        });
+      })
+      .listen(port, hostname, () => {
+        resolve();
       });
-    })
-    .listen(port, hostname);
+  });
 }
 
 export { createDevServer };

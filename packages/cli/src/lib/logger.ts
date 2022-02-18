@@ -71,7 +71,7 @@ class Logger {
   }
 
   public error(message: string, options?: LoggerOptions) {
-    this._log(' err', chalk.bold.red, message, options);
+    this._log('erro', chalk.bold.red, message, options);
   }
 
   public warn(message: string, options?: LoggerOptions) {
