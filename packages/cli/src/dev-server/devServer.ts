@@ -2,6 +2,7 @@ import path from 'path';
 
 import hotMiddleware from '@gatsbyjs/webpack-hot-middleware';
 import express, { NextFunction, Request, Response } from 'express';
+import expressStaticGzip from 'express-static-gzip';
 import { Compiler } from 'webpack';
 import devMiddleware from 'webpack-dev-middleware';
 
@@ -27,14 +28,20 @@ async function createDevServer(
 
       next();
     })
-    .use('/__get-internal-source', evalSourceMapMiddleware())
-    .use('/__open-editor', openEditorMiddleware())
     .use(
       '/__error-overlay-static',
-      express.static(
-        path.resolve(path.join(__dirname, '../../../error-overlay/dist/'))
-      )
+      expressStaticGzip(path.dirname(require.resolve('@ima/error-overlay')), {
+        enableBrotli: true,
+        index: false,
+        orderPreference: ['br'],
+        serveStatic: {
+          cacheControl: true,
+          maxAge: '14d',
+        },
+      })
     )
+    .use('/__get-internal-source', evalSourceMapMiddleware())
+    .use('/__open-editor', openEditorMiddleware())
     .use(
       devMiddleware(compiler, {
         index: false,

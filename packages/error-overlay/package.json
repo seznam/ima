@@ -10,7 +10,7 @@
     "stack-trace"
   ],
   "version": "17.10.0",
-  "main": "./dist/",
+  "main": "./dist/overlay.js",
   "scripts": {
     "dev": "NODE_ENV=development ../../node_modules/.bin/webpack --watch",
     "build": "NODE_ENV=production ../../node_modules/.bin/webpack"
@@ -24,6 +24,7 @@
     "@types/react-dom": "^17.0.11",
     "anser": "^2.1.0",
     "clsx": "^1.1.1",
+    "compression-webpack-plugin": "^9.2.0",
     "copy-webpack-plugin": "^10.2.0",
     "css-loader": "^6.5.1",
     "css-minimizer-webpack-plugin": "^3.3.0",
