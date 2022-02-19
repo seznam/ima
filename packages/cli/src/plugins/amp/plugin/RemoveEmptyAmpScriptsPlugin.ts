@@ -23,8 +23,12 @@ class RemoveEmptyAmpScriptsPlugin {
       compilation.hooks.processAssets.tap(
         {
           name: this._pluginName,
-          // run this process after all others
-          stage: compiler.webpack.Compilation.PROCESS_ASSETS_STAGE_REPORT,
+          /**
+           * run this process before optimizations so the unnecessary assets
+           * dont waste resources on minification.
+           */
+          stage: compiler.webpack.Compilation.PROCESS_ASSETS_STAGE_PRE_PROCESS,
+          additionalAssets: true,
         },
         assets => {
           if (this._options.entries.length === 0) {

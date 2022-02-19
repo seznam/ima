@@ -55,6 +55,11 @@ class ScrambleCssPlugin implements ImaCliPlugin {
     config: Configuration,
     ctx: ImaConfigurationContext
   ): Promise<Configuration> {
+    // Add only in css processing context
+    if (!ctx.processCss) {
+      return config;
+    }
+
     // Set default hash table filename (path)
     if (
       !this._options.scrambleCssMinimizerOptions?.hashTableFilename ||
@@ -89,8 +94,6 @@ class ScrambleCssPlugin implements ImaCliPlugin {
       this._options?.scrambleCssMinimizerOptions
     );
 
-    // TODO known bug, if run in dev mode, the app needs to save CSS
-    // again to trigger re-built and have correct css.
     /**
      * Force minimizer in development if CLI argument is present.
      * This will remove all other minimizers except the CSS scrambler

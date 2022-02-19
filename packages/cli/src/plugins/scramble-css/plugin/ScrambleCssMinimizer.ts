@@ -112,7 +112,7 @@ class ScrambleCssMinimizer {
         );
 
     // First process main and generate hash table
-    this._process(mainCssAsset, compilation).then(() => {
+    await this._process(mainCssAsset, compilation).then(() => {
       if (Array.isArray(restCssAssets) && restCssAssets.length) {
         return Promise.all(
           restCssAssets.map(cssAsset =>
