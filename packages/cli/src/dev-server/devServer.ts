@@ -21,6 +21,7 @@ async function createDevServer(
 
     const app = express();
     const isVerbose = process.argv.some(arg => arg.includes('--verbose=true'));
+    const staticDir = path.dirname(require.resolve('@ima/error-overlay'));
 
     app
       .use((req, res, next) => {
@@ -36,13 +37,15 @@ async function createDevServer(
           index: false,
           orderPreference: ['br'],
           serveStatic: {
-            cacheControl: true,
+            cacheControl: false,
             maxAge: '14d',
           },
         })
       )
-      .use('/__get-internal-source', evalSourceMapMiddleware())
-      .use('/__open-editor', openEditorMiddleware())
+      .use(
+        '/__error-overlay-static',
+        express.static(path.join(staticDir), { maxAge: '14d' })
+      )
       .use(
         devMiddleware(compiler, {
           index: false,
@@ -59,13 +62,15 @@ async function createDevServer(
           heartbeat: 5000,
         })
       )
+      .use('/__get-internal-source', evalSourceMapMiddleware())
+      .use('/__open-editor', openEditorMiddleware())
       .use((err: Error, req: Request, res: Response, next: NextFunction) => {
         if (res.headersSent) {
           return next(err);
         }
 
         res.status(500).json({
-          status: 'Something has happened with the ima-dev-server 😢',
+          status: 'Something has happened with the @ima/cli/devServer 😢',
           error: err,
         });
       })

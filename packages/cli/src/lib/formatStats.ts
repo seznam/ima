@@ -315,9 +315,9 @@ function formatStats(stats: MultiStats | undefined, args: ImaCliArgs): void {
 
   // Print more information for build task
   logger.write(
-    `The compilation generated additional ${chalk.green.bold(
+    `The compilation generated ${chalk.green.bold(
       additionalAssetsCount
-    )} assets.\n`
+    )} additional assets.\n`
   );
 }
 

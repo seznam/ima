@@ -186,9 +186,14 @@ export default class ClientRouter extends AbstractRouter {
     return super
       .route(path, options, action, locals)
       .catch(error => this.handleError({ error }, {}, locals))
-      .then(() => {
+      .then(error => {
         // Hide error overlay
-        if ($Debug && typeof window !== 'undefined' && window.__ima_hmr) {
+        if (
+          !(error instanceof Error) &&
+          $Debug &&
+          typeof window !== 'undefined' &&
+          window.__ima_hmr
+        ) {
           window.__ima_hmr.clearRuntimeErrors();
         }
       })
@@ -207,7 +212,7 @@ export default class ClientRouter extends AbstractRouter {
       // Show error overlay
       if (typeof window !== 'undefined' && window.__ima_hmr) {
         window.__ima_hmr.handleRuntimeError(params.error);
-        return;
+        return params.error;
       }
     }
 

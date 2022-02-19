@@ -67,28 +67,27 @@ function parseStack(stack: string[]): ParsedStack[] {
           lineNumber,
           columnNumber,
         };
-      } else {
-        // Strip eval
-        if (traceLine.indexOf('(eval ') !== -1) {
-          traceLine = traceLine.replace(/(\(eval at [^()]*)|(\),.*$)/g, '');
-        }
-
-        if (traceLine.indexOf('(at ') !== -1) {
-          traceLine = traceLine.replace(/\(at /, '(');
-        }
-
-        const data = traceLine.trim().split(/\s+/g).slice(1);
-        const traceToken = data.pop();
-        const { fileUri, lineNumber, columnNumber } =
-          (traceToken && extractLocation(traceToken)) || {};
-
-        return {
-          functionName: data.join(' ') || null,
-          fileUri,
-          lineNumber,
-          columnNumber,
-        };
       }
+
+      if (traceLine.indexOf('(eval ') !== -1) {
+        traceLine = traceLine.replace(/(\(eval at [^()]*)|(\),.*$)/g, '');
+      }
+
+      if (traceLine.indexOf('(at ') !== -1) {
+        traceLine = traceLine.replace(/\(at /, '(');
+      }
+
+      const data = traceLine.trim().split(/\s+/g).slice(1);
+      const traceToken = data.pop();
+      const { fileUri, lineNumber, columnNumber } =
+        (traceToken && extractLocation(traceToken)) || {};
+
+      return {
+        functionName: data.join(' ') || null,
+        fileUri,
+        lineNumber,
+        columnNumber,
+      };
     });
 }
 
