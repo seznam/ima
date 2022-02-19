@@ -10,11 +10,14 @@ export interface LoggerOptions {
 }
 
 class Logger {
-  private _innerElapsed?: ReturnType<typeof time>;
   private _identifier?: string;
+  private _globalLogger?: Logger;
 
-  constructor(identifier?: string) {
+  innerElapsed?: ReturnType<typeof time>;
+
+  constructor(identifier?: string, globalLogger?: Logger) {
     this._identifier = identifier;
+    this._globalLogger = globalLogger;
   }
 
   private _log(
@@ -28,7 +31,7 @@ class Logger {
 
     // Track time
     if (trackTime) {
-      this._innerElapsed = time();
+      this.innerElapsed = time();
     }
 
     // Write prefix (optionally with identifier)
@@ -49,16 +52,26 @@ class Logger {
     }
 
     // Write newline (ignore when some kind of time tracking is enabled)
-    if (newLine && !this._innerElapsed && !elapsed) {
+    if (newLine && !this.innerElapsed && !elapsed) {
       process.stdout.write('\n');
     }
   }
 
   public endTracking(): void {
     // Write elapsed for previous log
-    if (this._innerElapsed) {
-      this.writeElapsed(this._innerElapsed);
-      this._innerElapsed = undefined;
+    if (this.innerElapsed) {
+      this.writeElapsed(this.innerElapsed);
+      this.innerElapsed = undefined;
+
+      return;
+    }
+
+    // Write elapsed for previous log
+    if (this._globalLogger?.innerElapsed) {
+      this.writeElapsed(this._globalLogger.innerElapsed);
+      this._globalLogger.innerElapsed = undefined;
+
+      return;
     }
   }
 
@@ -95,10 +108,13 @@ class Logger {
   }
 }
 
+/**
+ * Create global logger instance
+ */
+const globalLogger = new Logger();
+
 function createLogger(imaPlugin: ImaCliPlugin): Logger {
-  return new Logger(imaPlugin.name);
+  return new Logger(imaPlugin.name, globalLogger);
 }
 
-const logger = new Logger();
-
-export { createLogger, logger };
+export { createLogger, globalLogger as logger };
