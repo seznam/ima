@@ -194,13 +194,13 @@ function extractAssetPaths(
  * Print formatted info about given asset
  */
 function printAssetInfo(
-  asset: StatsAsset,
+  asset: StatsAsset | undefined,
   outDir: string,
   isLastItem = false
 ): void {
   let result = '';
 
-  if (!asset.name) {
+  if (!asset || !asset.name) {
     return;
   }
 
@@ -263,8 +263,8 @@ function formatStats(stats: MultiStats | undefined, args: ImaCliArgs): void {
     return;
   }
 
-  // Minimal (default) output
-  let totalCount = 0;
+  let totalAssetCount = 0;
+  let chunkAssetsCount = 0;
   const outDir = jsonStats.children[0].outputPath ?? '';
 
   logger.info(
@@ -283,37 +283,42 @@ function formatStats(stats: MultiStats | undefined, args: ImaCliArgs): void {
     );
 
     // Count total number of generated assets
-    totalCount += child.assets?.length ?? 0;
+    totalAssetCount +=
+      child?.assets?.reduce((acc, cur) => {
+        acc += cur?.filteredRelated ?? 0 + 1;
 
-    const filteredAssets = child.assets
-      ?.filter(asset => /\.(css|js)$/i.test(asset.name))
-      .filter(asset => !asset.name.endsWith('hot-update.js'))
-      .sort((a, b) => a?.name.localeCompare(b?.name));
-    const filteredAssetsLen = filteredAssets?.length ?? 0;
+        return acc;
+      }, 0) ?? 0;
 
+    if (!(child.name && child.namedChunkGroups?.[child.name])) {
+      return;
+    }
+
+    // Child assets
+    const filteredAssets =
+      child.namedChunkGroups?.[child.name]?.assets?.map(({ name }) =>
+        child?.assets?.find(childAsset => childAsset.name === name)
+      ) ?? [];
+
+    // Print chunk assets
     filteredAssets?.forEach((asset, index) => {
       // Count also related (plugin generated) files
-      totalCount += Object.keys(asset?.info?.related ?? {}).length;
-
-      printAssetInfo(asset, outDir, index === filteredAssetsLen - 1);
+      chunkAssetsCount += asset?.filteredRelated ?? 0;
+      printAssetInfo(asset, outDir, index === filteredAssets?.length - 1);
     });
 
     logger.write('');
   });
 
+  // Total number of additional assets
+  const additionalAssetsCount = totalAssetCount - chunkAssetsCount;
+
   // Print more information for build task
-  if (args.command === 'build') {
-    logger.write(
-      `This ^ report covers only ${chalk.bold('.js')} and ${chalk.bold(
-        '.css'
-      )} files, there were`
-    );
-    logger.write(
-      `total of ${chalk.green.bold(
-        totalCount
-      )} assets generated inside the output folder.\n`
-    );
-  }
+  logger.write(
+    `The compilation generated additional ${chalk.green.bold(
+      additionalAssetsCount
+    )} assets.\n`
+  );
 }
 
 export { formatWebpackErrors, formatWebpackWarnings, formatStats };

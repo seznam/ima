@@ -13,6 +13,7 @@ import {
   ImaCliPlugin,
 } from '../../types';
 import { PostCssPlugin } from '../../webpack/plugins/PostCssPlugin';
+import { RemoveEmptyAmpScriptsPlugin } from './plugin/RemoveEmptyAmpScriptsPlugin';
 
 // Extend existing cli args interface with new values
 declare module '../../types' {
@@ -43,8 +44,6 @@ const ampPluginSharedCliArgs: CommandBuilder = {
  * Generates css file per component, so it can be later used to dynamically
  * construct minimal css file need to render the page (used specifically for AMP).
  */
-// TODO RemoveEmptyScripts doesnt work for new entry points since @pmmmwh/react-refresh-webpack-plugin injects
-// custom JS entries and RemoveEmptyScripts now thinks that these empty JS entries are only used in the CSS so it does not remove them
 class AmpPlugin implements ImaCliPlugin {
   private _options: Required<AmpPluginOptions>;
   private _logger: ReturnType<typeof createLogger>;
@@ -138,6 +137,13 @@ class AmpPlugin implements ImaCliPlugin {
         })
       );
     }
+
+    // Push cleanup plugin (removes generated empty JS entries)
+    config.plugins?.push(
+      new RemoveEmptyAmpScriptsPlugin({
+        entries: ampEntryPaths,
+      })
+    );
 
     return config;
   }

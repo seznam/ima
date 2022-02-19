@@ -126,14 +126,20 @@ class AnalyzePlugin implements ImaCliPlugin {
     if (reportExists || statsExists) {
       this._logger.write(chalk.bold.underline('\nWebpack Bundle Analyzer:'));
       reportExists &&
-        this._logger.write(`${chalk.gray('├')} report - ${reportPath}`);
+        this._logger.write(
+          `${chalk.gray('├')} report - ${chalk.magenta(reportPath)}`
+        );
       statsExists &&
-        this._logger.write(`${chalk.gray('└')} webpack stats - ${statsPath}`);
+        this._logger.write(
+          `${chalk.gray('└')} webpack stats - ${chalk.magenta(statsPath)}`
+        );
     }
 
     if (bundleStatsExists) {
       this._logger.write(chalk.bold.underline('\nWebpack Bundle Stats:'));
-      this._logger.write(`${chalk.gray('└')} report - ${bundleStatsPath}`);
+      this._logger.write(
+        `${chalk.gray('└')} report - ${chalk.magenta(bundleStatsPath)}`
+      );
     }
 
     // Write info about stats.json usage
