@@ -2,7 +2,7 @@ import fs from 'fs';
 import path from 'path';
 import { URLSearchParams } from 'url';
 
-// import ReactRefreshWebpackPlugin from '@pmmmwh/react-refresh-webpack-plugin';
+import ReactRefreshWebpackPlugin from '@pmmmwh/react-refresh-webpack-plugin';
 import CompressionPlugin from 'compression-webpack-plugin';
 import CopyPlugin from 'copy-webpack-plugin';
 import CssMinimizerPlugin from 'css-minimizer-webpack-plugin';
@@ -430,9 +430,9 @@ export default async (
                       },
                     ],
                   ],
-                  // plugins: useHMR
-                  //   ? [require.resolve('react-refresh/babel')]
-                  //   : [],
+                  plugins: useHMR
+                    ? [require.resolve('react-refresh/babel')]
+                    : [],
                   sourceMaps: useSourceMaps,
                   inputSourceMap: useSourceMaps,
                 },
@@ -514,13 +514,13 @@ export default async (
 
             // Following plugins enable react refresh and hmr in watch mode
             useHMR && new webpack.HotModuleReplacementPlugin(),
-            // useHMR &&
-            //   new ReactRefreshWebpackPlugin({
-            //     overlay: {
-            //       module: '@ima/hmr-client/dist/fastRefreshClient',
-            //       sockIntegration: 'whm',
-            //     },
-            //   }),
+            useHMR &&
+              new ReactRefreshWebpackPlugin({
+                overlay: {
+                  module: '@ima/hmr-client/dist/fastRefreshClient',
+                  sockIntegration: 'whm',
+                },
+              }),
           ]),
     ].filter(Boolean) as WebpackPluginInstance[],
     // Enable node preset for externals on server
