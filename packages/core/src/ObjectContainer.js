@@ -439,7 +439,10 @@ export default class ObjectContainer {
    * @param {?string} bindingPluginName
    */
   setBindingState(bindingState, bindingPluginName = null) {
-    if (this._bindingState === ObjectContainer.APP_BINDING_STATE) {
+    if (
+      this._bindingState === ObjectContainer.APP_BINDING_STATE &&
+      bindingState !== ObjectContainer.PLUGIN_BINDING_STATE
+    ) {
       throw new Error(
         `ima.core.ObjectContainer:setBindingState The setBindingState() ` +
           `method  has to be called only by the bootstrap script. Other ` +

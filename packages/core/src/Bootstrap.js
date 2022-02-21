@@ -187,7 +187,7 @@ export default class Bootstrap {
 
     this._oc.setBindingState(ObjectContainer.PLUGIN_BINDING_STATE, name);
 
-    module.initBind(ns, this._oc, this._bootstrap.getConfig().bind, name, true);
+    module.initBind(ns, this._oc, this._config.bind, name, true);
 
     this._oc.setBindingState(ObjectContainer.APP_BINDING_STATE);
   }
