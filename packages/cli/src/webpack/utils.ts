@@ -162,6 +162,7 @@ function createCacheKey(
    */
   hash.update(
     JSON.stringify({
+      experiments: JSON.stringify(imaConfig.experiments),
       command: ctx.command,
       forceSPA: ctx.forceSPA,
       forceSPAWithHMR: ctx.forceSPAWithHMR,
@@ -208,7 +209,7 @@ async function resolveImaConfig(args: ImaCliArgs): Promise<ImaConfig> {
     watchOptions: {
       ignored: ['**/.git/**', '**/node_modules/**', '**/build/**'],
       followSymlinks: true,
-      aggregateTimeout: 100,
+      aggregateTimeout: 80,
     },
     babel: async config => config,
     postcss: async config => config,

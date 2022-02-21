@@ -75,6 +75,10 @@ export default async (
   }: {
     useLessLoader?: boolean;
   } = {}): Promise<RuleSetUseItem[]> => {
+    if (!processCss && !isServer) {
+      return ['null-loader'];
+    }
+
     return [
       processCss && {
         loader: require.resolve('postcss-loader'),
@@ -215,14 +219,27 @@ export default async (
       minimize: !isDevEnv && !isServer,
       minimizer: [
         new TerserPlugin({
-          terserOptions: {
-            mangle: {
-              safari10: true,
-            },
-            // Added for profiling in devtools
-            keep_classnames: ctx.profile,
-            keep_fnames: ctx.profile,
-          },
+          ...(imaConfig.experiments?.swc
+            ? {
+                minify: TerserPlugin.swcMinify,
+                terserOptions: {
+                  safari10: !isServer && !isEsVersion,
+                  // Added for profiling in devtools
+                  keepClassnames: ctx.profile,
+                  keepFnames: ctx.profile,
+                },
+              }
+            : {
+                minify: TerserPlugin.terserMinify,
+                terserOptions: {
+                  mangle: {
+                    safari10: !isServer && !isEsVersion,
+                  },
+                  // Added for profiling in devtools
+                  keep_classnames: ctx.profile,
+                  keep_fnames: ctx.profile,
+                },
+              }),
         }),
         new CssMinimizerPlugin(),
       ],
@@ -351,106 +368,166 @@ export default async (
                 },
               ],
             },
-            /**
-             * Process js of app directory with general babel config
-             */
-            {
-              test: /\.(js|mjs|cjs)$/,
-              exclude: [/\bcore-js\b/, /\bwebpack\/buildin\b/, appDir],
-              use: [
-                {
-                  loader: require.resolve('babel-loader'),
-                  options: {
-                    sourceType: 'unambiguous',
-                    babelrc: false,
-                    configFile: false,
-                    cacheDirectory: true,
-                    cacheCompression: false,
-                    compact: !isDevEnv,
-                    targets,
-                    presets: [
-                      [
-                        require.resolve('@babel/preset-env'),
-                        {
-                          bugfixes: true,
-                          modules: false,
-                          useBuiltIns: 'usage',
-                          corejs: { version: '3.20' },
-                          exclude: ['transform-typeof-symbol'],
+            ...(imaConfig.experiments?.swc
+              ? [
+                  /**
+                   * Run node_modules and app JS through swc
+                   */
+                  {
+                    test: /\.(js|mjs|cjs)$/,
+                    exclude: [/\bcore-js\b/, /\bwebpack\/buildin\b/, appDir],
+                    use: [
+                      {
+                        loader: require.resolve('swc-loader'),
+                        options: {
+                          env: {
+                            targets,
+                            mode: 'usage',
+                            coreJs: 3,
+                          },
+                          module: {
+                            type: isEsVersion ? 'es6' : 'commonjs',
+                          },
+                          sourceMaps: true,
+                          inlineSourcesContent: true,
                         },
-                      ],
+                      },
+                      {
+                        // This injects new plugin loader interface into legacy plugins
+                        loader: 'ima-legacy-plugin-loader',
+                      },
                     ],
-                    sourceMaps: useSourceMaps,
-                    inputSourceMap: useSourceMaps,
                   },
-                },
-                {
-                  // This injects new plugin loader interface into legacy plugins
-                  loader: 'ima-legacy-plugin-loader',
-                },
-              ],
-            },
-            {
-              test: /\.(js|mjs|jsx|cjs)$/,
-              include: appDir,
-              exclude: /node_modules/,
-              loader: require.resolve('babel-loader'),
-              options: await imaConfig.babel(
-                {
-                  targets,
-                  babelrc: false,
-                  configFile: false,
-                  cacheDirectory: true,
-                  cacheCompression: false,
-                  compact: !isDevEnv,
-                  presets: [
-                    [
-                      require.resolve('@babel/preset-react'),
+                  {
+                    test: /\.(js|mjs|jsx|cjs)$/,
+                    include: appDir,
+                    exclude: /node_modules/,
+                    loader: require.resolve('swc-loader'),
+                    options: {
+                      env: {
+                        targets,
+                        mode: 'usage',
+                        coreJs: 3,
+                        shippedProposals: true,
+                      },
+                      module: {
+                        type: isEsVersion ? 'es6' : 'commonjs',
+                      },
+                      jsc: {
+                        parser: {
+                          syntax: 'ecmascript',
+                          jsx: true,
+                        },
+                        transform: {
+                          react: {
+                            runtime: imaConfig.jsxRuntime ?? 'automatic',
+                            development: isDevEnv,
+                            refresh: useHMR,
+                          },
+                        },
+                      },
+                      sourceMaps: true,
+                      inlineSourcesContent: true,
+                    },
+                  },
+                ]
+              : [
+                  /**
+                   * Process js of app directory with general babel config
+                   */
+                  {
+                    test: /\.(js|mjs|cjs)$/,
+                    exclude: [/\bcore-js\b/, /\bwebpack\/buildin\b/, appDir],
+                    use: [
                       {
-                        development: isDevEnv,
-                        runtime: imaConfig.jsxRuntime ?? 'automatic',
+                        loader: require.resolve('babel-loader'),
+                        options: {
+                          sourceType: 'unambiguous',
+                          babelrc: false,
+                          configFile: false,
+                          cacheDirectory: true,
+                          cacheCompression: false,
+                          compact: !isDevEnv,
+                          targets,
+                          presets: [
+                            [
+                              require.resolve('@babel/preset-env'),
+                              {
+                                bugfixes: true,
+                                modules: false,
+                                useBuiltIns: 'usage',
+                                corejs: { version: '3.20' },
+                                exclude: ['transform-typeof-symbol'],
+                              },
+                            ],
+                          ],
+                          sourceMaps: useSourceMaps,
+                          inputSourceMap: useSourceMaps,
+                        },
+                      },
+                      {
+                        // This injects new plugin loader interface into legacy plugins
+                        loader: 'ima-legacy-plugin-loader',
                       },
                     ],
-                    [
-                      require.resolve('@babel/preset-env'),
+                  },
+                  {
+                    test: /\.(js|mjs|jsx|cjs)$/,
+                    include: appDir,
+                    exclude: /node_modules/,
+                    loader: require.resolve('babel-loader'),
+                    options: await imaConfig.babel(
                       {
-                        bugfixes: true,
-                        modules: false,
-                        useBuiltIns: 'usage',
-                        corejs: { version: '3.20', proposals: true },
-                        exclude: ['transform-typeof-symbol'],
+                        targets,
+                        babelrc: false,
+                        configFile: false,
+                        cacheDirectory: true,
+                        cacheCompression: false,
+                        compact: !isDevEnv,
+                        presets: [
+                          [
+                            require.resolve('@babel/preset-react'),
+                            {
+                              development: isDevEnv,
+                              runtime: imaConfig.jsxRuntime ?? 'automatic',
+                            },
+                          ],
+                          [
+                            require.resolve('@babel/preset-env'),
+                            {
+                              bugfixes: true,
+                              modules: false,
+                              useBuiltIns: 'usage',
+                              corejs: { version: '3.20', proposals: true },
+                              exclude: ['transform-typeof-symbol'],
+                            },
+                          ],
+                        ],
+                        plugins: useHMR
+                          ? [require.resolve('react-refresh/babel')]
+                          : [],
+                        sourceMaps: useSourceMaps,
+                        inputSourceMap: useSourceMaps,
                       },
-                    ],
-                  ],
-                  plugins: useHMR
-                    ? [require.resolve('react-refresh/babel')]
-                    : [],
-                  sourceMaps: useSourceMaps,
-                  inputSourceMap: useSourceMaps,
-                },
-                ctx
-              ),
-            },
-
+                      ctx
+                    ),
+                  },
+                ]),
             /**
              * CSS & LESS loaders, both have the exact same capabilities
              */
-            ...(processCss
-              ? [
-                  {
-                    test: /\.less$/,
-                    sideEffects: true,
-                    type: 'css',
-                    use: await getStyleLoaders({ useLessLoader: true }),
-                  },
-                  {
-                    test: /\.css$/,
-                    sideEffects: true,
-                    type: 'css',
-                    use: await getStyleLoaders(),
-                  },
-                ]
-              : []),
+            {
+              test: /\.less$/,
+              sideEffects: true,
+              type: 'css',
+              use: await getStyleLoaders({ useLessLoader: true }),
+            },
+            {
+              test: /\.css$/,
+              sideEffects: true,
+              type: 'css',
+              use: await getStyleLoaders(),
+            },
             /**
              * Fallback loader for all modules, that don't match any
              * of the above defined rules. This should be defined last.

@@ -183,6 +183,14 @@ export type ImaConfig = {
    * Supported languages with glob pathes of the files with translations
    */
   languages: Record<string, string[]>;
+
+  /**
+   * Experimental configurations which can be enabled individually on specific applications.
+   * Some of these may find a way to default configuration in future versions of IMA.js.
+   */
+  experiments?: {
+    swc?: boolean;
+  };
 };
 
 /**
