@@ -37,7 +37,6 @@ async function createDevServer(
           index: false,
           orderPreference: ['br'],
           serveStatic: {
-            cacheControl: false,
             maxAge: '14d',
           },
         })

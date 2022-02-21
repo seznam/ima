@@ -3,9 +3,15 @@ import { HMRMessageData } from '#/types';
 export type HMREventSourceListener = (data: HMRMessageData) => void;
 export type HMRErrorListener = (data: Event) => void;
 
+const RECONNECT_TIMEOUT = 5000;
+
+/**
+ * Initiates connection to webpack-hot-middleware SSE event source.
+ */
 class HMREventSource {
   private _idCounter: number;
-  private _eventSource: EventSource;
+  private _eventSource?: EventSource;
+  private _reconnectTimeout?: number;
 
   private _errorListeners: Map<number, HMRErrorListener>;
   private _listeners: Map<number, HMREventSourceListener>;
@@ -18,9 +24,15 @@ class HMREventSource {
     this._messageHandler = this._messageHandler.bind(this);
     this._errorHandler = this._errorHandler.bind(this);
 
+    // Init event source
+    this._init();
+  }
+
+  private _init(): void {
     this._eventSource = new EventSource(
       `http://${window.parent.__ima_hmr.options.public}/__webpack_hmr`
     );
+
     this._eventSource.addEventListener('message', this._messageHandler);
     this._eventSource.addEventListener('error', this._errorHandler);
   }
@@ -42,6 +54,21 @@ class HMREventSource {
   }
 
   private _errorHandler(event: Event): void {
+    // Close event source
+    if (this._eventSource) {
+      this._eventSource.close();
+    }
+
+    // Clear pending timeouts
+    if (this._reconnectTimeout) {
+      window.clearTimeout(this._reconnectTimeout);
+    }
+
+    // Create reconnect timeout
+    this._reconnectTimeout = window.setTimeout(() => {
+      this._init();
+    }, RECONNECT_TIMEOUT);
+
     for (const listener of this._errorListeners.values()) {
       listener(event);
     }
