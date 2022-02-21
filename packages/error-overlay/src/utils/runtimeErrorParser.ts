@@ -2,7 +2,8 @@ import { ParsedStack } from '#/types';
 
 const reExtractLocations = /\(?(.+?)(?::(\d+))?(?::(\d+))?\)?$/;
 const reValidFrameChrome = /^\s*(at|in)\s.+(:\d+)/;
-const reValidFrameFireFox = /(^|@)\S+:\d+|.+line\s+\d+\s+>\s+(eval|Function).+/;
+const reValidFrameFireFox =
+  /(^|\/?@)\S+:\d+|.+line\s+\d+\s+>\s+(eval|Function).+/;
 
 /**
  * Extract file uri, line and column number from
@@ -27,6 +28,17 @@ function extractLocation(token: string): {
 }
 
 /**
+ * Splits trace line at '@' character ignoring pkg namespace paths.
+ */
+function splitAt(traceLine: string): string[] {
+  const traceLineMask = '____AT_MASK____';
+  const maskedTraceLine = traceLine.replace(/\/@/g, traceLineMask);
+  const parts = maskedTraceLine.split('@');
+
+  return parts.map(part => part.trim().replace(traceLineMask, '/@'));
+}
+
+/**
  * Original {@link https://github.com/facebook/create-react-app/blob/main/packages/react-error-overlay/src/utils/parser.js}
  *
  * Parses error stack lines into function name call, file uri
@@ -44,7 +56,10 @@ function parseStack(stack: string[]): ParsedStack[] {
     )
     .map(traceLine => {
       // Chrome and firefox have different stack trace formats
-      if (reValidFrameFireFox.test(traceLine)) {
+      const match = traceLine.match(reValidFrameFireFox);
+
+      // Validate firefox (if at character contains / prefix, it's namespaced package path)
+      if (match && match[1] === '@') {
         let isEval = false;
 
         // Strip eval
@@ -56,7 +71,7 @@ function parseStack(stack: string[]): ParsedStack[] {
           isEval = true;
         }
 
-        const data = traceLine.split(/[@]/g);
+        const data = splitAt(traceLine);
         const traceToken = data.pop();
         const { fileUri, lineNumber, columnNumber } =
           (traceToken && extractLocation(traceToken)) || {};
