@@ -33,7 +33,7 @@ function evalSourceMapMiddleware() {
      */
     if (fileUri?.startsWith('webpack-internal:///')) {
       const compilation =
-        res?.locals?.webpack?.devMiddleware?.stats?.stats[0]?.compilation;
+        res?.locals?.webpack?.devMiddleware?.stats?.compilation;
 
       if (!fileUri || !compilation) {
         return res.status(500).end();

@@ -266,14 +266,6 @@ export default async (
     },
     module: {
       rules: [
-        /**
-         * Extract source maps for node_module packages.
-         */
-        useSourceMaps && {
-          enforce: 'pre',
-          test: /\.(js|mjs|jsx|ts|tsx|cjs|css|less)$/,
-          use: require.resolve('source-map-loader'),
-        },
         {
           /**
            * This will traverse following loaders until a match is found.
