@@ -96,7 +96,7 @@ export default async (
                     ? '[path][name]__[local]--[hash:base64:5]'
                     : '[hash:base64]',
                 },
-                sourceMap: imaConfig.experiments?.swc, // Doesn't currently work with babel
+                sourceMap: useSourceMaps && imaConfig.experiments?.swc, // Doesn't currently work with babel
               },
             },
           ]
