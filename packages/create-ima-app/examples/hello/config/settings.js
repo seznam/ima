@@ -39,9 +39,6 @@ export default (ns, oc, config) => {
             `/static/locale/${config.$Language}.js${versionStamp}`,
             `/static/js.es/app.bundle.min.js${versionStamp}`,
           ],
-          polyfill: {
-            fetch: '/static/js/polyfill-fetch.js',
-          },
           documentView: DocumentView,
         },
       },

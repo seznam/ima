@@ -190,6 +190,7 @@ export type ImaConfig = {
    */
   experiments?: {
     swc?: boolean;
+    nativeCss?: boolean;
   };
 };
 

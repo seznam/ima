@@ -6,6 +6,7 @@ import ReactRefreshWebpackPlugin from '@pmmmwh/react-refresh-webpack-plugin';
 import CompressionPlugin from 'compression-webpack-plugin';
 import CopyPlugin from 'copy-webpack-plugin';
 import CssMinimizerPlugin from 'css-minimizer-webpack-plugin';
+import MiniCssExtractPlugin from 'mini-css-extract-plugin';
 import miniSVGDataURI from 'mini-svg-data-uri';
 import TerserPlugin from 'terser-webpack-plugin';
 import webpack, {
@@ -75,11 +76,31 @@ export default async (
   }: {
     useLessLoader?: boolean;
   } = {}): Promise<RuleSetUseItem[]> => {
-    if (!processCss && !isServer) {
+    if (!processCss) {
       return ['null-loader'];
     }
 
     return [
+      ...(!imaConfig.experiments?.nativeCss
+        ? [
+            processCss && {
+              loader: MiniCssExtractPlugin.loader,
+            },
+            {
+              loader: require.resolve('css-loader'),
+              options: {
+                modules: {
+                  auto: true,
+                  exportOnlyLocals: !processCss,
+                  localIdentName: isDevEnv
+                    ? '[path][name]__[local]--[hash:base64:5]'
+                    : '[hash:base64]',
+                },
+                sourceMap: useSourceMaps,
+              },
+            },
+          ]
+        : []),
       processCss && {
         loader: require.resolve('postcss-loader'),
         options: await imaConfig.postcss(
@@ -263,6 +284,7 @@ export default async (
     },
     resolve: {
       extensions: ['.mjs', '.js', '.jsx', '.json'],
+      mainFields: isServer ? ['main', 'module'] : ['browser', 'module', 'main'],
       alias: {
         // App specific aliases
         app: path.join(rootDir, 'app'),
@@ -519,14 +541,14 @@ export default async (
             {
               test: /\.less$/,
               sideEffects: true,
-              type: 'css',
               use: await getStyleLoaders({ useLessLoader: true }),
+              ...(imaConfig.experiments?.nativeCss && { type: 'css' }),
             },
             {
               test: /\.css$/,
               sideEffects: true,
-              type: 'css',
               use: await getStyleLoaders(),
+              ...(imaConfig.experiments?.nativeCss && { type: 'css' }),
             },
             /**
              * Fallback loader for all modules, that don't match any
@@ -562,6 +584,16 @@ export default async (
           ]
         : // Client-specific plugins
           [
+            processCss &&
+              new MiniCssExtractPlugin({
+                filename: ({ chunk }) =>
+                  `static/css/${chunk?.name === name ? 'app' : '[name]'}${
+                    !isDevEnv ? '.min' : ''
+                  }.css`,
+                ignoreOrder: true,
+                chunkFilename: `static/css/[id]${!isDevEnv ? '.min' : ''}.css`,
+              }),
+
             // Enables compression for assets in production build
             ...(!isDevEnv
               ? imaConfig.compression.map(
@@ -608,7 +640,7 @@ export default async (
 
     // Enable native css support (this replaces mini-css-extract-plugin and css-loader)
     experiments: {
-      css: true,
+      css: imaConfig.experiments?.nativeCss,
     },
   };
 };

@@ -63,7 +63,7 @@ async function runCompiler(
             logger.error(error.toString());
           }
 
-          return reject(compiler);
+          return reject(error);
         }
 
         // Format stats after plugin done callback
@@ -115,7 +115,7 @@ async function watchCompiler(
 
       // Reject with compiler when there are any errors
       if (error) {
-        return reject(compiler);
+        return reject(error);
       }
 
       // Format stats after plugin done callback

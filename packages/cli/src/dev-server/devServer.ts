@@ -75,6 +75,9 @@ async function createDevServer(
       })
       .listen(port, hostname, () => {
         resolve();
+      })
+      .on('error', error => {
+        reject(error);
       });
   });
 }

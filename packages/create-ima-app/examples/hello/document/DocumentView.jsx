@@ -78,6 +78,7 @@ export default class DocumentView extends AbstractDocumentView {
 		        }
 		    }
 		    $IMA.Runner = $IMA.Runner || {};
+
 		    if (Object.values && checkAsyncAwait()) {
 		        $IMA.Runner.scripts = [
 		            ${this.utils.$Settings.$Page.$Render.esScripts
@@ -91,11 +92,7 @@ export default class DocumentView extends AbstractDocumentView {
                   .join()}
 	            ];
 		    }
-		    if (!window.fetch) {
-		        $IMA.Runner.scripts.unshift('${
-              this.utils.$Settings.$Page.$Render.polyfill.fetch
-            }');
-		    }
+
 		    $IMA.Runner.scripts.forEach(function(source) {
 		        var script = document.createElement('script');
 		        script.async = $IMA.$Env !== 'dev';

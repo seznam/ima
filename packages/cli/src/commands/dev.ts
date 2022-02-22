@@ -134,7 +134,12 @@ const dev: HandlerFn = async args => {
     // Start nodemon and application server
     startNodemon(args);
   } catch (error) {
-    handleError(error);
+    if (args.verbose) {
+      console.error(error);
+    } else {
+      handleError(error);
+    }
+
     process.exit(1);
   }
 };
