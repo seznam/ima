@@ -96,7 +96,7 @@ export default async (
                     ? '[path][name]__[local]--[hash:base64:5]'
                     : '[hash:base64]',
                 },
-                sourceMap: useSourceMaps,
+                sourceMap: imaConfig.experiments?.swc, // Doesn't currently work with babel
               },
             },
           ]
@@ -112,6 +112,7 @@ export default async (
                 [
                   'postcss-preset-env',
                   {
+                    browsers: 'defaults',
                     autoprefixer: {
                       flexbox: 'no-2009',
                     },
@@ -178,7 +179,7 @@ export default async (
                 }).toString()}`,
               useHMR &&
                 isDebug &&
-                `@ima/hmr-client/dist/imaHmrClient?${new URLSearchParams({
+                `@ima/hmr-client/dist/imaHmrClient.js?${new URLSearchParams({
                   port: devServerConfig.port.toString(),
                   hostname: devServerConfig.hostname,
                   public: devServerConfig.public,
