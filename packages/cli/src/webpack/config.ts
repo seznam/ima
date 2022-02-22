@@ -386,7 +386,7 @@ export default async (
                             coreJs: 3,
                           },
                           module: {
-                            type: isEsVersion ? 'es6' : 'commonjs',
+                            type: 'commonjs',
                           },
                           sourceMaps: true,
                           inlineSourcesContent: true,
@@ -411,7 +411,7 @@ export default async (
                         shippedProposals: true,
                       },
                       module: {
-                        type: isEsVersion ? 'es6' : 'commonjs',
+                        type: 'commonjs',
                       },
                       jsc: {
                         parser: {
@@ -592,12 +592,15 @@ export default async (
               }),
           ]),
     ].filter(Boolean) as WebpackPluginInstance[],
+
     // Enable node preset for externals on server
     externalsPresets: {
       node: isServer,
     },
+
     // Turn webpack performance reports off since we print reports ourselves
     performance: false,
+
     // Disable infrastructure logging in normal mode
     infrastructureLogging: {
       level: ctx.verbose ? 'info' : 'none',
