@@ -141,9 +141,9 @@ async function mapCompileStackFrames(
             frame.columnNumber
           ) || {};
 
-          if (column) {
+          if (sourceFileUri) {
             const originalSource =
-              sourceFileUri && fileSource.sourceMap.getSource(sourceFileUri);
+              fileSource.sourceMap.getSource(sourceFileUri);
 
             return new StackFrame({
               originalFileName: sourceFileUri,

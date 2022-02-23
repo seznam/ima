@@ -44,7 +44,7 @@ const App: FunctionComponent = () => {
       <div className='p-4 mx-auto max-w-screen-lg'>
         <Header error={currentError} />
         <Hero error={currentError} />
-        {visibleFrames.map((frameWrapper, index) => (
+        {visibleFrames.filter(Boolean).map((frameWrapper, index) => (
           <Fragment key={frameWrapper.id}>
             <Frame
               frameWrapper={frameWrapper}

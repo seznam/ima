@@ -39,7 +39,6 @@
     "@gatsbyjs/webpack-hot-middleware": "^2.25.2",
     "@pmmmwh/react-refresh-webpack-plugin": "^0.5.4",
     "@swc/core": "^1.2.141",
-    "anser": "^2.1.1",
     "babel-loader": "^8.2.3",
     "better-opn": "^3.0.2",
     "bundle-stats-webpack-plugin": "^3.2.5",
