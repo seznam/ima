@@ -23,6 +23,11 @@ const handleRuntimeError = (error: Error) => {
     return;
   }
 
+  // Ignore unknown errors (usually promise rejectsion etc.)
+  if (error.message === 'Unknown') {
+    return;
+  }
+
   if (!window?.__ima_hmr) {
     return;
   }
