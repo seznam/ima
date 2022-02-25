@@ -135,6 +135,7 @@ export default class CookieStorage extends MapStorage {
    * @inheritdoc
    */
   has(name) {
+    this._parse();
     return super.has(name);
   }
 
@@ -142,6 +143,7 @@ export default class CookieStorage extends MapStorage {
    * @inheritdoc
    */
   get(name) {
+    this._parse();
     if (super.has(name)) {
       return super.get(name).value;
     } else {
@@ -230,6 +232,7 @@ export default class CookieStorage extends MapStorage {
    * @inheritdoc
    */
   keys() {
+    this._parse();
     return super.keys();
   }
 
@@ -237,6 +240,7 @@ export default class CookieStorage extends MapStorage {
    * @inheritdoc
    */
   size() {
+    this._parse();
     return super.size();
   }
 
@@ -295,17 +299,35 @@ export default class CookieStorage extends MapStorage {
       ? cookiesString.split(COOKIE_SEPARATOR)
       : [];
 
+    let cookiesNames = [];
+
     for (let i = 0; i < cookiesArray.length; i++) {
       let cookie = this._extractCookie(cookiesArray[i]);
 
       if (cookie.name !== null) {
         cookie.options = Object.assign({}, this._options, cookie.options);
 
+        cookiesNames.push(cookie.name);
+
+        // add new cookie or update existing one
         super.set(cookie.name, {
           value: this._sanitizeCookieValue(cookie.value),
           options: cookie.options,
         });
       }
+    }
+
+    // remove cookies from storage, which were not parsed
+    const currentCookiesNames = super.keys();
+
+    let currentCookieName = currentCookiesNames.next();
+
+    while (!currentCookieName.done) {
+      const index = cookiesNames.indexOf(currentCookieName.value);
+      if (index === -1) {
+        super.delete(currentCookieName.value);
+      }
+      currentCookieName = currentCookiesNames.next();
     }
   }
 
