@@ -96,7 +96,10 @@ export default async (
                     ? '[path][name]__[local]--[hash:base64:5]'
                     : '[hash:base64]',
                 },
-                sourceMap: useSourceMaps && imaConfig.experiments?.swc, // Doesn't currently work with babel
+                sourceMap:
+                  useSourceMaps &&
+                  (imaConfig.experiments?.swc ||
+                    imaConfig.experiments?.nativeCss), // Doesn't currently work with babel
               },
             },
           ]
@@ -250,8 +253,8 @@ export default async (
             mangle: {
               safari10: !isServer && !isEsVersion,
               // Added for profiling in devtools
-              keep_classnames: ctx.profile,
-              keep_fnames: ctx.profile,
+              keep_classnames: ctx.profile || isDevEnv,
+              keep_fnames: ctx.profile || isDevEnv,
             },
           },
         }),

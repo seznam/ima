@@ -101,9 +101,14 @@ const PostCssScrambler: postcss.PluginCreator<
             );
           }
 
-          classNameNode.value = `${numberToCssClass(
-            prefixIndex
-          )}_${numberToCssClass(mainPartIndex)}`;
+          // Repace with new class name value with source map support
+          classNameNode.replaceWith(
+            classNameNode.clone({
+              value: `${numberToCssClass(prefixIndex)}_${numberToCssClass(
+                mainPartIndex
+              )}`,
+            })
+          );
         });
       });
 
