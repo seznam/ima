@@ -96,7 +96,10 @@ export default async (
                     ? '[path][name]__[local]--[hash:base64:5]'
                     : '[hash:base64]',
                 },
-                sourceMap: useSourceMaps && imaConfig.experiments?.swc, // Doesn't currently work with babel
+                sourceMap:
+                  useSourceMaps &&
+                  (imaConfig.experiments?.swc ||
+                    imaConfig.experiments?.nativeCss), // Doesn't currently work with babel
               },
             },
           ]
@@ -238,30 +241,22 @@ export default async (
       },
     },
     optimization: {
-      minimize: !isDevEnv && !isServer,
+      minimize: ctx.command === 'build' && !isServer,
       minimizer: [
         new TerserPlugin({
-          ...(imaConfig.experiments?.swc
-            ? {
-                minify: TerserPlugin.swcMinify,
-                terserOptions: {
-                  safari10: !isServer && !isEsVersion,
-                  // Added for profiling in devtools
-                  keepClassnames: ctx.profile,
-                  keepFnames: ctx.profile,
-                },
-              }
-            : {
-                minify: TerserPlugin.terserMinify,
-                terserOptions: {
-                  mangle: {
-                    safari10: !isServer && !isEsVersion,
-                  },
-                  // Added for profiling in devtools
-                  keep_classnames: ctx.profile,
-                  keep_fnames: ctx.profile,
-                },
-              }),
+          minify: imaConfig.experiments?.swcMinimizer
+            ? TerserPlugin.swcMinify
+            : TerserPlugin.terserMinify,
+          terserOptions: {
+            ecma: isServer || isEsVersion ? 2016 : 5,
+            compress: true,
+            mangle: {
+              safari10: !isServer && !isEsVersion,
+              // Added for profiling in devtools
+              keep_classnames: ctx.profile || isDevEnv,
+              keep_fnames: ctx.profile || isDevEnv,
+            },
+          },
         }),
         new CssMinimizerPlugin(),
       ],
@@ -400,7 +395,7 @@ export default async (
                     test: /\.(js|mjs|cjs)$/,
                     exclude: [/\bcore-js\b/, /\bwebpack\/buildin\b/, appDir],
                     use: [
-                      {
+                      !isServer && {
                         loader: require.resolve('swc-loader'),
                         options: {
                           env: {
@@ -419,7 +414,7 @@ export default async (
                         // This injects new plugin loader interface into legacy plugins
                         loader: 'ima-legacy-plugin-loader',
                       },
-                    ],
+                    ].filter(Boolean),
                   },
                   {
                     test: /\.(js|mjs|jsx|cjs)$/,
@@ -462,7 +457,7 @@ export default async (
                     test: /\.(js|mjs|cjs)$/,
                     exclude: [/\bcore-js\b/, /\bwebpack\/buildin\b/, appDir],
                     use: [
-                      {
+                      !isServer && {
                         loader: require.resolve('babel-loader'),
                         options: {
                           sourceType: 'unambiguous',
@@ -492,7 +487,7 @@ export default async (
                         // This injects new plugin loader interface into legacy plugins
                         loader: 'ima-legacy-plugin-loader',
                       },
-                    ],
+                    ].filter(Boolean),
                   },
                   {
                     test: /\.(js|mjs|jsx|cjs)$/,
@@ -596,7 +591,7 @@ export default async (
               }),
 
             // Enables compression for assets in production build
-            ...(!isDevEnv
+            ...(ctx.command === 'build'
               ? imaConfig.compression.map(
                   algorithm =>
                     new CompressionPlugin({

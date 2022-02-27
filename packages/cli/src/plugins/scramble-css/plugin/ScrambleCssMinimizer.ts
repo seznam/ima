@@ -151,6 +151,8 @@ class ScrambleCssMinimizer {
       return;
     }
 
+    const prevMap = source.map();
+
     // Process css using postcss plugin
     const { css, map } = await postcss([
       PostCssScrambler({
@@ -158,14 +160,14 @@ class ScrambleCssMinimizer {
         hashTablePath: this._hashTablePath,
       }),
     ]).process(source.source(), {
-      map: source.map(),
+      map: prevMap ? { prev: prevMap } : {},
       from: filename,
       to: filename,
     });
 
     // Create new source
     const newSource = map
-      ? new sources.SourceMapSource(css, filename, map)
+      ? new sources.SourceMapSource(css, filename, map.toJSON())
       : new sources.RawSource(css);
 
     // Store cache
