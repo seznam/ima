@@ -209,7 +209,7 @@ export default class CookieStorage extends MapStorage {
    * @return {Storage} This storage.
    */
   delete(name, options = {}) {
-    if (this.has(name)) {
+    if (super.has(name)) {
       this.set(name, undefined, options);
       super.delete(name);
     }
@@ -295,6 +295,7 @@ export default class CookieStorage extends MapStorage {
     let cookiesString = this._window.isClient()
       ? document.cookie
       : this._request.getCookieHeader();
+
     let cookiesArray = cookiesString
       ? cookiesString.split(COOKIE_SEPARATOR)
       : [];
@@ -318,16 +319,11 @@ export default class CookieStorage extends MapStorage {
     }
 
     // remove cookies from storage, which were not parsed
-    const currentCookiesNames = super.keys();
-
-    let currentCookieName = currentCookiesNames.next();
-
-    while (!currentCookieName.done) {
-      const index = cookiesNames.indexOf(currentCookieName.value);
+    for (let storageCookieName of super.keys()) {
+      const index = cookiesNames.indexOf(storageCookieName);
       if (index === -1) {
-        super.delete(currentCookieName.value);
+        super.delete(storageCookieName);
       }
-      currentCookieName = currentCookiesNames.next();
     }
   }
 

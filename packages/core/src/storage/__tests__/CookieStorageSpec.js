@@ -19,6 +19,7 @@ describe('ima.storage.CookieStorage', () => {
   let cookiesStringForCookieHeader = 'cok1=hello; cok2=hello2';
 
   let request = null;
+  let requestGetCookieHeaderSpy = null;
   let response = null;
   let cookie = null;
   let win = null;
@@ -40,7 +41,8 @@ describe('ima.storage.CookieStorage', () => {
     request.init({});
     response.init({}, transformFunction);
 
-    spyOn(request, 'getCookieHeader').and.returnValue(cookieString);
+    requestGetCookieHeaderSpy = spyOn(request, 'getCookieHeader');
+    requestGetCookieHeaderSpy.and.returnValue(cookieString);
 
     spyOn(response, 'setCookie').and.stub();
 
@@ -98,6 +100,31 @@ describe('ima.storage.CookieStorage', () => {
       cookiesStringForCookieHeader
     );
     expect(cookie._transformFunction.encode.calls.count()).toBe(2);
+  });
+
+  describe('parse method', () => {
+    it('should delete cookie from storage, which were deleted in document.cookie', () => {
+      let cookieStringWithDeletedCok1 =
+        'cok2=hello2;Path=/;Expires=Fri, 31 Dec 9999 23:59:59 GMT';
+
+      requestGetCookieHeaderSpy.and.returnValue(cookieStringWithDeletedCok1);
+
+      cookie._parse();
+
+      expect(cookie._storage.size).toBe(1);
+    });
+
+    it('should change value of stored cookie if in document.cookie it has different value', () => {
+      let cookieStringWithNewValues =
+        'cok1=hello3;Path=/;Expires=Fri, 31 Dec 9999 23:59:59 GMT; cok2=hello4;Path=/;Expires=Fri, 31 Dec 9999 23:59:59 GMT';
+
+      requestGetCookieHeaderSpy.and.returnValue(cookieStringWithNewValues);
+
+      cookie._parse();
+
+      expect(cookie._storage.get('cok1').value).toBe('hello3');
+      expect(cookie._storage.get('cok2').value).toBe('hello4');
+    });
   });
 
   describe('set method', () => {
