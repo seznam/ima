@@ -1,5 +1,6 @@
 import { StatsError } from 'webpack';
 
+import { HMRMessageData } from '#/types';
 import { getOverlayBridge, getEventSource, HMRIndicator } from '#/utils';
 
 /**
@@ -52,7 +53,7 @@ window.addEventListener(
   'load',
   () => {
     // Connect client to HMR Event source
-    getEventSource().addListener(data => {
+    getEventSource().addListener('message', (data: HMRMessageData) => {
       // Compile error handler
       if (data.action === 'built') {
         if (Array.isArray(data?.errors) && data?.errors?.length > 0) {
@@ -70,9 +71,16 @@ window.addEventListener(
       }
     });
 
-    getEventSource().addErrorListener(() => {
+    getEventSource().addListener('error', () => {
       // Show invalid indicator to indicate lost connection
       hmrIndicator.create('invalid');
+    });
+
+    getEventSource().addListener('reconnect', () => {
+      hmrIndicator.destroy();
+
+      // Reload page to re-initialize disconnected hmr
+      location.reload();
     });
   },
   { once: true }

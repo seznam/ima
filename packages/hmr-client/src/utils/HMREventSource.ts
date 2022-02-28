@@ -1,9 +1,10 @@
 import { HMRMessageData } from '#/types';
 
+export type HMRReconnectListener = () => void;
 export type HMREventSourceListener = (data: HMRMessageData) => void;
 export type HMRErrorListener = (data: Event) => void;
 
-const RECONNECT_TIMEOUT = 5000;
+const RECONNECT_TIMEOUT = 1500;
 
 /**
  * Initiates connection to webpack-hot-middleware SSE event source.
@@ -13,14 +14,17 @@ class HMREventSource {
   private _eventSource?: EventSource;
   private _reconnectTimeout?: number;
 
+  private _reconnectListeners: Map<number, HMRReconnectListener>;
   private _errorListeners: Map<number, HMRErrorListener>;
   private _listeners: Map<number, HMREventSourceListener>;
 
   constructor() {
     this._idCounter = 0;
+    this._reconnectListeners = new Map();
     this._listeners = new Map();
     this._errorListeners = new Map();
 
+    this._reconnectHandler = this._reconnectHandler.bind(this);
     this._messageHandler = this._messageHandler.bind(this);
     this._errorHandler = this._errorHandler.bind(this);
 
@@ -28,13 +32,30 @@ class HMREventSource {
     this._init();
   }
 
-  private _init(): void {
+  private _init(reconnect = false): void {
     this._eventSource = new EventSource(
       `http://${window.parent.__ima_hmr.options.public}/__webpack_hmr`
     );
 
     this._eventSource.addEventListener('message', this._messageHandler);
     this._eventSource.addEventListener('error', this._errorHandler);
+
+    // Handle reconnection events
+    if (reconnect) {
+      const reconnectTimeout = setTimeout(() => {
+        this._reconnectHandler();
+      }, 50);
+
+      this._eventSource.addEventListener('error', () => {
+        clearTimeout(reconnectTimeout);
+      });
+    }
+  }
+
+  private _reconnectHandler(): void {
+    for (const listener of this._reconnectListeners.values()) {
+      listener();
+    }
   }
 
   private _messageHandler(event: MessageEvent): void {
@@ -66,7 +87,7 @@ class HMREventSource {
 
     // Create reconnect timeout
     this._reconnectTimeout = window.setTimeout(() => {
-      this._init();
+      this._init(true);
     }, RECONNECT_TIMEOUT);
 
     for (const listener of this._errorListeners.values()) {
@@ -74,16 +95,28 @@ class HMREventSource {
     }
   }
 
-  addListener(listener: HMREventSourceListener): number {
+  addListener(
+    type: 'message' | 'error' | 'reconnect',
+    listener: HMREventSourceListener | HMRReconnectListener
+  ): number {
     const listenerId = this._idCounter++;
-    this._listeners.set(listenerId, listener);
 
-    return listenerId;
-  }
+    switch (type) {
+      case 'error':
+        this._errorListeners.set(listenerId, listener as HMRErrorListener);
+        break;
 
-  addErrorListener(listener: HMRErrorListener): number {
-    const listenerId = this._idCounter++;
-    this._errorListeners.set(listenerId, listener);
+      case 'message':
+        this._listeners.set(listenerId, listener as HMREventSourceListener);
+        break;
+
+      case 'reconnect':
+        this._reconnectListeners.set(
+          listenerId,
+          listener as HMRReconnectListener
+        );
+        break;
+    }
 
     return listenerId;
   }

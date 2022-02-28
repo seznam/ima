@@ -173,7 +173,7 @@ export default async (
                 `@gatsbyjs/webpack-hot-middleware/client?${new URLSearchParams({
                   name,
                   path: `http://${devServerConfig.public}/__webpack_hmr`,
-                  timeout: '15000',
+                  timeout: '3000',
                   reload: 'true',
                   overlay: 'false',
                   overlayWarnings: 'false',

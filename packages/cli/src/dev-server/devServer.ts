@@ -58,7 +58,7 @@ async function createDevServer(
         hotMiddleware(compiler, {
           ...(isVerbose ? undefined : { quite: true, log: false }),
           path: '/__webpack_hmr',
-          heartbeat: 5000,
+          heartbeat: 1500,
         })
       )
       .use('/__get-internal-source', evalSourceMapMiddleware())
