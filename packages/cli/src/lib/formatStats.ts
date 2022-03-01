@@ -8,10 +8,7 @@ import prettyMs from 'pretty-ms';
 import { MultiStats, StatsAsset } from 'webpack';
 
 import { ImaCliArgs } from '../types';
-import {
-  createSourceFragment,
-  parseCompileError,
-} from './compileErrorParser';
+import { createSourceFragment, parseCompileError } from './compileErrorParser';
 import { logger } from './logger';
 
 const warningsCache = new Set<string>();

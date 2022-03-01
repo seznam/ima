@@ -3,14 +3,9 @@
   "version": "17.10.0",
   "description": "IMA.js hmr client used to connect app with error overlay.",
   "keywords": [
-    "IMA",
     "IMA.js",
-    "Isomorphic",
-    "Javascript",
-    "hmr",
-    "client",
-    "error-overlay",
-    "stack-trace"
+    "hmr-client",
+    "fast-refresh"
   ],
   "module": "./dist/fastRefreshClient.mjs",
   "main": "./dist/fastRefreshClient.cjs",

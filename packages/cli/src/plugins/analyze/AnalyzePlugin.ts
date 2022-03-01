@@ -103,7 +103,7 @@ class AnalyzePlugin implements ImaCliPlugin {
     return config;
   }
 
-  async postProcess(args: ImaCliArgs, imaConfig: ImaConfig): Promise<void> {
+  async postProcess(args: ImaCliArgs): Promise<void> {
     if (!args.analyze) {
       return;
     }
