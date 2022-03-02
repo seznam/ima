@@ -54,19 +54,19 @@
     "@size-limit/preset-big-lib": "^7.0.8",
     "enzyme": "^3.10.0",
     "jscodeshift": "^0.6.4",
-    "react": "16.9.0",
-    "react-dom": "16.9.0",
+    "react": "^17.0.2",
+    "react-dom": "^17.0.2",
     "rollup-plugin-jscc": "^2.0.0"
   },
   "dependencies": {
     "@ima/helpers": "^17.12.2",
     "classnames": "^2.2.6",
     "memoize-one": "^6.0.0",
-    "node-fetch": "^2.6.0"
+    "node-fetch": "^2.6.7"
   },
   "peerDependencies": {
-    "react": "16.x",
-    "react-dom": "16.x"
+    "react": ">=16.13",
+    "react-dom": ">=16.13"
   },
   "size-limit": [
     {
