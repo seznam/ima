@@ -28,6 +28,13 @@ module.exports = {
         type: 'css',
         use: ['postcss-loader'],
       },
+      {
+        test: /\.mjs$/,
+        type: 'javascript/auto',
+        resolve: {
+          fullySpecified: false,
+        },
+      },
     ],
   },
   optimization: {

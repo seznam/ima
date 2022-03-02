@@ -22,13 +22,11 @@ import {
 declare module '../../types' {
   interface ImaCliArgs {
     analyze?: ImaConfigurationContext['name'];
-    analyzeBaseline?: boolean;
   }
 }
 
 export interface AnalyzePluginOptions {
   open?: boolean;
-  compare?: boolean;
   bundleStatsOptions?: BundleStatsWebpackPlugin.Options;
   bundleAnalyzerOptions?: BundleAnalyzerPlugin.Options;
 }
@@ -70,12 +68,6 @@ class AnalyzePlugin implements ImaCliPlugin {
       return config;
     }
 
-    const isCompare = this._options?.compare === true;
-    const isBaseline =
-      ctx?.analyzeBaseline === true ||
-      (isCompare &&
-        !fs.existsSync(path.join(ctx.rootDir, 'build/bundle-stats.html')));
-
     if (
       (analyze === 'server' && isServer) ||
       (analyze === 'client.es' && isEsVersion) ||
@@ -85,8 +77,6 @@ class AnalyzePlugin implements ImaCliPlugin {
         new BundleStatsWebpackPlugin({
           // @ts-expect-error Not in type definitions
           silent: true,
-          compare: isCompare,
-          baseline: isBaseline,
           ...(this._options?.bundleStatsOptions ?? {}),
         }) as WebpackPluginInstance,
         new BundleAnalyzerPlugin({
