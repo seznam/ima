@@ -16,7 +16,6 @@ import {
   ImaCliCommand,
   ImaCliPlugin,
   ImaCliArgs,
-  ImaConfig,
 } from '../../types';
 
 // Extend existing cli args interface with new values
