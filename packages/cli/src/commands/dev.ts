@@ -41,10 +41,8 @@ function startNodemon(args: ImaCliArgs) {
   nodemon.on('start', () => {
     logger.info(
       `${serverHasStarted ? 'Restarting' : 'Starting'} application server${
-        !serverHasStarted && (args.forceSPA || args.forceSPAWithHMR)
-          ? ` in ${chalk.black.bgCyan(
-              args.forceSPAWithHMR ? 'SPA mode with HMR' : 'SPA mode'
-            )}`
+        !serverHasStarted && args.forceSPA
+          ? ` in ${chalk.black.bgCyan('SPA mode')}`
           : ''
       }...`
     );
@@ -80,7 +78,7 @@ function startNodemon(args: ImaCliArgs) {
  */
 const dev: HandlerFn = async args => {
   // Set force SPA flag so server can react accordingly
-  if (args.forceSPA || args.forceSPAWithHMR) {
+  if (args.forceSPA) {
     args.legacy = true; // SPA only supports es5 versions
     process.env.IMA_CLI_FORCE_SPA = 'true';
   }
@@ -122,9 +120,7 @@ const dev: HandlerFn = async args => {
     // Start HMR dev server
     await createDevServer(
       compiler.compilers.find(({ name }) =>
-        args.forceSPAWithHMR || args.forceSPA
-          ? name === 'client'
-          : name === 'client.es'
+        args.forceSPA ? name === 'client' : name === 'client.es'
       ),
       devServerConfig.hostname,
       devServerConfig.port
@@ -166,11 +162,6 @@ export const builder: CommandBuilder = {
   },
   forceSPA: {
     desc: 'Forces application to run in SPA mode',
-    type: 'boolean',
-    default: false,
-  },
-  forceSPAWithHMR: {
-    desc: 'Forces application to run in SPA mode with HMR enabled',
     type: 'boolean',
     default: false,
   },

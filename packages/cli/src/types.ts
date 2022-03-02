@@ -38,7 +38,6 @@ export interface ImaCliArgs {
   open?: boolean;
   legacy?: boolean;
   forceSPA?: boolean;
-  forceSPAWithHMR?: boolean;
   profile?: boolean;
   port?: number;
   hostname?: string;
