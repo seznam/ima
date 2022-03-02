@@ -9,11 +9,17 @@ import devMiddleware from 'webpack-dev-middleware';
 import { evalSourceMapMiddleware } from './evalSourceMapMiddleware';
 import { openEditorMiddleware } from './openEditorMiddleware';
 
-async function createDevServer(
-  compiler: Compiler | undefined,
-  hostname: string,
-  port: number
-): Promise<void> {
+async function createDevServer({
+  compiler,
+  hostname,
+  port,
+  rootDir,
+}: {
+  compiler: Compiler | undefined;
+  hostname: string;
+  port: number;
+  rootDir: string;
+}): Promise<void> {
   return new Promise((resolve, reject) => {
     if (!compiler) {
       return reject();
@@ -61,7 +67,7 @@ async function createDevServer(
           heartbeat: 1500,
         })
       )
-      .use('/__get-internal-source', evalSourceMapMiddleware())
+      .use('/__get-internal-source', evalSourceMapMiddleware(rootDir))
       .use('/__open-editor', openEditorMiddleware())
       .use((err: Error, req: Request, res: Response, next: NextFunction) => {
         if (res.headersSent) {

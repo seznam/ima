@@ -41,6 +41,8 @@ async function formatWebpackErrors(
     const parsedError = parseCompileError(error);
 
     if (parsedError) {
+      // Print uris relative to working dir
+      parsedError.fileUri = parsedError?.fileUri?.replace(args.rootDir, '.');
       parsedErrors.push(parsedError);
     }
   }
@@ -83,7 +85,11 @@ async function formatWebpackErrors(
     const fileLines = createSourceFragment(parsedError.lineNumber, file, 4);
 
     // Print error
-    logger.error(`at ${chalk.cyan(parsedError.fileUri)}`);
+    logger.error(
+      `at ${chalk.cyan(
+        `${parsedError.fileUri}:${parsedError.lineNumber}:${parsedError.columnNumber}`
+      )}`
+    );
     logger.write(
       `${chalk.underline(`${parsedError.name}:`)} ${parsedError.message}\n`
     );

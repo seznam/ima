@@ -24,7 +24,7 @@ function getSourceByModuleId(
     ?.originalSource();
 }
 
-function evalSourceMapMiddleware() {
+function evalSourceMapMiddleware(rootDir: string) {
   return async (req: Request, res: Response) => {
     let fileUri = req.query.fileName?.toString().replace('webpack://', '');
 
@@ -55,7 +55,11 @@ function evalSourceMapMiddleware() {
 
       const sourceMapURL = `//# sourceMappingURL=${base64SourceMap(source)}`;
       const sourceURL = `//# sourceURL=webpack-internal:///${moduleId}`;
-      return res.end(`${source.source()}\n${sourceMapURL}\n${sourceURL}`);
+
+      return res.json({
+        source: `${source.source()}\n${sourceMapURL}\n${sourceURL}`,
+        rootDir,
+      });
     } else {
       // Handle files with absolute/relative urls
       if (!fileUri) {
@@ -71,7 +75,10 @@ function evalSourceMapMiddleware() {
       try {
         const fileSource = await fs.promises.readFile(fileUri, 'utf8');
 
-        return res.end(fileSource);
+        return res.json({
+          source: fileSource,
+          rootDir,
+        });
       } catch (error) {
         return res.status(500).end();
       }

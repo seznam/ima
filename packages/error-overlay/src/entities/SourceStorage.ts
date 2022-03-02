@@ -2,6 +2,7 @@ import { SourceMap } from '#/entities';
 import { getSourceMap, getDevServerBaseUrl } from '#/utils';
 
 interface SourceStorageEntry {
+  rootDir?: string;
   fileContents: string | null;
   sourceMap: SourceMap | null;
 }
@@ -34,15 +35,18 @@ class SourceStorage {
     if (!this._sourceStorage.has(fileUri)) {
       this._sourceStorage.set(
         fileUri,
-        this._fetchFileContents(fileUri).then(async fileContents => {
-          if (!fileContents) {
+        this._fetchFile(fileUri).then(async file => {
+          if (!file) {
             return null;
           }
 
+          const { source, rootDir } = file;
+
           return {
-            fileContents,
+            rootDir,
+            fileContents: source,
             sourceMap: hasSourceMap
-              ? await this._fetchSourceMap(fileUri, fileContents)
+              ? await this._fetchSourceMap(fileUri, source)
               : null,
           };
         })
@@ -91,22 +95,31 @@ class SourceStorage {
    * @param {string} fileUri The uri of the source file.
    * @returns {Promise<string | null>}
    */
-  private async _fetchFileContents(fileUri: string): Promise<string | null> {
-    let fileContents = null;
-
+  private async _fetchFile(
+    fileUri: string
+  ): Promise<{ source: string; rootDir?: string } | null> {
     try {
       const response = await fetch(this.getFileSourceUrl(fileUri));
 
       if (!response.ok) {
-        return fileContents;
+        return null;
       }
 
-      fileContents = response.text();
+      if (response.headers.get('Content-Type')?.includes('application/json')) {
+        const { source, rootDir } = await response.json();
+
+        return {
+          source,
+          rootDir,
+        };
+      } else {
+        return { source: await response.text() };
+      }
     } catch (error) {
       console.warn(`Unable to fetch file contents for ${fileUri}.`, error);
     }
 
-    return fileContents;
+    return null;
   }
 
   /**
