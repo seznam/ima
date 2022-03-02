@@ -162,7 +162,6 @@ function createCacheKey(
    */
   hash.update(
     JSON.stringify({
-      experimentsNativeCss: imaConfig.experiments?.nativeCss,
       experimentsSwc: imaConfig.experiments?.swc,
       experimentsSwcMinimizer: imaConfig.experiments?.swcMinimizer,
       command: ctx.command,

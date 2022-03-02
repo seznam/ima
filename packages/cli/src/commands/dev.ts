@@ -120,15 +120,15 @@ const dev: HandlerFn = async args => {
     await watchCompiler(compiler, args, imaConfig);
 
     // Start HMR dev server
-    if (!args.forceSPA) {
-      await createDevServer(
-        compiler.compilers.find(({ name }) =>
-          args.forceSPAWithHMR ? name === 'client' : name === 'client.es'
-        ),
-        devServerConfig.hostname,
-        devServerConfig.port
-      );
-    }
+    await createDevServer(
+      compiler.compilers.find(({ name }) =>
+        args.forceSPAWithHMR || args.forceSPA
+          ? name === 'client'
+          : name === 'client.es'
+      ),
+      devServerConfig.hostname,
+      devServerConfig.port
+    );
 
     // Start nodemon and application server
     startNodemon(args);

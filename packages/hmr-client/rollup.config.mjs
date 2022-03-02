@@ -19,7 +19,7 @@ export default {
     {
       dir: './dist',
       entryFileNames: '[name].js',
-      format: 'cjs',
+      format: 'esm',
       exports: 'named',
       sourcemap: true,
     },

@@ -191,7 +191,6 @@ export type ImaConfig = {
   experiments?: {
     swc?: boolean;
     swcMinimizer?: boolean;
-    nativeCss?: boolean;
   };
 };
 

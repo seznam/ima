@@ -2,18 +2,17 @@
   "name": "@ima/core",
   "version": "17.12.1",
   "description": "IMA.js framework for isomorphic javascript application",
-  "browser": "client.cjs.js",
-  "main": "server.cjs.js",
-  "module": "server.esm.js",
+  "browser": "./dist/ima.client.js",
+  "main": "./dist/ima.server.cjs",
+  "module": "./dist/ima.server.mjs",
   "scripts": {
     "test": "npm run test:jest && npm run test:es && npm run test:size",
     "test:jest": "../../node_modules/.bin/jest --no-watchman -c jest.conf.js",
-    "test:es": "es-check es5 './polyfill/*.js'",
     "test:size": "size-limit",
     "preversion": "npm test",
     "clean": "rm -rf dist",
-    "dev": "rollup --config --watch",
-    "build": "rollup --config",
+    "dev": "../../node_modules/.bin/rollup --config --watch",
+    "build": "../../node_modules/.bin/rollup --config",
     "prepare": "npm run build"
   },
   "keywords": [
@@ -50,45 +49,34 @@
   },
   "license": "MIT",
   "devDependencies": {
-    "@babel/core": "^7.7.4",
-    "@babel/plugin-transform-modules-commonjs": "^7.7.4",
-    "@size-limit/preset-big-lib": "^2.2.1",
+    "@rollup/plugin-json": "^4.1.0",
+    "@rollup/plugin-replace": "^4.0.0",
+    "@size-limit/preset-big-lib": "^7.0.8",
     "enzyme": "^3.10.0",
-    "es-check": "^5.1.0",
     "jscodeshift": "^0.6.4",
     "react": "16.9.0",
     "react-dom": "16.9.0",
-    "rollup": "^1.27.8",
-    "rollup-plugin-jscc": "^1.0.0",
-    "rollup-plugin-json": "^4.0.0",
-    "rollup-plugin-replace": "^2.2.0"
+    "rollup-plugin-jscc": "^2.0.0"
   },
   "dependencies": {
-    "@ima/helpers": "^17.9.0",
+    "@ima/helpers": "^17.12.2",
     "classnames": "^2.2.6",
-    "memoize-one": "^5.1.1",
+    "memoize-one": "^6.0.0",
     "node-fetch": "^2.6.0"
   },
   "peerDependencies": {
     "react": "16.x",
     "react-dom": "16.x"
   },
-  "browserify": {
-    "transform": [
-      "ima-clientify",
-      "loose-envify",
-      "babelify"
-    ]
-  },
   "size-limit": [
     {
       "limit": "31 KB",
-      "path": "dist/ima.client.cjs.js",
+      "path": "./dist/ima.client.mjs",
       "running": false
     },
     {
       "limit": "31 KB",
-      "path": "dist/ima.client.esm.js",
+      "path": "./dist/ima.server.mjs",
       "running": false
     }
   ]
