@@ -8,6 +8,7 @@ module.exports = function urlParserMiddlewareFactory({
   environment,
   applicationFolder
 }) {
+  // TODO IMA@18 change build.js
   const BUILD_JS_PATH = path.resolve(applicationFolder, './app/build.js');
 
   function _getHost(req) {

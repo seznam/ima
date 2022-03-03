@@ -26,11 +26,10 @@ describe('devErrorPageFactory', () => {
     });
 
     it('should render error page for defined error', async () => {
-      await devErrorPage({ error: ERROR, req: REQ, res: RES });
+      const response = await devErrorPage({ error: ERROR, req: REQ, res: RES });
       expect(logger.error).toHaveBeenCalled();
-      expect(RES.status).toHaveBeenCalledWith(500);
-      expect(RES.send).toHaveBeenCalled();
-      expect(RES.send.mock.calls[0][0].includes('My own Error')).toBeTruthy();
+      expect(response.status).toEqual(500);
+      expect(response.content.includes('My own Error')).toBeTruthy();
     });
   });
 });

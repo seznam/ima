@@ -74,27 +74,27 @@ module.exports = function devErrorPageFactory({ logger }) {
       .then(callstack => {
         callstack = callstack.filter(item => !!item);
 
-        res.status(500);
-
-        res.send(
-          template({
+        return {
+          SPA: false,
+          static: false,
+          pageState: {},
+          cache: false,
+          error,
+          content: template({
             callstack,
             error,
             req,
             res
-          })
-        );
-
-        return { error };
+          }),
+          status: 500
+        };
       })
       .catch(error => {
-        res.status(500);
         logger.error('Failed to display error page', {
           error: errorToJSON(error)
         });
-        res.send(error.stack);
 
-        return { error };
+        return { error, content: error.stack, status: 500 };
       });
   }
 

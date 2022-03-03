@@ -9,10 +9,12 @@ module.exports = (() => {
    * @class InstanceRecycler
    */
   class InstanceRecycler {
-    clear() {
-      this._instanceFactory = null;
-      this._maxInstanceCount = 0;
+    constructor() {
       this._instances = [];
+    }
+
+    clear() {
+      this._maxInstanceCount = 0;
       this._concurrentRequests = 0;
       this._initialized = false;
     }

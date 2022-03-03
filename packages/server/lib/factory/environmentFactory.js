@@ -16,7 +16,7 @@ if (env === 'production') {
 }
 
 module.exports = function environmentFactory({ applicationFolder }) {
-  // TODO IMA@18 rewrite to mjs file from app folder
+  // TODO IMA@18 rewrite to js file from server folder
   let environmentConfig = require(path.resolve(
     applicationFolder,
     './build/ima/config/environment.js'
