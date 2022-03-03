@@ -6,7 +6,6 @@ import ReactRefreshWebpackPlugin from '@pmmmwh/react-refresh-webpack-plugin';
 import CompressionPlugin from 'compression-webpack-plugin';
 import CopyPlugin from 'copy-webpack-plugin';
 import CssMinimizerPlugin from 'css-minimizer-webpack-plugin';
-import MiniCssExtractPlugin from 'mini-css-extract-plugin';
 import miniSVGDataURI from 'mini-svg-data-uri';
 import TerserPlugin from 'terser-webpack-plugin';
 import webpack, {
@@ -37,10 +36,10 @@ export default async (
   ctx: ImaConfigurationContext,
   imaConfig: ImaConfig
 ): Promise<Configuration> => {
-  const { rootDir, isServer, isEsVersion, name, environment, processCss } = ctx;
+  const { rootDir, isServer, isEsVersion, name } = ctx;
 
   // Define helper variables derived from context
-  const isDevEnv = environment === 'development';
+  const isDevEnv = ctx.environment === 'development';
   const useSourceMaps = imaConfig.useSourceMaps || isDevEnv;
   const imaEnvironment = resolveEnvironment(rootDir);
   const isDebug = imaEnvironment.$Debug;
@@ -48,7 +47,7 @@ export default async (
   const publicPath = ctx.publicPath ?? imaConfig.publicPath;
   const appDir = path.join(rootDir, 'app');
   const useHMR =
-    ctx.command === 'dev' && !isServer && (isEsVersion || ctx.forceSPAWithHMR);
+    ctx.command === 'dev' && !isServer && (isEsVersion || ctx.forceSPA);
   const devServerConfig = createDevServerConfig({ imaConfig, ctx });
 
   // Define browserslist targets for current context
@@ -67,44 +66,14 @@ export default async (
   }
 
   /**
-   * Style loaders helper function used to define
-   * common style loader functions, that is later used
-   * to handle css and less source files.
+   * CSS loaders function generator. Contains postcss-loader
+   * and optional less loaders.
    */
-  const getStyleLoaders = async ({
-    useLessLoader = false,
-  }: {
-    useLessLoader?: boolean;
-  } = {}): Promise<RuleSetUseItem[]> => {
-    if (!processCss) {
-      return ['null-loader'];
-    }
-
+  const getStyleLoaders = async (
+    useLessLoader = false
+  ): Promise<RuleSetUseItem[]> => {
     return [
-      ...(!imaConfig.experiments?.nativeCss
-        ? [
-            processCss && {
-              loader: MiniCssExtractPlugin.loader,
-            },
-            {
-              loader: require.resolve('css-loader'),
-              options: {
-                modules: {
-                  auto: true,
-                  exportOnlyLocals: !processCss,
-                  localIdentName: isDevEnv
-                    ? '[path][name]__[local]--[hash:base64:5]'
-                    : '[hash:base64]',
-                },
-                sourceMap:
-                  useSourceMaps &&
-                  (imaConfig.experiments?.swc ||
-                    imaConfig.experiments?.nativeCss), // Doesn't currently work with babel
-              },
-            },
-          ]
-        : []),
-      processCss && {
+      {
         loader: require.resolve('postcss-loader'),
         options: await imaConfig.postcss(
           {
@@ -182,7 +151,7 @@ export default async (
                 }).toString()}`,
               useHMR &&
                 isDebug &&
-                `@ima/hmr-client/dist/imaHmrClient.js?${new URLSearchParams({
+                `@ima/hmr-client/dist/imaHmrClient?${new URLSearchParams({
                   port: devServerConfig.port.toString(),
                   hostname: devServerConfig.hostname,
                   public: devServerConfig.public,
@@ -284,9 +253,6 @@ export default async (
       alias: {
         // App specific aliases
         app: path.join(rootDir, 'app'),
-        '@ima/core': `@ima/core/dist/ima.${
-          isServer ? 'server.cjs.js' : 'client.esm.js'
-        }`,
         // Enable better profiling in react devtools
         ...(ctx.profile && {
           'react-dom$': 'react-dom/profiling',
@@ -534,18 +500,22 @@ export default async (
             /**
              * CSS & LESS loaders, both have the exact same capabilities
              */
-            {
-              test: /\.less$/,
-              sideEffects: true,
-              use: await getStyleLoaders({ useLessLoader: true }),
-              ...(imaConfig.experiments?.nativeCss && { type: 'css' }),
-            },
-            {
-              test: /\.css$/,
-              sideEffects: true,
-              use: await getStyleLoaders(),
-              ...(imaConfig.experiments?.nativeCss && { type: 'css' }),
-            },
+            ...(ctx.processCss
+              ? [
+                  {
+                    test: /\.less$/,
+                    type: 'css',
+                    sideEffects: true,
+                    use: await getStyleLoaders(true),
+                  },
+                  {
+                    test: /\.css$/,
+                    type: 'css',
+                    sideEffects: true,
+                    use: await getStyleLoaders(),
+                  },
+                ]
+              : []),
             /**
              * Fallback loader for all modules, that don't match any
              * of the above defined rules. This should be defined last.
@@ -555,6 +525,16 @@ export default async (
               type: 'asset/resource',
             },
           ],
+        },
+        {
+          /**
+           * Allow interop import of .mjs modules.
+           */
+          test: /\.mjs$/,
+          type: 'javascript/auto',
+          resolve: {
+            fullySpecified: false,
+          },
         },
       ].filter(Boolean) as RuleSetRule[],
     },
@@ -580,16 +560,6 @@ export default async (
           ]
         : // Client-specific plugins
           [
-            processCss &&
-              new MiniCssExtractPlugin({
-                filename: ({ chunk }) =>
-                  `static/css/${chunk?.name === name ? 'app' : '[name]'}${
-                    !isDevEnv ? '.min' : ''
-                  }.css`,
-                ignoreOrder: true,
-                chunkFilename: `static/css/[id]${!isDevEnv ? '.min' : ''}.css`,
-              }),
-
             // Enables compression for assets in production build
             ...(ctx.command === 'build'
               ? imaConfig.compression.map(
@@ -636,7 +606,7 @@ export default async (
 
     // Enable native css support (this replaces mini-css-extract-plugin and css-loader)
     experiments: {
-      css: imaConfig.experiments?.nativeCss,
+      css: true,
     },
   };
 };

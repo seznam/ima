@@ -72,7 +72,12 @@ async function getSourceMap(
       fileUri.substring(0, lastSlashIndex + 1) + sourceMappingUrl;
 
     rawSourceMap = await fetch(sourceStorage.getFileSourceUrl(fileName)).then(
-      res => res.json()
+      async res => {
+        const data = await res.json();
+
+        // Either return source from eval middleware or data from hot.js file
+        return data.source ? data.source : data;
+      }
     );
   }
 

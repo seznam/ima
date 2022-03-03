@@ -114,6 +114,20 @@ class LessConstantsPlugin implements ImaCliPlugin {
             libraryTarget: 'commonjs2',
           },
           entry: { lessConstantsEntry: modulePath },
+          module: {
+            rules: [
+              {
+                /**
+                 * Allow interop import of .mjs modules.
+                 */
+                test: /\.mjs$/,
+                type: 'javascript/auto',
+                resolve: {
+                  fullySpecified: false,
+                },
+              },
+            ],
+          },
           resolve: {
             alias: {
               app: path.join(args.rootDir, 'app'),

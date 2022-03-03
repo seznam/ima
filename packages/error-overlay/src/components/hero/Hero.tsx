@@ -29,7 +29,7 @@ const Hero: FunctionComponent<HeroProps> = ({ error }) => {
         >
           {errorType}
         </h1>
-        <h2 className='mt-2 text-base tracking-tighter text-rose-600 break-words sm:text-xl md:text-2xl'>
+        <h2 className='mt-2 text-base font-semibold tracking-tighter text-rose-600 break-words sm:text-xl md:text-2xl'>
           {error.name}: {error.message}
         </h2>
       </div>

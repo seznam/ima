@@ -41,10 +41,8 @@ function startNodemon(args: ImaCliArgs) {
   nodemon.on('start', () => {
     logger.info(
       `${serverHasStarted ? 'Restarting' : 'Starting'} application server${
-        !serverHasStarted && (args.forceSPA || args.forceSPAWithHMR)
-          ? ` in ${chalk.black.bgCyan(
-              args.forceSPAWithHMR ? 'SPA mode with HMR' : 'SPA mode'
-            )}`
+        !serverHasStarted && args.forceSPA
+          ? ` in ${chalk.black.bgCyan('SPA mode')}`
           : ''
       }...`
     );
@@ -80,7 +78,7 @@ function startNodemon(args: ImaCliArgs) {
  */
 const dev: HandlerFn = async args => {
   // Set force SPA flag so server can react accordingly
-  if (args.forceSPA || args.forceSPAWithHMR) {
+  if (args.forceSPA) {
     args.legacy = true; // SPA only supports es5 versions
     process.env.IMA_CLI_FORCE_SPA = 'true';
   }
@@ -116,19 +114,18 @@ const dev: HandlerFn = async args => {
     // Create compiler
     const compiler = webpack(config);
 
-    // Start watch compiler
-    await watchCompiler(compiler, args, imaConfig);
-
-    // Start HMR dev server
-    if (!args.forceSPA) {
-      await createDevServer(
-        compiler.compilers.find(({ name }) =>
-          args.forceSPAWithHMR ? name === 'client' : name === 'client.es'
+    // Start watch compiler & HMR dev server
+    await Promise.all([
+      watchCompiler(compiler, args, imaConfig),
+      createDevServer({
+        compiler: compiler.compilers.find(({ name }) =>
+          args.forceSPA ? name === 'client' : name === 'client.es'
         ),
-        devServerConfig.hostname,
-        devServerConfig.port
-      );
-    }
+        hostname: devServerConfig.hostname,
+        port: devServerConfig.port,
+        rootDir: args.rootDir,
+      }),
+    ]);
 
     // Start nodemon and application server
     startNodemon(args);
@@ -166,11 +163,6 @@ export const builder: CommandBuilder = {
   },
   forceSPA: {
     desc: 'Forces application to run in SPA mode',
-    type: 'boolean',
-    default: false,
-  },
-  forceSPAWithHMR: {
-    desc: 'Forces application to run in SPA mode with HMR enabled',
     type: 'boolean',
     default: false,
   },

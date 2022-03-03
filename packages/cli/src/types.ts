@@ -38,7 +38,6 @@ export interface ImaCliArgs {
   open?: boolean;
   legacy?: boolean;
   forceSPA?: boolean;
-  forceSPAWithHMR?: boolean;
   profile?: boolean;
   port?: number;
   hostname?: string;
@@ -191,7 +190,6 @@ export type ImaConfig = {
   experiments?: {
     swc?: boolean;
     swcMinimizer?: boolean;
-    nativeCss?: boolean;
   };
 };
 

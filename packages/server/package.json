@@ -36,7 +36,7 @@
     "error-to-json": "1.1.0",
     "highlight.js": "9.16.2",
     "stack-trace": "0.0.10",
-    "winston": "3.2.1"
+    "winston": "^3.6.0"
   },
   "peerDependencies": {
     "@ima/helpers": "17.x"

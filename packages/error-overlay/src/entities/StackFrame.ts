@@ -10,6 +10,7 @@ interface SourceFragmentLine {
  */
 class StackFrame {
   fileName?: string;
+  rootDir?: string;
   functionName?: string | null;
   sourceFragment?: SourceFragmentLine[] | null;
 
@@ -65,6 +66,7 @@ class StackFrame {
 
   constructor({
     fileName,
+    rootDir,
     functionName,
     sourceFragment,
     lineNumber,
@@ -75,6 +77,7 @@ class StackFrame {
     originalSourceFragment,
   }: {
     fileName?: string;
+    rootDir?: string;
     functionName?: string | null;
     sourceFragment?: SourceFragmentLine[] | null;
     lineNumber?: number;
@@ -85,6 +88,7 @@ class StackFrame {
     originalSourceFragment?: SourceFragmentLine[] | null;
   }) {
     this.fileName = fileName;
+    this.rootDir = rootDir;
     this.functionName = functionName;
     this.sourceFragment = sourceFragment;
 
@@ -130,10 +134,16 @@ class StackFrame {
 
     const indexOfFirstSlash = strippedUri?.indexOf('/');
 
-    // Print path relative from project dir
-    return indexOfFirstSlash
-      ? `./${strippedUri?.substring(indexOfFirstSlash + 1)}`
-      : strippedUri;
+    // Print paths relative to app dir
+    if (indexOfFirstSlash) {
+      return `./${strippedUri?.substring(indexOfFirstSlash + 1)}`;
+    }
+
+    if (this.rootDir) {
+      return strippedUri?.replace(this.rootDir, '.');
+    }
+
+    return strippedUri;
   }
 }
 

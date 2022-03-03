@@ -162,12 +162,10 @@ function createCacheKey(
    */
   hash.update(
     JSON.stringify({
-      experimentsNativeCss: imaConfig.experiments?.nativeCss,
       experimentsSwc: imaConfig.experiments?.swc,
       experimentsSwcMinimizer: imaConfig.experiments?.swcMinimizer,
       command: ctx.command,
       forceSPA: ctx.forceSPA,
-      forceSPAWithHMR: ctx.forceSPAWithHMR,
       profile: ctx.profile,
       publicPath: ctx.publicPath,
       rootDir: ctx.rootDir,
@@ -352,18 +350,17 @@ async function createWebpackConfig(
       name: 'client',
       isServer: false,
       isEsVersion: false,
-      processCss: args.forceSPA || args.forceSPAWithHMR,
+      processCss: args.forceSPA,
       ...args,
     },
     // SPA mode only supports es5 versions
-    !args.forceSPA &&
-      !args.forceSPAWithHMR && {
-        name: 'client.es',
-        isServer: false,
-        isEsVersion: true,
-        processCss: true,
-        ...args,
-      },
+    !args.forceSPA && {
+      name: 'client.es',
+      isServer: false,
+      isEsVersion: true,
+      processCss: true,
+      ...args,
+    },
   ].filter(Boolean) as ImaConfigurationContext[];
 
   /**

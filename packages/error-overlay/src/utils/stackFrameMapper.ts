@@ -38,6 +38,7 @@ async function mapStackFramesToOriginal(
 
         // Create parsed stack frame
         const stackFrame = new StackFrame({
+          rootDir: fileSource?.rootDir,
           fileName: frame.fileUri as string,
           functionName: frame.functionName,
           sourceFragment:
@@ -146,6 +147,7 @@ async function mapCompileStackFrames(
               fileSource.sourceMap.getSource(sourceFileUri);
 
             return new StackFrame({
+              rootDir: fileSource.rootDir,
               originalFileName: sourceFileUri,
               originalLineNumber: line,
               originalColumnNumber: column,
@@ -164,6 +166,7 @@ async function mapCompileStackFrames(
 
         // Fallback to original fragment if source maps are not available
         return new StackFrame({
+          rootDir: fileSource?.rootDir,
           originalFileName: frame.fileUri as string,
           originalSourceFragment:
             (frame.lineNumber &&
