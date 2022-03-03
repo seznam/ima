@@ -61,7 +61,7 @@ class ProgressTracker {
     this._percentageTracker[name] = percentage;
     const normPercentage = this._getPercentage();
 
-    if (percentage === 0 && this._isPending()) {
+    if (this._isPending()) {
       this._start();
     }
 

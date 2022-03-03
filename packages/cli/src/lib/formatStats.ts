@@ -100,7 +100,8 @@ async function formatWebpackErrors(
         chalk.gray(
           `${line.highlight ? chalk.red('>') : ' '}  ${line.line} | `
         ) +
-          highlight(line.source, {
+          // Replace tabs with spaces and highlight
+          highlight(line.source.replace(/\t/g, '    '), {
             language: parsedError.fileUri?.split('.').pop() ?? 'javascript',
             ignoreIllegals: true,
             theme: fromJson({
