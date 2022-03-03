@@ -1,8 +1,6 @@
-jest.mock('path');
-
-const path = require('path');
-
-path.resolve.mockImplementation((...rest) => rest.join(''));
+jest.mock('path', () => ({
+  resolve: jest.fn().mockImplementation(() => './__mocks__/ima.config.js'),
+}));
 
 const UrlParser = require('../urlParser.js');
 

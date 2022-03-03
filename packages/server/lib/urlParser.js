@@ -1,9 +1,7 @@
 const { URL } = require('url');
 
-let path = require('path');
-let applicationFolder = path.resolve('.');
-
-const IMA_CONFIG_JS_PATH = path.resolve(applicationFolder, './ima.config.js');
+const path = require('path');
+const IMA_CONFIG_JS_PATH = path.resolve('./ima.config.js');
 
 module.exports = environment => {
   function _getHost(req) {
