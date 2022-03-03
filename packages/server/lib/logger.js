@@ -2,6 +2,9 @@ const chalk = require('chalk');
 const { createLogger, format, transports } = require('winston');
 const { printf, combine } = format;
 
+const devLogger = require('./logger/devLogger');
+const { colorizeLevel } = require('./logger/loggerUtils');
+
 function formatMetaSimple(meta) {
   let keys = Object.keys(meta).filter(
     key => ['level', 'timestamp', 'message'].indexOf(key) === -1
@@ -96,28 +99,16 @@ function formatError(error) {
 module.exports = environment => {
   let FORMATTING = environment.$Server.logger.formatting;
 
-  if (['simple', 'JSON'].indexOf(FORMATTING) === -1) {
+  if (['simple', 'JSON', 'dev'].indexOf(FORMATTING) === -1) {
     throw new Error(
       'Invalid logger configuration: the formatting has to be ' +
         `either "simple" or "JSON", ${FORMATTING} was provided`
     );
   }
 
-  let colorizeLevel = level => {
-    switch (level) {
-      case 'info':
-        return chalk.cyan(`${level}: `);
-      case 'error':
-        return chalk.red(`${level}: `);
-      case 'warn':
-        return chalk.yellow(`${level}: `);
-      case 'debug':
-        return chalk.green(`${level}: `);
-
-      default:
-        return chalk.gray(`${level}: `);
-    }
-  };
+  if (FORMATTING === 'dev') {
+    return devLogger;
+  }
 
   let logger = createLogger({
     format: combine(

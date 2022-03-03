@@ -67,7 +67,7 @@ module.exports = (() => {
           maxEntries: 500,
         },
         logger: {
-          formatting: 'simple', // use "simple" or "JSON"
+          formatting: 'simple', // use "simple" or "JSON" or "dev"
         },
       },
       $Proxy: {
@@ -95,6 +95,9 @@ module.exports = (() => {
       },
       $Server: {
         concurrency: 1,
+        logger: {
+          formatting: 'dev',
+        },
       },
       $Proxy: {
         server: 'localhost:3001',

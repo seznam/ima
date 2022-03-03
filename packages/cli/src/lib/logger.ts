@@ -80,11 +80,11 @@ class Logger {
   }
 
   public success(message: string, options?: LoggerOptions) {
-    this._log('succ', chalk.bold.green, message, options);
+    this._log('success', chalk.bold.green, message, options);
   }
 
   public error(message: string, options?: LoggerOptions) {
-    this._log('erro', chalk.bold.red, message, options);
+    this._log('error', chalk.bold.red, message, options);
   }
 
   public warn(message: string, options?: LoggerOptions) {
@@ -96,7 +96,7 @@ class Logger {
   }
 
   public plugin(message: string, options?: LoggerOptions) {
-    this._log('plug', chalk.bold.blue, message, options);
+    this._log('plugin', chalk.bold.blue, message, options);
   }
 
   public write(message: string, options?: LoggerOptions) {

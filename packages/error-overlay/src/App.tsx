@@ -35,7 +35,7 @@ const App: FunctionComponent = () => {
   return (
     <div
       className={clsx(
-        'min-w-full min-h-screen font-mono text-slate-900 bg-white/80 backdrop-blur-md origin-top',
+        'min-w-full min-h-screen font-mono text-slate-900 bg-white/60 backdrop-blur-md origin-top',
         {
           'animate-fade-in-down': !isSSRError,
         }
