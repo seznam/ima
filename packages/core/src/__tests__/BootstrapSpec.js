@@ -66,10 +66,6 @@ describe('bootstrap', () => {
   });
 
   describe('_initSettings method', () => {
-    beforeEach(() => {
-      spyOn(bootstrap, '_getEnvironmentSetting').and.returnValue({});
-    });
-
     it('should call initSettings method for app', () => {
       spyOn(bootConfig, 'initSettings').and.callThrough();
 
@@ -147,7 +143,7 @@ describe('bootstrap', () => {
           $Env: 'prod',
           __meta__: {},
         },
-        'test-plugin'
+        false
       );
     });
 

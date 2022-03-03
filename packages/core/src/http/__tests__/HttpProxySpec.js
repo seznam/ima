@@ -44,11 +44,14 @@ describe('ima.core.http.HttpProxy', () => {
       body: { data: 'some data' },
     };
     fetchResult = Promise.resolve(response);
-    spyOn(proxy, '_getFetchApi').and.callFake(() => (_, init) => {
-      requestInit = init;
 
-      return fetchResult;
-    });
+    proxy._getFetchApi = jest.fn(() =>
+      Promise.resolve((_, init) => {
+        requestInit = init;
+
+        return fetchResult;
+      })
+    );
   });
 
   ['get', 'head', 'post', 'put', 'delete', 'patch'].forEach(method => {
@@ -99,9 +102,11 @@ describe('ima.core.http.HttpProxy', () => {
       it('should be timeouted for longer request then options.timeout', async done => {
         jest.useFakeTimers();
 
-        proxy._getFetchApi.and.callFake(() => {
-          jest.runOnlyPendingTimers();
-        });
+        proxy._getFetchApi = jest.fn(() =>
+          Promise.resolve(() => {
+            jest.runOnlyPendingTimers();
+          })
+        );
 
         try {
           await proxy.request(method, API_URL, DATA, OPTIONS);
