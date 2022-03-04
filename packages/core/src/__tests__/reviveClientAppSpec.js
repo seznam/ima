@@ -1,5 +1,4 @@
 import React from 'react';
-// eslint-disable-next-line no-unused-vars
 import ReactDOM from 'react-dom';
 import jsdom from 'jsdom';
 import ControllerInterface from '../controller/Controller';
@@ -23,18 +22,6 @@ const MASTER_ELEMENT_ID = 'some-id';
 
 describe('revive client application', () => {
   let router = null;
-  let ReactDOM = {
-    render() {
-      return {
-        setState: () => {},
-      };
-    },
-    hydrate() {
-      return {
-        setState: () => {},
-      };
-    },
-  };
 
   let routerConfig = {
     $Protocol: 'http:',
@@ -109,7 +96,7 @@ describe('revive client application', () => {
     //mock
     global.window.scrollTo = () => {};
 
-    spyOn(ReactDOM, 'render');
+    jest.spyOn(ReactDOM, 'render');
 
     done();
   });

@@ -186,16 +186,18 @@ export default class ClientRouter extends AbstractRouter {
     return super
       .route(path, options, action, locals)
       .catch(error => this.handleError({ error }, {}, locals))
-      .then(error => {
+      .then(data => {
         // Hide error overlay
         if (
-          !(error instanceof Error) &&
+          !(data instanceof Error) &&
           $Debug &&
           typeof window !== 'undefined' &&
           window.__ima_hmr
         ) {
           window.__ima_hmr.clearRuntimeErrors();
         }
+
+        return data;
       })
       .catch(error => {
         this._handleFatalError(error);
