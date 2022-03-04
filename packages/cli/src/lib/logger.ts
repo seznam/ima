@@ -83,8 +83,24 @@ class Logger {
     this._log('success', chalk.bold.green, message, options);
   }
 
-  public error(message: string, options?: LoggerOptions) {
-    this._log('error', chalk.bold.red, message, options);
+  public error(message: string | Error, options?: LoggerOptions) {
+    if (message instanceof Error) {
+      // eslint-disable-next-line @typescript-eslint/no-unused-vars
+      const [_, ...stackLines] = message.stack?.split('\n') ?? '';
+
+      // Print error name and message
+      this._log(
+        'error',
+        chalk.bold.red,
+        `${chalk.underline(message.name)}: ${message.message.trim()}`,
+        options
+      );
+
+      // Print stack
+      this.write(`\n${chalk.gray(stackLines.join('\n'))}\n`);
+    } else {
+      this._log('error', chalk.bold.red, message, options);
+    }
   }
 
   public warn(message: string, options?: LoggerOptions) {

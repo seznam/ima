@@ -58,6 +58,7 @@
     "messageformat": "^2.3.0",
     "mini-svg-data-uri": "^1.4.3",
     "nodemon": "^2.0.15",
+    "open-editor": "^3.0.0",
     "postcss": "^8.4.6",
     "postcss-flexbugs-fixes": "^5.0.2",
     "postcss-loader": "^6.2.1",

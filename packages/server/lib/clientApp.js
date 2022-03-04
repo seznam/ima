@@ -62,7 +62,7 @@ module.exports = (environment, logger, languageLoader, appFactory) => {
             return cb(err);
           }
 
-          content = hljs.highlight('javascript', content);
+          content = hljs.highlight(content, { language: 'javascript' });
 
           // start a few lines before the error or at the beginning of
           // the file
