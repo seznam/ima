@@ -14,7 +14,7 @@ const bodyParser = require('body-parser');
 const cookieParser = require('cookie-parser');
 const compression = require('compression');
 const helmet = require('helmet');
-const errorToJSON = require('error-to-json');
+const errorToJSON = require('error-to-json').default;
 const proxy = require('express-http-proxy');
 
 function errorToString(error) {

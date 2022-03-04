@@ -3,6 +3,7 @@ const path = require('path');
 const CompressionPlugin = require('compression-webpack-plugin');
 const CopyPlugin = require('copy-webpack-plugin');
 const CssMinimizerPlugin = require('css-minimizer-webpack-plugin');
+const { ProgressPlugin } = require('webpack');
 
 const rootDir = path.resolve(__dirname);
 const isProduction = process.env.NODE_ENV === 'production';
@@ -26,6 +27,7 @@ module.exports = {
       {
         test: /\.css$/i,
         type: 'css',
+        sideEffects: true,
         use: ['postcss-loader'],
       },
       {
@@ -52,6 +54,7 @@ module.exports = {
     },
   },
   plugins: [
+    new ProgressPlugin(),
     isProduction &&
       new CompressionPlugin({
         algorithm: 'brotliCompress',

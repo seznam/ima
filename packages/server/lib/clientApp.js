@@ -6,7 +6,7 @@ const asyncEach = require('async-each');
 const hljs = require('highlight.js');
 const sep = require('path').sep;
 const instanceRecycler = require('./instanceRecycler.js');
-const errorToJSON = require('error-to-json');
+const errorToJSON = require('error-to-json').default;
 const Cache = require('./cache.js').Cache;
 
 hljs.configure({
