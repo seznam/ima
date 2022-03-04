@@ -8,7 +8,6 @@ function generateConfig(environment) {
       '@ima/helpers',
       'classnames',
       'react',
-      'node-fetch',
       'react-dom',
       'memoize-one',
       ...(environment === 'server' ? ['react-dom/server'] : []),

@@ -6,7 +6,7 @@
   "main": "./dist/ima.server.cjs",
   "module": "./dist/ima.server.mjs",
   "scripts": {
-    "test": "npm run test:jest && npm run test:es && npm run test:size",
+    "test": "npm run test:jest && npm run test:size",
     "test:jest": "../../node_modules/.bin/jest --no-watchman -c jest.conf.js",
     "test:size": "size-limit",
     "preversion": "npm test",
@@ -56,7 +56,8 @@
     "jscodeshift": "^0.6.4",
     "react": "^17.0.2",
     "react-dom": "^17.0.2",
-    "rollup-plugin-jscc": "^2.0.0"
+    "rollup-plugin-jscc": "^2.0.0",
+    "size-limit": "^7.0.8"
   },
   "dependencies": {
     "@ima/helpers": "^17.12.2",
