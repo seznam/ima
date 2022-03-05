@@ -20,7 +20,7 @@ let exampleResolver = argv.example
         choices: [
           {
             name: `${chalk.bold.blue(
-              'Empty'
+              'Hello'
             )} - The basic Hello World example. Ideal for new projects.`,
             value: 'hello',
           },

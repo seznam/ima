@@ -43,9 +43,9 @@ node utils/version/create-ima-app-versions.js
 cd "$CREATE_IMA_APP_DIR"
 npm link
 
-# Setup app from example feed
+# Setup app from example hello
 cd "$ROOT_DIR"
-npx create-ima-app --example feed ima-app
+npx create-ima-app --example=hello ima-app
 cd ima-app
 npm run build
 # Add customized environment configuration
