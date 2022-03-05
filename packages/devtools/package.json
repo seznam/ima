@@ -65,7 +65,8 @@
     "postcss": "^8.2.4",
     "postcss-loader": "4.2.0",
     "rimraf": "^3.0.2",
-    "terser-webpack-plugin": "5.1.1"
+    "terser-webpack-plugin": "5.1.1",
+    "webpack-merge": "^5.8.0"
   },
   "dependencies": {
     "@ima/devtools-scripts": "^17.8.0",
