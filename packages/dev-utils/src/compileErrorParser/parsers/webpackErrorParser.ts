@@ -25,8 +25,8 @@ function webpackErrorParser(error: StatsError | Error): CompileError {
       (error as StatsError).moduleIdentifier ?? ''
     );
 
-    compileError.lineNumber = line;
-    compileError.columnNumber = column;
+    compileError.line = line;
+    compileError.column = column;
     compileError.fileUri = fileUri;
   } else if (error.stack) {
     const stackLines = error.stack?.split('\n');
@@ -39,8 +39,8 @@ function webpackErrorParser(error: StatsError | Error): CompileError {
 
       if (match) {
         compileError.fileUri = match[1];
-        compileError.lineNumber = parseInt(match[2]) || undefined;
-        compileError.columnNumber = parseInt(match[3]) || undefined;
+        compileError.line = parseInt(match[2]) || undefined;
+        compileError.column = parseInt(match[3]) || undefined;
       }
     } else {
       // Skip first line containing error message.
@@ -48,8 +48,8 @@ function webpackErrorParser(error: StatsError | Error): CompileError {
 
       if (match) {
         compileError.fileUri = match[2];
-        compileError.lineNumber = parseInt(match[3]) || undefined;
-        compileError.columnNumber = parseInt(match[4]) || undefined;
+        compileError.line = parseInt(match[3]) || undefined;
+        compileError.column = parseInt(match[4]) || undefined;
       }
     }
   }

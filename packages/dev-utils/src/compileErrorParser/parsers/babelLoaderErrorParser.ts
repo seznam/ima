@@ -25,8 +25,8 @@ function babelLoaderErrorParser(error: StatsError | Error): CompileError {
   if (match) {
     compileError.fileUri = match[2].trim();
     compileError.message = match[3].trim();
-    compileError.lineNumber = parseInt(match[5]) || undefined;
-    compileError.columnNumber = parseInt(match[6]) || undefined;
+    compileError.line = parseInt(match[5]) || undefined;
+    compileError.column = parseInt(match[6]) || undefined;
   }
 
   return compileError;

@@ -17,13 +17,13 @@ function swcLoaderErrorParser(error: StatsError | Error): CompileError {
   const compileError: CompileError = {
     name: 'Syntax error',
     message: messageLines[1].replace(/error:/gi, '').trim(),
-    columnNumber: 1, // swc-loader does not report columns reliably
+    column: 1, // swc-loader does not report columns reliably
   };
 
   // Parse error location
   const lineNumberMatch = error.message.match(RE_SWC_LINE_NUMBER);
   if (lineNumberMatch && lineNumberMatch[1]) {
-    compileError.lineNumber = parseInt(lineNumberMatch[1]);
+    compileError.line = parseInt(lineNumberMatch[1]);
   }
 
   if ((error as StatsError).moduleIdentifier) {

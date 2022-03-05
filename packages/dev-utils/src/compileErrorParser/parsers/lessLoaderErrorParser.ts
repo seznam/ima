@@ -24,8 +24,8 @@ function lessLoaderErrorParser(error: StatsError | Error): CompileError {
     const match = messageLines[i].match(RE_LESS_LOADER_LINE);
 
     if (match) {
-      compileError.lineNumber = parseInt(match[1]);
-      compileError.columnNumber = parseInt(match[2]) || 1;
+      compileError.line = parseInt(match[1]);
+      compileError.column = parseInt(match[2]) || 1;
 
       // Extract fileUri
       compileError.fileUri = match.input?.match(RE_FILE_PATH_REGEX)?.[0];

@@ -1,7 +1,11 @@
 import fs from 'fs';
 import path from 'path';
 
-import { createSourceFragment, parseCompileError } from '@ima/dev-utils';
+import {
+  CompileError,
+  createSourceFragment,
+  parseCompileError,
+} from '@ima/dev-utils';
 import chalk from 'chalk';
 import { highlight, fromJson } from 'cli-highlight';
 import prettyBytes from 'pretty-bytes';
@@ -48,7 +52,7 @@ async function formatWebpackErrors(
   }
 
   // Filter out duplicates
-  let filteredParsedErrors = [];
+  let filteredParsedErrors: CompileError[] = [];
   for (const parsedError of parsedErrors) {
     if (
       filteredParsedErrors.findIndex(
@@ -73,7 +77,7 @@ async function formatWebpackErrors(
   for (const parsedError of filteredParsedErrors) {
     // Print message right away, if we don't manage to parse it
     if (
-      !parsedError.lineNumber ||
+      !parsedError.line ||
       !(parsedError.fileUri && fs.existsSync(parsedError.fileUri))
     ) {
       return logger.error(
@@ -82,12 +86,12 @@ async function formatWebpackErrors(
     }
 
     const file = await fs.promises.readFile(parsedError.fileUri, 'utf8');
-    const fileLines = createSourceFragment(parsedError.lineNumber, file, 4);
+    const fileLines = createSourceFragment(parsedError.line, file, 4);
 
     // Print error
     logger.error(
       `at ${chalk.cyan(
-        `${parsedError.fileUri}:${parsedError.lineNumber}:${parsedError.columnNumber}`
+        `${parsedError.fileUri}:${parsedError.line}:${parsedError.column}`
       )}`
     );
     logger.write(

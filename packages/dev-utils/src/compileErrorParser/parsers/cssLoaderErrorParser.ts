@@ -24,8 +24,8 @@ function cssLoaderErrorParser(error: StatsError | Error): CompileError {
     const match = messageLines[i].match(RE_CSS_LOADER_LINE);
 
     if (match) {
-      compileError.lineNumber = parseInt(match[2]) || undefined;
-      compileError.columnNumber = parseInt(match[3]) || 1;
+      compileError.line = parseInt(match[2]) || undefined;
+      compileError.column = parseInt(match[3]) || 1;
       compileError.fileUri = match[4];
       compileError.message = match[6].trim();
 

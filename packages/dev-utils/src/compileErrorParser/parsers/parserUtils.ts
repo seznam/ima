@@ -2,8 +2,8 @@ export interface CompileError {
   name: string;
   message: string;
   fileUri?: string;
-  lineNumber?: number;
-  columnNumber?: number;
+  line?: number;
+  column?: number;
 }
 
 const RE_FILE_PATH_REGEX = /\.?(\/[^/\n :,]+)+/;

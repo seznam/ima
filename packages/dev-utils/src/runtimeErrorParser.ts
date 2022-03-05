@@ -1,10 +1,10 @@
 import { RE_VALID_FRAME_CHROME, RE_VALID_FRAME_FIREFOX } from '#/helpers';
 
 export type TraceLine = {
-  functionName?: string;
+  functionName: string;
   fileUri?: string;
-  lineNumber?: number;
-  columnNumber?: number;
+  line?: number;
+  column?: number;
 };
 
 const RE_EXTRACT_LOCATIONS = /\(?(.+?)(?::(\d+))?(?::(\d+))?\)?$/;
@@ -18,16 +18,16 @@ const RE_EXTRACT_LOCATIONS = /\(?(.+?)(?::(\d+))?(?::(\d+))?\)?$/;
  */
 function extractLocation(token: string): {
   fileUri: string;
-  lineNumber: number;
-  columnNumber: number;
+  line: number;
+  column: number;
 } {
-  const [fileUri, lineNumber, columnNumber] =
+  const [fileUri, line, column] =
     RE_EXTRACT_LOCATIONS.exec(token)?.slice(1) || [];
 
   return {
     fileUri,
-    lineNumber: parseInt(lineNumber),
-    columnNumber: parseInt(columnNumber),
+    line: parseInt(line),
+    column: parseInt(column),
   };
 }
 
@@ -80,14 +80,14 @@ function parseStack(stack: string[]): TraceLine[] {
 
         const data = splitAt(traceLine);
         const traceToken = data.pop();
-        const { fileUri, lineNumber, columnNumber } =
+        const { fileUri, line, column } =
           (traceToken && extractLocation(traceToken)) || {};
 
         return {
           functionName: data.join('@') || (isEval ? 'eval' : 'anonymous'),
           fileUri,
-          lineNumber,
-          columnNumber,
+          line,
+          column,
         };
       }
 
@@ -101,14 +101,14 @@ function parseStack(stack: string[]): TraceLine[] {
 
       const data = traceLine.trim().split(/\s+/g).slice(1);
       const traceToken = data.pop();
-      const { fileUri, lineNumber, columnNumber } =
+      const { fileUri, line, column } =
         (traceToken && extractLocation(traceToken)) || {};
 
       return {
         functionName: data.join(' ') || 'anonymous',
         fileUri,
-        lineNumber,
-        columnNumber,
+        line,
+        column,
       };
     });
 }
