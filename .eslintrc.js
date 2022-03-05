@@ -1,6 +1,12 @@
 module.exports = {
   root: true,
-  ignorePatterns: ['node_modules', 'dist'],
+  ignorePatterns: [
+    '**/node_modules/**',
+    '**/dist/**',
+    '**/docs/**',
+    '**/coverage/**',
+    'packages/create-ima-app/examples/todos/assets/**',
+  ],
   extends: [
     'eslint:recommended',
     'plugin:react/recommended',
