@@ -14,7 +14,20 @@
     "dev": "../../node_modules/.bin/rollup --config --watch",
     "build": "../../node_modules/.bin/rollup --config"
   },
-  "author": "Jan Šimeček",
+  "author": "Jan Šimeček <jan.simecek@firma.seznam.cz>",
+  "contributors": [],
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/seznam/ima.git",
+    "directory": "packages/hmr-client"
+  },
+  "bugs": {
+    "url": "https://github.com/seznam/ima/issues"
+  },
+  "publishConfig": {
+    "registry": "https://registry.npmjs.org/",
+    "access": "public"
+  },
   "license": "MIT",
   "devDependencies": {
     "@types/lodash.debounce": "^4.0.6",

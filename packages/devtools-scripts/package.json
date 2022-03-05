@@ -28,7 +28,8 @@
   ],
   "repository": {
     "type": "git",
-    "url": "https://github.com/seznam/ima.git"
+    "url": "https://github.com/seznam/ima.git",
+    "directory": "packages/devtools-scripts"
   },
   "bugs": {
     "url": "https://github.com/seznam/ima/issues"

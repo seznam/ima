@@ -9,7 +9,8 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/seznam/ima.git"
+    "url": "git+https://github.com/seznam/ima.git",
+    "directory": "packages/helpers"
   },
   "keywords": [
     "ima",

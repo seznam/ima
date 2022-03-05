@@ -32,7 +32,8 @@
   ],
   "repository": {
     "type": "git",
-    "url": "https://github.com/seznam/ima.git"
+    "url": "https://github.com/seznam/ima.git",
+    "directory": "packages/create-ima-app"
   },
   "bugs": {
     "url": "https://github.com/seznam/ima/issues"
