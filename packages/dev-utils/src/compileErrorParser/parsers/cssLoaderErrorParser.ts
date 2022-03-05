@@ -13,7 +13,7 @@ const RE_CSS_LOADER_LINE = /(^\((\d+):(\d+)\))?\s?(\.?(\/[^/\n :,]+)+)\s(.*)/;
  * less-loader specific parser. Tries to parse less compiler errors from
  * error message.
  */
-function cssLoaderErrorParser(error: StatsError & Error): CompileError {
+function cssLoaderErrorParser(error: StatsError | Error): CompileError {
   const messageLines = error.message.split('\n');
   const compileError: CompileError = {
     name: 'Syntax error',

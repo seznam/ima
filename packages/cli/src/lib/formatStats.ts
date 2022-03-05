@@ -1,14 +1,14 @@
 import fs from 'fs';
 import path from 'path';
 
+import { createSourceFragment, parseCompileError } from '@ima/dev-utils';
 import chalk from 'chalk';
 import { highlight, fromJson } from 'cli-highlight';
 import prettyBytes from 'pretty-bytes';
 import prettyMs from 'pretty-ms';
-import { MultiStats, StatsAsset } from 'webpack';
+import { MultiStats, StatsAsset, StatsError } from 'webpack';
 
 import { ImaCliArgs } from '../types';
-import { createSourceFragment, parseCompileError } from './compileErrorParser';
 import { logger } from './logger';
 
 const warningsCache = new Set<string>();
@@ -38,7 +38,7 @@ async function formatWebpackErrors(
   // Parse errors
   const parsedErrors = [];
   for (const error of errors) {
-    const parsedError = parseCompileError(error);
+    const parsedError = parseCompileError(error as StatsError);
 
     if (parsedError) {
       // Print uris relative to working dir

@@ -1,5 +1,4 @@
-// eslint-disable-next-line import/no-unresolved
-import { parseCompileError } from '@ima/cli/dist/lib/compileErrorParser'; // TODO
+import { parseCompileError } from '@ima/dev-utils';
 import { useCallback, useEffect } from 'react';
 
 import { useErrorsDispatcher } from '#/stores';

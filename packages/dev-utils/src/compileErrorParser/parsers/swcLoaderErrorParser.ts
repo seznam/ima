@@ -10,7 +10,7 @@ const RE_SWC_LINE_NUMBER = /(\d+) \|/;
  * SWC loader-specific error parser. Tries to parse error location from
  * webpack stats error object or browsers Error object.
  */
-function swcLoaderErrorParser(error: StatsError & Error): CompileError {
+function swcLoaderErrorParser(error: StatsError | Error): CompileError {
   const messageLines = error.message.split('\n');
 
   // Parse error message
@@ -26,11 +26,11 @@ function swcLoaderErrorParser(error: StatsError & Error): CompileError {
     compileError.lineNumber = parseInt(lineNumberMatch[1]);
   }
 
-  if (error.moduleIdentifier) {
+  if ((error as StatsError).moduleIdentifier) {
     // Parse filename from moduleIdentifier
-    compileError.fileUri = error.moduleIdentifier.includes('!')
-      ? error.moduleIdentifier.split('!').pop() ?? undefined
-      : error.moduleIdentifier;
+    compileError.fileUri = (error as StatsError).moduleIdentifier?.includes('!')
+      ? (error as StatsError).moduleIdentifier?.split('!').pop() ?? undefined
+      : (error as StatsError).moduleIdentifier;
   } else if (error.stack) {
     /**
      * Parse from error stack. The location is always on the first line

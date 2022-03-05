@@ -15,7 +15,7 @@ const RE_LESS_LOADER_LINE = /^.*\(line\s(\d+),\scolumn\s(\d+)\)$/;
  * less-loader specific parser. Tries to parse less compiler errors from
  * error message.
  */
-function lessLoaderErrorParser(error: StatsError & Error): CompileError {
+function lessLoaderErrorParser(error: StatsError | Error): CompileError {
   const messageLines = error.message.split('\n');
   const compileError: CompileError = {
     name: 'Syntax error',

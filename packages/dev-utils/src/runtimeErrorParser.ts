@@ -29,6 +29,9 @@ function extractLocation(token: string): {
 
 /**
  * Splits trace line at '@' character ignoring pkg namespace paths.
+ * Used for proper parsing of firefox-like stack traces.
+ *
+ * @param {string} traceLine Stack trace line.
  */
 function splitAt(traceLine: string): string[] {
   const traceLineMask = '____AT_MASK____';

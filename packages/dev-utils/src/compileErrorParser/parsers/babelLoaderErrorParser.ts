@@ -12,7 +12,7 @@ const RE_BABEL_LOADER_LINE = /^(.*):(.*):(.*)(\((\d+):(\d+)\))$/;
 /**
  * babel-loader parser, tries to parse compiler error location from the error message.
  */
-function babelLoaderErrorParser(error: StatsError & Error): CompileError {
+function babelLoaderErrorParser(error: StatsError | Error): CompileError {
   const messageLines = error.message.split('\n');
   const compileError: CompileError = {
     name: 'Syntax error',

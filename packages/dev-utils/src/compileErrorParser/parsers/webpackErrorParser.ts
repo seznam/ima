@@ -15,17 +15,22 @@ const RE_EXTRACT_LOCATIONS_FIREFOX = /(.*):(\d+):(\d+)/;
  * General webpack compile error parser which tries to parse all remaining
  * errors from error stack and stats params.
  */
-function webpackErrorParser(error: StatsError & Error): CompileError {
+function webpackErrorParser(error: StatsError | Error): CompileError {
   // Parse error message
   const compileError: CompileError = {
     name: 'Webpack error',
     message: error.message.replace(/module not found: error:/gi, '').trim(),
   };
 
-  if (error.loc && error.moduleIdentifier) {
+  if ((error as StatsError).loc && (error as StatsError).moduleIdentifier) {
     // Extract error location from stats params.
-    const [lineNumber, columnNumber] = extractErrorLoc(error.loc);
-    const fileUri = extractFileUri(error.moduleIdentifier);
+    const [lineNumber, columnNumber] = extractErrorLoc(
+      (error as StatsError).loc
+    );
+
+    const fileUri = extractFileUri(
+      (error as StatsError).moduleIdentifier ?? ''
+    );
 
     compileError.lineNumber = lineNumber;
     compileError.columnNumber = columnNumber;
