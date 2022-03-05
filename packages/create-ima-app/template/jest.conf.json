@@ -4,9 +4,7 @@
     "<rootDir>/"
   ],
   "setupFiles": [
-    "@ima/core/test.js",
-    "@ima/core/polyfill/imaLoader.js",
-    "@ima/core/polyfill/imaRunner.js",
+    "@ima/core/setupFile.js",
     "<rootDir>/jest.setup.js"
   ],
   "snapshotSerializers": ["enzyme-to-json/serializer"],

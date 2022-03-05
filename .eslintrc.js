@@ -88,6 +88,7 @@ module.exports = {
         'packages/cli/**',
         'packages/hmr-client/**',
         'packages/error-overlay/**',
+        'packages/dev-utils/**',
       ],
       extends: ['plugin:import/recommended'],
       rules: {

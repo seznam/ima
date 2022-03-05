@@ -1,0 +1,16 @@
+{
+  "extends": "../../tsconfig.json",
+  "compilerOptions": {
+    "lib": ["DOM"],
+    "outDir": "./dist",
+    "baseUrl": ".",
+    "paths": {
+      "#/*": ["./src/*"]
+    }
+  },
+  "include": [
+    "./typings/**/*",
+    "./src/**/*",
+    "./index.ts"
+  ]
+}
