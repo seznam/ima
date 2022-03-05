@@ -1,5 +1,6 @@
+import { TraceLine } from '@ima/dev-utils';
+
 import { StackFrame, SourceStorage } from '#/entities';
-import { ParsedStack } from '#/types';
 
 const IgnoredFunctionNames = ['processTicksAndRejections'];
 
@@ -9,11 +10,11 @@ const IgnoredFunctionNames = ['processTicksAndRejections'];
  * source code fragments around errored lines in the original source
  * code files.
  *
- * @param {ParsedStack[]} frames Parsed stack frames.
+ * @param {TraceLine[]} frames Parsed stack frames.
  * @returns {Promise<StackFrame[]>} Array of mapped StackFrame entity instances.
  */
 async function mapStackFramesToOriginal(
-  frames: ParsedStack[]
+  frames: TraceLine[]
 ): Promise<StackFrame[]> {
   const sourceStorage = new SourceStorage();
   const mappedFrames: StackFrame[] = await Promise.all(
@@ -42,32 +43,27 @@ async function mapStackFramesToOriginal(
           fileName: frame.fileUri as string,
           functionName: frame.functionName,
           sourceFragment:
-            (frame.lineNumber &&
+            (frame.line &&
               fileSource?.fileContents &&
               StackFrame.createSourceFragment(
-                frame.lineNumber,
+                frame.line,
                 fileSource?.fileContents,
                 index === 0 ? 8 : 4
               )) ||
             null,
-          lineNumber: frame.lineNumber,
-          columnNumber: frame.columnNumber,
+          lineNumber: frame.line,
+          columnNumber: frame.column,
         });
 
         // Generate original source code references if source map exists
-        if (
-          fileSource &&
-          fileSource.sourceMap &&
-          frame.lineNumber &&
-          frame.columnNumber
-        ) {
+        if (fileSource && fileSource.sourceMap && frame.line && frame.column) {
           const {
             column,
             line,
             source: sourceFileUri,
           } = fileSource.sourceMap.getOriginalPosition(
-            frame.lineNumber,
-            frame.columnNumber
+            frame.line,
+            frame.column
           ) || {};
 
           const originalSource =
@@ -106,11 +102,11 @@ async function mapStackFramesToOriginal(
  * This also means that resulted StackFrames contain only original
  * source fragments.
  *
- * @param {ParsedStack[]} frames Parsed stack frames (with original file locations).
+ * @param {TraceLine[]} frames Parsed stack frames (with original file locations).
  * @returns {Promise<StackFrame[]>} Array of mapped StackFrame entity instances.
  */
 async function mapCompileStackFrames(
-  frames: ParsedStack[]
+  frames: TraceLine[]
 ): Promise<StackFrame[]> {
   const sourceStorage = new SourceStorage();
   const mappedFrames: StackFrame[] = await Promise.all(
@@ -127,19 +123,14 @@ async function mapCompileStackFrames(
         const fileSource = await sourceStorage.get(frame.fileUri as string);
 
         // Generate original source code references if source map exists
-        if (
-          fileSource &&
-          fileSource.sourceMap &&
-          frame.lineNumber &&
-          frame.columnNumber
-        ) {
+        if (fileSource && fileSource.sourceMap && frame.line && frame.column) {
           const {
             column,
             line,
             source: sourceFileUri,
           } = fileSource.sourceMap.getOriginalPosition(
-            frame.lineNumber,
-            frame.columnNumber
+            frame.line,
+            frame.column
           ) || {};
 
           if (sourceFileUri) {
@@ -169,16 +160,16 @@ async function mapCompileStackFrames(
           rootDir: fileSource?.rootDir,
           originalFileName: frame.fileUri as string,
           originalSourceFragment:
-            (frame.lineNumber &&
+            (frame.line &&
               fileSource?.fileContents &&
               StackFrame.createSourceFragment(
-                frame.lineNumber,
+                frame.line,
                 fileSource?.fileContents,
                 index === 0 ? 8 : 4
               )) ||
             null,
-          originalLineNumber: frame.lineNumber,
-          originalColumnNumber: frame.columnNumber,
+          originalLineNumber: frame.line,
+          originalColumnNumber: frame.column,
         });
       })
   );

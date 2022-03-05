@@ -226,6 +226,7 @@ function main() {
     path.resolve(__dirname, '../../server'),
     path.resolve(__dirname, '../../error-overlay'),
     path.resolve(__dirname, '../../hmr-client'),
+    path.resolve(__dirname, '../../dev-utils'),
   ];
 
   // Init app

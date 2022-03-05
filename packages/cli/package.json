@@ -38,7 +38,6 @@
     "@babel/preset-env": "^7.16.11",
     "@babel/preset-react": "^7.16.7",
     "@gatsbyjs/webpack-hot-middleware": "^2.25.2",
-    "@ima/dev-utils": "^17.10.0",
     "@pmmmwh/react-refresh-webpack-plugin": "^0.5.4",
     "@swc/core": "^1.2.147",
     "@types/webpack": "^5.28.0",

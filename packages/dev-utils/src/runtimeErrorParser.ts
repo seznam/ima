@@ -1,7 +1,7 @@
 import { RE_VALID_FRAME_CHROME, RE_VALID_FRAME_FIREFOX } from '#/helpers';
 
 export type TraceLine = {
-  functionName: string;
+  functionName?: string;
   fileUri?: string;
   line?: number;
   column?: number;
@@ -52,15 +52,17 @@ function splitAt(traceLine: string): string[] {
  * line and column numbers of the call.
  *
  * @param {string[]} stack Array of stack lines.
+ * @param {number} maxStackLines Maximum number of stack lines to extract.
  * @returns {TraceLine[]}
  */
-function parseStack(stack: string[]): TraceLine[] {
+function parseStack(stack: string[], maxStackLines: number): TraceLine[] {
   return stack
     .filter(
       traceLine =>
         RE_VALID_FRAME_CHROME.test(traceLine) ||
         RE_VALID_FRAME_FIREFOX.test(traceLine)
     )
+    .slice(0, maxStackLines)
     .map(traceLine => {
       // Chrome and firefox have different stack trace formats
       const match = traceLine.match(RE_VALID_FRAME_FIREFOX);
@@ -84,7 +86,7 @@ function parseStack(stack: string[]): TraceLine[] {
           (traceToken && extractLocation(traceToken)) || {};
 
         return {
-          functionName: data.join('@') || (isEval ? 'eval' : 'anonymous'),
+          functionName: data.join('@') || (isEval ? 'eval' : undefined),
           fileUri,
           line,
           column,
@@ -105,7 +107,7 @@ function parseStack(stack: string[]): TraceLine[] {
         (traceToken && extractLocation(traceToken)) || {};
 
       return {
-        functionName: data.join(' ') || 'anonymous',
+        functionName: data.join(' ') || undefined,
         fileUri,
         line,
         column,
@@ -117,23 +119,27 @@ function parseStack(stack: string[]): TraceLine[] {
  * Parses Error object or stack lines into parsed stack trace lines.
  *
  * @param {Error | string | string[]} error Error, trace or similar object.
+ * @param {number} maxStackLines Maximum number of stack lines to extract.
  * @returns {TraceLine[]}
  */
-function parseRuntimeError(error: Error | string | string[]): TraceLine[] {
+function parseRuntimeError(
+  error: Error | string | string[],
+  maxStackLines = Infinity
+): TraceLine[] {
   if (error === null) {
     throw new Error('You cannot pass a null object.');
   }
 
   if (typeof error === 'string') {
-    return parseStack(error.split('\n'));
+    return parseStack(error.split('\n'), maxStackLines);
   }
 
   if (Array.isArray(error)) {
-    return parseStack(error);
+    return parseStack(error, maxStackLines);
   }
 
   if (typeof error.stack === 'string') {
-    return parseStack(error.stack.split('\n'));
+    return parseStack(error.stack.split('\n'), maxStackLines);
   }
 
   throw new Error('The error you provided does not contain a stack trace.');

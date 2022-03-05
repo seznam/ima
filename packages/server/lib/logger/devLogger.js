@@ -1,6 +1,8 @@
 const chalk = require('chalk');
 const winston = require('winston');
-const { colorizeLevel, parseLocation } = require('./loggerUtils');
+const { parseRuntimeError } = require('@ima/dev-utils');
+
+const { colorizeLevel } = require('./loggerUtils');
 
 function formatError(error, rootDir) {
   const output = [`${chalk.underline(`${error.name}:`)} ${error.message}\n`];
@@ -11,14 +13,14 @@ function formatError(error, rootDir) {
     const [_, ...stackLines] = error.stack.split('\n');
     output.push(chalk.gray(stackLines.join('\n')));
 
+    // Try to parse error location
     try {
-      // Try to parse error location
-      const errorLoc = parseLocation(stackLines[0]);
+      const errorLoc = parseRuntimeError(stackLines, 1);
 
       output.unshift(
         `${chalk.magenta(`${errorLoc.functionName}`)} at ${chalk.cyan(
-          `${errorLoc.fileUri.replace(rootDir, '.')}:${errorLoc.lineNumber}:${
-            errorLoc.columnNumber
+          `${errorLoc.fileUri.replace(rootDir, '.')}:${errorLoc.line}:${
+            errorLoc.column
           }`
         )}`
       );

@@ -51,10 +51,3 @@ export type ParsedErrorLocation = {
   lineNumber: number;
   columnNumber: number;
 };
-
-export type ParsedStack = {
-  functionName?: string | null;
-  fileUri?: string;
-  lineNumber?: number;
-  columnNumber?: number;
-};
