@@ -43,11 +43,3 @@ export interface HMROptions {
   hostname: string;
   public: string;
 }
-
-export type ErrorType = 'compile' | 'runtime';
-
-export type ParsedErrorLocation = {
-  fileUri: string;
-  lineNumber: number;
-  columnNumber: number;
-};

@@ -2,7 +2,8 @@ import uid from 'easy-uid';
 
 import { ErrorsAction } from '#/actions';
 import { StackFrame } from '#/entities';
-import { ErrorType } from '#/types';
+
+export type ErrorType = 'compile' | 'runtime';
 
 export type FrameWrapper = {
   id: string;
