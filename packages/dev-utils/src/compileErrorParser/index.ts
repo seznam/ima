@@ -1,13 +1,12 @@
 import { StatsError } from 'webpack';
 
-import { CompileError } from '#/types';
-
 import {
   babelLoaderErrorParser,
   cssLoaderErrorParser,
   lessLoaderErrorParser,
   swcLoaderErrorParser,
   webpackErrorParser,
+  CompileError,
 } from './parsers';
 
 /**
@@ -36,4 +35,4 @@ function parseCompileError(error: StatsError | Error): CompileError | null {
   return webpackErrorParser(error);
 }
 
-export { parseCompileError };
+export { parseCompileError, CompileError };

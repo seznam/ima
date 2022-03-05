@@ -1,6 +1,6 @@
 import { StatsError } from 'webpack';
 
-import { CompileError } from '#/types';
+import { CompileError } from './parserUtils';
 
 /**
  * css and post-css loader errors line hook

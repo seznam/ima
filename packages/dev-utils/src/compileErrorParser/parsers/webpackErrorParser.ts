@@ -1,12 +1,8 @@
 import { StatsError } from 'webpack';
 
-import { CompileError } from '#/types';
+import { RE_VALID_FRAME_FIREFOX } from '#/helpers';
 
-import {
-  extractErrorLoc,
-  extractFileUri,
-  RE_VALID_FRAME_FIREFOX,
-} from './parserUtils';
+import { CompileError, extractErrorLoc, extractFileUri } from './parserUtils';
 
 const RE_EXTRACT_LOCATIONS_CHROME = /\(((.*):(\d+):(\d+))\)/;
 const RE_EXTRACT_LOCATIONS_FIREFOX = /(.*):(\d+):(\d+)/;
@@ -24,16 +20,13 @@ function webpackErrorParser(error: StatsError | Error): CompileError {
 
   if ((error as StatsError).loc && (error as StatsError).moduleIdentifier) {
     // Extract error location from stats params.
-    const [lineNumber, columnNumber] = extractErrorLoc(
-      (error as StatsError).loc
-    );
-
+    const { line, column } = extractErrorLoc((error as StatsError).loc);
     const fileUri = extractFileUri(
       (error as StatsError).moduleIdentifier ?? ''
     );
 
-    compileError.lineNumber = lineNumber;
-    compileError.columnNumber = columnNumber;
+    compileError.lineNumber = line;
+    compileError.columnNumber = column;
     compileError.fileUri = fileUri;
   } else if (error.stack) {
     const stackLines = error.stack?.split('\n');

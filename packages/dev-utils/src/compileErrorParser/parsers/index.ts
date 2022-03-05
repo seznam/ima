@@ -5,9 +5,8 @@ export { swcLoaderErrorParser } from './swcLoaderErrorParser';
 export { webpackErrorParser } from './webpackErrorParser';
 
 export {
+  CompileError,
   RE_FILE_PATH_REGEX,
-  RE_VALID_FRAME_CHROME,
-  RE_VALID_FRAME_FIREFOX,
   extractErrorLoc,
   extractFileUri,
 } from './parserUtils';

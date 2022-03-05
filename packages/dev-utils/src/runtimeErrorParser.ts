@@ -1,9 +1,13 @@
-import { TraceLine } from '#/types';
+import { RE_VALID_FRAME_CHROME, RE_VALID_FRAME_FIREFOX } from '#/helpers';
 
-const reExtractLocations = /\(?(.+?)(?::(\d+))?(?::(\d+))?\)?$/;
-const reValidFrameChrome = /^\s*(at|in)\s.+(:\d+)/;
-const reValidFrameFireFox =
-  /(^|\/?@)\S+:\d+|.+line\s+\d+\s+>\s+(eval|Function).+/;
+export type TraceLine = {
+  functionName?: string;
+  fileUri?: string;
+  lineNumber?: number;
+  columnNumber?: number;
+};
+
+const RE_EXTRACT_LOCATIONS = /\(?(.+?)(?::(\d+))?(?::(\d+))?\)?$/;
 
 /**
  * Extract file uri, line and column number from
@@ -18,7 +22,7 @@ function extractLocation(token: string): {
   columnNumber: number;
 } {
   const [fileUri, lineNumber, columnNumber] =
-    reExtractLocations.exec(token)?.slice(1) || [];
+    RE_EXTRACT_LOCATIONS.exec(token)?.slice(1) || [];
 
   return {
     fileUri,
@@ -54,12 +58,12 @@ function parseStack(stack: string[]): TraceLine[] {
   return stack
     .filter(
       traceLine =>
-        reValidFrameChrome.test(traceLine) ||
-        reValidFrameFireFox.test(traceLine)
+        RE_VALID_FRAME_CHROME.test(traceLine) ||
+        RE_VALID_FRAME_FIREFOX.test(traceLine)
     )
     .map(traceLine => {
       // Chrome and firefox have different stack trace formats
-      const match = traceLine.match(reValidFrameFireFox);
+      const match = traceLine.match(RE_VALID_FRAME_FIREFOX);
 
       // Validate firefox (if at character contains / prefix, it's namespaced package path)
       if (match && match[1] === '@') {
@@ -80,7 +84,7 @@ function parseStack(stack: string[]): TraceLine[] {
           (traceToken && extractLocation(traceToken)) || {};
 
         return {
-          functionName: data.join('@') || (isEval ? 'eval' : null),
+          functionName: data.join('@') || (isEval ? 'eval' : 'anonymous'),
           fileUri,
           lineNumber,
           columnNumber,
@@ -101,7 +105,7 @@ function parseStack(stack: string[]): TraceLine[] {
         (traceToken && extractLocation(traceToken)) || {};
 
       return {
-        functionName: data.join(' ') || null,
+        functionName: data.join(' ') || 'anonymous',
         fileUri,
         lineNumber,
         columnNumber,
@@ -116,7 +120,7 @@ function parseStack(stack: string[]): TraceLine[] {
  * @returns {TraceLine[]}
  */
 function parseRuntimeError(error: Error | string | string[]): TraceLine[] {
-  if (error == null) {
+  if (error === null) {
     throw new Error('You cannot pass a null object.');
   }
 

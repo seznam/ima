@@ -1,13 +1,9 @@
-import { parseCompileError } from '@ima/dev-utils';
+import { parseCompileError, parseRuntimeError } from '@ima/dev-utils';
 import { useCallback, useEffect } from 'react';
 
 import { useErrorsDispatcher } from '#/stores';
 import { ClientEventName, OverlayEventName } from '#/types';
-import {
-  mapStackFramesToOriginal,
-  mapCompileStackFrames,
-  parseRuntimeError,
-} from '#/utils';
+import { mapStackFramesToOriginal, mapCompileStackFrames } from '#/utils';
 
 function useConnectSSRErrorOverlay(): void {
   const dispatch = useErrorsDispatcher();
