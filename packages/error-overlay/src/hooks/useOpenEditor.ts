@@ -1,4 +1,4 @@
-import { useCallback, useState } from 'react';
+import { useCallback, useState } from 'preact/hooks';
 
 import { FrameWrapper } from '#/reducers/errorsReducer';
 import { getDevServerBaseUrl } from '#/utils';

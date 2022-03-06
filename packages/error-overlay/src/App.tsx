@@ -1,11 +1,12 @@
 import 'tailwindcss/tailwind.css';
 import clsx from 'clsx';
-import { Fragment, FunctionComponent, useMemo } from 'react';
+import { Fragment, FunctionComponent } from 'preact';
+import { useMemo } from 'preact/hooks';
 import { SourceMapConsumer } from 'source-map';
 
 import { Frame, Header, Hero, Icon, Button } from '#/components';
 import { useConnectOverlay, useBridgeInterface } from '#/hooks';
-import { useErrorsStore, useErrorsDispatcher } from '#/stores';
+import { useErrorsStore } from '#/stores';
 import { getDevServerBaseUrl } from '#/utils';
 
 // Needed to enable source map parsing
@@ -16,11 +17,8 @@ SourceMapConsumer.initialize({
 
 const App: FunctionComponent = () => {
   useConnectOverlay();
-  const dispatch = useErrorsDispatcher();
   const { isSSRError } = useBridgeInterface();
-  const currentError = useErrorsStore(c =>
-    c.state.currentErrorId ? c.state.errors[c.state.currentErrorId] : null
-  );
+  const { dispatch, currentError } = useErrorsStore();
 
   const visibleFrames = useMemo(() => {
     if (!currentError) {

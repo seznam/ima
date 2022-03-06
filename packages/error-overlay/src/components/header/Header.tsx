@@ -1,9 +1,9 @@
-import { FunctionComponent, memo } from 'react';
+import { FunctionComponent } from 'preact';
 
 import { Button, Icon } from '#/components';
 import { useBridgeInterface } from '#/hooks';
 import { ErrorWrapper } from '#/reducers';
-import { useErrorsDispatcher, useErrorsStore } from '#/stores';
+import { useErrorsStore } from '#/stores';
 
 export type HeaderProps = {
   error: ErrorWrapper;
@@ -11,8 +11,7 @@ export type HeaderProps = {
 
 const Header: FunctionComponent<HeaderProps> = ({ error }) => {
   const { closeOverlay, isSSRError } = useBridgeInterface();
-  const dispatch = useErrorsDispatcher();
-  const errorIds = useErrorsStore(context => context.state.errorIds);
+  const { dispatch, state } = useErrorsStore();
 
   if (isSSRError) {
     return null;
@@ -20,7 +19,7 @@ const Header: FunctionComponent<HeaderProps> = ({ error }) => {
 
   return (
     <div className='flex justify-between items-center my-3'>
-      {error && errorIds.length > 1 ? (
+      {error && state.errorIds.length > 1 ? (
         <div className='flex items-center'>
           <Button
             size='xs'
@@ -37,9 +36,11 @@ const Header: FunctionComponent<HeaderProps> = ({ error }) => {
             <Icon icon='chevron' size='xs' />
           </Button>
           <span className='text-xs text-slate-700 md:text-sm'>
-            <span className='font-bold'>{errorIds.indexOf(error.id) + 1}</span>{' '}
-            of <span className='font-bold'>{errorIds.length}</span> errors are
-            visible on the page
+            <span className='font-bold'>
+              {state.errorIds.indexOf(error.id) + 1}
+            </span>{' '}
+            of <span className='font-bold'>{state.errorIds.length}</span> errors
+            are visible on the page
           </span>
         </div>
       ) : (
@@ -52,5 +53,4 @@ const Header: FunctionComponent<HeaderProps> = ({ error }) => {
   );
 };
 
-export { Header };
-export default memo(Header);
+export default Header;

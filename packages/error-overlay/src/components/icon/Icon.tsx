@@ -1,14 +1,15 @@
 import clsx from 'clsx';
-import { FunctionComponent, memo } from 'react';
+import { FunctionComponent } from 'preact';
 
 import { Icons, IconType } from './icons';
 
 export type IconProps = {
   icon: IconType;
   size?: 'sm' | 'xs' | 'lg';
+  className?: string;
 };
 
-const Icon: FunctionComponent<IconProps & React.SVGProps<SVGSVGElement>> = ({
+const Icon: FunctionComponent<IconProps> = ({
   icon,
   size,
   className,
@@ -36,5 +37,4 @@ const Icon: FunctionComponent<IconProps & React.SVGProps<SVGSVGElement>> = ({
   );
 };
 
-export { Icon };
-export default memo(Icon);
+export default Icon;

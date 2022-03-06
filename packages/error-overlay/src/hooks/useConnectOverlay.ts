@@ -1,8 +1,8 @@
 import { parseCompileError } from '@ima/dev-utils/dist/compileErrorParser';
 import { parseRuntimeError } from '@ima/dev-utils/dist/runtimeErrorParser';
-import { useCallback, useEffect } from 'react';
+import { useCallback, useEffect } from 'preact/hooks';
 
-import { useErrorsDispatcher } from '#/stores';
+import { useErrorsStore } from '#/stores';
 import { ClientEventName, OverlayEventName } from '#/types';
 import { mapCompileStackFrame, mapStackFramesToOriginal } from '#/utils';
 
@@ -10,7 +10,7 @@ import { mapCompileStackFrame, mapStackFramesToOriginal } from '#/utils';
  * SSR rendered runtime errors handler.
  */
 function useConnectSSRErrorOverlay(): void {
-  const dispatch = useErrorsDispatcher();
+  const { dispatch } = useErrorsStore();
 
   useEffect(() => {
     if (!window.__ima_server_error) {
@@ -41,7 +41,7 @@ function useConnectSSRErrorOverlay(): void {
  * Client side error handler (connects to HMR-client window events).
  */
 function useConnectClientErrorOverlay(): void {
-  const dispatch = useErrorsDispatcher();
+  const { dispatch } = useErrorsStore();
   let isRuntimeCompileError = false; // If set to true we do site reload after errors are fixed
 
   const runtimeErrorListener = useCallback(

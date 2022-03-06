@@ -2,6 +2,8 @@
   "extends": "../../tsconfig.json",
   "compilerOptions": {
     "lib": ["DOM", "ES2020"],
+    "jsx": "react-jsx",
+    "jsxImportSource": "preact",
     "outDir": "./dist",
     "baseUrl": ".",
     "declaration": false,

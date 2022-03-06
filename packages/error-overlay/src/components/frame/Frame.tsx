@@ -1,6 +1,6 @@
 import clsx from 'clsx';
+import { FunctionComponent } from 'preact';
 import prismjs from 'prismjs';
-import { FunctionComponent, memo } from 'react';
 
 import { Icon } from '#/components';
 import { ErrorWrapper, FrameWrapper } from '#/reducers';
@@ -141,5 +141,5 @@ const Frame: FunctionComponent<FrameProps> = ({
   );
 };
 
-export { Frame, getPrismLanguage };
-export default memo(Frame);
+export { getPrismLanguage };
+export default Frame;
