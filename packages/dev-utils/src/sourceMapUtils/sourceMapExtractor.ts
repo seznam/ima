@@ -1,6 +1,4 @@
-import { SourceMapConsumer } from 'source-map';
-
-import { SourceMap, SourceStorage } from '#/entities';
+import { SourceMapConsumer, BasicSourceMapConsumer } from 'source-map';
 
 /**
  * Extracts sourceMappingURL from the provided file contents.
@@ -12,7 +10,7 @@ import { SourceMap, SourceStorage } from '#/entities';
 async function extractSourceMappingUrl(
   fileUri: string,
   fileContents: string
-): Promise<string> {
+): Promise<string | null> {
   const regex = /\/\/[#@] ?sourceMappingURL=([^\s'"]+)\s*$/gm;
   let match: RegExpExecArray | null = null;
 
@@ -27,10 +25,21 @@ async function extractSourceMappingUrl(
   }
 
   if (!(match && match[1])) {
-    return Promise.reject(`Cannot find a source map directive for ${fileUri}.`);
+    return null;
   }
 
-  return Promise.resolve(match[1].toString());
+  const sourceMappingUrl = match[1].toString();
+
+  // Inline base64 source map
+  if (sourceMappingUrl.includes('data:')) {
+    return Promise.resolve(sourceMappingUrl);
+  }
+
+  const lastSlashIndex = fileUri.lastIndexOf('/');
+  const mapFileUri =
+    fileUri.substring(0, lastSlashIndex + 1) + sourceMappingUrl;
+
+  return Promise.resolve(mapFileUri);
 }
 
 /**
@@ -45,11 +54,14 @@ async function extractSourceMappingUrl(
  */
 async function getSourceMap(
   fileUri: string,
-  fileContents: string,
-  sourceStorage: SourceStorage
-): Promise<SourceMap> {
+  fileContents: string
+): Promise<BasicSourceMapConsumer> {
   let rawSourceMap;
   const sourceMappingUrl = await extractSourceMappingUrl(fileUri, fileContents);
+
+  if (!sourceMappingUrl) {
+    return Promise.reject(`Cannot find a source map directive for ${fileUri}.`);
+  }
 
   // Parse inline (eval) source maps
   if (sourceMappingUrl.indexOf('data:') === 0) {
@@ -72,18 +84,20 @@ async function getSourceMap(
     const fileName =
       fileUri.substring(0, lastSlashIndex + 1) + sourceMappingUrl;
 
-    rawSourceMap = await fetch(sourceStorage.getFileSourceUrl(fileName)).then(
-      async res => {
-        const data = await res.json();
+    // rawSourceMap = await fetch(sourceStorage.getFileSourceUrl(fileName)).then(
+    //   async res => {
+    //     const data = await res.json();
 
-        // Either return source from eval middleware or data from hot.js file
-        return data.source ? data.source : data;
-      }
-    );
+    //     // Either return source from eval middleware or data from hot.js file
+    //     return data.source ? data.source : data;
+    //   }
+    // );
   }
 
+  // TODO
+
   // Parse source maps from raw source map JSON
-  return new SourceMap(await new SourceMapConsumer(rawSourceMap));
+  return new SourceMapConsumer(rawSourceMap);
 }
 
 export { extractSourceMappingUrl, getSourceMap };

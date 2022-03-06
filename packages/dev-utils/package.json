@@ -11,8 +11,9 @@
     "dev": "../../node_modules/.bin/tsc --watch"
   },
   "files": [
+    "./dist/sourceMapUtils/index.js",
     "./dist/compileErrorParser/index.js",
-    "./dist/cliHighlight.js",
+    "./dist/cliUtils.js",
     "./dist/helpers.js",
     "./dist/runtimeErrorParser.js",
     "./dist/sourceFragment.js"
@@ -35,6 +36,7 @@
   "dependencies": {
     "@types/webpack": "^5.28.0",
     "chalk": "^4.1.2",
-    "cli-highlight": "^2.1.11"
+    "cli-highlight": "^2.1.11",
+    "source-map": "^0.7.3"
   }
 }

@@ -1,7 +1,7 @@
 import fs from 'fs';
 import path from 'path';
 
-import { highlightError } from '@ima/dev-utils/dist/cliHighlight';
+import { formatError } from '@ima/dev-utils/dist/cliUtils';
 import {
   CompileError,
   parseCompileError,
@@ -38,55 +38,28 @@ async function formatWebpackErrors(
     return;
   }
 
-  // Parse errors
-  // const parsedErrors = [];
+  const uniqueErrorTracker = new Set<string>();
+
   for (const error of errors) {
-    // Print error
-    logger.error(highlightError(error, 'compile', args.rootDir));
+    if (!error.moduleIdentifier) {
+      continue;
+    }
 
-    // const parsedError = parseCompileError(error as StatsError);
+    if (uniqueErrorTracker.has(error.moduleIdentifier)) {
+      continue;
+    }
 
-    // if (parsedError) {
-    //   // Print uris relative to working dir
-    //   parsedError.fileUri = parsedError?.fileUri?.replace(args.rootDir, '.');
-    //   parsedErrors.push(parsedError);
-    // }
+    // Track unique error by its identifier
+    uniqueErrorTracker.add(error.moduleIdentifier);
+
+    // Print unique error
+    logger.error(
+      await formatError(error, 'compile', {
+        rootDir: args.rootDir,
+        parseSourceMaps: false,
+      })
+    );
   }
-
-  // // Filter out duplicates
-  // let filteredParsedErrors: CompileError[] = [];
-  // for (const parsedError of parsedErrors) {
-  //   if (
-  //     filteredParsedErrors.findIndex(
-  //       error =>
-  //         error.name === parsedError.name &&
-  //         error.message === parsedError.message &&
-  //         error.fileUri === parsedError.fileUri
-  //     ) === -1
-  //   ) {
-  //     filteredParsedErrors.push(parsedError);
-  //   }
-  // }
-
-  // // Print only syntax errors
-  // if (filteredParsedErrors.some(error => error.name === 'Syntax error')) {
-  //   filteredParsedErrors = filteredParsedErrors.filter(
-  //     error => error.name === 'Syntax error'
-  //   );
-  // }
-
-  // // Print filtered errors
-  // for (const parsedError of filteredParsedErrors) {
-  //   // Print message right away, if we don't manage to parse it
-  //   if (
-  //     !parsedError.line ||
-  //     !(parsedError.fileUri && fs.existsSync(parsedError.fileUri))
-  //   ) {
-  //     return logger.error(
-  //       `${chalk.underline(`${parsedError.name}:`)} ${parsedError.message}\n`
-  //     );
-  //   }
-  // }
 }
 
 /**
