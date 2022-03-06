@@ -13,12 +13,12 @@ function useOpenEditor() {
 
     if (frameWrapper.showOriginal) {
       fileUri = frame.getPrettyOriginalFileUri();
-      line = frame.originalLineNumber;
-      column = frame.originalColumnNumber;
+      line = frame.orgLine;
+      column = frame.orgColumn;
     } else {
       fileUri = frame.fileName;
-      line = frame.lineNumber;
-      column = frame.columnNumber;
+      line = frame.line;
+      column = frame.column;
     }
 
     if (!fileUri) {

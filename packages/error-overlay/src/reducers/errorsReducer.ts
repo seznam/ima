@@ -68,8 +68,8 @@ function errorsReducer(state: ErrorsState, action: ErrorsAction): ErrorsState {
                     frame: curFrame,
                     showOriginal: true,
                     isCollapsed:
-                      !curFrame.originalSourceFragment ||
-                      curFrame.originalSourceFragment.length === 0,
+                      !curFrame.orgSourceFragment ||
+                      curFrame.orgSourceFragment.length === 0,
                   };
 
                   return accFrames;
@@ -100,8 +100,8 @@ function errorsReducer(state: ErrorsState, action: ErrorsAction): ErrorsState {
                   frame: curFrame,
                   showOriginal: true,
                   isCollapsed:
-                    !curFrame.originalSourceFragment ||
-                    curFrame.originalSourceFragment.length === 0,
+                    !curFrame.orgSourceFragment ||
+                    curFrame.orgSourceFragment.length === 0,
                 };
 
                 return accFrames;

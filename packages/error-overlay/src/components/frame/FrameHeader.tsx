@@ -25,10 +25,10 @@ const FrameHeader: FunctionComponent<FrameHeaderProps> = ({
     frameWrapper.showOriginal || errorType === 'compile'
       ? [
           frame.getPrettyOriginalFileUri(),
-          frame.originalLineNumber,
-          frame.originalColumnNumber,
+          frame.orgLine,
+          frame.orgColumn,
         ]
-      : [frame.fileName, frame.lineNumber, frame.columnNumber]
+      : [frame.fileName, frame.line, frame.column]
   ).filter(Boolean);
 
   return (

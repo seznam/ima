@@ -2,6 +2,9 @@ import { useCallback } from 'react';
 
 import { OverlayEventName } from '#/types';
 
+/**
+ * HMR client API hook
+ */
 function useBridgeInterface(): {
   closeOverlay(): void;
   isSSRError: boolean;

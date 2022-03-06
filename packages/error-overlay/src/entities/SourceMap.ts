@@ -2,15 +2,7 @@ import {
   NullablePosition,
   NullableMappedPosition,
   BasicSourceMapConsumer,
-  SourceMapConsumer,
 } from 'source-map';
-
-import { getDevServerBaseUrl } from '#/utils';
-
-// @ts-expect-error: Not available in typings
-SourceMapConsumer.initialize({
-  'lib/mappings.wasm': `${getDevServerBaseUrl()}/__error-overlay-static/mappings.wasm`,
-});
 
 /**
  * Original {@link https://github.com/facebook/create-react-app/blob/main/packages/react-dev-utils/evalSourceMapMiddleware.js}.
@@ -30,7 +22,7 @@ class SourceMap {
    * @param {number} column The column of the generated code position.
    * @returns {NullableMappedPosition}
    */
-  getOriginalPosition(
+  originalPositionFor(
     line: number,
     column: number
   ): Partial<NullableMappedPosition> {
@@ -48,7 +40,7 @@ class SourceMap {
    * @param {number} column The column of the original code position.
    * @returns {NullablePosition}
    */
-  getGeneratedPosition(
+  generatedPositionFor(
     source: string,
     line: number,
     column: number
@@ -66,7 +58,7 @@ class SourceMap {
    * @param {string} sourceName The name of the source file.
    * @returns {string | null}
    */
-  getSource(sourceName: string): string | null {
+  sourceContentFor(sourceName: string): string | null {
     return this._sourceMap.sourceContentFor(sourceName);
   }
 

@@ -1,10 +1,18 @@
 import 'tailwindcss/tailwind.css';
 import clsx from 'clsx';
 import { Fragment, FunctionComponent, useMemo } from 'react';
+import { SourceMapConsumer } from 'source-map';
 
 import { Frame, Header, Hero, Icon, Button } from '#/components';
 import { useConnectOverlay, useBridgeInterface } from '#/hooks';
 import { useErrorsStore, useErrorsDispatcher } from '#/stores';
+import { getDevServerBaseUrl } from '#/utils';
+
+// Needed to enable source map parsing
+// @ts-expect-error: Not available in typings
+SourceMapConsumer.initialize({
+  'lib/mappings.wasm': `${getDevServerBaseUrl()}/__error-overlay-static/mappings.wasm`,
+});
 
 const App: FunctionComponent = () => {
   useConnectOverlay();

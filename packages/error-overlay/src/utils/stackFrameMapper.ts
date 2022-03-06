@@ -1,8 +1,81 @@
 import { TraceLine } from '@ima/dev-utils/dist/runtimeErrorParser';
+import { createSourceFragment } from '@ima/dev-utils/dist/sourceFragment';
 
 import { StackFrame, SourceStorage } from '#/entities';
 
 const IgnoredFunctionNames = ['processTicksAndRejections'];
+const sourceStorage = new SourceStorage();
+
+/**
+ * StackFrame initialized helper. Takes care of properly
+ * initializing every property of StackFrame that can be
+ * parsed from the given data.
+ *
+ * @param {TraceLine} frame Parsed trace line.
+ * @param {number} contextLines Number of context lines around source fragment.
+ * @returns {StackFrame} parsed  StackFrame entity instance.
+ */
+async function createStackFrame(
+  frame: TraceLine,
+  contextLines: number
+): Promise<StackFrame> {
+  // Create basic stack frame from parsed trace line
+  const stackFrame = new StackFrame({
+    fileName: frame.fileUri as string,
+    functionName: frame.functionName,
+    line: frame.line,
+    column: frame.column,
+  });
+
+  // Get file source
+  const { fileContents, sourceMap, rootDir } =
+    (await sourceStorage.get(stackFrame.fileName as string)) || {};
+
+  if (!fileContents || !stackFrame.line) {
+    return stackFrame;
+  }
+
+  // Create file contents
+  stackFrame.rootDir = rootDir;
+  stackFrame.sourceFragment = createSourceFragment(
+    stackFrame.line,
+    fileContents,
+    contextLines
+  );
+
+  if (!sourceMap || !stackFrame.column) {
+    return stackFrame;
+  }
+
+  // Parse original source
+  const orgPosition =
+    sourceMap.originalPositionFor({
+      line: stackFrame.line,
+      column: stackFrame.column,
+    }) || {};
+
+  if (!orgPosition.source || !orgPosition.line) {
+    return stackFrame;
+  }
+
+  const orgSource = sourceMap.sourceContentFor(orgPosition.source);
+
+  if (!orgSource) {
+    return stackFrame;
+  }
+
+  // Create original source fragment
+  stackFrame.orgFileName = orgPosition.source;
+  stackFrame.orgLine = orgPosition.line;
+  stackFrame.orgColumn = orgPosition.column;
+  stackFrame.orgSourceFragment = createSourceFragment(
+    stackFrame.orgLine,
+    orgSource,
+    contextLines
+  );
+
+  return stackFrame;
+}
 
 /**
  * Maps parsed stacked frames into their original code positions
@@ -16,7 +89,6 @@ const IgnoredFunctionNames = ['processTicksAndRejections'];
 async function mapStackFramesToOriginal(
   frames: TraceLine[]
 ): Promise<StackFrame[]> {
-  const sourceStorage = new SourceStorage();
   const mappedFrames: StackFrame[] = await Promise.all(
     frames
       .filter(frame => {
@@ -33,58 +105,7 @@ async function mapStackFramesToOriginal(
 
         return true;
       })
-      .map(async (frame, index) => {
-        // Get file source
-        const fileSource = await sourceStorage.get(frame.fileUri as string);
-
-        // Create parsed stack frame
-        const stackFrame = new StackFrame({
-          rootDir: fileSource?.rootDir,
-          fileName: frame.fileUri as string,
-          functionName: frame.functionName,
-          sourceFragment:
-            (frame.line &&
-              fileSource?.fileContents &&
-              StackFrame.createSourceFragment(
-                frame.line,
-                fileSource?.fileContents,
-                index === 0 ? 8 : 4
-              )) ||
-            null,
-          lineNumber: frame.line,
-          columnNumber: frame.column,
-        });
-
-        // Generate original source code references if source map exists
-        if (fileSource && fileSource.sourceMap && frame.line && frame.column) {
-          const {
-            column,
-            line,
-            source: sourceFileUri,
-          } = fileSource.sourceMap.getOriginalPosition(
-            frame.line,
-            frame.column
-          ) || {};
-
-          const originalSource =
-            sourceFileUri && fileSource.sourceMap.getSource(sourceFileUri);
-
-          stackFrame.originalFileName = sourceFileUri;
-          stackFrame.originalLineNumber = line;
-          stackFrame.originalColumnNumber = column;
-          stackFrame.originalSourceFragment =
-            (line &&
-              originalSource &&
-              StackFrame.createSourceFragment(
-                line,
-                originalSource,
-                index === 0 ? 8 : 4
-              )) ||
-            null;
-        }
-
-        return stackFrame;
-      })
+      .map(async (frame, index) => createStackFrame(frame, index === 0 ? 8 : 4))
   );
 
   // Cleanup wasm allocated sourcemaps
@@ -94,90 +115,40 @@ async function mapStackFramesToOriginal(
 }
 
 /**
- * Maps error location frames into their original code. Unlike
- * mapStackFramesToOriginal function, this function doesn't work
- * with source maps, but rather assumes that provided frames
- * already point to the original file location.
+ * Maps compile error trace line into is original position.
+ * Compile errors already work with original positions so we
+ * only need to create original source fragment from given data.
  *
- * This also means that resulted StackFrames contain only original
- * source fragments.
- *
- * @param {TraceLine[]} frames Parsed stack frames (with original file locations).
- * @returns {Promise<StackFrame[]>} Array of mapped StackFrame entity instances.
+ * @param {TraceLine} frame Parsed compile trace line.
+ * @returns {Promise<StackFrame | null>} Mapped StackFrame instance.
  */
-async function mapCompileStackFrames(
-  frames: TraceLine[]
-): Promise<StackFrame[]> {
-  const sourceStorage = new SourceStorage();
-  const mappedFrames: StackFrame[] = await Promise.all(
-    frames
-      .filter(frame => {
-        if (!frame.fileUri) {
-          return false;
-        }
+async function mapCompileStackFrame(
+  frame: TraceLine
+): Promise<StackFrame | null> {
+  if (!frame.fileUri) {
+    return null;
+  }
 
-        return true;
-      })
-      .map(async (frame, index) => {
-        // Get file source
-        const fileSource = await sourceStorage.get(frame.fileUri as string);
+  const { rootDir, fileContents } =
+    (await sourceStorage.get(frame.fileUri as string)) || {};
 
-        // Generate original source code references if source map exists
-        if (fileSource && fileSource.sourceMap && frame.line && frame.column) {
-          const {
-            column,
-            line,
-            source: sourceFileUri,
-          } = fileSource.sourceMap.getOriginalPosition(
-            frame.line,
-            frame.column
-          ) || {};
-
-          if (sourceFileUri) {
-            const originalSource =
-              fileSource.sourceMap.getSource(sourceFileUri);
-
-            return new StackFrame({
-              rootDir: fileSource.rootDir,
-              originalFileName: sourceFileUri,
-              originalLineNumber: line,
-              originalColumnNumber: column,
-              originalSourceFragment:
-                (line &&
-                  originalSource &&
-                  StackFrame.createSourceFragment(
-                    line,
-                    originalSource,
-                    index === 0 ? 8 : 4
-                  )) ||
-                null,
-            });
-          }
-        }
-
-        // Fallback to original fragment if source maps are not available
-        return new StackFrame({
-          rootDir: fileSource?.rootDir,
-          originalFileName: frame.fileUri as string,
-          originalSourceFragment:
-            (frame.line &&
-              fileSource?.fileContents &&
-              StackFrame.createSourceFragment(
-                frame.line,
-                fileSource?.fileContents,
-                index === 0 ? 8 : 4
-              )) ||
-            null,
-          originalLineNumber: frame.line,
-          originalColumnNumber: frame.column,
-        });
-      })
-  );
+  // Compile errors are parsed directly on original
+  const mappedFrame = new StackFrame({
+    rootDir,
+    orgFileName: frame.fileUri as string,
+    orgSourceFragment:
+      (frame.line &&
+        fileContents &&
+        createSourceFragment(frame.line, fileContents, 8)) ||
+      null,
+    orgLine: frame.line,
+    orgColumn: frame.column,
+  });
 
   // Cleanup wasm allocated sourcemaps
   sourceStorage.cleanup();
 
-  return mappedFrames;
+  return mappedFrame;
 }
 
-export { mapStackFramesToOriginal, mapCompileStackFrames };
+export { mapStackFramesToOriginal, mapCompileStackFrame };

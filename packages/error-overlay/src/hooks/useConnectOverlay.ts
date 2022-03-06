@@ -4,10 +4,14 @@ import { useCallback, useEffect } from 'react';
 
 import { useErrorsDispatcher } from '#/stores';
 import { ClientEventName, OverlayEventName } from '#/types';
-import { mapStackFramesToOriginal, mapCompileStackFrames } from '#/utils';
+import { mapCompileStackFrame, mapStackFramesToOriginal } from '#/utils';
 
+/**
+ * SSR rendered runtime errors handler.
+ */
 function useConnectSSRErrorOverlay(): void {
   const dispatch = useErrorsDispatcher();
+
   useEffect(() => {
     if (!window.__ima_server_error) {
       return;
@@ -33,6 +37,9 @@ function useConnectSSRErrorOverlay(): void {
   }, []);
 }
 
+/**
+ * Client side error handler (connects to HMR-client window events).
+ */
 function useConnectClientErrorOverlay(): void {
   const dispatch = useErrorsDispatcher();
   let isRuntimeCompileError = false; // If set to true we do site reload after errors are fixed
@@ -72,15 +79,15 @@ function useConnectClientErrorOverlay(): void {
           return;
         }
 
-        const { name, message, ...parsedStack } = parsedError;
-        mapCompileStackFrames([parsedStack]).then(frames => {
+        const { name, message, ...traceLine } = parsedError;
+        mapCompileStackFrame(traceLine).then(frame => {
           dispatch({
             type: 'add',
             payload: {
               name: name,
               message: message,
               type: 'compile',
-              frames,
+              frames: frame ? [frame] : [], // TODO what happens when empty
             },
           });
         });

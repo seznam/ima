@@ -70,13 +70,13 @@ const Frame: FunctionComponent<FrameProps> = ({
 }) => {
   const { frame } = frameWrapper;
   const sourceFragment = frameWrapper.showOriginal
-    ? frame.originalSourceFragment
+    ? frame.orgSourceFragment
     : frame.sourceFragment;
   const hasFragment =
     Array.isArray(sourceFragment) && sourceFragment.length > 0;
 
   const { grammar, language } = getPrismLanguage(
-    frame.originalFileName || frame.fileName
+    frame.orgFileName || frame.fileName
   );
 
   return (
@@ -98,7 +98,7 @@ const Frame: FunctionComponent<FrameProps> = ({
             <pre>
               <code>
                 {(frameWrapper.showOriginal
-                  ? frame.originalSourceFragment
+                  ? frame.orgSourceFragment
                   : frame.sourceFragment
                 )?.map(line => (
                   <div
