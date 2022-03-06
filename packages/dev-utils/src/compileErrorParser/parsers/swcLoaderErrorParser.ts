@@ -1,7 +1,6 @@
 import { StatsError } from 'webpack';
 
-import { RE_VALID_FRAME_FIREFOX } from '#/helpers';
-
+import { RE_VALID_FRAME_FIREFOX } from '../../helpers';
 import { RE_FILE_PATH_REGEX, CompileError } from './parserUtils';
 
 const RE_SWC_LINE_NUMBER = /(\d+) \|/;

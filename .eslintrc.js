@@ -150,7 +150,11 @@ module.exports = {
     },
     // Other overrides
     {
-      files: ['packages/cli/**', 'packages/create-ima-app/**'],
+      files: [
+        'packages/cli/**',
+        'packages/dev-utils/**',
+        'packages/create-ima-app/**',
+      ],
       rules: {
         'no-console': 'off',
       },

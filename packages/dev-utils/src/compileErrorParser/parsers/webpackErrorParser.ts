@@ -1,7 +1,6 @@
 import { StatsError } from 'webpack';
 
-import { RE_VALID_FRAME_FIREFOX } from '#/helpers';
-
+import { RE_VALID_FRAME_FIREFOX } from '../../helpers';
 import { CompileError, extractErrorLoc, extractFileUri } from './parserUtils';
 
 const RE_EXTRACT_LOCATIONS_CHROME = /\(((.*):(\d+):(\d+))\)/;

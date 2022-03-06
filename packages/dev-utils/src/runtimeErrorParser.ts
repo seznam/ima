@@ -1,10 +1,17 @@
-import { RE_VALID_FRAME_CHROME, RE_VALID_FRAME_FIREFOX } from '#/helpers';
+import { RE_VALID_FRAME_CHROME, RE_VALID_FRAME_FIREFOX } from './helpers';
 
 export type TraceLine = {
   functionName?: string;
   fileUri?: string;
   line?: number;
   column?: number;
+};
+
+export type RuntimeError = {
+  name: string;
+  message: string;
+  stack: string;
+  parsedStack: TraceLine[];
 };
 
 const RE_EXTRACT_LOCATIONS = /\(?(.+?)(?::(\d+))?(?::(\d+))?\)?$/;
@@ -118,28 +125,25 @@ function parseStack(stack: string[], maxStackLines: number): TraceLine[] {
 /**
  * Parses Error object or stack lines into parsed stack trace lines.
  *
- * @param {Error | string | string[]} error Error, trace or similar object.
+ * @param {Error} error Error, trace or similar object.
  * @param {number} maxStackLines Maximum number of stack lines to extract.
- * @returns {TraceLine[]}
+ * @returns {RuntimeError}
  */
 function parseRuntimeError(
-  error: Error | string | string[],
+  error: Error,
   maxStackLines = Infinity
-): TraceLine[] {
+): RuntimeError {
   if (error === null) {
     throw new Error('You cannot pass a null object.');
   }
 
-  if (typeof error === 'string') {
-    return parseStack(error.split('\n'), maxStackLines);
-  }
-
-  if (Array.isArray(error)) {
-    return parseStack(error, maxStackLines);
-  }
-
   if (typeof error.stack === 'string') {
-    return parseStack(error.stack.split('\n'), maxStackLines);
+    return {
+      message: error.message,
+      name: error.name,
+      stack: error.stack,
+      parsedStack: parseStack(error.stack.split('\n'), maxStackLines),
+    };
   }
 
   throw new Error('The error you provided does not contain a stack trace.');

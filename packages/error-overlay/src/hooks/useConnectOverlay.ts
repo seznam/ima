@@ -1,4 +1,5 @@
-import { parseCompileError, parseRuntimeError } from '@ima/dev-utils';
+import { parseCompileError } from '@ima/dev-utils/dist/compileErrorParser';
+import { parseRuntimeError } from '@ima/dev-utils/dist/runtimeErrorParser';
 import { useCallback, useEffect } from 'react';
 
 import { useErrorsDispatcher } from '#/stores';
@@ -7,21 +8,23 @@ import { mapStackFramesToOriginal, mapCompileStackFrames } from '#/utils';
 
 function useConnectSSRErrorOverlay(): void {
   const dispatch = useErrorsDispatcher();
-  const { name, message, stack } = window.__ima_server_error || {};
-
   useEffect(() => {
-    if (!stack) {
+    if (!window.__ima_server_error) {
       return;
     }
 
     const initStackFrames = async () => {
+      const { name, message, parsedStack } = parseRuntimeError(
+        window.__ima_server_error
+      );
+
       dispatch({
         type: 'add',
         payload: {
           name,
           message,
           type: 'runtime',
-          frames: await mapStackFramesToOriginal(parseRuntimeError(stack)),
+          frames: await mapStackFramesToOriginal(parsedStack),
         },
       });
     };
@@ -36,19 +39,22 @@ function useConnectClientErrorOverlay(): void {
 
   const runtimeErrorListener = useCallback(
     (event: WindowEventMap[ClientEventName.RuntimeErrors]) => {
-      mapStackFramesToOriginal(parseRuntimeError(event.detail.error)).then(
-        frames => {
-          dispatch({
-            type: 'add',
-            payload: {
-              name: event.detail.error.name,
-              message: event.detail.error.message,
-              type: 'runtime',
-              frames,
-            },
-          });
-        }
+      const { name, message, parsedStack } = parseRuntimeError(
+        event.detail.error
       );
+
+      // Generate original code fragments
+      mapStackFramesToOriginal(parsedStack).then(frames => {
+        dispatch({
+          type: 'add',
+          payload: {
+            name: name,
+            message: message,
+            type: 'runtime',
+            frames,
+          },
+        });
+      });
     },
     []
   );

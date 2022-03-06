@@ -1,4 +1,4 @@
-import { TraceLine } from '@ima/dev-utils';
+import { TraceLine } from '@ima/dev-utils/dist/runtimeErrorParser';
 
 import { StackFrame, SourceStorage } from '#/entities';
 
