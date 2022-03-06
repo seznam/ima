@@ -1,1 +1,1 @@
-export { extractSourceMappingUrl, getSourceMap } from './sourceMapExtractor';
+export { extractSourceMappingUrl } from './sourceMapExtractor';
