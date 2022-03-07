@@ -1,5 +1,4 @@
 import { parseCompileError } from '@ima/dev-utils/dist/compileErrorParser';
-import { parseRuntimeError } from '@ima/dev-utils/dist/runtimeErrorParser';
 import { useCallback, useEffect } from 'preact/hooks';
 
 import { useErrorsStore } from '#/stores';
@@ -18,9 +17,7 @@ function useConnectSSRErrorOverlay(): void {
     }
 
     const initStackFrames = async () => {
-      const { name, message, parsedStack } = parseRuntimeError(
-        window.__ima_server_error
-      );
+      const { name, message, stack } = window.__ima_server_error;
 
       dispatch({
         type: 'add',
@@ -28,7 +25,7 @@ function useConnectSSRErrorOverlay(): void {
           name,
           message,
           type: 'runtime',
-          frames: await mapStackFramesToOriginal(parsedStack),
+          frames: await mapStackFramesToOriginal(stack),
         },
       });
     };
@@ -45,22 +42,17 @@ function useConnectClientErrorOverlay(): void {
   let isRuntimeCompileError = false; // If set to true we do site reload after errors are fixed
 
   const runtimeErrorListener = useCallback(
-    (event: WindowEventMap[ClientEventName.RuntimeErrors]) => {
-      const { name, message, parsedStack } = parseRuntimeError(
-        event.detail.error
-      );
+    async (event: WindowEventMap[ClientEventName.RuntimeErrors]) => {
+      const { name, message, stack } = event.detail.error;
 
-      // Generate original code fragments
-      mapStackFramesToOriginal(parsedStack).then(frames => {
-        dispatch({
-          type: 'add',
-          payload: {
-            name: name,
-            message: message,
-            type: 'runtime',
-            frames,
-          },
-        });
+      dispatch({
+        type: 'add',
+        payload: {
+          name,
+          message,
+          type: 'runtime',
+          frames: await mapStackFramesToOriginal(stack),
+        },
       });
     },
     []
@@ -79,8 +71,8 @@ function useConnectClientErrorOverlay(): void {
           return;
         }
 
-        const { name, message, ...traceLine } = parsedError;
-        mapCompileStackFrame(traceLine).then(frame => {
+        const { name, message, fileUri, line, column } = parsedError;
+        mapCompileStackFrame(fileUri, line, column).then(frame => {
           dispatch({
             type: 'add',
             payload: {

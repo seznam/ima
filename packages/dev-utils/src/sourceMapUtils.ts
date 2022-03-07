@@ -1,3 +1,5 @@
+import { RE_SOURCE_MAPPING_URL } from './helpers';
+
 /**
  * Extracts sourceMappingURL from the provided file contents.
  *
@@ -9,11 +11,10 @@ function extractSourceMappingUrl(
   fileUri: string,
   fileContents: string
 ): string | null {
-  const regex = /\/\/[#@] ?sourceMappingURL=([^\s'"]+)\s*$/gm;
   let match: RegExpExecArray | null = null;
 
   for (;;) {
-    const next = regex.exec(fileContents);
+    const next = RE_SOURCE_MAPPING_URL.exec(fileContents);
 
     if (next == null) {
       break;

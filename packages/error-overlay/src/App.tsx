@@ -1,4 +1,5 @@
 import 'tailwindcss/tailwind.css';
+
 import clsx from 'clsx';
 import { Fragment, FunctionComponent } from 'preact';
 import { useMemo } from 'preact/hooks';
@@ -41,7 +42,7 @@ const App: FunctionComponent = () => {
   return (
     <div
       className={clsx(
-        'min-w-full min-h-screen font-mono text-slate-900 bg-white/60 backdrop-blur-md origin-top',
+        'min-w-full min-h-screen font-mono text-slate-900 bg-white origin-top',
         {
           'animate-fade-in-down': !isSSRError,
         }

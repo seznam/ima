@@ -15,7 +15,6 @@
     "./dist/sourceMapUtils.js",
     "./dist/cliUtils.js",
     "./dist/helpers.js",
-    "./dist/runtimeErrorParser.js",
     "./dist/sourceFragment.js"
   ],
   "author": "Jan Šimeček <jan.simecek@firma.seznam.cz>",
@@ -37,6 +36,7 @@
     "@types/webpack": "^5.28.0",
     "chalk": "^4.1.2",
     "cli-highlight": "^2.1.11",
-    "source-map": "^0.7.3"
+    "source-map": "^0.7.3",
+    "stacktrace-parser": "^0.1.10"
   }
 }

@@ -3,10 +3,10 @@ import fs from 'fs';
 import chalk from 'chalk';
 import { highlight, fromJson } from 'cli-highlight';
 import { SourceMapConsumer } from 'source-map';
+import * as stackTraceParser from 'stacktrace-parser';
 import { StatsError } from 'webpack';
 
 import { parseCompileError } from './compileErrorParser';
-import { parseRuntimeError } from './runtimeErrorParser';
 import { createSourceFragment, FragmentLine } from './sourceFragment';
 import { extractSourceMappingUrl } from './sourceMapUtils';
 
@@ -152,17 +152,18 @@ async function formatError(
       column = compileError?.column;
       line = compileError?.line;
     } else if (type === 'runtime') {
-      const runtimeError = parseRuntimeError(error as Error);
-      const { parsedStack } = runtimeError;
+      name = error?.name;
+      message = error?.message;
+      stack = error.stack;
 
       // Extract parsed parts
-      name = runtimeError?.name;
-      message = runtimeError?.message;
-      stack = runtimeError.stack;
-      functionName = parsedStack[0].functionName;
-      fileUri = parsedStack[0].fileUri;
-      column = parsedStack[0].column;
-      line = parsedStack[0].line;
+      if (error.stack) {
+        const parsedStack = stackTraceParser.parse(error.stack);
+        functionName = parsedStack[0].methodName;
+        fileUri = parsedStack[0].file ?? undefined;
+        column = parsedStack[0].column ?? undefined;
+        line = parsedStack[0].lineNumber ?? undefined;
+      }
     } else {
       name = error.name;
       message = error.message;

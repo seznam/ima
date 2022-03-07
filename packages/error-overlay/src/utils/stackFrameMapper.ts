@@ -1,5 +1,5 @@
-import { TraceLine } from '@ima/dev-utils/dist/runtimeErrorParser';
 import { createSourceFragment } from '@ima/dev-utils/dist/sourceFragment';
+import * as stackTraceParser from 'stacktrace-parser';
 
 import { StackFrame, SourceStorage } from '#/entities';
 
@@ -11,20 +11,20 @@ const sourceStorage = new SourceStorage();
  * initializing every property of StackFrame that can be
  * parsed from the given data.
  *
- * @param {TraceLine} frame Parsed trace line.
+ * @param {stackTraceParser.StackFrame} frame Parsed trace line.
  * @param {number} contextLines Number of context lines around source fragment.
  * @returns {StackFrame} parsed  StackFrame entity instance.
  */
 async function createStackFrame(
-  frame: TraceLine,
+  frame: stackTraceParser.StackFrame,
   contextLines: number
 ): Promise<StackFrame> {
   // Create basic stack frame from parsed trace line
   const stackFrame = new StackFrame({
-    fileName: frame.fileUri as string,
-    functionName: frame.functionName,
-    line: frame.line,
-    column: frame.column,
+    fileName: frame.file as string,
+    functionName: frame.methodName,
+    line: frame.lineNumber ?? undefined,
+    column: frame.column ?? undefined,
   });
 
   // Get file source
@@ -83,22 +83,27 @@ async function createStackFrame(
  * source code fragments around errored lines in the original source
  * code files.
  *
- * @param {TraceLine[]} frames Parsed stack frames.
+ * @param {string|undefined} stack Error stack.
  * @returns {Promise<StackFrame[]>} Array of mapped StackFrame entity instances.
  */
 async function mapStackFramesToOriginal(
-  frames: TraceLine[]
+  stack: string | undefined
 ): Promise<StackFrame[]> {
+  if (!stack) {
+    return [];
+  }
+
+  const parsedStack = stackTraceParser.parse(stack);
   const mappedFrames: StackFrame[] = await Promise.all(
-    frames
+    parsedStack
       .filter(frame => {
-        if (!frame.fileUri) {
+        if (!frame.file) {
           return false;
         }
 
         if (
-          frame?.functionName &&
-          IgnoredFunctionNames.includes(frame.functionName)
+          frame.methodName &&
+          IgnoredFunctionNames.includes(frame.methodName)
         ) {
           return false;
         }
@@ -119,30 +124,31 @@ async function mapStackFramesToOriginal(
  * Compile errors already work with original positions so we
  * only need to create original source fragment from given data.
  *
- * @param {TraceLine} frame Parsed compile trace line.
+  @param {string?} fileUri Compile errored fileUri.
+  @param {number?} line Compile errored line.
+  @param {number?} colum Compile errored colum.
  * @returns {Promise<StackFrame | null>} Mapped StackFrame instance.
  */
 async function mapCompileStackFrame(
-  frame: TraceLine
+  fileUri?: string,
+  line?: number,
+  column?: number
 ): Promise<StackFrame | null> {
-  if (!frame.fileUri) {
+  if (!fileUri) {
     return null;
   }
 
-  const { rootDir, fileContents } =
-    (await sourceStorage.get(frame.fileUri as string)) || {};
+  const { rootDir, fileContents } = (await sourceStorage.get(fileUri)) ?? {};
 
   // Compile errors are parsed directly on original
   const mappedFrame = new StackFrame({
     rootDir,
-    orgFileName: frame.fileUri as string,
+    orgFileName: fileUri as string,
     orgSourceFragment:
-      (frame.line &&
-        fileContents &&
-        createSourceFragment(frame.line, fileContents, 8)) ||
+      (line && fileContents && createSourceFragment(line, fileContents, 8)) ||
       null,
-    orgLine: frame.line,
-    orgColumn: frame.column,
+    orgLine: line,
+    orgColumn: column,
   });
 
   // Cleanup wasm allocated sourcemaps
