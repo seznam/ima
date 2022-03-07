@@ -1,5 +1,3 @@
-export { createDevServer } from './dev-server/devServer';
-
 export { AmpPluginOptions, AmpPlugin } from './plugins/amp/AmpPlugin';
 
 export {

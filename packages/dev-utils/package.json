@@ -11,8 +11,8 @@
     "dev": "../../node_modules/.bin/tsc --watch"
   },
   "files": [
-    "./dist/sourceMapUtils/index.js",
     "./dist/compileErrorParser/index.js",
+    "./dist/sourceMapUtils.js",
     "./dist/cliUtils.js",
     "./dist/helpers.js",
     "./dist/runtimeErrorParser.js",

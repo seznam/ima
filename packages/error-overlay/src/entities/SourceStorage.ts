@@ -137,7 +137,7 @@ class SourceStorage {
   ): Promise<SourceMapConsumer | null> {
     try {
       // Extract source mapping url from source file
-      const sourceMapUrl = await extractSourceMappingUrl(fileUri, fileContents);
+      const sourceMapUrl = extractSourceMappingUrl(fileUri, fileContents);
 
       if (!sourceMapUrl) {
         return null;

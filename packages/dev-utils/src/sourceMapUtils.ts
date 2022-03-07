@@ -3,12 +3,12 @@
  *
  * @param {string} fileUri The uri of the source file.
  * @param {string} fileContents Source file file contents.
- * @returns {Promise<string>}
+ * @returns {string|null}
  */
-async function extractSourceMappingUrl(
+function extractSourceMappingUrl(
   fileUri: string,
   fileContents: string
-): Promise<string | null> {
+): string | null {
   const regex = /\/\/[#@] ?sourceMappingURL=([^\s'"]+)\s*$/gm;
   let match: RegExpExecArray | null = null;
 
@@ -30,16 +30,17 @@ async function extractSourceMappingUrl(
 
   // Inline base64 source map
   if (sourceMappingUrl.includes('data:')) {
-    return Promise.reject(
+    throw new Error(
       `Sorry, base64 inline source-map encoding is not supported ${fileUri}.`
     );
   }
 
+  // Prefix source map filename with path from fileUri
   const lastSlashIndex = fileUri.lastIndexOf('/');
   const mapFileUri =
     fileUri.substring(0, lastSlashIndex + 1) + sourceMappingUrl;
 
-  return Promise.resolve(mapFileUri);
+  return mapFileUri;
 }
 
 export { extractSourceMappingUrl };

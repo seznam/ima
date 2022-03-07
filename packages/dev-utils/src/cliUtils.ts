@@ -10,6 +10,18 @@ import { parseRuntimeError } from './runtimeErrorParser';
 import { createSourceFragment, FragmentLine } from './sourceFragment';
 import { extractSourceMappingUrl } from './sourceMapUtils';
 
+/**
+ * Get source fragment from provided source metadata.
+ * Optionally it tries to parse original content if
+ * source maps are available.
+ *
+ * @param {string?} fileUri source file uri.
+ * @param {number?} line errored line number.
+ * @param {number?} column errored column number.
+ * @param {boolean} [parseSourceMaps=true] flag to
+ *  parse source maps or not.
+ * @returns {Promise<string[]>} Formatted error lines.
+ */
 async function getSource(
   fileUri?: string,
   line?: number,
@@ -25,7 +37,7 @@ async function getSource(
 
   // Parse source maps
   if (parseSourceMaps) {
-    const sourceMapUrl = await extractSourceMappingUrl(fileUri, fileContents);
+    const sourceMapUrl = extractSourceMappingUrl(fileUri, fileContents);
 
     // Try to parse original content
     if (sourceMapUrl && fs.existsSync(sourceMapUrl)) {
