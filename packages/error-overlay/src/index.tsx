@@ -1,11 +1,15 @@
-import { render } from 'react-dom';
+import { render } from 'preact';
 
 import { App } from '#/App';
 import { ErrorsStoreProvider } from '#/stores';
 
-render(
-  <ErrorsStoreProvider>
-    <App />
-  </ErrorsStoreProvider>,
-  document.getElementById('root')
-);
+const root = document.getElementById('root');
+
+if (root) {
+  render(
+    <ErrorsStoreProvider>
+      <App />
+    </ErrorsStoreProvider>,
+    root
+  );
+}

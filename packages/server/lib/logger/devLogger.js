@@ -1,51 +1,41 @@
-const chalk = require('chalk');
 const winston = require('winston');
-const { colorizeLevel, parseLocation } = require('./loggerUtils');
+const TransportStream = require('winston-transport');
+const { formatError } = require('@ima/dev-utils/dist/cliUtils');
 
-function formatError(error, rootDir) {
-  const output = [`${chalk.underline(`${error.name}:`)} ${error.message}\n`];
+const { colorizeLevel } = require('./loggerUtils');
 
-  if (error.stack) {
-    // Skip first stack line since it contains error name and message
-    // eslint-disable-next-line no-unused-vars
-    const [_, ...stackLines] = error.stack.split('\n');
-    output.push(chalk.gray(stackLines.join('\n')));
+class ConsoleAsync extends TransportStream {
+  constructor(options = {}) {
+    super(options);
 
-    try {
-      // Try to parse error location
-      const errorLoc = parseLocation(stackLines[0]);
-
-      output.unshift(
-        `${chalk.magenta(`${errorLoc.functionName}`)} at ${chalk.cyan(
-          `${errorLoc.fileUri.replace(rootDir, '.')}:${errorLoc.lineNumber}:${
-            errorLoc.columnNumber
-          }`
-        )}`
-      );
-    } catch {
-      // Fail silently
-    }
+    this.name = options.name || 'console-async';
+    this.rootDir = options.rootDir;
   }
 
-  return output.join('\n') + '\n';
-}
+  log(info, callback) {
+    this._log(info, callback);
+  }
 
-function customFormatter(rootDir) {
-  return meta => {
-    return `${colorizeLevel(meta.level)}${
-      meta.error ? formatError(meta.error, rootDir) : meta.message
-    }`;
-  };
+  async _log(meta, callback) {
+    // eslint-disable-next-line no-console
+    (console[meta.level] ?? console.log)(
+      `${colorizeLevel(meta.level)}${
+        meta.error
+          ? await formatError(meta.error, 'runtime', this.rootDir)
+          : meta.message
+      }`
+    );
+
+    callback();
+  }
 }
 
 const logger = winston.createLogger({
   format: winston.format.json(),
   levels: winston.config.npm.levels,
   transports: [
-    new winston.transports.Console({
-      format: winston.format.combine(
-        winston.format.printf(customFormatter(process.cwd()))
-      ),
+    new ConsoleAsync({
+      rootDir: process.cwd(),
     }),
   ],
 });

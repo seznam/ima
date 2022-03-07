@@ -1,4 +1,4 @@
-import { FunctionComponent } from 'react';
+import { FunctionComponent } from 'preact';
 
 import AlertIcon from './AlertIcon';
 import ChevronIcon from './ChevronIcon';
@@ -15,9 +15,13 @@ export type IconType =
   | 'openEye'
   | 'alert';
 
+export type IconComponentProps = {
+  className?: string;
+};
+
 const Icons: Record<
   IconType,
-  FunctionComponent<React.SVGProps<SVGSVGElement>>
+  FunctionComponent<IconComponentProps>
 > = Object.freeze({
   chevron: ChevronIcon,
   closedEye: ClosedEyeIcon,

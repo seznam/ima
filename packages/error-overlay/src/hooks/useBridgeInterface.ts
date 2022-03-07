@@ -1,7 +1,10 @@
-import { useCallback } from 'react';
+import { useCallback } from 'preact/hooks';
 
 import { OverlayEventName } from '#/types';
 
+/**
+ * HMR client API hook
+ */
 function useBridgeInterface(): {
   closeOverlay(): void;
   isSSRError: boolean;

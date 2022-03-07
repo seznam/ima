@@ -1,6 +1,6 @@
 import { StatsError } from 'webpack';
 
-import { ParsedCompileError } from './parserHelpers';
+import { CompileError } from './parserUtils';
 
 /**
  * css and post-css loader errors line hook
@@ -13,9 +13,9 @@ const RE_CSS_LOADER_LINE = /(^\((\d+):(\d+)\))?\s?(\.?(\/[^/\n :,]+)+)\s(.*)/;
  * less-loader specific parser. Tries to parse less compiler errors from
  * error message.
  */
-function cssLoaderErrorParser(error: StatsError): ParsedCompileError {
+function cssLoaderErrorParser(error: StatsError | Error): CompileError {
   const messageLines = error.message.split('\n');
-  const compileError: ParsedCompileError = {
+  const compileError: CompileError = {
     name: 'Syntax error',
     message: '',
   };
@@ -24,8 +24,8 @@ function cssLoaderErrorParser(error: StatsError): ParsedCompileError {
     const match = messageLines[i].match(RE_CSS_LOADER_LINE);
 
     if (match) {
-      compileError.lineNumber = parseInt(match[2]) || undefined;
-      compileError.columnNumber = parseInt(match[3]) || 1;
+      compileError.line = parseInt(match[2]) || undefined;
+      compileError.column = parseInt(match[3]) || 1;
       compileError.fileUri = match[4];
       compileError.message = match[6].trim();
 

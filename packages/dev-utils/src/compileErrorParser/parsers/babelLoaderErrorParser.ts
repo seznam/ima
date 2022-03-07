@@ -1,6 +1,6 @@
 import { StatsError } from 'webpack';
 
-import { ParsedCompileError } from './parserHelpers';
+import { CompileError } from './parserUtils';
 
 /**
  * babel-loader error line hook
@@ -12,9 +12,9 @@ const RE_BABEL_LOADER_LINE = /^(.*):(.*):(.*)(\((\d+):(\d+)\))$/;
 /**
  * babel-loader parser, tries to parse compiler error location from the error message.
  */
-function babelLoaderErrorParser(error: StatsError): ParsedCompileError {
+function babelLoaderErrorParser(error: StatsError | Error): CompileError {
   const messageLines = error.message.split('\n');
-  const compileError: ParsedCompileError = {
+  const compileError: CompileError = {
     name: 'Syntax error',
     message: '',
   };
@@ -25,8 +25,8 @@ function babelLoaderErrorParser(error: StatsError): ParsedCompileError {
   if (match) {
     compileError.fileUri = match[2].trim();
     compileError.message = match[3].trim();
-    compileError.lineNumber = parseInt(match[5]) || undefined;
-    compileError.columnNumber = parseInt(match[6]) || undefined;
+    compileError.line = parseInt(match[5]) || undefined;
+    compileError.column = parseInt(match[6]) || undefined;
   }
 
   return compileError;

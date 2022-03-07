@@ -1,0 +1,42 @@
+{
+  "name": "@ima/dev-utils",
+  "version": "17.10.0",
+  "description": "IMA.js dev utils used used mainly in @ima/cli and other dev-related utilities.",
+  "keywords": [
+    "IMA.js",
+    "dev-utils"
+  ],
+  "scripts": {
+    "build": "../../node_modules/.bin/tsc",
+    "dev": "../../node_modules/.bin/tsc --watch"
+  },
+  "files": [
+    "./dist/compileErrorParser/index.js",
+    "./dist/sourceMapUtils.js",
+    "./dist/cliUtils.js",
+    "./dist/helpers.js",
+    "./dist/sourceFragment.js"
+  ],
+  "author": "Jan Šimeček <jan.simecek@firma.seznam.cz>",
+  "contributors": [],
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/seznam/ima.git",
+    "directory": "packages/dev-utils"
+  },
+  "bugs": {
+    "url": "https://github.com/seznam/ima/issues"
+  },
+  "publishConfig": {
+    "registry": "https://registry.npmjs.org/",
+    "access": "public"
+  },
+  "license": "MIT",
+  "dependencies": {
+    "@types/webpack": "^5.28.0",
+    "chalk": "^4.1.2",
+    "cli-highlight": "^2.1.11",
+    "source-map": "^0.7.3",
+    "stacktrace-parser": "^0.1.10"
+  }
+}

@@ -1,10 +1,12 @@
-import { SourceMap } from '#/entities';
-import { getSourceMap, getDevServerBaseUrl } from '#/utils';
+import { extractSourceMappingUrl } from '@ima/dev-utils/dist/sourceMapUtils';
+import { RawSourceMap, SourceMapConsumer } from 'source-map';
+
+import { getDevServerBaseUrl } from '#/utils';
 
 interface SourceStorageEntry {
   rootDir?: string;
   fileContents: string | null;
-  sourceMap: SourceMap | null;
+  sourceMap: SourceMapConsumer | null;
 }
 
 /**
@@ -127,21 +129,40 @@ class SourceStorage {
    *
    * @param {string} fileUri The uri of the source file.
    * @param {string} fileContents Source file file contents.
-   * @returns {Promise<SourceMap | null>}
+   * @returns {Promise<SourceMapConsumer | null>}
    */
   private async _fetchSourceMap(
     fileUri: string,
     fileContents: string
-  ): Promise<SourceMap | null> {
-    let sourceMap = null;
-
+  ): Promise<SourceMapConsumer | null> {
     try {
-      sourceMap = await getSourceMap(fileUri, fileContents, this);
+      // Extract source mapping url from source file
+      const sourceMapUrl = extractSourceMappingUrl(fileUri, fileContents);
+
+      if (!sourceMapUrl) {
+        return null;
+      }
+
+      // Fetch source map
+      const rawSourceMap = (await fetch(
+        this.getFileSourceUrl(sourceMapUrl)
+      ).then(async res => {
+        const data = await res.json();
+
+        // Either return source from internal source middleware or data from hot.js file
+        return data.source ? data.source : data;
+      })) as RawSourceMap;
+
+      if (!sourceMapUrl) {
+        return null;
+      }
+
+      return new SourceMapConsumer(rawSourceMap);
     } catch (error) {
       console.warn(error);
     }
 
-    return sourceMap;
+    return null;
   }
 }
 

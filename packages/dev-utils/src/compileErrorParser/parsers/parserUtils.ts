@@ -1,34 +1,39 @@
-export interface ParsedCompileError {
+export interface CompileError {
   name: string;
   message: string;
   fileUri?: string;
-  lineNumber?: number;
-  columnNumber?: number;
+  line?: number;
+  column?: number;
 }
 
 const RE_FILE_PATH_REGEX = /\.?(\/[^/\n :,]+)+/;
-const RE_VALID_FRAME_CHROME = /^\s*(at|in)\s.+(:\d+)/;
-const RE_VALID_FRAME_FIREFOX =
-  /(^|\/?@)\S+:\d+|.+line\s+\d+\s+>\s+(eval|Function).+/;
 
 /**
  * Parsers error location from error.loc string from webpack stats.
+ *
+ * @param {string?} errorLocation Error location (line:column) string.
+ * @returns { line?: number; column?: number; } parsed line & column.
  */
-function extractErrorLoc(errorLocation?: string): [number, number] | [] {
+function extractErrorLoc(errorLocation?: string): {
+  line?: number;
+  column?: number;
+} {
   if (!errorLocation || !errorLocation.includes(':')) {
-    return [];
+    return {};
   }
 
   const [line, columns] = errorLocation.split(':');
   const column = (columns.includes('-') ? columns.split('-') : columns)[0];
 
   // Columns are indexed from 0 so we need to compensate for that
-  return [parseInt(line), parseInt(column) + 1];
+  return { line: parseInt(line), column: parseInt(column) + 1 };
 }
 
 /**
  * Extracts fileUri from module identifier string, containing used loaders.
  * The fileUri should always be at the end, separated by ! character.
+ *
+ * @param {string} moduleIdentifier webpack resource query.
  */
 function extractFileUri(moduleIdentifier: string): string | undefined {
   return moduleIdentifier.includes('!')
@@ -36,10 +41,4 @@ function extractFileUri(moduleIdentifier: string): string | undefined {
     : moduleIdentifier;
 }
 
-export {
-  RE_FILE_PATH_REGEX,
-  RE_VALID_FRAME_CHROME,
-  RE_VALID_FRAME_FIREFOX,
-  extractErrorLoc,
-  extractFileUri,
-};
+export { RE_FILE_PATH_REGEX, extractErrorLoc, extractFileUri };

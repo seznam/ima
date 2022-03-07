@@ -1,10 +1,10 @@
 import clsx from 'clsx';
-import { FunctionComponent } from 'react';
+import { FunctionComponent } from 'preact';
 
 import { Button, Icon } from '#/components';
 import { useOpenEditor } from '#/hooks';
 import { ErrorWrapper, FrameWrapper } from '#/reducers/errorsReducer';
-import { useErrorsDispatcher, useErrorsStore } from '#/stores';
+import { useErrorsStore } from '#/stores';
 
 export type FrameHeaderProps = {
   errorId: ErrorWrapper['id'];
@@ -17,18 +17,14 @@ const FrameHeader: FunctionComponent<FrameHeaderProps> = ({
   errorId,
   hasFragment,
 }) => {
-  const dispatch = useErrorsDispatcher();
-  const errorType = useErrorsStore(context => context.currentError?.type);
+  const { dispatch, currentError } = useErrorsStore();
   const { openEditor, isLoading } = useOpenEditor();
+
   const { frame } = frameWrapper;
   const fileUriParts = (
-    frameWrapper.showOriginal || errorType === 'compile'
-      ? [
-          frame.getPrettyOriginalFileUri(),
-          frame.originalLineNumber,
-          frame.originalColumnNumber,
-        ]
-      : [frame.fileName, frame.lineNumber, frame.columnNumber]
+    frameWrapper.showOriginal || currentError?.type === 'compile'
+      ? [frame.getPrettyOriginalFileUri(), frame.orgLine, frame.orgColumn]
+      : [frame.fileName, frame.line, frame.column]
   ).filter(Boolean);
 
   return (
@@ -63,7 +59,7 @@ const FrameHeader: FunctionComponent<FrameHeaderProps> = ({
             {!hasFragment && (
               <Icon icon='alert' size='xs' className='mr-1 text-rose-400' />
             )}
-            {errorType === 'compile'
+            {currentError?.type === 'compile'
               ? frame.getPrettyFileName()
               : frame.getFunctionName()}
           </div>
@@ -76,7 +72,7 @@ const FrameHeader: FunctionComponent<FrameHeaderProps> = ({
       </button>
 
       <div className='flex px-2 md:px-4'>
-        {errorType !== 'compile' && (
+        {currentError?.type !== 'compile' && (
           <Button
             className='p-1 md:p-2'
             linkStyle

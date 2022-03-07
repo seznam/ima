@@ -1,10 +1,7 @@
 import { StatsError } from 'webpack';
 
-import {
-  ParsedCompileError,
-  RE_FILE_PATH_REGEX,
-  RE_VALID_FRAME_FIREFOX,
-} from './parserHelpers';
+import { RE_VALID_FRAME_FIREFOX } from '../../helpers';
+import { RE_FILE_PATH_REGEX, CompileError } from './parserUtils';
 
 const RE_SWC_LINE_NUMBER = /(\d+) \|/;
 
@@ -12,27 +9,27 @@ const RE_SWC_LINE_NUMBER = /(\d+) \|/;
  * SWC loader-specific error parser. Tries to parse error location from
  * webpack stats error object or browsers Error object.
  */
-function swcLoaderErrorParser(error: StatsError): ParsedCompileError {
+function swcLoaderErrorParser(error: StatsError | Error): CompileError {
   const messageLines = error.message.split('\n');
 
   // Parse error message
-  const compileError: ParsedCompileError = {
+  const compileError: CompileError = {
     name: 'Syntax error',
     message: messageLines[1].replace(/error:/gi, '').trim(),
-    columnNumber: 1, // swc-loader does not report columns reliably
+    column: 1, // swc-loader does not report columns reliably
   };
 
   // Parse error location
   const lineNumberMatch = error.message.match(RE_SWC_LINE_NUMBER);
   if (lineNumberMatch && lineNumberMatch[1]) {
-    compileError.lineNumber = parseInt(lineNumberMatch[1]);
+    compileError.line = parseInt(lineNumberMatch[1]);
   }
 
-  if (error.moduleIdentifier) {
+  if ((error as StatsError).moduleIdentifier) {
     // Parse filename from moduleIdentifier
-    compileError.fileUri = error.moduleIdentifier.includes('!')
-      ? error.moduleIdentifier.split('!').pop() ?? undefined
-      : error.moduleIdentifier;
+    compileError.fileUri = (error as StatsError).moduleIdentifier?.includes('!')
+      ? (error as StatsError).moduleIdentifier?.split('!').pop() ?? undefined
+      : (error as StatsError).moduleIdentifier;
   } else if (error.stack) {
     /**
      * Parse from error stack. The location is always on the first line

@@ -1,6 +1,6 @@
 import clsx from 'clsx';
+import { FunctionComponent } from 'preact';
 import prismjs from 'prismjs';
-import { FunctionComponent, memo } from 'react';
 
 import { Icon } from '#/components';
 import { ErrorWrapper, FrameWrapper } from '#/reducers';
@@ -70,13 +70,13 @@ const Frame: FunctionComponent<FrameProps> = ({
 }) => {
   const { frame } = frameWrapper;
   const sourceFragment = frameWrapper.showOriginal
-    ? frame.originalSourceFragment
+    ? frame.orgSourceFragment
     : frame.sourceFragment;
   const hasFragment =
     Array.isArray(sourceFragment) && sourceFragment.length > 0;
 
   const { grammar, language } = getPrismLanguage(
-    frame.originalFileName || frame.fileName
+    frame.orgFileName || frame.fileName
   );
 
   return (
@@ -98,7 +98,7 @@ const Frame: FunctionComponent<FrameProps> = ({
             <pre>
               <code>
                 {(frameWrapper.showOriginal
-                  ? frame.originalSourceFragment
+                  ? frame.orgSourceFragment
                   : frame.sourceFragment
                 )?.map(line => (
                   <div
@@ -141,5 +141,5 @@ const Frame: FunctionComponent<FrameProps> = ({
   );
 };
 
-export { Frame, getPrismLanguage };
-export default memo(Frame);
+export { getPrismLanguage };
+export default Frame;

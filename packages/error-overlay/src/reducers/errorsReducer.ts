@@ -2,7 +2,8 @@ import uid from 'easy-uid';
 
 import { ErrorsAction } from '#/actions';
 import { StackFrame } from '#/entities';
-import { ErrorType } from '#/types';
+
+export type ErrorType = 'compile' | 'runtime';
 
 export type FrameWrapper = {
   id: string;
@@ -67,8 +68,8 @@ function errorsReducer(state: ErrorsState, action: ErrorsAction): ErrorsState {
                     frame: curFrame,
                     showOriginal: true,
                     isCollapsed:
-                      !curFrame.originalSourceFragment ||
-                      curFrame.originalSourceFragment.length === 0,
+                      !curFrame.orgSourceFragment ||
+                      curFrame.orgSourceFragment.length === 0,
                   };
 
                   return accFrames;
@@ -99,8 +100,8 @@ function errorsReducer(state: ErrorsState, action: ErrorsAction): ErrorsState {
                   frame: curFrame,
                   showOriginal: true,
                   isCollapsed:
-                    !curFrame.originalSourceFragment ||
-                    curFrame.originalSourceFragment.length === 0,
+                    !curFrame.orgSourceFragment ||
+                    curFrame.orgSourceFragment.length === 0,
                 };
 
                 return accFrames;

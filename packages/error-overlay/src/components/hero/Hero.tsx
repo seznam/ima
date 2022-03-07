@@ -1,16 +1,16 @@
 import clsx from 'clsx';
-import { FunctionComponent, memo } from 'react';
+import { FunctionComponent } from 'preact';
 
 import { Icon, Button } from '#/components';
 import { ErrorWrapper } from '#/reducers';
-import { useErrorsDispatcher } from '#/stores';
+import { useErrorsStore } from '#/stores';
 
 export type HeroProps = {
   error: ErrorWrapper;
 };
 
 const Hero: FunctionComponent<HeroProps> = ({ error }) => {
-  const dispatch = useErrorsDispatcher();
+  const { dispatch } = useErrorsStore();
   const errorType = error?.type
     ? `${error?.type.charAt(0).toUpperCase()}${error?.type.slice(1)} Error`
     : 'Unknown Error';
@@ -60,5 +60,4 @@ const Hero: FunctionComponent<HeroProps> = ({ error }) => {
   );
 };
 
-export { Hero };
-export default memo(Hero);
+export default Hero;

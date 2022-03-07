@@ -1,6 +1,6 @@
 /* eslint-disable no-case-declarations */
-import { Dispatch, FunctionComponent, useReducer } from 'react';
-import { createContext, useContextSelector } from 'use-context-selector';
+import { createContext, FunctionComponent } from 'preact';
+import { useContext, useReducer } from 'preact/hooks';
 
 import { ErrorsAction } from '#/actions';
 import {
@@ -12,7 +12,7 @@ import {
 
 interface IErrorsContext {
   state: ErrorsState;
-  dispatch: Dispatch<ErrorsAction>;
+  dispatch: (value: ErrorsAction) => void;
   currentError: ErrorWrapper | null;
 }
 
@@ -35,26 +35,10 @@ const ErrorsStoreProvider: FunctionComponent = ({ children }) => {
   );
 };
 
-function useErrorsStore<Selected = IErrorsContext>(
-  selector?: (value: IErrorsContext) => Selected
-) {
-  const defaultSelector = (context: IErrorsContext): IErrorsContext => context;
+function useErrorsStore() {
+  const errorsContext = useContext(ErrorsContext);
 
-  return useContextSelector<IErrorsContext, Selected>(
-    ErrorsContext,
-    // @ts-expect-error not sure how to type this :D
-    selector ?? defaultSelector
-  );
+  return errorsContext;
 }
 
-function useErrorsDispatcher(): IErrorsContext['dispatch'] {
-  return useErrorsStore(c => c.dispatch);
-}
-
-export {
-  IErrorsContext,
-  ErrorsContext,
-  ErrorsStoreProvider,
-  useErrorsStore,
-  useErrorsDispatcher,
-};
+export { IErrorsContext, ErrorsContext, ErrorsStoreProvider, useErrorsStore };

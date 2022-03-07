@@ -1,32 +1,31 @@
-// eslint-disable-next-line import/no-unresolved
-import { parseCompileError } from '@ima/cli/dist/lib/compileErrorParser'; // TODO
-import { useCallback, useEffect } from 'react';
+import { parseCompileError } from '@ima/dev-utils/dist/compileErrorParser';
+import { useCallback, useEffect } from 'preact/hooks';
 
-import { useErrorsDispatcher } from '#/stores';
+import { useErrorsStore } from '#/stores';
 import { ClientEventName, OverlayEventName } from '#/types';
-import {
-  mapStackFramesToOriginal,
-  mapCompileStackFrames,
-  parseRuntimeError,
-} from '#/utils';
+import { mapCompileStackFrame, mapStackFramesToOriginal } from '#/utils';
 
+/**
+ * SSR rendered runtime errors handler.
+ */
 function useConnectSSRErrorOverlay(): void {
-  const dispatch = useErrorsDispatcher();
-  const { name, message, stack } = window.__ima_server_error || {};
+  const { dispatch } = useErrorsStore();
 
   useEffect(() => {
-    if (!stack) {
+    if (!window.__ima_server_error) {
       return;
     }
 
     const initStackFrames = async () => {
+      const { name, message, stack } = window.__ima_server_error;
+
       dispatch({
         type: 'add',
         payload: {
           name,
           message,
           type: 'runtime',
-          frames: await mapStackFramesToOriginal(parseRuntimeError(stack)),
+          frames: await mapStackFramesToOriginal(stack),
         },
       });
     };
@@ -35,25 +34,26 @@ function useConnectSSRErrorOverlay(): void {
   }, []);
 }
 
+/**
+ * Client side error handler (connects to HMR-client window events).
+ */
 function useConnectClientErrorOverlay(): void {
-  const dispatch = useErrorsDispatcher();
+  const { dispatch } = useErrorsStore();
   let isRuntimeCompileError = false; // If set to true we do site reload after errors are fixed
 
   const runtimeErrorListener = useCallback(
-    (event: WindowEventMap[ClientEventName.RuntimeErrors]) => {
-      mapStackFramesToOriginal(parseRuntimeError(event.detail.error)).then(
-        frames => {
-          dispatch({
-            type: 'add',
-            payload: {
-              name: event.detail.error.name,
-              message: event.detail.error.message,
-              type: 'runtime',
-              frames,
-            },
-          });
-        }
-      );
+    async (event: WindowEventMap[ClientEventName.RuntimeErrors]) => {
+      const { name, message, stack } = event.detail.error;
+
+      dispatch({
+        type: 'add',
+        payload: {
+          name,
+          message,
+          type: 'runtime',
+          frames: await mapStackFramesToOriginal(stack),
+        },
+      });
     },
     []
   );
@@ -71,15 +71,15 @@ function useConnectClientErrorOverlay(): void {
           return;
         }
 
-        const { name, message, ...parsedStack } = parsedError;
-        mapCompileStackFrames([parsedStack]).then(frames => {
+        const { name, message, fileUri, line, column } = parsedError;
+        mapCompileStackFrame(fileUri, line, column).then(frame => {
           dispatch({
             type: 'add',
             payload: {
               name: name,
               message: message,
               type: 'compile',
-              frames,
+              frames: frame ? [frame] : [], // TODO what happens when empty
             },
           });
         });

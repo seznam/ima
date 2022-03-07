@@ -6,7 +6,7 @@ import expressStaticGzip from 'express-static-gzip';
 import { Compiler } from 'webpack';
 import devMiddleware from 'webpack-dev-middleware';
 
-import { evalSourceMapMiddleware } from './evalSourceMapMiddleware';
+import { internalSourceMiddleware } from './internalSourceMiddleware';
 import { openEditorMiddleware } from './openEditorMiddleware';
 
 async function createDevServer({
@@ -57,7 +57,7 @@ async function createDevServer({
           publicPath: '/',
           writeToDisk: true,
           ...(isVerbose ? undefined : { stats: 'none' }),
-          serverSideRender: true,
+          serverSideRender: false,
         })
       )
       .use(
@@ -67,7 +67,7 @@ async function createDevServer({
           heartbeat: 1500,
         })
       )
-      .use('/__get-internal-source', evalSourceMapMiddleware(rootDir))
+      .use('/__get-internal-source', internalSourceMiddleware(rootDir))
       .use('/__open-editor', openEditorMiddleware())
       .use((err: Error, req: Request, res: Response, next: NextFunction) => {
         if (res.headersSent) {

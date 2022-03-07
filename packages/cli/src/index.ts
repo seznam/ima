@@ -1,10 +1,3 @@
-export {
-  createSourceFragment,
-  parseCompileError,
-} from './lib/compileErrorParser';
-
-export { createDevServer } from './dev-server/devServer';
-
 export { AmpPluginOptions, AmpPlugin } from './plugins/amp/AmpPlugin';
 
 export {

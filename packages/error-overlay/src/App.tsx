@@ -1,18 +1,25 @@
 import 'tailwindcss/tailwind.css';
+
 import clsx from 'clsx';
-import { Fragment, FunctionComponent, useMemo } from 'react';
+import { Fragment, FunctionComponent } from 'preact';
+import { useMemo } from 'preact/hooks';
+import { SourceMapConsumer } from 'source-map';
 
 import { Frame, Header, Hero, Icon, Button } from '#/components';
 import { useConnectOverlay, useBridgeInterface } from '#/hooks';
-import { useErrorsStore, useErrorsDispatcher } from '#/stores';
+import { useErrorsStore } from '#/stores';
+import { getDevServerBaseUrl } from '#/utils';
+
+// Needed to enable source map parsing
+// @ts-expect-error: Not available in typings
+SourceMapConsumer.initialize({
+  'lib/mappings.wasm': `${getDevServerBaseUrl()}/__error-overlay-static/mappings.wasm`,
+});
 
 const App: FunctionComponent = () => {
   useConnectOverlay();
-  const dispatch = useErrorsDispatcher();
   const { isSSRError } = useBridgeInterface();
-  const currentError = useErrorsStore(c =>
-    c.state.currentErrorId ? c.state.errors[c.state.currentErrorId] : null
-  );
+  const { dispatch, currentError } = useErrorsStore();
 
   const visibleFrames = useMemo(() => {
     if (!currentError) {
@@ -35,7 +42,7 @@ const App: FunctionComponent = () => {
   return (
     <div
       className={clsx(
-        'min-w-full min-h-screen font-mono text-slate-900 bg-white/60 backdrop-blur-md origin-top',
+        'min-w-full min-h-screen font-mono text-slate-900 bg-white origin-top',
         {
           'animate-fade-in-down': !isSSRError,
         }

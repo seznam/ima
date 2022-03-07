@@ -1,4 +1,4 @@
-import { useCallback, useState } from 'react';
+import { useCallback, useState } from 'preact/hooks';
 
 import { FrameWrapper } from '#/reducers/errorsReducer';
 import { getDevServerBaseUrl } from '#/utils';
@@ -7,31 +7,30 @@ function useOpenEditor() {
   const [isLoading, setIsLoading] = useState(false);
   const openEditor = useCallback(async (frameWrapper: FrameWrapper) => {
     setIsLoading(true);
+
+    const { frame } = frameWrapper;
     let fileUri, line, column;
 
     if (frameWrapper.showOriginal) {
-      fileUri = frameWrapper.frame.getPrettyOriginalFileUri();
-      line = frameWrapper.frame.originalLineNumber;
-      column = frameWrapper.frame.originalColumnNumber;
+      fileUri = frame.getPrettyOriginalFileUri();
+      line = frame.orgLine;
+      column = frame.orgColumn;
     } else {
-      fileUri = frameWrapper.frame.fileName;
-      line = frameWrapper.frame.lineNumber;
-      column = frameWrapper.frame.columnNumber;
+      fileUri = frame.fileName;
+      line = frame.line;
+      column = frame.column;
     }
 
     if (!fileUri) {
       return;
     }
 
-    const queryParams = [`fileName=${encodeURIComponent(fileUri)}`];
-
-    if (line) {
-      queryParams.push(`line=${line}`);
-    }
-
-    if (column) {
-      queryParams.push(`column=${column}`);
-    }
+    // Build query params
+    const queryParams = [
+      `fileName=${encodeURIComponent(fileUri)}`,
+      line && `line=${line}`,
+      column && `column=${column}`,
+    ].filter(Boolean);
 
     fetch(
       `${getDevServerBaseUrl()}/__open-editor?${queryParams.join('&')}`

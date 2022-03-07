@@ -1,14 +1,13 @@
 import fs from 'fs';
 import path from 'path';
 
+import { formatError } from '@ima/dev-utils/dist/cliUtils';
 import chalk from 'chalk';
-import { highlight, fromJson } from 'cli-highlight';
 import prettyBytes from 'pretty-bytes';
 import prettyMs from 'pretty-ms';
 import { MultiStats, StatsAsset } from 'webpack';
 
 import { ImaCliArgs } from '../types';
-import { createSourceFragment, parseCompileError } from './compileErrorParser';
 import { logger } from './logger';
 
 const warningsCache = new Set<string>();
@@ -35,97 +34,27 @@ async function formatWebpackErrors(
     return;
   }
 
-  // Parse errors
-  const parsedErrors = [];
+  const uniqueErrorTracker = new Set<string>();
+
   for (const error of errors) {
-    const parsedError = parseCompileError(error);
-
-    if (parsedError) {
-      // Print uris relative to working dir
-      parsedError.fileUri = parsedError?.fileUri?.replace(args.rootDir, '.');
-      parsedErrors.push(parsedError);
-    }
-  }
-
-  // Filter out duplicates
-  let filteredParsedErrors = [];
-  for (const parsedError of parsedErrors) {
-    if (
-      filteredParsedErrors.findIndex(
-        error =>
-          error.name === parsedError.name &&
-          error.message === parsedError.message &&
-          error.fileUri === parsedError.fileUri
-      ) === -1
-    ) {
-      filteredParsedErrors.push(parsedError);
-    }
-  }
-
-  // Print only syntax errors
-  if (filteredParsedErrors.some(error => error.name === 'Syntax error')) {
-    filteredParsedErrors = filteredParsedErrors.filter(
-      error => error.name === 'Syntax error'
-    );
-  }
-
-  // Print filtered errors
-  for (const parsedError of filteredParsedErrors) {
-    // Print message right away, if we don't manage to parse it
-    if (
-      !parsedError.lineNumber ||
-      !(parsedError.fileUri && fs.existsSync(parsedError.fileUri))
-    ) {
-      return logger.error(
-        `${chalk.underline(`${parsedError.name}:`)} ${parsedError.message}\n`
-      );
+    if (!error.moduleIdentifier) {
+      continue;
     }
 
-    const file = await fs.promises.readFile(parsedError.fileUri, 'utf8');
-    const fileLines = createSourceFragment(parsedError.lineNumber, file, 4);
+    if (uniqueErrorTracker.has(error.moduleIdentifier)) {
+      continue;
+    }
 
-    // Print error
+    // Track unique error by its identifier
+    uniqueErrorTracker.add(error.moduleIdentifier);
+
+    // Print unique error
     logger.error(
-      `at ${chalk.cyan(
-        `${parsedError.fileUri}:${parsedError.lineNumber}:${parsedError.columnNumber}`
-      )}`
+      await formatError(error, 'compile', {
+        rootDir: args.rootDir,
+        parseSourceMaps: false,
+      })
     );
-    logger.write(
-      `${chalk.underline(`${parsedError.name}:`)} ${parsedError.message}\n`
-    );
-
-    // Print source fragment
-    fileLines.forEach(line => {
-      logger.write(
-        chalk.gray(
-          `${line.highlight ? chalk.red('>') : ' '}  ${line.line} | `
-        ) +
-          // Replace tabs with spaces and highlight
-          highlight(line.source.replace(/\t/g, '    '), {
-            language: parsedError.fileUri?.split('.').pop() ?? 'javascript',
-            ignoreIllegals: true,
-            theme: fromJson({
-              keyword: 'cyan',
-              class: 'yellow',
-              built_in: 'yellow',
-              function: 'magenta',
-              string: 'green',
-              tag: 'gray',
-              attr: 'cyan',
-              doctag: 'gray',
-              comment: 'gray',
-              deletion: ['red', 'strikethrough'],
-              regexp: 'yellow',
-              literal: 'magenta',
-              number: 'magenta',
-              attribute: 'red',
-            }),
-          })
-      );
-    });
-
-    // Empty newline
-    logger.write('');
   }
 }
 

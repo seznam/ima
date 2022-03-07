@@ -1,6 +1,6 @@
 import { StatsError } from 'webpack';
 
-import { ParsedCompileError, RE_FILE_PATH_REGEX } from './parserHelpers';
+import { RE_FILE_PATH_REGEX, CompileError } from './parserUtils';
 
 /**
  * less-loader errors line hook
@@ -13,9 +13,9 @@ const RE_LESS_LOADER_LINE = /^.*\(line\s(\d+),\scolumn\s(\d+)\)$/;
  * less-loader specific parser. Tries to parse less compiler errors from
  * error message.
  */
-function lessLoaderErrorParser(error: StatsError): ParsedCompileError {
+function lessLoaderErrorParser(error: StatsError | Error): CompileError {
   const messageLines = error.message.split('\n');
-  const compileError: ParsedCompileError = {
+  const compileError: CompileError = {
     name: 'Syntax error',
     message: '',
   };
@@ -24,8 +24,8 @@ function lessLoaderErrorParser(error: StatsError): ParsedCompileError {
     const match = messageLines[i].match(RE_LESS_LOADER_LINE);
 
     if (match) {
-      compileError.lineNumber = parseInt(match[1]);
-      compileError.columnNumber = parseInt(match[2]) || 1;
+      compileError.line = parseInt(match[1]);
+      compileError.column = parseInt(match[2]) || 1;
 
       // Extract fileUri
       compileError.fileUri = match.input?.match(RE_FILE_PATH_REGEX)?.[0];

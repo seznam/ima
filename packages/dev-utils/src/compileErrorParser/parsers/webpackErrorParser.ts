@@ -1,11 +1,7 @@
 import { StatsError } from 'webpack';
 
-import {
-  ParsedCompileError,
-  extractErrorLoc,
-  extractFileUri,
-  RE_VALID_FRAME_FIREFOX,
-} from './parserHelpers';
+import { RE_VALID_FRAME_FIREFOX } from '../../helpers';
+import { CompileError, extractErrorLoc, extractFileUri } from './parserUtils';
 
 const RE_EXTRACT_LOCATIONS_CHROME = /\(((.*):(\d+):(\d+))\)/;
 const RE_EXTRACT_LOCATIONS_FIREFOX = /(.*):(\d+):(\d+)/;
@@ -14,20 +10,22 @@ const RE_EXTRACT_LOCATIONS_FIREFOX = /(.*):(\d+):(\d+)/;
  * General webpack compile error parser which tries to parse all remaining
  * errors from error stack and stats params.
  */
-function webpackErrorParser(error: StatsError): ParsedCompileError {
+function webpackErrorParser(error: StatsError | Error): CompileError {
   // Parse error message
-  const compileError: ParsedCompileError = {
+  const compileError: CompileError = {
     name: 'Webpack error',
     message: error.message.replace(/module not found: error:/gi, '').trim(),
   };
 
-  if (error.loc && error.moduleIdentifier) {
+  if ((error as StatsError).loc && (error as StatsError).moduleIdentifier) {
     // Extract error location from stats params.
-    const [lineNumber, columnNumber] = extractErrorLoc(error.loc);
-    const fileUri = extractFileUri(error.moduleIdentifier);
+    const { line, column } = extractErrorLoc((error as StatsError).loc);
+    const fileUri = extractFileUri(
+      (error as StatsError).moduleIdentifier ?? ''
+    );
 
-    compileError.lineNumber = lineNumber;
-    compileError.columnNumber = columnNumber;
+    compileError.line = line;
+    compileError.column = column;
     compileError.fileUri = fileUri;
   } else if (error.stack) {
     const stackLines = error.stack?.split('\n');
@@ -40,8 +38,8 @@ function webpackErrorParser(error: StatsError): ParsedCompileError {
 
       if (match) {
         compileError.fileUri = match[1];
-        compileError.lineNumber = parseInt(match[2]) || undefined;
-        compileError.columnNumber = parseInt(match[3]) || undefined;
+        compileError.line = parseInt(match[2]) || undefined;
+        compileError.column = parseInt(match[3]) || undefined;
       }
     } else {
       // Skip first line containing error message.
@@ -49,8 +47,8 @@ function webpackErrorParser(error: StatsError): ParsedCompileError {
 
       if (match) {
         compileError.fileUri = match[2];
-        compileError.lineNumber = parseInt(match[3]) || undefined;
-        compileError.columnNumber = parseInt(match[4]) || undefined;
+        compileError.line = parseInt(match[3]) || undefined;
+        compileError.column = parseInt(match[4]) || undefined;
       }
     }
   }

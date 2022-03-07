@@ -1,21 +1,19 @@
 import clsx from 'clsx';
-import { FunctionComponent } from 'react';
+import { FunctionComponent } from 'preact';
 
 export type ButtonProps = {
+  className?: string;
+  type?: 'button' | 'submit' | 'reset';
+  disabled?: boolean;
   btn?: 'primary' | 'secondary';
   color?: 'gray' | 'green' | 'light';
   size?: 'sm' | 'xs';
   linkStyle?: boolean;
+  onClick: (event: Event) => void;
   bordered?: boolean;
 };
 
-const Button: FunctionComponent<
-  ButtonProps &
-    React.DetailedHTMLProps<
-      React.ButtonHTMLAttributes<HTMLButtonElement>,
-      HTMLButtonElement
-    >
-> = ({
+const Button: FunctionComponent<ButtonProps> = ({
   children,
   className,
   color = 'gray',
