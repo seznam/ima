@@ -306,7 +306,18 @@ export default class CookieStorage extends MapStorage {
       let cookie = this._extractCookie(cookiesArray[i]);
 
       if (cookie.name !== null) {
-        cookie.options = Object.assign({}, this._options, cookie.options);
+        // if cookie already exists in storage get its old options
+        let oldCookieOptions = {};
+        if (super.has(cookie.name)) {
+          oldCookieOptions = super.get(cookie.name).options;
+        }
+
+        cookie.options = Object.assign(
+          {},
+          this._options, // default options
+          oldCookieOptions, // old cookie options (if any)
+          cookie.options // new cookie options (if any)
+        );
 
         cookiesNames.push(cookie.name);
 
