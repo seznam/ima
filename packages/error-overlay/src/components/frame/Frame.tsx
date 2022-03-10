@@ -4,13 +4,15 @@ import { FunctionComponent } from 'react';
 
 import { FrameHeader } from '#/components';
 import { StackFrame } from '#/entities';
+import { ParsedError } from '#/types';
 import { getPrismLanguage } from '#/utils';
 
 export type FrameProps = {
   frame: StackFrame;
+  type: ParsedError['type'];
 };
 
-const Frame: FunctionComponent<FrameProps> = ({ frame }) => {
+const Frame: FunctionComponent<FrameProps> = ({ frame, type }) => {
   const hasFragment = true;
   const showOriginal = true;
   const { grammar, language } = getPrismLanguage(
@@ -19,7 +21,7 @@ const Frame: FunctionComponent<FrameProps> = ({ frame }) => {
 
   return (
     <div className='ima-frame'>
-      <FrameHeader frame={frame} />
+      <FrameHeader frame={frame} isCompile={type === 'compile'} />
       <div className='ima-frame__code'>
         {hasFragment ? (
           <pre>
@@ -59,4 +61,4 @@ const Frame: FunctionComponent<FrameProps> = ({ frame }) => {
   );
 };
 
-export { Frame, getPrismLanguage };
+export default Frame;

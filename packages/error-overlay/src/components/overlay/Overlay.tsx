@@ -11,4 +11,4 @@ const Overlay: FunctionComponent = ({ children }) => {
   );
 };
 
-export { Overlay };
+export default Overlay;

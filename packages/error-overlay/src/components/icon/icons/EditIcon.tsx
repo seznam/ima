@@ -1,8 +1,6 @@
 import { FunctionComponent } from 'react';
 
-import { IconComponentProps } from '#/components/icon/icons';
-
-const EditIcon: FunctionComponent<IconComponentProps> = props => {
+const EditIcon: FunctionComponent<React.SVGProps<SVGSVGElement>> = props => {
   return (
     <svg
       fill='none'

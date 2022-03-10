@@ -17,10 +17,11 @@ const CompileError: FunctionComponent<CompileErrorProps> = ({ error }) => {
         <Frame
           key={`${frame.fileName}${frame.line}${frame.column}`}
           frame={frame}
+          type={error.type}
         />
       ))}
     </div>
   );
 };
 
-export { CompileError };
+export default CompileError;

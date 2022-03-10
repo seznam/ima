@@ -1,16 +1,15 @@
 .ima-overlay {
   @keyframes fadeInDown {
     0% {
+      transform: translateY(-5px);
       opacity: 0;
-      transform: translateY(-10px);
     }
 
     100% {
-      opacity: 1;
       transform: translateY(0);
+      opacity: 1;
     }
   }
-
 
   &__ {
     &backdrop {
@@ -34,13 +33,13 @@
 
       padding: 40px;
 
-      animation: fadeInDown 0.1s ease-in-out;
+      animation: fadeInDown 0.15s ease-out;
     }
 
     &content {
       margin: 0 auto;
 
-      border-radius: 5px;
+      border-radius: 3px;
 
       padding: 35px 30px;
       max-width: 760px;

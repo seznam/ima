@@ -22,4 +22,4 @@ const RuntimeError: FunctionComponent<RuntimeErrorProps> = ({ error }) => {
   return <h1>Runtime error - {error.name}</h1>;
 };
 
-export { RuntimeError };
+export default RuntimeError;

@@ -27,4 +27,4 @@ const Header: FunctionComponent<HeaderProps> = ({ name, message, type }) => {
   );
 };
 
-export { Header };
+export default Header;

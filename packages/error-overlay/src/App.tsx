@@ -15,7 +15,7 @@ export interface AppProps {
 }
 
 const App: FunctionComponent<AppProps> = ({ publicUrl }) => {
-  const data = useConnect();
+  // const data = useConnect();
   const error = TestError;
 
   if (!error) {

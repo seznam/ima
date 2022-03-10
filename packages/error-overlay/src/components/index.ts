@@ -1,7 +1,8 @@
-export * from './frame/Frame';
-export * from './frame/FrameHeader';
-export * from './header/Header';
+export { default as Icon } from './icon/Icon';
+export { default as Frame } from './frame/Frame';
+export { default as FrameHeader } from './frame/FrameHeader';
+export { default as Header } from './header/Header';
 export * from './OverlayContext';
-export * from './overlay/Overlay';
-export * from './compileError/CompileError';
-export * from './runtimeError/RuntimeError';
+export { default as Overlay } from './overlay/Overlay';
+export { default as CompileError } from './compileError/CompileError';
+export { default as RuntimeError } from './runtimeError/RuntimeError';
