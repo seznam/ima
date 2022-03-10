@@ -1,5 +1,5 @@
 import clsx from 'clsx';
-import { FunctionComponent } from 'preact';
+import { FunctionComponent } from 'react';
 
 import { Icons, IconType } from './icons';
 

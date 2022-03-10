@@ -1,4 +1,7 @@
+import type { ErrorEventEmitter } from '@ima/dev-utils/dist/ErrorEventEmitter';
 import { StatsError } from 'webpack';
+
+import { StackFrame } from '#/entities';
 
 declare global {
   interface WindowEventMap {
@@ -34,6 +37,8 @@ declare global {
     __ima_hmr: {
       options: HMROptions;
     };
+
+    __IMA_HMR: ErrorEventEmitter;
   }
 }
 
@@ -42,4 +47,11 @@ export interface HMROptions {
   port: number;
   hostname: string;
   public: string;
+}
+
+export interface ParsedError {
+  name: string;
+  message: string;
+  type: 'compile' | 'runtime';
+  frames: StackFrame[];
 }

@@ -9,6 +9,7 @@ const OVERLAY_IFRAME_ID = '__ima-error-overlay-iframe-id';
 class OverlayBridge {
   private _isReady = false;
   private _eventsQueue: CustomEvent[] = [];
+  private _imaErrorOverlay: HTMLElement | null = null;
 
   get iframe(): HTMLIFrameElement | null {
     const iframe = document.getElementById(OVERLAY_IFRAME_ID);
@@ -21,13 +22,11 @@ class OverlayBridge {
   }
 
   init(): void {
-    if (this.iframe) {
+    if (this._imaErrorOverlay) {
       return;
     }
 
-    // Create iframe
     this._isReady = false;
-    this._createIframe();
 
     // Add ready handler to initialize overlay connection
     this._readyHandler = this._readyHandler.bind(this);
@@ -36,6 +35,10 @@ class OverlayBridge {
     // Close iframe handler
     this._closeHandler = this._closeHandler.bind(this);
     window.addEventListener(OverlayEventName.Close, this._closeHandler);
+
+    // Init overlay
+    this._imaErrorOverlay = document.createElement('ima-error-overlay');
+    document.body.appendChild(this._imaErrorOverlay);
   }
 
   compileError(errors: StatsError[]): void {
@@ -91,10 +94,14 @@ class OverlayBridge {
   }
 
   private _readyHandler(): void {
+    console.log('READY HANDLER');
+
     this._isReady = true;
     let customEvent;
 
     while ((customEvent = this._eventsQueue.pop())) {
+      console.log('loop', this._eventsQueue);
+
       this._dispatchEvent(customEvent);
     }
   }
@@ -110,47 +117,15 @@ class OverlayBridge {
       this._eventsQueue.push(customEvent);
     }
   }
-
-  private _createIframe(): void {
-    const iframe = document.createElement('iframe');
-
-    iframe.id = OVERLAY_IFRAME_ID;
-    iframe.src = 'about:blank';
-
-    // Iframe styles
-    iframe.style.border = 'none';
-    iframe.style.height = '100%';
-    iframe.style.left = '0';
-    iframe.style.minHeight = '100vh';
-    iframe.style.minHeight = '-webkit-fill-available';
-    iframe.style.position = 'fixed';
-    iframe.style.top = '0';
-    iframe.style.width = '100vw';
-    iframe.style.zIndex = '2147483646';
-
-    // Insert into body
-    document.body.appendChild(iframe);
-
-    // Insert overlay html into iframe contents
-    iframe.contentWindow?.document.open();
-    iframe.contentWindow?.document.write(
-      overlayIndexHtml.replace(
-        /___hmrBaseUrl___/gi,
-        `http://${window.parent.__ima_hmr.options.public}`
-      )
-    );
-
-    iframe.contentWindow?.document.close();
-  }
 }
 
 // Ensure there's only one instance
-function getOverlayBridge(): OverlayBridge {
-  if (!window.__ima_hmr?.overlayBridge) {
-    window.__ima_hmr.overlayBridge = new OverlayBridge();
-  }
+// function getOverlayBridge(): OverlayBridge {
+//   if (!window.__ima_hmr?.overlayBridge) {
+//     window.__ima_hmr.overlayBridge = new OverlayBridge();
+//   }
 
-  return window.__ima_hmr.overlayBridge;
-}
+//   return window.__ima_hmr.overlayBridge;
+// }
 
-export { OverlayBridge, getOverlayBridge };
+export { OverlayBridge };

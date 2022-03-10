@@ -88,9 +88,9 @@ async function createStackFrame(
  */
 async function mapStackFramesToOriginal(
   stack: string | undefined
-): Promise<StackFrame[]> {
+): Promise<StackFrame[] | null> {
   if (!stack) {
-    return [];
+    return null;
   }
 
   const parsedStack = stackTraceParser.parse(stack);

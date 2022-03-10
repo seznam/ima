@@ -11,7 +11,7 @@ const isProduction = process.env.NODE_ENV === 'production';
 
 module.exports = {
   target: ['web', 'es11'],
-  entry: { overlay: './src/index.tsx' },
+  entry: { overlay: './index.tsx' },
   output: {
     clean: true,
     path: path.join(rootDir, './dist'),
@@ -26,9 +26,31 @@ module.exports = {
         exclude: /node_modules/,
       },
       {
-        test: /\.css$/i,
+        test: /\.(less)$/i,
         sideEffects: true,
-        use: [MiniCssExtractPlugin.loader, 'css-loader', 'postcss-loader'],
+        use: [
+          {
+            loader: 'style-loader',
+            options: {
+              injectType: 'lazyStyleTag',
+              insert: (element, options) => {
+                const parent = options.target || document.head;
+
+                parent.appendChild(element);
+              },
+            },
+          },
+          'css-loader',
+          {
+            loader: 'postcss-loader',
+            options: {
+              postcssOptions: {
+                plugins: ['postcss-preset-env'],
+              },
+            },
+          },
+          'less-loader',
+        ],
       },
       {
         test: /\.mjs$/,
@@ -54,8 +76,8 @@ module.exports = {
     },
   },
   plugins: [
-    new ProgressPlugin(),
     new MiniCssExtractPlugin(),
+    new ProgressPlugin(),
     isProduction &&
       new CompressionPlugin({
         algorithm: 'brotliCompress',

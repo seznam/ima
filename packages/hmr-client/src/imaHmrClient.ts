@@ -3,7 +3,7 @@ import { StatsError } from 'webpack';
 
 import {
   handleRuntimeError,
-  showCompileErrors,
+  showCompileError,
   clearRuntimeErrors,
   clearCompileError,
 } from '#/lib/hmrClient';
@@ -20,8 +20,8 @@ const debouncedHandleRuntimeError = debounce(
 );
 
 // Prevents rapid executions from fast refresh
-const debouncedShowCompileErrors = debounce(
-  (errors: StatsError[]) => showCompileErrors(errors),
+const debouncedshowCompileError = debounce(
+  (error: StatsError) => showCompileError(error),
   100,
   {
     leading: true,
@@ -41,5 +41,5 @@ window.__ima_hmr = {
   clearRuntimeErrors,
   clearCompileError,
   handleRuntimeError: debouncedHandleRuntimeError,
-  showCompileErrors: debouncedShowCompileErrors,
+  showCompileError: debouncedshowCompileError,
 };

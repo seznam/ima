@@ -1,4 +1,4 @@
-import { StatsError } from 'webpack';
+import { Stats, StatsError } from 'webpack';
 
 // Connect to already existing ima hmr client API
 const clearRuntimeErrors = () => {
@@ -17,6 +17,7 @@ const clearCompileError = () => {
   window.__ima_hmr.clearCompileError();
 };
 
+// TODO (why is it handled through window?)
 const handleRuntimeError = (error: Error) => {
   // Ignore HMR apply errors
   if (error.stack?.includes('Object.hotApply')) {
@@ -37,7 +38,7 @@ const handleRuntimeError = (error: Error) => {
     error.message.startsWith('Module build failed') ||
     error.message.startsWith('Cannot find module')
   ) {
-    return window.__ima_hmr.showCompileErrors([error as StatsError]);
+    return window.__ima_hmr.showCompileError(error as StatsError);
   }
 
   window.__ima_hmr.handleRuntimeError(error);

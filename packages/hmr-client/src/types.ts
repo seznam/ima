@@ -1,19 +1,23 @@
+import { ErrorEventEmitter } from '@ima/dev-utils/dist/ErrorEventEmitter';
 import { DebouncedFunc } from 'lodash';
 import { StatsError } from 'webpack';
 
-import { HMREventSource, OverlayBridge } from '#/utils';
+import { HMREventSource } from '#/utils';
 
+// TODO CLEANUP
 declare global {
   interface Window {
     __ima_hmr: {
       options: HMROptions;
       hmrEventSource?: HMREventSource;
-      overlayBridge?: OverlayBridge;
+      // overlayBridge?: OverlayBridge;
       handleRuntimeError: DebouncedFunc<(error: Error) => void>;
       clearRuntimeErrors(): void;
-      showCompileErrors(errors: StatsError[]): void;
+      showCompileError(error: StatsError): void;
       clearCompileError(): void;
     };
+
+    __IMA_HMR: ErrorEventEmitter;
   }
 
   interface WindowEventMap {
