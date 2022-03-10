@@ -67,7 +67,7 @@ function createDevServerConfig({
 }): {
   port: number;
   hostname: string;
-  public: string;
+  publicUrl: string;
 } {
   const port = args?.port ?? ctx?.port ?? imaConfig?.devServer?.port ?? 3101;
   const hostname =
@@ -75,12 +75,12 @@ function createDevServerConfig({
     ctx?.hostname ??
     imaConfig?.devServer?.hostname ??
     'localhost';
-  const publ = args?.public ?? ctx?.public ?? imaConfig?.devServer?.public;
+  const publicUrl = args?.publicUrl ?? ctx?.publicUrl ?? imaConfig?.devServer?.publicUrl;
 
   return {
     port,
     hostname,
-    public: publ ?? `${hostname}:${port}`,
+    publicUrl: publicUrl ?? `${hostname}:${port}`,
   };
 }
 

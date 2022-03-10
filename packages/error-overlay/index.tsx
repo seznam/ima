@@ -5,24 +5,26 @@ import { App } from './src/App';
 import styles from './index.less';
 
 /**
- * Define custom web component wrapper.
+ * Custom web component wrapper.
  */
 class ImaErrorOverlay extends HTMLElement {
   connectedCallback() {
-    const root = document.createElement('div');
-    root.classList.add('ima-error-overlay');
-
+    // Attach to shadow dom
     this.attachShadow({ mode: 'open' });
 
-    // Get component attributes
-    const publicUrl = this.getAttribute('public');
+    // Create app root element
+    const root = document.createElement('div');
+    root.setAttribute('data-ima-error-overlay', '');
 
     // Append styles and root
     styles.use({ target: this.shadowRoot });
     this.shadowRoot?.appendChild(root);
 
+    // Get component attributes
+    const publicUrl = this.getAttribute('public');
+
     // Render App
-    ReactDOM.render(<App public={publicUrl} />, root);
+    ReactDOM.render(<App publicUrl={publicUrl} />, root);
   }
 }
 

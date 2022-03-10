@@ -33,7 +33,7 @@ declare global {
 export interface HMROptions {
   port: number;
   hostname: string;
-  public: string;
+  publicUrl: string;
 }
 
 export interface HMRReport {

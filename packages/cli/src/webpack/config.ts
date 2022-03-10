@@ -141,7 +141,7 @@ export default async (
               useHMR &&
                 `@gatsbyjs/webpack-hot-middleware/client?${new URLSearchParams({
                   name,
-                  path: `http://${devServerConfig.public}/__webpack_hmr`,
+                  path: `http://${devServerConfig.publicUrl}/__webpack_hmr`,
                   timeout: '3000',
                   reload: 'true',
                   overlay: 'false',
@@ -154,7 +154,7 @@ export default async (
                 `@ima/hmr-client/dist/imaHmrClient?${new URLSearchParams({
                   port: devServerConfig.port.toString(),
                   hostname: devServerConfig.hostname,
-                  public: devServerConfig.public,
+                  publicUrl: devServerConfig.publicUrl,
                 }).toString()}`,
               path.join(rootDir, 'app/main.js'),
             ].filter(Boolean) as string[],

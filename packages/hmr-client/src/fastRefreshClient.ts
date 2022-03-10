@@ -1,4 +1,4 @@
-import { Stats, StatsError } from 'webpack';
+import { StatsError } from 'webpack';
 
 // Connect to already existing ima hmr client API
 const clearRuntimeErrors = () => {

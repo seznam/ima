@@ -34,7 +34,7 @@ class HMREventSource {
 
   private _init(reconnect = false): void {
     this._eventSource = new EventSource(
-      `http://${window.parent.__ima_hmr.options.public}/__webpack_hmr`
+      `http://${window.__ima_hmr.options.publicUrl}/__webpack_hmr`
     );
 
     this._eventSource.addEventListener('message', this._messageHandler);
