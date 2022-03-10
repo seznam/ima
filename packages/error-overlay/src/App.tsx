@@ -1,18 +1,22 @@
 import { FunctionComponent } from 'react';
 
-import { CompileError, RuntimeError } from '#/components';
 import {
   defaultOverlayContext,
   OverlayContext,
-} from '#/components/OverlayContext';
+  Overlay,
+  CompileError,
+  RuntimeError,
+} from '#/components';
 import { useConnect } from '#/hooks';
+import { TestError } from '#/testError';
 
 export interface AppProps {
   publicUrl: string | null;
 }
 
 const App: FunctionComponent<AppProps> = ({ publicUrl }) => {
-  const { error } = useConnect();
+  const data = useConnect();
+  const error = TestError;
 
   if (!error) {
     return null;
@@ -22,8 +26,10 @@ const App: FunctionComponent<AppProps> = ({ publicUrl }) => {
     <OverlayContext.Provider
       value={{ publicUrl: publicUrl ?? defaultOverlayContext.publicUrl }}
     >
-      {error.type === 'compile' && <CompileError error={error} />}
-      {error.type === 'runtime' && <RuntimeError error={error} />}
+      <Overlay>
+        {error.type === 'compile' && <CompileError error={error} />}
+        {error.type === 'runtime' && <RuntimeError error={error} />}
+      </Overlay>
     </OverlayContext.Provider>
   );
 };

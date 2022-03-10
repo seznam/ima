@@ -62,7 +62,7 @@ overlayJs.setAttribute(
 // Init error overlay
 overlayJs.onload = () => {
   const imaErrorOverlay = document.createElement('ima-error-overlay');
-  imaErrorOverlay.setAttribute('publicUrl', 'http://localhost:3101/');
+  imaErrorOverlay.setAttribute('public-url', 'http://localhost:3101/');
   document.body.append(imaErrorOverlay);
 
   // Connect client to HMR Event source

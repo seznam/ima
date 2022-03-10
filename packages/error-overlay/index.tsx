@@ -2,7 +2,8 @@ import ReactDOM from 'react-dom';
 
 import { App } from './src/App';
 
-import styles from './index.less';
+import globalStyles from './src/globalStyles.less';
+import styles from './src/styles.less';
 
 /**
  * Custom web component wrapper.
@@ -20,8 +21,11 @@ class ImaErrorOverlay extends HTMLElement {
     styles.use({ target: this.shadowRoot });
     this.shadowRoot?.appendChild(root);
 
+    // Init global styles
+    globalStyles.use();
+
     // Get component attributes
-    const publicUrl = this.getAttribute('public');
+    const publicUrl = this.getAttribute('public-url');
 
     // Render App
     ReactDOM.render(<App publicUrl={publicUrl} />, root);

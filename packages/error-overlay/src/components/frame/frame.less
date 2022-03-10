@@ -1,0 +1,46 @@
+.ima-frame {
+  border-radius: 5px;
+  overflow: hidden;
+
+  color: #f8fafc;
+
+  background-color: #334155;
+
+  box-shadow: rgb(30 41 59 / 0.25) 0 10px 15px -3px, rgb(30 41 59 / 0.15) 0 4px 6px -2px;
+
+  &__ {
+    &code {
+      overflow-y: auto;
+
+      font-size: 14px;
+      line-height: 24px;
+    }
+
+    &line {
+      display: flex;
+
+      border-left: 4px solid transparent;
+
+      align-items: center;
+
+      font-family: var(--ima-font-mono);
+
+      &-- {
+        &highlight {
+          border-color: #f43f5e;
+
+          background-color: rgb(244 63 94 / 0.2);
+        }
+      }
+    }
+
+    &line-number {
+      margin-right: 12px;
+      border-right: 2px solid rgba(71 85 105 / 75);
+
+      padding: 0 12px;
+
+      color: #94a3b8;
+    }
+  }
+}

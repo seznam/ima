@@ -17,7 +17,6 @@
   "include": [
     "./typings/**/*",
     "./src/**/*",
-    "index.less",
     "index.tsx"
   ]
 }
