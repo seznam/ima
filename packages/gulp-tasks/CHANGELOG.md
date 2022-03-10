@@ -3,6 +3,55 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [17.12.2](https://github.com/seznam/ima/compare/v17.12.1...v17.12.2) (2022-02-07)
+
+
+### Bug Fixes
+
+* 🐛 freeze @babel/core and @babel/helpers ([4957363](https://github.com/seznam/ima/commit/49573634f7c518a638bbc9888187febc7b785fc5))
+
+
+
+
+
+## [17.11.3](https://github.com/seznam/ima/compare/v17.11.2...v17.11.3) (2021-08-27)
+
+**Note:** Version bump only for package @ima/gulp-tasks
+
+
+
+
+
+## [17.11.2](https://github.com/seznam/ima/compare/v17.11.1...v17.11.2) (2021-07-16)
+
+
+### Bug Fixes
+
+* 🐛 passing at least query params to error route ([#126](https://github.com/seznam/ima/issues/126)) ([6b1224e](https://github.com/seznam/ima/commit/6b1224edd28d4ff8e853d46e46ac2b9b4160da2e))
+
+
+
+
+
+## [17.11.1](https://github.com/seznam/ima/compare/v17.11.0...v17.11.1) (2021-07-13)
+
+
+### Bug Fixes
+
+* 🐛 passing original params to not-found and error route ([#122](https://github.com/seznam/ima/issues/122)) ([131fb7f](https://github.com/seznam/ima/commit/131fb7fdb4d239c1efe49b9254ca1585e1b90315))
+
+
+
+
+
+# [17.11.0](https://github.com/seznam/ima/compare/v17.10.0...v17.11.0) (2021-06-12)
+
+**Note:** Version bump only for package @ima/gulp-tasks
+
+
+
+
+
 # [17.9.0](https://github.com/seznam/ima/compare/v17.8.1...v17.9.0) (2021-03-21)
 
 **Note:** Version bump only for package @ima/gulp-tasks

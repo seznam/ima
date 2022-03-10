@@ -2,6 +2,8 @@ import { getSettings, setSettings } from '../settings';
 import defaultSettings from '../defaultSettings';
 
 let settingsStorage = {};
+
+// eslint-disable-next-line jest/require-top-level-describe
 beforeEach(() => {
   global.chrome = {
     storage: {
@@ -9,17 +11,17 @@ beforeEach(() => {
         set: jest.fn().mockImplementation(value => {
           return (settingsStorage = {
             ...settingsStorage,
-            ...value
+            ...value,
           });
         }),
         get: jest.fn().mockImplementation((key, callback) => {
           callback(settingsStorage);
-        })
-      }
+        }),
+      },
     },
     runtime: {
-      lastError: 'runtime error'
-    }
+      lastError: 'runtime error',
+    },
   };
 });
 
@@ -37,27 +39,27 @@ describe('getSettings', () => {
   it('should call chrome.storage.local.get', async () => {
     await getSettings();
 
-    expect(chrome.storage.local.get.mock.calls.length).toBe(1);
-    expect(chrome.storage.local.get.mock.calls[0][0]).toEqual(null);
+    expect(chrome.storage.local.get.mock.calls).toHaveLength(1);
+    expect(chrome.storage.local.get.mock.calls[0][0]).toBeNull();
   });
 
   it('should return default settings when nothing is set', async () => {
-    expect(await getSettings('enabled')).toBe(true);
-    expect(await getSettings('hooks')).toBe(defaultSettings.hooks);
+    await expect(getSettings('enabled')).resolves.toBe(true);
+    await expect(getSettings('hooks')).resolves.toBe(defaultSettings.hooks);
   });
 
   it('should resolve with value when key provided', async () => {
     setSettings({ enabled: true });
 
-    expect(await getSettings('enabled')).toBe(true);
+    await expect(getSettings('enabled')).resolves.toBe(true);
   });
 
   it('should return whole storage.local if key not provided', async () => {
     setSettings({ enabled: true });
 
-    expect(await getSettings()).toEqual(
+    await expect(getSettings()).resolves.toStrictEqual(
       Object.assign({}, defaultSettings, {
-        enabled: true
+        enabled: true,
       })
     );
   });
@@ -67,11 +69,11 @@ describe('setSettings', () => {
   it('should call chrome.storage.local.set', () => {
     setSettings({ enabled: true });
 
-    expect(chrome.storage.local.set.mock.calls.length).toBe(1);
-    expect(chrome.storage.local.set.mock.calls[0][0]).toEqual({
-      enabled: true
+    expect(chrome.storage.local.set.mock.calls).toHaveLength(1);
+    expect(chrome.storage.local.set.mock.calls[0][0]).toStrictEqual({
+      enabled: true,
     });
 
-    expect(settingsStorage).toEqual({ enabled: true });
+    expect(settingsStorage).toStrictEqual({ enabled: true });
   });
 });

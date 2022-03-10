@@ -13,7 +13,7 @@ root.$IMA.Loader = root.$IMA.Loader || {
   importSync: function () {},
   initAllModules: function () {
     return Promise.resolve();
-  }
+  },
 };
 
 root.extend = extend;

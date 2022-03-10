@@ -5,7 +5,7 @@ import Panel from './Panel';
 const mapStateToProps = state => ({
   isLoading: state.entries.isLoading,
   error: state.entries.error,
-  status: state.entries.status
+  status: state.entries.status,
 });
 
 export default connect(mapStateToProps, {
@@ -16,5 +16,5 @@ export default connect(mapStateToProps, {
   clearEntries: actions.clearEntries,
   addEntries: actions.addEntries,
   selectNext: actions.selectNext,
-  selectPrevious: actions.selectPrevious
+  selectPrevious: actions.selectPrevious,
 })(Panel);

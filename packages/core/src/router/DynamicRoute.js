@@ -86,14 +86,14 @@ export default class DynamicRoute extends AbstractRoute {
    * @inheritdoc
    */
   toPath(params = {}) {
-    return this._getTrimmedPath(this._toPath(params));
+    return AbstractRoute.getTrimmedPath(this._toPath(params));
   }
 
   /**
    * @inheritdoc
    */
   matches(path) {
-    let trimmedPath = this._getTrimmedPath(path);
+    let trimmedPath = AbstractRoute.getTrimmedPath(path);
 
     return this._matcher.test(trimmedPath);
   }
@@ -102,9 +102,9 @@ export default class DynamicRoute extends AbstractRoute {
    * @inheritdoc
    */
   extractParameters(path) {
-    let trimmedPath = this._getTrimmedPath(path);
+    let trimmedPath = AbstractRoute.getTrimmedPath(path);
     let parameters = this._extractParameters(trimmedPath.split('?').shift());
-    let query = this._getQuery(trimmedPath);
+    let query = AbstractRoute.getQuery(trimmedPath);
 
     return Object.assign({}, parameters, query);
   }

@@ -71,7 +71,7 @@ export default class PageFactory {
       metaManager,
       router,
       dictionary,
-      settings
+      settings,
     ]);
 
     return decoratedController;

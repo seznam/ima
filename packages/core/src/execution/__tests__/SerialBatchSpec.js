@@ -16,16 +16,16 @@ describe('ima.core.execution.SerialBatch', () => {
   });
 
   describe('execute() method', () => {
-    it('should return array of results from each job', () => {
+    it('should return array of results from each job', async () => {
       expect.assertions(1);
       const argument = 'fluid';
 
-      return serialBatch.execute(argument).then(result => {
-        expect(result).toEqual([argument, argument]);
+      await serialBatch.execute(argument).then(result => {
+        expect(result).toStrictEqual([argument, argument]);
       });
     });
 
-    it('should pass argument to each job without mutation', () => {
+    it('should pass argument to each job without mutation', async () => {
       expect.assertions(1);
 
       const mutatingFunction = argument => {
@@ -37,18 +37,18 @@ describe('ima.core.execution.SerialBatch', () => {
 
       serialBatch.append(mutatingFunction);
 
-      return serialBatch.execute(argument).then(result => {
-        expect(result).toEqual([argument, argument, argument]);
+      await serialBatch.execute(argument).then(result => {
+        expect(result).toStrictEqual([argument, argument, argument]);
       });
     });
 
-    it('should call each job in the order they were specified', () => {
+    it('should call each job in the order they were specified', async () => {
       const fnA = jest.fn(asyncFunction);
       const fnB = jest.fn(asyncFunction);
 
       serialBatch.append([fnA, fnB]);
 
-      return serialBatch.execute('test').then(() => {
+      await serialBatch.execute('test').then(() => {
         const fnAFirstInvocation = Math.min(...fnA.mock.invocationCallOrder);
         const fnBFirstInvocation = Math.min(...fnB.mock.invocationCallOrder);
 
@@ -56,7 +56,7 @@ describe('ima.core.execution.SerialBatch', () => {
       });
     });
 
-    it('should return rejected Promise when one of the jobs fails', () => {
+    it('should return rejected Promise when one of the jobs fails', async () => {
       expect.assertions(1);
 
       const error = new Error('Test failed');
@@ -66,7 +66,7 @@ describe('ima.core.execution.SerialBatch', () => {
 
       serialBatch.append(rejectingFunction);
 
-      return serialBatch.execute().catch(error => {
+      await serialBatch.execute().catch(error => {
         expect(error).toBe(error);
       });
     });

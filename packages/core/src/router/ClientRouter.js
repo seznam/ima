@@ -29,7 +29,7 @@ const Events = Object.freeze({
    * @const
    * @type {string}
    */
-  POP_STATE: 'popstate'
+  POP_STATE: 'popstate',
 });
 
 /**
@@ -180,7 +180,7 @@ export default class ClientRouter extends AbstractRouter {
     const action = {
       event,
       type,
-      url: url || this.getBaseUrl() + path
+      url: url || this.getBaseUrl() + path,
     };
 
     return super
@@ -206,12 +206,24 @@ export default class ClientRouter extends AbstractRouter {
     }
 
     if (this.isRedirection(params.error)) {
+      let errorParams = params.error.getParams();
       options.httpStatus = params.error.getHttpStatus();
-      this.redirect(params.error.getParams().url, options);
+      let action = {
+        event: null,
+        type: ActionTypes.REDIRECT,
+        url: errorParams.url,
+      };
+
+      this.redirect(
+        errorParams.url,
+        Object.assign(options, errorParams.options),
+        Object.assign(action, errorParams.action),
+        locals
+      );
       return Promise.resolve({
         content: null,
         status: options.httpStatus,
-        error: params.error
+        error: params.error,
       });
     }
 
@@ -264,7 +276,7 @@ export default class ClientRouter extends AbstractRouter {
         {
           type: ActionTypes.POP_STATE,
           event,
-          url: this.getUrl()
+          url: this.getUrl(),
         }
       );
     }

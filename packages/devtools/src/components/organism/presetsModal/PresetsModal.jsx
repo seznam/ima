@@ -18,7 +18,7 @@ export default class PresetsModal extends React.PureComponent {
       addPreset: PropTypes.func,
       selectPreset: PropTypes.func,
       alertSuccess: PropTypes.func,
-      onClose: PropTypes.func.isRequired
+      onClose: PropTypes.func.isRequired,
     };
   }
 
@@ -30,7 +30,8 @@ export default class PresetsModal extends React.PureComponent {
         onClose={onClose}
         title={'Presets'}
         className={styles.modal}
-        opened={opened}>
+        opened={opened}
+      >
         {this._renderModalBody()}
         {this._renderModalFooter()}
       </Modal>
@@ -56,11 +57,11 @@ export default class PresetsModal extends React.PureComponent {
 
     return (
       <ModalFooter className={styles.footer}>
-        <Button onClick={e => this.onSaveChanges(e)} color="success">
+        <Button onClick={e => this.onSaveChanges(e)} color='success'>
           Save Preset Changes
         </Button>
         <div>
-          <Button onClick={e => this.onCreatePreset(e)} color="primary">
+          <Button onClick={e => this.onCreatePreset(e)} color='primary'>
             Create Preset
           </Button>
           <Button onClick={onClose}>Close</Button>
@@ -82,7 +83,7 @@ export default class PresetsModal extends React.PureComponent {
 
     setSettings({
       presets,
-      selectedPresetId
+      selectedPresetId,
     });
 
     alertSuccess('Changes made to the presets were saved.');
@@ -103,7 +104,7 @@ export default class PresetsModal extends React.PureComponent {
       name: `Preset - ${id.substring(0, 6)}`,
       editable: true,
       selected: false,
-      hooks: {}
+      hooks: {},
     };
   }
 }

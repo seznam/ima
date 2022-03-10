@@ -6,7 +6,7 @@ export default class Item extends AbstractComponent {
     super(props);
 
     this.state = {
-      editing: false
+      editing: false,
     };
   }
 
@@ -15,19 +15,20 @@ export default class Item extends AbstractComponent {
       <li
         className={this.cssClasses({
           completed: this.props.item.completed,
-          editing: this.state.editing
-        })}>
-        <div className="view">
+          editing: this.state.editing,
+        })}
+      >
+        <div className='view'>
           <input
-            className="toggle"
-            type="checkbox"
+            className='toggle'
+            type='checkbox'
             checked={this.props.item.completed}
             onChange={e => this.onCompletionToggled(e)}
           />
           <label onDoubleClick={e => this.onStartEdit(e)}>
             {this.props.item.title}
           </label>
-          <button className="destroy" onClick={e => this.onDelete(e)} />
+          <button className='destroy' onClick={e => this.onDelete(e)} />
         </div>
         {this._generateEditUI()}
       </li>
@@ -44,19 +45,19 @@ export default class Item extends AbstractComponent {
 
   onDelete() {
     this.fire('itemDeleted', {
-      item: this.props.item
+      item: this.props.item,
     });
   }
 
   onCompletionToggled() {
     this.fire('itemCompletionToggled', {
-      item: this.props.item
+      item: this.props.item,
     });
   }
 
   onStartEdit() {
     this.setState({
-      editing: true
+      editing: true,
     });
   }
 
@@ -66,12 +67,12 @@ export default class Item extends AbstractComponent {
     if (newTitle !== this.props.item.title) {
       this.fire('itemEdited', {
         item: this.props.item,
-        newTitle: newTitle
+        newTitle: newTitle,
       });
     }
 
     this.setState({
-      editing: false
+      editing: false,
     });
   }
 
@@ -82,7 +83,7 @@ export default class Item extends AbstractComponent {
 
     return (
       <input
-        className="edit"
+        className='edit'
         ref={edit => (this.edit = edit)}
         defaultValue={this.props.item.title}
         onBlur={this.onFinishEditing.bind(this)}

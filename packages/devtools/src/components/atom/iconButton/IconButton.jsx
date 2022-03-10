@@ -10,13 +10,13 @@ export default class IconButton extends React.PureComponent {
     return {
       color: PropTypes.oneOf(['danger', 'success']),
       name: PropTypes.string.isRequired,
-      className: PropTypes.string
+      className: PropTypes.string,
     };
   }
 
   static get defaultProps() {
     return {
-      className: ''
+      className: '',
     };
   }
 
@@ -30,7 +30,8 @@ export default class IconButton extends React.PureComponent {
           { [styles[`iconBtn--${color}`]]: color },
           className
         )}`}
-        {...rest}>
+        {...rest}
+      >
         <Icon name={name} />
       </button>
     );

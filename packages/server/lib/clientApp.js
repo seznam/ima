@@ -13,7 +13,7 @@ const Cache = require('./cache.js').Cache;
 
 hljs.configure({
   tabReplace: '  ',
-  lineNodes: true
+  lineNodes: true,
 });
 
 module.exports = (environment, logger, languageLoader, appFactory) => {
@@ -21,7 +21,7 @@ module.exports = (environment, logger, languageLoader, appFactory) => {
 
   const spaCache = new Cache(
     Object.assign({}, environment.$Server.cache, {
-      cacheKeyGenerator: null
+      cacheKeyGenerator: null,
     })
   );
 
@@ -30,7 +30,7 @@ module.exports = (environment, logger, languageLoader, appFactory) => {
     let fileIndex = 1;
 
     logger.error('The application crashed due to an uncaught exception', {
-      error: errorToJSON(err)
+      error: errorToJSON(err),
     });
 
     asyncEach(
@@ -94,7 +94,7 @@ module.exports = (environment, logger, languageLoader, appFactory) => {
         // sure to return something useful
         if (error) {
           logger.error('Failed to display error page', {
-            error: errorToJSON(error)
+            error: errorToJSON(error),
           });
           res.send(err.stack);
         } else {
@@ -157,7 +157,7 @@ module.exports = (environment, logger, languageLoader, appFactory) => {
         pageState: {},
         status,
         SPA: true,
-        error: null
+        error: null,
       });
     }
 
@@ -200,7 +200,7 @@ module.exports = (environment, logger, languageLoader, appFactory) => {
       error: new Error(
         `The server is overloaded with ${requests} concurrency requests.`
       ),
-      pageState: {}
+      pageState: {},
     });
   }
 
@@ -254,15 +254,15 @@ module.exports = (environment, logger, languageLoader, appFactory) => {
         $IMA: {},
         dictionary: {
           $Language: language,
-          dictionary: dictionary
+          dictionary: dictionary,
         },
         router: {
           $Protocol: protocol,
           $Host: host,
           $Path: urlPath,
           $Root: root,
-          $LanguagePartPath: languagePartPath
-        }
+          $LanguagePartPath: languagePartPath,
+        },
       },
       settings: {
         $Debug: environment.$Debug,
@@ -274,8 +274,8 @@ module.exports = (environment, logger, languageLoader, appFactory) => {
         $Host: host,
         $Path: urlPath,
         $Root: root,
-        $LanguagePartPath: languagePartPath
-      }
+        $LanguagePartPath: languagePartPath,
+      },
     };
 
     return bootConfig;
@@ -333,15 +333,16 @@ module.exports = (environment, logger, languageLoader, appFactory) => {
     let promise;
 
     try {
-      app.oc
-        .get('$Router')
-        .redirect(error.getParams().url, { httpStatus: error.getHttpStatus() });
+      app.oc.get('$Router').redirect(error.getParams().url, {
+        httpStatus: error.getHttpStatus(),
+        headers: error.getParams().headers,
+      });
       instanceRecycler.clearInstance(app);
       promise = Promise.resolve({
         content: null,
         pageState: {},
         status: error.getHttpStatus(),
-        error: error
+        error: error,
       });
     } catch (e) {
       promise = _applyError(e, req, res, app);
@@ -367,7 +368,7 @@ module.exports = (environment, logger, languageLoader, appFactory) => {
     let returnPromise;
 
     if (environment.$Debug) {
-      if (app) {
+      if (app && typeof app !== 'function') {
         instanceRecycler.clearInstance(app);
       }
 
@@ -375,7 +376,7 @@ module.exports = (environment, logger, languageLoader, appFactory) => {
         content: null,
         pageState: {},
         status: 500,
-        error: error
+        error: error,
       });
       _displayDetails(error, req, res);
     } else {
@@ -420,7 +421,7 @@ module.exports = (environment, logger, languageLoader, appFactory) => {
       routeInfo = router.getCurrentRouteInfo();
     } catch (e) {
       logger.warn('Failed to retrieve current route info', {
-        error: errorToJSON(e)
+        error: errorToJSON(e),
       });
     }
 
@@ -470,7 +471,7 @@ module.exports = (environment, logger, languageLoader, appFactory) => {
         global.$IMA.Loader.modules[modulePath] = Object.assign({}, module, {
           instance: null,
           dependencyOf: [],
-          dependencies: module.dependencies.slice()
+          dependencies: module.dependencies.slice(),
         });
       });
 
@@ -500,6 +501,6 @@ module.exports = (environment, logger, languageLoader, appFactory) => {
     errorHandler,
     requestHandler,
     showStaticErrorPage,
-    showStaticSPAPage
+    showStaticSPAPage,
   };
 };

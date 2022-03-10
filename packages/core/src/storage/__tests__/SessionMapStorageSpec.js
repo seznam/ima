@@ -21,21 +21,21 @@ describe('ima.storage.SessionMapStorage', () => {
 
   it('should set and get items', () => {
     sessionMap.set('item1', 1);
-    expect(sessionMap.get('item1')).toEqual(1);
+    expect(sessionMap.get('item1')).toBe(1);
 
     sessionMap.set('item2', 'test');
-    expect(sessionMap.get('item2')).toEqual('test');
+    expect(sessionMap.get('item2')).toBe('test');
 
     sessionMap.set('item3', false);
-    expect(sessionMap.get('item3')).toEqual(false);
+    expect(sessionMap.get('item3')).toBeFalsy();
 
     let obj = { testedProp: 'testedValue' };
     sessionMap.set('item4', obj);
-    expect(sessionMap.get('item4')).toEqual(obj);
+    expect(sessionMap.get('item4')).toStrictEqual(obj);
 
     let arr = [0, 'val', true, {}];
     sessionMap.set('item5', arr);
-    expect(sessionMap.get('item5')).toEqual(arr);
+    expect(sessionMap.get('item5')).toStrictEqual(arr);
   });
 
   it('should set promise value only to map storage', () => {
@@ -83,13 +83,16 @@ describe('ima.storage.SessionMapStorage', () => {
     do {
       switch (index++) {
         case 0:
-          expect(item.value).toEqual('item1');
+          // eslint-disable-next-line jest/no-conditional-expect
+          expect(item.value).toBe('item1');
           break;
         case 1:
-          expect(item.value).toEqual('item2');
+          // eslint-disable-next-line jest/no-conditional-expect
+          expect(item.value).toBe('item2');
           break;
         default:
-          expect(item.value).toEqual('item3');
+          // eslint-disable-next-line jest/no-conditional-expect
+          expect(item.value).toBe('item3');
           break;
       }
       item = iterator.next();

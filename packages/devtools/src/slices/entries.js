@@ -11,7 +11,7 @@ export const entriesInitialState = {
   zeroTime: null,
   zeroId: null,
   selectedId: null,
-  isLoading: true
+  isLoading: true,
 };
 
 const updateHasPreviousNext = state => {
@@ -112,7 +112,7 @@ const entries = createSlice({
           state.entries[id] = {
             id: id,
             selected: isFirst,
-            messages: [msg]
+            messages: [msg],
           };
         }
 
@@ -171,15 +171,15 @@ const entries = createSlice({
         updateSelected(state, state.entryIdsByQuery[selectedIdIndex - 1]);
         updateHasPreviousNext(state);
       }
-    }
-  }
+    },
+  },
 });
 
 const selectors = {
   getEntriesLength: createSelector(
     state => state.entries.entries,
     entries => entries && Object.keys(entries).length
-  )
+  ),
 };
 
 const { reducer, actions } = entries;

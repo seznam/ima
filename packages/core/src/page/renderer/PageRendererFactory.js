@@ -78,15 +78,15 @@ export default class PageRendererFactory {
     let managedRootViewComponent =
       this._resolveClassConstructor(managedRootView);
 
-    // if ($Debug) {
-    //   let componentPrototype = managedRootViewComponent.prototype;
+    if ($Debug) {
+      let componentPrototype = managedRootViewComponent.prototype;
 
-    //   if (!(componentPrototype instanceof this._React.Component)) {
-    //     throw new Error(
-    //       'The managed root view component must extend ' + 'React.Component'
-    //     );
-    //   }
-    // }
+      if (!(componentPrototype instanceof this._React.Component)) {
+        throw new Error(
+          'The managed root view component must extend ' + 'React.Component'
+        );
+      }
+    }
 
     return managedRootViewComponent;
   }

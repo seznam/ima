@@ -48,7 +48,7 @@ export default class PageHandlerRegistry extends PageHandler {
       [
         this._pageHandlers.map(handler =>
           handler.handlePreManagedState.bind(handler)
-        )
+        ),
       ]
     );
 
@@ -57,7 +57,7 @@ export default class PageHandlerRegistry extends PageHandler {
       [
         this._pageHandlers.map(handler =>
           handler.handlePostManagedState.bind(handler)
-        )
+        ),
       ]
     );
   }

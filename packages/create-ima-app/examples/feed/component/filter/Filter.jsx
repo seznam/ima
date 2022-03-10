@@ -9,7 +9,7 @@ export default class Filter extends AbstractComponent {
     super(props, context);
 
     this.state = {
-      expanded: false
+      expanded: false,
     };
   }
 
@@ -22,7 +22,7 @@ export default class Filter extends AbstractComponent {
     return (
       <div className={'filter' + isExpandedClass}>
         {topBar}
-        <div className="categories">
+        <div className='categories'>
           {allLink}
           {categoryLinks}
         </div>
@@ -37,9 +37,9 @@ export default class Filter extends AbstractComponent {
       : this.localize('filter.defaultCategory');
 
     return (
-      <div className="top">
+      <div className='top'>
         {label}
-        <span className="toggle" onClick={() => this.onToggle()}>
+        <span className='toggle' onClick={() => this.onToggle()}>
           {currentCategoryLabel}
         </span>
       </div>
@@ -50,7 +50,7 @@ export default class Filter extends AbstractComponent {
     let allLabel = this.localize('filter.all');
 
     return (
-      <a href={this.link('home')} className="all">
+      <a href={this.link('home')} className='all'>
         {allLabel}
       </a>
     );
@@ -63,7 +63,7 @@ export default class Filter extends AbstractComponent {
 
     return categories.getCategories().map((category, index) => {
       let link = this.link('category', {
-        category: category.getUrlName()
+        category: category.getUrlName(),
       });
 
       return (
@@ -76,7 +76,7 @@ export default class Filter extends AbstractComponent {
 
   onToggle() {
     this.setState({
-      expanded: !this.state.expanded
+      expanded: !this.state.expanded,
     });
   }
 }

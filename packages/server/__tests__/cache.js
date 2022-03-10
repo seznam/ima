@@ -2,11 +2,11 @@
 
 const CacheFactory = require('../lib/cache.js');
 
-describe('Cache', () => {
+describe('cache', () => {
   describe('set method', () => {
     let cache = null;
     let page = {
-      content: 'some html'
+      content: 'some html',
     };
 
     beforeEach(() => {
@@ -17,21 +17,21 @@ describe('Cache', () => {
             cacheKeyGenerator: null,
             entryTtl: 60 * 60 * 1000, // milliseconds
             unusedEntryTtl: 15 * 60 * 1000,
-            maxEntries: 1 // milliseconds
-          }
-        }
+            maxEntries: 1, // milliseconds
+          },
+        },
       });
 
       spyOn(cache, '_keyGenerator').and.returnValue('key');
     });
 
     it('should be set page to cache', () => {
-      expect(cache.set({}, page)).toEqual(true);
+      expect(cache.set({}, page)).toBeTruthy();
     });
 
     it('should be not set page to cache for exceed maximum entries limit', () => {
-      expect(cache.set({}, page)).toEqual(true);
-      expect(cache.set({}, page)).toEqual(false);
+      expect(cache.set({}, page)).toBeTruthy();
+      expect(cache.set({}, page)).toBeFalsy();
     });
   });
 });

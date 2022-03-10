@@ -32,8 +32,8 @@ export function getSettings(key = null) {
           ...resultRest,
           presets: {
             ...resultPresets,
-            ...defaultPresets
-          }
+            ...defaultPresets,
+          },
         };
 
         resolve(settings);

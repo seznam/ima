@@ -25,7 +25,7 @@ exports.default = () => {
       $Protocol: 'location.protocol',
       $Host: 'location.host',
       $Root: '',
-      $LanguagePartPath: ''
+      $LanguagePartPath: '',
     };
 
     let sourceTemplate = './build/static/html/spa.html';
@@ -52,6 +52,6 @@ exports.default = () => {
 
   return {
     'spa:clean': spaClean,
-    'spa:compile': spaCompile
+    'spa:compile': spaCompile,
   };
 };

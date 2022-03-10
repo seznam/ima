@@ -16,7 +16,7 @@ export default class NotFoundController extends AbstractPageController {
    */
   load() {
     return {
-      status: this.status
+      status: this.status,
     };
   }
 }

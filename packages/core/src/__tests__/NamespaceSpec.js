@@ -1,6 +1,6 @@
 import { Namespace } from '../namespace';
 
-describe('Namespace', () => {
+describe('namespace', () => {
   let ns = null;
   let path = 'a.b.c.ClassConstructor';
   class ClassConstructor {}
@@ -11,45 +11,45 @@ describe('Namespace', () => {
   });
 
   it('should create defined namespace', () => {
-    expect(ns.a.b.c.ClassConstructor).toEqual({});
+    expect(ns.a.b.c.ClassConstructor).toStrictEqual({});
   });
 
   it('should return stored value in namespace', () => {
-    expect(ns.get(path)).toEqual({});
+    expect(ns.get(path)).toStrictEqual({});
   });
 
   it('should return true if namespace exists', () => {
-    expect(ns.has(path)).toEqual(true);
+    expect(ns.has(path)).toBeTruthy();
   });
 
   it('should set value for defined namespace', () => {
     ns.set(path, ClassConstructor);
 
-    expect(ns.a.b.c.ClassConstructor).toEqual(ClassConstructor);
+    expect(ns.a.b.c.ClassConstructor).toStrictEqual(ClassConstructor);
   });
 
-  it('Should throw error when creating namespace with wrong path format', () => {
+  it('should throw error when creating namespace with wrong path format', () => {
     expect(() => ns.namespace(false)).toThrow();
     expect(() => ns.namespace(1)).toThrow();
     expect(() => ns.namespace(null)).toThrow();
     expect(() => ns.namespace(undefined)).toThrow();
   });
 
-  it('Should throw error when getting wrong path format namespace value', () => {
+  it('should throw error when getting wrong path format namespace value', () => {
     expect(() => ns.get(false)).toThrow();
     expect(() => ns.get(1)).toThrow();
     expect(() => ns.get(null)).toThrow();
     expect(() => ns.get(undefined)).toThrow();
   });
 
-  it('Should throw error when setting wrong path format', () => {
+  it('should throw error when setting wrong path format', () => {
     expect(() => ns.set(false)).toThrow();
     expect(() => ns.set(1)).toThrow();
     expect(() => ns.set(null)).toThrow();
     expect(() => ns.set(undefined)).toThrow();
   });
 
-  it('Should return false when calling has wrong path format', () => {
+  it('should return false when calling has wrong path format', () => {
     expect(() => ns.has(false)).not.toThrow();
     expect(ns.has(false)).toBeFalsy();
 

@@ -7,12 +7,12 @@ const mapStateToProps = state => ({
   searchQuery: state.entries.searchQuery,
   showingLength: state.entries.entryIdsByQuery.length,
   hasNext: state.entries.hasNext,
-  hasPrevious: state.entries.hasPrevious
+  hasPrevious: state.entries.hasPrevious,
 });
 
 export default connect(mapStateToProps, {
   clearEntries: actions.clearEntries,
   setSearchQuery: actions.setSearchQuery,
   selectNext: actions.selectNext,
-  selectPrevious: actions.selectPrevious
+  selectPrevious: actions.selectPrevious,
 })(Search);

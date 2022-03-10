@@ -21,7 +21,7 @@ export default (ns, oc, config) => {
     '$Http',
     'CATEGORIES_API_URL',
     CategoryListFactory,
-    Cache
+    Cache,
   ]);
   oc.inject(FeedResource, ['$Http', 'ITEMS_API_URL', FeedFactory, Cache]);
   oc.inject(ItemResource, ['$Http', 'ITEMS_API_URL', ItemFactory, Cache]);

@@ -22,7 +22,7 @@ let cache = imaServer.cache;
 let favicon = require('serve-favicon');
 let bodyParser = require('body-parser');
 let multer = require('multer')({
-  dest: path.resolve(__dirname) + '/static/uploads/'
+  dest: path.resolve(__dirname) + '/static/uploads/',
 });
 let cookieParser = require('cookie-parser');
 let methodOverride = require('method-override');
@@ -79,7 +79,7 @@ function renderApp(req, res, next) {
 
         if (response.error) {
           logger.error('App error', {
-            error: errorToJSON(response.error)
+            error: errorToJSON(response.error),
           });
         }
 

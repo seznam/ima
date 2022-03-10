@@ -55,7 +55,7 @@ export default class HomeController extends AbstractController {
         this.params.category
       ),
       feed: this._feedService.load(this.params.category),
-      sharedItem: null
+      sharedItem: null,
     };
   }
 

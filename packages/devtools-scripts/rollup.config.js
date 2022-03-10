@@ -8,12 +8,12 @@ const config = {
   input: './src/main.js',
   plugins: [
     nodeResolve({
-      mainFields: ['module', 'main']
+      mainFields: ['module', 'main'],
     }),
     commonjs({
-      include: 'node_modules/**'
-    })
-  ]
+      include: 'node_modules/**',
+    }),
+  ],
 };
 
 if (env === 'es' || env === 'cjs') {

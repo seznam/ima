@@ -1,6 +1,6 @@
 const js = [
   './node_modules/@ima/core/**/!(vendorLinker|gulpfile|build|test|*Spec).{js,jsx}',
-  '!./node_modules/@ima/core/polyfill/*.js'
+  '!./node_modules/@ima/core/polyfill/*.js',
 ];
 
 const vendors = {
@@ -10,10 +10,10 @@ const vendors = {
 
   client: [],
 
-  test: ['@ima/core/test.js', 'react-test-renderer', 'enzyme']
+  test: ['@ima/core/test.js', 'react-test-renderer', 'enzyme'],
 };
 
 module.exports = {
   js,
-  vendors
+  vendors,
 };

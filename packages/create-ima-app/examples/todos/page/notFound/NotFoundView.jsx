@@ -8,7 +8,7 @@ export default class NotFoundView extends AbstractComponent {
 
   render() {
     return (
-      <div className="l-not-found">
+      <div className='l-not-found'>
         <h1>404 &ndash; Not Found</h1>
       </div>
     );

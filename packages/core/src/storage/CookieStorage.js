@@ -88,7 +88,7 @@ export default class CookieStorage extends MapStorage {
       secure: false,
       httpOnly: false,
       domain: '',
-      sameSite: 'Lax'
+      sameSite: 'Lax',
     };
 
     /**
@@ -101,7 +101,7 @@ export default class CookieStorage extends MapStorage {
      */
     this._transformFunction = {
       encode: value => value,
-      decode: value => value
+      decode: value => value,
     };
   }
 
@@ -135,6 +135,7 @@ export default class CookieStorage extends MapStorage {
    * @inheritdoc
    */
   has(name) {
+    this._parse();
     return super.has(name);
   }
 
@@ -142,6 +143,7 @@ export default class CookieStorage extends MapStorage {
    * @inheritdoc
    */
   get(name) {
+    this._parse();
     if (super.has(name)) {
       return super.get(name).value;
     } else {
@@ -207,7 +209,7 @@ export default class CookieStorage extends MapStorage {
    * @return {Storage} This storage.
    */
   delete(name, options = {}) {
-    if (this.has(name)) {
+    if (super.has(name)) {
       this.set(name, undefined, options);
       super.delete(name);
     }
@@ -230,6 +232,7 @@ export default class CookieStorage extends MapStorage {
    * @inheritdoc
    */
   keys() {
+    this._parse();
     return super.keys();
   }
 
@@ -237,6 +240,7 @@ export default class CookieStorage extends MapStorage {
    * @inheritdoc
    */
   size() {
+    this._parse();
     return super.size();
   }
 
@@ -291,20 +295,45 @@ export default class CookieStorage extends MapStorage {
     let cookiesString = this._window.isClient()
       ? document.cookie
       : this._request.getCookieHeader();
+
     let cookiesArray = cookiesString
       ? cookiesString.split(COOKIE_SEPARATOR)
       : [];
+
+    let cookiesNames = [];
 
     for (let i = 0; i < cookiesArray.length; i++) {
       let cookie = this._extractCookie(cookiesArray[i]);
 
       if (cookie.name !== null) {
-        cookie.options = Object.assign({}, this._options, cookie.options);
+        // if cookie already exists in storage get its old options
+        let oldCookieOptions = {};
+        if (super.has(cookie.name)) {
+          oldCookieOptions = super.get(cookie.name).options;
+        }
 
+        cookie.options = Object.assign(
+          {},
+          this._options, // default options
+          oldCookieOptions, // old cookie options (if any)
+          cookie.options // new cookie options (if any)
+        );
+
+        cookiesNames.push(cookie.name);
+
+        // add new cookie or update existing one
         super.set(cookie.name, {
           value: this._sanitizeCookieValue(cookie.value),
-          options: cookie.options
+          options: cookie.options,
         });
+      }
+    }
+
+    // remove cookies from storage, which were not parsed
+    for (let storageCookieName of super.keys()) {
+      const index = cookiesNames.indexOf(storageCookieName);
+      if (index === -1) {
+        super.delete(storageCookieName);
       }
     }
   }
@@ -419,7 +448,7 @@ export default class CookieStorage extends MapStorage {
     return {
       name: cookieName,
       value: cookieValue,
-      options: cookieOptions
+      options: cookieOptions,
     };
   }
 

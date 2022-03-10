@@ -9,7 +9,7 @@ allows it to hook into IMA.js application environment.
 
 ## Interface functions
 
-There are total of **4 functions** that a plugin can export in it's main file:
+There are total of **4 functions** that a plugin can export in its main file:
 - [`$registerImaPlugin(ns)`](https://github.com/seznam/ima/blob/master/packages/core/src/vendorLinker.js#L38)
 **{namespace}** - main purpose of this function is to let IMA.js `VendorLinker`
 know, that this is a plugin. Most of the time this function **will be empty**. Optionally as a first and the only argument
@@ -75,6 +75,10 @@ export {
 };
 ```
 
+### Automatic registration with Object Container
+
+Every class that is exported in `main.js` and has a static property `$dependencies` that contains an array is automatically registered into `oc`. Otherwise, you may [register classes manually](https://imajs.io/docs/object-container#manually-registering-dependencies).
+
 ### Updating build.js
 
 One last thing when using a ima-plugin, or any other vendor library, is that you have to update your 
@@ -90,7 +94,6 @@ var vendors = {
 
 ## Conclusion
 
-As you can see that creating IMA.js plugin is very easy. You can always check our 
-[IMA.js-plugins](https://github.com/seznam/IMA.js-plugins/tree/master),
-which we describe more in detail [here](/docs/available-plugins), monorepo to take a look at many other already
-existing plugins and how they're implemented.
+As you can see, creating IMA.js plugin is very easy. You can always check our 
+[IMA.js-plugins](https://github.com/seznam/IMA.js-plugins/tree/master) monorepo to take a look at many other already
+existing plugins and how they're implemented, which we describe more in detail [in the documentation](/docs/available-plugins).

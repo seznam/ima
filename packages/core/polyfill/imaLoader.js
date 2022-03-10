@@ -16,7 +16,7 @@
         dependencies: dependencies,
         dependencyOf: [],
         factory: moduleFactory,
-        instance: null
+        instance: null,
       };
     },
     replaceModule: function (moduleName, dependencies, moduleFactory) {
@@ -67,7 +67,7 @@
       }
 
       return Promise.resolve();
-    }
+    },
   };
 
   function resolveModule(moduleName, dependencyOf, parentDependencySetter) {

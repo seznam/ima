@@ -7,7 +7,7 @@ describe('Search molecule', () => {
     onSelect: jest.fn(),
     clearEntries: jest.fn(),
     setSearchQuery: jest.fn(),
-    searchQuery: 'search query'
+    searchQuery: 'search query',
   };
 
   let wrapper, instance;
@@ -15,7 +15,7 @@ describe('Search molecule', () => {
   beforeEach(() => {
     wrapper = shallow(<Search {...props} />);
     instance = wrapper.instance();
-    instance.setState = jest.fn();
+    jest.spyOn(instance, 'setState').mockImplementation();
   });
 
   it('should match snapshot', () => {
@@ -26,32 +26,32 @@ describe('Search molecule', () => {
     wrapper.setState({ invalid: true });
 
     expect(instance.state.invalid).toBe(true);
-    expect(wrapper.find('input.searchInput--invalid').length).toBe(1);
+    expect(wrapper.find('input.searchInput--invalid')).toHaveLength(1);
   });
 
   it('should update state query on input change', () => {
-    instance.onChange = jest.fn();
+    jest.spyOn(instance, 'onChange').mockImplementation();
     instance.forceUpdate();
 
     wrapper
       .find('input.searchInput')
       .simulate('change', { target: { value: 'test' } });
 
-    expect(instance.onChange.mock.calls.length).toBe(1);
-    expect(instance.onChange.mock.calls[0][0]).toEqual({
-      target: { value: 'test' }
+    expect(instance.onChange.mock.calls).toHaveLength(1);
+    expect(instance.onChange.mock.calls[0][0]).toStrictEqual({
+      target: { value: 'test' },
     });
 
     instance.setState.mockReset();
   });
 
   it('should clear query on clear button click', () => {
-    instance.onClear = jest.fn();
+    jest.spyOn(instance, 'onClear').mockImplementation();
     instance.forceUpdate();
 
     wrapper.find('button').at(2).simulate('click');
 
-    expect(instance.onClear.mock.calls.length).toBe(1);
+    expect(instance.onClear.mock.calls).toHaveLength(1);
 
     instance.setState.mockReset();
   });
@@ -60,15 +60,17 @@ describe('Search molecule', () => {
     it('should update state search query', () => {
       instance.onChange({
         target: {
-          value: 'test'
-        }
+          value: 'test',
+        },
       });
 
-      expect(instance.setState.mock.calls.length).toBe(1);
-      expect(instance.setState.mock.calls[0][0]).toEqual({
-        query: 'test'
+      expect(instance.setState.mock.calls).toHaveLength(1);
+      expect(instance.setState.mock.calls[0][0]).toStrictEqual({
+        query: 'test',
       });
-      expect(instance.setState.mock.calls[0][1]).toEqual(instance._setQuery);
+      expect(instance.setState.mock.calls[0][1]).toStrictEqual(
+        instance._setQuery
+      );
     });
   });
 
@@ -78,15 +80,15 @@ describe('Search molecule', () => {
       expect(instance.state.query).toBe('search query');
 
       instance.onClear({
-        preventDefault: jest.fn()
+        preventDefault: jest.fn(),
       });
 
-      expect(instance.props.setSearchQuery.mock.calls.length).toBe(1);
-      expect(instance.props.setSearchQuery.mock.calls[0][0]).toEqual('');
+      expect(instance.props.setSearchQuery.mock.calls).toHaveLength(1);
+      expect(instance.props.setSearchQuery.mock.calls[0][0]).toBe('');
 
-      expect(instance.setState.mock.calls.length).toBe(1);
-      expect(instance.setState.mock.calls[0][0]).toEqual({
-        query: ''
+      expect(instance.setState.mock.calls).toHaveLength(1);
+      expect(instance.setState.mock.calls[0][0]).toStrictEqual({
+        query: '',
       });
     });
   });
@@ -106,10 +108,10 @@ describe('Search molecule', () => {
     });
 
     it('should return null on incomplete and invalid regular expressions', () => {
-      expect(instance._validateQuery('/incomplete')).toBe(null);
-      expect(instance._validateQuery('/(fire|getStat)')).toBe(null);
-      expect(instance._validateQuery('/fire|getStat)/')).toBe(null);
-      expect(instance._validateQuery('/[a-z)/')).toBe(null);
+      expect(instance._validateQuery('/incomplete')).toBeNull();
+      expect(instance._validateQuery('/(fire|getStat)')).toBeNull();
+      expect(instance._validateQuery('/fire|getStat)/')).toBeNull();
+      expect(instance._validateQuery('/[a-z)/')).toBeNull();
     });
   });
 });

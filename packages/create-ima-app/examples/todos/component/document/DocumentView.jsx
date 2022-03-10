@@ -14,13 +14,13 @@ export default class DocumentView extends AbstractDocumentView {
       this.utils.$Router.getBaseUrl() + this.utils.$Settings.$Static.js;
 
     return (
-      <html lang={'en'} data-framework="imajs">
+      <html lang={'en'} data-framework='imajs'>
         <head>
-          <meta charSet="utf-8" />
-          <meta httpEquiv="X-UA-Compatible" content="IE=edge" />
-          <meta name="viewport" content="width=device-width, initial-scale=1" />
+          <meta charSet='utf-8' />
+          <meta httpEquiv='X-UA-Compatible' content='IE=edge' />
+          <meta name='viewport' content='width=device-width, initial-scale=1' />
           <link
-            rel="stylesheet"
+            rel='stylesheet'
             href={
               this.utils.$Router.getBaseUrl() +
               this.utils.$Settings.$Static.css +
@@ -33,11 +33,11 @@ export default class DocumentView extends AbstractDocumentView {
         </head>
         <body>
           <div
-            id="page"
+            id='page'
             dangerouslySetInnerHTML={{ __html: this.props.page }}
           />
           <script
-            id="revivalSettings"
+            id='revivalSettings'
             dangerouslySetInnerHTML={{ __html: this.props.revivalSettings }}
           />
           <script
@@ -46,11 +46,11 @@ export default class DocumentView extends AbstractDocumentView {
 						if (!window.fetch) {
 							document.write('<script src="${jsBaseUrl}/fetch-polyfill.js"></' + 'script>')
 						}
-					`
+					`,
             }}
           />
           <div
-            id="scripts"
+            id='scripts'
             dangerouslySetInnerHTML={{ __html: this.getAsyncScripts() }}
           />
         </body>

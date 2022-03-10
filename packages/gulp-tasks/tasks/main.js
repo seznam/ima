@@ -31,7 +31,7 @@ exports.default = gulpConfig => {
   return {
     dev: dev,
     build: build,
-    'build:spa': buildSpa
+    'build:spa': buildSpa,
   };
 
   function prepareTasks(groupedTasks) {

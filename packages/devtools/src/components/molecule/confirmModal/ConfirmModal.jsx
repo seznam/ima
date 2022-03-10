@@ -13,7 +13,7 @@ export default class ConfirmModal extends React.PureComponent {
       opened: PropTypes.bool,
       accept: PropTypes.func,
       cancel: PropTypes.func,
-      hideConfirmModal: PropTypes.func
+      hideConfirmModal: PropTypes.func,
     };
   }
 
@@ -22,13 +22,14 @@ export default class ConfirmModal extends React.PureComponent {
 
     return (
       <Modal
-        title="Confirm"
+        title='Confirm'
         className={styles.modal}
         onClose={e => this.onCancel(e)}
-        opened={opened}>
+        opened={opened}
+      >
         <div className={styles.body}>{body}</div>
         <ModalFooter className={styles.footer}>
-          <Button onClick={e => this.onConfirm(e)} color="primary">
+          <Button onClick={e => this.onConfirm(e)} color='primary'>
             Confirm
           </Button>
           <Button onClick={e => this.onCancel(e)}>Cancel</Button>
