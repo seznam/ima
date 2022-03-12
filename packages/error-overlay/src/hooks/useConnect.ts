@@ -1,6 +1,8 @@
 import { parseCompileError } from '@ima/dev-utils/dist/compileErrorParser';
-import { useEffect, useState } from 'react';
+import { useContext, useEffect, useState } from 'react';
+import { SourceMapConsumer } from 'source-map';
 
+import { OverlayContext } from '#/components';
 import { ParsedError } from '#/types';
 import { mapCompileStackFrame, mapStackFramesToOriginal } from '#/utils';
 
@@ -8,10 +10,17 @@ import { mapCompileStackFrame, mapStackFramesToOriginal } from '#/utils';
  * Connects error overlay to __IMA_HMR interface.
  */
 function useConnect() {
+  const { publicUrl } = useContext(OverlayContext);
   const [error, setError] = useState<ParsedError | null>(null);
 
   // Subscribe to HMR events
   useEffect(() => {
+    // Needed to enable source map parsing
+    // @ts-expect-error: Not available in typings
+    SourceMapConsumer.initialize({
+      'lib/mappings.wasm': `${publicUrl}/__error-overlay-static/mappings.wasm`,
+    });
+
     window.__IMA_HMR.on('close', async () => {
       setError(null);
     });
@@ -73,7 +82,7 @@ function useConnect() {
     });
   }, []);
 
-  return { error };
+  return { error, setError };
 }
 
 export { useConnect };

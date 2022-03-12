@@ -1,21 +1,26 @@
 import clsx from 'clsx';
-import { FunctionComponent, useState } from 'react';
+import { FunctionComponent } from 'react';
 
 import { Icon } from '#/components';
 import { StackFrame } from '#/entities';
+import { useOpenEditor } from '#/hooks';
 
 export type FrameHeaderProps = {
   frame: StackFrame;
   isCompile: boolean;
+  showOriginal: boolean;
+  onToggle: () => void;
 };
 
 const FrameHeader: FunctionComponent<FrameHeaderProps> = ({
   frame,
   isCompile = true,
+  showOriginal,
+  onToggle,
 }) => {
-  const [showOriginal, setShowOriginal] = useState(isCompile);
+  const { isLoading, openEditor } = useOpenEditor();
   const fileUriParts = (
-    isCompile
+    showOriginal || isCompile
       ? [frame.getPrettyOriginalFileUri(), frame.orgLine, frame.orgColumn]
       : [frame.fileName, frame.line, frame.column]
   ).filter(Boolean);
@@ -35,25 +40,30 @@ const FrameHeader: FunctionComponent<FrameHeaderProps> = ({
         </div>
       </div>
 
-      <div className='flex px-2 md:px-4'>
+      <div className='ima-frame-header__actions'>
         {!isCompile && (
           <button
-            className='p-1 md:p-2'
-            color={showOriginal ? 'green' : 'light'}
-            onClick={() => setShowOriginal(value => !value)}
+            type='button'
+            className={clsx('ima-frame-header__button', {
+              'ima-frame-header__button--green': showOriginal,
+            })}
+            onClick={() => onToggle()}
           >
             {showOriginal ? <Icon icon='openEye' /> : <Icon icon='closedEye' />}
           </button>
         )}
 
         <button
-          className='p-1 md:p-2'
-          // onClick={() => openEditor(frameWrapper)}
-          // disabled={!hasFragment || isLoading}
+          type='button'
+          className={clsx('ima-frame-header__button', {
+            'ima-frame-header__button--pulse': isLoading,
+          })}
+          onClick={() => openEditor(frame, showOriginal)}
+          disabled={isLoading}
           color='light'
         >
           {/* <Icon className={clsx({ 'animate-bounce': isLoading })} icon='edit' /> */}
-          <Icon icon='edit' />
+          <Icon size='md' icon='edit' />
         </button>
       </div>
     </div>

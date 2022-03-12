@@ -1,8 +1,8 @@
 import clsx from 'clsx';
 import prismjs from 'prismjs';
-import { FunctionComponent } from 'react';
+import { FunctionComponent, useState } from 'react';
 
-import { FrameHeader } from '#/components';
+import { FrameHeader, Icon } from '#/components';
 import { StackFrame } from '#/entities';
 import { ParsedError } from '#/types';
 import { getPrismLanguage } from '#/utils';
@@ -14,14 +14,23 @@ export type FrameProps = {
 
 const Frame: FunctionComponent<FrameProps> = ({ frame, type }) => {
   const hasFragment = true;
-  const showOriginal = true;
+  const [showOriginal, setShowOriginal] = useState<boolean>(
+    !!frame.orgSourceFragment
+  );
+
   const { grammar, language } = getPrismLanguage(
     frame.orgFileName || frame.fileName
   );
 
   return (
     <div className='ima-frame'>
-      <FrameHeader frame={frame} isCompile={type === 'compile'} />
+      <FrameHeader
+        frame={frame}
+        isCompile={type === 'compile'}
+        onToggle={() => setShowOriginal(!showOriginal)}
+        showOriginal={showOriginal}
+      />
+
       <div className='ima-frame__code'>
         {hasFragment ? (
           <pre>
@@ -47,13 +56,9 @@ const Frame: FunctionComponent<FrameProps> = ({ frame, type }) => {
             </code>
           </pre>
         ) : (
-          <div className='flex justify-center items-center py-2'>
-            <div className='flex items-center'>
-              {/* <Icon icon='alert' size='xs' className='mr-2 text-rose-400' />{' '} */}
-              <span className='text-xs text-slate-400'>
-                Original source fragment is not available.
-              </span>
-            </div>
+          <div className='ima-frame__error'>
+            <Icon icon='alert' size='xs' className='ima-frame__error-icon' />{' '}
+            Original source fragment is not available.
           </div>
         )}
       </div>

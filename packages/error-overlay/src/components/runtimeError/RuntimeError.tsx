@@ -1,7 +1,6 @@
-import { FunctionComponent, useContext, useEffect } from 'react';
-import { SourceMapConsumer } from 'source-map';
+import { FunctionComponent, useState } from 'react';
 
-import { OverlayContext } from '#/components/OverlayContext';
+import { Frame } from '#/components';
 import { ParsedError } from '#/types';
 
 type RuntimeErrorProps = {
@@ -9,17 +8,39 @@ type RuntimeErrorProps = {
 };
 
 const RuntimeError: FunctionComponent<RuntimeErrorProps> = ({ error }) => {
-  const { publicUrl } = useContext(OverlayContext);
+  const [isCollapsed, setIsCollapsed] = useState<boolean>(
+    error.frames.length > 1
+  );
 
-  useEffect(() => {
-    // Needed to enable source map parsing
-    // @ts-expect-error: Not available in typings
-    SourceMapConsumer.initialize({
-      'lib/mappings.wasm': `${publicUrl}/__error-overlay-static/mappings.wasm`,
-    });
-  }, []);
+  return (
+    <div className='ima-runtime-error'>
+      {error.frames
+        .slice(0, isCollapsed ? 1 : error.frames.length)
+        .map(frame => (
+          <Frame
+            key={`${frame.fileName}${frame.line}${frame.column}`}
+            frame={frame}
+            type={error.type}
+          />
+        ))}
 
-  return <h1>Runtime error - {error.name}</h1>;
+      {isCollapsed && (
+        <div className='ima-runtime-error__expand-wrapper'>
+          <button
+            type='button'
+            className='ima-runtime-error__expand-button'
+            onClick={() => setIsCollapsed(!isCollapsed)}
+          >
+            Show{' '}
+            <span className='ima-runtime-error__number'>
+              {error.frames.length - 1}
+            </span>{' '}
+            hidden stack frames
+          </button>
+        </div>
+      )}
+    </div>
+  );
 };
 
 export default RuntimeError;

@@ -1,28 +1,32 @@
 import clsx from 'clsx';
 import { FunctionComponent } from 'react';
 
+import { Close } from '#/components';
 import { ParsedError } from '#/types';
 
 export type HeaderProps = {
   name: ParsedError['name'];
   message: ParsedError['message'];
   type: ParsedError['type'];
+  onClose: () => void;
 };
 
-const Header: FunctionComponent<HeaderProps> = ({ name, message, type }) => {
+const Header: FunctionComponent<HeaderProps> = ({
+  name,
+  message,
+  type,
+  onClose,
+}) => {
   return (
     <div className='ima-header'>
-      <div
-        className={clsx('ima-header__type', {
-          [`ima-header__type--${type}`]: type,
-        })}
-      >
+      <div className={clsx('ima-header__type', `ima-header__type--${type}`)}>
         {type} error
       </div>
       <div className='ima-header__meta'>
         <span className='ima-header__name'>{name}: </span>
         <span className='ima-header__message'>{message}</span>
       </div>
+      <Close onClose={() => onClose()} />
     </div>
   );
 };

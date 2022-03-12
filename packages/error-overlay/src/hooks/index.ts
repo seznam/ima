@@ -1,3 +1,2 @@
 export * from './useConnect';
-// export * from './useOpenEditor';
-// export * from './useBridgeInterface';
+export * from './useOpenEditor';

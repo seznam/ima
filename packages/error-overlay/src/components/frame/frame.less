@@ -6,7 +6,7 @@
 
   background-color: #334155;
 
-  box-shadow: rgb(30 41 59 / 0.25) 0 10px 15px -3px, rgb(30 41 59 / 0.15) 0 4px 6px -2px;
+  box-shadow: rgb(0 0 0 / 0) 0 0 0 0, rgb(0 0 0 / 0) 0 0 0 0, rgb(51 65 85 / 0.5) 0 10px 15px -3px, rgb(51 65 85 / 0.5) 0 4px 6px -4px;
 
   &__ {
     &code {
@@ -41,6 +41,31 @@
       padding: 0 12px;
 
       color: #94a3b8;
+    }
+
+    &error {
+      display: flex;
+
+      padding: 24px 12px;
+
+      justify-content: center;
+
+      align-items: center;
+
+      font-family: var(--ima-font-mono);
+
+      font-size: 12px;
+      line-height: 16px;
+
+      text-align: center;
+
+      color: #94a3b8;
+    }
+
+    &error-icon {
+      margin-right: 8px;
+
+      color: #fb7185;
     }
   }
 }

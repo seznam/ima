@@ -31,7 +31,7 @@
       position: relative;
       z-index: 10;
 
-      padding: 40px;
+      margin: 40px auto;
 
       animation: fadeInDown 0.15s ease-out;
     }
@@ -41,12 +41,24 @@
 
       border-radius: 3px;
 
-      padding: 35px 30px;
-      max-width: 760px;
+      border-top: 4px solid;
+
+      padding: 30px;
+      max-width: 860px;
 
       background: white;
 
       box-shadow: rgb(149 157 165 / 0.3) 0 8px 24px;
+
+      &-- {
+        &compile {
+          border-color: rgb(254 249 195);
+        }
+
+        &runtime {
+          border-color: var(--ima-color-red-base);
+        }
+      }
     }
   }
 }

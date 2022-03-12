@@ -1,21 +1,24 @@
 .ima-header {
+  position: relative;
+
+  font-family: var(--ima-font-mono);
+
   &__ {
     &type {
       display: inline-block;
 
-      border-radius: 2px;
       padding: 3px 6px;
 
       font-size: 12px;
       font-weight: 500;
 
-      text-transform: uppercase;
+      text-transform: capitalize;
 
       &-- {
         &compile {
-          color: var(--ima-color-dark);
+          color: rgb(161 98 7);
 
-          background-color: var(--ima-color-yellow-base);
+          background-color: rgb(254 249 195);
         }
 
         &runtime {
@@ -27,10 +30,12 @@
     }
 
     &meta {
-      margin: 12px 0 16px;
+      margin: 8px 0 16px;
 
-      font-size: 24px;
-      line-height: 32px;
+      font-size: 20px;
+      line-height: 28px;
+
+      letter-spacing: -1.5px;
       color: var(--ima-color-red-base);
     }
 
