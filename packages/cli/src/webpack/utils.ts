@@ -223,6 +223,9 @@ async function resolveImaConfig(args: ImaCliArgs): Promise<ImaConfig> {
     },
     babel: async config => config,
     postcss: async config => config,
+    experiments: {
+      swc: true,
+    },
   };
 
   const imaConfig = requireImaConfig(args.rootDir);
@@ -232,6 +235,10 @@ async function resolveImaConfig(args: ImaCliArgs): Promise<ImaConfig> {
     watchOptions: {
       ...defaultImaConfig.watchOptions,
       ...imaConfig?.watchOptions,
+    },
+    experiments: {
+      ...defaultImaConfig.experiments,
+      ...imaConfig?.experiments,
     },
   };
 

@@ -31,8 +31,5 @@
     "registry": "https://registry.npmjs.org/",
     "access": "public"
   },
-  "license": "MIT",
-  "dependencies": {
-    "@ima/dev-utils": "^17.10.0"
-  }
+  "license": "MIT"
 }

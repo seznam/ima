@@ -86,7 +86,7 @@ class SourceStorage {
       const loadedSource = await source;
 
       if (!loadedSource || !loadedSource.sourceMap) {
-        return;
+        continue;
       }
 
       loadedSource.sourceMap?.destroy();
@@ -105,7 +105,11 @@ class SourceStorage {
     fileUri: string
   ): Promise<{ source: string; rootDir?: string } | null> {
     try {
-      const response = await fetch(this.getFileSourceUrl(fileUri));
+      const response = await fetch(this.getFileSourceUrl(fileUri), {
+        headers: {
+          'cache-control': 'no-cache',
+        },
+      });
 
       if (!response.ok) {
         return null;
@@ -148,9 +152,11 @@ class SourceStorage {
       }
 
       // Fetch source map
-      const rawSourceMap = (await fetch(
-        this.getFileSourceUrl(sourceMapUrl)
-      ).then(async res => {
+      const rawSourceMap = (await fetch(this.getFileSourceUrl(sourceMapUrl), {
+        headers: {
+          'cache-control': 'no-cache',
+        },
+      }).then(async res => {
         const data = await res.json();
 
         // Either return source from internal source middleware or data from hot.js file
