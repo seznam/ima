@@ -1,4 +1,9 @@
 .ima-overlay {
+  width: 100vw;
+  height: 100vh;
+
+  overflow-y: auto;
+
   @keyframes fadeInDown {
     0% {
       transform: translateY(-5px);
@@ -52,11 +57,11 @@
 
       &-- {
         &compile {
-          border-color: rgb(254 249 195);
+          border-color: #fde68a;
         }
 
         &runtime {
-          border-color: var(--ima-color-red-base);
+          border-color: #ef4444;
         }
       }
     }
