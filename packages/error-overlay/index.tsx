@@ -22,6 +22,7 @@ class ImaErrorOverlay extends HTMLElement {
 
     // Get component attributes
     const publicUrl = this.getAttribute('public-url');
+    const serverError = this.getAttribute('server-error');
 
     // Render App
     ReactDOM.render(
@@ -30,7 +31,7 @@ class ImaErrorOverlay extends HTMLElement {
           publicUrl: publicUrl ?? defaultOverlayContext.publicUrl,
         }}
       >
-        <App />
+        <App serverError={serverError} />
       </OverlayContext.Provider>,
       root
     );

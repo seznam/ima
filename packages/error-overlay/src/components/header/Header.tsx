@@ -9,6 +9,7 @@ export type HeaderProps = {
   message: ParsedError['message'];
   type: ParsedError['type'];
   onClose: () => void;
+  hasCloseButton: boolean;
 };
 
 const Header: FunctionComponent<HeaderProps> = ({
@@ -16,6 +17,7 @@ const Header: FunctionComponent<HeaderProps> = ({
   message,
   type,
   onClose,
+  hasCloseButton,
 }) => {
   return (
     <div className='ima-header'>
@@ -26,7 +28,7 @@ const Header: FunctionComponent<HeaderProps> = ({
         <span className='ima-header__name'>{name}: </span>
         <span className='ima-header__message'>{message}</span>
       </div>
-      <Close onClose={() => onClose()} />
+      {hasCloseButton && <Close onClose={() => onClose()} />}
     </div>
   );
 };

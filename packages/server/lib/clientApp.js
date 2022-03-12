@@ -111,7 +111,7 @@ module.exports = (environment, logger, languageLoader, appFactory) => {
         } else {
           res.send(
             errorTemplate({
-              devServerPublic: process.env.IMA_CLI_DEV_SERVER_PUBLIC,
+              devServerPublic: process.env.IMA_CLI_DEV_SERVER_PUBLIC_URL,
               serverError: {
                 name: err.name,
                 message: err.message,

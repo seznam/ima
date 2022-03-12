@@ -3,8 +3,12 @@ import { FunctionComponent, useCallback } from 'react';
 import { Overlay, CompileError, RuntimeError, Header } from '#/components';
 import { useConnect } from '#/hooks';
 
-const App: FunctionComponent = () => {
-  const { error, setError } = useConnect();
+export interface AppProps {
+  serverError: string | null;
+}
+
+const App: FunctionComponent<AppProps> = ({ serverError }) => {
+  const { error, setError } = useConnect(serverError);
   const handleClose = useCallback(() => setError(null), []);
 
   if (!error) {
@@ -18,6 +22,7 @@ const App: FunctionComponent = () => {
         message={error.message}
         type={error.type}
         onClose={handleClose}
+        hasCloseButton={!serverError}
       />
       {error.type === 'compile' && <CompileError error={error} />}
       {error.type === 'runtime' && <RuntimeError error={error} />}
