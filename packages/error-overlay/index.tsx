@@ -1,6 +1,7 @@
 import ReactDOM from 'react-dom';
 
 import { App } from './src/App';
+import { OverlayContext, defaultOverlayContext } from './src/components';
 
 import globalStyles from './src/globalStyles.less';
 import styles from './src/styles.less';
@@ -28,7 +29,16 @@ class ImaErrorOverlay extends HTMLElement {
     const publicUrl = this.getAttribute('public-url');
 
     // Render App
-    ReactDOM.render(<App publicUrl={publicUrl} />, root);
+    ReactDOM.render(
+      <OverlayContext.Provider
+        value={{
+          publicUrl: publicUrl ?? defaultOverlayContext.publicUrl,
+        }}
+      >
+        <App />
+      </OverlayContext.Provider>,
+      root
+    );
   }
 }
 

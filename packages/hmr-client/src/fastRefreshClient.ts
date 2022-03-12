@@ -32,10 +32,10 @@ const handleRuntimeError = (error: Error) => {
     error.message.startsWith('Module build failed') ||
     error.message.startsWith('Cannot find module')
   ) {
-    return window.__IMA_HMR.emit('error', { error, type: 'runtime' });
+    return window.__IMA_HMR.emit('error', { error, type: 'compile' });
   }
 
-  window.__IMA_HMR.emit('error', { error, type: 'compile' });
+  window.__IMA_HMR.emit('error', { error, type: 'runtime' });
 };
 
 /**

@@ -75,12 +75,22 @@ function createDevServerConfig({
     ctx?.hostname ??
     imaConfig?.devServer?.hostname ??
     'localhost';
-  const publicUrl = args?.publicUrl ?? ctx?.publicUrl ?? imaConfig?.devServer?.publicUrl;
+  let publicUrl =
+    args?.publicUrl ?? ctx?.publicUrl ?? imaConfig?.devServer?.publicUrl;
+
+  // Clean public url (remove last slash)
+  publicUrl = publicUrl ?? `${hostname}:${port}`;
+  publicUrl = publicUrl?.replace(/\/$/, '');
+
+  // Preppend http
+  if (!publicUrl?.startsWith('http')) {
+    publicUrl = `http://${publicUrl}`;
+  }
 
   return {
     port,
     hostname,
-    publicUrl: publicUrl ?? `${hostname}:${port}`,
+    publicUrl,
   };
 }
 

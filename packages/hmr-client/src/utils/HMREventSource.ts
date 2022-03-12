@@ -18,7 +18,9 @@ class HMREventSource {
   private _errorListeners: Map<number, HMRErrorListener>;
   private _listeners: Map<number, HMREventSourceListener>;
 
-  constructor() {
+  public publicUrl: string;
+
+  constructor(publicUrl: string) {
     this._idCounter = 0;
     this._reconnectListeners = new Map();
     this._listeners = new Map();
@@ -28,14 +30,14 @@ class HMREventSource {
     this._messageHandler = this._messageHandler.bind(this);
     this._errorHandler = this._errorHandler.bind(this);
 
+    this.publicUrl = publicUrl;
+
     // Init event source
     this._init();
   }
 
   private _init(reconnect = false): void {
-    this._eventSource = new EventSource(
-      `http://${window.__ima_hmr.options.publicUrl}/__webpack_hmr`
-    );
+    this._eventSource = new EventSource(`${this.publicUrl}/__webpack_hmr`);
 
     this._eventSource.addEventListener('message', this._messageHandler);
     this._eventSource.addEventListener('error', this._errorHandler);
@@ -126,13 +128,4 @@ class HMREventSource {
   }
 }
 
-// Ensure there's only one instance
-function getEventSource(): HMREventSource {
-  if (!window.__ima_hmr?.hmrEventSource) {
-    window.__ima_hmr.hmrEventSource = new HMREventSource();
-  }
-
-  return window.__ima_hmr.hmrEventSource;
-}
-
-export { HMREventSource, getEventSource };
+export { HMREventSource };

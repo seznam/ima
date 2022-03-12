@@ -141,7 +141,7 @@ export default async (
               useHMR &&
                 `@gatsbyjs/webpack-hot-middleware/client?${new URLSearchParams({
                   name,
-                  path: `http://${devServerConfig.publicUrl}/__webpack_hmr`,
+                  path: `${devServerConfig.publicUrl}/__webpack_hmr`,
                   timeout: '3000',
                   reload: 'true',
                   overlay: 'false',

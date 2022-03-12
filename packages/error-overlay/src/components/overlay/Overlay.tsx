@@ -5,17 +5,12 @@ import { ParsedError } from '#/types';
 
 export interface OverlayProps {
   type: ParsedError['type'];
-  onClose: () => void;
 }
 
-const Overlay: FunctionComponent<OverlayProps> = ({
-  children,
-  type,
-  onClose,
-}) => {
+const Overlay: FunctionComponent<OverlayProps> = ({ children, type }) => {
   return (
     <div className='ima-overlay'>
-      <div className='ima-overlay__backdrop' onClick={() => onClose()} />
+      <div className='ima-overlay__backdrop' />
       <div className='ima-overlay__foreground'>
         <div
           className={clsx(
