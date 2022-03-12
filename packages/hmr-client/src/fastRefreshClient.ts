@@ -1,24 +1,22 @@
-import { StatsError } from 'webpack';
+/**
+ * @pmmmwh/react-refresh-webpack-plugin module which connects
+ * the fast refresh handlers to existing IMA_HMR api
+ * already bind to the current window.
+ */
 
-// Connect to already existing ima hmr client API
-const clearRuntimeErrors = () => {
-  if (!window?.__ima_hmr) {
+const clearErrors = () => {
+  if (!window?.__IMA_HMR) {
     return;
   }
 
-  window.__ima_hmr.clearRuntimeErrors();
+  window.__IMA_HMR.emit('clear');
 };
 
-const clearCompileError = () => {
-  if (!window?.__ima_hmr) {
-    return;
-  }
-
-  window.__ima_hmr.clearCompileError();
-};
-
-// TODO (why is it handled through window?)
 const handleRuntimeError = (error: Error) => {
+  if (!window?.__IMA_HMR) {
+    return;
+  }
+
   // Ignore HMR apply errors
   if (error.stack?.includes('Object.hotApply')) {
     return;
@@ -29,19 +27,23 @@ const handleRuntimeError = (error: Error) => {
     return;
   }
 
-  if (!window?.__ima_hmr) {
-    return;
-  }
-
   // Compile error catched in webpack runtime
   if (
     error.message.startsWith('Module build failed') ||
     error.message.startsWith('Cannot find module')
   ) {
-    return window.__ima_hmr.showCompileError(error as StatsError);
+    return window.__IMA_HMR.emit('error', { error, type: 'runtime' });
   }
 
-  window.__ima_hmr.handleRuntimeError(error);
+  window.__IMA_HMR.emit('error', { error, type: 'compile' });
 };
 
-export { handleRuntimeError, clearRuntimeErrors, clearCompileError };
+/**
+ * Exports correspond to the @pmmmwh/react-refresh-webpack-plugin
+ * module interface.
+ */
+export {
+  handleRuntimeError,
+  clearErrors as clearRuntimeErrors,
+  clearErrors as clearCompileError,
+};

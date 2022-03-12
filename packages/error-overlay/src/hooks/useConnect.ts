@@ -15,6 +15,9 @@ function useConnect() {
   const [error, setError] = useState<ParsedError | null>(null);
   const sourceStorage = new SourceStorage(publicUrl);
 
+  // TODO dont update if the error is the same
+  // let prevError = StatsError
+
   // Subscribe to HMR events
   useEffect(() => {
     // Needed to enable source map parsing

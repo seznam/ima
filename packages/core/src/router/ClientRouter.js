@@ -192,9 +192,9 @@ export default class ClientRouter extends AbstractRouter {
           !(data instanceof Error) &&
           $Debug &&
           typeof window !== 'undefined' &&
-          window.__ima_hmr
+          window.__IMA_HMR
         ) {
-          window.__ima_hmr.clearRuntimeErrors();
+          window.__IMA_HMR.emit('clear');
         }
 
         return data;
@@ -212,8 +212,12 @@ export default class ClientRouter extends AbstractRouter {
       console.error(params.error);
 
       // Show error overlay
-      if (typeof window !== 'undefined' && window.__ima_hmr) {
-        window.__ima_hmr.handleRuntimeError(params.error);
+      if (typeof window !== 'undefined' && window.__IMA_HMR) {
+        window.__IMA_HMR.emit('error', {
+          error: params.error,
+          type: 'runtime',
+        });
+
         return params.error;
       }
     }
