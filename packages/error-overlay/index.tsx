@@ -3,15 +3,13 @@ import ReactDOM from 'react-dom';
 import { App } from './src/App';
 import { OverlayContext, defaultOverlayContext } from './src/components';
 
-import globalStyles from './src/globalStyles.less';
-import styles from './src/styles.less';
+import styles from './src/app.less';
 
 /**
  * Custom web component wrapper.
  */
 class ImaErrorOverlay extends HTMLElement {
   connectedCallback() {
-    // Attach to shadow dom
     this.attachShadow({ mode: 'open' });
 
     // Create app root element
@@ -21,9 +19,6 @@ class ImaErrorOverlay extends HTMLElement {
     // Append styles and root
     styles.use({ target: this.shadowRoot });
     this.shadowRoot?.appendChild(root);
-
-    // Init global styles
-    globalStyles.use();
 
     // Get component attributes
     const publicUrl = this.getAttribute('public-url');

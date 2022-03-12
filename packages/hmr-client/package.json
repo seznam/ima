@@ -34,10 +34,5 @@
   "license": "MIT",
   "dependencies": {
     "@ima/dev-utils": "^17.10.0"
-  },
-  "devDependencies": {
-    "@types/lodash.debounce": "^4.0.6",
-    "lodash.debounce": "^4.0.8",
-    "rollup-plugin-html-string": "^1.0.1"
   }
 }

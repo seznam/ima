@@ -29,7 +29,7 @@ overlayJs.onload = () => {
   // Create and append the custom <ima-error-overlay /> element
   const imaErrorOverlay = document.createElement('ima-error-overlay');
   imaErrorOverlay.setAttribute('public-url', options.publicUrl);
-  document.body.append(imaErrorOverlay);
+  document.body.appendChild(imaErrorOverlay);
 
   // Connect client to HMR Event source
   eventSource.addListener('message', (data: HMRMessageData) => {
@@ -55,15 +55,16 @@ overlayJs.onload = () => {
 
   // Show invalid indicator to indicate lost connection
   eventSource.addListener('error', () => {
+    console.log('ERROR');
+
     hmrIndicator.create('invalid');
   });
 
   // Reload page to re-initialize disconnected hmr
   eventSource.addListener('reconnect', () => {
-    hmrIndicator.destroy();
     location.reload();
   });
 };
 
 // Add overlay source files to the document
-document.body.append(overlayJs);
+document.body.appendChild(overlayJs);
