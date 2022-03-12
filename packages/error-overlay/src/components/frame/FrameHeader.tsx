@@ -9,6 +9,7 @@ export type FrameHeaderProps = {
   frame: StackFrame;
   isCompile: boolean;
   showOriginal: boolean;
+  hasFragment: boolean;
   onToggle: () => void;
 };
 
@@ -16,6 +17,7 @@ const FrameHeader: FunctionComponent<FrameHeaderProps> = ({
   frame,
   isCompile = true,
   showOriginal,
+  hasFragment,
   onToggle,
 }) => {
   const { isLoading, openEditor } = useOpenEditor();
@@ -30,6 +32,13 @@ const FrameHeader: FunctionComponent<FrameHeaderProps> = ({
       <div className='ima-frame-header__tab'>
         <div className='ima-frame-header__file-info'>
           <div className='ima-frame-header__method-name'>
+            {!hasFragment && (
+              <Icon
+                icon='alert'
+                size='xs'
+                className='ima-frame-header__error-icon'
+              />
+            )}
             {isCompile ? frame.getPrettyFileName() : frame.getFunctionName()}
           </div>
           {fileUriParts.length > 0 && (
@@ -62,7 +71,6 @@ const FrameHeader: FunctionComponent<FrameHeaderProps> = ({
           disabled={isLoading}
           color='light'
         >
-          {/* <Icon className={clsx({ 'animate-bounce': isLoading })} icon='edit' /> */}
           <Icon size='md' icon='edit' />
         </button>
       </div>

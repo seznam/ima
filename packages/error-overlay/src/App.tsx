@@ -1,4 +1,4 @@
-import { FunctionComponent, useCallback, useState } from 'react';
+import { FunctionComponent, useCallback } from 'react';
 
 import {
   defaultOverlayContext,
@@ -9,20 +9,14 @@ import {
   Header,
 } from '#/components';
 import { useConnect } from '#/hooks';
-import { TestCompileError, TestRuntimeError } from '#/testError';
 
 export interface AppProps {
   publicUrl: string | null;
 }
 
 const App: FunctionComponent<AppProps> = ({ publicUrl }) => {
-  const data = useConnect();
-  console.log(data);
-
+  const { error, setError } = useConnect();
   const handleClose = useCallback(() => setError(null), []);
-  const [error, setError] = useState<
-    typeof TestCompileError | typeof TestRuntimeError | null
-  >(TestRuntimeError);
 
   if (!error) {
     return null;
@@ -30,7 +24,10 @@ const App: FunctionComponent<AppProps> = ({ publicUrl }) => {
 
   return (
     <OverlayContext.Provider
-      value={{ publicUrl: publicUrl ?? defaultOverlayContext.publicUrl }}
+      value={{
+        publicUrl:
+          publicUrl?.replace(/\/$/, '') ?? defaultOverlayContext.publicUrl,
+      }}
     >
       <Overlay type={error.type} onClose={handleClose}>
         <Header

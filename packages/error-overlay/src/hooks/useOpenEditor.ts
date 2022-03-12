@@ -32,7 +32,7 @@ function useOpenEditor() {
         column && `column=${column}`,
       ].filter(Boolean);
 
-      fetch(`${publicUrl}__open-editor?${queryParams.join('&')}`).finally(
+      fetch(`${publicUrl}/__open-editor?${queryParams.join('&')}`).finally(
         () => {
           setIsLoading(false);
         }

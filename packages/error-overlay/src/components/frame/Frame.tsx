@@ -13,10 +13,15 @@ export type FrameProps = {
 };
 
 const Frame: FunctionComponent<FrameProps> = ({ frame, type }) => {
-  const hasFragment = true;
   const [showOriginal, setShowOriginal] = useState<boolean>(
     !!frame.orgSourceFragment
   );
+
+  const sourceFragment = showOriginal
+    ? frame.orgSourceFragment
+    : frame.sourceFragment;
+  const hasFragment =
+    Array.isArray(sourceFragment) && sourceFragment.length > 0;
 
   const { grammar, language } = getPrismLanguage(
     frame.orgFileName || frame.fileName
@@ -29,16 +34,14 @@ const Frame: FunctionComponent<FrameProps> = ({ frame, type }) => {
         isCompile={type === 'compile'}
         onToggle={() => setShowOriginal(!showOriginal)}
         showOriginal={showOriginal}
+        hasFragment={hasFragment}
       />
 
       <div className='ima-frame__code'>
         {hasFragment ? (
           <pre>
             <code>
-              {(showOriginal
-                ? frame.orgSourceFragment
-                : frame.sourceFragment
-              )?.map(line => (
+              {sourceFragment.map(line => (
                 <div
                   key={line.line}
                   className={clsx('ima-frame__line', {

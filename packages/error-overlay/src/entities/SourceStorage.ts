@@ -1,8 +1,6 @@
 import { extractSourceMappingUrl } from '@ima/dev-utils/dist/sourceMapUtils';
 import { RawSourceMap, SourceMapConsumer } from 'source-map';
 
-import { getDevServerBaseUrl } from '#/utils';
-
 interface SourceStorageEntry {
   rootDir?: string;
   fileContents: string | null;
@@ -19,6 +17,12 @@ class SourceStorage {
     string,
     Promise<SourceStorageEntry | null>
   >();
+
+  public publicUrl: string;
+
+  constructor(publicUrl: string) {
+    this.publicUrl = publicUrl;
+  }
 
   /**
    * Fetch file contents and it's source map. This function aggregates multiple requests
@@ -69,9 +73,9 @@ class SourceStorage {
       return fileUri;
     }
 
-    return `${getDevServerBaseUrl()}/__get-internal-source?fileName=${encodeURIComponent(
-      fileUri
-    )}`;
+    return `${
+      this.publicUrl
+    }/__get-internal-source?fileName=${encodeURIComponent(fileUri)}`;
   }
 
   /**
