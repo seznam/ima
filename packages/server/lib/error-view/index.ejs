@@ -28,7 +28,7 @@
         }
 
         const debouncedReload = debounce(() => window.location.reload(), 100);
-        const evtSource = new EventSource('http://<%= devServerPublic %>/__webpack_hmr');
+        const evtSource = new EventSource('<%= devServerPublic %>/__webpack_hmr');
 
         evtSource.addEventListener('message', () => {
           if (event.data && typeof event.data === 'string' && event.data.includes('action')) {

@@ -16,6 +16,28 @@
     }
   }
 
+  @keyframes fadeIn {
+    0% {
+      opacity: 0;
+    }
+
+    100% {
+      opacity: 1;
+    }
+  }
+
+  &-- {
+    &animate {
+      .ima-overlay__backdrop {
+        animation: fadeIn 0.15s ease-out;
+      }
+
+      .ima-overlay__foreground {
+        animation: fadeInDown 0.15s ease-out;
+      }
+    }
+  }
+
   &__ {
     &backdrop {
       position: absolute;
@@ -37,8 +59,6 @@
       z-index: 10;
 
       margin: 40px auto;
-
-      animation: fadeInDown 0.15s ease-out;
     }
 
     &content {

@@ -10,9 +10,6 @@
     "build": "../../node_modules/.bin/tsc",
     "dev": "../../node_modules/.bin/tsc --watch"
   },
-  "files": [
-    "./dist"
-  ],
   "author": "Jan Šimeček <jan.simecek@firma.seznam.cz>",
   "contributors": [],
   "repository": {

@@ -5,11 +5,20 @@ import { ParsedError } from '#/types';
 
 export interface OverlayProps {
   type: ParsedError['type'];
+  animate?: boolean;
 }
 
-const Overlay: FunctionComponent<OverlayProps> = ({ children, type }) => {
+const Overlay: FunctionComponent<OverlayProps> = ({
+  children,
+  type,
+  animate = true,
+}) => {
   return (
-    <div className='ima-overlay'>
+    <div
+      className={clsx('ima-overlay', {
+        'ima-overlay--animate': animate,
+      })}
+    >
       <div className='ima-overlay__backdrop' />
       <div className='ima-overlay__foreground'>
         <div

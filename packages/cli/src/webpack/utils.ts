@@ -174,6 +174,7 @@ function createCacheKey(
     JSON.stringify({
       experimentsSwc: imaConfig.experiments?.swc,
       experimentsSwcMinimizer: imaConfig.experiments?.swcMinimizer,
+      experimentsNativeCss: imaConfig.experiments?.nativeCss,
       command: ctx.command,
       forceSPA: ctx.forceSPA,
       profile: ctx.profile,

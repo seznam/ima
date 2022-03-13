@@ -6,6 +6,7 @@ import ReactRefreshWebpackPlugin from '@pmmmwh/react-refresh-webpack-plugin';
 import CompressionPlugin from 'compression-webpack-plugin';
 import CopyPlugin from 'copy-webpack-plugin';
 import CssMinimizerPlugin from 'css-minimizer-webpack-plugin';
+import MiniCssExtractPlugin from 'mini-css-extract-plugin';
 import miniSVGDataURI from 'mini-svg-data-uri';
 import TerserPlugin from 'terser-webpack-plugin';
 import webpack, {
@@ -36,7 +37,7 @@ export default async (
   ctx: ImaConfigurationContext,
   imaConfig: ImaConfig
 ): Promise<Configuration> => {
-  const { rootDir, isServer, isEsVersion, name } = ctx;
+  const { rootDir, isServer, isEsVersion, name, processCss } = ctx;
 
   // Define helper variables derived from context
   const isDevEnv = ctx.environment === 'development';
@@ -72,7 +73,31 @@ export default async (
   const getStyleLoaders = async (
     useLessLoader = false
   ): Promise<RuleSetUseItem[]> => {
+    if (!processCss) {
+      return ['null-loader'];
+    }
+
     return [
+      ...(!imaConfig.experiments?.nativeCss
+        ? [
+            processCss && {
+              loader: MiniCssExtractPlugin.loader,
+            },
+            {
+              loader: require.resolve('css-loader'),
+              options: {
+                modules: {
+                  auto: true,
+                  exportOnlyLocals: !processCss,
+                  localIdentName: isDevEnv
+                    ? '[path][name]__[local]--[hash:base64:5]'
+                    : '[hash:base64]',
+                },
+                sourceMap: useSourceMaps,
+              },
+            },
+          ]
+        : []),
       {
         loader: require.resolve('postcss-loader'),
         options: await imaConfig.postcss(
@@ -119,6 +144,7 @@ export default async (
 
   return {
     name,
+    dependencies: [],
     target: isServer
       ? 'node16'
       : isEsVersion
@@ -500,19 +526,19 @@ export default async (
             /**
              * CSS & LESS loaders, both have the exact same capabilities
              */
-            ...(ctx.processCss
+            ...(processCss
               ? [
                   {
                     test: /\.less$/,
-                    type: 'css',
                     sideEffects: true,
                     use: await getStyleLoaders(true),
+                    ...(imaConfig.experiments?.nativeCss && { type: 'css' }),
                   },
                   {
                     test: /\.css$/,
-                    type: 'css',
                     sideEffects: true,
                     use: await getStyleLoaders(),
+                    ...(imaConfig.experiments?.nativeCss && { type: 'css' }),
                   },
                 ]
               : []),
@@ -560,6 +586,16 @@ export default async (
           ]
         : // Client-specific plugins
           [
+            processCss &&
+              new MiniCssExtractPlugin({
+                filename: ({ chunk }) =>
+                  `static/css/${chunk?.name === name ? 'app' : '[name]'}${
+                    !isDevEnv ? '.min' : ''
+                  }.css`,
+                ignoreOrder: true,
+                chunkFilename: `static/css/[id]${!isDevEnv ? '.min' : ''}.css`,
+              }),
+
             // Enables compression for assets in production build
             ...(ctx.command === 'build'
               ? imaConfig.compression.map(
@@ -606,7 +642,7 @@ export default async (
 
     // Enable native css support (this replaces mini-css-extract-plugin and css-loader)
     experiments: {
-      css: true,
+      css: !!imaConfig.experiments?.nativeCss,
     },
   };
 };

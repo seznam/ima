@@ -16,7 +16,7 @@ const App: FunctionComponent<AppProps> = ({ serverError }) => {
   }
 
   return (
-    <Overlay type={error.type}>
+    <Overlay type={error.type} animate={!serverError}>
       <Header
         name={error.name}
         message={error.message}
