@@ -106,12 +106,6 @@ function createImaApp(dirName, exampleName) {
     cwd: appRoot,
   });
 
-  // Init git repo
-  if (commandExistsSync('git')) {
-    info('Initializing git repository...', true);
-    execa.sync('git', ['init'], { cwd: appRoot });
-  }
-
   // Show final info
   info(`${chalk.bold('Success!')} Created ${chalk.cyan(
     projName

@@ -24,7 +24,9 @@ if (!$IMA.Test) {
 }
 
 if (module.hot) {
-  module.hot.accept();
+  module.hot.accept((err, { module }) => {
+    module.hot.accept();
+  });
 }
 
 export { getInitialAppConfigFunctions, ima };

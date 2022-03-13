@@ -55,8 +55,6 @@ overlayJs.onload = () => {
 
   // Show invalid indicator to indicate lost connection
   eventSource.addListener('error', () => {
-    console.log('ERROR');
-
     hmrIndicator.create('invalid');
   });
 
