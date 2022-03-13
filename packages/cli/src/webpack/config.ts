@@ -73,12 +73,8 @@ export default async (
   const getStyleLoaders = async (
     useLessLoader = false
   ): Promise<RuleSetUseItem[]> => {
-    if (!processCss) {
-      return ['null-loader'];
-    }
-
     return [
-      ...(!imaConfig.experiments?.nativeCss
+      ...(!imaConfig.experiments?.css
         ? [
             processCss && {
               loader: MiniCssExtractPlugin.loader,
@@ -526,22 +522,18 @@ export default async (
             /**
              * CSS & LESS loaders, both have the exact same capabilities
              */
-            ...(processCss
-              ? [
-                  {
-                    test: /\.less$/,
-                    sideEffects: true,
-                    use: await getStyleLoaders(true),
-                    ...(imaConfig.experiments?.nativeCss && { type: 'css' }),
-                  },
-                  {
-                    test: /\.css$/,
-                    sideEffects: true,
-                    use: await getStyleLoaders(),
-                    ...(imaConfig.experiments?.nativeCss && { type: 'css' }),
-                  },
-                ]
-              : []),
+            {
+              test: /\.less$/,
+              sideEffects: true,
+              use: await getStyleLoaders(true),
+              ...(imaConfig.experiments?.css && { type: 'css' }),
+            },
+            {
+              test: /\.css$/,
+              sideEffects: true,
+              use: await getStyleLoaders(),
+              ...(imaConfig.experiments?.css && { type: 'css' }),
+            },
             /**
              * Fallback loader for all modules, that don't match any
              * of the above defined rules. This should be defined last.
@@ -642,7 +634,7 @@ export default async (
 
     // Enable native css support (this replaces mini-css-extract-plugin and css-loader)
     experiments: {
-      css: !!imaConfig.experiments?.nativeCss,
+      css: !!imaConfig.experiments?.css,
     },
   };
 };
