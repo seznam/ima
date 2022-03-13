@@ -1,10 +1,19 @@
 #!/usr/bin/env node
+/* eslint-disable no-console */
 /* eslint-disable no-unused-vars */
 
 /**
- * Utility script to sync multiple ima packages into test application
- * used mainly for IMA cli debugging and development. Can't be deleted
- * when no longer needed.
+ * Utility script which generates `hello` ima application template
+ * from current version of source files (local) using locally build
+ * and packed npm packages (e.g. all packages are manually packed and installed).
+ * This is usefull during development if you want to generate new ima app
+ * with the current package versions and optionally watch and sync them
+ * to the destination app directory.
+ *
+ * @example
+ * ./utils/dev-app/devApp.js [path to ima hello template]
+ * ./utils/dev-app/devApp.js [path to ima hello template] --watch=cli hmr-client server
+ * ./utils/dev-app/devApp.js [path to ima hello template] --build=cli hmr-client server
  */
 
 /* eslint-disable @typescript-eslint/no-var-requires */
@@ -17,7 +26,6 @@ const path = require('path');
 const chalk = require('chalk');
 const chokidar = require('chokidar');
 const fsExtra = require('fs-extra');
-const yargs = require('yargs');
 
 function shell(cmd, cwd = process.cwd()) {
   console.log(chalk.bold.cyan('Running:'), cmd);
@@ -114,7 +122,7 @@ function initApp(destFolder, pkgDirs) {
     shell(
       `${path.resolve(
         __dirname,
-        '../../create-ima-app/bin/create-ima-app.js'
+        '../../packages/create-ima-app/bin/create-ima-app.js'
       )} ${destFolder} --example=hello`
     );
 
@@ -209,24 +217,20 @@ function copyChanges(destFolder, pkgDirs) {
 }
 
 function main() {
-  yargs.array('watch').argv;
-  yargs.array('build').argv;
-  const parsedArgs = yargs.argv;
-
-  if (parsedArgs._.length === 0) {
+  if (process.argv.length <= 2) {
     throw new Error(
       'Path to a destination app not provided in the first argument.'
     );
   }
 
-  const destFolder = path.resolve(parsedArgs._[0]);
+  const destFolder = path.resolve(process.argv[2]);
   const pkgDirs = [
-    path.resolve(__dirname, '..'),
-    path.resolve(__dirname, '../../core'),
-    path.resolve(__dirname, '../../server'),
-    path.resolve(__dirname, '../../error-overlay'),
-    path.resolve(__dirname, '../../hmr-client'),
-    path.resolve(__dirname, '../../dev-utils'),
+    path.resolve(__dirname, '../../packages/cli/'),
+    path.resolve(__dirname, '../../packages/core'),
+    path.resolve(__dirname, '../../packages/server'),
+    path.resolve(__dirname, '../../packages/error-overlay'),
+    path.resolve(__dirname, '../../packages/hmr-client'),
+    path.resolve(__dirname, '../../packages/dev-utils'),
   ];
 
   // Init app
@@ -243,14 +247,20 @@ function main() {
     );
   };
 
+  // Parse watch and build params
+  const pkgFilters = process.argv
+    .slice(3)
+    .filter(v => v !== '--')
+    .map(arg => arg.replace(/--(watch|build)=/, ''));
+
   // Copy and watch changes
-  if (Array.isArray(parsedArgs.watch)) {
-    watchChanges(destFolder, pkgFilter(pkgDirs, parsedArgs.watch));
+  if (process.argv.find(arg => arg.startsWith('--watch'))) {
+    watchChanges(destFolder, pkgFilter(pkgDirs, pkgFilters));
   }
 
   // Build and copy changes only
-  if (Array.isArray(parsedArgs.build)) {
-    copyChanges(destFolder, pkgFilter(pkgDirs, parsedArgs.build));
+  if (process.argv.find(arg => arg.startsWith('--build'))) {
+    copyChanges(destFolder, pkgFilter(pkgDirs, pkgFilters));
   }
 }
 

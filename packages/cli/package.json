@@ -15,8 +15,7 @@
   "types": "./dist/index.d.ts",
   "scripts": {
     "build": "../../node_modules/.bin/tsc",
-    "dev": "../../node_modules/.bin/tsc --watch",
-    "dev:app": "./tools/devApp.js"
+    "dev": "../../node_modules/.bin/tsc --watch"
   },
   "author": "Miroslav Jancarik <miroslav.jancarik@firma.seznam.cz>",
   "contributors": [],
@@ -87,8 +86,7 @@
     "@types/webpack-bundle-analyzer": "^4.4.1",
     "@types/webpack-dev-middleware": "^5.3.0",
     "@types/webpack-hot-middleware": "^2.25.6",
-    "@types/yargs": "^17.0.9",
-    "chokidar": "^3.5.3"
+    "@types/yargs": "^17.0.9"
   },
   "peerDependencies": {
     "@ima/server": "*"
