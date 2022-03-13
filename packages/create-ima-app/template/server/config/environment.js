@@ -1,5 +1,4 @@
-let versionCoef = 1000 * 60;
-let version = Math.round(new Date().getTime() / versionCoef).toString(36);
+const pkgJson = require('../../package.json');
 
 module.exports = (() => {
   return {
@@ -7,7 +6,7 @@ module.exports = (() => {
     // of other environments
     prod: {
       $Debug: false, // Debug mode
-      $Version: version, // Current server version. Version value is used
+      $Version: pkgJson.version, // Current server version. Version value is used
       // for static assets timestamp.
       /*
        * Key-value pairs used for configuring the languages used with

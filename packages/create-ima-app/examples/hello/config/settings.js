@@ -1,7 +1,11 @@
 import DocumentView from 'app/document/DocumentView';
 
 export default (ns, oc, config) => {
-  let versionStamp = `?version=${config.$Version}`;
+  const versionStamp = `?version=${
+    config.$Env === 'dev'
+      ? (+new Date() + Math.random() * 100).toString(32)
+      : config.$Version
+  }`;
 
   return {
     prod: {
