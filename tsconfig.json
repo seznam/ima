@@ -7,6 +7,7 @@
       "typings",
       "node_modules/@types"
     ],
+    "outDir": "dist",
     "declaration": true,
     "noEmitOnError": true,
     "allowJs": true,

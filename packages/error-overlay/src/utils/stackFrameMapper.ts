@@ -1,10 +1,10 @@
+import { CompileError } from '@ima/dev-utils/dist/compileErrorParser';
 import { createSourceFragment } from '@ima/dev-utils/dist/sourceFragment';
 import * as stackTraceParser from 'stacktrace-parser';
 
-import { StackFrame, SourceStorage } from '#/entities';
+import { SourceStorage, StackFrame } from '#/entities';
 
-const IgnoredFunctionNames = ['processTicksAndRejections'];
-const sourceStorage = new SourceStorage();
+const IGNORED_FUNCTION_NAMES = ['processTicksAndRejections'];
 
 /**
  * StackFrame initialized helper. Takes care of properly
@@ -17,7 +17,8 @@ const sourceStorage = new SourceStorage();
  */
 async function createStackFrame(
   frame: stackTraceParser.StackFrame,
-  contextLines: number
+  contextLines: number,
+  sourceStorage: SourceStorage
 ): Promise<StackFrame> {
   // Create basic stack frame from parsed trace line
   const stackFrame = new StackFrame({
@@ -87,10 +88,11 @@ async function createStackFrame(
  * @returns {Promise<StackFrame[]>} Array of mapped StackFrame entity instances.
  */
 async function mapStackFramesToOriginal(
-  stack: string | undefined
-): Promise<StackFrame[]> {
+  stack: string | undefined,
+  sourceStorage: SourceStorage
+): Promise<StackFrame[] | null> {
   if (!stack) {
-    return [];
+    return null;
   }
 
   const parsedStack = stackTraceParser.parse(stack);
@@ -103,18 +105,17 @@ async function mapStackFramesToOriginal(
 
         if (
           frame.methodName &&
-          IgnoredFunctionNames.includes(frame.methodName)
+          IGNORED_FUNCTION_NAMES.includes(frame.methodName)
         ) {
           return false;
         }
 
         return true;
       })
-      .map(async (frame, index) => createStackFrame(frame, index === 0 ? 8 : 4))
+      .map(async (frame, index) =>
+        createStackFrame(frame, index === 0 ? 8 : 4, sourceStorage)
+      )
   );
-
-  // Cleanup wasm allocated sourcemaps
-  sourceStorage.cleanup();
 
   return mappedFrames;
 }
@@ -130,14 +131,14 @@ async function mapStackFramesToOriginal(
  * @returns {Promise<StackFrame | null>} Mapped StackFrame instance.
  */
 async function mapCompileStackFrame(
-  fileUri?: string,
-  line?: number,
-  column?: number
+  compileError: CompileError,
+  sourceStorage: SourceStorage
 ): Promise<StackFrame | null> {
-  if (!fileUri) {
+  if (!compileError.fileUri) {
     return null;
   }
 
+  const { fileUri, line, column } = compileError;
   const { rootDir, fileContents } = (await sourceStorage.get(fileUri)) ?? {};
 
   // Compile errors are parsed directly on original
@@ -150,9 +151,6 @@ async function mapCompileStackFrame(
     orgLine: line,
     orgColumn: column,
   });
-
-  // Cleanup wasm allocated sourcemaps
-  sourceStorage.cleanup();
 
   return mappedFrame;
 }

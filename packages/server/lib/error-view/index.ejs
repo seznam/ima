@@ -4,21 +4,15 @@
   <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, shrink-to-fit=no">
-    <link rel="stylesheet" href="http://<%= devServerPublic %>/__error-overlay-static/overlay.css">
     <title>IMA.js - Server Error</title>
   </head>
 
   <body>
-    <div id="root"></div>
-    <script>
-      window.__ima_server_error = <%- JSON.stringify(serverError) %>;
-      window.__ima_hmr = {
-        options: {
-          public: '<%= devServerPublic %>'
-        }
-      };
-      </script>
-    <script src="http://<%= devServerPublic %>/__error-overlay-static/overlay.js"></script>
+    <script src="<%= devServerPublic %>/__error-overlay-static/overlay.js"></script>
+    <ima-error-overlay
+      public-url="<%= devServerPublic %>"
+      server-error="<%= JSON.stringify(serverError) %>"
+    ></ima-error-overlay>
     <script>
       (() => {
         function debounce(func, timeout) {
@@ -33,7 +27,7 @@
         }
 
         const debouncedReload = debounce(() => window.location.reload(), 100);
-        const evtSource = new EventSource('http://<%= devServerPublic %>/__webpack_hmr');
+        const evtSource = new EventSource('<%= devServerPublic %>/__webpack_hmr');
 
         evtSource.addEventListener('message', () => {
           if (event.data && typeof event.data === 'string' && event.data.includes('action')) {

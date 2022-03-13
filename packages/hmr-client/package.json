@@ -28,10 +28,5 @@
     "registry": "https://registry.npmjs.org/",
     "access": "public"
   },
-  "license": "MIT",
-  "devDependencies": {
-    "@types/lodash.debounce": "^4.0.6",
-    "lodash.debounce": "^4.0.8",
-    "rollup-plugin-html-string": "^1.0.1"
-  }
+  "license": "MIT"
 }

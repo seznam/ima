@@ -1,8 +1,6 @@
-import { FunctionComponent } from 'preact';
+import { FunctionComponent } from 'react';
 
-import { IconComponentProps } from '#/components/icon/icons';
-
-const CrossIcon: FunctionComponent<IconComponentProps> = props => {
+const CrossIcon: FunctionComponent<React.SVGProps<SVGSVGElement>> = props => {
   return (
     <svg
       xmlns='http://www.w3.org/2000/svg'

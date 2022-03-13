@@ -61,10 +61,8 @@ function renderApp(req, res, next) {
     .requestHandler(req, res)
     .then(
       response => {
-        // logger.info('Request handled successfully', { response: { status: number, content: string, SPA: boolean=, error: Error= } });
-
         if (response.error) {
-          logger.error('App error', {
+          logger.error('Application server error', {
             error: errorToJSON(response.error),
           });
         }

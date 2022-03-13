@@ -13,7 +13,7 @@ declare global {
   namespace NodeJS {
     interface ProcessEnv {
       IMA_CLI_FORCE_SPA?: string;
-      IMA_CLI_DEV_SERVER_PUBLIC?: string;
+      IMA_CLI_DEV_SERVER_PUBLIC_URL?: string;
     }
   }
 }
@@ -41,7 +41,7 @@ export interface ImaCliArgs {
   profile?: boolean;
   port?: number;
   hostname?: string;
-  public?: string;
+  publicUrl?: string;
   environment: 'development' | 'production' | string;
 }
 
@@ -143,7 +143,7 @@ export type ImaConfig = {
   devServer?: {
     port?: number; // [default=3101]
     hostname?: string; // [default=localhost]
-    public?: string; // public url used to access static files [default=localhost:3101]
+    publicUrl?: string; // public url used to access static files [default=localhost:3101]
   };
 
   /**
@@ -188,8 +188,9 @@ export type ImaConfig = {
    * Some of these may find a way to default configuration in future versions of IMA.js.
    */
   experiments?: {
-    swc?: boolean;
-    swcMinimizer?: boolean;
+    swc?: boolean; // Enables swc instead of babel (true by default)
+    swcMinimizer?: boolean; // Enables swc minimizer
+    css?: boolean; // Enables webpack native CSS support
   };
 };
 

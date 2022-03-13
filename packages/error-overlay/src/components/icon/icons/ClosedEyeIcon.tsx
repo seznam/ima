@@ -1,8 +1,8 @@
-import { FunctionComponent } from 'preact';
+import React, { FunctionComponent } from 'react';
 
-import { IconComponentProps } from '#/components/icon/icons';
-
-const ClosedEyeIcon: FunctionComponent<IconComponentProps> = props => {
+const ClosedEyeIcon: FunctionComponent<
+  React.SVGProps<SVGSVGElement>
+> = props => {
   return (
     <svg
       xmlns='http://www.w3.org/2000/svg'

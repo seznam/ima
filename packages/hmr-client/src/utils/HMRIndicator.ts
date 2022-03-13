@@ -1,42 +1,34 @@
-import hmrIndicatorHtml from '../public/hmrIndicator.html';
+import './HMRIndicatorElement';
 
-const HMR_INDICATOR_ID = '__ima-hmr-indicator';
+const HMR_INDICATOR_ID = 'ima-hmr-indicator';
 
 class HMRIndicator {
   private destroyTimeout: number | undefined;
 
-  get indicator(): HTMLDivElement | null {
-    const div = document.getElementById(HMR_INDICATOR_ID);
+  get indicator(): HTMLElement | null {
+    const indicatorElement = document.getElementById(HMR_INDICATOR_ID);
 
-    if (!div) {
+    if (!indicatorElement) {
       return null;
     }
 
-    return div as HTMLDivElement;
+    return indicatorElement as HTMLElement;
   }
 
   create(type: 'invalid' | 'loading' = 'loading'): void {
+    // Update existing indicator state
     if (this.indicator) {
-      // Update class name
-      this.indicator.className = `${HMR_INDICATOR_ID}--${type}`;
+      this.indicator.setAttribute('state', type);
 
       return;
     }
 
-    const indicatorDiv = document.createElement('div');
-
-    indicatorDiv.id = HMR_INDICATOR_ID;
-    indicatorDiv.innerHTML = hmrIndicatorHtml;
-    indicatorDiv.className = `${HMR_INDICATOR_ID}--${type}`;
-    indicatorDiv.style.position = 'fixed';
-    indicatorDiv.style.zIndex = '2147483647';
-    indicatorDiv.style.bottom = '15px';
-    indicatorDiv.style.right = '15px';
-    indicatorDiv.style.transition = 'opacity 0.15s ease-out';
-    indicatorDiv.style.opacity = '1';
+    const indicatorElement = document.createElement('ima-hmr-indicator');
+    indicatorElement.setAttribute('id', HMR_INDICATOR_ID);
+    indicatorElement.setAttribute('state', type);
 
     // Append to body
-    document.body.appendChild(indicatorDiv);
+    document.body.appendChild(indicatorElement);
   }
 
   destroy(): void {

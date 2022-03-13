@@ -1,0 +1,89 @@
+.ima-overlay {
+  width: 100vw;
+  height: 100vh;
+
+  overflow-y: auto;
+
+  @keyframes fadeInDown {
+    0% {
+      transform: translateY(-5px);
+      opacity: 0;
+    }
+
+    100% {
+      transform: translateY(0);
+      opacity: 1;
+    }
+  }
+
+  @keyframes fadeIn {
+    0% {
+      opacity: 0;
+    }
+
+    100% {
+      opacity: 1;
+    }
+  }
+
+  &-- {
+    &animate {
+      .ima-overlay__backdrop {
+        animation: fadeIn 0.15s ease-out;
+      }
+
+      .ima-overlay__foreground {
+        animation: fadeInDown 0.15s ease-out;
+      }
+    }
+  }
+
+  &__ {
+    &backdrop {
+      position: absolute;
+      left: 0;
+
+      top: 0;
+      z-index: 1;
+
+      width: 100vw;
+      height: 100%;
+
+      background: rgb(0 0 0 / 0.1);
+
+      backdrop-filter: blur(12px);
+    }
+
+    &foreground {
+      position: relative;
+      z-index: 10;
+
+      margin: 40px auto;
+    }
+
+    &content {
+      margin: 0 auto;
+
+      border-radius: 3px;
+
+      border-top: 4px solid;
+
+      padding: 30px;
+      max-width: 860px;
+
+      background: white;
+
+      box-shadow: rgb(149 157 165 / 0.3) 0 8px 24px;
+
+      &-- {
+        &compile {
+          border-color: #fde68a;
+        }
+
+        &runtime {
+          border-color: #ef4444;
+        }
+      }
+    }
+  }
+}

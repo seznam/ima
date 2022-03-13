@@ -1,8 +1,6 @@
 import { extractSourceMappingUrl } from '@ima/dev-utils/dist/sourceMapUtils';
 import { RawSourceMap, SourceMapConsumer } from 'source-map';
 
-import { getDevServerBaseUrl } from '#/utils';
-
 interface SourceStorageEntry {
   rootDir?: string;
   fileContents: string | null;
@@ -19,6 +17,12 @@ class SourceStorage {
     string,
     Promise<SourceStorageEntry | null>
   >();
+
+  public publicUrl: string;
+
+  constructor(publicUrl: string) {
+    this.publicUrl = publicUrl;
+  }
 
   /**
    * Fetch file contents and it's source map. This function aggregates multiple requests
@@ -69,9 +73,9 @@ class SourceStorage {
       return fileUri;
     }
 
-    return `${getDevServerBaseUrl()}/__get-internal-source?fileName=${encodeURIComponent(
-      fileUri
-    )}`;
+    return `${
+      this.publicUrl
+    }/__get-internal-source?fileName=${encodeURIComponent(fileUri)}`;
   }
 
   /**
@@ -82,7 +86,7 @@ class SourceStorage {
       const loadedSource = await source;
 
       if (!loadedSource || !loadedSource.sourceMap) {
-        return;
+        continue;
       }
 
       loadedSource.sourceMap?.destroy();
@@ -101,7 +105,11 @@ class SourceStorage {
     fileUri: string
   ): Promise<{ source: string; rootDir?: string } | null> {
     try {
-      const response = await fetch(this.getFileSourceUrl(fileUri));
+      const response = await fetch(this.getFileSourceUrl(fileUri), {
+        headers: {
+          'cache-control': 'no-cache',
+        },
+      });
 
       if (!response.ok) {
         return null;
@@ -144,9 +152,11 @@ class SourceStorage {
       }
 
       // Fetch source map
-      const rawSourceMap = (await fetch(
-        this.getFileSourceUrl(sourceMapUrl)
-      ).then(async res => {
+      const rawSourceMap = (await fetch(this.getFileSourceUrl(sourceMapUrl), {
+        headers: {
+          'cache-control': 'no-cache',
+        },
+      }).then(async res => {
         const data = await res.json();
 
         // Either return source from internal source middleware or data from hot.js file

@@ -67,7 +67,7 @@ function createDevServerConfig({
 }): {
   port: number;
   hostname: string;
-  public: string;
+  publicUrl: string;
 } {
   const port = args?.port ?? ctx?.port ?? imaConfig?.devServer?.port ?? 3101;
   const hostname =
@@ -75,12 +75,22 @@ function createDevServerConfig({
     ctx?.hostname ??
     imaConfig?.devServer?.hostname ??
     'localhost';
-  const publ = args?.public ?? ctx?.public ?? imaConfig?.devServer?.public;
+  let publicUrl =
+    args?.publicUrl ?? ctx?.publicUrl ?? imaConfig?.devServer?.publicUrl;
+
+  // Clean public url (remove last slash)
+  publicUrl = publicUrl ?? `${hostname}:${port}`;
+  publicUrl = publicUrl?.replace(/\/$/, '');
+
+  // Preppend http
+  if (!publicUrl?.startsWith('http')) {
+    publicUrl = `http://${publicUrl}`;
+  }
 
   return {
     port,
     hostname,
-    public: publ ?? `${hostname}:${port}`,
+    publicUrl,
   };
 }
 
@@ -164,6 +174,7 @@ function createCacheKey(
     JSON.stringify({
       experimentsSwc: imaConfig.experiments?.swc,
       experimentsSwcMinimizer: imaConfig.experiments?.swcMinimizer,
+      experimentsCss: imaConfig.experiments?.css,
       command: ctx.command,
       forceSPA: ctx.forceSPA,
       profile: ctx.profile,
@@ -213,6 +224,9 @@ async function resolveImaConfig(args: ImaCliArgs): Promise<ImaConfig> {
     },
     babel: async config => config,
     postcss: async config => config,
+    experiments: {
+      swc: true,
+    },
   };
 
   const imaConfig = requireImaConfig(args.rootDir);
@@ -222,6 +236,10 @@ async function resolveImaConfig(args: ImaCliArgs): Promise<ImaConfig> {
     watchOptions: {
       ...defaultImaConfig.watchOptions,
       ...imaConfig?.watchOptions,
+    },
+    experiments: {
+      ...defaultImaConfig.experiments,
+      ...imaConfig?.experiments,
     },
   };
 

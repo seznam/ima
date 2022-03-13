@@ -1,7 +1,6 @@
 import commonjs from '@rollup/plugin-commonjs';
 import { nodeResolve } from '@rollup/plugin-node-resolve';
 import typescript from '@rollup/plugin-typescript';
-import html from 'rollup-plugin-html-string';
 
 export default {
   input: {
@@ -31,5 +30,5 @@ export default {
       sourcemap: true,
     },
   ],
-  plugins: [html(), typescript(), nodeResolve(), commonjs()],
+  plugins: [typescript(), nodeResolve(), commonjs()],
 };

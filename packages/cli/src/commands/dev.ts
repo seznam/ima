@@ -95,7 +95,7 @@ const dev: HandlerFn = async args => {
      * CLI Args should always override the config values.
      */
     const devServerConfig = createDevServerConfig({ imaConfig, args });
-    process.env.IMA_CLI_DEV_SERVER_PUBLIC = devServerConfig.public;
+    process.env.IMA_CLI_DEV_SERVER_PUBLIC_URL = devServerConfig.publicUrl;
 
     // Run preProcess hook on imaPlugins
     await runImaPluginsHook(args, imaConfig, 'preProcess');
@@ -174,8 +174,8 @@ export const builder: CommandBuilder = {
     desc: 'Dev server hostname (overrides ima.config.js settings)',
     type: 'string',
   },
-  public: {
-    desc: 'Dev server public (overrides ima.config.js settings)',
+  publicUrl: {
+    desc: 'Dev server publicUrl (overrides ima.config.js settings)',
     type: 'string',
   },
   ...resolveCliPluginArgs(CMD),

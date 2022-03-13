@@ -10,13 +10,6 @@
     "build": "../../node_modules/.bin/tsc",
     "dev": "../../node_modules/.bin/tsc --watch"
   },
-  "files": [
-    "./dist/compileErrorParser/index.js",
-    "./dist/sourceMapUtils.js",
-    "./dist/cliUtils.js",
-    "./dist/helpers.js",
-    "./dist/sourceFragment.js"
-  ],
   "author": "Jan Šimeček <jan.simecek@firma.seznam.cz>",
   "contributors": [],
   "repository": {
