@@ -21,6 +21,9 @@
     "url": "https://github.com/seznam/ima.git",
     "directory": "packages/hmr-client"
   },
+  "dependencies": {
+    "@ima/dev-utils": "^17.10.0"
+  },
   "bugs": {
     "url": "https://github.com/seznam/ima/issues"
   },
