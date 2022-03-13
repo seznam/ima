@@ -40,10 +40,6 @@ module.exports = (environment, logger, languageLoader, appFactory) => {
     let callstack = stackTrace.parse(err);
     let fileIndex = 1;
 
-    logger.error('The application crashed due to an uncaught exception', {
-      error: errorToJSON(err),
-    });
-
     asyncEach(
       callstack,
       (stackFrame, cb) => {
