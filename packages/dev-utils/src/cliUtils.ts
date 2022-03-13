@@ -111,6 +111,9 @@ async function getSource(
  * @param {string?} type Error type (affects error parsing).
  * @param {string?} rootDir Optional root directory used to print
  *  absolute URLs as relative to the current rootDir.
+ * @param {string[]?} uniqueTracker Array of error identifiers to
+ *  track uniques, if the error matches identifier already included
+ *  in this array, this function returns empty string.
  * @returns {Promise<string>} Formatted error output.
  */
 async function formatError(
@@ -119,6 +122,7 @@ async function formatError(
   options?: {
     rootDir?: string;
     parseSourceMaps?: boolean;
+    uniqueTracker?: string[];
   }
 ): Promise<string> {
   let fileUri: string | undefined,
@@ -191,6 +195,18 @@ async function formatError(
 
     // Fallback in case everything fails
     return `${chalk.underline(`Unknown ${type} error`)}:\n${error}`;
+  }
+
+  // Track unique errors
+  if (options && Array.isArray(options?.uniqueTracker)) {
+    const errorIdentifier = `${fileUri}:${line}:${column}`;
+
+    // Return empty string for already processed errors
+    if (options?.uniqueTracker.includes(errorIdentifier)) {
+      return '';
+    } else {
+      options.uniqueTracker.push(errorIdentifier);
+    }
   }
 
   // Assemble error message

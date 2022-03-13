@@ -34,27 +34,20 @@ async function formatWebpackErrors(
     return;
   }
 
-  const uniqueErrorTracker = new Set<string>();
+  const uniqueErrorTracker: string[] = [];
 
   for (const error of errors) {
-    if (!error.moduleIdentifier) {
-      continue;
-    }
-
-    if (uniqueErrorTracker.has(error.moduleIdentifier)) {
-      continue;
-    }
-
-    // Track unique error by its identifier
-    uniqueErrorTracker.add(error.moduleIdentifier);
+    // Format error
+    const formattedError = await formatError(error, 'compile', {
+      rootDir: args.rootDir,
+      parseSourceMaps: false,
+      uniqueTracker: uniqueErrorTracker,
+    });
 
     // Print unique error
-    logger.error(
-      await formatError(error, 'compile', {
-        rootDir: args.rootDir,
-        parseSourceMaps: false,
-      })
-    );
+    if (formattedError) {
+      logger.error(formattedError);
+    }
   }
 }
 
