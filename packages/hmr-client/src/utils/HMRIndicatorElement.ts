@@ -1,73 +1,3 @@
-const STYLES = `
-:host {
-  position: fixed;
-  right: 15px;
-  bottom: 15px;
-  z-index: 2147483647;
-
-  transition: opacity 0.15s ease-out;
-  opacity: 1;
-}
-
-@keyframes ima-hmr-indicator__hourglass {
-  0% {
-    transform: rotate(0);
-    animation-timing-function: cubic-bezier(0.55, 0.055, 0.675, 0.19);
-  }
-
-  50% {
-    transform: rotate(540deg);
-    animation-timing-function: cubic-bezier(0.215, 0.61, 0.355, 1);
-  }
-
-  100% {
-    transform: rotate(1080deg);
-  }
-}
-
-@keyframes ima-hmr-indicator__fade-in-down {
-  0% {
-    transform: translateY(0) scale(0.9);
-    opacity: 0;
-  }
-
-  100% {
-    transform: translateY(0) scale(1);
-    opacity: 1;
-  }
-}
-
-.ima-hmr-indicator__wrapper {
-  display: inline-flex;
-
-  border-radius: 4px;
-  padding: 8px;
-
-  justify-content: center;
-  align-content: center;
-
-  background: white;
-
-  box-shadow: 0 5px 14px -3px rgba(100, 116, 139, 0.7), 0 3px 4px -4px rgba(100, 116, 139, 0.7);
-
-  animation: ima-hmr-indicator__fade-in-down 0.15s ease-in;
-}
-
-.ima-hmr-indicator__icon {
-  width: 16px;
-  height: 16px;
-}
-
-.ima-hmr-indicator__icon--loading {
-  animation: ima-hmr-indicator__hourglass 1.8s infinite cubic-bezier(0.215, 0.61, 0.355, 1);
-}
-
-.ima-hmr-indicator__icon--invalid {
-  filter: grayscale();
-  opacity: 0.6;
-}
-`;
-
 class ImaHMRIndicator extends HTMLElement {
   private _root: HTMLDivElement | undefined;
   private _icon: HTMLImageElement | undefined;
@@ -82,7 +12,7 @@ class ImaHMRIndicator extends HTMLElement {
     // Init styles
     this._initStyles();
 
-    // Create hmr indictaor
+    // Create hmr indicator
     this._createIndicator();
   }
 
@@ -92,9 +22,10 @@ class ImaHMRIndicator extends HTMLElement {
     newValue: string
   ): void {
     if (name === 'state') {
-      this._icon?.classList.remove(`ima-hmr-indicator__icon--loading`);
-      this._icon?.classList.remove(`ima-hmr-indicator__icon--invalid`);
-      this._icon?.classList.add(`ima-hmr-indicator__icon--${newValue}`);
+      this._icon?.setAttribute(
+        'class',
+        `ima-hmr-indicator__icon ima-hmr-indicator__icon--${newValue}`
+      );
     }
   }
 
@@ -117,7 +48,75 @@ class ImaHMRIndicator extends HTMLElement {
 
   private _initStyles(): void {
     const styles = document.createElement('style');
-    styles.innerHTML = STYLES;
+    styles.innerHTML = `
+    :host {
+      position: fixed;
+      right: 15px;
+      bottom: 15px;
+      z-index: 2147483647;
+
+      transition: opacity 0.15s ease-out;
+      opacity: 1;
+    }
+
+    @keyframes ima-hmr-indicator__hourglass {
+      0% {
+        transform: rotate(0);
+        animation-timing-function: cubic-bezier(0.55, 0.055, 0.675, 0.19);
+      }
+
+      50% {
+        transform: rotate(540deg);
+        animation-timing-function: cubic-bezier(0.215, 0.61, 0.355, 1);
+      }
+
+      100% {
+        transform: rotate(1080deg);
+      }
+    }
+
+    @keyframes ima-hmr-indicator__fade-in-down {
+      0% {
+        transform: translateY(0) scale(0.9);
+        opacity: 0;
+      }
+
+      100% {
+        transform: translateY(0) scale(1);
+        opacity: 1;
+      }
+    }
+
+    .ima-hmr-indicator__wrapper {
+      display: inline-flex;
+
+      border-radius: 4px;
+      padding: 8px;
+
+      justify-content: center;
+      align-content: center;
+
+      background: white;
+
+      box-shadow: 0 5px 14px -3px rgba(100, 116, 139, 0.7), 0 3px 4px -4px rgba(100, 116, 139, 0.7);
+
+      animation: ima-hmr-indicator__fade-in-down 0.15s ease-in;
+    }
+
+    .ima-hmr-indicator__icon {
+      width: 16px;
+      height: 16px;
+    }
+
+    .ima-hmr-indicator__icon--loading {
+      animation: ima-hmr-indicator__hourglass 1.8s infinite cubic-bezier(0.215, 0.61, 0.355, 1);
+    }
+
+    .ima-hmr-indicator__icon--invalid {
+      filter: grayscale();
+      opacity: 0.6;
+    }
+    `;
 
     this.shadowRoot?.appendChild(styles);
   }

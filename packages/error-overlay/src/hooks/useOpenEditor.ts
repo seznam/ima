@@ -6,6 +6,7 @@ import { StackFrame } from '#/entities';
 function useOpenEditor() {
   const { publicUrl } = useContext(OverlayContext);
   const [isLoading, setIsLoading] = useState(false);
+
   const openEditor = useCallback(
     async (frame: StackFrame, showOriginal = true) => {
       setIsLoading(true);

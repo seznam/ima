@@ -77,11 +77,9 @@ function useConnect(serverError: string | null) {
               return;
             }
 
-            const { message, name, column, fileUri, line } = parsedError;
+            const { message, name } = parsedError;
             const frame = await mapCompileStackFrame(
-              fileUri,
-              line,
-              column,
+              parsedError,
               sourceStorage
             );
 

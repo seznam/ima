@@ -7,7 +7,7 @@ export type ListenerData = {
 };
 export type Listener = (data?: ListenerData) => Promise<void>;
 
-class ErrorEventEmitter {
+class ErrorOverlayEmitter {
   private _listeners: Map<EventName, Listener[]>;
 
   constructor() {
@@ -34,4 +34,4 @@ class ErrorEventEmitter {
   }
 }
 
-export { ErrorEventEmitter };
+export { ErrorOverlayEmitter };

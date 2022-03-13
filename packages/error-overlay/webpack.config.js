@@ -45,7 +45,14 @@ module.exports = {
             loader: 'postcss-loader',
             options: {
               postcssOptions: {
-                plugins: ['postcss-preset-env'],
+                plugins: [
+                  [
+                    'postcss-preset-env',
+                    {
+                      browsers: 'last 2 versions, last 1 year, not safari 12.1',
+                    },
+                  ],
+                ],
               },
             },
           },

@@ -30,4 +30,4 @@ const App: FunctionComponent<AppProps> = ({ serverError }) => {
   );
 };
 
-export { App };
+export default App;

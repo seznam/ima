@@ -1,3 +1,4 @@
+import { CompileError } from '@ima/dev-utils/dist/compileErrorParser';
 import { createSourceFragment } from '@ima/dev-utils/dist/sourceFragment';
 import * as stackTraceParser from 'stacktrace-parser';
 
@@ -130,15 +131,14 @@ async function mapStackFramesToOriginal(
  * @returns {Promise<StackFrame | null>} Mapped StackFrame instance.
  */
 async function mapCompileStackFrame(
-  fileUri: string | undefined,
-  line: number | undefined,
-  column: number | undefined,
+  compileError: CompileError,
   sourceStorage: SourceStorage
 ): Promise<StackFrame | null> {
-  if (!fileUri) {
+  if (!compileError.fileUri) {
     return null;
   }
 
+  const { fileUri, line, column } = compileError;
   const { rootDir, fileContents } = (await sourceStorage.get(fileUri)) ?? {};
 
   // Compile errors are parsed directly on original

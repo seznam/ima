@@ -1,9 +1,9 @@
-import { ErrorEventEmitter } from '@ima/dev-utils/dist/ErrorEventEmitter';
+import { ErrorOverlayEmitter } from '@ima/dev-utils/dist/ErrorOverlayEmitter';
 import { StatsError } from 'webpack';
 
 declare global {
   interface Window {
-    __IMA_HMR: ErrorEventEmitter;
+    __IMA_HMR: ErrorOverlayEmitter;
   }
 }
 

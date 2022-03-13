@@ -14,15 +14,13 @@ const RuntimeError: FunctionComponent<RuntimeErrorProps> = ({ error }) => {
 
   return (
     <div className='ima-runtime-error'>
-      {error.frames
-        .slice(0, isCollapsed ? 1 : error.frames.length)
-        .map(frame => (
-          <Frame
-            key={`${frame.fileName}${frame.line}${frame.column}`}
-            frame={frame}
-            type={error.type}
-          />
-        ))}
+      {(isCollapsed ? [error.frames[0]] : error.frames).map(frame => (
+        <Frame
+          key={`${frame.fileName}${frame.line}${frame.column}`}
+          frame={frame}
+          type={error.type}
+        />
+      ))}
 
       {isCollapsed && (
         <div className='ima-runtime-error__expand-wrapper'>

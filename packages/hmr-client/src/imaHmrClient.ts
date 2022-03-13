@@ -1,13 +1,12 @@
-import { ErrorEventEmitter } from '@ima/dev-utils/dist/ErrorEventEmitter';
+import { ErrorOverlayEmitter } from '@ima/dev-utils/dist/ErrorOverlayEmitter';
 
 import { HMROptions, HMRMessageData } from '#/types';
 import { HMREventSource, HMRIndicator } from '#/utils';
 
 // Parse hmr options from webpack resource query
-// @ts-expect-error yeah I don't know how to type this...
 const options = Object.fromEntries(
   new URLSearchParams(__resourceQuery)
-) as HMROptions;
+) as unknown as HMROptions;
 
 /**
  * Initialize HMR client with indication, event emitter api
@@ -15,9 +14,9 @@ const options = Object.fromEntries(
  */
 const hmrIndicator = new HMRIndicator();
 const eventSource = new HMREventSource(options.publicUrl);
-window.__IMA_HMR = new ErrorEventEmitter();
+window.__IMA_HMR = new ErrorOverlayEmitter();
 
-// Create overlay.js script file which loads error overlay
+// Init overlay.js script file which loads error overlay
 const overlayJs = document.createElement('script');
 overlayJs.setAttribute(
   'src',

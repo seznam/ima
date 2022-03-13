@@ -1,10 +1,10 @@
-import type { ErrorEventEmitter } from '@ima/dev-utils/dist/ErrorEventEmitter';
+import type { ErrorOverlayEmitter } from '@ima/dev-utils/dist/ErrorOverlayEmitter';
 
 import { StackFrame } from '#/entities';
 
 declare global {
   interface Window {
-    __IMA_HMR: ErrorEventEmitter;
+    __IMA_HMR: ErrorOverlayEmitter;
   }
 }
 
