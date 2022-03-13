@@ -40,7 +40,7 @@ overlayJs.onload = () => {
           type: 'compile',
         });
       } else {
-        window.__IMA_HMR.emit('clear');
+        window.__IMA_HMR.emit('clear', { type: 'compile' });
       }
     }
 

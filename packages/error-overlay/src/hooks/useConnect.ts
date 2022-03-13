@@ -13,6 +13,9 @@ import { mapCompileStackFrame, mapStackFramesToOriginal } from '#/utils';
 function useConnect(serverError: string | null) {
   const { publicUrl } = useContext(OverlayContext);
   const [error, setError] = useState<ParsedError | null>(null);
+
+  // Tracks last reported error type for correct clearing
+  let lastErrorType: ParsedError['type'] | null = null;
   const sourceStorage = new SourceStorage(publicUrl);
 
   // Subscribe to HMR events
@@ -59,14 +62,23 @@ function useConnect(serverError: string | null) {
         setError(null);
       });
 
-      window.__IMA_HMR.on('clear', async () => {
-        setError(null);
+      window.__IMA_HMR.on('clear', async data => {
+        if (
+          !data ||
+          (data?.type === 'compile' && lastErrorType === 'compile') ||
+          (data?.type === 'runtime' && lastErrorType === 'runtime')
+        ) {
+          setError(null);
+          lastErrorType = null;
+        }
       });
 
       window.__IMA_HMR.on('error', async data => {
-        if (!data) {
+        if (!data?.error) {
           return;
         }
+
+        lastErrorType = data.type;
 
         try {
           // Parse compile error
@@ -119,6 +131,8 @@ function useConnect(serverError: string | null) {
       });
     }
   }, []);
+
+  // TODO remove listeners
 
   return { error, setError };
 }

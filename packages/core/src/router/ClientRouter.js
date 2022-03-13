@@ -188,8 +188,8 @@ export default class ClientRouter extends AbstractRouter {
       .catch(error => this.handleError({ error }, {}, locals))
       .then(data => {
         // Hide error overlay
-        if (!(data instanceof Error) && $Debug && this._window.__IMA_HMR) {
-          this._window.__IMA_HMR.emit('clear');
+        if (!(data instanceof Error) && $Debug && window.__IMA_HMR) {
+          window.__IMA_HMR.emit('clear', { type: 'runtime' });
         }
 
         return data;
@@ -207,8 +207,8 @@ export default class ClientRouter extends AbstractRouter {
       console.error(params.error);
 
       // Show error overlay
-      if (this._window.__IMA_HMR) {
-        this._window.__IMA_HMR.emit('error', {
+      if (window.__IMA_HMR) {
+        window.__IMA_HMR.emit('error', {
           error: params.error,
           type: 'runtime',
         });

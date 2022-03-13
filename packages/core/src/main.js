@@ -45,6 +45,7 @@ import PageManager from './page/manager/PageManager';
 import ServerPageManager from './page/manager/ServerPageManager';
 import AbstractPageRenderer from './page/renderer/AbstractPageRenderer';
 import BlankManagedRootView from './page/renderer/BlankManagedRootView';
+import ErrorBoundary from './page/renderer/ErrorBoundary';
 import ClientPageRenderer from './page/renderer/ClientPageRenderer';
 import ComponentUtils from './page/renderer/ComponentUtils';
 import RendererEvents from './page/renderer/Events';
@@ -294,6 +295,7 @@ export {
   ServerPageManager,
   AbstractPageRenderer,
   BlankManagedRootView,
+  ErrorBoundary,
   ClientPageRenderer,
   ComponentUtils,
   RendererEvents,
