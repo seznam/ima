@@ -17,13 +17,17 @@ class ConsoleAsync extends TransportStream {
   }
 
   async _log(meta, callback) {
+    const message = meta.error
+      ? `${meta.message}\n\n${await formatError(
+          meta.error,
+          'runtime',
+          this.rootDir
+        )}`
+      : meta.message;
+
     // eslint-disable-next-line no-console
     (console[meta.level] ?? console.log)(
-      `${colorizeLevel(meta.level)}${
-        meta.error
-          ? await formatError(meta.error, 'runtime', this.rootDir)
-          : meta.message
-      }`
+      `${colorizeLevel(meta.level)}${message}`
     );
 
     callback();
