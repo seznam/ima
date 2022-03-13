@@ -430,22 +430,28 @@ module.exports = (environment, logger, languageLoader, appFactory) => {
       appFactory();
     }
 
-    return _importAppMain().then(appMain => {
-      let app = _initApp(req, res, appMain);
-      _addImaToResponse(req, res, app);
+    return _importAppMain()
+      .then(appMain => {
+        let app = _initApp(req, res, appMain);
+        _addImaToResponse(req, res, app);
 
-      if (_hasToServeSPA(req, app)) {
-        instanceRecycler.clearInstance(app);
-        return showStaticSPAPage(req, res);
-      }
+        if (_hasToServeSPA(req, app)) {
+          instanceRecycler.clearInstance(app);
+          return showStaticSPAPage(req, res);
+        }
 
-      if (_isServerOverloaded()) {
-        instanceRecycler.clearInstance(app);
-        return _overloadHandler(req, res);
-      }
+        if (_isServerOverloaded()) {
+          instanceRecycler.clearInstance(app);
+          return _overloadHandler(req, res);
+        }
 
-      return _generateResponse(req, res, app);
-    });
+        return _generateResponse(req, res, app);
+      })
+      .catch(err => {
+        _displayDetails(err, req, res);
+
+        return err;
+      });
   }
 
   return {
