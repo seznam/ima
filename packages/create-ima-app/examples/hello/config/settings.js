@@ -30,14 +30,14 @@ export default (ns, oc, config) => {
       },
       $Page: {
         $Render: {
-          styles: [`/static/css/app.min.css${versionStamp}`],
+          styles: [`/static/css/app.css${versionStamp}`],
           scripts: [
             `/static/locale/${config.$Language}.js${versionStamp}`,
-            `/static/js/app.bundle.min.js${versionStamp}`,
+            `/static/js/app.bundle.js${versionStamp}`,
           ],
           esScripts: [
             `/static/locale/${config.$Language}.js${versionStamp}`,
-            `/static/js.es/app.bundle.min.js${versionStamp}`,
+            `/static/js.es/app.bundle.js${versionStamp}`,
           ],
           documentView: DocumentView,
         },

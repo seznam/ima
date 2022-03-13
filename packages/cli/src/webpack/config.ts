@@ -199,17 +199,14 @@ export default async (
           chunk?.name === name && isDevEnv && 'app.client',
           chunk?.name === name && !isDevEnv && 'app.bundle',
           chunk?.name !== name && '[name]',
-          !isDevEnv && 'min',
           'js',
         ].filter(Boolean);
 
         return `${baseFolder}/${fileNameParts.join('.')}`;
       },
       cssFilename: ({ chunk }) =>
-        `static/css/${chunk?.name === name ? 'app' : '[name]'}${
-          !isDevEnv ? '.min' : ''
-        }.css`,
-      cssChunkFilename: `static/css/[id]${!isDevEnv ? '.min' : ''}.css`,
+        `static/css/${chunk?.name === name ? 'app' : '[name]'}.css`,
+      cssChunkFilename: `static/css/[id].css`,
       publicPath,
       /**
        * We put hot updates into it's own folder
@@ -581,11 +578,9 @@ export default async (
             processCss &&
               new MiniCssExtractPlugin({
                 filename: ({ chunk }) =>
-                  `static/css/${chunk?.name === name ? 'app' : '[name]'}${
-                    !isDevEnv ? '.min' : ''
-                  }.css`,
+                  `static/css/${chunk?.name === name ? 'app' : '[name]'}.css`,
                 ignoreOrder: true,
-                chunkFilename: `static/css/[id]${!isDevEnv ? '.min' : ''}.css`,
+                chunkFilename: `static/css/[id].css`,
               }),
 
             // Enables compression for assets in production build

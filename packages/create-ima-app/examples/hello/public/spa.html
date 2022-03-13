@@ -14,7 +14,7 @@
     <meta property="og:image" content=""/>
 
     <meta name="viewport" content="width=device-width, initial-scale=1"/>
-    <link rel="stylesheet" href="/static/css/app<% if ($Env !== "dev") { %>.min<% } %>.css?version=<%= $Version %>"/>
+    <link rel="stylesheet" href="/static/css/app.css?version=<%= $Version %>"/>
     <title></title>
 </head>
 <body>
@@ -40,7 +40,7 @@
     <div id="scripts">
         <% if ($Env !== "dev") { %>
             <script type="application/javascript" src="/static/locale/<%= $Language %>.js?version=<%= $Version %>"></script>
-            <script type="application/javascript" src="/static/js/app.bundle.min.js?version=<%= $Version %>"></script>
+            <script type="application/javascript" src="/static/js/app.bundle.js?version=<%= $Version %>"></script>
         <% } else { %>
             <script type="application/javascript" src="/static/locale/<%= $Language %>.js?version=<%= $Version %>"></script>
             <script type="application/javascript" src="/static/js/vendors.js?version=<%= $Version %>"></script>

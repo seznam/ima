@@ -43,10 +43,7 @@ class ScrambleCssMinimizer {
       mainAssetFilter:
         options?.mainAssetFilter ??
         // Filter main app.css file
-        (filename =>
-          !!(
-            filename?.endsWith('app.min.css') || filename?.endsWith('app.css')
-          )),
+        (filename => filename?.endsWith('app.css')),
     };
 
     // Validate options
