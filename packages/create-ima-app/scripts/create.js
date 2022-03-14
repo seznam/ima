@@ -94,7 +94,7 @@ function createImaApp(dirName, exampleName) {
   // Run npm install
   info(
     `Running ${chalk.cyan(
-      'npm install'
+      'npm install --legacy-peer-deps' // TODO IMA@18
     )} inside app directory, this might take a while...`
   );
   // eslint-disable-next-line no-console
