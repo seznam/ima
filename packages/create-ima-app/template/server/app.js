@@ -77,7 +77,6 @@ function renderApp(req, res, next) {
         }
       },
       error => {
-        // logger.error('REJECT', { error });
         next(error);
       }
     )
@@ -110,8 +109,8 @@ app
     environment.$Server.staticFolder,
     express.static(path.resolve(path.join(__dirname, '../build/static')))
   )
-  .use(bodyParser.json()) // for parsing application/json
-  .use(bodyParser.urlencoded({ extended: true })) // for parsing application/x-www-form-urlencoded
+  .use(bodyParser.json())
+  .use(bodyParser.urlencoded({ extended: true }))
   .use(cookieParser())
   .use(
     environment.$Proxy.path + '/',

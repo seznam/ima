@@ -21,11 +21,10 @@ export default class ErrorBoundary extends React.PureComponent {
   }
 
   componentDidCatch(error) {
-    this.setState({ hasError: true });
-
     // Report errors to overlay
     if (typeof window !== 'undefined' && window?.__IMA_HMR?.emit) {
       window.__IMA_HMR.emit('error', { error, type: 'runtime' });
+      this.setState({ hasError: true });
     }
   }
 
