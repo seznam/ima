@@ -23,13 +23,13 @@ npm config set "//$NPM_LOCAL_REGISTRY_URL_NO_PROTOCOL/:_authToken" "0"
 for PACKAGE in $PACKAGES ; do
     cd "$ROOT_DIR/packages/$PACKAGE"
     echo "Working on $PACKAGE@$PACKAGE_VERSION"
-    sed -i "s#\"version\":\s\".*\"#\"version\": \"$PACKAGE_VERSION\"#" package.json
+    gsed -i "s#\"version\":\s\".*\"#\"version\": \"$PACKAGE_VERSION\"#" package.json
 
     for PACKAGE_UPDATE in $PACKAGES ; do
-        sed -i "s#\"@ima/$PACKAGE_UPDATE\":\s\".*\"#\"@ima/$PACKAGE_UPDATE\": \"$PACKAGE_VERSION\"#" package.json
+        gsed -i "s#\"@ima/$PACKAGE_UPDATE\":\s\".*\"#\"@ima/$PACKAGE_UPDATE\": \"$PACKAGE_VERSION\"#" package.json
     done
 
-    sed -i "s#https://registry.npmjs.org/#${NPM_LOCAL_REGISTRY_URL}#" package.json
+    gsed -i "s#https://registry.npmjs.org/#${NPM_LOCAL_REGISTRY_URL}#" package.json
     npm publish
 done
 
@@ -51,7 +51,7 @@ cd ./ima-app
 npm run build
 # Add customized environment configuration
 mv server/config/environment.js server/config/environment.orig.js
-mv "$ROOT_DIR/utils/benchmark/app/environment.js" server/config/environment.js
+cp "$ROOT_DIR/utils/benchmark/app/environment.js" server/config/environment.js
 NODE_ENV=prod node server/server.js &
 IMA_SKELETON_SERVER_PID=$!
 

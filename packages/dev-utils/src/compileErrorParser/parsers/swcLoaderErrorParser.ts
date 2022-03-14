@@ -1,3 +1,4 @@
+import stripAnsi from 'strip-ansi';
 import { StatsError } from 'webpack';
 
 import { RE_VALID_FRAME_FIREFOX } from '../../helpers';
@@ -6,21 +7,24 @@ import { RE_FILE_PATH_REGEX, CompileError } from './parserUtils';
 const RE_SWC_LINE_NUMBER = /(\d+) \|/;
 
 /**
+ * https://github.com/swc-project/swc/pull/3946
+ *
  * SWC loader-specific error parser. Tries to parse error location from
  * webpack stats error object or browsers Error object.
  */
 function swcLoaderErrorParser(error: StatsError | Error): CompileError {
-  const messageLines = error.message.split('\n');
+  const cleanedMessage = stripAnsi(error.message);
+  const messageLines = cleanedMessage.split('\n');
 
   // Parse error message
   const compileError: CompileError = {
     name: 'Syntax error',
-    message: messageLines[1].replace(/error:/gi, '').trim(),
+    message: messageLines[2].replace(/error:/gi, '').trim(),
     column: 1, // swc-loader does not report columns reliably
   };
 
   // Parse error location
-  const lineNumberMatch = error.message.match(RE_SWC_LINE_NUMBER);
+  const lineNumberMatch = cleanedMessage.match(RE_SWC_LINE_NUMBER);
   if (lineNumberMatch && lineNumberMatch[1]) {
     compileError.line = parseInt(lineNumberMatch[1]);
   }

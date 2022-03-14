@@ -29,6 +29,7 @@
     "chalk": "^4.1.2",
     "cli-highlight": "^2.1.11",
     "source-map": "^0.7.3",
-    "stacktrace-parser": "^0.1.10"
+    "stacktrace-parser": "^0.1.10",
+    "strip-ansi": "^6.0.0"
   }
 }
