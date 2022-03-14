@@ -17,6 +17,8 @@ import {
 } from '../types';
 import webpackConfig from './config';
 
+const IMA_CONF_FILENAME = 'ima.config.js';
+
 /**
  * Loads application IMA.js environment from server/config/environment.js
  *
@@ -188,8 +190,6 @@ function createCacheKey(
   return hash.digest('hex');
 }
 
-const IMA_CONF_FILENAME = 'ima.config.js';
-
 /**
  * Requires imaConfig from given root directory (default to cwd).
  *
@@ -263,7 +263,7 @@ async function resolveImaConfig(args: ImaCliArgs): Promise<ImaConfig> {
 
 /**
  * Takes care of cleaning build directory and node_modules/.cache
- * directory based on current cli arguments.
+ * directory based on passed cli arguments.
  */
 async function cleanup(args: ImaCliArgs): Promise<void> {
   // Clear cache before doing anything else
@@ -281,26 +281,24 @@ async function cleanup(args: ImaCliArgs): Promise<void> {
   }
 
   // Clear output directory
-  if (!args.clean) {
+  if (args.clean) {
+    logger.info('Cleaning the build directory...', { trackTime: true });
+    const outputDir = path.join(args.rootDir, 'build');
+
+    if (!fs.existsSync(outputDir)) {
+      logger.info('The build directory is already empty');
+      return;
+    }
+
+    await fs.promises.rm(outputDir, { recursive: true });
+    logger.endTracking();
+  } else {
     // Clean at least hot directory silently
     await fs.promises.rm(path.join(args.rootDir, 'build/hot'), {
       recursive: true,
       force: true,
     });
-
-    return;
   }
-
-  const outputDir = path.join(args.rootDir, 'build');
-
-  if (!fs.existsSync(outputDir)) {
-    logger.info('The build directory is already empty');
-    return;
-  }
-
-  logger.info('Cleaning the build directory...', { trackTime: true });
-  await fs.promises.rm(outputDir, { recursive: true });
-  logger.endTracking();
 }
 
 /**
@@ -337,7 +335,7 @@ async function runImaPluginsHook(
 }
 
 /**
- * Creates webpack configurations for defined types using provided args.
+ * Creates webpack configurations contexts from current config and cli args.
  * Additionally it applies all existing configuration overrides from cli plugins
  * and app overrides in this order cli -> plugins -> app.
  *

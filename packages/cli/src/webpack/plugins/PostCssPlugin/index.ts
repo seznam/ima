@@ -24,19 +24,19 @@ export interface PostCssPluginCacheEntry {
  */
 class PostCssPlugin {
   private _pluginName: string;
-  private options: PostCssPluginOptions;
+  private _options: PostCssPluginOptions;
 
   constructor(options: PostCssPluginOptions) {
     this._pluginName = this.constructor.name;
 
     // Set defaults
-    this.options = {
+    this._options = {
       filter: options.filter,
       plugins: options.plugins ?? [],
     };
 
     // Validate options
-    validate(schema as Schema, this.options, {
+    validate(schema as Schema, this._options, {
       name: this._pluginName,
       baseDataPath: 'options',
     });
@@ -57,7 +57,7 @@ class PostCssPlugin {
       compilation.hooks.statsPrinter.tap(this._pluginName, stats => {
         stats.hooks.print
           .for('asset.info.minimized')
-          .tap('post-css-plugin', (minimized, { green, formatFlag }) =>
+          .tap(this._pluginName, (minimized, { green, formatFlag }) =>
             minimized && green && formatFlag
               ? green(formatFlag('minimized'))
               : ''
@@ -67,9 +67,7 @@ class PostCssPlugin {
   }
 
   /**
-   * Optimize css assets using postCss plugin. By default first file that
-   * is returned from mainAssetFilter is used as base to generate hashMap,
-   * other files are scrambled using existing map.
+   * Optimize assets wich cache management.
    */
   async optimize(
     assets: Compilation['assets'],
@@ -77,7 +75,7 @@ class PostCssPlugin {
     compilation: Compilation
   ): Promise<void> {
     // No point to continue without plugins
-    if (this.options.plugins.length === 0) {
+    if (this._options.plugins.length === 0) {
       return;
     }
 
@@ -89,7 +87,7 @@ class PostCssPlugin {
             return false;
           }
 
-          return this.options.filter ? this.options.filter(name) : true;
+          return this._options.filter ? this._options.filter(name) : true;
         })
         .map(async name => {
           // Cast to asset since it wont be undefined
@@ -109,8 +107,6 @@ class PostCssPlugin {
       return;
     }
 
-    const { RawSource, SourceMapSource } = compiler.webpack.sources;
-
     // Process sources
     await Promise.all(
       filteredAssets.map(async asset => {
@@ -119,10 +115,11 @@ class PostCssPlugin {
 
         // No cache, process asset
         if (!output) {
-          const { css, map } = await postcss(this.options.plugins).process(
+          const prevMap = inputSource.map();
+          const { css, map } = await postcss(this._options.plugins).process(
             inputSource.source(),
             {
-              map: inputSource.map(),
+              map: prevMap ? { prev: prevMap } : {},
               from: name,
               to: name,
             }
@@ -131,8 +128,8 @@ class PostCssPlugin {
           // Create new source
           output = {
             source: map
-              ? new SourceMapSource(css, name, map)
-              : new RawSource(css),
+              ? new sources.SourceMapSource(css, name, map.toJSON())
+              : new sources.RawSource(css),
           };
 
           // Store cache

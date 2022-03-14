@@ -210,7 +210,7 @@ export default async (
       publicPath,
       /**
        * We put hot updates into it's own folder
-       * otherwise it clutters the built folder.
+       * otherwise it clutters the build folder.
        */
       hotUpdateChunkFilename: 'static/hot/[id].[fullhash].hot-update.js',
       hotUpdateMainFilename: 'static/hot/[runtime].[fullhash].hot-update.json',
@@ -459,7 +459,7 @@ export default async (
                                 bugfixes: true,
                                 modules: false,
                                 useBuiltIns: 'usage',
-                                corejs: { version: '3.20' },
+                                corejs: { version: '3.21' },
                                 exclude: ['transform-typeof-symbol'],
                               },
                             ],
@@ -501,7 +501,7 @@ export default async (
                               bugfixes: true,
                               modules: false,
                               useBuiltIns: 'usage',
-                              corejs: { version: '3.20', proposals: true },
+                              corejs: { version: '3.21', proposals: true },
                               exclude: ['transform-typeof-symbol'],
                             },
                           ],

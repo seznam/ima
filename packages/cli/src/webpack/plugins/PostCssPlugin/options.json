@@ -9,7 +9,7 @@
     },
     "filter": {
       "instanceof": "Function",
-      "description": "Optional filter function, by default all css assets are processed."
+      "description": "Optional assets filter function, by default all css assets are processed."
     }
   }
 }
