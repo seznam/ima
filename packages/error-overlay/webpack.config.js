@@ -3,7 +3,6 @@ const path = require('path');
 const CompressionPlugin = require('compression-webpack-plugin');
 const CopyPlugin = require('copy-webpack-plugin');
 const CssMinimizerPlugin = require('css-minimizer-webpack-plugin');
-const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 const { ProgressPlugin } = require('webpack');
 
 const rootDir = path.resolve(__dirname);
@@ -83,7 +82,6 @@ module.exports = {
     },
   },
   plugins: [
-    new MiniCssExtractPlugin(),
     new ProgressPlugin(),
     isProduction &&
       new CompressionPlugin({
