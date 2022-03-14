@@ -101,8 +101,8 @@ function createImaApp(dirName, exampleName) {
   console.log(chalk.dim('      Press CTRL+C to cancel.\n'));
 
   const npm = process.platform === 'win32' ? 'npm.cmd' : 'npm';
-  execa.sync(npm, ['install', ['--force']], {
-    // TODO IMA@18 -> remove --force
+  execa.sync(npm, ['install', ['--legacy-peer-deps']], {
+    // TODO IMA@18 -> remove --legacy-peer-deps
     stdio: 'inherit',
     cwd: appRoot,
   });
@@ -125,9 +125,6 @@ From there you can run several commands:
 
   ${chalk.cyan('npm run build')}
     To build the application.
-
-  ${chalk.cyan('npm run build:spa')}
-    To build SPA version of the application.
 
   ${chalk.cyan('npm run start')}
     To start IMA.js server.

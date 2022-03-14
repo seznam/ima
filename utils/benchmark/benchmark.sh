@@ -46,12 +46,13 @@ npm link
 # Setup app from example hello
 cd "$ROOT_DIR"
 npx create-ima-app --example=hello ima-app
+
 cd ima-app
 npm run build
 # Add customized environment configuration
-mv build/ima/config/environment.js build/ima/config/environment.orig.js
-mv "$ROOT_DIR/utils/benchmark/app/environment.js" build/ima/config/environment.js
-NODE_ENV=prod node build/server.js &
+mv server/config/environment.js server/config/environment.orig.js
+mv "$ROOT_DIR/utils/benchmark/app/environment.js" server/config/environment.js
+NODE_ENV=prod node server/server.js &
 IMA_SKELETON_SERVER_PID=$!
 
 sleep 7
