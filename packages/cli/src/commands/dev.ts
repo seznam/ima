@@ -150,11 +150,6 @@ export const describe = 'Run application in development watch mode';
 export const handler = handlerFactory(dev);
 export const builder: CommandBuilder = {
   ...sharedArgsFactory(CMD),
-  clean: {
-    desc: 'Clean build folder before building the application',
-    type: 'boolean',
-    default: false,
-  },
   open: {
     desc: 'Opens browser window after server has been started',
     type: 'boolean',

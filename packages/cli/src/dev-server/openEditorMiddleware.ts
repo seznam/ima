@@ -23,9 +23,9 @@ function getEditor() {
 }
 
 /**
- * Launch editor with given file on given line and column
- * if supported by the editor. If there are no editor env variables
- * set, it prints and instructions to setup this functionality.
+ * Open code editor at given file, line and column, if supported.
+ * If there are no editor env variables defined, it prints an
+ * instructions with stepts to setup this functionality.
  */
 function launchEditor(fileName: string, line: number, column: number): void {
   const editor = getEditor();

@@ -30,7 +30,7 @@ function handlerFactory(handlerFn: HandlerFn) {
 
 /**
  * Resolves additional cliArgs that can be provided with custom cli plugins
- * defined in the optional ima.config.js.
+ * defined in the ima.config.js.
  *
  * @param {ImaCliCommand} Current command for which args are loaded.
  * @returns {CommandBuilder} Yargs commands object.
@@ -60,7 +60,7 @@ function resolveCliPluginArgs(command: ImaCliCommand): CommandBuilder {
 
 /**
  * Initializes shared args with their default values based
- * current CLI command.
+ * on the current CLI command.
  *
  * @param {ImaCliCommand} command Current CLI command identifier.
  * @returns {CommandBuilder} Object with shared args.

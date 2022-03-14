@@ -11,19 +11,20 @@ import {
 import { logger } from './logger';
 
 /**
- * Handles webpack compile errors.
+ * Cli Error handler.
  *
  * @param {WebpackError | unknown} err
  * @returns {void}
  */
-function handleError(err: WebpackError | unknown): void {
-  if (err instanceof Error) {
-    err?.stack && logger.error(err.stack);
-  } else if (err instanceof WebpackError) {
-    err?.stack && logger.error(err.stack);
-    err?.details && logger.error(err.details);
+function handleError(error: WebpackError | unknown): void {
+  if (error instanceof Error || error instanceof WebpackError) {
+    logger.error(
+      `${chalk.underline(error.name)}: ${error.message}\n\n${chalk.gray(
+        error.stack
+      )}`
+    );
   } else {
-    logger.write(chalk.red('Unexpected error occurred, closing compiler...'));
+    logger.error('Unexpected error occurred, closing the compiler...');
   }
 }
 
@@ -55,7 +56,7 @@ async function runCompiler(
   return new Promise((resolve, reject) => {
     compiler.run((error, stats) =>
       closeCompiler(compiler).then(async () => {
-        // Reject with compiler when there are any errors
+        // Reject when there are any errors
         if (error || stats?.hasErrors()) {
           if (stats) {
             await formatWebpackErrors(stats, args);
@@ -82,7 +83,7 @@ async function runCompiler(
 }
 
 /**
- * Runs webpack compiler with given configuration.
+ * Runs webpack watch compiler with given configuration.
  *
  * @param {MultiCompiler} compiler Webpack compiler instance
  * @param {ImaCliArgs} args Cli and build args.
@@ -113,7 +114,7 @@ async function watchCompiler(
         logger.info('Continuing with the compilation...');
       }
 
-      // Reject with compiler when there are any errors
+      // Reject when there are any compiler errors
       if (error) {
         return reject(error);
       }

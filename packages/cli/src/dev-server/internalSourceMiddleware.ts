@@ -19,13 +19,13 @@ function internalSourceMiddleware(rootDir: string) {
     // Resolve absolute
     fileName = path.resolve(fileName);
 
-    // Don't allow outside of project dir
+    // Don't allow access outside of project dir
     if (!fileName.startsWith(rootDir)) {
       return res.status(500).end();
     }
 
     if (!fs.existsSync(fileName)) {
-      return res.status(500).end();
+      return res.status(404).end();
     }
 
     try {
@@ -33,7 +33,7 @@ function internalSourceMiddleware(rootDir: string) {
 
       return res.json({
         source: fileSource,
-        rootDir,
+        rootDir, // Used to print relative urls in error-overlay
       });
     } catch (error) {
       return res.status(500).end();
