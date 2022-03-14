@@ -54,7 +54,7 @@ async function runCompiler(
           if (stats) {
             await formatWebpackErrors(stats, args);
           } else if (error) {
-            logger.error(error.toString());
+            logger.error(error);
           }
 
           return reject(error);

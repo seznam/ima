@@ -17,7 +17,7 @@ export interface LessConstantsPluginOptions {
 
 /**
  * Generates .less file with less variables created from JS entry point.
- * The entry point should be composed of default export of an object
+ * The entry point should consist of default export of an object
  * with key values composed of LessConstantsPlugin helper functions.
  */
 class LessConstantsPlugin implements ImaCliPlugin {
@@ -37,7 +37,7 @@ class LessConstantsPlugin implements ImaCliPlugin {
    */
   async preProcess(args: ImaCliArgs, imaConfig: ImaConfig): Promise<void> {
     if (!this._options.entry) {
-      this._logger.error('bailing... entry file was not provided.');
+      this._logger.error('closing compiler... entry file was not provided.');
 
       process.exit(1);
     }
@@ -75,12 +75,7 @@ class LessConstantsPlugin implements ImaCliPlugin {
         encoding: 'utf8',
       });
     } catch (error) {
-      this._logger.error(
-        error instanceof Error
-          ? `${error.toString()}\n\n${error.stack}`
-          : 'unknown error'
-      );
-
+      this._logger.error(error instanceof Error ? error : 'unknown error');
       process.exit(1);
     }
 

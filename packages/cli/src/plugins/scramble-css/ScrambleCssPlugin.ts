@@ -108,7 +108,7 @@ class ScrambleCssPlugin implements ImaCliPlugin {
     } else {
       /**
        * Remove existing hashTable.json so the web does not try
-       * to load with scrambled CSS.
+       * to load css with invalid scrambled CSS.
        */
       if (
         this._options.scrambleCssMinimizerOptions?.hashTableFilename &&
@@ -120,7 +120,8 @@ class ScrambleCssPlugin implements ImaCliPlugin {
           this._options.scrambleCssMinimizerOptions?.hashTableFilename
         );
       }
-      // Add new scrambleCSS minimizer
+
+      // Add scrambleCSS minimizer
       config.optimization?.minimizer?.unshift(scrambleCssMinimizer);
     }
 

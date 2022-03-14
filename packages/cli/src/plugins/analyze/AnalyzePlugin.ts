@@ -32,7 +32,23 @@ export interface AnalyzePluginOptions {
 }
 
 /**
- * Appends webpack bundle analyzer plugin to the build command config.
+ * Plugin-specific additional CLI args which are shared across
+ * both build and dev commands.
+ */
+const analyzePluginSharedCliArgs: CommandBuilder = {
+  analyze: {
+    desc: 'Runs multiple webpack bundle analyzer plugins on given entry',
+    type: 'string',
+    choices: ['server', 'client', 'client.es'],
+  },
+  analyzeBaseline: {
+    desc: 'Generates baseline for webpack bundle stats comparison',
+    type: 'boolean',
+  },
+};
+
+/**
+ * Initializes webpack bundle analyzer plugins.
  */
 class AnalyzePlugin implements ImaCliPlugin {
   private _options: AnalyzePluginOptions;
@@ -40,17 +56,8 @@ class AnalyzePlugin implements ImaCliPlugin {
 
   readonly name = 'AnalyzePlugin';
   readonly cliArgs: Partial<Record<ImaCliCommand, CommandBuilder>> = {
-    build: {
-      analyze: {
-        desc: 'Runs multiple webpack bundle analyzer plugins on given entry',
-        type: 'string',
-        choices: ['server', 'client', 'client.es'],
-      },
-      analyzeBaseline: {
-        desc: 'Generates baseline for webpack bundle stats comparison',
-        type: 'boolean',
-      },
-    },
+    build: analyzePluginSharedCliArgs,
+    dev: analyzePluginSharedCliArgs,
   };
 
   constructor(options: AnalyzePluginOptions) {
@@ -62,17 +69,13 @@ class AnalyzePlugin implements ImaCliPlugin {
     config: Configuration,
     ctx: ImaConfigurationContext
   ): Promise<Configuration> {
-    const { analyze, isServer, isEsVersion } = ctx;
+    const { name, analyze } = ctx;
 
     if (!analyze) {
       return config;
     }
 
-    if (
-      (analyze === 'server' && isServer) ||
-      (analyze === 'client.es' && isEsVersion) ||
-      (analyze === 'client' && !isEsVersion && !isServer)
-    ) {
+    if (analyze && analyze === name) {
       config.plugins?.push(
         new BundleStatsWebpackPlugin({
           // @ts-expect-error Not in type definitions
@@ -112,6 +115,7 @@ class AnalyzePlugin implements ImaCliPlugin {
 
     this._logger.plugin('generated following report:');
 
+    // Print generated files info
     if (reportExists || statsExists) {
       this._logger.write(chalk.bold.underline('\nWebpack Bundle Analyzer:'));
       reportExists &&
@@ -131,7 +135,7 @@ class AnalyzePlugin implements ImaCliPlugin {
       );
     }
 
-    // Write info about stats.json usage
+    // Print info about stats.json usage
     if (statsExists) {
       this._logger.write(
         chalk.bold(
