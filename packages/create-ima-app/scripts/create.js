@@ -94,14 +94,14 @@ function createImaApp(dirName, exampleName) {
   // Run npm install
   info(
     `Running ${chalk.cyan(
-      'npm install --legacy-peer-deps' // TODO IMA@18
+      'npm install' // TODO IMA@18
     )} inside app directory, this might take a while...`
   );
   // eslint-disable-next-line no-console
   console.log(chalk.dim('      Press CTRL+C to cancel.\n'));
 
   const npm = process.platform === 'win32' ? 'npm.cmd' : 'npm';
-  execa.sync(npm, ['install'], {
+  execa.sync(npm, ['install', ['--legacy-peer-deps']], {
     stdio: 'inherit',
     cwd: appRoot,
   });

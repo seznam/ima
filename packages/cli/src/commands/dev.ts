@@ -26,7 +26,8 @@ import {
 
 /**
  * Starts ima server with nodemon to watch for server-side changes
- * (all changes in server/ folder), to automatically restart application.
+ * (all changes in server/ folder), to automatically restart the application
+ * server in case any change is detected.
  */
 function startNodemon(args: ImaCliArgs) {
   let serverHasStarted = false;
@@ -63,23 +64,25 @@ function startNodemon(args: ImaCliArgs) {
   });
 
   nodemon.on('crash', error => {
-    logger.error('Application watcher unexpectedly crashed.');
+    logger.error('Application watcher crashed unexpectedly.');
     logger.error(error);
     process.exit(1);
   });
 }
 
 /**
- * Builds ima application with provided config in watch mode
+ * Builds ima application in watch mode
  * while also starting the webserver itself.
  *
  * @param {ImaCliArgs} args
  * @returns {Promise<void>}
  */
 const dev: HandlerFn = async args => {
-  // Set force SPA flag so server can react accordingly
   if (args.forceSPA) {
-    args.legacy = true; // SPA only supports es5 versions
+    // SPA only supports es5 versions
+    args.legacy = true;
+
+    // Set force SPA flag so server can react accordingly
     process.env.IMA_CLI_FORCE_SPA = 'true';
   }
 
@@ -91,13 +94,13 @@ const dev: HandlerFn = async args => {
     const imaConfig = await resolveImaConfig(args);
 
     /**
-     * Set public env variable which is used to load assets in the SSR error view correctly.
+     * Set public env variable which is used to load assets in the SSR error view.
      * CLI Args should always override the config values.
      */
     const devServerConfig = createDevServerConfig({ imaConfig, args });
     process.env.IMA_CLI_DEV_SERVER_PUBLIC_URL = devServerConfig.publicUrl;
 
-    // Run preProcess hook on imaPlugins
+    // Run preProcess hook on IMA CLI Plugins
     await runImaPluginsHook(args, imaConfig, 'preProcess');
 
     // Generate webpack config
@@ -119,6 +122,7 @@ const dev: HandlerFn = async args => {
       watchCompiler(compiler, args, imaConfig),
       createDevServer({
         compiler: compiler.compilers.find(({ name }) =>
+          // Run dev server only for client compiler with HMR enabled
           args.forceSPA ? name === 'client' : name === 'client.es'
         ),
         hostname: devServerConfig.hostname,

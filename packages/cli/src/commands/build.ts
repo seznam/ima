@@ -17,7 +17,7 @@ import {
 } from '../webpack/utils';
 
 /**
- * Builds ima application with provided config.
+ * Builds ima application.
  *
  * @param {CliArgs} args
  * @returns {Promise<void>}
@@ -30,7 +30,7 @@ const build: HandlerFn = async args => {
     // Load ima config
     const imaConfig = await resolveImaConfig(args);
 
-    // Run preProcess hook on imaPlugins
+    // Run preProcess hook on IMA CLI Plugins
     await runImaPluginsHook(args, imaConfig, 'preProcess');
 
     // Generate webpack config

@@ -26,7 +26,7 @@ async function createDevServer({
     }
 
     const app = express();
-    const isVerbose = process.argv.some(arg => arg.includes('--verbose=true'));
+    const isVerbose = process.argv.some(arg => arg.includes('--verbose'));
     const staticDir = path.dirname(require.resolve('@ima/error-overlay'));
 
     app
@@ -76,7 +76,7 @@ async function createDevServer({
         }
 
         res.status(500).json({
-          status: 'Something has happened with the @ima/cli/devServer 😢',
+          status: 'Something happened with the @ima/cli/devServer 😢',
           error: err,
         });
       })

@@ -81,7 +81,7 @@ module.exports = {
     spyOn: true,
   },
   overrides: [
-    // TODO Enable repo-wide when merged to master
+    // TODO IMA@18 Enable repo-wide when merged to master
     // Import plugin
     {
       files: [

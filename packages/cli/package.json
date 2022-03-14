@@ -17,7 +17,7 @@
     "build": "../../node_modules/.bin/tsc",
     "dev": "../../node_modules/.bin/tsc --watch"
   },
-  "author": "Miroslav Jancarik <miroslav.jancarik@firma.seznam.cz>",
+  "author": "Jan Šimeček <jan.simecek@firma.seznam.cz>",
   "contributors": [],
   "repository": {
     "type": "git",
@@ -40,13 +40,12 @@
     "@ima/error-overlay": "^17.10.0",
     "@ima/hmr-client": "^17.10.0",
     "@pmmmwh/react-refresh-webpack-plugin": "^0.5.4",
-    "@swc/core": "^1.2.154",
+    "@swc/core": "^1.2.155",
     "@types/webpack": "^5.28.0",
     "babel-loader": "^8.2.3",
     "better-opn": "^3.0.2",
     "bundle-stats-webpack-plugin": "^3.2.9",
     "chalk": "^4.1.2",
-    "cli-highlight": "^2.1.11",
     "cli-progress": "^3.10.0",
     "compression-webpack-plugin": "^9.2.0",
     "copy-webpack-plugin": "^10.2.4",
