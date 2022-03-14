@@ -48,10 +48,9 @@ cd "$ROOT_DIR"
 npx create-ima-app --example=hello ima-app
 
 cd ./ima-app
-pwd
-ls
 cd ./node_modules/.bin
 ls
+cd ./ima-app
 npm run build
 # Add customized environment configuration
 mv server/config/environment.js server/config/environment.orig.js

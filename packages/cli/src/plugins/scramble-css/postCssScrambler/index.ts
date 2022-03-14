@@ -21,6 +21,7 @@ function createHashTable(root: postcss.Root): [string[], string[]] {
   const populatingParser = selectorParser(selector => {
     selector.walkClasses(classNameNode => {
       const className = classNameNode.value;
+
       if (/^\d+%/.test(className)) {
         // the selector parser does not handle decimal numbers in
         // selectors (used in keyframes), so we need to handle

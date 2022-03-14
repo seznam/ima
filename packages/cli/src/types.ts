@@ -6,9 +6,6 @@ import {
 } from 'webpack';
 import { CommandBuilder } from 'yargs';
 
-/**
- * Inject expected ENV values into nodeJS process.env object.
- */
 declare global {
   namespace NodeJS {
     interface ProcessEnv {
@@ -19,13 +16,12 @@ declare global {
 }
 
 /**
- * Available ima cli commands string identifiers.
+ * Ima CLI commands.
  */
 export type ImaCliCommand = 'build' | 'dev';
 
 /**
- * Arguments passed across ima cli and into webpack config
- * function generator.
+ * Arguments generated from ima CLI commands.
  */
 export interface ImaCliArgs {
   rootDir: string;
@@ -46,7 +42,7 @@ export interface ImaCliArgs {
 }
 
 /**
- * CLI arguments merged with current configuration arguments.
+ * CLI arguments merged with concrete configuration context.
  */
 export interface ImaConfigurationContext extends ImaCliArgs {
   name: 'server' | 'client' | 'client.es';
@@ -179,7 +175,7 @@ export type ImaConfig = {
   webpackAliases?: ResolveOptions['alias'];
 
   /**
-   * Supported languages with glob pathes of the files with translations
+   * Supported languages with glob paths of the files with translations
    */
   languages: Record<string, string[]>;
 

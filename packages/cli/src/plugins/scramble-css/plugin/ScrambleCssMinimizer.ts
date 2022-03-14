@@ -71,12 +71,10 @@ class ScrambleCssMinimizer {
       compilation.hooks.statsPrinter.tap(this._pluginName, stats => {
         stats.hooks.print
           .for('asset.info.minimized')
-          .tap(
-            'scramble-css-webpack-plugin',
-            (minimized, { green, formatFlag }) =>
-              minimized && green && formatFlag
-                ? green(formatFlag('minimized'))
-                : ''
+          .tap(this._pluginName, (minimized, { green, formatFlag }) =>
+            minimized && green && formatFlag
+              ? green(formatFlag('minimized'))
+              : ''
           );
       });
     });
@@ -109,15 +107,12 @@ class ScrambleCssMinimizer {
         );
 
     // First process main and generate hash table
-    await this._process(mainCssAsset, compilation).then(() => {
-      if (Array.isArray(restCssAssets) && restCssAssets.length) {
-        return Promise.all(
-          restCssAssets.map(cssAsset =>
-            this._process(cssAsset, compilation, false)
-          )
-        );
-      }
-    });
+    await this._process(mainCssAsset, compilation);
+
+    // Process rest of the css assets with generated hash table
+    await Promise.all(
+      restCssAssets.map(cssAsset => this._process(cssAsset, compilation, false))
+    );
   }
 
   /**

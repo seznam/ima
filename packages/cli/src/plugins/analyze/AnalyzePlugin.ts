@@ -32,22 +32,6 @@ export interface AnalyzePluginOptions {
 }
 
 /**
- * Plugin-specific additional CLI args which are shared across
- * both build and dev commands.
- */
-const analyzePluginSharedCliArgs: CommandBuilder = {
-  analyze: {
-    desc: 'Runs multiple webpack bundle analyzer plugins on given entry',
-    type: 'string',
-    choices: ['server', 'client', 'client.es'],
-  },
-  analyzeBaseline: {
-    desc: 'Generates baseline for webpack bundle stats comparison',
-    type: 'boolean',
-  },
-};
-
-/**
  * Initializes webpack bundle analyzer plugins.
  */
 class AnalyzePlugin implements ImaCliPlugin {
@@ -56,8 +40,17 @@ class AnalyzePlugin implements ImaCliPlugin {
 
   readonly name = 'AnalyzePlugin';
   readonly cliArgs: Partial<Record<ImaCliCommand, CommandBuilder>> = {
-    build: analyzePluginSharedCliArgs,
-    dev: analyzePluginSharedCliArgs,
+    build: {
+      analyze: {
+        desc: 'Runs multiple webpack bundle analyzer plugins on given entry',
+        type: 'string',
+        choices: ['server', 'client', 'client.es'],
+      },
+      analyzeBaseline: {
+        desc: 'Generates baseline for webpack bundle stats comparison',
+        type: 'boolean',
+      },
+    },
   };
 
   constructor(options: AnalyzePluginOptions) {
