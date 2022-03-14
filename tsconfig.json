@@ -9,7 +9,6 @@
     ],
     "outDir": "dist",
     "declaration": true,
-    "noEmitOnError": true,
     "allowJs": true,
     "esModuleInterop": true,
     "forceConsistentCasingInFileNames": true,

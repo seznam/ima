@@ -191,10 +191,10 @@ async function formatError(
       name = error.name;
       message = error.message;
       stack = error.stack;
+    } else {
+      // Fallback in case everything fails
+      return `${chalk.underline(`Unknown ${type} error`)}:\n${error}`;
     }
-
-    // Fallback in case everything fails
-    return `${chalk.underline(`Unknown ${type} error`)}:\n${error}`;
   }
 
   // Track unique errors

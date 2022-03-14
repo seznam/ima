@@ -7,6 +7,10 @@ export type ListenerData = {
 };
 export type Listener = (data?: ListenerData) => Promise<void>;
 
+/**
+ * Tiny event emitter used for communication between
+ * application, hmr client and error overlay.
+ */
 class ErrorOverlayEmitter {
   private _listeners: Map<EventName, Listener[]>;
 

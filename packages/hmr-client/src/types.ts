@@ -13,13 +13,6 @@ export interface HMROptions {
   publicUrl: string;
 }
 
-export interface HMRReport {
-  message: string;
-  moduleId: string;
-  moduleIdentifier: string;
-  moduleName: string;
-}
-
 export interface HMRMessageData {
   action: 'built' | 'building' | 'sync';
   hash?: string;

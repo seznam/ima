@@ -10,7 +10,7 @@ import {
 } from './parsers';
 
 /**
- * Tries to parse error location from an error object. Which can be
+ * Tries to parse error location from an error. Which can be
  * either webpack stats error or simple Error object.
  *
  * @param {StatsError | Error} error webpack stats object or error instance.
