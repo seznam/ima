@@ -18,6 +18,7 @@
   "devDependencies": {
     "@babel/eslint-parser": "^7.17.0",
     "@babel/preset-react": "^7.16.7",
+    "@ima/cli": "^17.10.0",
     "@swc/jest": "^0.2.20",
     "enzyme": "^3.11.0",
     "enzyme-adapter-react-16": "^1.15.6",
