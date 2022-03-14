@@ -94,14 +94,15 @@ function createImaApp(dirName, exampleName) {
   // Run npm install
   info(
     `Running ${chalk.cyan(
-      'npm install' // TODO IMA@18
+      'npm install'
     )} inside app directory, this might take a while...`
   );
   // eslint-disable-next-line no-console
   console.log(chalk.dim('      Press CTRL+C to cancel.\n'));
 
   const npm = process.platform === 'win32' ? 'npm.cmd' : 'npm';
-  execa.sync(npm, ['install', ['--legacy-peer-deps']], {
+  execa.sync(npm, ['install', ['--force']], {
+    // TODO IMA@18 -> remove --force
     stdio: 'inherit',
     cwd: appRoot,
   });
