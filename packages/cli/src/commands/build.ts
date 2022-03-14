@@ -41,8 +41,8 @@ const build: HandlerFn = async args => {
     // Run webpack compiler
     const compiler = webpack(config);
     await runCompiler(compiler, args, imaConfig);
-  } catch (err) {
-    handleError(err);
+  } catch (error) {
+    handleError(error);
     process.exit(1);
   }
 };

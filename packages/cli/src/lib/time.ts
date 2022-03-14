@@ -1,9 +1,8 @@
 import prettyMs from 'pretty-ms';
 
 /**
- * Returns current time using process.hrtime. If argument is provided
- * it will return diff in ms.
- *
+ * Returns time utility function, which when called returns
+ * formatted elapsed time from it's creation.
  *
  * @returns {BigInt} current time.
  */

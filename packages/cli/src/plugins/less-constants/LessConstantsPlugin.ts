@@ -1,3 +1,5 @@
+// TODO IMA@18 remove plugin specific dependencies form cli package.json
+
 import fs from 'fs';
 import path from 'path';
 

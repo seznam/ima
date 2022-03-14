@@ -1,5 +1,4 @@
-import chalk from 'chalk';
-import { WebpackError, MultiCompiler } from 'webpack';
+import { MultiCompiler } from 'webpack';
 
 import { ImaCliArgs, ImaConfig } from '../types';
 import { runImaPluginsHook } from '../webpack/utils';
@@ -13,19 +12,13 @@ import { logger } from './logger';
 /**
  * Cli Error handler.
  *
- * @param {WebpackError | unknown} err
+ * @param {Error | unknown} err
  * @returns {void}
  */
-function handleError(error: WebpackError | unknown): void {
-  if (error instanceof Error || error instanceof WebpackError) {
-    logger.error(
-      `${chalk.underline(error.name)}: ${error.message}\n\n${chalk.gray(
-        error.stack
-      )}`
-    );
-  } else {
-    logger.error('Unexpected error occurred, closing the compiler...');
-  }
+function handleError(error: Error | unknown): void {
+  logger.error(
+    (error as Error) ?? 'Unexpected error occurred, closing the compiler...'
+  );
 }
 
 /**

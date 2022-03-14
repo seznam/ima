@@ -5,8 +5,8 @@
   "scripts": {
     "test": "jest --config jest.conf.json",
     "lint": "eslint --fix './**/*.{js,jsx}'",
-    "dev": "ima dev",
-    "build": "NODE_ENV=production ima build",
+    "dev": "./node_modules/.bin/ima dev",
+    "build": "NODE_ENV=production ./node_modules/.bin/ima build",
     "start": "NODE_ENV=production node server/server.js"
   },
   "keywords": [
