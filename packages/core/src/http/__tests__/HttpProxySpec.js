@@ -99,7 +99,7 @@ describe('ima.core.http.HttpProxy', () => {
         }
       });
 
-      // FIXME
+      // TODO IMA@18
       // it('should be timeouted for longer request then options.timeout', async done => {
       //   jest.useFakeTimers();
 

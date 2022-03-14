@@ -26,7 +26,7 @@
     "eslint-plugin-import": "^2.25.4",
     "eslint-plugin-jest": "^26.1.1",
     "eslint-plugin-prettier": "4.0.0",
-    "eslint-plugin-react": "^7.29.3",
+    "eslint-plugin-react": "^7.29.4",
     "fs-extra": "8.1.0",
     "git-cz": "^4.8.0",
     "gulp": "4.0.2",
@@ -43,7 +43,7 @@
     "postcss": "^8.4.8",
     "postcss-less": "6.0.0",
     "prettier": "2.5.1",
-    "rollup": "^2.70.0",
+    "rollup": "^2.70.1",
     "stylelint": "^14.5.3",
     "stylelint-config-css-modules": "^4.0.1",
     "stylelint-config-standard": "^25.0.0",
@@ -52,7 +52,7 @@
     "to-mock": "1.6.2",
     "ts-loader": "^9.2.8",
     "typescript": "^4.6.2",
-    "verdaccio": "4.5.1",
+    "verdaccio": "^5.8.0",
     "webpack": "^5.69.1",
     "webpack-cli": "^4.9.2"
   },
@@ -100,6 +100,5 @@
   },
   "engines": {
     "node": ">=14"
-  },
-  "dependencies": {}
+  }
 }
