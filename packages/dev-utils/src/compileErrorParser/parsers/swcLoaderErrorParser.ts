@@ -4,7 +4,7 @@ import { StatsError } from 'webpack';
 import { RE_VALID_FRAME_FIREFOX } from '../../helpers';
 import { RE_FILE_PATH_REGEX, CompileError } from './parserUtils';
 
-const RE_SWC_LINE_NUMBER = /(\d+) \|/;
+const RE_SWC_LINE_NUMBER = /(\d+) │/;
 
 /**
  * https://github.com/swc-project/swc/pull/3946
@@ -19,7 +19,7 @@ function swcLoaderErrorParser(error: StatsError | Error): CompileError {
   // Parse error message
   const compileError: CompileError = {
     name: 'Syntax error',
-    message: messageLines[2].replace(/error:/gi, '').trim(),
+    message: messageLines[2].replace(/×/gi, '').trim(),
     column: 1, // swc-loader does not report columns reliably
   };
 
