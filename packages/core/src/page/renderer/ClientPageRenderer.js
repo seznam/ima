@@ -61,18 +61,7 @@ export default class ClientPageRenderer extends AbstractPageRenderer {
     if (!this._firstTime) {
       this._setStateWithoutRendering(controller, defaultPageState);
       await this._renderToDOM(controller, view, routeOptions);
-
-      if (
-        this._settings &&
-        this._settings.$Page &&
-        this._settings.$Page.$Render &&
-        this._settings.$Page.$Render.batchResolve
-      ) {
-        this._patchPromisesToState(controller, loadedPromises);
-        this._startBatchTransactions(controller, loadedPromises);
-      } else {
-        this._patchPromisesToState(controller, loadedPromises);
-      }
+      this._patchPromisesToState(controller, loadedPromises);
     }
 
     return this._Helper
@@ -101,23 +90,13 @@ export default class ClientPageRenderer extends AbstractPageRenderer {
   /**
    * @inheritdoc
    */
-  update(controller, resourcesUpdate) {
+  update(controller, view, resourcesUpdate) {
     let separatedData = this._separatePromisesAndValues(resourcesUpdate);
     let defaultPageState = separatedData.values;
     let updatedPromises = separatedData.promises;
 
     controller.setState(defaultPageState);
-    if (
-      this._settings &&
-      this._settings.$Page &&
-      this._settings.$Page.$Render &&
-      this._settings.$Page.$Render.batchResolve
-    ) {
-      this._patchPromisesToState(controller, updatedPromises);
-      this._startBatchTransactions(controller, updatedPromises);
-    } else {
-      this._patchPromisesToState(controller, updatedPromises);
-    }
+    this._patchPromisesToState(controller, updatedPromises);
 
     return this._Helper
       .allPromiseHash(updatedPromises)
@@ -177,6 +156,8 @@ export default class ClientPageRenderer extends AbstractPageRenderer {
         })
         .catch(error => this._handleError(error));
     }
+
+    this._startBatchTransactions(controller, patchedPromises);
   }
 
   /**

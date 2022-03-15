@@ -19,6 +19,7 @@ describe('ima.storage.CookieStorage', () => {
   let cookiesStringForCookieHeader = 'cok1=hello; cok2=hello2';
 
   let request = null;
+  let requestGetCookieHeaderSpy = null;
   let response = null;
   let cookie = null;
   let win = null;
@@ -40,7 +41,8 @@ describe('ima.storage.CookieStorage', () => {
     request.init({});
     response.init({}, transformFunction);
 
-    spyOn(request, 'getCookieHeader').and.returnValue(cookieString);
+    requestGetCookieHeaderSpy = spyOn(request, 'getCookieHeader');
+    requestGetCookieHeaderSpy.and.returnValue(cookieString);
 
     spyOn(response, 'setCookie').and.stub();
 
@@ -98,6 +100,57 @@ describe('ima.storage.CookieStorage', () => {
       cookiesStringForCookieHeader
     );
     expect(cookie._transformFunction.encode.calls.count()).toBe(2);
+  });
+
+  describe('parse method', () => {
+    it('should delete cookie from storage, which were deleted in document.cookie', () => {
+      let cookieStringWithDeletedCok1 =
+        'cok2=hello2;Path=/;Expires=Fri, 31 Dec 9999 23:59:59 GMT';
+
+      requestGetCookieHeaderSpy.and.returnValue(cookieStringWithDeletedCok1);
+
+      cookie._parse();
+
+      expect(cookie._storage.size).toBe(1);
+    });
+
+    it('should change value of stored cookie if in document.cookie it has different value', () => {
+      let cookieStringWithNewValues =
+        'cok1=hello3;Path=/;Expires=Fri, 31 Dec 9999 23:59:59 GMT; cok2=hello4;Path=/;Expires=Fri, 31 Dec 9999 23:59:59 GMT';
+
+      requestGetCookieHeaderSpy.and.returnValue(cookieStringWithNewValues);
+
+      cookie._parse();
+
+      expect(cookie._storage.get('cok1').value).toBe('hello3');
+      expect(cookie._storage.get('cok2').value).toBe('hello4');
+    });
+
+    it('should change options if it is different in document.cookie', () => {
+      let cookieStringWithNewOptions =
+        'cok1=hello3;Path=/someDir;Domain=localhost:3001;Expires=Fri, 31 Dec 9999 23:59:59 GMT; cok2=hello4;Path=/differetDir;Expires=Fri, 31 Dec 9999 23:59:59 GMT';
+
+      requestGetCookieHeaderSpy.and.returnValue(cookieStringWithNewOptions);
+
+      cookie._parse();
+
+      expect(cookie._storage.get('cok1').options.path).toBe('/someDir');
+      expect(cookie._storage.get('cok1').options.domain).toBe('localhost:3001');
+      expect(cookie._storage.get('cok2').options.path).toBe('/differetDir');
+    });
+
+    it('should not overwrite already set options, when none is parsed from document.cookie', () => {
+      let cookieStringWithNoOptions = 'cok1=hello3; cok2=hello4;';
+
+      requestGetCookieHeaderSpy.and.returnValue(cookieStringWithNoOptions);
+
+      cookie._parse();
+
+      expect(cookie._storage.get('cok1').options.path).toBe('/');
+      expect(cookie._storage.get('cok1').options.expires).not.toBeNull();
+      expect(cookie._storage.get('cok1').options.sameSite).toBe('Lax');
+      expect(cookie._storage.get('cok2').options.path).toBe('/');
+    });
   });
 
   describe('set method', () => {

@@ -100,22 +100,6 @@ describe('ima.core.page.renderer.AbstractPageRenderer', function () {
     });
   });
 
-  describe('clearState method', function () {
-    it('should be set clear state to reactevie component view', function () {
-      spyOn(reactiveComponentView, 'setState').and.stub();
-
-      pageRenderer.clearState();
-
-      expect(reactiveComponentView.setState).toHaveBeenCalledWith(
-        {
-          key1: undefined,
-          key2: undefined,
-        },
-        expect.any(Function)
-      );
-    });
-  });
-
   describe('_generateViewProps method', function () {
     it('should be set $Utils to props', function () {
       let utils = { router: 'router' };
