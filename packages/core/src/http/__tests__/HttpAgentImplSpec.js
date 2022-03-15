@@ -1,4 +1,5 @@
 import toMock from 'to-mock';
+import Helper from '@ima/helpers';
 
 import Cache from 'src/cache/Cache';
 import GenericError from 'src/error/GenericError';
@@ -39,7 +40,7 @@ describe('ima.core.http.HttpAgentImpl', () => {
         prefix: 'http.',
       },
     };
-    http = new HttpAgentImpl(proxy, cache, cookie, httpConfig);
+    http = new HttpAgentImpl(proxy, cache, cookie, Helper, httpConfig);
 
     options = {
       ttl: httpConfig.defaultRequestOptions.ttl,
@@ -169,6 +170,33 @@ describe('ima.core.http.HttpAgentImpl', () => {
           Object.assign({}, data.params.options, { withCredentials: false })
         ).then(() => {
           expect(cookie.getCookiesStringForCookieHeader).not.toHaveBeenCalled();
+          done();
+        });
+      });
+
+      it('should clone result from _internalCacheOfPromises', done => {
+        spyOn(proxy, 'request').and.callFake(() => {
+          return Promise.resolve(data);
+        });
+
+        spyOn(Helper, 'clone').and.stub();
+
+        //the first call without a response in the _internalCacheOfPromises
+        http[method](
+          data.params.url,
+          data.params.data,
+          data.params.options
+        ).then(() => {
+          expect(Helper.clone).not.toHaveBeenCalled();
+        });
+
+        //the second call from the _internalCacheOfPromises is cloned
+        http[method](
+          data.params.url,
+          data.params.data,
+          data.params.options
+        ).then(() => {
+          expect(Helper.clone).toHaveBeenCalled();
           done();
         });
       });

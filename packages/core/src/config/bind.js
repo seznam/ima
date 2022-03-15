@@ -226,6 +226,7 @@ export default (ns, oc, config) => {
     '$HttpAgentProxy',
     '$Cache',
     CookieStorage,
+    '$Helper',
     config.$Http,
   ]);
   oc.bind('$Http', HttpAgent);

@@ -3,6 +3,29 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [17.12.3](https://github.com/seznam/ima/compare/v17.12.2...v17.12.3) (2022-03-10)
+
+
+### Bug Fixes
+
+* 🐛 always parse cookies, remove deleted cookies ([7a6dfc3](https://github.com/seznam/ima/commit/7a6dfc3418877a26d21136a3351396164a655377))
+* 🐛 do not overwrite existing cookie options ([76223fc](https://github.com/seznam/ima/commit/76223fc16bd1398e7aff10334612d919a79d6d34))
+
+
+
+
+
+## [17.12.2](https://github.com/seznam/ima/compare/v17.12.1...v17.12.2) (2022-02-07)
+
+
+### Bug Fixes
+
+* 🐛 freeze @babel/core and @babel/helpers ([4957363](https://github.com/seznam/ima/commit/49573634f7c518a638bbc9888187febc7b785fc5))
+
+
+
+
+
 ## [17.12.1](https://github.com/seznam/ima/compare/v17.12.0...v17.12.1) (2021-12-09)
 
 

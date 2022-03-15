@@ -14,6 +14,7 @@ export default class HttpAgentImpl extends HttpAgent {
    * @param {Cache} cache Cache to use for caching ongoing and completed
    *        requests.
    * @param {CookieStorage} cookie The cookie storage to use internally.
+   * @param {vendor.$Helper} Helper The IMA.js helper methods.
    * @param {Object<string, *>} config Configuration of the HTTP handler for
    *        the current application environment, specifying the various
    *        default request option values and cache option values.
@@ -39,7 +40,7 @@ export default class HttpAgentImpl extends HttpAgent {
    *          .setDefaultHeader('Accept-Language', 'en')
    *          .clearDefaultHeaders();
    */
-  constructor(proxy, cache, cookie, config) {
+  constructor(proxy, cache, cookie, Helper, config) {
     super();
 
     /**
@@ -86,6 +87,13 @@ export default class HttpAgentImpl extends HttpAgent {
      *       }}
      */
     this._defaultRequestOptions = config.defaultRequestOptions;
+
+    /**
+     * Tha IMA.js helper methods.
+     *
+     * @type {vendor.$Helper}
+     */
+    this._Helper = Helper;
 
     /**
      * Internal request cache, used to cache ongoing requests.
@@ -189,6 +197,26 @@ export default class HttpAgentImpl extends HttpAgent {
   }
 
   /**
+   * Attempts to clone the provided value, if possible. Values that cannot be
+   * cloned (e.g. promises) will be simply returned.
+   *
+   * @param {*} value The value to clone.
+   * @return {*} The created clone, or the provided value if the value cannot be
+   *         cloned.
+   */
+  _clone(value) {
+    if (
+      value !== null &&
+      typeof value === 'object' &&
+      !(value instanceof Promise)
+    ) {
+      return this._Helper.clone(value);
+    }
+
+    return value;
+  }
+
+  /**
    * Check cache and if data isnt available then make real request.
    *
    * @param {string} method The HTTP method to use.
@@ -233,7 +261,9 @@ export default class HttpAgentImpl extends HttpAgent {
     let cacheKey = this.getCacheKey(method, url, data);
 
     if (this._internalCacheOfPromises.has(cacheKey)) {
-      return this._internalCacheOfPromises.get(cacheKey);
+      return this._internalCacheOfPromises
+        .get(cacheKey)
+        .then(data => this._clone(data));
     }
 
     if (this._cache.has(cacheKey)) {

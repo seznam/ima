@@ -1,6 +1,6 @@
 {
   "name": "@ima/gulp-tasks",
-  "version": "17.11.3",
+  "version": "17.12.2",
   "description": "Default gulp tasks for IMA.js applications.",
   "main": "",
   "scripts": {
@@ -31,11 +31,12 @@
     "@ima/plugin-websocket": "^0.x"
   },
   "devDependencies": {
-    "@ima/helpers": "^17.9.0",
+    "@ima/helpers": "^17.12.2",
     "@ima/plugin-websocket": "^0.1.0"
   },
   "dependencies": {
-    "@babel/core": "^7.15.0",
+    "@babel/core": "7.16.0",
+    "@babel/helpers": "7.16.3",
     "@babel/plugin-external-helpers": "^7.14.5",
     "@babel/plugin-transform-modules-commonjs": "^7.15.0",
     "@babel/plugin-transform-modules-systemjs": "^7.14.5",
