@@ -1,0 +1,199 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Options template should match snapshot 1`] = `
+<div
+  className="container"
+>
+  <Connect(PresetsModal)
+    onClose={[Function]}
+    opened={false}
+  />
+  <form
+    className="form"
+    onSubmit={[Function]}
+  >
+    <div
+      className="header"
+    >
+      <div>
+        <h1>
+          Hooks settings
+        </h1>
+        <p>
+          IMA.js developer tools works by wrapping certain methods in a proxy-like functions which sends information to the devtools prior to it's execution.
+        </p>
+        <p>
+          Since wrapping all functions in your application would produce too much clutter in the output, we provide default set of hooks which you can customize, turn on/off or completely remove to suit your needs.
+           
+          <a
+            href="https://imajs.io/docs/devtools-introduction"
+            target="_blank"
+          >
+            For more information about devtools, visit imajs.io
+          </a>
+          .
+        </p>
+      </div>
+      <div
+        className="actionsWrapper"
+      >
+        <Button
+          className=""
+          color="primary"
+          onClick={[Function]}
+        >
+          Add Hook
+        </Button>
+        <div
+          className="loadPresetsWrapper"
+        >
+          <p>
+            <span
+              className="presetsLabel"
+            >
+              Current preset:
+            </span>
+             
+            name
+          </p>
+          <Button
+            className=""
+            onClick={[Function]}
+          >
+            Load or Create Preset
+          </Button>
+        </div>
+      </div>
+    </div>
+    <div
+      className="hooksWrapper"
+    >
+      <Connect(HookEntry)
+        editable={true}
+        id="1"
+        key="1"
+      />
+      <Connect(HookEntry)
+        editable={true}
+        id="2"
+        key="2"
+      />
+      <Connect(HookEntry)
+        editable={true}
+        id="3"
+        key="3"
+      />
+    </div>
+    <div
+      className="footer"
+    >
+      <Button
+        className="saveBtn"
+        color="success"
+        type="submit"
+      >
+        Save Changes
+      </Button>
+    </div>
+  </form>
+</div>
+`;
+
+exports[`Options template should match snapshot with modal opened 1`] = `
+<div
+  className="container"
+>
+  <Connect(PresetsModal)
+    onClose={[Function]}
+    opened={true}
+  />
+  <form
+    className="form"
+    onSubmit={[Function]}
+  >
+    <div
+      className="header"
+    >
+      <div>
+        <h1>
+          Hooks settings
+        </h1>
+        <p>
+          IMA.js developer tools works by wrapping certain methods in a proxy-like functions which sends information to the devtools prior to it's execution.
+        </p>
+        <p>
+          Since wrapping all functions in your application would produce too much clutter in the output, we provide default set of hooks which you can customize, turn on/off or completely remove to suit your needs.
+           
+          <a
+            href="https://imajs.io/docs/devtools-introduction"
+            target="_blank"
+          >
+            For more information about devtools, visit imajs.io
+          </a>
+          .
+        </p>
+      </div>
+      <div
+        className="actionsWrapper"
+      >
+        <Button
+          className=""
+          color="primary"
+          onClick={[Function]}
+        >
+          Add Hook
+        </Button>
+        <div
+          className="loadPresetsWrapper"
+        >
+          <p>
+            <span
+              className="presetsLabel"
+            >
+              Current preset:
+            </span>
+             
+            name
+          </p>
+          <Button
+            className=""
+            onClick={[Function]}
+          >
+            Load or Create Preset
+          </Button>
+        </div>
+      </div>
+    </div>
+    <div
+      className="hooksWrapper"
+    >
+      <Connect(HookEntry)
+        editable={true}
+        id="1"
+        key="1"
+      />
+      <Connect(HookEntry)
+        editable={true}
+        id="2"
+        key="2"
+      />
+      <Connect(HookEntry)
+        editable={true}
+        id="3"
+        key="3"
+      />
+    </div>
+    <div
+      className="footer"
+    >
+      <Button
+        className="saveBtn"
+        color="success"
+        type="submit"
+      >
+        Save Changes
+      </Button>
+    </div>
+  </form>
+</div>
+`;
