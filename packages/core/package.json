@@ -7,7 +7,7 @@
   "module": "./dist/ima.server.mjs",
   "scripts": {
     "test": "npm run test:jest && npm run test:size",
-    "test:jest": "../../node_modules/.bin/jest --no-watchman -c jest.conf.js",
+    "test:jest": "../../node_modules/.bin/jest --no-watchman -c jest.config.js",
     "test:size": "size-limit",
     "preversion": "npm test",
     "clean": "rm -rf dist",

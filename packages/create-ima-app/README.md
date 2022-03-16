@@ -69,7 +69,7 @@ my-app
 │       └── notFound
 ├── gulpConfig.js
 ├── gulpfile.js
-├── jest.conf.json
+├── jest.config.json
 ├── jest.setup.js
 ├── package-lock.json
 ├── package.json
