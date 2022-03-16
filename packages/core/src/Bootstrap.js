@@ -55,8 +55,8 @@ export default class Bootstrap {
   }
 
   /**
-   * Initializes the plugin in case it's loaded dynamically. In case of static
-   * imports, the plugin is initialized during application bootstrap phase.
+   * Initializes dynamically loaded plugin. This is explicitly called from
+   * within the Plugin Loader instance.
    *
    * @param {string} name Plugin name.
    * @param {module} module Plugin interface (object with init functions).
@@ -87,7 +87,7 @@ export default class Bootstrap {
           ns,
           this._oc,
           this._config.settings,
-          false
+          false // Indicating static bootstraping
         );
 
         $Helper.assignRecursivelyWithTracking(name)(
@@ -116,7 +116,7 @@ export default class Bootstrap {
    * @param {module} module Plugin interface (object with init functions).
    */
   _initPluginSettings(name, module) {
-    if (typeof module.initSettings !== 'function') {
+    if (typeof module?.initSettings !== 'function') {
       return;
     }
 
@@ -125,7 +125,7 @@ export default class Bootstrap {
       ns,
       this._oc,
       this._config.settings,
-      true
+      true // Indicating static dynamic bootstraping
     );
 
     $Helper.assignRecursivelyWithTracking(name)(
