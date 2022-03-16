@@ -1,6 +1,6 @@
 src/
 **/__tests__/
 rollup.config.js
-jest.conf.js
+jest.config.js
 gulpfile.js
 .babelrc

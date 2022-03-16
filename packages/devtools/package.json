@@ -11,7 +11,7 @@
     "postversion": "VERSION=\"$(npx -c 'echo \"$npm_package_version\"')\" && git add package.json package-lock.json && git commit -m 'chore(release-devtools): publish' && git tag -a -m 'devtools-v$VERSION' devtools-v$VERSION && git push --follow-tags",
     "publish-webstore": "npm run build && npm run upload",
     "upload": "webstore upload --source ./dist --auto-publish",
-    "test": "../../node_modules/.bin/jest --no-watchman -c jest.conf.js",
+    "test": "../../node_modules/.bin/jest --no-watchman -c jest.config.js",
     "build": "NODE_ENV=production ../../node_modules/.bin/webpack --config webpack.prod.js",
     "dev": "../../node_modules/.bin/webpack --watch --progress --config webpack.dev.js"
   },

@@ -3,7 +3,7 @@
   "version": "0.1.0",
   "main": "server/server.js",
   "scripts": {
-    "test": "jest --config jest.conf.json",
+    "test": "jest --config jest.config.json",
     "lint": "eslint --fix './**/*.{js,jsx}'",
     "dev": "./node_modules/.bin/ima dev",
     "build": "NODE_ENV=production ./node_modules/.bin/ima build",
