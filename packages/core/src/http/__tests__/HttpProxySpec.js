@@ -99,24 +99,23 @@ describe('ima.core.http.HttpProxy', () => {
         }
       });
 
-      // TODO IMA@18
-      // it('should be timeouted for longer request then options.timeout', async done => {
-      //   jest.useFakeTimers();
+      it('should be timeouted for longer request then options.timeout', async () => {
+        try {
+          jest.useFakeTimers();
 
-      //   proxy._getFetchApi = jest.fn(() =>
-      //     Promise.resolve(() => {
-      //       jest.runOnlyPendingTimers();
-      //     })
-      //   );
+          proxy._getFetchApi = jest.fn(() =>
+            Promise.resolve(() => {
+              jest.runOnlyPendingTimers();
 
-      //   try {
-      //     await proxy.request(method, API_URL, DATA, OPTIONS);
-      //     done.fail();
-      //   } catch (error) {
-      //     expect(error.getParams().status).toBe(StatusCode.TIMEOUT);
-      //     done();
-      //   }
-      // });
+              return () => Promise.resolve();
+            })
+          );
+
+          await proxy.request(method, API_URL, DATA, OPTIONS);
+        } catch (error) {
+          expect(error.getParams().status).toBe(StatusCode.TIMEOUT);
+        }
+      });
 
       it('should reject promise for Forbidden', async done => {
         Object.assign(response, {

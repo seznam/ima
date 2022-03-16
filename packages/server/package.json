@@ -43,27 +43,5 @@
   "engines": {
     "node": ">=6",
     "npm": ">=6"
-  },
-  "jest": {
-    "bail": false,
-    "verbose": true,
-    "testEnvironment": "node",
-    "setupFiles": [],
-    "resolver": "<rootDir>/resolver.js",
-    "modulePaths": [
-      "<rootDir>/"
-    ],
-    "testMatch": [
-      "**/__tests__/*.js"
-    ]
-  },
-  "jestConfig": {
-    "mockRules": {
-      "lib": [
-        {
-          "../app/build.js": "./__mocks__/build.js"
-        }
-      ]
-    }
   }
 }
