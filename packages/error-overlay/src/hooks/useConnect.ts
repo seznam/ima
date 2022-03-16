@@ -132,8 +132,6 @@ function useConnect(serverError: string | null) {
     }
   }, []);
 
-  // TODO remove listeners
-
   return { error, setError };
 }
 
