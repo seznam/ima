@@ -25,8 +25,8 @@
   },
   "scripts": {
     "build": "tsc",
-    "dev": "tsc --watch",
-    "prepare": "npm run build"
+    "lint": "eslint './**/*.{js,jsx,ts,tsx}'",
+    "dev": "tsc --watch"
   },
   "dependencies": {
     "@babel/core": "^7.17.7",

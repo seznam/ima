@@ -31,6 +31,8 @@
     "dev": "webpack --watch --progress --config webpack.dev.js",
     "publish-webstore": "npm run build && npm run upload",
     "test": "jest --no-watchman -c jest.config.js",
+    "stylelint": "stylelint './**/*.less'",
+    "lint": "eslint './**/*.{js,jsx,ts,tsx}'",
     "upload": "webstore upload --source ./dist --auto-publish",
     "preversion": "npm test",
     "postversion": "VERSION=\"$(npx -c 'echo \"$npm_package_version\"')\" && git add package.json package-lock.json && git commit -m 'chore(release-devtools): publish' && git tag -a -m 'devtools-v$VERSION' devtools-v$VERSION && git push --follow-tags",

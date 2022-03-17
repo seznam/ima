@@ -20,6 +20,7 @@
   "main": "index.js",
   "scripts": {
     "test": "jest -c jest.config.js",
+    "lint": "eslint './**/*.{js,jsx,ts,tsx}'",
     "preversion": "npm test"
   },
   "dependencies": {

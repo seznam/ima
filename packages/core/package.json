@@ -39,7 +39,7 @@
     "build": "rollup --config",
     "clean": "rm -rf dist",
     "dev": "rollup --config --watch",
-    "prepare": "npm run build",
+    "lint": "eslint './**/*.{js,jsx,ts,tsx}'",
     "test": "npm run test:jest && npm run test:size",
     "test:jest": "jest --no-watchman -c jest.config.js",
     "test:size": "size-limit",

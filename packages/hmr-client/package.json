@@ -32,8 +32,8 @@
   "main": "./dist/fastRefreshClient.cjs",
   "scripts": {
     "build": "rollup --config",
-    "dev": "rollup --config --watch",
-    "prepare": "npm run build"
+    "lint": "eslint './**/*.{js,jsx,ts,tsx}'",
+    "dev": "rollup --config --watch"
   },
   "dependencies": {
     "@ima/dev-utils": "^17.12.3"

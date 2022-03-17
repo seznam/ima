@@ -21,6 +21,7 @@
   "main": "taskLoader.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 0",
+    "lint": "eslint './**/*.{js,jsx,ts,tsx}'",
     "preversion": "npm test"
   },
   "publishConfig": {

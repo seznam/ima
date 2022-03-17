@@ -18,8 +18,8 @@
   "author": "Jan Šimeček <jan.simecek@firma.seznam.cz>",
   "scripts": {
     "build": "tsc",
-    "dev": "tsc --watch",
-    "prepare": "npm run build"
+    "lint": "eslint './**/*.{js,jsx,ts,tsx}'",
+    "dev": "tsc --watch"
   },
   "dependencies": {
     "chalk": "^4.1.2",
