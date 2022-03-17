@@ -2,19 +2,21 @@
   "name": "create-ima-app",
   "version": "17.12.3",
   "description": "Create a IMA.js App easily.",
-  "bin": {
-    "create-ima-app": "./bin/create-ima-app.js"
-  },
-  "scripts": {
-    "preversion": "npm test",
-    "test": "echo \"Error: no test specified\" && exit 0"
-  },
   "keywords": [
     "IMA.js",
     "Isomorphic",
     "JavaScript",
     "cli"
   ],
+  "bugs": {
+    "url": "https://github.com/seznam/ima/issues"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/seznam/ima.git",
+    "directory": "packages/create-ima-app"
+  },
+  "license": "MIT",
   "author": "Miroslav Jancarik <miroslav.jancarik@firma.seznam.cz>",
   "contributors": [
     {
@@ -30,18 +32,13 @@
       "email": "ondrej.base@firma.seznam.cz"
     }
   ],
-  "repository": {
-    "type": "git",
-    "url": "https://github.com/seznam/ima.git",
-    "directory": "packages/create-ima-app"
+  "bin": {
+    "create-ima-app": "./bin/create-ima-app.js"
   },
-  "bugs": {
-    "url": "https://github.com/seznam/ima/issues"
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 0",
+    "preversion": "npm test"
   },
-  "engines": {
-    "node": ">=8"
-  },
-  "license": "MIT",
   "dependencies": {
     "chalk": "^4.1.2",
     "command-exists": "^1.2.8",
@@ -49,5 +46,9 @@
     "fs-extra": "^10.0.1",
     "inquirer": "^8.2.1",
     "yargs": "^17.3.1"
+  },
+  "publishConfig": {
+    "access": "public",
+    "registry": "https://registry.npmjs.org/"
   }
 }

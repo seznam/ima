@@ -1,36 +1,45 @@
 {
   "name": "@ima/hmr-client",
-  "version": "17.10.0",
+  "version": "17.12.3",
   "description": "IMA.js hmr client used to connect app with error overlay.",
   "keywords": [
     "IMA.js",
     "hmr-client",
     "fast-refresh"
   ],
-  "module": "./dist/fastRefreshClient.mjs",
-  "main": "./dist/fastRefreshClient.cjs",
-  "types": "./dist/types.d.ts",
-  "scripts": {
-    "dev": "../../node_modules/.bin/rollup --config --watch",
-    "build": "../../node_modules/.bin/rollup --config",
-    "prepare": "npm run build"
+  "bugs": {
+    "url": "https://github.com/seznam/ima/issues"
   },
-  "author": "Jan Šimeček <jan.simecek@firma.seznam.cz>",
-  "contributors": [],
   "repository": {
     "type": "git",
     "url": "https://github.com/seznam/ima.git",
     "directory": "packages/hmr-client"
   },
-  "dependencies": {
-    "@ima/dev-utils": "^17.10.0"
+  "license": "MIT",
+  "author": "Jan Šimeček <jan.simecek@firma.seznam.cz>",
+  "exports": {
+    ".": {
+      "import": "./dist/fastRefreshClient.mjs",
+      "require": "./dist/fastRefreshClient.cjs",
+      "default": "./dist/fastRefreshClient.js"
+    },
+    "./imaHmrClient": {
+      "import": "./dist/imaHmrClient.mjs",
+      "require": "./dist/imaHmrClient.cjs",
+      "default": "./dist/imaHmrClient.js"
+    }
   },
-  "bugs": {
-    "url": "https://github.com/seznam/ima/issues"
+  "main": "./dist/fastRefreshClient.cjs",
+  "scripts": {
+    "build": "rollup --config",
+    "dev": "rollup --config --watch",
+    "prepare": "npm run build"
+  },
+  "dependencies": {
+    "@ima/dev-utils": "^17.12.3"
   },
   "publishConfig": {
-    "registry": "https://registry.npmjs.org/",
-    "access": "public"
-  },
-  "license": "MIT"
+    "access": "public",
+    "registry": "https://registry.npmjs.org/"
+  }
 }

@@ -1,12 +1,11 @@
 {
   "name": "@ima/skeleton",
   "version": "0.1.0",
-  "main": "server/server.js",
   "scripts": {
     "test": "jest --config jest.config.json",
     "lint": "eslint --fix './**/*.{js,jsx}'",
-    "dev": "./node_modules/.bin/ima dev",
-    "build": "NODE_ENV=production ./node_modules/.bin/ima build",
+    "dev": "ima dev",
+    "build": "NODE_ENV=production ima build",
     "start": "NODE_ENV=production node server/server.js"
   },
   "keywords": [
@@ -18,21 +17,21 @@
   "devDependencies": {
     "@babel/eslint-parser": "^7.17.0",
     "@babel/preset-react": "^7.16.7",
-    "@ima/cli": "^17.10.0",
+    "@ima/cli": "^17.12.3",
     "@swc/jest": "^0.2.20",
     "enzyme": "^3.11.0",
     "enzyme-adapter-react-16": "^1.15.6",
     "enzyme-to-json": "^3.6.2",
-    "eslint": "^8.10.0",
-    "eslint-config-prettier": "^8.4.0",
+    "eslint": "^8.11.0",
+    "eslint-config-prettier": "^8.5.0",
     "eslint-plugin-jest": "^26.1.1",
     "eslint-plugin-prettier": "^4.0.0",
-    "eslint-plugin-react": "^7.29.2",
+    "eslint-plugin-react": "^7.29.4",
     "jest": "^27.5.1",
-    "prettier": "^2.5.1"
+    "prettier": "^2.6.0"
   },
   "dependencies": {
-    "@ima/core": "^17.12.2",
+    "@ima/core": "^17.12.3",
     "@ima/react-hooks": "^1.1.1",
     "@ima/server": "^17.12.2",
     "body-parser": "^1.19.2",
@@ -40,7 +39,7 @@
     "cookie-parser": "^1.4.6",
     "express": "^4.17.3",
     "express-http-proxy": "^1.6.3",
-    "helmet": "^3.21.2",
+    "helmet": "^3.23.3",
     "prop-types": "^15.8.1",
     "react": "^17.0.2",
     "react-dom": "^17.0.2",

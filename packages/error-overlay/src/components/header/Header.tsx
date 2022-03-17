@@ -1,8 +1,8 @@
 import clsx from 'clsx';
 import { FunctionComponent } from 'react';
 
-import { Close } from '#/components';
-import { ParsedError } from '#/types';
+import { Close } from '@/components';
+import { ParsedError } from '@/types';
 
 export type HeaderProps = {
   name: ParsedError['name'];

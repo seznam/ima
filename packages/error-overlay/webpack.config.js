@@ -10,7 +10,7 @@ const isProduction = process.env.NODE_ENV === 'production';
 
 module.exports = {
   target: ['web', 'es11'],
-  entry: { overlay: './index.tsx' },
+  entry: { overlay: './src/index.tsx' },
   output: {
     clean: true,
     path: path.join(rootDir, './dist'),
@@ -78,7 +78,7 @@ module.exports = {
       path: false,
     },
     alias: {
-      '#': path.resolve(rootDir, './src/'),
+      '@': path.join(rootDir, 'src'),
     },
   },
   plugins: [
@@ -96,7 +96,12 @@ module.exports = {
       }),
     new CopyPlugin({
       patterns: [
-        { from: path.resolve('node_modules/source-map/lib/mappings.wasm') },
+        {
+          from: path.join(
+            path.dirname(require.resolve('source-map')),
+            'lib/mappings.wasm'
+          ),
+        },
       ],
     }),
   ].filter(Boolean),

@@ -2,10 +2,10 @@ import { parseCompileError } from '@ima/dev-utils/dist/compileErrorParser';
 import { useContext, useEffect, useState } from 'react';
 import { SourceMapConsumer } from 'source-map';
 
-import { OverlayContext } from '#/components';
-import { SourceStorage } from '#/entities';
-import { ParsedError } from '#/types';
-import { mapCompileStackFrame, mapStackFramesToOriginal } from '#/utils';
+import { OverlayContext } from '@/components';
+import { SourceStorage } from '@/entities';
+import { ParsedError } from '@/types';
+import { mapCompileStackFrame, mapStackFramesToOriginal } from '@/utils';
 
 /**
  * Connects error overlay to __IMA_HMR interface.

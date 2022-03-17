@@ -9,7 +9,7 @@
     "baseUrl": ".",
     "declaration": false,
     "paths": {
-      "#/*": [
+      "@/*": [
         "./src/*"
       ]
     }
@@ -17,6 +17,6 @@
   "include": [
     "./typings/**/*",
     "./src/**/*",
-    "index.tsx"
+    "src/index.tsx"
   ]
 }

@@ -1,6 +1,6 @@
 import { FunctionComponent } from 'react';
 
-import { Icon } from '#/components';
+import { Icon } from '@/components';
 
 export interface CloseProps {
   onClose: () => void;
