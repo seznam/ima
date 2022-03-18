@@ -21,8 +21,8 @@
   "main": "./dist/overlay.js",
   "scripts": {
     "build": "NODE_ENV=production webpack",
-    "lint": "eslint './**/*.{js,jsx,ts,tsx}'",
     "dev": "NODE_ENV=development webpack --watch",
+    "lint": "eslint './**/*.{js,jsx,ts,tsx}'",
     "stylelint": "stylelint './**/*.less'"
   },
   "devDependencies": {

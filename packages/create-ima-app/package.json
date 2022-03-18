@@ -36,9 +36,9 @@
     "create-ima-app": "./bin/create-ima-app.js"
   },
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 0",
     "lint": "eslint './**/*.{js,jsx,ts,tsx}'",
     "stylelint": "stylelint './**/*.less'",
+    "test": "echo \"Error: no test specified\" && exit 0",
     "preversion": "npm test"
   },
   "dependencies": {

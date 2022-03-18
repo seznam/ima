@@ -18,8 +18,8 @@
   "author": "Miroslav Jancarik <miroslav.jancarik@firma.seznam.cz>",
   "main": "index.js",
   "scripts": {
-    "test": "jest -c jest.config.js",
     "lint": "eslint './**/*.{js,jsx,ts,tsx}'",
+    "test": "jest -c jest.config.js",
     "preversion": "npm test"
   },
   "dependencies": {

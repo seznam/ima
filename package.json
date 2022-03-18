@@ -21,11 +21,12 @@
     "./packages/server"
   ],
   "scripts": {
-    "postinstall": "npm install --prefix ./packages/devtools; turbo run build",
     "benchmark": "utils/benchmark/benchmark.sh",
+    "build": "turbo run build",
     "precommit": "lint-staged",
     "commit": "git-cz",
     "doc": "gulp doc",
+    "postinstall": "npm run build",
     "lint": "turbo run lint",
     "release": "lerna version --force-publish create-ima-app",
     "release:devtools": "npm run publish-webstore --prefix ./packages/devtools",
@@ -34,17 +35,12 @@
     "release:next:init": "lerna version premajor --force-publish",
     "release:publish": "lerna publish from-git --yes",
     "stylelint": "turbo run stylelint",
-    "test": "turbo run test && npm run --prefix ./packages/devtools test",
+    "test": "turbo run test",
     "version": "npm run doc && node utils/version/create-ima-app-versions.js && git add docs packages/create-ima-app/template/package.json"
   },
   "husky": {
     "hooks": {
       "commit-msg": "commitlint -E HUSKY_GIT_PARAMS"
-    }
-  },
-  "config": {
-    "commitizen": {
-      "path": "git-cz"
     }
   },
   "commitlint": {
@@ -54,6 +50,11 @@
   },
   "lint-staged": {
     "**/*.{js,jsx}": "npm run lint:cmd"
+  },
+  "config": {
+    "commitizen": {
+      "path": "git-cz"
+    }
   },
   "devDependencies": {
     "@babel/eslint-parser": "^7.17.0",
