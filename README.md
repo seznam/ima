@@ -34,14 +34,6 @@ For a more in-depth information about the IMA.js see a [full documentation](http
 - **server** - it contains methods which allow you  to connect IMA application with the express framework.
 - **gulp-tasks** - IMA.js usees gulp for bundling and automatization. There are prepared common tasks and a base configuration.
 
----
-**NOTE**
-
-The root postinstall `lerna bootstrap` has been replaced for non-CI cases by `lerna run prepare`. This should cover all use-cases in both `npm <= 6` and `npm >= 7` versions.
-
-In `npm >= 7` there  is [npm workspace bug](https://github.com/npm/cli/issues/3840): the build of all monorepo packages (included in `lerna bootstrap` command) should be run by root `npm install` but it does not accept the per-package `prepare` scripts yet.
----
-
 ## Plugins
 See the [ima-plugins](https://github.com/seznam/IMA.js-plugins) repository for available IMA.js plugins.
 
@@ -64,7 +56,7 @@ yarn dev
 ```
 
 ## Contributing
-
+  
 Contribute to this project via [Pull-Requests](https://github.com/seznam/ima/pulls).
 
 We are following [Conventional Commits Specification](https://www.conventionalcommits.org/en/v1.0.0/#summary). To simplify the commit process, you can use `npm run commit` command. It opens an interactive interface, which should help you with commit message composition.

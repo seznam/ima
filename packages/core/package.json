@@ -52,12 +52,9 @@
     "node-fetch": "^2.6.7"
   },
   "devDependencies": {
-    "@rollup/plugin-json": "^4.1.0",
-    "@rollup/plugin-replace": "^4.0.0",
     "@size-limit/preset-big-lib": "^7.0.8",
     "enzyme": "^3.11.0",
     "jscodeshift": "^0.13.1",
-    "rollup-plugin-jscc": "^2.0.0",
     "size-limit": "^7.0.8"
   },
   "peerDependencies": {
