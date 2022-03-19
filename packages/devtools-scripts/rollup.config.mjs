@@ -1,16 +1,8 @@
 import commonjs from '@rollup/plugin-commonjs';
 import { nodeResolve } from '@rollup/plugin-node-resolve';
+import { createRollupConfig } from '../../createRollupConfig.mjs';
 
-export default {
+export default createRollupConfig({
   treeshake: false,
-  input: './src/main.js',
-  output: [
-    {
-      file: './dist/main.mjs',
-      format: 'esm',
-      exports: 'named',
-      sourcemap: true,
-    },
-  ],
   plugins: [nodeResolve(), commonjs()],
-};
+});
