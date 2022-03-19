@@ -3,7 +3,6 @@ const path = require('path');
 const CompressionPlugin = require('compression-webpack-plugin');
 const CopyPlugin = require('copy-webpack-plugin');
 const CssMinimizerPlugin = require('css-minimizer-webpack-plugin');
-const { ProgressPlugin } = require('webpack');
 
 const rootDir = path.resolve(__dirname);
 const isProduction = process.env.NODE_ENV === 'production';
@@ -11,6 +10,8 @@ const isProduction = process.env.NODE_ENV === 'production';
 module.exports = {
   target: ['web', 'es11'],
   entry: { overlay: './src/index.tsx' },
+  mode: isProduction ? 'production' : 'development',
+  stats: 'minimal',
   output: {
     clean: true,
     path: path.join(rootDir, './dist'),
@@ -82,7 +83,6 @@ module.exports = {
     },
   },
   plugins: [
-    new ProgressPlugin(),
     isProduction &&
       new CompressionPlugin({
         algorithm: 'brotliCompress',
