@@ -171,6 +171,13 @@ export default class Router {
   getCurrentRouteInfo() {}
 
   /**
+   * Returns the storage of all known routes and middlewares. Their names are the map keys.
+   *
+   * @return {Map<string, AbstractRoute>} The map of known routes and middlewares.
+   */
+  getRouteHandlers() {}
+
+  /**
    * Registers event listeners at the client side window object allowing the
    * router to capture user's history (history pop state - going "back") and
    * page (clicking links) navigation.
