@@ -1,0 +1,13 @@
+{
+  "extends": "../../tsconfig.json",
+  "compilerOptions": {
+    "lib": ["DOM"],
+    "outDir": "./dist",
+    "baseUrl": "."
+  },
+  "include": [
+    "./typings/**/*",
+    "./src/**/*",
+    "./index.ts"
+  ]
+}

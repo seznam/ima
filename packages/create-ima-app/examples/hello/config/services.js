@@ -11,8 +11,10 @@ export default (ns, oc, config) => {
   $window.bindEventListener($window.getWindow(), 'error', event => {
     let error = event.error;
 
-    $router.handleError({ error }).catch(fatalError => {
-      config.$IMA.fatalErrorHandler(fatalError);
-    });
+    if (typeof $router?.handleError?.catch === 'function') {
+      $router.handleError({ error }).catch(fatalError => {
+        config.$IMA.fatalErrorHandler(fatalError);
+      });
+    }
   });
 };

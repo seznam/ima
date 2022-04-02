@@ -1,5 +1,3 @@
-'use strict';
-
 const CacheFactory = require('../lib/cache.js');
 
 describe('cache', () => {

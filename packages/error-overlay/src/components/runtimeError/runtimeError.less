@@ -1,0 +1,47 @@
+.ima-runtime-error {
+  & > * {
+    margin-bottom: 40px;
+
+    &:last-child {
+      margin-bottom: 0;
+    }
+  }
+
+  &__ {
+    &expand-wrapper {
+      display: flex;
+
+      justify-content: center;
+      align-items: center;
+    }
+
+    &expand-button {
+      border: none;
+
+      padding: 14px 20px;
+
+      font-family: var(--ima-font-mono);
+
+      font-size: 14px;
+      line-height: 14px;
+
+      background-color: #e2e8f0;
+
+      transition: all 0.15s ease-in-out;
+
+      cursor: pointer;
+
+      &:hover {
+        background-color: #cbd5e1;
+      }
+
+      &:active {
+        transform: scale(0.95);
+      }
+    }
+
+    &number {
+      text-decoration: underline;
+    }
+  }
+}

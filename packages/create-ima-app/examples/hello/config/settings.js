@@ -1,7 +1,11 @@
-import DocumentView from 'app/component/document/DocumentView';
+import DocumentView from 'app/document/DocumentView';
 
 export default (ns, oc, config) => {
-  let versionStamp = `?version=${config.$Version}`;
+  const versionStamp = `?version=${
+    config.$Env === 'dev'
+      ? (+new Date() + Math.random() * 100).toString(32)
+      : config.$Version
+  }`;
 
   return {
     prod: {
@@ -30,29 +34,23 @@ export default (ns, oc, config) => {
       },
       $Page: {
         $Render: {
+          styles: [`/static/css/app.css${versionStamp}`],
           scripts: [
-            `/static/js/locale/${config.$Language}.js${versionStamp}`,
-            '/static/js/app.bundle.min.js' + versionStamp,
+            `/static/locale/${config.$Language}.js${versionStamp}`,
+            `/static/js/app.bundle.js${versionStamp}`,
           ],
           esScripts: [
-            '/static/js/locale/' + config.$Language + '.js' + versionStamp,
-            '/static/js/app.bundle.es.min.js' + versionStamp,
+            `/static/locale/${config.$Language}.js${versionStamp}`,
+            `/static/js.es/app.bundle.js${versionStamp}`,
           ],
           documentView: DocumentView,
         },
       },
-      $Static: {
-        image: '/static/img',
-        css: '/static/css',
-        js: '/static/js',
-      },
-    },
-
-    test: {
-      $Http: {
-        defaultRequestOptions: {
-          timeout: 5000,
-        },
+      links: {
+        documentation: 'https://imajs.io/docs',
+        tutorial: 'https://imajs.io/tutorial/introduction',
+        plugins: 'https://github.com/seznam/IMA.js-plugins',
+        api: 'https://imajs.io/api',
       },
     },
 
@@ -64,21 +62,18 @@ export default (ns, oc, config) => {
       },
       $Page: {
         $Render: {
+          styles: [`/static/css/app.css${versionStamp}`],
           scripts: [
-            '/static/js/polyfill.js' + versionStamp,
-            '/static/js/shim.js' + versionStamp,
-            '/static/js/vendor.client.js' + versionStamp,
-            `/static/js/locale/${config.$Language}.js${versionStamp}`,
-            '/static/js/app.client.js' + versionStamp,
-            '/static/js/hot.reload.js' + versionStamp,
+            // `/static/js/polyfill.js${versionStamp}`,
+            `/static/locale/${config.$Language}.js${versionStamp}`,
+            `/static/js/vendors.js${versionStamp}`,
+            `/static/js/app.client.js${versionStamp}`,
           ],
           esScripts: [
-            '/static/js/polyfill.es.js' + versionStamp,
-            '/static/js/shim.es.js' + versionStamp,
-            '/static/js/vendor.client.es.js' + versionStamp,
-            `/static/js/locale/${config.$Language}.js${versionStamp}`,
-            '/static/js/app.client.es.js' + versionStamp,
-            '/static/js/hot.reload.js' + versionStamp,
+            // `/static/js.es/polyfill.js${versionStamp}`,
+            `/static/locale/${config.$Language}.js${versionStamp}`,
+            `/static/js.es/vendors.js${versionStamp}`,
+            `/static/js.es/app.client.js${versionStamp}`,
           ],
         },
       },

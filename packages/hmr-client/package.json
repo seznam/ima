@@ -1,0 +1,36 @@
+{
+  "name": "@ima/hmr-client",
+  "version": "17.10.0",
+  "description": "IMA.js hmr client used to connect app with error overlay.",
+  "keywords": [
+    "IMA.js",
+    "hmr-client",
+    "fast-refresh"
+  ],
+  "module": "./dist/fastRefreshClient.mjs",
+  "main": "./dist/fastRefreshClient.cjs",
+  "types": "./dist/types.d.ts",
+  "scripts": {
+    "dev": "../../node_modules/.bin/rollup --config --watch",
+    "build": "../../node_modules/.bin/rollup --config",
+    "prepare": "npm run build"
+  },
+  "author": "Jan Šimeček <jan.simecek@firma.seznam.cz>",
+  "contributors": [],
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/seznam/ima.git",
+    "directory": "packages/hmr-client"
+  },
+  "dependencies": {
+    "@ima/dev-utils": "^17.10.0"
+  },
+  "bugs": {
+    "url": "https://github.com/seznam/ima/issues"
+  },
+  "publishConfig": {
+    "registry": "https://registry.npmjs.org/",
+    "access": "public"
+  },
+  "license": "MIT"
+}

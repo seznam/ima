@@ -1,5 +1,3 @@
-'use strict';
-
 /**
  * Server-side cache implementation for the rendered page being the responses
  * of HTTP GET requests.

@@ -9,7 +9,8 @@
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/seznam/ima.git"
+    "url": "https://github.com/seznam/ima.git",
+    "directory": "packages/server"
   },
   "keywords": [
     "gulp",
@@ -28,21 +29,20 @@
   "homepage": "https://github.com/seznam/ima",
   "devDependencies": {
     "@ima/helpers": "^17.12.2",
-    "express": "^4.17.1"
+    "express": "^4.17.3"
   },
   "dependencies": {
-    "async-each": "1.0.3",
-    "error-to-json": "1.1.0",
-    "highlight.js": "9.16.2",
-    "stack-trace": "0.0.10",
-    "winston": "3.2.1"
+    "@ima/dev-utils": "^17.10.0",
+    "ejs": "^3.1.6",
+    "error-to-json": "^2.0.0",
+    "winston": "^3.6.0"
   },
   "peerDependencies": {
     "@ima/helpers": "17.x"
   },
   "engines": {
     "node": ">=6",
-    "npm": ">=4 <7"
+    "npm": ">=6"
   },
   "jest": {
     "bail": false,

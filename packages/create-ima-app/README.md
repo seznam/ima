@@ -31,15 +31,15 @@ Then open [http://localhost:3001/](http://localhost:3001/) to see your applicati
 **Node >= 8** is required for the installation. You can use [nvm](https://github.com/nvm-sh/nvm) to easily manage your local node version. To create new app you can choose one of the following methods based on your preferences.
 
 ### npm
-```shell 
+```shell
 npm init ima-app my-app
 ```
 ### npx
-```shell 
+```shell
 npx create-ima-app my-app
 ```
 ### yarn
-```shell 
+```shell
 yarn create ima-app my-app
 ```
 
@@ -91,9 +91,6 @@ To run eslint on your application source files. We've prepared pre-configured `.
 
 #### `npm run build`
 To build your application.
-
-#### `npm run build:spa`
-To build SPA version of your application.
 
 #### `npm run start`
 To start IMA.js server.

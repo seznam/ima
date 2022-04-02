@@ -1,15 +1,21 @@
 module.exports = {
   root: true,
+  ignorePatterns: [
+    '**/node_modules/**',
+    '**/dist/**',
+    '**/docs/**',
+    '**/coverage/**',
+    'packages/create-ima-app/examples/todos/assets/**',
+  ],
   extends: [
     'eslint:recommended',
     'plugin:react/recommended',
+    'plugin:react/jsx-runtime',
     'plugin:jest/recommended',
     'plugin:jest/style',
     'plugin:prettier/recommended',
   ],
   rules: {
-    // Eslint overrides
-    'no-import-assign': 0,
     'no-console': [
       'error',
       {
@@ -75,8 +81,80 @@ module.exports = {
     spyOn: true,
   },
   overrides: [
+    // TODO IMA@18 Enable repo-wide when merged to master
+    // Import plugin
     {
-      files: ['packages/cli/**', 'packages/create-ima-app/**'],
+      files: [
+        'packages/cli/**',
+        'packages/hmr-client/**',
+        'packages/error-overlay/**',
+        'packages/dev-utils/**',
+      ],
+      extends: ['plugin:import/recommended'],
+      rules: {
+        'import/order': [
+          'error',
+          {
+            groups: ['builtin', 'external', 'internal'],
+            pathGroups: [
+              {
+                pattern: '{preact|react|svelte}{/**,**}',
+                group: 'external',
+                position: 'before',
+              },
+              {
+                pattern: '#*/**',
+                group: 'internal',
+                position: 'after',
+              },
+              {
+                pattern: '*.{css,less,json,html,txt,csv,png,jpg,svg}',
+                group: 'object',
+                patternOptions: { matchBase: true },
+                position: 'after',
+              },
+            ],
+            pathGroupsExcludedImportTypes: ['#'],
+            'newlines-between': 'always',
+            alphabetize: {
+              order: 'asc',
+              caseInsensitive: true,
+            },
+          },
+        ],
+      },
+    },
+    // Typescript support
+    {
+      files: ['**/*.{ts,tsx}'],
+      parserOptions: {
+        tsconfigRootDir: __dirname,
+        project: './tsconfig.json',
+      },
+      extends: ['plugin:@typescript-eslint/recommended'],
+      rules: {
+        'import/no-unresolved': 'off',
+        '@typescript-eslint/ban-ts-comment': [
+          'error',
+          { 'ts-expect-error': 'allow-with-description' },
+        ],
+        '@typescript-eslint/no-unused-vars': 'error',
+        '@typescript-eslint/no-namespace': [
+          'error',
+          { allowDeclarations: true },
+        ],
+      },
+      settings: {
+        'import/ignore': [/^#/],
+      },
+    },
+    // Other overrides
+    {
+      files: [
+        'packages/cli/**',
+        'packages/dev-utils/**',
+        'packages/create-ima-app/**',
+      ],
       rules: {
         'no-console': 'off',
       },

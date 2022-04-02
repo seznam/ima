@@ -148,6 +148,6 @@ export default class PageRendererFactory {
    *         component.
    */
   createReactElementFactory(view) {
-    return this._React.createFactory(view);
+    return this._React.createElement.bind(null, view);
   }
 }

@@ -1,0 +1,48 @@
+<!doctype html>
+<html>
+
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, shrink-to-fit=no">
+    <title>IMA.js - Server Error</title>
+  </head>
+
+  <body>
+    <script src="<%= devServerPublic %>/__error-overlay-static/overlay.js"></script>
+    <ima-error-overlay
+      public-url="<%= devServerPublic %>"
+      server-error="<%= JSON.stringify(serverError) %>"
+    ></ima-error-overlay>
+    <script>
+      (() => {
+        function debounce(func, timeout) {
+          let timer;
+
+          return (...args) => {
+            clearTimeout(timer);
+            timer = setTimeout(() => {
+              func.apply(this, args);
+            }, timeout);
+          };
+        }
+
+        const debouncedReload = debounce(() => window.location.reload(), 100);
+        const evtSource = new EventSource('<%= devServerPublic %>/__webpack_hmr');
+
+        evtSource.addEventListener('message', () => {
+          if (event.data && typeof event.data === 'string' && event.data.includes('action')) {
+            try {
+              const data = JSON.parse(event.data);
+              if (data?.action === 'built' && data?.errors.length === 0) {
+                debouncedReload()
+              }
+            } catch (error) {
+              console.error('Something unexpected happened when parsing HMR event stream', error);
+            }
+          }
+        });
+      })();
+    </script>
+  </body>
+
+</html>

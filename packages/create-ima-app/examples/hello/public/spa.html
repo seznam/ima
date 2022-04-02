@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charSet="utf-8"/>
+    <meta httpEquiv="X-UA-Compatible" content="IE=edge"/>
+
+    <meta name="description" content=""/>
+    <meta name="keywords" content=""/>
+
+    <meta property="og:title" content=""/>
+    <meta property="og:description" content=""/>
+    <meta property="og:type" content=""/>
+    <meta property="og:url" content=""/>
+    <meta property="og:image" content=""/>
+
+    <meta name="viewport" content="width=device-width, initial-scale=1"/>
+    <link rel="stylesheet" href="/static/css/app.css?version=<%= $Version %>"/>
+    <title></title>
+</head>
+<body>
+    <div id="page">
+    </div>
+    <div id="revivalSettings">
+        <script type="application/javascript">
+            window.$Debug = <%= $Debug %>;
+            window.$IMA = window.$IMA || {};
+            window.$IMA.Cache = {};
+            window.$IMA.$App = <%- JSON.stringify($App) %>;
+            window.$IMA.$Language = "<%= $Language %>";
+            window.$IMA.$Version =  "<%= $Version %>";
+            window.$IMA.$Env = "<%= $Env %>";
+            window.$IMA.$Debug = <%= $Debug %>;
+            window.$IMA.$Protocol = location.protocol;
+            window.$IMA.$Host = location.host;
+            window.$IMA.$Path = location.pathname;
+            window.$IMA.$Root = "";
+            window.$IMA.$LanguagePartPath = "";
+        </script>
+    </div>
+    <div id="scripts">
+        <% if ($Env !== "dev") { %>
+            <script type="application/javascript" src="/static/locale/<%= $Language %>.js?version=<%= $Version %>"></script>
+            <script type="application/javascript" src="/static/js/app.bundle.js?version=<%= $Version %>"></script>
+        <% } else { %>
+            <script type="application/javascript" src="/static/locale/<%= $Language %>.js?version=<%= $Version %>"></script>
+            <script type="application/javascript" src="/static/js/vendors.js?version=<%= $Version %>"></script>
+            <script type="application/javascript" src="/static/js/app.client.js?version=<%= $Version %>"></script>
+        <% } %>
+    </div>
+</body>
+</html>

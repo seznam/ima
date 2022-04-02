@@ -185,8 +185,14 @@ export default class ClientRouter extends AbstractRouter {
 
     return super
       .route(path, options, action, locals)
-      .catch(error => {
-        return this.handleError({ error }, {}, locals);
+      .catch(error => this.handleError({ error }, {}, locals))
+      .then(data => {
+        // Hide error overlay
+        if (!(data instanceof Error) && $Debug && window.__IMA_HMR) {
+          window.__IMA_HMR.emit('clear', { type: 'runtime' });
+        }
+
+        return data;
       })
       .catch(error => {
         this._handleFatalError(error);
@@ -199,6 +205,16 @@ export default class ClientRouter extends AbstractRouter {
   handleError(params, options = {}, locals = {}) {
     if ($Debug) {
       console.error(params.error);
+
+      // Show error overlay
+      if (window.__IMA_HMR) {
+        window.__IMA_HMR.emit('error', {
+          error: params.error,
+          type: 'runtime',
+        });
+
+        return params.error;
+      }
     }
 
     if (this.isClientError(params.error)) {

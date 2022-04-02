@@ -1,0 +1,46 @@
+.ima-header {
+  position: relative;
+
+  font-family: var(--ima-font-mono);
+
+  &__ {
+    &type {
+      display: inline-block;
+
+      padding: 3px 6px;
+
+      font-size: 12px;
+      font-weight: 500;
+
+      text-transform: capitalize;
+
+      &-- {
+        &compile {
+          color: #a16207;
+
+          background-color: #fde68a;
+        }
+
+        &runtime {
+          color: white;
+
+          background-color: #ef4444;
+        }
+      }
+    }
+
+    &meta {
+      margin: 8px 0 16px;
+
+      font-size: 20px;
+      line-height: 28px;
+
+      letter-spacing: -1.5px;
+      color: #ef4444;
+    }
+
+    &name {
+      font-weight: 600;
+    }
+  }
+}

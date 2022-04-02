@@ -443,7 +443,10 @@ export default class ObjectContainer {
    * @param {?string} bindingPluginName
    */
   setBindingState(bindingState, bindingPluginName = null) {
-    if (this._bindingState === ObjectContainer.APP_BINDING_STATE) {
+    if (
+      this._bindingState === ObjectContainer.APP_BINDING_STATE &&
+      bindingState !== ObjectContainer.PLUGIN_BINDING_STATE
+    ) {
       throw new Error(
         `ima.core.ObjectContainer:setBindingState The setBindingState() ` +
           `method  has to be called only by the bootstrap script. Other ` +
@@ -676,7 +679,7 @@ export default class ObjectContainer {
   /**
    * Retrieves the class denoted by the provided class constructor.
    *
-   * The method then checks whether there are defined {@code $dependecies}
+   * The method then checks whether there are defined {@code $dependencies}
    * property for class. Then the class is registered to this object
    * container.
    *

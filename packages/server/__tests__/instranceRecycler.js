@@ -1,5 +1,3 @@
-'use strict';
-
 const instanceRecycler = require('../lib/instanceRecycler.js');
 
 describe('instranceRecycler', () => {

@@ -1,10 +1,9 @@
 import React from 'react';
+import ReactDOM from 'react-dom';
 import jsdom from 'jsdom';
-import $Helper from '@ima/helpers';
 import ControllerInterface from '../controller/Controller';
 import AbstractDocumentView from '../page/AbstractDocumentView';
 import * as ima from '../main';
-import vendorLinker from '../vendorLinker';
 
 jest.mock('path', () => {
   const original = jest.requireActual('path');
@@ -23,18 +22,6 @@ const MASTER_ELEMENT_ID = 'some-id';
 
 describe('revive client application', () => {
   let router = null;
-  let ReactDOM = {
-    render() {
-      return {
-        setState: () => {},
-      };
-    },
-    hydrate() {
-      return {
-        setState: () => {},
-      };
-    },
-  };
 
   let routerConfig = {
     $Protocol: 'http:',
@@ -109,11 +96,7 @@ describe('revive client application', () => {
     //mock
     global.window.scrollTo = () => {};
 
-    vendorLinker.set('react', React);
-    vendorLinker.set('react-dom', ReactDOM);
-    vendorLinker.set('@ima/helpers', $Helper);
-
-    spyOn(ReactDOM, 'render');
+    jest.spyOn(ReactDOM, 'render');
 
     done();
   });

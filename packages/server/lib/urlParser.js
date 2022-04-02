@@ -1,11 +1,7 @@
-'use strict';
-
 const { URL } = require('url');
 
-let path = require('path');
-let applicationFolder = path.resolve('.');
-
-const BUILD_JS_PATH = path.resolve(applicationFolder, './app/build.js');
+const path = require('path');
+const IMA_CONFIG_JS_PATH = path.resolve('./ima.config.js');
 
 module.exports = environment => {
   function _getHost(req) {
@@ -34,9 +30,11 @@ module.exports = environment => {
       rootExpression.replace('/', '/');
 
     if (languageParam) {
-      let build = require(BUILD_JS_PATH);
+      let imaConfig = require(IMA_CONFIG_JS_PATH) || {
+        languages: { cs: [], en: [] },
+      };
 
-      const langCodes = Object.keys(build.languages);
+      const langCodes = Object.keys(imaConfig.languages);
       let languagesExpr = langCodes.join('|');
       rootReg += '(/(' + languagesExpr + '))?';
     }

@@ -1,0 +1,55 @@
+{
+  "name": "@ima/error-overlay",
+  "version": "17.10.0",
+  "description": "IMA.js error-overlay used in development mode for error reporting.",
+  "keywords": [
+    "IMA.js",
+    "hot-module-replacement",
+    "error-overlay",
+    "stack-trace"
+  ],
+  "main": "./dist/overlay.js",
+  "scripts": {
+    "dev": "NODE_ENV=development ../../node_modules/.bin/webpack --watch",
+    "build": "NODE_ENV=production ../../node_modules/.bin/webpack",
+    "prepare": "npm run build"
+  },
+  "author": "Jan Šimeček <jan.simecek@firma.seznam.cz>",
+  "contributors": [],
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/seznam/ima.git",
+    "directory": "packages/error-overlay"
+  },
+  "bugs": {
+    "url": "https://github.com/seznam/ima/issues"
+  },
+  "publishConfig": {
+    "registry": "https://registry.npmjs.org/",
+    "access": "public"
+  },
+  "license": "MIT",
+  "devDependencies": {
+    "@ima/dev-utils": "^17.10.0",
+    "@types/prismjs": "^1.16.6",
+    "@types/react": "^17.0.40",
+    "@types/react-dom": "^17.0.13",
+    "clsx": "^1.1.1",
+    "compression-webpack-plugin": "^9.2.0",
+    "copy-webpack-plugin": "^10.2.0",
+    "css-loader": "^6.7.1",
+    "css-minimizer-webpack-plugin": "^3.3.0",
+    "easy-uid": "^2.0.2",
+    "less": "^4.1.2",
+    "less-loader": "^10.2.0",
+    "postcss": "^8.4.7",
+    "postcss-loader": "^6.2.1",
+    "postcss-preset-env": "^7.4.2",
+    "prismjs": "^1.27.0",
+    "react": "^17.0.2",
+    "react-dom": "^17.0.2",
+    "source-map": "^0.7.3",
+    "stacktrace-parser": "^0.1.10",
+    "style-loader": "^3.3.1"
+  }
+}

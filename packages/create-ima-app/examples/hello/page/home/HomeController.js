@@ -1,5 +1,7 @@
-import AbstractPageController from 'app/page/AbstractPageController';
 //import { GenericError } from '@ima/core';
+
+import AbstractPageController from 'app/page/AbstractPageController';
+import IMAjsShareImg from 'app/public/imajs-share.png';
 
 export default class HomeController extends AbstractPageController {
   static get $dependencies() {
@@ -38,7 +40,7 @@ export default class HomeController extends AbstractPageController {
     return {
       //error: Promise.reject(new GenericError('Try error page.')),
       //redirect: Promise.reject(new GenericError('Redirect from home page to error page for $Debug = false.', {status: 303, url: 'http://localhost:3001/not-found'})),
-      message: `I am`,
+      message: `Welcome to`,
       name: `IMA.js`,
     };
   }
@@ -50,7 +52,7 @@ export default class HomeController extends AbstractPageController {
    * controller has been provided with the rendered view.
    *
    * @override
-   * @param {Object<string, *>} loadedResources Map of resource names to
+   * @param {Object<string, *>} _loadedResources Map of resource names to
    *        resources loaded by the {@codelink load} method. This is the same
    *        object as the one passed to the {@codelink setState} method when
    *        the Promises returned by the {@codelink load} method were resolved.
@@ -60,17 +62,18 @@ export default class HomeController extends AbstractPageController {
    * @param {Object<string, *>} settings The application settings for the
    *        current application environment.
    */
-  setMetaParams(loadedResources, metaManager, router, dictionary, settings) {
+  // eslint-disable-next-line no-unused-vars
+  setMetaParams(_loadedResources, metaManager, router, dictionary, settings) {
     let title = 'Isomorphic applications hello world - IMA.js';
     let description =
       'IMA.js is isomorphic javascript applications ' +
       'framework. The basic Hello World example. Just the running ' +
       'IMA.js with the only one page. This example is ideal base ' +
       'for new project.';
-    let domain = router.getDomain();
-    let image = domain + settings.$Static.image + '/imajs-share.png';
 
     let url = router.getUrl();
+    let domain = router.getDomain();
+    let image = `${domain}/${IMAjsShareImg}`;
 
     metaManager.setTitle(title);
 

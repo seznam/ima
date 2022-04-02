@@ -1,11 +1,13 @@
-'use strict';
-
 const clone = require('clone');
 
-function assign(target, source, parentField = null) {
+function assign(target, source, parentField = null, ignoreMeta = true) {
   let fieldList = [];
 
   for (const field of Object.keys(source)) {
+    if (ignoreMeta && field === '__meta__') {
+      continue;
+    }
+
     const value = source[field];
     const fieldPath = parentField ? parentField + '.' + field : field;
     fieldList.push(fieldPath);

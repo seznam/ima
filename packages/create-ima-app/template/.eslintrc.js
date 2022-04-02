@@ -1,13 +1,12 @@
 module.exports = {
-  root: true,
+  ignorePatterns: ['node_modules', 'build'],
   extends: [
     'eslint:recommended',
     'plugin:react/recommended',
+    'plugin:react/jsx-runtime',
     'plugin:prettier/recommended',
   ],
   rules: {
-    // Eslint overrides
-    'no-import-assign': 0,
     'no-console': [
       'error',
       {
@@ -21,7 +20,7 @@ module.exports = {
       {
         singleQuote: true,
         semi: true,
-        trailingComma: 'none',
+        trailingComma: 'es5',
         jsxSingleQuote: true,
         bracketSameLine: false,
         arrowParens: 'avoid',
@@ -29,11 +28,7 @@ module.exports = {
     ],
 
     // React plugin overrides
-    'react/prop-types': 0,
-    'react/wrap-multilines': 0,
-    'react/no-deprecated': 0,
-    'react/jsx-uses-react': 0,
-    'react/react-in-jsx-scope': 0,
+    'react/prop-types': 'off',
   },
   settings: {
     react: {

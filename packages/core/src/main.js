@@ -1,7 +1,8 @@
-import vendorLinker from './vendorLinker';
+import React from 'react';
 import ns from './namespace';
 import ObjectContainer from './ObjectContainer';
 import Bootstrap from './Bootstrap';
+import pluginLoader from './pluginLoader';
 
 import initBindIma from './config/bind';
 import initServicesIma from './config/services';
@@ -44,6 +45,7 @@ import PageManager from './page/manager/PageManager';
 import ServerPageManager from './page/manager/ServerPageManager';
 import AbstractPageRenderer from './page/renderer/AbstractPageRenderer';
 import BlankManagedRootView from './page/renderer/BlankManagedRootView';
+import ErrorBoundary from './page/renderer/ErrorBoundary';
 import ClientPageRenderer from './page/renderer/ClientPageRenderer';
 import ComponentUtils from './page/renderer/ComponentUtils';
 import RendererEvents from './page/renderer/Events';
@@ -105,7 +107,7 @@ function getNamespace() {
 }
 
 function getInitialPluginConfig() {
-  return { plugins: vendorLinker.getImaPlugins() };
+  return { plugins: pluginLoader.getPlugins() };
 }
 
 function _getRoot() {
@@ -119,6 +121,7 @@ function _isClient() {
 function createImaApp() {
   let oc = new ObjectContainer(ns);
   let bootstrap = new Bootstrap(oc);
+  pluginLoader.init(bootstrap);
 
   return { oc, bootstrap };
 }
@@ -215,7 +218,7 @@ function reviveClientApp(initialAppConfigFunctions) {
   let root = _getRoot();
 
   //set React for ReactJS extension for browser
-  root.React = vendorLinker.get('react');
+  root.React = React;
   root.$Debug = root.$IMA.$Debug;
 
   let app = createImaApp();
@@ -228,8 +231,6 @@ function reviveClientApp(initialAppConfigFunctions) {
 }
 
 function onLoad() {
-  vendorLinker.bindToNamespace(ns);
-
   if (!_isClient()) {
     return Promise.reject(null);
   }
@@ -294,6 +295,7 @@ export {
   ServerPageManager,
   AbstractPageRenderer,
   BlankManagedRootView,
+  ErrorBoundary,
   ClientPageRenderer,
   ComponentUtils,
   RendererEvents,
@@ -335,6 +337,7 @@ export {
   ServerWindow,
   ClientWindow,
   ns,
+  pluginLoader,
   getUtils,
   localize,
   link,
@@ -343,6 +346,5 @@ export {
   fire,
   listen,
   unlisten,
-  vendorLinker,
   version,
 };

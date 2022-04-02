@@ -9,12 +9,12 @@ const { checkNodeVersion } = require('../utils/utils');
 const { error } = require('../utils/printUtils');
 
 const MIN_NODE_VERSION = 10;
-const MAX_NODE_VERSION = 14;
+const MAX_NODE_VERSION = 16;
 
 if (argv._.length === 0) {
   // eslint-disable-next-line no-console
   console.log(`
-Please specify your new project directory: 
+Please specify your new project directory:
   ${chalk.blue('create-ima-app')} ${chalk.green('<project-directory>')}
 
 For example:

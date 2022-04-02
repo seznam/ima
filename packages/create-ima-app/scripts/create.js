@@ -20,7 +20,7 @@ let exampleResolver = argv.example
         choices: [
           {
             name: `${chalk.bold.blue(
-              'Empty'
+              'Hello'
             )} - The basic Hello World example. Ideal for new projects.`,
             value: 'hello',
           },
@@ -101,16 +101,11 @@ function createImaApp(dirName, exampleName) {
   console.log(chalk.dim('      Press CTRL+C to cancel.\n'));
 
   const npm = process.platform === 'win32' ? 'npm.cmd' : 'npm';
-  execa.sync(npm, ['install'], {
+  execa.sync(npm, ['install', ['--legacy-peer-deps']], {
+    // TODO IMA@18 -> remove --legacy-peer-deps
     stdio: 'inherit',
     cwd: appRoot,
   });
-
-  // Init git repo
-  if (commandExistsSync('git')) {
-    info('Initializing git repository...', true);
-    execa.sync('git', ['init'], { cwd: appRoot });
-  }
 
   // Show final info
   info(`${chalk.bold('Success!')} Created ${chalk.cyan(
@@ -130,9 +125,6 @@ From there you can run several commands:
 
   ${chalk.cyan('npm run build')}
     To build the application.
-
-  ${chalk.cyan('npm run build:spa')}
-    To build SPA version of the application.
 
   ${chalk.cyan('npm run start')}
     To start IMA.js server.
