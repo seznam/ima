@@ -33,6 +33,7 @@
     "express": "^4.17.3"
   },
   "peerDependencies": {
+    "@ima/dev-utils": "^17.12.3",
     "@ima/helpers": ">=17.9.0"
   },
   "publishConfig": {

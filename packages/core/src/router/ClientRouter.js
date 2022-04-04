@@ -186,13 +186,13 @@ export default class ClientRouter extends AbstractRouter {
     return super
       .route(path, options, action, locals)
       .catch(error => this.handleError({ error }, {}, locals))
-      .then(data => {
+      .then(params => {
         // Hide error overlay
-        if (!(data instanceof Error) && $Debug && window.__IMA_HMR) {
+        if (!params?.error && $Debug && window.__IMA_HMR) {
           window.__IMA_HMR.emit('clear', { type: 'runtime' });
         }
 
-        return data;
+        return params;
       })
       .catch(error => {
         this._handleFatalError(error);
@@ -213,7 +213,11 @@ export default class ClientRouter extends AbstractRouter {
           type: 'runtime',
         });
 
-        return params.error;
+        return Promise.reject({
+          content: null,
+          status: options.httpStatus || 500,
+          error: params.error,
+        });
       }
     }
 
@@ -236,6 +240,7 @@ export default class ClientRouter extends AbstractRouter {
         Object.assign(action, errorParams.action),
         locals
       );
+
       return Promise.resolve({
         content: null,
         status: options.httpStatus,

@@ -17,35 +17,22 @@
   },
   "license": "MIT",
   "author": "Jan Šimeček <jan.simecek@firma.seznam.cz>",
-  "exports": {
-    ".": {
-      "import": "./dist/fastRefreshClient.mjs",
-      "require": "./dist/fastRefreshClient.cjs",
-      "default": "./dist/fastRefreshClient.js"
-    },
-    "./imaHmrClient": {
-      "import": "./dist/imaHmrClient.mjs",
-      "require": "./dist/imaHmrClient.cjs",
-      "default": "./dist/imaHmrClient.js"
-    }
-  },
   "main": "./dist/fastRefreshClient.cjs",
   "scripts": {
     "build": "rollup --config",
     "dev": "rollup --config --watch",
     "lint": "eslint './**/*.{js,jsx,ts,tsx}'"
   },
-  "dependencies": {
-    "@ima/dev-utils": "^17.12.3"
-  },
   "publishConfig": {
     "access": "public",
     "registry": "https://registry.npmjs.org/"
   },
   "devDependencies": {
+    "@ima/dev-utils": "^17.12.3",
     "@types/webpack-env": "^1.16.3"
   },
   "peerDependencies": {
+    "@ima/dev-utils": "^17.12.3",
     "webpack": "^5.70.0"
   }
 }
