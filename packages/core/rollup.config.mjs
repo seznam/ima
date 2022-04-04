@@ -11,7 +11,8 @@ function generateConfig(environment) {
       'react',
       'react-dom',
       'memoize-one',
-      ...(environment === 'server' ? ['react-dom/server'] : []),
+      'node-fetch',
+      'react-dom/server',
     ].filter(Boolean),
     input: {
       [`ima.${environment}`]: './src/main.js',
