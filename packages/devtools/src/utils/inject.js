@@ -2,7 +2,7 @@
  * @typedef {string}     InjectResourceType
  * @enum    {InjectResourceType}
  */
-export const InjectType = Object.freeze({
+const InjectType = Object.freeze({
   SCRIPT: 'script',
   STYLE: 'style',
 });
@@ -17,7 +17,7 @@ export const InjectType = Object.freeze({
  * @param   {string}             action
  * @returns {Promise<any>}
  */
-export function injectFile(
+function injectFile(
   src,
   resourceType = InjectType.SCRIPT,
   removeOnceExecuted = true,
@@ -75,7 +75,7 @@ export function injectFile(
  * @param   {string}             action
  * @returns {Promise<any>}
  */
-export function injectCode(
+function injectCode(
   code,
   resourceType = InjectType.SCRIPT,
   removeOnceExecuted = true,
@@ -111,3 +111,5 @@ export function injectCode(
     resolve();
   });
 }
+
+export { InjectType, injectFile, injectCode };

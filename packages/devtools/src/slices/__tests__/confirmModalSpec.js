@@ -1,4 +1,8 @@
-import { confirmModalInitialState, reducer, actions } from '../confirmModal';
+import {
+  confirmModalInitialState,
+  confirmModalReducer,
+  confirmModalActions,
+} from '../confirmModal';
 
 describe('confirmModalInitialState', () => {
   it('should match snapshot', () => {
@@ -6,7 +10,7 @@ describe('confirmModalInitialState', () => {
   });
 });
 
-describe('reducer', () => {
+describe('confirmModalReducer', () => {
   let curState;
 
   beforeEach(() => {
@@ -19,12 +23,14 @@ describe('reducer', () => {
   });
 
   it('should return the initial state', () => {
-    expect(reducer(undefined, {})).toStrictEqual(confirmModalInitialState);
+    expect(confirmModalReducer(undefined, {})).toStrictEqual(
+      confirmModalInitialState
+    );
   });
 
   it('should set opened to false', () => {
     expect(
-      reducer(curState, { type: 'confirmModal/hideConfirmModal' })
+      confirmModalReducer(curState, { type: 'confirmModal/hideConfirmModal' })
     ).toStrictEqual({
       ...curState,
       opened: false,
@@ -33,7 +39,7 @@ describe('reducer', () => {
 
   it('should set opened to true and set data to state', () => {
     expect(
-      reducer(curState, {
+      confirmModalReducer(curState, {
         type: 'confirmModal/showConfirmModal',
         payload: {
           body: 'body',
@@ -51,7 +57,7 @@ describe('reducer', () => {
 
   it('should set opened to true and data to initial state if not provided', () => {
     expect(
-      reducer(curState, {
+      confirmModalReducer(curState, {
         type: 'confirmModal/showConfirmModal',
         payload: {},
       })
@@ -64,9 +70,9 @@ describe('reducer', () => {
   });
 });
 
-describe('actions', () => {
+describe('confirmModalActions', () => {
   it('should create action to hide confirm modal', () => {
-    expect(actions.hideConfirmModal()).toStrictEqual({
+    expect(confirmModalActions.hideConfirmModal()).toStrictEqual({
       type: 'confirmModal/hideConfirmModal',
       payload: undefined,
     });
@@ -75,7 +81,7 @@ describe('actions', () => {
   it('should create action to show confirm modal', () => {
     const data = {};
 
-    expect(actions.showConfirmModal(data)).toStrictEqual({
+    expect(confirmModalActions.showConfirmModal(data)).toStrictEqual({
       type: 'confirmModal/showConfirmModal',
       payload: {},
     });

@@ -1,5 +1,5 @@
-import React from 'react';
 import { shallow } from 'enzyme';
+
 import EntryList from '../EntryList';
 
 describe('EntryList molecule', () => {

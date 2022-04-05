@@ -1,9 +1,9 @@
-import styles from './iconButton.less';
-import React from 'react';
-import PropTypes from 'prop-types';
 import cn from 'clsx';
+import PropTypes from 'prop-types';
 
-import Icon from 'components/atom/icon/Icon';
+import { Icon } from '@/components/atom';
+
+import styles from './iconButton.less';
 
 export default class IconButton extends React.PureComponent {
   static get propTypes() {

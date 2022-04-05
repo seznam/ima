@@ -1,5 +1,3 @@
-import React from 'react';
-
 export default class ResetIcon extends React.PureComponent {
   render() {
     return (

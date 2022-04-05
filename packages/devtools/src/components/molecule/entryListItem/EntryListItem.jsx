@@ -1,14 +1,14 @@
-import styles from './entryListItem.less';
-import React from 'react';
-import PropTypes from 'prop-types';
 import cn from 'clsx';
+import PropTypes from 'prop-types';
 
-import entryType from 'types/entryType';
+import { EntryType } from '@/types';
+
+import styles from './entryListItem.less';
 
 export default class EntryListItem extends React.PureComponent {
   static get propTypes() {
     return {
-      entry: entryType.isRequired,
+      entry: EntryType.isRequired,
       zeroId: PropTypes.string.isRequired,
       zeroTime: PropTypes.number.isRequired,
       setSelected: PropTypes.func.isRequired,

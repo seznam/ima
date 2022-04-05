@@ -6,7 +6,7 @@ import defaultSettings from './defaultSettings';
  *
  * @param {object} settings key-value pair object.
  */
-export function setSettings(settings) {
+function setSettings(settings) {
   chrome.storage.local.set(settings);
 }
 
@@ -17,7 +17,7 @@ export function setSettings(settings) {
  * @param {?string} key Optional settings key, if null whole storage content is returned.
  * @returns {Promise<object>}
  */
-export function getSettings(key = null) {
+function getSettings(key = null) {
   return new Promise(resolve => {
     chrome.storage.local.get(key, result => {
       if (key) {
@@ -41,3 +41,5 @@ export function getSettings(key = null) {
     });
   });
 }
+
+export { setSettings, getSettings };

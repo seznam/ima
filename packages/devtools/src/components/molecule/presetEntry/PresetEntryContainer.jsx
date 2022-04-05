@@ -1,7 +1,7 @@
 import { connect } from 'react-redux';
-import { actions as presetsActions } from 'slices/presets';
-import { actions as confirmModalActions } from 'slices/confirmModal';
-import { actions as alertsActions } from 'slices/alerts';
+
+import { alertsActions, confirmModalActions, presetsActions } from '@/slices';
+
 import PresetEntry from './PresetEntry';
 
 const mapStateToProps = (state, { id }) => ({

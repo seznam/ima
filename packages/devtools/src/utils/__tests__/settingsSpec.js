@@ -1,5 +1,5 @@
-import { getSettings, setSettings } from '../settings';
 import defaultSettings from '../defaultSettings';
+import { getSettings, setSettings } from '../settings';
 
 let settingsStorage = {};
 

@@ -1,5 +1,7 @@
 import { connect } from 'react-redux';
-import { actions } from 'slices/entries';
+
+import { entriesActions } from '@/slices';
+
 import EntryListItem from './EntryListItem';
 
 const mapStateToProps = (state, { id }) => ({
@@ -8,6 +10,6 @@ const mapStateToProps = (state, { id }) => ({
   zeroTime: state.entries.zeroTime,
 });
 
-export default connect(mapStateToProps, { setSelected: actions.setSelected })(
-  EntryListItem
-);
+export default connect(mapStateToProps, {
+  setSelected: entriesActions.setSelected,
+})(EntryListItem);

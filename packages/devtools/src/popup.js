@@ -1,8 +1,6 @@
 import './assets/less/popup.less';
-import { getSettings, setSettings } from 'services/settings';
-import { getCurrentTab, toggleClass } from 'services/utils';
-import Actions from 'constants/actions';
-import State from 'constants/state';
+import { Actions, State } from '@/constants';
+import { getSettings, setSettings, getCurrentTab, toggleClass } from '@/utils';
 
 /**
  * Shows alert message based on passed state attribute and hides the others.
@@ -90,11 +88,7 @@ function sendEnabled(port, enabled) {
   getSettings('enabled').then(enabled => {
     enableSwitch.checked = enabled;
     sendEnabled(port, enabled);
-
-    // Timeout to prevent transition on initial opening of the popup
-    setTimeout(() => {
-      toggleClass(popupBody, enabled);
-      enableSwitch.disabled = false;
-    }, 50);
+    toggleClass(popupBody, enabled);
+    enableSwitch.disabled = false;
   });
 })();

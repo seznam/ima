@@ -1,5 +1,3 @@
-import React from 'react';
-
 export default class MoreIcon extends React.PureComponent {
   render() {
     return (

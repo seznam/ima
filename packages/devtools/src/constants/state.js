@@ -5,4 +5,4 @@ const State = Object.freeze({
   RELOAD: 'reload',
 });
 
-export default State;
+export { State };

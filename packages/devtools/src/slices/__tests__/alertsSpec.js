@@ -1,4 +1,4 @@
-import { alertsInitialState, reducer, actions } from '../alerts';
+import { alertsInitialState, alertsReducer, alertsActions } from '../alerts';
 
 describe('alertsInitialState', () => {
   it('should match snapshot', () => {
@@ -6,7 +6,7 @@ describe('alertsInitialState', () => {
   });
 });
 
-describe('reducer', () => {
+describe('alertsReducer', () => {
   let curState;
 
   beforeEach(() => {
@@ -24,12 +24,12 @@ describe('reducer', () => {
   });
 
   it('should return the initial state', () => {
-    expect(reducer(undefined, {})).toStrictEqual(alertsInitialState);
+    expect(alertsReducer(undefined, {})).toStrictEqual(alertsInitialState);
   });
 
   it('should add alert to state', () => {
     expect(
-      reducer(curState, {
+      alertsReducer(curState, {
         type: 'alerts/showAlert',
         payload: {
           id: '1',
@@ -55,7 +55,7 @@ describe('reducer', () => {
 
   it('should remove alert from state', () => {
     expect(
-      reducer(curState, {
+      alertsReducer(curState, {
         type: 'alerts/removeAlert',
         payload: '0',
       })
@@ -67,7 +67,7 @@ describe('reducer', () => {
 
   it("should set alert's hidden property to true", () => {
     expect(
-      reducer(curState, {
+      alertsReducer(curState, {
         type: 'alerts/hideAlert',
         payload: '0',
       })
@@ -83,7 +83,7 @@ describe('reducer', () => {
   });
 });
 
-describe('actions', () => {
+describe('alertsActions', () => {
   it('should create action to show alert', () => {
     const data = {
       id: '0',
@@ -92,7 +92,7 @@ describe('actions', () => {
       type: 'type',
     };
 
-    expect(actions.showAlert(data)).toStrictEqual({
+    expect(alertsActions.showAlert(data)).toStrictEqual({
       type: 'alerts/showAlert',
       payload: {
         id: '0',
@@ -104,14 +104,14 @@ describe('actions', () => {
   });
 
   it('should create action to remove alert', () => {
-    expect(actions.removeAlert('0')).toStrictEqual({
+    expect(alertsActions.removeAlert('0')).toStrictEqual({
       type: 'alerts/removeAlert',
       payload: '0',
     });
   });
 
   it('should create action to hide alert', () => {
-    expect(actions.hideAlert('0')).toStrictEqual({
+    expect(alertsActions.hideAlert('0')).toStrictEqual({
       type: 'alerts/hideAlert',
       payload: '0',
     });

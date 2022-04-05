@@ -1,7 +1,7 @@
-import styles from './button.less';
-import React from 'react';
-import PropTypes from 'prop-types';
 import cn from 'clsx';
+import PropTypes from 'prop-types';
+
+import styles from './button.less';
 
 export default class Button extends React.PureComponent {
   static get propTypes() {

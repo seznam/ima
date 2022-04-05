@@ -73,7 +73,7 @@ module.exports = {
     minimizer: ['...', new CssMinimizerPlugin()],
   },
   resolve: {
-    extensions: ['.tsx', '.ts', '.js', '.jsx'],
+    extensions: ['.tsx', '.ts', '.js', '.jsx', 'json', 'mjs'],
     fallback: {
       fs: false,
       path: false,

@@ -1,5 +1,5 @@
-export const SENTINEL_TO_WEB = 'ima:devtool:to:web';
-export const SENTINEL_TO_EXTENSION = 'ima:devtool:to:extension';
+const SENTINEL_TO_WEB = 'ima:devtool:to:web';
+const SENTINEL_TO_EXTENSION = 'ima:devtool:to:extension';
 
 /**
  * Validates if input data are JSON serializable and creates message entry.
@@ -7,7 +7,7 @@ export const SENTINEL_TO_EXTENSION = 'ima:devtool:to:extension';
  * @param {Object} data Data containing passed message with action, payload and sentinel properties.
  * @returns {Object} Error message object if data are not serializable, otherwise input data.
  */
-export function createEntry(data) {
+function createEntry(data) {
   let message = null;
 
   try {
@@ -23,3 +23,5 @@ export function createEntry(data) {
 
   return message;
 }
+
+export { SENTINEL_TO_WEB, SENTINEL_TO_EXTENSION, createEntry };

@@ -3,6 +3,7 @@ import path from 'path';
 
 import postcss from 'postcss';
 import { validate } from 'schema-utils';
+// eslint-disable-next-line import/no-unresolved
 import { Schema } from 'schema-utils/declarations/validate';
 import { Compilation, Compiler, sources } from 'webpack';
 

@@ -1,7 +1,8 @@
-import React from 'react';
 import { shallow } from 'enzyme';
-import * as utils from 'services/utils';
-import Actions from 'constants/actions';
+
+import { Actions } from '@/constants';
+import * as utils from '@/utils';
+
 import Panel from '../Panel';
 
 describe('Panel template', () => {
@@ -78,7 +79,7 @@ describe('Panel template', () => {
     });
   });
 
-  describe('componentDidMount', () => {
+  describe('@/componentDidMount', () => {
     it('should initialize connection with background script', async () => {
       await instance.componentDidMount();
 
@@ -103,7 +104,7 @@ describe('Panel template', () => {
     });
   });
 
-  describe('componentWillUnmount', () => {
+  describe('@/componentWillUnmount', () => {
     it('should disconnect port and remove listeners', () => {
       jest.spyOn(window, 'removeEventListener').mockImplementation();
       jest.spyOn(instance.port, 'disconnect').mockImplementation();

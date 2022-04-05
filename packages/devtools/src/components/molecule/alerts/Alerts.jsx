@@ -1,10 +1,10 @@
-import styles from './alerts.less';
-import ReactDOM from 'react-dom';
-import React from 'react';
-import PropTypes from 'prop-types';
 import cn from 'clsx';
+import PropTypes from 'prop-types';
+import ReactDOM from 'react-dom';
 
-import Alert from 'components/atom/alert/Alert';
+import { Alert } from '@/components/atom';
+
+import styles from './alerts.less';
 
 export default class Alerts extends React.PureComponent {
   static get propTypes() {

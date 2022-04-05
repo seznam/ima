@@ -1,18 +1,17 @@
-import React from 'react';
+import { combineReducers } from '@reduxjs/toolkit';
 import ReactDOM from 'react-dom';
 import { Provider } from 'react-redux';
-import { combineReducers } from '@reduxjs/toolkit';
 import { createStore } from 'redux';
 
-import { reducer } from 'slices/entries';
-import Panel from 'components/template/panel/PanelContainer';
+import Panel from '@/components/template/panel/PanelContainer';
+import { entriesReducer } from '@/slices';
 
 const root = document.getElementById('root');
 
 if (root) {
   const store = createStore(
     combineReducers({
-      entries: reducer,
+      entries: entriesReducer,
     })
   );
 

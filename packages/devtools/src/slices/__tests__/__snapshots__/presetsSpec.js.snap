@@ -7,7 +7,7 @@ Object {
 }
 `;
 
-exports[`selectors should match snapshot 1`] = `
+exports[`presetsSelectors should match snapshot 1`] = `
 Object {
   "getActiveHooks": [Function],
   "getHookIds": [Function],

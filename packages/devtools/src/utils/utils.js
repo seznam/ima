@@ -4,7 +4,7 @@
  * @param {string} type Either 'alive' or 'dead'.
  * @param {?number} [tabId=null] Optional tabId, if defined icon is set only in this tab.
  */
-export function setIcon(type, tabId = null) {
+function setIcon(type, tabId = null) {
   if (type !== 'alive' && type !== 'dead') {
     return;
   }
@@ -32,7 +32,7 @@ export function setIcon(type, tabId = null) {
  * @param {boolean} active If true, class name is added, if false, class name is removed.
  * @param {string} className Class name to toggle.
  */
-export function toggleClass(element, active, className = 'active') {
+function toggleClass(element, active, className = 'active') {
   if (active) {
     element.classList.add(className);
   } else {
@@ -46,7 +46,7 @@ export function toggleClass(element, active, className = 'active') {
  *
  * @returns {Promise<{tabId: number}>} Tab details object.
  */
-export function getCurrentTab() {
+function getCurrentTab() {
   return new Promise(resolve => {
     if (chrome.devtools && chrome.devtools.inspectedWindow) {
       resolve(chrome.devtools.inspectedWindow);
@@ -64,7 +64,7 @@ export function getCurrentTab() {
  * @param {string} url Url to parse domain from.
  * @returns {null|string} Parsed domain stripped from schema.
  */
-export function extractDomainFromUrl(url) {
+function extractDomainFromUrl(url) {
   if (!url) {
     return null;
   }
@@ -75,3 +75,5 @@ export function extractDomainFromUrl(url) {
     .replace('www.', '')
     .split(/[/?#]/)[0];
 }
+
+export { setIcon, toggleClass, getCurrentTab, extractDomainFromUrl };

@@ -1,7 +1,7 @@
-import styles from './jsonView.less';
-import React from 'react';
 import PropTypes from 'prop-types';
 import ReactJson from 'react-json-view';
+
+import styles from './jsonView.less';
 
 export const THEME = Object.freeze({
   base00: 'rgba(0, 0, 0, 0)',

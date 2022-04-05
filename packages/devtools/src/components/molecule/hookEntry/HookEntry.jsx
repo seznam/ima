@@ -1,15 +1,16 @@
-import styles from './hookEntry.less';
-import React from 'react';
-import PropTypes from 'prop-types';
+import { Tooltip } from '@reach/tooltip';
+import Editor from '@uiw/react-textarea-code-editor';
 import cn from 'clsx';
-import Tooltip from '@reach/tooltip';
-import Editor from 'react-simple-code-editor';
-import { highlight, languages } from 'prismjs/components/prism-core';
+import { highlight, languages } from 'prismjs';
+import PropTypes from 'prop-types';
+
 import 'prismjs/components/prism-clike';
 import 'prismjs/components/prism-javascript';
 
-import HookType from 'types/hookType';
-import IconButton from 'components/atom/iconButton/IconButton';
+import { IconButton } from '@/components/atom';
+import { HookType } from '@/types';
+
+import styles from './hookEntry.less';
 
 export default class HookEntry extends React.PureComponent {
   static get propTypes() {

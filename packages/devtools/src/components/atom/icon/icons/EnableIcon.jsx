@@ -1,5 +1,3 @@
-import React from 'react';
-
 export default class EnableIcon extends React.PureComponent {
   render() {
     return (

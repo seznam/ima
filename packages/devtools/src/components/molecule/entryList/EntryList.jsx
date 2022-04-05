@@ -1,8 +1,8 @@
-import style from './entryList.less';
-import React from 'react';
 import PropTypes from 'prop-types';
 
-import EntryListItem from 'components/molecule/entryListItem/EntryListItemContainer';
+import { EntryListItemContainer } from '@/components/molecule';
+
+import style from './entryList.less';
 
 export default class EntryList extends React.PureComponent {
   static get propTypes() {
@@ -23,7 +23,7 @@ export default class EntryList extends React.PureComponent {
         <table className={style.table}>
           <tbody>
             {entryIds.map(id => {
-              return <EntryListItem id={id} key={id} />;
+              return <EntryListItemContainer id={id} key={id} />;
             })}
           </tbody>
         </table>

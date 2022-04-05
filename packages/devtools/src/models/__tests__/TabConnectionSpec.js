@@ -1,7 +1,7 @@
-import TabConnection, { CACHE_SIZE } from '../TabConnection';
-import Actions from 'constants/actions';
-import State from 'constants/state';
-import * as utils from 'services/utils';
+import { Actions, State } from '@/constants';
+import * as utils from '@/utils';
+
+import { TabConnection, CACHE_SIZE } from '../TabConnection';
 
 describe('TabConnection', () => {
   let instance = null;

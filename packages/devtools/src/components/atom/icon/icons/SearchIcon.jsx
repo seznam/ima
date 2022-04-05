@@ -1,5 +1,3 @@
-import React from 'react';
-
 export default class SearchIcon extends React.PureComponent {
   render() {
     return (

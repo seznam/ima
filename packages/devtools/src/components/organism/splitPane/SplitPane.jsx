@@ -1,21 +1,22 @@
-import styles from './splitPane.less';
-import React from 'react';
+import {
+  DataViewContainer,
+  EntryListContainer,
+  SearchContainer,
+} from '@/components/molecule';
 
-import Search from 'components/molecule/search/SearchContainer';
-import EntryList from 'components/molecule/entryList/EntryListContainer';
-import DataView from 'components/molecule/dataView/DataViewContainer';
+import styles from './splitPane.less';
 
 export default class SplitPane extends React.PureComponent {
   render() {
     return (
       <div className={styles.outerContainer}>
-        <Search />
+        <SearchContainer />
         <div className={styles.container}>
           <div className={styles.leftPane}>
-            <EntryList />
+            <EntryListContainer />
           </div>
           <div className={styles.rightPane}>
-            <DataView />
+            <DataViewContainer />
           </div>
         </div>
       </div>

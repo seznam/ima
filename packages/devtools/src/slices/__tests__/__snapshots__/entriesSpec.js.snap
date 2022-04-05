@@ -1,6 +1,6 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`actions should match snapshot 1`] = `
+exports[`entriesActions should match snapshot 1`] = `
 Object {
   "getEntriesLength": [Function],
 }
@@ -22,7 +22,7 @@ Object {
 }
 `;
 
-exports[`selectors should match snapshot 1`] = `
+exports[`entriesSelectors should match snapshot 1`] = `
 Object {
   "getEntriesLength": [Function],
 }

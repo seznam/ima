@@ -1,7 +1,7 @@
-import styles from './modal.less';
-import React from 'react';
-import PropTypes from 'prop-types';
 import cn from 'clsx';
+import PropTypes from 'prop-types';
+
+import styles from './modal.less';
 
 export default class ModalFooter extends React.PureComponent {
   static get propTypes() {

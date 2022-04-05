@@ -1,5 +1,5 @@
-import React from 'react';
 import { shallow } from 'enzyme';
+
 import Alerts from '../Alerts';
 
 describe('Alerts molecule', () => {

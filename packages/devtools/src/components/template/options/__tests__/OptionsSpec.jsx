@@ -1,9 +1,11 @@
-import React from 'react';
 import { shallow } from 'enzyme';
+
+import * as settings from '@/utils';
+
 import Options from '../Options';
-import * as settings from 'services/settings';
 
 jest.mock('easy-uid');
+// eslint-disable-next-line import/order
 import uid from 'easy-uid';
 
 describe('Options template', () => {
@@ -85,7 +87,7 @@ describe('Options template', () => {
     });
   });
 
-  describe('componentDidMount', () => {
+  describe('@/componentDidMount', () => {
     it('should fetch and set settings on mount', async () => {
       jest
         .spyOn(settings, 'getSettings')

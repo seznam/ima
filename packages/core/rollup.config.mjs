@@ -4,7 +4,8 @@ import jscc from 'rollup-plugin-jscc';
 import { createRollupConfig } from '../../createRollupConfig.mjs';
 
 function generateConfig(environment) {
-  return createRollupConfig({
+  return createRollupConfig(config => ({
+    ...config,
     external: [
       '@ima/helpers',
       'classnames',
@@ -36,7 +37,7 @@ function generateConfig(environment) {
         values: { _SERVER: environment === 'server' },
       }),
     ],
-  });
+  }));
 }
 
 export default [generateConfig('server'), generateConfig('client')];

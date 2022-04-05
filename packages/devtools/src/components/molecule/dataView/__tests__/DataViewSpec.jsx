@@ -1,7 +1,8 @@
-import React from 'react';
 import { shallow } from 'enzyme';
+
+import { JsonView } from '@/components/atom';
+
 import DataView, { TAB_SIZE } from '../DataView';
-import JsonView from 'components/atom/jsonView/JsonView';
 
 describe('DataView molecule', () => {
   let wrapper, instance;
@@ -87,7 +88,7 @@ describe('DataView molecule', () => {
     });
   });
 
-  describe('componentDidMount', () => {
+  describe('@/componentDidMount', () => {
     it('should add keyDown window listeners', () => {
       jest.spyOn(window, 'addEventListener').mockImplementation();
 
@@ -99,7 +100,7 @@ describe('DataView molecule', () => {
     });
   });
 
-  describe('componentWillUnmount', () => {
+  describe('@/componentWillUnmount', () => {
     it('should remove existing keyDown window listeners', () => {
       jest.spyOn(window, 'removeEventListener').mockImplementation();
 

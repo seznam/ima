@@ -26,12 +26,10 @@
     }
   ],
   "main": "./dist/main.cjs",
-  "module": "./dist/main.string.mjs",
-  "browser": "./dist/main.string.js",
+  "module": "./dist/main.mjs",
+  "browser": "./dist/main.js",
   "scripts": {
-    "build": "npm run build:script && npm run build:string",
-    "build:script": "rollup --config",
-    "build:string": "babel --plugins @babel/plugin-transform-template-literals ./dist/main.mjs | (echo '// DO NOT MODIFY FILE, FILE IS AUTO GENERATED FROM OTHER REPOSITORIES \nexport default function(hooks) { return `' && cat && echo 'createDevtool(({ importIMAClass, aop, createHook, hookName, createCallTrap, emit }) => { ${Object.values(hooks).filter(hook => hook.enabled).map(hook => hook.code).join(\"\\\\n\\\\n\")} });' && echo '`; }') > ./dist/main.string.js",
+    "build": "rollup --config",
     "dev": "rollup --config --watch",
     "lint": "eslint './**/*.{js,jsx,ts,tsx}'",
     "test": "echo \"Error: no test specified\" && exit 0",
@@ -42,8 +40,6 @@
     "to-aop": "^0.5.4"
   },
   "devDependencies": {
-    "@babel/cli": "^7.17.6",
-    "@babel/core": "^7.17.7",
     "@babel/plugin-transform-template-literals": "^7.16.7"
   },
   "publishConfig": {

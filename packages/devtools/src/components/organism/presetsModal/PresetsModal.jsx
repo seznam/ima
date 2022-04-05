@@ -1,13 +1,11 @@
-import styles from './presetsModal.less';
-import React from 'react';
+import uid from 'easy-uid';
 import PropTypes from 'prop-types';
 
-import { setSettings } from 'services/settings';
-import Modal from 'components/atom/modal/Modal';
-import ModalFooter from 'components/atom/modal/ModalFooter';
-import Button from 'components/atom/button/Button';
-import PresetEntry from 'components/molecule/presetEntry/PresetEntryContainer';
-import uid from 'easy-uid';
+import { Button, Modal, ModalFooter } from '@/components/atom';
+import { PresetEntryContainer } from '@/components/molecule';
+import { setSettings } from '@/utils';
+
+import styles from './presetsModal.less';
 
 export default class PresetsModal extends React.PureComponent {
   static get propTypes() {
@@ -45,7 +43,11 @@ export default class PresetsModal extends React.PureComponent {
       <div className={styles.body}>
         {Object.keys(presets).map(id => {
           return (
-            <PresetEntry onClick={() => this.onSelect(id)} key={id} id={id} />
+            <PresetEntryContainer
+              onClick={() => this.onSelect(id)}
+              key={id}
+              id={id}
+            />
           );
         })}
       </div>

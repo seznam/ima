@@ -1,15 +1,14 @@
 const path = require('path');
+
 const CopyPlugin = require('copy-webpack-plugin');
-const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 const generate = require('generate-file-webpack-plugin');
+const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 
 const pkg = require('./package');
-const manifest = require('./manifest');
+const manifest = require('./src/manifest');
 
-const srcDir = path.resolve(__dirname, 'src');
-const distDir = path.resolve(__dirname, 'dist');
-
-const PRODUCTION =
+const rootDir = path.resolve(__dirname);
+const isProduction =
   process.env.NODE_ENV && process.env.NODE_ENV === 'production';
 
 function buildManifest() {
@@ -20,25 +19,37 @@ function buildManifest() {
 }
 
 module.exports = {
-  mode: PRODUCTION ? 'production' : 'development',
+  target: ['web', 'es11'],
   entry: {
-    options: `${srcDir}/options.js`,
-    popup: `${srcDir}/popup.js`,
-    contentScript: `${srcDir}/contentScript.js`,
-    background: `${srcDir}/background.js`,
-    devtools: `${srcDir}/devtools.js`,
-    panel: `${srcDir}/panel.js`,
+    options: './src/options.js',
+    popup: './src/popup.js',
+    contentScript: './src/contentScript.js',
+    background: './src/background.js',
+    devtools: './src/devtools.js',
+    panel: './src/panel.js',
   },
+  mode: isProduction ? 'production' : 'development',
+  stats: 'minimal',
   output: {
-    path: distDir,
+    path: path.join(rootDir, 'dist'),
     filename: 'js/[name].js',
   },
+  devtool: isProduction ? 'source-map' : 'eval-cheap-source-map',
   resolve: {
-    modules: [srcDir, 'node_modules'],
-    extensions: ['.wasm', '.mjs', '.js', '.json', '.jsx'],
+    extensions: ['.tsx', '.ts', '.js', '.jsx', '.json', '.mjs'],
+    fallback: {
+      fs: false,
+      path: false,
+    },
+    alias: {
+      '@': path.join(rootDir, 'src'),
+    },
   },
   watchOptions: {
     ignored: /node_modules/,
+  },
+  optimization: {
+    minimize: isProduction,
   },
   module: {
     rules: [
@@ -94,13 +105,10 @@ module.exports = {
       content: buildManifest(),
     }),
     new CopyPlugin({
-      patterns: [{ from: `${srcDir}/public`, to: distDir }],
+      patterns: [{ from: path.join(rootDir, 'src/public') }],
     }),
     new MiniCssExtractPlugin({
       filename: 'css/[name].css',
     }),
   ],
-  stats: {
-    children: false,
-  },
 };

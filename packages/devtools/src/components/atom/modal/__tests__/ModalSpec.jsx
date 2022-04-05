@@ -1,5 +1,5 @@
-import React from 'react';
 import { shallow } from 'enzyme';
+
 import Modal, { BODY_STYLES, HIDE_ANIMATION_DURATION } from '../Modal';
 
 describe('Modal atom', () => {
@@ -89,7 +89,7 @@ describe('Modal atom', () => {
     });
   });
 
-  describe('componentDidMount', () => {
+  describe('@/componentDidMount', () => {
     it('should set keyDown window listeners', () => {
       jest.spyOn(window, 'addEventListener').mockImplementation();
 
@@ -101,7 +101,7 @@ describe('Modal atom', () => {
     });
   });
 
-  describe('componentWillUnmount', () => {
+  describe('@/componentWillUnmount', () => {
     it('should remove existing keyDown window listeners', () => {
       jest.spyOn(window, 'removeEventListener').mockImplementation();
 
@@ -115,7 +115,7 @@ describe('Modal atom', () => {
     });
   });
 
-  describe('componentDidUpdate', () => {
+  describe('@/componentDidUpdate', () => {
     it('should not do anything if opened props has not changed', () => {
       wrapper = shallow(<Modal opened={false} />);
       wrapper.setProps({ opened: false });

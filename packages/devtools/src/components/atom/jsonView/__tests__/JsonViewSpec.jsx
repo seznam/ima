@@ -1,5 +1,5 @@
-import React from 'react';
 import { shallow } from 'enzyme';
+
 import JsonView, { THEME } from '../JsonView';
 
 describe('JsonView.THEME', () => {

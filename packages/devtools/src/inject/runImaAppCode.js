@@ -1,4 +1,4 @@
-export default function () {
+function runImaAppCode() {
   return `
     (() => {
         $IMA.Runner.run = (...rest) => {
@@ -13,3 +13,5 @@ export default function () {
         }
     })();`;
 }
+
+export { runImaAppCode };

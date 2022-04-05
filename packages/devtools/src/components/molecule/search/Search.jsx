@@ -1,12 +1,12 @@
-import styles from './search.less';
-import React from 'react';
-import PropTypes from 'prop-types';
-import debounce from 'lodash.debounce';
-import cn from 'clsx';
-import Tooltip from '@reach/tooltip';
 import { Menu, MenuList, MenuButton, MenuItem } from '@reach/menu-button';
+import { Tooltip } from '@reach/tooltip';
+import cn from 'clsx';
+import debounce from 'lodash.debounce';
+import PropTypes from 'prop-types';
 
-import Icon from 'components/atom/icon/Icon';
+import { Icon } from '@/components/atom';
+
+import styles from './search.less';
 
 /**
  * Wait time for debounce function for setting search query into global state.

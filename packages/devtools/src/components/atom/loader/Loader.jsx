@@ -1,6 +1,6 @@
-import styles from './loader.less';
-import React from 'react';
 import PropTypes from 'prop-types';
+
+import styles from './loader.less';
 
 export default class Loader extends React.PureComponent {
   static get propTypes() {

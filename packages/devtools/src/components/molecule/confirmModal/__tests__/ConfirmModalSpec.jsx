@@ -1,5 +1,5 @@
-import React from 'react';
 import { shallow } from 'enzyme';
+
 import ConfirmModal from '../ConfirmModal';
 
 describe('ConfirmModal molecule', () => {

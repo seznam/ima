@@ -1,9 +1,11 @@
-import React from 'react';
 import { shallow } from 'enzyme';
-import * as settings from 'services/settings';
+
+import * as settings from '@/utils';
+
 import PresetsModal from '../PresetsModal';
 
 jest.mock('easy-uid');
+// eslint-disable-next-line import/order
 import uid from 'easy-uid';
 
 describe('PresetsModal organism', () => {
