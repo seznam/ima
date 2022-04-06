@@ -1,4 +1,5 @@
 import { shallow } from 'enzyme';
+import React from 'react';
 
 import { Actions } from '@/constants';
 import * as utils from '@/utils';

@@ -1,6 +1,7 @@
 import PropTypes from 'prop-types';
+import React from 'react';
 
-import { EntryListItemContainer } from '@/components/molecule';
+import EntryListItemContainer from '../entryListItem/EntryListItemContainer';
 
 import style from './entryList.less';
 

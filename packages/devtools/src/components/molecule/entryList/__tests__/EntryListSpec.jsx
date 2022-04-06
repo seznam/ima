@@ -1,4 +1,5 @@
 import { shallow } from 'enzyme';
+import React from 'react';
 
 import EntryList from '../EntryList';
 
@@ -11,10 +12,6 @@ describe('EntryList molecule', () => {
 
   beforeEach(() => {
     wrapper = shallow(<EntryList {...props} />);
-  });
-
-  it('should match snapshot', () => {
-    expect(wrapper).toMatchSnapshot();
   });
 
   it('should return null if entryIds are not provided', () => {

@@ -34,10 +34,6 @@ describe('DataView molecule', () => {
     instance = wrapper.instance();
   });
 
-  it('should match snapshot', () => {
-    expect(wrapper).toMatchSnapshot();
-  });
-
   it('should return null if entry is not provided', () => {
     wrapper.setProps({ entry: null });
 
@@ -79,12 +75,6 @@ describe('DataView molecule', () => {
       });
 
       expect(Array.isArray(instance.messages)).toBe(true);
-    });
-  });
-
-  describe('defaultProps', () => {
-    it('should match snapshot', () => {
-      expect(DataView.defaultProps).toMatchSnapshot();
     });
   });
 

@@ -1,5 +1,6 @@
 import uid from 'easy-uid';
 import PropTypes from 'prop-types';
+import React from 'react';
 
 import { Button, Modal, ModalFooter } from '@/components/atom';
 import { PresetEntryContainer } from '@/components/molecule';

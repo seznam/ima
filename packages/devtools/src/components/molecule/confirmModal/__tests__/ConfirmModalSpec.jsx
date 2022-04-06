@@ -26,10 +26,6 @@ describe('ConfirmModal molecule', () => {
     props.cancel.mockClear();
   });
 
-  it('should match snapshot', () => {
-    expect(wrapper).toMatchSnapshot();
-  });
-
   it('should call onConfirm  after clicking confirm btn', () => {
     jest.spyOn(instance, 'onConfirm').mockImplementation();
     wrapper.find('Button').at(0).simulate('click', event);

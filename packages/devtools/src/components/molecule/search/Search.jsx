@@ -3,6 +3,7 @@ import { Tooltip } from '@reach/tooltip';
 import cn from 'clsx';
 import debounce from 'lodash.debounce';
 import PropTypes from 'prop-types';
+import React from 'react';
 
 import { Icon } from '@/components/atom';
 

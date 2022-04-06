@@ -77,7 +77,6 @@ module.exports = {
     $Debug: true,
     $IMA: true,
     using: true,
-    React: true,
     extend: true,
     spyOn: true,
   },
@@ -95,7 +94,7 @@ module.exports = {
       ],
       extends: ['plugin:import/recommended'],
       rules: {
-        'import/no-unresolved': ['error', { ignore: ['^@\\/'] }], // ignore @/* aliases
+        'import/no-unresolved': ['warn', { ignore: ['^@\\/'] }], // ignore @/* aliases
         'import/order': [
           'error',
           {

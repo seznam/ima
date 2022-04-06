@@ -1,4 +1,5 @@
 import PropTypes from 'prop-types';
+import React from 'react';
 import ReactJson from 'react-json-view';
 
 import styles from './jsonView.less';

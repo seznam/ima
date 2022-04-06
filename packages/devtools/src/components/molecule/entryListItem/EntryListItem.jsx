@@ -1,5 +1,6 @@
 import cn from 'clsx';
 import PropTypes from 'prop-types';
+import React from 'react';
 
 import { EntryType } from '@/types';
 

@@ -18,6 +18,8 @@ function buildManifest() {
   return JSON.stringify(manifest, null, '  ');
 }
 
+// TODO clean in production before building
+
 module.exports = {
   target: ['web', 'es11'],
   entry: {
@@ -86,16 +88,7 @@ module.exports = {
       },
       {
         test: /\.(png|jpe?g|gif|svg)$/,
-        use: [
-          {
-            loader: 'file-loader',
-            options: {
-              name: '[name].[ext]',
-              outputPath: 'images',
-              publicPath: '../images/',
-            },
-          },
-        ],
+        type: 'asset/resource',
       },
     ],
   },

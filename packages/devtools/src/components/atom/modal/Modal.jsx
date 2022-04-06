@@ -1,5 +1,6 @@
 import cn from 'clsx';
 import PropTypes from 'prop-types';
+import React from 'react';
 import ReactDOM from 'react-dom';
 
 import { Icon } from '@/components/atom';

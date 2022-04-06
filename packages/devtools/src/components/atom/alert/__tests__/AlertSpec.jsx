@@ -5,11 +5,6 @@ import Alert from '../Alert';
 describe('Alert atom', () => {
   let wrapper = shallow(<Alert />);
 
-  it('should match snapshot', () => {
-    expect(wrapper).toMatchSnapshot();
-    expect(wrapper.instance().props.type).toBe('default');
-  });
-
   it('should render without title if type is default', () => {
     wrapper.setProps({ type: 'default' });
     expect(wrapper.find('strong')).toHaveLength(0);

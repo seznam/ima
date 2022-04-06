@@ -33,25 +33,6 @@ describe('HookEntry molecule', () => {
     event.stopPropagation.mockClear();
   });
 
-  it('should match snapshot', () => {
-    expect(wrapper).toMatchSnapshot();
-  });
-
-  it('should match snapshot when not in editable state', () => {
-    wrapper.setProps({ editable: false });
-    expect(wrapper).toMatchSnapshot();
-  });
-
-  it('should match snapshot when opened', () => {
-    wrapper.setProps({
-      hook: {
-        ...props.hook,
-        opened: true,
-      },
-    });
-    expect(wrapper).toMatchSnapshot();
-  });
-
   describe('onChange', () => {
     it('should extract name form input and set value to state', () => {
       jest.spyOn(instance, 'setState').mockImplementation();

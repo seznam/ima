@@ -29,15 +29,6 @@ describe('Modal atom', () => {
       .mockImplementation(cb => cb());
   });
 
-  it('should match snapshot when closed', () => {
-    expect(wrapper).toMatchSnapshot();
-  });
-
-  it('should match snapshot when opened', () => {
-    wrapper.setProps({ opened: true });
-    expect(wrapper).toMatchSnapshot();
-  });
-
   it('should call props.onClose when clicking on overlay', () => {
     wrapper.setProps({ opened: true });
     wrapper.find('div.overlay').simulate('click');
@@ -89,7 +80,7 @@ describe('Modal atom', () => {
     });
   });
 
-  describe('@/componentDidMount', () => {
+  describe('componentDidMount', () => {
     it('should set keyDown window listeners', () => {
       jest.spyOn(window, 'addEventListener').mockImplementation();
 
@@ -101,7 +92,7 @@ describe('Modal atom', () => {
     });
   });
 
-  describe('@/componentWillUnmount', () => {
+  describe('componentWillUnmount', () => {
     it('should remove existing keyDown window listeners', () => {
       jest.spyOn(window, 'removeEventListener').mockImplementation();
 
@@ -115,7 +106,7 @@ describe('Modal atom', () => {
     });
   });
 
-  describe('@/componentDidUpdate', () => {
+  describe('componentDidUpdate', () => {
     it('should not do anything if opened props has not changed', () => {
       wrapper = shallow(<Modal opened={false} />);
       wrapper.setProps({ opened: false });

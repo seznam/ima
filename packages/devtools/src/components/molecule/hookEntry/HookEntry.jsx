@@ -3,6 +3,7 @@ import Editor from '@uiw/react-textarea-code-editor';
 import cn from 'clsx';
 import { highlight, languages } from 'prismjs';
 import PropTypes from 'prop-types';
+import React from 'react';
 
 import 'prismjs/components/prism-clike';
 import 'prismjs/components/prism-javascript';
@@ -124,11 +125,11 @@ export default class HookEntry extends React.PureComponent {
         <Editor
           name={`code__${id}`}
           disabled={!editable}
+          language='js'
           className={cn(styles.input, styles.codeInput)}
           placeholder='// code'
           value={code}
-          onValueChange={code => this.setState({ code })}
-          highlight={code => highlight(code, languages.js)}
+          onChange={event => this.setState({ code: event.target.value })}
           padding={10}
           style={{
             overflow: 'auto',

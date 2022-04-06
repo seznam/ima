@@ -1,3 +1,4 @@
+import React from 'react';
 export default class CopyIcon extends React.PureComponent {
   render() {
     return (

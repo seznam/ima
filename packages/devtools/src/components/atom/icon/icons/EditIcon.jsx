@@ -1,3 +1,4 @@
+import React from 'react';
 export default class EditIcon extends React.PureComponent {
   render() {
     return (

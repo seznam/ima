@@ -9,7 +9,7 @@ function wrapCode(code) {
 export default function(hooks) {
 return \`
 ${code}
-createDevtool(({ importIMAClass, aop, createHook, hookName, createCallTrap, emit }) => { \${Object.values(hooks).filter(hook => hook.enabled).map(hook => hook.code).join("\\n\\n")} });
+createDevtool(({ importIMAClass, clone, aop, createHook, hookName, createCallTrap, emit }) => { \${Object.values(hooks).filter(hook => hook.enabled).map(hook => hook.code).join("\\n\\n")} });
 \`;
 }
   `;

@@ -38,10 +38,6 @@ describe('PresetsModal organism', () => {
     event.preventDefault.mockClear();
   });
 
-  it('should match snapshot', () => {
-    expect(wrapper).toMatchSnapshot();
-  });
-
   describe('onCreatePreset', () => {
     it('should call props.addPreset with blank preset', () => {
       jest

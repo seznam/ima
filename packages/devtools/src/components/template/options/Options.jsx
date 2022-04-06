@@ -1,6 +1,7 @@
 /* eslint-disable react/jsx-no-target-blank */
 import uid from 'easy-uid';
 import PropTypes from 'prop-types';
+import React from 'react';
 
 import { Button } from '@/components/atom';
 import { HookEntryContainer } from '@/components/molecule';

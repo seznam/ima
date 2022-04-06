@@ -1,5 +1,6 @@
 import debounce from 'lodash.debounce';
 import PropTypes from 'prop-types';
+import React from 'react';
 
 import { Loader } from '@/components/atom';
 import { SplitPane } from '@/components/organism';

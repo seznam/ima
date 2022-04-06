@@ -1,3 +1,4 @@
+import React from 'react';
 export default class CheckIcon extends React.PureComponent {
   render() {
     return (

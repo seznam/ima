@@ -19,10 +19,6 @@ describe('Alerts molecule', () => {
   let wrapper = shallow(<Alerts {...props} />);
   let instance = wrapper.instance();
 
-  it('should match snapshot', () => {
-    expect(wrapper).toMatchSnapshot();
-  });
-
   it('should call props.removeAlert when clicking on alert', () => {
     wrapper.find('Alert').simulate('click');
 
