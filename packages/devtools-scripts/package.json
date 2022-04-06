@@ -8,7 +8,7 @@
     "test": "echo \"Error: no test specified\" && exit 0",
     "build:commonjs": "NODE_ENV=cjs rollup -c -o lib/main.js",
     "build:es": "NODE_ENV=es rollup -c -o es/main.js",
-    "build:string": "babel --plugins @babel/plugin-transform-template-literals ./es/main.js | (echo '// DO NOT MODIFY FILE, FILE IS AUTO GENERATED FROM OTHER REPOSITORIES \nexport default function(hooks) { return `' && cat && echo 'createDevtool(({ importIMAClass, aop, createHook, hookName, createCallTrap, emit }) => { ${Object.values(hooks).filter(hook => hook.enabled).map(hook => hook.code).join(\"\\\\n\\\\n\")} });' && echo '`; }') > ./es/main.string.js",
+    "build:string": "babel --plugins @babel/plugin-transform-template-literals ./es/main.js | (echo '// DO NOT MODIFY FILE, FILE IS AUTO GENERATED FROM OTHER REPOSITORIES \nexport default function(hooks) { return `' && cat && echo 'createDevtool(({ importIMAClass, clone, aop, createHook, hookName, createCallTrap, emit }) => { ${Object.values(hooks).filter(hook => hook.enabled).map(hook => hook.code).join(\"\\\\n\\\\n\")} });' && echo '`; }') > ./es/main.string.js",
     "build:script": "npm run build:commonjs && npm run build:es",
     "build": "npm run build:script && npm run build:string",
     "dev": "NODE_ENV=es rollup -c -w -o es/main.js",
