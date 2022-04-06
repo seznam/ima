@@ -36,7 +36,6 @@
     "preversion": "npm test"
   },
   "dependencies": {
-    "easy-uid": "^2.0.2",
     "to-aop": "^0.5.4"
   },
   "devDependencies": {

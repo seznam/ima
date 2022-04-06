@@ -39,7 +39,7 @@ async function createDevServer({
       })
       .use(
         '/__error-overlay-static',
-        expressStaticGzip(path.dirname(require.resolve('@ima/error-overlay')), {
+        expressStaticGzip(staticDir, {
           enableBrotli: true,
           index: false,
           orderPreference: ['br'],
