@@ -21,7 +21,7 @@
     "@babel/eslint-parser": "^7.16.5",
     "@babel/preset-react": "^7.16.7",
     "@ima/gulp-task-loader": "17.8.0",
-    "@ima/gulp-tasks": "17.12.2",
+    "@ima/gulp-tasks": "17.13.0",
     "enzyme": "3.10.0",
     "enzyme-adapter-react-16": "1.15.1",
     "enzyme-to-json": "^3.4.3",
@@ -34,10 +34,10 @@
     "prettier": "^2.5.1"
   },
   "dependencies": {
-    "@ima/core": "17.12.3",
+    "@ima/core": "17.13.0",
     "@ima/plugin-hot-reload": "0.1.0",
     "@ima/plugin-websocket": "0.1.1",
-    "@ima/server": "17.12.2",
+    "@ima/server": "17.13.0",
     "body-parser": "1.19.0",
     "compression": "1.7.4",
     "cookie-parser": "1.4.4",

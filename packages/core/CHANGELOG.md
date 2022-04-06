@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [17.13.0](https://github.com/seznam/ima/compare/v17.12.3...v17.13.0) (2022-04-06)
+
+
+### Features
+
+* 🎸 new Router method getRouteHandlers ([d5312f4](https://github.com/seznam/ima/commit/d5312f4d94ca1d34d77cc0ae9d62628369484bfc))
+
+
+
+
+
 ## [17.12.3](https://github.com/seznam/ima/compare/v17.12.2...v17.12.3) (2022-03-10)
 
 
