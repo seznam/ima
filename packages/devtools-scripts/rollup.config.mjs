@@ -15,12 +15,12 @@ createDevtool(({ importIMAClass, clone, aop, createHook, hookName, createCallTra
   `;
 }
 
-export default createRollupConfig(config => ({
-  ...config,
+export default createRollupConfig(baseConfig => ({
+  ...baseConfig,
   treeshake: false,
   external: [/@babel\/runtime/],
   plugins: [
-    ...config.plugins,
+    ...baseConfig.plugins,
     babel({
       babelHelpers: 'bundled',
       comments: false,

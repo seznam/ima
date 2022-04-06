@@ -1,12 +1,8 @@
 import { Tooltip } from '@reach/tooltip';
 import Editor from '@uiw/react-textarea-code-editor';
 import cn from 'clsx';
-import { highlight, languages } from 'prismjs';
 import PropTypes from 'prop-types';
 import React from 'react';
-
-import 'prismjs/components/prism-clike';
-import 'prismjs/components/prism-javascript';
 
 import { IconButton } from '@/components/atom';
 import { HookType } from '@/types';
