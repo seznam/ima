@@ -1,7 +1,7 @@
 import { useCallback, useContext, useState } from 'react';
 
-import { OverlayContext } from '#/components';
-import { StackFrame } from '#/entities';
+import { OverlayContext } from '@/components';
+import { StackFrame } from '@/entities';
 
 function useOpenEditor() {
   const { publicUrl } = useContext(OverlayContext);

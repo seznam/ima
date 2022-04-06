@@ -1,7 +1,7 @@
 import { ErrorOverlayEmitter } from '@ima/dev-utils/dist/ErrorOverlayEmitter';
 
-import { HMROptions, HMRMessageData } from '#/types';
-import { HMREventSource, HMRIndicator } from '#/utils';
+import { HMROptions, HMRMessageData } from '@/types';
+import { HMREventSource, HMRIndicator } from '@/utils';
 
 // Parse hmr options from webpack resource query
 const options = Object.fromEntries(

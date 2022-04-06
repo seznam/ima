@@ -1,8 +1,9 @@
 import ReactDOM from 'react-dom';
 
-import App from '#/App';
-import styles from '#/app.less';
-import { OverlayContext, defaultOverlayContext } from '#/components';
+import App from './App';
+import { OverlayContext, defaultOverlayContext } from './components';
+
+import styles from './app.less';
 
 /**
  * Custom web component wrapper.

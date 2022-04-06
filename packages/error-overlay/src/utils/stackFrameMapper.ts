@@ -2,7 +2,7 @@ import { CompileError } from '@ima/dev-utils/dist/compileErrorParser';
 import { createSourceFragment } from '@ima/dev-utils/dist/sourceFragment';
 import * as stackTraceParser from 'stacktrace-parser';
 
-import { SourceStorage, StackFrame } from '#/entities';
+import { SourceStorage, StackFrame } from '@/entities';
 
 const IGNORED_FUNCTION_NAMES = ['processTicksAndRejections'];
 

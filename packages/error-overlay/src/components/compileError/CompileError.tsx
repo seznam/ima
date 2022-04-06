@@ -1,7 +1,7 @@
 import { FunctionComponent } from 'react';
 
-import { Frame } from '#/components';
-import { ParsedError } from '#/types';
+import { Frame } from '@/components';
+import { ParsedError } from '@/types';
 
 type CompileErrorProps = {
   error: ParsedError;

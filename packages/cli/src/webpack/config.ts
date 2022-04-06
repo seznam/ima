@@ -607,7 +607,7 @@ export default async (
             useHMR &&
               new ReactRefreshWebpackPlugin({
                 overlay: {
-                  module: '@ima/hmr-client/dist/fastRefreshClient',
+                  module: '@ima/hmr-client',
                   sockIntegration: 'whm',
                 },
               }),

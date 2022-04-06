@@ -1,41 +1,25 @@
 import json from '@rollup/plugin-json';
 import replace from '@rollup/plugin-replace';
 import jscc from 'rollup-plugin-jscc';
+import { createRollupConfig } from '../../createRollupConfig.mjs';
 
 function generateConfig(environment) {
-  return {
+  return createRollupConfig({
     external: [
       '@ima/helpers',
       'classnames',
       'react',
       'react-dom',
       'memoize-one',
-      ...(environment === 'server' ? ['react-dom/server'] : []),
+      'node-fetch',
+      'react-dom/server',
     ].filter(Boolean),
-    input: './src/main.js',
+    input: {
+      [`ima.${environment}`]: './src/main.js',
+    },
     treeshake: {
       moduleSideEffects: 'no-external',
     },
-    output: [
-      {
-        file: `./dist/ima.${environment}.cjs`,
-        format: 'cjs',
-        exports: 'named',
-        sourcemap: true,
-      },
-      {
-        file: `./dist/ima.${environment}.js`,
-        format: 'esm',
-        exports: 'named',
-        sourcemap: true,
-      },
-      {
-        file: `./dist/ima.${environment}.mjs`,
-        format: 'esm',
-        exports: 'named',
-        sourcemap: true,
-      },
-    ],
     plugins: [
       json({
         preferConst: true,
@@ -52,7 +36,7 @@ function generateConfig(environment) {
         values: { _SERVER: environment === 'server' },
       }),
     ],
-  };
+  });
 }
 
 export default [generateConfig('server'), generateConfig('client')];
