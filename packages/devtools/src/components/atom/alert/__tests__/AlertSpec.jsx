@@ -18,7 +18,6 @@ describe('Alert atom', () => {
     wrapper.setProps({ type: type, title: null });
     const strongTag = wrapper.find('strong');
 
-    expect(wrapper.instance().props.type).toBe(type);
     expect(strongTag).toHaveLength(1);
     expect(strongTag.text()).toBe(title);
   });

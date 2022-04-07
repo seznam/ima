@@ -18,10 +18,6 @@ describe('Search molecule', () => {
     jest.spyOn(instance, 'setState').mockImplementation();
   });
 
-  it('should match snapshot', () => {
-    expect(wrapper).toMatchSnapshot();
-  });
-
   it('should have .input--invalid class on input with invalid search queries', () => {
     wrapper.setState({ invalid: true });
 

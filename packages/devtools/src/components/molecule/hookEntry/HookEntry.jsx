@@ -5,7 +5,7 @@ import PropTypes from 'prop-types';
 import React from 'react';
 
 import { IconButton } from '@/components/atom';
-import { HookType } from '@/types';
+import { HookType } from '@/utils';
 
 import styles from './hookEntry.less';
 

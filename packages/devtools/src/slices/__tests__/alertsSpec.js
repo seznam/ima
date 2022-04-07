@@ -1,11 +1,5 @@
 import { alertsInitialState, alertsReducer, alertsActions } from '../alerts';
 
-describe('alertsInitialState', () => {
-  it('should match snapshot', () => {
-    expect(alertsInitialState).toMatchSnapshot();
-  });
-});
-
 describe('alertsReducer', () => {
   let curState;
 

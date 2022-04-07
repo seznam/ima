@@ -9,12 +9,6 @@ jest.mock('easy-uid');
 // eslint-disable-next-line import/order
 import uid from 'easy-uid';
 
-describe('presetsInitialState', () => {
-  it('should match snapshot', () => {
-    expect(presetsInitialState).toMatchSnapshot();
-  });
-});
-
 describe('presetsReducer', () => {
   let curState;
 
@@ -462,10 +456,6 @@ describe('presetsActions', () => {
 });
 
 describe('presetsSelectors', () => {
-  it('should match snapshot', () => {
-    expect(presetsSelectors).toMatchSnapshot();
-  });
-
   describe('getHookIds selector', () => {
     it('should return hook keys from currently selected preset', () => {
       const result = presetsSelectors.getHookIds.resultFunc('0', {

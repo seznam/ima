@@ -2,7 +2,7 @@ import cn from 'clsx';
 import PropTypes from 'prop-types';
 import React from 'react';
 
-import { EntryType } from '@/types';
+import { EntryType } from '@/utils';
 
 import styles from './entryListItem.less';
 

@@ -35,18 +35,6 @@ describe('PresetEntry molecule', () => {
     event.stopPropagation.mockClear();
   });
 
-  it('should match snapshot', () => {
-    expect(wrapper).toMatchSnapshot();
-  });
-
-  it('should match snapshot when editable', () => {
-    wrapper.setState({
-      editable: true,
-    });
-
-    expect(wrapper).toMatchSnapshot();
-  });
-
   it('should trigger onClick when clicked on entry item', () => {
     jest.spyOn(instance, 'onClick').mockImplementation();
     wrapper.first().simulate('click');

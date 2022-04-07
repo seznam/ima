@@ -5,12 +5,6 @@ import {
   entriesSelectors,
 } from '../entries';
 
-describe('entriesInitialState', () => {
-  it('should match snapshot', () => {
-    expect(entriesInitialState).toMatchSnapshot();
-  });
-});
-
 describe('entriesReducer', () => {
   let curState;
 
@@ -233,10 +227,6 @@ describe('entriesReducer', () => {
 });
 
 describe('entriesActions', () => {
-  it('should match snapshot', () => {
-    expect(entriesSelectors).toMatchSnapshot();
-  });
-
   it('should create action to add entries', () => {
     const entries = [{ payload: { label: 'msg' } }];
 
@@ -311,10 +301,6 @@ describe('entriesActions', () => {
 });
 
 describe('entriesSelectors', () => {
-  it('should match snapshot', () => {
-    expect(entriesSelectors).toMatchSnapshot();
-  });
-
   describe('getEntriesLength selector', () => {
     it('should return 0 for initial state', () => {
       const result = entriesSelectors.getEntriesLength.resultFunc(

@@ -1,7 +1,7 @@
 import { shallow } from 'enzyme';
-import React from 'react';
 
 import { Actions } from '@/constants';
+jest.mock('@/utils');
 import * as utils from '@/utils';
 
 import Panel from '../Panel';
@@ -49,35 +49,26 @@ describe('Panel template', () => {
     jest.spyOn(instance, 'setState').mockImplementation();
   });
 
-  it('should match snapshot with loader', () => {
+  it('should render with loader', () => {
     wrapper.setProps({ isLoading: true });
 
-    expect(wrapper).toMatchSnapshot();
     expect(wrapper.find('Loader')).toHaveLength(1);
   });
 
-  it('should match snapshot with error message', () => {
+  it('should render with error message', () => {
     wrapper.setProps({
       isLoading: false,
       error:
         'The devtools only support applications runnning IMA.js v17 or higher.',
     });
 
-    expect(wrapper).toMatchSnapshot();
     expect(wrapper.find('h4')).toHaveLength(1);
   });
 
-  it('should match snapshot with SplitPane', () => {
+  it('should render with SplitPane', () => {
     wrapper.setProps({ isLoading: false });
 
-    expect(wrapper).toMatchSnapshot();
     expect(wrapper.find('SplitPane')).toHaveLength(1);
-  });
-
-  describe('defaultProps', () => {
-    it('should match snapshot', () => {
-      expect(Panel.defaultProps).toMatchSnapshot();
-    });
   });
 
   describe('@/componentDidMount', () => {

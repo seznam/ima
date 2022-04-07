@@ -18,7 +18,9 @@
     "jsx": "react-jsx",
   },
   "exclude": [
-    "node_modules",
-    "dist"
+    "**/node_modules/**",
+    "**/__snapshots__/**",
+    "**/dist/**",
+    "**/.turbo/**"
   ]
 }

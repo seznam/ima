@@ -1,6 +1,6 @@
 import { ErrorOverlayEmitter } from '@ima/dev-utils/dist/ErrorOverlayEmitter';
 
-import { HMROptions, HMRMessageData } from '@/types';
+import { HMROptions, HMRMessageData } from '@/utils';
 import { HMREventSource, HMRIndicator } from '@/utils';
 
 // Parse hmr options from webpack resource query

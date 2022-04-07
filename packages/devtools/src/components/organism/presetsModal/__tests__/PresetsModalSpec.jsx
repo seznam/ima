@@ -1,5 +1,6 @@
 import { shallow } from 'enzyme';
 
+jest.mock('@/utils');
 import * as settings from '@/utils';
 
 import PresetsModal from '../PresetsModal';

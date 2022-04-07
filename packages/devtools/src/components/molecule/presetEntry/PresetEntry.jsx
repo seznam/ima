@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import React from 'react';
 
 import { IconButton } from '@/components/atom';
-import { PresetType } from '@/types';
+import { PresetType } from '@/utils';
 
 import styles from './presetEntry.less';
 

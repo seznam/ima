@@ -25,12 +25,6 @@ beforeEach(() => {
   };
 });
 
-describe('defaultSettings', () => {
-  it('should match snapshot', () => {
-    expect(defaultSettings).toMatchSnapshot();
-  });
-});
-
 describe('getSettings', () => {
   beforeEach(() => {
     settingsStorage = {};

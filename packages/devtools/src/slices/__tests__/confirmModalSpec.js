@@ -4,12 +4,6 @@ import {
   confirmModalActions,
 } from '../confirmModal';
 
-describe('confirmModalInitialState', () => {
-  it('should match snapshot', () => {
-    expect(confirmModalInitialState).toMatchSnapshot();
-  });
-});
-
 describe('confirmModalReducer', () => {
   let curState;
 
