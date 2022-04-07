@@ -30,7 +30,7 @@ Upgrading from version 15 should be pretty straightforward and your application 
 - ~~**react-test-renderer**~~ *(removed)*
 
 ## Migration guide
-- Use of **regular expressions** in `serveSPA.blacklist`. If you've been using array of strings, you need to change the syntax to use regular expressions instead: 
+- Use of **regular expressions** in `serveSPA.blacklist`. If you've been using array of strings, you need to change the syntax to use regular expressions instead:
 
 ```diff
 /* app/environment.js */
@@ -54,11 +54,11 @@ route(
 ```
 
 - Http options withCredentials is set to false by default. You must check your HTTP CORS requests and you must set withCredentials to true for sending Cookie header.
- 
-- **New serializer settings in Jest**, to configure it first add path to a newly created file ``jest.setup.js`` (located in the root directory) into `setupFiles` array in ``jest.conf.json``. After that add new `snapshotSerializers` field with `["enzyme-to-json/serializer"]` value, that handles module loading, which converts Enzyme wrappers into format compatible with Jest snapshots.
+
+- **New serializer settings in Jest**, to configure it first add path to a newly created file ``jest.setup.js`` (located in the root directory) into `setupFiles` array in ``jest.config.json``. After that add new `snapshotSerializers` field with `["enzyme-to-json/serializer"]` value, that handles module loading, which converts Enzyme wrappers into format compatible with Jest snapshots.
 
 ```diff
-/* jest.conf.json */
+/* jest.config.json */
 "setupFiles": [
   "ima/test.js",
   "ima/polyfill/imaLoader.js",

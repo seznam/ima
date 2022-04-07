@@ -5,7 +5,7 @@ title: "Docs - Getting started"
 
 The **IMA.js** is an application development stack for developing isomorphic applications written in pure JavaScript and React.
 It helps you develop fully isomorphic JavaScript applications that behave consistently in many different environments with ease
-using the provided tools and several [plugins](https://github.com/seznam/IMA.js-plugins) we already have available. 
+using the provided tools and several [plugins](https://github.com/seznam/IMA.js-plugins) we already have available.
 
 IMA.js development stack consists of many different components. Here's a summary of few of the main ones:
 - [React](https://reactjs.org/docs/getting-started.html) for UI, which you should [learn before](https://reactjs.org/tutorial/tutorial.html) you dive head-first into IMA.js.
@@ -27,7 +27,7 @@ Start by running following command:
 
 ```console
 $ npx create-ima-app my-app
-``` 
+```
 *([npx](https://www.npmjs.com/package/npx) comes with npm 5.2+ and higher, [see instructions for older npm versions](https://github.com/facebook/create-react-app#creating-an-app))*
 
 This will bootstrap your new application and install all dependencies. The provided wizard will
@@ -37,17 +37,17 @@ one of our [examples](/examples).
 - `empty` - Hello World [[Source code](https://github.com/seznam/ima/tree/master/packages/create-ima-app/examples/hello)]
 - `feed` - TODO List [[Source code](https://github.com/seznam/ima/tree/master/packages/create-ima-app/examples/feed)]
 - `todos` - Twitter-Like Feed [[Source code](https://github.com/seznam/ima/tree/master/packages/create-ima-app/examples/todos)]
- 
+
 After the installation succeeds, run following commands to start your application:
 
 ```console
 $ cd my-app
 $ npm run dev
-``` 
+```
 
 Before going ahead, now that your application is running, you can either continue reading this documentation,
 which describes many different parts of IMA.js in detail, take a direct look at the
- [API](/api) or [**start with our tutorial**](/tutorial/introduction).  
+ [API](/api) or [**start with our tutorial**](/tutorial/introduction).
 
 ### Available commands
 
@@ -62,8 +62,8 @@ Once you've initialized your new IMA.js project, following commands become avail
 - `npm run start` - Starts IMA.js server.
 
 ### Why should I use `create-ima-app` command?
-Developing IMA.js application is fairly easy, but the initial setup process can be quite tiresome. 
-This tool aims to streamline this process, save your time and provide you with buildable 
+Developing IMA.js application is fairly easy, but the initial setup process can be quite tiresome.
+This tool aims to streamline this process, save your time and provide you with buildable
 application with opinionated defaults that can be easily customized to your needs.
 
 ## Application structure
@@ -95,7 +95,7 @@ my-app
 │       └── notFound
 ├── gulpConfig.js
 ├── gulpfile.js
-├── jest.conf.json
+├── jest.config.json
 ├── jest.setup.js
 ├── package-lock.json
 ├── package.json
@@ -115,7 +115,7 @@ So let's take a closer look at the **contents of the application**:
       - `html` - this folder contains **two main files**:
         - `spa.html` - this is a template for SPA applications.
         - `error.html` - an error page showed in production.
-  - `component` - our React components for use in the view. Components are 
+  - `component` - our React components for use in the view. Components are
   covered in [part 3 of our tutorial](/tutorial/adding-some-state).
   - `config`, `environment.js` - configuration files. For more information see
     [Configuration](/docs/configuration) page.

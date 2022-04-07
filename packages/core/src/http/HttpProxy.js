@@ -106,37 +106,35 @@ export default class HttpProxy {
         }, options.timeout);
       }
 
-      this._getFetchApi().then(fetch =>
-        fetch(
-          this._composeRequestUrl(
-            url,
-            !this._shouldRequestHaveBody(method, data) ? data : {}
-          ),
-          this._composeRequestInit(method, data, options)
-        )
-          .then(response => {
-            if (requestTimeoutId) {
-              clearTimeout(requestTimeoutId);
-            }
-
-            const contentType = response.headers.get('content-type');
-
-            if (response.status === HttpStatusCode.NO_CONTENT) {
-              return Promise.resolve([response, null]);
-            } else if (
-              contentType &&
-              contentType.includes('application/json')
-            ) {
-              return response.json().then(body => [response, body]);
-            } else {
-              return response.text().then(body => [response, body]);
-            }
-          })
-          .then(([response, responseBody]) =>
-            this._processResponse(requestParams, response, responseBody)
+      this._getFetchApi()
+        .then(fetch =>
+          fetch(
+            this._composeRequestUrl(
+              url,
+              !this._shouldRequestHaveBody(method, data) ? data : {}
+            ),
+            this._composeRequestInit(method, data, options)
           )
-          .then(resolve, reject)
-      );
+        )
+        .then(response => {
+          if (requestTimeoutId) {
+            clearTimeout(requestTimeoutId);
+          }
+
+          const contentType = response.headers.get('content-type');
+
+          if (response.status === HttpStatusCode.NO_CONTENT) {
+            return Promise.resolve([response, null]);
+          } else if (contentType && contentType.includes('application/json')) {
+            return response.json().then(body => [response, body]);
+          } else {
+            return response.text().then(body => [response, body]);
+          }
+        })
+        .then(([response, responseBody]) =>
+          this._processResponse(requestParams, response, responseBody)
+        )
+        .then(resolve, reject);
     }).catch(fetchError => {
       throw this._processError(fetchError, requestParams);
     });

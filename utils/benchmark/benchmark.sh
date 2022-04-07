@@ -49,9 +49,6 @@ npx create-ima-app --example=hello ima-app
 
 cd ./ima-app
 
-# TODO IMA@18 remove
-npm i -D ajv
-
 npm run build
 # Add customized environment configuration
 mv server/config/environment.js server/config/environment.orig.js

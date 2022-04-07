@@ -25,7 +25,9 @@ const IMA_CONF_FILENAME = 'ima.config.js';
  * @param {ImaCliArgs['rootDir']} rootDir Application root directory
  * @returns {ImaEnvironment} Loaded environment
  */
-function resolveEnvironment(rootDir: ImaCliArgs['rootDir']): ImaEnvironment {
+function resolveEnvironment(
+  rootDir: ImaCliArgs['rootDir'] = process.cwd()
+): ImaEnvironment {
   const envSourcePath = path.resolve(rootDir, './server/config/environment.js');
   const envSource = envSourcePath && require(envSourcePath);
 

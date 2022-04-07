@@ -2,16 +2,6 @@
   "name": "@ima/devtools-scripts",
   "version": "17.12.2",
   "description": "IMA.js devtool script used in the @ima/devtools.",
-  "main": "./dist/main.string.js",
-  "scripts": {
-    "preversion": "npm test",
-    "test": "echo \"Error: no test specified\" && exit 0",
-    "build:string": "babel --plugins @babel/plugin-transform-template-literals ./dist/main.mjs | (echo '// DO NOT MODIFY FILE, FILE IS AUTO GENERATED FROM OTHER REPOSITORIES \nexport default function(hooks) { return `' && cat && echo 'createDevtool(({ importIMAClass, aop, createHook, hookName, createCallTrap, emit }) => { ${Object.values(hooks).filter(hook => hook.enabled).map(hook => hook.code).join(\"\\\\n\\\\n\")} });' && echo '`; }') > ./dist/main.string.js",
-    "build:script": "../../node_modules/.bin/rollup --config",
-    "build": "npm run build:script && npm run build:string",
-    "dev": "../../node_modules/.bin/rollup --config --watch",
-    "prepare": "npm run build"
-  },
   "keywords": [
     "IMA",
     "IMA.js",
@@ -19,6 +9,15 @@
     "Devtools",
     "Inject Scripts"
   ],
+  "bugs": {
+    "url": "https://github.com/seznam/ima/issues"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/seznam/ima.git",
+    "directory": "packages/devtools-scripts"
+  },
+  "license": "MIT",
   "author": "Miroslav Jancarik <miroslav.jancarik@firma.seznam.cz>",
   "contributors": [
     {
@@ -26,26 +25,29 @@
       "email": "jan.simecek@firma.seznam.cz"
     }
   ],
-  "repository": {
-    "type": "git",
-    "url": "https://github.com/seznam/ima.git",
-    "directory": "packages/devtools-scripts"
-  },
-  "bugs": {
-    "url": "https://github.com/seznam/ima/issues"
-  },
-  "publishConfig": {
-    "registry": "https://registry.npmjs.org/",
-    "access": "public"
-  },
-  "license": "ISC",
-  "devDependencies": {
-    "@babel/cli": "^7.17.6",
-    "@babel/core": "^7.17.5",
-    "@babel/plugin-transform-template-literals": "^7.16.7"
+  "main": "./dist/main.cjs",
+  "module": "./dist/main.string.mjs",
+  "browser": "./dist/main.string.js",
+  "scripts": {
+    "build": "npm run build:script && npm run build:string",
+    "build:script": "rollup --config",
+    "build:string": "babel --plugins @babel/plugin-transform-template-literals ./dist/main.mjs | (echo '// DO NOT MODIFY FILE, FILE IS AUTO GENERATED FROM OTHER REPOSITORIES \nexport default function(hooks) { return `' && cat && echo 'createDevtool(({ importIMAClass, aop, createHook, hookName, createCallTrap, emit }) => { ${Object.values(hooks).filter(hook => hook.enabled).map(hook => hook.code).join(\"\\\\n\\\\n\")} });' && echo '`; }') > ./dist/main.string.js",
+    "dev": "rollup --config --watch",
+    "lint": "eslint './**/*.{js,jsx,ts,tsx}'",
+    "test": "echo \"Error: no test specified\" && exit 0",
+    "preversion": "npm test"
   },
   "dependencies": {
     "easy-uid": "^2.0.2",
     "to-aop": "^0.5.4"
+  },
+  "devDependencies": {
+    "@babel/cli": "^7.17.6",
+    "@babel/core": "^7.17.7",
+    "@babel/plugin-transform-template-literals": "^7.16.7"
+  },
+  "publishConfig": {
+    "access": "public",
+    "registry": "https://registry.npmjs.org/"
   }
 }

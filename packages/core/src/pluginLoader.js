@@ -80,4 +80,5 @@ class PluginLoader {
   }
 }
 
+export { PluginLoader };
 export default new PluginLoader();

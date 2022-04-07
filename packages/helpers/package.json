@@ -2,35 +2,31 @@
   "name": "@ima/helpers",
   "version": "17.12.2",
   "description": "Various helpers for the IMA.js framework.",
-  "main": "index.js",
-  "scripts": {
-    "preversion": "npm test",
-    "test": "../../node_modules/.bin/jest -c jest.conf.js"
+  "keywords": [
+    "ima",
+    "IMA.js"
+  ],
+  "bugs": {
+    "url": "https://github.com/seznam/ima/issues"
   },
   "repository": {
     "type": "git",
     "url": "git+https://github.com/seznam/ima.git",
     "directory": "packages/helpers"
   },
-  "keywords": [
-    "ima",
-    "IMA.js"
-  ],
-  "author": "Miroslav Jancarik <miroslav.jancarik@firma.seznam.cz>",
   "license": "MIT",
-  "bugs": {
-    "url": "https://github.com/seznam/ima/issues"
-  },
-  "homepage": "https://github.com/seznam/ima#readme",
-  "publishConfig": {
-    "registry": "https://registry.npmjs.org/",
-    "access": "public"
+  "author": "Miroslav Jancarik <miroslav.jancarik@firma.seznam.cz>",
+  "main": "index.js",
+  "scripts": {
+    "lint": "eslint './**/*.{js,jsx,ts,tsx}'",
+    "test": "jest -c jest.config.js",
+    "preversion": "npm test"
   },
   "dependencies": {
     "clone": "^2.1.2"
   },
-  "engines": {
-    "node": ">=10",
-    "npm": ">=6"
+  "publishConfig": {
+    "access": "public",
+    "registry": "https://registry.npmjs.org/"
   }
 }

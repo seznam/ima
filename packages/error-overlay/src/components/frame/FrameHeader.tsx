@@ -1,9 +1,9 @@
 import clsx from 'clsx';
 import { FunctionComponent } from 'react';
 
-import { Icon } from '#/components';
-import { StackFrame } from '#/entities';
-import { useOpenEditor } from '#/hooks';
+import { Icon } from '@/components';
+import { StackFrame } from '@/entities';
+import { useOpenEditor } from '@/hooks';
 
 export type FrameHeaderProps = {
   frame: StackFrame;

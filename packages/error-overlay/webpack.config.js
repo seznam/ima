@@ -3,14 +3,15 @@ const path = require('path');
 const CompressionPlugin = require('compression-webpack-plugin');
 const CopyPlugin = require('copy-webpack-plugin');
 const CssMinimizerPlugin = require('css-minimizer-webpack-plugin');
-const { ProgressPlugin } = require('webpack');
 
 const rootDir = path.resolve(__dirname);
 const isProduction = process.env.NODE_ENV === 'production';
 
 module.exports = {
   target: ['web', 'es11'],
-  entry: { overlay: './index.tsx' },
+  entry: { overlay: './src/index.tsx' },
+  mode: isProduction ? 'production' : 'development',
+  stats: 'minimal',
   output: {
     clean: true,
     path: path.join(rootDir, './dist'),
@@ -78,11 +79,10 @@ module.exports = {
       path: false,
     },
     alias: {
-      '#': path.resolve(rootDir, './src/'),
+      '@': path.join(rootDir, 'src'),
     },
   },
   plugins: [
-    new ProgressPlugin(),
     isProduction &&
       new CompressionPlugin({
         algorithm: 'brotliCompress',
@@ -96,7 +96,12 @@ module.exports = {
       }),
     new CopyPlugin({
       patterns: [
-        { from: path.resolve('node_modules/source-map/lib/mappings.wasm') },
+        {
+          from: path.join(
+            path.dirname(require.resolve('source-map')),
+            'lib/mappings.wasm'
+          ),
+        },
       ],
     }),
   ].filter(Boolean),
