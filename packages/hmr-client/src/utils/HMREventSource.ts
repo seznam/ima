@@ -1,4 +1,4 @@
-import { HMRMessageData } from '@/utils';
+import { HMRMessageData } from '@/types';
 
 export type HMRReconnectListener = () => void;
 export type HMREventSourceListener = (data: HMRMessageData) => void;

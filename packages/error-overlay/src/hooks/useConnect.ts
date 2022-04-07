@@ -4,7 +4,7 @@ import { SourceMapConsumer } from 'source-map';
 
 import { OverlayContext } from '@/components';
 import { SourceStorage } from '@/entities';
-import { ParsedError } from '@/utils';
+import { ParsedError } from '@/types';
 import { mapCompileStackFrame, mapStackFramesToOriginal } from '@/utils';
 
 /**

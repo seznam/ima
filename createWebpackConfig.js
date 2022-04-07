@@ -2,8 +2,9 @@ const fs = require('fs');
 const path = require('path');
 const CssMinimizerPlugin = require('css-minimizer-webpack-plugin');
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
+const argv = require('webpack-nano/argv');
 
-function createWebpackConfig(callback, { useStyleLoader = false } = {}) {
+function createWebpackConfig(callback) {
   const rootDir = process.cwd();
   const ctx = {
     rootDir,
@@ -15,6 +16,7 @@ function createWebpackConfig(callback, { useStyleLoader = false } = {}) {
     target: ['web', 'es11'],
     mode: ctx.isProduction ? 'production' : 'development',
     stats: 'minimal',
+    watch: argv?.watch,
     output: {
       path: ctx.outDir,
       filename: 'js/[name].js',
@@ -25,9 +27,6 @@ function createWebpackConfig(callback, { useStyleLoader = false } = {}) {
       store: 'pack',
     },
     devtool: ctx.isProduction ? 'source-map' : 'eval-cheap-source-map',
-    watchOptions: {
-      ignored: /node_modules/,
-    },
     module: {
       rules: [
         {
@@ -73,20 +72,7 @@ function createWebpackConfig(callback, { useStyleLoader = false } = {}) {
           test: /\.(le|c)ss$/,
           sideEffects: true,
           use: [
-            useStyleLoader
-              ? {
-                  loader: require.resolve('style-loader'),
-                  options: {
-                    injectType: 'lazyStyleTag',
-                    // Allows custom insert using `styles.use({ target: this.shadowRoot })`;
-                    insert: (element, options) => {
-                      const parent = options.target || document.head;
-
-                      parent.appendChild(element);
-                    },
-                  },
-                }
-              : { loader: MiniCssExtractPlugin.loader },
+            MiniCssExtractPlugin.loader,
             {
               loader: require.resolve('css-loader'),
               options: {
@@ -149,11 +135,10 @@ function createWebpackConfig(callback, { useStyleLoader = false } = {}) {
       },
     },
     plugins: [
-      !useStyleLoader &&
-        new MiniCssExtractPlugin({
-          filename: 'css/[name].css',
-        }),
-    ].filter(Boolean),
+      new MiniCssExtractPlugin({
+        filename: 'css/[name].css',
+      }),
+    ],
   };
 
   // Clean build directory in production

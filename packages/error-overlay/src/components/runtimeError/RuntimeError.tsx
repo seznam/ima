@@ -1,7 +1,7 @@
 import { FunctionComponent, useState } from 'react';
 
 import { Frame } from '@/components';
-import { ParsedError } from '@/utils';
+import { ParsedError } from '@/types';
 
 type RuntimeErrorProps = {
   error: ParsedError;

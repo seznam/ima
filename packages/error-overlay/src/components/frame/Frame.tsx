@@ -4,7 +4,7 @@ import { FunctionComponent, useState } from 'react';
 
 import { FrameHeader, Icon } from '@/components';
 import { StackFrame } from '@/entities';
-import { ParsedError } from '@/utils';
+import { ParsedError } from '@/types';
 import { getPrismLanguage } from '@/utils';
 
 export type FrameProps = {

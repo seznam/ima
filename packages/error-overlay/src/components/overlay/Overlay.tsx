@@ -1,7 +1,7 @@
 import clsx from 'clsx';
 import { FunctionComponent } from 'react';
 
-import { ParsedError } from '@/utils';
+import { ParsedError } from '@/types';
 
 export interface OverlayProps {
   type: ParsedError['type'];
