@@ -26,12 +26,8 @@
     "eslint-config-prettier": "^8.5.0",
     "eslint-plugin-jest": "^26.1.1",
     "eslint-plugin-prettier": "^4.0.0",
-<<<<<<< HEAD
-    "eslint-plugin-react": "^7.29.2",
-    "identity-obj-proxy": "^3.0.0",
-=======
     "eslint-plugin-react": "^7.29.4",
->>>>>>> 8dc10a1633996bfe134d28fd89c4b36413ea2c58
+    "identity-obj-proxy": "^3.0.0",
     "jest": "^27.5.1",
     "prettier": "^2.6.0"
   },
