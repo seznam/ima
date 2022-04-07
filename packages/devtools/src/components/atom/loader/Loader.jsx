@@ -1,6 +1,6 @@
 import PropTypes from 'prop-types';
 
-import styles from './loader.less';
+import styles from './loader.module.less';
 
 export default function Loader({ title }) {
   return (

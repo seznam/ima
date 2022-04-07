@@ -6,7 +6,7 @@ import { Button, Modal, ModalFooter } from '@/components/atom';
 import { PresetEntryContainer } from '@/components/molecule';
 import { setSettings } from '@/utils';
 
-import styles from './presetsModal.less';
+import styles from './presetsModal.module.less';
 
 export default class PresetsModal extends React.PureComponent {
   static get propTypes() {

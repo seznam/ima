@@ -5,7 +5,7 @@ import ReactDOM from 'react-dom';
 
 import { Alert } from '@/components/atom';
 
-import styles from './alerts.less';
+import styles from './alerts.module.less';
 
 export default class Alerts extends React.PureComponent {
   static get propTypes() {

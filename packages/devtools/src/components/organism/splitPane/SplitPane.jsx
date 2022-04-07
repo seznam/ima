@@ -4,7 +4,7 @@ import {
   SearchContainer,
 } from '@/components/molecule';
 
-import styles from './splitPane.less';
+import styles from './splitPane.module.less';
 
 export default function SplitPane() {
   return (

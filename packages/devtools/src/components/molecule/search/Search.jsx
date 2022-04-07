@@ -7,7 +7,7 @@ import React from 'react';
 
 import { Icon } from '@/components/atom';
 
-import styles from './search.less';
+import styles from './search.module.less';
 
 /**
  * Wait time for debounce function for setting search query into global state.

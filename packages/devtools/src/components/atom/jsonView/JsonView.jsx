@@ -2,7 +2,7 @@ import PropTypes from 'prop-types';
 import { memo } from 'react';
 import ReactJson from 'react-json-view';
 
-import styles from './jsonView.less';
+import styles from './jsonView.module.less';
 
 const THEME = Object.freeze({
   base00: 'rgba(0, 0, 0, 0)',

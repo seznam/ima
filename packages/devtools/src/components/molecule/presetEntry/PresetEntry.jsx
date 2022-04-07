@@ -5,7 +5,7 @@ import React from 'react';
 import { IconButton } from '@/components/atom';
 import { PresetType } from '@/utils';
 
-import styles from './presetEntry.less';
+import styles from './presetEntry.module.less';
 
 export default class PresetEntry extends React.PureComponent {
   static get propTypes() {

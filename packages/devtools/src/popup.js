@@ -1,4 +1,4 @@
-import './assets/less/popup.less';
+import './assets/less/popup.module.less';
 import { Actions, State } from '@/constants';
 import { getSettings, setSettings, getCurrentTab, toggleClass } from '@/utils';
 

@@ -5,7 +5,7 @@ import ReactDOM from 'react-dom';
 
 import { Icon } from '@/components/atom';
 
-import styles from './modal.less';
+import styles from './modal.module.less';
 
 export const HIDE_ANIMATION_DURATION = 200;
 export const BODY_STYLES =

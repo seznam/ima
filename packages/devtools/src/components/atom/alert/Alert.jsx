@@ -1,7 +1,7 @@
 import cn from 'clsx';
 import PropTypes from 'prop-types';
 
-import styles from './alert.less';
+import styles from './alert.module.less';
 
 export default function Alert({
   type = 'default',

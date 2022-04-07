@@ -8,7 +8,7 @@ import { HookEntryContainer } from '@/components/molecule';
 import { PresetsModalContainer } from '@/components/organism';
 import { getSettings, setSettings } from '@/utils';
 
-import styles from './options.less';
+import styles from './options.module.less';
 
 export default class Options extends React.PureComponent {
   static propTypes() {

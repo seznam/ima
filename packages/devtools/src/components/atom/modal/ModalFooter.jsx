@@ -1,7 +1,7 @@
 import cn from 'clsx';
 import PropTypes from 'prop-types';
 
-import styles from './modal.less';
+import styles from './modal.module.less';
 
 export default function ModalFooter({ children, className, ...restProps }) {
   return (

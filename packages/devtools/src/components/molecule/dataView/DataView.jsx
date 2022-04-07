@@ -4,7 +4,7 @@ import { Tab, TabList, TabPanel, Tabs } from 'react-tabs';
 import { JsonView } from '@/components/atom';
 import { EntryType } from '@/utils';
 
-import styles from './dataView.less';
+import styles from './dataView.module.less';
 
 export const TAB_SIZE = 3;
 

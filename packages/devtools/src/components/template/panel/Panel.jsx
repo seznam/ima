@@ -7,7 +7,7 @@ import { SplitPane } from '@/components/organism';
 import { Actions } from '@/constants';
 import { getCurrentTab } from '@/utils';
 
-import styles from './panel.less';
+import styles from './panel.module.less';
 
 /**
  * Wait time for debounce function for adding new entries in batches. Usually we receive

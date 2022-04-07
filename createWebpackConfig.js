@@ -77,6 +77,7 @@ function createWebpackConfig(callback) {
               loader: require.resolve('css-loader'),
               options: {
                 modules: {
+                  auto: true,
                   localIdentName: `[path][name]__[local]--[hash:base64:5]`,
                 },
               },

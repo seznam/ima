@@ -4,7 +4,7 @@ import React from 'react';
 
 import { EntryType } from '@/utils';
 
-import styles from './entryListItem.less';
+import styles from './entryListItem.module.less';
 
 export default class EntryListItem extends React.PureComponent {
   static get propTypes() {

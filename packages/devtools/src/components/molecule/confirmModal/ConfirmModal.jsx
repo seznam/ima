@@ -3,7 +3,7 @@ import React from 'react';
 
 import { Button, Modal, ModalFooter } from '@/components/atom';
 
-import styles from './confirmModal.less';
+import styles from './confirmModal.module.less';
 
 export default class ConfirmModal extends React.PureComponent {
   static get propTypes() {

@@ -3,7 +3,7 @@ import { memo } from 'react';
 
 import EntryListItemContainer from '../entryListItem/EntryListItemContainer';
 
-import style from './entryList.less';
+import style from './entryList.module.less';
 
 function EntryList({ entryIds }) {
   if (entryIds.length <= 0) {

@@ -7,7 +7,7 @@ import React from 'react';
 import { IconButton } from '@/components/atom';
 import { HookType } from '@/utils';
 
-import styles from './hookEntry.less';
+import styles from './hookEntry.module.less';
 
 export default class HookEntry extends React.PureComponent {
   static get propTypes() {

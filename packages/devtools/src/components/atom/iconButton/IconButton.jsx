@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 
 import { Icon } from '@/components/atom';
 
-import styles from './iconButton.less';
+import styles from './iconButton.module.less';
 
 export default function IconButton({ color, className, name, ...restProps }) {
   return (

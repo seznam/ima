@@ -1,7 +1,7 @@
 import cn from 'clsx';
 import PropTypes from 'prop-types';
 
-import styles from './button.less';
+import styles from './button.module.less';
 
 export default function Button({ color, className, children, ...restProps }) {
   return (
