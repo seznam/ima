@@ -19,6 +19,7 @@ module.exports = {
     'max-line-length': null,
     'selector-class-pattern': null,
     'keyframes-name-pattern': null,
+    'color-function-notation': null,
     'alpha-value-notation': ['number'],
     'declaration-property-unit-disallowed-list': {
       '/^animation/': ['ms'],
