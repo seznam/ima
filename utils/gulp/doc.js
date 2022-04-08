@@ -14,6 +14,7 @@ const getSource = require('get-source');
 
 const DOC_SRC = 'doc-src';
 const FILENAME_REGEX = /(\/|\.jsx|\.js|\.tsx|\.ts)/g;
+const SPACE_REGEX = /^( +)/;
 
 const dir = {
   doc: `${__dirname}/../../docs/`,
@@ -138,18 +139,27 @@ function generate(done) {
             const { lineno: compiledLineno = 0, path: compiledPath = '' } =
               item.meta;
 
+            // get column number of the actual code
+            // this tries to avoid the known bug in 'get-source' and 'source-map' which causes the resolution to fail
+            // (tl;dr tsc does not include the leading spaces in the sourcemap range, `source-map` fails to find the line, `get-source` pretends the compiled file is in fact the source)
+            // https://github.com/xpl/get-source/issues/9
+            const line = fileSource.lines[compiledLineno];
+            const spaceMatch = line.match(SPACE_REGEX);
+            const spaceCount = Array.isArray(spaceMatch)
+              ? spaceMatch[0].length
+              : 0;
+
             const resolved = fileSource.resolve({
               line: compiledLineno,
-              column: 0,
+              column: spaceCount + 1,
             });
 
-            // only set on first cycle - partially avoids a known bug in 'get-source' and 'source-map'
-            // https://github.com/xpl/get-source/issues/9
+            // only set on first cycle - if the above did not work and the resolution failed, this should retain the correct filename
             sourceFilename = sourceFilename
               ? sourceFilename
               : resolved.sourceFile.path.split('/').pop();
 
-            // for files hit by above-mentioned bug, this line number might be off
+            // if the resolution fails, the number will be off
             const sourceLineno = resolved.line;
 
             item.meta = {
