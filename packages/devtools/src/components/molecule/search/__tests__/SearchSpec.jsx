@@ -1,5 +1,5 @@
-import React from 'react';
 import { shallow } from 'enzyme';
+
 import Search from '../Search';
 
 describe('Search molecule', () => {
@@ -16,10 +16,6 @@ describe('Search molecule', () => {
     wrapper = shallow(<Search {...props} />);
     instance = wrapper.instance();
     jest.spyOn(instance, 'setState').mockImplementation();
-  });
-
-  it('should match snapshot', () => {
-    expect(wrapper).toMatchSnapshot();
   });
 
   it('should have .input--invalid class on input with invalid search queries', () => {

@@ -1,0 +1,70 @@
+{
+    "enabled": true,
+    "selectedPresetId": "default-k2rtjo03-b4d8f22f-1e84-4d7a-aba3-bsdf9ee601a4",
+    "presets": {
+        "default-k2rtjo03-b4d8f22f-1e84-4d7a-aba3-bsdf9ee601a4": {
+            "id": "default-k2rtjo03-b4d8f22f-1e84-4d7a-aba3-bsdf9ee601a4",
+            "name": "Default",
+            "editable": false,
+            "selected": true,
+            "hooks": {
+                "k2rtjo03-b4d8f22f-1e84-4d7a-aba3-b4ee9ee601a4": {
+                    "id": "k2rtjo03-b4d8f22f-1e84-4d7a-aba3-b4ee9ee601a4",
+                    "name": "Controller and Extension",
+                    "description": "Captures calls to the (init|load|update|destroy|activate|deactivate|setState|getState|(on.*)) methods in the app Controllers and Extensions.",
+                    "code": "let ImaControllerInterface = importIMAClass('@ima/core', 'Controller');\nlet ImaExtensionInterface = importIMAClass('@ima/core', 'Extension');\n\nObject.keys($IMA.Loader.modules)\n  .filter(namespace => namespace !== 'app/main')\n  .forEach(namespace => {\n    let Constructor = $IMA.Loader.importSync(namespace);\n    let prototype =\n      Constructor && Constructor.default\n        ? Constructor.default.prototype\n        : undefined;\n\n    if (\n      prototype instanceof ImaControllerInterface ||\n      prototype instanceof ImaExtensionInterface\n    ) {\n      aop(\n        Constructor.default,\n        createHook(\n          hookName.afterMethod,\n          /^(init|load|update|destroy|activate|deactivate|setState|getState|(on.*))$/,\n          meta => {\n            if (\n              !(\n                meta.context &&\n                meta.context instanceof Constructor.default\n              )\n            ) {\n              return;\n            }\n\n            emit(namespace, meta, {\n              color: prototype instanceof ImaControllerInterface ? 'green' : 'teal'\n            });\n          }\n        )\n      );\n    }\n  });",
+                    "enabled": true,
+                    "opened": false
+                },
+                "k2rtk252-929a2561-677e-43e7-851d-167faeda16d2": {
+                    "id": "k2rtk252-929a2561-677e-43e7-851d-167faeda16d2",
+                    "name": "Dispatcher",
+                    "description": "Captures all events send through the Dispatcher.",
+                    "code": "let Dispatcher = importIMAClass('@ima/core', 'DispatcherImpl');\n\naop(\n  Dispatcher,\n  createHook(hookName.afterMethod, 'fire', meta => {\n    if (!(meta.context && meta.context instanceof Dispatcher)) {\n      return;\n    }\n\n    let identifier = 'Dispatcher';\n    emit(\n      identifier,\n      meta,\n      {\n        color: 'red'\n      },\n      {\n        label:\n          meta.args && meta.args[0]\n            ? ''\n              .concat(identifier, ':')\n              .concat(meta.property, ':')\n              .concat(meta.args[0])\n            : undefined,\n        state: {\n          args: clone(meta.args),\n          payload: {}\n        }\n      }\n    );\n  })\n);",
+                    "enabled": true,
+                    "opened": false
+                },
+                "k2rtk5c4-f5d98f8c-d694-4831-a348-d3ea36127d8d": {
+                    "id": "k2rtk5c4-f5d98f8c-d694-4831-a348-d3ea36127d8d",
+                    "name": "EventBus",
+                    "description": "Captures all events fired through the EventBus.",
+                    "code": "let EventBus = importIMAClass('@ima/core', 'EventBusImpl');\n\naop(\n  EventBus,\n  createHook(hookName.afterMethod, /^(fire)$/, meta => {\n    if (!(meta.context && meta.context instanceof EventBus)) {\n      return;\n    }\n\n    let identifier = 'EventBus';\n    let args = meta.args.slice();\n    args[0] = Array.from(meta.args[0].classList || {}).join(' ');\n    emit(\n      identifier,\n      meta,\n      {\n        color: 'yellow'\n      },\n      {\n        label:\n          meta.args && meta.args[1]\n            ? ''\n              .concat(identifier, ':')\n              .concat(meta.property, ':')\n              .concat(meta.args[1])\n            : undefined,\n        state: {\n          args: clone(args),\n          payload: {}\n        }\n      }\n    );\n  })\n);",
+                    "enabled": true,
+                    "opened": false
+                },
+                "k2rtkaij-0e302928-c1c1-4710-b202-a9b6aac66507": {
+                    "id": "k2rtkaij-0e302928-c1c1-4710-b202-a9b6aac66507",
+                    "name": "ClientPageManager",
+                    "description": "Captures calls to the (init|manage|destroy) methods in the ClientPageManager.",
+                    "code": "let ClientPageManager = importIMAClass('@ima/core', 'ClientPageManager');\n\naop(\n  ClientPageManager,\n  createHook(hookName.afterMethod, /^(init|manage|destroy)$/, meta => {\n    if (!(meta.context && meta.context instanceof ClientPageManager)) {\n      return;\n    }\n\n    emit('ClientPageManager', meta, {\n      color: 'blue'\n    });\n  })\n);",
+                    "enabled": true,
+                    "opened": false
+                },
+                "k2rtkf8v-a8f1654e-bfcf-404f-916d-073d48f3f151": {
+                    "id": "k2rtkf8v-a8f1654e-bfcf-404f-916d-073d48f3f151",
+                    "name": "PageHandlerRegistry",
+                    "description": "Captures method calls in the PageHandlerRegistry.",
+                    "code": "let PageHandlerRegistry = importIMAClass('@ima/core', 'PageHandlerRegistry');\n\naop(\n  PageHandlerRegistry,\n  createHook(hookName.afterMethod, /.*/, meta => {\n    if (\n      !(meta.context && meta.context instanceof PageHandlerRegistry)\n    ) {\n      return;\n    }\n\n    emit('PageHandlerRegistry', meta, {\n      color: 'violet'\n    });\n  })\n);",
+                    "enabled": true,
+                    "opened": false
+                },
+                "k2rtkjn3-b070cb12-3411-4e15-98af-6fc390e21741": {
+                    "id": "k2rtkjn3-b070cb12-3411-4e15-98af-6fc390e21741",
+                    "name": "PageNavigationHandler",
+                    "description": "Captures method calls in the PageNavigationHandler.",
+                    "code": "let PageNavigationHandler = importIMAClass('@ima/core', 'PageNavigationHandler');\n\naop(\n  PageNavigationHandler,\n  createHook(hookName.afterMethod, /.*/, meta => {\n    if (\n      !(meta.context && meta.context instanceof PageNavigationHandler)\n    ) {\n      return;\n    }\n\n    emit('PageNavigationHandler', meta, {\n      color: 'violet'\n    });\n  })\n);",
+                    "enabled": true,
+                    "opened": false
+                },
+                "k2rtkoem-95fc6f66-59c2-4b33-a7ad-a6efef2ebef2": {
+                    "id": "k2rtkoem-95fc6f66-59c2-4b33-a7ad-a6efef2ebef2",
+                    "name": "HttpAgent",
+                    "description": "Captures (get|post|put|delete|patch) method calls in the HttpAgent.",
+                    "code": "let Http = importIMAClass('@ima/core', 'HttpAgentImpl');\n\naop(\n  Http,\n  createHook(\n    hookName.afterMethod,\n    /^(get|post|put|delete|patch)$/,\n    meta => {\n      if (!(meta.context && meta.context instanceof Http)) {\n        return;\n      }\n\n      emit('Http', meta, {\n        color: 'indigo'\n      });\n    }\n  )\n);",
+                    "enabled": true,
+                    "opened": false
+                }
+            }
+        }
+    }
+}

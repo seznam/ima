@@ -1,10 +1,11 @@
-import styles from './presetEntry.less';
-import React from 'react';
-import Tooltip from '@reach/tooltip';
+import { Tooltip } from '@reach/tooltip';
 import PropTypes from 'prop-types';
+import React from 'react';
 
-import PresetType from 'types/presetType';
-import IconButton from 'components/atom/iconButton/IconButton';
+import { IconButton } from '@/components/atom';
+import { PresetType } from '@/utils';
+
+import styles from './presetEntry.module.less';
 
 export default class PresetEntry extends React.PureComponent {
   static get propTypes() {

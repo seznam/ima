@@ -1,9 +1,12 @@
-import React from 'react';
 import { shallow } from 'enzyme';
-import * as settings from 'services/settings';
+
+jest.mock('@/utils');
+import * as settings from '@/utils';
+
 import PresetsModal from '../PresetsModal';
 
 jest.mock('easy-uid');
+// eslint-disable-next-line import/order
 import uid from 'easy-uid';
 
 describe('PresetsModal organism', () => {
@@ -34,10 +37,6 @@ describe('PresetsModal organism', () => {
     wrapper = shallow(<PresetsModal {...props} />);
     instance = wrapper.instance();
     event.preventDefault.mockClear();
-  });
-
-  it('should match snapshot', () => {
-    expect(wrapper).toMatchSnapshot();
   });
 
   describe('onCreatePreset', () => {

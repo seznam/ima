@@ -1,5 +1,5 @@
-import React from 'react';
 import { shallow } from 'enzyme';
+
 import Modal, { BODY_STYLES, HIDE_ANIMATION_DURATION } from '../Modal';
 
 describe('Modal atom', () => {
@@ -27,15 +27,6 @@ describe('Modal atom', () => {
       .spyOn(global, 'setTimeout')
       .mockImplementation()
       .mockImplementation(cb => cb());
-  });
-
-  it('should match snapshot when closed', () => {
-    expect(wrapper).toMatchSnapshot();
-  });
-
-  it('should match snapshot when opened', () => {
-    wrapper.setProps({ opened: true });
-    expect(wrapper).toMatchSnapshot();
   });
 
   it('should call props.onClose when clicking on overlay', () => {

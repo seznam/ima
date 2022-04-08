@@ -1,6 +1,6 @@
 import { createSlice } from '@reduxjs/toolkit';
 
-export const confirmModalInitialState = {
+const confirmModalInitialState = {
   body: '',
   opened: false,
   accept: null,
@@ -23,6 +23,7 @@ const confirmModal = createSlice({
   },
 });
 
-const { reducer, actions } = confirmModal;
+const { reducer: confirmModalReducer, actions: confirmModalActions } =
+  confirmModal;
 
-export { reducer, actions };
+export { confirmModalInitialState, confirmModalReducer, confirmModalActions };

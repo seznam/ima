@@ -9,4 +9,4 @@ const Actions = Object.freeze({
   MESSAGE: 'ima:devtool:message',
 });
 
-export default Actions;
+export { Actions };

@@ -1,15 +1,15 @@
-import { presetsInitialState, actions, reducer, selectors } from '../presets';
+import {
+  presetsInitialState,
+  presetsActions,
+  presetsReducer,
+  presetsSelectors,
+} from '../presets';
 
 jest.mock('easy-uid');
+// eslint-disable-next-line import/order
 import uid from 'easy-uid';
 
-describe('presetsInitialState', () => {
-  it('should match snapshot', () => {
-    expect(presetsInitialState).toMatchSnapshot();
-  });
-});
-
-describe('reducer', () => {
+describe('presetsReducer', () => {
   let curState;
 
   beforeEach(() => {
@@ -27,12 +27,12 @@ describe('reducer', () => {
   });
 
   it('should return the initial state', () => {
-    expect(reducer(undefined, {})).toStrictEqual(presetsInitialState);
+    expect(presetsReducer(undefined, {})).toStrictEqual(presetsInitialState);
   });
 
   it('should set presets to state', () => {
     expect(
-      reducer(curState, {
+      presetsReducer(curState, {
         type: 'presets/setPresets',
         payload: {
           presets: {
@@ -61,7 +61,7 @@ describe('reducer', () => {
 
   it('should add preset to state', () => {
     expect(
-      reducer(curState, {
+      presetsReducer(curState, {
         type: 'presets/addPreset',
         payload: {
           id: '1',
@@ -82,7 +82,7 @@ describe('reducer', () => {
 
   it('should rename existing preset', () => {
     expect(
-      reducer(curState, {
+      presetsReducer(curState, {
         type: 'presets/renamePreset',
         payload: {
           id: '0',
@@ -104,7 +104,7 @@ describe('reducer', () => {
     curState.selectedPresetId = null;
 
     expect(
-      reducer(curState, {
+      presetsReducer(curState, {
         type: 'presets/deletePreset',
         payload: '0',
       })
@@ -121,7 +121,7 @@ describe('reducer', () => {
     };
 
     expect(
-      reducer(curState, {
+      presetsReducer(curState, {
         type: 'presets/deletePreset',
         payload: '0',
       })
@@ -141,7 +141,7 @@ describe('reducer', () => {
     uid.mockReturnValue('1');
 
     expect(
-      reducer(curState, {
+      presetsReducer(curState, {
         type: 'presets/copyPreset',
         payload: '0',
       })
@@ -162,7 +162,7 @@ describe('reducer', () => {
 
   it('should set preset with given id as selected', () => {
     expect(
-      reducer(curState, {
+      presetsReducer(curState, {
         type: 'presets/selectPreset',
         payload: '0',
       })
@@ -188,7 +188,7 @@ describe('reducer', () => {
     };
 
     expect(
-      reducer(curState, {
+      presetsReducer(curState, {
         type: 'presets/selectPreset',
         payload: '0',
       })
@@ -212,7 +212,7 @@ describe('reducer', () => {
 
   it('should add hook to currently selected preset', () => {
     expect(
-      reducer(curState, {
+      presetsReducer(curState, {
         type: 'presets/addHook',
         payload: {
           id: '0',
@@ -244,7 +244,7 @@ describe('reducer', () => {
     };
 
     expect(
-      reducer(curState, {
+      presetsReducer(curState, {
         type: 'presets/toggleHook',
         payload: '0',
       })
@@ -272,7 +272,7 @@ describe('reducer', () => {
     };
 
     expect(
-      reducer(curState, {
+      presetsReducer(curState, {
         type: 'presets/deleteHook',
         payload: '0',
       })
@@ -296,7 +296,7 @@ describe('reducer', () => {
     };
 
     expect(
-      reducer(curState, {
+      presetsReducer(curState, {
         type: 'presets/openHook',
         payload: '0',
       })
@@ -327,7 +327,7 @@ describe('reducer', () => {
     };
 
     expect(
-      reducer(curState, {
+      presetsReducer(curState, {
         type: 'presets/openHook',
         payload: '0',
       })
@@ -351,10 +351,10 @@ describe('reducer', () => {
   });
 });
 
-describe('actions', () => {
+describe('presetsActions', () => {
   it('should create action to set presets', () => {
     expect(
-      actions.setPresets({
+      presetsActions.setPresets({
         presets: 'myPresets',
         selectedPresetId: '0',
       })
@@ -369,7 +369,7 @@ describe('actions', () => {
 
   it('should create action to add preset', () => {
     expect(
-      actions.addPreset({
+      presetsActions.addPreset({
         id: '0',
         name: 'preset',
       })
@@ -384,7 +384,7 @@ describe('actions', () => {
 
   it('should create action to rename preset', () => {
     expect(
-      actions.renamePreset({
+      presetsActions.renamePreset({
         id: '0',
         name: 'newPresetName',
       })
@@ -398,21 +398,21 @@ describe('actions', () => {
   });
 
   it('should create action to delete preset', () => {
-    expect(actions.deletePreset('0')).toStrictEqual({
+    expect(presetsActions.deletePreset('0')).toStrictEqual({
       type: 'presets/deletePreset',
       payload: '0',
     });
   });
 
   it('should create action to copy preset', () => {
-    expect(actions.copyPreset('0')).toStrictEqual({
+    expect(presetsActions.copyPreset('0')).toStrictEqual({
       type: 'presets/copyPreset',
       payload: '0',
     });
   });
 
   it('should create action to select preset', () => {
-    expect(actions.selectPreset('0')).toStrictEqual({
+    expect(presetsActions.selectPreset('0')).toStrictEqual({
       type: 'presets/selectPreset',
       payload: '0',
     });
@@ -420,7 +420,7 @@ describe('actions', () => {
 
   it('should create action to add hook', () => {
     expect(
-      actions.addHook({
+      presetsActions.addHook({
         id: '0',
         name: 'hookName',
       })
@@ -434,35 +434,31 @@ describe('actions', () => {
   });
 
   it('should create action to toggle hook', () => {
-    expect(actions.toggleHook('0')).toStrictEqual({
+    expect(presetsActions.toggleHook('0')).toStrictEqual({
       type: 'presets/toggleHook',
       payload: '0',
     });
   });
 
   it('should create action to delete hook', () => {
-    expect(actions.deleteHook('0')).toStrictEqual({
+    expect(presetsActions.deleteHook('0')).toStrictEqual({
       type: 'presets/deleteHook',
       payload: '0',
     });
   });
 
   it('should create action to open hook', () => {
-    expect(actions.openHook('0')).toStrictEqual({
+    expect(presetsActions.openHook('0')).toStrictEqual({
       type: 'presets/openHook',
       payload: '0',
     });
   });
 });
 
-describe('selectors', () => {
-  it('should match snapshot', () => {
-    expect(selectors).toMatchSnapshot();
-  });
-
+describe('presetsSelectors', () => {
   describe('getHookIds selector', () => {
     it('should return hook keys from currently selected preset', () => {
-      const result = selectors.getHookIds.resultFunc('0', {
+      const result = presetsSelectors.getHookIds.resultFunc('0', {
         0: {
           hooks: {
             0: {},
@@ -475,7 +471,7 @@ describe('selectors', () => {
     });
 
     it('should return null for empty state', () => {
-      const result = selectors.getHookIds.resultFunc(null, {});
+      const result = presetsSelectors.getHookIds.resultFunc(null, {});
 
       expect(result).toBeNull();
     });
@@ -483,7 +479,7 @@ describe('selectors', () => {
 
   describe('getActiveHooks selector', () => {
     it('should return hooks from currently selected preset', () => {
-      const result = selectors.getActiveHooks.resultFunc('0', {
+      const result = presetsSelectors.getActiveHooks.resultFunc('0', {
         0: {
           hooks: {
             0: {},
@@ -499,7 +495,7 @@ describe('selectors', () => {
     });
 
     it('should return null for empty state', () => {
-      const result = selectors.getActiveHooks.resultFunc(null, {});
+      const result = presetsSelectors.getActiveHooks.resultFunc(null, {});
 
       expect(result).toBeNull();
     });
