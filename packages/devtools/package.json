@@ -41,7 +41,7 @@
     "version:patch": "npm --no-git-tag-version version patch"
   },
   "devDependencies": {
-    "@ima/devtools-scripts": "^17.13.0",
+    "@ima/devtools-scripts": "^17.12.2",
     "@reach/menu-button": "0.16.2",
     "@reach/tooltip": "0.16.2",
     "@reduxjs/toolkit": "1.8.1",

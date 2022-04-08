@@ -56,6 +56,7 @@ async function createDevServer({
         express.static(path.join(staticDir), { maxAge: '14d' })
       )
       .use(
+        // @ts-expect-error Broken typ in devMiddleware package
         devMiddleware(compiler, {
           index: false,
           publicPath: '/',
@@ -65,6 +66,7 @@ async function createDevServer({
         })
       )
       .use(
+        // @ts-expect-error Broken typ in hotMiddleware package
         hotMiddleware(compiler, {
           ...(isVerbose ? undefined : { quite: true, log: false }),
           path: '/__webpack_hmr',
