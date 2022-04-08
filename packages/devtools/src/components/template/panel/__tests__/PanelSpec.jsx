@@ -71,7 +71,7 @@ describe('Panel template', () => {
     expect(wrapper.find('SplitPane')).toHaveLength(1);
   });
 
-  describe('@/componentDidMount', () => {
+  describe('componentDidMount', () => {
     it('should initialize connection with background script', async () => {
       await instance.componentDidMount();
 
@@ -96,7 +96,7 @@ describe('Panel template', () => {
     });
   });
 
-  describe('@/componentWillUnmount', () => {
+  describe('componentWillUnmount', () => {
     it('should disconnect port and remove listeners', () => {
       jest.spyOn(window, 'removeEventListener').mockImplementation();
       jest.spyOn(instance.port, 'disconnect').mockImplementation();

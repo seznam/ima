@@ -78,7 +78,7 @@ describe('DataView molecule', () => {
     });
   });
 
-  describe('@/componentDidMount', () => {
+  describe('componentDidMount', () => {
     it('should add keyDown window listeners', () => {
       jest.spyOn(window, 'addEventListener').mockImplementation();
 
@@ -90,7 +90,7 @@ describe('DataView molecule', () => {
     });
   });
 
-  describe('@/componentWillUnmount', () => {
+  describe('componentWillUnmount', () => {
     it('should remove existing keyDown window listeners', () => {
       jest.spyOn(window, 'removeEventListener').mockImplementation();
 

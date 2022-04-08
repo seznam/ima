@@ -3,7 +3,7 @@ import ReactDOM from 'react-dom';
 import { Provider } from 'react-redux';
 import { createStore } from 'redux';
 
-import Panel from '@/components/template/panel/PanelContainer';
+import { PanelContainer } from '@/components/template';
 import { entriesReducer } from '@/slices';
 
 const root = document.getElementById('root');
@@ -17,7 +17,7 @@ if (root) {
 
   ReactDOM.render(
     <Provider store={store}>
-      <Panel />
+      <PanelContainer />
     </Provider>,
     document.getElementById('root')
   );
