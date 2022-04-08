@@ -9,13 +9,17 @@ const lernaData = require('../../lerna.json');
 const rename = require('gulp-rename');
 const merge = require('merge-stream');
 const ts = require('gulp-typescript');
+const sourcemaps = require('gulp-sourcemaps');
+const getSource = require('get-source');
 
 const DOC_SRC = 'doc-src';
+const FILENAME_REGEX = /(\/|\.jsx|\.js|\.tsx|\.ts)/g;
 
 const dir = {
   doc: `${__dirname}/../../docs/`,
   docData: `${__dirname}/../../docs/_data/`,
   docPartials: `${__dirname}/../../docs/_partials/`,
+  docTsSourcemaps: `${__dirname}/../../docs/_ts_sourcemaps/`,
   docPosts: `${__dirname}/../../docs/_posts/`,
   docSass: `${__dirname}/../../docs/_sass/`,
   docSrc: `${__dirname}/../../${DOC_SRC}/`,
@@ -59,9 +63,17 @@ function clear() {
   return del(dir.docSrc);
 }
 
-function getFiles() {
+function compileTs() {
   const tsProject = ts.createProject(config.tsProject);
-  const tsFiles = gulp.src(config.files.ts).pipe(tsProject());
+  return gulp
+    .src(config.files.ts)
+    .pipe(sourcemaps.init({ loadMaps: true, largeFile: true }))
+    .pipe(tsProject())
+    .pipe(sourcemaps.write());
+}
+
+function getFiles() {
+  const tsFiles = compileTs();
   const jsFiles = gulp.src(config.files.js);
   return merge(tsFiles, jsFiles);
 }
@@ -111,24 +123,47 @@ function generate(done) {
     .pipe(
       map((file, callback) => {
         let urlPrefix = '';
+        let sourceFilename = '';
         let menuHandled = false;
         let templateData = jsdoc2md.getTemplateDataSync({ files: file.path });
+        let fileSource = getSource(file.path);
         let textHandled = false;
-        const filename = file.relative
-          .replace(/(\/|.jsx|.js)/g, '')
+        const docFilename = file.relative
+          .replace(FILENAME_REGEX, '')
           .replace(/([a-zA-Z])(?=[A-Z])/g, '$1-')
           .toLowerCase();
 
         templateData = templateData.map(item => {
           if (item.meta) {
-            const { filename = '', lineno = 0, path = '' } = item.meta;
+            const { lineno: compiledLineno = 0, path: compiledPath = '' } =
+              item.meta;
 
-            item.imaGitUrl = `${gitUrl}${path
+            const resolved = fileSource.resolve({
+              line: compiledLineno,
+              column: 0,
+            });
+
+            // only set on first cycle - partially avoids a known bug in 'get-source' and 'source-map'
+            // https://github.com/xpl/get-source/issues/9
+            sourceFilename = sourceFilename
+              ? sourceFilename
+              : resolved.sourceFile.path.split('/').pop();
+
+            // for files hit by above-mentioned bug, this line number might be off
+            const sourceLineno = resolved.line;
+
+            item.meta = {
+              ...item.meta,
+              filename: sourceFilename,
+              lineno: sourceLineno,
+            };
+
+            item.imaGitUrl = `${gitUrl}${compiledPath
               .split(DOC_SRC)
-              .pop()}/${filename}#L${lineno}`;
+              .pop()}/${sourceFilename}#L${sourceLineno}`;
 
             if (!menuHandled) {
-              const category = path.split(`${DOC_SRC}/`);
+              const category = compiledPath.split(`${DOC_SRC}/`);
 
               if (category.length > 1) {
                 item.imaMenuCategory = category.pop();
@@ -137,13 +172,13 @@ function generate(done) {
               }
 
               urlPrefix = item.imaMenuCategory;
-              item.imaMenuName = filename.replace(/(\/|.jsx|.js)/g, '');
+              item.imaMenuName = sourceFilename.replace(FILENAME_REGEX, '');
 
               menuHandled = true;
             }
 
             if (!textHandled) {
-              let subDir = path.split(`${DOC_SRC}/`);
+              let subDir = compiledPath.split(`${DOC_SRC}/`);
               if (subDir.length > 1) {
                 subDir = `${subDir.pop()}/`;
               } else {
@@ -152,7 +187,10 @@ function generate(done) {
 
               const textPath = `${
                 dir.parent
-              }${subDir}__docs__/${filename.replace(/(\/|.jsx|.js)/g, '.md')}`;
+              }${subDir}__docs__/${sourceFilename.replace(
+                FILENAME_REGEX,
+                '.md'
+              )}`;
 
               if (fs.pathExistsSync(textPath)) {
                 item.imaText = fs.readFileSync(textPath, 'utf8');
@@ -179,7 +217,7 @@ function generate(done) {
           lunrDocuments.push({
             name,
             text: Array.from(textValues.values()).filter(value => !!value),
-            url: `${urlPrefix}/${filename}#${hash}`,
+            url: `${urlPrefix}/${docFilename}#${hash}`,
           });
 
           return item;
@@ -189,7 +227,10 @@ function generate(done) {
           Object.assign({}, config, { data: templateData })
         );
 
-        fs.writeFileSync(`${dir.docPosts}${datePrefix}-${filename}.md`, output);
+        fs.writeFileSync(
+          `${dir.docPosts}${datePrefix}-${docFilename}.md`,
+          output
+        );
 
         callback(null, file);
       })

@@ -55,7 +55,7 @@ export default class AbstractComponent extends React.Component {
    *        the placeholders in the localization phrase.
    * @return {string} Localized phrase.
    */
-  localize(key: string, params: object = {}) {
+  localize(key: string, params: Record<string, number> = {}) {
     return helpers.localize(this, key, params);
   }
 
@@ -70,7 +70,7 @@ export default class AbstractComponent extends React.Component {
    *        extraneous parameters to add to the URL as a query string.
    * @return {string} The generated URL.
    */
-  link(name: string, params: object = {}): string {
+  link(name: string, params: Record<string, number> = {}): string {
     return helpers.link(this, name, params);
   }
 
