@@ -81,7 +81,7 @@ class AnalyzePlugin implements ImaCliPlugin {
           logLevel: 'silent',
           openAnalyzer: false,
           ...(this._options?.bundleAnalyzerOptions ?? {}),
-        })
+        }) as unknown as WebpackPluginInstance
       );
     }
 
