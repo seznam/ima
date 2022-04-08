@@ -56,7 +56,7 @@ module.exports = {
   },
   settings: {
     react: {
-      version: '16',
+      version: '17',
     },
   },
   parser: '@babel/eslint-parser',
@@ -86,12 +86,15 @@ module.exports = {
     {
       files: [
         'packages/cli/**',
+        'packages/devtools/**',
+        'packages/devtools-scripts/**',
         'packages/hmr-client/**',
         'packages/error-overlay/**',
         'packages/dev-utils/**',
       ],
       extends: ['plugin:import/recommended'],
       rules: {
+        'import/no-unresolved': ['warn', { ignore: ['^@\\/'] }], // ignore @/* aliases
         'import/order': [
           'error',
           {
@@ -103,7 +106,7 @@ module.exports = {
                 position: 'before',
               },
               {
-                pattern: '#*/**',
+                pattern: '@/**',
                 group: 'internal',
                 position: 'after',
               },
@@ -114,7 +117,6 @@ module.exports = {
                 position: 'after',
               },
             ],
-            pathGroupsExcludedImportTypes: ['#'],
             'newlines-between': 'always',
             alphabetize: {
               order: 'asc',
@@ -122,6 +124,13 @@ module.exports = {
             },
           },
         ],
+      },
+      settings: {
+        'import/resolver': {
+          node: {
+            extensions: ['.js', '.ts', '.jsx', '.tsx', '.mjs', '.json'],
+          },
+        },
       },
     },
     // Typescript support
@@ -133,7 +142,6 @@ module.exports = {
       },
       extends: ['plugin:@typescript-eslint/recommended'],
       rules: {
-        'import/no-unresolved': 'off',
         '@typescript-eslint/ban-ts-comment': [
           'error',
           { 'ts-expect-error': 'allow-with-description' },
@@ -143,9 +151,6 @@ module.exports = {
           'error',
           { allowDeclarations: true },
         ],
-      },
-      settings: {
-        'import/ignore': [/^#/],
       },
     },
     // Other overrides
@@ -162,7 +167,7 @@ module.exports = {
     {
       files: ['packages/devtools/**', 'packages/create-ima-app/**'],
       rules: {
-        'no-unused-vars': 'off',
+        'no-unused-vars': 'warn',
       },
       globals: {
         chrome: true,

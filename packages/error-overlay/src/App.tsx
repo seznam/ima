@@ -1,7 +1,8 @@
 import { FunctionComponent, useCallback } from 'react';
 
-import { useConnect } from './hooks';
 import { Overlay, CompileError, RuntimeError, Header } from '@/components';
+
+import { useConnect } from './hooks';
 
 export interface AppProps {
   serverError: string | null;

@@ -1,5 +1,8 @@
-function createRollupConfig(config = {}) {
-  return {
+import commonjs from '@rollup/plugin-commonjs';
+import { nodeResolve } from '@rollup/plugin-node-resolve';
+
+function createRollupConfig(callback) {
+  return callback({
     input: {
       main: './src/main.js',
     },
@@ -26,8 +29,8 @@ function createRollupConfig(config = {}) {
         sourcemap: true,
       },
     ],
-    ...config,
-  };
+    plugins: [nodeResolve(), commonjs()],
+  });
 }
 
 export { createRollupConfig };
