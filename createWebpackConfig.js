@@ -30,15 +30,11 @@ function createWebpackConfig(callback) {
     module: {
       rules: [
         {
-          test: /\.tsx?$/,
-          use: require.resolve('ts-loader'),
-          exclude: /node_modules/,
-        },
-        {
-          test: /\.(js|mjs|jsx|cjs)$/,
+          test: /\.(tsx?|jsx?|mjs|cjs)$/,
           exclude: /node_modules/,
           loader: require.resolve('babel-loader'),
           options: {
+            sourceType: 'unambiguous',
             targets: { chrome: '80', safari: '14' }, // es11
             babelrc: false,
             configFile: false,
@@ -46,6 +42,7 @@ function createWebpackConfig(callback) {
             cacheCompression: false,
             compact: !ctx.isProduction,
             presets: [
+              require.resolve('@babel/preset-typescript'),
               [
                 require.resolve('@babel/preset-react'),
                 {
@@ -122,7 +119,7 @@ function createWebpackConfig(callback) {
       ],
     },
     optimization: {
-      minimize: ctx.isProduction,
+      minimize: false,
       minimizer: ['...', new CssMinimizerPlugin()],
     },
     resolve: {
