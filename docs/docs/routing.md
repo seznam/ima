@@ -159,7 +159,7 @@ They are really powerful and can help you cover those edge cases that cannot be 
 Dynamic routes can be created just like the regular (static routes). The only thing that's different is the `pathExpression`, which is now object consisting of three keys: `matcher`, `toPath` and `extractParameters`:
 
 ```javascript
-const POST_MATCHER = /([\w-]+)?\/?([\w-]+)?\/post\/(\d+)/i;
+const POST_MATCHER = /\/(([\w-]+)\/)?(([\w-]+)\/)?post\/(\d+)/i;
 
 router.add('post', {
   matcher: POST_MATCHER,
@@ -167,15 +167,15 @@ router.add('post', {
     const parsedPath = POST_MATCHER.exec(path);
 
     return {
-      category: parsedPath[1],
-      subcategory: parsedPath[2],
-      itemId: parsedPath[3]
+      category: parsedPath[2],
+      subcategory: parsedPath[4],
+      itemId: parsedPath[5]
     };
   },
   toPath: params => {
     const { category, subcategory, itemId } = params;
 
-    return [category, subcategory, itemId].filter(i => !!i).join('/');
+    return '/' + [category, subcategory, 'post', itemId].filter(i => !!i).join('/');
   }
 }, UserController, UserView);
 ```

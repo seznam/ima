@@ -96,7 +96,7 @@ export default class AbstractRouter extends Router {
     this._languagePartPath = '';
 
     /**
-     * Storage of all known routes and middlewares. The key are their names.
+     * Storage of all known routes and middlewares. Their names are the map keys.
      *
      * @type {Map<string, AbstractRoute>}
      */
@@ -231,6 +231,13 @@ export default class AbstractRouter extends Router {
     let params = route.extractParameters(path);
 
     return { route, params, path };
+  }
+
+  /**
+   * @inheritdoc
+   */
+  getRouteHandlers() {
+    return this._routeHandlers;
   }
 
   /**

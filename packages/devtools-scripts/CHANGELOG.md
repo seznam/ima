@@ -3,6 +3,25 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [17.13.0](https://github.com/seznam/ima/compare/v17.12.3...v17.13.0) (2022-04-06)
+
+
+### Bug Fixes
+
+* 🐛 Added devtools-scripts missing clone helper destructing ([06b0f9a](https://github.com/seznam/ima/commit/06b0f9a7022807be51d352d19b620fd698a3baf8))
+
+
+
+
+
+## [17.12.2](https://github.com/seznam/ima/compare/v17.12.1...v17.12.2) (2022-02-07)
+
+**Note:** Version bump only for package @ima/devtools-scripts
+
+
+
+
+
 # [17.8.0](https://github.com/seznam/ima/compare/v17.7.10...v17.8.0) (2021-02-03)
 
 **Note:** Version bump only for package @ima/devtools-scripts
