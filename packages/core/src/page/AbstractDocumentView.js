@@ -65,4 +65,70 @@ export default class AbstractDocumentView extends AbstractPureComponent {
     this[PRIVATE.masterElementId] = masterElementId;
   }
   //#endif
+
+  static get esTestScripts() {
+    return [
+      '(() => { const o = { t: { q: true } }; return o?.t?.q && (o?.a?.q ?? true); })()',
+      'typeof Promise.allSettled === "function"',
+      'typeof globalThis !== "undefined"',
+      'typeof 9007199254740991n === "bigint"',
+    ];
+  }
+
+  getScripts({ scripts, runtime, esScripts, esRuntime }) {
+    return `<script>
+      (function() {
+        function test(snippet) {
+          try {
+            var fn = new Function(snippet);
+            var result = fn();
+
+            return !!result;
+          } catch (e) {
+            return false;
+          }
+        }
+
+        window.$IMA.Runner = window.$IMA.Runner || {};
+        var isEsVersion = ${this.constructor.esTestScripts
+          .map(script => `test('return ${script}')`)
+          .join(' && ')};
+
+        if (isEsVersion) {
+          window.$IMA.Runner.runtime = '${esRuntime}';
+          window.$IMA.Runner.scripts = JSON.parse('${JSON.stringify(
+            esScripts
+          )}');
+        } else {
+          window.$IMA.Runner.runtime = '${runtime}';
+          window.$IMA.Runner.scripts = JSON.parse('${JSON.stringify(scripts)}');
+        }
+
+        window.$IMA.Runner.scripts.forEach(${this.getScriptCallback()});
+        window.$IMA.Runner.run = function() {
+          (${this.getScriptCallback()})(window.$IMA.Runner.runtime)
+        };
+      })();
+    </script>`;
+  }
+
+  getScriptCallback() {
+    return `function(source) {
+      var scriptEl = document.createElement('script');
+
+      if (typeof source === 'string') {
+        scriptEl.src = source;
+      } else {
+        var src = source[0];
+        var options = source[1];
+
+        scriptEl.src = src;
+        Object.keys(options).forEach(function (attr) {
+          scriptEl[attr] = options[attr];
+        });
+      }
+
+      document.getElementById('scripts').appendChild(scriptEl);
+    }`;
+  }
 }

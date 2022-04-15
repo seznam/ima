@@ -249,23 +249,22 @@ export default async (
         }),
         new CssMinimizerPlugin(),
       ],
-      // Split chunks in dev for better caching
-      ...(isDevEnv
-        ? {
-            moduleIds: 'named',
-            chunkIds: 'named',
-            splitChunks: {
-              cacheGroups: {
-                vendor: {
-                  // Split only JS files
-                  test: /[\\/]node_modules[\\/](.*)(js|jsx|ts|tsx)$/,
-                  name: 'vendors',
-                  chunks: 'all',
-                },
-              },
+      moduleIds: 'deterministic',
+      chunkIds: 'deterministic',
+      ...(!isServer && { runtimeChunk: 'single' }),
+      splitChunks: {
+        ...(isDevEnv && {
+          cacheGroups: {
+            // Split vendor chunk in dev for better watch caching
+            vendor: {
+              // Split only JS files
+              test: /[\\/]node_modules[\\/](.*)(js|jsx|ts|tsx)$/,
+              name: 'vendors',
+              chunks: 'all',
             },
-          }
-        : {}),
+          },
+        }),
+      },
     },
     resolve: {
       extensions: ['.mjs', '.js', '.jsx', '.json'],

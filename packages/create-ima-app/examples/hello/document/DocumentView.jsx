@@ -60,47 +60,12 @@ export default class DocumentView extends AbstractDocumentView {
           />
           <div
             id='scripts'
-            dangerouslySetInnerHTML={{ __html: this.getAsyncScripts() }}
+            dangerouslySetInnerHTML={{
+              __html: this.getScripts(this.utils.$Settings.$Page.$Render),
+            }}
           />
         </body>
       </html>
     );
-  }
-
-  getAsyncScripts() {
-    let scriptResources = `<script>
-		    function checkAsyncAwait () {
-		        try {
-		            new Function('(async () => ({}))()');
-		            return true;
-		        } catch (e) {
-		            return false;
-		        }
-		    }
-		    $IMA.Runner = $IMA.Runner || {};
-
-		    if (Object.values && checkAsyncAwait()) {
-		        $IMA.Runner.scripts = [
-		            ${this.utils.$Settings.$Page.$Render.esScripts
-                  .map(script => `'${script}'`)
-                  .join()}
-	            ];
-		    } else {
-		        $IMA.Runner.scripts = [
-		            ${this.utils.$Settings.$Page.$Render.scripts
-                  .map(script => `'${script}'`)
-                  .join()}
-	            ];
-		    }
-
-		    $IMA.Runner.scripts.forEach(function(source) {
-		        var script = document.createElement('script');
-		        script.async = $IMA.$Env !== 'dev';
-		        script.onload = $IMA.Runner.load;
-		        script.src = source;
-		        document.getElementById('scripts').appendChild(script);
-		    });
-	    </script>`;
-    return scriptResources;
   }
 }
