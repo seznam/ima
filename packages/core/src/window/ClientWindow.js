@@ -10,6 +10,18 @@ export default class ClientWindow extends Window {
     return [];
   }
 
+  constructor() {
+    super();
+
+    /**
+     * Map of event names to a map of event listeners to a map of scopes to
+     * a map of bound listeners.
+     *
+     * @type {Map<string, Map<function(*), Map<function(*), function(*)>>>}
+     */
+    this._scopedListeners = new Map();
+  }
+
   /**
    * @inheritdoc
    */
@@ -202,18 +214,96 @@ export default class ClientWindow extends Window {
   /**
    * @inheritdoc
    */
-  bindEventListener(eventTarget, event, listener, useCapture = false) {
+  bindEventListener(
+    eventTarget,
+    event,
+    listener,
+    useCapture = false,
+    scope = null
+  ) {
     if (eventTarget.addEventListener) {
-      eventTarget.addEventListener(event, listener, useCapture);
+      let usedListener = listener;
+
+      if (scope) {
+        usedListener = this._findScopedListener(
+          event,
+          listener,
+          useCapture,
+          scope
+        );
+
+        if (!usedListener) {
+          usedListener = listener.bind(scope);
+          this._scopedListeners.set(
+            [event, listener, useCapture, scope],
+            usedListener
+          );
+        }
+      }
+
+      eventTarget.addEventListener(event, usedListener, useCapture);
     }
   }
 
   /**
    * @inheritdoc
    */
-  unbindEventListener(eventTarget, event, listener, useCapture = false) {
+  unbindEventListener(
+    eventTarget,
+    event,
+    listener,
+    useCapture = false,
+    scope = null
+  ) {
     if (eventTarget.removeEventListener) {
-      eventTarget.removeEventListener(event, listener, useCapture);
+      let usedListener = listener;
+
+      if (scope) {
+        usedListener = this._findScopedListener(
+          event,
+          listener,
+          useCapture,
+          scope,
+          true
+        );
+
+        if ($Debug && !usedListener) {
+          console.warn(
+            'ima.core.window.ClientWindow.unbindEventListener(): the provided ' +
+              `listener '${listener}' is not registered for the ` +
+              `specified event '${event}' and scope '${scope}'. Check ` +
+              `your workflow.`,
+            {
+              event,
+              listener,
+              scope,
+            }
+          );
+        }
+      }
+
+      eventTarget.removeEventListener(event, usedListener, useCapture);
+    }
+  }
+
+  _findScopedListener(event, listener, useCapture, scope, remove = false) {
+    for (const key of this._scopedListeners.keys()) {
+      const [_event, _listener, _useCapture, _scope] = key;
+
+      if (
+        event === _event &&
+        listener === _listener &&
+        useCapture === _useCapture &&
+        scope === _scope
+      ) {
+        const usedListener = this._scopedListeners.get(key);
+
+        if (remove) {
+          this._scopedListeners.delete(key);
+        }
+
+        return usedListener;
+      }
     }
   }
 }
