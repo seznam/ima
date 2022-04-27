@@ -14,10 +14,9 @@ export default class ClientWindow extends Window {
     super();
 
     /**
-     * Map of event names to a map of event listeners to a map of scopes to
-     * a map of bound listeners.
+     * Map of event event identifiers to a bound listener.
      *
-     * @type {Map<string, Map<function(*), Map<function(*), function(*)>>>}
+     * @type {Map<Array<string, function(*), boolean, Object>, function(*)>}
      */
     this._scopedListeners = new Map();
   }
