@@ -73,7 +73,7 @@ export default class AbstractDocumentView extends AbstractPureComponent {
    * evaluate to true, the es scripts are loaded, otherwise it falls back to
    * the legacy versions of script files.
    *
-   * @returns {array[string]} Array of string JS expressions.
+   * @returns {string[]} Array of string JS expressions.
    */
   static get esTestScripts() {
     return [
@@ -121,11 +121,11 @@ export default class AbstractDocumentView extends AbstractPureComponent {
         }
 
         // Create script callback
-        var _createScriptCallback = ${this.createScriptCallback()};
+        var _createScript = ${this.createScript()};
 
-        window.$IMA.Runner.scripts.forEach(_createScriptCallback);
+        window.$IMA.Runner.scripts.forEach(_createScript);
         window.$IMA.Runner.run = function() {
-          _createScriptCallback(window.$IMA.Runner.runtime);
+          _createScript(window.$IMA.Runner.runtime);
         };
       })();
     </script>`;
@@ -139,7 +139,7 @@ export default class AbstractDocumentView extends AbstractPureComponent {
    * @returns {string} Inlined script function that takes one argument,
    *   which represents the script definitions passed to the {@code getScripts}.
    */
-  createScriptCallback() {
+  createScript() {
     return `function createScript(source) {
       var scriptEl = document.createElement('script');
 
@@ -169,11 +169,11 @@ export default class AbstractDocumentView extends AbstractPureComponent {
             scriptEl.setAttribute(attr, options[attr]);
           }
         });
-      }
 
-      scriptEl.onload = function () {
-        $IMA.Runner.load(source);
-      };
+        scriptEl.onload = function () {
+          $IMA.Runner.load(source);
+        };
+      }
 
       document.getElementById('scripts').appendChild(scriptEl);
     }`;
