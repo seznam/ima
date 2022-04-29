@@ -175,7 +175,7 @@ function watchChanges(destFolder, pkgDirs) {
       pkgDir,
       pkgJson.name === '@ima/server'
         ? '/**/*.(js|cjs|mjs|json|ejs|map|wasm|d.ts|gz|br|css)'
-        : '/dist/**/*.(js|cjs|mjs|json|ejs|map|wasm|d.ts|gz|br|css)',
+        : '/(dist|polyfill)/**/*.(js|cjs|mjs|json|ejs|map|wasm|d.ts|gz|br|css)',
       destPkgDir
     );
   });

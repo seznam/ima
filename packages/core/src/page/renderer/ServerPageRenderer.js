@@ -3,6 +3,32 @@ import GenericError from '../../error/GenericError';
 
 // @server-side class ServerPageRenderer extends __VARIABLE__ {__CLEAR__}\nexports.default = ServerPageRenderer;
 
+let imaRunner = '';
+
+//#if _SERVER
+if (typeof window === 'undefined' || window === null) {
+  const fs = require('fs');
+  const path = require('path');
+  const coreBaseFolder = path.dirname(
+    /**
+     * Webpack >= 4 overrides native `require.resolve` in their resolver.
+     * So we need to explicitly use the native impelmentation when availlable
+     * in order to make this work in webpack-built bundles.
+     */
+    (typeof __non_webpack_require__ !== 'undefined'
+      ? // eslint-disable-next-line no-undef
+        __non_webpack_require__
+      : require
+    ).resolve('@ima/core')
+  );
+
+  imaRunner = fs.readFileSync(
+    path.join(coreBaseFolder, '../polyfill/imaRunner.js'),
+    'utf8'
+  );
+}
+//#endif
+
 /**
  * Server-side page renderer. The renderer renders the page into the HTML
  * markup and sends it to the client.
@@ -120,6 +146,7 @@ export default class ServerPageRenderer extends AbstractPageRenderer {
 				$IMA.$Root = "${this._settings.$Root}";
 				$IMA.$LanguagePartPath = "${this._settings.$LanguagePartPath}";
 			})(typeof window !== 'undefined' && window !== null ? window : global);
+      ${imaRunner}
 			`;
   }
 

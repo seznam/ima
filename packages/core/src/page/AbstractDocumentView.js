@@ -68,10 +68,10 @@ export default class AbstractDocumentView extends AbstractPureComponent {
 
   static get esTestScripts() {
     return [
-      '(() => { const o = { t: { q: true } }; return o?.t?.q && (o?.a?.q ?? true); })()',
-      'typeof Promise.allSettled === "function"',
-      'typeof globalThis !== "undefined"',
-      'typeof 9007199254740991n === "bigint"',
+      'return (() => { const o = { t: { q: true } }; return o?.t?.q && (o?.a?.q ?? true); })()',
+      'return typeof Promise.allSettled === "function"',
+      'return typeof globalThis !== "undefined"',
+      'return typeof 9007199254740991n === "bigint"',
     ];
   }
 
@@ -91,7 +91,7 @@ export default class AbstractDocumentView extends AbstractPureComponent {
 
         window.$IMA.Runner = window.$IMA.Runner || {};
         var isEsVersion = ${this.constructor.esTestScripts
-          .map(script => `test('return ${script}')`)
+          .map(script => `test('${script}')`)
           .join(' && ')};
 
         if (isEsVersion) {
@@ -104,16 +104,19 @@ export default class AbstractDocumentView extends AbstractPureComponent {
           window.$IMA.Runner.scripts = JSON.parse('${JSON.stringify(scripts)}');
         }
 
-        window.$IMA.Runner.scripts.forEach(${this.getScriptCallback()});
+        // Create script callback
+        ${this.getScriptCallback()}
+
+        window.$IMA.Runner.scripts.forEach(createScript);
         window.$IMA.Runner.run = function() {
-          (${this.getScriptCallback()})(window.$IMA.Runner.runtime)
+          createScript(window.$IMA.Runner.runtime);
         };
       })();
     </script>`;
   }
 
   getScriptCallback() {
-    return `function(source) {
+    return `function createScript(source) {
       var scriptEl = document.createElement('script');
 
       if (typeof source === 'string') {
@@ -123,10 +126,30 @@ export default class AbstractDocumentView extends AbstractPureComponent {
         var options = source[1];
 
         scriptEl.src = src;
+
         Object.keys(options).forEach(function (attr) {
-          scriptEl[attr] = options[attr];
+          if (attr === 'fallback' && options.fallback) {
+            scriptEl.onerror = function() {
+              var optionsCopy = {};
+
+              // Create options copy and skip fallback
+              Object.keys(options).forEach(function (attr) {
+                if (attr !== 'fallback') {
+                  optionsCopy[attr] = options[attr];
+                }
+              });
+
+              createScript([options.fallback, optionsCopy]);
+            };
+          } else {
+            scriptEl.setAttribute(attr, options[attr]);
+          }
         });
       }
+
+      scriptEl.onload = function () {
+        $IMA.Runner.load(source);
+      };
 
       document.getElementById('scripts').appendChild(scriptEl);
     }`;
