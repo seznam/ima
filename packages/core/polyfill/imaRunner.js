@@ -1,7 +1,7 @@
 (function (root) {
   root.$IMA = root.$IMA || {};
   root.$IMA.Runner = root.$IMA.Runner || {
-    runtime: null,
+    runtime: '',
     scripts: [],
     loadedScripts: [],
     load: function (script) {

@@ -64,8 +64,17 @@ export default class AbstractDocumentView extends AbstractPureComponent {
 
     this[PRIVATE.masterElementId] = masterElementId;
   }
-  //#endif
 
+  /**
+   * Returns array of JS expressions wrapped in string,
+   * that are evaluated on frontend and are used to determine if
+   * the es version of the FE scripts should be loaded. Each expression
+   * should start with return keyword and when all expressions in the array
+   * evaluate to true, the es scripts are loaded, otherwise it falls back to
+   * the legacy versions of script files.
+   *
+   * @returns {array[string]} Array of string JS expressions.
+   */
   static get esTestScripts() {
     return [
       'return (() => { const o = { t: { q: true } }; return o?.t?.q && (o?.a?.q ?? true); })()',
@@ -75,6 +84,13 @@ export default class AbstractDocumentView extends AbstractPureComponent {
     ];
   }
 
+  /**
+   * Initializes $IMA.Runner with es or non-es versions of script
+   * source files, based on the result of evaluation of the
+   * {@code esTestScripts} getter expressions.
+   *
+   * @returns {string} Inline script used to initialized $IMA.Runner.
+   */
   getScripts({ scripts, runtime, esScripts, esRuntime }) {
     return `<script>
       (function() {
@@ -105,17 +121,25 @@ export default class AbstractDocumentView extends AbstractPureComponent {
         }
 
         // Create script callback
-        ${this.getScriptCallback()}
+        var _createScriptCallback = ${this.createScriptCallback()};
 
-        window.$IMA.Runner.scripts.forEach(createScript);
+        window.$IMA.Runner.scripts.forEach(_createScriptCallback);
         window.$IMA.Runner.run = function() {
-          createScript(window.$IMA.Runner.runtime);
+          _createScriptCallback(window.$IMA.Runner.runtime);
         };
       })();
     </script>`;
   }
 
-  getScriptCallback() {
+  /**
+   * Callback function injected into the DOM (should be es5 compatible),
+   * which is called on every script source. By default it creates a tag
+   * that is injected into the DOM.
+   *
+   * @returns {string} Inlined script function that takes one argument,
+   *   which represents the script definitions passed to the {@code getScripts}.
+   */
+  createScriptCallback() {
     return `function createScript(source) {
       var scriptEl = document.createElement('script');
 
@@ -154,4 +178,5 @@ export default class AbstractDocumentView extends AbstractPureComponent {
       document.getElementById('scripts').appendChild(scriptEl);
     }`;
   }
+  //#endif
 }

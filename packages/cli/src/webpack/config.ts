@@ -569,6 +569,13 @@ export default async (
             new CopyPlugin({
               patterns: [
                 { from: 'app/public', to: 'static/public' },
+                {
+                  from: path.join(
+                    path.dirname(require.resolve('@ima/core')),
+                    '../polyfill/imaRunner.js'
+                  ),
+                  to: 'static/public',
+                },
                 ...extractLanguages(imaConfig),
               ],
             }),
