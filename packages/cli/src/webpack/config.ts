@@ -249,8 +249,8 @@ export default async (
         }),
         new CssMinimizerPlugin(),
       ],
-      moduleIds: 'deterministic',
-      chunkIds: 'deterministic',
+      moduleIds: 'named',
+      chunkIds: 'named',
       ...(!isServer && { runtimeChunk: 'single' }),
       splitChunks: {
         ...(isDevEnv && {
