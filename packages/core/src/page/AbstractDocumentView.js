@@ -105,27 +105,25 @@ export default class AbstractDocumentView extends AbstractPureComponent {
           }
         }
 
-        window.$IMA.Runner = window.$IMA.Runner || {};
+        $IMA.Runner = $IMA.Runner || {};
         var isEsVersion = ${this.constructor.esTestScripts
           .map(script => `test('${script}')`)
           .join(' && ')};
 
         if (isEsVersion) {
-          window.$IMA.Runner.runtime = '${esRuntime}';
-          window.$IMA.Runner.scripts = JSON.parse('${JSON.stringify(
-            esScripts
-          )}');
+          $IMA.Runner.runtime = '${esRuntime}';
+          $IMA.Runner.scripts = JSON.parse('${JSON.stringify(esScripts)}');
         } else {
-          window.$IMA.Runner.runtime = '${runtime}';
-          window.$IMA.Runner.scripts = JSON.parse('${JSON.stringify(scripts)}');
+          $IMA.Runner.runtime = '${runtime}';
+          $IMA.Runner.scripts = JSON.parse('${JSON.stringify(scripts)}');
         }
 
         // Create script callback
         var _createScript = ${this.createScript()};
 
-        window.$IMA.Runner.scripts.forEach(_createScript);
-        window.$IMA.Runner.run = function() {
-          _createScript(window.$IMA.Runner.runtime);
+        $IMA.Runner.scripts.forEach(_createScript);
+        $IMA.Runner.run = function() {
+          _createScript($IMA.Runner.runtime);
         };
       })();
     </script>`;
