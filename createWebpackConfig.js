@@ -2,7 +2,6 @@ const fs = require('fs');
 const path = require('path');
 const CssMinimizerPlugin = require('css-minimizer-webpack-plugin');
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
-const argv = require('webpack-nano/argv');
 
 function createWebpackConfig(callback) {
   const rootDir = process.cwd();
@@ -16,7 +15,6 @@ function createWebpackConfig(callback) {
     target: ['web', 'es11'],
     mode: ctx.isProduction ? 'production' : 'development',
     stats: 'minimal',
-    watch: argv?.watch,
     output: {
       path: ctx.outDir,
       filename: 'js/[name].js',
