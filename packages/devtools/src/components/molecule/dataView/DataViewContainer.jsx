@@ -1,4 +1,5 @@
 import { connect } from 'react-redux';
+
 import DataView from './DataView';
 
 const mapStateToProps = state => ({

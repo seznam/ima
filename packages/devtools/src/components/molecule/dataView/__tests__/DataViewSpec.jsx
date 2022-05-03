@@ -1,7 +1,8 @@
-import React from 'react';
 import { shallow } from 'enzyme';
+
+import { JsonView } from '@/components/atom';
+
 import DataView, { TAB_SIZE } from '../DataView';
-import JsonView from 'components/atom/jsonView/JsonView';
 
 describe('DataView molecule', () => {
   let wrapper, instance;
@@ -31,10 +32,6 @@ describe('DataView molecule', () => {
   beforeEach(() => {
     wrapper = shallow(<DataView {...props} />);
     instance = wrapper.instance();
-  });
-
-  it('should match snapshot', () => {
-    expect(wrapper).toMatchSnapshot();
   });
 
   it('should return null if entry is not provided', () => {
@@ -78,12 +75,6 @@ describe('DataView molecule', () => {
       });
 
       expect(Array.isArray(instance.messages)).toBe(true);
-    });
-  });
-
-  describe('defaultProps', () => {
-    it('should match snapshot', () => {
-      expect(DataView.defaultProps).toMatchSnapshot();
     });
   });
 

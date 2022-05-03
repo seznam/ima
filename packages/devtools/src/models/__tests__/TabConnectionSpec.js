@@ -1,7 +1,13 @@
-import TabConnection, { CACHE_SIZE } from '../TabConnection';
-import Actions from 'constants/actions';
-import State from 'constants/state';
-import * as utils from 'services/utils';
+import { Actions, State } from '@/constants';
+
+import { TabConnection, CACHE_SIZE } from '../TabConnection';
+
+jest.mock('@/utils', () => ({
+  setIcon: jest.fn(),
+}));
+
+// eslint-disable-next-line import/order
+import * as utils from '@/utils';
 
 describe('TabConnection', () => {
   let instance = null;

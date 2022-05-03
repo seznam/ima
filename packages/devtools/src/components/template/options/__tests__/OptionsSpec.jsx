@@ -1,9 +1,15 @@
-import React from 'react';
 import { shallow } from 'enzyme';
+
+jest.mock('@/utils', () => ({
+  setSettings: jest.fn(),
+  getSettings: jest.fn().mockReturnValue(Promise.resolve({})),
+}));
+import * as utils from '@/utils';
+
 import Options from '../Options';
-import * as settings from 'services/settings';
 
 jest.mock('easy-uid');
+// eslint-disable-next-line import/order
 import uid from 'easy-uid';
 
 describe('Options template', () => {
@@ -33,28 +39,23 @@ describe('Options template', () => {
     global.chrome = {
       storage: {
         local: {
-          get: jest.fn,
+          get: jest.fn(),
         },
       },
     };
   });
 
   beforeEach(() => {
-    wrapper = shallow(<Options {...props} />);
+    wrapper = shallow(<Options {...props} />, {
+      disableLifecycleMethods: true,
+    });
+
     instance = wrapper.instance();
     event.preventDefault.mockClear();
   });
 
-  it('should match snapshot', () => {
-    expect(wrapper).toMatchSnapshot();
-  });
-
-  it('should match snapshot with modal opened', () => {
-    wrapper.setState({
-      modalOpened: true,
-    });
-
-    expect(wrapper).toMatchSnapshot();
+  afterEach(() => {
+    jest.clearAllMocks();
   });
 
   describe('get isEditable', () => {
@@ -87,17 +88,16 @@ describe('Options template', () => {
 
   describe('componentDidMount', () => {
     it('should fetch and set settings on mount', async () => {
-      jest
-        .spyOn(settings, 'getSettings')
-        .mockImplementation()
-        .mockImplementation(() => ({
+      jest.spyOn(utils, 'getSettings').mockImplementation(() =>
+        Promise.resolve({
           presets: 'settingsPresets',
           selectedPresetId: '0',
-        }));
+        })
+      );
 
       await instance.componentDidMount();
 
-      expect(settings.getSettings.mock.calls).toHaveLength(1);
+      expect(utils.getSettings.mock.calls).toHaveLength(1);
       expect(instance.props.setPresets.mock.calls).toHaveLength(1);
       expect(instance.props.setPresets.mock.calls[0][0]).toStrictEqual({
         presets: 'settingsPresets',
@@ -108,10 +108,7 @@ describe('Options template', () => {
 
   describe('onAdd', () => {
     it('should call props.addHook with generated hook', () => {
-      jest
-        .spyOn(instance, '_createHook')
-        .mockImplementation()
-        .mockReturnValue('newHook');
+      jest.spyOn(instance, '_createHook').mockReturnValue('newHook');
 
       instance.onAdd(event);
 
@@ -151,7 +148,7 @@ describe('Options template', () => {
 
   describe('onSubmit', () => {
     beforeEach(() => {
-      jest.spyOn(settings, 'setSettings').mockImplementation();
+      jest.spyOn(utils, 'setSettings').mockImplementation();
       global.FormData = function () {
         return {
           entries: jest.fn().mockImplementation(() => {
@@ -166,8 +163,8 @@ describe('Options template', () => {
     it('should call set settings with new extracted data', () => {
       instance.onSubmit(event);
 
-      expect(settings.setSettings.mock.calls).toHaveLength(1);
-      expect(settings.setSettings.mock.calls[0][0]).toStrictEqual({
+      expect(utils.setSettings.mock.calls).toHaveLength(1);
+      expect(utils.setSettings.mock.calls[0][0]).toStrictEqual({
         presets: {
           ...props.presets,
           0: {

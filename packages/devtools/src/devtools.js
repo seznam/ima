@@ -1,5 +1,5 @@
-import { getCurrentTab } from 'services/utils';
-import Actions from 'constants/actions';
+import { Actions } from '@/constants';
+import { getCurrentTab } from '@/utils';
 
 let port = null;
 

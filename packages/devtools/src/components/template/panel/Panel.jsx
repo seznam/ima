@@ -1,12 +1,13 @@
-import styles from './panel.less';
-import React from 'react';
-import PropTypes from 'prop-types';
 import debounce from 'lodash.debounce';
+import PropTypes from 'prop-types';
+import React from 'react';
 
-import { getCurrentTab } from 'services/utils';
-import Actions from 'constants/actions';
-import SplitPane from 'components/organism/splitPane/SplitPane';
-import Loader from 'components/atom/loader/Loader';
+import { Loader } from '@/components/atom';
+import { SplitPane } from '@/components/organism';
+import { Actions } from '@/constants';
+import { getCurrentTab } from '@/utils';
+
+import styles from './panel.module.less';
 
 /**
  * Wait time for debounce function for adding new entries in batches. Usually we receive

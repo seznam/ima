@@ -1,5 +1,7 @@
 import { connect } from 'react-redux';
-import { actions as alertsActions } from 'slices/alerts';
+
+import { alertsActions } from '@/slices';
+
 import Alerts from './Alerts';
 
 const mapStateToProps = state => ({

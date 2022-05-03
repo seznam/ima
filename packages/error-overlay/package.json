@@ -18,10 +18,10 @@
   },
   "license": "MIT",
   "author": "Jan Šimeček <jan.simecek@firma.seznam.cz>",
-  "main": "./dist/overlay.js",
+  "main": "./dist/js/overlay.js",
   "scripts": {
-    "build": "NODE_ENV=production wp",
-    "dev": "NODE_ENV=development wp --watch",
+    "build": "NODE_ENV=production webpack",
+    "dev": "NODE_ENV=development webpack --watch",
     "lint": "eslint './**/*.{js,jsx,ts,tsx}'",
     "stylelint": "stylelint './**/*.less'"
   },
@@ -32,22 +32,11 @@
     "@types/react-dom": "^17.0.13",
     "clsx": "^1.1.1",
     "compression-webpack-plugin": "^9.2.0",
-    "copy-webpack-plugin": "^10.2.4",
-    "css-loader": "^6.7.1",
-    "css-minimizer-webpack-plugin": "^3.4.1",
-    "easy-uid": "^2.0.2",
-    "less": "^4.1.2",
-    "less-loader": "^10.2.0",
-    "postcss": "^8.4.12",
-    "postcss-loader": "^6.2.1",
-    "postcss-preset-env": "^7.4.2",
     "prismjs": "^1.27.0",
     "react": "^17.0.2",
     "react-dom": "^17.0.2",
     "source-map": "^0.7.3",
-    "stacktrace-parser": "^0.1.10",
-    "style-loader": "^3.3.1",
-    "ts-loader": "^9.2.8"
+    "stacktrace-parser": "^0.1.10"
   },
   "publishConfig": {
     "access": "public",

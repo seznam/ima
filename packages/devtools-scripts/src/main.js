@@ -1,5 +1,6 @@
-import { aop, createHook, hookName, createCallTrap } from 'to-aop';
 import uid from 'easy-uid';
+import { aop, createHook, hookName, createCallTrap } from 'to-aop';
+
 import DevToolManager from './DevToolManager';
 
 const ImaMainModules = [

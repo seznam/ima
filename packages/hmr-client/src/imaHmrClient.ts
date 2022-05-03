@@ -20,7 +20,7 @@ window.__IMA_HMR = new ErrorOverlayEmitter();
 const overlayJs = document.createElement('script');
 overlayJs.setAttribute(
   'src',
-  `${options.publicUrl}/__error-overlay-static/overlay.js`
+  `${options.publicUrl}/__error-overlay-static/js/overlay.js`
 );
 
 // Init error overlay on source load

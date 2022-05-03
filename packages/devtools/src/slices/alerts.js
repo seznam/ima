@@ -1,7 +1,7 @@
 import { createSlice } from '@reduxjs/toolkit';
 import uid from 'easy-uid';
 
-export const alertsInitialState = {
+const alertsInitialState = {
   alerts: {},
 };
 
@@ -78,6 +78,6 @@ alerts.actions.default = (text, timeout = 3000) => {
   );
 };
 
-const { reducer, actions } = alerts;
+const { reducer: alertsReducer, actions: alertsActions } = alerts;
 
-export { reducer, actions };
+export { alertsInitialState, alertsReducer, alertsActions };

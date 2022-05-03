@@ -1,5 +1,7 @@
 import { connect } from 'react-redux';
-import { actions } from 'slices/confirmModal';
+
+import { confirmModalActions } from '@/slices';
+
 import ConfirmModal from './ConfirmModal';
 
 const mapStateToProps = state => {
@@ -12,5 +14,5 @@ const mapStateToProps = state => {
 };
 
 export default connect(mapStateToProps, {
-  hideConfirmModal: actions.hideConfirmModal,
+  hideConfirmModal: confirmModalActions.hideConfirmModal,
 })(ConfirmModal);

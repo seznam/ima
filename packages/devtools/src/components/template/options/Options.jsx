@@ -1,13 +1,14 @@
 /* eslint-disable react/jsx-no-target-blank */
-import styles from './options.less';
-import React from 'react';
-import PropTypes from 'prop-types';
 import uid from 'easy-uid';
+import PropTypes from 'prop-types';
+import React from 'react';
 
-import { getSettings, setSettings } from 'services/settings';
-import HookEntry from 'components/molecule/hookEntry/HookEntryContainer';
-import Button from 'components/atom/button/Button';
-import PresetsModal from 'components/organism/presetsModal/PresetsModalContainer';
+import { Button } from '@/components/atom';
+import { HookEntryContainer } from '@/components/molecule';
+import { PresetsModalContainer } from '@/components/organism';
+import { getSettings, setSettings } from '@/utils';
+
+import styles from './options.module.less';
 
 export default class Options extends React.PureComponent {
   static propTypes() {
@@ -55,7 +56,7 @@ export default class Options extends React.PureComponent {
 
     return (
       <div className={styles.container}>
-        <PresetsModal
+        <PresetsModalContainer
           onClose={e => this.onModalClose(e)}
           opened={modalOpened}
         />
@@ -66,7 +67,11 @@ export default class Options extends React.PureComponent {
             {hookIds &&
               hookIds.map(id => {
                 return (
-                  <HookEntry editable={this.isEditable} id={id} key={id} />
+                  <HookEntryContainer
+                    editable={this.isEditable}
+                    id={id}
+                    key={id}
+                  />
                 );
               })}
           </div>

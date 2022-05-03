@@ -27,7 +27,10 @@ async function createDevServer({
 
     const app = express();
     const isVerbose = process.argv.some(arg => arg.includes('--verbose'));
-    const staticDir = path.dirname(require.resolve('@ima/error-overlay'));
+    const staticDir = path.join(
+      path.dirname(require.resolve('@ima/error-overlay')),
+      '..'
+    );
 
     app
       .use((req, res, next) => {
@@ -39,7 +42,7 @@ async function createDevServer({
       })
       .use(
         '/__error-overlay-static',
-        expressStaticGzip(path.dirname(require.resolve('@ima/error-overlay')), {
+        expressStaticGzip(staticDir, {
           enableBrotli: true,
           index: false,
           orderPreference: ['br'],

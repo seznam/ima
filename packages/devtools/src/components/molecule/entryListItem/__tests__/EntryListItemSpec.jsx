@@ -1,5 +1,5 @@
-import React from 'react';
 import { shallow } from 'enzyme';
+
 import EntryListItem from '../EntryListItem';
 
 describe('EntryListItem molecule', () => {
@@ -50,10 +50,6 @@ describe('EntryListItem molecule', () => {
     instance = wrapper.instance();
   });
 
-  it('should match snapshot', () => {
-    expect(wrapper).toMatchSnapshot();
-  });
-
   it('should render event along with label when available', () => {
     wrapper.setProps({
       entry: {
@@ -71,7 +67,6 @@ describe('EntryListItem molecule', () => {
     expect(instance.props.entry.messages[0].payload.label).toBe(
       'label:type:event'
     );
-    expect(wrapper).toMatchSnapshot();
   });
 
   it('should have wrapper--selected if item has props selected true', () => {

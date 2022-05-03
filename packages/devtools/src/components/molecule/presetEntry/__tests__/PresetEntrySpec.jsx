@@ -1,5 +1,5 @@
-import React from 'react';
 import { shallow } from 'enzyme';
+
 import PresetEntry from '../PresetEntry';
 
 describe('PresetEntry molecule', () => {
@@ -33,18 +33,6 @@ describe('PresetEntry molecule', () => {
 
     event.preventDefault.mockClear();
     event.stopPropagation.mockClear();
-  });
-
-  it('should match snapshot', () => {
-    expect(wrapper).toMatchSnapshot();
-  });
-
-  it('should match snapshot when editable', () => {
-    wrapper.setState({
-      editable: true,
-    });
-
-    expect(wrapper).toMatchSnapshot();
   });
 
   it('should trigger onClick when clicked on entry item', () => {
