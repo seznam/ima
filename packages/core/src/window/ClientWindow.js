@@ -16,9 +16,9 @@ export default class ClientWindow extends Window {
     /**
      * Map of event event identifiers to a bound listener.
      *
-     * @type {Map<Array<string, function(*), boolean, Object>, function(*)>}
+     * @type {WeakMap<Object, Map<Array<string, function(*), boolean, Object>, function(*)>>}
      */
-    this._scopedListeners = new Map();
+    this._scopedListeners = new WeakMap();
   }
 
   /**
@@ -225,6 +225,7 @@ export default class ClientWindow extends Window {
 
       if (scope) {
         usedListener = this._findScopedListener(
+          eventTarget,
           event,
           listener,
           useCapture,
@@ -233,8 +234,13 @@ export default class ClientWindow extends Window {
 
         if (!usedListener) {
           usedListener = listener.bind(scope);
-          this._scopedListeners.set(
-            [event, listener, useCapture, scope],
+
+          this._addScopedListener(
+            eventTarget,
+            event,
+            listener,
+            useCapture,
+            scope,
             usedListener
           );
         }
@@ -259,6 +265,7 @@ export default class ClientWindow extends Window {
 
       if (scope) {
         usedListener = this._findScopedListener(
+          eventTarget,
           event,
           listener,
           useCapture,
@@ -285,23 +292,55 @@ export default class ClientWindow extends Window {
     }
   }
 
-  _findScopedListener(event, listener, useCapture, scope, remove = false) {
-    for (const key of this._scopedListeners.keys()) {
-      const [_event, _listener, _useCapture, _scope] = key;
+  _addScopedListener(
+    eventTarget,
+    event,
+    listener,
+    useCapture,
+    scope,
+    usedListener
+  ) {
+    if (!this._scopedListeners.has(eventTarget)) {
+      this._scopedListeners.set(eventTarget, new Map());
+    }
 
-      if (
-        event === _event &&
-        listener === _listener &&
-        useCapture === _useCapture &&
-        scope === _scope
-      ) {
-        const usedListener = this._scopedListeners.get(key);
+    const scopedListeners = this._scopedListeners.get(eventTarget);
 
-        if (remove) {
-          this._scopedListeners.delete(key);
+    scopedListeners.set([event, listener, useCapture, scope], usedListener);
+  }
+
+  _findScopedListener(
+    eventTarget,
+    event,
+    listener,
+    useCapture,
+    scope,
+    remove = false
+  ) {
+    if (this._scopedListeners.has(eventTarget)) {
+      const scopedListeners = this._scopedListeners.get(eventTarget);
+
+      for (const key of scopedListeners.keys()) {
+        const [_event, _listener, _useCapture, _scope] = key;
+
+        if (
+          event === _event &&
+          listener === _listener &&
+          useCapture === _useCapture &&
+          scope === _scope
+        ) {
+          const usedListener = scopedListeners.get(key);
+
+          if (remove) {
+            scopedListeners.delete(key);
+
+            if (!scopedListeners.size) {
+              this._scopedListeners.delete(eventTarget);
+            }
+          }
+
+          return usedListener;
         }
-
-        return usedListener;
       }
     }
   }
