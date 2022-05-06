@@ -220,6 +220,7 @@ module.exports = (environment, logger, languageLoader, appFactory) => {
         $Env: environment.$Env,
         $Version: environment.$Version,
         $App: environment.$App || {},
+        $Source: environment.$Source || {},
         $Protocol: protocol,
         $Language: language,
         $Host: host,

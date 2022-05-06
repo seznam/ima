@@ -140,6 +140,7 @@ export default class ServerPageRenderer extends AbstractPageRenderer {
 				$IMA.$Debug = ${this._settings.$Debug};
 				$IMA.$Version = "${this._settings.$Version}";
 				$IMA.$App = ${JSON.stringify(this._settings.$App)};
+				$IMA.$Source = ${JSON.stringify(this._settings.$Source)};
 				$IMA.$Protocol = "${this._settings.$Protocol}";
 				$IMA.$Host = "${this._settings.$Host}";
 				$IMA.$Path = "${this._settings.$Path}";

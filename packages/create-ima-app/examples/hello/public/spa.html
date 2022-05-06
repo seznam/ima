@@ -18,14 +18,14 @@
     <title></title>
 </head>
 <body>
-    <div id="page">
-    </div>
+    <div id="page"></div>
     <div id="revivalSettings">
         <script>
             window.$Debug = <%= $Debug %>;
             window.$IMA = window.$IMA || {};
             window.$IMA.Cache = {};
             window.$IMA.$App = <%- JSON.stringify($App) %>;
+            window.$IMA.$Source = <%- JSON.stringify($Source) %>;
             window.$IMA.$Language = "<%= $Language %>";
             window.$IMA.$Version =  "<%= $Version %>";
             window.$IMA.$Env = "<%= $Env %>";
@@ -39,17 +39,6 @@
     </div>
     <div id="scripts">
         <script src="/static/public/imaRunner.js?version=<%= $Version %>"></script>
-        <script src="/static/locale/<%= $Language %>.js?version=<%= $Version %>"></script>
-
-        <% if ($Env !== "dev") { %>
-            <script src="/static/js/app.bundle.js?version=<%= $Version %>"></script>
-        <% } else { %>
-            <script src="/static/js/vendors.js?version=<%= $Version %>"></script>
-            <script src="/static/js/app.client.js?version=<%= $Version %>"></script>
-        <% } %>
-
-        <script src="/static/js/runtime.js?version=<%= $Version %>"></script>
-        <script>window.$IMA.Runner.run();</script>
     </div>
 </body>
 </html>

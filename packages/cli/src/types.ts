@@ -222,6 +222,11 @@ export interface ImaEnvironment {
   $App: unknown;
 
   /**
+   * App script and style sources
+   */
+  $Source: unknown;
+
+  /**
    * Array of defined languages
    */
   $Language: string[];

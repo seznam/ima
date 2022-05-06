@@ -22,28 +22,15 @@ export default class DocumentView extends AbstractDocumentView {
             content={this.props.metaManager.getMetaName('keywords')}
           />
 
-          <meta
-            property='og:title'
-            content={this.props.metaManager.getMetaProperty('og:title')}
-          />
-          <meta
-            property='og:description'
-            content={this.props.metaManager.getMetaProperty('og:description')}
-          />
-          <meta
-            property='og:type'
-            content={this.props.metaManager.getMetaProperty('og:type')}
-          />
-          <meta
-            property='og:url'
-            content={this.props.metaManager.getMetaProperty('og:url')}
-          />
-          <meta
-            property='og:image'
-            content={this.props.metaManager.getMetaProperty('og:image')}
-          />
+          {this.props.metaManager.getMetaProperties().map(property => (
+            <meta
+              key={property}
+              property={property}
+              content={this.props.metaManager.getMetaProperty(property)}
+            />
+          ))}
 
-          {this.utils.$Settings.$Page.$Render.styles.map(style => (
+          {this.utils.$Settings.$Page.$Source.styles.map(style => (
             <link key={style} rel='stylesheet' href={style} />
           ))}
 
@@ -51,18 +38,12 @@ export default class DocumentView extends AbstractDocumentView {
         </head>
         <body>
           <div
-            id='page'
+            id={this.constructor.masterElementId}
             dangerouslySetInnerHTML={{ __html: this.props.page }}
           />
           <script
             id='revivalSettings'
             dangerouslySetInnerHTML={{ __html: this.props.revivalSettings }}
-          />
-          <div
-            id='scripts'
-            dangerouslySetInnerHTML={{
-              __html: this.getScripts(this.utils.$Settings.$Page.$Render),
-            }}
           />
         </body>
       </html>

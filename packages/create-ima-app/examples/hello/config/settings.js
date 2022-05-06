@@ -1,14 +1,9 @@
 import DocumentView from 'app/document/DocumentView';
 
 export default (ns, oc, config) => {
-  const versionStamp = `?version=${
-    config.$Env === 'dev'
-      ? (+new Date() + Math.random() * 100).toString(32)
-      : config.$Version
-  }`;
-
   return {
     prod: {
+      $Version: config.$Version,
       $Http: {
         defaultRequestOptions: {
           timeout: 7000, // Request timeout
@@ -33,24 +28,8 @@ export default (ns, oc, config) => {
         ttl: 60000, // Default time to live for cached value in ms.
       },
       $Page: {
+        $Source: config.$Source,
         $Render: {
-          styles: [`/static/css/app.css${versionStamp}`],
-          scripts: [
-            [
-              `/static/locale/${config.$Language}.js${versionStamp}`,
-              { async: true },
-            ],
-            [`/static/js/app.bundle.js${versionStamp}`, { async: true }],
-          ],
-          runtime: `/static/js/runtime.js${versionStamp}`,
-          esScripts: [
-            [
-              `/static/locale/${config.$Language}.js${versionStamp}`,
-              { async: true },
-            ],
-            [`/static/js.es/app.bundle.js${versionStamp}`, { async: true }],
-          ],
-          esRuntime: `/static/js.es/runtime.js${versionStamp}`,
           documentView: DocumentView,
         },
       },
@@ -66,29 +45,6 @@ export default (ns, oc, config) => {
       $Http: {
         defaultRequestOptions: {
           timeout: 2000,
-        },
-      },
-      $Page: {
-        $Render: {
-          styles: [`/static/css/app.css${versionStamp}`],
-          scripts: [
-            // `/static/js/polyfill.js${versionStamp}`,
-            [
-              `/static/locale/${config.$Language}.js${versionStamp}`,
-              { async: true },
-            ],
-            [`/static/js/vendors.js${versionStamp}`, { async: true }],
-            [`/static/js/app.client.js${versionStamp}`, { async: true }],
-          ],
-          esScripts: [
-            // `/static/js.es/polyfill.js${versionStamp}`,
-            [
-              `/static/locale/${config.$Language}.js${versionStamp}`,
-              { async: true },
-            ],
-            [`/static/js.es/vendors.js${versionStamp}`, { async: true }],
-            [`/static/js.es/app.client.js${versionStamp}`, { async: true }],
-          ],
         },
       },
     },

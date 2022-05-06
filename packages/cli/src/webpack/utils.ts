@@ -368,11 +368,10 @@ async function createWebpackConfig(
       name: 'client',
       isServer: false,
       isEsVersion: false,
-      processCss: args.forceSPA,
+      processCss: false,
       ...args,
     },
-    // SPA mode only supports es5 versions
-    !args.forceSPA && {
+    {
       name: 'client.es',
       isServer: false,
       isEsVersion: true,

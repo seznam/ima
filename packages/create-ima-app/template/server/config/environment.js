@@ -26,6 +26,19 @@ module.exports = (() => {
       $Language: {
         '//*:*': 'en',
       },
+      $Source: {
+        styles: ['/static/css/app.css'],
+        scripts: [
+          ['/static/locale/{$Language}.js', { async: true }],
+          ['/static/js/app.bundle.js', { async: true }],
+        ],
+        runtime: '/static/js/runtime.js',
+        esScripts: [
+          ['/static/locale/{$Language}.js', { async: true }],
+          ['/static/js.es/app.bundle.js', { async: true }],
+        ],
+        esRuntime: '/static/js.es/runtime.js',
+      },
       $Server: {
         port: 3001, // The port at which the server listens for
         // incoming HTTP connections
@@ -91,6 +104,21 @@ module.exports = (() => {
       $Debug: true,
       $Language: {
         '//*:*': 'en',
+      },
+      $Source: {
+        styles: ['/static/css/app.css'],
+        scripts: [
+          ['/static/locale/{$Language}.js', { async: true }],
+          ['/static/js/vendors.js', { async: true }],
+          ['/static/js/app.client.js', { async: true }],
+        ],
+        runtime: '/static/js/runtime.js',
+        esScripts: [
+          ['/static/locale/{$Language}.js', { async: true }],
+          ['/static/js.es/vendors.js', { async: true }],
+          ['/static/js.es/app.client.js', { async: true }],
+        ],
+        esRuntime: '/static/js.es/runtime.js',
       },
       $Server: {
         concurrency: 1,

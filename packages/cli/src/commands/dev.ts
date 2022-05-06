@@ -79,9 +79,6 @@ function startNodemon(args: ImaCliArgs) {
  */
 const dev: HandlerFn = async args => {
   if (args.forceSPA) {
-    // SPA only supports es5 versions
-    args.legacy = true;
-
     // Set force SPA flag so server can react accordingly
     process.env.IMA_CLI_FORCE_SPA = 'true';
   }
@@ -121,9 +118,10 @@ const dev: HandlerFn = async args => {
     await Promise.all([
       watchCompiler(compiler, args, imaConfig),
       createDevServer({
-        compiler: compiler.compilers.find(({ name }) =>
-          // Run dev server only for client compiler with HMR enabled
-          args.forceSPA ? name === 'client' : name === 'client.es'
+        compiler: compiler.compilers.find(
+          ({ name }) =>
+            // Run dev server only for client compiler with HMR enabled
+            name === 'client.es'
         ),
         hostname: devServerConfig.hostname,
         port: devServerConfig.port,
