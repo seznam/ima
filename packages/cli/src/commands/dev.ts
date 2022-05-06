@@ -34,7 +34,9 @@ function startNodemon(args: ImaCliArgs) {
 
   nodemon({
     script: path.join(args.rootDir, 'server/server.js'),
-    watch: [`${path.join(args.rootDir, 'server')}`],
+    watch: ['server', 'build/static/public/spa.html'].map(p =>
+      path.join(args.rootDir, p)
+    ),
     args: [`--verbose=${args.verbose}`],
     cwd: args.rootDir,
   });

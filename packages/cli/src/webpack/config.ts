@@ -48,8 +48,7 @@ export default async (
   const outputDir = path.join(rootDir, 'build');
   const publicPath = ctx.publicPath ?? imaConfig.publicPath;
   const appDir = path.join(rootDir, 'app');
-  const useHMR =
-    ctx.command === 'dev' && !isServer && (isEsVersion || ctx.forceSPA);
+  const useHMR = ctx.command === 'dev' && isEsVersion;
   const devServerConfig = createDevServerConfig({ imaConfig, ctx });
 
   // Define browserslist targets for current context
