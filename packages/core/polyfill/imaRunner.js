@@ -146,4 +146,5 @@
   );
 
   root.$IMA.Runner.initScripts();
+  Object.seal(root.$IMA.Runner);
 })(typeof window !== 'undefined' && window !== null ? window : global);

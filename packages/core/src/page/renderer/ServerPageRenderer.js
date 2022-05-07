@@ -9,21 +9,9 @@ let imaRunner = '';
 if (typeof window === 'undefined' || window === null) {
   const fs = require('fs');
   const path = require('path');
-  const coreBaseFolder = path.dirname(
-    /**
-     * Webpack >= 4 overrides native `require.resolve` in their resolver.
-     * So we need to explicitly use the native impelmentation when availlable
-     * in order to make this work in webpack-built bundles.
-     */
-    (typeof __non_webpack_require__ !== 'undefined'
-      ? // eslint-disable-next-line no-undef
-        __non_webpack_require__
-      : require
-    ).resolve('@ima/core')
-  );
 
   imaRunner = fs.readFileSync(
-    path.join(coreBaseFolder, '../polyfill/imaRunner.js'),
+    path.resolve('./build/static/public/imaRunner.js'),
     'utf8'
   );
 }
