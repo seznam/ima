@@ -7,7 +7,6 @@ import CompressionPlugin from 'compression-webpack-plugin';
 // eslint-disable-next-line import/default
 import CopyPlugin from 'copy-webpack-plugin';
 import CssMinimizerPlugin from 'css-minimizer-webpack-plugin';
-import HtmlMinimizerPlugin from 'html-minimizer-webpack-plugin';
 import MiniCssExtractPlugin from 'mini-css-extract-plugin';
 import miniSVGDataURI from 'mini-svg-data-uri';
 import TerserPlugin from 'terser-webpack-plugin';
@@ -248,7 +247,6 @@ export default async (
           },
         }),
         new CssMinimizerPlugin(),
-        new HtmlMinimizerPlugin(),
       ],
       moduleIds: 'named',
       chunkIds: 'named',
@@ -599,7 +597,7 @@ export default async (
                       filename: `[path][base].${
                         algorithm === 'brotliCompress' ? 'br' : 'gz'
                       }`,
-                      test: /\.(js|css|html|svg)$/,
+                      test: /\.(js|css|svg)$/,
                       compressionOptions: {
                         level: 9,
                       },
