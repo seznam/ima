@@ -8,6 +8,7 @@ const Cache = require('./cache.js').Cache;
 module.exports = (environment, logger, languageLoader, appFactory) => {
   const app = appFactory();
 
+  const runner = fs.readFileSync('./build/static/public/runner.js', 'utf8');
   const spaTemplate = ejs.compile(
     fs.readFileSync('./build/static/public/spa.html', 'utf8'),
     { cache: true, filename: 'spa.html' }
@@ -123,7 +124,10 @@ module.exports = (environment, logger, languageLoader, appFactory) => {
         );
       }
 
-      const content = spaTemplate(bootConfig.settings);
+      const content = spaTemplate({
+        ...bootConfig.settings,
+        runner,
+      });
       spaCache.set(req, content);
 
       res.status(status);

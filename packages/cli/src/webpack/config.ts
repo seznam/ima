@@ -7,6 +7,7 @@ import CompressionPlugin from 'compression-webpack-plugin';
 // eslint-disable-next-line import/default
 import CopyPlugin from 'copy-webpack-plugin';
 import CssMinimizerPlugin from 'css-minimizer-webpack-plugin';
+import HtmlMinimizerPlugin from 'html-minimizer-webpack-plugin';
 import MiniCssExtractPlugin from 'mini-css-extract-plugin';
 import miniSVGDataURI from 'mini-svg-data-uri';
 import TerserPlugin from 'terser-webpack-plugin';
@@ -247,6 +248,7 @@ export default async (
           },
         }),
         new CssMinimizerPlugin(),
+        new HtmlMinimizerPlugin(),
       ],
       moduleIds: 'named',
       chunkIds: 'named',
@@ -563,15 +565,7 @@ export default async (
       // Server/client specific plugins are defined below
       ...(isServer
         ? // Server-specific plugins
-          [
-            // Copies essential assets to static directory
-            new CopyPlugin({
-              patterns: [
-                { from: 'app/public', to: 'static/public' },
-                ...extractLanguages(imaConfig),
-              ],
-            }),
-          ]
+          []
         : // Client-specific plugins
           [
             // This needs to run for both client bundles
@@ -585,6 +579,15 @@ export default async (
                   `static/css/${chunk?.name === name ? 'app' : '[name]'}.css`,
                 ignoreOrder: true,
                 chunkFilename: `static/css/[id].css`,
+              }),
+
+            // Copies essential assets to static directory
+            isEsVersion &&
+              new CopyPlugin({
+                patterns: [
+                  { from: 'app/public', to: 'static/public' },
+                  ...extractLanguages(imaConfig),
+                ],
               }),
 
             // Enables compression for assets in production build
