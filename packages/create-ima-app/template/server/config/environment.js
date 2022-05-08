@@ -29,15 +29,13 @@ module.exports = (() => {
       $Source: {
         styles: ['/static/css/app.css'],
         scripts: [
-          ['/static/locale/{$Language}.js', { async: true }],
-          ['/static/js/app.bundle.js', { async: true }],
+          ['/static/locale/{language}.js?v={version}', { async: true }],
+          ['/static/js/app.bundle.js?v={version}', { async: true }],
         ],
-        runtime: '/static/js/runtime.js',
         esScripts: [
-          ['/static/locale/{$Language}.js', { async: true }],
-          ['/static/js.es/app.bundle.js', { async: true }],
+          ['/static/locale/{language}.js?v={version}', { async: true }],
+          ['/static/js.es/app.bundle.js?v={version}', { async: true }],
         ],
-        esRuntime: '/static/js.es/runtime.js',
       },
       $Server: {
         port: 3001, // The port at which the server listens for
@@ -108,17 +106,15 @@ module.exports = (() => {
       $Source: {
         styles: ['/static/css/app.css'],
         scripts: [
-          ['/static/locale/{$Language}.js', { async: true }],
-          ['/static/js/vendors.js', { async: true }],
-          ['/static/js/app.client.js', { async: true }],
+          ['/static/locale/{language}.js?v={version}', { async: true }],
+          ['/static/js/vendors.js?v={version}', { async: true }],
+          ['/static/js/app.client.js?v={version}', { async: true }],
         ],
-        runtime: '/static/js/runtime.js',
         esScripts: [
-          ['/static/locale/{$Language}.js', { async: true }],
-          ['/static/js.es/vendors.js', { async: true }],
-          ['/static/js.es/app.client.js', { async: true }],
+          ['/static/locale/{language}.js?v={version}', { async: true }],
+          ['/static/js.es/vendors.js?v={version}', { async: true }],
+          ['/static/js.es/app.client.js?v={version}', { async: true }],
         ],
-        esRuntime: '/static/js.es/runtime.js',
       },
       $Server: {
         concurrency: 1,

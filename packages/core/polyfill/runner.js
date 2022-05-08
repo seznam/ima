@@ -28,6 +28,7 @@
   root.$IMA = root.$IMA || {};
   root.$IMA.Runner = assign(
     {
+      isEsVersion: false,
       scripts: [],
       loadedScripts: [],
       // es11 env test scripts
@@ -37,6 +38,7 @@
         'return typeof globalThis !== "undefined"',
         'return typeof 9007199254740991n === "bigint"',
       ],
+
       /**
        * Handles creation of script elements and their injection to the DOM.
        * It also takes care of testing the browser environment and determining
@@ -72,9 +74,9 @@
           var scriptEl = root.document.createElement('script');
 
           function replaceValues(source) {
-            var newSource = source.replace('{$Language}', root.$IMA.$Language);
-
-            return newSource;
+            return source
+              .replace('{language}', root.$IMA.$Language)
+              .replace('{version}', root.$IMA.$Version);
           }
 
           if (typeof source === 'string') {
@@ -105,32 +107,54 @@
             });
 
             scriptEl.onload = function () {
-              runner.load(source);
+              runner.onLoad(source);
             };
           }
 
           scriptsRoot.appendChild(scriptEl);
         }
 
+        runner.isEsVersion = runner.testScripts.every(testScript);
+
         /**
          * Sets concrete scripts to the runner based on the currently
          * supported ecma script version.
          */
-        if (runner.testScripts.every(testScript)) {
-          runner.runtime = root.$IMA.$Source.esRuntime;
+        if (runner.isEsVersion) {
           runner.scripts = root.$IMA.$Source.esScripts;
         } else {
-          runner.runtime = root.$IMA.$Source.runtime;
           runner.scripts = root.$IMA.$Source.scripts;
         }
 
         runner.scripts.forEach(createScript);
-        runner.run = function () {
-          createScript(runner.runtime);
-        };
       },
-      run: function () {},
-      load: function (script) {
+
+      /**
+       * Executes the appropriate runtime based on the current
+       * es environment after all scripts are loaded. The {esRuntime} and
+       * {runtime} placeholders are replaced with the actual runtime code
+       * at the build time.
+       */
+      run: function () {
+        var runner = root.$IMA.Runner;
+
+        try {
+          if (runner.isEsVersion) {
+            /* {esRuntime} */
+          } else {
+            /* {runtime} */
+          }
+        } catch (error) {
+          runner.onError(error);
+        }
+      },
+
+      /**
+       * This handler should be called for every script defined
+       * in the scripts array, since only when all of the scripts are
+       * loaded, the run callback is called.
+       */
+      onLoad: function (script) {
         var runner = root.$IMA.Runner;
 
         runner.loadedScripts.push(
@@ -140,6 +164,14 @@
         if (runner.scripts.length === runner.loadedScripts.length) {
           runner.run();
         }
+      },
+
+      /**
+       * Optional onError handler. It is triggered in case the runtime
+       * code fails to run the application.
+       */
+      onError: function (error) {
+        console.error('IMA Runner ERROR:', error);
       },
     },
     root.$IMA.Runner || {}

@@ -3,15 +3,15 @@ import GenericError from '../../error/GenericError';
 
 // @server-side class ServerPageRenderer extends __VARIABLE__ {__CLEAR__}\nexports.default = ServerPageRenderer;
 
-let imaRunner = '';
+let runner = '';
 
 //#if _SERVER
 if (typeof window === 'undefined' || window === null) {
   const fs = require('fs');
   const path = require('path');
 
-  imaRunner = fs.readFileSync(
-    path.resolve('./build/static/public/imaRunner.js'),
+  runner = fs.readFileSync(
+    path.resolve('./build/static/public/runner.js'),
     'utf8'
   );
 }
@@ -135,7 +135,7 @@ export default class ServerPageRenderer extends AbstractPageRenderer {
 				$IMA.$Root = "${this._settings.$Root}";
 				$IMA.$LanguagePartPath = "${this._settings.$LanguagePartPath}";
 			})(typeof window !== 'undefined' && window !== null ? window : global);
-      ${imaRunner}
+      ${runner}
 			`;
   }
 

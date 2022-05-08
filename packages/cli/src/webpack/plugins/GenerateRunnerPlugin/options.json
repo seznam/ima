@@ -1,0 +1,11 @@
+{
+  "title": "GenerateRunnerPlugin",
+  "type": "object",
+  "additionalProperties": false,
+  "properties": {
+    "context": {
+      "type": "object",
+      "description": "IMA CLI configuration context."
+    }
+  }
+}

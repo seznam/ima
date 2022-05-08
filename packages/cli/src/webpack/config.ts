@@ -18,6 +18,7 @@ import webpack, {
 } from 'webpack';
 
 import { ImaConfigurationContext, ImaConfig } from '../types';
+import { GenerateRunnerPlugin } from './plugins/GenerateRunnerPlugin';
 import { createProgress } from './plugins/ProgressPlugin';
 import {
   resolveEnvironment,
@@ -46,7 +47,6 @@ export default async (
   const imaEnvironment = resolveEnvironment(rootDir);
   const isDebug = imaEnvironment.$Debug;
   const outputDir = path.join(rootDir, 'build');
-  const publicPath = ctx.publicPath ?? imaConfig.publicPath;
   const appDir = path.join(rootDir, 'app');
   const useHMR = ctx.command === 'dev' && isEsVersion;
   const devServerConfig = createDevServerConfig({ imaConfig, ctx });
@@ -207,7 +207,7 @@ export default async (
       cssFilename: ({ chunk }) =>
         `static/css/${chunk?.name === name ? 'app' : '[name]'}.css`,
       cssChunkFilename: `static/css/[id].css`,
-      publicPath,
+      publicPath: ctx.publicPath ?? imaConfig.publicPath,
       /**
        * We put hot updates into it's own folder
        * otherwise it clutters the build folder.
@@ -568,19 +568,17 @@ export default async (
             new CopyPlugin({
               patterns: [
                 { from: 'app/public', to: 'static/public' },
-                {
-                  from: path.join(
-                    path.dirname(require.resolve('@ima/core')),
-                    '../polyfill/imaRunner.js'
-                  ),
-                  to: 'static/public',
-                },
                 ...extractLanguages(imaConfig),
               ],
             }),
           ]
         : // Client-specific plugins
           [
+            // This needs to run for both client bundles
+            new GenerateRunnerPlugin({
+              context: ctx,
+            }),
+
             processCss &&
               new MiniCssExtractPlugin({
                 filename: ({ chunk }) =>
