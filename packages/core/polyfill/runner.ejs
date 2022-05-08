@@ -140,9 +140,14 @@
 
         try {
           if (runner.isEsVersion) {
-            /* {esRuntime} */
+            /**
+             * We need to wrap esRuntime code in a string and execute the function
+             * since the code can contain some es5-incompatible syntax, which would
+             * break the legacy JS interpreters.
+             */
+            new Function('<%- esRuntime %>')();
           } else {
-            /* {runtime} */
+            <%- runtime %>
           }
         } catch (error) {
           runner.onError(error);

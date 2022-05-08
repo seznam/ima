@@ -6,6 +6,10 @@
     "context": {
       "type": "object",
       "description": "IMA CLI configuration context."
+    },
+    "runnerTemplate": {
+      "type": "string",
+      "description": "Custom IMA Runner ejs code template.",
     }
   }
 }
