@@ -29,7 +29,7 @@ let runtimeStorage: {
 class GenerateRunnerPlugin {
   private _pluginName: string;
   private _options: GenerateRunnerPluginOptions;
-  private _runner: ejs.TemplateFunction;
+  private _runnerTemplate: ejs.TemplateFunction;
 
   constructor(options: GenerateRunnerPluginOptions) {
     this._pluginName = this.constructor.name;
@@ -42,7 +42,7 @@ class GenerateRunnerPlugin {
     });
 
     // Pre-compile runner ejs template
-    this._runner = ejs.compile(
+    this._runnerTemplate = ejs.compile(
       options.runnerTemplate ??
         fs.readFileSync(
           path.resolve(
@@ -82,13 +82,13 @@ class GenerateRunnerPlugin {
       return;
     }
 
+    const { legacy, command, name } = this._options.context;
+
     // Save runtime code into storage
-    runtimeStorage[
-      compilation.name === 'client.es' ? 'esRuntimeCode' : 'runtimeCode'
-    ] = assets[runtimeAsset].source().toString();
+    runtimeStorage[name === 'client.es' ? 'esRuntimeCode' : 'runtimeCode'] =
+      assets[runtimeAsset].source().toString();
 
     const { esRuntimeCode, runtimeCode } = runtimeStorage;
-    const { legacy, command } = this._options.context;
 
     // Delete runtime asset since we inline it in the IMA runner.
     compilation.deleteAsset(runtimeAsset);
@@ -99,7 +99,7 @@ class GenerateRunnerPlugin {
       (command == 'dev' && legacy && esRuntimeCode && runtimeCode) ||
       (command == 'dev' && !legacy && esRuntimeCode)
     ) {
-      const generatedRunner = this._runner({
+      const generatedRunner = this._runnerTemplate({
         esRuntime: this._addSlashes(esRuntimeCode),
         runtime: runtimeCode ?? '// runtime not generated',
       });
