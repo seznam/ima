@@ -5,6 +5,7 @@ import ControllerInterface from '../controller/Controller';
 import AbstractDocumentView from '../page/AbstractDocumentView';
 import * as ima from '../main';
 
+jest.mock('fs');
 jest.mock('path', () => {
   const original = jest.requireActual('path');
   const resolve = (...args) => {

@@ -4,6 +4,7 @@ import ServerPageRenderer from '../page/renderer/ServerPageRenderer';
 import Response from '../router/Response';
 import * as ima from '../main';
 
+jest.mock('fs');
 jest.mock('path', () => {
   const original = jest.requireActual('path');
   const resolve = (...args) => {

@@ -13,6 +13,7 @@ import {
   objectKeepUnmock,
 } from 'to-mock';
 
+jest.mock('fs');
 jest.mock('path', () => {
   const original = jest.requireActual('path');
   const resolve = (...args) => {
