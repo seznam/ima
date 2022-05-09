@@ -8,7 +8,6 @@ import CompressionPlugin from 'compression-webpack-plugin';
 import CopyPlugin from 'copy-webpack-plugin';
 import CssMinimizerPlugin from 'css-minimizer-webpack-plugin';
 import MiniCssExtractPlugin from 'mini-css-extract-plugin';
-import miniSVGDataURI from 'mini-svg-data-uri';
 import TerserPlugin from 'terser-webpack-plugin';
 import webpack, {
   Configuration,
@@ -238,9 +237,7 @@ export default async (
             : TerserPlugin.terserMinify,
           terserOptions: {
             ecma: isServer || isEsVersion ? 2016 : 5,
-            compress: true,
             mangle: {
-              safari10: !isServer && !isEsVersion,
               // Added for profiling in devtools
               keep_classnames: ctx.profile || isDevEnv,
               keep_fnames: ctx.profile || isDevEnv,
@@ -300,7 +297,14 @@ export default async (
              * on the resource size
              */
             {
-              test: [/\.bmp$/, /\.gif$/, /\.jpe?g$/, /\.png$/, /\.webp$/],
+              test: [
+                /\.bmp$/,
+                /\.gif$/,
+                /\.jpe?g$/,
+                /\.png$/,
+                /\.webp$/,
+                /\.svg$/,
+              ],
               oneOf: [
                 {
                   resourceQuery: /inline/, // foo.png?inline
@@ -315,41 +319,6 @@ export default async (
                   parser: {
                     dataUrlCondition: {
                       maxSize: imaConfig.imageInlineSizeLimit,
-                    },
-                  },
-                },
-              ],
-            },
-            /**
-             * Uses svgo to optimize loaded svg files. Inline and external logic
-             * using the queryParam in import path applies here the same as with
-             * the image assets. Inline SVGs are converted to more efficient data URI.
-             * Defaults to external
-             */
-            {
-              test: /\.svg$/,
-              rules: [
-                {
-                  oneOf: [
-                    {
-                      resourceQuery: /inline/, // foo.svg?inline
-                      type: 'asset/inline',
-                      generator: {
-                        dataUrl: (content: string | Buffer) =>
-                          miniSVGDataURI(content.toString()),
-                      },
-                    },
-                    {
-                      type: 'asset/resource',
-                    },
-                  ],
-                },
-                {
-                  loader: require.resolve('svgo-loader'),
-                  options: {
-                    js2svg: {
-                      indent: 2,
-                      pretty: isDevEnv,
                     },
                   },
                 },
