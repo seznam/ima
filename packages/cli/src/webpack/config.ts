@@ -361,8 +361,8 @@ export default async (
                           module: {
                             type: 'commonjs',
                           },
-                          sourceMaps: true,
-                          inlineSourcesContent: true,
+                          sourceMaps: useSourceMaps,
+                          inlineSourcesContent: useSourceMaps,
                         },
                       },
                       {
@@ -376,32 +376,35 @@ export default async (
                     include: appDir,
                     exclude: /node_modules/,
                     loader: require.resolve('swc-loader'),
-                    options: {
-                      env: {
-                        targets,
-                        mode: 'usage',
-                        coreJs: 3,
-                        shippedProposals: true,
-                      },
-                      module: {
-                        type: 'commonjs',
-                      },
-                      jsc: {
-                        parser: {
-                          syntax: 'ecmascript',
-                          jsx: true,
+                    options: await imaConfig.swc(
+                      {
+                        env: {
+                          targets,
+                          mode: 'usage',
+                          coreJs: 3,
+                          shippedProposals: true,
                         },
-                        transform: {
-                          react: {
-                            runtime: imaConfig.jsxRuntime ?? 'automatic',
-                            development: isDevEnv,
-                            refresh: useHMR,
+                        module: {
+                          type: 'commonjs',
+                        },
+                        jsc: {
+                          parser: {
+                            syntax: 'ecmascript',
+                            jsx: true,
+                          },
+                          transform: {
+                            react: {
+                              runtime: imaConfig.jsxRuntime ?? 'automatic',
+                              development: isDevEnv,
+                              refresh: useHMR,
+                            },
                           },
                         },
+                        sourceMaps: useSourceMaps,
+                        inlineSourcesContent: useSourceMaps,
                       },
-                      sourceMaps: true,
-                      inlineSourcesContent: true,
-                    },
+                      ctx
+                    ),
                   },
                 ]
               : [

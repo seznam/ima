@@ -114,6 +114,15 @@ export type ImaConfig = {
   ) => Promise<Record<string, unknown>>;
 
   /**
+   * Function which receives default app swc-loader config and current context,
+   * this can be used for additional customization or returning completely different config.
+   */
+  swc: (
+    config: Record<string, unknown>,
+    ctx: ImaConfigurationContext
+  ) => Promise<Record<string, unknown>>;
+
+  /**
    * Function which receives postcss-loader config and current context, this can be used
    * to customize existing default postcss config or completely replace it with a custom one.
    */
