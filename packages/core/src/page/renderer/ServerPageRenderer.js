@@ -9,11 +9,14 @@ let runner = '';
 if (typeof window === 'undefined' || window === null) {
   const fs = require('fs');
   const path = require('path');
+  const runnerPath = path.resolve('./build/static/public/runner.js');
 
-  runner = fs.readFileSync(
-    path.resolve('./build/static/public/runner.js'),
-    'utf8'
-  );
+  if (fs.existsSync(runnerPath)) {
+    runner = fs.readFileSync(
+      path.resolve('./build/static/public/runner.js'),
+      'utf8'
+    );
+  }
 }
 //#endif
 
