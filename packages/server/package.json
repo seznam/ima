@@ -3,8 +3,9 @@
   "version": "17.12.2",
   "description": "Default dev server for IMA.js applications.",
   "keywords": [
-    "gulp",
     "IMA.js",
+    "server",
+    "ssr",
     "ima"
   ],
   "bugs": {
