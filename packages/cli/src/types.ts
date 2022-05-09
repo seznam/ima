@@ -158,10 +158,11 @@ export type ImaConfig = {
   watchOptions: WebpackOptionsNormalized['watchOptions'];
 
   /**
-   * Set to true to generate source maps in production builds
-   * (dev/watch build always generate source maps to work properly with error overlay).
+   * Set to true (or any preset from https://webpack.js.org/configuration/devtool/#devtool)
+   * to enable source maps for production build. (dev/watch tasks always generate
+   * source maps to work properly with error overlay).
    */
-  useSourceMaps?: boolean;
+  sourceMap?: boolean | string;
 
   /**
    * Set custom jsxRuntime for @babel/preset-react, the default is 'automatic'.

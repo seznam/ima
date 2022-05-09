@@ -41,7 +41,7 @@ export default async (
 
   // Define helper variables derived from context
   const isDevEnv = ctx.environment === 'development';
-  const useSourceMaps = imaConfig.useSourceMaps || isDevEnv;
+  const useSourceMaps = !!imaConfig.sourceMap || isDevEnv;
   const imaEnvironment = resolveEnvironment(rootDir);
   const isDebug = imaEnvironment.$Debug;
   const outputDir = path.join(rootDir, 'build');
@@ -65,6 +65,13 @@ export default async (
   } else if (isServer) {
     targets = { node: '16' };
   }
+
+  // Set correct devtool source maps config
+  const devtool = useSourceMaps
+    ? typeof imaConfig.sourceMap === 'string'
+      ? imaConfig.sourceMap
+      : 'source-map'
+    : false;
 
   /**
    * CSS loaders function generator. Contains postcss-loader
@@ -149,9 +156,7 @@ export default async (
     mode: isDevEnv ? 'development' : 'production',
     devtool: useHMR
       ? 'cheap-module-source-map' // Needed for proper source maps parsing in error-overlay
-      : useSourceMaps
-      ? 'source-map'
-      : false,
+      : devtool,
     entry: {
       ...(isServer
         ? {
