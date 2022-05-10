@@ -120,6 +120,8 @@ export default class ServerPageRenderer extends AbstractPageRenderer {
    * The javascript code will include a settings the "revival" data for the
    * application at the client-side.
    *
+   * @param {object} props Revival settings properties passed to $IMA
+   *         object on window.
    * @return {string} The javascript code to include into the
    *         rendered page.
    */
