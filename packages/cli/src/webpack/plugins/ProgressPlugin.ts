@@ -11,13 +11,13 @@ import { ImaConfigurationContext } from '../../types';
  * tracked using one progress bar.
  */
 class ProgressTracker {
-  _hasStarted: boolean;
-  _elapsed: ReturnType<typeof time> | null;
-  _trackedEntries: number;
-  _percentageTracker:
+  private _hasStarted: boolean;
+  private _elapsed: ReturnType<typeof time> | null;
+  private _trackedEntries: number;
+  private _percentageTracker:
     | Record<ImaConfigurationContext['name'], number>
     | Record<string, never>;
-  _progressBar: cliProgress.SingleBar;
+  private _progressBar: cliProgress.SingleBar;
 
   constructor() {
     this._hasStarted = false;
