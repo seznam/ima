@@ -6,6 +6,8 @@ export default class DocumentView extends AbstractDocumentView {
   }
 
   render() {
+    const { metaManager } = this.props;
+
     return (
       <html>
         <head>
@@ -13,25 +15,24 @@ export default class DocumentView extends AbstractDocumentView {
           <meta httpEquiv='X-UA-Compatible' content='IE=edge' />
           <meta name='viewport' content='width=device-width, initial-scale=1' />
 
-          <meta
-            name='description'
-            content={this.props.metaManager.getMetaName('description')}
-          />
-          <meta
-            name='keywords'
-            content={this.props.metaManager.getMetaName('keywords')}
-          />
-
-          {this.props.metaManager.getMetaProperties().map(property => (
+          {metaManager.getMetaNames().map(name => (
             <meta
-              key={property}
-              property={property}
-              content={this.props.metaManager.getMetaProperty(property)}
+              key={name}
+              name={name}
+              content={metaManager.getMetaName(name)}
             />
           ))}
 
-          {this.utils.$Settings.$Page.$Source.styles.map(style => (
-            <link key={style} rel='stylesheet' href={style} />
+          {metaManager.getMetaProperties().map(property => (
+            <meta
+              key={property}
+              property={property}
+              content={metaManager.getMetaProperty(property)}
+            />
+          ))}
+
+          {metaManager.getLinks().map(rel => (
+            <link key={rel} href={metaManager.getLink(rel)} rel={rel} />
           ))}
 
           <title>{this.props.metaManager.getTitle()}</title>

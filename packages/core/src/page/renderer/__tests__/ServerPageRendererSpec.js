@@ -52,9 +52,11 @@ describe('ima.core.page.renderer.ServerPageRenderer', () => {
     renderToStaticMarkup: () => {},
   };
   let settings = {
+    $Source: jest.fn(() => ({
+      styles: ['css/app.css'],
+    })),
     $Page: {
       $Render: {
-        scripts: [],
         documentView: 'app.component.document.DocumentView',
       },
     },
@@ -227,7 +229,9 @@ describe('ima.core.page.renderer.ServerPageRenderer', () => {
       spyOn(rendererFactory, 'createReactElementFactory').and.returnValue(
         documentViewFactory
       );
-      spyOn(ReactDOMServer, 'renderToStaticMarkup').and.returnValue(appMarkup);
+      jest
+        .spyOn(ReactDOMServer, 'renderToStaticMarkup')
+        .mockReturnValue(appMarkup);
       spyOn(pageRenderer, '_getRevivalSettings').and.returnValue(
         revivalSettings
       );
@@ -276,6 +280,23 @@ describe('ima.core.page.renderer.ServerPageRenderer', () => {
 
     it('should return page content', () => {
       expect(pageContent).toBe('<!doctype html>\n' + appMarkup);
+    });
+
+    it('should return page content with css', () => {
+      ReactDOMServer.renderToStaticMarkup.mockReturnValue(
+        '<html><head></head><body></body></html>'
+      );
+
+      pageContent = pageRenderer._renderPageContentToString(
+        controller,
+        view,
+        routeOptions
+      );
+
+      expect(pageContent).toMatchInlineSnapshot(`
+        "<!doctype html>
+        <html><head><link rel=\\"stylesheet\\" href=\\"css/app.css\\" /></head><body></body></html>"
+      `);
     });
   });
 });

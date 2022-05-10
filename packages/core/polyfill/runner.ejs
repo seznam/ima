@@ -73,16 +73,16 @@
         function createScript(source) {
           var scriptEl = root.document.createElement('script');
 
-          function replaceValues(source) {
+          function interpolateValues(source) {
             return source
               .replace('{language}', root.$IMA.$Language)
               .replace('{version}', root.$IMA.$Version);
           }
 
           if (typeof source === 'string') {
-            scriptEl.src = replaceValues(source);
+            scriptEl.src = interpolateValues(source);
           } else {
-            var src = replaceValues(source[0]);
+            var src = interpolateValues(source[0]);
             var options = source[1];
 
             scriptEl.src = src;
@@ -118,15 +118,19 @@
 
         /**
          * Sets concrete scripts to the runner based on the currently
-         * supported ecma script version.
+         * supported ecma script version. Fallback to es5 scripts if
+         * there are no sources for the newer versions.
          */
-        if (runner.isEsVersion) {
+        if (runner.isEsVersion && root.$IMA.$Source.esScripts) {
           runner.scripts = root.$IMA.$Source.esScripts;
         } else {
           runner.scripts = root.$IMA.$Source.scripts;
         }
 
-        runner.scripts.forEach(createScript);
+        // Create script tags
+        if (Array.isArray(runner.scripts)) {
+          runner.scripts.forEach(createScript);
+        }
       },
 
       /**
@@ -139,7 +143,11 @@
         var runner = root.$IMA.Runner;
 
         try {
-          if (runner.isEsVersion) {
+          /**
+           * Run es version of the runtime, in case there are any es scripts sources.
+           * Otherwise fallback to the es5 version of the runner.
+           */
+          if (runner.isEsVersion && root.$IMA.$Source.esScripts) {
             /**
              * We need to wrap esRuntime code in a string and execute the function
              * since the code can contain some es5-incompatible syntax, which would

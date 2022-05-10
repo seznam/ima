@@ -28,7 +28,6 @@ export default (ns, oc, config) => {
         ttl: 60000, // Default time to live for cached value in ms.
       },
       $Page: {
-        $Source: config.$Source,
         $Render: {
           documentView: DocumentView,
         },

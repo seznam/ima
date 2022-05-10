@@ -113,6 +113,44 @@ function escapeRegExp(string) {
   return string.replace(/([.*+?^=!:${}()|[\]/\\])/g, '\\$1');
 }
 
+function renderStyles(styles, settings) {
+  if (!Array.isArray(styles)) {
+    return '';
+  }
+
+  const { $Version } = settings ?? {};
+  const interpolateValues = source => source.replace('{version}', $Version);
+
+  return styles
+    .map(style => {
+      if (typeof style === 'string') {
+        return `<link rel="stylesheet" href="${interpolateValues(style)}" />`;
+      }
+
+      const [href, { fallback = null, ...options }] = style;
+      const linkTagParts = [`<link href="${interpolateValues(href)}"`];
+
+      // Generate fallback handler
+      if (fallback) {
+        linkTagParts.push(
+          `onerror="this.onerror=null;this.href='${interpolateValues(
+            fallback
+          )}';"`
+        );
+      }
+
+      // Generate other attributes
+      for (const [attr, value] of Object.entries(options)) {
+        linkTagParts.push(`${attr}="${value}"`);
+      }
+
+      linkTagParts.push('/>');
+
+      return linkTagParts.join(' ');
+    })
+    .join('');
+}
+
 module.exports = {
   assignRecursively,
   assignRecursivelyWithTracking,
@@ -120,5 +158,6 @@ module.exports = {
   allPromiseHash,
   escapeRegExp,
   resolveEnvironmentSetting,
+  renderStyles,
   clone,
 };

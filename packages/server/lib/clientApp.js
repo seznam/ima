@@ -2,6 +2,7 @@ const path = require('path');
 const fs = require('fs');
 const ejs = require('ejs');
 const instanceRecycler = require('./instanceRecycler.js');
+const { renderStyles } = require('@ima/helpers');
 const errorToJSON = require('error-to-json').default;
 const Cache = require('./cache.js').Cache;
 
@@ -124,10 +125,19 @@ module.exports = (environment, logger, languageLoader, appFactory) => {
         );
       }
 
+      const generatedSource =
+        bootConfig.settings?.$Source?.({ isSPA: true }) ?? {};
+      const styles = renderStyles(generatedSource.styles, {
+        $Version: bootConfig.settings.$Version,
+      });
+
       const content = spaTemplate({
         ...bootConfig.settings,
+        $Source: generatedSource,
+        styles,
         runner,
       });
+
       spaCache.set(req, content);
 
       res.status(status);
@@ -224,7 +234,7 @@ module.exports = (environment, logger, languageLoader, appFactory) => {
         $Env: environment.$Env,
         $Version: environment.$Version,
         $App: environment.$App || {},
-        $Source: environment.$Source || {},
+        $Source: environment.$Source,
         $Protocol: protocol,
         $Language: language,
         $Host: host,
