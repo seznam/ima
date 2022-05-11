@@ -1,30 +1,28 @@
 import path from 'path';
 import { fileURLToPath } from 'url';
-import fs from 'fs-extra';
 import { spawnSync } from 'child_process';
+import fs from 'fs-extra';
 import chalk from 'chalk';
 import { info, error } from './utils.js';
 
-const __dirname = path.dirname(fileURLToPath(import.meta.url));
+(async () => {
+  const __dirname = path.dirname(fileURLToPath(import.meta.url));
+  const projDir = process.argv[2];
 
-createImaApp(process.argv[2]);
-
-async function createImaApp(dirName) {
   info(
     `Creating new IMA.js application inside the ${chalk.magenta(
-      dirName
+      projDir
     )} directory...`,
     true
   );
 
-  const projName = dirName.split(path.sep).pop();
-  const appRoot = path.resolve(dirName.toString());
+  const projName = projDir.split(path.sep).pop();
+  const appRoot = path.resolve(projDir.toString());
   const tplRoot = path.join(__dirname, '../template');
 
-  if (!fs.existsSync(dirName)) {
+  if (!fs.existsSync(projDir)) {
     try {
       info(`Creating basic directory structure...`);
-      fs.mkdirSync(appRoot, { recursive: true });
       fs.copySync(tplRoot, appRoot);
     } catch (err) {
       error(err.message);
@@ -32,7 +30,7 @@ async function createImaApp(dirName) {
     }
   } else {
     error(
-      `Aborting... the directory ${dirName} ${chalk.bold.red(
+      `Aborting... the directory ${projDir} ${chalk.bold.red(
         'already exists'
       )}.\n`
     );
@@ -87,7 +85,7 @@ From there you can run several commands:
 
 We suggest that you start with:
 
-  ${chalk.blue('cd')} ${dirName}
+  ${chalk.blue('cd')} ${projDir}
   ${chalk.blue('npm run dev')}
 `);
-}
+})();
