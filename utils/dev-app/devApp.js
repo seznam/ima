@@ -123,7 +123,7 @@ function initApp(destFolder, pkgDirs) {
       `${path.resolve(
         __dirname,
         '../../packages/create-ima-app/bin/create-ima-app.js'
-      )} ${destFolder} --example=hello`
+      )} ${destFolder}`
     );
 
     // Build, pack and install as current dependencies

@@ -1,13 +1,15 @@
-const execa = require('execa');
-const fs = require('fs-extra');
-const path = require('path');
-const chalk = require('chalk');
-const argv = require('yargs').argv;
-const { info, error } = require('../utils');
+import path from 'path';
+import { fileURLToPath } from 'url';
+import fs from 'fs-extra';
+import { spawnSync } from 'child_process';
+import chalk from 'chalk';
+import { info, error } from './utils.js';
 
-createImaApp(argv._[0]);
+const __dirname = path.dirname(fileURLToPath(import.meta.url));
 
-function createImaApp(dirName) {
+createImaApp(process.argv[2]);
+
+async function createImaApp(dirName) {
   info(
     `Creating new IMA.js application inside the ${chalk.magenta(
       dirName
@@ -39,7 +41,7 @@ function createImaApp(dirName) {
 
   // Overwrite package.json with new name
   const pkgJsonPath = path.join(appRoot, 'package.json');
-  const pkgJson = require(pkgJsonPath);
+  const pkgJson = JSON.parse(fs.readFileSync(pkgJsonPath, 'utf8'));
 
   pkgJson.name = projName;
   fs.writeFileSync(pkgJsonPath, JSON.stringify(pkgJson, null, 2));
@@ -54,7 +56,7 @@ function createImaApp(dirName) {
   console.log(chalk.dim('      Press CTRL+C to cancel.\n'));
 
   const npm = process.platform === 'win32' ? 'npm.cmd' : 'npm';
-  execa.sync(npm, ['install', ['--legacy-peer-deps']], {
+  spawnSync(npm, ['install', '--legacy-peer-deps'], {
     // TODO IMA@18 -> remove --legacy-peer-deps
     stdio: 'inherit',
     cwd: appRoot,

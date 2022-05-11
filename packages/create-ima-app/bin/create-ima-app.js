@@ -1,16 +1,16 @@
 #!/usr/bin/env node
 
-const path = require('path');
-const execa = require('execa');
-const chalk = require('chalk');
-const argv = require('yargs').argv;
-
-const { error, warn } = require('../utils');
+import path from 'path';
+import { fileURLToPath } from 'url';
+import { spawnSync } from 'child_process';
+import chalk from 'chalk';
+import { error, warn } from '../scripts/utils.js';
 
 const MIN_NODE_VERSION = 14;
-const MAX_NODE_VERSION = 14;
+const MAX_NODE_VERSION = 16;
+const __dirname = path.dirname(fileURLToPath(import.meta.url));
 
-if (argv._.length === 0) {
+if (process.argv.length === 2) {
   console.log(`
 Please specify your new project directory:
   ${chalk.blue('create-ima-app')} ${chalk.green('<project-directory>')}
@@ -50,7 +50,8 @@ if (nodeMajorVersion > MAX_NODE_VERSION) {
   );
 }
 
-execa.sync(
+// Run create script
+spawnSync(
   'node',
   [path.resolve(__dirname, '../scripts/create.js'), ...process.argv.slice(2)],
   {
