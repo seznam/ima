@@ -61,15 +61,11 @@ class ProgressTracker {
     this._percentageTracker[name] = percentage;
     const normPercentage = this._getPercentage();
 
-    if (this._isPending()) {
-      this._start();
+    if (!this._hasStarted) {
+      this.start();
     }
 
-    this._update(normPercentage, msg, args.join(' '));
-
-    if (this._isFinished()) {
-      this._stop();
-    }
+    this.update(normPercentage, msg, args.join(' '));
   }
 
   /**
@@ -85,26 +81,9 @@ class ProgressTracker {
   }
 
   /**
-   * Check if the compilation has finished.
-   */
-  private _isFinished(): boolean {
-    return (
-      this._hasStarted &&
-      Object.values(this._percentageTracker).every(value => value >= 1)
-    );
-  }
-
-  /**
-   * Check if the compilation has not started yet.
-   */
-  private _isPending(): boolean {
-    return !this._hasStarted;
-  }
-
-  /**
    * Start progress bar reporting (renders progress bar with specified size).
    */
-  private _start(): void {
+  start(): void {
     this._hasStarted = true;
     this._elapsed = time();
     this._progressBar.start(100, 0, {
@@ -115,7 +94,7 @@ class ProgressTracker {
   /**
    * Update progress bar with new data.
    */
-  private _update(percentage: number, msg: string, other: string): void {
+  update(percentage: number, msg: string, other: string): void {
     this._progressBar.update(percentage, {
       time: this._elapsed?.(),
       msg,
@@ -126,7 +105,12 @@ class ProgressTracker {
   /**
    * Stop progress bar rendering and end compilation reporting.
    */
-  private _stop(): void {
+  stop(): void {
+    // Don't do anything if the progress is not running
+    if (!this._hasStarted) {
+      return;
+    }
+
     this._progressBar.update(100, {
       time: this._elapsed?.(),
       msg: 'done',
@@ -160,4 +144,12 @@ function createProgress(name: ImaConfigurationContext['name']) {
   });
 }
 
-export { createProgress };
+/**
+ * Provides access to the singleton progress instance
+ * so i can be modified externally.
+ */
+function getProgress(): ProgressTracker {
+  return progressTracker;
+}
+
+export { createProgress, getProgress };
