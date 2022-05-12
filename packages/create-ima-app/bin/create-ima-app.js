@@ -6,8 +6,8 @@ import { spawnSync } from 'child_process';
 import chalk from 'chalk';
 import { error, warn } from '../scripts/utils.js';
 
-const MIN_NODE_VERSION = 14;
-const MAX_NODE_VERSION = 16;
+const MIN_NODE_VERSION = 16;
+const MAX_NODE_VERSION = 18;
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 
 if (process.argv.length === 2) {
