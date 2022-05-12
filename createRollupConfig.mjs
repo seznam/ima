@@ -3,6 +3,9 @@ import { nodeResolve } from '@rollup/plugin-node-resolve';
 
 function createRollupConfig(callback) {
   return callback({
+    watch: {
+      clearScreen: false,
+    },
     input: {
       main: './src/main.js',
     },

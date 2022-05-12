@@ -1,8 +1,12 @@
 {
   "extends": "../../tsconfig.json",
   "compilerOptions": {
+    "lib": [
+      "ES2020"
+    ],
     "resolveJsonModule": true,
     "outDir": "./dist",
+    "baseUrl": "."
   },
   "include": [
     "./typings/**/*",
