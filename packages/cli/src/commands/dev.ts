@@ -34,40 +34,38 @@ function startNodemon(args: ImaCliArgs) {
 
   nodemon({
     script: path.join(args.rootDir, 'server/server.js'),
-    watch: [`${path.join(args.rootDir, 'server')}`],
-    args: [`--verbose=${args.verbose}`],
+    watch: [path.join(args.rootDir, 'server')],
+    args: args.verbose ? [`--verbose=${args.verbose}`] : [],
     cwd: args.rootDir,
-  });
+  })
+    .on('start', () => {
+      logger.info(
+        `${serverHasStarted ? 'Restarting' : 'Starting'} application server${
+          !serverHasStarted && args.forceSPA
+            ? ` in ${chalk.black.bgCyan('SPA mode')}`
+            : ''
+        }...`
+      );
 
-  nodemon.on('start', () => {
-    logger.info(
-      `${serverHasStarted ? 'Restarting' : 'Starting'} application server${
-        !serverHasStarted && args.forceSPA
-          ? ` in ${chalk.black.bgCyan('SPA mode')}`
-          : ''
-      }...`
-    );
+      if (args.open && !serverHasStarted) {
+        const imaEnvironment = resolveEnvironment(args.rootDir);
+        const port = imaEnvironment?.$Server?.port ?? 3001;
+        serverHasStarted = true;
 
-    if (args.open && !serverHasStarted) {
-      const imaEnvironment = resolveEnvironment(args.rootDir);
-      const port = imaEnvironment?.$Server?.port ?? 3001;
-      serverHasStarted = true;
-
-      try {
-        open(`http://localhost:${port}`);
-      } catch (error) {
-        logger.error(
-          `Could not open http://localhost:${port} inside a browser, ${error}`
-        );
+        try {
+          open(`http://localhost:${port}`);
+        } catch (error) {
+          logger.error(
+            `Could not open http://localhost:${port} inside a browser, ${error}`
+          );
+        }
       }
-    }
-  });
-
-  nodemon.on('crash', error => {
-    logger.error('Application watcher crashed unexpectedly.');
-    logger.error(error);
-    process.exit(1);
-  });
+    })
+    .on('crash', error => {
+      logger.error('Application watcher crashed unexpectedly.');
+      logger.error(error);
+      process.exit(1);
+    });
 }
 
 /**

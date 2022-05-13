@@ -94,7 +94,15 @@ function pkgFilter(paths, needles) {
     watchChanges(destDir, pkgFilter(pkgDirs, cliArgs.watch));
   }
 
-  // TODO trigger webpack rebuild and server reload
+  const imaConfigPath = path.join(destDir, 'ima.config.js');
+
+  // Copy "dev" ima config into the application, if it doesn't have any
+  if (!fs.existsSync(imaConfigPath)) {
+    fs.copyFileSync(
+      path.join(__dirname, './utils/ima.config.js'),
+      imaConfigPath
+    );
+  }
 })();
 
 process.on('SIGTERM', () => process.exit(0));

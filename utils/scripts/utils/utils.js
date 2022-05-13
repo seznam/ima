@@ -17,10 +17,14 @@ const IGNORED = [
   'rollup.config.mjs',
   'jest.config.js',
   'src',
-  'node_modules',
-  'typings',
-  '__tests__',
+  '**/*.tgz',
+  '**/node_modules/**',
+  '**/typings/**',
+  '**/__mocks__/**',
+  '**/__tests__/**',
 ];
+
+let runningProcesses = [];
 
 /**
  * Simple wrapper for shell command using child.execSync.
@@ -100,6 +104,15 @@ function createWatcher(name, baseDir, paths, destFolder, options = {}) {
           fs.unlink(dest, callback);
           break;
       }
+
+      // Restart ima server in host application
+      if (name === 'server') {
+        let serverBuildDir = path.join(destFolder, '../../../server/server.js');
+        const updatedDate = new Date();
+
+        // Set new accessed and updated timestamps to trigger nodemon
+        fs.utimesSync(serverBuildDir, updatedDate, updatedDate);
+      }
     };
 
     watcher
@@ -126,15 +139,13 @@ function watchChanges(destFolder, pkgDirs) {
 
     // Spawn watch
     if (pkgJson.scripts.dev) {
-      child.spawn('npm', ['run', 'dev'], {
-        stdio: 'inherit',
-        cwd: pkgDir,
-      });
-    } else if (pkgJson.scripts.build) {
-      child.spawn('npm', ['run', 'build', '--', '--watch'], {
-        stdio: 'inherit',
-        cwd: pkgDir,
-      });
+      const npm = process.platform === 'win32' ? 'npm.cmd' : 'npm';
+      runningProcesses.push(
+        child.spawn(npm, ['run', 'dev'], {
+          stdio: 'inherit',
+          cwd: pkgDir,
+        })
+      );
     }
 
     // Create file watcher
@@ -228,6 +239,20 @@ function initApp(destDir, pkgDirs, cliArgs) {
     });
   }
 }
+
+/**
+ * Make sure that we kill or spanwed processes on exit.
+ */
+function killRunningProcesses() {
+  runningProcesses.forEach(proc => proc && proc.kill('SIGINT'));
+  process.exit(0);
+}
+
+// Make sure we exit gracefully.
+process.on('SIGTERM', () => killRunningProcesses);
+process.on('SIGINT', () => killRunningProcesses);
+process.on('SIGUSR2', () => killRunningProcesses);
+process.on('exit', () => killRunningProcesses);
 
 module.exports = {
   shell,
