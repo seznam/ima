@@ -45,7 +45,7 @@ npm link
 
 # Setup app from example hello
 cd "$ROOT_DIR"
-npx create-ima-app --example=hello ima-app
+npx create-ima-app ima-app
 
 cd ./ima-app
 
