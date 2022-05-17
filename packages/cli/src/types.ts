@@ -114,6 +114,15 @@ export type ImaConfig = {
   ) => Promise<Record<string, unknown>>;
 
   /**
+   * Function which receives default app swc-loader config and current context,
+   * this can be used for additional customization or returning completely different config.
+   */
+  swc: (
+    config: Record<string, unknown>,
+    ctx: ImaConfigurationContext
+  ) => Promise<Record<string, unknown>>;
+
+  /**
    * Function which receives postcss-loader config and current context, this can be used
    * to customize existing default postcss config or completely replace it with a custom one.
    */
@@ -149,10 +158,11 @@ export type ImaConfig = {
   watchOptions: WebpackOptionsNormalized['watchOptions'];
 
   /**
-   * Set to true to generate source maps in production builds
-   * (dev/watch build always generate source maps to work properly with error overlay).
+   * Set to true (or any preset from https://webpack.js.org/configuration/devtool/#devtool)
+   * to enable source maps for production build. (dev/watch tasks always generate
+   * source maps to work properly with error overlay).
    */
-  useSourceMaps?: boolean;
+  sourceMap?: boolean | string;
 
   /**
    * Set custom jsxRuntime for @babel/preset-react, the default is 'automatic'.

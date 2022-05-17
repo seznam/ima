@@ -1,6 +1,7 @@
 import { MultiCompiler } from 'webpack';
 
 import { ImaCliArgs, ImaConfig } from '../types';
+import { getProgress } from '../webpack/plugins/ProgressPlugin';
 import { runImaPluginsHook } from '../webpack/utils';
 import {
   formatStats,
@@ -49,6 +50,9 @@ async function runCompiler(
   return new Promise((resolve, reject) => {
     compiler.run((error, stats) =>
       closeCompiler(compiler).then(async () => {
+        // Stop CLI progress bar
+        getProgress().stop();
+
         // Reject when there are any errors
         if (error || stats?.hasErrors()) {
           if (stats) {
@@ -95,6 +99,9 @@ async function watchCompiler(
 
   return new Promise<MultiCompiler>((resolve, reject) => {
     compiler.watch(imaConfig.watchOptions, async (error, stats) => {
+      // Stop CLI progress bar
+      getProgress().stop();
+
       // Don't continue when there are compile errors on first run
       if (firstRun && stats?.hasErrors()) {
         hadErrorsOnFirstRun = true;
