@@ -1,5 +1,4 @@
-import memoizeOne from 'memoize-one';
-import { renderStyles } from '@ima/helpers';
+import { processContent } from '@ima/helpers';
 
 import AbstractPageRenderer from './AbstractPageRenderer';
 import GenericError from '../../error/GenericError';
@@ -125,25 +124,24 @@ export default class ServerPageRenderer extends AbstractPageRenderer {
    * @return {string} The javascript code to include into the
    *         rendered page.
    */
-  _getRevivalSettings(props) {
+  _getRevivalSettings() {
     return `
 			(function(root) {
-				root.$Debug = ${props.$Debug};
+				root.$Debug = ${$Debug};
 				root.$IMA = root.$IMA || {};
-				$IMA.Cache = ${props.Cache};
-				$IMA.$Language = "${props.$Language}";
-				$IMA.$Env = "${props.$Env}";
-				$IMA.$Debug = ${props.$Debug};
-				$IMA.$Version = "${props.$Version}";
-				$IMA.$App = ${JSON.stringify(props.$App)};
-				$IMA.$Source = ${JSON.stringify(props.$Source)};
-				$IMA.$Protocol = "${props.$Protocol}";
-				$IMA.$Host = "${props.$Host}";
-				$IMA.$Path = "${props.$Path}";
-				$IMA.$Root = "${props.$Root}";
-				$IMA.$LanguagePartPath = "${props.$LanguagePartPath}";
+				$IMA.Cache =${this._cache.serialize()};
+				$IMA.$Language = "${this._settings.$Language}";
+				$IMA.$Env = "${this._settings.$Env}";
+				$IMA.$Debug = ${this._settings.$Debug};
+				$IMA.$Version = "${this._settings.$Version}";
+				$IMA.$App = ${JSON.stringify(this._settings.$App)};
+				$IMA.$Protocol = "${this._settings.$Protocol}";
+				$IMA.$Host = "${this._settings.$Host}";
+				$IMA.$Path = "${this._settings.$Path}";
+				$IMA.$Root = "${this._settings.$Root}";
+				$IMA.$LanguagePartPath = "${this._settings.$LanguagePartPath}";
 			})(typeof window !== 'undefined' && window !== null ? window : global);
-      ${runner}
+      #{$Runner}
 			`;
   }
 
@@ -218,48 +216,26 @@ export default class ServerPageRenderer extends AbstractPageRenderer {
       this._getDocumentView(routeOptions)
     );
 
-    // Prepare revival settings properties
-    const $Utils = this._factory.getUtils();
-    const metaManager = controller.getMetaManager();
-    const memoizeSource = memoizeOne(
-      $Utils => this._settings?.$Source?.({ $Utils }) ?? {}
-    );
-
-    const generatedSource = memoizeSource($Utils);
-    const revivalSettingsProps = {
-      ...this._settings,
-      Cache: this._cache.serialize(),
-      $Source: generatedSource,
-    };
-
-    // Render styles
-    const memoizeRenderStyles = memoizeOne((styles, $Version) =>
-      renderStyles(styles, {
-        $Version,
-      })
-    );
-
     // Render document view (base HTML) to string
-    const appMarkup = this._ReactDOM.renderToStaticMarkup(
+    let appMarkup = this._ReactDOM.renderToStaticMarkup(
       documentViewFactory({
         page,
-        $Utils,
-        metaManager,
-        revivalSettings: this._getRevivalSettings(revivalSettingsProps),
+        $Utils: this._factory.getUtils(),
+        metaManager: controller.getMetaManager(),
+        revivalSettings: this._getRevivalSettings(),
       })
     );
 
+    // TODO IMA@18 - should be handled in server
+    appMarkup = processContent({
+      content: appMarkup,
+      SPA: false,
+      settings: this._settings,
+      runner,
+    });
+
     // Return HTML markup with injected styles
-    return (
-      '<!doctype html>\n' +
-      appMarkup.replace(
-        '<head>',
-        `<head>${memoizeRenderStyles(
-          generatedSource.styles,
-          revivalSettingsProps.$Version
-        )}`
-      )
-    );
+    return '<!doctype html>\n' + appMarkup;
   }
   //#endif
 }

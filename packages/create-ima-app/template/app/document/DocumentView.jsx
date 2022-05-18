@@ -35,6 +35,9 @@ export default class DocumentView extends AbstractDocumentView {
             <link key={rel} href={metaManager.getLink(rel)} rel={rel} />
           ))}
 
+          {/* Inject styles from $Source.styles */}
+          {'#{$Styles}'}
+
           <title>{this.props.metaManager.getTitle()}</title>
         </head>
         <body>

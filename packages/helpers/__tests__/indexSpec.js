@@ -158,7 +158,6 @@ describe('helper', () => {
       expect(helpers.renderStyles({})).toBe('');
       expect(helpers.renderStyles(null)).toBe('');
       expect(helpers.renderStyles('/static/app.css')).toBe('');
-      expect(helpers.renderStyles(undefined, { $Version: 1 })).toBe('');
     });
 
     it('should return link stylesheet tags for string items', () => {
@@ -177,12 +176,6 @@ describe('helper', () => {
           '<link rel="stylesheet" href="/static/app2.css" />' +
           '<link rel="stylesheet" href="/static/app3.css" />'
       );
-    });
-
-    it('should interpolate setting variables', () => {
-      expect(
-        helpers.renderStyles(['/static/app.css?v={version}'], { $Version: 1 })
-      ).toBe('<link rel="stylesheet" href="/static/app.css?v=1" />');
     });
 
     it('should return link tag with custom attributes', () => {

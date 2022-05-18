@@ -52,9 +52,7 @@ describe('ima.core.page.renderer.ServerPageRenderer', () => {
     renderToStaticMarkup: () => {},
   };
   let settings = {
-    $Source: jest.fn(() => ({
-      styles: ['css/app.css'],
-    })),
+    $Source: jest.fn().mockReturnValue({}),
     $Page: {
       $Render: {
         documentView: 'app.component.document.DocumentView',
@@ -280,23 +278,6 @@ describe('ima.core.page.renderer.ServerPageRenderer', () => {
 
     it('should return page content', () => {
       expect(pageContent).toBe('<!doctype html>\n' + appMarkup);
-    });
-
-    it('should return page content with css', () => {
-      ReactDOMServer.renderToStaticMarkup.mockReturnValue(
-        '<html><head></head><body></body></html>'
-      );
-
-      pageContent = pageRenderer._renderPageContentToString(
-        controller,
-        view,
-        routeOptions
-      );
-
-      expect(pageContent).toMatchInlineSnapshot(`
-        "<!doctype html>
-        <html><head><link rel=\\"stylesheet\\" href=\\"css/app.css\\" /></head><body></body></html>"
-      `);
     });
   });
 });

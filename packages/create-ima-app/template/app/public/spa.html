@@ -14,7 +14,7 @@
     <meta property="og:image" content="" />
 
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <%- styles %>
+    #{$Styles}
 
     <title></title>
 </head>
@@ -26,7 +26,6 @@
             window.$IMA = window.$IMA || {};
             window.$IMA.Cache = {};
             window.$IMA.$App = <%- JSON.stringify($App) %>;
-            window.$IMA.$Source = <%- JSON.stringify($Source) %>;
             window.$IMA.$Language = "<%= $Language %>";
             window.$IMA.$Version =  "<%= $Version %>";
             window.$IMA.$Env = "<%= $Env %>";
@@ -36,7 +35,7 @@
             window.$IMA.$Path = location.pathname;
             window.$IMA.$Root = "";
             window.$IMA.$LanguagePartPath = "";
-            <%- runner %>
+            #{$Runner}
         </script>
     </div>
 </body>

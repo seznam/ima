@@ -113,29 +113,27 @@ function escapeRegExp(string) {
   return string.replace(/([.*+?^=!:${}()|[\]/\\])/g, '\\$1');
 }
 
-function renderStyles(styles, settings) {
+/**
+ * TODO IMA@18 - Move to server
+ */
+function renderStyles(styles) {
   if (!Array.isArray(styles)) {
     return '';
   }
 
-  const { $Version } = settings ?? {};
-  const interpolateValues = source => source.replace('{version}', $Version);
-
   return styles
     .map(style => {
       if (typeof style === 'string') {
-        return `<link rel="stylesheet" href="${interpolateValues(style)}" />`;
+        return `<link rel="stylesheet" href="${style}" />`;
       }
 
       const [href, { fallback = null, ...options }] = style;
-      const linkTagParts = [`<link href="${interpolateValues(href)}"`];
+      const linkTagParts = [`<link href="${href}"`];
 
       // Generate fallback handler
       if (fallback) {
         linkTagParts.push(
-          `onerror="this.onerror=null;this.href='${interpolateValues(
-            fallback
-          )}';"`
+          `onerror="this.onerror=null;this.href='${fallback}';"`
         );
       }
 
@@ -151,6 +149,34 @@ function renderStyles(styles, settings) {
     .join('');
 }
 
+/**
+ * TODO IMA@18 - Move to server (and probably make more inteligent)
+ *
+ * - Runner should not be passed as argument in server (is available globally)
+ * - basically makes every value from settings available in content interpolation...
+ */
+function processContent({ content, runner, SPA, settings, pageState = {} }) {
+  const interpolateRe = /#{([\w\d\-._$]+)}/g;
+  const extendedSettings = { ...settings };
+  const interpolate = (match, envKey) => extendedSettings[envKey];
+
+  // Preprocess source and styles
+  const { styles, ...source } = settings.$Source({ pageState, SPA });
+  const $Source = JSON.stringify(source).replace(interpolateRe, interpolate);
+  const $Styles = renderStyles(styles).replace(interpolateRe, interpolate);
+
+  // Extends settings with source and styles
+  extendedSettings.$Source = $Source;
+  extendedSettings.$Styles = $Styles;
+
+  // Preprocess $Runner (with $Source already processed)
+  const $Runner = runner.replace(interpolateRe, interpolate);
+  extendedSettings.$Runner = $Runner;
+
+  // Interpolate values in content
+  return content.replace(interpolateRe, interpolate);
+}
+
 module.exports = {
   assignRecursively,
   assignRecursivelyWithTracking,
@@ -159,5 +185,6 @@ module.exports = {
   escapeRegExp,
   resolveEnvironmentSetting,
   renderStyles,
+  processContent,
   clone,
 };
