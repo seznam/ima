@@ -162,8 +162,10 @@ function processContent({ content, runner, SPA, settings, pageState = {} }) {
 
   // Preprocess source and styles
   const { styles, ...source } = settings.$Source({ pageState, SPA });
-  const $Source = JSON.stringify(source).replace(interpolateRe, interpolate);
   const $Styles = renderStyles(styles).replace(interpolateRe, interpolate);
+  const $Source = JSON.stringify(source)
+    .replace(interpolateRe, interpolate)
+    .replace(/"/g, '\\"'); // Add slashes to "" to fix terser run on runner code.
 
   // Extends settings with source and styles
   extendedSettings.$Source = $Source;

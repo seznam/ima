@@ -29,7 +29,7 @@
   root.$IMA.Runner = assign(
     {
       isEsVersion: false,
-      source: #{$Source},
+      source: JSON.parse('#{$Source}'),
       scripts: [],
       loadedScripts: [],
       // es11 env test scripts
