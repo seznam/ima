@@ -169,6 +169,7 @@ function getClientBootConfig(initialAppConfigFunctions) {
       $Env: $IMA.$Env,
       $Version: $IMA.$Version,
       $App: $IMA.$App,
+      $Source: $IMA.$Source,
       $Protocol: $IMA.$Protocol,
       $Language: $IMA.$Language,
       $Host: $IMA.$Host,

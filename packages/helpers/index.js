@@ -113,6 +113,72 @@ function escapeRegExp(string) {
   return string.replace(/([.*+?^=!:${}()|[\]/\\])/g, '\\$1');
 }
 
+/**
+ * TODO IMA@18 - Move to server
+ */
+function renderStyles(styles) {
+  if (!Array.isArray(styles)) {
+    return '';
+  }
+
+  return styles
+    .map(style => {
+      if (typeof style === 'string') {
+        return `<link rel="stylesheet" href="${style}" />`;
+      }
+
+      const [href, { fallback = null, ...options }] = style;
+      const linkTagParts = [`<link href="${href}"`];
+
+      // Generate fallback handler
+      if (fallback) {
+        linkTagParts.push(
+          `onerror="this.onerror=null;this.href='${fallback}';"`
+        );
+      }
+
+      // Generate other attributes
+      for (const [attr, value] of Object.entries(options)) {
+        linkTagParts.push(`${attr}="${value}"`);
+      }
+
+      linkTagParts.push('/>');
+
+      return linkTagParts.join(' ');
+    })
+    .join('');
+}
+
+/**
+ * TODO IMA@18 - Move to server (and probably make more inteligent)
+ *
+ * - Runner should not be passed as argument in server (is available globally)
+ * - basically makes every value from settings available in content interpolation...
+ */
+function processContent({ content, runner, SPA, settings, pageState = {} }) {
+  const interpolateRe = /#{([\w\d\-._$]+)}/g;
+  const extendedSettings = { ...settings };
+  const interpolate = (match, envKey) => extendedSettings[envKey];
+
+  // Preprocess source and styles
+  const { styles, ...source } = settings.$Source({ pageState, SPA });
+  const $Styles = renderStyles(styles).replace(interpolateRe, interpolate);
+  const $Source = JSON.stringify(source)
+    .replace(interpolateRe, interpolate)
+    .replace(/"/g, '\\"'); // Add slashes to "" to fix terser run on runner code.
+
+  // Extends settings with source and styles
+  extendedSettings.$Source = $Source;
+  extendedSettings.$Styles = $Styles;
+
+  // Preprocess $Runner (with $Source already processed)
+  const $Runner = runner.replace(interpolateRe, interpolate);
+  extendedSettings.$Runner = $Runner;
+
+  // Interpolate values in content
+  return content.replace(interpolateRe, interpolate);
+}
+
 module.exports = {
   assignRecursively,
   assignRecursivelyWithTracking,
@@ -120,5 +186,7 @@ module.exports = {
   allPromiseHash,
   escapeRegExp,
   resolveEnvironmentSetting,
+  renderStyles,
+  processContent,
   clone,
 };

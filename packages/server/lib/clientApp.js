@@ -2,12 +2,14 @@ const path = require('path');
 const fs = require('fs');
 const ejs = require('ejs');
 const instanceRecycler = require('./instanceRecycler.js');
+const { processContent } = require('@ima/helpers');
 const errorToJSON = require('error-to-json').default;
 const Cache = require('./cache.js').Cache;
 
 module.exports = (environment, logger, languageLoader, appFactory) => {
   const app = appFactory();
 
+  const runner = fs.readFileSync('./build/static/public/runner.js', 'utf8');
   const spaTemplate = ejs.compile(
     fs.readFileSync('./build/static/public/spa.html', 'utf8'),
     { cache: true, filename: 'spa.html' }
@@ -123,7 +125,13 @@ module.exports = (environment, logger, languageLoader, appFactory) => {
         );
       }
 
-      const content = spaTemplate(bootConfig.settings);
+      let content = processContent({
+        content: spaTemplate(bootConfig.settings),
+        SPA: true,
+        settings: bootConfig.settings,
+        runner,
+      });
+
       spaCache.set(req, content);
 
       res.status(status);
@@ -220,6 +228,7 @@ module.exports = (environment, logger, languageLoader, appFactory) => {
         $Env: environment.$Env,
         $Version: environment.$Version,
         $App: environment.$App || {},
+        $Source: environment.$Source,
         $Protocol: protocol,
         $Language: language,
         $Host: host,

@@ -17,6 +17,7 @@ import webpack, {
 } from 'webpack';
 
 import { ImaConfigurationContext, ImaConfig } from '../types';
+import { GenerateRunnerPlugin } from './plugins/GenerateRunnerPlugin';
 import { createProgress } from './plugins/ProgressPlugin';
 import {
   resolveEnvironment,
@@ -45,10 +46,8 @@ export default async (
   const imaEnvironment = resolveEnvironment(rootDir);
   const isDebug = imaEnvironment.$Debug;
   const outputDir = path.join(rootDir, 'build');
-  const publicPath = ctx.publicPath ?? imaConfig.publicPath;
   const appDir = path.join(rootDir, 'app');
-  const useHMR =
-    ctx.command === 'dev' && !isServer && (isEsVersion || ctx.forceSPA);
+  const useHMR = ctx.command === 'dev' && isEsVersion;
   const devServerConfig = createDevServerConfig({ imaConfig, ctx });
 
   // Define browserslist targets for current context
@@ -212,7 +211,7 @@ export default async (
       cssFilename: ({ chunk }) =>
         `static/css/${chunk?.name === name ? 'app' : '[name]'}.css`,
       cssChunkFilename: `static/css/[id].css`,
-      publicPath,
+      publicPath: ctx.publicPath ?? imaConfig.publicPath,
       /**
        * We put hot updates into it's own folder
        * otherwise it clutters the build folder.
@@ -251,23 +250,22 @@ export default async (
         }),
         new CssMinimizerPlugin(),
       ],
-      // Split chunks in dev for better caching
-      ...(isDevEnv
-        ? {
-            moduleIds: 'named',
-            chunkIds: 'named',
-            splitChunks: {
-              cacheGroups: {
-                vendor: {
-                  // Split only JS files
-                  test: /[\\/]node_modules[\\/](.*)(js|jsx|ts|tsx)$/,
-                  name: 'vendors',
-                  chunks: 'all',
-                },
-              },
+      moduleIds: 'named',
+      chunkIds: 'named',
+      ...(!isServer && { runtimeChunk: 'single' }),
+      splitChunks: {
+        ...(isDevEnv && {
+          cacheGroups: {
+            // Split vendor chunk in dev for better watch caching
+            vendor: {
+              // Split only JS files
+              test: /[\\/]node_modules[\\/](.*)(js|jsx|ts|tsx)$/,
+              name: 'vendors',
+              chunks: 'all',
             },
-          }
-        : {}),
+          },
+        }),
+      },
     },
     resolve: {
       extensions: ['.mjs', '.js', '.jsx', '.json'],
@@ -542,23 +540,29 @@ export default async (
       // Server/client specific plugins are defined below
       ...(isServer
         ? // Server-specific plugins
-          [
-            // Copies essential assets to static directory
-            new CopyPlugin({
-              patterns: [
-                { from: 'app/public', to: 'static/public' },
-                ...extractLanguages(imaConfig),
-              ],
-            }),
-          ]
+          []
         : // Client-specific plugins
           [
+            // This needs to run for both client bundles
+            new GenerateRunnerPlugin({
+              context: ctx,
+            }),
+
             processCss &&
               new MiniCssExtractPlugin({
                 filename: ({ chunk }) =>
                   `static/css/${chunk?.name === name ? 'app' : '[name]'}.css`,
                 ignoreOrder: true,
                 chunkFilename: `static/css/[id].css`,
+              }),
+
+            // Copies essential assets to static directory
+            isEsVersion &&
+              new CopyPlugin({
+                patterns: [
+                  { from: 'app/public', to: 'static/public' },
+                  ...extractLanguages(imaConfig),
+                ],
               }),
 
             // Enables compression for assets in production build
@@ -570,7 +574,7 @@ export default async (
                       filename: `[path][base].${
                         algorithm === 'brotliCompress' ? 'br' : 'gz'
                       }`,
-                      test: /\.(js|css|html|svg)$/,
+                      test: /\.(js|css|svg)$/,
                       compressionOptions: {
                         level: 9,
                       },

@@ -24,7 +24,6 @@ describe('ima.core.page.renderer.AbstractPageRenderer', function () {
   let settings = {
     $Page: {
       $Render: {
-        scripts: [],
         documentView: 'app.component.document.DocumentView',
       },
     },

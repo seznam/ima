@@ -1,76 +1,36 @@
-const execa = require('execa');
-const fs = require('fs');
-const fsx = require('fs-extra');
-const path = require('path');
-const chalk = require('chalk');
-const inquirer = require('inquirer');
-const argv = require('yargs').argv;
-const commandExistsSync = require('command-exists').sync;
-const { info, error } = require('../utils/printUtils');
+import path from 'path';
+import { fileURLToPath } from 'url';
+import { spawnSync } from 'child_process';
+import fs from 'fs-extra';
+import chalk from 'chalk';
+import { info, error } from './utils.js';
 
-const dir = argv._[0];
+(async () => {
+  const __dirname = path.dirname(fileURLToPath(import.meta.url));
+  const projDir = process.argv[2];
 
-let exampleResolver = argv.example
-  ? Promise.resolve({ example: argv.example })
-  : inquirer.prompt([
-      {
-        type: 'list',
-        name: 'example',
-        message: 'Choose a template for your new IMA.js application:',
-        choices: [
-          {
-            name: `${chalk.bold.blue(
-              'Hello'
-            )} - The basic Hello World example. Ideal for new projects.`,
-            value: 'hello',
-          },
-          {
-            name: `${chalk.bold.blue(
-              'Todos'
-            )} - Demo example of TodoMVC application.`,
-            value: 'todos',
-          },
-          {
-            name: `${chalk.bold.blue(
-              'Feed'
-            )}  - Demo example of twitter-like application with fake REST API.`,
-            value: 'feed',
-          },
-        ],
-      },
-    ]);
-
-exampleResolver.then(({ example }) => {
-  createImaApp(dir, example);
-});
-
-function createImaApp(dirName, exampleName) {
   info(
-    `Creating new IMA.js app inside ${chalk.green(dirName)} directory...`,
+    `Creating new IMA.js application inside the ${chalk.magenta(
+      projDir
+    )} directory...`,
     true
   );
 
-  const projName = dirName.split(path.sep).pop();
-  const appRoot = path.resolve(dirName.toString());
+  const projName = projDir.split(path.sep).pop();
+  const appRoot = path.resolve(projDir.toString());
   const tplRoot = path.join(__dirname, '../template');
-  const exampleRoot = path.resolve(__dirname, `../examples/${exampleName}`);
 
-  if (!fs.existsSync(exampleRoot)) {
-    error(`Example '${exampleName}' is not defiend.`);
-    process.exit(1);
-  }
-
-  if (!fs.existsSync(dirName)) {
+  if (!fs.existsSync(projDir)) {
     try {
       info(`Creating basic directory structure...`);
-      fsx.copySync(tplRoot, appRoot);
+      fs.copySync(tplRoot, appRoot);
     } catch (err) {
       error(err.message);
       process.exit(1);
     }
   } else {
     error(
-      `Aborting... the directory ${dirName} ${chalk.bold.red(
+      `Aborting... the directory ${projDir} ${chalk.bold.red(
         'already exists'
       )}.\n`
     );
@@ -79,59 +39,53 @@ function createImaApp(dirName, exampleName) {
 
   // Overwrite package.json with new name
   const pkgJsonPath = path.join(appRoot, 'package.json');
-  const pkgJson = require(pkgJsonPath);
+  const pkgJson = JSON.parse(fs.readFileSync(pkgJsonPath, 'utf8'));
 
   pkgJson.name = projName;
   fs.writeFileSync(pkgJsonPath, JSON.stringify(pkgJson, null, 2));
 
-  // Copy example files into ./app directory
-  if (exampleName !== 'hello') {
-    info(`Copying ${chalk.cyan(exampleName)} example files...`);
-  }
-
-  fsx.copySync(exampleRoot, path.join(appRoot, 'app'));
-
   // Run npm install
   info(
-    `Running ${chalk.cyan(
+    `Running ${chalk.magenta(
       'npm install'
     )} inside app directory, this might take a while...`
   );
-  // eslint-disable-next-line no-console
+
   console.log(chalk.dim('      Press CTRL+C to cancel.\n'));
 
   const npm = process.platform === 'win32' ? 'npm.cmd' : 'npm';
-  execa.sync(npm, ['install', ['--legacy-peer-deps']], {
+  spawnSync(npm, ['install', '--legacy-peer-deps'], {
     // TODO IMA@18 -> remove --legacy-peer-deps
     stdio: 'inherit',
     cwd: appRoot,
   });
 
   // Show final info
-  info(`${chalk.bold('Success!')} Created ${chalk.cyan(
+  console.log('');
+  info(`${chalk.bold.green('Success!')} Created ${chalk.magenta(
     projName
-  )} inside ${chalk.green(appRoot)} directory.
+  )} inside the ${chalk.magenta(appRoot)} directory.
 
 From there you can run several commands:
 
-  ${chalk.cyan('npm run test')}
-    To start test runners.
+  ${chalk.blue('npm run test')}
+    To run test runners.
 
-  ${chalk.cyan('npm run lint')}
+  ${chalk.blue('npm run lint')}
     To run eslint on your application source files.
 
-  ${chalk.cyan('npm run dev')}
+  ${chalk.blue('npm run dev')}
     To start development server.
 
-  ${chalk.cyan('npm run build')}
+  ${chalk.blue('npm run build')}
     To build the application.
 
-  ${chalk.cyan('npm run start')}
-    To start IMA.js server.
+  ${chalk.blue('npm run start')}
+    To start IMA.js application server.
 
 We suggest that you start with:
 
-  ${chalk.cyan('cd')} ${dirName}
-  ${chalk.cyan('npm run dev')}
+  ${chalk.blue('cd')} ${projDir}
+  ${chalk.blue('npm run dev')}
 `);
-}
+})();
