@@ -46,8 +46,10 @@ export default abstract class MetaManager {
    * @param name Meta information property name, for example
    *        `keywords`.
    * @param value The meta information value.
+   *
+   * @param  other_attrs Additional attributes to be used in the meta tag (some types of meta tags require them).
    */
-  setMetaName(name: string, value: string) {
+  setMetaName(name: string, value: string, other_attrs: object) {
     return;
   }
 
@@ -79,8 +81,9 @@ export default abstract class MetaManager {
    *
    * @param name Name of the specialized meta information property.
    * @param value The value of the meta information property.
+   * @param other_attrs Additional attributes to be used in the meta tag (some types of meta tags require them).
    */
-  setMetaProperty(name: string, value: string) {
+  setMetaProperty(name: string, value: string, other_attrs: object) {
     return;
   }
 
@@ -116,8 +119,9 @@ export default abstract class MetaManager {
    *        page.
    * @param reference The reference to the location of the related
    *        document, e.g. a URL.
+   * @param other_attrs Additional attributes to be used in the link tag (some types of link tags require them).
    */
-  setLink(relation: string, reference: string) {
+  setLink(relation: string, reference: string, other_attrs: object) {
     return;
   }
 

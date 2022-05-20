@@ -5,9 +5,9 @@ import MetaManager from './MetaManager';
  */
 export default class MetaManagerImpl extends MetaManager {
   protected _title: string;
-  protected _metaName: Map<string, string>;
-  protected _metaProperty: Map<string, string>;
-  protected _link: Map<string, string>;
+  protected _metaName: Map<string, string | object>;
+  protected _metaProperty: Map<string, string | object>;
+  protected _link: Map<string, string | object>;
 
   static get $dependencies() {
     return [];
@@ -57,8 +57,9 @@ export default class MetaManagerImpl extends MetaManager {
   /**
    * @inheritdoc
    */
-  setMetaName(name: string, value: string) {
-    this._metaName.set(name, value);
+  setMetaName(name: string, value: string, other_attrs: object) {
+    const meta = other_attrs ? { value, ...other_attrs } : value;
+    this._metaName.set(name, meta);
   }
 
   /**
@@ -78,8 +79,9 @@ export default class MetaManagerImpl extends MetaManager {
   /**
    * @inheritdoc
    */
-  setMetaProperty(name: string, value: string) {
-    this._metaProperty.set(name, value);
+  setMetaProperty(name: string, value: string, other_attrs: object) {
+    const meta = other_attrs ? { value, ...other_attrs } : value;
+    this._metaProperty.set(name, meta);
   }
 
   /**
@@ -99,8 +101,9 @@ export default class MetaManagerImpl extends MetaManager {
   /**
    * @inheritdoc
    */
-  setLink(relation: string, value: string) {
-    this._link.set(relation, value);
+  setLink(relation: string, value: string, other_attrs: object) {
+    const meta = other_attrs ? { value, ...other_attrs } : value;
+    this._link.set(relation, meta);
   }
 
   /**
