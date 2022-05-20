@@ -24,8 +24,8 @@
     "ima": "./dist/bin/ima.js"
   },
   "scripts": {
-    "build": "tsc",
-    "dev": "tsc --watch",
+    "build": "tsc -b",
+    "dev": "tsc -w --preserveWatchOutput",
     "lint": "eslint './**/*.{js,jsx,ts,tsx}'"
   },
   "dependencies": {

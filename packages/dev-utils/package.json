@@ -17,8 +17,8 @@
   "license": "MIT",
   "author": "Jan Šimeček <jan.simecek@firma.seznam.cz>",
   "scripts": {
-    "build": "tsc",
-    "dev": "tsc --watch",
+    "build": "tsc -b",
+    "dev": "tsc -w --preserveWatchOutput",
     "lint": "eslint './**/*.{js,jsx,ts,tsx}'"
   },
   "dependencies": {
