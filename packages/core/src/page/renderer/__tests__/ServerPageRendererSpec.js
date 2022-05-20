@@ -13,6 +13,7 @@ import {
   objectKeepUnmock,
 } from 'to-mock';
 
+jest.mock('fs');
 jest.mock('path', () => {
   const original = jest.requireActual('path');
   const resolve = (...args) => {
@@ -51,9 +52,9 @@ describe('ima.core.page.renderer.ServerPageRenderer', () => {
     renderToStaticMarkup: () => {},
   };
   let settings = {
+    $Source: jest.fn().mockReturnValue({}),
     $Page: {
       $Render: {
-        scripts: [],
         documentView: 'app.component.document.DocumentView',
       },
     },
@@ -226,7 +227,9 @@ describe('ima.core.page.renderer.ServerPageRenderer', () => {
       spyOn(rendererFactory, 'createReactElementFactory').and.returnValue(
         documentViewFactory
       );
-      spyOn(ReactDOMServer, 'renderToStaticMarkup').and.returnValue(appMarkup);
+      jest
+        .spyOn(ReactDOMServer, 'renderToStaticMarkup')
+        .mockReturnValue(appMarkup);
       spyOn(pageRenderer, '_getRevivalSettings').and.returnValue(
         revivalSettings
       );

@@ -41,7 +41,7 @@ function timeNow() {
   return `${h}:${m}:${s}`;
 }
 
-function createWatcher(name, baseDir, paths, destFolder, options = {}) {
+function createWatcher({ name, baseDir, paths, destFolder, options = {} }) {
   try {
     const watcher = chokidar.watch(path.join(baseDir, paths), {
       persistent: true,
@@ -169,15 +169,23 @@ function watchChanges(destFolder, pkgDirs) {
       });
     }
 
-    // Create file watcher
-    createWatcher(
+    const watcherBaseOptions = {
       name,
-      pkgDir,
-      pkgJson.name === '@ima/server'
-        ? '/**/*.(js|cjs|mjs|json|ejs|map|wasm|d.ts|gz|br|css)'
-        : '/dist/**/*.(js|cjs|mjs|json|ejs|map|wasm|d.ts|gz|br|css)',
-      destPkgDir
-    );
+      baseDir: pkgDir,
+      paths:
+        '/(dist|polyfill)/**/*.(js|cjs|mjs|json|ejs|map|wasm|d.ts|gz|br|css)',
+      destFolder: destPkgDir,
+    };
+
+    // Create file watchers
+    if (['@ima/helpers', '@ima/server'].includes(pkgJson.name)) {
+      createWatcher({
+        ...watcherBaseOptions,
+        paths: '/**/*.(js|cjs|mjs|json|ejs|map|wasm|d.ts|gz|br|css)',
+      });
+    } else {
+      createWatcher(watcherBaseOptions);
+    }
   });
 }
 
@@ -231,6 +239,7 @@ function main() {
     path.resolve(__dirname, '../../packages/error-overlay'),
     path.resolve(__dirname, '../../packages/hmr-client'),
     path.resolve(__dirname, '../../packages/dev-utils'),
+    path.resolve(__dirname, '../../packages/helpers'),
   ];
 
   // Init app

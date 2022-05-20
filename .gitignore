@@ -7,3 +7,5 @@ lerna-debug.log
 .history
 .turbo
 jsconfig.json
+ima-app
+storage

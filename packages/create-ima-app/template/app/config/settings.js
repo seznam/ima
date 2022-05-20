@@ -1,14 +1,9 @@
 import DocumentView from 'app/document/DocumentView';
 
 export default (ns, oc, config) => {
-  const versionStamp = `?version=${
-    config.$Env === 'dev'
-      ? (+new Date() + Math.random() * 100).toString(32)
-      : config.$Version
-  }`;
-
   return {
     prod: {
+      $Version: config.$Version,
       $Http: {
         defaultRequestOptions: {
           timeout: 7000, // Request timeout
@@ -34,15 +29,6 @@ export default (ns, oc, config) => {
       },
       $Page: {
         $Render: {
-          styles: [`/static/css/app.css${versionStamp}`],
-          scripts: [
-            `/static/locale/${config.$Language}.js${versionStamp}`,
-            `/static/js/app.bundle.js${versionStamp}`,
-          ],
-          esScripts: [
-            `/static/locale/${config.$Language}.js${versionStamp}`,
-            `/static/js.es/app.bundle.js${versionStamp}`,
-          ],
           documentView: DocumentView,
         },
       },
@@ -58,23 +44,6 @@ export default (ns, oc, config) => {
       $Http: {
         defaultRequestOptions: {
           timeout: 2000,
-        },
-      },
-      $Page: {
-        $Render: {
-          styles: [`/static/css/app.css${versionStamp}`],
-          scripts: [
-            // `/static/js/polyfill.js${versionStamp}`,
-            `/static/locale/${config.$Language}.js${versionStamp}`,
-            `/static/js/vendors.js${versionStamp}`,
-            `/static/js/app.client.js${versionStamp}`,
-          ],
-          esScripts: [
-            // `/static/js.es/polyfill.js${versionStamp}`,
-            `/static/locale/${config.$Language}.js${versionStamp}`,
-            `/static/js.es/vendors.js${versionStamp}`,
-            `/static/js.es/app.client.js${versionStamp}`,
-          ],
         },
       },
     },

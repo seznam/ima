@@ -20,7 +20,9 @@ const proxy = require('express-http-proxy');
 function errorToString(error) {
   const jsonError = errorToJSON(error);
   let errorString =
-    jsonError && jsonError.message ? jsonError.message : 'Uknown error message';
+    jsonError && jsonError.message
+      ? jsonError.message
+      : 'Unknown error message';
 
   try {
     errorString = JSON.stringify(jsonError);

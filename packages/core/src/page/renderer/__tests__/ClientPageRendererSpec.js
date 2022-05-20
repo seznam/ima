@@ -40,7 +40,6 @@ describe('ima.core.page.renderer.ClientPageRenderer', function () {
   let settings = {
     $Page: {
       $Render: {
-        scripts: [],
         documentView: 'app.component.document.DocumentView',
       },
     },
