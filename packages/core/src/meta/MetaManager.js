@@ -42,6 +42,8 @@ export default class MetaManager {
    * @param {string} name Meta information property name, for example
    *        {@code keywords}.
    * @param {string} value The meta information value.
+   *
+   * @param {Object=} other_attrs Additional attributes to be used in the meta tag (some types of meta tags require them).
    */
   setMetaName() {}
 
@@ -70,6 +72,7 @@ export default class MetaManager {
    *
    * @param {string} name Name of the specialized meta information property.
    * @param {string} value The value of the meta information property.
+   * @param {Object=} other_attrs Additional attributes to be used in the meta tag (some types of meta tags require them).
    */
   setMetaProperty() {}
 
@@ -101,6 +104,7 @@ export default class MetaManager {
    *        page.
    * @param {string} reference The reference to the location of the related
    *        document, e.g. a URL.
+   * @param {Object=} other_attrs Additional attributes to be used in the link tag (some types of link tags require them).
    */
   setLink() {}
 
