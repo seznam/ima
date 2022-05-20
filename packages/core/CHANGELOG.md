@@ -3,6 +3,28 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [17.15.0](https://github.com/seznam/ima/compare/v17.14.0...v17.15.0) (2022-05-20)
+
+
+### Features
+
+* scoped client window listeners ([#199](https://github.com/seznam/ima/issues/199)) ([acef240](https://github.com/seznam/ima/commit/acef24026116fff6e11999cc36c914c39b501f73))
+
+
+
+
+
+# [17.14.0](https://github.com/seznam/ima/compare/v17.13.0...v17.14.0) (2022-04-20)
+
+
+### Features
+
+* 🎸 Changed regex in Dictionary has() function + added test ([3014c82](https://github.com/seznam/ima/commit/3014c827b0b63a5e201b34b1c7688d27214f123c))
+
+
+
+
+
 # [17.13.0](https://github.com/seznam/ima/compare/v17.12.3...v17.13.0) (2022-04-06)
 
 

@@ -10,6 +10,17 @@ export default class ClientWindow extends Window {
     return [];
   }
 
+  constructor() {
+    super();
+
+    /**
+     * Map of event event identifiers to a bound listener.
+     *
+     * @type {WeakMap<Object, Map<Array<string, function(*), boolean, Object>, function(*)>>}
+     */
+    this._scopedListeners = new WeakMap();
+  }
+
   /**
    * @inheritdoc
    */
@@ -202,18 +213,135 @@ export default class ClientWindow extends Window {
   /**
    * @inheritdoc
    */
-  bindEventListener(eventTarget, event, listener, useCapture = false) {
+  bindEventListener(
+    eventTarget,
+    event,
+    listener,
+    useCapture = false,
+    scope = null
+  ) {
     if (eventTarget.addEventListener) {
-      eventTarget.addEventListener(event, listener, useCapture);
+      let usedListener = listener;
+
+      if (scope) {
+        usedListener = this._findScopedListener(
+          eventTarget,
+          event,
+          listener,
+          useCapture,
+          scope
+        );
+
+        if (!usedListener) {
+          usedListener = listener.bind(scope);
+
+          this._addScopedListener(
+            eventTarget,
+            event,
+            listener,
+            useCapture,
+            scope,
+            usedListener
+          );
+        }
+      }
+
+      eventTarget.addEventListener(event, usedListener, useCapture);
     }
   }
 
   /**
    * @inheritdoc
    */
-  unbindEventListener(eventTarget, event, listener, useCapture = false) {
+  unbindEventListener(
+    eventTarget,
+    event,
+    listener,
+    useCapture = false,
+    scope = null
+  ) {
     if (eventTarget.removeEventListener) {
-      eventTarget.removeEventListener(event, listener, useCapture);
+      let usedListener = listener;
+
+      if (scope) {
+        usedListener = this._findScopedListener(
+          eventTarget,
+          event,
+          listener,
+          useCapture,
+          scope,
+          true
+        );
+
+        if ($Debug && !usedListener) {
+          console.warn(
+            'ima.core.window.ClientWindow.unbindEventListener(): the provided ' +
+              `listener '${listener}' is not registered for the ` +
+              `specified event '${event}' and scope '${scope}'. Check ` +
+              `your workflow.`,
+            {
+              event,
+              listener,
+              scope,
+            }
+          );
+        }
+      }
+
+      eventTarget.removeEventListener(event, usedListener, useCapture);
+    }
+  }
+
+  _addScopedListener(
+    eventTarget,
+    event,
+    listener,
+    useCapture,
+    scope,
+    usedListener
+  ) {
+    if (!this._scopedListeners.has(eventTarget)) {
+      this._scopedListeners.set(eventTarget, new Map());
+    }
+
+    const scopedListeners = this._scopedListeners.get(eventTarget);
+
+    scopedListeners.set([event, listener, useCapture, scope], usedListener);
+  }
+
+  _findScopedListener(
+    eventTarget,
+    event,
+    listener,
+    useCapture,
+    scope,
+    remove = false
+  ) {
+    if (this._scopedListeners.has(eventTarget)) {
+      const scopedListeners = this._scopedListeners.get(eventTarget);
+
+      for (const key of scopedListeners.keys()) {
+        const [_event, _listener, _useCapture, _scope] = key;
+
+        if (
+          event === _event &&
+          listener === _listener &&
+          useCapture === _useCapture &&
+          scope === _scope
+        ) {
+          const usedListener = scopedListeners.get(key);
+
+          if (remove) {
+            scopedListeners.delete(key);
+
+            if (!scopedListeners.size) {
+              this._scopedListeners.delete(eventTarget);
+            }
+          }
+
+          return usedListener;
+        }
+      }
     }
   }
 }
