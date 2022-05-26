@@ -3,6 +3,58 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [18.0.0-rc.0](https://github.com/seznam/ima/compare/v17.12.3...v18.0.0-rc.0) (2022-05-26)
+
+
+### Bug Fixes
+
+* 🐛 Better error handling in compiler, overlay and hmr ([ce101e3](https://github.com/seznam/ima/commit/ce101e37557e3929b287c50c734c6ab46cec57cb))
+* 🐛 Clone HttpAgent internalCacheOfPromise result ([57aa831](https://github.com/seznam/ima/commit/57aa83166edd7b8d4b54e01c6f8e3dd084273fd5))
+* 🐛 error-overlay and runtime error reporting fixes ([07b9d29](https://github.com/seznam/ima/commit/07b9d2972d7e90c6f8ef943e8f721841e0006882))
+* 🐛 Fixed handleError issues and incorrect dependencies ([bf8f7f6](https://github.com/seznam/ima/commit/bf8f7f628b4a77abff8a89306fbd1adf6bfb863a))
+* 🐛 Plugin dynamic binding fix ([1049c7a](https://github.com/seznam/ima/commit/1049c7aa87671c97555a6e2247a3eed7a6c3d207))
+* 🐛 React deprecated createFactory fix, added --clearCache ([5939c45](https://github.com/seznam/ima/commit/5939c45d5a5a694255cb401f5abd7ef6843a276f))
+* 🐛 updated packagelocks ([c3d6ce1](https://github.com/seznam/ima/commit/c3d6ce1f8b4d224673793261f60469f3c840b096))
+
+
+### Code Refactoring
+
+* 💡 keep same interface for mount and update methods ([fbdd705](https://github.com/seznam/ima/commit/fbdd7056b9ad5599bdc9e7b03ee7d29dbc44ed1f))
+* 💡 remove deprectecated clearState method ([7cab3af](https://github.com/seznam/ima/commit/7cab3af498ee100071ab9bc444683dcade7e9ddf))
+
+
+### Features
+
+* 🎸 Added ErrorBoundary and fixed HMR error reporting ([81ae9cd](https://github.com/seznam/ima/commit/81ae9cd90a775a1d22350dcd5f07677e8127ae87))
+* 🎸 Added experimental ima and fast refresh overlay clients ([fc7d7e1](https://github.com/seznam/ima/commit/fc7d7e1f7ad21b637df7b30c9a5067a6a920848d))
+* 🎸 Added experimental pluginLoader ([e03005f](https://github.com/seznam/ima/commit/e03005f2550d38477f839794128dd9712917993d))
+* 🎸 Added new @ima/dev-utils package ([77859dd](https://github.com/seznam/ima/commit/77859dd03b31ce948167b615a13416e69258d822))
+* 🎸 Added new pluginLoader utility class ([636651d](https://github.com/seznam/ima/commit/636651debd3cf936fb286a4f76a070f1cfcd2c5b))
+* 🎸 allow defined ima aliases starting with $ from plugin ([f8cb535](https://github.com/seznam/ima/commit/f8cb5357bcf032cf144ecb76c9bc6182c71c5574))
+* 🎸 batch page state with transactions during loading phase ([8ca6680](https://github.com/seznam/ima/commit/8ca6680c67d0f88b4e57a19b3e97733e8de6922a))
+* 🎸 Performance improvements, fixed parsing of source maps ([f13f718](https://github.com/seznam/ima/commit/f13f7186bb056251d9f040d88a45aff103e5eaa5))
+* 🎸 Remove vendorLinker, imaLoader and imaRunner ([7785612](https://github.com/seznam/ima/commit/7785612dff7a27005cacca26a2bb228ba520745a))
+* 🎸 The error overlay iframe can now be closed ([e2c7532](https://github.com/seznam/ima/commit/e2c75320ecd63f136f957766fa748dcc72174139))
+* 🎸 UI, HMR, Compile error handling improvements ([96d49fb](https://github.com/seznam/ima/commit/96d49fb04fd06b58459add7427d59f0fd007bbbb))
+* 🎸 Updated verdacio ([f0cdbbe](https://github.com/seznam/ima/commit/f0cdbbe65ae523c74e3ddaad655dc0c0a689413a))
+
+
+### Performance Improvements
+
+* ⚡️ batch mode keep one free frame between commits ([3be83b3](https://github.com/seznam/ima/commit/3be83b325a907c4e5bb0d944786fece15460c370))
+
+
+### BREAKING CHANGES
+
+* 🧨 HttpAgent feature internalCacheOfPromise returns cloned response
+* 🧨 Resolved promises from load method are set to view in batches
+* 🧨 yes
+* 🧨 yes
+
+
+
+
+
 ## [17.12.3](https://github.com/seznam/ima/compare/v17.12.2...v17.12.3) (2022-03-10)
 
 
