@@ -3,6 +3,14 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [17.15.1](https://github.com/seznam/ima/compare/v17.15.0...v17.15.1) (2022-05-26)
+
+**Note:** Version bump only for package @ima/core
+
+
+
+
+
 # [17.15.0](https://github.com/seznam/ima/compare/v17.14.0...v17.15.0) (2022-05-20)
 
 
