@@ -74,7 +74,7 @@
     "whatwg-fetch": "^3.6.2"
   },
   "peerDependencies": {
-    "@ima/helpers": ">=17.9.0",
+    "@ima/helpers": "^18.0.0-rc.0",
     "@ima/plugin-websocket": ">=1.1.0"
   },
   "publishConfig": {
