@@ -5,7 +5,8 @@
     },
     "publish": {
       "conventionalCommits": true,
-      "preid": "rc"
+      "preid": "rc",
+      "verifyAccess": false
     }
   },
   "packages": [
