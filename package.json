@@ -35,7 +35,7 @@
     "release:graduate": "npm run release -- --conventional-graduate",
     "release:next": "npm run release -- prerelease",
     "release:next:init": "lerna version premajor --force-publish",
-    "release:publish": "lerna publish from-git --yes",
+    "release:publish": "lerna publish from-package --yes",
     "stylelint": "turbo run stylelint",
     "test": "turbo run test",
     "version": "npm run doc && node utils/version/create-ima-app-versions.js && git add docs packages/create-ima-app/template/package.json"
