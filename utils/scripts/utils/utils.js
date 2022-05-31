@@ -218,7 +218,7 @@ function initApp(destDir, pkgDirs, cliArgs) {
     `${path.resolve(
       __dirname,
       '../../../packages/create-ima-app/bin/create-ima-app.js'
-    )} ${destDir} --example=hello`
+    )} ${destDir}`
   );
 
   // Build, pack and install packages in the target directory.
@@ -234,7 +234,8 @@ function initApp(destDir, pkgDirs, cliArgs) {
       const packFileName = `ima-${name}-${pkgJson.version}.tgz`;
       const packFilePath = path.join(pkgDir, packFileName);
 
-      shell(`npm install ${packFilePath}`, destDir);
+      // TODO IMA@18 - remove when ima works without legacy peer deps
+      shell(`npm install ${packFilePath} --legacy-peer-deps`, destDir);
       fs.rmSync(packFilePath);
     });
   }

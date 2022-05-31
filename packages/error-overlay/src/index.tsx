@@ -1,4 +1,4 @@
-import ReactDOM from 'react-dom';
+import { createRoot } from 'react-dom/client';
 
 import App from './App';
 import { OverlayContext, defaultOverlayContext } from './components';
@@ -13,27 +13,27 @@ class ImaErrorOverlay extends HTMLElement {
     this.attachShadow({ mode: 'open' });
 
     // Create app root element
-    const root = document.createElement('div');
-    root.setAttribute('data-ima-error-overlay', '');
+    const container = document.createElement('div');
+    container.setAttribute('data-ima-error-overlay', '');
+    const root = createRoot(container);
 
     // Append styles and root
     styles.use({ target: this.shadowRoot });
-    this.shadowRoot?.appendChild(root);
+    this.shadowRoot?.appendChild(container);
 
     // Get component attributes
     const publicUrl = this.getAttribute('public-url');
     const serverError = this.getAttribute('server-error');
 
     // Render App
-    ReactDOM.render(
+    root.render(
       <OverlayContext.Provider
         value={{
           publicUrl: publicUrl ?? defaultOverlayContext.publicUrl,
         }}
       >
         <App serverError={serverError} />
-      </OverlayContext.Provider>,
-      root
+      </OverlayContext.Provider>
     );
   }
 }
