@@ -5,22 +5,21 @@ const CopyPlugin = require('copy-webpack-plugin');
 
 const { createWebpackConfig } = require('../../createWebpackConfig');
 
-module.exports = createWebpackConfig((baseConfig, { isProduction }) => {
+module.exports = createWebpackConfig(baseConfig => {
   const config = {
     ...baseConfig,
     entry: { overlay: './src/index.tsx' },
     plugins: [
-      isProduction &&
-        new CompressionPlugin({
-          algorithm: 'brotliCompress',
-          filename: `[path][base].br`,
-          test: /\.(js|css|html|svg)$/,
-          compressionOptions: {
-            level: 9,
-          },
-          threshold: 0,
-          minRatio: 0.95,
-        }),
+      new CompressionPlugin({
+        algorithm: 'brotliCompress',
+        filename: `[path][base].br`,
+        test: /\.(js|css|html|svg)$/,
+        compressionOptions: {
+          level: 9,
+        },
+        threshold: 0,
+        minRatio: 0.95,
+      }),
       new CopyPlugin({
         patterns: [
           {
