@@ -152,7 +152,7 @@ class ScrambleCssMinimizer {
         hashTablePath: this._hashTablePath,
       }),
     ]).process(source.source(), {
-      map: prevMap ? { prev: prevMap } : {},
+      map: prevMap ? { prev: prevMap } : false,
       from: filename,
       to: filename,
     });
