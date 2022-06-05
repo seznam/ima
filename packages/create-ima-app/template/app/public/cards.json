@@ -1,0 +1,22 @@
+[
+  {
+    "id": "documentation",
+    "title": "Documentation",
+    "content": "In the documentation you'll find an <a target=\"_blank\" href=\"{link}\">in depth look</a> to every part of the IMA.js framework."
+  },
+  {
+    "id": "tutorial",
+    "title": "Tutorial",
+    "content": "The tutorial, which is always <a target=\"_blank\" href=\"{link}\">good place to start</a>, takes you through the build process of a simple guest book application."
+  },
+  {
+    "id": "plugins",
+    "title": "Plugins",
+    "content": "IMA.js comes with full support for plugins, feel free to export <a target=\"_blank\" href=\"{link}\">existing library</a> we maintain."
+  },
+  {
+    "id": "api",
+    "title": "API",
+    "content": "This section provides direct look at the <a target=\"_blank\" href=\"{link}\">framework's API</a>."
+  }
+]

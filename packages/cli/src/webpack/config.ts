@@ -62,7 +62,9 @@ export default async (
       ios: '14',
     };
   } else if (isServer) {
-    targets = { node: '16' };
+    targets = { node: '18' };
+  } else {
+    targets = { ie: '11' };
   }
 
   // Set correct devtool source maps config
@@ -148,7 +150,7 @@ export default async (
     name,
     dependencies: [],
     target: isServer
-      ? 'node16'
+      ? 'node18'
       : isEsVersion
       ? ['web', 'es11']
       : ['web', 'es5'],
@@ -359,7 +361,7 @@ export default async (
                           env: {
                             targets,
                             mode: 'usage',
-                            coreJs: 3,
+                            coreJs: '3.22.7',
                           },
                           module: {
                             type: 'commonjs',
@@ -384,7 +386,7 @@ export default async (
                         env: {
                           targets,
                           mode: 'usage',
-                          coreJs: 3,
+                          coreJs: '3.22.7',
                           shippedProposals: true,
                         },
                         module: {
@@ -435,7 +437,7 @@ export default async (
                                 bugfixes: true,
                                 modules: false,
                                 useBuiltIns: 'usage',
-                                corejs: { version: '3.21' },
+                                corejs: { version: '3.22.7' },
                                 exclude: ['transform-typeof-symbol'],
                               },
                             ],
@@ -477,7 +479,7 @@ export default async (
                               bugfixes: true,
                               modules: false,
                               useBuiltIns: 'usage',
-                              corejs: { version: '3.21', proposals: true },
+                              corejs: { version: '3.22.7', proposals: true },
                               exclude: ['transform-typeof-symbol'],
                             },
                           ],
@@ -557,13 +559,22 @@ export default async (
               }),
 
             // Copies essential assets to static directory
-            isEsVersion &&
-              new CopyPlugin({
-                patterns: [
-                  { from: 'app/public', to: 'static/public' },
-                  ...extractLanguages(imaConfig),
-                ],
-              }),
+            isEsVersion
+              ? new CopyPlugin({
+                  patterns: [
+                    { from: 'app/public', to: 'static/public' },
+                    { from: 'app/public', to: 'static/public' },
+                    ...extractLanguages(imaConfig),
+                  ],
+                })
+              : new CopyPlugin({
+                  patterns: [
+                    {
+                      from: require.resolve('whatwg-fetch'),
+                      to: 'static/public/fetch.polyfill.js',
+                    },
+                  ],
+                }),
 
             // Enables compression for assets in production build
             ...(ctx.command === 'build'

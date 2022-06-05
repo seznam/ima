@@ -1,25 +1,39 @@
+import { useState, useEffect } from 'react';
 import { useSettings, useLocalize } from '@ima/react-hooks';
 
 import Card from 'app/component/card/Card';
 import './homeView.less';
 
-export default function HomeView(props) {
+/**
+ * The {@code load} method in HomeController.js passes entries
+ * in the returned object as props to this component view. The
+ * data are passed all at once, as soon as all promises resolve
+ * (in case of SSR) or one by one as the promises are being resolved.
+ */
+export default function HomeView({ message, name, cards }) {
   const links = useSettings('links');
   const localize = useLocalize();
+  const [mounted, setMounted] = useState(false);
+
+  // This executes only on client side
+  useEffect(() => {
+    setMounted(true);
+  }, []);
 
   return (
     <div className='page-home'>
       <div className='content'>
         <h1>
-          {props.message}{' '}
+          {message}{' '}
           <a
+            target='_blank'
             href='https://imajs.io'
-            title={props.name}
+            title={name}
             rel='noopener noreferrer'
           >
-            {props.name}
+            {name}
           </a>
-          !
+          !{mounted ? '💡' : ''}
         </h1>
 
         <p
@@ -28,24 +42,11 @@ export default function HomeView(props) {
         ></p>
 
         <div className='cards'>
-          <Card title='Documentation' href={links.documentation}>
-            In the documentation you’ll find an{' '}
-            <a href={links.documentation}>in depth look</a> to every part of the
-            IMA.js framework.
-          </Card>
-          <Card title='Tutorial' href={links.tutorial}>
-            The tutorial, which is always{' '}
-            <a href={links.tutorial}>good place to start</a>, takes you through
-            the build process of a simple guest book application.
-          </Card>
-          <Card title='Plugins' href={links.plugins}>
-            IMA.js comes with full support for plugins, feel free to export{' '}
-            <a href={links.plugins}>existing library</a> we maintain.
-          </Card>
-          <Card title='API' href={links.api}>
-            This section provides direct look at the{' '}
-            <a href={links.api}>framework’s API</a>.
-          </Card>
+          {cards?.map(card => (
+            <Card key={card.id} title={card.title} href={links[card.id]}>
+              {card.content}
+            </Card>
+          )) ?? null}
         </div>
       </div>
     </div>

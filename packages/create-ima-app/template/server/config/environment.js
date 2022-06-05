@@ -30,6 +30,7 @@ module.exports = (() => {
         styles: ['/static/css/app.css'],
         scripts: [
           ['/static/locale/#{$Language}.js?v=#{$Version}', { async: true }],
+          ['/static/public/fetch.polyfill.js?v=#{$Version}', { async: true }],
           ['/static/js/app.bundle.js?v=#{$Version}', { async: true }],
         ],
         esScripts: [
@@ -107,6 +108,7 @@ module.exports = (() => {
         styles: ['/static/css/app.css'],
         scripts: [
           ['/static/locale/#{$Language}.js?v=#{$Version}', { async: true }],
+          ['/static/public/fetch.polyfill.js?v=#{$Version}', { async: true }],
           ['/static/js/vendors.js?v=#{$Version}', { async: true }],
           ['/static/js/app.client.js?v=#{$Version}', { async: true }],
         ],

@@ -195,31 +195,33 @@ function copyChanges(destDir, pkgDirs) {
 function initApp(destDir, pkgDirs, cliArgs) {
   const exists = fs.existsSync(destDir);
 
-  // Bail if it already exists
   if (exists && !cliArgs.force) {
-    return console.log(
+    console.log(
       chalk.yellow(
         'The app destination folder already exists, skipping initialization...\n' +
           'Use --force cli argument to overwrite the destination folder.'
       )
     );
-  }
+  } else {
+    // Delete folder before init
+    if (exists) {
+      fs.rmSync(destDir, { recursive: true, force: true });
 
-  // Remove dest dir if it exists and force argument is true
-  if (exists && cliArgs.force) {
-    fs.rmSync(destDir, { recursive: true, force: true });
-    console.log(
-      chalk.yellow('The app destination folder already exists, overwriting...')
+      console.log(
+        chalk.yellow(
+          'The app destination folder already exists, overwriting...'
+        )
+      );
+    }
+
+    // Run create-ima-app script
+    shell(
+      `${path.resolve(
+        __dirname,
+        '../../../packages/create-ima-app/bin/create-ima-app.js'
+      )} ${destDir}`
     );
   }
-
-  // Run create-ima-app script
-  shell(
-    `${path.resolve(
-      __dirname,
-      '../../../packages/create-ima-app/bin/create-ima-app.js'
-    )} ${destDir}`
-  );
 
   // Build, pack and install packages in the target directory.
   if (cliArgs.init) {

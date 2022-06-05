@@ -106,16 +106,13 @@ export default class HttpProxy {
         }, options.timeout);
       }
 
-      this._getFetchApi()
-        .then(fetch =>
-          fetch(
-            this._composeRequestUrl(
-              url,
-              !this._shouldRequestHaveBody(method, data) ? data : {}
-            ),
-            this._composeRequestInit(method, data, options)
-          )
-        )
+      fetch(
+        this._composeRequestUrl(
+          url,
+          !this._shouldRequestHaveBody(method, data) ? data : {}
+        ),
+        this._composeRequestInit(method, data, options)
+      )
         .then(response => {
           if (requestTimeoutId) {
             clearTimeout(requestTimeoutId);
@@ -272,44 +269,8 @@ export default class HttpProxy {
   _headersToPlainObject(headers) {
     let plainHeaders = {};
 
-    if (headers.entries) {
-      for (let [key, value] of headers.entries()) {
-        plainHeaders[key] = value;
-      }
-    } else if (headers.forEach) {
-      /**
-       * Check for forEach() has to be here because in old Firefoxes (versions lower than 44) there is not
-       * possibility to iterate through all the headers - according to docs
-       * (https://developer.mozilla.org/en-US/docs/Web/API/Headers) where is "entries(), keys(), values(), and support
-       * of for...of" is supported from Firefox version 44
-       */
-      if (headers.getAll) {
-        /**
-         * @todo This branch should be removed with node-fetch release
-         *       2.0.0.
-         */
-        headers.forEach((_, headerName) => {
-          plainHeaders[headerName] = headers.getAll(headerName).join(', ');
-        });
-      } else if (headers.get) {
-        /**
-         * In case that Headers.getAll() from previous branch doesn't exist because it is obsolete and deprecated - in
-         * newer versions of the Fetch spec, Headers.getAll() has been deleted, and Headers.get() has been updated to
-         * fetch all header values instead of only the first one - according to docs
-         * (https://developer.mozilla.org/en-US/docs/Web/API/Headers/getAll)
-         */
-        headers.forEach((_, headerName) => {
-          plainHeaders[headerName] = headers.get(headerName);
-        });
-      } else {
-        /**
-         * @todo If Microsoft Edge supported headers.entries(), we'd remove
-         *       this branch.
-         */
-        headers.forEach((headerValue, headerName) => {
-          plainHeaders[headerName] = headerValue;
-        });
-      }
+    for (let [key, value] of headers.entries()) {
+      plainHeaders[key] = value;
     }
 
     return plainHeaders;
@@ -360,20 +321,6 @@ export default class HttpProxy {
         cause
       )
     );
-  }
-
-  /**
-   * Returns {@link https://developer.mozilla.org/en-US/docs/Web/API/WindowOrWorkerGlobalScope/fetch window.fetch}
-   * compatible API to use, depending on the method being used at the server
-   * (polyfill) or client (native/polyfill) side.
-   *
-   * @return {function((string|Request), RequestInit=): Promise.<Response>} An
-   *         implementation of the Fetch API to use.
-   */
-  async _getFetchApi() {
-    return this._window.isClient()
-      ? this._window.getWindow().fetch
-      : import('node-fetch').then(fetch => fetch.default);
   }
 
   /**

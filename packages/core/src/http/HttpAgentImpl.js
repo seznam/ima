@@ -443,7 +443,7 @@ export default class HttpAgentImpl extends HttpAgent {
    */
   _setCookiesFromResponse(agentResponse) {
     if (agentResponse.headersRaw) {
-      let receivedCookies = agentResponse.headersRaw.raw()['set-cookie'];
+      let receivedCookies = agentResponse.headersRaw['set-cookie'];
 
       if (receivedCookies) {
         if (!Array.isArray(receivedCookies)) {
