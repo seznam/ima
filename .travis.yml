@@ -22,6 +22,7 @@ jobs:
     - if: tag =~ ^v # Run only for tags
       stage: "deploy"
       script:
+        - if [[ "$TRAVIS_TAG" =~ "rc" ]] ; then export DIST_TAG="next" ; fi
         - echo "//registry.npmjs.org/:_authToken=\${NPM_TOKEN}" >> $HOME/.npmrc 2> /dev/null
         - npm run release:publish
       skip_cleanup: true

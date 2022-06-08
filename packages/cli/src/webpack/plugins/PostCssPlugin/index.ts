@@ -119,7 +119,7 @@ class PostCssPlugin {
           const { css, map } = await postcss(this._options.plugins).process(
             inputSource.source(),
             {
-              map: prevMap ? { prev: prevMap } : {},
+              map: prevMap ? { prev: prevMap } : false,
               from: name,
               to: name,
             }

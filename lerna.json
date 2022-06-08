@@ -5,7 +5,8 @@
     },
     "publish": {
       "conventionalCommits": true,
-      "preid": "rc"
+      "preid": "rc",
+      "verifyAccess": false
     }
   },
   "packages": [
@@ -16,5 +17,5 @@
     "**/__tests__/**",
     "**/*.md"
   ],
-  "version": "17.12.3"
+  "version": "18.0.0-rc.0"
 }
