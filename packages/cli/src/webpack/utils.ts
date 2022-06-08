@@ -126,7 +126,9 @@ function extractLanguages(imaConfig: ImaConfig): ObjectPattern[] {
             ).replace(`${locale.toUpperCase()}.json`, '');
 
             return Object.assign(accumulator, {
-              [scopeFromFilename]: accumulator[scopeFromFilename] ? Object.assign({}, accumulator[scopeFromFilename], fileContent) : fileContent,
+              [scopeFromFilename]: accumulator[scopeFromFilename]
+                ? Object.assign({}, accumulator[scopeFromFilename], fileContent)
+                : fileContent,
             });
           }, tempLocales[locale]);
 
