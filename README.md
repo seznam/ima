@@ -60,3 +60,10 @@ yarn dev
 Contribute to this project via [Pull-Requests](https://github.com/seznam/ima/pulls).
 
 We are following [Conventional Commits Specification](https://www.conventionalcommits.org/en/v1.0.0/#summary). To simplify the commit process, you can use `npm run commit` command. It opens an interactive interface, which should help you with commit message composition.
+
+
+### Set up the dev environment
+
+Our dev stack expects `node==16` and `npm>=17`.
+
+To set up, simply run `npm install` from the repo root.
