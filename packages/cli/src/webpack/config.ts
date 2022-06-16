@@ -52,6 +52,7 @@ export default async (
 
   // Define browserslist targets for current context
   let targets: 'defaults' | Record<string, string> = 'defaults';
+
   if (isEsVersion) {
     targets = {
       chrome: '80',
@@ -63,8 +64,6 @@ export default async (
     };
   } else if (isServer) {
     targets = { node: '18' };
-  } else {
-    targets = { ie: '11' };
   }
 
   // Set correct devtool source maps config
@@ -165,6 +164,8 @@ export default async (
           }
         : {
             [name]: [
+              // Inject fetch polyfill to es5 bundle
+              !isEsVersion && require.resolve('whatwg-fetch'),
               // We have to use @gatsbyjs version, since the original package containing webpack 5 fix is not yet released
               useHMR &&
                 `@gatsbyjs/webpack-hot-middleware/client?${new URLSearchParams({
@@ -559,22 +560,13 @@ export default async (
               }),
 
             // Copies essential assets to static directory
-            isEsVersion
-              ? new CopyPlugin({
-                  patterns: [
-                    { from: 'app/public', to: 'static/public' },
-                    { from: 'app/public', to: 'static/public' },
-                    ...extractLanguages(imaConfig),
-                  ],
-                })
-              : new CopyPlugin({
-                  patterns: [
-                    {
-                      from: require.resolve('whatwg-fetch'),
-                      to: 'static/public/fetch.polyfill.js',
-                    },
-                  ],
-                }),
+            isEsVersion &&
+              new CopyPlugin({
+                patterns: [
+                  { from: 'app/public', to: 'static/public' },
+                  ...extractLanguages(imaConfig),
+                ],
+              }),
 
             // Enables compression for assets in production build
             ...(ctx.command === 'build'

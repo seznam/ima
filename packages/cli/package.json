@@ -1,6 +1,6 @@
 {
   "name": "@ima/cli",
-  "version": "18.0.0-rc.0",
+  "version": "18.0.0-rc.0-next",
   "description": "IMA.js CLI tool to build, develop and work with IMA.js applications.",
   "keywords": [
     "IMA",
@@ -33,9 +33,9 @@
     "@babel/preset-env": "^7.18.2",
     "@babel/preset-react": "^7.17.12",
     "@gatsbyjs/webpack-hot-middleware": "2.25.2",
-    "@ima/dev-utils": "^18.0.0-rc.0",
-    "@ima/error-overlay": "^18.0.0-rc.0",
-    "@ima/hmr-client": "^18.0.0-rc.0",
+    "@ima/dev-utils": "18.0.0-rc.0-next",
+    "@ima/error-overlay": "18.0.0-rc.0-next",
+    "@ima/hmr-client": "18.0.0-rc.0-next",
     "@pmmmwh/react-refresh-webpack-plugin": "^0.5.7",
     "@swc/core": "^1.2.196",
     "ajv": "8.11.0",
@@ -72,6 +72,7 @@
     "webpack": "^5.72.1",
     "webpack-bundle-analyzer": "4.5.0",
     "webpack-dev-middleware": "^5.3.3",
+    "whatwg-fetch": "^3.6.2",
     "yargs": "^17.5.1"
   },
   "devDependencies": {
@@ -86,10 +87,10 @@
     "@types/yargs": "^17.0.10"
   },
   "peerDependencies": {
-    "@ima/server": "^18.0.0-rc.0"
+    "@ima/server": "18.0.0-rc.0-next"
   },
   "publishConfig": {
     "access": "public",
-    "registry": "https://registry.npmjs.org/"
+    "registry": "http://localhost:4873/"
   }
 }

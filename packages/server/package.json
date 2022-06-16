@@ -1,6 +1,6 @@
 {
   "name": "@ima/server",
-  "version": "18.0.0-rc.0",
+  "version": "18.0.0-rc.0-next",
   "description": "Default dev server for IMA.js applications.",
   "keywords": [
     "IMA.js",
@@ -30,15 +30,15 @@
     "winston": "^3.6.0"
   },
   "devDependencies": {
-    "@ima/dev-utils": "^18.0.0-rc.0",
+    "@ima/dev-utils": "18.0.0-rc.0-next",
     "express": "^4.17.3"
   },
   "peerDependencies": {
-    "@ima/dev-utils": "^18.0.0-rc.0",
-    "@ima/helpers": "^18.0.0-rc.0"
+    "@ima/dev-utils": "18.0.0-rc.0-next",
+    "@ima/helpers": "18.0.0-rc.0-next"
   },
   "publishConfig": {
     "access": "public",
-    "registry": "https://registry.npmjs.org/"
+    "registry": "http://localhost:4873/"
   }
 }

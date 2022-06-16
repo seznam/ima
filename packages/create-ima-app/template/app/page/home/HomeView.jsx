@@ -33,7 +33,6 @@ export default function HomeView({ message, name, cards }) {
           >
             {name}
           </a>
-          !{mounted ? '💡' : ''}
         </h1>
 
         <p
@@ -48,6 +47,8 @@ export default function HomeView({ message, name, cards }) {
             </Card>
           )) ?? null}
         </div>
+
+        {mounted && <div className='mounted'>💡</div>}
       </div>
     </div>
   );

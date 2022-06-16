@@ -1,6 +1,6 @@
 {
   "name": "@ima/dev-utils",
-  "version": "18.0.0-rc.0",
+  "version": "18.0.0-rc.0-next",
   "description": "IMA.js dev utils used used mainly in @ima/cli and other dev-related utilities.",
   "keywords": [
     "IMA.js",
@@ -30,7 +30,7 @@
   },
   "publishConfig": {
     "access": "public",
-    "registry": "https://registry.npmjs.org/"
+    "registry": "http://localhost:4873/"
   },
   "devDependencies": {
     "@types/node": "^17.0.21"
