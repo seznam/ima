@@ -1,6 +1,6 @@
 {
   "name": "@ima/helpers",
-  "version": "18.0.0-rc.0-next",
+  "version": "18.0.0-rc.0",
   "description": "Various helpers for the IMA.js framework.",
   "keywords": [
     "ima",
@@ -27,6 +27,6 @@
   },
   "publishConfig": {
     "access": "public",
-    "registry": "http://localhost:4873/"
+    "registry": "https://registry.npmjs.org/"
   }
 }

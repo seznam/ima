@@ -1,6 +1,6 @@
 {
   "name": "@ima/core",
-  "version": "18.0.0-rc.0-next",
+  "version": "18.0.0-rc.0",
   "description": "IMA.js framework for isomorphic javascript application",
   "keywords": [
     "IMA",
@@ -46,7 +46,7 @@
     "preversion": "npm test"
   },
   "dependencies": {
-    "@ima/helpers": "18.0.0-rc.0-next",
+    "@ima/helpers": "^18.0.0-rc.0",
     "classnames": "^2.3.1",
     "memoize-one": "^6.0.0"
   },
@@ -62,7 +62,7 @@
   },
   "publishConfig": {
     "access": "public",
-    "registry": "http://localhost:4873/"
+    "registry": "https://registry.npmjs.org/"
   },
   "size-limit": [
     {
