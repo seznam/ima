@@ -18,7 +18,7 @@
   "author": "Miroslav Jancarik <miroslav.jancarik@firma.seznam.cz>",
   "main": "./dist/main.cjs",
   "module": "./dist/main.mjs",
-  "browser": "./dist/main.mjs",
+  "browser": "./dist/main.js",
   "scripts": {
     "build": "rollup --config",
     "dev": "rollup --config --watch",
