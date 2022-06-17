@@ -64,12 +64,11 @@ describe('ima.core.http.HttpAgentImpl', () => {
       headers: {
         'set-cookie': ['cookie1=cookie1', 'cookie2=cookie2'],
       },
-      headersRaw: {
-        raw() {
-          return { 'set-cookie': ['cookie1=cookie1', 'cookie2=cookie2'] };
-        },
-        'set-cookie': ['cookie1=cookie1', 'cookie2=cookie2'],
-      },
+      headersRaw: new Map(
+        Object.entries({
+          'set-cookie': ['cookie1=cookie1', 'cookie2=cookie2'],
+        })
+      ),
     };
   });
 
