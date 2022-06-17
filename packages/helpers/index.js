@@ -1,4 +1,4 @@
-const clone = require('clone');
+import clone from 'clone';
 
 function assign(target, source, parentField = null, ignoreMeta = true) {
   let fieldList = [];
@@ -179,7 +179,7 @@ function processContent({ content, runner, SPA, settings, pageState = {} }) {
   return content.replace(interpolateRe, interpolate);
 }
 
-module.exports = {
+export {
   assignRecursively,
   assignRecursivelyWithTracking,
   deepFreeze,
