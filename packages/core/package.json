@@ -32,9 +32,9 @@
       "email": "ondrej.base@firma.seznam.cz"
     }
   ],
-  "main": "./dist/ima.server.cjs",
-  "module": "./dist/ima.server.mjs",
-  "browser": "./dist/ima.client.js",
+  "main": "./dist/server.cjs",
+  "module": "./dist/server.mjs",
+  "browser": "./dist/client.js",
   "scripts": {
     "build": "rollup --config",
     "clean": "rm -rf dist",
@@ -68,12 +68,12 @@
   "size-limit": [
     {
       "limit": "31 KB",
-      "path": "./dist/ima.client.mjs",
+      "path": "./dist/client.mjs",
       "running": false
     },
     {
       "limit": "31 KB",
-      "path": "./dist/ima.server.mjs",
+      "path": "./dist/server.mjs",
       "running": false
     }
   ]

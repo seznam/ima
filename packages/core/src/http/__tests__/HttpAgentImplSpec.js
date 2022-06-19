@@ -1,5 +1,5 @@
 import toMock from 'to-mock';
-import Helper from '@ima/helpers';
+import * as Helper from '@ima/helpers';
 
 import Cache from 'src/cache/Cache';
 import GenericError from 'src/error/GenericError';

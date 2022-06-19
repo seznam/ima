@@ -16,9 +16,9 @@
   },
   "license": "MIT",
   "author": "Miroslav Jancarik <miroslav.jancarik@firma.seznam.cz>",
-  "main": "./dist/main.cjs",
-  "module": "./dist/main.mjs",
-  "browser": "./dist/main.js",
+  "main": "./dist/index.cjs",
+  "module": "./dist/index.mjs",
+  "browser": "./dist/index.js",
   "scripts": {
     "build": "rollup --config",
     "dev": "rollup --config --watch",

@@ -1,4 +1,4 @@
-import * as helpers from '../index';
+import * as helpers from '..';
 
 describe('helper', () => {
   describe('assignRecursively', () => {

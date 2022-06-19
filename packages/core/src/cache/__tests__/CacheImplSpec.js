@@ -1,4 +1,4 @@
-import Helper from '@ima/helpers';
+import * as Helper from '@ima/helpers';
 import CacheFactory from '../CacheFactory';
 import Cache from '../CacheImpl';
 import MapStorage from 'src/storage/MapStorage';
