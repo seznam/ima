@@ -1,6 +1,5 @@
-src/
-**/__tests__/
-rollup.config.js
-jest.config.js
-gulpfile.js
-.babelrc
+*
+!dist/**/*
+!package.json
+!transform/**/*
+!polyfill/**/*
