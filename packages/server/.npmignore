@@ -1,9 +1,5 @@
-gulpfile.js
-.babelrc
-/__tests__
-.eslintrc.js
-.gitignore
-.prettierignore
-resolver.js
-LICENSE.md
-README.md
+*
+!lib/**/*
+!package.json
+!index.js
+!resolver.js
