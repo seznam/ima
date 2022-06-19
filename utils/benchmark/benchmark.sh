@@ -19,10 +19,6 @@ NPM_LOCAL_REGISTRY_PID=$!
 
 npm config set "//$NPM_LOCAL_REGISTRY_URL_NO_PROTOCOL/:_authToken" "0"
 
-# Build packages
-cd $ROOT_DIR
-npm run build
-
 # Release ima packages to local registry
 for PACKAGE in $PACKAGES ; do
     cd "$ROOT_DIR/packages/$PACKAGE"
