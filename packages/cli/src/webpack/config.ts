@@ -52,6 +52,7 @@ export default async (
 
   // Define browserslist targets for current context
   let targets: 'defaults' | Record<string, string> = 'defaults';
+
   if (isEsVersion) {
     targets = {
       chrome: '80',
@@ -62,7 +63,7 @@ export default async (
       ios: '14',
     };
   } else if (isServer) {
-    targets = { node: '16' };
+    targets = { node: '18' };
   }
 
   // Set correct devtool source maps config
@@ -148,7 +149,7 @@ export default async (
     name,
     dependencies: [],
     target: isServer
-      ? 'node16'
+      ? 'node18'
       : isEsVersion
       ? ['web', 'es11']
       : ['web', 'es5'],
@@ -163,6 +164,8 @@ export default async (
           }
         : {
             [name]: [
+              // Inject fetch polyfill to es5 bundle
+              !isEsVersion && require.resolve('whatwg-fetch'),
               // We have to use @gatsbyjs version, since the original package containing webpack 5 fix is not yet released
               useHMR &&
                 `@gatsbyjs/webpack-hot-middleware/client?${new URLSearchParams({
@@ -359,7 +362,7 @@ export default async (
                           env: {
                             targets,
                             mode: 'usage',
-                            coreJs: 3,
+                            coreJs: '3.22.7',
                           },
                           module: {
                             type: 'commonjs',
@@ -384,7 +387,7 @@ export default async (
                         env: {
                           targets,
                           mode: 'usage',
-                          coreJs: 3,
+                          coreJs: '3.22.7',
                           shippedProposals: true,
                         },
                         module: {
@@ -435,7 +438,7 @@ export default async (
                                 bugfixes: true,
                                 modules: false,
                                 useBuiltIns: 'usage',
-                                corejs: { version: '3.21' },
+                                corejs: { version: '3.22.7' },
                                 exclude: ['transform-typeof-symbol'],
                               },
                             ],
@@ -477,7 +480,7 @@ export default async (
                               bugfixes: true,
                               modules: false,
                               useBuiltIns: 'usage',
-                              corejs: { version: '3.21', proposals: true },
+                              corejs: { version: '3.22.7', proposals: true },
                               exclude: ['transform-typeof-symbol'],
                             },
                           ],

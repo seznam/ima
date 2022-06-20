@@ -48,8 +48,7 @@
   "dependencies": {
     "@ima/helpers": "^18.0.0-rc.0",
     "classnames": "^2.3.1",
-    "memoize-one": "^6.0.0",
-    "node-fetch": "^2.6.7"
+    "memoize-one": "^6.0.0"
   },
   "devDependencies": {
     "@size-limit/preset-big-lib": "^7.0.8",

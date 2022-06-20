@@ -12,7 +12,6 @@ function generateConfig(environment) {
       'react',
       'react-dom',
       'memoize-one',
-      'node-fetch',
       'react-dom/server',
     ].filter(Boolean),
     input: {

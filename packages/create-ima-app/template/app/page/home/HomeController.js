@@ -1,11 +1,20 @@
-//import { GenericError } from '@ima/core';
+import { HttpAgent } from '@ima/core';
 
 import AbstractPageController from 'app/page/AbstractPageController';
 import IMAjsShareImg from 'app/public/imajs-share.png';
 
 export default class HomeController extends AbstractPageController {
   static get $dependencies() {
-    return [];
+    return [HttpAgent];
+  }
+
+  /**
+   * @param {HttpAgent} httpAgent
+   */
+  constructor(httpAgent) {
+    super();
+
+    this._httpAgent = httpAgent;
   }
 
   /**
@@ -37,9 +46,20 @@ export default class HomeController extends AbstractPageController {
    *         resolved values will be pushed to the controller's state.
    */
   load() {
+    /**
+     * Fetch cards data from static JSON file using IMA HttpAgent.
+     * HttpAgent is implementation based on native fetch api with some
+     * additional features. It handles fetching data on client but also
+     * on server isomorphically.
+     */
+    const cardsPromise = this._httpAgent
+      .get('http://localhost:3001/static/public/cards.json')
+      .then(response => response.body);
+
     return {
-      //error: Promise.reject(new GenericError('Try error page.')),
-      //redirect: Promise.reject(new GenericError('Redirect from home page to error page for $Debug = false.', {status: 303, url: 'http://localhost:3001/not-found'})),
+      // error: Promise.reject(new GenericError('Try error page.')),
+      // redirect: Promise.reject(new GenericError('Redirect from home page to error page for $Debug = false.', {status: 303, url: 'http://localhost:3001/not-found'})),
+      cards: cardsPromise,
       message: `Welcome to`,
       name: `IMA.js`,
     };
