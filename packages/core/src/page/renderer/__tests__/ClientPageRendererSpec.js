@@ -1,4 +1,4 @@
-import Helper from '@ima/helpers';
+import * as Helper from '@ima/helpers';
 import Controller from 'src/controller/Controller';
 import ClientPageRenderer from '../ClientPageRenderer';
 import RendererFactory from '../PageRendererFactory';

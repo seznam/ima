@@ -1,4 +1,4 @@
-const helpers = require('../index');
+import * as helpers from '..';
 
 describe('helper', () => {
   describe('assignRecursively', () => {

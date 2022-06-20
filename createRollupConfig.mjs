@@ -7,7 +7,7 @@ function createRollupConfig(callback) {
       clearScreen: false,
     },
     input: {
-      main: './src/main.js',
+      index: './src/index.js',
     },
     output: [
       {

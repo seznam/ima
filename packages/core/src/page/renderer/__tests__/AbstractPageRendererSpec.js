@@ -1,4 +1,4 @@
-import Helper from '@ima/helpers';
+import * as Helper from '@ima/helpers';
 import ReactDOM from 'react-dom';
 import Controller from 'src/controller/Controller';
 import AbstractDocumentView from 'src/page/AbstractDocumentView';

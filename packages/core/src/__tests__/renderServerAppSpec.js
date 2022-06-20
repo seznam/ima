@@ -2,7 +2,7 @@ import React from 'react';
 import ControllerInterface from '../controller/Controller';
 import ServerPageRenderer from '../page/renderer/ServerPageRenderer';
 import Response from '../router/Response';
-import * as ima from '../main';
+import * as ima from '../index';
 
 jest.mock('fs');
 jest.mock('path', () => {

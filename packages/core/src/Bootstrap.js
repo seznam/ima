@@ -1,4 +1,4 @@
-import $Helper from '@ima/helpers';
+import * as $Helper from '@ima/helpers';
 import ns from './namespace';
 import ObjectContainer from './ObjectContainer';
 import Router from './router/Router';
