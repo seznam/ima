@@ -32,9 +32,9 @@
       "email": "ondrej.base@firma.seznam.cz"
     }
   ],
-  "main": "./dist/ima.server.cjs",
-  "module": "./dist/ima.server.mjs",
-  "browser": "./dist/ima.client.js",
+  "main": "./dist/server.cjs",
+  "module": "./dist/server.mjs",
+  "browser": "./dist/client.js",
   "scripts": {
     "build": "rollup --config",
     "clean": "rm -rf dist",
@@ -48,8 +48,7 @@
   "dependencies": {
     "@ima/helpers": "^18.0.0-rc.0",
     "classnames": "^2.3.1",
-    "memoize-one": "^6.0.0",
-    "node-fetch": "^2.6.7"
+    "memoize-one": "^6.0.0"
   },
   "devDependencies": {
     "@size-limit/preset-big-lib": "^7.0.8",
@@ -68,12 +67,12 @@
   "size-limit": [
     {
       "limit": "31 KB",
-      "path": "./dist/ima.client.mjs",
+      "path": "./dist/client.mjs",
       "running": false
     },
     {
       "limit": "31 KB",
-      "path": "./dist/ima.server.mjs",
+      "path": "./dist/server.mjs",
       "running": false
     }
   ]

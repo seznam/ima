@@ -46,13 +46,14 @@
     "cli-progress": "^3.11.1",
     "compression-webpack-plugin": "^10.0.0",
     "copy-webpack-plugin": "^11.0.0",
-    "core-js": "^3.22.7",
+    "core-js": "3.22.7",
     "css-loader": "6.7.1",
     "css-minimizer-webpack-plugin": "^4.0.0",
     "ejs": "^3.1.7",
     "express": "^4.18.1",
     "express-static-gzip": "^2.1.7",
     "globby": "11.1.0",
+    "kill-port": "^1.6.1",
     "less": "4.1.2",
     "less-loader": "^11.0.0",
     "messageformat": "2.3.0",
@@ -72,6 +73,7 @@
     "webpack": "^5.72.1",
     "webpack-bundle-analyzer": "4.5.0",
     "webpack-dev-middleware": "^5.3.3",
+    "whatwg-fetch": "^3.6.2",
     "yargs": "^17.5.1"
   },
   "devDependencies": {

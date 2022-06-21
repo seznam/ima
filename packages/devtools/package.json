@@ -25,7 +25,6 @@
       "email": "jan.simecek@firma.seznam.cz"
     }
   ],
-  "main": "dist/main.js",
   "scripts": {
     "build": "NODE_ENV=production webpack",
     "dev": "NODE_ENV=development webpack --watch",

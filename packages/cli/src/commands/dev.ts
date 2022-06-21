@@ -2,6 +2,7 @@ import path from 'path';
 
 import open from 'better-opn';
 import chalk from 'chalk';
+import kill from 'kill-port';
 import nodemon from 'nodemon';
 import webpack from 'webpack';
 import { CommandBuilder } from 'yargs';
@@ -14,7 +15,7 @@ import {
 } from '../lib/cli';
 import { watchCompiler, handleError } from '../lib/compiler';
 import { logger } from '../lib/logger';
-import { ImaCliArgs, HandlerFn } from '../types';
+import { ImaCliArgs, ImaEnvironment, HandlerFn } from '../types';
 import {
   cleanup,
   createDevServerConfig,
@@ -29,7 +30,7 @@ import {
  * (all changes in server/ folder), to automatically restart the application
  * server in case any change is detected.
  */
-function startNodemon(args: ImaCliArgs) {
+function startNodemon(args: ImaCliArgs, environment: ImaEnvironment) {
   let serverHasStarted = false;
 
   nodemon({
@@ -50,8 +51,7 @@ function startNodemon(args: ImaCliArgs) {
       );
 
       if (args.open && !serverHasStarted) {
-        const imaEnvironment = resolveEnvironment(args.rootDir);
-        const port = imaEnvironment?.$Server?.port ?? 3001;
+        const port = environment.$Server.port;
         serverHasStarted = true;
 
         try {
@@ -87,8 +87,9 @@ const dev: HandlerFn = async args => {
     // Do cleanup
     await cleanup(args);
 
-    // Load ima config
+    // Load ima config & env
     const imaConfig = await resolveImaConfig(args);
+    const environment = resolveEnvironment(args.rootDir);
 
     /**
      * Set public env variable which is used to load assets in the SSR error view.
@@ -96,6 +97,12 @@ const dev: HandlerFn = async args => {
      */
     const devServerConfig = createDevServerConfig({ imaConfig, args });
     process.env.IMA_CLI_DEV_SERVER_PUBLIC_URL = devServerConfig.publicUrl;
+
+    // Kill processes running on the same port
+    await Promise.all([
+      kill(environment.$Server.port),
+      kill(devServerConfig.port),
+    ]).then(data => console.log(data));
 
     // Run preProcess hook on IMA CLI Plugins
     await runImaPluginsHook(args, imaConfig, 'preProcess');
@@ -130,7 +137,7 @@ const dev: HandlerFn = async args => {
     ]);
 
     // Start nodemon and application server
-    startNodemon(args);
+    startNodemon(args, environment);
   } catch (error) {
     if (args.verbose) {
       console.error(error);

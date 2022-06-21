@@ -12,11 +12,10 @@ function generateConfig(environment) {
       'react',
       'react-dom',
       'memoize-one',
-      'node-fetch',
       'react-dom/server',
     ].filter(Boolean),
     input: {
-      [`ima.${environment}`]: './src/main.js',
+      [`${environment}`]: './src/index.js',
     },
     treeshake: {
       moduleSideEffects: 'no-external',

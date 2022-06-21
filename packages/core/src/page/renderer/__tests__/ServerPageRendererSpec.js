@@ -1,4 +1,4 @@
-import Helper from '@ima/helpers';
+import * as Helper from '@ima/helpers';
 import Cache from 'src/cache/Cache';
 import Controller from 'src/controller/Controller';
 import GenericError from 'src/error/GenericError';

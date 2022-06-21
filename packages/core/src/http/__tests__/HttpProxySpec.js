@@ -43,15 +43,14 @@ describe('ima.core.http.HttpProxy', () => {
       },
       body: { data: 'some data' },
     };
+
     fetchResult = Promise.resolve(response);
 
-    proxy._getFetchApi = jest.fn(() =>
-      Promise.resolve((_, init) => {
-        requestInit = init;
+    global.fetch = jest.fn((_, init) => {
+      requestInit = init;
 
-        return fetchResult;
-      })
-    );
+      return Promise.resolve(fetchResult);
+    });
   });
 
   ['get', 'head', 'post', 'put', 'delete', 'patch'].forEach(method => {

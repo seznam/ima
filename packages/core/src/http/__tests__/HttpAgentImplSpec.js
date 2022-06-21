@@ -1,5 +1,5 @@
 import toMock from 'to-mock';
-import Helper from '@ima/helpers';
+import * as Helper from '@ima/helpers';
 
 import Cache from 'src/cache/Cache';
 import GenericError from 'src/error/GenericError';
@@ -62,14 +62,13 @@ describe('ima.core.http.HttpAgentImpl', () => {
         options: options,
       },
       headers: {
-        'set-cookie': 'cookie1=cookie1, cookie2=cookie2',
+        'set-cookie': ['cookie1=cookie1', 'cookie2=cookie2'],
       },
-      headersRaw: {
-        raw() {
-          return { 'set-cookie': ['cookie1=cookie1', 'cookie2=cookie2'] };
-        },
-        'set-cookie': 'cookie1=cookie1, cookie2=cookie2',
-      },
+      headersRaw: new Map(
+        Object.entries({
+          'set-cookie': ['cookie1=cookie1', 'cookie2=cookie2'],
+        })
+      ),
     };
   });
 

@@ -1,6 +1,6 @@
 // Injection scripts
 
-import imaDevtoolsCode from '@ima/devtools-scripts/dist/main.string.js';
+import imaDevtoolsCode from '@ima/devtools-scripts/dist/index.string.js';
 
 import { Actions } from '@/constants';
 import { detectImaAppCode, runImaAppCode } from '@/inject';

@@ -3,7 +3,7 @@ import ReactDOM from 'react-dom';
 import jsdom from 'jsdom';
 import ControllerInterface from '../controller/Controller';
 import AbstractDocumentView from '../page/AbstractDocumentView';
-import * as ima from '../main';
+import * as ima from '../index';
 
 jest.mock('fs');
 jest.mock('path', () => {
